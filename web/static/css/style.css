@@ -1,0 +1,91 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+    background-color: #1a1a1a;
+    color: #e0e0e0;
+    line-height: 1.6;
+}
+
+header {
+    background-color: #2a2a2a;
+    padding: 1rem 2rem;
+    border-bottom: 2px solid #444;
+}
+
+header h1 {
+    color: #00ff88;
+    margin-bottom: 0.5rem;
+}
+
+nav {
+    display: flex;
+    gap: 1rem;
+}
+
+nav a {
+    color: #e0e0e0;
+    text-decoration: none;
+    padding: 0.5rem 1rem;
+    border-radius: 4px;
+    transition: background-color 0.2s;
+}
+
+nav a:hover {
+    background-color: #3a3a3a;
+}
+
+main {
+    padding: 2rem;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+button {
+    background-color: #00ff88;
+    color: #1a1a1a;
+    border: none;
+    padding: 0.75rem 1.5rem;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 1rem;
+    font-weight: bold;
+    transition: background-color 0.2s;
+}
+
+button:hover {
+    background-color: #00cc70;
+}
+
+#characters-list, #campaigns-list, #sessions-list {
+    margin-top: 1rem;
+    display: grid;
+    gap: 1rem;
+}
+
+.card {
+    background-color: #2a2a2a;
+    padding: 1.5rem;
+    border-radius: 8px;
+    border: 1px solid #444;
+}
+
+.card h3 {
+    color: #00ff88;
+    margin-bottom: 0.5rem;
+}
+
+.card p {
+    color: #b0b0b0;
+    margin-bottom: 0.25rem;
+}
+
+.error {
+    color: #ff6b6b;
+    font-weight: bold;
+}
+

@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ShadowMaster RPG System</title>
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+    <div id="app">
+        <header>
+            <h1>ShadowMaster RPG System</h1>
+            <nav>
+                <a href="#characters">Characters</a>
+                <a href="#campaigns">Campaigns</a>
+                <a href="#sessions">Sessions</a>
+            </nav>
+        </header>
+        <main>
+            <div id="characters-view">
+                <h2>Characters</h2>
+                <button id="create-character-btn">Create Character</button>
+                <div id="characters-list"></div>
+            </div>
+            <div id="campaigns-view" style="display: none;">
+                <h2>Campaigns</h2>
+                <button id="create-campaign-btn">Create Campaign</button>
+                <div id="campaigns-list"></div>
+            </div>
+            <div id="sessions-view" style="display: none;">
+                <h2>Sessions</h2>
+                <div id="sessions-list"></div>
+            </div>
+        </main>
+    </div>
+    <script src="/js/app.js"></script>
+</body>
+</html>
+
