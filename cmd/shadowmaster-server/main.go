@@ -8,8 +8,9 @@ import (
 
 	"github.com/go-chi/chi/v5"
 	"github.com/go-chi/chi/v5/middleware"
-
+	
 	jsonrepo "shadowmaster/internal/repository/json"
+	"shadowmaster/internal/service"
 )
 
 func main() {
@@ -24,8 +25,11 @@ func main() {
 		log.Fatalf("Failed to initialize repositories: %v", err)
 	}
 
+	// Initialize services
+	characterService := service.NewCharacterService(repos.Character)
+	
 	// Initialize handlers
-	handlers := api.NewHandlers(repos)
+	handlers := api.NewHandlers(repos, characterService)
 
 	// Setup router
 	r := chi.NewRouter()
@@ -42,6 +46,10 @@ func main() {
 		r.Post("/characters", handlers.CreateCharacter)
 		r.Put("/characters/{id}", handlers.UpdateCharacter)
 		r.Delete("/characters/{id}", handlers.DeleteCharacter)
+		
+		// Skills routes
+		r.Get("/skills/active", handlers.GetActiveSkills)
+		r.Get("/skills/knowledge", handlers.GetKnowledgeSkills)
 
 		// Group routes
 		r.Get("/groups", handlers.GetGroups)

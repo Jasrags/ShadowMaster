@@ -22,6 +22,94 @@
                 <button id="create-character-btn">Create Character</button>
                 <div id="characters-list"></div>
             </div>
+            
+            <!-- Character Creation Modal -->
+            <div id="character-modal" class="modal" style="display: none;">
+                <div class="modal-content">
+                    <span class="close">&times;</span>
+                    <h2>Create Character</h2>
+                    <form id="character-form">
+                        <div class="form-group">
+                            <label for="char-name">Character Name:</label>
+                            <input type="text" id="char-name" name="name" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="player-name">Player Name:</label>
+                            <input type="text" id="player-name" name="player_name">
+                        </div>
+                        
+                        <h3>Priority Selection (Shadowrun 3e)</h3>
+                        <p class="help-text">Assign priorities A-E to each category (A = highest, E = lowest). Magic can be "None".</p>
+                        
+                        <div class="priority-grid">
+                            <div class="form-group">
+                                <label for="magic-priority">Magic:</label>
+                                <select id="magic-priority" name="magic_priority">
+                                    <option value="None">None</option>
+                                    <option value="A">A</option>
+                                    <option value="B">B</option>
+                                    <option value="C">C</option>
+                                    <option value="D">D</option>
+                                    <option value="E">E</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="race-priority">Race:</label>
+                                <select id="race-priority" name="race_priority">
+                                    <option value="A">A</option>
+                                    <option value="B">B</option>
+                                    <option value="C" selected>C</option>
+                                    <option value="D">D</option>
+                                    <option value="E">E</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="attr-priority">Attributes:</label>
+                                <select id="attr-priority" name="attr_priority">
+                                    <option value="A">A</option>
+                                    <option value="B" selected>B</option>
+                                    <option value="C">C</option>
+                                    <option value="D">D</option>
+                                    <option value="E">E</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="skills-priority">Skills:</label>
+                                <select id="skills-priority" name="skills_priority">
+                                    <option value="A">A</option>
+                                    <option value="B">B</option>
+                                    <option value="C">C</option>
+                                    <option value="D" selected>D</option>
+                                    <option value="E">E</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="resources-priority">Resources:</label>
+                                <select id="resources-priority" name="resources_priority">
+                                    <option value="A">A</option>
+                                    <option value="B">B</option>
+                                    <option value="C" selected>C</option>
+                                    <option value="D">D</option>
+                                    <option value="E">E</option>
+                                </select>
+                            </div>
+                        </div>
+                        
+                        <div class="form-actions">
+                            <button type="submit">Create Character</button>
+                            <button type="button" class="btn-cancel">Cancel</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+            
+            <!-- Character Sheet Modal -->
+            <div id="character-sheet-modal" class="modal" style="display: none;">
+                <div class="modal-content large">
+                    <span class="close">&times;</span>
+                    <div id="character-sheet-content"></div>
+                </div>
+            </div>
             <div id="campaigns-view" style="display: none;">
                 <h2>Campaigns</h2>
                 <button id="create-campaign-btn">Create Campaign</button>

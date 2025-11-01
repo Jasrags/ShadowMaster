@@ -5,7 +5,9 @@ import (
 	"net/http"
 	"shadowmaster/internal/domain"
 	"shadowmaster/internal/repository"
-	"shadowmaster/internal/repository/json"
+	jsonrepo "shadowmaster/internal/repository/json"
+	"shadowmaster/internal/service"
+	sr3 "shadowmaster/pkg/shadowrun/edition/v3"
 )
 
 // Handlers wraps repository instances for API handlers
@@ -15,16 +17,18 @@ type Handlers struct {
 	CampaignRepo  repository.CampaignRepository
 	SessionRepo   repository.SessionRepository
 	SceneRepo     repository.SceneRepository
+	CharacterService *service.CharacterService
 }
 
 // NewHandlers creates a new handlers instance
-func NewHandlers(repos *jsonrepo.Repositories) *Handlers {
+func NewHandlers(repos *jsonrepo.Repositories, charService *service.CharacterService) *Handlers {
 	return &Handlers{
 		CharacterRepo: repos.Character,
 		GroupRepo:     repos.Group,
 		CampaignRepo:  repos.Campaign,
 		SessionRepo:   repos.Session,
 		SceneRepo:     repos.Scene,
+		CharacterService: charService,
 	}
 }
 
@@ -53,18 +57,64 @@ func (h *Handlers) GetCharacter(w http.ResponseWriter, r *http.Request) {
 
 // CreateCharacter handles POST /api/characters
 func (h *Handlers) CreateCharacter(w http.ResponseWriter, r *http.Request) {
-	var character domain.Character
-	if err := json.NewDecoder(r.Body).Decode(&character); err != nil {
+	var req struct {
+		Name        string      `json:"name"`
+		PlayerName  string      `json:"player_name"`
+		Edition     string      `json:"edition"`
+		EditionData interface{} `json:"edition_data"`
+	}
+	
+	if err := json.NewDecoder(r.Body).Decode(&req); err != nil {
 		http.Error(w, err.Error(), http.StatusBadRequest)
 		return
 	}
 
-	if err := h.CharacterRepo.Create(&character); err != nil {
+	// If SR3 edition with priority data, use character service
+	if req.Edition == "sr3" && h.CharacterService != nil {
+		editionDataMap, ok := req.EditionData.(map[string]interface{})
+		if ok {
+			priorities := service.PrioritySelection{
+				Magic:      getStringFromMap(editionDataMap, "magic_priority", "None"),
+				Race:       getStringFromMap(editionDataMap, "race_priority", "C"),
+				Attributes: getStringFromMap(editionDataMap, "attr_priority", "B"),
+				Skills:     getStringFromMap(editionDataMap, "skills_priority", "D"),
+				Resources:  getStringFromMap(editionDataMap, "resources_priority", "C"),
+			}
+			
+			character, err := h.CharacterService.CreateSR3Character(req.Name, req.PlayerName, priorities)
+			if err != nil {
+				http.Error(w, err.Error(), http.StatusInternalServerError)
+				return
+			}
+			respondJSON(w, http.StatusCreated, character)
+			return
+		}
+	}
+
+	// Fallback to direct creation
+	character := &domain.Character{
+		Name:       req.Name,
+		PlayerName: req.PlayerName,
+		Edition:    req.Edition,
+		EditionData: req.EditionData,
+	}
+
+	if err := h.CharacterRepo.Create(character); err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
 
 	respondJSON(w, http.StatusCreated, character)
+}
+
+// getStringFromMap safely extracts a string value from a map
+func getStringFromMap(m map[string]interface{}, key, defaultValue string) string {
+	if val, ok := m[key]; ok {
+		if str, ok := val.(string); ok {
+			return str
+		}
+	}
+	return defaultValue
 }
 
 // UpdateCharacter handles PUT /api/characters/{id}
@@ -94,6 +144,24 @@ func (h *Handlers) DeleteCharacter(w http.ResponseWriter, r *http.Request) {
 	}
 
 	w.WriteHeader(http.StatusNoContent)
+}
+
+// GetActiveSkills handles GET /api/skills/active
+func (h *Handlers) GetActiveSkills(w http.ResponseWriter, r *http.Request) {
+	skills := sr3.GetAllActiveSkills()
+	respondJSON(w, http.StatusOK, map[string]interface{}{
+		"skills": skills,
+		"categories": sr3.ActiveSkillCategories,
+	})
+}
+
+// GetKnowledgeSkills handles GET /api/skills/knowledge
+func (h *Handlers) GetKnowledgeSkills(w http.ResponseWriter, r *http.Request) {
+	skills := sr3.GetAllKnowledgeSkills()
+	respondJSON(w, http.StatusOK, map[string]interface{}{
+		"skills": skills,
+		"categories": sr3.KnowledgeSkillCategories,
+	})
 }
 
 // Group handlers

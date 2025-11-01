@@ -89,3 +89,300 @@ button:hover {
     font-weight: bold;
 }
 
+/* Modal Styles */
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 1000;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgba(0, 0, 0, 0.8);
+}
+
+.modal-content {
+    background-color: #2a2a2a;
+    margin: 5% auto;
+    padding: 2rem;
+    border: 2px solid #444;
+    border-radius: 8px;
+    width: 90%;
+    max-width: 600px;
+    max-height: 90vh;
+    overflow-y: auto;
+}
+
+.modal-content.large {
+    max-width: 900px;
+}
+
+.close {
+    color: #aaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.close:hover,
+.close:focus {
+    color: #fff;
+}
+
+/* Form Styles */
+.form-group {
+    margin-bottom: 1.5rem;
+}
+
+.form-group label {
+    display: block;
+    color: #e0e0e0;
+    margin-bottom: 0.5rem;
+    font-weight: bold;
+}
+
+.form-group input[type="text"],
+.form-group input[type="number"],
+.form-group select {
+    width: 100%;
+    padding: 0.75rem;
+    background-color: #1a1a1a;
+    border: 1px solid #444;
+    border-radius: 4px;
+    color: #e0e0e0;
+    font-size: 1rem;
+}
+
+.form-group input:focus,
+.form-group select:focus {
+    outline: none;
+    border-color: #00ff88;
+}
+
+.help-text {
+    color: #b0b0b0;
+    font-size: 0.9rem;
+    margin-bottom: 1rem;
+    font-style: italic;
+}
+
+.priority-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+}
+
+.form-actions {
+    display: flex;
+    gap: 1rem;
+    margin-top: 2rem;
+}
+
+.btn-cancel {
+    background-color: #555;
+    color: #fff;
+}
+
+.btn-cancel:hover {
+    background-color: #666;
+}
+
+/* Character Sheet Styles */
+.character-sheet {
+    color: #e0e0e0;
+}
+
+.character-sheet h2 {
+    color: #00ff88;
+    margin-bottom: 1rem;
+}
+
+.character-sheet h3 {
+    color: #00ff88;
+    margin-top: 1.5rem;
+    margin-bottom: 0.75rem;
+    border-bottom: 1px solid #444;
+    padding-bottom: 0.5rem;
+}
+
+.attribute-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+}
+
+.attribute-card {
+    background-color: #1a1a1a;
+    padding: 1rem;
+    border-radius: 4px;
+    border: 1px solid #444;
+    text-align: center;
+}
+
+.attribute-card .label {
+    color: #b0b0b0;
+    font-size: 0.9rem;
+    margin-bottom: 0.5rem;
+}
+
+.attribute-card .value {
+    color: #00ff88;
+    font-size: 2rem;
+    font-weight: bold;
+}
+
+.stats-row {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: 1rem;
+    margin-bottom: 1rem;
+}
+
+.stat-item {
+    background-color: #1a1a1a;
+    padding: 0.75rem;
+    border-radius: 4px;
+    border: 1px solid #444;
+}
+
+.stat-item label {
+    color: #b0b0b0;
+    font-size: 0.85rem;
+    display: block;
+    margin-bottom: 0.25rem;
+}
+
+.stat-item .value {
+    color: #e0e0e0;
+    font-size: 1.2rem;
+    font-weight: bold;
+}
+
+/* Character Sheet Header */
+.sheet-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 2rem;
+    padding-bottom: 1rem;
+    border-bottom: 2px solid #444;
+}
+
+.header-actions {
+    display: flex;
+    gap: 1rem;
+}
+
+/* Skills Table */
+.skills-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 1rem;
+    background-color: #1a1a1a;
+}
+
+.skills-table thead {
+    background-color: #2a2a2a;
+}
+
+.skills-table th,
+.skills-table td {
+    padding: 0.75rem;
+    text-align: left;
+    border-bottom: 1px solid #444;
+}
+
+.skills-table th {
+    color: #00ff88;
+    font-weight: bold;
+}
+
+.skills-table td {
+    color: #e0e0e0;
+}
+
+.skills-table tr:hover {
+    background-color: #2a2a2a;
+}
+
+/* Buttons */
+.btn-small {
+    padding: 0.25rem 0.75rem;
+    font-size: 0.85rem;
+    margin: 0 0.25rem;
+}
+
+.btn-edit {
+    background-color: #00aaff;
+    color: #fff;
+}
+
+.btn-edit:hover {
+    background-color: #0088cc;
+}
+
+.btn-delete {
+    background-color: #ff4444;
+    color: #fff;
+}
+
+.btn-delete:hover {
+    background-color: #cc0000;
+}
+
+.btn-add {
+    background-color: #00ff88;
+    color: #1a1a1a;
+    margin-top: 1rem;
+}
+
+.btn-add:hover {
+    background-color: #00cc70;
+}
+
+.empty-message {
+    color: #888;
+    font-style: italic;
+    padding: 1rem;
+    text-align: center;
+}
+
+.equipment-item {
+    background-color: #1a1a1a;
+    padding: 0.75rem;
+    border-radius: 4px;
+    border: 1px solid #444;
+    margin-bottom: 0.5rem;
+}
+
+/* Skill Select Modal */
+.skill-select-modal {
+    position: fixed;
+    z-index: 2000;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgba(0, 0, 0, 0.8);
+}
+
+.skill-modal-content {
+    background-color: #2a2a2a;
+    margin: 10% auto;
+    padding: 2rem;
+    border: 2px solid #444;
+    border-radius: 8px;
+    width: 90%;
+    max-width: 500px;
+}
+
+.skill-modal-content h3 {
+    color: #00ff88;
+    margin-bottom: 1.5rem;
+}
+
