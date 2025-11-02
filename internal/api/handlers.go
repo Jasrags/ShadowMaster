@@ -164,6 +164,46 @@ func (h *Handlers) GetKnowledgeSkills(w http.ResponseWriter, r *http.Request) {
 	})
 }
 
+// GetWeapons handles GET /api/equipment/weapons
+func (h *Handlers) GetWeapons(w http.ResponseWriter, r *http.Request) {
+	weapons := sr3.GetAllWeapons()
+	weaponType := r.URL.Query().Get("type")
+	if weaponType != "" {
+		filtered := sr3.GetWeaponsByType(weaponType)
+		respondJSON(w, http.StatusOK, map[string]interface{}{
+			"weapons": filtered,
+		})
+		return
+	}
+	respondJSON(w, http.StatusOK, map[string]interface{}{
+		"weapons": weapons,
+	})
+}
+
+// GetArmor handles GET /api/equipment/armor
+func (h *Handlers) GetArmor(w http.ResponseWriter, r *http.Request) {
+	armor := sr3.GetAllArmor()
+	armorType := r.URL.Query().Get("type")
+	if armorType != "" {
+		filtered := sr3.GetArmorByType(armorType)
+		respondJSON(w, http.StatusOK, map[string]interface{}{
+			"armor": filtered,
+		})
+		return
+	}
+	respondJSON(w, http.StatusOK, map[string]interface{}{
+		"armor": armor,
+	})
+}
+
+// GetCyberware handles GET /api/equipment/cyberware
+func (h *Handlers) GetCyberware(w http.ResponseWriter, r *http.Request) {
+	cyberware := sr3.GetAllCyberware()
+	respondJSON(w, http.StatusOK, map[string]interface{}{
+		"cyberware": cyberware,
+	})
+}
+
 // Group handlers
 
 // GetGroups handles GET /api/groups

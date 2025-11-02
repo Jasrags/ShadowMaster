@@ -39,14 +39,18 @@ type CharacterSR3 struct {
 	Metatype string  `json:"metatype"` // Human, Elf, Dwarf, Ork, Troll
 	Essence  float64 `json:"essence"`  // Starting at 6.0, reduced by cyberware
 
+	// Racial Special Abilities
+	RacialAbilities []RacialAbility `json:"racial_abilities,omitempty"` // Vision, resistance, reach, etc.
+
 	// Magic
 	MagicRating int    `json:"magic_rating,omitempty"`
 	Tradition   string `json:"tradition,omitempty"`  // Hermetic, Shaman, etc.
 	Initiation  int    `json:"initiation,omitempty"` // Initiation grade
 
-	// Skills (simplified for now - will expand)
+	// Skills
 	ActiveSkills    map[string]Skill `json:"active_skills"`
 	KnowledgeSkills map[string]Skill `json:"knowledge_skills"`
+	LanguageSkills  map[string]Skill `json:"language_skills"`
 
 	// Equipment
 	Weapons   []Weapon    `json:"weapons"`
@@ -110,7 +114,9 @@ type Cyberware struct {
 	Name         string  `json:"name"`
 	Rating       int     `json:"rating,omitempty"`
 	EssenceCost  float64 `json:"essence_cost"`
+	Cost         int     `json:"cost,omitempty"`        // Cost in nuyen
 	Availability int     `json:"availability,omitempty"`
+	Racial       bool    `json:"racial,omitempty"`      // True if this is inherent racial cyberware (e.g., Troll Dermal Armor)
 	Notes        string  `json:"notes,omitempty"`
 }
 
@@ -182,4 +188,11 @@ type Reputation struct {
 	StreetCred      int `json:"street_cred"`
 	Notoriety       int `json:"notoriety"`
 	PublicAwareness int `json:"public_awareness"`
+}
+
+// RacialAbility represents a special ability granted by a metatype
+type RacialAbility struct {
+	Name        string `json:"name"`        // Thermographic Vision, Low-light Vision, Resistance, Reach
+	Description string `json:"description,omitempty"` // Description of the ability
+	Effect      string `json:"effect,omitempty"`     // Mechanical effect (e.g., "+2 Body vs disease/toxin")
 }

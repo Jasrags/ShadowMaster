@@ -50,6 +50,11 @@ func main() {
 		// Skills routes
 		r.Get("/skills/active", handlers.GetActiveSkills)
 		r.Get("/skills/knowledge", handlers.GetKnowledgeSkills)
+		
+		// Equipment routes
+		r.Get("/equipment/weapons", handlers.GetWeapons)
+		r.Get("/equipment/armor", handlers.GetArmor)
+		r.Get("/equipment/cyberware", handlers.GetCyberware)
 
 		// Group routes
 		r.Get("/groups", handlers.GetGroups)

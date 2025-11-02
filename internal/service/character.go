@@ -36,6 +36,7 @@ func (s *CharacterService) CreateSR3Character(name, playerName string, prioritie
 
 		ActiveSkills:    make(map[string]domain.Skill),
 		KnowledgeSkills: make(map[string]domain.Skill),
+		LanguageSkills:  make(map[string]domain.Skill),
 		Weapons:         []domain.Weapon{},
 		Armor:           []domain.Armor{},
 		Cyberware:       []domain.Cyberware{},
@@ -62,6 +63,12 @@ func (s *CharacterService) CreateSR3Character(name, playerName string, prioritie
 	if err := applyPriorities(sr3Data, priorities); err != nil {
 		return nil, err
 	}
+
+	// Apply racial special abilities
+	applyRacialAbilities(sr3Data)
+
+	// Apply language skills (free native language at rating 6)
+	applyLanguageSkills(sr3Data)
 
 	// Calculate derived attributes
 	sr3Data.Reaction = sr3Data.Quickness + sr3Data.Intelligence
@@ -133,17 +140,71 @@ type MetatypeModifiers struct {
 }
 
 // getMetatypeFromPriority returns metatype and modifiers based on priority
+// Note: This function returns default modifiers. Actual metatype selection should happen
+// based on player choice within the allowed metatypes for the priority level.
+// This function should be called with the selected metatype name, not the priority.
 func getMetatypeFromPriority(priority string) (string, MetatypeModifiers, error) {
 	// Simplified: Human is default, higher priorities allow other metatypes
 	mods := MetatypeModifiers{} // Human has no modifiers
 
 	switch priority {
 	case "A", "B":
-		// Allow non-human metatypes
-		// For now, default to Human
+		// Allow all metatypes (Human, Elf, Dwarf, Ork, Troll)
+		// For now, default to Human - actual selection should be done by player
+		return "Human", mods, nil
+	case "C":
+		// Allow Troll or Elf only
+		// For now, default to Elf - actual selection should be done by player
+		return "Elf", MetatypeModifiers{Quickness: 1, Charisma: 2}, nil
+	case "D":
+		// Allow Dwarf or Ork only
+		// For now, default to Dwarf - actual selection should be done by player
+		return "Dwarf", MetatypeModifiers{Body: 1, Strength: 2, Willpower: 1}, nil
+	case "E":
+		// Human only
 		return "Human", mods, nil
 	default:
 		return "Human", mods, nil
+	}
+}
+
+// GetMetatypeModifiers returns attribute modifiers for a given metatype
+// Based on the official Shadowrun 3rd Edition Racial Modifications Table
+func GetMetatypeModifiers(metatype string) MetatypeModifiers {
+	switch metatype {
+	case "Human":
+		return MetatypeModifiers{} // No modifiers
+	case "Dwarf":
+		return MetatypeModifiers{
+			Body:      1,
+			Strength:  2,
+			Willpower: 1,
+		}
+		// Special abilities: Thermographic Vision, Resistance (+2 Body vs disease/toxin)
+	case "Elf":
+		return MetatypeModifiers{
+			Quickness: 1,
+			Charisma:  2,
+		}
+		// Special abilities: Low-light Vision
+	case "Ork":
+		return MetatypeModifiers{
+			Body:        3,
+			Strength:    2,
+			Charisma:    -1,
+			Intelligence: -1,
+		}
+	case "Troll":
+		return MetatypeModifiers{
+			Body:         5,
+			Quickness:    -1,
+			Strength:     4,
+			Intelligence: -2,
+			Charisma:     -2,
+		}
+		// Special abilities: Thermographic Vision, +1 Reach for Armed/Unarmed Combat, Dermal Armor (+1 Body)
+	default:
+		return MetatypeModifiers{} // Default to Human (no modifiers)
 	}
 }
 
@@ -193,16 +254,88 @@ func getMagicRatingFromPriority(priority string) int {
 func getResourcesPriority(priority string) int {
 	switch priority {
 	case "A":
-		return 400000
+		return 1000000
 	case "B":
-		return 275000
+		return 400000
 	case "C":
-		return 175000
+		return 90000
 	case "D":
-		return 100000
+		return 20000
 	case "E":
-		return 50000
+		return 5000
 	default:
 		return 0
 	}
+}
+
+// applyRacialAbilities applies racial special abilities based on metatype
+// This includes adding racial abilities to the RacialAbilities list
+// and adding Troll Dermal Armor as inherent cyberware
+func applyRacialAbilities(char *domain.CharacterSR3) {
+	char.RacialAbilities = []domain.RacialAbility{}
+
+	switch char.Metatype {
+	case "Dwarf":
+		char.RacialAbilities = append(char.RacialAbilities,
+			domain.RacialAbility{
+				Name:        "Thermographic Vision",
+				Description: "Can see heat signatures",
+			},
+			domain.RacialAbility{
+				Name:        "Resistance",
+				Description: "Resistance to disease and toxins",
+				Effect:      "+2 Body to any disease or toxin",
+			},
+		)
+	case "Elf":
+		char.RacialAbilities = append(char.RacialAbilities,
+			domain.RacialAbility{
+				Name:        "Low-light Vision",
+				Description: "Can see in low-light conditions",
+			},
+		)
+	case "Troll":
+		char.RacialAbilities = append(char.RacialAbilities,
+			domain.RacialAbility{
+				Name:        "Thermographic Vision",
+				Description: "Can see heat signatures",
+			},
+			domain.RacialAbility{
+				Name:        "Reach",
+				Description: "Increased reach in combat",
+				Effect:      "+1 Reach for Armed/Unarmed Combat",
+			},
+		)
+		// Add Troll Dermal Armor as inherent cyberware (no essence cost, no nuyen cost)
+		char.Cyberware = append(char.Cyberware,
+			domain.Cyberware{
+				Name:        "Dermal Armor (Racial)",
+				Rating:      1,
+				EssenceCost:  0.0, // Inherent - no essence cost
+				Cost:        0,    // Inherent - no nuyen cost
+				Racial:      true, // Mark as racial cyberware
+				Notes:       "Inherent Troll racial trait - +1 Body",
+			},
+		)
+	}
+}
+
+// applyLanguageSkills applies language skill rules during character creation
+// - Characters get one free native language at rating 6
+// - Language skill points = Intelligence * 1.5 (rounded down)
+// - Language skills link to Intelligence attribute
+func applyLanguageSkills(char *domain.CharacterSR3) {
+	// Give one free native language at rating 6 (default to English)
+	if len(char.LanguageSkills) == 0 {
+		char.LanguageSkills["English"] = domain.Skill{
+			Name:   "English",
+			Rating: 6,
+		}
+	}
+}
+
+// GetLanguageSkillPoints calculates available language skill points during character creation
+// Formula: Intelligence * 1.5 (rounded down)
+func GetLanguageSkillPoints(intelligence int) int {
+	return int(float64(intelligence) * 1.5)
 }
