@@ -29,7 +29,7 @@ type CharacterSR3 struct {
 	Reaction int `json:"reaction"` // Quickness + Intelligence
 
 	// Priority system
-	MagicPriority     string `json:"magic_priority"`     // A-E or "None"
+	MagicPriority     string `json:"magic_priority"`     // A-E (A/B: Magical, C/D/E: Mundane)
 	RacePriority      string `json:"race_priority"`      // A-E
 	AttrPriority      string `json:"attr_priority"`      // A-E
 	SkillsPriority    string `json:"skills_priority"`    // A-E
@@ -61,9 +61,10 @@ type CharacterSR3 struct {
 	Vehicles  []Vehicle   `json:"vehicles"`
 
 	// Magic
-	Spells  []Spell  `json:"spells"`
-	Focuses []Focus  `json:"focuses"`
-	Spirits []Spirit `json:"spirits"`
+	Spells     []Spell     `json:"spells"`
+	Focuses    []Focus     `json:"focuses"`
+	Spirits    []Spirit    `json:"spirits"`
+	AdeptPowers []AdeptPower `json:"adept_powers,omitempty"` // For Adepts only
 
 	// Social
 	Contacts   []Contact  `json:"contacts"`
@@ -179,7 +180,8 @@ type Spirit struct {
 type Contact struct {
 	Name    string `json:"name"`
 	Type    string `json:"type"`    // Fixer, Dealer, etc.
-	Loyalty int    `json:"loyalty"` // 1-6
+	Level   int    `json:"level"`  // 1-3 (Level 1: Contact, Level 2: Buddy, Level 3: Friend for life)
+	Loyalty int    `json:"loyalty"` // 1-3
 	Notes   string `json:"notes,omitempty"`
 }
 
@@ -195,4 +197,13 @@ type RacialAbility struct {
 	Name        string `json:"name"`        // Thermographic Vision, Low-light Vision, Resistance, Reach
 	Description string `json:"description,omitempty"` // Description of the ability
 	Effect      string `json:"effect,omitempty"`     // Mechanical effect (e.g., "+2 Body vs disease/toxin")
+}
+
+// AdeptPower represents an adept power purchased with Power Points
+type AdeptPower struct {
+	Name        string  `json:"name"`        // Astral Perception, Attribute Boost, etc.
+	Rating      int     `json:"rating,omitempty"` // For powers with levels
+	PowerPoints float64 `json:"power_points"`     // Power Points spent on this power
+	Attribute   string  `json:"attribute,omitempty"` // For powers that specify an attribute (e.g., Attribute Boost)
+	Notes       string  `json:"notes,omitempty"`
 }

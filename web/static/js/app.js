@@ -139,8 +139,64 @@ function showCreateCharacterModal() {
     const modal = document.getElementById('character-modal');
     modal.style.display = 'block';
     
+    // Reset wizard state
+    characterWizardState = {
+        currentStep: 1,
+        characterName: '',
+        playerName: '',
+        selectedRace: null,
+        priorities: null
+    };
+    
     // Reset form
     document.getElementById('character-form').reset();
+    
+    // Reset priority assignments
+    priorityAssignments = {
+        magic: null,
+        race: null,
+        attributes: null,
+        skills: null,
+        resources: null
+    };
+    
+    // Clear all dropzones
+    document.querySelectorAll('.priority-dropzone').forEach(dropzone => {
+        dropzone.classList.remove('has-priority');
+        // Preserve the hidden input
+        const input = dropzone.querySelector('input[type="hidden"]');
+        dropzone.innerHTML = '<span class="dropzone-text">Drop priority here</span>';
+        if (input) {
+            input.value = '';
+            dropzone.appendChild(input);
+        }
+    });
+    
+    // Clear all priority value displays
+    ['magic', 'race', 'attributes', 'skills', 'resources'].forEach(category => {
+        updatePriorityValue(category, null);
+    });
+    
+    // Reset hidden inputs
+    document.querySelectorAll('[id$="-priority"]').forEach(input => {
+        if (input.type === 'hidden') {
+            input.value = '';
+        }
+    });
+    
+    // Show all priority chips
+    document.querySelectorAll('.priority-chip').forEach(chip => {
+        chip.classList.remove('used');
+    });
+    
+    // Update validation
+    updatePriorityValidation();
+    
+    // Show step 1
+    showWizardStep(1);
+    
+    // Initialize drag-and-drop (in case not already initialized)
+    initPriorityDragDrop();
 }
 
 // Close modal
@@ -151,31 +207,549 @@ function closeModal(modalId) {
     }
 }
 
-// Handle character form submission
-function handleCharacterFormSubmit(e) {
-    e.preventDefault();
+// Priority Assignment State
+let priorityAssignments = {
+    magic: null,
+    race: null,
+    attributes: null,
+    skills: null,
+    resources: null
+};
+
+// Character Creation Wizard State
+let characterWizardState = {
+    currentStep: 1,
+    characterName: '',
+    playerName: '',
+    selectedRace: null,
+    priorities: null
+};
+
+// Get the display value for a priority selection in a category
+function getPriorityValue(category, priority) {
+    if (!priority) return '';
     
-    const formData = {
-        name: document.getElementById('char-name').value,
-        player_name: document.getElementById('player-name').value,
-        edition: 'sr3',
-        edition_data: {
-            magic_priority: document.getElementById('magic-priority').value,
-            race_priority: document.getElementById('race-priority').value,
-            attr_priority: document.getElementById('attr-priority').value,
-            skills_priority: document.getElementById('skills-priority').value,
-            resources_priority: document.getElementById('resources-priority').value
+    const priorityTable = {
+        magic: {
+            'A': 'Full Magician',
+            'B': 'Adept/Aspected Magician',
+            'C': 'Mundane',
+            'D': 'Mundane',
+            'E': 'Mundane'
+        },
+        race: {
+            'A': 'All races',
+            'B': 'All races',
+            'C': 'Troll or Elf',
+            'D': 'Dwarf or Ork',
+            'E': 'Human'
+        },
+        attributes: {
+            'A': '30 points',
+            'B': '27 points',
+            'C': '24 points',
+            'D': '21 points',
+            'E': '18 points'
+        },
+        skills: {
+            'A': '50 points',
+            'B': '40 points',
+            'C': '34 points',
+            'D': '30 points',
+            'E': '27 points'
+        },
+        resources: {
+            'A': '1,000,000¥',
+            'B': '400,000¥',
+            'C': '90,000¥',
+            'D': '20,000¥',
+            'E': '5,000¥'
         }
     };
     
-    createCharacter(formData.name, formData.player_name, formData.edition, formData.edition_data)
-        .then(() => {
-            closeModal('character-modal');
-            alert('Character created successfully!');
-        })
-        .catch(error => {
-            alert('Failed to create character: ' + error.message);
+    return priorityTable[category] && priorityTable[category][priority] ? priorityTable[category][priority] : '';
+}
+
+// Update the priority value display for a category
+function updatePriorityValue(category, priority) {
+    const valueId = category === 'attributes' ? 'attr-value' : `${category}-value`;
+    const valueEl = document.getElementById(valueId);
+    if (valueEl) {
+        const value = getPriorityValue(category, priority);
+        valueEl.textContent = value ? ` ${value}` : '';
+    }
+}
+
+// Initialize drag-and-drop for priority assignment
+function initPriorityDragDrop() {
+    // Set up all priority chips in the pool as draggable
+    const poolChips = document.querySelectorAll('.priority-chips .priority-chip');
+    poolChips.forEach(chip => {
+        chip.setAttribute('draggable', 'true');
+        // Remove existing listeners by checking if already initialized
+        if (!chip._hasDragListeners) {
+            chip.addEventListener('dragstart', handleDragStart);
+            chip.addEventListener('dragend', handleDragEnd);
+            chip._hasDragListeners = true;
+        }
+    });
+    
+    // Set up drop zones
+    const dropzones = document.querySelectorAll('.priority-dropzone');
+    dropzones.forEach(dropzone => {
+        // Remove existing listeners by checking if already initialized
+        if (!dropzone._hasDropListeners) {
+            dropzone.addEventListener('dragover', handleDragOver);
+            dropzone.addEventListener('drop', handleDrop);
+            dropzone.addEventListener('dragleave', handleDragLeave);
+            dropzone._hasDropListeners = true;
+        }
+    });
+    
+    // Set up double-click removal for chips already in dropzones
+    document.querySelectorAll('.priority-dropzone .priority-chip').forEach(chip => {
+        if (!chip._hasDblClickListener) {
+            chip.addEventListener('dblclick', () => {
+                const dropzone = chip.closest('.priority-dropzone');
+                if (dropzone) {
+                    const category = dropzone.dataset.category;
+                    priorityAssignments[category] = null;
+                    clearDropzone(category);
+                    updatePriorityChips();
+                    updatePriorityValidation();
+                    updatePriorityValue(category, null);
+                }
+            });
+            chip._hasDblClickListener = true;
+        }
+    });
+    
+    updatePriorityValidation();
+}
+
+function handleDragStart(e) {
+    e.dataTransfer.effectAllowed = 'move';
+    const priority = e.target.dataset.priority || e.target.textContent.trim();
+    e.dataTransfer.setData('text/plain', priority);
+    e.target.classList.add('dragging');
+    
+    // Store the source category if dragging from a dropzone
+    const dropzone = e.target.closest('.priority-dropzone');
+    if (dropzone) {
+        e.dataTransfer.setData('source-category', dropzone.dataset.category || '');
+    } else {
+        e.dataTransfer.setData('source-category', 'pool');
+    }
+}
+
+function handleDragEnd(e) {
+    e.target.classList.remove('dragging');
+}
+
+function handleDragOver(e) {
+    e.preventDefault();
+    e.dataTransfer.dropEffect = 'move';
+    const dropzone = e.target.classList.contains('priority-dropzone') 
+        ? e.target 
+        : e.target.closest('.priority-dropzone');
+    if (dropzone) {
+        dropzone.classList.add('drag-over');
+    }
+}
+
+function handleDragLeave(e) {
+    const dropzone = e.target.classList.contains('priority-dropzone') 
+        ? e.target 
+        : e.target.closest('.priority-dropzone');
+    if (dropzone) {
+        dropzone.classList.remove('drag-over');
+    }
+}
+
+function handleDrop(e) {
+    e.preventDefault();
+    const dropzone = e.target.classList.contains('priority-dropzone') 
+        ? e.target 
+        : e.target.closest('.priority-dropzone');
+    if (!dropzone) return;
+    
+    dropzone.classList.remove('drag-over');
+    
+    const priority = e.dataTransfer.getData('text/plain');
+    const category = dropzone.dataset.category;
+    const sourceCategory = e.dataTransfer.getData('source-category');
+    
+    // If dragging from a dropzone, clear it first
+    if (sourceCategory && sourceCategory !== 'pool' && sourceCategory !== category) {
+        priorityAssignments[sourceCategory] = null;
+        clearDropzone(sourceCategory);
+    }
+    
+    assignPriority(category, priority);
+}
+
+function handleDropzoneClick(e) {
+    // Allow double-clicking on dropzone to remove priority (alternative to drag-drop)
+    const dropzone = e.currentTarget;
+    if (dropzone.classList.contains('has-priority')) {
+        const category = dropzone.dataset.category;
+        priorityAssignments[category] = null;
+        clearDropzone(category);
+        updatePriorityChips();
+        updatePriorityValidation();
+    }
+}
+
+function assignPriority(category, priority) {
+    // Remove priority from any previous category
+    const prevCategory = Object.keys(priorityAssignments).find(
+        cat => priorityAssignments[cat] === priority
+    );
+    if (prevCategory) {
+        priorityAssignments[prevCategory] = null;
+        clearDropzone(prevCategory);
+        updatePriorityValue(prevCategory, null);
+    }
+    
+    // Assign to new category
+    priorityAssignments[category] = priority;
+    
+    // Update UI
+    updateDropzone(category, priority);
+    updatePriorityChips();
+    updatePriorityValidation();
+    updatePriorityValue(category, priority);
+    
+    // Update hidden input
+    const input = document.getElementById(`${category === 'attributes' ? 'attr' : category}-priority`);
+    if (input) {
+        input.value = priority;
+    }
+}
+
+function clearDropzone(category) {
+    const dropzoneId = `${category === 'attributes' ? 'attr' : category}-dropzone`;
+    const dropzone = document.getElementById(dropzoneId);
+    if (dropzone) {
+        dropzone.classList.remove('has-priority');
+        // Preserve the hidden input
+        const input = dropzone.querySelector('input[type="hidden"]');
+        dropzone.innerHTML = '<span class="dropzone-text">Drop priority here</span>';
+        if (input) {
+            input.value = '';
+            dropzone.appendChild(input);
+        } else {
+            // Recreate input if missing
+            const newInput = document.createElement('input');
+            newInput.type = 'hidden';
+            newInput.id = `${category === 'attributes' ? 'attr' : category}-priority`;
+            newInput.name = `${category === 'attributes' ? 'attr' : category}_priority`;
+            newInput.value = '';
+            dropzone.appendChild(newInput);
+        }
+    }
+    // Clear the priority value display
+    updatePriorityValue(category, null);
+}
+
+function updateDropzone(category, priority) {
+    const dropzoneId = `${category === 'attributes' ? 'attr' : category}-dropzone`;
+    const dropzone = document.getElementById(dropzoneId);
+    if (dropzone && priority) {
+        dropzone.classList.add('has-priority');
+        
+        // Create a draggable chip in the dropzone
+        const chip = document.createElement('div');
+        chip.className = 'priority-chip';
+        chip.setAttribute('draggable', 'true');
+        chip.setAttribute('data-priority', priority);
+        chip.textContent = priority;
+        chip.style.cursor = 'grab';
+        chip.title = 'Drag to move, double-click to remove';
+        
+        // Make chip draggable
+        chip.addEventListener('dragstart', handleDragStart);
+        chip.addEventListener('dragend', handleDragEnd);
+        
+        // Allow double-click to remove
+        chip.addEventListener('dblclick', () => {
+            priorityAssignments[category] = null;
+            clearDropzone(category);
+            updatePriorityChips();
+            updatePriorityValidation();
+            updatePriorityValue(category, null);
         });
+        
+        dropzone.innerHTML = '';
+        dropzone.appendChild(chip);
+        
+        // Also update hidden input
+        const input = document.getElementById(`${category === 'attributes' ? 'attr' : category}-priority`);
+        if (input) {
+            input.value = priority;
+        }
+    }
+}
+
+function updatePriorityChips() {
+    // Only update chips in the priority pool (not those in dropzones)
+    const pool = document.querySelector('.priority-chips');
+    if (!pool) return;
+    
+    const poolChips = pool.querySelectorAll('.priority-chip');
+    const usedPriorities = Object.values(priorityAssignments).filter(p => p !== null);
+    
+    poolChips.forEach(chip => {
+        const priority = chip.dataset.priority;
+        if (usedPriorities.includes(priority)) {
+            chip.classList.add('used');
+        } else {
+            chip.classList.remove('used');
+        }
+    });
+}
+
+function updatePriorityValidation() {
+    const validationEl = document.getElementById('priority-validation');
+    if (!validationEl) return;
+    
+    const assigned = Object.values(priorityAssignments).filter(p => p !== null);
+    const requiredPriorities = ['A', 'B', 'C', 'D', 'E'];
+    const missing = requiredPriorities.filter(p => !assigned.includes(p));
+    
+    if (assigned.length === 5 && missing.length === 0) {
+        // All priorities assigned
+        validationEl.className = 'validation-message success';
+        validationEl.textContent = '✓ All priorities assigned correctly';
+        validationEl.style.display = 'block';
+    } else if (assigned.length > 0) {
+        // Some priorities assigned
+        validationEl.className = 'validation-message error';
+        validationEl.textContent = `Missing priorities: ${missing.join(', ')}`;
+        validationEl.style.display = 'block';
+    } else {
+        // No priorities assigned yet
+        validationEl.style.display = 'none';
+    }
+}
+
+function validatePriorities() {
+    const assigned = Object.values(priorityAssignments).filter(p => p !== null);
+    const requiredPriorities = ['A', 'B', 'C', 'D', 'E'];
+    const missing = requiredPriorities.filter(p => !assigned.includes(p));
+    
+    if (assigned.length !== 5) {
+        return {
+            valid: false,
+            message: `Please assign all 5 priorities. Missing: ${missing.join(', ')}`
+        };
+    }
+    
+    // Check for duplicates
+    const duplicates = assigned.filter((p, i) => assigned.indexOf(p) !== i);
+    if (duplicates.length > 0) {
+        return {
+            valid: false,
+            message: 'Each priority can only be used once.'
+        };
+    }
+    
+    return { valid: true };
+}
+
+// Handle character form submission (step 1: priorities)
+function handleCharacterFormSubmit(e) {
+    e.preventDefault();
+    
+    // Validate priorities
+    const validation = validatePriorities();
+    if (!validation.valid) {
+        alert(validation.message);
+        return;
+    }
+    
+    // Store character creation state
+    characterWizardState.characterName = document.getElementById('char-name').value;
+    characterWizardState.playerName = document.getElementById('player-name').value;
+    characterWizardState.priorities = {
+        magic: priorityAssignments.magic || '',
+        race: priorityAssignments.race || '',
+        attributes: priorityAssignments.attributes || '',
+        skills: priorityAssignments.skills || '',
+        resources: priorityAssignments.resources || ''
+    };
+    
+    // Move to step 2: Race selection
+    showWizardStep(2);
+}
+
+// Wizard step navigation
+function showWizardStep(step) {
+    characterWizardState.currentStep = step;
+    
+    // Hide all steps
+    document.querySelectorAll('.wizard-step').forEach(stepEl => {
+        stepEl.style.display = 'none';
+    });
+    
+    // Update progress indicator
+    document.querySelectorAll('.progress-step').forEach((progressStep, index) => {
+        const stepNum = index + 1;
+        progressStep.classList.remove('active', 'completed');
+        if (stepNum < step) {
+            progressStep.classList.add('completed');
+        } else if (stepNum === step) {
+            progressStep.classList.add('active');
+        }
+    });
+    
+    // Show current step
+    const currentStepEl = document.getElementById(`step-${step}`);
+    if (currentStepEl) {
+        currentStepEl.style.display = 'block';
+    }
+    
+    // Initialize step-specific content
+    if (step === 2) {
+        displayRaceSelection();
+    }
+}
+
+// Display race selection based on race priority
+function displayRaceSelection() {
+    const racePriority = characterWizardState.priorities.race;
+    const container = document.getElementById('race-selection-container');
+    if (!container) return;
+    
+    // Get valid races based on priority
+    const validRaces = getValidRacesForPriority(racePriority);
+    
+    // Race data with modifiers and abilities
+    const raceData = {
+        'Human': {
+            name: 'Human',
+            modifiers: {},
+            abilities: ['Baseline metatype - no special abilities']
+        },
+        'Dwarf': {
+            name: 'Dwarf',
+            modifiers: {
+                Body: 1,
+                Strength: 2,
+                Willpower: 1
+            },
+            abilities: ['Thermographic Vision', 'Resistance (+2 Body vs disease/toxin)']
+        },
+        'Elf': {
+            name: 'Elf',
+            modifiers: {
+                Quickness: 1,
+                Charisma: 2
+            },
+            abilities: ['Low-light Vision']
+        },
+        'Ork': {
+            name: 'Ork',
+            modifiers: {
+                Body: 3,
+                Strength: 2,
+                Charisma: -1,
+                Intelligence: -1
+            },
+            abilities: []
+        },
+        'Troll': {
+            name: 'Troll',
+            modifiers: {
+                Body: 5,
+                Quickness: -1,
+                Strength: 4,
+                Intelligence: -2,
+                Charisma: -2
+            },
+            abilities: ['Thermographic Vision', '+1 Reach for Armed/Unarmed Combat', 'Dermal Armor (+1 Body)']
+        }
+    };
+    
+    container.innerHTML = '';
+    
+    validRaces.forEach(raceName => {
+        const race = raceData[raceName];
+        if (!race) return;
+        
+        const raceCard = document.createElement('div');
+        raceCard.className = 'race-option';
+        raceCard.dataset.race = raceName;
+        raceCard.addEventListener('click', () => selectRace(raceName));
+        
+        let html = `<h4>${race.name}</h4>`;
+        
+        // Attribute modifiers
+        const modifiers = Object.keys(race.modifiers);
+        if (modifiers.length > 0) {
+            html += '<div class="race-attributes"><h5>Attribute Modifiers</h5>';
+            modifiers.forEach(attr => {
+                const mod = race.modifiers[attr];
+                const modClass = mod > 0 ? 'positive' : 'negative';
+                const modSign = mod > 0 ? '+' : '';
+                html += `<div class="attribute-mod">
+                    <span>${attr}</span>
+                    <span class="mod-value ${modClass}">${modSign}${mod}</span>
+                </div>`;
+            });
+            html += '</div>';
+        } else {
+            html += '<div class="race-attributes"><h5>Attribute Modifiers</h5><p style="color: #888; font-size: 0.85rem;">No modifiers (baseline)</p></div>';
+        }
+        
+        // Special abilities
+        if (race.abilities.length > 0) {
+            html += '<div class="race-abilities"><h5>Special Abilities</h5>';
+            race.abilities.forEach(ability => {
+                html += `<div class="ability">${ability}</div>`;
+            });
+            html += '</div>';
+        }
+        
+        raceCard.innerHTML = html;
+        container.appendChild(raceCard);
+    });
+}
+
+// Get valid races based on race priority
+function getValidRacesForPriority(priority) {
+    switch (priority) {
+        case 'A':
+        case 'B':
+            return ['Human', 'Elf', 'Dwarf', 'Ork', 'Troll'];
+        case 'C':
+            return ['Troll', 'Elf'];
+        case 'D':
+            return ['Dwarf', 'Ork'];
+        case 'E':
+            return ['Human'];
+        default:
+            return [];
+    }
+}
+
+// Select a race
+function selectRace(raceName) {
+    characterWizardState.selectedRace = raceName;
+    
+    // Update UI
+    document.querySelectorAll('.race-option').forEach(option => {
+        option.classList.remove('selected');
+        if (option.dataset.race === raceName) {
+            option.classList.add('selected');
+        }
+    });
+    
+    // Enable next button
+    const nextBtn = document.getElementById('race-next-btn');
+    if (nextBtn) {
+        nextBtn.disabled = false;
+    }
 }
 
 // View character sheet
@@ -1510,6 +2084,9 @@ document.addEventListener('DOMContentLoaded', () => {
     loadCharacters();
     loadCampaigns();
     
+    // Note: Priority drag-and-drop initialized when modal opens
+    // (initPriorityDragDrop is called in showCreateCharacterModal)
+    
     // Create button event listeners
     const createCharBtn = document.getElementById('create-character-btn');
     if (createCharBtn) {
@@ -1537,10 +2114,29 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
     
-    // Cancel button handlers
-    const cancelBtn = document.querySelector('.btn-cancel');
-    if (cancelBtn) {
-        cancelBtn.addEventListener('click', () => closeModal('character-modal'));
+    // Cancel buttons
+    document.querySelectorAll('.btn-cancel').forEach(btn => {
+        btn.addEventListener('click', () => closeModal('character-modal'));
+    });
+    
+    // Wizard navigation buttons
+    const raceBackBtn = document.getElementById('race-back-btn');
+    if (raceBackBtn) {
+        raceBackBtn.addEventListener('click', () => showWizardStep(1));
+    }
+    
+    const raceNextBtn = document.getElementById('race-next-btn');
+    if (raceNextBtn) {
+        raceNextBtn.addEventListener('click', () => {
+            if (characterWizardState.selectedRace) {
+                showWizardStep(3);
+            }
+        });
+    }
+    
+    const attrBackBtn = document.getElementById('attr-back-btn');
+    if (attrBackBtn) {
+        attrBackBtn.addEventListener('click', () => showWizardStep(2));
     }
     
     // Close modal when clicking outside

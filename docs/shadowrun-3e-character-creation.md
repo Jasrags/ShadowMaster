@@ -97,6 +97,14 @@ Determines magical ability.
 - Receives 25 Power Points at creation
 - Uses Power Points to purchase adept powers (physical enhancements)
 - Cannot cast spells but has physical magical enhancements
+- **Power Cost Types:**
+  - **Fixed Cost Powers:** Pay the listed Power Point cost (e.g., Astral Perception: 2 Power Points)
+  - **Per-Level Powers:** Pay cost × level (e.g., Attribute Boost: 0.25 per level)
+  - **Specification Required:** Some powers require additional specification (e.g., Attribute Boost requires choosing which attribute to boost)
+- **Available Powers:**
+  - Astral Perception (2 Power Points) - Can perceive the astral plane
+  - Attribute Boost (0.25 Power Points per level) - Boosts a physical or mental attribute (must specify attribute)
+  - More powers to be added as provided
 
 **Mundane (Priority C, D, E):**
 - No magical ability
@@ -268,7 +276,15 @@ Resources are spent in the following order:
      - Spend spell points: 1 point per spell Force
      - Can purchase additional spell points: 25,000¥ per point (max 50 total spell points)
    - **For Adepts (Priority B):**
+     - Receive 25 Power Points at creation
      - Spend Power Points on adept powers (not nuyen)
+     - **Power Types:**
+       - **Fixed Cost Powers:** Pay listed Power Point cost (e.g., Astral Perception: 2 Power Points)
+       - **Per-Level Powers:** Pay cost × level (e.g., Attribute Boost: 0.25 per level)
+     - **Available Powers:**
+       - Astral Perception (2 Power Points) - Can perceive the astral plane
+       - Attribute Boost (0.25 Power Points per level) - Boosts an attribute (must specify which attribute)
+     - More adept powers can be added as they are provided
    - Purchase magical gear (foci, ritual materials, etc.) with nuyen
 
 2. **Cyberware**
@@ -284,22 +300,29 @@ Resources are spent in the following order:
    - Bioware costs nuyen but doesn't reduce Essence (much more expensive)
 
 3. **Contacts**
-   - Can purchase contacts with nuyen or allocate during creation
+   - **Free Contacts:** Characters begin with two free level 1 contacts
+   - **Contact Levels:**
+     - Level 1 (Contact): 5,000¥
+     - Level 2 (Buddy): 10,000¥
+     - Level 3 (Friend for life): 200,000¥
+   - **Loyalty Rating:** 1-3 (not 1-6)
+   - **Contact Types:** Fixer, Dealer, Street Doc, Bartender, Information Broker, Corporate, Gang, Law Enforcement, Media, Smuggler, Talislegger, General
+   - **No Limits:** No limits on starting contacts
    - Each contact has:
      - Name
-     - Type (connection type)
-     - Loyalty rating (1-6)
-   - Track contact costs (varies by contact type and loyalty)
+     - Type (contact type)
+     - Level (1-3)
+     - Loyalty rating (1-3)
 
 4. **Lifestyle**
-   - Choose starting lifestyle:
-     - Street (lowest)
-     - Squatter
-     - Low
-     - Middle
-     - High
-     - Luxury (highest)
-   - Pay initial lifestyle cost with nuyen
+   - Choose starting lifestyle (monthly cost):
+     - Street: 0¥
+     - Squatter: 100¥
+     - Low: 1,000¥
+     - Middle: 5,000¥
+     - High: 10,000¥
+     - Luxury: 100,000¥
+   - Lifestyle is a monthly recurring cost
    - Lifestyle affects monthly expenses and quality of life
 
 5. **Other Equipment**
@@ -390,10 +413,10 @@ Resources are spent in the following order:
 3. **Racial Special Abilities** ✅ - **RESOLVED** - Special abilities tracking implemented (vision, resistance, reach)
 4. **Troll Dermal Armor** ✅ - **RESOLVED** - Automatically added as inherent cyberware for Trolls
 5. **Metatype Attribute Maximums** ⚠️ - Cannot validate attributes without knowing maximum values
-6. **Contacts System** ⚠️ - Missing cost structure and contact types
-7. **Lifestyle System** ⚠️ - Missing costs and benefits for each lifestyle level
+6. **Contacts System** ✅ - **RESOLVED** - Contact cost structure and types implemented
+7. **Lifestyle System** ✅ - **RESOLVED** - Lifestyle costs implemented
 8. **Spell Lists** ⚠️ - Need list of available spells and tradition restrictions
-9. **Adept Powers** ⚠️ - Need list of adept powers and Power Point costs
+9. **Adept Powers** ✅ - **PARTIALLY RESOLVED** - Basic structure implemented, initial powers added (Astral Perception, Attribute Boost)
 10. **Aspected Magician Restrictions** ⚠️ - Details on what "certain restrictions" and "one aspect" means
 11. **Language Skills Details** ✅ - **RESOLVED** - Language skill system implemented with free native language and complexity table
 12. **Specialization Details** - What specializations exist for each skill

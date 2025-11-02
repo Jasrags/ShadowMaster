@@ -74,11 +74,18 @@ func (h *Handlers) CreateCharacter(w http.ResponseWriter, r *http.Request) {
 		editionDataMap, ok := req.EditionData.(map[string]interface{})
 		if ok {
 			priorities := service.PrioritySelection{
-				Magic:      getStringFromMap(editionDataMap, "magic_priority", "None"),
-				Race:       getStringFromMap(editionDataMap, "race_priority", "C"),
-				Attributes: getStringFromMap(editionDataMap, "attr_priority", "B"),
-				Skills:     getStringFromMap(editionDataMap, "skills_priority", "D"),
-				Resources:  getStringFromMap(editionDataMap, "resources_priority", "C"),
+				Magic:      getStringFromMap(editionDataMap, "magic_priority", ""),
+				Race:       getStringFromMap(editionDataMap, "race_priority", ""),
+				Attributes: getStringFromMap(editionDataMap, "attr_priority", ""),
+				Skills:     getStringFromMap(editionDataMap, "skills_priority", ""),
+				Resources:  getStringFromMap(editionDataMap, "resources_priority", ""),
+			}
+			
+			// Validate that all priorities are assigned (A-E)
+			if priorities.Magic == "" || priorities.Race == "" || priorities.Attributes == "" || 
+			   priorities.Skills == "" || priorities.Resources == "" {
+				http.Error(w, "All priorities (A-E) must be assigned to each category", http.StatusBadRequest)
+				return
 			}
 			
 			character, err := h.CharacterService.CreateSR3Character(req.Name, req.PlayerName, priorities)

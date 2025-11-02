@@ -43,10 +43,11 @@ func (s *CharacterService) CreateSR3Character(name, playerName string, prioritie
 		Bioware:         []domain.Bioware{},
 		Gear:            []domain.Item{},
 		Vehicles:        []domain.Vehicle{},
-		Spells:          []domain.Spell{},
-		Focuses:         []domain.Focus{},
-		Spirits:         []domain.Spirit{},
-		Contacts:        []domain.Contact{},
+		Spells:       []domain.Spell{},
+		Focuses:      []domain.Focus{},
+		Spirits:      []domain.Spirit{},
+		AdeptPowers: []domain.AdeptPower{},
+		Contacts:     []domain.Contact{},
 
 		Reputation: domain.Reputation{
 			StreetCred:      0,
@@ -70,6 +71,9 @@ func (s *CharacterService) CreateSR3Character(name, playerName string, prioritie
 	// Apply language skills (free native language at rating 6)
 	applyLanguageSkills(sr3Data)
 
+	// Apply free contacts (two free level 1 contacts)
+	applyFreeContacts(sr3Data)
+
 	// Calculate derived attributes
 	sr3Data.Reaction = sr3Data.Quickness + sr3Data.Intelligence
 	sr3Data.Essence = 6.0 // Starting essence
@@ -85,8 +89,10 @@ func (s *CharacterService) CreateSR3Character(name, playerName string, prioritie
 }
 
 // PrioritySelection holds character creation priorities
+// Each priority (A-E) can only be used once
+// Magic priority: A or B = magical (A: Full Magician, B: Adept/Aspected), C/D/E = mundane
 type PrioritySelection struct {
-	Magic      string // A-E or "None"
+	Magic      string // A-E (A: Full Magician, B: Adept/Aspected, C/D/E: Mundane)
 	Race       string // A-E
 	Attributes string // A-E
 	Skills     string // A-E
@@ -121,8 +127,13 @@ func applyPriorities(char *domain.CharacterSR3, priorities PrioritySelection) er
 	char.SkillsPriority = priorities.Skills
 
 	// Apply magic priority
-	if priorities.Magic != "None" {
+	// Priority A or B = magical, Priority C/D/E = mundane (Magic Rating 0)
+	if priorities.Magic == "A" || priorities.Magic == "B" {
 		char.MagicRating = getMagicRatingFromPriority(priorities.Magic)
+		char.MagicPriority = priorities.Magic
+	} else {
+		// Priority C, D, or E = mundane (no magic)
+		char.MagicRating = 0
 		char.MagicPriority = priorities.Magic
 	}
 
@@ -339,3 +350,28 @@ func applyLanguageSkills(char *domain.CharacterSR3) {
 func GetLanguageSkillPoints(intelligence int) int {
 	return int(float64(intelligence) * 1.5)
 }
+
+// applyFreeContacts applies free contacts during character creation
+// Characters begin with two free level 1 contacts
+func applyFreeContacts(char *domain.CharacterSR3) {
+	// Give two free level 1 contacts (placeholder names, can be customized)
+	if len(char.Contacts) == 0 {
+		char.Contacts = []domain.Contact{
+			{
+				Name:    "Contact 1",
+				Type:    "General",
+				Level:   1,
+				Loyalty: 1,
+				Notes:   "Free level 1 contact",
+			},
+			{
+				Name:    "Contact 2",
+				Type:    "General",
+				Level:   1,
+				Loyalty: 1,
+				Notes:   "Free level 1 contact",
+			},
+		}
+	}
+}
+

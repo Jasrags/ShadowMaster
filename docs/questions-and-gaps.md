@@ -111,57 +111,92 @@ This document identifies questions and missing information needed to complete th
 
 ---
 
-### 4. Contacts System ⚠️
-**Issue:** Contacts are mentioned but cost system and types are not defined.
+### 4. Contacts System ✅ **RESOLVED**
+**Status:** Contact system rules have been provided and integrated into the codebase.
 
-**Questions:**
-- What are the contact types (connection types)?
-- What is the cost structure? (Document says "varies by contact type and loyalty")
-- How does loyalty rating affect cost?
-- What loyalty ratings are available (1-6 is mentioned, but costs?)
-- Can contacts be allocated during creation (free) vs purchased with nuyen?
-- What does each contact type provide?
-- Are there limits on starting contacts?
+**Rules:**
+- **Free Contacts:** Characters begin with two free level 1 contacts
+- **Contact Levels:** 1-3 (Level 1: Contact, Level 2: Buddy, Level 3: Friend for life)
+- **Loyalty:** 1-3 (not 1-6)
+- **No Limits:** No limits on starting contacts
 
-**Impact:** Cannot implement contact purchase/allocation system.
+**Starting Character Extras Table - Contacts:**
+| Extra Contacts | Cost |
+|----------------|------|
+| Contact (level 1) | 5,000¥ |
+| Buddy (Level 2) | 10,000¥ |
+| Friend for life (Level 3) | 200,000¥ |
 
----
+**Contact Types:**
+- Fixer, Dealer, Street Doc, Bartender, Information Broker, Corporate, Gang, Law Enforcement, Media, Smuggler, Talislegger, General
 
-### 5. Lifestyle System ⚠️
-**Issue:** Lifestyle levels are listed but costs and benefits are not specified.
+**Implementation Notes:**
+- `applyFreeContacts()` function automatically gives two free level 1 contacts during character creation
+- `GetContactCost()` function returns cost based on contact level
+- `Contact` domain model updated with `Level` field (1-3)
+- `Loyalty` field clarified as 1-3 (not 1-6)
+- Contact types database created in `pkg/shadowrun/edition/v3/contacts.go`
 
-**Questions:**
-- What is the cost for each lifestyle level?
-  - Street
-  - Squatter
-  - Low
-  - Middle
-  - High
-  - Luxury
-- Is this a one-time cost during character creation, or a monthly cost?
-- What benefits or penalties does each lifestyle provide?
-- Does lifestyle affect anything else (availability of equipment, contacts, etc.)?
-- Can lifestyle be changed later?
-
-**Impact:** Cannot implement lifestyle selection and tracking.
+**Impact:** ✅ Contact system now implemented!
 
 ---
 
-### 6. Adept Powers ⚠️
-**Issue:** Adepts receive 25 Power Points but we don't know what they can purchase.
+### 5. Lifestyle System ✅ **RESOLVED**
+**Status:** Lifestyle cost structure has been provided and integrated into the codebase.
 
-**Questions:**
-- What adept powers exist?
-- What is the cost (in Power Points) for each power?
-- Are there power ratings (like spell Force)?
+**Starting Character Extras Table - Lifestyle:**
+| Lifestyle | Cost (per month) |
+|-----------|------------------|
+| Street | 0¥ |
+| Squatter | 100¥ |
+| Low | 1,000¥ |
+| Middle | 5,000¥ |
+| High | 10,000¥ |
+| Luxury | 100,000¥ |
+
+**Implementation Notes:**
+- `GetLifestyleCost()` function returns monthly cost based on lifestyle level
+- Lifestyle levels database created in `pkg/shadowrun/edition/v3/lifestyle.go`
+- Lifestyle is stored in `CharacterSR3.Lifestyle` field
+
+**Impact:** ✅ Lifestyle system now implemented!
+
+---
+
+### 6. Adept Powers ✅ **PARTIALLY RESOLVED**
+**Status:** Some adept powers have been provided and integrated into the codebase. More powers needed for complete implementation.
+
+**Provided Powers:**
+- **Astral Perception**: 2 Power Points (fixed cost)
+- **Attribute Boost**: 0.25 Power Points per level (must specify an attribute)
+
+**Rules:**
+- Adepts receive 25 Power Points at creation (Priority B)
+- Some powers have fixed costs (e.g., Astral Perception)
+- Some powers have per-level costs (e.g., Attribute Boost)
+- Some powers require additional specification (e.g., Attribute Boost requires specifying which attribute)
+- Powers with "per level" in the cost will be listed as such
+
+**Implementation Notes:**
+- `AdeptPower` domain model created with support for:
+  - Fixed-cost powers
+  - Per-level powers (with rating/level)
+  - Powers requiring specification (e.g., attribute for Attribute Boost)
+- `AdeptPowersDatabase` created in `pkg/shadowrun/edition/v3/adept.go` with initial powers
+- `CalculateAdeptPowerCost()` function handles both fixed and per-level costs
+- `AdeptPowers` array added to `CharacterSR3` domain model
+
+**Remaining Questions:**
+- What other adept powers exist?
 - Are there restrictions on which powers can be learned?
 - Can powers be purchased at character creation only, or can they be learned later with karma?
+- Maximum levels for per-level powers (if any)
 
-**Impact:** Cannot implement Adept character creation.
+**Impact:** ✅ Basic adept power structure implemented! Ready to add more powers as they are provided.
 
 ---
 
-### 7. Spell Lists and Traditions ⚠️
+### 7. Spell Lists ⚠️
 **Issue:** We know spell costs (1 point per Force) but not what spells exist.
 
 **Questions:**
