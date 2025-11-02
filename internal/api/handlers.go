@@ -75,14 +75,14 @@ func (h *Handlers) CreateCharacter(w http.ResponseWriter, r *http.Request) {
 		if ok {
 			priorities := service.PrioritySelection{
 				Magic:      getStringFromMap(editionDataMap, "magic_priority", ""),
-				Race:       getStringFromMap(editionDataMap, "race_priority", ""),
+				Metatype:   getStringFromMap(editionDataMap, "metatype_priority", ""),
 				Attributes: getStringFromMap(editionDataMap, "attr_priority", ""),
 				Skills:     getStringFromMap(editionDataMap, "skills_priority", ""),
 				Resources:  getStringFromMap(editionDataMap, "resources_priority", ""),
 			}
 			
 			// Validate that all priorities are assigned (A-E)
-			if priorities.Magic == "" || priorities.Race == "" || priorities.Attributes == "" || 
+			if priorities.Magic == "" || priorities.Metatype == "" || priorities.Attributes == "" || 
 			   priorities.Skills == "" || priorities.Resources == "" {
 				http.Error(w, "All priorities (A-E) must be assigned to each category", http.StatusBadRequest)
 				return

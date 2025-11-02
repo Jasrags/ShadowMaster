@@ -29,7 +29,7 @@ func (s *CharacterService) CreateSR3Character(name, playerName string, prioritie
 	// Initialize SR3 data
 	sr3Data := &domain.CharacterSR3{
 		MagicPriority:     priorities.Magic,
-		RacePriority:      priorities.Race,
+		MetatypePriority:  priorities.Metatype,
 		AttrPriority:      priorities.Attributes,
 		SkillsPriority:    priorities.Skills,
 		ResourcesPriority: priorities.Resources,
@@ -93,7 +93,7 @@ func (s *CharacterService) CreateSR3Character(name, playerName string, prioritie
 // Magic priority: A or B = magical (A: Full Magician, B: Adept/Aspected), C/D/E = mundane
 type PrioritySelection struct {
 	Magic      string // A-E (A: Full Magician, B: Adept/Aspected, C/D/E: Mundane)
-	Race       string // A-E
+	Metatype   string // A-E
 	Attributes string // A-E
 	Skills     string // A-E
 	Resources  string // A-E
@@ -101,8 +101,8 @@ type PrioritySelection struct {
 
 // applyPriorities applies priority system to character
 func applyPriorities(char *domain.CharacterSR3, priorities PrioritySelection) error {
-	// Apply race priority (metatype selection)
-	metatype, attrMods, err := getMetatypeFromPriority(priorities.Race)
+	// Apply metatype priority (metatype selection)
+	metatype, attrMods, err := getMetatypeFromPriority(priorities.Metatype)
 	if err != nil {
 		return err
 	}

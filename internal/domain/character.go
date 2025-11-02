@@ -30,7 +30,7 @@ type CharacterSR3 struct {
 
 	// Priority system
 	MagicPriority     string `json:"magic_priority"`     // A-E (A/B: Magical, C/D/E: Mundane)
-	RacePriority      string `json:"race_priority"`      // A-E
+	MetatypePriority  string `json:"metatype_priority"`  // A-E
 	AttrPriority      string `json:"attr_priority"`      // A-E
 	SkillsPriority    string `json:"skills_priority"`    // A-E
 	ResourcesPriority string `json:"resources_priority"` // A-E

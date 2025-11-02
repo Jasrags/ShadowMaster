@@ -154,7 +154,7 @@ function showCreateCharacterModal() {
     // Reset priority assignments
     priorityAssignments = {
         magic: null,
-        race: null,
+        metatype: null,
         attributes: null,
         skills: null,
         resources: null
@@ -173,7 +173,7 @@ function showCreateCharacterModal() {
     });
     
     // Clear all priority value displays
-    ['magic', 'race', 'attributes', 'skills', 'resources'].forEach(category => {
+    ['magic', 'metatype', 'attributes', 'skills', 'resources'].forEach(category => {
         updatePriorityValue(category, null);
     });
     
@@ -210,7 +210,7 @@ function closeModal(modalId) {
 // Priority Assignment State
 let priorityAssignments = {
     magic: null,
-    race: null,
+    metatype: null,
     attributes: null,
     skills: null,
     resources: null
@@ -237,7 +237,7 @@ function getPriorityValue(category, priority) {
             'D': 'Mundane',
             'E': 'Mundane'
         },
-        race: {
+        metatype: {
             'A': 'All metatypes',
             'B': 'All metatypes',
             'C': 'Troll or Elf',
@@ -573,7 +573,7 @@ function handleCharacterFormSubmit(e) {
     characterWizardState.playerName = document.getElementById('player-name').value;
     characterWizardState.priorities = {
         magic: priorityAssignments.magic || '',
-        race: priorityAssignments.race || '',
+        metatype: priorityAssignments.metatype || '',
         attributes: priorityAssignments.attributes || '',
         skills: priorityAssignments.skills || '',
         resources: priorityAssignments.resources || ''
@@ -617,12 +617,12 @@ function showWizardStep(step) {
 
 // Display metatype selection based on metatype priority
 function displayMetatypeSelection() {
-    const racePriority = characterWizardState.priorities.race;
+    const metatypePriority = characterWizardState.priorities.metatype;
     const container = document.getElementById('metatype-selection-container');
     if (!container) return;
     
     // Get valid metatypes based on priority
-    const validMetatypes = getValidMetatypesForPriority(racePriority);
+    const validMetatypes = getValidMetatypesForPriority(metatypePriority);
     
     // Metatype data with modifiers and abilities
     const metatypeData = {
