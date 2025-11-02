@@ -807,8 +807,6 @@ function initializeMagicalAbilitiesStep() {
     document.querySelectorAll('input[name="tradition"]').forEach(input => {
         input.checked = false;
     });
-    const totemSelect = document.getElementById('totem-select');
-    if (totemSelect) totemSelect.value = '';
     
     // Display options based on Magic priority
     if (!magicPriority || magicPriority === 'C' || magicPriority === 'D' || magicPriority === 'E') {
@@ -927,8 +925,6 @@ function selectMagicalType(type) {
         document.querySelectorAll('input[name="tradition"]').forEach(input => {
             input.checked = false;
         });
-        const totemSelect = document.getElementById('totem-select');
-        if (totemSelect) totemSelect.value = '';
     }
     
     updateMagicSummary();
@@ -943,19 +939,109 @@ function handleTraditionSelection(tradition) {
     
     if (tradition === 'Shamanic') {
         totemSection.style.display = 'block';
+        // Display totem selection
+        displayTotemSelection();
         // Restore totem if already selected
         if (characterWizardState.totem) {
-            const totemSelect = document.getElementById('totem-select');
-            if (totemSelect) {
-                totemSelect.value = characterWizardState.totem;
-            }
+            // Selection will be restored in displayTotemSelection
         }
     } else {
         totemSection.style.display = 'none';
         characterWizardState.totem = null;
-        const totemSelect = document.getElementById('totem-select');
-        if (totemSelect) totemSelect.value = '';
     }
+    
+    updateMagicSummary();
+    validateMagicalAbilities();
+}
+
+// Display totem selection
+function displayTotemSelection() {
+    const container = document.getElementById('totem-selection-container');
+    if (!container) return;
+    
+    // Totem database
+    const totemData = {
+        'Bear': {
+            name: 'Bear',
+            description: 'The Bear totem represents strength, healing, and the protective nature of the forest. Bear shamans draw power from the wilderness and have a deep connection to natural healing. However, their primal nature makes them prone to berserk rages when wounded in combat.',
+            environment: 'Forest',
+            advantages: [
+                '+2 dice for Health spells',
+                '+2 dice for Forest spirits'
+            ],
+            disadvantages: [
+                'Bear shamans can go berserk when wounded',
+                'When taking physical damage in combat: Willpower (4) test',
+                'Berserk lasts 3 turns, minus 1 turn per success',
+                '3+ successes avert berserk rage entirely',
+                'Berserk shaman attacks closest living thing (friend or foe) with most powerful weapons',
+                'Berserk fury dissipates if target is incapacitated before time expires'
+            ]
+        }
+        // More totems can be added here
+    };
+    
+    container.innerHTML = '';
+    
+    Object.keys(totemData).forEach(totemName => {
+        const totem = totemData[totemName];
+        
+        const totemCard = document.createElement('div');
+        totemCard.className = 'totem-option';
+        totemCard.dataset.totem = totemName;
+        totemCard.addEventListener('click', () => selectTotem(totemName));
+        
+        // Mark as selected if already chosen
+        if (characterWizardState.totem === totemName) {
+            totemCard.classList.add('selected');
+        }
+        
+        let html = `<h4>${totem.name}</h4>`;
+        
+        // Description
+        if (totem.description) {
+            html += `<div class="totem-description"><p>${totem.description}</p></div>`;
+        }
+        
+        // Environment
+        if (totem.environment) {
+            html += `<div class="totem-environment"><h5>Environment</h5><p>${totem.environment}</p></div>`;
+        }
+        
+        // Advantages
+        if (totem.advantages && totem.advantages.length > 0) {
+            html += '<div class="totem-advantages"><h5>Advantages</h5><ul>';
+            totem.advantages.forEach(adv => {
+                html += `<li class="advantage">${adv}</li>`;
+            });
+            html += '</ul></div>';
+        }
+        
+        // Disadvantages
+        if (totem.disadvantages && totem.disadvantages.length > 0) {
+            html += '<div class="totem-disadvantages"><h5>Disadvantages</h5><ul>';
+            totem.disadvantages.forEach(disadv => {
+                html += `<li class="disadvantage">${disadv}</li>`;
+            });
+            html += '</ul></div>';
+        }
+        
+        totemCard.innerHTML = html;
+        container.appendChild(totemCard);
+    });
+}
+
+// Select a totem
+function selectTotem(totemName) {
+    characterWizardState.totem = totemName;
+    
+    // Update UI
+    document.querySelectorAll('.totem-option').forEach(option => {
+        option.classList.remove('selected');
+        if (option.dataset.totem === totemName) {
+            option.classList.add('selected');
+        }
+    });
     
     updateMagicSummary();
     validateMagicalAbilities();
@@ -1245,9 +1331,48 @@ function initializeAttributesStep() {
                     currentValue = minValue;
                 }
                 
+                // Prevent exceeding maximum attribute value (6 before modifiers)
+                if (currentValue > 6) {
+                    input.value = 6;
+                    currentValue = 6;
+                }
+                
                 // Get current modifiers dynamically (for display only)
                 const currentMetatype = characterWizardState.selectedMetatype || 'Human';
                 const currentModifiers = metatypeModifiers[currentMetatype] || metatypeModifiers['Human'];
+                
+                // Calculate total points used to check if we exceed available
+                const attrPriority = characterWizardState.priorities.attributes;
+                const availablePoints = getAvailableAttributePoints(attrPriority);
+                
+                // Calculate points used by all attributes
+                let totalUsed = 0;
+                ['body', 'quickness', 'strength', 'charisma', 'intelligence', 'willpower'].forEach(otherAttr => {
+                    const otherInput = document.getElementById(`attr-${otherAttr}`);
+                    if (otherInput) {
+                        const otherValue = otherInput.value.trim();
+                        const otherParsed = otherValue === '' ? 0 : parseInt(otherValue, 10);
+                        const otherActual = isNaN(otherParsed) ? 0 : otherParsed;
+                        const otherStartValue = startingValues[otherAttr] || 1;
+                        const otherPointsSpent = Math.max(0, otherActual - otherStartValue);
+                        totalUsed += otherPointsSpent;
+                    }
+                });
+                
+                // If we exceed available points, clamp this attribute to what's affordable
+                if (totalUsed > availablePoints) {
+                    // Calculate points used by OTHER attributes (excluding this one)
+                    let otherAttributesUsed = totalUsed - Math.max(0, currentValue - minValue);
+                    
+                    // Calculate maximum we can afford for this attribute
+                    const pointsLeftForThis = availablePoints - otherAttributesUsed;
+                    const maxAffordable = minValue + Math.max(0, pointsLeftForThis);
+                    
+                    // Set to the lower of: what they entered (clamped to 6), or what we can afford
+                    const finalValue = Math.min(maxAffordable, 6, currentValue);
+                    input.value = finalValue;
+                    currentValue = finalValue;
+                }
                 
                 updateAttributeTracking();
                 updateFinalValues(currentModifiers);
@@ -1573,11 +1698,22 @@ function validateAttributes() {
         }
     });
     
+    // Get starting values for validation (for checking if points are all spent)
+    const startingValues = {
+        body: 1 + (modifiers.Body || 0),
+        quickness: 1 + (modifiers.Quickness || 0),
+        strength: 1 + (modifiers.Strength || 0),
+        charisma: 1 + (modifiers.Charisma || 0),
+        intelligence: 1 + (modifiers.Intelligence || 0),
+        willpower: 1 + (modifiers.Willpower || 0)
+    };
+    
     // Check total points
     if (used > available) {
-        errors.push(`Using ${used} points, but only ${available} available`);
+        errors.push(`Using ${used} points, but only ${available} available. Reduce attributes to stay within limit.`);
     } else if (used < available) {
-        warnings.push(`${available - used} points remaining`);
+        const remaining = available - used;
+        errors.push(`You must spend all ${available} points. ${remaining} point(s) remaining.`);
     }
     
     // Update validation message
@@ -1592,18 +1728,13 @@ function validateAttributes() {
         validationEl.style.display = 'block';
         if (nextBtn) nextBtn.disabled = true;
         return false;
-    } else if (used === available) {
+    } else {
+        // All points spent and no errors
         validationEl.className = 'validation-message success';
         validationEl.textContent = '✓ All points assigned correctly';
         validationEl.style.display = 'block';
         if (nextBtn) nextBtn.disabled = false;
         return true;
-    } else {
-        validationEl.className = 'validation-message error';
-        validationEl.textContent = `Please assign all ${available} points. ${available - used} remaining.`;
-        validationEl.style.display = 'block';
-        if (nextBtn) nextBtn.disabled = true;
-        return false;
     }
 }
 
@@ -3012,15 +3143,7 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
     
-    // Totem selection
-    const totemSelect = document.getElementById('totem-select');
-    if (totemSelect) {
-        totemSelect.addEventListener('change', () => {
-            characterWizardState.totem = totemSelect.value;
-            updateMagicSummary();
-            validateMagicalAbilities();
-        });
-    }
+    // Totem selection is handled dynamically when Shamanic tradition is selected
     
     const attrBackBtn = document.getElementById('attr-back-btn');
     if (attrBackBtn) {
