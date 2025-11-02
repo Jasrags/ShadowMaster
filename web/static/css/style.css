@@ -583,6 +583,89 @@ button:hover {
     font-style: italic;
 }
 
+/* Magical Abilities Selection */
+.magic-type-option {
+    padding: 1rem;
+    margin: 0.5rem 0;
+    background-color: #2a2a2a;
+    border: 2px solid #444;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.magic-type-option:hover {
+    border-color: #00ff88;
+    background-color: #333;
+}
+
+.magic-type-option.selected {
+    border-color: #00ff88;
+    background-color: #1a3a1a;
+}
+
+.magic-type-option h4 {
+    margin: 0 0 0.5rem 0;
+    color: #00ff88;
+}
+
+.magic-type-option p {
+    margin: 0.25rem 0;
+    color: #ccc;
+    font-size: 0.9rem;
+}
+
+.tradition-options {
+    display: flex;
+    gap: 1rem;
+    margin: 1rem 0;
+}
+
+.tradition-option {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.75rem 1rem;
+    background-color: #2a2a2a;
+    border: 2px solid #444;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.tradition-option:hover {
+    border-color: #00ff88;
+    background-color: #333;
+}
+
+.tradition-option input[type="radio"]:checked + span {
+    color: #00ff88;
+    font-weight: bold;
+}
+
+.tradition-option:has(input[type="radio"]:checked) {
+    border-color: #00ff88;
+    background-color: #1a3a1a;
+}
+
+.magic-summary {
+    margin-top: 1.5rem;
+    padding: 1rem;
+    background-color: #2a2a2a;
+    border-radius: 6px;
+    border: 1px solid #444;
+}
+
+.magic-summary h4 {
+    margin-top: 0;
+    color: #00ff88;
+}
+
+.magic-summary p {
+    margin: 0.5rem 0;
+    color: #ccc;
+}
+
 .attribute-input {
     width: 80px;
     padding: 0.5rem;

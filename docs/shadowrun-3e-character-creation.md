@@ -197,6 +197,7 @@ Determines starting nuyen (money).
    - **Priority C, D, E**: Mundane (no magical ability)
 2. If Full Magician or Aspected Magician:
    - Select Tradition: Shamanic or Hermetic
+   - If Shamanic we need to choose a totem.  
    - Note spell points received (Full Magician: 25, Aspected: 35)
    - Note Magic Rating (Full Magician: 6, Aspected/Adept: 4)
 3. If Adept:

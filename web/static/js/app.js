@@ -147,6 +147,9 @@ function showCreateCharacterModal() {
         playerName: '',
         selectedMetatype: null,
         priorities: null,
+        magicalType: null,
+        tradition: null,
+        totem: null,
         attributes: null, // Will be set when entering attributes step
         attributeBaseValues: null // Will be calculated based on selected metatype
     };
@@ -228,6 +231,9 @@ let characterWizardState = {
     playerName: '',
     selectedMetatype: null,
     priorities: null,
+    magicalType: null, // 'Full Magician', 'Aspected Magician', 'Adept', or 'Mundane'
+    tradition: null, // 'Hermetic' or 'Shamanic' (for Full/Aspected Magicians)
+    totem: null, // Totem name (for Shamanic mages)
     attributes: null,
     attributeBaseValues: null
 };
@@ -610,17 +616,27 @@ function showWizardStep(step) {
         }
     });
     
-    // Show current step
+    // Show current step first (so elements are available for initialization)
     const currentStepEl = document.getElementById(`step-${step}`);
-    if (currentStepEl) {
-        currentStepEl.style.display = 'block';
+    if (!currentStepEl) {
+        console.error(`Step ${step} element not found`);
+        return;
     }
+    currentStepEl.style.display = 'block';
     
     // Initialize step-specific content
-    if (step === 2) {
-        displayMetatypeSelection();
-    } else if (step === 3) {
-        initializeAttributesStep();
+    try {
+        if (step === 2) {
+            displayMetatypeSelection();
+        } else if (step === 3) {
+            // Initialize magical abilities step
+            initializeMagicalAbilitiesStep();
+        } else if (step === 4) {
+            // Initialize attributes step
+            initializeAttributesStep();
+        }
+    } catch (error) {
+        console.error(`Error initializing step ${step}:`, error);
     }
 }
 
@@ -761,6 +777,300 @@ function selectMetatype(metatypeName) {
     }
 }
 
+// Initialize magical abilities step
+function initializeMagicalAbilitiesStep() {
+    const magicPriority = characterWizardState.priorities.magic;
+    const container = document.getElementById('magical-abilities-container');
+    const helpText = document.getElementById('magic-help-text');
+    const traditionSection = document.getElementById('tradition-selection');
+    const totemSection = document.getElementById('totem-selection');
+    const summarySection = document.getElementById('magic-summary');
+    
+    if (!container) return;
+    
+    // Clear previous selections if priority changed
+    if (characterWizardState.magicalType) {
+        const currentPriority = characterWizardState.priorities.magic;
+        if (magicPriority !== currentPriority) {
+            characterWizardState.magicalType = null;
+            characterWizardState.tradition = null;
+            characterWizardState.totem = null;
+        }
+    }
+    
+    container.innerHTML = '';
+    traditionSection.style.display = 'none';
+    totemSection.style.display = 'none';
+    summarySection.style.display = 'none';
+    
+    // Hide tradition/totem selections initially
+    document.querySelectorAll('input[name="tradition"]').forEach(input => {
+        input.checked = false;
+    });
+    const totemSelect = document.getElementById('totem-select');
+    if (totemSelect) totemSelect.value = '';
+    
+    // Display options based on Magic priority
+    if (!magicPriority || magicPriority === 'C' || magicPriority === 'D' || magicPriority === 'E') {
+        // Mundane (no magic)
+        helpText.textContent = 'Your Magic priority is ' + magicPriority + '. Your character is Mundane (no magical ability).';
+        const mundaneCard = document.createElement('div');
+        mundaneCard.className = 'magic-type-option selected';
+        mundaneCard.innerHTML = '<h4>Mundane</h4><p>No magical ability. Magic Rating = 0.</p>';
+        container.appendChild(mundaneCard);
+        characterWizardState.magicalType = 'Mundane';
+        characterWizardState.tradition = null;
+        characterWizardState.totem = null;
+        updateMagicSummary();
+        validateMagicalAbilities();
+    } else if (magicPriority === 'A') {
+        // Full Magician only
+        helpText.textContent = 'Your Magic priority is A. Your character must be a Full Magician.';
+        const fullMagicianCard = document.createElement('div');
+        fullMagicianCard.className = 'magic-type-option selected';
+        fullMagicianCard.innerHTML = `
+            <h4>Full Magician</h4>
+            <p>Magic Rating: 6</p>
+            <p>Spell Points: 25</p>
+            <p>Must select a tradition (Shamanic or Hermetic)</p>
+        `;
+        container.appendChild(fullMagicianCard);
+        characterWizardState.magicalType = 'Full Magician';
+        traditionSection.style.display = 'block';
+        
+        // If tradition already selected, restore it
+        if (characterWizardState.tradition) {
+            const traditionInput = document.querySelector(`input[name="tradition"][value="${characterWizardState.tradition}"]`);
+            if (traditionInput) {
+                traditionInput.checked = true;
+                handleTraditionSelection(characterWizardState.tradition);
+            }
+        }
+    } else if (magicPriority === 'B') {
+        // Adept or Aspected Magician
+        helpText.textContent = 'Your Magic priority is B. Choose between Adept or Aspected Magician.';
+        
+        const adeptCard = document.createElement('div');
+        adeptCard.className = 'magic-type-option';
+        adeptCard.dataset.type = 'Adept';
+        adeptCard.innerHTML = `
+            <h4>Adept</h4>
+            <p>Magic Rating: 4</p>
+            <p>Power Points: 25</p>
+            <p>Physical magical enhancements. Cannot cast spells.</p>
+        `;
+        adeptCard.addEventListener('click', () => selectMagicalType('Adept'));
+        if (characterWizardState.magicalType === 'Adept') {
+            adeptCard.classList.add('selected');
+        }
+        container.appendChild(adeptCard);
+        
+        const aspectedCard = document.createElement('div');
+        aspectedCard.className = 'magic-type-option';
+        aspectedCard.dataset.type = 'Aspected Magician';
+        aspectedCard.innerHTML = `
+            <h4>Aspected Magician</h4>
+            <p>Magic Rating: 4</p>
+            <p>Spell Points: 35</p>
+            <p>Specialized in one aspect of tradition. Must select a tradition (Shamanic or Hermetic).</p>
+        `;
+        aspectedCard.addEventListener('click', () => selectMagicalType('Aspected Magician'));
+        if (characterWizardState.magicalType === 'Aspected Magician') {
+            aspectedCard.classList.add('selected');
+            traditionSection.style.display = 'block';
+            // Restore tradition if already selected
+            if (characterWizardState.tradition) {
+                const traditionInput = document.querySelector(`input[name="tradition"][value="${characterWizardState.tradition}"]`);
+                if (traditionInput) {
+                    traditionInput.checked = true;
+                    handleTraditionSelection(characterWizardState.tradition);
+                }
+            }
+        }
+        container.appendChild(aspectedCard);
+    }
+    
+    validateMagicalAbilities();
+}
+
+// Select magical type (Adept or Aspected Magician for Priority B)
+function selectMagicalType(type) {
+    characterWizardState.magicalType = type;
+    
+    // Update UI
+    document.querySelectorAll('.magic-type-option').forEach(option => {
+        option.classList.remove('selected');
+        if (option.dataset.type === type) {
+            option.classList.add('selected');
+        }
+    });
+    
+    // Show/hide tradition selection
+    const traditionSection = document.getElementById('tradition-selection');
+    const totemSection = document.getElementById('totem-selection');
+    
+    if (type === 'Aspected Magician') {
+        traditionSection.style.display = 'block';
+        // Restore tradition if already selected
+        if (characterWizardState.tradition) {
+            const traditionInput = document.querySelector(`input[name="tradition"][value="${characterWizardState.tradition}"]`);
+            if (traditionInput) {
+                traditionInput.checked = true;
+                handleTraditionSelection(characterWizardState.tradition);
+            }
+        }
+    } else if (type === 'Adept') {
+        traditionSection.style.display = 'none';
+        totemSection.style.display = 'none';
+        characterWizardState.tradition = null;
+        characterWizardState.totem = null;
+        document.querySelectorAll('input[name="tradition"]').forEach(input => {
+            input.checked = false;
+        });
+        const totemSelect = document.getElementById('totem-select');
+        if (totemSelect) totemSelect.value = '';
+    }
+    
+    updateMagicSummary();
+    validateMagicalAbilities();
+}
+
+// Handle tradition selection
+function handleTraditionSelection(tradition) {
+    characterWizardState.tradition = tradition;
+    
+    const totemSection = document.getElementById('totem-selection');
+    
+    if (tradition === 'Shamanic') {
+        totemSection.style.display = 'block';
+        // Restore totem if already selected
+        if (characterWizardState.totem) {
+            const totemSelect = document.getElementById('totem-select');
+            if (totemSelect) {
+                totemSelect.value = characterWizardState.totem;
+            }
+        }
+    } else {
+        totemSection.style.display = 'none';
+        characterWizardState.totem = null;
+        const totemSelect = document.getElementById('totem-select');
+        if (totemSelect) totemSelect.value = '';
+    }
+    
+    updateMagicSummary();
+    validateMagicalAbilities();
+}
+
+// Update magic summary display
+function updateMagicSummary() {
+    const summarySection = document.getElementById('magic-summary');
+    const summaryContent = document.getElementById('magic-summary-content');
+    
+    if (!summarySection || !summaryContent) return;
+    
+    const type = characterWizardState.magicalType;
+    if (!type) {
+        summarySection.style.display = 'none';
+        return;
+    }
+    
+    summarySection.style.display = 'block';
+    let html = '';
+    
+    if (type === 'Mundane') {
+        html = '<p><strong>Type:</strong> Mundane</p>';
+        html += '<p><strong>Magic Rating:</strong> 0</p>';
+    } else if (type === 'Full Magician') {
+        html = '<p><strong>Type:</strong> Full Magician</p>';
+        html += '<p><strong>Magic Rating:</strong> 6</p>';
+        html += '<p><strong>Spell Points:</strong> 25</p>';
+        if (characterWizardState.tradition) {
+            html += `<p><strong>Tradition:</strong> ${characterWizardState.tradition}</p>`;
+            if (characterWizardState.tradition === 'Shamanic' && characterWizardState.totem) {
+                html += `<p><strong>Totem:</strong> ${characterWizardState.totem}</p>`;
+            }
+        }
+    } else if (type === 'Aspected Magician') {
+        html = '<p><strong>Type:</strong> Aspected Magician</p>';
+        html += '<p><strong>Magic Rating:</strong> 4</p>';
+        html += '<p><strong>Spell Points:</strong> 35</p>';
+        if (characterWizardState.tradition) {
+            html += `<p><strong>Tradition:</strong> ${characterWizardState.tradition}</p>`;
+            if (characterWizardState.tradition === 'Shamanic' && characterWizardState.totem) {
+                html += `<p><strong>Totem:</strong> ${characterWizardState.totem}</p>`;
+            }
+        }
+    } else if (type === 'Adept') {
+        html = '<p><strong>Type:</strong> Adept</p>';
+        html += '<p><strong>Magic Rating:</strong> 4</p>';
+        html += '<p><strong>Power Points:</strong> 25</p>';
+    }
+    
+    summaryContent.innerHTML = html;
+}
+
+// Validate magical abilities selection
+function validateMagicalAbilities() {
+    const magicPriority = characterWizardState.priorities.magic;
+    const nextBtn = document.getElementById('magic-next-btn');
+    
+    if (!nextBtn) return false;
+    
+    // If mundane, always valid
+    if (!magicPriority || magicPriority === 'C' || magicPriority === 'D' || magicPriority === 'E') {
+        nextBtn.disabled = false;
+        return true;
+    }
+    
+    // Priority A: Must be Full Magician with tradition selected
+    if (magicPriority === 'A') {
+        if (characterWizardState.magicalType === 'Full Magician' && characterWizardState.tradition) {
+            // If Shamanic, must have totem
+            if (characterWizardState.tradition === 'Shamanic' && !characterWizardState.totem) {
+                nextBtn.disabled = true;
+                return false;
+            }
+            nextBtn.disabled = false;
+            return true;
+        }
+        nextBtn.disabled = true;
+        return false;
+    }
+    
+    // Priority B: Must be Adept or Aspected Magician
+    if (magicPriority === 'B') {
+        if (!characterWizardState.magicalType) {
+            nextBtn.disabled = true;
+            return false;
+        }
+        
+        if (characterWizardState.magicalType === 'Adept') {
+            nextBtn.disabled = false;
+            return true;
+        }
+        
+        if (characterWizardState.magicalType === 'Aspected Magician') {
+            if (!characterWizardState.tradition) {
+                nextBtn.disabled = true;
+                return false;
+            }
+            // If Shamanic, must have totem
+            if (characterWizardState.tradition === 'Shamanic' && !characterWizardState.totem) {
+                nextBtn.disabled = true;
+                return false;
+            }
+            nextBtn.disabled = false;
+            return true;
+        }
+        
+        nextBtn.disabled = true;
+        return false;
+    }
+    
+    nextBtn.disabled = true;
+    return false;
+}
+
 // Metatype modifiers data
 const metatypeModifiers = {
     'Human': {
@@ -819,13 +1129,24 @@ function getAvailableAttributePoints(priority) {
 
 // Initialize attributes step
 function initializeAttributesStep() {
+    // Check if priorities are set
+    if (!characterWizardState.priorities || !characterWizardState.priorities.attributes) {
+        console.error('Attributes priority not set');
+        return;
+    }
+    
     const attrPriority = characterWizardState.priorities.attributes;
     const availablePoints = getAvailableAttributePoints(attrPriority);
     const selectedMetatype = characterWizardState.selectedMetatype || 'Human';
     const modifiers = metatypeModifiers[selectedMetatype] || metatypeModifiers['Human'];
     
     // Set available points
-    document.getElementById('available-points').textContent = availablePoints;
+    const availablePointsEl = document.getElementById('available-points');
+    if (!availablePointsEl) {
+        console.error('available-points element not found');
+        return;
+    }
+    availablePointsEl.textContent = availablePoints;
     
     // Calculate base starting values
     // Step 1: Characters start with 1 in all attributes for free
@@ -1141,20 +1462,22 @@ function updateDerivedAttributes(modifiers) {
 
 // Update magic rating display
 function updateMagicRating() {
-    const magicPriority = characterWizardState.priorities.magic;
+    const magicalType = characterWizardState.magicalType || 'Mundane';
     let magicRating = 0;
     let magicNote = 'Mundane (no magic)';
     
-    if (magicPriority === 'A') {
+    if (magicalType === 'Full Magician') {
         magicRating = 6;
         magicNote = 'Full Magician';
-    } else if (magicPriority === 'B') {
+    } else if (magicalType === 'Aspected Magician' || magicalType === 'Adept') {
         magicRating = 4;
-        magicNote = 'Adept/Aspected Magician';
+        magicNote = magicalType;
     }
     
-    document.getElementById('derived-magic').textContent = magicRating;
-    document.getElementById('magic-note').textContent = magicNote;
+    const magicEl = document.getElementById('derived-magic');
+    const noteEl = document.getElementById('magic-note');
+    if (magicEl) magicEl.textContent = magicRating;
+    if (noteEl) noteEl.textContent = magicNote;
 }
 
 // Validate attributes
@@ -2661,14 +2984,47 @@ document.addEventListener('DOMContentLoaded', () => {
     if (metatypeNextBtn) {
         metatypeNextBtn.addEventListener('click', () => {
             if (characterWizardState.selectedMetatype) {
-                showWizardStep(3);
+                showWizardStep(3); // Go to Magic step
             }
+        });
+    }
+    
+    // Magic step navigation
+    const magicBackBtn = document.getElementById('magic-back-btn');
+    if (magicBackBtn) {
+        magicBackBtn.addEventListener('click', () => showWizardStep(2));
+    }
+    
+    const magicNextBtn = document.getElementById('magic-next-btn');
+    if (magicNextBtn) {
+        magicNextBtn.addEventListener('click', () => {
+            if (validateMagicalAbilities()) {
+                showWizardStep(4); // Go to Attributes step
+            }
+        });
+    }
+    
+    // Tradition selection
+    const traditionInputs = document.querySelectorAll('input[name="tradition"]');
+    traditionInputs.forEach(input => {
+        input.addEventListener('change', () => {
+            handleTraditionSelection(input.value);
+        });
+    });
+    
+    // Totem selection
+    const totemSelect = document.getElementById('totem-select');
+    if (totemSelect) {
+        totemSelect.addEventListener('change', () => {
+            characterWizardState.totem = totemSelect.value;
+            updateMagicSummary();
+            validateMagicalAbilities();
         });
     }
     
     const attrBackBtn = document.getElementById('attr-back-btn');
     if (attrBackBtn) {
-        attrBackBtn.addEventListener('click', () => showWizardStep(2));
+        attrBackBtn.addEventListener('click', () => showWizardStep(3)); // Back to Magic step
     }
     
     const attrNextBtn = document.getElementById('attr-next-btn');

@@ -41,6 +41,10 @@
                         </div>
                         <div class="progress-step" data-step="3">
                             <span class="step-number">3</span>
+                            <span class="step-label">Magic</span>
+                        </div>
+                        <div class="progress-step" data-step="4">
+                            <span class="step-number">4</span>
                             <span class="step-label">Attributes</span>
                         </div>
                     </div>
@@ -127,13 +131,56 @@
                         <div id="metatype-selection-container" class="metatype-selection-grid"></div>
                         <div class="form-actions">
                             <button type="button" id="metatype-back-btn" class="btn-secondary">Back</button>
-                            <button type="button" id="metatype-next-btn" class="btn-primary" disabled>Next: Choose Attributes</button>
+                            <button type="button" id="metatype-next-btn" class="btn-primary" disabled>Next: Choose Magical Abilities</button>
                             <button type="button" class="btn-cancel">Cancel</button>
                         </div>
                     </div>
                     
-                    <!-- Step 3: Attributes -->
+                    <!-- Step 3: Magical Abilities -->
                     <div class="wizard-step" id="step-3" data-step="3" style="display: none;">
+                        <h3>Choose Magical Abilities</h3>
+                        <p class="help-text" id="magic-help-text">Select your character's magical type based on your magic priority selection.</p>
+                        
+                        <div id="magical-abilities-container">
+                            <!-- Options will be dynamically generated based on Magic priority -->
+                        </div>
+                        
+                        <div id="tradition-selection" style="display: none;">
+                            <h4>Select Tradition</h4>
+                            <div class="tradition-options">
+                                <label class="tradition-option">
+                                    <input type="radio" name="tradition" value="Hermetic">
+                                    <span>Hermetic</span>
+                                </label>
+                                <label class="tradition-option">
+                                    <input type="radio" name="tradition" value="Shamanic">
+                                    <span>Shamanic</span>
+                                </label>
+                            </div>
+                        </div>
+                        
+                        <div id="totem-selection" style="display: none;">
+                            <h4>Select Totem</h4>
+                            <select id="totem-select" class="form-control">
+                                <option value="">Choose a totem...</option>
+                                <option value="Bear">Bear</option>
+                            </select>
+                        </div>
+                        
+                        <div class="magic-summary" id="magic-summary" style="display: none;">
+                            <h4>Summary</h4>
+                            <div id="magic-summary-content"></div>
+                        </div>
+                        
+                        <div class="form-actions">
+                            <button type="button" id="magic-back-btn" class="btn-secondary">Back</button>
+                            <button type="button" id="magic-next-btn" class="btn-primary" disabled>Next: Choose Attributes</button>
+                            <button type="button" class="btn-cancel">Cancel</button>
+                        </div>
+                    </div>
+                    
+                    <!-- Step 4: Attributes -->
+                    <div class="wizard-step" id="step-4" data-step="4" style="display: none;">
                         <h3>Assign Attributes</h3>
                         <p class="help-text">Characters start with 1 in all attributes for free, plus racial modifiers. Attributes can be below 1 if modifiers are negative, but must be raised to at least 1 before the character is valid. Each attribute can be raised up to 6 maximum (before racial modifiers).</p>
                         
