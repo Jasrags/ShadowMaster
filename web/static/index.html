@@ -37,7 +37,7 @@
                         </div>
                         <div class="progress-step" data-step="2">
                             <span class="step-number">2</span>
-                            <span class="step-label">Race</span>
+                            <span class="step-label">Metatype</span>
                         </div>
                         <div class="progress-step" data-step="3">
                             <span class="step-number">3</span>
@@ -70,7 +70,7 @@
                                     </div>
                                 </div>
                                 <div class="priority-category" data-category="race">
-                                    <label>Race: <span class="priority-value" id="race-value"></span></label>
+                                    <label>Metatype: <span class="priority-value" id="race-value"></span></label>
                                     <div class="priority-dropzone" id="race-dropzone" data-category="race">
                                         <span class="dropzone-text">Drop priority here</span>
                                         <input type="hidden" id="race-priority" name="race_priority" value="">
@@ -114,20 +114,20 @@
                         </div>
                         
                             <div class="form-actions">
-                                <button type="submit">Next: Choose Race</button>
+                                <button type="submit">Next: Choose Metatype</button>
                                 <button type="button" class="btn-cancel">Cancel</button>
                             </div>
                         </form>
                     </div>
                     
-                    <!-- Step 2: Race Selection -->
+                    <!-- Step 2: Metatype Selection -->
                     <div class="wizard-step" id="step-2" data-step="2" style="display: none;">
-                        <h3>Choose Race (Metatype)</h3>
-                        <p class="help-text">Select your character's metatype based on your race priority selection.</p>
-                        <div id="race-selection-container" class="race-selection-grid"></div>
+                        <h3>Choose Metatype</h3>
+                        <p class="help-text">Select your character's metatype based on your metatype priority selection.</p>
+                        <div id="metatype-selection-container" class="metatype-selection-grid"></div>
                         <div class="form-actions">
-                            <button type="button" id="race-back-btn" class="btn-secondary">Back</button>
-                            <button type="button" id="race-next-btn" class="btn-primary" disabled>Next: Choose Attributes</button>
+                            <button type="button" id="metatype-back-btn" class="btn-secondary">Back</button>
+                            <button type="button" id="metatype-next-btn" class="btn-primary" disabled>Next: Choose Attributes</button>
                             <button type="button" class="btn-cancel">Cancel</button>
                         </div>
                     </div>

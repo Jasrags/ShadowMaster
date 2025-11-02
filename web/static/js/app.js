@@ -144,7 +144,7 @@ function showCreateCharacterModal() {
         currentStep: 1,
         characterName: '',
         playerName: '',
-        selectedRace: null,
+        selectedMetatype: null,
         priorities: null
     };
     
@@ -221,7 +221,7 @@ let characterWizardState = {
     currentStep: 1,
     characterName: '',
     playerName: '',
-    selectedRace: null,
+    selectedMetatype: null,
     priorities: null
 };
 
@@ -238,8 +238,8 @@ function getPriorityValue(category, priority) {
             'E': 'Mundane'
         },
         race: {
-            'A': 'All races',
-            'B': 'All races',
+            'A': 'All metatypes',
+            'B': 'All metatypes',
             'C': 'Troll or Elf',
             'D': 'Dwarf or Ork',
             'E': 'Human'
@@ -579,7 +579,7 @@ function handleCharacterFormSubmit(e) {
         resources: priorityAssignments.resources || ''
     };
     
-    // Move to step 2: Race selection
+    // Move to step 2: Metatype selection
     showWizardStep(2);
 }
 
@@ -611,21 +611,21 @@ function showWizardStep(step) {
     
     // Initialize step-specific content
     if (step === 2) {
-        displayRaceSelection();
+        displayMetatypeSelection();
     }
 }
 
-// Display race selection based on race priority
-function displayRaceSelection() {
+// Display metatype selection based on metatype priority
+function displayMetatypeSelection() {
     const racePriority = characterWizardState.priorities.race;
-    const container = document.getElementById('race-selection-container');
+    const container = document.getElementById('metatype-selection-container');
     if (!container) return;
     
-    // Get valid races based on priority
-    const validRaces = getValidRacesForPriority(racePriority);
+    // Get valid metatypes based on priority
+    const validMetatypes = getValidMetatypesForPriority(racePriority);
     
-    // Race data with modifiers and abilities
-    const raceData = {
+    // Metatype data with modifiers and abilities
+    const metatypeData = {
         'Human': {
             name: 'Human',
             modifiers: {},
@@ -673,23 +673,23 @@ function displayRaceSelection() {
     
     container.innerHTML = '';
     
-    validRaces.forEach(raceName => {
-        const race = raceData[raceName];
-        if (!race) return;
+    validMetatypes.forEach(metatypeName => {
+        const metatype = metatypeData[metatypeName];
+        if (!metatype) return;
         
-        const raceCard = document.createElement('div');
-        raceCard.className = 'race-option';
-        raceCard.dataset.race = raceName;
-        raceCard.addEventListener('click', () => selectRace(raceName));
+        const metatypeCard = document.createElement('div');
+        metatypeCard.className = 'metatype-option';
+        metatypeCard.dataset.metatype = metatypeName;
+        metatypeCard.addEventListener('click', () => selectMetatype(metatypeName));
         
-        let html = `<h4>${race.name}</h4>`;
+        let html = `<h4>${metatype.name}</h4>`;
         
         // Attribute modifiers
-        const modifiers = Object.keys(race.modifiers);
+        const modifiers = Object.keys(metatype.modifiers);
         if (modifiers.length > 0) {
-            html += '<div class="race-attributes"><h5>Attribute Modifiers</h5>';
+            html += '<div class="metatype-attributes"><h5>Attribute Modifiers</h5>';
             modifiers.forEach(attr => {
-                const mod = race.modifiers[attr];
+                const mod = metatype.modifiers[attr];
                 const modClass = mod > 0 ? 'positive' : 'negative';
                 const modSign = mod > 0 ? '+' : '';
                 html += `<div class="attribute-mod">
@@ -699,25 +699,25 @@ function displayRaceSelection() {
             });
             html += '</div>';
         } else {
-            html += '<div class="race-attributes"><h5>Attribute Modifiers</h5><p style="color: #888; font-size: 0.85rem;">No modifiers (baseline)</p></div>';
+            html += '<div class="metatype-attributes"><h5>Attribute Modifiers</h5><p style="color: #888; font-size: 0.85rem;">No modifiers (baseline)</p></div>';
         }
         
         // Special abilities
-        if (race.abilities.length > 0) {
-            html += '<div class="race-abilities"><h5>Special Abilities</h5>';
-            race.abilities.forEach(ability => {
+        if (metatype.abilities.length > 0) {
+            html += '<div class="metatype-abilities"><h5>Special Abilities</h5>';
+            metatype.abilities.forEach(ability => {
                 html += `<div class="ability">${ability}</div>`;
             });
             html += '</div>';
         }
         
-        raceCard.innerHTML = html;
-        container.appendChild(raceCard);
+        metatypeCard.innerHTML = html;
+        container.appendChild(metatypeCard);
     });
 }
 
-// Get valid races based on race priority
-function getValidRacesForPriority(priority) {
+// Get valid metatypes based on metatype priority
+function getValidMetatypesForPriority(priority) {
     switch (priority) {
         case 'A':
         case 'B':
@@ -733,20 +733,20 @@ function getValidRacesForPriority(priority) {
     }
 }
 
-// Select a race
-function selectRace(raceName) {
-    characterWizardState.selectedRace = raceName;
+// Select a metatype
+function selectMetatype(metatypeName) {
+    characterWizardState.selectedMetatype = metatypeName;
     
     // Update UI
-    document.querySelectorAll('.race-option').forEach(option => {
+    document.querySelectorAll('.metatype-option').forEach(option => {
         option.classList.remove('selected');
-        if (option.dataset.race === raceName) {
+        if (option.dataset.metatype === metatypeName) {
             option.classList.add('selected');
         }
     });
     
     // Enable next button
-    const nextBtn = document.getElementById('race-next-btn');
+    const nextBtn = document.getElementById('metatype-next-btn');
     if (nextBtn) {
         nextBtn.disabled = false;
     }
@@ -2120,15 +2120,15 @@ document.addEventListener('DOMContentLoaded', () => {
     });
     
     // Wizard navigation buttons
-    const raceBackBtn = document.getElementById('race-back-btn');
-    if (raceBackBtn) {
-        raceBackBtn.addEventListener('click', () => showWizardStep(1));
+    const metatypeBackBtn = document.getElementById('metatype-back-btn');
+    if (metatypeBackBtn) {
+        metatypeBackBtn.addEventListener('click', () => showWizardStep(1));
     }
     
-    const raceNextBtn = document.getElementById('race-next-btn');
-    if (raceNextBtn) {
-        raceNextBtn.addEventListener('click', () => {
-            if (characterWizardState.selectedRace) {
+    const metatypeNextBtn = document.getElementById('metatype-next-btn');
+    if (metatypeNextBtn) {
+        metatypeNextBtn.addEventListener('click', () => {
+            if (characterWizardState.selectedMetatype) {
                 showWizardStep(3);
             }
         });
