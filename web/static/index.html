@@ -132,13 +132,83 @@
                         </div>
                     </div>
                     
-                    <!-- Step 3: Attributes (placeholder for now) -->
+                    <!-- Step 3: Attributes -->
                     <div class="wizard-step" id="step-3" data-step="3" style="display: none;">
                         <h3>Assign Attributes</h3>
-                        <p>Attribute assignment coming soon...</p>
+                        <p class="help-text">Characters start with 1 in all attributes for free, plus racial modifiers. Attributes can be below 1 if modifiers are negative, but must be raised to at least 1 before the character is valid. Each attribute can be raised up to 6 maximum (before racial modifiers).</p>
+                        
+                        <div class="attributes-container">
+                            <div class="attributes-header">
+                                <div class="points-info">
+                                    <span>Available Points: <strong id="available-points">0</strong></span>
+                                    <span>Used Points: <strong id="used-points">0</strong></span>
+                                    <span>Remaining: <strong id="remaining-points" class="points-remaining">0</strong></span>
+                                </div>
+                                <div id="attribute-validation" class="validation-message" style="display: none;"></div>
+                            </div>
+                            
+                            <div class="attributes-grid">
+                                <div class="attribute-row">
+                                    <label for="attr-body">Body (BOD): <span class="min-label" id="min-body"></span></label>
+                                    <input type="number" id="attr-body" max="6" value="1" class="attribute-input">
+                                    <span class="modifier-display" id="mod-body"></span>
+                                    <span class="final-value" id="final-body"></span>
+                                </div>
+                                <div class="attribute-row">
+                                    <label for="attr-quickness">Quickness (QUI): <span class="min-label" id="min-quickness"></span></label>
+                                    <input type="number" id="attr-quickness" max="6" value="1" class="attribute-input">
+                                    <span class="modifier-display" id="mod-quickness"></span>
+                                    <span class="final-value" id="final-quickness"></span>
+                                </div>
+                                <div class="attribute-row">
+                                    <label for="attr-strength">Strength (STR): <span class="min-label" id="min-strength"></span></label>
+                                    <input type="number" id="attr-strength" max="6" value="1" class="attribute-input">
+                                    <span class="modifier-display" id="mod-strength"></span>
+                                    <span class="final-value" id="final-strength"></span>
+                                </div>
+                                <div class="attribute-row">
+                                    <label for="attr-charisma">Charisma (CHA): <span class="min-label" id="min-charisma"></span></label>
+                                    <input type="number" id="attr-charisma" max="6" value="1" class="attribute-input">
+                                    <span class="modifier-display" id="mod-charisma"></span>
+                                    <span class="final-value" id="final-charisma"></span>
+                                </div>
+                                <div class="attribute-row">
+                                    <label for="attr-intelligence">Intelligence (INT): <span class="min-label" id="min-intelligence"></span></label>
+                                    <input type="number" id="attr-intelligence" max="6" value="1" class="attribute-input">
+                                    <span class="modifier-display" id="mod-intelligence"></span>
+                                    <span class="final-value" id="final-intelligence"></span>
+                                </div>
+                                <div class="attribute-row">
+                                    <label for="attr-willpower">Willpower (WIL): <span class="min-label" id="min-willpower"></span></label>
+                                    <input type="number" id="attr-willpower" max="6" value="1" class="attribute-input">
+                                    <span class="modifier-display" id="mod-willpower"></span>
+                                    <span class="final-value" id="final-willpower"></span>
+                                </div>
+                            </div>
+                            
+                            <div class="derived-attributes">
+                                <h4>Derived Attributes</h4>
+                                <div class="derived-row">
+                                    <label>Reaction:</label>
+                                    <span id="derived-reaction">0</span>
+                                    <small>(Quickness + Intelligence) ÷ 2, rounded down</small>
+                                </div>
+                                <div class="derived-row">
+                                    <label>Essence:</label>
+                                    <span id="derived-essence">6.0</span>
+                                    <small>Starting value, reduced by cyberware</small>
+                                </div>
+                                <div class="derived-row">
+                                    <label>Magic Rating:</label>
+                                    <span id="derived-magic">0</span>
+                                    <small id="magic-note">Based on magic priority</small>
+                                </div>
+                            </div>
+                        </div>
+                        
                         <div class="form-actions">
                             <button type="button" id="attr-back-btn" class="btn-secondary">Back</button>
-                            <button type="button" id="attr-next-btn" class="btn-primary" disabled>Next</button>
+                            <button type="button" id="attr-next-btn" class="btn-primary" disabled>Next: Assign Skills</button>
                             <button type="button" class="btn-cancel">Cancel</button>
                         </div>
                     </div>

@@ -518,6 +518,146 @@ button:hover {
     display: block;
 }
 
+/* Attributes Step Styles */
+.attributes-container {
+    margin-top: 1.5rem;
+}
+
+.attributes-header {
+    margin-bottom: 1.5rem;
+    padding: 1rem;
+    background-color: #2a2a2a;
+    border-radius: 6px;
+    border: 1px solid #444;
+}
+
+.points-info {
+    display: flex;
+    gap: 2rem;
+    align-items: center;
+    margin-bottom: 1rem;
+}
+
+.points-info strong {
+    color: #00ff88;
+    font-size: 1.1rem;
+}
+
+.points-remaining {
+    color: #00ff88;
+}
+
+.points-remaining.negative {
+    color: #ff6b6b;
+}
+
+.attributes-grid {
+    display: grid;
+    gap: 1rem;
+    margin-bottom: 2rem;
+}
+
+.attribute-row {
+    display: grid;
+    grid-template-columns: 150px 80px auto 60px;
+    align-items: center;
+    gap: 1rem;
+    padding: 1rem;
+    background-color: #2a2a2a;
+    border-radius: 6px;
+    border: 1px solid #444;
+}
+
+.attribute-row label {
+    font-weight: bold;
+    color: #e0e0e0;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.min-label {
+    font-size: 0.75rem;
+    font-weight: normal;
+    color: #888;
+    font-style: italic;
+}
+
+.attribute-input {
+    width: 80px;
+    padding: 0.5rem;
+    background-color: #1a1a1a;
+    border: 1px solid #444;
+    border-radius: 4px;
+    color: #e0e0e0;
+    font-size: 1rem;
+    text-align: center;
+}
+
+.attribute-input:focus {
+    outline: none;
+    border-color: #00ff88;
+}
+
+.modifier-display {
+    font-size: 0.85rem;
+    color: #b0b0b0;
+    font-style: italic;
+}
+
+.modifier-display.positive {
+    color: #00ff88;
+}
+
+.modifier-display.negative {
+    color: #ff6b6b;
+}
+
+.final-value {
+    font-weight: bold;
+    font-size: 1.1rem;
+    color: #00ff88;
+    text-align: right;
+}
+
+.derived-attributes {
+    margin-top: 2rem;
+    padding: 1.5rem;
+    background-color: #2a2a2a;
+    border-radius: 6px;
+    border: 1px solid #444;
+}
+
+.derived-attributes h4 {
+    color: #00ff88;
+    margin-bottom: 1rem;
+}
+
+.derived-row {
+    display: grid;
+    grid-template-columns: 150px 60px 1fr;
+    align-items: center;
+    gap: 1rem;
+    padding: 0.5rem 0;
+}
+
+.derived-row label {
+    font-weight: bold;
+    color: #e0e0e0;
+}
+
+.derived-row span {
+    color: #00ff88;
+    font-weight: bold;
+    font-size: 1.1rem;
+}
+
+.derived-row small {
+    color: #888;
+    font-size: 0.85rem;
+    font-style: italic;
+}
+
 /* Character Sheet Styles */
 .character-sheet {
     color: #e0e0e0;

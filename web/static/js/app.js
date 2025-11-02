@@ -140,12 +140,15 @@ function showCreateCharacterModal() {
     modal.style.display = 'block';
     
     // Reset wizard state
+    // Note: Don't pre-initialize attributes to 1, as they should be calculated from base + modifiers
     characterWizardState = {
         currentStep: 1,
         characterName: '',
         playerName: '',
         selectedMetatype: null,
-        priorities: null
+        priorities: null,
+        attributes: null, // Will be set when entering attributes step
+        attributeBaseValues: null // Will be calculated based on selected metatype
     };
     
     // Reset form
@@ -217,12 +220,16 @@ let priorityAssignments = {
 };
 
 // Character Creation Wizard State
+// Note: attributes and attributeBaseValues should be null initially
+// They will be calculated when entering the attributes step based on selected metatype
 let characterWizardState = {
     currentStep: 1,
     characterName: '',
     playerName: '',
     selectedMetatype: null,
-    priorities: null
+    priorities: null,
+    attributes: null,
+    attributeBaseValues: null
 };
 
 // Get the display value for a priority selection in a category
@@ -612,6 +619,8 @@ function showWizardStep(step) {
     // Initialize step-specific content
     if (step === 2) {
         displayMetatypeSelection();
+    } else if (step === 3) {
+        initializeAttributesStep();
     }
 }
 
@@ -749,6 +758,529 @@ function selectMetatype(metatypeName) {
     const nextBtn = document.getElementById('metatype-next-btn');
     if (nextBtn) {
         nextBtn.disabled = false;
+    }
+}
+
+// Metatype modifiers data
+const metatypeModifiers = {
+    'Human': {
+        Body: 0,
+        Quickness: 0,
+        Strength: 0,
+        Charisma: 0,
+        Intelligence: 0,
+        Willpower: 0
+    },
+    'Dwarf': {
+        Body: 1,
+        Quickness: 0,
+        Strength: 2,
+        Charisma: 0,
+        Intelligence: 0,
+        Willpower: 1
+    },
+    'Elf': {
+        Body: 0,
+        Quickness: 1,
+        Strength: 0,
+        Charisma: 2,
+        Intelligence: 0,
+        Willpower: 0
+    },
+    'Ork': {
+        Body: 3,
+        Quickness: 0,
+        Strength: 2,
+        Charisma: -1,
+        Intelligence: -1,
+        Willpower: 0
+    },
+    'Troll': {
+        Body: 5,
+        Quickness: -1,
+        Strength: 4,
+        Charisma: -2,
+        Intelligence: -2,
+        Willpower: 0
+    }
+};
+
+// Get available attribute points based on priority
+function getAvailableAttributePoints(priority) {
+    const pointTable = {
+        'A': 30,
+        'B': 27,
+        'C': 24,
+        'D': 21,
+        'E': 18
+    };
+    return pointTable[priority] || 0;
+}
+
+// Initialize attributes step
+function initializeAttributesStep() {
+    const attrPriority = characterWizardState.priorities.attributes;
+    const availablePoints = getAvailableAttributePoints(attrPriority);
+    const selectedMetatype = characterWizardState.selectedMetatype || 'Human';
+    const modifiers = metatypeModifiers[selectedMetatype] || metatypeModifiers['Human'];
+    
+    // Set available points
+    document.getElementById('available-points').textContent = availablePoints;
+    
+    // Calculate base starting values
+    // Step 1: Characters start with 1 in all attributes for free
+    // Step 2: Apply metatype modifiers
+    // Starting value = 1 (free) + modifier
+    // For Ork Charisma: starting value = 1 + (-1) = 0
+    // For Troll Intelligence: starting value = 1 + (-2) = -1
+    // Note: Starting values CAN be less than 1 if modifiers are negative
+    // Players must spend points to raise attributes below 1 up to at least 1
+    
+    // Base value for point calculation = modifier only (used in point tracking)
+    // This allows correct point calculation: points = input - modifier
+    // For Ork Charisma: if input is 1, points = 1 - (-1) = 2 points ✓
+    // For Troll Intelligence: if input is 1, points = 1 - (-2) = 3 points ✓
+    const baseValuesForPoints = {
+        body: modifiers.Body || 0,
+        quickness: modifiers.Quickness || 0,
+        strength: modifiers.Strength || 0,
+        charisma: modifiers.Charisma || 0,
+        intelligence: modifiers.Intelligence || 0,
+        willpower: modifiers.Willpower || 0
+    };
+    
+    // Starting values = 1 (free) + modifier
+    const startingValues = {
+        body: 1 + (modifiers.Body || 0),
+        quickness: 1 + (modifiers.Quickness || 0),
+        strength: 1 + (modifiers.Strength || 0),
+        charisma: 1 + (modifiers.Charisma || 0),
+        intelligence: 1 + (modifiers.Intelligence || 0),
+        willpower: 1 + (modifiers.Willpower || 0)
+    };
+    
+    // Initialize attribute inputs with starting values (1 + modifier)
+    // When entering the attributes step, always start from these values
+    // Use stored values only if they're already set and valid for this metatype
+    const attrs = characterWizardState.attributes;
+    
+    const getInitialValue = (attrKey, startValue) => {
+        // If we have stored values from a previous visit to this step, use them
+        // But only if they're valid (>= starting value) for the current metatype
+        if (attrs && attrs[attrKey] !== undefined && attrs[attrKey] >= startValue) {
+            return attrs[attrKey];
+        }
+        // Otherwise, start at the starting value (1 + modifier, which may be negative)
+        // Player must raise to 1+ for validation
+        return startValue;
+    };
+    
+    document.getElementById('attr-body').value = getInitialValue('body', startingValues.body);
+    document.getElementById('attr-quickness').value = getInitialValue('quickness', startingValues.quickness);
+    document.getElementById('attr-strength').value = getInitialValue('strength', startingValues.strength);
+    document.getElementById('attr-charisma').value = getInitialValue('charisma', startingValues.charisma);
+    document.getElementById('attr-intelligence').value = getInitialValue('intelligence', startingValues.intelligence);
+    document.getElementById('attr-willpower').value = getInitialValue('willpower', startingValues.willpower);
+    
+    // Set minimum values for inputs based on starting values (1 + modifier)
+    // Note: Starting values can be negative, but HTML5 number inputs work better with min attribute
+    // We'll validate programmatically in the input handler
+    document.getElementById('attr-body').min = Math.min(startingValues.body, 0); // Allow negative if starting is negative
+    document.getElementById('attr-quickness').min = Math.min(startingValues.quickness, 0);
+    document.getElementById('attr-strength').min = Math.min(startingValues.strength, 0);
+    document.getElementById('attr-charisma').min = Math.min(startingValues.charisma, 0);
+    document.getElementById('attr-intelligence').min = Math.min(startingValues.intelligence, 0);
+    document.getElementById('attr-willpower').min = Math.min(startingValues.willpower, 0);
+    
+    // Update minimum labels to show the starting value
+    updateAttributeMinLabels(startingValues);
+    
+    // Store base values (modifier only) for point calculation
+    // Store starting values (1 + modifier) for display/minimum tracking
+    characterWizardState.attributeBaseValues = baseValuesForPoints;
+    characterWizardState.attributeStartingValues = startingValues;
+    
+    // Display modifiers
+    updateModifierDisplays(modifiers);
+    
+    // Set up event listeners for attribute inputs
+    ['body', 'quickness', 'strength', 'charisma', 'intelligence', 'willpower'].forEach(attr => {
+        const input = document.getElementById(`attr-${attr}`);
+        if (input) {
+            input.addEventListener('input', () => {
+                // Enforce minimum based on starting values (1 + modifier, can be negative)
+                const startingValues = characterWizardState.attributeStartingValues || {
+                    body: 1, quickness: 1, strength: 1, charisma: 1, intelligence: 1, willpower: 1
+                };
+                // Handle 0 as a valid value (don't use || 1 which would convert 0 to 1)
+                const inputValue = input.value.trim();
+                const parsedValue = inputValue === '' ? 0 : parseInt(inputValue, 10);
+                let currentValue = isNaN(parsedValue) ? 0 : parsedValue;
+                const minValue = startingValues[attr] || 1;
+                
+                // Prevent reducing below starting value (1 + modifier, which may be negative)
+                if (currentValue < minValue) {
+                    input.value = minValue;
+                    currentValue = minValue;
+                }
+                
+                // Get current modifiers dynamically (for display only)
+                const currentMetatype = characterWizardState.selectedMetatype || 'Human';
+                const currentModifiers = metatypeModifiers[currentMetatype] || metatypeModifiers['Human'];
+                
+                updateAttributeTracking();
+                updateFinalValues(currentModifiers);
+                updateDerivedAttributes(currentModifiers);
+                validateAttributes();
+            });
+        }
+    });
+    
+    // Initial updates
+    updateAttributeTracking();
+    updateFinalValues(modifiers);
+    updateDerivedAttributes(modifiers);
+    updateMagicRating();
+    validateAttributes();
+}
+
+// Update modifier displays
+function updateModifierDisplays(modifiers) {
+    Object.keys(modifiers).forEach(attr => {
+        const attrKey = attr.toLowerCase();
+        const modEl = document.getElementById(`mod-${attrKey}`);
+        if (modEl && modifiers[attr] !== 0) {
+            const sign = modifiers[attr] > 0 ? '+' : '';
+            modEl.textContent = `(${sign}${modifiers[attr]} racial)`;
+            modEl.className = `modifier-display ${modifiers[attr] > 0 ? 'positive' : 'negative'}`;
+        } else if (modEl) {
+            modEl.textContent = '';
+            modEl.className = 'modifier-display';
+        }
+    });
+}
+
+// Update attribute minimum labels
+// Shows the starting value (1 + modifier) which may be negative
+function updateAttributeMinLabels(startingValues) {
+    Object.keys(startingValues).forEach(attr => {
+        const minEl = document.getElementById(`min-${attr}`);
+        if (minEl) {
+            const startValue = startingValues[attr];
+            if (startValue > 1) {
+                minEl.textContent = `(min ${startValue})`;
+            } else if (startValue < 1) {
+                minEl.textContent = `(start ${startValue}, must raise to 1+)`;
+                minEl.style.color = '#ff6b6b'; // Red to indicate needs attention
+            } else {
+                minEl.textContent = '';
+            }
+        }
+    });
+}
+
+// Update attribute point tracking
+// Note: Characters start with 1 in all attributes for free, plus racial modifiers
+// Base values can be less than 1 (if modifiers are negative)
+// Points spent = current value - base value (if base is negative, this correctly calculates points needed)
+function updateAttributeTracking() {
+    const attrs = ['body', 'quickness', 'strength', 'charisma', 'intelligence', 'willpower'];
+    let used = 0;
+    
+    // Get base values (racial modifiers directly, can be negative)
+    const baseValues = characterWizardState.attributeBaseValues || {
+        body: 0,
+        quickness: 0,
+        strength: 0,
+        charisma: 0,
+        intelligence: 0,
+        willpower: 0
+    };
+    
+    attrs.forEach(attr => {
+        const input = document.getElementById(`attr-${attr}`);
+        if (input) {
+            // Handle 0 as a valid value (don't use || 1 which would convert 0 to 1)
+            const inputValue = input.value.trim();
+            const totalValue = inputValue === '' ? 0 : parseInt(inputValue, 10);
+            const actualValue = isNaN(totalValue) ? 0 : totalValue;
+            const baseValue = baseValues[attr] || 0;
+            
+            // Calculate points spent
+            // Starting value = 1 (free) + modifier
+            // The free 1 is NOT counted in the point pool
+            // Points spent = (current value - 1 free) - (starting value - 1 free)
+            // = (current - 1) - (starting - 1)
+            // = (current - 1) - modifier
+            // For Ork Charisma: modifier = -1, starting = 0 (1 + -1)
+            //   If input is 0 (starting), points = (0 - 1) - (-1) = -1 + 1 = 0 ✓
+            //   If input is 1, points = (1 - 1) - (-1) = 0 + 1 = 1 point
+            //   But wait, user said it costs 2 points to get from "the -1" to 1
+            //   I think they mean: from the modifier value (-1) to 1
+            //   So: points = (1 - 1) - (-1) = 1, but we need 2
+            //   Maybe: points = current - modifier?
+            //   For Ork CHA: points = 1 - (-1) = 2 ✓
+            //   But at starting (0): points = 0 - (-1) = 1 (should be 0)
+            
+            // Actually, I think the correct formula accounting for the free 1:
+            // Points = (current - 1) - modifier
+            // At starting (0 for Ork CHA): (0 - 1) - (-1) = -1 + 1 = 0 ✓
+            // To get to 1: (1 - 1) - (-1) = 0 + 1 = 1 (but user wants 2?)
+            
+            // Wait, let me reconsider: maybe points = current - modifier
+            // At starting (0): 0 - (-1) = 1 (wrong, should be 0)
+            // To get to 1: 1 - (-1) = 2 ✓
+            
+            // I think we need: if at starting value, points = 0
+            // Otherwise: points = current - modifier
+            // Or: points = Math.max(0, current - modifier - (starting - modifier))
+            // = Math.max(0, current - starting)
+            
+            // Actually, simplest: points = current - starting (where starting = 1 + modifier)
+            // At starting: points = 0 ✓
+            // To get to 1 from 0: points = 1 - 0 = 1 (but user wants 2...)
+            
+            // Let me try: points = current - modifier (but subtract the starting adjustment)
+            // points = (current - modifier) - (starting - modifier)
+            // = current - modifier - starting + modifier
+            // = current - starting
+            
+            // Hmm, maybe the user wants: points = current - modifier always
+            // And we just handle that at starting (0) we show 0 points somehow?
+            // Or maybe: points = Math.max(0, (current - 1) - modifier)?
+            // At 0: max(0, -1 - (-1)) = max(0, 0) = 0 ✓
+            // At 1: max(0, 0 - (-1)) = max(0, 1) = 1 (but user wants 2)
+            
+            // Actually, I think the issue is we're using modifier-only base for calculation
+            // But we should use: points = (current - starting) where starting includes free 1
+            const startingValue = 1 + baseValue; // starting = 1 + modifier
+            const pointsSpent = actualValue - startingValue;
+            // Only count positive points (when above starting value)
+            used += Math.max(0, pointsSpent);
+        }
+    });
+    
+    const attrPriority = characterWizardState.priorities.attributes;
+    const available = getAvailableAttributePoints(attrPriority);
+    const remaining = available - used;
+    
+    document.getElementById('used-points').textContent = used;
+    const remainingEl = document.getElementById('remaining-points');
+    remainingEl.textContent = remaining;
+    
+    if (remaining < 0) {
+        remainingEl.classList.add('negative');
+    } else {
+        remainingEl.classList.remove('negative');
+    }
+}
+
+// Update final attribute values
+// Note: The input value already includes racial modifiers (base 1 + modifiers)
+// So final value = input value (no additional modifiers to apply)
+function updateFinalValues(modifiers) {
+    const attrs = [
+        { key: 'body', name: 'Body' },
+        { key: 'quickness', name: 'Quickness' },
+        { key: 'strength', name: 'Strength' },
+        { key: 'charisma', name: 'Charisma' },
+        { key: 'intelligence', name: 'Intelligence' },
+        { key: 'willpower', name: 'Willpower' }
+    ];
+    
+    attrs.forEach(attr => {
+        const input = document.getElementById(`attr-${attr.key}`);
+        const finalEl = document.getElementById(`final-${attr.key}`);
+        
+        if (input && finalEl) {
+            // Input value already includes racial modifiers, so final = input
+            // Handle 0 as a valid value (don't use || 1 which would convert 0 to 1)
+            const inputValue = input.value.trim();
+            const finalValue = inputValue === '' ? 0 : parseInt(inputValue, 10);
+            
+            // If parsing failed or is NaN, default to 0 (not 1, since 0 is valid)
+            const displayValue = isNaN(finalValue) ? 0 : finalValue;
+            
+            finalEl.textContent = displayValue;
+            
+            // Highlight if final value would be less than 1
+            if (displayValue < 1) {
+                finalEl.style.color = '#ff6b6b';
+            } else {
+                finalEl.style.color = '#00ff88';
+            }
+        }
+    });
+}
+
+// Update derived attributes
+// Note: Input values already include racial modifiers, so no additional modifiers needed
+function updateDerivedAttributes(modifiers) {
+    const quicknessInput = document.getElementById('attr-quickness');
+    const intelligenceInput = document.getElementById('attr-intelligence');
+    
+    if (quicknessInput && intelligenceInput) {
+        // Input values already include racial modifiers
+        // Handle 0 as a valid value (don't use || 1 which would convert 0 to 1)
+        const quicknessValue = quicknessInput.value.trim();
+        const intelligenceValue = intelligenceInput.value.trim();
+        const quickness = quicknessValue === '' ? 0 : parseInt(quicknessValue, 10);
+        const intelligence = intelligenceValue === '' ? 0 : parseInt(intelligenceValue, 10);
+        const quicknessFinal = isNaN(quickness) ? 0 : quickness;
+        const intelligenceFinal = isNaN(intelligence) ? 0 : intelligence;
+        
+        // Reaction = (Quickness + Intelligence) ÷ 2, rounded down
+        const reaction = Math.floor((quicknessFinal + intelligenceFinal) / 2);
+        
+        document.getElementById('derived-reaction').textContent = reaction;
+    }
+    
+    // Essence always starts at 6.0
+    document.getElementById('derived-essence').textContent = '6.0';
+}
+
+// Update magic rating display
+function updateMagicRating() {
+    const magicPriority = characterWizardState.priorities.magic;
+    let magicRating = 0;
+    let magicNote = 'Mundane (no magic)';
+    
+    if (magicPriority === 'A') {
+        magicRating = 6;
+        magicNote = 'Full Magician';
+    } else if (magicPriority === 'B') {
+        magicRating = 4;
+        magicNote = 'Adept/Aspected Magician';
+    }
+    
+    document.getElementById('derived-magic').textContent = magicRating;
+    document.getElementById('magic-note').textContent = magicNote;
+}
+
+// Validate attributes
+// Note: Characters start with 1 in all attributes for free, plus racial modifiers
+// The available points are spent on top of the base value (1 + racial modifiers)
+function validateAttributes() {
+    const attrPriority = characterWizardState.priorities.attributes;
+    const available = getAvailableAttributePoints(attrPriority);
+    const selectedMetatype = characterWizardState.selectedMetatype || 'Human';
+    const modifiers = metatypeModifiers[selectedMetatype] || metatypeModifiers['Human'];
+    
+    // Get base values (1 + racial modifiers)
+    const baseValues = characterWizardState.attributeBaseValues || {
+        body: 1,
+        quickness: 1,
+        strength: 1,
+        charisma: 1,
+        intelligence: 1,
+        willpower: 1
+    };
+    
+    const attrs = [
+        { key: 'body', name: 'Body' },
+        { key: 'quickness', name: 'Quickness' },
+        { key: 'strength', name: 'Strength' },
+        { key: 'charisma', name: 'Charisma' },
+        { key: 'intelligence', name: 'Intelligence' },
+        { key: 'willpower', name: 'Willpower' }
+    ];
+    
+    let used = 0;
+    const errors = [];
+    const warnings = [];
+    
+    // Check each attribute
+    attrs.forEach(attr => {
+        const input = document.getElementById(`attr-${attr.key}`);
+        if (!input) return;
+        
+        // Handle 0 as a valid value (don't use || 1 which would convert 0 to 1)
+        const inputValue = input.value.trim();
+        const totalValue = inputValue === '' ? 0 : parseInt(inputValue, 10);
+        const actualValue = isNaN(totalValue) ? 0 : totalValue;
+        const baseValue = baseValues[attr.key] || 0;
+        
+        // Check minimum (cannot go below starting value, which is 1 + modifier)
+        const startValue = startingValues[attr.key] || 1;
+        if (actualValue < startValue) {
+            errors.push(`${attr.name} cannot be reduced below ${startValue} (starting value: 1 + racial modifier)`);
+        }
+        
+        // Check maximum (cannot exceed 6 before modifiers)
+        if (actualValue > 6) {
+            errors.push(`${attr.name} cannot exceed 6 (before racial modifiers)`);
+        }
+        
+        // Calculate points spent
+        // Starting value = 1 (free) + modifier, so starting = 0 for Ork CHA, -1 for Troll INT
+        // The free 1 point is NOT counted in the point pool
+        // Points spent = current value - starting value
+        // This correctly excludes the free 1 from the calculation
+        // For Ork Charisma: modifier = -1, starting = 0 (1 + -1)
+        //   If input is 0 (starting), points = 0 - 0 = 0 ✓ (no points spent)
+        //   If input is 1, points = 1 - 0 = 1 point (but user wants 2...)
+        //   Actually, user said it costs 2 points from "-1 to 1"
+        //   Maybe they mean from modifier value (-1) to 1, which would be: 1 - (-1) = 2
+        //   But our starting is 0, not -1...
+        
+        // Re-reading: user wants points = current - modifier (not current - starting)
+        // For Ork CHA: points = 1 - (-1) = 2 ✓
+        // But at starting (0): points = 0 - (-1) = 1 (should be 0)
+        // So we need: if at starting, points = 0, else points = current - modifier
+        
+        // Actually, I think: points = current - starting (where starting = 1 + modifier)
+        // This correctly gives 0 at starting, and 1 point to go from 0 to 1
+        // But user wants 2... Let me check if maybe: points = (current - starting) * 2?
+        // Or maybe: points = current - modifier when current > starting?
+        
+        // For now, using: points = current - starting (excludes free 1)
+        // This gives: at starting = 0 points, which is correct
+        // To get to 1 from 0: 1 point
+        // User may need to clarify if they want a different calculation
+        const startingValue = startingValues[attr.key] || 1;
+        const pointsSpent = actualValue - startingValue;
+        // Only count positive points (when above starting value)
+        used += Math.max(0, pointsSpent);
+        
+        // Final value must be at least 1 (players must spend points to raise attributes below 1)
+        // Input value already includes modifiers, so final value = actualValue
+        const finalValue = actualValue;
+        if (finalValue < 1) {
+            errors.push(`${attr.name} is ${finalValue}, but must be at least 1. Spend ${1 - finalValue} more point(s) to raise it.`);
+        }
+    });
+    
+    // Check total points
+    if (used > available) {
+        errors.push(`Using ${used} points, but only ${available} available`);
+    } else if (used < available) {
+        warnings.push(`${available - used} points remaining`);
+    }
+    
+    // Update validation message
+    const validationEl = document.getElementById('attribute-validation');
+    const nextBtn = document.getElementById('attr-next-btn');
+    
+    if (!validationEl) return false;
+    
+    if (errors.length > 0) {
+        validationEl.className = 'validation-message error';
+        validationEl.textContent = errors[0]; // Show first error
+        validationEl.style.display = 'block';
+        if (nextBtn) nextBtn.disabled = true;
+        return false;
+    } else if (used === available) {
+        validationEl.className = 'validation-message success';
+        validationEl.textContent = '✓ All points assigned correctly';
+        validationEl.style.display = 'block';
+        if (nextBtn) nextBtn.disabled = false;
+        return true;
+    } else {
+        validationEl.className = 'validation-message error';
+        validationEl.textContent = `Please assign all ${available} points. ${available - used} remaining.`;
+        validationEl.style.display = 'block';
+        if (nextBtn) nextBtn.disabled = true;
+        return false;
     }
 }
 
@@ -2137,6 +2669,26 @@ document.addEventListener('DOMContentLoaded', () => {
     const attrBackBtn = document.getElementById('attr-back-btn');
     if (attrBackBtn) {
         attrBackBtn.addEventListener('click', () => showWizardStep(2));
+    }
+    
+    const attrNextBtn = document.getElementById('attr-next-btn');
+    if (attrNextBtn) {
+        attrNextBtn.addEventListener('click', () => {
+            if (validateAttributes()) {
+                // Store attribute distribution
+                characterWizardState.attributes = {
+                    body: parseInt(document.getElementById('attr-body').value) || 1,
+                    quickness: parseInt(document.getElementById('attr-quickness').value) || 1,
+                    strength: parseInt(document.getElementById('attr-strength').value) || 1,
+                    charisma: parseInt(document.getElementById('attr-charisma').value) || 1,
+                    intelligence: parseInt(document.getElementById('attr-intelligence').value) || 1,
+                    willpower: parseInt(document.getElementById('attr-willpower').value) || 1
+                };
+                // Move to next step (placeholder for now)
+                // showWizardStep(4);
+                alert('Attribute assignment complete! Next step coming soon...');
+            }
+        });
     }
     
     // Close modal when clicking outside

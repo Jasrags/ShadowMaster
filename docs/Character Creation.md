@@ -45,7 +45,7 @@ Reaction: Reaction is equal to quickness and Intelligence added together, divide
 Assigning skills
 The skill points assigned at creation are used to purchase 
 
-Choose Race
+Choose Metatype
 Choose magical abilities (Full Magician (Mage/Shaman), Aspected Magician (Mage/Shaman), Adept)
 Choose attributes
 Assigning skills 
