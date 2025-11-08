@@ -5,8 +5,8 @@ This document consolidates outstanding data requirements and open questions iden
 ## Character Creation
 
 ### Step Two: Choose Metatype
-- Need full SR5 priority table values for Metatype and Attributes (including special attribute point grants).
-- Require metatype attribute starting values, natural maximums, and special ability data in structured form.
+~Need full SR5 priority table values for Metatype and Attributes (including special attribute point grants).~ Covered in `shadowrun-5e-data-tables.md` (Master Priority Overview & Metatype Priority Details).
+- Require metatype attribute starting values, natural maximums, and special ability data in structured form. Addressed via `shadowrun-5e-data-tables.md` (Metatype Attribute Table).
 - Confirm exact rules for doubled lifestyle costs and other metatype-specific economic modifiers.
 - Need official validation on special attribute caps when Qualities (Lucky, Exceptional Attribute) are present.
 

@@ -11,6 +11,8 @@
 - [Shadowrun 5e Matrix Spec](./shadowrun-5e-matrix.md)
 - [Shadowrun 5e Magic Spec](./shadowrun-5e-magic.md)
 - [Shadowrun 5e Magic Data](./shadowrun-5e-magic-data.md)
+- [Shadowrun 5e Combat Spec](./shadowrun-5e-combat.md)
+- [Shadowrun 5e Gear Spec](./shadowrun-5e-gear.md)
 
 ## Metatype Attribute Table
 
