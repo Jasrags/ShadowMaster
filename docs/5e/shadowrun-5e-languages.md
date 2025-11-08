@@ -21,3 +21,5 @@
 - Characters receive one native language at rating 6 for free.
 - Additional language skills follow standard skill rating rules and link to Intuition.
 - The Bilingual positive quality grants an extra native language during character creation.
+
+*Last updated: 2025-11-08*

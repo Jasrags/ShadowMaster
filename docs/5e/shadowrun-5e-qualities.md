@@ -63,3 +63,5 @@ Qualities represent positive and negative traits that modify a character’s cap
 - `shadowrun-5e-qualities-data.md`: Complete positive/negative quality tables and supporting reference charts (Prejudiced, Allergy, Scorched).
 - SR5 Core Rulebook, Qualities chapter (pp. 84–92, 134–138) for detailed descriptions and edge cases.
 - Character creation limits: SR5 Core p. 63 (25 Karma limit for positive, 25 Karma bonus cap for negative).
+
+*Last updated: 2025-11-08*

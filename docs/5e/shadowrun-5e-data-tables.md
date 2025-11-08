@@ -124,12 +124,26 @@ Dedicated documents contain specification and data details:
 ## Lifestyle & Economy Tables
 
 ### Lifestyle Costs
-
-> Outstanding requirements are tracked in [Data Tables questions](./shadowrun-5e-questions-and-gaps.md#data-tables--reference-content).
+-
+-> Outstanding requirements are tracked in [Data Tables questions](./shadowrun-5e-questions-and-gaps.md#data-tables--reference-content).
+| Lifestyle | Monthly Cost |
+|-----------|--------------|
+| Street    | Free         |
+| Squatter  | 500¥         |
+| Low       | 2,000¥       |
+| Middle    | 5,000¥       |
+| High      | 10,000¥      |
+| Luxury    | 100,000¥     |
 
 ### Starting Nuyen Table
-
-> Outstanding requirements are tracked in [Data Tables questions](./shadowrun-5e-questions-and-gaps.md#data-tables--reference-content).
+| Lifestyle | Starting Nuyen |
+|-----------|----------------|
+| Street    | `1D6 × 20¥`     |
+| Squatter  | `2D6 × 40¥`     |
+| Low       | `3D6 × 60¥`     |
+| Middle    | `4D6 × 100¥`    |
+| High      | `5D6 × 500¥`    |
+| Luxury    | `6D6 × 1,000¥`  |
 
 ### Karma-to-Nuyen Conversion
 
@@ -169,3 +183,5 @@ Common languages in 2075 include Sperethiel, Russian, Spanish (and Aztlaner Span
 - [Shadowrun 5e Languages](./shadowrun-5e-languages.md)
 
 ## Additional Reference Placeholders
+
+*Last updated: 2025-11-08*

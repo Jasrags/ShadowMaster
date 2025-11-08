@@ -56,8 +56,9 @@ This document consolidates outstanding data requirements and open questions iden
 - Clarify rounding conventions beyond those noted (e.g., Reaction rounding for initiative dice).
 
 ### Step Nine: Final Touches
-- Need decision on export formats and data schema for character handoff.
-- Clarify whether GM feedback loop should be captured in-app (comments, versioning).
+- Need example contact lists with Connection/Loyalty ratings for typical archetypes.
+- Provide lifestyle templates with monthly costs, amenities, and upgrade options.
+  - Addressed via `shadowrun-5e-character.md` (Lifestyle Management section) and `shadowrun-5e-data-tables.md` (Lifestyle & Economy tables).
 
 ## Attributes
 - Populate base ranges and metatype modifiers from SR5 tables.
@@ -90,3 +91,5 @@ This document consolidates outstanding data requirements and open questions iden
 ---
 
 *Last compiled: 2025-11-08. Update this file whenever new gaps are discovered or existing items are resolved.*
+
+*Last updated: 2025-11-08*

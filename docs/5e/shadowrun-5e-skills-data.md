@@ -585,3 +585,5 @@ OUTDOORS: Navigation,Survival,Tracking
 SORCERY: Counterspelling,Ritual Spellcasting,Spellcasting
 STEALTH: Disguise,Palming,Sneaking
 TASKING: Compiling,Decompiling,Registering
+
+*Last updated: 2025-11-08*

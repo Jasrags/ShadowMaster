@@ -71,3 +71,5 @@ Attribute-only tests are used when no skill applies. The gamemaster determines w
 - **Memory (`Logic + Willpower`)**: Recall or memorize information. Apply Knowledge Skill Table thresholds. Hits on memorization tests add dice to later recall checks. Glitches cause misremembered details; critical glitches create entirely false memories.
 
 These guidelines should be referenced when implementing tests that rely solely on innate attributes rather than skills.
+
+*Last updated: 2025-11-08*

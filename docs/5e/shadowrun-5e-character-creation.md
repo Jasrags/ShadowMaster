@@ -310,3 +310,5 @@ Flesh out the character’s backstory. Qualities, attributes, and contacts provi
 
 - See [Step Nine questions](./shadowrun-5e-questions-and-gaps.md#step-nine-final-touches).
 
+*Last updated: 2025-11-08*
+

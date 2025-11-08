@@ -43,3 +43,5 @@
 | E | 12 | |
 
 > TODO: Add metatype-specific attribute modifiers table or link to existing metatype data once finalized.
+
+*Last updated: 2025-11-08*

@@ -119,3 +119,5 @@
 | Blackout | No memories retained for the duration; neither tech nor magic can restore them. |
 | Migraines | –2 dice to all Physical and Mental tests; also suffers light sensitivity and nausea (see p. 409). |
 | Paranoia/Anxiety | Must make Social Success Tests (threshold 5) for basic interactions; if no skill applies, default to Charisma –1. Failure means paranoia/anxiety reactions for the effect’s duration. |
+
+*Last updated: 2025-11-08*

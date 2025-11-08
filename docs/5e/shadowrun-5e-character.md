@@ -114,6 +114,40 @@ Store the outcome of the priority table selection for audit and recalculation:
 - `ammoAndConsumables`: per-weapon ammo counts, reagents, medkits, etc.
 - `edgeCurrent`: fluctuates during sessions; ensure cannot exceed maximum without explicit rule.
 
+## Reputation & Heat
+
+- Track three independent scores per runner: `streetCred`, `notoriety`, and `publicAwareness`.
+- **Street Cred**: `floor(totalKarma / 10)` plus GM-awarded bonuses for exceptional accomplishments. Serves as a positive limit modifier on Social tests when the runner’s exploits are relevant. Spending 2 points permanently can erase 1 point of Notoriety.
+- **Notoriety**: starts at 0. Adjust for qualities (`+1` per negative quality in the SR5 list, `-1` per positive quality: Blandness, First Impression, Lucky). GM awards +1 for serious social or moral breaches (betraying team, killing innocents, stiffing a Johnson, etc.). High values impose Social penalties and reduce contact willingness.
+- **Public Awareness**: GM increments when actions hit mainstream news (fights with law enforcement, high-profile extractions, collateral damage, broadcasted crimes). Use awareness tiers to determine recognition: 0–3 (unknown outside shadows), 4–6 (niche watchers), 7–9 (investigative media & agencies), 10+ (household name).
+- Provide UI affordances to display current scores, recent triggers, and reminders that Notoriety/Public Awareness are sticky unless mitigated through story actions.
+
+## Lifestyle Management
+
+- Primary lifestyle required; additional lifestyles allowed for alternate IDs/safehouses but must be paid separately.
+- Reference `shadowrun-5e-data-tables.md` for monthly costs and starting nuyen roll ranges.
+- Support special lifestyles:
+  - `hospitalized`: temporary; 500¥/day basic, 1,000¥/day intensive.
+  - `teamLifestyle`: shared cost = base + 10% per extra occupant; designate tenant of record for debt tracking.
+- Implement lifestyle options as modifiers on the base cost or limits:
+  - **Special Work Area** (+1,000¥/month, +2 limit to relevant skill tests on-site).
+  - **Extra Secure** (+20%; improves HTR/security response tier by one level).
+  - **Obscure / Difficult to Find** (+10%; imposes –2 dice on intruders’ Sneaking tests nearby).
+  - **Cramped** (–10%; –2 to Logic-linked test limits performed in the space).
+  - **Dangerous Area** (–20%; degrades local security response tier by one).
+  - Disallow options on Street or Hospitalized lifestyles; GM may veto combinations that defy narrative plausibility.
+- Handle missed payments with eviction downgrade logic (roll 1d6 vs consecutive missed months; downgrade if failure). Allow prepayments and permanent lifestyle purchases (100 × monthly cost) with resale rules per SR5.
+
+## Run Rewards
+
+- **Cash**: base offer = 3,000¥ per runner, modified by Negotiation net hits (+100¥ each). Multiply by difficulty factors:
+  - Highest opposing dice pool ÷ 4 (rounded down).
+  - +1 if runners outnumbered 3:1 in any combat; +1 instead for 2:1 vs Professional Rating ≥4.
+  - +1 for packs of ≥6 critters; +1 if ≥3 significant spirits encountered; +1 for notable lore threats; +1 for exceptional speed/subtlety; +1 if public exposure risk inherent.
+  - Apply final moral modifier: standard (×1), “cold-hearted” jobs (+10–20%), “good feelings” jobs (–10–20%).
+- **Karma**: award per runner using SR5 table: survival (2), all objectives (2), some objectives (1), plus `(highestOpposedDicePool / 6)` rounded down. Apply same moral modifier as cash (standard 0, cold-hearted –2, feel-good +2). Support GM overrides for standout play.
+- Surface summary on run wrap-up screen showing negotiated base, multipliers applied, and modifiers so teams understand payouts.
+
 ## Implementation Notes
 
 - Treat the character document as the integration point for all subsystem specs; avoid duplicating rules stored elsewhere.
@@ -123,138 +157,9 @@ Store the outcome of the priority table selection for audit and recalculation:
 
 ## Open Questions & Data Gaps
 
-- Gear, spell, and augmentation catalogs remain incomplete; need data ingest strategy.
-- Derived attribute formulas pending finalization (see `shadowrun-5e-attributes.md`).
-- Advancement rules for submersion/initiations require dedicated specs.
-- Need clarity on how to represent mentor spirits/totems, matrix marks, and lifestyles with add-ons in data model.
+- Need full spell list with drain codes, ritual catalog, adept power data from SR5 core and expansions.
+- Mentor spirits/totems require dedicated data fields (bonuses, disadvantages).
+- Initiation and metamagics rules require elaboration (grade cost, benefits, ordeals).
+- Background count tables and astral phenomena events pending documentation.
 
 *Last updated: 2025-11-08*
-
-
-YOUR CHARACTER
-At the heart of your experience in Shadowrun is your
-character. This is who you are in the Sixth World, the per-
-son whose story you will follow and develop through-
-out the missions and campaigns you undertake. The
-back of the book contains a character sheet that holds
-all the data you’ll need to quickly reference for your
-character. The character sheet may
-contain a bunch of numbers and
-other stats, but your character
-is more than that. The char-
-acter is the combination of
-skills, inborn abilities, street
-smarts, and bleeding-edge
-gear that makes them dan-
-gerous—sometimes to others,
-sometimes to themselves, often
-to both. The numbers are there to
-give you a summary of your char-
-acter’s skills and abilities, and to
-provide the information you
-need to resolve the various
-tests that arise. As a player,
-though, you can work within
-the numbers and every other
-part of the character to create
-a vivid personality who is part of
-the ongoing drama of the Sixth
-World.
-The building blocks below
-are the critical elements that
-help make your character
-who they are.
-
-METATYPE
-The first crucial element of a
-character is their metatype. Peo-
-ple in the Sixth World belong to different strains of
-metahumanity, which means the hands attempting
-to strangle the life out of you come in a variety of
-shapes and sizes. During the Awakening, when mag-
-ic returned to the world, humans started turning into
-the creatures out of fantasy and fairy tales, and these
-kinds of people are now common sights in many parts
-of the Sixth World. Your Shadowrun character will
-be one of five different types of being (called meta-
-types): human, elf, dwarf, ork, or troll. The game rules
-for each of these metatypes are described in Creating
-a Shadowrunner, p. 62.
-Human (Homo sapiens sapiens) is the metatype that
-has been around the longest (well, with one possible ex-
-ception). You know them, you love them, and if you’re
-reading this there’s a high probability that you are one.
-They are balanced in their abilities and tend to have a
-little larger portion of luck (represented by Edge) than
-other metatypes.
-Dwarfs (Homo sapiens pumilionis), as you may guess,
-are shorter and stockier than humans. They tend to
-be quite strong and very resilient, able to recover from
-damage ranging from knocks to the head to doses of
-hemlock. Or knocks to the head with a club wrapped
-in hemlock leaves. Dwarfs are hard workers and tend to
-be highly valued by corporations, which means they are
-more deeply integrated into human society than the oth-
-er metatypes. They still face discrimination due to their
-size, and they often have to take steps to make a world
-built for humans suitable for them.
-Elves (Homo sapiens nobilis) are
-taller than humans, thinner, and
-have pointed ears. They have an
-extremely annoying knack for
-being more nimble than hu-
-mans, and they generally are
-better looking to boot. They
-also have very long lifespans,
-and continue to look young
-into their forties and fifties. They
-have occasionally been known to
-lord those facts over humans, or
-anyone who comes within hear-
-ing range. While most elves
-emerged at the Awakening
-along with the other meta-
-types, there are rumors that
-a few elves were hiding some-
-where during the magical ebb
-of the Fifth World, and they are
-far older than any creature has a
-right to be.
-Orks (Homo sapiens robustus) look like the crea-
-tures that have been dying by the score in fantasy mov-
-ies and trideos for almost one hundred fifty years. With
-protruding brows, prominent tusks, and a large stature,
-orks have trouble avoiding the stereotype of being un-
-thinkingly violent brutes. It doesn’t help that there are
-more than a few orks who are happy to live up to that
-stereotype rather than fight it. The end result is a certain
-underlying tension between orks and humans, which
-leads to both groups often preferring to live in separate
-communities. Elves and orks, on the other hand, often
-prefer to live in entirely separate countries. Despite the
-stereotypes, orks can be found in all walks of life, from
-dank alleys to corporate boardrooms. They have a shorter
-lifespan than humans, which often leads to them having a
-certain desperation to pack as much living into their years
-as they can.
-Trolls (Homo sapiens ingentis) make orks look like the
-ordinary man on the street. Orks might be, on average,
-less than a quarter-meter taller than humans; trolls, by
-contrast, are more than a half-meter taller than orks.
-Orks might look like a monstrous version of humanity;
-trolls, on the other hand, look like vaguely human ver-
-sions of the creature from your most recent nightmare.
-With thick, curled horns on their heads (some trolls
-prefer to have them cut, while others polish them with
-pride), spiky protrusions of calcium on their joints, and
-individual muscles that are larger than a full-grown pig,
-trolls give the immediate impression that they are built
-for destruction. Most of them are able to live up to that
-image. Not all trolls, though, are about absorbing and in-
-flicting damage. They have tried to find their way into
-different roles, but their large size combines with cultural
-stereotypes to make it hard for them to fit in. Orks tend
-to be the most accepting of trolls, and the two meta-
-types often inhabit the same neighborhoods. Typically
-these are not the most resource-rich neighborhoods in
-any given sprawl.

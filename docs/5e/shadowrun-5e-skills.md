@@ -302,3 +302,5 @@ dice to worm more money out of the man.
 - Lingos are treated as specializations of a base language, representing jargon-heavy variants.
 - When making Social tests in a non-native language, the number of Social skill dice that can be applied is capped by the language’s rating (e.g., a Negotiation 6 character using German 3 may only add 3 dice).
 
+*Last updated: 2025-11-08*
+
