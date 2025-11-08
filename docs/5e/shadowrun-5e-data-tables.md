@@ -1,5 +1,17 @@
 # Shadowrun Fifth Edition Data Tables
 
+## Attribute Data
+
+- [Shadowrun 5e Attributes Specification](./shadowrun-5e-attributes.md)
+- [Shadowrun 5e Attributes Data](./shadowrun-5e-attributes-data.md)
+
+## Game Concepts
+
+- [Shadowrun 5e Game Concepts](./shadowrun-5e-game-concepts.md)
+- [Shadowrun 5e Matrix Spec](./shadowrun-5e-matrix.md)
+- [Shadowrun 5e Magic Spec](./shadowrun-5e-magic.md)
+- [Shadowrun 5e Magic Data](./shadowrun-5e-magic-data.md)
+
 ## Metatype Attribute Table
 
 Start/max values are shown as `start/max`. Initiative is calculated as `Reaction + Intuition` using the character's current (natural or augmented) ratings.
@@ -83,65 +95,65 @@ Dedicated documents contain specification and data details:
 
 ### Active Skills and Groups
 
-> TODO: list active skills, linked attributes, and skill group memberships.
+> Outstanding requirements are tracked in [Skills Data questions](./shadowrun-5e-questions-and-gaps.md#skills-data).
 
 ## Magic & Resonance References
 
 ### Spell Lists
 
-> TODO: provide spell catalog and classifications.
+> Outstanding requirements are tracked in [Data Tables questions](./shadowrun-5e-questions-and-gaps.md#data-tables--reference-content).
 
 ### Complex Forms & Sprites
 
-> TODO: list technomancer complex forms and sprite options.
+> Outstanding requirements are tracked in [Data Tables questions](./shadowrun-5e-questions-and-gaps.md#data-tables--reference-content).
 
 ### Adept Powers
 
-> TODO: include adept power names, costs, and notes.
+> Outstanding requirements are tracked in [Data Tables questions](./shadowrun-5e-questions-and-gaps.md#data-tables--reference-content).
 
 ## Gear & Augmentation Tables
 
 ### Gear Inventory
 
-> TODO: add gear items with cost, availability, device rating, and categories.
+> Outstanding requirements are tracked in [Data Tables questions](./shadowrun-5e-questions-and-gaps.md#data-tables--reference-content).
 
 ### Augmentation Catalog
 
-> TODO: add cyberware and bioware entries with Essence cost, grade modifiers, availability, and effects.
+> Outstanding requirements are tracked in [Data Tables questions](./shadowrun-5e-questions-and-gaps.md#data-tables--reference-content).
 
 ## Lifestyle & Economy Tables
 
 ### Lifestyle Costs
 
-> TODO: provide lifestyle tiers, monthly costs, and modifiers.
+> Outstanding requirements are tracked in [Data Tables questions](./shadowrun-5e-questions-and-gaps.md#data-tables--reference-content).
 
 ### Starting Nuyen Table
 
-> TODO: include lifestyle-based starting nuyen rolls and modifiers.
+> Outstanding requirements are tracked in [Data Tables questions](./shadowrun-5e-questions-and-gaps.md#data-tables--reference-content).
 
 ### Karma-to-Nuyen Conversion
 
-> TODO: document Karma conversion limits and rates.
+> Outstanding requirements are tracked in [Data Tables questions](./shadowrun-5e-questions-and-gaps.md#data-tables--reference-content).
 
 ## Advancement & Karma Spending
 
 ### Additional Purchases and Restrictions
 
-> TODO: list Karma costs for raising attributes, skills, spells, Power Points, contacts, etc.
+> Outstanding requirements are tracked in [Step Seven questions](./shadowrun-5e-questions-and-gaps.md#step-seven-spend-your-leftover-karma).
 
 ### Advancement Cost Summary
 
-> TODO: add post-creation advancement cost references for quick lookup.
+> Outstanding requirements are tracked in [Step Seven questions](./shadowrun-5e-questions-and-gaps.md#step-seven-spend-your-leftover-karma).
 
 ## Derived Statistics Reference
 
 ### Derived Attribute Formulas
 
-> TODO: include formulas for limits, condition monitors, initiative variants, and other derived stats.
+> Outstanding requirements are tracked in [Step Eight questions](./shadowrun-5e-questions-and-gaps.md#step-eight-final-calculations).
 
 ### Special Cases & Rounding Rules
 
-> TODO: document edge cases, rounding conventions, and quality-based adjustments.
+> Outstanding requirements are tracked in [Step Eight questions](./shadowrun-5e-questions-and-gaps.md#step-eight-final-calculations).
 
 ## Qualities Reference
 
@@ -152,7 +164,7 @@ See dedicated documents for specification and data tables:
 
 ## Languages Reference
 
-A list of common languages and supporting notes is available in:
+Common languages in 2075 include Sperethiel, Russian, Spanish (and Aztlaner Spanish), Or’zet, French, Lakota, English, Italian, Dakota, Japanese, German, Mandarin, and Diné (Navajo). For the full list and usage notes, see:
 
 - [Shadowrun 5e Languages](./shadowrun-5e-languages.md)
 

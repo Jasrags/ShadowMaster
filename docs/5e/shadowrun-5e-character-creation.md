@@ -26,7 +26,7 @@ All characters start with 25 Karma to improve themselves and gain additional res
 
 ### Open Questions & Data Gaps
 
-- None identified; treat as guidance-only content.
+- None currently. See [SR5 Questions & Gaps](./shadowrun-5e-questions-and-gaps.md) for future updates.
 
 ## Step Two: Choose Metatype
 
@@ -62,10 +62,7 @@ Attribute choices affect derived stats calculated later, such as Initiative and 
 
 ### Open Questions & Data Gaps
 
-- Need full SR5 priority table values for Metatype and Attributes (including special attribute point grants).
-- Require metatype attribute starting values, natural maximums, and special ability data in structured form.
-- Confirm exact rules for doubled lifestyle costs and other metatype-specific economic modifiers.
-- Need official validation on special attribute caps when Qualities (Lucky, Exceptional Attribute) are present.
+- See [Step Two questions](./shadowrun-5e-questions-and-gaps.md#step-two-choose-metatype).
 
 ## Step Three: Choose Magic or Resonance
 
@@ -88,10 +85,7 @@ Players are not restricted to the bundles provided by their priority choice. Add
 
 ### Open Questions & Data Gaps
 
-- Need complete Magic/Resonance priority table: starting attribute ratings, spell/skill/complex form bundles, Power Point grants.
-- Require official spell lists, complex forms, spirit options, and adept power catalogues for selection UIs.
-- Clarify restrictions and benefits for aspected magicians (specific skill group contents, limitations).
-- Need mechanics for technomancer complex forms and registered sprite limits during creation.
+- See [Step Three questions](./shadowrun-5e-questions-and-gaps.md#step-three-choose-magic-or-resonance).
 
 ## Step Four: Purchase Qualities
 
@@ -109,9 +103,7 @@ Record each Quality on the character sheet, noting any modifiers to skills or at
 
 ### Open Questions & Data Gaps
 
-- Need complete SR5 quality list with Karma costs, prerequisites, and mechanical effects.
-- Require guidance on stacking rules, mutual exclusivity, and GM-approval flags.
-- Confirm workflows for awarding GM-chosen Negative Qualities during creation.
+- See [Step Four questions](./shadowrun-5e-questions-and-gaps.md#step-four-purchase-qualities).
 
 ## Step Five: Purchase Skills
 
@@ -150,10 +142,7 @@ Some skills are restricted to characters with specific attributes. Magic and Res
 
 ### Open Questions & Data Gaps
 
-- Require authoritative SR5 skill list, linked attributes, and descriptions.
-- Need official skill group definitions (membership, maximum ratings) and how they interact with other rules.
-- Need specialization options or guidance (free-form vs. predefined) for each skill.
-- Confirm exact cost formulae when aptitudes, qualities, or other modifiers apply.
+- See [Step Five questions](./shadowrun-5e-questions-and-gaps.md#step-five-purchase-skills).
 
 ## Knowledge and Language Skills
 
@@ -179,9 +168,7 @@ Determine whether each Knowledge skill uses Intuition or Logic based on its cate
 
 ### Open Questions & Data Gaps
 
-- Need canonical Knowledge and Language skill examples or lists for guided selection.
-- Clarify whether Knowledge skills default to Logic or Intuition when ambiguous.
-- Confirm if any metatype or quality modifies free Knowledge/Language point calculations.
+- See [Knowledge & Language questions](./shadowrun-5e-questions-and-gaps.md#knowledge--language-skills).
 
 ## Step Six: Spend Your Resources
 
@@ -206,9 +193,7 @@ Three major restrictions apply to purchases:
 
 ### Open Questions & Data Gaps
 
-- Need complete SR5 gear database with costs, availability, device ratings, and categories.
-- Require Karma↔nuyen conversion limits confirmation (some tables may provide variants).
-- Clarify how resource priority interacts with alternate creation levels (street, prime).
+- See [Step Six questions](./shadowrun-5e-questions-and-gaps.md#step-six-spend-your-resources).
 
 ### Cyberware and Bioware
 
@@ -231,9 +216,7 @@ Attributes boosted by augmentations do not affect calculations for Knowledge ski
 
 ### Open Questions & Data Gaps
 
-- Require detailed augmentation data: Essence costs, grade modifiers, availability, device ratings, attribute effects.
-- Need rules for stacking augmentations, compatibility constraints, and cyberware capacity (e.g., limb capacity).
-- Clarify procedure for inherent racial traits lost through augmentation and how to restore them via upgrades.
+- See [Cyberware & Bioware questions](./shadowrun-5e-questions-and-gaps.md#cyberware--bioware).
 
 ### Lifestyle
 
@@ -246,7 +229,7 @@ Lifestyle defines day-to-day living conditions and monthly expenses. Options inc
 
 ### Open Questions & Data Gaps
 
-- Need official lifestyle cost table, modifiers, and effects (starting nuyen adjustments, social modifiers, etc.).
+- See [Lifestyle & Starting Nuyen questions](./shadowrun-5e-questions-and-gaps.md#lifestyle--starting-nuyen).
 
 ### Starting Nuyen
 
@@ -259,7 +242,7 @@ Starting nuyen depends on chosen lifestyle and a dice roll specified by the Star
 
 ### Open Questions & Data Gaps
 
-- Need the exact Starting Nuyen table (dice pools and modifiers) for each lifestyle.
+- See [Lifestyle & Starting Nuyen questions](./shadowrun-5e-questions-and-gaps.md#lifestyle--starting-nuyen).
 
 ## Step Seven: Spend Your Leftover Karma
 
@@ -289,9 +272,7 @@ Both ratings must be at least 1. Loyalty 1–2 represents a business relationshi
 
 ### Open Questions & Data Gaps
 
-- Need Additional Purchases and Restrictions table to define what can be bought with Karma and associated costs.
-- Require advancement cost tables for attributes, skills, specializations, spells, spirits, Power Points, and contacts.
-- Clarify maximum carryover Karma and any campaign-specific overrides.
+- See [Step Seven questions](./shadowrun-5e-questions-and-gaps.md#step-seven-spend-your-leftover-karma).
 
 ## Step Eight: Final Calculations
 
@@ -311,8 +292,7 @@ After spending resources and Karma, compute derived mechanics. Many depend on fi
 
 ### Open Questions & Data Gaps
 
-- Need explicit formula references for all derived stats (limits, monitors, initiative variants) and any edge cases (qualities, augmentations).
-- Clarify rounding conventions beyond those noted (e.g., Reaction rounding for initiative dice).
+- See [Step Eight questions](./shadowrun-5e-questions-and-gaps.md#step-eight-final-calculations).
 
 ## Step Nine: Final Touches
 
@@ -328,6 +308,5 @@ Flesh out the character’s backstory. Qualities, attributes, and contacts provi
 
 ### Open Questions & Data Gaps
 
-- Need decision on export formats and data schema for character handoff.
-- Clarify whether GM feedback loop should be captured in-app (comments, versioning).
+- See [Step Nine questions](./shadowrun-5e-questions-and-gaps.md#step-nine-final-touches).
 
