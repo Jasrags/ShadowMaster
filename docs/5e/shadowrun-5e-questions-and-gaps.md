@@ -6,8 +6,8 @@ This document consolidates outstanding data requirements and open questions iden
 
 ### Step Two: Choose Metatype
 ~Need full SR5 priority table values for Metatype and Attributes (including special attribute point grants).~ Covered in `shadowrun-5e-data-tables.md` (Master Priority Overview & Metatype Priority Details).
-- Require metatype attribute starting values, natural maximums, and special ability data in structured form. Addressed via `shadowrun-5e-data-tables.md` (Metatype Attribute Table).
-- Confirm exact rules for doubled lifestyle costs and other metatype-specific economic modifiers.
+-~Require metatype attribute starting values, natural maximums, and special ability data in structured form.~ Addressed via `shadowrun-5e-data-tables.md` (Metatype Attribute Table).
+-~Confirm exact rules for doubled lifestyle costs and other metatype-specific economic modifiers.~ Rule limited to applying the listed % modifier (e.g., dwarf ×1.2, troll ×2) to lifestyle purchases; captured in `shadowrun-5e-character.md`.
 - Need official validation on special attribute caps when Qualities (Lucky, Exceptional Attribute) are present.
 
 ### Step Three: Choose Magic or Resonance
@@ -22,8 +22,8 @@ This document consolidates outstanding data requirements and open questions iden
 - Confirm workflows for awarding GM-chosen Negative Qualities during creation.
 
 ### Step Five: Purchase Skills
-- Require authoritative SR5 skill list, linked attributes, and descriptions.
-- Need official skill group definitions (membership, maximum ratings) and how they interact with other rules.
+-~Require authoritative SR5 skill list, linked attributes, and descriptions.~ Provided in `shadowrun-5e-skills-data.md` with linked attributes, defaulting rules, specializations, and notes.
+-~Need official skill group definitions (membership, maximum ratings) and how they interact with other rules.~ Membership captured in `shadowrun-5e-skills-data.md`; note to document max-rating interactions when advancement data is sourced.
 - Need specialization options or guidance (free-form vs. predefined) for each skill.
 - Confirm exact cost formulae when aptitudes, qualities, or other modifiers apply.
 
@@ -43,8 +43,9 @@ This document consolidates outstanding data requirements and open questions iden
 - Clarify procedure for inherent racial traits lost through augmentation and how to restore them via upgrades.
 
 ### Lifestyle & Starting Nuyen
-- Need official lifestyle cost table, modifiers, and effects (starting nuyen adjustments, social modifiers, etc.).
-- Need the exact Starting Nuyen table (dice pools and modifiers) for each lifestyle.
+-~Need official lifestyle cost table, modifiers, and effects (starting nuyen adjustments, social modifiers, etc.).~ Covered via `shadowrun-5e-data-tables.md` (Lifestyle & Economy tables) and `shadowrun-5e-character.md` (Lifestyle Management guidance).
+-~Need the exact Starting Nuyen table (dice pools and modifiers) for each lifestyle.~ Maintained in `shadowrun-5e-data-tables.md`.
+- Clarify how resource priority interacts with alternate creation levels (street, prime).
 
 ### Step Seven: Spend Your Leftover Karma
 - Need Additional Purchases and Restrictions table to define what can be bought with Karma and associated costs.
@@ -73,6 +74,7 @@ This document consolidates outstanding data requirements and open questions iden
 - Provide matrix-specific skill entries (currently placeholder in data tables).
 
 ## Data Tables & Reference Content
+- Compile combat modifier tables (environmental, firing modes, melee/ranged adjustments) for UI automation per `shadowrun-5e-combat.md`.
 - Populate spell catalog classifications.
 - List technomancer complex forms and sprite options.
 - Document adept power names/costs for selection UIs.

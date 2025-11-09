@@ -566,24 +566,4 @@ Specializations: Data Bombs or by complex form
 | Pilot Ground Craft | Reaction | — | Yes | Bike; Hovercraft; Remote Operation; Tracked; Wheeled | Driving ground-based vehicles (non-walker). |
 | Pilot Watercraft | Reaction | — | Yes | Hydrofoil; Motorboat; Remote Operation; Sail; Ship; Submarine | Piloting waterborne vehicles locally or remotely. |
 
-
-
-
-
-ACTING: Con,Impersonation,Performance
-ATHLETICS: Gymnastics,Running,Swimming
-BIOTECH: Cybertechnology,First Aid,Medicine
-CLOSE COMBAT: Blades,Clubs, Unarmed
-CONJURING: Banishing,Binding,Summoning
-CRACKING: Cybercombat,Electronic Warfare,Hacking
-ELECTRONICS: Computer,Hardware,Software
-ENCHANTING: Alchemy,Artificing,Disenchanting
-FIREARMS: Automatics,Longarms,Pistols
-INFLUENCE: Etiquette,Leadership,Negotiation
-ENGINEERING: Aeronautics Mechanic,Automotive Mechanic,Industrial Mechanic,Nautical Mechanic
-OUTDOORS: Navigation,Survival,Tracking
-SORCERY: Counterspelling,Ritual Spellcasting,Spellcasting
-STEALTH: Disguise,Palming,Sneaking
-TASKING: Compiling,Decompiling,Registering
-
 *Last updated: 2025-11-08*
