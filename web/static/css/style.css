@@ -2035,6 +2035,14 @@ body.react-magic-enabled #magic-summary {
     color: #35ff9e;
 }
 
+.react-priority-status.error {
+    color: #ff6f80;
+}
+
+.react-priority-status.warning {
+    color: #ffb347;
+}
+
 .react-priority-dropzones {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
@@ -2049,6 +2057,244 @@ body.react-magic-enabled #magic-summary {
 .react-priority-category span:last-child {
     font-size: 0.9rem;
     color: #0d3b5d;
+}
+
+.sum-to-ten-wrapper {
+    gap: 1.5rem;
+}
+
+.sum-to-ten-description {
+    margin: 0.5rem 0 0;
+    color: #8cd6ff;
+    font-size: 0.9rem;
+}
+
+.sum-to-ten-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 1rem;
+    margin-top: 1rem;
+}
+
+.sum-to-ten-card {
+    background: rgba(4, 20, 30, 0.85);
+    border: 1px solid rgba(0, 166, 255, 0.3);
+    border-radius: 10px;
+    padding: 1rem 1.1rem;
+    box-shadow: 0 0 18px rgba(0, 166, 255, 0.1);
+    display: flex;
+    flex-direction: column;
+    gap: 0.65rem;
+}
+
+.sum-to-ten-card__header {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    font-weight: 600;
+    color: #8cf5c7;
+}
+
+.sum-to-ten-card__header span:first-child {
+    color: #00ff88;
+    font-size: 0.95rem;
+}
+
+.sum-to-ten-card__header span:last-child {
+    color: #c7ffe6;
+    font-size: 0.85rem;
+}
+
+.sum-to-ten-card select {
+    width: 100%;
+    padding: 0.55rem 0.65rem;
+    border-radius: 8px;
+    border: 1px solid rgba(0, 166, 255, 0.35);
+    background: rgba(3, 12, 22, 0.9);
+    color: #e8f6ff;
+}
+
+.sum-to-ten-card select:focus {
+    outline: none;
+    border-color: rgba(0, 166, 255, 0.7);
+    box-shadow: 0 0 0 2px rgba(0, 166, 255, 0.2);
+}
+
+.sum-to-ten-card__summary {
+    font-size: 0.82rem;
+    color: #7ad7ac;
+}
+
+.sum-to-ten-clear {
+    padding: 0;
+    align-self: flex-start;
+    color: #8cd6ff;
+}
+
+.sum-to-ten-status.success {
+    color: #35ff9e;
+}
+
+.sum-to-ten-status.error {
+    color: #ff6f80;
+}
+
+.sum-to-ten-status.warning {
+    color: #ffb347;
+}
+
+.sum-to-ten-footer {
+    margin-top: 1rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 1rem;
+}
+
+.sum-to-ten-metrics {
+    font-size: 0.85rem;
+    color: #8cd6ff;
+}
+
+.sum-to-ten-actions {
+    display: flex;
+    gap: 0.75rem;
+}
+
+.karma-wrapper {
+    display: grid;
+    gap: 1.5rem;
+}
+
+.karma-description {
+    margin: 0;
+    color: #8cd6ff;
+    font-size: 0.92rem;
+}
+
+.karma-notes {
+    margin: 0;
+    padding-left: 1.25rem;
+    color: #7ad7ac;
+    font-size: 0.85rem;
+}
+
+.karma-grid {
+    display: grid;
+    gap: 1.25rem;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+}
+
+.karma-panel {
+    background: rgba(4, 20, 30, 0.85);
+    border: 1px solid rgba(0, 166, 255, 0.28);
+    border-radius: 10px;
+    padding: 1.1rem 1.2rem;
+    box-shadow: 0 0 20px rgba(0, 166, 255, 0.1);
+    display: flex;
+    flex-direction: column;
+    gap: 0.8rem;
+}
+
+.karma-panel h4 {
+    margin: 0;
+    color: #00ff88;
+    font-size: 1rem;
+}
+
+.karma-field {
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+    font-size: 0.85rem;
+    color: #8cd6ff;
+}
+
+.karma-field select,
+.karma-field input[type="number"] {
+    background: rgba(3, 12, 22, 0.9);
+    border: 1px solid rgba(0, 166, 255, 0.35);
+    border-radius: 8px;
+    padding: 0.55rem 0.65rem;
+    color: #e8f6ff;
+}
+
+.karma-field select:focus,
+.karma-field input[type="number"]:focus {
+    outline: none;
+    border-color: rgba(0, 166, 255, 0.7);
+    box-shadow: 0 0 0 2px rgba(0, 166, 255, 0.2);
+}
+
+.karma-ledger {
+    display: grid;
+    gap: 0.65rem;
+}
+
+.karma-ledger-row span {
+    display: flex;
+    justify-content: space-between;
+    color: #c7ffe6;
+}
+
+.karma-info {
+    margin: 0;
+    color: #c7ffe6;
+    font-size: 0.85rem;
+}
+
+.karma-summary dl {
+    margin: 0;
+    display: grid;
+    gap: 0.5rem;
+}
+
+.karma-summary dl div {
+    display: flex;
+    justify-content: space-between;
+}
+
+.karma-summary dt {
+    color: #8cd6ff;
+    font-weight: 500;
+}
+
+.karma-summary dd {
+    margin: 0;
+    color: #c7ffe6;
+    font-weight: 600;
+}
+
+.karma-warning {
+    margin: 0;
+    color: #ff6f80;
+    font-size: 0.82rem;
+}
+
+.karma-hint {
+    margin: 0;
+    color: #7ad7ac;
+    font-size: 0.82rem;
+}
+
+.karma-status.success {
+    color: #35ff9e;
+}
+
+.karma-status.error {
+    color: #ff6f80;
+}
+
+.karma-status.warning {
+    color: #ffb347;
+}
+
+.karma-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 0.75rem;
 }
 
 @media (max-width: 768px) {

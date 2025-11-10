@@ -34,6 +34,7 @@ interface CampaignCreationState {
   edition: EditionKey;
   data?: CharacterCreationData;
   gameplayRules?: GameplayRules;
+  creationMethod?: string;
   loading: boolean;
   error?: string;
 }
@@ -53,6 +54,7 @@ export interface EditionContextValue {
   campaignGameplayRules?: GameplayRules;
   campaignLoading: boolean;
   campaignError?: string;
+  campaignCreationMethod?: string;
 }
 
 const defaultEdition: EditionMetadata = {
@@ -85,6 +87,7 @@ const fallbackValue: EditionContextValue = {
   campaignGameplayRules: undefined,
   campaignLoading: false,
   campaignError: undefined,
+  campaignCreationMethod: undefined,
 };
 
 const EditionContext = createContext<EditionContextValue>(fallbackValue);
@@ -212,6 +215,7 @@ export function EditionProvider({ children }: PropsWithChildren) {
           edition: activeEdition.key,
           data: previous?.data,
           gameplayRules: previous?.gameplayRules,
+          creationMethod: previous?.creationMethod,
           loading: true,
           error: undefined,
         };
@@ -237,14 +241,15 @@ export function EditionProvider({ children }: PropsWithChildren) {
           }));
         }
 
-        setCampaignState({
+        setCampaignState(() => ({
           campaignId,
           edition: editionKey,
           data: editionData ? applyGameplayRules(editionData, payload.gameplay_rules) : undefined,
           gameplayRules: payload.gameplay_rules,
+          creationMethod: payload.creation_method ?? undefined,
           loading: false,
           error: undefined,
-        });
+        }));
       } catch (error) {
         const message =
           error instanceof Error
@@ -255,6 +260,7 @@ export function EditionProvider({ children }: PropsWithChildren) {
           edition: activeEdition.key,
           data: undefined,
           gameplayRules: undefined,
+          creationMethod: undefined,
           loading: false,
           error: message,
         });
@@ -278,6 +284,8 @@ export function EditionProvider({ children }: PropsWithChildren) {
     const effectiveData =
       campaignMatchesActive && campaignState.data ? campaignState.data : activeDataState?.data;
 
+    const campaignCreationMethod = campaignMatchesActive ? campaignState?.creationMethod : undefined;
+
     return {
       activeEdition,
       supportedEditions,
@@ -300,6 +308,7 @@ export function EditionProvider({ children }: PropsWithChildren) {
       campaignGameplayRules: campaignMatchesActive ? campaignState?.gameplayRules : undefined,
       campaignLoading: campaignState?.loading ?? false,
       campaignError: campaignState?.error,
+      campaignCreationMethod,
     };
   }, [
     activeEdition,

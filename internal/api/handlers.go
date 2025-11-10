@@ -54,10 +54,11 @@ type campaignResponse struct {
 }
 
 type campaignCharacterCreationResponse struct {
-	CampaignID    string                        `json:"campaign_id"`
-	Edition       string                        `json:"edition"`
-	EditionData   *domain.CharacterCreationData `json:"edition_data"`
-	GameplayRules *service.GameplayRules        `json:"gameplay_rules,omitempty"`
+	CampaignID     string                        `json:"campaign_id"`
+	Edition        string                        `json:"edition"`
+	CreationMethod string                        `json:"creation_method"`
+	EditionData    *domain.CharacterCreationData `json:"edition_data"`
+	GameplayRules  *service.GameplayRules        `json:"gameplay_rules,omitempty"`
 }
 
 type userResponse struct {
@@ -599,10 +600,11 @@ func (h *Handlers) GetCampaignCharacterCreationData(w http.ResponseWriter, r *ht
 	}
 
 	respondJSON(w, http.StatusOK, campaignCharacterCreationResponse{
-		CampaignID:    campaign.ID,
-		Edition:       campaign.Edition,
-		EditionData:   editionData,
-		GameplayRules: rules,
+		CampaignID:     campaign.ID,
+		Edition:        campaign.Edition,
+		CreationMethod: campaign.CreationMethod,
+		EditionData:    editionData,
+		GameplayRules:  rules,
 	})
 }
 

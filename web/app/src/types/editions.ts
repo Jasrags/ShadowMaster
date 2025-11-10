@@ -59,16 +59,54 @@ export interface GameplayRules {
   gear_restrictions?: GearRestrictions;
 }
 
+export interface CreationMethodGearConversion {
+  karma_per_nuyen?: number;
+  max_karma_for_gear?: number;
+  max_starting_nuyen?: number;
+}
+
+export interface CreationMethodMagicQualityGrant {
+  attribute?: string;
+  base?: number;
+  free_power_points?: string;
+  power_point_cost?: number;
+  notes?: string;
+}
+
+export interface CreationMethodMagicQuality {
+  name: string;
+  cost: number;
+  grants?: CreationMethodMagicQualityGrant;
+  notes?: string;
+}
+
+export interface CreationMethodDefinition {
+  label: string;
+  description?: string;
+  supports_multiple_column_selection?: boolean;
+  point_budget?: number;
+  priority_costs?: Partial<Record<PriorityCode, number>>;
+  supports_multiple_A?: boolean;
+  karma_budget?: number;
+  metatype_costs?: Record<string, number>;
+  gear_conversion?: CreationMethodGearConversion;
+  magic_qualities?: CreationMethodMagicQuality[];
+  notes?: string[];
+  references?: string[];
+}
+
 export interface CharacterCreationData {
   priorities: Partial<Record<PriorityCategory, Record<PriorityCode, PriorityOption>>>;
   metatypes: MetatypeDefinition[];
   gameplay_levels?: Record<string, GameplayLevelDefinition>;
+  creation_methods?: Record<string, CreationMethodDefinition>;
 }
 
 export interface CampaignCharacterCreationResponse {
   campaign_id: string;
   edition: string;
   edition_data: CharacterCreationData;
+  creation_method?: string;
   gameplay_rules?: GameplayRules;
 }
 

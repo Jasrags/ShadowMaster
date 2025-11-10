@@ -1,5 +1,7 @@
 # Plan: Expose Campaign Defaults to Character Creation
 
+> **Roadmap Reference:** Progress against this plan is reflected in `docs/project-roadmap.md`. Keep this checklist for granular implementation notes related to campaign defaults.
+
 ## 1. Backend Enhancements
 - [x] **Campaign Service:** Extend `DescribeGameplayRules` to return structured defaults and helper logic for character creation overrides.
 - [x] **API Layer:** Introduce `/api/campaigns/{id}/character-creation` endpoint returning edition data plus gameplay rule overrides.

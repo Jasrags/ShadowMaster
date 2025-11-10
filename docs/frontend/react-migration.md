@@ -2,6 +2,8 @@
 
 *Last updated: 2025-11-10*
 
+> **Roadmap Reference:** Overall priorities now live in `docs/project-roadmap.md`. Use this file to capture React-specific migration details and decisions.
+
 ## Step 1 — React Foundation & Edition Context
 - Added Vite + TypeScript scaffold under `web/app/` with linting (`eslint`), formatting (`prettier`), and a lightweight smoke test (`tsx`).
 - Builds emit to `web/static/dist/main.js` for drop-in compatibility with the existing Go HTTP server.

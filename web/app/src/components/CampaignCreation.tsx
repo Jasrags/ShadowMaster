@@ -1,7 +1,7 @@
 import { FormEvent, useEffect, useMemo, useState } from 'react';
 import { createPortal } from 'react-dom';
 import { useEdition } from '../hooks/useEdition';
-import { CharacterCreationData, UserSummary } from '../types/editions';
+import { CharacterCreationData, CreationMethodDefinition, UserSummary } from '../types/editions';
 
 interface Props {
   targetId?: string;
@@ -13,7 +13,7 @@ interface Option<T extends string = string> {
   value: T;
 }
 
-const CREATION_METHOD_OPTIONS: Option[] = [
+const DEFAULT_CREATION_METHOD_OPTIONS: Option[] = [
   { label: 'Priority (default)', value: 'priority' },
   { label: 'Sum-to-Ten (coming soon)', value: 'sum_to_ten' },
   { label: 'Karma (coming soon)', value: 'karma' },
@@ -37,6 +37,8 @@ export function CampaignCreation({ targetId = 'campaign-creation-react-root', on
   const [selectedGameplayLevel, setSelectedGameplayLevel] = useState<string>('experienced');
   const [selectedCreationMethod, setSelectedCreationMethod] = useState<string>('priority');
   const [users, setUsers] = useState<UserSummary[]>([]);
+  const [creationMethods, setCreationMethods] = useState<Record<string, CreationMethodDefinition>>({});
+  const [creationMethodOptions, setCreationMethodOptions] = useState<Option[]>(DEFAULT_CREATION_METHOD_OPTIONS);
   const [isOpen, setIsOpen] = useState(false);
 
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -71,6 +73,7 @@ export function CampaignCreation({ targetId = 'campaign-creation-react-root', on
         const data = await response.json();
         const creationData: CharacterCreationData = data?.character_creation ?? data;
         setEditionData(creationData);
+        setCreationMethods(creationData.creation_methods ?? {});
         const levels = Object.entries(creationData.gameplay_levels ?? {}).map(([value, { label }]) => ({
           value,
           label: label || value,
@@ -115,8 +118,34 @@ export function CampaignCreation({ targetId = 'campaign-creation-react-root', on
   useEffect(() => {
     if (!editionData && characterCreationData) {
       setEditionData(characterCreationData);
+      setCreationMethods(characterCreationData.creation_methods ?? {});
     }
   }, [characterCreationData, editionData]);
+
+  useEffect(() => {
+    if (!editionData && Object.keys(creationMethods).length === 0) {
+      setCreationMethodOptions(DEFAULT_CREATION_METHOD_OPTIONS);
+      return;
+    }
+    if (!creationMethods || Object.keys(creationMethods).length === 0) {
+      setCreationMethodOptions(DEFAULT_CREATION_METHOD_OPTIONS);
+      return;
+    }
+    const options = Object.entries(creationMethods).map(([value, definition]) => ({
+      value,
+      label: definition.label || value,
+    }));
+    setCreationMethodOptions(options);
+  }, [creationMethods, editionData]);
+
+  useEffect(() => {
+    if (creationMethodOptions.length === 0) {
+      return;
+    }
+    if (!creationMethodOptions.some((option) => option.value === selectedCreationMethod)) {
+      setSelectedCreationMethod(creationMethodOptions[0].value);
+    }
+  }, [creationMethodOptions, selectedCreationMethod]);
 
   const editionOptions = useMemo<Option[]>(() => {
     return supportedEditions.map((edition) => ({
@@ -138,7 +167,7 @@ export function CampaignCreation({ targetId = 'campaign-creation-react-root', on
   function resetForm() {
     setName('');
     setSelectedGameplayLevel('experienced');
-    setSelectedCreationMethod('priority');
+    setSelectedCreationMethod(creationMethodOptions[0]?.value ?? 'priority');
     setGmUserId(users[0]?.id ?? '');
     setError(null);
   }
@@ -274,15 +303,23 @@ export function CampaignCreation({ targetId = 'campaign-creation-react-root', on
                 value={selectedCreationMethod}
                 onChange={(event) => setSelectedCreationMethod(event.target.value)}
               >
-                {CREATION_METHOD_OPTIONS.map((option) => (
+                {creationMethodOptions.map((option) => (
                   <option key={option.value} value={option.value}>
                     {option.label}
                   </option>
                 ))}
               </select>
-              {selectedCreationMethod !== 'priority' && (
-                <small>Alternative creation methods are not yet implemented and will default to Priority.</small>
-              )}
+              <div className="form-help">
+                {creationMethods[selectedCreationMethod]?.description && (
+                  <p>{creationMethods[selectedCreationMethod]?.description}</p>
+                )}
+                {selectedCreationMethod !== 'priority' && (
+                  <p>
+                    Support for Sum-to-Ten and Karma methods is still under development. Characters will temporarily
+                    default to Priority until the new workflows are implemented.
+                  </p>
+                )}
+              </div>
             </div>
 
             <div className="form-group">

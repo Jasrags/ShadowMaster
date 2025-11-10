@@ -30,6 +30,7 @@ type CharacterCreationData struct {
 	Priorities     map[string]map[string]PriorityOption `json:"priorities"`
 	Metatypes      []MetatypeDefinition                 `json:"metatypes"`
 	GameplayLevels map[string]GameplayLevel             `json:"gameplay_levels,omitempty"`
+	CreationMethods map[string]CreationMethod           `json:"creation_methods,omitempty"`
 }
 
 // GameplayLevel captures SR5 gameplay-level adjustments.
@@ -48,4 +49,44 @@ type GameplayLevel struct {
 type GearRestrictions struct {
 	MaxDeviceRating *int `json:"max_device_rating,omitempty"`
 	MaxAvailability *int `json:"max_availability,omitempty"`
+}
+
+// CreationMethod describes an available character creation strategy for an edition.
+type CreationMethod struct {
+	Label                              string                               `json:"label"`
+	Description                        string                               `json:"description,omitempty"`
+	SupportsMultipleColumnSelection    bool                                 `json:"supports_multiple_column_selection,omitempty"`
+	PointBudget                        int                                  `json:"point_budget,omitempty"`
+	PriorityCosts                      map[string]int                       `json:"priority_costs,omitempty"`
+	SupportsMultipleA                  bool                                 `json:"supports_multiple_A,omitempty"`
+	KarmaBudget                        int                                  `json:"karma_budget,omitempty"`
+	MetatypeCosts                      map[string]int                       `json:"metatype_costs,omitempty"`
+	GearConversion                     *CreationMethodGearConversion        `json:"gear_conversion,omitempty"`
+	MagicQualities                     []CreationMethodMagicQuality         `json:"magic_qualities,omitempty"`
+	Notes                              []string                             `json:"notes,omitempty"`
+	References                         []string                             `json:"references,omitempty"`
+}
+
+// CreationMethodGearConversion captures Karma↔¥ conversion limits.
+type CreationMethodGearConversion struct {
+	KarmaPerNuyen    float64 `json:"karma_per_nuyen,omitempty"`
+	MaxKarmaForGear  int     `json:"max_karma_for_gear,omitempty"`
+	MaxStartingNuyen int     `json:"max_starting_nuyen,omitempty"`
+}
+
+// CreationMethodMagicQuality represents a quality that unlocks magical abilities in Karma creation.
+type CreationMethodMagicQuality struct {
+	Name   string                          `json:"name"`
+	Cost   int                             `json:"cost"`
+	Grants CreationMethodMagicQualityGrant `json:"grants,omitempty"`
+	Notes  string                          `json:"notes,omitempty"`
+}
+
+// CreationMethodMagicQualityGrant captures benefits from selecting a magic quality.
+type CreationMethodMagicQualityGrant struct {
+	Attribute        string  `json:"attribute,omitempty"`
+	Base             int     `json:"base,omitempty"`
+	FreePowerPoints  string  `json:"free_power_points,omitempty"`
+	PowerPointCost   int     `json:"power_point_cost,omitempty"`
+	AdditionalNotes  string  `json:"notes,omitempty"`
 }

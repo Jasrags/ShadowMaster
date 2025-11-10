@@ -62,7 +62,7 @@ func TestCampaignServiceCreateRequiresEdition(t *testing.T) {
 	}
 }
 
-func TestCampaignServiceCreationMethodFallback(t *testing.T) {
+func TestCampaignServiceCreationMethodNormalization(t *testing.T) {
 	dir := t.TempDir()
 	store, err := storage.NewJSONStore(dir)
 	if err != nil {
@@ -73,17 +73,25 @@ func TestCampaignServiceCreationMethodFallback(t *testing.T) {
 	writeGameplayLevelData(t, store)
 	service := NewCampaignService(repo, jsonrepo.NewEditionRepository(store))
 
-	for _, method := range []string{"Sum-to-Ten", "karma", "Priority"} {
+	tests := map[string]string{
+		"Sum-to-Ten": "sum_to_ten",
+		"sumtotten":  "sum_to_ten",
+		"karma":      "karma",
+		"Priority":   "priority",
+		"":           "priority",
+	}
+
+	for input, expected := range tests {
 		campaign, err := service.CreateCampaign(CampaignCreateInput{
-			Name:           "Test " + method,
+			Name:           "Test " + input,
 			Edition:        "sr5",
-			CreationMethod: method,
+			CreationMethod: input,
 		})
 		if err != nil {
-			t.Fatalf("create campaign (%s): %v", method, err)
+			t.Fatalf("create campaign (%s): %v", input, err)
 		}
-		if campaign.CreationMethod != "priority" {
-			t.Fatalf("expected creation method to fallback to priority, got %s", campaign.CreationMethod)
+		if campaign.CreationMethod != expected {
+			t.Fatalf("expected creation method %s, got %s", expected, campaign.CreationMethod)
 		}
 	}
 }
@@ -115,8 +123,8 @@ func TestCampaignServiceImmutableFields(t *testing.T) {
 	}
 
 	method := "karma"
-	if _, err := service.UpdateCampaign(campaign.ID, CampaignUpdateInput{CreationMethod: &method}); err != nil {
-		t.Fatalf("expected creation method fallback to succeed, got %v", err)
+	if _, err := service.UpdateCampaign(campaign.ID, CampaignUpdateInput{CreationMethod: &method}); err == nil {
+		t.Fatal("expected error when attempting to mutate creation method")
 	}
 
 	newGM := "user-2"
@@ -226,6 +234,29 @@ func writeGameplayLevelData(t *testing.T, store *storage.JSONStore) {
 				GearRestrictions: domain.GearRestrictions{
 					MaxDeviceRating: &maxDevicePrime,
 					MaxAvailability: &maxAvailPrime,
+				},
+			},
+		},
+		CreationMethods: map[string]domain.CreationMethod{
+			"priority": {
+				Label: "Priority",
+			},
+			"sum_to_ten": {
+				Label:        "Sum-to-Ten",
+				PointBudget:  10,
+				PriorityCosts: map[string]int{
+					"A": 4,
+					"B": 3,
+					"C": 2,
+					"D": 1,
+					"E": 0,
+				},
+			},
+			"karma": {
+				Label:       "Karma Point-Buy",
+				KarmaBudget: 800,
+				MetatypeCosts: map[string]int{
+					"human": 0,
 				},
 			},
 		},

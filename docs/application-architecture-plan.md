@@ -1,5 +1,7 @@
 # ShadowMaster Application Architecture Plan
 
+> **Roadmap Reference:** High-level progress and priorities now live in `docs/project-roadmap.md`. This document retains deeper architectural context and should be updated when those details change.
+
 ## 1. Concept Overview
 
 ### 1.1 Core Domain Concepts

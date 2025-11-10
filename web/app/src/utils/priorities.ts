@@ -1,14 +1,8 @@
 import { CharacterCreationData, PriorityCategory, PriorityCode, PriorityOption } from '../types/editions';
 
-export const PRIORITY_CATEGORIES: PriorityCategory[] = [
-  'magic',
-  'metatype',
-  'attributes',
-  'skills',
-  'resources',
-];
+export const PRIORITY_CATEGORIES: PriorityCategory[] = ['magic', 'metatype', 'attributes', 'skills', 'resources'];
 
-const DEFAULT_PRIORITY_CODES: PriorityCode[] = ['A', 'B', 'C', 'D', 'E'];
+export const PRIORITY_CODES: PriorityCode[] = ['A', 'B', 'C', 'D', 'E'];
 
 const CATEGORY_LABELS: Record<PriorityCategory, string> = {
   magic: 'Magic',
@@ -33,13 +27,13 @@ export function getPriorityOptions(
 ): PriorityOptionDescriptor[] {
   const categoryTable = data?.priorities?.[category];
   if (!categoryTable) {
-    return DEFAULT_PRIORITY_CODES.map((code) => ({
+    return PRIORITY_CODES.map((code) => ({
       code,
       option: { label: `Priority ${code}` },
     }));
   }
 
-  return DEFAULT_PRIORITY_CODES.map((code) => {
+  return PRIORITY_CODES.map((code) => {
     const option = categoryTable[code] ?? { label: `Priority ${code}` };
     return { code, option };
   });
@@ -69,11 +63,11 @@ export function getAssignedPriorities(assignments: PriorityAssignments): Priorit
 
 export function getAvailablePriorities(assignments: PriorityAssignments): PriorityCode[] {
   const assigned = new Set(getAssignedPriorities(assignments));
-  return DEFAULT_PRIORITY_CODES.filter((code) => !assigned.has(code));
+  return PRIORITY_CODES.filter((code) => !assigned.has(code));
 }
 
 export function isAssignmentsComplete(assignments: PriorityAssignments): boolean {
-  return getAssignedPriorities(assignments).length === DEFAULT_PRIORITY_CODES.length;
+  return getAssignedPriorities(assignments).length === PRIORITY_CODES.length;
 }
 
 export function getPrioritySummary(option?: PriorityOption): string {

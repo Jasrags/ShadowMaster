@@ -71,9 +71,9 @@ func (s *CampaignService) CreateCampaign(input CampaignCreateInput) (*domain.Cam
 		return nil, ErrCampaignEditionRequired
 	}
 
-	creationMethod := normalizeCreationMethod(edition, strings.TrimSpace(input.CreationMethod))
-	if creationMethod == "" {
-		return nil, ErrCampaignCreationMethodRequired
+	creationMethod, err := s.normalizeCreationMethod(edition, strings.TrimSpace(input.CreationMethod))
+	if err != nil {
+		return nil, err
 	}
 
 	gameplayLevel, err := s.resolveGameplayLevel(edition, strings.TrimSpace(input.GameplayLevel))
@@ -112,7 +112,10 @@ func (s *CampaignService) UpdateCampaign(id string, input CampaignUpdateInput) (
 	}
 
 	if input.CreationMethod != nil {
-		normalized := normalizeCreationMethod(campaign.Edition, strings.TrimSpace(*input.CreationMethod))
+		normalized, err := s.normalizeCreationMethod(campaign.Edition, strings.TrimSpace(*input.CreationMethod))
+		if err != nil {
+			return nil, err
+		}
 		if normalized != campaign.CreationMethod {
 			return nil, ErrCampaignImmutableCreation
 		}
@@ -159,31 +162,6 @@ func (s *CampaignService) DeleteCampaign(id string) error {
 	return s.campaignRepo.Delete(id)
 }
 
-func normalizeCreationMethod(edition, method string) string {
-	if method != "" {
-		normalized := sanitizeMethod(method)
-		switch normalized {
-		case "priority":
-			return "priority"
-		case "sum_to_ten", "sumtotten", "sum2ten":
-			return "priority"
-		case "karma":
-			return "priority"
-		default:
-			if normalized != "" {
-				return normalized
-			}
-		}
-	}
-
-	switch strings.ToLower(edition) {
-	case "sr5":
-		return "priority"
-	default:
-		return "priority"
-	}
-}
-
 func sanitizeMethod(method string) string {
 	normalized := strings.ToLower(strings.TrimSpace(method))
 	normalized = strings.ReplaceAll(normalized, "-", "_")
@@ -204,6 +182,90 @@ func campaignStatusOrDefault(requested, existing string) string {
 		return existing
 	}
 	return requested
+}
+
+func (s *CampaignService) normalizeCreationMethod(edition, method string) (string, error) {
+	edition = strings.ToLower(strings.TrimSpace(edition))
+	requested := canonicalizeCreationMethod(sanitizeMethod(method))
+
+	if s.editionRepo == nil {
+		if requested != "" {
+			return requested, nil
+		}
+		if def := defaultCreationMethodForEdition(nil, edition); def != "" {
+			return def, nil
+		}
+		return "", ErrCampaignCreationMethodRequired
+	}
+
+	data, err := s.editionRepo.GetCharacterCreationData(edition)
+	if err != nil {
+		if requested != "" {
+			return requested, nil
+		}
+		if def := defaultCreationMethodForEdition(nil, edition); def != "" {
+			return def, nil
+		}
+		return "", ErrCampaignCreationMethodRequired
+	}
+
+	available := data.CreationMethods
+
+	if requested != "" {
+		if _, ok := available[requested]; ok {
+			return requested, nil
+		}
+	}
+
+	if requested == "" {
+		if def := defaultCreationMethodForEdition(available, edition); def != "" {
+			return def, nil
+		}
+		return "", ErrCampaignCreationMethodRequired
+	}
+
+	if def := defaultCreationMethodForEdition(available, edition); def != "" {
+		return def, nil
+	}
+
+	if len(available) > 0 {
+		for key := range available {
+			return key, nil
+		}
+	}
+
+	return "", ErrCampaignCreationMethodRequired
+}
+
+func canonicalizeCreationMethod(method string) string {
+	switch method {
+	case "priority", "":
+		return method
+	case "sum_to_ten", "sumtotten", "sum2ten", "sum_to10":
+		return "sum_to_ten"
+	case "karma", "point_buy", "pointbuy":
+		return "karma"
+	default:
+		return method
+	}
+}
+
+func defaultCreationMethodForEdition(available map[string]domain.CreationMethod, edition string) string {
+	if len(available) > 0 {
+		if _, ok := available["priority"]; ok {
+			return "priority"
+		}
+		for key := range available {
+			return key
+		}
+	}
+
+	switch strings.ToLower(strings.TrimSpace(edition)) {
+	case "sr5":
+		return "priority"
+	default:
+		return "priority"
+	}
 }
 
 // GameplayRules represents resolved gameplay level rules.
