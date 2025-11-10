@@ -6,13 +6,13 @@ import (
 	"net/http"
 	"os"
 	"shadowmaster/internal/api"
+	"shadowmaster/internal/domain"
+	jsonrepo "shadowmaster/internal/repository/json"
+	"shadowmaster/internal/service"
 	"time"
 
 	"github.com/go-chi/chi/v5"
 	"github.com/go-chi/chi/v5/middleware"
-
-	jsonrepo "shadowmaster/internal/repository/json"
-	"shadowmaster/internal/service"
 )
 
 func main() {
@@ -30,12 +30,15 @@ func main() {
 	// Initialize services
 	characterService := service.NewCharacterService(repos.Character)
 	userService := service.NewUserService(repos.User)
+	campaignService := service.NewCampaignService(repos.Campaign, repos.Edition)
+	sessionService := service.NewSessionService(repos.Session, repos.Campaign)
+	sceneService := service.NewSceneService(repos.Scene, repos.Session)
 
 	sessionSecret := os.Getenv("SESSION_SECRET")
 	sessionManager := api.NewSessionManager(sessionSecret, 7*24*time.Hour, false)
 
 	// Initialize handlers
-	handlers := api.NewHandlers(repos, characterService, userService, sessionManager)
+	handlers := api.NewHandlers(repos, characterService, userService, sessionManager, campaignService, sessionService, sceneService)
 
 	// Setup router
 	r := chi.NewRouter()
@@ -84,25 +87,43 @@ func main() {
 		r.Delete("/groups/{id}", handlers.DeleteGroup)
 
 		// Campaign routes
-		r.Get("/campaigns", handlers.GetCampaigns)
-		r.Get("/campaigns/{id}", handlers.GetCampaign)
-		r.Post("/campaigns", handlers.CreateCampaign)
-		r.Put("/campaigns/{id}", handlers.UpdateCampaign)
-		r.Delete("/campaigns/{id}", handlers.DeleteCampaign)
+		r.Route("/campaigns", func(r chi.Router) {
+			r.Get("/", handlers.GetCampaigns)
+			r.Get("/{id}", handlers.GetCampaign)
+
+			r.Group(func(r chi.Router) {
+				r.Use(sessionManager.RequireRole(domain.RoleAdministrator, domain.RoleGamemaster))
+				r.Post("/", handlers.CreateCampaign)
+				r.Put("/{id}", handlers.UpdateCampaign)
+				r.Delete("/{id}", handlers.DeleteCampaign)
+			})
+		})
 
 		// Session routes
-		r.Get("/sessions", handlers.GetSessions)
-		r.Get("/sessions/{id}", handlers.GetSession)
-		r.Post("/sessions", handlers.CreateSession)
-		r.Put("/sessions/{id}", handlers.UpdateSession)
-		r.Delete("/sessions/{id}", handlers.DeleteSession)
+		r.Route("/sessions", func(r chi.Router) {
+			r.Get("/", handlers.GetSessions)
+			r.Get("/{id}", handlers.GetSession)
+
+			r.Group(func(r chi.Router) {
+				r.Use(sessionManager.RequireRole(domain.RoleAdministrator, domain.RoleGamemaster))
+				r.Post("/", handlers.CreateSession)
+				r.Put("/{id}", handlers.UpdateSession)
+				r.Delete("/{id}", handlers.DeleteSession)
+			})
+		})
 
 		// Scene routes
-		r.Get("/scenes", handlers.GetScenes)
-		r.Get("/scenes/{id}", handlers.GetScene)
-		r.Post("/scenes", handlers.CreateScene)
-		r.Put("/scenes/{id}", handlers.UpdateScene)
-		r.Delete("/scenes/{id}", handlers.DeleteScene)
+		r.Route("/scenes", func(r chi.Router) {
+			r.Get("/", handlers.GetScenes)
+			r.Get("/{id}", handlers.GetScene)
+
+			r.Group(func(r chi.Router) {
+				r.Use(sessionManager.RequireRole(domain.RoleAdministrator, domain.RoleGamemaster))
+				r.Post("/", handlers.CreateScene)
+				r.Put("/{id}", handlers.UpdateScene)
+				r.Delete("/{id}", handlers.DeleteScene)
+			})
+		})
 	})
 
 	// Serve static files

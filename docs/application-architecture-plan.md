@@ -145,9 +145,9 @@
 - Author Go service validation for immutable campaign setup and character ownership.
 
 ### Phase 2 – API & RBAC Hardening
-- Introduce campaign/session/scene service layers and expose REST endpoints for create/update/delete with role checks.  
-- Apply `RequireRole` middleware and fine-grained authorization helpers.  
-- Return edition + creation method metadata from campaign endpoints to drive frontend.
+- Introduce campaign/session/scene service layers and expose REST endpoints for create/update/delete with role checks. *(Completed)*  
+- Apply `RequireRole` middleware and fine-grained authorization helpers. *(Completed)*  
+- Return edition + creation method metadata from campaign endpoints to drive frontend. *(Completed)*
 
 ### Phase 3 – Edition & Creation Method Support
 - Model SR5 gameplay levels and alternative creation methods in `data/editions`.  

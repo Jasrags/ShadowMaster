@@ -7,28 +7,32 @@ import (
 
 // Index maintains relationships and quick lookups
 type Index struct {
-	Characters map[string]string `json:"characters"` // ID -> filename
-	Groups     map[string]string `json:"groups"`
-	Campaigns  map[string]string `json:"campaigns"`
-	Sessions   map[string]string `json:"sessions"`
-	Scenes     map[string]string `json:"scenes"`
-	Users      map[string]string `json:"users"`
-	UserEmails map[string]string `json:"user_emails"`
-	Usernames  map[string]string `json:"usernames"`
-	mu         sync.RWMutex
+	Characters         map[string]string   `json:"characters"` // ID -> filename
+	Groups             map[string]string   `json:"groups"`
+	Campaigns          map[string]string   `json:"campaigns"`
+	Sessions           map[string]string   `json:"sessions"`
+	Scenes             map[string]string   `json:"scenes"`
+	Users              map[string]string   `json:"users"`
+	UserEmails         map[string]string   `json:"user_emails"`
+	Usernames          map[string]string   `json:"usernames"`
+	CampaignCharacters map[string][]string `json:"campaign_characters"`
+	UserCharacters     map[string][]string `json:"user_characters"`
+	mu                 sync.RWMutex
 }
 
 // NewIndex creates a new empty index
 func NewIndex() *Index {
 	return &Index{
-		Characters: make(map[string]string),
-		Groups:     make(map[string]string),
-		Campaigns:  make(map[string]string),
-		Sessions:   make(map[string]string),
-		Scenes:     make(map[string]string),
-		Users:      make(map[string]string),
-		UserEmails: make(map[string]string),
-		Usernames:  make(map[string]string),
+		Characters:         make(map[string]string),
+		Groups:             make(map[string]string),
+		Campaigns:          make(map[string]string),
+		Sessions:           make(map[string]string),
+		Scenes:             make(map[string]string),
+		Users:              make(map[string]string),
+		UserEmails:         make(map[string]string),
+		Usernames:          make(map[string]string),
+		CampaignCharacters: make(map[string][]string),
+		UserCharacters:     make(map[string][]string),
 	}
 }
 
@@ -61,6 +65,12 @@ func LoadIndex(data []byte) (*Index, error) {
 	}
 	if idx.Usernames == nil {
 		idx.Usernames = make(map[string]string)
+	}
+	if idx.CampaignCharacters == nil {
+		idx.CampaignCharacters = make(map[string][]string)
+	}
+	if idx.UserCharacters == nil {
+		idx.UserCharacters = make(map[string][]string)
 	}
 	return &idx, nil
 }

@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"shadowmaster/internal/domain"
 	"shadowmaster/pkg/storage"
+	"strings"
 	"time"
 
 	"github.com/google/uuid"
@@ -17,10 +18,14 @@ type CampaignRepositoryJSON struct {
 
 // NewCampaignRepository creates a new JSON-based campaign repository
 func NewCampaignRepository(store *storage.JSONStore, index *Index) *CampaignRepositoryJSON {
-	return &CampaignRepositoryJSON{
+	repo := &CampaignRepositoryJSON{
 		store: store,
 		index: index,
 	}
+
+	repo.normalizeExistingCampaigns()
+
+	return repo
 }
 
 // Create creates a new campaign
@@ -28,10 +33,18 @@ func (r *CampaignRepositoryJSON) Create(campaign *domain.Campaign) error {
 	if campaign.ID == "" {
 		campaign.ID = uuid.New().String()
 	}
-	campaign.CreatedAt = time.Now()
-	campaign.UpdatedAt = time.Now()
+	now := time.Now()
+	if campaign.CreatedAt.IsZero() {
+		campaign.CreatedAt = now
+	}
+	campaign.UpdatedAt = now
 	if campaign.Status == "" {
 		campaign.Status = "Active"
+	}
+	campaign.CreationMethod = normalizeCreationMethod(campaign.Edition, campaign.CreationMethod)
+	campaign.GameplayLevel = normalizeGameplayLevel(campaign.Edition, campaign.GameplayLevel)
+	if campaign.SetupLockedAt.IsZero() {
+		campaign.SetupLockedAt = campaign.CreatedAt
 	}
 
 	filename := fmt.Sprintf("campaigns/%s.json", campaign.ID)
@@ -104,15 +117,23 @@ func (r *CampaignRepositoryJSON) GetByGroupID(groupID string) ([]*domain.Campaig
 
 // Update updates an existing campaign
 func (r *CampaignRepositoryJSON) Update(campaign *domain.Campaign) error {
-	r.index.mu.RLock()
-	_, exists := r.index.Campaigns[campaign.ID]
-	r.index.mu.RUnlock()
-
-	if !exists {
-		return fmt.Errorf("campaign not found: %s", campaign.ID)
+	existing, err := r.GetByID(campaign.ID)
+	if err != nil {
+		return err
 	}
 
+	campaign.CreatedAt = existing.CreatedAt
+	campaign.Status = campaignStatusOrDefault(campaign.Status, existing.Status)
+	campaign.Edition = existing.Edition
+	campaign.CreationMethod = normalizeCreationMethod(existing.Edition, existing.CreationMethod)
+	requestedGameplay := campaign.GameplayLevel
+	if requestedGameplay == "" {
+		requestedGameplay = existing.GameplayLevel
+	}
+	campaign.GameplayLevel = normalizeGameplayLevel(existing.Edition, requestedGameplay)
+	campaign.SetupLockedAt = existing.SetupLockedAt
 	campaign.UpdatedAt = time.Now()
+
 	filename := fmt.Sprintf("campaigns/%s.json", campaign.ID)
 	return r.store.Write(filename, campaign)
 }
@@ -141,4 +162,93 @@ func (r *CampaignRepositoryJSON) Delete(id string) error {
 // saveIndex saves the index file
 func (r *CampaignRepositoryJSON) saveIndex() error {
 	return r.store.Write("index.json", r.index)
+}
+
+func (r *CampaignRepositoryJSON) normalizeExistingCampaigns() {
+	files, err := r.store.List("campaigns")
+	if err != nil {
+		return
+	}
+
+	now := time.Now()
+
+	for _, file := range files {
+		if !strings.HasSuffix(file, ".json") {
+			continue
+		}
+
+		filename := fmt.Sprintf("campaigns/%s", file)
+		var campaign domain.Campaign
+		if err := r.store.Read(filename, &campaign); err != nil {
+			continue
+		}
+
+		changed := false
+
+		defaultMethod := normalizeCreationMethod(campaign.Edition, campaign.CreationMethod)
+		if campaign.CreationMethod != defaultMethod {
+			campaign.CreationMethod = defaultMethod
+			changed = true
+		}
+
+		defaultGameplay := normalizeGameplayLevel(campaign.Edition, campaign.GameplayLevel)
+		if campaign.GameplayLevel != defaultGameplay {
+			campaign.GameplayLevel = defaultGameplay
+			changed = true
+		}
+
+		if campaign.SetupLockedAt.IsZero() {
+			if campaign.CreatedAt.IsZero() {
+				campaign.CreatedAt = now
+			}
+			campaign.SetupLockedAt = campaign.CreatedAt
+			changed = true
+		}
+
+		if changed {
+			campaign.UpdatedAt = time.Now()
+			_ = r.store.Write(filename, &campaign)
+		}
+	}
+}
+
+func normalizeCreationMethod(edition string, creationMethod string) string {
+	if creationMethod != "" {
+		return strings.ToLower(creationMethod)
+	}
+
+	switch strings.ToLower(edition) {
+	case "sr5":
+		return "priority"
+	default:
+		return "priority"
+	}
+}
+
+func normalizeGameplayLevel(edition string, gameplayLevel string) string {
+	gameplayLevel = strings.ToLower(gameplayLevel)
+	if strings.ToLower(edition) != "sr5" {
+		return gameplayLevel
+	}
+
+	if gameplayLevel == "" {
+		return "experienced"
+	}
+
+	switch gameplayLevel {
+	case "street", "experienced", "prime":
+		return gameplayLevel
+	default:
+		return "experienced"
+	}
+}
+
+func campaignStatusOrDefault(requested string, existing string) string {
+	if requested == "" {
+		if existing == "" {
+			return "Active"
+		}
+		return existing
+	}
+	return requested
 }

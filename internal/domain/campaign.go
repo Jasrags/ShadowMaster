@@ -16,15 +16,19 @@ type Group struct {
 
 // Campaign represents a campaign linked to a group
 type Campaign struct {
-	ID          string    `json:"id"`
-	Name        string    `json:"name"`
-	Description string    `json:"description,omitempty"`
-	GroupID     string    `json:"group_id"` // Reference to group
-	GmName      string    `json:"gm_name,omitempty"`
-	Edition     string    `json:"edition"` // "sr3", "sr4", etc.
-	CreatedAt   time.Time `json:"created_at"`
-	UpdatedAt   time.Time `json:"updated_at"`
-	Status      string    `json:"status"` // Active, Paused, Completed
+	ID             string    `json:"id"`
+	Name           string    `json:"name"`
+	Description    string    `json:"description,omitempty"`
+	GroupID        string    `json:"group_id"` // Reference to group
+	GmName         string    `json:"gm_name,omitempty"`
+	Edition        string    `json:"edition"` // "sr3", "sr4", etc.
+	CreationMethod string    `json:"creation_method"`
+	GameplayLevel  string    `json:"gameplay_level,omitempty"`
+	HouseRules     string    `json:"house_rules,omitempty"`
+	CreatedAt      time.Time `json:"created_at"`
+	UpdatedAt      time.Time `json:"updated_at"`
+	SetupLockedAt  time.Time `json:"setup_locked_at,omitempty"`
+	Status         string    `json:"status"` // Active, Paused, Completed
 }
 
 // Session represents an individual play session within a campaign

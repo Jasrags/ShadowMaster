@@ -27,6 +27,25 @@ type MetatypeDefinition struct {
 
 // CharacterCreationData aggregates data required by the multi-step wizard.
 type CharacterCreationData struct {
-	Priorities map[string]map[string]PriorityOption `json:"priorities"`
-	Metatypes  []MetatypeDefinition                 `json:"metatypes"`
+	Priorities     map[string]map[string]PriorityOption `json:"priorities"`
+	Metatypes      []MetatypeDefinition                 `json:"metatypes"`
+	GameplayLevels map[string]GameplayLevel             `json:"gameplay_levels,omitempty"`
+}
+
+// GameplayLevel captures SR5 gameplay-level adjustments.
+type GameplayLevel struct {
+	Label                  string           `json:"label"`
+	Description            string           `json:"description,omitempty"`
+	Resources              map[string]int   `json:"resources,omitempty"`
+	StartingKarma          int              `json:"starting_karma,omitempty"`
+	MaxCustomKarma         int              `json:"max_custom_karma,omitempty"`
+	KarmaToNuyenLimit      int              `json:"karma_to_nuyen_limit,omitempty"`
+	ContactKarmaMultiplier int              `json:"contact_karma_multiplier,omitempty"`
+	GearRestrictions       GearRestrictions `json:"gear_restrictions,omitempty"`
+}
+
+// GearRestrictions captures device/availability caps.
+type GearRestrictions struct {
+	MaxDeviceRating *int `json:"max_device_rating,omitempty"`
+	MaxAvailability *int `json:"max_availability,omitempty"`
 }

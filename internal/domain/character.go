@@ -9,6 +9,10 @@ type Character struct {
 	ID          string      `json:"id"`
 	Name        string      `json:"name"`
 	PlayerName  string      `json:"player_name,omitempty"`
+	UserID      string      `json:"user_id,omitempty"`
+	CampaignID  string      `json:"campaign_id,omitempty"`
+	IsNPC       bool        `json:"is_npc"`
+	Status      string      `json:"status,omitempty"`
 	Edition     string      `json:"edition"`      // "sr3", "sr4", etc.
 	EditionData interface{} `json:"edition_data"` // Edition-specific character data
 	CreatedAt   time.Time   `json:"created_at"`
@@ -61,9 +65,9 @@ type CharacterSR3 struct {
 	Vehicles  []Vehicle   `json:"vehicles"`
 
 	// Magic
-	Spells     []Spell     `json:"spells"`
-	Focuses    []Focus     `json:"focuses"`
-	Spirits    []Spirit    `json:"spirits"`
+	Spells      []Spell      `json:"spells"`
+	Focuses     []Focus      `json:"focuses"`
+	Spirits     []Spirit     `json:"spirits"`
 	AdeptPowers []AdeptPower `json:"adept_powers,omitempty"` // For Adepts only
 
 	// Social
@@ -115,9 +119,9 @@ type Cyberware struct {
 	Name         string  `json:"name"`
 	Rating       int     `json:"rating,omitempty"`
 	EssenceCost  float64 `json:"essence_cost"`
-	Cost         int     `json:"cost,omitempty"`        // Cost in nuyen
+	Cost         int     `json:"cost,omitempty"` // Cost in nuyen
 	Availability int     `json:"availability,omitempty"`
-	Racial       bool    `json:"racial,omitempty"`      // True if this is inherent racial cyberware (e.g., Troll Dermal Armor)
+	Racial       bool    `json:"racial,omitempty"` // True if this is inherent racial cyberware (e.g., Troll Dermal Armor)
 	Notes        string  `json:"notes,omitempty"`
 }
 
@@ -180,7 +184,7 @@ type Spirit struct {
 type Contact struct {
 	Name    string `json:"name"`
 	Type    string `json:"type"`    // Fixer, Dealer, etc.
-	Level   int    `json:"level"`  // 1-3 (Level 1: Contact, Level 2: Buddy, Level 3: Friend for life)
+	Level   int    `json:"level"`   // 1-3 (Level 1: Contact, Level 2: Buddy, Level 3: Friend for life)
 	Loyalty int    `json:"loyalty"` // 1-3
 	Notes   string `json:"notes,omitempty"`
 }
@@ -194,16 +198,16 @@ type Reputation struct {
 
 // RacialAbility represents a special ability granted by a metatype
 type RacialAbility struct {
-	Name        string `json:"name"`        // Thermographic Vision, Low-light Vision, Resistance, Reach
+	Name        string `json:"name"`                  // Thermographic Vision, Low-light Vision, Resistance, Reach
 	Description string `json:"description,omitempty"` // Description of the ability
-	Effect      string `json:"effect,omitempty"`     // Mechanical effect (e.g., "+2 Body vs disease/toxin")
+	Effect      string `json:"effect,omitempty"`      // Mechanical effect (e.g., "+2 Body vs disease/toxin")
 }
 
 // AdeptPower represents an adept power purchased with Power Points
 type AdeptPower struct {
-	Name        string  `json:"name"`        // Astral Perception, Attribute Boost, etc.
-	Rating      int     `json:"rating,omitempty"` // For powers with levels
-	PowerPoints float64 `json:"power_points"`     // Power Points spent on this power
+	Name        string  `json:"name"`                // Astral Perception, Attribute Boost, etc.
+	Rating      int     `json:"rating,omitempty"`    // For powers with levels
+	PowerPoints float64 `json:"power_points"`        // Power Points spent on this power
 	Attribute   string  `json:"attribute,omitempty"` // For powers that specify an attribute (e.g., Attribute Boost)
 	Notes       string  `json:"notes,omitempty"`
 }

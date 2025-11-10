@@ -25,6 +25,9 @@ type Handlers struct {
 	CharacterService *service.CharacterService
 	UserService      *service.UserService
 	Sessions         *SessionManager
+	CampaignService  *service.CampaignService
+	SessionService   *service.SessionService
+	SceneService     *service.SceneService
 }
 
 type registerRequest struct {
@@ -43,8 +46,44 @@ type changePasswordRequest struct {
 	NewPassword     string `json:"new_password"`
 }
 
+type campaignResponse struct {
+	*domain.Campaign
+	GameplayRules *service.GameplayRules `json:"gameplay_rules,omitempty"`
+}
+
+type campaignCreateRequest struct {
+	Name           string `json:"name"`
+	Description    string `json:"description"`
+	GroupID        string `json:"group_id"`
+	GMName         string `json:"gm_name"`
+	Edition        string `json:"edition"`
+	CreationMethod string `json:"creation_method"`
+	GameplayLevel  string `json:"gameplay_level"`
+	HouseRules     string `json:"house_rules"`
+	Status         string `json:"status"`
+}
+
+type campaignUpdateRequest struct {
+	Name           *string `json:"name"`
+	Description    *string `json:"description"`
+	GMName         *string `json:"gm_name"`
+	GameplayLevel  *string `json:"gameplay_level"`
+	HouseRules     *string `json:"house_rules"`
+	Status         *string `json:"status"`
+	CreationMethod *string `json:"creation_method"`
+	Edition        *string `json:"edition"`
+}
+
 // NewHandlers creates a new handlers instance
-func NewHandlers(repos *jsonrepo.Repositories, charService *service.CharacterService, userService *service.UserService, sessions *SessionManager) *Handlers {
+func NewHandlers(
+	repos *jsonrepo.Repositories,
+	charService *service.CharacterService,
+	userService *service.UserService,
+	sessions *SessionManager,
+	campaignService *service.CampaignService,
+	sessionService *service.SessionService,
+	sceneService *service.SceneService,
+) *Handlers {
 	return &Handlers{
 		CharacterRepo:    repos.Character,
 		GroupRepo:        repos.Group,
@@ -56,6 +95,9 @@ func NewHandlers(repos *jsonrepo.Repositories, charService *service.CharacterSer
 		CharacterService: charService,
 		UserService:      userService,
 		Sessions:         sessions,
+		CampaignService:  campaignService,
+		SessionService:   sessionService,
+		SceneService:     sceneService,
 	}
 }
 
@@ -470,64 +512,110 @@ func (h *Handlers) DeleteGroup(w http.ResponseWriter, r *http.Request) {
 
 // GetCampaigns handles GET /api/campaigns
 func (h *Handlers) GetCampaigns(w http.ResponseWriter, r *http.Request) {
-	campaigns, err := h.CampaignRepo.GetAll()
+	campaigns, err := h.CampaignService.ListCampaigns()
 	if err != nil {
-		http.Error(w, err.Error(), http.StatusInternalServerError)
+		respondError(w, http.StatusInternalServerError, err.Error())
 		return
 	}
-	respondJSON(w, http.StatusOK, campaigns)
+
+	response := make([]campaignResponse, 0, len(campaigns))
+	for _, campaign := range campaigns {
+		payload, err := h.buildCampaignResponse(campaign)
+		if err != nil {
+			respondServiceError(w, err)
+			return
+		}
+		response = append(response, *payload)
+	}
+
+	respondJSON(w, http.StatusOK, response)
 }
 
 // GetCampaign handles GET /api/campaigns/{id}
 func (h *Handlers) GetCampaign(w http.ResponseWriter, r *http.Request) {
 	id := r.PathValue("id")
-	campaign, err := h.CampaignRepo.GetByID(id)
+	campaign, err := h.CampaignService.GetCampaign(id)
 	if err != nil {
-		http.Error(w, err.Error(), http.StatusNotFound)
+		respondServiceError(w, err)
 		return
 	}
-	respondJSON(w, http.StatusOK, campaign)
+	payload, err := h.buildCampaignResponse(campaign)
+	if err != nil {
+		respondServiceError(w, err)
+		return
+	}
+	respondJSON(w, http.StatusOK, payload)
 }
 
 // CreateCampaign handles POST /api/campaigns
 func (h *Handlers) CreateCampaign(w http.ResponseWriter, r *http.Request) {
-	var campaign domain.Campaign
-	if err := json.NewDecoder(r.Body).Decode(&campaign); err != nil {
-		http.Error(w, err.Error(), http.StatusBadRequest)
+	var req campaignCreateRequest
+	if err := json.NewDecoder(r.Body).Decode(&req); err != nil {
+		respondError(w, http.StatusBadRequest, err.Error())
 		return
 	}
 
-	if err := h.CampaignRepo.Create(&campaign); err != nil {
-		http.Error(w, err.Error(), http.StatusInternalServerError)
+	campaign, err := h.CampaignService.CreateCampaign(service.CampaignCreateInput{
+		Name:           req.Name,
+		Description:    req.Description,
+		GroupID:        req.GroupID,
+		GMName:         req.GMName,
+		Edition:        req.Edition,
+		CreationMethod: req.CreationMethod,
+		GameplayLevel:  req.GameplayLevel,
+		HouseRules:     req.HouseRules,
+		Status:         req.Status,
+	})
+	if err != nil {
+		respondServiceError(w, err)
 		return
 	}
 
-	respondJSON(w, http.StatusCreated, campaign)
+	payload, err := h.buildCampaignResponse(campaign)
+	if err != nil {
+		respondServiceError(w, err)
+		return
+	}
+	respondJSON(w, http.StatusCreated, payload)
 }
 
 // UpdateCampaign handles PUT /api/campaigns/{id}
 func (h *Handlers) UpdateCampaign(w http.ResponseWriter, r *http.Request) {
 	id := r.PathValue("id")
-	var campaign domain.Campaign
-	if err := json.NewDecoder(r.Body).Decode(&campaign); err != nil {
-		http.Error(w, err.Error(), http.StatusBadRequest)
+	var req campaignUpdateRequest
+	if err := json.NewDecoder(r.Body).Decode(&req); err != nil {
+		respondError(w, http.StatusBadRequest, err.Error())
 		return
 	}
 
-	campaign.ID = id
-	if err := h.CampaignRepo.Update(&campaign); err != nil {
-		http.Error(w, err.Error(), http.StatusInternalServerError)
+	campaign, err := h.CampaignService.UpdateCampaign(id, service.CampaignUpdateInput{
+		Name:           req.Name,
+		Description:    req.Description,
+		GMName:         req.GMName,
+		GameplayLevel:  req.GameplayLevel,
+		HouseRules:     req.HouseRules,
+		Status:         req.Status,
+		CreationMethod: req.CreationMethod,
+		Edition:        req.Edition,
+	})
+	if err != nil {
+		respondServiceError(w, err)
 		return
 	}
 
-	respondJSON(w, http.StatusOK, campaign)
+	payload, err := h.buildCampaignResponse(campaign)
+	if err != nil {
+		respondServiceError(w, err)
+		return
+	}
+	respondJSON(w, http.StatusOK, payload)
 }
 
 // DeleteCampaign handles DELETE /api/campaigns/{id}
 func (h *Handlers) DeleteCampaign(w http.ResponseWriter, r *http.Request) {
 	id := r.PathValue("id")
-	if err := h.CampaignRepo.Delete(id); err != nil {
-		http.Error(w, err.Error(), http.StatusInternalServerError)
+	if err := h.CampaignService.DeleteCampaign(id); err != nil {
+		respondError(w, http.StatusInternalServerError, err.Error())
 		return
 	}
 
@@ -538,9 +626,9 @@ func (h *Handlers) DeleteCampaign(w http.ResponseWriter, r *http.Request) {
 
 // GetSessions handles GET /api/sessions
 func (h *Handlers) GetSessions(w http.ResponseWriter, r *http.Request) {
-	sessions, err := h.SessionRepo.GetAll()
+	sessions, err := h.SessionService.ListSessions()
 	if err != nil {
-		http.Error(w, err.Error(), http.StatusInternalServerError)
+		respondError(w, http.StatusInternalServerError, err.Error())
 		return
 	}
 	respondJSON(w, http.StatusOK, sessions)
@@ -549,9 +637,9 @@ func (h *Handlers) GetSessions(w http.ResponseWriter, r *http.Request) {
 // GetSession handles GET /api/sessions/{id}
 func (h *Handlers) GetSession(w http.ResponseWriter, r *http.Request) {
 	id := r.PathValue("id")
-	session, err := h.SessionRepo.GetByID(id)
+	session, err := h.SessionService.GetSession(id)
 	if err != nil {
-		http.Error(w, err.Error(), http.StatusNotFound)
+		respondServiceError(w, err)
 		return
 	}
 	respondJSON(w, http.StatusOK, session)
@@ -561,16 +649,17 @@ func (h *Handlers) GetSession(w http.ResponseWriter, r *http.Request) {
 func (h *Handlers) CreateSession(w http.ResponseWriter, r *http.Request) {
 	var session domain.Session
 	if err := json.NewDecoder(r.Body).Decode(&session); err != nil {
-		http.Error(w, err.Error(), http.StatusBadRequest)
+		respondError(w, http.StatusBadRequest, err.Error())
 		return
 	}
 
-	if err := h.SessionRepo.Create(&session); err != nil {
-		http.Error(w, err.Error(), http.StatusInternalServerError)
+	created, err := h.SessionService.CreateSession(&session)
+	if err != nil {
+		respondServiceError(w, err)
 		return
 	}
 
-	respondJSON(w, http.StatusCreated, session)
+	respondJSON(w, http.StatusCreated, created)
 }
 
 // UpdateSession handles PUT /api/sessions/{id}
@@ -578,24 +667,24 @@ func (h *Handlers) UpdateSession(w http.ResponseWriter, r *http.Request) {
 	id := r.PathValue("id")
 	var session domain.Session
 	if err := json.NewDecoder(r.Body).Decode(&session); err != nil {
-		http.Error(w, err.Error(), http.StatusBadRequest)
+		respondError(w, http.StatusBadRequest, err.Error())
 		return
 	}
 
-	session.ID = id
-	if err := h.SessionRepo.Update(&session); err != nil {
-		http.Error(w, err.Error(), http.StatusInternalServerError)
+	updated, err := h.SessionService.UpdateSession(id, &session)
+	if err != nil {
+		respondServiceError(w, err)
 		return
 	}
 
-	respondJSON(w, http.StatusOK, session)
+	respondJSON(w, http.StatusOK, updated)
 }
 
 // DeleteSession handles DELETE /api/sessions/{id}
 func (h *Handlers) DeleteSession(w http.ResponseWriter, r *http.Request) {
 	id := r.PathValue("id")
-	if err := h.SessionRepo.Delete(id); err != nil {
-		http.Error(w, err.Error(), http.StatusInternalServerError)
+	if err := h.SessionService.DeleteSession(id); err != nil {
+		respondServiceError(w, err)
 		return
 	}
 
@@ -606,9 +695,9 @@ func (h *Handlers) DeleteSession(w http.ResponseWriter, r *http.Request) {
 
 // GetScenes handles GET /api/scenes
 func (h *Handlers) GetScenes(w http.ResponseWriter, r *http.Request) {
-	scenes, err := h.SceneRepo.GetAll()
+	scenes, err := h.SceneService.ListScenes()
 	if err != nil {
-		http.Error(w, err.Error(), http.StatusInternalServerError)
+		respondError(w, http.StatusInternalServerError, err.Error())
 		return
 	}
 	respondJSON(w, http.StatusOK, scenes)
@@ -617,9 +706,9 @@ func (h *Handlers) GetScenes(w http.ResponseWriter, r *http.Request) {
 // GetScene handles GET /api/scenes/{id}
 func (h *Handlers) GetScene(w http.ResponseWriter, r *http.Request) {
 	id := r.PathValue("id")
-	scene, err := h.SceneRepo.GetByID(id)
+	scene, err := h.SceneService.GetScene(id)
 	if err != nil {
-		http.Error(w, err.Error(), http.StatusNotFound)
+		respondServiceError(w, err)
 		return
 	}
 	respondJSON(w, http.StatusOK, scene)
@@ -629,16 +718,17 @@ func (h *Handlers) GetScene(w http.ResponseWriter, r *http.Request) {
 func (h *Handlers) CreateScene(w http.ResponseWriter, r *http.Request) {
 	var scene domain.Scene
 	if err := json.NewDecoder(r.Body).Decode(&scene); err != nil {
-		http.Error(w, err.Error(), http.StatusBadRequest)
+		respondError(w, http.StatusBadRequest, err.Error())
 		return
 	}
 
-	if err := h.SceneRepo.Create(&scene); err != nil {
-		http.Error(w, err.Error(), http.StatusInternalServerError)
+	created, err := h.SceneService.CreateScene(&scene)
+	if err != nil {
+		respondServiceError(w, err)
 		return
 	}
 
-	respondJSON(w, http.StatusCreated, scene)
+	respondJSON(w, http.StatusCreated, created)
 }
 
 // UpdateScene handles PUT /api/scenes/{id}
@@ -646,24 +736,24 @@ func (h *Handlers) UpdateScene(w http.ResponseWriter, r *http.Request) {
 	id := r.PathValue("id")
 	var scene domain.Scene
 	if err := json.NewDecoder(r.Body).Decode(&scene); err != nil {
-		http.Error(w, err.Error(), http.StatusBadRequest)
+		respondError(w, http.StatusBadRequest, err.Error())
 		return
 	}
 
-	scene.ID = id
-	if err := h.SceneRepo.Update(&scene); err != nil {
-		http.Error(w, err.Error(), http.StatusInternalServerError)
+	updated, err := h.SceneService.UpdateScene(id, &scene)
+	if err != nil {
+		respondServiceError(w, err)
 		return
 	}
 
-	respondJSON(w, http.StatusOK, scene)
+	respondJSON(w, http.StatusOK, updated)
 }
 
 // DeleteScene handles DELETE /api/scenes/{id}
 func (h *Handlers) DeleteScene(w http.ResponseWriter, r *http.Request) {
 	id := r.PathValue("id")
-	if err := h.SceneRepo.Delete(id); err != nil {
-		http.Error(w, err.Error(), http.StatusInternalServerError)
+	if err := h.SceneService.DeleteScene(id); err != nil {
+		respondServiceError(w, err)
 		return
 	}
 
@@ -679,4 +769,43 @@ func respondJSON(w http.ResponseWriter, status int, data interface{}) {
 
 func respondError(w http.ResponseWriter, status int, message string) {
 	respondJSON(w, status, map[string]string{"error": message})
+}
+
+func respondServiceError(w http.ResponseWriter, err error) {
+	switch {
+	case errors.Is(err, service.ErrCampaignNotFound),
+		errors.Is(err, service.ErrSessionNotFound),
+		errors.Is(err, service.ErrSceneNotFound):
+		respondError(w, http.StatusNotFound, err.Error())
+	case errors.Is(err, service.ErrCampaignEditionRequired),
+		errors.Is(err, service.ErrCampaignCreationMethodRequired),
+		errors.Is(err, service.ErrCampaignImmutableEdition),
+		errors.Is(err, service.ErrCampaignImmutableCreation),
+		errors.Is(err, service.ErrCampaignUnknownGameplayLevel),
+		errors.Is(err, service.ErrSessionCampaignRequired),
+		errors.Is(err, service.ErrSessionImmutableCampaign),
+		errors.Is(err, service.ErrSceneSessionRequired),
+		errors.Is(err, service.ErrSceneImmutableSession):
+		respondError(w, http.StatusBadRequest, err.Error())
+	case errors.Is(err, service.ErrForbidden):
+		respondError(w, http.StatusForbidden, err.Error())
+	default:
+		respondError(w, http.StatusInternalServerError, err.Error())
+	}
+}
+
+func (h *Handlers) buildCampaignResponse(campaign *domain.Campaign) (*campaignResponse, error) {
+	if campaign == nil {
+		return &campaignResponse{Campaign: nil}, nil
+	}
+
+	rules, err := h.CampaignService.DescribeGameplayRules(campaign)
+	if err != nil {
+		return nil, err
+	}
+
+	return &campaignResponse{
+		Campaign:      campaign,
+		GameplayRules: rules,
+	}, nil
 }
