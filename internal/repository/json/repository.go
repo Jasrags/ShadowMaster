@@ -12,6 +12,7 @@ type Repositories struct {
 	Campaign  repository.CampaignRepository
 	Session   repository.SessionRepository
 	Scene     repository.SceneRepository
+	Edition   repository.EditionDataRepository
 }
 
 // NewRepositories creates all repository instances with shared index
@@ -39,5 +40,6 @@ func NewRepositories(dataPath string) (*Repositories, error) {
 		Campaign:  NewCampaignRepository(store, index),
 		Session:   NewSessionRepository(store, index),
 		Scene:     NewSceneRepository(store, index),
+		Edition:   NewEditionRepository(store),
 	}, nil
 }

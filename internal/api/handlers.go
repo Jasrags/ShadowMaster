@@ -2,7 +2,9 @@ package api
 
 import (
 	"encoding/json"
+	"errors"
 	"net/http"
+	"os"
 	"shadowmaster/internal/domain"
 	"shadowmaster/internal/repository"
 	jsonrepo "shadowmaster/internal/repository/json"
@@ -12,22 +14,24 @@ import (
 
 // Handlers wraps repository instances for API handlers
 type Handlers struct {
-	CharacterRepo repository.CharacterRepository
-	GroupRepo     repository.GroupRepository
-	CampaignRepo  repository.CampaignRepository
-	SessionRepo   repository.SessionRepository
-	SceneRepo     repository.SceneRepository
+	CharacterRepo    repository.CharacterRepository
+	GroupRepo        repository.GroupRepository
+	CampaignRepo     repository.CampaignRepository
+	SessionRepo      repository.SessionRepository
+	SceneRepo        repository.SceneRepository
+	EditionRepo      repository.EditionDataRepository
 	CharacterService *service.CharacterService
 }
 
 // NewHandlers creates a new handlers instance
 func NewHandlers(repos *jsonrepo.Repositories, charService *service.CharacterService) *Handlers {
 	return &Handlers{
-		CharacterRepo: repos.Character,
-		GroupRepo:     repos.Group,
-		CampaignRepo:  repos.Campaign,
-		SessionRepo:   repos.Session,
-		SceneRepo:     repos.Scene,
+		CharacterRepo:    repos.Character,
+		GroupRepo:        repos.Group,
+		CampaignRepo:     repos.Campaign,
+		SessionRepo:      repos.Session,
+		SceneRepo:        repos.Scene,
+		EditionRepo:      repos.Edition,
 		CharacterService: charService,
 	}
 }
@@ -42,6 +46,35 @@ func (h *Handlers) GetCharacters(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	respondJSON(w, http.StatusOK, characters)
+}
+
+// GetEditionCharacterCreationData handles GET /api/editions/{edition}/character-creation
+func (h *Handlers) GetEditionCharacterCreationData(w http.ResponseWriter, r *http.Request) {
+	edition := r.PathValue("edition")
+	if edition == "" {
+		http.Error(w, "edition path parameter is required", http.StatusBadRequest)
+		return
+	}
+
+	if h.EditionRepo == nil {
+		http.Error(w, "edition repository not configured", http.StatusInternalServerError)
+		return
+	}
+
+	data, err := h.EditionRepo.GetCharacterCreationData(edition)
+	if err != nil {
+		if errors.Is(err, os.ErrNotExist) {
+			http.Error(w, "edition data not found", http.StatusNotFound)
+			return
+		}
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+
+	respondJSON(w, http.StatusOK, map[string]interface{}{
+		"edition":            edition,
+		"character_creation": data,
+	})
 }
 
 // GetCharacter handles GET /api/characters/{id}
@@ -63,7 +96,7 @@ func (h *Handlers) CreateCharacter(w http.ResponseWriter, r *http.Request) {
 		Edition     string      `json:"edition"`
 		EditionData interface{} `json:"edition_data"`
 	}
-	
+
 	if err := json.NewDecoder(r.Body).Decode(&req); err != nil {
 		http.Error(w, err.Error(), http.StatusBadRequest)
 		return
@@ -80,14 +113,14 @@ func (h *Handlers) CreateCharacter(w http.ResponseWriter, r *http.Request) {
 				Skills:     getStringFromMap(editionDataMap, "skills_priority", ""),
 				Resources:  getStringFromMap(editionDataMap, "resources_priority", ""),
 			}
-			
+
 			// Validate that all priorities are assigned (A-E)
-			if priorities.Magic == "" || priorities.Metatype == "" || priorities.Attributes == "" || 
-			   priorities.Skills == "" || priorities.Resources == "" {
+			if priorities.Magic == "" || priorities.Metatype == "" || priorities.Attributes == "" ||
+				priorities.Skills == "" || priorities.Resources == "" {
 				http.Error(w, "All priorities (A-E) must be assigned to each category", http.StatusBadRequest)
 				return
 			}
-			
+
 			character, err := h.CharacterService.CreateSR3Character(req.Name, req.PlayerName, priorities)
 			if err != nil {
 				http.Error(w, err.Error(), http.StatusInternalServerError)
@@ -100,9 +133,9 @@ func (h *Handlers) CreateCharacter(w http.ResponseWriter, r *http.Request) {
 
 	// Fallback to direct creation
 	character := &domain.Character{
-		Name:       req.Name,
-		PlayerName: req.PlayerName,
-		Edition:    req.Edition,
+		Name:        req.Name,
+		PlayerName:  req.PlayerName,
+		Edition:     req.Edition,
 		EditionData: req.EditionData,
 	}
 
@@ -157,7 +190,7 @@ func (h *Handlers) DeleteCharacter(w http.ResponseWriter, r *http.Request) {
 func (h *Handlers) GetActiveSkills(w http.ResponseWriter, r *http.Request) {
 	skills := sr3.GetAllActiveSkills()
 	respondJSON(w, http.StatusOK, map[string]interface{}{
-		"skills": skills,
+		"skills":     skills,
 		"categories": sr3.ActiveSkillCategories,
 	})
 }
@@ -166,7 +199,7 @@ func (h *Handlers) GetActiveSkills(w http.ResponseWriter, r *http.Request) {
 func (h *Handlers) GetKnowledgeSkills(w http.ResponseWriter, r *http.Request) {
 	skills := sr3.GetAllKnowledgeSkills()
 	respondJSON(w, http.StatusOK, map[string]interface{}{
-		"skills": skills,
+		"skills":     skills,
 		"categories": sr3.KnowledgeSkillCategories,
 	})
 }

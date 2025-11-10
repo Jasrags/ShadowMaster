@@ -1,5 +1,38 @@
 // ShadowMaster Web Interface
 const API_BASE = '/api';
+let legacyInitialized = false;
+const legacyEditionData = {};
+const priorityInputMap = {
+    magic: 'magic-priority',
+    metatype: 'metatype-priority',
+    attributes: 'attr-priority',
+    skills: 'skills-priority',
+    resources: 'resources-priority'
+};
+
+function applyPriorityAssignment(category, value) {
+    priorityAssignments[category] = value ? value : null;
+
+    const inputId = priorityInputMap[category];
+    if (inputId) {
+        const inputEl = document.getElementById(inputId);
+        if (inputEl) {
+            inputEl.value = value || '';
+        }
+    }
+
+    updatePriorityValue(category, value || null);
+}
+
+function clonePriorityAssignments() {
+    return {
+        magic: priorityAssignments.magic,
+        metatype: priorityAssignments.metatype,
+        attributes: priorityAssignments.attributes,
+        skills: priorityAssignments.skills,
+        resources: priorityAssignments.resources
+    };
+}
 
 // Load characters
 async function loadCharacters() {
@@ -3064,7 +3097,12 @@ function showCreateCampaignModal() {
 }
 
 // Initialize
-document.addEventListener('DOMContentLoaded', () => {
+function initializeLegacyApp() {
+    if (legacyInitialized) {
+        return;
+    }
+    legacyInitialized = true;
+
     loadSkillsLists(); // Load skills database
     loadEquipmentLists(); // Load equipment database
     loadCharacters();
@@ -3199,5 +3237,27 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         });
     });
+}
+
+document.addEventListener('DOMContentLoaded', initializeLegacyApp);
+
+window.ShadowmasterLegacyApp = Object.assign(window.ShadowmasterLegacyApp ?? {}, {
+    initialize: initializeLegacyApp,
+    isInitialized: () => legacyInitialized,
+    setEditionData: (edition, data) => {
+        if (!edition) return;
+        legacyEditionData[edition] = data;
+        window.ShadowmasterEditionData = Object.assign({}, legacyEditionData);
+    },
+    setPriorities: (assignments) => {
+        if (!assignments) return;
+        ['magic', 'metatype', 'attributes', 'skills', 'resources'].forEach(category => {
+            const value = assignments[category];
+            applyPriorityAssignment(category, value);
+        });
+        updatePriorityChips();
+        updatePriorityValidation();
+    },
+    getPriorities: () => clonePriorityAssignments()
 });
 

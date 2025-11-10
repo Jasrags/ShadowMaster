@@ -1041,3 +1041,94 @@ button:hover {
     margin-bottom: 1.5rem;
 }
 
+.react-banner {
+    position: fixed;
+    bottom: 1rem;
+    right: 1rem;
+    padding: 0.5rem 0.75rem;
+    border-radius: 6px;
+    background: rgba(5, 32, 54, 0.9);
+    color: #e5f3ff;
+    font-size: 0.75rem;
+    line-height: 1.2;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.35);
+    pointer-events: none;
+    z-index: 1050;
+}
+
+.react-banner[data-active-edition="sr5"] {
+    border: 1px solid rgba(0, 193, 255, 0.5);
+}
+
+.react-banner[data-active-edition="sr3"] {
+    border: 1px solid rgba(255, 193, 59, 0.5);
+}
+
+body.react-priority-enabled #priority-assignment-legacy {
+    display: none;
+}
+
+.react-priority-wrapper {
+    border: 1px solid rgba(5, 32, 54, 0.15);
+    border-radius: 8px;
+    padding: 1.25rem;
+    background: rgba(10, 38, 64, 0.04);
+    box-shadow: inset 0 0 0 1px rgba(5, 32, 54, 0.05);
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.react-priority-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 0.9rem;
+    color: #0a263f;
+}
+
+.react-priority-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 1rem;
+}
+
+.react-priority-card {
+    border: 1px solid rgba(5, 32, 54, 0.12);
+    border-radius: 6px;
+    padding: 0.75rem;
+    background: #fff;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.react-priority-card label {
+    font-weight: 600;
+    color: #052036;
+}
+
+.react-priority-select {
+    width: 100%;
+    padding: 0.4rem 0.5rem;
+    border-radius: 4px;
+    border: 1px solid rgba(5, 32, 54, 0.25);
+    background: #f8fbff;
+    font-size: 0.95rem;
+}
+
+.react-priority-summary {
+    font-size: 0.8rem;
+    color: #335066;
+    min-height: 2.4rem;
+}
+
+.react-priority-status {
+    font-size: 0.85rem;
+    color: #b5472d;
+}
+
+.react-priority-status.success {
+    color: #1f7a43;
+}
+

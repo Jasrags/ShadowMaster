@@ -51,3 +51,8 @@ type SceneRepository interface {
 	Update(scene *domain.Scene) error
 	Delete(id string) error
 }
+
+// EditionDataRepository exposes read-only edition metadata for the UI.
+type EditionDataRepository interface {
+	GetCharacterCreationData(edition string) (*domain.CharacterCreationData, error)
+}

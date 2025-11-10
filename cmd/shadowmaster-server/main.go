@@ -8,7 +8,7 @@ import (
 
 	"github.com/go-chi/chi/v5"
 	"github.com/go-chi/chi/v5/middleware"
-	
+
 	jsonrepo "shadowmaster/internal/repository/json"
 	"shadowmaster/internal/service"
 )
@@ -27,7 +27,7 @@ func main() {
 
 	// Initialize services
 	characterService := service.NewCharacterService(repos.Character)
-	
+
 	// Initialize handlers
 	handlers := api.NewHandlers(repos, characterService)
 
@@ -46,11 +46,14 @@ func main() {
 		r.Post("/characters", handlers.CreateCharacter)
 		r.Put("/characters/{id}", handlers.UpdateCharacter)
 		r.Delete("/characters/{id}", handlers.DeleteCharacter)
-		
+
+		// Edition metadata
+		r.Get("/editions/{edition}/character-creation", handlers.GetEditionCharacterCreationData)
+
 		// Skills routes
 		r.Get("/skills/active", handlers.GetActiveSkills)
 		r.Get("/skills/knowledge", handlers.GetKnowledgeSkills)
-		
+
 		// Equipment routes
 		r.Get("/equipment/weapons", handlers.GetWeapons)
 		r.Get("/equipment/armor", handlers.GetArmor)
