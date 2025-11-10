@@ -9,11 +9,15 @@
 <body>
     <div id="app">
         <header>
-            <h1>ShadowMaster RPG System</h1>
-            <div id="main-navigation-root"></div>
+            <div class="header__inner">
+                <div class="header__brand">
+                    <h1>ShadowMaster RPG System</h1>
+                </div>
+                <div class="header__nav" id="main-navigation-root"></div>
+                <div class="header__auth" id="auth-root"></div>
+            </div>
         </header>
         <main>
-            <div id="auth-root"></div>
             <section id="characters-view" data-tab="characters">
                 <div id="characters-actions"></div>
                 <div class="characters-list-wrapper">
