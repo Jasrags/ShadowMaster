@@ -13,6 +13,7 @@ type Repositories struct {
 	Session   repository.SessionRepository
 	Scene     repository.SceneRepository
 	Edition   repository.EditionDataRepository
+	User      repository.UserRepository
 }
 
 // NewRepositories creates all repository instances with shared index
@@ -41,5 +42,6 @@ func NewRepositories(dataPath string) (*Repositories, error) {
 		Session:   NewSessionRepository(store, index),
 		Scene:     NewSceneRepository(store, index),
 		Edition:   NewEditionRepository(store),
+		User:      NewUserRepository(store, index),
 	}, nil
 }

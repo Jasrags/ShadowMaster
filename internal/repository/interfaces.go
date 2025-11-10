@@ -4,6 +4,17 @@ import (
 	"shadowmaster/internal/domain"
 )
 
+// UserRepository defines operations for user storage
+type UserRepository interface {
+	Create(user *domain.User) error
+	GetByID(id string) (*domain.User, error)
+	GetByEmail(email string) (*domain.User, error)
+	GetByUsername(username string) (*domain.User, error)
+	GetAll() ([]*domain.User, error)
+	Update(user *domain.User) error
+	Delete(id string) error
+}
+
 // CharacterRepository defines operations for character storage
 type CharacterRepository interface {
 	Create(character *domain.Character) error

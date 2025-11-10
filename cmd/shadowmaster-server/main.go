@@ -4,7 +4,9 @@ import (
 	"flag"
 	"log"
 	"net/http"
+	"os"
 	"shadowmaster/internal/api"
+	"time"
 
 	"github.com/go-chi/chi/v5"
 	"github.com/go-chi/chi/v5/middleware"
@@ -27,9 +29,13 @@ func main() {
 
 	// Initialize services
 	characterService := service.NewCharacterService(repos.Character)
+	userService := service.NewUserService(repos.User)
+
+	sessionSecret := os.Getenv("SESSION_SECRET")
+	sessionManager := api.NewSessionManager(sessionSecret, 7*24*time.Hour, false)
 
 	// Initialize handlers
-	handlers := api.NewHandlers(repos, characterService)
+	handlers := api.NewHandlers(repos, characterService, userService, sessionManager)
 
 	// Setup router
 	r := chi.NewRouter()
@@ -37,9 +43,20 @@ func main() {
 	r.Use(middleware.Recoverer)
 	r.Use(middleware.RequestID)
 	r.Use(corsMiddleware)
+	r.Use(sessionManager.WithSession)
 
 	// API routes
 	r.Route("/api", func(r chi.Router) {
+		// Auth routes
+		r.Post("/auth/register", handlers.RegisterUser)
+		r.Post("/auth/login", handlers.LoginUser)
+		r.Get("/auth/me", handlers.GetCurrentUser)
+		r.Group(func(r chi.Router) {
+			r.Use(sessionManager.RequireAuth)
+			r.Post("/auth/logout", handlers.LogoutUser)
+			r.Post("/auth/password", handlers.ChangePassword)
+		})
+
 		// Character routes
 		r.Get("/characters", handlers.GetCharacters)
 		r.Get("/characters/{id}", handlers.GetCharacter)

@@ -10,6 +10,7 @@ import (
 	jsonrepo "shadowmaster/internal/repository/json"
 	"shadowmaster/internal/service"
 	sr3 "shadowmaster/pkg/shadowrun/edition/v3"
+	"strings"
 )
 
 // Handlers wraps repository instances for API handlers
@@ -20,11 +21,30 @@ type Handlers struct {
 	SessionRepo      repository.SessionRepository
 	SceneRepo        repository.SceneRepository
 	EditionRepo      repository.EditionDataRepository
+	UserRepo         repository.UserRepository
 	CharacterService *service.CharacterService
+	UserService      *service.UserService
+	Sessions         *SessionManager
+}
+
+type registerRequest struct {
+	Email    string `json:"email"`
+	Username string `json:"username"`
+	Password string `json:"password"`
+}
+
+type loginRequest struct {
+	Email    string `json:"email"`
+	Password string `json:"password"`
+}
+
+type changePasswordRequest struct {
+	CurrentPassword string `json:"current_password"`
+	NewPassword     string `json:"new_password"`
 }
 
 // NewHandlers creates a new handlers instance
-func NewHandlers(repos *jsonrepo.Repositories, charService *service.CharacterService) *Handlers {
+func NewHandlers(repos *jsonrepo.Repositories, charService *service.CharacterService, userService *service.UserService, sessions *SessionManager) *Handlers {
 	return &Handlers{
 		CharacterRepo:    repos.Character,
 		GroupRepo:        repos.Group,
@@ -32,8 +52,142 @@ func NewHandlers(repos *jsonrepo.Repositories, charService *service.CharacterSer
 		SessionRepo:      repos.Session,
 		SceneRepo:        repos.Scene,
 		EditionRepo:      repos.Edition,
+		UserRepo:         repos.User,
 		CharacterService: charService,
+		UserService:      userService,
+		Sessions:         sessions,
 	}
+}
+
+// Auth handlers
+
+// RegisterUser handles POST /api/auth/register
+func (h *Handlers) RegisterUser(w http.ResponseWriter, r *http.Request) {
+	var req registerRequest
+	if err := json.NewDecoder(r.Body).Decode(&req); err != nil {
+		respondError(w, http.StatusBadRequest, "invalid request body")
+		return
+	}
+
+	req.Email = strings.TrimSpace(req.Email)
+	req.Username = strings.TrimSpace(req.Username)
+	if req.Email == "" || req.Username == "" || req.Password == "" {
+		respondError(w, http.StatusBadRequest, "email, username, and password are required")
+		return
+	}
+
+	user, err := h.UserService.Register(req.Email, req.Username, req.Password)
+	if err != nil {
+		respondError(w, http.StatusBadRequest, err.Error())
+		return
+	}
+
+	if err := h.Sessions.Create(w, user.ID, user.Roles); err != nil {
+		respondError(w, http.StatusInternalServerError, "failed to create session")
+		return
+	}
+
+	respondJSON(w, http.StatusCreated, map[string]interface{}{
+		"user": user,
+	})
+}
+
+// LoginUser handles POST /api/auth/login
+func (h *Handlers) LoginUser(w http.ResponseWriter, r *http.Request) {
+	var req loginRequest
+	if err := json.NewDecoder(r.Body).Decode(&req); err != nil {
+		respondError(w, http.StatusBadRequest, "invalid request body")
+		return
+	}
+
+	req.Email = strings.TrimSpace(req.Email)
+	if req.Email == "" || req.Password == "" {
+		respondError(w, http.StatusBadRequest, "email and password are required")
+		return
+	}
+
+	user, err := h.UserService.Authenticate(req.Email, req.Password)
+	if err != nil {
+		if errors.Is(err, service.ErrInvalidCredentials) {
+			respondError(w, http.StatusUnauthorized, "invalid email or password")
+			return
+		}
+		respondError(w, http.StatusInternalServerError, err.Error())
+		return
+	}
+
+	if err := h.Sessions.Create(w, user.ID, user.Roles); err != nil {
+		respondError(w, http.StatusInternalServerError, "failed to create session")
+		return
+	}
+
+	respondJSON(w, http.StatusOK, map[string]interface{}{
+		"user": user,
+	})
+}
+
+// LogoutUser handles POST /api/auth/logout
+func (h *Handlers) LogoutUser(w http.ResponseWriter, r *http.Request) {
+	h.Sessions.Clear(w)
+	w.WriteHeader(http.StatusNoContent)
+}
+
+// GetCurrentUser handles GET /api/auth/me
+func (h *Handlers) GetCurrentUser(w http.ResponseWriter, r *http.Request) {
+	session := GetSessionFromContext(r.Context())
+	if session == nil {
+		respondJSON(w, http.StatusOK, map[string]interface{}{
+			"user": nil,
+		})
+		return
+	}
+
+	user, err := h.UserService.GetUserByID(session.UserID)
+	if err != nil {
+		respondJSON(w, http.StatusOK, map[string]interface{}{
+			"user": nil,
+		})
+		return
+	}
+
+	respondJSON(w, http.StatusOK, map[string]interface{}{
+		"user": user,
+	})
+}
+
+// ChangePassword handles POST /api/auth/password
+func (h *Handlers) ChangePassword(w http.ResponseWriter, r *http.Request) {
+	session := GetSessionFromContext(r.Context())
+	if session == nil {
+		var err error
+		session, err = h.Sessions.Get(r)
+		if err != nil {
+			http.Error(w, http.StatusText(http.StatusUnauthorized), http.StatusUnauthorized)
+			return
+		}
+	}
+
+	var req changePasswordRequest
+	if err := json.NewDecoder(r.Body).Decode(&req); err != nil {
+		respondError(w, http.StatusBadRequest, "invalid request body")
+		return
+	}
+
+	if strings.TrimSpace(req.CurrentPassword) == "" || strings.TrimSpace(req.NewPassword) == "" {
+		respondError(w, http.StatusBadRequest, "current_password and new_password are required")
+		return
+	}
+
+	if err := h.UserService.ChangePasswordWithCurrent(session.UserID, req.CurrentPassword, req.NewPassword); err != nil {
+		if errors.Is(err, service.ErrInvalidCredentials) {
+			respondError(w, http.StatusUnauthorized, "invalid current password")
+			return
+		}
+		respondError(w, http.StatusBadRequest, err.Error())
+		return
+	}
+
+	w.WriteHeader(http.StatusNoContent)
 }
 
 // Character handlers
@@ -521,4 +675,8 @@ func respondJSON(w http.ResponseWriter, status int, data interface{}) {
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(status)
 	json.NewEncoder(w).Encode(data)
+}
+
+func respondError(w http.ResponseWriter, status int, message string) {
+	respondJSON(w, status, map[string]string{"error": message})
 }

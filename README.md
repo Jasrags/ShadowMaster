@@ -11,6 +11,7 @@ A tabletop RPG management system for Shadowrun 3rd edition with support for mult
   - CLI interface (command-line)
 - **JSON File Storage**: All data stored in JSON files (extensible to database in future)
 - **REST API**: Complete REST API for all entities
+- **User Authentication**: Email-based registration, secure login, and role-based access control (Admin, Gamemaster, Player)
 - **Real-time Support**: WebSocket support for live updates (planned)
 
 ## Architecture
@@ -97,13 +98,14 @@ make clean
 ### Running the Server Manually
 
 ```bash
-go run cmd/shadowmaster-server/main.go
+SESSION_SECRET="change-me" go run cmd/shadowmaster-server/main.go
 ```
 
 The server will start on port 8080 by default. Options:
 - `-port`: Server port (default: 8080)
 - `-data`: Path to data directory (default: ./data)
 - `-web`: Path to web static files (default: ./web/static)
+- `SESSION_SECRET`: Environment variable used to sign session cookies (generates a default if unset, but using a unique value per environment is strongly recommended)
 
 ### Building Binaries
 
@@ -123,6 +125,7 @@ make build-all
 ### Accessing the Web Interface
 
 After starting the server, open your browser to `http://localhost:8080`
+You will be greeted with a combined login/registration panel powered by the React shell. The first account created will automatically be granted **Administrator** permissions; additional accounts default to **Player** role but can be elevated later.
 
 ## API Endpoints
 
@@ -160,6 +163,15 @@ After starting the server, open your browser to `http://localhost:8080`
 - `POST /api/scenes` - Create scene
 - `PUT /api/scenes/{id}` - Update scene
 - `DELETE /api/scenes/{id}` - Delete scene
+
+### Authentication
+- `POST /api/auth/register` - Create a user account (first user becomes Administrator)
+- `POST /api/auth/login` - Authenticate with email + password
+- `POST /api/auth/logout` - Clear session cookie (requires active session)
+- `GET /api/auth/me` - Fetch current authenticated user profile
+- `POST /api/auth/password` - Change password (requires current password + policy-compliant new password)
+
+All authentication endpoints return/accept JSON and rely on HTTP-only cookies for session management. The frontend client automatically includes credentials (`fetch(..., { credentials: 'include' })`) when communicating with the API.
 
 ## Makefile Commands
 

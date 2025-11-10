@@ -1,9 +1,26 @@
 import { useEffect, useState } from 'react';
 import { createPortal } from 'react-dom';
+import { AuthPanel } from './components/AuthPanel';
+import { CharactersActions } from './components/CharactersActions';
+import { MainNavigation } from './components/MainNavigation';
 import { PriorityAssignment } from './components/PriorityAssignment';
 import { MetatypeSelection } from './components/MetatypeSelection';
 import { MagicalAbilitiesSelection, MagicalSelection } from './components/MagicalAbilitiesSelection';
 import { useEdition } from './hooks/useEdition';
+
+function AuthPortal() {
+  const [container, setContainer] = useState<Element | null>(null);
+
+  useEffect(() => {
+    setContainer(document.getElementById('auth-root'));
+  }, []);
+
+  if (!container) {
+    return null;
+  }
+
+  return createPortal(<AuthPanel />, container);
+}
 
 function PriorityAssignmentPortal() {
   const [container, setContainer] = useState<Element | null>(null);
@@ -130,6 +147,9 @@ export function App() {
           React shell active — controlling edition context for <strong>{activeEdition.label}</strong> {status}
         </small>
       </div>
+      <AuthPortal />
+      <MainNavigation />
+      <CharactersActions />
       <PriorityAssignmentPortal />
       <MetatypeSelectionPortal />
       <MagicalAbilitiesPortal />
@@ -151,6 +171,8 @@ declare global {
       setMagicState?: (state: MagicalSelection) => void;
       subscribeMagicState?: (listener: () => void) => void;
       unsubscribeMagicState?: (listener: () => void) => void;
+      showWizardStep?: (step: number) => void;
     };
+    showCreateCharacterModal?: () => void;
   }
 }
