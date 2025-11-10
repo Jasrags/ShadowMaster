@@ -51,6 +51,13 @@ type campaignResponse struct {
 	GameplayRules *service.GameplayRules `json:"gameplay_rules,omitempty"`
 }
 
+type campaignCharacterCreationResponse struct {
+	CampaignID    string                        `json:"campaign_id"`
+	Edition       string                        `json:"edition"`
+	EditionData   *domain.CharacterCreationData `json:"edition_data"`
+	GameplayRules *service.GameplayRules        `json:"gameplay_rules,omitempty"`
+}
+
 type campaignCreateRequest struct {
 	Name           string `json:"name"`
 	Description    string `json:"description"`
@@ -545,6 +552,45 @@ func (h *Handlers) GetCampaign(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	respondJSON(w, http.StatusOK, payload)
+}
+
+// GetCampaignCharacterCreationData handles GET /api/campaigns/{id}/character-creation
+func (h *Handlers) GetCampaignCharacterCreationData(w http.ResponseWriter, r *http.Request) {
+	id := r.PathValue("id")
+	if id == "" {
+		respondError(w, http.StatusBadRequest, "campaign id is required")
+		return
+	}
+
+	campaign, err := h.CampaignService.GetCampaign(id)
+	if err != nil {
+		respondServiceError(w, err)
+		return
+	}
+
+	if h.EditionRepo == nil {
+		respondError(w, http.StatusInternalServerError, "edition repository not configured")
+		return
+	}
+
+	editionData, err := h.EditionRepo.GetCharacterCreationData(campaign.Edition)
+	if err != nil {
+		respondError(w, http.StatusInternalServerError, err.Error())
+		return
+	}
+
+	rules, err := h.CampaignService.DescribeGameplayRules(campaign)
+	if err != nil {
+		respondServiceError(w, err)
+		return
+	}
+
+	respondJSON(w, http.StatusOK, campaignCharacterCreationResponse{
+		CampaignID:    campaign.ID,
+		Edition:       campaign.Edition,
+		EditionData:   editionData,
+		GameplayRules: rules,
+	})
 }
 
 // CreateCampaign handles POST /api/campaigns

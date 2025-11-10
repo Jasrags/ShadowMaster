@@ -46,7 +46,15 @@ function getInitialAssignments(): PriorityAssignments {
 }
 
 export function PriorityAssignment() {
-  const { characterCreationData, activeEdition, isLoading, error } = useEdition();
+  const {
+    characterCreationData,
+    activeEdition,
+    isLoading,
+    error,
+    campaignGameplayRules,
+    campaignLoading,
+    campaignError,
+  } = useEdition();
   const [assignments, setAssignments] = useState<PriorityAssignments>(() => getInitialAssignments());
   const [dragState, setDragState] = useState<DragState | null>(null);
   const dropzoneRefs = useRef<Record<string, HTMLDivElement | null>>({});
@@ -170,8 +178,26 @@ export function PriorityAssignment() {
         <span>
           Priority Assignment — <strong>{activeEdition.label}</strong>
         </span>
-        <span>{isLoading ? 'Loading priority data…' : error ? `Error: ${error}` : 'Drag letters into categories'}</span>
+        <span>
+          {campaignError
+            ? `Campaign defaults unavailable: ${campaignError}`
+            : campaignLoading
+            ? 'Applying campaign defaults…'
+            : isLoading
+            ? 'Loading priority data…'
+            : error
+            ? `Error: ${error}`
+            : 'Drag letters into categories'}
+        </span>
       </div>
+      {campaignGameplayRules && (
+        <div className="react-priority-campaign">
+          <span className="campaign-tag">
+            Campaign Defaults • {campaignGameplayRules.label}
+          </span>
+          {campaignGameplayRules.description && <p>{campaignGameplayRules.description}</p>}
+        </div>
+      )}
 
       <div className="react-priority-layout">
         <aside className="react-priority-pool">

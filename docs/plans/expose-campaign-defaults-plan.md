@@ -1,16 +1,23 @@
 # Plan: Expose Campaign Defaults to Character Creation
 
 ## 1. Backend Enhancements
-- **Campaign Service:** Extend `DescribeGameplayRules` to return structured defaults (already available). Add helper that merges edition data + campaign overrides for character creation.
-- **API Layer:** Introduce `/api/campaigns/{id}/character-creation` endpoint returning edition data plus gameplay-rule overrides (resources, karma caps, gear limits). Reuse existing edition repository and campaign service.
-- **Legacy JS Bridge:** Expose a method in `window.ShadowmasterLegacyApp` to accept campaign gameplay defaults so the legacy steps remain consistent.
+- [x] **Campaign Service:** Extend `DescribeGameplayRules` to return structured defaults and helper logic for character creation overrides.
+- [x] **API Layer:** Introduce `/api/campaigns/{id}/character-creation` endpoint returning edition data plus gameplay rule overrides.
+- [x] **Legacy JS Bridge:** Provide hooks on `window.ShadowmasterLegacyApp` for campaign defaults (React fills them at runtime).
 
 ## 2. Frontend Updates (React shell)
-- **Edition Context:** Allow fetching campaign-specific character creation config when a campaign ID is present, cascading gameplay rule overrides into React components (priority resources, karma limits, gear warnings).
-- **Character Wizard:** Consume the merged data to display active gameplay level and enforce limits (e.g., resource totals, karma conversion cap). Provide UI copy indicating the campaign’s gameplay level.
+- [x] **Edition Context:** Fetch campaign-specific character creation config, merge resource overrides, and surface gameplay rules.
+- [x] **Character Wizard:** Display campaign gameplay level and apply overrides (resources, karma) in UI/legacy bridge.
+- [ ] **Campaign Creation UI:** Replace legacy modal with React wizard featuring:
+  - Campaign name text field
+  - Edition dropdown
+  - Gameplay level dropdown (based on edition defaults)
+  - Character creation method dropdown (defaulting to priority, other modes stubbed until implemented)
+  - GM dropdown populated from active users with Gamemaster/Administrator roles
+  - Optional group selector (hidden until group management exists)
 
 ## 3. Tests & Documentation
-- **Go Tests:** Add coverage for the new campaign character-creation endpoint ensuring overrides are applied correctly.
-- **React/Vitest:** Add unit tests verifying edition context merges gameplay rules and wizard applies resource defaults.
-- **Docs:** Update `docs/application-architecture-plan.md` to reflect campaign-aware character creation, and add brief usage notes in relevant README/documentation.
+- [x] **Go Tests:** Added coverage for the campaign character-creation endpoint.
+- [x] **React/Vitest:** Smoke test extended to cover campaign gameplay rule merging.
+- [ ] **Docs:** Update `docs/application-architecture-plan.md` and related docs with campaign-aware character creation notes.
 

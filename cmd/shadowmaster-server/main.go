@@ -90,6 +90,7 @@ func main() {
 		r.Route("/campaigns", func(r chi.Router) {
 			r.Get("/", handlers.GetCampaigns)
 			r.Get("/{id}", handlers.GetCampaign)
+			r.Get("/{id}/character-creation", handlers.GetCampaignCharacterCreationData)
 
 			r.Group(func(r chi.Router) {
 				r.Use(sessionManager.RequireRole(domain.RoleAdministrator, domain.RoleGamemaster))

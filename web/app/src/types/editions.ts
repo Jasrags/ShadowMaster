@@ -31,7 +31,43 @@ export interface MetatypeDefinition {
   notes?: string;
 }
 
+export interface GearRestrictions {
+  max_device_rating?: number | null;
+  max_availability?: number | null;
+}
+
+export interface GameplayLevelDefinition {
+  label: string;
+  description?: string;
+  resources?: Partial<Record<PriorityCode, number>>;
+  starting_karma?: number;
+  max_custom_karma?: number;
+  karma_to_nuyen_limit?: number;
+  contact_karma_multiplier?: number;
+  gear_restrictions?: GearRestrictions;
+}
+
+export interface GameplayRules {
+  key: string;
+  label: string;
+  description?: string;
+  resources?: Partial<Record<PriorityCode, number>>;
+  starting_karma?: number;
+  max_custom_karma?: number;
+  karma_to_nuyen_limit?: number;
+  contact_karma_multiplier?: number;
+  gear_restrictions?: GearRestrictions;
+}
+
 export interface CharacterCreationData {
   priorities: Partial<Record<PriorityCategory, Record<PriorityCode, PriorityOption>>>;
   metatypes: MetatypeDefinition[];
+  gameplay_levels?: Record<string, GameplayLevelDefinition>;
+}
+
+export interface CampaignCharacterCreationResponse {
+  campaign_id: string;
+  edition: string;
+  edition_data: CharacterCreationData;
+  gameplay_rules?: GameplayRules;
 }

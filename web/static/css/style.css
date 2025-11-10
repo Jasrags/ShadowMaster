@@ -84,6 +84,13 @@ button:hover {
     margin-bottom: 0.25rem;
 }
 
+.card-actions {
+    margin-top: 1rem;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+}
+
 .error {
     color: #ff6b6b;
     font-weight: bold;
@@ -1442,6 +1449,28 @@ body.react-magic-enabled #magic-summary {
     align-items: center;
     font-size: 0.9rem;
     color: #a2fbd4;
+}
+
+.react-priority-campaign {
+    display: flex;
+    flex-direction: column;
+    gap: 0.35rem;
+    font-size: 0.85rem;
+    color: #9bd5ff;
+}
+
+.campaign-tag {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    padding: 0.2rem 0.6rem;
+    border-radius: 999px;
+    background: rgba(0, 166, 255, 0.15);
+    border: 1px solid rgba(0, 166, 255, 0.35);
+    color: #a7eaff;
+    font-size: 0.75rem;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
 }
 
 .react-priority-layout {

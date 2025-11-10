@@ -7,6 +7,7 @@ import { PriorityAssignment } from './components/PriorityAssignment';
 import { MetatypeSelection } from './components/MetatypeSelection';
 import { MagicalAbilitiesSelection, MagicalSelection } from './components/MagicalAbilitiesSelection';
 import { useEdition } from './hooks/useEdition';
+import { GameplayRules } from './types/editions';
 
 function AuthPortal() {
   const [container, setContainer] = useState<Element | null>(null);
@@ -172,7 +173,14 @@ declare global {
       subscribeMagicState?: (listener: () => void) => void;
       unsubscribeMagicState?: (listener: () => void) => void;
       showWizardStep?: (step: number) => void;
+      loadCampaignCharacterCreation?: (campaignId: string) => Promise<void>;
+      clearCampaignCharacterCreation?: () => void;
+      applyCampaignCreationDefaults?: (payload: {
+        campaignId: string | null;
+        edition?: string;
+        gameplayRules?: GameplayRules | null;
+      } | null) => void;
     };
-    showCreateCharacterModal?: () => void;
+    showCreateCharacterModal?: (options?: { campaignId?: string }) => void;
   }
 }

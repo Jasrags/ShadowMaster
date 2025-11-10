@@ -151,11 +151,13 @@
 
 ### Phase 3 – Edition & Creation Method Support
 - Model SR5 gameplay levels and alternative creation methods in `data/editions`.  
-- Wire campaign creation UI/API to enforce allowed combinations; ensure characters created afterward respect campaign defaults.  
+- Wire campaign creation UI/API to enforce allowed combinations; ensure characters created afterward respect campaign defaults. *(In progress)*  
+- Surface campaign gameplay overrides (priority resources, karma limits) to character creation UI/legacy bridge. *(Completed)*  
 - Add validation harnesses/unit tests for creation pipelines across SR3/SR5.
 
 ### Phase 4 – Frontend Migration
 - Build React campaign creation wizard (edition/method immutable choices, GM workflows).  
+- Add dropdowns for edition selection, gameplay level, and creation method; include text input for campaign name and GM selector sourced from active Gamemasters.  
 - Implement session and scene management panels with participant linking and initiative helpers.  
 - Retire equivalent legacy DOM paths, leaving React as the authoritative UI.
 

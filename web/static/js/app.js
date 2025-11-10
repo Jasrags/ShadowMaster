@@ -138,6 +138,17 @@ async function loadCampaigns() {
                 <p>GM: ${campaign.gm_name || 'N/A'}</p>
                 <p>Status: ${campaign.status}</p>
             `;
+            const actions = document.createElement('div');
+            actions.className = 'card-actions';
+            const createBtn = document.createElement('button');
+            createBtn.type = 'button';
+            createBtn.className = 'btn-primary btn-small';
+            createBtn.textContent = 'Create Character';
+            createBtn.addEventListener('click', () => {
+                void openCampaignCharacterCreator(campaign);
+            });
+            actions.appendChild(createBtn);
+            card.appendChild(actions);
             listEl.appendChild(card);
         });
     } catch (error) {
@@ -147,6 +158,27 @@ async function loadCampaigns() {
             listEl.innerHTML = '<p class="error">Failed to load campaigns. Please try again.</p>';
         }
     }
+}
+
+async function openCampaignCharacterCreator(campaign) {
+    if (!campaign || !campaign.id) {
+        if (typeof window !== 'undefined') {
+            window.ShadowmasterLegacyApp?.clearCampaignCharacterCreation?.();
+        }
+        showCreateCharacterModal();
+        return;
+    }
+
+    try {
+        if (typeof window !== 'undefined' && window.ShadowmasterLegacyApp?.loadCampaignCharacterCreation) {
+            await window.ShadowmasterLegacyApp.loadCampaignCharacterCreation(campaign.id);
+        }
+    } catch (error) {
+        console.error('Failed to load campaign character creation defaults:', error);
+        alert('Failed to load campaign defaults. Using base rules instead.');
+    }
+
+    showCreateCharacterModal({ campaignId: campaign.id });
 }
 
 // Create character
@@ -209,7 +241,10 @@ async function createCampaign(name, groupId, gmName, edition = 'sr3') {
 }
 
 // Show create character modal
-function showCreateCharacterModal() {
+function showCreateCharacterModal(options = {}) {
+    const campaignId = (options && typeof options === 'object') ? options.campaignId || null : null;
+    const campaignGameplayRules = (options && typeof options === 'object') ? options.campaignGameplayRules || null : null;
+
     const modal = document.getElementById('character-modal');
     modal.style.display = 'block';
     
@@ -225,7 +260,9 @@ function showCreateCharacterModal() {
         tradition: null,
         totem: null,
         attributes: null, // Will be set when entering attributes step
-        attributeBaseValues: null // Will be calculated based on selected metatype
+        attributeBaseValues: null, // Will be calculated based on selected metatype
+        campaignId: campaignId,
+        campaignGameplayRules: campaignGameplayRules
     };
     
     // Reset form
@@ -285,6 +322,14 @@ function closeModal(modalId) {
     if (modal) {
         modal.style.display = 'none';
     }
+
+    if (modalId === 'character-modal') {
+        characterWizardState.campaignId = null;
+        characterWizardState.campaignGameplayRules = null;
+        if (typeof window !== 'undefined') {
+            window.ShadowmasterLegacyApp?.clearCampaignCharacterCreation?.();
+        }
+    }
 }
 
 // Priority Assignment State
@@ -309,7 +354,9 @@ let characterWizardState = {
     tradition: null, // 'Hermetic' or 'Shamanic' (for Full/Aspected Magicians)
     totem: null, // Totem name (for Shamanic mages)
     attributes: null,
-    attributeBaseValues: null
+    attributeBaseValues: null,
+    campaignId: null,
+    campaignGameplayRules: null
 };
 
 // Get the display value for a priority selection in a category
@@ -3171,7 +3218,12 @@ function initializeLegacyApp() {
     // Create button event listeners
     const createCharBtn = document.getElementById('create-character-btn');
     if (createCharBtn) {
-        createCharBtn.addEventListener('click', showCreateCharacterModal);
+        createCharBtn.addEventListener('click', () => {
+            if (typeof window !== 'undefined') {
+                window.ShadowmasterLegacyApp?.clearCampaignCharacterCreation?.();
+            }
+            showCreateCharacterModal();
+        });
     }
     
     const createCampaignBtn = document.getElementById('create-campaign-btn');
@@ -3305,6 +3357,23 @@ window.ShadowmasterLegacyApp = Object.assign(window.ShadowmasterLegacyApp ?? {},
         if (!edition) return;
         legacyEditionData[edition] = data;
         window.ShadowmasterEditionData = Object.assign({}, legacyEditionData);
+    },
+    loadCampaignCharacterCreation: async () => {
+        // React hook will replace this with actual implementation
+        return Promise.resolve();
+    },
+    clearCampaignCharacterCreation: () => {
+        characterWizardState.campaignId = null;
+        characterWizardState.campaignGameplayRules = null;
+    },
+    applyCampaignCreationDefaults: (payload) => {
+        if (!payload) {
+            characterWizardState.campaignId = null;
+            characterWizardState.campaignGameplayRules = null;
+            return;
+        }
+        characterWizardState.campaignId = payload.campaignId || null;
+        characterWizardState.campaignGameplayRules = payload.gameplayRules || null;
     },
     setPriorities: (assignments) => {
         if (!assignments) return;
