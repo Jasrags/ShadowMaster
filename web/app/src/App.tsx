@@ -8,8 +8,12 @@ import { MainNavigation } from './components/MainNavigation';
 import { PriorityAssignment } from './components/PriorityAssignment';
 import { MetatypeSelection } from './components/MetatypeSelection';
 import { MagicalAbilitiesSelection, MagicalSelection } from './components/MagicalAbilitiesSelection';
+import { CampaignDashboard } from './components/CampaignDashboard';
+import { CampaignSummary } from './types/campaigns';
 import { useEdition } from './hooks/useEdition';
 import { GameplayRules } from './types/editions';
+import { NotificationProvider } from './context/NotificationContext';
+import type { NotificationDescriptor } from './context/NotificationContext';
 
 function AuthPortal() {
   const [container, setContainer] = useState<Element | null>(null);
@@ -133,6 +137,7 @@ function MagicalAbilitiesPortal() {
 
 export function App() {
   const { activeEdition, isLoading, error, characterCreationData } = useEdition();
+  const [dashboardCampaign, setDashboardCampaign] = useState<CampaignSummary | null>(null);
 
   let status = '· data pending';
   if (isLoading) {
@@ -144,7 +149,7 @@ export function App() {
   }
 
   return (
-    <>
+    <NotificationProvider>
       <div className="react-banner" data-active-edition={activeEdition.key}>
         <small>
           React shell active — controlling edition context for <strong>{activeEdition.label}</strong> {status}
@@ -152,13 +157,14 @@ export function App() {
       </div>
       <AuthPortal />
       <MainNavigation />
-      <CampaignCreation />
+      <CampaignCreation onCreated={(campaign) => setDashboardCampaign(campaign)} />
+      <CampaignDashboard campaign={dashboardCampaign} onClose={() => setDashboardCampaign(null)} />
       <CampaignList />
       <CharactersActions />
       <PriorityAssignmentPortal />
       <MetatypeSelectionPortal />
       <MagicalAbilitiesPortal />
-    </>
+    </NotificationProvider>
   );
 }
 
@@ -186,5 +192,6 @@ declare global {
       } | null) => void;
     };
     showCreateCharacterModal?: (options?: { campaignId?: string }) => void;
+    ShadowmasterNotify?: (descriptor: NotificationDescriptor) => string;
   }
 }

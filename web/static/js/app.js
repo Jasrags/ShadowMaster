@@ -40,6 +40,22 @@ function notifyMagicState() {
     });
 }
 
+function legacyNotify(message, type = 'info', title) {
+    const descriptor = {
+        type,
+        title: title || (type === 'error' ? 'Error' : type === 'warning' ? 'Warning' : 'Notice'),
+        description: message
+    };
+    if (typeof window !== 'undefined') {
+        if (typeof window.ShadowmasterNotify === 'function') {
+            window.ShadowmasterNotify(descriptor);
+        } else {
+            const logger = type === 'error' ? console.error : type === 'warning' ? console.warn : console.log;
+            logger.call(console, message);
+        }
+    }
+}
+
 function setMetatypeSelectionReact(metatypeId) {
     characterWizardState.selectedMetatype = metatypeId;
     document.querySelectorAll('.metatype-option').forEach(option => {
@@ -190,7 +206,7 @@ async function openCampaignCharacterCreator(campaign) {
         }
     } catch (error) {
         console.error('Failed to load campaign character creation defaults:', error);
-        alert('Failed to load campaign defaults. Using base rules instead.');
+        legacyNotify('Failed to load campaign defaults. Using base rules instead.', 'warning', 'Campaign defaults unavailable');
     }
 
     showCreateCharacterModal({ campaignId: campaign.id });
@@ -686,7 +702,7 @@ function handleCharacterFormSubmit(e) {
     // Validate priorities
     const validation = validatePriorities();
     if (!validation.valid) {
-        alert(validation.message);
+        legacyNotify(validation.message, 'warning', 'Invalid campaign defaults');
         return;
     }
     
@@ -1869,7 +1885,7 @@ function viewCharacterSheet(characterId) {
         })
         .catch(error => {
             console.error('Failed to load character:', error);
-            alert('Failed to load character');
+            legacyNotify('Failed to load character.', 'error', 'Character load failed');
         });
 }
 
@@ -2189,7 +2205,7 @@ async function updateAttribute(attrName, value) {
         currentEditingCharacter = await response.json();
     } catch (error) {
         console.error('Failed to update attribute:', error);
-        alert('Failed to update attribute: ' + error.message);
+        legacyNotify('Failed to update attribute: ' + error.message, 'error', 'Attribute update failed');
     }
 }
 
@@ -2326,7 +2342,7 @@ function showAddSkillModal(type) {
         const skillName = selectValue || customValue;
         
         if (!skillName) {
-            alert('Please select or enter a skill name');
+            legacyNotify('Please select or enter a skill name.', 'warning', 'Skill selection required');
             return;
         }
         
@@ -2399,7 +2415,7 @@ async function addSkill(characterId, type, name, rating, specialization) {
         
         viewCharacterSheet(characterId); // Reload sheet
     } catch (error) {
-        alert('Failed to add skill: ' + error.message);
+        legacyNotify('Failed to add skill: ' + error.message, 'error', 'Skill add failed');
     }
 }
 
@@ -2426,7 +2442,7 @@ async function updateSkill(characterId, type, name, rating, specialization) {
         
         viewCharacterSheet(characterId);
     } catch (error) {
-        alert('Failed to update skill: ' + error.message);
+        legacyNotify('Failed to update skill: ' + error.message, 'error', 'Skill update failed');
     }
 }
 
@@ -2450,7 +2466,7 @@ async function removeSkill(characterId, type, name) {
         
         viewCharacterSheet(characterId);
     } catch (error) {
-        alert('Failed to remove skill: ' + error.message);
+        legacyNotify('Failed to remove skill: ' + error.message, 'error', 'Skill removal failed');
     }
 }
 
@@ -2522,7 +2538,7 @@ function showAddWeaponModal() {
         const weaponName = selectValue || customValue;
         
         if (!weaponName) {
-            alert('Please select or enter a weapon name');
+            legacyNotify('Please select or enter a weapon name.', 'warning', 'Weapon selection required');
             return;
         }
         
@@ -2593,7 +2609,7 @@ async function addWeapon(characterId, name, type, damage, accuracy, concealabili
         
         viewCharacterSheet(characterId);
     } catch (error) {
-        alert('Failed to add weapon: ' + error.message);
+        legacyNotify('Failed to add weapon: ' + error.message, 'error', 'Weapon add failed');
     }
 }
 
@@ -2624,7 +2640,7 @@ async function updateWeapon(characterId, idx, name, type, damage, accuracy, conc
         
         viewCharacterSheet(characterId);
     } catch (error) {
-        alert('Failed to update weapon: ' + error.message);
+        legacyNotify('Failed to update weapon: ' + error.message, 'error', 'Weapon update failed');
     }
 }
 
@@ -2649,7 +2665,7 @@ async function removeWeapon(characterId, idx) {
         
         viewCharacterSheet(characterId);
     } catch (error) {
-        alert('Failed to remove weapon: ' + error.message);
+        legacyNotify('Failed to remove weapon: ' + error.message, 'error', 'Weapon removal failed');
     }
 }
 
@@ -2711,7 +2727,7 @@ function showAddArmorModal() {
         const armorName = selectValue || customValue;
         
         if (!armorName) {
-            alert('Please select or enter an armor name');
+            legacyNotify('Please select or enter an armor name.', 'warning', 'Armor selection required');
             return;
         }
         
@@ -2776,7 +2792,7 @@ async function addArmor(characterId, name, rating, type) {
         
         viewCharacterSheet(characterId);
     } catch (error) {
-        alert('Failed to add armor: ' + error.message);
+        legacyNotify('Failed to add armor: ' + error.message, 'error', 'Armor add failed');
     }
 }
 
@@ -2801,7 +2817,7 @@ async function updateArmor(characterId, idx, name, rating, type) {
         
         viewCharacterSheet(characterId);
     } catch (error) {
-        alert('Failed to update armor: ' + error.message);
+        legacyNotify('Failed to update armor: ' + error.message, 'error', 'Armor update failed');
     }
 }
 
@@ -2826,7 +2842,7 @@ async function removeArmor(characterId, idx) {
         
         viewCharacterSheet(characterId);
     } catch (error) {
-        alert('Failed to remove armor: ' + error.message);
+        legacyNotify('Failed to remove armor: ' + error.message, 'error', 'Armor removal failed');
     }
 }
 
@@ -2892,7 +2908,7 @@ function showAddCyberwareModal() {
         const cyberwareName = selectValue || customValue;
         
         if (!cyberwareName) {
-            alert('Please select or enter a cyberware name');
+            legacyNotify('Please select or enter a cyberware name.', 'warning', 'Cyberware selection required');
             return;
         }
         
@@ -2962,7 +2978,7 @@ async function addCyberware(characterId, name, rating, essenceCost) {
         
         viewCharacterSheet(characterId);
     } catch (error) {
-        alert('Failed to add cyberware: ' + error.message);
+        legacyNotify('Failed to add cyberware: ' + error.message, 'error', 'Cyberware add failed');
     }
 }
 
@@ -2997,7 +3013,7 @@ async function updateCyberware(characterId, idx, name, rating, essenceCost) {
         
         viewCharacterSheet(characterId);
     } catch (error) {
-        alert('Failed to update cyberware: ' + error.message);
+        legacyNotify('Failed to update cyberware: ' + error.message, 'error', 'Cyberware update failed');
     }
 }
 
@@ -3026,7 +3042,7 @@ async function removeCyberware(characterId, idx) {
         
         viewCharacterSheet(characterId);
     } catch (error) {
-        alert('Failed to remove cyberware: ' + error.message);
+        legacyNotify('Failed to remove cyberware: ' + error.message, 'error', 'Cyberware removal failed');
     }
 }
 
@@ -3083,7 +3099,7 @@ async function addContact(characterId, name, type, loyalty) {
         
         viewCharacterSheet(characterId);
     } catch (error) {
-        alert('Failed to add contact: ' + error.message);
+        legacyNotify('Failed to add contact: ' + error.message, 'error', 'Contact add failed');
     }
 }
 
@@ -3108,7 +3124,7 @@ async function updateContact(characterId, idx, name, type, loyalty) {
         
         viewCharacterSheet(characterId);
     } catch (error) {
-        alert('Failed to update contact: ' + error.message);
+        legacyNotify('Failed to update contact: ' + error.message, 'error', 'Contact update failed');
     }
 }
 
@@ -3133,7 +3149,7 @@ async function removeContact(characterId, idx) {
         
         viewCharacterSheet(characterId);
     } catch (error) {
-        alert('Failed to remove contact: ' + error.message);
+        legacyNotify('Failed to remove contact: ' + error.message, 'error', 'Contact removal failed');
     }
 }
 
@@ -3273,7 +3289,7 @@ function initializeLegacyApp() {
                 };
                 // Move to next step (placeholder for now)
                 // showWizardStep(4);
-                alert('Attribute assignment complete! Next step coming soon...');
+                legacyNotify('Attribute assignment complete! Next step coming soon...', 'info', 'Priorities saved');
             }
         });
     }

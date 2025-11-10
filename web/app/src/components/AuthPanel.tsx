@@ -1,4 +1,5 @@
 import { FormEvent, useEffect, useMemo, useRef, useState } from 'react';
+import { useNotifications } from '../context/NotificationContext';
 import { AuthUser, ShadowmasterAuthState } from '../types/auth';
 
 type AuthView = 'login' | 'register' | 'password';
@@ -49,8 +50,6 @@ export function AuthPanel() {
   const [view, setView] = useState<AuthView>('login');
   const [user, setUser] = useState<AuthUser | null>(null);
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
-  const [success, setSuccess] = useState<string | null>(null);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   const [loginEmail, setLoginEmail] = useState('');
@@ -69,6 +68,7 @@ export function AuthPanel() {
   const menuRef = useRef<HTMLElement | null>(null);
   const dropdownId = 'auth-menu-dropdown';
   const headingId = 'auth-menu-heading';
+  const { pushNotification } = useNotifications();
 
   useEffect(() => {
     if (hasFetchedInitialUser.current) {
@@ -128,7 +128,6 @@ export function AuthPanel() {
   async function fetchCurrentUser() {
     try {
       setLoading(true);
-      setError(null);
       const data = await request<ApiUserResponse>('/api/auth/me');
       setUser(data.user);
       setView('login');
@@ -144,8 +143,6 @@ export function AuthPanel() {
   async function handleLogin(event: FormEvent) {
     event.preventDefault();
     setLoading(true);
-    setError(null);
-    setSuccess(null);
     try {
       const data = await request<ApiUserResponse>('/api/auth/login', {
         method: 'POST',
@@ -157,10 +154,19 @@ export function AuthPanel() {
       setUser(data.user);
       setView('login');
       setLoginPassword('');
-      setSuccess('Welcome back!');
       setIsMenuOpen(false);
+      pushNotification({
+        type: 'success',
+        title: 'Signed in',
+        description: data.user ? `Welcome back, ${data.user.username || data.user.email}!` : 'Signed in successfully.',
+      });
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Login failed');
+      const message = err instanceof Error ? err.message : 'Login failed';
+      pushNotification({
+        type: 'error',
+        title: 'Login failed',
+        description: message,
+      });
     } finally {
       setLoading(false);
     }
@@ -169,12 +175,14 @@ export function AuthPanel() {
   async function handleRegister(event: FormEvent) {
     event.preventDefault();
     if (registerPassword !== registerConfirm) {
-      setError('Passwords do not match');
+      pushNotification({
+        type: 'warning',
+        title: 'Passwords do not match',
+        description: 'Please confirm your password before continuing.',
+      });
       return;
     }
     setLoading(true);
-    setError(null);
-    setSuccess(null);
     try {
       const data = await request<ApiUserResponse>('/api/auth/register', {
         method: 'POST',
@@ -186,11 +194,20 @@ export function AuthPanel() {
       });
       setUser(data.user);
       setView('login');
-      setSuccess('Account created successfully.');
       setRegisterPassword('');
       setRegisterConfirm('');
+      pushNotification({
+        type: 'success',
+        title: 'Account created',
+        description: 'You can now sign in with your new credentials.',
+      });
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Registration failed');
+      const message = err instanceof Error ? err.message : 'Registration failed';
+      pushNotification({
+        type: 'error',
+        title: 'Registration failed',
+        description: message,
+      });
     } finally {
       setLoading(false);
     }
@@ -198,16 +215,23 @@ export function AuthPanel() {
 
   async function handleLogout() {
     setLoading(true);
-    setError(null);
-    setSuccess(null);
     try {
       await request('/api/auth/logout', { method: 'POST' });
       setUser(null);
       setView('login');
-      setSuccess('Signed out successfully.');
       setIsMenuOpen(true);
+      pushNotification({
+        type: 'success',
+        title: 'Signed out',
+        description: 'You have been signed out successfully.',
+      });
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Logout failed');
+      const message = err instanceof Error ? err.message : 'Logout failed';
+      pushNotification({
+        type: 'error',
+        title: 'Logout failed',
+        description: message,
+      });
     } finally {
       setLoading(false);
     }
@@ -216,12 +240,14 @@ export function AuthPanel() {
   async function handlePasswordChange(event: FormEvent) {
     event.preventDefault();
     if (newPassword !== confirmPassword) {
-      setError('New passwords do not match');
+      pushNotification({
+        type: 'warning',
+        title: 'New passwords do not match',
+        description: 'Make sure both password fields match before updating.',
+      });
       return;
     }
     setLoading(true);
-    setError(null);
-    setSuccess(null);
     try {
       await request('/api/auth/password', {
         method: 'POST',
@@ -230,13 +256,22 @@ export function AuthPanel() {
           new_password: newPassword,
         }),
       });
-      setSuccess('Password updated successfully.');
       setCurrentPassword('');
       setNewPassword('');
       setConfirmPassword('');
       setView('login');
+      pushNotification({
+        type: 'success',
+        title: 'Password updated',
+        description: 'Your password has been updated successfully.',
+      });
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Password update failed');
+      const message = err instanceof Error ? err.message : 'Password update failed';
+      pushNotification({
+        type: 'error',
+        title: 'Password update failed',
+        description: message,
+      });
     } finally {
       setLoading(false);
     }
@@ -289,9 +324,6 @@ export function AuthPanel() {
           )}
         </header>
 
-        {error && <div className="auth-alert auth-alert--error">{error}</div>}
-        {success && <div className="auth-alert auth-alert--success">{success}</div>}
-
         {user ? (
           <div className="auth-panel__content">
             <div className="auth-panel__actions">
@@ -299,8 +331,6 @@ export function AuthPanel() {
                 type="button"
                 className="btn btn-secondary"
                 onClick={() => {
-                  setError(null);
-                  setSuccess(null);
                   setView(view === 'password' ? 'login' : 'password');
                 }}
                 disabled={loading}
@@ -389,8 +419,6 @@ export function AuthPanel() {
                     type="button"
                     onClick={() => {
                       setView('register');
-                      setError(null);
-                      setSuccess(null);
                     }}
                   >
                     Need an account?
@@ -449,8 +477,6 @@ export function AuthPanel() {
                     type="button"
                     onClick={() => {
                       setView('login');
-                      setError(null);
-                      setSuccess(null);
                     }}
                   >
                     Sign in instead
