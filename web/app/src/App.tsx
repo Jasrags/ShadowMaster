@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { createPortal } from 'react-dom';
 import { PriorityAssignment } from './components/PriorityAssignment';
 import { MetatypeSelection } from './components/MetatypeSelection';
+import { MagicalAbilitiesSelection, MagicalSelection } from './components/MagicalAbilitiesSelection';
 import { useEdition } from './hooks/useEdition';
 
 function PriorityAssignmentPortal() {
@@ -59,6 +60,57 @@ function MetatypeSelectionPortal() {
     />, container);
 }
 
+function MagicalAbilitiesPortal() {
+  const [container, setContainer] = useState<Element | null>(null);
+  const [state, setState] = useState<MagicalSelection & { priority: string }>({
+    priority: '',
+    type: null,
+    tradition: null,
+    totem: null,
+  });
+
+  useEffect(() => {
+    setContainer(document.getElementById('magical-abilities-react-root'));
+  }, []);
+
+  useEffect(() => {
+    const legacy = window.ShadowmasterLegacyApp;
+    if (!legacy) return;
+
+    const subscription = () => {
+      const magicState = legacy.getMagicState?.();
+      if (magicState) {
+        setState({
+          priority: magicState.priority || '',
+          type: magicState.type || null,
+          tradition: magicState.tradition || null,
+          totem: magicState.totem || null,
+        });
+      }
+    };
+
+    subscription();
+    legacy.subscribeMagicState?.(subscription);
+
+    return () => {
+      legacy.unsubscribeMagicState?.(subscription);
+    };
+  }, []);
+
+  if (!container) {
+    return null;
+  }
+
+  return createPortal(
+    <MagicalAbilitiesSelection
+      priority={state.priority}
+      selection={{ type: state.type, tradition: state.tradition, totem: state.totem }}
+      onChange={(next) => {
+        window.ShadowmasterLegacyApp?.setMagicState?.(next);
+      }}
+    />, container);
+}
+
 export function App() {
   const { activeEdition, isLoading, error, characterCreationData } = useEdition();
 
@@ -80,6 +132,7 @@ export function App() {
       </div>
       <PriorityAssignmentPortal />
       <MetatypeSelectionPortal />
+      <MagicalAbilitiesPortal />
     </>
   );
 }
@@ -94,6 +147,10 @@ declare global {
       setMetatypeSelection?: (id: string) => void;
       subscribeMetatypeState?: (listener: () => void) => void;
       unsubscribeMetatypeState?: (listener: () => void) => void;
+      getMagicState?: () => { priority: string; type: string | null; tradition: string | null; totem: string | null };
+      setMagicState?: (state: MagicalSelection) => void;
+      subscribeMagicState?: (listener: () => void) => void;
+      unsubscribeMagicState?: (listener: () => void) => void;
     };
   }
 }

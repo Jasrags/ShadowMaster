@@ -23,6 +23,19 @@ export function MetatypeSelection({ priority, selectedMetatype, onSelect }: Prop
     priority,
   ]);
 
+  const canAdvance = Boolean(selectedMetatype);
+
+  const handleBack = () => {
+    window.ShadowmasterLegacyApp?.showWizardStep?.(1);
+  };
+
+  const handleNext = () => {
+    if (!selectedMetatype) {
+      return;
+    }
+    window.ShadowmasterLegacyApp?.showWizardStep?.(3);
+  };
+
   if (isLoading) {
     return <p className="react-metatype-status">Loading metatype data…</p>;
   }
@@ -103,6 +116,18 @@ export function MetatypeSelection({ priority, selectedMetatype, onSelect }: Prop
             )}
           </article>
         ))}
+      </div>
+
+      <div className="react-metatype-footer">
+        <button type="button" className="btn btn-secondary" onClick={handleBack}>
+          Back
+        </button>
+        <div className={`react-metatype-status ${canAdvance ? 'ready' : ''}`}>
+          {canAdvance ? 'Metatype selected. Continue to magic.' : 'Select a metatype to continue.'}
+        </div>
+        <button type="button" className="btn btn-primary" disabled={!canAdvance} onClick={handleNext}>
+          Next: Choose Magical Abilities
+        </button>
       </div>
     </>
   );

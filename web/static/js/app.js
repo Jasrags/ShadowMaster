@@ -11,6 +11,7 @@ const priorityInputMap = {
 };
 
 let metatypeStateListeners = [];
+let magicStateListeners = [];
 
 function notifyMetatypeState() {
     metatypeStateListeners.forEach(listener => {
@@ -18,6 +19,16 @@ function notifyMetatypeState() {
             listener();
         } catch (err) {
             console.error('Metatype listener failed', err);
+        }
+    });
+}
+
+function notifyMagicState() {
+    magicStateListeners.forEach(listener => {
+        try {
+            listener();
+        } catch (err) {
+            console.error('Magic listener failed', err);
         }
     });
 }
@@ -46,6 +57,12 @@ function applyPriorityAssignment(category, value) {
     }
 
     updatePriorityValue(category, value || null);
+    if (category === 'metatype') {
+        notifyMetatypeState();
+    }
+    if (category === 'magic') {
+        notifyMagicState();
+    }
 }
 
 function clonePriorityAssignments() {
@@ -954,6 +971,7 @@ function initializeMagicalAbilitiesStep() {
     }
     
     validateMagicalAbilities();
+    notifyMagicState();
 }
 
 // Select magical type (Adept or Aspected Magician for Priority B)
@@ -994,6 +1012,7 @@ function selectMagicalType(type) {
     
     updateMagicSummary();
     validateMagicalAbilities();
+    notifyMagicState();
 }
 
 // Handle tradition selection
@@ -1017,6 +1036,7 @@ function handleTraditionSelection(tradition) {
     
     updateMagicSummary();
     validateMagicalAbilities();
+    notifyMagicState();
 }
 
 // Display totem selection
@@ -1110,6 +1130,7 @@ function selectTotem(totemName) {
     
     updateMagicSummary();
     validateMagicalAbilities();
+    notifyMagicState();
 }
 
 // Update magic summary display
@@ -1162,6 +1183,10 @@ function updateMagicSummary() {
 
 // Validate magical abilities selection
 function validateMagicalAbilities() {
+    if (!characterWizardState.priorities) {
+        characterWizardState.priorities = clonePriorityAssignments();
+    }
+
     const magicPriority = characterWizardState.priorities.magic;
     const nextBtn = document.getElementById('magic-next-btn');
     
@@ -3301,6 +3326,56 @@ window.ShadowmasterLegacyApp = Object.assign(window.ShadowmasterLegacyApp ?? {},
     },
     unsubscribeMetatypeState: (listener) => {
         metatypeStateListeners = metatypeStateListeners.filter(l => l !== listener);
+    },
+    getMagicState: () => {
+        return {
+            priority: characterWizardState.priorities ? (characterWizardState.priorities.magic || '') : '',
+            type: characterWizardState.magicalType || null,
+            tradition: characterWizardState.tradition || null,
+            totem: characterWizardState.totem || null
+        };
+    },
+    setMagicState: (state) => {
+        if (!state) return;
+
+        if (!characterWizardState.priorities) {
+            characterWizardState.priorities = clonePriorityAssignments();
+        }
+
+        if (Object.prototype.hasOwnProperty.call(state, 'type')) {
+            characterWizardState.magicalType = state.type || null;
+        }
+        if (Object.prototype.hasOwnProperty.call(state, 'tradition')) {
+            characterWizardState.tradition = state.tradition || null;
+        }
+        if (Object.prototype.hasOwnProperty.call(state, 'totem')) {
+            characterWizardState.totem = state.totem || null;
+        }
+
+        const type = characterWizardState.magicalType;
+        if (type !== 'Full Magician' && type !== 'Aspected Magician') {
+            characterWizardState.tradition = null;
+            characterWizardState.totem = null;
+        } else if (characterWizardState.tradition !== 'Shamanic') {
+            characterWizardState.totem = null;
+        }
+
+        updateMagicSummary();
+        validateMagicalAbilities();
+        notifyMagicState();
+    },
+    subscribeMagicState: (listener) => {
+        if (typeof listener === 'function') {
+            magicStateListeners.push(listener);
+        }
+    },
+    unsubscribeMagicState: (listener) => {
+        magicStateListeners = magicStateListeners.filter(l => l !== listener);
+    },
+    showWizardStep: (step) => {
+        if (typeof step === 'number') {
+            showWizardStep(step);
+        }
     }
 });
 
