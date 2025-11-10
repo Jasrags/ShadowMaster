@@ -38,8 +38,9 @@ const originalReplaceState = window.history.replaceState;
 
 window.history.replaceState = () => {};
 
-globalThis.fetch = async (input: RequestInfo | URL, init?: RequestInit) => {
+globalThis.fetch = async (input: RequestInfo | URL, _init?: RequestInit) => {
   const url = typeof input === 'string' ? input : input instanceof URL ? input.toString() : input.url;
+  void _init;
 
   if (url.includes('/campaigns/') && url.endsWith('/character-creation')) {
     return new Response(
@@ -65,6 +66,20 @@ globalThis.fetch = async (input: RequestInfo | URL, init?: RequestInit) => {
           resources: { A: 75000, B: 50000, C: 25000, D: 15000, E: 6000 },
         },
       }),
+      { status: 200, headers: { 'Content-Type': 'application/json' } },
+    );
+  }
+
+  if (url.includes('/api/users')) {
+    return new Response(
+      JSON.stringify([
+        {
+          id: 'user-1',
+          email: 'gm@example.com',
+          username: 'Gamemaster',
+          roles: ['gamemaster'],
+        },
+      ]),
       { status: 200, headers: { 'Content-Type': 'application/json' } },
     );
   }

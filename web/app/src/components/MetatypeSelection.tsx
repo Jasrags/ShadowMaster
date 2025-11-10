@@ -1,6 +1,7 @@
 import { useEffect, useMemo } from 'react';
 import { useEdition } from '../hooks/useEdition';
 import { getMetatypesForPriority, formatModifier, formatAttributeLabel } from '../utils/metatypes';
+import { PriorityCode } from '../types/editions';
 
 interface Props {
   priority: string;
@@ -18,10 +19,14 @@ export function MetatypeSelection({ priority, selectedMetatype, onSelect }: Prop
     };
   }, []);
 
-  const metatypes = useMemo(() => getMetatypesForPriority(characterCreationData, priority as any), [
-    characterCreationData,
-    priority,
-  ]);
+  const metatypes = useMemo(() => {
+    const normalized = priority?.toUpperCase?.() ?? '';
+    const allowed: PriorityCode[] = ['A', 'B', 'C', 'D', 'E'];
+    const safePriority: PriorityCode | '' = allowed.includes(normalized as PriorityCode)
+      ? (normalized as PriorityCode)
+      : '';
+    return getMetatypesForPriority(characterCreationData, safePriority);
+  }, [characterCreationData, priority]);
 
   const canAdvance = Boolean(selectedMetatype);
 

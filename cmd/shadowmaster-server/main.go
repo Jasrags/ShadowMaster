@@ -58,6 +58,10 @@ func main() {
 			r.Use(sessionManager.RequireAuth)
 			r.Post("/auth/logout", handlers.LogoutUser)
 			r.Post("/auth/password", handlers.ChangePassword)
+			r.Route("/users", func(r chi.Router) {
+				r.Use(sessionManager.RequireRole(domain.RoleAdministrator, domain.RoleGamemaster))
+				r.Get("/", handlers.GetUsers)
+			})
 		})
 
 		// Character routes

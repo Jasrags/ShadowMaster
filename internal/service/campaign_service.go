@@ -29,6 +29,7 @@ type CampaignCreateInput struct {
 	Description    string
 	GroupID        string
 	GMName         string
+	GMUserID       string
 	Edition        string
 	CreationMethod string
 	GameplayLevel  string
@@ -41,6 +42,7 @@ type CampaignUpdateInput struct {
 	Name           *string
 	Description    *string
 	GMName         *string
+	GMUserID       *string
 	GameplayLevel  *string
 	HouseRules     *string
 	Status         *string
@@ -84,6 +86,7 @@ func (s *CampaignService) CreateCampaign(input CampaignCreateInput) (*domain.Cam
 		Description:    strings.TrimSpace(input.Description),
 		GroupID:        strings.TrimSpace(input.GroupID),
 		GmName:         strings.TrimSpace(input.GMName),
+		GmUserID:       strings.TrimSpace(input.GMUserID),
 		Edition:        edition,
 		CreationMethod: creationMethod,
 		GameplayLevel:  gameplayLevel,
@@ -123,6 +126,9 @@ func (s *CampaignService) UpdateCampaign(id string, input CampaignUpdateInput) (
 	}
 	if input.GMName != nil {
 		campaign.GmName = strings.TrimSpace(*input.GMName)
+	}
+	if input.GMUserID != nil {
+		campaign.GmUserID = strings.TrimSpace(*input.GMUserID)
 	}
 	if input.HouseRules != nil {
 		campaign.HouseRules = strings.TrimSpace(*input.HouseRules)

@@ -2,6 +2,8 @@ import { useEffect, useState } from 'react';
 import { createPortal } from 'react-dom';
 import { AuthPanel } from './components/AuthPanel';
 import { CharactersActions } from './components/CharactersActions';
+import { CampaignCreation } from './components/CampaignCreation';
+import { CampaignList } from './components/CampaignList';
 import { MainNavigation } from './components/MainNavigation';
 import { PriorityAssignment } from './components/PriorityAssignment';
 import { MetatypeSelection } from './components/MetatypeSelection';
@@ -150,6 +152,8 @@ export function App() {
       </div>
       <AuthPortal />
       <MainNavigation />
+      <CampaignCreation />
+      <CampaignList />
       <CharactersActions />
       <PriorityAssignmentPortal />
       <MetatypeSelectionPortal />

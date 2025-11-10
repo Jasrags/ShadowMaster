@@ -10,6 +10,13 @@ const priorityInputMap = {
     resources: 'resources-priority'
 };
 
+function isAuthenticated() {
+    if (typeof window !== 'undefined' && window.ShadowmasterAuth) {
+        return Boolean(window.ShadowmasterAuth.user);
+    }
+    return true;
+}
+
 let metatypeStateListeners = [];
 let magicStateListeners = [];
 
@@ -115,6 +122,14 @@ async function loadCharacters() {
 
 // Load campaigns
 async function loadCampaigns() {
+    if (!isAuthenticated()) {
+        return;
+    }
+
+    if (document.body.classList.contains('react-campaign-enabled')) {
+        return;
+    }
+
     try {
         const response = await fetch(`${API_BASE}/campaigns`);
         if (!response.ok) {
@@ -3357,6 +3372,9 @@ window.ShadowmasterLegacyApp = Object.assign(window.ShadowmasterLegacyApp ?? {},
         if (!edition) return;
         legacyEditionData[edition] = data;
         window.ShadowmasterEditionData = Object.assign({}, legacyEditionData);
+    },
+    loadCampaigns: () => {
+        loadCampaigns();
     },
     loadCampaignCharacterCreation: async () => {
         // React hook will replace this with actual implementation

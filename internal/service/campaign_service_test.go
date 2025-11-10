@@ -22,8 +22,10 @@ func TestCampaignServiceCreateDefaults(t *testing.T) {
 	service := NewCampaignService(repo, jsonrepo.NewEditionRepository(store))
 
 	campaign, err := service.CreateCampaign(CampaignCreateInput{
-		Name:    "Neon Noir",
-		Edition: "SR5",
+		Name:     "Neon Noir",
+		Edition:  "SR5",
+		GMName:   "GM Name",
+		GMUserID: "user-1",
 	})
 	if err != nil {
 		t.Fatalf("create campaign: %v", err)
@@ -115,6 +117,11 @@ func TestCampaignServiceImmutableFields(t *testing.T) {
 	method := "karma"
 	if _, err := service.UpdateCampaign(campaign.ID, CampaignUpdateInput{CreationMethod: &method}); err != nil {
 		t.Fatalf("expected creation method fallback to succeed, got %v", err)
+	}
+
+	newGM := "user-2"
+	if _, err := service.UpdateCampaign(campaign.ID, CampaignUpdateInput{GMUserID: &newGM}); err != nil {
+		t.Fatalf("update GM user id: %v", err)
 	}
 
 	invalidLevel := "legendary"

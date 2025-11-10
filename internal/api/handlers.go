@@ -49,6 +49,8 @@ type changePasswordRequest struct {
 type campaignResponse struct {
 	*domain.Campaign
 	GameplayRules *service.GameplayRules `json:"gameplay_rules,omitempty"`
+	CanEdit       bool                   `json:"can_edit"`
+	CanDelete     bool                   `json:"can_delete"`
 }
 
 type campaignCharacterCreationResponse struct {
@@ -58,11 +60,19 @@ type campaignCharacterCreationResponse struct {
 	GameplayRules *service.GameplayRules        `json:"gameplay_rules,omitempty"`
 }
 
+type userResponse struct {
+	ID       string   `json:"id"`
+	Email    string   `json:"email"`
+	Username string   `json:"username"`
+	Roles    []string `json:"roles"`
+}
+
 type campaignCreateRequest struct {
 	Name           string `json:"name"`
 	Description    string `json:"description"`
 	GroupID        string `json:"group_id"`
 	GMName         string `json:"gm_name"`
+	GMUserID       string `json:"gm_user_id"`
 	Edition        string `json:"edition"`
 	CreationMethod string `json:"creation_method"`
 	GameplayLevel  string `json:"gameplay_level"`
@@ -74,6 +84,7 @@ type campaignUpdateRequest struct {
 	Name           *string `json:"name"`
 	Description    *string `json:"description"`
 	GMName         *string `json:"gm_name"`
+	GMUserID       *string `json:"gm_user_id"`
 	GameplayLevel  *string `json:"gameplay_level"`
 	HouseRules     *string `json:"house_rules"`
 	Status         *string `json:"status"`
@@ -525,9 +536,10 @@ func (h *Handlers) GetCampaigns(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	session := GetSessionFromContext(r.Context())
 	response := make([]campaignResponse, 0, len(campaigns))
 	for _, campaign := range campaigns {
-		payload, err := h.buildCampaignResponse(campaign)
+		payload, err := h.buildCampaignResponse(session, campaign)
 		if err != nil {
 			respondServiceError(w, err)
 			return
@@ -546,7 +558,8 @@ func (h *Handlers) GetCampaign(w http.ResponseWriter, r *http.Request) {
 		respondServiceError(w, err)
 		return
 	}
-	payload, err := h.buildCampaignResponse(campaign)
+	session := GetSessionFromContext(r.Context())
+	payload, err := h.buildCampaignResponse(session, campaign)
 	if err != nil {
 		respondServiceError(w, err)
 		return
@@ -601,11 +614,13 @@ func (h *Handlers) CreateCampaign(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	session := GetSessionFromContext(r.Context())
 	campaign, err := h.CampaignService.CreateCampaign(service.CampaignCreateInput{
 		Name:           req.Name,
 		Description:    req.Description,
 		GroupID:        req.GroupID,
 		GMName:         req.GMName,
+		GMUserID:       req.GMUserID,
 		Edition:        req.Edition,
 		CreationMethod: req.CreationMethod,
 		GameplayLevel:  req.GameplayLevel,
@@ -617,7 +632,7 @@ func (h *Handlers) CreateCampaign(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	payload, err := h.buildCampaignResponse(campaign)
+	payload, err := h.buildCampaignResponse(session, campaign)
 	if err != nil {
 		respondServiceError(w, err)
 		return
@@ -634,10 +649,23 @@ func (h *Handlers) UpdateCampaign(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	session := GetSessionFromContext(r.Context())
+	existing, err := h.CampaignService.GetCampaign(id)
+	if err != nil {
+		respondServiceError(w, err)
+		return
+	}
+
+	if !canManageCampaign(existing, session) {
+		respondServiceError(w, service.ErrForbidden)
+		return
+	}
+
 	campaign, err := h.CampaignService.UpdateCampaign(id, service.CampaignUpdateInput{
 		Name:           req.Name,
 		Description:    req.Description,
 		GMName:         req.GMName,
+		GMUserID:       req.GMUserID,
 		GameplayLevel:  req.GameplayLevel,
 		HouseRules:     req.HouseRules,
 		Status:         req.Status,
@@ -649,7 +677,7 @@ func (h *Handlers) UpdateCampaign(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	payload, err := h.buildCampaignResponse(campaign)
+	payload, err := h.buildCampaignResponse(session, campaign)
 	if err != nil {
 		respondServiceError(w, err)
 		return
@@ -660,12 +688,57 @@ func (h *Handlers) UpdateCampaign(w http.ResponseWriter, r *http.Request) {
 // DeleteCampaign handles DELETE /api/campaigns/{id}
 func (h *Handlers) DeleteCampaign(w http.ResponseWriter, r *http.Request) {
 	id := r.PathValue("id")
+
+	session := GetSessionFromContext(r.Context())
+	campaign, err := h.CampaignService.GetCampaign(id)
+	if err != nil {
+		respondServiceError(w, err)
+		return
+	}
+
+	if !canManageCampaign(campaign, session) {
+		respondServiceError(w, service.ErrForbidden)
+		return
+	}
+
 	if err := h.CampaignService.DeleteCampaign(id); err != nil {
-		respondError(w, http.StatusInternalServerError, err.Error())
+		respondServiceError(w, err)
 		return
 	}
 
 	w.WriteHeader(http.StatusNoContent)
+}
+
+// GetUsers handles GET /api/users
+func (h *Handlers) GetUsers(w http.ResponseWriter, r *http.Request) {
+	roleQuery := strings.TrimSpace(r.URL.Query().Get("role"))
+	var filters []string
+	if roleQuery != "" {
+		for _, part := range strings.Split(roleQuery, ",") {
+			part = strings.TrimSpace(part)
+			if part != "" {
+				filters = append(filters, part)
+			}
+		}
+	}
+
+	users, err := h.UserService.ListUsers(filters...)
+	if err != nil {
+		respondError(w, http.StatusInternalServerError, err.Error())
+		return
+	}
+
+	response := make([]userResponse, 0, len(users))
+	for _, user := range users {
+		response = append(response, userResponse{
+			ID:       user.ID,
+			Email:    user.Email,
+			Username: user.Username,
+			Roles:    user.Roles,
+		})
+	}
+
+	respondJSON(w, http.StatusOK, response)
 }
 
 // Session handlers
@@ -840,7 +913,7 @@ func respondServiceError(w http.ResponseWriter, err error) {
 	}
 }
 
-func (h *Handlers) buildCampaignResponse(campaign *domain.Campaign) (*campaignResponse, error) {
+func (h *Handlers) buildCampaignResponse(session *SessionData, campaign *domain.Campaign) (*campaignResponse, error) {
 	if campaign == nil {
 		return &campaignResponse{Campaign: nil}, nil
 	}
@@ -850,8 +923,32 @@ func (h *Handlers) buildCampaignResponse(campaign *domain.Campaign) (*campaignRe
 		return nil, err
 	}
 
+	canManage := canManageCampaign(campaign, session)
+
 	return &campaignResponse{
 		Campaign:      campaign,
 		GameplayRules: rules,
+		CanEdit:       canManage,
+		CanDelete:     canManage,
 	}, nil
+}
+
+func canManageCampaign(campaign *domain.Campaign, session *SessionData) bool {
+	if campaign == nil || session == nil {
+		return false
+	}
+
+	if session.HasRole(domain.RoleAdministrator) {
+		return true
+	}
+
+	if campaign.GmUserID == "" {
+		return false
+	}
+
+	if !strings.EqualFold(session.UserID, campaign.GmUserID) {
+		return false
+	}
+
+	return session.HasRole(domain.RoleGamemaster) || session.HasRole(domain.RoleAdministrator)
 }

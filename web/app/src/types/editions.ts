@@ -71,3 +71,10 @@ export interface CampaignCharacterCreationResponse {
   edition_data: CharacterCreationData;
   gameplay_rules?: GameplayRules;
 }
+
+export interface UserSummary {
+  id: string;
+  email: string;
+  username: string;
+  roles: string[];
+}

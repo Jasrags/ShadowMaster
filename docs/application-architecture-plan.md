@@ -156,8 +156,9 @@
 - Add validation harnesses/unit tests for creation pipelines across SR3/SR5.
 
 ### Phase 4 – Frontend Migration
-- Build React campaign creation wizard (edition/method immutable choices, GM workflows).  
-- Add dropdowns for edition selection, gameplay level, and creation method; include text input for campaign name and GM selector sourced from active Gamemasters.  
+- Build React campaign management UI (wizard, list, actions) with reusable primitives:
+  - Campaign creation wizard (name, edition, gameplay level, creation method, GM selector, optional group picker)
+  - Shared table component (sortable columns, filters, action column) for campaigns/sessions/scenes
 - Implement session and scene management panels with participant linking and initiative helpers.  
 - Retire equivalent legacy DOM paths, leaving React as the authoritative UI.
 

@@ -21,6 +21,7 @@ type Campaign struct {
 	Description    string    `json:"description,omitempty"`
 	GroupID        string    `json:"group_id"` // Reference to group
 	GmName         string    `json:"gm_name,omitempty"`
+	GmUserID       string    `json:"gm_user_id,omitempty"`
 	Edition        string    `json:"edition"` // "sr3", "sr4", etc.
 	CreationMethod string    `json:"creation_method"`
 	GameplayLevel  string    `json:"gameplay_level,omitempty"`

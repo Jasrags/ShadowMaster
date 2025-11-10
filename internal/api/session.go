@@ -23,6 +23,19 @@ type SessionData struct {
 	Roles  []string `json:"roles"`
 }
 
+// HasRole reports whether the session includes the provided role (case-insensitive).
+func (s *SessionData) HasRole(role string) bool {
+	if s == nil {
+		return false
+	}
+	for _, r := range s.Roles {
+		if strings.EqualFold(r, role) {
+			return true
+		}
+	}
+	return false
+}
+
 // SessionManager handles issuing and validating signed session cookies.
 type SessionManager struct {
 	secret    []byte

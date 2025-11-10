@@ -216,3 +216,39 @@ func sanitizeUser(user *domain.User) *domain.User {
 	safe.PasswordHash = ""
 	return &safe
 }
+
+// ListUsers returns sanitized users, optionally filtered by role (case-insensitive).
+func (s *UserService) ListUsers(filterRoles ...string) ([]*domain.User, error) {
+	users, err := s.userRepo.GetAll()
+	if err != nil {
+		return nil, err
+	}
+
+	roleFilters := make(map[string]struct{})
+	for _, role := range filterRoles {
+		role = strings.ToLower(strings.TrimSpace(role))
+		if role != "" {
+			roleFilters[role] = struct{}{}
+		}
+	}
+
+	result := make([]*domain.User, 0, len(users))
+
+	for _, user := range users {
+		if len(roleFilters) > 0 {
+			found := false
+			for _, role := range user.Roles {
+				if _, ok := roleFilters[strings.ToLower(role)]; ok {
+					found = true
+					break
+				}
+			}
+			if !found {
+				continue
+			}
+		}
+		result = append(result, sanitizeUser(user))
+	}
+
+	return result, nil
+}

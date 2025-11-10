@@ -1,13 +1,7 @@
 import { FormEvent, useEffect, useMemo, useRef, useState } from 'react';
+import { AuthUser, ShadowmasterAuthState } from '../types/auth';
 
 type AuthView = 'login' | 'register' | 'password';
-
-export interface AuthUser {
-  id: string;
-  email: string;
-  username: string;
-  roles: string[];
-}
 
 interface ApiUserResponse {
   user: AuthUser | null;
@@ -368,12 +362,7 @@ export function AuthPanel() {
 
 declare global {
   interface Window {
-    ShadowmasterAuth?: {
-      user: AuthUser | null;
-      isAdministrator: boolean;
-      isGamemaster: boolean;
-      isPlayer: boolean;
-    };
+    ShadowmasterAuth?: ShadowmasterAuthState;
   }
 }
 
