@@ -1,6 +1,6 @@
 # React Migration Notes
 
-*Last updated: 2025-11-09*
+*Last updated: 2025-11-10*
 
 ## Step 1 — React Foundation & Edition Context
 - Added Vite + TypeScript scaffold under `web/app/` with linting (`eslint`), formatting (`prettier`), and a lightweight smoke test (`tsx`).
@@ -13,6 +13,12 @@
 - React shell mounts into `#shadowmaster-react-root` without disturbing the legacy DOM and triggers `window.ShadowmasterLegacyApp.initialize()` when needed.
 - Legacy wizard exposes `initializeLegacyApp` and `isInitialized` for future React components to coordinate progressive rewrites.
 
+## Step 2 — Campaign Management Reactification
+- `CampaignCreation` React flow now owns the entire campaign onboarding experience with edition, gameplay level, and creation method controls.
+- `CampaignTable` reuses the shared `DataTable` to list campaigns with admin/GM-scoped edit & delete actions plus empty-state messaging.
+- Legacy prompt-driven campaign creation and the static `#create-campaign-btn` have been removed; React is now the only way to create campaigns.
+- React bridge dispatches `shadowmaster:campaigns:refresh` events so any remaining legacy consumers stay synchronized during the migration window.
+
 ## Development Workflow
 - Install dependencies: `cd web/app && npm install`
 - Local iteration: `npm run dev` (Vite dev server) *(TODO: proxy backend endpoints)*
@@ -21,6 +27,6 @@
 - Lint: `npm run lint`
 
 ## Next Steps
-- Migrate priority selection UI into a React component using `EditionContext` data.
-- Convert wizard state management into React state/hooks while preserving API interactions.
-- Gradually retire direct DOM manipulation from `web/static/js/app.js`.
+- Convert the remaining character creation steps (attributes, summary, validation) into React-managed flows.
+- Replace the legacy character list/cards with a shared `DataTable` implementation.
+- Continue pruning direct DOM manipulation from `web/static/js/app.js` as React covers more surfaces.

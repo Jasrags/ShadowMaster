@@ -1331,10 +1331,6 @@ body.react-magic-enabled #magic-summary {
     align-items: center;
 }
 
-body.react-campaign-enabled #create-campaign-btn {
-    display: none;
-}
-
 .campaigns-react-shell {
     margin-top: 1.5rem;
     background: rgba(12, 18, 32, 0.8);

@@ -225,36 +225,6 @@ async function createCharacter(name, playerName, edition = 'sr3') {
     }
 }
 
-// Create campaign
-async function createCampaign(name, groupId, gmName, edition = 'sr3') {
-    try {
-        const response = await fetch(`${API_BASE}/campaigns`, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({
-                name: name,
-                group_id: groupId,
-                gm_name: gmName,
-                edition: edition,
-                status: 'Active'
-            }),
-        });
-        
-        if (!response.ok) {
-            throw new Error(`HTTP error! status: ${response.status}`);
-        }
-        
-        const campaign = await response.json();
-        loadCampaigns(); // Reload the list
-        return campaign;
-    } catch (error) {
-        console.error('Failed to create campaign:', error);
-        throw error;
-    }
-}
-
 // Show create character modal
 function showCreateCharacterModal(options = {}) {
     const campaignId = (options && typeof options === 'object') ? options.campaignId || null : null;
@@ -3196,25 +3166,6 @@ async function createCharacter(name, playerName, edition = 'sr3', editionData = 
     }
 }
 
-// Show create campaign modal
-function showCreateCampaignModal() {
-    const name = prompt('Campaign name:');
-    if (!name) return;
-    
-    const gmName = prompt('GM name:') || '';
-    
-    // For now, we'll create without a group (group_id can be empty or we'll create one later)
-    const groupId = prompt('Group ID (optional, press Cancel to skip):') || '';
-    
-    createCampaign(name, groupId, gmName)
-        .then(() => {
-            alert('Campaign created successfully!');
-        })
-        .catch(error => {
-            alert('Failed to create campaign: ' + error.message);
-        });
-}
-
 // Initialize
 function initializeLegacyApp() {
     if (legacyInitialized) {
@@ -3239,11 +3190,6 @@ function initializeLegacyApp() {
             }
             showCreateCharacterModal();
         });
-    }
-    
-    const createCampaignBtn = document.getElementById('create-campaign-btn');
-    if (createCampaignBtn) {
-        createCampaignBtn.addEventListener('click', showCreateCampaignModal);
     }
     
     // Character form submission
