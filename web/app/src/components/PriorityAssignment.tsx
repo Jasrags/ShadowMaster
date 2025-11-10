@@ -1,13 +1,22 @@
-import { useEffect, useMemo, useState } from 'react';
+import { DragEvent, useEffect, useMemo, useRef, useState } from 'react';
 import { useEdition } from '../hooks/useEdition';
 import {
   createEmptyAssignments,
+  getAvailablePriorities,
   getCategoryLabel,
   getPriorityOptions,
+  getPrioritySummary,
+  isAssignmentsComplete,
   PRIORITY_CATEGORIES,
   PriorityAssignments,
 } from '../utils/priorities';
 import { PriorityCode } from '../types/editions';
+
+interface DragState {
+  source: 'pool' | 'dropzone';
+  category?: keyof PriorityAssignments;
+  priority: PriorityCode;
+}
 
 function normalizeAssignments(assignments: PriorityAssignments): Record<string, PriorityCode | null> {
   return Object.fromEntries(
@@ -39,6 +48,8 @@ function getInitialAssignments(): PriorityAssignments {
 export function PriorityAssignment() {
   const { characterCreationData, activeEdition, isLoading, error } = useEdition();
   const [assignments, setAssignments] = useState<PriorityAssignments>(() => getInitialAssignments());
+  const [dragState, setDragState] = useState<DragState | null>(null);
+  const dropzoneRefs = useRef<Record<string, HTMLDivElement | null>>({});
 
   useEffect(() => {
     document.body.classList.add('react-priority-enabled');
@@ -54,37 +65,101 @@ export function PriorityAssignment() {
     }
   }, [assignments]);
 
-  const missingPriorities = useMemo(() => {
-    const used = new Set<string>();
-    PRIORITY_CATEGORIES.forEach((category) => {
-      const value = assignments[category];
-      if (value) {
-        used.add(value);
-      }
-    });
-    return ['A', 'B', 'C', 'D', 'E'].filter((priority) => !used.has(priority));
-  }, [assignments]);
+  const missingPriorities = useMemo(() => getAvailablePriorities(assignments), [assignments]);
+  const allAssigned = isAssignmentsComplete(assignments);
 
-  const allAssigned = missingPriorities.length === 0;
-
-  function handlePriorityChange(category: keyof PriorityAssignments, value: string) {
+  function releasePriority(priority: PriorityCode) {
     setAssignments((prev) => {
-      if (prev[category] === value) {
-        return prev;
+      const next = { ...prev };
+      for (const category of PRIORITY_CATEGORIES) {
+        if (next[category] === priority) {
+          next[category] = '';
+        }
       }
+      return next;
+    });
+  }
 
+  function handleChipDragStart(priority: PriorityCode, event: DragEvent<HTMLDivElement>) {
+    event.dataTransfer.effectAllowed = 'move';
+    setDragState({ source: 'pool', priority });
+    event.dataTransfer.setData('text/plain', priority);
+  }
+
+  function handleDropzoneDragStart(category: keyof PriorityAssignments, priority: PriorityCode, event: DragEvent<HTMLDivElement>) {
+    event.dataTransfer.effectAllowed = 'move';
+    setDragState({ source: 'dropzone', category, priority });
+    event.dataTransfer.setData('text/plain', priority);
+  }
+
+  function clearDragState() {
+    setDragState(null);
+  }
+
+  function handleDrop(category: keyof PriorityAssignments, event: DragEvent<HTMLDivElement>) {
+    event.preventDefault();
+    const priority = (event.dataTransfer.getData('text/plain') || dragState?.priority || '') as PriorityCode;
+    if (!priority) {
+      clearDragState();
+      return;
+    }
+
+    setAssignments((prev) => {
       const next: PriorityAssignments = { ...prev };
 
-      // Clear any category currently using the new value
-      if (value) {
-        for (const otherCategory of PRIORITY_CATEGORIES) {
-          if (otherCategory !== category && next[otherCategory] === value) {
-            next[otherCategory] = '';
-          }
+      // Ensure uniqueness by clearing any existing reference to the priority
+      for (const otherCategory of PRIORITY_CATEGORIES) {
+        if (next[otherCategory] === priority) {
+          next[otherCategory] = '';
         }
       }
 
-      next[category] = (value as PriorityCode) || '';
+      next[category] = priority;
+      return next;
+    });
+
+    clearDragState();
+  }
+
+  function handleDragOver(category: keyof PriorityAssignments, event: DragEvent<HTMLDivElement>) {
+    event.preventDefault();
+    const zone = dropzoneRefs.current[category];
+    if (zone) {
+      zone.classList.add('active');
+    }
+  }
+
+  function handleDragLeave(category: keyof PriorityAssignments) {
+    const zone = dropzoneRefs.current[category];
+    if (zone) {
+      zone.classList.remove('active');
+    }
+  }
+
+  function handleDropEnd(category: keyof PriorityAssignments) {
+    const zone = dropzoneRefs.current[category];
+    if (zone) {
+      zone.classList.remove('active');
+    }
+  }
+
+  function handleChipClick(priority: PriorityCode) {
+    const nextTarget = missingPriorities[0];
+    if (!nextTarget) {
+      // All categories are assigned; clicking frees the chip
+      releasePriority(priority);
+      return;
+    }
+
+    setAssignments((prev) => {
+      const next = { ...prev };
+      // Remove from any current position
+      for (const category of PRIORITY_CATEGORIES) {
+        if (next[category] === priority) {
+          next[category] = '';
+        }
+      }
+      next[nextTarget as keyof PriorityAssignments] = priority;
       return next;
     });
   }
@@ -95,39 +170,106 @@ export function PriorityAssignment() {
         <span>
           Priority Assignment — <strong>{activeEdition.label}</strong>
         </span>
-        <span>{isLoading ? 'Loading priority data…' : error ? `Error: ${error}` : 'React-driven'}</span>
+        <span>{isLoading ? 'Loading priority data…' : error ? `Error: ${error}` : 'Drag letters into categories'}</span>
       </div>
 
-      <div className="react-priority-grid">
-        {PRIORITY_CATEGORIES.map((category) => {
-          const label = getCategoryLabel(category);
-          const options = getPriorityOptions(characterCreationData, category);
-          const selected = assignments[category] ?? '';
-          const selectedOption = options.find((opt) => opt.code === selected);
+      <div className="react-priority-layout">
+        <aside className="react-priority-pool">
+          <h4>Available Priorities</h4>
+          <div
+            className="react-priority-dropzone"
+            onDragOver={(event) => {
+              event.preventDefault();
+              setDragState((prev) => (prev ? { ...prev, category: undefined } : prev));
+            }}
+            onDrop={(event) => {
+              event.preventDefault();
+              const priority = (event.dataTransfer.getData('text/plain') || dragState?.priority || '') as PriorityCode;
+              if (priority) {
+                releasePriority(priority);
+              }
+              clearDragState();
+            }}
+          >
+            <div className="react-priority-chips">
+              {['A', 'B', 'C', 'D', 'E'].map((code) => {
+                const assigned = getAvailablePriorities(assignments).includes(code as PriorityCode) === false;
+                const isBeingDragged = dragState?.priority === code && dragState.source === 'pool';
 
-          return (
-            <div key={category} className="react-priority-card">
-              <label htmlFor={`react-priority-${category}`}>{label}</label>
-              <select
-                id={`react-priority-${category}`}
-                className="react-priority-select"
-                value={selected}
-                onChange={(event) => handlePriorityChange(category, event.target.value)}
-              >
-                <option value="">Select priority…</option>
-                {options.map(({ code, option }) => (
-                  <option key={code} value={code}>
-                    {code} — {option.label}
-                  </option>
-                ))}
-              </select>
-
-              <div className="react-priority-summary">
-                {selectedOption?.option.summary || selectedOption?.option.description || 'Pick a priority to view details.'}
-              </div>
+                return (
+                  <div
+                    key={code}
+                    className={`react-priority-chip ${assigned ? 'used' : ''} ${isBeingDragged ? 'dragging' : ''}`}
+                    draggable={!assigned}
+                    onDragStart={(event) => !assigned && handleChipDragStart(code as PriorityCode, event)}
+                    onDragEnd={clearDragState}
+                    onClick={() => handleChipClick(code as PriorityCode)}
+                    role="button"
+                    tabIndex={assigned ? -1 : 0}
+                    onKeyDown={(event) => {
+                      if (!assigned && (event.key === 'Enter' || event.key === ' ')) {
+                        event.preventDefault();
+                        handleChipClick(code as PriorityCode);
+                      }
+                    }}
+                  >
+                    {code}
+                  </div>
+                );
+              })}
             </div>
-          );
-        })}
+          </div>
+        </aside>
+
+        <section className="react-priority-dropzones">
+          {PRIORITY_CATEGORIES.map((category) => {
+            const label = getCategoryLabel(category);
+            const options = getPriorityOptions(characterCreationData, category);
+            const assignedPriority = assignments[category];
+            const option = options.find((opt) => opt.code === assignedPriority);
+            const isActive = dragState?.source === 'dropzone' && dragState.category === category;
+
+            return (
+              <div
+                key={category}
+                ref={(node) => {
+                  dropzoneRefs.current[category] = node;
+                }}
+                className={`react-priority-dropzone ${assignedPriority ? 'filled' : ''}`}
+                onDragOver={(event) => handleDragOver(category, event)}
+                onDragLeave={() => handleDragLeave(category)}
+                onDrop={(event) => {
+                  handleDrop(category, event);
+                  handleDropEnd(category);
+                }}
+              >
+                <div className="react-priority-category">
+                  <span>{label}</span>
+                  {assignedPriority && (
+                    <span>
+                      {assignedPriority} — {option?.option.label ?? 'Unknown'}
+                    </span>
+                  )}
+                </div>
+                <div className="react-priority-description">{getPrioritySummary(option?.option)}</div>
+
+                {assignedPriority ? (
+                  <div
+                    className={`react-priority-chip ${isActive ? 'dragging' : ''}`}
+                    draggable
+                    onDragStart={(event) => handleDropzoneDragStart(category, assignedPriority as PriorityCode, event)}
+                    onDragEnd={clearDragState}
+                    onDoubleClick={() => releasePriority(assignedPriority as PriorityCode)}
+                  >
+                    {assignedPriority}
+                  </div>
+                ) : (
+                  <div style={{ fontSize: '0.8rem', color: '#6b8599' }}>Drop priority here</div>
+                )}
+              </div>
+            );
+          })}
+        </section>
       </div>
 
       <div

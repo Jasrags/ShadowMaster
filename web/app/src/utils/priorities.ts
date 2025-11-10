@@ -56,3 +56,29 @@ export function createEmptyAssignments(): PriorityAssignments {
     resources: '',
   };
 }
+
+export function getAssignedPriorities(assignments: PriorityAssignments): PriorityCode[] {
+  return PRIORITY_CATEGORIES.reduce<PriorityCode[]>((acc, category) => {
+    const value = assignments[category];
+    if (value) {
+      acc.push(value);
+    }
+    return acc;
+  }, []);
+}
+
+export function getAvailablePriorities(assignments: PriorityAssignments): PriorityCode[] {
+  const assigned = new Set(getAssignedPriorities(assignments));
+  return DEFAULT_PRIORITY_CODES.filter((code) => !assigned.has(code));
+}
+
+export function isAssignmentsComplete(assignments: PriorityAssignments): boolean {
+  return getAssignedPriorities(assignments).length === DEFAULT_PRIORITY_CODES.length;
+}
+
+export function getPrioritySummary(option?: PriorityOption): string {
+  if (!option) {
+    return 'Drag a priority letter from the pool into this category.';
+  }
+  return option.summary || option.description || option.label || '';
+}

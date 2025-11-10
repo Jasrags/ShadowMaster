@@ -132,10 +132,13 @@
                         <h3>Choose Metatype</h3>
                         <p class="help-text">Select your character's metatype based on your metatype priority selection.</p>
                         <div id="metatype-selection-container" class="metatype-selection-grid"></div>
+                        <div id="metatype-selection-react-root"></div>
+                        <div id="metatype-selection-legacy">
                         <div class="form-actions">
                             <button type="button" id="metatype-back-btn" class="btn-secondary">Back</button>
                             <button type="button" id="metatype-next-btn" class="btn-primary" disabled>Next: Choose Magical Abilities</button>
                             <button type="button" class="btn-cancel">Cancel</button>
+                        </div>
                         </div>
                     </div>
                     
@@ -282,6 +285,9 @@
         </main>
     </div>
     <script src="/js/app.js"></script>
+    <script>
+        window.process = window.process || { env: {} };
+    </script>
     <script type="module" src="/dist/main.js"></script>
 </body>
 </html>

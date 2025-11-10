@@ -28,7 +28,7 @@ deps: ## Download and install dependencies
 	@go mod tidy
 	@echo "$(GREEN)✓ Dependencies installed$(NC)"
 
-build: ## Build the server binary
+build: frontend-build ## Build the server binary
 	@echo "$(CYAN)Building server...$(NC)"
 	@go build $(GOFLAGS) -ldflags "$(LDFLAGS)" -o bin/$(BINARY_NAME) ./cmd/shadowmaster-server
 	@echo "$(GREEN)✓ Server built: bin/$(BINARY_NAME)$(NC)"
@@ -43,7 +43,7 @@ build-all: build build-cli ## Build both server and CLI binaries
 
 run: server ## Alias for server target
 
-server: ## Run the server
+server: frontend-build ## Run the server
 	@echo "$(CYAN)Starting ShadowMaster server...$(NC)"
 	@echo "$(YELLOW)Port: $(PORT)$(NC)"
 	@echo "$(YELLOW)Data directory: $(DATA_DIR)$(NC)"
@@ -132,6 +132,11 @@ watch: ## Watch for file changes and rebuild (requires fswatch or similar)
 	else \
 		echo "$(YELLOW)Please install fswatch or entr for file watching$(NC)"; \
 	fi
+
+frontend-build: ## Build the React frontend bundle
+	@echo "$(CYAN)Building React frontend...$(NC)"
+	@cd web/app && npm run build
+	@echo "$(GREEN)✓ Frontend bundle built$(NC)"
 
 .DEFAULT_GOAL := help
 

@@ -10,6 +10,30 @@ const priorityInputMap = {
     resources: 'resources-priority'
 };
 
+let metatypeStateListeners = [];
+
+function notifyMetatypeState() {
+    metatypeStateListeners.forEach(listener => {
+        try {
+            listener();
+        } catch (err) {
+            console.error('Metatype listener failed', err);
+        }
+    });
+}
+
+function setMetatypeSelectionReact(metatypeId) {
+    characterWizardState.selectedMetatype = metatypeId;
+    document.querySelectorAll('.metatype-option').forEach(option => {
+        option.classList.toggle('selected', option.dataset.metatype === metatypeId);
+    });
+    const nextBtn = document.getElementById('metatype-next-btn');
+    if (nextBtn) {
+        nextBtn.disabled = !metatypeId;
+    }
+    notifyMetatypeState();
+}
+
 function applyPriorityAssignment(category, value) {
     priorityAssignments[category] = value ? value : null;
 
@@ -324,6 +348,9 @@ function updatePriorityValue(category, priority) {
         const value = getPriorityValue(category, priority);
         valueEl.textContent = value ? ` ${value}` : '';
     }
+    if (category === 'metatype') {
+        notifyMetatypeState();
+    }
 }
 
 // Initialize drag-and-drop for priority assignment
@@ -625,6 +652,8 @@ function handleCharacterFormSubmit(e) {
         resources: priorityAssignments.resources || ''
     };
     
+    notifyMetatypeState();
+    
     // Move to step 2: Metatype selection
     showWizardStep(2);
 }
@@ -661,6 +690,7 @@ function showWizardStep(step) {
     try {
         if (step === 2) {
             displayMetatypeSelection();
+            notifyMetatypeState();
         } else if (step === 3) {
             // Initialize magical abilities step
             initializeMagicalAbilitiesStep();
@@ -808,6 +838,8 @@ function selectMetatype(metatypeName) {
     if (nextBtn) {
         nextBtn.disabled = false;
     }
+    
+    notifyMetatypeState();
 }
 
 // Initialize magical abilities step
@@ -3258,6 +3290,17 @@ window.ShadowmasterLegacyApp = Object.assign(window.ShadowmasterLegacyApp ?? {},
         updatePriorityChips();
         updatePriorityValidation();
     },
-    getPriorities: () => clonePriorityAssignments()
+    getPriorities: () => clonePriorityAssignments(),
+    getMetatypePriority: () => characterWizardState.priorities ? characterWizardState.priorities.metatype || '' : '',
+    getMetatypeSelection: () => characterWizardState.selectedMetatype,
+    setMetatypeSelection: (metatypeId) => {
+        setMetatypeSelectionReact(metatypeId);
+    },
+    subscribeMetatypeState: (listener) => {
+        metatypeStateListeners.push(listener);
+    },
+    unsubscribeMetatypeState: (listener) => {
+        metatypeStateListeners = metatypeStateListeners.filter(l => l !== listener);
+    }
 });
 

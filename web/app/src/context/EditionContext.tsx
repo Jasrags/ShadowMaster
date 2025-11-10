@@ -35,8 +35,8 @@ export interface EditionContextValue {
 }
 
 const defaultEdition: EditionMetadata = {
-  key: 'sr5',
-  label: 'Shadowrun 5th Edition',
+  key: 'sr3',
+  label: 'Shadowrun 3rd Edition',
   isPrimary: true,
   mockDataLoaded: true,
 };
@@ -65,10 +65,10 @@ export function EditionProvider({ children }: PropsWithChildren) {
     () => [
       defaultEdition,
       {
-        key: 'sr3',
-        label: 'Shadowrun 3rd Edition',
+        key: 'sr5',
+        label: 'Shadowrun 5th Edition',
         isPrimary: false,
-        mockDataLoaded: false,
+        mockDataLoaded: true,
       },
     ],
     [],
