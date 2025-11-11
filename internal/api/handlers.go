@@ -69,28 +69,30 @@ type userResponse struct {
 }
 
 type campaignCreateRequest struct {
-	Name           string `json:"name"`
-	Description    string `json:"description"`
-	GroupID        string `json:"group_id"`
-	GMName         string `json:"gm_name"`
-	GMUserID       string `json:"gm_user_id"`
-	Edition        string `json:"edition"`
-	CreationMethod string `json:"creation_method"`
-	GameplayLevel  string `json:"gameplay_level"`
-	HouseRules     string `json:"house_rules"`
-	Status         string `json:"status"`
+	Name           string   `json:"name"`
+	Description    string   `json:"description"`
+	GroupID        string   `json:"group_id"`
+	GMName         string   `json:"gm_name"`
+	GMUserID       string   `json:"gm_user_id"`
+	Edition        string   `json:"edition"`
+	CreationMethod string   `json:"creation_method"`
+	GameplayLevel  string   `json:"gameplay_level"`
+	HouseRules     string   `json:"house_rules"`
+	Status         string   `json:"status"`
+	EnabledBooks   []string `json:"enabled_books"`
 }
 
 type campaignUpdateRequest struct {
-	Name           *string `json:"name"`
-	Description    *string `json:"description"`
-	GMName         *string `json:"gm_name"`
-	GMUserID       *string `json:"gm_user_id"`
-	GameplayLevel  *string `json:"gameplay_level"`
-	HouseRules     *string `json:"house_rules"`
-	Status         *string `json:"status"`
-	CreationMethod *string `json:"creation_method"`
-	Edition        *string `json:"edition"`
+	Name           *string   `json:"name"`
+	Description    *string   `json:"description"`
+	GMName         *string   `json:"gm_name"`
+	GMUserID       *string   `json:"gm_user_id"`
+	GameplayLevel  *string   `json:"gameplay_level"`
+	HouseRules     *string   `json:"house_rules"`
+	Status         *string   `json:"status"`
+	CreationMethod *string   `json:"creation_method"`
+	Edition        *string   `json:"edition"`
+	EnabledBooks   *[]string `json:"enabled_books"`
 }
 
 // NewHandlers creates a new handlers instance
@@ -289,6 +291,25 @@ func (h *Handlers) GetEditionCharacterCreationData(w http.ResponseWriter, r *htt
 	respondJSON(w, http.StatusOK, map[string]interface{}{
 		"edition":            edition,
 		"character_creation": data,
+	})
+}
+
+// GetEditionBooks handles GET /api/editions/{edition}/books
+func (h *Handlers) GetEditionBooks(w http.ResponseWriter, r *http.Request) {
+	edition := r.PathValue("edition")
+	if edition == "" {
+		respondError(w, http.StatusBadRequest, "edition is required")
+		return
+	}
+
+	books, err := h.CampaignService.ListSourceBooks(edition)
+	if err != nil {
+		respondServiceError(w, err)
+		return
+	}
+
+	respondJSON(w, http.StatusOK, map[string]interface{}{
+		"books": books,
 	})
 }
 
@@ -628,6 +649,7 @@ func (h *Handlers) CreateCampaign(w http.ResponseWriter, r *http.Request) {
 		GameplayLevel:  req.GameplayLevel,
 		HouseRules:     req.HouseRules,
 		Status:         req.Status,
+		EnabledBooks:   req.EnabledBooks,
 	})
 	if err != nil {
 		respondServiceError(w, err)
@@ -673,6 +695,7 @@ func (h *Handlers) UpdateCampaign(w http.ResponseWriter, r *http.Request) {
 		Status:         req.Status,
 		CreationMethod: req.CreationMethod,
 		Edition:        req.Edition,
+		EnabledBooks:   req.EnabledBooks,
 	})
 	if err != nil {
 		respondServiceError(w, err)

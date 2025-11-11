@@ -30,7 +30,7 @@ func main() {
 	// Initialize services
 	characterService := service.NewCharacterService(repos.Character)
 	userService := service.NewUserService(repos.User)
-	campaignService := service.NewCampaignService(repos.Campaign, repos.Edition)
+	campaignService := service.NewCampaignService(repos.Campaign, repos.Edition, repos.Books)
 	sessionService := service.NewSessionService(repos.Session, repos.Campaign)
 	sceneService := service.NewSceneService(repos.Scene, repos.Session)
 
@@ -73,6 +73,7 @@ func main() {
 
 		// Edition metadata
 		r.Get("/editions/{edition}/character-creation", handlers.GetEditionCharacterCreationData)
+		r.Get("/editions/{edition}/books", handlers.GetEditionBooks)
 
 		// Skills routes
 		r.Get("/skills/active", handlers.GetActiveSkills)

@@ -26,6 +26,7 @@ type Campaign struct {
 	CreationMethod string    `json:"creation_method"`
 	GameplayLevel  string    `json:"gameplay_level,omitempty"`
 	HouseRules     string    `json:"house_rules,omitempty"`
+	EnabledBooks   []string  `json:"enabled_books"`
 	CreatedAt      time.Time `json:"created_at"`
 	UpdatedAt      time.Time `json:"updated_at"`
 	SetupLockedAt  time.Time `json:"setup_locked_at,omitempty"`

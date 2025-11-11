@@ -13,6 +13,7 @@ var (
 	ErrCampaignImmutableCreation      = errors.New("campaign creation method cannot be changed once set")
 	ErrCampaignNotFound               = errors.New("campaign not found")
 	ErrCampaignUnknownGameplayLevel   = errors.New("unknown gameplay level for edition")
+	ErrCampaignUnknownBook            = errors.New("campaign enabled book is not recognized")
 
 	// Session errors
 	ErrSessionCampaignRequired  = errors.New("session must be associated with a campaign")
@@ -32,10 +33,10 @@ var (
 	ErrSumToTenUnknownPriorityCode = errors.New("Sum-to-Ten selection contains unknown priority code")
 
 	// Karma creation errors
-	ErrKarmaInvalidSelection   = errors.New("invalid Karma point-buy selection")
-	ErrKarmaBudgetMismatch     = errors.New("Karma point-buy selection does not spend required points")
-	ErrKarmaExceedsGearBudget  = errors.New("Karma point-buy gear conversion exceeds limit")
-	ErrKarmaAttributeMaxLimit  = errors.New("Karma point-buy cannot max more than one physical or mental attribute")
-	ErrKarmaUnknownMetatype    = errors.New("Karma point-buy metatype not recognized")
+	ErrKarmaInvalidSelection    = errors.New("invalid Karma point-buy selection")
+	ErrKarmaBudgetMismatch      = errors.New("Karma point-buy selection does not spend required points")
+	ErrKarmaExceedsGearBudget   = errors.New("Karma point-buy gear conversion exceeds limit")
+	ErrKarmaAttributeMaxLimit   = errors.New("Karma point-buy cannot max more than one physical or mental attribute")
+	ErrKarmaUnknownMetatype     = errors.New("Karma point-buy metatype not recognized")
 	ErrKarmaNegativeExpenditure = errors.New("Karma point-buy expenditure must be positive")
 )

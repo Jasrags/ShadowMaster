@@ -1,7 +1,7 @@
 import { FormEvent, useCallback, useEffect, useMemo, useReducer, useState } from 'react';
 import { createPortal } from 'react-dom';
 import { useEdition } from '../hooks/useEdition';
-import { CharacterCreationData, CreationMethodDefinition, UserSummary } from '../types/editions';
+import { CharacterCreationData, CreationMethodDefinition, SourceBook, UserSummary } from '../types/editions';
 import { CampaignSummary } from '../types/campaigns';
 import { useNotifications } from '../context/NotificationContext';
 
@@ -65,6 +65,17 @@ function generateId(prefix: string) {
     return `${prefix}-${crypto.randomUUID()}`;
   }
   return `${prefix}-${Date.now()}-${Math.random().toString(16).slice(2)}`;
+}
+
+function deriveDefaultBookCode(edition: string): string {
+  return edition.toLowerCase() === 'sr5' ? 'SR5' : edition.toUpperCase();
+}
+
+function deriveBookFallbackName(code: string): string {
+  if (code === 'SR5') {
+    return 'Shadowrun 5th Edition';
+  }
+  return code;
 }
 
 interface RosterPlaceholder {
@@ -282,9 +293,26 @@ export function CampaignCreation({ targetId = 'campaign-creation-react-root', on
   const [error, setError] = useState<string | null>(null);
   const [currentStep, setCurrentStep] = useState<number>(0);
   const [draft, dispatchDraft] = useReducer(draftReducer, defaultDraft);
+  const [availableBooks, setAvailableBooks] = useState<SourceBook[]>([]);
+  const [selectedBooks, setSelectedBooks] = useState<string[]>(() => [deriveDefaultBookCode(activeEdition.key)]);
+  const [booksExpanded, setBooksExpanded] = useState(false);
+  const [isLoadingBooks, setIsLoadingBooks] = useState(false);
+  const [bookLoadError, setBookLoadError] = useState<string | null>(null);
   const { pushNotification } = useNotifications();
 
   const totalSteps = STEP_LABELS.length;
+  const defaultBookCode = useMemo(() => deriveDefaultBookCode(selectedEdition), [selectedEdition]);
+  const bookLabelMap = useMemo(() => {
+    const map = new Map<string, string>();
+    availableBooks.forEach((book) => {
+      map.set(book.code.toUpperCase(), book.name);
+    });
+    return map;
+  }, [availableBooks]);
+  const selectedBookLabels = useMemo(
+    () => selectedBooks.map((code) => bookLabelMap.get(code) ?? code),
+    [bookLabelMap, selectedBooks],
+  );
 
   useEffect(() => {
     setContainer(document.getElementById(targetId));
@@ -293,6 +321,72 @@ export function CampaignCreation({ targetId = 'campaign-creation-react-root', on
   useEffect(() => {
     setSelectedEdition(activeEdition.key);
   }, [activeEdition.key]);
+
+  useEffect(() => {
+    let cancelled = false;
+
+    async function loadBooks() {
+      setIsLoadingBooks(true);
+      setBookLoadError(null);
+      try {
+        const response = await fetch(`/api/editions/${selectedEdition}/books`);
+        if (!response.ok) {
+          throw new Error(`Failed to load books (${response.status})`);
+        }
+        const payload = await response.json();
+        const books: SourceBook[] = Array.isArray(payload?.books) ? payload.books : [];
+        if (cancelled) {
+          return;
+        }
+        const normalized = books
+          .map((book) => ({
+            ...book,
+            code: (book.code || '').toUpperCase(),
+          }))
+          .filter((book) => book.code);
+        const hasDefault = normalized.some((book) => book.code === defaultBookCode);
+        const enriched = hasDefault
+          ? normalized
+          : [
+              ...normalized,
+              {
+                id: defaultBookCode.toLowerCase(),
+                name: deriveBookFallbackName(defaultBookCode),
+                code: defaultBookCode,
+              },
+            ];
+        enriched.sort((a, b) => a.code.localeCompare(b.code));
+        setAvailableBooks(enriched);
+        setSelectedBooks((previous) => {
+          const next = new Set(previous.map((code) => code.toUpperCase()));
+          next.add(defaultBookCode);
+          const allowed = new Set(enriched.map((book) => book.code));
+          return Array.from(next).filter((code) => allowed.has(code)).sort();
+        });
+      } catch (err) {
+        console.error('Failed to load source books', err);
+        if (cancelled) {
+          return;
+        }
+        setBookLoadError('Unable to load source books. Default core book applied.');
+        const fallback = [
+          { id: defaultBookCode.toLowerCase(), name: deriveBookFallbackName(defaultBookCode), code: defaultBookCode },
+        ];
+        setAvailableBooks(fallback);
+        setSelectedBooks([defaultBookCode]);
+      } finally {
+        if (!cancelled) {
+          setIsLoadingBooks(false);
+        }
+      }
+    }
+
+    void loadBooks();
+
+    return () => {
+      cancelled = true;
+    };
+  }, [defaultBookCode, selectedEdition]);
 
   useEffect(() => {
     async function loadEdition(key: typeof selectedEdition) {
@@ -417,18 +511,26 @@ export function CampaignCreation({ targetId = 'campaign-creation-react-root', on
     }));
   }, [users]);
 
-  const resetWizard = useCallback(() => {
-    dispatchDraft({ type: 'RESET', payload: { ...defaultDraft } });
-    setSelectedGameplayLevel('experienced');
-    setSelectedCreationMethod(creationMethodOptions[0]?.value ?? 'priority');
-    setGmUserId(users[0]?.id ?? '');
-    setError(null);
-    setCurrentStep(0);
-  }, [creationMethodOptions, users]);
+  const resetWizard = useCallback(
+    (overrideDefaultBook?: string) => {
+      const nextDefault = overrideDefaultBook ?? deriveDefaultBookCode(selectedEdition);
+      dispatchDraft({ type: 'RESET', payload: { ...defaultDraft } });
+      setSelectedGameplayLevel('experienced');
+      setSelectedCreationMethod(creationMethodOptions[0]?.value ?? 'priority');
+      setGmUserId(users[0]?.id ?? '');
+      setError(null);
+      setCurrentStep(0);
+      setSelectedBooks([nextDefault]);
+      setBooksExpanded(false);
+      setBookLoadError(null);
+    },
+    [creationMethodOptions, selectedEdition, users],
+  );
 
   function handleOpen() {
+    const initialBook = deriveDefaultBookCode(activeEdition.key);
     setSelectedEdition(activeEdition.key);
-    resetWizard();
+    resetWizard(initialBook);
     setIsOpen(true);
   }
 
@@ -543,6 +645,7 @@ export function CampaignCreation({ targetId = 'campaign-creation-react-root', on
           edition: selectedEdition,
           gameplay_level: selectedGameplayLevel,
           creation_method: selectedCreationMethod,
+          enabled_books: selectedBooks,
           house_rules: JSON.stringify(houseRulesPayload),
           status: 'Active',
         }),
@@ -689,6 +792,9 @@ export function CampaignCreation({ targetId = 'campaign-creation-react-root', on
                     const value = event.target.value as typeof selectedEdition;
                     setSelectedEdition(value);
                     setEdition(value);
+                    setSelectedBooks([deriveDefaultBookCode(value)]);
+                    setBooksExpanded(false);
+                    setBookLoadError(null);
                     void reloadEditionData(value);
                   }}
                 >
@@ -739,6 +845,69 @@ export function CampaignCreation({ targetId = 'campaign-creation-react-root', on
                     Support for Sum-to-Ten and Karma methods is still under development. Characters will temporarily
                     default to Priority until the new workflows are implemented.
                   </p>
+                )}
+              </div>
+            </div>
+
+            <div className="collapsible">
+              <button
+                type="button"
+                className="collapsible__trigger"
+                aria-expanded={booksExpanded}
+                onClick={() => setBooksExpanded((previous) => !previous)}
+              >
+                <span>Source Books</span>
+                <span className="collapsible__chevron" aria-hidden="true">
+                  {booksExpanded ? '▾' : '▸'}
+                </span>
+              </button>
+              <div
+                className={`collapsible__content ${booksExpanded ? 'collapsible__content--open' : ''}`}
+                aria-live="polite"
+              >
+                <p className="form-help">
+                  Enable the references that should be legal at your table. {defaultBookCode} is always required and stays
+                  selected.
+                </p>
+                {bookLoadError && <p className="form-warning">{bookLoadError}</p>}
+                {isLoadingBooks ? (
+                  <p className="form-help">Loading books…</p>
+                ) : (
+                  <div className="book-checkboxes">
+                    {availableBooks.map((book) => {
+                      const code = book.code.toUpperCase();
+                      const checked = selectedBooks.includes(code);
+                      const disabled = code === defaultBookCode;
+                      return (
+                        <label key={code} className={`book-checkbox ${disabled ? 'book-checkbox--locked' : ''}`}>
+                          <input
+                            type="checkbox"
+                            checked={checked}
+                            disabled={disabled}
+                            onChange={(event) => {
+                              const isChecked = event.target.checked;
+                              setSelectedBooks((previous) => {
+                                const next = new Set(previous.map((value) => value.toUpperCase()));
+                                if (isChecked) {
+                                  next.add(code);
+                                } else {
+                                  next.delete(code);
+                                }
+                                if (!next.has(defaultBookCode)) {
+                                  next.add(defaultBookCode);
+                                }
+                                return Array.from(next).sort();
+                              });
+                            }}
+                          />
+                          <div>
+                            <strong>{book.name}</strong>
+                            <span className="book-code">{code}</span>
+                          </div>
+                        </label>
+                      );
+                    })}
+                  </div>
                 )}
               </div>
             </div>
@@ -1138,6 +1307,9 @@ export function CampaignCreation({ targetId = 'campaign-creation-react-root', on
                   </li>
                   <li>
                     <strong>Creation Method:</strong> {selectedCreationMethod}
+                  </li>
+                  <li>
+                    <strong>Source Books:</strong> {selectedBookLabels.length > 0 ? selectedBookLabels.join(', ') : defaultBookCode}
                   </li>
                   <li>
                     <strong>GM:</strong>{' '}

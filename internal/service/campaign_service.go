@@ -2,6 +2,7 @@ package service
 
 import (
 	"fmt"
+	"sort"
 	"strings"
 	"time"
 
@@ -13,13 +14,15 @@ import (
 type CampaignService struct {
 	campaignRepo repository.CampaignRepository
 	editionRepo  repository.EditionDataRepository
+	bookRepo     repository.BookRepository
 }
 
 // NewCampaignService constructs a CampaignService.
-func NewCampaignService(campaignRepo repository.CampaignRepository, editionRepo repository.EditionDataRepository) *CampaignService {
+func NewCampaignService(campaignRepo repository.CampaignRepository, editionRepo repository.EditionDataRepository, bookRepo repository.BookRepository) *CampaignService {
 	return &CampaignService{
 		campaignRepo: campaignRepo,
 		editionRepo:  editionRepo,
+		bookRepo:     bookRepo,
 	}
 }
 
@@ -35,6 +38,7 @@ type CampaignCreateInput struct {
 	GameplayLevel  string
 	HouseRules     string
 	Status         string
+	EnabledBooks   []string
 }
 
 // CampaignUpdateInput captures mutable campaign fields.
@@ -48,6 +52,7 @@ type CampaignUpdateInput struct {
 	Status         *string
 	CreationMethod *string
 	Edition        *string
+	EnabledBooks   *[]string
 }
 
 // ListCampaigns returns all campaigns.
@@ -81,6 +86,11 @@ func (s *CampaignService) CreateCampaign(input CampaignCreateInput) (*domain.Cam
 		return nil, err
 	}
 
+	enabledBooks, err := s.validateEnabledBooks(edition, input.EnabledBooks)
+	if err != nil {
+		return nil, err
+	}
+
 	campaign := &domain.Campaign{
 		Name:           strings.TrimSpace(input.Name),
 		Description:    strings.TrimSpace(input.Description),
@@ -92,6 +102,7 @@ func (s *CampaignService) CreateCampaign(input CampaignCreateInput) (*domain.Cam
 		GameplayLevel:  gameplayLevel,
 		HouseRules:     strings.TrimSpace(input.HouseRules),
 		Status:         campaignStatusOrDefault(input.Status, ""),
+		EnabledBooks:   enabledBooks,
 	}
 
 	if err := s.campaignRepo.Create(campaign); err != nil {
@@ -145,6 +156,19 @@ func (s *CampaignService) UpdateCampaign(id string, input CampaignUpdateInput) (
 			return nil, err
 		}
 		campaign.GameplayLevel = level
+	}
+
+	if input.EnabledBooks != nil {
+		books, err := s.validateEnabledBooks(campaign.Edition, *input.EnabledBooks)
+		if err != nil {
+			return nil, err
+		}
+		campaign.EnabledBooks = books
+	}
+
+	if len(campaign.EnabledBooks) == 0 {
+		defaults, _ := s.validateEnabledBooks(campaign.Edition, nil)
+		campaign.EnabledBooks = defaults
 	}
 
 	if campaign.SetupLockedAt.IsZero() {
@@ -348,4 +372,68 @@ func (s *CampaignService) DescribeGameplayRules(campaign *domain.Campaign) (*Gam
 		ContactKarmaMultiplier: level.ContactKarmaMultiplier,
 		GearRestrictions:       level.GearRestrictions,
 	}, nil
+}
+
+// ListSourceBooks returns available source books for an edition.
+func (s *CampaignService) ListSourceBooks(edition string) ([]domain.SourceBook, error) {
+	edition = strings.ToLower(strings.TrimSpace(edition))
+	if edition == "" {
+		return nil, fmt.Errorf("edition is required")
+	}
+	if s.bookRepo == nil {
+		return []domain.SourceBook{{Code: "SR5", Name: "Shadowrun 5th Edition"}}, nil
+	}
+	books, err := s.bookRepo.ListBooks(edition)
+	if err != nil {
+		return nil, err
+	}
+	sort.SliceStable(books, func(i, j int) bool {
+		if books[i].Code == books[j].Code {
+			return books[i].Name < books[j].Name
+		}
+		return books[i].Code < books[j].Code
+	})
+	return books, nil
+}
+
+func (s *CampaignService) validateEnabledBooks(edition string, requested []string) ([]string, error) {
+	codes := make(map[string]struct{})
+	for _, raw := range requested {
+		code := strings.ToUpper(strings.TrimSpace(raw))
+		if code == "" {
+			continue
+		}
+		codes[code] = struct{}{}
+	}
+	if strings.EqualFold(edition, "sr5") || edition == "" {
+		codes["SR5"] = struct{}{}
+	} else {
+		codes[strings.ToUpper(edition)] = struct{}{}
+	}
+
+	allowed := make(map[string]struct{})
+	if s.bookRepo != nil {
+		if books, err := s.bookRepo.ListBooks(edition); err == nil {
+			for _, book := range books {
+				if book.Code != "" {
+					allowed[strings.ToUpper(book.Code)] = struct{}{}
+				}
+			}
+		}
+	}
+
+	if len(allowed) > 0 {
+		for code := range codes {
+			if _, ok := allowed[code]; !ok {
+				return nil, fmt.Errorf("%w: %s", ErrCampaignUnknownBook, code)
+			}
+		}
+	}
+
+	result := make([]string, 0, len(codes))
+	for code := range codes {
+		result = append(result, code)
+	}
+	sort.Strings(result)
+	return result, nil
 }

@@ -15,6 +15,7 @@ export interface Campaign {
   created_at: string;
   updated_at: string;
   setup_locked_at?: string;
+  enabled_books: string[];
 }
 
 export type CampaignStatus = 'Active' | 'Paused' | 'Completed';
@@ -35,6 +36,7 @@ export interface CampaignSummary {
   updated_at?: string;
   setup_locked_at?: string;
   gameplay_rules?: GameplayRules;
+  enabled_books: string[];
   can_edit: boolean;
   can_delete: boolean;
 }

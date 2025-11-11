@@ -28,8 +28,9 @@ func TestGetCampaignCharacterCreationData(t *testing.T) {
 	}
 
 	writeSR5EditionData(t, store)
+	writeSR5BooksData(t, store)
 
-	campaignService := service.NewCampaignService(repos.Campaign, repos.Edition)
+	campaignService := service.NewCampaignService(repos.Campaign, repos.Edition, repos.Books)
 	sessionService := service.NewSessionService(repos.Session, repos.Campaign)
 	sceneService := service.NewSceneService(repos.Scene, repos.Session)
 
@@ -115,5 +116,22 @@ func writeSR5EditionData(t *testing.T, store *storage.JSONStore) {
 
 	if err := store.Write(filepath.Join("editions", "sr5", "character_creation.json"), &data); err != nil {
 		t.Fatalf("write edition data: %v", err)
+	}
+}
+
+func writeSR5BooksData(t *testing.T, store *storage.JSONStore) {
+	t.Helper()
+
+	data := struct {
+		Books []domain.SourceBook `json:"books"`
+	}{
+		Books: []domain.SourceBook{
+			{ID: "sr5", Name: "Shadowrun 5th Edition", Code: "SR5"},
+			{ID: "ap", Name: "Assassin's Primer", Code: "AP"},
+		},
+	}
+
+	if err := store.Write(filepath.Join("editions", "sr5", "books", "all.json"), &data); err != nil {
+		t.Fatalf("write books data: %v", err)
 	}
 }

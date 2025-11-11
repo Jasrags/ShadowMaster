@@ -69,3 +69,8 @@ type SceneRepository interface {
 type EditionDataRepository interface {
 	GetCharacterCreationData(edition string) (*domain.CharacterCreationData, error)
 }
+
+// BookRepository exposes source book metadata for editions.
+type BookRepository interface {
+	ListBooks(edition string) ([]domain.SourceBook, error)
+}

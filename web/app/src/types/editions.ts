@@ -1,5 +1,18 @@
 export type PriorityCode = 'A' | 'B' | 'C' | 'D' | 'E';
 
+export interface SourceBookMatch {
+  language: string;
+  page: string;
+  text: string;
+}
+
+export interface SourceBook {
+  id: string;
+  name: string;
+  code: string;
+  matches?: SourceBookMatch[];
+}
+
 export interface PriorityOption {
   label: string;
   summary?: string;

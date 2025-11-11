@@ -13,6 +13,7 @@ type Repositories struct {
 	Session   repository.SessionRepository
 	Scene     repository.SceneRepository
 	Edition   repository.EditionDataRepository
+	Books     repository.BookRepository
 	User      repository.UserRepository
 }
 
@@ -42,6 +43,7 @@ func NewRepositories(dataPath string) (*Repositories, error) {
 		Session:   NewSessionRepository(store, index),
 		Scene:     NewSceneRepository(store, index),
 		Edition:   NewEditionRepository(store),
+		Books:     NewBooksRepository(store),
 		User:      NewUserRepository(store, index),
 	}, nil
 }

@@ -19,7 +19,8 @@ func TestCampaignServiceCreateDefaults(t *testing.T) {
 	index := jsonrepo.NewIndex()
 	repo := jsonrepo.NewCampaignRepository(store, index)
 	writeGameplayLevelData(t, store)
-	service := NewCampaignService(repo, jsonrepo.NewEditionRepository(store))
+	writeBooksData(t, store)
+	service := NewCampaignService(repo, jsonrepo.NewEditionRepository(store), jsonrepo.NewBooksRepository(store))
 
 	campaign, err := service.CreateCampaign(CampaignCreateInput{
 		Name:     "Neon Noir",
@@ -40,6 +41,9 @@ func TestCampaignServiceCreateDefaults(t *testing.T) {
 	if campaign.GameplayLevel != "experienced" {
 		t.Fatalf("expected default gameplay level experienced, got %s", campaign.GameplayLevel)
 	}
+	if len(campaign.EnabledBooks) != 1 || campaign.EnabledBooks[0] != "SR5" {
+		t.Fatalf("expected enabled books to contain SR5, got %v", campaign.EnabledBooks)
+	}
 
 	rules, err := service.DescribeGameplayRules(campaign)
 	if err != nil {
@@ -55,7 +59,9 @@ func TestCampaignServiceCreateRequiresEdition(t *testing.T) {
 	store, _ := storage.NewJSONStore(dir)
 	index := jsonrepo.NewIndex()
 	repo := jsonrepo.NewCampaignRepository(store, index)
-	service := NewCampaignService(repo, jsonrepo.NewEditionRepository(store))
+	writeGameplayLevelData(t, store)
+	writeBooksData(t, store)
+	service := NewCampaignService(repo, jsonrepo.NewEditionRepository(store), jsonrepo.NewBooksRepository(store))
 
 	if _, err := service.CreateCampaign(CampaignCreateInput{}); err == nil {
 		t.Fatal("expected error when edition is missing")
@@ -71,7 +77,8 @@ func TestCampaignServiceCreationMethodNormalization(t *testing.T) {
 	index := jsonrepo.NewIndex()
 	repo := jsonrepo.NewCampaignRepository(store, index)
 	writeGameplayLevelData(t, store)
-	service := NewCampaignService(repo, jsonrepo.NewEditionRepository(store))
+	writeBooksData(t, store)
+	service := NewCampaignService(repo, jsonrepo.NewEditionRepository(store), jsonrepo.NewBooksRepository(store))
 
 	tests := map[string]string{
 		"Sum-to-Ten": "sum_to_ten",
@@ -96,13 +103,66 @@ func TestCampaignServiceCreationMethodNormalization(t *testing.T) {
 	}
 }
 
+func TestCampaignServiceRejectsUnknownBook(t *testing.T) {
+	dir := t.TempDir()
+	store, err := storage.NewJSONStore(dir)
+	if err != nil {
+		t.Fatalf("new store: %v", err)
+	}
+	index := jsonrepo.NewIndex()
+	repo := jsonrepo.NewCampaignRepository(store, index)
+	writeGameplayLevelData(t, store)
+	writeBooksData(t, store)
+	service := NewCampaignService(repo, jsonrepo.NewEditionRepository(store), jsonrepo.NewBooksRepository(store))
+
+	_, err = service.CreateCampaign(CampaignCreateInput{
+		Name:         "Bad Books",
+		Edition:      "sr5",
+		EnabledBooks: []string{"ZZZ"},
+	})
+	if err == nil {
+		t.Fatal("expected error for unknown book code")
+	}
+	if !errors.Is(err, ErrCampaignUnknownBook) {
+		t.Fatalf("expected ErrCampaignUnknownBook, got %v", err)
+	}
+}
+
+func TestCampaignServiceListSourceBooksFallback(t *testing.T) {
+	dir := t.TempDir()
+	store, err := storage.NewJSONStore(dir)
+	if err != nil {
+		t.Fatalf("new store: %v", err)
+	}
+	index := jsonrepo.NewIndex()
+	repo := jsonrepo.NewCampaignRepository(store, index)
+	writeGameplayLevelData(t, store)
+	writeBooksData(t, store)
+	service := NewCampaignService(repo, jsonrepo.NewEditionRepository(store), jsonrepo.NewBooksRepository(store))
+
+	books, err := service.ListSourceBooks("sr3")
+	if err != nil {
+		t.Fatalf("list source books: %v", err)
+	}
+	if len(books) != 1 {
+		t.Fatalf("expected fallback book entry, got %d", len(books))
+	}
+	if books[0].Code != "SR3" {
+		t.Fatalf("expected fallback SR3 code, got %s", books[0].Code)
+	}
+	if books[0].Name == "" {
+		t.Fatal("expected fallback book name to be set")
+	}
+}
+
 func TestCampaignServiceImmutableFields(t *testing.T) {
 	dir := t.TempDir()
 	store, _ := storage.NewJSONStore(dir)
 	index := jsonrepo.NewIndex()
 	repo := jsonrepo.NewCampaignRepository(store, index)
 	writeGameplayLevelData(t, store)
-	service := NewCampaignService(repo, jsonrepo.NewEditionRepository(store))
+	writeBooksData(t, store)
+	service := NewCampaignService(repo, jsonrepo.NewEditionRepository(store), jsonrepo.NewBooksRepository(store))
 
 	campaign, err := service.CreateCampaign(CampaignCreateInput{
 		Name:    "Lockdown Run",
@@ -138,6 +198,21 @@ func TestCampaignServiceImmutableFields(t *testing.T) {
 	} else if !errors.Is(err, ErrCampaignUnknownGameplayLevel) {
 		t.Fatalf("expected ErrCampaignUnknownGameplayLevel, got %v", err)
 	}
+
+	newBooks := []string{"SR5", "AP"}
+	updated, err := service.UpdateCampaign(campaign.ID, CampaignUpdateInput{EnabledBooks: &newBooks})
+	if err != nil {
+		t.Fatalf("update enabled books: %v", err)
+	}
+	campaign = updated
+	if len(campaign.EnabledBooks) != 2 {
+		t.Fatalf("expected two enabled books, got %v", campaign.EnabledBooks)
+	}
+
+	invalidBook := []string{"XYZ"}
+	if _, err := service.UpdateCampaign(campaign.ID, CampaignUpdateInput{EnabledBooks: &invalidBook}); err == nil {
+		t.Fatal("expected error when enabling unknown book")
+	}
 }
 
 func TestCampaignServiceMigratesLegacyData(t *testing.T) {
@@ -160,7 +235,8 @@ func TestCampaignServiceMigratesLegacyData(t *testing.T) {
 	index.Campaigns["legacy"] = filepath.Join("campaigns", "legacy.json")
 	repo := jsonrepo.NewCampaignRepository(store, index)
 	writeGameplayLevelData(t, store)
-	service := NewCampaignService(repo, jsonrepo.NewEditionRepository(store))
+	writeBooksData(t, store)
+	service := NewCampaignService(repo, jsonrepo.NewEditionRepository(store), jsonrepo.NewBooksRepository(store))
 
 	campaign, err := service.GetCampaign("legacy")
 	if err != nil {
@@ -183,9 +259,11 @@ func TestCampaignServiceDescribeGameplayRulesUnknownEdition(t *testing.T) {
 	store, _ := storage.NewJSONStore(dir)
 	index := jsonrepo.NewIndex()
 	repo := jsonrepo.NewCampaignRepository(store, index)
-	service := NewCampaignService(repo, jsonrepo.NewEditionRepository(store))
+	writeGameplayLevelData(t, store)
+	writeBooksData(t, store)
+	service := NewCampaignService(repo, jsonrepo.NewEditionRepository(store), jsonrepo.NewBooksRepository(store))
 
-	campaign := &domain.Campaign{Edition: "sr3"}
+	campaign := &domain.Campaign{Edition: "sr3", EnabledBooks: []string{"SR5"}}
 	if err := repo.Create(campaign); err != nil {
 		t.Fatalf("create campaign: %v", err)
 	}
@@ -242,8 +320,8 @@ func writeGameplayLevelData(t *testing.T, store *storage.JSONStore) {
 				Label: "Priority",
 			},
 			"sum_to_ten": {
-				Label:        "Sum-to-Ten",
-				PointBudget:  10,
+				Label:       "Sum-to-Ten",
+				PointBudget: 10,
 				PriorityCosts: map[string]int{
 					"A": 4,
 					"B": 3,
@@ -264,5 +342,22 @@ func writeGameplayLevelData(t *testing.T, store *storage.JSONStore) {
 
 	if err := store.Write(filepath.Join("editions", "sr5", "character_creation.json"), &data); err != nil {
 		t.Fatalf("write gameplay level data: %v", err)
+	}
+}
+
+func writeBooksData(t *testing.T, store *storage.JSONStore) {
+	t.Helper()
+
+	data := struct {
+		Books []domain.SourceBook `json:"books"`
+	}{
+		Books: []domain.SourceBook{
+			{ID: "sr5", Name: "Shadowrun 5th Edition", Code: "SR5"},
+			{ID: "ap", Name: "Assassin's Primer", Code: "AP"},
+		},
+	}
+
+	if err := store.Write(filepath.Join("editions", "sr5", "books", "all.json"), &data); err != nil {
+		t.Fatalf("write books data: %v", err)
 	}
 }

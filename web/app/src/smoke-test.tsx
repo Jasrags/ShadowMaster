@@ -26,6 +26,60 @@ Object.defineProperty(globalThis, 'HTMLElement', {
   writable: true,
 });
 
+const portalHostIds = [
+  'auth-root',
+  'main-navigation-root',
+  'campaign-creation-react-root',
+  'campaigns-list',
+  'characters-actions',
+  'priority-assignment-react-root',
+  'metatype-selection-react-root',
+  'magical-abilities-react-root',
+  'characters-view',
+  'campaigns-view',
+  'sessions-view',
+];
+
+portalHostIds.forEach((id) => {
+  const host = window.document.createElement('div');
+  host.id = id;
+  window.document.body.appendChild(host);
+});
+
+const CustomEventPolyfill = (() => {
+  if (typeof window.CustomEvent === 'function') {
+    return window.CustomEvent;
+  }
+  function Polyfill(event: string, params?: CustomEventInit) {
+    const detail = params ?? { bubbles: false, cancelable: false, detail: undefined };
+    const evt = window.document.createEvent('CustomEvent');
+    evt.initCustomEvent(event, detail.bubbles ?? false, detail.cancelable ?? false, detail.detail);
+    return evt;
+  }
+  Polyfill.prototype = window.Event.prototype;
+  return Polyfill as unknown as typeof window.CustomEvent;
+})();
+
+Object.defineProperty(window, 'CustomEvent', {
+  value: CustomEventPolyfill,
+  configurable: true,
+  writable: true,
+});
+
+Object.defineProperty(globalThis, 'CustomEvent', {
+  value: CustomEventPolyfill,
+  configurable: true,
+  writable: true,
+});
+
+Object.defineProperty(window.HTMLElement.prototype, 'focus', {
+  value() {
+    // no-op focus to satisfy components relying on focus management in tests
+  },
+  configurable: true,
+  writable: true,
+});
+
 if (!('navigator' in globalThis)) {
   Object.defineProperty(globalThis, 'navigator', {
     value: { userAgent: 'node' },
@@ -111,6 +165,37 @@ globalThis.fetch = async (input: RequestInfo | URL, _init?: RequestInit) => {
     );
   }
 
+  if (url.endsWith('/api/campaigns') && (!_init || !_init.method || _init.method === 'GET')) {
+    return new Response(
+      JSON.stringify([
+        {
+          id: 'campaign-123',
+          name: 'Prime Run',
+          description: 'A sample campaign',
+          edition: 'sr5',
+          creation_method: 'priority',
+          gameplay_level: 'experienced',
+          status: 'Active',
+          enabled_books: ['SR5', 'AP'],
+          can_edit: true,
+          can_delete: true,
+          gm_name: 'Gamemaster',
+          gm_user_id: 'user-1',
+          created_at: new Date().toISOString(),
+          updated_at: new Date().toISOString(),
+        },
+      ]),
+      { status: 200, headers: { 'Content-Type': 'application/json' } },
+    );
+  }
+
+  if (url.includes('/api/characters')) {
+    return new Response(JSON.stringify([]), {
+      status: 200,
+      headers: { 'Content-Type': 'application/json' },
+    });
+  }
+
   if (url.includes('/editions/') && url.endsWith('/character-creation')) {
     return new Response(
       JSON.stringify({
@@ -147,6 +232,18 @@ globalThis.fetch = async (input: RequestInfo | URL, _init?: RequestInit) => {
           },
         },
         gameplay_levels: {},
+      }),
+      { status: 200, headers: { 'Content-Type': 'application/json' } },
+    );
+  }
+
+  if (url.includes('/editions/') && url.endsWith('/books')) {
+    return new Response(
+      JSON.stringify({
+        books: [
+          { id: 'sr5', name: 'Shadowrun 5th Edition', code: 'SR5' },
+          { id: 'ap', name: "Assassin's Primer", code: 'AP' },
+        ],
       }),
       { status: 200, headers: { 'Content-Type': 'application/json' } },
     );
@@ -229,7 +326,7 @@ if (!sr5Context) {
 }
 
 await sr5Context.loadCampaignCharacterCreation('campaign-123');
-await new Promise((resolve) => setTimeout(resolve, 40));
+await new Promise((resolve) => setTimeout(resolve, 100));
 
 const updatedContext = editionContextHolder.__editionContext;
 
@@ -255,7 +352,7 @@ if (priorityALabel !== '75,000¥') {
   throw new Error(`Smoke test failed: Expected campaign resource override of 75,000¥, found ${priorityALabel}`);
 }
 
-const sumToTenSnapshot = container.textContent ?? '';
+const sumToTenSnapshot = window.document.body.textContent ?? '';
 
 if (!/Sum-to-Ten Assignment/i.test(sumToTenSnapshot) || !/Spent 10 \/ 10 points/i.test(sumToTenSnapshot)) {
   cleanup();
@@ -266,9 +363,9 @@ if (!/Sum-to-Ten Assignment/i.test(sumToTenSnapshot) || !/Spent 10 \/ 10 points/
 }
 
 await sr5Context.loadCampaignCharacterCreation('campaign-karma');
-await new Promise((resolve) => setTimeout(resolve, 40));
+await new Promise((resolve) => setTimeout(resolve, 100));
 
-const karmaSnapshot = container.textContent ?? '';
+const karmaSnapshot = window.document.body.textContent ?? '';
 
 if (!/Karma Point-Buy/i.test(karmaSnapshot) || !/Karma budget/i.test(karmaSnapshot)) {
   cleanup();

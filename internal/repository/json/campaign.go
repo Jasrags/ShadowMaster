@@ -8,6 +8,7 @@ import (
 	"time"
 
 	"github.com/google/uuid"
+	"sort"
 )
 
 // CampaignRepositoryJSON implements CampaignRepository using JSON files
@@ -46,6 +47,8 @@ func (r *CampaignRepositoryJSON) Create(campaign *domain.Campaign) error {
 	if campaign.SetupLockedAt.IsZero() {
 		campaign.SetupLockedAt = campaign.CreatedAt
 	}
+
+	ensureCampaignEnabledBooks(campaign)
 
 	filename := fmt.Sprintf("campaigns/%s.json", campaign.ID)
 	if err := r.store.Write(filename, campaign); err != nil {
@@ -134,6 +137,8 @@ func (r *CampaignRepositoryJSON) Update(campaign *domain.Campaign) error {
 	campaign.SetupLockedAt = existing.SetupLockedAt
 	campaign.UpdatedAt = time.Now()
 
+	ensureCampaignEnabledBooks(campaign)
+
 	filename := fmt.Sprintf("campaigns/%s.json", campaign.ID)
 	return r.store.Write(filename, campaign)
 }
@@ -207,6 +212,7 @@ func (r *CampaignRepositoryJSON) normalizeExistingCampaigns() {
 
 		if changed {
 			campaign.UpdatedAt = time.Now()
+			ensureCampaignEnabledBooks(&campaign)
 			_ = r.store.Write(filename, &campaign)
 		}
 	}
@@ -251,4 +257,25 @@ func campaignStatusOrDefault(requested string, existing string) string {
 		return existing
 	}
 	return requested
+}
+
+func ensureCampaignEnabledBooks(campaign *domain.Campaign) {
+	if campaign == nil {
+		return
+	}
+	seen := make(map[string]struct{})
+	for _, code := range campaign.EnabledBooks {
+		code = strings.ToUpper(strings.TrimSpace(code))
+		if code == "" {
+			continue
+		}
+		seen[code] = struct{}{}
+	}
+	seen["SR5"] = struct{}{}
+
+	campaign.EnabledBooks = campaign.EnabledBooks[:0]
+	for code := range seen {
+		campaign.EnabledBooks = append(campaign.EnabledBooks, code)
+	}
+	sort.Strings(campaign.EnabledBooks)
 }
