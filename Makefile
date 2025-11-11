@@ -1,4 +1,4 @@
-.PHONY: help build run server cli clean test fmt vet deps install dev
+.PHONY: help build run server cli clean test test-go test-react fmt vet deps install dev
 
 # Variables
 BINARY_NAME=shadowmaster-server
@@ -41,7 +41,7 @@ build-cli: ## Build the CLI binary
 build-all: build build-cli ## Build both server and CLI binaries
 	@echo "$(GREEN)✓ All binaries built$(NC)"
 
-run: server ## Alias for server target
+run: test server ## Alias for server target that also runs tests
 
 server: frontend-build ## Run the server
 	@echo "$(CYAN)Starting ShadowMaster server...$(NC)"
@@ -71,10 +71,16 @@ install-cli: build-cli ## Build and install the CLI binary to GOPATH/bin
 	@go install ./cmd/shadowmaster-cli
 	@echo "$(GREEN)✓ CLI installed$(NC)"
 
-test: ## Run tests
-	@echo "$(CYAN)Running tests...$(NC)"
+test: test-go test-react ## Run Go and React tests
+	@echo "$(GREEN)✓ Go and React tests completed$(NC)"
+
+test-go: ## Run Go tests
+	@echo "$(CYAN)Running Go tests...$(NC)"
 	@go test -v ./...
-	@echo "$(GREEN)✓ Tests completed$(NC)"
+
+test-react: ## Run React tests
+	@echo "$(CYAN)Running React tests...$(NC)"
+	@cd web/app && npm test
 
 test-coverage: ## Run tests with coverage
 	@echo "$(CYAN)Running tests with coverage...$(NC)"

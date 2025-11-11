@@ -3,6 +3,9 @@ package service
 import (
 	"testing"
 
+	"github.com/stretchr/testify/assert"
+	"github.com/stretchr/testify/require"
+
 	"shadowmaster/internal/domain"
 )
 
@@ -45,8 +48,7 @@ func karmaTestData() *domain.CharacterCreationData {
 }
 
 func TestValidateKarmaPointBuySelection(t *testing.T) {
-	data := karmaTestData()
-	selection := KarmaPointBuySelection{
+	validSelection := KarmaPointBuySelection{
 		MetatypeID: "human",
 		Entries: []KarmaLedgerEntry{
 			{Category: "attributes", Karma: 300},
@@ -67,61 +69,103 @@ func TestValidateKarmaPointBuySelection(t *testing.T) {
 		},
 	}
 
-	if err := ValidateKarmaPointBuySelection(data, selection); err != nil {
-		t.Fatalf("expected selection to be valid, got %v", err)
-	}
-}
-
-func TestValidateKarmaPointBuySelectionBudgetMismatch(t *testing.T) {
-	data := karmaTestData()
-	selection := KarmaPointBuySelection{
-		MetatypeID: "human",
-		Entries: []KarmaLedgerEntry{
-			{Category: "attributes", Karma: 300},
-			{Category: "skills", Karma: 100},
+	testCases := []struct {
+		name      string
+		data      func() *domain.CharacterCreationData
+		selection KarmaPointBuySelection
+		wantErr   error
+		expectErr bool
+	}{
+		{
+			name:      "valid selection",
+			data:      karmaTestData,
+			selection: validSelection,
+		},
+		{
+			name: "budget mismatch",
+			data: karmaTestData,
+			selection: KarmaPointBuySelection{
+				MetatypeID: "human",
+				Entries: []KarmaLedgerEntry{
+					{Category: "attributes", Karma: 300},
+					{Category: "skills", Karma: 100},
+				},
+			},
+			wantErr:   ErrKarmaBudgetMismatch,
+			expectErr: true,
+		},
+		{
+			name: "gear limit exceeded",
+			data: karmaTestData,
+			selection: KarmaPointBuySelection{
+				MetatypeID: "human",
+				Entries: []KarmaLedgerEntry{
+					{Category: "gear", Karma: 250},
+					{Category: "attributes", Karma: 300},
+					{Category: "skills", Karma: 250},
+				},
+			},
+			wantErr:   ErrKarmaExceedsGearBudget,
+			expectErr: true,
+		},
+		{
+			name: "attribute max limit",
+			data: karmaTestData,
+			selection: KarmaPointBuySelection{
+				MetatypeID: "human",
+				Entries: []KarmaLedgerEntry{
+					{Category: "attributes", Karma: 400},
+					{Category: "skills", Karma: 200},
+					{Category: "gear", Karma: 150},
+					{Category: "qualities", Karma: 50},
+				},
+				Attributes: map[string]int{
+					"body":     6,
+					"agility":  6,
+					"strength": 5,
+					"reaction": 4,
+				},
+			},
+			wantErr:   ErrKarmaAttributeMaxLimit,
+			expectErr: true,
+		},
+		{
+			name: "unsupported creation method",
+			data: func() *domain.CharacterCreationData {
+				return &domain.CharacterCreationData{
+					CreationMethods: map[string]domain.CreationMethod{
+						"priority": {Label: "Priority"},
+					},
+				}
+			},
+			selection: KarmaPointBuySelection{
+				MetatypeID: "human",
+				Entries: []KarmaLedgerEntry{
+					{Category: "attributes", Karma: 300},
+					{Category: "skills", Karma: 200},
+					{Category: "qualities", Karma: 100},
+					{Category: "gear", Karma: 150},
+					{Category: "contacts", Karma: 50},
+				},
+			},
+			wantErr:   ErrCreationMethodUnsupported,
+			expectErr: true,
 		},
 	}
 
-	if err := ValidateKarmaPointBuySelection(data, selection); err == nil {
-		t.Fatal("expected budget mismatch error")
-	}
-}
+	for _, tc := range testCases {
+		tc := tc
+		t.Run(tc.name, func(t *testing.T) {
+			err := ValidateKarmaPointBuySelection(tc.data(), tc.selection)
+			if tc.expectErr {
+				require.Error(t, err)
+				if tc.wantErr != nil {
+					assert.ErrorIs(t, err, tc.wantErr)
+				}
+				return
+			}
 
-func TestValidateKarmaPointBuySelectionGearLimit(t *testing.T) {
-	data := karmaTestData()
-	selection := KarmaPointBuySelection{
-		MetatypeID: "human",
-		Entries: []KarmaLedgerEntry{
-			{Category: "gear", Karma: 250},
-			{Category: "attributes", Karma: 300},
-			{Category: "skills", Karma: 250},
-		},
-	}
-
-	if err := ValidateKarmaPointBuySelection(data, selection); err != ErrKarmaExceedsGearBudget {
-		t.Fatalf("expected ErrKarmaExceedsGearBudget, got %v", err)
-	}
-}
-
-func TestValidateKarmaPointBuySelectionAttributeMaxLimit(t *testing.T) {
-	data := karmaTestData()
-	selection := KarmaPointBuySelection{
-		MetatypeID: "human",
-		Entries: []KarmaLedgerEntry{
-			{Category: "attributes", Karma: 400},
-			{Category: "skills", Karma: 200},
-			{Category: "gear", Karma: 150},
-			{Category: "qualities", Karma: 50},
-		},
-		Attributes: map[string]int{
-			"body":     6,
-			"agility":  6,
-			"strength": 5,
-			"reaction": 4,
-		},
-	}
-
-	if err := ValidateKarmaPointBuySelection(data, selection); err != ErrKarmaAttributeMaxLimit {
-		t.Fatalf("expected ErrKarmaAttributeMaxLimit, got %v", err)
+			require.NoError(t, err)
+		})
 	}
 }

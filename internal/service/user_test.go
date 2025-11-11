@@ -1,8 +1,12 @@
 package service
 
 import (
-	"shadowmaster/internal/domain"
 	"testing"
+
+	"github.com/stretchr/testify/assert"
+	"github.com/stretchr/testify/require"
+
+	"shadowmaster/internal/domain"
 )
 
 func TestValidatePassword(t *testing.T) {
@@ -58,8 +62,10 @@ func TestValidatePassword(t *testing.T) {
 		t.Run(tc.name, func(t *testing.T) {
 			t.Parallel()
 			err := ValidatePassword(tc.password, tc.disallowed...)
-			if (err != nil) != tc.wantErr {
-				t.Fatalf("ValidatePassword(%q) error = %v, wantErr %v", tc.password, err, tc.wantErr)
+			if tc.wantErr {
+				require.Error(t, err, "expected error for %s", tc.name)
+			} else {
+				require.NoError(t, err, "unexpected error for %s", tc.name)
 			}
 		})
 	}
@@ -78,13 +84,8 @@ func TestSanitizeUser(t *testing.T) {
 
 	sanitized := sanitizeUser(input)
 
-	if sanitized == input {
-		t.Fatal("sanitizeUser should return a copy, not the original pointer")
-	}
-	if sanitized.PasswordHash != "" {
-		t.Errorf("sanitizeUser.PasswordHash = %q, want empty", sanitized.PasswordHash)
-	}
-	if sanitized.Email != input.Email || sanitized.Username != input.Username {
-		t.Error("sanitizeUser should retain non-sensitive fields")
-	}
+	assert.NotSame(t, input, sanitized, "sanitizeUser should return a copy")
+	assert.Empty(t, sanitized.PasswordHash)
+	assert.Equal(t, input.Email, sanitized.Email)
+	assert.Equal(t, input.Username, sanitized.Username)
 }

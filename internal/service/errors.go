@@ -34,9 +34,9 @@ var (
 
 	// Karma creation errors
 	ErrKarmaInvalidSelection    = errors.New("invalid Karma point-buy selection")
-	ErrKarmaBudgetMismatch      = errors.New("Karma point-buy selection does not spend required points")
-	ErrKarmaExceedsGearBudget   = errors.New("Karma point-buy gear conversion exceeds limit")
-	ErrKarmaAttributeMaxLimit   = errors.New("Karma point-buy cannot max more than one physical or mental attribute")
-	ErrKarmaUnknownMetatype     = errors.New("Karma point-buy metatype not recognized")
-	ErrKarmaNegativeExpenditure = errors.New("Karma point-buy expenditure must be positive")
+	ErrKarmaBudgetMismatch      = errors.New("karma point-buy selection does not spend required points")
+	ErrKarmaExceedsGearBudget   = errors.New("karma point-buy gear conversion exceeds limit")
+	ErrKarmaAttributeMaxLimit   = errors.New("karma point-buy cannot max more than one physical or mental attribute")
+	ErrKarmaUnknownMetatype     = errors.New("karma point-buy metatype not recognized")
+	ErrKarmaNegativeExpenditure = errors.New("karma point-buy expenditure must be positive")
 )

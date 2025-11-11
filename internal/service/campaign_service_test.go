@@ -1,26 +1,20 @@
 package service
 
 import (
-	"errors"
 	"path/filepath"
+	"testing"
+
+	"github.com/stretchr/testify/assert"
+	"github.com/stretchr/testify/require"
+
 	"shadowmaster/internal/domain"
+	"shadowmaster/internal/repository"
 	jsonrepo "shadowmaster/internal/repository/json"
 	"shadowmaster/pkg/storage"
-	"testing"
 )
 
 func TestCampaignServiceCreateDefaults(t *testing.T) {
-	dir := t.TempDir()
-
-	store, err := storage.NewJSONStore(dir)
-	if err != nil {
-		t.Fatalf("new store: %v", err)
-	}
-	index := jsonrepo.NewIndex()
-	repo := jsonrepo.NewCampaignRepository(store, index)
-	writeGameplayLevelData(t, store)
-	writeBooksData(t, store)
-	service := NewCampaignService(repo, jsonrepo.NewEditionRepository(store), jsonrepo.NewBooksRepository(store))
+	service, repo := newCampaignService(t)
 
 	campaign, err := service.CreateCampaign(CampaignCreateInput{
 		Name:     "Neon Noir",
@@ -28,253 +22,323 @@ func TestCampaignServiceCreateDefaults(t *testing.T) {
 		GMName:   "GM Name",
 		GMUserID: "user-1",
 	})
-	if err != nil {
-		t.Fatalf("create campaign: %v", err)
-	}
+	require.NoError(t, err)
 
-	if campaign.Edition != "sr5" {
-		t.Fatalf("expected edition normalized to sr5, got %s", campaign.Edition)
-	}
-	if campaign.CreationMethod != "priority" {
-		t.Fatalf("expected default creation method priority, got %s", campaign.CreationMethod)
-	}
-	if campaign.GameplayLevel != "experienced" {
-		t.Fatalf("expected default gameplay level experienced, got %s", campaign.GameplayLevel)
-	}
-	if len(campaign.EnabledBooks) != 1 || campaign.EnabledBooks[0] != "SR5" {
-		t.Fatalf("expected enabled books to contain SR5, got %v", campaign.EnabledBooks)
-	}
+	assert.Equal(t, "sr5", campaign.Edition)
+	assert.Equal(t, "priority", campaign.CreationMethod)
+	assert.Equal(t, "experienced", campaign.GameplayLevel)
+	assert.Equal(t, []string{"SR5"}, campaign.EnabledBooks)
 
 	rules, err := service.DescribeGameplayRules(campaign)
-	if err != nil {
-		t.Fatalf("describe gameplay rules: %v", err)
-	}
-	if rules == nil || rules.Key != "experienced" {
-		t.Fatalf("expected experienced rules, got %+v", rules)
-	}
+	require.NoError(t, err)
+	require.NotNil(t, rules)
+	assert.Equal(t, "experienced", rules.Key)
+
+	// sanity check repo stores normalized data
+	stored, err := repo.GetByID(campaign.ID)
+	require.NoError(t, err)
+	assert.Equal(t, "sr5", stored.Edition)
 }
 
 func TestCampaignServiceCreateRequiresEdition(t *testing.T) {
-	dir := t.TempDir()
-	store, _ := storage.NewJSONStore(dir)
-	index := jsonrepo.NewIndex()
-	repo := jsonrepo.NewCampaignRepository(store, index)
-	writeGameplayLevelData(t, store)
-	writeBooksData(t, store)
-	service := NewCampaignService(repo, jsonrepo.NewEditionRepository(store), jsonrepo.NewBooksRepository(store))
+	service, _ := newCampaignService(t)
 
-	if _, err := service.CreateCampaign(CampaignCreateInput{}); err == nil {
-		t.Fatal("expected error when edition is missing")
-	}
+	_, err := service.CreateCampaign(CampaignCreateInput{})
+	require.Error(t, err)
+	assert.ErrorIs(t, err, ErrCampaignEditionRequired)
 }
 
 func TestCampaignServiceCreationMethodNormalization(t *testing.T) {
-	dir := t.TempDir()
-	store, err := storage.NewJSONStore(dir)
-	if err != nil {
-		t.Fatalf("new store: %v", err)
-	}
-	index := jsonrepo.NewIndex()
-	repo := jsonrepo.NewCampaignRepository(store, index)
-	writeGameplayLevelData(t, store)
-	writeBooksData(t, store)
-	service := NewCampaignService(repo, jsonrepo.NewEditionRepository(store), jsonrepo.NewBooksRepository(store))
+	service, _ := newCampaignService(t)
 
-	tests := map[string]string{
-		"Sum-to-Ten": "sum_to_ten",
-		"sumtotten":  "sum_to_ten",
-		"karma":      "karma",
-		"Priority":   "priority",
-		"":           "priority",
+	testCases := []struct {
+		name     string
+		input    string
+		expected string
+	}{
+		{name: "sum to ten label", input: "Sum-to-Ten", expected: "sum_to_ten"},
+		{name: "typo sumtotten", input: "sumtotten", expected: "sum_to_ten"},
+		{name: "karma lower", input: "karma", expected: "karma"},
+		{name: "priority title case", input: "Priority", expected: "priority"},
+		{name: "empty defaults to priority", input: "", expected: "priority"},
 	}
 
-	for input, expected := range tests {
+	for _, tc := range testCases {
+		tc := tc
 		campaign, err := service.CreateCampaign(CampaignCreateInput{
-			Name:           "Test " + input,
+			Name:           "Test " + tc.name,
 			Edition:        "sr5",
-			CreationMethod: input,
+			CreationMethod: tc.input,
 		})
-		if err != nil {
-			t.Fatalf("create campaign (%s): %v", input, err)
-		}
-		if campaign.CreationMethod != expected {
-			t.Fatalf("expected creation method %s, got %s", expected, campaign.CreationMethod)
-		}
+		require.NoError(t, err, tc.name)
+		assert.Equal(t, tc.expected, campaign.CreationMethod, tc.name)
 	}
 }
 
 func TestCampaignServiceRejectsUnknownBook(t *testing.T) {
-	dir := t.TempDir()
-	store, err := storage.NewJSONStore(dir)
-	if err != nil {
-		t.Fatalf("new store: %v", err)
-	}
-	index := jsonrepo.NewIndex()
-	repo := jsonrepo.NewCampaignRepository(store, index)
-	writeGameplayLevelData(t, store)
-	writeBooksData(t, store)
-	service := NewCampaignService(repo, jsonrepo.NewEditionRepository(store), jsonrepo.NewBooksRepository(store))
+	service, _ := newCampaignService(t)
 
-	_, err = service.CreateCampaign(CampaignCreateInput{
+	_, err := service.CreateCampaign(CampaignCreateInput{
 		Name:         "Bad Books",
 		Edition:      "sr5",
 		EnabledBooks: []string{"ZZZ"},
 	})
-	if err == nil {
-		t.Fatal("expected error for unknown book code")
-	}
-	if !errors.Is(err, ErrCampaignUnknownBook) {
-		t.Fatalf("expected ErrCampaignUnknownBook, got %v", err)
-	}
+	require.Error(t, err)
+	assert.ErrorIs(t, err, ErrCampaignUnknownBook)
 }
 
 func TestCampaignServiceListSourceBooksFallback(t *testing.T) {
-	dir := t.TempDir()
-	store, err := storage.NewJSONStore(dir)
-	if err != nil {
-		t.Fatalf("new store: %v", err)
-	}
-	index := jsonrepo.NewIndex()
-	repo := jsonrepo.NewCampaignRepository(store, index)
-	writeGameplayLevelData(t, store)
-	writeBooksData(t, store)
-	service := NewCampaignService(repo, jsonrepo.NewEditionRepository(store), jsonrepo.NewBooksRepository(store))
+	service, _ := newCampaignService(t)
 
 	books, err := service.ListSourceBooks("sr3")
-	if err != nil {
-		t.Fatalf("list source books: %v", err)
-	}
-	if len(books) != 1 {
-		t.Fatalf("expected fallback book entry, got %d", len(books))
-	}
-	if books[0].Code != "SR3" {
-		t.Fatalf("expected fallback SR3 code, got %s", books[0].Code)
-	}
-	if books[0].Name == "" {
-		t.Fatal("expected fallback book name to be set")
-	}
+	require.NoError(t, err)
+	require.Len(t, books, 1)
+	assert.Equal(t, "SR3", books[0].Code)
+	assert.NotEmpty(t, books[0].Name)
 }
 
 func TestCampaignServiceImmutableFields(t *testing.T) {
-	dir := t.TempDir()
-	store, _ := storage.NewJSONStore(dir)
-	index := jsonrepo.NewIndex()
-	repo := jsonrepo.NewCampaignRepository(store, index)
-	writeGameplayLevelData(t, store)
-	writeBooksData(t, store)
-	service := NewCampaignService(repo, jsonrepo.NewEditionRepository(store), jsonrepo.NewBooksRepository(store))
+	service, repo := newCampaignService(t)
 
 	campaign, err := service.CreateCampaign(CampaignCreateInput{
 		Name:    "Lockdown Run",
 		Edition: "sr5",
 	})
-	if err != nil {
-		t.Fatalf("create campaign: %v", err)
-	}
+	require.NoError(t, err)
 
 	newName := "Updated Run"
-	if _, err := service.UpdateCampaign(campaign.ID, CampaignUpdateInput{Name: &newName}); err != nil {
-		t.Fatalf("update campaign: %v", err)
-	}
+	updated, err := service.UpdateCampaign(campaign.ID, CampaignUpdateInput{Name: &newName})
+	require.NoError(t, err)
+	assert.Equal(t, newName, updated.Name)
 
 	edition := "sr3"
-	if _, err := service.UpdateCampaign(campaign.ID, CampaignUpdateInput{Edition: &edition}); err == nil {
-		t.Fatal("expected error when attempting to change edition")
-	}
+	_, err = service.UpdateCampaign(campaign.ID, CampaignUpdateInput{Edition: &edition})
+	require.Error(t, err)
 
 	method := "karma"
-	if _, err := service.UpdateCampaign(campaign.ID, CampaignUpdateInput{CreationMethod: &method}); err == nil {
-		t.Fatal("expected error when attempting to mutate creation method")
-	}
+	_, err = service.UpdateCampaign(campaign.ID, CampaignUpdateInput{CreationMethod: &method})
+	require.Error(t, err)
 
 	newGM := "user-2"
-	if _, err := service.UpdateCampaign(campaign.ID, CampaignUpdateInput{GMUserID: &newGM}); err != nil {
-		t.Fatalf("update GM user id: %v", err)
-	}
+	updated, err = service.UpdateCampaign(campaign.ID, CampaignUpdateInput{GMUserID: &newGM})
+	require.NoError(t, err)
+	assert.Equal(t, newGM, updated.GmUserID)
 
 	invalidLevel := "legendary"
-	if _, err := service.UpdateCampaign(campaign.ID, CampaignUpdateInput{GameplayLevel: &invalidLevel}); err == nil {
-		t.Fatal("expected error when providing unknown gameplay level")
-	} else if !errors.Is(err, ErrCampaignUnknownGameplayLevel) {
-		t.Fatalf("expected ErrCampaignUnknownGameplayLevel, got %v", err)
-	}
+	_, err = service.UpdateCampaign(campaign.ID, CampaignUpdateInput{GameplayLevel: &invalidLevel})
+	require.Error(t, err)
+	assert.ErrorIs(t, err, ErrCampaignUnknownGameplayLevel)
 
 	newBooks := []string{"SR5", "AP"}
-	updated, err := service.UpdateCampaign(campaign.ID, CampaignUpdateInput{EnabledBooks: &newBooks})
-	if err != nil {
-		t.Fatalf("update enabled books: %v", err)
-	}
-	campaign = updated
-	if len(campaign.EnabledBooks) != 2 {
-		t.Fatalf("expected two enabled books, got %v", campaign.EnabledBooks)
-	}
+	updated, err = service.UpdateCampaign(campaign.ID, CampaignUpdateInput{EnabledBooks: &newBooks})
+	require.NoError(t, err)
+	assert.ElementsMatch(t, newBooks, updated.EnabledBooks)
 
 	invalidBook := []string{"XYZ"}
-	if _, err := service.UpdateCampaign(campaign.ID, CampaignUpdateInput{EnabledBooks: &invalidBook}); err == nil {
-		t.Fatal("expected error when enabling unknown book")
-	}
+	_, err = service.UpdateCampaign(campaign.ID, CampaignUpdateInput{EnabledBooks: &invalidBook})
+	require.Error(t, err)
+	assert.ErrorIs(t, err, ErrCampaignUnknownBook)
+
+	// verify persisted data remains consistent
+	stored, err := repo.GetByID(campaign.ID)
+	require.NoError(t, err)
+	assert.Equal(t, updated.EnabledBooks, stored.EnabledBooks)
 }
 
 func TestCampaignServiceMigratesLegacyData(t *testing.T) {
-	dir := t.TempDir()
-	store, err := storage.NewJSONStore(dir)
-	if err != nil {
-		t.Fatalf("new store: %v", err)
-	}
+	store, index := newCampaignStore(t)
 
 	legacy := &domain.Campaign{
 		ID:      "legacy",
 		Name:    "Legacy Campaign",
 		Edition: "sr5",
 	}
-	if err := store.Write(filepath.Join("campaigns", "legacy.json"), legacy); err != nil {
-		t.Fatalf("write legacy campaign: %v", err)
-	}
+	require.NoError(t, store.Write(filepath.Join("campaigns", "legacy.json"), legacy))
 
-	index := jsonrepo.NewIndex()
 	index.Campaigns["legacy"] = filepath.Join("campaigns", "legacy.json")
-	repo := jsonrepo.NewCampaignRepository(store, index)
-	writeGameplayLevelData(t, store)
-	writeBooksData(t, store)
-	service := NewCampaignService(repo, jsonrepo.NewEditionRepository(store), jsonrepo.NewBooksRepository(store))
+
+	service, repo := newCampaignServiceWithStore(t, store, index)
 
 	campaign, err := service.GetCampaign("legacy")
-	if err != nil {
-		t.Fatalf("get legacy campaign: %v", err)
-	}
+	require.NoError(t, err)
 
-	if campaign.CreationMethod != "priority" {
-		t.Fatalf("expected creation method priority after migration, got %s", campaign.CreationMethod)
-	}
-	if campaign.GameplayLevel != "experienced" {
-		t.Fatalf("expected gameplay level experienced after migration, got %s", campaign.GameplayLevel)
-	}
-	if campaign.SetupLockedAt.IsZero() {
-		t.Fatal("expected setup locked timestamp to be set")
-	}
+	assert.Equal(t, "priority", campaign.CreationMethod)
+	assert.Equal(t, "experienced", campaign.GameplayLevel)
+	assert.False(t, campaign.SetupLockedAt.IsZero(), "expected setup locked timestamp to be set")
+
+	// ensure repo persisted migration changes
+	stored, err := repo.GetByID("legacy")
+	require.NoError(t, err)
+	assert.Equal(t, campaign.CreationMethod, stored.CreationMethod)
+	assert.Equal(t, campaign.GameplayLevel, stored.GameplayLevel)
+	assert.Equal(t, campaign.SetupLockedAt, stored.SetupLockedAt)
 }
 
 func TestCampaignServiceDescribeGameplayRulesUnknownEdition(t *testing.T) {
-	dir := t.TempDir()
-	store, _ := storage.NewJSONStore(dir)
-	index := jsonrepo.NewIndex()
-	repo := jsonrepo.NewCampaignRepository(store, index)
-	writeGameplayLevelData(t, store)
-	writeBooksData(t, store)
-	service := NewCampaignService(repo, jsonrepo.NewEditionRepository(store), jsonrepo.NewBooksRepository(store))
+	service, repo := newCampaignService(t)
 
 	campaign := &domain.Campaign{Edition: "sr3", EnabledBooks: []string{"SR5"}}
-	if err := repo.Create(campaign); err != nil {
-		t.Fatalf("create campaign: %v", err)
-	}
+	require.NoError(t, repo.Create(campaign))
 
 	rules, err := service.DescribeGameplayRules(campaign)
-	if err != nil {
-		t.Fatalf("describe gameplay rules: %v", err)
+	require.NoError(t, err)
+	assert.Nil(t, rules)
+}
+
+func TestSanitizeMethod(t *testing.T) {
+	t.Parallel()
+
+	testCases := []struct {
+		name     string
+		input    string
+		expected string
+	}{
+		{name: "trim and lower", input: "  Priority  ", expected: "priority"},
+		{name: "replace dash", input: "sum-to-ten", expected: "sum_to_ten"},
+		{name: "replace spaces", input: "sum to ten", expected: "sum_to_ten"},
+		{name: "mixed case", input: "SUM_To_TEN", expected: "sum_to_ten"},
 	}
-	if rules != nil {
-		t.Fatalf("expected no gameplay rules for sr3, got %+v", rules)
+
+	for _, tc := range testCases {
+		tc := tc
+		t.Run(tc.name, func(t *testing.T) {
+			assert.Equal(t, tc.expected, sanitizeMethod(tc.input))
+		})
 	}
+}
+
+func TestCanonicalizeCreationMethod(t *testing.T) {
+	t.Parallel()
+
+	testCases := []struct {
+		input    string
+		expected string
+	}{
+		{"", ""},
+		{"priority", "priority"},
+		{"sumtotten", "sum_to_ten"},
+		{"sum_to10", "sum_to_ten"},
+		{"karma", "karma"},
+		{"point_buy", "karma"},
+		{"unknown", "unknown"},
+	}
+
+	for _, tc := range testCases {
+		tc := tc
+		t.Run(tc.input, func(t *testing.T) {
+			assert.Equal(t, tc.expected, canonicalizeCreationMethod(tc.input))
+		})
+	}
+}
+
+func TestDefaultCreationMethodForEdition(t *testing.T) {
+	t.Parallel()
+
+	testCases := []struct {
+		name      string
+		available map[string]domain.CreationMethod
+		edition   string
+		expected  string
+	}{
+		{
+			name:      "priority available",
+			available: map[string]domain.CreationMethod{"priority": {}},
+			edition:   "sr5",
+			expected:  "priority",
+		},
+		{
+			name:      "first available when priority missing",
+			available: map[string]domain.CreationMethod{"karma": {}},
+			edition:   "sr5",
+			expected:  "karma",
+		},
+		{
+			name:     "fall back to edition default",
+			edition:  "sr5",
+			expected: "priority",
+		},
+	}
+
+	for _, tc := range testCases {
+		tc := tc
+		t.Run(tc.name, func(t *testing.T) {
+			assert.Equal(t, tc.expected, defaultCreationMethodForEdition(tc.available, tc.edition))
+		})
+	}
+}
+
+func TestNormalizeGameplayLevel(t *testing.T) {
+	t.Parallel()
+
+	assert.Equal(t, "street", normalizeGameplayLevel("SR5", "Street"))
+	assert.Equal(t, "", normalizeGameplayLevel("SR5", ""))
+}
+
+func TestCampaignServiceValidateEnabledBooks(t *testing.T) {
+	t.Parallel()
+
+	books := []domain.SourceBook{
+		{Code: "SR5"},
+		{Code: "AP"},
+	}
+
+	service := &CampaignService{
+		bookRepo: &stubBookRepo{books: books},
+	}
+
+	t.Run("adds default sr5 book", func(t *testing.T) {
+		actual, err := service.validateEnabledBooks("sr5", nil)
+		require.NoError(t, err)
+		assert.Equal(t, []string{"SR5"}, actual)
+	})
+
+	t.Run("preserves requested valid books", func(t *testing.T) {
+		actual, err := service.validateEnabledBooks("sr5", []string{"AP"})
+		require.NoError(t, err)
+		assert.ElementsMatch(t, []string{"AP", "SR5"}, actual)
+	})
+
+	t.Run("errors on unknown book when repo has list", func(t *testing.T) {
+		_, err := service.validateEnabledBooks("sr5", []string{"XYZ"})
+		require.Error(t, err)
+		assert.ErrorIs(t, err, ErrCampaignUnknownBook)
+	})
+}
+
+func newCampaignStore(t *testing.T) (*storage.JSONStore, *jsonrepo.Index) {
+	t.Helper()
+
+	dir := t.TempDir()
+	store, err := storage.NewJSONStore(dir)
+	require.NoError(t, err, "new store")
+	return store, jsonrepo.NewIndex()
+}
+
+func newCampaignService(t *testing.T) (*CampaignService, repository.CampaignRepository) {
+	store, index := newCampaignStore(t)
+	return newCampaignServiceWithStore(t, store, index)
+}
+
+func newCampaignServiceWithStore(t *testing.T, store *storage.JSONStore, index *jsonrepo.Index) (*CampaignService, repository.CampaignRepository) {
+	t.Helper()
+
+	writeGameplayLevelData(t, store)
+	writeBooksData(t, store)
+	repo := jsonrepo.NewCampaignRepository(store, index)
+	service := NewCampaignService(repo, jsonrepo.NewEditionRepository(store), jsonrepo.NewBooksRepository(store))
+	return service, repo
+}
+
+type stubBookRepo struct {
+	books []domain.SourceBook
+	err   error
+}
+
+func (s *stubBookRepo) ListBooks(string) ([]domain.SourceBook, error) {
+	if s.err != nil {
+		return nil, s.err
+	}
+	return s.books, nil
 }
 
 func writeGameplayLevelData(t *testing.T, store *storage.JSONStore) {
@@ -340,9 +404,7 @@ func writeGameplayLevelData(t *testing.T, store *storage.JSONStore) {
 		},
 	}
 
-	if err := store.Write(filepath.Join("editions", "sr5", "character_creation.json"), &data); err != nil {
-		t.Fatalf("write gameplay level data: %v", err)
-	}
+	require.NoError(t, store.Write(filepath.Join("editions", "sr5", "character_creation.json"), &data))
 }
 
 func writeBooksData(t *testing.T, store *storage.JSONStore) {
@@ -357,7 +419,5 @@ func writeBooksData(t *testing.T, store *storage.JSONStore) {
 		},
 	}
 
-	if err := store.Write(filepath.Join("editions", "sr5", "books", "all.json"), &data); err != nil {
-		t.Fatalf("write books data: %v", err)
-	}
+	require.NoError(t, store.Write(filepath.Join("editions", "sr5", "books", "all.json"), &data))
 }
