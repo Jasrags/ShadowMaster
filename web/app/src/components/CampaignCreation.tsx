@@ -116,28 +116,15 @@ type DraftAction =
   | { type: 'UPDATE_FIELD'; field: keyof DraftState; value: DraftState[keyof DraftState] }
   | { type: 'UPDATE_PLACEHOLDER'; id: string; field: keyof RosterPlaceholder; value: string }
   | { type: 'ADD_PLACEHOLDER' }
+  | { type: 'ADD_PLACEHOLDER_WITH_ID'; id: string; name: string; role: string }
   | { type: 'REMOVE_PLACEHOLDER'; id: string }
   | { type: 'UPDATE_FACTION'; id: string; field: keyof DraftState['factions'][number]; value: string }
   | { type: 'ADD_FACTION' }
+  | { type: 'ADD_FACTION_WITH_ID'; id: string }
   | { type: 'REMOVE_FACTION'; id: string }
   | { type: 'UPDATE_LOCATION'; id: string; field: keyof DraftState['locations'][number]; value: string }
   | { type: 'ADD_LOCATION' }
-  | { type: 'REMOVE_LOCATION'; id: string }
-  | {
-      type: 'UPDATE_FACTION';
-      id: string;
-      field: keyof DraftState['factions'][number];
-      value: string;
-    }
-  | { type: 'ADD_FACTION' }
-  | { type: 'REMOVE_FACTION'; id: string }
-  | {
-      type: 'UPDATE_LOCATION';
-      id: string;
-      field: keyof DraftState['locations'][number];
-      value: string;
-    }
-  | { type: 'ADD_LOCATION' }
+  | { type: 'ADD_LOCATION_WITH_ID'; id: string }
   | { type: 'REMOVE_LOCATION'; id: string }
   | { type: 'UPDATE_HOUSE_RULE'; key: string; value: boolean }
   | {
@@ -193,6 +180,18 @@ function draftReducer(state: DraftState, action: DraftAction): DraftState {
           },
         ],
       };
+    case 'ADD_PLACEHOLDER_WITH_ID':
+      return {
+        ...state,
+        placeholders: [
+          ...state.placeholders,
+          {
+            id: action.id,
+            name: action.name,
+            role: action.role,
+          },
+        ],
+      };
     case 'REMOVE_PLACEHOLDER':
       return {
         ...state,
@@ -218,6 +217,19 @@ function draftReducer(state: DraftState, action: DraftAction): DraftState {
           },
         ],
       };
+    case 'ADD_FACTION_WITH_ID':
+      return {
+        ...state,
+        factions: [
+          ...state.factions,
+          {
+            id: action.id,
+            name: '',
+            tags: '',
+            notes: '',
+          },
+        ],
+      };
     case 'REMOVE_FACTION':
       return {
         ...state,
@@ -237,6 +249,18 @@ function draftReducer(state: DraftState, action: DraftAction): DraftState {
           ...state.locations,
           {
             id: generateId('location'),
+            name: '',
+            descriptor: '',
+          },
+        ],
+      };
+    case 'ADD_LOCATION_WITH_ID':
+      return {
+        ...state,
+        locations: [
+          ...state.locations,
+          {
+            id: action.id,
             name: '',
             descriptor: '',
           },
@@ -273,6 +297,7 @@ export function CampaignCreation({ targetId = 'campaign-creation-react-root', on
     activeEdition,
     supportedEditions,
     characterCreationData,
+    campaignCharacterCreation,
     reloadEditionData,
     setEdition,
   } = useEdition();
@@ -306,6 +331,10 @@ export function CampaignCreation({ targetId = 'campaign-creation-react-root', on
   const { pushNotification } = useNotifications();
   const [fieldErrors, setFieldErrors] = useState<Record<string, string>>({});
   const [stepErrors, setStepErrors] = useState<Record<number, string[]>>({});
+  const [isFactionLibraryOpen, setFactionLibraryOpen] = useState(false);
+  const [isLocationLibraryOpen, setLocationLibraryOpen] = useState(false);
+  const [isPlaceholderLibraryOpen, setPlaceholderLibraryOpen] = useState(false);
+  const [isSessionSeedLibraryOpen, setSessionSeedLibraryOpen] = useState(false);
 
   const nameRef = useRef<HTMLInputElement | null>(null);
   const themeRef = useRef<HTMLInputElement | null>(null);
@@ -540,6 +569,75 @@ export function CampaignCreation({ targetId = 'campaign-creation-react-root', on
     }));
   }, [users]);
 
+  const campaignSupport = useMemo(() => {
+    return campaignCharacterCreation?.campaign_support ?? characterCreationData?.campaign_support;
+  }, [campaignCharacterCreation?.campaign_support, characterCreationData?.campaign_support]);
+
+  const factionLibrary = campaignSupport?.factions ?? [];
+  const locationLibrary = campaignSupport?.locations ?? [];
+  const placeholderLibrary = campaignSupport?.placeholders ?? [];
+  const sessionSeedLibrary = campaignSupport?.session_seeds ?? [];
+
+  const [factionFilter, setFactionFilter] = useState('');
+  const [locationFilter, setLocationFilter] = useState('');
+  const [placeholderFilter, setPlaceholderFilter] = useState('');
+  const [sessionSeedFilter, setSessionSeedFilter] = useState('');
+
+  const filteredFactionLibrary = useMemo(() => {
+    if (!factionFilter.trim()) {
+      return factionLibrary;
+    }
+    const term = factionFilter.toLowerCase();
+    return factionLibrary.filter((preset) => {
+      return (
+        preset.name.toLowerCase().includes(term) ||
+        (preset.tags ?? '').toLowerCase().includes(term) ||
+        (preset.notes ?? '').toLowerCase().includes(term)
+      );
+    });
+  }, [factionFilter, factionLibrary]);
+
+  const filteredLocationLibrary = useMemo(() => {
+    if (!locationFilter.trim()) {
+      return locationLibrary;
+    }
+    const term = locationFilter.toLowerCase();
+    return locationLibrary.filter((preset) => {
+      return (
+        preset.name.toLowerCase().includes(term) ||
+        (preset.descriptor ?? '').toLowerCase().includes(term)
+      );
+    });
+  }, [locationFilter, locationLibrary]);
+
+  const filteredPlaceholderLibrary = useMemo(() => {
+    if (!placeholderFilter.trim()) {
+      return placeholderLibrary;
+    }
+    const term = placeholderFilter.toLowerCase();
+    return placeholderLibrary.filter((preset) => {
+      return (
+        preset.name.toLowerCase().includes(term) ||
+        (preset.role ?? '').toLowerCase().includes(term)
+      );
+    });
+  }, [placeholderFilter, placeholderLibrary]);
+
+  const filteredSessionSeedLibrary = useMemo(() => {
+    if (!sessionSeedFilter.trim()) {
+      return sessionSeedLibrary;
+    }
+    const term = sessionSeedFilter.toLowerCase();
+    return sessionSeedLibrary.filter((preset) => {
+      return (
+        preset.title.toLowerCase().includes(term) ||
+        (preset.objectives ?? '').toLowerCase().includes(term) ||
+        (preset.scene_template ?? '').toLowerCase().includes(term) ||
+        (preset.summary ?? '').toLowerCase().includes(term)
+      );
+    });
+  }, [sessionSeedFilter, sessionSeedLibrary]);
+
   const resetWizard = useCallback(
     (overrideDefaultBook?: string) => {
       const nextDefault = overrideDefaultBook ?? deriveDefaultBookCode(selectedEdition);
@@ -626,47 +724,6 @@ export function CampaignCreation({ targetId = 'campaign-creation-react-root', on
       }
     }
   };
-  const handleQuickAddFaction = useCallback(() => {
-    const newId = generateId('faction');
-    dispatchDraft({ type: 'ADD_FACTION' });
-    dispatchDraft({
-      type: 'UPDATE_FACTION',
-      id: newId,
-      field: 'name',
-      value: 'Ares Macrotechnology',
-    });
-    dispatchDraft({
-      type: 'UPDATE_FACTION',
-      id: newId,
-      field: 'tags',
-      value: 'Corporate, AAA',
-    });
-    dispatchDraft({
-      type: 'UPDATE_FACTION',
-      id: newId,
-      field: 'notes',
-      value: 'Megacorp interested in experimental weapons testing.',
-    });
-    clearFieldError('backbone', 2);
-  }, []);
-
-  const handleQuickAddLocation = useCallback(() => {
-    const newId = generateId('location');
-    dispatchDraft({ type: 'ADD_LOCATION' });
-    dispatchDraft({
-      type: 'UPDATE_LOCATION',
-      id: newId,
-      field: 'name',
-      value: 'Downtown Seattle Safehouse',
-    });
-    dispatchDraft({
-      type: 'UPDATE_LOCATION',
-      id: newId,
-      field: 'descriptor',
-      value: 'Secure condo with rating 4 security and friendly neighbors.',
-    });
-    clearFieldError('backbone', 2);
-  }, []);
 
   const focusField = (ref?: RefObject<Element | null>) => {
     if (!ref?.current || !(ref.current instanceof HTMLElement)) {
@@ -756,6 +813,33 @@ export function CampaignCreation({ targetId = 'campaign-creation-react-root', on
       return copy;
     });
   };
+
+  const handleQuickAddFaction = useCallback(() => {
+    const newId = generateId('faction');
+    dispatchDraft({ type: 'ADD_FACTION_WITH_ID', id: newId });
+    dispatchDraft({ type: 'UPDATE_FACTION', id: newId, field: 'name', value: 'Ares Macrotechnology' });
+    dispatchDraft({ type: 'UPDATE_FACTION', id: newId, field: 'tags', value: 'Corporate, AAA' });
+    dispatchDraft({
+      type: 'UPDATE_FACTION',
+      id: newId,
+      field: 'notes',
+      value: 'Megacorp interested in experimental weapons testing.',
+    });
+    clearFieldError('backbone', 2);
+  }, [clearFieldError]);
+
+  const handleQuickAddLocation = useCallback(() => {
+    const newId = generateId('location');
+    dispatchDraft({ type: 'ADD_LOCATION_WITH_ID', id: newId });
+    dispatchDraft({ type: 'UPDATE_LOCATION', id: newId, field: 'name', value: 'Downtown Seattle Safehouse' });
+    dispatchDraft({
+      type: 'UPDATE_LOCATION',
+      id: newId,
+      field: 'descriptor',
+      value: 'Secure condo with rating 4 security and friendly neighbors.',
+    });
+    clearFieldError('backbone', 2);
+  }, [clearFieldError]);
 
   const handleBack = () => {
     const targetStep = Math.max(currentStep - 1, 0);
@@ -1205,6 +1289,61 @@ export function CampaignCreation({ targetId = 'campaign-creation-react-root', on
               <p className="form-help">
                 Player selection is coming soon. Use placeholders to capture your expected team composition.
               </p>
+              {placeholderLibrary.length > 0 && (
+                <div className="backbone-library">
+                  <button
+                    type="button"
+                    className="btn-secondary"
+                    onClick={() => setPlaceholderLibraryOpen((open) => !open)}
+                    aria-expanded={isPlaceholderLibraryOpen}
+                    aria-controls="creation-placeholder-library"
+                  >
+                    {isPlaceholderLibraryOpen ? 'Hide library' : 'Browse library'}
+                  </button>
+                  {isPlaceholderLibraryOpen && (
+                    <div
+                      id="creation-placeholder-library"
+                      className="campaign-manage__preset-panel"
+                      role="region"
+                      aria-label="Placeholder library"
+                    >
+                      <input
+                        type="search"
+                        placeholder="Search placeholder library…"
+                        value={placeholderFilter}
+                        onChange={(event) => setPlaceholderFilter(event.target.value)}
+                      />
+                      <div className="campaign-manage__preset-scroll">
+                        {filteredPlaceholderLibrary.length === 0 ? (
+                          <p className="campaign-manage__empty">No matches.</p>
+                        ) : (
+                          filteredPlaceholderLibrary.map((preset) => (
+                            <button
+                              key={preset.id}
+                              type="button"
+                              className="campaign-manage__preset-option"
+                              onClick={() => {
+                                const newId = generateId('placeholder');
+                                dispatchDraft({
+                                  type: 'ADD_PLACEHOLDER_WITH_ID',
+                                  id: newId,
+                                  name: preset.name,
+                                  role: preset.role ?? '',
+                                });
+                                clearFieldError('roster', 1);
+                                setPlaceholderLibraryOpen(false);
+                              }}
+                            >
+                              <span className="campaign-manage__preset-name">{preset.name}</span>
+                              {preset.role && <span className="campaign-manage__preset-tags">{preset.role}</span>}
+                            </button>
+                          ))
+                        )}
+                      </div>
+                    </div>
+                  )}
+                </div>
+              )}
               <div className="placeholder-list">
                 {draft.placeholders.map((placeholder) => (
                   <div key={placeholder.id} className="placeholder-card">
@@ -1262,114 +1401,224 @@ export function CampaignCreation({ targetId = 'campaign-creation-react-root', on
             <p>Capture recurring factions and key locations to anchor your campaign.</p>
             <div ref={backboneRef} tabIndex={-1}>
             <div className="form-grid">
-              <div className="form-group">
-                <label>Factions</label>
-                <div className="backbone-list">
-                  {draft.factions.map((faction) => (
-                    <div key={faction.id} className="backbone-card">
-                      <input
-                        value={faction.name}
-                        onChange={(event) =>
-                          dispatchDraft({
-                            type: 'UPDATE_FACTION',
-                            id: faction.id,
-                            field: 'name',
-                            value: event.target.value,
-                          })
-                        }
-                        placeholder="Faction name"
-                      />
-                      <input
-                        value={faction.tags}
-                        onChange={(event) =>
-                          dispatchDraft({
-                            type: 'UPDATE_FACTION',
-                            id: faction.id,
-                            field: 'tags',
-                            value: event.target.value,
-                          })
-                        }
-                        placeholder="Tags (corp, gang, fixer...)"
-                      />
-                      <textarea
-                        value={faction.notes}
-                        onChange={(event) =>
-                          dispatchDraft({
-                            type: 'UPDATE_FACTION',
-                            id: faction.id,
-                            field: 'notes',
-                            value: event.target.value,
-                          })
-                        }
-                        placeholder="Notes / agenda"
-                      />
-                      <button
-                        type="button"
-                        className="btn-link"
-                        onClick={() => dispatchDraft({ type: 'REMOVE_FACTION', id: faction.id })}
-                      >
-                        Remove
-                      </button>
+                  <div className="form-group">
+                    <label>Factions</label>
+                    {factionLibrary.length > 0 && (
+                      <div className="backbone-library">
+                        <button
+                          type="button"
+                          className="btn-secondary"
+                          onClick={() => setFactionLibraryOpen((open) => !open)}
+                          aria-expanded={isFactionLibraryOpen}
+                          aria-controls="creation-faction-library"
+                        >
+                          {isFactionLibraryOpen ? 'Hide library' : 'Browse library'}
+                        </button>
+                        {isFactionLibraryOpen && (
+                          <div
+                            id="creation-faction-library"
+                            className="campaign-manage__preset-panel"
+                            role="region"
+                            aria-label="Faction library"
+                          >
+                            <input
+                              type="search"
+                              placeholder="Search faction library…"
+                              value={factionFilter}
+                              onChange={(event) => setFactionFilter(event.target.value)}
+                            />
+                            <div className="campaign-manage__preset-scroll">
+                              {filteredFactionLibrary.length === 0 ? (
+                                <p className="campaign-manage__empty">No matches.</p>
+                              ) : (
+                                filteredFactionLibrary.map((preset) => (
+                                  <button
+                                    key={preset.id}
+                                    type="button"
+                                    className="campaign-manage__preset-option"
+                                    onClick={() => {
+                                      const newId = generateId('faction');
+                                      dispatchDraft({ type: 'ADD_FACTION_WITH_ID', id: newId });
+                                      dispatchDraft({ type: 'UPDATE_FACTION', id: newId, field: 'name', value: preset.name });
+                                      dispatchDraft({ type: 'UPDATE_FACTION', id: newId, field: 'tags', value: preset.tags ?? '' });
+                                      dispatchDraft({ type: 'UPDATE_FACTION', id: newId, field: 'notes', value: preset.notes ?? '' });
+                                      setFactionLibraryOpen(false);
+                                    }}
+                                  >
+                                    <span className="campaign-manage__preset-name">{preset.name}</span>
+                                    {preset.tags && <span className="campaign-manage__preset-tags">{preset.tags}</span>}
+                                  </button>
+                                ))
+                              )}
+                            </div>
+                          </div>
+                        )}
+                      </div>
+                    )}
+                    <div className="backbone-list">
+                      {draft.factions.map((faction) => (
+                        <div key={faction.id} className="backbone-card">
+                          <input
+                            value={faction.name}
+                            onChange={(event) =>
+                              dispatchDraft({
+                                type: 'UPDATE_FACTION',
+                                id: faction.id,
+                                field: 'name',
+                                value: event.target.value,
+                              })
+                            }
+                            placeholder="Faction name"
+                          />
+                          <input
+                            value={faction.tags}
+                            onChange={(event) =>
+                              dispatchDraft({
+                                type: 'UPDATE_FACTION',
+                                id: faction.id,
+                                field: 'tags',
+                                value: event.target.value,
+                              })
+                            }
+                            placeholder="Tags (corp, gang, fixer...)"
+                          />
+                          <textarea
+                            value={faction.notes}
+                            onChange={(event) =>
+                              dispatchDraft({
+                                type: 'UPDATE_FACTION',
+                                id: faction.id,
+                                field: 'notes',
+                                value: event.target.value,
+                              })
+                            }
+                            placeholder="Notes / agenda"
+                          />
+                          <button
+                            type="button"
+                            className="btn-link"
+                            onClick={() => dispatchDraft({ type: 'REMOVE_FACTION', id: faction.id })}
+                          >
+                            Remove
+                          </button>
+                        </div>
+                      ))}
+                      <div className="backbone-actions">
+                        <button type="button" className="btn-secondary" onClick={() => dispatchDraft({ type: 'ADD_FACTION' })}>
+                          Add Faction
+                        </button>
+                        <button type="button" className="btn-link" onClick={handleQuickAddFaction}>
+                          Quick-add template
+                        </button>
+                      </div>
                     </div>
-                  ))}
-                  <div className="backbone-actions">
-                    <button type="button" className="btn-secondary" onClick={() => dispatchDraft({ type: 'ADD_FACTION' })}>
-                      Add Faction
-                    </button>
-                    <button type="button" className="btn-link" onClick={handleQuickAddFaction}>
-                      Quick-add template
-                    </button>
                   </div>
-                </div>
-              </div>
-              <div className="form-group">
-                <label>Locations</label>
-                <div className="backbone-list">
-                  {draft.locations.map((location) => (
-                    <div key={location.id} className="backbone-card">
-                      <input
-                        value={location.name}
-                        onChange={(event) =>
-                          dispatchDraft({
-                            type: 'UPDATE_LOCATION',
-                            id: location.id,
-                            field: 'name',
-                            value: event.target.value,
-                          })
-                        }
-                        placeholder="Location name"
-                      />
-                      <textarea
-                        value={location.descriptor}
-                        onChange={(event) =>
-                          dispatchDraft({
-                            type: 'UPDATE_LOCATION',
-                            id: location.id,
-                            field: 'descriptor',
-                            value: event.target.value,
-                          })
-                        }
-                        placeholder="Descriptor (security rating, vibe...)"
-                      />
-                      <button
-                        type="button"
-                        className="btn-link"
-                        onClick={() => dispatchDraft({ type: 'REMOVE_LOCATION', id: location.id })}
-                      >
-                        Remove
-                      </button>
+                  <div className="form-group">
+                    <label>Locations</label>
+                    {locationLibrary.length > 0 && (
+                      <div className="backbone-library">
+                        <button
+                          type="button"
+                          className="btn-secondary"
+                          onClick={() => setLocationLibraryOpen((open) => !open)}
+                          aria-expanded={isLocationLibraryOpen}
+                          aria-controls="creation-location-library"
+                        >
+                          {isLocationLibraryOpen ? 'Hide library' : 'Browse library'}
+                        </button>
+                        {isLocationLibraryOpen && (
+                          <div
+                            id="creation-location-library"
+                            className="campaign-manage__preset-panel"
+                            role="region"
+                            aria-label="Location library"
+                          >
+                            <input
+                              type="search"
+                              placeholder="Search location library…"
+                              value={locationFilter}
+                              onChange={(event) => setLocationFilter(event.target.value)}
+                            />
+                            <div className="campaign-manage__preset-scroll">
+                              {filteredLocationLibrary.length === 0 ? (
+                                <p className="campaign-manage__empty">No matches.</p>
+                              ) : (
+                                filteredLocationLibrary.map((preset) => (
+                                  <button
+                                    key={preset.id}
+                                    type="button"
+                                    className="campaign-manage__preset-option"
+                                    onClick={() => {
+                                      const newId = generateId('location');
+                                      dispatchDraft({ type: 'ADD_LOCATION_WITH_ID', id: newId });
+                                      dispatchDraft({ type: 'UPDATE_LOCATION', id: newId, field: 'name', value: preset.name });
+                                      dispatchDraft({
+                                        type: 'UPDATE_LOCATION',
+                                        id: newId,
+                                        field: 'descriptor',
+                                        value: preset.descriptor ?? '',
+                                      });
+                                      setLocationLibraryOpen(false);
+                                    }}
+                                  >
+                                    <span className="campaign-manage__preset-name">{preset.name}</span>
+                                    {preset.descriptor && (
+                                      <span className="campaign-manage__preset-tags">{preset.descriptor}</span>
+                                    )}
+                                  </button>
+                                ))
+                              )}
+                            </div>
+                          </div>
+                        )}
+                      </div>
+                    )}
+                    <div className="backbone-list">
+                      {draft.locations.map((location) => (
+                        <div key={location.id} className="backbone-card">
+                          <input
+                            value={location.name}
+                            onChange={(event) =>
+                              dispatchDraft({
+                                type: 'UPDATE_LOCATION',
+                                id: location.id,
+                                field: 'name',
+                                value: event.target.value,
+                              })
+                            }
+                            placeholder="Location name"
+                          />
+                          <textarea
+                            value={location.descriptor}
+                            onChange={(event) =>
+                              dispatchDraft({
+                                type: 'UPDATE_LOCATION',
+                                id: location.id,
+                                field: 'descriptor',
+                                value: event.target.value,
+                              })
+                            }
+                            placeholder="Descriptor (security rating, vibe...)"
+                          />
+                          <button
+                            type="button"
+                            className="btn-link"
+                            onClick={() => dispatchDraft({ type: 'REMOVE_LOCATION', id: location.id })}
+                          >
+                            Remove
+                          </button>
+                        </div>
+                      ))}
+                      <div className="backbone-actions">
+                        <button type="button" className="btn-secondary" onClick={() => dispatchDraft({ type: 'ADD_LOCATION' })}>
+                          Add Location
+                        </button>
+                        <button type="button" className="btn-link" onClick={handleQuickAddLocation}>
+                          Quick-add template
+                        </button>
+                      </div>
                     </div>
-                  ))}
-                  <div className="backbone-actions">
-                    <button type="button" className="btn-secondary" onClick={() => dispatchDraft({ type: 'ADD_LOCATION' })}>
-                      Add Location
-                    </button>
-                    <button type="button" className="btn-link" onClick={handleQuickAddLocation}>
-                      Quick-add template
-                    </button>
                   </div>
-                </div>
-              </div>
             </div>
             </div>
             {fieldErrors.backbone && (
@@ -1422,47 +1671,123 @@ export function CampaignCreation({ targetId = 'campaign-creation-react-root', on
       case 4:
         return (
           <section className="campaign-step">
-            <h4>Session Seed</h4>
-            <div ref={sessionSeedRef} tabIndex={-1}>
-            <label className="skip-toggle">
+            <h4>Session Planning</h4>
+            <p>Outline the opening session runners can expect.</p>
+            {sessionSeedLibrary.length > 0 && (
+              <div className="backbone-library">
+                <button
+                  type="button"
+                  className="btn-secondary"
+                  onClick={() => setSessionSeedLibraryOpen((open) => !open)}
+                  aria-expanded={isSessionSeedLibraryOpen}
+                  aria-controls="creation-session-library"
+                >
+                  {isSessionSeedLibraryOpen ? 'Hide templates' : 'Browse templates'}
+                </button>
+                {isSessionSeedLibraryOpen && (
+                  <div
+                    id="creation-session-library"
+                    className="campaign-manage__preset-panel"
+                    role="region"
+                    aria-label="Session seed library"
+                  >
+                    <input
+                      type="search"
+                      placeholder="Search session templates…"
+                      value={sessionSeedFilter}
+                      onChange={(event) => setSessionSeedFilter(event.target.value)}
+                    />
+                    <div className="campaign-manage__preset-scroll">
+                      {filteredSessionSeedLibrary.length === 0 ? (
+                        <p className="campaign-manage__empty">No matches.</p>
+                      ) : (
+                        filteredSessionSeedLibrary.map((preset) => (
+                          <button
+                            key={preset.id}
+                            type="button"
+                            className="campaign-manage__preset-option"
+                            onClick={() => {
+                              dispatchDraft({ type: 'UPDATE_SESSION_SEED', field: 'skip', value: false });
+                              dispatchDraft({ type: 'UPDATE_SESSION_SEED', field: 'title', value: preset.title });
+                              dispatchDraft({
+                                type: 'UPDATE_SESSION_SEED',
+                                field: 'objectives',
+                                value: preset.objectives ?? '',
+                              });
+                              dispatchDraft({
+                                type: 'UPDATE_SESSION_SEED',
+                                field: 'sceneTemplate',
+                                value: preset.scene_template ?? draft.sessionSeed.sceneTemplate,
+                              });
+                              dispatchDraft({
+                                type: 'UPDATE_SESSION_SEED',
+                                field: 'summary',
+                                value: preset.summary ?? '',
+                              });
+                              clearFieldError('sessionSeed', 4);
+                              setSessionSeedLibraryOpen(false);
+                            }}
+                          >
+                            <span className="campaign-manage__preset-name">{preset.title}</span>
+                            {preset.objectives && (
+                              <span className="campaign-manage__preset-tags">{preset.objectives}</span>
+                            )}
+                          </button>
+                        ))
+                      )}
+                    </div>
+                  </div>
+                )}
+              </div>
+            )}
+            <label className="campaign-manage__checkbox">
               <input
                 type="checkbox"
                 checked={draft.sessionSeed.skip}
-                  onChange={(event) => {
+                onChange={(event) =>
                   dispatchDraft({
                     type: 'UPDATE_SESSION_SEED',
                     field: 'skip',
                     value: event.target.checked,
-                    });
-                    if (event.target.checked) {
-                      clearFieldError('sessionSeed', 4);
+                  })
                 }
-                  }}
               />
-              Skip session setup for now
+              <span>Skip planning for now</span>
             </label>
             {!draft.sessionSeed.skip && (
-              <>
+              <div className="campaign-manage__session-grid">
                 <div className="form-group">
-                  <label htmlFor="session-title">Session Title</label>
+                  <label>Title</label>
                   <input
-                    id="session-title"
                     value={draft.sessionSeed.title}
-                      onChange={(event) => {
+                    onChange={(event) =>
                       dispatchDraft({
                         type: 'UPDATE_SESSION_SEED',
                         field: 'title',
                         value: event.target.value,
-                        });
-                        clearFieldError('sessionSeed', 4);
-                      }}
-                    placeholder="Session 0: The job offer"
+                      })
+                    }
+                    placeholder="Session 0, The Run, etc."
                   />
                 </div>
                 <div className="form-group">
-                  <label htmlFor="session-objectives">Objectives / Notes</label>
+                  <label>Scene Template</label>
+                  <input
+                    value={draft.sessionSeed.sceneTemplate}
+                    onChange={(event) =>
+                      dispatchDraft({
+                        type: 'UPDATE_SESSION_SEED',
+                        field: 'sceneTemplate',
+                        value: event.target.value,
+                      })
+                    }
+                    placeholder="social_meetup, extraction, heist..."
+                  />
+                </div>
+                <div className="form-group">
+                  <label>Objectives</label>
                   <textarea
-                    id="session-objectives"
+                    rows={3}
                     value={draft.sessionSeed.objectives}
                     onChange={(event) =>
                       dispatchDraft({
@@ -1471,40 +1796,12 @@ export function CampaignCreation({ targetId = 'campaign-creation-react-root', on
                         value: event.target.value,
                       })
                     }
-                    placeholder="List your opening beats, key NPCs, or complications."
-                    rows={4}
                   />
                 </div>
                 <div className="form-group">
-                  <label>Scene Template</label>
-                  <div className="session-template-options">
-                    {SESSION_TEMPLATES.map((template) => (
-                      <label key={template.value} className="session-template">
-                        <input
-                          type="radio"
-                          name="session-template"
-                          value={template.value}
-                          checked={draft.sessionSeed.sceneTemplate === template.value}
-                          onChange={(event) =>
-                            dispatchDraft({
-                              type: 'UPDATE_SESSION_SEED',
-                              field: 'sceneTemplate',
-                              value: event.target.value,
-                            })
-                          }
-                        />
-                        <div>
-                          <strong>{template.label}</strong>
-                          <p>{template.description}</p>
-                        </div>
-                      </label>
-                    ))}
-                  </div>
-                </div>
-                <div className="form-group">
-                  <label htmlFor="session-summary">Session Summary (what happened)</label>
+                  <label>Summary</label>
                   <textarea
-                    id="session-summary"
+                    rows={3}
                     value={draft.sessionSeed.summary}
                     onChange={(event) =>
                       dispatchDraft({
@@ -1513,14 +1810,11 @@ export function CampaignCreation({ targetId = 'campaign-creation-react-root', on
                         value: event.target.value,
                       })
                     }
-                    placeholder="Quick notes on outcomes once the session wraps."
-                    rows={3}
                   />
                 </div>
-              </>
-              )}
-            </div>
-            {fieldErrors.sessionSeed && !draft.sessionSeed.skip && (
+              </div>
+            )}
+            {fieldErrors.sessionSeed && (
               <p className="form-error" role="alert">
                 {fieldErrors.sessionSeed}
               </p>

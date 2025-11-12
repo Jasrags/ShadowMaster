@@ -5,6 +5,7 @@ import { ShadowmasterAuthState } from '../types/auth';
 import { UserSummary } from '../types/editions';
 import { CampaignTable } from './CampaignTable';
 import { CampaignManageDrawer } from './CampaignManageDrawer';
+import { CampaignViewDrawer } from './CampaignViewDrawer';
 
 interface Props {
   targetId?: string;
@@ -44,6 +45,7 @@ export function CampaignList({ targetId = CAMPAIGNS_ROOT_ID }: Props) {
   const [actionError, setActionError] = useState<string | null>(null);
   const [actionSuccess, setActionSuccess] = useState<string | null>(null);
   const [actionInFlightId, setActionInFlightId] = useState<string | null>(null);
+  const [campaignToView, setCampaignToView] = useState<CampaignSummary | null>(null);
   const [campaignToManage, setCampaignToManage] = useState<CampaignSummary | null>(null);
   const [gmUsers, setGmUsers] = useState<UserSummary[]>([]);
   const [currentUser, setCurrentUser] = useState<ShadowmasterAuthState | null>(
@@ -212,11 +214,18 @@ export function CampaignList({ targetId = CAMPAIGNS_ROOT_ID }: Props) {
         campaigns={campaigns}
         loading={isLoading}
         error={loadError}
+        onView={(campaign) => setCampaignToView(campaign)}
         onEdit={(campaign) => setCampaignToManage(campaign)}
         onDelete={handleDelete}
         currentUser={currentUser}
         actionInFlightId={actionInFlightId}
       />
+      {campaignToView && (
+        <CampaignViewDrawer
+          campaign={campaignToView}
+          onClose={() => setCampaignToView(null)}
+        />
+      )}
       {campaignToManage && (
         <CampaignManageDrawer
           campaign={campaignToManage}

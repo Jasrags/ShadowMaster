@@ -8,6 +8,7 @@ interface Props {
   campaigns: CampaignSummary[];
   loading: boolean;
   error: string | null;
+  onView: (campaign: CampaignSummary) => void;
   onEdit: (campaign: CampaignSummary) => void;
   onDelete: (campaign: CampaignSummary) => void;
   currentUser: ShadowmasterAuthState | null;
@@ -18,6 +19,7 @@ export function CampaignTable({
   campaigns,
   loading,
   error,
+  onView,
   onEdit,
   onDelete,
   currentUser,
@@ -97,6 +99,14 @@ export function CampaignTable({
               <button
                 type="button"
                 className="button button--table"
+                onClick={() => onView(campaign)}
+                disabled={isProcessing}
+              >
+                View
+              </button>
+              <button
+                type="button"
+                className="button button--table"
                 onClick={() => onEdit(campaign)}
                 disabled={isProcessing || !canManage || !allowEdit}
               >
@@ -115,7 +125,7 @@ export function CampaignTable({
         },
       },
     ],
-    [actionInFlightId, currentUser, onDelete, onEdit],
+    [actionInFlightId, currentUser, onDelete, onEdit, onView],
   );
 
   return (

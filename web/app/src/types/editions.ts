@@ -170,6 +170,41 @@ export interface CharacterCreationData {
   gameplay_levels?: Record<string, GameplayLevelDefinition>;
   creation_methods?: Record<string, CreationMethodDefinition>;
   advancement?: AdvancementRules;
+  campaign_support?: CampaignSupportData;
+}
+
+export interface CampaignSupportData {
+  factions?: CampaignFactionPreset[];
+  locations?: CampaignLocationPreset[];
+  placeholders?: CampaignPlaceholderPreset[];
+  session_seeds?: CampaignSessionSeedPreset[];
+}
+
+export interface CampaignFactionPreset {
+  id: string;
+  name: string;
+  tags?: string;
+  notes?: string;
+}
+
+export interface CampaignLocationPreset {
+  id: string;
+  name: string;
+  descriptor?: string;
+}
+
+export interface CampaignPlaceholderPreset {
+  id: string;
+  name: string;
+  role?: string;
+}
+
+export interface CampaignSessionSeedPreset {
+  id: string;
+  title: string;
+  objectives?: string;
+  scene_template?: string;
+  summary?: string;
 }
 
 export interface CampaignCharacterCreationResponse {

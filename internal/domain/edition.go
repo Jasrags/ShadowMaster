@@ -32,6 +32,46 @@ type CharacterCreationData struct {
 	GameplayLevels  map[string]GameplayLevel             `json:"gameplay_levels,omitempty"`
 	CreationMethods map[string]CreationMethod            `json:"creation_methods,omitempty"`
 	Advancement     *AdvancementRules                    `json:"advancement,omitempty"`
+	CampaignSupport *CampaignSupport                     `json:"campaign_support,omitempty"`
+}
+
+// CampaignSupport aggregates reusable campaign planning presets.
+type CampaignSupport struct {
+	Factions     []CampaignFactionPreset     `json:"factions,omitempty"`
+	Locations    []CampaignLocationPreset   `json:"locations,omitempty"`
+	Placeholders []CampaignPlaceholderPreset `json:"placeholders,omitempty"`
+	SessionSeeds []CampaignSessionSeedPreset `json:"session_seeds,omitempty"`
+}
+
+// CampaignFactionPreset represents a prebuilt faction entry.
+type CampaignFactionPreset struct {
+	ID    string `json:"id"`
+	Name  string `json:"name"`
+	Tags  string `json:"tags,omitempty"`
+	Notes string `json:"notes,omitempty"`
+}
+
+// CampaignLocationPreset represents a prebuilt location entry.
+type CampaignLocationPreset struct {
+	ID         string `json:"id"`
+	Name       string `json:"name"`
+	Descriptor string `json:"descriptor,omitempty"`
+}
+
+// CampaignPlaceholderPreset represents a suggested runner placeholder template.
+type CampaignPlaceholderPreset struct {
+	ID   string `json:"id"`
+	Name string `json:"name"`
+	Role string `json:"role,omitempty"`
+}
+
+// CampaignSessionSeedPreset represents a reusable session planning template.
+type CampaignSessionSeedPreset struct {
+	ID            string `json:"id"`
+	Title         string `json:"title"`
+	Objectives    string `json:"objectives,omitempty"`
+	SceneTemplate string `json:"scene_template,omitempty"`
+	Summary       string `json:"summary,omitempty"`
 }
 
 // GameplayLevel captures SR5 gameplay-level adjustments.

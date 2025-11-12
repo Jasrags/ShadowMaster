@@ -9,7 +9,10 @@ import (
 	"shadowmaster/pkg/storage"
 )
 
-const characterCreationFilename = "character_creation.json"
+const (
+	characterCreationFilename = "character_creation.json"
+	campaignSupportFilename   = "campaign_support.json"
+)
 
 type editionRepository struct {
 	store *storage.JSONStore
@@ -30,6 +33,14 @@ func (r *editionRepository) GetCharacterCreationData(edition string) (*domain.Ch
 	var data domain.CharacterCreationData
 	if err := r.store.Read(path, &data); err != nil {
 		return nil, fmt.Errorf("failed to load character creation data for %s: %w", edition, err)
+	}
+
+	if supportPath := filepath.Join("editions", edition, campaignSupportFilename); r.store.Exists(supportPath) {
+		var support domain.CampaignSupport
+		if err := r.store.Read(supportPath, &support); err != nil {
+			return nil, fmt.Errorf("failed to load campaign support data for %s: %w", edition, err)
+		}
+		data.CampaignSupport = &support
 	}
 
 	return &data, nil

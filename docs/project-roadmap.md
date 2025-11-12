@@ -45,6 +45,11 @@ Legend: ✅ Complete • ⚙️ In Progress • 🔜 Planned • 🛑 Blocked
    - [ ] Add automated migrations/backfill scripts for legacy campaign data (edition/method defaults).
    - [ ] Formalize data seeding for demo/test environments (users, campaigns, characters).
 
+5. **Campaign Management Enhancements**
+   - [ ] Introduce a read-only campaign detail view accessible from the campaign table.
+   - [ ] Provide a shareable campaign summary layout separate from editing controls.
+   - [ ] Expand preset libraries (contacts, safehouses, session hooks) once core UX lands.
+
 ---
 
 ## 3. Edition Strategy & SR5 Rollout
@@ -108,6 +113,7 @@ Legend: ✅ Complete • ⚙️ In Progress • 🔜 Planned • 🛑 Blocked
   - Campaign creation wizard with edition/method/level dropdowns and GM selector.
   - Campaign table leveraging reusable `DataTable`, including edit/delete modals tied to RBAC.
   - Legacy campaign modal fully retired.
+  - SR5 preset libraries (factions, locations, placeholders, session seeds) hooked into wizard + drawer.
 
 ---
 
@@ -118,6 +124,11 @@ Legend: ✅ Complete • ⚙️ In Progress • 🔜 Planned • 🛑 Blocked
 - [ ] Capture edition-specific creation math (Priority, Sum-to-Ten, Karma) in a shared reference once implementation lands.
 - [ ] Expand Go test coverage for scenes/sessions once React CRUD is introduced.
 - [ ] Add end-to-end smoke test covering campaign creation + character wizard path with campaign defaults.
+- **React test coverage plan**
+  - Audit components and prioritize critical flows (campaign creation, management drawers, shared inputs) for first-wave coverage.
+  - Expand Vitest + Testing Library suites to lock rendering behaviour and side-effects.
+  - Strengthen integration smoke tests that exercise multi-step flows (wizard validation, preset add/remove loops).
+  - Evaluate Storybook and visual regression tooling once baseline unit coverage lands.
 
 ---
 

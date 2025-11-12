@@ -79,8 +79,10 @@ test-go: ## Run Go tests
 	@go test -v ./...
 
 test-react: ## Run React tests
-	@echo "$(CYAN)Running React tests...$(NC)"
-	@cd web/app && npm test
+	@echo "$(CYAN)Running React smoke test...$(NC)"
+	@cd web/app && npm test -- --watch=false
+	@echo "$(CYAN)Running React unit tests...$(NC)"
+	@cd web/app && npm run test:unit
 
 test-coverage: ## Run tests with coverage
 	@echo "$(CYAN)Running tests with coverage...$(NC)"

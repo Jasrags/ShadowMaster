@@ -2089,6 +2089,13 @@ body.react-magic-enabled #magic-summary {
     color: #8cd6ff;
 }
 
+.campaign-manage__section-heading {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 0.75rem;
+}
+
 .campaign-manage__actions {
     display: flex;
     justify-content: flex-end;
@@ -2192,6 +2199,151 @@ body.react-magic-enabled #magic-summary {
 .campaign-manage__sublist li small {
     color: rgba(144, 212, 255, 0.6);
     font-size: 0.75rem;
+}
+
+.campaign-manage__toggle-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 0.6rem;
+    margin-bottom: 0.5rem;
+}
+
+.campaign-manage__toggle {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.45rem;
+    padding: 0.45rem 0.6rem;
+    border-radius: 6px;
+    background: rgba(10, 30, 46, 0.65);
+    border: 1px solid rgba(0, 166, 255, 0.25);
+}
+
+.campaign-manage__toggle input {
+    width: 1rem;
+    height: 1rem;
+}
+
+.campaign-manage__collection {
+    display: grid;
+    gap: 0.75rem;
+}
+
+.campaign-manage__collection-card {
+    background: rgba(3, 25, 40, 0.85);
+    border: 1px solid rgba(0, 166, 255, 0.2);
+    border-radius: 8px;
+    padding: 0.85rem 0.95rem;
+    display: grid;
+    gap: 0.65rem;
+}
+
+.campaign-manage__collection-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.75rem;
+}
+
+.campaign-manage__collection-header strong {
+    color: #9bd5ff;
+    font-size: 0.85rem;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+}
+
+.campaign-manage__preset {
+    margin: 0.6rem 0 0.85rem;
+    display: grid;
+    gap: 0.35rem;
+}
+
+.campaign-manage__preset-row {
+    display: flex;
+    gap: 0.5rem;
+    align-items: center;
+}
+
+.campaign-manage__preset-row--stacked {
+    flex-direction: column;
+    align-items: stretch;
+}
+
+.campaign-manage__preset-row--stacked input {
+    width: 100%;
+}
+
+.campaign-manage__preset-scroll {
+    display: grid;
+    gap: 0.35rem;
+    max-height: 220px;
+    overflow-y: auto;
+    padding-right: 0.25rem;
+}
+
+.campaign-manage__preset-panel {
+    display: grid;
+    gap: 0.5rem;
+    padding: 0.6rem 0.7rem;
+    border-radius: 8px;
+    background: rgba(4, 20, 30, 0.85);
+    border: 1px solid rgba(0, 166, 255, 0.2);
+}
+
+.campaign-manage__preset-option {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.2rem;
+    padding: 0.45rem 0.55rem;
+    background: rgba(10, 30, 46, 0.65);
+    border: 1px solid rgba(0, 166, 255, 0.25);
+    border-radius: 6px;
+    color: #e8f6ff;
+    font-size: 0.88rem;
+    transition: border-color 0.15s ease, background 0.15s ease;
+}
+
+.campaign-manage__preset-option:hover {
+    border-color: rgba(0, 166, 255, 0.45);
+    background: rgba(10, 30, 46, 0.85);
+}
+
+.campaign-manage__preset-name {
+    font-weight: 600;
+}
+
+.campaign-manage__preset-tags {
+    font-size: 0.75rem;
+    color: rgba(144, 212, 255, 0.75);
+}
+
+.campaign-manage__preset-row select {
+    flex: 1;
+}
+
+.campaign-manage__checkbox {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-bottom: 0.6rem;
+    font-size: 0.9rem;
+    color: rgba(232, 246, 255, 0.9);
+}
+
+.campaign-manage__checkbox input {
+    width: 1rem;
+    height: 1rem;
+}
+
+.campaign-manage__session-grid {
+    display: grid;
+    gap: 0.75rem;
+}
+
+.campaign-manage__empty {
+    color: rgba(144, 212, 255, 0.65);
+    font-style: italic;
+    margin: 0.35rem 0 0;
 }
 
 .pill--status-active {
@@ -3372,5 +3524,137 @@ body.react-magic-enabled #magic-summary {
 .form-warning {
     color: #f5d67b;
     margin: 0.5rem 0 0;
+}
+
+.backbone-library {
+    display: grid;
+    gap: 0.5rem;
+    margin-bottom: 0.75rem;
+}
+
+.campaign-view .campaign-manage__body {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+.campaign-view__section {
+    background: rgba(4, 20, 30, 0.8);
+    border: 1px solid rgba(0, 166, 255, 0.2);
+    border-radius: 10px;
+    padding: 1.1rem 1.25rem;
+    display: grid;
+    gap: 0.75rem;
+}
+
+.campaign-view__list {
+    margin: 0;
+    display: grid;
+    gap: 0.5rem;
+}
+
+.campaign-view__list div {
+    display: flex;
+    justify-content: space-between;
+    gap: 1rem;
+    font-size: 0.92rem;
+}
+
+.campaign-view__list dt {
+    color: rgba(144, 212, 255, 0.7);
+    font-weight: 600;
+}
+
+.campaign-view__list dd {
+    margin: 0;
+    color: #e8f6ff;
+    text-align: right;
+}
+
+.campaign-view__pill-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+}
+
+.campaign-view__empty {
+    margin: 0;
+    color: rgba(144, 212, 255, 0.75);
+    font-size: 0.9rem;
+}
+
+.campaign-view__subsection {
+    display: grid;
+    gap: 0.35rem;
+}
+
+.campaign-view__subsection h5 {
+    margin: 0;
+    font-size: 0.85rem;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    color: rgba(144, 212, 255, 0.8);
+}
+
+.campaign-view__subsection ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    gap: 0.35rem;
+    font-size: 0.9rem;
+}
+
+.campaign-view__subsection dl {
+    margin: 0;
+    display: grid;
+    gap: 0.45rem;
+}
+
+.campaign-view__subsection dl div {
+    display: flex;
+    justify-content: space-between;
+    gap: 0.75rem;
+    font-size: 0.9rem;
+}
+
+.campaign-view__badge {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 2.25rem;
+    padding: 0.1rem 0.4rem;
+    border-radius: 999px;
+    font-size: 0.7rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+}
+
+.campaign-view__badge--on {
+    background: rgba(0, 204, 153, 0.2);
+    color: #6dffd2;
+    border: 1px solid rgba(0, 204, 153, 0.35);
+}
+
+.campaign-view__badge--off {
+    background: rgba(255, 107, 107, 0.12);
+    color: #ffb3b3;
+    border: 1px solid rgba(255, 107, 107, 0.35);
+}
+
+.campaign-view__code-block {
+    margin: 0;
+    padding: 0.75rem;
+    border-radius: 8px;
+    background: rgba(6, 24, 36, 0.95);
+    border: 1px solid rgba(0, 166, 255, 0.25);
+    font-family: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, Monaco, monospace;
+    font-size: 0.8rem;
+    white-space: pre-wrap;
+    word-break: break-word;
 }
 
