@@ -257,11 +257,15 @@ function showCreateCharacterModal(options = {}) {
         playerName: '',
         selectedMetatype: null,
         priorities: null,
-        magicalType: null,
-        tradition: null,
-        totem: null,
-        attributes: null, // Will be set when entering attributes step
-        attributeBaseValues: null, // Will be calculated based on selected metatype
+        magicalType: null, // 'Full Magician', 'Aspected Magician', 'Adept', or 'Mundane'
+        tradition: null, // 'Hermetic' or 'Shamanic' (for Full/Aspected Magicians)
+        totem: null, // Totem name (for Shamanic mages)
+        attributes: null,
+        attributeBaseValues: null,
+        skills: {
+            active: [],
+            knowledge: []
+        },
         campaignId: campaignId,
         campaignGameplayRules: campaignGameplayRules
     };
@@ -356,6 +360,10 @@ let characterWizardState = {
     totem: null, // Totem name (for Shamanic mages)
     attributes: null,
     attributeBaseValues: null,
+    skills: {
+        active: [],
+        knowledge: []
+    },
     campaignId: null,
     campaignGameplayRules: null
 };
@@ -762,6 +770,16 @@ function showWizardStep(step) {
         } else if (step === 4) {
             // Initialize attributes step
             initializeAttributesStep();
+        } else if (step === 5) {
+            initializeSkillsStep();
+        } else if (step === 6) {
+            initializeEquipmentStep();
+        } else if (step === 7) {
+            initializeContactsStep();
+        } else if (step === 8) {
+            initializeLifestyleStep();
+        } else if (step === 9) {
+            initializeCharacterReviewStep();
         }
     } catch (error) {
         console.error(`Error initializing step ${step}:`, error);
@@ -1353,6 +1371,9 @@ function getAvailableAttributePoints(priority) {
 
 // Initialize attributes step
 function initializeAttributesStep() {
+    if (typeof document !== 'undefined' && document.body.classList.contains('react-attributes-enabled')) {
+        return;
+    }
     // Check if priorities are set
     if (!characterWizardState.priorities || !characterWizardState.priorities.attributes) {
         console.error('Attributes priority not set');
@@ -3287,9 +3308,7 @@ function initializeLegacyApp() {
                     intelligence: parseInt(document.getElementById('attr-intelligence').value) || 1,
                     willpower: parseInt(document.getElementById('attr-willpower').value) || 1
                 };
-                // Move to next step (placeholder for now)
-                // showWizardStep(4);
-                legacyNotify('Attribute assignment complete! Next step coming soon...', 'info', 'Priorities saved');
+                showWizardStep(5);
             }
         });
     }
@@ -3391,26 +3410,15 @@ window.ShadowmasterLegacyApp = Object.assign(window.ShadowmasterLegacyApp ?? {},
             characterWizardState.priorities = clonePriorityAssignments();
         }
 
-        if (Object.prototype.hasOwnProperty.call(state, 'type')) {
-            characterWizardState.magicalType = state.type || null;
-        }
-        if (Object.prototype.hasOwnProperty.call(state, 'tradition')) {
-            characterWizardState.tradition = state.tradition || null;
-        }
-        if (Object.prototype.hasOwnProperty.call(state, 'totem')) {
-            characterWizardState.totem = state.totem || null;
+        characterWizardState.magicalType = state.type || null;
+        characterWizardState.tradition = state.tradition || null;
+        characterWizardState.totem = state.totem || null;
+
+        if (state.priority) {
+            characterWizardState.priorities.magic = state.priority;
+            applyPriorityAssignment('magic', state.priority);
         }
 
-        const type = characterWizardState.magicalType;
-        if (type !== 'Full Magician' && type !== 'Aspected Magician') {
-            characterWizardState.tradition = null;
-            characterWizardState.totem = null;
-        } else if (characterWizardState.tradition !== 'Shamanic') {
-            characterWizardState.totem = null;
-        }
-
-        updateMagicSummary();
-        validateMagicalAbilities();
         notifyMagicState();
     },
     subscribeMagicState: (listener) => {
@@ -3421,10 +3429,351 @@ window.ShadowmasterLegacyApp = Object.assign(window.ShadowmasterLegacyApp ?? {},
     unsubscribeMagicState: (listener) => {
         magicStateListeners = magicStateListeners.filter(l => l !== listener);
     },
+    getSkillsState: () => {
+        const priority = characterWizardState.priorities ? (characterWizardState.priorities.skills || '') : '';
+        const available = getAvailableSkillPoints(priority || '');
+        const active = characterWizardState.skills?.active || [];
+        const knowledge = characterWizardState.skills?.knowledge || [];
+        const used = [...active, ...knowledge].reduce((total, entry) => total + (entry.rating || 0), 0);
+
+        return {
+            priority,
+            active,
+            knowledge,
+            available,
+            used
+        };
+    },
+    setSkillsState: (state) => {
+        if (!state) return;
+
+        if (!characterWizardState.priorities) {
+            characterWizardState.priorities = clonePriorityAssignments();
+        }
+
+        if (state.priority) {
+            characterWizardState.priorities.skills = state.priority;
+            applyPriorityAssignment('skills', state.priority);
+        }
+
+        characterWizardState.skills = {
+            active: Array.isArray(state.active) ? state.active.map(entry => ({
+                id: entry.id || null,
+                name: entry.name || '',
+                rating: parseInt(entry.rating, 10) || 1
+            })) : [],
+            knowledge: Array.isArray(state.knowledge) ? state.knowledge.map(entry => ({
+                id: entry.id || null,
+                name: entry.name || '',
+                rating: parseInt(entry.rating, 10) || 1
+            })) : []
+        };
+    },
     showWizardStep: (step) => {
-        if (typeof step === 'number') {
-            showWizardStep(step);
+        showWizardStep(step);
+    },
+    getAttributesState: () => {
+        return {
+            values: characterWizardState.attributes ? { ...characterWizardState.attributes } : null,
+            startingValues: characterWizardState.attributeStartingValues
+                ? { ...characterWizardState.attributeStartingValues }
+                : null,
+            baseValues: characterWizardState.attributeBaseValues
+                ? { ...characterWizardState.attributeBaseValues }
+                : null
+        };
+    },
+    setAttributesState: (payload) => {
+        if (!payload) return;
+        if (payload.values && typeof payload.values === 'object') {
+            characterWizardState.attributes = { ...payload.values };
+        }
+        if (payload.startingValues && typeof payload.startingValues === 'object') {
+            characterWizardState.attributeStartingValues = { ...payload.startingValues };
+        }
+        if (payload.baseValues && typeof payload.baseValues === 'object') {
+            characterWizardState.attributeBaseValues = { ...payload.baseValues };
+        }
+    },
+    getEquipmentState: () => {
+        const priority = characterWizardState.priorities ? (characterWizardState.priorities.resources || '') : '';
+        return {
+            priority,
+            weapons: characterWizardState.equipment?.weapons || [],
+            armor: characterWizardState.equipment?.armor || [],
+            cyberware: characterWizardState.equipment?.cyberware || [],
+            bioware: characterWizardState.equipment?.bioware || [],
+            gear: characterWizardState.equipment?.gear || [],
+            vehicles: characterWizardState.equipment?.vehicles || [],
+            totalCost: characterWizardState.equipment?.totalCost || 0,
+            remainingNuyen: characterWizardState.equipment?.remainingNuyen || 0,
+            totalEssenceCost: characterWizardState.equipment?.totalEssenceCost || 0
+        };
+    },
+    setEquipmentState: (payload) => {
+        if (!payload) return;
+
+        if (!characterWizardState.priorities) {
+            characterWizardState.priorities = clonePriorityAssignments();
+        }
+
+        if (payload.priority) {
+            characterWizardState.priorities.resources = payload.priority;
+            applyPriorityAssignment('resources', payload.priority);
+        }
+
+        if (!characterWizardState.equipment) {
+            characterWizardState.equipment = {};
+        }
+
+        if (Array.isArray(payload.weapons)) {
+            characterWizardState.equipment.weapons = payload.weapons.map(entry => ({
+                id: entry.id || null,
+                name: entry.name || '',
+                type: entry.type || 'Firearm',
+                damage: entry.damage || '',
+                accuracy: parseInt(entry.accuracy, 10) || 0,
+                concealability: parseInt(entry.concealability, 10) || 0,
+                mode: entry.mode || null,
+                range: entry.range || null,
+                notes: entry.notes || null,
+                cost: parseInt(entry.cost, 10) || 0
+            }));
+        }
+
+        if (Array.isArray(payload.armor)) {
+            characterWizardState.equipment.armor = payload.armor.map(entry => ({
+                id: entry.id || null,
+                name: entry.name || '',
+                type: entry.type || 'Armor',
+                rating: parseInt(entry.rating, 10) || 0,
+                notes: entry.notes || null,
+                cost: parseInt(entry.cost, 10) || 0
+            }));
+        }
+
+        if (Array.isArray(payload.cyberware)) {
+            characterWizardState.equipment.cyberware = payload.cyberware.map(entry => ({
+                id: entry.id || null,
+                name: entry.name || '',
+                rating: entry.rating ? parseInt(entry.rating, 10) : null,
+                essenceCost: parseFloat(entry.essenceCost) || 0,
+                cost: parseInt(entry.cost, 10) || 0,
+                availability: entry.availability ? parseInt(entry.availability, 10) : null,
+                notes: entry.notes || null
+            }));
+        }
+
+        if (Array.isArray(payload.bioware)) {
+            characterWizardState.equipment.bioware = payload.bioware.map(entry => ({
+                id: entry.id || null,
+                name: entry.name || '',
+                rating: entry.rating ? parseInt(entry.rating, 10) : null,
+                cost: parseInt(entry.cost, 10) || 0,
+                availability: entry.availability ? parseInt(entry.availability, 10) : null,
+                notes: entry.notes || null
+            }));
+        }
+
+        if (Array.isArray(payload.gear)) {
+            characterWizardState.equipment.gear = payload.gear.map(entry => ({
+                id: entry.id || null,
+                name: entry.name || '',
+                type: entry.type || 'Equipment',
+                count: parseInt(entry.count, 10) || 1,
+                notes: entry.notes || null,
+                cost: parseInt(entry.cost, 10) || 0
+            }));
+        }
+
+        if (Array.isArray(payload.vehicles)) {
+            characterWizardState.equipment.vehicles = payload.vehicles.map(entry => ({
+                id: entry.id || null,
+                name: entry.name || '',
+                type: entry.type || 'Car',
+                handling: parseInt(entry.handling, 10) || 0,
+                speed: parseInt(entry.speed, 10) || 0,
+                acceleration: parseInt(entry.acceleration, 10) || 0,
+                body: parseInt(entry.body, 10) || 0,
+                armor: entry.armor ? parseInt(entry.armor, 10) : null,
+                modifications: Array.isArray(entry.modifications) ? entry.modifications : null,
+                notes: entry.notes || null,
+                cost: parseInt(entry.cost, 10) || 0
+            }));
+        }
+
+        if (typeof payload.totalCost === 'number') {
+            characterWizardState.equipment.totalCost = payload.totalCost;
+        }
+        if (typeof payload.remainingNuyen === 'number') {
+            characterWizardState.equipment.remainingNuyen = payload.remainingNuyen;
+        }
+        if (typeof payload.totalEssenceCost === 'number') {
+            characterWizardState.equipment.totalEssenceCost = payload.totalEssenceCost;
+        }
+
+        notifyEquipmentState();
+    },
+    subscribeEquipmentState: (listener) => {
+        if (typeof listener === 'function') {
+            equipmentStateListeners.push(listener);
+            return () => {
+                equipmentStateListeners = equipmentStateListeners.filter(l => l !== listener);
+            };
+        }
+    },
+    getContactsState: () => {
+        return {
+            contacts: characterWizardState.contacts || []
+        };
+    },
+    setContactsState: (payload) => {
+        if (!payload) return;
+
+        if (Array.isArray(payload.contacts)) {
+            characterWizardState.contacts = payload.contacts.map(entry => ({
+                id: entry.id || null,
+                name: entry.name || '',
+                type: entry.type || 'General',
+                level: parseInt(entry.level, 10) || 1,
+                loyalty: parseInt(entry.loyalty, 10) || 1,
+                notes: entry.notes || null
+            }));
+        }
+
+        notifyContactsState();
+    },
+    subscribeContactsState: (listener) => {
+        if (typeof listener === 'function') {
+            contactsStateListeners.push(listener);
+            return () => {
+                contactsStateListeners = contactsStateListeners.filter(l => l !== listener);
+            };
+        }
+    },
+    getLifestyleState: () => {
+        return {
+            lifestyle: characterWizardState.lifestyle || ''
+        };
+    },
+    setLifestyleState: (payload) => {
+        if (!payload) return;
+
+        if (payload.lifestyle) {
+            characterWizardState.lifestyle = payload.lifestyle;
+        }
+
+        notifyLifestyleState();
+    },
+    subscribeLifestyleState: (listener) => {
+        if (typeof listener === 'function') {
+            lifestyleStateListeners.push(listener);
+            return () => {
+                lifestyleStateListeners = lifestyleStateListeners.filter(l => l !== listener);
+            };
         }
     }
 });
+
+function initializeSkillsStep() {
+    if (typeof document !== 'undefined' && document.body.classList.contains('react-skills-enabled')) {
+        return;
+    }
+
+    const container = document.getElementById('skills-react-root');
+    if (container) {
+        container.innerHTML = '<p class="legacy-warning">React skills interface not available.</p>';
+    }
+}
+
+function getAvailableSkillPoints(priority) {
+    const pointTable = {
+        'A': 50,
+        'B': 40,
+        'C': 34,
+        'D': 30,
+        'E': 27
+    };
+    return pointTable[priority] || 0;
+}
+
+function initializeEquipmentStep() {
+    if (typeof document !== 'undefined' && document.body.classList.contains('react-equipment-enabled')) {
+        return;
+    }
+
+    const container = document.getElementById('equipment-react-root');
+    if (container) {
+        container.innerHTML = '<p class="legacy-warning">React equipment interface not available.</p>';
+    }
+}
+
+let equipmentStateListeners = [];
+
+function notifyEquipmentState() {
+    equipmentStateListeners.forEach(listener => {
+        try {
+            listener();
+        } catch (err) {
+            console.error('Equipment listener failed', err);
+        }
+    });
+}
+
+function initializeContactsStep() {
+    if (typeof document !== 'undefined' && document.body.classList.contains('react-contacts-enabled')) {
+        return;
+    }
+
+    const container = document.getElementById('contacts-react-root');
+    if (container) {
+        container.innerHTML = '<p class="legacy-warning">React contacts interface not available.</p>';
+    }
+}
+
+let contactsStateListeners = [];
+
+function notifyContactsState() {
+    contactsStateListeners.forEach(listener => {
+        try {
+            listener();
+        } catch (err) {
+            console.error('Contacts listener failed', err);
+        }
+    });
+}
+
+function initializeLifestyleStep() {
+    if (typeof document !== 'undefined' && document.body.classList.contains('react-lifestyle-enabled')) {
+        return;
+    }
+
+    const container = document.getElementById('lifestyle-react-root');
+    if (container) {
+        container.innerHTML = '<p class="legacy-warning">React lifestyle interface not available.</p>';
+    }
+}
+
+let lifestyleStateListeners = [];
+
+function notifyLifestyleState() {
+    lifestyleStateListeners.forEach(listener => {
+        try {
+            listener();
+        } catch (err) {
+            console.error('Lifestyle listener failed', err);
+        }
+    });
+}
+
+function initializeCharacterReviewStep() {
+    if (typeof document !== 'undefined' && document.body.classList.contains('react-character-review-enabled')) {
+        return;
+    }
+
+    const container = document.getElementById('character-review-react-root');
+    if (container) {
+        container.innerHTML = '<p class="legacy-warning">React character review interface not available.</p>';
+    }
+}
 

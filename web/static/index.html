@@ -28,7 +28,7 @@
             
             <!-- Character Creation Modal -->
             <div id="character-modal" class="modal" style="display: none;">
-                <div class="modal-content">
+                <div class="modal-content character-wizard-modal">
                     <span class="close">&times;</span>
                     <h2>Create Character</h2>
                     
@@ -49,6 +49,26 @@
                         <div class="progress-step" data-step="4">
                             <span class="step-number">4</span>
                             <span class="step-label">Attributes</span>
+                        </div>
+                        <div class="progress-step" data-step="5">
+                            <span class="step-number">5</span>
+                            <span class="step-label">Skills</span>
+                        </div>
+                        <div class="progress-step" data-step="6">
+                            <span class="step-number">6</span>
+                            <span class="step-label">Equipment</span>
+                        </div>
+                        <div class="progress-step" data-step="7">
+                            <span class="step-number">7</span>
+                            <span class="step-label">Contacts</span>
+                        </div>
+                        <div class="progress-step" data-step="8">
+                            <span class="step-number">8</span>
+                            <span class="step-label">Lifestyle</span>
+                        </div>
+                        <div class="progress-step" data-step="9">
+                            <span class="step-number">9</span>
+                            <span class="step-label">Review</span>
                         </div>
                     </div>
                     
@@ -185,80 +205,53 @@
                     <div class="wizard-step" id="step-4" data-step="4" style="display: none;">
                         <h3>Assign Attributes</h3>
                         <p class="help-text">Characters start with 1 in all attributes for free, plus racial modifiers. Attributes can be below 1 if modifiers are negative, but must be raised to at least 1 before the character is valid. Each attribute can be raised up to 6 maximum (before racial modifiers).</p>
-                        
-                        <div class="attributes-container">
-                            <div class="attributes-header">
-                                <div class="points-info">
-                                    <span>Available Points: <strong id="available-points">0</strong></span>
-                                    <span>Used Points: <strong id="used-points">0</strong></span>
-                                    <span>Remaining: <strong id="remaining-points" class="points-remaining">0</strong></span>
-                                </div>
-                                <div id="attribute-validation" class="validation-message" style="display: none;"></div>
-                            </div>
-                            
-                            <div class="attributes-grid">
-                                <div class="attribute-row">
-                                    <label for="attr-body">Body (BOD): <span class="min-label" id="min-body"></span></label>
-                                    <input type="number" id="attr-body" max="6" value="1" class="attribute-input">
-                                    <span class="modifier-display" id="mod-body"></span>
-                                    <span class="final-value" id="final-body"></span>
-                                </div>
-                                <div class="attribute-row">
-                                    <label for="attr-quickness">Quickness (QUI): <span class="min-label" id="min-quickness"></span></label>
-                                    <input type="number" id="attr-quickness" max="6" value="1" class="attribute-input">
-                                    <span class="modifier-display" id="mod-quickness"></span>
-                                    <span class="final-value" id="final-quickness"></span>
-                                </div>
-                                <div class="attribute-row">
-                                    <label for="attr-strength">Strength (STR): <span class="min-label" id="min-strength"></span></label>
-                                    <input type="number" id="attr-strength" max="6" value="1" class="attribute-input">
-                                    <span class="modifier-display" id="mod-strength"></span>
-                                    <span class="final-value" id="final-strength"></span>
-                                </div>
-                                <div class="attribute-row">
-                                    <label for="attr-charisma">Charisma (CHA): <span class="min-label" id="min-charisma"></span></label>
-                                    <input type="number" id="attr-charisma" max="6" value="1" class="attribute-input">
-                                    <span class="modifier-display" id="mod-charisma"></span>
-                                    <span class="final-value" id="final-charisma"></span>
-                                </div>
-                                <div class="attribute-row">
-                                    <label for="attr-intelligence">Intelligence (INT): <span class="min-label" id="min-intelligence"></span></label>
-                                    <input type="number" id="attr-intelligence" max="6" value="1" class="attribute-input">
-                                    <span class="modifier-display" id="mod-intelligence"></span>
-                                    <span class="final-value" id="final-intelligence"></span>
-                                </div>
-                                <div class="attribute-row">
-                                    <label for="attr-willpower">Willpower (WIL): <span class="min-label" id="min-willpower"></span></label>
-                                    <input type="number" id="attr-willpower" max="6" value="1" class="attribute-input">
-                                    <span class="modifier-display" id="mod-willpower"></span>
-                                    <span class="final-value" id="final-willpower"></span>
-                                </div>
-                            </div>
-                            
-                            <div class="derived-attributes">
-                                <h4>Derived Attributes</h4>
-                                <div class="derived-row">
-                                    <label>Reaction:</label>
-                                    <span id="derived-reaction">0</span>
-                                    <small>(Quickness + Intelligence) ÷ 2, rounded down</small>
-                                </div>
-                                <div class="derived-row">
-                                    <label>Essence:</label>
-                                    <span id="derived-essence">6.0</span>
-                                    <small>Starting value, reduced by cyberware</small>
-                                </div>
-                                <div class="derived-row">
-                                    <label>Magic Rating:</label>
-                                    <span id="derived-magic">0</span>
-                                    <small id="magic-note">Based on magic priority</small>
-                                </div>
-                            </div>
+                        <div id="attributes-react-root" class="react-mount">
+                            <p class="legacy-warning">Loading attributes interface…</p>
                         </div>
-                        
-                        <div class="form-actions">
-                            <button type="button" id="attr-back-btn" class="btn-secondary">Back</button>
-                            <button type="button" id="attr-next-btn" class="btn-primary" disabled>Next: Assign Skills</button>
-                            <button type="button" class="btn-cancel">Cancel</button>
+                    </div>
+
+                    <!-- Step 5: Skills -->
+                    <div class="wizard-step" id="step-5" data-step="5" style="display: none;">
+                        <h3>Assign Skills</h3>
+                        <p class="help-text">Allocate your skill points across active and knowledge skills. Points must be fully spent before advancing.</p>
+                        <div id="skills-react-root" class="react-mount">
+                            <p class="legacy-warning">Loading skills interface…</p>
+                        </div>
+                    </div>
+
+                    <!-- Step 6: Equipment -->
+                    <div class="wizard-step" id="step-6" data-step="6" style="display: none;">
+                        <h3>Select Equipment</h3>
+                        <p class="help-text">Purchase weapons, armor, cyberware, bioware, gear, and vehicles using your resources priority nuyen.</p>
+                        <div id="equipment-react-root" class="react-mount">
+                            <p class="legacy-warning">Loading equipment interface…</p>
+                        </div>
+                    </div>
+
+                    <!-- Step 7: Contacts -->
+                    <div class="wizard-step" id="step-7" data-step="7" style="display: none;">
+                        <h3>Manage Contacts</h3>
+                        <p class="help-text">Configure your character's contacts. Characters start with two free level 1 contacts.</p>
+                        <div id="contacts-react-root" class="react-mount">
+                            <p class="legacy-warning">Loading contacts interface…</p>
+                        </div>
+                    </div>
+
+                    <!-- Step 8: Lifestyle -->
+                    <div class="wizard-step" id="step-8" data-step="8" style="display: none;">
+                        <h3>Select Lifestyle</h3>
+                        <p class="help-text">Choose your character's lifestyle. This represents their living conditions and standard of living.</p>
+                        <div id="lifestyle-react-root" class="react-mount">
+                            <p class="legacy-warning">Loading lifestyle interface…</p>
+                        </div>
+                    </div>
+
+                    <!-- Step 9: Final Review -->
+                    <div class="wizard-step" id="step-9" data-step="9" style="display: none;">
+                        <h3>Review & Create Character</h3>
+                        <p class="help-text">Review all your character details and create your character.</p>
+                        <div id="character-review-react-root" class="react-mount">
+                            <p class="legacy-warning">Loading review interface…</p>
                         </div>
                     </div>
                 </div>

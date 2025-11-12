@@ -88,7 +88,7 @@ func TestSessionService_UpdateSession(t *testing.T) {
 		{
 			name: "updates status when valid",
 			mutate: func(session *domain.Session) {
-				session.Status = "Active"
+	session.Status = "Active"
 			},
 			assert: func(t *testing.T, updated *domain.Session) {
 				assert.Equal(t, "Active", updated.Status)

@@ -1,6 +1,7 @@
 import { StrictMode, useEffect } from 'react';
 import { createRoot } from 'react-dom/client';
 import { EditionProvider } from './context/EditionContext';
+import { CharacterWizardProvider } from './context/CharacterWizardContext';
 import { App } from './App';
 import type { PriorityCode } from './types/editions';
 
@@ -26,7 +27,9 @@ function Root() {
   return (
     <StrictMode>
       <EditionProvider>
-        <App />
+        <CharacterWizardProvider>
+          <App />
+        </CharacterWizardProvider>
       </EditionProvider>
     </StrictMode>
   );

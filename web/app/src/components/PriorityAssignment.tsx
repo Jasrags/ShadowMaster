@@ -1,5 +1,6 @@
 import { ChangeEvent, DragEvent, useEffect, useMemo, useRef, useState } from 'react';
 import { useEdition } from '../hooks/useEdition';
+import { useCharacterWizard } from '../context/CharacterWizardContext';
 import {
   createEmptyAssignments,
   getAvailablePriorities,
@@ -175,7 +176,40 @@ function ClassicPriorityAssignment({
   campaignLoading,
   campaignError,
 }: ClassicPriorityAssignmentProps) {
-  const [assignments, setAssignments] = useState<PriorityAssignments>(() => getInitialAssignments());
+  const wizard = useCharacterWizard();
+  
+  const [assignments, setAssignments] = useState<PriorityAssignments>(() => {
+    // Try to load from context first, then fall back to legacy
+    // Note: We can't call hooks inside useState initializer, so we need to check
+    // if the context has been initialized. For now, we'll use a lazy initialization pattern.
+    // On first render, wizard.state will have initial values, so we check legacy first.
+    const legacyPriorities = window.ShadowmasterLegacyApp?.getPriorities?.();
+    if (legacyPriorities) {
+      const result: PriorityAssignments = {
+        magic: (legacyPriorities.magic as PriorityCode) ?? null,
+        metatype: (legacyPriorities.metatype as PriorityCode) ?? null,
+        attributes: (legacyPriorities.attributes as PriorityCode) ?? null,
+        skills: (legacyPriorities.skills as PriorityCode) ?? null,
+        resources: (legacyPriorities.resources as PriorityCode) ?? null,
+      };
+      return result;
+    }
+    
+    // Fall back to context if legacy doesn't have values
+    const contextPriorities = wizard.state.priorities;
+    if (contextPriorities.magic || contextPriorities.metatype || 
+        contextPriorities.attributes || contextPriorities.skills || contextPriorities.resources) {
+      return {
+        magic: contextPriorities.magic ?? null,
+        metatype: contextPriorities.metatype ?? null,
+        attributes: contextPriorities.attributes ?? null,
+        skills: contextPriorities.skills ?? null,
+        resources: contextPriorities.resources ?? null,
+      };
+    }
+    
+    return getInitialAssignments();
+  });
   const [dragState, setDragState] = useState<DragState | null>(null);
   const dropzoneRefs = useRef<Record<string, HTMLDivElement | null>>({});
 
@@ -187,8 +221,18 @@ function ClassicPriorityAssignment({
   }, []);
 
   useEffect(() => {
-    window.ShadowmasterLegacyApp?.setPriorities?.(normalizeAssignments(assignments));
-  }, [assignments]);
+    const normalized = normalizeAssignments(assignments);
+    // Sync to legacy for backward compatibility
+    window.ShadowmasterLegacyApp?.setPriorities?.(normalized);
+    // Also sync to React context
+    wizard.setPriorities({
+      magic: normalized.magic as 'A' | 'B' | 'C' | 'D' | 'E' | null,
+      metatype: normalized.metatype as 'A' | 'B' | 'C' | 'D' | 'E' | null,
+      attributes: normalized.attributes as 'A' | 'B' | 'C' | 'D' | 'E' | null,
+      skills: normalized.skills as 'A' | 'B' | 'C' | 'D' | 'E' | null,
+      resources: normalized.resources as 'A' | 'B' | 'C' | 'D' | 'E' | null,
+    });
+  }, [assignments, wizard]);
 
   const missingPriorities = useMemo(() => getAvailablePriorities(assignments), [assignments]);
   const allAssigned = isAssignmentsComplete(assignments);

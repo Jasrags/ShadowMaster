@@ -14,6 +14,12 @@ import { useEdition } from './hooks/useEdition';
 import { GameplayRules } from './types/editions';
 import { NotificationProvider } from './context/NotificationContext';
 import type { NotificationDescriptor } from './context/NotificationContext';
+import AttributesPortal from './components/AttributesAllocation';
+import SkillsPortal from './components/SkillsAllocation';
+import { EquipmentPortal } from './components/EquipmentAllocation';
+import { ContactsPortal } from './components/ContactsAllocation';
+import { LifestylePortal } from './components/LifestyleSelection';
+import { CharacterReviewPortal } from './components/CharacterReview';
 
 function AuthPortal() {
   const [container, setContainer] = useState<Element | null>(null);
@@ -164,6 +170,12 @@ export function App() {
       <PriorityAssignmentPortal />
       <MetatypeSelectionPortal />
       <MagicalAbilitiesPortal />
+      <AttributesPortal />
+      <SkillsPortal />
+      <EquipmentPortal />
+      <ContactsPortal />
+      <LifestylePortal />
+      <CharacterReviewPortal />
     </NotificationProvider>
   );
 }
@@ -190,6 +202,187 @@ declare global {
         edition?: string;
         gameplayRules?: GameplayRules | null;
       } | null) => void;
+      getAttributesState?: () => {
+        values?: Record<string, number> | null;
+        startingValues?: Record<string, number> | null;
+        baseValues?: Record<string, number> | null;
+      } | null;
+      setAttributesState?: (payload: {
+        values?: Record<string, number> | null;
+        startingValues?: Record<string, number> | null;
+        baseValues?: Record<string, number> | null;
+      }) => void;
+      getSkillsState?: () => {
+        priority?: string;
+        active?: Array<{ id?: string; name: string; rating: number }>;
+        knowledge?: Array<{ id?: string; name: string; rating: number }>;
+        available?: number;
+        used?: number;
+      } | null;
+      setSkillsState?: (payload: {
+        priority?: string;
+        active?: Array<{ id?: string; name: string; rating: number }>;
+        knowledge?: Array<{ id?: string; name: string; rating: number }>;
+        available?: number;
+        used?: number;
+      }) => void;
+      getEquipmentState?: () => {
+        priority?: string;
+        weapons?: Array<{
+          id?: string;
+          name: string;
+          type?: string;
+          damage?: string;
+          accuracy?: number;
+          concealability?: number;
+          mode?: string;
+          range?: string;
+          notes?: string;
+          cost?: number;
+        }>;
+        armor?: Array<{
+          id?: string;
+          name: string;
+          type?: string;
+          rating?: number;
+          notes?: string;
+          cost?: number;
+        }>;
+        cyberware?: Array<{
+          id?: string;
+          name: string;
+          rating?: number;
+          essenceCost?: number;
+          cost?: number;
+          availability?: number;
+          notes?: string;
+        }>;
+        bioware?: Array<{
+          id?: string;
+          name: string;
+          rating?: number;
+          cost?: number;
+          availability?: number;
+          notes?: string;
+        }>;
+        gear?: Array<{
+          id?: string;
+          name: string;
+          type?: string;
+          count?: number;
+          notes?: string;
+          cost?: number;
+        }>;
+        vehicles?: Array<{
+          id?: string;
+          name: string;
+          type?: string;
+          handling?: number;
+          speed?: number;
+          acceleration?: number;
+          body?: number;
+          armor?: number;
+          modifications?: string[];
+          notes?: string;
+          cost?: number;
+        }>;
+        totalCost?: number;
+        remainingNuyen?: number;
+        totalEssenceCost?: number;
+      } | null;
+      setEquipmentState?: (payload: {
+        priority?: string;
+        weapons?: Array<{
+          id?: string;
+          name: string;
+          type?: string;
+          damage?: string;
+          accuracy?: number;
+          concealability?: number;
+          mode?: string;
+          range?: string;
+          notes?: string;
+          cost?: number;
+        }>;
+        armor?: Array<{
+          id?: string;
+          name: string;
+          type?: string;
+          rating?: number;
+          notes?: string;
+          cost?: number;
+        }>;
+        cyberware?: Array<{
+          id?: string;
+          name: string;
+          rating?: number;
+          essenceCost?: number;
+          cost?: number;
+          availability?: number;
+          notes?: string;
+        }>;
+        bioware?: Array<{
+          id?: string;
+          name: string;
+          rating?: number;
+          cost?: number;
+          availability?: number;
+          notes?: string;
+        }>;
+        gear?: Array<{
+          id?: string;
+          name: string;
+          type?: string;
+          count?: number;
+          notes?: string;
+          cost?: number;
+        }>;
+        vehicles?: Array<{
+          id?: string;
+          name: string;
+          type?: string;
+          handling?: number;
+          speed?: number;
+          acceleration?: number;
+          body?: number;
+          armor?: number;
+          modifications?: string[];
+          notes?: string;
+          cost?: number;
+        }>;
+        totalCost?: number;
+        remainingNuyen?: number;
+        totalEssenceCost?: number;
+      }) => void;
+      subscribeEquipmentState?: (listener: () => void) => () => void;
+      getContactsState?: () => {
+        contacts?: Array<{
+          id?: string;
+          name: string;
+          type?: string;
+          level?: number;
+          loyalty?: number;
+          notes?: string;
+        }>;
+      } | null;
+      setContactsState?: (payload: {
+        contacts?: Array<{
+          id?: string;
+          name: string;
+          type?: string;
+          level?: number;
+          loyalty?: number;
+          notes?: string;
+        }>;
+      }) => void;
+      subscribeContactsState?: (listener: () => void) => () => void;
+      getLifestyleState?: () => {
+        lifestyle?: string;
+      } | null;
+      setLifestyleState?: (payload: {
+        lifestyle?: string;
+      }) => void;
+      subscribeLifestyleState?: (listener: () => void) => () => void;
     };
     showCreateCharacterModal?: (options?: { campaignId?: string }) => void;
     ShadowmasterNotify?: (descriptor: NotificationDescriptor) => string;

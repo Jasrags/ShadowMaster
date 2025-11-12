@@ -71,35 +71,78 @@ export function MetatypeSelection({ priority, selectedMetatype, onSelect }: Prop
             <section className="react-metatype-modifiers">
               <strong>Attribute Modifiers</strong>
               {(() => {
-                const entries = metatype.attribute_modifiers
-                  ? Object.entries(metatype.attribute_modifiers).filter(([, value]) => value !== 0)
-                  : [];
+                // For SR5, use SR3 racial modifications table as guidance for modifier values
+                // Map SR3 attribute names to SR5 equivalents (Quickness→Agility, Intelligence→Logic)
+                // For SR3, use attribute_modifiers directly
+                let entries: Array<[string, number]> = [];
+                
+                if (activeEdition.key === 'sr5') {
+                  // SR3 racial modifications table values, mapped to SR5 attribute names
+                  const sr5Modifiers: Record<string, Record<string, number>> = {
+                    human: {},
+                    dwarf: {
+                      body: 1,
+                      strength: 2,
+                      willpower: 1,
+                    },
+                    elf: {
+                      quickness: 1, // Displayed as Agility in SR5
+                      charisma: 2,
+                    },
+                    ork: {
+                      body: 3,
+                      strength: 2,
+                      charisma: -1,
+                      intelligence: -1, // Displayed as Logic in SR5
+                    },
+                    troll: {
+                      body: 5,
+                      quickness: -1, // Displayed as Agility in SR5
+                      strength: 4,
+                      intelligence: -2, // Displayed as Logic in SR5
+                      charisma: -2,
+                    },
+                  };
+                  
+                  const metatypeKey = metatype.name.toLowerCase();
+                  const modifiers = sr5Modifiers[metatypeKey] || {};
+                  
+                  // Map SR3 attribute names to SR5 display names
+                  const attributeDisplayMapping: Record<string, string> = {
+                    quickness: 'agility', // SR3 Quickness → SR5 Agility
+                    intelligence: 'logic', // SR3 Intelligence → SR5 Logic
+                  };
+                  
+                  entries = Object.entries(modifiers)
+                    .map(([attr, value]) => {
+                      const displayAttr = attributeDisplayMapping[attr.toLowerCase()] ?? attr;
+                      return [displayAttr, value] as [string, number];
+                    })
+                    .filter(([, modifier]) => modifier !== 0);
+                } else if (metatype.attribute_modifiers) {
+                  // Use existing attribute_modifiers for SR3
+                  entries = Object.entries(metatype.attribute_modifiers)
+                    .filter(([, value]) => value !== 0)
+                    .map(([attr, value]) => [attr, typeof value === 'number' ? value : Number(value)]);
+                }
 
                 if (entries.length === 0) {
                   return <div className="attribute-mod">No attribute modifiers.</div>;
                 }
 
-                return entries.map(([attr, value]) => (
-                  <div key={attr} className="attribute-mod">
-                    <span>{formatAttributeLabel(attr)}</span>
-                    <span className={value > 0 ? 'positive' : 'negative'}>{formatModifier(value)}</span>
-                  </div>
-                ));
+                return entries.map(([attr, value]) => {
+                  const numValue = typeof value === 'number' ? value : Number(value);
+                  return (
+                    <div key={attr} className="attribute-mod">
+                      <span>{formatAttributeLabel(attr)}</span>
+                      <span className={numValue > 0 ? 'positive' : numValue < 0 ? 'negative' : ''}>
+                        {formatModifier(numValue)}
+                      </span>
+                    </div>
+                  );
+                });
               })()}
             </section>
-
-            {activeEdition.key === 'sr5' &&
-              metatype.special_attribute_points &&
-              Object.keys(metatype.special_attribute_points).length > 0 && (
-              <section className="react-metatype-special">
-                <strong>Special Attribute Points (SR5)</strong>
-                {Object.entries(metatype.special_attribute_points).map(([priorityCode, points]) => (
-                  <div key={priorityCode} className="ability">
-                    <span>Priority {priorityCode}: {points}</span>
-                  </div>
-                ))}
-              </section>
-            )}
 
             {metatype.abilities && metatype.abilities.length > 0 && (
               <section className="react-metatype-abilities">

@@ -237,6 +237,23 @@ export function MagicalAbilitiesSelection({ priority, selection, onChange }: Pro
     );
   };
 
+  const canAdvance = (): boolean => {
+    if (!selection.type) {
+      return false;
+    }
+
+    if (selection.type === 'Full Magician' || selection.type === 'Aspected Magician') {
+      if (!selection.tradition) {
+        return false;
+      }
+      if (selection.tradition === 'Shamanic' && !selection.totem) {
+        return false;
+      }
+    }
+
+    return true;
+  };
+
   const renderStatus = () => {
     if (!selection.type) {
       return <p className="react-magic-status">Select a magical path to proceed.</p>;
@@ -254,6 +271,17 @@ export function MagicalAbilitiesSelection({ priority, selection, onChange }: Pro
     return <p className="react-magic-status ready">Magical abilities ready. Continue to Attributes.</p>;
   };
 
+  const handleBack = () => {
+    window.ShadowmasterLegacyApp?.showWizardStep?.(2);
+  };
+
+  const handleNext = () => {
+    if (!canAdvance()) {
+      return;
+    }
+    window.ShadowmasterLegacyApp?.showWizardStep?.(4);
+  };
+
   return (
     <div className="react-magic-wrapper">
       <div className="react-magic-header">
@@ -267,10 +295,17 @@ export function MagicalAbilitiesSelection({ priority, selection, onChange }: Pro
       {renderMagicCards()}
       {renderTraditions()}
       {renderTotems()}
-      {renderStatus()}
 
       <footer className="react-magic-footer">
-        <small>Edition: {activeEdition.label}</small>
+        <button type="button" className="btn btn-secondary" onClick={handleBack}>
+          Back
+        </button>
+        <div className={`react-magic-status ${canAdvance() ? 'ready' : ''}`}>
+          {renderStatus()}
+        </div>
+        <button type="button" className="btn btn-primary" disabled={!canAdvance()} onClick={handleNext}>
+          Next: Assign Attributes
+        </button>
       </footer>
     </div>
   );
