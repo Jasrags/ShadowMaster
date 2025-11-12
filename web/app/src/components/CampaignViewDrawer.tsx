@@ -154,14 +154,6 @@ export function CampaignViewDrawer({ campaign, onClose }: Props) {
               {editionLabel} · {creationMethodLabel || 'Unknown method'} · {gameplayLevelLabel || 'Gameplay level unset'}
             </p>
           </div>
-          <div className="campaign-manage__header-actions">
-            <span className={`pill pill--status-${(campaign.status ?? 'unknown').toLowerCase()}`}>
-              {campaign.status ?? 'Unknown'}
-            </span>
-            <button type="button" className="btn-secondary" onClick={onClose}>
-              Close
-            </button>
-          </div>
         </header>
 
         <div className="campaign-manage__body campaign-view__body">
@@ -343,6 +335,15 @@ export function CampaignViewDrawer({ campaign, onClose }: Props) {
               )}
           </section>
         </div>
+
+        <footer className="campaign-view__footer">
+          <span className={`pill pill--status-${(campaign.status ?? 'unknown').toLowerCase()}`}>
+            {campaign.status ?? 'Unknown'}
+          </span>
+          <button type="button" className="btn-secondary" onClick={onClose}>
+            Close
+          </button>
+        </footer>
       </section>
     </div>
   );

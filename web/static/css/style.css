@@ -2064,10 +2064,18 @@ body.react-magic-enabled #magic-summary {
     font-size: 0.9rem;
 }
 
-.campaign-manage__header-actions {
+.campaign-manage__footer {
     display: flex;
+    flex-wrap: wrap;
     align-items: center;
     gap: 0.75rem;
+    padding: 1rem 1.5rem 1.25rem;
+    border-top: 1px solid rgba(0, 166, 255, 0.2);
+    background: rgba(4, 20, 30, 0.85);
+}
+
+.campaign-manage__footer .btn-secondary {
+    margin-left: auto;
 }
 
 .campaign-manage__body {
@@ -3656,5 +3664,22 @@ body.react-magic-enabled #magic-summary {
     font-size: 0.8rem;
     white-space: pre-wrap;
     word-break: break-word;
+}
+
+.campaign-view__pillar {
+}
+
+.campaign-view__footer {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 1rem 1.5rem 1.25rem;
+    border-top: 1px solid rgba(0, 166, 255, 0.2);
+    background: rgba(4, 20, 30, 0.8);
+}
+
+.campaign-view__footer .btn-secondary {
+    margin-left: auto;
 }
 

@@ -418,12 +418,6 @@ export function CampaignManageDrawer({ campaign, gmUsers, gameplayRules, onClose
               {editionLabel} · {creationMethodLabel} · {gameplayLevelLabel}
             </p>
           </div>
-          <div className="campaign-manage__header-actions">
-            <span className={`pill pill--status-${status.toLowerCase()}`}>{status}</span>
-            <button type="button" className="btn-secondary" onClick={onClose}>
-              Close
-            </button>
-          </div>
         </header>
 
         <div className="campaign-manage__body">
@@ -1137,6 +1131,13 @@ export function CampaignManageDrawer({ campaign, gmUsers, gameplayRules, onClose
             )}
           </aside>
         </div>
+
+        <footer className="campaign-manage__footer">
+          <span className={`pill pill--status-${status.toLowerCase()}`}>{status}</span>
+          <button type="button" className="btn-secondary" onClick={onClose}>
+            Close
+          </button>
+        </footer>
       </section>
     </div>
   );

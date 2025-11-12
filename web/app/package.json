@@ -12,7 +12,7 @@
     "preview": "vite preview",
     "lint": "eslint \"src/**/*.{ts,tsx}\"",
     "test": "tsx src/smoke-test.tsx",
-    "test:unit": "vitest run --environment jsdom"
+    "test:unit": "vitest run --environment jsdom --pool=threads"
   },
   "dependencies": {
     "react": "^18.3.1",
