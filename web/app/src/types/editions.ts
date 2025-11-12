@@ -49,6 +49,61 @@ export interface GearRestrictions {
   max_availability?: number | null;
 }
 
+export interface FocusBondingRule {
+  type: string;
+  label: string;
+  karma_per_force: number;
+}
+
+export interface SkillTrainingBracket {
+  min_rating: number;
+  max_rating: number;
+  per_rating: number;
+  unit: 'day' | 'week' | 'month' | string;
+}
+
+export interface AdvancementKarmaCosts {
+  attribute_multiplier: number;
+  active_skill_multiplier: number;
+  knowledge_skill_multiplier: number;
+  skill_group_multiplier: number;
+  specialization: number;
+  new_knowledge_skill: number;
+  new_complex_form: number;
+  new_spell: number;
+  initiation_base: number;
+  initiation_per_grade: number;
+  positive_quality_multiplier: number;
+  negative_quality_removal_multiplier: number;
+}
+
+export interface AdvancementTraining {
+  attribute_per_rating_weeks: number;
+  edge_requires_downtime: boolean;
+  instructor_reduction_percent?: number;
+  active_skill_brackets?: SkillTrainingBracket[];
+  skill_group_per_rating_weeks?: number;
+  specialization_months?: number;
+}
+
+export interface AdvancementLimits {
+  attribute_increase_per_downtime: number;
+  skill_increase_per_downtime: number;
+  skill_group_increase_per_downtime: number;
+  allows_simultaneous_attribute_and_skill: boolean;
+  allows_simultaneous_physical_and_mental: boolean;
+  requires_augmentation_recovery_pause?: boolean;
+}
+
+export interface AdvancementRules {
+  karma_costs: AdvancementKarmaCosts;
+  training: AdvancementTraining;
+  limits: AdvancementLimits;
+  focus_bonding: FocusBondingRule[];
+  notes?: string[];
+  future_features?: string[];
+}
+
 export interface GameplayLevelDefinition {
   label: string;
   description?: string;
@@ -70,6 +125,7 @@ export interface GameplayRules {
   karma_to_nuyen_limit?: number;
   contact_karma_multiplier?: number;
   gear_restrictions?: GearRestrictions;
+  advancement?: AdvancementRules;
 }
 
 export interface CreationMethodGearConversion {
@@ -113,6 +169,7 @@ export interface CharacterCreationData {
   metatypes: MetatypeDefinition[];
   gameplay_levels?: Record<string, GameplayLevelDefinition>;
   creation_methods?: Record<string, CreationMethodDefinition>;
+  advancement?: AdvancementRules;
 }
 
 export interface CampaignCharacterCreationResponse {

@@ -1,4 +1,4 @@
-import { FormEvent, useCallback, useEffect, useMemo, useReducer, useState } from 'react';
+import { FormEvent, RefObject, useCallback, useEffect, useMemo, useReducer, useRef, useState } from 'react';
 import { createPortal } from 'react-dom';
 import { useEdition } from '../hooks/useEdition';
 import { CharacterCreationData, CreationMethodDefinition, SourceBook, UserSummary } from '../types/editions';
@@ -277,8 +277,13 @@ export function CampaignCreation({ targetId = 'campaign-creation-react-root', on
     setEdition,
   } = useEdition();
 
+  const preferredEdition = useMemo(() => {
+    const sr5 = supportedEditions.find((edition) => edition.key === 'sr5');
+    return sr5 ? sr5.key : activeEdition.key;
+  }, [activeEdition.key, supportedEditions]);
+
   const [container, setContainer] = useState<Element | null>(null);
-  const [selectedEdition, setSelectedEdition] = useState(activeEdition.key);
+  const [selectedEdition, setSelectedEdition] = useState(preferredEdition);
   const [editionData, setEditionData] = useState<CharacterCreationData | undefined>(characterCreationData);
   const [gameplayLevels, setGameplayLevels] = useState<Option[]>([]);
   const [availableCharacters, setAvailableCharacters] = useState<CharacterSummary[]>([]);
@@ -294,11 +299,21 @@ export function CampaignCreation({ targetId = 'campaign-creation-react-root', on
   const [currentStep, setCurrentStep] = useState<number>(0);
   const [draft, dispatchDraft] = useReducer(draftReducer, defaultDraft);
   const [availableBooks, setAvailableBooks] = useState<SourceBook[]>([]);
-  const [selectedBooks, setSelectedBooks] = useState<string[]>(() => [deriveDefaultBookCode(activeEdition.key)]);
+  const [selectedBooks, setSelectedBooks] = useState<string[]>(() => [deriveDefaultBookCode(preferredEdition)]);
   const [booksExpanded, setBooksExpanded] = useState(false);
   const [isLoadingBooks, setIsLoadingBooks] = useState(false);
   const [bookLoadError, setBookLoadError] = useState<string | null>(null);
   const { pushNotification } = useNotifications();
+  const [fieldErrors, setFieldErrors] = useState<Record<string, string>>({});
+  const [stepErrors, setStepErrors] = useState<Record<number, string[]>>({});
+
+  const nameRef = useRef<HTMLInputElement | null>(null);
+  const themeRef = useRef<HTMLInputElement | null>(null);
+  const gmRef = useRef<HTMLSelectElement | null>(null);
+  const overviewRef = useRef<HTMLTextAreaElement | null>(null);
+  const rosterRef = useRef<HTMLDivElement | null>(null);
+  const backboneRef = useRef<HTMLDivElement | null>(null);
+  const sessionSeedRef = useRef<HTMLDivElement | null>(null);
 
   const totalSteps = STEP_LABELS.length;
   const defaultBookCode = useMemo(() => deriveDefaultBookCode(selectedEdition), [selectedEdition]);
@@ -319,8 +334,14 @@ export function CampaignCreation({ targetId = 'campaign-creation-react-root', on
   }, [targetId]);
 
   useEffect(() => {
-    setSelectedEdition(activeEdition.key);
-  }, [activeEdition.key]);
+    setSelectedEdition(preferredEdition);
+  }, [preferredEdition]);
+
+  useEffect(() => {
+    if (activeEdition.key !== preferredEdition) {
+      setEdition(preferredEdition);
+    }
+  }, [activeEdition.key, preferredEdition, setEdition]);
 
   useEffect(() => {
     let cancelled = false;
@@ -478,10 +499,16 @@ export function CampaignCreation({ targetId = 'campaign-creation-react-root', on
       setCreationMethodOptions(DEFAULT_CREATION_METHOD_OPTIONS);
       return;
     }
-    const options = Object.entries(creationMethods).map(([value, definition]) => ({
+    const options = Object.entries(creationMethods)
+      .map(([value, definition]) => ({
       value,
       label: definition.label || value,
-    }));
+      }))
+      .sort((a, b) => {
+        if (a.value === 'priority') return -1;
+        if (b.value === 'priority') return 1;
+        return a.label.localeCompare(b.label);
+      });
     setCreationMethodOptions(options);
   }, [creationMethods, editionData]);
 
@@ -490,7 +517,9 @@ export function CampaignCreation({ targetId = 'campaign-creation-react-root', on
       return;
     }
     if (!creationMethodOptions.some((option) => option.value === selectedCreationMethod)) {
-      setSelectedCreationMethod(creationMethodOptions[0].value);
+      const priorityOption = creationMethodOptions.find((option) => option.value === 'priority');
+      setSelectedCreationMethod(priorityOption?.value ?? creationMethodOptions[0].value);
+      return;
     }
   }, [creationMethodOptions, selectedCreationMethod]);
 
@@ -519,6 +548,8 @@ export function CampaignCreation({ targetId = 'campaign-creation-react-root', on
       setSelectedCreationMethod(creationMethodOptions[0]?.value ?? 'priority');
       setGmUserId(users[0]?.id ?? '');
       setError(null);
+      setFieldErrors({});
+      setStepErrors({});
       setCurrentStep(0);
       setSelectedBooks([nextDefault]);
       setBooksExpanded(false);
@@ -540,23 +571,43 @@ export function CampaignCreation({ targetId = 'campaign-creation-react-root', on
   }
 
   function validateStep(step: number): boolean {
-    if (step === 0 && !draft.name.trim()) {
-      setError('Campaign name is required.');
-      return false;
+    const errors: Record<string, string> = {};
+    let summary: string | undefined;
+
+    if (step === 0) {
+      if (!draft.name.trim()) {
+        errors.name = 'Campaign name is required.';
+        summary = 'Provide a campaign name before continuing.';
+      }
+      if (users.length > 0 && !gmUserId) {
+        errors.gm = 'Assign a gamemaster.';
+        summary = summary ?? 'Assign a gamemaster before continuing.';
     }
+    }
+
     if (step === 1 && draft.selectedPlayers.length === 0 && draft.placeholders.length === 0) {
-      setError('Select at least one existing character or create a placeholder runner.');
-      return false;
+      errors.roster = 'Select at least one existing character or create a placeholder runner.';
+      summary = 'Attach at least one runner before continuing.';
     }
+
     if (step === 2 && draft.factions.length === 0 && draft.locations.length === 0) {
-      setError('Add at least one faction or location, or use the quick-add template.');
-      return false;
+      errors.backbone = 'Add at least one faction or location, or use the quick-add template.';
+      summary = 'Capture at least one faction or location before continuing.';
     }
+
     if (step === 4 && !draft.sessionSeed.skip && !draft.sessionSeed.title.trim()) {
-      setError('Provide a title for the initial session or choose to skip.');
+      errors.sessionSeed = 'Provide a title for the initial session or choose to skip.';
+      summary = 'Name your first session or choose to skip.';
+    }
+
+    if (Object.keys(errors).length > 0) {
+      applyErrors(step, errors, summary);
       return false;
     }
+
     setError(null);
+    setFieldErrors({});
+    clearStepError(step);
     return true;
   }
 
@@ -564,7 +615,16 @@ export function CampaignCreation({ targetId = 'campaign-creation-react-root', on
     if (!validateStep(currentStep)) {
       return;
     }
-    setCurrentStep((prev) => Math.min(prev + 1, STEP_LABELS.length - 1));
+    const nextStep = Math.min(currentStep + 1, STEP_LABELS.length - 1);
+    setFieldErrors({});
+    setCurrentStep(nextStep);
+    if (stepErrors[nextStep]?.length) {
+      validateStep(nextStep);
+    } else {
+      if (!Object.values(stepErrors).some((messages) => messages?.length)) {
+        setError(null);
+      }
+    }
   };
   const handleQuickAddFaction = useCallback(() => {
     const newId = generateId('faction');
@@ -587,6 +647,7 @@ export function CampaignCreation({ targetId = 'campaign-creation-react-root', on
       field: 'notes',
       value: 'Megacorp interested in experimental weapons testing.',
     });
+    clearFieldError('backbone', 2);
   }, []);
 
   const handleQuickAddLocation = useCallback(() => {
@@ -604,11 +665,109 @@ export function CampaignCreation({ targetId = 'campaign-creation-react-root', on
       field: 'descriptor',
       value: 'Secure condo with rating 4 security and friendly neighbors.',
     });
+    clearFieldError('backbone', 2);
   }, []);
 
+  const focusField = (ref?: RefObject<Element | null>) => {
+    if (!ref?.current || !(ref.current instanceof HTMLElement)) {
+      return;
+    }
+    ref.current.focus({ preventScroll: true });
+    ref.current.scrollIntoView({ behavior: 'smooth', block: 'center' });
+  };
+
+  const applyErrors = (step: number, errors: Record<string, string>, summary?: string) => {
+    const errorKeys = Object.keys(errors);
+    const firstField = errorKeys[0];
+
+    const messages =
+      summary != null
+        ? [
+            summary,
+            ...errorKeys
+              .filter((field) => field !== firstField)
+              .map((field) => errors[field])
+              .filter((message) => message && message !== summary),
+          ]
+        : errorKeys.map((field) => errors[field]);
+
+    setError(messages[0] ?? null);
+    setFieldErrors(errors);
+    setStepErrors((prev) => ({
+      ...prev,
+      [step]: messages.length > 0 ? messages : ['Please resolve the highlighted fields.'],
+    }));
+
+    if (firstField) {
+      switch (firstField) {
+        case 'name':
+          focusField(nameRef);
+          break;
+        case 'theme':
+          focusField(themeRef);
+          break;
+        case 'gm':
+          focusField(gmRef);
+          break;
+        case 'overview':
+          focusField(overviewRef);
+          break;
+        case 'roster':
+          focusField(rosterRef);
+          break;
+        case 'backbone':
+          focusField(backboneRef);
+          break;
+        case 'sessionSeed':
+          focusField(sessionSeedRef);
+          break;
+        default:
+          break;
+      }
+    }
+  };
+
+  const clearStepError = (step: number) => {
+    setStepErrors((prev) => {
+      if (!(step in prev)) {
+        return prev;
+      }
+      const { [step]: _removed, ...rest } = prev;
+      if (Object.keys(rest).length === 0) {
+        setError(null);
+      }
+      return rest;
+    });
+  };
+
+  const clearFieldError = (field: string, step = currentStep) => {
+    setFieldErrors((prev) => {
+      if (!(field in prev)) {
+        return prev;
+      }
+      const copy = { ...prev };
+      delete copy[field];
+      if (Object.keys(copy).length === 0) {
+        if (step === currentStep) {
+          setError(null);
+        }
+        clearStepError(step);
+      }
+      return copy;
+    });
+  };
+
   const handleBack = () => {
+    const targetStep = Math.max(currentStep - 1, 0);
+    setFieldErrors({});
+    setCurrentStep(targetStep);
+    if (stepErrors[targetStep]?.length) {
+      validateStep(targetStep);
+    } else {
+      if (!Object.values(stepErrors).some((messages) => messages?.length)) {
     setError(null);
-    setCurrentStep((prev) => Math.max(prev - 1, 0));
+      }
+    }
   };
 
   async function handleSubmit(event: FormEvent<HTMLFormElement>) {
@@ -617,8 +776,21 @@ export function CampaignCreation({ targetId = 'campaign-creation-react-root', on
       return;
     }
 
+    const outstandingStep = Object.entries(stepErrors).find(
+      ([index, messages]) => Number(index) !== currentStep && messages?.length,
+    );
+    if (outstandingStep) {
+      const nextStep = Number(outstandingStep[0]);
+      setFieldErrors({});
+      setCurrentStep(nextStep);
+      validateStep(nextStep);
+      return;
+    }
+
     setIsSubmitting(true);
     setError(null);
+    setFieldErrors({});
+    clearStepError(currentStep);
 
     try {
       const gmUser = users.find((user) => user.id === gmUserId);
@@ -760,12 +932,25 @@ export function CampaignCreation({ targetId = 'campaign-creation-react-root', on
                   id="campaign-name"
                   name="campaign-name"
                   value={draft.name}
-                  onChange={(event) =>
-                    dispatchDraft({ type: 'UPDATE_FIELD', field: 'name', value: event.target.value })
-                  }
+                  onChange={(event) => {
+                    dispatchDraft({ type: 'UPDATE_FIELD', field: 'name', value: event.target.value });
+                    clearFieldError('name');
+                  }}
+                  autoFocus
+                  maxLength={80}
                   required
-                  placeholder="Enter campaign title"
+                  placeholder="e.g., Emerald City Heist"
+                  ref={nameRef}
+                  className={fieldErrors.name ? 'input--invalid' : undefined}
+                  aria-invalid={fieldErrors.name ? 'true' : 'false'}
+                  aria-describedby={fieldErrors.name ? 'campaign-name-error' : undefined}
                 />
+                <p className="form-help">This title appears in dashboards, notifications, and session summaries.</p>
+                {fieldErrors.name && (
+                  <p id="campaign-name-error" className="form-error" role="alert">
+                    {fieldErrors.name}
+                  </p>
+                )}
               </div>
               <div className="form-group">
                 <label htmlFor="campaign-theme">Theme / Tagline</label>
@@ -777,7 +962,9 @@ export function CampaignCreation({ targetId = 'campaign-creation-react-root', on
                     dispatchDraft({ type: 'UPDATE_FIELD', field: 'theme', value: event.target.value })
                   }
                   placeholder="e.g., Neo-Tokyo corporate intrigue"
+                  ref={themeRef}
                 />
+                <p className="form-help">A short hook that sets tone for players and appears alongside the title.</p>
               </div>
             </div>
 
@@ -900,10 +1087,10 @@ export function CampaignCreation({ targetId = 'campaign-creation-react-root', on
                               });
                             }}
                           />
-                          <div>
-                            <strong>{book.name}</strong>
-                            <span className="book-code">{code}</span>
-                          </div>
+                          <span className="book-option">
+                            {book.name} <span className="book-code">({code})</span>
+                            {disabled && <span className="book-required">(required)</span>}
+                          </span>
                         </label>
                       );
                     })}
@@ -918,7 +1105,14 @@ export function CampaignCreation({ targetId = 'campaign-creation-react-root', on
                 id="campaign-gm"
                 name="campaign-gm"
                 value={gmUserId}
-                onChange={(event) => setGmUserId(event.target.value)}
+                onChange={(event) => {
+                  setGmUserId(event.target.value);
+                  clearFieldError('gm');
+                }}
+                ref={gmRef}
+                className={fieldErrors.gm ? 'input--invalid' : undefined}
+                aria-invalid={fieldErrors.gm ? 'true' : 'false'}
+                aria-describedby={fieldErrors.gm ? 'campaign-gm-error' : undefined}
               >
                 {gmOptions.map((option) => (
                   <option key={option.value} value={option.value}>
@@ -926,6 +1120,11 @@ export function CampaignCreation({ targetId = 'campaign-creation-react-root', on
                   </option>
                 ))}
               </select>
+              {fieldErrors.gm && (
+                <p id="campaign-gm-error" className="form-error" role="alert">
+                  {fieldErrors.gm}
+                </p>
+              )}
             </div>
 
             <div className="form-group">
@@ -934,12 +1133,25 @@ export function CampaignCreation({ targetId = 'campaign-creation-react-root', on
                 id="campaign-description"
                 name="campaign-description"
                 value={draft.description}
-                onChange={(event) =>
-                  dispatchDraft({ type: 'UPDATE_FIELD', field: 'description', value: event.target.value })
-                }
-                placeholder="Summarize the campaign's premise, tone, and key hooks."
-                rows={4}
+                onChange={(event) => {
+                  dispatchDraft({ type: 'UPDATE_FIELD', field: 'description', value: event.target.value });
+                  clearFieldError('overview');
+                }}
+                placeholder="Outline the premise, tone, and first planned arc. Include touchstones players can latch onto."
+                rows={6}
+                ref={overviewRef}
+                className={`campaign-form__textarea ${fieldErrors.overview ? 'input--invalid' : ''}`.trim()}
+                aria-invalid={fieldErrors.overview ? 'true' : 'false'}
+                aria-describedby={fieldErrors.overview ? 'campaign-description-error' : undefined}
               />
+              <p className="form-help">
+                Use this space for the elevator pitch—players will see it at a glance when they open the campaign.
+              </p>
+              {fieldErrors.overview && (
+                <p id="campaign-description-error" className="form-error" role="alert">
+                  {fieldErrors.overview}
+                </p>
+              )}
             </div>
           </section>
         );
@@ -953,7 +1165,7 @@ export function CampaignCreation({ targetId = 'campaign-creation-react-root', on
               {availableCharacters.length === 0 ? (
                 <p className="form-help">No characters found yet. You can create placeholders below.</p>
               ) : (
-                <div className="character-checkboxes">
+                <div className="character-checkboxes" ref={rosterRef} tabIndex={-1}>
                   {availableCharacters.map((character) => {
                     const label = character.player_name
                       ? `${character.name} — ${character.player_name}`
@@ -972,6 +1184,7 @@ export function CampaignCreation({ targetId = 'campaign-creation-react-root', on
                                 ? [...draft.selectedPlayers, character.id]
                                 : draft.selectedPlayers.filter((id) => id !== character.id),
                             });
+                            clearFieldError('roster');
                           }}
                         />
                         <span>{label}</span>
@@ -982,6 +1195,11 @@ export function CampaignCreation({ targetId = 'campaign-creation-react-root', on
                 </div>
               )}
             </div>
+            {fieldErrors.roster && (
+              <p className="form-error" role="alert">
+                {fieldErrors.roster}
+              </p>
+            )}
             <div className="form-group">
               <label>Player Characters</label>
               <p className="form-help">
@@ -1023,7 +1241,14 @@ export function CampaignCreation({ targetId = 'campaign-creation-react-root', on
                     </button>
                   </div>
                 ))}
-                <button type="button" className="btn-secondary" onClick={() => dispatchDraft({ type: 'ADD_PLACEHOLDER' })}>
+                <button
+                  type="button"
+                  className="btn-secondary"
+                  onClick={() => {
+                    dispatchDraft({ type: 'ADD_PLACEHOLDER' });
+                    clearFieldError('roster', 1);
+                  }}
+                >
                   Add Placeholder
                 </button>
               </div>
@@ -1035,7 +1260,7 @@ export function CampaignCreation({ targetId = 'campaign-creation-react-root', on
           <section className="campaign-step">
             <h4>World Backbone</h4>
             <p>Capture recurring factions and key locations to anchor your campaign.</p>
-            {error && <p className="form-error">{error}</p>}
+            <div ref={backboneRef} tabIndex={-1}>
             <div className="form-grid">
               <div className="form-group">
                 <label>Factions</label>
@@ -1146,6 +1371,12 @@ export function CampaignCreation({ targetId = 'campaign-creation-react-root', on
                 </div>
               </div>
             </div>
+            </div>
+            {fieldErrors.backbone && (
+              <p className="form-error" role="alert">
+                {fieldErrors.backbone}
+              </p>
+            )}
           </section>
         );
       case 3:
@@ -1192,17 +1423,21 @@ export function CampaignCreation({ targetId = 'campaign-creation-react-root', on
         return (
           <section className="campaign-step">
             <h4>Session Seed</h4>
+            <div ref={sessionSeedRef} tabIndex={-1}>
             <label className="skip-toggle">
               <input
                 type="checkbox"
                 checked={draft.sessionSeed.skip}
-                onChange={(event) =>
+                  onChange={(event) => {
                   dispatchDraft({
                     type: 'UPDATE_SESSION_SEED',
                     field: 'skip',
                     value: event.target.checked,
-                  })
+                    });
+                    if (event.target.checked) {
+                      clearFieldError('sessionSeed', 4);
                 }
+                  }}
               />
               Skip session setup for now
             </label>
@@ -1213,13 +1448,14 @@ export function CampaignCreation({ targetId = 'campaign-creation-react-root', on
                   <input
                     id="session-title"
                     value={draft.sessionSeed.title}
-                    onChange={(event) =>
+                      onChange={(event) => {
                       dispatchDraft({
                         type: 'UPDATE_SESSION_SEED',
                         field: 'title',
                         value: event.target.value,
-                      })
-                    }
+                        });
+                        clearFieldError('sessionSeed', 4);
+                      }}
                     placeholder="Session 0: The job offer"
                   />
                 </div>
@@ -1282,6 +1518,12 @@ export function CampaignCreation({ targetId = 'campaign-creation-react-root', on
                   />
                 </div>
               </>
+              )}
+            </div>
+            {fieldErrors.sessionSeed && !draft.sessionSeed.skip && (
+              <p className="form-error" role="alert">
+                {fieldErrors.sessionSeed}
+              </p>
             )}
           </section>
         );
@@ -1389,26 +1631,50 @@ export function CampaignCreation({ targetId = 'campaign-creation-react-root', on
           <div className="campaign-wizard__header">
             <h3>Create Campaign</h3>
             <nav className="campaign-wizard__navigation" aria-label="Campaign creation steps">
-              {STEP_LABELS.map((label, index) => (
+              {STEP_LABELS.map((label, index) => {
+                const isActive = currentStep === index;
+                const isCompleted = currentStep > index;
+                const hasError = Boolean(stepErrors[index]?.length);
+                return (
                 <button
                   key={label}
                   type="button"
                   className={`campaign-wizard__step ${
-                    currentStep === index ? 'campaign-wizard__step--active' : ''
-                  } ${currentStep > index ? 'campaign-wizard__step--completed' : ''}`}
-                  onClick={() => setCurrentStep(index)}
+                      isActive ? 'campaign-wizard__step--active' : ''
+                    } ${isCompleted ? 'campaign-wizard__step--completed' : ''} ${
+                      hasError ? 'campaign-wizard__step--error' : ''
+                    }`}
+                    onClick={() => {
+                      setFieldErrors({});
+                      setCurrentStep(index);
+                      if (stepErrors[index]?.length) {
+                        validateStep(index);
+                      } else {
+                        setError(null);
+                      }
+                    }}
                 >
                   <span className="campaign-wizard__step-index">{index + 1}</span>
                   <span>{label}</span>
+                    {hasError && <span className="campaign-wizard__step-error-indicator" aria-hidden="true">!</span>}
                 </button>
-              ))}
+                );
+              })}
             </nav>
           </div>
 
-          <form className="campaign-wizard__form" onSubmit={handleSubmit}>
+          <form className="campaign-wizard__form campaign-form" onSubmit={handleSubmit} noValidate>
             {renderStep()}
 
-            {error && <p className="form-error">{error}</p>}
+            {(stepErrors[currentStep]?.length || error) && (
+              <div className="form-error form-error--banner" role="alert" aria-live="assertive">
+                <ul className="form-error__list">
+                  {(stepErrors[currentStep] ?? (error ? [error] : [])).map((message, idx) => (
+                    <li key={`step-${currentStep}-error-${idx}`}>{message}</li>
+                  ))}
+                </ul>
+              </div>
+            )}
 
             <div className="campaign-wizard__actions">
               <button type="button" className="btn-secondary" onClick={handleCancel} disabled={isSubmitting}>

@@ -89,6 +89,12 @@ func TestGetCampaignCharacterCreationData(t *testing.T) {
 	if payload.GameplayRules.Resources["A"] != 450000 {
 		t.Fatalf("expected resource override for priority A, got %d", payload.GameplayRules.Resources["A"])
 	}
+	if payload.GameplayRules.Advancement == nil {
+		t.Fatal("expected advancement rules to be present")
+	}
+	if payload.GameplayRules.Advancement.KarmaCosts.AttributeMultiplier != 5 {
+		t.Fatalf("expected attribute multiplier 5, got %d", payload.GameplayRules.Advancement.KarmaCosts.AttributeMultiplier)
+	}
 }
 
 func writeSR5EditionData(t *testing.T, store *storage.JSONStore) {
@@ -110,6 +116,48 @@ func writeSR5EditionData(t *testing.T, store *storage.JSONStore) {
 				Label:         "Experienced",
 				Resources:     map[string]int{"A": 450000},
 				StartingKarma: 25,
+			},
+		},
+		Advancement: &domain.AdvancementRules{
+			KarmaCosts: domain.AdvancementKarmaCosts{
+				AttributeMultiplier:              5,
+				ActiveSkillMultiplier:            2,
+				KnowledgeSkillMultiplier:         1,
+				SkillGroupMultiplier:             5,
+				Specialization:                   7,
+				NewKnowledgeSkill:                1,
+				NewComplexForm:                   4,
+				NewSpell:                         5,
+				InitiationBase:                   10,
+				InitiationPerGrade:               3,
+				PositiveQualityMultiplier:        2,
+				NegativeQualityRemovalMultiplier: 2,
+			},
+			Training: domain.AdvancementTraining{
+				AttributePerRatingWeeks:    1,
+				EdgeRequiresDowntime:       false,
+				InstructorReductionPercent: 25,
+				ActiveSkillBrackets: []domain.SkillTrainingBracket{
+					{MinRating: 1, MaxRating: 4, PerRating: 1, Unit: "day"},
+				},
+				SkillGroupPerRatingWeeks: 2,
+				SpecializationMonths:     1,
+			},
+			Limits: domain.AdvancementLimits{
+				AttributeIncreasePerDowntime:        2,
+				SkillIncreasePerDowntime:            3,
+				SkillGroupIncreasePerDowntime:       1,
+				AllowsSimultaneousAttributeAndSkill: true,
+				AllowsSimultaneousPhysicalAndMental: true,
+			},
+			FocusBonding: []domain.FocusBondingRule{
+				{Type: "enchanting_focus", Label: "Enchanting Focus", KarmaPerForce: 3},
+				{Type: "metamagic_focus", Label: "Metamagic Focus", KarmaPerForce: 3},
+				{Type: "weapon_focus", Label: "Weapon Focus", KarmaPerForce: 3},
+				{Type: "power_focus", Label: "Power Focus", KarmaPerForce: 6},
+				{Type: "qi_focus", Label: "Qi Focus", KarmaPerForce: 2},
+				{Type: "spell_focus", Label: "Spell Focus", KarmaPerForce: 2},
+				{Type: "spirit_focus", Label: "Spirit Focus", KarmaPerForce: 2},
 			},
 		},
 	}

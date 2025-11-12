@@ -27,10 +27,11 @@ type MetatypeDefinition struct {
 
 // CharacterCreationData aggregates data required by the multi-step wizard.
 type CharacterCreationData struct {
-	Priorities     map[string]map[string]PriorityOption `json:"priorities"`
-	Metatypes      []MetatypeDefinition                 `json:"metatypes"`
-	GameplayLevels map[string]GameplayLevel             `json:"gameplay_levels,omitempty"`
-	CreationMethods map[string]CreationMethod           `json:"creation_methods,omitempty"`
+	Priorities      map[string]map[string]PriorityOption `json:"priorities"`
+	Metatypes       []MetatypeDefinition                 `json:"metatypes"`
+	GameplayLevels  map[string]GameplayLevel             `json:"gameplay_levels,omitempty"`
+	CreationMethods map[string]CreationMethod            `json:"creation_methods,omitempty"`
+	Advancement     *AdvancementRules                    `json:"advancement,omitempty"`
 }
 
 // GameplayLevel captures SR5 gameplay-level adjustments.
@@ -53,18 +54,18 @@ type GearRestrictions struct {
 
 // CreationMethod describes an available character creation strategy for an edition.
 type CreationMethod struct {
-	Label                              string                               `json:"label"`
-	Description                        string                               `json:"description,omitempty"`
-	SupportsMultipleColumnSelection    bool                                 `json:"supports_multiple_column_selection,omitempty"`
-	PointBudget                        int                                  `json:"point_budget,omitempty"`
-	PriorityCosts                      map[string]int                       `json:"priority_costs,omitempty"`
-	SupportsMultipleA                  bool                                 `json:"supports_multiple_A,omitempty"`
-	KarmaBudget                        int                                  `json:"karma_budget,omitempty"`
-	MetatypeCosts                      map[string]int                       `json:"metatype_costs,omitempty"`
-	GearConversion                     *CreationMethodGearConversion        `json:"gear_conversion,omitempty"`
-	MagicQualities                     []CreationMethodMagicQuality         `json:"magic_qualities,omitempty"`
-	Notes                              []string                             `json:"notes,omitempty"`
-	References                         []string                             `json:"references,omitempty"`
+	Label                           string                        `json:"label"`
+	Description                     string                        `json:"description,omitempty"`
+	SupportsMultipleColumnSelection bool                          `json:"supports_multiple_column_selection,omitempty"`
+	PointBudget                     int                           `json:"point_budget,omitempty"`
+	PriorityCosts                   map[string]int                `json:"priority_costs,omitempty"`
+	SupportsMultipleA               bool                          `json:"supports_multiple_A,omitempty"`
+	KarmaBudget                     int                           `json:"karma_budget,omitempty"`
+	MetatypeCosts                   map[string]int                `json:"metatype_costs,omitempty"`
+	GearConversion                  *CreationMethodGearConversion `json:"gear_conversion,omitempty"`
+	MagicQualities                  []CreationMethodMagicQuality  `json:"magic_qualities,omitempty"`
+	Notes                           []string                      `json:"notes,omitempty"`
+	References                      []string                      `json:"references,omitempty"`
 }
 
 // CreationMethodGearConversion captures Karma↔¥ conversion limits.
@@ -84,9 +85,70 @@ type CreationMethodMagicQuality struct {
 
 // CreationMethodMagicQualityGrant captures benefits from selecting a magic quality.
 type CreationMethodMagicQualityGrant struct {
-	Attribute        string  `json:"attribute,omitempty"`
-	Base             int     `json:"base,omitempty"`
-	FreePowerPoints  string  `json:"free_power_points,omitempty"`
-	PowerPointCost   int     `json:"power_point_cost,omitempty"`
-	AdditionalNotes  string  `json:"notes,omitempty"`
+	Attribute       string `json:"attribute,omitempty"`
+	Base            int    `json:"base,omitempty"`
+	FreePowerPoints string `json:"free_power_points,omitempty"`
+	PowerPointCost  int    `json:"power_point_cost,omitempty"`
+	AdditionalNotes string `json:"notes,omitempty"`
+}
+
+// AdvancementRules captures post-creation progression defaults.
+type AdvancementRules struct {
+	KarmaCosts     AdvancementKarmaCosts `json:"karma_costs"`
+	Training       AdvancementTraining   `json:"training"`
+	Limits         AdvancementLimits     `json:"limits"`
+	FocusBonding   []FocusBondingRule    `json:"focus_bonding"`
+	Notes          []string              `json:"notes,omitempty"`
+	FutureFeatures []string              `json:"future_features,omitempty"`
+}
+
+// AdvancementKarmaCosts represents the karma formulas for common improvements.
+type AdvancementKarmaCosts struct {
+	AttributeMultiplier              int `json:"attribute_multiplier"`
+	ActiveSkillMultiplier            int `json:"active_skill_multiplier"`
+	KnowledgeSkillMultiplier         int `json:"knowledge_skill_multiplier"`
+	SkillGroupMultiplier             int `json:"skill_group_multiplier"`
+	Specialization                   int `json:"specialization"`
+	NewKnowledgeSkill                int `json:"new_knowledge_skill"`
+	NewComplexForm                   int `json:"new_complex_form"`
+	NewSpell                         int `json:"new_spell"`
+	InitiationBase                   int `json:"initiation_base"`
+	InitiationPerGrade               int `json:"initiation_per_grade"`
+	PositiveQualityMultiplier        int `json:"positive_quality_multiplier"`
+	NegativeQualityRemovalMultiplier int `json:"negative_quality_removal_multiplier"`
+}
+
+// AdvancementTraining captures downtime expectations for advancement.
+type AdvancementTraining struct {
+	AttributePerRatingWeeks    int                    `json:"attribute_per_rating_weeks"`
+	EdgeRequiresDowntime       bool                   `json:"edge_requires_downtime"`
+	InstructorReductionPercent int                    `json:"instructor_reduction_percent,omitempty"`
+	ActiveSkillBrackets        []SkillTrainingBracket `json:"active_skill_brackets,omitempty"`
+	SkillGroupPerRatingWeeks   int                    `json:"skill_group_per_rating_weeks,omitempty"`
+	SpecializationMonths       int                    `json:"specialization_months,omitempty"`
+}
+
+// SkillTrainingBracket expresses the time required to raise a skill within a rating band.
+type SkillTrainingBracket struct {
+	MinRating int    `json:"min_rating"`
+	MaxRating int    `json:"max_rating"`
+	PerRating int    `json:"per_rating"`
+	Unit      string `json:"unit"`
+}
+
+// AdvancementLimits captures per-downtime restrictions and concurrency rules.
+type AdvancementLimits struct {
+	AttributeIncreasePerDowntime        int  `json:"attribute_increase_per_downtime"`
+	SkillIncreasePerDowntime            int  `json:"skill_increase_per_downtime"`
+	SkillGroupIncreasePerDowntime       int  `json:"skill_group_increase_per_downtime"`
+	AllowsSimultaneousAttributeAndSkill bool `json:"allows_simultaneous_attribute_and_skill"`
+	AllowsSimultaneousPhysicalAndMental bool `json:"allows_simultaneous_physical_and_mental"`
+	RequiresAugmentationRecoveryPause   bool `json:"requires_augmentation_recovery_pause"`
+}
+
+// FocusBondingRule represents karma costs for binding magical foci.
+type FocusBondingRule struct {
+	Type          string `json:"type"`
+	Label         string `json:"label"`
+	KarmaPerForce int    `json:"karma_per_force"`
 }

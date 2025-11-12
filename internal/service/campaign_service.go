@@ -294,15 +294,16 @@ func defaultCreationMethodForEdition(available map[string]domain.CreationMethod,
 
 // GameplayRules represents resolved gameplay level rules.
 type GameplayRules struct {
-	Key                    string                  `json:"key"`
-	Label                  string                  `json:"label"`
-	Description            string                  `json:"description,omitempty"`
-	Resources              map[string]int          `json:"resources,omitempty"`
-	StartingKarma          int                     `json:"starting_karma,omitempty"`
-	MaxCustomKarma         int                     `json:"max_custom_karma,omitempty"`
-	KarmaToNuyenLimit      int                     `json:"karma_to_nuyen_limit,omitempty"`
-	ContactKarmaMultiplier int                     `json:"contact_karma_multiplier,omitempty"`
-	GearRestrictions       domain.GearRestrictions `json:"gear_restrictions,omitempty"`
+	Key                    string                   `json:"key"`
+	Label                  string                   `json:"label"`
+	Description            string                   `json:"description,omitempty"`
+	Resources              map[string]int           `json:"resources,omitempty"`
+	StartingKarma          int                      `json:"starting_karma,omitempty"`
+	MaxCustomKarma         int                      `json:"max_custom_karma,omitempty"`
+	KarmaToNuyenLimit      int                      `json:"karma_to_nuyen_limit,omitempty"`
+	ContactKarmaMultiplier int                      `json:"contact_karma_multiplier,omitempty"`
+	GearRestrictions       domain.GearRestrictions  `json:"gear_restrictions,omitempty"`
+	Advancement            *domain.AdvancementRules `json:"advancement,omitempty"`
 }
 
 func (s *CampaignService) resolveGameplayLevel(edition, requested string) (string, error) {
@@ -371,6 +372,7 @@ func (s *CampaignService) DescribeGameplayRules(campaign *domain.Campaign) (*Gam
 		KarmaToNuyenLimit:      level.KarmaToNuyenLimit,
 		ContactKarmaMultiplier: level.ContactKarmaMultiplier,
 		GearRestrictions:       level.GearRestrictions,
+		Advancement:            data.Advancement,
 	}, nil
 }
 

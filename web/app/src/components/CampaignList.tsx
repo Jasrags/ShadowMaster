@@ -4,7 +4,7 @@ import { CampaignSummary } from '../types/campaigns';
 import { ShadowmasterAuthState } from '../types/auth';
 import { UserSummary } from '../types/editions';
 import { CampaignTable } from './CampaignTable';
-import { CampaignEditModal } from './CampaignEditModal';
+import { CampaignManageDrawer } from './CampaignManageDrawer';
 
 interface Props {
   targetId?: string;
@@ -44,7 +44,7 @@ export function CampaignList({ targetId = CAMPAIGNS_ROOT_ID }: Props) {
   const [actionError, setActionError] = useState<string | null>(null);
   const [actionSuccess, setActionSuccess] = useState<string | null>(null);
   const [actionInFlightId, setActionInFlightId] = useState<string | null>(null);
-  const [campaignToEdit, setCampaignToEdit] = useState<CampaignSummary | null>(null);
+  const [campaignToManage, setCampaignToManage] = useState<CampaignSummary | null>(null);
   const [gmUsers, setGmUsers] = useState<UserSummary[]>([]);
   const [currentUser, setCurrentUser] = useState<ShadowmasterAuthState | null>(
     window.ShadowmasterAuth ?? null,
@@ -165,12 +165,12 @@ export function CampaignList({ targetId = CAMPAIGNS_ROOT_ID }: Props) {
 
   const handleSave = useCallback(
     async (updates: Partial<CampaignSummary>) => {
-      if (!campaignToEdit) {
+      if (!campaignToManage) {
         return;
       }
       setActionError(null);
       setActionSuccess(null);
-      setActionInFlightId(campaignToEdit.id);
+      setActionInFlightId(campaignToManage.id);
       try {
         const body = JSON.stringify({
           name: updates.name,
@@ -178,9 +178,9 @@ export function CampaignList({ targetId = CAMPAIGNS_ROOT_ID }: Props) {
           gm_user_id: updates.gm_user_id,
           status: updates.status,
           house_rules: updates.house_rules,
-          gameplay_level: updates.gameplay_level,
+          enabled_books: updates.enabled_books,
         });
-        const payload = await request<CampaignSummary>(`/api/campaigns/${campaignToEdit.id}`, {
+        const payload = await request<CampaignSummary>(`/api/campaigns/${campaignToManage.id}`, {
           method: 'PUT',
           body,
         });
@@ -189,7 +189,7 @@ export function CampaignList({ targetId = CAMPAIGNS_ROOT_ID }: Props) {
         );
         setActionSuccess(`Campaign "${payload.name}" updated.`);
         window.dispatchEvent(new Event('shadowmaster:campaigns:refresh'));
-        setCampaignToEdit(null);
+        setCampaignToManage(null);
       } catch (err) {
         const message = err instanceof Error ? err.message : 'Failed to update campaign.';
         setActionError(message);
@@ -197,7 +197,7 @@ export function CampaignList({ targetId = CAMPAIGNS_ROOT_ID }: Props) {
         setActionInFlightId(null);
       }
     },
-    [campaignToEdit],
+    [campaignToManage],
   );
 
   if (!container) {
@@ -212,17 +212,17 @@ export function CampaignList({ targetId = CAMPAIGNS_ROOT_ID }: Props) {
         campaigns={campaigns}
         loading={isLoading}
         error={loadError}
-        onEdit={(campaign) => setCampaignToEdit(campaign)}
+        onEdit={(campaign) => setCampaignToManage(campaign)}
         onDelete={handleDelete}
         currentUser={currentUser}
         actionInFlightId={actionInFlightId}
       />
-      {campaignToEdit && (
-        <CampaignEditModal
-          campaign={campaignToEdit}
+      {campaignToManage && (
+        <CampaignManageDrawer
+          campaign={campaignToManage}
           gmUsers={gmUsers}
-          gameplayRules={campaignToEdit.gameplay_rules}
-          onClose={() => setCampaignToEdit(null)}
+          gameplayRules={campaignToManage.gameplay_rules}
+          onClose={() => setCampaignToManage(null)}
           onSave={handleSave}
         />
       )}

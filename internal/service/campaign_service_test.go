@@ -33,6 +33,9 @@ func TestCampaignServiceCreateDefaults(t *testing.T) {
 	require.NoError(t, err)
 	require.NotNil(t, rules)
 	assert.Equal(t, "experienced", rules.Key)
+	require.NotNil(t, rules.Advancement)
+	assert.Equal(t, 5, rules.Advancement.KarmaCosts.AttributeMultiplier)
+	require.Len(t, rules.Advancement.FocusBonding, 7)
 
 	// sanity check repo stores normalized data
 	stored, err := repo.GetByID(campaign.ID)
@@ -400,6 +403,49 @@ func writeGameplayLevelData(t *testing.T, store *storage.JSONStore) {
 				MetatypeCosts: map[string]int{
 					"human": 0,
 				},
+			},
+		},
+		Advancement: &domain.AdvancementRules{
+			KarmaCosts: domain.AdvancementKarmaCosts{
+				AttributeMultiplier:              5,
+				ActiveSkillMultiplier:            2,
+				KnowledgeSkillMultiplier:         1,
+				SkillGroupMultiplier:             5,
+				Specialization:                   7,
+				NewKnowledgeSkill:                1,
+				NewComplexForm:                   4,
+				NewSpell:                         5,
+				InitiationBase:                   10,
+				InitiationPerGrade:               3,
+				PositiveQualityMultiplier:        2,
+				NegativeQualityRemovalMultiplier: 2,
+			},
+			Training: domain.AdvancementTraining{
+				AttributePerRatingWeeks:    1,
+				EdgeRequiresDowntime:       false,
+				InstructorReductionPercent: 25,
+				ActiveSkillBrackets: []domain.SkillTrainingBracket{
+					{MinRating: 1, MaxRating: 4, PerRating: 1, Unit: "day"},
+				},
+				SkillGroupPerRatingWeeks: 2,
+				SpecializationMonths:     1,
+			},
+			Limits: domain.AdvancementLimits{
+				AttributeIncreasePerDowntime:        2,
+				SkillIncreasePerDowntime:            3,
+				SkillGroupIncreasePerDowntime:       1,
+				AllowsSimultaneousAttributeAndSkill: true,
+				AllowsSimultaneousPhysicalAndMental: true,
+				RequiresAugmentationRecoveryPause:   true,
+			},
+			FocusBonding: []domain.FocusBondingRule{
+				{Type: "enchanting_focus", Label: "Enchanting Focus", KarmaPerForce: 3},
+				{Type: "metamagic_focus", Label: "Metamagic Focus", KarmaPerForce: 3},
+				{Type: "weapon_focus", Label: "Weapon Focus", KarmaPerForce: 3},
+				{Type: "power_focus", Label: "Power Focus", KarmaPerForce: 6},
+				{Type: "qi_focus", Label: "Qi Focus", KarmaPerForce: 2},
+				{Type: "spell_focus", Label: "Spell Focus", KarmaPerForce: 2},
+				{Type: "spirit_focus", Label: "Spirit Focus", KarmaPerForce: 2},
 			},
 		},
 	}

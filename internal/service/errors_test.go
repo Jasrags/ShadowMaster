@@ -20,7 +20,7 @@ func TestErrorSentinels(t *testing.T) {
 		{name: "campaign unknown book", err: ErrCampaignUnknownBook, message: "campaign enabled book is not recognized"},
 		{name: "session campaign required", err: ErrSessionCampaignRequired, message: "session must be associated with a campaign"},
 		{name: "scene session required", err: ErrSceneSessionRequired, message: "scene must be associated with a session"},
-		{name: "karma budget mismatch", err: ErrKarmaBudgetMismatch, message: "Karma point-buy selection does not spend required points"},
+		{name: "karma budget mismatch", err: ErrKarmaBudgetMismatch, message: "karma point-buy selection does not spend required points"},
 	}
 
 	for _, tc := range testCases {

@@ -1,4 +1,5 @@
 import { ReactNode, useMemo, useState } from 'react';
+import { TextInput } from './common/TextInput';
 
 export type SortDirection = 'asc' | 'desc';
 
@@ -124,7 +125,8 @@ export function DataTable<T extends Record<string, unknown>>({
     <div className="data-table-wrapper">
       {enableSearch && columns.length > 0 && (
         <div className="data-table-toolbar">
-          <input
+          <TextInput
+            variant="search"
             type="search"
             placeholder={searchPlaceholder}
             value={searchQuery}
