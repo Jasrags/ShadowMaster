@@ -3,6 +3,7 @@ import { createPortal } from 'react-dom';
 import { CampaignSummary } from '../types/campaigns';
 import { ShadowmasterAuthState } from '../types/auth';
 import { UserSummary } from '../types/editions';
+import { ShadowmasterLegacyApp } from '../types/legacy';
 import { CampaignTable } from './CampaignTable';
 import { CampaignManageDrawer } from './CampaignManageDrawer';
 import { CampaignViewDrawer } from './CampaignViewDrawer';
@@ -104,15 +105,19 @@ export function CampaignList({ targetId = CAMPAIGNS_ROOT_ID }: Props) {
   }, [fetchCampaigns]);
 
   useEffect(() => {
-    window.ShadowmasterLegacyApp = Object.assign(window.ShadowmasterLegacyApp ?? {}, {
-      loadCampaigns: () => {
-        void fetchCampaigns();
+    window.ShadowmasterLegacyApp = Object.assign(
+      (window.ShadowmasterLegacyApp as ShadowmasterLegacyApp | undefined) ?? {},
+      {
+        loadCampaigns: () => {
+          void fetchCampaigns();
+        },
       },
-    });
+    );
 
     return () => {
-      if (window.ShadowmasterLegacyApp) {
-        window.ShadowmasterLegacyApp.loadCampaigns = undefined;
+      const legacy = window.ShadowmasterLegacyApp as ShadowmasterLegacyApp | undefined;
+      if (legacy) {
+        legacy.loadCampaigns = undefined;
       }
     };
   }, [fetchCampaigns]);
