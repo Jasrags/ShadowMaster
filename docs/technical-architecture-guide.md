@@ -31,7 +31,7 @@ _Last updated: 2025-11-11_
 | `CampaignService` | CRUD + validation, gameplay rule resolution, book validation, creation method normalization. |
 | `SessionService` | CRUD enforcing campaign linkage immutability. |
 | `SceneService` | CRUD enforcing session linkage immutability. |
-| `CharacterService` | (legacy + upcoming React flow) handles character persistence and creation validations. |
+| `CharacterService` | Handles character persistence and creation validations (drives React wizard payloads while legacy list views finish migrating). |
 | `UserService` | Registration, authentication, password updates, role-filtered user list. |
 | `SR5` validators | Sum-to-Ten and Karma budget enforcement (`internal/service/sr5_*.go`). |
 
@@ -68,7 +68,7 @@ Error translation flows through `respondServiceError` for consistent HTTP codes.
   - `CampaignCreation`: Modal wizard with multipage reducer, book selector, GM roster integration.
   - `CampaignTable` + `DataTable`: Reusable table with sort/filter and RBAC-aware actions.
   - `PriorityAssignment` suite: Handles Priority, Sum-to-Ten, Karma flows using edition context.
-- **Legacy Bridge (`web/static/js/app.js`)** remains for sections not migrated yet; React components call into it for certain actions (e.g., showing legacy modals).
+- **Legacy Bridge (`web/static/js/app.js`)** now only powers nav fallbacks and list refresh helpers for characters/campaigns while React owns the wizard and management UI.
 - **Styling** via `web/static/css/style.css`, gradually modularized; ensures consistent look for new components (collapsible panels, tables, modals).
 
 ---

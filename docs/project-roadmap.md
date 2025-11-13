@@ -89,7 +89,7 @@ Legend: ✅ Complete • ⚙️ In Progress • 🔜 Planned • 🛑 Blocked
 - Edition context now merges campaign overrides; next iteration:
   - [ ] Cache preloaded edition data client-side for faster tab switches.
   - [ ] Normalize legacy characters against campaign gameplay rules.
-- **Recent**: Characters tab migrated to React `DataTable`; legacy list now suppressed. Legacy wizard HTML removed; React CharacterWizard is authoritative entry point.
+- **Recent**: Characters tab migrated to React `DataTable`; legacy list now suppressed. React CharacterWizard is the sole flow (legacy JS trimmed to minimal loaders for nav fallbacks).
 
 ---
 
@@ -115,6 +115,7 @@ Legend: ✅ Complete • ⚙️ In Progress • 🔜 Planned • 🛑 Blocked
   - Campaign creation wizard with edition/method/level dropdowns and GM selector.
   - Campaign table leveraging reusable `DataTable`, including edit/delete modals tied to RBAC.
   - Legacy campaign modal fully retired.
+  - Legacy character wizard JS removed; React wizard drives creation end-to-end (legacy JS only refreshes lists for nav fallbacks).
   - SR5 preset libraries (factions, locations, placeholders, session seeds) hooked into wizard + drawer.
 
 ---

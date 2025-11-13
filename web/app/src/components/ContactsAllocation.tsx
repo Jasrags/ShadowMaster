@@ -2,7 +2,6 @@ import { useEffect, useMemo, useState, useRef } from 'react';
 import { createPortal } from 'react-dom';
 import { TextInput } from './common/TextInput';
 import { useCharacterWizard } from '../context/CharacterWizardContext';
-import type { ShadowmasterLegacyApp } from '../types/legacy';
 
 export interface ContactEntry {
   id: string;

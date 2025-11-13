@@ -3,7 +3,6 @@ import { createPortal } from 'react-dom';
 import { TextInput } from './common/TextInput';
 import { useEdition } from '../hooks/useEdition';
 import { useCharacterWizard } from '../context/CharacterWizardContext';
-import type { ShadowmasterLegacyApp } from '../types/legacy';
 
 type ResourcesPriority = 'A' | 'B' | 'C' | 'D' | 'E' | '';
 
