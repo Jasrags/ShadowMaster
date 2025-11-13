@@ -1,5 +1,6 @@
 import { useEffect, useMemo } from 'react';
 import { useEdition } from '../hooks/useEdition';
+import { useCharacterWizard } from '../context/CharacterWizardContext';
 import { getMetatypesForPriority, formatModifier, formatAttributeLabel } from '../utils/metatypes';
 import { PriorityCode } from '../types/editions';
 
@@ -11,6 +12,7 @@ interface Props {
 
 export function MetatypeSelection({ priority, selectedMetatype, onSelect }: Props) {
   const { characterCreationData, isLoading, error, activeEdition } = useEdition();
+  const wizard = useCharacterWizard();
 
   useEffect(() => {
     document.body.classList.add('react-metatype-enabled');
@@ -30,15 +32,21 @@ export function MetatypeSelection({ priority, selectedMetatype, onSelect }: Prop
 
   const canAdvance = Boolean(selectedMetatype);
 
+  const handleSelect = (metatypeId: string) => {
+    // Sync to context
+    wizard.setSelectedMetatype(metatypeId);
+    onSelect(metatypeId);
+  };
+
   const handleBack = () => {
-    window.ShadowmasterLegacyApp?.showWizardStep?.(1);
+    wizard.navigateToStep(1);
   };
 
   const handleNext = () => {
     if (!selectedMetatype) {
       return;
     }
-    window.ShadowmasterLegacyApp?.showWizardStep?.(3);
+    wizard.navigateToStep(3);
   };
 
   if (isLoading) {
@@ -64,7 +72,7 @@ export function MetatypeSelection({ priority, selectedMetatype, onSelect }: Prop
           <article
             key={metatype.id}
             className={`react-metatype-card ${selectedMetatype === metatype.id ? 'selected' : ''}`}
-            onClick={() => onSelect(metatype.id)}
+            onClick={() => handleSelect(metatype.id)}
           >
             <h4>{metatype.name}</h4>
 

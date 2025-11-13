@@ -1,6 +1,6 @@
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo, useState, useRef } from 'react';
 import { createPortal } from 'react-dom';
-import type { ShadowmasterLegacyApp } from '../types/legacy';
+import { useCharacterWizard } from '../context/CharacterWizardContext';
 
 interface CharacterReviewProps {
   characterName: string;
@@ -41,24 +41,117 @@ export interface CharacterSubmissionData {
   };
 }
 
-function CharacterReview({ characterName, playerName, onBack, onSubmit }: CharacterReviewProps) {
+export function CharacterReview({ characterName, playerName, onBack, onSubmit }: CharacterReviewProps) {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitError, setSubmitError] = useState<string | null>(null);
   const [summary, setSummary] = useState<Partial<CharacterSubmissionData['edition_data']>>({});
+  const wizard = useCharacterWizard();
+
+  // Extract specific values from wizard.state to use as dependencies
+  const {
+    priorities: contextPriorities,
+    selectedMetatype: contextMetatype,
+    magicSelection: contextMagic,
+    attributes: contextAttributes,
+    activeSkills: contextActiveSkills,
+    knowledgeSkills: contextKnowledgeSkills,
+    weapons: contextWeapons,
+    armor: contextArmor,
+    cyberware: contextCyberware,
+    bioware: contextBioware,
+    gear: contextGear,
+    vehicles: contextVehicles,
+    contacts: contextContacts,
+    lifestyle: contextLifestyle,
+    attributeStartingValues,
+    attributeBaseValues,
+  } = wizard.state;
+
+  // Use refs to track previous JSON strings and only update when they actually change
+  const prevKeys = useRef<Record<string, string>>({});
 
   useEffect(() => {
-    const legacy = window.ShadowmasterLegacyApp as ShadowmasterLegacyApp | undefined;
-    if (!legacy) return;
+    // Create JSON string keys for comparison
+    const activeSkillsKey = JSON.stringify(contextActiveSkills);
+    const knowledgeSkillsKey = JSON.stringify(contextKnowledgeSkills);
+    const weaponsKey = JSON.stringify(contextWeapons);
+    const armorKey = JSON.stringify(contextArmor);
+    const cyberwareKey = JSON.stringify(contextCyberware);
+    const biowareKey = JSON.stringify(contextBioware);
+    const gearKey = JSON.stringify(contextGear);
+    const vehiclesKey = JSON.stringify(contextVehicles);
+    const contactsKey = JSON.stringify(contextContacts);
+    const attributesKey = JSON.stringify(contextAttributes);
+    const attributeStartingValuesKey = JSON.stringify(attributeStartingValues);
+    const attributeBaseValuesKey = JSON.stringify(attributeBaseValues);
+    const prioritiesKey = JSON.stringify(contextPriorities);
+    const magicKey = JSON.stringify(contextMagic);
 
-    // Collect all wizard state
-    const priorities = legacy.getPriorities?.() ?? {};
-    const metatypeSelection = legacy.getMetatypeSelection?.() ?? null;
-    const magicState = legacy.getMagicState?.();
-    const attributesState = legacy.getAttributesState?.();
-    const skillsState = legacy.getSkillsState?.();
-    const equipmentState = legacy.getEquipmentState?.();
-    const contactsState = legacy.getContactsState?.();
-    const lifestyleState = legacy.getLifestyleState?.();
+    // Check if any values actually changed
+    const currentKeys = {
+      activeSkillsKey,
+      knowledgeSkillsKey,
+      weaponsKey,
+      armorKey,
+      cyberwareKey,
+      biowareKey,
+      gearKey,
+      vehiclesKey,
+      contactsKey,
+      attributesKey,
+      attributeStartingValuesKey,
+      attributeBaseValuesKey,
+      prioritiesKey,
+      magicKey,
+      contextMetatype,
+      contextLifestyle,
+    };
+    
+    const keysChanged = Object.keys(currentKeys).some(key => currentKeys[key] !== prevKeys.current[key]);
+    
+    if (!keysChanged) {
+      return; // No changes, skip update
+    }
+    
+    prevKeys.current = currentKeys;
+
+    // Collect all wizard state from context
+    const priorities = {
+      magic: contextPriorities.magic ?? null,
+      metatype: contextPriorities.metatype ?? null,
+      attributes: contextPriorities.attributes ?? null,
+      skills: contextPriorities.skills ?? null,
+      resources: contextPriorities.resources ?? null,
+    };
+    const metatypeSelection = contextMetatype;
+    const magicState = contextMagic?.type ? {
+      type: contextMagic.type,
+      tradition: contextMagic.tradition ?? null,
+      totem: contextMagic.totem ?? null,
+    } : null;
+    const attributesState = contextAttributes ? {
+      values: contextAttributes,
+      startingValues: attributeStartingValues ?? {},
+      baseValues: attributeBaseValues ?? {},
+    } : null;
+    const skillsState = {
+      active: contextActiveSkills,
+      knowledge: contextKnowledgeSkills,
+    };
+    const equipmentState = {
+      weapons: contextWeapons,
+      armor: contextArmor,
+      cyberware: contextCyberware,
+      bioware: contextBioware,
+      gear: contextGear,
+      vehicles: contextVehicles,
+    };
+    const contactsState = {
+      contacts: contextContacts,
+    };
+    const lifestyleState = contextLifestyle ? {
+      lifestyle: contextLifestyle,
+    } : null;
 
     setSummary({
       magic_priority: priorities.magic ?? '',
@@ -91,7 +184,8 @@ function CharacterReview({ characterName, playerName, onBack, onSubmit }: Charac
       })) ?? [],
       lifestyle: lifestyleState?.lifestyle ?? '',
     });
-  }, []);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [contextMetatype, contextLifestyle]); // Arrays/objects checked via JSON.stringify inside effect
 
   const validation = useMemo(() => {
     const errors: string[] = [];
@@ -303,10 +397,13 @@ function CharacterReview({ characterName, playerName, onBack, onSubmit }: Charac
   );
 }
 
-export function CharacterReviewPortal() {
+interface CharacterReviewPortalProps {
+  onSubmit?: (data: CharacterSubmissionData) => Promise<void>;
+}
+
+export function CharacterReviewPortal({ onSubmit }: CharacterReviewPortalProps = {}) {
   const [container, setContainer] = useState<Element | null>(null);
-  const [characterName, setCharacterName] = useState('');
-  const [playerName, setPlayerName] = useState('');
+  const wizard = useCharacterWizard();
 
   useEffect(() => {
     setContainer(document.getElementById('character-review-react-root'));
@@ -319,34 +416,8 @@ export function CharacterReviewPortal() {
     };
   }, []);
 
-  useEffect(() => {
-    // Get character name and player name from the form
-    const nameInput = document.getElementById('char-name') as HTMLInputElement;
-    const playerInput = document.getElementById('player-name') as HTMLInputElement;
-
-    if (nameInput) {
-      setCharacterName(nameInput.value);
-      const updateName = () => setCharacterName(nameInput.value);
-      nameInput.addEventListener('input', updateName);
-      return () => nameInput.removeEventListener('input', updateName);
-    }
-  }, []);
-
-  useEffect(() => {
-    const playerInput = document.getElementById('player-name') as HTMLInputElement;
-    if (playerInput) {
-      setPlayerName(playerInput.value);
-      const updatePlayer = () => setPlayerName(playerInput.value);
-      playerInput.addEventListener('input', updatePlayer);
-      return () => playerInput.removeEventListener('input', updatePlayer);
-    }
-  }, []);
-
   const handleBack = () => {
-    const legacy = window.ShadowmasterLegacyApp as ShadowmasterLegacyApp | undefined;
-    if (legacy?.showWizardStep) {
-      legacy.showWizardStep(8); // Back to Lifestyle step
-    }
+    wizard.navigateToStep(8);
   };
 
   const handleSubmit = async (data: CharacterSubmissionData) => {
@@ -366,13 +437,6 @@ export function CharacterReviewPortal() {
 
     const character = await response.json();
 
-    // Close modal and reload characters
-    const modal = document.getElementById('character-modal');
-    if (modal) {
-      modal.style.display = 'none';
-    }
-
-    // Notify success
     if (typeof window.ShadowmasterNotify === 'function') {
       window.ShadowmasterNotify({
         type: 'success',
@@ -381,14 +445,12 @@ export function CharacterReviewPortal() {
       });
     }
 
-    // Reload characters list
-    if (typeof window.ShadowmasterLegacyApp?.loadCampaigns === 'function') {
-      window.ShadowmasterLegacyApp.loadCampaigns();
-    }
+    window.dispatchEvent(new Event('shadowmaster:characters:refresh'));
+    window.dispatchEvent(new Event('shadowmaster:campaigns:refresh'));
 
-    // Trigger character list reload
-    const loadCharactersEvent = new CustomEvent('reload-characters');
-    window.dispatchEvent(loadCharactersEvent);
+    if (onSubmit) {
+      await onSubmit(data);
+    }
   };
 
   if (!container) {
@@ -396,7 +458,12 @@ export function CharacterReviewPortal() {
   }
 
   return createPortal(
-    <CharacterReview characterName={characterName} playerName={playerName} onBack={handleBack} onSubmit={handleSubmit} />,
+    <CharacterReview
+      characterName={wizard.state.characterName}
+      playerName={wizard.state.playerName}
+      onBack={handleBack}
+      onSubmit={handleSubmit}
+    />,
     container,
   );
 }

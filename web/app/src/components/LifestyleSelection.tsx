@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState } from 'react';
 import { createPortal } from 'react-dom';
-import type { ShadowmasterLegacyApp } from '../types/legacy';
+import { useCharacterWizard } from '../context/CharacterWizardContext';
 
 export type LifestyleOption = 'Street' | 'Squatter' | 'Low' | 'Middle' | 'High' | 'Luxury' | '';
 
@@ -108,6 +108,7 @@ function LifestyleSelection({ storedLifestyle = '', onBack, onStateChange, onSav
 
 export function LifestylePortal() {
   const [container, setContainer] = useState<Element | null>(null);
+  const wizard = useCharacterWizard();
   const [storedLifestyle, setStoredLifestyle] = useState<LifestyleOption>('');
 
   useEffect(() => {
@@ -121,54 +122,26 @@ export function LifestylePortal() {
     };
   }, []);
 
+  const contextLifestyle = wizard.state.lifestyle;
+
   useEffect(() => {
-    const legacy = window.ShadowmasterLegacyApp as ShadowmasterLegacyApp | undefined;
-    if (!legacy) {
-      return;
-    }
-
-    const syncState = () => {
-      const lifestyleState = legacy.getLifestyleState?.();
-      if (lifestyleState) {
-        setStoredLifestyle((lifestyleState.lifestyle as LifestyleOption) || '');
-      } else {
-        setStoredLifestyle('');
-      }
-    };
-
-    syncState();
-
-    // Subscribe to state changes if available
-    const unsubscribe = legacy.subscribeLifestyleState?.(syncState);
-    return () => {
-      if (typeof unsubscribe === 'function') {
-        unsubscribe();
-      }
-    };
-  }, []);
+    setStoredLifestyle(contextLifestyle ?? '');
+  }, [contextLifestyle]);
 
   const handleStateChange = (state: LifestyleState) => {
-    const legacy = window.ShadowmasterLegacyApp as ShadowmasterLegacyApp | undefined;
-    if (legacy?.setLifestyleState) {
-      legacy.setLifestyleState({
-        lifestyle: state.lifestyle,
-      });
+    // Sync to context only if the value actually changed
+    if (wizard.state.lifestyle !== state.lifestyle) {
+      wizard.setLifestyle(state.lifestyle);
     }
   };
 
   const handleSave = (state: LifestyleState) => {
     handleStateChange(state);
-    const legacy = window.ShadowmasterLegacyApp as ShadowmasterLegacyApp | undefined;
-    if (legacy?.showWizardStep) {
-      legacy.showWizardStep(9); // Move to Final Review/Submit step
-    }
+    wizard.navigateToStep(9); // Move to Final Review/Submit step
   };
 
   const handleBack = () => {
-    const legacy = window.ShadowmasterLegacyApp as ShadowmasterLegacyApp | undefined;
-    if (legacy?.showWizardStep) {
-      legacy.showWizardStep(7); // Back to Contacts step
-    }
+    wizard.navigateToStep(7); // Back to Contacts step
   };
 
   if (!container) {

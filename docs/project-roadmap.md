@@ -32,6 +32,7 @@ Legend: ✅ Complete • ⚙️ In Progress • 🔜 Planned • 🛑 Blocked
    - [ ] Document campaign setup implications for non-Priority methods.
 
 2. **Character Creation Wizard Conversion**
+   - [x] Reactify shell + modal (CharacterWizard, WizardContext) and retire legacy modal markup.
    - [ ] Reactify remaining steps (Attributes, Skills, Gear preview).
    - [ ] Ensure campaign defaults (karma, resources, restrictions) flow through every step.
    - [ ] Provide validation summaries before character save.
@@ -68,7 +69,7 @@ Legend: ✅ Complete • ⚙️ In Progress • 🔜 Planned • 🛑 Blocked
   - ✅ React root + `EditionContext` scaffolding.
   - ✅ Wizard steps migrated: Priorities, Metatypes, Magical Abilities.
   - [ ] Migrate Attributes, Skills, Gear/Lifestyle, and summary/validation steps.
-  - [ ] Replace character roster cards with shared `DataTable`; connect to campaign defaults.
+  - ✅ Replace character roster cards with shared `DataTable`; connect to campaign defaults.
 
 - **Testing & Fixtures**
   - [ ] Create fixture characters for SR5 (priority, Sum-to-Ten, Karma) to validate derived stats.
@@ -88,6 +89,7 @@ Legend: ✅ Complete • ⚙️ In Progress • 🔜 Planned • 🛑 Blocked
 - Edition context now merges campaign overrides; next iteration:
   - [ ] Cache preloaded edition data client-side for faster tab switches.
   - [ ] Normalize legacy characters against campaign gameplay rules.
+- **Recent**: Characters tab migrated to React `DataTable`; legacy list now suppressed. Legacy wizard HTML removed; React CharacterWizard is authoritative entry point.
 
 ---
 

@@ -10,7 +10,6 @@ export interface ShadowmasterLegacyApp {
   setKarmaPointBuy?: (payload: unknown) => void;
   getSkillsState?: () => unknown;
   setSkillsState?: (payload: unknown) => void;
-  showWizardStep?: (step: number) => void;
   loadCampaignCharacterCreation?: (campaignId: string) => Promise<void>;
   clearCampaignCharacterCreation?: () => void;
   subscribeMetatypeState?: (listener: () => void) => void;

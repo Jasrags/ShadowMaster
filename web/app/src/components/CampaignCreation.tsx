@@ -2,6 +2,7 @@ import { FormEvent, RefObject, useCallback, useEffect, useMemo, useReducer, useR
 import { createPortal } from 'react-dom';
 import { useEdition } from '../hooks/useEdition';
 import { CharacterCreationData, CreationMethodDefinition, SourceBook, UserSummary } from '../types/editions';
+import { CharacterSummary } from '../types/characters';
 import { CampaignSummary } from '../types/campaigns';
 import { useNotifications } from '../context/NotificationContext';
 
@@ -82,14 +83,6 @@ interface RosterPlaceholder {
   id: string;
   name: string;
   role: string;
-}
-
-interface CharacterSummary {
-  id: string;
-  name: string;
-  player_name?: string;
-  status?: string;
-  edition?: string;
 }
 
 interface DraftState {

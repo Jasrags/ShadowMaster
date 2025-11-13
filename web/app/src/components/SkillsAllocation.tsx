@@ -1,8 +1,9 @@
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo, useState, useRef } from 'react';
 import { createPortal } from 'react-dom';
 import { TextInput } from './common/TextInput';
 import { useEdition } from '../hooks/useEdition';
-import type { ShadowmasterLegacyApp } from '../types/legacy';
+import { useCharacterWizard } from '../context/CharacterWizardContext';
+import type { CharacterCreationData } from '../types/editions';
 
 type SkillPriority = 'A' | 'B' | 'C' | 'D' | 'E' | '';
 
@@ -311,6 +312,7 @@ interface LegacySkillState {
 export function SkillsPortal() {
   const [container, setContainer] = useState<Element | null>(null);
   const { characterCreationData } = useEdition();
+  const wizard = useCharacterWizard();
   const [priority, setPriority] = useState<SkillPriority>('');
   const [storedSkills, setStoredSkills] = useState<LegacySkillState>({ active: [], knowledge: [] });
 
@@ -325,56 +327,65 @@ export function SkillsPortal() {
     };
   }, []);
 
+  const contextPriority = wizard.state.priorities.skills ?? '';
+  const contextActive = wizard.state.activeSkills;
+  const contextKnowledge = wizard.state.knowledgeSkills;
+
+  // Use refs to track previous JSON strings and only update when they actually change
+  const prevActiveKey = useRef<string>('');
+  const prevKnowledgeKey = useRef<string>('');
+
+  const prevPriority = useRef<string>('');
+
   useEffect(() => {
-    const legacy = window.ShadowmasterLegacyApp as ShadowmasterLegacyApp | undefined;
-    if (!legacy) {
-      return;
+    const activeKey = JSON.stringify(contextActive);
+    const knowledgeKey = JSON.stringify(contextKnowledge);
+    
+    // Only update priority if it changed
+    if (contextPriority !== prevPriority.current) {
+      prevPriority.current = contextPriority;
+      setPriority(contextPriority);
     }
 
-    const syncState = () => {
-      const priorities = legacy.getPriorities?.() ?? {};
-      setPriority((priorities.skills as SkillPriority) ?? '');
-
-      const skillState = legacy.getSkillsState?.();
-      if (skillState) {
-        setStoredSkills({
-          active: skillState.active?.map((entry) => ({ ...entry })) ?? [],
-          knowledge: skillState.knowledge?.map((entry) => ({ ...entry })) ?? [],
-        });
-      } else {
-        setStoredSkills({ active: [], knowledge: [] });
-      }
-    };
-
-    syncState();
-  }, [characterCreationData]);
+    // Only update if the arrays actually changed
+    if (activeKey !== prevActiveKey.current || knowledgeKey !== prevKnowledgeKey.current) {
+      prevActiveKey.current = activeKey;
+      prevKnowledgeKey.current = knowledgeKey;
+      
+      // Load from context
+      setStoredSkills({
+        active: contextActive.map((skill) => ({ id: skill.id, name: skill.name, rating: skill.rating })),
+        knowledge: contextKnowledge.map((skill) => ({ id: skill.id, name: skill.name, rating: skill.rating })),
+      });
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [characterCreationData, contextPriority]); // Arrays checked via JSON.stringify inside effect
 
   if (!container) {
     return null;
   }
 
-  const legacy = window.ShadowmasterLegacyApp as ShadowmasterLegacyApp | undefined;
-
   const handleStateChange = (state: SkillsState) => {
-    legacy?.setSkillsState?.({
-      priority: state.priority,
-      active: state.activeSkills.map((skill) => ({ id: skill.id, name: skill.name, rating: skill.rating })),
-      knowledge: state.knowledgeSkills.map((skill) => ({ id: skill.id, name: skill.name, rating: skill.rating })),
-      available: state.availablePoints,
-      used: state.usedPoints,
-    });
+    const currentActiveKey = JSON.stringify(wizard.state.activeSkills);
+    const nextActiveKey = JSON.stringify(state.activeSkills);
+    if (currentActiveKey !== nextActiveKey) {
+      wizard.setActiveSkills(state.activeSkills);
+    }
+
+    const currentKnowledgeKey = JSON.stringify(wizard.state.knowledgeSkills);
+    const nextKnowledgeKey = JSON.stringify(state.knowledgeSkills);
+    if (currentKnowledgeKey !== nextKnowledgeKey) {
+      wizard.setKnowledgeSkills(state.knowledgeSkills);
+    }
   };
 
   const handleBack = () => {
-    legacy?.showWizardStep?.(4);
+    wizard.navigateToStep(4);
   };
 
   const handleSave = (state: SkillsState) => {
     handleStateChange(state);
-    const legacy = window.ShadowmasterLegacyApp as ShadowmasterLegacyApp | undefined;
-    if (legacy?.showWizardStep) {
-      legacy.showWizardStep(6); // Move to Equipment step
-    }
+    wizard.navigateToStep(6); // Move to Equipment step
   };
 
   return createPortal(

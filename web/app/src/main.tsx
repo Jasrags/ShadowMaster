@@ -2,6 +2,7 @@ import { StrictMode, useEffect } from 'react';
 import { createRoot } from 'react-dom/client';
 import { EditionProvider } from './context/EditionContext';
 import { CharacterWizardProvider } from './context/CharacterWizardContext';
+import { WizardProvider } from './context/WizardContext';
 import { App } from './App';
 import type { PriorityCode } from './types/editions';
 
@@ -24,15 +25,17 @@ function Root() {
     }
   }, []);
 
-  return (
-    <StrictMode>
-      <EditionProvider>
-        <CharacterWizardProvider>
-          <App />
-        </CharacterWizardProvider>
-      </EditionProvider>
-    </StrictMode>
-  );
+        return (
+          <StrictMode>
+            <EditionProvider>
+              <CharacterWizardProvider>
+                <WizardProvider>
+                  <App />
+                </WizardProvider>
+              </CharacterWizardProvider>
+            </EditionProvider>
+          </StrictMode>
+        );
 }
 
 const root = createRoot(container);

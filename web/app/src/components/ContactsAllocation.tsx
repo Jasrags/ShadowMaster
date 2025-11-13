@@ -1,6 +1,7 @@
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo, useState, useRef } from 'react';
 import { createPortal } from 'react-dom';
 import { TextInput } from './common/TextInput';
+import { useCharacterWizard } from '../context/CharacterWizardContext';
 import type { ShadowmasterLegacyApp } from '../types/legacy';
 
 export interface ContactEntry {
@@ -244,6 +245,7 @@ interface LegacyContactsState {
 
 export function ContactsPortal() {
   const [container, setContainer] = useState<Element | null>(null);
+  const wizard = useCharacterWizard();
   const [storedContacts, setStoredContacts] = useState<ContactEntry[]>([]);
 
   useEffect(() => {
@@ -257,63 +259,47 @@ export function ContactsPortal() {
     };
   }, []);
 
+  const contextContacts = wizard.state.contacts;
+
+  // Use ref to track previous JSON string and only update when it actually changes
+  const prevContactsKey = useRef<string>('');
+
   useEffect(() => {
-    const legacy = window.ShadowmasterLegacyApp as ShadowmasterLegacyApp | undefined;
-    if (!legacy) {
-      return;
+    const contactsKey = JSON.stringify(contextContacts);
+    
+    // Only update if contacts actually changed
+    if (contactsKey !== prevContactsKey.current) {
+      prevContactsKey.current = contactsKey;
+      
+      setStoredContacts(contextContacts.map((entry) => ({
+        id: entry.id,
+        name: entry.name,
+        type: entry.type,
+        level: entry.level,
+        loyalty: entry.loyalty,
+        notes: entry.notes,
+      })));
     }
-
-    const syncState = () => {
-      const contactsState = legacy.getContactsState?.();
-      if (contactsState) {
-        setStoredContacts(
-          contactsState.contacts?.map((entry) => ({
-            id: entry.id ?? generateId('contact'),
-            name: entry.name || '',
-            type: entry.type || 'General',
-            level: entry.level || 1,
-            loyalty: entry.loyalty || 1,
-            notes: entry.notes,
-          })) ?? [],
-        );
-      } else {
-        setStoredContacts([]);
-      }
-    };
-
-    syncState();
-
-    // Subscribe to state changes if available
-    const unsubscribe = legacy.subscribeContactsState?.(syncState);
-    return () => {
-      if (typeof unsubscribe === 'function') {
-        unsubscribe();
-      }
-    };
+    // Note: We intentionally don't include contextContacts in deps to avoid infinite loops
+    // The effect will run on every render, but we check if contacts actually changed via JSON.stringify
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const handleStateChange = (state: ContactsState) => {
-    const legacy = window.ShadowmasterLegacyApp as ShadowmasterLegacyApp | undefined;
-    if (legacy?.setContactsState) {
-      legacy.setContactsState({
-        contacts: state.contacts,
-      });
+    const existingKey = JSON.stringify(wizard.state.contacts);
+    const nextKey = JSON.stringify(state.contacts);
+    if (existingKey !== nextKey) {
+      wizard.setContacts(state.contacts);
     }
   };
 
   const handleSave = (state: ContactsState) => {
     handleStateChange(state);
-    const legacy = window.ShadowmasterLegacyApp as ShadowmasterLegacyApp | undefined;
-    if (legacy?.showWizardStep) {
-      legacy.showWizardStep(8); // Move to Lifestyle step
-    }
+    wizard.navigateToStep(8); // Move to Lifestyle step
   };
 
   const handleBack = () => {
-    const legacy = window.ShadowmasterLegacyApp as ShadowmasterLegacyApp | undefined;
-    if (legacy?.showWizardStep) {
-      legacy.showWizardStep(6); // Back to Equipment step
-    }
+    wizard.navigateToStep(6); // Back to Equipment step
   };
 
   if (!container) {

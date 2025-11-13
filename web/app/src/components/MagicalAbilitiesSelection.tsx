@@ -1,5 +1,6 @@
 import { useEffect, useMemo } from 'react';
 import { useEdition } from '../hooks/useEdition';
+import { useCharacterWizard } from '../context/CharacterWizardContext';
 
 export interface MagicalSelection {
   type: string | null;
@@ -35,6 +36,7 @@ function normalizePriority(priority: string): string {
 
 export function MagicalAbilitiesSelection({ priority, selection, onChange }: Props) {
   const { characterCreationData, activeEdition } = useEdition();
+  const wizard = useCharacterWizard();
   const normalizedPriority = normalizePriority(priority);
   const priorityTable = characterCreationData?.priorities?.magic ?? null;
   const priorityInfo = useMemo(() => {
@@ -124,7 +126,9 @@ export function MagicalAbilitiesSelection({ priority, selection, onChange }: Pro
       return;
     }
 
+    // Sync to context
     onChange(nextSelection);
+    wizard.setMagicSelection(nextSelection);
   };
 
   const renderMagicCards = () => {
@@ -272,14 +276,14 @@ export function MagicalAbilitiesSelection({ priority, selection, onChange }: Pro
   };
 
   const handleBack = () => {
-    window.ShadowmasterLegacyApp?.showWizardStep?.(2);
+    wizard.navigateToStep(2);
   };
 
   const handleNext = () => {
     if (!canAdvance()) {
       return;
     }
-    window.ShadowmasterLegacyApp?.showWizardStep?.(4);
+    wizard.navigateToStep(4);
   };
 
   return (

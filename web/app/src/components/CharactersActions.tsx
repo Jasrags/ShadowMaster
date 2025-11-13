@@ -1,49 +1,52 @@
-import { useEffect, useState } from 'react';
+import { MouseEvent, useEffect, useState } from 'react';
 import { createPortal } from 'react-dom';
-
-function openCreateCharacterModal() {
-  if (typeof window.showCreateCharacterModal === 'function') {
-    window.showCreateCharacterModal();
-    return;
-  }
-
-  window.ShadowmasterLegacyApp?.showWizardStep?.(1);
-  const modal = document.getElementById('character-modal');
-  if (modal) {
-    modal.style.display = 'block';
-  }
-}
+import { useWizard } from '../context/WizardContext';
 
 export function CharactersActions() {
   const [container, setContainer] = useState<Element | null>(null);
+  const { openWizard } = useWizard();
 
   useEffect(() => {
     setContainer(document.getElementById('characters-actions'));
-  }, []);
+    
+    // Expose function for legacy code compatibility
+    (window as any).openCharacterWizard = (campaignId?: string | null) => {
+      openWizard(campaignId);
+    };
+  }, [openWizard]);
 
   if (!container) {
     return null;
   }
 
+  const handleCreateCharacter = (event: MouseEvent<HTMLButtonElement>) => {
+    event.preventDefault();
+    event.stopPropagation();
+    if (event.nativeEvent && typeof event.nativeEvent.stopImmediatePropagation === 'function') {
+      event.nativeEvent.stopImmediatePropagation();
+    }
+
+    window.ShadowmasterLegacyApp?.clearCampaignCharacterCreation?.();
+    openWizard();
+  };
+
   return createPortal(
-    <div className="characters-callout">
-      <div className="characters-callout__copy">
-        <h2>Characters</h2>
-        <p>
-          Build new runners, review existing sheets, and keep your roster ready for the next mission.
-        </p>
-      </div>
-      <div className="characters-callout__actions">
+    <section className="campaign-create-react campaign-create-react--collapsed characters-actions">
+      <div className="campaign-create-trigger">
+        <div className="campaign-create-trigger__copy">
+          <h3>Plan Your Next Runner</h3>
+          <p>Build new characters and keep your roster ready for the next mission.</p>
+        </div>
         <button
           id="create-character-btn"
           type="button"
-          className="btn btn-primary"
-          onClick={openCreateCharacterModal}
+          className="btn-primary"
+          onClick={handleCreateCharacter}
         >
           Create Character
         </button>
       </div>
-    </div>,
+    </section>,
     container,
   );
 }

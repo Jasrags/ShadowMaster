@@ -112,6 +112,7 @@ interface CharacterWizardContextValue {
   setContacts: (contacts: ContactEntry[]) => void;
   setLifestyle: (lifestyle: LifestyleOption) => void;
   setCurrentStep: (step: number) => void;
+  navigateToStep: (step: number) => void;
   reset: () => void;
 }
 
@@ -235,6 +236,10 @@ export function CharacterWizardProvider({ children }: { children: ReactNode }) {
     setState((prev) => ({ ...prev, currentStep: step }));
   }, []);
 
+  const navigateToStep = useCallback((step: number) => {
+    setState((prev) => ({ ...prev, currentStep: step }));
+  }, []);
+
   const reset = useCallback(() => {
     setState(initialState);
   }, []);
@@ -261,6 +266,7 @@ export function CharacterWizardProvider({ children }: { children: ReactNode }) {
     setContacts,
     setLifestyle,
     setCurrentStep,
+    navigateToStep,
     reset,
   };
 

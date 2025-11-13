@@ -1,7 +1,8 @@
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo, useState, useRef } from 'react';
 import { createPortal } from 'react-dom';
 import { TextInput } from './common/TextInput';
 import { useEdition } from '../hooks/useEdition';
+import { useCharacterWizard } from '../context/CharacterWizardContext';
 import type { ShadowmasterLegacyApp } from '../types/legacy';
 
 type ResourcesPriority = 'A' | 'B' | 'C' | 'D' | 'E' | '';
@@ -676,6 +677,7 @@ interface LegacyEquipmentState {
 export function EquipmentPortal() {
   const [container, setContainer] = useState<Element | null>(null);
   const { characterCreationData } = useEdition();
+  const wizard = useCharacterWizard();
   const [priority, setPriority] = useState<ResourcesPriority>('');
   const [storedEquipment, setStoredEquipment] = useState<LegacyEquipmentState>({
     weapons: [],
@@ -697,80 +699,98 @@ export function EquipmentPortal() {
     };
   }, []);
 
+  const contextPriority = wizard.state.priorities.resources ?? '';
+  const contextWeapons = wizard.state.weapons;
+  const contextArmor = wizard.state.armor;
+  const contextCyberware = wizard.state.cyberware;
+  const contextBioware = wizard.state.bioware;
+  const contextGear = wizard.state.gear;
+  const contextVehicles = wizard.state.vehicles;
+
+  // Use refs to track previous JSON strings and only update when they actually change
+  const prevKeys = useRef<Record<string, string>>({});
+  const prevPriority = useRef<string>('');
+
   useEffect(() => {
-    const legacy = window.ShadowmasterLegacyApp as ShadowmasterLegacyApp | undefined;
-    if (!legacy) {
-      return;
+    const weaponsKey = JSON.stringify(contextWeapons);
+    const armorKey = JSON.stringify(contextArmor);
+    const cyberwareKey = JSON.stringify(contextCyberware);
+    const biowareKey = JSON.stringify(contextBioware);
+    const gearKey = JSON.stringify(contextGear);
+    const vehiclesKey = JSON.stringify(contextVehicles);
+    
+    // Only update priority if it changed
+    if (contextPriority !== prevPriority.current) {
+      prevPriority.current = contextPriority;
+      setPriority(contextPriority);
     }
 
-    const syncState = () => {
-      const priorities = legacy.getPriorities?.() ?? {};
-      setPriority((priorities.resources as ResourcesPriority) ?? '');
-
-      const equipmentState = legacy.getEquipmentState?.();
-      if (equipmentState) {
-        setStoredEquipment({
-          weapons: equipmentState.weapons?.map((entry) => ({ ...entry })) ?? [],
-          armor: equipmentState.armor?.map((entry) => ({ ...entry })) ?? [],
-          cyberware: equipmentState.cyberware?.map((entry) => ({ ...entry })) ?? [],
-          bioware: equipmentState.bioware?.map((entry) => ({ ...entry })) ?? [],
-          gear: equipmentState.gear?.map((entry) => ({ ...entry })) ?? [],
-          vehicles: equipmentState.vehicles?.map((entry) => ({ ...entry })) ?? [],
-        });
-      } else {
-        setStoredEquipment({
-          weapons: [],
-          armor: [],
-          cyberware: [],
-          bioware: [],
-          gear: [],
-          vehicles: [],
-        });
-      }
-    };
-
-    syncState();
-
-    // Subscribe to state changes if available
-    const unsubscribe = legacy.subscribeEquipmentState?.(syncState);
-    return () => {
-      if (typeof unsubscribe === 'function') {
-        unsubscribe();
-      }
-    };
-  }, []);
+    // Only update if arrays actually changed
+    const currentKeys = { weaponsKey, armorKey, cyberwareKey, biowareKey, gearKey, vehiclesKey };
+    const keysChanged = Object.keys(currentKeys).some(key => currentKeys[key] !== prevKeys.current[key]);
+    
+    if (keysChanged) {
+      prevKeys.current = currentKeys;
+      
+      // Load from context
+      setStoredEquipment({
+        weapons: contextWeapons.map((entry) => ({ ...entry })),
+        armor: contextArmor.map((entry) => ({ ...entry })),
+        cyberware: contextCyberware.map((entry) => ({ ...entry })),
+        bioware: contextBioware.map((entry) => ({ ...entry })),
+        gear: contextGear.map((entry) => ({ ...entry })),
+        vehicles: contextVehicles.map((entry) => ({ ...entry })),
+      });
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [contextPriority]); // Arrays checked via JSON.stringify inside effect
 
   const handleStateChange = (state: EquipmentState) => {
-    const legacy = window.ShadowmasterLegacyApp as ShadowmasterLegacyApp | undefined;
-    if (legacy?.setEquipmentState) {
-      legacy.setEquipmentState({
-        priority: state.priority,
-        weapons: state.weapons,
-        armor: state.armor,
-        cyberware: state.cyberware,
-        bioware: state.bioware,
-        gear: state.gear,
-        vehicles: state.vehicles,
-        totalCost: state.totalCost,
-        remainingNuyen: state.remainingNuyen,
-        totalEssenceCost: state.totalEssenceCost,
-      });
+    const nextKeys = {
+      weapons: JSON.stringify(state.weapons),
+      armor: JSON.stringify(state.armor),
+      cyberware: JSON.stringify(state.cyberware),
+      bioware: JSON.stringify(state.bioware),
+      gear: JSON.stringify(state.gear),
+      vehicles: JSON.stringify(state.vehicles),
+    };
+
+    const currentKeys = {
+      weapons: JSON.stringify(wizard.state.weapons),
+      armor: JSON.stringify(wizard.state.armor),
+      cyberware: JSON.stringify(wizard.state.cyberware),
+      bioware: JSON.stringify(wizard.state.bioware),
+      gear: JSON.stringify(wizard.state.gear),
+      vehicles: JSON.stringify(wizard.state.vehicles),
+    };
+
+    if (nextKeys.weapons !== currentKeys.weapons) {
+      wizard.setWeapons(state.weapons);
+    }
+    if (nextKeys.armor !== currentKeys.armor) {
+      wizard.setArmor(state.armor);
+    }
+    if (nextKeys.cyberware !== currentKeys.cyberware) {
+      wizard.setCyberware(state.cyberware);
+    }
+    if (nextKeys.bioware !== currentKeys.bioware) {
+      wizard.setBioware(state.bioware);
+    }
+    if (nextKeys.gear !== currentKeys.gear) {
+      wizard.setGear(state.gear);
+    }
+    if (nextKeys.vehicles !== currentKeys.vehicles) {
+      wizard.setVehicles(state.vehicles);
     }
   };
 
   const handleSave = (state: EquipmentState) => {
     handleStateChange(state);
-    const legacy = window.ShadowmasterLegacyApp as ShadowmasterLegacyApp | undefined;
-    if (legacy?.showWizardStep) {
-      legacy.showWizardStep(7); // Move to Contacts step
-    }
+    wizard.navigateToStep(7); // Move to Contacts step
   };
 
   const handleBack = () => {
-    const legacy = window.ShadowmasterLegacyApp as ShadowmasterLegacyApp | undefined;
-    if (legacy?.showWizardStep) {
-      legacy.showWizardStep(5); // Back to Skills step
-    }
+    wizard.navigateToStep(5); // Back to Skills step
   };
 
   if (!container) {

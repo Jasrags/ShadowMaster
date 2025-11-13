@@ -298,6 +298,11 @@ button:hover {
     padding: 2.5rem;
 }
 
+.wizard-step-content {
+    margin-top: 2rem;
+    min-height: 400px;
+}
+
 @media (max-width: 1400px) {
     .modal-content.character-wizard-modal {
         max-width: 1100px;
@@ -1684,33 +1689,37 @@ body.react-magic-enabled #magic-summary {
     display: none;
 }
 
-.characters-callout {
-    display: flex;
-    justify-content: space-between;
-    align-items: flex-start;
-    gap: 1.25rem;
-    padding: 1.4rem 1.6rem;
-    border-radius: 12px;
-    background: rgba(6, 38, 26, 0.85);
-    border: 1px solid rgba(0, 255, 136, 0.35);
-    box-shadow: 0 0 18px rgba(0, 255, 136, 0.12);
-    margin-bottom: 1.5rem;
+@media (max-width: 768px) {
+    .auth-panel {
+        padding: 1.1rem;
+    }
+
+    .auth-panel__actions {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .auth-form {
+        padding: 0.85rem;
+    }
 }
 
-.characters-callout h2 {
-    margin: 0 0 0.35rem;
-    color: #35ff9e;
+.characters-react-shell {
+    margin-top: 1.5rem;
+    background: rgba(12, 18, 32, 0.8);
+    border: 1px solid rgba(0, 255, 153, 0.25);
+    border-radius: 8px;
+    padding: 1.5rem;
+    box-shadow: 0 0 24px rgba(0, 255, 153, 0.12);
 }
 
-.characters-callout__copy p {
-    margin: 0;
-    color: #a7f4d3;
-    font-size: 0.95rem;
+.characters-table .form-feedback {
+    margin-bottom: 1rem;
 }
 
-.characters-callout__actions {
-    display: flex;
-    align-items: center;
+body.react-characters-enabled #characters-list > .card,
+body.react-characters-enabled #characters-list > p {
+    display: none;
 }
 
 .campaigns-react-shell {
@@ -2575,6 +2584,24 @@ body.react-magic-enabled #magic-summary {
     font-size: 0.9rem;
 }
 
+.campaigns-list-wrapper {
+    padding: 1.25rem 1.5rem;
+    border-radius: 12px;
+    background: rgba(6, 20, 29, 0.85);
+    border: 1px solid rgba(0, 255, 153, 0.25);
+    box-shadow: inset 0 0 0 1px rgba(0, 255, 153, 0.08);
+    margin-top: 1.5rem;
+}
+
+.campaigns-list-heading {
+    margin-top: 0;
+    margin-bottom: 1rem;
+    color: #4affc5;
+    letter-spacing: 0.03em;
+    text-transform: uppercase;
+    font-size: 0.9rem;
+}
+
 .main-tab-panel--active {
     animation: fadeInUp 0.25s ease both;
 }
@@ -2587,27 +2614,6 @@ body.react-magic-enabled #magic-summary {
     to {
         opacity: 1;
         transform: translateY(0);
-    }
-}
-
-@media (max-width: 768px) {
-    .auth-panel {
-        padding: 1.1rem;
-    }
-
-    .auth-panel__actions {
-        flex-direction: column;
-        align-items: stretch;
-    }
-
-    .auth-form {
-        padding: 0.85rem;
-    }
-
-    .characters-callout {
-        flex-direction: column;
-        align-items: stretch;
-        text-align: left;
     }
 }
 

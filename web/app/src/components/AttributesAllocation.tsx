@@ -1,6 +1,7 @@
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo, useState, useRef } from 'react';
 import { createPortal } from 'react-dom';
 import { useEdition } from '../hooks/useEdition';
+import { useCharacterWizard } from '../context/CharacterWizardContext';
 import type { MetatypeDefinition } from '../types/editions';
 
 export type AttributeKey = 'body' | 'quickness' | 'strength' | 'charisma' | 'intelligence' | 'willpower';
@@ -319,6 +320,7 @@ export function AttributesAllocation({
 export function AttributesPortal() {
   const [container, setContainer] = useState<Element | null>(null);
   const { characterCreationData, activeEdition } = useEdition();
+  const wizard = useCharacterWizard();
   const [priority, setPriority] = useState('');
   const [metatypeId, setMetatypeId] = useState<string | null>(null);
   const [magicType, setMagicType] = useState<string | null>(null);
@@ -335,52 +337,39 @@ export function AttributesPortal() {
     };
   }, []);
 
-  useEffect(() => {
-    const legacy = window.ShadowmasterLegacyApp;
-    if (!legacy) {
-      return;
-    }
+  const contextPriority = wizard.state.priorities.attributes ?? '';
+  const contextMetatypeId = wizard.state.selectedMetatype;
+  const contextMagicType = wizard.state.magicSelection?.type ?? null;
+  const contextAttributes = wizard.state.attributes;
 
-    const syncState = () => {
-      const priorities = legacy.getPriorities?.() ?? {};
-      const currentPriority = (priorities.attributes as string) ?? '';
-      const currentMetatypeId = legacy.getMetatypeSelection?.() ?? null;
-      const magicState = legacy.getMagicState?.();
-      const currentMagicType = magicState?.type ?? null;
+  // Use ref to track previous JSON string and only update when it actually changes
+  const prevAttributesKey = useRef<string>('');
+
+  useEffect(() => {
+    const attributesKey = JSON.stringify(contextAttributes);
+    
+    // Clear stored values if metatype or priority changed (new character creation session)
+    if (contextMetatypeId !== metatypeId || contextPriority !== priority) {
+      setStoredValues(null);
+    }
+    
+    setPriority(contextPriority);
+    setMetatypeId(contextMetatypeId);
+    setMagicType(contextMagicType);
+    
+    // Load from context only if attributes actually changed
+    if (attributesKey !== prevAttributesKey.current) {
+      prevAttributesKey.current = attributesKey;
       
-      // Clear stored values if metatype or priority changed (new character creation session)
-      if (currentMetatypeId !== metatypeId || currentPriority !== priority) {
-        setStoredValues(null);
-      }
-      
-      setPriority(currentPriority);
-      setMetatypeId(currentMetatypeId);
-      setMagicType(currentMagicType);
-      
-      const attributeState = legacy.getAttributesState?.();
-      // Only load stored values if they exist and metatype/priority match current values
-      // On first load (metatypeId/priority are null/empty), don't load stored values - start fresh
-      if (attributeState?.values && 
-          currentMetatypeId !== null && 
-          currentPriority !== '' &&
-          currentMetatypeId === metatypeId && 
-          currentPriority === priority) {
-        setStoredValues(attributeState.values as Partial<AttributeValues>);
+      if (contextAttributes && contextMetatypeId !== null && contextPriority !== '') {
+        setStoredValues(contextAttributes);
       } else if (metatypeId === null || priority === '') {
         // On first load, ensure stored values are cleared
         setStoredValues(null);
       }
-    };
-
-    syncState();
-    legacy.subscribeMetatypeState?.(syncState);
-    legacy.subscribeMagicState?.(syncState);
-
-    return () => {
-      legacy.unsubscribeMetatypeState?.(syncState);
-      legacy.unsubscribeMagicState?.(syncState);
-    };
-  }, []);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [contextPriority, contextMetatypeId, contextMagicType, metatypeId, priority]); // contextAttributes checked via JSON.stringify
 
   if (!container) {
     return null;
@@ -417,19 +406,30 @@ export function AttributesPortal() {
   const metatypeName = metatype?.name ?? 'Human';
 
   const handleStateChange = (state: AllocationState) => {
-    window.ShadowmasterLegacyApp?.setAttributesState?.({
-      values: state.values,
-      startingValues: state.startingValues,
-      baseValues: state.modifiers,
-    });
+    const currentValuesKey = JSON.stringify(wizard.state.attributes ?? {});
+    const nextValuesKey = JSON.stringify(state.values);
+    if (currentValuesKey !== nextValuesKey) {
+      wizard.setAttributes(state.values);
+    }
+
+    const currentStartingKey = JSON.stringify(wizard.state.attributeStartingValues ?? {});
+    const nextStartingKey = JSON.stringify(state.startingValues);
+    if (currentStartingKey !== nextStartingKey) {
+      wizard.setAttributeStartingValues(state.startingValues);
+    }
+
+    const currentBaseKey = JSON.stringify(wizard.state.attributeBaseValues ?? {});
+    const nextBaseKey = JSON.stringify(state.modifiers);
+    if (currentBaseKey !== nextBaseKey) {
+      wizard.setAttributeBaseValues(state.modifiers);
+    }
   };
 
   const handleSave = (state: AllocationState) => {
-    window.ShadowmasterLegacyApp?.setAttributesState?.({
-      values: state.values,
-      startingValues: state.startingValues,
-      baseValues: state.modifiers,
-    });
+    // Sync to context
+    wizard.setAttributes(state.values);
+    wizard.setAttributeStartingValues(state.startingValues);
+    wizard.setAttributeBaseValues(state.modifiers);
 
     const description = `Stored attribute allocation for ${metatypeName}. Reaction ${Math.floor(
       (state.values.quickness + state.values.intelligence) / 2,
@@ -445,7 +445,7 @@ export function AttributesPortal() {
       console.info(description);
     }
 
-    window.ShadowmasterLegacyApp?.showWizardStep?.(5);
+    wizard.navigateToStep(5);
   };
 
   return createPortal(
@@ -456,7 +456,7 @@ export function AttributesPortal() {
       priority={priority}
       storedValues={storedValues}
       onStateChange={handleStateChange}
-      onBack={() => window.ShadowmasterLegacyApp?.showWizardStep?.(3)}
+      onBack={() => wizard.navigateToStep(3)}
       onSave={handleSave}
     />, container);
 }

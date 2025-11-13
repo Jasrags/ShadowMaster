@@ -1,6 +1,7 @@
 import { ChangeEvent, DragEvent, useEffect, useMemo, useRef, useState } from 'react';
 import { useEdition } from '../hooks/useEdition';
 import { useCharacterWizard } from '../context/CharacterWizardContext';
+import type { Priorities } from '../context/CharacterWizardContext';
 import {
   createEmptyAssignments,
   getAvailablePriorities,
@@ -49,38 +50,35 @@ function normalizeAssignments(assignments: PriorityAssignments): Record<string, 
   );
 }
 
-function getInitialAssignments(): PriorityAssignments {
+function prioritiesToAssignments(priorities: Priorities): PriorityAssignments {
   const base = createEmptyAssignments();
-  if (typeof window === 'undefined') {
-    return base;
-  }
-
-  const existing = window.ShadowmasterLegacyApp?.getPriorities?.();
-  if (!existing) {
-    return base;
-  }
-
-  const result = { ...base };
-  for (const category of PRIORITY_CATEGORIES) {
-    const value = existing[category];
-    if (typeof value === 'string' && value.length === 1) {
-      result[category] = value as PriorityCode;
-    }
-  }
-  return result;
+  return {
+    magic: priorities.magic ?? base.magic,
+    metatype: priorities.metatype ?? base.metatype,
+    attributes: priorities.attributes ?? base.attributes,
+    skills: priorities.skills ?? base.skills,
+    resources: priorities.resources ?? base.resources,
+  };
 }
 
-function getInitialSumAssignments(): PriorityAssignments {
-  const base = getInitialAssignments();
-  const hasExisting = PRIORITY_CATEGORIES.some((category) => base[category]);
-  if (!hasExisting) {
-    base.magic = 'A';
-    base.metatype = 'B';
-    base.attributes = 'C';
-    base.skills = 'D';
-    base.resources = 'E';
-  }
-  return base;
+function assignmentsToPriorities(assignments: PriorityAssignments): Priorities {
+  return {
+    magic: assignments.magic ? (assignments.magic as PriorityCode) : null,
+    metatype: assignments.metatype ? (assignments.metatype as PriorityCode) : null,
+    attributes: assignments.attributes ? (assignments.attributes as PriorityCode) : null,
+    skills: assignments.skills ? (assignments.skills as PriorityCode) : null,
+    resources: assignments.resources ? (assignments.resources as PriorityCode) : null,
+  };
+}
+
+function getDefaultSumToTenAssignments(): PriorityAssignments {
+  return {
+    magic: 'A',
+    metatype: 'B',
+    attributes: 'C',
+    skills: 'D',
+    resources: 'E',
+  };
 }
 
 export function PriorityAssignment() {
@@ -178,38 +176,9 @@ function ClassicPriorityAssignment({
 }: ClassicPriorityAssignmentProps) {
   const wizard = useCharacterWizard();
   
-  const [assignments, setAssignments] = useState<PriorityAssignments>(() => {
-    // Try to load from context first, then fall back to legacy
-    // Note: We can't call hooks inside useState initializer, so we need to check
-    // if the context has been initialized. For now, we'll use a lazy initialization pattern.
-    // On first render, wizard.state will have initial values, so we check legacy first.
-    const legacyPriorities = window.ShadowmasterLegacyApp?.getPriorities?.();
-    if (legacyPriorities) {
-      const result: PriorityAssignments = {
-        magic: (legacyPriorities.magic as PriorityCode) ?? null,
-        metatype: (legacyPriorities.metatype as PriorityCode) ?? null,
-        attributes: (legacyPriorities.attributes as PriorityCode) ?? null,
-        skills: (legacyPriorities.skills as PriorityCode) ?? null,
-        resources: (legacyPriorities.resources as PriorityCode) ?? null,
-      };
-      return result;
-    }
-    
-    // Fall back to context if legacy doesn't have values
-    const contextPriorities = wizard.state.priorities;
-    if (contextPriorities.magic || contextPriorities.metatype || 
-        contextPriorities.attributes || contextPriorities.skills || contextPriorities.resources) {
-      return {
-        magic: contextPriorities.magic ?? null,
-        metatype: contextPriorities.metatype ?? null,
-        attributes: contextPriorities.attributes ?? null,
-        skills: contextPriorities.skills ?? null,
-        resources: contextPriorities.resources ?? null,
-      };
-    }
-    
-    return getInitialAssignments();
-  });
+  const [assignments, setAssignments] = useState<PriorityAssignments>(() =>
+    prioritiesToAssignments(wizard.state.priorities),
+  );
   const [dragState, setDragState] = useState<DragState | null>(null);
   const dropzoneRefs = useRef<Record<string, HTMLDivElement | null>>({});
 
@@ -220,19 +189,35 @@ function ClassicPriorityAssignment({
     };
   }, []);
 
+  // Use ref to track previous priorities and only update when they actually change
+  const prevPrioritiesKey = useRef<string>('');
+  const isInitialMount = useRef<boolean>(true);
+
   useEffect(() => {
     const normalized = normalizeAssignments(assignments);
-    // Sync to legacy for backward compatibility
-    window.ShadowmasterLegacyApp?.setPriorities?.(normalized);
-    // Also sync to React context
-    wizard.setPriorities({
-      magic: normalized.magic as 'A' | 'B' | 'C' | 'D' | 'E' | null,
-      metatype: normalized.metatype as 'A' | 'B' | 'C' | 'D' | 'E' | null,
-      attributes: normalized.attributes as 'A' | 'B' | 'C' | 'D' | 'E' | null,
-      skills: normalized.skills as 'A' | 'B' | 'C' | 'D' | 'E' | null,
-      resources: normalized.resources as 'A' | 'B' | 'C' | 'D' | 'E' | null,
-    });
-  }, [assignments, wizard]);
+    const prioritiesKey = JSON.stringify(normalized);
+    
+    // Skip initial sync if priorities are empty (to avoid loop on mount after reset)
+    const isEmpty = !normalized.magic && !normalized.metatype && !normalized.attributes && 
+                    !normalized.skills && !normalized.resources;
+    
+    if (isInitialMount.current && isEmpty) {
+      isInitialMount.current = false;
+      prevPrioritiesKey.current = prioritiesKey;
+      return;
+    }
+    
+    isInitialMount.current = false;
+    
+    // Only update if priorities actually changed
+    if (prioritiesKey !== prevPrioritiesKey.current) {
+      prevPrioritiesKey.current = prioritiesKey;
+      
+      // Sync to React context
+      wizard.setPriorities(assignmentsToPriorities(assignments));
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [assignments]);
 
   const missingPriorities = useMemo(() => getAvailablePriorities(assignments), [assignments]);
   const allAssigned = isAssignmentsComplete(assignments);
@@ -496,7 +481,16 @@ function SumToTenAssignment({
   campaignLoading,
   campaignError,
 }: SumToTenAssignmentProps) {
-  const [assignments, setAssignments] = useState<PriorityAssignments>(() => getInitialSumAssignments());
+  const wizard = useCharacterWizard();
+  const [assignments, setAssignments] = useState<PriorityAssignments>(() => {
+    const fromContext = prioritiesToAssignments(wizard.state.priorities);
+    const hasExisting = PRIORITY_CATEGORIES.some((category) => fromContext[category]);
+    return hasExisting ? fromContext : getDefaultSumToTenAssignments();
+  });
+
+  useEffect(() => {
+    wizard.setPriorities(assignmentsToPriorities(assignments));
+  }, [assignments, wizard]);
 
   useEffect(() => {
     document.body.classList.add('react-priority-enabled');
@@ -504,10 +498,6 @@ function SumToTenAssignment({
       document.body.classList.remove('react-priority-enabled');
     };
   }, []);
-
-  useEffect(() => {
-    window.ShadowmasterLegacyApp?.setPriorities?.(normalizeAssignments(assignments));
-  }, [assignments]);
 
   const costTable = useMemo(() => {
     const table: Record<PriorityCode, number> = { ...DEFAULT_SUM_TO_TEN_COSTS };
@@ -560,7 +550,7 @@ function SumToTenAssignment({
   }
 
   function handleReset() {
-    setAssignments(getInitialSumAssignments());
+    setAssignments(getDefaultSumToTenAssignments());
   }
 
   return (
@@ -684,6 +674,7 @@ function KarmaPointBuyAssignment({
   campaignLoading,
   campaignError,
 }: KarmaPointBuyAssignmentProps) {
+  const wizard = useCharacterWizard();
   const metatypeOptions = useMemo(() => {
     const list = characterCreationData?.metatypes ?? [];
     return list.map((metatype) => ({
@@ -701,21 +692,13 @@ function KarmaPointBuyAssignment({
   );
 
   useEffect(() => {
+    wizard.setPriorities(assignmentsToPriorities(createEmptyAssignments()));
+  }, [wizard]);
+
+  useEffect(() => {
     const defaultMetatype = metatypeOptions[0]?.value ?? '';
     setMetatypeId((prev) => (prev ? prev : defaultMetatype));
   }, [metatypeOptions]);
-
-  useEffect(() => {
-    const entries = KARMA_LEDGER_CATEGORIES.map(({ key, label }) => ({
-      category: key,
-      label,
-      karma: ledger[key] ?? 0,
-    }));
-    window.ShadowmasterLegacyApp?.setKarmaPointBuy?.({
-      metatype_id: metatypeId,
-      entries,
-    });
-  }, [ledger, metatypeId]);
 
   const budget = creationMethod.karma_budget ?? 800;
   const metatypeCost =
@@ -900,28 +883,7 @@ function KarmaPointBuyAssignment({
         <button type="button" className="btn btn-secondary" onClick={handleReset}>
           Reset allocations
         </button>
-        <button
-          type="button"
-          className="btn btn-link"
-          onClick={() => window.ShadowmasterLegacyApp?.showLegacyKarmaWizard?.()}
-        >
-          Open legacy point-buy wizard
-        </button>
       </div>
     </div>
   );
-}
-
-declare global {
-  interface Window {
-    ShadowmasterLegacyApp?: {
-      setPriorities?: (assignments: Record<string, PriorityCode | null>) => void;
-      getPriorities?: () => Record<string, PriorityCode | null>;
-      setKarmaPointBuy?: (payload: {
-        metatype_id: string;
-        entries: Array<{ category: string; label: string; karma: number }>;
-      }) => void;
-      showLegacyKarmaWizard?: () => void;
-    };
-  }
 }

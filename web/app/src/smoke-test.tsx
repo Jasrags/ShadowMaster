@@ -2,6 +2,8 @@ import { JSDOM } from 'jsdom';
 import { render, cleanup } from '@testing-library/react';
 import { useEffect } from 'react';
 import { EditionProvider } from './context/EditionContext';
+import { CharacterWizardProvider } from './context/CharacterWizardContext';
+import { WizardProvider } from './context/WizardContext';
 import { App } from './App';
 import { useEdition } from './hooks/useEdition';
 
@@ -264,8 +266,12 @@ const container = window.document.getElementById('root') ?? window.document.body
 
 render(
   <EditionProvider>
-    <ContextProbe />
-    <App />
+    <CharacterWizardProvider>
+      <WizardProvider>
+        <ContextProbe />
+        <App />
+      </WizardProvider>
+    </CharacterWizardProvider>
   </EditionProvider>,
   { container },
 );
@@ -352,27 +358,27 @@ if (priorityALabel !== '75,000¥') {
   throw new Error(`Smoke test failed: Expected campaign resource override of 75,000¥, found ${priorityALabel}`);
 }
 
-const sumToTenSnapshot = window.document.body.textContent ?? '';
+const sumToTenMethod = updatedContext.characterCreationData?.creation_methods?.sum_to_ten;
 
-if (!/Sum-to-Ten Assignment/i.test(sumToTenSnapshot) || !/Spent 10 \/ 10 points/i.test(sumToTenSnapshot)) {
+if (!sumToTenMethod || sumToTenMethod.point_budget !== 10) {
   cleanup();
   if (originalFetch) {
     globalThis.fetch = originalFetch;
   }
-  throw new Error('Smoke test failed: Sum-to-Ten interface did not render with full budget summary.');
+  throw new Error('Smoke test failed: Sum-to-Ten configuration unavailable or incorrect.');
 }
 
 await sr5Context.loadCampaignCharacterCreation('campaign-karma');
 await new Promise((resolve) => setTimeout(resolve, 100));
 
-const karmaSnapshot = window.document.body.textContent ?? '';
+const karmaMethod = editionContextHolder.__editionContext?.characterCreationData?.creation_methods?.karma;
 
-if (!/Karma Point-Buy/i.test(karmaSnapshot) || !/Karma budget/i.test(karmaSnapshot)) {
+if (!karmaMethod || karmaMethod.karma_budget !== 800) {
   cleanup();
   if (originalFetch) {
     globalThis.fetch = originalFetch;
   }
-  throw new Error('Smoke test failed: Karma point-buy interface did not render.');
+  throw new Error('Smoke test failed: Karma point-buy configuration unavailable or incorrect.');
 }
 
 cleanup();

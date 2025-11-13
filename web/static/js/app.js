@@ -100,18 +100,31 @@ function clonePriorityAssignments() {
 
 // Load characters
 async function loadCharacters() {
+    const listEl = document.getElementById('characters-list');
+    if (!listEl) {
+        return;
+    }
+
+    if (document.body.classList.contains('react-characters-enabled') || listEl.querySelector('.characters-react-shell')) {
+        return;
+    }
+
     try {
         const response = await fetch(`${API_BASE}/characters`);
         if (!response.ok) {
             throw new Error(`HTTP error! status: ${response.status}`);
         }
         const characters = await response.json();
-        const listEl = document.getElementById('characters-list');
         listEl.innerHTML = '';
         
         // Handle null or undefined responses
         if (!characters || !Array.isArray(characters) || characters.length === 0) {
-            listEl.innerHTML = '<p>No characters found. Create your first character!</p>';
+            if (!listEl.querySelector('.characters-empty-fallback')) {
+                const empty = document.createElement('p');
+                empty.className = 'characters-empty-fallback';
+                empty.textContent = 'No characters found. Create your first character!';
+                listEl.appendChild(empty);
+            }
             return;
         }
         
@@ -142,7 +155,12 @@ async function loadCampaigns() {
         return;
     }
 
-    if (document.body.classList.contains('react-campaign-enabled')) {
+    const listEl = document.getElementById('campaigns-list');
+    if (!listEl) {
+        return;
+    }
+
+    if (document.body.classList.contains('react-campaign-enabled') || listEl.querySelector('.campaigns-react-shell')) {
         return;
     }
 
@@ -152,7 +170,11 @@ async function loadCampaigns() {
             throw new Error(`HTTP error! status: ${response.status}`);
         }
         const campaigns = await response.json();
-        const listEl = document.getElementById('campaigns-list');
+
+        if (document.body.classList.contains('react-campaign-enabled') || listEl.querySelector('.campaigns-react-shell')) {
+            return;
+        }
+
         listEl.innerHTML = '';
         
         // Handle null or undefined responses
@@ -192,24 +214,23 @@ async function loadCampaigns() {
 }
 
 async function openCampaignCharacterCreator(campaign) {
-    if (!campaign || !campaign.id) {
-        if (typeof window !== 'undefined') {
-            window.ShadowmasterLegacyApp?.clearCampaignCharacterCreation?.();
-        }
-        showCreateCharacterModal();
-        return;
-    }
+    const campaignId = campaign && campaign.id ? campaign.id : null;
 
     try {
-        if (typeof window !== 'undefined' && window.ShadowmasterLegacyApp?.loadCampaignCharacterCreation) {
-            await window.ShadowmasterLegacyApp.loadCampaignCharacterCreation(campaign.id);
+        if (campaignId && typeof window !== 'undefined' && window.ShadowmasterLegacyApp?.loadCampaignCharacterCreation) {
+            await window.ShadowmasterLegacyApp.loadCampaignCharacterCreation(campaignId);
         }
     } catch (error) {
         console.error('Failed to load campaign character creation defaults:', error);
         legacyNotify('Failed to load campaign defaults. Using base rules instead.', 'warning', 'Campaign defaults unavailable');
     }
 
-    showCreateCharacterModal({ campaignId: campaign.id });
+    if (typeof window !== 'undefined' && typeof window.openCharacterWizard === 'function') {
+        window.openCharacterWizard(campaignId);
+        return;
+    }
+
+    legacyNotify('The React character wizard is unavailable.', 'error', 'Wizard unavailable');
 }
 
 // Create character
@@ -233,7 +254,8 @@ async function createCharacter(name, playerName, edition = 'sr3') {
         }
         
         const character = await response.json();
-        loadCharacters(); // Reload the list
+        window.dispatchEvent(new Event('shadowmaster:characters:refresh'));
+        window.dispatchEvent(new Event('shadowmaster:campaigns:refresh'));
         return character;
     } catch (error) {
         console.error('Failed to create character:', error);
@@ -243,82 +265,17 @@ async function createCharacter(name, playerName, edition = 'sr3') {
 
 // Show create character modal
 function showCreateCharacterModal(options = {}) {
-    const campaignId = (options && typeof options === 'object') ? options.campaignId || null : null;
-    const campaignGameplayRules = (options && typeof options === 'object') ? options.campaignGameplayRules || null : null;
+    const payload = options && typeof options === 'object' ? options : {};
+    const campaignId = payload.campaignId ?? null;
 
-    const modal = document.getElementById('character-modal');
-    modal.style.display = 'block';
-    
-    // Reset wizard state
-    // Note: Don't pre-initialize attributes to 1, as they should be calculated from base + modifiers
-    characterWizardState = {
-        currentStep: 1,
-        characterName: '',
-        playerName: '',
-        selectedMetatype: null,
-        priorities: null,
-        magicalType: null, // 'Full Magician', 'Aspected Magician', 'Adept', or 'Mundane'
-        tradition: null, // 'Hermetic' or 'Shamanic' (for Full/Aspected Magicians)
-        totem: null, // Totem name (for Shamanic mages)
-        attributes: null,
-        attributeBaseValues: null,
-        skills: {
-            active: [],
-            knowledge: []
-        },
-        campaignId: campaignId,
-        campaignGameplayRules: campaignGameplayRules
-    };
-    
-    // Reset form
-    document.getElementById('character-form').reset();
-    
-    // Reset priority assignments
-    priorityAssignments = {
-        magic: null,
-        metatype: null,
-        attributes: null,
-        skills: null,
-        resources: null
-    };
-    
-    // Clear all dropzones
-    document.querySelectorAll('.priority-dropzone').forEach(dropzone => {
-        dropzone.classList.remove('has-priority');
-        // Preserve the hidden input
-        const input = dropzone.querySelector('input[type="hidden"]');
-        dropzone.innerHTML = '<span class="dropzone-text">Drop priority here</span>';
-        if (input) {
-            input.value = '';
-            dropzone.appendChild(input);
+    if (typeof window !== 'undefined') {
+        if (typeof window.openCharacterWizard === 'function') {
+            window.openCharacterWizard(campaignId);
+            return;
         }
-    });
-    
-    // Clear all priority value displays
-    ['magic', 'metatype', 'attributes', 'skills', 'resources'].forEach(category => {
-        updatePriorityValue(category, null);
-    });
-    
-    // Reset hidden inputs
-    document.querySelectorAll('[id$="-priority"]').forEach(input => {
-        if (input.type === 'hidden') {
-            input.value = '';
-        }
-    });
-    
-    // Show all priority chips
-    document.querySelectorAll('.priority-chip').forEach(chip => {
-        chip.classList.remove('used');
-    });
-    
-    // Update validation
-    updatePriorityValidation();
-    
-    // Show step 1
-    showWizardStep(1);
-    
-    // Initialize drag-and-drop (in case not already initialized)
-    initPriorityDragDrop();
+    }
+
+    legacyNotify('The React character wizard is unavailable.', 'error', 'Wizard unavailable');
 }
 
 // Close modal
@@ -733,57 +690,7 @@ function handleCharacterFormSubmit(e) {
 
 // Wizard step navigation
 function showWizardStep(step) {
-    characterWizardState.currentStep = step;
-    
-    // Hide all steps
-    document.querySelectorAll('.wizard-step').forEach(stepEl => {
-        stepEl.style.display = 'none';
-    });
-    
-    // Update progress indicator
-    document.querySelectorAll('.progress-step').forEach((progressStep, index) => {
-        const stepNum = index + 1;
-        progressStep.classList.remove('active', 'completed');
-        if (stepNum < step) {
-            progressStep.classList.add('completed');
-        } else if (stepNum === step) {
-            progressStep.classList.add('active');
-        }
-    });
-    
-    // Show current step first (so elements are available for initialization)
-    const currentStepEl = document.getElementById(`step-${step}`);
-    if (!currentStepEl) {
-        console.error(`Step ${step} element not found`);
-        return;
-    }
-    currentStepEl.style.display = 'block';
-    
-    // Initialize step-specific content
-    try {
-        if (step === 2) {
-            displayMetatypeSelection();
-            notifyMetatypeState();
-        } else if (step === 3) {
-            // Initialize magical abilities step
-            initializeMagicalAbilitiesStep();
-        } else if (step === 4) {
-            // Initialize attributes step
-            initializeAttributesStep();
-        } else if (step === 5) {
-            initializeSkillsStep();
-        } else if (step === 6) {
-            initializeEquipmentStep();
-        } else if (step === 7) {
-            initializeContactsStep();
-        } else if (step === 8) {
-            initializeLifestyleStep();
-        } else if (step === 9) {
-            initializeCharacterReviewStep();
-        }
-    } catch (error) {
-        console.error(`Error initializing step ${step}:`, error);
-    }
+    console.warn('Legacy showWizardStep called after migration; ignoring.', step);
 }
 
 // Display metatype selection based on metatype priority
@@ -3195,7 +3102,8 @@ async function createCharacter(name, playerName, edition = 'sr3', editionData = 
         }
         
         const character = await response.json();
-        loadCharacters(); // Reload the list
+        window.dispatchEvent(new Event('shadowmaster:characters:refresh'));
+        window.dispatchEvent(new Event('shadowmaster:campaigns:refresh'));
         return character;
     } catch (error) {
         console.error('Failed to create character:', error);
@@ -3212,7 +3120,6 @@ function initializeLegacyApp() {
 
     loadSkillsLists(); // Load skills database
     loadEquipmentLists(); // Load equipment database
-    loadCharacters();
     loadCampaigns();
     
     // Note: Priority drag-and-drop initialized when modal opens
@@ -3221,9 +3128,16 @@ function initializeLegacyApp() {
     // Create button event listeners
     const createCharBtn = document.getElementById('create-character-btn');
     if (createCharBtn) {
-        createCharBtn.addEventListener('click', () => {
+        createCharBtn.addEventListener('click', (event) => {
             if (typeof window !== 'undefined') {
                 window.ShadowmasterLegacyApp?.clearCampaignCharacterCreation?.();
+            }
+            if (typeof window.openCharacterWizard === 'function') {
+                window.openCharacterWizard();
+                if (event && typeof event.preventDefault === 'function') {
+                    event.preventDefault();
+                }
+                return;
             }
             showCreateCharacterModal();
         });
@@ -3355,7 +3269,7 @@ window.ShadowmasterLegacyApp = Object.assign(window.ShadowmasterLegacyApp ?? {},
         window.ShadowmasterEditionData = Object.assign({}, legacyEditionData);
     },
     loadCampaigns: () => {
-        loadCampaigns();
+        window.dispatchEvent(new Event('shadowmaster:campaigns:refresh'));
     },
     loadCampaignCharacterCreation: async () => {
         // React hook will replace this with actual implementation
