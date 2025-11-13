@@ -90,6 +90,7 @@ interface DraftState {
   description: string;
   theme: string;
   selectedPlayers: string[];
+  selectedPlayerUserIds: string[];
   placeholders: RosterPlaceholder[];
   factions: Array<{ id: string; name: string; tags: string; notes: string }>;
   locations: Array<{ id: string; name: string; descriptor: string }>;
@@ -131,6 +132,7 @@ const defaultDraft: DraftState = {
   description: '',
   theme: '',
   selectedPlayers: [],
+  selectedPlayerUserIds: [],
   placeholders: [],
   factions: [],
   locations: [],
@@ -309,6 +311,7 @@ export function CampaignCreation({ targetId = 'campaign-creation-react-root', on
   const [selectedGameplayLevel, setSelectedGameplayLevel] = useState<string>('experienced');
   const [selectedCreationMethod, setSelectedCreationMethod] = useState<string>('priority');
   const [users, setUsers] = useState<UserSummary[]>([]);
+  const [playerUsers, setPlayerUsers] = useState<UserSummary[]>([]);
   const [creationMethods, setCreationMethods] = useState<Record<string, CreationMethodDefinition>>({});
   const [creationMethodOptions, setCreationMethodOptions] = useState<Option[]>(DEFAULT_CREATION_METHOD_OPTIONS);
   const [isOpen, setIsOpen] = useState(false);
@@ -327,6 +330,7 @@ export function CampaignCreation({ targetId = 'campaign-creation-react-root', on
   const [isFactionLibraryOpen, setFactionLibraryOpen] = useState(false);
   const [isLocationLibraryOpen, setLocationLibraryOpen] = useState(false);
   const [isPlaceholderLibraryOpen, setPlaceholderLibraryOpen] = useState(false);
+  const [isPlayerLibraryOpen, setPlayerLibraryOpen] = useState(false);
   const [isSessionSeedLibraryOpen, setSessionSeedLibraryOpen] = useState(false);
 
   const nameRef = useRef<HTMLInputElement | null>(null);
@@ -545,6 +549,28 @@ export function CampaignCreation({ targetId = 'campaign-creation-react-root', on
     }
   }, [creationMethodOptions, selectedCreationMethod]);
 
+  useEffect(() => {
+    async function loadPlayers() {
+      try {
+        const response = await fetch('/api/users?role=player');
+        if (!response.ok) {
+          throw new Error(`Failed to load player roster (${response.status})`);
+        }
+        const payload: UserSummary[] = await response.json();
+        if (!Array.isArray(payload)) {
+          setPlayerUsers([]);
+          return;
+        }
+        setPlayerUsers(payload);
+      } catch (err) {
+        console.error('Failed to load player roster', err);
+        setPlayerUsers([]);
+      }
+    }
+
+    void loadPlayers();
+  }, []);
+
   const editionOptions = useMemo<Option[]>(() => {
     return supportedEditions.map((edition) => ({
       label: edition.label,
@@ -562,6 +588,22 @@ export function CampaignCreation({ targetId = 'campaign-creation-react-root', on
     }));
   }, [users]);
 
+  const playerRosterLookup = useMemo(() => {
+    const map = new Map<string, UserSummary>();
+    [...playerUsers, ...users].forEach((user) => {
+      if (user?.id) {
+        map.set(user.id, user);
+      }
+    });
+    return map;
+  }, [playerUsers, users]);
+
+  const selectedPlayerDetails = useMemo(() => {
+    return draft.selectedPlayerUserIds
+      .map((id) => playerRosterLookup.get(id))
+      .filter((user): user is UserSummary => Boolean(user));
+  }, [draft.selectedPlayerUserIds, playerRosterLookup]);
+
   const campaignSupport = useMemo(() => {
     return campaignCharacterCreation?.campaign_support ?? characterCreationData?.campaign_support;
   }, [campaignCharacterCreation?.campaign_support, characterCreationData?.campaign_support]);
@@ -574,6 +616,7 @@ export function CampaignCreation({ targetId = 'campaign-creation-react-root', on
   const [factionFilter, setFactionFilter] = useState('');
   const [locationFilter, setLocationFilter] = useState('');
   const [placeholderFilter, setPlaceholderFilter] = useState('');
+  const [playerFilter, setPlayerFilter] = useState('');
   const [sessionSeedFilter, setSessionSeedFilter] = useState('');
 
   const filteredFactionLibrary = useMemo(() => {
@@ -616,6 +659,19 @@ export function CampaignCreation({ targetId = 'campaign-creation-react-root', on
     });
   }, [placeholderFilter, placeholderLibrary]);
 
+  const filteredPlayerUsers = useMemo(() => {
+    const remaining = playerUsers.filter((user) => !draft.selectedPlayerUserIds.includes(user.id));
+    if (!playerFilter.trim()) {
+      return remaining;
+    }
+    const term = playerFilter.toLowerCase();
+    return remaining.filter((user) => {
+      const username = (user.username ?? '').toLowerCase();
+      const email = (user.email ?? '').toLowerCase();
+      return username.includes(term) || email.includes(term);
+    });
+  }, [draft.selectedPlayerUserIds, playerFilter, playerUsers]);
+
   const filteredSessionSeedLibrary = useMemo(() => {
     if (!sessionSeedFilter.trim()) {
       return sessionSeedLibrary;
@@ -645,6 +701,8 @@ export function CampaignCreation({ targetId = 'campaign-creation-react-root', on
       setSelectedBooks([nextDefault]);
       setBooksExpanded(false);
       setBookLoadError(null);
+      setPlayerLibraryOpen(false);
+      setPlayerFilter('');
     },
     [creationMethodOptions, selectedEdition, users],
   );
@@ -676,9 +734,12 @@ export function CampaignCreation({ targetId = 'campaign-creation-react-root', on
     }
     }
 
-    if (step === 1 && draft.selectedPlayers.length === 0 && draft.placeholders.length === 0) {
-      errors.roster = 'Select at least one existing character or create a placeholder runner.';
-      summary = 'Attach at least one runner before continuing.';
+    if (step === 1 &&
+      draft.selectedPlayers.length === 0 &&
+      draft.placeholders.length === 0 &&
+      draft.selectedPlayerUserIds.length === 0) {
+      errors.roster = 'Select at least one player, existing character, or create a placeholder runner.';
+      summary = 'Attach players or runners before continuing.';
     }
 
     if (step === 2 && draft.factions.length === 0 && draft.locations.length === 0) {
@@ -873,6 +934,15 @@ export function CampaignCreation({ targetId = 'campaign-creation-react-root', on
       const gmUser = users.find((user) => user.id === gmUserId);
       const campaignName = draft.name.trim() || 'Campaign';
 
+      const playerAssignments = draft.selectedPlayerUserIds
+        .map((id) => playerRosterLookup.get(id))
+        .filter((user): user is UserSummary => Boolean(user))
+        .map((user) => ({
+          id: user.id,
+          username: user.username ?? '',
+          email: user.email ?? '',
+        }));
+
       const houseRulesPayload = {
         automation: draft.houseRules,
         notes: draft.houseRuleNotes,
@@ -880,6 +950,7 @@ export function CampaignCreation({ targetId = 'campaign-creation-react-root', on
         factions: draft.factions,
         locations: draft.locations,
         placeholders: draft.placeholders,
+        players: playerAssignments,
         session_seed: draft.sessionSeed,
       };
 
@@ -895,6 +966,7 @@ export function CampaignCreation({ targetId = 'campaign-creation-react-root', on
           gameplay_level: selectedGameplayLevel,
           creation_method: selectedCreationMethod,
           enabled_books: selectedBooks,
+          player_user_ids: draft.selectedPlayerUserIds,
           house_rules: JSON.stringify(houseRulesPayload),
           status: 'Active',
         }),
@@ -1280,8 +1352,91 @@ export function CampaignCreation({ targetId = 'campaign-creation-react-root', on
             <div className="form-group">
               <label>Player Characters</label>
               <p className="form-help">
-                Player selection is coming soon. Use placeholders to capture your expected team composition.
+                Assign registered players to this campaign and use placeholders to capture any remaining runner concepts.
               </p>
+              {playerUsers.length === 0 ? (
+                <p className="form-help">No player accounts found yet. Invite players or create accounts to assign them here.</p>
+              ) : (
+                <div className="backbone-library">
+                  <button
+                    type="button"
+                    className="btn-secondary"
+                    onClick={() => setPlayerLibraryOpen((open) => !open)}
+                    aria-expanded={isPlayerLibraryOpen}
+                    aria-controls="creation-player-library"
+                  >
+                    {isPlayerLibraryOpen ? 'Hide player search' : 'Search player accounts'}
+                  </button>
+                  {isPlayerLibraryOpen && (
+                    <div
+                      id="creation-player-library"
+                      className="campaign-manage__preset-panel"
+                      role="region"
+                      aria-label="Player account search"
+                    >
+                      <input
+                        type="search"
+                        placeholder="Search players by username or email…"
+                        value={playerFilter}
+                        onChange={(event) => setPlayerFilter(event.target.value)}
+                      />
+                      <div className="campaign-manage__preset-scroll">
+                        {filteredPlayerUsers.length === 0 ? (
+                          <p className="campaign-manage__empty">No players match that search.</p>
+                        ) : (
+                          filteredPlayerUsers.map((player) => (
+                            <button
+                              key={player.id}
+                              type="button"
+                              className="campaign-manage__preset-option"
+                              onClick={() => {
+                                dispatchDraft({
+                                  type: 'UPDATE_FIELD',
+                                  field: 'selectedPlayerUserIds',
+                                  value: Array.from(new Set([...draft.selectedPlayerUserIds, player.id])),
+                                });
+                                clearFieldError('roster', 1);
+                              }}
+                            >
+                              <span className="campaign-manage__preset-name">{player.username || player.email}</span>
+                              {player.email && player.username && <span className="campaign-manage__preset-tags">{player.email}</span>}
+                            </button>
+                          ))
+                        )}
+                      </div>
+                    </div>
+                  )}
+                </div>
+              )}
+
+              {draft.selectedPlayerUserIds.length > 0 ? (
+                <ul className="campaign-selected-players">
+                  {selectedPlayerDetails.map((player) => (
+                    <li key={`selected-player-${player.id}`} className="campaign-selected-players__item">
+                      <div>
+                        <strong>{player.username || player.email}</strong>
+                        {player.email && player.username && <span className="campaign-selected-players__email">{player.email}</span>}
+                      </div>
+                      <button
+                        type="button"
+                        className="btn-link"
+                        onClick={() =>
+                          dispatchDraft({
+                            type: 'UPDATE_FIELD',
+                            field: 'selectedPlayerUserIds',
+                            value: draft.selectedPlayerUserIds.filter((id) => id !== player.id),
+                          })
+                        }
+                      >
+                        Remove
+                      </button>
+                    </li>
+                  ))}
+                </ul>
+              ) : (
+                <p className="form-help">No players selected yet.</p>
+              )}
+
               {placeholderLibrary.length > 0 && (
                 <div className="backbone-library">
                   <button
@@ -1848,6 +2003,12 @@ export function CampaignCreation({ targetId = 'campaign-creation-react-root', on
               </div>
               <div className="review-card">
                 <h5>Roster & World</h5>
+                <p>
+                  <strong>Players:</strong>{' '}
+                  {selectedPlayerDetails.length > 0
+                    ? selectedPlayerDetails.map((player) => player.username || player.email).join(', ')
+                    : '—'}
+                </p>
                 <p>
                   <strong>Placeholders:</strong> {draft.placeholders.length}{' '}
                   {draft.placeholders.length > 0 &&

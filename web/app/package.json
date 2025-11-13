@@ -15,7 +15,10 @@
     "test:unit": "vitest run --environment jsdom --pool=threads"
   },
   "dependencies": {
+    "@react-stately/data": "^3.14.1",
     "react": "^18.3.1",
+    "react-aria": "^3.33.0",
+    "react-aria-components": "^1.3.1",
     "react-dom": "^18.3.1"
   },
   "devDependencies": {

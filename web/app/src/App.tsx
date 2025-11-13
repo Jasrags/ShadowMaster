@@ -12,6 +12,7 @@ import { useEdition } from './hooks/useEdition';
 import { NotificationProvider } from './context/NotificationContext';
 import { CharacterWizard } from './components/CharacterWizard';
 import { useWizard } from './context/WizardContext';
+import { UiDemoScreen } from './components/UiDemoScreen';
 
 function AuthPortal() {
   const [container, setContainer] = useState<Element | null>(null);
@@ -55,6 +56,7 @@ export function App() {
       <CampaignList />
       <CharactersActions />
       <CharacterList />
+      <UiDemoScreen />
       <CharacterWizard
         isOpen={isWizardOpen}
         onClose={closeWizard}

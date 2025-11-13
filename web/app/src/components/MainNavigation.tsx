@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useState } from 'react';
 import { createPortal } from 'react-dom';
 
-type TabKey = 'characters' | 'campaigns' | 'sessions';
+type TabKey = 'characters' | 'campaigns' | 'sessions' | 'ui-demo';
 
 interface TabDefinition {
   key: TabKey;
@@ -28,6 +28,12 @@ const TABS: TabDefinition[] = [
     label: 'Sessions',
     description: 'Track upcoming runs, agendas, and after-action reports.',
     targetId: 'sessions-view',
+  },
+  {
+    key: 'ui-demo',
+    label: 'UI Demo',
+    description: 'Prototype React Aria components and theming ideas.',
+    targetId: 'ui-demo-view',
   },
 ];
 

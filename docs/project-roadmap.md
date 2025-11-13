@@ -148,6 +148,7 @@ Legend: ✅ Complete • ⚙️ In Progress • 🔜 Planned • 🛑 Blocked
 - **Infrastructure**
   - CI pipeline for Go + React tests.
   - Packaging strategy for edition data updates (hot reload vs. build-time).
+  - Plan API versioning/feature-flag strategy to guard future schema changes.
 
 ---
 
