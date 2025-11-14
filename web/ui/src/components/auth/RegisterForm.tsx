@@ -1,5 +1,5 @@
 import { useState, FormEvent } from 'react';
-import { Button, TextField, Label, FieldError } from 'react-aria-components';
+import { Button, TextField, Input, Label, FieldError } from 'react-aria-components';
 import { useAuth } from '../../contexts/AuthContext';
 
 export function RegisterForm() {
@@ -49,7 +49,7 @@ export function RegisterForm() {
         className="flex flex-col gap-1"
       >
         <Label className="text-sm font-medium text-gray-300">Email</Label>
-        <input
+        <Input
           className="px-3 py-2 bg-sr-gray border border-sr-light-gray rounded-md text-gray-100 focus:outline-none focus:ring-2 focus:ring-sr-accent focus:border-transparent"
           placeholder="your@email.com"
         />
@@ -65,7 +65,7 @@ export function RegisterForm() {
         className="flex flex-col gap-1"
       >
         <Label className="text-sm font-medium text-gray-300">Username</Label>
-        <input
+        <Input
           className="px-3 py-2 bg-sr-gray border border-sr-light-gray rounded-md text-gray-100 focus:outline-none focus:ring-2 focus:ring-sr-accent focus:border-transparent"
           placeholder="username"
         />
@@ -81,7 +81,7 @@ export function RegisterForm() {
         className="flex flex-col gap-1"
       >
         <Label className="text-sm font-medium text-gray-300">Password</Label>
-        <input
+        <Input
           className="px-3 py-2 bg-sr-gray border border-sr-light-gray rounded-md text-gray-100 focus:outline-none focus:ring-2 focus:ring-sr-accent focus:border-transparent"
           placeholder="••••••••"
         />
@@ -100,7 +100,7 @@ export function RegisterForm() {
         className="flex flex-col gap-1"
       >
         <Label className="text-sm font-medium text-gray-300">Confirm Password</Label>
-        <input
+        <Input
           className="px-3 py-2 bg-sr-gray border border-sr-light-gray rounded-md text-gray-100 focus:outline-none focus:ring-2 focus:ring-sr-accent focus:border-transparent"
           placeholder="••••••••"
         />

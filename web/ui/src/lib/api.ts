@@ -13,14 +13,17 @@ async function apiRequest<T>(
   endpoint: string,
   options: RequestInit = {}
 ): Promise<T> {
-  const response = await fetch(`${API_BASE}${endpoint}`, {
+  const url = `${API_BASE}${endpoint}`;
+  const requestOptions: RequestInit = {
     ...options,
     credentials: 'include', // Include cookies for session-based auth
     headers: {
       'Content-Type': 'application/json',
       ...options.headers,
     },
-  });
+  };
+
+  const response = await fetch(url, requestOptions);
 
   if (!response.ok) {
     let errorMessage = `HTTP error! status: ${response.status}`;

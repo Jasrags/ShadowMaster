@@ -1,5 +1,5 @@
 import { useState, FormEvent } from 'react';
-import { Button, TextField, Label, FieldError } from 'react-aria-components';
+import { Button, TextField, Input, Label, FieldError } from 'react-aria-components';
 import { useAuth } from '../../contexts/AuthContext';
 
 export function LoginForm() {
@@ -12,10 +12,21 @@ export function LoginForm() {
   async function handleSubmit(e: FormEvent) {
     e.preventDefault();
     setLocalError(null);
+
+    // Validate fields
+    if (!email.trim()) {
+      setLocalError('Email is required');
+      return;
+    }
+    if (!password) {
+      setLocalError('Password is required');
+      return;
+    }
+
     setIsSubmitting(true);
 
     try {
-      await login(email, password);
+      await login(email.trim(), password);
     } catch (err) {
       setLocalError(err instanceof Error ? err.message : 'Login failed');
     } finally {
@@ -36,7 +47,7 @@ export function LoginForm() {
         className="flex flex-col gap-1"
       >
         <Label className="text-sm font-medium text-gray-300">Email</Label>
-        <input
+        <Input
           className="px-3 py-2 bg-sr-gray border border-sr-light-gray rounded-md text-gray-100 focus:outline-none focus:ring-2 focus:ring-sr-accent focus:border-transparent"
           placeholder="your@email.com"
         />
@@ -52,7 +63,7 @@ export function LoginForm() {
         className="flex flex-col gap-1"
       >
         <Label className="text-sm font-medium text-gray-300">Password</Label>
-        <input
+        <Input
           className="px-3 py-2 bg-sr-gray border border-sr-light-gray rounded-md text-gray-100 focus:outline-none focus:ring-2 focus:ring-sr-accent focus:border-transparent"
           placeholder="••••••••"
         />
