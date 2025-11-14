@@ -79,7 +79,7 @@ func (r *CampaignRepositoryJSON) GetByID(id string) (*domain.Campaign, error) {
 	}
 
 	// Backfill structured fields from legacy house rules JSON if needed.
-	backfilled := backfillHouseRules(&campaign)
+	backfilled := backfillHouseRulesFromFile(r.store, filename, &campaign)
 	if backfilled {
 		if err := r.store.Write(filename, &campaign); err != nil {
 			return nil, err
@@ -104,7 +104,7 @@ func (r *CampaignRepositoryJSON) GetAll() ([]*domain.Campaign, error) {
 		if err := r.store.Read(filename, &campaign); err != nil {
 			continue
 		}
-		if backfillHouseRules(&campaign) {
+		if backfillHouseRulesFromFile(r.store, filename, &campaign) {
 			_ = r.store.Write(filename, &campaign)
 		}
 		campaigns = append(campaigns, &campaign)
@@ -222,7 +222,7 @@ func (r *CampaignRepositoryJSON) normalizeExistingCampaigns() {
 			changed = true
 		}
 
-		if backfillHouseRules(&campaign) {
+		if backfillHouseRulesFromFile(r.store, filename, &campaign) {
 			changed = true
 		}
 
@@ -234,18 +234,42 @@ func (r *CampaignRepositoryJSON) normalizeExistingCampaigns() {
 	}
 }
 
-func backfillHouseRules(campaign *domain.Campaign) bool {
+// backfillHouseRulesFromFile migrates legacy house_rules JSON blob to structured fields.
+// It reads the raw JSON file to check for legacy house_rules field since it's no longer in the domain model.
+func backfillHouseRulesFromFile(store *storage.JSONStore, filename string, campaign *domain.Campaign) bool {
 	if campaign == nil {
 		return false
 	}
 
 	changed := false
 
-	// If structured fields already exist or no legacy blob, nothing to do.
-	if (campaign.Theme != "" || campaign.HouseRuleNotes != "" || len(campaign.Automation) > 0 ||
+	// If structured fields already exist, nothing to do.
+	if campaign.Theme != "" || campaign.HouseRuleNotes != "" || len(campaign.Automation) > 0 ||
 		len(campaign.Factions) > 0 || len(campaign.Locations) > 0 || len(campaign.Placeholders) > 0 ||
-		campaign.SessionSeed != nil || len(campaign.PlayerUserIDs) > 0 || len(campaign.Players) > 0) ||
-		strings.TrimSpace(campaign.HouseRules) == "" {
+		campaign.SessionSeed != nil || len(campaign.PlayerUserIDs) > 0 || len(campaign.Players) > 0 {
+		return changed
+	}
+
+	// Read raw JSON to check for legacy house_rules field
+	rawData, err := store.ReadRaw(filename)
+	if err != nil {
+		return changed
+	}
+
+	// Parse as map to check for house_rules field
+	var rawMap map[string]interface{}
+	if err := json.Unmarshal(rawData, &rawMap); err != nil {
+		return changed
+	}
+
+	// Check if house_rules exists and has data
+	houseRulesRaw, exists := rawMap["house_rules"]
+	if !exists {
+		return changed
+	}
+
+	houseRulesStr, ok := houseRulesRaw.(string)
+	if !ok || strings.TrimSpace(houseRulesStr) == "" {
 		return changed
 	}
 
@@ -261,7 +285,7 @@ func backfillHouseRules(campaign *domain.Campaign) bool {
 	}
 
 	var payload legacyHouseRules
-	if err := json.Unmarshal([]byte(campaign.HouseRules), &payload); err != nil {
+	if err := json.Unmarshal([]byte(houseRulesStr), &payload); err != nil {
 		return changed
 	}
 

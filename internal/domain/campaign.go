@@ -34,7 +34,6 @@ type Campaign struct {
 	SessionSeed    *CampaignSessionSeed      `json:"session_seed,omitempty"`
 	PlayerUserIDs  []string                  `json:"player_user_ids,omitempty"`
 	Players        []CampaignPlayerReference `json:"players,omitempty"`
-	HouseRules     string                    `json:"house_rules,omitempty"`
 	EnabledBooks   []string                  `json:"enabled_books"`
 	CreatedAt      time.Time                 `json:"created_at"`
 	UpdatedAt      time.Time                 `json:"updated_at"`

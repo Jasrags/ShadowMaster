@@ -5,6 +5,7 @@ import (
 	"shadowmaster/internal/domain"
 	"shadowmaster/pkg/storage"
 	"testing"
+	"time"
 
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
@@ -115,20 +116,27 @@ func TestCampaignRepositoryBackfillHouseRules(t *testing.T) {
 	store, err := storage.NewJSONStore(dir)
 	require.NoError(t, err)
 
-	legacy := &domain.Campaign{
-		ID:         "legacy",
-		Name:       "Legacy Run",
-		Edition:    "sr5",
-		HouseRules: `{"automation":{"init_tracking":true,"recoil":false},"notes":"  sticky note  ","theme":"  Neon Nights  ","factions":[{"id":" f1 ","name":"  Ares Macrotechnology ","tags":"Corporate"}],"locations":[{"id":"l1","name":"  Safehouse ","descriptor":" Downtown "}],"placeholders":[{"id":"p1","name":"  Runner ","role":" Face "}],"session_seed":{"title":"  Session Zero ","objectives":" Introductions ","scene_template":" social_meetup ","summary":" meet the fixer "},"players":[{"id":" player-1 ","username":" PlayerOne "},{"id":"player-1","username":"Duplicate"},{"id":"player-2","username":" PlayerTwo "}]}`,
+	// Create legacy campaign with house_rules JSON blob by writing raw JSON
+	legacyID := "legacy"
+	legacyJSON := map[string]interface{}{
+		"id":          legacyID,
+		"name":        "Legacy Run",
+		"edition":     "sr5",
+		"status":      "Active",
+		"group_id":    "",
+		"house_rules": `{"automation":{"init_tracking":true,"recoil":false},"notes":"  sticky note  ","theme":"  Neon Nights  ","factions":[{"id":" f1 ","name":"  Ares Macrotechnology ","tags":"Corporate"}],"locations":[{"id":"l1","name":"  Safehouse ","descriptor":" Downtown "}],"placeholders":[{"id":"p1","name":"  Runner ","role":" Face "}],"session_seed":{"title":"  Session Zero ","objectives":" Introductions ","scene_template":" social_meetup ","summary":" meet the fixer "},"players":[{"id":" player-1 ","username":" PlayerOne "},{"id":"player-1","username":"Duplicate"},{"id":"player-2","username":" PlayerTwo "}]}`,
+		"created_at":  time.Now().Format(time.RFC3339),
+		"updated_at":  time.Now().Format(time.RFC3339),
+		"enabled_books": []string{"SR5"},
 	}
-	require.NoError(t, store.Write(filepath.Join("campaigns", legacy.ID+".json"), legacy))
+	require.NoError(t, store.Write(filepath.Join("campaigns", legacyID+".json"), legacyJSON))
 
 	index := NewIndex()
-	index.Campaigns[legacy.ID] = filepath.Join("campaigns", legacy.ID+".json")
+	index.Campaigns[legacyID] = filepath.Join("campaigns", legacyID+".json")
 
 	repo := NewCampaignRepository(store, index)
 
-	result, err := repo.GetByID(legacy.ID)
+	result, err := repo.GetByID(legacyID)
 	require.NoError(t, err)
 
 	assert.Equal(t, "Neon Nights", result.Theme)
@@ -163,7 +171,7 @@ func TestCampaignRepositoryBackfillHouseRules(t *testing.T) {
 
 	// ensure the backfill wrote the updated campaign back to disk
 	reloaded := &domain.Campaign{}
-	require.NoError(t, store.Read(filepath.Join("campaigns", legacy.ID+".json"), reloaded))
+	require.NoError(t, store.Read(filepath.Join("campaigns", legacyID+".json"), reloaded))
 	assert.Equal(t, result.Theme, reloaded.Theme)
 	assert.Equal(t, result.HouseRuleNotes, reloaded.HouseRuleNotes)
 	assert.Equal(t, result.Automation, reloaded.Automation)

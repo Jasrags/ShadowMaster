@@ -28,7 +28,6 @@ export interface Campaign {
   session_seed?: CampaignSessionSeed;
   player_user_ids?: string[];
   players?: CampaignPlayerReference[];
-  house_rules?: string;
   enabled_books: string[];
   created_at: string;
   updated_at: string;

@@ -84,7 +84,6 @@ func TestCampaignHandlersCRUD(t *testing.T) {
 		"players": []map[string]string{
 			{"id": "gm-1", "username": " GM "},
 		},
-		"house_rules":   "{}",
 		"status":        "Active",
 		"gm_name":       gm.Username,
 		"gm_user_id":    gm.ID,

@@ -86,7 +86,6 @@ type campaignCreateRequest struct {
 	SessionSeed    *campaignSessionSeedRequest  `json:"session_seed"`
 	PlayerUserIDs  []string                     `json:"player_user_ids"`
 	Players        []campaignPlayerRequest      `json:"players"`
-	HouseRules     string                       `json:"house_rules"`
 	Status         string                       `json:"status"`
 	EnabledBooks   []string                     `json:"enabled_books"`
 }
@@ -106,7 +105,6 @@ type campaignUpdateRequest struct {
 	SessionSeed    *campaignSessionSeedRequest   `json:"session_seed"`
 	PlayerUserIDs  *[]string                     `json:"player_user_ids"`
 	Players        *[]campaignPlayerRequest      `json:"players"`
-	HouseRules     *string                       `json:"house_rules"`
 	Status         *string                       `json:"status"`
 	CreationMethod *string                       `json:"creation_method"`
 	Edition        *string                       `json:"edition"`
@@ -709,7 +707,6 @@ func (h *Handlers) CreateCampaign(w http.ResponseWriter, r *http.Request) {
 		SessionSeed:    toDomainSessionSeed(req.SessionSeed),
 		PlayerUserIDs:  normalizePlayerUserIDs(req.PlayerUserIDs),
 		Players:        toDomainPlayers(req.Players),
-		HouseRules:     req.HouseRules,
 		Status:         req.Status,
 		EnabledBooks:   req.EnabledBooks,
 	})
@@ -762,7 +759,6 @@ func (h *Handlers) UpdateCampaign(w http.ResponseWriter, r *http.Request) {
 		SessionSeed:    toDomainSessionSeedPtr(req.SessionSeed),
 		PlayerUserIDs:  toPlayerIDsPtr(req.PlayerUserIDs),
 		Players:        toDomainPlayersPtr(req.Players),
-		HouseRules:     req.HouseRules,
 		Status:         req.Status,
 		CreationMethod: req.CreationMethod,
 		Edition:        req.Edition,

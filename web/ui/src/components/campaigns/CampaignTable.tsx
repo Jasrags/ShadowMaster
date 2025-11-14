@@ -2,6 +2,8 @@ import type { CampaignResponse } from '../../lib/types';
 import { DataTable, ColumnDefinition } from '../common/DataTable';
 import { Button } from 'react-aria-components';
 import { DeleteConfirmationDialog } from '../common/DeleteConfirmationDialog';
+import { CampaignViewModal } from './CampaignViewModal';
+import { useState } from 'react';
 
 interface CampaignTableProps {
   campaigns: CampaignResponse[];
@@ -21,9 +23,12 @@ const getStatusColor = (status: string) => {
 };
 
 export function CampaignTable({ campaigns }: CampaignTableProps) {
+  const [selectedCampaign, setSelectedCampaign] = useState<CampaignResponse | null>(null);
+  const [isViewModalOpen, setIsViewModalOpen] = useState(false);
+
   const handleView = (campaign: CampaignResponse) => {
-    // TODO: Implement view functionality
-    console.log('View campaign:', campaign.id);
+    setSelectedCampaign(campaign);
+    setIsViewModalOpen(true);
   };
 
   const handleEdit = (campaign: CampaignResponse) => {
@@ -112,16 +117,23 @@ export function CampaignTable({ campaigns }: CampaignTableProps) {
   ];
 
   return (
-    <DataTable
-      data={campaigns}
-      columns={columns}
-      searchFields={['name', 'gm_name', 'edition', 'gameplay_level', 'status']}
-      searchPlaceholder="Search campaigns..."
-      defaultSortColumn="status"
-      defaultSortDirection="asc"
-      emptyMessage="No campaigns available"
-      emptySearchMessage="No campaigns found. Try adjusting your search."
-      ariaLabel="Campaigns table"
-    />
+    <>
+      <DataTable
+        data={campaigns}
+        columns={columns}
+        searchFields={['name', 'gm_name', 'edition', 'gameplay_level', 'status']}
+        searchPlaceholder="Search campaigns..."
+        defaultSortColumn="status"
+        defaultSortDirection="asc"
+        emptyMessage="No campaigns available"
+        emptySearchMessage="No campaigns found. Try adjusting your search."
+        ariaLabel="Campaigns table"
+      />
+      <CampaignViewModal
+        campaign={selectedCampaign}
+        isOpen={isViewModalOpen}
+        onOpenChange={setIsViewModalOpen}
+      />
+    </>
   );
 }

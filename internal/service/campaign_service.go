@@ -45,7 +45,6 @@ type CampaignCreateInput struct {
 	SessionSeed    *domain.CampaignSessionSeed
 	PlayerUserIDs  []string
 	Players        []domain.CampaignPlayerReference
-	HouseRules     string
 	Status         string
 	EnabledBooks   []string
 }
@@ -66,7 +65,6 @@ type CampaignUpdateInput struct {
 	SessionSeed    **domain.CampaignSessionSeed
 	PlayerUserIDs  *[]string
 	Players        *[]domain.CampaignPlayerReference
-	HouseRules     *string
 	Status         *string
 	CreationMethod *string
 	Edition        *string
@@ -135,7 +133,6 @@ func (s *CampaignService) CreateCampaign(input CampaignCreateInput) (*domain.Cam
 		SessionSeed:    sessionSeed,
 		PlayerUserIDs:  playerUserIDs,
 		Players:        players,
-		HouseRules:     strings.TrimSpace(input.HouseRules),
 		Status:         campaignStatusOrDefault(input.Status, ""),
 		EnabledBooks:   enabledBooks,
 	}
@@ -205,9 +202,6 @@ func (s *CampaignService) UpdateCampaign(id string, input CampaignUpdateInput) (
 	}
 	if input.Players != nil {
 		campaign.Players = clonePlayerReferences(*input.Players)
-	}
-	if input.HouseRules != nil {
-		campaign.HouseRules = strings.TrimSpace(*input.HouseRules)
 	}
 	if input.Status != nil {
 		campaign.Status = campaignStatusOrDefault(strings.TrimSpace(*input.Status), campaign.Status)
