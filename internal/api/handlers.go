@@ -602,15 +602,18 @@ func (h *Handlers) DeleteGroup(w http.ResponseWriter, r *http.Request) {
 
 // GetCampaigns handles GET /api/campaigns
 func (h *Handlers) GetCampaigns(w http.ResponseWriter, r *http.Request) {
-	campaigns, err := h.CampaignService.ListCampaigns()
+	allCampaigns, err := h.CampaignService.ListCampaigns()
 	if err != nil {
 		respondError(w, http.StatusInternalServerError, err.Error())
 		return
 	}
 
 	session := GetSessionFromContext(r.Context())
-	response := make([]campaignResponse, 0, len(campaigns))
-	for _, campaign := range campaigns {
+	// Filter campaigns based on user role
+	filteredCampaigns := h.filterCampaignsByRole(allCampaigns, session)
+
+	response := make([]campaignResponse, 0, len(filteredCampaigns))
+	for _, campaign := range filteredCampaigns {
 		payload, err := h.buildCampaignResponse(session, campaign)
 		if err != nil {
 			respondServiceError(w, err)
@@ -1254,4 +1257,52 @@ func canManageCampaign(campaign *domain.Campaign, session *SessionData) bool {
 	}
 
 	return session.HasRole(domain.RoleGamemaster) || session.HasRole(domain.RoleAdministrator)
+}
+
+// filterCampaignsByRole filters campaigns based on the user's roles.
+// - Administrator: returns all campaigns
+// - Gamemaster: returns campaigns where the user is the GM
+// - Player: returns campaigns where the user is a player
+// If a user has multiple roles, returns the union of campaigns from all applicable roles.
+func (h *Handlers) filterCampaignsByRole(campaigns []*domain.Campaign, session *SessionData) []*domain.Campaign {
+	if session == nil {
+		return []*domain.Campaign{}
+	}
+
+	// Administrator sees all campaigns
+	if session.HasRole(domain.RoleAdministrator) {
+		return campaigns
+	}
+
+	filtered := make([]*domain.Campaign, 0)
+	seen := make(map[string]bool) // Track campaign IDs to avoid duplicates
+
+	// Gamemaster: campaigns where user is the GM
+	if session.HasRole(domain.RoleGamemaster) {
+		for _, campaign := range campaigns {
+			if campaign.GmUserID != "" && strings.EqualFold(campaign.GmUserID, session.UserID) {
+				if !seen[campaign.ID] {
+					filtered = append(filtered, campaign)
+					seen[campaign.ID] = true
+				}
+			}
+		}
+	}
+
+	// Player: campaigns where user is in player_user_ids
+	if session.HasRole(domain.RolePlayer) {
+		for _, campaign := range campaigns {
+			for _, playerID := range campaign.PlayerUserIDs {
+				if strings.EqualFold(playerID, session.UserID) {
+					if !seen[campaign.ID] {
+						filtered = append(filtered, campaign)
+						seen[campaign.ID] = true
+					}
+					break
+				}
+			}
+		}
+	}
+
+	return filtered
 }
