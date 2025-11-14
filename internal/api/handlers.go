@@ -69,30 +69,80 @@ type userResponse struct {
 }
 
 type campaignCreateRequest struct {
-	Name           string   `json:"name"`
-	Description    string   `json:"description"`
-	GroupID        string   `json:"group_id"`
-	GMName         string   `json:"gm_name"`
-	GMUserID       string   `json:"gm_user_id"`
-	Edition        string   `json:"edition"`
-	CreationMethod string   `json:"creation_method"`
-	GameplayLevel  string   `json:"gameplay_level"`
-	HouseRules     string   `json:"house_rules"`
-	Status         string   `json:"status"`
-	EnabledBooks   []string `json:"enabled_books"`
+	Name           string                       `json:"name"`
+	Description    string                       `json:"description"`
+	GroupID        string                       `json:"group_id"`
+	GMName         string                       `json:"gm_name"`
+	GMUserID       string                       `json:"gm_user_id"`
+	Edition        string                       `json:"edition"`
+	CreationMethod string                       `json:"creation_method"`
+	GameplayLevel  string                       `json:"gameplay_level"`
+	Theme          string                       `json:"theme"`
+	HouseRuleNotes string                       `json:"house_rule_notes"`
+	Automation     map[string]bool              `json:"automation"`
+	Factions       []campaignFactionRequest     `json:"factions"`
+	Locations      []campaignLocationRequest    `json:"locations"`
+	Placeholders   []campaignPlaceholderRequest `json:"placeholders"`
+	SessionSeed    *campaignSessionSeedRequest  `json:"session_seed"`
+	PlayerUserIDs  []string                     `json:"player_user_ids"`
+	Players        []campaignPlayerRequest      `json:"players"`
+	HouseRules     string                       `json:"house_rules"`
+	Status         string                       `json:"status"`
+	EnabledBooks   []string                     `json:"enabled_books"`
 }
 
 type campaignUpdateRequest struct {
-	Name           *string   `json:"name"`
-	Description    *string   `json:"description"`
-	GMName         *string   `json:"gm_name"`
-	GMUserID       *string   `json:"gm_user_id"`
-	GameplayLevel  *string   `json:"gameplay_level"`
-	HouseRules     *string   `json:"house_rules"`
-	Status         *string   `json:"status"`
-	CreationMethod *string   `json:"creation_method"`
-	Edition        *string   `json:"edition"`
-	EnabledBooks   *[]string `json:"enabled_books"`
+	Name           *string                       `json:"name"`
+	Description    *string                       `json:"description"`
+	GMName         *string                       `json:"gm_name"`
+	GMUserID       *string                       `json:"gm_user_id"`
+	GameplayLevel  *string                       `json:"gameplay_level"`
+	Theme          *string                       `json:"theme"`
+	HouseRuleNotes *string                       `json:"house_rule_notes"`
+	Automation     *map[string]bool              `json:"automation"`
+	Factions       *[]campaignFactionRequest     `json:"factions"`
+	Locations      *[]campaignLocationRequest    `json:"locations"`
+	Placeholders   *[]campaignPlaceholderRequest `json:"placeholders"`
+	SessionSeed    *campaignSessionSeedRequest   `json:"session_seed"`
+	PlayerUserIDs  *[]string                     `json:"player_user_ids"`
+	Players        *[]campaignPlayerRequest      `json:"players"`
+	HouseRules     *string                       `json:"house_rules"`
+	Status         *string                       `json:"status"`
+	CreationMethod *string                       `json:"creation_method"`
+	Edition        *string                       `json:"edition"`
+	EnabledBooks   *[]string                     `json:"enabled_books"`
+}
+
+type campaignFactionRequest struct {
+	ID    string `json:"id"`
+	Name  string `json:"name"`
+	Tags  string `json:"tags"`
+	Notes string `json:"notes"`
+}
+
+type campaignLocationRequest struct {
+	ID         string `json:"id"`
+	Name       string `json:"name"`
+	Descriptor string `json:"descriptor"`
+}
+
+type campaignPlaceholderRequest struct {
+	ID   string `json:"id"`
+	Name string `json:"name"`
+	Role string `json:"role"`
+}
+
+type campaignSessionSeedRequest struct {
+	Title         string `json:"title"`
+	Objectives    string `json:"objectives"`
+	SceneTemplate string `json:"scene_template"`
+	Summary       string `json:"summary"`
+	Skip          bool   `json:"skip"`
+}
+
+type campaignPlayerRequest struct {
+	ID       string `json:"id"`
+	Username string `json:"username"`
 }
 
 // NewHandlers creates a new handlers instance
@@ -647,6 +697,15 @@ func (h *Handlers) CreateCampaign(w http.ResponseWriter, r *http.Request) {
 		Edition:        req.Edition,
 		CreationMethod: req.CreationMethod,
 		GameplayLevel:  req.GameplayLevel,
+		Theme:          req.Theme,
+		HouseRuleNotes: req.HouseRuleNotes,
+		Automation:     cloneAutomation(req.Automation),
+		Factions:       toDomainFactions(req.Factions),
+		Locations:      toDomainLocations(req.Locations),
+		Placeholders:   toDomainPlaceholders(req.Placeholders),
+		SessionSeed:    toDomainSessionSeed(req.SessionSeed),
+		PlayerUserIDs:  normalizePlayerUserIDs(req.PlayerUserIDs),
+		Players:        toDomainPlayers(req.Players),
 		HouseRules:     req.HouseRules,
 		Status:         req.Status,
 		EnabledBooks:   req.EnabledBooks,
@@ -691,6 +750,15 @@ func (h *Handlers) UpdateCampaign(w http.ResponseWriter, r *http.Request) {
 		GMName:         req.GMName,
 		GMUserID:       req.GMUserID,
 		GameplayLevel:  req.GameplayLevel,
+		Theme:          req.Theme,
+		HouseRuleNotes: req.HouseRuleNotes,
+		Automation:     cloneAutomationPtr(req.Automation),
+		Factions:       toDomainFactionsPtr(req.Factions),
+		Locations:      toDomainLocationsPtr(req.Locations),
+		Placeholders:   toDomainPlaceholdersPtr(req.Placeholders),
+		SessionSeed:    toDomainSessionSeedPtr(req.SessionSeed),
+		PlayerUserIDs:  toPlayerIDsPtr(req.PlayerUserIDs),
+		Players:        toDomainPlayersPtr(req.Players),
 		HouseRules:     req.HouseRules,
 		Status:         req.Status,
 		CreationMethod: req.CreationMethod,
@@ -732,6 +800,216 @@ func (h *Handlers) DeleteCampaign(w http.ResponseWriter, r *http.Request) {
 	}
 
 	w.WriteHeader(http.StatusNoContent)
+}
+
+func toDomainFactions(source []campaignFactionRequest) []domain.CampaignFaction {
+	if len(source) == 0 {
+		return nil
+	}
+	result := make([]domain.CampaignFaction, 0, len(source))
+	for _, item := range source {
+		id := strings.TrimSpace(item.ID)
+		name := strings.TrimSpace(item.Name)
+		if id == "" && name == "" {
+			continue
+		}
+		result = append(result, domain.CampaignFaction{
+			ID:    id,
+			Name:  name,
+			Tags:  strings.TrimSpace(item.Tags),
+			Notes: strings.TrimSpace(item.Notes),
+		})
+	}
+	if len(result) == 0 {
+		return nil
+	}
+	return result
+}
+
+func toDomainFactionsPtr(source *[]campaignFactionRequest) *[]domain.CampaignFaction {
+	if source == nil {
+		return nil
+	}
+	cloned := toDomainFactions(*source)
+	return &cloned
+}
+
+func toDomainLocations(source []campaignLocationRequest) []domain.CampaignLocation {
+	if len(source) == 0 {
+		return nil
+	}
+	result := make([]domain.CampaignLocation, 0, len(source))
+	for _, item := range source {
+		id := strings.TrimSpace(item.ID)
+		name := strings.TrimSpace(item.Name)
+		if id == "" && name == "" {
+			continue
+		}
+		result = append(result, domain.CampaignLocation{
+			ID:         id,
+			Name:       name,
+			Descriptor: strings.TrimSpace(item.Descriptor),
+		})
+	}
+	if len(result) == 0 {
+		return nil
+	}
+	return result
+}
+
+func toDomainLocationsPtr(source *[]campaignLocationRequest) *[]domain.CampaignLocation {
+	if source == nil {
+		return nil
+	}
+	cloned := toDomainLocations(*source)
+	return &cloned
+}
+
+func toDomainPlaceholders(source []campaignPlaceholderRequest) []domain.CampaignPlaceholder {
+	if len(source) == 0 {
+		return nil
+	}
+	result := make([]domain.CampaignPlaceholder, 0, len(source))
+	for _, item := range source {
+		id := strings.TrimSpace(item.ID)
+		name := strings.TrimSpace(item.Name)
+		if id == "" && name == "" {
+			continue
+		}
+		result = append(result, domain.CampaignPlaceholder{
+			ID:   id,
+			Name: name,
+			Role: strings.TrimSpace(item.Role),
+		})
+	}
+	if len(result) == 0 {
+		return nil
+	}
+	return result
+}
+
+func toDomainPlaceholdersPtr(source *[]campaignPlaceholderRequest) *[]domain.CampaignPlaceholder {
+	if source == nil {
+		return nil
+	}
+	cloned := toDomainPlaceholders(*source)
+	return &cloned
+}
+
+func toDomainSessionSeed(source *campaignSessionSeedRequest) *domain.CampaignSessionSeed {
+	if source == nil {
+		return nil
+	}
+	seed := &domain.CampaignSessionSeed{
+		Title:         strings.TrimSpace(source.Title),
+		Objectives:    strings.TrimSpace(source.Objectives),
+		SceneTemplate: strings.TrimSpace(source.SceneTemplate),
+		Summary:       strings.TrimSpace(source.Summary),
+		Skip:          source.Skip,
+	}
+	if seed.Title == "" && seed.Objectives == "" && seed.SceneTemplate == "" && seed.Summary == "" && !seed.Skip {
+		return nil
+	}
+	return seed
+}
+
+func toDomainSessionSeedPtr(source *campaignSessionSeedRequest) **domain.CampaignSessionSeed {
+	if source == nil {
+		return nil
+	}
+	seed := toDomainSessionSeed(source)
+	return &seed
+}
+
+func toDomainPlayers(source []campaignPlayerRequest) []domain.CampaignPlayerReference {
+	if len(source) == 0 {
+		return nil
+	}
+	result := make([]domain.CampaignPlayerReference, 0, len(source))
+	seen := make(map[string]struct{})
+	for _, item := range source {
+		id := strings.TrimSpace(item.ID)
+		if id == "" {
+			continue
+		}
+		if _, exists := seen[id]; exists {
+			continue
+		}
+		seen[id] = struct{}{}
+		result = append(result, domain.CampaignPlayerReference{
+			ID:       id,
+			Username: strings.TrimSpace(item.Username),
+		})
+	}
+	if len(result) == 0 {
+		return nil
+	}
+	return result
+}
+
+func toDomainPlayersPtr(source *[]campaignPlayerRequest) *[]domain.CampaignPlayerReference {
+	if source == nil {
+		return nil
+	}
+	cloned := toDomainPlayers(*source)
+	return &cloned
+}
+
+func toPlayerIDsPtr(source *[]string) *[]string {
+	if source == nil {
+		return nil
+	}
+	cloned := normalizePlayerUserIDs(*source)
+	return &cloned
+}
+
+func cloneAutomation(source map[string]bool) map[string]bool {
+	if len(source) == 0 {
+		return nil
+	}
+	result := make(map[string]bool, len(source))
+	for key, value := range source {
+		trimmed := strings.TrimSpace(key)
+		if trimmed == "" {
+			continue
+		}
+		result[trimmed] = value
+	}
+	if len(result) == 0 {
+		return nil
+	}
+	return result
+}
+
+func cloneAutomationPtr(source *map[string]bool) *map[string]bool {
+	if source == nil {
+		return nil
+	}
+	cloned := cloneAutomation(*source)
+	return &cloned
+}
+
+func normalizePlayerUserIDs(source []string) []string {
+	if len(source) == 0 {
+		return nil
+	}
+	seen := make(map[string]struct{}, len(source))
+	result := make([]string, 0, len(source))
+	for _, id := range source {
+		trimmed := strings.TrimSpace(id)
+		if trimmed == "" {
+			continue
+		}
+		if _, exists := seen[trimmed]; exists {
+			continue
+		}
+		seen[trimmed] = struct{}{}
+		result = append(result, trimmed)
+	}
+	if len(result) == 0 {
+		return nil
+	}
+	return result
 }
 
 // GetUsers handles GET /api/users

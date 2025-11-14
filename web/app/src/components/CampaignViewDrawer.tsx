@@ -48,7 +48,7 @@ function formatDate(value?: string): string | null {
   }).format(date);
 }
 
-function parseHouseRules(raw?: string | null): HouseRulesSummary {
+function parseLegacyHouseRulesSummary(raw?: string | null): HouseRulesSummary {
   if (!raw) {
     return {
       automation: {},
@@ -125,8 +125,86 @@ function parseHouseRules(raw?: string | null): HouseRulesSummary {
   }
 }
 
+function deriveHouseRulesSummary(campaign: CampaignSummary): HouseRulesSummary {
+  const hasStructured =
+    typeof campaign.theme === 'string' ||
+    typeof campaign.house_rule_notes === 'string' ||
+    (campaign.automation && Object.keys(campaign.automation).length > 0) ||
+    (campaign.factions && campaign.factions.length > 0) ||
+    (campaign.locations && campaign.locations.length > 0) ||
+    (campaign.placeholders && campaign.placeholders.length > 0) ||
+    campaign.session_seed;
+
+  if (hasStructured) {
+    const automation: Record<string, boolean> = {};
+    if (campaign.automation) {
+      Object.entries(campaign.automation).forEach(([key, value]) => {
+        if (key.trim().length === 0) {
+          return;
+        }
+        automation[key] = Boolean(value);
+      });
+    }
+
+    const factions = (campaign.factions ?? [])
+      .map((faction) => ({
+        name: faction.name?.trim() ?? '',
+        tags: faction.tags?.trim() || undefined,
+        notes: faction.notes?.trim() || undefined,
+      }))
+      .filter((faction) => faction.name.length > 0);
+
+    const locations = (campaign.locations ?? [])
+      .map((location) => ({
+        name: location.name?.trim() ?? '',
+        descriptor: location.descriptor?.trim() || undefined,
+      }))
+      .filter((location) => location.name.length > 0);
+
+    const placeholders = (campaign.placeholders ?? [])
+      .map((placeholder) => ({
+        name: placeholder.name?.trim() ?? '',
+        role: placeholder.role?.trim() || undefined,
+      }))
+      .filter((placeholder) => placeholder.name.length > 0);
+
+    const sessionSeedSource = campaign.session_seed;
+    let sessionSeed: HouseRulesSummary['sessionSeed'];
+    if (sessionSeedSource) {
+      if (sessionSeedSource.skip) {
+        sessionSeed = { skip: true };
+      } else if (
+        sessionSeedSource.title ||
+        sessionSeedSource.objectives ||
+        sessionSeedSource.sceneTemplate ||
+        sessionSeedSource.summary
+      ) {
+        sessionSeed = {
+          title: sessionSeedSource.title?.trim() || undefined,
+          objectives: sessionSeedSource.objectives?.trim() || undefined,
+          sceneTemplate: sessionSeedSource.sceneTemplate?.trim() || undefined,
+          summary: sessionSeedSource.summary?.trim() || undefined,
+        };
+      }
+    }
+
+    return {
+      theme: campaign.theme?.trim() || undefined,
+      notes: campaign.house_rule_notes?.trim() || undefined,
+      automation,
+      factions,
+      locations,
+      placeholders,
+      sessionSeed,
+      isValid: true,
+    };
+  }
+
+  return parseLegacyHouseRulesSummary(campaign.house_rules);
+}
+
 export function CampaignViewDrawer({ campaign, onClose }: Props) {
-  const houseRules = useMemo(() => parseHouseRules(campaign.house_rules), [campaign.house_rules]);
+  const houseRules = useMemo(() => deriveHouseRulesSummary(campaign), [campaign]);
 
   const editionLabel = campaign.edition?.toUpperCase() ?? 'SR5';
   const creationMethodLabel = toStartCase(campaign.creation_method);
@@ -199,6 +277,29 @@ export function CampaignViewDrawer({ campaign, onClose }: Props) {
                 <dd>{lockedAt ?? 'Not locked'}</dd>
               </div>
             </dl>
+          </section>
+
+          <section className="campaign-view__section">
+            <h4 className="campaign-manage__section-title">Players</h4>
+            {campaign.players && campaign.players.length > 0 ? (
+              <ul className="campaign-view__pill-list">
+                {campaign.players.map((player) => (
+                  <li key={player.id} className="pill">
+                    {player.username ?? player.id}
+                  </li>
+                ))}
+              </ul>
+            ) : campaign.player_user_ids && campaign.player_user_ids.length > 0 ? (
+              <ul className="campaign-view__pill-list">
+                {campaign.player_user_ids.map((id) => (
+                  <li key={id} className="pill">
+                    {id}
+                  </li>
+                ))}
+              </ul>
+            ) : (
+              <p className="campaign-view__empty">No players assigned yet.</p>
+            )}
           </section>
 
           <section className="campaign-view__section">

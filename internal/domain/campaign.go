@@ -16,21 +16,67 @@ type Group struct {
 
 // Campaign represents a campaign linked to a group
 type Campaign struct {
-	ID             string    `json:"id"`
-	Name           string    `json:"name"`
-	Description    string    `json:"description,omitempty"`
-	GroupID        string    `json:"group_id"` // Reference to group
-	GmName         string    `json:"gm_name,omitempty"`
-	GmUserID       string    `json:"gm_user_id,omitempty"`
-	Edition        string    `json:"edition"` // "sr3", "sr4", etc.
-	CreationMethod string    `json:"creation_method"`
-	GameplayLevel  string    `json:"gameplay_level,omitempty"`
-	HouseRules     string    `json:"house_rules,omitempty"`
-	EnabledBooks   []string  `json:"enabled_books"`
-	CreatedAt      time.Time `json:"created_at"`
-	UpdatedAt      time.Time `json:"updated_at"`
-	SetupLockedAt  time.Time `json:"setup_locked_at,omitempty"`
-	Status         string    `json:"status"` // Active, Paused, Completed
+	ID             string                    `json:"id"`
+	Name           string                    `json:"name"`
+	Description    string                    `json:"description,omitempty"`
+	GroupID        string                    `json:"group_id"` // Reference to group
+	GmName         string                    `json:"gm_name,omitempty"`
+	GmUserID       string                    `json:"gm_user_id,omitempty"`
+	Edition        string                    `json:"edition"` // "sr3", "sr4", etc.
+	CreationMethod string                    `json:"creation_method"`
+	GameplayLevel  string                    `json:"gameplay_level,omitempty"`
+	Theme          string                    `json:"theme,omitempty"`
+	HouseRuleNotes string                    `json:"house_rule_notes,omitempty"`
+	Automation     map[string]bool           `json:"automation,omitempty"`
+	Factions       []CampaignFaction         `json:"factions,omitempty"`
+	Locations      []CampaignLocation        `json:"locations,omitempty"`
+	Placeholders   []CampaignPlaceholder     `json:"placeholders,omitempty"`
+	SessionSeed    *CampaignSessionSeed      `json:"session_seed,omitempty"`
+	PlayerUserIDs  []string                  `json:"player_user_ids,omitempty"`
+	Players        []CampaignPlayerReference `json:"players,omitempty"`
+	HouseRules     string                    `json:"house_rules,omitempty"`
+	EnabledBooks   []string                  `json:"enabled_books"`
+	CreatedAt      time.Time                 `json:"created_at"`
+	UpdatedAt      time.Time                 `json:"updated_at"`
+	SetupLockedAt  time.Time                 `json:"setup_locked_at,omitempty"`
+	Status         string                    `json:"status"` // Active, Paused, Completed
+}
+
+// CampaignFaction captures a recurring organization in the campaign.
+type CampaignFaction struct {
+	ID    string `json:"id"`
+	Name  string `json:"name"`
+	Tags  string `json:"tags,omitempty"`
+	Notes string `json:"notes,omitempty"`
+}
+
+// CampaignLocation represents a notable location.
+type CampaignLocation struct {
+	ID         string `json:"id"`
+	Name       string `json:"name"`
+	Descriptor string `json:"descriptor,omitempty"`
+}
+
+// CampaignPlaceholder represents a placeholder runner or NPC slot.
+type CampaignPlaceholder struct {
+	ID   string `json:"id"`
+	Name string `json:"name"`
+	Role string `json:"role,omitempty"`
+}
+
+// CampaignSessionSeed captures planned opening session details.
+type CampaignSessionSeed struct {
+	Title         string `json:"title,omitempty"`
+	Objectives    string `json:"objectives,omitempty"`
+	SceneTemplate string `json:"scene_template,omitempty"`
+	Summary       string `json:"summary,omitempty"`
+	Skip          bool   `json:"skip"`
+}
+
+// CampaignPlayerReference links a campaign to a player user.
+type CampaignPlayerReference struct {
+	ID       string `json:"id"`
+	Username string `json:"username,omitempty"`
 }
 
 // Session represents an individual play session within a campaign

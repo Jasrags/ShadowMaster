@@ -27,40 +27,48 @@ describe('CampaignViewDrawer', () => {
       updated_at: '2080-05-02T15:30:00.000Z',
       setup_locked_at: '2080-05-03T18:45:00.000Z',
       enabled_books: ['SR5', 'RG'],
-      house_rules: JSON.stringify({
-        theme: 'Chrome Noir',
-        notes: 'Keep the shadows stylish.',
-        automation: {
-          initiative_automation: true,
-          recoil_tracking: false,
+      theme: 'Chrome Noir',
+      house_rule_notes: 'Keep the shadows stylish.',
+      automation: {
+        initiative_automation: true,
+        recoil_tracking: false,
+      },
+      factions: [
+        {
+          id: 'f-1',
+          name: 'Ancients Seattle Chapter',
+          tags: 'Go-gang',
+          notes: 'Green bikes and sharper ears.',
         },
-        factions: [
-          {
-            name: 'Ancients Seattle Chapter',
-            tags: 'Go-gang',
-            notes: 'Green bikes and sharper ears.',
-          },
-        ],
-        locations: [
-          {
-            name: 'The Matchstick Jazz Club',
-            descriptor: 'Runner-friendly speakeasy',
-          },
-        ],
-        placeholders: [
-          {
-            name: 'Ghost',
-            role: 'Face',
-          },
-        ],
-        session_seed: {
-          title: 'Session 1: Meet the Johnson',
-          objectives: 'Secure the briefcase; keep collateral to a minimum.',
-          sceneTemplate: 'social_meetup',
-          summary: 'Downtown meet-and-greet to set the tone.',
-          skip: false,
+      ],
+      locations: [
+        {
+          id: 'l-1',
+          name: 'The Matchstick Jazz Club',
+          descriptor: 'Runner-friendly speakeasy',
         },
-      }),
+      ],
+      placeholders: [
+        {
+          id: 'p-1',
+          name: 'Ghost',
+          role: 'Face',
+        },
+      ],
+      session_seed: {
+        title: 'Session 1: Meet the Johnson',
+        objectives: 'Secure the briefcase; keep collateral to a minimum.',
+        sceneTemplate: 'social_meetup',
+        summary: 'Downtown meet-and-greet to set the tone.',
+        skip: false,
+      },
+      players: [
+        {
+          id: 'player-1',
+          username: 'Razr',
+        },
+      ],
+      player_user_ids: ['player-1'],
       can_edit: false,
       can_delete: false,
     };
@@ -96,6 +104,7 @@ describe('CampaignViewDrawer', () => {
     expect(screen.getByText('Ghost')).toBeInTheDocument();
     expect(screen.getByText(/Face/)).toBeInTheDocument();
     expect(screen.getByText('Session 1: Meet the Johnson')).toBeInTheDocument();
+    expect(screen.getByText('Razr')).toBeInTheDocument();
 
     expect(screen.queryByRole('textbox')).not.toBeInTheDocument();
     expect(screen.queryAllByRole('combobox')).toHaveLength(0);

@@ -4,7 +4,6 @@ import { EditionProvider } from './context/EditionContext';
 import { CharacterWizardProvider } from './context/CharacterWizardContext';
 import { WizardProvider } from './context/WizardContext';
 import { App } from './App';
-import type { PriorityCode } from './types/editions';
 
 const existingHost = document.getElementById('shadowmaster-react-root');
 const container = existingHost ?? createContainer();
@@ -43,12 +42,6 @@ root.render(<Root />);
 
 declare global {
   interface Window {
-    ShadowmasterLegacyApp?: {
-      initialize: () => void;
-      isInitialized?: () => boolean;
-      setEditionData?: (edition: string, data: unknown) => void;
-      setPriorities?: (assignments: Record<string, PriorityCode | null>) => void;
-      getPriorities?: () => Record<string, PriorityCode | null>;
-    };
+    ShadowmasterLegacyApp?: import('./types/legacy').ShadowmasterLegacyApp;
   }
 }

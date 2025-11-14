@@ -32,7 +32,82 @@ export function CampaignDashboard({ targetId = 'campaign-dashboard-root', campai
   }, [targetId]);
 
   const houseRules: HouseRulesPayload = useMemo(() => {
-    if (!campaign?.house_rules) {
+    if (!campaign) {
+      return {};
+    }
+
+    const hasStructured =
+      typeof campaign.theme === 'string' ||
+      typeof campaign.house_rule_notes === 'string' ||
+      (campaign.automation && Object.keys(campaign.automation).length > 0) ||
+      (campaign.factions && campaign.factions.length > 0) ||
+      (campaign.locations && campaign.locations.length > 0) ||
+      (campaign.placeholders && campaign.placeholders.length > 0) ||
+      campaign.session_seed;
+
+    if (hasStructured) {
+      const automation = campaign.automation
+        ? Object.fromEntries(
+            Object.entries(campaign.automation).map(([key, value]) => [key, Boolean(value)]),
+          )
+        : undefined;
+
+      const factions = campaign.factions
+        ?.map((faction) => ({
+          id: faction.id,
+          name: faction.name?.trim() ?? '',
+          tags: faction.tags?.trim() || undefined,
+          notes: faction.notes?.trim() || undefined,
+        }))
+        .filter((faction) => faction.name.length > 0);
+
+      const locations = campaign.locations
+        ?.map((location) => ({
+          id: location.id,
+          name: location.name?.trim() ?? '',
+          descriptor: location.descriptor?.trim() || undefined,
+        }))
+        .filter((location) => location.name.length > 0);
+
+      const placeholders = campaign.placeholders
+        ?.map((placeholder) => ({
+          name: placeholder.name?.trim() ?? '',
+          role: placeholder.role?.trim() || '',
+        }))
+        .filter((placeholder) => placeholder.name.length > 0);
+
+      let sessionSeed: HouseRulesPayload['session_seed'];
+      if (campaign.session_seed) {
+        if (campaign.session_seed.skip) {
+          sessionSeed = { skip: true };
+        } else if (
+          campaign.session_seed.title ||
+          campaign.session_seed.objectives ||
+          campaign.session_seed.sceneTemplate ||
+          campaign.session_seed.summary
+        ) {
+          sessionSeed = {
+            title: campaign.session_seed.title?.trim() || undefined,
+            objectives: campaign.session_seed.objectives?.trim() || undefined,
+            sceneTemplate: campaign.session_seed.sceneTemplate?.trim() || undefined,
+            summary: campaign.session_seed.summary?.trim() || undefined,
+            skip: false,
+          };
+        }
+      }
+
+      return {
+        automation,
+        notes: campaign.house_rule_notes?.trim() || undefined,
+        theme: campaign.theme?.trim() || undefined,
+        factions,
+        locations,
+        placeholders,
+        session_seed: sessionSeed,
+      };
+    }
+
+    if (!campaign.house_rules) {
       return {};
     }
     try {
@@ -41,11 +116,16 @@ export function CampaignDashboard({ targetId = 'campaign-dashboard-root', campai
       console.warn('Failed to parse campaign house rules payload', err);
       return {};
     }
-  }, [campaign?.house_rules]);
+  }, [campaign]);
 
   if (!container || !campaign) {
     return null;
   }
+
+  const playerNames =
+    campaign.players && campaign.players.length > 0
+      ? campaign.players.map((player) => player.username ?? player.id)
+      : campaign.player_user_ids ?? [];
 
   const automationToggles = Object.entries(houseRules.automation ?? {}).filter(([, enabled]) => enabled);
   const hasWorldDetails = (houseRules.factions?.length ?? 0) > 0 || (houseRules.locations?.length ?? 0) > 0;
@@ -76,6 +156,9 @@ export function CampaignDashboard({ targetId = 'campaign-dashboard-root', campai
       <div className="campaign-dashboard__grid">
         <section className="campaign-dashboard__card">
           <h4>Roster</h4>
+          <p>
+            <strong>Players:</strong> {playerNames.length > 0 ? playerNames.join(', ') : 'No assigned players'}
+          </p>
           <p>
             <strong>Placeholders:</strong>{' '}
             {houseRules.placeholders?.length

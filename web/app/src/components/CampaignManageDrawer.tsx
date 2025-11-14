@@ -2,6 +2,7 @@ import { FormEvent, useEffect, useMemo, useState } from 'react';
 import { useEdition } from '../hooks/useEdition';
 import { CampaignSummary } from '../types/campaigns';
 import { GameplayRules, UserSummary } from '../types/editions';
+import { loadLocalPlayerDirectory } from '../utils/playerDirectory';
 
 interface Props {
   campaign: CampaignSummary;
@@ -70,6 +71,44 @@ function generateId(prefix: string): string {
   return `${prefix}-${Math.random().toString(36).slice(2, 10)}`;
 }
 
+function extractCampaignPlayerIds(campaign: CampaignSummary): string[] {
+  const ids = new Set<string>();
+  (campaign.player_user_ids ?? []).forEach((id) => {
+    if (typeof id === 'string' && id.trim().length > 0) {
+      ids.add(id.trim());
+    }
+  });
+  (campaign.players ?? []).forEach((player) => {
+    if (typeof player?.id === 'string' && player.id.trim().length > 0) {
+      ids.add(player.id.trim());
+    }
+  });
+  return Array.from(ids);
+}
+
+function isUserSummary(value: unknown): value is UserSummary {
+  if (!value || typeof value !== 'object') {
+    return false;
+  }
+  const entry = value as Partial<UserSummary>;
+  return (
+    typeof entry.id === 'string' &&
+    entry.id.trim().length > 0 &&
+    typeof entry.email === 'string' &&
+    typeof entry.username === 'string'
+  );
+}
+
+function normalizeUserSummaries(payload: unknown): UserSummary[] {
+  if (Array.isArray(payload)) {
+    return payload.filter(isUserSummary);
+  }
+  if (payload && typeof payload === 'object' && Array.isArray((payload as { users?: unknown }).users)) {
+    return (payload as { users: unknown[] }).users.filter(isUserSummary);
+  }
+  return [];
+}
+
 function ensureCollectionIds<T extends { id?: string }>(items: T[], prefix: string): Array<T & { id: string }> {
   return items.map((item) => ({
     id: item.id ?? generateId(prefix),
@@ -77,20 +116,21 @@ function ensureCollectionIds<T extends { id?: string }>(items: T[], prefix: stri
   }));
 }
 
-function parseHouseRules(source?: string | null): ParsedHouseRules {
+function createDefaultHouseRules(): StructuredHouseRules {
+  return {
+    automation: Object.fromEntries(AUTOMATION_DEFAULTS.map((key) => [key, false])),
+    notes: '',
+    theme: '',
+    factions: [],
+    locations: [],
+    placeholders: [],
+    sessionSeed: { title: '', objectives: '', sceneTemplate: '', summary: '', skip: false },
+  };
+}
+
+function parseLegacyHouseRules(source?: string | null): ParsedHouseRules {
   if (!source) {
-    return {
-      valid: true,
-      value: {
-        automation: Object.fromEntries(AUTOMATION_DEFAULTS.map((key) => [key, false])),
-        notes: '',
-        theme: '',
-        factions: [],
-        locations: [],
-        placeholders: [],
-        sessionSeed: { title: '', objectives: '', sceneTemplate: '', summary: '', skip: false },
-      },
-    };
+    return { valid: true, value: createDefaultHouseRules() };
   }
 
   try {
@@ -169,69 +209,204 @@ function parseHouseRules(source?: string | null): ParsedHouseRules {
   }
 }
 
-function buildHouseRulesPayload(state: StructuredHouseRules): string {
-  const next: Record<string, unknown> = {};
+function deriveHouseRulesStateFromCampaign(campaign: CampaignSummary) {
+  const defaults = createDefaultHouseRules();
+  const hasStructured =
+    typeof campaign.theme === 'string' ||
+    typeof campaign.house_rule_notes === 'string' ||
+    (campaign.automation && Object.keys(campaign.automation).length > 0) ||
+    (campaign.factions && campaign.factions.length > 0) ||
+    (campaign.locations && campaign.locations.length > 0) ||
+    (campaign.placeholders && campaign.placeholders.length > 0) ||
+    campaign.session_seed;
 
-  next.automation = state.automation;
-  if (state.theme.trim()) {
-    next.theme = state.theme.trim();
-  }
-  if (state.notes.trim()) {
-    next.notes = state.notes.trim();
-  }
+  if (hasStructured) {
+    const automation = { ...defaults.automation };
+    if (campaign.automation) {
+      Object.entries(campaign.automation).forEach(([key, value]) => {
+        if (key.trim().length === 0) {
+          return;
+        }
+        automation[key] = Boolean(value);
+      });
+    }
 
-  const factions = state.factions
-    .map((faction) => ({
-      ...faction,
-      name: faction.name.trim(),
-      tags: faction.tags?.trim() || undefined,
-      notes: faction.notes?.trim() || undefined,
-    }))
-    .filter((faction) => faction.name.length > 0);
-  if (factions.length > 0) {
-    next.factions = factions;
-  }
+    const factions = ensureCollectionIds(
+      (campaign.factions ?? []).map((faction) => ({
+        id: faction.id,
+        name: faction.name ?? '',
+        tags: faction.tags ?? '',
+        notes: faction.notes ?? '',
+      })),
+      'faction',
+    );
 
-  const locations = state.locations
-    .map((location) => ({
-      ...location,
-      name: location.name.trim(),
-      descriptor: location.descriptor?.trim() || undefined,
-    }))
-    .filter((location) => location.name.length > 0);
-  if (locations.length > 0) {
-    next.locations = locations;
-  }
+    const locations = ensureCollectionIds(
+      (campaign.locations ?? []).map((location) => ({
+        id: location.id,
+        name: location.name ?? '',
+        descriptor: location.descriptor ?? '',
+      })),
+      'location',
+    );
 
-  const placeholders = state.placeholders
-    .map((placeholder) => ({
-      ...placeholder,
-      name: placeholder.name.trim(),
-      role: placeholder.role.trim(),
-    }))
-    .filter((placeholder) => placeholder.name.length > 0);
-  if (placeholders.length > 0) {
-    next.placeholders = placeholders;
-  }
+    const placeholders = ensureCollectionIds(
+      (campaign.placeholders ?? []).map((placeholder) => ({
+        id: placeholder.id,
+        name: placeholder.name ?? '',
+        role: placeholder.role ?? '',
+      })),
+      'placeholder',
+    );
 
-  if (state.sessionSeed.skip) {
-    next.session_seed = { skip: true };
-  } else if (
-    state.sessionSeed.title.trim() ||
-    state.sessionSeed.objectives.trim() ||
-    state.sessionSeed.sceneTemplate.trim() ||
-    state.sessionSeed.summary.trim()
-  ) {
-    next.session_seed = {
-      title: state.sessionSeed.title.trim() || undefined,
-      objectives: state.sessionSeed.objectives.trim() || undefined,
-      sceneTemplate: state.sessionSeed.sceneTemplate.trim() || undefined,
-      summary: state.sessionSeed.summary.trim() || undefined,
-      skip: false,
+    const sessionSeedSource = campaign.session_seed;
+    const sessionSeed: SessionSeedState = sessionSeedSource
+      ? {
+          title: sessionSeedSource.title ?? '',
+          objectives: sessionSeedSource.objectives ?? '',
+          sceneTemplate: sessionSeedSource.sceneTemplate ?? '',
+          summary: sessionSeedSource.summary ?? '',
+          skip: Boolean(sessionSeedSource.skip),
+        }
+      : defaults.sessionSeed;
+
+    return {
+      structured: {
+        automation,
+        notes: campaign.house_rule_notes ?? '',
+        theme: campaign.theme ?? '',
+        factions,
+        locations,
+        placeholders,
+        sessionSeed,
+      },
+      rawLegacy: '',
+      isRawMode: false,
     };
   }
 
-  return JSON.stringify(next, null, 2);
+  const legacy = parseLegacyHouseRules(campaign.house_rules);
+  if (legacy.valid) {
+    return {
+      structured: legacy.value,
+      rawLegacy: '',
+      isRawMode: false,
+    };
+  }
+
+  return {
+    structured: defaults,
+    rawLegacy: legacy.raw,
+    isRawMode: true,
+  };
+}
+
+function buildHouseRulesPayload(state: StructuredHouseRules) {
+  const defaults = createDefaultHouseRules();
+  const automationKeys = new Set<string>([
+    ...Object.keys(defaults.automation),
+    ...Object.keys(state.automation ?? {}),
+  ]);
+
+  const automation: Record<string, boolean> = {};
+  automationKeys.forEach((key) => {
+    automation[key] = Boolean(state.automation?.[key]);
+  });
+
+  const sanitize = (value: string) => value.trim();
+
+  const factions = ensureCollectionIds(
+    state.factions
+      .map((faction) => ({
+        id: faction.id,
+        name: sanitize(faction.name),
+        tags: faction.tags?.trim() || undefined,
+        notes: faction.notes?.trim() || undefined,
+      }))
+      .filter((faction) => faction.name.length > 0),
+    'faction',
+  );
+
+  const locations = ensureCollectionIds(
+    state.locations
+      .map((location) => ({
+        id: location.id,
+        name: sanitize(location.name),
+        descriptor: location.descriptor?.trim() || undefined,
+      }))
+      .filter((location) => location.name.length > 0),
+    'location',
+  );
+
+  const placeholders = ensureCollectionIds(
+    state.placeholders
+      .map((placeholder) => ({
+        id: placeholder.id,
+        name: sanitize(placeholder.name),
+        role: sanitize(placeholder.role),
+      }))
+      .filter((placeholder) => placeholder.name.length > 0),
+    'placeholder',
+  );
+
+  const sessionSeed: SessionSeedState = {
+    title: sanitize(state.sessionSeed.title),
+    objectives: sanitize(state.sessionSeed.objectives),
+    sceneTemplate: sanitize(state.sessionSeed.sceneTemplate),
+    summary: sanitize(state.sessionSeed.summary),
+    skip: Boolean(state.sessionSeed.skip),
+  };
+
+  const structured: StructuredHouseRules = {
+    automation,
+    notes: sanitize(state.notes),
+    theme: sanitize(state.theme),
+    factions,
+    locations,
+    placeholders,
+    sessionSeed,
+  };
+
+  const legacyPayload: Record<string, unknown> = { automation };
+  if (structured.theme) {
+    legacyPayload.theme = structured.theme;
+  }
+  if (structured.notes) {
+    legacyPayload.notes = structured.notes;
+  }
+  if (structured.factions.length > 0) {
+    legacyPayload.factions = structured.factions;
+  }
+  if (structured.locations.length > 0) {
+    legacyPayload.locations = structured.locations;
+  }
+  if (structured.placeholders.length > 0) {
+    legacyPayload.placeholders = structured.placeholders;
+  }
+
+  const hasSessionSeedContent =
+    sessionSeed.skip ||
+    sessionSeed.title ||
+    sessionSeed.objectives ||
+    sessionSeed.sceneTemplate ||
+    sessionSeed.summary;
+
+  if (hasSessionSeedContent) {
+    legacyPayload.session_seed = sessionSeed.skip
+      ? { skip: true }
+      : {
+          title: sessionSeed.title || undefined,
+          objectives: sessionSeed.objectives || undefined,
+          sceneTemplate: sessionSeed.sceneTemplate || undefined,
+          summary: sessionSeed.summary || undefined,
+          skip: false,
+        };
+  }
+
+  return {
+    structured,
+    legacy: JSON.stringify(legacyPayload, null, 2),
+  };
 }
 
 export function CampaignManageDrawer({ campaign, gmUsers, gameplayRules, onClose, onSave }: Props) {
@@ -247,55 +422,47 @@ export function CampaignManageDrawer({ campaign, gmUsers, gameplayRules, onClose
   const [isSaving, setIsSaving] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  const parsedHouseRules = useMemo(() => parseHouseRules(campaign.house_rules), [campaign.house_rules]);
-  const [rawHouseRules, setRawHouseRules] = useState(parsedHouseRules.valid ? '' : parsedHouseRules.raw);
+  const initialHouseRules = useMemo(() => deriveHouseRulesStateFromCampaign(campaign), [campaign]);
 
-  const [theme, setTheme] = useState(parsedHouseRules.valid ? parsedHouseRules.value.theme : '');
-  const [notes, setNotes] = useState(parsedHouseRules.valid ? parsedHouseRules.value.notes : '');
-  const [automation, setAutomation] = useState<Record<string, boolean>>(
-    parsedHouseRules.valid ? parsedHouseRules.value.automation : {},
-  );
-  const [factions, setFactions] = useState<Faction[]>(parsedHouseRules.valid ? parsedHouseRules.value.factions : []);
-  const [locations, setLocations] = useState<Location[]>(parsedHouseRules.valid ? parsedHouseRules.value.locations : []);
-  const [placeholders, setPlaceholders] = useState<Placeholder[]>(
-    parsedHouseRules.valid ? parsedHouseRules.value.placeholders : [],
-  );
-  const [sessionSeed, setSessionSeed] = useState<SessionSeedState>(
-    parsedHouseRules.valid
-      ? parsedHouseRules.value.sessionSeed
-      : { title: '', objectives: '', sceneTemplate: '', summary: '', skip: false },
-  );
+  const [rawHouseRules, setRawHouseRules] = useState(initialHouseRules.rawLegacy);
+  const [isRawMode, setIsRawMode] = useState(initialHouseRules.isRawMode);
+
+  const [theme, setTheme] = useState(initialHouseRules.structured.theme);
+  const [notes, setNotes] = useState(initialHouseRules.structured.notes);
+  const [automation, setAutomation] = useState<Record<string, boolean>>(initialHouseRules.structured.automation);
+  const [factions, setFactions] = useState<Faction[]>(initialHouseRules.structured.factions);
+  const [locations, setLocations] = useState<Location[]>(initialHouseRules.structured.locations);
+  const [placeholders, setPlaceholders] = useState<Placeholder[]>(initialHouseRules.structured.placeholders);
+  const [sessionSeed, setSessionSeed] = useState<SessionSeedState>(initialHouseRules.structured.sessionSeed);
   const [factionFilter, setFactionFilter] = useState('');
   const [locationFilter, setLocationFilter] = useState('');
   const [isFactionLibraryOpen, setFactionLibraryOpen] = useState(false);
   const [isLocationLibraryOpen, setLocationLibraryOpen] = useState(false);
+  const [playerUsers, setPlayerUsers] = useState<UserSummary[]>(() => loadLocalPlayerDirectory());
+  const [playerFilter, setPlayerFilter] = useState('');
+  const [isPlayerLibraryOpen, setPlayerLibraryOpen] = useState(false);
+  const [selectedPlayerUserIds, setSelectedPlayerUserIds] = useState<string[]>(() =>
+    extractCampaignPlayerIds(campaign),
+  );
 
   useEffect(() => {
     setName(campaign.name);
     setGmUserId(campaign.gm_user_id ?? '');
     setStatus(campaign.status ?? 'Active');
 
-    const update = parseHouseRules(campaign.house_rules);
-    if (!update.valid) {
-      setRawHouseRules(update.raw);
-      setTheme('');
-      setNotes('');
-      setAutomation({});
-      setFactions([]);
-      setLocations([]);
-      setPlaceholders([]);
-      setSessionSeed({ title: '', objectives: '', sceneTemplate: '', summary: '', skip: false });
-      return;
-    }
-
-    setRawHouseRules('');
-    setTheme(update.value.theme);
-    setNotes(update.value.notes);
-    setAutomation(update.value.automation);
-    setFactions(update.value.factions);
-    setLocations(update.value.locations);
-    setPlaceholders(update.value.placeholders);
-    setSessionSeed(update.value.sessionSeed);
+    const next = deriveHouseRulesStateFromCampaign(campaign);
+    setRawHouseRules(next.rawLegacy);
+    setIsRawMode(next.isRawMode);
+    setTheme(next.structured.theme);
+    setNotes(next.structured.notes);
+    setAutomation(next.structured.automation);
+    setFactions(next.structured.factions);
+    setLocations(next.structured.locations);
+    setPlaceholders(next.structured.placeholders);
+    setSessionSeed(next.structured.sessionSeed);
+    setSelectedPlayerUserIds(extractCampaignPlayerIds(campaign));
+    setPlayerFilter('');
+    setPlayerLibraryOpen(false);
   }, [campaign]);
 
   useEffect(() => {
@@ -312,8 +479,58 @@ export function CampaignManageDrawer({ campaign, gmUsers, gameplayRules, onClose
     }));
   }, [gmUsers]);
 
+  const playerRosterLookup = useMemo(() => {
+    const map = new Map<string, { username?: string | null; email?: string | null }>();
+    (campaign.players ?? []).forEach((player) => {
+      if (player?.id) {
+        map.set(player.id, { username: player.username ?? null, email: null });
+      }
+    });
+    playerUsers.forEach((user) => {
+      if (user?.id) {
+        map.set(user.id, { username: user.username ?? null, email: user.email ?? null });
+      }
+    });
+    return map;
+  }, [campaign.players, playerUsers]);
+
+  const selectedPlayerDetails = useMemo(
+    () =>
+      selectedPlayerUserIds.map((id) => {
+        const entry = playerRosterLookup.get(id);
+        const username = entry?.username?.trim() || id;
+        const email = entry?.email?.trim() || null;
+        return { id, username, email };
+      }),
+    [playerRosterLookup, selectedPlayerUserIds],
+  );
+
+  const sortedSelectedPlayerDetails = useMemo(() => {
+    return [...selectedPlayerDetails].sort((a, b) => {
+      const aPrimary = (a.username || a.id || '').toLowerCase();
+      const bPrimary = (b.username || b.id || '').toLowerCase();
+      const comparison = aPrimary.localeCompare(bPrimary);
+      if (comparison !== 0) {
+        return comparison;
+      }
+      return a.id.localeCompare(b.id);
+    });
+  }, [selectedPlayerDetails]);
+
+  const selectedPlayerIds = useMemo(() => new Set(selectedPlayerUserIds), [selectedPlayerUserIds]);
+
+  const filteredPlayerUsers = useMemo(() => {
+    const normalizedFilter = playerFilter.trim().toLowerCase();
+    if (!normalizedFilter) {
+      return playerUsers;
+    }
+    return playerUsers.filter((user) => {
+      const username = (user.username ?? '').toLowerCase();
+      return username.includes(normalizedFilter);
+    });
+  }, [playerFilter, playerUsers]);
+
   const disableSave = isSaving || name.trim().length === 0 || (gmUsers.length > 0 && !gmUserId);
-  const isRawMode = !parsedHouseRules.valid;
 
   async function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -325,25 +542,78 @@ export function CampaignManageDrawer({ campaign, gmUsers, gameplayRules, onClose
     try {
       const gmUser = gmUsers.find((user) => user.id === gmUserId);
 
-      const houseRulesPayload = isRawMode
-        ? rawHouseRules.trim()
-        : buildHouseRulesPayload({
-            automation,
-            notes,
-            theme,
-            factions,
-            locations,
-            placeholders,
-            sessionSeed,
-          });
+      const normalizedPlayerIds = Array.from(
+        new Set(
+          selectedPlayerUserIds
+            .map((id) => id.trim())
+            .filter((id) => id.length > 0),
+        ),
+      );
 
-      await onSave({
-        name: name.trim(),
-        gm_user_id: gmUserId || undefined,
-        gm_name: gmUser?.username ?? gmUser?.email ?? '',
-        status,
-        house_rules: houseRulesPayload,
+      const detailMap = new Map(selectedPlayerDetails.map((player) => [player.id, player]));
+      const playersPayload = normalizedPlayerIds.map((id) => {
+        const detail = detailMap.get(id);
+        const username = detail?.username?.trim() || id;
+        return { id, username };
       });
+
+      if (isRawMode) {
+        await onSave({
+          name: name.trim(),
+          gm_user_id: gmUserId || undefined,
+          gm_name: gmUser?.username ?? gmUser?.email ?? '',
+          status,
+          player_user_ids: normalizedPlayerIds,
+          players: playersPayload,
+          house_rules: rawHouseRules.trim(),
+        });
+      } else {
+        const { structured, legacy } = buildHouseRulesPayload({
+          automation,
+          notes,
+          theme,
+          factions,
+          locations,
+          placeholders,
+          sessionSeed,
+        });
+
+        const hasSessionSeedContent =
+          structured.sessionSeed.skip ||
+          structured.sessionSeed.title ||
+          structured.sessionSeed.objectives ||
+          structured.sessionSeed.sceneTemplate ||
+          structured.sessionSeed.summary;
+
+        const sessionSeedPayload = hasSessionSeedContent
+          ? structured.sessionSeed.skip
+            ? { skip: true }
+            : {
+                title: structured.sessionSeed.title || undefined,
+                objectives: structured.sessionSeed.objectives || undefined,
+                sceneTemplate: structured.sessionSeed.sceneTemplate || undefined,
+                summary: structured.sessionSeed.summary || undefined,
+                skip: false,
+              }
+          : null;
+
+        await onSave({
+          name: name.trim(),
+          gm_user_id: gmUserId || undefined,
+          gm_name: gmUser?.username ?? gmUser?.email ?? '',
+          status,
+          theme: structured.theme,
+          house_rule_notes: structured.notes,
+          automation: structured.automation,
+          factions: structured.factions,
+          locations: structured.locations,
+          placeholders: structured.placeholders,
+          session_seed: sessionSeedPayload ?? undefined,
+          player_user_ids: normalizedPlayerIds,
+          players: playersPayload,
+          house_rules: legacy,
+        });
+      }
       await loadCampaignCharacterCreation(campaign.id);
       onClose();
     } catch (err) {
@@ -464,6 +734,96 @@ export function CampaignManageDrawer({ campaign, gmUsers, gameplayRules, onClose
                   ))}
                 </select>
               </div>
+            </section>
+
+            <section>
+              <h4 className="campaign-manage__section-title">Players</h4>
+              <p className="campaign-manage__hint">
+                Assign registered players to give them dashboard access and keep everyone in sync.
+              </p>
+              {playerUsers.length > 0 ? (
+                <div className="campaign-manage__preset">
+                  <button
+                    type="button"
+                    className="btn-secondary"
+                    onClick={() => setPlayerLibraryOpen((open) => !open)}
+                    aria-expanded={isPlayerLibraryOpen}
+                    aria-controls="campaign-player-search-panel"
+                  >
+                    {isPlayerLibraryOpen ? 'Hide player search' : 'Search player accounts'}
+                  </button>
+                  {isPlayerLibraryOpen && (
+                    <div
+                      id="campaign-player-search-panel"
+                      className="campaign-manage__preset-panel"
+                      role="region"
+                      aria-label="Player account search"
+                    >
+                      <input
+                        type="search"
+                        placeholder="Search players by username…"
+                        value={playerFilter}
+                        onChange={(event) => setPlayerFilter(event.target.value)}
+                      />
+                      <div className="campaign-manage__preset-scroll">
+                        {filteredPlayerUsers.length === 0 ? (
+                          <p className="campaign-manage__empty">No players match that search.</p>
+                        ) : (
+                          filteredPlayerUsers.map((player, index) => (
+                            <button
+                              key={player.id ?? player.email ?? player.username ?? `player-${index}`}
+                              type="button"
+                              className={`campaign-manage__preset-option${
+                                player.id && selectedPlayerIds.has(player.id) ? ' campaign-manage__preset-option--disabled' : ''
+                              }`}
+                              onClick={() => {
+                                if (!player.id || selectedPlayerIds.has(player.id)) {
+                                  return;
+                                }
+                                setSelectedPlayerUserIds((current) => [...current, player.id ?? '']);
+                              }}
+                              disabled={!player.id || selectedPlayerIds.has(player.id)}
+                            >
+                              <span className="campaign-manage__preset-name">
+                                {player.username || player.id || 'Unknown player'}
+                              </span>
+                              {player.id && selectedPlayerIds.has(player.id) && (
+                                <span className="campaign-manage__preset-tags">Already added</span>
+                              )}
+                            </button>
+                          ))
+                        )}
+                      </div>
+                    </div>
+                  )}
+                </div>
+              ) : (
+                <p className="campaign-manage__empty">
+                  No player accounts found yet. Invite players to assign them here.
+                </p>
+              )}
+              {sortedSelectedPlayerDetails.length > 0 ? (
+                <ul className="campaign-selected-players">
+                  {sortedSelectedPlayerDetails.map((player) => (
+                    <li key={player.id} className="campaign-selected-players__item">
+                      <div>
+                        <strong>{player.username || player.id}</strong>
+                      </div>
+                      <button
+                        type="button"
+                        className="btn-link"
+                        onClick={() =>
+                          setSelectedPlayerUserIds((current) => current.filter((id) => id !== player.id))
+                        }
+                      >
+                        Remove
+                      </button>
+                    </li>
+                  ))}
+                </ul>
+              ) : (
+                <p className="campaign-manage__empty">No players assigned yet.</p>
+              )}
             </section>
 
             {isRawMode ? (

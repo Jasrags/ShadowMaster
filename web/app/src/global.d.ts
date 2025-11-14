@@ -7,3 +7,5 @@ declare global {
     openCharacterWizard?: (campaignId?: string | null) => void;
   }
 }
+
+export {};

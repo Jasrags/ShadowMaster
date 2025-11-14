@@ -5,6 +5,9 @@ import (
 	"shadowmaster/internal/domain"
 	"shadowmaster/pkg/storage"
 	"testing"
+
+	"github.com/stretchr/testify/assert"
+	"github.com/stretchr/testify/require"
 )
 
 func TestCampaignRepositoryDefaultsAndNormalization(t *testing.T) {
@@ -105,4 +108,63 @@ func TestCampaignRepositoryDefaultsAndNormalization(t *testing.T) {
 	if reloaded.SetupLockedAt.IsZero() {
 		t.Fatal("expected migrated campaign to have setup lock timestamp")
 	}
+}
+
+func TestCampaignRepositoryBackfillHouseRules(t *testing.T) {
+	dir := t.TempDir()
+	store, err := storage.NewJSONStore(dir)
+	require.NoError(t, err)
+
+	legacy := &domain.Campaign{
+		ID:         "legacy",
+		Name:       "Legacy Run",
+		Edition:    "sr5",
+		HouseRules: `{"automation":{"init_tracking":true,"recoil":false},"notes":"  sticky note  ","theme":"  Neon Nights  ","factions":[{"id":" f1 ","name":"  Ares Macrotechnology ","tags":"Corporate"}],"locations":[{"id":"l1","name":"  Safehouse ","descriptor":" Downtown "}],"placeholders":[{"id":"p1","name":"  Runner ","role":" Face "}],"session_seed":{"title":"  Session Zero ","objectives":" Introductions ","scene_template":" social_meetup ","summary":" meet the fixer "},"players":[{"id":" player-1 ","username":" PlayerOne "},{"id":"player-1","username":"Duplicate"},{"id":"player-2","username":" PlayerTwo "}]}`,
+	}
+	require.NoError(t, store.Write(filepath.Join("campaigns", legacy.ID+".json"), legacy))
+
+	index := NewIndex()
+	index.Campaigns[legacy.ID] = filepath.Join("campaigns", legacy.ID+".json")
+
+	repo := NewCampaignRepository(store, index)
+
+	result, err := repo.GetByID(legacy.ID)
+	require.NoError(t, err)
+
+	assert.Equal(t, "Neon Nights", result.Theme)
+	assert.Equal(t, "sticky note", result.HouseRuleNotes)
+	assert.Equal(t, map[string]bool{"init_tracking": true, "recoil": false}, result.Automation)
+	require.Len(t, result.Factions, 1)
+	assert.Equal(t, "f1", result.Factions[0].ID)
+	assert.Equal(t, "Ares Macrotechnology", result.Factions[0].Name)
+	assert.Equal(t, "Corporate", result.Factions[0].Tags)
+	require.Len(t, result.Locations, 1)
+	assert.Equal(t, "l1", result.Locations[0].ID)
+	assert.Equal(t, "Safehouse", result.Locations[0].Name)
+	assert.Equal(t, "Downtown", result.Locations[0].Descriptor)
+	require.Len(t, result.Placeholders, 1)
+	assert.Equal(t, "p1", result.Placeholders[0].ID)
+	assert.Equal(t, "Runner", result.Placeholders[0].Name)
+	assert.Equal(t, "Face", result.Placeholders[0].Role)
+	require.NotNil(t, result.SessionSeed)
+	assert.Equal(t, "Session Zero", result.SessionSeed.Title)
+	assert.Equal(t, "Introductions", result.SessionSeed.Objectives)
+	assert.Equal(t, "social_meetup", result.SessionSeed.SceneTemplate)
+	assert.Equal(t, "meet the fixer", result.SessionSeed.Summary)
+	assert.False(t, result.SessionSeed.Skip)
+
+	require.Len(t, result.PlayerUserIDs, 2)
+	assert.ElementsMatch(t, []string{"player-1", "player-2"}, result.PlayerUserIDs)
+	require.Len(t, result.Players, 2)
+	assert.Equal(t, "player-1", result.Players[0].ID)
+	assert.Equal(t, "PlayerOne", result.Players[0].Username)
+	assert.Equal(t, "player-2", result.Players[1].ID)
+	assert.Equal(t, "PlayerTwo", result.Players[1].Username)
+
+	// ensure the backfill wrote the updated campaign back to disk
+	reloaded := &domain.Campaign{}
+	require.NoError(t, store.Read(filepath.Join("campaigns", legacy.ID+".json"), reloaded))
+	assert.Equal(t, result.Theme, reloaded.Theme)
+	assert.Equal(t, result.HouseRuleNotes, reloaded.HouseRuleNotes)
+	assert.Equal(t, result.Automation, reloaded.Automation)
 }

@@ -36,6 +36,15 @@ type CampaignCreateInput struct {
 	Edition        string
 	CreationMethod string
 	GameplayLevel  string
+	Theme          string
+	HouseRuleNotes string
+	Automation     map[string]bool
+	Factions       []domain.CampaignFaction
+	Locations      []domain.CampaignLocation
+	Placeholders   []domain.CampaignPlaceholder
+	SessionSeed    *domain.CampaignSessionSeed
+	PlayerUserIDs  []string
+	Players        []domain.CampaignPlayerReference
 	HouseRules     string
 	Status         string
 	EnabledBooks   []string
@@ -48,6 +57,15 @@ type CampaignUpdateInput struct {
 	GMName         *string
 	GMUserID       *string
 	GameplayLevel  *string
+	Theme          *string
+	HouseRuleNotes *string
+	Automation     *map[string]bool
+	Factions       *[]domain.CampaignFaction
+	Locations      *[]domain.CampaignLocation
+	Placeholders   *[]domain.CampaignPlaceholder
+	SessionSeed    **domain.CampaignSessionSeed
+	PlayerUserIDs  *[]string
+	Players        *[]domain.CampaignPlayerReference
 	HouseRules     *string
 	Status         *string
 	CreationMethod *string
@@ -91,6 +109,14 @@ func (s *CampaignService) CreateCampaign(input CampaignCreateInput) (*domain.Cam
 		return nil, err
 	}
 
+	automation := cloneAutomation(input.Automation)
+	factions := cloneFactions(input.Factions)
+	locations := cloneLocations(input.Locations)
+	placeholders := clonePlaceholders(input.Placeholders)
+	sessionSeed := cloneSessionSeed(input.SessionSeed)
+	playerUserIDs := normalizePlayerUserIDs(input.PlayerUserIDs)
+	players := clonePlayerReferences(input.Players)
+
 	campaign := &domain.Campaign{
 		Name:           strings.TrimSpace(input.Name),
 		Description:    strings.TrimSpace(input.Description),
@@ -100,6 +126,15 @@ func (s *CampaignService) CreateCampaign(input CampaignCreateInput) (*domain.Cam
 		Edition:        edition,
 		CreationMethod: creationMethod,
 		GameplayLevel:  gameplayLevel,
+		Theme:          strings.TrimSpace(input.Theme),
+		HouseRuleNotes: strings.TrimSpace(input.HouseRuleNotes),
+		Automation:     automation,
+		Factions:       factions,
+		Locations:      locations,
+		Placeholders:   placeholders,
+		SessionSeed:    sessionSeed,
+		PlayerUserIDs:  playerUserIDs,
+		Players:        players,
 		HouseRules:     strings.TrimSpace(input.HouseRules),
 		Status:         campaignStatusOrDefault(input.Status, ""),
 		EnabledBooks:   enabledBooks,
@@ -144,6 +179,33 @@ func (s *CampaignService) UpdateCampaign(id string, input CampaignUpdateInput) (
 	if input.GMUserID != nil {
 		campaign.GmUserID = strings.TrimSpace(*input.GMUserID)
 	}
+	if input.Theme != nil {
+		campaign.Theme = strings.TrimSpace(*input.Theme)
+	}
+	if input.HouseRuleNotes != nil {
+		campaign.HouseRuleNotes = strings.TrimSpace(*input.HouseRuleNotes)
+	}
+	if input.Automation != nil {
+		campaign.Automation = cloneAutomation(*input.Automation)
+	}
+	if input.Factions != nil {
+		campaign.Factions = cloneFactions(*input.Factions)
+	}
+	if input.Locations != nil {
+		campaign.Locations = cloneLocations(*input.Locations)
+	}
+	if input.Placeholders != nil {
+		campaign.Placeholders = clonePlaceholders(*input.Placeholders)
+	}
+	if input.SessionSeed != nil {
+		campaign.SessionSeed = cloneSessionSeed(*input.SessionSeed)
+	}
+	if input.PlayerUserIDs != nil {
+		campaign.PlayerUserIDs = normalizePlayerUserIDs(*input.PlayerUserIDs)
+	}
+	if input.Players != nil {
+		campaign.Players = clonePlayerReferences(*input.Players)
+	}
 	if input.HouseRules != nil {
 		campaign.HouseRules = strings.TrimSpace(*input.HouseRules)
 	}
@@ -184,6 +246,160 @@ func (s *CampaignService) UpdateCampaign(id string, input CampaignUpdateInput) (
 // DeleteCampaign removes a campaign.
 func (s *CampaignService) DeleteCampaign(id string) error {
 	return s.campaignRepo.Delete(id)
+}
+
+func cloneAutomation(source map[string]bool) map[string]bool {
+	if len(source) == 0 {
+		return nil
+	}
+	result := make(map[string]bool, len(source))
+	for key, value := range source {
+		trimmed := strings.TrimSpace(key)
+		if trimmed == "" {
+			continue
+		}
+		result[trimmed] = value
+	}
+	if len(result) == 0 {
+		return nil
+	}
+	return result
+}
+
+func cloneFactions(source []domain.CampaignFaction) []domain.CampaignFaction {
+	if len(source) == 0 {
+		return nil
+	}
+	result := make([]domain.CampaignFaction, 0, len(source))
+	for _, faction := range source {
+		id := strings.TrimSpace(faction.ID)
+		name := strings.TrimSpace(faction.Name)
+		if id == "" && name == "" {
+			continue
+		}
+		result = append(result, domain.CampaignFaction{
+			ID:    id,
+			Name:  name,
+			Tags:  strings.TrimSpace(faction.Tags),
+			Notes: strings.TrimSpace(faction.Notes),
+		})
+	}
+	if len(result) == 0 {
+		return nil
+	}
+	return result
+}
+
+func cloneLocations(source []domain.CampaignLocation) []domain.CampaignLocation {
+	if len(source) == 0 {
+		return nil
+	}
+	result := make([]domain.CampaignLocation, 0, len(source))
+	for _, location := range source {
+		id := strings.TrimSpace(location.ID)
+		name := strings.TrimSpace(location.Name)
+		if id == "" && name == "" {
+			continue
+		}
+		result = append(result, domain.CampaignLocation{
+			ID:         id,
+			Name:       name,
+			Descriptor: strings.TrimSpace(location.Descriptor),
+		})
+	}
+	if len(result) == 0 {
+		return nil
+	}
+	return result
+}
+
+func clonePlaceholders(source []domain.CampaignPlaceholder) []domain.CampaignPlaceholder {
+	if len(source) == 0 {
+		return nil
+	}
+	result := make([]domain.CampaignPlaceholder, 0, len(source))
+	for _, placeholder := range source {
+		id := strings.TrimSpace(placeholder.ID)
+		name := strings.TrimSpace(placeholder.Name)
+		if id == "" && name == "" {
+			continue
+		}
+		result = append(result, domain.CampaignPlaceholder{
+			ID:   id,
+			Name: name,
+			Role: strings.TrimSpace(placeholder.Role),
+		})
+	}
+	if len(result) == 0 {
+		return nil
+	}
+	return result
+}
+
+func cloneSessionSeed(seed *domain.CampaignSessionSeed) *domain.CampaignSessionSeed {
+	if seed == nil {
+		return nil
+	}
+	copy := &domain.CampaignSessionSeed{
+		Title:         strings.TrimSpace(seed.Title),
+		Objectives:    strings.TrimSpace(seed.Objectives),
+		SceneTemplate: strings.TrimSpace(seed.SceneTemplate),
+		Summary:       strings.TrimSpace(seed.Summary),
+		Skip:          seed.Skip,
+	}
+	if copy.Title == "" && copy.Objectives == "" && copy.SceneTemplate == "" && copy.Summary == "" && !copy.Skip {
+		return nil
+	}
+	return copy
+}
+
+func normalizePlayerUserIDs(source []string) []string {
+	if len(source) == 0 {
+		return nil
+	}
+	seen := make(map[string]struct{}, len(source))
+	result := make([]string, 0, len(source))
+	for _, id := range source {
+		trimmed := strings.TrimSpace(id)
+		if trimmed == "" {
+			continue
+		}
+		if _, exists := seen[trimmed]; exists {
+			continue
+		}
+		seen[trimmed] = struct{}{}
+		result = append(result, trimmed)
+	}
+	if len(result) == 0 {
+		return nil
+	}
+	return result
+}
+
+func clonePlayerReferences(source []domain.CampaignPlayerReference) []domain.CampaignPlayerReference {
+	if len(source) == 0 {
+		return nil
+	}
+	seen := make(map[string]struct{}, len(source))
+	result := make([]domain.CampaignPlayerReference, 0, len(source))
+	for _, player := range source {
+		id := strings.TrimSpace(player.ID)
+		if id == "" {
+			continue
+		}
+		if _, exists := seen[id]; exists {
+			continue
+		}
+		seen[id] = struct{}{}
+		result = append(result, domain.CampaignPlayerReference{
+			ID:       id,
+			Username: strings.TrimSpace(player.Username),
+		})
+	}
+	if len(result) == 0 {
+		return nil
+	}
+	return result
 }
 
 func sanitizeMethod(method string) string {

@@ -2,6 +2,7 @@ import { FormEvent, RefObject, useCallback, useEffect, useMemo, useReducer, useR
 import { createPortal } from 'react-dom';
 import { useEdition } from '../hooks/useEdition';
 import { CharacterCreationData, CreationMethodDefinition, SourceBook, UserSummary } from '../types/editions';
+import { loadLocalPlayerDirectory } from '../utils/playerDirectory';
 import { CharacterSummary } from '../types/characters';
 import { CampaignSummary } from '../types/campaigns';
 import { useNotifications } from '../context/NotificationContext';
@@ -42,6 +43,8 @@ const AUTOMATION_TOGGLES = [
   },
 ];
 
+const AUTOMATION_DEFAULTS = AUTOMATION_TOGGLES.map((toggle) => toggle.key);
+
 const SESSION_TEMPLATES = [
   { value: 'blank', label: 'Blank session', description: 'Start fresh with your own outline.' },
   {
@@ -60,6 +63,50 @@ const SESSION_TEMPLATES = [
     description: 'Magically oriented scene to explore astral threats or allies.',
   },
 ];
+
+function resolveApiPath(path: string): string {
+  if (typeof window === 'undefined' || !window.location?.origin) {
+    return path;
+  }
+  try {
+    return new URL(path, window.location.origin).toString();
+  } catch {
+    return path;
+  }
+}
+
+function shouldSkipPlayerFetch(): boolean {
+  if (typeof window === 'undefined') {
+    return true;
+  }
+  if (typeof import.meta !== 'undefined' && import.meta.env?.MODE === 'test') {
+    return true;
+  }
+  return false;
+}
+
+function isUserSummary(value: unknown): value is UserSummary {
+  if (!value || typeof value !== 'object') {
+    return false;
+  }
+  const entry = value as Partial<UserSummary>;
+  return (
+    typeof entry.id === 'string' &&
+    entry.id.trim().length > 0 &&
+    typeof entry.email === 'string' &&
+    typeof entry.username === 'string'
+  );
+}
+
+function normalizeUserSummaries(payload: unknown): UserSummary[] {
+  if (Array.isArray(payload)) {
+    return payload.filter(isUserSummary);
+  }
+  if (payload && typeof payload === 'object' && Array.isArray((payload as { users?: unknown }).users)) {
+    return (payload as { users: unknown[] }).users.filter(isUserSummary);
+  }
+  return [];
+}
 
 function generateId(prefix: string) {
   if (typeof crypto !== 'undefined' && crypto.randomUUID) {
@@ -311,7 +358,7 @@ export function CampaignCreation({ targetId = 'campaign-creation-react-root', on
   const [selectedGameplayLevel, setSelectedGameplayLevel] = useState<string>('experienced');
   const [selectedCreationMethod, setSelectedCreationMethod] = useState<string>('priority');
   const [users, setUsers] = useState<UserSummary[]>([]);
-  const [playerUsers, setPlayerUsers] = useState<UserSummary[]>([]);
+  const [playerUsers, setPlayerUsers] = useState<UserSummary[]>(() => loadLocalPlayerDirectory());
   const [creationMethods, setCreationMethods] = useState<Record<string, CreationMethodDefinition>>({});
   const [creationMethodOptions, setCreationMethodOptions] = useState<Option[]>(DEFAULT_CREATION_METHOD_OPTIONS);
   const [isOpen, setIsOpen] = useState(false);
@@ -488,6 +535,42 @@ export function CampaignCreation({ targetId = 'campaign-creation-react-root', on
   }, []);
 
   useEffect(() => {
+    let cancelled = false;
+
+    async function loadPlayers() {
+      if (shouldSkipPlayerFetch()) {
+        return;
+      }
+      try {
+        const response = await fetch(resolveApiPath('/api/users?role=player'), {
+          credentials: 'include',
+        });
+        if (!response.ok) {
+          throw new Error(`Failed to load player roster (${response.status})`);
+        }
+        const payload = (await response.json()) as unknown;
+        const normalized = normalizeUserSummaries(payload)
+          .filter((user) => Array.isArray(user.roles) && user.roles.includes('player'))
+          .map((user) => ({
+            ...user,
+            username: user.username.trim(),
+          }));
+        if (!cancelled && normalized.length > 0) {
+          setPlayerUsers(normalized);
+        }
+      } catch (err) {
+        console.warn('Failed to load player roster', err);
+      }
+    }
+
+    void loadPlayers();
+
+    return () => {
+      cancelled = true;
+    };
+  }, []);
+
+  useEffect(() => {
     async function loadCharacters() {
       try {
         const response = await fetch('/api/characters');
@@ -549,28 +632,6 @@ export function CampaignCreation({ targetId = 'campaign-creation-react-root', on
     }
   }, [creationMethodOptions, selectedCreationMethod]);
 
-  useEffect(() => {
-    async function loadPlayers() {
-      try {
-        const response = await fetch('/api/users?role=player');
-        if (!response.ok) {
-          throw new Error(`Failed to load player roster (${response.status})`);
-        }
-        const payload: UserSummary[] = await response.json();
-        if (!Array.isArray(payload)) {
-          setPlayerUsers([]);
-          return;
-        }
-        setPlayerUsers(payload);
-      } catch (err) {
-        console.error('Failed to load player roster', err);
-        setPlayerUsers([]);
-      }
-    }
-
-    void loadPlayers();
-  }, []);
-
   const editionOptions = useMemo<Option[]>(() => {
     return supportedEditions.map((edition) => ({
       label: edition.label,
@@ -590,19 +651,31 @@ export function CampaignCreation({ targetId = 'campaign-creation-react-root', on
 
   const playerRosterLookup = useMemo(() => {
     const map = new Map<string, UserSummary>();
-    [...playerUsers, ...users].forEach((user) => {
+    playerUsers.forEach((user) => {
       if (user?.id) {
         map.set(user.id, user);
       }
     });
     return map;
-  }, [playerUsers, users]);
+  }, [playerUsers]);
 
   const selectedPlayerDetails = useMemo(() => {
     return draft.selectedPlayerUserIds
       .map((id) => playerRosterLookup.get(id))
       .filter((user): user is UserSummary => Boolean(user));
   }, [draft.selectedPlayerUserIds, playerRosterLookup]);
+
+  const sortedSelectedPlayerDetails = useMemo(() => {
+    return [...selectedPlayerDetails].sort((a, b) => {
+      const aPrimary = (a.username || a.id || '').toLowerCase();
+      const bPrimary = (b.username || b.id || '').toLowerCase();
+      const comparison = aPrimary.localeCompare(bPrimary);
+      if (comparison !== 0) {
+        return comparison;
+      }
+      return (a.id ?? '').localeCompare(b.id ?? '');
+    });
+  }, [selectedPlayerDetails]);
 
   const campaignSupport = useMemo(() => {
     return campaignCharacterCreation?.campaign_support ?? characterCreationData?.campaign_support;
@@ -659,18 +732,21 @@ export function CampaignCreation({ targetId = 'campaign-creation-react-root', on
     });
   }, [placeholderFilter, placeholderLibrary]);
 
+  const selectedPlayerIdSet = useMemo(
+    () => new Set(draft.selectedPlayerUserIds),
+    [draft.selectedPlayerUserIds],
+  );
+
   const filteredPlayerUsers = useMemo(() => {
-    const remaining = playerUsers.filter((user) => !draft.selectedPlayerUserIds.includes(user.id));
     if (!playerFilter.trim()) {
-      return remaining;
+      return playerUsers;
     }
     const term = playerFilter.toLowerCase();
-    return remaining.filter((user) => {
+    return playerUsers.filter((user) => {
       const username = (user.username ?? '').toLowerCase();
-      const email = (user.email ?? '').toLowerCase();
-      return username.includes(term) || email.includes(term);
+      return username.includes(term);
     });
-  }, [draft.selectedPlayerUserIds, playerFilter, playerUsers]);
+  }, [playerFilter, playerUsers]);
 
   const filteredSessionSeedLibrary = useMemo(() => {
     if (!sessionSeedFilter.trim()) {
@@ -934,25 +1010,31 @@ export function CampaignCreation({ targetId = 'campaign-creation-react-root', on
       const gmUser = users.find((user) => user.id === gmUserId);
       const campaignName = draft.name.trim() || 'Campaign';
 
-      const playerAssignments = draft.selectedPlayerUserIds
-        .map((id) => playerRosterLookup.get(id))
-        .filter((user): user is UserSummary => Boolean(user))
-        .map((user) => ({
-          id: user.id,
-          username: user.username ?? '',
-          email: user.email ?? '',
-        }));
-
-      const houseRulesPayload = {
-        automation: draft.houseRules,
-        notes: draft.houseRuleNotes,
-        theme: draft.theme,
-        factions: draft.factions,
-        locations: draft.locations,
-        placeholders: draft.placeholders,
-        players: playerAssignments,
-        session_seed: draft.sessionSeed,
+      const structuredHouseRules = prepareStructuredHouseRules();
+      const legacyHouseRulesPayload: Record<string, unknown> = {
+        automation: structuredHouseRules.automation,
       };
+      if (structuredHouseRules.houseRuleNotes) {
+        legacyHouseRulesPayload.notes = structuredHouseRules.houseRuleNotes;
+      }
+      if (structuredHouseRules.theme) {
+        legacyHouseRulesPayload.theme = structuredHouseRules.theme;
+      }
+      if (structuredHouseRules.factions.length > 0) {
+        legacyHouseRulesPayload.factions = structuredHouseRules.factions;
+      }
+      if (structuredHouseRules.locations.length > 0) {
+        legacyHouseRulesPayload.locations = structuredHouseRules.locations;
+      }
+      if (structuredHouseRules.placeholders.length > 0) {
+        legacyHouseRulesPayload.placeholders = structuredHouseRules.placeholders;
+      }
+      if (structuredHouseRules.sessionSeed) {
+        legacyHouseRulesPayload.session_seed = structuredHouseRules.sessionSeed;
+      }
+      if (structuredHouseRules.players.length > 0) {
+        legacyHouseRulesPayload.players = structuredHouseRules.players;
+      }
 
       const response = await fetch('/api/campaigns', {
         method: 'POST',
@@ -966,8 +1048,16 @@ export function CampaignCreation({ targetId = 'campaign-creation-react-root', on
           gameplay_level: selectedGameplayLevel,
           creation_method: selectedCreationMethod,
           enabled_books: selectedBooks,
-          player_user_ids: draft.selectedPlayerUserIds,
-          house_rules: JSON.stringify(houseRulesPayload),
+          theme: structuredHouseRules.theme,
+          house_rule_notes: structuredHouseRules.houseRuleNotes,
+          automation: structuredHouseRules.automation,
+          factions: structuredHouseRules.factions,
+          locations: structuredHouseRules.locations,
+          placeholders: structuredHouseRules.placeholders,
+          session_seed: structuredHouseRules.sessionSeed,
+          player_user_ids: structuredHouseRules.playerUserIds,
+          players: structuredHouseRules.players,
+          house_rules: JSON.stringify(legacyHouseRulesPayload),
           status: 'Active',
         }),
       });
@@ -1064,6 +1154,94 @@ export function CampaignCreation({ targetId = 'campaign-creation-react-root', on
     } finally {
       setIsSubmitting(false);
     }
+  }
+
+  function prepareStructuredHouseRules() {
+    const automationKeys = new Set<string>([
+      ...AUTOMATION_DEFAULTS,
+      ...Object.keys(draft.houseRules ?? {}),
+    ]);
+    const automation: Record<string, boolean> = {};
+    automationKeys.forEach((key) => {
+      automation[key] = Boolean(draft.houseRules?.[key]);
+    });
+
+    const sanitize = (value: string) => value.trim();
+
+    const factions = draft.factions
+      .map((faction) => ({
+        id: faction.id || generateId('faction'),
+        name: sanitize(faction.name),
+        tags: faction.tags?.trim() || undefined,
+        notes: faction.notes?.trim() || undefined,
+      }))
+      .filter((faction) => faction.name.length > 0);
+
+    const locations = draft.locations
+      .map((location) => ({
+        id: location.id || generateId('location'),
+        name: sanitize(location.name),
+        descriptor: location.descriptor?.trim() || undefined,
+      }))
+      .filter((location) => location.name.length > 0);
+
+    const placeholders = draft.placeholders
+      .map((placeholder) => ({
+        id: placeholder.id || generateId('placeholder'),
+        name: sanitize(placeholder.name),
+        role: placeholder.role.trim(),
+      }))
+      .filter((placeholder) => placeholder.name.length > 0);
+
+    let sessionSeed: { title?: string; objectives?: string; sceneTemplate?: string; summary?: string; skip: boolean } | null;
+    if (draft.sessionSeed.skip) {
+      sessionSeed = { skip: true };
+    } else {
+      const normalized = {
+        title: sanitize(draft.sessionSeed.title) || undefined,
+        objectives: sanitize(draft.sessionSeed.objectives) || undefined,
+        sceneTemplate: sanitize(draft.sessionSeed.sceneTemplate) || undefined,
+        summary: sanitize(draft.sessionSeed.summary) || undefined,
+        skip: false,
+      };
+      const hasContent =
+        normalized.title || normalized.objectives || normalized.sceneTemplate || normalized.summary;
+      sessionSeed = hasContent ? normalized : null;
+    }
+
+    const playerUserIds = Array.from(
+      new Set(
+        draft.selectedPlayerUserIds
+          .map((id) => id.trim())
+          .filter((id) => id.length > 0),
+      ),
+    );
+
+    const players = playerUserIds
+      .map((id) => {
+        const user = playerRosterLookup.get(id);
+        if (!user) {
+          return null;
+        }
+        const username = user.username?.trim() || user.email?.trim() || '';
+        return { id, username };
+      })
+      .filter(
+        (player): player is { id: string; username: string } =>
+          Boolean(player),
+      );
+
+    return {
+      theme: sanitize(draft.theme),
+      houseRuleNotes: sanitize(draft.houseRuleNotes),
+      automation,
+      factions,
+      locations,
+      placeholders,
+      sessionSeed,
+      playerUserIds,
+      players,
+    };
   }
 
   const editionCreationMethod = creationMethods[selectedCreationMethod];
@@ -1376,7 +1554,7 @@ export function CampaignCreation({ targetId = 'campaign-creation-react-root', on
                     >
                       <input
                         type="search"
-                        placeholder="Search players by username or email…"
+                        placeholder="Search players by username…"
                         value={playerFilter}
                         onChange={(event) => setPlayerFilter(event.target.value)}
                       />
@@ -1384,24 +1562,41 @@ export function CampaignCreation({ targetId = 'campaign-creation-react-root', on
                         {filteredPlayerUsers.length === 0 ? (
                           <p className="campaign-manage__empty">No players match that search.</p>
                         ) : (
-                          filteredPlayerUsers.map((player) => (
-                            <button
-                              key={player.id}
-                              type="button"
-                              className="campaign-manage__preset-option"
-                              onClick={() => {
-                                dispatchDraft({
-                                  type: 'UPDATE_FIELD',
-                                  field: 'selectedPlayerUserIds',
-                                  value: Array.from(new Set([...draft.selectedPlayerUserIds, player.id])),
-                                });
-                                clearFieldError('roster', 1);
-                              }}
-                            >
-                              <span className="campaign-manage__preset-name">{player.username || player.email}</span>
-                              {player.email && player.username && <span className="campaign-manage__preset-tags">{player.email}</span>}
-                            </button>
-                          ))
+                          filteredPlayerUsers.map((player, index) => {
+                            const id = player.id ?? '';
+                            const alreadySelected = id.length > 0 && selectedPlayerIdSet.has(id);
+                            return (
+                              <button
+                                key={player.id ?? player.email ?? player.username ?? `player-${index}`}
+                                type="button"
+                                className={`campaign-manage__preset-option${
+                                  alreadySelected ? ' campaign-manage__preset-option--disabled' : ''
+                                }`}
+                                onClick={() => {
+                                  if (alreadySelected || id.length === 0) {
+                                    return;
+                                  }
+                                  dispatchDraft({
+                                    type: 'UPDATE_FIELD',
+                                    field: 'selectedPlayerUserIds',
+                                    value: Array.from(new Set([...draft.selectedPlayerUserIds, id])),
+                                  });
+                                  clearFieldError('roster', 1);
+                                }}
+                                disabled={alreadySelected || id.length === 0}
+                              >
+                                <span className="campaign-manage__preset-name">
+                                  {player.username || player.email || id || 'Unknown player'}
+                                </span>
+                                {player.email && player.username && (
+                                  <span className="campaign-manage__preset-tags">{player.email}</span>
+                                )}
+                                {alreadySelected && (
+                                  <span className="campaign-manage__preset-tags">Already added</span>
+                                )}
+                              </button>
+                            );
+                          })
                         )}
                       </div>
                     </div>
@@ -1410,29 +1605,44 @@ export function CampaignCreation({ targetId = 'campaign-creation-react-root', on
               )}
 
               {draft.selectedPlayerUserIds.length > 0 ? (
-                <ul className="campaign-selected-players">
-                  {selectedPlayerDetails.map((player) => (
-                    <li key={`selected-player-${player.id}`} className="campaign-selected-players__item">
-                      <div>
-                        <strong>{player.username || player.email}</strong>
-                        {player.email && player.username && <span className="campaign-selected-players__email">{player.email}</span>}
-                      </div>
-                      <button
-                        type="button"
-                        className="btn-link"
-                        onClick={() =>
-                          dispatchDraft({
-                            type: 'UPDATE_FIELD',
-                            field: 'selectedPlayerUserIds',
-                            value: draft.selectedPlayerUserIds.filter((id) => id !== player.id),
-                          })
-                        }
-                      >
-                        Remove
-                      </button>
-                    </li>
-                  ))}
-                </ul>
+                <div className="campaign-selected-players__table-wrapper">
+                  <table className="campaign-selected-players__table">
+                    <thead>
+                      <tr>
+                        <th scope="col">Player Username</th>
+                        <th scope="col" className="campaign-selected-players__actions-header">
+                          Actions
+                        </th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {sortedSelectedPlayerDetails.map((player) => (
+                        <tr key={`selected-player-${player.id}`}>
+                          <td data-label="Player Username">
+                            <span className="campaign-selected-players__username">
+                              {player.username || player.email || player.id}
+                            </span>
+                          </td>
+                          <td className="campaign-selected-players__actions">
+                            <button
+                              type="button"
+                              className="btn-link"
+                              onClick={() =>
+                                dispatchDraft({
+                                  type: 'UPDATE_FIELD',
+                                  field: 'selectedPlayerUserIds',
+                                  value: draft.selectedPlayerUserIds.filter((id) => id !== player.id),
+                                })
+                              }
+                            >
+                              Remove
+                            </button>
+                          </td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
               ) : (
                 <p className="form-help">No players selected yet.</p>
               )}

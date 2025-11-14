@@ -1,6 +1,7 @@
 package jsonrepo
 
 import (
+	"encoding/json"
 	"fmt"
 	"shadowmaster/internal/domain"
 	"shadowmaster/pkg/storage"
@@ -77,6 +78,14 @@ func (r *CampaignRepositoryJSON) GetByID(id string) (*domain.Campaign, error) {
 		return nil, err
 	}
 
+	// Backfill structured fields from legacy house rules JSON if needed.
+	backfilled := backfillHouseRules(&campaign)
+	if backfilled {
+		if err := r.store.Write(filename, &campaign); err != nil {
+			return nil, err
+		}
+	}
+
 	return &campaign, nil
 }
 
@@ -94,6 +103,9 @@ func (r *CampaignRepositoryJSON) GetAll() ([]*domain.Campaign, error) {
 		var campaign domain.Campaign
 		if err := r.store.Read(filename, &campaign); err != nil {
 			continue
+		}
+		if backfillHouseRules(&campaign) {
+			_ = r.store.Write(filename, &campaign)
 		}
 		campaigns = append(campaigns, &campaign)
 	}
@@ -210,12 +222,249 @@ func (r *CampaignRepositoryJSON) normalizeExistingCampaigns() {
 			changed = true
 		}
 
+		if backfillHouseRules(&campaign) {
+			changed = true
+		}
+
 		if changed {
 			campaign.UpdatedAt = time.Now()
 			ensureCampaignEnabledBooks(&campaign)
 			_ = r.store.Write(filename, &campaign)
 		}
 	}
+}
+
+func backfillHouseRules(campaign *domain.Campaign) bool {
+	if campaign == nil {
+		return false
+	}
+
+	changed := false
+
+	// If structured fields already exist or no legacy blob, nothing to do.
+	if (campaign.Theme != "" || campaign.HouseRuleNotes != "" || len(campaign.Automation) > 0 ||
+		len(campaign.Factions) > 0 || len(campaign.Locations) > 0 || len(campaign.Placeholders) > 0 ||
+		campaign.SessionSeed != nil || len(campaign.PlayerUserIDs) > 0 || len(campaign.Players) > 0) ||
+		strings.TrimSpace(campaign.HouseRules) == "" {
+		return changed
+	}
+
+	type legacyHouseRules struct {
+		Automation   map[string]bool                  `json:"automation"`
+		Notes        string                           `json:"notes"`
+		Theme        string                           `json:"theme"`
+		Factions     []domain.CampaignFaction         `json:"factions"`
+		Locations    []domain.CampaignLocation        `json:"locations"`
+		Placeholders []domain.CampaignPlaceholder     `json:"placeholders"`
+		SessionSeed  *domain.CampaignSessionSeed      `json:"session_seed"`
+		Players      []domain.CampaignPlayerReference `json:"players"`
+	}
+
+	var payload legacyHouseRules
+	if err := json.Unmarshal([]byte(campaign.HouseRules), &payload); err != nil {
+		return changed
+	}
+
+	if campaign.Theme == "" && payload.Theme != "" {
+		campaign.Theme = strings.TrimSpace(payload.Theme)
+		changed = true
+	}
+	if campaign.HouseRuleNotes == "" && payload.Notes != "" {
+		campaign.HouseRuleNotes = strings.TrimSpace(payload.Notes)
+		changed = true
+	}
+	if len(campaign.Automation) == 0 && len(payload.Automation) > 0 {
+		campaign.Automation = cloneAutomation(payload.Automation)
+		changed = true
+	}
+	if len(campaign.Factions) == 0 && len(payload.Factions) > 0 {
+		campaign.Factions = cloneFactions(payload.Factions)
+		changed = true
+	}
+	if len(campaign.Locations) == 0 && len(payload.Locations) > 0 {
+		campaign.Locations = cloneLocations(payload.Locations)
+		changed = true
+	}
+	if len(campaign.Placeholders) == 0 && len(payload.Placeholders) > 0 {
+		campaign.Placeholders = clonePlaceholders(payload.Placeholders)
+		changed = true
+	}
+	if campaign.SessionSeed == nil && payload.SessionSeed != nil {
+		campaign.SessionSeed = cloneSessionSeed(payload.SessionSeed)
+		if campaign.SessionSeed != nil {
+			changed = true
+		}
+	}
+
+	if len(campaign.PlayerUserIDs) == 0 && len(payload.Players) > 0 {
+		ids := make([]string, 0, len(payload.Players))
+		for _, player := range payload.Players {
+			if trimmed := strings.TrimSpace(player.ID); trimmed != "" {
+				ids = append(ids, trimmed)
+			}
+		}
+		campaign.PlayerUserIDs = normalizePlayerUserIDs(ids)
+		campaign.Players = clonePlayerReferences(payload.Players)
+		if len(campaign.PlayerUserIDs) > 0 {
+			changed = true
+		}
+	}
+
+	return changed
+}
+
+func cloneAutomation(source map[string]bool) map[string]bool {
+	if len(source) == 0 {
+		return nil
+	}
+	result := make(map[string]bool, len(source))
+	for key, value := range source {
+		trimmed := strings.TrimSpace(key)
+		if trimmed == "" {
+			continue
+		}
+		result[trimmed] = value
+	}
+	if len(result) == 0 {
+		return nil
+	}
+	return result
+}
+
+func cloneFactions(source []domain.CampaignFaction) []domain.CampaignFaction {
+	if len(source) == 0 {
+		return nil
+	}
+	result := make([]domain.CampaignFaction, 0, len(source))
+	for _, faction := range source {
+		id := strings.TrimSpace(faction.ID)
+		name := strings.TrimSpace(faction.Name)
+		if id == "" && name == "" {
+			continue
+		}
+		result = append(result, domain.CampaignFaction{
+			ID:    id,
+			Name:  name,
+			Tags:  strings.TrimSpace(faction.Tags),
+			Notes: strings.TrimSpace(faction.Notes),
+		})
+	}
+	if len(result) == 0 {
+		return nil
+	}
+	return result
+}
+
+func cloneLocations(source []domain.CampaignLocation) []domain.CampaignLocation {
+	if len(source) == 0 {
+		return nil
+	}
+	result := make([]domain.CampaignLocation, 0, len(source))
+	for _, location := range source {
+		id := strings.TrimSpace(location.ID)
+		name := strings.TrimSpace(location.Name)
+		if id == "" && name == "" {
+			continue
+		}
+		result = append(result, domain.CampaignLocation{
+			ID:         id,
+			Name:       name,
+			Descriptor: strings.TrimSpace(location.Descriptor),
+		})
+	}
+	if len(result) == 0 {
+		return nil
+	}
+	return result
+}
+
+func clonePlaceholders(source []domain.CampaignPlaceholder) []domain.CampaignPlaceholder {
+	if len(source) == 0 {
+		return nil
+	}
+	result := make([]domain.CampaignPlaceholder, 0, len(source))
+	for _, placeholder := range source {
+		id := strings.TrimSpace(placeholder.ID)
+		name := strings.TrimSpace(placeholder.Name)
+		if id == "" && name == "" {
+			continue
+		}
+		result = append(result, domain.CampaignPlaceholder{
+			ID:   id,
+			Name: name,
+			Role: strings.TrimSpace(placeholder.Role),
+		})
+	}
+	if len(result) == 0 {
+		return nil
+	}
+	return result
+}
+
+func cloneSessionSeed(seed *domain.CampaignSessionSeed) *domain.CampaignSessionSeed {
+	if seed == nil {
+		return nil
+	}
+	copy := &domain.CampaignSessionSeed{
+		Title:         strings.TrimSpace(seed.Title),
+		Objectives:    strings.TrimSpace(seed.Objectives),
+		SceneTemplate: strings.TrimSpace(seed.SceneTemplate),
+		Summary:       strings.TrimSpace(seed.Summary),
+		Skip:          seed.Skip,
+	}
+	if copy.Title == "" && copy.Objectives == "" && copy.SceneTemplate == "" && copy.Summary == "" && !copy.Skip {
+		return nil
+	}
+	return copy
+}
+
+func normalizePlayerUserIDs(source []string) []string {
+	if len(source) == 0 {
+		return nil
+	}
+	seen := make(map[string]struct{}, len(source))
+	result := make([]string, 0, len(source))
+	for _, id := range source {
+		trimmed := strings.TrimSpace(id)
+		if trimmed == "" {
+			continue
+		}
+		if _, exists := seen[trimmed]; exists {
+			continue
+		}
+		seen[trimmed] = struct{}{}
+		result = append(result, trimmed)
+	}
+	if len(result) == 0 {
+		return nil
+	}
+	return result
+}
+
+func clonePlayerReferences(source []domain.CampaignPlayerReference) []domain.CampaignPlayerReference {
+	if len(source) == 0 {
+		return nil
+	}
+	seen := make(map[string]struct{}, len(source))
+	result := make([]domain.CampaignPlayerReference, 0, len(source))
+	for _, player := range source {
+		id := strings.TrimSpace(player.ID)
+		if id == "" {
+			continue
+		}
+		if _, exists := seen[id]; exists {
+			continue
+		}
+		seen[id] = struct{}{}
+		result = append(result, domain.CampaignPlayerReference{
+			ID:       id,
+			Username: strings.TrimSpace(player.Username),
+		})
+	}
+	if len(result) == 0 {
+		return nil
+	}
+	return result
 }
 
 func normalizeCreationMethod(edition string, creationMethod string) string {

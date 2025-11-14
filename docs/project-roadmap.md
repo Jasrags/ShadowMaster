@@ -127,6 +127,9 @@ Legend: ✅ Complete • ⚙️ In Progress • 🔜 Planned • 🛑 Blocked
 - [ ] Capture edition-specific creation math (Priority, Sum-to-Ten, Karma) in a shared reference once implementation lands.
 - [ ] Expand Go test coverage for scenes/sessions once React CRUD is introduced.
 - [ ] Add end-to-end smoke test covering campaign creation + character wizard path with campaign defaults.
+- [ ] Add Go unit tests for `pkg/storage` helpers and remaining `internal/repository/json` packages (characters, groups, sessions, scenes, users) to reach consistent coverage.
+- [ ] Expand Go API handler tests beyond campaigns (auth flows, groups, sessions/scenes CRUD, equipment/skills endpoints) to lock HTTP responses.
+- [ ] Introduce integration tests verifying edition/book repositories load mixed data from disk.
 - **React test coverage plan**
   - Audit components and prioritize critical flows (campaign creation, management drawers, shared inputs) for first-wave coverage.
   - Expand Vitest + Testing Library suites to lock rendering behaviour and side-effects.
@@ -149,6 +152,8 @@ Legend: ✅ Complete • ⚙️ In Progress • 🔜 Planned • 🛑 Blocked
   - CI pipeline for Go + React tests.
   - Packaging strategy for edition data updates (hot reload vs. build-time).
   - Plan API versioning/feature-flag strategy to guard future schema changes.
+- **Testing & QA**
+  - Investigate Playwright/Cypress smoke tests for React flows (campaign creation, character wizard) to supplement Vitest coverage.
 
 ---
 
