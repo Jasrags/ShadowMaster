@@ -2,11 +2,12 @@ import { useEffect, useState } from 'react';
 import { campaignApi } from '../../lib/api';
 import type { CampaignResponse } from '../../lib/types';
 import { CampaignCard } from './CampaignCard';
+import { useToast } from '../../contexts/ToastContext';
 
 export function CampaignList() {
+  const { showError } = useToast();
   const [campaigns, setCampaigns] = useState<CampaignResponse[]>([]);
   const [isLoading, setIsLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     loadCampaigns();
@@ -15,11 +16,11 @@ export function CampaignList() {
   async function loadCampaigns() {
     try {
       setIsLoading(true);
-      setError(null);
       const data = await campaignApi.getCampaigns();
       setCampaigns(data);
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Failed to load campaigns');
+      const errorMessage = err instanceof Error ? err.message : 'Failed to load campaigns';
+      showError('Failed to load campaigns', errorMessage);
     } finally {
       setIsLoading(false);
     }
@@ -29,21 +30,6 @@ export function CampaignList() {
     return (
       <div className="flex items-center justify-center py-12">
         <div className="text-gray-400">Loading campaigns...</div>
-      </div>
-    );
-  }
-
-  if (error) {
-    return (
-      <div className="p-4 bg-red-900/20 border border-red-500/50 rounded-md text-red-400">
-        <p className="font-medium mb-2">Error loading campaigns</p>
-        <p className="text-sm">{error}</p>
-        <button
-          onClick={loadCampaigns}
-          className="mt-4 px-4 py-2 bg-sr-accent hover:bg-sr-accent-dark text-sr-dark font-medium rounded-md transition-colors"
-        >
-          Retry
-        </button>
       </div>
     );
   }
