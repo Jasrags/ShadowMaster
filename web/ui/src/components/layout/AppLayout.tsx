@@ -1,6 +1,7 @@
 import { ReactNode } from 'react';
 import { Button } from 'react-aria-components';
 import { useAuth } from '../../contexts/AuthContext';
+import { useToast } from '../../contexts/ToastContext';
 
 interface AppLayoutProps {
   children: ReactNode;
@@ -8,12 +9,14 @@ interface AppLayoutProps {
 
 export function AppLayout({ children }: AppLayoutProps) {
   const { user, logout } = useAuth();
+  const { showSuccess, showError } = useToast();
 
   async function handleLogout() {
     try {
       await logout();
+      showSuccess('Logged out', 'You have been successfully logged out');
     } catch (err) {
-      console.error('Logout failed:', err);
+      showError('Logout failed', err instanceof Error ? err.message : 'Failed to log out');
     }
   }
 

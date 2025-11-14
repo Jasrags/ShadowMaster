@@ -9,7 +9,6 @@ interface AuthContextType {
   login: (email: string, password: string) => Promise<void>;
   register: (email: string, username: string, password: string) => Promise<void>;
   logout: () => Promise<void>;
-  error: string | null;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -17,7 +16,6 @@ const AuthContext = createContext<AuthContextType | undefined>(undefined);
 export function AuthProvider({ children }: { children: ReactNode }) {
   const [user, setUser] = useState<UserResponse | null>(null);
   const [isLoading, setIsLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
 
   // Check authentication status on mount
   useEffect(() => {
@@ -27,48 +25,29 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   async function checkAuth() {
     try {
       setIsLoading(true);
-      setError(null);
       const currentUser = await authApi.getCurrentUser();
       setUser(currentUser);
     } catch (err) {
       setUser(null);
-      setError(err instanceof Error ? err.message : 'Failed to check authentication');
+      // Silently fail auth check - user just isn't logged in
     } finally {
       setIsLoading(false);
     }
   }
 
   async function login(email: string, password: string) {
-    try {
-      setError(null);
-      const userData = await authApi.login({ email, password });
-      setUser(userData);
-    } catch (err) {
-      setError(err instanceof Error ? err.message : 'Login failed');
-      throw err;
-    }
+    const userData = await authApi.login({ email, password });
+    setUser(userData);
   }
 
   async function register(email: string, username: string, password: string) {
-    try {
-      setError(null);
-      const userData = await authApi.register({ email, username, password });
-      setUser(userData);
-    } catch (err) {
-      setError(err instanceof Error ? err.message : 'Registration failed');
-      throw err;
-    }
+    const userData = await authApi.register({ email, username, password });
+    setUser(userData);
   }
 
   async function logout() {
-    try {
-      setError(null);
-      await authApi.logout();
-      setUser(null);
-    } catch (err) {
-      setError(err instanceof Error ? err.message : 'Logout failed');
-      throw err;
-    }
+    await authApi.logout();
+    setUser(null);
   }
 
   return (
@@ -80,7 +59,6 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         login,
         register,
         logout,
-        error,
       }}
     >
       {children}

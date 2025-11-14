@@ -1,25 +1,45 @@
 import { useState, FormEvent } from 'react';
 import { Button, TextField, Input, Label, FieldError } from 'react-aria-components';
 import { useAuth } from '../../contexts/AuthContext';
+import { useToast } from '../../contexts/ToastContext';
+import { validateEmail } from '../../lib/validation';
 
 export function LoginForm() {
-  const { login, error } = useAuth();
+  const { login } = useAuth();
+  const { showError, showSuccess } = useToast();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [localError, setLocalError] = useState<string | null>(null);
+  const [emailError, setEmailError] = useState<string | null>(null);
+  const [passwordError, setPasswordError] = useState<string | null>(null);
+  const [touched, setTouched] = useState({ email: false, password: false });
+
+  function validateForm(): boolean {
+    let isValid = true;
+
+    const emailValidation = validateEmail(email);
+    if (emailValidation) {
+      setEmailError(emailValidation);
+      isValid = false;
+    } else {
+      setEmailError(null);
+    }
+
+    if (!password) {
+      setPasswordError('Password is required');
+      isValid = false;
+    } else {
+      setPasswordError(null);
+    }
+
+    return isValid;
+  }
 
   async function handleSubmit(e: FormEvent) {
     e.preventDefault();
-    setLocalError(null);
+    setTouched({ email: true, password: true });
 
-    // Validate fields
-    if (!email.trim()) {
-      setLocalError('Email is required');
-      return;
-    }
-    if (!password) {
-      setLocalError('Password is required');
+    if (!validateForm()) {
       return;
     }
 
@@ -27,31 +47,51 @@ export function LoginForm() {
 
     try {
       await login(email.trim(), password);
+      showSuccess('Login successful', 'Welcome back!');
     } catch (err) {
-      setLocalError(err instanceof Error ? err.message : 'Login failed');
+      const errorMessage = err instanceof Error ? err.message : 'Login failed';
+      showError('Login failed', errorMessage);
     } finally {
       setIsSubmitting(false);
     }
   }
 
-  const displayError = localError || error;
+  function handleEmailBlur() {
+    setTouched((prev) => ({ ...prev, email: true }));
+    const error = validateEmail(email);
+    setEmailError(error);
+  }
+
+  function handlePasswordBlur() {
+    setTouched((prev) => ({ ...prev, password: true }));
+    if (!password) {
+      setPasswordError('Password is required');
+    } else {
+      setPasswordError(null);
+    }
+  }
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-4">
+    <form onSubmit={handleSubmit} noValidate className="space-y-4">
       <TextField
         name="email"
         type="email"
         value={email}
         onChange={setEmail}
+        onBlur={handleEmailBlur}
         isRequired
+        isInvalid={touched.email && emailError !== null}
+        validationBehavior="aria"
         className="flex flex-col gap-1"
       >
         <Label className="text-sm font-medium text-gray-300">Email</Label>
         <Input
-          className="px-3 py-2 bg-sr-gray border border-sr-light-gray rounded-md text-gray-100 focus:outline-none focus:ring-2 focus:ring-sr-accent focus:border-transparent"
+          className="px-3 py-2 bg-sr-gray border border-sr-light-gray rounded-md text-gray-100 focus:outline-none focus:ring-2 focus:ring-sr-accent focus:border-transparent data-[invalid]:border-red-500/50"
           placeholder="your@email.com"
         />
-        <FieldError className="text-sm text-sr-danger" />
+        {touched.email && emailError && (
+          <FieldError className="text-sm text-sr-danger">{emailError}</FieldError>
+        )}
       </TextField>
 
       <TextField
@@ -59,22 +99,21 @@ export function LoginForm() {
         type="password"
         value={password}
         onChange={setPassword}
+        onBlur={handlePasswordBlur}
         isRequired
+        isInvalid={touched.password && passwordError !== null}
+        validationBehavior="aria"
         className="flex flex-col gap-1"
       >
         <Label className="text-sm font-medium text-gray-300">Password</Label>
         <Input
-          className="px-3 py-2 bg-sr-gray border border-sr-light-gray rounded-md text-gray-100 focus:outline-none focus:ring-2 focus:ring-sr-accent focus:border-transparent"
+          className="px-3 py-2 bg-sr-gray border border-sr-light-gray rounded-md text-gray-100 focus:outline-none focus:ring-2 focus:ring-sr-accent focus:border-transparent data-[invalid]:border-red-500/50"
           placeholder="••••••••"
         />
-        <FieldError className="text-sm text-sr-danger" />
+        {touched.password && passwordError && (
+          <FieldError className="text-sm text-sr-danger">{passwordError}</FieldError>
+        )}
       </TextField>
-
-      {displayError && (
-        <div className="p-3 bg-red-900/20 border border-red-500/50 rounded-md text-red-400 text-sm">
-          {displayError}
-        </div>
-      )}
 
       <Button
         type="submit"
