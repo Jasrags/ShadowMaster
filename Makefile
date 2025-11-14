@@ -1,4 +1,4 @@
-.PHONY: help build run server cli clean test test-go test-react fmt vet deps install dev
+.PHONY: help build frontend-build run run-dev server cli clean test test-go test-react fmt vet deps install dev
 
 # Variables
 BINARY_NAME=shadowmaster-server
@@ -28,6 +28,11 @@ deps: ## Download and install dependencies
 	@go mod tidy
 	@echo "$(GREEN)✓ Dependencies installed$(NC)"
 
+frontend-build: ## Build the frontend
+	@echo "$(CYAN)Building frontend...$(NC)"
+	@cd web/ui && npm run build
+	@echo "$(GREEN)✓ Frontend built$(NC)"
+
 build: frontend-build ## Build the server binary
 	@echo "$(CYAN)Building server...$(NC)"
 	@go build $(GOFLAGS) -ldflags "$(LDFLAGS)" -o bin/$(BINARY_NAME) ./cmd/shadowmaster-server
@@ -41,16 +46,20 @@ build-cli: ## Build the CLI binary
 build-all: build build-cli ## Build both server and CLI binaries
 	@echo "$(GREEN)✓ All binaries built$(NC)"
 
-run: test server ## Alias for server target that also runs tests
-
-server: frontend-build ## Run the server
+run: build ## Run the server in production mode (serves built static files)
 	@echo "$(CYAN)Starting ShadowMaster server...$(NC)"
-	@echo "$(YELLOW)Port: $(PORT)$(NC)"
-	@echo "$(YELLOW)Data directory: $(DATA_DIR)$(NC)"
-	@echo "$(YELLOW)Web directory: $(WEB_DIR)$(NC)"
-	@echo ""
 	@mkdir -p $(DATA_DIR)
-	@go run ./cmd/shadowmaster-server -port $(PORT) -data $(DATA_DIR) -web $(WEB_DIR)
+	@./bin/$(BINARY_NAME) -port $(PORT) -data $(DATA_DIR) -web $(WEB_DIR)
+
+run-dev: ## Run both API server and frontend dev server
+	@echo "$(CYAN)Starting ShadowMaster in development mode...$(NC)"
+	@echo "$(YELLOW)API server will run on port $(PORT)$(NC)"
+	@echo "$(YELLOW)Frontend dev server will run on port 5173$(NC)"
+	@echo "$(YELLOW)Press Ctrl+C to stop both servers$(NC)"
+	@mkdir -p $(DATA_DIR)
+	@(trap 'kill 0' EXIT; \
+		go run ./cmd/shadowmaster-server -port $(PORT) -data $(DATA_DIR) -web $(WEB_DIR) & \
+		cd web/ui && npm run dev)
 
 dev: ## Run the server in development mode (with auto-reload if available)
 	@echo "$(CYAN)Starting ShadowMaster server in development mode...$(NC)"
@@ -79,10 +88,9 @@ test-go: ## Run Go tests
 	@go test -v ./...
 
 test-react: ## Run React tests
-	@echo "$(CYAN)Running React smoke test...$(NC)"
-	@cd web/app && npm test -- --watch=false
-	@echo "$(CYAN)Running React unit tests...$(NC)"
-	@cd web/app && npm run test:unit
+	@echo "$(CYAN)Running React lint checks...$(NC)"
+	@cd web/ui && npm install
+	@cd web/ui && npm run lint
 
 test-coverage: ## Run tests with coverage
 	@echo "$(CYAN)Running tests with coverage...$(NC)"
@@ -140,11 +148,6 @@ watch: ## Watch for file changes and rebuild (requires fswatch or similar)
 	else \
 		echo "$(YELLOW)Please install fswatch or entr for file watching$(NC)"; \
 	fi
-
-frontend-build: ## Build the React frontend bundle
-	@echo "$(CYAN)Building React frontend...$(NC)"
-	@cd web/app && npm run build
-	@echo "$(GREEN)✓ Frontend bundle built$(NC)"
 
 .DEFAULT_GOAL := help
 

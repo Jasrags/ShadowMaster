@@ -32,6 +32,11 @@ go.work
 *.o
 *.a
 
+# Frontend build output
+web/static/
+web/ui/dist/
+web/ui/node_modules/
+
 # Data directory (contains game data)
 data/
 !data/.gitkeep
