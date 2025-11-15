@@ -26,7 +26,7 @@ All characters start with 25 Karma to improve themselves and gain additional res
 
 ### Open Questions & Data Gaps
 
-- None currently. See [SR5 Questions & Gaps](./shadowrun-5e-questions-and-gaps.md) for future updates.
+- None currently. See [SR5 Questions & Gaps](./questions-and-gaps.md) for future updates.
 
 ## Step Two: Choose Metatype
 
@@ -34,7 +34,7 @@ All characters start with 25 Karma to improve themselves and gain additional res
 
 Shadowrun Fifth Edition uses the Priority System, a table with columns for Metatype, Attributes, Magic or Resonance, Skills, and Resources. Rows cover Priority Levels A through E. Players assign a distinct priority level to each column—no duplicates allowed. Higher priorities grant greater benefits. Karma can later customize attributes further.
 
-Character creation begins by selecting a metatype (human, elf, dwarf, ork, troll). Each metatype provides different advantages and disadvantages. Humans gain +1 Edge. Trolls receive thermographic vision, +1 Reach, dermal armor, and doubled lifestyle costs, reflecting the expense of adapting gear to their massive frames. Many metatypes adjust natural attribute limits as well. Consult the [Metatype Attribute Table](./shadowrun-5e-data-tables.md#metatype-attribute-table) for details.
+Character creation begins by selecting a metatype (human, elf, dwarf, ork, troll). Each metatype provides different advantages and disadvantages. Humans gain +1 Edge. Trolls receive thermographic vision, +1 Reach, dermal armor, and doubled lifestyle costs, reflecting the expense of adapting gear to their massive frames. Many metatypes adjust natural attribute limits as well. Consult the [Metatype Attribute Table](./data-tables.md#metatype-attribute-table) for details.
 
 After choosing a metatype, review the Metatype column to determine which priority levels offer enough special attribute points (Edge, Magic, Resonance). Technomancers need high Resonance, while magicians and adepts prioritise Magic. Edge starts at the value shown on the Metatype Attribute Table; Magic and Resonance start at 0.
 
@@ -62,7 +62,7 @@ Attribute choices affect derived stats calculated later, such as Initiative and 
 
 ### Open Questions & Data Gaps
 
-- See [Step Two questions](./shadowrun-5e-questions-and-gaps.md#step-two-choose-metatype).
+- See [Step Two questions](./questions-and-gaps.md#step-two-choose-metatype).
 
 ## Step Three: Choose Magic or Resonance
 
@@ -85,7 +85,7 @@ Players are not restricted to the bundles provided by their priority choice. Add
 
 ### Open Questions & Data Gaps
 
-- See [Step Three questions](./shadowrun-5e-questions-and-gaps.md#step-three-choose-magic-or-resonance).
+- See [Step Three questions](./questions-and-gaps.md#step-three-choose-magic-or-resonance).
 
 ## Step Four: Purchase Qualities
 
@@ -103,7 +103,7 @@ Record each Quality on the character sheet, noting any modifiers to skills or at
 
 ### Open Questions & Data Gaps
 
-- See [Step Four questions](./shadowrun-5e-questions-and-gaps.md#step-four-purchase-qualities).
+- See [Step Four questions](./questions-and-gaps.md#step-four-purchase-qualities).
 
 ## Step Five: Purchase Skills
 
@@ -142,7 +142,7 @@ Some skills are restricted to characters with specific attributes. Magic and Res
 
 ### Open Questions & Data Gaps
 
-- See [Step Five questions](./shadowrun-5e-questions-and-gaps.md#step-five-purchase-skills).
+- See [Step Five questions](./questions-and-gaps.md#step-five-purchase-skills).
 
 ## Knowledge and Language Skills
 
@@ -168,7 +168,7 @@ Determine whether each Knowledge skill uses Intuition or Logic based on its cate
 
 ### Open Questions & Data Gaps
 
-- See [Knowledge & Language questions](./shadowrun-5e-questions-and-gaps.md#knowledge--language-skills).
+- See [Knowledge & Language questions](./questions-and-gaps.md#knowledge--language-skills).
 
 ## Step Six: Spend Your Resources
 
@@ -193,7 +193,7 @@ Three major restrictions apply to purchases:
 
 ### Open Questions & Data Gaps
 
-- See [Step Six questions](./shadowrun-5e-questions-and-gaps.md#step-six-spend-your-resources).
+- See [Step Six questions](./questions-and-gaps.md#step-six-spend-your-resources).
 
 ### Cyberware and Bioware
 
@@ -216,7 +216,7 @@ Attributes boosted by augmentations do not affect calculations for Knowledge ski
 
 ### Open Questions & Data Gaps
 
-- See [Cyberware & Bioware questions](./shadowrun-5e-questions-and-gaps.md#cyberware--bioware).
+- See [Cyberware & Bioware questions](./questions-and-gaps.md#cyberware--bioware).
 
 ### Lifestyle
 
@@ -229,7 +229,7 @@ Lifestyle defines day-to-day living conditions and monthly expenses. Options inc
 
 ### Open Questions & Data Gaps
 
-- See [Lifestyle & Starting Nuyen questions](./shadowrun-5e-questions-and-gaps.md#lifestyle--starting-nuyen).
+- See [Lifestyle & Starting Nuyen questions](./questions-and-gaps.md#lifestyle--starting-nuyen).
 
 ### Starting Nuyen
 
@@ -242,7 +242,7 @@ Starting nuyen depends on chosen lifestyle and a dice roll specified by the Star
 
 ### Open Questions & Data Gaps
 
-- See [Lifestyle & Starting Nuyen questions](./shadowrun-5e-questions-and-gaps.md#lifestyle--starting-nuyen).
+- See [Lifestyle & Starting Nuyen questions](./questions-and-gaps.md#lifestyle--starting-nuyen).
 
 ## Step Seven: Spend Your Leftover Karma
 
@@ -272,7 +272,7 @@ Both ratings must be at least 1. Loyalty 1–2 represents a business relationshi
 
 ### Open Questions & Data Gaps
 
-- See [Step Seven questions](./shadowrun-5e-questions-and-gaps.md#step-seven-spend-your-leftover-karma).
+- See [Step Seven questions](./questions-and-gaps.md#step-seven-spend-your-leftover-karma).
 
 ## Step Eight: Final Calculations
 
@@ -292,7 +292,7 @@ After spending resources and Karma, compute derived mechanics. Many depend on fi
 
 ### Open Questions & Data Gaps
 
-- See [Step Eight questions](./shadowrun-5e-questions-and-gaps.md#step-eight-final-calculations).
+- See [Step Eight questions](./questions-and-gaps.md#step-eight-final-calculations).
 
 ## Step Nine: Final Touches
 
@@ -308,7 +308,7 @@ Flesh out the character’s backstory. Qualities, attributes, and contacts provi
 
 ### Open Questions & Data Gaps
 
-- See [Step Nine questions](./shadowrun-5e-questions-and-gaps.md#step-nine-final-touches).
+- See [Step Nine questions](./questions-and-gaps.md#step-nine-final-touches).
 
 *Last updated: 2025-11-08*
 

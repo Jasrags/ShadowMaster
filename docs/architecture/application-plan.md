@@ -1,6 +1,6 @@
 # ShadowMaster Application Architecture Plan
 
-> **Roadmap Reference:** High-level progress and priorities now live in `docs/project-roadmap.md`. This document retains deeper architectural context and should be updated when those details change.
+> **Roadmap Reference:** High-level progress and priorities now live in `docs/product/roadmap.md`. This document retains deeper architectural context and should be updated when those details change.
 
 ## 1. Concept Overview
 
@@ -103,7 +103,7 @@
 - Lifestyle, gear, skills documentation exists in `/docs/5e`, but backend ingestion has not been wired.
 
 ### 2.4 Documentation Footprint
-- Auth roadmap (`docs/auth-roadmap.md`) and multi-edition plan exist.  
+- Auth roadmap (`docs/archive/auth-roadmap.md`) and multi-edition plan exist.  
 - No consolidated architecture overview prior to this document; campaign/session/scenes guidance is scattered in edition docs and legacy notes.
 
 ## 3. Target Architecture Decisions
