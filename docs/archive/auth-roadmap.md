@@ -1,6 +1,6 @@
 # User Authentication Roadmap
 
-> **Roadmap Reference:** Current milestone tracking is consolidated in `docs/project-roadmap.md`. Keep this document focused on authentication-specific requirements and history.
+> **Roadmap Reference:** Current milestone tracking is consolidated in `docs/product/roadmap.md`. Keep this document focused on authentication-specific requirements and history.
 
 ## Overview & Scope
 This document captures the agreed plan for implementing user registration, login, and role-based access control (RBAC) using the existing Go + JSON storage stack. It summarizes current requirements, outlines the phased implementation strategy, and serves as the living reference that should be updated as work progresses.
