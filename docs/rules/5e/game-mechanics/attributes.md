@@ -37,15 +37,15 @@ Shadowrun 5e characters are defined by a set of primary attributes (physical, me
 4. **Derived Attributes**
    - Reaction, Essence, Initiative, etc., are calculated from primary attributes or other values. Document formulas once sourced from rules.
 5. **Advancement & Augmentation**
-   - Attribute improvement costs, cyberware impacts, and magical adjustments should reference advancement rules once sourced (see [Attributes questions](./shadowrun-5e-questions-and-gaps.md#attributes)).
+   - Attribute improvement costs, cyberware impacts, and magical adjustments should reference advancement rules once sourced (see [Attributes questions](../questions-and-gaps.md#attributes)).
 
 ## Open Items
-- See [Attributes questions](./shadowrun-5e-questions-and-gaps.md#attributes) for outstanding data requirements.
+- See [Attributes questions](../questions-and-gaps.md#attributes) for outstanding data requirements.
 
 ## Reference
 - SR5 Core Rulebook attribute chapter (pages TBD).
-- `shadowrun-5e-data-tables.md` for priority point values.
-- Metatype data (see `shadowrun-5e-data-tables.md` and related files) once fully populated.
+- [Data Tables](../data-tables.md) for priority point values.
+- Metatype data (see [Data Tables](../data-tables.md) and related files) once fully populated.
 
 
 USING ATTRIBUTES
@@ -71,5 +71,54 @@ Attribute-only tests are used when no skill applies. The gamemaster determines w
 - **Memory (`Logic + Willpower`)**: Recall or memorize information. Apply Knowledge Skill Table thresholds. Hits on memorization tests add dice to later recall checks. Glitches cause misremembered details; critical glitches create entirely false memories.
 
 These guidelines should be referenced when implementing tests that rely solely on innate attributes rather than skills.
+
+*Last updated: 2025-11-08*
+---
+
+## Attribute Data Tables
+
+## Primary Attributes
+
+| Name | Abbreviation | Category | Base Range (Min–Max) | Description | Notes |
+|------|--------------|----------|----------------------|-------------|-------|
+| Body | BOD | Physical | TODO | Physical toughness, resistance to damage. | |
+| Agility | AGI | Physical | TODO | Coordination, reflexes, and balance. | |
+| Reaction | REA | Physical (derived for initiative) | TODO | Reflex speed and evasive ability. | Often treated as derived; confirm final handling. |
+| Strength | STR | Physical | TODO | Raw muscle power. | |
+| Willpower | WIL | Mental | TODO | Mental fortitude and resistance. | |
+| Logic | LOG | Mental | TODO | Analytical and reasoning ability. | |
+| Intuition | INT | Mental | TODO | Instinct, perception, gut reactions. | |
+| Charisma | CHA | Mental | TODO | Social presence and force of personality. | |
+| Edge | EDG | Special | TODO | Luck and ability to “push” outcomes. | Humans receive baseline bonus (see metatype data). |
+| Magic | MAG | Special | TODO | Magical aptitude; only for Awakened. | Mundanes start at 0. |
+| Resonance | RES | Special | TODO | Technomancer connection to the Resonance. | Non-technomancers start at 0. |
+| Essence | ESS | Special | 6 (base) | Measure of life force; reduced by cyberware. | Typically derived but tracked as a key value. |
+
+> TODO: Confirm which attributes are strictly primary vs derived in SR5 tables and update accordingly.
+
+## Derived Attributes
+
+| Name | Formula / Base | Description | Notes |
+|------|----------------|-------------|-------|
+| Reaction | TBD | Combination of Quickness (Agility) and Intelligence? | Verify SR5 definition. |
+| Initiative | TBD | Initiative score and dice pool. | Multiple variants (physical, astral, matrix). |
+| Astral Initiative | TBD | Initiative for astral projection. | |
+| Matrix Initiative | TBD | Initiative while in VR/AR. | |
+| Essence | 6 – (cyber/bio costs) | Remaining life force after augmentations. | Already tracked above; keep formula here for clarity. |
+| Physical Limit | TBD | Calculated limit for physical actions. | |
+| Mental Limit | TBD | Calculated limit for mental actions. | |
+| Social Limit | TBD | Calculated limit for social actions. | |
+
+## Attribute Priority Reference
+
+| Priority | Attribute Points | Notes |
+|----------|------------------|-------|
+| A | 24 | From master priority table; confirm for SR5. |
+| B | 20 | |
+| C | 16 | |
+| D | 14 | |
+| E | 12 | |
+
+> TODO: Add metatype-specific attribute modifiers table or link to existing metatype data once finalized.
 
 *Last updated: 2025-11-08*

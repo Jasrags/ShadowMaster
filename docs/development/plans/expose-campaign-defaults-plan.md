@@ -1,6 +1,6 @@
 # Plan: Expose Campaign Defaults to Character Creation
 
-> **Roadmap Reference:** Progress against this plan is reflected in `docs/project-roadmap.md`. Keep this checklist for granular implementation notes related to campaign defaults.
+> **Roadmap Reference:** Progress against this plan is reflected in `docs/product/roadmap.md`. Keep this checklist for granular implementation notes related to campaign defaults.
 
 ## 1. Backend Enhancements
 - [x] **Campaign Service:** Extend `DescribeGameplayRules` to return structured defaults and helper logic for character creation overrides.
@@ -18,5 +18,5 @@
 ## 3. Tests & Documentation
 - [x] **Go Tests:** Added coverage for the campaign character-creation endpoint.
 - [x] **React/Vitest:** Smoke test extended to cover campaign gameplay rule merging.
-- [ ] **Docs:** Update `docs/application-architecture-plan.md` and related docs with campaign-aware character creation notes.
+- [ ] **Docs:** Update `docs/architecture/application-plan.md` and related docs with campaign-aware character creation notes.
 
