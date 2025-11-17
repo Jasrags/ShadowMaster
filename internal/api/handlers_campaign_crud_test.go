@@ -35,6 +35,9 @@ type campaignPayload struct {
 	Players        []domain.CampaignPlayerReference `json:"players"`
 	EnabledBooks   []string                         `json:"enabled_books"`
 	Status         string                           `json:"status"`
+	DeletedAt      *time.Time                       `json:"deleted_at,omitempty"`
+	GmUserID       string                           `json:"gm_user_id,omitempty"`
+	GMUsername     string                           `json:"gm_username,omitempty"`
 	CanEdit        bool                             `json:"can_edit"`
 	CanDelete      bool                             `json:"can_delete"`
 	GameplayRules  struct {
@@ -44,6 +47,16 @@ type campaignPayload struct {
 
 func TestCampaignHandlersCRUD(t *testing.T) {
 	handlers, repos := setupCampaignHandlers(t)
+
+	// Create admin user for creating campaigns
+	admin := &domain.User{
+		ID:           "admin",
+		Email:        "admin@example.com",
+		Username:     "admin",
+		PasswordHash: "hash",
+		Roles:        []string{domain.RoleAdministrator},
+	}
+	require.NoError(t, repos.User.Create(admin))
 
 	gm := &domain.User{
 		ID:           "gm-1",
@@ -107,6 +120,9 @@ func TestCampaignHandlersCRUD(t *testing.T) {
 	require.NoError(t, json.Unmarshal(rr.Body.Bytes(), &created))
 	assert.Equal(t, "Seattle Shadows", created.Name)
 	assert.Equal(t, "sr5", created.Edition)
+	// Verify GM user ID and username are set from the creating user (admin)
+	assert.Equal(t, "admin", created.GmUserID)
+	assert.Equal(t, "admin", created.GMUsername)
 	assert.Equal(t, "experienced", created.GameplayLevel)
 	assert.Equal(t, "Neon Nights", created.Theme)
 	assert.Equal(t, "no dragons at the table", created.HouseRuleNotes)
@@ -210,7 +226,7 @@ func TestCampaignHandlersCRUD(t *testing.T) {
 	require.Len(t, reload.Factions, 1)
 	assert.Equal(t, "f1", reload.Factions[0].ID)
 
-	// DELETE /api/campaigns/{id}
+	// DELETE /api/campaigns/{id} - Soft delete
 	deleteReq := httptest.NewRequest(http.MethodDelete, "/api/campaigns/"+created.ID, nil)
 	deleteReq.SetPathValue("id", created.ID)
 	attachSession(t, handlers, deleteReq, "admin", []string{domain.RoleAdministrator})
@@ -218,13 +234,35 @@ func TestCampaignHandlersCRUD(t *testing.T) {
 	handlers.Sessions.WithSession(http.HandlerFunc(handlers.DeleteCampaign)).ServeHTTP(deleteRR, deleteReq)
 	require.Equal(t, http.StatusNoContent, deleteRR.Code)
 
-	// Verify campaign removed
-	missingReq := httptest.NewRequest(http.MethodGet, "/api/campaigns/"+created.ID, nil)
-	missingReq.SetPathValue("id", created.ID)
-	attachSession(t, handlers, missingReq, "admin", []string{domain.RoleAdministrator})
-	missingRR := httptest.NewRecorder()
-	handlers.Sessions.WithSession(http.HandlerFunc(handlers.GetCampaign)).ServeHTTP(missingRR, missingReq)
-	assert.Equal(t, http.StatusNotFound, missingRR.Code)
+	// Verify campaign is soft-deleted (not in GetAll list)
+	listAfterDeleteReq := httptest.NewRequest(http.MethodGet, "/api/campaigns", nil)
+	attachSession(t, handlers, listAfterDeleteReq, "admin", []string{domain.RoleAdministrator})
+	listAfterDeleteRR := httptest.NewRecorder()
+	handlers.Sessions.WithSession(http.HandlerFunc(handlers.GetCampaigns)).ServeHTTP(listAfterDeleteRR, listAfterDeleteReq)
+	require.Equal(t, http.StatusOK, listAfterDeleteRR.Code)
+	var campaignsAfterDelete []campaignPayload
+	require.NoError(t, json.Unmarshal(listAfterDeleteRR.Body.Bytes(), &campaignsAfterDelete))
+	// Campaign should not appear in the list (soft-deleted)
+	found := false
+	for _, c := range campaignsAfterDelete {
+		if c.ID == created.ID {
+			found = true
+			break
+		}
+	}
+	assert.False(t, found, "Deleted campaign should not appear in GetAll results")
+
+	// Verify campaign still exists but is marked as deleted (can be retrieved by ID)
+	deletedCampaignReq := httptest.NewRequest(http.MethodGet, "/api/campaigns/"+created.ID, nil)
+	deletedCampaignReq.SetPathValue("id", created.ID)
+	attachSession(t, handlers, deletedCampaignReq, "admin", []string{domain.RoleAdministrator})
+	deletedCampaignRR := httptest.NewRecorder()
+	handlers.Sessions.WithSession(http.HandlerFunc(handlers.GetCampaign)).ServeHTTP(deletedCampaignRR, deletedCampaignReq)
+	require.Equal(t, http.StatusOK, deletedCampaignRR.Code)
+	var deletedCampaign campaignPayload
+	require.NoError(t, json.Unmarshal(deletedCampaignRR.Body.Bytes(), &deletedCampaign))
+	assert.NotNil(t, deletedCampaign.DeletedAt, "Campaign should have DeletedAt timestamp set")
+	assert.False(t, deletedCampaign.DeletedAt.IsZero(), "Campaign DeletedAt should not be zero")
 }
 
 func TestUpdateCampaignRequiresPrivileges(t *testing.T) {

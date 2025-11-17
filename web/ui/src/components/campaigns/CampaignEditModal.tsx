@@ -55,7 +55,7 @@ export function CampaignEditModal({ campaign, isOpen, onOpenChange, onSuccess }:
   const [enabledBooks, setEnabledBooks] = useState<string[]>([]);
   const [automation, setAutomation] = useState<Record<string, boolean>>({});
   const [selectedAutomations, setSelectedAutomations] = useState<string[]>([]);
-  const [availableBooks, setAvailableBooks] = useState<string[]>([]);
+  const [availableBooks, setAvailableBooks] = useState<Array<{ code: string; name: string }>>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [isLoadingBooks, setIsLoadingBooks] = useState(false);
 
@@ -63,9 +63,11 @@ export function CampaignEditModal({ campaign, isOpen, onOpenChange, onSuccess }:
     try {
       setIsLoadingBooks(true);
       const books = await campaignApi.getEditionBooks(edition);
-      // Ensure books is an array of strings
+      // Ensure books is an array of SourceBook objects
       const validBooks = Array.isArray(books) 
-        ? books.filter((book): book is string => typeof book === 'string')
+        ? books.filter((book): book is { code: string; name: string } => 
+            book && typeof book === 'object' && typeof book.code === 'string' && typeof book.name === 'string'
+          )
         : [];
       setAvailableBooks(validBooks);
     } catch (err) {
@@ -300,18 +302,17 @@ export function CampaignEditModal({ campaign, isOpen, onOpenChange, onSuccess }:
                 ) : (
                   <div className="space-y-2 border border-sr-light-gray rounded-md p-3 bg-sr-light-gray/30">
                     {availableBooks.map((book, index) => {
-                      // Ensure book is a string and create a truly unique key
-                      const bookKey = typeof book === 'string' ? `book-${book}-${index}` : `book-${index}`;
-                      const bookLabel = typeof book === 'string' ? book : String(book);
+                      const bookKey = `book-${book.code}-${index}`;
+                      const bookCode = book.code;
                       return (
                         <div key={bookKey} className="flex items-center gap-2">
                           <Checkbox
-                            isSelected={enabledBooks.includes(bookLabel)}
+                            isSelected={enabledBooks.includes(bookCode)}
                             onChange={(isSelected) => {
                               if (isSelected) {
-                                setEnabledBooks((prev) => [...prev, bookLabel]);
+                                setEnabledBooks((prev) => [...prev, bookCode]);
                               } else {
-                                setEnabledBooks((prev) => prev.filter((b) => b !== bookLabel));
+                                setEnabledBooks((prev) => prev.filter((b) => b !== bookCode));
                               }
                             }}
                             className="cursor-pointer"
@@ -334,7 +335,7 @@ export function CampaignEditModal({ campaign, isOpen, onOpenChange, onSuccess }:
                               </div>
                             )}
                           </Checkbox>
-                          <span className="text-sm text-gray-100">{bookLabel}</span>
+                          <span className="text-sm text-gray-100">{book.name || book.code}</span>
                         </div>
                       );
                     })}

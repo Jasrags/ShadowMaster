@@ -1,15 +1,18 @@
 import { useEffect, useState, useCallback } from 'react';
+import { Button } from 'react-aria-components';
 import { campaignApi } from '../lib/api';
 import type { CampaignResponse } from '../lib/types';
 import { useAuth } from '../contexts/AuthContext';
 import { useToast } from '../contexts/ToastContext';
 import { CampaignTable } from './campaigns/CampaignTable';
+import { CampaignCreationWizard } from './campaigns/CampaignCreationWizard';
 
 export function HomePage() {
   const { user } = useAuth();
   const { showError } = useToast();
   const [campaigns, setCampaigns] = useState<CampaignResponse[]>([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [isWizardOpen, setIsWizardOpen] = useState(false);
 
   const loadCampaigns = useCallback(async () => {
     try {
@@ -55,8 +58,22 @@ export function HomePage() {
 
   return (
     <div>
-      <h2 className="text-2xl font-bold text-gray-100 mb-6">{getHeading()}</h2>
+      <div className="flex items-center justify-between mb-6">
+        <h2 className="text-2xl font-bold text-gray-100">{getHeading()}</h2>
+        <Button
+          onPress={() => setIsWizardOpen(true)}
+          aria-label="Create new campaign"
+          className="px-4 py-2 bg-sr-accent border border-sr-accent rounded-md text-gray-100 hover:bg-sr-accent/80 focus:outline-none focus:ring-2 focus:ring-sr-accent focus:border-transparent transition-colors text-sm font-medium"
+        >
+          Create
+        </Button>
+      </div>
       <CampaignTable campaigns={campaigns} onCampaignUpdated={loadCampaigns} />
+      <CampaignCreationWizard
+        isOpen={isWizardOpen}
+        onOpenChange={setIsWizardOpen}
+        onSuccess={loadCampaigns}
+      />
     </div>
   );
 }

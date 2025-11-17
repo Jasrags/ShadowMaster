@@ -92,9 +92,30 @@ export const campaignApi = {
     });
   },
 
-  async getEditionBooks(edition: string): Promise<string[]> {
-    const response = await apiRequest<{ books: string[] }>(`/editions/${edition}/books`);
+  async getEditionBooks(edition: string): Promise<Array<{ code: string; name: string; id?: string }>> {
+    const response = await apiRequest<{ books: Array<{ code: string; name: string; id?: string }> }>(`/editions/${edition}/books`);
     return response.books || [];
+  },
+
+  async createCampaign(data: {
+    name: string;
+    description?: string;
+    edition: string;
+    creationMethod: string;
+    status?: string;
+    enabledBooks?: string[];
+    automation?: Record<string, boolean>;
+  }): Promise<CampaignResponse> {
+    return apiRequest<CampaignResponse>('/campaigns', {
+      method: 'POST',
+      body: JSON.stringify(data),
+    });
+  },
+
+  async deleteCampaign(id: string): Promise<void> {
+    return apiRequest<void>(`/campaigns/${id}`, {
+      method: 'DELETE',
+    });
   },
 };
 

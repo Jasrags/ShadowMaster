@@ -63,7 +63,7 @@ func (r *CampaignRepositoryJSON) Create(campaign *domain.Campaign) error {
 	return r.saveIndex()
 }
 
-// GetByID retrieves a campaign by ID
+// GetByID retrieves a campaign by ID (includes soft-deleted campaigns)
 func (r *CampaignRepositoryJSON) GetByID(id string) (*domain.Campaign, error) {
 	r.index.mu.RLock()
 	filename, exists := r.index.Campaigns[id]
@@ -89,7 +89,7 @@ func (r *CampaignRepositoryJSON) GetByID(id string) (*domain.Campaign, error) {
 	return &campaign, nil
 }
 
-// GetAll retrieves all campaigns
+// GetAll retrieves all campaigns (excluding soft-deleted ones)
 func (r *CampaignRepositoryJSON) GetAll() ([]*domain.Campaign, error) {
 	r.index.mu.RLock()
 	campaignMap := make(map[string]string)
@@ -102,6 +102,10 @@ func (r *CampaignRepositoryJSON) GetAll() ([]*domain.Campaign, error) {
 	for _, filename := range campaignMap {
 		var campaign domain.Campaign
 		if err := r.store.Read(filename, &campaign); err != nil {
+			continue
+		}
+		// Skip soft-deleted campaigns
+		if !campaign.DeletedAt.IsZero() {
 			continue
 		}
 		if backfillHouseRulesFromFile(r.store, filename, &campaign) {
@@ -137,6 +141,8 @@ func (r *CampaignRepositoryJSON) Update(campaign *domain.Campaign) error {
 		return err
 	}
 
+	// Preserve DeletedAt from existing campaign (soft-deleted campaigns stay deleted)
+	campaign.DeletedAt = existing.DeletedAt
 	campaign.CreatedAt = existing.CreatedAt
 	campaign.Status = campaignStatusOrDefault(campaign.Status, existing.Status)
 	campaign.Edition = existing.Edition
@@ -156,24 +162,28 @@ func (r *CampaignRepositoryJSON) Update(campaign *domain.Campaign) error {
 }
 
 // Delete deletes a campaign
+// Delete performs a soft delete by setting DeletedAt timestamp
 func (r *CampaignRepositoryJSON) Delete(id string) error {
-	r.index.mu.RLock()
-	filename, exists := r.index.Campaigns[id]
-	r.index.mu.RUnlock()
-
-	if !exists {
-		return fmt.Errorf("campaign not found: %s", id)
-	}
-
-	if err := r.store.Delete(filename); err != nil {
+	campaign, err := r.GetByID(id)
+	if err != nil {
 		return err
 	}
 
-	r.index.mu.Lock()
-	delete(r.index.Campaigns, id)
-	r.index.mu.Unlock()
+	// Check if already deleted
+	if !campaign.DeletedAt.IsZero() {
+		return fmt.Errorf("campaign already deleted: %s", id)
+	}
 
-	return r.saveIndex()
+	// Perform soft delete by setting DeletedAt
+	campaign.DeletedAt = time.Now()
+	campaign.UpdatedAt = time.Now()
+
+	filename := fmt.Sprintf("campaigns/%s.json", campaign.ID)
+	if err := r.store.Write(filename, campaign); err != nil {
+		return err
+	}
+
+	return nil
 }
 
 // saveIndex saves the index file

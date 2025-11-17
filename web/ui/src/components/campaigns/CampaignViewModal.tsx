@@ -1,5 +1,7 @@
 import { Dialog, Modal, Heading, Button } from 'react-aria-components';
+import { useState, useEffect } from 'react';
 import type { CampaignResponse } from '../../lib/types';
+import { campaignApi } from '../../lib/api';
 
 interface CampaignViewModalProps {
   campaign: CampaignResponse | null;
@@ -65,6 +67,26 @@ const getAutomationInfo = (key: string): { name: string; description: string } =
 };
 
 export function CampaignViewModal({ campaign, isOpen, onOpenChange }: CampaignViewModalProps) {
+  const [bookNames, setBookNames] = useState<Record<string, string>>({});
+
+  // Load book names when modal opens
+  useEffect(() => {
+    if (campaign && isOpen && campaign.edition) {
+      campaignApi.getEditionBooks(campaign.edition)
+        .then(books => {
+          const nameMap: Record<string, string> = {};
+          books.forEach(book => {
+            nameMap[book.code] = book.name;
+          });
+          setBookNames(nameMap);
+        })
+        .catch(() => {
+          // Silently fail - tooltips just won't show
+          setBookNames({});
+        });
+    }
+  }, [campaign, isOpen]);
+
   const handleClose = () => {
     onOpenChange(false);
   };
@@ -124,8 +146,8 @@ export function CampaignViewModal({ campaign, isOpen, onOpenChange }: CampaignVi
                     <p className="text-gray-100 mt-1">{campaign.edition.toUpperCase()}</p>
                   </div>
                   <div>
-                    <label className="text-sm text-gray-400">GM Name</label>
-                    <p className="text-gray-100 mt-1">{campaign.gm_name ? toTitleCase(campaign.gm_name) : '-'}</p>
+                    <label className="text-sm text-gray-400">GM</label>
+                    <p className="text-gray-100 mt-1">{campaign.gm_username || (campaign.gm_name ? toTitleCase(campaign.gm_name) : '-')}</p>
                   </div>
                   <div>
                     <label className="text-sm text-gray-400">Gameplay Level</label>
@@ -165,14 +187,30 @@ export function CampaignViewModal({ campaign, isOpen, onOpenChange }: CampaignVi
                 <section>
                   <h2 className="text-lg font-semibold text-gray-200 mb-3">Enabled Books</h2>
                   <div className="flex flex-wrap gap-2">
-                    {campaign.enabled_books.map((book, index) => (
-                      <span
-                        key={index}
-                        className="px-3 py-1 bg-sr-light-gray border border-sr-light-gray rounded-md text-gray-200 text-sm"
-                      >
-                        {book}
-                      </span>
-                    ))}
+                    {campaign.enabled_books.map((book, index) => {
+                      const bookName = bookNames[book] || book;
+                      const hasTooltip = bookNames[book] && bookNames[book] !== book;
+                      return (
+                        <div
+                          key={index}
+                          className="relative group"
+                        >
+                          <span
+                            className="px-3 py-1 bg-sr-light-gray border border-sr-light-gray rounded-md text-gray-200 text-sm cursor-default"
+                          >
+                            {book}
+                          </span>
+                          {hasTooltip && (
+                            <div className="absolute bottom-full left-1/2 transform -translate-x-1/2 mb-2 px-2 py-1 bg-sr-gray border border-sr-light-gray rounded-md text-xs text-gray-100 whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none z-10 shadow-lg">
+                              {bookName}
+                              <div className="absolute top-full left-1/2 transform -translate-x-1/2 -mt-px">
+                                <div className="border-4 border-transparent border-t-sr-light-gray"></div>
+                              </div>
+                            </div>
+                          )}
+                        </div>
+                      );
+                    })}
                   </div>
                 </section>
               )}
@@ -291,12 +329,28 @@ export function CampaignViewModal({ campaign, isOpen, onOpenChange }: CampaignVi
               )}
 
               {/* Automation */}
-              {campaign.automation && Object.keys(campaign.automation).length > 0 && (
-                <section>
-                  <h2 className="text-lg font-semibold text-gray-200 mb-3">Automation</h2>
-                  <div className="space-y-2">
-                    {Object.entries(campaign.automation).map(([key, value]) => {
+              <section>
+                <h2 className="text-lg font-semibold text-gray-200 mb-3">Automation</h2>
+                <div className="space-y-2">
+                  {(() => {
+                    // Default automation keys
+                    const defaultAutomationKeys = [
+                      'initiative_automation',
+                      'matrix_trace',
+                      'recoil_tracking',
+                      'damage_tracking',
+                      'spell_cast',
+                      'skill_test',
+                    ];
+                    
+                    // Get all automation keys (from campaign or default list)
+                    const allKeys = campaign.automation 
+                      ? [...new Set([...defaultAutomationKeys, ...Object.keys(campaign.automation)])]
+                      : defaultAutomationKeys;
+                    
+                    return allKeys.map((key) => {
                       const automationInfo = getAutomationInfo(key);
+                      const isEnabled = campaign.automation?.[key] === true;
                       return (
                         <div
                           key={key}
@@ -304,17 +358,17 @@ export function CampaignViewModal({ campaign, isOpen, onOpenChange }: CampaignVi
                         >
                           <div className="flex items-center justify-between mb-1">
                             <div className="font-medium text-gray-200">{automationInfo.name}</div>
-                            <span className={`px-2 py-1 rounded text-sm ${value ? 'bg-green-900/30 text-green-400' : 'bg-red-900/30 text-red-400'}`}>
-                              {value ? 'Enabled' : 'Disabled'}
+                            <span className={`px-2 py-1 rounded text-sm ${isEnabled ? 'bg-green-900/30 text-green-400' : 'bg-red-900/30 text-red-400'}`}>
+                              {isEnabled ? 'Enabled' : 'Disabled'}
                             </span>
                           </div>
                           <div className="text-sm text-gray-400 mt-1">{automationInfo.description}</div>
                         </div>
                       );
-                    })}
-                  </div>
-                </section>
-              )}
+                    });
+                  })()}
+                </div>
+              </section>
 
               {/* Dates */}
               <section>

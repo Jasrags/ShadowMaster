@@ -32,6 +32,7 @@ export interface Campaign {
   created_at: string;
   updated_at: string;
   setup_locked_at?: string;
+  deleted_at?: string;
   status: string; // Active, Paused, Completed
 }
 
@@ -88,6 +89,7 @@ export interface UserResponse {
 
 // Campaign response with additional fields
 export interface CampaignResponse extends Campaign {
+  gm_username?: string;
   can_edit?: boolean;
   can_delete?: boolean;
 }

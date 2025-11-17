@@ -49,6 +49,7 @@ type changePasswordRequest struct {
 type campaignResponse struct {
 	*domain.Campaign
 	GameplayRules *service.GameplayRules `json:"gameplay_rules,omitempty"`
+	GMUsername    string                 `json:"gm_username,omitempty"`
 	CanEdit       bool                   `json:"can_edit"`
 	CanDelete     bool                   `json:"can_delete"`
 }
@@ -689,12 +690,32 @@ func (h *Handlers) CreateCampaign(w http.ResponseWriter, r *http.Request) {
 	}
 
 	session := GetSessionFromContext(r.Context())
+	if session == nil {
+		respondError(w, http.StatusUnauthorized, "authentication required")
+		return
+	}
+
+	// Get the user to set GM name from username
+	user, err := h.UserService.GetUserByID(session.UserID)
+	if err != nil {
+		respondServiceError(w, err)
+		return
+	}
+
+	// Set GM user ID and name from the creating user
+	gmUserID := session.UserID
+	gmName := user.Username
+	// Allow override of GM name if provided (for backwards compatibility)
+	if req.GMName != "" {
+		gmName = req.GMName
+	}
+
 	campaign, err := h.CampaignService.CreateCampaign(service.CampaignCreateInput{
 		Name:           req.Name,
 		Description:    req.Description,
 		GroupID:        req.GroupID,
-		GMName:         req.GMName,
-		GMUserID:       req.GMUserID,
+		GMName:         gmName,
+		GMUserID:       gmUserID,
 		Edition:        req.Edition,
 		CreationMethod: req.CreationMethod,
 		GameplayLevel:  req.GameplayLevel,
@@ -736,6 +757,12 @@ func (h *Handlers) UpdateCampaign(w http.ResponseWriter, r *http.Request) {
 	existing, err := h.CampaignService.GetCampaign(id)
 	if err != nil {
 		respondServiceError(w, err)
+		return
+	}
+
+	// Prevent updating soft-deleted campaigns
+	if !existing.DeletedAt.IsZero() {
+		respondError(w, http.StatusBadRequest, "cannot update a deleted campaign")
 		return
 	}
 
@@ -785,6 +812,12 @@ func (h *Handlers) DeleteCampaign(w http.ResponseWriter, r *http.Request) {
 	campaign, err := h.CampaignService.GetCampaign(id)
 	if err != nil {
 		respondServiceError(w, err)
+		return
+	}
+
+	// Prevent deleting already-deleted campaigns
+	if !campaign.DeletedAt.IsZero() {
+		respondError(w, http.StatusBadRequest, "campaign is already deleted")
 		return
 	}
 
@@ -1227,9 +1260,23 @@ func (h *Handlers) buildCampaignResponse(session *SessionData, campaign *domain.
 
 	canManage := canManageCampaign(campaign, session)
 
+	// Look up GM username if GM user ID is set
+	gmUsername := ""
+	if campaign.GmUserID != "" {
+		user, err := h.UserService.GetUserByID(campaign.GmUserID)
+		if err == nil && user != nil {
+			gmUsername = user.Username
+		}
+	}
+	// Fallback to gm_name if username lookup failed
+	if gmUsername == "" && campaign.GmName != "" {
+		gmUsername = campaign.GmName
+	}
+
 	return &campaignResponse{
 		Campaign:      campaign,
 		GameplayRules: rules,
+		GMUsername:    gmUsername,
 		CanEdit:       canManage,
 		CanDelete:     canManage,
 	}, nil
