@@ -131,6 +131,6 @@ This document translates the GM onboarding flow into concrete UI, data, and inte
 ### References
 - Persona notes: `docs/personas/gamemaster_persona_shadowrun.md`
 - Existing wizard source: `web/app/src/components/CampaignCreation.tsx`
-- Roadmap: `docs/project-roadmap.md`
+- Roadmap: `docs/product/roadmap.md`
 
 
