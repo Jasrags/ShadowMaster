@@ -27,7 +27,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       setIsLoading(true);
       const currentUser = await authApi.getCurrentUser();
       setUser(currentUser);
-    } catch (err) {
+    } catch {
       setUser(null);
       // Silently fail auth check - user just isn't logged in
     } finally {
@@ -66,6 +66,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   );
 }
 
+// eslint-disable-next-line react-refresh/only-export-components
 export function useAuth() {
   const context = useContext(AuthContext);
   if (context === undefined) {

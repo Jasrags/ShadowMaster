@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useCallback } from 'react';
 import { campaignApi } from '../../lib/api';
 import type { CampaignResponse } from '../../lib/types';
 import { CampaignCard } from './CampaignCard';
@@ -9,11 +9,7 @@ export function CampaignList() {
   const [campaigns, setCampaigns] = useState<CampaignResponse[]>([]);
   const [isLoading, setIsLoading] = useState(true);
 
-  useEffect(() => {
-    loadCampaigns();
-  }, []);
-
-  async function loadCampaigns() {
+  const loadCampaigns = useCallback(async () => {
     try {
       setIsLoading(true);
       const data = await campaignApi.getCampaigns();
@@ -24,7 +20,11 @@ export function CampaignList() {
     } finally {
       setIsLoading(false);
     }
-  }
+  }, [showError]);
+
+  useEffect(() => {
+    loadCampaigns();
+  }, [loadCampaigns]);
 
   if (isLoading) {
     return (

@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useCallback } from 'react';
 import { campaignApi } from '../lib/api';
 import type { CampaignResponse } from '../lib/types';
 import { useAuth } from '../contexts/AuthContext';
@@ -11,11 +11,7 @@ export function HomePage() {
   const [campaigns, setCampaigns] = useState<CampaignResponse[]>([]);
   const [isLoading, setIsLoading] = useState(true);
 
-  useEffect(() => {
-    loadCampaigns();
-  }, []);
-
-  async function loadCampaigns() {
+  const loadCampaigns = useCallback(async () => {
     try {
       setIsLoading(true);
       const data = await campaignApi.getCampaigns();
@@ -26,7 +22,11 @@ export function HomePage() {
     } finally {
       setIsLoading(false);
     }
-  }
+  }, [showError]);
+
+  useEffect(() => {
+    loadCampaigns();
+  }, [loadCampaigns]);
 
   // Determine heading based on user roles
   const getHeading = () => {

@@ -148,6 +148,88 @@ func TestCampaignServiceImmutableFields(t *testing.T) {
 	assert.Equal(t, updated.EnabledBooks, stored.EnabledBooks)
 }
 
+func TestCampaignServiceUpdateAutomation(t *testing.T) {
+	service, repo := newCampaignService(t)
+
+	campaign, err := service.CreateCampaign(CampaignCreateInput{
+		Name:    "Automation Test",
+		Edition: "sr5",
+	})
+	require.NoError(t, err)
+
+	// Test setting automation
+	automation := map[string]bool{
+		"initiative_automation": true,
+		"damage_tracking":       true,
+		"matrix_trace":          false,
+		"recoil_tracking":       true,
+		"spell_cast":            false,
+		"skill_test":            true,
+	}
+	updated, err := service.UpdateCampaign(campaign.ID, CampaignUpdateInput{Automation: &automation})
+	require.NoError(t, err)
+	assert.Equal(t, automation, updated.Automation)
+
+	// Test updating automation (partial replacement)
+	newAutomation := map[string]bool{
+		"initiative_automation": false,
+		"damage_tracking":       false,
+	}
+	updated, err = service.UpdateCampaign(campaign.ID, CampaignUpdateInput{Automation: &newAutomation})
+	require.NoError(t, err)
+	assert.Equal(t, newAutomation, updated.Automation)
+
+	// Verify persisted
+	stored, err := repo.GetByID(campaign.ID)
+	require.NoError(t, err)
+	assert.Equal(t, newAutomation, stored.Automation)
+}
+
+func TestCampaignServiceUpdateStatus(t *testing.T) {
+	service, repo := newCampaignService(t)
+
+	campaign, err := service.CreateCampaign(CampaignCreateInput{
+		Name:    "Status Test",
+		Edition: "sr5",
+		Status:  "Active",
+	})
+	require.NoError(t, err)
+	assert.Equal(t, "Active", campaign.Status)
+
+	// Test status transitions
+	statuses := []string{"Paused", "Completed", "Active"}
+	for _, status := range statuses {
+		updated, err := service.UpdateCampaign(campaign.ID, CampaignUpdateInput{Status: &status})
+		require.NoError(t, err)
+		assert.Equal(t, status, updated.Status)
+
+		stored, err := repo.GetByID(campaign.ID)
+		require.NoError(t, err)
+		assert.Equal(t, status, stored.Status)
+	}
+}
+
+func TestCampaignServiceUpdateTheme(t *testing.T) {
+	service, repo := newCampaignService(t)
+
+	campaign, err := service.CreateCampaign(CampaignCreateInput{
+		Name:    "Theme Test",
+		Edition: "sr5",
+		Theme:   "Original Theme",
+	})
+	require.NoError(t, err)
+	assert.Equal(t, "Original Theme", campaign.Theme)
+
+	newTheme := "Updated Theme"
+	updated, err := service.UpdateCampaign(campaign.ID, CampaignUpdateInput{Theme: &newTheme})
+	require.NoError(t, err)
+	assert.Equal(t, newTheme, updated.Theme)
+
+	stored, err := repo.GetByID(campaign.ID)
+	require.NoError(t, err)
+	assert.Equal(t, newTheme, stored.Theme)
+}
+
 func TestCampaignServiceMigratesLegacyData(t *testing.T) {
 	store, index := newCampaignStore(t)
 

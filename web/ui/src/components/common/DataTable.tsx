@@ -22,11 +22,11 @@ export interface ColumnDefinition<T> {
   header: string;
   accessor: keyof T | ((row: T) => ReactNode);
   sortable?: boolean;
-  render?: (value: any, row: T) => ReactNode;
+  render?: (value: unknown, row: T) => ReactNode;
   className?: string;
 }
 
-export interface DataTableProps<T extends Record<string, any>> {
+export interface DataTableProps<T> {
   data: T[];
   columns: ColumnDefinition<T>[];
   searchFields?: (keyof T)[];
@@ -43,7 +43,7 @@ export interface DataTableProps<T extends Record<string, any>> {
 const DEFAULT_ROWS_PER_PAGE_OPTIONS = [10, 25, 50, 100];
 const DEFAULT_ROWS_PER_PAGE = 10;
 
-export function DataTable<T extends Record<string, any>>({
+export function DataTable<T>({
   data,
   columns,
   searchFields,
@@ -118,7 +118,7 @@ export function DataTable<T extends Record<string, any>>({
   };
 
   const getCellValue = (row: T, column: ColumnDefinition<T>): ReactNode => {
-    let value: any;
+    let value: unknown;
     if (typeof column.accessor === 'function') {
       value = column.accessor(row);
     } else {

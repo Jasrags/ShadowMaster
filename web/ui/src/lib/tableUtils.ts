@@ -17,7 +17,7 @@ export interface FilterConfig {
  * @param searchFields Fields to search when using global search term
  * @returns Filtered array
  */
-export function filterData<T extends Record<string, any>>(
+export function filterData<T>(
   data: T[],
   searchTerm: string,
   filters: FilterConfig,
@@ -42,7 +42,7 @@ export function filterData<T extends Record<string, any>>(
     if (filterValue && filterValue.trim()) {
       const filterLower = filterValue.toLowerCase().trim();
       filtered = filtered.filter((item) => {
-        const value = item[key];
+        const value = (item as Record<string, unknown>)[key];
         if (value == null) return false;
         return String(value).toLowerCase().includes(filterLower);
       });
@@ -59,7 +59,7 @@ export function filterData<T extends Record<string, any>>(
  * @param sortDirection Sort direction (asc or desc)
  * @returns Sorted array
  */
-export function sortData<T extends Record<string, any>>(
+export function sortData<T>(
   data: T[],
   sortKey: keyof T | null,
   sortDirection: 'asc' | 'desc'

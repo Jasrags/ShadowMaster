@@ -80,8 +80,8 @@ export function CampaignTable({ campaigns, onCampaignUpdated }: CampaignTablePro
       header: 'Status',
       accessor: 'status',
       sortable: true,
-      render: (value: string) => (
-        <span className={getStatusColor(value)}>{value}</span>
+      render: (value: unknown) => (
+        <span className={getStatusColor(String(value))}>{String(value)}</span>
       ),
     },
     {
@@ -89,7 +89,7 @@ export function CampaignTable({ campaigns, onCampaignUpdated }: CampaignTablePro
       header: 'Actions',
       accessor: 'id',
       sortable: false,
-      render: (_value: any, row: CampaignResponse) => (
+      render: (_value: unknown, row: CampaignResponse) => (
         <div className="flex items-center gap-2">
           <Button
             onPress={() => handleView(row)}

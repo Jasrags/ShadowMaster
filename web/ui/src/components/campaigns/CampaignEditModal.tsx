@@ -3,7 +3,7 @@ import { Checkbox } from 'react-aria-components';
 import type { CampaignResponse } from '../../lib/types';
 import { campaignApi } from '../../lib/api';
 import { useToast } from '../../contexts/ToastContext';
-import { useState, useEffect, useMemo } from 'react';
+import { useState, useEffect, useMemo, useCallback } from 'react';
 
 interface CampaignEditModalProps {
   campaign: CampaignResponse | null;
@@ -59,6 +59,24 @@ export function CampaignEditModal({ campaign, isOpen, onOpenChange, onSuccess }:
   const [isLoading, setIsLoading] = useState(false);
   const [isLoadingBooks, setIsLoadingBooks] = useState(false);
 
+  const loadAvailableBooks = useCallback(async (edition: string) => {
+    try {
+      setIsLoadingBooks(true);
+      const books = await campaignApi.getEditionBooks(edition);
+      // Ensure books is an array of strings
+      const validBooks = Array.isArray(books) 
+        ? books.filter((book): book is string => typeof book === 'string')
+        : [];
+      setAvailableBooks(validBooks);
+    } catch (err) {
+      const errorMessage = err instanceof Error ? err.message : 'Failed to load available books';
+      showError('Failed to load books', errorMessage);
+      setAvailableBooks([]); // Set empty array on error
+    } finally {
+      setIsLoadingBooks(false);
+    }
+  }, [showError]);
+
   // Load campaign data when modal opens
   useEffect(() => {
     if (campaign && isOpen) {
@@ -107,25 +125,7 @@ export function CampaignEditModal({ campaign, isOpen, onOpenChange, onSuccess }:
         loadAvailableBooks(campaign.edition);
       }
     }
-  }, [campaign, isOpen]);
-
-  const loadAvailableBooks = async (edition: string) => {
-    try {
-      setIsLoadingBooks(true);
-      const books = await campaignApi.getEditionBooks(edition);
-      // Ensure books is an array of strings
-      const validBooks = Array.isArray(books) 
-        ? books.filter((book): book is string => typeof book === 'string')
-        : [];
-      setAvailableBooks(validBooks);
-    } catch (err) {
-      const errorMessage = err instanceof Error ? err.message : 'Failed to load available books';
-      showError('Failed to load books', errorMessage);
-      setAvailableBooks([]); // Set empty array on error
-    } finally {
-      setIsLoadingBooks(false);
-    }
-  };
+  }, [campaign, isOpen, loadAvailableBooks]);
 
   const handleClose = () => {
     onOpenChange(false);

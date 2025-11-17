@@ -33,6 +33,8 @@ type campaignPayload struct {
 	SessionSeed    *domain.CampaignSessionSeed      `json:"session_seed"`
 	PlayerUserIDs  []string                         `json:"player_user_ids"`
 	Players        []domain.CampaignPlayerReference `json:"players"`
+	EnabledBooks   []string                         `json:"enabled_books"`
+	Status         string                           `json:"status"`
 	CanEdit        bool                             `json:"can_edit"`
 	CanDelete      bool                             `json:"can_delete"`
 	GameplayRules  struct {
@@ -149,8 +151,21 @@ func TestCampaignHandlersCRUD(t *testing.T) {
 	assert.Equal(t, created.ID, fetched.ID)
 	assert.True(t, fetched.CanEdit)
 
-	// PUT /api/campaigns/{id}
-	updateBody, err := json.Marshal(map[string]string{"name": "Renamed Shadows"})
+	// PUT /api/campaigns/{id} - Update all editable fields
+	updateBody, err := json.Marshal(map[string]interface{}{
+		"name":          "Renamed Shadows",
+		"status":        "Paused",
+		"theme":         "Cyberpunk Noir",
+		"enabled_books": []string{"SR5", "AP"},
+		"automation": map[string]bool{
+			"initiative_automation": true,
+			"damage_tracking":       true,
+			"matrix_trace":          false,
+			"recoil_tracking":       false,
+			"spell_cast":            true,
+			"skill_test":            false,
+		},
+	})
 	require.NoError(t, err)
 
 	updateReq := httptest.NewRequest(http.MethodPut, "/api/campaigns/"+created.ID, bytes.NewReader(updateBody))
@@ -163,11 +178,34 @@ func TestCampaignHandlersCRUD(t *testing.T) {
 	var updated campaignPayload
 	require.NoError(t, json.Unmarshal(updateRR.Body.Bytes(), &updated))
 	assert.Equal(t, "Renamed Shadows", updated.Name)
+	assert.Equal(t, "Paused", updated.Status)
+	assert.Equal(t, "Cyberpunk Noir", updated.Theme)
+	assert.ElementsMatch(t, []string{"SR5", "AP"}, updated.EnabledBooks)
+	assert.Equal(t, map[string]bool{
+		"initiative_automation": true,
+		"damage_tracking":       true,
+		"matrix_trace":          false,
+		"recoil_tracking":       false,
+		"spell_cast":            true,
+		"skill_test":            false,
+	}, updated.Automation)
 
+	// Verify persisted data
 	reload, err := repos.Campaign.GetByID(created.ID)
 	require.NoError(t, err)
 	assert.Equal(t, "Renamed Shadows", reload.Name)
-	assert.Equal(t, "Neon Nights", reload.Theme)
+	assert.Equal(t, "Paused", reload.Status)
+	assert.Equal(t, "Cyberpunk Noir", reload.Theme)
+	assert.ElementsMatch(t, []string{"SR5", "AP"}, reload.EnabledBooks)
+	assert.Equal(t, map[string]bool{
+		"initiative_automation": true,
+		"damage_tracking":       true,
+		"matrix_trace":          false,
+		"recoil_tracking":       false,
+		"spell_cast":            true,
+		"skill_test":            false,
+	}, reload.Automation)
+	// Verify immutable fields remain unchanged
 	assert.Equal(t, "no dragons at the table", reload.HouseRuleNotes)
 	require.Len(t, reload.Factions, 1)
 	assert.Equal(t, "f1", reload.Factions[0].ID)
@@ -218,6 +256,182 @@ func TestUpdateCampaignRequiresPrivileges(t *testing.T) {
 	handlers.Sessions.WithSession(http.HandlerFunc(handlers.UpdateCampaign)).ServeHTTP(rr, req)
 
 	assert.Equal(t, http.StatusForbidden, rr.Code)
+}
+
+func TestUpdateCampaignAllFields(t *testing.T) {
+	handlers, repos := setupCampaignHandlers(t)
+
+	gm := &domain.User{
+		ID:           "gm-1",
+		Email:        "gm@example.com",
+		Username:     "GM",
+		PasswordHash: "hash",
+		Roles:        []string{domain.RoleGamemaster},
+	}
+	require.NoError(t, repos.User.Create(gm))
+
+	// Create initial campaign
+	campaign, err := handlers.CampaignService.CreateCampaign(service.CampaignCreateInput{
+		Name:           "Test Campaign",
+		Edition:        "sr5",
+		CreationMethod: "priority",
+		GameplayLevel:  "experienced",
+		GMName:         gm.Username,
+		GMUserID:       gm.ID,
+		Status:         "Active",
+		Theme:          "Original Theme",
+		EnabledBooks:   []string{"SR5"},
+		Automation: map[string]bool{
+			"initiative_automation": false,
+			"damage_tracking":       false,
+		},
+	})
+	require.NoError(t, err)
+
+	// Test updating name
+	updateBody, _ := json.Marshal(map[string]interface{}{"name": "Updated Name"})
+	req := httptest.NewRequest(http.MethodPut, "/api/campaigns/"+campaign.ID, bytes.NewReader(updateBody))
+	req.SetPathValue("id", campaign.ID)
+	attachSession(t, handlers, req, "gm-1", []string{domain.RoleGamemaster})
+	rr := httptest.NewRecorder()
+	handlers.Sessions.WithSession(http.HandlerFunc(handlers.UpdateCampaign)).ServeHTTP(rr, req)
+	require.Equal(t, http.StatusOK, rr.Code)
+
+	var result campaignPayload
+	require.NoError(t, json.Unmarshal(rr.Body.Bytes(), &result))
+	assert.Equal(t, "Updated Name", result.Name)
+
+	// Test updating status
+	updateBody, _ = json.Marshal(map[string]interface{}{"status": "Completed"})
+	req = httptest.NewRequest(http.MethodPut, "/api/campaigns/"+campaign.ID, bytes.NewReader(updateBody))
+	req.SetPathValue("id", campaign.ID)
+	attachSession(t, handlers, req, "gm-1", []string{domain.RoleGamemaster})
+	rr = httptest.NewRecorder()
+	handlers.Sessions.WithSession(http.HandlerFunc(handlers.UpdateCampaign)).ServeHTTP(rr, req)
+	require.NoError(t, json.Unmarshal(rr.Body.Bytes(), &result))
+	assert.Equal(t, "Completed", result.Status)
+
+	// Test updating theme
+	updateBody, _ = json.Marshal(map[string]interface{}{"theme": "New Theme"})
+	req = httptest.NewRequest(http.MethodPut, "/api/campaigns/"+campaign.ID, bytes.NewReader(updateBody))
+	req.SetPathValue("id", campaign.ID)
+	attachSession(t, handlers, req, "gm-1", []string{domain.RoleGamemaster})
+	rr = httptest.NewRecorder()
+	handlers.Sessions.WithSession(http.HandlerFunc(handlers.UpdateCampaign)).ServeHTTP(rr, req)
+	require.NoError(t, json.Unmarshal(rr.Body.Bytes(), &result))
+	assert.Equal(t, "New Theme", result.Theme)
+
+	// Test updating enabled_books
+	updateBody, _ = json.Marshal(map[string]interface{}{"enabled_books": []string{"SR5", "AP"}})
+	req = httptest.NewRequest(http.MethodPut, "/api/campaigns/"+campaign.ID, bytes.NewReader(updateBody))
+	req.SetPathValue("id", campaign.ID)
+	attachSession(t, handlers, req, "gm-1", []string{domain.RoleGamemaster})
+	rr = httptest.NewRecorder()
+	handlers.Sessions.WithSession(http.HandlerFunc(handlers.UpdateCampaign)).ServeHTTP(rr, req)
+	require.NoError(t, json.Unmarshal(rr.Body.Bytes(), &result))
+	assert.ElementsMatch(t, []string{"SR5", "AP"}, result.EnabledBooks)
+
+	// Test updating automation
+	updateBody, _ = json.Marshal(map[string]interface{}{
+		"automation": map[string]bool{
+			"initiative_automation": true,
+			"damage_tracking":       true,
+			"matrix_trace":          true,
+			"recoil_tracking":       false,
+			"spell_cast":            false,
+			"skill_test":            true,
+		},
+	})
+	req = httptest.NewRequest(http.MethodPut, "/api/campaigns/"+campaign.ID, bytes.NewReader(updateBody))
+	req.SetPathValue("id", campaign.ID)
+	attachSession(t, handlers, req, "gm-1", []string{domain.RoleGamemaster})
+	rr = httptest.NewRecorder()
+	handlers.Sessions.WithSession(http.HandlerFunc(handlers.UpdateCampaign)).ServeHTTP(rr, req)
+	require.NoError(t, json.Unmarshal(rr.Body.Bytes(), &result))
+	assert.Equal(t, map[string]bool{
+		"initiative_automation": true,
+		"damage_tracking":       true,
+		"matrix_trace":          true,
+		"recoil_tracking":       false,
+		"spell_cast":            false,
+		"skill_test":            true,
+	}, result.Automation)
+
+	// Verify final state in repository
+	final, err := repos.Campaign.GetByID(campaign.ID)
+	require.NoError(t, err)
+	assert.Equal(t, "Updated Name", final.Name)
+	assert.Equal(t, "Completed", final.Status)
+	assert.Equal(t, "New Theme", final.Theme)
+	assert.ElementsMatch(t, []string{"SR5", "AP"}, final.EnabledBooks)
+	assert.Equal(t, map[string]bool{
+		"initiative_automation": true,
+		"damage_tracking":       true,
+		"matrix_trace":          true,
+		"recoil_tracking":       false,
+		"spell_cast":            false,
+		"skill_test":            true,
+	}, final.Automation)
+}
+
+func TestUpdateCampaignAutomationPartialUpdate(t *testing.T) {
+	handlers, repos := setupCampaignHandlers(t)
+
+	gm := &domain.User{
+		ID:           "gm-1",
+		Email:        "gm@example.com",
+		Username:     "GM",
+		PasswordHash: "hash",
+		Roles:        []string{domain.RoleGamemaster},
+	}
+	require.NoError(t, repos.User.Create(gm))
+
+	// Create campaign with initial automation
+	campaign, err := handlers.CampaignService.CreateCampaign(service.CampaignCreateInput{
+		Name:           "Automation Test",
+		Edition:        "sr5",
+		CreationMethod: "priority",
+		GameplayLevel:  "experienced",
+		GMName:         gm.Username,
+		GMUserID:       gm.ID,
+		Status:         "Active",
+		Automation: map[string]bool{
+			"initiative_automation": true,
+			"damage_tracking":       true,
+			"matrix_trace":          false,
+		},
+	})
+	require.NoError(t, err)
+
+	// Update with partial automation (should replace entire map)
+	updateBody, _ := json.Marshal(map[string]interface{}{
+		"automation": map[string]bool{
+			"recoil_tracking": true,
+			"spell_cast":      true,
+		},
+	})
+	req := httptest.NewRequest(http.MethodPut, "/api/campaigns/"+campaign.ID, bytes.NewReader(updateBody))
+	req.SetPathValue("id", campaign.ID)
+	attachSession(t, handlers, req, "gm-1", []string{domain.RoleGamemaster})
+	rr := httptest.NewRecorder()
+	handlers.Sessions.WithSession(http.HandlerFunc(handlers.UpdateCampaign)).ServeHTTP(rr, req)
+	require.Equal(t, http.StatusOK, rr.Code)
+
+	var result campaignPayload
+	require.NoError(t, json.Unmarshal(rr.Body.Bytes(), &result))
+	// Should only have the two keys we sent
+	assert.Equal(t, map[string]bool{
+		"recoil_tracking": true,
+		"spell_cast":      true,
+	}, result.Automation)
+
+	// Verify in repository
+	final, err := repos.Campaign.GetByID(campaign.ID)
+	require.NoError(t, err)
+	assert.Equal(t, map[string]bool{
+		"recoil_tracking": true,
+		"spell_cast":      true,
+	}, final.Automation)
 }
 
 func setupCampaignHandlers(t *testing.T) (*api.Handlers, *jsonrepo.Repositories) {
