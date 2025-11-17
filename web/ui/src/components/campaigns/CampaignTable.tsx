@@ -3,10 +3,12 @@ import { DataTable, ColumnDefinition } from '../common/DataTable';
 import { Button } from 'react-aria-components';
 import { DeleteConfirmationDialog } from '../common/DeleteConfirmationDialog';
 import { CampaignViewModal } from './CampaignViewModal';
+import { CampaignEditModal } from './CampaignEditModal';
 import { useState } from 'react';
 
 interface CampaignTableProps {
   campaigns: CampaignResponse[];
+  onCampaignUpdated?: () => void;
 }
 
 const getStatusColor = (status: string) => {
@@ -22,9 +24,10 @@ const getStatusColor = (status: string) => {
   }
 };
 
-export function CampaignTable({ campaigns }: CampaignTableProps) {
+export function CampaignTable({ campaigns, onCampaignUpdated }: CampaignTableProps) {
   const [selectedCampaign, setSelectedCampaign] = useState<CampaignResponse | null>(null);
   const [isViewModalOpen, setIsViewModalOpen] = useState(false);
+  const [isEditModalOpen, setIsEditModalOpen] = useState(false);
 
   const handleView = (campaign: CampaignResponse) => {
     setSelectedCampaign(campaign);
@@ -32,8 +35,14 @@ export function CampaignTable({ campaigns }: CampaignTableProps) {
   };
 
   const handleEdit = (campaign: CampaignResponse) => {
-    // TODO: Implement edit functionality
-    console.log('Edit campaign:', campaign.id);
+    setSelectedCampaign(campaign);
+    setIsEditModalOpen(true);
+  };
+
+  const handleEditSuccess = () => {
+    if (onCampaignUpdated) {
+      onCampaignUpdated();
+    }
   };
 
   const handleDelete = (campaign: CampaignResponse) => {
@@ -133,6 +142,12 @@ export function CampaignTable({ campaigns }: CampaignTableProps) {
         campaign={selectedCampaign}
         isOpen={isViewModalOpen}
         onOpenChange={setIsViewModalOpen}
+      />
+      <CampaignEditModal
+        campaign={selectedCampaign}
+        isOpen={isEditModalOpen}
+        onOpenChange={setIsEditModalOpen}
+        onSuccess={handleEditSuccess}
       />
     </>
   );

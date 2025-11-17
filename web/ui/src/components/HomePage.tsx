@@ -56,7 +56,7 @@ export function HomePage() {
   return (
     <div>
       <h2 className="text-2xl font-bold text-gray-100 mb-6">{getHeading()}</h2>
-      <CampaignTable campaigns={campaigns} />
+      <CampaignTable campaigns={campaigns} onCampaignUpdated={loadCampaigns} />
     </div>
   );
 }

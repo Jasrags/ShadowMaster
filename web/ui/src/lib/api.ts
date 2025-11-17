@@ -84,5 +84,17 @@ export const campaignApi = {
   async getCampaign(id: string): Promise<CampaignResponse> {
     return apiRequest<CampaignResponse>(`/campaigns/${id}`);
   },
+
+  async updateCampaign(id: string, data: Partial<CampaignResponse>): Promise<CampaignResponse> {
+    return apiRequest<CampaignResponse>(`/campaigns/${id}`, {
+      method: 'PUT',
+      body: JSON.stringify(data),
+    });
+  },
+
+  async getEditionBooks(edition: string): Promise<string[]> {
+    const response = await apiRequest<{ books: string[] }>(`/editions/${edition}/books`);
+    return response.books || [];
+  },
 };
 
