@@ -39,6 +39,10 @@ export function CampaignTable({ campaigns, onCampaignUpdated }: CampaignTablePro
   };
 
   const handleEdit = (campaign: CampaignResponse) => {
+    // Defensive check: only allow editing if user has permission
+    if (!campaign.can_edit) {
+      return;
+    }
     setSelectedCampaign(campaign);
     setIsEditModalOpen(true);
   };
@@ -116,29 +120,33 @@ export function CampaignTable({ campaigns, onCampaignUpdated }: CampaignTablePro
           >
             View
           </Button>
-          <Button
-            onPress={() => handleEdit(row)}
-            aria-label={`Edit campaign ${row.name}`}
-            className="px-2 py-1 bg-sr-gray border border-sr-light-gray rounded-md text-gray-100 hover:bg-sr-light-gray focus:outline-none focus:ring-2 focus:ring-sr-accent focus:border-transparent text-sm transition-colors"
-          >
-            Edit
-          </Button>
-          <DeleteConfirmationDialog
-            title="Delete Campaign"
-            message={`Are you sure you want to delete "${row.name}"? This action cannot be undone.`}
-            onConfirm={() => handleDelete(row)}
-            confirmLabel="Delete"
-            cancelLabel="Cancel"
-            trigger={
-              <Button
-                aria-label={`Delete campaign ${row.name}`}
-                isDisabled={isDeleting === row.id}
-                className="px-2 py-1 bg-sr-gray border border-sr-danger rounded-md text-gray-100 hover:bg-sr-danger/20 focus:outline-none focus:ring-2 focus:ring-sr-danger focus:border-transparent text-sm transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
-              >
-                {isDeleting === row.id ? 'Deleting...' : 'Delete'}
-              </Button>
-            }
-          />
+          {row.can_edit && (
+            <Button
+              onPress={() => handleEdit(row)}
+              aria-label={`Edit campaign ${row.name}`}
+              className="px-2 py-1 bg-sr-gray border border-sr-light-gray rounded-md text-gray-100 hover:bg-sr-light-gray focus:outline-none focus:ring-2 focus:ring-sr-accent focus:border-transparent text-sm transition-colors"
+            >
+              Edit
+            </Button>
+          )}
+          {row.can_delete && (
+            <DeleteConfirmationDialog
+              title="Delete Campaign"
+              message={`Are you sure you want to delete "${row.name}"? This action cannot be undone.`}
+              onConfirm={() => handleDelete(row)}
+              confirmLabel="Delete"
+              cancelLabel="Cancel"
+              trigger={
+                <Button
+                  aria-label={`Delete campaign ${row.name}`}
+                  isDisabled={isDeleting === row.id}
+                  className="px-2 py-1 bg-sr-gray border border-sr-danger rounded-md text-gray-100 hover:bg-sr-danger/20 focus:outline-none focus:ring-2 focus:ring-sr-danger focus:border-transparent text-sm transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                >
+                  {isDeleting === row.id ? 'Deleting...' : 'Delete'}
+                </Button>
+              }
+            />
+          )}
         </div>
       ),
     },

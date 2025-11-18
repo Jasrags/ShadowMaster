@@ -43,8 +43,7 @@ type CampaignCreateInput struct {
 	Locations      []domain.CampaignLocation
 	Placeholders   []domain.CampaignPlaceholder
 	SessionSeed    *domain.CampaignSessionSeed
-	PlayerUserIDs  []string
-	Players        []domain.CampaignPlayerReference
+	Players        []domain.CampaignPlayer
 	Status         string
 	EnabledBooks   []string
 }
@@ -63,8 +62,7 @@ type CampaignUpdateInput struct {
 	Locations      *[]domain.CampaignLocation
 	Placeholders   *[]domain.CampaignPlaceholder
 	SessionSeed    **domain.CampaignSessionSeed
-	PlayerUserIDs  *[]string
-	Players        *[]domain.CampaignPlayerReference
+	Players        *[]domain.CampaignPlayer
 	Status         *string
 	CreationMethod *string
 	Edition        *string
@@ -112,8 +110,7 @@ func (s *CampaignService) CreateCampaign(input CampaignCreateInput) (*domain.Cam
 	locations := cloneLocations(input.Locations)
 	placeholders := clonePlaceholders(input.Placeholders)
 	sessionSeed := cloneSessionSeed(input.SessionSeed)
-	playerUserIDs := normalizePlayerUserIDs(input.PlayerUserIDs)
-	players := clonePlayerReferences(input.Players)
+	players := clonePlayers(input.Players)
 
 	campaign := &domain.Campaign{
 		Name:           strings.TrimSpace(input.Name),
@@ -131,7 +128,6 @@ func (s *CampaignService) CreateCampaign(input CampaignCreateInput) (*domain.Cam
 		Locations:      locations,
 		Placeholders:   placeholders,
 		SessionSeed:    sessionSeed,
-		PlayerUserIDs:  playerUserIDs,
 		Players:        players,
 		Status:         campaignStatusOrDefault(input.Status, ""),
 		EnabledBooks:   enabledBooks,
@@ -197,11 +193,8 @@ func (s *CampaignService) UpdateCampaign(id string, input CampaignUpdateInput) (
 	if input.SessionSeed != nil {
 		campaign.SessionSeed = cloneSessionSeed(*input.SessionSeed)
 	}
-	if input.PlayerUserIDs != nil {
-		campaign.PlayerUserIDs = normalizePlayerUserIDs(*input.PlayerUserIDs)
-	}
 	if input.Players != nil {
-		campaign.Players = clonePlayerReferences(*input.Players)
+		campaign.Players = clonePlayers(*input.Players)
 	}
 	if input.Status != nil {
 		campaign.Status = campaignStatusOrDefault(strings.TrimSpace(*input.Status), campaign.Status)
@@ -347,35 +340,12 @@ func cloneSessionSeed(seed *domain.CampaignSessionSeed) *domain.CampaignSessionS
 	return copy
 }
 
-func normalizePlayerUserIDs(source []string) []string {
+func clonePlayers(source []domain.CampaignPlayer) []domain.CampaignPlayer {
 	if len(source) == 0 {
 		return nil
 	}
 	seen := make(map[string]struct{}, len(source))
-	result := make([]string, 0, len(source))
-	for _, id := range source {
-		trimmed := strings.TrimSpace(id)
-		if trimmed == "" {
-			continue
-		}
-		if _, exists := seen[trimmed]; exists {
-			continue
-		}
-		seen[trimmed] = struct{}{}
-		result = append(result, trimmed)
-	}
-	if len(result) == 0 {
-		return nil
-	}
-	return result
-}
-
-func clonePlayerReferences(source []domain.CampaignPlayerReference) []domain.CampaignPlayerReference {
-	if len(source) == 0 {
-		return nil
-	}
-	seen := make(map[string]struct{}, len(source))
-	result := make([]domain.CampaignPlayerReference, 0, len(source))
+	result := make([]domain.CampaignPlayer, 0, len(source))
 	for _, player := range source {
 		id := strings.TrimSpace(player.ID)
 		if id == "" {
@@ -385,9 +355,16 @@ func clonePlayerReferences(source []domain.CampaignPlayerReference) []domain.Cam
 			continue
 		}
 		seen[id] = struct{}{}
-		result = append(result, domain.CampaignPlayerReference{
-			ID:       id,
-			Username: strings.TrimSpace(player.Username),
+		result = append(result, domain.CampaignPlayer{
+			ID:          id,
+			UserID:      strings.TrimSpace(player.UserID),
+			Email:       strings.TrimSpace(strings.ToLower(player.Email)),
+			Username:    strings.TrimSpace(player.Username),
+			Status:      strings.TrimSpace(player.Status),
+			InvitedBy:   strings.TrimSpace(player.InvitedBy),
+			InvitedAt:   player.InvitedAt,
+			RespondedAt: player.RespondedAt,
+			JoinedAt:    player.JoinedAt,
 		})
 	}
 	if len(result) == 0 {
@@ -648,4 +625,242 @@ func (s *CampaignService) validateEnabledBooks(edition string, requested []strin
 	}
 	sort.Strings(result)
 	return result, nil
+}
+
+// InvitePlayerInput contains data for inviting a player to a campaign.
+type InvitePlayerInput struct {
+	Email    string // Email for unregistered users
+	UserID   string // User ID if user exists
+	Username string // Username if user exists
+	InvitedBy string // User ID of GM sending invite
+}
+
+// InvitePlayer creates an invitation for a player to join a campaign.
+func (s *CampaignService) InvitePlayer(campaignID string, input InvitePlayerInput) (*domain.CampaignPlayer, error) {
+	campaign, err := s.campaignRepo.GetByID(campaignID)
+	if err != nil {
+		return nil, fmt.Errorf("%w: %v", ErrCampaignNotFound, err)
+	}
+
+	// Validate that we have either email or user ID
+	if input.Email == "" && input.UserID == "" {
+		return nil, fmt.Errorf("either email or user_id is required")
+	}
+
+	// Check if user is already a player (accepted status)
+	if input.UserID != "" {
+		for _, player := range campaign.Players {
+			if player.UserID == input.UserID && player.Status == "accepted" {
+				return nil, fmt.Errorf("user is already a player in this campaign")
+			}
+		}
+	}
+
+	// Check if there's already a pending invitation
+	for _, player := range campaign.Players {
+		if player.Status == "invited" {
+			if input.UserID != "" && player.UserID == input.UserID {
+				return nil, fmt.Errorf("user already has a pending invitation")
+			}
+			if input.Email != "" && strings.ToLower(player.Email) == strings.ToLower(input.Email) {
+				return nil, fmt.Errorf("email already has a pending invitation")
+			}
+		}
+	}
+
+	// Create new player entry with "invited" status
+	newPlayer := domain.CampaignPlayer{
+		ID:        fmt.Sprintf("player-%d", time.Now().UnixNano()), // Simple ID generation
+		Email:     strings.TrimSpace(strings.ToLower(input.Email)),
+		UserID:    input.UserID,
+		Username:  input.Username,
+		Status:    "invited",
+		InvitedBy: input.InvitedBy,
+		InvitedAt: time.Now(),
+	}
+
+	// Add to campaign
+	if campaign.Players == nil {
+		campaign.Players = []domain.CampaignPlayer{}
+	}
+	campaign.Players = append(campaign.Players, newPlayer)
+	campaign.UpdatedAt = time.Now()
+
+	if err := s.campaignRepo.Update(campaign); err != nil {
+		return nil, fmt.Errorf("failed to save invitation: %w", err)
+	}
+
+	return &newPlayer, nil
+}
+
+// AcceptInvitation accepts a campaign invitation and updates the player status.
+func (s *CampaignService) AcceptInvitation(campaignID, playerID, userID string) error {
+	campaign, err := s.campaignRepo.GetByID(campaignID)
+	if err != nil {
+		return fmt.Errorf("%w: %v", ErrCampaignNotFound, err)
+	}
+
+	// Find player entry
+	var playerIndex = -1
+	for i := range campaign.Players {
+		if campaign.Players[i].ID == playerID {
+			playerIndex = i
+			break
+		}
+	}
+
+	if playerIndex == -1 {
+		return fmt.Errorf("invitation not found")
+	}
+
+	player := &campaign.Players[playerIndex]
+
+	// Verify invitation is for this user
+	if player.UserID != "" && player.UserID != userID {
+		return fmt.Errorf("invitation is not for this user")
+	}
+	if player.Status != "invited" {
+		return fmt.Errorf("invitation is not pending")
+	}
+
+	// Update player status to accepted
+	player.Status = "accepted"
+	player.RespondedAt = time.Now()
+	player.JoinedAt = time.Now()
+	
+	// Update userID if it wasn't set (email-only invitation)
+	if player.UserID == "" && userID != "" {
+		player.UserID = userID
+	}
+
+	campaign.UpdatedAt = time.Now()
+	if err := s.campaignRepo.Update(campaign); err != nil {
+		return fmt.Errorf("failed to update campaign: %w", err)
+	}
+
+	return nil
+}
+
+// DeclineInvitation declines a campaign invitation.
+func (s *CampaignService) DeclineInvitation(campaignID, playerID, userID string) error {
+	campaign, err := s.campaignRepo.GetByID(campaignID)
+	if err != nil {
+		return fmt.Errorf("%w: %v", ErrCampaignNotFound, err)
+	}
+
+	// Find player entry
+	var playerIndex = -1
+	for i := range campaign.Players {
+		if campaign.Players[i].ID == playerID {
+			playerIndex = i
+			break
+		}
+	}
+
+	if playerIndex == -1 {
+		return fmt.Errorf("invitation not found")
+	}
+
+	player := &campaign.Players[playerIndex]
+
+	// Verify invitation is for this user
+	if player.UserID != "" && player.UserID != userID {
+		return fmt.Errorf("invitation is not for this user")
+	}
+	if player.Status != "invited" {
+		return fmt.Errorf("invitation is not pending")
+	}
+
+	// Update player status to declined
+	player.Status = "declined"
+	player.RespondedAt = time.Now()
+
+	campaign.UpdatedAt = time.Now()
+	if err := s.campaignRepo.Update(campaign); err != nil {
+		return fmt.Errorf("failed to update campaign: %w", err)
+	}
+
+	return nil
+}
+
+// GetUserInvitations returns all pending invitations for a user.
+func (s *CampaignService) GetUserInvitations(userID, email string) ([]struct {
+	Campaign *domain.Campaign
+	Player   domain.CampaignPlayer
+}, error) {
+	allCampaigns, err := s.campaignRepo.GetAll()
+	if err != nil {
+		return nil, err
+	}
+
+	var result []struct {
+		Campaign *domain.Campaign
+		Player   domain.CampaignPlayer
+	}
+
+	for _, campaign := range allCampaigns {
+		for _, player := range campaign.Players {
+			if player.Status == "invited" {
+				matches := false
+				if userID != "" && player.UserID == userID {
+					matches = true
+				}
+				if email != "" && player.Email != "" && player.Email == strings.ToLower(strings.TrimSpace(email)) {
+					matches = true
+				}
+				if matches {
+					result = append(result, struct {
+						Campaign *domain.Campaign
+						Player   domain.CampaignPlayer
+					}{
+						Campaign: campaign,
+						Player:   player,
+					})
+				}
+			}
+		}
+	}
+
+	return result, nil
+}
+
+// RemoveInvitation removes an invitation from a campaign.
+// This is now just an alias for RemovePlayer since invitations are part of the unified Players list.
+func (s *CampaignService) RemoveInvitation(campaignID, playerID string) error {
+	return s.RemovePlayer(campaignID, playerID)
+}
+
+// RemovePlayer removes a player from a campaign.
+// This removes the player entry entirely (for invited/declined) or sets status to "removed" (for accepted).
+func (s *CampaignService) RemovePlayer(campaignID, playerID string) error {
+	campaign, err := s.campaignRepo.GetByID(campaignID)
+	if err != nil {
+		return fmt.Errorf("%w: %v", ErrCampaignNotFound, err)
+	}
+
+	// Find and remove player entry
+	newPlayers := make([]domain.CampaignPlayer, 0, len(campaign.Players))
+	found := false
+	for _, player := range campaign.Players {
+		if player.ID == playerID {
+			found = true
+			// For accepted players, we could set status to "removed" to keep history
+			// For now, we'll just remove them entirely
+			continue
+		}
+		newPlayers = append(newPlayers, player)
+	}
+
+	if !found {
+		return fmt.Errorf("player not found")
+	}
+
+	campaign.Players = newPlayers
+	campaign.UpdatedAt = time.Now()
+
+	if err := s.campaignRepo.Update(campaign); err != nil {
+		return fmt.Errorf("failed to update campaign: %w", err)
+	}
+
+	return nil
 }

@@ -1,6 +1,7 @@
 import type {
   UserResponse,
   CampaignResponse,
+  CampaignPlayer,
   LoginRequest,
   RegisterRequest,
   ApiError,
@@ -114,6 +115,55 @@ export const campaignApi = {
 
   async deleteCampaign(id: string): Promise<void> {
     return apiRequest<void>(`/campaigns/${id}`, {
+      method: 'DELETE',
+    });
+  },
+
+  async invitePlayer(campaignId: string, data: { email?: string; username?: string; user_id?: string }): Promise<CampaignPlayer> {
+    return apiRequest<CampaignPlayer>(`/campaigns/${campaignId}/invitations`, {
+      method: 'POST',
+      body: JSON.stringify(data),
+    });
+  },
+
+  async getCampaignInvitations(campaignId: string): Promise<CampaignPlayer[]> {
+    return apiRequest<CampaignPlayer[]>(`/campaigns/${campaignId}/invitations`, {
+      method: 'GET',
+    });
+  },
+
+  async getUserInvitations(): Promise<Array<{ campaign_id: string; campaign_name: string; player: CampaignPlayer }>> {
+    return apiRequest<Array<{ campaign_id: string; campaign_name: string; player: CampaignPlayer }>>('/invitations', {
+      method: 'GET',
+    });
+  },
+
+  async acceptInvitation(playerId: string): Promise<void> {
+    return apiRequest<void>(`/invitations/${playerId}/accept`, {
+      method: 'POST',
+    });
+  },
+
+  async declineInvitation(playerId: string): Promise<void> {
+    return apiRequest<void>(`/invitations/${playerId}/decline`, {
+      method: 'POST',
+    });
+  },
+
+  async searchUsers(query: string): Promise<Array<{ id: string; username: string; email: string }>> {
+    return apiRequest<Array<{ id: string; username: string; email: string }>>(`/users/search?q=${encodeURIComponent(query)}`, {
+      method: 'GET',
+    });
+  },
+
+  async removeInvitation(campaignId: string, playerId: string): Promise<void> {
+    return apiRequest<void>(`/campaigns/${campaignId}/invitations/${playerId}`, {
+      method: 'DELETE',
+    });
+  },
+
+  async removePlayer(campaignId: string, playerId: string): Promise<void> {
+    return apiRequest<void>(`/campaigns/${campaignId}/players/${playerId}`, {
       method: 'DELETE',
     });
   },

@@ -256,7 +256,7 @@ func backfillHouseRulesFromFile(store *storage.JSONStore, filename string, campa
 	// If structured fields already exist, nothing to do.
 	if campaign.Theme != "" || campaign.HouseRuleNotes != "" || len(campaign.Automation) > 0 ||
 		len(campaign.Factions) > 0 || len(campaign.Locations) > 0 || len(campaign.Placeholders) > 0 ||
-		campaign.SessionSeed != nil || len(campaign.PlayerUserIDs) > 0 || len(campaign.Players) > 0 {
+		campaign.SessionSeed != nil || len(campaign.Players) > 0 {
 		return changed
 	}
 
@@ -284,14 +284,14 @@ func backfillHouseRulesFromFile(store *storage.JSONStore, filename string, campa
 	}
 
 	type legacyHouseRules struct {
-		Automation   map[string]bool                  `json:"automation"`
-		Notes        string                           `json:"notes"`
-		Theme        string                           `json:"theme"`
-		Factions     []domain.CampaignFaction         `json:"factions"`
-		Locations    []domain.CampaignLocation        `json:"locations"`
-		Placeholders []domain.CampaignPlaceholder     `json:"placeholders"`
-		SessionSeed  *domain.CampaignSessionSeed      `json:"session_seed"`
-		Players      []domain.CampaignPlayerReference `json:"players"`
+		Automation   map[string]bool           `json:"automation"`
+		Notes        string                    `json:"notes"`
+		Theme        string                    `json:"theme"`
+		Factions     []domain.CampaignFaction  `json:"factions"`
+		Locations    []domain.CampaignLocation `json:"locations"`
+		Placeholders []domain.CampaignPlaceholder `json:"placeholders"`
+		SessionSeed  *domain.CampaignSessionSeed  `json:"session_seed"`
+		Players      []domain.CampaignPlayer     `json:"players"`
 	}
 
 	var payload legacyHouseRules
@@ -330,18 +330,9 @@ func backfillHouseRulesFromFile(store *storage.JSONStore, filename string, campa
 		}
 	}
 
-	if len(campaign.PlayerUserIDs) == 0 && len(payload.Players) > 0 {
-		ids := make([]string, 0, len(payload.Players))
-		for _, player := range payload.Players {
-			if trimmed := strings.TrimSpace(player.ID); trimmed != "" {
-				ids = append(ids, trimmed)
-			}
-		}
-		campaign.PlayerUserIDs = normalizePlayerUserIDs(ids)
-		campaign.Players = clonePlayerReferences(payload.Players)
-		if len(campaign.PlayerUserIDs) > 0 {
-			changed = true
-		}
+	if len(campaign.Players) == 0 && len(payload.Players) > 0 {
+		campaign.Players = payload.Players
+		changed = true
 	}
 
 	return changed
@@ -475,30 +466,12 @@ func normalizePlayerUserIDs(source []string) []string {
 	return result
 }
 
-func clonePlayerReferences(source []domain.CampaignPlayerReference) []domain.CampaignPlayerReference {
+// Legacy function - no longer needed with unified Players model
+func clonePlayerReferences_legacy(source []domain.CampaignPlayer) []domain.CampaignPlayer {
 	if len(source) == 0 {
 		return nil
 	}
-	seen := make(map[string]struct{}, len(source))
-	result := make([]domain.CampaignPlayerReference, 0, len(source))
-	for _, player := range source {
-		id := strings.TrimSpace(player.ID)
-		if id == "" {
-			continue
-		}
-		if _, exists := seen[id]; exists {
-			continue
-		}
-		seen[id] = struct{}{}
-		result = append(result, domain.CampaignPlayerReference{
-			ID:       id,
-			Username: strings.TrimSpace(player.Username),
-		})
-	}
-	if len(result) == 0 {
-		return nil
-	}
-	return result
+	return source
 }
 
 func normalizeCreationMethod(edition string, creationMethod string) string {

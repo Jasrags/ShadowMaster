@@ -6,6 +6,7 @@ import { useAuth } from '../contexts/AuthContext';
 import { useToast } from '../contexts/ToastContext';
 import { CampaignTable } from './campaigns/CampaignTable';
 import { CampaignCreationWizard } from './campaigns/CampaignCreationWizard';
+import { InvitationNotification } from '../components/common/InvitationNotification';
 
 export function HomePage() {
   const { user } = useAuth();
@@ -68,13 +69,14 @@ export function HomePage() {
           Create
         </Button>
       </div>
-      <CampaignTable campaigns={campaigns} onCampaignUpdated={loadCampaigns} />
-      <CampaignCreationWizard
-        isOpen={isWizardOpen}
-        onOpenChange={setIsWizardOpen}
-        onSuccess={loadCampaigns}
-      />
-    </div>
-  );
-}
+        <CampaignTable campaigns={campaigns} onCampaignUpdated={loadCampaigns} />
+        <CampaignCreationWizard
+          isOpen={isWizardOpen}
+          onOpenChange={setIsWizardOpen}
+          onSuccess={loadCampaigns}
+        />
+        <InvitationNotification onInvitationAccepted={loadCampaigns} />
+      </div>
+    );
+  }
 

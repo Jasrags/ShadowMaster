@@ -31,8 +31,7 @@ type campaignPayload struct {
 	Locations      []domain.CampaignLocation        `json:"locations"`
 	Placeholders   []domain.CampaignPlaceholder     `json:"placeholders"`
 	SessionSeed    *domain.CampaignSessionSeed      `json:"session_seed"`
-	PlayerUserIDs  []string                         `json:"player_user_ids"`
-	Players        []domain.CampaignPlayerReference `json:"players"`
+	Players        []domain.CampaignPlayer          `json:"players"`
 	EnabledBooks   []string                         `json:"enabled_books"`
 	Status         string                           `json:"status"`
 	DeletedAt      *time.Time                       `json:"deleted_at,omitempty"`
@@ -95,7 +94,6 @@ func TestCampaignHandlersCRUD(t *testing.T) {
 			"summary":        "Meet the fixer",
 			"skip":           false,
 		},
-		"player_user_ids": []string{" gm-1 ", "gm-1"}, // duplicates to verify normalization
 		"players": []map[string]string{
 			{"id": "gm-1", "username": " GM "},
 		},
@@ -135,9 +133,8 @@ func TestCampaignHandlersCRUD(t *testing.T) {
 	assert.Equal(t, "Runner", created.Placeholders[0].Name)
 	require.NotNil(t, created.SessionSeed)
 	assert.Equal(t, "Session Zero", created.SessionSeed.Title)
-	assert.ElementsMatch(t, []string{"gm-1"}, created.PlayerUserIDs)
 	require.Len(t, created.Players, 1)
-	assert.Equal(t, "gm-1", created.Players[0].ID)
+	assert.Equal(t, "gm-1", created.Players[0].UserID)
 	assert.Equal(t, "GM", created.Players[0].Username)
 	assert.True(t, created.CanEdit)
 	assert.Equal(t, "experienced", created.GameplayRules.Key)

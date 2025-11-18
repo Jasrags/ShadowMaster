@@ -2,6 +2,8 @@ package jsonrepo
 
 import (
 	"fmt"
+	"os"
+	"path/filepath"
 	"shadowmaster/internal/domain"
 	"shadowmaster/pkg/storage"
 	"strings"
@@ -114,23 +116,80 @@ func (r *UserRepositoryJSON) GetByUsername(username string) (*domain.User, error
 	return r.GetByID(id)
 }
 
-// GetAll returns all users.
+// GetAll returns all users, including those not in the index (scans filesystem).
 func (r *UserRepositoryJSON) GetAll() ([]*domain.User, error) {
 	r.index.mu.RLock()
-	userFiles := make(map[string]string, len(r.index.Users))
-	for id, filename := range r.index.Users {
-		userFiles[id] = filename
+	indexedFiles := make(map[string]bool)
+	for _, filename := range r.index.Users {
+		indexedFiles[filename] = true
 	}
 	r.index.mu.RUnlock()
 
+	// Scan filesystem for user files
+	usersDir := filepath.Join(r.store.BasePath(), "users")
+	entries, err := os.ReadDir(usersDir)
+	if err != nil && !os.IsNotExist(err) {
+		return nil, fmt.Errorf("failed to read users directory: %w", err)
+	}
+
 	users := make([]*domain.User, 0)
-	for _, filename := range userFiles {
+	seenIDs := make(map[string]bool)
+	needsIndexUpdate := false
+
+	// First, load indexed users
+	for id, filename := range r.index.Users {
 		var user domain.User
 		if err := r.store.Read(filename, &user); err != nil {
 			continue
 		}
 		users = append(users, &user)
+		seenIDs[id] = true
 	}
+
+	// Then, scan for unindexed users
+	if entries != nil {
+		for _, entry := range entries {
+			if entry.IsDir() || !strings.HasSuffix(entry.Name(), ".json") {
+				continue
+			}
+			filename := fmt.Sprintf("users/%s", entry.Name())
+			if indexedFiles[filename] {
+				continue // Already loaded
+			}
+
+			var user domain.User
+			if err := r.store.Read(filename, &user); err != nil {
+				continue
+			}
+			if seenIDs[user.ID] {
+				continue // Already loaded
+			}
+
+			// Add to index for future lookups
+			r.index.mu.Lock()
+			r.index.Users[user.ID] = filename
+			emailKey := normalizeIdentity(user.Email)
+			usernameKey := normalizeIdentity(user.Username)
+			if emailKey != "" {
+				r.index.UserEmails[emailKey] = user.ID
+			}
+			if usernameKey != "" {
+				r.index.Usernames[usernameKey] = user.ID
+			}
+			needsIndexUpdate = true
+			r.index.mu.Unlock()
+			seenIDs[user.ID] = true
+			users = append(users, &user)
+		}
+
+		// Save updated index if we found new users
+		if needsIndexUpdate {
+			r.index.mu.Lock()
+			r.saveIndexLocked()
+			r.index.mu.Unlock()
+		}
+	}
+
 	return users, nil
 }
 
