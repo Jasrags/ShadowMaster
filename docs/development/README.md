@@ -20,3 +20,4 @@ Documentation for developers working on ShadowMaster.
 
 - **[Campaign Creation Flow](./plans/campaign-creation-flow.md)** - Campaign creation feature plan
 - **[Expose Campaign Defaults](./plans/expose-campaign-defaults-plan.md)** - Campaign defaults feature plan
+- **[NPC Library Plan](./plans/npc-library-plan.md)** - NPC library system for game masters

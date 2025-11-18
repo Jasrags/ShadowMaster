@@ -147,6 +147,7 @@ Legend: ✅ Complete • ⚙️ In Progress • 🔜 Planned • 🛑 Blocked
 - **Campaign Enhancements**
   - Session attendance tracking and XP/karma allocation tooling.
   - Scene templates (combat/matrix/social) with quick-add NPCs.
+  - **NPC Library**: Reusable NPC creation, management, and library system for GMs. See `docs/development/plans/npc-library-plan.md` for detailed design.
 
 - **Infrastructure**
   - CI pipeline for Go + React tests.
