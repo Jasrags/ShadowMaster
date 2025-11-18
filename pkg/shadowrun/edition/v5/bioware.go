@@ -197,8 +197,8 @@ type SelectSkill struct {
 
 // SkillAttributeBonus represents a skill attribute bonus
 type SkillAttributeBonus struct {
-	Name      string `json:"name"`      // Attribute name
-	Bonus     string `json:"bonus"`     // Bonus value
+	Name      string `json:"name"`                // Attribute name
+	Bonus     string `json:"bonus"`               // Bonus value
 	Condition string `json:"condition,omitempty"` // Condition for the bonus
 }
 
