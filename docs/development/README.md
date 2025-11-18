@@ -20,3 +20,5 @@ Documentation for developers working on ShadowMaster.
 
 - **[Campaign Creation Flow](./plans/campaign-creation-flow.md)** - Campaign creation feature plan
 - **[Expose Campaign Defaults](./plans/expose-campaign-defaults-plan.md)** - Campaign defaults feature plan
+- **[SR5 Character Model Plan](./plans/sr5-character-model-plan.md)** - Complete SR5 character domain model implementation (required before NPC library)
+- **[NPC Library Plan](./plans/npc-library-plan.md)** - NPC library system for game masters (depends on SR5 character model)

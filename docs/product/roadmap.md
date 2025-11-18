@@ -147,6 +147,8 @@ Legend: ✅ Complete • ⚙️ In Progress • 🔜 Planned • 🛑 Blocked
 - **Campaign Enhancements**
   - Session attendance tracking and XP/karma allocation tooling.
   - Scene templates (combat/matrix/social) with quick-add NPCs.
+  - **SR5 Character Model**: Complete `CharacterSR5` domain model implementation. See `docs/development/plans/sr5-character-model-plan.md` for detailed design. **Required before NPC library.**
+  - **NPC Library**: Reusable NPC creation, management, and library system for GMs. See `docs/development/plans/npc-library-plan.md` for detailed design. **Depends on SR5 character model completion.**
 
 - **Infrastructure**
   - CI pipeline for Go + React tests.
