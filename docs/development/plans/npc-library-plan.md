@@ -469,11 +469,14 @@ data/
 ## 11. Dependencies & Prerequisites
 
 - ✅ Character domain model exists with `IsNPC` field
+- ⚠️ **SR5 Character Model**: Must complete `CharacterSR5` domain model before NPC library (see `sr5-character-model-plan.md`)
 - ✅ Campaign, Session, Scene domain models exist
-- ✅ Character creation wizard exists (can be reused)
+- ✅ Character creation wizard exists (can be reused for NPCs)
 - ✅ RBAC system in place
 - ✅ React component library (`DataTable`, modals, drawers)
 - ⚙️ Scene participant linking (may need enhancement)
+
+**Critical Dependency**: The NPC library plan assumes a complete SR5 character model exists. See `docs/development/plans/sr5-character-model-plan.md` for the implementation plan to flesh out `CharacterSR5` before proceeding with NPC library features.
 
 ---
 
