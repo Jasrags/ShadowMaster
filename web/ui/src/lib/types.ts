@@ -26,12 +26,12 @@ export interface Campaign {
   locations?: CampaignLocation[];
   placeholders?: CampaignPlaceholder[];
   session_seed?: CampaignSessionSeed;
-  player_user_ids?: string[];
-  players?: CampaignPlayerReference[];
+  players?: CampaignPlayer[];
   enabled_books: string[];
   created_at: string;
   updated_at: string;
   setup_locked_at?: string;
+  deleted_at?: string;
   status: string; // Active, Paused, Completed
 }
 
@@ -62,9 +62,17 @@ export interface CampaignSessionSeed {
   skip: boolean;
 }
 
-export interface CampaignPlayerReference {
-  id: string;
-  username?: string;
+// Unified player structure that replaces both CampaignPlayerReference and CampaignInvitation
+export interface CampaignPlayer {
+  id: string; // Unique ID for this player entry
+  user_id?: string; // User ID if registered user
+  email?: string; // Email if unregistered user (for email-based invites)
+  username?: string; // Username (enriched from user data)
+  status: 'invited' | 'accepted' | 'declined' | 'removed'; // Player status
+  invited_by: string; // User ID of GM who sent invite
+  invited_at: string; // When invitation was sent
+  responded_at?: string; // When player responded (accepted/declined)
+  joined_at?: string; // When player joined (for accepted players)
 }
 
 // Auth request/response types
@@ -88,6 +96,7 @@ export interface UserResponse {
 
 // Campaign response with additional fields
 export interface CampaignResponse extends Campaign {
+  gm_username?: string;
   can_edit?: boolean;
   can_delete?: boolean;
 }

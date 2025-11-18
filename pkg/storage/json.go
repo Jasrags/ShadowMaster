@@ -134,3 +134,8 @@ func (s *JSONStore) ReadRaw(filename string) ([]byte, error) {
 	}
 	return data, nil
 }
+
+// BasePath returns the base path of the store
+func (s *JSONStore) BasePath() string {
+	return s.basePath
+}

@@ -165,6 +165,15 @@ func (s *UserService) GetUserByID(userID string) (*domain.User, error) {
 	return sanitizeUser(user), nil
 }
 
+// GetUserByUsername retrieves a user by username.
+func (s *UserService) GetUserByUsername(username string) (*domain.User, error) {
+	user, err := s.userRepo.GetByUsername(username)
+	if err != nil {
+		return nil, err
+	}
+	return sanitizeUser(user), nil
+}
+
 // ValidatePassword checks a password against policy rules.
 func ValidatePassword(password string, disallowed ...string) error {
 	password = strings.TrimSpace(password)

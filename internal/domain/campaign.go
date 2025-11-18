@@ -32,12 +32,12 @@ type Campaign struct {
 	Locations      []CampaignLocation        `json:"locations,omitempty"`
 	Placeholders   []CampaignPlaceholder     `json:"placeholders,omitempty"`
 	SessionSeed    *CampaignSessionSeed      `json:"session_seed,omitempty"`
-	PlayerUserIDs  []string                  `json:"player_user_ids,omitempty"`
-	Players        []CampaignPlayerReference `json:"players,omitempty"`
+	Players []CampaignPlayer `json:"players,omitempty"`
 	EnabledBooks   []string                  `json:"enabled_books"`
 	CreatedAt      time.Time                 `json:"created_at"`
 	UpdatedAt      time.Time                 `json:"updated_at"`
 	SetupLockedAt  time.Time                 `json:"setup_locked_at,omitempty"`
+	DeletedAt      time.Time                 `json:"deleted_at,omitempty"`
 	Status         string                    `json:"status"` // Active, Paused, Completed
 }
 
@@ -72,10 +72,18 @@ type CampaignSessionSeed struct {
 	Skip          bool   `json:"skip"`
 }
 
-// CampaignPlayerReference links a campaign to a player user.
-type CampaignPlayerReference struct {
-	ID       string `json:"id"`
-	Username string `json:"username,omitempty"`
+// CampaignPlayer represents a player in a campaign with their invitation/participation status.
+// This unified structure replaces the separate Players and Invitations arrays.
+type CampaignPlayer struct {
+	ID          string    `json:"id"`                     // Unique ID for this player entry
+	UserID      string    `json:"user_id,omitempty"`      // User ID if registered user
+	Email       string    `json:"email,omitempty"`        // Email if unregistered user (for email-based invites)
+	Username    string    `json:"username,omitempty"`     // Username (enriched from user data)
+	Status      string    `json:"status"`                 // "invited", "accepted", "declined", "removed"
+	InvitedBy   string    `json:"invited_by"`             // User ID of GM who sent invite
+	InvitedAt   time.Time `json:"invited_at"`             // When invitation was sent
+	RespondedAt time.Time `json:"responded_at,omitempty"` // When player responded (accepted/declined)
+	JoinedAt    time.Time `json:"joined_at,omitempty"`    // When player joined (for accepted players)
 }
 
 // Session represents an individual play session within a campaign

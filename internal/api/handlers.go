@@ -49,6 +49,7 @@ type changePasswordRequest struct {
 type campaignResponse struct {
 	*domain.Campaign
 	GameplayRules *service.GameplayRules `json:"gameplay_rules,omitempty"`
+	GMUsername    string                 `json:"gm_username,omitempty"`
 	CanEdit       bool                   `json:"can_edit"`
 	CanDelete     bool                   `json:"can_delete"`
 }
@@ -84,7 +85,6 @@ type campaignCreateRequest struct {
 	Locations      []campaignLocationRequest    `json:"locations"`
 	Placeholders   []campaignPlaceholderRequest `json:"placeholders"`
 	SessionSeed    *campaignSessionSeedRequest  `json:"session_seed"`
-	PlayerUserIDs  []string                     `json:"player_user_ids"`
 	Players        []campaignPlayerRequest      `json:"players"`
 	Status         string                       `json:"status"`
 	EnabledBooks   []string                     `json:"enabled_books"`
@@ -103,7 +103,6 @@ type campaignUpdateRequest struct {
 	Locations      *[]campaignLocationRequest    `json:"locations"`
 	Placeholders   *[]campaignPlaceholderRequest `json:"placeholders"`
 	SessionSeed    *campaignSessionSeedRequest   `json:"session_seed"`
-	PlayerUserIDs  *[]string                     `json:"player_user_ids"`
 	Players        *[]campaignPlayerRequest      `json:"players"`
 	Status         *string                       `json:"status"`
 	CreationMethod *string                       `json:"creation_method"`
@@ -689,12 +688,32 @@ func (h *Handlers) CreateCampaign(w http.ResponseWriter, r *http.Request) {
 	}
 
 	session := GetSessionFromContext(r.Context())
+	if session == nil {
+		respondError(w, http.StatusUnauthorized, "authentication required")
+		return
+	}
+
+	// Get the user to set GM name from username
+	user, err := h.UserService.GetUserByID(session.UserID)
+	if err != nil {
+		respondServiceError(w, err)
+		return
+	}
+
+	// Set GM user ID and name from the creating user
+	gmUserID := session.UserID
+	gmName := user.Username
+	// Allow override of GM name if provided (for backwards compatibility)
+	if req.GMName != "" {
+		gmName = req.GMName
+	}
+
 	campaign, err := h.CampaignService.CreateCampaign(service.CampaignCreateInput{
 		Name:           req.Name,
 		Description:    req.Description,
 		GroupID:        req.GroupID,
-		GMName:         req.GMName,
-		GMUserID:       req.GMUserID,
+		GMName:         gmName,
+		GMUserID:       gmUserID,
 		Edition:        req.Edition,
 		CreationMethod: req.CreationMethod,
 		GameplayLevel:  req.GameplayLevel,
@@ -705,7 +724,6 @@ func (h *Handlers) CreateCampaign(w http.ResponseWriter, r *http.Request) {
 		Locations:      toDomainLocations(req.Locations),
 		Placeholders:   toDomainPlaceholders(req.Placeholders),
 		SessionSeed:    toDomainSessionSeed(req.SessionSeed),
-		PlayerUserIDs:  normalizePlayerUserIDs(req.PlayerUserIDs),
 		Players:        toDomainPlayers(req.Players),
 		Status:         req.Status,
 		EnabledBooks:   req.EnabledBooks,
@@ -739,6 +757,12 @@ func (h *Handlers) UpdateCampaign(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	// Prevent updating soft-deleted campaigns
+	if !existing.DeletedAt.IsZero() {
+		respondError(w, http.StatusBadRequest, "cannot update a deleted campaign")
+		return
+	}
+
 	if !canManageCampaign(existing, session) {
 		respondServiceError(w, service.ErrForbidden)
 		return
@@ -757,7 +781,6 @@ func (h *Handlers) UpdateCampaign(w http.ResponseWriter, r *http.Request) {
 		Locations:      toDomainLocationsPtr(req.Locations),
 		Placeholders:   toDomainPlaceholdersPtr(req.Placeholders),
 		SessionSeed:    toDomainSessionSeedPtr(req.SessionSeed),
-		PlayerUserIDs:  toPlayerIDsPtr(req.PlayerUserIDs),
 		Players:        toDomainPlayersPtr(req.Players),
 		Status:         req.Status,
 		CreationMethod: req.CreationMethod,
@@ -785,6 +808,12 @@ func (h *Handlers) DeleteCampaign(w http.ResponseWriter, r *http.Request) {
 	campaign, err := h.CampaignService.GetCampaign(id)
 	if err != nil {
 		respondServiceError(w, err)
+		return
+	}
+
+	// Prevent deleting already-deleted campaigns
+	if !campaign.DeletedAt.IsZero() {
+		respondError(w, http.StatusBadRequest, "campaign is already deleted")
 		return
 	}
 
@@ -920,11 +949,11 @@ func toDomainSessionSeedPtr(source *campaignSessionSeedRequest) **domain.Campaig
 	return &seed
 }
 
-func toDomainPlayers(source []campaignPlayerRequest) []domain.CampaignPlayerReference {
+func toDomainPlayers(source []campaignPlayerRequest) []domain.CampaignPlayer {
 	if len(source) == 0 {
 		return nil
 	}
-	result := make([]domain.CampaignPlayerReference, 0, len(source))
+	result := make([]domain.CampaignPlayer, 0, len(source))
 	seen := make(map[string]struct{})
 	for _, item := range source {
 		id := strings.TrimSpace(item.ID)
@@ -935,9 +964,11 @@ func toDomainPlayers(source []campaignPlayerRequest) []domain.CampaignPlayerRefe
 			continue
 		}
 		seen[id] = struct{}{}
-		result = append(result, domain.CampaignPlayerReference{
+		result = append(result, domain.CampaignPlayer{
 			ID:       id,
+			UserID:   id, // Assume ID is userID for backward compatibility
 			Username: strings.TrimSpace(item.Username),
+			Status:   "accepted", // Default status for players added via create/update
 		})
 	}
 	if len(result) == 0 {
@@ -946,19 +977,11 @@ func toDomainPlayers(source []campaignPlayerRequest) []domain.CampaignPlayerRefe
 	return result
 }
 
-func toDomainPlayersPtr(source *[]campaignPlayerRequest) *[]domain.CampaignPlayerReference {
+func toDomainPlayersPtr(source *[]campaignPlayerRequest) *[]domain.CampaignPlayer {
 	if source == nil {
 		return nil
 	}
 	cloned := toDomainPlayers(*source)
-	return &cloned
-}
-
-func toPlayerIDsPtr(source *[]string) *[]string {
-	if source == nil {
-		return nil
-	}
-	cloned := normalizePlayerUserIDs(*source)
 	return &cloned
 }
 
@@ -1227,9 +1250,39 @@ func (h *Handlers) buildCampaignResponse(session *SessionData, campaign *domain.
 
 	canManage := canManageCampaign(campaign, session)
 
+	// Look up GM username if GM user ID is set
+	gmUsername := ""
+	if campaign.GmUserID != "" {
+		user, err := h.UserService.GetUserByID(campaign.GmUserID)
+		if err == nil && user != nil {
+			gmUsername = user.Username
+		}
+	}
+	// Fallback to gm_name if username lookup failed
+	if gmUsername == "" && campaign.GmName != "" {
+		gmUsername = campaign.GmName
+	}
+
+	// Enrich player usernames if missing
+	enrichedCampaign := *campaign
+	if len(enrichedCampaign.Players) > 0 {
+		enrichedPlayers := make([]domain.CampaignPlayer, len(enrichedCampaign.Players))
+		copy(enrichedPlayers, enrichedCampaign.Players)
+		for i := range enrichedPlayers {
+			if enrichedPlayers[i].Username == "" && enrichedPlayers[i].UserID != "" {
+				user, err := h.UserService.GetUserByID(enrichedPlayers[i].UserID)
+				if err == nil && user != nil {
+					enrichedPlayers[i].Username = user.Username
+				}
+			}
+		}
+		enrichedCampaign.Players = enrichedPlayers
+	}
+
 	return &campaignResponse{
-		Campaign:      campaign,
+		Campaign:      &enrichedCampaign,
 		GameplayRules: rules,
+		GMUsername:    gmUsername,
 		CanEdit:       canManage,
 		CanDelete:     canManage,
 	}, nil
@@ -1253,6 +1306,326 @@ func canManageCampaign(campaign *domain.Campaign, session *SessionData) bool {
 	}
 
 	return session.HasRole(domain.RoleGamemaster) || session.HasRole(domain.RoleAdministrator)
+}
+
+// Invitation handlers
+
+// InvitePlayer handles POST /api/campaigns/{id}/invitations
+func (h *Handlers) InvitePlayer(w http.ResponseWriter, r *http.Request) {
+	campaignID := r.PathValue("id")
+	session := GetSessionFromContext(r.Context())
+	if session == nil {
+		respondError(w, http.StatusUnauthorized, "authentication required")
+		return
+	}
+
+	// Get campaign to verify GM permissions
+	campaign, err := h.CampaignService.GetCampaign(campaignID)
+	if err != nil {
+		respondServiceError(w, err)
+		return
+	}
+
+	if !canManageCampaign(campaign, session) {
+		respondServiceError(w, service.ErrForbidden)
+		return
+	}
+
+	var req struct {
+		Email    string `json:"email"`
+		UserID   string `json:"user_id"`
+		Username string `json:"username"`
+	}
+	if err := json.NewDecoder(r.Body).Decode(&req); err != nil {
+		respondError(w, http.StatusBadRequest, err.Error())
+		return
+	}
+
+	// If username provided, look up user
+	if req.Username != "" && req.UserID == "" {
+		user, err := h.UserService.GetUserByUsername(req.Username)
+		if err == nil && user != nil {
+			req.UserID = user.ID
+			req.Username = user.Username
+		} else {
+			respondError(w, http.StatusBadRequest, "user not found")
+			return
+		}
+	}
+
+	invitation, err := h.CampaignService.InvitePlayer(campaignID, service.InvitePlayerInput{
+		Email:     req.Email,
+		UserID:    req.UserID,
+		Username:  req.Username,
+		InvitedBy: session.UserID,
+	})
+	if err != nil {
+		respondError(w, http.StatusBadRequest, err.Error())
+		return
+	}
+
+	respondJSON(w, http.StatusCreated, invitation)
+}
+
+// GetCampaignInvitations handles GET /api/campaigns/{id}/invitations
+// Returns all players with their current status (invited, accepted, declined)
+func (h *Handlers) GetCampaignInvitations(w http.ResponseWriter, r *http.Request) {
+	campaignID := r.PathValue("id")
+	session := GetSessionFromContext(r.Context())
+	if session == nil {
+		respondError(w, http.StatusUnauthorized, "authentication required")
+		return
+	}
+
+	// Get campaign to verify GM permissions
+	campaign, err := h.CampaignService.GetCampaign(campaignID)
+	if err != nil {
+		respondServiceError(w, err)
+		return
+	}
+
+	if !canManageCampaign(campaign, session) {
+		respondServiceError(w, service.ErrForbidden)
+		return
+	}
+
+	// Return all players (which includes invitations)
+	respondJSON(w, http.StatusOK, campaign.Players)
+}
+
+// GetUserInvitations handles GET /api/invitations
+func (h *Handlers) GetUserInvitations(w http.ResponseWriter, r *http.Request) {
+	session := GetSessionFromContext(r.Context())
+	if session == nil {
+		respondError(w, http.StatusUnauthorized, "authentication required")
+		return
+	}
+
+	// Get user to get email
+	user, err := h.UserService.GetUserByID(session.UserID)
+	if err != nil {
+		respondServiceError(w, err)
+		return
+	}
+
+	invitations, err := h.CampaignService.GetUserInvitations(session.UserID, user.Email)
+	if err != nil {
+		respondServiceError(w, err)
+		return
+	}
+
+	// Format response
+	type invitationResponse struct {
+		CampaignID   string                `json:"campaign_id"`
+		CampaignName string                `json:"campaign_name"`
+		Player       domain.CampaignPlayer `json:"player"`
+	}
+
+	response := make([]invitationResponse, 0, len(invitations))
+	for _, item := range invitations {
+		response = append(response, invitationResponse{
+			CampaignID:   item.Campaign.ID,
+			CampaignName: item.Campaign.Name,
+			Player:       item.Player,
+		})
+	}
+
+	respondJSON(w, http.StatusOK, response)
+}
+
+// AcceptInvitation handles POST /api/invitations/{id}/accept
+// The {id} is now the player ID (from the unified Players list)
+func (h *Handlers) AcceptInvitation(w http.ResponseWriter, r *http.Request) {
+	playerID := r.PathValue("id")
+	session := GetSessionFromContext(r.Context())
+	if session == nil {
+		respondError(w, http.StatusUnauthorized, "authentication required")
+		return
+	}
+
+	// Find the campaign with this player entry
+	user, err := h.UserService.GetUserByID(session.UserID)
+	if err != nil {
+		respondServiceError(w, err)
+		return
+	}
+
+	invitations, err := h.CampaignService.GetUserInvitations(session.UserID, user.Email)
+	if err != nil {
+		respondServiceError(w, err)
+		return
+	}
+
+	var campaignID string
+	for _, item := range invitations {
+		if item.Player.ID == playerID {
+			campaignID = item.Campaign.ID
+			break
+		}
+	}
+
+	if campaignID == "" {
+		respondError(w, http.StatusNotFound, "invitation not found")
+		return
+	}
+
+	if err := h.CampaignService.AcceptInvitation(campaignID, playerID, session.UserID); err != nil {
+		respondError(w, http.StatusBadRequest, err.Error())
+		return
+	}
+
+	w.WriteHeader(http.StatusNoContent)
+}
+
+// DeclineInvitation handles POST /api/invitations/{id}/decline
+// The {id} is now the player ID (from the unified Players list)
+func (h *Handlers) DeclineInvitation(w http.ResponseWriter, r *http.Request) {
+	playerID := r.PathValue("id")
+	session := GetSessionFromContext(r.Context())
+	if session == nil {
+		respondError(w, http.StatusUnauthorized, "authentication required")
+		return
+	}
+
+	// Find the campaign with this player entry
+	user, err := h.UserService.GetUserByID(session.UserID)
+	if err != nil {
+		respondServiceError(w, err)
+		return
+	}
+
+	invitations, err := h.CampaignService.GetUserInvitations(session.UserID, user.Email)
+	if err != nil {
+		respondServiceError(w, err)
+		return
+	}
+
+	var campaignID string
+	for _, item := range invitations {
+		if item.Player.ID == playerID {
+			campaignID = item.Campaign.ID
+			break
+		}
+	}
+
+	if campaignID == "" {
+		respondError(w, http.StatusNotFound, "invitation not found")
+		return
+	}
+
+	if err := h.CampaignService.DeclineInvitation(campaignID, playerID, session.UserID); err != nil {
+		respondError(w, http.StatusBadRequest, err.Error())
+		return
+	}
+
+	w.WriteHeader(http.StatusNoContent)
+}
+
+// SearchUsers handles GET /api/users/search?q=username
+func (h *Handlers) SearchUsers(w http.ResponseWriter, r *http.Request) {
+	query := r.URL.Query().Get("q")
+	if query == "" {
+		respondJSON(w, http.StatusOK, []interface{}{})
+		return
+	}
+
+	query = strings.TrimSpace(strings.ToLower(query))
+	allUsers, err := h.UserRepo.GetAll()
+	if err != nil {
+		respondError(w, http.StatusInternalServerError, err.Error())
+		return
+	}
+
+	type userSearchResult struct {
+		ID       string `json:"id"`
+		Username string `json:"username"`
+		Email    string `json:"email"`
+	}
+
+	results := make([]userSearchResult, 0)
+	for _, user := range allUsers {
+		if user == nil {
+			continue
+		}
+		usernameLower := strings.ToLower(strings.TrimSpace(user.Username))
+		emailLower := strings.ToLower(strings.TrimSpace(user.Email))
+		usernameMatch := strings.Contains(usernameLower, query)
+		emailMatch := strings.Contains(emailLower, query)
+		if usernameMatch || emailMatch {
+			results = append(results, userSearchResult{
+				ID:       user.ID,
+				Username: user.Username,
+				Email:    user.Email,
+			})
+		}
+		// Limit results
+		if len(results) >= 10 {
+			break
+		}
+	}
+
+	respondJSON(w, http.StatusOK, results)
+}
+
+// RemoveInvitation handles DELETE /api/campaigns/{id}/invitations/{playerId}
+// This is now just an alias for RemovePlayer since invitations are part of the unified Players list
+func (h *Handlers) RemoveInvitation(w http.ResponseWriter, r *http.Request) {
+	campaignID := r.PathValue("id")
+	playerID := r.PathValue("playerId")
+	session := GetSessionFromContext(r.Context())
+	if session == nil {
+		respondError(w, http.StatusUnauthorized, "authentication required")
+		return
+	}
+
+	// Get campaign to verify GM permissions
+	campaign, err := h.CampaignService.GetCampaign(campaignID)
+	if err != nil {
+		respondServiceError(w, err)
+		return
+	}
+
+	if !canManageCampaign(campaign, session) {
+		respondServiceError(w, service.ErrForbidden)
+		return
+	}
+
+	if err := h.CampaignService.RemoveInvitation(campaignID, playerID); err != nil {
+		respondError(w, http.StatusBadRequest, err.Error())
+		return
+	}
+
+	w.WriteHeader(http.StatusNoContent)
+}
+
+// RemovePlayer handles DELETE /api/campaigns/{id}/players/{playerId}
+func (h *Handlers) RemovePlayer(w http.ResponseWriter, r *http.Request) {
+	campaignID := r.PathValue("id")
+	playerID := r.PathValue("playerId")
+	session := GetSessionFromContext(r.Context())
+	if session == nil {
+		respondError(w, http.StatusUnauthorized, "authentication required")
+		return
+	}
+
+	// Get campaign to verify GM permissions
+	campaign, err := h.CampaignService.GetCampaign(campaignID)
+	if err != nil {
+		respondServiceError(w, err)
+		return
+	}
+
+	if !canManageCampaign(campaign, session) {
+		respondServiceError(w, service.ErrForbidden)
+		return
+	}
+
+	if err := h.CampaignService.RemovePlayer(campaignID, playerID); err != nil {
+		respondError(w, http.StatusBadRequest, err.Error())
+		return
+	}
+
+	w.WriteHeader(http.StatusNoContent)
 }
 
 // filterCampaignsByRole filters campaigns based on the user's roles.
@@ -1285,11 +1658,11 @@ func (h *Handlers) filterCampaignsByRole(campaigns []*domain.Campaign, session *
 		}
 	}
 
-	// Player: campaigns where user is in player_user_ids
+	// Player: campaigns where user is in players list with "accepted" status
 	if session.HasRole(domain.RolePlayer) {
 		for _, campaign := range campaigns {
-			for _, playerID := range campaign.PlayerUserIDs {
-				if strings.EqualFold(playerID, session.UserID) {
+			for _, player := range campaign.Players {
+				if player.UserID != "" && strings.EqualFold(player.UserID, session.UserID) && player.Status == "accepted" {
 					if !seen[campaign.ID] {
 						filtered = append(filtered, campaign)
 						seen[campaign.ID] = true

@@ -5,6 +5,8 @@ import { DeleteConfirmationDialog } from '../common/DeleteConfirmationDialog';
 import { CampaignViewModal } from './CampaignViewModal';
 import { CampaignEditModal } from './CampaignEditModal';
 import { useState } from 'react';
+import { campaignApi } from '../../lib/api';
+import { useToast } from '../../contexts/ToastContext';
 
 interface CampaignTableProps {
   campaigns: CampaignResponse[];
@@ -25,9 +27,11 @@ const getStatusColor = (status: string) => {
 };
 
 export function CampaignTable({ campaigns, onCampaignUpdated }: CampaignTableProps) {
+  const { showSuccess, showError } = useToast();
   const [selectedCampaign, setSelectedCampaign] = useState<CampaignResponse | null>(null);
   const [isViewModalOpen, setIsViewModalOpen] = useState(false);
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+  const [isDeleting, setIsDeleting] = useState<string | null>(null);
 
   const handleView = (campaign: CampaignResponse) => {
     setSelectedCampaign(campaign);
@@ -35,6 +39,10 @@ export function CampaignTable({ campaigns, onCampaignUpdated }: CampaignTablePro
   };
 
   const handleEdit = (campaign: CampaignResponse) => {
+    // Defensive check: only allow editing if user has permission
+    if (!campaign.can_edit) {
+      return;
+    }
     setSelectedCampaign(campaign);
     setIsEditModalOpen(true);
   };
@@ -45,9 +53,20 @@ export function CampaignTable({ campaigns, onCampaignUpdated }: CampaignTablePro
     }
   };
 
-  const handleDelete = (campaign: CampaignResponse) => {
-    // TODO: Implement delete functionality
-    console.log('Delete campaign:', campaign.id);
+  const handleDelete = async (campaign: CampaignResponse) => {
+    setIsDeleting(campaign.id);
+    try {
+      await campaignApi.deleteCampaign(campaign.id);
+      showSuccess('Campaign deleted', `Campaign "${campaign.name}" has been deleted.`);
+      if (onCampaignUpdated) {
+        onCampaignUpdated();
+      }
+    } catch (err) {
+      const errorMessage = err instanceof Error ? err.message : 'Failed to delete campaign';
+      showError('Failed to delete campaign', errorMessage);
+    } finally {
+      setIsDeleting(null);
+    }
   };
 
   const columns: ColumnDefinition<CampaignResponse>[] = [
@@ -58,10 +77,13 @@ export function CampaignTable({ campaigns, onCampaignUpdated }: CampaignTablePro
       sortable: true,
     },
     {
-      id: 'gm_name',
-      header: 'GM Name',
-      accessor: 'gm_name',
+      id: 'gm_username',
+      header: 'GM',
+      accessor: 'gm_username',
       sortable: true,
+      render: (_value: unknown, row: CampaignResponse) => (
+        <span>{row.gm_username || row.gm_name || '-'}</span>
+      ),
     },
     {
       id: 'edition',
@@ -98,28 +120,33 @@ export function CampaignTable({ campaigns, onCampaignUpdated }: CampaignTablePro
           >
             View
           </Button>
-          <Button
-            onPress={() => handleEdit(row)}
-            aria-label={`Edit campaign ${row.name}`}
-            className="px-2 py-1 bg-sr-gray border border-sr-light-gray rounded-md text-gray-100 hover:bg-sr-light-gray focus:outline-none focus:ring-2 focus:ring-sr-accent focus:border-transparent text-sm transition-colors"
-          >
-            Edit
-          </Button>
-          <DeleteConfirmationDialog
-            title="Delete Campaign"
-            message={`Are you sure you want to delete "${row.name}"? This action cannot be undone.`}
-            onConfirm={() => handleDelete(row)}
-            confirmLabel="Delete"
-            cancelLabel="Cancel"
-            trigger={
-              <Button
-                aria-label={`Delete campaign ${row.name}`}
-                className="px-2 py-1 bg-sr-gray border border-sr-danger rounded-md text-gray-100 hover:bg-sr-danger/20 focus:outline-none focus:ring-2 focus:ring-sr-danger focus:border-transparent text-sm transition-colors"
-              >
-                Delete
-              </Button>
-            }
-          />
+          {row.can_edit && (
+            <Button
+              onPress={() => handleEdit(row)}
+              aria-label={`Edit campaign ${row.name}`}
+              className="px-2 py-1 bg-sr-gray border border-sr-light-gray rounded-md text-gray-100 hover:bg-sr-light-gray focus:outline-none focus:ring-2 focus:ring-sr-accent focus:border-transparent text-sm transition-colors"
+            >
+              Edit
+            </Button>
+          )}
+          {row.can_delete && (
+            <DeleteConfirmationDialog
+              title="Delete Campaign"
+              message={`Are you sure you want to delete "${row.name}"? This action cannot be undone.`}
+              onConfirm={() => handleDelete(row)}
+              confirmLabel="Delete"
+              cancelLabel="Cancel"
+              trigger={
+                <Button
+                  aria-label={`Delete campaign ${row.name}`}
+                  isDisabled={isDeleting === row.id}
+                  className="px-2 py-1 bg-sr-gray border border-sr-danger rounded-md text-gray-100 hover:bg-sr-danger/20 focus:outline-none focus:ring-2 focus:ring-sr-danger focus:border-transparent text-sm transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                >
+                  {isDeleting === row.id ? 'Deleting...' : 'Delete'}
+                </Button>
+              }
+            />
+          )}
         </div>
       ),
     },
@@ -130,7 +157,7 @@ export function CampaignTable({ campaigns, onCampaignUpdated }: CampaignTablePro
       <DataTable
         data={campaigns}
         columns={columns}
-        searchFields={['name', 'gm_name', 'edition', 'gameplay_level', 'status']}
+            searchFields={['name', 'gm_username', 'gm_name', 'edition', 'gameplay_level', 'status']}
         searchPlaceholder="Search campaigns..."
         defaultSortColumn="status"
         defaultSortDirection="asc"

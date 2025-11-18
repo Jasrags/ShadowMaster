@@ -1,5 +1,7 @@
 import { Dialog, Modal, Heading, Button } from 'react-aria-components';
+import { useState, useEffect } from 'react';
 import type { CampaignResponse } from '../../lib/types';
+import { campaignApi } from '../../lib/api';
 
 interface CampaignViewModalProps {
   campaign: CampaignResponse | null;
@@ -64,18 +66,61 @@ const getAutomationInfo = (key: string): { name: string; description: string } =
   };
 };
 
+
 export function CampaignViewModal({ campaign, isOpen, onOpenChange }: CampaignViewModalProps) {
+  const [bookNames, setBookNames] = useState<Record<string, string>>({});
+  const [currentCampaign, setCurrentCampaign] = useState<CampaignResponse | null>(campaign);
+
+  // Update currentCampaign when campaign prop changes
+  useEffect(() => {
+    setCurrentCampaign(campaign);
+  }, [campaign]);
+
+  // Reload campaign when modal opens or campaign prop changes
+  useEffect(() => {
+    if (isOpen && campaign?.id) {
+      const reloadCampaign = async () => {
+        try {
+          const updated = await campaignApi.getCampaign(campaign.id);
+          setCurrentCampaign(updated);
+        } catch (err) {
+          console.error('Failed to reload campaign:', err);
+        }
+      };
+      reloadCampaign();
+    }
+  }, [isOpen, campaign?.id]);
+
+  // Load book names when modal opens
+  useEffect(() => {
+    if (currentCampaign && isOpen && currentCampaign.edition) {
+      const edition = currentCampaign.edition;
+      campaignApi.getEditionBooks(edition)
+        .then(books => {
+          const nameMap: Record<string, string> = {};
+          books.forEach(book => {
+            nameMap[book.code] = book.name;
+          });
+          setBookNames(nameMap);
+        })
+        .catch(() => {
+          // Silently fail - tooltips just won't show
+          setBookNames({});
+        });
+    }
+  }, [currentCampaign, isOpen]);
+
   const handleClose = () => {
     onOpenChange(false);
   };
 
-  if (!campaign || !isOpen) {
+  if (!currentCampaign || !isOpen) {
     return null;
   }
 
   return (
     <Modal isOpen={isOpen} onOpenChange={onOpenChange}>
-      <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
+      <div className="fixed inset-0 z-50 flex items-center justify-center p-4" style={{ zIndex: 50 }}>
         <div className="fixed inset-0 bg-black/50" aria-hidden="true" onClick={handleClose} />
         <Dialog className="relative bg-sr-gray border border-sr-light-gray rounded-lg shadow-xl max-w-4xl w-full max-h-[90vh] overflow-hidden outline-none flex flex-col">
           <div className="flex items-center justify-between p-6 border-b border-sr-light-gray">
@@ -83,7 +128,7 @@ export function CampaignViewModal({ campaign, isOpen, onOpenChange }: CampaignVi
               slot="title"
               className="text-2xl font-semibold text-gray-100"
             >
-              {campaign.name}
+              {currentCampaign.name}
             </Heading>
             <Button
               onPress={handleClose}
@@ -115,91 +160,119 @@ export function CampaignViewModal({ campaign, isOpen, onOpenChange }: CampaignVi
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div>
                     <label className="text-sm text-gray-400">Status</label>
-                    <p className={`text-gray-100 mt-1 ${getStatusColor(campaign.status)}`}>
-                      {campaign.status}
+                    <p className={`text-gray-100 mt-1 ${getStatusColor(currentCampaign.status)}`}>
+                      {currentCampaign.status}
                     </p>
                   </div>
                   <div>
                     <label className="text-sm text-gray-400">Edition</label>
-                    <p className="text-gray-100 mt-1">{campaign.edition.toUpperCase()}</p>
+                    <p className="text-gray-100 mt-1">{currentCampaign.edition.toUpperCase()}</p>
                   </div>
                   <div>
-                    <label className="text-sm text-gray-400">GM Name</label>
-                    <p className="text-gray-100 mt-1">{campaign.gm_name ? toTitleCase(campaign.gm_name) : '-'}</p>
+                    <label className="text-sm text-gray-400">GM</label>
+                    <p className="text-gray-100 mt-1">{currentCampaign.gm_username || (currentCampaign.gm_name ? toTitleCase(currentCampaign.gm_name) : '-')}</p>
                   </div>
                   <div>
                     <label className="text-sm text-gray-400">Gameplay Level</label>
-                    <p className="text-gray-100 mt-1">{campaign.gameplay_level ? toTitleCase(campaign.gameplay_level) : '-'}</p>
+                    <p className="text-gray-100 mt-1">{currentCampaign.gameplay_level ? toTitleCase(currentCampaign.gameplay_level) : '-'}</p>
                   </div>
                   <div>
                     <label className="text-sm text-gray-400">Creation Method</label>
-                    <p className="text-gray-100 mt-1">{campaign.creation_method ? toTitleCase(campaign.creation_method) : '-'}</p>
+                    <p className="text-gray-100 mt-1">{currentCampaign.creation_method ? toTitleCase(currentCampaign.creation_method) : '-'}</p>
                   </div>
                   <div>
                     <label className="text-sm text-gray-400">Theme</label>
-                    <p className="text-gray-100 mt-1">{campaign.theme || '-'}</p>
+                    <p className="text-gray-100 mt-1">{currentCampaign.theme || '-'}</p>
                   </div>
                 </div>
               </section>
 
               {/* Description */}
-              {campaign.description && (
+              {currentCampaign.description && (
                 <section>
                   <h2 className="text-lg font-semibold text-gray-200 mb-3">Description</h2>
-                  <p className="text-gray-300 whitespace-pre-wrap">{campaign.description}</p>
+                  <p className="text-gray-300 whitespace-pre-wrap">{currentCampaign.description}</p>
                 </section>
               )}
 
               {/* House Rules */}
-              {campaign.house_rule_notes && (
+              {currentCampaign.house_rule_notes && (
                 <section>
                   <h2 className="text-lg font-semibold text-gray-200 mb-3">House Rules</h2>
                   <p className="text-gray-300 whitespace-pre-wrap">
-                    {campaign.house_rule_notes}
+                    {currentCampaign.house_rule_notes}
                   </p>
                 </section>
               )}
 
               {/* Enabled Books */}
-              {campaign.enabled_books && campaign.enabled_books.length > 0 && (
+              {currentCampaign.enabled_books && currentCampaign.enabled_books.length > 0 && (
                 <section>
                   <h2 className="text-lg font-semibold text-gray-200 mb-3">Enabled Books</h2>
                   <div className="flex flex-wrap gap-2">
-                    {campaign.enabled_books.map((book, index) => (
-                      <span
-                        key={index}
-                        className="px-3 py-1 bg-sr-light-gray border border-sr-light-gray rounded-md text-gray-200 text-sm"
-                      >
-                        {book}
-                      </span>
-                    ))}
+                    {currentCampaign.enabled_books.map((book, index) => {
+                      const bookName = bookNames[book] || book;
+                      const hasTooltip = bookNames[book] && bookNames[book] !== book;
+                      return (
+                        <div
+                          key={index}
+                          className="relative group"
+                        >
+                          <span
+                            className="px-3 py-1 bg-sr-light-gray border border-sr-light-gray rounded-md text-gray-200 text-sm cursor-default"
+                          >
+                            {book}
+                          </span>
+                          {hasTooltip && (
+                            <div className="absolute bottom-full left-1/2 transform -translate-x-1/2 mb-2 px-2 py-1 bg-sr-gray border border-sr-light-gray rounded-md text-xs text-gray-100 whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none z-10 shadow-lg">
+                              {bookName}
+                              <div className="absolute top-full left-1/2 transform -translate-x-1/2 -mt-px">
+                                <div className="border-4 border-transparent border-t-sr-light-gray"></div>
+                              </div>
+                            </div>
+                          )}
+                        </div>
+                      );
+                    })}
                   </div>
                 </section>
               )}
 
-              {/* Players */}
-              {campaign.players && campaign.players.length > 0 && (
+              {/* Players (Read-only) */}
+              {currentCampaign.players && currentCampaign.players.length > 0 && (
                 <section>
                   <h2 className="text-lg font-semibold text-gray-200 mb-3">Players</h2>
                   <div className="space-y-2">
-                    {campaign.players.map((player) => (
-                      <div
-                        key={player.id}
-                        className="px-3 py-2 bg-sr-light-gray border border-sr-light-gray rounded-md text-gray-200"
-                      >
-                        {player.username || player.id}
-                      </div>
-                    ))}
+                    {currentCampaign.players
+                      .filter(player => player.status === 'accepted')
+                      .map((player) => {
+                        const displayName = player.username || player.email || player.id;
+                        return (
+                          <div
+                            key={player.id}
+                            className="flex items-center justify-between px-3 py-2 bg-green-900/20 border border-green-700/50 rounded-md text-gray-200 text-sm"
+                          >
+                            <div className="flex items-center gap-2">
+                              <span>{displayName}</span>
+                              {player.joined_at && (
+                                <span className="text-xs text-gray-400">
+                                  Joined: {new Date(player.joined_at).toLocaleDateString()}
+                                </span>
+                              )}
+                            </div>
+                          </div>
+                        );
+                      })}
                   </div>
                 </section>
               )}
 
               {/* Factions */}
-              {campaign.factions && campaign.factions.length > 0 && (
+              {currentCampaign.factions && currentCampaign.factions.length > 0 && (
                 <section>
                   <h2 className="text-lg font-semibold text-gray-200 mb-3">Factions</h2>
                   <div className="space-y-3">
-                    {campaign.factions.map((faction) => (
+                    {currentCampaign.factions.map((faction) => (
                       <div
                         key={faction.id}
                         className="p-3 bg-sr-light-gray border border-sr-light-gray rounded-md"
@@ -218,11 +291,11 @@ export function CampaignViewModal({ campaign, isOpen, onOpenChange }: CampaignVi
               )}
 
               {/* Locations */}
-              {campaign.locations && campaign.locations.length > 0 && (
+              {currentCampaign.locations && currentCampaign.locations.length > 0 && (
                 <section>
                   <h2 className="text-lg font-semibold text-gray-200 mb-3">Locations</h2>
                   <div className="space-y-2">
-                    {campaign.locations.map((location) => (
+                    {currentCampaign.locations.map((location) => (
                       <div
                         key={location.id}
                         className="px-3 py-2 bg-sr-light-gray border border-sr-light-gray rounded-md"
@@ -238,11 +311,11 @@ export function CampaignViewModal({ campaign, isOpen, onOpenChange }: CampaignVi
               )}
 
               {/* Placeholders */}
-              {campaign.placeholders && campaign.placeholders.length > 0 && (
+              {currentCampaign.placeholders && currentCampaign.placeholders.length > 0 && (
                 <section>
                   <h2 className="text-lg font-semibold text-gray-200 mb-3">Placeholders</h2>
                   <div className="space-y-2">
-                    {campaign.placeholders.map((placeholder) => (
+                    {currentCampaign.placeholders.map((placeholder) => (
                       <div
                         key={placeholder.id}
                         className="px-3 py-2 bg-sr-light-gray border border-sr-light-gray rounded-md"
@@ -258,32 +331,32 @@ export function CampaignViewModal({ campaign, isOpen, onOpenChange }: CampaignVi
               )}
 
               {/* Session Seed */}
-              {campaign.session_seed && (
+              {currentCampaign.session_seed && (
                 <section>
                   <h2 className="text-lg font-semibold text-gray-200 mb-3">Session Seed</h2>
                   <div className="p-3 bg-sr-light-gray border border-sr-light-gray rounded-md space-y-2">
-                    {campaign.session_seed.title && (
+                    {currentCampaign.session_seed.title && (
                       <div>
                         <label className="text-sm text-gray-400">Title</label>
-                        <p className="text-gray-200">{campaign.session_seed.title}</p>
+                        <p className="text-gray-200">{currentCampaign.session_seed.title}</p>
                       </div>
                     )}
-                    {campaign.session_seed.objectives && (
+                    {currentCampaign.session_seed.objectives && (
                       <div>
                         <label className="text-sm text-gray-400">Objectives</label>
-                        <p className="text-gray-200 whitespace-pre-wrap">{campaign.session_seed.objectives}</p>
+                        <p className="text-gray-200 whitespace-pre-wrap">{currentCampaign.session_seed.objectives}</p>
                       </div>
                     )}
-                    {campaign.session_seed.scene_template && (
+                    {currentCampaign.session_seed.scene_template && (
                       <div>
                         <label className="text-sm text-gray-400">Scene Template</label>
-                        <p className="text-gray-200">{campaign.session_seed.scene_template}</p>
+                        <p className="text-gray-200">{currentCampaign.session_seed.scene_template}</p>
                       </div>
                     )}
-                    {campaign.session_seed.summary && (
+                    {currentCampaign.session_seed.summary && (
                       <div>
                         <label className="text-sm text-gray-400">Summary</label>
-                        <p className="text-gray-200 whitespace-pre-wrap">{campaign.session_seed.summary}</p>
+                        <p className="text-gray-200 whitespace-pre-wrap">{currentCampaign.session_seed.summary}</p>
                       </div>
                     )}
                   </div>
@@ -291,12 +364,28 @@ export function CampaignViewModal({ campaign, isOpen, onOpenChange }: CampaignVi
               )}
 
               {/* Automation */}
-              {campaign.automation && Object.keys(campaign.automation).length > 0 && (
-                <section>
-                  <h2 className="text-lg font-semibold text-gray-200 mb-3">Automation</h2>
-                  <div className="space-y-2">
-                    {Object.entries(campaign.automation).map(([key, value]) => {
+              <section>
+                <h2 className="text-lg font-semibold text-gray-200 mb-3">Automation</h2>
+                <div className="space-y-2">
+                  {(() => {
+                    // Default automation keys
+                    const defaultAutomationKeys = [
+                      'initiative_automation',
+                      'matrix_trace',
+                      'recoil_tracking',
+                      'damage_tracking',
+                      'spell_cast',
+                      'skill_test',
+                    ];
+                    
+                    // Get all automation keys (from currentCampaign or default list)
+                    const allKeys = currentCampaign.automation 
+                      ? [...new Set([...defaultAutomationKeys, ...Object.keys(currentCampaign.automation)])]
+                      : defaultAutomationKeys;
+                    
+                    return allKeys.map((key) => {
                       const automationInfo = getAutomationInfo(key);
+                      const isEnabled = currentCampaign.automation?.[key] === true;
                       return (
                         <div
                           key={key}
@@ -304,17 +393,17 @@ export function CampaignViewModal({ campaign, isOpen, onOpenChange }: CampaignVi
                         >
                           <div className="flex items-center justify-between mb-1">
                             <div className="font-medium text-gray-200">{automationInfo.name}</div>
-                            <span className={`px-2 py-1 rounded text-sm ${value ? 'bg-green-900/30 text-green-400' : 'bg-red-900/30 text-red-400'}`}>
-                              {value ? 'Enabled' : 'Disabled'}
+                            <span className={`px-2 py-1 rounded text-sm ${isEnabled ? 'bg-green-900/30 text-green-400' : 'bg-red-900/30 text-red-400'}`}>
+                              {isEnabled ? 'Enabled' : 'Disabled'}
                             </span>
                           </div>
                           <div className="text-sm text-gray-400 mt-1">{automationInfo.description}</div>
                         </div>
                       );
-                    })}
-                  </div>
-                </section>
-              )}
+                    });
+                  })()}
+                </div>
+              </section>
 
               {/* Dates */}
               <section>
@@ -323,20 +412,20 @@ export function CampaignViewModal({ campaign, isOpen, onOpenChange }: CampaignVi
                   <div>
                     <label className="text-sm text-gray-400">Created</label>
                     <p className="text-gray-100 mt-1">
-                      {new Date(campaign.created_at).toLocaleDateString()}
+                      {currentCampaign && new Date(currentCampaign.created_at).toLocaleDateString()}
                     </p>
                   </div>
                   <div>
                     <label className="text-sm text-gray-400">Updated</label>
                     <p className="text-gray-100 mt-1">
-                      {new Date(campaign.updated_at).toLocaleDateString()}
+                      {currentCampaign && new Date(currentCampaign.updated_at).toLocaleDateString()}
                     </p>
                   </div>
-                  {campaign.setup_locked_at && (
+                  {currentCampaign?.setup_locked_at && (
                     <div>
                       <label className="text-sm text-gray-400">Setup Locked</label>
                       <p className="text-gray-100 mt-1">
-                        {new Date(campaign.setup_locked_at).toLocaleDateString()}
+                        {new Date(currentCampaign.setup_locked_at).toLocaleDateString()}
                       </p>
                     </div>
                   )}

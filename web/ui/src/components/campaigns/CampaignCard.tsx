@@ -1,4 +1,4 @@
-import type { Campaign } from '../../lib/types';
+import type { Campaign, CampaignResponse } from '../../lib/types';
 
 interface CampaignCardProps {
   campaign: Campaign;
@@ -35,9 +35,9 @@ export function CampaignCard({ campaign }: CampaignCardProps) {
             <span className="font-medium text-gray-400">Level:</span> {campaign.gameplay_level}
           </div>
         )}
-        {campaign.gm_name && (
+        {((campaign as CampaignResponse).gm_username || campaign.gm_name) && (
           <div>
-            <span className="font-medium text-gray-400">GM:</span> {campaign.gm_name}
+            <span className="font-medium text-gray-400">GM:</span> {(campaign as CampaignResponse).gm_username || campaign.gm_name}
           </div>
         )}
       </div>

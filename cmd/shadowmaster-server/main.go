@@ -102,7 +102,27 @@ func main() {
 				r.Post("/", handlers.CreateCampaign)
 				r.Put("/{id}", handlers.UpdateCampaign)
 				r.Delete("/{id}", handlers.DeleteCampaign)
+				// Invitation routes (GM only)
+				r.Post("/{id}/invitations", handlers.InvitePlayer)
+				r.Get("/{id}/invitations", handlers.GetCampaignInvitations)
+				r.Delete("/{id}/invitations/{playerId}", handlers.RemoveInvitation)
+				// Player management routes (GM only)
+				r.Delete("/{id}/players/{playerId}", handlers.RemovePlayer)
 			})
+		})
+
+		// Invitation routes
+		r.Group(func(r chi.Router) {
+			r.Use(sessionManager.RequireAuth)
+			r.Get("/invitations", handlers.GetUserInvitations)
+			r.Post("/invitations/{id}/accept", handlers.AcceptInvitation)
+			r.Post("/invitations/{id}/decline", handlers.DeclineInvitation)
+		})
+
+		// User search (for autocomplete)
+		r.Group(func(r chi.Router) {
+			r.Use(sessionManager.RequireAuth)
+			r.Get("/users/search", handlers.SearchUsers)
 		})
 
 		// Session routes
