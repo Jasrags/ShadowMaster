@@ -385,36 +385,35 @@ func (h *Handlers) CreateCharacter(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	// If SR3 edition with priority data, use character service
-	if req.Edition == "sr3" && h.CharacterService != nil {
-		editionDataMap, ok := req.EditionData.(map[string]interface{})
-		if ok {
-			priorities := service.PrioritySelection{
-				Magic:      getStringFromMap(editionDataMap, "magic_priority", ""),
-				Metatype:   getStringFromMap(editionDataMap, "metatype_priority", ""),
-				Attributes: getStringFromMap(editionDataMap, "attr_priority", ""),
-				Skills:     getStringFromMap(editionDataMap, "skills_priority", ""),
-				Resources:  getStringFromMap(editionDataMap, "resources_priority", ""),
-			}
-
-			// Validate that all priorities are assigned (A-E)
-			if priorities.Magic == "" || priorities.Metatype == "" || priorities.Attributes == "" ||
-				priorities.Skills == "" || priorities.Resources == "" {
-				http.Error(w, "All priorities (A-E) must be assigned to each category", http.StatusBadRequest)
-				return
-			}
-
-			character, err := h.CharacterService.CreateSR3Character(req.Name, req.PlayerName, priorities)
-			if err != nil {
-				http.Error(w, err.Error(), http.StatusInternalServerError)
-				return
-			}
-			respondJSON(w, http.StatusCreated, character)
-			return
-		}
+	// Validate required fields
+	if req.Name == "" {
+		http.Error(w, "name is required", http.StatusBadRequest)
+		return
+	}
+	if req.Edition == "" {
+		http.Error(w, "edition is required", http.StatusBadRequest)
+		return
 	}
 
-	// Fallback to direct creation
+	// Use the character service with edition registry
+	if h.CharacterService != nil {
+		character, err := h.CharacterService.CreateCharacter(req.Edition, req.Name, req.PlayerName, req.EditionData)
+		if err != nil {
+			// Check if it's a validation error (400) or server error (500)
+			if strings.Contains(err.Error(), "unsupported edition") || 
+			   strings.Contains(err.Error(), "invalid creation data") ||
+			   strings.Contains(err.Error(), "all priorities") {
+				http.Error(w, err.Error(), http.StatusBadRequest)
+			} else {
+				http.Error(w, err.Error(), http.StatusInternalServerError)
+			}
+			return
+		}
+		respondJSON(w, http.StatusCreated, character)
+		return
+	}
+
+	// Fallback to direct creation (shouldn't happen in normal operation)
 	character := &domain.Character{
 		Name:        req.Name,
 		PlayerName:  req.PlayerName,

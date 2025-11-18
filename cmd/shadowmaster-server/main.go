@@ -9,6 +9,8 @@ import (
 	"shadowmaster/internal/domain"
 	jsonrepo "shadowmaster/internal/repository/json"
 	"shadowmaster/internal/service"
+	edition "shadowmaster/pkg/shadowrun/edition"
+	v3 "shadowmaster/pkg/shadowrun/edition/v3"
 	"time"
 
 	"github.com/go-chi/chi/v5"
@@ -26,6 +28,11 @@ func main() {
 	if err != nil {
 		log.Fatalf("Failed to initialize repositories: %v", err)
 	}
+
+	// Register edition handlers
+	sr3Handler := v3.NewSR3Handler(repos.Edition)
+	edition.Register(sr3Handler)
+	log.Println("Registered edition handlers:", edition.ListEditions())
 
 	// Initialize services
 	characterService := service.NewCharacterService(repos.Character)

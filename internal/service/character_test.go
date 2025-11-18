@@ -2,13 +2,14 @@ package service
 
 import (
 	"errors"
-	"fmt"
 	"testing"
 
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 
 	"shadowmaster/internal/domain"
+	edition "shadowmaster/pkg/shadowrun/edition"
+	v3 "shadowmaster/pkg/shadowrun/edition/v3"
 )
 
 type stubCharacterRepository struct {
@@ -47,10 +48,15 @@ func (s *stubCharacterRepository) Delete(string) error {
 func TestCharacterServiceCreateSR3Character(t *testing.T) {
 	t.Parallel()
 
+	// Register SR3 handler for testing
+	mockRepo := &mockEditionRepository{}
+	sr3Handler := v3.NewSR3Handler(mockRepo)
+	edition.Register(sr3Handler)
+
 	repo := &stubCharacterRepository{}
 	service := NewCharacterService(repo)
 
-	priorities := PrioritySelection{
+	priorities := v3.PrioritySelection{
 		Magic:      "A",
 		Metatype:   "C",
 		Attributes: "B",
@@ -67,12 +73,12 @@ func TestCharacterServiceCreateSR3Character(t *testing.T) {
 	assert.Equal(t, "Player One", character.PlayerName)
 	assert.Equal(t, "sr3", character.Edition)
 
-	sr3Data, ok := character.EditionData.(*domain.CharacterSR3)
-	require.True(t, ok, "expected SR3 edition data")
+	sr3Data, err := character.GetSR3Data()
+	require.NoError(t, err)
 
 	assert.Equal(t, "Elf", sr3Data.Metatype)
 	assert.Equal(t, 6, sr3Data.MagicRating)
-	assert.Equal(t, getResourcesPriority("B"), sr3Data.Nuyen)
+	assert.Equal(t, 400000, sr3Data.Nuyen) // Priority B resources
 	assert.Equal(t, 5, sr3Data.Quickness)
 	assert.Equal(t, 4, sr3Data.Intelligence)
 	assert.Equal(t, 9, sr3Data.Reaction)
@@ -87,69 +93,45 @@ func TestCharacterServiceCreateSR3Character(t *testing.T) {
 	assert.Equal(t, "Contact 2", sr3Data.Contacts[1].Name)
 }
 
-func TestGetResourcesPriority(t *testing.T) {
-	t.Parallel()
+// mockEditionRepository is a test implementation of EditionDataRepository
+type mockEditionRepository struct{}
 
-	testCases := []struct {
-		input    string
-		expected int
-	}{
-		{"A", 1000000},
-		{"B", 400000},
-		{"C", 90000},
-		{"D", 20000},
-		{"E", 5000},
-		{"unknown", 0},
-	}
-
-	for _, tc := range testCases {
-		tc := tc
-		t.Run(tc.input, func(t *testing.T) {
-			assert.Equal(t, tc.expected, getResourcesPriority(tc.input))
-		})
-	}
+func (m *mockEditionRepository) GetCharacterCreationData(edition string) (*domain.CharacterCreationData, error) {
+	return &domain.CharacterCreationData{
+		Priorities: make(map[string]map[string]domain.PriorityOption),
+		Metatypes:  []domain.MetatypeDefinition{},
+	}, nil
 }
 
-func TestGetMetatypeModifiers(t *testing.T) {
+func TestCharacterServiceCreateCharacter(t *testing.T) {
 	t.Parallel()
 
-	testCases := []struct {
-		name     string
-		metatype string
-		expected MetatypeModifiers
-	}{
-		{"human", "Human", MetatypeModifiers{}},
-		{"dwarf", "Dwarf", MetatypeModifiers{Body: 1, Strength: 2, Willpower: 1}},
-		{"elf", "Elf", MetatypeModifiers{Quickness: 1, Charisma: 2}},
-		{"ork", "Ork", MetatypeModifiers{Body: 3, Strength: 2, Charisma: -1, Intelligence: -1}},
-		{"troll", "Troll", MetatypeModifiers{Body: 5, Quickness: -1, Strength: 4, Intelligence: -2, Charisma: -2}},
+	// Register SR3 handler for testing
+	mockRepo := &mockEditionRepository{}
+	sr3Handler := v3.NewSR3Handler(mockRepo)
+	edition.Register(sr3Handler)
+
+	repo := &stubCharacterRepository{}
+	service := NewCharacterService(repo)
+
+	priorities := v3.PrioritySelection{
+		Magic:      "A",
+		Metatype:   "C",
+		Attributes: "B",
+		Skills:     "A",
+		Resources:  "B",
 	}
 
-	for _, tc := range testCases {
-		tc := tc
-		t.Run(tc.name, func(t *testing.T) {
-			assert.Equal(t, tc.expected, GetMetatypeModifiers(tc.metatype))
-		})
-	}
-}
+	character, err := service.CreateCharacter("sr3", "Test Character", "Test Player", priorities)
+	require.NoError(t, err)
 
-func TestGetLanguageSkillPoints(t *testing.T) {
-	t.Parallel()
+	require.Len(t, repo.created, 1)
+	assert.Equal(t, "Test Character", character.Name)
+	assert.Equal(t, "Test Player", character.PlayerName)
+	assert.Equal(t, "sr3", character.Edition)
 
-	testCases := []struct {
-		intelligence int
-		expected     int
-	}{
-		{0, 0},
-		{4, 6},
-		{5, 7},
-		{10, 15},
-	}
-
-	for _, tc := range testCases {
-		tc := tc
-		t.Run(fmt.Sprintf("int_%d", tc.intelligence), func(t *testing.T) {
-			assert.Equal(t, tc.expected, GetLanguageSkillPoints(tc.intelligence))
-		})
-	}
+	// Test unsupported edition
+	_, err = service.CreateCharacter("sr4", "Test", "Player", nil)
+	require.Error(t, err)
+	assert.Contains(t, err.Error(), "unsupported edition")
 }

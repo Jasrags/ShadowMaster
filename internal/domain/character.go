@@ -1,6 +1,7 @@
 package domain
 
 import (
+	"fmt"
 	"time"
 )
 
@@ -210,4 +211,59 @@ type AdeptPower struct {
 	PowerPoints float64 `json:"power_points"`        // Power Points spent on this power
 	Attribute   string  `json:"attribute,omitempty"` // For powers that specify an attribute (e.g., Attribute Boost)
 	Notes       string  `json:"notes,omitempty"`
+}
+
+// GetSR3Data returns the SR3-specific character data with type safety.
+// Returns an error if the character is not SR3 or if the data type is invalid.
+func (c *Character) GetSR3Data() (*CharacterSR3, error) {
+	if c.Edition != "sr3" {
+		return nil, fmt.Errorf("character is not SR3 edition (got: %s)", c.Edition)
+	}
+	
+	if c.EditionData == nil {
+		return nil, fmt.Errorf("character edition data is nil")
+	}
+	
+	// Handle both pointer and value types
+	switch data := c.EditionData.(type) {
+	case *CharacterSR3:
+		return data, nil
+	case CharacterSR3:
+		return &data, nil
+	case map[string]interface{}:
+		// For JSON unmarshaling cases where it comes as a map
+		// This is a fallback - ideally we'd use proper JSON unmarshaling
+		return nil, fmt.Errorf("edition data is a map, needs proper unmarshaling")
+	default:
+		return nil, fmt.Errorf("invalid SR3 data type: %T", c.EditionData)
+	}
+}
+
+// SetSR3Data sets the SR3-specific character data and updates the edition field.
+func (c *Character) SetSR3Data(data *CharacterSR3) {
+	c.Edition = "sr3"
+	c.EditionData = data
+}
+
+// GetSR5Data returns the SR5-specific character data with type safety.
+// Returns an error if the character is not SR5 or if the data type is invalid.
+// Note: CharacterSR5 type will need to be defined when SR5 is implemented.
+func (c *Character) GetSR5Data() (interface{}, error) {
+	if c.Edition != "sr5" {
+		return nil, fmt.Errorf("character is not SR5 edition (got: %s)", c.Edition)
+	}
+	
+	if c.EditionData == nil {
+		return nil, fmt.Errorf("character edition data is nil")
+	}
+	
+	// TODO: Replace with actual CharacterSR5 type when implemented
+	return c.EditionData, nil
+}
+
+// SetSR5Data sets the SR5-specific character data and updates the edition field.
+// Note: This will need to be updated when CharacterSR5 type is defined.
+func (c *Character) SetSR5Data(data interface{}) {
+	c.Edition = "sr5"
+	c.EditionData = data
 }
