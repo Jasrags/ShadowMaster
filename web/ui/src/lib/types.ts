@@ -107,3 +107,93 @@ export interface ApiError {
   message?: string;
 }
 
+// Gear Requirement types (matching Go structure)
+export interface GearConditionGroup {
+  category?: string[];
+  name?: string[];
+}
+
+export interface GearDetailsRequirement {
+  or?: GearConditionGroup;
+  and?: GearConditionGroup;
+  // For complex attribute-based requirements (fallback)
+  [key: string]: unknown;
+}
+
+export interface RequirementOneOf {
+  cyberware?: string[];
+  bioware?: string[];
+  metatype?: string;
+  quality?: string[];
+  power?: string;
+  group?: string[];
+}
+
+export interface RequirementAllOf {
+  metatype?: string;
+  quality?: string;
+  power?: string;
+  magenabled?: boolean;
+}
+
+export interface ParentDetails {
+  name: string;
+}
+
+export interface GearRequired {
+  oneof?: RequirementOneOf;
+  allof?: RequirementAllOf;
+  parentdetails?: ParentDetails;
+  geardetails?: GearDetailsRequirement | Record<string, unknown>; // Can be type-safe or complex map
+}
+
+// Gear types
+export interface Gear {
+  name: string;
+  category: string;
+  source: string;
+  page?: string;
+  rating?: string;
+  avail?: string;
+  cost?: string;
+  costfor?: string;
+  addweapon?: string;
+  ammoforweapontype?: string;
+  isflechetteammo?: boolean;
+  flechetteweaponbonus?: string;
+  weaponbonus?: string;
+  addoncategory?: string | string[];
+  required?: GearRequired;
+  requireparent?: boolean;
+  bonus?: unknown;
+}
+
+// Armor types
+export interface Armor {
+  name: string;
+  category: string;
+  armor: string;
+  armorcapacity: string;
+  avail: string;
+  cost: string;
+  source: string;
+  armoroverride?: string;
+  rating?: number;
+  addmodcategory?: string;
+  selectmodsfromcategory?: {
+    category: string;
+  };
+  gears?: {
+    usegear?: string[];
+  };
+  addweapon?: string;
+  bonus?: unknown;
+  wirelessbonus?: unknown;
+  mods?: {
+    name?: string | string[] | Array<{
+      '+content'?: string;
+      '+@rating'?: string;
+    }>;
+  };
+}
+

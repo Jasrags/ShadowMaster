@@ -88,7 +88,7 @@ var DataArmors = map[string]Armor{
 		Cost:          "1500",
 		Source:        "SR5",
 		Gears: &Gears{
-			UseGear: "Holster",
+			UseGear: []string{"concealable_holster"},
 		},
 	},
 	"armor_clothing": {
@@ -161,7 +161,7 @@ var DataArmors = map[string]Armor{
 		Source:         "SR5",
 		AddModCategory: "Urban Explorer Jumpsuit Accessories",
 		Gears: &Gears{
-			UseGear: []interface{}{"Biomonitor", "Music Player"},
+			UseGear: []string{"Biomonitor", "Music Player"},
 		},
 	},
 	"helmet": {
@@ -448,7 +448,7 @@ var DataArmors = map[string]Armor{
 		Cost:          "1300",
 		Source:        "RG",
 		Gears: &Gears{
-			UseGear: "Holster",
+			UseGear: []string{"Holster"},
 		},
 		WirelessBonus: &Bonus{
 			SkillCategory: SkillCategoryBonus{
@@ -501,7 +501,7 @@ var DataArmors = map[string]Armor{
 		Cost:          "1000",
 		Source:        "RG",
 		Gears: &Gears{
-			UseGear: "Holster",
+			UseGear: []string{"Holster"},
 		},
 		WirelessBonus: &Bonus{
 			SkillCategory: SkillCategoryBonus{
@@ -518,7 +518,7 @@ var DataArmors = map[string]Armor{
 		Cost:          "1000",
 		Source:        "RG",
 		Gears: &Gears{
-			UseGear: "Holster",
+			UseGear: []string{"Holster"},
 		},
 		WirelessBonus: &Bonus{
 			SkillCategory: SkillCategoryBonus{
@@ -535,7 +535,7 @@ var DataArmors = map[string]Armor{
 		Cost:          "1000",
 		Source:        "RG",
 		Gears: &Gears{
-			UseGear: "Holster",
+			UseGear: []string{"Holster"},
 		},
 		WirelessBonus: &Bonus{
 			SkillCategory: SkillCategoryBonus{
@@ -586,7 +586,7 @@ var DataArmors = map[string]Armor{
 		Cost:          "1500",
 		Source:        "RG",
 		Gears: &Gears{
-			UseGear: "Holster",
+			UseGear: []string{"Holster"},
 		},
 		WirelessBonus: &Bonus{
 			LimitModifier: LimitModifier{
@@ -607,7 +607,7 @@ var DataArmors = map[string]Armor{
 		Source:        "RG",
 		ArmorOverride: "+3",
 		Gears: &Gears{
-			UseGear: "Holster",
+			UseGear: []string{"Holster"},
 		},
 		WirelessBonus: &Bonus{
 			LimitModifier: LimitModifier{
@@ -627,7 +627,7 @@ var DataArmors = map[string]Armor{
 		Cost:          "13500",
 		Source:        "RG",
 		Gears: &Gears{
-			UseGear: "Holster",
+			UseGear: []string{"Holster"},
 		},
 		WirelessBonus: &Bonus{
 			LimitModifier: LimitModifier{
@@ -792,7 +792,7 @@ var DataArmors = map[string]Armor{
 			Category: "Globetrotter Jacket Liners",
 		},
 		Gears: &Gears{
-			UseGear: "Holster",
+			UseGear: []string{"Holster"},
 		},
 		WirelessBonus: &Bonus{
 			SpecificSkill: SkillCategoryBonus{
@@ -849,7 +849,7 @@ var DataArmors = map[string]Armor{
 			Category: "Victory Liners",
 		},
 		Gears: &Gears{
-			UseGear: "Holster",
+			UseGear: []string{"Holster"},
 		},
 		WirelessBonus: &Bonus{
 			SpecificSkill: SkillCategoryBonus{
@@ -894,7 +894,7 @@ var DataArmors = map[string]Armor{
 			Category: "Victory Liners",
 		},
 		Gears: &Gears{
-			UseGear: "Holster",
+			UseGear: []string{"Holster"},
 		},
 		WirelessBonus: &Bonus{
 			SpecificSkill: SkillCategoryBonus{
@@ -996,7 +996,7 @@ var DataArmors = map[string]Armor{
 		Cost:          "8000",
 		Source:        "RG",
 		Gears: &Gears{
-			UseGear: "Holster",
+			UseGear: []string{"Holster"},
 		},
 		Bonus: &Bonus{
 			LimitModifier: LimitModifier{
@@ -1016,7 +1016,7 @@ var DataArmors = map[string]Armor{
 		Cost:          "14000",
 		Source:        "RG",
 		Gears: &Gears{
-			UseGear: "Holster",
+			UseGear: []string{"Holster"},
 		},
 		Bonus: &Bonus{
 			LimitModifier: LimitModifier{
@@ -1036,7 +1036,7 @@ var DataArmors = map[string]Armor{
 		Cost:          "20000",
 		Source:        "RG",
 		Gears: &Gears{
-			UseGear: "Holster",
+			UseGear: []string{"Holster"},
 		},
 		Bonus: &Bonus{
 			LimitModifier: LimitModifier{
@@ -1274,7 +1274,7 @@ var DataArmors = map[string]Armor{
 		Cost:          "4000",
 		Source:        "RG",
 		Gears: &Gears{
-			UseGear: "Grenade: Flash-Pak",
+			UseGear: []string{"Grenade: Flash-Pak"},
 		},
 	},
 	"murder_armor": {
@@ -1286,7 +1286,7 @@ var DataArmors = map[string]Armor{
 		Cost:          "5000",
 		Source:        "RG",
 		Gears: &Gears{
-			UseGear: []interface{}{"Biomonitor", "Holster"},
+			UseGear: []string{"Biomonitor", "Holster"},
 		},
 		Mods: &Mods{
 			Name: "Custom Fit",
@@ -1374,7 +1374,7 @@ var DataArmors = map[string]Armor{
 		Cost:          "1000",
 		Source:        "RG",
 		Gears: &Gears{
-			UseGear: "Flare Compensation",
+			UseGear: []string{"Flare Compensation"},
 		},
 		WirelessBonus: &Bonus{
 			SpecificSkill: SkillCategoryBonus{
@@ -1403,7 +1403,7 @@ var DataArmors = map[string]Armor{
 		Cost:          "800",
 		Source:        "RG",
 		Gears: &Gears{
-			UseGear: "Flare Compensation",
+			UseGear: []string{"Flare Compensation"},
 		},
 		WirelessBonus: &Bonus{
 			SpecificSkill: SkillCategoryBonus{
@@ -1425,7 +1425,7 @@ var DataArmors = map[string]Armor{
 		Cost:          "2000",
 		Source:        "RG",
 		Gears: &Gears{
-			UseGear: "Flare Compensation",
+			UseGear: []string{"Flare Compensation"},
 		},
 		WirelessBonus: &Bonus{
 			LimitModifier: LimitModifier{
@@ -1449,7 +1449,7 @@ var DataArmors = map[string]Armor{
 		Cost:          "11000",
 		Source:        "RG",
 		Gears: &Gears{
-			UseGear: []interface{}{"Gas Mask", "Flare Compensation"},
+			UseGear: []string{"Gas Mask", "Flare Compensation"},
 		},
 		Bonus: &Bonus{
 			LimitModifier: LimitModifier{
@@ -1478,7 +1478,7 @@ var DataArmors = map[string]Armor{
 		Cost:          "1200",
 		Source:        "RG",
 		Gears: &Gears{
-			UseGear: "Flare Compensation",
+			UseGear: []string{"Flare Compensation"},
 		},
 		Bonus: &Bonus{
 			FatigueResist: "-2",
@@ -1498,7 +1498,7 @@ var DataArmors = map[string]Armor{
 		Cost:          "10000",
 		Source:        "RG",
 		Gears: &Gears{
-			UseGear: "Flare Compensation",
+			UseGear: []string{"Flare Compensation"},
 		},
 		Mods: &Mods{
 			Name: []interface{}{"Custom Fit", ModNameEntry{
@@ -1515,7 +1515,7 @@ var DataArmors = map[string]Armor{
 		Cost:          "900",
 		Source:        "RG",
 		Gears: &Gears{
-			UseGear: "Low Light",
+			UseGear: []string{"Low Light"},
 		},
 	},
 	"full_face_mask": {
@@ -1527,7 +1527,7 @@ var DataArmors = map[string]Armor{
 		Cost:          "300",
 		Source:        "RG",
 		Gears: &Gears{
-			UseGear: "Gas Mask",
+			UseGear: []string{"Gas Mask"},
 		},
 	},
 	"drysuit": {
@@ -1581,7 +1581,7 @@ var DataArmors = map[string]Armor{
 		Cost:          "3000",
 		Source:        "RG",
 		Gears: &Gears{
-			UseGear: "Gas Mask",
+			UseGear: []string{"Gas Mask"},
 		},
 		Mods: &Mods{
 			Name: []interface{}{ModNameEntry{
@@ -1604,7 +1604,7 @@ var DataArmors = map[string]Armor{
 		Cost:          "12000",
 		Source:        "RG",
 		Gears: &Gears{
-			UseGear: []interface{}{"Renraku Sensei", "Flare Compensation", "Biomonitor"},
+			UseGear: []string{"Renraku Sensei", "Flare Compensation", "Biomonitor"},
 		},
 		Mods: &Mods{
 			Name: []interface{}{"Chemical Seal", ModNameEntry{
@@ -1623,7 +1623,7 @@ var DataArmors = map[string]Armor{
 		Cost:          "25000",
 		Source:        "RG",
 		Gears: &Gears{
-			UseGear: []interface{}{"Renraku Sensei", "Flare Compensation", "Biomonitor"},
+			UseGear: []string{"Renraku Sensei", "Flare Compensation", "Biomonitor"},
 		},
 		Mods: &Mods{
 			Name: []interface{}{"Chemical Seal", ModNameEntry{
@@ -1642,7 +1642,7 @@ var DataArmors = map[string]Armor{
 		Cost:          "35000",
 		Source:        "RG",
 		Gears: &Gears{
-			UseGear: []interface{}{"Renraku Sensei", "Biomonitor"},
+			UseGear: []string{"Renraku Sensei", "Biomonitor"},
 		},
 		Mods: &Mods{
 			Name: []interface{}{"Chemical Seal", ModNameEntry{
@@ -2196,7 +2196,7 @@ var DataArmors = map[string]Armor{
 		Cost:          "200",
 		Source:        "HS",
 		Gears: &Gears{
-			UseGear: []interface{}{"Camera", "Microphone, Omni-Directional"},
+			UseGear: []string{"Camera", "Microphone, Omni-Directional"},
 		},
 	},
 	"critter_body_armor": {
@@ -2641,7 +2641,7 @@ var DataArmors = map[string]Armor{
 		Cost:          "35000",
 		Source:        "SL",
 		Gears: &Gears{
-			UseGear: "Holster",
+			UseGear: []string{"Holster"},
 		},
 		Bonus: &Bonus{
 			LimitModifier: LimitModifier{
@@ -2670,7 +2670,7 @@ var DataArmors = map[string]Armor{
 		Cost:          "1700",
 		Source:        "KC",
 		Gears: &Gears{
-			UseGear: "Holster",
+			UseGear: []string{"Holster"},
 		},
 		Mods: &Mods{
 			Name: []interface{}{"Drag Handle", "Pantheon Armored Shell", "Micro-Hardpoint", "Micro-Hardpoint", "Micro-Hardpoint", "Pantheon Quick-Charge Battery Pack"},
@@ -2685,7 +2685,7 @@ var DataArmors = map[string]Armor{
 		Cost:          "1000",
 		Source:        "KC",
 		Gears: &Gears{
-			UseGear: []interface{}{"Holster", "Medkit"},
+			UseGear: []string{"Holster", "Medkit"},
 		},
 		Mods: &Mods{
 			Name: []interface{}{"Drag Handle", "Micro-Hardpoint"},
@@ -2700,7 +2700,7 @@ var DataArmors = map[string]Armor{
 		Cost:          "200",
 		Source:        "HAMG",
 		Gears: &Gears{
-			UseGear: "Image Link",
+			UseGear: []string{"Image Link"},
 		},
 	},
 	"rheingold_friesennerz": {

@@ -1,21 +1,23 @@
 package common
 
 // RequirementOneOf represents a one-of requirement (at least one must be met)
+// Simplified to use []string instead of interface{} for consistency
 type RequirementOneOf struct {
-	Cyberware interface{} `json:"cyberware,omitempty"` // Can be string or []string
-	Bioware   interface{} `json:"bioware,omitempty"`   // Can be string or []string
-	Metatype  string      `json:"metatype,omitempty"`  // Required metatype
-	Quality   interface{} `json:"quality,omitempty"`   // Can be string or []string
-	Power     string      `json:"power,omitempty"`     // Required power
-	Group     interface{} `json:"group,omitempty"`     // Required group (can be complex)
+	Cyberware []string `json:"cyberware,omitempty"` // List of required cyberware (OR logic)
+	Bioware   []string `json:"bioware,omitempty"`   // List of required bioware (OR logic)
+	Metatype  string   `json:"metatype,omitempty"`  // Required metatype
+	Quality   []string `json:"quality,omitempty"`   // List of required qualities (OR logic)
+	Power     string   `json:"power,omitempty"`     // Required power
+	Group     []string `json:"group,omitempty"`     // List of required groups (OR logic)
 }
 
 // RequirementAllOf represents an all-of requirement (all must be met)
+// Simplified to use concrete types instead of interface{}
 type RequirementAllOf struct {
-	Metatype string      `json:"metatype,omitempty"` // Required metatype
-	Quality  string      `json:"quality,omitempty"`  // Required quality
-	Power    string      `json:"power,omitempty"`    // Required power
-	MagEnabled interface{} `json:"magenabled,omitempty"` // Magic enabled requirement
+	Metatype   string `json:"metatype,omitempty"`   // Required metatype
+	Quality    string `json:"quality,omitempty"`    // Required quality
+	Power      string `json:"power,omitempty"`      // Required power
+	MagEnabled bool   `json:"magenabled,omitempty"` // Magic enabled requirement
 }
 
 // ParentDetails represents parent item details requirement

@@ -34,12 +34,25 @@ type GearBonus struct {
 	Unique                   string                  `json:"+@unique,omitempty"`                 // Unique identifier
 }
 
-// GearRequired represents requirements for gear
+// GearDetailsRequirement represents gear details requirements (type-safe)
+type GearDetailsRequirement struct {
+	OR  *GearConditionGroup `json:"or,omitempty"`  // At least one condition must match
+	AND *GearConditionGroup `json:"and,omitempty"` // All conditions must match
+}
+
+// GearConditionGroup represents a group of conditions for gear requirements
+type GearConditionGroup struct {
+	Category []string `json:"category,omitempty"` // List of allowed categories
+	Name     []string `json:"name,omitempty"`     // List of allowed names
+}
+
+// GearRequired represents requirements for gear (simplified, type-safe version)
+// GearDetails can be *GearDetailsRequirement (type-safe) or map[string]interface{} (complex attribute-based requirements)
 type GearRequired struct {
 	OneOf       *common.RequirementOneOf `json:"oneof,omitempty"`         // One-of requirement
 	AllOf       *common.RequirementAllOf `json:"allof,omitempty"`         // All-of requirement
 	Parent      *common.ParentDetails    `json:"parentdetails,omitempty"` // Parent details requirement
-	GearDetails interface{}              `json:"geardetails,omitempty"`   // Gear details requirement (can be complex)
+	GearDetails interface{}              `json:"geardetails,omitempty"`   // Gear details requirement (*GearDetailsRequirement for simple cases, map[string]interface{} for complex)
 }
 
 // Gear represents a piece of gear from Shadowrun 5th Edition

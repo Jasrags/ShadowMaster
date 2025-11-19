@@ -2490,9 +2490,9 @@ var DataGears = map[string]Gear{
 		Avail:    "0",
 		Cost:     "100",
 		Required: &GearRequired{
-			GearDetails: map[string]interface{}{
-				"OR": map[string]interface{}{
-					"category": []interface{}{"Commlinks", "Custom"},
+			GearDetails: &GearDetailsRequirement{
+				OR: &GearConditionGroup{
+					Category: []string{"Commlinks", "Custom"},
 				},
 			},
 		},
@@ -2506,9 +2506,9 @@ var DataGears = map[string]Gear{
 		Avail:    "4F",
 		Cost:     "250",
 		Required: &GearRequired{
-			GearDetails: map[string]interface{}{
-				"OR": map[string]interface{}{
-					"category": []interface{}{"Commlinks", "Custom"},
+			GearDetails: &GearDetailsRequirement{
+				OR: &GearConditionGroup{
+					Category: []string{"Commlinks", "Custom"},
 				},
 			},
 		},
@@ -2631,9 +2631,9 @@ var DataGears = map[string]Gear{
 		Avail:    "0",
 		Cost:     "(Rating*Rating*Rating)*500",
 		Required: &GearRequired{
-			GearDetails: map[string]interface{}{
-				"OR": map[string]interface{}{
-					"name": []interface{}{"Fuchi Cyber-N", "Fuchi Cyber-Ex"},
+			GearDetails: &GearDetailsRequirement{
+				OR: &GearConditionGroup{
+					Name: []string{"Fuchi Cyber-N", "Fuchi Cyber-Ex"},
 				},
 			},
 		},
@@ -2647,9 +2647,9 @@ var DataGears = map[string]Gear{
 		Avail:    "0",
 		Cost:     "(Rating*Rating)*500",
 		Required: &GearRequired{
-			GearDetails: map[string]interface{}{
-				"OR": map[string]interface{}{
-					"name": []interface{}{"Fuchi Cyber-N", "Fuchi Cyber-Ex"},
+			GearDetails: &GearDetailsRequirement{
+				OR: &GearConditionGroup{
+					Name: []string{"Fuchi Cyber-N", "Fuchi Cyber-Ex"},
 				},
 			},
 		},
@@ -2663,9 +2663,9 @@ var DataGears = map[string]Gear{
 		Avail:    "0",
 		Cost:     "(Rating*Rating)*500",
 		Required: &GearRequired{
-			GearDetails: map[string]interface{}{
-				"OR": map[string]interface{}{
-					"name": []interface{}{"Fuchi Cyber-N", "Fuchi Cyber-Ex"},
+			GearDetails: &GearDetailsRequirement{
+				OR: &GearConditionGroup{
+					Name: []string{"Fuchi Cyber-N", "Fuchi Cyber-Ex"},
 				},
 			},
 		},
@@ -2679,9 +2679,9 @@ var DataGears = map[string]Gear{
 		Avail:    "(Rating*4)R",
 		Cost:     "(Rating*Rating*Rating)*500",
 		Required: &GearRequired{
-			GearDetails: map[string]interface{}{
-				"OR": map[string]interface{}{
-					"name": "Fuchi Cyber-Ex",
+			GearDetails: &GearDetailsRequirement{
+				OR: &GearConditionGroup{
+					Name: []string{"Fuchi Cyber-Ex"},
 				},
 			},
 		},
@@ -2695,9 +2695,9 @@ var DataGears = map[string]Gear{
 		Avail:    "0",
 		Cost:     "(Rating*Rating*Rating)*500",
 		Required: &GearRequired{
-			GearDetails: map[string]interface{}{
-				"OR": map[string]interface{}{
-					"name": "Fuchi Cyber-N",
+			GearDetails: &GearDetailsRequirement{
+				OR: &GearConditionGroup{
+					Name: []string{"Fuchi Cyber-N"},
 				},
 			},
 		},
@@ -4937,9 +4937,10 @@ var DataGears = map[string]Gear{
 		Avail:    "(Rating * 3)F",
 		Cost:     "Rating * 200",
 		Required: &GearRequired{
-			GearDetails: map[string]interface{}{
-				"OR": map[string]interface{}{
-					"category": "Custom", "name": []interface{}{"Fake SIN", "Credstick, Fake (2050)", "Credstick, Standard (2050)"},
+			GearDetails: &GearDetailsRequirement{
+				OR: &GearConditionGroup{
+					Category: []string{"Custom"},
+					Name:     []string{"Fake SIN", "Credstick, Fake (2050)", "Credstick, Standard (2050)"},
 				},
 			},
 		},
@@ -5311,9 +5312,9 @@ var DataGears = map[string]Gear{
 		Avail:    "+8R",
 		Cost:     "4000",
 		Required: &GearRequired{
-			GearDetails: map[string]interface{}{
-				"OR": map[string]interface{}{
-					"category": []interface{}{"Sensors", "Custom"},
+			GearDetails: &GearDetailsRequirement{
+				OR: &GearConditionGroup{
+					Category: []string{"Sensors", "Custom"},
 				},
 			},
 		},
@@ -5327,9 +5328,9 @@ var DataGears = map[string]Gear{
 		Avail:    "0",
 		Cost:     "0",
 		Required: &GearRequired{
-			GearDetails: map[string]interface{}{
-				"OR": map[string]interface{}{
-					"category": []interface{}{"Sensors", "Custom"},
+			GearDetails: &GearDetailsRequirement{
+				OR: &GearConditionGroup{
+					Category: []string{"Sensors", "Custom"},
 				},
 			},
 		},
@@ -5385,9 +5386,9 @@ var DataGears = map[string]Gear{
 		Avail:    "0",
 		Cost:     "0",
 		Required: &GearRequired{
-			GearDetails: map[string]interface{}{
-				"OR": map[string]interface{}{
-					"category": []interface{}{"Sensors", "Custom"},
+			GearDetails: &GearDetailsRequirement{
+				OR: &GearConditionGroup{
+					Category: []string{"Sensors", "Custom"},
 				},
 			},
 		},
@@ -5401,9 +5402,9 @@ var DataGears = map[string]Gear{
 		Avail:    "0",
 		Cost:     "0",
 		Required: &GearRequired{
-			GearDetails: map[string]interface{}{
-				"OR": map[string]interface{}{
-					"category": []interface{}{"Sensors", "Custom"},
+			GearDetails: &GearDetailsRequirement{
+				OR: &GearConditionGroup{
+					Category: []string{"Sensors", "Custom"},
 				},
 			},
 		},
@@ -5417,9 +5418,9 @@ var DataGears = map[string]Gear{
 		Avail:    "0",
 		Cost:     "0",
 		Required: &GearRequired{
-			GearDetails: map[string]interface{}{
-				"OR": map[string]interface{}{
-					"category": []interface{}{"Sensors", "Custom"},
+			GearDetails: &GearDetailsRequirement{
+				OR: &GearConditionGroup{
+					Category: []string{"Sensors", "Custom"},
 				},
 			},
 		},
@@ -5433,9 +5434,9 @@ var DataGears = map[string]Gear{
 		Avail:    "0",
 		Cost:     "0",
 		Required: &GearRequired{
-			GearDetails: map[string]interface{}{
-				"OR": map[string]interface{}{
-					"category": []interface{}{"Sensors", "Custom"},
+			GearDetails: &GearDetailsRequirement{
+				OR: &GearConditionGroup{
+					Category: []string{"Sensors", "Custom"},
 				},
 			},
 		},
@@ -5449,9 +5450,9 @@ var DataGears = map[string]Gear{
 		Avail:    "0",
 		Cost:     "0",
 		Required: &GearRequired{
-			GearDetails: map[string]interface{}{
-				"OR": map[string]interface{}{
-					"category": []interface{}{"Sensors", "Custom"},
+			GearDetails: &GearDetailsRequirement{
+				OR: &GearConditionGroup{
+					Category: []string{"Sensors", "Custom"},
 				},
 			},
 		},
@@ -5465,9 +5466,9 @@ var DataGears = map[string]Gear{
 		Avail:    "0",
 		Cost:     "0",
 		Required: &GearRequired{
-			GearDetails: map[string]interface{}{
-				"OR": map[string]interface{}{
-					"category": []interface{}{"Sensors", "Custom"},
+			GearDetails: &GearDetailsRequirement{
+				OR: &GearConditionGroup{
+					Category: []string{"Sensors", "Custom"},
 				},
 			},
 		},
@@ -5481,9 +5482,9 @@ var DataGears = map[string]Gear{
 		Avail:    "0",
 		Cost:     "0",
 		Required: &GearRequired{
-			GearDetails: map[string]interface{}{
-				"OR": map[string]interface{}{
-					"category": []interface{}{"Sensors", "Custom"},
+			GearDetails: &GearDetailsRequirement{
+				OR: &GearConditionGroup{
+					Category: []string{"Sensors", "Custom"},
 				},
 			},
 		},
@@ -5497,9 +5498,9 @@ var DataGears = map[string]Gear{
 		Avail:    "0",
 		Cost:     "0",
 		Required: &GearRequired{
-			GearDetails: map[string]interface{}{
-				"OR": map[string]interface{}{
-					"category": []interface{}{"Sensors", "Custom"},
+			GearDetails: &GearDetailsRequirement{
+				OR: &GearConditionGroup{
+					Category: []string{"Sensors", "Custom"},
 				},
 			},
 		},
@@ -5513,9 +5514,9 @@ var DataGears = map[string]Gear{
 		Avail:    "0",
 		Cost:     "0",
 		Required: &GearRequired{
-			GearDetails: map[string]interface{}{
-				"OR": map[string]interface{}{
-					"category": []interface{}{"Sensors", "Custom"},
+			GearDetails: &GearDetailsRequirement{
+				OR: &GearConditionGroup{
+					Category: []string{"Sensors", "Custom"},
 				},
 			},
 		},
@@ -5529,9 +5530,9 @@ var DataGears = map[string]Gear{
 		Avail:    "0",
 		Cost:     "0",
 		Required: &GearRequired{
-			GearDetails: map[string]interface{}{
-				"OR": map[string]interface{}{
-					"category": []interface{}{"Sensors", "Custom"},
+			GearDetails: &GearDetailsRequirement{
+				OR: &GearConditionGroup{
+					Category: []string{"Sensors", "Custom"},
 				},
 			},
 		},
@@ -5545,9 +5546,9 @@ var DataGears = map[string]Gear{
 		Avail:    "0",
 		Cost:     "0",
 		Required: &GearRequired{
-			GearDetails: map[string]interface{}{
-				"OR": map[string]interface{}{
-					"category": []interface{}{"Sensors", "Custom"},
+			GearDetails: &GearDetailsRequirement{
+				OR: &GearConditionGroup{
+					Category: []string{"Sensors", "Custom"},
 				},
 			},
 		},
@@ -5561,9 +5562,9 @@ var DataGears = map[string]Gear{
 		Avail:    "0",
 		Cost:     "0",
 		Required: &GearRequired{
-			GearDetails: map[string]interface{}{
-				"OR": map[string]interface{}{
-					"category": []interface{}{"Sensors", "Custom"},
+			GearDetails: &GearDetailsRequirement{
+				OR: &GearConditionGroup{
+					Category: []string{"Sensors", "Custom"},
 				},
 			},
 		},
@@ -5577,9 +5578,9 @@ var DataGears = map[string]Gear{
 		Avail:    "0",
 		Cost:     "0",
 		Required: &GearRequired{
-			GearDetails: map[string]interface{}{
-				"OR": map[string]interface{}{
-					"category": []interface{}{"Sensors", "Custom"},
+			GearDetails: &GearDetailsRequirement{
+				OR: &GearConditionGroup{
+					Category: []string{"Sensors", "Custom"},
 				},
 			},
 		},
@@ -5593,9 +5594,9 @@ var DataGears = map[string]Gear{
 		Avail:    "0",
 		Cost:     "0",
 		Required: &GearRequired{
-			GearDetails: map[string]interface{}{
-				"OR": map[string]interface{}{
-					"category": []interface{}{"Sensors", "Custom"},
+			GearDetails: &GearDetailsRequirement{
+				OR: &GearConditionGroup{
+					Category: []string{"Sensors", "Custom"},
 				},
 			},
 		},
@@ -5609,9 +5610,9 @@ var DataGears = map[string]Gear{
 		Avail:    "8",
 		Cost:     "0",
 		Required: &GearRequired{
-			GearDetails: map[string]interface{}{
-				"OR": map[string]interface{}{
-					"category": []interface{}{"Sensors", "Custom"},
+			GearDetails: &GearDetailsRequirement{
+				OR: &GearConditionGroup{
+					Category: []string{"Sensors", "Custom"},
 				},
 			},
 		},
@@ -5625,9 +5626,9 @@ var DataGears = map[string]Gear{
 		Avail:    "0",
 		Cost:     "0",
 		Required: &GearRequired{
-			GearDetails: map[string]interface{}{
-				"OR": map[string]interface{}{
-					"category": []interface{}{"Sensors", "Custom"},
+			GearDetails: &GearDetailsRequirement{
+				OR: &GearConditionGroup{
+					Category: []string{"Sensors", "Custom"},
 				},
 			},
 		},
@@ -5668,9 +5669,10 @@ var DataGears = map[string]Gear{
 		Avail:    "0",
 		Cost:     "100",
 		Required: &GearRequired{
-			GearDetails: map[string]interface{}{
-				"OR": map[string]interface{}{
-					"name": "Contacts", "category": "Custom",
+			GearDetails: &GearDetailsRequirement{
+				OR: &GearConditionGroup{
+					Name:     []string{"Contacts"},
+					Category: []string{"Custom"},
 				},
 			},
 		},
@@ -7457,7 +7459,7 @@ var DataGears = map[string]Gear{
 		Cost:     "Rating * 5000",
 		Required: &GearRequired{
 			OneOf: &common.RequirementOneOf{
-				Quality: "Mentor Spirit",
+				Quality: []string{"Mentor Spirit"},
 			},
 		},
 		Bonus: &GearBonus{
@@ -7479,7 +7481,7 @@ var DataGears = map[string]Gear{
 		Cost:     "Rating * 5000",
 		Required: &GearRequired{
 			OneOf: &common.RequirementOneOf{
-				Quality: "Mentor Spirit",
+				Quality: []string{"Mentor Spirit"},
 			},
 		},
 		Bonus: &GearBonus{
@@ -7501,7 +7503,7 @@ var DataGears = map[string]Gear{
 		Cost:     "Rating * 9000",
 		Required: &GearRequired{
 			OneOf: &common.RequirementOneOf{
-				Quality: "Mentor Spirit",
+				Quality: []string{"Mentor Spirit"},
 			},
 		},
 		Bonus: &GearBonus{
@@ -7518,7 +7520,7 @@ var DataGears = map[string]Gear{
 		Cost:     "Rating * 9000",
 		Required: &GearRequired{
 			OneOf: &common.RequirementOneOf{
-				Quality: "Mentor Spirit",
+				Quality: []string{"Mentor Spirit"},
 			},
 		},
 		Bonus: &GearBonus{
@@ -7535,7 +7537,7 @@ var DataGears = map[string]Gear{
 		Cost:     "Rating * 9000",
 		Required: &GearRequired{
 			OneOf: &common.RequirementOneOf{
-				Quality: "Mentor Spirit",
+				Quality: []string{"Mentor Spirit"},
 			},
 		},
 		Bonus: &GearBonus{
@@ -7552,7 +7554,7 @@ var DataGears = map[string]Gear{
 		Cost:     "Rating * 9000",
 		Required: &GearRequired{
 			OneOf: &common.RequirementOneOf{
-				Quality: "Mentor Spirit",
+				Quality: []string{"Mentor Spirit"},
 			},
 		},
 		Bonus: &GearBonus{
@@ -7569,7 +7571,7 @@ var DataGears = map[string]Gear{
 		Cost:     "Rating * 18000",
 		Required: &GearRequired{
 			OneOf: &common.RequirementOneOf{
-				Quality: "Mentor Spirit",
+				Quality: []string{"Mentor Spirit"},
 			},
 		},
 		Bonus: &GearBonus{
@@ -7591,7 +7593,7 @@ var DataGears = map[string]Gear{
 		Cost:     "Rating * 3000",
 		Required: &GearRequired{
 			OneOf: &common.RequirementOneOf{
-				Quality: "Mentor Spirit",
+				Quality: []string{"Mentor Spirit"},
 			},
 		},
 		Bonus: &GearBonus{
@@ -7612,7 +7614,7 @@ var DataGears = map[string]Gear{
 		Cost:     "Rating * 4000",
 		Required: &GearRequired{
 			OneOf: &common.RequirementOneOf{
-				Quality: "Mentor Spirit",
+				Quality: []string{"Mentor Spirit"},
 			},
 		},
 		Bonus: &GearBonus{
@@ -7629,7 +7631,7 @@ var DataGears = map[string]Gear{
 		Cost:     "Rating * 4000",
 		Required: &GearRequired{
 			OneOf: &common.RequirementOneOf{
-				Quality: "Mentor Spirit",
+				Quality: []string{"Mentor Spirit"},
 			},
 		},
 		Bonus: &GearBonus{
@@ -7646,7 +7648,7 @@ var DataGears = map[string]Gear{
 		Cost:     "Rating * 4000",
 		Required: &GearRequired{
 			OneOf: &common.RequirementOneOf{
-				Quality: "Mentor Spirit",
+				Quality: []string{"Mentor Spirit"},
 			},
 		},
 		Bonus: &GearBonus{
@@ -7666,7 +7668,7 @@ var DataGears = map[string]Gear{
 		Cost:     "Rating * 4000",
 		Required: &GearRequired{
 			OneOf: &common.RequirementOneOf{
-				Quality: "Mentor Spirit",
+				Quality: []string{"Mentor Spirit"},
 			},
 		},
 		Bonus: &GearBonus{
@@ -7683,7 +7685,7 @@ var DataGears = map[string]Gear{
 		Cost:     "Rating * 4000",
 		Required: &GearRequired{
 			OneOf: &common.RequirementOneOf{
-				Quality: "Mentor Spirit",
+				Quality: []string{"Mentor Spirit"},
 			},
 		},
 		Bonus: &GearBonus{
@@ -7700,7 +7702,7 @@ var DataGears = map[string]Gear{
 		Cost:     "Rating * 4000",
 		Required: &GearRequired{
 			OneOf: &common.RequirementOneOf{
-				Quality: "Mentor Spirit",
+				Quality: []string{"Mentor Spirit"},
 			},
 		},
 		Bonus: &GearBonus{
@@ -7717,7 +7719,7 @@ var DataGears = map[string]Gear{
 		Cost:     "Rating * 4000",
 		Required: &GearRequired{
 			OneOf: &common.RequirementOneOf{
-				Quality: "Mentor Spirit",
+				Quality: []string{"Mentor Spirit"},
 			},
 		},
 		Bonus: &GearBonus{
@@ -7737,7 +7739,7 @@ var DataGears = map[string]Gear{
 		Cost:     "Rating * 4000",
 		Required: &GearRequired{
 			OneOf: &common.RequirementOneOf{
-				Quality: "Mentor Spirit",
+				Quality: []string{"Mentor Spirit"},
 			},
 		},
 		Bonus: &GearBonus{
@@ -7754,7 +7756,7 @@ var DataGears = map[string]Gear{
 		Cost:     "Rating * 4000",
 		Required: &GearRequired{
 			OneOf: &common.RequirementOneOf{
-				Quality: "Mentor Spirit",
+				Quality: []string{"Mentor Spirit"},
 			},
 		},
 		Bonus: &GearBonus{
@@ -7771,7 +7773,7 @@ var DataGears = map[string]Gear{
 		Cost:     "Rating * 4000",
 		Required: &GearRequired{
 			OneOf: &common.RequirementOneOf{
-				Quality: "Mentor Spirit",
+				Quality: []string{"Mentor Spirit"},
 			},
 		},
 		Bonus: &GearBonus{
@@ -7788,7 +7790,7 @@ var DataGears = map[string]Gear{
 		Cost:     "Rating * 4000",
 		Required: &GearRequired{
 			OneOf: &common.RequirementOneOf{
-				Quality: "Mentor Spirit",
+				Quality: []string{"Mentor Spirit"},
 			},
 		},
 		Bonus: &GearBonus{
@@ -7808,7 +7810,7 @@ var DataGears = map[string]Gear{
 		Cost:     "Rating * 4000",
 		Required: &GearRequired{
 			OneOf: &common.RequirementOneOf{
-				Quality: "Mentor Spirit",
+				Quality: []string{"Mentor Spirit"},
 			},
 		},
 		Bonus: &GearBonus{
@@ -7825,7 +7827,7 @@ var DataGears = map[string]Gear{
 		Cost:     "Rating * 4000",
 		Required: &GearRequired{
 			OneOf: &common.RequirementOneOf{
-				Quality: "Mentor Spirit",
+				Quality: []string{"Mentor Spirit"},
 			},
 		},
 		Bonus: &GearBonus{
@@ -7842,7 +7844,7 @@ var DataGears = map[string]Gear{
 		Cost:     "Rating * 4000",
 		Required: &GearRequired{
 			OneOf: &common.RequirementOneOf{
-				Quality: "Mentor Spirit",
+				Quality: []string{"Mentor Spirit"},
 			},
 		},
 		Bonus: &GearBonus{
@@ -7859,7 +7861,7 @@ var DataGears = map[string]Gear{
 		Cost:     "Rating * 4000",
 		Required: &GearRequired{
 			OneOf: &common.RequirementOneOf{
-				Quality: "Mentor Spirit",
+				Quality: []string{"Mentor Spirit"},
 			},
 		},
 		Bonus: &GearBonus{
@@ -7879,7 +7881,7 @@ var DataGears = map[string]Gear{
 		Cost:     "Rating * 4000",
 		Required: &GearRequired{
 			OneOf: &common.RequirementOneOf{
-				Quality: "Mentor Spirit",
+				Quality: []string{"Mentor Spirit"},
 			},
 		},
 		Bonus: &GearBonus{
@@ -7896,7 +7898,7 @@ var DataGears = map[string]Gear{
 		Cost:     "Rating * 4000",
 		Required: &GearRequired{
 			OneOf: &common.RequirementOneOf{
-				Quality: "Mentor Spirit",
+				Quality: []string{"Mentor Spirit"},
 			},
 		},
 		Bonus: &GearBonus{
@@ -7913,7 +7915,7 @@ var DataGears = map[string]Gear{
 		Cost:     "Rating * 4000",
 		Required: &GearRequired{
 			OneOf: &common.RequirementOneOf{
-				Quality: "Mentor Spirit",
+				Quality: []string{"Mentor Spirit"},
 			},
 		},
 		Bonus: &GearBonus{
@@ -7930,7 +7932,7 @@ var DataGears = map[string]Gear{
 		Cost:     "Rating * 4000",
 		Required: &GearRequired{
 			OneOf: &common.RequirementOneOf{
-				Quality: "Mentor Spirit",
+				Quality: []string{"Mentor Spirit"},
 			},
 		},
 		Bonus: &GearBonus{
@@ -7950,7 +7952,7 @@ var DataGears = map[string]Gear{
 		Cost:     "Rating * 4000",
 		Required: &GearRequired{
 			OneOf: &common.RequirementOneOf{
-				Quality: "Mentor Spirit",
+				Quality: []string{"Mentor Spirit"},
 			},
 		},
 		Bonus: &GearBonus{
@@ -7967,7 +7969,7 @@ var DataGears = map[string]Gear{
 		Cost:     "Rating * 4000",
 		Required: &GearRequired{
 			OneOf: &common.RequirementOneOf{
-				Quality: "Mentor Spirit",
+				Quality: []string{"Mentor Spirit"},
 			},
 		},
 		Bonus: &GearBonus{
@@ -7986,7 +7988,7 @@ var DataGears = map[string]Gear{
 		Cost:     "Rating * 4000",
 		Required: &GearRequired{
 			OneOf: &common.RequirementOneOf{
-				Quality: "Mentor Spirit",
+				Quality: []string{"Mentor Spirit"},
 			},
 		},
 		Bonus: &GearBonus{
@@ -8005,7 +8007,7 @@ var DataGears = map[string]Gear{
 		Cost:     "Rating * 4000",
 		Required: &GearRequired{
 			OneOf: &common.RequirementOneOf{
-				Quality: "Mentor Spirit",
+				Quality: []string{"Mentor Spirit"},
 			},
 		},
 		Bonus: &GearBonus{
@@ -8024,7 +8026,7 @@ var DataGears = map[string]Gear{
 		Cost:     "Rating * 7000",
 		Required: &GearRequired{
 			OneOf: &common.RequirementOneOf{
-				Quality: "Mentor Spirit",
+				Quality: []string{"Mentor Spirit"},
 			},
 		},
 		Bonus: &GearBonus{
@@ -8043,7 +8045,7 @@ var DataGears = map[string]Gear{
 		Cost:     "Rating * 5000",
 		Required: &GearRequired{
 			OneOf: &common.RequirementOneOf{
-				Quality: "Mentor Spirit",
+				Quality: []string{"Mentor Spirit"},
 			},
 		},
 		Bonus: &GearBonus{
@@ -8065,7 +8067,7 @@ var DataGears = map[string]Gear{
 		Cost:     "Rating * 5000",
 		Required: &GearRequired{
 			OneOf: &common.RequirementOneOf{
-				Quality: "Mentor Spirit",
+				Quality: []string{"Mentor Spirit"},
 			},
 		},
 		Bonus: &GearBonus{
@@ -8087,7 +8089,7 @@ var DataGears = map[string]Gear{
 		Cost:     "Rating * 9000",
 		Required: &GearRequired{
 			OneOf: &common.RequirementOneOf{
-				Quality: "Mentor Spirit",
+				Quality: []string{"Mentor Spirit"},
 			},
 		},
 		Bonus: &GearBonus{
@@ -8104,7 +8106,7 @@ var DataGears = map[string]Gear{
 		Cost:     "Rating * 9000",
 		Required: &GearRequired{
 			OneOf: &common.RequirementOneOf{
-				Quality: "Mentor Spirit",
+				Quality: []string{"Mentor Spirit"},
 			},
 		},
 		Bonus: &GearBonus{
@@ -8121,7 +8123,7 @@ var DataGears = map[string]Gear{
 		Cost:     "Rating * 9000",
 		Required: &GearRequired{
 			OneOf: &common.RequirementOneOf{
-				Quality: "Mentor Spirit",
+				Quality: []string{"Mentor Spirit"},
 			},
 		},
 		Bonus: &GearBonus{
@@ -8138,7 +8140,7 @@ var DataGears = map[string]Gear{
 		Cost:     "Rating * 9000",
 		Required: &GearRequired{
 			OneOf: &common.RequirementOneOf{
-				Quality: "Mentor Spirit",
+				Quality: []string{"Mentor Spirit"},
 			},
 		},
 		Bonus: &GearBonus{
@@ -8155,7 +8157,7 @@ var DataGears = map[string]Gear{
 		Cost:     "Rating * 18000",
 		Required: &GearRequired{
 			OneOf: &common.RequirementOneOf{
-				Quality: "Mentor Spirit",
+				Quality: []string{"Mentor Spirit"},
 			},
 		},
 		Bonus: &GearBonus{
@@ -8177,7 +8179,7 @@ var DataGears = map[string]Gear{
 		Cost:     "Rating * 3000",
 		Required: &GearRequired{
 			OneOf: &common.RequirementOneOf{
-				Quality: "Mentor Spirit",
+				Quality: []string{"Mentor Spirit"},
 			},
 		},
 		Bonus: &GearBonus{
@@ -8198,7 +8200,7 @@ var DataGears = map[string]Gear{
 		Cost:     "Rating * 4000",
 		Required: &GearRequired{
 			OneOf: &common.RequirementOneOf{
-				Quality: "Mentor Spirit",
+				Quality: []string{"Mentor Spirit"},
 			},
 		},
 		Bonus: &GearBonus{
@@ -8215,7 +8217,7 @@ var DataGears = map[string]Gear{
 		Cost:     "Rating * 4000",
 		Required: &GearRequired{
 			OneOf: &common.RequirementOneOf{
-				Quality: "Mentor Spirit",
+				Quality: []string{"Mentor Spirit"},
 			},
 		},
 		Bonus: &GearBonus{
@@ -8232,7 +8234,7 @@ var DataGears = map[string]Gear{
 		Cost:     "Rating * 4000",
 		Required: &GearRequired{
 			OneOf: &common.RequirementOneOf{
-				Quality: "Mentor Spirit",
+				Quality: []string{"Mentor Spirit"},
 			},
 		},
 		Bonus: &GearBonus{
@@ -8252,7 +8254,7 @@ var DataGears = map[string]Gear{
 		Cost:     "Rating * 4000",
 		Required: &GearRequired{
 			OneOf: &common.RequirementOneOf{
-				Quality: "Mentor Spirit",
+				Quality: []string{"Mentor Spirit"},
 			},
 		},
 		Bonus: &GearBonus{
@@ -8269,7 +8271,7 @@ var DataGears = map[string]Gear{
 		Cost:     "Rating * 4000",
 		Required: &GearRequired{
 			OneOf: &common.RequirementOneOf{
-				Quality: "Mentor Spirit",
+				Quality: []string{"Mentor Spirit"},
 			},
 		},
 		Bonus: &GearBonus{
@@ -8286,7 +8288,7 @@ var DataGears = map[string]Gear{
 		Cost:     "Rating * 4000",
 		Required: &GearRequired{
 			OneOf: &common.RequirementOneOf{
-				Quality: "Mentor Spirit",
+				Quality: []string{"Mentor Spirit"},
 			},
 		},
 		Bonus: &GearBonus{
@@ -8303,7 +8305,7 @@ var DataGears = map[string]Gear{
 		Cost:     "Rating * 4000",
 		Required: &GearRequired{
 			OneOf: &common.RequirementOneOf{
-				Quality: "Mentor Spirit",
+				Quality: []string{"Mentor Spirit"},
 			},
 		},
 		Bonus: &GearBonus{
@@ -8323,7 +8325,7 @@ var DataGears = map[string]Gear{
 		Cost:     "Rating * 4000",
 		Required: &GearRequired{
 			OneOf: &common.RequirementOneOf{
-				Quality: "Mentor Spirit",
+				Quality: []string{"Mentor Spirit"},
 			},
 		},
 		Bonus: &GearBonus{
@@ -8340,7 +8342,7 @@ var DataGears = map[string]Gear{
 		Cost:     "Rating * 4000",
 		Required: &GearRequired{
 			OneOf: &common.RequirementOneOf{
-				Quality: "Mentor Spirit",
+				Quality: []string{"Mentor Spirit"},
 			},
 		},
 		Bonus: &GearBonus{
@@ -8357,7 +8359,7 @@ var DataGears = map[string]Gear{
 		Cost:     "Rating * 4000",
 		Required: &GearRequired{
 			OneOf: &common.RequirementOneOf{
-				Quality: "Mentor Spirit",
+				Quality: []string{"Mentor Spirit"},
 			},
 		},
 		Bonus: &GearBonus{
@@ -8374,7 +8376,7 @@ var DataGears = map[string]Gear{
 		Cost:     "Rating * 4000",
 		Required: &GearRequired{
 			OneOf: &common.RequirementOneOf{
-				Quality: "Mentor Spirit",
+				Quality: []string{"Mentor Spirit"},
 			},
 		},
 		Bonus: &GearBonus{
@@ -8394,7 +8396,7 @@ var DataGears = map[string]Gear{
 		Cost:     "Rating * 4000",
 		Required: &GearRequired{
 			OneOf: &common.RequirementOneOf{
-				Quality: "Mentor Spirit",
+				Quality: []string{"Mentor Spirit"},
 			},
 		},
 		Bonus: &GearBonus{
@@ -8411,7 +8413,7 @@ var DataGears = map[string]Gear{
 		Cost:     "Rating * 4000",
 		Required: &GearRequired{
 			OneOf: &common.RequirementOneOf{
-				Quality: "Mentor Spirit",
+				Quality: []string{"Mentor Spirit"},
 			},
 		},
 		Bonus: &GearBonus{
@@ -8428,7 +8430,7 @@ var DataGears = map[string]Gear{
 		Cost:     "Rating * 4000",
 		Required: &GearRequired{
 			OneOf: &common.RequirementOneOf{
-				Quality: "Mentor Spirit",
+				Quality: []string{"Mentor Spirit"},
 			},
 		},
 		Bonus: &GearBonus{
@@ -8445,7 +8447,7 @@ var DataGears = map[string]Gear{
 		Cost:     "Rating * 4000",
 		Required: &GearRequired{
 			OneOf: &common.RequirementOneOf{
-				Quality: "Mentor Spirit",
+				Quality: []string{"Mentor Spirit"},
 			},
 		},
 		Bonus: &GearBonus{
@@ -8465,7 +8467,7 @@ var DataGears = map[string]Gear{
 		Cost:     "Rating * 4000",
 		Required: &GearRequired{
 			OneOf: &common.RequirementOneOf{
-				Quality: "Mentor Spirit",
+				Quality: []string{"Mentor Spirit"},
 			},
 		},
 		Bonus: &GearBonus{
@@ -8482,7 +8484,7 @@ var DataGears = map[string]Gear{
 		Cost:     "Rating * 4000",
 		Required: &GearRequired{
 			OneOf: &common.RequirementOneOf{
-				Quality: "Mentor Spirit",
+				Quality: []string{"Mentor Spirit"},
 			},
 		},
 		Bonus: &GearBonus{
@@ -8499,7 +8501,7 @@ var DataGears = map[string]Gear{
 		Cost:     "Rating * 4000",
 		Required: &GearRequired{
 			OneOf: &common.RequirementOneOf{
-				Quality: "Mentor Spirit",
+				Quality: []string{"Mentor Spirit"},
 			},
 		},
 		Bonus: &GearBonus{
@@ -8516,7 +8518,7 @@ var DataGears = map[string]Gear{
 		Cost:     "Rating * 4000",
 		Required: &GearRequired{
 			OneOf: &common.RequirementOneOf{
-				Quality: "Mentor Spirit",
+				Quality: []string{"Mentor Spirit"},
 			},
 		},
 		Bonus: &GearBonus{
@@ -8536,7 +8538,7 @@ var DataGears = map[string]Gear{
 		Cost:     "Rating * 4000",
 		Required: &GearRequired{
 			OneOf: &common.RequirementOneOf{
-				Quality: "Mentor Spirit",
+				Quality: []string{"Mentor Spirit"},
 			},
 		},
 		Bonus: &GearBonus{
@@ -8553,7 +8555,7 @@ var DataGears = map[string]Gear{
 		Cost:     "Rating * 4000",
 		Required: &GearRequired{
 			OneOf: &common.RequirementOneOf{
-				Quality: "Mentor Spirit",
+				Quality: []string{"Mentor Spirit"},
 			},
 		},
 		Bonus: &GearBonus{
@@ -8572,7 +8574,7 @@ var DataGears = map[string]Gear{
 		Cost:     "Rating * 4000",
 		Required: &GearRequired{
 			OneOf: &common.RequirementOneOf{
-				Quality: "Mentor Spirit",
+				Quality: []string{"Mentor Spirit"},
 			},
 		},
 		Bonus: &GearBonus{
@@ -8591,7 +8593,7 @@ var DataGears = map[string]Gear{
 		Cost:     "Rating * 4000",
 		Required: &GearRequired{
 			OneOf: &common.RequirementOneOf{
-				Quality: "Mentor Spirit",
+				Quality: []string{"Mentor Spirit"},
 			},
 		},
 		Bonus: &GearBonus{
@@ -8610,7 +8612,7 @@ var DataGears = map[string]Gear{
 		Cost:     "Rating * 7000",
 		Required: &GearRequired{
 			OneOf: &common.RequirementOneOf{
-				Quality: "Mentor Spirit",
+				Quality: []string{"Mentor Spirit"},
 			},
 		},
 		Bonus: &GearBonus{
@@ -10798,8 +10800,10 @@ var DataGears = map[string]Gear{
 		Avail:    "0",
 		Cost:     "Parent Cost * -.5",
 		Required: &GearRequired{
-			GearDetails: map[string]interface{}{
-				"category": "Drugs",
+			GearDetails: &GearDetailsRequirement{
+				OR: &GearConditionGroup{
+					Category: []string{"Drugs"},
+				},
 			},
 		},
 		RequireParent: &[]bool{true}[0],
@@ -10813,8 +10817,10 @@ var DataGears = map[string]Gear{
 		Avail:    "0",
 		Cost:     "Parent Cost",
 		Required: &GearRequired{
-			GearDetails: map[string]interface{}{
-				"category": "Drugs",
+			GearDetails: &GearDetailsRequirement{
+				OR: &GearConditionGroup{
+					Category: []string{"Drugs"},
+				},
 			},
 		},
 		RequireParent: &[]bool{true}[0],
@@ -10828,8 +10834,10 @@ var DataGears = map[string]Gear{
 		Avail:    "0",
 		Cost:     "Parent Cost * 5",
 		Required: &GearRequired{
-			GearDetails: map[string]interface{}{
-				"category": "Drugs",
+			GearDetails: &GearDetailsRequirement{
+				OR: &GearConditionGroup{
+					Category: []string{"Drugs"},
+				},
 			},
 		},
 		RequireParent: &[]bool{true}[0],
@@ -10843,9 +10851,9 @@ var DataGears = map[string]Gear{
 		Avail:    "2",
 		Cost:     "150",
 		Required: &GearRequired{
-			GearDetails: map[string]interface{}{
-				"OR": map[string]interface{}{
-					"category": []interface{}{"Armor", "Clothing", "Cloaks", "High-Fashion Armor Clothing", "Specialty Armor", "Custom"},
+			GearDetails: &GearDetailsRequirement{
+				OR: &GearConditionGroup{
+					Category: []string{"Armor", "Clothing", "Cloaks", "High-Fashion Armor Clothing", "Specialty Armor", "Custom"},
 				},
 			},
 		},
@@ -10859,9 +10867,9 @@ var DataGears = map[string]Gear{
 		Avail:    "2",
 		Cost:     "150",
 		Required: &GearRequired{
-			GearDetails: map[string]interface{}{
-				"OR": map[string]interface{}{
-					"category": []interface{}{"Armor", "Clothing", "Cloaks", "High-Fashion Armor Clothing", "Specialty Armor", "Custom"},
+			GearDetails: &GearDetailsRequirement{
+				OR: &GearConditionGroup{
+					Category: []string{"Armor", "Clothing", "Cloaks", "High-Fashion Armor Clothing", "Specialty Armor", "Custom"},
 				},
 			},
 		},
@@ -10875,9 +10883,9 @@ var DataGears = map[string]Gear{
 		Avail:    "4",
 		Cost:     "175",
 		Required: &GearRequired{
-			GearDetails: map[string]interface{}{
-				"OR": map[string]interface{}{
-					"category": []interface{}{"Armor", "Clothing", "Cloaks", "High-Fashion Armor Clothing", "Specialty Armor", "Custom"},
+			GearDetails: &GearDetailsRequirement{
+				OR: &GearConditionGroup{
+					Category: []string{"Armor", "Clothing", "Cloaks", "High-Fashion Armor Clothing", "Specialty Armor", "Custom"},
 				},
 			},
 		},
@@ -10891,9 +10899,9 @@ var DataGears = map[string]Gear{
 		Avail:    "6",
 		Cost:     "275",
 		Required: &GearRequired{
-			GearDetails: map[string]interface{}{
-				"OR": map[string]interface{}{
-					"category": []interface{}{"Armor", "Clothing", "Cloaks", "High-Fashion Armor Clothing", "Specialty Armor", "Custom"},
+			GearDetails: &GearDetailsRequirement{
+				OR: &GearConditionGroup{
+					Category: []string{"Armor", "Clothing", "Cloaks", "High-Fashion Armor Clothing", "Specialty Armor", "Custom"},
 				},
 			},
 		},
@@ -10908,9 +10916,9 @@ var DataGears = map[string]Gear{
 		Cost:      "175",
 		AddWeapon: "Micro Flare Launcher",
 		Required: &GearRequired{
-			GearDetails: map[string]interface{}{
-				"OR": map[string]interface{}{
-					"category": []interface{}{"Armor", "Clothing", "Cloaks", "High-Fashion Armor Clothing", "Specialty Armor", "Custom"},
+			GearDetails: &GearDetailsRequirement{
+				OR: &GearConditionGroup{
+					Category: []string{"Armor", "Clothing", "Cloaks", "High-Fashion Armor Clothing", "Specialty Armor", "Custom"},
 				},
 			},
 		},
@@ -10925,9 +10933,9 @@ var DataGears = map[string]Gear{
 		Cost:          "Children Cost * 0.1",
 		AddonCategory: []string{"Cyberdecks", "Custom"},
 		Required: &GearRequired{
-			GearDetails: map[string]interface{}{
-				"OR": map[string]interface{}{
-					"category": []interface{}{"Armor", "Clothing", "Cloaks", "High-Fashion Armor Clothing", "Specialty Armor", "Custom"},
+			GearDetails: &GearDetailsRequirement{
+				OR: &GearConditionGroup{
+					Category: []string{"Armor", "Clothing", "Cloaks", "High-Fashion Armor Clothing", "Specialty Armor", "Custom"},
 				},
 			},
 		},
@@ -10955,9 +10963,9 @@ var DataGears = map[string]Gear{
 		Avail:    "(Rating*2)R",
 		Cost:     "(Rating*Rating)*3000",
 		Required: &GearRequired{
-			GearDetails: map[string]interface{}{
-				"OR": map[string]interface{}{
-					"category": []interface{}{"Commlinks", "Cyberterminals", "Custom"},
+			GearDetails: &GearDetailsRequirement{
+				OR: &GearConditionGroup{
+					Category: []string{"Commlinks", "Cyberterminals", "Custom"},
 				},
 			},
 		},
@@ -10971,9 +10979,9 @@ var DataGears = map[string]Gear{
 		Avail:    "(Rating*2)R",
 		Cost:     "(Rating*Rating)*3000",
 		Required: &GearRequired{
-			GearDetails: map[string]interface{}{
-				"OR": map[string]interface{}{
-					"category": []interface{}{"Commlinks", "Cyberterminals", "Custom"},
+			GearDetails: &GearDetailsRequirement{
+				OR: &GearConditionGroup{
+					Category: []string{"Commlinks", "Cyberterminals", "Custom"},
 				},
 			},
 		},
@@ -10987,9 +10995,9 @@ var DataGears = map[string]Gear{
 		Avail:    "8R",
 		Cost:     "500",
 		Required: &GearRequired{
-			GearDetails: map[string]interface{}{
-				"OR": map[string]interface{}{
-					"category": []interface{}{"Commlinks", "Cyberterminals", "Custom"},
+			GearDetails: &GearDetailsRequirement{
+				OR: &GearConditionGroup{
+					Category: []string{"Commlinks", "Cyberterminals", "Custom"},
 				},
 			},
 		},
@@ -11004,9 +11012,9 @@ var DataGears = map[string]Gear{
 		Cost:      "600",
 		AddWeapon: "Stun Dongle",
 		Required: &GearRequired{
-			GearDetails: map[string]interface{}{
-				"OR": map[string]interface{}{
-					"category": []interface{}{"Commlinks", "Cyberterminals", "Custom"},
+			GearDetails: &GearDetailsRequirement{
+				OR: &GearConditionGroup{
+					Category: []string{"Commlinks", "Cyberterminals", "Custom"},
 				},
 			},
 		},
@@ -11020,9 +11028,9 @@ var DataGears = map[string]Gear{
 		Avail:    "3",
 		Cost:     "400",
 		Required: &GearRequired{
-			GearDetails: map[string]interface{}{
-				"OR": map[string]interface{}{
-					"category": []interface{}{"Commlinks", "Cyberterminals", "Custom"},
+			GearDetails: &GearDetailsRequirement{
+				OR: &GearConditionGroup{
+					Category: []string{"Commlinks", "Cyberterminals", "Custom"},
 				},
 			},
 		},
@@ -11037,9 +11045,10 @@ var DataGears = map[string]Gear{
 		Cost:          "Rating * 4000",
 		AddonCategory: []string{"Common Programs", "Hacking Programs"},
 		Required: &GearRequired{
-			GearDetails: map[string]interface{}{
-				"OR": map[string]interface{}{
-					"NONE": nil, "category": []interface{}{"Commlink", "Cyberdecks", "Cyberterminals", "Custom"},
+			GearDetails: &GearDetailsRequirement{
+				OR: &GearConditionGroup{
+					Category: []string{"Commlink", "Cyberdecks", "Cyberterminals", "Custom"},
+					// Note: "NONE": nil is ignored - it represents optional requirement
 				},
 			},
 		},
@@ -11053,9 +11062,9 @@ var DataGears = map[string]Gear{
 		Avail:    "+2",
 		Cost:     "Gear Cost * 0.2",
 		Required: &GearRequired{
-			GearDetails: map[string]interface{}{
-				"OR": map[string]interface{}{
-					"category": []interface{}{"Commlinks", "Custom"},
+			GearDetails: &GearDetailsRequirement{
+				OR: &GearConditionGroup{
+					Category: []string{"Commlinks", "Custom"},
 				},
 			},
 		},
@@ -11072,9 +11081,9 @@ var DataGears = map[string]Gear{
 		Avail:    "+4R",
 		Cost:     "Gear Cost * 0.5",
 		Required: &GearRequired{
-			GearDetails: map[string]interface{}{
-				"OR": map[string]interface{}{
-					"category": []interface{}{"Commlinks", "Custom"},
+			GearDetails: &GearDetailsRequirement{
+				OR: &GearConditionGroup{
+					Category: []string{"Commlinks", "Custom"},
 				},
 			},
 		},
@@ -11088,9 +11097,9 @@ var DataGears = map[string]Gear{
 		Avail:    "0",
 		Cost:     "0",
 		Required: &GearRequired{
-			GearDetails: map[string]interface{}{
-				"OR": map[string]interface{}{
-					"category": []interface{}{"Cyberdecks", "Custom"},
+			GearDetails: &GearDetailsRequirement{
+				OR: &GearConditionGroup{
+					Category: []string{"Cyberdecks", "Custom"},
 				},
 			},
 		},
@@ -11104,9 +11113,9 @@ var DataGears = map[string]Gear{
 		Avail:    "+3",
 		Cost:     "Gear Cost * 0.2",
 		Required: &GearRequired{
-			GearDetails: map[string]interface{}{
-				"OR": map[string]interface{}{
-					"category": []interface{}{"Cyberdecks", "Custom"},
+			GearDetails: &GearDetailsRequirement{
+				OR: &GearConditionGroup{
+					Category: []string{"Cyberdecks", "Custom"},
 				},
 			},
 		},
@@ -11123,9 +11132,9 @@ var DataGears = map[string]Gear{
 		Avail:    "+6R",
 		Cost:     "Gear Cost * 0.5",
 		Required: &GearRequired{
-			GearDetails: map[string]interface{}{
-				"OR": map[string]interface{}{
-					"category": []interface{}{"Cyberdecks", "Custom"},
+			GearDetails: &GearDetailsRequirement{
+				OR: &GearConditionGroup{
+					Category: []string{"Cyberdecks", "Custom"},
 				},
 			},
 		},
@@ -13975,8 +13984,10 @@ var DataGears = map[string]Gear{
 		Avail:    "+3",
 		Cost:     "+500",
 		Required: &GearRequired{
-			GearDetails: map[string]interface{}{
-				"name": "Altskin",
+			GearDetails: &GearDetailsRequirement{
+				OR: &GearConditionGroup{
+					Name: []string{"Altskin"},
+				},
 			},
 		},
 	},
@@ -13989,8 +14000,10 @@ var DataGears = map[string]Gear{
 		Avail:    "+2",
 		Cost:     "+250",
 		Required: &GearRequired{
-			GearDetails: map[string]interface{}{
-				"name": "Altskin",
+			GearDetails: &GearDetailsRequirement{
+				OR: &GearConditionGroup{
+					Name: []string{"Altskin"},
+				},
 			},
 		},
 	},
@@ -14003,8 +14016,10 @@ var DataGears = map[string]Gear{
 		Avail:    "+4F",
 		Cost:     "Rating * 200",
 		Required: &GearRequired{
-			GearDetails: map[string]interface{}{
-				"name": "Altskin",
+			GearDetails: &GearDetailsRequirement{
+				OR: &GearConditionGroup{
+					Name: []string{"Altskin"},
+				},
 			},
 		},
 	},
@@ -14017,8 +14032,10 @@ var DataGears = map[string]Gear{
 		Avail:    "+1",
 		Cost:     "+250",
 		Required: &GearRequired{
-			GearDetails: map[string]interface{}{
-				"name": "Altskin",
+			GearDetails: &GearDetailsRequirement{
+				OR: &GearConditionGroup{
+					Name: []string{"Altskin"},
+				},
 			},
 		},
 	},
@@ -14031,8 +14048,10 @@ var DataGears = map[string]Gear{
 		Avail:    "+2",
 		Cost:     "+250",
 		Required: &GearRequired{
-			GearDetails: map[string]interface{}{
-				"name": "Altskin",
+			GearDetails: &GearDetailsRequirement{
+				OR: &GearConditionGroup{
+					Name: []string{"Altskin"},
+				},
 			},
 		},
 		Bonus: &GearBonus{
@@ -14983,9 +15002,9 @@ var DataGears = map[string]Gear{
 		Avail:    "2",
 		Cost:     "100",
 		Required: &GearRequired{
-			GearDetails: map[string]interface{}{
-				"OR": map[string]interface{}{
-					"category": []interface{}{"Armor", "Clothing", "Cloaks", "High-Fashion Armor Clothing", "Specialty Armor", "Custom"},
+			GearDetails: &GearDetailsRequirement{
+				OR: &GearConditionGroup{
+					Category: []string{"Armor", "Clothing", "Cloaks", "High-Fashion Armor Clothing", "Specialty Armor", "Custom"},
 				},
 			},
 		},
@@ -15440,8 +15459,10 @@ var DataGears = map[string]Gear{
 		Avail:    "4",
 		Cost:     "250",
 		Required: &GearRequired{
-			GearDetails: map[string]interface{}{
-				"name": "Binoculars (2050)",
+			GearDetails: &GearDetailsRequirement{
+				OR: &GearConditionGroup{
+					Name: []string{"Binoculars (2050)"},
+				},
 			},
 		},
 	},
@@ -15454,8 +15475,10 @@ var DataGears = map[string]Gear{
 		Avail:    "4",
 		Cost:     "200",
 		Required: &GearRequired{
-			GearDetails: map[string]interface{}{
-				"name": "Binoculars (2050)",
+			GearDetails: &GearDetailsRequirement{
+				OR: &GearConditionGroup{
+					Name: []string{"Binoculars (2050)"},
+				},
 			},
 		},
 	},
@@ -15478,8 +15501,10 @@ var DataGears = map[string]Gear{
 		Avail:    "6",
 		Cost:     "700",
 		Required: &GearRequired{
-			GearDetails: map[string]interface{}{
-				"name": "Goggles (2050)",
+			GearDetails: &GearDetailsRequirement{
+				OR: &GearConditionGroup{
+					Name: []string{"Goggles (2050)"},
+				},
 			},
 		},
 	},
@@ -15492,8 +15517,10 @@ var DataGears = map[string]Gear{
 		Avail:    "6",
 		Cost:     "500",
 		Required: &GearRequired{
-			GearDetails: map[string]interface{}{
-				"name": "Goggles (2050)",
+			GearDetails: &GearDetailsRequirement{
+				OR: &GearConditionGroup{
+					Name: []string{"Goggles (2050)"},
+				},
 			},
 		},
 	},
@@ -15506,8 +15533,10 @@ var DataGears = map[string]Gear{
 		Avail:    "4",
 		Cost:     "200",
 		Required: &GearRequired{
-			GearDetails: map[string]interface{}{
-				"name": "Goggles (2050)",
+			GearDetails: &GearDetailsRequirement{
+				OR: &GearConditionGroup{
+					Name: []string{"Goggles (2050)"},
+				},
 			},
 		},
 	},

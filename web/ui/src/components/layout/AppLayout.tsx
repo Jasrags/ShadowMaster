@@ -1,15 +1,37 @@
-import { ReactNode } from 'react';
+import { ReactNode, useMemo } from 'react';
 import { Button } from 'react-aria-components';
 import { useAuth } from '../../contexts/AuthContext';
 import { useToast } from '../../contexts/ToastContext';
+import { TabNavigation } from './TabNavigation';
 
 interface AppLayoutProps {
   children: ReactNode;
 }
 
 export function AppLayout({ children }: AppLayoutProps) {
-  const { user, logout } = useAuth();
+  const { user, isAuthenticated, logout } = useAuth();
   const { showSuccess, showError } = useToast();
+
+  // Define tabs - only show Campaigns if authenticated, Gear only for admin
+  const tabs = useMemo(() => {
+    const allTabs = [
+      { id: 'home', label: 'Home', path: '/' },
+    ];
+
+    if (isAuthenticated) {
+      allTabs.push({ id: 'campaigns', label: 'Campaigns', path: '/campaigns' });
+      // Add admin-only tabs
+      if (user?.roles.includes('administrator')) {
+        allTabs.push({ id: 'gear', label: 'Gear', path: '/gear' });
+        allTabs.push({ id: 'armor', label: 'Armor', path: '/armor' });
+      }
+      // Add more authenticated tabs here as needed
+      // allTabs.push({ id: 'characters', label: 'Characters', path: '/characters' });
+      // allTabs.push({ id: 'sessions', label: 'Sessions', path: '/sessions' });
+    }
+
+    return allTabs;
+  }, [isAuthenticated, user]);
 
   async function handleLogout() {
     try {
@@ -51,6 +73,15 @@ export function AppLayout({ children }: AppLayoutProps) {
           </div>
         </div>
       </header>
+
+      {/* Only show tab navigation if we have more than just the home tab */}
+      {tabs.length > 1 && (
+        <div className="bg-sr-gray border-b border-sr-light-gray">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <TabNavigation tabs={tabs} />
+          </div>
+        </div>
+      )}
 
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {children}

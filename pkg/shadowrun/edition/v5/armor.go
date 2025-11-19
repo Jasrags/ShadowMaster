@@ -59,7 +59,7 @@ type SelectModsCategory struct {
 
 // Gears represents gears that can be used with armor
 type Gears struct {
-	UseGear interface{} `json:"usegear"` // Can be string or []string
+	UseGear []string `json:"usegear"` // Array of gear IDs (can be empty, single item, or multiple)
 }
 
 // Mods represents pre-installed mods on armor

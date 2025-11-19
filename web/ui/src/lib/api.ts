@@ -5,6 +5,8 @@ import type {
   LoginRequest,
   RegisterRequest,
   ApiError,
+  Gear,
+  Armor,
 } from './types';
 
 const API_BASE = '/api';
@@ -166,6 +168,22 @@ export const campaignApi = {
     return apiRequest<void>(`/campaigns/${campaignId}/players/${playerId}`, {
       method: 'DELETE',
     });
+  },
+};
+
+// Gear API functions (admin only)
+export const gearApi = {
+  async getGear(): Promise<Gear[]> {
+    const response = await apiRequest<{ gear: Gear[] }>('/equipment/gear');
+    return response.gear || [];
+  },
+};
+
+// Armor API functions
+export const armorApi = {
+  async getArmor(): Promise<Armor[]> {
+    const response = await apiRequest<{ armor: Armor[] }>('/equipment/armor');
+    return response.armor || [];
   },
 };
 

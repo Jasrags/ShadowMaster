@@ -10,6 +10,7 @@ import (
 	jsonrepo "shadowmaster/internal/repository/json"
 	"shadowmaster/internal/service"
 	sr3 "shadowmaster/pkg/shadowrun/edition/v3"
+	sr5 "shadowmaster/pkg/shadowrun/edition/v5"
 	"strings"
 )
 
@@ -504,17 +505,13 @@ func (h *Handlers) GetWeapons(w http.ResponseWriter, r *http.Request) {
 
 // GetArmor handles GET /api/equipment/armor
 func (h *Handlers) GetArmor(w http.ResponseWriter, r *http.Request) {
-	armor := sr3.GetAllArmor()
-	armorType := r.URL.Query().Get("type")
-	if armorType != "" {
-		filtered := sr3.GetArmorByType(armorType)
-		respondJSON(w, http.StatusOK, map[string]interface{}{
-			"armor": filtered,
-		})
-		return
+	// Get all armor from the data
+	armorList := make([]sr5.Armor, 0)
+	for _, armor := range sr5.DataArmors {
+		armorList = append(armorList, armor)
 	}
 	respondJSON(w, http.StatusOK, map[string]interface{}{
-		"armor": armor,
+		"armor": armorList,
 	})
 }
 
@@ -523,6 +520,19 @@ func (h *Handlers) GetCyberware(w http.ResponseWriter, r *http.Request) {
 	cyberware := sr3.GetAllCyberware()
 	respondJSON(w, http.StatusOK, map[string]interface{}{
 		"cyberware": cyberware,
+	})
+}
+
+// GetGears handles GET /api/equipment/gear
+func (h *Handlers) GetGears(w http.ResponseWriter, r *http.Request) {
+	// Get all gear from the data
+	gearList := make([]sr5.Gear, 0)
+	for _, gear := range sr5.DataGears {
+		gearList = append(gearList, gear)
+	}
+	
+	respondJSON(w, http.StatusOK, map[string]interface{}{
+		"gear": gearList,
 	})
 }
 
