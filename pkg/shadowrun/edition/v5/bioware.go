@@ -1,5 +1,7 @@
 package v5
 
+import "shadowmaster/pkg/shadowrun/edition/v5/common"
+
 // Grade represents a bioware grade (Standard, Used, Alphaware, etc.)
 type Grade struct {
 	Name         string `json:"name"`
@@ -31,19 +33,19 @@ type Bioware struct {
 	// Optional fields
 	Rating          int              `json:"rating,omitempty"`          // Rating for variable rating items (always numeric)
 	Limit           string           `json:"limit,omitempty"`           // Limit like "False", "{arm}", "{leg}", etc.
-	Bonus           *BiowareBonus    `json:"bonus,omitempty"`           // Bonuses provided by this bioware
-	Forbidden       *Forbidden       `json:"forbidden,omitempty"`       // Forbidden items/qualities
-	BannedGrades    *BannedGrades    `json:"bannedgrades,omitempty"`    // Banned grades for this bioware
-	Required        *BiowareRequired `json:"required,omitempty"`        // Requirements for this bioware
-	AllowGear       *AllowGear       `json:"allowgear,omitempty"`       // Allowed gear categories
-	AllowSubsystems *AllowSubsystems `json:"allowsubsystems,omitempty"` // Allowed subsystem categories
+	Bonus           *BiowareBonus         `json:"bonus,omitempty"`           // Bonuses provided by this bioware
+	Forbidden       *common.Forbidden     `json:"forbidden,omitempty"`       // Forbidden items/qualities
+	BannedGrades    *common.BannedGrades  `json:"bannedgrades,omitempty"`    // Banned grades for this bioware
+	Required        *BiowareRequired      `json:"required,omitempty"`        // Requirements for this bioware
+	AllowGear       *common.AllowGear     `json:"allowgear,omitempty"`       // Allowed gear categories
+	AllowSubsystems *common.AllowSubsystems `json:"allowsubsystems,omitempty"` // Allowed subsystem categories
 	AddWeapon       string           `json:"addweapon,omitempty"`       // Weapon added by this bioware
 	AddToParentEss  *bool            `json:"addtoparentess,omitempty"`  // Whether to add to parent essence
 	RequireParent   *bool            `json:"requireparent,omitempty"`   // Whether a parent is required
 	SelectSide      *bool            `json:"selectside,omitempty"`      // Whether to select side (left/right)
 	BlocksMounts    string           `json:"blocksmounts,omitempty"`    // Mounts blocked by this bioware
-	PairBonus       *PairBonus       `json:"pairbonus,omitempty"`       // Bonus when paired with matching item
-	PairInclude     *PairInclude     `json:"pairinclude,omitempty"`     // Item that pairs with this
+	PairBonus       *common.PairBonus   `json:"pairbonus,omitempty"`       // Bonus when paired with matching item
+	PairInclude     *common.PairInclude `json:"pairinclude,omitempty"`     // Item that pairs with this
 	Notes           string           `json:"notes,omitempty"`           // Notes about this bioware
 	ForceGrade      string           `json:"forcegrade,omitempty"`      // Force a specific grade (like "None")
 	IsGeneware      *bool            `json:"isgeneware,omitempty"`      // Whether this is geneware
@@ -51,21 +53,22 @@ type Bioware struct {
 
 // BiowareBonus represents bonuses provided by bioware
 // This is a very flexible structure with many possible bonus types
+// Note: common.BaseBonus exists with all common fields - future migration could embed it
 type BiowareBonus struct {
 	// Limit modifiers
 	LimitModifier interface{} `json:"limitmodifier,omitempty"` // Can be LimitModifier or []LimitModifier
 
 	// Skill bonuses
-	SkillCategory        interface{}                `json:"skillcategory,omitempty"`        // Can be SkillCategoryBonus or []SkillCategoryBonus
-	SpecificSkill        interface{}                `json:"specificskill,omitempty"`        // Can be SpecificSkillBonus or []SpecificSkillBonus
-	SkillGroup           interface{}                `json:"skillgroup,omitempty"`           // Can be SkillGroupBonus or []SkillGroupBonus
-	SelectSkill          *SelectSkill               `json:"selectskill,omitempty"`          // Selectable skill bonus
-	SkillAttribute       *SkillAttributeBonus       `json:"skillattribute,omitempty"`       // Skill attribute bonus
-	SkillLinkedAttribute *SkillLinkedAttributeBonus `json:"skilllinkedattribute,omitempty"` // Skill linked attribute bonus
+	SkillCategory        interface{}                      `json:"skillcategory,omitempty"`        // Can be SkillCategoryBonus or []SkillCategoryBonus
+	SpecificSkill        interface{}                      `json:"specificskill,omitempty"`        // Can be SpecificSkillBonus or []SpecificSkillBonus
+	SkillGroup           interface{}                      `json:"skillgroup,omitempty"`           // Can be SkillGroupBonus or []SkillGroupBonus
+	SelectSkill          *common.SelectSkill              `json:"selectskill,omitempty"`          // Selectable skill bonus
+	SkillAttribute       *common.SkillAttributeBonus      `json:"skillattribute,omitempty"`       // Skill attribute bonus
+	SkillLinkedAttribute *common.SkillLinkedAttributeBonus `json:"skilllinkedattribute,omitempty"` // Skill linked attribute bonus
 
 	// Attribute bonuses
-	SpecificAttribute  interface{}              `json:"specificattribute,omitempty"`  // Can be SpecificAttributeBonus or []SpecificAttributeBonus
-	AttributeKarmaCost *AttributeKarmaCostBonus `json:"attributekarmacost,omitempty"` // Attribute karma cost modifier
+	SpecificAttribute  interface{}                    `json:"specificattribute,omitempty"`  // Can be SpecificAttributeBonus or []SpecificAttributeBonus
+	AttributeKarmaCost *common.AttributeKarmaCostBonus `json:"attributekarmacost,omitempty"` // Attribute karma cost modifier
 
 	// Limit bonuses
 	PhysicalLimit string `json:"physicallimit,omitempty"` // Physical limit modifier
@@ -73,11 +76,11 @@ type BiowareBonus struct {
 	SocialLimit   string `json:"sociallimit,omitempty"`   // Social limit modifier
 
 	// Condition monitor bonuses
-	ConditionMonitor *ConditionMonitorBonus `json:"conditionmonitor,omitempty"`
+	ConditionMonitor *common.ConditionMonitorBonus `json:"conditionmonitor,omitempty"`
 
 	// Initiative bonuses
-	Initiative     *InitiativeBonus     `json:"initiative,omitempty"`     // Initiative bonus
-	InitiativePass *InitiativePassBonus `json:"initiativepass,omitempty"` // Initiative pass bonus
+	Initiative     *common.InitiativeBonus     `json:"initiative,omitempty"`     // Initiative bonus
+	InitiativePass *common.InitiativePassBonus `json:"initiativepass,omitempty"` // Initiative pass bonus
 
 	// Combat bonuses
 	Dodge string `json:"dodge,omitempty"` // Dodge bonus
@@ -87,7 +90,7 @@ type BiowareBonus struct {
 	UnarmedDV         string               `json:"unarmeddv,omitempty"`         // Unarmed damage value bonus
 	UnarmedDVPhysical *bool                `json:"unarmeddvphysical,omitempty"` // Whether unarmed DV is physical
 	UnarmedReach      string               `json:"unarmedreach,omitempty"`      // Unarmed reach bonus
-	WeaponAccuracy    *WeaponAccuracyBonus `json:"weaponaccuracy,omitempty"`    // Weapon accuracy bonus
+	WeaponAccuracy    *common.WeaponAccuracyBonus `json:"weaponaccuracy,omitempty"`    // Weapon accuracy bonus
 
 	// Armor bonuses
 	Armor            interface{} `json:"armor,omitempty"`            // Can be ArmorBonus or string
@@ -150,24 +153,17 @@ type BiowareBonus struct {
 	PsychologicalAddictionAlreadyAddicted string `json:"psychologicaladdictionalreadyaddicted,omitempty"`
 
 	// Special bonuses
-	DisableQuality             string        `json:"disablequality,omitempty"`             // Quality to disable
-	AddQualities               *AddQualities `json:"addqualities,omitempty"`               // Qualities to add
-	ReflexRecorderOptimization *bool         `json:"reflexrecorderoptimization,omitempty"` // Reflex recorder optimization
-	Ambidextrous               *bool         `json:"ambidextrous,omitempty"`               // Ambidextrous bonus
-	Adapsin                    *bool         `json:"adapsin,omitempty"`                    // Adapsin bonus
+	DisableQuality             string                 `json:"disablequality,omitempty"`             // Quality to disable
+	AddQualities               *common.AddQualities   `json:"addqualities,omitempty"`               // Qualities to add
+	ReflexRecorderOptimization *bool                  `json:"reflexrecorderoptimization,omitempty"` // Reflex recorder optimization
+	Ambidextrous               *bool                  `json:"ambidextrous,omitempty"`               // Ambidextrous bonus
+	Adapsin                    *bool                  `json:"adapsin,omitempty"`                    // Adapsin bonus
 
 	// Unique identifier
 	Unique string `json:"+@unique,omitempty"`
 
 	// Select text
-	SelectText *SelectTextBonus `json:"selecttext,omitempty"`
-}
-
-// SpecificAttributeBonus represents a specific attribute bonus
-type SpecificAttributeBonus struct {
-	Name string `json:"name"`          // Attribute name like "STR", "AGI", "LOG", etc.
-	Val  string `json:"val"`           // Value like "Rating", "1", etc.
-	Max  string `json:"max,omitempty"` // Maximum value (for max attribute bonuses)
+	SelectText *common.SelectTextBonus `json:"selecttext,omitempty"`
 }
 
 // BiowareSkillCategoryBonus represents a skill category bonus for bioware
@@ -177,110 +173,36 @@ type BiowareSkillCategoryBonus struct {
 	Bonus string `json:"bonus"` // Bonus value like "Rating", "1", etc. (can be string or numeric)
 }
 
-// SkillGroupBonus represents a skill group bonus
-type SkillGroupBonus struct {
-	Name      string `json:"name"`                // Skill group name like "Athletics", "Acting", etc.
-	Bonus     string `json:"bonus"`               // Bonus value like "Rating", "1", etc.
-	Condition string `json:"condition,omitempty"` // Condition like "People who can smell you"
-}
-
-// SelectSkill represents a selectable skill bonus
-type SelectSkill struct {
-	Val              string `json:"val,omitempty"`                // Bonus value
-	Max              string `json:"max,omitempty"`                // Maximum value
-	SkillCategory    string `json:"+@skillcategory,omitempty"`    // Skill category (used in critter powers)
-	LimitToAttribute string `json:"+@limittoattribute,omitempty"` // Limit to attributes
-	MaximumRating    string `json:"+@maximumrating,omitempty"`    // Maximum rating
-	KnowledgeSkills  string `json:"+@knowledgeskills,omitempty"`  // Whether knowledge skills
-	ApplyToRating    string `json:"applytorating,omitempty"`      // Whether to apply to rating
-	ExcludeAttribute string `json:"excludeattribute,omitempty"`   // Exclude attribute
-}
-
-// SkillAttributeBonus represents a skill attribute bonus
-type SkillAttributeBonus struct {
-	Name      string `json:"name"`                // Attribute name
-	Bonus     string `json:"bonus"`               // Bonus value
-	Condition string `json:"condition,omitempty"` // Condition for the bonus
-}
-
-// SkillLinkedAttributeBonus represents a skill linked attribute bonus
-type SkillLinkedAttributeBonus struct {
-	Name  string `json:"name"`  // Attribute name
-	Bonus string `json:"bonus"` // Bonus value
-}
-
-// AttributeKarmaCostBonus represents an attribute karma cost modifier
-type AttributeKarmaCostBonus struct {
-	Name string `json:"name"` // Attribute name
-	Val  string `json:"val"`  // Karma cost modifier
-}
-
-// ConditionMonitorBonus represents a condition monitor bonus
-type ConditionMonitorBonus struct {
-	SharedThresholdOffset string `json:"sharedthresholdoffset,omitempty"` // Shared threshold offset
-	ThresholdOffset       string `json:"thresholdoffset,omitempty"`       // Threshold offset
-}
-
-// InitiativeBonus represents an initiative bonus
-type InitiativeBonus struct {
-	Content    string `json:"+content,omitempty"`     // Bonus value
-	Precedence string `json:"+@precedence,omitempty"` // Precedence
-}
-
-// InitiativePassBonus represents an initiative pass bonus
-type InitiativePassBonus struct {
-	Content    string `json:"+content,omitempty"`     // Bonus value
-	Precedence string `json:"+@precedence,omitempty"` // Precedence
-}
-
-// ArmorBonus represents an armor bonus
-type ArmorBonus struct {
-	Content string `json:"+content,omitempty"` // Armor value
-	Group   string `json:"+@group,omitempty"`  // Group
-}
-
-// WeaponAccuracyBonus represents a weapon accuracy bonus
-type WeaponAccuracyBonus struct {
-	Name  string `json:"name"`  // Weapon name pattern
-	Value string `json:"value"` // Accuracy bonus value
-}
-
-// AddQualities represents qualities to add
-type AddQualities struct {
-	AddQuality string `json:"addquality,omitempty"` // Quality to add
-}
-
-// SelectTextBonus represents a selectable text bonus
-type SelectTextBonus struct {
-	XML       string `json:"+@xml,omitempty"`       // XML file reference
-	XPath     string `json:"+@xpath,omitempty"`     // XPath expression
-	AllowEdit string `json:"+@allowedit,omitempty"` // Whether editing is allowed
-}
-
-// Forbidden represents forbidden items or qualities
-type Forbidden struct {
-	OneOf *ForbiddenOneOf `json:"oneof,omitempty"`
-}
-
-// ForbiddenOneOf represents a one-of forbidden constraint
-type ForbiddenOneOf struct {
-	Cyberware interface{} `json:"cyberware,omitempty"` // Can be string or []string
-	Bioware   interface{} `json:"bioware,omitempty"`   // Can be string or []string
-	Quality   string      `json:"quality,omitempty"`   // Quality name
-}
-
-// BannedGrades represents banned grades for bioware
-type BannedGrades struct {
-	Grade []string `json:"grade"` // List of banned grade names
-}
+// Type aliases for backward compatibility during migration
+// These point to the common package types
+type (
+	SpecificAttributeBonus  = common.SpecificAttributeBonus
+	SkillGroupBonus         = common.SkillGroupBonus
+	SelectSkill             = common.SelectSkill
+	SkillAttributeBonus     = common.SkillAttributeBonus
+	SkillLinkedAttributeBonus = common.SkillLinkedAttributeBonus
+	AttributeKarmaCostBonus = common.AttributeKarmaCostBonus
+	ConditionMonitorBonus   = common.ConditionMonitorBonus
+	InitiativeBonus         = common.InitiativeBonus
+	InitiativePassBonus     = common.InitiativePassBonus
+	ArmorBonus              = common.ArmorBonus
+	WeaponAccuracyBonus     = common.WeaponAccuracyBonus
+	AddQualities            = common.AddQualities
+	SelectTextBonus         = common.SelectTextBonus
+	Forbidden               = common.Forbidden
+	ForbiddenOneOf          = common.ForbiddenOneOf
+	BannedGrades            = common.BannedGrades
+)
 
 // BiowareRequired represents requirements for bioware
+// Note: common.Requirement exists with unified structure - future migration could use it
 type BiowareRequired struct {
 	OneOf *BiowareRequiredOneOf `json:"oneof,omitempty"`
 	AllOf *BiowareRequiredAllOf `json:"allof,omitempty"`
 }
 
 // BiowareRequiredOneOf represents a one-of requirement
+// Note: common.RequirementOneOf exists with similar structure
 type BiowareRequiredOneOf struct {
 	Cyberware string      `json:"cyberware,omitempty"` // Required cyberware
 	Bioware   interface{} `json:"bioware,omitempty"`   // Can be string or []string
@@ -289,41 +211,17 @@ type BiowareRequiredOneOf struct {
 }
 
 // BiowareRequiredAllOf represents an all-of requirement
+// Note: common.RequirementAllOf exists with similar structure
 type BiowareRequiredAllOf struct {
 	Metatype string `json:"metatype,omitempty"` // Required metatype
 }
 
-// AllowGear represents allowed gear categories
-type AllowGear struct {
-	GearCategory []string `json:"gearcategory"` // List of allowed gear categories
-}
-
-// AllowSubsystems represents allowed subsystem categories
-type AllowSubsystems struct {
-	Category string `json:"category"` // Allowed subsystem category
-}
-
-// PairBonus represents a bonus when paired with matching item
-type PairBonus struct {
-	UnarmedDV      string          `json:"unarmeddv,omitempty"`      // Unarmed damage value
-	UnarmedReach   string          `json:"unarmedreach,omitempty"`   // Unarmed reach
-	WalkMultiplier *WalkMultiplier `json:"walkmultiplier,omitempty"` // Walk multiplier
-	Reach          *ReachBonus     `json:"reach,omitempty"`          // Reach bonus
-}
-
-// WalkMultiplier represents a walk multiplier bonus
-type WalkMultiplier struct {
-	Val      string `json:"val"`      // Multiplier value
-	Category string `json:"category"` // Category like "Swim"
-}
-
-// ReachBonus represents a reach bonus
-type ReachBonus struct {
-	Content string `json:"+content,omitempty"` // Reach value
-	Name    string `json:"+@name,omitempty"`   // Weapon name
-}
-
-// PairInclude represents an item that pairs with this bioware
-type PairInclude struct {
-	Name string `json:"name"` // Name of the paired item
-}
+// Additional type aliases
+type (
+	AllowGear       = common.AllowGear
+	AllowSubsystems = common.AllowSubsystems
+	PairBonus       = common.PairBonus
+	WalkMultiplier  = common.WalkMultiplier
+	ReachBonus      = common.ReachBonus
+	PairInclude     = common.PairInclude
+)

@@ -1,5 +1,7 @@
 package v5
 
+import "shadowmaster/pkg/shadowrun/edition/v5/common"
+
 // MentorChoice represents a choice option for a mentor
 type MentorChoice struct {
 	Name   string      `json:"name"`   // Choice name/description
@@ -15,10 +17,10 @@ type MentorChoices struct {
 // MentorBonus represents bonuses for a mentor
 // Note: Many bonus types are reused from other packages
 type MentorBonus struct {
-	DamageResistance string      `json:"damageresistance,omitempty"` // Damage resistance bonus
-	SelectSkill      *SelectSkill `json:"selectskill,omitempty"`      // Selectable skill bonus
-	SpecificSkill    interface{} `json:"specificskill,omitempty"`     // Specific skill bonus (can be complex)
-	AddQualities     interface{} `json:"addqualities,omitempty"`      // Add qualities (can be complex)
+	DamageResistance string                `json:"damageresistance,omitempty"` // Damage resistance bonus
+	SelectSkill      *common.SelectSkill   `json:"selectskill,omitempty"`      // Selectable skill bonus
+	SpecificSkill    interface{}           `json:"specificskill,omitempty"`     // Specific skill bonus (can be complex)
+	AddQualities     interface{}           `json:"addqualities,omitempty"`      // Add qualities (can be complex)
 	// Add other bonus types as needed
 }
 

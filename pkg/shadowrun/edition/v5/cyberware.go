@@ -1,5 +1,7 @@
 package v5
 
+import "shadowmaster/pkg/shadowrun/edition/v5/common"
+
 // CyberwareGrade represents a cyberware grade (Standard, Used, Alphaware, etc.)
 // Note: This is the same structure as bioware Grade, but kept separate for clarity
 type CyberwareGrade struct {
@@ -33,19 +35,19 @@ type Cyberware struct {
 	// Optional fields
 	Rating                   int                `json:"rating,omitempty"`                   // Rating for variable rating items (always numeric)
 	Limit                    string             `json:"limit,omitempty"`                    // Limit like "False", "{arm}", "{leg}", etc.
-	BannedGrades             *BannedGrades      `json:"bannedgrades,omitempty"`             // Grades that cannot be used
-	BannedWareGrades         interface{}        `json:"bannedwaregrades,omitempty"`         // Banned ware grades
-	Bonus                    *CyberwareBonus    `json:"bonus,omitempty"`                    // Bonuses provided by this cyberware
-	WirelessBonus            *CyberwareBonus    `json:"wirelessbonus,omitempty"`            // Bonuses when wireless is enabled
-	Forbidden                *Forbidden         `json:"forbidden,omitempty"`                // Forbidden items/qualities
-	AllowGear                *AllowGear         `json:"allowgear,omitempty"`                // Allowed gear categories
-	AllowSubsystems          *AllowSubsystems   `json:"allowsubsystems,omitempty"`          // Allowed subsystems
+	BannedGrades             *common.BannedGrades      `json:"bannedgrades,omitempty"`             // Grades that cannot be used
+	BannedWareGrades         interface{}               `json:"bannedwaregrades,omitempty"`         // Banned ware grades
+	Bonus                    *CyberwareBonus           `json:"bonus,omitempty"`                    // Bonuses provided by this cyberware
+	WirelessBonus            *CyberwareBonus           `json:"wirelessbonus,omitempty"`            // Bonuses when wireless is enabled
+	Forbidden                *common.Forbidden         `json:"forbidden,omitempty"`                // Forbidden items/qualities
+	AllowGear                *common.AllowGear         `json:"allowgear,omitempty"`                // Allowed gear categories
+	AllowSubsystems          *common.AllowSubsystems   `json:"allowsubsystems,omitempty"`          // Allowed subsystems
 	Subsystems               interface{}        `json:"subsystems,omitempty"`               // Subsystems
 	Notes                    string             `json:"notes,omitempty"`                    // Additional notes
-	PairBonus                *PairBonus         `json:"pairbonus,omitempty"`                // Bonus when paired with another item
-	WirelessPairBonus        *PairBonus         `json:"wirelesspairbonus,omitempty"`        // Wireless pair bonus
-	PairInclude              *PairInclude       `json:"pairinclude,omitempty"`              // Item that pairs with this
-	WirelessPairInclude      *PairInclude       `json:"wirelesspairinclude,omitempty"`      // Wireless pair include
+	PairBonus                *common.PairBonus   `json:"pairbonus,omitempty"`                // Bonus when paired with another item
+	WirelessPairBonus        *common.PairBonus   `json:"wirelesspairbonus,omitempty"`        // Wireless pair bonus
+	PairInclude              *common.PairInclude `json:"pairinclude,omitempty"`              // Item that pairs with this
+	WirelessPairInclude      *common.PairInclude `json:"wirelesspairinclude,omitempty"`      // Wireless pair include
 	SelectSide               *bool              `json:"selectside,omitempty"`               // Whether a side can be selected
 	AddWeapon                string             `json:"addweapon,omitempty"`                // Weapon added by this cyberware
 	AddVehicle               string             `json:"addvehicle,omitempty"`               // Vehicle added by this cyberware
@@ -72,6 +74,7 @@ type Cyberware struct {
 
 // CyberwareBonus represents bonuses provided by cyberware
 // This reuses many of the same bonus types as bioware
+// Note: common.BaseBonus exists with all common fields - future migration could embed it
 type CyberwareBonus struct {
 	// Limit modifiers
 	LimitModifier interface{} `json:"limitmodifier,omitempty"` // Can be LimitModifier or []LimitModifier
@@ -80,14 +83,14 @@ type CyberwareBonus struct {
 	SkillCategory        interface{}                `json:"skillcategory,omitempty"`        // Can be SkillCategoryBonus or []SkillCategoryBonus
 	SpecificSkill        interface{}                `json:"specificskill,omitempty"`        // Can be SpecificSkillBonus or []SpecificSkillBonus
 	SkillGroup           interface{}                `json:"skillgroup,omitempty"`           // Can be SkillGroupBonus or []SkillGroupBonus
-	SelectSkill          *SelectSkill               `json:"selectskill,omitempty"`          // Selectable skill bonus
-	SkillAttribute       *SkillAttributeBonus       `json:"skillattribute,omitempty"`       // Skill attribute bonus
-	SkillLinkedAttribute *SkillLinkedAttributeBonus `json:"skilllinkedattribute,omitempty"` // Skill linked attribute bonus
-	SkillSoftAccess      interface{}                `json:"skillsoftaccess,omitempty"`      // Skillsoft access bonus
+	SelectSkill          *common.SelectSkill               `json:"selectskill,omitempty"`          // Selectable skill bonus
+	SkillAttribute       *common.SkillAttributeBonus       `json:"skillattribute,omitempty"`       // Skill attribute bonus
+	SkillLinkedAttribute *common.SkillLinkedAttributeBonus `json:"skilllinkedattribute,omitempty"` // Skill linked attribute bonus
+	SkillSoftAccess      interface{}                       `json:"skillsoftaccess,omitempty"`      // Skillsoft access bonus
 
 	// Attribute bonuses
-	SpecificAttribute  interface{}              `json:"specificattribute,omitempty"`  // Can be SpecificAttributeBonus or []SpecificAttributeBonus
-	AttributeKarmaCost *AttributeKarmaCostBonus `json:"attributekarmacost,omitempty"` // Attribute karma cost modifier
+	SpecificAttribute  interface{}                    `json:"specificattribute,omitempty"`  // Can be SpecificAttributeBonus or []SpecificAttributeBonus
+	AttributeKarmaCost *common.AttributeKarmaCostBonus `json:"attributekarmacost,omitempty"` // Attribute karma cost modifier
 
 	// Limit bonuses
 	PhysicalLimit string `json:"physicallimit,omitempty"` // Physical limit modifier
@@ -95,21 +98,21 @@ type CyberwareBonus struct {
 	SocialLimit   string `json:"sociallimit,omitempty"`   // Social limit modifier
 
 	// Condition monitor bonuses
-	ConditionMonitor *ConditionMonitorBonus `json:"conditionmonitor,omitempty"`
+	ConditionMonitor *common.ConditionMonitorBonus `json:"conditionmonitor,omitempty"`
 
 	// Initiative bonuses
-	Initiative     *InitiativeBonus     `json:"initiative,omitempty"`     // Initiative bonus
-	InitiativePass *InitiativePassBonus `json:"initiativepass,omitempty"` // Initiative pass bonus
+	Initiative     *common.InitiativeBonus     `json:"initiative,omitempty"`     // Initiative bonus
+	InitiativePass *common.InitiativePassBonus `json:"initiativepass,omitempty"` // Initiative pass bonus
 
 	// Combat bonuses
 	Dodge string `json:"dodge,omitempty"` // Dodge bonus
 
 	// Damage bonuses
-	DamageResistance  string               `json:"damageresistance,omitempty"`  // Damage resistance bonus
-	UnarmedDV         string               `json:"unarmeddv,omitempty"`         // Unarmed damage value bonus
-	UnarmedDVPhysical *bool                `json:"unarmeddvphysical,omitempty"` // Whether unarmed DV is physical
-	UnarmedReach      string               `json:"unarmedreach,omitempty"`      // Unarmed reach bonus
-	WeaponAccuracy    *WeaponAccuracyBonus `json:"weaponaccuracy,omitempty"`    // Weapon accuracy bonus
+	DamageResistance  string                    `json:"damageresistance,omitempty"`  // Damage resistance bonus
+	UnarmedDV         string                    `json:"unarmeddv,omitempty"`         // Unarmed damage value bonus
+	UnarmedDVPhysical *bool                     `json:"unarmeddvphysical,omitempty"` // Whether unarmed DV is physical
+	UnarmedReach      string                    `json:"unarmedreach,omitempty"`      // Unarmed reach bonus
+	WeaponAccuracy    *common.WeaponAccuracyBonus `json:"weaponaccuracy,omitempty"`    // Weapon accuracy bonus
 
 	// Armor bonuses
 	Armor            interface{} `json:"armor,omitempty"`            // Can be ArmorBonus or string
@@ -172,24 +175,24 @@ type CyberwareBonus struct {
 	PsychologicalAddictionAlreadyAddicted string `json:"psychologicaladdictionalreadyaddicted,omitempty"`
 
 	// Special bonuses
-	DisableQuality             string        `json:"disablequality,omitempty"`             // Quality to disable
-	AddQualities               *AddQualities `json:"addqualities,omitempty"`               // Qualities to add
-	ReflexRecorderOptimization *bool         `json:"reflexrecorderoptimization,omitempty"` // Reflex recorder optimization
-	Ambidextrous               *bool         `json:"ambidextrous,omitempty"`               // Ambidextrous bonus
-	Adapsin                    *bool         `json:"adapsin,omitempty"`                    // Adapsin bonus
+	DisableQuality             string                 `json:"disablequality,omitempty"`             // Quality to disable
+	AddQualities               *common.AddQualities   `json:"addqualities,omitempty"`               // Qualities to add
+	ReflexRecorderOptimization *bool                  `json:"reflexrecorderoptimization,omitempty"` // Reflex recorder optimization
+	Ambidextrous               *bool                  `json:"ambidextrous,omitempty"`               // Ambidextrous bonus
+	Adapsin                    *bool                  `json:"adapsin,omitempty"`                    // Adapsin bonus
 
 	// Unique identifier
 	Unique string `json:"+@unique,omitempty"`
 
 	// Select text
-	SelectText *SelectTextBonus `json:"selecttext,omitempty"`
+	SelectText *common.SelectTextBonus `json:"selecttext,omitempty"`
 }
 
 // CyberwareRequired represents requirements for cyberware
+// Note: common.Requirement exists with unified structure including ParentDetails - future migration could use it
 type CyberwareRequired struct {
-	ParentDetails interface{} `json:"parentdetails,omitempty"` // Parent details requirement
+	ParentDetails interface{} `json:"parentdetails,omitempty"` // Parent details requirement (can use common.ParentDetails)
 }
 
-// Reuse structs from bioware.go for common structures
-// BannedGrades, Forbidden, AllowGear, AllowSubsystems, PairBonus, PairInclude
-// are already defined in bioware.go and can be reused
+// Note: BannedGrades, Forbidden, AllowGear, AllowSubsystems, PairBonus, PairInclude
+// are type aliased in bioware.go pointing to common package types

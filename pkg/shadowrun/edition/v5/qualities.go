@@ -218,12 +218,14 @@ type QualityBonus struct {
 }
 
 // QualityRequired represents requirements for a quality
+// Note: common.Requirement exists with unified structure - future migration could use it
 type QualityRequired struct {
 	OneOf *QualityRequiredOneOf `json:"oneof,omitempty"`
 	AllOf *QualityRequiredAllOf `json:"allof,omitempty"`
 }
 
 // QualityRequiredOneOf represents a one-of requirement
+// Note: common.RequirementOneOf exists with similar structure
 type QualityRequiredOneOf struct {
 	Metatype    interface{} `json:"metatype,omitempty"`   // Can be string or []string
 	Quality     interface{} `json:"quality,omitempty"`    // Can be string or []string
@@ -232,6 +234,7 @@ type QualityRequiredOneOf struct {
 }
 
 // QualityRequiredAllOf represents an all-of requirement
+// Note: common.RequirementAllOf exists with similar structure
 type QualityRequiredAllOf struct {
 	Metatype string `json:"metatype,omitempty"`
 }

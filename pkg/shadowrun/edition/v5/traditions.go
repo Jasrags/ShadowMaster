@@ -1,5 +1,7 @@
 package v5
 
+import "shadowmaster/pkg/shadowrun/edition/v5/common"
+
 // TraditionSpirits represents the spirit types for a tradition
 type TraditionSpirits struct {
 	SpiritCombat        string `json:"spiritcombat,omitempty"`        // Spirit for combat
@@ -10,9 +12,9 @@ type TraditionSpirits struct {
 }
 
 // TraditionBonus represents bonuses for a tradition
-// Note: Reuses AddQualities from bioware.go
+// Note: Reuses AddQualities from common package
 type TraditionBonus struct {
-	AddQualities *AddQualities `json:"addqualities,omitempty"` // Qualities to add
+	AddQualities *common.AddQualities `json:"addqualities,omitempty"` // Qualities to add
 }
 
 // Tradition represents a magic tradition from Shadowrun 5th Edition

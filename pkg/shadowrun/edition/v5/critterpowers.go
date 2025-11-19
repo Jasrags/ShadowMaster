@@ -1,5 +1,7 @@
 package v5
 
+import "shadowmaster/pkg/shadowrun/edition/v5/common"
+
 // CritterPowerCategory represents a critter power category
 // Categories can be simple strings or objects with content and whitelist
 type CritterPowerCategory struct {
@@ -10,8 +12,8 @@ type CritterPowerCategory struct {
 // CritterPowerDefinitionBonus represents bonuses for a critter power definition
 // Note: Many bonus types are reused from other packages (SelectSkill, SelectTextBonus, etc.)
 type CritterPowerDefinitionBonus struct {
-	SelectSkill  *SelectSkill     `json:"selectskill,omitempty"`  // Selectable skill bonus
-	SelectText   *SelectTextBonus `json:"selecttext,omitempty"`   // Selectable text bonus
+	SelectSkill  *common.SelectSkill     `json:"selectskill,omitempty"`  // Selectable skill bonus
+	SelectText   *common.SelectTextBonus `json:"selecttext,omitempty"`   // Selectable text bonus
 	UnlockSkills interface{}      `json:"unlockskills,omitempty"` // Unlock skills (can be complex)
 	// Add other bonus types as needed
 }

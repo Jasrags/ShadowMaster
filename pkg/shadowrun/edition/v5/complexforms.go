@@ -1,9 +1,11 @@
 package v5
 
+import "shadowmaster/pkg/shadowrun/edition/v5/common"
+
 // ComplexFormBonus represents bonuses for a complex form
-// Note: SelectTextBonus is defined in bioware.go and reused here
+// Note: SelectTextBonus is from common package
 type ComplexFormBonus struct {
-	SelectText *SelectTextBonus `json:"selecttext,omitempty"` // Select text bonus
+	SelectText *common.SelectTextBonus `json:"selecttext,omitempty"` // Select text bonus
 }
 
 // ComplexFormRequired represents requirements for a complex form

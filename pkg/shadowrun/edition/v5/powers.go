@@ -1,5 +1,7 @@
 package v5
 
+import "shadowmaster/pkg/shadowrun/edition/v5/common"
+
 // PowerRequired represents requirements for an adept power
 type PowerRequired struct {
 	OneOf *PowerRequiredOneOf `json:"oneof,omitempty"` // One-of requirement
@@ -18,9 +20,9 @@ type AdeptWayRequires struct {
 // PowerBonus represents bonuses for an adept power
 // Note: Many bonus types are reused from other packages
 type PowerBonus struct {
-	SelectAttribute    interface{}      `json:"selectattribute,omitempty"`    // Selectable attribute bonus
-	SelectSkill        *SelectSkill     `json:"selectskill,omitempty"`        // Selectable skill bonus
-	SpecificSkill      interface{}      `json:"specificskill,omitempty"`      // Specific skill bonuses
+	SelectAttribute    interface{}           `json:"selectattribute,omitempty"`    // Selectable attribute bonus
+	SelectSkill        *common.SelectSkill   `json:"selectskill,omitempty"`        // Selectable skill bonus
+	SpecificSkill      interface{}           `json:"specificskill,omitempty"`      // Specific skill bonuses
 	UnlockSkills       interface{}      `json:"unlockskills,omitempty"`       // Unlock skills
 	Dodge              string           `json:"dodge,omitempty"`              // Dodge bonus
 	Surprise           string           `json:"surprise,omitempty"`           // Surprise bonus

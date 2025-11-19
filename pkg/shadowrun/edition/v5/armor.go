@@ -1,5 +1,7 @@
 package v5
 
+import "shadowmaster/pkg/shadowrun/edition/v5/common"
+
 // Category represents an armor or mod category with its black market classification
 type Category struct {
 	Name        string `json:"name"`         // Category name
@@ -135,21 +137,9 @@ type Bonus struct {
 	SelectText *bool `json:"selecttext,omitempty"`
 }
 
-// LimitModifier represents a limit modifier bonus
-type LimitModifier struct {
-	Limit     string `json:"limit"`     // "Physical", "Social", "Mental", etc.
-	Value     string `json:"value"`     // Modifier value like "2", "-1", "Rating", etc.
-	Condition string `json:"condition"` // Condition like "LimitCondition_Visible", etc.
-}
-
-// SkillCategoryBonus represents a skill category bonus
-type SkillCategoryBonus struct {
-	Name  string `json:"name"`  // Skill category name like "Social Active"
-	Bonus int    `json:"bonus"` // Bonus value (always numeric)
-}
-
-// SpecificSkillBonus represents a specific skill bonus
-type SpecificSkillBonus struct {
-	Name  string `json:"name"`  // Skill name like "Survival", "Etiquette"
-	Bonus int    `json:"bonus"` // Bonus value (always numeric)
-}
+// Type aliases for backward compatibility
+type (
+	LimitModifier      = common.LimitModifier
+	SkillCategoryBonus = common.SkillCategoryBonus
+	SpecificSkillBonus = common.SpecificSkillBonus
+)

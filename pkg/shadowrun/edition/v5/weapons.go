@@ -21,8 +21,9 @@ type WeaponAccessory struct {
 }
 
 // WeaponRequired represents requirements for a weapon or accessory
+// Note: common.Requirement exists with unified structure including WeaponDetails - future migration could use it
 type WeaponRequired struct {
-	WeaponDetails interface{} `json:"weapondetails,omitempty"` // Complex weapon details requirement
+	WeaponDetails interface{} `json:"weapondetails,omitempty"` // Complex weapon details requirement (can use common.WeaponDetails)
 }
 
 // WeaponAccessories represents a collection of accessories
