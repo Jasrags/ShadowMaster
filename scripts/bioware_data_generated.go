@@ -1,7 +1,5 @@
 package v5
 
-import "shadowmaster/pkg/shadowrun/edition/v5/common"
-
 // DataGrades contains bioware grades keyed by their ID (lowercase with underscores)
 var DataGrades = map[string]Grade{
 	"none": {
@@ -152,11 +150,9 @@ var DataBiowares = map[string]Bioware{
 			Source: "SR5",
 			Rating: 4,
 			Bonus: &BiowareBonus{
-				BaseBonus: common.BaseBonus{
-					UnarmedDVPhysical: &[]bool{true}[0],
-					DamageResistance: "Rating",
-					UnarmedDV: "Rating-1",
-				},
+				UnarmedDVPhysical: &[]bool{true}[0],
+				DamageResistance: "Rating",
+				UnarmedDV: "Rating-1",
 			},
 			Forbidden: &Forbidden{
 				OneOf: &ForbiddenOneOf{
@@ -183,10 +179,8 @@ var DataBiowares = map[string]Bioware{
 			Source: "SR5",
 			Rating: 3,
 			Bonus: &BiowareBonus{
-				BaseBonus: common.BaseBonus{
-					SpecificAttribute: &SpecificAttributeBonus{
+				SpecificAttribute: &SpecificAttributeBonus{
 					Name: "LOG", Val: "Rating",
-				},
 				},
 			},
 			BannedGrades: &BannedGrades{
@@ -203,11 +197,9 @@ var DataBiowares = map[string]Bioware{
 			Source: "SR5",
 			Rating: 12,
 			Bonus: &BiowareBonus{
-				BaseBonus: common.BaseBonus{
-					ConditionMonitor: &ConditionMonitorBonus{
+				ConditionMonitor: &ConditionMonitorBonus{
 				SharedThresholdOffset: "Rating",
 			},
-				},
 			},
 			Forbidden: &Forbidden{
 				OneOf: &ForbiddenOneOf{
@@ -227,12 +219,10 @@ var DataBiowares = map[string]Bioware{
 			Cost: "24000",
 			Source: "SR5",
 			Bonus: &BiowareBonus{
-				BaseBonus: common.BaseBonus{
-					SpecificSkill: SpecificSkillBonus{
+				SpecificSkill: SpecificSkillBonus{
 				Name: "Escape Artist", Bonus: 1,
 			},
-					PhysicalLimit: "1",
-				},
+				PhysicalLimit: "1",
 			},
 			Forbidden: &Forbidden{
 				OneOf: &ForbiddenOneOf{
@@ -250,8 +240,7 @@ var DataBiowares = map[string]Bioware{
 			Source: "SR5",
 			Rating: 3,
 			Bonus: &BiowareBonus{
-				BaseBonus: common.BaseBonus{
-					SkillCategory: []interface{}{BiowareSkillCategoryBonus{
+				SkillCategory: []interface{}{BiowareSkillCategoryBonus{
 				Name: "Academic", Bonus: "Rating",
 			}, BiowareSkillCategoryBonus{
 				Name: "Interest", Bonus: "Rating",
@@ -262,9 +251,8 @@ var DataBiowares = map[string]Bioware{
 			}, BiowareSkillCategoryBonus{
 				Name: "Street", Bonus: "Rating",
 			}},
-					MentalLimit: "Rating",
-					Memory: "Rating",
-				},
+				MentalLimit: "Rating",
+				Memory: "Rating",
 			},
 			BannedGrades: &BannedGrades{
 				Grade: []string{"Used", "Used (Adapsin)"},
@@ -280,13 +268,11 @@ var DataBiowares = map[string]Bioware{
 			Source: "SR5",
 			Rating: 4,
 			Bonus: &BiowareBonus{
-				BaseBonus: common.BaseBonus{
-					SpecificAttribute: &SpecificAttributeBonus{
+				SpecificAttribute: &SpecificAttributeBonus{
 					Name: "STR", Val: "Rating",
 				},
-					DisableQuality: "Celerity",
-					Unique: "muscle",
-				},
+				DisableQuality: "Celerity",
+				Unique: "muscle",
 			},
 		},
 	"muscle_toner": {
@@ -299,13 +285,11 @@ var DataBiowares = map[string]Bioware{
 			Source: "SR5",
 			Rating: 4,
 			Bonus: &BiowareBonus{
-				BaseBonus: common.BaseBonus{
-					SpecificAttribute: &SpecificAttributeBonus{
+				SpecificAttribute: &SpecificAttributeBonus{
 					Name: "AGI", Val: "Rating",
 				},
-					DisableQuality: "Celerity",
-					Unique: "muscle",
-				},
+				DisableQuality: "Celerity",
+				Unique: "muscle",
 			},
 		},
 	"orthoskin": {
@@ -318,11 +302,9 @@ var DataBiowares = map[string]Bioware{
 			Source: "SR5",
 			Rating: 4,
 			Bonus: &BiowareBonus{
-				BaseBonus: common.BaseBonus{
-					Armor: &ArmorBonus{
+				Armor: &ArmorBonus{
 				Content: "Rating", Group: "0",
 			},
-				},
 			},
 			Forbidden: &Forbidden{
 				OneOf: &ForbiddenOneOf{
@@ -352,12 +334,10 @@ var DataBiowares = map[string]Bioware{
 			Source: "SR5",
 			Rating: 6,
 			Bonus: &BiowareBonus{
-				BaseBonus: common.BaseBonus{
-					PathogenContactResist: "Rating",
-					PathogenIngestionResist: "Rating",
-					PathogenInhalationResist: "Rating",
-					PathogenInjectionResist: "Rating",
-				},
+				PathogenContactResist: "Rating",
+				PathogenIngestionResist: "Rating",
+				PathogenInhalationResist: "Rating",
+				PathogenInjectionResist: "Rating",
 			},
 		},
 	"platelet_factories": {
@@ -379,11 +359,9 @@ var DataBiowares = map[string]Bioware{
 			Source: "SR5",
 			Limit: "False",
 			Bonus: &BiowareBonus{
-				BaseBonus: common.BaseBonus{
-					SelectSkill: &SelectSkill{
+				SelectSkill: &SelectSkill{
 				Val: "1", LimitToAttribute: "BOD,AGI,REA,STR",
 			},
-				},
 			},
 			BannedGrades: &BannedGrades{
 				Grade: []string{"Used", "Used (Adapsin)"},
@@ -420,8 +398,7 @@ var DataBiowares = map[string]Bioware{
 			Cost: "140000",
 			Source: "SR5",
 			Bonus: &BiowareBonus{
-				BaseBonus: common.BaseBonus{
-					SpecificAttribute: []interface{}{&SpecificAttributeBonus{
+				SpecificAttribute: []interface{}{&SpecificAttributeBonus{
 					Name: "BOD", Val: "1",
 				}, &SpecificAttributeBonus{
 					Name: "AGI", Val: "1",
@@ -430,8 +407,7 @@ var DataBiowares = map[string]Bioware{
 				}, &SpecificAttributeBonus{
 					Name: "STR", Val: "1",
 				}},
-					LifestyleCost: "25",
-				},
+				LifestyleCost: "25",
 			},
 		},
 	"symbiotes": {
@@ -444,10 +420,8 @@ var DataBiowares = map[string]Bioware{
 			Source: "SR5",
 			Rating: 4,
 			Bonus: &BiowareBonus{
-				BaseBonus: common.BaseBonus{
-					StunCMRecovery: "Rating",
-					PhysicalCMRecovery: "Rating",
-				},
+				StunCMRecovery: "Rating",
+				PhysicalCMRecovery: "Rating",
 			},
 		},
 	"synaptic_booster": {
@@ -460,15 +434,13 @@ var DataBiowares = map[string]Bioware{
 			Source: "SR5",
 			Rating: 3,
 			Bonus: &BiowareBonus{
-				BaseBonus: common.BaseBonus{
-					SpecificAttribute: &SpecificAttributeBonus{
+				SpecificAttribute: &SpecificAttributeBonus{
 					Name: "REA", Val: "Rating",
 				},
-					InitiativePass: &InitiativePassBonus{
+				InitiativePass: &InitiativePassBonus{
 				Content: "Rating", Precedence: "0",
 			},
-					DisableQuality: "3564b678-7721-4a8d-ac79-1600cf92dc14",
-				},
+				DisableQuality: "3564b678-7721-4a8d-ac79-1600cf92dc14",
 			},
 			BannedGrades: &BannedGrades{
 				Grade: []string{"Used", "Used (Adapsin)"},
@@ -484,11 +456,9 @@ var DataBiowares = map[string]Bioware{
 			Source: "SR5",
 			Rating: 3,
 			Bonus: &BiowareBonus{
-				BaseBonus: common.BaseBonus{
-					SkillGroup: SkillGroupBonus{
+				SkillGroup: SkillGroupBonus{
 				Name: "Athletics", Bonus: "Rating", Condition: "",
 			},
-				},
 			},
 		},
 	"tailored_pheromones": {
@@ -501,14 +471,12 @@ var DataBiowares = map[string]Bioware{
 			Source: "SR5",
 			Rating: 3,
 			Bonus: &BiowareBonus{
-				BaseBonus: common.BaseBonus{
-					SkillGroup: []interface{}{SkillGroupBonus{
+				SkillGroup: []interface{}{SkillGroupBonus{
 				Name: "Acting", Bonus: "Rating", Condition: "People who can smell you",
 			}, SkillGroupBonus{
 				Name: "Influence", Bonus: "Rating", Condition: "People who can smell you",
 			}},
-					SocialLimit: "Rating",
-				},
+				SocialLimit: "Rating",
 			},
 		},
 	"toxin_extractor": {
@@ -521,12 +489,10 @@ var DataBiowares = map[string]Bioware{
 			Source: "SR5",
 			Rating: 6,
 			Bonus: &BiowareBonus{
-				BaseBonus: common.BaseBonus{
-					ToxinContactResist: "Rating",
-					ToxinIngestionResist: "Rating",
-					ToxinInhalationResist: "Rating",
-					ToxinInjectionResist: "Rating",
-				},
+				ToxinContactResist: "Rating",
+				ToxinIngestionResist: "Rating",
+				ToxinInhalationResist: "Rating",
+				ToxinInjectionResist: "Rating",
 			},
 		},
 	"tracheal_filter": {
@@ -539,9 +505,7 @@ var DataBiowares = map[string]Bioware{
 			Source: "SR5",
 			Rating: 6,
 			Bonus: &BiowareBonus{
-				BaseBonus: common.BaseBonus{
-					ToxinInhalationResist: "Rating",
-				},
+				ToxinInhalationResist: "Rating",
 			},
 		},
 	"chemical_gland_internal_release_or_gradual_release": {
@@ -554,9 +518,7 @@ var DataBiowares = map[string]Bioware{
 			Source: "CF",
 			Limit: "False",
 			Bonus: &BiowareBonus{
-				BaseBonus: common.BaseBonus{
-					SelectText: &SelectTextBonus{},
-				},
+				SelectText: &SelectTextBonus{},
 			},
 			AllowGear: &AllowGear{
 				GearCategory: []string{"Chemicals", "Custom Drug", "Drugs", "Toxins", "Custom"},
@@ -648,10 +610,8 @@ var DataBiowares = map[string]Bioware{
 			Cost: "20000",
 			Source: "CF",
 			Bonus: &BiowareBonus{
-				BaseBonus: common.BaseBonus{
-					ToxinContactResist: "2",
-					FatigueResist: "-2",
-				},
+				ToxinContactResist: "2",
+				FatigueResist: "-2",
 			},
 			Required: &BiowareRequired{
 				OneOf: &BiowareRequiredOneOf{
@@ -668,9 +628,7 @@ var DataBiowares = map[string]Bioware{
 			Cost: "2000",
 			Source: "CF",
 			Bonus: &BiowareBonus{
-				BaseBonus: common.BaseBonus{
-					FireArmor: "2",
-				},
+				FireArmor: "2",
 			},
 			Required: &BiowareRequired{
 				OneOf: &BiowareRequiredOneOf{
@@ -687,9 +645,7 @@ var DataBiowares = map[string]Bioware{
 			Cost: "8000",
 			Source: "CF",
 			Bonus: &BiowareBonus{
-				BaseBonus: common.BaseBonus{
-					ElectricityArmor: "2",
-				},
+				ElectricityArmor: "2",
 			},
 			Forbidden: &Forbidden{
 				OneOf: &ForbiddenOneOf{
@@ -711,9 +667,7 @@ var DataBiowares = map[string]Bioware{
 			Cost: "8000",
 			Source: "CF",
 			Bonus: &BiowareBonus{
-				BaseBonus: common.BaseBonus{
-					ElectricityArmor: "-2",
-				},
+				ElectricityArmor: "-2",
 			},
 			Forbidden: &Forbidden{
 				OneOf: &ForbiddenOneOf{
@@ -735,9 +689,7 @@ var DataBiowares = map[string]Bioware{
 			Cost: "2000",
 			Source: "CF",
 			Bonus: &BiowareBonus{
-				BaseBonus: common.BaseBonus{
-					ColdArmor: "2",
-				},
+				ColdArmor: "2",
 			},
 			Required: &BiowareRequired{
 				OneOf: &BiowareRequiredOneOf{
@@ -768,9 +720,7 @@ var DataBiowares = map[string]Bioware{
 			Cost: "8000",
 			Source: "CF",
 			Bonus: &BiowareBonus{
-				BaseBonus: common.BaseBonus{
-					UnarmedReach: "1",
-				},
+				UnarmedReach: "1",
 			},
 			Required: &BiowareRequired{
 				OneOf: &BiowareRequiredOneOf{
@@ -787,11 +737,9 @@ var DataBiowares = map[string]Bioware{
 			Cost: "8000",
 			Source: "CF",
 			Bonus: &BiowareBonus{
-				BaseBonus: common.BaseBonus{
-					LimitModifier: LimitModifier{
+				LimitModifier: LimitModifier{
 				Limit: "Physical", Value: "1", Condition: "LimitCondition_SkillsActiveEscapeArtist",
 			},
-				},
 			},
 			Forbidden: &Forbidden{
 				OneOf: &ForbiddenOneOf{
@@ -808,9 +756,7 @@ var DataBiowares = map[string]Bioware{
 			Cost: "8000",
 			Source: "CF",
 			Bonus: &BiowareBonus{
-				BaseBonus: common.BaseBonus{
-					FatigueResist: "-2",
-				},
+				FatigueResist: "-2",
 			},
 		},
 	"hand_and_foot_webbing_hands": {
@@ -823,11 +769,9 @@ var DataBiowares = map[string]Bioware{
 			Source: "CF",
 			Limit: "{arm}",
 			Bonus: &BiowareBonus{
-				BaseBonus: common.BaseBonus{
-					LimitModifier: LimitModifier{
+				LimitModifier: LimitModifier{
 				Limit: "Physical", Value: "1", Condition: "LimitCondition_SkillsActiveSwimming",
 			},
-				},
 			},
 			SelectSide: &[]bool{true}[0],
 			PairBonus: &PairBonus{
@@ -846,11 +790,9 @@ var DataBiowares = map[string]Bioware{
 			Source: "CF",
 			Limit: "{leg}",
 			Bonus: &BiowareBonus{
-				BaseBonus: common.BaseBonus{
-					LimitModifier: LimitModifier{
+				LimitModifier: LimitModifier{
 				Limit: "Physical", Value: "1", Condition: "LimitCondition_SkillsActiveSwimming",
 			},
-				},
 			},
 			SelectSide: &[]bool{true}[0],
 			PairBonus: &PairBonus{
@@ -954,13 +896,11 @@ var DataBiowares = map[string]Bioware{
 			Cost: "10000",
 			Source: "CF",
 			Bonus: &BiowareBonus{
-				BaseBonus: common.BaseBonus{
-					LimitModifier: []interface{}{LimitModifier{
+				LimitModifier: []interface{}{LimitModifier{
 				Limit: "Social", Value: "1", Condition: "LimitCondition_TestSpeech",
 			}, LimitModifier{
 				Limit: "Social", Value: "2", Condition: "LimitCondition_SkillsActivePerformanceSinging",
 			}},
-				},
 			},
 		},
 	"vocal_range_expander": {
@@ -972,13 +912,11 @@ var DataBiowares = map[string]Bioware{
 			Cost: "30000",
 			Source: "CF",
 			Bonus: &BiowareBonus{
-				BaseBonus: common.BaseBonus{
-					LimitModifier: []interface{}{LimitModifier{
+				LimitModifier: []interface{}{LimitModifier{
 				Limit: "Social", Value: "1", Condition: "LimitCondition_TestSpeech",
 			}, LimitModifier{
 				Limit: "Social", Value: "2", Condition: "LimitCondition_SkillsActivePerformanceSinging",
 			}},
-				},
 			},
 		},
 	"nephritic_screen": {
@@ -991,20 +929,18 @@ var DataBiowares = map[string]Bioware{
 			Source: "CF",
 			Rating: 6,
 			Bonus: &BiowareBonus{
-				BaseBonus: common.BaseBonus{
-					ToxinContactResist: "Rating",
-					ToxinIngestionResist: "Rating",
-					ToxinInhalationResist: "Rating",
-					ToxinInjectionResist: "Rating",
-					PathogenContactResist: "Rating",
-					PathogenIngestionResist: "Rating",
-					PathogenInhalationResist: "Rating",
-					PathogenInjectionResist: "Rating",
-					PhysiologicalAddictionFirstTime: "Rating",
-					PsychologicalAddictionFirstTime: "Rating",
-					PhysiologicalAddictionAlreadyAddicted: "Rating",
-					PsychologicalAddictionAlreadyAddicted: "Rating",
-				},
+				ToxinContactResist: "Rating",
+				ToxinIngestionResist: "Rating",
+				ToxinInhalationResist: "Rating",
+				ToxinInjectionResist: "Rating",
+				PathogenContactResist: "Rating",
+				PathogenIngestionResist: "Rating",
+				PathogenInhalationResist: "Rating",
+				PathogenInjectionResist: "Rating",
+				PhysiologicalAddictionFirstTime: "Rating",
+				PsychologicalAddictionFirstTime: "Rating",
+				PhysiologicalAddictionAlreadyAddicted: "Rating",
+				PsychologicalAddictionAlreadyAddicted: "Rating",
 			},
 		},
 	"nictitating_membranes": {
@@ -1026,9 +962,7 @@ var DataBiowares = map[string]Bioware{
 			Source: "CF",
 			Rating: 3,
 			Bonus: &BiowareBonus{
-				BaseBonus: common.BaseBonus{
-					SelectText: &SelectTextBonus{},
-				},
+				SelectText: &SelectTextBonus{},
 			},
 		},
 	"expanded_volume": {
@@ -1041,9 +975,7 @@ var DataBiowares = map[string]Bioware{
 			Source: "CF",
 			Rating: 4,
 			Bonus: &BiowareBonus{
-				BaseBonus: common.BaseBonus{
-					FatigueResist: "Rating",
-				},
+				FatigueResist: "Rating",
 			},
 		},
 	"amplified_immune_system": {
@@ -1056,12 +988,10 @@ var DataBiowares = map[string]Bioware{
 			Source: "CF",
 			Rating: 4,
 			Bonus: &BiowareBonus{
-				BaseBonus: common.BaseBonus{
-					PathogenContactResist: "Rating",
-					PathogenIngestionResist: "Rating",
-					PathogenInhalationResist: "Rating",
-					PathogenInjectionResist: "Rating",
-				},
+				PathogenContactResist: "Rating",
+				PathogenIngestionResist: "Rating",
+				PathogenInhalationResist: "Rating",
+				PathogenInjectionResist: "Rating",
 			},
 		},
 	"minor_biosculpting_modification": {
@@ -1074,9 +1004,7 @@ var DataBiowares = map[string]Bioware{
 			Source: "CF",
 			Limit: "False",
 			Bonus: &BiowareBonus{
-				BaseBonus: common.BaseBonus{
-					SelectText: &SelectTextBonus{},
-				},
+				SelectText: &SelectTextBonus{},
 			},
 		},
 	"moderate_biosculpting_modification": {
@@ -1089,9 +1017,7 @@ var DataBiowares = map[string]Bioware{
 			Source: "CF",
 			Limit: "False",
 			Bonus: &BiowareBonus{
-				BaseBonus: common.BaseBonus{
-					SelectText: &SelectTextBonus{},
-				},
+				SelectText: &SelectTextBonus{},
 			},
 		},
 	"severe_biosculpting_modification": {
@@ -1104,9 +1030,7 @@ var DataBiowares = map[string]Bioware{
 			Source: "CF",
 			Limit: "False",
 			Bonus: &BiowareBonus{
-				BaseBonus: common.BaseBonus{
-					SelectText: &SelectTextBonus{},
-				},
+				SelectText: &SelectTextBonus{},
 			},
 		},
 	"troll_reduction": {
@@ -1119,12 +1043,11 @@ var DataBiowares = map[string]Bioware{
 			Source: "CF",
 			Rating: 2,
 			Bonus: &BiowareBonus{
-				BaseBonus: common.BaseBonus{
-					SpecificAttribute: &SpecificAttributeBonus{
-					Name: "CHA", Max: "Rating",
-				},
-					Armor: "-1",
-				},
+				SpecificAttribute: &SpecificAttributeBonus{
+				name: "CHA",
+				max: "Rating",
+			},
+				Armor: "-1",
 			},
 			Required: &BiowareRequired{
 				OneOf: &BiowareRequiredOneOf{
@@ -1141,11 +1064,10 @@ var DataBiowares = map[string]Bioware{
 			Cost: "15000",
 			Source: "CF",
 			Bonus: &BiowareBonus{
-				BaseBonus: common.BaseBonus{
-					SpecificAttribute: &SpecificAttributeBonus{
-					Name: "CHA", Max: "1",
-				},
-				},
+				SpecificAttribute: &SpecificAttributeBonus{
+				name: "CHA",
+				max: "1",
+			},
 			},
 			Required: &BiowareRequired{
 				OneOf: &BiowareRequiredOneOf{
@@ -1163,9 +1085,7 @@ var DataBiowares = map[string]Bioware{
 			Source: "CF",
 			Limit: "False",
 			Bonus: &BiowareBonus{
-				BaseBonus: common.BaseBonus{
-					SelectText: &SelectTextBonus{},
-				},
+				SelectText: &SelectTextBonus{},
 			},
 		},
 	"metatype_modification": {
@@ -1178,9 +1098,7 @@ var DataBiowares = map[string]Bioware{
 			Source: "CF",
 			Limit: "False",
 			Bonus: &BiowareBonus{
-				BaseBonus: common.BaseBonus{
-					SelectText: &SelectTextBonus{},
-				},
+				SelectText: &SelectTextBonus{},
 			},
 		},
 	"claws": {
@@ -1219,10 +1137,8 @@ var DataBiowares = map[string]Bioware{
 			Source: "CF",
 			Rating: 4,
 			Bonus: &BiowareBonus{
-				BaseBonus: common.BaseBonus{
-					UnarmedDVPhysical: &[]bool{true}[0],
-					UnarmedDV: "Rating*0.5",
-				},
+				UnarmedDVPhysical: &[]bool{true}[0],
+				UnarmedDV: "Rating*0.5",
 			},
 			Notes: "Rating is used to represent hands and feet. Every 2 Rating will grant +1 Unarmed damage.",
 		},
@@ -1344,9 +1260,7 @@ var DataBiowares = map[string]Bioware{
 			Source: "CF",
 			Limit: "{arm}",
 			Bonus: &BiowareBonus{
-				BaseBonus: common.BaseBonus{
-					UnarmedDVPhysical: &[]bool{true}[0],
-				},
+				UnarmedDVPhysical: &[]bool{true}[0],
 			},
 			SelectSide: &[]bool{true}[0],
 			BlocksMounts: "wrist,elbow,shoulder",
@@ -1367,9 +1281,7 @@ var DataBiowares = map[string]Bioware{
 			Source: "CF",
 			Limit: "{leg}",
 			Bonus: &BiowareBonus{
-				BaseBonus: common.BaseBonus{
-					UnarmedDVPhysical: &[]bool{true}[0],
-				},
+				UnarmedDVPhysical: &[]bool{true}[0],
 			},
 			SelectSide: &[]bool{true}[0],
 			BlocksMounts: "ankle,knee,hip",
@@ -1496,11 +1408,9 @@ var DataBiowares = map[string]Bioware{
 			Cost: "2000",
 			Source: "CF",
 			Bonus: &BiowareBonus{
-				BaseBonus: common.BaseBonus{
-					WeaponAccuracy: &WeaponAccuracyBonus{
+				WeaponAccuracy: &WeaponAccuracyBonus{
 				Name: "[contains]Fangs", Value: "2",
 			},
-				},
 			},
 		},
 	"sprayer": {
@@ -1556,9 +1466,7 @@ var DataBiowares = map[string]Bioware{
 			Rating: 3,
 			Limit: "False",
 			Bonus: &BiowareBonus{
-				BaseBonus: common.BaseBonus{
-					SelectText: &SelectTextBonus{},
-				},
+				SelectText: &SelectTextBonus{},
 			},
 		},
 	"chameleon_skin": {
@@ -1570,11 +1478,9 @@ var DataBiowares = map[string]Bioware{
 			Cost: "2000",
 			Source: "CF",
 			Bonus: &BiowareBonus{
-				BaseBonus: common.BaseBonus{
-					LimitModifier: LimitModifier{
+				LimitModifier: LimitModifier{
 				Limit: "Physical", Value: "1", Condition: "LimitCondition_SkillGroupStealthNaked",
 			},
-				},
 			},
 		},
 	"chameleon_skin_dynamic": {
@@ -1586,11 +1492,9 @@ var DataBiowares = map[string]Bioware{
 			Cost: "4000",
 			Source: "CF",
 			Bonus: &BiowareBonus{
-				BaseBonus: common.BaseBonus{
-					LimitModifier: LimitModifier{
+				LimitModifier: LimitModifier{
 				Limit: "Physical", Value: "2", Condition: "LimitCondition_SkillGroupStealthNaked",
 			},
-				},
 			},
 		},
 	"clean_metabolism": {
@@ -1630,9 +1534,7 @@ var DataBiowares = map[string]Bioware{
 			Source: "CF",
 			Limit: "False",
 			Bonus: &BiowareBonus{
-				BaseBonus: common.BaseBonus{
-					SelectText: &SelectTextBonus{},
-				},
+				SelectText: &SelectTextBonus{},
 			},
 		},
 	"hair_growth_full_body": {
@@ -1666,9 +1568,7 @@ var DataBiowares = map[string]Bioware{
 			Rating: 20,
 			Limit: "False",
 			Bonus: &BiowareBonus{
-				BaseBonus: common.BaseBonus{
-					SelectText: &SelectTextBonus{},
-				},
+				SelectText: &SelectTextBonus{},
 			},
 		},
 	"silky_skin": {
@@ -1691,9 +1591,7 @@ var DataBiowares = map[string]Bioware{
 			Source: "CF",
 			Limit: "False",
 			Bonus: &BiowareBonus{
-				BaseBonus: common.BaseBonus{
-					SelectText: &SelectTextBonus{},
-				},
+				SelectText: &SelectTextBonus{},
 			},
 		},
 	"skin_pigmentation_permanent": {
@@ -1706,9 +1604,7 @@ var DataBiowares = map[string]Bioware{
 			Source: "CF",
 			Limit: "False",
 			Bonus: &BiowareBonus{
-				BaseBonus: common.BaseBonus{
-					SelectText: &SelectTextBonus{},
-				},
+				SelectText: &SelectTextBonus{},
 			},
 		},
 	"cerebellum_booster": {
@@ -1721,10 +1617,8 @@ var DataBiowares = map[string]Bioware{
 			Source: "CF",
 			Rating: 2,
 			Bonus: &BiowareBonus{
-				BaseBonus: common.BaseBonus{
-					SpecificAttribute: &SpecificAttributeBonus{
+				SpecificAttribute: &SpecificAttributeBonus{
 					Name: "INT", Val: "Rating",
-				},
 				},
 			},
 			BannedGrades: &BannedGrades{
@@ -1740,12 +1634,10 @@ var DataBiowares = map[string]Bioware{
 			Cost: "10000",
 			Source: "CF",
 			Bonus: &BiowareBonus{
-				BaseBonus: common.BaseBonus{
-					InitiativePass: &InitiativePassBonus{
+				InitiativePass: &InitiativePassBonus{
 				Content: "1", Precedence: "0",
 			},
-					DisableQuality: "3564b678-7721-4a8d-ac79-1600cf92dc14",
-				},
+				DisableQuality: "3564b678-7721-4a8d-ac79-1600cf92dc14",
 			},
 			BannedGrades: &BannedGrades{
 				Grade: []string{"Used", "Used (Adapsin)"},
@@ -1761,11 +1653,9 @@ var DataBiowares = map[string]Bioware{
 			Source: "CF",
 			Limit: "False",
 			Bonus: &BiowareBonus{
-				BaseBonus: common.BaseBonus{
-					SelectSkill: &SelectSkill{
+				SelectSkill: &SelectSkill{
 				Val: "1", MaximumRating: "0", KnowledgeSkills: "True", ApplyToRating: "True",
 			},
-				},
 			},
 			BannedGrades: &BannedGrades{
 				Grade: []string{"Used", "Used (Adapsin)"},
@@ -1836,11 +1726,9 @@ var DataBiowares = map[string]Bioware{
 			Cost: "10000",
 			Source: "CF",
 			Bonus: &BiowareBonus{
-				BaseBonus: common.BaseBonus{
-					AddQualities: &AddQualities{
+				AddQualities: &AddQualities{
 				AddQuality: "Photographic Memory",
 			},
-				},
 			},
 			BannedGrades: &BannedGrades{
 				Grade: []string{"Used", "Used (Adapsin)"},
@@ -1975,9 +1863,7 @@ var DataBiowares = map[string]Bioware{
 			Cost: "15000",
 			Source: "CF",
 			Bonus: &BiowareBonus{
-				BaseBonus: common.BaseBonus{
-					Memory: "2",
-				},
+				Memory: "2",
 			},
 			ForceGrade: "None",
 			IsGeneware: &[]bool{true}[0],
@@ -1991,9 +1877,7 @@ var DataBiowares = map[string]Bioware{
 			Cost: "16500",
 			Source: "CF",
 			Bonus: &BiowareBonus{
-				BaseBonus: common.BaseBonus{
-					FatigueResist: "1",
-				},
+				FatigueResist: "1",
 			},
 			ForceGrade: "None",
 			IsGeneware: &[]bool{true}[0],
@@ -2007,9 +1891,7 @@ var DataBiowares = map[string]Bioware{
 			Cost: "12000",
 			Source: "CF",
 			Bonus: &BiowareBonus{
-				BaseBonus: common.BaseBonus{
-					ElectricityArmor: "1",
-				},
+				ElectricityArmor: "1",
 			},
 			ForceGrade: "None",
 			IsGeneware: &[]bool{true}[0],
@@ -2023,14 +1905,12 @@ var DataBiowares = map[string]Bioware{
 			Cost: "30500",
 			Source: "CF",
 			Bonus: &BiowareBonus{
-				BaseBonus: common.BaseBonus{
-					SpecificAttribute: &SpecificAttributeBonus{
+				SpecificAttribute: &SpecificAttributeBonus{
 					Name: "STR", Val: "1",
 				},
-					AttributeKarmaCost: &AttributeKarmaCostBonus{
+				AttributeKarmaCost: &AttributeKarmaCostBonus{
 				Name: "STR", Val: "-2",
 			},
-				},
 			},
 			ForceGrade: "None",
 			IsGeneware: &[]bool{true}[0],
@@ -2044,12 +1924,10 @@ var DataBiowares = map[string]Bioware{
 			Cost: "16420",
 			Source: "CF",
 			Bonus: &BiowareBonus{
-				BaseBonus: common.BaseBonus{
-					PhysiologicalAddictionFirstTime: "-2",
-					PsychologicalAddictionFirstTime: "-2",
-					PhysiologicalAddictionAlreadyAddicted: "2",
-					PsychologicalAddictionAlreadyAddicted: "2",
-				},
+				PhysiologicalAddictionFirstTime: "-2",
+				PsychologicalAddictionFirstTime: "-2",
+				PhysiologicalAddictionAlreadyAddicted: "2",
+				PsychologicalAddictionAlreadyAddicted: "2",
 			},
 			ForceGrade: "None",
 			IsGeneware: &[]bool{true}[0],
@@ -2074,13 +1952,11 @@ var DataBiowares = map[string]Bioware{
 			Cost: "8000",
 			Source: "CF",
 			Bonus: &BiowareBonus{
-				BaseBonus: common.BaseBonus{
-					ToxinContactResist: "1",
-					ToxinIngestionResist: "1",
-					ToxinInhalationResist: "1",
-					ToxinInjectionResist: "1",
-					LifestyleCost: "-10",
-				},
+				ToxinContactResist: "1",
+				ToxinIngestionResist: "1",
+				ToxinInhalationResist: "1",
+				ToxinInjectionResist: "1",
+				LifestyleCost: "-10",
 			},
 			ForceGrade: "None",
 			IsGeneware: &[]bool{true}[0],
@@ -2094,9 +1970,7 @@ var DataBiowares = map[string]Bioware{
 			Cost: "30000",
 			Source: "CF",
 			Bonus: &BiowareBonus{
-				BaseBonus: common.BaseBonus{
-					Adapsin: &[]bool{true}[0],
-				},
+				Adapsin: &[]bool{true}[0],
 			},
 			ForceGrade: "None",
 			IsGeneware: &[]bool{true}[0],
@@ -2110,34 +1984,32 @@ var DataBiowares = map[string]Bioware{
 			Cost: "61000",
 			Source: "CF",
 			Bonus: &BiowareBonus{
-				BaseBonus: common.BaseBonus{
-					SkillAttribute: &SkillAttributeBonus{
+				SkillAttribute: &SkillAttributeBonus{
 						Name: "WIL", Bonus: "1",
 					},
-					AddQualities: &AddQualities{
+				AddQualities: &AddQualities{
 				AddQuality: "Poor Self Control (Thrill Seeker) (Dareadrenaline)",
 			},
-					DrainResist: "1",
-					FadingResist: "1",
-					DirectManaSpellResist: "1",
-					DetectionSpellResist: "1",
-					ManaIllusionResist: "1",
-					MentalManipulationResist: "1",
-					DecreaseBODResist: "1",
-					DecreaseAGIResist: "1",
-					DecreaseREAResist: "1",
-					DecreaseSTRResist: "1",
-					DecreaseCHAResist: "1",
-					DecreaseINTResist: "1",
-					DecreaseLOGResist: "1",
-					DecreaseWILResist: "1",
-					Composure: "1",
-					JudgeIntentionsDefense: "1",
-					PhysiologicalAddictionFirstTime: "1",
-					PsychologicalAddictionFirstTime: "1",
-					PhysiologicalAddictionAlreadyAddicted: "1",
-					PsychologicalAddictionAlreadyAddicted: "1",
-				},
+				DrainResist: "1",
+				FadingResist: "1",
+				DirectManaSpellResist: "1",
+				DetectionSpellResist: "1",
+				ManaIllusionResist: "1",
+				MentalManipulationResist: "1",
+				DecreaseBODResist: "1",
+				DecreaseAGIResist: "1",
+				DecreaseREAResist: "1",
+				DecreaseSTRResist: "1",
+				DecreaseCHAResist: "1",
+				DecreaseINTResist: "1",
+				DecreaseLOGResist: "1",
+				DecreaseWILResist: "1",
+				Composure: "1",
+				JudgeIntentionsDefense: "1",
+				PhysiologicalAddictionFirstTime: "1",
+				PsychologicalAddictionFirstTime: "1",
+				PhysiologicalAddictionAlreadyAddicted: "1",
+				PsychologicalAddictionAlreadyAddicted: "1",
 			},
 			ForceGrade: "None",
 			IsGeneware: &[]bool{true}[0],
@@ -2151,9 +2023,7 @@ var DataBiowares = map[string]Bioware{
 			Cost: "18000",
 			Source: "CF",
 			Bonus: &BiowareBonus{
-				BaseBonus: common.BaseBonus{
-					FatigueResist: "-1",
-				},
+				FatigueResist: "-1",
 			},
 			ForceGrade: "None",
 			IsGeneware: &[]bool{true}[0],
@@ -2167,9 +2037,7 @@ var DataBiowares = map[string]Bioware{
 			Cost: "8000",
 			Source: "CF",
 			Bonus: &BiowareBonus{
-				BaseBonus: common.BaseBonus{
-					LifestyleCost: "10",
-				},
+				LifestyleCost: "10",
 			},
 			ForceGrade: "None",
 			IsGeneware: &[]bool{true}[0],
@@ -2183,11 +2051,9 @@ var DataBiowares = map[string]Bioware{
 			Cost: "7000",
 			Source: "CF",
 			Bonus: &BiowareBonus{
-				BaseBonus: common.BaseBonus{
-					SpecificSkill: SpecificSkillBonus{
+				SpecificSkill: SpecificSkillBonus{
 				Name: "Navigation", Bonus: 1,
 			},
-				},
 			},
 			ForceGrade: "None",
 			IsGeneware: &[]bool{true}[0],
@@ -2201,15 +2067,13 @@ var DataBiowares = map[string]Bioware{
 			Cost: "38000",
 			Source: "CF",
 			Bonus: &BiowareBonus{
-				BaseBonus: common.BaseBonus{
-					SkillGroup: SkillGroupBonus{
+				SkillGroup: SkillGroupBonus{
 				Name: "Athletics", Bonus: "1", Condition: "",
 			},
-					PhysicalLimit: "1",
-					FatigueResist: "1",
-					StunCMRecovery: "1",
-					PhysicalCMRecovery: "1",
-				},
+				PhysicalLimit: "1",
+				FatigueResist: "1",
+				StunCMRecovery: "1",
+				PhysicalCMRecovery: "1",
 			},
 			ForceGrade: "None",
 			IsGeneware: &[]bool{true}[0],
@@ -2223,11 +2087,9 @@ var DataBiowares = map[string]Bioware{
 			Cost: "62000",
 			Source: "CF",
 			Bonus: &BiowareBonus{
-				BaseBonus: common.BaseBonus{
-					SkillLinkedAttribute: &SkillLinkedAttributeBonus{
+				SkillLinkedAttribute: &SkillLinkedAttributeBonus{
 						Name: "LOG", Bonus: "1",
 					},
-				},
 			},
 			ForceGrade: "None",
 			IsGeneware: &[]bool{true}[0],
@@ -2241,11 +2103,9 @@ var DataBiowares = map[string]Bioware{
 			Cost: "65000",
 			Source: "CF",
 			Bonus: &BiowareBonus{
-				BaseBonus: common.BaseBonus{
-					SkillLinkedAttribute: &SkillLinkedAttributeBonus{
+				SkillLinkedAttribute: &SkillLinkedAttributeBonus{
 						Name: "INT", Bonus: "1",
 					},
-				},
 			},
 			ForceGrade: "None",
 			IsGeneware: &[]bool{true}[0],
@@ -2259,9 +2119,7 @@ var DataBiowares = map[string]Bioware{
 			Cost: "73000",
 			Source: "CF",
 			Bonus: &BiowareBonus{
-				BaseBonus: common.BaseBonus{
-					Dodge: "2",
-				},
+				Dodge: "2",
 			},
 			ForceGrade: "None",
 			IsGeneware: &[]bool{true}[0],
@@ -2275,11 +2133,9 @@ var DataBiowares = map[string]Bioware{
 			Cost: "9000",
 			Source: "CF",
 			Bonus: &BiowareBonus{
-				BaseBonus: common.BaseBonus{
-					SpecificSkill: SpecificSkillBonus{
+				SpecificSkill: SpecificSkillBonus{
 				Name: "Gymnastics", Bonus: 2,
 			},
-				},
 			},
 			ForceGrade: "None",
 			IsGeneware: &[]bool{true}[0],
@@ -2293,9 +2149,7 @@ var DataBiowares = map[string]Bioware{
 			Cost: "8000",
 			Source: "CF",
 			Bonus: &BiowareBonus{
-				BaseBonus: common.BaseBonus{
-					LifestyleCost: "-10",
-				},
+				LifestyleCost: "-10",
 			},
 			ForceGrade: "None",
 			IsGeneware: &[]bool{true}[0],
@@ -2309,16 +2163,14 @@ var DataBiowares = map[string]Bioware{
 			Cost: "78000",
 			Source: "CF",
 			Bonus: &BiowareBonus{
-				BaseBonus: common.BaseBonus{
-					Initiative: &InitiativeBonus{
+				Initiative: &InitiativeBonus{
 				Content: "1", Precedence: "0",
 			},
-					InitiativePass: &InitiativePassBonus{
+				InitiativePass: &InitiativePassBonus{
 				Content: "1", Precedence: "0",
 			},
-					Dodge: "1",
-					DisableQuality: "3564b678-7721-4a8d-ac79-1600cf92dc14",
-				},
+				Dodge: "1",
+				DisableQuality: "3564b678-7721-4a8d-ac79-1600cf92dc14",
 			},
 			ForceGrade: "None",
 			IsGeneware: &[]bool{true}[0],
@@ -2332,11 +2184,9 @@ var DataBiowares = map[string]Bioware{
 			Cost: "14000",
 			Source: "CF",
 			Bonus: &BiowareBonus{
-				BaseBonus: common.BaseBonus{
-					SpecificSkill: SpecificSkillBonus{
+				SpecificSkill: SpecificSkillBonus{
 				Name: "Perception", Bonus: 1,
 			},
-				},
 			},
 			ForceGrade: "None",
 			IsGeneware: &[]bool{true}[0],
@@ -2350,11 +2200,9 @@ var DataBiowares = map[string]Bioware{
 			Cost: "8000",
 			Source: "CF",
 			Bonus: &BiowareBonus{
-				BaseBonus: common.BaseBonus{
-					SpecificSkill: SpecificSkillBonus{
+				SpecificSkill: SpecificSkillBonus{
 				Name: "Perception", Bonus: 3,
 			},
-				},
 			},
 			ForceGrade: "None",
 			IsGeneware: &[]bool{true}[0],
@@ -2379,9 +2227,7 @@ var DataBiowares = map[string]Bioware{
 			Cost: "20000",
 			Source: "CF",
 			Bonus: &BiowareBonus{
-				BaseBonus: common.BaseBonus{
-					Unique: "microadaptation",
-				},
+				Unique: "microadaptation",
 			},
 			ForceGrade: "None",
 			IsGeneware: &[]bool{true}[0],
@@ -2395,10 +2241,8 @@ var DataBiowares = map[string]Bioware{
 			Cost: "8000",
 			Source: "CF",
 			Bonus: &BiowareBonus{
-				BaseBonus: common.BaseBonus{
-					ColdArmor: "2",
-					Unique: "microadaptation",
-				},
+				ColdArmor: "2",
+				Unique: "microadaptation",
 			},
 			Forbidden: &Forbidden{
 				OneOf: &ForbiddenOneOf{
@@ -2417,9 +2261,7 @@ var DataBiowares = map[string]Bioware{
 			Cost: "50000",
 			Source: "CF",
 			Bonus: &BiowareBonus{
-				BaseBonus: common.BaseBonus{
-					Unique: "microadaptation",
-				},
+				Unique: "microadaptation",
 			},
 			ForceGrade: "None",
 			IsGeneware: &[]bool{true}[0],
@@ -2433,10 +2275,8 @@ var DataBiowares = map[string]Bioware{
 			Cost: "8000",
 			Source: "CF",
 			Bonus: &BiowareBonus{
-				BaseBonus: common.BaseBonus{
-					FireArmor: "2",
-					Unique: "microadaptation",
-				},
+				FireArmor: "2",
+				Unique: "microadaptation",
 			},
 			Forbidden: &Forbidden{
 				OneOf: &ForbiddenOneOf{
@@ -2455,10 +2295,8 @@ var DataBiowares = map[string]Bioware{
 			Cost: "8000",
 			Source: "CF",
 			Bonus: &BiowareBonus{
-				BaseBonus: common.BaseBonus{
-					LifestyleCost: "10",
-					Unique: "microadaptation",
-				},
+				LifestyleCost: "10",
+				Unique: "microadaptation",
 			},
 			ForceGrade: "None",
 			IsGeneware: &[]bool{true}[0],
@@ -2472,9 +2310,7 @@ var DataBiowares = map[string]Bioware{
 			Cost: "30000",
 			Source: "CF",
 			Bonus: &BiowareBonus{
-				BaseBonus: common.BaseBonus{
-					Unique: "microadaptation",
-				},
+				Unique: "microadaptation",
 			},
 			ForceGrade: "None",
 			IsGeneware: &[]bool{true}[0],
@@ -2488,12 +2324,10 @@ var DataBiowares = map[string]Bioware{
 			Cost: "15000",
 			Source: "CF",
 			Bonus: &BiowareBonus{
-				BaseBonus: common.BaseBonus{
-					ToxinContactResist: "2",
-					ToxinIngestionResist: "2",
-					ToxinInhalationResist: "2",
-					Unique: "microadaptation",
-				},
+				ToxinContactResist: "2",
+				ToxinIngestionResist: "2",
+				ToxinInhalationResist: "2",
+				Unique: "microadaptation",
 			},
 			ForceGrade: "None",
 			IsGeneware: &[]bool{true}[0],
@@ -2507,10 +2341,8 @@ var DataBiowares = map[string]Bioware{
 			Cost: "15000",
 			Source: "CF",
 			Bonus: &BiowareBonus{
-				BaseBonus: common.BaseBonus{
-					RadiationResist: "2",
-					Unique: "microadaptation",
-				},
+				RadiationResist: "2",
+				Unique: "microadaptation",
 			},
 			ForceGrade: "None",
 			IsGeneware: &[]bool{true}[0],
@@ -2524,9 +2356,7 @@ var DataBiowares = map[string]Bioware{
 			Cost: "Variable(30000-1000000)",
 			Source: "CF",
 			Bonus: &BiowareBonus{
-				BaseBonus: common.BaseBonus{
-					SelectText: &SelectTextBonus{},
-				},
+				SelectText: &SelectTextBonus{},
 			},
 			ForceGrade: "None",
 			IsGeneware: &[]bool{true}[0],
@@ -2556,11 +2386,9 @@ var DataBiowares = map[string]Bioware{
 			Cost: "6600",
 			Source: "CF",
 			Bonus: &BiowareBonus{
-				BaseBonus: common.BaseBonus{
-					Initiative: &InitiativeBonus{
+				Initiative: &InitiativeBonus{
 						Content: "1",
 					},
-				},
 			},
 			Required: &BiowareRequired{
 				OneOf: &BiowareRequiredOneOf{
@@ -2579,9 +2407,7 @@ var DataBiowares = map[string]Bioware{
 			Cost: "3800",
 			Source: "CF",
 			Bonus: &BiowareBonus{
-				BaseBonus: common.BaseBonus{
-					ReflexRecorderOptimization: &[]bool{true}[0],
-				},
+				ReflexRecorderOptimization: &[]bool{true}[0],
 			},
 			Required: &BiowareRequired{
 				OneOf: &BiowareRequiredOneOf{
@@ -2648,11 +2474,10 @@ var DataBiowares = map[string]Bioware{
 			Cost: "47000",
 			Source: "CF",
 			Bonus: &BiowareBonus{
-				BaseBonus: common.BaseBonus{
-					SpecificAttribute: &SpecificAttributeBonus{
-					Name: "BOD", Max: "1",
-				},
-				},
+				SpecificAttribute: &SpecificAttributeBonus{
+				name: "BOD",
+				max: "1",
+			},
 			},
 			Forbidden: &Forbidden{
 				OneOf: &ForbiddenOneOf{
@@ -2671,11 +2496,10 @@ var DataBiowares = map[string]Bioware{
 			Cost: "47000",
 			Source: "CF",
 			Bonus: &BiowareBonus{
-				BaseBonus: common.BaseBonus{
-					SpecificAttribute: &SpecificAttributeBonus{
-					Name: "AGI", Max: "1",
-				},
-				},
+				SpecificAttribute: &SpecificAttributeBonus{
+				name: "AGI",
+				max: "1",
+			},
 			},
 			Forbidden: &Forbidden{
 				OneOf: &ForbiddenOneOf{
@@ -2694,11 +2518,10 @@ var DataBiowares = map[string]Bioware{
 			Cost: "47000",
 			Source: "CF",
 			Bonus: &BiowareBonus{
-				BaseBonus: common.BaseBonus{
-					SpecificAttribute: &SpecificAttributeBonus{
-					Name: "REA", Max: "1",
-				},
-				},
+				SpecificAttribute: &SpecificAttributeBonus{
+				name: "REA",
+				max: "1",
+			},
 			},
 			Forbidden: &Forbidden{
 				OneOf: &ForbiddenOneOf{
@@ -2717,11 +2540,10 @@ var DataBiowares = map[string]Bioware{
 			Cost: "47000",
 			Source: "CF",
 			Bonus: &BiowareBonus{
-				BaseBonus: common.BaseBonus{
-					SpecificAttribute: &SpecificAttributeBonus{
-					Name: "STR", Max: "1",
-				},
-				},
+				SpecificAttribute: &SpecificAttributeBonus{
+				name: "STR",
+				max: "1",
+			},
 			},
 			Forbidden: &Forbidden{
 				OneOf: &ForbiddenOneOf{
@@ -2740,11 +2562,10 @@ var DataBiowares = map[string]Bioware{
 			Cost: "47000",
 			Source: "CF",
 			Bonus: &BiowareBonus{
-				BaseBonus: common.BaseBonus{
-					SpecificAttribute: &SpecificAttributeBonus{
-					Name: "CHA", Max: "1",
-				},
-				},
+				SpecificAttribute: &SpecificAttributeBonus{
+				name: "CHA",
+				max: "1",
+			},
 			},
 			Forbidden: &Forbidden{
 				OneOf: &ForbiddenOneOf{
@@ -2763,11 +2584,10 @@ var DataBiowares = map[string]Bioware{
 			Cost: "47000",
 			Source: "CF",
 			Bonus: &BiowareBonus{
-				BaseBonus: common.BaseBonus{
-					SpecificAttribute: &SpecificAttributeBonus{
-					Name: "INT", Max: "1",
-				},
-				},
+				SpecificAttribute: &SpecificAttributeBonus{
+				name: "INT",
+				max: "1",
+			},
 			},
 			Forbidden: &Forbidden{
 				OneOf: &ForbiddenOneOf{
@@ -2786,11 +2606,10 @@ var DataBiowares = map[string]Bioware{
 			Cost: "47000",
 			Source: "CF",
 			Bonus: &BiowareBonus{
-				BaseBonus: common.BaseBonus{
-					SpecificAttribute: &SpecificAttributeBonus{
-					Name: "LOG", Max: "1",
-				},
-				},
+				SpecificAttribute: &SpecificAttributeBonus{
+				name: "LOG",
+				max: "1",
+			},
 			},
 			Forbidden: &Forbidden{
 				OneOf: &ForbiddenOneOf{
@@ -2809,11 +2628,10 @@ var DataBiowares = map[string]Bioware{
 			Cost: "47000",
 			Source: "CF",
 			Bonus: &BiowareBonus{
-				BaseBonus: common.BaseBonus{
-					SpecificAttribute: &SpecificAttributeBonus{
-					Name: "WIL", Max: "1",
-				},
-				},
+				SpecificAttribute: &SpecificAttributeBonus{
+				name: "WIL",
+				max: "1",
+			},
 			},
 			Forbidden: &Forbidden{
 				OneOf: &ForbiddenOneOf{
@@ -2833,9 +2651,7 @@ var DataBiowares = map[string]Bioware{
 			Source: "CF",
 			Limit: "False",
 			Bonus: &BiowareBonus{
-				BaseBonus: common.BaseBonus{
-					SelectText: &SelectTextBonus{},
-				},
+				SelectText: &SelectTextBonus{},
 			},
 			ForceGrade: "None",
 			IsGeneware: &[]bool{true}[0],
@@ -2861,11 +2677,9 @@ var DataBiowares = map[string]Bioware{
 			Source: "CF",
 			Limit: "False",
 			Bonus: &BiowareBonus{
-				BaseBonus: common.BaseBonus{
-					SelectText: &SelectTextBonus{
+				SelectText: &SelectTextBonus{
 				XML: "metatypes.xml", XPath: "/chummer/metatypes/metatype | /chummer/metatypes/metatype/metavariants/metavariant", AllowEdit: "True",
 			},
-				},
 			},
 			ForceGrade: "None",
 			IsGeneware: &[]bool{true}[0],
@@ -2880,9 +2694,7 @@ var DataBiowares = map[string]Bioware{
 			Source: "CF",
 			Limit: "{BODUnaug}",
 			Bonus: &BiowareBonus{
-				BaseBonus: common.BaseBonus{
-					SelectText: &SelectTextBonus{},
-				},
+				SelectText: &SelectTextBonus{},
 			},
 			ForceGrade: "None",
 			IsGeneware: &[]bool{true}[0],
@@ -2897,9 +2709,7 @@ var DataBiowares = map[string]Bioware{
 			Source: "CF",
 			Limit: "False",
 			Bonus: &BiowareBonus{
-				BaseBonus: common.BaseBonus{
-					SelectText: &SelectTextBonus{},
-				},
+				SelectText: &SelectTextBonus{},
 			},
 			ForceGrade: "None",
 			IsGeneware: &[]bool{true}[0],
@@ -2986,10 +2796,8 @@ var DataBiowares = map[string]Bioware{
 			Source: "CF",
 			Limit: "False",
 			Bonus: &BiowareBonus{
-				BaseBonus: common.BaseBonus{
-					StunCMRecovery: "1",
-					PhysicalCMRecovery: "1",
-				},
+				StunCMRecovery: "1",
+				PhysicalCMRecovery: "1",
 			},
 		},
 	"booster_endosont": {
@@ -3010,9 +2818,7 @@ var DataBiowares = map[string]Bioware{
 			Cost: "10000",
 			Source: "CF",
 			Bonus: &BiowareBonus{
-				BaseBonus: common.BaseBonus{
-					LifestyleCost: "-10",
-				},
+				LifestyleCost: "-10",
 			},
 		},
 	"electroreceptor_endosont": {
@@ -3072,10 +2878,8 @@ var DataBiowares = map[string]Bioware{
 			Cost: "30000",
 			Source: "CF",
 			Bonus: &BiowareBonus{
-				BaseBonus: common.BaseBonus{
-					StunCMRecovery: "1",
-					PhysicalCMRecovery: "2",
-				},
+				StunCMRecovery: "1",
+				PhysicalCMRecovery: "2",
 			},
 		},
 	"slimworm": {
@@ -3087,9 +2891,7 @@ var DataBiowares = map[string]Bioware{
 			Cost: "1000",
 			Source: "CF",
 			Bonus: &BiowareBonus{
-				BaseBonus: common.BaseBonus{
-					ToxinIngestionResist: "1",
-				},
+				ToxinIngestionResist: "1",
 			},
 		},
 	"stalwart_endosont": {
@@ -3110,9 +2912,7 @@ var DataBiowares = map[string]Bioware{
 			Cost: "4500",
 			Source: "HT",
 			Bonus: &BiowareBonus{
-				BaseBonus: common.BaseBonus{
-					Ambidextrous: &[]bool{true}[0],
-				},
+				Ambidextrous: &[]bool{true}[0],
 			},
 		},
 	"bone_spike_no_bone_density": {
@@ -3195,14 +2995,12 @@ var DataBiowares = map[string]Bioware{
 			Cost: "40000",
 			Source: "2050",
 			Bonus: &BiowareBonus{
-				BaseBonus: common.BaseBonus{
-					LimitModifier: LimitModifier{
+				LimitModifier: LimitModifier{
 				Limit: "Physical", Value: "1", Condition: "LimitCondition_SkillsActiveEscapeArtist",
 			},
-					SpecificSkill: SpecificSkillBonus{
+				SpecificSkill: SpecificSkillBonus{
 				Name: "Escape Artist", Bonus: 1,
 			},
-				},
 			},
 		},
 	"suprathyroid_gland_2050": {
@@ -3214,8 +3012,7 @@ var DataBiowares = map[string]Bioware{
 			Cost: "50000",
 			Source: "2050",
 			Bonus: &BiowareBonus{
-				BaseBonus: common.BaseBonus{
-					SpecificAttribute: []interface{}{&SpecificAttributeBonus{
+				SpecificAttribute: []interface{}{&SpecificAttributeBonus{
 					Name: "BOD", Val: "1",
 				}, &SpecificAttributeBonus{
 					Name: "AGI", Val: "1",
@@ -3224,8 +3021,7 @@ var DataBiowares = map[string]Bioware{
 				}, &SpecificAttributeBonus{
 					Name: "STR", Val: "1",
 				}},
-					LifestyleCost: "25",
-				},
+				LifestyleCost: "25",
 			},
 		},
 	"tracheal_filter_2050": {
@@ -3248,9 +3044,7 @@ var DataBiowares = map[string]Bioware{
 			Source: "2050",
 			Rating: 3,
 			Bonus: &BiowareBonus{
-				BaseBonus: common.BaseBonus{
-					SocialLimit: "Rating",
-				},
+				SocialLimit: "Rating",
 			},
 		},
 	"mnemonic_enhancer_2050": {
@@ -3263,8 +3057,7 @@ var DataBiowares = map[string]Bioware{
 			Source: "2050",
 			Rating: 3,
 			Bonus: &BiowareBonus{
-				BaseBonus: common.BaseBonus{
-					SkillCategory: []interface{}{BiowareSkillCategoryBonus{
+				SkillCategory: []interface{}{BiowareSkillCategoryBonus{
 				Name: "Academic", Bonus: "Rating",
 			}, BiowareSkillCategoryBonus{
 				Name: "Interest", Bonus: "Rating",
@@ -3275,9 +3068,8 @@ var DataBiowares = map[string]Bioware{
 			}, BiowareSkillCategoryBonus{
 				Name: "Street", Bonus: "Rating",
 			}},
-					MentalLimit: "Rating",
-					Memory: "Rating",
-				},
+				MentalLimit: "Rating",
+				Memory: "Rating",
 			},
 			BannedGrades: &BannedGrades{
 				Grade: []string{"Used", "Used (Adapsin)"},
@@ -3293,13 +3085,11 @@ var DataBiowares = map[string]Bioware{
 			Source: "2050",
 			Rating: 4,
 			Bonus: &BiowareBonus{
-				BaseBonus: common.BaseBonus{
-					SpecificAttribute: &SpecificAttributeBonus{
+				SpecificAttribute: &SpecificAttributeBonus{
 					Name: "AGI", Val: "Rating",
 				},
-					DisableQuality: "Celerity",
-					Unique: "muscle",
-				},
+				DisableQuality: "Celerity",
+				Unique: "muscle",
 			},
 		},
 	"muscle_augmentation_2050": {
@@ -3312,13 +3102,11 @@ var DataBiowares = map[string]Bioware{
 			Source: "2050",
 			Rating: 4,
 			Bonus: &BiowareBonus{
-				BaseBonus: common.BaseBonus{
-					SpecificAttribute: &SpecificAttributeBonus{
+				SpecificAttribute: &SpecificAttributeBonus{
 					Name: "STR", Val: "Rating",
 				},
-					DisableQuality: "Celerity",
-					Unique: "muscle",
-				},
+				DisableQuality: "Celerity",
+				Unique: "muscle",
 			},
 		},
 	"nephritic_screen_2050": {
@@ -3331,20 +3119,18 @@ var DataBiowares = map[string]Bioware{
 			Source: "2050",
 			Rating: 6,
 			Bonus: &BiowareBonus{
-				BaseBonus: common.BaseBonus{
-					ToxinContactResist: "Rating",
-					ToxinIngestionResist: "Rating",
-					ToxinInhalationResist: "Rating",
-					ToxinInjectionResist: "Rating",
-					PathogenContactResist: "Rating",
-					PathogenIngestionResist: "Rating",
-					PathogenInhalationResist: "Rating",
-					PathogenInjectionResist: "Rating",
-					PhysiologicalAddictionFirstTime: "Rating",
-					PsychologicalAddictionFirstTime: "Rating",
-					PhysiologicalAddictionAlreadyAddicted: "Rating",
-					PsychologicalAddictionAlreadyAddicted: "Rating",
-				},
+				ToxinContactResist: "Rating",
+				ToxinIngestionResist: "Rating",
+				ToxinInhalationResist: "Rating",
+				ToxinInjectionResist: "Rating",
+				PathogenContactResist: "Rating",
+				PathogenIngestionResist: "Rating",
+				PathogenInhalationResist: "Rating",
+				PathogenInjectionResist: "Rating",
+				PhysiologicalAddictionFirstTime: "Rating",
+				PsychologicalAddictionFirstTime: "Rating",
+				PhysiologicalAddictionAlreadyAddicted: "Rating",
+				PsychologicalAddictionAlreadyAddicted: "Rating",
 			},
 		},
 	"orthoskin_2050": {
@@ -3357,11 +3143,9 @@ var DataBiowares = map[string]Bioware{
 			Source: "2050",
 			Rating: 3,
 			Bonus: &BiowareBonus{
-				BaseBonus: common.BaseBonus{
-					Armor: &ArmorBonus{
+				Armor: &ArmorBonus{
 				Content: "Rating", Group: "0",
 			},
-				},
 			},
 			Forbidden: &Forbidden{
 				OneOf: &ForbiddenOneOf{
@@ -3379,12 +3163,10 @@ var DataBiowares = map[string]Bioware{
 			Source: "2050",
 			Rating: 6,
 			Bonus: &BiowareBonus{
-				BaseBonus: common.BaseBonus{
-					PathogenContactResist: "Rating",
-					PathogenIngestionResist: "Rating",
-					PathogenInhalationResist: "Rating",
-					PathogenInjectionResist: "Rating",
-				},
+				PathogenContactResist: "Rating",
+				PathogenIngestionResist: "Rating",
+				PathogenInhalationResist: "Rating",
+				PathogenInjectionResist: "Rating",
 			},
 		},
 	"reflex_recorder_2050": {
@@ -3397,11 +3179,9 @@ var DataBiowares = map[string]Bioware{
 			Source: "2050",
 			Limit: "False",
 			Bonus: &BiowareBonus{
-				BaseBonus: common.BaseBonus{
-					SelectSkill: &SelectSkill{
+				SelectSkill: &SelectSkill{
 				Val: "1", LimitToAttribute: "BOD,AGI,REA,STR",
 			},
-				},
 			},
 			BannedGrades: &BannedGrades{
 				Grade: []string{"Used", "Used (Adapsin)"},
@@ -3417,11 +3197,9 @@ var DataBiowares = map[string]Bioware{
 			Source: "2050",
 			Rating: 12,
 			Bonus: &BiowareBonus{
-				BaseBonus: common.BaseBonus{
-					ConditionMonitor: &ConditionMonitorBonus{
+				ConditionMonitor: &ConditionMonitorBonus{
 				SharedThresholdOffset: "Rating",
 			},
-				},
 			},
 			Forbidden: &Forbidden{
 				OneOf: &ForbiddenOneOf{
@@ -3464,15 +3242,13 @@ var DataBiowares = map[string]Bioware{
 			Source: "2050",
 			Rating: 3,
 			Bonus: &BiowareBonus{
-				BaseBonus: common.BaseBonus{
-					SpecificAttribute: &SpecificAttributeBonus{
+				SpecificAttribute: &SpecificAttributeBonus{
 					Name: "REA", Val: "Rating",
 				},
-					InitiativePass: &InitiativePassBonus{
+				InitiativePass: &InitiativePassBonus{
 				Content: "Rating", Precedence: "0",
 			},
-					DisableQuality: "3564b678-7721-4a8d-ac79-1600cf92dc14",
-				},
+				DisableQuality: "3564b678-7721-4a8d-ac79-1600cf92dc14",
 			},
 			BannedGrades: &BannedGrades{
 				Grade: []string{"Used", "Used (Adapsin)"},
@@ -3488,11 +3264,9 @@ var DataBiowares = map[string]Bioware{
 			Source: "2050",
 			Rating: 3,
 			Bonus: &BiowareBonus{
-				BaseBonus: common.BaseBonus{
-					SkillGroup: SkillGroupBonus{
+				SkillGroup: SkillGroupBonus{
 				Name: "Athletics", Bonus: "Rating", Condition: "",
 			},
-				},
 			},
 		},
 	"platelet_factories_2050": {
@@ -3514,10 +3288,8 @@ var DataBiowares = map[string]Bioware{
 			Source: "2050",
 			Rating: 3,
 			Bonus: &BiowareBonus{
-				BaseBonus: common.BaseBonus{
-					SpecificAttribute: &SpecificAttributeBonus{
+				SpecificAttribute: &SpecificAttributeBonus{
 					Name: "LOG", Val: "Rating",
-				},
 				},
 			},
 			BannedGrades: &BannedGrades{
@@ -3544,13 +3316,11 @@ var DataBiowares = map[string]Bioware{
 			Rating: 3,
 			Limit: "1",
 			Bonus: &BiowareBonus{
-				BaseBonus: common.BaseBonus{
-					LimitModifier: []interface{}{LimitModifier{
+				LimitModifier: []interface{}{LimitModifier{
 				Limit: "Social", Value: "Rating", Condition: "LimitCondition_SkillsActiveLeadership",
 			}, LimitModifier{
 				Limit: "Social", Value: "Rating", Condition: "LimitCondition_SkillsActivePerformanceSinging",
 			}},
-				},
 			},
 			BannedGrades: &BannedGrades{
 				Grade: []string{"Used", "Standard", "Standard (Burnout's Way)", "Alphaware", "Omegaware"},

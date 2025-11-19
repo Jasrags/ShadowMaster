@@ -77,8 +77,11 @@ def convert_dict_to_go(d, context=""):
         return f"SkillGroupBonus{{\n\t\t\t\tName: {convert_value(d.get('name'), 'name')}, Bonus: {convert_value(d.get('bonus'), 'bonus')}, Condition: {convert_value(d.get('condition', ''), 'condition')},\n\t\t\t}}"
     
     # Handle SpecificAttributeBonus
-    if 'name' in d and 'val' in d and context == "specificattribute":
-        parts = [f"Name: {convert_value(d.get('name'), 'name')}", f"Val: {convert_value(d.get('val'), 'val')}"]
+    if context == "specificattribute" and 'name' in d:
+        parts = []
+        parts.append(f"Name: {convert_value(d.get('name'), 'name')}")
+        if 'val' in d:
+            parts.append(f"Val: {convert_value(d.get('val'), 'val')}")
         if 'max' in d:
             parts.append(f"Max: {convert_value(d.get('max'), 'max')}")
         return f"&SpecificAttributeBonus{{\n\t\t\t\t\t{', '.join(parts)},\n\t\t\t\t}}"
@@ -401,7 +404,9 @@ def convert_bioware_bonus_to_go(d):
     if not parts:
         return "nil"
     
-    return f"&BiowareBonus{{\n\t\t\t\t{',\n\t\t\t\t'.join(parts)},\n\t\t\t}}"
+    # Wrap all BaseBonus fields in a BaseBonus field
+    base_bonus_fields = ',\n\t\t\t\t\t'.join(parts)
+    return f"&BiowareBonus{{\n\t\t\t\tBaseBonus: common.BaseBonus{{\n\t\t\t\t\t{base_bonus_fields},\n\t\t\t\t}},\n\t\t\t}}"
 
 def convert_forbidden_to_go(d):
     """Convert forbidden dictionary to Go Forbidden struct"""
@@ -618,8 +623,9 @@ for bioware in data['biowares']['bioware']:
     bioware_entries.append(f'\t"{bioware_id}": {bioware_go}')
 
 # Write to file
-with open('bioware_data_generated.go', 'w') as f:
+with open('pkg/shadowrun/edition/v5/bioware_data.go', 'w') as f:
     f.write('package v5\n\n')
+    f.write('import "shadowmaster/pkg/shadowrun/edition/v5/common"\n\n')
     f.write('// DataGrades contains bioware grades keyed by their ID (lowercase with underscores)\n')
     f.write('var DataGrades = map[string]Grade{\n')
     f.write(',\n'.join(grade_entries))

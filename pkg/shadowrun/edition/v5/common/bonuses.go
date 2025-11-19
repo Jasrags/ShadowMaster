@@ -34,7 +34,7 @@ type SkillCategoryBonus struct {
 // SpecificSkillBonus represents a specific skill bonus
 type SpecificSkillBonus struct {
 	Name  string `json:"name"`  // Skill name like "Survival", "Etiquette"
-	Bonus int    `json:"bonus"` // Bonus value (always numeric)
+	Bonus interface{} `json:"bonus"` // Bonus value (can be int or string like "Rating")
 }
 
 // SkillGroupBonus represents a skill group bonus

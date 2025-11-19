@@ -1,5 +1,7 @@
 package v5
 
+import "shadowmaster/pkg/shadowrun/edition/v5/common"
+
 // DataGearCategories contains gear categories keyed by their ID (lowercase with underscores)
 var DataGearCategories = map[string]GearCategory{
 	"alchemical_tools": {
@@ -231,15 +233,20 @@ var DataGears = map[string]Gear{
 		AddWeapon: "Throwing Syringe",
 	},
 	"seeker_shaft": {
-		Name:          "Seeker Shaft",
-		Category:      "Ammunition",
-		Source:        "HT",
-		Page:          "187",
-		Rating:        "0",
-		Avail:         "12F",
-		Cost:          "45",
-		CostFor:       "1",
-		Required:      nil,
+		Name:        "Seeker Shaft",
+		Category:    "Ammunition",
+		Source:      "HT",
+		Page:        "187",
+		Rating:      "0",
+		Avail:       "12F",
+		Cost:        "45",
+		CostFor:     "1",
+		WeaponBonus: "",
+		Required: &GearRequired{
+			Parent: &common.ParentDetails{
+				Name: "bow",
+			},
+		},
 		RequireParent: &[]bool{true}[0],
 	},
 	"arrow_monotip_head": {
@@ -252,6 +259,7 @@ var DataGears = map[string]Gear{
 		Cost:              "(Rating * 30)",
 		CostFor:           "1",
 		AmmoForWeaponType: "bow",
+		WeaponBonus:       "",
 	},
 	"ammo_depleted_uranium": {
 		Name:              "Ammo: Depleted Uranium",
@@ -263,6 +271,7 @@ var DataGears = map[string]Gear{
 		Cost:              "1000",
 		CostFor:           "10",
 		AmmoForWeaponType: "gun",
+		WeaponBonus:       "",
 	},
 	"ammo_silver": {
 		Name:              "Ammo: Silver",
@@ -274,6 +283,7 @@ var DataGears = map[string]Gear{
 		Cost:              "250",
 		CostFor:           "10",
 		AmmoForWeaponType: "gun",
+		WeaponBonus:       "",
 	},
 	"ammo_wood_pulp": {
 		Name:              "Ammo: Wood Pulp",
@@ -285,6 +295,7 @@ var DataGears = map[string]Gear{
 		Cost:              "10",
 		CostFor:           "10",
 		AmmoForWeaponType: "gun",
+		WeaponBonus:       "",
 	},
 	"ammo_hi_de_rounds": {
 		Name:              "Ammo: Hi-De Rounds",
@@ -307,6 +318,7 @@ var DataGears = map[string]Gear{
 		Cost:              "40",
 		CostFor:           "10",
 		AmmoForWeaponType: "gun",
+		WeaponBonus:       "",
 	},
 	"spare_clip": {
 		Name:     "Spare Clip",
@@ -316,7 +328,11 @@ var DataGears = map[string]Gear{
 		Rating:   "0",
 		Avail:    "4",
 		Cost:     "5",
-		Bonus:    nil,
+		Bonus: &GearBonus{
+			SelectWeapon: &common.WeaponDetails{
+				Details: "(contains(ammo, '(c)') or contains(ammo, '(d)')) and name != 'HK Urban Fighter'",
+			},
+		},
 	},
 	"speed_loader": {
 		Name:     "Speed Loader",
@@ -326,7 +342,11 @@ var DataGears = map[string]Gear{
 		Rating:   "0",
 		Avail:    "2",
 		Cost:     "25",
-		Bonus:    nil,
+		Bonus: &GearBonus{
+			SelectWeapon: &common.WeaponDetails{
+				Details: "contains(ammo, '(cy)')",
+			},
+		},
 	},
 	"ammo_apds": {
 		Name:              "Ammo: APDS",
@@ -338,6 +358,7 @@ var DataGears = map[string]Gear{
 		Cost:              "120",
 		CostFor:           "10",
 		AmmoForWeaponType: "gun",
+		WeaponBonus:       "",
 	},
 	"ammo_assault_cannon": {
 		Name:              "Ammo: Assault Cannon",
@@ -360,30 +381,35 @@ var DataGears = map[string]Gear{
 		Cost:              "80",
 		CostFor:           "10",
 		AmmoForWeaponType: "gun",
+		WeaponBonus:       "",
 	},
 	"ammo_flechette_rounds": {
-		Name:              "Ammo: Flechette Rounds",
-		Category:          "Ammunition",
-		Source:            "SR5",
-		Page:              "434",
-		Rating:            "0",
-		Avail:             "6R",
-		Cost:              "65",
-		CostFor:           "10",
-		AmmoForWeaponType: "gun",
-		IsFlechetteAmmo:   &[]bool{true}[0],
+		Name:                 "Ammo: Flechette Rounds",
+		Category:             "Ammunition",
+		Source:               "SR5",
+		Page:                 "434",
+		Rating:               "0",
+		Avail:                "6R",
+		Cost:                 "65",
+		CostFor:              "10",
+		AmmoForWeaponType:    "gun",
+		IsFlechetteAmmo:      &[]bool{true}[0],
+		FlechetteWeaponBonus: "",
+		WeaponBonus:          "",
 	},
 	"ammo_stick_n_shock_flechette_rounds": {
-		Name:              "Ammo: Stick-n-Shock Flechette Rounds",
-		Category:          "Ammunition",
-		Source:            "TSG",
-		Page:              "29",
-		Rating:            "0",
-		Avail:             "6R",
-		Cost:              "110",
-		CostFor:           "10",
-		AmmoForWeaponType: "gun",
-		IsFlechetteAmmo:   &[]bool{true}[0],
+		Name:                 "Ammo: Stick-n-Shock Flechette Rounds",
+		Category:             "Ammunition",
+		Source:               "TSG",
+		Page:                 "29",
+		Rating:               "0",
+		Avail:                "6R",
+		Cost:                 "110",
+		CostFor:              "10",
+		AmmoForWeaponType:    "gun",
+		IsFlechetteAmmo:      &[]bool{true}[0],
+		FlechetteWeaponBonus: "",
+		WeaponBonus:          "",
 	},
 	"ammo_gel_rounds": {
 		Name:              "Ammo: Gel Rounds",
@@ -395,6 +421,7 @@ var DataGears = map[string]Gear{
 		Cost:              "25",
 		CostFor:           "10",
 		AmmoForWeaponType: "gun",
+		WeaponBonus:       "",
 	},
 	"ammo_hollow_points": {
 		Name:              "Ammo: Hollow Points",
@@ -406,17 +433,19 @@ var DataGears = map[string]Gear{
 		Cost:              "70",
 		CostFor:           "10",
 		AmmoForWeaponType: "gun",
+		WeaponBonus:       "",
 	},
 	"ammo_injection_darts": {
-		Name:          "Ammo: Injection Darts",
-		Category:      "Ammunition",
-		Source:        "SR5",
-		Page:          "434",
-		Rating:        "0",
-		Avail:         "4R",
-		Cost:          "75",
-		CostFor:       "10",
-		AddonCategory: []string{"Drugs", "Toxins", "Custom"},
+		Name:              "Ammo: Injection Darts",
+		Category:          "Ammunition",
+		Source:            "SR5",
+		Page:              "434",
+		Rating:            "0",
+		Avail:             "4R",
+		Cost:              "75",
+		CostFor:           "10",
+		AmmoForWeaponType: "dartgun",
+		AddonCategory:     []string{"Drugs", "Toxins", "Custom"},
 	},
 	"ammo_taurus_omni_6_heavy": {
 		Name:              "Ammo: Taurus Omni-6 Heavy",
@@ -428,6 +457,7 @@ var DataGears = map[string]Gear{
 		Cost:              "20",
 		CostFor:           "10",
 		AmmoForWeaponType: "gun",
+		WeaponBonus:       "",
 	},
 	"ammo_peak_discharge_energy_units": {
 		Name:              "Ammo: Peak-Discharge Energy Units",
@@ -460,6 +490,7 @@ var DataGears = map[string]Gear{
 		Cost:              "80",
 		CostFor:           "10",
 		AmmoForWeaponType: "gun",
+		WeaponBonus:       "",
 	},
 	"ammo_tracer": {
 		Name:              "Ammo: Tracer",
@@ -493,6 +524,7 @@ var DataGears = map[string]Gear{
 		Cost:              "120",
 		CostFor:           "10",
 		AmmoForWeaponType: "gun",
+		WeaponBonus:       "",
 	},
 	"ammo_frangible_rounds": {
 		Name:              "Ammo: Frangible Rounds",
@@ -504,6 +536,7 @@ var DataGears = map[string]Gear{
 		Cost:              "10",
 		CostFor:           "10",
 		AmmoForWeaponType: "gun",
+		WeaponBonus:       "",
 	},
 	"ammo_flare_rounds": {
 		Name:              "Ammo: Flare Rounds",
@@ -515,6 +548,7 @@ var DataGears = map[string]Gear{
 		Cost:              "20",
 		CostFor:           "10",
 		AmmoForWeaponType: "gun",
+		WeaponBonus:       "",
 	},
 	"ammo_tracker_rounds_security_tag": {
 		Name:              "Ammo: Tracker Rounds, Security Tag",
@@ -548,6 +582,7 @@ var DataGears = map[string]Gear{
 		Cost:              "5",
 		CostFor:           "10",
 		AmmoForWeaponType: "gun",
+		WeaponBonus:       "",
 		AddonCategory:     []string{"Drugs", "Toxins", "Custom"},
 	},
 	"ammo_dmso_rounds": {
@@ -672,6 +707,7 @@ var DataGears = map[string]Gear{
 		Cost:              "(Rating * 2) + 10",
 		CostFor:           "1",
 		AmmoForWeaponType: "bow",
+		WeaponBonus:       "",
 	},
 	"arrow_explosive_head": {
 		Name:              "Arrow: Explosive Head",
@@ -683,6 +719,7 @@ var DataGears = map[string]Gear{
 		Cost:              "(Rating * 2) + 15",
 		CostFor:           "1",
 		AmmoForWeaponType: "bow",
+		WeaponBonus:       "",
 	},
 	"arrow_hammerhead": {
 		Name:              "Arrow: Hammerhead",
@@ -694,6 +731,7 @@ var DataGears = map[string]Gear{
 		Cost:              "(Rating * 2) + 5",
 		CostFor:           "1",
 		AmmoForWeaponType: "bow",
+		WeaponBonus:       "",
 	},
 	"arrow_incendiary_head": {
 		Name:              "Arrow: Incendiary Head",
@@ -705,6 +743,7 @@ var DataGears = map[string]Gear{
 		Cost:              "(Rating * 2) + 100",
 		CostFor:           "1",
 		AmmoForWeaponType: "bow",
+		WeaponBonus:       "",
 	},
 	"arrow_screamer_head": {
 		Name:              "Arrow: Screamer Head",
@@ -716,6 +755,7 @@ var DataGears = map[string]Gear{
 		Cost:              "(Rating * 2) + 5",
 		CostFor:           "1",
 		AmmoForWeaponType: "bow",
+		WeaponBonus:       "",
 	},
 	"arrow_stick_n_shock": {
 		Name:              "Arrow: Stick-n-Shock",
@@ -727,6 +767,7 @@ var DataGears = map[string]Gear{
 		Cost:              "(Rating * 2) + 25",
 		CostFor:           "1",
 		AmmoForWeaponType: "bow",
+		WeaponBonus:       "",
 	},
 	"arrow_stick_n_shock_wstatic_shaft": {
 		Name:              "Arrow: Stick-n-Shock w/Static Shaft",
@@ -738,6 +779,7 @@ var DataGears = map[string]Gear{
 		Cost:              "(Rating * 25) + 25",
 		CostFor:           "1",
 		AmmoForWeaponType: "bow",
+		WeaponBonus:       "",
 	},
 	"bolt_barbed_head": {
 		Name:              "Bolt: Barbed Head",
@@ -749,6 +791,7 @@ var DataGears = map[string]Gear{
 		Cost:              "15",
 		CostFor:           "1",
 		AmmoForWeaponType: "crossbow",
+		WeaponBonus:       "",
 	},
 	"bolt_explosive_head": {
 		Name:              "Bolt: Explosive Head",
@@ -760,6 +803,7 @@ var DataGears = map[string]Gear{
 		Cost:              "20",
 		CostFor:           "1",
 		AmmoForWeaponType: "crossbow",
+		WeaponBonus:       "",
 	},
 	"bolt_hammerhead": {
 		Name:              "Bolt: Hammerhead",
@@ -771,6 +815,7 @@ var DataGears = map[string]Gear{
 		Cost:              "10",
 		CostFor:           "1",
 		AmmoForWeaponType: "crossbow",
+		WeaponBonus:       "",
 	},
 	"bolt_incendiary_head": {
 		Name:              "Bolt: Incendiary Head",
@@ -782,6 +827,7 @@ var DataGears = map[string]Gear{
 		Cost:              "105",
 		CostFor:           "1",
 		AmmoForWeaponType: "crossbow",
+		WeaponBonus:       "",
 	},
 	"bolt_screamer_head": {
 		Name:              "Bolt: Screamer Head",
@@ -793,6 +839,7 @@ var DataGears = map[string]Gear{
 		Cost:              "10",
 		CostFor:           "1",
 		AmmoForWeaponType: "crossbow",
+		WeaponBonus:       "",
 	},
 	"bolt_stick_n_shock": {
 		Name:              "Bolt: Stick-n-Shock",
@@ -804,6 +851,7 @@ var DataGears = map[string]Gear{
 		Cost:              "30",
 		CostFor:           "1",
 		AmmoForWeaponType: "crossbow",
+		WeaponBonus:       "",
 	},
 	"bolt_stick_n_shock_wstatic_shaft": {
 		Name:              "Bolt: Stick-n-Shock w/Static Shaft",
@@ -815,6 +863,7 @@ var DataGears = map[string]Gear{
 		Cost:              "50",
 		CostFor:           "1",
 		AmmoForWeaponType: "crossbow",
+		WeaponBonus:       "",
 	},
 	"boomerang": {
 		Name:      "Boomerang",
@@ -882,6 +931,7 @@ var DataGears = map[string]Gear{
 		Cost:              "600",
 		CostFor:           "4",
 		AmmoForWeaponType: "netgun",
+		WeaponBonus:       "",
 	},
 	"xl_net_gun_reload_shocknet": {
 		Name:              "XL Net Gun Reload (Shocknet)",
@@ -893,6 +943,7 @@ var DataGears = map[string]Gear{
 		Cost:              "650",
 		CostFor:           "2",
 		AmmoForWeaponType: "netgunxl",
+		WeaponBonus:       "",
 	},
 	"ammo_fuel_canister": {
 		Name:              "Ammo: Fuel Canister",
@@ -915,6 +966,7 @@ var DataGears = map[string]Gear{
 		Cost:              "175",
 		CostFor:           "10",
 		AmmoForWeaponType: "gun",
+		WeaponBonus:       "",
 	},
 	"ammo_gyrojet": {
 		Name:              "Ammo: Gyrojet",
@@ -926,6 +978,7 @@ var DataGears = map[string]Gear{
 		Cost:              "160",
 		CostFor:           "10",
 		AmmoForWeaponType: "gyrojet",
+		WeaponBonus:       "",
 	},
 	"ammo_gauss": {
 		Name:              "Ammo: Gauss",
@@ -1068,75 +1121,82 @@ var DataGears = map[string]Gear{
 		AddWeapon: "Grenade: Thermal Smoke",
 	},
 	"minigrenade_flash_bang": {
-		Name:      "Minigrenade: Flash-Bang",
-		Category:  "Ammunition",
-		Source:    "SR5",
-		Page:      "435",
-		Rating:    "0",
-		Avail:     "6R",
-		Cost:      "100",
-		AddWeapon: "Minigrenade: Flash-Bang",
+		Name:              "Minigrenade: Flash-Bang",
+		Category:          "Ammunition",
+		Source:            "SR5",
+		Page:              "435",
+		Rating:            "0",
+		Avail:             "6R",
+		Cost:              "100",
+		AddWeapon:         "Minigrenade: Flash-Bang",
+		AmmoForWeaponType: "glauncher",
 	},
 	"minigrenade_flash_pak": {
-		Name:      "Minigrenade: Flash-Pak",
-		Category:  "Ammunition",
-		Source:    "SR5",
-		Page:      "435",
-		Rating:    "0",
-		Avail:     "4",
-		Cost:      "125",
-		AddWeapon: "Minigrenade: Flash-Pak",
+		Name:              "Minigrenade: Flash-Pak",
+		Category:          "Ammunition",
+		Source:            "SR5",
+		Page:              "435",
+		Rating:            "0",
+		Avail:             "4",
+		Cost:              "125",
+		AddWeapon:         "Minigrenade: Flash-Pak",
+		AmmoForWeaponType: "glauncher",
 	},
 	"minigrenade_fragmentation": {
-		Name:      "Minigrenade: Fragmentation",
-		Category:  "Ammunition",
-		Source:    "SR5",
-		Page:      "435",
-		Rating:    "0",
-		Avail:     "11F",
-		Cost:      "100",
-		AddWeapon: "Minigrenade: Fragmentation",
+		Name:              "Minigrenade: Fragmentation",
+		Category:          "Ammunition",
+		Source:            "SR5",
+		Page:              "435",
+		Rating:            "0",
+		Avail:             "11F",
+		Cost:              "100",
+		AddWeapon:         "Minigrenade: Fragmentation",
+		AmmoForWeaponType: "glauncher",
 	},
 	"minigrenade_high_explosive": {
-		Name:      "Minigrenade: High Explosive",
-		Category:  "Ammunition",
-		Source:    "SR5",
-		Page:      "435",
-		Rating:    "0",
-		Avail:     "11F",
-		Cost:      "100",
-		AddWeapon: "Minigrenade: High Explosive",
+		Name:              "Minigrenade: High Explosive",
+		Category:          "Ammunition",
+		Source:            "SR5",
+		Page:              "435",
+		Rating:            "0",
+		Avail:             "11F",
+		Cost:              "100",
+		AddWeapon:         "Minigrenade: High Explosive",
+		AmmoForWeaponType: "glauncher",
 	},
 	"minigrenade_gas": {
-		Name:          "Minigrenade: Gas",
-		Category:      "Ammunition",
-		Source:        "SR5",
-		Page:          "435",
-		Rating:        "0",
-		Avail:         "4R",
-		Cost:          "40",
-		AddWeapon:     "Minigrenade: Gas",
-		AddonCategory: []string{"Drugs", "Toxins", "Custom"},
+		Name:              "Minigrenade: Gas",
+		Category:          "Ammunition",
+		Source:            "SR5",
+		Page:              "435",
+		Rating:            "0",
+		Avail:             "4R",
+		Cost:              "40",
+		AddWeapon:         "Minigrenade: Gas",
+		AmmoForWeaponType: "glauncher",
+		AddonCategory:     []string{"Drugs", "Toxins", "Custom"},
 	},
 	"minigrenade_smoke": {
-		Name:      "Minigrenade: Smoke",
-		Category:  "Ammunition",
-		Source:    "SR5",
-		Page:      "435",
-		Rating:    "0",
-		Avail:     "4R",
-		Cost:      "40",
-		AddWeapon: "Minigrenade: Smoke",
+		Name:              "Minigrenade: Smoke",
+		Category:          "Ammunition",
+		Source:            "SR5",
+		Page:              "435",
+		Rating:            "0",
+		Avail:             "4R",
+		Cost:              "40",
+		AddWeapon:         "Minigrenade: Smoke",
+		AmmoForWeaponType: "glauncher",
 	},
 	"minigrenade_thermal_smoke": {
-		Name:      "Minigrenade: Thermal Smoke",
-		Category:  "Ammunition",
-		Source:    "SR5",
-		Page:      "435",
-		Rating:    "0",
-		Avail:     "6R",
-		Cost:      "60",
-		AddWeapon: "Minigrenade: Thermal Smoke",
+		Name:              "Minigrenade: Thermal Smoke",
+		Category:          "Ammunition",
+		Source:            "SR5",
+		Page:              "435",
+		Rating:            "0",
+		Avail:             "6R",
+		Cost:              "60",
+		AddWeapon:         "Minigrenade: Thermal Smoke",
+		AmmoForWeaponType: "glauncher",
 	},
 	"grenade_paint": {
 		Name:      "Grenade: Paint",
@@ -1271,143 +1331,162 @@ var DataGears = map[string]Gear{
 		AddWeapon: "Grenade: Smokebomb, Aerodynamic",
 	},
 	"rocket_anti_vehicle": {
-		Name:      "Rocket: Anti-Vehicle",
-		Category:  "Ammunition",
-		Source:    "SR5",
-		Page:      "436",
-		Rating:    "0",
-		Avail:     "18F",
-		Cost:      "2800",
-		AddWeapon: "Rocket: Anti-Vehicle",
+		Name:              "Rocket: Anti-Vehicle",
+		Category:          "Ammunition",
+		Source:            "SR5",
+		Page:              "436",
+		Rating:            "0",
+		Avail:             "18F",
+		Cost:              "2800",
+		AddWeapon:         "Rocket: Anti-Vehicle",
+		AmmoForWeaponType: "mlauncher",
 	},
 	"rocket_fragmentation": {
-		Name:      "Rocket: Fragmentation",
-		Category:  "Ammunition",
-		Source:    "SR5",
-		Page:      "436",
-		Rating:    "0",
-		Avail:     "12F",
-		Cost:      "2000",
-		AddWeapon: "Rocket: Fragmentation",
+		Name:              "Rocket: Fragmentation",
+		Category:          "Ammunition",
+		Source:            "SR5",
+		Page:              "436",
+		Rating:            "0",
+		Avail:             "12F",
+		Cost:              "2000",
+		AddWeapon:         "Rocket: Fragmentation",
+		AmmoForWeaponType: "mlauncher",
 	},
 	"rocket_high_explosive": {
-		Name:      "Rocket: High Explosive",
-		Category:  "Ammunition",
-		Source:    "SR5",
-		Page:      "436",
-		Rating:    "0",
-		Avail:     "18F",
-		Cost:      "2100",
-		AddWeapon: "Rocket: High Explosive",
+		Name:              "Rocket: High Explosive",
+		Category:          "Ammunition",
+		Source:            "SR5",
+		Page:              "436",
+		Rating:            "0",
+		Avail:             "18F",
+		Cost:              "2100",
+		AddWeapon:         "Rocket: High Explosive",
+		AmmoForWeaponType: "mlauncher",
 	},
 	"rocket_incendiary": {
-		Name:      "Rocket: Incendiary",
-		Category:  "Ammunition",
-		Source:    "TSG",
-		Page:      "29",
-		Rating:    "0",
-		Avail:     "12F",
-		Cost:      "1900",
-		AddWeapon: "Rocket: Incendiary",
+		Name:              "Rocket: Incendiary",
+		Category:          "Ammunition",
+		Source:            "TSG",
+		Page:              "29",
+		Rating:            "0",
+		Avail:             "12F",
+		Cost:              "1900",
+		AddWeapon:         "Rocket: Incendiary",
+		AmmoForWeaponType: "mlauncher",
 	},
 	"missile_anti_vehicle": {
-		Name:      "Missile: Anti-Vehicle",
-		Category:  "Ammunition",
-		Source:    "SR5",
-		Page:      "436",
-		Rating:    "0",
-		Avail:     "22F",
-		Cost:      "2800",
-		AddWeapon: "Missile: Anti-Vehicle",
+		Name:              "Missile: Anti-Vehicle",
+		Category:          "Ammunition",
+		Source:            "SR5",
+		Page:              "436",
+		Rating:            "0",
+		Avail:             "22F",
+		Cost:              "2800",
+		AddWeapon:         "Missile: Anti-Vehicle",
+		AmmoForWeaponType: "mlauncher",
 	},
 	"missile_fragmentation": {
-		Name:      "Missile: Fragmentation",
-		Category:  "Ammunition",
-		Source:    "SR5",
-		Page:      "436",
-		Rating:    "0",
-		Avail:     "16F",
-		Cost:      "2000",
-		AddWeapon: "Missile: Fragmentation",
+		Name:              "Missile: Fragmentation",
+		Category:          "Ammunition",
+		Source:            "SR5",
+		Page:              "436",
+		Rating:            "0",
+		Avail:             "16F",
+		Cost:              "2000",
+		AddWeapon:         "Missile: Fragmentation",
+		AmmoForWeaponType: "mlauncher",
 	},
 	"missile_high_explosive": {
-		Name:      "Missile: High Explosive",
-		Category:  "Ammunition",
-		Source:    "SR5",
-		Page:      "436",
-		Rating:    "0",
-		Avail:     "22F",
-		Cost:      "2100",
-		AddWeapon: "Missile: High Explosive",
+		Name:              "Missile: High Explosive",
+		Category:          "Ammunition",
+		Source:            "SR5",
+		Page:              "436",
+		Rating:            "0",
+		Avail:             "22F",
+		Cost:              "2100",
+		AddWeapon:         "Missile: High Explosive",
+		AmmoForWeaponType: "mlauncher",
 	},
 	"ammo_renrakuingram_supermach": {
-		Name:     "Ammo: Renraku/Ingram Supermach",
-		Category: "Ammunition",
-		Source:   "SL",
-		Page:     "132",
-		Rating:   "0",
-		Avail:    "16F",
-		Cost:     "20",
-		CostFor:  "10",
+		Name:              "Ammo: Renraku/Ingram Supermach",
+		Category:          "Ammunition",
+		Source:            "SL",
+		Page:              "132",
+		Rating:            "0",
+		Avail:             "16F",
+		Cost:              "20",
+		CostFor:           "10",
+		AmmoForWeaponType: "supermach",
 	},
 	"ammo_water": {
-		Name:     "Ammo: Water",
-		Category: "Ammunition",
-		Source:   "SOTG",
-		Page:     "16",
-		Rating:   "0",
-		Avail:    "0",
-		Cost:     "0",
+		Name:              "Ammo: Water",
+		Category:          "Ammunition",
+		Source:            "SOTG",
+		Page:              "16",
+		Rating:            "0",
+		Avail:             "0",
+		Cost:              "0",
+		AmmoForWeaponType: "firefighting cannons",
 	},
 	"ammo_fire_extinguishant": {
-		Name:     "Ammo: Fire Extinguishant",
-		Category: "Ammunition",
-		Source:   "SOTG",
-		Page:     "16",
-		Rating:   "0",
-		Avail:    "6R",
-		Cost:     "500",
-		CostFor:  "50",
+		Name:              "Ammo: Fire Extinguishant",
+		Category:          "Ammunition",
+		Source:            "SOTG",
+		Page:              "16",
+		Rating:            "0",
+		Avail:             "6R",
+		Cost:              "500",
+		CostFor:           "50",
+		AmmoForWeaponType: "firefighting cannons",
+		WeaponBonus:       "",
 	},
 	"ammo_slingshot_acid_capsules": {
-		Name:     "Ammo: Slingshot Acid Capsules",
-		Category: "Ammunition",
-		Source:   "SOTG",
-		Page:     "13",
-		Rating:   "0",
-		Avail:    "0",
-		Cost:     "100",
-		CostFor:  "10",
+		Name:              "Ammo: Slingshot Acid Capsules",
+		Category:          "Ammunition",
+		Source:            "SOTG",
+		Page:              "13",
+		Rating:            "0",
+		Avail:             "0",
+		Cost:              "100",
+		CostFor:           "10",
+		AmmoForWeaponType: "slingshot",
+		WeaponBonus:       "",
 	},
 	"ammo_slingshot_paint_capsules": {
-		Name:     "Ammo: Slingshot Paint Capsules",
-		Category: "Ammunition",
-		Source:   "SOTG",
-		Page:     "13",
-		Rating:   "0",
-		Avail:    "0",
-		Cost:     "10",
-		CostFor:  "10",
+		Name:              "Ammo: Slingshot Paint Capsules",
+		Category:          "Ammunition",
+		Source:            "SOTG",
+		Page:              "13",
+		Rating:            "0",
+		Avail:             "0",
+		Cost:              "10",
+		CostFor:           "10",
+		AmmoForWeaponType: "slingshot",
+		WeaponBonus:       "",
 	},
 	"ammo_slingshot_poison_capsules": {
-		Name:     "Ammo: Slingshot Poison Capsules",
-		Category: "Ammunition",
-		Source:   "SOTG",
-		Page:     "13",
-		Rating:   "0",
-		Avail:    "0",
-		Cost:     "100",
-		CostFor:  "10",
+		Name:              "Ammo: Slingshot Poison Capsules",
+		Category:          "Ammunition",
+		Source:            "SOTG",
+		Page:              "13",
+		Rating:            "0",
+		Avail:             "0",
+		Cost:              "100",
+		CostFor:           "10",
+		AmmoForWeaponType: "slingshot",
+		WeaponBonus:       "",
 	},
 	"ammo_slingshot_capsule_round": {
-		Name:     "Ammo: Slingshot Capsule Round",
-		Category: "Ammunition",
-		Source:   "RG",
-		Page:     "23",
-		Rating:   "0",
-		Avail:    "0",
-		Cost:     "5",
-		CostFor:  "10",
+		Name:              "Ammo: Slingshot Capsule Round",
+		Category:          "Ammunition",
+		Source:            "RG",
+		Page:              "23",
+		Rating:            "0",
+		Avail:             "0",
+		Cost:              "5",
+		CostFor:           "10",
+		AmmoForWeaponType: "slingshot",
+		WeaponBonus:       "",
 	},
 	"grenade_maker": {
 		Name:      "Grenade: Maker",
@@ -1430,23 +1509,25 @@ var DataGears = map[string]Gear{
 		AddWeapon: "Grenade: Maker, Aerodynamic",
 	},
 	"missile_maker": {
-		Name:      "Missile: Maker",
-		Category:  "Ammunition",
-		Source:    "SL",
-		Page:      "76",
-		Rating:    "0",
-		Avail:     "24F",
-		Cost:      "5000",
-		AddWeapon: "Missile: Maker",
+		Name:              "Missile: Maker",
+		Category:          "Ammunition",
+		Source:            "SL",
+		Page:              "76",
+		Rating:            "0",
+		Avail:             "24F",
+		Cost:              "5000",
+		AddWeapon:         "Missile: Maker",
+		AmmoForWeaponType: "mlauncher",
 	},
 	"ammo_spinstorm_ferrous_slugs": {
-		Name:     "Ammo: Spinstorm Ferrous Slugs",
-		Category: "Ammunition",
-		Source:   "SL",
-		Page:     "80",
-		Rating:   "0",
-		Avail:    "12R",
-		Cost:     "10",
+		Name:              "Ammo: Spinstorm Ferrous Slugs",
+		Category:          "Ammunition",
+		Source:            "SL",
+		Page:              "80",
+		Rating:            "0",
+		Avail:             "12R",
+		Cost:              "10",
+		AmmoForWeaponType: "spinstorm",
 	},
 	"ammo_grey_goo_armor_eater": {
 		Name:              "Ammo: Grey Goo Armor Eater",
@@ -1458,6 +1539,7 @@ var DataGears = map[string]Gear{
 		Cost:              "50 * Rating",
 		CostFor:           "10",
 		AmmoForWeaponType: "gun",
+		WeaponBonus:       "",
 	},
 	"ammo_grey_goo_penetrator": {
 		Name:              "Ammo: Grey Goo Penetrator",
@@ -1469,36 +1551,40 @@ var DataGears = map[string]Gear{
 		Cost:              "1000",
 		CostFor:           "10",
 		AmmoForWeaponType: "gun",
+		WeaponBonus:       "",
 	},
 	"ammo_man_catcher_ammo_compound": {
-		Name:     "Ammo: Man-Catcher Ammo Compound",
-		Category: "Ammunition",
-		Source:   "SL",
-		Page:     "133",
-		Rating:   "0",
-		Avail:    "18",
-		Cost:     "200",
-		CostFor:  "10",
+		Name:              "Ammo: Man-Catcher Ammo Compound",
+		Category:          "Ammunition",
+		Source:            "SL",
+		Page:              "133",
+		Rating:            "0",
+		Avail:             "18",
+		Cost:              "200",
+		CostFor:           "10",
+		AmmoForWeaponType: "man-catcher",
 	},
 	"torpedo_grenade_heap": {
-		Name:      "Torpedo Grenade: HEAP",
-		Category:  "Ammunition",
-		Source:    "SL",
-		Page:      "133",
-		Rating:    "0",
-		Avail:     "14F",
-		Cost:      "300",
-		AddWeapon: "Torpedo Grenade: HEAP",
+		Name:              "Torpedo Grenade: HEAP",
+		Category:          "Ammunition",
+		Source:            "SL",
+		Page:              "133",
+		Rating:            "0",
+		Avail:             "14F",
+		Cost:              "300",
+		AddWeapon:         "Torpedo Grenade: HEAP",
+		AmmoForWeaponType: "torpglauncher",
 	},
 	"torpedo_grenade_depth_charge": {
-		Name:      "Torpedo Grenade: Depth Charge",
-		Category:  "Ammunition",
-		Source:    "SL",
-		Page:      "133",
-		Rating:    "0",
-		Avail:     "12F",
-		Cost:      "175",
-		AddWeapon: "Torpedo Grenade: Depth Charge",
+		Name:              "Torpedo Grenade: Depth Charge",
+		Category:          "Ammunition",
+		Source:            "SL",
+		Page:              "133",
+		Rating:            "0",
+		Avail:             "12F",
+		Cost:              "175",
+		AddWeapon:         "Torpedo Grenade: Depth Charge",
+		AmmoForWeaponType: "torpglauncher",
 	},
 	"ammo_zapper": {
 		Name:              "Ammo: Zapper",
@@ -1510,6 +1596,7 @@ var DataGears = map[string]Gear{
 		Cost:              "140",
 		CostFor:           "10",
 		AmmoForWeaponType: "gun",
+		WeaponBonus:       "",
 	},
 	"ammo_looper": {
 		Name:              "Ammo: Looper",
@@ -1521,6 +1608,7 @@ var DataGears = map[string]Gear{
 		Cost:              "FixedValues(20,30,40,50,100,200)",
 		CostFor:           "10",
 		AmmoForWeaponType: "gun",
+		WeaponBonus:       "",
 	},
 	"ammo_fuzzy": {
 		Name:              "Ammo: Fuzzy",
@@ -1532,6 +1620,7 @@ var DataGears = map[string]Gear{
 		Cost:              "FixedValues(30,50)",
 		CostFor:           "10",
 		AmmoForWeaponType: "gun",
+		WeaponBonus:       "",
 	},
 	"ammo_e0_e0_public_grid": {
 		Name:              "Ammo: E0-E0 (Public Grid)",
@@ -1543,6 +1632,7 @@ var DataGears = map[string]Gear{
 		Cost:              "50",
 		CostFor:           "10",
 		AmmoForWeaponType: "gun",
+		WeaponBonus:       "",
 	},
 	"ammo_e0_e0_local_grid": {
 		Name:              "Ammo: E0-E0 (Local Grid)",
@@ -1554,7 +1644,10 @@ var DataGears = map[string]Gear{
 		Cost:              "60",
 		CostFor:           "10",
 		AmmoForWeaponType: "gun",
-		Bonus:             nil,
+		WeaponBonus:       "",
+		Bonus: &GearBonus{
+			SelectText: &common.SelectTextBonus{},
+		},
 	},
 	"ammo_e0_e0_megacorporate_grid": {
 		Name:              "Ammo: E0-E0 (Megacorporate Grid)",
@@ -1566,7 +1659,12 @@ var DataGears = map[string]Gear{
 		Cost:              "100",
 		CostFor:           "10",
 		AmmoForWeaponType: "gun",
-		Bonus:             nil,
+		WeaponBonus:       "",
+		Bonus: &GearBonus{
+			SelectText: &common.SelectTextBonus{
+				XML: "lifemodules.xml", XPath: "/chummer/storybuilder/macros/mega/persistent/*", AllowEdit: "True",
+			},
+		},
 	},
 	"ammo_e0_e0_rifle_public_grid": {
 		Name:              "Ammo: E0-E0 Rifle (Public Grid)",
@@ -1578,6 +1676,7 @@ var DataGears = map[string]Gear{
 		Cost:              "50",
 		CostFor:           "10",
 		AmmoForWeaponType: "gun",
+		WeaponBonus:       "",
 	},
 	"ammo_e0_e0_rifle_local_grid": {
 		Name:              "Ammo: E0-E0 Rifle (Local Grid)",
@@ -1589,7 +1688,10 @@ var DataGears = map[string]Gear{
 		Cost:              "60",
 		CostFor:           "10",
 		AmmoForWeaponType: "gun",
-		Bonus:             nil,
+		WeaponBonus:       "",
+		Bonus: &GearBonus{
+			SelectText: &common.SelectTextBonus{},
+		},
 	},
 	"ammo_e0_e0_rifle_megacorporate_grid": {
 		Name:              "Ammo: E0-E0 Rifle (Megacorporate Grid)",
@@ -1601,7 +1703,12 @@ var DataGears = map[string]Gear{
 		Cost:              "100",
 		CostFor:           "10",
 		AmmoForWeaponType: "gun",
-		Bonus:             nil,
+		WeaponBonus:       "",
+		Bonus: &GearBonus{
+			SelectText: &common.SelectTextBonus{
+				XML: "lifemodules.xml", XPath: "/chummer/storybuilder/macros/mega/persistent/*", AllowEdit: "True",
+			},
+		},
 	},
 	"arrow_arrowlink_50m": {
 		Name:              "Arrow: Arrowlink (50m)",
@@ -1644,13 +1751,14 @@ var DataGears = map[string]Gear{
 		AmmoForWeaponType: "bow",
 	},
 	"grenade_fuzzy_boom_boom_bunnies": {
-		Name:     "Grenade: Fuzzy Boom Boom Bunnies",
-		Category: "Ammunition",
-		Source:   "KC",
-		Page:     "53",
-		Rating:   "20",
-		Avail:    "10R",
-		Cost:     "Rating*20",
+		Name:      "Grenade: Fuzzy Boom Boom Bunnies",
+		Category:  "Ammunition",
+		Source:    "KC",
+		Page:      "53",
+		Rating:    "20",
+		Avail:     "10R",
+		Cost:      "Rating*20",
+		AddWeapon: "Grenade: Fuzzy Boom Boom Bunnies",
 	},
 	"grenade_cos": {
 		Name:      "Grenade: COS",
@@ -1663,22 +1771,24 @@ var DataGears = map[string]Gear{
 		AddWeapon: "Grenade: COS",
 	},
 	"grenade_douser": {
-		Name:     "Grenade: Douser",
-		Category: "Ammunition",
-		Source:   "KC",
-		Page:     "55",
-		Rating:   "10",
-		Avail:    "Rating*2F",
-		Cost:     "Rating*50",
+		Name:      "Grenade: Douser",
+		Category:  "Ammunition",
+		Source:    "KC",
+		Page:      "55",
+		Rating:    "10",
+		Avail:     "Rating*2F",
+		Cost:      "Rating*50",
+		AddWeapon: "Grenade: Douser",
 	},
 	"grenade_dumdum": {
-		Name:     "Grenade: DumDum",
-		Category: "Ammunition",
-		Source:   "KC",
-		Page:     "56",
-		Rating:   "10",
-		Avail:    "Rating*2R",
-		Cost:     "Rating*50",
+		Name:      "Grenade: DumDum",
+		Category:  "Ammunition",
+		Source:    "KC",
+		Page:      "56",
+		Rating:    "10",
+		Avail:     "Rating*2R",
+		Cost:      "Rating*50",
+		AddWeapon: "Grenade: DumDum",
 	},
 	"ammo_krime_power_rounds": {
 		Name:              "Ammo: Krime Power Rounds",
@@ -1701,6 +1811,7 @@ var DataGears = map[string]Gear{
 		Cost:              "250",
 		CostFor:           "10",
 		AmmoForWeaponType: "gun",
+		WeaponBonus:       "",
 	},
 	"ammo_krime_crackle_fin_stabilized_heat_slugs": {
 		Name:              "Ammo: Krime Crackle Fin-Stabilized HEAT Slugs",
@@ -1712,6 +1823,7 @@ var DataGears = map[string]Gear{
 		Cost:              "300",
 		CostFor:           "10",
 		AmmoForWeaponType: "gun",
+		WeaponBonus:       "",
 	},
 	"ammo_krime_laser_bullets": {
 		Name:              "Ammo: Krime Laser Bullets",
@@ -1734,6 +1846,7 @@ var DataGears = map[string]Gear{
 		Cost:              "200",
 		CostFor:           "10",
 		AmmoForWeaponType: "cannon",
+		WeaponBonus:       "",
 	},
 	"ammo_krime_splash_self_defense_ammunition": {
 		Name:              "Ammo: Krime Splash Self-Defense Ammunition",
@@ -1745,6 +1858,7 @@ var DataGears = map[string]Gear{
 		Cost:              "100",
 		CostFor:           "10",
 		AmmoForWeaponType: "gun",
+		WeaponBonus:       "",
 	},
 	"grenade_krime_cleaner": {
 		Name:      "Grenade: Krime Cleaner",
@@ -2159,7 +2273,9 @@ var DataGears = map[string]Gear{
 		Rating:   "10",
 		Avail:    "(Rating*2)+4F",
 		Cost:     "(Rating*500)+5000",
-		Bonus:    nil,
+		Bonus: &GearBonus{
+			SelectText: &common.SelectTextBonus{},
+		},
 	},
 	"faceless_generic": {
 		Name:     "Faceless - Generic",
@@ -2169,7 +2285,9 @@ var DataGears = map[string]Gear{
 		Rating:   "10",
 		Avail:    "(Rating*2)+2F",
 		Cost:     "(Rating*500)+1000",
-		Bonus:    nil,
+		Bonus: &GearBonus{
+			SelectText: &common.SelectTextBonus{},
+		},
 	},
 	"faceless_blurred_face": {
 		Name:     "Faceless - Blurred Face",
@@ -2287,7 +2405,9 @@ var DataGears = map[string]Gear{
 		Rating:   "7",
 		Avail:    "Rating * 2",
 		Cost:     "FixedValues(100,700,1000,2500,3000,5000,8000)",
-		Bonus:    nil,
+		Bonus: &GearBonus{
+			SelectText: &common.SelectTextBonus{},
+		},
 	},
 	"meta_link": {
 		Name:     "Meta Link",
@@ -2369,7 +2489,13 @@ var DataGears = map[string]Gear{
 		Rating:   "0",
 		Avail:    "0",
 		Cost:     "100",
-		Required: nil,
+		Required: &GearRequired{
+			GearDetails: map[string]interface{}{
+				"OR": map[string]interface{}{
+					"category": []interface{}{"Commlinks", "Custom"},
+				},
+			},
+		},
 	},
 	"sim_module_hot": {
 		Name:     "Sim Module, Hot",
@@ -2379,7 +2505,13 @@ var DataGears = map[string]Gear{
 		Rating:   "0",
 		Avail:    "4F",
 		Cost:     "250",
-		Required: nil,
+		Required: &GearRequired{
+			GearDetails: map[string]interface{}{
+				"OR": map[string]interface{}{
+					"category": []interface{}{"Commlinks", "Custom"},
+				},
+			},
+		},
 	},
 	"erika_mcd_1": {
 		Name:     "Erika MCD-1",
@@ -2498,7 +2630,13 @@ var DataGears = map[string]Gear{
 		Rating:   "{Parent Rating}",
 		Avail:    "0",
 		Cost:     "(Rating*Rating*Rating)*500",
-		Required: nil,
+		Required: &GearRequired{
+			GearDetails: map[string]interface{}{
+				"OR": map[string]interface{}{
+					"name": []interface{}{"Fuchi Cyber-N", "Fuchi Cyber-Ex"},
+				},
+			},
+		},
 	},
 	"custom_cyberdeck_sleaze": {
 		Name:     "[Custom Cyberdeck] Sleaze",
@@ -2508,7 +2646,13 @@ var DataGears = map[string]Gear{
 		Rating:   "{Parent Rating}",
 		Avail:    "0",
 		Cost:     "(Rating*Rating)*500",
-		Required: nil,
+		Required: &GearRequired{
+			GearDetails: map[string]interface{}{
+				"OR": map[string]interface{}{
+					"name": []interface{}{"Fuchi Cyber-N", "Fuchi Cyber-Ex"},
+				},
+			},
+		},
 	},
 	"custom_cyberdeck_data_processing": {
 		Name:     "[Custom Cyberdeck] Data Processing",
@@ -2518,7 +2662,13 @@ var DataGears = map[string]Gear{
 		Rating:   "{Parent Rating}",
 		Avail:    "0",
 		Cost:     "(Rating*Rating)*500",
-		Required: nil,
+		Required: &GearRequired{
+			GearDetails: map[string]interface{}{
+				"OR": map[string]interface{}{
+					"name": []interface{}{"Fuchi Cyber-N", "Fuchi Cyber-Ex"},
+				},
+			},
+		},
 	},
 	"custom_cyberdeck_firewall": {
 		Name:     "[Custom Cyberdeck] Firewall",
@@ -2528,7 +2678,13 @@ var DataGears = map[string]Gear{
 		Rating:   "{Parent Rating}",
 		Avail:    "(Rating*4)R",
 		Cost:     "(Rating*Rating*Rating)*500",
-		Required: nil,
+		Required: &GearRequired{
+			GearDetails: map[string]interface{}{
+				"OR": map[string]interface{}{
+					"name": "Fuchi Cyber-Ex",
+				},
+			},
+		},
 	},
 	"custom_cyberdeck_firewall_1": {
 		Name:     "[Custom Cyberdeck] Firewall",
@@ -2538,7 +2694,13 @@ var DataGears = map[string]Gear{
 		Rating:   "{Parent Rating}",
 		Avail:    "0",
 		Cost:     "(Rating*Rating*Rating)*500",
-		Required: nil,
+		Required: &GearRequired{
+			GearDetails: map[string]interface{}{
+				"OR": map[string]interface{}{
+					"name": "Fuchi Cyber-N",
+				},
+			},
+		},
 	},
 	"security_deck_guard": {
 		Name:     "Security Deck: Guard",
@@ -2622,14 +2784,18 @@ var DataGears = map[string]Gear{
 		Cost:     "225000",
 	},
 	"evo_sublime": {
-		Name:          "Evo Sublime",
-		Category:      "Cyberdecks",
-		Source:        "KC",
-		Page:          "62",
-		Rating:        "0",
-		Avail:         "12R",
-		Cost:          "375000",
-		Required:      nil,
+		Name:     "Evo Sublime",
+		Category: "Cyberdecks",
+		Source:   "KC",
+		Page:     "62",
+		Rating:   "0",
+		Avail:    "12R",
+		Cost:     "375000",
+		Required: &GearRequired{
+			Parent: &common.ParentDetails{
+				Name: "Cyberdeck",
+			},
+		},
 		RequireParent: &[]bool{true}[0],
 	},
 	"fairlight_destiny_blade": {
@@ -3338,7 +3504,9 @@ var DataGears = map[string]Gear{
 		Rating:   "0",
 		Avail:    "0",
 		Cost:     "Variable(0-50)",
-		Bonus:    nil,
+		Bonus: &GearBonus{
+			SelectText: &common.SelectTextBonus{},
+		},
 	},
 	"diagnostics": {
 		Name:     "Diagnostics",
@@ -3375,7 +3543,9 @@ var DataGears = map[string]Gear{
 		Rating:   "0",
 		Avail:    "0",
 		Cost:     "Variable(0-50)",
-		Bonus:    nil,
+		Bonus: &GearBonus{
+			SelectText: &common.SelectTextBonus{},
+		},
 	},
 	"browse": {
 		Name:     "Browse",
@@ -3844,7 +4014,11 @@ var DataGears = map[string]Gear{
 		Rating:   "6",
 		Avail:    "Rating * 2",
 		Cost:     "Rating * 5000",
-		Bonus:    nil,
+		Bonus: &GearBonus{
+			ActiveSoft: &common.SelectSkill{
+				Val: "Rating",
+			},
+		},
 	},
 	"knowsoft": {
 		Name:     "Knowsoft",
@@ -3854,7 +4028,11 @@ var DataGears = map[string]Gear{
 		Rating:   "6",
 		Avail:    "Rating",
 		Cost:     "Rating * 2000",
-		Bonus:    nil,
+		Bonus: &GearBonus{
+			SkillSoft: &common.SelectSkill{
+				Val: "Rating", ExcludeAttribute: "Language",
+			},
+		},
 	},
 	"linguasoft": {
 		Name:     "Linguasoft",
@@ -3864,7 +4042,11 @@ var DataGears = map[string]Gear{
 		Rating:   "6",
 		Avail:    "Rating",
 		Cost:     "Rating * 1000",
-		Bonus:    nil,
+		Bonus: &GearBonus{
+			SkillSoft: &common.SelectSkill{
+				Val: "Rating", SkillCategory: "Language",
+			},
+		},
 	},
 	"swarm": {
 		Name:     "Swarm",
@@ -3883,7 +4065,9 @@ var DataGears = map[string]Gear{
 		Rating:   "0",
 		Avail:    "4",
 		Cost:     "120",
-		Bonus:    nil,
+		Bonus: &GearBonus{
+			SelectText: &common.SelectTextBonus{},
+		},
 	},
 	"mapsoft": {
 		Name:     "Mapsoft",
@@ -3893,7 +4077,9 @@ var DataGears = map[string]Gear{
 		Rating:   "0",
 		Avail:    "4",
 		Cost:     "100",
-		Bonus:    nil,
+		Bonus: &GearBonus{
+			SelectText: &common.SelectTextBonus{},
+		},
 	},
 	"shopsoft": {
 		Name:     "Shopsoft",
@@ -3903,7 +4089,9 @@ var DataGears = map[string]Gear{
 		Rating:   "0",
 		Avail:    "4",
 		Cost:     "150",
-		Bonus:    nil,
+		Bonus: &GearBonus{
+			SelectText: &common.SelectTextBonus{},
+		},
 	},
 	"tutorsoft": {
 		Name:     "Tutorsoft",
@@ -3913,7 +4101,9 @@ var DataGears = map[string]Gear{
 		Rating:   "6",
 		Avail:    "Rating",
 		Cost:     "Rating * 400",
-		Bonus:    nil,
+		Bonus: &GearBonus{
+			SelectText: &common.SelectTextBonus{},
+		},
 	},
 	"subliminal_subacoustics_software": {
 		Name:     "Subliminal Subacoustics Software",
@@ -3950,7 +4140,11 @@ var DataGears = map[string]Gear{
 		Rating:   "6",
 		Avail:    "Rating * 2",
 		Cost:     "Rating * 500",
-		Bonus:    nil,
+		Bonus: &GearBonus{
+			SelectText: &common.SelectTextBonus{
+				XML: "vehicles.xml", XPath: "/chummer/vehicles/vehicle", AllowEdit: "True",
+			},
+		},
 	},
 	"model_maneuvering_autosoft": {
 		Name:     "[Model] Maneuvering Autosoft",
@@ -3960,7 +4154,11 @@ var DataGears = map[string]Gear{
 		Rating:   "6",
 		Avail:    "Rating * 2",
 		Cost:     "Rating * 500",
-		Bonus:    nil,
+		Bonus: &GearBonus{
+			SelectText: &common.SelectTextBonus{
+				XML: "vehicles.xml", XPath: "/chummer/vehicles/vehicle", AllowEdit: "True",
+			},
+		},
 	},
 	"model_stealth_autosoft": {
 		Name:     "[Model] Stealth Autosoft",
@@ -3970,7 +4168,11 @@ var DataGears = map[string]Gear{
 		Rating:   "6",
 		Avail:    "Rating * 2",
 		Cost:     "Rating * 500",
-		Bonus:    nil,
+		Bonus: &GearBonus{
+			SelectText: &common.SelectTextBonus{
+				XML: "vehicles.xml", XPath: "/chummer/vehicles/vehicle", AllowEdit: "True",
+			},
+		},
 	},
 	"weapon_targeting_autosoft": {
 		Name:     "[Weapon] Targeting Autosoft",
@@ -3980,7 +4182,11 @@ var DataGears = map[string]Gear{
 		Rating:   "6",
 		Avail:    "Rating * 2",
 		Cost:     "Rating * 500",
-		Bonus:    nil,
+		Bonus: &GearBonus{
+			SelectText: &common.SelectTextBonus{
+				XML: "weapons.xml", XPath: "/chummer/weapons/weapon[type = 'Ranged']", AllowEdit: "True",
+			},
+		},
 	},
 	"smartsoft": {
 		Name:     "Smartsoft",
@@ -4008,7 +4214,13 @@ var DataGears = map[string]Gear{
 		Rating:   "6",
 		Avail:    "Rating * 2",
 		Cost:     "Rating * 500",
-		Bonus:    nil,
+		Bonus: &GearBonus{
+			BaseBonus: common.BaseBonus{
+				SelectSkill: &common.SelectSkill{
+					LimitToAttribute: "First Aid,Hardware,Instruction,Aeronautics Mechanic,Automotive Mechanic,Industrial Mechanic,Nautical Mechanic,Navigation,Performance",
+				},
+			},
+		},
 	},
 	"skill_autosoft_knowledge": {
 		Name:     "Skill Autosoft (Knowledge)",
@@ -4018,7 +4230,13 @@ var DataGears = map[string]Gear{
 		Rating:   "6",
 		Avail:    "Rating * 2",
 		Cost:     "Rating * 500",
-		Bonus:    nil,
+		Bonus: &GearBonus{
+			BaseBonus: common.BaseBonus{
+				SelectSkill: &common.SelectSkill{
+					KnowledgeSkills: "True", SkillCategory: "Academic,Language,Professional",
+				},
+			},
+		},
 	},
 	"skill_autosoft_restricted": {
 		Name:     "Skill Autosoft (Restricted)",
@@ -4028,7 +4246,13 @@ var DataGears = map[string]Gear{
 		Rating:   "6",
 		Avail:    "(Rating * 2)R",
 		Cost:     "Rating * 500",
-		Bonus:    nil,
+		Bonus: &GearBonus{
+			BaseBonus: common.BaseBonus{
+				SelectSkill: &common.SelectSkill{
+					LimitToAttribute: "Chemistry,Demolitions,Electronic Warfare,Lockpicking,Medicine",
+				},
+			},
+		},
 	},
 	"weapon_melee_autosoft": {
 		Name:     "[Weapon] Melee Autosoft",
@@ -4038,7 +4262,11 @@ var DataGears = map[string]Gear{
 		Rating:   "6",
 		Avail:    "Rating * 2",
 		Cost:     "Rating * 500",
-		Bonus:    nil,
+		Bonus: &GearBonus{
+			SelectText: &common.SelectTextBonus{
+				XML: "weapons.xml", XPath: "/chummer/weapons/weapon[type = 'Melee']", AllowEdit: "True",
+			},
+		},
 	},
 	"attack_booster": {
 		Name:     "Attack Booster",
@@ -4120,7 +4348,9 @@ var DataGears = map[string]Gear{
 		Rating:   "0",
 		Avail:    "4",
 		Cost:     "100",
-		Bonus:    nil,
+		Bonus: &GearBonus{
+			SelectText: &common.SelectTextBonus{},
+		},
 	},
 	"linguistics": {
 		Name:     "Linguistics",
@@ -4130,7 +4360,9 @@ var DataGears = map[string]Gear{
 		Rating:   "0",
 		Avail:    "4",
 		Cost:     "50",
-		Bonus:    nil,
+		Bonus: &GearBonus{
+			SelectText: &common.SelectTextBonus{},
+		},
 	},
 	"pi_tac_level_i_renraku_taka": {
 		Name:     "PI-Tac Level I (Renraku Taka)",
@@ -4167,7 +4399,13 @@ var DataGears = map[string]Gear{
 		Rating:   "6",
 		Avail:    "8R",
 		Cost:     "Rating * 250",
-		Bonus:    nil,
+		Bonus: &GearBonus{
+			BaseBonus: common.BaseBonus{
+				LimitModifier: common.LimitModifier{
+					Limit: "Social", Value: "1", Condition: "LimitCondition_Intimidation",
+				},
+			},
+		},
 	},
 	"ar_gloves": {
 		Name:     "AR Gloves",
@@ -4323,7 +4561,9 @@ var DataGears = map[string]Gear{
 		Rating:   "0",
 		Avail:    "4",
 		Cost:     "250",
-		Bonus:    nil,
+		Bonus: &GearBonus{
+			SelectText: &common.SelectTextBonus{},
+		},
 	},
 	"smartsafety_bracelet": {
 		Name:     "SmartSafety Bracelet",
@@ -4362,7 +4602,9 @@ var DataGears = map[string]Gear{
 		Avail:         "0",
 		Cost:          "0",
 		AddonCategory: "Custom",
-		Bonus:         nil,
+		Bonus: &GearBonus{
+			SelectText: &common.SelectTextBonus{},
+		},
 	},
 	"global_grid": {
 		Name:          "Global Grid",
@@ -4373,7 +4615,9 @@ var DataGears = map[string]Gear{
 		Avail:         "0",
 		Cost:          "0",
 		AddonCategory: "Custom",
-		Bonus:         nil,
+		Bonus: &GearBonus{
+			SelectText: &common.SelectTextBonus{},
+		},
 	},
 	"standard_tags": {
 		Name:     "Standard Tags",
@@ -4692,8 +4936,16 @@ var DataGears = map[string]Gear{
 		Rating:   "6",
 		Avail:    "(Rating * 3)F",
 		Cost:     "Rating * 200",
-		Required: nil,
-		Bonus:    nil,
+		Required: &GearRequired{
+			GearDetails: map[string]interface{}{
+				"OR": map[string]interface{}{
+					"category": "Custom", "name": []interface{}{"Fake SIN", "Credstick, Fake (2050)", "Credstick, Standard (2050)"},
+				},
+			},
+		},
+		Bonus: &GearBonus{
+			SelectRestricted: nil,
+		},
 	},
 	"fake_sin": {
 		Name:          "Fake SIN",
@@ -4704,7 +4956,9 @@ var DataGears = map[string]Gear{
 		Avail:         "(Rating * 3)F",
 		Cost:          "Rating * 2500",
 		AddonCategory: []string{"ID/Credsticks", "Custom"},
-		Bonus:         nil,
+		Bonus: &GearBonus{
+			SelectText: &common.SelectTextBonus{},
+		},
 	},
 	"tool_kit": {
 		Name:     "Tool Kit",
@@ -4714,7 +4968,11 @@ var DataGears = map[string]Gear{
 		Rating:   "0",
 		Avail:    "0",
 		Cost:     "500",
-		Bonus:    nil,
+		Bonus: &GearBonus{
+			SelectText: &common.SelectTextBonus{
+				XML: "skills.xml", XPath: "/chummer/skills/skill/name | /chummer/knowledgeskills/skill/name", AllowEdit: "True",
+			},
+		},
 	},
 	"tool_shop": {
 		Name:     "Tool Shop",
@@ -4724,7 +4982,11 @@ var DataGears = map[string]Gear{
 		Rating:   "0",
 		Avail:    "8",
 		Cost:     "5000",
-		Bonus:    nil,
+		Bonus: &GearBonus{
+			SelectText: &common.SelectTextBonus{
+				XML: "skills.xml", XPath: "/chummer/skills/skill/name | /chummer/knowledgeskills/skill/name", AllowEdit: "True",
+			},
+		},
 	},
 	"tool_facility": {
 		Name:     "Tool Facility",
@@ -4734,7 +4996,11 @@ var DataGears = map[string]Gear{
 		Rating:   "0",
 		Avail:    "12",
 		Cost:     "50000",
-		Bonus:    nil,
+		Bonus: &GearBonus{
+			SelectText: &common.SelectTextBonus{
+				XML: "skills.xml", XPath: "/chummer/skills/skill/name | /chummer/knowledgeskills/skill/name", AllowEdit: "True",
+			},
+		},
 	},
 	"binoculars": {
 		Name:          "Binoculars",
@@ -4881,7 +5147,9 @@ var DataGears = map[string]Gear{
 		Avail:         "+4R",
 		Cost:          "2000",
 		RequireParent: &[]bool{true}[0],
-		Bonus:         nil,
+		Bonus: &GearBonus{
+			SmartLink: "1",
+		},
 	},
 	"thermographic_vision": {
 		Name:          "Thermographic Vision",
@@ -4902,7 +5170,13 @@ var DataGears = map[string]Gear{
 		Avail:         "+(Rating *2)",
 		Cost:          "Rating * 500",
 		RequireParent: &[]bool{true}[0],
-		Bonus:         nil,
+		Bonus: &GearBonus{
+			BaseBonus: common.BaseBonus{
+				LimitModifier: common.LimitModifier{
+					Limit: "Mental", Value: "Rating", Condition: "LimitCondition_SkillsActivePerceptionVisual",
+				},
+			},
+		},
 	},
 	"vision_magnification": {
 		Name:          "Vision Magnification",
@@ -4983,7 +5257,13 @@ var DataGears = map[string]Gear{
 		Avail:         "+(Rating *2)",
 		Cost:          "Rating * 500",
 		RequireParent: &[]bool{true}[0],
-		Bonus:         nil,
+		Bonus: &GearBonus{
+			BaseBonus: common.BaseBonus{
+				LimitModifier: common.LimitModifier{
+					Limit: "Mental", Value: "Rating", Condition: "LimitCondition_SkillsActivePerceptionHearing",
+				},
+			},
+		},
 	},
 	"select_sound_filter": {
 		Name:          "Select Sound Filter",
@@ -5004,7 +5284,13 @@ var DataGears = map[string]Gear{
 		Avail:         "+4",
 		Cost:          "1000",
 		RequireParent: &[]bool{true}[0],
-		Bonus:         nil,
+		Bonus: &GearBonus{
+			BaseBonus: common.BaseBonus{
+				LimitModifier: common.LimitModifier{
+					Limit: "Mental", Value: "2", Condition: "LimitCondition_SkillsActivePerceptionSpatialRecognizer",
+				},
+			},
+		},
 	},
 	"sound_link": {
 		Name:          "Sound Link",
@@ -5024,7 +5310,13 @@ var DataGears = map[string]Gear{
 		Rating:   "0",
 		Avail:    "+8R",
 		Cost:     "4000",
-		Required: nil,
+		Required: &GearRequired{
+			GearDetails: map[string]interface{}{
+				"OR": map[string]interface{}{
+					"category": []interface{}{"Sensors", "Custom"},
+				},
+			},
+		},
 	},
 	"x_ray": {
 		Name:     "X-Ray",
@@ -5034,7 +5326,13 @@ var DataGears = map[string]Gear{
 		Rating:   "0",
 		Avail:    "0",
 		Cost:     "0",
-		Required: nil,
+		Required: &GearRequired{
+			GearDetails: map[string]interface{}{
+				"OR": map[string]interface{}{
+					"category": []interface{}{"Sensors", "Custom"},
+				},
+			},
+		},
 	},
 	"handheld_housing": {
 		Name:          "Handheld Housing",
@@ -5086,7 +5384,13 @@ var DataGears = map[string]Gear{
 		Rating:   "0",
 		Avail:    "0",
 		Cost:     "0",
-		Required: nil,
+		Required: &GearRequired{
+			GearDetails: map[string]interface{}{
+				"OR": map[string]interface{}{
+					"category": []interface{}{"Sensors", "Custom"},
+				},
+			},
+		},
 	},
 	"camera_1": {
 		Name:     "Camera",
@@ -5096,7 +5400,13 @@ var DataGears = map[string]Gear{
 		Rating:   "{Parent Rating}",
 		Avail:    "0",
 		Cost:     "0",
-		Required: nil,
+		Required: &GearRequired{
+			GearDetails: map[string]interface{}{
+				"OR": map[string]interface{}{
+					"category": []interface{}{"Sensors", "Custom"},
+				},
+			},
+		},
 	},
 	"cyberware_scanner": {
 		Name:     "Cyberware Scanner",
@@ -5106,7 +5416,13 @@ var DataGears = map[string]Gear{
 		Rating:   "0",
 		Avail:    "0",
 		Cost:     "0",
-		Required: nil,
+		Required: &GearRequired{
+			GearDetails: map[string]interface{}{
+				"OR": map[string]interface{}{
+					"category": []interface{}{"Sensors", "Custom"},
+				},
+			},
+		},
 	},
 	"directional_microphone": {
 		Name:     "Directional Microphone",
@@ -5116,7 +5432,13 @@ var DataGears = map[string]Gear{
 		Rating:   "{Parent Rating}",
 		Avail:    "0",
 		Cost:     "0",
-		Required: nil,
+		Required: &GearRequired{
+			GearDetails: map[string]interface{}{
+				"OR": map[string]interface{}{
+					"category": []interface{}{"Sensors", "Custom"},
+				},
+			},
+		},
 	},
 	"geiger_counter": {
 		Name:     "Geiger Counter",
@@ -5126,7 +5448,13 @@ var DataGears = map[string]Gear{
 		Rating:   "0",
 		Avail:    "0",
 		Cost:     "0",
-		Required: nil,
+		Required: &GearRequired{
+			GearDetails: map[string]interface{}{
+				"OR": map[string]interface{}{
+					"category": []interface{}{"Sensors", "Custom"},
+				},
+			},
+		},
 	},
 	"laser_microphone": {
 		Name:     "Laser Microphone",
@@ -5136,7 +5464,13 @@ var DataGears = map[string]Gear{
 		Rating:   "{Parent Rating}",
 		Avail:    "0",
 		Cost:     "0",
-		Required: nil,
+		Required: &GearRequired{
+			GearDetails: map[string]interface{}{
+				"OR": map[string]interface{}{
+					"category": []interface{}{"Sensors", "Custom"},
+				},
+			},
+		},
 	},
 	"laser_range_finder": {
 		Name:     "Laser Range Finder",
@@ -5146,7 +5480,13 @@ var DataGears = map[string]Gear{
 		Rating:   "0",
 		Avail:    "0",
 		Cost:     "0",
-		Required: nil,
+		Required: &GearRequired{
+			GearDetails: map[string]interface{}{
+				"OR": map[string]interface{}{
+					"category": []interface{}{"Sensors", "Custom"},
+				},
+			},
+		},
 	},
 	"mad_scanner": {
 		Name:     "MAD Scanner",
@@ -5156,7 +5496,13 @@ var DataGears = map[string]Gear{
 		Rating:   "0",
 		Avail:    "0",
 		Cost:     "0",
-		Required: nil,
+		Required: &GearRequired{
+			GearDetails: map[string]interface{}{
+				"OR": map[string]interface{}{
+					"category": []interface{}{"Sensors", "Custom"},
+				},
+			},
+		},
 	},
 	"motion_sensor": {
 		Name:     "Motion Sensor",
@@ -5166,7 +5512,13 @@ var DataGears = map[string]Gear{
 		Rating:   "0",
 		Avail:    "0",
 		Cost:     "0",
-		Required: nil,
+		Required: &GearRequired{
+			GearDetails: map[string]interface{}{
+				"OR": map[string]interface{}{
+					"category": []interface{}{"Sensors", "Custom"},
+				},
+			},
+		},
 	},
 	"olfactory_scanner": {
 		Name:     "Olfactory Scanner",
@@ -5176,7 +5528,13 @@ var DataGears = map[string]Gear{
 		Rating:   "0",
 		Avail:    "0",
 		Cost:     "0",
-		Required: nil,
+		Required: &GearRequired{
+			GearDetails: map[string]interface{}{
+				"OR": map[string]interface{}{
+					"category": []interface{}{"Sensors", "Custom"},
+				},
+			},
+		},
 	},
 	"omni_directional_microphone": {
 		Name:     "Omni-directional Microphone",
@@ -5186,7 +5544,13 @@ var DataGears = map[string]Gear{
 		Rating:   "{Parent Rating}",
 		Avail:    "0",
 		Cost:     "0",
-		Required: nil,
+		Required: &GearRequired{
+			GearDetails: map[string]interface{}{
+				"OR": map[string]interface{}{
+					"category": []interface{}{"Sensors", "Custom"},
+				},
+			},
+		},
 	},
 	"radio_signal_scanner": {
 		Name:     "Radio Signal Scanner",
@@ -5196,7 +5560,13 @@ var DataGears = map[string]Gear{
 		Rating:   "0",
 		Avail:    "0",
 		Cost:     "0",
-		Required: nil,
+		Required: &GearRequired{
+			GearDetails: map[string]interface{}{
+				"OR": map[string]interface{}{
+					"category": []interface{}{"Sensors", "Custom"},
+				},
+			},
+		},
 	},
 	"ultrasound": {
 		Name:     "Ultrasound",
@@ -5206,7 +5576,13 @@ var DataGears = map[string]Gear{
 		Rating:   "0",
 		Avail:    "0",
 		Cost:     "0",
-		Required: nil,
+		Required: &GearRequired{
+			GearDetails: map[string]interface{}{
+				"OR": map[string]interface{}{
+					"category": []interface{}{"Sensors", "Custom"},
+				},
+			},
+		},
 	},
 	"vision_magnification_1": {
 		Name:     "Vision Magnification",
@@ -5216,7 +5592,13 @@ var DataGears = map[string]Gear{
 		Rating:   "0",
 		Avail:    "0",
 		Cost:     "0",
-		Required: nil,
+		Required: &GearRequired{
+			GearDetails: map[string]interface{}{
+				"OR": map[string]interface{}{
+					"category": []interface{}{"Sensors", "Custom"},
+				},
+			},
+		},
 	},
 	"nanoscanner": {
 		Name:     "Nanoscanner",
@@ -5226,7 +5608,13 @@ var DataGears = map[string]Gear{
 		Rating:   "0",
 		Avail:    "8",
 		Cost:     "0",
-		Required: nil,
+		Required: &GearRequired{
+			GearDetails: map[string]interface{}{
+				"OR": map[string]interface{}{
+					"category": []interface{}{"Sensors", "Custom"},
+				},
+			},
+		},
 	},
 	"radar_scanner": {
 		Name:     "Radar Scanner",
@@ -5236,7 +5624,13 @@ var DataGears = map[string]Gear{
 		Rating:   "0",
 		Avail:    "0",
 		Cost:     "0",
-		Required: nil,
+		Required: &GearRequired{
+			GearDetails: map[string]interface{}{
+				"OR": map[string]interface{}{
+					"category": []interface{}{"Sensors", "Custom"},
+				},
+			},
+		},
 	},
 	"chem_detect_nail_polish": {
 		Name:     "Chem Detect Nail Polish",
@@ -5273,7 +5667,13 @@ var DataGears = map[string]Gear{
 		Rating:   "0",
 		Avail:    "0",
 		Cost:     "100",
-		Required: nil,
+		Required: &GearRequired{
+			GearDetails: map[string]interface{}{
+				"OR": map[string]interface{}{
+					"name": "Contacts", "category": "Custom",
+				},
+			},
+		},
 	},
 	"smart_wig": {
 		Name:     "Smart Wig",
@@ -5528,7 +5928,13 @@ var DataGears = map[string]Gear{
 		Rating:   "6",
 		Avail:    "8R",
 		Cost:     "Rating * 500",
-		Bonus:    nil,
+		Bonus: &GearBonus{
+			BaseBonus: common.BaseBonus{
+				LimitModifier: common.LimitModifier{
+					Limit: "Physical", Value: "Rating", Condition: "LimitCondition_GearAutopicker",
+				},
+			},
+		},
 	},
 	"cellular_glove_molder": {
 		Name:     "Cellular Glove Molder",
@@ -5665,7 +6071,9 @@ var DataGears = map[string]Gear{
 		Rating:   "0",
 		Avail:    "8F",
 		Cost:     "300",
-		Bonus:    nil,
+		Bonus: &GearBonus{
+			SelectText: &common.SelectTextBonus{},
+		},
 	},
 	"quickdraw_quiver": {
 		Name:     "Quickdraw Quiver",
@@ -5711,7 +6119,13 @@ var DataGears = map[string]Gear{
 		Rating:   "6",
 		Avail:    "Rating * 2",
 		Cost:     "Rating * 150",
-		Bonus:    nil,
+		Bonus: &GearBonus{
+			BaseBonus: common.BaseBonus{
+				ToxinContactResist:    "Rating",
+				PathogenContactResist: "Rating",
+			},
+			Unique: "chemicalprotection",
+		},
 	},
 	"climbing_gear": {
 		Name:     "Climbing Gear",
@@ -5842,7 +6256,13 @@ var DataGears = map[string]Gear{
 		Rating:   "6",
 		Avail:    "0",
 		Cost:     "Rating * 50",
-		Bonus:    nil,
+		Bonus: &GearBonus{
+			BaseBonus: common.BaseBonus{
+				ToxinInhalationResist:    "Rating",
+				PathogenInhalationResist: "Rating",
+			},
+			Unique: "respirator",
+		},
 	},
 	"survival_kit": {
 		Name:      "Survival Kit",
@@ -6002,7 +6422,13 @@ var DataGears = map[string]Gear{
 		Rating:   "6",
 		Avail:    "3",
 		Cost:     "Rating * 75",
-		Bonus:    nil,
+		Bonus: &GearBonus{
+			BaseBonus: common.BaseBonus{
+				ToxinInhalationResist:    "Rating",
+				PathogenInhalationResist: "Rating",
+			},
+			Unique: "respirator",
+		},
 	},
 	"generator": {
 		Name:          "Generator",
@@ -6070,67 +6496,74 @@ var DataGears = map[string]Gear{
 		Cost:     "120",
 	},
 	"microwire_100m": {
-		Name:     "Microwire (100m)",
-		Category: "Grapple Gun",
-		Source:   "SR5",
-		Page:     "449",
-		Rating:   "0",
-		Avail:    "4",
-		Cost:     "50",
+		Name:              "Microwire (100m)",
+		Category:          "Grapple Gun",
+		Source:            "SR5",
+		Page:              "449",
+		Rating:            "0",
+		Avail:             "4",
+		Cost:              "50",
+		AmmoForWeaponType: "grapplegun",
 	},
 	"myomeric_rope_10m": {
-		Name:     "Myomeric Rope (10m)",
-		Category: "Grapple Gun",
-		Source:   "SR5",
-		Page:     "449",
-		Rating:   "0",
-		Avail:    "10",
-		Cost:     "200",
+		Name:              "Myomeric Rope (10m)",
+		Category:          "Grapple Gun",
+		Source:            "SR5",
+		Page:              "449",
+		Rating:            "0",
+		Avail:             "10",
+		Cost:              "200",
+		AmmoForWeaponType: "grapplegun",
 	},
 	"standard_rope_100m": {
-		Name:     "Standard Rope (100m)",
-		Category: "Grapple Gun",
-		Source:   "SR5",
-		Page:     "449",
-		Rating:   "0",
-		Avail:    "0",
-		Cost:     "50",
+		Name:              "Standard Rope (100m)",
+		Category:          "Grapple Gun",
+		Source:            "SR5",
+		Page:              "449",
+		Rating:            "0",
+		Avail:             "0",
+		Cost:              "50",
+		AmmoForWeaponType: "grapplegun",
 	},
 	"stealth_rope_100m": {
-		Name:     "Stealth Rope (100m)",
-		Category: "Grapple Gun",
-		Source:   "SR5",
-		Page:     "449",
-		Rating:   "0",
-		Avail:    "8F",
-		Cost:     "85",
+		Name:              "Stealth Rope (100m)",
+		Category:          "Grapple Gun",
+		Source:            "SR5",
+		Page:              "449",
+		Rating:            "0",
+		Avail:             "8F",
+		Cost:              "85",
+		AmmoForWeaponType: "grapplegun",
 	},
 	"reinforced_microwire_100m": {
-		Name:     "Reinforced Microwire (100m)",
-		Category: "Grapple Gun",
-		Source:   "TCT",
-		Page:     "185",
-		Rating:   "0",
-		Avail:    "8",
-		Cost:     "100",
+		Name:              "Reinforced Microwire (100m)",
+		Category:          "Grapple Gun",
+		Source:            "TCT",
+		Page:              "185",
+		Rating:            "0",
+		Avail:             "8",
+		Cost:              "100",
+		AmmoForWeaponType: "grapplegun",
 	},
 	"reinforced_standard_rope_100m": {
-		Name:     "Reinforced Standard Rope (100m)",
-		Category: "Grapple Gun",
-		Source:   "TCT",
-		Page:     "185",
-		Rating:   "0",
-		Avail:    "2",
-		Cost:     "100",
+		Name:              "Reinforced Standard Rope (100m)",
+		Category:          "Grapple Gun",
+		Source:            "TCT",
+		Page:              "185",
+		Rating:            "0",
+		Avail:             "2",
+		Cost:              "100",
+		AmmoForWeaponType: "grapplegun",
 	},
 	"reinforced_stealth_rope_100m": {
-		Name:     "Reinforced Stealth Rope (100m)",
-		Category: "Grapple Gun",
-		Source:   "TCT",
-		Page:     "185",
-		Rating:   "0",
-		Avail:    "12F",
-		Cost:     "170",
+		Name:              "Reinforced Stealth Rope (100m)",
+		Category:          "Grapple Gun",
+		Source:            "TCT",
+		Page:              "185",
+		Rating:            "0",
+		Avail:             "12F",
+		Cost:              "170",
+		AmmoForWeaponType: "grapplegun",
 	},
 	"tactical_grapple_gun": {
 		Name:      "Tactical Grapple Gun",
@@ -6213,7 +6646,13 @@ var DataGears = map[string]Gear{
 		Rating:   "6",
 		Avail:    "Rating",
 		Cost:     "Rating * 250",
-		Bonus:    nil,
+		Bonus: &GearBonus{
+			BaseBonus: common.BaseBonus{
+				LimitModifier: common.LimitModifier{
+					Limit: "Mental", Value: "Rating", Condition: "LimitCondition_SkillsActiveFirstAidMedicine",
+				},
+			},
+		},
 	},
 	"medkit_supplies": {
 		Name:     "Medkit Supplies",
@@ -6232,7 +6671,13 @@ var DataGears = map[string]Gear{
 		Rating:   "6",
 		Avail:    "Rating",
 		Cost:     "100 * Rating * Rating",
-		Bonus:    nil,
+		Bonus: &GearBonus{
+			BaseBonus: common.BaseBonus{
+				LimitModifier: common.LimitModifier{
+					Limit: "Mental", Value: "Rating", Condition: "LimitCondition_SkillsActiveFirstAidMedicine",
+				},
+			},
+		},
 	},
 	"slap_patch_antidote_patch": {
 		Name:     "Slap Patch, Antidote Patch",
@@ -6584,7 +7029,14 @@ var DataGears = map[string]Gear{
 		Rating:   "18",
 		Avail:    "(Rating * 3)R",
 		Cost:     "Rating * 5000",
-		Bonus:    nil,
+		Bonus: &GearBonus{
+			BaseBonus: common.BaseBonus{
+				SpecificSkill: common.SpecificSkillBonus{
+					Name: "Alchemy", Bonus: "Rating",
+				},
+			},
+			SelectTradition: nil,
+		},
 	},
 	"disenchanting_focus": {
 		Name:     "Disenchanting Focus",
@@ -6594,7 +7046,14 @@ var DataGears = map[string]Gear{
 		Rating:   "18",
 		Avail:    "(Rating * 3)R",
 		Cost:     "Rating * 5000",
-		Bonus:    nil,
+		Bonus: &GearBonus{
+			BaseBonus: common.BaseBonus{
+				SpecificSkill: common.SpecificSkillBonus{
+					Name: "Disenchanting", Bonus: "Rating",
+				},
+			},
+			SelectTradition: nil,
+		},
 	},
 	"centering_focus": {
 		Name:     "Centering Focus",
@@ -6604,7 +7063,9 @@ var DataGears = map[string]Gear{
 		Rating:   "18",
 		Avail:    "(Rating * 3)R",
 		Cost:     "Rating * 9000",
-		Bonus:    nil,
+		Bonus: &GearBonus{
+			SelectTradition: nil,
+		},
 	},
 	"flexible_signature_focus": {
 		Name:     "Flexible Signature Focus",
@@ -6614,7 +7075,9 @@ var DataGears = map[string]Gear{
 		Rating:   "18",
 		Avail:    "(Rating * 3)R",
 		Cost:     "Rating * 9000",
-		Bonus:    nil,
+		Bonus: &GearBonus{
+			SelectTradition: nil,
+		},
 	},
 	"masking_focus": {
 		Name:     "Masking Focus",
@@ -6624,7 +7087,9 @@ var DataGears = map[string]Gear{
 		Rating:   "18",
 		Avail:    "(Rating * 3)R",
 		Cost:     "Rating * 9000",
-		Bonus:    nil,
+		Bonus: &GearBonus{
+			SelectTradition: nil,
+		},
 	},
 	"spell_shaping_focus": {
 		Name:     "Spell Shaping Focus",
@@ -6634,7 +7099,9 @@ var DataGears = map[string]Gear{
 		Rating:   "18",
 		Avail:    "(Rating * 3)R",
 		Cost:     "Rating * 9000",
-		Bonus:    nil,
+		Bonus: &GearBonus{
+			SelectTradition: nil,
+		},
 	},
 	"power_focus": {
 		Name:     "Power Focus",
@@ -6644,7 +7111,14 @@ var DataGears = map[string]Gear{
 		Rating:   "18",
 		Avail:    "(Rating * 4)R",
 		Cost:     "Rating * 18000",
-		Bonus:    nil,
+		Bonus: &GearBonus{
+			BaseBonus: common.BaseBonus{
+				SkillAttribute: &common.SkillAttributeBonus{
+					Name: "MAG", Bonus: "Rating",
+				},
+			},
+			SelectTradition: nil,
+		},
 	},
 	"qi_focus": {
 		Name:     "Qi Focus",
@@ -6654,7 +7128,13 @@ var DataGears = map[string]Gear{
 		Rating:   "18",
 		Avail:    "(Rating * 3)R",
 		Cost:     "Rating * 3000",
-		Bonus:    nil,
+		Bonus: &GearBonus{
+			SelectPowers: map[string]interface{}{
+				"selectpower": map[string]interface{}{
+					"ignorerating": "True", "val": "Rating", "limit": "Rating", "pointsperlevel": "0.25",
+				},
+			},
+		},
 	},
 	"counterspelling_focus_combat": {
 		Name:     "Counterspelling Focus, Combat",
@@ -6664,7 +7144,9 @@ var DataGears = map[string]Gear{
 		Rating:   "18",
 		Avail:    "(Rating * 3)R",
 		Cost:     "Rating * 4000",
-		Bonus:    nil,
+		Bonus: &GearBonus{
+			SelectTradition: nil,
+		},
 	},
 	"ritual_spellcasting_focus_combat": {
 		Name:     "Ritual Spellcasting Focus, Combat",
@@ -6674,7 +7156,9 @@ var DataGears = map[string]Gear{
 		Rating:   "18",
 		Avail:    "(Rating * 3)R",
 		Cost:     "Rating * 4000",
-		Bonus:    nil,
+		Bonus: &GearBonus{
+			SelectTradition: nil,
+		},
 	},
 	"spellcasting_focus_combat": {
 		Name:     "Spellcasting Focus, Combat",
@@ -6684,7 +7168,12 @@ var DataGears = map[string]Gear{
 		Rating:   "18",
 		Avail:    "(Rating * 3)R",
 		Cost:     "Rating * 4000",
-		Bonus:    nil,
+		Bonus: &GearBonus{
+			SelectTradition: nil,
+			SpellCategory: &common.SelectSkill{
+				Val: "Rating",
+			},
+		},
 	},
 	"sustaining_focus_combat": {
 		Name:     "Sustaining Focus, Combat",
@@ -6694,7 +7183,9 @@ var DataGears = map[string]Gear{
 		Rating:   "18",
 		Avail:    "(Rating * 3)R",
 		Cost:     "Rating * 4000",
-		Bonus:    nil,
+		Bonus: &GearBonus{
+			SelectTradition: nil,
+		},
 	},
 	"counterspelling_focus_detection": {
 		Name:     "Counterspelling Focus, Detection",
@@ -6704,7 +7195,9 @@ var DataGears = map[string]Gear{
 		Rating:   "18",
 		Avail:    "(Rating * 3)R",
 		Cost:     "Rating * 4000",
-		Bonus:    nil,
+		Bonus: &GearBonus{
+			SelectTradition: nil,
+		},
 	},
 	"ritual_spellcasting_focus_detection": {
 		Name:     "Ritual Spellcasting Focus, Detection",
@@ -6714,7 +7207,9 @@ var DataGears = map[string]Gear{
 		Rating:   "18",
 		Avail:    "(Rating * 3)R",
 		Cost:     "Rating * 4000",
-		Bonus:    nil,
+		Bonus: &GearBonus{
+			SelectTradition: nil,
+		},
 	},
 	"spellcasting_focus_detection": {
 		Name:     "Spellcasting Focus, Detection",
@@ -6724,7 +7219,12 @@ var DataGears = map[string]Gear{
 		Rating:   "18",
 		Avail:    "(Rating * 3)R",
 		Cost:     "Rating * 4000",
-		Bonus:    nil,
+		Bonus: &GearBonus{
+			SelectTradition: nil,
+			SpellCategory: &common.SelectSkill{
+				Val: "Rating",
+			},
+		},
 	},
 	"sustaining_focus_detection": {
 		Name:     "Sustaining Focus, Detection",
@@ -6734,7 +7234,9 @@ var DataGears = map[string]Gear{
 		Rating:   "18",
 		Avail:    "(Rating * 3)R",
 		Cost:     "Rating * 4000",
-		Bonus:    nil,
+		Bonus: &GearBonus{
+			SelectTradition: nil,
+		},
 	},
 	"counterspelling_focus_health": {
 		Name:     "Counterspelling Focus, Health",
@@ -6744,7 +7246,9 @@ var DataGears = map[string]Gear{
 		Rating:   "18",
 		Avail:    "(Rating * 3)R",
 		Cost:     "Rating * 4000",
-		Bonus:    nil,
+		Bonus: &GearBonus{
+			SelectTradition: nil,
+		},
 	},
 	"ritual_spellcasting_focus_health": {
 		Name:     "Ritual Spellcasting Focus, Health",
@@ -6754,7 +7258,9 @@ var DataGears = map[string]Gear{
 		Rating:   "18",
 		Avail:    "(Rating * 3)R",
 		Cost:     "Rating * 4000",
-		Bonus:    nil,
+		Bonus: &GearBonus{
+			SelectTradition: nil,
+		},
 	},
 	"spellcasting_focus_health": {
 		Name:     "Spellcasting Focus, Health",
@@ -6764,7 +7270,12 @@ var DataGears = map[string]Gear{
 		Rating:   "18",
 		Avail:    "(Rating * 3)R",
 		Cost:     "Rating * 4000",
-		Bonus:    nil,
+		Bonus: &GearBonus{
+			SelectTradition: nil,
+			SpellCategory: &common.SelectSkill{
+				Val: "Rating",
+			},
+		},
 	},
 	"sustaining_focus_health": {
 		Name:     "Sustaining Focus, Health",
@@ -6774,7 +7285,9 @@ var DataGears = map[string]Gear{
 		Rating:   "18",
 		Avail:    "(Rating * 3)R",
 		Cost:     "Rating * 4000",
-		Bonus:    nil,
+		Bonus: &GearBonus{
+			SelectTradition: nil,
+		},
 	},
 	"counterspelling_focus_illusion": {
 		Name:     "Counterspelling Focus, Illusion",
@@ -6784,7 +7297,9 @@ var DataGears = map[string]Gear{
 		Rating:   "18",
 		Avail:    "(Rating * 3)R",
 		Cost:     "Rating * 4000",
-		Bonus:    nil,
+		Bonus: &GearBonus{
+			SelectTradition: nil,
+		},
 	},
 	"ritual_spellcasting_focus_illusion": {
 		Name:     "Ritual Spellcasting Focus, Illusion",
@@ -6794,7 +7309,9 @@ var DataGears = map[string]Gear{
 		Rating:   "18",
 		Avail:    "(Rating * 3)R",
 		Cost:     "Rating * 4000",
-		Bonus:    nil,
+		Bonus: &GearBonus{
+			SelectTradition: nil,
+		},
 	},
 	"spellcasting_focus_illusion": {
 		Name:     "Spellcasting Focus, Illusion",
@@ -6804,7 +7321,12 @@ var DataGears = map[string]Gear{
 		Rating:   "18",
 		Avail:    "(Rating * 3)R",
 		Cost:     "Rating * 4000",
-		Bonus:    nil,
+		Bonus: &GearBonus{
+			SelectTradition: nil,
+			SpellCategory: &common.SelectSkill{
+				Val: "Rating",
+			},
+		},
 	},
 	"sustaining_focus_illusion": {
 		Name:     "Sustaining Focus, Illusion",
@@ -6814,7 +7336,9 @@ var DataGears = map[string]Gear{
 		Rating:   "18",
 		Avail:    "(Rating * 3)R",
 		Cost:     "Rating * 4000",
-		Bonus:    nil,
+		Bonus: &GearBonus{
+			SelectTradition: nil,
+		},
 	},
 	"counterspelling_focus_manipulation": {
 		Name:     "Counterspelling Focus, Manipulation",
@@ -6824,7 +7348,9 @@ var DataGears = map[string]Gear{
 		Rating:   "18",
 		Avail:    "(Rating * 3)R",
 		Cost:     "Rating * 4000",
-		Bonus:    nil,
+		Bonus: &GearBonus{
+			SelectTradition: nil,
+		},
 	},
 	"ritual_spellcasting_focus_manipulation": {
 		Name:     "Ritual Spellcasting Focus, Manipulation",
@@ -6834,7 +7360,9 @@ var DataGears = map[string]Gear{
 		Rating:   "18",
 		Avail:    "(Rating * 3)R",
 		Cost:     "Rating * 4000",
-		Bonus:    nil,
+		Bonus: &GearBonus{
+			SelectTradition: nil,
+		},
 	},
 	"spellcasting_focus_manipulation": {
 		Name:     "Spellcasting Focus, Manipulation",
@@ -6844,7 +7372,12 @@ var DataGears = map[string]Gear{
 		Rating:   "18",
 		Avail:    "(Rating * 3)R",
 		Cost:     "Rating * 4000",
-		Bonus:    nil,
+		Bonus: &GearBonus{
+			SelectTradition: nil,
+			SpellCategory: &common.SelectSkill{
+				Val: "Rating",
+			},
+		},
 	},
 	"sustaining_focus_manipulation": {
 		Name:     "Sustaining Focus, Manipulation",
@@ -6854,7 +7387,9 @@ var DataGears = map[string]Gear{
 		Rating:   "18",
 		Avail:    "(Rating * 3)R",
 		Cost:     "Rating * 4000",
-		Bonus:    nil,
+		Bonus: &GearBonus{
+			SelectTradition: nil,
+		},
 	},
 	"summoning_focus": {
 		Name:     "Summoning Focus",
@@ -6864,7 +7399,11 @@ var DataGears = map[string]Gear{
 		Rating:   "18",
 		Avail:    "(Rating * 3)R",
 		Cost:     "Rating * 4000",
-		Bonus:    nil,
+		Bonus: &GearBonus{
+			SelectText: &common.SelectTextBonus{
+				XML: "strings.xml", XPath: "/chummer/spiritcategories/category",
+			},
+		},
 	},
 	"banishing_focus": {
 		Name:     "Banishing Focus",
@@ -6874,7 +7413,11 @@ var DataGears = map[string]Gear{
 		Rating:   "18",
 		Avail:    "(Rating * 3)R",
 		Cost:     "Rating * 4000",
-		Bonus:    nil,
+		Bonus: &GearBonus{
+			SelectText: &common.SelectTextBonus{
+				XML: "strings.xml", XPath: "/chummer/spiritcategories/category",
+			},
+		},
 	},
 	"binding_focus": {
 		Name:     "Binding Focus",
@@ -6884,7 +7427,11 @@ var DataGears = map[string]Gear{
 		Rating:   "18",
 		Avail:    "(Rating * 3)R",
 		Cost:     "Rating * 4000",
-		Bonus:    nil,
+		Bonus: &GearBonus{
+			SelectText: &common.SelectTextBonus{
+				XML: "strings.xml", XPath: "/chummer/spiritcategories/category",
+			},
+		},
 	},
 	"weapon_focus": {
 		Name:     "Weapon Focus",
@@ -6894,7 +7441,11 @@ var DataGears = map[string]Gear{
 		Rating:   "18",
 		Avail:    "(Rating * 4)R",
 		Cost:     "Rating * 7000",
-		Bonus:    nil,
+		Bonus: &GearBonus{
+			WeaponSpecificDice: map[string]interface{}{
+				"+content": "Rating", "+@type": "Melee",
+			},
+		},
 	},
 	"alchemical_focus_individualized_partial": {
 		Name:     "Alchemical Focus, Individualized, Partial",
@@ -6904,8 +7455,19 @@ var DataGears = map[string]Gear{
 		Rating:   "18",
 		Avail:    "(Rating * 3)R",
 		Cost:     "Rating * 5000",
-		Required: nil,
-		Bonus:    nil,
+		Required: &GearRequired{
+			OneOf: &common.RequirementOneOf{
+				Quality: "Mentor Spirit",
+			},
+		},
+		Bonus: &GearBonus{
+			BaseBonus: common.BaseBonus{
+				SpecificSkill: common.SpecificSkillBonus{
+					Name: "Alchemy", Bonus: "Rating",
+				},
+			},
+			SelectTradition: nil,
+		},
 	},
 	"disenchanting_focus_individualized_partial": {
 		Name:     "Disenchanting Focus, Individualized, Partial",
@@ -6915,8 +7477,19 @@ var DataGears = map[string]Gear{
 		Rating:   "18",
 		Avail:    "(Rating * 3)R",
 		Cost:     "Rating * 5000",
-		Required: nil,
-		Bonus:    nil,
+		Required: &GearRequired{
+			OneOf: &common.RequirementOneOf{
+				Quality: "Mentor Spirit",
+			},
+		},
+		Bonus: &GearBonus{
+			BaseBonus: common.BaseBonus{
+				SpecificSkill: common.SpecificSkillBonus{
+					Name: "Disenchanting", Bonus: "Rating",
+				},
+			},
+			SelectTradition: nil,
+		},
 	},
 	"centering_focus_individualized_partial": {
 		Name:     "Centering Focus, Individualized, Partial",
@@ -6926,8 +7499,14 @@ var DataGears = map[string]Gear{
 		Rating:   "18",
 		Avail:    "(Rating * 3)R",
 		Cost:     "Rating * 9000",
-		Required: nil,
-		Bonus:    nil,
+		Required: &GearRequired{
+			OneOf: &common.RequirementOneOf{
+				Quality: "Mentor Spirit",
+			},
+		},
+		Bonus: &GearBonus{
+			SelectTradition: nil,
+		},
 	},
 	"flexible_signature_focus_individualized_partial": {
 		Name:     "Flexible Signature Focus, Individualized, Partial",
@@ -6937,8 +7516,14 @@ var DataGears = map[string]Gear{
 		Rating:   "18",
 		Avail:    "(Rating * 3)R",
 		Cost:     "Rating * 9000",
-		Required: nil,
-		Bonus:    nil,
+		Required: &GearRequired{
+			OneOf: &common.RequirementOneOf{
+				Quality: "Mentor Spirit",
+			},
+		},
+		Bonus: &GearBonus{
+			SelectTradition: nil,
+		},
 	},
 	"masking_focus_individualized_partial": {
 		Name:     "Masking Focus, Individualized, Partial",
@@ -6948,8 +7533,14 @@ var DataGears = map[string]Gear{
 		Rating:   "18",
 		Avail:    "(Rating * 3)R",
 		Cost:     "Rating * 9000",
-		Required: nil,
-		Bonus:    nil,
+		Required: &GearRequired{
+			OneOf: &common.RequirementOneOf{
+				Quality: "Mentor Spirit",
+			},
+		},
+		Bonus: &GearBonus{
+			SelectTradition: nil,
+		},
 	},
 	"spell_shaping_focus_individualized_partial": {
 		Name:     "Spell Shaping Focus, Individualized, Partial",
@@ -6959,8 +7550,14 @@ var DataGears = map[string]Gear{
 		Rating:   "18",
 		Avail:    "(Rating * 3)R",
 		Cost:     "Rating * 9000",
-		Required: nil,
-		Bonus:    nil,
+		Required: &GearRequired{
+			OneOf: &common.RequirementOneOf{
+				Quality: "Mentor Spirit",
+			},
+		},
+		Bonus: &GearBonus{
+			SelectTradition: nil,
+		},
 	},
 	"power_focus_individualized_partial": {
 		Name:     "Power Focus, Individualized, Partial",
@@ -6970,8 +7567,19 @@ var DataGears = map[string]Gear{
 		Rating:   "18",
 		Avail:    "(Rating * 4)R",
 		Cost:     "Rating * 18000",
-		Required: nil,
-		Bonus:    nil,
+		Required: &GearRequired{
+			OneOf: &common.RequirementOneOf{
+				Quality: "Mentor Spirit",
+			},
+		},
+		Bonus: &GearBonus{
+			BaseBonus: common.BaseBonus{
+				SkillAttribute: &common.SkillAttributeBonus{
+					Name: "MAG", Bonus: "Rating",
+				},
+			},
+			SelectTradition: nil,
+		},
 	},
 	"qi_focus_individualized_partial": {
 		Name:     "Qi Focus, Individualized, Partial",
@@ -6981,8 +7589,18 @@ var DataGears = map[string]Gear{
 		Rating:   "18",
 		Avail:    "(Rating * 3)R",
 		Cost:     "Rating * 3000",
-		Required: nil,
-		Bonus:    nil,
+		Required: &GearRequired{
+			OneOf: &common.RequirementOneOf{
+				Quality: "Mentor Spirit",
+			},
+		},
+		Bonus: &GearBonus{
+			SelectPowers: map[string]interface{}{
+				"selectpower": map[string]interface{}{
+					"ignorerating": "True", "val": "Rating", "limit": "Rating", "pointsperlevel": "0.25",
+				},
+			},
+		},
 	},
 	"counterspelling_focus_combat_individualized_partial": {
 		Name:     "Counterspelling Focus, Combat, Individualized, Partial",
@@ -6992,8 +7610,14 @@ var DataGears = map[string]Gear{
 		Rating:   "18",
 		Avail:    "(Rating * 3)R",
 		Cost:     "Rating * 4000",
-		Required: nil,
-		Bonus:    nil,
+		Required: &GearRequired{
+			OneOf: &common.RequirementOneOf{
+				Quality: "Mentor Spirit",
+			},
+		},
+		Bonus: &GearBonus{
+			SelectTradition: nil,
+		},
 	},
 	"ritual_spellcasting_focus_combat_individualized_partial": {
 		Name:     "Ritual Spellcasting Focus, Combat, Individualized, Partial",
@@ -7003,8 +7627,14 @@ var DataGears = map[string]Gear{
 		Rating:   "18",
 		Avail:    "(Rating * 3)R",
 		Cost:     "Rating * 4000",
-		Required: nil,
-		Bonus:    nil,
+		Required: &GearRequired{
+			OneOf: &common.RequirementOneOf{
+				Quality: "Mentor Spirit",
+			},
+		},
+		Bonus: &GearBonus{
+			SelectTradition: nil,
+		},
 	},
 	"spellcasting_focus_combat_individualized_partial": {
 		Name:     "Spellcasting Focus, Combat, Individualized, Partial",
@@ -7014,8 +7644,17 @@ var DataGears = map[string]Gear{
 		Rating:   "18",
 		Avail:    "(Rating * 3)R",
 		Cost:     "Rating * 4000",
-		Required: nil,
-		Bonus:    nil,
+		Required: &GearRequired{
+			OneOf: &common.RequirementOneOf{
+				Quality: "Mentor Spirit",
+			},
+		},
+		Bonus: &GearBonus{
+			SelectTradition: nil,
+			SpellCategory: &common.SelectSkill{
+				Val: "Rating",
+			},
+		},
 	},
 	"sustaining_focus_combat_individualized_partial": {
 		Name:     "Sustaining Focus, Combat, Individualized, Partial",
@@ -7025,8 +7664,14 @@ var DataGears = map[string]Gear{
 		Rating:   "18",
 		Avail:    "(Rating * 3)R",
 		Cost:     "Rating * 4000",
-		Required: nil,
-		Bonus:    nil,
+		Required: &GearRequired{
+			OneOf: &common.RequirementOneOf{
+				Quality: "Mentor Spirit",
+			},
+		},
+		Bonus: &GearBonus{
+			SelectTradition: nil,
+		},
 	},
 	"counterspelling_focus_detection_individualized_partial": {
 		Name:     "Counterspelling Focus, Detection, Individualized, Partial",
@@ -7036,8 +7681,14 @@ var DataGears = map[string]Gear{
 		Rating:   "18",
 		Avail:    "(Rating * 3)R",
 		Cost:     "Rating * 4000",
-		Required: nil,
-		Bonus:    nil,
+		Required: &GearRequired{
+			OneOf: &common.RequirementOneOf{
+				Quality: "Mentor Spirit",
+			},
+		},
+		Bonus: &GearBonus{
+			SelectTradition: nil,
+		},
 	},
 	"ritual_spellcasting_focus_detection_individualized_partial": {
 		Name:     "Ritual Spellcasting Focus, Detection, Individualized, Partial",
@@ -7047,8 +7698,14 @@ var DataGears = map[string]Gear{
 		Rating:   "18",
 		Avail:    "(Rating * 3)R",
 		Cost:     "Rating * 4000",
-		Required: nil,
-		Bonus:    nil,
+		Required: &GearRequired{
+			OneOf: &common.RequirementOneOf{
+				Quality: "Mentor Spirit",
+			},
+		},
+		Bonus: &GearBonus{
+			SelectTradition: nil,
+		},
 	},
 	"spellcasting_focus_detection_individualized_partial": {
 		Name:     "Spellcasting Focus, Detection, Individualized, Partial",
@@ -7058,8 +7715,17 @@ var DataGears = map[string]Gear{
 		Rating:   "18",
 		Avail:    "(Rating * 3)R",
 		Cost:     "Rating * 4000",
-		Required: nil,
-		Bonus:    nil,
+		Required: &GearRequired{
+			OneOf: &common.RequirementOneOf{
+				Quality: "Mentor Spirit",
+			},
+		},
+		Bonus: &GearBonus{
+			SelectTradition: nil,
+			SpellCategory: &common.SelectSkill{
+				Val: "Rating",
+			},
+		},
 	},
 	"sustaining_focus_detection_individualized_partial": {
 		Name:     "Sustaining Focus, Detection, Individualized, Partial",
@@ -7069,8 +7735,14 @@ var DataGears = map[string]Gear{
 		Rating:   "18",
 		Avail:    "(Rating * 3)R",
 		Cost:     "Rating * 4000",
-		Required: nil,
-		Bonus:    nil,
+		Required: &GearRequired{
+			OneOf: &common.RequirementOneOf{
+				Quality: "Mentor Spirit",
+			},
+		},
+		Bonus: &GearBonus{
+			SelectTradition: nil,
+		},
 	},
 	"counterspelling_focus_health_individualized_partial": {
 		Name:     "Counterspelling Focus, Health, Individualized, Partial",
@@ -7080,8 +7752,14 @@ var DataGears = map[string]Gear{
 		Rating:   "18",
 		Avail:    "(Rating * 3)R",
 		Cost:     "Rating * 4000",
-		Required: nil,
-		Bonus:    nil,
+		Required: &GearRequired{
+			OneOf: &common.RequirementOneOf{
+				Quality: "Mentor Spirit",
+			},
+		},
+		Bonus: &GearBonus{
+			SelectTradition: nil,
+		},
 	},
 	"ritual_spellcasting_focus_health_individualized_partial": {
 		Name:     "Ritual Spellcasting Focus, Health, Individualized, Partial",
@@ -7091,8 +7769,14 @@ var DataGears = map[string]Gear{
 		Rating:   "18",
 		Avail:    "(Rating * 3)R",
 		Cost:     "Rating * 4000",
-		Required: nil,
-		Bonus:    nil,
+		Required: &GearRequired{
+			OneOf: &common.RequirementOneOf{
+				Quality: "Mentor Spirit",
+			},
+		},
+		Bonus: &GearBonus{
+			SelectTradition: nil,
+		},
 	},
 	"spellcasting_focus_health_individualized_partial": {
 		Name:     "Spellcasting Focus, Health, Individualized, Partial",
@@ -7102,8 +7786,17 @@ var DataGears = map[string]Gear{
 		Rating:   "18",
 		Avail:    "(Rating * 3)R",
 		Cost:     "Rating * 4000",
-		Required: nil,
-		Bonus:    nil,
+		Required: &GearRequired{
+			OneOf: &common.RequirementOneOf{
+				Quality: "Mentor Spirit",
+			},
+		},
+		Bonus: &GearBonus{
+			SelectTradition: nil,
+			SpellCategory: &common.SelectSkill{
+				Val: "Rating",
+			},
+		},
 	},
 	"sustaining_focus_health_individualized_partial": {
 		Name:     "Sustaining Focus, Health, Individualized, Partial",
@@ -7113,8 +7806,14 @@ var DataGears = map[string]Gear{
 		Rating:   "18",
 		Avail:    "(Rating * 3)R",
 		Cost:     "Rating * 4000",
-		Required: nil,
-		Bonus:    nil,
+		Required: &GearRequired{
+			OneOf: &common.RequirementOneOf{
+				Quality: "Mentor Spirit",
+			},
+		},
+		Bonus: &GearBonus{
+			SelectTradition: nil,
+		},
 	},
 	"counterspelling_focus_illusion_individualized_partial": {
 		Name:     "Counterspelling Focus, Illusion, Individualized, Partial",
@@ -7124,8 +7823,14 @@ var DataGears = map[string]Gear{
 		Rating:   "18",
 		Avail:    "(Rating * 3)R",
 		Cost:     "Rating * 4000",
-		Required: nil,
-		Bonus:    nil,
+		Required: &GearRequired{
+			OneOf: &common.RequirementOneOf{
+				Quality: "Mentor Spirit",
+			},
+		},
+		Bonus: &GearBonus{
+			SelectTradition: nil,
+		},
 	},
 	"ritual_spellcasting_focus_illusion_individualized_partial": {
 		Name:     "Ritual Spellcasting Focus, Illusion, Individualized, Partial",
@@ -7135,8 +7840,14 @@ var DataGears = map[string]Gear{
 		Rating:   "18",
 		Avail:    "(Rating * 3)R",
 		Cost:     "Rating * 4000",
-		Required: nil,
-		Bonus:    nil,
+		Required: &GearRequired{
+			OneOf: &common.RequirementOneOf{
+				Quality: "Mentor Spirit",
+			},
+		},
+		Bonus: &GearBonus{
+			SelectTradition: nil,
+		},
 	},
 	"spellcasting_focus_illusion_individualized_partial": {
 		Name:     "Spellcasting Focus, Illusion, Individualized, Partial",
@@ -7146,8 +7857,17 @@ var DataGears = map[string]Gear{
 		Rating:   "18",
 		Avail:    "(Rating * 3)R",
 		Cost:     "Rating * 4000",
-		Required: nil,
-		Bonus:    nil,
+		Required: &GearRequired{
+			OneOf: &common.RequirementOneOf{
+				Quality: "Mentor Spirit",
+			},
+		},
+		Bonus: &GearBonus{
+			SelectTradition: nil,
+			SpellCategory: &common.SelectSkill{
+				Val: "Rating",
+			},
+		},
 	},
 	"sustaining_focus_illusion_individualized_partial": {
 		Name:     "Sustaining Focus, Illusion, Individualized, Partial",
@@ -7157,8 +7877,14 @@ var DataGears = map[string]Gear{
 		Rating:   "18",
 		Avail:    "(Rating * 3)R",
 		Cost:     "Rating * 4000",
-		Required: nil,
-		Bonus:    nil,
+		Required: &GearRequired{
+			OneOf: &common.RequirementOneOf{
+				Quality: "Mentor Spirit",
+			},
+		},
+		Bonus: &GearBonus{
+			SelectTradition: nil,
+		},
 	},
 	"counterspelling_focus_manipulation_individualized_partial": {
 		Name:     "Counterspelling Focus, Manipulation, Individualized, Partial",
@@ -7168,8 +7894,14 @@ var DataGears = map[string]Gear{
 		Rating:   "18",
 		Avail:    "(Rating * 3)R",
 		Cost:     "Rating * 4000",
-		Required: nil,
-		Bonus:    nil,
+		Required: &GearRequired{
+			OneOf: &common.RequirementOneOf{
+				Quality: "Mentor Spirit",
+			},
+		},
+		Bonus: &GearBonus{
+			SelectTradition: nil,
+		},
 	},
 	"ritual_spellcasting_focus_manipulation_individualized_partial": {
 		Name:     "Ritual Spellcasting Focus, Manipulation, Individualized, Partial",
@@ -7179,8 +7911,14 @@ var DataGears = map[string]Gear{
 		Rating:   "18",
 		Avail:    "(Rating * 3)R",
 		Cost:     "Rating * 4000",
-		Required: nil,
-		Bonus:    nil,
+		Required: &GearRequired{
+			OneOf: &common.RequirementOneOf{
+				Quality: "Mentor Spirit",
+			},
+		},
+		Bonus: &GearBonus{
+			SelectTradition: nil,
+		},
 	},
 	"spellcasting_focus_manipulation_individualized_partial": {
 		Name:     "Spellcasting Focus, Manipulation, Individualized, Partial",
@@ -7190,8 +7928,17 @@ var DataGears = map[string]Gear{
 		Rating:   "18",
 		Avail:    "(Rating * 3)R",
 		Cost:     "Rating * 4000",
-		Required: nil,
-		Bonus:    nil,
+		Required: &GearRequired{
+			OneOf: &common.RequirementOneOf{
+				Quality: "Mentor Spirit",
+			},
+		},
+		Bonus: &GearBonus{
+			SelectTradition: nil,
+			SpellCategory: &common.SelectSkill{
+				Val: "Rating",
+			},
+		},
 	},
 	"sustaining_focus_manipulation_individualized_partial": {
 		Name:     "Sustaining Focus, Manipulation, Individualized, Partial",
@@ -7201,8 +7948,14 @@ var DataGears = map[string]Gear{
 		Rating:   "18",
 		Avail:    "(Rating * 3)R",
 		Cost:     "Rating * 4000",
-		Required: nil,
-		Bonus:    nil,
+		Required: &GearRequired{
+			OneOf: &common.RequirementOneOf{
+				Quality: "Mentor Spirit",
+			},
+		},
+		Bonus: &GearBonus{
+			SelectTradition: nil,
+		},
 	},
 	"summoning_focus_individualized_partial": {
 		Name:     "Summoning Focus, Individualized, Partial",
@@ -7212,8 +7965,16 @@ var DataGears = map[string]Gear{
 		Rating:   "18",
 		Avail:    "(Rating * 3)R",
 		Cost:     "Rating * 4000",
-		Required: nil,
-		Bonus:    nil,
+		Required: &GearRequired{
+			OneOf: &common.RequirementOneOf{
+				Quality: "Mentor Spirit",
+			},
+		},
+		Bonus: &GearBonus{
+			SelectText: &common.SelectTextBonus{
+				XML: "strings.xml", XPath: "/chummer/spiritcategories/category",
+			},
+		},
 	},
 	"banishing_focus_individualized_partial": {
 		Name:     "Banishing Focus, Individualized, Partial",
@@ -7223,8 +7984,16 @@ var DataGears = map[string]Gear{
 		Rating:   "18",
 		Avail:    "(Rating * 3)R",
 		Cost:     "Rating * 4000",
-		Required: nil,
-		Bonus:    nil,
+		Required: &GearRequired{
+			OneOf: &common.RequirementOneOf{
+				Quality: "Mentor Spirit",
+			},
+		},
+		Bonus: &GearBonus{
+			SelectText: &common.SelectTextBonus{
+				XML: "strings.xml", XPath: "/chummer/spiritcategories/category",
+			},
+		},
 	},
 	"binding_focus_individualized_partial": {
 		Name:     "Binding Focus, Individualized, Partial",
@@ -7234,8 +8003,16 @@ var DataGears = map[string]Gear{
 		Rating:   "18",
 		Avail:    "(Rating * 3)R",
 		Cost:     "Rating * 4000",
-		Required: nil,
-		Bonus:    nil,
+		Required: &GearRequired{
+			OneOf: &common.RequirementOneOf{
+				Quality: "Mentor Spirit",
+			},
+		},
+		Bonus: &GearBonus{
+			SelectText: &common.SelectTextBonus{
+				XML: "strings.xml", XPath: "/chummer/spiritcategories/category",
+			},
+		},
 	},
 	"weapon_focus_individualized_partial": {
 		Name:     "Weapon Focus, Individualized, Partial",
@@ -7245,8 +8022,16 @@ var DataGears = map[string]Gear{
 		Rating:   "18",
 		Avail:    "(Rating * 4)R",
 		Cost:     "Rating * 7000",
-		Required: nil,
-		Bonus:    nil,
+		Required: &GearRequired{
+			OneOf: &common.RequirementOneOf{
+				Quality: "Mentor Spirit",
+			},
+		},
+		Bonus: &GearBonus{
+			WeaponSpecificDice: map[string]interface{}{
+				"+content": "Rating", "+@type": "Melee",
+			},
+		},
 	},
 	"alchemical_focus_individualized_complete": {
 		Name:     "Alchemical Focus, Individualized, Complete",
@@ -7256,8 +8041,19 @@ var DataGears = map[string]Gear{
 		Rating:   "18",
 		Avail:    "(Rating * 3)R",
 		Cost:     "Rating * 5000",
-		Required: nil,
-		Bonus:    nil,
+		Required: &GearRequired{
+			OneOf: &common.RequirementOneOf{
+				Quality: "Mentor Spirit",
+			},
+		},
+		Bonus: &GearBonus{
+			BaseBonus: common.BaseBonus{
+				SpecificSkill: common.SpecificSkillBonus{
+					Name: "Alchemy", Bonus: "Rating",
+				},
+			},
+			SelectTradition: nil,
+		},
 	},
 	"disenchanting_focus_individualized_complete": {
 		Name:     "Disenchanting Focus, Individualized, Complete",
@@ -7267,8 +8063,19 @@ var DataGears = map[string]Gear{
 		Rating:   "18",
 		Avail:    "(Rating * 3)R",
 		Cost:     "Rating * 5000",
-		Required: nil,
-		Bonus:    nil,
+		Required: &GearRequired{
+			OneOf: &common.RequirementOneOf{
+				Quality: "Mentor Spirit",
+			},
+		},
+		Bonus: &GearBonus{
+			BaseBonus: common.BaseBonus{
+				SpecificSkill: common.SpecificSkillBonus{
+					Name: "Disenchanting", Bonus: "Rating",
+				},
+			},
+			SelectTradition: nil,
+		},
 	},
 	"centering_focus_individualized_complete": {
 		Name:     "Centering Focus, Individualized, Complete",
@@ -7278,8 +8085,14 @@ var DataGears = map[string]Gear{
 		Rating:   "18",
 		Avail:    "(Rating * 3)R",
 		Cost:     "Rating * 9000",
-		Required: nil,
-		Bonus:    nil,
+		Required: &GearRequired{
+			OneOf: &common.RequirementOneOf{
+				Quality: "Mentor Spirit",
+			},
+		},
+		Bonus: &GearBonus{
+			SelectTradition: nil,
+		},
 	},
 	"flexible_signature_focus_individualized_complete": {
 		Name:     "Flexible Signature Focus, Individualized, Complete",
@@ -7289,8 +8102,14 @@ var DataGears = map[string]Gear{
 		Rating:   "18",
 		Avail:    "(Rating * 3)R",
 		Cost:     "Rating * 9000",
-		Required: nil,
-		Bonus:    nil,
+		Required: &GearRequired{
+			OneOf: &common.RequirementOneOf{
+				Quality: "Mentor Spirit",
+			},
+		},
+		Bonus: &GearBonus{
+			SelectTradition: nil,
+		},
 	},
 	"masking_focus_individualized_complete": {
 		Name:     "Masking Focus, Individualized, Complete",
@@ -7300,8 +8119,14 @@ var DataGears = map[string]Gear{
 		Rating:   "18",
 		Avail:    "(Rating * 3)R",
 		Cost:     "Rating * 9000",
-		Required: nil,
-		Bonus:    nil,
+		Required: &GearRequired{
+			OneOf: &common.RequirementOneOf{
+				Quality: "Mentor Spirit",
+			},
+		},
+		Bonus: &GearBonus{
+			SelectTradition: nil,
+		},
 	},
 	"spell_shaping_focus_individualized_complete": {
 		Name:     "Spell Shaping Focus, Individualized, Complete",
@@ -7311,8 +8136,14 @@ var DataGears = map[string]Gear{
 		Rating:   "18",
 		Avail:    "(Rating * 3)R",
 		Cost:     "Rating * 9000",
-		Required: nil,
-		Bonus:    nil,
+		Required: &GearRequired{
+			OneOf: &common.RequirementOneOf{
+				Quality: "Mentor Spirit",
+			},
+		},
+		Bonus: &GearBonus{
+			SelectTradition: nil,
+		},
 	},
 	"power_focus_individualized_complete": {
 		Name:     "Power Focus, Individualized, Complete",
@@ -7322,8 +8153,19 @@ var DataGears = map[string]Gear{
 		Rating:   "18",
 		Avail:    "(Rating * 4)R",
 		Cost:     "Rating * 18000",
-		Required: nil,
-		Bonus:    nil,
+		Required: &GearRequired{
+			OneOf: &common.RequirementOneOf{
+				Quality: "Mentor Spirit",
+			},
+		},
+		Bonus: &GearBonus{
+			BaseBonus: common.BaseBonus{
+				SkillAttribute: &common.SkillAttributeBonus{
+					Name: "MAG", Bonus: "Rating",
+				},
+			},
+			SelectTradition: nil,
+		},
 	},
 	"qi_focus_individualized_complete": {
 		Name:     "Qi Focus, Individualized, Complete",
@@ -7333,8 +8175,18 @@ var DataGears = map[string]Gear{
 		Rating:   "18",
 		Avail:    "(Rating * 3)R",
 		Cost:     "Rating * 3000",
-		Required: nil,
-		Bonus:    nil,
+		Required: &GearRequired{
+			OneOf: &common.RequirementOneOf{
+				Quality: "Mentor Spirit",
+			},
+		},
+		Bonus: &GearBonus{
+			SelectPowers: map[string]interface{}{
+				"selectpower": map[string]interface{}{
+					"ignorerating": "True", "val": "Rating", "limit": "Rating", "pointsperlevel": "0.25",
+				},
+			},
+		},
 	},
 	"counterspelling_focus_combat_individualized_complete": {
 		Name:     "Counterspelling Focus, Combat, Individualized, Complete",
@@ -7344,8 +8196,14 @@ var DataGears = map[string]Gear{
 		Rating:   "18",
 		Avail:    "(Rating * 3)R",
 		Cost:     "Rating * 4000",
-		Required: nil,
-		Bonus:    nil,
+		Required: &GearRequired{
+			OneOf: &common.RequirementOneOf{
+				Quality: "Mentor Spirit",
+			},
+		},
+		Bonus: &GearBonus{
+			SelectTradition: nil,
+		},
 	},
 	"ritual_spellcasting_focus_combat_individualized_complete": {
 		Name:     "Ritual Spellcasting Focus, Combat, Individualized, Complete",
@@ -7355,8 +8213,14 @@ var DataGears = map[string]Gear{
 		Rating:   "18",
 		Avail:    "(Rating * 3)R",
 		Cost:     "Rating * 4000",
-		Required: nil,
-		Bonus:    nil,
+		Required: &GearRequired{
+			OneOf: &common.RequirementOneOf{
+				Quality: "Mentor Spirit",
+			},
+		},
+		Bonus: &GearBonus{
+			SelectTradition: nil,
+		},
 	},
 	"spellcasting_focus_combat_individualized_complete": {
 		Name:     "Spellcasting Focus, Combat, Individualized, Complete",
@@ -7366,8 +8230,17 @@ var DataGears = map[string]Gear{
 		Rating:   "18",
 		Avail:    "(Rating * 3)R",
 		Cost:     "Rating * 4000",
-		Required: nil,
-		Bonus:    nil,
+		Required: &GearRequired{
+			OneOf: &common.RequirementOneOf{
+				Quality: "Mentor Spirit",
+			},
+		},
+		Bonus: &GearBonus{
+			SelectTradition: nil,
+			SpellCategory: &common.SelectSkill{
+				Val: "Rating",
+			},
+		},
 	},
 	"sustaining_focus_combat_individualized_complete": {
 		Name:     "Sustaining Focus, Combat, Individualized, Complete",
@@ -7377,8 +8250,14 @@ var DataGears = map[string]Gear{
 		Rating:   "18",
 		Avail:    "(Rating * 3)R",
 		Cost:     "Rating * 4000",
-		Required: nil,
-		Bonus:    nil,
+		Required: &GearRequired{
+			OneOf: &common.RequirementOneOf{
+				Quality: "Mentor Spirit",
+			},
+		},
+		Bonus: &GearBonus{
+			SelectTradition: nil,
+		},
 	},
 	"counterspelling_focus_detection_individualized_complete": {
 		Name:     "Counterspelling Focus, Detection, Individualized, Complete",
@@ -7388,8 +8267,14 @@ var DataGears = map[string]Gear{
 		Rating:   "18",
 		Avail:    "(Rating * 3)R",
 		Cost:     "Rating * 4000",
-		Required: nil,
-		Bonus:    nil,
+		Required: &GearRequired{
+			OneOf: &common.RequirementOneOf{
+				Quality: "Mentor Spirit",
+			},
+		},
+		Bonus: &GearBonus{
+			SelectTradition: nil,
+		},
 	},
 	"ritual_spellcasting_focus_detection_individualized_complete": {
 		Name:     "Ritual Spellcasting Focus, Detection, Individualized, Complete",
@@ -7399,8 +8284,14 @@ var DataGears = map[string]Gear{
 		Rating:   "18",
 		Avail:    "(Rating * 3)R",
 		Cost:     "Rating * 4000",
-		Required: nil,
-		Bonus:    nil,
+		Required: &GearRequired{
+			OneOf: &common.RequirementOneOf{
+				Quality: "Mentor Spirit",
+			},
+		},
+		Bonus: &GearBonus{
+			SelectTradition: nil,
+		},
 	},
 	"spellcasting_focus_detection_individualized_complete": {
 		Name:     "Spellcasting Focus, Detection, Individualized, Complete",
@@ -7410,8 +8301,17 @@ var DataGears = map[string]Gear{
 		Rating:   "18",
 		Avail:    "(Rating * 3)R",
 		Cost:     "Rating * 4000",
-		Required: nil,
-		Bonus:    nil,
+		Required: &GearRequired{
+			OneOf: &common.RequirementOneOf{
+				Quality: "Mentor Spirit",
+			},
+		},
+		Bonus: &GearBonus{
+			SelectTradition: nil,
+			SpellCategory: &common.SelectSkill{
+				Val: "Rating",
+			},
+		},
 	},
 	"sustaining_focus_detection_individualized_complete": {
 		Name:     "Sustaining Focus, Detection, Individualized, Complete",
@@ -7421,8 +8321,14 @@ var DataGears = map[string]Gear{
 		Rating:   "18",
 		Avail:    "(Rating * 3)R",
 		Cost:     "Rating * 4000",
-		Required: nil,
-		Bonus:    nil,
+		Required: &GearRequired{
+			OneOf: &common.RequirementOneOf{
+				Quality: "Mentor Spirit",
+			},
+		},
+		Bonus: &GearBonus{
+			SelectTradition: nil,
+		},
 	},
 	"counterspelling_focus_health_individualized_complete": {
 		Name:     "Counterspelling Focus, Health, Individualized, Complete",
@@ -7432,8 +8338,14 @@ var DataGears = map[string]Gear{
 		Rating:   "18",
 		Avail:    "(Rating * 3)R",
 		Cost:     "Rating * 4000",
-		Required: nil,
-		Bonus:    nil,
+		Required: &GearRequired{
+			OneOf: &common.RequirementOneOf{
+				Quality: "Mentor Spirit",
+			},
+		},
+		Bonus: &GearBonus{
+			SelectTradition: nil,
+		},
 	},
 	"ritual_spellcasting_focus_health_individualized_complete": {
 		Name:     "Ritual Spellcasting Focus, Health, Individualized, Complete",
@@ -7443,8 +8355,14 @@ var DataGears = map[string]Gear{
 		Rating:   "18",
 		Avail:    "(Rating * 3)R",
 		Cost:     "Rating * 4000",
-		Required: nil,
-		Bonus:    nil,
+		Required: &GearRequired{
+			OneOf: &common.RequirementOneOf{
+				Quality: "Mentor Spirit",
+			},
+		},
+		Bonus: &GearBonus{
+			SelectTradition: nil,
+		},
 	},
 	"spellcasting_focus_health_individualized_complete": {
 		Name:     "Spellcasting Focus, Health, Individualized, Complete",
@@ -7454,8 +8372,17 @@ var DataGears = map[string]Gear{
 		Rating:   "18",
 		Avail:    "(Rating * 3)R",
 		Cost:     "Rating * 4000",
-		Required: nil,
-		Bonus:    nil,
+		Required: &GearRequired{
+			OneOf: &common.RequirementOneOf{
+				Quality: "Mentor Spirit",
+			},
+		},
+		Bonus: &GearBonus{
+			SelectTradition: nil,
+			SpellCategory: &common.SelectSkill{
+				Val: "Rating",
+			},
+		},
 	},
 	"sustaining_focus_health_individualized_complete": {
 		Name:     "Sustaining Focus, Health, Individualized, Complete",
@@ -7465,8 +8392,14 @@ var DataGears = map[string]Gear{
 		Rating:   "18",
 		Avail:    "(Rating * 3)R",
 		Cost:     "Rating * 4000",
-		Required: nil,
-		Bonus:    nil,
+		Required: &GearRequired{
+			OneOf: &common.RequirementOneOf{
+				Quality: "Mentor Spirit",
+			},
+		},
+		Bonus: &GearBonus{
+			SelectTradition: nil,
+		},
 	},
 	"counterspelling_focus_illusion_individualized_complete": {
 		Name:     "Counterspelling Focus, Illusion, Individualized, Complete",
@@ -7476,8 +8409,14 @@ var DataGears = map[string]Gear{
 		Rating:   "18",
 		Avail:    "(Rating * 3)R",
 		Cost:     "Rating * 4000",
-		Required: nil,
-		Bonus:    nil,
+		Required: &GearRequired{
+			OneOf: &common.RequirementOneOf{
+				Quality: "Mentor Spirit",
+			},
+		},
+		Bonus: &GearBonus{
+			SelectTradition: nil,
+		},
 	},
 	"ritual_spellcasting_focus_illusion_individualized_complete": {
 		Name:     "Ritual Spellcasting Focus, Illusion, Individualized, Complete",
@@ -7487,8 +8426,14 @@ var DataGears = map[string]Gear{
 		Rating:   "18",
 		Avail:    "(Rating * 3)R",
 		Cost:     "Rating * 4000",
-		Required: nil,
-		Bonus:    nil,
+		Required: &GearRequired{
+			OneOf: &common.RequirementOneOf{
+				Quality: "Mentor Spirit",
+			},
+		},
+		Bonus: &GearBonus{
+			SelectTradition: nil,
+		},
 	},
 	"spellcasting_focus_illusion_individualized_complete": {
 		Name:     "Spellcasting Focus, Illusion, Individualized, Complete",
@@ -7498,8 +8443,17 @@ var DataGears = map[string]Gear{
 		Rating:   "18",
 		Avail:    "(Rating * 3)R",
 		Cost:     "Rating * 4000",
-		Required: nil,
-		Bonus:    nil,
+		Required: &GearRequired{
+			OneOf: &common.RequirementOneOf{
+				Quality: "Mentor Spirit",
+			},
+		},
+		Bonus: &GearBonus{
+			SelectTradition: nil,
+			SpellCategory: &common.SelectSkill{
+				Val: "Rating",
+			},
+		},
 	},
 	"sustaining_focus_illusion_individualized_complete": {
 		Name:     "Sustaining Focus, Illusion, Individualized, Complete",
@@ -7509,8 +8463,14 @@ var DataGears = map[string]Gear{
 		Rating:   "18",
 		Avail:    "(Rating * 3)R",
 		Cost:     "Rating * 4000",
-		Required: nil,
-		Bonus:    nil,
+		Required: &GearRequired{
+			OneOf: &common.RequirementOneOf{
+				Quality: "Mentor Spirit",
+			},
+		},
+		Bonus: &GearBonus{
+			SelectTradition: nil,
+		},
 	},
 	"counterspelling_focus_manipulation_individualized_complete": {
 		Name:     "Counterspelling Focus, Manipulation, Individualized, Complete",
@@ -7520,8 +8480,14 @@ var DataGears = map[string]Gear{
 		Rating:   "18",
 		Avail:    "(Rating * 3)R",
 		Cost:     "Rating * 4000",
-		Required: nil,
-		Bonus:    nil,
+		Required: &GearRequired{
+			OneOf: &common.RequirementOneOf{
+				Quality: "Mentor Spirit",
+			},
+		},
+		Bonus: &GearBonus{
+			SelectTradition: nil,
+		},
 	},
 	"ritual_spellcasting_focus_manipulation_individualized_complete": {
 		Name:     "Ritual Spellcasting Focus, Manipulation, Individualized, Complete",
@@ -7531,8 +8497,14 @@ var DataGears = map[string]Gear{
 		Rating:   "18",
 		Avail:    "(Rating * 3)R",
 		Cost:     "Rating * 4000",
-		Required: nil,
-		Bonus:    nil,
+		Required: &GearRequired{
+			OneOf: &common.RequirementOneOf{
+				Quality: "Mentor Spirit",
+			},
+		},
+		Bonus: &GearBonus{
+			SelectTradition: nil,
+		},
 	},
 	"spellcasting_focus_manipulation_individualized_complete": {
 		Name:     "Spellcasting Focus, Manipulation, Individualized, Complete",
@@ -7542,8 +8514,17 @@ var DataGears = map[string]Gear{
 		Rating:   "18",
 		Avail:    "(Rating * 3)R",
 		Cost:     "Rating * 4000",
-		Required: nil,
-		Bonus:    nil,
+		Required: &GearRequired{
+			OneOf: &common.RequirementOneOf{
+				Quality: "Mentor Spirit",
+			},
+		},
+		Bonus: &GearBonus{
+			SelectTradition: nil,
+			SpellCategory: &common.SelectSkill{
+				Val: "Rating",
+			},
+		},
 	},
 	"sustaining_focus_manipulation_individualized_complete": {
 		Name:     "Sustaining Focus, Manipulation, Individualized, Complete",
@@ -7553,8 +8534,14 @@ var DataGears = map[string]Gear{
 		Rating:   "18",
 		Avail:    "(Rating * 3)R",
 		Cost:     "Rating * 4000",
-		Required: nil,
-		Bonus:    nil,
+		Required: &GearRequired{
+			OneOf: &common.RequirementOneOf{
+				Quality: "Mentor Spirit",
+			},
+		},
+		Bonus: &GearBonus{
+			SelectTradition: nil,
+		},
 	},
 	"summoning_focus_individualized_complete": {
 		Name:     "Summoning Focus, Individualized, Complete",
@@ -7564,8 +8551,16 @@ var DataGears = map[string]Gear{
 		Rating:   "18",
 		Avail:    "(Rating * 3)R",
 		Cost:     "Rating * 4000",
-		Required: nil,
-		Bonus:    nil,
+		Required: &GearRequired{
+			OneOf: &common.RequirementOneOf{
+				Quality: "Mentor Spirit",
+			},
+		},
+		Bonus: &GearBonus{
+			SelectText: &common.SelectTextBonus{
+				XML: "strings.xml", XPath: "/chummer/spiritcategories/category",
+			},
+		},
 	},
 	"banishing_focus_individualized_complete": {
 		Name:     "Banishing Focus, Individualized, Complete",
@@ -7575,8 +8570,16 @@ var DataGears = map[string]Gear{
 		Rating:   "18",
 		Avail:    "(Rating * 3)R",
 		Cost:     "Rating * 4000",
-		Required: nil,
-		Bonus:    nil,
+		Required: &GearRequired{
+			OneOf: &common.RequirementOneOf{
+				Quality: "Mentor Spirit",
+			},
+		},
+		Bonus: &GearBonus{
+			SelectText: &common.SelectTextBonus{
+				XML: "strings.xml", XPath: "/chummer/spiritcategories/category",
+			},
+		},
 	},
 	"binding_focus_individualized_complete": {
 		Name:     "Binding Focus, Individualized, Complete",
@@ -7586,8 +8589,16 @@ var DataGears = map[string]Gear{
 		Rating:   "18",
 		Avail:    "(Rating * 3)R",
 		Cost:     "Rating * 4000",
-		Required: nil,
-		Bonus:    nil,
+		Required: &GearRequired{
+			OneOf: &common.RequirementOneOf{
+				Quality: "Mentor Spirit",
+			},
+		},
+		Bonus: &GearBonus{
+			SelectText: &common.SelectTextBonus{
+				XML: "strings.xml", XPath: "/chummer/spiritcategories/category",
+			},
+		},
 	},
 	"weapon_focus_individualized_complete": {
 		Name:     "Weapon Focus, Individualized, Complete",
@@ -7597,8 +8608,16 @@ var DataGears = map[string]Gear{
 		Rating:   "18",
 		Avail:    "(Rating * 4)R",
 		Cost:     "Rating * 7000",
-		Required: nil,
-		Bonus:    nil,
+		Required: &GearRequired{
+			OneOf: &common.RequirementOneOf{
+				Quality: "Mentor Spirit",
+			},
+		},
+		Bonus: &GearBonus{
+			WeaponSpecificDice: map[string]interface{}{
+				"+content": "Rating", "+@type": "Melee",
+			},
+		},
 	},
 	"alchemical_focus_formula": {
 		Name:     "Alchemical Focus Formula",
@@ -7608,7 +8627,9 @@ var DataGears = map[string]Gear{
 		Rating:   "18",
 		Avail:    "(Rating * 3)R",
 		Cost:     "Rating * 1250",
-		Bonus:    nil,
+		Bonus: &GearBonus{
+			SelectTradition: nil,
+		},
 	},
 	"disenchanting_focus_formula": {
 		Name:     "Disenchanting Focus Formula",
@@ -7618,7 +8639,9 @@ var DataGears = map[string]Gear{
 		Rating:   "18",
 		Avail:    "(Rating * 3)R",
 		Cost:     "Rating * 1250",
-		Bonus:    nil,
+		Bonus: &GearBonus{
+			SelectTradition: nil,
+		},
 	},
 	"centering_focus_formula": {
 		Name:     "Centering Focus Formula",
@@ -7628,7 +8651,9 @@ var DataGears = map[string]Gear{
 		Rating:   "18",
 		Avail:    "(Rating * 3)R",
 		Cost:     "Rating * 2250",
-		Bonus:    nil,
+		Bonus: &GearBonus{
+			SelectTradition: nil,
+		},
 	},
 	"flexible_signature_focus_formula": {
 		Name:     "Flexible Signature Focus Formula",
@@ -7638,7 +8663,9 @@ var DataGears = map[string]Gear{
 		Rating:   "18",
 		Avail:    "(Rating * 3)R",
 		Cost:     "Rating * 2250",
-		Bonus:    nil,
+		Bonus: &GearBonus{
+			SelectTradition: nil,
+		},
 	},
 	"masking_focus_formula": {
 		Name:     "Masking Focus Formula",
@@ -7648,7 +8675,9 @@ var DataGears = map[string]Gear{
 		Rating:   "18",
 		Avail:    "(Rating * 3)R",
 		Cost:     "Rating * 2250",
-		Bonus:    nil,
+		Bonus: &GearBonus{
+			SelectTradition: nil,
+		},
 	},
 	"spell_shaping_focus_formula": {
 		Name:     "Spell Shaping Focus Formula",
@@ -7658,7 +8687,9 @@ var DataGears = map[string]Gear{
 		Rating:   "18",
 		Avail:    "(Rating * 3)R",
 		Cost:     "Rating * 2250",
-		Bonus:    nil,
+		Bonus: &GearBonus{
+			SelectTradition: nil,
+		},
 	},
 	"power_focus_formula": {
 		Name:     "Power Focus Formula",
@@ -7668,7 +8699,9 @@ var DataGears = map[string]Gear{
 		Rating:   "18",
 		Avail:    "(Rating * 4)R",
 		Cost:     "Rating * 4500",
-		Bonus:    nil,
+		Bonus: &GearBonus{
+			SelectTradition: nil,
+		},
 	},
 	"qi_focus_formula": {
 		Name:     "Qi Focus Formula",
@@ -7678,7 +8711,9 @@ var DataGears = map[string]Gear{
 		Rating:   "18",
 		Avail:    "(Rating * 3)R",
 		Cost:     "Rating * 750",
-		Bonus:    nil,
+		Bonus: &GearBonus{
+			SelectTradition: nil,
+		},
 	},
 	"counterspelling_focus_formula_combat": {
 		Name:     "Counterspelling Focus Formula, Combat",
@@ -7688,7 +8723,9 @@ var DataGears = map[string]Gear{
 		Rating:   "18",
 		Avail:    "(Rating * 3)R",
 		Cost:     "Rating * 1000",
-		Bonus:    nil,
+		Bonus: &GearBonus{
+			SelectTradition: nil,
+		},
 	},
 	"ritual_spellcasting_focus_formula_combat": {
 		Name:     "Ritual Spellcasting Focus Formula, Combat",
@@ -7698,7 +8735,9 @@ var DataGears = map[string]Gear{
 		Rating:   "18",
 		Avail:    "(Rating * 3)R",
 		Cost:     "Rating * 1000",
-		Bonus:    nil,
+		Bonus: &GearBonus{
+			SelectTradition: nil,
+		},
 	},
 	"spellcasting_focus_formula_combat": {
 		Name:     "Spellcasting Focus Formula, Combat",
@@ -7708,7 +8747,9 @@ var DataGears = map[string]Gear{
 		Rating:   "18",
 		Avail:    "(Rating * 3)R",
 		Cost:     "Rating * 1000",
-		Bonus:    nil,
+		Bonus: &GearBonus{
+			SelectTradition: nil,
+		},
 	},
 	"sustaining_focus_formula_combat": {
 		Name:     "Sustaining Focus Formula, Combat",
@@ -7718,7 +8759,9 @@ var DataGears = map[string]Gear{
 		Rating:   "18",
 		Avail:    "(Rating * 3)R",
 		Cost:     "Rating * 1000",
-		Bonus:    nil,
+		Bonus: &GearBonus{
+			SelectTradition: nil,
+		},
 	},
 	"counterspelling_focus_formula_detection": {
 		Name:     "Counterspelling Focus Formula, Detection",
@@ -7728,7 +8771,9 @@ var DataGears = map[string]Gear{
 		Rating:   "18",
 		Avail:    "(Rating * 3)R",
 		Cost:     "Rating * 1000",
-		Bonus:    nil,
+		Bonus: &GearBonus{
+			SelectTradition: nil,
+		},
 	},
 	"ritual_spellcasting_focus_formula_detection": {
 		Name:     "Ritual Spellcasting Focus Formula, Detection",
@@ -7738,7 +8783,9 @@ var DataGears = map[string]Gear{
 		Rating:   "18",
 		Avail:    "(Rating * 3)R",
 		Cost:     "Rating * 1000",
-		Bonus:    nil,
+		Bonus: &GearBonus{
+			SelectTradition: nil,
+		},
 	},
 	"spellcasting_focus_formula_detection": {
 		Name:     "Spellcasting Focus Formula, Detection",
@@ -7748,7 +8795,9 @@ var DataGears = map[string]Gear{
 		Rating:   "18",
 		Avail:    "(Rating * 3)R",
 		Cost:     "Rating * 1000",
-		Bonus:    nil,
+		Bonus: &GearBonus{
+			SelectTradition: nil,
+		},
 	},
 	"sustaining_focus_formula_detection": {
 		Name:     "Sustaining Focus Formula, Detection",
@@ -7758,7 +8807,9 @@ var DataGears = map[string]Gear{
 		Rating:   "18",
 		Avail:    "(Rating * 3)R",
 		Cost:     "Rating * 1000",
-		Bonus:    nil,
+		Bonus: &GearBonus{
+			SelectTradition: nil,
+		},
 	},
 	"counterspelling_focus_formula_health": {
 		Name:     "Counterspelling Focus Formula, Health",
@@ -7768,7 +8819,9 @@ var DataGears = map[string]Gear{
 		Rating:   "18",
 		Avail:    "(Rating * 3)R",
 		Cost:     "Rating * 1000",
-		Bonus:    nil,
+		Bonus: &GearBonus{
+			SelectTradition: nil,
+		},
 	},
 	"ritual_spellcasting_focus_formula_health": {
 		Name:     "Ritual Spellcasting Focus Formula, Health",
@@ -7778,7 +8831,9 @@ var DataGears = map[string]Gear{
 		Rating:   "18",
 		Avail:    "(Rating * 3)R",
 		Cost:     "Rating * 1000",
-		Bonus:    nil,
+		Bonus: &GearBonus{
+			SelectTradition: nil,
+		},
 	},
 	"spellcasting_focus_formula_health": {
 		Name:     "Spellcasting Focus Formula, Health",
@@ -7788,7 +8843,9 @@ var DataGears = map[string]Gear{
 		Rating:   "18",
 		Avail:    "(Rating * 3)R",
 		Cost:     "Rating * 1000",
-		Bonus:    nil,
+		Bonus: &GearBonus{
+			SelectTradition: nil,
+		},
 	},
 	"sustaining_focus_formula_health": {
 		Name:     "Sustaining Focus Formula, Health",
@@ -7798,7 +8855,9 @@ var DataGears = map[string]Gear{
 		Rating:   "18",
 		Avail:    "(Rating * 3)R",
 		Cost:     "Rating * 1000",
-		Bonus:    nil,
+		Bonus: &GearBonus{
+			SelectTradition: nil,
+		},
 	},
 	"counterspelling_focus_formula_illusion": {
 		Name:     "Counterspelling Focus Formula, Illusion",
@@ -7808,7 +8867,9 @@ var DataGears = map[string]Gear{
 		Rating:   "18",
 		Avail:    "(Rating * 3)R",
 		Cost:     "Rating * 1000",
-		Bonus:    nil,
+		Bonus: &GearBonus{
+			SelectTradition: nil,
+		},
 	},
 	"ritual_spellcasting_focus_formula_illusion": {
 		Name:     "Ritual Spellcasting Focus Formula, Illusion",
@@ -7818,7 +8879,9 @@ var DataGears = map[string]Gear{
 		Rating:   "18",
 		Avail:    "(Rating * 3)R",
 		Cost:     "Rating * 1000",
-		Bonus:    nil,
+		Bonus: &GearBonus{
+			SelectTradition: nil,
+		},
 	},
 	"spellcasting_focus_formula_illusion": {
 		Name:     "Spellcasting Focus Formula, Illusion",
@@ -7828,7 +8891,9 @@ var DataGears = map[string]Gear{
 		Rating:   "18",
 		Avail:    "(Rating * 3)R",
 		Cost:     "Rating * 1000",
-		Bonus:    nil,
+		Bonus: &GearBonus{
+			SelectTradition: nil,
+		},
 	},
 	"sustaining_focus_formula_illusion": {
 		Name:     "Sustaining Focus Formula, Illusion",
@@ -7838,7 +8903,9 @@ var DataGears = map[string]Gear{
 		Rating:   "18",
 		Avail:    "(Rating * 3)R",
 		Cost:     "Rating * 1000",
-		Bonus:    nil,
+		Bonus: &GearBonus{
+			SelectTradition: nil,
+		},
 	},
 	"counterspelling_focus_formula_manipulation": {
 		Name:     "Counterspelling Focus Formula, Manipulation",
@@ -7848,7 +8915,9 @@ var DataGears = map[string]Gear{
 		Rating:   "18",
 		Avail:    "(Rating * 3)R",
 		Cost:     "Rating * 1000",
-		Bonus:    nil,
+		Bonus: &GearBonus{
+			SelectTradition: nil,
+		},
 	},
 	"ritual_spellcasting_focus_formula_manipulation": {
 		Name:     "Ritual Spellcasting Focus Formula, Manipulation",
@@ -7858,7 +8927,9 @@ var DataGears = map[string]Gear{
 		Rating:   "18",
 		Avail:    "(Rating * 3)R",
 		Cost:     "Rating * 1000",
-		Bonus:    nil,
+		Bonus: &GearBonus{
+			SelectTradition: nil,
+		},
 	},
 	"spellcasting_focus_formula_manipulation": {
 		Name:     "Spellcasting Focus Formula, Manipulation",
@@ -7868,7 +8939,9 @@ var DataGears = map[string]Gear{
 		Rating:   "18",
 		Avail:    "(Rating * 3)R",
 		Cost:     "Rating * 1000",
-		Bonus:    nil,
+		Bonus: &GearBonus{
+			SelectTradition: nil,
+		},
 	},
 	"sustaining_focus_formula_manipulation": {
 		Name:     "Sustaining Focus Formula, Manipulation",
@@ -7878,7 +8951,9 @@ var DataGears = map[string]Gear{
 		Rating:   "18",
 		Avail:    "(Rating * 3)R",
 		Cost:     "Rating * 1000",
-		Bonus:    nil,
+		Bonus: &GearBonus{
+			SelectTradition: nil,
+		},
 	},
 	"summoning_focus_formula": {
 		Name:     "Summoning Focus Formula",
@@ -7888,7 +8963,11 @@ var DataGears = map[string]Gear{
 		Rating:   "18",
 		Avail:    "(Rating * 3)R",
 		Cost:     "Rating * 1000",
-		Bonus:    nil,
+		Bonus: &GearBonus{
+			SelectText: &common.SelectTextBonus{
+				XML: "strings.xml", XPath: "/chummer/spiritcategories/category",
+			},
+		},
 	},
 	"banishing_focus_formula": {
 		Name:     "Banishing Focus Formula",
@@ -7898,7 +8977,11 @@ var DataGears = map[string]Gear{
 		Rating:   "18",
 		Avail:    "(Rating * 3)R",
 		Cost:     "Rating * 1000",
-		Bonus:    nil,
+		Bonus: &GearBonus{
+			SelectText: &common.SelectTextBonus{
+				XML: "strings.xml", XPath: "/chummer/spiritcategories/category",
+			},
+		},
 	},
 	"binding_focus_formula": {
 		Name:     "Binding Focus Formula",
@@ -7908,7 +8991,11 @@ var DataGears = map[string]Gear{
 		Rating:   "18",
 		Avail:    "(Rating * 3)R",
 		Cost:     "Rating * 1000",
-		Bonus:    nil,
+		Bonus: &GearBonus{
+			SelectText: &common.SelectTextBonus{
+				XML: "strings.xml", XPath: "/chummer/spiritcategories/category",
+			},
+		},
 	},
 	"weapon_focus_formula": {
 		Name:     "Weapon Focus Formula",
@@ -7918,7 +9005,9 @@ var DataGears = map[string]Gear{
 		Rating:   "18",
 		Avail:    "(Rating * 4)R",
 		Cost:     "Rating * 1750",
-		Bonus:    nil,
+		Bonus: &GearBonus{
+			SelectText: &common.SelectTextBonus{},
+		},
 	},
 	"spell_formula_combat": {
 		Name:     "Spell Formula, Combat",
@@ -7928,7 +9017,11 @@ var DataGears = map[string]Gear{
 		Rating:   "0",
 		Avail:    "8R",
 		Cost:     "2000",
-		Bonus:    nil,
+		Bonus: &GearBonus{
+			SelectText: &common.SelectTextBonus{
+				XML: "spells.xml", XPath: "/chummer/spells/spell[category = 'Combat']", AllowEdit: "True",
+			},
+		},
 	},
 	"spell_formula_detection": {
 		Name:     "Spell Formula, Detection",
@@ -7938,7 +9031,11 @@ var DataGears = map[string]Gear{
 		Rating:   "0",
 		Avail:    "4R",
 		Cost:     "500",
-		Bonus:    nil,
+		Bonus: &GearBonus{
+			SelectText: &common.SelectTextBonus{
+				XML: "spells.xml", XPath: "/chummer/spells/spell[category = 'Detection']", AllowEdit: "True",
+			},
+		},
 	},
 	"spell_formula_health": {
 		Name:     "Spell Formula, Health",
@@ -7948,7 +9045,11 @@ var DataGears = map[string]Gear{
 		Rating:   "0",
 		Avail:    "4R",
 		Cost:     "500",
-		Bonus:    nil,
+		Bonus: &GearBonus{
+			SelectText: &common.SelectTextBonus{
+				XML: "spells.xml", XPath: "/chummer/spells/spell[category = 'Health']", AllowEdit: "True",
+			},
+		},
 	},
 	"spell_formula_illusion": {
 		Name:     "Spell Formula, Illusion",
@@ -7958,7 +9059,11 @@ var DataGears = map[string]Gear{
 		Rating:   "0",
 		Avail:    "8R",
 		Cost:     "1000",
-		Bonus:    nil,
+		Bonus: &GearBonus{
+			SelectText: &common.SelectTextBonus{
+				XML: "spells.xml", XPath: "/chummer/spells/spell[category = 'Illusion']", AllowEdit: "True",
+			},
+		},
 	},
 	"spell_formula_manipulation": {
 		Name:     "Spell Formula, Manipulation",
@@ -7968,7 +9073,11 @@ var DataGears = map[string]Gear{
 		Rating:   "0",
 		Avail:    "8R",
 		Cost:     "1500",
-		Bonus:    nil,
+		Bonus: &GearBonus{
+			SelectText: &common.SelectTextBonus{
+				XML: "spells.xml", XPath: "/chummer/spells/spell[category = 'Manipulation']", AllowEdit: "True",
+			},
+		},
 	},
 	"enchanting_gloves": {
 		Name:     "Enchanting Gloves",
@@ -7987,7 +9096,9 @@ var DataGears = map[string]Gear{
 		Rating:   "20",
 		Avail:    "Rating * 2",
 		Cost:     "Rating * 500",
-		Bonus:    nil,
+		Bonus: &GearBonus{
+			SelectTradition: nil,
+		},
 	},
 	"sacred_circle_materials": {
 		Name:     "Sacred Circle Materials",
@@ -7997,7 +9108,9 @@ var DataGears = map[string]Gear{
 		Rating:   "20",
 		Avail:    "Rating * 2",
 		Cost:     "Rating * 1500",
-		Bonus:    nil,
+		Bonus: &GearBonus{
+			SelectTradition: nil,
+		},
 	},
 	"reagents_per_dram": {
 		Name:     "Reagents, per dram",
@@ -8007,7 +9120,9 @@ var DataGears = map[string]Gear{
 		Rating:   "0",
 		Avail:    "0",
 		Cost:     "20",
-		Bonus:    nil,
+		Bonus: &GearBonus{
+			SelectTradition: nil,
+		},
 	},
 	"refined_reagents": {
 		Name:     "Refined Reagents",
@@ -8017,7 +9132,9 @@ var DataGears = map[string]Gear{
 		Rating:   "0",
 		Avail:    "6",
 		Cost:     "350",
-		Bonus:    nil,
+		Bonus: &GearBonus{
+			SelectTradition: nil,
+		},
 	},
 	"radical_reagents": {
 		Name:     "Radical Reagents",
@@ -8027,7 +9144,9 @@ var DataGears = map[string]Gear{
 		Rating:   "0",
 		Avail:    "8",
 		Cost:     "4500",
-		Bonus:    nil,
+		Bonus: &GearBonus{
+			SelectTradition: nil,
+		},
 	},
 	"tainted_reagents": {
 		Name:     "Tainted Reagents",
@@ -8037,7 +9156,9 @@ var DataGears = map[string]Gear{
 		Rating:   "0",
 		Avail:    "0",
 		Cost:     "20",
-		Bonus:    nil,
+		Bonus: &GearBonus{
+			SelectTradition: nil,
+		},
 	},
 	"tainted_reagents_refined": {
 		Name:     "Tainted Reagents, Refined",
@@ -8047,7 +9168,9 @@ var DataGears = map[string]Gear{
 		Rating:   "0",
 		Avail:    "4",
 		Cost:     "100",
-		Bonus:    nil,
+		Bonus: &GearBonus{
+			SelectTradition: nil,
+		},
 	},
 	"tainted_reagents_radical": {
 		Name:     "Tainted Reagents, Radical",
@@ -8057,7 +9180,9 @@ var DataGears = map[string]Gear{
 		Rating:   "0",
 		Avail:    "8",
 		Cost:     "500",
-		Bonus:    nil,
+		Bonus: &GearBonus{
+			SelectTradition: nil,
+		},
 	},
 	"inferior_reagents": {
 		Name:     "Inferior Reagents",
@@ -8067,7 +9192,9 @@ var DataGears = map[string]Gear{
 		Rating:   "0",
 		Avail:    "1",
 		Cost:     "30",
-		Bonus:    nil,
+		Bonus: &GearBonus{
+			SelectTradition: nil,
+		},
 	},
 	"inferior_reagents_refined": {
 		Name:     "Inferior Reagents, Refined",
@@ -8077,7 +9204,9 @@ var DataGears = map[string]Gear{
 		Rating:   "0",
 		Avail:    "5",
 		Cost:     "150",
-		Bonus:    nil,
+		Bonus: &GearBonus{
+			SelectTradition: nil,
+		},
 	},
 	"inferior_reagents_radical": {
 		Name:     "Inferior Reagents, Radical",
@@ -8087,7 +9216,9 @@ var DataGears = map[string]Gear{
 		Rating:   "0",
 		Avail:    "9",
 		Cost:     "750",
-		Bonus:    nil,
+		Bonus: &GearBonus{
+			SelectTradition: nil,
+		},
 	},
 	"subpar_reagents": {
 		Name:     "Subpar Reagents",
@@ -8097,7 +9228,9 @@ var DataGears = map[string]Gear{
 		Rating:   "0",
 		Avail:    "4",
 		Cost:     "40",
-		Bonus:    nil,
+		Bonus: &GearBonus{
+			SelectTradition: nil,
+		},
 	},
 	"subpar_reagents_refined": {
 		Name:     "Subpar Reagents, Refined",
@@ -8107,7 +9240,9 @@ var DataGears = map[string]Gear{
 		Rating:   "0",
 		Avail:    "8",
 		Cost:     "200",
-		Bonus:    nil,
+		Bonus: &GearBonus{
+			SelectTradition: nil,
+		},
 	},
 	"subpar_reagents_radical": {
 		Name:     "Subpar Reagents, Radical",
@@ -8117,7 +9252,9 @@ var DataGears = map[string]Gear{
 		Rating:   "0",
 		Avail:    "12",
 		Cost:     "1000",
-		Bonus:    nil,
+		Bonus: &GearBonus{
+			SelectTradition: nil,
+		},
 	},
 	"baseline_reagents": {
 		Name:     "Baseline Reagents",
@@ -8127,7 +9264,9 @@ var DataGears = map[string]Gear{
 		Rating:   "0",
 		Avail:    "6R",
 		Cost:     "50",
-		Bonus:    nil,
+		Bonus: &GearBonus{
+			SelectTradition: nil,
+		},
 	},
 	"baseline_reagents_refined": {
 		Name:     "Baseline Reagents, Refined",
@@ -8137,7 +9276,9 @@ var DataGears = map[string]Gear{
 		Rating:   "0",
 		Avail:    "10R",
 		Cost:     "250",
-		Bonus:    nil,
+		Bonus: &GearBonus{
+			SelectTradition: nil,
+		},
 	},
 	"baseline_reagents_radical": {
 		Name:     "Baseline Reagents, Radical",
@@ -8147,7 +9288,9 @@ var DataGears = map[string]Gear{
 		Rating:   "0",
 		Avail:    "14R",
 		Cost:     "1250",
-		Bonus:    nil,
+		Bonus: &GearBonus{
+			SelectTradition: nil,
+		},
 	},
 	"superior_reagents": {
 		Name:     "Superior Reagents",
@@ -8157,7 +9300,9 @@ var DataGears = map[string]Gear{
 		Rating:   "0",
 		Avail:    "14R",
 		Cost:     "60",
-		Bonus:    nil,
+		Bonus: &GearBonus{
+			SelectTradition: nil,
+		},
 	},
 	"superior_reagents_refined": {
 		Name:     "Superior Reagents, Refined",
@@ -8167,7 +9312,9 @@ var DataGears = map[string]Gear{
 		Rating:   "0",
 		Avail:    "18R",
 		Cost:     "300",
-		Bonus:    nil,
+		Bonus: &GearBonus{
+			SelectTradition: nil,
+		},
 	},
 	"superior_reagents_radical": {
 		Name:     "Superior Reagents, Radical",
@@ -8177,7 +9324,9 @@ var DataGears = map[string]Gear{
 		Rating:   "0",
 		Avail:    "22R",
 		Cost:     "1500",
-		Bonus:    nil,
+		Bonus: &GearBonus{
+			SelectTradition: nil,
+		},
 	},
 	"prime_reagents": {
 		Name:     "Prime Reagents",
@@ -8187,7 +9336,9 @@ var DataGears = map[string]Gear{
 		Rating:   "0",
 		Avail:    "20R",
 		Cost:     "70",
-		Bonus:    nil,
+		Bonus: &GearBonus{
+			SelectTradition: nil,
+		},
 	},
 	"prime_reagents_refined": {
 		Name:     "Prime Reagents, Refined",
@@ -8197,7 +9348,9 @@ var DataGears = map[string]Gear{
 		Rating:   "0",
 		Avail:    "24R",
 		Cost:     "350",
-		Bonus:    nil,
+		Bonus: &GearBonus{
+			SelectTradition: nil,
+		},
 	},
 	"prime_reagents_radical": {
 		Name:     "Prime Reagents, Radical",
@@ -8207,7 +9360,9 @@ var DataGears = map[string]Gear{
 		Rating:   "0",
 		Avail:    "28R",
 		Cost:     "1750",
-		Bonus:    nil,
+		Bonus: &GearBonus{
+			SelectTradition: nil,
+		},
 	},
 	"orichalcum": {
 		Name:     "Orichalcum",
@@ -8226,7 +9381,11 @@ var DataGears = map[string]Gear{
 		Rating:   "0",
 		Avail:    "4",
 		Cost:     "2000",
-		Bonus:    nil,
+		Bonus: &GearBonus{
+			SelectText: &common.SelectTextBonus{
+				XML: "spells.xml", XPath: "/chummer/spells/spell",
+			},
+		},
 	},
 	"fab_i": {
 		Name:     "FAB I",
@@ -8317,7 +9476,13 @@ var DataGears = map[string]Gear{
 		Rating:   "20",
 		Avail:    "(Rating * Rating)R",
 		Cost:     "Rating * 1500",
-		Bonus:    nil,
+		Bonus: &GearBonus{
+			BaseBonus: common.BaseBonus{
+				SelectSkill: &common.SelectSkill{
+					SkillCategory: "Physical Active",
+				},
+			},
+		},
 	},
 	"mana_sensitive_film_plate": {
 		Name:     "Mana-Sensitive Film Plate",
@@ -8408,7 +9573,9 @@ var DataGears = map[string]Gear{
 		Rating:   "0",
 		Avail:    "0",
 		Cost:     "0",
-		Bonus:    nil,
+		Bonus: &GearBonus{
+			SelectText: &common.SelectTextBonus{},
+		},
 	},
 	"tool_cleanser_15_uses": {
 		Name:     "Tool Cleanser (15 Uses)",
@@ -8436,7 +9603,11 @@ var DataGears = map[string]Gear{
 		Rating:   "0",
 		Avail:    "9",
 		Cost:     "1000",
-		Bonus:    nil,
+		Bonus: &GearBonus{
+			SelectText: &common.SelectTextBonus{
+				XML: "traditions.xml", XPath: "/chummer/spirits/spirit/name",
+			},
+		},
 	},
 	"aghexhex": {
 		Name:     "AgHexHex",
@@ -8556,13 +9727,14 @@ var DataGears = map[string]Gear{
 		Cost:     "1000",
 	},
 	"cstear_gas": {
-		Name:     "CS/Tear Gas",
-		Category: "Toxins",
-		Source:   "SR5",
-		Page:     "409",
-		Rating:   "0",
-		Avail:    "4R",
-		Cost:     "20",
+		Name:              "CS/Tear Gas",
+		Category:          "Toxins",
+		Source:            "SR5",
+		Page:              "409",
+		Rating:            "0",
+		Avail:             "4R",
+		Cost:              "20",
+		AmmoForWeaponType: "spraypen",
 	},
 	"gamma_scopolamine": {
 		Name:     "Gamma-Scopolamine",
@@ -8583,40 +9755,44 @@ var DataGears = map[string]Gear{
 		Cost:     "50",
 	},
 	"nausea_gas": {
-		Name:     "Nausea Gas",
-		Category: "Toxins",
-		Source:   "SR5",
-		Page:     "410",
-		Rating:   "0",
-		Avail:    "6R",
-		Cost:     "25",
+		Name:              "Nausea Gas",
+		Category:          "Toxins",
+		Source:            "SR5",
+		Page:              "410",
+		Rating:            "0",
+		Avail:             "6R",
+		Cost:              "25",
+		AmmoForWeaponType: "spraypen",
 	},
 	"neuro_stun_viii": {
-		Name:     "Neuro-Stun VIII",
-		Category: "Toxins",
-		Source:   "SR5",
-		Page:     "410",
-		Rating:   "0",
-		Avail:    "12R",
-		Cost:     "60",
+		Name:              "Neuro-Stun VIII",
+		Category:          "Toxins",
+		Source:            "SR5",
+		Page:              "410",
+		Rating:            "0",
+		Avail:             "12R",
+		Cost:              "60",
+		AmmoForWeaponType: "spraypen",
 	},
 	"neuro_stun_ix": {
-		Name:     "Neuro-Stun IX",
-		Category: "Toxins",
-		Source:   "SR5",
-		Page:     "410",
-		Rating:   "0",
-		Avail:    "13R",
-		Cost:     "60",
+		Name:              "Neuro-Stun IX",
+		Category:          "Toxins",
+		Source:            "SR5",
+		Page:              "410",
+		Rating:            "0",
+		Avail:             "13R",
+		Cost:              "60",
+		AmmoForWeaponType: "spraypen",
 	},
 	"neuro_stun_x": {
-		Name:     "Neuro-Stun X",
-		Category: "Toxins",
-		Source:   "SR5",
-		Page:     "410",
-		Rating:   "0",
-		Avail:    "14R",
-		Cost:     "100",
+		Name:              "Neuro-Stun X",
+		Category:          "Toxins",
+		Source:            "SR5",
+		Page:              "410",
+		Rating:            "0",
+		Avail:             "14R",
+		Cost:              "100",
+		AmmoForWeaponType: "spraypen",
 	},
 	"pepper_punch": {
 		Name:              "Pepper Punch",
@@ -8629,13 +9805,14 @@ var DataGears = map[string]Gear{
 		AmmoForWeaponType: "pepperpunch,spraypen",
 	},
 	"seven_7": {
-		Name:     "Seven-7",
-		Category: "Toxins",
-		Source:   "SR5",
-		Page:     "410",
-		Rating:   "0",
-		Avail:    "20F",
-		Cost:     "1000",
+		Name:              "Seven-7",
+		Category:          "Toxins",
+		Source:            "SR5",
+		Page:              "410",
+		Rating:            "0",
+		Avail:             "20F",
+		Cost:              "1000",
+		AmmoForWeaponType: "spraypen",
 	},
 	"dread": {
 		Name:     "Dread",
@@ -8656,13 +9833,14 @@ var DataGears = map[string]Gear{
 		Cost:     "250",
 	},
 	"retro": {
-		Name:     "Retro",
-		Category: "Toxins",
-		Source:   "BB",
-		Page:     "20",
-		Rating:   "0",
-		Avail:    "10F",
-		Cost:     "500",
+		Name:              "Retro",
+		Category:          "Toxins",
+		Source:            "BB",
+		Page:              "20",
+		Rating:            "0",
+		Avail:             "10F",
+		Cost:              "500",
+		AmmoForWeaponType: "spraypen",
 	},
 	"rocuronium": {
 		Name:     "Rocuronium",
@@ -8674,13 +9852,14 @@ var DataGears = map[string]Gear{
 		Cost:     "50",
 	},
 	"cypher": {
-		Name:     "Cypher",
-		Category: "Toxins",
-		Source:   "BB",
-		Page:     "21",
-		Rating:   "0",
-		Avail:    "16R",
-		Cost:     "5000",
+		Name:              "Cypher",
+		Category:          "Toxins",
+		Source:            "BB",
+		Page:              "21",
+		Rating:            "0",
+		Avail:             "16R",
+		Cost:              "5000",
+		AmmoForWeaponType: "spraypen",
 	},
 	"kev_ammunition": {
 		Name:     "KEV Ammunition",
@@ -8701,54 +9880,59 @@ var DataGears = map[string]Gear{
 		Cost:     "20",
 	},
 	"bliss": {
-		Name:          "Bliss",
-		Category:      "Drugs",
-		Source:        "SR5",
-		Page:          "411",
-		Rating:        "0",
-		Avail:         "3F",
-		Cost:          "15",
-		AddonCategory: []string{"Drug Grades", "Custom"},
+		Name:              "Bliss",
+		Category:          "Drugs",
+		Source:            "SR5",
+		Page:              "411",
+		Rating:            "0",
+		Avail:             "3F",
+		Cost:              "15",
+		AmmoForWeaponType: "spraypen",
+		AddonCategory:     []string{"Drug Grades", "Custom"},
 	},
 	"cram": {
-		Name:          "Cram",
-		Category:      "Drugs",
-		Source:        "SR5",
-		Page:          "411",
-		Rating:        "0",
-		Avail:         "2R",
-		Cost:          "10",
-		AddonCategory: []string{"Drug Grades", "Custom"},
+		Name:              "Cram",
+		Category:          "Drugs",
+		Source:            "SR5",
+		Page:              "411",
+		Rating:            "0",
+		Avail:             "2R",
+		Cost:              "10",
+		AmmoForWeaponType: "spraypen",
+		AddonCategory:     []string{"Drug Grades", "Custom"},
 	},
 	"deepweed": {
-		Name:          "Deepweed",
-		Category:      "Drugs",
-		Source:        "SR5",
-		Page:          "411",
-		Rating:        "0",
-		Avail:         "8F",
-		Cost:          "400",
-		AddonCategory: []string{"Drug Grades", "Custom"},
+		Name:              "Deepweed",
+		Category:          "Drugs",
+		Source:            "SR5",
+		Page:              "411",
+		Rating:            "0",
+		Avail:             "8F",
+		Cost:              "400",
+		AmmoForWeaponType: "spraypen",
+		AddonCategory:     []string{"Drug Grades", "Custom"},
 	},
 	"jazz": {
-		Name:          "Jazz",
-		Category:      "Drugs",
-		Source:        "SR5",
-		Page:          "411",
-		Rating:        "0",
-		Avail:         "2R",
-		Cost:          "75",
-		AddonCategory: []string{"Drug Grades", "Custom"},
+		Name:              "Jazz",
+		Category:          "Drugs",
+		Source:            "SR5",
+		Page:              "411",
+		Rating:            "0",
+		Avail:             "2R",
+		Cost:              "75",
+		AmmoForWeaponType: "spraypen",
+		AddonCategory:     []string{"Drug Grades", "Custom"},
 	},
 	"kamikaze": {
-		Name:          "Kamikaze",
-		Category:      "Drugs",
-		Source:        "SR5",
-		Page:          "412",
-		Rating:        "0",
-		Avail:         "4R",
-		Cost:          "100",
-		AddonCategory: []string{"Drug Grades", "Custom"},
+		Name:              "Kamikaze",
+		Category:          "Drugs",
+		Source:            "SR5",
+		Page:              "412",
+		Rating:            "0",
+		Avail:             "4R",
+		Cost:              "100",
+		AmmoForWeaponType: "spraypen",
+		AddonCategory:     []string{"Drug Grades", "Custom"},
 	},
 	"long_haul": {
 		Name:          "Long Haul",
@@ -8761,24 +9945,26 @@ var DataGears = map[string]Gear{
 		AddonCategory: []string{"Drug Grades", "Custom"},
 	},
 	"nitro": {
-		Name:          "Nitro",
-		Category:      "Drugs",
-		Source:        "SR5",
-		Page:          "412",
-		Rating:        "0",
-		Avail:         "2R",
-		Cost:          "50",
-		AddonCategory: []string{"Drug Grades", "Custom"},
+		Name:              "Nitro",
+		Category:          "Drugs",
+		Source:            "SR5",
+		Page:              "412",
+		Rating:            "0",
+		Avail:             "2R",
+		Cost:              "50",
+		AmmoForWeaponType: "spraypen",
+		AddonCategory:     []string{"Drug Grades", "Custom"},
 	},
 	"novacoke": {
-		Name:          "Novacoke",
-		Category:      "Drugs",
-		Source:        "SR5",
-		Page:          "412",
-		Rating:        "0",
-		Avail:         "2R",
-		Cost:          "10",
-		AddonCategory: []string{"Drug Grades", "Custom"},
+		Name:              "Novacoke",
+		Category:          "Drugs",
+		Source:            "SR5",
+		Page:              "412",
+		Rating:            "0",
+		Avail:             "2R",
+		Cost:              "10",
+		AmmoForWeaponType: "spraypen",
+		AddonCategory:     []string{"Drug Grades", "Custom"},
 	},
 	"psyche": {
 		Name:          "Psyche",
@@ -8791,14 +9977,15 @@ var DataGears = map[string]Gear{
 		AddonCategory: []string{"Drug Grades", "Custom"},
 	},
 	"zen": {
-		Name:          "Zen",
-		Category:      "Drugs",
-		Source:        "SR5",
-		Page:          "412",
-		Rating:        "0",
-		Avail:         "4R",
-		Cost:          "5",
-		AddonCategory: []string{"Drug Grades", "Custom"},
+		Name:              "Zen",
+		Category:          "Drugs",
+		Source:            "SR5",
+		Page:              "412",
+		Rating:            "0",
+		Avail:             "4R",
+		Cost:              "5",
+		AmmoForWeaponType: "spraypen",
+		AddonCategory:     []string{"Drug Grades", "Custom"},
 	},
 	"crash": {
 		Name:          "Crash",
@@ -8881,24 +10068,26 @@ var DataGears = map[string]Gear{
 		AddonCategory: []string{"Drug Grades", "Custom"},
 	},
 	"accelerator": {
-		Name:          "Accelerator",
-		Category:      "Drugs",
-		Source:        "LCD",
-		Page:          "205",
-		Rating:        "0",
-		Avail:         "6R",
-		Cost:          "200",
-		AddonCategory: []string{"Drug Grades", "Custom"},
+		Name:              "Accelerator",
+		Category:          "Drugs",
+		Source:            "LCD",
+		Page:              "205",
+		Rating:            "0",
+		Avail:             "6R",
+		Cost:              "200",
+		AmmoForWeaponType: "spraypen",
+		AddonCategory:     []string{"Drug Grades", "Custom"},
 	},
 	"buffout": {
-		Name:          "Buffout",
-		Category:      "Drugs",
-		Source:        "LCD",
-		Page:          "204",
-		Rating:        "0",
-		Avail:         "6R",
-		Cost:          "100",
-		AddonCategory: []string{"Drug Grades", "Custom"},
+		Name:              "Buffout",
+		Category:          "Drugs",
+		Source:            "LCD",
+		Page:              "204",
+		Rating:            "0",
+		Avail:             "6R",
+		Cost:              "100",
+		AmmoForWeaponType: "spraypen",
+		AddonCategory:     []string{"Drug Grades", "Custom"},
 	},
 	"numb": {
 		Name:          "Numb",
@@ -8911,14 +10100,15 @@ var DataGears = map[string]Gear{
 		AddonCategory: []string{"Drug Grades", "Custom"},
 	},
 	"pinpoint": {
-		Name:          "Pinpoint",
-		Category:      "Drugs",
-		Source:        "LCD",
-		Page:          "204",
-		Rating:        "0",
-		Avail:         "6R",
-		Cost:          "75",
-		AddonCategory: []string{"Drug Grades", "Custom"},
+		Name:              "Pinpoint",
+		Category:          "Drugs",
+		Source:            "LCD",
+		Page:              "204",
+		Rating:            "0",
+		Avail:             "6R",
+		Cost:              "75",
+		AmmoForWeaponType: "spraypen",
+		AddonCategory:     []string{"Drug Grades", "Custom"},
 	},
 	"liquid_nutrients": {
 		Name:          "Liquid Nutrients",
@@ -8990,14 +10180,15 @@ var DataGears = map[string]Gear{
 		AddonCategory: []string{"Drug Grades", "Custom"},
 	},
 	"betameth": {
-		Name:          "Betameth",
-		Category:      "Drugs",
-		Source:        "CF",
-		Page:          "180",
-		Rating:        "0",
-		Avail:         "5F",
-		Cost:          "30",
-		AddonCategory: []string{"Drug Grades", "Custom"},
+		Name:              "Betameth",
+		Category:          "Drugs",
+		Source:            "CF",
+		Page:              "180",
+		Rating:            "0",
+		Avail:             "5F",
+		Cost:              "30",
+		AmmoForWeaponType: "spraypen",
+		AddonCategory:     []string{"Drug Grades", "Custom"},
 	},
 	"betel": {
 		Name:          "Betel",
@@ -9080,14 +10271,15 @@ var DataGears = map[string]Gear{
 		AddonCategory: []string{"Drug Grades", "Custom"},
 	},
 	"guts": {
-		Name:          "Guts",
-		Category:      "Drugs",
-		Source:        "CF",
-		Page:          "181",
-		Rating:        "0",
-		Avail:         "8R",
-		Cost:          "60",
-		AddonCategory: []string{"Drug Grades", "Custom"},
+		Name:              "Guts",
+		Category:          "Drugs",
+		Source:            "CF",
+		Page:              "181",
+		Rating:            "0",
+		Avail:             "8R",
+		Cost:              "60",
+		AmmoForWeaponType: "spraypen",
+		AddonCategory:     []string{"Drug Grades", "Custom"},
 	},
 	"hecates_blessing": {
 		Name:          "Hecate's Blessing",
@@ -9150,14 +10342,15 @@ var DataGears = map[string]Gear{
 		AddonCategory: []string{"Drug Grades", "Custom"},
 	},
 	"little_smoke": {
-		Name:          "Little Smoke",
-		Category:      "Drugs",
-		Source:        "CF",
-		Page:          "187",
-		Rating:        "0",
-		Avail:         "12F",
-		Cost:          "1800",
-		AddonCategory: []string{"Drug Grades", "Custom"},
+		Name:              "Little Smoke",
+		Category:          "Drugs",
+		Source:            "CF",
+		Page:              "187",
+		Rating:            "0",
+		Avail:             "12F",
+		Cost:              "1800",
+		AmmoForWeaponType: "spraypen",
+		AddonCategory:     []string{"Drug Grades", "Custom"},
 	},
 	"memory_fog": {
 		Name:          "Memory Fog",
@@ -9190,24 +10383,26 @@ var DataGears = map[string]Gear{
 		AddonCategory: []string{"Drug Grades", "Custom"},
 	},
 	"oneiro": {
-		Name:          "Oneiro",
-		Category:      "Drugs",
-		Source:        "CF",
-		Page:          "186",
-		Rating:        "0",
-		Avail:         "6F",
-		Cost:          "1250",
-		AddonCategory: []string{"Drug Grades", "Custom"},
+		Name:              "Oneiro",
+		Category:          "Drugs",
+		Source:            "CF",
+		Page:              "186",
+		Rating:            "0",
+		Avail:             "6F",
+		Cost:              "1250",
+		AmmoForWeaponType: "spraypen",
+		AddonCategory:     []string{"Drug Grades", "Custom"},
 	},
 	"overdrive": {
-		Name:          "Overdrive",
-		Category:      "Drugs",
-		Source:        "CF",
-		Page:          "186",
-		Rating:        "0",
-		Avail:         "10F",
-		Cost:          "800",
-		AddonCategory: []string{"Drug Grades", "Custom"},
+		Name:              "Overdrive",
+		Category:          "Drugs",
+		Source:            "CF",
+		Page:              "186",
+		Rating:            "0",
+		Avail:             "10F",
+		Cost:              "800",
+		AmmoForWeaponType: "spraypen",
+		AddonCategory:     []string{"Drug Grades", "Custom"},
 	},
 	"oxygenated_fluorocarbons": {
 		Name:          "Oxygenated Fluorocarbons",
@@ -9220,14 +10415,15 @@ var DataGears = map[string]Gear{
 		AddonCategory: []string{"Drug Grades", "Custom"},
 	},
 	"pixie_dust": {
-		Name:          "Pixie Dust",
-		Category:      "Drugs",
-		Source:        "CF",
-		Page:          "186",
-		Rating:        "0",
-		Avail:         "8F",
-		Cost:          "800",
-		AddonCategory: []string{"Drug Grades", "Custom"},
+		Name:              "Pixie Dust",
+		Category:          "Drugs",
+		Source:            "CF",
+		Page:              "186",
+		Rating:            "0",
+		Avail:             "8F",
+		Cost:              "800",
+		AmmoForWeaponType: "spraypen",
+		AddonCategory:     []string{"Drug Grades", "Custom"},
 	},
 	"push": {
 		Name:          "Push",
@@ -9288,14 +10484,15 @@ var DataGears = map[string]Gear{
 		AddonCategory: []string{"Drug Grades", "Custom"},
 	},
 	"shade": {
-		Name:          "Shade",
-		Category:      "Drugs",
-		Source:        "CF",
-		Page:          "187",
-		Rating:        "0",
-		Avail:         "6R",
-		Cost:          "1000",
-		AddonCategory: []string{"Drug Grades", "Custom"},
+		Name:              "Shade",
+		Category:          "Drugs",
+		Source:            "CF",
+		Page:              "187",
+		Rating:            "0",
+		Avail:             "6R",
+		Cost:              "1000",
+		AmmoForWeaponType: "spraypen",
+		AddonCategory:     []string{"Drug Grades", "Custom"},
 	},
 	"slab_1": {
 		Name:          "Slab",
@@ -9318,14 +10515,15 @@ var DataGears = map[string]Gear{
 		AddonCategory: []string{"Drug Grades", "Custom"},
 	},
 	"snuff": {
-		Name:          "Snuff",
-		Category:      "Drugs",
-		Source:        "CF",
-		Page:          "183",
-		Rating:        "0",
-		Avail:         "1R",
-		Cost:          "10",
-		AddonCategory: []string{"Drug Grades", "Custom"},
+		Name:              "Snuff",
+		Category:          "Drugs",
+		Source:            "CF",
+		Page:              "183",
+		Rating:            "0",
+		Avail:             "1R",
+		Cost:              "10",
+		AmmoForWeaponType: "spraypen",
+		AddonCategory:     []string{"Drug Grades", "Custom"},
 	},
 	"sober_time": {
 		Name:          "Sober Time",
@@ -9348,14 +10546,15 @@ var DataGears = map[string]Gear{
 		AddonCategory: []string{"Drug Grades", "Custom"},
 	},
 	"trance": {
-		Name:          "Trance",
-		Category:      "Drugs",
-		Source:        "CF",
-		Page:          "186",
-		Rating:        "0",
-		Avail:         "10F",
-		Cost:          "1100",
-		AddonCategory: []string{"Drug Grades", "Custom"},
+		Name:              "Trance",
+		Category:          "Drugs",
+		Source:            "CF",
+		Page:              "186",
+		Rating:            "0",
+		Avail:             "10F",
+		Cost:              "1100",
+		AmmoForWeaponType: "spraypen",
+		AddonCategory:     []string{"Drug Grades", "Custom"},
 	},
 	"woad": {
 		Name:          "Woad",
@@ -9368,14 +10567,15 @@ var DataGears = map[string]Gear{
 		AddonCategory: []string{"Drug Grades", "Custom"},
 	},
 	"wuduaku": {
-		Name:          "Wudu'aku",
-		Category:      "Drugs",
-		Source:        "CF",
-		Page:          "187",
-		Rating:        "0",
-		Avail:         "12F",
-		Cost:          "2350",
-		AddonCategory: []string{"Drug Grades", "Custom"},
+		Name:              "Wudu'aku",
+		Category:          "Drugs",
+		Source:            "CF",
+		Page:              "187",
+		Rating:            "0",
+		Avail:             "12F",
+		Cost:              "2350",
+		AmmoForWeaponType: "spraypen",
+		AddonCategory:     []string{"Drug Grades", "Custom"},
 	},
 	"zero": {
 		Name:          "Zero",
@@ -9445,13 +10645,14 @@ var DataGears = map[string]Gear{
 		Cost:     "50",
 	},
 	"chloroform": {
-		Name:     "Chloroform",
-		Category: "Toxins",
-		Source:   "SS",
-		Page:     "188",
-		Rating:   "0",
-		Avail:    "4R",
-		Cost:     "75",
+		Name:              "Chloroform",
+		Category:          "Toxins",
+		Source:            "SS",
+		Page:              "188",
+		Rating:            "0",
+		Avail:             "4R",
+		Cost:              "75",
+		AmmoForWeaponType: "spraypen",
 	},
 	"dmso": {
 		Name:     "DMSO",
@@ -9589,36 +10790,48 @@ var DataGears = map[string]Gear{
 		Cost:     "200",
 	},
 	"street_cooked": {
-		Name:          "Street Cooked",
-		Category:      "Drug Grades",
-		Source:        "CF",
-		Page:          "190",
-		Rating:        "0",
-		Avail:         "0",
-		Cost:          "Parent Cost * -.5",
-		Required:      nil,
+		Name:     "Street Cooked",
+		Category: "Drug Grades",
+		Source:   "CF",
+		Page:     "190",
+		Rating:   "0",
+		Avail:    "0",
+		Cost:     "Parent Cost * -.5",
+		Required: &GearRequired{
+			GearDetails: map[string]interface{}{
+				"category": "Drugs",
+			},
+		},
 		RequireParent: &[]bool{true}[0],
 	},
 	"pharmaceutical": {
-		Name:          "Pharmaceutical",
-		Category:      "Drug Grades",
-		Source:        "CF",
-		Page:          "190",
-		Rating:        "0",
-		Avail:         "0",
-		Cost:          "Parent Cost",
-		Required:      nil,
+		Name:     "Pharmaceutical",
+		Category: "Drug Grades",
+		Source:   "CF",
+		Page:     "190",
+		Rating:   "0",
+		Avail:    "0",
+		Cost:     "Parent Cost",
+		Required: &GearRequired{
+			GearDetails: map[string]interface{}{
+				"category": "Drugs",
+			},
+		},
 		RequireParent: &[]bool{true}[0],
 	},
 	"designer": {
-		Name:          "Designer",
-		Category:      "Drug Grades",
-		Source:        "CF",
-		Page:          "190",
-		Rating:        "0",
-		Avail:         "0",
-		Cost:          "Parent Cost * 5",
-		Required:      nil,
+		Name:     "Designer",
+		Category: "Drug Grades",
+		Source:   "CF",
+		Page:     "190",
+		Rating:   "0",
+		Avail:    "0",
+		Cost:     "Parent Cost * 5",
+		Required: &GearRequired{
+			GearDetails: map[string]interface{}{
+				"category": "Drugs",
+			},
+		},
 		RequireParent: &[]bool{true}[0],
 	},
 	"concealable_holster": {
@@ -9629,7 +10842,13 @@ var DataGears = map[string]Gear{
 		Rating:   "0",
 		Avail:    "2",
 		Cost:     "150",
-		Required: nil,
+		Required: &GearRequired{
+			GearDetails: map[string]interface{}{
+				"OR": map[string]interface{}{
+					"category": []interface{}{"Armor", "Clothing", "Cloaks", "High-Fashion Armor Clothing", "Specialty Armor", "Custom"},
+				},
+			},
+		},
 	},
 	"holster": {
 		Name:     "Holster",
@@ -9639,7 +10858,13 @@ var DataGears = map[string]Gear{
 		Rating:   "0",
 		Avail:    "2",
 		Cost:     "150",
-		Required: nil,
+		Required: &GearRequired{
+			GearDetails: map[string]interface{}{
+				"OR": map[string]interface{}{
+					"category": []interface{}{"Armor", "Clothing", "Cloaks", "High-Fashion Armor Clothing", "Specialty Armor", "Custom"},
+				},
+			},
+		},
 	},
 	"quick_draw_holster": {
 		Name:     "Quick-Draw Holster",
@@ -9649,7 +10874,13 @@ var DataGears = map[string]Gear{
 		Rating:   "0",
 		Avail:    "4",
 		Cost:     "175",
-		Required: nil,
+		Required: &GearRequired{
+			GearDetails: map[string]interface{}{
+				"OR": map[string]interface{}{
+					"category": []interface{}{"Armor", "Clothing", "Cloaks", "High-Fashion Armor Clothing", "Specialty Armor", "Custom"},
+				},
+			},
+		},
 	},
 	"concealed_quick_draw_holster": {
 		Name:     "Concealed Quick-Draw Holster",
@@ -9659,7 +10890,13 @@ var DataGears = map[string]Gear{
 		Rating:   "0",
 		Avail:    "6",
 		Cost:     "275",
-		Required: nil,
+		Required: &GearRequired{
+			GearDetails: map[string]interface{}{
+				"OR": map[string]interface{}{
+					"category": []interface{}{"Armor", "Clothing", "Cloaks", "High-Fashion Armor Clothing", "Specialty Armor", "Custom"},
+				},
+			},
+		},
 	},
 	"micro_flare_launcher_1": {
 		Name:      "Micro Flare Launcher",
@@ -9670,7 +10907,13 @@ var DataGears = map[string]Gear{
 		Avail:     "0",
 		Cost:      "175",
 		AddWeapon: "Micro Flare Launcher",
-		Required:  nil,
+		Required: &GearRequired{
+			GearDetails: map[string]interface{}{
+				"OR": map[string]interface{}{
+					"category": []interface{}{"Armor", "Clothing", "Cloaks", "High-Fashion Armor Clothing", "Specialty Armor", "Custom"},
+				},
+			},
+		},
 	},
 	"distributed_deck": {
 		Name:          "Distributed Deck",
@@ -9681,7 +10924,13 @@ var DataGears = map[string]Gear{
 		Avail:         "+2",
 		Cost:          "Children Cost * 0.1",
 		AddonCategory: []string{"Cyberdecks", "Custom"},
-		Required:      nil,
+		Required: &GearRequired{
+			GearDetails: map[string]interface{}{
+				"OR": map[string]interface{}{
+					"category": []interface{}{"Armor", "Clothing", "Cloaks", "High-Fashion Armor Clothing", "Specialty Armor", "Custom"},
+				},
+			},
+		},
 	},
 	"personal_drone_rack": {
 		Name:     "Personal Drone Rack",
@@ -9691,7 +10940,11 @@ var DataGears = map[string]Gear{
 		Rating:   "0",
 		Avail:    "12R",
 		Cost:     "500",
-		Required: nil,
+		Required: &GearRequired{
+			Parent: &common.ParentDetails{
+				Name: "Micro-Hardpoint",
+			},
+		},
 	},
 	"attack_dongle": {
 		Name:     "Attack Dongle",
@@ -9701,7 +10954,13 @@ var DataGears = map[string]Gear{
 		Rating:   "6",
 		Avail:    "(Rating*2)R",
 		Cost:     "(Rating*Rating)*3000",
-		Required: nil,
+		Required: &GearRequired{
+			GearDetails: map[string]interface{}{
+				"OR": map[string]interface{}{
+					"category": []interface{}{"Commlinks", "Cyberterminals", "Custom"},
+				},
+			},
+		},
 	},
 	"stealth_dongle": {
 		Name:     "Stealth Dongle",
@@ -9711,7 +10970,13 @@ var DataGears = map[string]Gear{
 		Rating:   "6",
 		Avail:    "(Rating*2)R",
 		Cost:     "(Rating*Rating)*3000",
-		Required: nil,
+		Required: &GearRequired{
+			GearDetails: map[string]interface{}{
+				"OR": map[string]interface{}{
+					"category": []interface{}{"Commlinks", "Cyberterminals", "Custom"},
+				},
+			},
+		},
 	},
 	"cable_tap": {
 		Name:     "Cable Tap",
@@ -9721,7 +10986,13 @@ var DataGears = map[string]Gear{
 		Rating:   "0",
 		Avail:    "8R",
 		Cost:     "500",
-		Required: nil,
+		Required: &GearRequired{
+			GearDetails: map[string]interface{}{
+				"OR": map[string]interface{}{
+					"category": []interface{}{"Commlinks", "Cyberterminals", "Custom"},
+				},
+			},
+		},
 	},
 	"stun_dongle": {
 		Name:      "Stun Dongle",
@@ -9732,7 +11003,13 @@ var DataGears = map[string]Gear{
 		Avail:     "6R",
 		Cost:      "600",
 		AddWeapon: "Stun Dongle",
-		Required:  nil,
+		Required: &GearRequired{
+			GearDetails: map[string]interface{}{
+				"OR": map[string]interface{}{
+					"category": []interface{}{"Commlinks", "Cyberterminals", "Custom"},
+				},
+			},
+		},
 	},
 	"receiver": {
 		Name:     "Receiver",
@@ -9742,7 +11019,13 @@ var DataGears = map[string]Gear{
 		Rating:   "0",
 		Avail:    "3",
 		Cost:     "400",
-		Required: nil,
+		Required: &GearRequired{
+			GearDetails: map[string]interface{}{
+				"OR": map[string]interface{}{
+					"category": []interface{}{"Commlinks", "Cyberterminals", "Custom"},
+				},
+			},
+		},
 	},
 	"multiprogram_operating_system": {
 		Name:          "Multiprogram Operating System",
@@ -9753,7 +11036,13 @@ var DataGears = map[string]Gear{
 		Avail:         "6",
 		Cost:          "Rating * 4000",
 		AddonCategory: []string{"Common Programs", "Hacking Programs"},
-		Required:      nil,
+		Required: &GearRequired{
+			GearDetails: map[string]interface{}{
+				"OR": map[string]interface{}{
+					"NONE": nil, "category": []interface{}{"Commlink", "Cyberdecks", "Cyberterminals", "Custom"},
+				},
+			},
+		},
 	},
 	"commlink_form_factor_non_standard": {
 		Name:     "Commlink Form Factor, Non-Standard",
@@ -9763,8 +11052,16 @@ var DataGears = map[string]Gear{
 		Rating:   "0",
 		Avail:    "+2",
 		Cost:     "Gear Cost * 0.2",
-		Required: nil,
-		Bonus:    nil,
+		Required: &GearRequired{
+			GearDetails: map[string]interface{}{
+				"OR": map[string]interface{}{
+					"category": []interface{}{"Commlinks", "Custom"},
+				},
+			},
+		},
+		Bonus: &GearBonus{
+			SelectText: &common.SelectTextBonus{},
+		},
 	},
 	"commlink_form_factor_weapon": {
 		Name:     "Commlink Form Factor, Weapon",
@@ -9774,7 +11071,13 @@ var DataGears = map[string]Gear{
 		Rating:   "0",
 		Avail:    "+4R",
 		Cost:     "Gear Cost * 0.5",
-		Required: nil,
+		Required: &GearRequired{
+			GearDetails: map[string]interface{}{
+				"OR": map[string]interface{}{
+					"category": []interface{}{"Commlinks", "Custom"},
+				},
+			},
+		},
 	},
 	"cyberdeck_form_factor_hackpack": {
 		Name:     "Cyberdeck Form Factor, Hackpack",
@@ -9784,7 +11087,13 @@ var DataGears = map[string]Gear{
 		Rating:   "0",
 		Avail:    "0",
 		Cost:     "0",
-		Required: nil,
+		Required: &GearRequired{
+			GearDetails: map[string]interface{}{
+				"OR": map[string]interface{}{
+					"category": []interface{}{"Cyberdecks", "Custom"},
+				},
+			},
+		},
 	},
 	"cyberdeck_form_factor_non_standard": {
 		Name:     "Cyberdeck Form Factor, Non-Standard",
@@ -9794,8 +11103,16 @@ var DataGears = map[string]Gear{
 		Rating:   "0",
 		Avail:    "+3",
 		Cost:     "Gear Cost * 0.2",
-		Required: nil,
-		Bonus:    nil,
+		Required: &GearRequired{
+			GearDetails: map[string]interface{}{
+				"OR": map[string]interface{}{
+					"category": []interface{}{"Cyberdecks", "Custom"},
+				},
+			},
+		},
+		Bonus: &GearBonus{
+			SelectText: &common.SelectTextBonus{},
+		},
 	},
 	"cyberdeck_form_factor_weapon": {
 		Name:     "Cyberdeck Form Factor, Weapon",
@@ -9805,7 +11122,13 @@ var DataGears = map[string]Gear{
 		Rating:   "0",
 		Avail:    "+6R",
 		Cost:     "Gear Cost * 0.5",
-		Required: nil,
+		Required: &GearRequired{
+			GearDetails: map[string]interface{}{
+				"OR": map[string]interface{}{
+					"category": []interface{}{"Cyberdecks", "Custom"},
+				},
+			},
+		},
 	},
 	"hardening": {
 		Name:     "Hardening",
@@ -9833,7 +11156,9 @@ var DataGears = map[string]Gear{
 		Rating:   "0",
 		Avail:    "7R",
 		Cost:     "1400",
-		Bonus:    nil,
+		Bonus: &GearBonus{
+			MatrixInitiativeDice: "1",
+		},
 	},
 	"overwatch_mask": {
 		Name:     "Overwatch Mask",
@@ -9852,7 +11177,11 @@ var DataGears = map[string]Gear{
 		Rating:   "0",
 		Avail:    "2",
 		Cost:     "900",
-		Bonus:    nil,
+		Bonus: &GearBonus{
+			SelectText: &common.SelectTextBonus{
+				XML: "programs.xml", XPath: "/chummer/programs/program",
+			},
+		},
 	},
 	"self_destruct": {
 		Name:     "Self-Destruct",
@@ -9953,7 +11282,17 @@ var DataGears = map[string]Gear{
 		Avail:         "0",
 		Cost:          "0",
 		AddonCategory: "Electronic Modification",
-		Required:      nil,
+		Required: &GearRequired{
+			GearDetails: map[string]interface{}{
+				"attributearray": map[string]interface{}{
+					"+@operation": "exists", "+@NOT": "",
+				}, "OR": map[string]interface{}{
+					"attack": []interface{}{map[string]interface{}{
+						"+@operation": "exists", "+@NOT": "",
+					}, "0"},
+				},
+			},
+		},
 	},
 	"add_sleaze_modification": {
 		Name:          "Add Sleaze Modification",
@@ -9964,7 +11303,17 @@ var DataGears = map[string]Gear{
 		Avail:         "0",
 		Cost:          "0",
 		AddonCategory: "Electronic Modification",
-		Required:      nil,
+		Required: &GearRequired{
+			GearDetails: map[string]interface{}{
+				"attributearray": map[string]interface{}{
+					"+@operation": "exists", "+@NOT": "",
+				}, "OR": map[string]interface{}{
+					"sleaze": []interface{}{map[string]interface{}{
+						"+@operation": "exists", "+@NOT": "",
+					}, "0"},
+				},
+			},
+		},
 	},
 	"add_module": {
 		Name:          "Add Module",
@@ -9985,7 +11334,17 @@ var DataGears = map[string]Gear{
 		Rating:   "0",
 		Avail:    "0",
 		Cost:     "0",
-		Required: nil,
+		Required: &GearRequired{
+			GearDetails: map[string]interface{}{
+				"OR": map[string]interface{}{
+					"attributearray": map[string]interface{}{
+						"+@operation": "exists",
+					}, "sleaze": map[string]interface{}{
+						"+content": "0", "+@operation": "greaterthan",
+					}, "name": []interface{}{"Add Sleaze Modification", "Fuchi Cyber-N", "Fuchi Cyber-Ex"},
+				},
+			},
+		},
 	},
 	"increase_attack_modification": {
 		Name:     "Increase Attack Modification",
@@ -9995,7 +11354,17 @@ var DataGears = map[string]Gear{
 		Rating:   "0",
 		Avail:    "0",
 		Cost:     "0",
-		Required: nil,
+		Required: &GearRequired{
+			GearDetails: map[string]interface{}{
+				"OR": map[string]interface{}{
+					"attributearray": map[string]interface{}{
+						"+@operation": "exists",
+					}, "attack": map[string]interface{}{
+						"+content": "0", "+@operation": "greaterthan",
+					}, "name": []interface{}{"Add Attack Modification", "Fuchi Cyber-N", "Fuchi Cyber-Ex"},
+				},
+			},
+		},
 	},
 	"increase_data_processing_modification": {
 		Name:     "Increase Data Processing Modification",
@@ -10005,7 +11374,17 @@ var DataGears = map[string]Gear{
 		Rating:   "0",
 		Avail:    "0",
 		Cost:     "0",
-		Required: nil,
+		Required: &GearRequired{
+			GearDetails: map[string]interface{}{
+				"OR": map[string]interface{}{
+					"attributearray": map[string]interface{}{
+						"+@operation": "exists",
+					}, "dataprocessing": map[string]interface{}{
+						"+content": "0", "+@operation": "greaterthan",
+					}, "name": []interface{}{"Fuchi Cyber-N", "Fuchi Cyber-Ex"},
+				},
+			},
+		},
 	},
 	"increase_firewall_modification": {
 		Name:     "Increase Firewall Modification",
@@ -10015,7 +11394,17 @@ var DataGears = map[string]Gear{
 		Rating:   "0",
 		Avail:    "0",
 		Cost:     "0",
-		Required: nil,
+		Required: &GearRequired{
+			GearDetails: map[string]interface{}{
+				"OR": map[string]interface{}{
+					"attributearray": map[string]interface{}{
+						"+@operation": "exists",
+					}, "firewall": map[string]interface{}{
+						"+content": "0", "+@operation": "greaterthan",
+					}, "name": []interface{}{"Fuchi Cyber-N", "Fuchi Cyber-Ex"},
+				},
+			},
+		},
 	},
 	"decrease_sleaze_modification": {
 		Name:     "Decrease Sleaze Modification",
@@ -10025,7 +11414,17 @@ var DataGears = map[string]Gear{
 		Rating:   "0",
 		Avail:    "0",
 		Cost:     "0",
-		Required: nil,
+		Required: &GearRequired{
+			GearDetails: map[string]interface{}{
+				"OR": map[string]interface{}{
+					"attributearray": map[string]interface{}{
+						"+@operation": "exists",
+					}, "sleaze": map[string]interface{}{
+						"+content": "0", "+@operation": "greaterthan",
+					}, "name": []interface{}{"Fuchi Cyber-N", "Fuchi Cyber-Ex"},
+				},
+			},
+		},
 	},
 	"decrease_attack_modification": {
 		Name:     "Decrease Attack Modification",
@@ -10035,7 +11434,17 @@ var DataGears = map[string]Gear{
 		Rating:   "0",
 		Avail:    "0",
 		Cost:     "0",
-		Required: nil,
+		Required: &GearRequired{
+			GearDetails: map[string]interface{}{
+				"OR": map[string]interface{}{
+					"attributearray": map[string]interface{}{
+						"+@operation": "exists",
+					}, "attack": map[string]interface{}{
+						"+content": "0", "+@operation": "greaterthan",
+					}, "name": []interface{}{"Fuchi Cyber-N", "Fuchi Cyber-Ex"},
+				},
+			},
+		},
 	},
 	"decrease_data_processing_modification": {
 		Name:     "Decrease Data Processing Modification",
@@ -10045,7 +11454,17 @@ var DataGears = map[string]Gear{
 		Rating:   "0",
 		Avail:    "0",
 		Cost:     "0",
-		Required: nil,
+		Required: &GearRequired{
+			GearDetails: map[string]interface{}{
+				"OR": map[string]interface{}{
+					"attributearray": map[string]interface{}{
+						"+@operation": "exists",
+					}, "dataprocessing": map[string]interface{}{
+						"+content": "0", "+@operation": "greaterthan",
+					}, "name": []interface{}{"Fuchi Cyber-N", "Fuchi Cyber-Ex"},
+				},
+			},
+		},
 	},
 	"decrease_firewall_modification": {
 		Name:     "Decrease Firewall Modification",
@@ -10055,7 +11474,17 @@ var DataGears = map[string]Gear{
 		Rating:   "0",
 		Avail:    "0",
 		Cost:     "0",
-		Required: nil,
+		Required: &GearRequired{
+			GearDetails: map[string]interface{}{
+				"OR": map[string]interface{}{
+					"attributearray": map[string]interface{}{
+						"+@operation": "exists",
+					}, "firewall": map[string]interface{}{
+						"+content": "0", "+@operation": "greaterthan",
+					}, "name": []interface{}{"Fuchi Cyber-N", "Fuchi Cyber-Ex"},
+				},
+			},
+		},
 	},
 	"modify_matrix_attribute_increase_attack_decrease_sleaze": {
 		Name:     "Modify Matrix Attribute (Increase Attack, Decrease Sleaze)",
@@ -10065,7 +11494,19 @@ var DataGears = map[string]Gear{
 		Rating:   "0",
 		Avail:    "0",
 		Cost:     "0",
-		Required: nil,
+		Required: &GearRequired{
+			GearDetails: map[string]interface{}{
+				"OR": map[string]interface{}{
+					"AND": map[string]interface{}{
+						"attack": map[string]interface{}{
+							"+content": "0", "+@operation": "greaterthan",
+						}, "sleaze": map[string]interface{}{
+							"+content": "0", "+@operation": "greaterthan",
+						},
+					}, "name": []interface{}{"Fuchi Cyber-N", "Fuchi Cyber-Ex"},
+				},
+			},
+		},
 	},
 	"modify_matrix_attribute_increase_attack_decrease_data_processing": {
 		Name:     "Modify Matrix Attribute (Increase Attack, Decrease Data Processing)",
@@ -10075,7 +11516,19 @@ var DataGears = map[string]Gear{
 		Rating:   "0",
 		Avail:    "0",
 		Cost:     "0",
-		Required: nil,
+		Required: &GearRequired{
+			GearDetails: map[string]interface{}{
+				"OR": map[string]interface{}{
+					"AND": map[string]interface{}{
+						"attack": map[string]interface{}{
+							"+content": "0", "+@operation": "greaterthan",
+						}, "dataprocessing": map[string]interface{}{
+							"+content": "0", "+@operation": "greaterthan",
+						},
+					}, "name": []interface{}{"Fuchi Cyber-N", "Fuchi Cyber-Ex"},
+				},
+			},
+		},
 	},
 	"modify_matrix_attribute_increase_attack_decrease_firewall": {
 		Name:     "Modify Matrix Attribute (Increase Attack, Decrease Firewall)",
@@ -10085,7 +11538,19 @@ var DataGears = map[string]Gear{
 		Rating:   "0",
 		Avail:    "0",
 		Cost:     "0",
-		Required: nil,
+		Required: &GearRequired{
+			GearDetails: map[string]interface{}{
+				"OR": map[string]interface{}{
+					"AND": map[string]interface{}{
+						"attack": map[string]interface{}{
+							"+content": "0", "+@operation": "greaterthan",
+						}, "firewall": map[string]interface{}{
+							"+content": "0", "+@operation": "greaterthan",
+						},
+					}, "name": []interface{}{"Fuchi Cyber-N", "Fuchi Cyber-Ex"},
+				},
+			},
+		},
 	},
 	"modify_matrix_attribute_increase_sleaze_decrease_attack": {
 		Name:     "Modify Matrix Attribute (Increase Sleaze, Decrease Attack)",
@@ -10095,7 +11560,19 @@ var DataGears = map[string]Gear{
 		Rating:   "0",
 		Avail:    "0",
 		Cost:     "0",
-		Required: nil,
+		Required: &GearRequired{
+			GearDetails: map[string]interface{}{
+				"OR": map[string]interface{}{
+					"AND": map[string]interface{}{
+						"attack": map[string]interface{}{
+							"+content": "0", "+@operation": "greaterthan",
+						}, "sleaze": map[string]interface{}{
+							"+content": "0", "+@operation": "greaterthan",
+						},
+					}, "name": []interface{}{"Fuchi Cyber-N", "Fuchi Cyber-Ex"},
+				},
+			},
+		},
 	},
 	"modify_matrix_attribute_increase_sleaze_decrease_data_processing": {
 		Name:     "Modify Matrix Attribute (Increase Sleaze, Decrease Data Processing)",
@@ -10105,7 +11582,19 @@ var DataGears = map[string]Gear{
 		Rating:   "0",
 		Avail:    "0",
 		Cost:     "0",
-		Required: nil,
+		Required: &GearRequired{
+			GearDetails: map[string]interface{}{
+				"OR": map[string]interface{}{
+					"AND": map[string]interface{}{
+						"sleaze": map[string]interface{}{
+							"+content": "0", "+@operation": "greaterthan",
+						}, "dataprocessing": map[string]interface{}{
+							"+content": "0", "+@operation": "greaterthan",
+						},
+					}, "name": []interface{}{"Fuchi Cyber-N", "Fuchi Cyber-Ex"},
+				},
+			},
+		},
 	},
 	"modify_matrix_attribute_increase_sleaze_decrease_firewall": {
 		Name:     "Modify Matrix Attribute (Increase Sleaze, Decrease Firewall)",
@@ -10115,7 +11604,19 @@ var DataGears = map[string]Gear{
 		Rating:   "0",
 		Avail:    "0",
 		Cost:     "0",
-		Required: nil,
+		Required: &GearRequired{
+			GearDetails: map[string]interface{}{
+				"OR": map[string]interface{}{
+					"AND": map[string]interface{}{
+						"sleaze": map[string]interface{}{
+							"+content": "0", "+@operation": "greaterthan",
+						}, "firewall": map[string]interface{}{
+							"+content": "0", "+@operation": "greaterthan",
+						},
+					}, "name": []interface{}{"Fuchi Cyber-N", "Fuchi Cyber-Ex"},
+				},
+			},
+		},
 	},
 	"modify_matrix_attribute_increase_data_processing_decrease_attack": {
 		Name:     "Modify Matrix Attribute (Increase Data Processing, Decrease Attack)",
@@ -10125,7 +11626,19 @@ var DataGears = map[string]Gear{
 		Rating:   "0",
 		Avail:    "0",
 		Cost:     "0",
-		Required: nil,
+		Required: &GearRequired{
+			GearDetails: map[string]interface{}{
+				"OR": map[string]interface{}{
+					"AND": map[string]interface{}{
+						"attack": map[string]interface{}{
+							"+content": "0", "+@operation": "greaterthan",
+						}, "dataprocessing": map[string]interface{}{
+							"+content": "0", "+@operation": "greaterthan",
+						},
+					}, "name": []interface{}{"Fuchi Cyber-N", "Fuchi Cyber-Ex"},
+				},
+			},
+		},
 	},
 	"modify_matrix_attribute_increase_data_processing_decrease_sleaze": {
 		Name:     "Modify Matrix Attribute (Increase Data Processing, Decrease Sleaze)",
@@ -10135,7 +11648,19 @@ var DataGears = map[string]Gear{
 		Rating:   "0",
 		Avail:    "0",
 		Cost:     "0",
-		Required: nil,
+		Required: &GearRequired{
+			GearDetails: map[string]interface{}{
+				"OR": map[string]interface{}{
+					"AND": map[string]interface{}{
+						"sleaze": map[string]interface{}{
+							"+content": "0", "+@operation": "greaterthan",
+						}, "dataprocessing": map[string]interface{}{
+							"+content": "0", "+@operation": "greaterthan",
+						},
+					}, "name": []interface{}{"Fuchi Cyber-N", "Fuchi Cyber-Ex"},
+				},
+			},
+		},
 	},
 	"modify_matrix_attribute_increase_data_processing_decrease_firewall": {
 		Name:     "Modify Matrix Attribute (Increase Data Processing, Decrease Firewall)",
@@ -10145,7 +11670,19 @@ var DataGears = map[string]Gear{
 		Rating:   "0",
 		Avail:    "0",
 		Cost:     "0",
-		Required: nil,
+		Required: &GearRequired{
+			GearDetails: map[string]interface{}{
+				"OR": map[string]interface{}{
+					"AND": map[string]interface{}{
+						"dataprocessing": map[string]interface{}{
+							"+content": "0", "+@operation": "greaterthan",
+						}, "firewall": map[string]interface{}{
+							"+content": "0", "+@operation": "greaterthan",
+						},
+					}, "name": []interface{}{"Fuchi Cyber-N", "Fuchi Cyber-Ex"},
+				},
+			},
+		},
 	},
 	"modify_matrix_attribute_increase_firewall_decrease_attack": {
 		Name:     "Modify Matrix Attribute (Increase Firewall, Decrease Attack)",
@@ -10155,7 +11692,19 @@ var DataGears = map[string]Gear{
 		Rating:   "0",
 		Avail:    "0",
 		Cost:     "0",
-		Required: nil,
+		Required: &GearRequired{
+			GearDetails: map[string]interface{}{
+				"OR": map[string]interface{}{
+					"AND": map[string]interface{}{
+						"attack": map[string]interface{}{
+							"+content": "0", "+@operation": "greaterthan",
+						}, "firewall": map[string]interface{}{
+							"+content": "0", "+@operation": "greaterthan",
+						},
+					}, "name": []interface{}{"Fuchi Cyber-N", "Fuchi Cyber-Ex"},
+				},
+			},
+		},
 	},
 	"modify_matrix_attribute_increase_firewall_decrease_sleaze": {
 		Name:     "Modify Matrix Attribute (Increase Firewall, Decrease Sleaze)",
@@ -10165,7 +11714,19 @@ var DataGears = map[string]Gear{
 		Rating:   "0",
 		Avail:    "0",
 		Cost:     "0",
-		Required: nil,
+		Required: &GearRequired{
+			GearDetails: map[string]interface{}{
+				"OR": map[string]interface{}{
+					"AND": map[string]interface{}{
+						"sleaze": map[string]interface{}{
+							"+content": "0", "+@operation": "greaterthan",
+						}, "firewall": map[string]interface{}{
+							"+content": "0", "+@operation": "greaterthan",
+						},
+					}, "name": []interface{}{"Fuchi Cyber-N", "Fuchi Cyber-Ex"},
+				},
+			},
+		},
 	},
 	"modify_matrix_attribute_increase_firewall_decrease_data_processing": {
 		Name:     "Modify Matrix Attribute (Increase Firewall, Decrease Data Processing)",
@@ -10175,7 +11736,19 @@ var DataGears = map[string]Gear{
 		Rating:   "0",
 		Avail:    "0",
 		Cost:     "0",
-		Required: nil,
+		Required: &GearRequired{
+			GearDetails: map[string]interface{}{
+				"OR": map[string]interface{}{
+					"AND": map[string]interface{}{
+						"dataprocessing": map[string]interface{}{
+							"+content": "0", "+@operation": "greaterthan",
+						}, "firewall": map[string]interface{}{
+							"+content": "0", "+@operation": "greaterthan",
+						},
+					}, "name": []interface{}{"Fuchi Cyber-N", "Fuchi Cyber-Ex"},
+				},
+			},
+		},
 	},
 	"modify_matrix_attribute_increase_1st_decrease_2nd": {
 		Name:     "Modify Matrix Attribute (Increase 1st, Decrease 2nd)",
@@ -10185,7 +11758,13 @@ var DataGears = map[string]Gear{
 		Rating:   "0",
 		Avail:    "0",
 		Cost:     "0",
-		Required: nil,
+		Required: &GearRequired{
+			GearDetails: map[string]interface{}{
+				"attributearray": map[string]interface{}{
+					"+@operation": "exists",
+				},
+			},
+		},
 	},
 	"modify_matrix_attribute_increase_1st_decrease_3rd": {
 		Name:     "Modify Matrix Attribute (Increase 1st, Decrease 3rd)",
@@ -10195,7 +11774,13 @@ var DataGears = map[string]Gear{
 		Rating:   "0",
 		Avail:    "0",
 		Cost:     "0",
-		Required: nil,
+		Required: &GearRequired{
+			GearDetails: map[string]interface{}{
+				"attributearray": map[string]interface{}{
+					"+@operation": "exists",
+				},
+			},
+		},
 	},
 	"modify_matrix_attribute_increase_1st_decrease_4th": {
 		Name:     "Modify Matrix Attribute (Increase 1st, Decrease 4th)",
@@ -10205,7 +11790,13 @@ var DataGears = map[string]Gear{
 		Rating:   "0",
 		Avail:    "0",
 		Cost:     "0",
-		Required: nil,
+		Required: &GearRequired{
+			GearDetails: map[string]interface{}{
+				"attributearray": map[string]interface{}{
+					"+@operation": "exists",
+				},
+			},
+		},
 	},
 	"modify_matrix_attribute_increase_2nd_decrease_1st": {
 		Name:     "Modify Matrix Attribute (Increase 2nd, Decrease 1st)",
@@ -10215,7 +11806,13 @@ var DataGears = map[string]Gear{
 		Rating:   "0",
 		Avail:    "0",
 		Cost:     "0",
-		Required: nil,
+		Required: &GearRequired{
+			GearDetails: map[string]interface{}{
+				"attributearray": map[string]interface{}{
+					"+@operation": "exists",
+				},
+			},
+		},
 	},
 	"modify_matrix_attribute_increase_2nd_decrease_3rd": {
 		Name:     "Modify Matrix Attribute (Increase 2nd, Decrease 3rd)",
@@ -10225,7 +11822,13 @@ var DataGears = map[string]Gear{
 		Rating:   "0",
 		Avail:    "0",
 		Cost:     "0",
-		Required: nil,
+		Required: &GearRequired{
+			GearDetails: map[string]interface{}{
+				"attributearray": map[string]interface{}{
+					"+@operation": "exists",
+				},
+			},
+		},
 	},
 	"modify_matrix_attribute_increase_2nd_decrease_4th": {
 		Name:     "Modify Matrix Attribute (Increase 2nd, Decrease 4th)",
@@ -10235,7 +11838,13 @@ var DataGears = map[string]Gear{
 		Rating:   "0",
 		Avail:    "0",
 		Cost:     "0",
-		Required: nil,
+		Required: &GearRequired{
+			GearDetails: map[string]interface{}{
+				"attributearray": map[string]interface{}{
+					"+@operation": "exists",
+				},
+			},
+		},
 	},
 	"modify_matrix_attribute_increase_3rd_decrease_1st": {
 		Name:     "Modify Matrix Attribute (Increase 3rd, Decrease 1st)",
@@ -10245,7 +11854,13 @@ var DataGears = map[string]Gear{
 		Rating:   "0",
 		Avail:    "0",
 		Cost:     "0",
-		Required: nil,
+		Required: &GearRequired{
+			GearDetails: map[string]interface{}{
+				"attributearray": map[string]interface{}{
+					"+@operation": "exists",
+				},
+			},
+		},
 	},
 	"modify_matrix_attribute_increase_3rd_decrease_2nd": {
 		Name:     "Modify Matrix Attribute (Increase 3rd, Decrease 2nd)",
@@ -10255,7 +11870,13 @@ var DataGears = map[string]Gear{
 		Rating:   "0",
 		Avail:    "0",
 		Cost:     "0",
-		Required: nil,
+		Required: &GearRequired{
+			GearDetails: map[string]interface{}{
+				"attributearray": map[string]interface{}{
+					"+@operation": "exists",
+				},
+			},
+		},
 	},
 	"modify_matrix_attribute_increase_3rd_decrease_4th": {
 		Name:     "Modify Matrix Attribute (Increase 3rd, Decrease 4th)",
@@ -10265,7 +11886,13 @@ var DataGears = map[string]Gear{
 		Rating:   "0",
 		Avail:    "0",
 		Cost:     "0",
-		Required: nil,
+		Required: &GearRequired{
+			GearDetails: map[string]interface{}{
+				"attributearray": map[string]interface{}{
+					"+@operation": "exists",
+				},
+			},
+		},
 	},
 	"modify_matrix_attribute_increase_4th_decrease_1st": {
 		Name:     "Modify Matrix Attribute (Increase 4th, Decrease 1st)",
@@ -10275,7 +11902,13 @@ var DataGears = map[string]Gear{
 		Rating:   "0",
 		Avail:    "0",
 		Cost:     "0",
-		Required: nil,
+		Required: &GearRequired{
+			GearDetails: map[string]interface{}{
+				"attributearray": map[string]interface{}{
+					"+@operation": "exists",
+				},
+			},
+		},
 	},
 	"modify_matrix_attribute_increase_4th_decrease_2nd": {
 		Name:     "Modify Matrix Attribute (Increase 4th, Decrease 2nd)",
@@ -10285,7 +11918,13 @@ var DataGears = map[string]Gear{
 		Rating:   "0",
 		Avail:    "0",
 		Cost:     "0",
-		Required: nil,
+		Required: &GearRequired{
+			GearDetails: map[string]interface{}{
+				"attributearray": map[string]interface{}{
+					"+@operation": "exists",
+				},
+			},
+		},
 	},
 	"modify_matrix_attribute_increase_4th_decrease_3rd": {
 		Name:     "Modify Matrix Attribute (Increase 4th, Decrease 3rd)",
@@ -10295,7 +11934,13 @@ var DataGears = map[string]Gear{
 		Rating:   "0",
 		Avail:    "0",
 		Cost:     "0",
-		Required: nil,
+		Required: &GearRequired{
+			GearDetails: map[string]interface{}{
+				"attributearray": map[string]interface{}{
+					"+@operation": "exists",
+				},
+			},
+		},
 	},
 	"persona_firmware": {
 		Name:          "Persona Firmware",
@@ -10786,7 +12431,9 @@ var DataGears = map[string]Gear{
 		Rating:   "0",
 		Avail:    "0",
 		Cost:     "10",
-		Bonus:    nil,
+		Bonus: &GearBonus{
+			SelectText: &common.SelectTextBonus{},
+		},
 	},
 	"movie_first_run": {
 		Name:     "Movie, First Run",
@@ -10796,7 +12443,9 @@ var DataGears = map[string]Gear{
 		Rating:   "0",
 		Avail:    "0",
 		Cost:     "20",
-		Bonus:    nil,
+		Bonus: &GearBonus{
+			SelectText: &common.SelectTextBonus{},
+		},
 	},
 	"movie_second_run": {
 		Name:     "Movie, Second Run",
@@ -10806,7 +12455,9 @@ var DataGears = map[string]Gear{
 		Rating:   "0",
 		Avail:    "0",
 		Cost:     "5",
-		Bonus:    nil,
+		Bonus: &GearBonus{
+			SelectText: &common.SelectTextBonus{},
+		},
 	},
 	"movie_one_view_download": {
 		Name:     "Movie, One-View Download",
@@ -10816,7 +12467,9 @@ var DataGears = map[string]Gear{
 		Rating:   "0",
 		Avail:    "0",
 		Cost:     "5",
-		Bonus:    nil,
+		Bonus: &GearBonus{
+			SelectText: &common.SelectTextBonus{},
+		},
 	},
 	"sim_program": {
 		Name:     "Sim Program",
@@ -10826,7 +12479,9 @@ var DataGears = map[string]Gear{
 		Rating:   "0",
 		Avail:    "0",
 		Cost:     "50",
-		Bonus:    nil,
+		Bonus: &GearBonus{
+			SelectText: &common.SelectTextBonus{},
+		},
 	},
 	"sim_program_one_view_download": {
 		Name:     "Sim Program, One-View Download",
@@ -10836,7 +12491,9 @@ var DataGears = map[string]Gear{
 		Rating:   "0",
 		Avail:    "0",
 		Cost:     "10",
-		Bonus:    nil,
+		Bonus: &GearBonus{
+			SelectText: &common.SelectTextBonus{},
+		},
 	},
 	"portable_music_player": {
 		Name:     "Portable Music Player",
@@ -10846,7 +12503,9 @@ var DataGears = map[string]Gear{
 		Rating:   "0",
 		Avail:    "0",
 		Cost:     "10",
-		Bonus:    nil,
+		Bonus: &GearBonus{
+			SelectText: &common.SelectTextBonus{},
+		},
 	},
 	"prepaid_commlink_cheap": {
 		Name:     "Prepaid Commlink (Cheap)",
@@ -10874,7 +12533,9 @@ var DataGears = map[string]Gear{
 		Rating:   "0",
 		Avail:    "0",
 		Cost:     "50",
-		Bonus:    nil,
+		Bonus: &GearBonus{
+			SelectText: &common.SelectTextBonus{},
+		},
 	},
 	"video_game_oldused": {
 		Name:     "Video Game (Old/Used)",
@@ -10884,7 +12545,9 @@ var DataGears = map[string]Gear{
 		Rating:   "0",
 		Avail:    "0",
 		Cost:     "20",
-		Bonus:    nil,
+		Bonus: &GearBonus{
+			SelectText: &common.SelectTextBonus{},
+		},
 	},
 	"magazine_download": {
 		Name:     "Magazine (Download)",
@@ -10894,7 +12557,9 @@ var DataGears = map[string]Gear{
 		Rating:   "0",
 		Avail:    "0",
 		Cost:     "5",
-		Bonus:    nil,
+		Bonus: &GearBonus{
+			SelectText: &common.SelectTextBonus{},
+		},
 	},
 	"magazine_printout": {
 		Name:     "Magazine (Printout)",
@@ -10904,7 +12569,9 @@ var DataGears = map[string]Gear{
 		Rating:   "0",
 		Avail:    "0",
 		Cost:     "5",
-		Bonus:    nil,
+		Bonus: &GearBonus{
+			SelectText: &common.SelectTextBonus{},
+		},
 	},
 	"book_download": {
 		Name:     "Book (Download)",
@@ -10914,7 +12581,9 @@ var DataGears = map[string]Gear{
 		Rating:   "0",
 		Avail:    "0",
 		Cost:     "20",
-		Bonus:    nil,
+		Bonus: &GearBonus{
+			SelectText: &common.SelectTextBonus{},
+		},
 	},
 	"book_printout": {
 		Name:     "Book (Printout)",
@@ -10924,7 +12593,9 @@ var DataGears = map[string]Gear{
 		Rating:   "0",
 		Avail:    "0",
 		Cost:     "20",
-		Bonus:    nil,
+		Bonus: &GearBonus{
+			SelectText: &common.SelectTextBonus{},
+		},
 	},
 	"textbook_undergraduate_download": {
 		Name:     "Textbook, Undergraduate (Download)",
@@ -10934,7 +12605,9 @@ var DataGears = map[string]Gear{
 		Rating:   "0",
 		Avail:    "0",
 		Cost:     "100",
-		Bonus:    nil,
+		Bonus: &GearBonus{
+			SelectText: &common.SelectTextBonus{},
+		},
 	},
 	"textbook_undergraduate_printout": {
 		Name:     "Textbook, Undergraduate (Printout)",
@@ -10944,7 +12617,9 @@ var DataGears = map[string]Gear{
 		Rating:   "0",
 		Avail:    "0",
 		Cost:     "100",
-		Bonus:    nil,
+		Bonus: &GearBonus{
+			SelectText: &common.SelectTextBonus{},
+		},
 	},
 	"textbook_graduate_download": {
 		Name:     "Textbook, Graduate (Download)",
@@ -10954,7 +12629,9 @@ var DataGears = map[string]Gear{
 		Rating:   "0",
 		Avail:    "0",
 		Cost:     "500",
-		Bonus:    nil,
+		Bonus: &GearBonus{
+			SelectText: &common.SelectTextBonus{},
+		},
 	},
 	"textbook_graduate_printout": {
 		Name:     "Textbook, Graduate (Printout)",
@@ -10964,7 +12641,9 @@ var DataGears = map[string]Gear{
 		Rating:   "0",
 		Avail:    "0",
 		Cost:     "500",
-		Bonus:    nil,
+		Bonus: &GearBonus{
+			SelectText: &common.SelectTextBonus{},
+		},
 	},
 	"trideo_set_small": {
 		Name:     "Trideo Set (Small)",
@@ -11001,7 +12680,9 @@ var DataGears = map[string]Gear{
 		Rating:   "0",
 		Avail:    "0",
 		Cost:     "10",
-		Bonus:    nil,
+		Bonus: &GearBonus{
+			SelectText: &common.SelectTextBonus{},
+		},
 	},
 	"ticket_for_a_show_normal": {
 		Name:     "Ticket for a Show (Normal)",
@@ -11011,7 +12692,9 @@ var DataGears = map[string]Gear{
 		Rating:   "0",
 		Avail:    "4",
 		Cost:     "50",
-		Bonus:    nil,
+		Bonus: &GearBonus{
+			SelectText: &common.SelectTextBonus{},
+		},
 	},
 	"ticket_for_a_show_famous_artist": {
 		Name:     "Ticket for a Show (Famous Artist)",
@@ -11021,7 +12704,9 @@ var DataGears = map[string]Gear{
 		Rating:   "0",
 		Avail:    "8",
 		Cost:     "500",
-		Bonus:    nil,
+		Bonus: &GearBonus{
+			SelectText: &common.SelectTextBonus{},
+		},
 	},
 	"ticket_for_sporting_event_nosebleed": {
 		Name:     "Ticket for Sporting Event (Nosebleed)",
@@ -11031,7 +12716,9 @@ var DataGears = map[string]Gear{
 		Rating:   "0",
 		Avail:    "0",
 		Cost:     "50",
-		Bonus:    nil,
+		Bonus: &GearBonus{
+			SelectText: &common.SelectTextBonus{},
+		},
 	},
 	"ticket_for_sporting_event_normal": {
 		Name:     "Ticket for Sporting Event (Normal)",
@@ -11041,7 +12728,9 @@ var DataGears = map[string]Gear{
 		Rating:   "0",
 		Avail:    "4",
 		Cost:     "250",
-		Bonus:    nil,
+		Bonus: &GearBonus{
+			SelectText: &common.SelectTextBonus{},
+		},
 	},
 	"ticket_for_sporting_event_good": {
 		Name:     "Ticket for Sporting Event (Good)",
@@ -11051,7 +12740,9 @@ var DataGears = map[string]Gear{
 		Rating:   "0",
 		Avail:    "8",
 		Cost:     "1000",
-		Bonus:    nil,
+		Bonus: &GearBonus{
+			SelectText: &common.SelectTextBonus{},
+		},
 	},
 	"box_rental_for_ten_at_a_sporting_event": {
 		Name:     "Box Rental for Ten at a Sporting Event",
@@ -11061,7 +12752,9 @@ var DataGears = map[string]Gear{
 		Rating:   "0",
 		Avail:    "12",
 		Cost:     "20000",
-		Bonus:    nil,
+		Bonus: &GearBonus{
+			SelectText: &common.SelectTextBonus{},
+		},
 	},
 	"song_download": {
 		Name:     "Song Download",
@@ -11071,7 +12764,9 @@ var DataGears = map[string]Gear{
 		Rating:   "0",
 		Avail:    "0",
 		Cost:     "1",
-		Bonus:    nil,
+		Bonus: &GearBonus{
+			SelectText: &common.SelectTextBonus{},
+		},
 	},
 	"screamsheet_download": {
 		Name:     "Screamsheet Download",
@@ -11081,7 +12776,9 @@ var DataGears = map[string]Gear{
 		Rating:   "0",
 		Avail:    "0",
 		Cost:     "1",
-		Bonus:    nil,
+		Bonus: &GearBonus{
+			SelectText: &common.SelectTextBonus{},
+		},
 	},
 	"roll_of_clear_tape": {
 		Name:     "Roll of Clear Tape",
@@ -11410,7 +13107,9 @@ var DataGears = map[string]Gear{
 		Rating:   "0",
 		Avail:    "0",
 		Cost:     "10",
-		Bonus:    nil,
+		Bonus: &GearBonus{
+			SelectText: &common.SelectTextBonus{},
+		},
 	},
 	"gasoline_liter": {
 		Name:     "Gasoline (Liter)",
@@ -11438,7 +13137,9 @@ var DataGears = map[string]Gear{
 		Rating:   "0",
 		Avail:    "0",
 		Cost:     "5",
-		Bonus:    nil,
+		Bonus: &GearBonus{
+			SelectText: &common.SelectTextBonus{},
+		},
 	},
 	"calculator": {
 		Name:     "Calculator",
@@ -11520,7 +13221,9 @@ var DataGears = map[string]Gear{
 		Rating:   "0",
 		Avail:    "0",
 		Cost:     "5",
-		Bonus:    nil,
+		Bonus: &GearBonus{
+			SelectText: &common.SelectTextBonus{},
+		},
 	},
 	"hand_tool_good": {
 		Name:     "Hand Tool (Good)",
@@ -11530,7 +13233,9 @@ var DataGears = map[string]Gear{
 		Rating:   "0",
 		Avail:    "0",
 		Cost:     "20",
-		Bonus:    nil,
+		Bonus: &GearBonus{
+			SelectText: &common.SelectTextBonus{},
+		},
 	},
 	"power_tool_cheap": {
 		Name:     "Power Tool (Cheap)",
@@ -11540,7 +13245,9 @@ var DataGears = map[string]Gear{
 		Rating:   "0",
 		Avail:    "0",
 		Cost:     "20",
-		Bonus:    nil,
+		Bonus: &GearBonus{
+			SelectText: &common.SelectTextBonus{},
+		},
 	},
 	"power_tool_good": {
 		Name:     "Power Tool (Good)",
@@ -11550,7 +13257,9 @@ var DataGears = map[string]Gear{
 		Rating:   "0",
 		Avail:    "0",
 		Cost:     "100",
-		Bonus:    nil,
+		Bonus: &GearBonus{
+			SelectText: &common.SelectTextBonus{},
+		},
 	},
 	"paint_roller": {
 		Name:     "Paint Roller",
@@ -12265,7 +13974,11 @@ var DataGears = map[string]Gear{
 		Rating:   "0",
 		Avail:    "+3",
 		Cost:     "+500",
-		Required: nil,
+		Required: &GearRequired{
+			GearDetails: map[string]interface{}{
+				"name": "Altskin",
+			},
+		},
 	},
 	"altskin_chameleon": {
 		Name:     "Altskin Chameleon",
@@ -12275,7 +13988,11 @@ var DataGears = map[string]Gear{
 		Rating:   "0",
 		Avail:    "+2",
 		Cost:     "+250",
-		Required: nil,
+		Required: &GearRequired{
+			GearDetails: map[string]interface{}{
+				"name": "Altskin",
+			},
+		},
 	},
 	"altskin_newprint": {
 		Name:     "Altskin Newprint",
@@ -12285,7 +14002,11 @@ var DataGears = map[string]Gear{
 		Rating:   "6",
 		Avail:    "+4F",
 		Cost:     "Rating * 200",
-		Required: nil,
+		Required: &GearRequired{
+			GearDetails: map[string]interface{}{
+				"name": "Altskin",
+			},
+		},
 	},
 	"altskin_sealer": {
 		Name:     "Altskin Sealer",
@@ -12295,7 +14016,11 @@ var DataGears = map[string]Gear{
 		Rating:   "0",
 		Avail:    "+1",
 		Cost:     "+250",
-		Required: nil,
+		Required: &GearRequired{
+			GearDetails: map[string]interface{}{
+				"name": "Altskin",
+			},
+		},
 	},
 	"altskin_shifter": {
 		Name:     "Altskin Shifter",
@@ -12305,8 +14030,18 @@ var DataGears = map[string]Gear{
 		Rating:   "0",
 		Avail:    "+2",
 		Cost:     "+250",
-		Required: nil,
-		Bonus:    nil,
+		Required: &GearRequired{
+			GearDetails: map[string]interface{}{
+				"name": "Altskin",
+			},
+		},
+		Bonus: &GearBonus{
+			BaseBonus: common.BaseBonus{
+				LimitModifier: common.LimitModifier{
+					Limit: "Mental", Value: "1", Condition: "LimitCondition_SkillsActiveDisguiseImpersonation",
+				},
+			},
+		},
 	},
 	"carcerand_plus": {
 		Name:     "Carcerand-Plus",
@@ -12343,7 +14078,11 @@ var DataGears = map[string]Gear{
 		Rating:   "6",
 		Avail:    "8F",
 		Cost:     "Rating * 1500",
-		Bonus:    nil,
+		Bonus: &GearBonus{
+			SelectText: &common.SelectTextBonus{
+				XML: "gear.xml", XPath: "/chummer/gears/gear[category = 'Toxins']", AllowEdit: "True",
+			},
+		},
 	},
 	"monowire_per_metre": {
 		Name:     "Monowire (Per Metre)",
@@ -12535,7 +14274,9 @@ var DataGears = map[string]Gear{
 		Rating:   "0",
 		Avail:    "0",
 		Cost:     "Variable(500-2500)",
-		Bonus:    nil,
+		Bonus: &GearBonus{
+			SelectText: &common.SelectTextBonus{},
+		},
 	},
 	"address": {
 		Name:     "Address",
@@ -12545,7 +14286,9 @@ var DataGears = map[string]Gear{
 		Rating:   "0",
 		Avail:    "0",
 		Cost:     "Variable(200-750)",
-		Bonus:    nil,
+		Bonus: &GearBonus{
+			SelectText: &common.SelectTextBonus{},
+		},
 	},
 	"blackmail_info": {
 		Name:     "Blackmail Info",
@@ -12555,7 +14298,9 @@ var DataGears = map[string]Gear{
 		Rating:   "0",
 		Avail:    "0",
 		Cost:     "Variable(2000-1000000)",
-		Bonus:    nil,
+		Bonus: &GearBonus{
+			SelectText: &common.SelectTextBonus{},
+		},
 	},
 	"handwriting_analysis": {
 		Name:     "Handwriting Analysis",
@@ -12565,7 +14310,9 @@ var DataGears = map[string]Gear{
 		Rating:   "0",
 		Avail:    "0",
 		Cost:     "Variable(150-400)",
-		Bonus:    nil,
+		Bonus: &GearBonus{
+			SelectText: &common.SelectTextBonus{},
+		},
 	},
 	"history": {
 		Name:     "History",
@@ -12575,7 +14322,9 @@ var DataGears = map[string]Gear{
 		Rating:   "0",
 		Avail:    "0",
 		Cost:     "Variable(250-2000)",
-		Bonus:    nil,
+		Bonus: &GearBonus{
+			SelectText: &common.SelectTextBonus{},
+		},
 	},
 	"hobbies": {
 		Name:     "Hobbies",
@@ -12585,7 +14334,9 @@ var DataGears = map[string]Gear{
 		Rating:   "0",
 		Avail:    "0",
 		Cost:     "Variable(100-500)",
-		Bonus:    nil,
+		Bonus: &GearBonus{
+			SelectText: &common.SelectTextBonus{},
+		},
 	},
 	"market_scan": {
 		Name:     "Market Scan",
@@ -12595,7 +14346,9 @@ var DataGears = map[string]Gear{
 		Rating:   "0",
 		Avail:    "0",
 		Cost:     "Variable(100-300)",
-		Bonus:    nil,
+		Bonus: &GearBonus{
+			SelectText: &common.SelectTextBonus{},
+		},
 	},
 	"medical_condition": {
 		Name:     "Medical Condition",
@@ -12605,7 +14358,9 @@ var DataGears = map[string]Gear{
 		Rating:   "0",
 		Avail:    "0",
 		Cost:     "Variable(500-3000)",
-		Bonus:    nil,
+		Bonus: &GearBonus{
+			SelectText: &common.SelectTextBonus{},
+		},
 	},
 	"name": {
 		Name:     "Name",
@@ -12615,7 +14370,9 @@ var DataGears = map[string]Gear{
 		Rating:   "0",
 		Avail:    "0",
 		Cost:     "Variable(100-500)",
-		Bonus:    nil,
+		Bonus: &GearBonus{
+			SelectText: &common.SelectTextBonus{},
+		},
 	},
 	"pattern_recognition": {
 		Name:     "Pattern Recognition",
@@ -12625,7 +14382,9 @@ var DataGears = map[string]Gear{
 		Rating:   "0",
 		Avail:    "0",
 		Cost:     "Variable(300-1750)",
-		Bonus:    nil,
+		Bonus: &GearBonus{
+			SelectText: &common.SelectTextBonus{},
+		},
 	},
 	"psych_profile": {
 		Name:     "Psych Profile",
@@ -12635,7 +14394,9 @@ var DataGears = map[string]Gear{
 		Rating:   "0",
 		Avail:    "0",
 		Cost:     "Variable(750-3000)",
-		Bonus:    nil,
+		Bonus: &GearBonus{
+			SelectText: &common.SelectTextBonus{},
+		},
 	},
 	"recent_purchases": {
 		Name:     "Recent Purchases",
@@ -12645,7 +14406,9 @@ var DataGears = map[string]Gear{
 		Rating:   "0",
 		Avail:    "0",
 		Cost:     "Variable(150-1500)",
-		Bonus:    nil,
+		Bonus: &GearBonus{
+			SelectText: &common.SelectTextBonus{},
+		},
 	},
 	"safehouses": {
 		Name:     "Safehouses",
@@ -12655,7 +14418,9 @@ var DataGears = map[string]Gear{
 		Rating:   "0",
 		Avail:    "0",
 		Cost:     "Variable(1000-1000000)",
-		Bonus:    nil,
+		Bonus: &GearBonus{
+			SelectText: &common.SelectTextBonus{},
+		},
 	},
 	"social_media_analysis": {
 		Name:     "Social Media Analysis",
@@ -12665,7 +14430,9 @@ var DataGears = map[string]Gear{
 		Rating:   "0",
 		Avail:    "0",
 		Cost:     "Variable(100-500)",
-		Bonus:    nil,
+		Bonus: &GearBonus{
+			SelectText: &common.SelectTextBonus{},
+		},
 	},
 	"workplace": {
 		Name:     "Workplace",
@@ -12675,7 +14442,9 @@ var DataGears = map[string]Gear{
 		Rating:   "0",
 		Avail:    "0",
 		Cost:     "Variable(150-600)",
-		Bonus:    nil,
+		Bonus: &GearBonus{
+			SelectText: &common.SelectTextBonus{},
+		},
 	},
 	"folding_metachair_basic": {
 		Name:     "Folding Metachair, Basic",
@@ -12912,64 +14681,70 @@ var DataGears = map[string]Gear{
 		Cost:     "60",
 	},
 	"missile_anti_vehicle_2050": {
-		Name:      "Missile: Anti-Vehicle (2050)",
-		Category:  "Ammunition",
-		Source:    "2050",
-		Page:      "191",
-		Rating:    "6",
-		Avail:     "12F",
-		Cost:      "2000+(Rating * 500)",
-		AddWeapon: "Missile: Anti-Vehicle (2050)",
+		Name:              "Missile: Anti-Vehicle (2050)",
+		Category:          "Ammunition",
+		Source:            "2050",
+		Page:              "191",
+		Rating:            "6",
+		Avail:             "12F",
+		Cost:              "2000+(Rating * 500)",
+		AddWeapon:         "Missile: Anti-Vehicle (2050)",
+		AmmoForWeaponType: "mlauncher",
 	},
 	"missile_anti_personnel_2050": {
-		Name:      "Missile: Anti-Personnel (2050)",
-		Category:  "Ammunition",
-		Source:    "2050",
-		Page:      "191",
-		Rating:    "6",
-		Avail:     "12F",
-		Cost:      "1000+(Rating * 500)",
-		AddWeapon: "Missile: Anti-Personnel (2050)",
+		Name:              "Missile: Anti-Personnel (2050)",
+		Category:          "Ammunition",
+		Source:            "2050",
+		Page:              "191",
+		Rating:            "6",
+		Avail:             "12F",
+		Cost:              "1000+(Rating * 500)",
+		AddWeapon:         "Missile: Anti-Personnel (2050)",
+		AmmoForWeaponType: "mlauncher",
 	},
 	"missile_high_explosive_2050": {
-		Name:      "Missile: High Explosive (2050)",
-		Category:  "Ammunition",
-		Source:    "2050",
-		Page:      "191",
-		Rating:    "6",
-		Avail:     "12F",
-		Cost:      "1500+(Rating * 500)",
-		AddWeapon: "Missile: High Explosive (2050)",
+		Name:              "Missile: High Explosive (2050)",
+		Category:          "Ammunition",
+		Source:            "2050",
+		Page:              "191",
+		Rating:            "6",
+		Avail:             "12F",
+		Cost:              "1500+(Rating * 500)",
+		AddWeapon:         "Missile: High Explosive (2050)",
+		AmmoForWeaponType: "mlauncher",
 	},
 	"rocket_high_explosive_2050": {
-		Name:      "Rocket: High Explosive (2050)",
-		Category:  "Ammunition",
-		Source:    "2050",
-		Page:      "191",
-		Rating:    "0",
-		Avail:     "8F",
-		Cost:      "1500",
-		AddWeapon: "Rocket: High Explosive (2050)",
+		Name:              "Rocket: High Explosive (2050)",
+		Category:          "Ammunition",
+		Source:            "2050",
+		Page:              "191",
+		Rating:            "0",
+		Avail:             "8F",
+		Cost:              "1500",
+		AddWeapon:         "Rocket: High Explosive (2050)",
+		AmmoForWeaponType: "mlauncher",
 	},
 	"rocket_anti_vehicle_2050": {
-		Name:      "Rocket: Anti-Vehicle (2050)",
-		Category:  "Ammunition",
-		Source:    "2050",
-		Page:      "191",
-		Rating:    "0",
-		Avail:     "8F",
-		Cost:      "2000",
-		AddWeapon: "Rocket: Anti-Vehicle (2050)",
+		Name:              "Rocket: Anti-Vehicle (2050)",
+		Category:          "Ammunition",
+		Source:            "2050",
+		Page:              "191",
+		Rating:            "0",
+		Avail:             "8F",
+		Cost:              "2000",
+		AddWeapon:         "Rocket: Anti-Vehicle (2050)",
+		AmmoForWeaponType: "mlauncher",
 	},
 	"rocket_anti_personnel_2050": {
-		Name:      "Rocket: Anti-Personnel (2050)",
-		Category:  "Ammunition",
-		Source:    "2050",
-		Page:      "191",
-		Rating:    "0",
-		Avail:     "8F",
-		Cost:      "1000",
-		AddWeapon: "Rocket: Anti-Personnel (2050)",
+		Name:              "Rocket: Anti-Personnel (2050)",
+		Category:          "Ammunition",
+		Source:            "2050",
+		Page:              "191",
+		Rating:            "0",
+		Avail:             "8F",
+		Cost:              "1000",
+		AddWeapon:         "Rocket: Anti-Personnel (2050)",
+		AmmoForWeaponType: "mlauncher",
 	},
 	"grenade_smoke_2050": {
 		Name:      "Grenade: Smoke (2050)",
@@ -12992,14 +14767,15 @@ var DataGears = map[string]Gear{
 		AddWeapon: "Grenade: Smoke, Aerodynamic (2050)",
 	},
 	"minigrenade_smoke_2050": {
-		Name:      "Minigrenade: Smoke (2050)",
-		Category:  "Ammunition",
-		Source:    "2050",
-		Page:      "191",
-		Rating:    "0",
-		Avail:     "8F",
-		Cost:      "60",
-		AddWeapon: "Minigrenade: Smoke (2050)",
+		Name:              "Minigrenade: Smoke (2050)",
+		Category:          "Ammunition",
+		Source:            "2050",
+		Page:              "191",
+		Rating:            "0",
+		Avail:             "8F",
+		Cost:              "60",
+		AddWeapon:         "Minigrenade: Smoke (2050)",
+		AmmoForWeaponType: "glauncher",
 	},
 	"grenade_offensive_2050": {
 		Name:      "Grenade: Offensive (2050)",
@@ -13022,14 +14798,15 @@ var DataGears = map[string]Gear{
 		AddWeapon: "Grenade: Offensive, Aerodynamic (2050)",
 	},
 	"minigrenade_offensive_2050": {
-		Name:      "Minigrenade: Offensive (2050)",
-		Category:  "Ammunition",
-		Source:    "2050",
-		Page:      "191",
-		Rating:    "0",
-		Avail:     "4F",
-		Cost:      "60",
-		AddWeapon: "Minigrenade: Offensive (2050)",
+		Name:              "Minigrenade: Offensive (2050)",
+		Category:          "Ammunition",
+		Source:            "2050",
+		Page:              "191",
+		Rating:            "0",
+		Avail:             "4F",
+		Cost:              "60",
+		AddWeapon:         "Minigrenade: Offensive (2050)",
+		AmmoForWeaponType: "glauncher",
 	},
 	"grenade_defensive_2050": {
 		Name:      "Grenade: Defensive (2050)",
@@ -13052,14 +14829,15 @@ var DataGears = map[string]Gear{
 		AddWeapon: "Grenade: Defensive, Aerodynamic (2050)",
 	},
 	"minigrenade_defensive_2050": {
-		Name:      "Minigrenade: Defensive (2050)",
-		Category:  "Ammunition",
-		Source:    "2050",
-		Page:      "191",
-		Rating:    "0",
-		Avail:     "4F",
-		Cost:      "60",
-		AddWeapon: "Minigrenade: Defensive (2050)",
+		Name:              "Minigrenade: Defensive (2050)",
+		Category:          "Ammunition",
+		Source:            "2050",
+		Page:              "191",
+		Rating:            "0",
+		Avail:             "4F",
+		Cost:              "60",
+		AddWeapon:         "Minigrenade: Defensive (2050)",
+		AmmoForWeaponType: "glauncher",
 	},
 	"grenade_shock_2050": {
 		Name:      "Grenade: Shock (2050)",
@@ -13084,14 +14862,15 @@ var DataGears = map[string]Gear{
 		AddWeapon: "Grenade: Shock, Aerodynamic (2050)",
 	},
 	"minigrenade_shock_2050": {
-		Name:      "Minigrenade: Shock (2050)",
-		Category:  "Ammunition",
-		Source:    "2050",
-		Page:      "191",
-		Rating:    "0",
-		Avail:     "8F",
-		Cost:      "60",
-		AddWeapon: "Minigrenade: Shock (2050)",
+		Name:              "Minigrenade: Shock (2050)",
+		Category:          "Ammunition",
+		Source:            "2050",
+		Page:              "191",
+		Rating:            "0",
+		Avail:             "8F",
+		Cost:              "60",
+		AddWeapon:         "Minigrenade: Shock (2050)",
+		AmmoForWeaponType: "glauncher",
 	},
 	"grenade_halloweener_molotov_cocktail": {
 		Name:      "Grenade: Halloweener Molotov Cocktail",
@@ -13136,15 +14915,16 @@ var DataGears = map[string]Gear{
 		AmmoForWeaponType: "cannon",
 	},
 	"ammo_injection_darts_2050": {
-		Name:          "Ammo: Injection Darts (2050)",
-		Category:      "Ammunition",
-		Source:        "2050",
-		Page:          "190",
-		Rating:        "0",
-		Avail:         "4R",
-		Cost:          "200",
-		CostFor:       "10",
-		AddonCategory: []string{"Drugs", "Toxins"},
+		Name:              "Ammo: Injection Darts (2050)",
+		Category:          "Ammunition",
+		Source:            "2050",
+		Page:              "190",
+		Rating:            "0",
+		Avail:             "4R",
+		Cost:              "200",
+		CostFor:           "10",
+		AmmoForWeaponType: "dartgun",
+		AddonCategory:     []string{"Drugs", "Toxins"},
 	},
 	"ammo_gel_rounds_2050": {
 		Name:              "Ammo: Gel Rounds (2050)",
@@ -13156,6 +14936,7 @@ var DataGears = map[string]Gear{
 		Cost:              "30",
 		CostFor:           "10",
 		AmmoForWeaponType: "gun",
+		WeaponBonus:       "",
 	},
 	"ammo_flechette_rounds_2050": {
 		Name:              "Ammo: Flechette Rounds (2050)",
@@ -13167,6 +14948,7 @@ var DataGears = map[string]Gear{
 		Cost:              "100",
 		CostFor:           "10",
 		AmmoForWeaponType: "gun",
+		WeaponBonus:       "",
 	},
 	"ammo_explosive_rounds_2050": {
 		Name:              "Ammo: Explosive Rounds (2050)",
@@ -13178,6 +14960,7 @@ var DataGears = map[string]Gear{
 		Cost:              "50",
 		CostFor:           "10",
 		AmmoForWeaponType: "gun",
+		WeaponBonus:       "",
 	},
 	"ammo_apds_2050": {
 		Name:              "Ammo: APDS (2050)",
@@ -13189,6 +14972,7 @@ var DataGears = map[string]Gear{
 		Cost:              "70",
 		CostFor:           "10",
 		AmmoForWeaponType: "gun",
+		WeaponBonus:       "",
 	},
 	"concealable_holster_2050": {
 		Name:     "Concealable Holster (2050)",
@@ -13198,7 +14982,13 @@ var DataGears = map[string]Gear{
 		Rating:   "0",
 		Avail:    "2",
 		Cost:     "100",
-		Required: nil,
+		Required: &GearRequired{
+			GearDetails: map[string]interface{}{
+				"OR": map[string]interface{}{
+					"category": []interface{}{"Armor", "Clothing", "Cloaks", "High-Fashion Armor Clothing", "Specialty Armor", "Custom"},
+				},
+			},
+		},
 	},
 	"smart_goggles_2050": {
 		Name:     "Smart Goggles (2050)",
@@ -13208,7 +14998,9 @@ var DataGears = map[string]Gear{
 		Rating:   "0",
 		Avail:    "3R",
 		Cost:     "3000",
-		Bonus:    nil,
+		Bonus: &GearBonus{
+			SmartLink: "1",
+		},
 	},
 	"low_light_2050": {
 		Name:          "Low Light (2050)",
@@ -13319,7 +15111,9 @@ var DataGears = map[string]Gear{
 		Rating:   "18",
 		Avail:    "(Rating * 3)R",
 		Cost:     "Rating * 90000",
-		Bonus:    nil,
+		Bonus: &GearBonus{
+			SelectWeapon: nil,
+		},
 	},
 	"spell_lock_health_2050": {
 		Name:     "Spell Lock, Health (2050)",
@@ -13645,7 +15439,11 @@ var DataGears = map[string]Gear{
 		Rating:   "0",
 		Avail:    "4",
 		Cost:     "250",
-		Required: nil,
+		Required: &GearRequired{
+			GearDetails: map[string]interface{}{
+				"name": "Binoculars (2050)",
+			},
+		},
 	},
 	"binoculars_low_light_2050": {
 		Name:     "Binoculars, Low Light (2050)",
@@ -13655,7 +15453,11 @@ var DataGears = map[string]Gear{
 		Rating:   "0",
 		Avail:    "4",
 		Cost:     "200",
-		Required: nil,
+		Required: &GearRequired{
+			GearDetails: map[string]interface{}{
+				"name": "Binoculars (2050)",
+			},
+		},
 	},
 	"goggles_2050": {
 		Name:          "Goggles (2050)",
@@ -13675,7 +15477,11 @@ var DataGears = map[string]Gear{
 		Rating:   "0",
 		Avail:    "6",
 		Cost:     "700",
-		Required: nil,
+		Required: &GearRequired{
+			GearDetails: map[string]interface{}{
+				"name": "Goggles (2050)",
+			},
+		},
 	},
 	"goggles_low_light_2050": {
 		Name:     "Goggles, Low Light (2050)",
@@ -13685,7 +15491,11 @@ var DataGears = map[string]Gear{
 		Rating:   "0",
 		Avail:    "6",
 		Cost:     "500",
-		Required: nil,
+		Required: &GearRequired{
+			GearDetails: map[string]interface{}{
+				"name": "Goggles (2050)",
+			},
+		},
 	},
 	"goggles_vision_magnification_2050": {
 		Name:     "Goggles, Vision Magnification (2050)",
@@ -13695,7 +15505,11 @@ var DataGears = map[string]Gear{
 		Rating:   "0",
 		Avail:    "4",
 		Cost:     "200",
-		Required: nil,
+		Required: &GearRequired{
+			GearDetails: map[string]interface{}{
+				"name": "Goggles (2050)",
+			},
+		},
 	},
 	"credstick_certified_2050": {
 		Name:          "Credstick, Certified (2050)",
@@ -13716,7 +15530,9 @@ var DataGears = map[string]Gear{
 		Avail:         "0",
 		Cost:          "5",
 		AddonCategory: []string{"ID/Credsticks", "Currency", "Custom"},
-		Bonus:         nil,
+		Bonus: &GearBonus{
+			SelectText: &common.SelectTextBonus{},
+		},
 	},
 	"credstick_fake_2050": {
 		Name:          "Credstick, Fake (2050)",
@@ -13727,7 +15543,9 @@ var DataGears = map[string]Gear{
 		Avail:         "(Rating * 2)F",
 		Cost:          "Rating * 1000",
 		AddonCategory: []string{"ID/Credsticks", "Currency", "Custom"},
-		Bonus:         nil,
+		Bonus: &GearBonus{
+			SelectText: &common.SelectTextBonus{},
+		},
 	},
 	"telecom_2050": {
 		Name:     "Telecom (2050)",
@@ -13989,7 +15807,11 @@ var DataGears = map[string]Gear{
 		Rating:   "0",
 		Avail:    "5",
 		Cost:     "500",
-		Bonus:    nil,
+		Bonus: &GearBonus{
+			SelectText: &common.SelectTextBonus{
+				XML: "skills.xml", XPath: "/chummer/skills/skill/name | /chummer/knowledgeskills/skill/name", AllowEdit: "True",
+			},
+		},
 	},
 	"tool_shop_2050": {
 		Name:     "Tool Shop (2050)",
@@ -13999,7 +15821,11 @@ var DataGears = map[string]Gear{
 		Rating:   "0",
 		Avail:    "8",
 		Cost:     "5000",
-		Bonus:    nil,
+		Bonus: &GearBonus{
+			SelectText: &common.SelectTextBonus{
+				XML: "skills.xml", XPath: "/chummer/skills/skill/name | /chummer/knowledgeskills/skill/name", AllowEdit: "True",
+			},
+		},
 	},
 	"tool_facility_2050": {
 		Name:     "Tool Facility (2050)",
@@ -14009,7 +15835,11 @@ var DataGears = map[string]Gear{
 		Rating:   "0",
 		Avail:    "14",
 		Cost:     "100000",
-		Bonus:    nil,
+		Bonus: &GearBonus{
+			SelectText: &common.SelectTextBonus{
+				XML: "skills.xml", XPath: "/chummer/skills/skill/name | /chummer/knowledgeskills/skill/name", AllowEdit: "True",
+			},
+		},
 	},
 	"atropine_2050": {
 		Name:     "Atropine (2050)",
@@ -14101,7 +15931,13 @@ var DataGears = map[string]Gear{
 		Rating:   "6",
 		Avail:    "Rating",
 		Cost:     "Rating * 200",
-		Bonus:    nil,
+		Bonus: &GearBonus{
+			BaseBonus: common.BaseBonus{
+				ToxinContactResist:    "Rating",
+				PathogenContactResist: "Rating",
+			},
+			Unique: "chemicalprotection",
+		},
 	},
 	"respirator_2050": {
 		Name:     "Respirator (2050)",
@@ -14166,7 +16002,13 @@ var DataGears = map[string]Gear{
 		Rating:   "0",
 		Avail:    "2",
 		Cost:     "200",
-		Bonus:    nil,
+		Bonus: &GearBonus{
+			BaseBonus: common.BaseBonus{
+				LimitModifier: common.LimitModifier{
+					Limit: "Mental", Value: "3", Condition: "LimitCondition_SkillsActiveFirstAidMedicine",
+				},
+			},
+		},
 	},
 	"medkit_supplies_2050": {
 		Name:     "Medkit Supplies (2050)",
@@ -14369,14 +16211,15 @@ var DataGears = map[string]Gear{
 		Cost:     "1000",
 	},
 	"minigrenade_winchester_howe_hornet_direct_fire": {
-		Name:      "Minigrenade: Winchester-Howe Hornet Direct-Fire",
-		Category:  "Ammunition",
-		Source:    "SL",
-		Page:      "132",
-		Rating:    "0",
-		Avail:     "16F",
-		Cost:      "400",
-		AddWeapon: "Minigrenade: Winchester-Howe Hornet Direct-Fire",
+		Name:              "Minigrenade: Winchester-Howe Hornet Direct-Fire",
+		Category:          "Ammunition",
+		Source:            "SL",
+		Page:              "132",
+		Rating:            "0",
+		Avail:             "16F",
+		Cost:              "400",
+		AddWeapon:         "Minigrenade: Winchester-Howe Hornet Direct-Fire",
+		AmmoForWeaponType: "glauncher",
 	},
 	"pantheon_industries_mercury_alpha_battlefield_signal_booster": {
 		Name:     "Pantheon Industries \"Mercury-Alpha\" Battlefield Signal Booster",
@@ -14404,7 +16247,10 @@ var DataGears = map[string]Gear{
 		Rating:   "3",
 		Avail:    "7F",
 		Cost:     "Rating*500",
-		Bonus:    nil,
+		Bonus: &GearBonus{
+			SelectText:         &common.SelectTextBonus{},
+			EssencePenaltyT100: "-10*Rating",
+		},
 	},
 	"blight": {
 		Name:     "Blight",
@@ -14423,7 +16269,9 @@ var DataGears = map[string]Gear{
 		Rating:   "0",
 		Avail:    "0",
 		Cost:     "50",
-		Bonus:    nil,
+		Bonus: &GearBonus{
+			SelectText: &common.SelectTextBonus{},
+		},
 	},
 	"professional_instrument": {
 		Name:     "Professional Instrument",
@@ -14433,7 +16281,9 @@ var DataGears = map[string]Gear{
 		Rating:   "0",
 		Avail:    "0",
 		Cost:     "500",
-		Bonus:    nil,
+		Bonus: &GearBonus{
+			SelectText: &common.SelectTextBonus{},
+		},
 	},
 	"rising_star_instrument": {
 		Name:     "Rising Star Instrument",
@@ -14443,7 +16293,9 @@ var DataGears = map[string]Gear{
 		Rating:   "0",
 		Avail:    "6",
 		Cost:     "5000",
-		Bonus:    nil,
+		Bonus: &GearBonus{
+			SelectText: &common.SelectTextBonus{},
+		},
 	},
 	"big_time_instrument": {
 		Name:     "Big Time Instrument",
@@ -14453,7 +16305,9 @@ var DataGears = map[string]Gear{
 		Rating:   "0",
 		Avail:    "12",
 		Cost:     "50000",
-		Bonus:    nil,
+		Bonus: &GearBonus{
+			SelectText: &common.SelectTextBonus{},
+		},
 	},
 	"internal_synthlink": {
 		Name:          "Internal Synthlink",
@@ -14523,7 +16377,9 @@ var DataGears = map[string]Gear{
 		Rating:   "0",
 		Avail:    "6",
 		Cost:     "50",
-		Bonus:    nil,
+		Bonus: &GearBonus{
+			SelectText: &common.SelectTextBonus{},
+		},
 	},
 	"procam": {
 		Name:          "ProCam",
@@ -14546,14 +16402,22 @@ var DataGears = map[string]Gear{
 		RequireParent: &[]bool{true}[0],
 	},
 	"smartcam_internal": {
-		Name:          "SmartCam Internal",
-		Category:      "Sensors",
-		Source:        "NF",
-		Page:          "175",
-		Rating:        "0",
-		Avail:         "8",
-		Cost:          "(Parent Cost * 2)",
-		Required:      nil,
+		Name:     "SmartCam Internal",
+		Category: "Sensors",
+		Source:   "NF",
+		Page:     "175",
+		Rating:   "0",
+		Avail:    "8",
+		Cost:     "(Parent Cost * 2)",
+		Required: &GearRequired{
+			GearDetails: map[string]interface{}{
+				"OR": map[string]interface{}{
+					"name": []interface{}{map[string]interface{}{
+						"+content": "Camera", "+@operation": "contains",
+					}, "ProCam"},
+				},
+			},
+		},
 		RequireParent: &[]bool{true}[0],
 	},
 	"basic_press": {
