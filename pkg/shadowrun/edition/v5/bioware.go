@@ -188,6 +188,7 @@ type SkillGroupBonus struct {
 type SelectSkill struct {
 	Val              string `json:"val,omitempty"`                // Bonus value
 	Max              string `json:"max,omitempty"`                // Maximum value
+	SkillCategory    string `json:"+@skillcategory,omitempty"`    // Skill category (used in critter powers)
 	LimitToAttribute string `json:"+@limittoattribute,omitempty"` // Limit to attributes
 	MaximumRating    string `json:"+@maximumrating,omitempty"`    // Maximum rating
 	KnowledgeSkills  string `json:"+@knowledgeskills,omitempty"`  // Whether knowledge skills

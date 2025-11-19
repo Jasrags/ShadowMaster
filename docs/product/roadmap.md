@@ -138,7 +138,139 @@ Legend: ✅ Complete • ⚙️ In Progress • 🔜 Planned • 🛑 Blocked
 
 ---
 
-## 7. Backlog / Future Considerations
+## 7. Chummer Data Processing - Deferred Items
+
+During the migration of Chummer JSON data files into Go structs (`pkg/shadowrun/edition/v5/`), several complex structures and fields were deferred for later implementation. These items are documented here for future work.
+
+### 7.1 Incomplete Data Files
+
+- **`critters.json`**: The `DataCritters` map was intentionally left empty due to the extreme complexity of critter data structures. The structs are defined (`Critter`, `CritterPower`, `CritterSkill`, etc.) but the data map needs to be populated with proper handling of:
+  - Complex `powers` field (can be strings, objects, or arrays)
+  - Complex `skills` field (can be single or arrays)
+  - Complex `bonus` structures with various nested types
+
+### 7.2 Complex Bonus Structures (Set to `nil` or `interface{}`)
+
+Many bonus fields across multiple data types are currently set to `nil` or use `interface{}` and need proper struct definitions:
+
+#### Paragons (`paragons.go`)
+- `ParagonBonus.SpecificSkill` - Can be single or list of skill bonuses
+- `ParagonBonus.ActionDicePool` - Complex action dice pool structure
+- `ParagonBonus.LivingPersona` - Complex living persona bonuses
+- `ParagonBonus.WeaponSkillAccuracy` - Can be single or list
+
+#### Powers (`powers.go`)
+- `PowerBonus.SpecificSkill` - Can be single or list
+- `PowerBonus.SpecificPower` - Can be single or list
+- `PowerBonus.WeaponCategoryDV` - Complex weapon category DV structure
+- Many other bonus types are set to `nil` with TODOs
+
+#### Critter Powers (`critterpowers.go`)
+- `CritterPowerDefinitionBonus.UnlockSkills` - Complex unlock skills structure
+
+#### Echoes (`echoes.go`)
+- `EchoBonus.LivingPersona` - Complex living persona bonuses
+- `EchoBonus.SelectText` - Complex selectable text structure
+- `EchoBonus.LimitModifier` - Complex limit modifier structure
+- `EchoBonus.SpecificAttribute` - Complex specific attribute structure
+- `EchoBonus.PenaltyFreeSustain` - Complex penalty-free sustain structure
+
+#### Life Modules (`lifemodules.go`)
+- `LifeModuleBonus.AttributeLevel` - Complex attribute level structure
+- `LifeModuleBonus.SkillLevel` - Can be single or list
+- `LifeModuleBonus.KnowledgeSkillLevel` - Can be single or list
+- `LifeModuleBonus.AddQualities` - Complex add qualities structure
+- `LifeModuleVersion.SkillLevel` - Can be single or list
+- `LifeModuleVersion.KnowledgeSkillLevel` - Can be single or list
+- `LifeModuleVersion.AttributeLevel` - Complex attribute level structure
+- `LifeModuleVersion.AddQualities` - Complex add qualities structure
+
+#### Drug Components (`drugcomponents.go`)
+- `DrugComponentBonus.Attribute` - Can be single or list
+- `DrugComponentBonus.Quality` - Complex quality structure
+- `DrugComponentBonus.Limit` - Can be single or list
+- `DrugComponentEffect.Attribute` - Can be single or list
+- `DrugComponentEffect.Limit` - Can be single or list
+- `DrugComponentEffect.Quality` - Complex quality structure
+- `DrugComponentEffect.SpecificSkill` - Complex specific skill structure
+
+#### Mentors (`mentors.go`)
+- `MentorBonus.SpecificSkill` - Can be single or list
+- `MentorBonus.SpecificPower` - Can be single or list
+- `MentorBonus.AddQualities` - Complex add qualities structure
+
+#### Packs (`packs.go`)
+- `PackGear.Name` - Can be string or complex object with `+content` and `+@select` fields
+- Various collection fields (`Gear`, `Armor`, `Accessory`, `Weapon`) can be single items or arrays
+
+### 7.3 Complex Required Structures
+
+Several `Required` fields are set to `nil` with TODOs:
+
+#### Cyberware (`cyberware.go`)
+- `Cyberware.Required` - Complex required structures (multiple instances have `Required: nil, // TODO: Handle complex required`)
+- `CyberwareRequired.ParentDetails` - Complex parent details structure (set to empty string with TODO)
+
+#### Weapons (`weapons.go`)
+- `Weapon.Required` - Complex required structures (set to `nil` with TODOs in generation script)
+- `WeaponAccessory.Required` - Complex required structures
+
+#### Vehicles (`vehicles.go`)
+- `VehicleModification.Required` - Complex required structures (set to `nil` with TODOs)
+
+### 7.4 Formula-Based Fields
+
+Some fields contain formulas that need evaluation logic:
+
+#### Cyberware (`cyberware_data.go`)
+- Rating fields with formulas like `"{STRMaximum}"` or `"{AGIMaximum}"` are set to `0` with TODOs
+- Bonus values with formulas like `"Rating"` are set to `0` with TODOs (e.g., Impersonation, Intimidation bonuses)
+
+### 7.5 Complex Nested Structures
+
+#### Priorities (`priorities.go`)
+- `PriorityTalent.SkillType` - Can be string or complex object
+- `TalentForbidden.OneOf` - Complex one-of requirement structure (set to `nil` in some cases)
+- `TalentQualities.Quality` - Set to `nil` in some cases, needs proper handling
+
+#### Metamagic (`metamagic.go`)
+- `MetamagicRequired.Group` - Can be complex structure
+- `MetamagicRequiredOneOf.Group` - Can be complex structure
+- `Metamagic.QuickeningMetamagic` - Can be null or complex structure
+
+### 7.6 Single vs. Array Handling
+
+Many fields can be either a single value or an array, currently handled with `interface{}`:
+- Various `*Bonus` fields with `SpecificSkill`, `SpecificPower`, etc.
+- Collection fields in packs, life modules, and other structures
+- `Metavariants` in metatypes (handled but could be improved)
+
+### 7.7 Action Type Handling
+
+In `powers.go` and `critterpowers.go`, the `Action` field uses a workaround:
+- `Action: &[]string{"Complex"}[0]` - This is a workaround for pointer string fields
+- Should be refactored to use a proper helper function or constant
+
+### 7.8 Priority Items for Implementation
+
+1. **High Priority**:
+   - Implement proper struct definitions for commonly used bonus types (SpecificSkill, SpecificPower, AddQualities)
+   - Handle formula evaluation for rating and bonus fields
+   - Populate `DataCritters` map with proper handling of complex structures
+
+2. **Medium Priority**:
+   - Refactor `interface{}` fields to use proper union types or discriminated unions
+   - Implement proper handling of single vs. array fields
+   - Complete `Required` structure implementations
+
+3. **Low Priority**:
+   - Refactor action type handling to use constants/helpers
+   - Improve type safety across all bonus structures
+   - Add validation logic for complex nested structures
+
+---
+
+## 8. Backlog / Future Considerations
 
 - **User Settings & Profile**
   - Settings panel (themes, password, email notifications).
@@ -159,7 +291,7 @@ Legend: ✅ Complete • ⚙️ In Progress • 🔜 Planned • 🛑 Blocked
 
 ---
 
-## 8. Maintenance Notes
+## 9. Maintenance Notes
 
 - Treat this file as the single roadmap of record. When milestones complete, check them off here and optionally prune detailed breakdowns from legacy docs.
 - Keep status indicators aligned with TODO tracking or issue tracker milestones.
