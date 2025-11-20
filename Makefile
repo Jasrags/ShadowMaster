@@ -1,4 +1,4 @@
-.PHONY: help build frontend-build run run-dev server cli clean test test-go test-react fmt vet deps install dev
+.PHONY: help build frontend-build run run-dev server cli clean test test-go test-react fmt vet deps install dev docker-build docker-tag docker-push docker-run docker-clean
 
 # Variables
 BINARY_NAME=shadowmaster-server
@@ -8,6 +8,9 @@ WEB_DIR=./web/static
 PORT=8080
 GOFLAGS=-v
 LDFLAGS=-s -w
+IMAGE_NAME=shadowmaster
+DOCKER_REGISTRY=
+VERSION_FILE=VERSION
 
 # Colors for output
 CYAN=\033[0;36m
@@ -148,6 +151,52 @@ watch: ## Watch for file changes and rebuild (requires fswatch or similar)
 	else \
 		echo "$(YELLOW)Please install fswatch or entr for file watching$(NC)"; \
 	fi
+
+# Docker targets
+docker-build: ## Build Docker image with version tagging
+	@echo "$(CYAN)Building Docker image...$(NC)"
+	@chmod +x scripts/docker-build.sh
+	@./scripts/docker-build.sh --image-name $(IMAGE_NAME) $(if $(DOCKER_REGISTRY),--registry $(DOCKER_REGISTRY),)
+
+docker-tag: ## Tag Docker image for registry (requires DOCKER_REGISTRY variable)
+	@if [ -z "$(DOCKER_REGISTRY)" ]; then \
+		echo "$(YELLOW)Error: DOCKER_REGISTRY variable not set$(NC)"; \
+		exit 1; \
+	fi
+	@echo "$(CYAN)Tagging image for registry...$(NC)"
+	@VERSION=$$(cat $(VERSION_FILE) 2>/dev/null || echo "latest"); \
+	docker tag $(IMAGE_NAME):$$VERSION $(DOCKER_REGISTRY)/$(IMAGE_NAME):$$VERSION; \
+	docker tag $(IMAGE_NAME):latest $(DOCKER_REGISTRY)/$(IMAGE_NAME):latest; \
+	echo "$(GREEN)✓ Image tagged$(NC)"
+
+docker-push: docker-tag ## Push Docker image to registry (requires DOCKER_REGISTRY variable)
+	@if [ -z "$(DOCKER_REGISTRY)" ]; then \
+		echo "$(YELLOW)Error: DOCKER_REGISTRY variable not set$(NC)"; \
+		exit 1; \
+	fi
+	@echo "$(CYAN)Pushing image to registry...$(NC)"
+	@VERSION=$$(cat $(VERSION_FILE) 2>/dev/null || echo "latest"); \
+	docker push $(DOCKER_REGISTRY)/$(IMAGE_NAME):$$VERSION; \
+	docker push $(DOCKER_REGISTRY)/$(IMAGE_NAME):latest; \
+	echo "$(GREEN)✓ Image pushed$(NC)"
+
+docker-run: ## Run Docker container locally
+	@echo "$(CYAN)Running Docker container...$(NC)"
+	@mkdir -p $(DATA_DIR)
+	@docker run -it --rm \
+		-p $(PORT):8080 \
+		-v $$(pwd)/$(DATA_DIR):/data \
+		-e SESSION_SECRET=$${SESSION_SECRET:-change-me-in-production} \
+		$(IMAGE_NAME):latest
+
+docker-clean: ## Remove Docker images
+	@echo "$(CYAN)Cleaning Docker images...$(NC)"
+	@docker rmi $(IMAGE_NAME):latest 2>/dev/null || true
+	@VERSION=$$(cat $(VERSION_FILE) 2>/dev/null || echo ""); \
+	if [ -n "$$VERSION" ]; then \
+		docker rmi $(IMAGE_NAME):$$VERSION 2>/dev/null || true; \
+	fi
+	@echo "$(GREEN)✓ Docker images cleaned$(NC)"
 
 .DEFAULT_GOAL := help
 

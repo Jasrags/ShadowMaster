@@ -17,6 +17,13 @@ import (
 	"github.com/go-chi/chi/v5/middleware"
 )
 
+// Version information set at build time via ldflags
+var (
+	Version   = "dev"
+	BuildTime = "unknown"
+	GitCommit = "unknown"
+)
+
 func main() {
 	dataPath := flag.String("data", "./data", "Path to data directory")
 	port := flag.String("port", "8080", "Server port")
@@ -54,6 +61,9 @@ func main() {
 	r.Use(middleware.RequestID)
 	r.Use(corsMiddleware)
 	r.Use(sessionManager.WithSession)
+
+	// Health check endpoint (no auth required)
+	r.Get("/health", handlers.HealthCheck)
 
 	// API routes
 	r.Route("/api", func(r chi.Router) {
@@ -170,7 +180,9 @@ func main() {
 		http.ServeFile(w, r, *webPath+"/index.html")
 	})
 
-	log.Printf("Starting server on port %s", *port)
+	log.Printf("Starting ShadowMaster server")
+	log.Printf("Version: %s (built %s, commit %s)", Version, BuildTime, GitCommit)
+	log.Printf("Port: %s", *port)
 	log.Printf("Data directory: %s", *dataPath)
 	log.Printf("Web files: %s", *webPath)
 	if err := http.ListenAndServe(":"+*port, r); err != nil {
