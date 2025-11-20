@@ -15,23 +15,23 @@ type GearBonus struct {
 	common.BaseBonus
 
 	// Gear-specific bonus fields
-	SelectTradition          interface{}             `json:"selecttradition,omitempty"`          // Selectable tradition bonus (can be complex)
-	SelectText               *common.SelectTextBonus `json:"selecttext,omitempty"`               // Selectable text bonus
-	SelectWeapon             interface{}             `json:"selectweapon,omitempty"`             // Selectable weapon bonus (can be complex)
-	SelectPowers             interface{}             `json:"selectpowers,omitempty"`             // Selectable powers bonus (can be complex)
-	SelectRestricted         interface{}             `json:"selectrestricted,omitempty"`         // Selectable restricted item bonus (can be complex)
-	SpellCategory            interface{}             `json:"spellcategory,omitempty"`            // Spell category bonus (can be complex)
-	SmartLink                interface{}             `json:"smartlink,omitempty"`                // Smartlink bonus (can be complex)
-	WeaponSpecificDice       interface{}             `json:"weaponspecificdice,omitempty"`       // Weapon-specific dice bonus (can be complex)
-	MatrixInitiativeDice     string                  `json:"matrixinitiativedice,omitempty"`     // Matrix initiative dice bonus
-	EssencePenaltyT100       string                  `json:"essencepenaltyt100,omitempty"`       // Essence penalty to 100%
-	SkillSoft                interface{}             `json:"skillsoft,omitempty"`                // Skillsoft bonus (can be complex)
-	ActiveSoft               interface{}             `json:"activesoft,omitempty"`               // Active soft bonus (can be complex)
-	ToxinContactImmune       string                  `json:"toxincontactimmune,omitempty"`       // Toxin contact immunity
-	ToxinInhalationImmune    string                  `json:"toxininhalationimmune,omitempty"`    // Toxin inhalation immunity
-	PathogenContactImmune    string                  `json:"pathogencontactimmune,omitempty"`    // Pathogen contact immunity
-	PathogenInhalationImmune string                  `json:"pathogeninhalationimmune,omitempty"` // Pathogen inhalation immunity
-	Unique                   string                  `json:"+@unique,omitempty"`                 // Unique identifier
+	SelectTradition          []string                        `json:"selecttradition,omitempty"`          // Selectable tradition bonus
+	SelectText               *common.SelectTextBonus         `json:"selecttext,omitempty"`               // Selectable text bonus
+	SelectWeapon             *common.WeaponDetails           `json:"selectweapon,omitempty"`             // Selectable weapon bonus
+	SelectPowers             *common.SelectPowersBonus       `json:"selectpowers,omitempty"`             // Selectable powers bonus
+	SelectRestricted         []string                        `json:"selectrestricted,omitempty"`         // Selectable restricted item bonus
+	SpellCategory            *common.SpellCategoryBonus      `json:"spellcategory,omitempty"`            // Spell category bonus
+	SmartLink                string                          `json:"smartlink,omitempty"`                // Smartlink bonus
+	WeaponSpecificDice       *common.WeaponSpecificDiceBonus `json:"weaponspecificdice,omitempty"`       // Weapon-specific dice bonus
+	MatrixInitiativeDice     string                          `json:"matrixinitiativedice,omitempty"`     // Matrix initiative dice bonus
+	EssencePenaltyT100       string                          `json:"essencepenaltyt100,omitempty"`       // Essence penalty to 100%
+	SkillSoft                *common.SelectSkill             `json:"skillsoft,omitempty"`                // Skillsoft bonus
+	ActiveSoft               *common.SelectSkill             `json:"activesoft,omitempty"`               // Active soft bonus
+	ToxinContactImmune       string                          `json:"toxincontactimmune,omitempty"`       // Toxin contact immunity
+	ToxinInhalationImmune    string                          `json:"toxininhalationimmune,omitempty"`    // Toxin inhalation immunity
+	PathogenContactImmune    string                          `json:"pathogencontactimmune,omitempty"`    // Pathogen contact immunity
+	PathogenInhalationImmune string                          `json:"pathogeninhalationimmune,omitempty"` // Pathogen inhalation immunity
+	Unique                   string                          `json:"+@unique,omitempty"`                 // Unique identifier
 }
 
 // GearDetailsRequirement represents gear details requirements (type-safe)

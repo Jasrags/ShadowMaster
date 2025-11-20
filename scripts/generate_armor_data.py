@@ -107,24 +107,34 @@ def convert_dict_to_go(d, context=""):
         brace_close = '}'
         return f"&Gears{brace_open}\n\t\t\t\tUseGear: []string{brace_open}{items_str}{brace_close},\n\t\t\t{brace_close}"
     
-    # Handle Mods
+    # Handle Mods - Name is always []string (flatten strings and ModNameEntry.Content)
     if 'name' in d and context != "bonus":
         name_val = d.get('name')
+        items = []
         if isinstance(name_val, str):
-            return f"&Mods{{\n\t\t\t\tName: {convert_value(name_val, 'name')},\n\t\t\t}}"
+            # Single string - wrap in slice
+            items.append(convert_value(name_val, 'name'))
         elif isinstance(name_val, list):
-            items = []
+            # Array of items - extract strings and ModNameEntry.Content
             for item in name_val:
                 if isinstance(item, dict):
-                    items.append(convert_dict_to_go(item, "modnameentry"))
+                    # Extract Content from ModNameEntry
+                    content = item.get('+content', '')
+                    if content:
+                        items.append(convert_value(content, 'name'))
                 else:
+                    # Plain string
                     items.append(convert_value(item, 'name'))
+        elif name_val is None:
+            # Handle None/null case - return nil
+            return "nil"
+        
+        if items:
             items_str = ', '.join(items)
             brace_open = '{'
             brace_close = '}'
-            return f"&Mods{brace_open}\n\t\t\t\tName: []interface{brace_open}{brace_close}{brace_open}{items_str}{brace_close},\n\t\t\t{brace_close}"
-        elif name_val is None:
-            # Handle None/null case - return nil
+            return f"&Mods{brace_open}\n\t\t\t\tName: []string{brace_open}{items_str}{brace_close},\n\t\t\t{brace_close}"
+        else:
             return "nil"
     
     # Handle Required

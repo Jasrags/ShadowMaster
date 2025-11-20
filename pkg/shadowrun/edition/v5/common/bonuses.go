@@ -164,3 +164,28 @@ type AllowSubsystems struct {
 	Category string `json:"category"` // Allowed subsystem category
 }
 
+// SpellCategoryBonus represents a spell category bonus
+type SpellCategoryBonus struct {
+	Name string `json:"name"` // Spell category name like "Combat", "Detection"
+	Val  string `json:"val"`  // Bonus value like "Rating", "1", etc.
+}
+
+// WeaponSpecificDiceBonus represents a weapon-specific dice bonus
+type WeaponSpecificDiceBonus struct {
+	Content string `json:"+content,omitempty"` // Dice bonus value like "Rating", "1", etc.
+	Type    string `json:"+@type,omitempty"`   // Weapon type like "Melee", "Ranged", etc.
+}
+
+// SelectPower represents a selectable power with its properties
+type SelectPower struct {
+	IgnoreRating    string `json:"ignorerating,omitempty"`    // Whether to ignore rating (e.g., "True")
+	Val             string `json:"val,omitempty"`             // Bonus value like "Rating"
+	Limit           string `json:"limit,omitempty"`           // Limit value like "Rating"
+	PointsPerLevel  string `json:"pointsperlevel,omitempty"`  // Points per level like "0.25"
+}
+
+// SelectPowersBonus represents a selectable powers bonus
+type SelectPowersBonus struct {
+	SelectPower *SelectPower `json:"selectpower,omitempty"` // Selectable power details
+}
+

@@ -7131,9 +7131,12 @@ var DataGears = map[string]Gear{
 		Avail:    "(Rating * 3)R",
 		Cost:     "Rating * 3000",
 		Bonus: &GearBonus{
-			SelectPowers: map[string]interface{}{
-				"selectpower": map[string]interface{}{
-					"ignorerating": "True", "val": "Rating", "limit": "Rating", "pointsperlevel": "0.25",
+			SelectPowers: &common.SelectPowersBonus{
+				SelectPower: &common.SelectPower{
+					IgnoreRating:   "True",
+					Val:            "Rating",
+					Limit:          "Rating",
+					PointsPerLevel: "0.25",
 				},
 			},
 		},
@@ -7172,9 +7175,7 @@ var DataGears = map[string]Gear{
 		Cost:     "Rating * 4000",
 		Bonus: &GearBonus{
 			SelectTradition: nil,
-			SpellCategory: &common.SelectSkill{
-				Val: "Rating",
-			},
+			SpellCategory:   &common.SpellCategoryBonus{Name: "Combat", Val: "Rating"},
 		},
 	},
 	"sustaining_focus_combat": {
@@ -7223,9 +7224,7 @@ var DataGears = map[string]Gear{
 		Cost:     "Rating * 4000",
 		Bonus: &GearBonus{
 			SelectTradition: nil,
-			SpellCategory: &common.SelectSkill{
-				Val: "Rating",
-			},
+			SpellCategory:   &common.SpellCategoryBonus{Name: "Detection", Val: "Rating"},
 		},
 	},
 	"sustaining_focus_detection": {
@@ -7274,9 +7273,7 @@ var DataGears = map[string]Gear{
 		Cost:     "Rating * 4000",
 		Bonus: &GearBonus{
 			SelectTradition: nil,
-			SpellCategory: &common.SelectSkill{
-				Val: "Rating",
-			},
+			SpellCategory:   &common.SpellCategoryBonus{Name: "Health", Val: "Rating"},
 		},
 	},
 	"sustaining_focus_health": {
@@ -7325,9 +7322,7 @@ var DataGears = map[string]Gear{
 		Cost:     "Rating * 4000",
 		Bonus: &GearBonus{
 			SelectTradition: nil,
-			SpellCategory: &common.SelectSkill{
-				Val: "Rating",
-			},
+			SpellCategory:   &common.SpellCategoryBonus{Name: "Illusion", Val: "Rating"},
 		},
 	},
 	"sustaining_focus_illusion": {
@@ -7376,9 +7371,7 @@ var DataGears = map[string]Gear{
 		Cost:     "Rating * 4000",
 		Bonus: &GearBonus{
 			SelectTradition: nil,
-			SpellCategory: &common.SelectSkill{
-				Val: "Rating",
-			},
+			SpellCategory:   &common.SpellCategoryBonus{Name: "Manipulation", Val: "Rating"},
 		},
 	},
 	"sustaining_focus_manipulation": {
@@ -7444,8 +7437,9 @@ var DataGears = map[string]Gear{
 		Avail:    "(Rating * 4)R",
 		Cost:     "Rating * 7000",
 		Bonus: &GearBonus{
-			WeaponSpecificDice: map[string]interface{}{
-				"+content": "Rating", "+@type": "Melee",
+			WeaponSpecificDice: &common.WeaponSpecificDiceBonus{
+				Content: "Rating",
+				Type:    "Melee",
 			},
 		},
 	},
@@ -7597,9 +7591,12 @@ var DataGears = map[string]Gear{
 			},
 		},
 		Bonus: &GearBonus{
-			SelectPowers: map[string]interface{}{
-				"selectpower": map[string]interface{}{
-					"ignorerating": "True", "val": "Rating", "limit": "Rating", "pointsperlevel": "0.25",
+			SelectPowers: &common.SelectPowersBonus{
+				SelectPower: &common.SelectPower{
+					IgnoreRating:   "True",
+					Val:            "Rating",
+					Limit:          "Rating",
+					PointsPerLevel: "0.25",
 				},
 			},
 		},
@@ -7653,9 +7650,7 @@ var DataGears = map[string]Gear{
 		},
 		Bonus: &GearBonus{
 			SelectTradition: nil,
-			SpellCategory: &common.SelectSkill{
-				Val: "Rating",
-			},
+			SpellCategory:   &common.SpellCategoryBonus{Name: "Combat", Val: "Rating"},
 		},
 	},
 	"sustaining_focus_combat_individualized_partial": {
@@ -7724,9 +7719,7 @@ var DataGears = map[string]Gear{
 		},
 		Bonus: &GearBonus{
 			SelectTradition: nil,
-			SpellCategory: &common.SelectSkill{
-				Val: "Rating",
-			},
+			SpellCategory:   &common.SpellCategoryBonus{Name: "Detection", Val: "Rating"},
 		},
 	},
 	"sustaining_focus_detection_individualized_partial": {
@@ -7795,9 +7788,7 @@ var DataGears = map[string]Gear{
 		},
 		Bonus: &GearBonus{
 			SelectTradition: nil,
-			SpellCategory: &common.SelectSkill{
-				Val: "Rating",
-			},
+			SpellCategory:   &common.SpellCategoryBonus{Name: "Health", Val: "Rating"},
 		},
 	},
 	"sustaining_focus_health_individualized_partial": {
@@ -7866,9 +7857,7 @@ var DataGears = map[string]Gear{
 		},
 		Bonus: &GearBonus{
 			SelectTradition: nil,
-			SpellCategory: &common.SelectSkill{
-				Val: "Rating",
-			},
+			SpellCategory:   &common.SpellCategoryBonus{Name: "Illusion", Val: "Rating"},
 		},
 	},
 	"sustaining_focus_illusion_individualized_partial": {
@@ -7937,9 +7926,7 @@ var DataGears = map[string]Gear{
 		},
 		Bonus: &GearBonus{
 			SelectTradition: nil,
-			SpellCategory: &common.SelectSkill{
-				Val: "Rating",
-			},
+			SpellCategory:   &common.SpellCategoryBonus{Name: "Manipulation", Val: "Rating"},
 		},
 	},
 	"sustaining_focus_manipulation_individualized_partial": {
@@ -8030,8 +8017,9 @@ var DataGears = map[string]Gear{
 			},
 		},
 		Bonus: &GearBonus{
-			WeaponSpecificDice: map[string]interface{}{
-				"+content": "Rating", "+@type": "Melee",
+			WeaponSpecificDice: &common.WeaponSpecificDiceBonus{
+				Content: "Rating",
+				Type:    "Melee",
 			},
 		},
 	},
@@ -8183,9 +8171,12 @@ var DataGears = map[string]Gear{
 			},
 		},
 		Bonus: &GearBonus{
-			SelectPowers: map[string]interface{}{
-				"selectpower": map[string]interface{}{
-					"ignorerating": "True", "val": "Rating", "limit": "Rating", "pointsperlevel": "0.25",
+			SelectPowers: &common.SelectPowersBonus{
+				SelectPower: &common.SelectPower{
+					IgnoreRating:   "True",
+					Val:            "Rating",
+					Limit:          "Rating",
+					PointsPerLevel: "0.25",
 				},
 			},
 		},
@@ -8239,9 +8230,7 @@ var DataGears = map[string]Gear{
 		},
 		Bonus: &GearBonus{
 			SelectTradition: nil,
-			SpellCategory: &common.SelectSkill{
-				Val: "Rating",
-			},
+			SpellCategory:   &common.SpellCategoryBonus{Name: "Combat", Val: "Rating"},
 		},
 	},
 	"sustaining_focus_combat_individualized_complete": {
@@ -8310,9 +8299,7 @@ var DataGears = map[string]Gear{
 		},
 		Bonus: &GearBonus{
 			SelectTradition: nil,
-			SpellCategory: &common.SelectSkill{
-				Val: "Rating",
-			},
+			SpellCategory:   &common.SpellCategoryBonus{Name: "Detection", Val: "Rating"},
 		},
 	},
 	"sustaining_focus_detection_individualized_complete": {
@@ -8381,9 +8368,7 @@ var DataGears = map[string]Gear{
 		},
 		Bonus: &GearBonus{
 			SelectTradition: nil,
-			SpellCategory: &common.SelectSkill{
-				Val: "Rating",
-			},
+			SpellCategory:   &common.SpellCategoryBonus{Name: "Health", Val: "Rating"},
 		},
 	},
 	"sustaining_focus_health_individualized_complete": {
@@ -8452,9 +8437,7 @@ var DataGears = map[string]Gear{
 		},
 		Bonus: &GearBonus{
 			SelectTradition: nil,
-			SpellCategory: &common.SelectSkill{
-				Val: "Rating",
-			},
+			SpellCategory:   &common.SpellCategoryBonus{Name: "Illusion", Val: "Rating"},
 		},
 	},
 	"sustaining_focus_illusion_individualized_complete": {
@@ -8523,9 +8506,7 @@ var DataGears = map[string]Gear{
 		},
 		Bonus: &GearBonus{
 			SelectTradition: nil,
-			SpellCategory: &common.SelectSkill{
-				Val: "Rating",
-			},
+			SpellCategory:   &common.SpellCategoryBonus{Name: "Manipulation", Val: "Rating"},
 		},
 	},
 	"sustaining_focus_manipulation_individualized_complete": {
@@ -8616,8 +8597,9 @@ var DataGears = map[string]Gear{
 			},
 		},
 		Bonus: &GearBonus{
-			WeaponSpecificDice: map[string]interface{}{
-				"+content": "Rating", "+@type": "Melee",
+			WeaponSpecificDice: &common.WeaponSpecificDiceBonus{
+				Content: "Rating",
+				Type:    "Melee",
 			},
 		},
 	},

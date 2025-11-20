@@ -45,7 +45,7 @@ type ArmorMod struct {
 
 	// Optional fields
 	GearCapacity  *int      `json:"gearcapacity,omitempty"`  // Gear capacity (always numeric when present)
-	Hide          *bool     `json:"hide,omitempty"`          // Whether to hide this mod
+	Hide          bool      `json:"hide,omitempty"`          // Whether to hide this mod
 	Required      *Required `json:"required,omitempty"`      // Requirements for this mod
 	AddonCategory []string  `json:"addoncategory,omitempty"` // Categories of addons that can be added
 	Bonus         *Bonus    `json:"bonus,omitempty"`         // Bonuses provided by this mod
@@ -64,7 +64,7 @@ type Gears struct {
 
 // Mods represents pre-installed mods on armor
 type Mods struct {
-	Name interface{} `json:"name"` // Can be string, []string, or []ModNameEntry
+	Name []string `json:"name"` // Array of mod names (flattened from strings and ModNameEntry.Content)
 }
 
 // ModNameEntry represents a mod name entry that can have additional attributes
@@ -110,11 +110,11 @@ type Bonus struct {
 
 	// Resistance/immunity bonuses
 	ToxinContactResist       string `json:"toxincontactresist,omitempty"` // Can be numeric string or "Rating"
-	ToxinContactImmune       *bool  `json:"toxincontactimmune,omitempty"`
-	ToxinInhalationImmune    *bool  `json:"toxininhalationimmune,omitempty"`
+	ToxinContactImmune       bool   `json:"toxincontactimmune,omitempty"`
+	ToxinInhalationImmune    bool   `json:"toxininhalationimmune,omitempty"`
 	PathogenContactResist    string `json:"pathogencontactresist,omitempty"` // Can be numeric string or "Rating"
-	PathogenContactImmune    *bool  `json:"pathogencontactimmune,omitempty"`
-	PathogenInhalationImmune *bool  `json:"pathogeninhalationimmune,omitempty"`
+	PathogenContactImmune    bool   `json:"pathogencontactimmune,omitempty"`
+	PathogenInhalationImmune bool   `json:"pathogeninhalationimmune,omitempty"`
 
 	// Armor bonuses
 	FireArmor        string `json:"firearmor,omitempty"`        // Can be numeric string or "Rating"
@@ -128,13 +128,13 @@ type Bonus struct {
 	FatigueResist string `json:"fatigueresist,omitempty"` // Can be numeric string or formula
 
 	// Select armor
-	SelectArmor *bool `json:"selectarmor,omitempty"`
+	SelectArmor bool `json:"selectarmor,omitempty"`
 
 	// Unique identifier
 	Unique string `json:"+@unique,omitempty"`
 
 	// Select text
-	SelectText *bool `json:"selecttext,omitempty"`
+	SelectText bool `json:"selecttext,omitempty"`
 }
 
 // Type aliases for backward compatibility
