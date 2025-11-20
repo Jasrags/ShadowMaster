@@ -103,6 +103,25 @@ Builds Docker images with version tagging.
 ./scripts/docker-build.sh --registry myregistry.com --push
 ```
 
+## Helper Scripts
+
+### `enable-scripts.ps1`
+Helper script to configure PowerShell execution policy on Windows.
+
+**Usage:**
+```powershell
+powershell -ExecutionPolicy Bypass -File .\scripts\enable-scripts.ps1
+```
+
+**What it does:**
+- Checks current execution policy
+- Provides options to set execution policy
+- Recommended: RemoteSigned for CurrentUser (allows local scripts, requires signed remote scripts)
+
+**If you get execution policy errors:**
+1. Run the helper script above, or
+2. Manually set: `Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope CurrentUser`
+
 ## Platform-Specific Notes
 
 ### macOS/Linux
@@ -111,6 +130,7 @@ Builds Docker images with version tagging.
 - Scripts require execute permissions: `chmod +x scripts/*.sh`
 
 ### Windows
+- **First time:** Run `enable-scripts.ps1` to allow script execution
 - Use `setup.ps1` and `check-prerequisites.ps1` for setup
 - Use PowerShell scripts (`build.ps1`, `run.ps1`, `test.ps1`) as alternatives to Makefile
 - Or install WSL (Windows Subsystem for Linux) to use Makefile commands

@@ -81,6 +81,12 @@ For detailed platform-specific setup instructions, see the [Setup Guide](docs/ge
 
 **Windows Users:** You can use WSL (Windows Subsystem for Linux) for Makefile support, or use the PowerShell scripts in the `scripts/` directory.
 
+**Note for Windows:** If you get a PowerShell execution policy error, run:
+```powershell
+Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope CurrentUser
+```
+Or use the helper script: `powershell -ExecutionPolicy Bypass -File .\scripts\enable-scripts.ps1`
+
 ### Using the Makefile (macOS/Linux/WSL)
 
 The project includes a Makefile for common development tasks:

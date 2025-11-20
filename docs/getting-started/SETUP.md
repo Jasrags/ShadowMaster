@@ -160,7 +160,24 @@ node --version
 npm --version
 ```
 
-**3. Run Setup Script:**
+**Note:** If `node` or `npm` commands are not found, they may be installed but not in your PATH. The setup script will detect and use them automatically, but you may want to add `C:\Program Files\nodejs` to your system PATH permanently (see Troubleshooting section).
+
+**3. Enable PowerShell Script Execution (if needed):**
+
+If you get an execution policy error, you need to allow script execution:
+
+```powershell
+# Check current execution policy
+Get-ExecutionPolicy
+
+# Set execution policy for current user (recommended)
+Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope CurrentUser
+
+# Or run script with bypass (one-time)
+Set-ExecutionPolicy -ExecutionPolicy Bypass -Scope Process
+```
+
+**4. Run Setup Script:**
 
 ```powershell
 .\scripts\setup.ps1
@@ -387,6 +404,53 @@ chmod +x scripts/*.sh
 1. **Use WSL** (Recommended): Install WSL and use Linux commands
 2. **Use PowerShell scripts**: Use `.\scripts\build.ps1` instead of `make build`
 3. **Install Make for Windows**: Download from [GnuWin32](http://gnuwin32.sourceforge.net/packages/make.htm) or use Chocolatey: `choco install make`
+
+#### PowerShell Execution Policy (Windows)
+
+**Problem:** `cannot be loaded because running scripts is disabled on this system`
+
+**Solution:**
+```powershell
+# Option 1: Set execution policy for current user (recommended)
+Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope CurrentUser
+
+# Option 2: Bypass for current session only
+Set-ExecutionPolicy -ExecutionPolicy Bypass -Scope Process
+
+# Option 3: Run script with bypass flag
+powershell -ExecutionPolicy Bypass -File .\scripts\setup.ps1
+```
+
+**Note:** `RemoteSigned` allows local scripts to run but requires downloaded scripts to be signed. This is the recommended setting for development.
+
+#### Node.js Not Found in PATH (Windows)
+
+**Problem:** Node.js is installed but script says it's not found
+
+**Solution:**
+
+The setup script will automatically detect Node.js in common locations and add it to PATH for the current session. To make it permanent:
+
+1. **Find Node.js installation path** (usually `C:\Program Files\nodejs`)
+
+2. **Add to System PATH:**
+   - Open System Properties → Advanced → Environment Variables
+   - Under "System variables", find `Path` and click Edit
+   - Click New and add: `C:\Program Files\nodejs`
+   - Click OK on all dialogs
+
+3. **Or use PowerShell (as Administrator):**
+   ```powershell
+   [Environment]::SetEnvironmentVariable(
+       "Path",
+       [Environment]::GetEnvironmentVariable("Path", "Machine") + ";C:\Program Files\nodejs",
+       "Machine"
+   )
+   ```
+
+4. **Restart PowerShell** for changes to take effect
+
+**Note:** The setup script will work even if Node.js isn't in PATH - it will add it for the current session automatically.
 
 #### Port Already in Use
 

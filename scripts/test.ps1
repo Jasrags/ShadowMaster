@@ -2,12 +2,16 @@
 
 $ErrorActionPreference = "Stop"
 
-function Write-ColorOutput($ForegroundColor) {
+function Write-ColorOutput {
+    param(
+        [Parameter(Mandatory=$true, Position=0)]
+        [ConsoleColor]$ForegroundColor,
+        [Parameter(Mandatory=$true, Position=1)]
+        [string]$Message
+    )
     $fc = $host.UI.RawUI.ForegroundColor
     $host.UI.RawUI.ForegroundColor = $ForegroundColor
-    if ($args) {
-        Write-Output $args
-    }
+    Write-Output $Message
     $host.UI.RawUI.ForegroundColor = $fc
 }
 
@@ -26,5 +30,5 @@ if (-not (Test-Path "node_modules")) {
 npm run lint
 Pop-Location
 
-Write-ColorOutput Green "✓ All tests completed"
+Write-ColorOutput Green "[OK] All tests completed"
 

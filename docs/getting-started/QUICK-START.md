@@ -22,6 +22,17 @@ Get ShadowMaster up and running in minutes!
 ```
 
 **Windows:**
+
+If you get an execution policy error, first run:
+```powershell
+# Enable script execution (one-time setup)
+Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope CurrentUser
+
+# Or use the helper script
+powershell -ExecutionPolicy Bypass -File .\scripts\enable-scripts.ps1
+```
+
+Then run:
 ```powershell
 .\scripts\setup.ps1
 ```
