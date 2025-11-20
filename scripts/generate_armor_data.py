@@ -48,21 +48,21 @@ def convert_dict_to_go(d, context=""):
     
     # Handle LimitModifier
     if 'limit' in d and 'value' in d and 'condition' in d:
-        return f"LimitModifier{{\n\t\t\t\tLimit: {convert_value(d.get('limit'), 'limit')}, Value: {convert_value(d.get('value'), 'value')}, Condition: {convert_value(d.get('condition'), 'condition')},\n\t\t\t}}"
+        return f"{{\n\t\t\t\t\t\tLimit: {convert_value(d.get('limit'), 'limit')}, Value: {convert_value(d.get('value'), 'value')}, Condition: {convert_value(d.get('condition'), 'condition')},\n\t\t\t\t\t}}"
     
     # Handle SkillCategoryBonus
     if 'name' in d and 'bonus' in d and context != "modnameentry":
         bonus_val = d.get('bonus')
         if isinstance(bonus_val, str) and bonus_val.isdigit():
             bonus_val = int(bonus_val)
-        return f"SkillCategoryBonus{{\n\t\t\t\tName: {convert_value(d.get('name'), 'name')}, Bonus: {bonus_val},\n\t\t\t}}"
+        return f"{{\n\t\t\t\t\t\tName: {convert_value(d.get('name'), 'name')}, Bonus: {bonus_val},\n\t\t\t\t\t}}"
     
     # Handle SpecificSkillBonus
     if 'name' in d and 'bonus' in d:
         bonus_val = d.get('bonus')
         if isinstance(bonus_val, str) and bonus_val.isdigit():
             bonus_val = int(bonus_val)
-        return f"SpecificSkillBonus{{\n\t\t\t\tName: {convert_value(d.get('name'), 'name')}, Bonus: {bonus_val},\n\t\t\t}}"
+        return f"{{\n\t\t\t\t\t\tName: {convert_value(d.get('name'), 'name')}, Bonus: {bonus_val},\n\t\t\t\t\t}}"
     
     # Handle ModNameEntry
     if '+content' in d or '+@rating' in d or '+@maxrating' in d:
@@ -82,16 +82,16 @@ def convert_dict_to_go(d, context=""):
     if 'category' in d and len(d) == 1:
         return f"&SelectModsCategory{{\n\t\t\t\tCategory: {convert_value(d.get('category'), 'category')},\n\t\t\t}}"
     
-    # Handle Gears
+    # Handle Gears - UseGear is always []string
     if 'usegear' in d:
         usegear = d.get('usegear')
+        items = []
         if isinstance(usegear, str):
-            return f"&Gears{{\n\t\t\t\tUseGear: {convert_value(usegear, 'usegear')},\n\t\t\t}}"
+            items.append(convert_value(usegear, 'usegear'))
         elif isinstance(usegear, list):
-            items = []
             for item in usegear:
                 if isinstance(item, dict):
-                    # Complex gear item - extract name if available, otherwise use a string representation
+                    # Complex gear item - extract name if available
                     if '+content' in item:
                         gear_name = item.get('+content', 'Unknown')
                         items.append(f'"{gear_name}"')
@@ -99,14 +99,13 @@ def convert_dict_to_go(d, context=""):
                         gear_name = item.get('name', 'Unknown')
                         items.append(f'"{gear_name}"')
                     else:
-                        # Fallback to string representation
                         items.append('"complex_gear"')
                 else:
                     items.append(convert_value(item, 'usegear'))
-            items_str = ', '.join(items)
-            brace_open = '{'
-            brace_close = '}'
-            return f"&Gears{brace_open}\n\t\t\t\tUseGear: []interface{brace_open}{brace_close}{brace_open}{items_str}{brace_close},\n\t\t\t{brace_close}"
+        items_str = ', '.join(items)
+        brace_open = '{'
+        brace_close = '}'
+        return f"&Gears{brace_open}\n\t\t\t\tUseGear: []string{brace_open}{items_str}{brace_close},\n\t\t\t{brace_close}"
     
     # Handle Mods
     if 'name' in d and context != "bonus":
@@ -152,41 +151,41 @@ def convert_bonus_to_go(d):
     """Convert bonus dictionary to Go Bonus struct"""
     parts = []
     
-    # Handle limitmodifier (can be single or array)
+    # Handle limitmodifier (always a slice)
     if 'limitmodifier' in d:
         lm = d.get('limitmodifier')
         if isinstance(lm, list):
             items = [convert_dict_to_go(item, "limitmodifier") for item in lm]
-            items_str = ', '.join(items)
-            brace_open = '{'
-            brace_close = '}'
-            parts.append(f"LimitModifier: []interface{brace_open}{brace_close}{brace_open}{items_str}{brace_close}")
+            items_str = ',\n\t\t\t\t\t'.join(items)
+            parts.append(f"LimitModifier: []LimitModifier{{\n\t\t\t\t\t{items_str},\n\t\t\t\t}}")
         else:
-            parts.append(f"LimitModifier: {convert_dict_to_go(lm, 'limitmodifier')}")
+            # Single value - wrap in slice
+            item = convert_dict_to_go(lm, 'limitmodifier')
+            parts.append(f"LimitModifier: []LimitModifier{{\n\t\t\t\t\t{item},\n\t\t\t\t}}")
     
-    # Handle skillcategory (can be single or array)
+    # Handle skillcategory (always a slice)
     if 'skillcategory' in d:
         sc = d.get('skillcategory')
         if isinstance(sc, list):
             items = [convert_dict_to_go(item, "skillcategory") for item in sc]
-            items_str = ', '.join(items)
-            brace_open = '{'
-            brace_close = '}'
-            parts.append(f"SkillCategory: []interface{brace_open}{brace_close}{brace_open}{items_str}{brace_close}")
+            items_str = ',\n\t\t\t\t\t'.join(items)
+            parts.append(f"SkillCategory: []SkillCategoryBonus{{\n\t\t\t\t\t{items_str},\n\t\t\t\t}}")
         else:
-            parts.append(f"SkillCategory: {convert_dict_to_go(sc, 'skillcategory')}")
+            # Single value - wrap in slice
+            item = convert_dict_to_go(sc, 'skillcategory')
+            parts.append(f"SkillCategory: []SkillCategoryBonus{{\n\t\t\t\t\t{item},\n\t\t\t\t}}")
     
-    # Handle specificskill (can be single or array)
+    # Handle specificskill (always a slice)
     if 'specificskill' in d:
         ss = d.get('specificskill')
         if isinstance(ss, list):
             items = [convert_dict_to_go(item, "specificskill") for item in ss]
-            items_str = ', '.join(items)
-            brace_open = '{'
-            brace_close = '}'
-            parts.append(f"SpecificSkill: []interface{brace_open}{brace_close}{brace_open}{items_str}{brace_close}")
+            items_str = ',\n\t\t\t\t\t'.join(items)
+            parts.append(f"SpecificSkill: []SpecificSkillBonus{{\n\t\t\t\t\t{items_str},\n\t\t\t\t}}")
         else:
-            parts.append(f"SpecificSkill: {convert_dict_to_go(ss, 'specificskill')}")
+            # Single value - wrap in slice
+            item = convert_dict_to_go(ss, 'specificskill')
+            parts.append(f"SpecificSkill: []SpecificSkillBonus{{\n\t\t\t\t\t{item},\n\t\t\t\t}}")
     
     # Handle other bonus fields
     field_mapping = {
@@ -343,9 +342,30 @@ for mod in data['mods']['mod']:
     mod_go = convert_mod_to_go(mod)
     mod_entries.append(f'\t"{mod_id}": {mod_go}')
 
+# Generate category entries
+category_entries = []
+for category in data['categories']['category']:
+    name = category.get('+content', '')
+    black_market = category.get('+@blackmarket', '')
+    category_entries.append(f'\t"{name}": {{\n\t\tName: "{name}", BlackMarket: "{black_market}",\n\t}}')
+
+mod_category_entries = []
+for category in data['modcategories']['category']:
+    name = category.get('+content', '')
+    black_market = category.get('+@blackmarket', '')
+    mod_category_entries.append(f'\t"{name}": {{\n\t\tName: "{name}", BlackMarket: "{black_market}",\n\t}}')
+
 # Write to file
 with open('armor_data_generated.go', 'w') as f:
     f.write('package v5\n\n')
+    f.write('// DataCategories contains armor categories keyed by category name\n')
+    f.write('var DataCategories = map[string]Category{\n')
+    f.write(',\n'.join(category_entries))
+    f.write(',\n}\n\n')
+    f.write('// DataModCategories contains armor mod categories keyed by category name\n')
+    f.write('var DataModCategories = map[string]Category{\n')
+    f.write(',\n'.join(mod_category_entries))
+    f.write(',\n}\n\n')
     f.write('// DataArmors contains armor records keyed by their ID (lowercase with underscores)\n')
     f.write('var DataArmors = map[string]Armor{\n')
     f.write(',\n'.join(armor_entries))

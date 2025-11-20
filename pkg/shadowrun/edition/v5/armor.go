@@ -99,11 +99,11 @@ type ArmorModRef struct {
 // This is a flexible structure that can contain various bonus types
 type Bonus struct {
 	// Limit modifiers
-	LimitModifier interface{} `json:"limitmodifier,omitempty"` // Can be LimitModifier or []LimitModifier
+	LimitModifier []LimitModifier `json:"limitmodifier,omitempty"`
 
 	// Skill bonuses
-	SkillCategory interface{} `json:"skillcategory,omitempty"` // Can be SkillCategoryBonus or []SkillCategoryBonus
-	SpecificSkill interface{} `json:"specificskill,omitempty"` // Can be SpecificSkillBonus or []SpecificSkillBonus
+	SkillCategory []SkillCategoryBonus `json:"skillcategory,omitempty"`
+	SpecificSkill []SpecificSkillBonus `json:"specificskill,omitempty"`
 
 	// Social limit
 	SocialLimit string `json:"sociallimit,omitempty"` // Can be numeric string or formula

@@ -1,5 +1,7 @@
 package v5
 
+import "shadowmaster/pkg/shadowrun/edition/v5/common"
+
 // DataQualityCategories contains quality category names
 var DataQualityCategories = []string{
 	"Positive",
@@ -15,7 +17,7 @@ var DataQualities = map[string]Quality{
 		Source:   "SR5",
 		Limit:    "{arm} - 1",
 		Bonus: &QualityBonus{
-			Ambidextrous: &[]bool{true}[0],
+			Ambidextrous: true,
 		},
 		Page: "71",
 	},
@@ -51,7 +53,7 @@ var DataQualities = map[string]Quality{
 		Bonus:    nil,
 		Required: &QualityRequired{
 			OneOf: &QualityRequiredOneOf{
-				Metatype: []string{"Centaur", "Naga", "Pixie", "Sasquatch"}, Quality: []string{"Adept", "Aware", "Aspected Magician", "Enchanter", "Explorer", "Apprentice", "Magician", "Mystic Adept", "Infected: Mutaqua", "Infected: Nosferatu", "Infected: Wendigo"}, MageEnabled: &[]bool{true}[0],
+				Metatype: []string{"Centaur", "Naga", "Pixie", "Sasquatch"}, Quality: []string{"Adept", "Aware", "Aspected Magician", "Enchanter", "Explorer", "Apprentice", "Magician", "Mystic Adept", "Infected: Mutaqua", "Infected: Nosferatu", "Infected: Wendigo"}, MageEnabled: true,
 			},
 		},
 		Forbidden: &QualityForbidden{
@@ -70,7 +72,7 @@ var DataQualities = map[string]Quality{
 			NativeLanguageLimit: "1",
 		},
 		Page:        "72",
-		ChargenOnly: &[]bool{true}[0],
+		ChargenOnly: true,
 	},
 	"blandness": {
 		Name:     "Blandness",
@@ -148,7 +150,7 @@ var DataQualities = map[string]Quality{
 		Category: "Positive",
 		Source:   "SR5",
 		Bonus: &QualityBonus{
-			SkillCategory: BiowareSkillCategoryBonus{
+			SkillCategory: &BiowareSkillCategoryBonus{
 				Name: "Social Active", Bonus: "2",
 			},
 			Notoriety: "-1",
@@ -454,7 +456,7 @@ var DataQualities = map[string]Quality{
 			PathogenInjectionResist:  "2",
 		},
 		Page: "77",
-		Hide: &[]bool{true}[0],
+		Hide: true,
 	},
 	"resistance_to_pathogens_and_toxins": {
 		Name:     "Resistance to Pathogens and Toxins",
@@ -511,7 +513,7 @@ var DataQualities = map[string]Quality{
 		Source:   "SR5",
 		Limit:    "3",
 		Bonus: &QualityBonus{
-			ConditionMonitor: "",
+			ConditionMonitor: nil,
 		},
 		Page: "77",
 	},
@@ -664,7 +666,7 @@ var DataQualities = map[string]Quality{
 		Source:   "SR5",
 		Bonus:    nil,
 		Page:     "66",
-		Hide:     &[]bool{true}[0],
+		Hide:     true,
 	},
 	"thermographic_vision": {
 		Name:     "Thermographic Vision",
@@ -673,7 +675,7 @@ var DataQualities = map[string]Quality{
 		Source:   "SR5",
 		Bonus:    nil,
 		Page:     "66",
-		Hide:     &[]bool{true}[0],
+		Hide:     true,
 	},
 	"magician": {
 		Name:     "Magician",
@@ -691,8 +693,8 @@ var DataQualities = map[string]Quality{
 			},
 		},
 		Page:              "69",
-		ContributeToLimit: &[]bool{false}[0],
-		OnlyPriorityGiven: &[]bool{true}[0],
+		ContributeToLimit: false,
+		OnlyPriorityGiven: true,
 		NameOnPage:        "Magicians",
 	},
 	"adept": {
@@ -714,8 +716,8 @@ var DataQualities = map[string]Quality{
 			},
 		},
 		Page:              "69",
-		ContributeToLimit: &[]bool{false}[0],
-		OnlyPriorityGiven: &[]bool{true}[0],
+		ContributeToLimit: false,
+		OnlyPriorityGiven: true,
 		NameOnPage:        "Adepts",
 	},
 	"mystic_adept": {
@@ -734,8 +736,8 @@ var DataQualities = map[string]Quality{
 			},
 		},
 		Page:              "69",
-		ContributeToLimit: &[]bool{false}[0],
-		OnlyPriorityGiven: &[]bool{true}[0],
+		ContributeToLimit: false,
+		OnlyPriorityGiven: true,
 		NameOnPage:        "Mystic Adepts",
 	},
 	"technomancer": {
@@ -758,8 +760,8 @@ var DataQualities = map[string]Quality{
 			},
 		},
 		Page:              "69",
-		ContributeToLimit: &[]bool{false}[0],
-		OnlyPriorityGiven: &[]bool{true}[0],
+		ContributeToLimit: false,
+		OnlyPriorityGiven: true,
 	},
 	"aspected_magician": {
 		Name:     "Aspected Magician",
@@ -777,8 +779,8 @@ var DataQualities = map[string]Quality{
 			},
 		},
 		Page:              "69",
-		ContributeToLimit: &[]bool{false}[0],
-		OnlyPriorityGiven: &[]bool{true}[0],
+		ContributeToLimit: false,
+		OnlyPriorityGiven: true,
 		NameOnPage:        "Aspected Magicians",
 	},
 	"aware": {
@@ -796,8 +798,8 @@ var DataQualities = map[string]Quality{
 			},
 		},
 		Page:              "49",
-		ContributeToLimit: &[]bool{false}[0],
-		OnlyPriorityGiven: &[]bool{true}[0],
+		ContributeToLimit: false,
+		OnlyPriorityGiven: true,
 	},
 	"addiction_mild": {
 		Name:     "Addiction (Mild)",
@@ -842,7 +844,7 @@ var DataQualities = map[string]Quality{
 		Source:   "SR5",
 		Limit:    "False",
 		Bonus: &QualityBonus{
-			SkillCategory: BiowareSkillCategoryBonus{
+			SkillCategory: &BiowareSkillCategoryBonus{
 				Name: "Social Active", Bonus: "-3",
 			},
 			SelectText: &SelectTextBonus{},
@@ -946,7 +948,7 @@ var DataQualities = map[string]Quality{
 		Bonus:    nil,
 		Required: &QualityRequired{
 			OneOf: &QualityRequiredOneOf{
-				Metatype: []string{"Centaur", "Naga", "Pixie", "Sasquatch"}, Quality: []string{"Adept", "Aware", "Aspected Magician", "Enchanter", "Explorer", "Apprentice", "Magician", "Mystic Adept", "Infected: Mutaqua", "Infected: Nosferatu", "Infected: Wendigo"}, MageEnabled: &[]bool{true}[0],
+				Metatype: []string{"Centaur", "Naga", "Pixie", "Sasquatch"}, Quality: []string{"Adept", "Aware", "Aspected Magician", "Enchanter", "Explorer", "Apprentice", "Magician", "Mystic Adept", "Infected: Mutaqua", "Infected: Nosferatu", "Infected: Wendigo"}, MageEnabled: true,
 			},
 		},
 		Forbidden: &QualityForbidden{
@@ -1089,7 +1091,7 @@ var DataQualities = map[string]Quality{
 		Source:          "SR5",
 		Limit:           "4",
 		Page:            "81",
-		FirstLevelBonus: nil,
+		FirstLevelBonus: false,
 	},
 	"incompetent": {
 		Name:     "Incompetent",
@@ -1146,7 +1148,7 @@ var DataQualities = map[string]Quality{
 		Category: "Negative",
 		Source:   "SR5",
 		Bonus: &QualityBonus{
-			ConditionMonitor: "",
+			ConditionMonitor: nil,
 		},
 		Page: "82",
 	},
@@ -1458,7 +1460,7 @@ var DataQualities = map[string]Quality{
 			},
 		},
 		Page:         "131",
-		DoubleCareer: &[]bool{false}[0],
+		DoubleCareer: false,
 	},
 	"spirit_champion": {
 		Name:     "Spirit Champion",
@@ -1487,7 +1489,7 @@ var DataQualities = map[string]Quality{
 			},
 		},
 		Page:         "176",
-		DoubleCareer: &[]bool{false}[0],
+		DoubleCareer: false,
 	},
 	"the_artists_way": {
 		Name:     "The Artist's Way",
@@ -1508,7 +1510,7 @@ var DataQualities = map[string]Quality{
 			},
 		},
 		Page:         "176",
-		DoubleCareer: &[]bool{false}[0],
+		DoubleCareer: false,
 	},
 	"the_athletes_way": {
 		Name:     "The Athlete's Way",
@@ -1529,7 +1531,7 @@ var DataQualities = map[string]Quality{
 			},
 		},
 		Page:         "176",
-		DoubleCareer: &[]bool{false}[0],
+		DoubleCareer: false,
 	},
 	"the_beasts_way": {
 		Name:     "The Beast's Way",
@@ -1553,7 +1555,7 @@ var DataQualities = map[string]Quality{
 			},
 		},
 		Page:         "176",
-		DoubleCareer: &[]bool{false}[0],
+		DoubleCareer: false,
 		CostDiscount: "",
 	},
 	"the_burnouts_way": {
@@ -1573,7 +1575,7 @@ var DataQualities = map[string]Quality{
 			},
 		},
 		Page:         "177",
-		DoubleCareer: &[]bool{false}[0],
+		DoubleCareer: false,
 	},
 	"the_invisible_way": {
 		Name:     "The Invisible Way",
@@ -1594,7 +1596,7 @@ var DataQualities = map[string]Quality{
 			},
 		},
 		Page:         "177",
-		DoubleCareer: &[]bool{false}[0],
+		DoubleCareer: false,
 	},
 	"the_magicians_way": {
 		Name:     "The Magician's Way",
@@ -1615,7 +1617,7 @@ var DataQualities = map[string]Quality{
 			},
 		},
 		Page:         "178",
-		DoubleCareer: &[]bool{false}[0],
+		DoubleCareer: false,
 	},
 	"the_speakers_way": {
 		Name:     "The Speaker's Way",
@@ -1636,7 +1638,7 @@ var DataQualities = map[string]Quality{
 			},
 		},
 		Page:         "178",
-		DoubleCareer: &[]bool{false}[0],
+		DoubleCareer: false,
 	},
 	"the_spiritual_way": {
 		Name:     "The Spiritual Way",
@@ -1644,7 +1646,7 @@ var DataQualities = map[string]Quality{
 		Category: "Positive",
 		Source:   "SG",
 		Bonus: &QualityBonus{
-			SkillGroup: SkillGroupBonus{
+			SkillGroup: &common.SkillGroupBonus{
 				Name: "Conjuring", Bonus: "1", Condition: "",
 			},
 			FreeQuality: []string{"ced3fecf-2277-4b20-b1e0-894162ca9ae2"},
@@ -1660,7 +1662,7 @@ var DataQualities = map[string]Quality{
 			},
 		},
 		Page:         "178",
-		DoubleCareer: &[]bool{false}[0],
+		DoubleCareer: false,
 	},
 	"the_twisted_way": {
 		Name:     "The Twisted Way",
@@ -1678,7 +1680,7 @@ var DataQualities = map[string]Quality{
 			},
 		},
 		Page:         "85",
-		DoubleCareer: &[]bool{false}[0],
+		DoubleCareer: false,
 	},
 	"the_warriors_way": {
 		Name:     "The Warrior's Way",
@@ -1699,7 +1701,7 @@ var DataQualities = map[string]Quality{
 			},
 		},
 		Page:         "178",
-		DoubleCareer: &[]bool{false}[0],
+		DoubleCareer: false,
 	},
 	"spirit_pariah": {
 		Name:     "Spirit Pariah",
@@ -1718,7 +1720,7 @@ var DataQualities = map[string]Quality{
 			AstralReputation: "-1",
 		},
 		Page:       "199",
-		CareerOnly: &[]bool{true}[0],
+		CareerOnly: true,
 	},
 	"gifted_healer": {
 		Name:     "Gifted Healer",
@@ -1765,7 +1767,7 @@ var DataQualities = map[string]Quality{
 		Category: "Positive",
 		Source:   "SASS",
 		Bonus: &QualityBonus{
-			LimitModifier: LimitModifier{
+			LimitModifier: &common.LimitModifier{
 				Limit: "Mental", Value: "1", Condition: "LimitCondition_SkillsKnowledgeAcademic",
 			},
 		},
@@ -1795,8 +1797,8 @@ var DataQualities = map[string]Quality{
 			},
 		},
 		Page:              "103",
-		ContributeToLimit: &[]bool{false}[0],
-		DoubleCareer:      &[]bool{false}[0],
+		ContributeToLimit: false,
+		DoubleCareer:      false,
 	},
 	"changeling_class_ii_surge": {
 		Name:     "Changeling (Class II SURGE)",
@@ -1812,8 +1814,8 @@ var DataQualities = map[string]Quality{
 			},
 		},
 		Page:              "103",
-		ContributeToLimit: &[]bool{false}[0],
-		DoubleCareer:      &[]bool{false}[0],
+		ContributeToLimit: false,
+		DoubleCareer:      false,
 	},
 	"changeling_class_iii_surge": {
 		Name:     "Changeling (Class III SURGE)",
@@ -1829,8 +1831,8 @@ var DataQualities = map[string]Quality{
 			},
 		},
 		Page:              "103",
-		ContributeToLimit: &[]bool{false}[0],
-		DoubleCareer:      &[]bool{false}[0],
+		ContributeToLimit: false,
+		DoubleCareer:      false,
 	},
 	"adrenaline_surge": {
 		Name:     "Adrenaline Surge",
@@ -1861,7 +1863,7 @@ var DataQualities = map[string]Quality{
 			BlackMarketDiscount: "",
 		},
 		Page:        "145",
-		ChargenOnly: &[]bool{true}[0],
+		ChargenOnly: true,
 	},
 	"born_rich": {
 		Name:     "Born Rich",
@@ -1872,7 +1874,7 @@ var DataQualities = map[string]Quality{
 			NuyenMaxBP: "30",
 		},
 		Page:        "145",
-		ChargenOnly: &[]bool{true}[0],
+		ChargenOnly: true,
 	},
 	"city_slicker": {
 		Name:     "City Slicker",
@@ -1887,7 +1889,7 @@ var DataQualities = map[string]Quality{
 			}, SpecificSkillBonus{
 				Name: "Survival", Bonus: 2,
 			}},
-			SkillGroup: SkillGroupBonus{
+			SkillGroup: &common.SkillGroupBonus{
 				Name: "Outdoors", Bonus: "1", Condition: "Urban",
 			},
 		},
@@ -1961,10 +1963,10 @@ var DataQualities = map[string]Quality{
 		Category: "Positive",
 		Source:   "RF",
 		Bonus: &QualityBonus{
-			LimitModifier: LimitModifier{
+			LimitModifier: &common.LimitModifier{
 				Limit: "Social", Value: "1", Condition: "LimitCondition_Sprawl",
 			},
-			SkillCategory: BiowareSkillCategoryBonus{
+			SkillCategory: &BiowareSkillCategoryBonus{
 				Name: "Social Active", Bonus: "1",
 			},
 			PublicAwareness: "2",
@@ -1983,10 +1985,10 @@ var DataQualities = map[string]Quality{
 		Category: "Positive",
 		Source:   "RF",
 		Bonus: &QualityBonus{
-			LimitModifier: LimitModifier{
+			LimitModifier: &common.LimitModifier{
 				Limit: "Social", Value: "1", Condition: "LimitCondition_NationalLanguageRanks",
 			},
-			SkillCategory: BiowareSkillCategoryBonus{
+			SkillCategory: &BiowareSkillCategoryBonus{
 				Name: "Social Active", Bonus: "2",
 			},
 			PublicAwareness: "3",
@@ -2005,10 +2007,10 @@ var DataQualities = map[string]Quality{
 		Category: "Positive",
 		Source:   "RF",
 		Bonus: &QualityBonus{
-			LimitModifier: LimitModifier{
+			LimitModifier: &common.LimitModifier{
 				Limit: "Social", Value: "2", Condition: "LimitCondition_Megacorp",
 			},
-			SkillCategory: BiowareSkillCategoryBonus{
+			SkillCategory: &BiowareSkillCategoryBonus{
 				Name: "Social Active", Bonus: "2",
 			},
 			PublicAwareness: "5",
@@ -2027,8 +2029,8 @@ var DataQualities = map[string]Quality{
 		Category: "Positive",
 		Source:   "RF",
 		Bonus: &QualityBonus{
-			LimitModifier: "",
-			SkillCategory: BiowareSkillCategoryBonus{
+			LimitModifier: nil,
+			SkillCategory: &BiowareSkillCategoryBonus{
 				Name: "Social Active", Bonus: "3",
 			},
 			PublicAwareness: "8",
@@ -2109,7 +2111,7 @@ var DataQualities = map[string]Quality{
 		Category: "Positive",
 		Source:   "RF",
 		Bonus: &QualityBonus{
-			SkillCategory: BiowareSkillCategoryBonus{
+			SkillCategory: &BiowareSkillCategoryBonus{
 				Name: "Language", Bonus: "1",
 			},
 			SkillCategoryKarmaCost: "",
@@ -2146,17 +2148,17 @@ var DataQualities = map[string]Quality{
 			}, SpecificSkillBonus{
 				Name: "Survival", Bonus: -1,
 			}},
-			SkillGroup: []interface{}{SkillGroupBonus{
+			SkillGroup: []interface{}{&common.SkillGroupBonus{
 				Name: "Outdoors", Bonus: "2", Condition: "Rural",
-			}, SkillGroupBonus{
+			}, &common.SkillGroupBonus{
 				Name: "Outdoors", Bonus: "2", Condition: "Desert",
-			}, SkillGroupBonus{
+			}, &common.SkillGroupBonus{
 				Name: "Outdoors", Bonus: "2", Condition: "Forest",
-			}, SkillGroupBonus{
+			}, &common.SkillGroupBonus{
 				Name: "Outdoors", Bonus: "2", Condition: "Jungle",
-			}, SkillGroupBonus{
+			}, &common.SkillGroupBonus{
 				Name: "Outdoors", Bonus: "2", Condition: "Mountain",
-			}, SkillGroupBonus{
+			}, &common.SkillGroupBonus{
 				Name: "Outdoors", Bonus: "2", Condition: "Polar",
 			}},
 		},
@@ -2284,7 +2286,7 @@ var DataQualities = map[string]Quality{
 			RestrictGear: "",
 		},
 		Page:         "149",
-		NoLevels:     &[]bool{true}[0],
+		NoLevels:     true,
 		ChargenLimit: "1",
 	},
 	"school_of_hard_knocks": {
@@ -2407,10 +2409,10 @@ var DataQualities = map[string]Quality{
 		Source:   "RF",
 		Limit:    "3",
 		Bonus: &QualityBonus{
-			ConditionMonitor: "",
+			ConditionMonitor: nil,
 		},
 		Page:                  "150",
-		LimitWithinInclusions: &[]bool{true}[0],
+		LimitWithinInclusions: true,
 		IncludeInLimit: &IncludeInLimit{
 			Name: "Tough as Nails (Stun)",
 		},
@@ -2422,10 +2424,10 @@ var DataQualities = map[string]Quality{
 		Source:   "RF",
 		Limit:    "3",
 		Bonus: &QualityBonus{
-			ConditionMonitor: "",
+			ConditionMonitor: nil,
 		},
 		Page:                  "150",
-		LimitWithinInclusions: &[]bool{true}[0],
+		LimitWithinInclusions: true,
 		IncludeInLimit: &IncludeInLimit{
 			Name: "Tough as Nails (Physical)",
 		},
@@ -2516,10 +2518,10 @@ var DataQualities = map[string]Quality{
 		Category: "Positive",
 		Source:   "RF",
 		Bonus: &QualityBonus{
-			LimitModifier: LimitModifier{
+			LimitModifier: &common.LimitModifier{
 				Limit: "Social", Value: "2", Condition: "LimitCondition_QualityTrustworthy",
 			},
-			SkillGroup: SkillGroupBonus{
+			SkillGroup: &common.SkillGroupBonus{
 				Name: "Influence", Bonus: "1", Condition: "",
 			},
 		},
@@ -2531,7 +2533,7 @@ var DataQualities = map[string]Quality{
 		Category: "Positive",
 		Source:   "RF",
 		Bonus: &QualityBonus{
-			SkillCategory: BiowareSkillCategoryBonus{
+			SkillCategory: &BiowareSkillCategoryBonus{
 				Name: "Vehicle Active", Bonus: "1",
 			},
 		},
@@ -2692,7 +2694,7 @@ var DataQualities = map[string]Quality{
 		Category: "Negative",
 		Source:   "RF",
 		Bonus: &QualityBonus{
-			SkillGroup: SkillGroupBonus{
+			SkillGroup: &common.SkillGroupBonus{
 				Name: "Electronics", Bonus: "-4", Condition: "",
 			},
 		},
@@ -2810,7 +2812,7 @@ var DataQualities = map[string]Quality{
 		Source:   "RF",
 		Limit:    "3",
 		Bonus: &QualityBonus{
-			SkillAttribute:                        "",
+			SkillAttribute:                        nil,
 			Dodge:                                 "-Rating",
 			Memory:                                "-Rating",
 			Surprise:                              "-Rating",
@@ -2935,7 +2937,7 @@ var DataQualities = map[string]Quality{
 			SpecificAttribute: []interface{}{nil, nil, nil, nil},
 		},
 		Page:            "156",
-		FirstLevelBonus: nil,
+		FirstLevelBonus: false,
 	},
 	"liar": {
 		Name:     "Liar",
@@ -2943,7 +2945,7 @@ var DataQualities = map[string]Quality{
 		Category: "Negative",
 		Source:   "RF",
 		Bonus: &QualityBonus{
-			LimitModifier: "",
+			LimitModifier: nil,
 		},
 		Page: "156",
 	},
@@ -3265,7 +3267,7 @@ var DataQualities = map[string]Quality{
 		Source:   "CF",
 		Bonus:    nil,
 		Page:     "160",
-		Hide:     &[]bool{true}[0],
+		Hide:     true,
 	},
 	"poor_self_control_vindictive": {
 		Name:     "Poor Self Control (Vindictive)",
@@ -3298,7 +3300,7 @@ var DataQualities = map[string]Quality{
 			},
 		},
 		Page:     "158",
-		NoLevels: &[]bool{true}[0],
+		NoLevels: true,
 	},
 	"reduced_sense_smell": {
 		Name:     "Reduced Sense (Smell)",
@@ -3450,7 +3452,7 @@ var DataQualities = map[string]Quality{
 			},
 		},
 		Page: "105",
-		Hide: &[]bool{true}[0],
+		Hide: true,
 	},
 	"natural_weapon_bite_naga": {
 		Name:     "Natural Weapon: Bite (Naga)",
@@ -3479,7 +3481,7 @@ var DataQualities = map[string]Quality{
 			},
 		},
 		Page: "309",
-		Hide: &[]bool{true}[0],
+		Hide: true,
 	},
 	"360_degree_eyesight": {
 		Name:     "360-degree Eyesight",
@@ -3663,7 +3665,7 @@ var DataQualities = map[string]Quality{
 		Category: "Positive",
 		Source:   "RF",
 		Bonus: &QualityBonus{
-			UnarmedDVPhysical: &[]bool{true}[0],
+			UnarmedDVPhysical: true,
 			UnarmedDV:         "2",
 		},
 		Required: &QualityRequired{
@@ -4239,7 +4241,7 @@ var DataQualities = map[string]Quality{
 		Category: "Positive",
 		Source:   "RF",
 		Bonus: &QualityBonus{
-			SkillCategory: BiowareSkillCategoryBonus{
+			SkillCategory: &BiowareSkillCategoryBonus{
 				Name: "Social Active", Bonus: "1",
 			},
 			AddQuality:  nil,
@@ -4926,7 +4928,7 @@ var DataQualities = map[string]Quality{
 		Category: "Positive",
 		Source:   "RF",
 		Bonus: &QualityBonus{
-			SkillCategory: BiowareSkillCategoryBonus{
+			SkillCategory: &BiowareSkillCategoryBonus{
 				Name: "Physical Active", Bonus: "-1",
 			},
 			UnarmedDV: "1",
@@ -4995,7 +4997,7 @@ var DataQualities = map[string]Quality{
 		Category: "Negative",
 		Source:   "RF",
 		Bonus: &QualityBonus{
-			SkillCategory: BiowareSkillCategoryBonus{
+			SkillCategory: &BiowareSkillCategoryBonus{
 				Name: "Physical Active", Bonus: "-1",
 			},
 			MovementReplace: []interface{}{nil, nil, nil},
@@ -5068,7 +5070,7 @@ var DataQualities = map[string]Quality{
 		Category: "Negative",
 		Source:   "RF",
 		Bonus: &QualityBonus{
-			SkillCategory: BiowareSkillCategoryBonus{
+			SkillCategory: &BiowareSkillCategoryBonus{
 				Name: "Combat Active", Bonus: "-1",
 			},
 			SpecificSkill: SpecificSkillBonus{
@@ -5103,7 +5105,7 @@ var DataQualities = map[string]Quality{
 		Category: "Negative",
 		Source:   "RF",
 		Bonus: &QualityBonus{
-			SkillCategory: BiowareSkillCategoryBonus{
+			SkillCategory: &BiowareSkillCategoryBonus{
 				Name: "Physical Active", Bonus: "-2",
 			},
 		},
@@ -5241,7 +5243,7 @@ var DataQualities = map[string]Quality{
 		Category: "Negative",
 		Source:   "RF",
 		Bonus: &QualityBonus{
-			ConditionMonitor: "",
+			ConditionMonitor: nil,
 			LifestyleCost:    "10",
 		},
 		Page:      "121",
@@ -5267,7 +5269,7 @@ var DataQualities = map[string]Quality{
 		Category: "Negative",
 		Source:   "RF",
 		Bonus: &QualityBonus{
-			SkillCategory: BiowareSkillCategoryBonus{
+			SkillCategory: &BiowareSkillCategoryBonus{
 				Name: "Physical Active", Bonus: "-2",
 			},
 		},
@@ -5415,8 +5417,31 @@ var DataQualities = map[string]Quality{
 			},
 		},
 		Page:              "136",
-		ContributeToLimit: &[]bool{false}[0],
-		NaturalWeapons:    "",
+		ContributeToLimit: false,
+		NaturalWeapons: &NaturalWeapons{
+			NaturalWeapon: []*NaturalWeapon{
+				{
+					Name:     "Infected Claws",
+					Reach:    "0",
+					Damage:   "({STR}+2)P",
+					AP:       "-1",
+					UseSkill: "Unarmed Combat",
+					Accuracy: "Physical",
+					Source:   "RF",
+					Page:     "137",
+				},
+				{
+					Name:     "Infected Bite",
+					Reach:    "-1",
+					Damage:   "({STR}+1)P",
+					AP:       "-1",
+					UseSkill: "Unarmed Combat",
+					Accuracy: "Physical",
+					Source:   "RF",
+					Page:     "137",
+				},
+			},
+		},
 	},
 	"infected_banshee": {
 		Name:     "Infected: Banshee",
@@ -5456,8 +5481,19 @@ var DataQualities = map[string]Quality{
 			},
 		},
 		Page:              "136",
-		ContributeToLimit: &[]bool{false}[0],
-		NaturalWeapons:    "",
+		ContributeToLimit: false,
+		NaturalWeapons: &NaturalWeapons{
+			NaturalWeapon: &NaturalWeapon{
+				Name:     "Infected Bite",
+				Reach:    "-1",
+				Damage:   "({STR}+1)P",
+				AP:       "-1",
+				UseSkill: "Unarmed Combat",
+				Accuracy: "Physical",
+				Source:   "RF",
+				Page:     "137",
+			},
+		},
 	},
 	"infected_dzoo_noo_qua": {
 		Name:     "Infected: Dzoo-Noo-Qua",
@@ -5500,8 +5536,31 @@ var DataQualities = map[string]Quality{
 			},
 		},
 		Page:              "137",
-		ContributeToLimit: &[]bool{false}[0],
-		NaturalWeapons:    "",
+		ContributeToLimit: false,
+		NaturalWeapons: &NaturalWeapons{
+			NaturalWeapon: []*NaturalWeapon{
+				{
+					Name:     "Infected Claws",
+					Reach:    "0",
+					Damage:   "({STR}+2)P",
+					AP:       "-1",
+					UseSkill: "Unarmed Combat",
+					Accuracy: "Physical",
+					Source:   "RF",
+					Page:     "137",
+				},
+				{
+					Name:     "Infected Bite",
+					Reach:    "-1",
+					Damage:   "({STR}+1)P",
+					AP:       "-1",
+					UseSkill: "Unarmed Combat",
+					Accuracy: "Physical",
+					Source:   "RF",
+					Page:     "137",
+				},
+			},
+		},
 	},
 	"infected_fomoraig": {
 		Name:     "Infected: Fomoraig",
@@ -5539,8 +5598,31 @@ var DataQualities = map[string]Quality{
 			},
 		},
 		Page:              "138",
-		ContributeToLimit: &[]bool{false}[0],
-		NaturalWeapons:    "",
+		ContributeToLimit: false,
+		NaturalWeapons: &NaturalWeapons{
+			NaturalWeapon: []*NaturalWeapon{
+				{
+					Name:     "Infected Claws",
+					Reach:    "0",
+					Damage:   "({STR}+2)P",
+					AP:       "-1",
+					UseSkill: "Unarmed Combat",
+					Accuracy: "Physical",
+					Source:   "RF",
+					Page:     "137",
+				},
+				{
+					Name:     "Infected Bite",
+					Reach:    "-1",
+					Damage:   "({STR}+1)P",
+					AP:       "-1",
+					UseSkill: "Unarmed Combat",
+					Accuracy: "Physical",
+					Source:   "RF",
+					Page:     "137",
+				},
+			},
+		},
 	},
 	"infected_ghoul_dwarf": {
 		Name:     "Infected: Ghoul (Dwarf)",
@@ -5582,8 +5664,31 @@ var DataQualities = map[string]Quality{
 			},
 		},
 		Page:              "138",
-		ContributeToLimit: &[]bool{false}[0],
-		NaturalWeapons:    "",
+		ContributeToLimit: false,
+		NaturalWeapons: &NaturalWeapons{
+			NaturalWeapon: []*NaturalWeapon{
+				{
+					Name:     "Infected Claws",
+					Reach:    "0",
+					Damage:   "({STR}+2)P",
+					AP:       "-1",
+					UseSkill: "Unarmed Combat",
+					Accuracy: "Physical",
+					Source:   "RF",
+					Page:     "137",
+				},
+				{
+					Name:     "Infected Bite",
+					Reach:    "-1",
+					Damage:   "({STR}+1)P",
+					AP:       "-1",
+					UseSkill: "Unarmed Combat",
+					Accuracy: "Physical",
+					Source:   "RF",
+					Page:     "137",
+				},
+			},
+		},
 	},
 	"infected_ghoul_elf": {
 		Name:     "Infected: Ghoul (Elf)",
@@ -5625,8 +5730,31 @@ var DataQualities = map[string]Quality{
 			},
 		},
 		Page:              "138",
-		ContributeToLimit: &[]bool{false}[0],
-		NaturalWeapons:    "",
+		ContributeToLimit: false,
+		NaturalWeapons: &NaturalWeapons{
+			NaturalWeapon: []*NaturalWeapon{
+				{
+					Name:     "Infected Claws",
+					Reach:    "0",
+					Damage:   "({STR}+2)P",
+					AP:       "-1",
+					UseSkill: "Unarmed Combat",
+					Accuracy: "Physical",
+					Source:   "RF",
+					Page:     "137",
+				},
+				{
+					Name:     "Infected Bite",
+					Reach:    "-1",
+					Damage:   "({STR}+1)P",
+					AP:       "-1",
+					UseSkill: "Unarmed Combat",
+					Accuracy: "Physical",
+					Source:   "RF",
+					Page:     "137",
+				},
+			},
+		},
 	},
 	"infected_ghoul_human": {
 		Name:     "Infected: Ghoul (Human)",
@@ -5668,8 +5796,31 @@ var DataQualities = map[string]Quality{
 			},
 		},
 		Page:              "138",
-		ContributeToLimit: &[]bool{false}[0],
-		NaturalWeapons:    "",
+		ContributeToLimit: false,
+		NaturalWeapons: &NaturalWeapons{
+			NaturalWeapon: []*NaturalWeapon{
+				{
+					Name:     "Infected Claws",
+					Reach:    "0",
+					Damage:   "({STR}+2)P",
+					AP:       "-1",
+					UseSkill: "Unarmed Combat",
+					Accuracy: "Physical",
+					Source:   "RF",
+					Page:     "137",
+				},
+				{
+					Name:     "Infected Bite",
+					Reach:    "-1",
+					Damage:   "({STR}+1)P",
+					AP:       "-1",
+					UseSkill: "Unarmed Combat",
+					Accuracy: "Physical",
+					Source:   "RF",
+					Page:     "137",
+				},
+			},
+		},
 	},
 	"infected_ghoul_ork": {
 		Name:     "Infected: Ghoul (Ork)",
@@ -5711,8 +5862,31 @@ var DataQualities = map[string]Quality{
 			},
 		},
 		Page:              "138",
-		ContributeToLimit: &[]bool{false}[0],
-		NaturalWeapons:    "",
+		ContributeToLimit: false,
+		NaturalWeapons: &NaturalWeapons{
+			NaturalWeapon: []*NaturalWeapon{
+				{
+					Name:     "Infected Claws",
+					Reach:    "0",
+					Damage:   "({STR}+2)P",
+					AP:       "-1",
+					UseSkill: "Unarmed Combat",
+					Accuracy: "Physical",
+					Source:   "RF",
+					Page:     "137",
+				},
+				{
+					Name:     "Infected Bite",
+					Reach:    "-1",
+					Damage:   "({STR}+1)P",
+					AP:       "-1",
+					UseSkill: "Unarmed Combat",
+					Accuracy: "Physical",
+					Source:   "RF",
+					Page:     "137",
+				},
+			},
+		},
 	},
 	"infected_ghoul_sasquatch": {
 		Name:     "Infected: Ghoul (Sasquatch)",
@@ -5754,8 +5928,31 @@ var DataQualities = map[string]Quality{
 			},
 		},
 		Page:              "138",
-		ContributeToLimit: &[]bool{false}[0],
-		NaturalWeapons:    "",
+		ContributeToLimit: false,
+		NaturalWeapons: &NaturalWeapons{
+			NaturalWeapon: []*NaturalWeapon{
+				{
+					Name:     "Infected Claws",
+					Reach:    "0",
+					Damage:   "({STR}+2)P",
+					AP:       "-1",
+					UseSkill: "Unarmed Combat",
+					Accuracy: "Physical",
+					Source:   "RF",
+					Page:     "137",
+				},
+				{
+					Name:     "Infected Bite",
+					Reach:    "-1",
+					Damage:   "({STR}+1)P",
+					AP:       "-1",
+					UseSkill: "Unarmed Combat",
+					Accuracy: "Physical",
+					Source:   "RF",
+					Page:     "137",
+				},
+			},
+		},
 	},
 	"infected_ghoul_troll": {
 		Name:     "Infected: Ghoul (Troll)",
@@ -5797,8 +5994,31 @@ var DataQualities = map[string]Quality{
 			},
 		},
 		Page:              "138",
-		ContributeToLimit: &[]bool{false}[0],
-		NaturalWeapons:    "",
+		ContributeToLimit: false,
+		NaturalWeapons: &NaturalWeapons{
+			NaturalWeapon: []*NaturalWeapon{
+				{
+					Name:     "Infected Claws",
+					Reach:    "0",
+					Damage:   "({STR}+2)P",
+					AP:       "-1",
+					UseSkill: "Unarmed Combat",
+					Accuracy: "Physical",
+					Source:   "RF",
+					Page:     "137",
+				},
+				{
+					Name:     "Infected Bite",
+					Reach:    "-1",
+					Damage:   "({STR}+1)P",
+					AP:       "-1",
+					UseSkill: "Unarmed Combat",
+					Accuracy: "Physical",
+					Source:   "RF",
+					Page:     "137",
+				},
+			},
+		},
 	},
 	"infected_gnawer": {
 		Name:     "Infected: Gnawer",
@@ -5835,8 +6055,19 @@ var DataQualities = map[string]Quality{
 			},
 		},
 		Page:              "138",
-		ContributeToLimit: &[]bool{false}[0],
-		NaturalWeapons:    "",
+		ContributeToLimit: false,
+		NaturalWeapons: &NaturalWeapons{
+			NaturalWeapon: &NaturalWeapon{
+				Name:     "Infected Bite",
+				Reach:    "-1",
+				Damage:   "({STR}+2)P",
+				AP:       "-1",
+				UseSkill: "Unarmed Combat",
+				Accuracy: "Physical",
+				Source:   "RF",
+				Page:     "137",
+			},
+		},
 	},
 	"infected_goblin": {
 		Name:     "Infected: Goblin",
@@ -5883,8 +6114,31 @@ var DataQualities = map[string]Quality{
 			},
 		},
 		Page:              "138",
-		ContributeToLimit: &[]bool{false}[0],
-		NaturalWeapons:    "",
+		ContributeToLimit: false,
+		NaturalWeapons: &NaturalWeapons{
+			NaturalWeapon: []*NaturalWeapon{
+				{
+					Name:     "Infected Claws",
+					Reach:    "0",
+					Damage:   "({STR}+2)P",
+					AP:       "-1",
+					UseSkill: "Unarmed Combat",
+					Accuracy: "Physical",
+					Source:   "RF",
+					Page:     "137",
+				},
+				{
+					Name:     "Infected Bite",
+					Reach:    "-1",
+					Damage:   "({STR}+1)P",
+					AP:       "-1",
+					UseSkill: "Unarmed Combat",
+					Accuracy: "Physical",
+					Source:   "RF",
+					Page:     "137",
+				},
+			},
+		},
 	},
 	"infected_grendel": {
 		Name:     "Infected: Grendel",
@@ -5930,9 +6184,32 @@ var DataQualities = map[string]Quality{
 			},
 		},
 		Page:              "139",
-		ContributeToLimit: &[]bool{false}[0],
-		Implemented:       &[]bool{false}[0],
-		NaturalWeapons:    "",
+		ContributeToLimit: false,
+		Implemented:       false,
+		NaturalWeapons: &NaturalWeapons{
+			NaturalWeapon: []*NaturalWeapon{
+				{
+					Name:     "Infected Claws",
+					Reach:    "0",
+					Damage:   "({STR}+1)P",
+					AP:       "-1",
+					UseSkill: "Unarmed Combat",
+					Accuracy: "Physical",
+					Source:   "RF",
+					Page:     "137",
+				},
+				{
+					Name:     "Infected Bite",
+					Reach:    "-1",
+					Damage:   "({STR}+1)P",
+					AP:       "-1",
+					UseSkill: "Unarmed Combat",
+					Accuracy: "Physical",
+					Source:   "RF",
+					Page:     "137",
+				},
+			},
+		},
 	},
 	"infected_harvester": {
 		Name:     "Infected: Harvester",
@@ -5982,8 +6259,31 @@ var DataQualities = map[string]Quality{
 			},
 		},
 		Page:              "139",
-		ContributeToLimit: &[]bool{false}[0],
-		NaturalWeapons:    "",
+		ContributeToLimit: false,
+		NaturalWeapons: &NaturalWeapons{
+			NaturalWeapon: []*NaturalWeapon{
+				{
+					Name:     "Infected Claws",
+					Reach:    "0",
+					Damage:   "({STR}+3)P",
+					AP:       "-2",
+					UseSkill: "Unarmed Combat",
+					Accuracy: "Physical",
+					Source:   "RF",
+					Page:     "137",
+				},
+				{
+					Name:     "Infected Bite",
+					Reach:    "-1",
+					Damage:   "({STR}+1)P",
+					AP:       "-1",
+					UseSkill: "Unarmed Combat",
+					Accuracy: "Physical",
+					Source:   "RF",
+					Page:     "137",
+				},
+			},
+		},
 	},
 	"infected_loup_garou": {
 		Name:     "Infected: Loup-Garou",
@@ -6033,8 +6333,31 @@ var DataQualities = map[string]Quality{
 			},
 		},
 		Page:              "139",
-		ContributeToLimit: &[]bool{false}[0],
-		NaturalWeapons:    "",
+		ContributeToLimit: false,
+		NaturalWeapons: &NaturalWeapons{
+			NaturalWeapon: []*NaturalWeapon{
+				{
+					Name:     "Infected Claws",
+					Reach:    "0",
+					Damage:   "({STR}+3)P",
+					AP:       "-2",
+					UseSkill: "Unarmed Combat",
+					Accuracy: "Physical",
+					Source:   "RF",
+					Page:     "137",
+				},
+				{
+					Name:     "Infected Bite",
+					Reach:    "-1",
+					Damage:   "({STR}+2)P",
+					AP:       "-2",
+					UseSkill: "Unarmed Combat",
+					Accuracy: "Physical",
+					Source:   "RF",
+					Page:     "137",
+				},
+			},
+		},
 	},
 	"infected_mutaqua": {
 		Name:     "Infected: Mutaqua",
@@ -6078,9 +6401,32 @@ var DataQualities = map[string]Quality{
 			},
 		},
 		Page:              "139",
-		ContributeToLimit: &[]bool{false}[0],
-		NaturalWeapons:    "",
-		CostDiscount:      "",
+		ContributeToLimit: false,
+		NaturalWeapons: &NaturalWeapons{
+			NaturalWeapon: []*NaturalWeapon{
+				{
+					Name:     "Infected Claws",
+					Reach:    "0",
+					Damage:   "({STR}+2)P",
+					AP:       "-1",
+					UseSkill: "Unarmed Combat",
+					Accuracy: "Physical",
+					Source:   "RF",
+					Page:     "137",
+				},
+				{
+					Name:     "Infected Bite",
+					Reach:    "-1",
+					Damage:   "({STR}+1)P",
+					AP:       "-1",
+					UseSkill: "Unarmed Combat",
+					Accuracy: "Physical",
+					Source:   "RF",
+					Page:     "137",
+				},
+			},
+		},
+		CostDiscount: "",
 	},
 	"infected_nosferatu": {
 		Name:     "Infected: Nosferatu",
@@ -6122,9 +6468,20 @@ var DataQualities = map[string]Quality{
 			},
 		},
 		Page:              "139",
-		ContributeToLimit: &[]bool{false}[0],
-		NaturalWeapons:    "",
-		CostDiscount:      "",
+		ContributeToLimit: false,
+		NaturalWeapons: &NaturalWeapons{
+			NaturalWeapon: &NaturalWeapon{
+				Name:     "Infected Bite",
+				Reach:    "-1",
+				Damage:   "({STR}+1)P",
+				AP:       "-1",
+				UseSkill: "Unarmed Combat",
+				Accuracy: "Physical",
+				Source:   "RF",
+				Page:     "137",
+			},
+		},
+		CostDiscount: "",
 	},
 	"infected_vampire_human": {
 		Name:     "Infected: Vampire (Human)",
@@ -6165,8 +6522,19 @@ var DataQualities = map[string]Quality{
 			},
 		},
 		Page:              "140",
-		ContributeToLimit: &[]bool{false}[0],
-		NaturalWeapons:    "",
+		ContributeToLimit: false,
+		NaturalWeapons: &NaturalWeapons{
+			NaturalWeapon: &NaturalWeapon{
+				Name:     "Infected Bite",
+				Reach:    "-1",
+				Damage:   "({STR}+1)P",
+				AP:       "-1",
+				UseSkill: "Unarmed Combat",
+				Accuracy: "Physical",
+				Source:   "RF",
+				Page:     "137",
+			},
+		},
 	},
 	"infected_vampire_non_human": {
 		Name:     "Infected: Vampire (Non-Human)",
@@ -6202,8 +6570,19 @@ var DataQualities = map[string]Quality{
 			},
 		},
 		Page:              "140",
-		ContributeToLimit: &[]bool{false}[0],
-		NaturalWeapons:    "",
+		ContributeToLimit: false,
+		NaturalWeapons: &NaturalWeapons{
+			NaturalWeapon: &NaturalWeapon{
+				Name:     "Infected Bite",
+				Reach:    "-1",
+				Damage:   "({STR}+1)P",
+				AP:       "-1",
+				UseSkill: "Unarmed Combat",
+				Accuracy: "Physical",
+				Source:   "RF",
+				Page:     "137",
+			},
+		},
 	},
 	"infected_sukuyan_human": {
 		Name:     "Infected: Sukuyan (Human)",
@@ -6244,8 +6623,19 @@ var DataQualities = map[string]Quality{
 			},
 		},
 		Page:              "127",
-		ContributeToLimit: &[]bool{false}[0],
-		NaturalWeapons:    "",
+		ContributeToLimit: false,
+		NaturalWeapons: &NaturalWeapons{
+			NaturalWeapon: &NaturalWeapon{
+				Name:     "Infected Bite",
+				Reach:    "-1",
+				Damage:   "({STR}+1)P",
+				AP:       "-1",
+				UseSkill: "Unarmed Combat",
+				Accuracy: "Physical",
+				Source:   "RF",
+				Page:     "137",
+			},
+		},
 	},
 	"infected_sukuyan_non_human": {
 		Name:     "Infected: Sukuyan (Non-Human)",
@@ -6281,8 +6671,19 @@ var DataQualities = map[string]Quality{
 			},
 		},
 		Page:              "127",
-		ContributeToLimit: &[]bool{false}[0],
-		NaturalWeapons:    "",
+		ContributeToLimit: false,
+		NaturalWeapons: &NaturalWeapons{
+			NaturalWeapon: &NaturalWeapon{
+				Name:     "Infected Bite",
+				Reach:    "-1",
+				Damage:   "({STR}+1)P",
+				AP:       "-1",
+				UseSkill: "Unarmed Combat",
+				Accuracy: "Physical",
+				Source:   "RF",
+				Page:     "137",
+			},
+		},
 	},
 	"infected_wendigo": {
 		Name:     "Infected: Wendigo",
@@ -6324,9 +6725,32 @@ var DataQualities = map[string]Quality{
 			},
 		},
 		Page:              "140",
-		ContributeToLimit: &[]bool{false}[0],
-		NaturalWeapons:    "",
-		CostDiscount:      "",
+		ContributeToLimit: false,
+		NaturalWeapons: &NaturalWeapons{
+			NaturalWeapon: []*NaturalWeapon{
+				{
+					Name:     "Infected Claws",
+					Reach:    "0",
+					Damage:   "({STR}+2)P",
+					AP:       "-1",
+					UseSkill: "Unarmed Combat",
+					Accuracy: "Physical",
+					Source:   "RF",
+					Page:     "137",
+				},
+				{
+					Name:     "Infected Bite",
+					Reach:    "-1",
+					Damage:   "({STR}+1)P",
+					AP:       "-1",
+					UseSkill: "Unarmed Combat",
+					Accuracy: "Physical",
+					Source:   "RF",
+					Page:     "137",
+				},
+			},
+		},
+		CostDiscount: "",
 	},
 	"infected_optional_power_armor": {
 		Name:     "Infected Optional Power: Armor",
@@ -6343,7 +6767,7 @@ var DataQualities = map[string]Quality{
 			},
 		},
 		Page:         "136",
-		DoubleCareer: &[]bool{false}[0],
+		DoubleCareer: false,
 	},
 	"infected_optional_power_compulsion": {
 		Name:     "Infected Optional Power: Compulsion",
@@ -6360,7 +6784,7 @@ var DataQualities = map[string]Quality{
 		},
 		Forbidden:    nil,
 		Page:         "136",
-		DoubleCareer: &[]bool{false}[0],
+		DoubleCareer: false,
 	},
 	"infected_optional_power_enhanced_sense_hearing": {
 		Name:     "Infected Optional Power: Enhanced Sense (Hearing)",
@@ -6376,7 +6800,7 @@ var DataQualities = map[string]Quality{
 			},
 		},
 		Page:         "136",
-		DoubleCareer: &[]bool{false}[0],
+		DoubleCareer: false,
 	},
 	"infected_optional_power_enhanced_sense_low_light_vision": {
 		Name:     "Infected Optional Power: Enhanced Sense (Low-Light Vision)",
@@ -6392,7 +6816,7 @@ var DataQualities = map[string]Quality{
 			},
 		},
 		Page:         "136",
-		DoubleCareer: &[]bool{false}[0],
+		DoubleCareer: false,
 	},
 	"infected_optional_power_enhanced_sense_smell": {
 		Name:     "Infected Optional Power: Enhanced Sense (Smell)",
@@ -6408,7 +6832,7 @@ var DataQualities = map[string]Quality{
 			},
 		},
 		Page:         "136",
-		DoubleCareer: &[]bool{false}[0],
+		DoubleCareer: false,
 	},
 	"infected_optional_power_enhanced_sense_taste": {
 		Name:     "Infected Optional Power: Enhanced Sense (Taste)",
@@ -6424,7 +6848,7 @@ var DataQualities = map[string]Quality{
 			},
 		},
 		Page:         "136",
-		DoubleCareer: &[]bool{false}[0],
+		DoubleCareer: false,
 	},
 	"infected_optional_power_enhanced_sense_thermographic_vision": {
 		Name:     "Infected Optional Power: Enhanced Sense (Thermographic Vision)",
@@ -6440,7 +6864,7 @@ var DataQualities = map[string]Quality{
 			},
 		},
 		Page:         "136",
-		DoubleCareer: &[]bool{false}[0],
+		DoubleCareer: false,
 	},
 	"infected_optional_power_enhanced_sense_visual_acuity": {
 		Name:     "Infected Optional Power: Enhanced Sense (Visual Acuity)",
@@ -6456,7 +6880,7 @@ var DataQualities = map[string]Quality{
 			},
 		},
 		Page:         "136",
-		DoubleCareer: &[]bool{false}[0],
+		DoubleCareer: false,
 	},
 	"infected_optional_power_fear": {
 		Name:     "Infected Optional Power: Fear",
@@ -6473,7 +6897,7 @@ var DataQualities = map[string]Quality{
 		},
 		Forbidden:    nil,
 		Page:         "136",
-		DoubleCareer: &[]bool{false}[0],
+		DoubleCareer: false,
 	},
 	"infected_optional_power_immunity_fire": {
 		Name:     "Infected Optional Power: Immunity (Fire)",
@@ -6489,7 +6913,7 @@ var DataQualities = map[string]Quality{
 			},
 		},
 		Page:         "136",
-		DoubleCareer: &[]bool{false}[0],
+		DoubleCareer: false,
 	},
 	"infected_optional_power_immunity_pathogens": {
 		Name:     "Infected Optional Power: Immunity (Pathogens)",
@@ -6505,7 +6929,7 @@ var DataQualities = map[string]Quality{
 			},
 		},
 		Page:         "136",
-		DoubleCareer: &[]bool{false}[0],
+		DoubleCareer: false,
 	},
 	"infected_optional_power_immunity_toxins": {
 		Name:     "Infected Optional Power: Immunity (Toxins)",
@@ -6521,7 +6945,7 @@ var DataQualities = map[string]Quality{
 			},
 		},
 		Page:         "136",
-		DoubleCareer: &[]bool{false}[0],
+		DoubleCareer: false,
 	},
 	"infected_optional_power_influence": {
 		Name:     "Infected Optional Power: Influence",
@@ -6538,7 +6962,7 @@ var DataQualities = map[string]Quality{
 		},
 		Forbidden:    nil,
 		Page:         "136",
-		DoubleCareer: &[]bool{false}[0],
+		DoubleCareer: false,
 	},
 	"infected_optional_power_magical_guard": {
 		Name:     "Infected Optional Power: Magical Guard",
@@ -6555,7 +6979,7 @@ var DataQualities = map[string]Quality{
 		},
 		Forbidden:    nil,
 		Page:         "136",
-		DoubleCareer: &[]bool{false}[0],
+		DoubleCareer: false,
 	},
 	"infected_advanced_optional_power_mimicry": {
 		Name:     "Infected Advanced Optional Power: Mimicry",
@@ -6572,7 +6996,7 @@ var DataQualities = map[string]Quality{
 		},
 		Forbidden:    nil,
 		Page:         "398",
-		DoubleCareer: &[]bool{false}[0],
+		DoubleCareer: false,
 	},
 	"infected_optional_power_mist_form": {
 		Name:     "Infected Optional Power: Mist Form",
@@ -6588,7 +7012,7 @@ var DataQualities = map[string]Quality{
 			},
 		},
 		Page:         "136",
-		DoubleCareer: &[]bool{false}[0],
+		DoubleCareer: false,
 	},
 	"infected_optional_power_paralyzing_howl": {
 		Name:     "Infected Optional Power: Paralyzing Howl",
@@ -6605,7 +7029,7 @@ var DataQualities = map[string]Quality{
 		},
 		Forbidden:    nil,
 		Page:         "136",
-		DoubleCareer: &[]bool{false}[0],
+		DoubleCareer: false,
 	},
 	"infected_advanced_optional_power_psychokinesis": {
 		Name:     "Infected Advanced Optional Power: Psychokinesis",
@@ -6622,7 +7046,7 @@ var DataQualities = map[string]Quality{
 		},
 		Forbidden:    nil,
 		Page:         "400",
-		DoubleCareer: &[]bool{false}[0],
+		DoubleCareer: false,
 	},
 	"infected_optional_power_regeneration": {
 		Name:     "Infected Optional Power: Regeneration",
@@ -6639,7 +7063,7 @@ var DataQualities = map[string]Quality{
 		},
 		Forbidden:    nil,
 		Page:         "136",
-		DoubleCareer: &[]bool{false}[0],
+		DoubleCareer: false,
 	},
 	"data_anomaly": {
 		Name:     "Data Anomaly",
@@ -6913,7 +7337,7 @@ var DataQualities = map[string]Quality{
 		Category: "Positive",
 		Source:   "DT",
 		Bonus: &QualityBonus{
-			LimitModifier: LimitModifier{
+			LimitModifier: &common.LimitModifier{
 				Limit: "Social", Value: "1", Condition: "LimitCondition_QualityChatty",
 			},
 		},
@@ -7056,7 +7480,7 @@ var DataQualities = map[string]Quality{
 		Category: "Positive",
 		Source:   "DT",
 		Bonus: &QualityBonus{
-			ConditionMonitor: "",
+			ConditionMonitor: nil,
 		},
 		Required: &QualityRequired{
 			OneOf: &QualityRequiredOneOf{
@@ -7142,7 +7566,7 @@ var DataQualities = map[string]Quality{
 			},
 		},
 		Page:        "151",
-		Implemented: &[]bool{false}[0],
+		Implemented: false,
 	},
 	"fragmentation": {
 		Name:     "Fragmentation",
@@ -7256,7 +7680,7 @@ var DataQualities = map[string]Quality{
 			PrototypeTranshuman: "1",
 		},
 		Page:        "54",
-		ChargenOnly: &[]bool{true}[0],
+		ChargenOnly: true,
 	},
 	"redliner": {
 		Name:     "Redliner",
@@ -7299,7 +7723,7 @@ var DataQualities = map[string]Quality{
 		Source:      "CF",
 		Bonus:       nil,
 		Page:        "157",
-		ChargenOnly: &[]bool{true}[0],
+		ChargenOnly: true,
 	},
 	"phenotypic_variation_masque": {
 		Name:        "Phenotypic Variation - Masque",
@@ -7308,7 +7732,7 @@ var DataQualities = map[string]Quality{
 		Source:      "CF",
 		Bonus:       nil,
 		Page:        "157",
-		ChargenOnly: &[]bool{true}[0],
+		ChargenOnly: true,
 	},
 	"phenotypic_variation_reprint": {
 		Name:        "Phenotypic Variation - Reprint",
@@ -7317,7 +7741,7 @@ var DataQualities = map[string]Quality{
 		Source:      "CF",
 		Bonus:       nil,
 		Page:        "157",
-		ChargenOnly: &[]bool{true}[0],
+		ChargenOnly: true,
 	},
 	"phenotypic_variation_shuffle": {
 		Name:        "Phenotypic Variation - Shuffle",
@@ -7326,7 +7750,7 @@ var DataQualities = map[string]Quality{
 		Source:      "CF",
 		Bonus:       nil,
 		Page:        "157",
-		ChargenOnly: &[]bool{true}[0],
+		ChargenOnly: true,
 	},
 	"phenotypic_variation_genetic_optimization_body": {
 		Name:     "Phenotypic Variation - Genetic Optimization (Body)",
@@ -7342,7 +7766,7 @@ var DataQualities = map[string]Quality{
 			},
 		},
 		Page:        "157",
-		ChargenOnly: &[]bool{true}[0],
+		ChargenOnly: true,
 	},
 	"phenotypic_variation_genetic_optimization_agility": {
 		Name:     "Phenotypic Variation - Genetic Optimization (Agility)",
@@ -7358,7 +7782,7 @@ var DataQualities = map[string]Quality{
 			},
 		},
 		Page:        "157",
-		ChargenOnly: &[]bool{true}[0],
+		ChargenOnly: true,
 	},
 	"phenotypic_variation_genetic_optimization_reaction": {
 		Name:     "Phenotypic Variation - Genetic Optimization (Reaction)",
@@ -7374,7 +7798,7 @@ var DataQualities = map[string]Quality{
 			},
 		},
 		Page:        "157",
-		ChargenOnly: &[]bool{true}[0],
+		ChargenOnly: true,
 	},
 	"phenotypic_variation_genetic_optimization_strength": {
 		Name:     "Phenotypic Variation - Genetic Optimization (Strength)",
@@ -7390,7 +7814,7 @@ var DataQualities = map[string]Quality{
 			},
 		},
 		Page:        "157",
-		ChargenOnly: &[]bool{true}[0],
+		ChargenOnly: true,
 	},
 	"phenotypic_variation_genetic_optimization_charisma": {
 		Name:     "Phenotypic Variation - Genetic Optimization (Charisma)",
@@ -7406,7 +7830,7 @@ var DataQualities = map[string]Quality{
 			},
 		},
 		Page:        "157",
-		ChargenOnly: &[]bool{true}[0],
+		ChargenOnly: true,
 	},
 	"phenotypic_variation_genetic_optimization_intuition": {
 		Name:     "Phenotypic Variation - Genetic Optimization (Intuition)",
@@ -7422,7 +7846,7 @@ var DataQualities = map[string]Quality{
 			},
 		},
 		Page:        "157",
-		ChargenOnly: &[]bool{true}[0],
+		ChargenOnly: true,
 	},
 	"phenotypic_variation_genetic_optimization_logic": {
 		Name:     "Phenotypic Variation - Genetic Optimization (Logic)",
@@ -7438,7 +7862,7 @@ var DataQualities = map[string]Quality{
 			},
 		},
 		Page:        "157",
-		ChargenOnly: &[]bool{true}[0],
+		ChargenOnly: true,
 	},
 	"phenotypic_variation_genetic_optimization_willpower": {
 		Name:     "Phenotypic Variation - Genetic Optimization (Willpower)",
@@ -7454,7 +7878,7 @@ var DataQualities = map[string]Quality{
 			},
 		},
 		Page:        "157",
-		ChargenOnly: &[]bool{true}[0],
+		ChargenOnly: true,
 	},
 	"phenotypic_variation_cosmetic_alteration": {
 		Name:     "Phenotypic Variation - Cosmetic Alteration",
@@ -7465,7 +7889,7 @@ var DataQualities = map[string]Quality{
 			SelectText: &SelectTextBonus{},
 		},
 		Page:        "158",
-		ChargenOnly: &[]bool{true}[0],
+		ChargenOnly: true,
 	},
 	"phenotypic_variation_print_removal": {
 		Name:        "Phenotypic Variation - Print Removal",
@@ -7474,7 +7898,7 @@ var DataQualities = map[string]Quality{
 		Source:      "CF",
 		Bonus:       nil,
 		Page:        "158",
-		ChargenOnly: &[]bool{true}[0],
+		ChargenOnly: true,
 	},
 	"phenotypic_variation_metaposeur": {
 		Name:     "Phenotypic Variation - Metaposeur",
@@ -7485,7 +7909,7 @@ var DataQualities = map[string]Quality{
 			SelectText: "",
 		},
 		Page:        "158",
-		ChargenOnly: &[]bool{true}[0],
+		ChargenOnly: true,
 	},
 	"antipathy": {
 		Name:     "Antipathy",
@@ -7663,7 +8087,7 @@ var DataQualities = map[string]Quality{
 		Category: "Negative",
 		Source:   "CF",
 		Bonus: &QualityBonus{
-			SkillCategory: BiowareSkillCategoryBonus{
+			SkillCategory: &BiowareSkillCategoryBonus{
 				Name: "Social Active", Bonus: "-3",
 			},
 			SpecificSkill: SpecificSkillBonus{
@@ -7693,7 +8117,7 @@ var DataQualities = map[string]Quality{
 			}, SpecificSkillBonus{
 				Name: "Leadership", Bonus: -2,
 			}},
-			SkillGroup: SkillGroupBonus{
+			SkillGroup: &common.SkillGroupBonus{
 				Name: "Close Combat", Bonus: "1", Condition: "",
 			},
 		},
@@ -7766,7 +8190,7 @@ var DataQualities = map[string]Quality{
 		Category: "Negative",
 		Source:   "HT",
 		Bonus: &QualityBonus{
-			LimitModifier: LimitModifier{
+			LimitModifier: &common.LimitModifier{
 				Limit: "Social", Value: "-1", Condition: "LimitCondition_ExcludeIntimidation",
 			},
 		},
@@ -7797,7 +8221,7 @@ var DataQualities = map[string]Quality{
 			DealerConnection: "",
 		},
 		Page:     "33",
-		NoLevels: &[]bool{true}[0],
+		NoLevels: true,
 	},
 	"grease_monkey": {
 		Name:     "Grease Monkey",
@@ -7805,7 +8229,7 @@ var DataQualities = map[string]Quality{
 		Category: "Positive",
 		Source:   "R5",
 		Bonus: &QualityBonus{
-			SkillGroup: SkillGroupBonus{
+			SkillGroup: &common.SkillGroupBonus{
 				Name: "Engineering", Bonus: "1", Condition: "",
 			},
 		},
@@ -7874,8 +8298,8 @@ var DataQualities = map[string]Quality{
 			},
 		},
 		Page:                "164",
-		RefundKarmaOnRemove: &[]bool{true}[0],
-		ContributeToLimit:   &[]bool{false}[0],
+		RefundKarmaOnRemove: true,
+		ContributeToLimit:   false,
 	},
 	"dracoform_eastern_drake": {
 		Name:     "Dracoform (Eastern Drake)",
@@ -7904,9 +8328,20 @@ var DataQualities = map[string]Quality{
 			},
 		},
 		Page:              "163",
-		StagedPurchase:    &[]bool{true}[0],
-		ContributeToLimit: &[]bool{false}[0],
-		NaturalWeapons:    "",
+		StagedPurchase:    true,
+		ContributeToLimit: false,
+		NaturalWeapons: &NaturalWeapons{
+			NaturalWeapon: &NaturalWeapon{
+				Name:     "Dracoform Claws",
+				Reach:    "0",
+				Damage:   "({STR}+1)P",
+				AP:       "-1",
+				UseSkill: "Unarmed Combat",
+				Accuracy: "Physical",
+				Source:   "HS",
+				Page:     "163",
+			},
+		},
 	},
 	"dracoform_western_drake": {
 		Name:     "Dracoform (Western Drake)",
@@ -7933,9 +8368,20 @@ var DataQualities = map[string]Quality{
 			},
 		},
 		Page:              "163",
-		StagedPurchase:    &[]bool{true}[0],
-		ContributeToLimit: &[]bool{false}[0],
-		NaturalWeapons:    "",
+		StagedPurchase:    true,
+		ContributeToLimit: false,
+		NaturalWeapons: &NaturalWeapons{
+			NaturalWeapon: &NaturalWeapon{
+				Name:     "Dracoform Horns",
+				Reach:    "0",
+				Damage:   "({STR}+2)P",
+				AP:       "-1",
+				UseSkill: "Unarmed Combat",
+				Accuracy: "Physical",
+				Source:   "HS",
+				Page:     "163",
+			},
+		},
 	},
 	"dracoform_feathered_drake": {
 		Name:     "Dracoform (Feathered Drake)",
@@ -7966,9 +8412,20 @@ var DataQualities = map[string]Quality{
 			},
 		},
 		Page:              "163",
-		StagedPurchase:    &[]bool{true}[0],
-		ContributeToLimit: &[]bool{false}[0],
-		NaturalWeapons:    "",
+		StagedPurchase:    true,
+		ContributeToLimit: false,
+		NaturalWeapons: &NaturalWeapons{
+			NaturalWeapon: &NaturalWeapon{
+				Name:     "Dracoform Tail",
+				Reach:    "1",
+				Damage:   "({STR}+3)P",
+				AP:       "-1",
+				UseSkill: "Unarmed Combat",
+				Accuracy: "Physical",
+				Source:   "HS",
+				Page:     "163",
+			},
+		},
 	},
 	"dracoform_sea_drake": {
 		Name:     "Dracoform (Sea Drake)",
@@ -7997,9 +8454,20 @@ var DataQualities = map[string]Quality{
 			},
 		},
 		Page:              "163",
-		StagedPurchase:    &[]bool{true}[0],
-		ContributeToLimit: &[]bool{false}[0],
-		NaturalWeapons:    "",
+		StagedPurchase:    true,
+		ContributeToLimit: false,
+		NaturalWeapons: &NaturalWeapons{
+			NaturalWeapon: &NaturalWeapon{
+				Name:     "Dracoform Fangs",
+				Reach:    "0",
+				Damage:   "({STR}+1)P",
+				AP:       "-2",
+				UseSkill: "Unarmed Combat",
+				Accuracy: "Physical",
+				Source:   "HS",
+				Page:     "163",
+			},
+		},
 	},
 	"alibi": {
 		Name:     "Alibi",
@@ -8039,7 +8507,7 @@ var DataQualities = map[string]Quality{
 		Category: "Positive",
 		Source:   "CA",
 		Bonus: &QualityBonus{
-			SwapSkillAttribute: "",
+			SwapSkillAttribute: nil,
 		},
 		Page: "150",
 	},
@@ -8241,7 +8709,7 @@ var DataQualities = map[string]Quality{
 		Source:   "CA",
 		Limit:    "3",
 		Bonus: &QualityBonus{
-			SkillCategory: BiowareSkillCategoryBonus{
+			SkillCategory: &BiowareSkillCategoryBonus{
 				Name: "Social Active", Bonus: "-Rating",
 			},
 		},
@@ -8283,7 +8751,7 @@ var DataQualities = map[string]Quality{
 			},
 		},
 		Page:              "151",
-		ContributeToLimit: &[]bool{false}[0],
+		ContributeToLimit: false,
 	},
 	"free_insect_spirit_fire_ant": {
 		Name:     "Free Insect Spirit: Fire Ant",
@@ -8303,7 +8771,7 @@ var DataQualities = map[string]Quality{
 			},
 		},
 		Page:              "151",
-		ContributeToLimit: &[]bool{false}[0],
+		ContributeToLimit: false,
 	},
 	"free_insect_spirit_desert_locust": {
 		Name:     "Free Insect Spirit: Desert Locust",
@@ -8323,7 +8791,7 @@ var DataQualities = map[string]Quality{
 			},
 		},
 		Page:              "151",
-		ContributeToLimit: &[]bool{false}[0],
+		ContributeToLimit: false,
 	},
 	"free_insect_spirit_mole_cricket": {
 		Name:     "Free Insect Spirit: Mole Cricket",
@@ -8344,7 +8812,7 @@ var DataQualities = map[string]Quality{
 			},
 		},
 		Page:              "151",
-		ContributeToLimit: &[]bool{false}[0],
+		ContributeToLimit: false,
 	},
 	"free_insect_spirit_subterranean_termite": {
 		Name:     "Free Insect Spirit: Subterranean Termite",
@@ -8365,7 +8833,7 @@ var DataQualities = map[string]Quality{
 			},
 		},
 		Page:              "151",
-		ContributeToLimit: &[]bool{false}[0],
+		ContributeToLimit: false,
 	},
 	"free_insect_spirit_hunter_wasp": {
 		Name:     "Free Insect Spirit: Hunter Wasp",
@@ -8385,7 +8853,7 @@ var DataQualities = map[string]Quality{
 			},
 		},
 		Page:              "151",
-		ContributeToLimit: &[]bool{false}[0],
+		ContributeToLimit: false,
 	},
 	"free_insect_spirit_bee": {
 		Name:     "Free Insect Spirit: Bee",
@@ -8405,7 +8873,7 @@ var DataQualities = map[string]Quality{
 			},
 		},
 		Page:              "151",
-		ContributeToLimit: &[]bool{false}[0],
+		ContributeToLimit: false,
 	},
 	"free_insect_spirit_goliath_beetle": {
 		Name:     "Free Insect Spirit: Goliath Beetle",
@@ -8426,7 +8894,7 @@ var DataQualities = map[string]Quality{
 			},
 		},
 		Page:              "151",
-		ContributeToLimit: &[]bool{false}[0],
+		ContributeToLimit: false,
 	},
 	"free_insect_spirit_water_beetle": {
 		Name:     "Free Insect Spirit: Water Beetle",
@@ -8446,7 +8914,7 @@ var DataQualities = map[string]Quality{
 			},
 		},
 		Page:              "151",
-		ContributeToLimit: &[]bool{false}[0],
+		ContributeToLimit: false,
 	},
 	"free_insect_spirit_house_centipede": {
 		Name:     "Free Insect Spirit: House Centipede",
@@ -8466,7 +8934,7 @@ var DataQualities = map[string]Quality{
 			},
 		},
 		Page:              "151",
-		ContributeToLimit: &[]bool{false}[0],
+		ContributeToLimit: false,
 	},
 	"free_insect_spirit_tropical_centipede": {
 		Name:     "Free Insect Spirit: Tropical Centipede",
@@ -8486,7 +8954,7 @@ var DataQualities = map[string]Quality{
 			},
 		},
 		Page:              "151",
-		ContributeToLimit: &[]bool{false}[0],
+		ContributeToLimit: false,
 	},
 	"free_insect_spirit_century_cicada": {
 		Name:     "Free Insect Spirit: Century Cicada",
@@ -8506,7 +8974,7 @@ var DataQualities = map[string]Quality{
 			},
 		},
 		Page:              "151",
-		ContributeToLimit: &[]bool{false}[0],
+		ContributeToLimit: false,
 	},
 	"free_insect_spirit_trapdoor_spider": {
 		Name:     "Free Insect Spirit: Trapdoor Spider",
@@ -8526,7 +8994,7 @@ var DataQualities = map[string]Quality{
 			},
 		},
 		Page:              "151",
-		ContributeToLimit: &[]bool{false}[0],
+		ContributeToLimit: false,
 	},
 	"free_insect_spirit_black_widow": {
 		Name:     "Free Insect Spirit: Black Widow",
@@ -8546,7 +9014,7 @@ var DataQualities = map[string]Quality{
 			},
 		},
 		Page:              "151",
-		ContributeToLimit: &[]bool{false}[0],
+		ContributeToLimit: false,
 	},
 	"free_insect_spirit_burster_firefly": {
 		Name:     "Free Insect Spirit: Burster Firefly",
@@ -8566,7 +9034,7 @@ var DataQualities = map[string]Quality{
 			},
 		},
 		Page:              "151",
-		ContributeToLimit: &[]bool{false}[0],
+		ContributeToLimit: false,
 	},
 	"free_insect_spirit_botfly": {
 		Name:     "Free Insect Spirit: Botfly",
@@ -8586,7 +9054,7 @@ var DataQualities = map[string]Quality{
 			},
 		},
 		Page:              "151",
-		ContributeToLimit: &[]bool{false}[0],
+		ContributeToLimit: false,
 	},
 	"free_insect_spirit_dragonfly": {
 		Name:     "Free Insect Spirit: Dragonfly",
@@ -8606,7 +9074,7 @@ var DataQualities = map[string]Quality{
 			},
 		},
 		Page:              "151",
-		ContributeToLimit: &[]bool{false}[0],
+		ContributeToLimit: false,
 	},
 	"free_insect_spirit_mimic_mantis": {
 		Name:     "Free Insect Spirit: Mimic Mantis",
@@ -8626,7 +9094,7 @@ var DataQualities = map[string]Quality{
 			},
 		},
 		Page:              "151",
-		ContributeToLimit: &[]bool{false}[0],
+		ContributeToLimit: false,
 	},
 	"free_insect_spirit_orchid_mantis": {
 		Name:     "Free Insect Spirit: Orchid Mantis",
@@ -8646,7 +9114,7 @@ var DataQualities = map[string]Quality{
 			},
 		},
 		Page:              "151",
-		ContributeToLimit: &[]bool{false}[0],
+		ContributeToLimit: false,
 	},
 	"free_insect_spirit_vampire_mosquito": {
 		Name:     "Free Insect Spirit: Vampire Mosquito",
@@ -8666,7 +9134,7 @@ var DataQualities = map[string]Quality{
 			},
 		},
 		Page:              "151",
-		ContributeToLimit: &[]bool{false}[0],
+		ContributeToLimit: false,
 	},
 	"free_insect_spirit_tick": {
 		Name:     "Free Insect Spirit: Tick",
@@ -8686,7 +9154,7 @@ var DataQualities = map[string]Quality{
 			},
 		},
 		Page:              "151",
-		ContributeToLimit: &[]bool{false}[0],
+		ContributeToLimit: false,
 	},
 	"free_insect_spirit_deaths_head_moth": {
 		Name:     "Free Insect Spirit: Death's Head Moth",
@@ -8707,7 +9175,7 @@ var DataQualities = map[string]Quality{
 			},
 		},
 		Page:              "151",
-		ContributeToLimit: &[]bool{false}[0],
+		ContributeToLimit: false,
 	},
 	"free_insect_spirit_cryptid_moth": {
 		Name:     "Free Insect Spirit: Cryptid Moth",
@@ -8728,7 +9196,7 @@ var DataQualities = map[string]Quality{
 			},
 		},
 		Page:              "151",
-		ContributeToLimit: &[]bool{false}[0],
+		ContributeToLimit: false,
 	},
 	"free_insect_spirit_cave_roach": {
 		Name:     "Free Insect Spirit: Cave Roach",
@@ -8748,7 +9216,7 @@ var DataQualities = map[string]Quality{
 			},
 		},
 		Page:              "151",
-		ContributeToLimit: &[]bool{false}[0],
+		ContributeToLimit: false,
 	},
 	"free_insect_spirit_silverfish": {
 		Name:     "Free Insect Spirit: Silverfish",
@@ -8768,7 +9236,7 @@ var DataQualities = map[string]Quality{
 			},
 		},
 		Page:              "151",
-		ContributeToLimit: &[]bool{false}[0],
+		ContributeToLimit: false,
 	},
 	"adept_healer": {
 		Name:     "Adept Healer",
@@ -8782,8 +9250,8 @@ var DataQualities = map[string]Quality{
 			},
 		},
 		Page:                  "31",
-		CanBuyWithSpellPoints: &[]bool{true}[0],
-		DoubleCareer:          &[]bool{false}[0],
+		CanBuyWithSpellPoints: true,
+		DoubleCareer:          false,
 	},
 	"alchemical_armorer": {
 		Name:     "Alchemical Armorer",
@@ -8795,8 +9263,8 @@ var DataQualities = map[string]Quality{
 		},
 		Required:              nil,
 		Page:                  "31",
-		CanBuyWithSpellPoints: &[]bool{true}[0],
-		DoubleCareer:          &[]bool{false}[0],
+		CanBuyWithSpellPoints: true,
+		DoubleCareer:          false,
 	},
 	"alchemical_bomb_maker": {
 		Name:                  "Alchemical Bomb Maker",
@@ -8806,8 +9274,8 @@ var DataQualities = map[string]Quality{
 		Bonus:                 nil,
 		Required:              nil,
 		Page:                  "31",
-		CanBuyWithSpellPoints: &[]bool{true}[0],
-		DoubleCareer:          &[]bool{false}[0],
+		CanBuyWithSpellPoints: true,
+		DoubleCareer:          false,
 	},
 	"animal_familiar": {
 		Name:                  "Animal Familiar",
@@ -8817,8 +9285,8 @@ var DataQualities = map[string]Quality{
 		Bonus:                 nil,
 		Required:              nil,
 		Page:                  "31",
-		CanBuyWithSpellPoints: &[]bool{true}[0],
-		DoubleCareer:          &[]bool{false}[0],
+		CanBuyWithSpellPoints: true,
+		DoubleCareer:          false,
 	},
 	"apt_pupil": {
 		Name:                  "Apt Pupil",
@@ -8828,8 +9296,8 @@ var DataQualities = map[string]Quality{
 		Bonus:                 nil,
 		Required:              nil,
 		Page:                  "32",
-		CanBuyWithSpellPoints: &[]bool{true}[0],
-		DoubleCareer:          &[]bool{false}[0],
+		CanBuyWithSpellPoints: true,
+		DoubleCareer:          false,
 	},
 	"arcane_bodyguard": {
 		Name:                  "Arcane Bodyguard",
@@ -8839,8 +9307,8 @@ var DataQualities = map[string]Quality{
 		Bonus:                 nil,
 		Required:              nil,
 		Page:                  "32",
-		CanBuyWithSpellPoints: &[]bool{true}[0],
-		DoubleCareer:          &[]bool{false}[0],
+		CanBuyWithSpellPoints: true,
+		DoubleCareer:          false,
 	},
 	"arcane_improviser": {
 		Name:                  "Arcane Improviser",
@@ -8850,8 +9318,8 @@ var DataQualities = map[string]Quality{
 		Bonus:                 nil,
 		Required:              nil,
 		Page:                  "32",
-		CanBuyWithSpellPoints: &[]bool{true}[0],
-		DoubleCareer:          &[]bool{false}[0],
+		CanBuyWithSpellPoints: true,
+		DoubleCareer:          false,
 	},
 	"archivist": {
 		Name:                  "Archivist",
@@ -8861,8 +9329,8 @@ var DataQualities = map[string]Quality{
 		Bonus:                 nil,
 		Required:              nil,
 		Page:                  "32",
-		CanBuyWithSpellPoints: &[]bool{true}[0],
-		DoubleCareer:          &[]bool{false}[0],
+		CanBuyWithSpellPoints: true,
+		DoubleCareer:          false,
 	},
 	"astral_bouncer": {
 		Name:                  "Astral Bouncer",
@@ -8872,8 +9340,8 @@ var DataQualities = map[string]Quality{
 		Bonus:                 nil,
 		Required:              nil,
 		Page:                  "32",
-		CanBuyWithSpellPoints: &[]bool{true}[0],
-		DoubleCareer:          &[]bool{false}[0],
+		CanBuyWithSpellPoints: true,
+		DoubleCareer:          false,
 	},
 	"astral_infiltrator": {
 		Name:                  "Astral Infiltrator",
@@ -8883,8 +9351,8 @@ var DataQualities = map[string]Quality{
 		Bonus:                 nil,
 		Required:              nil,
 		Page:                  "32",
-		CanBuyWithSpellPoints: &[]bool{true}[0],
-		DoubleCareer:          &[]bool{false}[0],
+		CanBuyWithSpellPoints: true,
+		DoubleCareer:          false,
 	},
 	"barehanded_adept": {
 		Name:     "Barehanded Adept",
@@ -8898,8 +9366,8 @@ var DataQualities = map[string]Quality{
 		},
 		Required:              nil,
 		Page:                  "33",
-		CanBuyWithSpellPoints: &[]bool{true}[0],
-		DoubleCareer:          &[]bool{false}[0],
+		CanBuyWithSpellPoints: true,
+		DoubleCareer:          false,
 	},
 	"blood_necromancer": {
 		Name:                  "Blood Necromancer",
@@ -8909,8 +9377,8 @@ var DataQualities = map[string]Quality{
 		Bonus:                 nil,
 		Required:              nil,
 		Page:                  "33",
-		CanBuyWithSpellPoints: &[]bool{true}[0],
-		DoubleCareer:          &[]bool{false}[0],
+		CanBuyWithSpellPoints: true,
+		DoubleCareer:          false,
 	},
 	"chain_breaker": {
 		Name:     "Chain Breaker",
@@ -8923,8 +9391,8 @@ var DataQualities = map[string]Quality{
 		},
 		Required:              nil,
 		Page:                  "33",
-		CanBuyWithSpellPoints: &[]bool{true}[0],
-		DoubleCareer:          &[]bool{false}[0],
+		CanBuyWithSpellPoints: true,
+		DoubleCareer:          false,
 		CostDiscount:          "",
 	},
 	"chakra_interrupter": {
@@ -8935,8 +9403,8 @@ var DataQualities = map[string]Quality{
 		Bonus:                 nil,
 		Required:              nil,
 		Page:                  "34",
-		CanBuyWithSpellPoints: &[]bool{true}[0],
-		DoubleCareer:          &[]bool{false}[0],
+		CanBuyWithSpellPoints: true,
+		DoubleCareer:          false,
 	},
 	"charlatan": {
 		Name:                  "Charlatan",
@@ -8946,8 +9414,8 @@ var DataQualities = map[string]Quality{
 		Bonus:                 nil,
 		Required:              nil,
 		Page:                  "34",
-		CanBuyWithSpellPoints: &[]bool{true}[0],
-		DoubleCareer:          &[]bool{false}[0],
+		CanBuyWithSpellPoints: true,
+		DoubleCareer:          false,
 	},
 	"chosen_follower": {
 		Name:     "Chosen Follower",
@@ -8961,8 +9429,8 @@ var DataQualities = map[string]Quality{
 			},
 		},
 		Page:                  "35",
-		CanBuyWithSpellPoints: &[]bool{true}[0],
-		DoubleCareer:          &[]bool{false}[0],
+		CanBuyWithSpellPoints: true,
+		DoubleCareer:          false,
 	},
 	"close_combat_mage": {
 		Name:     "Close Combat Mage",
@@ -8975,9 +9443,9 @@ var DataQualities = map[string]Quality{
 		},
 		Required:              nil,
 		Page:                  "35",
-		NoLevels:              &[]bool{true}[0],
-		CanBuyWithSpellPoints: &[]bool{true}[0],
-		DoubleCareer:          &[]bool{false}[0],
+		NoLevels:              true,
+		CanBuyWithSpellPoints: true,
+		DoubleCareer:          false,
 	},
 	"dark_ally": {
 		Name:                  "Dark Ally",
@@ -8987,8 +9455,8 @@ var DataQualities = map[string]Quality{
 		Bonus:                 nil,
 		Required:              nil,
 		Page:                  "35",
-		CanBuyWithSpellPoints: &[]bool{true}[0],
-		DoubleCareer:          &[]bool{false}[0],
+		CanBuyWithSpellPoints: true,
+		DoubleCareer:          false,
 	},
 	"death_dealer": {
 		Name:     "Death Dealer",
@@ -9003,8 +9471,8 @@ var DataQualities = map[string]Quality{
 		Required:              nil,
 		Forbidden:             nil,
 		Page:                  "35",
-		CanBuyWithSpellPoints: &[]bool{true}[0],
-		DoubleCareer:          &[]bool{false}[0],
+		CanBuyWithSpellPoints: true,
+		DoubleCareer:          false,
 	},
 	"death_dealer_adept": {
 		Name:     "Death Dealer (Adept)",
@@ -9022,8 +9490,8 @@ var DataQualities = map[string]Quality{
 			},
 		},
 		Page:                  "35",
-		CanBuyWithSpellPoints: &[]bool{true}[0],
-		DoubleCareer:          &[]bool{false}[0],
+		CanBuyWithSpellPoints: true,
+		DoubleCareer:          false,
 	},
 	"dedicated_conjurer": {
 		Name:     "Dedicated Conjurer",
@@ -9035,8 +9503,8 @@ var DataQualities = map[string]Quality{
 		},
 		Required:              nil,
 		Page:                  "36",
-		CanBuyWithSpellPoints: &[]bool{true}[0],
-		DoubleCareer:          &[]bool{false}[0],
+		CanBuyWithSpellPoints: true,
+		DoubleCareer:          false,
 		CostDiscount:          "",
 	},
 	"dedicated_spellslinger": {
@@ -9051,8 +9519,8 @@ var DataQualities = map[string]Quality{
 		},
 		Required:              nil,
 		Page:                  "36",
-		CanBuyWithSpellPoints: &[]bool{true}[0],
-		DoubleCareer:          &[]bool{false}[0],
+		CanBuyWithSpellPoints: true,
+		DoubleCareer:          false,
 		CostDiscount:          "",
 	},
 	"dual_natured_defender": {
@@ -9063,8 +9531,8 @@ var DataQualities = map[string]Quality{
 		Bonus:                 nil,
 		Required:              nil,
 		Page:                  "36",
-		CanBuyWithSpellPoints: &[]bool{true}[0],
-		DoubleCareer:          &[]bool{false}[0],
+		CanBuyWithSpellPoints: true,
+		DoubleCareer:          false,
 	},
 	"durable_preparations": {
 		Name:                  "Durable Preparations",
@@ -9074,8 +9542,8 @@ var DataQualities = map[string]Quality{
 		Bonus:                 nil,
 		Required:              nil,
 		Page:                  "36",
-		CanBuyWithSpellPoints: &[]bool{true}[0],
-		DoubleCareer:          &[]bool{false}[0],
+		CanBuyWithSpellPoints: true,
+		DoubleCareer:          false,
 	},
 	"elemental_master": {
 		Name:                  "Elemental Master",
@@ -9085,8 +9553,8 @@ var DataQualities = map[string]Quality{
 		Bonus:                 nil,
 		Required:              nil,
 		Page:                  "36",
-		CanBuyWithSpellPoints: &[]bool{true}[0],
-		DoubleCareer:          &[]bool{false}[0],
+		CanBuyWithSpellPoints: true,
+		DoubleCareer:          false,
 	},
 	"flesh_sculpter": {
 		Name:                  "Flesh Sculpter",
@@ -9097,8 +9565,8 @@ var DataQualities = map[string]Quality{
 		Bonus:                 nil,
 		Required:              nil,
 		Page:                  "37",
-		CanBuyWithSpellPoints: &[]bool{true}[0],
-		DoubleCareer:          &[]bool{false}[0],
+		CanBuyWithSpellPoints: true,
+		DoubleCareer:          false,
 	},
 	"healer": {
 		Name:                  "Healer",
@@ -9108,8 +9576,8 @@ var DataQualities = map[string]Quality{
 		Bonus:                 nil,
 		Required:              nil,
 		Page:                  "37",
-		CanBuyWithSpellPoints: &[]bool{true}[0],
-		DoubleCareer:          &[]bool{false}[0],
+		CanBuyWithSpellPoints: true,
+		DoubleCareer:          false,
 	},
 	"illusionist": {
 		Name:     "Illusionist",
@@ -9122,8 +9590,8 @@ var DataQualities = map[string]Quality{
 		},
 		Required:              nil,
 		Page:                  "37",
-		CanBuyWithSpellPoints: &[]bool{true}[0],
-		DoubleCareer:          &[]bool{false}[0],
+		CanBuyWithSpellPoints: true,
+		DoubleCareer:          false,
 	},
 	"items_of_power": {
 		Name:                  "Items of Power",
@@ -9133,8 +9601,8 @@ var DataQualities = map[string]Quality{
 		Bonus:                 nil,
 		Required:              nil,
 		Page:                  "38",
-		CanBuyWithSpellPoints: &[]bool{true}[0],
-		DoubleCareer:          &[]bool{false}[0],
+		CanBuyWithSpellPoints: true,
+		DoubleCareer:          false,
 	},
 	"mage_hunter_i": {
 		Name:                  "Mage Hunter I",
@@ -9144,8 +9612,8 @@ var DataQualities = map[string]Quality{
 		Bonus:                 nil,
 		Required:              nil,
 		Page:                  "38",
-		CanBuyWithSpellPoints: &[]bool{true}[0],
-		DoubleCareer:          &[]bool{false}[0],
+		CanBuyWithSpellPoints: true,
+		DoubleCareer:          false,
 	},
 	"mage_hunter_ii": {
 		Name:                  "Mage Hunter II",
@@ -9155,8 +9623,8 @@ var DataQualities = map[string]Quality{
 		Bonus:                 nil,
 		Required:              nil,
 		Page:                  "38",
-		CanBuyWithSpellPoints: &[]bool{true}[0],
-		DoubleCareer:          &[]bool{false}[0],
+		CanBuyWithSpellPoints: true,
+		DoubleCareer:          false,
 	},
 	"mage_hunter_iii": {
 		Name:                  "Mage Hunter III",
@@ -9166,8 +9634,8 @@ var DataQualities = map[string]Quality{
 		Bonus:                 nil,
 		Required:              nil,
 		Page:                  "38",
-		CanBuyWithSpellPoints: &[]bool{true}[0],
-		DoubleCareer:          &[]bool{false}[0],
+		CanBuyWithSpellPoints: true,
+		DoubleCareer:          false,
 	},
 	"missile_deflector": {
 		Name:                  "Missile Deflector",
@@ -9177,8 +9645,8 @@ var DataQualities = map[string]Quality{
 		Bonus:                 nil,
 		Required:              nil,
 		Page:                  "38",
-		CanBuyWithSpellPoints: &[]bool{true}[0],
-		DoubleCareer:          &[]bool{false}[0],
+		CanBuyWithSpellPoints: true,
+		DoubleCareer:          false,
 	},
 	"mystic_foreman": {
 		Name:                  "Mystic Foreman",
@@ -9188,8 +9656,8 @@ var DataQualities = map[string]Quality{
 		Bonus:                 nil,
 		Required:              nil,
 		Page:                  "38",
-		CanBuyWithSpellPoints: &[]bool{true}[0],
-		DoubleCareer:          &[]bool{false}[0],
+		CanBuyWithSpellPoints: true,
+		DoubleCareer:          false,
 	},
 	"mystic_pitcher": {
 		Name:                  "Mystic Pitcher",
@@ -9199,8 +9667,8 @@ var DataQualities = map[string]Quality{
 		Bonus:                 nil,
 		Required:              nil,
 		Page:                  "38",
-		CanBuyWithSpellPoints: &[]bool{true}[0],
-		DoubleCareer:          &[]bool{false}[0],
+		CanBuyWithSpellPoints: true,
+		DoubleCareer:          false,
 	},
 	"pacifist_adept": {
 		Name:     "Pacifist Adept",
@@ -9214,8 +9682,8 @@ var DataQualities = map[string]Quality{
 			},
 		},
 		Page:                  "39",
-		CanBuyWithSpellPoints: &[]bool{true}[0],
-		DoubleCareer:          &[]bool{false}[0],
+		CanBuyWithSpellPoints: true,
+		DoubleCareer:          false,
 	},
 	"potion_maker": {
 		Name:                  "Potion Maker",
@@ -9225,8 +9693,8 @@ var DataQualities = map[string]Quality{
 		Bonus:                 nil,
 		Required:              nil,
 		Page:                  "39",
-		CanBuyWithSpellPoints: &[]bool{true}[0],
-		DoubleCareer:          &[]bool{false}[0],
+		CanBuyWithSpellPoints: true,
+		DoubleCareer:          false,
 	},
 	"practiced_alchemist": {
 		Name:                  "Practiced Alchemist",
@@ -9236,8 +9704,8 @@ var DataQualities = map[string]Quality{
 		Bonus:                 nil,
 		Required:              nil,
 		Page:                  "39",
-		CanBuyWithSpellPoints: &[]bool{true}[0],
-		DoubleCareer:          &[]bool{false}[0],
+		CanBuyWithSpellPoints: true,
+		DoubleCareer:          false,
 	},
 	"puppet_master": {
 		Name:                  "Puppet Master",
@@ -9248,8 +9716,8 @@ var DataQualities = map[string]Quality{
 		Bonus:                 nil,
 		Required:              nil,
 		Page:                  "39",
-		CanBuyWithSpellPoints: &[]bool{true}[0],
-		DoubleCareer:          &[]bool{false}[0],
+		CanBuyWithSpellPoints: true,
+		DoubleCareer:          false,
 	},
 	"reckless_spell_master": {
 		Name:                  "Reckless Spell Master",
@@ -9260,8 +9728,8 @@ var DataQualities = map[string]Quality{
 		Bonus:                 nil,
 		Required:              nil,
 		Page:                  "39",
-		CanBuyWithSpellPoints: &[]bool{true}[0],
-		DoubleCareer:          &[]bool{false}[0],
+		CanBuyWithSpellPoints: true,
+		DoubleCareer:          false,
 	},
 	"renaissance_ritualist": {
 		Name:                  "Renaissance Ritualist",
@@ -9271,8 +9739,8 @@ var DataQualities = map[string]Quality{
 		Bonus:                 nil,
 		Required:              nil,
 		Page:                  "40",
-		CanBuyWithSpellPoints: &[]bool{true}[0],
-		DoubleCareer:          &[]bool{false}[0],
+		CanBuyWithSpellPoints: true,
+		DoubleCareer:          false,
 	},
 	"revenant_adept": {
 		Name:     "Revenant Adept",
@@ -9286,8 +9754,8 @@ var DataQualities = map[string]Quality{
 			},
 		},
 		Page:                  "40",
-		CanBuyWithSpellPoints: &[]bool{true}[0],
-		DoubleCareer:          &[]bool{false}[0],
+		CanBuyWithSpellPoints: true,
+		DoubleCareer:          false,
 	},
 	"shock_mage": {
 		Name:                  "Shock Mage",
@@ -9297,8 +9765,8 @@ var DataQualities = map[string]Quality{
 		Bonus:                 nil,
 		Required:              nil,
 		Page:                  "40",
-		CanBuyWithSpellPoints: &[]bool{true}[0],
-		DoubleCareer:          &[]bool{false}[0],
+		CanBuyWithSpellPoints: true,
+		DoubleCareer:          false,
 	},
 	"skinwalker": {
 		Name:                  "Skinwalker",
@@ -9309,8 +9777,8 @@ var DataQualities = map[string]Quality{
 		Bonus:                 nil,
 		Required:              nil,
 		Page:                  "40",
-		CanBuyWithSpellPoints: &[]bool{true}[0],
-		DoubleCareer:          &[]bool{false}[0],
+		CanBuyWithSpellPoints: true,
+		DoubleCareer:          false,
 	},
 	"spectral_warden": {
 		Name:                  "Spectral Warden",
@@ -9320,8 +9788,8 @@ var DataQualities = map[string]Quality{
 		Bonus:                 nil,
 		Required:              nil,
 		Page:                  "40",
-		CanBuyWithSpellPoints: &[]bool{true}[0],
-		DoubleCareer:          &[]bool{false}[0],
+		CanBuyWithSpellPoints: true,
+		DoubleCareer:          false,
 	},
 	"spell_jammer": {
 		Name:                  "Spell Jammer",
@@ -9331,8 +9799,8 @@ var DataQualities = map[string]Quality{
 		Bonus:                 nil,
 		Required:              nil,
 		Page:                  "40",
-		CanBuyWithSpellPoints: &[]bool{true}[0],
-		DoubleCareer:          &[]bool{false}[0],
+		CanBuyWithSpellPoints: true,
+		DoubleCareer:          false,
 	},
 	"spirit_hunter_i": {
 		Name:     "Spirit Hunter I",
@@ -9346,8 +9814,8 @@ var DataQualities = map[string]Quality{
 			},
 		},
 		Page:                  "40",
-		CanBuyWithSpellPoints: &[]bool{true}[0],
-		DoubleCareer:          &[]bool{false}[0],
+		CanBuyWithSpellPoints: true,
+		DoubleCareer:          false,
 	},
 	"spirit_hunter_ii": {
 		Name:                  "Spirit Hunter II",
@@ -9357,8 +9825,8 @@ var DataQualities = map[string]Quality{
 		Bonus:                 nil,
 		Required:              nil,
 		Page:                  "40",
-		CanBuyWithSpellPoints: &[]bool{true}[0],
-		DoubleCareer:          &[]bool{false}[0],
+		CanBuyWithSpellPoints: true,
+		DoubleCareer:          false,
 	},
 	"spirit_hunter_iii": {
 		Name:                  "Spirit Hunter III",
@@ -9368,8 +9836,8 @@ var DataQualities = map[string]Quality{
 		Bonus:                 nil,
 		Required:              nil,
 		Page:                  "40",
-		CanBuyWithSpellPoints: &[]bool{true}[0],
-		DoubleCareer:          &[]bool{false}[0],
+		CanBuyWithSpellPoints: true,
+		DoubleCareer:          false,
 	},
 	"spiritual_lodge": {
 		Name:                  "Spiritual Lodge",
@@ -9379,8 +9847,8 @@ var DataQualities = map[string]Quality{
 		Bonus:                 nil,
 		Required:              nil,
 		Page:                  "41",
-		CanBuyWithSpellPoints: &[]bool{true}[0],
-		DoubleCareer:          &[]bool{false}[0],
+		CanBuyWithSpellPoints: true,
+		DoubleCareer:          false,
 	},
 	"spiritual_pilgrim": {
 		Name:                  "Spiritual Pilgrim",
@@ -9390,8 +9858,8 @@ var DataQualities = map[string]Quality{
 		Bonus:                 nil,
 		Required:              nil,
 		Page:                  "41",
-		CanBuyWithSpellPoints: &[]bool{true}[0],
-		DoubleCareer:          &[]bool{false}[0],
+		CanBuyWithSpellPoints: true,
+		DoubleCareer:          false,
 	},
 	"sprawl_tamer": {
 		Name:                  "Sprawl Tamer",
@@ -9401,8 +9869,8 @@ var DataQualities = map[string]Quality{
 		Bonus:                 nil,
 		Required:              nil,
 		Page:                  "41",
-		CanBuyWithSpellPoints: &[]bool{true}[0],
-		DoubleCareer:          &[]bool{false}[0],
+		CanBuyWithSpellPoints: true,
+		DoubleCareer:          false,
 	},
 	"stalwart_ally": {
 		Name:                  "Stalwart Ally",
@@ -9412,8 +9880,8 @@ var DataQualities = map[string]Quality{
 		Bonus:                 nil,
 		Required:              nil,
 		Page:                  "42",
-		CanBuyWithSpellPoints: &[]bool{true}[0],
-		DoubleCareer:          &[]bool{false}[0],
+		CanBuyWithSpellPoints: true,
+		DoubleCareer:          false,
 	},
 	"taboo_transformer": {
 		Name:                  "Taboo Transformer",
@@ -9423,8 +9891,8 @@ var DataQualities = map[string]Quality{
 		Bonus:                 nil,
 		Required:              nil,
 		Page:                  "42",
-		CanBuyWithSpellPoints: &[]bool{true}[0],
-		DoubleCareer:          &[]bool{false}[0],
+		CanBuyWithSpellPoints: true,
+		DoubleCareer:          false,
 	},
 	"vexcraft": {
 		Name:                  "Vexcraft",
@@ -9434,8 +9902,8 @@ var DataQualities = map[string]Quality{
 		Bonus:                 nil,
 		Required:              nil,
 		Page:                  "42",
-		CanBuyWithSpellPoints: &[]bool{true}[0],
-		DoubleCareer:          &[]bool{false}[0],
+		CanBuyWithSpellPoints: true,
+		DoubleCareer:          false,
 	},
 	"worship_leader": {
 		Name:                  "Worship Leader",
@@ -9445,8 +9913,8 @@ var DataQualities = map[string]Quality{
 		Bonus:                 nil,
 		Required:              nil,
 		Page:                  "42",
-		CanBuyWithSpellPoints: &[]bool{true}[0],
-		DoubleCareer:          &[]bool{false}[0],
+		CanBuyWithSpellPoints: true,
+		DoubleCareer:          false,
 	},
 	"crystal_breath": {
 		Name:     "Crystal Breath",
@@ -9454,7 +9922,7 @@ var DataQualities = map[string]Quality{
 		Category: "Positive",
 		Source:   "FA",
 		Bonus: &QualityBonus{
-			ConditionMonitor:          "",
+			ConditionMonitor:          nil,
 			ToxinInhalationResist:     "2",
 			FatigueResist:             "1",
 			EssencePenaltyMagonlyT100: "100",
@@ -9462,8 +9930,8 @@ var DataQualities = map[string]Quality{
 		},
 		Required:          nil,
 		Page:              "132",
-		ContributeToLimit: &[]bool{false}[0],
-		DoubleCareer:      &[]bool{false}[0],
+		ContributeToLimit: false,
+		DoubleCareer:      false,
 	},
 	"crystal_eye_one_eye": {
 		Name:     "Crystal Eye (One Eye)",
@@ -9472,14 +9940,14 @@ var DataQualities = map[string]Quality{
 		Source:   "FA",
 		Limit:    "False",
 		Bonus: &QualityBonus{
-			ConditionMonitor:          "",
+			ConditionMonitor:          nil,
 			EssencePenaltyMagonlyT100: "100",
 			EssencePenaltyT100:        "-100",
 		},
 		Required:          nil,
 		Page:              "132",
-		ContributeToLimit: &[]bool{false}[0],
-		DoubleCareer:      &[]bool{false}[0],
+		ContributeToLimit: false,
+		DoubleCareer:      false,
 	},
 	"crystal_eye_two_eyes": {
 		Name:     "Crystal Eye (Two Eyes)",
@@ -9488,7 +9956,7 @@ var DataQualities = map[string]Quality{
 		Source:   "FA",
 		Limit:    "False",
 		Bonus: &QualityBonus{
-			ConditionMonitor:          "",
+			ConditionMonitor:          nil,
 			EssencePenaltyMagonlyT100: "100",
 			EssencePenaltyT100:        "-100",
 		},
@@ -9499,8 +9967,8 @@ var DataQualities = map[string]Quality{
 			},
 		},
 		Page:              "132",
-		ContributeToLimit: &[]bool{false}[0],
-		DoubleCareer:      &[]bool{false}[0],
+		ContributeToLimit: false,
+		DoubleCareer:      false,
 	},
 	"crystal_gut_liver": {
 		Name:     "Crystal Gut (Liver)",
@@ -9508,7 +9976,7 @@ var DataQualities = map[string]Quality{
 		Category: "Positive",
 		Source:   "FA",
 		Bonus: &QualityBonus{
-			ConditionMonitor:          "",
+			ConditionMonitor:          nil,
 			ToxinIngestionResist:      "2",
 			FatigueResist:             "1",
 			EssencePenaltyMagonlyT100: "50",
@@ -9521,8 +9989,8 @@ var DataQualities = map[string]Quality{
 			},
 		},
 		Page:              "133",
-		ContributeToLimit: &[]bool{false}[0],
-		DoubleCareer:      &[]bool{false}[0],
+		ContributeToLimit: false,
+		DoubleCareer:      false,
 	},
 	"crystal_gut_kidneys": {
 		Name:     "Crystal Gut (Kidneys)",
@@ -9530,7 +9998,7 @@ var DataQualities = map[string]Quality{
 		Category: "Positive",
 		Source:   "FA",
 		Bonus: &QualityBonus{
-			ConditionMonitor:          "",
+			ConditionMonitor:          nil,
 			ToxinInjectionResist:      "2",
 			FatigueResist:             "1",
 			EssencePenaltyMagonlyT100: "50",
@@ -9543,8 +10011,8 @@ var DataQualities = map[string]Quality{
 			},
 		},
 		Page:              "133",
-		ContributeToLimit: &[]bool{false}[0],
-		DoubleCareer:      &[]bool{false}[0],
+		ContributeToLimit: false,
+		DoubleCareer:      false,
 	},
 	"crystal_gut_stomach": {
 		Name:     "Crystal Gut (Stomach)",
@@ -9552,7 +10020,7 @@ var DataQualities = map[string]Quality{
 		Category: "Positive",
 		Source:   "FA",
 		Bonus: &QualityBonus{
-			ConditionMonitor:          "",
+			ConditionMonitor:          nil,
 			FatigueResist:             "1",
 			LifestyleCost:             "-10",
 			EssencePenaltyMagonlyT100: "50",
@@ -9565,8 +10033,8 @@ var DataQualities = map[string]Quality{
 			},
 		},
 		Page:              "133",
-		ContributeToLimit: &[]bool{false}[0],
-		DoubleCareer:      &[]bool{false}[0],
+		ContributeToLimit: false,
+		DoubleCareer:      false,
 	},
 	"crystal_gut_intestines": {
 		Name:     "Crystal Gut (Intestines)",
@@ -9574,7 +10042,7 @@ var DataQualities = map[string]Quality{
 		Category: "Positive",
 		Source:   "FA",
 		Bonus: &QualityBonus{
-			ConditionMonitor:          "",
+			ConditionMonitor:          nil,
 			FatigueResist:             "1",
 			EssencePenaltyMagonlyT100: "50",
 			EssencePenaltyT100:        "-50",
@@ -9586,8 +10054,8 @@ var DataQualities = map[string]Quality{
 			},
 		},
 		Page:              "133",
-		ContributeToLimit: &[]bool{false}[0],
-		DoubleCareer:      &[]bool{false}[0],
+		ContributeToLimit: false,
+		DoubleCareer:      false,
 	},
 	"crystal_gut_liver_kidneys": {
 		Name:     "Crystal Gut (Liver, Kidneys)",
@@ -9595,7 +10063,7 @@ var DataQualities = map[string]Quality{
 		Category: "Positive",
 		Source:   "FA",
 		Bonus: &QualityBonus{
-			ConditionMonitor:          "",
+			ConditionMonitor:          nil,
 			ToxinIngestionResist:      "2",
 			ToxinInjectionResist:      "2",
 			FatigueResist:             "2",
@@ -9609,8 +10077,8 @@ var DataQualities = map[string]Quality{
 			},
 		},
 		Page:              "133",
-		ContributeToLimit: &[]bool{false}[0],
-		DoubleCareer:      &[]bool{false}[0],
+		ContributeToLimit: false,
+		DoubleCareer:      false,
 	},
 	"crystal_gut_liver_stomach": {
 		Name:     "Crystal Gut (Liver, Stomach)",
@@ -9618,7 +10086,7 @@ var DataQualities = map[string]Quality{
 		Category: "Positive",
 		Source:   "FA",
 		Bonus: &QualityBonus{
-			ConditionMonitor:          "",
+			ConditionMonitor:          nil,
 			ToxinIngestionResist:      "2",
 			FatigueResist:             "2",
 			LifestyleCost:             "-10",
@@ -9632,8 +10100,8 @@ var DataQualities = map[string]Quality{
 			},
 		},
 		Page:              "133",
-		ContributeToLimit: &[]bool{false}[0],
-		DoubleCareer:      &[]bool{false}[0],
+		ContributeToLimit: false,
+		DoubleCareer:      false,
 	},
 	"crystal_gut_liver_intestines": {
 		Name:     "Crystal Gut (Liver, Intestines)",
@@ -9641,7 +10109,7 @@ var DataQualities = map[string]Quality{
 		Category: "Positive",
 		Source:   "FA",
 		Bonus: &QualityBonus{
-			ConditionMonitor:          "",
+			ConditionMonitor:          nil,
 			ToxinIngestionResist:      "2",
 			FatigueResist:             "2",
 			EssencePenaltyMagonlyT100: "100",
@@ -9654,8 +10122,8 @@ var DataQualities = map[string]Quality{
 			},
 		},
 		Page:              "133",
-		ContributeToLimit: &[]bool{false}[0],
-		DoubleCareer:      &[]bool{false}[0],
+		ContributeToLimit: false,
+		DoubleCareer:      false,
 	},
 	"crystal_gut_kidneys_stomach": {
 		Name:     "Crystal Gut (Kidneys, Stomach)",
@@ -9663,7 +10131,7 @@ var DataQualities = map[string]Quality{
 		Category: "Positive",
 		Source:   "FA",
 		Bonus: &QualityBonus{
-			ConditionMonitor:          "",
+			ConditionMonitor:          nil,
 			ToxinInjectionResist:      "2",
 			FatigueResist:             "2",
 			LifestyleCost:             "-10",
@@ -9677,8 +10145,8 @@ var DataQualities = map[string]Quality{
 			},
 		},
 		Page:              "133",
-		ContributeToLimit: &[]bool{false}[0],
-		DoubleCareer:      &[]bool{false}[0],
+		ContributeToLimit: false,
+		DoubleCareer:      false,
 	},
 	"crystal_gut_kidneys_intestines": {
 		Name:     "Crystal Gut (Kidneys, Intestines)",
@@ -9686,7 +10154,7 @@ var DataQualities = map[string]Quality{
 		Category: "Positive",
 		Source:   "FA",
 		Bonus: &QualityBonus{
-			ConditionMonitor:          "",
+			ConditionMonitor:          nil,
 			ToxinInjectionResist:      "2",
 			FatigueResist:             "2",
 			EssencePenaltyMagonlyT100: "100",
@@ -9699,8 +10167,8 @@ var DataQualities = map[string]Quality{
 			},
 		},
 		Page:              "133",
-		ContributeToLimit: &[]bool{false}[0],
-		DoubleCareer:      &[]bool{false}[0],
+		ContributeToLimit: false,
+		DoubleCareer:      false,
 	},
 	"crystal_gut_stomach_intestines": {
 		Name:     "Crystal Gut (Stomach, Intestines)",
@@ -9708,7 +10176,7 @@ var DataQualities = map[string]Quality{
 		Category: "Positive",
 		Source:   "FA",
 		Bonus: &QualityBonus{
-			ConditionMonitor:          "",
+			ConditionMonitor:          nil,
 			FatigueResist:             "2",
 			LifestyleCost:             "-10",
 			EssencePenaltyMagonlyT100: "100",
@@ -9721,8 +10189,8 @@ var DataQualities = map[string]Quality{
 			},
 		},
 		Page:              "133",
-		ContributeToLimit: &[]bool{false}[0],
-		DoubleCareer:      &[]bool{false}[0],
+		ContributeToLimit: false,
+		DoubleCareer:      false,
 	},
 	"crystal_gut_liver_kidneys_stomach": {
 		Name:     "Crystal Gut (Liver, Kidneys, Stomach)",
@@ -9730,7 +10198,7 @@ var DataQualities = map[string]Quality{
 		Category: "Positive",
 		Source:   "FA",
 		Bonus: &QualityBonus{
-			ConditionMonitor:          "",
+			ConditionMonitor:          nil,
 			ToxinIngestionResist:      "2",
 			ToxinInjectionResist:      "2",
 			FatigueResist:             "3",
@@ -9745,8 +10213,8 @@ var DataQualities = map[string]Quality{
 			},
 		},
 		Page:              "133",
-		ContributeToLimit: &[]bool{false}[0],
-		DoubleCareer:      &[]bool{false}[0],
+		ContributeToLimit: false,
+		DoubleCareer:      false,
 	},
 	"crystal_gut_liver_kidneys_intestines": {
 		Name:     "Crystal Gut (Liver, Kidneys, Intestines)",
@@ -9754,7 +10222,7 @@ var DataQualities = map[string]Quality{
 		Category: "Positive",
 		Source:   "FA",
 		Bonus: &QualityBonus{
-			ConditionMonitor:          "",
+			ConditionMonitor:          nil,
 			ToxinIngestionResist:      "2",
 			ToxinInjectionResist:      "2",
 			FatigueResist:             "3",
@@ -9768,8 +10236,8 @@ var DataQualities = map[string]Quality{
 			},
 		},
 		Page:              "133",
-		ContributeToLimit: &[]bool{false}[0],
-		DoubleCareer:      &[]bool{false}[0],
+		ContributeToLimit: false,
+		DoubleCareer:      false,
 	},
 	"crystal_gut_liver_stomach_intestines": {
 		Name:     "Crystal Gut (Liver, Stomach, Intestines)",
@@ -9777,7 +10245,7 @@ var DataQualities = map[string]Quality{
 		Category: "Positive",
 		Source:   "FA",
 		Bonus: &QualityBonus{
-			ConditionMonitor:          "",
+			ConditionMonitor:          nil,
 			ToxinIngestionResist:      "2",
 			FatigueResist:             "3",
 			LifestyleCost:             "-10",
@@ -9791,8 +10259,8 @@ var DataQualities = map[string]Quality{
 			},
 		},
 		Page:              "133",
-		ContributeToLimit: &[]bool{false}[0],
-		DoubleCareer:      &[]bool{false}[0],
+		ContributeToLimit: false,
+		DoubleCareer:      false,
 	},
 	"crystal_gut_kidneys_stomach_intestines": {
 		Name:     "Crystal Gut (Kidneys, Stomach, Intestines)",
@@ -9800,7 +10268,7 @@ var DataQualities = map[string]Quality{
 		Category: "Positive",
 		Source:   "FA",
 		Bonus: &QualityBonus{
-			ConditionMonitor:          "",
+			ConditionMonitor:          nil,
 			ToxinInjectionResist:      "2",
 			FatigueResist:             "3",
 			LifestyleCost:             "-10",
@@ -9814,8 +10282,8 @@ var DataQualities = map[string]Quality{
 			},
 		},
 		Page:              "133",
-		ContributeToLimit: &[]bool{false}[0],
-		DoubleCareer:      &[]bool{false}[0],
+		ContributeToLimit: false,
+		DoubleCareer:      false,
 	},
 	"crystal_gut_liver_kidneys_stomach_intestines": {
 		Name:     "Crystal Gut (Liver, Kidneys, Stomach, Intestines)",
@@ -9823,7 +10291,7 @@ var DataQualities = map[string]Quality{
 		Category: "Positive",
 		Source:   "FA",
 		Bonus: &QualityBonus{
-			ConditionMonitor:          "",
+			ConditionMonitor:          nil,
 			ToxinIngestionResist:      "2",
 			ToxinInjectionResist:      "2",
 			FatigueResist:             "4",
@@ -9838,8 +10306,8 @@ var DataQualities = map[string]Quality{
 			},
 		},
 		Page:              "133",
-		ContributeToLimit: &[]bool{false}[0],
-		DoubleCareer:      &[]bool{false}[0],
+		ContributeToLimit: false,
+		DoubleCareer:      false,
 	},
 	"crystal_jaw": {
 		Name:     "Crystal Jaw",
@@ -9847,15 +10315,26 @@ var DataQualities = map[string]Quality{
 		Category: "Positive",
 		Source:   "FA",
 		Bonus: &QualityBonus{
-			ConditionMonitor:          "",
+			ConditionMonitor:          nil,
 			EssencePenaltyMagonlyT100: "100",
 			EssencePenaltyT100:        "-100",
 		},
 		Required:          nil,
 		Page:              "133",
-		ContributeToLimit: &[]bool{false}[0],
-		DoubleCareer:      &[]bool{false}[0],
-		NaturalWeapons:    "",
+		ContributeToLimit: false,
+		DoubleCareer:      false,
+		NaturalWeapons: &NaturalWeapons{
+			NaturalWeapon: &NaturalWeapon{
+				Name:     "Crystal Jaw",
+				Reach:    "-1",
+				Damage:   "({STR}+2)P",
+				AP:       "-4",
+				UseSkill: "Unarmed Combat",
+				Accuracy: "Physical",
+				Source:   "FA",
+				Page:     "133",
+			},
+		},
 	},
 	"crystal_limb_arm": {
 		Name:     "Crystal Limb (Arm)",
@@ -9864,15 +10343,15 @@ var DataQualities = map[string]Quality{
 		Source:   "FA",
 		Limit:    "False",
 		Bonus: &QualityBonus{
-			ConditionMonitor:          "",
+			ConditionMonitor:          nil,
 			Armor:                     "1",
 			EssencePenaltyMagonlyT100: "100",
 			EssencePenaltyT100:        "-100",
 		},
 		Required:          nil,
 		Page:              "133",
-		ContributeToLimit: &[]bool{false}[0],
-		DoubleCareer:      &[]bool{false}[0],
+		ContributeToLimit: false,
+		DoubleCareer:      false,
 	},
 	"crystal_limb_leg": {
 		Name:     "Crystal Limb (Leg)",
@@ -9881,15 +10360,15 @@ var DataQualities = map[string]Quality{
 		Source:   "FA",
 		Limit:    "False",
 		Bonus: &QualityBonus{
-			ConditionMonitor:          "",
+			ConditionMonitor:          nil,
 			Armor:                     "1",
 			EssencePenaltyMagonlyT100: "100",
 			EssencePenaltyT100:        "-100",
 		},
 		Required:          nil,
 		Page:              "133",
-		ContributeToLimit: &[]bool{false}[0],
-		DoubleCareer:      &[]bool{false}[0],
+		ContributeToLimit: false,
+		DoubleCareer:      false,
 	},
 	"crystal_spine": {
 		Name:     "Crystal Spine",
@@ -9897,7 +10376,7 @@ var DataQualities = map[string]Quality{
 		Category: "Positive",
 		Source:   "FA",
 		Bonus: &QualityBonus{
-			ConditionMonitor: "",
+			ConditionMonitor: nil,
 			Initiative: &InitiativeBonus{
 				Content: "2", Precedence: "0",
 			},
@@ -9907,8 +10386,8 @@ var DataQualities = map[string]Quality{
 		},
 		Required:          nil,
 		Page:              "133",
-		ContributeToLimit: &[]bool{false}[0],
-		DoubleCareer:      &[]bool{false}[0],
+		ContributeToLimit: false,
+		DoubleCareer:      false,
 	},
 	"crystalline_blade": {
 		Name:              "Crystalline Blade",
@@ -9917,9 +10396,20 @@ var DataQualities = map[string]Quality{
 		Source:            "FA",
 		Required:          nil,
 		Page:              "133",
-		ContributeToLimit: &[]bool{false}[0],
-		DoubleCareer:      &[]bool{false}[0],
-		NaturalWeapons:    "",
+		ContributeToLimit: false,
+		DoubleCareer:      false,
+		NaturalWeapons: &NaturalWeapons{
+			NaturalWeapon: &NaturalWeapon{
+				Name:     "Crystalline Blade",
+				Reach:    "1",
+				Damage:   "({STR}+3)P",
+				AP:       "-2",
+				UseSkill: "Unarmed Combat",
+				Accuracy: "Physical",
+				Source:   "FA",
+				Page:     "133",
+			},
+		},
 	},
 	"crystalline_claws": {
 		Name:              "Crystalline Claws",
@@ -9928,9 +10418,20 @@ var DataQualities = map[string]Quality{
 		Source:            "FA",
 		Required:          nil,
 		Page:              "133",
-		ContributeToLimit: &[]bool{false}[0],
-		DoubleCareer:      &[]bool{false}[0],
-		NaturalWeapons:    "",
+		ContributeToLimit: false,
+		DoubleCareer:      false,
+		NaturalWeapons: &NaturalWeapons{
+			NaturalWeapon: &NaturalWeapon{
+				Name:     "Crystal Claw",
+				Reach:    "0",
+				Damage:   "({STR}+1)P",
+				AP:       "-1",
+				UseSkill: "Unarmed Combat",
+				Accuracy: "Physical",
+				Source:   "FA",
+				Page:     "133",
+			},
+		},
 	},
 	"crystalline_diver": {
 		Name:     "Crystalline Diver",
@@ -9943,8 +10444,8 @@ var DataQualities = map[string]Quality{
 			},
 		},
 		Page:              "133",
-		ContributeToLimit: &[]bool{false}[0],
-		DoubleCareer:      &[]bool{false}[0],
+		ContributeToLimit: false,
+		DoubleCareer:      false,
 	},
 	"crystalline_grace": {
 		Name:     "Crystalline Grace",
@@ -9957,8 +10458,8 @@ var DataQualities = map[string]Quality{
 			},
 		},
 		Page:              "134",
-		ContributeToLimit: &[]bool{false}[0],
-		DoubleCareer:      &[]bool{false}[0],
+		ContributeToLimit: false,
+		DoubleCareer:      false,
 	},
 	"crystalline_reflexes": {
 		Name:     "Crystalline Reflexes",
@@ -9970,8 +10471,8 @@ var DataQualities = map[string]Quality{
 		},
 		Required:          nil,
 		Page:              "134",
-		ContributeToLimit: &[]bool{false}[0],
-		DoubleCareer:      &[]bool{false}[0],
+		ContributeToLimit: false,
+		DoubleCareer:      false,
 	},
 	"crystalline_shards": {
 		Name:     "Crystalline Shards",
@@ -9984,9 +10485,20 @@ var DataQualities = map[string]Quality{
 			},
 		},
 		Page:              "134",
-		ContributeToLimit: &[]bool{false}[0],
-		DoubleCareer:      &[]bool{false}[0],
-		NaturalWeapons:    "",
+		ContributeToLimit: false,
+		DoubleCareer:      false,
+		NaturalWeapons: &NaturalWeapons{
+			NaturalWeapon: &NaturalWeapon{
+				Name:     "Crystalline Shards",
+				Reach:    "0",
+				Damage:   "({STR}+3)P",
+				AP:       "4",
+				UseSkill: "Throwing Weapons",
+				Accuracy: "Physical",
+				Source:   "FA",
+				Page:     "133",
+			},
+		},
 	},
 	"crystalline_vision": {
 		Name:     "Crystalline Vision",
@@ -10002,8 +10514,8 @@ var DataQualities = map[string]Quality{
 			},
 		},
 		Page:              "134",
-		ContributeToLimit: &[]bool{false}[0],
-		DoubleCareer:      &[]bool{false}[0],
+		ContributeToLimit: false,
+		DoubleCareer:      false,
 	},
 	"apprentice": {
 		Name:     "Apprentice",
@@ -10021,8 +10533,8 @@ var DataQualities = map[string]Quality{
 			},
 		},
 		Page:              "47",
-		ContributeToLimit: &[]bool{false}[0],
-		OnlyPriorityGiven: &[]bool{true}[0],
+		ContributeToLimit: false,
+		OnlyPriorityGiven: true,
 	},
 	"enchanter": {
 		Name:     "Enchanter",
@@ -10040,8 +10552,8 @@ var DataQualities = map[string]Quality{
 			},
 		},
 		Page:              "47",
-		ContributeToLimit: &[]bool{false}[0],
-		OnlyPriorityGiven: &[]bool{true}[0],
+		ContributeToLimit: false,
+		OnlyPriorityGiven: true,
 	},
 	"explorer": {
 		Name:     "Explorer",
@@ -10058,8 +10570,8 @@ var DataQualities = map[string]Quality{
 			},
 		},
 		Page:              "47",
-		ContributeToLimit: &[]bool{false}[0],
-		OnlyPriorityGiven: &[]bool{true}[0],
+		ContributeToLimit: false,
+		OnlyPriorityGiven: true,
 	},
 	"elementalist_air": {
 		Name:     "Elementalist (Air)",
@@ -10076,7 +10588,7 @@ var DataQualities = map[string]Quality{
 			},
 		},
 		Page:              "43",
-		ContributeToLimit: &[]bool{false}[0],
+		ContributeToLimit: false,
 	},
 	"elementalist_earth": {
 		Name:     "Elementalist (Earth)",
@@ -10093,7 +10605,7 @@ var DataQualities = map[string]Quality{
 			},
 		},
 		Page:              "43",
-		ContributeToLimit: &[]bool{false}[0],
+		ContributeToLimit: false,
 	},
 	"elementalist_fire": {
 		Name:     "Elementalist (Fire)",
@@ -10110,7 +10622,7 @@ var DataQualities = map[string]Quality{
 			},
 		},
 		Page:              "43",
-		ContributeToLimit: &[]bool{false}[0],
+		ContributeToLimit: false,
 	},
 	"elementalist_water": {
 		Name:     "Elementalist (Water)",
@@ -10127,7 +10639,7 @@ var DataQualities = map[string]Quality{
 			},
 		},
 		Page:              "43",
-		ContributeToLimit: &[]bool{false}[0],
+		ContributeToLimit: false,
 	},
 	"hedge_witchwizard": {
 		Name:     "Hedge Witch/Wizard",
@@ -10146,7 +10658,7 @@ var DataQualities = map[string]Quality{
 			},
 		},
 		Page:              "43",
-		ContributeToLimit: &[]bool{false}[0],
+		ContributeToLimit: false,
 	},
 	"seer": {
 		Name:     "Seer",
@@ -10163,7 +10675,7 @@ var DataQualities = map[string]Quality{
 			},
 		},
 		Page:              "43",
-		ContributeToLimit: &[]bool{false}[0],
+		ContributeToLimit: false,
 	},
 	"null_wizard": {
 		Name:     "Null Wizard",
@@ -10181,7 +10693,7 @@ var DataQualities = map[string]Quality{
 			},
 		},
 		Page:              "43",
-		ContributeToLimit: &[]bool{false}[0],
+		ContributeToLimit: false,
 	},
 	"mentors_mask": {
 		Name:     "Mentor's Mask",
@@ -10198,7 +10710,7 @@ var DataQualities = map[string]Quality{
 			},
 		},
 		Page:              "182",
-		ContributeToLimit: &[]bool{false}[0],
+		ContributeToLimit: false,
 	},
 	"arcology_tantrum": {
 		Name:     "Arcology Tantrum",
@@ -10384,7 +10896,7 @@ var DataQualities = map[string]Quality{
 			AddWare:    "",
 		},
 		Page:        "30",
-		ChargenOnly: &[]bool{true}[0],
+		ChargenOnly: true,
 	},
 	"corporate_loyalist": {
 		Name:     "Corporate Loyalist",
@@ -10465,7 +10977,7 @@ var DataQualities = map[string]Quality{
 		Source:   "SL",
 		Limit:    "False",
 		Bonus: &QualityBonus{
-			SkillCategory: BiowareSkillCategoryBonus{
+			SkillCategory: &BiowareSkillCategoryBonus{
 				Name: "Social Active", Bonus: "-2",
 			},
 			SelectText: &SelectTextBonus{},
@@ -10479,7 +10991,7 @@ var DataQualities = map[string]Quality{
 		Source:   "SL",
 		Limit:    "False",
 		Bonus: &QualityBonus{
-			SkillCategory: BiowareSkillCategoryBonus{
+			SkillCategory: &BiowareSkillCategoryBonus{
 				Name: "Social Active", Bonus: "-3",
 			},
 			SelectText: &SelectTextBonus{},
@@ -10525,7 +11037,7 @@ var DataQualities = map[string]Quality{
 		Source:   "SL",
 		Limit:    "3",
 		Bonus: &QualityBonus{
-			SkillCategory: BiowareSkillCategoryBonus{
+			SkillCategory: &BiowareSkillCategoryBonus{
 				Name: "Social Active", Bonus: "-Rating",
 			},
 		},
@@ -10577,7 +11089,7 @@ var DataQualities = map[string]Quality{
 		Category: "Negative",
 		Source:   "KC",
 		Bonus: &QualityBonus{
-			SkillCategory: BiowareSkillCategoryBonus{
+			SkillCategory: &BiowareSkillCategoryBonus{
 				Name: "Social Active", Bonus: "-2",
 			},
 		},
@@ -10676,7 +11188,7 @@ var DataQualities = map[string]Quality{
 		Category: "Negative",
 		Source:   "KC",
 		Bonus: &QualityBonus{
-			SkillGroup: SkillGroupBonus{
+			SkillGroup: &common.SkillGroupBonus{
 				Name: "Stealth", Bonus: "-2", Condition: "When in hosts",
 			},
 		},
@@ -11219,7 +11731,7 @@ var DataQualities = map[string]Quality{
 			},
 		},
 		Page:         "89",
-		DoubleCareer: &[]bool{false}[0],
+		DoubleCareer: false,
 	},
 	"resonant_stream_machinist": {
 		Name:     "Resonant Stream: Machinist",
@@ -11249,7 +11761,7 @@ var DataQualities = map[string]Quality{
 			},
 		},
 		Page:         "90",
-		DoubleCareer: &[]bool{false}[0],
+		DoubleCareer: false,
 	},
 	"resonant_stream_sourceror": {
 		Name:     "Resonant Stream: Sourceror",
@@ -11271,7 +11783,7 @@ var DataQualities = map[string]Quality{
 			},
 		},
 		Page:         "91",
-		DoubleCareer: &[]bool{false}[0],
+		DoubleCareer: false,
 	},
 	"resonant_stream_technoshaman": {
 		Name:     "Resonant Stream: Technoshaman",
@@ -11290,7 +11802,7 @@ var DataQualities = map[string]Quality{
 			},
 		},
 		Page:         "91",
-		DoubleCareer: &[]bool{false}[0],
+		DoubleCareer: false,
 	},
 	"dissonant_stream_apophenian": {
 		Name:     "Dissonant Stream: Apophenian",
@@ -11309,7 +11821,7 @@ var DataQualities = map[string]Quality{
 			},
 		},
 		Page:         "133",
-		DoubleCareer: &[]bool{false}[0],
+		DoubleCareer: false,
 	},
 	"dissonant_stream_erisian": {
 		Name:     "Dissonant Stream: Erisian",
@@ -11328,7 +11840,7 @@ var DataQualities = map[string]Quality{
 			},
 		},
 		Page:         "134",
-		DoubleCareer: &[]bool{false}[0],
+		DoubleCareer: false,
 	},
 	"dissonant_stream_morphinae": {
 		Name:     "Dissonant Stream: Morphinae",
@@ -11347,7 +11859,7 @@ var DataQualities = map[string]Quality{
 			},
 		},
 		Page:         "132",
-		DoubleCareer: &[]bool{false}[0],
+		DoubleCareer: false,
 	},
 	"dead_sin": {
 		Name:     "Dead SIN",
@@ -11427,7 +11939,7 @@ var DataQualities = map[string]Quality{
 		Category: "Positive",
 		Source:   "BTB",
 		Bonus: &QualityBonus{
-			SkillCategory: BiowareSkillCategoryBonus{
+			SkillCategory: &BiowareSkillCategoryBonus{
 				Name: "Social Active", Bonus: "2",
 			},
 		},
@@ -11461,8 +11973,8 @@ var DataQualities = map[string]Quality{
 		},
 		Required:              nil,
 		Page:                  "161",
-		CanBuyWithSpellPoints: &[]bool{true}[0],
-		DoubleCareer:          &[]bool{false}[0],
+		CanBuyWithSpellPoints: true,
+		DoubleCareer:          false,
 	},
 	"prototype_materials": {
 		Name:     "Prototype Materials",
@@ -11522,8 +12034,8 @@ var DataQualities = map[string]Quality{
 		Source:                "BTB",
 		Required:              nil,
 		Page:                  "161",
-		CanBuyWithSpellPoints: &[]bool{true}[0],
-		DoubleCareer:          &[]bool{false}[0],
+		CanBuyWithSpellPoints: true,
+		DoubleCareer:          false,
 	},
 	"candle_in_the_darkness": {
 		Name:     "Candle in the Darkness",
@@ -11580,6 +12092,6 @@ var DataQualities = map[string]Quality{
 			NuyenMaxBP: "-1",
 		},
 		Page:           "177",
-		ContributeToBP: &[]bool{false}[0],
+		ContributeToBP: false,
 	},
 }

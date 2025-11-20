@@ -1,5 +1,7 @@
 package v5
 
+import "shadowmaster/pkg/shadowrun/edition/v5/common"
+
 // Quality represents a quality (positive or negative) from Shadowrun 5th Edition
 type Quality struct {
 	// Required fields
@@ -14,27 +16,27 @@ type Quality struct {
 	Required              *QualityRequired  `json:"required,omitempty"`              // Requirements for this quality
 	Forbidden             *QualityForbidden `json:"forbidden,omitempty"`             // Forbidden items/qualities
 	Page                  string            `json:"page,omitempty"`                  // Page number in source book
-	ChargenOnly           *bool             `json:"chargenonly,omitempty"`           // Whether only available at character creation
-	CareerOnly            *bool             `json:"careeronly,omitempty"`            // Whether only available during career
+	ChargenOnly           bool              `json:"chargenonly,omitempty"`           // Whether only available at character creation
+	CareerOnly            bool              `json:"careeronly,omitempty"`            // Whether only available during career
 	Mutant                string            `json:"mutant,omitempty"`                // Mutant flag (usually "True" or empty)
 	Metagenic             string            `json:"metagenic,omitempty"`             // Metagenic flag
-	NoLevels              *bool             `json:"nolevels,omitempty"`              // Whether this quality has no levels
-	StagedPurchase        *bool             `json:"stagedpurchase,omitempty"`        // Whether this can be purchased in stages
-	RefundKarmaOnRemove   *bool             `json:"refundkarmaonremove,omitempty"`   // Whether karma is refunded on removal
-	ContributeToBP        *bool             `json:"contributetobp,omitempty"`        // Whether this contributes to build points
-	ContributeToLimit     *bool             `json:"contributetolimit,omitempty"`     // Whether this contributes to limits
+	NoLevels              bool              `json:"nolevels,omitempty"`              // Whether this quality has no levels
+	StagedPurchase        bool              `json:"stagedpurchase,omitempty"`        // Whether this can be purchased in stages
+	RefundKarmaOnRemove   bool              `json:"refundkarmaonremove,omitempty"`   // Whether karma is refunded on removal
+	ContributeToBP        bool              `json:"contributetobp,omitempty"`        // Whether this contributes to build points
+	ContributeToLimit     bool              `json:"contributetolimit,omitempty"`     // Whether this contributes to limits
 	IncludeInLimit        *IncludeInLimit   `json:"includeinlimit,omitempty"`        // Whether included in limit calculations
-	LimitWithinInclusions *bool             `json:"limitwithinclusions,omitempty"`   // Limit within inclusions
-	OnlyPriorityGiven     *bool             `json:"onlyprioritygiven,omitempty"`     // Only available with priority
-	CanBuyWithSpellPoints *bool             `json:"canbuywithspellpoints,omitempty"` // Can be bought with spell points
-	DoubleCareer          *bool             `json:"doublecareer,omitempty"`          // Double career flag
+	LimitWithinInclusions bool              `json:"limitwithinclusions,omitempty"`   // Limit within inclusions
+	OnlyPriorityGiven     bool              `json:"onlyprioritygiven,omitempty"`     // Only available with priority
+	CanBuyWithSpellPoints bool              `json:"canbuywithspellpoints,omitempty"` // Can be bought with spell points
+	DoubleCareer          bool              `json:"doublecareer,omitempty"`          // Double career flag
 	ChargenLimit          string            `json:"chargenlimit,omitempty"`          // Character generation limit
 	CostDiscount          string            `json:"costdiscount,omitempty"`          // Cost discount
-	FirstLevelBonus       *bool             `json:"firstlevelbonus,omitempty"`       // First level bonus
-	Hide                  *bool             `json:"hide,omitempty"`                  // Whether to hide this quality
-	Implemented           *bool             `json:"implemented,omitempty"`           // Whether implemented
+	FirstLevelBonus       bool              `json:"firstlevelbonus,omitempty"`       // First level bonus
+	Hide                  bool              `json:"hide,omitempty"`                  // Whether to hide this quality
+	Implemented           bool              `json:"implemented,omitempty"`           // Whether implemented
 	NameOnPage            string            `json:"nameonpage,omitempty"`            // Name as it appears on page
-	NaturalWeapons        interface{}       `json:"naturalweapons,omitempty"`        // Natural weapons (can be bool or complex structure)
+	NaturalWeapons        *NaturalWeapons   `json:"naturalweapons,omitempty"`        // Natural weapons structure
 	AddWeapon             string            `json:"addweapon,omitempty"`             // Weapon added by this quality
 }
 
@@ -45,46 +47,46 @@ type QualityBonus struct {
 	// For now, we'll use a flexible approach with interface{} for complex nested structures
 
 	// Common bonus fields (similar to bioware)
-	LimitModifier            interface{} `json:"limitmodifier,omitempty"`
-	SkillCategory            interface{} `json:"skillcategory,omitempty"`
-	SpecificSkill            interface{} `json:"specificskill,omitempty"`
-	SkillGroup               interface{} `json:"skillgroup,omitempty"`
-	SelectSkill              interface{} `json:"selectskill,omitempty"`
-	SkillAttribute           interface{} `json:"skillattribute,omitempty"`
-	SpecificAttribute        interface{} `json:"specificattribute,omitempty"`
-	PhysicalLimit            string      `json:"physicallimit,omitempty"`
-	MentalLimit              string      `json:"mentallimit,omitempty"`
-	SocialLimit              string      `json:"sociallimit,omitempty"`
-	ConditionMonitor         interface{} `json:"conditionmonitor,omitempty"`
-	Initiative               interface{} `json:"initiative,omitempty"`
-	InitiativePass           interface{} `json:"initiativepass,omitempty"`
-	Dodge                    string      `json:"dodge,omitempty"`
-	DamageResistance         string      `json:"damageresistance,omitempty"`
-	UnarmedDV                string      `json:"unarmeddv,omitempty"`
-	UnarmedDVPhysical        *bool       `json:"unarmeddvphysical,omitempty"`
-	UnarmedReach             string      `json:"unarmedreach,omitempty"`
-	Armor                    interface{} `json:"armor,omitempty"`
-	FireArmor                string      `json:"firearmor,omitempty"`
-	ColdArmor                string      `json:"coldarmor,omitempty"`
-	ElectricityArmor         string      `json:"electricityarmor,omitempty"`
-	ToxinContactResist       string      `json:"toxincontactresist,omitempty"`
-	ToxinIngestionResist     string      `json:"toxiningestionresist,omitempty"`
-	ToxinInhalationResist    string      `json:"toxininhalationresist,omitempty"`
-	ToxinInjectionResist     string      `json:"toxininjectionresist,omitempty"`
-	PathogenContactResist    string      `json:"pathogencontactresist,omitempty"`
-	PathogenIngestionResist  string      `json:"pathogeningestionresist,omitempty"`
-	PathogenInhalationResist string      `json:"pathogeninhalationresist,omitempty"`
-	PathogenInjectionResist  string      `json:"pathogeninjectionresist,omitempty"`
-	RadiationResist          string      `json:"radiationresist,omitempty"`
-	FatigueResist            string      `json:"fatigueresist,omitempty"`
-	StunCMRecovery           string      `json:"stuncmrecovery,omitempty"`
-	PhysicalCMRecovery       string      `json:"physicalcmrecovery,omitempty"`
-	Memory                   string      `json:"memory,omitempty"`
-	DrainResist              string      `json:"drainresist,omitempty"`
-	FadingResist             string      `json:"fadingresist,omitempty"`
-	Composure                string      `json:"composure,omitempty"`
-	LifestyleCost            string      `json:"lifestylecost,omitempty"`
-	Ambidextrous             *bool       `json:"ambidextrous,omitempty"`
+	LimitModifier            *common.LimitModifier         `json:"limitmodifier,omitempty"`
+	SkillCategory            *BiowareSkillCategoryBonus    `json:"skillcategory,omitempty"`
+	SpecificSkill            interface{}                   `json:"specificskill,omitempty"` // Can be SpecificSkillBonus, []SpecificSkillBonus, or []interface{}
+	SkillGroup               interface{}                   `json:"skillgroup,omitempty"`    // Can be *SkillGroupBonus or []interface{}
+	SelectSkill              interface{}                   `json:"selectskill,omitempty"`   // Can be *SelectSkill or []interface{}
+	SkillAttribute           *common.SkillAttributeBonus   `json:"skillattribute,omitempty"`
+	SpecificAttribute        interface{}                   `json:"specificattribute,omitempty"` // Can be string, *SpecificAttributeBonus, or []interface{}
+	PhysicalLimit            string                        `json:"physicallimit,omitempty"`
+	MentalLimit              string                        `json:"mentallimit,omitempty"`
+	SocialLimit              string                        `json:"sociallimit,omitempty"`
+	ConditionMonitor         *common.ConditionMonitorBonus `json:"conditionmonitor,omitempty"`
+	Initiative               *common.InitiativeBonus       `json:"initiative,omitempty"`
+	InitiativePass           *common.InitiativePassBonus   `json:"initiativepass,omitempty"`
+	Dodge                    string                        `json:"dodge,omitempty"`
+	DamageResistance         string                        `json:"damageresistance,omitempty"`
+	UnarmedDV                string                        `json:"unarmeddv,omitempty"`
+	UnarmedDVPhysical        bool                          `json:"unarmeddvphysical,omitempty"`
+	UnarmedReach             string                        `json:"unarmedreach,omitempty"`
+	Armor                    interface{}                   `json:"armor,omitempty"` // Can be *ArmorBonus or string
+	FireArmor                string                        `json:"firearmor,omitempty"`
+	ColdArmor                string                        `json:"coldarmor,omitempty"`
+	ElectricityArmor         string                        `json:"electricityarmor,omitempty"`
+	ToxinContactResist       string                        `json:"toxincontactresist,omitempty"`
+	ToxinIngestionResist     string                        `json:"toxiningestionresist,omitempty"`
+	ToxinInhalationResist    string                        `json:"toxininhalationresist,omitempty"`
+	ToxinInjectionResist     string                        `json:"toxininjectionresist,omitempty"`
+	PathogenContactResist    string                        `json:"pathogencontactresist,omitempty"`
+	PathogenIngestionResist  string                        `json:"pathogeningestionresist,omitempty"`
+	PathogenInhalationResist string                        `json:"pathogeninhalationresist,omitempty"`
+	PathogenInjectionResist  string                        `json:"pathogeninjectionresist,omitempty"`
+	RadiationResist          string                        `json:"radiationresist,omitempty"`
+	FatigueResist            string                        `json:"fatigueresist,omitempty"`
+	StunCMRecovery           string                        `json:"stuncmrecovery,omitempty"`
+	PhysicalCMRecovery       string                        `json:"physicalcmrecovery,omitempty"`
+	Memory                   string                        `json:"memory,omitempty"`
+	DrainResist              string                        `json:"drainresist,omitempty"`
+	FadingResist             string                        `json:"fadingresist,omitempty"`
+	Composure                string                        `json:"composure,omitempty"`
+	LifestyleCost            string                        `json:"lifestylecost,omitempty"`
+	Ambidextrous             bool                          `json:"ambidextrous,omitempty"`
 
 	// Quality-specific bonus fields
 	Notoriety                                      string      `json:"notoriety,omitempty"`
@@ -230,7 +232,7 @@ type QualityRequiredOneOf struct {
 	Metatype    []string `json:"metatype,omitempty"`   // Array of metatype names
 	Quality     []string `json:"quality,omitempty"`    // Array of quality names
 	Power       string   `json:"power,omitempty"`      // Power name
-	MageEnabled *bool    `json:"magenabled,omitempty"` // Magic enabled flag
+	MageEnabled bool     `json:"magenabled,omitempty"` // Magic enabled flag
 }
 
 // QualityForbiddenOneOf represents a one-of forbidden constraint
@@ -259,4 +261,22 @@ type ActionDicePool struct {
 // IncludeInLimit represents an include in limit structure
 type IncludeInLimit struct {
 	Name interface{} `json:"name,omitempty"` // Can be string or []string
+}
+
+// NaturalWeapon represents a single natural weapon
+type NaturalWeapon struct {
+	Name     string `json:"name,omitempty"`
+	Reach    string `json:"reach,omitempty"`
+	Damage   string `json:"damage,omitempty"`
+	AP       string `json:"ap,omitempty"`
+	UseSkill string `json:"useskill,omitempty"`
+	Accuracy string `json:"accuracy,omitempty"`
+	Source   string `json:"source,omitempty"`
+	Page     string `json:"page,omitempty"`
+}
+
+// NaturalWeapons represents the naturalweapons structure
+// Can be a single weapon or an array of weapons
+type NaturalWeapons struct {
+	NaturalWeapon interface{} `json:"naturalweapon,omitempty"` // Can be NaturalWeapon or []NaturalWeapon
 }
