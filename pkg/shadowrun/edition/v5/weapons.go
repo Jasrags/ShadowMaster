@@ -28,12 +28,12 @@ type WeaponRequired struct {
 
 // WeaponAccessories represents a collection of accessories
 type WeaponAccessories struct {
-	Accessory interface{} `json:"accessory,omitempty"` // Can be single WeaponAccessory or []WeaponAccessory
+	Accessory []WeaponAccessory `json:"accessory,omitempty"` // Array of weapon accessories
 }
 
 // WeaponAccessoryMounts represents available accessory mounts
 type WeaponAccessoryMounts struct {
-	Mount interface{} `json:"mount,omitempty"` // Can be single string or []string
+	Mount []string `json:"mount,omitempty"` // Array of mount locations (e.g., "Stock", "Side", "Top", "Under")
 }
 
 // Weapon represents a weapon from Shadowrun 5th Edition

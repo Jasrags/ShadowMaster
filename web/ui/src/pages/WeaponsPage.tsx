@@ -1,37 +1,37 @@
 import { useEffect, useState, useCallback } from 'react';
-import { gearApi } from '../lib/api';
-import type { Gear } from '../lib/types';
+import { weaponApi } from '../lib/api';
+import type { Weapon } from '../lib/types';
 import { useToast } from '../contexts/ToastContext';
-import { GearTable } from '../components/gear/GearTable';
-import { GearTableGrouped } from '../components/gear/GearTableGrouped';
+import { WeaponTable } from '../components/weapon/WeaponTable';
+import { WeaponTableGrouped } from '../components/weapon/WeaponTableGrouped';
 
-export function GearPage() {
+export function WeaponsPage() {
   const { showError } = useToast();
-  const [gear, setGear] = useState<Gear[]>([]);
+  const [weapons, setWeapons] = useState<Weapon[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [viewMode, setViewMode] = useState<'flat' | 'grouped'>('grouped');
 
-  const loadGear = useCallback(async () => {
+  const loadWeapons = useCallback(async () => {
     try {
       setIsLoading(true);
-      const data = await gearApi.getGear();
-      setGear(data);
+      const data = await weaponApi.getWeapons();
+      setWeapons(data);
     } catch (err) {
-      const errorMessage = err instanceof Error ? err.message : 'Failed to load gear';
-      showError('Failed to load gear', errorMessage);
+      const errorMessage = err instanceof Error ? err.message : 'Failed to load weapons';
+      showError('Failed to load weapons', errorMessage);
     } finally {
       setIsLoading(false);
     }
   }, [showError]);
 
   useEffect(() => {
-    loadGear();
-  }, [loadGear]);
+    loadWeapons();
+  }, [loadWeapons]);
 
   if (isLoading) {
     return (
       <div className="flex items-center justify-center py-12">
-        <div className="text-gray-400">Loading gear...</div>
+        <div className="text-gray-400">Loading weapons...</div>
       </div>
     );
   }
@@ -41,9 +41,9 @@ export function GearPage() {
       <div className="mb-6">
         <div className="flex items-center justify-between mb-2">
           <div>
-            <h2 className="text-2xl font-bold text-gray-100 mb-2">Gear Database</h2>
+            <h2 className="text-2xl font-bold text-gray-100 mb-2">Weapons Database</h2>
             <p className="text-gray-400">
-              View and search all available gear from Shadowrun 5th Edition ({gear.length} items)
+              View and search all available weapons from Shadowrun 5th Edition ({weapons.length} items)
             </p>
           </div>
           <div className="flex gap-2">
@@ -71,9 +71,9 @@ export function GearPage() {
         </div>
       </div>
       {viewMode === 'grouped' ? (
-        <GearTableGrouped gear={gear} />
+        <WeaponTableGrouped weapons={weapons} />
       ) : (
-        <GearTable gear={gear} />
+        <WeaponTable weapons={weapons} />
       )}
     </div>
   );

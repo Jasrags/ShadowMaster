@@ -9,6 +9,9 @@ import { HomePage } from './pages/HomePage';
 import { CampaignsPage } from './pages/CampaignsPage';
 import { GearPage } from './pages/GearPage';
 import { ArmorPage } from './pages/ArmorPage';
+import { WeaponsPage } from './pages/WeaponsPage';
+import { SkillsPage } from './pages/SkillsPage';
+import { QualitiesPage } from './pages/QualitiesPage';
 
 function App() {
   return (
@@ -29,7 +32,7 @@ function App() {
                     </AuthenticatedRoute>
                   }
                 />
-                {/* Admin-only routes */}
+                {/* Admin-only routes - Gear, Armor, Weapons, and Skills (shown under Database tab) */}
                 <Route
                   path="/gear"
                   element={
@@ -43,6 +46,30 @@ function App() {
                   element={
                     <AdminRoute>
                       <ArmorPage />
+                    </AdminRoute>
+                  }
+                />
+                <Route
+                  path="/weapons"
+                  element={
+                    <AdminRoute>
+                      <WeaponsPage />
+                    </AdminRoute>
+                  }
+                />
+                <Route
+                  path="/skills"
+                  element={
+                    <AdminRoute>
+                      <SkillsPage />
+                    </AdminRoute>
+                  }
+                />
+                <Route
+                  path="/qualities"
+                  element={
+                    <AdminRoute>
+                      <QualitiesPage />
                     </AdminRoute>
                   }
                 />

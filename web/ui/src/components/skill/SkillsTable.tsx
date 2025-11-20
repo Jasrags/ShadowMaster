@@ -1,23 +1,23 @@
 import { useState, useMemo } from 'react';
 import { DataTable, ColumnDefinition } from '../common/DataTable';
-import type { Gear } from '../../lib/types';
-import { GearViewModal } from './GearViewModal';
-import { CategoryFilter } from './CategoryFilter';
-import { SourceFilter } from './SourceFilter';
+import type { Skill } from '../../lib/types';
+import { SkillViewModal } from './SkillViewModal';
+import { SkillCategoryFilter } from './SkillCategoryFilter';
+import { SkillSourceFilter } from './SkillSourceFilter';
 
-interface GearTableProps {
-  gear: Gear[];
+interface SkillsTableProps {
+  skills: Skill[];
 }
 
-export function GearTable({ gear }: GearTableProps) {
-  const [selectedGear, setSelectedGear] = useState<Gear | null>(null);
+export function SkillsTable({ skills }: SkillsTableProps) {
+  const [selectedSkill, setSelectedSkill] = useState<Skill | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedCategories, setSelectedCategories] = useState<string[]>([]);
   const [selectedSources, setSelectedSources] = useState<string[]>(['SR5']);
 
-  // Filter gear by selected categories and sources
-  const filteredGear = useMemo(() => {
-    let filtered = gear;
+  // Filter skills by selected categories and sources
+  const filteredSkills = useMemo(() => {
+    let filtered = skills;
 
     // Filter by category
     if (selectedCategories.length > 0) {
@@ -26,24 +26,27 @@ export function GearTable({ gear }: GearTableProps) {
 
     // Filter by source
     if (selectedSources.length > 0) {
-      filtered = filtered.filter(item => selectedSources.includes(item.source));
+      filtered = filtered.filter(item => {
+        const skillSource = item.source || 'Unknown';
+        return selectedSources.includes(skillSource);
+      });
     }
 
     return filtered;
-  }, [gear, selectedCategories, selectedSources]);
+  }, [skills, selectedCategories, selectedSources]);
 
-  const handleNameClick = (gearItem: Gear) => {
-    setSelectedGear(gearItem);
+  const handleNameClick = (skillItem: Skill) => {
+    setSelectedSkill(skillItem);
     setIsModalOpen(true);
   };
 
-  const columns: ColumnDefinition<Gear>[] = [
+  const columns: ColumnDefinition<Skill>[] = [
     {
       id: 'name',
       header: 'Name',
       accessor: 'name',
       sortable: true,
-      render: (value: unknown, row: Gear) => (
+      render: (value: unknown, row: Skill) => (
         <button
           onClick={() => handleNameClick(row)}
           className="text-sr-accent hover:text-sr-accent/80 hover:underline cursor-pointer text-left"
@@ -59,6 +62,24 @@ export function GearTable({ gear }: GearTableProps) {
       sortable: true,
     },
     {
+      id: 'attribute',
+      header: 'Attribute',
+      accessor: 'attribute',
+      sortable: true,
+    },
+    {
+      id: 'default',
+      header: 'Default',
+      accessor: 'default',
+      sortable: true,
+    },
+    {
+      id: 'skillgroup',
+      header: 'Skill Group',
+      accessor: 'skillgroup',
+      sortable: true,
+    },
+    {
       id: 'source',
       header: 'Source',
       accessor: 'source',
@@ -70,63 +91,39 @@ export function GearTable({ gear }: GearTableProps) {
       accessor: 'page',
       sortable: true,
     },
-    {
-      id: 'rating',
-      header: 'Rating',
-      accessor: 'rating',
-      sortable: true,
-    },
-    {
-      id: 'avail',
-      header: 'Availability',
-      accessor: 'avail',
-      sortable: true,
-    },
-    {
-      id: 'cost',
-      header: 'Cost',
-      accessor: 'cost',
-      sortable: true,
-    },
-    {
-      id: 'costfor',
-      header: 'Cost For',
-      accessor: 'costfor',
-      sortable: true,
-    },
   ];
 
   return (
     <>
       <div className="space-y-4 mb-4">
         <div className="flex flex-wrap items-start gap-4">
-          <CategoryFilter
-            gear={gear}
+          <SkillCategoryFilter
+            skills={skills}
             selectedCategories={selectedCategories}
             onCategoriesChange={setSelectedCategories}
           />
-          <SourceFilter
-            gear={gear}
+          <SkillSourceFilter
+            skills={skills}
             selectedSources={selectedSources}
             onSourcesChange={setSelectedSources}
           />
         </div>
       </div>
       <DataTable
-        data={filteredGear}
+        data={filteredSkills}
         columns={columns}
-        searchFields={['name', 'category', 'source']}
-        searchPlaceholder="Search gear by name, category, or source..."
+        searchFields={['name', 'category', 'attribute', 'source']}
+        searchPlaceholder="Search skills by name, category, attribute, or source..."
         rowsPerPageOptions={[25, 50, 100, 200]}
         defaultRowsPerPage={50}
         defaultSortColumn="name"
         defaultSortDirection="asc"
-        emptyMessage="No gear available"
-        emptySearchMessage="No gear found matching your search criteria."
-        ariaLabel="Gear data table"
+        emptyMessage="No skills available"
+        emptySearchMessage="No skills found matching your search criteria."
+        ariaLabel="Skills data table"
       />
-      <GearViewModal
-        gear={selectedGear}
+      <SkillViewModal
+        skill={selectedSkill}
         isOpen={isModalOpen}
         onOpenChange={setIsModalOpen}
       />

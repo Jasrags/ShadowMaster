@@ -14,7 +14,7 @@ export function ArmorTable({ armor, gearMap }: ArmorTableProps) {
   const [selectedArmor, setSelectedArmor] = useState<Armor | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedCategories, setSelectedCategories] = useState<string[]>([]);
-  const [selectedSources, setSelectedSources] = useState<string[]>([]);
+  const [selectedSources, setSelectedSources] = useState<string[]>(['SR5']);
 
   // Filter armor by selected categories and sources
   const filteredArmor = useMemo(() => {

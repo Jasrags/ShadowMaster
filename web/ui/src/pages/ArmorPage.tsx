@@ -3,12 +3,14 @@ import { armorApi, gearApi } from '../lib/api';
 import type { Armor, Gear } from '../lib/types';
 import { useToast } from '../contexts/ToastContext';
 import { ArmorTable } from '../components/armor/ArmorTable';
+import { ArmorTableGrouped } from '../components/armor/ArmorTableGrouped';
 
 export function ArmorPage() {
   const { showError } = useToast();
   const [armor, setArmor] = useState<Armor[]>([]);
   const [gear, setGear] = useState<Gear[]>([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [viewMode, setViewMode] = useState<'flat' | 'grouped'>('grouped');
 
   // Create a map of gear IDs to gear objects for lookups
   const gearMap = useMemo(() => {
@@ -67,8 +69,43 @@ export function ArmorPage() {
 
   return (
     <div>
-      <h2 className="text-2xl font-bold text-gray-100 mb-6">All Armor ({armor.length})</h2>
-      <ArmorTable armor={armor} gearMap={gearMap} />
+      <div className="mb-6">
+        <div className="flex items-center justify-between mb-2">
+          <div>
+            <h2 className="text-2xl font-bold text-gray-100 mb-2">Armor Database</h2>
+            <p className="text-gray-400">
+              View and search all available armor from Shadowrun 5th Edition ({armor.length} items)
+            </p>
+          </div>
+          <div className="flex gap-2">
+            <button
+              onClick={() => setViewMode('flat')}
+              className={`px-4 py-2 rounded-md text-sm font-medium transition-colors ${
+                viewMode === 'flat'
+                  ? 'bg-sr-accent text-sr-dark'
+                  : 'bg-sr-gray border border-sr-light-gray text-gray-300 hover:bg-sr-light-gray'
+              }`}
+            >
+              Flat View
+            </button>
+            <button
+              onClick={() => setViewMode('grouped')}
+              className={`px-4 py-2 rounded-md text-sm font-medium transition-colors ${
+                viewMode === 'grouped'
+                  ? 'bg-sr-accent text-sr-dark'
+                  : 'bg-sr-gray border border-sr-light-gray text-gray-300 hover:bg-sr-light-gray'
+              }`}
+            >
+              Grouped View
+            </button>
+          </div>
+        </div>
+      </div>
+      {viewMode === 'grouped' ? (
+        <ArmorTableGrouped armor={armor} gearMap={gearMap} />
+      ) : (
+        <ArmorTable armor={armor} gearMap={gearMap} />
+      )}
     </div>
   );
 }

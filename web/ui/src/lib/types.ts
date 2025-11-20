@@ -197,3 +197,152 @@ export interface Armor {
   };
 }
 
+// Weapon types
+export interface WeaponAccessory {
+  name: string | string[];
+  mount?: string;
+  avail?: string;
+  cost?: string;
+  source?: string;
+  page?: string;
+  rating?: string;
+  required?: {
+    weapondetails?: unknown;
+  };
+}
+
+export interface WeaponAccessories {
+  accessory?: WeaponAccessory[];
+}
+
+export interface WeaponAccessoryMounts {
+  mount?: string[];
+}
+
+export interface Weapon {
+  name: string;
+  category: string;
+  type: string; // "Melee" or "Ranged"
+  source: string;
+  conceal?: string;
+  accuracy?: string;
+  reach?: string;
+  damage?: string;
+  ap?: string; // Armor penetration
+  mode?: string;
+  rc?: string; // Recoil compensation
+  ammo?: string;
+  range?: string;
+  avail?: string;
+  cost?: string;
+  page?: string;
+  accessories?: WeaponAccessories;
+  accessorymounts?: WeaponAccessoryMounts;
+  addweapon?: string | string[];
+  allowaccessory?: string;
+  allowgear?: string | string[];
+  alternaterange?: string;
+  ammocategory?: string;
+  ammoslots?: string;
+  cyberware?: string;
+  doubledcostaccessorymounts?: boolean;
+  extramount?: string;
+  hide?: boolean;
+  maxrating?: string;
+  mount?: string;
+  requireammo?: string;
+  required?: {
+    weapondetails?: unknown;
+  };
+  shortburst?: string;
+  singleshot?: string;
+  sizecategory?: string;
+  spec?: string;
+  spec2?: string;
+  underbarrels?: string | string[];
+  useskill?: string;
+  useskillspec?: string;
+  weapontype?: string;
+}
+
+// Skill types
+export interface Specs {
+  spec: string[];
+}
+
+export interface Skill {
+  name: string;
+  attribute: string;
+  category: string;
+  default: string; // "True" or "False"
+  source?: string;
+  skillgroup?: string;
+  specs?: Specs;
+  exotic?: boolean;
+  page?: string;
+  requiresflymovement?: boolean;
+  requiresgroundmovement?: boolean;
+  requiresswimmovement?: boolean;
+}
+
+// Quality types
+export interface QualityRequiredOneOf {
+  metatype?: string[];
+  quality?: string[];
+  power?: string;
+  magenabled?: boolean;
+}
+
+export interface QualityRequiredAllOf {
+  metatype?: string;
+}
+
+export interface QualityRequired {
+  oneof?: QualityRequiredOneOf;
+  allof?: QualityRequiredAllOf;
+}
+
+export interface QualityForbiddenOneOf {
+  quality?: string[];
+  bioware?: string[];
+  power?: string;
+}
+
+export interface QualityForbidden {
+  oneof?: QualityForbiddenOneOf;
+}
+
+export interface Quality {
+  name: string;
+  karma: string;
+  category: string; // "Positive" or "Negative"
+  source: string;
+  limit?: string;
+  bonus?: unknown; // Complex structure, can be expanded later
+  required?: QualityRequired;
+  forbidden?: QualityForbidden;
+  page?: string;
+  chargenonly?: boolean;
+  careeronly?: boolean;
+  mutant?: string;
+  metagenic?: string;
+  nolevels?: boolean;
+  stagedpurchase?: boolean;
+  refundkarmaonremove?: boolean;
+  contributetobp?: boolean;
+  contributetolimit?: boolean;
+  includeinlimit?: unknown;
+  limitwithininclusions?: boolean;
+  onlyprioritygiven?: boolean;
+  canbuywithspellpoints?: boolean;
+  doublecareer?: boolean;
+  chargenlimit?: string;
+  costdiscount?: string;
+  firstlevelbonus?: boolean;
+  hide?: boolean;
+  implemented?: boolean;
+  nameonpage?: string;
+  naturalweapons?: unknown;
+  addweapon?: string;
+}
+

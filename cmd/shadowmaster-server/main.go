@@ -87,12 +87,14 @@ func main() {
 		r.Get("/skills/knowledge", handlers.GetKnowledgeSkills)
 
 		// Equipment routes
-		r.Get("/equipment/weapons", handlers.GetWeapons)
 		r.Get("/equipment/armor", handlers.GetArmor)
 		r.Get("/equipment/cyberware", handlers.GetCyberware)
 		r.Group(func(r chi.Router) {
 			r.Use(sessionManager.RequireRole(domain.RoleAdministrator))
+			r.Get("/equipment/skills", handlers.GetSkills)
+			r.Get("/equipment/weapons", handlers.GetWeapons)
 			r.Get("/equipment/gear", handlers.GetGears)
+			r.Get("/equipment/qualities", handlers.GetQualities)
 		})
 
 		// Group routes

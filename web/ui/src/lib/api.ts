@@ -7,6 +7,9 @@ import type {
   ApiError,
   Gear,
   Armor,
+  Weapon,
+  Skill,
+  Quality,
 } from './types';
 
 const API_BASE = '/api';
@@ -184,6 +187,30 @@ export const armorApi = {
   async getArmor(): Promise<Armor[]> {
     const response = await apiRequest<{ armor: Armor[] }>('/equipment/armor');
     return response.armor || [];
+  },
+};
+
+// Weapon API functions (admin only)
+export const weaponApi = {
+  async getWeapons(): Promise<Weapon[]> {
+    const response = await apiRequest<{ weapons: Weapon[] }>('/equipment/weapons');
+    return response.weapons || [];
+  },
+};
+
+// Skill API functions (admin only)
+export const skillApi = {
+  async getSkills(): Promise<Skill[]> {
+    const response = await apiRequest<{ skills: Skill[] }>('/equipment/skills');
+    return response.skills || [];
+  },
+};
+
+// Quality API functions (admin only)
+export const qualityApi = {
+  async getQualities(): Promise<Quality[]> {
+    const response = await apiRequest<{ qualities: Quality[] }>('/equipment/qualities');
+    return response.qualities || [];
   },
 };
 

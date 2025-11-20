@@ -117,12 +117,8 @@ var DataWeapons = map[string]Weapon{
 		Page:     "45",
 		Accessories: &WeaponAccessories{
 			Accessory: []WeaponAccessory{
-				{
-					Name: "Laser Sight",
-				},
-				{
-					Name: "Shock Pad",
-				},
+				{Name: "Laser Sight"},
+				{Name: "Shock Pad"},
 			},
 		},
 		AccessoryMounts: &WeaponAccessoryMounts{
@@ -2111,7 +2107,7 @@ var DataWeapons = map[string]Weapon{
 			},
 		},
 		AccessoryMounts: &WeaponAccessoryMounts{
-			Mount: "Under",
+			Mount: []string{"Under"},
 		},
 	},
 	"shiawase_blazer": {

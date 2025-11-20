@@ -2,7 +2,14 @@ import { ReactNode, useMemo } from 'react';
 import { Button } from 'react-aria-components';
 import { useAuth } from '../../contexts/AuthContext';
 import { useToast } from '../../contexts/ToastContext';
-import { TabNavigation } from './TabNavigation';
+import { NestedTabNavigation } from './NestedTabNavigation';
+
+interface TabItem {
+  id: string;
+  label: string;
+  path: string;
+  nested?: TabItem[];
+}
 
 interface AppLayoutProps {
   children: ReactNode;
@@ -12,18 +19,28 @@ export function AppLayout({ children }: AppLayoutProps) {
   const { user, isAuthenticated, logout } = useAuth();
   const { showSuccess, showError } = useToast();
 
-  // Define tabs - only show Campaigns if authenticated, Gear only for admin
-  const tabs = useMemo(() => {
-    const allTabs = [
+  // Define tabs - only show Campaigns if authenticated, Database (with Gear/Armor) only for admin
+  const tabs = useMemo((): TabItem[] => {
+    const allTabs: TabItem[] = [
       { id: 'home', label: 'Home', path: '/' },
     ];
 
     if (isAuthenticated) {
       allTabs.push({ id: 'campaigns', label: 'Campaigns', path: '/campaigns' });
-      // Add admin-only tabs
+      // Add admin-only Database tab with nested Gear and Armor
       if (user?.roles.includes('administrator')) {
-        allTabs.push({ id: 'gear', label: 'Gear', path: '/gear' });
-        allTabs.push({ id: 'armor', label: 'Armor', path: '/armor' });
+        allTabs.push({
+          id: 'database',
+          label: 'Database',
+          path: '/database',
+          nested: [
+            { id: 'gear', label: 'Gear', path: '/gear' },
+            { id: 'armor', label: 'Armor', path: '/armor' },
+            { id: 'weapons', label: 'Weapons', path: '/weapons' },
+            { id: 'skills', label: 'Skills', path: '/skills' },
+            { id: 'qualities', label: 'Qualities', path: '/qualities' },
+          ],
+        });
       }
       // Add more authenticated tabs here as needed
       // allTabs.push({ id: 'characters', label: 'Characters', path: '/characters' });
@@ -78,7 +95,7 @@ export function AppLayout({ children }: AppLayoutProps) {
       {tabs.length > 1 && (
         <div className="bg-sr-gray border-b border-sr-light-gray">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <TabNavigation tabs={tabs} />
+            <NestedTabNavigation tabs={tabs} />
           </div>
         </div>
       )}

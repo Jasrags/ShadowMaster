@@ -487,19 +487,32 @@ func (h *Handlers) GetKnowledgeSkills(w http.ResponseWriter, r *http.Request) {
 	})
 }
 
-// GetWeapons handles GET /api/equipment/weapons
-func (h *Handlers) GetWeapons(w http.ResponseWriter, r *http.Request) {
-	weapons := sr3.GetAllWeapons()
-	weaponType := r.URL.Query().Get("type")
-	if weaponType != "" {
-		filtered := sr3.GetWeaponsByType(weaponType)
-		respondJSON(w, http.StatusOK, map[string]interface{}{
-			"weapons": filtered,
-		})
-		return
+// GetSkills handles GET /api/equipment/skills
+func (h *Handlers) GetSkills(w http.ResponseWriter, r *http.Request) {
+	// Get all skills from the v5 data (both active and knowledge)
+	skillList := make([]sr5.Skill, 0)
+	// Add active skills
+	for _, skill := range sr5.DataSkills {
+		skillList = append(skillList, skill)
+	}
+	// Add knowledge skills
+	for _, skill := range sr5.DataKnowledgeSkills {
+		skillList = append(skillList, skill)
 	}
 	respondJSON(w, http.StatusOK, map[string]interface{}{
-		"weapons": weapons,
+		"skills": skillList,
+	})
+}
+
+// GetWeapons handles GET /api/equipment/weapons
+func (h *Handlers) GetWeapons(w http.ResponseWriter, r *http.Request) {
+	// Get all weapons from the v5 data
+	weaponList := make([]sr5.Weapon, 0)
+	for _, weapon := range sr5.DataWeapons {
+		weaponList = append(weaponList, weapon)
+	}
+	respondJSON(w, http.StatusOK, map[string]interface{}{
+		"weapons": weaponList,
 	})
 }
 
@@ -533,6 +546,18 @@ func (h *Handlers) GetGears(w http.ResponseWriter, r *http.Request) {
 	
 	respondJSON(w, http.StatusOK, map[string]interface{}{
 		"gear": gearList,
+	})
+}
+
+// GetQualities handles GET /api/equipment/qualities
+func (h *Handlers) GetQualities(w http.ResponseWriter, r *http.Request) {
+	// Get all qualities from the v5 data
+	qualityList := make([]sr5.Quality, 0)
+	for _, quality := range sr5.DataQualities {
+		qualityList = append(qualityList, quality)
+	}
+	respondJSON(w, http.StatusOK, map[string]interface{}{
+		"qualities": qualityList,
 	})
 }
 

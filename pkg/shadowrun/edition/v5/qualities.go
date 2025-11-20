@@ -227,10 +227,17 @@ type QualityRequired struct {
 // QualityRequiredOneOf represents a one-of requirement
 // Note: common.RequirementOneOf exists with similar structure
 type QualityRequiredOneOf struct {
-	Metatype    interface{} `json:"metatype,omitempty"`   // Can be string or []string
-	Quality     interface{} `json:"quality,omitempty"`    // Can be string or []string
-	Power       string      `json:"power,omitempty"`      // Power name
-	MageEnabled *bool       `json:"magenabled,omitempty"` // Magic enabled flag
+	Metatype    []string `json:"metatype,omitempty"`   // Array of metatype names
+	Quality     []string `json:"quality,omitempty"`    // Array of quality names
+	Power       string   `json:"power,omitempty"`      // Power name
+	MageEnabled *bool    `json:"magenabled,omitempty"` // Magic enabled flag
+}
+
+// QualityForbiddenOneOf represents a one-of forbidden constraint
+type QualityForbiddenOneOf struct {
+	Quality []string `json:"quality,omitempty"` // Array of quality names
+	Bioware []string `json:"bioware,omitempty"` // Array of bioware names
+	Power   string   `json:"power,omitempty"`   // Power name
 }
 
 // QualityRequiredAllOf represents an all-of requirement
@@ -242,13 +249,6 @@ type QualityRequiredAllOf struct {
 // QualityForbidden represents forbidden items or qualities
 type QualityForbidden struct {
 	OneOf *QualityForbiddenOneOf `json:"oneof,omitempty"`
-}
-
-// QualityForbiddenOneOf represents a one-of forbidden constraint
-type QualityForbiddenOneOf struct {
-	Quality interface{} `json:"quality,omitempty"` // Can be string or []string
-	Bioware interface{} `json:"bioware,omitempty"` // Can be string or []string
-	Power   string      `json:"power,omitempty"`   // Power name
 }
 
 // ActionDicePool represents an action dice pool bonus

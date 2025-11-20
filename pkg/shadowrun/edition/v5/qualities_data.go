@@ -51,12 +51,12 @@ var DataQualities = map[string]Quality{
 		Bonus:    nil,
 		Required: &QualityRequired{
 			OneOf: &QualityRequiredOneOf{
-				Metatype: []interface{}{"Centaur", "Naga", "Pixie", "Sasquatch"}, Quality: []interface{}{"Adept", "Aware", "Aspected Magician", "Enchanter", "Explorer", "Apprentice", "Magician", "Mystic Adept", "Infected: Mutaqua", "Infected: Nosferatu", "Infected: Wendigo"}, MageEnabled: &[]bool{true}[0],
+				Metatype: []string{"Centaur", "Naga", "Pixie", "Sasquatch"}, Quality: []string{"Adept", "Aware", "Aspected Magician", "Enchanter", "Explorer", "Apprentice", "Magician", "Mystic Adept", "Infected: Mutaqua", "Infected: Nosferatu", "Infected: Wendigo"}, MageEnabled: &[]bool{true}[0],
 			},
 		},
 		Forbidden: &QualityForbidden{
 			OneOf: &QualityForbiddenOneOf{
-				Quality: "Astral Beacon",
+				Quality: []string{"Astral Beacon"},
 			},
 		},
 		Page: "72",
@@ -82,7 +82,7 @@ var DataQualities = map[string]Quality{
 		},
 		Forbidden: &QualityForbidden{
 			OneOf: &QualityForbiddenOneOf{
-				Quality: "Distinctive Style",
+				Quality: []string{"Distinctive Style"},
 			},
 		},
 		Page: "72",
@@ -137,7 +137,7 @@ var DataQualities = map[string]Quality{
 		},
 		Forbidden: &QualityForbidden{
 			OneOf: &QualityForbiddenOneOf{
-				Quality: "Lucky",
+				Quality: []string{"Lucky"},
 			},
 		},
 		Page: "72",
@@ -164,7 +164,7 @@ var DataQualities = map[string]Quality{
 		Bonus:    nil,
 		Required: &QualityRequired{
 			OneOf: &QualityRequiredOneOf{
-				Quality: []interface{}{"Barehanded Adept", "Aware", "Magician", "Mystic Adept", "Apprentice", "Aspected Magician", "Enchanter", "Explorer", "Technomancer", "Infected: Mutaqua", "Infected: Nosferatu", "Infected: Wendigo"}, Power: "Adept Spell",
+				Quality: []string{"Barehanded Adept", "Aware", "Magician", "Mystic Adept", "Apprentice", "Aspected Magician", "Enchanter", "Explorer", "Technomancer", "Infected: Mutaqua", "Infected: Nosferatu", "Infected: Wendigo"}, Power: "Adept Spell",
 			},
 		},
 		Page: "74",
@@ -198,7 +198,7 @@ var DataQualities = map[string]Quality{
 		},
 		Forbidden: &QualityForbidden{
 			OneOf: &QualityForbiddenOneOf{
-				Bioware: []interface{}{"Damage Compensators", "Damage Compensators (2050)"}, Power: "Pain Resistance",
+				Bioware: []string{"Damage Compensators", "Damage Compensators (2050)"}, Power: "Pain Resistance",
 			},
 		},
 		Page: "74",
@@ -222,7 +222,7 @@ var DataQualities = map[string]Quality{
 		Bonus:    nil,
 		Required: &QualityRequired{
 			OneOf: &QualityRequiredOneOf{
-				Metatype: []interface{}{"Elf", "Dwarf", "Ork"},
+				Metatype: []string{"Elf", "Dwarf", "Ork"},
 			},
 		},
 		Page: "75",
@@ -288,7 +288,7 @@ var DataQualities = map[string]Quality{
 		},
 		Forbidden: &QualityForbidden{
 			OneOf: &QualityForbiddenOneOf{
-				Quality: "Exceptional Attribute",
+				Quality: []string{"Exceptional Attribute"},
 			},
 		},
 		Page: "76",
@@ -304,7 +304,7 @@ var DataQualities = map[string]Quality{
 		},
 		Forbidden: &QualityForbidden{
 			OneOf: &QualityForbiddenOneOf{
-				Quality: []interface{}{"Adept", "Aware", "Magician", "Mystic Adept", "Aspected Magician", "Enchanter", "Explorer", "Apprentice", "Infected: Mutaqua", "Infected: Nosferatu", "Infected: Wendigo"},
+				Quality: []string{"Adept", "Aware", "Magician", "Mystic Adept", "Aspected Magician", "Enchanter", "Explorer", "Apprentice", "Infected: Mutaqua", "Infected: Nosferatu", "Infected: Wendigo"},
 			},
 		},
 		Page: "76",
@@ -317,7 +317,7 @@ var DataQualities = map[string]Quality{
 		Bonus:    nil,
 		Required: &QualityRequired{
 			OneOf: &QualityRequiredOneOf{
-				Quality: []interface{}{"Adept", "Aspected Magician", "Aware", "Enchanter", "Explorer", "Apprentice", "Magician", "Mystic Adept"},
+				Quality: []string{"Adept", "Aspected Magician", "Aware", "Enchanter", "Explorer", "Apprentice", "Magician", "Mystic Adept"},
 			},
 		},
 		Page: "76",
@@ -355,7 +355,7 @@ var DataQualities = map[string]Quality{
 		},
 		Forbidden: &QualityForbidden{
 			OneOf: &QualityForbiddenOneOf{
-				Quality: "Weak Immune System",
+				Quality: []string{"Weak Immune System"},
 			},
 		},
 		Page: "76",
@@ -371,7 +371,7 @@ var DataQualities = map[string]Quality{
 		},
 		Forbidden: &QualityForbidden{
 			OneOf: &QualityForbiddenOneOf{
-				Quality: "Weak Immune System",
+				Quality: []string{"Weak Immune System"},
 			},
 		},
 		Page: "76",
@@ -397,7 +397,7 @@ var DataQualities = map[string]Quality{
 		},
 		Forbidden: &QualityForbidden{
 			OneOf: &QualityForbiddenOneOf{
-				Quality: "Uncanny Healer",
+				Quality: []string{"Uncanny Healer"},
 			},
 		},
 		Page: "77",
@@ -415,7 +415,7 @@ var DataQualities = map[string]Quality{
 		},
 		Forbidden: &QualityForbidden{
 			OneOf: &QualityForbiddenOneOf{
-				Quality: []interface{}{"Resistance to Pathogens and Toxins", "Weak Immune System"},
+				Quality: []string{"Resistance to Pathogens and Toxins", "Weak Immune System"},
 			},
 		},
 		Page: "77",
@@ -433,7 +433,7 @@ var DataQualities = map[string]Quality{
 		},
 		Forbidden: &QualityForbidden{
 			OneOf: &QualityForbiddenOneOf{
-				Quality: []interface{}{"Resistance to Pathogens and Toxins", "Weak Immune System"},
+				Quality: []string{"Resistance to Pathogens and Toxins", "Weak Immune System"},
 			},
 		},
 		Page: "77",
@@ -473,7 +473,7 @@ var DataQualities = map[string]Quality{
 		},
 		Forbidden: &QualityForbidden{
 			OneOf: &QualityForbiddenOneOf{
-				Quality: []interface{}{"Resistance to Pathogens", "Resistance to Toxins", "Weak Immune System"},
+				Quality: []string{"Resistance to Pathogens", "Resistance to Toxins", "Weak Immune System"},
 			},
 		},
 		Page: "77",
@@ -489,7 +489,7 @@ var DataQualities = map[string]Quality{
 		},
 		Required: &QualityRequired{
 			OneOf: &QualityRequiredOneOf{
-				Quality: []interface{}{"Aware", "Magician", "Mystic Adept", "Aspected Magician", "Enchanter", "Explorer", "Apprentice", "Infected: Mutaqua", "Infected: Nosferatu", "Infected: Wendigo"},
+				Quality: []string{"Aware", "Magician", "Mystic Adept", "Aspected Magician", "Enchanter", "Explorer", "Apprentice", "Infected: Mutaqua", "Infected: Nosferatu", "Infected: Wendigo"},
 			},
 		},
 		Page: "77",
@@ -631,7 +631,7 @@ var DataQualities = map[string]Quality{
 		Bonus:    nil,
 		Forbidden: &QualityForbidden{
 			OneOf: &QualityForbiddenOneOf{
-				Quality: "Rad-Tolerant",
+				Quality: []string{"Rad-Tolerant"},
 			},
 		},
 		Page: "169",
@@ -644,7 +644,7 @@ var DataQualities = map[string]Quality{
 		Bonus:    nil,
 		Forbidden: &QualityForbidden{
 			OneOf: &QualityForbiddenOneOf{
-				Quality: "Radiation Sponge",
+				Quality: []string{"Radiation Sponge"},
 			},
 		},
 		Page: "169",
@@ -687,7 +687,7 @@ var DataQualities = map[string]Quality{
 		},
 		Forbidden: &QualityForbidden{
 			OneOf: &QualityForbiddenOneOf{
-				Quality: []interface{}{"Adept", "Mystic Adept", "Aspected Magician", "Enchanter", "Explorer", "Aware", "Apprentice"},
+				Quality: []string{"Adept", "Mystic Adept", "Aspected Magician", "Enchanter", "Explorer", "Aware", "Apprentice"},
 			},
 		},
 		Page:              "69",
@@ -710,7 +710,7 @@ var DataQualities = map[string]Quality{
 		},
 		Forbidden: &QualityForbidden{
 			OneOf: &QualityForbiddenOneOf{
-				Quality: []interface{}{"Aware", "Magician", "Mystic Adept", "Aspected Magician", "Enchanter", "Explorer", "Apprentice"},
+				Quality: []string{"Aware", "Magician", "Mystic Adept", "Aspected Magician", "Enchanter", "Explorer", "Apprentice"},
 			},
 		},
 		Page:              "69",
@@ -730,7 +730,7 @@ var DataQualities = map[string]Quality{
 		},
 		Forbidden: &QualityForbidden{
 			OneOf: &QualityForbiddenOneOf{
-				Quality: []interface{}{"Aware", "Magician", "Adept", "Aspected Magician", "Enchanter", "Explorer", "Apprentice"},
+				Quality: []string{"Aware", "Magician", "Adept", "Aspected Magician", "Enchanter", "Explorer", "Apprentice"},
 			},
 		},
 		Page:              "69",
@@ -754,7 +754,7 @@ var DataQualities = map[string]Quality{
 		},
 		Forbidden: &QualityForbidden{
 			OneOf: &QualityForbiddenOneOf{
-				Quality: "Latent Dracomorphosis",
+				Quality: []string{"Latent Dracomorphosis"},
 			},
 		},
 		Page:              "69",
@@ -773,7 +773,7 @@ var DataQualities = map[string]Quality{
 		},
 		Forbidden: &QualityForbidden{
 			OneOf: &QualityForbiddenOneOf{
-				Quality: []interface{}{"Aware", "Enchanter", "Explorer", "Apprentice", "Magician", "Mystic Adept", "Adept"},
+				Quality: []string{"Aware", "Enchanter", "Explorer", "Apprentice", "Magician", "Mystic Adept", "Adept"},
 			},
 		},
 		Page:              "69",
@@ -792,7 +792,7 @@ var DataQualities = map[string]Quality{
 		},
 		Forbidden: &QualityForbidden{
 			OneOf: &QualityForbiddenOneOf{
-				Quality: []interface{}{"Apprentice", "Aspected Magician", "Enchanter", "Explorer", "Magician", "Mystic Adept", "Adept", "Technomancer"},
+				Quality: []string{"Apprentice", "Aspected Magician", "Enchanter", "Explorer", "Magician", "Mystic Adept", "Adept", "Technomancer"},
 			},
 		},
 		Page:              "49",
@@ -946,12 +946,12 @@ var DataQualities = map[string]Quality{
 		Bonus:    nil,
 		Required: &QualityRequired{
 			OneOf: &QualityRequiredOneOf{
-				Metatype: []interface{}{"Centaur", "Naga", "Pixie", "Sasquatch"}, Quality: []interface{}{"Adept", "Aware", "Aspected Magician", "Enchanter", "Explorer", "Apprentice", "Magician", "Mystic Adept", "Infected: Mutaqua", "Infected: Nosferatu", "Infected: Wendigo"}, MageEnabled: &[]bool{true}[0],
+				Metatype: []string{"Centaur", "Naga", "Pixie", "Sasquatch"}, Quality: []string{"Adept", "Aware", "Aspected Magician", "Enchanter", "Explorer", "Apprentice", "Magician", "Mystic Adept", "Infected: Mutaqua", "Infected: Nosferatu", "Infected: Wendigo"}, MageEnabled: &[]bool{true}[0],
 			},
 		},
 		Forbidden: &QualityForbidden{
 			OneOf: &QualityForbiddenOneOf{
-				Quality: "Astral Chameleon",
+				Quality: []string{"Astral Chameleon"},
 			},
 		},
 		Page: "78",
@@ -1019,7 +1019,7 @@ var DataQualities = map[string]Quality{
 		},
 		Forbidden: &QualityForbidden{
 			OneOf: &QualityForbiddenOneOf{
-				Quality: []interface{}{"Dependent (Inconvenience)", "Dependent (Demanding)"},
+				Quality: []string{"Dependent (Inconvenience)", "Dependent (Demanding)"},
 			},
 		},
 		Page: "80",
@@ -1034,7 +1034,7 @@ var DataQualities = map[string]Quality{
 		},
 		Forbidden: &QualityForbidden{
 			OneOf: &QualityForbiddenOneOf{
-				Quality: []interface{}{"Dependent (Nuisance)", "Dependent (Demanding)"},
+				Quality: []string{"Dependent (Nuisance)", "Dependent (Demanding)"},
 			},
 		},
 		Page: "80",
@@ -1049,7 +1049,7 @@ var DataQualities = map[string]Quality{
 		},
 		Forbidden: &QualityForbidden{
 			OneOf: &QualityForbiddenOneOf{
-				Quality: []interface{}{"Dependent (Nuisance)", "Dependent (Inconvenience)"},
+				Quality: []string{"Dependent (Nuisance)", "Dependent (Inconvenience)"},
 			},
 		},
 		Page: "80",
@@ -1062,7 +1062,7 @@ var DataQualities = map[string]Quality{
 		Bonus:    nil,
 		Forbidden: &QualityForbidden{
 			OneOf: &QualityForbiddenOneOf{
-				Quality: "Blandness",
+				Quality: []string{"Blandness"},
 			},
 		},
 		Page: "80",
@@ -1109,7 +1109,7 @@ var DataQualities = map[string]Quality{
 		Bonus:    nil,
 		Forbidden: &QualityForbidden{
 			OneOf: &QualityForbiddenOneOf{
-				Quality: "Insomnia (Full)",
+				Quality: []string{"Insomnia (Full)"},
 			},
 		},
 		Page: "81",
@@ -1122,7 +1122,7 @@ var DataQualities = map[string]Quality{
 		Bonus:    nil,
 		Forbidden: &QualityForbidden{
 			OneOf: &QualityForbiddenOneOf{
-				Quality: "Insomnia (Basic)",
+				Quality: []string{"Insomnia (Basic)"},
 			},
 		},
 		Page: "81",
@@ -1160,7 +1160,7 @@ var DataQualities = map[string]Quality{
 		},
 		Required: &QualityRequired{
 			OneOf: &QualityRequiredOneOf{
-				Metatype: []interface{}{"Human", "Elf"},
+				Metatype: []string{"Human", "Elf"},
 			},
 		},
 		Page: "82",
@@ -1270,7 +1270,7 @@ var DataQualities = map[string]Quality{
 		},
 		Forbidden: &QualityForbidden{
 			OneOf: &QualityForbiddenOneOf{
-				Quality: []interface{}{"SINner (Criminal)", "SINner (National)", "SINner (Corporate Limited)"},
+				Quality: []string{"SINner (Criminal)", "SINner (National)", "SINner (Corporate Limited)"},
 			},
 		},
 		Page: "85",
@@ -1285,7 +1285,7 @@ var DataQualities = map[string]Quality{
 		},
 		Forbidden: &QualityForbidden{
 			OneOf: &QualityForbiddenOneOf{
-				Quality: []interface{}{"SINner (Criminal)", "SINner (Corporate)", "SINner (Corporate Limited)"},
+				Quality: []string{"SINner (Criminal)", "SINner (Corporate)", "SINner (Corporate Limited)"},
 			},
 		},
 		Page: "84",
@@ -1300,7 +1300,7 @@ var DataQualities = map[string]Quality{
 		},
 		Forbidden: &QualityForbidden{
 			OneOf: &QualityForbiddenOneOf{
-				Quality: []interface{}{"SINner (Criminal)", "SINner (National)", "SINner (Corporate)"},
+				Quality: []string{"SINner (Criminal)", "SINner (National)", "SINner (Corporate)"},
 			},
 		},
 		Page: "84",
@@ -1316,7 +1316,7 @@ var DataQualities = map[string]Quality{
 		},
 		Forbidden: &QualityForbidden{
 			OneOf: &QualityForbiddenOneOf{
-				Quality: []interface{}{"SINner (Corporate)", "SINner (National)", "SINner (Corporate Limited)"},
+				Quality: []string{"SINner (Corporate)", "SINner (National)", "SINner (Corporate Limited)"},
 			},
 		},
 		Page: "84",
@@ -1344,7 +1344,7 @@ var DataQualities = map[string]Quality{
 		},
 		Required: &QualityRequired{
 			OneOf: &QualityRequiredOneOf{
-				Quality: []interface{}{"Aspected Magician", "Enchanter", "Explorer", "Apprentice", "Aware", "Adept", "Magician", "Mystic Adept", "Infected: Mutaqua", "Infected: Nosferatu", "Infected: Wendigo"},
+				Quality: []string{"Aspected Magician", "Enchanter", "Explorer", "Apprentice", "Aware", "Adept", "Magician", "Mystic Adept", "Infected: Mutaqua", "Infected: Nosferatu", "Infected: Wendigo"},
 			},
 		},
 		Page: "85",
@@ -1441,7 +1441,7 @@ var DataQualities = map[string]Quality{
 		},
 		Forbidden: &QualityForbidden{
 			OneOf: &QualityForbiddenOneOf{
-				Quality: []interface{}{"Resistance to Pathogens", "Resistance to Toxins", "Resistance to Pathogens and Toxins", "Natural Immunity (Natural)", "Natural Immunity (Synthetic)"},
+				Quality: []string{"Resistance to Pathogens", "Resistance to Toxins", "Resistance to Pathogens and Toxins", "Natural Immunity (Natural)", "Natural Immunity (Synthetic)"},
 			},
 		},
 		Page: "87",
@@ -1454,7 +1454,7 @@ var DataQualities = map[string]Quality{
 		Bonus:    nil,
 		Required: &QualityRequired{
 			OneOf: &QualityRequiredOneOf{
-				Quality: []interface{}{"Adept", "Apprentice", "Aspected Magician", "Enchanter", "Explorer", "Magician", "Mystic Adept"},
+				Quality: []string{"Adept", "Apprentice", "Aspected Magician", "Enchanter", "Explorer", "Magician", "Mystic Adept"},
 			},
 		},
 		Page:         "131",
@@ -1478,12 +1478,12 @@ var DataQualities = map[string]Quality{
 		},
 		Required: &QualityRequired{
 			OneOf: &QualityRequiredOneOf{
-				Quality: []interface{}{"Adept", "Mystic Adept"},
+				Quality: []string{"Adept", "Mystic Adept"},
 			},
 		},
 		Forbidden: &QualityForbidden{
 			OneOf: &QualityForbiddenOneOf{
-				Quality: []interface{}{"The Artist's Way", "The Athlete's Way", "The Beast's Way", "The Burnout's Way", "The Invisible Way", "The Magician's Way", "The Speaker's Way", "The Spiritual Way", "The Twisted Way", "The Warrior's Way"},
+				Quality: []string{"The Artist's Way", "The Athlete's Way", "The Beast's Way", "The Burnout's Way", "The Invisible Way", "The Magician's Way", "The Speaker's Way", "The Spiritual Way", "The Twisted Way", "The Warrior's Way"},
 			},
 		},
 		Page:         "176",
@@ -1499,12 +1499,12 @@ var DataQualities = map[string]Quality{
 		},
 		Required: &QualityRequired{
 			OneOf: &QualityRequiredOneOf{
-				Quality: []interface{}{"Adept", "Mystic Adept"},
+				Quality: []string{"Adept", "Mystic Adept"},
 			},
 		},
 		Forbidden: &QualityForbidden{
 			OneOf: &QualityForbiddenOneOf{
-				Quality: []interface{}{"The Artisan's Way", "The Athlete's Way", "The Beast's Way", "The Burnout's Way", "The Invisible Way", "The Magician's Way", "The Speaker's Way", "The Spiritual Way", "The Twisted Way", "The Warrior's Way"},
+				Quality: []string{"The Artisan's Way", "The Athlete's Way", "The Beast's Way", "The Burnout's Way", "The Invisible Way", "The Magician's Way", "The Speaker's Way", "The Spiritual Way", "The Twisted Way", "The Warrior's Way"},
 			},
 		},
 		Page:         "176",
@@ -1520,12 +1520,12 @@ var DataQualities = map[string]Quality{
 		},
 		Required: &QualityRequired{
 			OneOf: &QualityRequiredOneOf{
-				Quality: []interface{}{"Adept", "Mystic Adept"},
+				Quality: []string{"Adept", "Mystic Adept"},
 			},
 		},
 		Forbidden: &QualityForbidden{
 			OneOf: &QualityForbiddenOneOf{
-				Quality: []interface{}{"The Artist's Way", "The Artisan's Way", "The Beast's Way", "The Burnout's Way", "The Invisible Way", "The Magician's Way", "The Speaker's Way", "The Spiritual Way", "The Twisted Way", "The Warrior's Way"},
+				Quality: []string{"The Artist's Way", "The Artisan's Way", "The Beast's Way", "The Burnout's Way", "The Invisible Way", "The Magician's Way", "The Speaker's Way", "The Spiritual Way", "The Twisted Way", "The Warrior's Way"},
 			},
 		},
 		Page:         "176",
@@ -1540,16 +1540,16 @@ var DataQualities = map[string]Quality{
 			SpecificSkill: SpecificSkillBonus{
 				Name: "Animal Handling", Bonus: 1,
 			},
-			FreeQuality: "ced3fecf-2277-4b20-b1e0-894162ca9ae2",
+			FreeQuality: []string{"ced3fecf-2277-4b20-b1e0-894162ca9ae2"},
 		},
 		Required: &QualityRequired{
 			OneOf: &QualityRequiredOneOf{
-				Quality: []interface{}{"Adept", "Mystic Adept"},
+				Quality: []string{"Adept", "Mystic Adept"},
 			},
 		},
 		Forbidden: &QualityForbidden{
 			OneOf: &QualityForbiddenOneOf{
-				Quality: []interface{}{"The Artisan's Way", "The Athlete's Way", "The Artist's Way", "The Burnout's Way", "The Invisible Way", "The Magician's Way", "The Speaker's Way", "The Spiritual Way", "The Twisted Way", "The Warrior's Way"},
+				Quality: []string{"The Artisan's Way", "The Athlete's Way", "The Artist's Way", "The Burnout's Way", "The Invisible Way", "The Magician's Way", "The Speaker's Way", "The Spiritual Way", "The Twisted Way", "The Warrior's Way"},
 			},
 		},
 		Page:         "176",
@@ -1564,12 +1564,12 @@ var DataQualities = map[string]Quality{
 		Bonus:    nil,
 		Required: &QualityRequired{
 			OneOf: &QualityRequiredOneOf{
-				Quality: []interface{}{"Adept", "Mystic Adept"},
+				Quality: []string{"Adept", "Mystic Adept"},
 			},
 		},
 		Forbidden: &QualityForbidden{
 			OneOf: &QualityForbiddenOneOf{
-				Quality: []interface{}{"The Artisan's Way", "The Athlete's Way", "The Beast's Way", "The Artist's Way", "The Invisible Way", "The Magician's Way", "The Speaker's Way", "The Spiritual Way", "The Twisted Way", "The Warrior's Way"},
+				Quality: []string{"The Artisan's Way", "The Athlete's Way", "The Beast's Way", "The Artist's Way", "The Invisible Way", "The Magician's Way", "The Speaker's Way", "The Spiritual Way", "The Twisted Way", "The Warrior's Way"},
 			},
 		},
 		Page:         "177",
@@ -1585,12 +1585,12 @@ var DataQualities = map[string]Quality{
 		},
 		Required: &QualityRequired{
 			OneOf: &QualityRequiredOneOf{
-				Quality: []interface{}{"Adept", "Mystic Adept"},
+				Quality: []string{"Adept", "Mystic Adept"},
 			},
 		},
 		Forbidden: &QualityForbidden{
 			OneOf: &QualityForbiddenOneOf{
-				Quality: []interface{}{"The Artisan's Way", "The Athlete's Way", "The Beast's Way", "The Burnout's Way", "The Artist's Way", "The Magician's Way", "The Speaker's Way", "The Spiritual Way", "The Twisted Way", "The Warrior's Way"},
+				Quality: []string{"The Artisan's Way", "The Athlete's Way", "The Beast's Way", "The Burnout's Way", "The Artist's Way", "The Magician's Way", "The Speaker's Way", "The Spiritual Way", "The Twisted Way", "The Warrior's Way"},
 			},
 		},
 		Page:         "177",
@@ -1606,12 +1606,12 @@ var DataQualities = map[string]Quality{
 		},
 		Required: &QualityRequired{
 			OneOf: &QualityRequiredOneOf{
-				Quality: []interface{}{"Adept", "Mystic Adept"},
+				Quality: []string{"Adept", "Mystic Adept"},
 			},
 		},
 		Forbidden: &QualityForbidden{
 			OneOf: &QualityForbiddenOneOf{
-				Quality: []interface{}{"The Artisan's Way", "The Athlete's Way", "The Beast's Way", "The Burnout's Way", "The Invisible Way", "The Artist's Way", "The Speaker's Way", "The Spiritual Way", "The Twisted Way", "The Warrior's Way"},
+				Quality: []string{"The Artisan's Way", "The Athlete's Way", "The Beast's Way", "The Burnout's Way", "The Invisible Way", "The Artist's Way", "The Speaker's Way", "The Spiritual Way", "The Twisted Way", "The Warrior's Way"},
 			},
 		},
 		Page:         "178",
@@ -1627,12 +1627,12 @@ var DataQualities = map[string]Quality{
 		},
 		Required: &QualityRequired{
 			OneOf: &QualityRequiredOneOf{
-				Quality: []interface{}{"Adept", "Mystic Adept"},
+				Quality: []string{"Adept", "Mystic Adept"},
 			},
 		},
 		Forbidden: &QualityForbidden{
 			OneOf: &QualityForbiddenOneOf{
-				Quality: []interface{}{"The Artisan's Way", "The Athlete's Way", "The Beast's Way", "The Burnout's Way", "The Invisible Way", "The Magician's Way", "The Artist's Way", "The Spiritual Way", "The Twisted Way", "The Warrior's Way"},
+				Quality: []string{"The Artisan's Way", "The Athlete's Way", "The Beast's Way", "The Burnout's Way", "The Invisible Way", "The Magician's Way", "The Artist's Way", "The Spiritual Way", "The Twisted Way", "The Warrior's Way"},
 			},
 		},
 		Page:         "178",
@@ -1647,16 +1647,16 @@ var DataQualities = map[string]Quality{
 			SkillGroup: SkillGroupBonus{
 				Name: "Conjuring", Bonus: "1", Condition: "",
 			},
-			FreeQuality: "ced3fecf-2277-4b20-b1e0-894162ca9ae2",
+			FreeQuality: []string{"ced3fecf-2277-4b20-b1e0-894162ca9ae2"},
 		},
 		Required: &QualityRequired{
 			OneOf: &QualityRequiredOneOf{
-				Quality: []interface{}{"Adept", "Mystic Adept"},
+				Quality: []string{"Adept", "Mystic Adept"},
 			},
 		},
 		Forbidden: &QualityForbidden{
 			OneOf: &QualityForbiddenOneOf{
-				Quality: []interface{}{"The Artisan's Way", "The Artist's Way", "The Athlete's Way", "The Beast's Way", "The Burnout's Way", "The Invisible Way", "The Magician's Way", "The Speaker's Way", "The Twisted Way", "The Warrior's Way"},
+				Quality: []string{"The Artisan's Way", "The Artist's Way", "The Athlete's Way", "The Beast's Way", "The Burnout's Way", "The Invisible Way", "The Magician's Way", "The Speaker's Way", "The Twisted Way", "The Warrior's Way"},
 			},
 		},
 		Page:         "178",
@@ -1669,12 +1669,12 @@ var DataQualities = map[string]Quality{
 		Source:   "SG",
 		Required: &QualityRequired{
 			OneOf: &QualityRequiredOneOf{
-				Quality: []interface{}{"Adept", "Apprentice", "Aspected Magician", "Enchanter", "Explorer", "Magician", "Mystic Adept"},
+				Quality: []string{"Adept", "Apprentice", "Aspected Magician", "Enchanter", "Explorer", "Magician", "Mystic Adept"},
 			},
 		},
 		Forbidden: &QualityForbidden{
 			OneOf: &QualityForbiddenOneOf{
-				Quality: []interface{}{"The Artisan's Way", "The Artist's Way", "The Athlete's Way", "The Beast's Way", "The Burnout's Way", "The Invisible Way", "The Magician's Way", "The Speaker's Way", "The Spiritual Way", "The Warrior's Way"},
+				Quality: []string{"The Artisan's Way", "The Artist's Way", "The Athlete's Way", "The Beast's Way", "The Burnout's Way", "The Invisible Way", "The Magician's Way", "The Speaker's Way", "The Spiritual Way", "The Warrior's Way"},
 			},
 		},
 		Page:         "85",
@@ -1690,12 +1690,12 @@ var DataQualities = map[string]Quality{
 		},
 		Required: &QualityRequired{
 			OneOf: &QualityRequiredOneOf{
-				Quality: []interface{}{"Adept", "Mystic Adept"},
+				Quality: []string{"Adept", "Mystic Adept"},
 			},
 		},
 		Forbidden: &QualityForbidden{
 			OneOf: &QualityForbiddenOneOf{
-				Quality: []interface{}{"The Artisan's Way", "The Artist's Way", "The Athlete's Way", "The Beast's Way", "The Burnout's Way", "The Invisible Way", "The Magician's Way", "The Speaker's Way", "The Spiritual Way", "The Twisted Way"},
+				Quality: []string{"The Artisan's Way", "The Artist's Way", "The Athlete's Way", "The Beast's Way", "The Burnout's Way", "The Invisible Way", "The Magician's Way", "The Speaker's Way", "The Spiritual Way", "The Twisted Way"},
 			},
 		},
 		Page:         "178",
@@ -1791,7 +1791,7 @@ var DataQualities = map[string]Quality{
 		},
 		Forbidden: &QualityForbidden{
 			OneOf: &QualityForbiddenOneOf{
-				Quality: []interface{}{"Changeling (Class II SURGE)", "Changeling (Class III SURGE)", "Latent Dracomorphosis"},
+				Quality: []string{"Changeling (Class II SURGE)", "Changeling (Class III SURGE)", "Latent Dracomorphosis"},
 			},
 		},
 		Page:              "103",
@@ -1808,7 +1808,7 @@ var DataQualities = map[string]Quality{
 		},
 		Forbidden: &QualityForbidden{
 			OneOf: &QualityForbiddenOneOf{
-				Quality: []interface{}{"Changeling (Class I SURGE)", "Changeling (Class III SURGE)", "Latent Dracomorphosis"},
+				Quality: []string{"Changeling (Class I SURGE)", "Changeling (Class III SURGE)", "Latent Dracomorphosis"},
 			},
 		},
 		Page:              "103",
@@ -1825,7 +1825,7 @@ var DataQualities = map[string]Quality{
 		},
 		Forbidden: &QualityForbidden{
 			OneOf: &QualityForbiddenOneOf{
-				Quality: []interface{}{"Changeling (Class I SURGE)", "Changeling (Class II SURGE)", "Latent Dracomorphosis"},
+				Quality: []string{"Changeling (Class I SURGE)", "Changeling (Class II SURGE)", "Latent Dracomorphosis"},
 			},
 		},
 		Page:              "103",
@@ -1930,7 +1930,7 @@ var DataQualities = map[string]Quality{
 		},
 		Required: &QualityRequired{
 			OneOf: &QualityRequiredOneOf{
-				Quality: []interface{}{"SINner (Criminal)", "SINner (National)", "SINner (Corporate Limited)", "SINner (Corporate)"},
+				Quality: []string{"SINner (Criminal)", "SINner (National)", "SINner (Corporate Limited)", "SINner (Corporate)"},
 			},
 		},
 		Page: "146",
@@ -1972,7 +1972,7 @@ var DataQualities = map[string]Quality{
 		},
 		Forbidden: &QualityForbidden{
 			OneOf: &QualityForbiddenOneOf{
-				Quality: []interface{}{"Fame: National", "Fame: Megacorporate", "Fame: Global"},
+				Quality: []string{"Fame: National", "Fame: Megacorporate", "Fame: Global"},
 			},
 		},
 		Page: "146",
@@ -1994,7 +1994,7 @@ var DataQualities = map[string]Quality{
 		},
 		Forbidden: &QualityForbidden{
 			OneOf: &QualityForbiddenOneOf{
-				Quality: []interface{}{"Fame: Local", "Fame: Megacorporate", "Fame: Global"},
+				Quality: []string{"Fame: Local", "Fame: Megacorporate", "Fame: Global"},
 			},
 		},
 		Page: "146",
@@ -2016,7 +2016,7 @@ var DataQualities = map[string]Quality{
 		},
 		Forbidden: &QualityForbidden{
 			OneOf: &QualityForbiddenOneOf{
-				Quality: []interface{}{"Fame: National", "Fame: Local", "Fame: Global"},
+				Quality: []string{"Fame: National", "Fame: Local", "Fame: Global"},
 			},
 		},
 		Page: "147",
@@ -2036,7 +2036,7 @@ var DataQualities = map[string]Quality{
 		},
 		Forbidden: &QualityForbidden{
 			OneOf: &QualityForbiddenOneOf{
-				Quality: []interface{}{"Fame: National", "Fame: Megacorporate", "Fame: Local"},
+				Quality: []string{"Fame: National", "Fame: Megacorporate", "Fame: Local"},
 			},
 		},
 		Page: "147",
@@ -2209,7 +2209,7 @@ var DataQualities = map[string]Quality{
 		Bonus:    nil,
 		Required: &QualityRequired{
 			OneOf: &QualityRequiredOneOf{
-				Quality: []interface{}{"SINner (National)", "SINner (Corporate)"},
+				Quality: []string{"SINner (National)", "SINner (Corporate)"},
 			},
 		},
 		Page: "149",
@@ -2331,7 +2331,7 @@ var DataQualities = map[string]Quality{
 		},
 		Forbidden: &QualityForbidden{
 			OneOf: &QualityForbiddenOneOf{
-				Quality: "Legendary Rep",
+				Quality: []string{"Legendary Rep"},
 			},
 		},
 		Page: "149",
@@ -2347,7 +2347,7 @@ var DataQualities = map[string]Quality{
 		},
 		Forbidden: &QualityForbidden{
 			OneOf: &QualityForbiddenOneOf{
-				Quality: "Solid Rep",
+				Quality: []string{"Solid Rep"},
 			},
 		},
 		Page: "149",
@@ -2377,7 +2377,7 @@ var DataQualities = map[string]Quality{
 		Bonus:    nil,
 		Required: &QualityRequired{
 			OneOf: &QualityRequiredOneOf{
-				Quality: []interface{}{"Aspected Magician", "Enchanter", "Explorer", "Apprentice", "Magician", "Adept", "Mystic Adept", "Infected: Mutaqua", "Infected: Nosferatu", "Infected: Wendigo"},
+				Quality: []string{"Aspected Magician", "Enchanter", "Explorer", "Apprentice", "Magician", "Adept", "Mystic Adept", "Infected: Mutaqua", "Infected: Nosferatu", "Infected: Wendigo"},
 			},
 		},
 		Page: "150",
@@ -2440,12 +2440,12 @@ var DataQualities = map[string]Quality{
 		},
 		Required: &QualityRequired{
 			OneOf: &QualityRequiredOneOf{
-				Quality: []interface{}{"SINner (National)", "SINner (Corporate)"},
+				Quality: []string{"SINner (National)", "SINner (Corporate)"},
 			},
 		},
 		Forbidden: &QualityForbidden{
 			OneOf: &QualityForbiddenOneOf{
-				Quality: []interface{}{"Trust Fund II", "Trust Fund III", "Trust Fund IV"},
+				Quality: []string{"Trust Fund II", "Trust Fund III", "Trust Fund IV"},
 			},
 		},
 		Page: "151",
@@ -2460,12 +2460,12 @@ var DataQualities = map[string]Quality{
 		},
 		Required: &QualityRequired{
 			OneOf: &QualityRequiredOneOf{
-				Quality: []interface{}{"SINner (National)", "SINner (Corporate)"},
+				Quality: []string{"SINner (National)", "SINner (Corporate)"},
 			},
 		},
 		Forbidden: &QualityForbidden{
 			OneOf: &QualityForbiddenOneOf{
-				Quality: []interface{}{"Trust Fund I", "Trust Fund III", "Trust Fund IV"},
+				Quality: []string{"Trust Fund I", "Trust Fund III", "Trust Fund IV"},
 			},
 		},
 		Page: "151",
@@ -2480,12 +2480,12 @@ var DataQualities = map[string]Quality{
 		},
 		Required: &QualityRequired{
 			OneOf: &QualityRequiredOneOf{
-				Quality: []interface{}{"SINner (National)", "SINner (Corporate)"},
+				Quality: []string{"SINner (National)", "SINner (Corporate)"},
 			},
 		},
 		Forbidden: &QualityForbidden{
 			OneOf: &QualityForbiddenOneOf{
-				Quality: []interface{}{"Trust Fund I", "Trust Fund II", "Trust Fund IV"},
+				Quality: []string{"Trust Fund I", "Trust Fund II", "Trust Fund IV"},
 			},
 		},
 		Page: "151",
@@ -2500,12 +2500,12 @@ var DataQualities = map[string]Quality{
 		},
 		Required: &QualityRequired{
 			OneOf: &QualityRequiredOneOf{
-				Quality: []interface{}{"SINner (National)", "SINner (Corporate)"},
+				Quality: []string{"SINner (National)", "SINner (Corporate)"},
 			},
 		},
 		Forbidden: &QualityForbidden{
 			OneOf: &QualityForbiddenOneOf{
-				Quality: []interface{}{"Trust Fund I", "Trust Fund II", "Trust Fund III"},
+				Quality: []string{"Trust Fund I", "Trust Fund II", "Trust Fund III"},
 			},
 		},
 		Page: "151",
@@ -2562,7 +2562,7 @@ var DataQualities = map[string]Quality{
 		},
 		Required: &QualityRequired{
 			OneOf: &QualityRequiredOneOf{
-				Quality: []interface{}{"Aspected Magician", "Magician"},
+				Quality: []string{"Aspected Magician", "Magician"},
 			},
 		},
 		Page: "151",
@@ -2575,7 +2575,7 @@ var DataQualities = map[string]Quality{
 		Bonus:    nil,
 		Forbidden: &QualityForbidden{
 			OneOf: &QualityForbiddenOneOf{
-				Quality: "Albinism II",
+				Quality: []string{"Albinism II"},
 			},
 		},
 		Page: "151",
@@ -2588,7 +2588,7 @@ var DataQualities = map[string]Quality{
 		Bonus:    nil,
 		Forbidden: &QualityForbidden{
 			OneOf: &QualityForbiddenOneOf{
-				Quality: "Albinism I",
+				Quality: []string{"Albinism I"},
 			},
 		},
 		Page: "151",
@@ -2600,7 +2600,7 @@ var DataQualities = map[string]Quality{
 		Source:   "RF",
 		Forbidden: &QualityForbidden{
 			OneOf: &QualityForbiddenOneOf{
-				Quality: "Amnesia (Neural Deletion)",
+				Quality: []string{"Amnesia (Neural Deletion)"},
 			},
 		},
 		Page: "152",
@@ -2612,7 +2612,7 @@ var DataQualities = map[string]Quality{
 		Source:   "RF",
 		Forbidden: &QualityForbidden{
 			OneOf: &QualityForbiddenOneOf{
-				Quality: "Amnesia (Surface Loss)",
+				Quality: []string{"Amnesia (Surface Loss)"},
 			},
 		},
 		Page: "152",
@@ -2652,7 +2652,7 @@ var DataQualities = map[string]Quality{
 		Bonus:    nil,
 		Forbidden: &QualityForbidden{
 			OneOf: &QualityForbiddenOneOf{
-				Quality: "Reduced Sense (Sight)",
+				Quality: []string{"Reduced Sense (Sight)"},
 			},
 		},
 		Page:         "153",
@@ -2706,7 +2706,7 @@ var DataQualities = map[string]Quality{
 		Bonus:    nil,
 		Forbidden: &QualityForbidden{
 			OneOf: &QualityForbiddenOneOf{
-				Quality: []interface{}{"Creature of Comfort (High)", "Creature of Comfort (Luxury)"},
+				Quality: []string{"Creature of Comfort (High)", "Creature of Comfort (Luxury)"},
 			},
 		},
 		Page: "153",
@@ -2719,7 +2719,7 @@ var DataQualities = map[string]Quality{
 		Bonus:    nil,
 		Forbidden: &QualityForbidden{
 			OneOf: &QualityForbiddenOneOf{
-				Quality: []interface{}{"Creature of Comfort (Middle)", "Creature of Comfort (Luxury)"},
+				Quality: []string{"Creature of Comfort (Middle)", "Creature of Comfort (Luxury)"},
 			},
 		},
 		Page: "153",
@@ -2732,7 +2732,7 @@ var DataQualities = map[string]Quality{
 		Bonus:    nil,
 		Forbidden: &QualityForbidden{
 			OneOf: &QualityForbiddenOneOf{
-				Quality: []interface{}{"Creature of Comfort (Middle)", "Creature of Comfort (High)"},
+				Quality: []string{"Creature of Comfort (Middle)", "Creature of Comfort (High)"},
 			},
 		},
 		Page: "153",
@@ -2747,7 +2747,7 @@ var DataQualities = map[string]Quality{
 		},
 		Forbidden: &QualityForbidden{
 			OneOf: &QualityForbiddenOneOf{
-				Quality: []interface{}{"Day Job (20 hrs)", "Day Job (40 hrs)"},
+				Quality: []string{"Day Job (20 hrs)", "Day Job (40 hrs)"},
 			},
 		},
 		Page: "154",
@@ -2762,7 +2762,7 @@ var DataQualities = map[string]Quality{
 		},
 		Forbidden: &QualityForbidden{
 			OneOf: &QualityForbiddenOneOf{
-				Quality: []interface{}{"Day Job (10 hrs)", "Day Job (40 hrs)"},
+				Quality: []string{"Day Job (10 hrs)", "Day Job (40 hrs)"},
 			},
 		},
 		Page: "154",
@@ -2777,7 +2777,7 @@ var DataQualities = map[string]Quality{
 		},
 		Forbidden: &QualityForbidden{
 			OneOf: &QualityForbiddenOneOf{
-				Quality: []interface{}{"Day Job (10 hrs)", "Day Job (20 hrs)"},
+				Quality: []string{"Day Job (10 hrs)", "Day Job (20 hrs)"},
 			},
 		},
 		Page: "154",
@@ -2790,7 +2790,7 @@ var DataQualities = map[string]Quality{
 		Bonus:    nil,
 		Forbidden: &QualityForbidden{
 			OneOf: &QualityForbiddenOneOf{
-				Quality: "Reduced Sense (Hearing)",
+				Quality: []string{"Reduced Sense (Hearing)"},
 			},
 		},
 		Page: "154",
@@ -2967,7 +2967,7 @@ var DataQualities = map[string]Quality{
 		},
 		Forbidden: &QualityForbidden{
 			OneOf: &QualityForbiddenOneOf{
-				Quality: "Oblivious II",
+				Quality: []string{"Oblivious II"},
 			},
 		},
 		Page: "157",
@@ -2984,7 +2984,7 @@ var DataQualities = map[string]Quality{
 		},
 		Forbidden: &QualityForbidden{
 			OneOf: &QualityForbiddenOneOf{
-				Quality: "Oblivious I",
+				Quality: []string{"Oblivious I"},
 			},
 		},
 		Page: "157",
@@ -2997,7 +2997,7 @@ var DataQualities = map[string]Quality{
 		Bonus:    nil,
 		Forbidden: &QualityForbidden{
 			OneOf: &QualityForbiddenOneOf{
-				Quality: "Pacifist II",
+				Quality: []string{"Pacifist II"},
 			},
 		},
 		Page: "157",
@@ -3010,7 +3010,7 @@ var DataQualities = map[string]Quality{
 		Bonus:    nil,
 		Forbidden: &QualityForbidden{
 			OneOf: &QualityForbiddenOneOf{
-				Quality: "Pacifist I",
+				Quality: []string{"Pacifist I"},
 			},
 		},
 		Page: "157",
@@ -3294,7 +3294,7 @@ var DataQualities = map[string]Quality{
 		},
 		Forbidden: &QualityForbidden{
 			OneOf: &QualityForbiddenOneOf{
-				Quality: "Erased",
+				Quality: []string{"Erased"},
 			},
 		},
 		Page:     "158",
@@ -3348,7 +3348,7 @@ var DataQualities = map[string]Quality{
 		},
 		Forbidden: &QualityForbidden{
 			OneOf: &QualityForbiddenOneOf{
-				Quality: "Deaf",
+				Quality: []string{"Deaf"},
 			},
 		},
 		Page: "159",
@@ -3365,7 +3365,7 @@ var DataQualities = map[string]Quality{
 		},
 		Forbidden: &QualityForbidden{
 			OneOf: &QualityForbiddenOneOf{
-				Quality: "Blind",
+				Quality: []string{"Blind"},
 			},
 		},
 		Page: "159",
@@ -3382,7 +3382,7 @@ var DataQualities = map[string]Quality{
 		},
 		Required: &QualityRequired{
 			OneOf: &QualityRequiredOneOf{
-				Quality: []interface{}{"Magician", "Aware", "Aspected Magician", "Enchanter", "Explorer", "Mystic Adept", "Apprentice", "Infected: Mutaqua", "Infected: Nosferatu", "Infected: Wendigo"},
+				Quality: []string{"Magician", "Aware", "Aspected Magician", "Enchanter", "Explorer", "Mystic Adept", "Apprentice", "Infected: Mutaqua", "Infected: Nosferatu", "Infected: Wendigo"},
 			},
 		},
 		Page: "159",
@@ -3489,7 +3489,7 @@ var DataQualities = map[string]Quality{
 		Bonus:    nil,
 		Required: &QualityRequired{
 			OneOf: &QualityRequiredOneOf{
-				Quality: []interface{}{"Changeling (Class I SURGE)", "Changeling (Class II SURGE)", "Changeling (Class III SURGE)"},
+				Quality: []string{"Changeling (Class I SURGE)", "Changeling (Class II SURGE)", "Changeling (Class III SURGE)"},
 			},
 		},
 		Page:      "111",
@@ -3503,12 +3503,12 @@ var DataQualities = map[string]Quality{
 		Bonus:    nil,
 		Required: &QualityRequired{
 			OneOf: &QualityRequiredOneOf{
-				Quality: []interface{}{"Changeling (Class I SURGE)", "Changeling (Class II SURGE)", "Changeling (Class III SURGE)"},
+				Quality: []string{"Changeling (Class I SURGE)", "Changeling (Class II SURGE)", "Changeling (Class III SURGE)"},
 			},
 		},
 		Forbidden: &QualityForbidden{
 			OneOf: &QualityForbiddenOneOf{
-				Quality: []interface{}{"Feathers", "Scales"},
+				Quality: []string{"Feathers", "Scales"},
 			},
 		},
 		Page:      "111",
@@ -3524,12 +3524,12 @@ var DataQualities = map[string]Quality{
 		},
 		Required: &QualityRequired{
 			OneOf: &QualityRequiredOneOf{
-				Quality: []interface{}{"Changeling (Class I SURGE)", "Changeling (Class II SURGE)", "Changeling (Class III SURGE)"},
+				Quality: []string{"Changeling (Class I SURGE)", "Changeling (Class II SURGE)", "Changeling (Class III SURGE)"},
 			},
 		},
 		Forbidden: &QualityForbidden{
 			OneOf: &QualityForbiddenOneOf{
-				Quality: []interface{}{"Feathers", "Scales"},
+				Quality: []string{"Feathers", "Scales"},
 			},
 		},
 		Page:      "111",
@@ -3543,12 +3543,12 @@ var DataQualities = map[string]Quality{
 		Bonus:    nil,
 		Required: &QualityRequired{
 			OneOf: &QualityRequiredOneOf{
-				Quality: []interface{}{"Changeling (Class I SURGE)", "Changeling (Class II SURGE)", "Changeling (Class III SURGE)"},
+				Quality: []string{"Changeling (Class I SURGE)", "Changeling (Class II SURGE)", "Changeling (Class III SURGE)"},
 			},
 		},
 		Forbidden: &QualityForbidden{
 			OneOf: &QualityForbiddenOneOf{
-				Quality: []interface{}{"Feathers", "Scales"},
+				Quality: []string{"Feathers", "Scales"},
 			},
 		},
 		Page:      "111",
@@ -3565,12 +3565,12 @@ var DataQualities = map[string]Quality{
 		},
 		Required: &QualityRequired{
 			OneOf: &QualityRequiredOneOf{
-				Quality: []interface{}{"Changeling (Class I SURGE)", "Changeling (Class II SURGE)", "Changeling (Class III SURGE)"},
+				Quality: []string{"Changeling (Class I SURGE)", "Changeling (Class II SURGE)", "Changeling (Class III SURGE)"},
 			},
 		},
 		Forbidden: &QualityForbidden{
 			OneOf: &QualityForbiddenOneOf{
-				Quality: "Magic Resistance",
+				Quality: []string{"Magic Resistance"},
 			},
 		},
 		Page:      "111",
@@ -3588,7 +3588,7 @@ var DataQualities = map[string]Quality{
 		},
 		Required: &QualityRequired{
 			OneOf: &QualityRequiredOneOf{
-				Quality: []interface{}{"Changeling (Class I SURGE)", "Changeling (Class II SURGE)", "Changeling (Class III SURGE)"},
+				Quality: []string{"Changeling (Class I SURGE)", "Changeling (Class II SURGE)", "Changeling (Class III SURGE)"},
 			},
 		},
 		Page:      "112",
@@ -3605,7 +3605,7 @@ var DataQualities = map[string]Quality{
 		},
 		Required: &QualityRequired{
 			OneOf: &QualityRequiredOneOf{
-				Quality: []interface{}{"Changeling (Class I SURGE)", "Changeling (Class II SURGE)", "Changeling (Class III SURGE)"},
+				Quality: []string{"Changeling (Class I SURGE)", "Changeling (Class II SURGE)", "Changeling (Class III SURGE)"},
 			},
 		},
 		Page:      "112",
@@ -3622,7 +3622,7 @@ var DataQualities = map[string]Quality{
 		},
 		Required: &QualityRequired{
 			OneOf: &QualityRequiredOneOf{
-				Quality: []interface{}{"Changeling (Class I SURGE)", "Changeling (Class II SURGE)", "Changeling (Class III SURGE)"},
+				Quality: []string{"Changeling (Class I SURGE)", "Changeling (Class II SURGE)", "Changeling (Class III SURGE)"},
 			},
 		},
 		Page:      "112",
@@ -3637,7 +3637,7 @@ var DataQualities = map[string]Quality{
 		Bonus:    nil,
 		Required: &QualityRequired{
 			OneOf: &QualityRequiredOneOf{
-				Quality: []interface{}{"Changeling (Class I SURGE)", "Changeling (Class II SURGE)", "Changeling (Class III SURGE)"},
+				Quality: []string{"Changeling (Class I SURGE)", "Changeling (Class II SURGE)", "Changeling (Class III SURGE)"},
 			},
 		},
 		Page:      "112",
@@ -3651,7 +3651,7 @@ var DataQualities = map[string]Quality{
 		Bonus:    nil,
 		Required: &QualityRequired{
 			OneOf: &QualityRequiredOneOf{
-				Quality: []interface{}{"Changeling (Class I SURGE)", "Changeling (Class II SURGE)", "Changeling (Class III SURGE)"},
+				Quality: []string{"Changeling (Class I SURGE)", "Changeling (Class II SURGE)", "Changeling (Class III SURGE)"},
 			},
 		},
 		Page:      "112",
@@ -3668,7 +3668,7 @@ var DataQualities = map[string]Quality{
 		},
 		Required: &QualityRequired{
 			OneOf: &QualityRequiredOneOf{
-				Quality: []interface{}{"Changeling (Class I SURGE)", "Changeling (Class II SURGE)", "Changeling (Class III SURGE)"},
+				Quality: []string{"Changeling (Class I SURGE)", "Changeling (Class II SURGE)", "Changeling (Class III SURGE)"},
 			},
 		},
 		Page:      "112",
@@ -3682,7 +3682,7 @@ var DataQualities = map[string]Quality{
 		Bonus:    nil,
 		Required: &QualityRequired{
 			OneOf: &QualityRequiredOneOf{
-				Quality: []interface{}{"Changeling (Class I SURGE)", "Changeling (Class II SURGE)", "Changeling (Class III SURGE)"},
+				Quality: []string{"Changeling (Class I SURGE)", "Changeling (Class II SURGE)", "Changeling (Class III SURGE)"},
 			},
 		},
 		Page:      "111",
@@ -3696,7 +3696,7 @@ var DataQualities = map[string]Quality{
 		Bonus:    nil,
 		Required: &QualityRequired{
 			OneOf: &QualityRequiredOneOf{
-				Quality: []interface{}{"Changeling (Class I SURGE)", "Changeling (Class II SURGE)", "Changeling (Class III SURGE)"},
+				Quality: []string{"Changeling (Class I SURGE)", "Changeling (Class II SURGE)", "Changeling (Class III SURGE)"},
 			},
 		},
 		Page:      "112",
@@ -3710,7 +3710,7 @@ var DataQualities = map[string]Quality{
 		Bonus:    nil,
 		Required: &QualityRequired{
 			OneOf: &QualityRequiredOneOf{
-				Quality: []interface{}{"Changeling (Class I SURGE)", "Changeling (Class II SURGE)", "Changeling (Class III SURGE)"},
+				Quality: []string{"Changeling (Class I SURGE)", "Changeling (Class II SURGE)", "Changeling (Class III SURGE)"},
 			},
 		},
 		Page:      "113",
@@ -3724,7 +3724,7 @@ var DataQualities = map[string]Quality{
 		Bonus:    nil,
 		Required: &QualityRequired{
 			OneOf: &QualityRequiredOneOf{
-				Quality: []interface{}{"Changeling (Class I SURGE)", "Changeling (Class II SURGE)", "Changeling (Class III SURGE)"},
+				Quality: []string{"Changeling (Class I SURGE)", "Changeling (Class II SURGE)", "Changeling (Class III SURGE)"},
 			},
 		},
 		Page:      "113",
@@ -3741,12 +3741,12 @@ var DataQualities = map[string]Quality{
 		},
 		Required: &QualityRequired{
 			OneOf: &QualityRequiredOneOf{
-				Quality: []interface{}{"Changeling (Class I SURGE)", "Changeling (Class II SURGE)", "Changeling (Class III SURGE)"},
+				Quality: []string{"Changeling (Class I SURGE)", "Changeling (Class II SURGE)", "Changeling (Class III SURGE)"},
 			},
 		},
 		Forbidden: &QualityForbidden{
 			OneOf: &QualityForbiddenOneOf{
-				Quality: "Satyr Legs",
+				Quality: []string{"Satyr Legs"},
 			},
 		},
 		Page:      "113",
@@ -3760,12 +3760,12 @@ var DataQualities = map[string]Quality{
 		Bonus:    nil,
 		Required: &QualityRequired{
 			OneOf: &QualityRequiredOneOf{
-				Quality: []interface{}{"Changeling (Class I SURGE)", "Changeling (Class II SURGE)", "Changeling (Class III SURGE)"},
+				Quality: []string{"Changeling (Class I SURGE)", "Changeling (Class II SURGE)", "Changeling (Class III SURGE)"},
 			},
 		},
 		Forbidden: &QualityForbidden{
 			OneOf: &QualityForbiddenOneOf{
-				Quality: []interface{}{"Razor Claws", "Retractable Claws"},
+				Quality: []string{"Razor Claws", "Retractable Claws"},
 			},
 		},
 		Page:      "113",
@@ -3780,12 +3780,12 @@ var DataQualities = map[string]Quality{
 		Bonus:    nil,
 		Required: &QualityRequired{
 			OneOf: &QualityRequiredOneOf{
-				Quality: []interface{}{"Changeling (Class I SURGE)", "Changeling (Class II SURGE)", "Changeling (Class III SURGE)"},
+				Quality: []string{"Changeling (Class I SURGE)", "Changeling (Class II SURGE)", "Changeling (Class III SURGE)"},
 			},
 		},
 		Forbidden: &QualityForbidden{
 			OneOf: &QualityForbiddenOneOf{
-				Quality: []interface{}{"Claws", "Retractable Claws"},
+				Quality: []string{"Claws", "Retractable Claws"},
 			},
 		},
 		Page:      "113",
@@ -3800,12 +3800,12 @@ var DataQualities = map[string]Quality{
 		Bonus:    nil,
 		Required: &QualityRequired{
 			OneOf: &QualityRequiredOneOf{
-				Quality: []interface{}{"Changeling (Class I SURGE)", "Changeling (Class II SURGE)", "Changeling (Class III SURGE)"},
+				Quality: []string{"Changeling (Class I SURGE)", "Changeling (Class II SURGE)", "Changeling (Class III SURGE)"},
 			},
 		},
 		Forbidden: &QualityForbidden{
 			OneOf: &QualityForbiddenOneOf{
-				Quality: []interface{}{"Razor Claws", "Claws"},
+				Quality: []string{"Razor Claws", "Claws"},
 			},
 		},
 		Page:      "113",
@@ -3820,12 +3820,12 @@ var DataQualities = map[string]Quality{
 		Bonus:    nil,
 		Required: &QualityRequired{
 			OneOf: &QualityRequiredOneOf{
-				Quality: []interface{}{"Changeling (Class I SURGE)", "Changeling (Class II SURGE)", "Changeling (Class III SURGE)"},
+				Quality: []string{"Changeling (Class I SURGE)", "Changeling (Class II SURGE)", "Changeling (Class III SURGE)"},
 			},
 		},
 		Forbidden: &QualityForbidden{
 			OneOf: &QualityForbiddenOneOf{
-				Quality: "Climate Adaptation (Desert)",
+				Quality: []string{"Climate Adaptation (Desert)"},
 			},
 		},
 		Page:      "113",
@@ -3839,12 +3839,12 @@ var DataQualities = map[string]Quality{
 		Bonus:    nil,
 		Required: &QualityRequired{
 			OneOf: &QualityRequiredOneOf{
-				Quality: []interface{}{"Changeling (Class I SURGE)", "Changeling (Class II SURGE)", "Changeling (Class III SURGE)"},
+				Quality: []string{"Changeling (Class I SURGE)", "Changeling (Class II SURGE)", "Changeling (Class III SURGE)"},
 			},
 		},
 		Forbidden: &QualityForbidden{
 			OneOf: &QualityForbiddenOneOf{
-				Quality: "Climate Adaptation (Arctic)",
+				Quality: []string{"Climate Adaptation (Arctic)"},
 			},
 		},
 		Page:      "113",
@@ -3858,12 +3858,12 @@ var DataQualities = map[string]Quality{
 		Bonus:    nil,
 		Required: &QualityRequired{
 			OneOf: &QualityRequiredOneOf{
-				Quality: []interface{}{"Changeling (Class I SURGE)", "Changeling (Class II SURGE)", "Changeling (Class III SURGE)"},
+				Quality: []string{"Changeling (Class I SURGE)", "Changeling (Class II SURGE)", "Changeling (Class III SURGE)"},
 			},
 		},
 		Forbidden: &QualityForbidden{
 			OneOf: &QualityForbiddenOneOf{
-				Quality: "Natural Venom",
+				Quality: []string{"Natural Venom"},
 			},
 		},
 		Page:      "113",
@@ -3881,12 +3881,12 @@ var DataQualities = map[string]Quality{
 		},
 		Required: &QualityRequired{
 			OneOf: &QualityRequiredOneOf{
-				Quality: []interface{}{"Changeling (Class I SURGE)", "Changeling (Class II SURGE)", "Changeling (Class III SURGE)"},
+				Quality: []string{"Changeling (Class I SURGE)", "Changeling (Class II SURGE)", "Changeling (Class III SURGE)"},
 			},
 		},
 		Forbidden: &QualityForbidden{
 			OneOf: &QualityForbiddenOneOf{
-				Quality: []interface{}{"Dermal Alteration (Blubber)", "Dermal Alteration (Dragon Skin)", "Dermal Alteration (Granite Shell)", "Dermal Alteration (Rhino Hide)"},
+				Quality: []string{"Dermal Alteration (Blubber)", "Dermal Alteration (Dragon Skin)", "Dermal Alteration (Granite Shell)", "Dermal Alteration (Rhino Hide)"},
 			},
 		},
 		Page:      "113",
@@ -3902,12 +3902,12 @@ var DataQualities = map[string]Quality{
 		},
 		Required: &QualityRequired{
 			OneOf: &QualityRequiredOneOf{
-				Quality: []interface{}{"Changeling (Class I SURGE)", "Changeling (Class II SURGE)", "Changeling (Class III SURGE)"},
+				Quality: []string{"Changeling (Class I SURGE)", "Changeling (Class II SURGE)", "Changeling (Class III SURGE)"},
 			},
 		},
 		Forbidden: &QualityForbidden{
 			OneOf: &QualityForbiddenOneOf{
-				Quality: []interface{}{"Dermal Alteration (Bark Skin)", "Dermal Alteration (Dragon Skin)", "Dermal Alteration (Granite Shell)", "Dermal Alteration (Rhino Hide)"},
+				Quality: []string{"Dermal Alteration (Bark Skin)", "Dermal Alteration (Dragon Skin)", "Dermal Alteration (Granite Shell)", "Dermal Alteration (Rhino Hide)"},
 			},
 		},
 		Page:      "112",
@@ -3923,12 +3923,12 @@ var DataQualities = map[string]Quality{
 		},
 		Required: &QualityRequired{
 			OneOf: &QualityRequiredOneOf{
-				Quality: []interface{}{"Changeling (Class I SURGE)", "Changeling (Class II SURGE)", "Changeling (Class III SURGE)"},
+				Quality: []string{"Changeling (Class I SURGE)", "Changeling (Class II SURGE)", "Changeling (Class III SURGE)"},
 			},
 		},
 		Forbidden: &QualityForbidden{
 			OneOf: &QualityForbiddenOneOf{
-				Quality: []interface{}{"Dermal Alteration (Bark Skin)", "Dermal Alteration (Blubber)", "Dermal Alteration (Granite Shell)", "Dermal Alteration (Rhino Hide)"},
+				Quality: []string{"Dermal Alteration (Bark Skin)", "Dermal Alteration (Blubber)", "Dermal Alteration (Granite Shell)", "Dermal Alteration (Rhino Hide)"},
 			},
 		},
 		Page:      "113",
@@ -3946,12 +3946,12 @@ var DataQualities = map[string]Quality{
 		},
 		Required: &QualityRequired{
 			OneOf: &QualityRequiredOneOf{
-				Quality: []interface{}{"Changeling (Class I SURGE)", "Changeling (Class II SURGE)", "Changeling (Class III SURGE)"},
+				Quality: []string{"Changeling (Class I SURGE)", "Changeling (Class II SURGE)", "Changeling (Class III SURGE)"},
 			},
 		},
 		Forbidden: &QualityForbidden{
 			OneOf: &QualityForbiddenOneOf{
-				Quality: []interface{}{"Dermal Alteration (Bark Skin)", "Dermal Alteration (Blubber)", "Dermal Alteration (Dragon Skin)", "Dermal Alteration (Rhino Hide)"},
+				Quality: []string{"Dermal Alteration (Bark Skin)", "Dermal Alteration (Blubber)", "Dermal Alteration (Dragon Skin)", "Dermal Alteration (Rhino Hide)"},
 			},
 		},
 		Page:      "113",
@@ -3969,12 +3969,12 @@ var DataQualities = map[string]Quality{
 		},
 		Required: &QualityRequired{
 			OneOf: &QualityRequiredOneOf{
-				Quality: []interface{}{"Changeling (Class I SURGE)", "Changeling (Class II SURGE)", "Changeling (Class III SURGE)"},
+				Quality: []string{"Changeling (Class I SURGE)", "Changeling (Class II SURGE)", "Changeling (Class III SURGE)"},
 			},
 		},
 		Forbidden: &QualityForbidden{
 			OneOf: &QualityForbiddenOneOf{
-				Quality: []interface{}{"Dermal Alteration (Bark Skin)", "Dermal Alteration (Blubber)", "Dermal Alteration (Dragon Skin)", "Dermal Alteration (Granite Shell)"},
+				Quality: []string{"Dermal Alteration (Bark Skin)", "Dermal Alteration (Blubber)", "Dermal Alteration (Dragon Skin)", "Dermal Alteration (Granite Shell)"},
 			},
 		},
 		Page:      "113",
@@ -3990,7 +3990,7 @@ var DataQualities = map[string]Quality{
 		},
 		Required: &QualityRequired{
 			OneOf: &QualityRequiredOneOf{
-				Quality: []interface{}{"Changeling (Class I SURGE)", "Changeling (Class II SURGE)", "Changeling (Class III SURGE)"},
+				Quality: []string{"Changeling (Class I SURGE)", "Changeling (Class II SURGE)", "Changeling (Class III SURGE)"},
 			},
 		},
 		Page:      "114",
@@ -4004,7 +4004,7 @@ var DataQualities = map[string]Quality{
 		Bonus:    nil,
 		Required: &QualityRequired{
 			OneOf: &QualityRequiredOneOf{
-				Quality: []interface{}{"Changeling (Class I SURGE)", "Changeling (Class II SURGE)", "Changeling (Class III SURGE)"},
+				Quality: []string{"Changeling (Class I SURGE)", "Changeling (Class II SURGE)", "Changeling (Class III SURGE)"},
 			},
 		},
 		Page:      "114",
@@ -4020,7 +4020,7 @@ var DataQualities = map[string]Quality{
 		},
 		Required: &QualityRequired{
 			OneOf: &QualityRequiredOneOf{
-				Quality: []interface{}{"Changeling (Class I SURGE)", "Changeling (Class II SURGE)", "Changeling (Class III SURGE)"},
+				Quality: []string{"Changeling (Class I SURGE)", "Changeling (Class II SURGE)", "Changeling (Class III SURGE)"},
 			},
 		},
 		Page:      "114",
@@ -4036,7 +4036,7 @@ var DataQualities = map[string]Quality{
 		},
 		Required: &QualityRequired{
 			OneOf: &QualityRequiredOneOf{
-				Quality: []interface{}{"Changeling (Class I SURGE)", "Changeling (Class II SURGE)", "Changeling (Class III SURGE)"},
+				Quality: []string{"Changeling (Class I SURGE)", "Changeling (Class II SURGE)", "Changeling (Class III SURGE)"},
 			},
 		},
 		Page:      "114",
@@ -4052,7 +4052,7 @@ var DataQualities = map[string]Quality{
 		},
 		Required: &QualityRequired{
 			OneOf: &QualityRequiredOneOf{
-				Quality: []interface{}{"Changeling (Class I SURGE)", "Changeling (Class II SURGE)", "Changeling (Class III SURGE)"},
+				Quality: []string{"Changeling (Class I SURGE)", "Changeling (Class II SURGE)", "Changeling (Class III SURGE)"},
 			},
 		},
 		Page:      "113",
@@ -4066,7 +4066,7 @@ var DataQualities = map[string]Quality{
 		Bonus:    nil,
 		Required: &QualityRequired{
 			OneOf: &QualityRequiredOneOf{
-				Quality: []interface{}{"Changeling (Class I SURGE)", "Changeling (Class II SURGE)", "Changeling (Class III SURGE)"},
+				Quality: []string{"Changeling (Class I SURGE)", "Changeling (Class II SURGE)", "Changeling (Class III SURGE)"},
 			},
 		},
 		Page:      "115",
@@ -4081,7 +4081,7 @@ var DataQualities = map[string]Quality{
 		Bonus:    nil,
 		Required: &QualityRequired{
 			OneOf: &QualityRequiredOneOf{
-				Quality: []interface{}{"Changeling (Class I SURGE)", "Changeling (Class II SURGE)", "Changeling (Class III SURGE)"},
+				Quality: []string{"Changeling (Class I SURGE)", "Changeling (Class II SURGE)", "Changeling (Class III SURGE)"},
 			},
 		},
 		Page:      "115",
@@ -4099,12 +4099,12 @@ var DataQualities = map[string]Quality{
 		},
 		Required: &QualityRequired{
 			OneOf: &QualityRequiredOneOf{
-				Quality: []interface{}{"Changeling (Class I SURGE)", "Changeling (Class II SURGE)", "Changeling (Class III SURGE)"},
+				Quality: []string{"Changeling (Class I SURGE)", "Changeling (Class II SURGE)", "Changeling (Class III SURGE)"},
 			},
 		},
 		Forbidden: &QualityForbidden{
 			OneOf: &QualityForbiddenOneOf{
-				Quality: []interface{}{"Vestigial Tail", "Functional Tail (Paddle)", "Functional Tail (Prehensile)", "Functional Tail (Thagomizer)"},
+				Quality: []string{"Vestigial Tail", "Functional Tail (Paddle)", "Functional Tail (Prehensile)", "Functional Tail (Thagomizer)"},
 			},
 		},
 		Page:      "115",
@@ -4122,12 +4122,12 @@ var DataQualities = map[string]Quality{
 		},
 		Required: &QualityRequired{
 			OneOf: &QualityRequiredOneOf{
-				Quality: []interface{}{"Changeling (Class I SURGE)", "Changeling (Class II SURGE)", "Changeling (Class III SURGE)"},
+				Quality: []string{"Changeling (Class I SURGE)", "Changeling (Class II SURGE)", "Changeling (Class III SURGE)"},
 			},
 		},
 		Forbidden: &QualityForbidden{
 			OneOf: &QualityForbiddenOneOf{
-				Quality: []interface{}{"Vestigial Tail", "Functional Tail (Balance)", "Functional Tail (Prehensile)", "Functional Tail (Thagomizer)"},
+				Quality: []string{"Vestigial Tail", "Functional Tail (Balance)", "Functional Tail (Prehensile)", "Functional Tail (Thagomizer)"},
 			},
 		},
 		Page:      "115",
@@ -4145,12 +4145,12 @@ var DataQualities = map[string]Quality{
 		},
 		Required: &QualityRequired{
 			OneOf: &QualityRequiredOneOf{
-				Quality: []interface{}{"Changeling (Class I SURGE)", "Changeling (Class II SURGE)", "Changeling (Class III SURGE)"},
+				Quality: []string{"Changeling (Class I SURGE)", "Changeling (Class II SURGE)", "Changeling (Class III SURGE)"},
 			},
 		},
 		Forbidden: &QualityForbidden{
 			OneOf: &QualityForbiddenOneOf{
-				Quality: []interface{}{"Vestigial Tail", "Functional Tail (Balance)", "Functional Tail (Paddle)", "Functional Tail (Thagomizer)"},
+				Quality: []string{"Vestigial Tail", "Functional Tail (Balance)", "Functional Tail (Paddle)", "Functional Tail (Thagomizer)"},
 			},
 		},
 		Page:      "115",
@@ -4164,12 +4164,12 @@ var DataQualities = map[string]Quality{
 		Bonus:    nil,
 		Required: &QualityRequired{
 			OneOf: &QualityRequiredOneOf{
-				Quality: []interface{}{"Changeling (Class I SURGE)", "Changeling (Class II SURGE)", "Changeling (Class III SURGE)"},
+				Quality: []string{"Changeling (Class I SURGE)", "Changeling (Class II SURGE)", "Changeling (Class III SURGE)"},
 			},
 		},
 		Forbidden: &QualityForbidden{
 			OneOf: &QualityForbiddenOneOf{
-				Quality: []interface{}{"Vestigial Tail", "Functional Tail (Balance)", "Functional Tail (Paddle)", "Functional Tail (Prehensile)"},
+				Quality: []string{"Vestigial Tail", "Functional Tail (Balance)", "Functional Tail (Paddle)", "Functional Tail (Prehensile)"},
 			},
 		},
 		Page:      "115",
@@ -4184,12 +4184,12 @@ var DataQualities = map[string]Quality{
 		Bonus:    nil,
 		Required: &QualityRequired{
 			OneOf: &QualityRequiredOneOf{
-				Quality: []interface{}{"Changeling (Class I SURGE)", "Changeling (Class II SURGE)", "Changeling (Class III SURGE)"},
+				Quality: []string{"Changeling (Class I SURGE)", "Changeling (Class II SURGE)", "Changeling (Class III SURGE)"},
 			},
 		},
 		Forbidden: &QualityForbidden{
 			OneOf: &QualityForbiddenOneOf{
-				Quality: []interface{}{"Gills (Aqua)", "Gills (Full)"},
+				Quality: []string{"Gills (Aqua)", "Gills (Full)"},
 			},
 		},
 		Page:      "115",
@@ -4203,12 +4203,12 @@ var DataQualities = map[string]Quality{
 		Bonus:    nil,
 		Required: &QualityRequired{
 			OneOf: &QualityRequiredOneOf{
-				Quality: []interface{}{"Changeling (Class I SURGE)", "Changeling (Class II SURGE)", "Changeling (Class III SURGE)"},
+				Quality: []string{"Changeling (Class I SURGE)", "Changeling (Class II SURGE)", "Changeling (Class III SURGE)"},
 			},
 		},
 		Forbidden: &QualityForbidden{
 			OneOf: &QualityForbiddenOneOf{
-				Quality: []interface{}{"Gills (Air)", "Gills (Full)"},
+				Quality: []string{"Gills (Air)", "Gills (Full)"},
 			},
 		},
 		Page:      "115",
@@ -4222,12 +4222,12 @@ var DataQualities = map[string]Quality{
 		Bonus:    nil,
 		Required: &QualityRequired{
 			OneOf: &QualityRequiredOneOf{
-				Quality: []interface{}{"Changeling (Class I SURGE)", "Changeling (Class II SURGE)", "Changeling (Class III SURGE)"},
+				Quality: []string{"Changeling (Class I SURGE)", "Changeling (Class II SURGE)", "Changeling (Class III SURGE)"},
 			},
 		},
 		Forbidden: &QualityForbidden{
 			OneOf: &QualityForbiddenOneOf{
-				Quality: []interface{}{"Gills (Aqua)", "Gills (Air)"},
+				Quality: []string{"Gills (Aqua)", "Gills (Air)"},
 			},
 		},
 		Page:      "115",
@@ -4247,7 +4247,7 @@ var DataQualities = map[string]Quality{
 		},
 		Required: &QualityRequired{
 			OneOf: &QualityRequiredOneOf{
-				Quality: []interface{}{"Changeling (Class I SURGE)", "Changeling (Class II SURGE)", "Changeling (Class III SURGE)"},
+				Quality: []string{"Changeling (Class I SURGE)", "Changeling (Class II SURGE)", "Changeling (Class III SURGE)"},
 			},
 		},
 		Page:      "115",
@@ -4261,7 +4261,7 @@ var DataQualities = map[string]Quality{
 		Bonus:    nil,
 		Required: &QualityRequired{
 			OneOf: &QualityRequiredOneOf{
-				Quality: []interface{}{"Changeling (Class I SURGE)", "Changeling (Class II SURGE)", "Changeling (Class III SURGE)"},
+				Quality: []string{"Changeling (Class I SURGE)", "Changeling (Class II SURGE)", "Changeling (Class III SURGE)"},
 			},
 		},
 		Page:      "116",
@@ -4275,7 +4275,7 @@ var DataQualities = map[string]Quality{
 		Bonus:    nil,
 		Required: &QualityRequired{
 			OneOf: &QualityRequiredOneOf{
-				Quality: []interface{}{"Changeling (Class I SURGE)", "Changeling (Class II SURGE)", "Changeling (Class III SURGE)"},
+				Quality: []string{"Changeling (Class I SURGE)", "Changeling (Class II SURGE)", "Changeling (Class III SURGE)"},
 			},
 		},
 		Page:      "115",
@@ -4290,7 +4290,7 @@ var DataQualities = map[string]Quality{
 		Bonus:    nil,
 		Required: &QualityRequired{
 			OneOf: &QualityRequiredOneOf{
-				Quality: []interface{}{"Changeling (Class I SURGE)", "Changeling (Class II SURGE)", "Changeling (Class III SURGE)"},
+				Quality: []string{"Changeling (Class I SURGE)", "Changeling (Class II SURGE)", "Changeling (Class III SURGE)"},
 			},
 		},
 		Page:      "116",
@@ -4304,7 +4304,7 @@ var DataQualities = map[string]Quality{
 		Bonus:    nil,
 		Required: &QualityRequired{
 			OneOf: &QualityRequiredOneOf{
-				Quality: []interface{}{"Changeling (Class I SURGE)", "Changeling (Class II SURGE)", "Changeling (Class III SURGE)"},
+				Quality: []string{"Changeling (Class I SURGE)", "Changeling (Class II SURGE)", "Changeling (Class III SURGE)"},
 			},
 		},
 		Page:      "116",
@@ -4319,7 +4319,7 @@ var DataQualities = map[string]Quality{
 		Bonus:    nil,
 		Required: &QualityRequired{
 			OneOf: &QualityRequiredOneOf{
-				Quality: []interface{}{"Changeling (Class I SURGE)", "Changeling (Class II SURGE)", "Changeling (Class III SURGE)"},
+				Quality: []string{"Changeling (Class I SURGE)", "Changeling (Class II SURGE)", "Changeling (Class III SURGE)"},
 			},
 		},
 		Page:      "116",
@@ -4333,7 +4333,7 @@ var DataQualities = map[string]Quality{
 		Bonus:    nil,
 		Required: &QualityRequired{
 			OneOf: &QualityRequiredOneOf{
-				Quality: []interface{}{"Changeling (Class I SURGE)", "Changeling (Class II SURGE)", "Changeling (Class III SURGE)"},
+				Quality: []string{"Changeling (Class I SURGE)", "Changeling (Class II SURGE)", "Changeling (Class III SURGE)"},
 			},
 		},
 		Page:      "116",
@@ -4347,7 +4347,7 @@ var DataQualities = map[string]Quality{
 		Bonus:    nil,
 		Required: &QualityRequired{
 			OneOf: &QualityRequiredOneOf{
-				Metatype: "Centaur", Quality: []interface{}{"Changeling (Class I SURGE)", "Changeling (Class II SURGE)", "Changeling (Class III SURGE)"},
+				Metatype: []string{"Centaur"}, Quality: []string{"Changeling (Class I SURGE)", "Changeling (Class II SURGE)", "Changeling (Class III SURGE)"},
 			},
 		},
 		Page:      "116",
@@ -4365,7 +4365,7 @@ var DataQualities = map[string]Quality{
 		},
 		Required: &QualityRequired{
 			OneOf: &QualityRequiredOneOf{
-				Quality: []interface{}{"Changeling (Class I SURGE)", "Changeling (Class II SURGE)", "Changeling (Class III SURGE)"},
+				Quality: []string{"Changeling (Class I SURGE)", "Changeling (Class II SURGE)", "Changeling (Class III SURGE)"},
 			},
 		},
 		Page:      "116",
@@ -4379,7 +4379,7 @@ var DataQualities = map[string]Quality{
 		Bonus:    nil,
 		Required: &QualityRequired{
 			OneOf: &QualityRequiredOneOf{
-				Quality: []interface{}{"Changeling (Class I SURGE)", "Changeling (Class II SURGE)", "Changeling (Class III SURGE)"},
+				Quality: []string{"Changeling (Class I SURGE)", "Changeling (Class II SURGE)", "Changeling (Class III SURGE)"},
 			},
 		},
 		Page:      "116",
@@ -4395,7 +4395,7 @@ var DataQualities = map[string]Quality{
 		},
 		Required: &QualityRequired{
 			OneOf: &QualityRequiredOneOf{
-				Quality: []interface{}{"Changeling (Class I SURGE)", "Changeling (Class II SURGE)", "Changeling (Class III SURGE)"},
+				Quality: []string{"Changeling (Class I SURGE)", "Changeling (Class II SURGE)", "Changeling (Class III SURGE)"},
 			},
 		},
 		Page:      "116",
@@ -4411,7 +4411,7 @@ var DataQualities = map[string]Quality{
 		},
 		Required: &QualityRequired{
 			OneOf: &QualityRequiredOneOf{
-				Quality: []interface{}{"Changeling (Class I SURGE)", "Changeling (Class II SURGE)", "Changeling (Class III SURGE)"},
+				Quality: []string{"Changeling (Class I SURGE)", "Changeling (Class II SURGE)", "Changeling (Class III SURGE)"},
 			},
 		},
 		Page:      "116",
@@ -4427,7 +4427,7 @@ var DataQualities = map[string]Quality{
 		},
 		Required: &QualityRequired{
 			OneOf: &QualityRequiredOneOf{
-				Quality: []interface{}{"Changeling (Class I SURGE)", "Changeling (Class II SURGE)", "Changeling (Class III SURGE)"},
+				Quality: []string{"Changeling (Class I SURGE)", "Changeling (Class II SURGE)", "Changeling (Class III SURGE)"},
 			},
 		},
 		Page:      "116",
@@ -4443,7 +4443,7 @@ var DataQualities = map[string]Quality{
 		},
 		Required: &QualityRequired{
 			OneOf: &QualityRequiredOneOf{
-				Quality: []interface{}{"Changeling (Class I SURGE)", "Changeling (Class II SURGE)", "Changeling (Class III SURGE)"},
+				Quality: []string{"Changeling (Class I SURGE)", "Changeling (Class II SURGE)", "Changeling (Class III SURGE)"},
 			},
 		},
 		Page:      "116",
@@ -4459,7 +4459,7 @@ var DataQualities = map[string]Quality{
 		},
 		Required: &QualityRequired{
 			OneOf: &QualityRequiredOneOf{
-				Quality: []interface{}{"Changeling (Class I SURGE)", "Changeling (Class II SURGE)", "Changeling (Class III SURGE)"},
+				Quality: []string{"Changeling (Class I SURGE)", "Changeling (Class II SURGE)", "Changeling (Class III SURGE)"},
 			},
 		},
 		Page:      "116",
@@ -4475,7 +4475,7 @@ var DataQualities = map[string]Quality{
 		},
 		Required: &QualityRequired{
 			OneOf: &QualityRequiredOneOf{
-				Quality: []interface{}{"Changeling (Class I SURGE)", "Changeling (Class II SURGE)", "Changeling (Class III SURGE)"},
+				Quality: []string{"Changeling (Class I SURGE)", "Changeling (Class II SURGE)", "Changeling (Class III SURGE)"},
 			},
 		},
 		Page:      "116",
@@ -4491,7 +4491,7 @@ var DataQualities = map[string]Quality{
 		},
 		Required: &QualityRequired{
 			OneOf: &QualityRequiredOneOf{
-				Quality: []interface{}{"Changeling (Class I SURGE)", "Changeling (Class II SURGE)", "Changeling (Class III SURGE)"},
+				Quality: []string{"Changeling (Class I SURGE)", "Changeling (Class II SURGE)", "Changeling (Class III SURGE)"},
 			},
 		},
 		Page:      "116",
@@ -4507,7 +4507,7 @@ var DataQualities = map[string]Quality{
 		},
 		Required: &QualityRequired{
 			OneOf: &QualityRequiredOneOf{
-				Quality: []interface{}{"Changeling (Class I SURGE)", "Changeling (Class II SURGE)", "Changeling (Class III SURGE)"},
+				Quality: []string{"Changeling (Class I SURGE)", "Changeling (Class II SURGE)", "Changeling (Class III SURGE)"},
 			},
 		},
 		Page:      "116",
@@ -4524,7 +4524,7 @@ var DataQualities = map[string]Quality{
 		},
 		Required: &QualityRequired{
 			OneOf: &QualityRequiredOneOf{
-				Quality: []interface{}{"Changeling (Class I SURGE)", "Changeling (Class II SURGE)", "Changeling (Class III SURGE)"},
+				Quality: []string{"Changeling (Class I SURGE)", "Changeling (Class II SURGE)", "Changeling (Class III SURGE)"},
 			}, AllOf: &QualityRequiredAllOf{
 				Metatype: "Human",
 			},
@@ -4540,7 +4540,7 @@ var DataQualities = map[string]Quality{
 		Bonus:    nil,
 		Required: &QualityRequired{
 			OneOf: &QualityRequiredOneOf{
-				Quality: []interface{}{"Changeling (Class I SURGE)", "Changeling (Class II SURGE)", "Changeling (Class III SURGE)"},
+				Quality: []string{"Changeling (Class I SURGE)", "Changeling (Class II SURGE)", "Changeling (Class III SURGE)"},
 			},
 		},
 		Page:      "116",
@@ -4558,7 +4558,7 @@ var DataQualities = map[string]Quality{
 		},
 		Required: &QualityRequired{
 			OneOf: &QualityRequiredOneOf{
-				Quality: []interface{}{"Changeling (Class I SURGE)", "Changeling (Class II SURGE)", "Changeling (Class III SURGE)"},
+				Quality: []string{"Changeling (Class I SURGE)", "Changeling (Class II SURGE)", "Changeling (Class III SURGE)"},
 			},
 		},
 		Page:      "117",
@@ -4572,12 +4572,12 @@ var DataQualities = map[string]Quality{
 		Bonus:    nil,
 		Required: &QualityRequired{
 			OneOf: &QualityRequiredOneOf{
-				Quality: []interface{}{"Changeling (Class I SURGE)", "Changeling (Class II SURGE)", "Changeling (Class III SURGE)"},
+				Quality: []string{"Changeling (Class I SURGE)", "Changeling (Class II SURGE)", "Changeling (Class III SURGE)"},
 			},
 		},
 		Forbidden: &QualityForbidden{
 			OneOf: &QualityForbiddenOneOf{
-				Quality: []interface{}{"Corrosive Spit", "Natural Venom (Exhaled, Moderate)", "Natural Venom (Exhaled, Serious)", "Natural Venom (Exhaled, Deadly)", "Natural Venom (Spat, Mild)", "Natural Venom (Spat, Moderate)", "Natural Venom (Spat, Serious)", "Natural Venom (Spat, Deadly)", "Natural Venom (Injected, Mild)", "Natural Venom (Injected, Moderate)", "Natural Venom (Injected, Serious)", "Natural Venom (Injected, Deadly)"},
+				Quality: []string{"Corrosive Spit", "Natural Venom (Exhaled, Moderate)", "Natural Venom (Exhaled, Serious)", "Natural Venom (Exhaled, Deadly)", "Natural Venom (Spat, Mild)", "Natural Venom (Spat, Moderate)", "Natural Venom (Spat, Serious)", "Natural Venom (Spat, Deadly)", "Natural Venom (Injected, Mild)", "Natural Venom (Injected, Moderate)", "Natural Venom (Injected, Serious)", "Natural Venom (Injected, Deadly)"},
 			},
 		},
 		Page:      "117",
@@ -4591,12 +4591,12 @@ var DataQualities = map[string]Quality{
 		Bonus:    nil,
 		Required: &QualityRequired{
 			OneOf: &QualityRequiredOneOf{
-				Quality: []interface{}{"Changeling (Class I SURGE)", "Changeling (Class II SURGE)", "Changeling (Class III SURGE)"},
+				Quality: []string{"Changeling (Class I SURGE)", "Changeling (Class II SURGE)", "Changeling (Class III SURGE)"},
 			},
 		},
 		Forbidden: &QualityForbidden{
 			OneOf: &QualityForbiddenOneOf{
-				Quality: []interface{}{"Corrosive Spit", "Natural Venom (Exhaled, Mild)", "Natural Venom (Exhaled, Serious)", "Natural Venom (Exhaled, Deadly)", "Natural Venom (Spat, Mild)", "Natural Venom (Spat, Moderate)", "Natural Venom (Spat, Serious)", "Natural Venom (Spat, Deadly)", "Natural Venom (Injected, Mild)", "Natural Venom (Injected, Moderate)", "Natural Venom (Injected, Serious)", "Natural Venom (Injected, Deadly)"},
+				Quality: []string{"Corrosive Spit", "Natural Venom (Exhaled, Mild)", "Natural Venom (Exhaled, Serious)", "Natural Venom (Exhaled, Deadly)", "Natural Venom (Spat, Mild)", "Natural Venom (Spat, Moderate)", "Natural Venom (Spat, Serious)", "Natural Venom (Spat, Deadly)", "Natural Venom (Injected, Mild)", "Natural Venom (Injected, Moderate)", "Natural Venom (Injected, Serious)", "Natural Venom (Injected, Deadly)"},
 			},
 		},
 		Page:      "117",
@@ -4610,12 +4610,12 @@ var DataQualities = map[string]Quality{
 		Bonus:    nil,
 		Required: &QualityRequired{
 			OneOf: &QualityRequiredOneOf{
-				Quality: []interface{}{"Changeling (Class I SURGE)", "Changeling (Class II SURGE)", "Changeling (Class III SURGE)"},
+				Quality: []string{"Changeling (Class I SURGE)", "Changeling (Class II SURGE)", "Changeling (Class III SURGE)"},
 			},
 		},
 		Forbidden: &QualityForbidden{
 			OneOf: &QualityForbiddenOneOf{
-				Quality: []interface{}{"Corrosive Spit", "Natural Venom (Exhaled, Moderate)", "Natural Venom (Exhaled, Mild)", "Natural Venom (Exhaled, Deadly)", "Natural Venom (Spat, Mild)", "Natural Venom (Spat, Moderate)", "Natural Venom (Spat, Serious)", "Natural Venom (Spat, Deadly)", "Natural Venom (Injected, Mild)", "Natural Venom (Injected, Moderate)", "Natural Venom (Injected, Serious)", "Natural Venom (Injected, Deadly)"},
+				Quality: []string{"Corrosive Spit", "Natural Venom (Exhaled, Moderate)", "Natural Venom (Exhaled, Mild)", "Natural Venom (Exhaled, Deadly)", "Natural Venom (Spat, Mild)", "Natural Venom (Spat, Moderate)", "Natural Venom (Spat, Serious)", "Natural Venom (Spat, Deadly)", "Natural Venom (Injected, Mild)", "Natural Venom (Injected, Moderate)", "Natural Venom (Injected, Serious)", "Natural Venom (Injected, Deadly)"},
 			},
 		},
 		Page:      "117",
@@ -4629,12 +4629,12 @@ var DataQualities = map[string]Quality{
 		Bonus:    nil,
 		Required: &QualityRequired{
 			OneOf: &QualityRequiredOneOf{
-				Quality: []interface{}{"Changeling (Class I SURGE)", "Changeling (Class II SURGE)", "Changeling (Class III SURGE)"},
+				Quality: []string{"Changeling (Class I SURGE)", "Changeling (Class II SURGE)", "Changeling (Class III SURGE)"},
 			},
 		},
 		Forbidden: &QualityForbidden{
 			OneOf: &QualityForbiddenOneOf{
-				Quality: []interface{}{"Corrosive Spit", "Natural Venom (Exhaled, Moderate)", "Natural Venom (Exhaled, Serious)", "Natural Venom (Exhaled, Mild)", "Natural Venom (Spat, Mild)", "Natural Venom (Spat, Moderate)", "Natural Venom (Spat, Serious)", "Natural Venom (Spat, Deadly)", "Natural Venom (Injected, Mild)", "Natural Venom (Injected, Moderate)", "Natural Venom (Injected, Serious)", "Natural Venom (Injected, Deadly)"},
+				Quality: []string{"Corrosive Spit", "Natural Venom (Exhaled, Moderate)", "Natural Venom (Exhaled, Serious)", "Natural Venom (Exhaled, Mild)", "Natural Venom (Spat, Mild)", "Natural Venom (Spat, Moderate)", "Natural Venom (Spat, Serious)", "Natural Venom (Spat, Deadly)", "Natural Venom (Injected, Mild)", "Natural Venom (Injected, Moderate)", "Natural Venom (Injected, Serious)", "Natural Venom (Injected, Deadly)"},
 			},
 		},
 		Page:      "117",
@@ -4648,12 +4648,12 @@ var DataQualities = map[string]Quality{
 		Bonus:    nil,
 		Required: &QualityRequired{
 			OneOf: &QualityRequiredOneOf{
-				Quality: []interface{}{"Changeling (Class I SURGE)", "Changeling (Class II SURGE)", "Changeling (Class III SURGE)"},
+				Quality: []string{"Changeling (Class I SURGE)", "Changeling (Class II SURGE)", "Changeling (Class III SURGE)"},
 			},
 		},
 		Forbidden: &QualityForbidden{
 			OneOf: &QualityForbiddenOneOf{
-				Quality: []interface{}{"Corrosive Spit", "Natural Venom (Exhaled, Moderate)", "Natural Venom (Exhaled, Serious)", "Natural Venom (Exhaled, Deadly)", "Natural Venom (Exhaled, Mild)", "Natural Venom (Spat, Moderate)", "Natural Venom (Spat, Serious)", "Natural Venom (Spat, Deadly)", "Natural Venom (Injected, Mild)", "Natural Venom (Injected, Moderate)", "Natural Venom (Injected, Serious)", "Natural Venom (Injected, Deadly)"},
+				Quality: []string{"Corrosive Spit", "Natural Venom (Exhaled, Moderate)", "Natural Venom (Exhaled, Serious)", "Natural Venom (Exhaled, Deadly)", "Natural Venom (Exhaled, Mild)", "Natural Venom (Spat, Moderate)", "Natural Venom (Spat, Serious)", "Natural Venom (Spat, Deadly)", "Natural Venom (Injected, Mild)", "Natural Venom (Injected, Moderate)", "Natural Venom (Injected, Serious)", "Natural Venom (Injected, Deadly)"},
 			},
 		},
 		Page:      "117",
@@ -4667,12 +4667,12 @@ var DataQualities = map[string]Quality{
 		Bonus:    nil,
 		Required: &QualityRequired{
 			OneOf: &QualityRequiredOneOf{
-				Quality: []interface{}{"Changeling (Class I SURGE)", "Changeling (Class II SURGE)", "Changeling (Class III SURGE)"},
+				Quality: []string{"Changeling (Class I SURGE)", "Changeling (Class II SURGE)", "Changeling (Class III SURGE)"},
 			},
 		},
 		Forbidden: &QualityForbidden{
 			OneOf: &QualityForbiddenOneOf{
-				Quality: []interface{}{"Corrosive Spit", "Natural Venom (Exhaled, Moderate)", "Natural Venom (Exhaled, Serious)", "Natural Venom (Exhaled, Deadly)", "Natural Venom (Spat, Mild)", "Natural Venom (Exhaled, Mild)", "Natural Venom (Spat, Serious)", "Natural Venom (Spat, Deadly)", "Natural Venom (Injected, Mild)", "Natural Venom (Injected, Moderate)", "Natural Venom (Injected, Serious)", "Natural Venom (Injected, Deadly)"},
+				Quality: []string{"Corrosive Spit", "Natural Venom (Exhaled, Moderate)", "Natural Venom (Exhaled, Serious)", "Natural Venom (Exhaled, Deadly)", "Natural Venom (Spat, Mild)", "Natural Venom (Exhaled, Mild)", "Natural Venom (Spat, Serious)", "Natural Venom (Spat, Deadly)", "Natural Venom (Injected, Mild)", "Natural Venom (Injected, Moderate)", "Natural Venom (Injected, Serious)", "Natural Venom (Injected, Deadly)"},
 			},
 		},
 		Page:      "117",
@@ -4686,12 +4686,12 @@ var DataQualities = map[string]Quality{
 		Bonus:    nil,
 		Required: &QualityRequired{
 			OneOf: &QualityRequiredOneOf{
-				Quality: []interface{}{"Changeling (Class I SURGE)", "Changeling (Class II SURGE)", "Changeling (Class III SURGE)"},
+				Quality: []string{"Changeling (Class I SURGE)", "Changeling (Class II SURGE)", "Changeling (Class III SURGE)"},
 			},
 		},
 		Forbidden: &QualityForbidden{
 			OneOf: &QualityForbiddenOneOf{
-				Quality: []interface{}{"Corrosive Spit", "Natural Venom (Exhaled, Mild)", "Natural Venom (Exhaled, Moderate)", "Natural Venom (Exhaled, Serious)", "Natural Venom (Exhaled, Deadly)", "Natural Venom (Spat, Mild)", "Natural Venom (Spat, Moderate)", "Natural Venom (Spat, Deadly)", "Natural Venom (Injected, Mild)", "Natural Venom (Injected, Moderate)", "Natural Venom (Injected, Serious)", "Natural Venom (Injected, Deadly)"},
+				Quality: []string{"Corrosive Spit", "Natural Venom (Exhaled, Mild)", "Natural Venom (Exhaled, Moderate)", "Natural Venom (Exhaled, Serious)", "Natural Venom (Exhaled, Deadly)", "Natural Venom (Spat, Mild)", "Natural Venom (Spat, Moderate)", "Natural Venom (Spat, Deadly)", "Natural Venom (Injected, Mild)", "Natural Venom (Injected, Moderate)", "Natural Venom (Injected, Serious)", "Natural Venom (Injected, Deadly)"},
 			},
 		},
 		Page:      "117",
@@ -4705,12 +4705,12 @@ var DataQualities = map[string]Quality{
 		Bonus:    nil,
 		Required: &QualityRequired{
 			OneOf: &QualityRequiredOneOf{
-				Quality: []interface{}{"Changeling (Class I SURGE)", "Changeling (Class II SURGE)", "Changeling (Class III SURGE)"},
+				Quality: []string{"Changeling (Class I SURGE)", "Changeling (Class II SURGE)", "Changeling (Class III SURGE)"},
 			},
 		},
 		Forbidden: &QualityForbidden{
 			OneOf: &QualityForbiddenOneOf{
-				Quality: []interface{}{"Corrosive Spit", "Natural Venom (Exhaled, Mild)", "Natural Venom (Exhaled, Moderate)", "Natural Venom (Exhaled, Serious)", "Natural Venom (Exhaled, Deadly)", "Natural Venom (Spat, Mild)", "Natural Venom (Spat, Moderate)", "Natural Venom (Spat, Serious)", "Natural Venom (Injected, Mild)", "Natural Venom (Injected, Moderate)", "Natural Venom (Injected, Serious)", "Natural Venom (Injected, Deadly)"},
+				Quality: []string{"Corrosive Spit", "Natural Venom (Exhaled, Mild)", "Natural Venom (Exhaled, Moderate)", "Natural Venom (Exhaled, Serious)", "Natural Venom (Exhaled, Deadly)", "Natural Venom (Spat, Mild)", "Natural Venom (Spat, Moderate)", "Natural Venom (Spat, Serious)", "Natural Venom (Injected, Mild)", "Natural Venom (Injected, Moderate)", "Natural Venom (Injected, Serious)", "Natural Venom (Injected, Deadly)"},
 			},
 		},
 		Page:      "117",
@@ -4724,12 +4724,12 @@ var DataQualities = map[string]Quality{
 		Bonus:    nil,
 		Required: &QualityRequired{
 			OneOf: &QualityRequiredOneOf{
-				Quality: []interface{}{"Changeling (Class I SURGE)", "Changeling (Class II SURGE)", "Changeling (Class III SURGE)"},
+				Quality: []string{"Changeling (Class I SURGE)", "Changeling (Class II SURGE)", "Changeling (Class III SURGE)"},
 			},
 		},
 		Forbidden: &QualityForbidden{
 			OneOf: &QualityForbiddenOneOf{
-				Quality: []interface{}{"Corrosive Spit", "Natural Venom (Exhaled, Mild)", "Natural Venom (Exhaled, Moderate)", "Natural Venom (Exhaled, Serious)", "Natural Venom (Exhaled, Deadly)", "Natural Venom (Spat, Mild)", "Natural Venom (Spat, Moderate)", "Natural Venom (Spat, Serious)", "Natural Venom (Spat, Deadly)", "Natural Venom (Injected, Moderate)", "Natural Venom (Injected, Serious)", "Natural Venom (Injected, Deadly)"},
+				Quality: []string{"Corrosive Spit", "Natural Venom (Exhaled, Mild)", "Natural Venom (Exhaled, Moderate)", "Natural Venom (Exhaled, Serious)", "Natural Venom (Exhaled, Deadly)", "Natural Venom (Spat, Mild)", "Natural Venom (Spat, Moderate)", "Natural Venom (Spat, Serious)", "Natural Venom (Spat, Deadly)", "Natural Venom (Injected, Moderate)", "Natural Venom (Injected, Serious)", "Natural Venom (Injected, Deadly)"},
 			},
 		},
 		Page:      "117",
@@ -4743,12 +4743,12 @@ var DataQualities = map[string]Quality{
 		Bonus:    nil,
 		Required: &QualityRequired{
 			OneOf: &QualityRequiredOneOf{
-				Quality: []interface{}{"Changeling (Class I SURGE)", "Changeling (Class II SURGE)", "Changeling (Class III SURGE)"},
+				Quality: []string{"Changeling (Class I SURGE)", "Changeling (Class II SURGE)", "Changeling (Class III SURGE)"},
 			},
 		},
 		Forbidden: &QualityForbidden{
 			OneOf: &QualityForbiddenOneOf{
-				Quality: []interface{}{"Corrosive Spit", "Natural Venom (Exhaled, Mild)", "Natural Venom (Exhaled, Moderate)", "Natural Venom (Exhaled, Serious)", "Natural Venom (Exhaled, Deadly)", "Natural Venom (Spat, Mild)", "Natural Venom (Spat, Moderate)", "Natural Venom (Spat, Serious)", "Natural Venom (Spat, Deadly)", "Natural Venom (Injected, Mild)", "Natural Venom (Injected, Serious)", "Natural Venom (Injected, Deadly)"},
+				Quality: []string{"Corrosive Spit", "Natural Venom (Exhaled, Mild)", "Natural Venom (Exhaled, Moderate)", "Natural Venom (Exhaled, Serious)", "Natural Venom (Exhaled, Deadly)", "Natural Venom (Spat, Mild)", "Natural Venom (Spat, Moderate)", "Natural Venom (Spat, Serious)", "Natural Venom (Spat, Deadly)", "Natural Venom (Injected, Mild)", "Natural Venom (Injected, Serious)", "Natural Venom (Injected, Deadly)"},
 			},
 		},
 		Page:      "117",
@@ -4762,12 +4762,12 @@ var DataQualities = map[string]Quality{
 		Bonus:    nil,
 		Required: &QualityRequired{
 			OneOf: &QualityRequiredOneOf{
-				Quality: []interface{}{"Changeling (Class I SURGE)", "Changeling (Class II SURGE)", "Changeling (Class III SURGE)"},
+				Quality: []string{"Changeling (Class I SURGE)", "Changeling (Class II SURGE)", "Changeling (Class III SURGE)"},
 			},
 		},
 		Forbidden: &QualityForbidden{
 			OneOf: &QualityForbiddenOneOf{
-				Quality: []interface{}{"Corrosive Spit", "Natural Venom (Exhaled, Mild)", "Natural Venom (Exhaled, Moderate)", "Natural Venom (Exhaled, Serious)", "Natural Venom (Exhaled, Deadly)", "Natural Venom (Spat, Mild)", "Natural Venom (Spat, Moderate)", "Natural Venom (Spat, Serious)", "Natural Venom (Spat, Deadly)", "Natural Venom (Injected, Mild)", "Natural Venom (Injected, Moderate)", "Natural Venom (Injected, Deadly)"},
+				Quality: []string{"Corrosive Spit", "Natural Venom (Exhaled, Mild)", "Natural Venom (Exhaled, Moderate)", "Natural Venom (Exhaled, Serious)", "Natural Venom (Exhaled, Deadly)", "Natural Venom (Spat, Mild)", "Natural Venom (Spat, Moderate)", "Natural Venom (Spat, Serious)", "Natural Venom (Spat, Deadly)", "Natural Venom (Injected, Mild)", "Natural Venom (Injected, Moderate)", "Natural Venom (Injected, Deadly)"},
 			},
 		},
 		Page:      "117",
@@ -4781,12 +4781,12 @@ var DataQualities = map[string]Quality{
 		Bonus:    nil,
 		Required: &QualityRequired{
 			OneOf: &QualityRequiredOneOf{
-				Quality: []interface{}{"Changeling (Class I SURGE)", "Changeling (Class II SURGE)", "Changeling (Class III SURGE)"},
+				Quality: []string{"Changeling (Class I SURGE)", "Changeling (Class II SURGE)", "Changeling (Class III SURGE)"},
 			},
 		},
 		Forbidden: &QualityForbidden{
 			OneOf: &QualityForbiddenOneOf{
-				Quality: []interface{}{"Corrosive Spit", "Natural Venom (Exhaled, Mild)", "Natural Venom (Exhaled, Moderate)", "Natural Venom (Exhaled, Serious)", "Natural Venom (Exhaled, Deadly)", "Natural Venom (Spat, Mild)", "Natural Venom (Spat, Moderate)", "Natural Venom (Spat, Serious)", "Natural Venom (Spat, Deadly)", "Natural Venom (Injected, Mild)", "Natural Venom (Injected, Serious)", "Natural Venom (Injected, Moderate)"},
+				Quality: []string{"Corrosive Spit", "Natural Venom (Exhaled, Mild)", "Natural Venom (Exhaled, Moderate)", "Natural Venom (Exhaled, Serious)", "Natural Venom (Exhaled, Deadly)", "Natural Venom (Spat, Mild)", "Natural Venom (Spat, Moderate)", "Natural Venom (Spat, Serious)", "Natural Venom (Spat, Deadly)", "Natural Venom (Injected, Mild)", "Natural Venom (Injected, Serious)", "Natural Venom (Injected, Moderate)"},
 			},
 		},
 		Page:      "117",
@@ -4803,7 +4803,7 @@ var DataQualities = map[string]Quality{
 		},
 		Required: &QualityRequired{
 			OneOf: &QualityRequiredOneOf{
-				Quality: []interface{}{"Changeling (Class I SURGE)", "Changeling (Class II SURGE)", "Changeling (Class III SURGE)"},
+				Quality: []string{"Changeling (Class I SURGE)", "Changeling (Class II SURGE)", "Changeling (Class III SURGE)"},
 			},
 		},
 		Page:      "117",
@@ -4819,12 +4819,12 @@ var DataQualities = map[string]Quality{
 		},
 		Required: &QualityRequired{
 			OneOf: &QualityRequiredOneOf{
-				Quality: []interface{}{"Changeling (Class I SURGE)", "Changeling (Class II SURGE)", "Changeling (Class III SURGE)"},
+				Quality: []string{"Changeling (Class I SURGE)", "Changeling (Class II SURGE)", "Changeling (Class III SURGE)"},
 			},
 		},
 		Forbidden: &QualityForbidden{
 			OneOf: &QualityForbiddenOneOf{
-				Quality: "Nocturnal",
+				Quality: []string{"Nocturnal"},
 			},
 		},
 		Page:      "117",
@@ -4838,7 +4838,7 @@ var DataQualities = map[string]Quality{
 		Bonus:    nil,
 		Required: &QualityRequired{
 			OneOf: &QualityRequiredOneOf{
-				Quality: []interface{}{"Changeling (Class I SURGE)", "Changeling (Class II SURGE)", "Changeling (Class III SURGE)"},
+				Quality: []string{"Changeling (Class I SURGE)", "Changeling (Class II SURGE)", "Changeling (Class III SURGE)"},
 			},
 		},
 		Page:      "117",
@@ -4855,7 +4855,7 @@ var DataQualities = map[string]Quality{
 		},
 		Required: &QualityRequired{
 			OneOf: &QualityRequiredOneOf{
-				Quality: []interface{}{"Changeling (Class I SURGE)", "Changeling (Class II SURGE)", "Changeling (Class III SURGE)"},
+				Quality: []string{"Changeling (Class I SURGE)", "Changeling (Class II SURGE)", "Changeling (Class III SURGE)"},
 			},
 		},
 		Page:      "118",
@@ -4869,7 +4869,7 @@ var DataQualities = map[string]Quality{
 		Bonus:    nil,
 		Required: &QualityRequired{
 			OneOf: &QualityRequiredOneOf{
-				Quality: []interface{}{"Changeling (Class I SURGE)", "Changeling (Class II SURGE)", "Changeling (Class III SURGE)"},
+				Quality: []string{"Changeling (Class I SURGE)", "Changeling (Class II SURGE)", "Changeling (Class III SURGE)"},
 			},
 		},
 		Page:      "118",
@@ -4886,7 +4886,7 @@ var DataQualities = map[string]Quality{
 		},
 		Required: &QualityRequired{
 			OneOf: &QualityRequiredOneOf{
-				Quality: []interface{}{"Changeling (Class I SURGE)", "Changeling (Class II SURGE)", "Changeling (Class III SURGE)"},
+				Quality: []string{"Changeling (Class I SURGE)", "Changeling (Class II SURGE)", "Changeling (Class III SURGE)"},
 			},
 		},
 		Page:      "118",
@@ -4900,7 +4900,7 @@ var DataQualities = map[string]Quality{
 		Bonus:    nil,
 		Required: &QualityRequired{
 			OneOf: &QualityRequiredOneOf{
-				Quality: []interface{}{"Changeling (Class I SURGE)", "Changeling (Class II SURGE)", "Changeling (Class III SURGE)"},
+				Quality: []string{"Changeling (Class I SURGE)", "Changeling (Class II SURGE)", "Changeling (Class III SURGE)"},
 			},
 		},
 		Page:      "118",
@@ -4914,7 +4914,7 @@ var DataQualities = map[string]Quality{
 		Bonus:    nil,
 		Required: &QualityRequired{
 			OneOf: &QualityRequiredOneOf{
-				Quality: []interface{}{"Changeling (Class I SURGE)", "Changeling (Class II SURGE)", "Changeling (Class III SURGE)"},
+				Quality: []string{"Changeling (Class I SURGE)", "Changeling (Class II SURGE)", "Changeling (Class III SURGE)"},
 			},
 		},
 		Page:      "118",
@@ -4933,7 +4933,7 @@ var DataQualities = map[string]Quality{
 		},
 		Required: &QualityRequired{
 			OneOf: &QualityRequiredOneOf{
-				Quality: []interface{}{"Changeling (Class I SURGE)", "Changeling (Class II SURGE)", "Changeling (Class III SURGE)"},
+				Quality: []string{"Changeling (Class I SURGE)", "Changeling (Class II SURGE)", "Changeling (Class III SURGE)"},
 			},
 		},
 		Page:      "118",
@@ -4947,7 +4947,7 @@ var DataQualities = map[string]Quality{
 		Bonus:    nil,
 		Required: &QualityRequired{
 			OneOf: &QualityRequiredOneOf{
-				Quality: []interface{}{"Changeling (Class I SURGE)", "Changeling (Class II SURGE)", "Changeling (Class III SURGE)"},
+				Quality: []string{"Changeling (Class I SURGE)", "Changeling (Class II SURGE)", "Changeling (Class III SURGE)"},
 			},
 		},
 		Page:      "118",
@@ -4965,7 +4965,7 @@ var DataQualities = map[string]Quality{
 		},
 		Required: &QualityRequired{
 			OneOf: &QualityRequiredOneOf{
-				Quality: []interface{}{"Changeling (Class I SURGE)", "Changeling (Class II SURGE)", "Changeling (Class III SURGE)"},
+				Quality: []string{"Changeling (Class I SURGE)", "Changeling (Class II SURGE)", "Changeling (Class III SURGE)"},
 			},
 		},
 		Page:      "118",
@@ -4983,7 +4983,7 @@ var DataQualities = map[string]Quality{
 		},
 		Required: &QualityRequired{
 			OneOf: &QualityRequiredOneOf{
-				Quality: []interface{}{"Changeling (Class I SURGE)", "Changeling (Class II SURGE)", "Changeling (Class III SURGE)"},
+				Quality: []string{"Changeling (Class I SURGE)", "Changeling (Class II SURGE)", "Changeling (Class III SURGE)"},
 			},
 		},
 		Page:      "119",
@@ -5078,7 +5078,7 @@ var DataQualities = map[string]Quality{
 		},
 		Forbidden: &QualityForbidden{
 			OneOf: &QualityForbiddenOneOf{
-				Quality: "Third Eye",
+				Quality: []string{"Third Eye"},
 			},
 		},
 		Page:      "120",
@@ -5118,7 +5118,7 @@ var DataQualities = map[string]Quality{
 		Bonus:    nil,
 		Forbidden: &QualityForbidden{
 			OneOf: &QualityForbiddenOneOf{
-				Quality: []interface{}{"Animal Pelage (Quills)", "Animal Pelage (Insulating Pelt)", "Animal Pelage (Camo Fur)", "Mood Hair", "Scales"},
+				Quality: []string{"Animal Pelage (Quills)", "Animal Pelage (Insulating Pelt)", "Animal Pelage (Camo Fur)", "Mood Hair", "Scales"},
 			},
 		},
 		Page:      "120",
@@ -5229,7 +5229,7 @@ var DataQualities = map[string]Quality{
 		Bonus:    nil,
 		Forbidden: &QualityForbidden{
 			OneOf: &QualityForbiddenOneOf{
-				Quality: []interface{}{"Feathers", "Scales", "Unusual Hair"},
+				Quality: []string{"Feathers", "Scales", "Unusual Hair"},
 			},
 		},
 		Page:      "121",
@@ -5255,7 +5255,7 @@ var DataQualities = map[string]Quality{
 		Bonus:    nil,
 		Forbidden: &QualityForbidden{
 			OneOf: &QualityForbiddenOneOf{
-				Quality: "Photometabolism",
+				Quality: []string{"Photometabolism"},
 			},
 		},
 		Page:      "121",
@@ -5282,7 +5282,7 @@ var DataQualities = map[string]Quality{
 		Bonus:    nil,
 		Forbidden: &QualityForbidden{
 			OneOf: &QualityForbiddenOneOf{
-				Quality: []interface{}{"Animal Pelage (Quills)", "Animal Pelage (Insulating Pelt)", "Animal Pelage (Camo Fur)", "Feathers", "Mood Hair"},
+				Quality: []string{"Animal Pelage (Quills)", "Animal Pelage (Insulating Pelt)", "Animal Pelage (Camo Fur)", "Feathers", "Mood Hair"},
 			},
 		},
 		Page:      "121",
@@ -5346,7 +5346,7 @@ var DataQualities = map[string]Quality{
 		Bonus:    nil,
 		Forbidden: &QualityForbidden{
 			OneOf: &QualityForbiddenOneOf{
-				Quality: "Cyclopean Eye",
+				Quality: []string{"Cyclopean Eye"},
 			},
 		},
 		Page:      "122",
@@ -5360,7 +5360,7 @@ var DataQualities = map[string]Quality{
 		Bonus:    nil,
 		Forbidden: &QualityForbidden{
 			OneOf: &QualityForbiddenOneOf{
-				Quality: "Mood Hair",
+				Quality: []string{"Mood Hair"},
 			},
 		},
 		Page:      "122",
@@ -5374,7 +5374,7 @@ var DataQualities = map[string]Quality{
 		Bonus:    nil,
 		Forbidden: &QualityForbidden{
 			OneOf: &QualityForbiddenOneOf{
-				Quality: []interface{}{"Functional Tail (Balance)", "Functional Tail (Paddle)", "Functional Tail (Prehensile)", "Functional Tail (Thagomizer)"},
+				Quality: []string{"Functional Tail (Balance)", "Functional Tail (Paddle)", "Functional Tail (Prehensile)", "Functional Tail (Thagomizer)"},
 			},
 		},
 		Page:      "123",
@@ -5411,7 +5411,7 @@ var DataQualities = map[string]Quality{
 		},
 		Forbidden: &QualityForbidden{
 			OneOf: &QualityForbiddenOneOf{
-				Quality: []interface{}{"Magic Resistance", "Latent Dracomorphosis"},
+				Quality: []string{"Magic Resistance", "Latent Dracomorphosis"},
 			},
 		},
 		Page:              "136",
@@ -5452,7 +5452,7 @@ var DataQualities = map[string]Quality{
 		},
 		Forbidden: &QualityForbidden{
 			OneOf: &QualityForbiddenOneOf{
-				Quality: []interface{}{"Magic Resistance", "Latent Dracomorphosis"},
+				Quality: []string{"Magic Resistance", "Latent Dracomorphosis"},
 			},
 		},
 		Page:              "136",
@@ -5496,7 +5496,7 @@ var DataQualities = map[string]Quality{
 		},
 		Forbidden: &QualityForbidden{
 			OneOf: &QualityForbiddenOneOf{
-				Quality: []interface{}{"Magic Resistance", "Latent Dracomorphosis"},
+				Quality: []string{"Magic Resistance", "Latent Dracomorphosis"},
 			},
 		},
 		Page:              "137",
@@ -5535,7 +5535,7 @@ var DataQualities = map[string]Quality{
 		},
 		Forbidden: &QualityForbidden{
 			OneOf: &QualityForbiddenOneOf{
-				Quality: []interface{}{"Magic Resistance", "Latent Dracomorphosis"},
+				Quality: []string{"Magic Resistance", "Latent Dracomorphosis"},
 			},
 		},
 		Page:              "138",
@@ -5573,12 +5573,12 @@ var DataQualities = map[string]Quality{
 		},
 		Required: &QualityRequired{
 			OneOf: &QualityRequiredOneOf{
-				Metatype: "Dwarf",
+				Metatype: []string{"Dwarf"},
 			},
 		},
 		Forbidden: &QualityForbidden{
 			OneOf: &QualityForbiddenOneOf{
-				Quality: []interface{}{"Magic Resistance", "Latent Dracomorphosis"},
+				Quality: []string{"Magic Resistance", "Latent Dracomorphosis"},
 			},
 		},
 		Page:              "138",
@@ -5616,12 +5616,12 @@ var DataQualities = map[string]Quality{
 		},
 		Required: &QualityRequired{
 			OneOf: &QualityRequiredOneOf{
-				Metatype: "Elf",
+				Metatype: []string{"Elf"},
 			},
 		},
 		Forbidden: &QualityForbidden{
 			OneOf: &QualityForbiddenOneOf{
-				Quality: []interface{}{"Magic Resistance", "Latent Dracomorphosis"},
+				Quality: []string{"Magic Resistance", "Latent Dracomorphosis"},
 			},
 		},
 		Page:              "138",
@@ -5659,12 +5659,12 @@ var DataQualities = map[string]Quality{
 		},
 		Required: &QualityRequired{
 			OneOf: &QualityRequiredOneOf{
-				Metatype: "Human",
+				Metatype: []string{"Human"},
 			},
 		},
 		Forbidden: &QualityForbidden{
 			OneOf: &QualityForbiddenOneOf{
-				Quality: []interface{}{"Magic Resistance", "Latent Dracomorphosis"},
+				Quality: []string{"Magic Resistance", "Latent Dracomorphosis"},
 			},
 		},
 		Page:              "138",
@@ -5702,12 +5702,12 @@ var DataQualities = map[string]Quality{
 		},
 		Required: &QualityRequired{
 			OneOf: &QualityRequiredOneOf{
-				Metatype: "Ork",
+				Metatype: []string{"Ork"},
 			},
 		},
 		Forbidden: &QualityForbidden{
 			OneOf: &QualityForbiddenOneOf{
-				Quality: []interface{}{"Magic Resistance", "Latent Dracomorphosis"},
+				Quality: []string{"Magic Resistance", "Latent Dracomorphosis"},
 			},
 		},
 		Page:              "138",
@@ -5745,12 +5745,12 @@ var DataQualities = map[string]Quality{
 		},
 		Required: &QualityRequired{
 			OneOf: &QualityRequiredOneOf{
-				Metatype: "Sasquatch",
+				Metatype: []string{"Sasquatch"},
 			},
 		},
 		Forbidden: &QualityForbidden{
 			OneOf: &QualityForbiddenOneOf{
-				Quality: []interface{}{"Magic Resistance", "Latent Dracomorphosis"},
+				Quality: []string{"Magic Resistance", "Latent Dracomorphosis"},
 			},
 		},
 		Page:              "138",
@@ -5788,12 +5788,12 @@ var DataQualities = map[string]Quality{
 		},
 		Required: &QualityRequired{
 			OneOf: &QualityRequiredOneOf{
-				Metatype: "Troll",
+				Metatype: []string{"Troll"},
 			},
 		},
 		Forbidden: &QualityForbidden{
 			OneOf: &QualityForbiddenOneOf{
-				Quality: []interface{}{"Magic Resistance", "Latent Dracomorphosis"},
+				Quality: []string{"Magic Resistance", "Latent Dracomorphosis"},
 			},
 		},
 		Page:              "138",
@@ -5831,7 +5831,7 @@ var DataQualities = map[string]Quality{
 		},
 		Forbidden: &QualityForbidden{
 			OneOf: &QualityForbiddenOneOf{
-				Quality: []interface{}{"Magic Resistance", "Latent Dracomorphosis"},
+				Quality: []string{"Magic Resistance", "Latent Dracomorphosis"},
 			},
 		},
 		Page:              "138",
@@ -5879,7 +5879,7 @@ var DataQualities = map[string]Quality{
 		},
 		Forbidden: &QualityForbidden{
 			OneOf: &QualityForbiddenOneOf{
-				Quality: []interface{}{"Magic Resistance", "Latent Dracomorphosis"},
+				Quality: []string{"Magic Resistance", "Latent Dracomorphosis"},
 			},
 		},
 		Page:              "138",
@@ -5926,7 +5926,7 @@ var DataQualities = map[string]Quality{
 		},
 		Forbidden: &QualityForbidden{
 			OneOf: &QualityForbiddenOneOf{
-				Quality: []interface{}{"Magic Resistance", "Latent Dracomorphosis"},
+				Quality: []string{"Magic Resistance", "Latent Dracomorphosis"},
 			},
 		},
 		Page:              "139",
@@ -5978,7 +5978,7 @@ var DataQualities = map[string]Quality{
 		},
 		Forbidden: &QualityForbidden{
 			OneOf: &QualityForbiddenOneOf{
-				Quality: []interface{}{"Magic Resistance", "Latent Dracomorphosis"},
+				Quality: []string{"Magic Resistance", "Latent Dracomorphosis"},
 			},
 		},
 		Page:              "139",
@@ -6029,7 +6029,7 @@ var DataQualities = map[string]Quality{
 		},
 		Forbidden: &QualityForbidden{
 			OneOf: &QualityForbiddenOneOf{
-				Quality: []interface{}{"Magic Resistance", "Latent Dracomorphosis"},
+				Quality: []string{"Magic Resistance", "Latent Dracomorphosis"},
 			},
 		},
 		Page:              "139",
@@ -6074,7 +6074,7 @@ var DataQualities = map[string]Quality{
 		},
 		Forbidden: &QualityForbidden{
 			OneOf: &QualityForbiddenOneOf{
-				Quality: []interface{}{"Magic Resistance", "Infected: Fomoraig", "Infected: Dzoo-Noo-Qua", "Infected: Ghoul (Troll)", "Infected: Mutaqua", "Infected: Vampire (Non-Human)", "Latent Dracomorphosis"},
+				Quality: []string{"Magic Resistance", "Infected: Fomoraig", "Infected: Dzoo-Noo-Qua", "Infected: Ghoul (Troll)", "Infected: Mutaqua", "Infected: Vampire (Non-Human)", "Latent Dracomorphosis"},
 			},
 		},
 		Page:              "139",
@@ -6118,7 +6118,7 @@ var DataQualities = map[string]Quality{
 		},
 		Forbidden: &QualityForbidden{
 			OneOf: &QualityForbiddenOneOf{
-				Quality: []interface{}{"Magic Resistance", "Latent Dracomorphosis"},
+				Quality: []string{"Magic Resistance", "Latent Dracomorphosis"},
 			},
 		},
 		Page:              "139",
@@ -6161,7 +6161,7 @@ var DataQualities = map[string]Quality{
 		},
 		Forbidden: &QualityForbidden{
 			OneOf: &QualityForbiddenOneOf{
-				Quality: []interface{}{"Magic Resistance", "Latent Dracomorphosis"},
+				Quality: []string{"Magic Resistance", "Latent Dracomorphosis"},
 			},
 		},
 		Page:              "140",
@@ -6198,7 +6198,7 @@ var DataQualities = map[string]Quality{
 		},
 		Forbidden: &QualityForbidden{
 			OneOf: &QualityForbiddenOneOf{
-				Quality: []interface{}{"Magic Resistance", "Latent Dracomorphosis"},
+				Quality: []string{"Magic Resistance", "Latent Dracomorphosis"},
 			},
 		},
 		Page:              "140",
@@ -6240,7 +6240,7 @@ var DataQualities = map[string]Quality{
 		},
 		Forbidden: &QualityForbidden{
 			OneOf: &QualityForbiddenOneOf{
-				Quality: []interface{}{"Magic Resistance", "Latent Dracomorphosis"},
+				Quality: []string{"Magic Resistance", "Latent Dracomorphosis"},
 			},
 		},
 		Page:              "127",
@@ -6277,7 +6277,7 @@ var DataQualities = map[string]Quality{
 		},
 		Forbidden: &QualityForbidden{
 			OneOf: &QualityForbiddenOneOf{
-				Quality: []interface{}{"Magic Resistance", "Latent Dracomorphosis"},
+				Quality: []string{"Magic Resistance", "Latent Dracomorphosis"},
 			},
 		},
 		Page:              "127",
@@ -6320,7 +6320,7 @@ var DataQualities = map[string]Quality{
 		},
 		Forbidden: &QualityForbidden{
 			OneOf: &QualityForbiddenOneOf{
-				Quality: []interface{}{"Magic Resistance", "Latent Dracomorphosis"},
+				Quality: []string{"Magic Resistance", "Latent Dracomorphosis"},
 			},
 		},
 		Page:              "140",
@@ -6339,7 +6339,7 @@ var DataQualities = map[string]Quality{
 		},
 		Required: &QualityRequired{
 			OneOf: &QualityRequiredOneOf{
-				Quality: []interface{}{"Infected: Dzoo-Noo-Qua", "Infected: Fomoraig", "Infected: Gnawer", "Infected: Mutaqua"},
+				Quality: []string{"Infected: Dzoo-Noo-Qua", "Infected: Fomoraig", "Infected: Gnawer", "Infected: Mutaqua"},
 			},
 		},
 		Page:         "136",
@@ -6355,7 +6355,7 @@ var DataQualities = map[string]Quality{
 		},
 		Required: &QualityRequired{
 			OneOf: &QualityRequiredOneOf{
-				Quality: "Infected: Nosferatu",
+				Quality: []string{"Infected: Nosferatu"},
 			},
 		},
 		Forbidden:    nil,
@@ -6372,7 +6372,7 @@ var DataQualities = map[string]Quality{
 		},
 		Required: &QualityRequired{
 			OneOf: &QualityRequiredOneOf{
-				Quality: []interface{}{"Infected: Banshee", "Infected: Dzoo-Noo-Qua", "Infected: Mutaqua", "Infected: Nosferatu", "Infected: Vampire (Human)", "Infected: Vampire (Non-Human)", "Infected: Sukuyan (Human)", "Infected: Sukuyan (Non-Human)", "Infected: Wendigo"},
+				Quality: []string{"Infected: Banshee", "Infected: Dzoo-Noo-Qua", "Infected: Mutaqua", "Infected: Nosferatu", "Infected: Vampire (Human)", "Infected: Vampire (Non-Human)", "Infected: Sukuyan (Human)", "Infected: Sukuyan (Non-Human)", "Infected: Wendigo"},
 			},
 		},
 		Page:         "136",
@@ -6388,7 +6388,7 @@ var DataQualities = map[string]Quality{
 		},
 		Required: &QualityRequired{
 			OneOf: &QualityRequiredOneOf{
-				Quality: []interface{}{"Infected: Mutaqua", "Infected: Nosferatu"},
+				Quality: []string{"Infected: Mutaqua", "Infected: Nosferatu"},
 			},
 		},
 		Page:         "136",
@@ -6404,7 +6404,7 @@ var DataQualities = map[string]Quality{
 		},
 		Required: &QualityRequired{
 			OneOf: &QualityRequiredOneOf{
-				Quality: []interface{}{"Infected: Banshee", "Infected: Goblin", "Infected: Vampire (Human)", "Infected: Vampire (Non-Human)", "Infected: Sukuyan (Human)", "Infected: Sukuyan (Non-Human)", "Infected: Wendigo"},
+				Quality: []string{"Infected: Banshee", "Infected: Goblin", "Infected: Vampire (Human)", "Infected: Vampire (Non-Human)", "Infected: Sukuyan (Human)", "Infected: Sukuyan (Non-Human)", "Infected: Wendigo"},
 			},
 		},
 		Page:         "136",
@@ -6420,7 +6420,7 @@ var DataQualities = map[string]Quality{
 		},
 		Required: &QualityRequired{
 			OneOf: &QualityRequiredOneOf{
-				Quality: "Infected: Goblin",
+				Quality: []string{"Infected: Goblin"},
 			},
 		},
 		Page:         "136",
@@ -6436,7 +6436,7 @@ var DataQualities = map[string]Quality{
 		},
 		Required: &QualityRequired{
 			OneOf: &QualityRequiredOneOf{
-				Quality: []interface{}{"Infected: Nosferatu", "Infected: Vampire (Human)", "Infected: Vampire (Non-Human)", "Infected: Sukuyan (Human)", "Infected: Sukuyan (Non-Human)"},
+				Quality: []string{"Infected: Nosferatu", "Infected: Vampire (Human)", "Infected: Vampire (Non-Human)", "Infected: Sukuyan (Human)", "Infected: Sukuyan (Non-Human)"},
 			},
 		},
 		Page:         "136",
@@ -6452,7 +6452,7 @@ var DataQualities = map[string]Quality{
 		},
 		Required: &QualityRequired{
 			OneOf: &QualityRequiredOneOf{
-				Quality: "Infected: Wendigo",
+				Quality: []string{"Infected: Wendigo"},
 			},
 		},
 		Page:         "136",
@@ -6468,7 +6468,7 @@ var DataQualities = map[string]Quality{
 		},
 		Required: &QualityRequired{
 			OneOf: &QualityRequiredOneOf{
-				Quality: []interface{}{"Infected: Banshee", "Infected: Mutaqua", "Infected: Nosferatu", "Infected: Wendigo"},
+				Quality: []string{"Infected: Banshee", "Infected: Mutaqua", "Infected: Nosferatu", "Infected: Wendigo"},
 			},
 		},
 		Forbidden:    nil,
@@ -6485,7 +6485,7 @@ var DataQualities = map[string]Quality{
 		},
 		Required: &QualityRequired{
 			OneOf: &QualityRequiredOneOf{
-				Quality: "Infected: Goblin",
+				Quality: []string{"Infected: Goblin"},
 			},
 		},
 		Page:         "136",
@@ -6501,7 +6501,7 @@ var DataQualities = map[string]Quality{
 		},
 		Required: &QualityRequired{
 			OneOf: &QualityRequiredOneOf{
-				Quality: []interface{}{"Infected: Banshee", "Infected: Nosferatu", "Infected: Vampire (Human)", "Infected: Vampire (Non-Human)", "Infected: Sukuyan (Human)", "Infected: Sukuyan (Non-Human)", "Infected: Wendigo"},
+				Quality: []string{"Infected: Banshee", "Infected: Nosferatu", "Infected: Vampire (Human)", "Infected: Vampire (Non-Human)", "Infected: Sukuyan (Human)", "Infected: Sukuyan (Non-Human)", "Infected: Wendigo"},
 			},
 		},
 		Page:         "136",
@@ -6517,7 +6517,7 @@ var DataQualities = map[string]Quality{
 		},
 		Required: &QualityRequired{
 			OneOf: &QualityRequiredOneOf{
-				Quality: []interface{}{"Infected: Banshee", "Infected: Dzoo-Noo-Qua", "Infected: Goblin", "Infected: Mutaqua", "Infected: Nosferatu", "Infected: Vampire (Human)", "Infected: Vampire (Non-Human)", "Infected: Sukuyan (Human)", "Infected: Sukuyan (Non-Human)", "Infected: Wendigo"},
+				Quality: []string{"Infected: Banshee", "Infected: Dzoo-Noo-Qua", "Infected: Goblin", "Infected: Mutaqua", "Infected: Nosferatu", "Infected: Vampire (Human)", "Infected: Vampire (Non-Human)", "Infected: Sukuyan (Human)", "Infected: Sukuyan (Non-Human)", "Infected: Wendigo"},
 			},
 		},
 		Page:         "136",
@@ -6533,7 +6533,7 @@ var DataQualities = map[string]Quality{
 		},
 		Required: &QualityRequired{
 			OneOf: &QualityRequiredOneOf{
-				Quality: []interface{}{"Infected: Nosferatu", "Infected: Wendigo"},
+				Quality: []string{"Infected: Nosferatu", "Infected: Wendigo"},
 			},
 		},
 		Forbidden:    nil,
@@ -6550,7 +6550,7 @@ var DataQualities = map[string]Quality{
 		},
 		Required: &QualityRequired{
 			OneOf: &QualityRequiredOneOf{
-				Quality: []interface{}{"Infected: Dzoo-Noo-Qua", "Infected: Mutaqua"},
+				Quality: []string{"Infected: Dzoo-Noo-Qua", "Infected: Mutaqua"},
 			},
 		},
 		Forbidden:    nil,
@@ -6567,7 +6567,7 @@ var DataQualities = map[string]Quality{
 		},
 		Required: &QualityRequired{
 			OneOf: &QualityRequiredOneOf{
-				Quality: "Infected: Nosferatu",
+				Quality: []string{"Infected: Nosferatu"},
 			},
 		},
 		Forbidden:    nil,
@@ -6584,7 +6584,7 @@ var DataQualities = map[string]Quality{
 		},
 		Required: &QualityRequired{
 			OneOf: &QualityRequiredOneOf{
-				Quality: []interface{}{"Infected: Banshee", "Infected: Vampire (Human)", "Infected: Vampire (Non-Human)", "Infected: Sukuyan (Human)", "Infected: Sukuyan (Non-Human)"},
+				Quality: []string{"Infected: Banshee", "Infected: Vampire (Human)", "Infected: Vampire (Non-Human)", "Infected: Sukuyan (Human)", "Infected: Sukuyan (Non-Human)"},
 			},
 		},
 		Page:         "136",
@@ -6600,7 +6600,7 @@ var DataQualities = map[string]Quality{
 		},
 		Required: &QualityRequired{
 			OneOf: &QualityRequiredOneOf{
-				Quality: "Infected: Banshee",
+				Quality: []string{"Infected: Banshee"},
 			},
 		},
 		Forbidden:    nil,
@@ -6617,7 +6617,7 @@ var DataQualities = map[string]Quality{
 		},
 		Required: &QualityRequired{
 			OneOf: &QualityRequiredOneOf{
-				Quality: "Infected: Nosferatu",
+				Quality: []string{"Infected: Nosferatu"},
 			},
 		},
 		Forbidden:    nil,
@@ -6634,7 +6634,7 @@ var DataQualities = map[string]Quality{
 		},
 		Required: &QualityRequired{
 			OneOf: &QualityRequiredOneOf{
-				Quality: []interface{}{"Infected: Banshee", "Infected: Dzoo-Noo-Qua", "Infected: Goblin", "Infected: Mutaqua", "Infected: Nosferatu", "Infected: Vampire (Human)", "Infected: Vampire (Non-Human)", "Infected: Sukuyan (Human)", "Infected: Sukuyan (Non-Human)", "Infected: Wendigo"},
+				Quality: []string{"Infected: Banshee", "Infected: Dzoo-Noo-Qua", "Infected: Goblin", "Infected: Mutaqua", "Infected: Nosferatu", "Infected: Vampire (Human)", "Infected: Vampire (Non-Human)", "Infected: Sukuyan (Human)", "Infected: Sukuyan (Non-Human)", "Infected: Wendigo"},
 			},
 		},
 		Forbidden:    nil,
@@ -6707,7 +6707,7 @@ var DataQualities = map[string]Quality{
 		},
 		Required: &QualityRequired{
 			OneOf: &QualityRequiredOneOf{
-				Quality: "Technomancer",
+				Quality: []string{"Technomancer"},
 			},
 		},
 		Page: "45",
@@ -6752,11 +6752,11 @@ var DataQualities = map[string]Quality{
 		Category: "Positive",
 		Source:   "DTR",
 		Bonus: &QualityBonus{
-			SelectQuality: "",
+			SelectQuality: []string{""},
 		},
 		Required: &QualityRequired{
 			OneOf: &QualityRequiredOneOf{
-				Quality: []interface{}{"Infected: Bandersnatch", "Infected: Banshee", "Infected: Dzoo-Noo-Qua", "Infected: Fomoraig", "Infected: Ghoul (Dwarf)", "Infected: Ghoul (Elf)", "Infected: Ghoul (Human)", "Infected: Ghoul (Ork)", "Infected: Ghoul (Sasquatch)", "Infected: Ghoul (Troll)", "Infected: Gnawer", "Infected: Goblin", "Infected: Grendel", "Infected: Harvester", "Infected: Loup-Garou", "Infected: Mutaqua", "Infected: Nosferatu", "Infected: Vampire (Human)", "Infected: Vampire (Non-Human)", "Infected: Sukuyan (Human)", "Infected: Sukuyan (Non-Human)", "Infected: Wendigo"},
+				Quality: []string{"Infected: Bandersnatch", "Infected: Banshee", "Infected: Dzoo-Noo-Qua", "Infected: Fomoraig", "Infected: Ghoul (Dwarf)", "Infected: Ghoul (Elf)", "Infected: Ghoul (Human)", "Infected: Ghoul (Ork)", "Infected: Ghoul (Sasquatch)", "Infected: Ghoul (Troll)", "Infected: Gnawer", "Infected: Goblin", "Infected: Grendel", "Infected: Harvester", "Infected: Loup-Garou", "Infected: Mutaqua", "Infected: Nosferatu", "Infected: Vampire (Human)", "Infected: Vampire (Non-Human)", "Infected: Sukuyan (Human)", "Infected: Sukuyan (Non-Human)", "Infected: Wendigo"},
 			},
 		},
 		Page: "163",
@@ -6769,7 +6769,7 @@ var DataQualities = map[string]Quality{
 		Bonus:    nil,
 		Required: &QualityRequired{
 			OneOf: &QualityRequiredOneOf{
-				Quality: []interface{}{"Infected: Bandersnatch", "Infected: Banshee", "Infected: Dzoo-Noo-Qua", "Infected: Fomoraig", "Infected: Ghoul (Dwarf)", "Infected: Ghoul (Elf)", "Infected: Ghoul (Human)", "Infected: Ghoul (Ork)", "Infected: Ghoul (Sasquatch)", "Infected: Ghoul (Troll)", "Infected: Gnawer", "Infected: Goblin", "Infected: Grendel", "Infected: Harvester", "Infected: Loup-Garou", "Infected: Mutaqua", "Infected: Nosferatu", "Infected: Vampire (Human)", "Infected: Vampire (Non-Human)", "Infected: Sukuyan (Human)", "Infected: Sukuyan (Non-Human)", "Infected: Wendigo"},
+				Quality: []string{"Infected: Bandersnatch", "Infected: Banshee", "Infected: Dzoo-Noo-Qua", "Infected: Fomoraig", "Infected: Ghoul (Dwarf)", "Infected: Ghoul (Elf)", "Infected: Ghoul (Human)", "Infected: Ghoul (Ork)", "Infected: Ghoul (Sasquatch)", "Infected: Ghoul (Troll)", "Infected: Gnawer", "Infected: Goblin", "Infected: Grendel", "Infected: Harvester", "Infected: Loup-Garou", "Infected: Mutaqua", "Infected: Nosferatu", "Infected: Vampire (Human)", "Infected: Vampire (Non-Human)", "Infected: Sukuyan (Human)", "Infected: Sukuyan (Non-Human)", "Infected: Wendigo"},
 			},
 		},
 		Page: "164",
@@ -6793,7 +6793,7 @@ var DataQualities = map[string]Quality{
 		},
 		Required: &QualityRequired{
 			OneOf: &QualityRequiredOneOf{
-				Quality: []interface{}{"Infected: Bandersnatch", "Infected: Banshee", "Infected: Dzoo-Noo-Qua", "Infected: Fomoraig", "Infected: Ghoul (Dwarf)", "Infected: Ghoul (Elf)", "Infected: Ghoul (Human)", "Infected: Ghoul (Ork)", "Infected: Ghoul (Sasquatch)", "Infected: Ghoul (Troll)", "Infected: Gnawer", "Infected: Goblin", "Infected: Grendel", "Infected: Harvester", "Infected: Loup-Garou", "Infected: Mutaqua", "Infected: Nosferatu", "Infected: Vampire (Human)", "Infected: Vampire (Non-Human)", "Infected: Sukuyan (Human)", "Infected: Sukuyan (Non-Human)", "Infected: Wendigo"},
+				Quality: []string{"Infected: Bandersnatch", "Infected: Banshee", "Infected: Dzoo-Noo-Qua", "Infected: Fomoraig", "Infected: Ghoul (Dwarf)", "Infected: Ghoul (Elf)", "Infected: Ghoul (Human)", "Infected: Ghoul (Ork)", "Infected: Ghoul (Sasquatch)", "Infected: Ghoul (Troll)", "Infected: Gnawer", "Infected: Goblin", "Infected: Grendel", "Infected: Harvester", "Infected: Loup-Garou", "Infected: Mutaqua", "Infected: Nosferatu", "Infected: Vampire (Human)", "Infected: Vampire (Non-Human)", "Infected: Sukuyan (Human)", "Infected: Sukuyan (Non-Human)", "Infected: Wendigo"},
 			},
 		},
 		Page: "164",
@@ -6806,7 +6806,7 @@ var DataQualities = map[string]Quality{
 		Bonus:    nil,
 		Required: &QualityRequired{
 			OneOf: &QualityRequiredOneOf{
-				Quality: "Technomancer",
+				Quality: []string{"Technomancer"},
 			},
 		},
 		Page: "46",
@@ -6840,7 +6840,7 @@ var DataQualities = map[string]Quality{
 		Bonus:    nil,
 		Required: &QualityRequired{
 			OneOf: &QualityRequiredOneOf{
-				Quality: "Technomancer",
+				Quality: []string{"Technomancer"},
 			},
 		},
 		Page: "47",
@@ -6902,7 +6902,7 @@ var DataQualities = map[string]Quality{
 		Required: nil,
 		Forbidden: &QualityForbidden{
 			OneOf: &QualityForbiddenOneOf{
-				Quality: "Technomancer",
+				Quality: []string{"Technomancer"},
 			},
 		},
 		Page: "49",
@@ -6919,7 +6919,7 @@ var DataQualities = map[string]Quality{
 		},
 		Required: &QualityRequired{
 			OneOf: &QualityRequiredOneOf{
-				Metatype: "A.I.",
+				Metatype: []string{"A.I."},
 			},
 		},
 		Page: "146",
@@ -6932,7 +6932,7 @@ var DataQualities = map[string]Quality{
 		Bonus:    nil,
 		Required: &QualityRequired{
 			OneOf: &QualityRequiredOneOf{
-				Metatype: "A.I.",
+				Metatype: []string{"A.I."},
 			},
 		},
 		Page: "146",
@@ -6950,7 +6950,7 @@ var DataQualities = map[string]Quality{
 		},
 		Required: &QualityRequired{
 			OneOf: &QualityRequiredOneOf{
-				Metatype: "A.I.",
+				Metatype: []string{"A.I."},
 			},
 		},
 		Page: "147",
@@ -6964,7 +6964,7 @@ var DataQualities = map[string]Quality{
 		Bonus:    nil,
 		Required: &QualityRequired{
 			OneOf: &QualityRequiredOneOf{
-				Metatype: "A.I.",
+				Metatype: []string{"A.I."},
 			},
 		},
 		Page: "147",
@@ -6977,7 +6977,7 @@ var DataQualities = map[string]Quality{
 		Bonus:    nil,
 		Required: &QualityRequired{
 			OneOf: &QualityRequiredOneOf{
-				Metatype: "A.I.",
+				Metatype: []string{"A.I."},
 			},
 		},
 		Page: "148",
@@ -6990,7 +6990,7 @@ var DataQualities = map[string]Quality{
 		Bonus:    nil,
 		Required: &QualityRequired{
 			OneOf: &QualityRequiredOneOf{
-				Metatype: "A.I.",
+				Metatype: []string{"A.I."},
 			},
 		},
 		Page: "149",
@@ -7003,7 +7003,7 @@ var DataQualities = map[string]Quality{
 		Bonus:    nil,
 		Required: &QualityRequired{
 			OneOf: &QualityRequiredOneOf{
-				Metatype: "A.I.",
+				Metatype: []string{"A.I."},
 			},
 		},
 		Page: "149",
@@ -7016,7 +7016,7 @@ var DataQualities = map[string]Quality{
 		Bonus:    nil,
 		Required: &QualityRequired{
 			OneOf: &QualityRequiredOneOf{
-				Metatype: "A.I.",
+				Metatype: []string{"A.I."},
 			},
 		},
 		Page: "149",
@@ -7029,7 +7029,7 @@ var DataQualities = map[string]Quality{
 		Bonus:    nil,
 		Required: &QualityRequired{
 			OneOf: &QualityRequiredOneOf{
-				Metatype: "A.I.",
+				Metatype: []string{"A.I."},
 			},
 		},
 		Page: "150",
@@ -7045,7 +7045,7 @@ var DataQualities = map[string]Quality{
 		},
 		Required: &QualityRequired{
 			OneOf: &QualityRequiredOneOf{
-				Metatype: "A.I.",
+				Metatype: []string{"A.I."},
 			},
 		},
 		Page: "150",
@@ -7060,7 +7060,7 @@ var DataQualities = map[string]Quality{
 		},
 		Required: &QualityRequired{
 			OneOf: &QualityRequiredOneOf{
-				Metatype: "A.I.",
+				Metatype: []string{"A.I."},
 			},
 		},
 		Page: "151",
@@ -7073,7 +7073,7 @@ var DataQualities = map[string]Quality{
 		Bonus:    nil,
 		Required: &QualityRequired{
 			OneOf: &QualityRequiredOneOf{
-				Metatype: "A.I.",
+				Metatype: []string{"A.I."},
 			},
 		},
 		Page: "151",
@@ -7086,7 +7086,7 @@ var DataQualities = map[string]Quality{
 		Bonus:    nil,
 		Required: &QualityRequired{
 			OneOf: &QualityRequiredOneOf{
-				Metatype: "A.I.",
+				Metatype: []string{"A.I."},
 			},
 		},
 		Page: "151",
@@ -7099,7 +7099,7 @@ var DataQualities = map[string]Quality{
 		Bonus:    nil,
 		Required: &QualityRequired{
 			OneOf: &QualityRequiredOneOf{
-				Metatype: "A.I.",
+				Metatype: []string{"A.I."},
 			},
 		},
 		Page: "151",
@@ -7112,7 +7112,7 @@ var DataQualities = map[string]Quality{
 		Bonus:    nil,
 		Required: &QualityRequired{
 			OneOf: &QualityRequiredOneOf{
-				Metatype: "A.I.",
+				Metatype: []string{"A.I."},
 			},
 		},
 		Page: "151",
@@ -7125,7 +7125,7 @@ var DataQualities = map[string]Quality{
 		Bonus:    nil,
 		Required: &QualityRequired{
 			OneOf: &QualityRequiredOneOf{
-				Metatype: "A.I.",
+				Metatype: []string{"A.I."},
 			},
 		},
 		Page: "151",
@@ -7138,7 +7138,7 @@ var DataQualities = map[string]Quality{
 		Bonus:    nil,
 		Required: &QualityRequired{
 			OneOf: &QualityRequiredOneOf{
-				Metatype: "A.I.",
+				Metatype: []string{"A.I."},
 			},
 		},
 		Page:        "151",
@@ -7154,7 +7154,7 @@ var DataQualities = map[string]Quality{
 		},
 		Required: &QualityRequired{
 			OneOf: &QualityRequiredOneOf{
-				Metatype: "A.I.",
+				Metatype: []string{"A.I."},
 			},
 		},
 		Page: "151",
@@ -7169,7 +7169,7 @@ var DataQualities = map[string]Quality{
 		},
 		Required: &QualityRequired{
 			OneOf: &QualityRequiredOneOf{
-				Metatype: "A.I.",
+				Metatype: []string{"A.I."},
 			},
 		},
 		Page: "152",
@@ -7182,7 +7182,7 @@ var DataQualities = map[string]Quality{
 		Bonus:    nil,
 		Required: &QualityRequired{
 			OneOf: &QualityRequiredOneOf{
-				Metatype: "A.I.",
+				Metatype: []string{"A.I."},
 			},
 		},
 		Page: "152",
@@ -7197,7 +7197,7 @@ var DataQualities = map[string]Quality{
 		},
 		Forbidden: &QualityForbidden{
 			OneOf: &QualityForbiddenOneOf{
-				Quality: "Biocompatibility (Bioware)",
+				Quality: []string{"Biocompatibility (Bioware)"},
 			},
 		},
 		Page: "54",
@@ -7212,7 +7212,7 @@ var DataQualities = map[string]Quality{
 		},
 		Forbidden: &QualityForbidden{
 			OneOf: &QualityForbiddenOneOf{
-				Quality: "Biocompatibility (Cyberware)",
+				Quality: []string{"Biocompatibility (Cyberware)"},
 			},
 		},
 		Page: "54",
@@ -7287,7 +7287,7 @@ var DataQualities = map[string]Quality{
 		},
 		Forbidden: &QualityForbidden{
 			OneOf: &QualityForbiddenOneOf{
-				Quality: "Quick Healer",
+				Quality: []string{"Quick Healer"},
 			},
 		},
 		Page: "56",
@@ -7338,7 +7338,7 @@ var DataQualities = map[string]Quality{
 		},
 		Forbidden: &QualityForbidden{
 			OneOf: &QualityForbiddenOneOf{
-				Bioware: "Genetic Optimization (Body)",
+				Bioware: []string{"Genetic Optimization (Body)"},
 			},
 		},
 		Page:        "157",
@@ -7354,7 +7354,7 @@ var DataQualities = map[string]Quality{
 		},
 		Forbidden: &QualityForbidden{
 			OneOf: &QualityForbiddenOneOf{
-				Bioware: "Genetic Optimization (Agility)",
+				Bioware: []string{"Genetic Optimization (Agility)"},
 			},
 		},
 		Page:        "157",
@@ -7370,7 +7370,7 @@ var DataQualities = map[string]Quality{
 		},
 		Forbidden: &QualityForbidden{
 			OneOf: &QualityForbiddenOneOf{
-				Bioware: "Genetic Optimization (Reaction)",
+				Bioware: []string{"Genetic Optimization (Reaction)"},
 			},
 		},
 		Page:        "157",
@@ -7386,7 +7386,7 @@ var DataQualities = map[string]Quality{
 		},
 		Forbidden: &QualityForbidden{
 			OneOf: &QualityForbiddenOneOf{
-				Bioware: "Genetic Optimization (Strength)",
+				Bioware: []string{"Genetic Optimization (Strength)"},
 			},
 		},
 		Page:        "157",
@@ -7402,7 +7402,7 @@ var DataQualities = map[string]Quality{
 		},
 		Forbidden: &QualityForbidden{
 			OneOf: &QualityForbiddenOneOf{
-				Bioware: "Genetic Optimization (Charisma)",
+				Bioware: []string{"Genetic Optimization (Charisma)"},
 			},
 		},
 		Page:        "157",
@@ -7418,7 +7418,7 @@ var DataQualities = map[string]Quality{
 		},
 		Forbidden: &QualityForbidden{
 			OneOf: &QualityForbiddenOneOf{
-				Bioware: "Genetic Optimization (Intuition)",
+				Bioware: []string{"Genetic Optimization (Intuition)"},
 			},
 		},
 		Page:        "157",
@@ -7434,7 +7434,7 @@ var DataQualities = map[string]Quality{
 		},
 		Forbidden: &QualityForbidden{
 			OneOf: &QualityForbiddenOneOf{
-				Bioware: "Genetic Optimization (Logic)",
+				Bioware: []string{"Genetic Optimization (Logic)"},
 			},
 		},
 		Page:        "157",
@@ -7450,7 +7450,7 @@ var DataQualities = map[string]Quality{
 		},
 		Forbidden: &QualityForbidden{
 			OneOf: &QualityForbiddenOneOf{
-				Bioware: "Genetic Optimization (Willpower)",
+				Bioware: []string{"Genetic Optimization (Willpower)"},
 			},
 		},
 		Page:        "157",
@@ -7870,7 +7870,7 @@ var DataQualities = map[string]Quality{
 		Bonus:    nil,
 		Forbidden: &QualityForbidden{
 			OneOf: &QualityForbiddenOneOf{
-				Quality: []interface{}{"Dracoform (Eastern Drake)", "Dracoform (Western Drake)", "Dracoform (Feathered Drake)", "Dracoform (Sea Drake)", "Changeling (Class I SURGE)", "Changeling (Class II SURGE)", "Changeling (Class III SURGE)", "Infected: Bandersnatch", "Infected: Banshee", "Infected: Dzoo-Noo-Qua", "Infected: Fomoraig", "Infected: Ghoul (Dwarf)", "Infected: Ghoul (Elf)", "Infected: Ghoul (Human)", "Infected: Ghoul (Ork)", "Infected: Ghoul (Sasquatch)", "Infected: Ghoul (Troll)", "Infected: Gnawer", "Infected: Goblin", "Infected: Grendel", "Infected: Harvester", "Infected: Loup-Garou", "Infected: Mutaqua", "Infected: Nosferatu", "Infected: Vampire (Human)", "Infected: Vampire (Non-Human)", "Infected: Sukuyan (Human)", "Infected: Sukuyan (Non-Human)", "Infected: Wendigo"},
+				Quality: []string{"Dracoform (Eastern Drake)", "Dracoform (Western Drake)", "Dracoform (Feathered Drake)", "Dracoform (Sea Drake)", "Changeling (Class I SURGE)", "Changeling (Class II SURGE)", "Changeling (Class III SURGE)", "Infected: Bandersnatch", "Infected: Banshee", "Infected: Dzoo-Noo-Qua", "Infected: Fomoraig", "Infected: Ghoul (Dwarf)", "Infected: Ghoul (Elf)", "Infected: Ghoul (Human)", "Infected: Ghoul (Ork)", "Infected: Ghoul (Sasquatch)", "Infected: Ghoul (Troll)", "Infected: Gnawer", "Infected: Goblin", "Infected: Grendel", "Infected: Harvester", "Infected: Loup-Garou", "Infected: Mutaqua", "Infected: Nosferatu", "Infected: Vampire (Human)", "Infected: Vampire (Non-Human)", "Infected: Sukuyan (Human)", "Infected: Sukuyan (Non-Human)", "Infected: Wendigo"},
 			},
 		},
 		Page:                "164",
@@ -7900,7 +7900,7 @@ var DataQualities = map[string]Quality{
 		},
 		Forbidden: &QualityForbidden{
 			OneOf: &QualityForbiddenOneOf{
-				Quality: []interface{}{"Dracoform (Western Drake)", "Dracoform (Feathered Drake)", "Dracoform (Sea Drake)", "Latent Dracomorphosis"},
+				Quality: []string{"Dracoform (Western Drake)", "Dracoform (Feathered Drake)", "Dracoform (Sea Drake)", "Latent Dracomorphosis"},
 			},
 		},
 		Page:              "163",
@@ -7929,7 +7929,7 @@ var DataQualities = map[string]Quality{
 		},
 		Forbidden: &QualityForbidden{
 			OneOf: &QualityForbiddenOneOf{
-				Quality: []interface{}{"Dracoform (Eastern Drake)", "Dracoform (Feathered Drake)", "Dracoform (Sea Drake)", "Latent Dracomorphosis"},
+				Quality: []string{"Dracoform (Eastern Drake)", "Dracoform (Feathered Drake)", "Dracoform (Sea Drake)", "Latent Dracomorphosis"},
 			},
 		},
 		Page:              "163",
@@ -7962,7 +7962,7 @@ var DataQualities = map[string]Quality{
 		},
 		Forbidden: &QualityForbidden{
 			OneOf: &QualityForbiddenOneOf{
-				Quality: []interface{}{"Dracoform (Eastern Drake)", "Dracoform (Western Drake)", "Dracoform (Sea Drake)", "Latent Dracomorphosis"},
+				Quality: []string{"Dracoform (Eastern Drake)", "Dracoform (Western Drake)", "Dracoform (Sea Drake)", "Latent Dracomorphosis"},
 			},
 		},
 		Page:              "163",
@@ -7993,7 +7993,7 @@ var DataQualities = map[string]Quality{
 		},
 		Forbidden: &QualityForbidden{
 			OneOf: &QualityForbiddenOneOf{
-				Quality: []interface{}{"Dracoform (Eastern Drake)", "Dracoform (Western Drake)", "Dracoform (Feathered Drake)", "Latent Dracomorphosis"},
+				Quality: []string{"Dracoform (Eastern Drake)", "Dracoform (Western Drake)", "Dracoform (Feathered Drake)", "Latent Dracomorphosis"},
 			},
 		},
 		Page:              "163",
@@ -8119,7 +8119,7 @@ var DataQualities = map[string]Quality{
 		Bonus:    nil,
 		Required: &QualityRequired{
 			OneOf: &QualityRequiredOneOf{
-				Quality: "Memory Palace",
+				Quality: []string{"Memory Palace"},
 			},
 		},
 		Page: "151",
@@ -8279,7 +8279,7 @@ var DataQualities = map[string]Quality{
 		Required: nil,
 		Forbidden: &QualityForbidden{
 			OneOf: &QualityForbiddenOneOf{
-				Quality: "Mentor Spirit",
+				Quality: []string{"Mentor Spirit"},
 			},
 		},
 		Page:              "151",
@@ -8299,7 +8299,7 @@ var DataQualities = map[string]Quality{
 		Required: nil,
 		Forbidden: &QualityForbidden{
 			OneOf: &QualityForbiddenOneOf{
-				Quality: "Mentor Spirit",
+				Quality: []string{"Mentor Spirit"},
 			},
 		},
 		Page:              "151",
@@ -8319,7 +8319,7 @@ var DataQualities = map[string]Quality{
 		Required: nil,
 		Forbidden: &QualityForbidden{
 			OneOf: &QualityForbiddenOneOf{
-				Quality: "Mentor Spirit",
+				Quality: []string{"Mentor Spirit"},
 			},
 		},
 		Page:              "151",
@@ -8340,7 +8340,7 @@ var DataQualities = map[string]Quality{
 		Required: nil,
 		Forbidden: &QualityForbidden{
 			OneOf: &QualityForbiddenOneOf{
-				Quality: "Mentor Spirit",
+				Quality: []string{"Mentor Spirit"},
 			},
 		},
 		Page:              "151",
@@ -8361,7 +8361,7 @@ var DataQualities = map[string]Quality{
 		Required: nil,
 		Forbidden: &QualityForbidden{
 			OneOf: &QualityForbiddenOneOf{
-				Quality: "Mentor Spirit",
+				Quality: []string{"Mentor Spirit"},
 			},
 		},
 		Page:              "151",
@@ -8381,7 +8381,7 @@ var DataQualities = map[string]Quality{
 		Required: nil,
 		Forbidden: &QualityForbidden{
 			OneOf: &QualityForbiddenOneOf{
-				Quality: "Mentor Spirit",
+				Quality: []string{"Mentor Spirit"},
 			},
 		},
 		Page:              "151",
@@ -8401,7 +8401,7 @@ var DataQualities = map[string]Quality{
 		Required: nil,
 		Forbidden: &QualityForbidden{
 			OneOf: &QualityForbiddenOneOf{
-				Quality: "Mentor Spirit",
+				Quality: []string{"Mentor Spirit"},
 			},
 		},
 		Page:              "151",
@@ -8422,7 +8422,7 @@ var DataQualities = map[string]Quality{
 		Required: nil,
 		Forbidden: &QualityForbidden{
 			OneOf: &QualityForbiddenOneOf{
-				Quality: "Mentor Spirit",
+				Quality: []string{"Mentor Spirit"},
 			},
 		},
 		Page:              "151",
@@ -8442,7 +8442,7 @@ var DataQualities = map[string]Quality{
 		Required: nil,
 		Forbidden: &QualityForbidden{
 			OneOf: &QualityForbiddenOneOf{
-				Quality: "Mentor Spirit",
+				Quality: []string{"Mentor Spirit"},
 			},
 		},
 		Page:              "151",
@@ -8462,7 +8462,7 @@ var DataQualities = map[string]Quality{
 		Required: nil,
 		Forbidden: &QualityForbidden{
 			OneOf: &QualityForbiddenOneOf{
-				Quality: "Mentor Spirit",
+				Quality: []string{"Mentor Spirit"},
 			},
 		},
 		Page:              "151",
@@ -8482,7 +8482,7 @@ var DataQualities = map[string]Quality{
 		Required: nil,
 		Forbidden: &QualityForbidden{
 			OneOf: &QualityForbiddenOneOf{
-				Quality: "Mentor Spirit",
+				Quality: []string{"Mentor Spirit"},
 			},
 		},
 		Page:              "151",
@@ -8502,7 +8502,7 @@ var DataQualities = map[string]Quality{
 		Required: nil,
 		Forbidden: &QualityForbidden{
 			OneOf: &QualityForbiddenOneOf{
-				Quality: "Mentor Spirit",
+				Quality: []string{"Mentor Spirit"},
 			},
 		},
 		Page:              "151",
@@ -8522,7 +8522,7 @@ var DataQualities = map[string]Quality{
 		Required: nil,
 		Forbidden: &QualityForbidden{
 			OneOf: &QualityForbiddenOneOf{
-				Quality: "Mentor Spirit",
+				Quality: []string{"Mentor Spirit"},
 			},
 		},
 		Page:              "151",
@@ -8542,7 +8542,7 @@ var DataQualities = map[string]Quality{
 		Required: nil,
 		Forbidden: &QualityForbidden{
 			OneOf: &QualityForbiddenOneOf{
-				Quality: "Mentor Spirit",
+				Quality: []string{"Mentor Spirit"},
 			},
 		},
 		Page:              "151",
@@ -8562,7 +8562,7 @@ var DataQualities = map[string]Quality{
 		Required: nil,
 		Forbidden: &QualityForbidden{
 			OneOf: &QualityForbiddenOneOf{
-				Quality: "Mentor Spirit",
+				Quality: []string{"Mentor Spirit"},
 			},
 		},
 		Page:              "151",
@@ -8582,7 +8582,7 @@ var DataQualities = map[string]Quality{
 		Required: nil,
 		Forbidden: &QualityForbidden{
 			OneOf: &QualityForbiddenOneOf{
-				Quality: "Mentor Spirit",
+				Quality: []string{"Mentor Spirit"},
 			},
 		},
 		Page:              "151",
@@ -8602,7 +8602,7 @@ var DataQualities = map[string]Quality{
 		Required: nil,
 		Forbidden: &QualityForbidden{
 			OneOf: &QualityForbiddenOneOf{
-				Quality: "Mentor Spirit",
+				Quality: []string{"Mentor Spirit"},
 			},
 		},
 		Page:              "151",
@@ -8622,7 +8622,7 @@ var DataQualities = map[string]Quality{
 		Required: nil,
 		Forbidden: &QualityForbidden{
 			OneOf: &QualityForbiddenOneOf{
-				Quality: "Mentor Spirit",
+				Quality: []string{"Mentor Spirit"},
 			},
 		},
 		Page:              "151",
@@ -8642,7 +8642,7 @@ var DataQualities = map[string]Quality{
 		Required: nil,
 		Forbidden: &QualityForbidden{
 			OneOf: &QualityForbiddenOneOf{
-				Quality: "Mentor Spirit",
+				Quality: []string{"Mentor Spirit"},
 			},
 		},
 		Page:              "151",
@@ -8662,7 +8662,7 @@ var DataQualities = map[string]Quality{
 		Required: nil,
 		Forbidden: &QualityForbidden{
 			OneOf: &QualityForbiddenOneOf{
-				Quality: "Mentor Spirit",
+				Quality: []string{"Mentor Spirit"},
 			},
 		},
 		Page:              "151",
@@ -8682,7 +8682,7 @@ var DataQualities = map[string]Quality{
 		Required: nil,
 		Forbidden: &QualityForbidden{
 			OneOf: &QualityForbiddenOneOf{
-				Quality: "Mentor Spirit",
+				Quality: []string{"Mentor Spirit"},
 			},
 		},
 		Page:              "151",
@@ -8703,7 +8703,7 @@ var DataQualities = map[string]Quality{
 		Required: nil,
 		Forbidden: &QualityForbidden{
 			OneOf: &QualityForbiddenOneOf{
-				Quality: "Mentor Spirit",
+				Quality: []string{"Mentor Spirit"},
 			},
 		},
 		Page:              "151",
@@ -8724,7 +8724,7 @@ var DataQualities = map[string]Quality{
 		Required: nil,
 		Forbidden: &QualityForbidden{
 			OneOf: &QualityForbiddenOneOf{
-				Quality: "Mentor Spirit",
+				Quality: []string{"Mentor Spirit"},
 			},
 		},
 		Page:              "151",
@@ -8744,7 +8744,7 @@ var DataQualities = map[string]Quality{
 		Required: nil,
 		Forbidden: &QualityForbidden{
 			OneOf: &QualityForbiddenOneOf{
-				Quality: "Mentor Spirit",
+				Quality: []string{"Mentor Spirit"},
 			},
 		},
 		Page:              "151",
@@ -8764,7 +8764,7 @@ var DataQualities = map[string]Quality{
 		Required: nil,
 		Forbidden: &QualityForbidden{
 			OneOf: &QualityForbiddenOneOf{
-				Quality: "Mentor Spirit",
+				Quality: []string{"Mentor Spirit"},
 			},
 		},
 		Page:              "151",
@@ -8957,7 +8957,7 @@ var DataQualities = map[string]Quality{
 		Bonus:    nil,
 		Required: &QualityRequired{
 			OneOf: &QualityRequiredOneOf{
-				Quality: "Mentor Spirit",
+				Quality: []string{"Mentor Spirit"},
 			},
 		},
 		Page:                  "35",
@@ -9018,7 +9018,7 @@ var DataQualities = map[string]Quality{
 		},
 		Required: &QualityRequired{
 			OneOf: &QualityRequiredOneOf{
-				Quality: []interface{}{"Adept", "Mystic Adept"},
+				Quality: []string{"Adept", "Mystic Adept"},
 			},
 		},
 		Page:                  "35",
@@ -9210,7 +9210,7 @@ var DataQualities = map[string]Quality{
 		Bonus:    nil,
 		Required: &QualityRequired{
 			OneOf: &QualityRequiredOneOf{
-				Quality: []interface{}{"Pacifist I", "Pacifist II"},
+				Quality: []string{"Pacifist I", "Pacifist II"},
 			},
 		},
 		Page:                  "39",
@@ -9495,7 +9495,7 @@ var DataQualities = map[string]Quality{
 		Required: nil,
 		Forbidden: &QualityForbidden{
 			OneOf: &QualityForbiddenOneOf{
-				Quality: "Cyclopean Eye",
+				Quality: []string{"Cyclopean Eye"},
 			},
 		},
 		Page:              "132",
@@ -9517,7 +9517,7 @@ var DataQualities = map[string]Quality{
 		Required: nil,
 		Forbidden: &QualityForbidden{
 			OneOf: &QualityForbiddenOneOf{
-				Quality: []interface{}{"Crystal Gut (Liver, Kidneys)", "Crystal Gut (Liver, Stomach)", "Crystal Gut (Liver, Intestines)", "Crystal Gut (Liver, Kidneys, Stomach)", "Crystal Gut (Liver, Kidneys, Intestines)", "Crystal Gut (Liver, Stomach, Intestines)", "Crystal Gut (Liver, Kidneys, Stomach, Intestines)"},
+				Quality: []string{"Crystal Gut (Liver, Kidneys)", "Crystal Gut (Liver, Stomach)", "Crystal Gut (Liver, Intestines)", "Crystal Gut (Liver, Kidneys, Stomach)", "Crystal Gut (Liver, Kidneys, Intestines)", "Crystal Gut (Liver, Stomach, Intestines)", "Crystal Gut (Liver, Kidneys, Stomach, Intestines)"},
 			},
 		},
 		Page:              "133",
@@ -9539,7 +9539,7 @@ var DataQualities = map[string]Quality{
 		Required: nil,
 		Forbidden: &QualityForbidden{
 			OneOf: &QualityForbiddenOneOf{
-				Quality: []interface{}{"Crystal Gut (Liver, Kidneys)", "Crystal Gut (Kidneys, Stomach)", "Crystal Gut (Kidneys, Intestines)", "Crystal Gut (Liver, Kidneys, Stomach)", "Crystal Gut (Liver, Kidneys, Intestines)", "Crystal Gut (Kidneys, Stomach, Intestines)", "Crystal Gut (Liver, Kidneys, Stomach, Intestines)"},
+				Quality: []string{"Crystal Gut (Liver, Kidneys)", "Crystal Gut (Kidneys, Stomach)", "Crystal Gut (Kidneys, Intestines)", "Crystal Gut (Liver, Kidneys, Stomach)", "Crystal Gut (Liver, Kidneys, Intestines)", "Crystal Gut (Kidneys, Stomach, Intestines)", "Crystal Gut (Liver, Kidneys, Stomach, Intestines)"},
 			},
 		},
 		Page:              "133",
@@ -9561,7 +9561,7 @@ var DataQualities = map[string]Quality{
 		Required: nil,
 		Forbidden: &QualityForbidden{
 			OneOf: &QualityForbiddenOneOf{
-				Quality: []interface{}{"Crystal Gut (Liver, Stomach)", "Crystal Gut (Kidneys, Stomach)", "Crystal Gut (Stomach, Intestines)", "Crystal Gut (Liver, Kidneys, Stomach)", "Crystal Gut (Liver, Stomach, Intestines)", "Crystal Gut (Kidneys, Stomach, Intestines)", "Crystal Gut (Liver, Kidneys, Stomach, Intestines)"},
+				Quality: []string{"Crystal Gut (Liver, Stomach)", "Crystal Gut (Kidneys, Stomach)", "Crystal Gut (Stomach, Intestines)", "Crystal Gut (Liver, Kidneys, Stomach)", "Crystal Gut (Liver, Stomach, Intestines)", "Crystal Gut (Kidneys, Stomach, Intestines)", "Crystal Gut (Liver, Kidneys, Stomach, Intestines)"},
 			},
 		},
 		Page:              "133",
@@ -9582,7 +9582,7 @@ var DataQualities = map[string]Quality{
 		Required: nil,
 		Forbidden: &QualityForbidden{
 			OneOf: &QualityForbiddenOneOf{
-				Quality: []interface{}{"Crystal Gut (Liver, Intestines)", "Crystal Gut (Kidneys, Intestines)", "Crystal Gut (Stomach, Intestines)", "Crystal Gut (Liver, Kidneys, Intestines)", "Crystal Gut (Liver, Stomach, Intestines)", "Crystal Gut (Kidneys, Stomach, Intestines)", "Crystal Gut (Liver, Kidneys, Stomach, Intestines)"},
+				Quality: []string{"Crystal Gut (Liver, Intestines)", "Crystal Gut (Kidneys, Intestines)", "Crystal Gut (Stomach, Intestines)", "Crystal Gut (Liver, Kidneys, Intestines)", "Crystal Gut (Liver, Stomach, Intestines)", "Crystal Gut (Kidneys, Stomach, Intestines)", "Crystal Gut (Liver, Kidneys, Stomach, Intestines)"},
 			},
 		},
 		Page:              "133",
@@ -9605,7 +9605,7 @@ var DataQualities = map[string]Quality{
 		Required: nil,
 		Forbidden: &QualityForbidden{
 			OneOf: &QualityForbiddenOneOf{
-				Quality: []interface{}{"Crystal Gut (Liver)", "Crystal Gut (Kidneys)", "Crystal Gut (Liver, Stomach)", "Crystal Gut (Liver, Intestines)", "Crystal Gut (Kidneys, Stomach)", "Crystal Gut (Kidneys, Intestines)", "Crystal Gut (Liver, Kidneys, Stomach)", "Crystal Gut (Liver, Kidneys, Intestines)", "Crystal Gut (Liver, Stomach, Intestines)", "Crystal Gut (Kidneys, Stomach, Intestines)", "Crystal Gut (Liver, Kidneys, Stomach, Intestines)"},
+				Quality: []string{"Crystal Gut (Liver)", "Crystal Gut (Kidneys)", "Crystal Gut (Liver, Stomach)", "Crystal Gut (Liver, Intestines)", "Crystal Gut (Kidneys, Stomach)", "Crystal Gut (Kidneys, Intestines)", "Crystal Gut (Liver, Kidneys, Stomach)", "Crystal Gut (Liver, Kidneys, Intestines)", "Crystal Gut (Liver, Stomach, Intestines)", "Crystal Gut (Kidneys, Stomach, Intestines)", "Crystal Gut (Liver, Kidneys, Stomach, Intestines)"},
 			},
 		},
 		Page:              "133",
@@ -9628,7 +9628,7 @@ var DataQualities = map[string]Quality{
 		Required: nil,
 		Forbidden: &QualityForbidden{
 			OneOf: &QualityForbiddenOneOf{
-				Quality: []interface{}{"Crystal Gut (Liver)", "Crystal Gut (Stomach)", "Crystal Gut (Liver, Kidneys)", "Crystal Gut (Liver, Intestines)", "Crystal Gut (Kidneys, Stomach)", "Crystal Gut (Stomach, Intestines)", "Crystal Gut (Liver, Kidneys, Stomach)", "Crystal Gut (Liver, Kidneys, Intestines)", "Crystal Gut (Liver, Stomach, Intestines)", "Crystal Gut (Kidneys, Stomach, Intestines)", "Crystal Gut (Liver, Kidneys, Stomach, Intestines)"},
+				Quality: []string{"Crystal Gut (Liver)", "Crystal Gut (Stomach)", "Crystal Gut (Liver, Kidneys)", "Crystal Gut (Liver, Intestines)", "Crystal Gut (Kidneys, Stomach)", "Crystal Gut (Stomach, Intestines)", "Crystal Gut (Liver, Kidneys, Stomach)", "Crystal Gut (Liver, Kidneys, Intestines)", "Crystal Gut (Liver, Stomach, Intestines)", "Crystal Gut (Kidneys, Stomach, Intestines)", "Crystal Gut (Liver, Kidneys, Stomach, Intestines)"},
 			},
 		},
 		Page:              "133",
@@ -9650,7 +9650,7 @@ var DataQualities = map[string]Quality{
 		Required: nil,
 		Forbidden: &QualityForbidden{
 			OneOf: &QualityForbiddenOneOf{
-				Quality: []interface{}{"Crystal Gut (Liver)", "Crystal Gut (Intestines)", "Crystal Gut (Liver, Kidneys)", "Crystal Gut (Liver, Stomach)", "Crystal Gut (Kidneys, Intestines)", "Crystal Gut (Stomach, Intestines)", "Crystal Gut (Liver, Kidneys, Stomach)", "Crystal Gut (Liver, Kidneys, Intestines)", "Crystal Gut (Liver, Stomach, Intestines)", "Crystal Gut (Kidneys, Stomach, Intestines)", "Crystal Gut (Liver, Kidneys, Stomach, Intestines)"},
+				Quality: []string{"Crystal Gut (Liver)", "Crystal Gut (Intestines)", "Crystal Gut (Liver, Kidneys)", "Crystal Gut (Liver, Stomach)", "Crystal Gut (Kidneys, Intestines)", "Crystal Gut (Stomach, Intestines)", "Crystal Gut (Liver, Kidneys, Stomach)", "Crystal Gut (Liver, Kidneys, Intestines)", "Crystal Gut (Liver, Stomach, Intestines)", "Crystal Gut (Kidneys, Stomach, Intestines)", "Crystal Gut (Liver, Kidneys, Stomach, Intestines)"},
 			},
 		},
 		Page:              "133",
@@ -9673,7 +9673,7 @@ var DataQualities = map[string]Quality{
 		Required: nil,
 		Forbidden: &QualityForbidden{
 			OneOf: &QualityForbiddenOneOf{
-				Quality: []interface{}{"Crystal Gut (Kidneys)", "Crystal Gut (Stomach)", "Crystal Gut (Liver, Kidneys)", "Crystal Gut (Liver, Stomach)", "Crystal Gut (Kidneys, Intestines)", "Crystal Gut (Stomach, Intestines)", "Crystal Gut (Liver, Kidneys, Stomach)", "Crystal Gut (Liver, Kidneys, Intestines)", "Crystal Gut (Liver, Stomach, Intestines)", "Crystal Gut (Kidneys, Stomach, Intestines)", "Crystal Gut (Liver, Kidneys, Stomach, Intestines)"},
+				Quality: []string{"Crystal Gut (Kidneys)", "Crystal Gut (Stomach)", "Crystal Gut (Liver, Kidneys)", "Crystal Gut (Liver, Stomach)", "Crystal Gut (Kidneys, Intestines)", "Crystal Gut (Stomach, Intestines)", "Crystal Gut (Liver, Kidneys, Stomach)", "Crystal Gut (Liver, Kidneys, Intestines)", "Crystal Gut (Liver, Stomach, Intestines)", "Crystal Gut (Kidneys, Stomach, Intestines)", "Crystal Gut (Liver, Kidneys, Stomach, Intestines)"},
 			},
 		},
 		Page:              "133",
@@ -9695,7 +9695,7 @@ var DataQualities = map[string]Quality{
 		Required: nil,
 		Forbidden: &QualityForbidden{
 			OneOf: &QualityForbiddenOneOf{
-				Quality: []interface{}{"Crystal Gut (Kidneys)", "Crystal Gut (Intestines)", "Crystal Gut (Liver, Kidneys)", "Crystal Gut (Liver, Intestines)", "Crystal Gut (Kidneys, Stomach)", "Crystal Gut (Stomach, Intestines)", "Crystal Gut (Liver, Kidneys, Stomach)", "Crystal Gut (Liver, Kidneys, Intestines)", "Crystal Gut (Liver, Stomach, Intestines)", "Crystal Gut (Kidneys, Stomach, Intestines)", "Crystal Gut (Liver, Kidneys, Stomach, Intestines)"},
+				Quality: []string{"Crystal Gut (Kidneys)", "Crystal Gut (Intestines)", "Crystal Gut (Liver, Kidneys)", "Crystal Gut (Liver, Intestines)", "Crystal Gut (Kidneys, Stomach)", "Crystal Gut (Stomach, Intestines)", "Crystal Gut (Liver, Kidneys, Stomach)", "Crystal Gut (Liver, Kidneys, Intestines)", "Crystal Gut (Liver, Stomach, Intestines)", "Crystal Gut (Kidneys, Stomach, Intestines)", "Crystal Gut (Liver, Kidneys, Stomach, Intestines)"},
 			},
 		},
 		Page:              "133",
@@ -9717,7 +9717,7 @@ var DataQualities = map[string]Quality{
 		Required: nil,
 		Forbidden: &QualityForbidden{
 			OneOf: &QualityForbiddenOneOf{
-				Quality: []interface{}{"Crystal Gut (Stomach)", "Crystal Gut (Intestines)", "Crystal Gut (Liver, Stomach)", "Crystal Gut (Liver, Intestines)", "Crystal Gut (Kidneys, Stomach)", "Crystal Gut (Kidneys, Intestines)", "Crystal Gut (Liver, Kidneys, Stomach)", "Crystal Gut (Liver, Kidneys, Intestines)", "Crystal Gut (Liver, Stomach, Intestines)", "Crystal Gut (Kidneys, Stomach, Intestines)", "Crystal Gut (Liver, Kidneys, Stomach, Intestines)"},
+				Quality: []string{"Crystal Gut (Stomach)", "Crystal Gut (Intestines)", "Crystal Gut (Liver, Stomach)", "Crystal Gut (Liver, Intestines)", "Crystal Gut (Kidneys, Stomach)", "Crystal Gut (Kidneys, Intestines)", "Crystal Gut (Liver, Kidneys, Stomach)", "Crystal Gut (Liver, Kidneys, Intestines)", "Crystal Gut (Liver, Stomach, Intestines)", "Crystal Gut (Kidneys, Stomach, Intestines)", "Crystal Gut (Liver, Kidneys, Stomach, Intestines)"},
 			},
 		},
 		Page:              "133",
@@ -9741,7 +9741,7 @@ var DataQualities = map[string]Quality{
 		Required: nil,
 		Forbidden: &QualityForbidden{
 			OneOf: &QualityForbiddenOneOf{
-				Quality: []interface{}{"Crystal Gut (Liver)", "Crystal Gut (Kidneys)", "Crystal Gut (Stomach)", "Crystal Gut (Liver, Kidneys)", "Crystal Gut (Liver, Stomach)", "Crystal Gut (Liver, Intestines)", "Crystal Gut (Kidneys, Stomach)", "Crystal Gut (Kidneys, Intestines)", "Crystal Gut (Stomach, Intestines)", "Crystal Gut (Liver, Kidneys, Intestines)", "Crystal Gut (Liver, Stomach, Intestines)", "Crystal Gut (Kidneys, Stomach, Intestines)", "Crystal Gut (Liver, Kidneys, Stomach, Intestines)"},
+				Quality: []string{"Crystal Gut (Liver)", "Crystal Gut (Kidneys)", "Crystal Gut (Stomach)", "Crystal Gut (Liver, Kidneys)", "Crystal Gut (Liver, Stomach)", "Crystal Gut (Liver, Intestines)", "Crystal Gut (Kidneys, Stomach)", "Crystal Gut (Kidneys, Intestines)", "Crystal Gut (Stomach, Intestines)", "Crystal Gut (Liver, Kidneys, Intestines)", "Crystal Gut (Liver, Stomach, Intestines)", "Crystal Gut (Kidneys, Stomach, Intestines)", "Crystal Gut (Liver, Kidneys, Stomach, Intestines)"},
 			},
 		},
 		Page:              "133",
@@ -9764,7 +9764,7 @@ var DataQualities = map[string]Quality{
 		Required: nil,
 		Forbidden: &QualityForbidden{
 			OneOf: &QualityForbiddenOneOf{
-				Quality: []interface{}{"Crystal Gut (Liver)", "Crystal Gut (Kidneys)", "Crystal Gut (Intestines)", "Crystal Gut (Liver, Kidneys)", "Crystal Gut (Liver, Stomach)", "Crystal Gut (Liver, Intestines)", "Crystal Gut (Kidneys, Stomach)", "Crystal Gut (Kidneys, Intestines)", "Crystal Gut (Stomach, Intestines)", "Crystal Gut (Liver, Kidneys, Stomach)", "Crystal Gut (Liver, Stomach, Intestines)", "Crystal Gut (Kidneys, Stomach, Intestines)", "Crystal Gut (Liver, Kidneys, Stomach, Intestines)"},
+				Quality: []string{"Crystal Gut (Liver)", "Crystal Gut (Kidneys)", "Crystal Gut (Intestines)", "Crystal Gut (Liver, Kidneys)", "Crystal Gut (Liver, Stomach)", "Crystal Gut (Liver, Intestines)", "Crystal Gut (Kidneys, Stomach)", "Crystal Gut (Kidneys, Intestines)", "Crystal Gut (Stomach, Intestines)", "Crystal Gut (Liver, Kidneys, Stomach)", "Crystal Gut (Liver, Stomach, Intestines)", "Crystal Gut (Kidneys, Stomach, Intestines)", "Crystal Gut (Liver, Kidneys, Stomach, Intestines)"},
 			},
 		},
 		Page:              "133",
@@ -9787,7 +9787,7 @@ var DataQualities = map[string]Quality{
 		Required: nil,
 		Forbidden: &QualityForbidden{
 			OneOf: &QualityForbiddenOneOf{
-				Quality: []interface{}{"Crystal Gut (Liver)", "Crystal Gut (Stomach)", "Crystal Gut (Intestines)", "Crystal Gut (Liver, Kidneys)", "Crystal Gut (Liver, Stomach)", "Crystal Gut (Liver, Intestines)", "Crystal Gut (Kidneys, Stomach)", "Crystal Gut (Kidneys, Intestines)", "Crystal Gut (Stomach, Intestines)", "Crystal Gut (Liver, Kidneys, Stomach)", "Crystal Gut (Liver, Kidneys, Intestines)", "Crystal Gut (Kidneys, Stomach, Intestines)", "Crystal Gut (Liver, Kidneys, Stomach, Intestines)"},
+				Quality: []string{"Crystal Gut (Liver)", "Crystal Gut (Stomach)", "Crystal Gut (Intestines)", "Crystal Gut (Liver, Kidneys)", "Crystal Gut (Liver, Stomach)", "Crystal Gut (Liver, Intestines)", "Crystal Gut (Kidneys, Stomach)", "Crystal Gut (Kidneys, Intestines)", "Crystal Gut (Stomach, Intestines)", "Crystal Gut (Liver, Kidneys, Stomach)", "Crystal Gut (Liver, Kidneys, Intestines)", "Crystal Gut (Kidneys, Stomach, Intestines)", "Crystal Gut (Liver, Kidneys, Stomach, Intestines)"},
 			},
 		},
 		Page:              "133",
@@ -9810,7 +9810,7 @@ var DataQualities = map[string]Quality{
 		Required: nil,
 		Forbidden: &QualityForbidden{
 			OneOf: &QualityForbiddenOneOf{
-				Quality: []interface{}{"Crystal Gut (Kidneys)", "Crystal Gut (Stomach)", "Crystal Gut (Intestines)", "Crystal Gut (Liver, Kidneys)", "Crystal Gut (Liver, Stomach)", "Crystal Gut (Liver, Intestines)", "Crystal Gut (Kidneys, Stomach)", "Crystal Gut (Kidneys, Intestines)", "Crystal Gut (Stomach, Intestines)", "Crystal Gut (Liver, Kidneys, Stomach)", "Crystal Gut (Liver, Kidneys, Intestines)", "Crystal Gut (Liver, Stomach, Intestines)", "Crystal Gut (Liver, Kidneys, Stomach, Intestines)"},
+				Quality: []string{"Crystal Gut (Kidneys)", "Crystal Gut (Stomach)", "Crystal Gut (Intestines)", "Crystal Gut (Liver, Kidneys)", "Crystal Gut (Liver, Stomach)", "Crystal Gut (Liver, Intestines)", "Crystal Gut (Kidneys, Stomach)", "Crystal Gut (Kidneys, Intestines)", "Crystal Gut (Stomach, Intestines)", "Crystal Gut (Liver, Kidneys, Stomach)", "Crystal Gut (Liver, Kidneys, Intestines)", "Crystal Gut (Liver, Stomach, Intestines)", "Crystal Gut (Liver, Kidneys, Stomach, Intestines)"},
 			},
 		},
 		Page:              "133",
@@ -9834,7 +9834,7 @@ var DataQualities = map[string]Quality{
 		Required: nil,
 		Forbidden: &QualityForbidden{
 			OneOf: &QualityForbiddenOneOf{
-				Quality: []interface{}{"Crystal Gut (Liver)", "Crystal Gut (Kidneys)", "Crystal Gut (Stomach)", "Crystal Gut (Intestines)", "Crystal Gut (Liver, Kidneys)", "Crystal Gut (Liver, Stomach)", "Crystal Gut (Liver, Intestines)", "Crystal Gut (Kidneys, Stomach)", "Crystal Gut (Kidneys, Intestines)", "Crystal Gut (Stomach, Intestines)", "Crystal Gut (Liver, Kidneys, Stomach)", "Crystal Gut (Liver, Kidneys, Intestines)", "Crystal Gut (Liver, Stomach, Intestines)", "Crystal Gut (Kidneys, Stomach, Intestines)"},
+				Quality: []string{"Crystal Gut (Liver)", "Crystal Gut (Kidneys)", "Crystal Gut (Stomach)", "Crystal Gut (Intestines)", "Crystal Gut (Liver, Kidneys)", "Crystal Gut (Liver, Stomach)", "Crystal Gut (Liver, Intestines)", "Crystal Gut (Kidneys, Stomach)", "Crystal Gut (Kidneys, Intestines)", "Crystal Gut (Stomach, Intestines)", "Crystal Gut (Liver, Kidneys, Stomach)", "Crystal Gut (Liver, Kidneys, Intestines)", "Crystal Gut (Liver, Stomach, Intestines)", "Crystal Gut (Kidneys, Stomach, Intestines)"},
 			},
 		},
 		Page:              "133",
@@ -9939,7 +9939,7 @@ var DataQualities = map[string]Quality{
 		Source:   "FA",
 		Required: &QualityRequired{
 			OneOf: &QualityRequiredOneOf{
-				Quality: "Crystal Breath",
+				Quality: []string{"Crystal Breath"},
 			},
 		},
 		Page:              "133",
@@ -9953,7 +9953,7 @@ var DataQualities = map[string]Quality{
 		Source:   "FA",
 		Required: &QualityRequired{
 			OneOf: &QualityRequiredOneOf{
-				Quality: "Crystal Limb (Leg)",
+				Quality: []string{"Crystal Limb (Leg)"},
 			},
 		},
 		Page:              "134",
@@ -9980,7 +9980,7 @@ var DataQualities = map[string]Quality{
 		Source:   "FA",
 		Required: &QualityRequired{
 			OneOf: &QualityRequiredOneOf{
-				Quality: "Crystal Limb (Arm)",
+				Quality: []string{"Crystal Limb (Arm)"},
 			},
 		},
 		Page:              "134",
@@ -9998,7 +9998,7 @@ var DataQualities = map[string]Quality{
 		},
 		Required: &QualityRequired{
 			OneOf: &QualityRequiredOneOf{
-				Quality: []interface{}{"Crystal Eye (One Eye)", "Crystal Eye (Two Eyes)", "Crystal Eye (Three Eyes)"},
+				Quality: []string{"Crystal Eye (One Eye)", "Crystal Eye (Two Eyes)", "Crystal Eye (Three Eyes)"},
 			},
 		},
 		Page:              "134",
@@ -10017,7 +10017,7 @@ var DataQualities = map[string]Quality{
 		},
 		Forbidden: &QualityForbidden{
 			OneOf: &QualityForbiddenOneOf{
-				Quality: []interface{}{"Aware", "Aspected Magician", "Enchanter", "Explorer", "Magician", "Mystic Adept", "Adept"},
+				Quality: []string{"Aware", "Aspected Magician", "Enchanter", "Explorer", "Magician", "Mystic Adept", "Adept"},
 			},
 		},
 		Page:              "47",
@@ -10036,7 +10036,7 @@ var DataQualities = map[string]Quality{
 		},
 		Forbidden: &QualityForbidden{
 			OneOf: &QualityForbiddenOneOf{
-				Quality: []interface{}{"Aware", "Aspected Magician", "Apprentice", "Explorer", "Magician", "Mystic Adept", "Adept"},
+				Quality: []string{"Aware", "Aspected Magician", "Apprentice", "Explorer", "Magician", "Mystic Adept", "Adept"},
 			},
 		},
 		Page:              "47",
@@ -10054,7 +10054,7 @@ var DataQualities = map[string]Quality{
 		},
 		Forbidden: &QualityForbidden{
 			OneOf: &QualityForbiddenOneOf{
-				Quality: []interface{}{"Aware", "Aspected Magician", "Enchanter", "Apprentice", "Magician", "Mystic Adept", "Adept"},
+				Quality: []string{"Aware", "Aspected Magician", "Enchanter", "Apprentice", "Magician", "Mystic Adept", "Adept"},
 			},
 		},
 		Page:              "47",
@@ -10072,7 +10072,7 @@ var DataQualities = map[string]Quality{
 		},
 		Required: &QualityRequired{
 			OneOf: &QualityRequiredOneOf{
-				Quality: []interface{}{"Adept", "Aware", "Aspected Magician", "Apprentice", "Explorer", "Magician", "Mystic Adept"},
+				Quality: []string{"Adept", "Aware", "Aspected Magician", "Apprentice", "Explorer", "Magician", "Mystic Adept"},
 			},
 		},
 		Page:              "43",
@@ -10089,7 +10089,7 @@ var DataQualities = map[string]Quality{
 		},
 		Required: &QualityRequired{
 			OneOf: &QualityRequiredOneOf{
-				Quality: []interface{}{"Adept", "Aware", "Aspected Magician", "Apprentice", "Explorer", "Magician", "Mystic Adept"},
+				Quality: []string{"Adept", "Aware", "Aspected Magician", "Apprentice", "Explorer", "Magician", "Mystic Adept"},
 			},
 		},
 		Page:              "43",
@@ -10106,7 +10106,7 @@ var DataQualities = map[string]Quality{
 		},
 		Required: &QualityRequired{
 			OneOf: &QualityRequiredOneOf{
-				Quality: []interface{}{"Adept", "Aware", "Aspected Magician", "Apprentice", "Explorer", "Magician", "Mystic Adept"},
+				Quality: []string{"Adept", "Aware", "Aspected Magician", "Apprentice", "Explorer", "Magician", "Mystic Adept"},
 			},
 		},
 		Page:              "43",
@@ -10123,7 +10123,7 @@ var DataQualities = map[string]Quality{
 		},
 		Required: &QualityRequired{
 			OneOf: &QualityRequiredOneOf{
-				Quality: []interface{}{"Adept", "Aware", "Aspected Magician", "Apprentice", "Explorer", "Magician", "Mystic Adept"},
+				Quality: []string{"Adept", "Aware", "Aspected Magician", "Apprentice", "Explorer", "Magician", "Mystic Adept"},
 			},
 		},
 		Page:              "43",
@@ -10142,7 +10142,7 @@ var DataQualities = map[string]Quality{
 		},
 		Required: &QualityRequired{
 			OneOf: &QualityRequiredOneOf{
-				Quality: []interface{}{"Adept", "Aware", "Aspected Magician", "Apprentice", "Explorer", "Magician", "Mystic Adept"},
+				Quality: []string{"Adept", "Aware", "Aspected Magician", "Apprentice", "Explorer", "Magician", "Mystic Adept"},
 			},
 		},
 		Page:              "43",
@@ -10159,7 +10159,7 @@ var DataQualities = map[string]Quality{
 		},
 		Required: &QualityRequired{
 			OneOf: &QualityRequiredOneOf{
-				Quality: []interface{}{"Adept", "Aware", "Aspected Magician", "Apprentice", "Explorer", "Magician", "Mystic Adept"},
+				Quality: []string{"Adept", "Aware", "Aspected Magician", "Apprentice", "Explorer", "Magician", "Mystic Adept"},
 			},
 		},
 		Page:              "43",
@@ -10177,7 +10177,7 @@ var DataQualities = map[string]Quality{
 		},
 		Required: &QualityRequired{
 			OneOf: &QualityRequiredOneOf{
-				Quality: []interface{}{"Adept", "Aware", "Aspected Magician", "Apprentice", "Explorer", "Magician", "Mystic Adept"},
+				Quality: []string{"Adept", "Aware", "Aspected Magician", "Apprentice", "Explorer", "Magician", "Mystic Adept"},
 			},
 		},
 		Page:              "43",
@@ -10194,7 +10194,7 @@ var DataQualities = map[string]Quality{
 		},
 		Required: &QualityRequired{
 			OneOf: &QualityRequiredOneOf{
-				Quality: "Mentor Spirit",
+				Quality: []string{"Mentor Spirit"},
 			},
 		},
 		Page:              "182",
@@ -10214,7 +10214,7 @@ var DataQualities = map[string]Quality{
 		Source:   "SAG",
 		Forbidden: &QualityForbidden{
 			OneOf: &QualityForbiddenOneOf{
-				Quality: []interface{}{"SINner (Corporate)", "SINner (Criminal)", "SINner (National)", "SINner (Corporate Limited)", "People's SIN (Criminal)"},
+				Quality: []string{"SINner (Corporate)", "SINner (Criminal)", "SINner (National)", "SINner (Corporate Limited)", "People's SIN (Criminal)"},
 			},
 		},
 		Page: "148",
@@ -10226,7 +10226,7 @@ var DataQualities = map[string]Quality{
 		Source:   "SAG",
 		Forbidden: &QualityForbidden{
 			OneOf: &QualityForbiddenOneOf{
-				Quality: []interface{}{"SINner (Corporate)", "SINner (Criminal)", "SINner (National)", "SINner (Corporate Limited)", "People's SIN"},
+				Quality: []string{"SINner (Corporate)", "SINner (Criminal)", "SINner (National)", "SINner (Corporate Limited)", "People's SIN"},
 			},
 		},
 		Page: "148",
@@ -10252,7 +10252,7 @@ var DataQualities = map[string]Quality{
 		},
 		Required: &QualityRequired{
 			OneOf: &QualityRequiredOneOf{
-				Metatype: []interface{}{"Troll", "Ork"},
+				Metatype: []string{"Troll", "Ork"},
 			},
 		},
 		Page: "188",
@@ -10264,7 +10264,7 @@ var DataQualities = map[string]Quality{
 		Source:   "TCT",
 		Required: &QualityRequired{
 			OneOf: &QualityRequiredOneOf{
-				Metatype: "Troll",
+				Metatype: []string{"Troll"},
 			},
 		},
 		Page: "188",
@@ -10314,7 +10314,7 @@ var DataQualities = map[string]Quality{
 		},
 		Required: &QualityRequired{
 			OneOf: &QualityRequiredOneOf{
-				Metatype: []interface{}{"Troll", "Ork"},
+				Metatype: []string{"Troll", "Ork"},
 			},
 		},
 		Page: "188",
@@ -10326,7 +10326,7 @@ var DataQualities = map[string]Quality{
 		Source:   "TCT",
 		Required: &QualityRequired{
 			OneOf: &QualityRequiredOneOf{
-				Metatype: []interface{}{"Troll", "Ork"},
+				Metatype: []string{"Troll", "Ork"},
 			},
 		},
 		Page: "189",
@@ -10700,7 +10700,7 @@ var DataQualities = map[string]Quality{
 		},
 		Required: &QualityRequired{
 			OneOf: &QualityRequiredOneOf{
-				Quality: "Technomancer",
+				Quality: []string{"Technomancer"},
 			},
 		},
 		Page: "96",
@@ -10715,7 +10715,7 @@ var DataQualities = map[string]Quality{
 		},
 		Required: &QualityRequired{
 			OneOf: &QualityRequiredOneOf{
-				Quality: "Technomancer",
+				Quality: []string{"Technomancer"},
 			},
 		},
 		Page: "96",
@@ -10730,7 +10730,7 @@ var DataQualities = map[string]Quality{
 		},
 		Required: &QualityRequired{
 			OneOf: &QualityRequiredOneOf{
-				Quality: "Technomancer",
+				Quality: []string{"Technomancer"},
 			},
 		},
 		Page: "96",
@@ -10745,7 +10745,7 @@ var DataQualities = map[string]Quality{
 		},
 		Required: &QualityRequired{
 			OneOf: &QualityRequiredOneOf{
-				Quality: "Technomancer",
+				Quality: []string{"Technomancer"},
 			},
 		},
 		Page: "96",
@@ -10758,7 +10758,7 @@ var DataQualities = map[string]Quality{
 		Bonus:    nil,
 		Required: &QualityRequired{
 			OneOf: &QualityRequiredOneOf{
-				Quality: "Technomancer",
+				Quality: []string{"Technomancer"},
 			},
 		},
 		Page: "96",
@@ -10771,7 +10771,7 @@ var DataQualities = map[string]Quality{
 		Bonus:    nil,
 		Required: &QualityRequired{
 			OneOf: &QualityRequiredOneOf{
-				Quality: "Technomancer",
+				Quality: []string{"Technomancer"},
 			},
 		},
 		Page: "96",
@@ -10784,7 +10784,7 @@ var DataQualities = map[string]Quality{
 		Bonus:    nil,
 		Required: &QualityRequired{
 			OneOf: &QualityRequiredOneOf{
-				Quality: "Technomancer",
+				Quality: []string{"Technomancer"},
 			},
 		},
 		Page: "96",
@@ -10797,7 +10797,7 @@ var DataQualities = map[string]Quality{
 		Bonus:    nil,
 		Required: &QualityRequired{
 			OneOf: &QualityRequiredOneOf{
-				Quality: "Technomancer",
+				Quality: []string{"Technomancer"},
 			},
 		},
 		Page: "96",
@@ -10810,12 +10810,12 @@ var DataQualities = map[string]Quality{
 		Bonus:    nil,
 		Required: &QualityRequired{
 			OneOf: &QualityRequiredOneOf{
-				Quality: "Technomancer",
+				Quality: []string{"Technomancer"},
 			},
 		},
 		Forbidden: &QualityForbidden{
 			OneOf: &QualityForbiddenOneOf{
-				Quality: "Team Player",
+				Quality: []string{"Team Player"},
 			},
 		},
 		Page: "96",
@@ -10830,7 +10830,7 @@ var DataQualities = map[string]Quality{
 		},
 		Required: &QualityRequired{
 			OneOf: &QualityRequiredOneOf{
-				Quality: "Technomancer",
+				Quality: []string{"Technomancer"},
 			},
 		},
 		Page: "97",
@@ -10843,12 +10843,12 @@ var DataQualities = map[string]Quality{
 		Bonus:    nil,
 		Required: &QualityRequired{
 			OneOf: &QualityRequiredOneOf{
-				Quality: "Technomancer",
+				Quality: []string{"Technomancer"},
 			},
 		},
 		Forbidden: &QualityForbidden{
 			OneOf: &QualityForbiddenOneOf{
-				Quality: "One With the Matrix III",
+				Quality: []string{"One With the Matrix III"},
 			},
 		},
 		Page: "97",
@@ -10861,12 +10861,12 @@ var DataQualities = map[string]Quality{
 		Bonus:    nil,
 		Required: &QualityRequired{
 			OneOf: &QualityRequiredOneOf{
-				Quality: "Technomancer",
+				Quality: []string{"Technomancer"},
 			},
 		},
 		Forbidden: &QualityForbidden{
 			OneOf: &QualityForbiddenOneOf{
-				Quality: "One With the Matrix III",
+				Quality: []string{"One With the Matrix III"},
 			},
 		},
 		Page: "97",
@@ -10879,12 +10879,12 @@ var DataQualities = map[string]Quality{
 		Bonus:    nil,
 		Required: &QualityRequired{
 			OneOf: &QualityRequiredOneOf{
-				Quality: "Technomancer",
+				Quality: []string{"Technomancer"},
 			},
 		},
 		Forbidden: &QualityForbidden{
 			OneOf: &QualityForbiddenOneOf{
-				Quality: []interface{}{"One With the Matrix I", "One With the Matrix II"},
+				Quality: []string{"One With the Matrix I", "One With the Matrix II"},
 			},
 		},
 		Page: "97",
@@ -10897,7 +10897,7 @@ var DataQualities = map[string]Quality{
 		Bonus:    nil,
 		Forbidden: &QualityForbidden{
 			OneOf: &QualityForbiddenOneOf{
-				Quality: "Technomancer",
+				Quality: []string{"Technomancer"},
 			},
 		},
 		Page: "97",
@@ -10911,7 +10911,7 @@ var DataQualities = map[string]Quality{
 		Bonus:    nil,
 		Required: &QualityRequired{
 			OneOf: &QualityRequiredOneOf{
-				Quality: "Technomancer",
+				Quality: []string{"Technomancer"},
 			},
 		},
 		Page: "97",
@@ -10924,7 +10924,7 @@ var DataQualities = map[string]Quality{
 		Bonus:    nil,
 		Required: &QualityRequired{
 			OneOf: &QualityRequiredOneOf{
-				Quality: "Technomancer",
+				Quality: []string{"Technomancer"},
 			},
 		},
 		Page: "97",
@@ -10937,12 +10937,12 @@ var DataQualities = map[string]Quality{
 		Bonus:    nil,
 		Required: &QualityRequired{
 			OneOf: &QualityRequiredOneOf{
-				Quality: "Technomancer",
+				Quality: []string{"Technomancer"},
 			},
 		},
 		Forbidden: &QualityForbidden{
 			OneOf: &QualityForbiddenOneOf{
-				Quality: "Trust Lore, Not Data",
+				Quality: []string{"Trust Lore, Not Data"},
 			},
 		},
 		Page: "97",
@@ -10955,12 +10955,12 @@ var DataQualities = map[string]Quality{
 		Bonus:    nil,
 		Required: &QualityRequired{
 			OneOf: &QualityRequiredOneOf{
-				Quality: "Technomancer",
+				Quality: []string{"Technomancer"},
 			},
 		},
 		Forbidden: &QualityForbidden{
 			OneOf: &QualityForbiddenOneOf{
-				Quality: "Trust Data, Not Lore",
+				Quality: []string{"Trust Data, Not Lore"},
 			},
 		},
 		Page: "97",
@@ -10973,12 +10973,12 @@ var DataQualities = map[string]Quality{
 		Bonus:    nil,
 		Required: &QualityRequired{
 			OneOf: &QualityRequiredOneOf{
-				Quality: "Technomancer",
+				Quality: []string{"Technomancer"},
 			},
 		},
 		Forbidden: &QualityForbidden{
 			OneOf: &QualityForbiddenOneOf{
-				Quality: "Digital Doppelganger",
+				Quality: []string{"Digital Doppelganger"},
 			},
 		},
 		Page: "98",
@@ -10991,7 +10991,7 @@ var DataQualities = map[string]Quality{
 		Bonus:    nil,
 		Required: &QualityRequired{
 			OneOf: &QualityRequiredOneOf{
-				Quality: "Technomancer",
+				Quality: []string{"Technomancer"},
 			},
 		},
 		Page: "102",
@@ -11006,7 +11006,7 @@ var DataQualities = map[string]Quality{
 		},
 		Required: &QualityRequired{
 			OneOf: &QualityRequiredOneOf{
-				Quality: "Technomancer",
+				Quality: []string{"Technomancer"},
 			},
 		},
 		Page: "99",
@@ -11021,7 +11021,7 @@ var DataQualities = map[string]Quality{
 		},
 		Required: &QualityRequired{
 			OneOf: &QualityRequiredOneOf{
-				Quality: "Technomancer",
+				Quality: []string{"Technomancer"},
 			},
 		},
 		Page: "99",
@@ -11036,7 +11036,7 @@ var DataQualities = map[string]Quality{
 		},
 		Required: &QualityRequired{
 			OneOf: &QualityRequiredOneOf{
-				Quality: "Technomancer",
+				Quality: []string{"Technomancer"},
 			},
 		},
 		Page: "99",
@@ -11051,7 +11051,7 @@ var DataQualities = map[string]Quality{
 		},
 		Required: &QualityRequired{
 			OneOf: &QualityRequiredOneOf{
-				Quality: "Technomancer",
+				Quality: []string{"Technomancer"},
 			},
 		},
 		Page: "99",
@@ -11063,7 +11063,7 @@ var DataQualities = map[string]Quality{
 		Source:   "KC",
 		Required: &QualityRequired{
 			OneOf: &QualityRequiredOneOf{
-				Quality: "Technomancer",
+				Quality: []string{"Technomancer"},
 			},
 		},
 		Page: "99",
@@ -11076,7 +11076,7 @@ var DataQualities = map[string]Quality{
 		Bonus:    nil,
 		Required: &QualityRequired{
 			OneOf: &QualityRequiredOneOf{
-				Quality: "Technomancer",
+				Quality: []string{"Technomancer"},
 			},
 		},
 		Page: "99",
@@ -11100,7 +11100,7 @@ var DataQualities = map[string]Quality{
 		Bonus:    nil,
 		Required: &QualityRequired{
 			OneOf: &QualityRequiredOneOf{
-				Quality: "Technomancer",
+				Quality: []string{"Technomancer"},
 			},
 		},
 		Page: "99",
@@ -11113,12 +11113,12 @@ var DataQualities = map[string]Quality{
 		Bonus:    nil,
 		Required: &QualityRequired{
 			OneOf: &QualityRequiredOneOf{
-				Quality: "Technomancer",
+				Quality: []string{"Technomancer"},
 			},
 		},
 		Forbidden: &QualityForbidden{
 			OneOf: &QualityForbiddenOneOf{
-				Quality: []interface{}{"Addiction (Mild)", "Addiction (Moderate)", "Addiction (Severe)", "Addiction (Burnout)"},
+				Quality: []string{"Addiction (Mild)", "Addiction (Moderate)", "Addiction (Severe)", "Addiction (Burnout)"},
 			},
 		},
 		Page: "99",
@@ -11133,7 +11133,7 @@ var DataQualities = map[string]Quality{
 		},
 		Required: &QualityRequired{
 			OneOf: &QualityRequiredOneOf{
-				Quality: "Technomancer",
+				Quality: []string{"Technomancer"},
 			},
 		},
 		Page: "99",
@@ -11150,7 +11150,7 @@ var DataQualities = map[string]Quality{
 		},
 		Required: &QualityRequired{
 			OneOf: &QualityRequiredOneOf{
-				Quality: "Technomancer",
+				Quality: []string{"Technomancer"},
 			},
 		},
 		Page: "99",
@@ -11163,7 +11163,7 @@ var DataQualities = map[string]Quality{
 		Bonus:    nil,
 		Required: &QualityRequired{
 			OneOf: &QualityRequiredOneOf{
-				Quality: "Technomancer",
+				Quality: []string{"Technomancer"},
 			},
 		},
 		Page: "100",
@@ -11187,7 +11187,7 @@ var DataQualities = map[string]Quality{
 		Bonus:    nil,
 		Required: &QualityRequired{
 			OneOf: &QualityRequiredOneOf{
-				Quality: []interface{}{"Addiction (Mild)", "Addiction (Moderate)", "Addiction (Severe)", "Addiction (Burnout)"},
+				Quality: []string{"Addiction (Mild)", "Addiction (Moderate)", "Addiction (Severe)", "Addiction (Burnout)"},
 			},
 		},
 		Page: "100",
@@ -11210,12 +11210,12 @@ var DataQualities = map[string]Quality{
 		},
 		Required: &QualityRequired{
 			OneOf: &QualityRequiredOneOf{
-				Quality: "Technomancer",
+				Quality: []string{"Technomancer"},
 			},
 		},
 		Forbidden: &QualityForbidden{
 			OneOf: &QualityForbiddenOneOf{
-				Quality: []interface{}{"Resonant Stream: Machinist", "Resonant Stream: Sourceror", "Resonant Stream: Technoshaman", "Dissonant Stream: Apophenian", "Dissonant Stream: Erisian", "Dissonant Stream: Morphinae"},
+				Quality: []string{"Resonant Stream: Machinist", "Resonant Stream: Sourceror", "Resonant Stream: Technoshaman", "Dissonant Stream: Apophenian", "Dissonant Stream: Erisian", "Dissonant Stream: Morphinae"},
 			},
 		},
 		Page:         "89",
@@ -11240,12 +11240,12 @@ var DataQualities = map[string]Quality{
 		},
 		Required: &QualityRequired{
 			OneOf: &QualityRequiredOneOf{
-				Quality: "Technomancer",
+				Quality: []string{"Technomancer"},
 			},
 		},
 		Forbidden: &QualityForbidden{
 			OneOf: &QualityForbiddenOneOf{
-				Quality: []interface{}{"Resonant Stream: Cyberadept", "Resonant Stream: Sourceror", "Resonant Stream: Technoshaman", "Dissonant Stream: Apophenian", "Dissonant Stream: Erisian", "Dissonant Stream: Morphinae"},
+				Quality: []string{"Resonant Stream: Cyberadept", "Resonant Stream: Sourceror", "Resonant Stream: Technoshaman", "Dissonant Stream: Apophenian", "Dissonant Stream: Erisian", "Dissonant Stream: Morphinae"},
 			},
 		},
 		Page:         "90",
@@ -11262,12 +11262,12 @@ var DataQualities = map[string]Quality{
 		},
 		Required: &QualityRequired{
 			OneOf: &QualityRequiredOneOf{
-				Quality: "Technomancer",
+				Quality: []string{"Technomancer"},
 			},
 		},
 		Forbidden: &QualityForbidden{
 			OneOf: &QualityForbiddenOneOf{
-				Quality: []interface{}{"Resonant Stream: Cyberadept", "Resonant Stream: Machinist", "Resonant Stream: Technoshaman", "Dissonant Stream: Apophenian", "Dissonant Stream: Erisian", "Dissonant Stream: Morphinae"},
+				Quality: []string{"Resonant Stream: Cyberadept", "Resonant Stream: Machinist", "Resonant Stream: Technoshaman", "Dissonant Stream: Apophenian", "Dissonant Stream: Erisian", "Dissonant Stream: Morphinae"},
 			},
 		},
 		Page:         "91",
@@ -11281,12 +11281,12 @@ var DataQualities = map[string]Quality{
 		Bonus:    nil,
 		Required: &QualityRequired{
 			OneOf: &QualityRequiredOneOf{
-				Quality: "Technomancer",
+				Quality: []string{"Technomancer"},
 			},
 		},
 		Forbidden: &QualityForbidden{
 			OneOf: &QualityForbiddenOneOf{
-				Quality: []interface{}{"Resonant Stream: Cyberadept", "Resonant Stream: Machinist", "Resonant Stream: Sourceror", "Dissonant Stream: Apophenian", "Dissonant Stream: Erisian", "Dissonant Stream: Morphinae"},
+				Quality: []string{"Resonant Stream: Cyberadept", "Resonant Stream: Machinist", "Resonant Stream: Sourceror", "Dissonant Stream: Apophenian", "Dissonant Stream: Erisian", "Dissonant Stream: Morphinae"},
 			},
 		},
 		Page:         "91",
@@ -11300,12 +11300,12 @@ var DataQualities = map[string]Quality{
 		Bonus:    nil,
 		Required: &QualityRequired{
 			OneOf: &QualityRequiredOneOf{
-				Quality: "Technomancer",
+				Quality: []string{"Technomancer"},
 			},
 		},
 		Forbidden: &QualityForbidden{
 			OneOf: &QualityForbiddenOneOf{
-				Quality: []interface{}{"Resonant Stream: Cyberadept", "Resonant Stream: Machinist", "Resonant Stream: Sourceror", "Resonant Stream: Technoshaman", "Dissonant Stream: Erisian", "Dissonant Stream: Morphinae"},
+				Quality: []string{"Resonant Stream: Cyberadept", "Resonant Stream: Machinist", "Resonant Stream: Sourceror", "Resonant Stream: Technoshaman", "Dissonant Stream: Erisian", "Dissonant Stream: Morphinae"},
 			},
 		},
 		Page:         "133",
@@ -11319,12 +11319,12 @@ var DataQualities = map[string]Quality{
 		Bonus:    nil,
 		Required: &QualityRequired{
 			OneOf: &QualityRequiredOneOf{
-				Quality: "Technomancer",
+				Quality: []string{"Technomancer"},
 			},
 		},
 		Forbidden: &QualityForbidden{
 			OneOf: &QualityForbiddenOneOf{
-				Quality: []interface{}{"Resonant Stream: Cyberadept", "Resonant Stream: Machinist", "Resonant Stream: Sourceror", "Resonant Stream: Technoshaman", "Dissonant Stream: Apophenian", "Dissonant Stream: Morphinae"},
+				Quality: []string{"Resonant Stream: Cyberadept", "Resonant Stream: Machinist", "Resonant Stream: Sourceror", "Resonant Stream: Technoshaman", "Dissonant Stream: Apophenian", "Dissonant Stream: Morphinae"},
 			},
 		},
 		Page:         "134",
@@ -11338,12 +11338,12 @@ var DataQualities = map[string]Quality{
 		Bonus:    nil,
 		Required: &QualityRequired{
 			OneOf: &QualityRequiredOneOf{
-				Quality: "Technomancer",
+				Quality: []string{"Technomancer"},
 			},
 		},
 		Forbidden: &QualityForbidden{
 			OneOf: &QualityForbiddenOneOf{
-				Quality: []interface{}{"Resonant Stream: Cyberadept", "Resonant Stream: Machinist", "Resonant Stream: Sourceror", "Resonant Stream: Technoshaman", "Dissonant Stream: Apophenian", "Dissonant Stream: Erisian"},
+				Quality: []string{"Resonant Stream: Cyberadept", "Resonant Stream: Machinist", "Resonant Stream: Sourceror", "Resonant Stream: Technoshaman", "Dissonant Stream: Apophenian", "Dissonant Stream: Erisian"},
 			},
 		},
 		Page:         "132",
@@ -11359,7 +11359,7 @@ var DataQualities = map[string]Quality{
 		},
 		Forbidden: &QualityForbidden{
 			OneOf: &QualityForbiddenOneOf{
-				Quality: []interface{}{"SINner (Criminal)", "SINner (National)", "SINner (Corporate Limited)", "SINner (Corporate)"},
+				Quality: []string{"SINner (Criminal)", "SINner (National)", "SINner (Corporate Limited)", "SINner (Corporate)"},
 			},
 		},
 		Page: "162",
@@ -11391,7 +11391,7 @@ var DataQualities = map[string]Quality{
 		Bonus:    nil,
 		Required: &QualityRequired{
 			OneOf: &QualityRequiredOneOf{
-				Quality: "Technomancer",
+				Quality: []string{"Technomancer"},
 			},
 		},
 		Page: "160",
@@ -11408,7 +11408,7 @@ var DataQualities = map[string]Quality{
 		},
 		Required: &QualityRequired{
 			OneOf: &QualityRequiredOneOf{
-				Quality: "Technomancer",
+				Quality: []string{"Technomancer"},
 			},
 		},
 		Page: "160",
@@ -11472,7 +11472,7 @@ var DataQualities = map[string]Quality{
 		Bonus:    nil,
 		Required: &QualityRequired{
 			OneOf: &QualityRequiredOneOf{
-				Quality: "Special Modifications",
+				Quality: []string{"Special Modifications"},
 			},
 		},
 		Forbidden: nil,
@@ -11508,7 +11508,7 @@ var DataQualities = map[string]Quality{
 		},
 		Required: &QualityRequired{
 			OneOf: &QualityRequiredOneOf{
-				Quality: "Prototype Materials",
+				Quality: []string{"Prototype Materials"},
 			},
 		},
 		Forbidden:  nil,
@@ -11533,7 +11533,7 @@ var DataQualities = map[string]Quality{
 		Bonus:    nil,
 		Required: &QualityRequired{
 			OneOf: &QualityRequiredOneOf{
-				Quality: []interface{}{"Code of Honor", "Code of Honor: Avenging Angel", "Code of Honor: Black Hat", "Code of Honor: Like a Boss"},
+				Quality: []string{"Code of Honor", "Code of Honor: Avenging Angel", "Code of Honor: Black Hat", "Code of Honor: Like a Boss"},
 			},
 		},
 		Page: "177",
@@ -11548,7 +11548,7 @@ var DataQualities = map[string]Quality{
 		},
 		Forbidden: &QualityForbidden{
 			OneOf: &QualityForbiddenOneOf{
-				Quality: "Networker",
+				Quality: []string{"Networker"},
 			},
 		},
 		Page: "177",
@@ -11564,7 +11564,7 @@ var DataQualities = map[string]Quality{
 		},
 		Forbidden: &QualityForbidden{
 			OneOf: &QualityForbiddenOneOf{
-				Quality: "Massive Network",
+				Quality: []string{"Massive Network"},
 			},
 		},
 		Page: "177",

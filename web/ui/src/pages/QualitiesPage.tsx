@@ -1,37 +1,37 @@
 import { useEffect, useState, useCallback } from 'react';
-import { gearApi } from '../lib/api';
-import type { Gear } from '../lib/types';
+import { qualityApi } from '../lib/api';
+import type { Quality } from '../lib/types';
 import { useToast } from '../contexts/ToastContext';
-import { GearTable } from '../components/gear/GearTable';
-import { GearTableGrouped } from '../components/gear/GearTableGrouped';
+import { QualitiesTable } from '../components/quality/QualitiesTable';
+import { QualitiesTableGrouped } from '../components/quality/QualitiesTableGrouped';
 
-export function GearPage() {
+export function QualitiesPage() {
   const { showError } = useToast();
-  const [gear, setGear] = useState<Gear[]>([]);
+  const [qualities, setQualities] = useState<Quality[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [viewMode, setViewMode] = useState<'flat' | 'grouped'>('grouped');
 
-  const loadGear = useCallback(async () => {
+  const loadQualities = useCallback(async () => {
     try {
       setIsLoading(true);
-      const data = await gearApi.getGear();
-      setGear(data);
+      const data = await qualityApi.getQualities();
+      setQualities(data);
     } catch (err) {
-      const errorMessage = err instanceof Error ? err.message : 'Failed to load gear';
-      showError('Failed to load gear', errorMessage);
+      const errorMessage = err instanceof Error ? err.message : 'Failed to load qualities';
+      showError('Failed to load qualities', errorMessage);
     } finally {
       setIsLoading(false);
     }
   }, [showError]);
 
   useEffect(() => {
-    loadGear();
-  }, [loadGear]);
+    loadQualities();
+  }, [loadQualities]);
 
   if (isLoading) {
     return (
       <div className="flex items-center justify-center py-12">
-        <div className="text-gray-400">Loading gear...</div>
+        <div className="text-gray-400">Loading qualities...</div>
       </div>
     );
   }
@@ -41,9 +41,9 @@ export function GearPage() {
       <div className="mb-6">
         <div className="flex items-center justify-between mb-2">
           <div>
-            <h2 className="text-2xl font-bold text-gray-100 mb-2">Gear Database</h2>
+            <h2 className="text-2xl font-bold text-gray-100 mb-2">Qualities Database</h2>
             <p className="text-gray-400">
-              View and search all available gear from Shadowrun 5th Edition ({gear.length} items)
+              View and search all available qualities from Shadowrun 5th Edition ({qualities.length} items)
             </p>
           </div>
           <div className="flex gap-2">
@@ -71,9 +71,9 @@ export function GearPage() {
         </div>
       </div>
       {viewMode === 'grouped' ? (
-        <GearTableGrouped gear={gear} />
+        <QualitiesTableGrouped qualities={qualities} />
       ) : (
-        <GearTable gear={gear} />
+        <QualitiesTable qualities={qualities} />
       )}
     </div>
   );
