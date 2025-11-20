@@ -73,7 +73,7 @@ type Gear struct {
 	IsFlechetteAmmo      *bool         `json:"isflechetteammo,omitempty"`      // Is flechette ammo
 	FlechetteWeaponBonus string        `json:"flechetteweaponbonus,omitempty"` // Flechette weapon bonus
 	WeaponBonus          string        `json:"weaponbonus,omitempty"`          // Weapon bonus
-	AddonCategory        interface{}   `json:"addoncategory,omitempty"`        // Addon category (can be string or []string)
+	AddonCategory        []string      `json:"addoncategory,omitempty"`        // Addon category (array of category strings)
 	Required             *GearRequired `json:"required,omitempty"`             // Requirements
 	RequireParent        *bool         `json:"requireparent,omitempty"`        // Require parent
 	Bonus                *GearBonus    `json:"bonus,omitempty"`                // Bonuses

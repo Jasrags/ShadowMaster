@@ -95,7 +95,7 @@ var DataQualities = map[string]Quality{
 		Category: "Positive",
 		Source:   "SR5",
 		Bonus: &QualityBonus{
-			SpecificSkill: SpecificSkillBonus{
+			SpecificSkill: []common.SpecificSkillBonus{{
 				Name: "Sneaking", Bonus: 2,
 			},
 		},
@@ -121,7 +121,7 @@ var DataQualities = map[string]Quality{
 		Category: "Positive",
 		Source:   "SR5",
 		Bonus: &QualityBonus{
-			SpecificSkill: SpecificSkillBonus{
+			SpecificSkill: []common.SpecificSkillBonus{{
 				Name: "Escape Artist", Bonus: 2,
 			},
 		},
@@ -212,7 +212,7 @@ var DataQualities = map[string]Quality{
 		Source:   "SR5",
 		Limit:    "False",
 		Bonus: &QualityBonus{
-			SelectText: &SelectTextBonus{},
+			SelectText: &common.SelectTextBonus{},
 		},
 		Page: "74",
 	},
@@ -330,9 +330,9 @@ var DataQualities = map[string]Quality{
 		Category: "Positive",
 		Source:   "SR5",
 		Bonus: &QualityBonus{
-			SpecificSkill: []interface{}{SpecificSkillBonus{
+			SpecificSkill: []common.SpecificSkillBonus{{
 				Name: "Running", Bonus: 2,
-			}, SpecificSkillBonus{
+			}, common.SpecificSkillBonus{
 				Name: "Gymnastics", Bonus: 2,
 			}},
 		},
@@ -353,7 +353,7 @@ var DataQualities = map[string]Quality{
 		Source:   "SR5",
 		Limit:    "False",
 		Bonus: &QualityBonus{
-			SelectText: &SelectTextBonus{},
+			SelectText: &common.SelectTextBonus{},
 		},
 		Forbidden: &QualityForbidden{
 			OneOf: &QualityForbiddenOneOf{
@@ -369,7 +369,7 @@ var DataQualities = map[string]Quality{
 		Source:   "SR5",
 		Limit:    "False",
 		Bonus: &QualityBonus{
-			SelectText: &SelectTextBonus{},
+			SelectText: &common.SelectTextBonus{},
 		},
 		Forbidden: &QualityForbidden{
 			OneOf: &QualityForbiddenOneOf{
@@ -487,7 +487,7 @@ var DataQualities = map[string]Quality{
 		Source:   "SR5",
 		Limit:    "False",
 		Bonus: &QualityBonus{
-			SelectText: "",
+			SelectText: nil,
 		},
 		Required: &QualityRequired{
 			OneOf: &QualityRequiredOneOf{
@@ -531,7 +531,7 @@ var DataQualities = map[string]Quality{
 		Category: "Positive",
 		Source:   "AP",
 		Bonus: &QualityBonus{
-			SelectText: &SelectTextBonus{},
+			SelectText: &common.SelectTextBonus{},
 		},
 		Page: "17",
 	},
@@ -576,7 +576,7 @@ var DataQualities = map[string]Quality{
 		Source:   "RG",
 		Limit:    "False",
 		Bonus: &QualityBonus{
-			SelectText: &SelectTextBonus{},
+			SelectText: &common.SelectTextBonus{},
 		},
 		Page: "127",
 	},
@@ -587,7 +587,7 @@ var DataQualities = map[string]Quality{
 		Source:   "RG",
 		Limit:    "False",
 		Bonus: &QualityBonus{
-			SelectText: &SelectTextBonus{},
+			SelectText: &common.SelectTextBonus{},
 		},
 		Page: "127",
 	},
@@ -746,7 +746,7 @@ var DataQualities = map[string]Quality{
 		Category: "Positive",
 		Source:   "SR5",
 		Bonus: &QualityBonus{
-			SpecificSkill: SpecificSkillBonus{
+			SpecificSkill: []common.SpecificSkillBonus{{
 				Name: "Computer", Bonus: 2,
 			},
 			AddGear:         "",
@@ -808,7 +808,7 @@ var DataQualities = map[string]Quality{
 		Source:   "SR5",
 		Limit:    "False",
 		Bonus: &QualityBonus{
-			SelectText: &SelectTextBonus{},
+			SelectText: &common.SelectTextBonus{},
 			Notoriety:  "1",
 		},
 		Page: "77",
@@ -820,7 +820,7 @@ var DataQualities = map[string]Quality{
 		Source:   "SR5",
 		Limit:    "False",
 		Bonus: &QualityBonus{
-			SelectText: &SelectTextBonus{},
+			SelectText: &common.SelectTextBonus{},
 			Notoriety:  "1",
 		},
 		Page: "78",
@@ -832,7 +832,7 @@ var DataQualities = map[string]Quality{
 		Source:   "SR5",
 		Limit:    "False",
 		Bonus: &QualityBonus{
-			SelectText: &SelectTextBonus{},
+			SelectText: &common.SelectTextBonus{},
 			Notoriety:  "1",
 		},
 		Page: "78",
@@ -847,7 +847,7 @@ var DataQualities = map[string]Quality{
 			SkillCategory: &BiowareSkillCategoryBonus{
 				Name: "Social Active", Bonus: "-3",
 			},
-			SelectText: &SelectTextBonus{},
+			SelectText: &common.SelectTextBonus{},
 			Notoriety:  "1",
 		},
 		Page: "78",
@@ -859,7 +859,7 @@ var DataQualities = map[string]Quality{
 		Source:   "SR5",
 		Limit:    "False",
 		Bonus: &QualityBonus{
-			SelectText: &SelectTextBonus{},
+			SelectText: &common.SelectTextBonus{},
 		},
 		Page: "78",
 	},
@@ -870,7 +870,7 @@ var DataQualities = map[string]Quality{
 		Source:   "SR5",
 		Limit:    "False",
 		Bonus: &QualityBonus{
-			SelectText: &SelectTextBonus{},
+			SelectText: &common.SelectTextBonus{},
 		},
 		Page: "78",
 	},
@@ -881,7 +881,7 @@ var DataQualities = map[string]Quality{
 		Source:   "SR5",
 		Limit:    "False",
 		Bonus: &QualityBonus{
-			SelectText: &SelectTextBonus{},
+			SelectText: &common.SelectTextBonus{},
 		},
 		Page: "78",
 	},
@@ -892,7 +892,7 @@ var DataQualities = map[string]Quality{
 		Source:   "SR5",
 		Limit:    "False",
 		Bonus: &QualityBonus{
-			SelectText: &SelectTextBonus{},
+			SelectText: &common.SelectTextBonus{},
 		},
 		Page: "78",
 	},
@@ -903,7 +903,7 @@ var DataQualities = map[string]Quality{
 		Source:   "SR5",
 		Limit:    "False",
 		Bonus: &QualityBonus{
-			SelectText: &SelectTextBonus{},
+			SelectText: &common.SelectTextBonus{},
 		},
 		Page: "78",
 	},
@@ -914,7 +914,7 @@ var DataQualities = map[string]Quality{
 		Source:   "SR5",
 		Limit:    "False",
 		Bonus: &QualityBonus{
-			SelectText: &SelectTextBonus{},
+			SelectText: &common.SelectTextBonus{},
 		},
 		Page: "78",
 	},
@@ -925,7 +925,7 @@ var DataQualities = map[string]Quality{
 		Source:   "SR5",
 		Limit:    "False",
 		Bonus: &QualityBonus{
-			SelectText: &SelectTextBonus{},
+			SelectText: &common.SelectTextBonus{},
 		},
 		Page: "78",
 	},
@@ -936,7 +936,7 @@ var DataQualities = map[string]Quality{
 		Source:   "SR5",
 		Limit:    "False",
 		Bonus: &QualityBonus{
-			SelectText: &SelectTextBonus{},
+			SelectText: &common.SelectTextBonus{},
 		},
 		Page: "78",
 	},
@@ -985,7 +985,7 @@ var DataQualities = map[string]Quality{
 		Source:   "SR5",
 		Limit:    "False",
 		Bonus: &QualityBonus{
-			SelectText: &SelectTextBonus{},
+			SelectText: &common.SelectTextBonus{},
 		},
 		Page: "79",
 	},
@@ -996,7 +996,7 @@ var DataQualities = map[string]Quality{
 		Source:   "SR5",
 		Limit:    "False",
 		Bonus: &QualityBonus{
-			SelectText: &SelectTextBonus{},
+			SelectText: &common.SelectTextBonus{},
 		},
 		Page: "80",
 	},
@@ -1174,7 +1174,7 @@ var DataQualities = map[string]Quality{
 		Source:   "SR5",
 		Limit:    "False",
 		Bonus: &QualityBonus{
-			SelectText: &SelectTextBonus{},
+			SelectText: &common.SelectTextBonus{},
 		},
 		Page: "82",
 	},
@@ -1185,7 +1185,7 @@ var DataQualities = map[string]Quality{
 		Source:   "SR5",
 		Limit:    "False",
 		Bonus: &QualityBonus{
-			SelectText: &SelectTextBonus{},
+			SelectText: &common.SelectTextBonus{},
 		},
 		Page: "82",
 	},
@@ -1196,7 +1196,7 @@ var DataQualities = map[string]Quality{
 		Source:   "SR5",
 		Limit:    "False",
 		Bonus: &QualityBonus{
-			SelectText: &SelectTextBonus{},
+			SelectText: &common.SelectTextBonus{},
 		},
 		Page: "82",
 	},
@@ -1207,7 +1207,7 @@ var DataQualities = map[string]Quality{
 		Source:   "SR5",
 		Limit:    "False",
 		Bonus: &QualityBonus{
-			SelectText: &SelectTextBonus{},
+			SelectText: &common.SelectTextBonus{},
 		},
 		Page: "82",
 	},
@@ -1218,7 +1218,7 @@ var DataQualities = map[string]Quality{
 		Source:   "SR5",
 		Limit:    "False",
 		Bonus: &QualityBonus{
-			SelectText: &SelectTextBonus{},
+			SelectText: &common.SelectTextBonus{},
 		},
 		Page: "82",
 	},
@@ -1229,7 +1229,7 @@ var DataQualities = map[string]Quality{
 		Source:   "SR5",
 		Limit:    "False",
 		Bonus: &QualityBonus{
-			SelectText: &SelectTextBonus{},
+			SelectText: &common.SelectTextBonus{},
 		},
 		Page: "82",
 	},
@@ -1239,7 +1239,7 @@ var DataQualities = map[string]Quality{
 		Category: "Negative",
 		Source:   "SR5",
 		Bonus: &QualityBonus{
-			SelectText: &SelectTextBonus{},
+			SelectText: &common.SelectTextBonus{},
 			Notoriety:  "1",
 		},
 		Page: "83",
@@ -1268,7 +1268,7 @@ var DataQualities = map[string]Quality{
 		Category: "Negative",
 		Source:   "SR5",
 		Bonus: &QualityBonus{
-			SelectText: "",
+			SelectText: nil,
 		},
 		Forbidden: &QualityForbidden{
 			OneOf: &QualityForbiddenOneOf{
@@ -1283,7 +1283,7 @@ var DataQualities = map[string]Quality{
 		Category: "Negative",
 		Source:   "SR5",
 		Bonus: &QualityBonus{
-			SelectText: &SelectTextBonus{},
+			SelectText: &common.SelectTextBonus{},
 		},
 		Forbidden: &QualityForbidden{
 			OneOf: &QualityForbiddenOneOf{
@@ -1298,7 +1298,7 @@ var DataQualities = map[string]Quality{
 		Category: "Negative",
 		Source:   "SR5",
 		Bonus: &QualityBonus{
-			SelectText: "",
+			SelectText: nil,
 		},
 		Forbidden: &QualityForbidden{
 			OneOf: &QualityForbiddenOneOf{
@@ -1313,7 +1313,7 @@ var DataQualities = map[string]Quality{
 		Category: "Negative",
 		Source:   "SR5",
 		Bonus: &QualityBonus{
-			SelectText: &SelectTextBonus{},
+			SelectText: &common.SelectTextBonus{},
 			Notoriety:  "1",
 		},
 		Forbidden: &QualityForbidden{
@@ -1330,7 +1330,7 @@ var DataQualities = map[string]Quality{
 		Source:   "SR5",
 		Limit:    "False",
 		Bonus: &QualityBonus{
-			SelectText: &SelectTextBonus{},
+			SelectText: &common.SelectTextBonus{},
 		},
 		Page: "85",
 	},
@@ -1341,7 +1341,7 @@ var DataQualities = map[string]Quality{
 		Source:   "SR5",
 		Limit:    "False",
 		Bonus: &QualityBonus{
-			SelectText: "",
+			SelectText: nil,
 			Notoriety:  "1",
 		},
 		Required: &QualityRequired{
@@ -1539,7 +1539,7 @@ var DataQualities = map[string]Quality{
 		Category: "Positive",
 		Source:   "SG",
 		Bonus: &QualityBonus{
-			SpecificSkill: SpecificSkillBonus{
+			SpecificSkill: []common.SpecificSkillBonus{{
 				Name: "Animal Handling", Bonus: 1,
 			},
 			FreeQuality: []string{"ced3fecf-2277-4b20-b1e0-894162ca9ae2"},
@@ -1646,7 +1646,7 @@ var DataQualities = map[string]Quality{
 		Category: "Positive",
 		Source:   "SG",
 		Bonus: &QualityBonus{
-			SkillGroup: &common.SkillGroupBonus{
+			SkillGroup: []*common.SkillGroupBonus{{
 				Name: "Conjuring", Bonus: "1", Condition: "",
 			},
 			FreeQuality: []string{"ced3fecf-2277-4b20-b1e0-894162ca9ae2"},
@@ -1728,7 +1728,7 @@ var DataQualities = map[string]Quality{
 		Category: "Positive",
 		Source:   "BB",
 		Bonus: &QualityBonus{
-			SelectText: &SelectTextBonus{},
+			SelectText: &common.SelectTextBonus{},
 		},
 		Page: "11",
 	},
@@ -1848,7 +1848,7 @@ var DataQualities = map[string]Quality{
 		Category: "Positive",
 		Source:   "RF",
 		Bonus: &QualityBonus{
-			SpecificSkill: SpecificSkillBonus{
+			SpecificSkill: []common.SpecificSkillBonus{{
 				Name: "Animal Handling", Bonus: 2,
 			},
 		},
@@ -1882,14 +1882,14 @@ var DataQualities = map[string]Quality{
 		Category: "Positive",
 		Source:   "RF",
 		Bonus: &QualityBonus{
-			SpecificSkill: []interface{}{SpecificSkillBonus{
+			SpecificSkill: []common.SpecificSkillBonus{{
 				Name: "Perception", Bonus: -1,
-			}, SpecificSkillBonus{
+			}, common.SpecificSkillBonus{
 				Name: "Survival", Bonus: -1,
-			}, SpecificSkillBonus{
+			}, common.SpecificSkillBonus{
 				Name: "Survival", Bonus: 2,
 			}},
-			SkillGroup: &common.SkillGroupBonus{
+			SkillGroup: []*common.SkillGroupBonus{{
 				Name: "Outdoors", Bonus: "1", Condition: "Urban",
 			},
 		},
@@ -1928,7 +1928,7 @@ var DataQualities = map[string]Quality{
 		Category: "Positive",
 		Source:   "RF",
 		Bonus: &QualityBonus{
-			SelectText: &SelectTextBonus{},
+			SelectText: &common.SelectTextBonus{},
 		},
 		Required: &QualityRequired{
 			OneOf: &QualityRequiredOneOf{
@@ -1943,7 +1943,7 @@ var DataQualities = map[string]Quality{
 		Category: "Positive",
 		Source:   "RF",
 		Bonus: &QualityBonus{
-			SelectText: &SelectTextBonus{},
+			SelectText: &common.SelectTextBonus{},
 		},
 		Page: "146",
 	},
@@ -2059,7 +2059,7 @@ var DataQualities = map[string]Quality{
 		Category: "Positive",
 		Source:   "RF",
 		Bonus: &QualityBonus{
-			SpecificSkill: SpecificSkillBonus{
+			SpecificSkill: []common.SpecificSkillBonus{{
 				Name: "Perception", Bonus: 1,
 			},
 		},
@@ -2143,12 +2143,12 @@ var DataQualities = map[string]Quality{
 		Category: "Positive",
 		Source:   "RF",
 		Bonus: &QualityBonus{
-			SpecificSkill: []interface{}{SpecificSkillBonus{
+			SpecificSkill: []common.SpecificSkillBonus{{
 				Name: "Perception", Bonus: -1,
-			}, SpecificSkillBonus{
+			}, common.SpecificSkillBonus{
 				Name: "Survival", Bonus: -1,
 			}},
-			SkillGroup: []interface{}{&common.SkillGroupBonus{
+			SkillGroup: []*common.SkillGroupBonus{{
 				Name: "Outdoors", Bonus: "2", Condition: "Rural",
 			}, &common.SkillGroupBonus{
 				Name: "Outdoors", Bonus: "2", Condition: "Desert",
@@ -2179,9 +2179,9 @@ var DataQualities = map[string]Quality{
 		Source:   "RF",
 		Limit:    "2",
 		Bonus: &QualityBonus{
-			SpecificSkill: []interface{}{SpecificSkillBonus{
+			SpecificSkill: []common.SpecificSkillBonus{{
 				Name: "Perception", Bonus: 1,
-			}, SpecificSkillBonus{
+			}, common.SpecificSkillBonus{
 				Name: "Assensing", Bonus: 1,
 			}},
 		},
@@ -2222,7 +2222,7 @@ var DataQualities = map[string]Quality{
 		Category: "Positive",
 		Source:   "RF",
 		Bonus: &QualityBonus{
-			SelectText: &SelectTextBonus{},
+			SelectText: &common.SelectTextBonus{},
 		},
 		Page: "86",
 	},
@@ -2232,7 +2232,7 @@ var DataQualities = map[string]Quality{
 		Category: "Positive",
 		Source:   "RF",
 		Bonus: &QualityBonus{
-			SelectText: &SelectTextBonus{},
+			SelectText: &common.SelectTextBonus{},
 		},
 		Page: "86",
 	},
@@ -2242,7 +2242,7 @@ var DataQualities = map[string]Quality{
 		Category: "Positive",
 		Source:   "RF",
 		Bonus: &QualityBonus{
-			SelectText: &SelectTextBonus{},
+			SelectText: &common.SelectTextBonus{},
 		},
 		Page: "86",
 	},
@@ -2252,7 +2252,7 @@ var DataQualities = map[string]Quality{
 		Category: "Positive",
 		Source:   "RF",
 		Bonus: &QualityBonus{
-			SelectText: &SelectTextBonus{},
+			SelectText: &common.SelectTextBonus{},
 		},
 		Page: "86",
 	},
@@ -2262,7 +2262,7 @@ var DataQualities = map[string]Quality{
 		Category: "Positive",
 		Source:   "RF",
 		Bonus: &QualityBonus{
-			SelectText: &SelectTextBonus{},
+			SelectText: &common.SelectTextBonus{},
 		},
 		Page: "86",
 	},
@@ -2272,7 +2272,7 @@ var DataQualities = map[string]Quality{
 		Category: "Positive",
 		Source:   "RF",
 		Bonus: &QualityBonus{
-			SelectText: &SelectTextBonus{},
+			SelectText: &common.SelectTextBonus{},
 		},
 		Page: "86",
 	},
@@ -2305,7 +2305,7 @@ var DataQualities = map[string]Quality{
 		Category: "Positive",
 		Source:   "RF",
 		Bonus: &QualityBonus{
-			SpecificSkill: SpecificSkillBonus{
+			SpecificSkill: []common.SpecificSkillBonus{{
 				Name: "Navigation", Bonus: 1,
 			},
 		},
@@ -2318,7 +2318,7 @@ var DataQualities = map[string]Quality{
 		Source:   "RF",
 		Limit:    "False",
 		Bonus: &QualityBonus{
-			SelectText: "",
+			SelectText: nil,
 		},
 		Page: "149",
 	},
@@ -2329,7 +2329,7 @@ var DataQualities = map[string]Quality{
 		Source:   "RF",
 		Limit:    "False",
 		Bonus: &QualityBonus{
-			SelectText: &SelectTextBonus{},
+			SelectText: &common.SelectTextBonus{},
 		},
 		Forbidden: &QualityForbidden{
 			OneOf: &QualityForbiddenOneOf{
@@ -2345,7 +2345,7 @@ var DataQualities = map[string]Quality{
 		Source:   "RF",
 		Limit:    "False",
 		Bonus: &QualityBonus{
-			SelectText: &SelectTextBonus{},
+			SelectText: &common.SelectTextBonus{},
 		},
 		Forbidden: &QualityForbidden{
 			OneOf: &QualityForbiddenOneOf{
@@ -2521,7 +2521,7 @@ var DataQualities = map[string]Quality{
 			LimitModifier: &common.LimitModifier{
 				Limit: "Social", Value: "2", Condition: "LimitCondition_QualityTrustworthy",
 			},
-			SkillGroup: &common.SkillGroupBonus{
+			SkillGroup: []*common.SkillGroupBonus{{
 				Name: "Influence", Bonus: "1", Condition: "",
 			},
 		},
@@ -2545,9 +2545,9 @@ var DataQualities = map[string]Quality{
 		Category: "Positive",
 		Source:   "RF",
 		Bonus: &QualityBonus{
-			SpecificSkill: []interface{}{SpecificSkillBonus{
+			SpecificSkill: []common.SpecificSkillBonus{{
 				Name: "Diving", Bonus: 2,
-			}, SpecificSkillBonus{
+			}, common.SpecificSkillBonus{
 				Name: "Swimming", Bonus: 2,
 			}},
 		},
@@ -2642,7 +2642,7 @@ var DataQualities = map[string]Quality{
 		Source:   "RF",
 		Limit:    "False",
 		Bonus: &QualityBonus{
-			SelectText: &SelectTextBonus{},
+			SelectText: &common.SelectTextBonus{},
 		},
 		Page: "153",
 	},
@@ -2694,7 +2694,7 @@ var DataQualities = map[string]Quality{
 		Category: "Negative",
 		Source:   "RF",
 		Bonus: &QualityBonus{
-			SkillGroup: &common.SkillGroupBonus{
+			SkillGroup: []*common.SkillGroupBonus{{
 				Name: "Electronics", Bonus: "-4", Condition: "",
 			},
 		},
@@ -2745,7 +2745,7 @@ var DataQualities = map[string]Quality{
 		Category: "Negative",
 		Source:   "RF",
 		Bonus: &QualityBonus{
-			SelectText: &SelectTextBonus{},
+			SelectText: &common.SelectTextBonus{},
 		},
 		Forbidden: &QualityForbidden{
 			OneOf: &QualityForbiddenOneOf{
@@ -2760,7 +2760,7 @@ var DataQualities = map[string]Quality{
 		Category: "Negative",
 		Source:   "RF",
 		Bonus: &QualityBonus{
-			SelectText: &SelectTextBonus{},
+			SelectText: &common.SelectTextBonus{},
 		},
 		Forbidden: &QualityForbidden{
 			OneOf: &QualityForbiddenOneOf{
@@ -2775,7 +2775,7 @@ var DataQualities = map[string]Quality{
 		Category: "Negative",
 		Source:   "RF",
 		Bonus: &QualityBonus{
-			SelectText: &SelectTextBonus{},
+			SelectText: &common.SelectTextBonus{},
 		},
 		Forbidden: &QualityForbidden{
 			OneOf: &QualityForbiddenOneOf{
@@ -2835,7 +2835,7 @@ var DataQualities = map[string]Quality{
 		Source:   "RF",
 		Limit:    "False",
 		Bonus: &QualityBonus{
-			SelectText: &SelectTextBonus{},
+			SelectText: &common.SelectTextBonus{},
 		},
 		Page: "154",
 	},
@@ -2846,7 +2846,7 @@ var DataQualities = map[string]Quality{
 		Source:   "RF",
 		Limit:    "False",
 		Bonus: &QualityBonus{
-			SelectText: &SelectTextBonus{},
+			SelectText: &common.SelectTextBonus{},
 		},
 		Page: "154",
 	},
@@ -2868,7 +2868,7 @@ var DataQualities = map[string]Quality{
 		Source:   "RF",
 		Limit:    "False",
 		Bonus: &QualityBonus{
-			SelectText: &SelectTextBonus{},
+			SelectText: &common.SelectTextBonus{},
 		},
 		Page: "155",
 	},
@@ -2879,7 +2879,7 @@ var DataQualities = map[string]Quality{
 		Source:   "RF",
 		Limit:    "False",
 		Bonus: &QualityBonus{
-			SelectText: &SelectTextBonus{},
+			SelectText: &common.SelectTextBonus{},
 		},
 		Page: "155",
 	},
@@ -2963,7 +2963,7 @@ var DataQualities = map[string]Quality{
 		Category: "Negative",
 		Source:   "RF",
 		Bonus: &QualityBonus{
-			SpecificSkill: SpecificSkillBonus{
+			SpecificSkill: []common.SpecificSkillBonus{{
 				Name: "Perception", Bonus: -2,
 			},
 		},
@@ -2980,7 +2980,7 @@ var DataQualities = map[string]Quality{
 		Category: "Negative",
 		Source:   "RF",
 		Bonus: &QualityBonus{
-			SpecificSkill: SpecificSkillBonus{
+			SpecificSkill: []common.SpecificSkillBonus{{
 				Name: "Perception", Bonus: -2,
 			},
 		},
@@ -3043,7 +3043,7 @@ var DataQualities = map[string]Quality{
 		Source:   "RF",
 		Limit:    "False",
 		Bonus: &QualityBonus{
-			SelectText: &SelectTextBonus{},
+			SelectText: &common.SelectTextBonus{},
 		},
 		Page: "157",
 	},
@@ -3054,7 +3054,7 @@ var DataQualities = map[string]Quality{
 		Source:   "RF",
 		Limit:    "False",
 		Bonus: &QualityBonus{
-			SelectText: &SelectTextBonus{},
+			SelectText: &common.SelectTextBonus{},
 		},
 		Page: "157",
 	},
@@ -3065,7 +3065,7 @@ var DataQualities = map[string]Quality{
 		Source:   "RF",
 		Limit:    "False",
 		Bonus: &QualityBonus{
-			SelectText: &SelectTextBonus{},
+			SelectText: &common.SelectTextBonus{},
 		},
 		Page: "157",
 	},
@@ -3076,7 +3076,7 @@ var DataQualities = map[string]Quality{
 		Source:   "RF",
 		Limit:    "False",
 		Bonus: &QualityBonus{
-			SelectText: &SelectTextBonus{},
+			SelectText: &common.SelectTextBonus{},
 		},
 		Page: "157",
 	},
@@ -3087,7 +3087,7 @@ var DataQualities = map[string]Quality{
 		Source:   "RF",
 		Limit:    "False",
 		Bonus: &QualityBonus{
-			SelectText: &SelectTextBonus{},
+			SelectText: &common.SelectTextBonus{},
 		},
 		Page: "157",
 	},
@@ -3098,7 +3098,7 @@ var DataQualities = map[string]Quality{
 		Source:   "RF",
 		Limit:    "False",
 		Bonus: &QualityBonus{
-			SelectText: &SelectTextBonus{},
+			SelectText: &common.SelectTextBonus{},
 		},
 		Page: "157",
 	},
@@ -3127,7 +3127,7 @@ var DataQualities = map[string]Quality{
 		Source:   "RF",
 		Limit:    "False",
 		Bonus: &QualityBonus{
-			SelectText: &SelectTextBonus{},
+			SelectText: &common.SelectTextBonus{},
 		},
 		Page: "158",
 	},
@@ -3138,7 +3138,7 @@ var DataQualities = map[string]Quality{
 		Source:   "RF",
 		Limit:    "False",
 		Bonus: &QualityBonus{
-			SelectText: &SelectTextBonus{},
+			SelectText: &common.SelectTextBonus{},
 		},
 		Page: "158",
 	},
@@ -3149,7 +3149,7 @@ var DataQualities = map[string]Quality{
 		Source:   "RF",
 		Limit:    "False",
 		Bonus: &QualityBonus{
-			SelectText: &SelectTextBonus{},
+			SelectText: &common.SelectTextBonus{},
 		},
 		Page: "158",
 	},
@@ -3160,7 +3160,7 @@ var DataQualities = map[string]Quality{
 		Source:   "RF",
 		Limit:    "False",
 		Bonus: &QualityBonus{
-			SelectText: &SelectTextBonus{},
+			SelectText: &common.SelectTextBonus{},
 		},
 		Page: "158",
 	},
@@ -3171,7 +3171,7 @@ var DataQualities = map[string]Quality{
 		Source:   "RF",
 		Limit:    "False",
 		Bonus: &QualityBonus{
-			SelectText: &SelectTextBonus{},
+			SelectText: &common.SelectTextBonus{},
 		},
 		Page: "158",
 	},
@@ -3182,7 +3182,7 @@ var DataQualities = map[string]Quality{
 		Source:   "RF",
 		Limit:    "False",
 		Bonus: &QualityBonus{
-			SelectText: &SelectTextBonus{},
+			SelectText: &common.SelectTextBonus{},
 		},
 		Page: "158",
 	},
@@ -3193,7 +3193,7 @@ var DataQualities = map[string]Quality{
 		Source:   "RF",
 		Limit:    "False",
 		Bonus: &QualityBonus{
-			SelectText: &SelectTextBonus{},
+			SelectText: &common.SelectTextBonus{},
 		},
 		Page: "158",
 	},
@@ -3204,7 +3204,7 @@ var DataQualities = map[string]Quality{
 		Source:   "RF",
 		Limit:    "False",
 		Bonus: &QualityBonus{
-			SelectText: &SelectTextBonus{},
+			SelectText: &common.SelectTextBonus{},
 		},
 		Page: "158",
 	},
@@ -3215,7 +3215,7 @@ var DataQualities = map[string]Quality{
 		Source:   "RF",
 		Limit:    "False",
 		Bonus: &QualityBonus{
-			SelectText: &SelectTextBonus{},
+			SelectText: &common.SelectTextBonus{},
 		},
 		Page: "158",
 	},
@@ -3226,7 +3226,7 @@ var DataQualities = map[string]Quality{
 		Source:   "RF",
 		Limit:    "False",
 		Bonus: &QualityBonus{
-			SelectText: &SelectTextBonus{},
+			SelectText: &common.SelectTextBonus{},
 		},
 		Page: "158",
 	},
@@ -3237,7 +3237,7 @@ var DataQualities = map[string]Quality{
 		Source:   "RF",
 		Limit:    "False",
 		Bonus: &QualityBonus{
-			SelectText: &SelectTextBonus{},
+			SelectText: &common.SelectTextBonus{},
 		},
 		Page: "158",
 	},
@@ -3248,7 +3248,7 @@ var DataQualities = map[string]Quality{
 		Source:   "RF",
 		Limit:    "False",
 		Bonus: &QualityBonus{
-			SelectText: &SelectTextBonus{},
+			SelectText: &common.SelectTextBonus{},
 		},
 		Page: "158",
 	},
@@ -3292,7 +3292,7 @@ var DataQualities = map[string]Quality{
 		Source:   "RF",
 		Limit:    "10",
 		Bonus: &QualityBonus{
-			SelectText: "",
+			SelectText: nil,
 		},
 		Forbidden: &QualityForbidden{
 			OneOf: &QualityForbiddenOneOf{
@@ -3308,7 +3308,7 @@ var DataQualities = map[string]Quality{
 		Category: "Negative",
 		Source:   "RF",
 		Bonus: &QualityBonus{
-			SpecificSkill: SpecificSkillBonus{
+			SpecificSkill: []common.SpecificSkillBonus{{
 				Name: "Perception", Bonus: -2,
 			},
 		},
@@ -3320,7 +3320,7 @@ var DataQualities = map[string]Quality{
 		Category: "Negative",
 		Source:   "RF",
 		Bonus: &QualityBonus{
-			SpecificSkill: SpecificSkillBonus{
+			SpecificSkill: []common.SpecificSkillBonus{{
 				Name: "Perception", Bonus: -2,
 			},
 		},
@@ -3332,7 +3332,7 @@ var DataQualities = map[string]Quality{
 		Category: "Negative",
 		Source:   "RF",
 		Bonus: &QualityBonus{
-			SpecificSkill: SpecificSkillBonus{
+			SpecificSkill: []common.SpecificSkillBonus{{
 				Name: "Perception", Bonus: -2,
 			},
 		},
@@ -3344,7 +3344,7 @@ var DataQualities = map[string]Quality{
 		Category: "Negative",
 		Source:   "RF",
 		Bonus: &QualityBonus{
-			SpecificSkill: SpecificSkillBonus{
+			SpecificSkill: []common.SpecificSkillBonus{{
 				Name: "Perception", Bonus: -2,
 			},
 		},
@@ -3361,7 +3361,7 @@ var DataQualities = map[string]Quality{
 		Category: "Negative",
 		Source:   "RF",
 		Bonus: &QualityBonus{
-			SpecificSkill: SpecificSkillBonus{
+			SpecificSkill: []common.SpecificSkillBonus{{
 				Name: "Perception", Bonus: -2,
 			},
 		},
@@ -3378,7 +3378,7 @@ var DataQualities = map[string]Quality{
 		Category: "Negative",
 		Source:   "RF",
 		Bonus: &QualityBonus{
-			SpecificSkill: SpecificSkillBonus{
+			SpecificSkill: []common.SpecificSkillBonus{{
 				Name: "Assensing", Bonus: -2,
 			},
 		},
@@ -3403,7 +3403,7 @@ var DataQualities = map[string]Quality{
 		Category: "Negative",
 		Source:   "RF",
 		Bonus: &QualityBonus{
-			SelectText: &SelectTextBonus{},
+			SelectText: &common.SelectTextBonus{},
 		},
 		Page: "159",
 	},
@@ -3414,7 +3414,7 @@ var DataQualities = map[string]Quality{
 		Source:   "RF",
 		Limit:    "False",
 		Bonus: &QualityBonus{
-			SelectText: &SelectTextBonus{},
+			SelectText: &common.SelectTextBonus{},
 		},
 		Page: "159",
 	},
@@ -3424,7 +3424,7 @@ var DataQualities = map[string]Quality{
 		Category: "Negative",
 		Source:   "RF",
 		Bonus: &QualityBonus{
-			SelectText: &SelectTextBonus{},
+			SelectText: &common.SelectTextBonus{},
 		},
 		Page: "159",
 	},
@@ -3584,7 +3584,7 @@ var DataQualities = map[string]Quality{
 		Category: "Positive",
 		Source:   "RF",
 		Bonus: &QualityBonus{
-			SpecificSkill: SpecificSkillBonus{
+			SpecificSkill: []common.SpecificSkillBonus{{
 				Name: "Gymnastics", Bonus: 1,
 			},
 		},
@@ -4095,7 +4095,7 @@ var DataQualities = map[string]Quality{
 		Category: "Positive",
 		Source:   "RF",
 		Bonus: &QualityBonus{
-			SpecificSkill: SpecificSkillBonus{
+			SpecificSkill: []common.SpecificSkillBonus{{
 				Name: "Gymnastics", Bonus: 1,
 			},
 		},
@@ -4118,7 +4118,7 @@ var DataQualities = map[string]Quality{
 		Category: "Positive",
 		Source:   "RF",
 		Bonus: &QualityBonus{
-			SpecificSkill: SpecificSkillBonus{
+			SpecificSkill: []common.SpecificSkillBonus{{
 				Name: "Swimming", Bonus: 2,
 			},
 		},
@@ -4141,7 +4141,7 @@ var DataQualities = map[string]Quality{
 		Category: "Positive",
 		Source:   "RF",
 		Bonus: &QualityBonus{
-			SpecificSkill: SpecificSkillBonus{
+			SpecificSkill: []common.SpecificSkillBonus{{
 				Name: "Gymnastics", Bonus: 1,
 			},
 		},
@@ -4361,7 +4361,7 @@ var DataQualities = map[string]Quality{
 		Category: "Positive",
 		Source:   "RF",
 		Bonus: &QualityBonus{
-			SpecificSkill: SpecificSkillBonus{
+			SpecificSkill: []common.SpecificSkillBonus{{
 				Name: "Navigation", Bonus: 1,
 			},
 		},
@@ -4522,7 +4522,7 @@ var DataQualities = map[string]Quality{
 		Source:   "RF",
 		Limit:    "False",
 		Bonus: &QualityBonus{
-			SelectText: "",
+			SelectText: nil,
 		},
 		Required: &QualityRequired{
 			OneOf: &QualityRequiredOneOf{
@@ -4554,7 +4554,7 @@ var DataQualities = map[string]Quality{
 		Category: "Positive",
 		Source:   "RF",
 		Bonus: &QualityBonus{
-			SpecificSkill: SpecificSkillBonus{
+			SpecificSkill: []common.SpecificSkillBonus{{
 				Name: "Intimidation", Bonus: 2,
 			},
 		},
@@ -4961,7 +4961,7 @@ var DataQualities = map[string]Quality{
 		Category: "Positive",
 		Source:   "RF",
 		Bonus: &QualityBonus{
-			SpecificSkill: SpecificSkillBonus{
+			SpecificSkill: []common.SpecificSkillBonus{{
 				Name: "Perception", Bonus: 2,
 			},
 		},
@@ -4979,7 +4979,7 @@ var DataQualities = map[string]Quality{
 		Category: "Positive",
 		Source:   "RF",
 		Bonus: &QualityBonus{
-			SpecificSkill: SpecificSkillBonus{
+			SpecificSkill: []common.SpecificSkillBonus{{
 				Name: "Swimming", Bonus: 2,
 			},
 		},
@@ -5057,7 +5057,7 @@ var DataQualities = map[string]Quality{
 		Category: "Negative",
 		Source:   "RF",
 		Bonus: &QualityBonus{
-			SpecificSkill: SpecificSkillBonus{
+			SpecificSkill: []common.SpecificSkillBonus{{
 				Name: "Animal Handling", Bonus: -2,
 			},
 		},
@@ -5073,7 +5073,7 @@ var DataQualities = map[string]Quality{
 			SkillCategory: &BiowareSkillCategoryBonus{
 				Name: "Combat Active", Bonus: "-1",
 			},
-			SpecificSkill: SpecificSkillBonus{
+			SpecificSkill: []common.SpecificSkillBonus{{
 				Name: "Gunnery", Bonus: -1,
 			},
 			DefenseTest: "-1",
@@ -5092,7 +5092,7 @@ var DataQualities = map[string]Quality{
 		Category: "Negative",
 		Source:   "RF",
 		Bonus: &QualityBonus{
-			SpecificSkill: SpecificSkillBonus{
+			SpecificSkill: []common.SpecificSkillBonus{{
 				Name: "Perception", Bonus: -2,
 			},
 		},
@@ -7213,7 +7213,7 @@ var DataQualities = map[string]Quality{
 		Category: "Positive",
 		Source:   "DTR",
 		Bonus: &QualityBonus{
-			SelectText: &SelectTextBonus{},
+			SelectText: &common.SelectTextBonus{},
 		},
 		Required: &QualityRequired{
 			OneOf: &QualityRequiredOneOf{
@@ -7241,7 +7241,7 @@ var DataQualities = map[string]Quality{
 		Category: "Negative",
 		Source:   "DT",
 		Bonus: &QualityBonus{
-			SpecificSkill: SpecificSkillBonus{
+			SpecificSkill: []common.SpecificSkillBonus{{
 				Name: "Hacking", Bonus: 2,
 			},
 		},
@@ -7465,7 +7465,7 @@ var DataQualities = map[string]Quality{
 		Source:   "DT",
 		Limit:    "3",
 		Bonus: &QualityBonus{
-			SelectText: &SelectTextBonus{},
+			SelectText: &common.SelectTextBonus{},
 		},
 		Required: &QualityRequired{
 			OneOf: &QualityRequiredOneOf{
@@ -7589,7 +7589,7 @@ var DataQualities = map[string]Quality{
 		Category: "Negative",
 		Source:   "DT",
 		Bonus: &QualityBonus{
-			SelectText: &SelectTextBonus{},
+			SelectText: &common.SelectTextBonus{},
 		},
 		Required: &QualityRequired{
 			OneOf: &QualityRequiredOneOf{
@@ -7886,7 +7886,7 @@ var DataQualities = map[string]Quality{
 		Category: "Positive",
 		Source:   "CF",
 		Bonus: &QualityBonus{
-			SelectText: &SelectTextBonus{},
+			SelectText: &common.SelectTextBonus{},
 		},
 		Page:        "158",
 		ChargenOnly: true,
@@ -7906,7 +7906,7 @@ var DataQualities = map[string]Quality{
 		Category: "Positive",
 		Source:   "CF",
 		Bonus: &QualityBonus{
-			SelectText: "",
+			SelectText: nil,
 		},
 		Page:        "158",
 		ChargenOnly: true,
@@ -7962,7 +7962,7 @@ var DataQualities = map[string]Quality{
 		Source:   "CF",
 		Limit:    "False",
 		Bonus: &QualityBonus{
-			SelectText: &SelectTextBonus{},
+			SelectText: &common.SelectTextBonus{},
 		},
 		Page: "57",
 	},
@@ -7973,7 +7973,7 @@ var DataQualities = map[string]Quality{
 		Source:   "CF",
 		Limit:    "False",
 		Bonus: &QualityBonus{
-			SelectText: &SelectTextBonus{},
+			SelectText: &common.SelectTextBonus{},
 		},
 		Page: "57",
 	},
@@ -7984,7 +7984,7 @@ var DataQualities = map[string]Quality{
 		Source:   "CF",
 		Limit:    "False",
 		Bonus: &QualityBonus{
-			SelectText: &SelectTextBonus{},
+			SelectText: &common.SelectTextBonus{},
 		},
 		Page: "57",
 	},
@@ -7995,7 +7995,7 @@ var DataQualities = map[string]Quality{
 		Source:   "CF",
 		Limit:    "False",
 		Bonus: &QualityBonus{
-			SelectText: &SelectTextBonus{},
+			SelectText: &common.SelectTextBonus{},
 		},
 		Page: "57",
 	},
@@ -8006,7 +8006,7 @@ var DataQualities = map[string]Quality{
 		Source:   "CF",
 		Limit:    "False",
 		Bonus: &QualityBonus{
-			SelectText: &SelectTextBonus{},
+			SelectText: &common.SelectTextBonus{},
 		},
 		Page: "57",
 	},
@@ -8090,7 +8090,7 @@ var DataQualities = map[string]Quality{
 			SkillCategory: &BiowareSkillCategoryBonus{
 				Name: "Social Active", Bonus: "-3",
 			},
-			SpecificSkill: SpecificSkillBonus{
+			SpecificSkill: []common.SpecificSkillBonus{{
 				Name: "Intimidation", Bonus: 2,
 			},
 		},
@@ -8110,14 +8110,14 @@ var DataQualities = map[string]Quality{
 		Category: "Negative",
 		Source:   "CF",
 		Bonus: &QualityBonus{
-			SpecificSkill: []interface{}{SpecificSkillBonus{
+			SpecificSkill: []common.SpecificSkillBonus{{
 				Name: "Exotic Melee Weapon", Bonus: 1,
-			}, SpecificSkillBonus{
+			}, common.SpecificSkillBonus{
 				Name: "Etiquette", Bonus: -2,
-			}, SpecificSkillBonus{
+			}, common.SpecificSkillBonus{
 				Name: "Leadership", Bonus: -2,
 			}},
-			SkillGroup: &common.SkillGroupBonus{
+			SkillGroup: []*common.SkillGroupBonus{{
 				Name: "Close Combat", Bonus: "1", Condition: "",
 			},
 		},
@@ -8154,7 +8154,7 @@ var DataQualities = map[string]Quality{
 		Source:   "HT",
 		Limit:    "False",
 		Bonus: &QualityBonus{
-			SelectText: "",
+			SelectText: nil,
 		},
 		Page: "191",
 	},
@@ -8229,7 +8229,7 @@ var DataQualities = map[string]Quality{
 		Category: "Positive",
 		Source:   "R5",
 		Bonus: &QualityBonus{
-			SkillGroup: &common.SkillGroupBonus{
+			SkillGroup: []*common.SkillGroupBonus{{
 				Name: "Engineering", Bonus: "1", Condition: "",
 			},
 		},
@@ -8258,7 +8258,7 @@ var DataQualities = map[string]Quality{
 		Source:   "R5",
 		Limit:    "False",
 		Bonus: &QualityBonus{
-			SelectText: &SelectTextBonus{},
+			SelectText: &common.SelectTextBonus{},
 		},
 		Page: "33",
 	},
@@ -8475,7 +8475,7 @@ var DataQualities = map[string]Quality{
 		Category: "Positive",
 		Source:   "CA",
 		Bonus: &QualityBonus{
-			SpecificSkill: SpecificSkillBonus{
+			SpecificSkill: []common.SpecificSkillBonus{{
 				Name: "Con", Bonus: 2,
 			},
 		},
@@ -8487,7 +8487,7 @@ var DataQualities = map[string]Quality{
 		Category: "Positive",
 		Source:   "CA",
 		Bonus: &QualityBonus{
-			SpecificSkill: SpecificSkillBonus{
+			SpecificSkill: []common.SpecificSkillBonus{{
 				Name: "Negotiation", Bonus: 2,
 			},
 		},
@@ -8545,7 +8545,7 @@ var DataQualities = map[string]Quality{
 		Category: "Positive",
 		Source:   "CA",
 		Bonus: &QualityBonus{
-			SpecificSkill: SpecificSkillBonus{
+			SpecificSkill: []common.SpecificSkillBonus{{
 				Name: "Sneaking", Bonus: 2,
 			},
 		},
@@ -8614,7 +8614,7 @@ var DataQualities = map[string]Quality{
 		Category: "Negative",
 		Source:   "CA",
 		Bonus: &QualityBonus{
-			SpecificSkill: SpecificSkillBonus{
+			SpecificSkill: []common.SpecificSkillBonus{{
 				Name: "Leadership", Bonus: -2,
 			},
 		},
@@ -8635,7 +8635,7 @@ var DataQualities = map[string]Quality{
 		Source:   "CA",
 		Limit:    "False",
 		Bonus: &QualityBonus{
-			SelectText: &SelectTextBonus{},
+			SelectText: &common.SelectTextBonus{},
 		},
 		Page: "152",
 	},
@@ -8646,7 +8646,7 @@ var DataQualities = map[string]Quality{
 		Source:   "CA",
 		Limit:    "False",
 		Bonus: &QualityBonus{
-			SelectText: &SelectTextBonus{},
+			SelectText: &common.SelectTextBonus{},
 		},
 		Page: "152",
 	},
@@ -8657,7 +8657,7 @@ var DataQualities = map[string]Quality{
 		Source:   "CA",
 		Limit:    "False",
 		Bonus: &QualityBonus{
-			SelectText: &SelectTextBonus{},
+			SelectText: &common.SelectTextBonus{},
 		},
 		Page: "152",
 	},
@@ -8668,7 +8668,7 @@ var DataQualities = map[string]Quality{
 		Source:   "CA",
 		Limit:    "False",
 		Bonus: &QualityBonus{
-			SelectText: &SelectTextBonus{},
+			SelectText: &common.SelectTextBonus{},
 		},
 		Page: "152",
 	},
@@ -8679,7 +8679,7 @@ var DataQualities = map[string]Quality{
 		Source:   "CA",
 		Limit:    "False",
 		Bonus: &QualityBonus{
-			SelectText: &SelectTextBonus{},
+			SelectText: &common.SelectTextBonus{},
 		},
 		Page: "152",
 	},
@@ -8690,7 +8690,7 @@ var DataQualities = map[string]Quality{
 		Source:   "CA",
 		Limit:    "False",
 		Bonus: &QualityBonus{
-			SelectText: &SelectTextBonus{},
+			SelectText: &common.SelectTextBonus{},
 		},
 		Page: "152",
 	},
@@ -9439,7 +9439,7 @@ var DataQualities = map[string]Quality{
 		Source:   "FA",
 		Limit:    "3",
 		Bonus: &QualityBonus{
-			SelectText: &SelectTextBonus{},
+			SelectText: &common.SelectTextBonus{},
 		},
 		Required:              nil,
 		Page:                  "35",
@@ -9586,7 +9586,7 @@ var DataQualities = map[string]Quality{
 		Source:   "FA",
 		Limit:    "3",
 		Bonus: &QualityBonus{
-			SelectText: &SelectTextBonus{},
+			SelectText: &common.SelectTextBonus{},
 		},
 		Required:              nil,
 		Page:                  "37",
@@ -10749,7 +10749,7 @@ var DataQualities = map[string]Quality{
 		Category: "Positive",
 		Source:   "TCT",
 		Bonus: &QualityBonus{
-			SelectText: &SelectTextBonus{},
+			SelectText: &common.SelectTextBonus{},
 			AddQuality: nil,
 		},
 		Page: "188",
@@ -10794,7 +10794,7 @@ var DataQualities = map[string]Quality{
 		Category: "Positive",
 		Source:   "TCT",
 		Bonus: &QualityBonus{
-			SpecificSkill: SpecificSkillBonus{
+			SpecificSkill: []common.SpecificSkillBonus{{
 				Name: "Intimidation", Bonus: 3,
 			},
 		},
@@ -10820,7 +10820,7 @@ var DataQualities = map[string]Quality{
 		Category: "Positive",
 		Source:   "TCT",
 		Bonus: &QualityBonus{
-			SpecificSkill: SpecificSkillBonus{
+			SpecificSkill: []common.SpecificSkillBonus{{
 				Name: "Leadership", Bonus: 3,
 			},
 		},
@@ -10892,7 +10892,7 @@ var DataQualities = map[string]Quality{
 		Source:   "TSG",
 		Limit:    "11",
 		Bonus: &QualityBonus{
-			SelectText: &SelectTextBonus{},
+			SelectText: &common.SelectTextBonus{},
 			AddWare:    "",
 		},
 		Page:        "30",
@@ -10904,7 +10904,7 @@ var DataQualities = map[string]Quality{
 		Category: "Positive",
 		Source:   "SL",
 		Bonus: &QualityBonus{
-			SelectText: &SelectTextBonus{},
+			SelectText: &common.SelectTextBonus{},
 		},
 		Page: "126",
 	},
@@ -10915,7 +10915,7 @@ var DataQualities = map[string]Quality{
 		Source:   "SL",
 		Limit:    "False",
 		Bonus: &QualityBonus{
-			SelectText: &SelectTextBonus{},
+			SelectText: &common.SelectTextBonus{},
 		},
 		Page: "126",
 	},
@@ -10926,7 +10926,7 @@ var DataQualities = map[string]Quality{
 		Source:   "SL",
 		Limit:    "False",
 		Bonus: &QualityBonus{
-			SelectText: &SelectTextBonus{},
+			SelectText: &common.SelectTextBonus{},
 		},
 		Page: "126",
 	},
@@ -10937,7 +10937,7 @@ var DataQualities = map[string]Quality{
 		Source:   "SL",
 		Limit:    "False",
 		Bonus: &QualityBonus{
-			SelectText: &SelectTextBonus{},
+			SelectText: &common.SelectTextBonus{},
 		},
 		Page: "126",
 	},
@@ -10947,7 +10947,7 @@ var DataQualities = map[string]Quality{
 		Category: "Positive",
 		Source:   "SL",
 		Bonus: &QualityBonus{
-			SpecificSkill: SpecificSkillBonus{
+			SpecificSkill: []common.SpecificSkillBonus{{
 				Name: "Leadership", Bonus: 1,
 			},
 		},
@@ -10980,7 +10980,7 @@ var DataQualities = map[string]Quality{
 			SkillCategory: &BiowareSkillCategoryBonus{
 				Name: "Social Active", Bonus: "-2",
 			},
-			SelectText: &SelectTextBonus{},
+			SelectText: &common.SelectTextBonus{},
 		},
 		Page: "127",
 	},
@@ -10994,7 +10994,7 @@ var DataQualities = map[string]Quality{
 			SkillCategory: &BiowareSkillCategoryBonus{
 				Name: "Social Active", Bonus: "-3",
 			},
-			SelectText: &SelectTextBonus{},
+			SelectText: &common.SelectTextBonus{},
 		},
 		Page: "127",
 	},
@@ -11168,7 +11168,7 @@ var DataQualities = map[string]Quality{
 		Category: "Negative",
 		Source:   "KC",
 		Bonus: &QualityBonus{
-			SpecificSkill: SpecificSkillBonus{
+			SpecificSkill: []common.SpecificSkillBonus{{
 				Name: "Computer", Bonus: -2,
 			},
 		},
@@ -11188,7 +11188,7 @@ var DataQualities = map[string]Quality{
 		Category: "Negative",
 		Source:   "KC",
 		Bonus: &QualityBonus{
-			SkillGroup: &common.SkillGroupBonus{
+			SkillGroup: []*common.SkillGroupBonus{{
 				Name: "Stealth", Bonus: "-2", Condition: "When in hosts",
 			},
 		},
@@ -11338,7 +11338,7 @@ var DataQualities = map[string]Quality{
 		Category: "Positive",
 		Source:   "KC",
 		Bonus: &QualityBonus{
-			SelectText: "",
+			SelectText: nil,
 		},
 		Required: &QualityRequired{
 			OneOf: &QualityRequiredOneOf{
@@ -11599,7 +11599,7 @@ var DataQualities = map[string]Quality{
 		Category: "Negative",
 		Source:   "KC",
 		Bonus: &QualityBonus{
-			SelectText: &SelectTextBonus{},
+			SelectText: &common.SelectTextBonus{},
 		},
 		Required: nil,
 		Page:     "99",
@@ -11656,7 +11656,7 @@ var DataQualities = map[string]Quality{
 		Category: "Negative",
 		Source:   "KC",
 		Bonus: &QualityBonus{
-			SpecificSkill: SpecificSkillBonus{
+			SpecificSkill: []common.SpecificSkillBonus{{
 				Name: "Registering", Bonus: -1,
 			},
 		},
@@ -11710,13 +11710,13 @@ var DataQualities = map[string]Quality{
 		Category: "Positive",
 		Source:   "KC",
 		Bonus: &QualityBonus{
-			SpecificSkill: []interface{}{SpecificSkillBonus{
+			SpecificSkill: []common.SpecificSkillBonus{{
 				Name: "Compiling", Bonus: 2,
-			}, SpecificSkillBonus{
+			}, common.SpecificSkillBonus{
 				Name: "Compiling", Bonus: 2,
-			}, SpecificSkillBonus{
+			}, common.SpecificSkillBonus{
 				Name: "Decompiling", Bonus: 2,
-			}, SpecificSkillBonus{
+			}, common.SpecificSkillBonus{
 				Name: "Decompiling", Bonus: 2,
 			}},
 		},
@@ -11739,13 +11739,13 @@ var DataQualities = map[string]Quality{
 		Category: "Positive",
 		Source:   "KC",
 		Bonus: &QualityBonus{
-			SpecificSkill: []interface{}{SpecificSkillBonus{
+			SpecificSkill: []common.SpecificSkillBonus{{
 				Name: "Compiling", Bonus: 2,
-			}, SpecificSkillBonus{
+			}, common.SpecificSkillBonus{
 				Name: "Compiling", Bonus: 2,
-			}, SpecificSkillBonus{
+			}, common.SpecificSkillBonus{
 				Name: "Decompiling", Bonus: 2,
-			}, SpecificSkillBonus{
+			}, common.SpecificSkillBonus{
 				Name: "Decompiling", Bonus: 2,
 			}},
 			FadingValue: "",
@@ -11914,7 +11914,7 @@ var DataQualities = map[string]Quality{
 		Category: "Positive",
 		Source:   "BTB",
 		Bonus: &QualityBonus{
-			SpecificSkill: SpecificSkillBonus{
+			SpecificSkill: []common.SpecificSkillBonus{{
 				Name: "Computer", Bonus: 2,
 			},
 		},
@@ -11951,7 +11951,7 @@ var DataQualities = map[string]Quality{
 		Category: "Positive",
 		Source:   "BTB",
 		Bonus: &QualityBonus{
-			SpecificSkill: SpecificSkillBonus{
+			SpecificSkill: []common.SpecificSkillBonus{{
 				Name: "Etiquette", Bonus: 2,
 			},
 		},
@@ -11963,11 +11963,11 @@ var DataQualities = map[string]Quality{
 		Category: "Positive",
 		Source:   "BTB",
 		Bonus: &QualityBonus{
-			SpecificSkill: []interface{}{SpecificSkillBonus{
+			SpecificSkill: []common.SpecificSkillBonus{{
 				Name: "Compiling", Bonus: 2,
-			}, SpecificSkillBonus{
+			}, common.SpecificSkillBonus{
 				Name: "Decompiling", Bonus: 2,
-			}, SpecificSkillBonus{
+			}, common.SpecificSkillBonus{
 				Name: "Software", Bonus: 2,
 			}},
 		},

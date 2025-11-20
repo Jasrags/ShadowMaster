@@ -2315,7 +2315,7 @@ var DataGears = map[string]Gear{
 		Rating:        "0",
 		Avail:         "0",
 		Cost:          "0",
-		AddonCategory: "Custom",
+		AddonCategory: []string{"Custom"},
 	},
 	"micro_trid_projector": {
 		Name:          "Micro Trid-Projector",
@@ -2325,7 +2325,7 @@ var DataGears = map[string]Gear{
 		Rating:        "0",
 		Avail:         "0",
 		Cost:          "0",
-		AddonCategory: "Custom",
+		AddonCategory: []string{"Custom"},
 	},
 	"touchscreen_display": {
 		Name:          "Touchscreen Display",
@@ -2335,7 +2335,7 @@ var DataGears = map[string]Gear{
 		Rating:        "0",
 		Avail:         "0",
 		Cost:          "0",
-		AddonCategory: "Custom",
+		AddonCategory: []string{"Custom"},
 	},
 	"rfid_tag_scanner": {
 		Name:          "RFID Tag Scanner",
@@ -2345,7 +2345,7 @@ var DataGears = map[string]Gear{
 		Rating:        "0",
 		Avail:         "0",
 		Cost:          "0",
-		AddonCategory: "Custom",
+		AddonCategory: []string{"Custom"},
 	},
 	"gps_guidance_system": {
 		Name:          "GPS Guidance System",
@@ -2355,7 +2355,7 @@ var DataGears = map[string]Gear{
 		Rating:        "0",
 		Avail:         "0",
 		Cost:          "0",
-		AddonCategory: "Custom",
+		AddonCategory: []string{"Custom"},
 	},
 	"chip_player": {
 		Name:          "Chip Player",
@@ -2365,7 +2365,7 @@ var DataGears = map[string]Gear{
 		Rating:        "0",
 		Avail:         "0",
 		Cost:          "0",
-		AddonCategory: "Custom",
+		AddonCategory: []string{"Custom"},
 	},
 	"credstick_reader": {
 		Name:          "Credstick Reader",
@@ -2375,7 +2375,7 @@ var DataGears = map[string]Gear{
 		Rating:        "0",
 		Avail:         "0",
 		Cost:          "0",
-		AddonCategory: "Custom",
+		AddonCategory: []string{"Custom"},
 	},
 	"shock_and_water_resistant_case": {
 		Name:          "Shock- and Water-Resistant Case",
@@ -2385,7 +2385,7 @@ var DataGears = map[string]Gear{
 		Rating:        "0",
 		Avail:         "0",
 		Cost:          "0",
-		AddonCategory: "Custom",
+		AddonCategory: []string{"Custom"},
 	},
 	"living_persona": {
 		Name:          "Living Persona",
@@ -2395,7 +2395,7 @@ var DataGears = map[string]Gear{
 		Rating:        "0",
 		Avail:         "0",
 		Cost:          "0",
-		AddonCategory: "Custom",
+		AddonCategory: []string{"Custom"},
 	},
 	"custom_commlink": {
 		Name:     "Custom Commlink",
@@ -2584,7 +2584,7 @@ var DataGears = map[string]Gear{
 		Rating:        "0",
 		Avail:         "0",
 		Cost:          "0",
-		AddonCategory: "Custom",
+		AddonCategory: []string{"Custom"},
 	},
 	"shiawase_cyber_5": {
 		Name:     "Shiawase Cyber-5",
@@ -2995,7 +2995,7 @@ var DataGears = map[string]Gear{
 		Rating:        "0",
 		Avail:         "0",
 		Cost:          "0",
-		AddonCategory: "Custom",
+		AddonCategory: []string{"Custom"},
 	},
 	"mct_blue_defender": {
 		Name:     "MCT Blue Defender",
@@ -3068,7 +3068,7 @@ var DataGears = map[string]Gear{
 		Rating:        "0",
 		Avail:         "0",
 		Cost:          "0",
-		AddonCategory: "Custom",
+		AddonCategory: []string{"Custom"},
 	},
 	"mct_trainee": {
 		Name:     "MCT Trainee",
@@ -3330,7 +3330,7 @@ var DataGears = map[string]Gear{
 		Rating:        "0",
 		Avail:         "0",
 		Cost:          "0",
-		AddonCategory: "Custom",
+		AddonCategory: []string{"Custom"},
 	},
 	"blood_alcohol_biosensor": {
 		Name:          "Blood Alcohol Biosensor",
@@ -3340,7 +3340,7 @@ var DataGears = map[string]Gear{
 		Rating:        "0",
 		Avail:         "0",
 		Cost:          "0",
-		AddonCategory: "Custom",
+		AddonCategory: []string{"Custom"},
 	},
 	"siemens_rheingold": {
 		Name:     "Siemens Rheingold",
@@ -3368,7 +3368,7 @@ var DataGears = map[string]Gear{
 		Rating:        "0",
 		Avail:         "0",
 		Cost:          "0",
-		AddonCategory: "Custom",
+		AddonCategory: []string{"Custom"},
 	},
 	"msi_falke": {
 		Name:     "MSI Falke",
@@ -4591,7 +4591,7 @@ var DataGears = map[string]Gear{
 		Rating:        "0",
 		Avail:         "0",
 		Cost:          "0",
-		AddonCategory: "Custom",
+		AddonCategory: []string{"Custom"},
 	},
 	"local_grid": {
 		Name:          "Local Grid",
@@ -4601,7 +4601,7 @@ var DataGears = map[string]Gear{
 		Rating:        "0",
 		Avail:         "0",
 		Cost:          "0",
-		AddonCategory: "Custom",
+		AddonCategory: []string{"Custom"},
 		Bonus: &GearBonus{
 			SelectText: &common.SelectTextBonus{},
 		},
@@ -4614,7 +4614,7 @@ var DataGears = map[string]Gear{
 		Rating:        "0",
 		Avail:         "0",
 		Cost:          "0",
-		AddonCategory: "Custom",
+		AddonCategory: []string{"Custom"},
 		Bonus: &GearBonus{
 			SelectText: &common.SelectTextBonus{},
 		},
@@ -6284,7 +6284,7 @@ var DataGears = map[string]Gear{
 		Rating:        "0",
 		Avail:         "0",
 		Cost:          "0",
-		AddonCategory: "Custom",
+		AddonCategory: []string{"Custom"},
 	},
 	"compass": {
 		Name:          "Compass",
@@ -6294,7 +6294,7 @@ var DataGears = map[string]Gear{
 		Rating:        "0",
 		Avail:         "0",
 		Cost:          "0",
-		AddonCategory: "Custom",
+		AddonCategory: []string{"Custom"},
 	},
 	"matches": {
 		Name:          "Matches",
@@ -6304,7 +6304,7 @@ var DataGears = map[string]Gear{
 		Rating:        "0",
 		Avail:         "0",
 		Cost:          "0",
-		AddonCategory: "Custom",
+		AddonCategory: []string{"Custom"},
 	},
 	"lightweight_thermal_blanket": {
 		Name:          "Lightweight Thermal Blanket",
@@ -6314,7 +6314,7 @@ var DataGears = map[string]Gear{
 		Rating:        "0",
 		Avail:         "0",
 		Cost:          "0",
-		AddonCategory: "Custom",
+		AddonCategory: []string{"Custom"},
 	},
 	"several_days_worth_of_ration_bars": {
 		Name:          "Several Days' Worth of Ration Bars",
@@ -6324,7 +6324,7 @@ var DataGears = map[string]Gear{
 		Rating:        "0",
 		Avail:         "0",
 		Cost:          "0",
-		AddonCategory: "Custom",
+		AddonCategory: []string{"Custom"},
 	},
 	"water_purification_unit": {
 		Name:          "Water Purification Unit",
@@ -6334,7 +6334,7 @@ var DataGears = map[string]Gear{
 		Rating:        "0",
 		Avail:         "0",
 		Cost:          "0",
-		AddonCategory: "Custom",
+		AddonCategory: []string{"Custom"},
 	},
 	"gps_monitor": {
 		Name:          "GPS Monitor",
@@ -6344,7 +6344,7 @@ var DataGears = map[string]Gear{
 		Rating:        "0",
 		Avail:         "0",
 		Cost:          "0",
-		AddonCategory: "Custom",
+		AddonCategory: []string{"Custom"},
 	},
 	"mini_multitool": {
 		Name:          "Mini-Multitool",
@@ -6354,7 +6354,7 @@ var DataGears = map[string]Gear{
 		Rating:        "0",
 		Avail:         "0",
 		Cost:          "0",
-		AddonCategory: "Custom",
+		AddonCategory: []string{"Custom"},
 	},
 	"micro_lighter": {
 		Name:          "Micro-Lighter",
@@ -6364,7 +6364,7 @@ var DataGears = map[string]Gear{
 		Rating:        "0",
 		Avail:         "0",
 		Cost:          "0",
-		AddonCategory: "Custom",
+		AddonCategory: []string{"Custom"},
 	},
 	"hidden_compartment": {
 		Name:          "Hidden Compartment",
@@ -6374,7 +6374,7 @@ var DataGears = map[string]Gear{
 		Rating:        "0",
 		Avail:         "0",
 		Cost:          "0",
-		AddonCategory: "Custom",
+		AddonCategory: []string{"Custom"},
 	},
 	"phosphorescent_blade_coating": {
 		Name:          "Phosphorescent Blade Coating",
@@ -6384,7 +6384,7 @@ var DataGears = map[string]Gear{
 		Rating:        "0",
 		Avail:         "0",
 		Cost:          "0",
-		AddonCategory: "Custom",
+		AddonCategory: []string{"Custom"},
 	},
 	"aro_of_local_maps": {
 		Name:          "ARO of Local Maps",
@@ -6394,7 +6394,7 @@ var DataGears = map[string]Gear{
 		Rating:        "0",
 		Avail:         "0",
 		Cost:          "0",
-		AddonCategory: "Custom",
+		AddonCategory: []string{"Custom"},
 	},
 	"can_make_commcalls": {
 		Name:          "Can Make Commcalls",
@@ -6404,7 +6404,7 @@ var DataGears = map[string]Gear{
 		Rating:        "0",
 		Avail:         "0",
 		Cost:          "0",
-		AddonCategory: "Custom",
+		AddonCategory: []string{"Custom"},
 	},
 	"fashion_gasmask": {
 		Name:     "Fashion Gasmask",
@@ -6440,7 +6440,7 @@ var DataGears = map[string]Gear{
 		Rating:        "0",
 		Avail:         "0",
 		Cost:          "0",
-		AddonCategory: "Custom",
+		AddonCategory: []string{"Custom"},
 	},
 	"articulated_grapnel": {
 		Name:     "Articulated Grapnel",
@@ -11272,7 +11272,7 @@ var DataGears = map[string]Gear{
 		Rating:        "0",
 		Avail:         "0",
 		Cost:          "0",
-		AddonCategory: "Electronic Modification",
+		AddonCategory: []string{"Electronic Modification"},
 		Required: &GearRequired{
 			GearDetails: map[string]interface{}{
 				"attributearray": map[string]interface{}{
@@ -11293,7 +11293,7 @@ var DataGears = map[string]Gear{
 		Rating:        "0",
 		Avail:         "0",
 		Cost:          "0",
-		AddonCategory: "Electronic Modification",
+		AddonCategory: []string{"Electronic Modification"},
 		Required: &GearRequired{
 			GearDetails: map[string]interface{}{
 				"attributearray": map[string]interface{}{
