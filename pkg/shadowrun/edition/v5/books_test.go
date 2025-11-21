@@ -9,52 +9,64 @@ import (
 
 func TestDataBooks(t *testing.T) {
 	assert.NotEmpty(t, DataBooks, "DataBooks should not be empty")
+	assert.Greater(t, len(DataBooks), 60, "Should have many books")
+	assert.Less(t, len(DataBooks), 70, "Should not have too many books")
+}
 
+func TestDataBooksSpecific(t *testing.T) {
 	tests := []struct {
 		name         string
-		id           string
+		code         string
 		expectedName string
-		expectedCode string
 	}{
 		{
-			name:         "Shadowrun 5th Edition",
-			id:           "sr5",
-			expectedName: "Shadowrun 5th Edition",
-			expectedCode: "SR5",
+			name:         "Assassin's Primer",
+			code:         "AP",
+			expectedName: "Assassin's Primer",
+		},
+		{
+			name:         "Gun Heaven 3",
+			code:         "GH3",
+			expectedName: "Gun Heaven 3",
 		},
 		{
 			name:         "Run and Gun",
-			id:           "rg",
+			code:         "RG",
 			expectedName: "Run and Gun",
-			expectedCode: "RG",
+		},
+		{
+			name:         "Shadowrun 5th Edition",
+			code:         "SR5",
+			expectedName: "Shadowrun 5th Edition",
 		},
 		{
 			name:         "Street Grimoire",
-			id:           "sg",
+			code:         "SG",
 			expectedName: "Street Grimoire",
-			expectedCode: "SG",
-		},
-		{
-			name:         "Chrome Flesh",
-			id:           "cf",
-			expectedName: "Chrome Flesh",
-			expectedCode: "CF",
 		},
 	}
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			book, ok := DataBooks[tt.id]
-			require.True(t, ok, "Book %s should exist", tt.id)
-			assert.Equal(t, tt.expectedName, book.Name)
-			assert.Equal(t, tt.expectedCode, book.Code)
+			var found *Book
+			for i := range DataBooks {
+				if DataBooks[i].Code == tt.code {
+					found = &DataBooks[i]
+					break
+				}
+			}
+			require.NotNil(t, found, "Book with code %s should exist", tt.code)
+			assert.Equal(t, tt.expectedName, found.Name)
+			assert.Equal(t, tt.code, found.Code)
+			assert.NotEmpty(t, found.ID, "ID should not be empty")
 		})
 	}
 }
 
 func TestBookFields(t *testing.T) {
-	book, ok := DataBooks["sr5"]
-	require.True(t, ok, "Book 'sr5' should exist")
+	// Find first book
+	require.NotEmpty(t, DataBooks, "DataBooks should not be empty")
+	book := DataBooks[0]
 
 	tests := []struct {
 		name    string
@@ -73,31 +85,37 @@ func TestBookFields(t *testing.T) {
 	}
 }
 
-func TestBookMatches(t *testing.T) {
-	book, ok := DataBooks["sr5"]
-	require.True(t, ok, "Book 'sr5' should exist")
-
-	if book.Matches != nil {
-		assert.NotNil(t, book.Matches.Match, "Match should not be nil if Matches is set")
+func TestBookWithMatches(t *testing.T) {
+	// Find a book with matches
+	var book *Book
+	for i := range DataBooks {
+		if DataBooks[i].Matches != nil && len(DataBooks[i].Matches.Match) > 0 {
+			book = &DataBooks[i]
+			break
+		}
 	}
+
+	require.NotNil(t, book, "Should have at least one book with matches")
+	assert.NotNil(t, book.Matches, "Matches should not be nil")
+	assert.NotEmpty(t, book.Matches.Match, "Match slice should not be empty")
+
+	match := book.Matches.Match[0]
+	assert.NotEmpty(t, match.Language, "Language should not be empty")
+	assert.NotEmpty(t, match.Text, "Text should not be empty")
+	assert.Greater(t, match.Page, 0, "Page should be greater than 0")
 }
 
-func TestBookWithSingleMatch(t *testing.T) {
-	// Test a book with a single match (not an array)
-	book, ok := DataBooks["sge"]
-	require.True(t, ok, "Book 'sge' should exist")
-
-	if book.Matches != nil {
-		assert.NotNil(t, book.Matches.Match, "Match should not be nil")
+func TestBookPermanent(t *testing.T) {
+	// Find permanent book
+	var book *Book
+	for i := range DataBooks {
+		if DataBooks[i].Permanent != "" {
+			book = &DataBooks[i]
+			break
+		}
 	}
-}
 
-func TestBookWithMultipleMatches(t *testing.T) {
-	// Test a book with multiple matches (array)
-	book, ok := DataBooks["sr5"]
-	require.True(t, ok, "Book 'sr5' should exist")
-
-	if book.Matches != nil {
-		assert.NotNil(t, book.Matches.Match, "Match should not be nil")
-	}
+	require.NotNil(t, book, "Should have at least one permanent book")
+	assert.Equal(t, "Shadowrun 5th Edition", book.Name)
+	assert.NotEmpty(t, book.Permanent, "Permanent field should be set")
 }
