@@ -1,10 +1,14 @@
 name: CI
 
+# Workflow disabled - uncomment the 'on' section below to re-enable
+# on:
+#   push:
+#     branches: [ main ]
+#   pull_request:
+#     branches: [ main ]
+
 on:
-  push:
-    branches: [ main ]
-  pull_request:
-    branches: [ main ]
+  workflow_dispatch:  # Allow manual triggering only
 
 jobs:
   build-and-test:

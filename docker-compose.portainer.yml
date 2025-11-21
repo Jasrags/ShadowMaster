@@ -1,0 +1,66 @@
+version: '3.8'
+
+services:
+  shadowmaster:
+    image: ${IMAGE_NAME:-shadowmaster}:${VERSION:-latest}
+    container_name: shadowmaster
+    ports:
+      - "${PORT:-8080}:8080"
+    volumes:
+      - shadowmaster-data:/data
+    environment:
+      - SESSION_SECRET=${SESSION_SECRET}
+    restart: ${RESTART_POLICY:-unless-stopped}
+    healthcheck:
+      test: ["CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://localhost:8080/health"]
+      interval: 30s
+      timeout: 3s
+      retries: 3
+      start_period: 5s
+    networks:
+      - shadowmaster-network
+    labels:
+      - "com.centurylinklabs.watchtower.enable=true"
+      - "com.centurylinklabs.watchtower.scope=shadowmaster"
+    deploy:
+      resources:
+        limits:
+          cpus: ${CPU_LIMIT:-}
+          memory: ${MEMORY_LIMIT:-}
+        reservations:
+          cpus: ${CPU_RESERVATION:-}
+          memory: ${MEMORY_RESERVATION:-}
+
+  watchtower:
+    image: containrrr/watchtower:latest
+    container_name: watchtower
+    restart: ${WATCHTOWER_RESTART_POLICY:-unless-stopped}
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+    environment:
+      - WATCHTOWER_CLEANUP=${WATCHTOWER_CLEANUP:-true}
+      - WATCHTOWER_INCLUDE_STOPPED=${WATCHTOWER_INCLUDE_STOPPED:-false}
+      - WATCHTOWER_REVIVE_STOPPED=${WATCHTOWER_REVIVE_STOPPED:-false}
+      - WATCHTOWER_LABEL_ENABLE=${WATCHTOWER_LABEL_ENABLE:-true}
+      - WATCHTOWER_SCHEDULE=${WATCHTOWER_SCHEDULE:-0 0 4 * * *}
+      - WATCHTOWER_INCLUDE_RESTARTING=${WATCHTOWER_INCLUDE_RESTARTING:-true}
+      - WATCHTOWER_ROLLING_RESTART=${WATCHTOWER_ROLLING_RESTART:-false}
+      - WATCHTOWER_POLL_INTERVAL=${WATCHTOWER_POLL_INTERVAL:-}
+      - WATCHTOWER_NOTIFICATIONS=${WATCHTOWER_NOTIFICATIONS:-}
+      - WATCHTOWER_NOTIFICATION_URL=${WATCHTOWER_NOTIFICATION_URL:-}
+    networks:
+      - shadowmaster-network
+    deploy:
+      resources:
+        limits:
+          cpus: ${WATCHTOWER_CPU_LIMIT:-0.1}
+          memory: ${WATCHTOWER_MEMORY_LIMIT:-64m}
+
+volumes:
+  shadowmaster-data:
+    driver: local
+
+networks:
+  shadowmaster-network:
+    driver: bridge
+
