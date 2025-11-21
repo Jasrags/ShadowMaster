@@ -2,34 +2,42 @@ package v5
 
 import "shadowmaster/pkg/shadowrun/edition/v5/common"
 
-// ComplexFormBonus represents bonuses for a complex form
-// Note: SelectTextBonus is from common package
-type ComplexFormBonus struct {
-	SelectText *common.SelectTextBonus `json:"selecttext,omitempty"` // Select text bonus
+// This file contains complex form structures generated from complexforms.xsd
+
+// ComplexFormCategory represents a complex form category
+type ComplexFormCategory struct {
+	Content string `xml:",chardata" json:"+content,omitempty"`
 }
 
-// ComplexFormRequired represents requirements for a complex form
-type ComplexFormRequired struct {
-	OneOf *ComplexFormRequiredOneOf `json:"oneof,omitempty"` // One-of requirement
+// ComplexFormCategories represents a collection of complex form categories
+type ComplexFormCategories struct {
+	Category []ComplexFormCategory `xml:"category,omitempty" json:"category,omitempty"`
 }
 
-// ComplexFormRequiredOneOf represents a one-of requirement for complex forms
-type ComplexFormRequiredOneOf struct {
-	Quality string `json:"quality,omitempty"` // Required quality
+// ComplexFormItem represents a complex form definition
+type ComplexFormItem struct {
+	ID string `xml:"id" json:"id"`
+	Name string `xml:"name" json:"name"`
+	Target string `xml:"target" json:"target"`
+	Duration string `xml:"duration" json:"duration"`
+	FV string `xml:"fv" json:"fv"`
+	common.SourceReference
+	common.Visibility
+	UseSkill *string `xml:"useskill,omitempty" json:"useskill,omitempty"`
+	Bonus *common.BaseBonus `xml:"bonus,omitempty" json:"bonus,omitempty"`
+	Required *common.Required `xml:"required,omitempty" json:"required,omitempty"`
+	Forbidden *common.Forbidden `xml:"forbidden,omitempty" json:"forbidden,omitempty"`
 }
 
-// ComplexForm represents a complex form from Shadowrun 5th Edition
-type ComplexForm struct {
-	// Required fields
-	ID       string `json:"id"`       // Unique identifier (UUID)
-	Name     string `json:"name"`     // Complex form name
-	Target   string `json:"target"`   // Target type like "Persona", "Device", "File", etc.
-	Duration string `json:"duration"` // Duration like "P", "S", "I", "E", "Special"
-	FV       string `json:"fv"`       // Fading Value like "L-2", "L+1", "L", "Special"
-	Source   string `json:"source"`   // Source book like "SR5", "DT", "CF", "KC"
-	Page     string `json:"page"`     // Page number
-
-	// Optional fields
-	Bonus    *ComplexFormBonus    `json:"bonus,omitempty"`    // Bonuses provided by this complex form
-	Required *ComplexFormRequired `json:"required,omitempty"` // Requirements for this complex form
+// ComplexFormItems represents a collection of complex forms
+type ComplexFormItems struct {
+	ComplexForm []ComplexFormItem `xml:"complexform,omitempty" json:"complexform,omitempty"`
 }
+
+// ComplexFormsChummer represents the root chummer element for complex forms
+type ComplexFormsChummer struct {
+	Version *string `xml:"version,omitempty" json:"version,omitempty"`
+	Categories []ComplexFormCategories `xml:"categories,omitempty" json:"categories,omitempty"`
+	ComplexForms []ComplexFormItems `xml:"complexforms,omitempty" json:"complexforms,omitempty"`
+}
+

@@ -1,10 +1,22 @@
 package v5
 
-// Reference represents a reference entry from Shadowrun 5th Edition
-// These are typically page references to rules, sections, or content in sourcebooks
-type Reference struct {
-	ID     string `json:"id"`     // Unique identifier (UUID)
-	Name   string `json:"name"`   // Reference name (e.g., "Another Night, Another Run")
-	Source string `json:"source"` // Source book (e.g., "SR5")
-	Page   string `json:"page"`   // Page number
+// This file contains reference structures generated from references.xsd
+
+// Rule represents a reference rule
+type Rule struct {
+	ID string `xml:"id" json:"id"`
+	Name string `xml:"name" json:"name"`
+	Source string `xml:"source" json:"source"`
+	Page uint16 `xml:"page" json:"page"`
 }
+
+// Rules represents a collection of reference rules
+type Rules struct {
+	Rule []Rule `xml:"rule" json:"rule"`
+}
+
+// ReferencesChummer represents the root chummer element for references
+type ReferencesChummer struct {
+	Rules Rules `xml:"rules" json:"rules"`
+}
+

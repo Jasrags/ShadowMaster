@@ -1,4 +1,4 @@
-import { useState, useMemo, useEffect } from 'react';
+import React, { useState, useMemo, useEffect } from 'react';
 import { Button } from 'react-aria-components';
 import type { Gear } from '../../lib/types';
 import { GearViewModal } from './GearViewModal';
@@ -173,10 +173,9 @@ export function GearTableGrouped({ gear }: GearTableGroupedProps) {
                 </tr>
               ) : (
                 groupedGear.map((group) => (
-                  <>
+                  <React.Fragment key={group.category}>
                     {/* Group Header Row */}
                     <tr
-                      key={group.category}
                       className="bg-sr-light-gray/30 border-b border-sr-light-gray cursor-pointer hover:bg-sr-light-gray/50 transition-colors"
                       onClick={() => toggleGroup(group.category)}
                     >
@@ -231,7 +230,7 @@ export function GearTableGrouped({ gear }: GearTableGroupedProps) {
                         <td className="px-4 py-2 text-gray-300">{item.costfor || '-'}</td>
                       </tr>
                     ))}
-                  </>
+                  </React.Fragment>
                 ))
               )}
             </tbody>

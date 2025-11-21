@@ -1,58 +1,55 @@
 package v5
 
-// MartialArtTechnique represents a technique reference within a martial art
-type MartialArtTechnique struct {
-	Name string `json:"name"` // Technique name
-}
+import "shadowmaster/pkg/shadowrun/edition/v5/common"
 
-// MartialArtTechniques represents a collection of techniques for a martial art
-type MartialArtTechniques struct {
-	Technique interface{} `json:"technique,omitempty"` // Can be single MartialArtTechnique or []MartialArtTechnique
-}
+// This file contains martial arts structures generated from martialarts.xsd
 
-// AddSkillSpecializationOption represents a skill specialization option bonus
-type AddSkillSpecializationOption struct {
-	Skill string `json:"skill"` // Skill name
-	Spec  string `json:"spec"`  // Specialization name
-}
-
-// MartialArtBonus represents bonuses for a martial art
-type MartialArtBonus struct {
-	AddSkillSpecializationOption *AddSkillSpecializationOption `json:"addskillspecializationoption,omitempty"` // Skill specialization option
-}
-
-// MartialArtRequired represents requirements for a martial art technique
-type MartialArtRequired struct {
-	AllOf *MartialArtRequiredAllOf `json:"allof,omitempty"` // All-of requirement
-}
-
-// MartialArtRequiredAllOf represents an all-of requirement for martial art techniques
-type MartialArtRequiredAllOf struct {
-	MagEnabled interface{} `json:"magenabled,omitempty"` // Magic enabled requirement
-}
-
-// MartialArt represents a martial art from Shadowrun 5th Edition
-type MartialArt struct {
-	// Required fields
-	ID       string `json:"id"`       // Unique identifier (UUID)
-	Name     string `json:"name"`     // Martial art name
-	Source   string `json:"source"`   // Source book like "RG", "FA", etc.
-	Page     string `json:"page"`     // Page number
-
-	// Optional fields
-	Bonus     *MartialArtBonus     `json:"bonus,omitempty"`     // Bonuses provided by this martial art
-	Techniques *MartialArtTechniques `json:"techniques,omitempty"` // Techniques available in this martial art
-}
-
-// Technique represents a martial art technique definition from Shadowrun 5th Edition
+// Technique represents a martial art technique
 type Technique struct {
-	// Required fields
-	ID       string `json:"id"`       // Unique identifier (UUID)
-	Name     string `json:"name"`     // Technique name
-	Source   string `json:"source"`   // Source book like "RG", "FA", etc.
-	Page     string `json:"page"`     // Page number
+	Name string `xml:"name" json:"name"`
+	Hide *string `xml:"hide,omitempty" json:"hide,omitempty"`
+}
 
-	// Optional fields
-	Required *MartialArtRequired `json:"required,omitempty"` // Requirements for this technique
+// Techniques represents a collection of techniques
+type Techniques struct {
+	Technique []Technique `xml:"technique,omitempty" json:"technique,omitempty"`
+}
+
+// MartialArt represents a martial art
+type MartialArt struct {
+	ID string `xml:"id" json:"id"`
+	Name string `xml:"name" json:"name"`
+	Cost *int `xml:"cost,omitempty" json:"cost,omitempty"`
+	common.Visibility
+	Bonus *common.BaseBonus `xml:"bonus,omitempty" json:"bonus,omitempty"`
+	AllTechniques *string `xml:"alltechniques,omitempty" json:"alltechniques,omitempty"`
+	Techniques *Techniques `xml:"techniques,omitempty" json:"techniques,omitempty"`
+	common.SourceReference
+}
+
+// MartialArts represents a collection of martial arts
+type MartialArts struct {
+	MartialArt []MartialArt `xml:"martialart,omitempty" json:"martialart,omitempty"`
+}
+
+// TechniqueItem represents a standalone martial art technique
+type TechniqueItem struct {
+	ID string `xml:"id" json:"id"`
+	Name string `xml:"name" json:"name"`
+	Bonus *common.BaseBonus `xml:"bonus,omitempty" json:"bonus,omitempty"`
+	common.Visibility
+	common.SourceReference
+}
+
+// TechniqueItems represents a collection of standalone techniques
+type TechniqueItems struct {
+	Technique []TechniqueItem `xml:"technique,omitempty" json:"technique,omitempty"`
+}
+
+// MartialArtsChummer represents the root chummer element for martial arts
+type MartialArtsChummer struct {
+	Version *string `xml:"version,omitempty" json:"version,omitempty"`
+	MartialArts []MartialArts `xml:"martialarts,omitempty" json:"martialarts,omitempty"`
+	Techniques []TechniqueItems `xml:"techniques,omitempty" json:"techniques,omitempty"`
 }
 

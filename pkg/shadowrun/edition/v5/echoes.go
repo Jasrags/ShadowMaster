@@ -1,27 +1,29 @@
 package v5
 
-// EchoBonus represents bonuses for an echo
-// Note: Many bonus types are reused from other packages or can be complex structures
-type EchoBonus struct {
-	LivingPersona           interface{} `json:"livingpersona,omitempty"`           // Living persona bonuses (can be complex)
-	MatrixInitiativeDiceAdd string      `json:"matrixinitiativediceadd,omitempty"` // Matrix initiative dice bonus
-	SelectText              interface{} `json:"selecttext,omitempty"`              // Selectable text bonus (can be complex)
-	LimitModifier           interface{} `json:"limitmodifier,omitempty"`           // Limit modifier (can be complex)
-	SpecificAttribute       interface{} `json:"specificattribute,omitempty"`       // Specific attribute bonus (can be complex)
-	InitiativePass          string      `json:"initiativepass,omitempty"`          // Initiative pass bonus
-	PenaltyFreeSustain      interface{} `json:"penaltyfreesustain,omitempty"`      // Penalty-free sustain (can be complex)
-}
+import "shadowmaster/pkg/shadowrun/edition/v5/common"
 
-// Echo represents a technomancer echo from Shadowrun 5th Edition
+// This file contains echo structures generated from echoes.xsd
+
+// Echo represents an echo
 type Echo struct {
-	// Required fields
-	ID     string `json:"id"`     // Unique identifier (UUID)
-	Name   string `json:"name"`   // Echo name
-	Source string `json:"source"` // Source book like "SR5", "DT", "KC", etc.
-	Page   string `json:"page"`   // Page number
-
-	// Optional fields
-	Bonus *EchoBonus `json:"bonus,omitempty"` // Bonuses provided by this echo
-	Limit string     `json:"limit,omitempty"` // Limit like "2", "3", "False", etc.
-	Hide  *bool      `json:"hide,omitempty"`  // Whether to hide this echo
+	ID string `xml:"id" json:"id"`
+	Name string `xml:"name" json:"name"`
+	common.SourceReference
+	Bonus *common.BaseBonus `xml:"bonus,omitempty" json:"bonus,omitempty"`
+	Forbidden *common.Forbidden `xml:"forbidden,omitempty" json:"forbidden,omitempty"`
+	common.Visibility
+	Limit *string `xml:"limit,omitempty" json:"limit,omitempty"`
+	Required *common.Required `xml:"required,omitempty" json:"required,omitempty"`
 }
+
+// Echoes represents a collection of echoes
+type Echoes struct {
+	Echo []Echo `xml:"echo,omitempty" json:"echo,omitempty"`
+}
+
+// EchoesChummer represents the root chummer element for echoes
+type EchoesChummer struct {
+	Version *string `xml:"version,omitempty" json:"version,omitempty"`
+	Echoes []Echoes `xml:"echoes,omitempty" json:"echoes,omitempty"`
+}
+

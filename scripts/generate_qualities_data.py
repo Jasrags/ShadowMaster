@@ -36,36 +36,36 @@ def convert_dict_to_go(d, context=""):
     if not d:
         return "nil"
     
-    # Handle LimitModifier
+    # Handle LimitModifier (from common package)
     if 'limit' in d and 'value' in d and 'condition' in d:
-        return f"LimitModifier{{\n\t\t\t\tLimit: {convert_value(d.get('limit'), 'limit')}, Value: {convert_value(d.get('value'), 'value')}, Condition: {convert_value(d.get('condition'), 'condition')},\n\t\t\t}}"
+        return f"&common.LimitModifier{{\n\t\t\t\tLimit: {convert_value(d.get('limit'), 'limit')}, Value: {convert_value(d.get('value'), 'value')}, Condition: {convert_value(d.get('condition'), 'condition')},\n\t\t\t}}"
     
-    # Handle SkillCategoryBonus (for qualities, similar to bioware)
+    # Handle SkillCategoryBonus (for qualities, similar to bioware - pointer type)
     if 'name' in d and 'bonus' in d and context == "skillcategory":
         bonus_val = convert_value(d.get('bonus'), 'bonus')
-        return f"BiowareSkillCategoryBonus{{\n\t\t\t\tName: {convert_value(d.get('name'), 'name')}, Bonus: {bonus_val},\n\t\t\t}}"
+        return f"&BiowareSkillCategoryBonus{{\n\t\t\t\tName: {convert_value(d.get('name'), 'name')}, Bonus: {bonus_val},\n\t\t\t}}"
     
-    # Handle SpecificSkillBonus
+    # Handle SpecificSkillBonus (from common package, value not pointer)
     if 'name' in d and 'bonus' in d and context == "specificskill":
         bonus_val = d.get('bonus')
         if isinstance(bonus_val, str) and bonus_val.isdigit():
             bonus_val = int(bonus_val)
         else:
             bonus_val = convert_value(bonus_val, 'bonus')
-        return f"SpecificSkillBonus{{\n\t\t\t\tName: {convert_value(d.get('name'), 'name')}, Bonus: {bonus_val},\n\t\t\t}}"
+        return f"common.SpecificSkillBonus{{\n\t\t\t\tName: {convert_value(d.get('name'), 'name')}, Bonus: {bonus_val},\n\t\t\t}}"
     
-    # Handle SkillGroupBonus
+    # Handle SkillGroupBonus (from common package)
     if 'name' in d and 'bonus' in d and context == "skillgroup":
-        return f"SkillGroupBonus{{\n\t\t\t\tName: {convert_value(d.get('name'), 'name')}, Bonus: {convert_value(d.get('bonus'), 'bonus')}, Condition: {convert_value(d.get('condition', ''), 'condition')},\n\t\t\t}}"
+        return f"&common.SkillGroupBonus{{\n\t\t\t\tName: {convert_value(d.get('name'), 'name')}, Bonus: {convert_value(d.get('bonus'), 'bonus')}, Condition: {convert_value(d.get('condition', ''), 'condition')},\n\t\t\t}}"
     
-    # Handle SpecificAttributeBonus
+    # Handle SpecificAttributeBonus (from common package)
     if 'name' in d and 'val' in d and context == "specificattribute":
         parts = [f"Name: {convert_value(d.get('name'), 'name')}", f"Val: {convert_value(d.get('val'), 'val')}"]
         if 'max' in d:
             parts.append(f"Max: {convert_value(d.get('max'), 'max')}")
-        return f"&SpecificAttributeBonus{{\n\t\t\t\t\t{', '.join(parts)},\n\t\t\t\t}}"
+        return f"&common.SpecificAttributeBonus{{\n\t\t\t\t\t{', '.join(parts)},\n\t\t\t\t}}"
     
-    # Handle SelectSkill
+    # Handle SelectSkill (from common package)
     if ('val' in d or 'max' in d) and context in ["selectskill", "selectattributes"]:
         parts = []
         if 'val' in d:
@@ -81,40 +81,59 @@ def convert_dict_to_go(d, context=""):
         if 'applytorating' in d:
             parts.append(f"ApplyToRating: {convert_value(d.get('applytorating'), 'applytorating')}")
         if 'excludeattribute' in d:
-            parts.append(f"ExcludeAttribute: {convert_value(d.get('excludeattribute'), 'excludeattribute')}")
-        return f"&SelectSkill{{\n\t\t\t\t\t{', '.join(parts)},\n\t\t\t\t}}"
+            ex_attr = d.get('excludeattribute')
+            if isinstance(ex_attr, list):
+                # Convert list to comma-separated string
+                parts.append(f"ExcludeAttribute: {convert_value(', '.join(ex_attr), 'excludeattribute')}")
+            else:
+                parts.append(f"ExcludeAttribute: {convert_value(ex_attr, 'excludeattribute')}")
+        return f"&common.SelectSkill{{\n\t\t\t\t\t{', '.join(parts)},\n\t\t\t\t}}"
     
-    # Handle SkillAttributeBonus
+    # Handle SkillAttributeBonus (from common package)
     if 'name' in d and 'bonus' in d and context == "skillattribute":
         parts = [f"Name: {convert_value(d.get('name'), 'name')}", f"Bonus: {convert_value(d.get('bonus'), 'bonus')}"]
         if 'condition' in d:
             parts.append(f"Condition: {convert_value(d.get('condition'), 'condition')}")
-        return f"&SkillAttributeBonus{{\n\t\t\t\t\t\t{', '.join(parts)},\n\t\t\t\t\t}}"
+        return f"&common.SkillAttributeBonus{{\n\t\t\t\t\t\t{', '.join(parts)},\n\t\t\t\t\t}}"
     
-    # Handle ConditionMonitorBonus
+    # Handle ConditionMonitorBonus (from common package)
     if 'sharedthresholdoffset' in d or 'thresholdoffset' in d:
         parts = []
         if 'sharedthresholdoffset' in d:
             parts.append(f"SharedThresholdOffset: {convert_value(d.get('sharedthresholdoffset'), 'sharedthresholdoffset')}")
         if 'thresholdoffset' in d:
             parts.append(f"ThresholdOffset: {convert_value(d.get('thresholdoffset'), 'thresholdoffset')}")
-        return f"&ConditionMonitorBonus{{\n\t\t\t\t\t{', '.join(parts)},\n\t\t\t\t}}"
+        return f"&common.ConditionMonitorBonus{{\n\t\t\t\t\t{', '.join(parts)},\n\t\t\t\t}}"
     
-    # Handle InitiativeBonus
+    # Handle InitiativeBonus (from common package)
     if '+content' in d and '+@precedence' in d and context == "initiative":
-        return f"&InitiativeBonus{{\n\t\t\t\t\tContent: {convert_value(d.get('+content'), 'content')}, Precedence: {convert_value(d.get('+@precedence'), 'precedence')},\n\t\t\t\t}}"
+        return f"&common.InitiativeBonus{{\n\t\t\t\t\tContent: {convert_value(d.get('+content'), 'content')}, Precedence: {convert_value(d.get('+@precedence'), 'precedence')},\n\t\t\t\t}}"
     
-    # Handle InitiativePassBonus
+    # Handle InitiativePassBonus (from common package)
     if '+content' in d and '+@precedence' in d and context == "initiativepass":
-        return f"&InitiativePassBonus{{\n\t\t\t\t\tContent: {convert_value(d.get('+content'), 'content')}, Precedence: {convert_value(d.get('+@precedence'), 'precedence')},\n\t\t\t\t}}"
+        return f"&common.InitiativePassBonus{{\n\t\t\t\t\tContent: {convert_value(d.get('+content'), 'content')}, Precedence: {convert_value(d.get('+@precedence'), 'precedence')},\n\t\t\t\t}}"
     
-    # Handle ArmorBonus
+    # Handle ArmorBonus (from common package)
     if '+content' in d and '+@group' in d:
-        return f"&ArmorBonus{{\n\t\t\t\t\tContent: {convert_value(d.get('+content'), 'content')}, Group: {convert_value(d.get('+@group'), 'group')},\n\t\t\t\t}}"
+        return f"&common.ArmorBonus{{\n\t\t\t\t\tContent: {convert_value(d.get('+content'), 'content')}, Group: {convert_value(d.get('+@group'), 'group')},\n\t\t\t\t}}"
     
     # Handle ActionDicePool
     if '+@category' in d and context == "actiondicepool":
         return f"&ActionDicePool{{\n\t\t\t\t\tCategory: {convert_value(d.get('+@category'), 'category')},\n\t\t\t\t}}"
+    
+    # Handle SelectTextBonus (from common package)
+    if ('+@xml' in d or '+@xpath' in d or '+@allowedit' in d) and context == "selecttext":
+        parts = []
+        if '+@xml' in d:
+            parts.append(f"XML: {convert_value(d.get('+@xml'), 'xml')}")
+        if '+@xpath' in d:
+            parts.append(f"XPath: {convert_value(d.get('+@xpath'), 'xpath')}")
+        if '+@allowedit' in d:
+            parts.append(f"AllowEdit: {convert_value(d.get('+@allowedit'), 'allowedit')}")
+        if parts:
+            return f"&common.SelectTextBonus{{\n\t\t\t\t\t{', '.join(parts)},\n\t\t\t\t}}"
+        else:
+            return "&common.SelectTextBonus{}"
     
     # Generic struct - for complex nested structures, use interface{}
     # This will be handled in the bonus conversion function
@@ -127,15 +146,15 @@ def convert_quality_bonus_to_go(d):
     
     parts = []
     
-    # Handle limitmodifier (can be single or array)
+    # Handle limitmodifier (can be single pointer - from common package)
     if 'limitmodifier' in d:
         lm = d.get('limitmodifier')
         if isinstance(lm, list):
-            items = [convert_dict_to_go(item, "limitmodifier") for item in lm]
-            items_str = ', '.join(items)
-            brace_open = '{'
-            brace_close = '}'
-            parts.append(f"LimitModifier: []interface{brace_open}{brace_close}{brace_open}{items_str}{brace_close}")
+            # Should be single value, but handle array just in case
+            if len(lm) > 0:
+                parts.append(f"LimitModifier: {convert_dict_to_go(lm[0], 'limitmodifier')}")
+            else:
+                parts.append("LimitModifier: nil")
         else:
             parts.append(f"LimitModifier: {convert_dict_to_go(lm, 'limitmodifier')}")
     
@@ -151,39 +170,46 @@ def convert_quality_bonus_to_go(d):
         else:
             parts.append(f"SkillCategory: {convert_dict_to_go(sc, 'skillcategory')}")
     
-    # Handle specificskill (can be single or array)
+    # Handle specificskill (array from common package)
     if 'specificskill' in d:
         ss = d.get('specificskill')
+        brace_open = '{'
+        brace_close = '}'
         if isinstance(ss, list):
             items = [convert_dict_to_go(item, "specificskill") for item in ss]
             items_str = ', '.join(items)
-            brace_open = '{'
-            brace_close = '}'
-            parts.append(f"SpecificSkill: []interface{brace_open}{brace_close}{brace_open}{items_str}{brace_close}")
+            parts.append(f"SpecificSkill: []common.SpecificSkillBonus{brace_open}{items_str}{brace_close}")
         else:
-            parts.append(f"SpecificSkill: {convert_dict_to_go(ss, 'specificskill')}")
+            # Single value - wrap in array
+            item = convert_dict_to_go(ss, 'specificskill')
+            # Remove & if present and wrap in array
+            if item.startswith('&'):
+                item = item[1:]
+            parts.append(f"SpecificSkill: []common.SpecificSkillBonus{brace_open}{item}{brace_close}")
     
-    # Handle skillgroup (can be single or array)
+    # Handle skillgroup (array from common package)
     if 'skillgroup' in d:
         sg = d.get('skillgroup')
+        brace_open = '{'
+        brace_close = '}'
         if isinstance(sg, list):
             items = [convert_dict_to_go(item, "skillgroup") for item in sg]
             items_str = ', '.join(items)
-            brace_open = '{'
-            brace_close = '}'
-            parts.append(f"SkillGroup: []interface{brace_open}{brace_close}{brace_open}{items_str}{brace_close}")
+            parts.append(f"SkillGroup: []*common.SkillGroupBonus{brace_open}{items_str}{brace_close}")
         else:
-            parts.append(f"SkillGroup: {convert_dict_to_go(sg, 'skillgroup')}")
+            # Single value - wrap in array
+            item = convert_dict_to_go(sg, 'skillgroup')
+            parts.append(f"SkillGroup: []*common.SkillGroupBonus{brace_open}{item}{brace_close}")
     
-    # Handle selectskill
+    # Handle selectskill (from common package, but still interface{} for now)
     if 'selectskill' in d:
         parts.append(f"SelectSkill: {convert_dict_to_go(d.get('selectskill'), 'selectskill')}")
     
-    # Handle skillattribute
+    # Handle skillattribute (from common package)
     if 'skillattribute' in d:
         parts.append(f"SkillAttribute: {convert_dict_to_go(d.get('skillattribute'), 'skillattribute')}")
     
-    # Handle specificattribute (can be single or array)
+    # Handle specificattribute (can be string, pointer, or array - from common package)
     if 'specificattribute' in d:
         sa = d.get('specificattribute')
         if isinstance(sa, list):
@@ -192,16 +218,13 @@ def convert_quality_bonus_to_go(d):
             brace_open = '{'
             brace_close = '}'
             parts.append(f"SpecificAttribute: []interface{brace_open}{brace_close}{brace_open}{items_str}{brace_close}")
+        elif isinstance(sa, str):
+            # Simple string value
+            parts.append(f"SpecificAttribute: {convert_value(sa, 'specificattribute')}")
         else:
             sa_go = convert_dict_to_go(sa, 'specificattribute')
             if sa_go == "nil":
                 parts.append(f"SpecificAttribute: nil")
-            elif not sa_go.startswith('&') and not sa_go.startswith('[]'):
-                if sa_go.startswith('SpecificAttributeBonus'):
-                    sa_go = f"&{sa_go}"
-                else:
-                    sa_go = f"&SpecificAttributeBonus{sa_go}"
-                parts.append(f"SpecificAttribute: {sa_go}")
             else:
                 parts.append(f"SpecificAttribute: {sa_go}")
     
@@ -223,31 +246,31 @@ def convert_quality_bonus_to_go(d):
         else:
             parts.append(f"SelectAttributes: {convert_dict_to_go(sa_dict, 'selectattributes')}")
     
-    # Handle conditionmonitor
+    # Handle conditionmonitor (from common package)
     if 'conditionmonitor' in d:
         parts.append(f"ConditionMonitor: {convert_dict_to_go(d.get('conditionmonitor'), 'conditionmonitor')}")
     
-    # Handle initiative
+    # Handle initiative (from common package)
     if 'initiative' in d:
         init_val = d.get('initiative')
         if isinstance(init_val, dict):
             parts.append(f"Initiative: {convert_dict_to_go(init_val, 'initiative')}")
         else:
-            parts.append(f"Initiative: &InitiativeBonus{{\n\t\t\t\t\t\tContent: {convert_value(init_val, 'initiative')},\n\t\t\t\t\t}}")
+            parts.append(f"Initiative: &common.InitiativeBonus{{\n\t\t\t\t\t\tContent: {convert_value(init_val, 'initiative')},\n\t\t\t\t\t}}")
     
-    # Handle initiativepass
+    # Handle initiativepass (from common package)
     if 'initiativepass' in d:
         ip_val = d.get('initiativepass')
         if isinstance(ip_val, dict):
             parts.append(f"InitiativePass: {convert_dict_to_go(ip_val, 'initiativepass')}")
         else:
-            parts.append(f"InitiativePass: &InitiativePassBonus{{\n\t\t\t\t\t\tContent: {convert_value(ip_val, 'initiativepass')},\n\t\t\t\t\t}}")
+            parts.append(f"InitiativePass: &common.InitiativePassBonus{{\n\t\t\t\t\t\tContent: {convert_value(ip_val, 'initiativepass')},\n\t\t\t\t\t}}")
     
     # Handle actiondicepool
     if 'actiondicepool' in d:
         parts.append(f"ActionDicePool: {convert_dict_to_go(d.get('actiondicepool'), 'actiondicepool')}")
     
-    # Handle armor
+    # Handle armor (can be *common.ArmorBonus or string)
     if 'armor' in d:
         armor_val = d.get('armor')
         if isinstance(armor_val, dict):
@@ -255,18 +278,22 @@ def convert_quality_bonus_to_go(d):
         else:
             parts.append(f"Armor: {convert_value(armor_val, 'armor')}")
     
-    # Handle selecttext
+    # Handle selecttext (from common package)
     if 'selecttext' in d:
         st = d.get('selecttext')
         if st is None:
-            parts.append("SelectText: &SelectTextBonus{}")
+            parts.append("SelectText: &common.SelectTextBonus{}")
         else:
-            parts.append(f"SelectText: {convert_dict_to_go(st, 'selecttext')}")
+            st_go = convert_dict_to_go(st, 'selecttext')
+            if st_go == "nil":
+                parts.append("SelectText: &common.SelectTextBonus{}")
+            else:
+                parts.append(f"SelectText: {st_go}")
     
     # Handle all other interface{} fields that can be complex structures
     interface_fields = {
         'addcontact': 'AddContact',
-        'addqualities': 'AddQualities',
+        'addqualities': 'AddQuality',  # Note: field name is AddQuality, not AddQualities
         'addskillspecializationoption': 'AddSkill',
         'addspell': 'AddSpell',
         'addspirit': 'AddSpirit',
@@ -276,7 +303,7 @@ def convert_quality_bonus_to_go(d):
         'addlimb': 'AddLimb',
         'addmetamagic': 'AddMetamagic',
         'selectcontact': 'SelectContact',
-        'selectexpertise': 'SelectExpertise',
+        # selectexpertise is handled separately as it's a string, not interface{}
         'selectinherentaiprogram': 'SelectInherentAIProgram',
         'selectmentorspirit': 'SelectMentorSpirit',
         'selectparagon': 'SelectParagon',
@@ -333,7 +360,7 @@ def convert_quality_bonus_to_go(d):
             else:
                 parts.append(f"{go_field}: {convert_value(val, field)}")
     
-    # Handle boolean pointer fields
+    # Handle boolean fields (plain bool, not *bool)
     bool_fields = {
         'unarmeddvphysical': 'UnarmedDVPhysical',
         'ambidextrous': 'Ambidextrous',
@@ -342,13 +369,13 @@ def convert_quality_bonus_to_go(d):
         if field in d:
             value = d.get(field)
             if value is None:
-                brace_open = '{'
-                brace_close = '}'
-                parts.append(f"{go_field}: &[]bool{brace_open}true{brace_close}[0]")
+                parts.append(f"{go_field}: true")  # Default to true for nil
             else:
-                brace_open = '{'
-                brace_close = '}'
-                parts.append(f"{go_field}: &[]bool{brace_open}{str(value).lower()}{brace_close}[0]")
+                parts.append(f"{go_field}: {str(value).lower()}")
+    
+    # Handle selectexpertise (simple string field)
+    if 'selectexpertise' in d:
+        parts.append(f"SelectExpertise: {convert_value(d.get('selectexpertise'), 'selectexpertise')}")
     
     # Handle all string fields
     string_fields = {
@@ -392,7 +419,7 @@ def convert_quality_bonus_to_go(d):
         'skillcategorykarmacost': 'SkillCategoryKarmaCost',
         # skillcategorykarmacostmultiplier is handled separately - it's a string, not interface{}
         # skillcategorypointcostmultiplier is handled separately - it's a string, not interface{}
-        'skillcategoryspecializationkarmacostmultiplier': 'SkillCategorySpecializationKarmaCostMultiplier',
+        # skillcategoryspecializationkarmacostmultiplier is a string, handled in string_fields
         'skillgroupcategorykarmacostmultiplier': 'SkillGroupCategoryKarmaCostMultiplier',
         'newspellkarmacost': 'NewspellKarmaCost',
         'focusbindingkarmacost': 'FocusBindingKarmaCost',
@@ -456,7 +483,15 @@ def convert_quality_bonus_to_go(d):
     }
     for field, go_field in string_fields.items():
         if field in d:
-            parts.append(f"{go_field}: {convert_value(d.get(field), field)}")
+            val = d.get(field)
+            # Skip complex structures (arrays, dicts) for string fields
+            if isinstance(val, (dict, list)):
+                # Skip complex structures - they should be handled separately
+                continue
+            # Skip nil values for string fields (they'll be omitted)
+            if val is None:
+                continue
+            parts.append(f"{go_field}: {convert_value(val, field)}")
     
     if not parts:
         return "nil"
@@ -469,36 +504,32 @@ def convert_quality_required_to_go(d):
     if 'oneof' in d:
         oo = d.get('oneof')
         oo_parts = []
+        brace_open = '{'
+        brace_close = '}'
         if 'metatype' in oo:
             mt = oo.get('metatype')
             if isinstance(mt, list):
                 items = [convert_value(item, 'metatype') for item in mt]
-                brace_open = '{'
-                brace_close = '}'
-                oo_parts.append(f"Metatype: []interface{brace_open}{brace_close}{brace_open}{', '.join(items)}{brace_close}")
+                oo_parts.append(f"Metatype: []string{brace_open}{', '.join(items)}{brace_close}")
             else:
-                oo_parts.append(f"Metatype: {convert_value(mt, 'metatype')}")
+                # Single value - wrap in array
+                oo_parts.append(f"Metatype: []string{brace_open}{convert_value(mt, 'metatype')}{brace_close}")
         if 'quality' in oo:
             q = oo.get('quality')
             if isinstance(q, list):
                 items = [convert_value(item, 'quality') for item in q]
-                brace_open = '{'
-                brace_close = '}'
-                oo_parts.append(f"Quality: []interface{brace_open}{brace_close}{brace_open}{', '.join(items)}{brace_close}")
+                oo_parts.append(f"Quality: []string{brace_open}{', '.join(items)}{brace_close}")
             else:
-                oo_parts.append(f"Quality: {convert_value(q, 'quality')}")
+                # Single value - wrap in array
+                oo_parts.append(f"Quality: []string{brace_open}{convert_value(q, 'quality')}{brace_close}")
         if 'power' in oo:
             oo_parts.append(f"Power: {convert_value(oo.get('power'), 'power')}")
         if 'magenabled' in oo:
             mge = oo.get('magenabled')
             if mge is None:
-                brace_open = '{'
-                brace_close = '}'
-                oo_parts.append(f"MageEnabled: &[]bool{brace_open}true{brace_close}[0]")
+                oo_parts.append(f"MageEnabled: true")  # Default to true for nil
             else:
-                brace_open = '{'
-                brace_close = '}'
-                oo_parts.append(f"MageEnabled: &[]bool{brace_open}{str(mge).lower()}{brace_close}[0]")
+                oo_parts.append(f"MageEnabled: {str(mge).lower()}")
         if oo_parts:
             parts.append(f"OneOf: &QualityRequiredOneOf{{\n\t\t\t\t\t{', '.join(oo_parts)},\n\t\t\t\t}}")
     if 'allof' in d:
@@ -517,24 +548,24 @@ def convert_quality_forbidden_to_go(d):
     if 'oneof' in d:
         oo = d.get('oneof')
         parts = []
+        brace_open = '{'
+        brace_close = '}'
         if 'quality' in oo:
             q = oo.get('quality')
             if isinstance(q, list):
                 items = [convert_value(item, 'quality') for item in q]
-                brace_open = '{'
-                brace_close = '}'
-                parts.append(f"Quality: []interface{brace_open}{brace_close}{brace_open}{', '.join(items)}{brace_close}")
+                parts.append(f"Quality: []string{brace_open}{', '.join(items)}{brace_close}")
             else:
-                parts.append(f"Quality: {convert_value(q, 'quality')}")
+                # Single value - wrap in array
+                parts.append(f"Quality: []string{brace_open}{convert_value(q, 'quality')}{brace_close}")
         if 'bioware' in oo:
             bw = oo.get('bioware')
             if isinstance(bw, list):
                 items = [convert_value(item, 'bioware') for item in bw]
-                brace_open = '{'
-                brace_close = '}'
-                parts.append(f"Bioware: []interface{brace_open}{brace_close}{brace_open}{', '.join(items)}{brace_close}")
+                parts.append(f"Bioware: []string{brace_open}{', '.join(items)}{brace_close}")
             else:
-                parts.append(f"Bioware: {convert_value(bw, 'bioware')}")
+                # Single value - wrap in array
+                parts.append(f"Bioware: []string{brace_open}{convert_value(bw, 'bioware')}{brace_close}")
         if 'power' in oo:
             parts.append(f"Power: {convert_value(oo.get('power'), 'power')}")
         if not parts:
@@ -568,7 +599,7 @@ def convert_quality_to_go(quality):
     if 'page' in quality:
         parts.append(f'Page: {convert_value(quality.get("page"), "page")}')
     
-    # Handle boolean pointer fields
+    # Handle boolean fields (plain bool, not *bool)
     bool_fields = {
         'chargenonly': 'ChargenOnly',
         'careeronly': 'CareerOnly',
@@ -578,7 +609,7 @@ def convert_quality_to_go(quality):
         'contributetobp': 'ContributeToBP',
         'contributetolimit': 'ContributeToLimit',
         # includeinlimit is handled separately as it's a complex structure
-        'limitwithinclusions': 'LimitWithinInclusions',
+        'limitwithininclusions': 'LimitWithinInclusions',
         'onlyprioritygiven': 'OnlyPriorityGiven',
         'canbuywithspellpoints': 'CanBuyWithSpellPoints',
         'doublecareer': 'DoubleCareer',
@@ -591,13 +622,9 @@ def convert_quality_to_go(quality):
         if field in quality:
             value = quality.get(field)
             if value is None:
-                brace_open = '{'
-                brace_close = '}'
-                parts.append(f'{go_field}: &[]bool{brace_open}true{brace_close}[0]')
+                parts.append(f'{go_field}: true')  # Default to true for nil
             else:
-                brace_open = '{'
-                brace_close = '}'
-                parts.append(f'{go_field}: &[]bool{brace_open}{str(value).lower()}{brace_close}[0]')
+                parts.append(f'{go_field}: {str(value).lower()}')
     
     # Handle includeinlimit (complex structure)
     if 'includeinlimit' in quality:
@@ -617,20 +644,16 @@ def convert_quality_to_go(quality):
             brace_close = '}'
             parts.append(f'IncludeInLimit: &[]bool{brace_open}true{brace_close}[0]')
     
-    # Handle firstlevelbonus (can be bool or complex structure)
+    # Handle firstlevelbonus (plain bool, not *bool)
     if 'firstlevelbonus' in quality:
         flb = quality.get('firstlevelbonus')
         if isinstance(flb, dict):
-            # Complex structure - for now, skip it or handle as interface{}
-            parts.append('FirstLevelBonus: nil')  # TODO: Handle complex firstlevelbonus structures
+            # Complex structure - default to false for now
+            parts.append('FirstLevelBonus: false')  # TODO: Handle complex firstlevelbonus structures
         elif flb is None:
-            brace_open = '{'
-            brace_close = '}'
-            parts.append(f'FirstLevelBonus: &[]bool{brace_open}true{brace_close}[0]')
+            parts.append('FirstLevelBonus: true')  # Default to true for nil
         else:
-            brace_open = '{'
-            brace_close = '}'
-            parts.append(f'FirstLevelBonus: &[]bool{brace_open}{str(flb).lower()}{brace_close}[0]')
+            parts.append(f'FirstLevelBonus: {str(flb).lower()}')
     
     # Handle naturalweapons (can be bool or complex structure)
     if 'naturalweapons' in quality:
@@ -658,7 +681,11 @@ def convert_quality_to_go(quality):
     }
     for field, go_field in string_fields.items():
         if field in quality:
-            parts.append(f'{go_field}: {convert_value(quality.get(field), field)}')
+            val = quality.get(field)
+            # Skip nil values for string fields
+            if val is None:
+                continue
+            parts.append(f'{go_field}: {convert_value(val, field)}')
     
     return "{\n\t\t\t" + ",\n\t\t\t".join(parts) + ",\n\t\t}"
 
@@ -673,14 +700,23 @@ for category in data['categories']['category']:
 
 # Generate quality entries
 quality_entries = []
+seen_ids = set()
 for quality in data['qualities']['quality']:
     quality_id = to_snake_case(quality.get('name', ''))
+    # Handle duplicate IDs by appending a counter
+    original_id = quality_id
+    counter = 1
+    while quality_id in seen_ids:
+        quality_id = f"{original_id}_{counter}"
+        counter += 1
+    seen_ids.add(quality_id)
     quality_go = convert_quality_to_go(quality)
     quality_entries.append(f'\t"{quality_id}": {quality_go}')
 
 # Write to file
-with open('qualities_data_generated.go', 'w') as f:
+with open('pkg/shadowrun/edition/v5/qualities_data.go', 'w', encoding='utf-8') as f:
     f.write('package v5\n\n')
+    f.write('import "shadowmaster/pkg/shadowrun/edition/v5/common"\n\n')
     f.write('// DataQualityCategories contains quality category names\n')
     f.write('var DataQualityCategories = []string{\n')
     f.write(',\n'.join(category_entries))

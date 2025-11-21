@@ -39,6 +39,8 @@ export function AppLayout({ children }: AppLayoutProps) {
             { id: 'weapons', label: 'Weapons', path: '/weapons' },
             { id: 'skills', label: 'Skills', path: '/skills' },
             { id: 'qualities', label: 'Qualities', path: '/qualities' },
+            { id: 'books', label: 'Books', path: '/books' },
+            { id: 'lifestyles', label: 'Lifestyles', path: '/lifestyles' },
           ],
         });
       }

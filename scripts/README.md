@@ -43,7 +43,7 @@ PowerShell script to build the project (Windows alternative to `make build`).
 ## Run Scripts
 
 ### `run.ps1`
-PowerShell script to run the server (Windows alternative to `make run`).
+PowerShell script to run the server in production mode (Windows alternative to `make run`).
 
 **Usage:**
 ```powershell
@@ -59,6 +59,29 @@ PowerShell script to run the server (Windows alternative to `make run`).
 - Builds the project if binary doesn't exist
 - Creates data directory if needed
 - Starts the server with default or specified options
+- Serves built static files from `web/static`
+
+### `run-dev.ps1`
+PowerShell script to run both API server and frontend dev server (Windows alternative to `make run-dev`).
+
+**Usage:**
+```powershell
+.\scripts\run-dev.ps1
+```
+
+**Options:**
+```powershell
+.\scripts\run-dev.ps1 [port] [data-dir] [web-dir]
+```
+
+**What it does:**
+- Runs the Go API server on port 8080 (default)
+- Runs the Vite frontend dev server on port 5173
+- Provides hot-reload for frontend development
+- Proxies `/api` requests to the backend server
+- Press Ctrl+C to stop both servers
+
+**Note:** This is the recommended way to develop, as it provides hot-reload and better error messages.
 
 ## Test Scripts
 

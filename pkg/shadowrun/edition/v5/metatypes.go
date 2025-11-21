@@ -1,152 +1,212 @@
 package v5
 
-// MetatypeQualities represents qualities associated with a metatype
-type MetatypeQualities struct {
-	Positive *MetatypeQualityList `json:"positive,omitempty"` // Positive qualities
-	Negative *MetatypeQualityList `json:"negative,omitempty"` // Negative qualities
+import "shadowmaster/pkg/shadowrun/edition/v5/common"
+
+// This file contains metatype structures generated from metatypes.xsd
+
+// Quality represents a quality with optional attributes
+type Quality struct {
+	Content string `xml:",chardata" json:"+content,omitempty"`
+	Removable *string `xml:"removable,attr,omitempty" json:"+@removable,omitempty"`
+	Select *string `xml:"select,attr,omitempty" json:"+@select,omitempty"`
 }
 
-// MetatypeQualityList represents a list of qualities (can be single string or array)
-type MetatypeQualityList struct {
-	Quality interface{} `json:"quality,omitempty"` // Can be string or []string
+// Power represents a power with optional attributes
+type Power struct {
+	Content string `xml:",chardata" json:"+content,omitempty"`
+	Select *string `xml:"select,attr,omitempty" json:"+@select,omitempty"`
+	Rating *string `xml:"rating,attr,omitempty" json:"+@rating,omitempty"`
+	Cost *string `xml:"cost,attr,omitempty" json:"+@cost,omitempty"`
 }
 
-// MetatypeBonus represents bonuses provided by a metatype
-type MetatypeBonus struct {
-	LifestyleCost string `json:"lifestylecost,omitempty"` // Lifestyle cost modifier
-	// Add other bonus fields as needed
+// PositiveQualities represents positive qualities
+type PositiveQualities struct {
+	Quality []Quality `xml:"quality,omitempty" json:"quality,omitempty"`
 }
 
-// Metavariant represents a metavariant of a metatype
+// NegativeQualities represents negative qualities
+type NegativeQualities struct {
+	Quality []Quality `xml:"quality,omitempty" json:"quality,omitempty"`
+}
+
+// Qualities represents a collection of qualities
+type Qualities struct {
+	Positive *PositiveQualities `xml:"positive,omitempty" json:"positive,omitempty"`
+	Negative *NegativeQualities `xml:"negative,omitempty" json:"negative,omitempty"`
+}
+
+// Powers represents a collection of powers
+type Powers struct {
+	Power []Power `xml:"power,omitempty" json:"power,omitempty"`
+}
+
+// OptionalPowers represents optional powers
+type OptionalPowers struct {
+	Power []Power `xml:"power,omitempty" json:"power,omitempty"`
+}
+
+// Metavariant represents a metavariant
 type Metavariant struct {
-	// Required fields
-	ID       string `json:"id"`       // Unique identifier
-	Name     string `json:"name"`     // Metavariant name
-	Category string `json:"category"` // Category (usually "Metavariant")
-	Karma    string `json:"karma"`    // Karma cost
-
-	// Attribute limits (min/max/augmented)
-	BODMin int `json:"bodmin"` // Body minimum
-	BODMax int `json:"bodmax"` // Body maximum
-	BODAug int `json:"bodaug"` // Body augmented maximum
-	AGIMin int `json:"agimin"` // Agility minimum
-	AGIMax int `json:"agimax"` // Agility maximum
-	AGIAug int `json:"agiaug"` // Agility augmented maximum
-	REAMin int `json:"reamin"` // Reaction minimum
-	REAMax int `json:"reamax"` // Reaction maximum
-	REAAug int `json:"reaaug"` // Reaction augmented maximum
-	STRMin int `json:"strmin"` // Strength minimum
-	STRMax int `json:"strmax"` // Strength maximum
-	STRAug int `json:"straug"` // Strength augmented maximum
-	CHAMin int `json:"chamin"` // Charisma minimum
-	CHAMax int `json:"chamax"` // Charisma maximum
-	CHAAug int `json:"chaaug"` // Charisma augmented maximum
-	INTMin int `json:"intmin"` // Intuition minimum
-	INTMax int `json:"intmax"` // Intuition maximum
-	INTAug int `json:"intaug"` // Intuition augmented maximum
-	LOGMin int `json:"logmin"` // Logic minimum
-	LOGMax int `json:"logmax"` // Logic maximum
-	LOGAug int `json:"logaug"` // Logic augmented maximum
-	WILMin int `json:"wilmin"` // Willpower minimum
-	WILMax int `json:"wilmax"` // Willpower maximum
-	WILAug int `json:"wilaug"` // Willpower augmented maximum
-	INIMin int `json:"inimin"` // Initiative minimum
-	INIMax int `json:"inimax"` // Initiative maximum
-	INIAug int `json:"iniaug"` // Initiative augmented maximum
-	EDGMin int `json:"edgmin"` // Edge minimum
-	EDGMax int `json:"edgmax"` // Edge maximum
-	EDGAug int `json:"edgaug"` // Edge augmented maximum
-	MAGMin int `json:"magmin"` // Magic minimum
-	MAGMax int `json:"magmax"` // Magic maximum
-	MAGAug int `json:"magaug"` // Magic augmented maximum
-	RESMin int `json:"resmin"` // Resonance minimum
-	RESMax int `json:"resmax"` // Resonance maximum
-	RESAug int `json:"resaug"` // Resonance augmented maximum
-	ESSMin int `json:"essmin"` // Essence minimum
-	ESSMax int `json:"essmax"` // Essence maximum
-	ESSAug int `json:"essaug"` // Essence augmented maximum
-	DEPMin int `json:"depmin"` // Depth minimum
-	DEPMax int `json:"depmax"` // Depth maximum
-	DEPAug int `json:"depaug"` // Depth augmented maximum
-
-	// Optional fields
-	Qualities *MetatypeQualities `json:"qualities,omitempty"` // Associated qualities
-	Bonus     *MetatypeBonus     `json:"bonus,omitempty"`     // Bonuses
-	Source    string             `json:"source,omitempty"`    // Source book
-	Page      string             `json:"page,omitempty"`      // Page number
+	Name string `xml:"name" json:"name"`
+	common.Visibility
+	Category string `xml:"category" json:"category"`
+	Karma string `xml:"karma" json:"karma"`
+	Powers *Powers `xml:"powers,omitempty" json:"powers,omitempty"`
+	Qualities *Qualities `xml:"qualities,omitempty" json:"qualities,omitempty"`
+	Bonus *common.BaseBonus `xml:"bonus,omitempty" json:"bonus,omitempty"`
+	common.SourceReference
 }
 
-// Metatype represents a metatype from Shadowrun 5th Edition
-type Metatype struct {
-	// Required fields
-	ID       string `json:"id"`       // Unique identifier
-	Name     string `json:"name"`     // Metatype name
-	Category string `json:"category"` // Category (Metahuman, Metavariant, etc.)
-	Karma    string `json:"karma"`    // Karma cost
+// MetatypeSkill represents a skill with optional attributes for metatypes
+type MetatypeSkill struct {
+	Content string `xml:",chardata" json:"+content,omitempty"`
+	Rating *string `xml:"rating,attr,omitempty" json:"+@rating,omitempty"`
+	Spec *string `xml:"spec,attr,omitempty" json:"+@spec,omitempty"`
+	Select *string `xml:"select,attr,omitempty" json:"+@select,omitempty"`
+}
 
-	// Attribute limits (min/max/augmented)
-	BODMin int `json:"bodmin"` // Body minimum
-	BODMax int `json:"bodmax"` // Body maximum
-	BODAug int `json:"bodaug"` // Body augmented maximum
-	AGIMin int `json:"agimin"` // Agility minimum
-	AGIMax int `json:"agimax"` // Agility maximum
-	AGIAug int `json:"agiaug"` // Agility augmented maximum
-	REAMin int `json:"reamin"` // Reaction minimum
-	REAMax int `json:"reamax"` // Reaction maximum
-	REAAug int `json:"reaaug"` // Reaction augmented maximum
-	STRMin int `json:"strmin"` // Strength minimum
-	STRMax int `json:"strmax"` // Strength maximum
-	STRAug int `json:"straug"` // Strength augmented maximum
-	CHAMin int `json:"chamin"` // Charisma minimum
-	CHAMax int `json:"chamax"` // Charisma maximum
-	CHAAug int `json:"chaaug"` // Charisma augmented maximum
-	INTMin int `json:"intmin"` // Intuition minimum
-	INTMax int `json:"intmax"` // Intuition maximum
-	INTAug int `json:"intaug"` // Intuition augmented maximum
-	LOGMin int `json:"logmin"` // Logic minimum
-	LOGMax int `json:"logmax"` // Logic maximum
-	LOGAug int `json:"logaug"` // Logic augmented maximum
-	WILMin int `json:"wilmin"` // Willpower minimum
-	WILMax int `json:"wilmax"` // Willpower maximum
-	WILAug int `json:"wilaug"` // Willpower augmented maximum
-	INIMin int `json:"inimin"` // Initiative minimum
-	INIMax int `json:"inimax"` // Initiative maximum
-	INIAug int `json:"iniaug"` // Initiative augmented maximum
-	EDGMin int `json:"edgmin"` // Edge minimum
-	EDGMax int `json:"edgmax"` // Edge maximum
-	EDGAug int `json:"edgaug"` // Edge augmented maximum
-	MAGMin int `json:"magmin"` // Magic minimum
-	MAGMax int `json:"magmax"` // Magic maximum
-	MAGAug int `json:"magaug"` // Magic augmented maximum
-	RESMin int `json:"resmin"` // Resonance minimum
-	RESMax int `json:"resmax"` // Resonance maximum
-	RESAug int `json:"resaug"` // Resonance augmented maximum
-	ESSMin int `json:"essmin"` // Essence minimum
-	ESSMax int `json:"essmax"` // Essence maximum
-	ESSAug int `json:"essaug"` // Essence augmented maximum
-	DEPMin int `json:"depmin"` // Depth minimum
-	DEPMax int `json:"depmax"` // Depth maximum
-	DEPAug int `json:"depaug"` // Depth augmented maximum
+// MetatypeSkillGroup represents a skill group for metatypes
+type MetatypeSkillGroup struct {
+	Content string `xml:",chardata" json:"+content,omitempty"`
+	Rating *string `xml:"rating,attr,omitempty" json:"+@rating,omitempty"`
+}
 
-	// Movement
-	Walk   string `json:"walk,omitempty"`   // Walk speed (format: "2/1/0")
-	Run    string `json:"run,omitempty"`    // Run speed (format: "4/0/0")
-	Sprint string `json:"sprint,omitempty"` // Sprint speed (format: "2/1/0")
+// MetatypeKnowledge represents a knowledge skill for metatypes
+type MetatypeKnowledge struct {
+	Content string `xml:",chardata" json:"+content,omitempty"`
+	Rating *string `xml:"rating,attr,omitempty" json:"+@rating,omitempty"`
+	Category *string `xml:"category,attr,omitempty" json:"+@category,omitempty"`
+}
 
-	// Optional fields
-	Qualities            *MetatypeQualities `json:"qualities,omitempty"`            // Associated qualities
-	Bonus                *MetatypeBonus     `json:"bonus,omitempty"`                // Bonuses
-	Metavariants         *Metavariants      `json:"metavariants,omitempty"`         // Metavariants
-	Source               string             `json:"source,omitempty"`               // Source book
-	Page                 string             `json:"page,omitempty"`                 // Page number
-	Powers               interface{}        `json:"powers,omitempty"`               // Powers (complex structure)
-	AddWeapon            string             `json:"addweapon,omitempty"`            // Weapon added
-	HalveAttributePoints *bool              `json:"halveattributepoints,omitempty"` // Halve attribute points
-	Movement             interface{}        `json:"movement,omitempty"`             // Movement (complex structure)
-	QualityRestriction   interface{}        `json:"qualityrestriction,omitempty"`   // Quality restrictions
+// MetatypeSkills represents a collection of skills for metatypes
+type MetatypeSkills struct {
+	Skill []MetatypeSkill `xml:"skill,omitempty" json:"skill,omitempty"`
+	Group []MetatypeSkillGroup `xml:"group,omitempty" json:"group,omitempty"`
+	Knowledge []MetatypeKnowledge `xml:"knowledge,omitempty" json:"knowledge,omitempty"`
+}
+
+// ComplexForm represents a complex form
+type ComplexForm struct {
+	Content string `xml:",chardata" json:"+content,omitempty"`
+	Rating *string `xml:"rating,attr,omitempty" json:"+@rating,omitempty"`
+	Category *string `xml:"category,attr,omitempty" json:"+@category,omitempty"`
+	Option *string `xml:"option,attr,omitempty" json:"+@option,omitempty"`
+	OptionRating *string `xml:"optionrating,attr,omitempty" json:"+@optionrating,omitempty"`
+	OptionSelect *string `xml:"optionselect,attr,omitempty" json:"+@optionselect,omitempty"`
+}
+
+// ComplexForms represents a collection of complex forms
+type ComplexForms struct {
+	ComplexForm []ComplexForm `xml:"complexform,omitempty" json:"complexform,omitempty"`
+}
+
+// OptionalComplexForms represents optional complex forms
+type OptionalComplexForms struct {
+	ComplexForm []ComplexForm `xml:"complexform,omitempty" json:"complexform,omitempty"`
+}
+
+// Gear represents a gear item
+type Gear struct {
+	Content string `xml:",chardata" json:"+content,omitempty"`
+	Rating *string `xml:"rating,attr,omitempty" json:"+@rating,omitempty"`
+}
+
+// Gears represents a collection of gear items
+type Gears struct {
+	Gear []Gear `xml:"gear,omitempty" json:"gear,omitempty"`
+}
+
+// QualityRestriction represents quality restrictions
+type QualityRestriction struct {
+	Positive *PositiveQualities `xml:"positive,omitempty" json:"positive,omitempty"`
+	Negative *NegativeQualities `xml:"negative,omitempty" json:"negative,omitempty"`
 }
 
 // Metavariants represents a collection of metavariants
 type Metavariants struct {
-	Metavariant interface{} `json:"metavariant,omitempty"` // Can be single Metavariant or []Metavariant
+	Metavariant []Metavariant `xml:"metavariant,omitempty" json:"metavariant,omitempty"`
 }
+
+// Metatype represents a metatype definition
+type Metatype struct {
+	ID string `xml:"id" json:"id"`
+	common.Visibility
+	Name *string `xml:"name,omitempty" json:"name,omitempty"`
+	ForceCreature *string `xml:"forcecreature,omitempty" json:"forcecreature,omitempty"`
+	Karma *string `xml:"karma,omitempty" json:"karma,omitempty"`
+	Category string `xml:"category" json:"category"`
+	BodMin string `xml:"bodmin" json:"bodmin"`
+	BodMax string `xml:"bodmax" json:"bodmax"`
+	BodAug string `xml:"bodaug" json:"bodaug"`
+	AgiMin string `xml:"agimin" json:"agimin"`
+	AgiMax string `xml:"agimax" json:"agimax"`
+	AgiAug string `xml:"agiaug" json:"agiaug"`
+	ReaMin string `xml:"reamin" json:"reamin"`
+	ReaMax string `xml:"reamax" json:"reamax"`
+	ReaAug string `xml:"reaaug" json:"reaaug"`
+	StrMin string `xml:"strmin" json:"strmin"`
+	StrMax string `xml:"strmax" json:"strmax"`
+	StrAug string `xml:"straug" json:"straug"`
+	WilMin string `xml:"wilmin" json:"wilmin"`
+	WilMax string `xml:"wilmax" json:"wilmax"`
+	WilAug string `xml:"wilaug" json:"wilaug"`
+	LogMin string `xml:"logmin" json:"logmin"`
+	LogMax string `xml:"logmax" json:"logmax"`
+	LogAug string `xml:"logaug" json:"logaug"`
+	IntMin string `xml:"intmin" json:"intmin"`
+	IntMax string `xml:"intmax" json:"intmax"`
+	IntAug string `xml:"intaug" json:"intaug"`
+	ChaMin string `xml:"chamin" json:"chamin"`
+	ChaMax string `xml:"chamax" json:"chamax"`
+	ChaAug string `xml:"chaaug" json:"chaaug"`
+	EdgMin string `xml:"edgmin" json:"edgmin"`
+	EdgMax string `xml:"edgmax" json:"edgmax"`
+	EdgAug string `xml:"edgaug" json:"edgaug"`
+	IniMin string `xml:"inimin" json:"inimin"`
+	IniMax string `xml:"inimax" json:"inimax"`
+	IniAug string `xml:"iniaug" json:"iniaug"`
+	MagMin string `xml:"magmin" json:"magmin"`
+	MagMax string `xml:"magmax" json:"magmax"`
+	MagAug string `xml:"magaug" json:"magaug"`
+	ResMin string `xml:"resmin" json:"resmin"`
+	ResMax string `xml:"resmax" json:"resmax"`
+	ResAug string `xml:"resaug" json:"resaug"`
+	EssMin string `xml:"essmin" json:"essmin"`
+	EssMax string `xml:"essmax" json:"essmax"`
+	EssAug string `xml:"essaug" json:"essaug"`
+	Movement string `xml:"movement" json:"movement"`
+	QualityRestriction *QualityRestriction `xml:"qualityrestriction,omitempty" json:"qualityrestriction,omitempty"`
+	Qualities *Qualities `xml:"qualities,omitempty" json:"qualities,omitempty"`
+	Bonus *common.BaseBonus `xml:"bonus,omitempty" json:"bonus,omitempty"`
+	Powers *Powers `xml:"powers,omitempty" json:"powers,omitempty"`
+	OptionalPowers *OptionalPowers `xml:"optionalpowers,omitempty" json:"optionalpowers,omitempty"`
+	Skills *MetatypeSkills `xml:"skills,omitempty" json:"skills,omitempty"`
+	ComplexForms *ComplexForms `xml:"complexforms,omitempty" json:"complexforms,omitempty"`
+	OptionalComplexForms *OptionalComplexForms `xml:"optionalcomplexforms,omitempty" json:"optionalcomplexforms,omitempty"`
+	Gears *Gears `xml:"gears,omitempty" json:"gears,omitempty"`
+	common.SourceReference
+	Metavariants *Metavariants `xml:"metavariants,omitempty" json:"metavariants,omitempty"`
+}
+
+// MetatypeCategory represents a metatype category
+type MetatypeCategory struct {
+	Content string `xml:",chardata" json:"+content,omitempty"`
+}
+
+// MetatypeCategories represents a collection of metatype categories
+type MetatypeCategories struct {
+	Category []MetatypeCategory `xml:"category,omitempty" json:"category,omitempty"`
+}
+
+// Metatypes represents a collection of metatypes
+type Metatypes struct {
+	Metatype []Metatype `xml:"metatype,omitempty" json:"metatype,omitempty"`
+}
+
+// MetatypesChummer represents the root chummer element for metatypes
+type MetatypesChummer struct {
+	Version *string `xml:"version,omitempty" json:"version,omitempty"`
+	Categories []MetatypeCategories `xml:"categories,omitempty" json:"categories,omitempty"`
+	Metatypes []Metatypes `xml:"metatypes,omitempty" json:"metatypes,omitempty"`
+}
+

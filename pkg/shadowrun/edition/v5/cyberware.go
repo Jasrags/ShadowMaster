@@ -2,197 +2,163 @@ package v5
 
 import "shadowmaster/pkg/shadowrun/edition/v5/common"
 
-// CyberwareGrade represents a cyberware grade (Standard, Used, Alphaware, etc.)
-// Note: This is the same structure as bioware Grade, but kept separate for clarity
-type CyberwareGrade struct {
-	Name         string      `json:"name"`
-	Ess          string      `json:"ess"`             // Essence cost modifier like "1", "0.8", "1.25"
-	Cost         string      `json:"cost"`            // Cost modifier like "1", "0.75", "1.2"
-	DeviceRating string      `json:"devicerating"`    // Device rating (usually "2")
-	Avail        string      `json:"avail"`           // Availability modifier like "0", "-4", "+2"
-	Source       string      `json:"source"`          // Source book like "SR5", "CF", etc.
-	Page         string      `json:"page,omitempty"`  // Page number
-	Bonus        interface{} `json:"bonus,omitempty"` // Bonuses (can be complex structure)
-}
+// This file contains cyberware structures generated from cyberware.xsd
 
-// CyberwareCategory represents a cyberware category with its black market classification
+// CyberwareCategory represents a cyberware category
 type CyberwareCategory struct {
-	Name        string `json:"name"`         // Category name
-	BlackMarket string `json:"black_market"` // Black market classification
+	Content string `xml:",chardata" json:"+content,omitempty"`
+	Show *string `xml:"show,attr,omitempty" json:"+@show,omitempty"`
 }
 
-// Cyberware represents a piece of cyberware from Shadowrun 5th Edition
+// CyberwareCategories represents a collection of cyberware categories
+type CyberwareCategories struct {
+	Category []CyberwareCategory `xml:"category,omitempty" json:"category,omitempty"`
+}
+
+// CyberwareGrade represents a cyberware grade
+type CyberwareGrade struct {
+	ID string `xml:"id" json:"id"`
+	Name *string `xml:"name,omitempty" json:"name,omitempty"`
+	Ess *string `xml:"ess,omitempty" json:"ess,omitempty"`
+	Cost *string `xml:"cost,omitempty" json:"cost,omitempty"`
+	DeviceRating *int `xml:"devicerating,omitempty" json:"devicerating,omitempty"`
+	Avail *string `xml:"avail,omitempty" json:"avail,omitempty"`
+	Bonus *common.BaseBonus `xml:"bonus,omitempty" json:"bonus,omitempty"`
+	common.SourceReference
+}
+
+// CyberwareGrades represents a collection of cyberware grades
+type CyberwareGrades struct {
+	Grade []CyberwareGrade `xml:"grade,omitempty" json:"grade,omitempty"`
+}
+
+// CyberwareAllowGear represents allowed gear categories for cyberware
+type CyberwareAllowGear struct {
+	GearCategory []string `xml:"gearcategory,omitempty" json:"gearcategory,omitempty"`
+}
+
+// AllowSubsystems represents allowed subsystems
+type AllowSubsystems struct {
+	Category []string `xml:"category,omitempty" json:"category,omitempty"`
+}
+
+// IncludePair represents an include pair
+type IncludePair struct {
+	Name []string `xml:"name,omitempty" json:"name,omitempty"`
+}
+
+// BannedGrades represents banned grades
+type BannedGrades struct {
+	Grade []string `xml:"grade,omitempty" json:"grade,omitempty"`
+}
+
+// CyberwareSubsystem represents a subsystem within cyberware
+type CyberwareSubsystem struct {
+	Name string `xml:"name" json:"name"`
+	Rating *int `xml:"rating,omitempty" json:"rating,omitempty"`
+	Forced *string `xml:"forced,omitempty" json:"forced,omitempty"`
+	Subsystems *CyberwareSubsystems `xml:"subsystems,omitempty" json:"subsystems,omitempty"`
+	Gears *common.Gears `xml:"gears,omitempty" json:"gears,omitempty"`
+}
+
+// BiowareSubsystem represents a bioware subsystem within cyberware subsystems
+type BiowareSubsystem struct {
+	Name string `xml:"name" json:"name"`
+	Rating *int `xml:"rating,omitempty" json:"rating,omitempty"`
+	Forced *string `xml:"forced,omitempty" json:"forced,omitempty"`
+	Subsystems *CyberwareSubsystems `xml:"subsystems,omitempty" json:"subsystems,omitempty"`
+	Gears *common.Gears `xml:"gears,omitempty" json:"gears,omitempty"`
+}
+
+// CyberwareSubsystems represents subsystems (can contain cyberware or bioware)
+type CyberwareSubsystems struct {
+	Cyberware []CyberwareSubsystem `xml:"cyberware,omitempty" json:"cyberware,omitempty"`
+	Bioware []BiowareSubsystem `xml:"bioware,omitempty" json:"bioware,omitempty"`
+}
+
+// CyberwareItemName represents a cyberware name with optional attributes
+type CyberwareItemName struct {
+	Content string `xml:",chardata" json:"+content,omitempty"`
+	Select *string `xml:"select,attr,omitempty" json:"+@select,omitempty"`
+}
+
+// CyberwareItem represents a cyberware item within a cyberwares container
+type CyberwareItem struct {
+	Name CyberwareItemName `xml:"name" json:"name"`
+	Hide *string `xml:"hide,omitempty" json:"hide,omitempty"`
+	Rating *int `xml:"rating,omitempty" json:"rating,omitempty"`
+	Cyberwares *CyberwaresContainer `xml:"cyberwares,omitempty" json:"cyberwares,omitempty"`
+}
+
+// CyberwaresContainer represents a recursive cyberwares container
+type CyberwaresContainer struct {
+	Cyberware []CyberwareItem `xml:"cyberware" json:"cyberware"`
+}
+
+// Cyberware represents a cyberware definition
 type Cyberware struct {
-	// Required fields
-	Name     string `json:"name"`
-	Category string `json:"category"`
-	Ess      string `json:"ess"`      // Essence cost like "Rating * 0.75", "0.1", "FixedValues(0.2,0.5)"
-	Capacity string `json:"capacity"` // Capacity like "0", "Rating"
-	Avail    string `json:"avail"`    // Availability like "(Rating * 6)F", "4", "FixedValues(8,12)"
-	Cost     string `json:"cost"`     // Cost like "Rating * 55000", "4000", "Variable(50-500)"
-	Source   string `json:"source"`   // Source book like "SR5", "CF", etc.
-
-	// Optional fields
-	Rating                   int                `json:"rating,omitempty"`                   // Rating for variable rating items (always numeric)
-	Limit                    string             `json:"limit,omitempty"`                    // Limit like "False", "{arm}", "{leg}", etc.
-	BannedGrades             *common.BannedGrades      `json:"bannedgrades,omitempty"`             // Grades that cannot be used
-	BannedWareGrades         interface{}               `json:"bannedwaregrades,omitempty"`         // Banned ware grades
-	Bonus                    *CyberwareBonus           `json:"bonus,omitempty"`                    // Bonuses provided by this cyberware
-	WirelessBonus            *CyberwareBonus           `json:"wirelessbonus,omitempty"`            // Bonuses when wireless is enabled
-	Forbidden                *common.Forbidden         `json:"forbidden,omitempty"`                // Forbidden items/qualities
-	AllowGear                *common.AllowGear         `json:"allowgear,omitempty"`                // Allowed gear categories
-	AllowSubsystems          *common.AllowSubsystems   `json:"allowsubsystems,omitempty"`          // Allowed subsystems
-	Subsystems               interface{}        `json:"subsystems,omitempty"`               // Subsystems
-	Notes                    string             `json:"notes,omitempty"`                    // Additional notes
-	PairBonus                *common.PairBonus   `json:"pairbonus,omitempty"`                // Bonus when paired with another item
-	WirelessPairBonus        *common.PairBonus   `json:"wirelesspairbonus,omitempty"`        // Wireless pair bonus
-	PairInclude              *common.PairInclude `json:"pairinclude,omitempty"`              // Item that pairs with this
-	WirelessPairInclude      *common.PairInclude `json:"wirelesspairinclude,omitempty"`      // Wireless pair include
-	SelectSide               *bool              `json:"selectside,omitempty"`               // Whether a side can be selected
-	AddWeapon                string             `json:"addweapon,omitempty"`                // Weapon added by this cyberware
-	AddVehicle               string             `json:"addvehicle,omitempty"`               // Vehicle added by this cyberware
-	Hide                     *bool              `json:"hide,omitempty"`                     // Whether to hide this cyberware
-	Required                 *CyberwareRequired `json:"required,omitempty"`                 // Requirements for this cyberware
-	ForceGrade               string             `json:"forcegrade,omitempty"`               // Force grade
-	DeviceRating             string             `json:"devicerating,omitempty"`             // Device rating
-	MinRating                string             `json:"minrating,omitempty"`                // Minimum rating
-	RatingLabel              string             `json:"ratinglabel,omitempty"`              // Rating label
-	RemovalCost              string             `json:"removalcost,omitempty"`              // Removal cost
-	LimbSlot                 string             `json:"limbslot,omitempty"`                 // Limb slot
-	LimbSlotCount            string             `json:"limbslotcount,omitempty"`            // Limb slot count
-	ModularMount             string             `json:"modularmount,omitempty"`             // Modular mount
-	MountsTo                 string             `json:"mountsto,omitempty"`                 // Mounts to
-	InheritAttributes        *bool              `json:"inheritattributes,omitempty"`        // Inherit attributes
-	AddToParentCapacity      string             `json:"addtoparentcapacity,omitempty"`      // Add to parent capacity
-	AddParentWeaponAccessory string             `json:"addparentweaponaccessory,omitempty"` // Add parent weapon accessory
-	RequireParent            *bool              `json:"requireparent,omitempty"`            // Whether a parent is required
-	BlocksMounts             string             `json:"blocksmounts,omitempty"`             // Mounts blocked by this cyberware
-	Gears                    interface{}        `json:"gears,omitempty"`                    // Gears that can be used with this cyberware
-	Programs                 interface{}        `json:"programs,omitempty"`                 // Programs
-	Page                     string             `json:"page,omitempty"`                     // Page number
+	ID string `xml:"id" json:"id"`
+	Name string `xml:"name" json:"name"`
+	Category string `xml:"category" json:"category"`
+	Ess string `xml:"ess" json:"ess"`
+	Capacity string `xml:"capacity" json:"capacity"`
+	Avail string `xml:"avail" json:"avail"`
+	Cost string `xml:"cost" json:"cost"`
+	RequireParent string `xml:"requireparent" json:"requireparent"`
+	common.SourceReference
+	Limit *string `xml:"limit,omitempty" json:"limit,omitempty"`
+	AddToParentCapacity *string `xml:"addtoparentcapacity,omitempty" json:"addtoparentcapacity,omitempty"`
+	AddVehicle []string `xml:"addvehicle,omitempty" json:"addvehicle,omitempty"`
+	AddWeapon []string `xml:"addweapon,omitempty" json:"addweapon,omitempty"`
+	AllowGear *CyberwareAllowGear `xml:"allowgear,omitempty" json:"allowgear,omitempty"`
+	AllowSubsystems *AllowSubsystems `xml:"allowsubsystems,omitempty" json:"allowsubsystems,omitempty"`
+	IncludePair *IncludePair `xml:"includepair,omitempty" json:"includepair,omitempty"`
+	Bonus *common.BaseBonus `xml:"bonus,omitempty" json:"bonus,omitempty"`
+	Forbidden *common.Forbidden `xml:"forbidden,omitempty" json:"forbidden,omitempty"`
+	ForceGrade *string `xml:"forcegrade,omitempty" json:"forcegrade,omitempty"`
+	common.Visibility
+	MountsTo *string `xml:"mountsto,omitempty" json:"mountsto,omitempty"`
+	ModularMount *string `xml:"modularmount,omitempty" json:"modularmount,omitempty"`
+	BlocksMounts *string `xml:"blocksmounts,omitempty" json:"blocksmounts,omitempty"`
+	AddToParentEss *string `xml:"addtoparentess,omitempty" json:"addtoparentess,omitempty"`
+	BannedGrades *BannedGrades `xml:"bannedgrades,omitempty" json:"bannedgrades,omitempty"`
+	InheritAttributes *string `xml:"inheritattributes,omitempty" json:"inheritattributes,omitempty"`
+	LimbSlot *string `xml:"limbslot,omitempty" json:"limbslot,omitempty"`
+	LimbSlotCount *string `xml:"limbslotcount,omitempty" json:"limbslotcount,omitempty"`
+	MinAgility *int `xml:"minagility,omitempty" json:"minagility,omitempty"`
+	MinStrength *int `xml:"minstrength,omitempty" json:"minstrength,omitempty"`
+	MinRating *string `xml:"minrating,omitempty" json:"minrating,omitempty"`
+	Notes *string `xml:"notes,omitempty" json:"notes,omitempty"`
+	Rating *string `xml:"rating,omitempty" json:"rating,omitempty"`
+	Required *common.Required `xml:"required,omitempty" json:"required,omitempty"`
+	Subsystems *CyberwareSubsystems `xml:"subsystems,omitempty" json:"subsystems,omitempty"`
+	Gears *common.Gears `xml:"gears,omitempty" json:"gears,omitempty"`
 }
 
-// CyberwareBonus represents bonuses provided by cyberware
-// This reuses many of the same bonus types as bioware
-// Note: common.BaseBonus exists with all common fields - future migration could embed it
-type CyberwareBonus struct {
-	// Limit modifiers
-	LimitModifier interface{} `json:"limitmodifier,omitempty"` // Can be LimitModifier or []LimitModifier
-
-	// Skill bonuses
-	SkillCategory        interface{}                `json:"skillcategory,omitempty"`        // Can be SkillCategoryBonus or []SkillCategoryBonus
-	SpecificSkill        interface{}                `json:"specificskill,omitempty"`        // Can be SpecificSkillBonus or []SpecificSkillBonus
-	SkillGroup           interface{}                `json:"skillgroup,omitempty"`           // Can be SkillGroupBonus or []SkillGroupBonus
-	SelectSkill          *common.SelectSkill               `json:"selectskill,omitempty"`          // Selectable skill bonus
-	SkillAttribute       *common.SkillAttributeBonus       `json:"skillattribute,omitempty"`       // Skill attribute bonus
-	SkillLinkedAttribute *common.SkillLinkedAttributeBonus `json:"skilllinkedattribute,omitempty"` // Skill linked attribute bonus
-	SkillSoftAccess      interface{}                       `json:"skillsoftaccess,omitempty"`      // Skillsoft access bonus
-
-	// Attribute bonuses
-	SpecificAttribute  interface{}                    `json:"specificattribute,omitempty"`  // Can be SpecificAttributeBonus or []SpecificAttributeBonus
-	AttributeKarmaCost *common.AttributeKarmaCostBonus `json:"attributekarmacost,omitempty"` // Attribute karma cost modifier
-
-	// Limit bonuses
-	PhysicalLimit string `json:"physicallimit,omitempty"` // Physical limit modifier
-	MentalLimit   string `json:"mentallimit,omitempty"`   // Mental limit modifier
-	SocialLimit   string `json:"sociallimit,omitempty"`   // Social limit modifier
-
-	// Condition monitor bonuses
-	ConditionMonitor *common.ConditionMonitorBonus `json:"conditionmonitor,omitempty"`
-
-	// Initiative bonuses
-	Initiative     *common.InitiativeBonus     `json:"initiative,omitempty"`     // Initiative bonus
-	InitiativePass *common.InitiativePassBonus `json:"initiativepass,omitempty"` // Initiative pass bonus
-
-	// Combat bonuses
-	Dodge string `json:"dodge,omitempty"` // Dodge bonus
-
-	// Damage bonuses
-	DamageResistance  string                    `json:"damageresistance,omitempty"`  // Damage resistance bonus
-	UnarmedDV         string                    `json:"unarmeddv,omitempty"`         // Unarmed damage value bonus
-	UnarmedDVPhysical *bool                     `json:"unarmeddvphysical,omitempty"` // Whether unarmed DV is physical
-	UnarmedReach      string                    `json:"unarmedreach,omitempty"`      // Unarmed reach bonus
-	WeaponAccuracy    *common.WeaponAccuracyBonus `json:"weaponaccuracy,omitempty"`    // Weapon accuracy bonus
-
-	// Armor bonuses
-	Armor            interface{} `json:"armor,omitempty"`            // Can be ArmorBonus or string
-	FireArmor        string      `json:"firearmor,omitempty"`        // Fire armor bonus
-	ColdArmor        string      `json:"coldarmor,omitempty"`        // Cold armor bonus
-	ElectricityArmor string      `json:"electricityarmor,omitempty"` // Electricity armor bonus
-
-	// Resistance/immunity bonuses
-	ToxinContactResist       string `json:"toxincontactresist,omitempty"`
-	ToxinIngestionResist     string `json:"toxiningestionresist,omitempty"`
-	ToxinInhalationResist    string `json:"toxininhalationresist,omitempty"`
-	ToxinInjectionResist     string `json:"toxininjectionresist,omitempty"`
-	PathogenContactResist    string `json:"pathogencontactresist,omitempty"`
-	PathogenIngestionResist  string `json:"pathogeningestionresist,omitempty"`
-	PathogenInhalationResist string `json:"pathogeninhalationresist,omitempty"`
-	PathogenInjectionResist  string `json:"pathogeninjectionresist,omitempty"`
-
-	// Radiation resistance
-	RadiationResist string `json:"radiationresist,omitempty"`
-
-	// Fatigue resistance
-	FatigueResist string `json:"fatigueresist,omitempty"`
-
-	// Recovery bonuses
-	StunCMRecovery     string `json:"stuncmrecovery,omitempty"`     // Stun condition monitor recovery
-	PhysicalCMRecovery string `json:"physicalcmrecovery,omitempty"` // Physical condition monitor recovery
-
-	// Memory bonus
-	Memory string `json:"memory,omitempty"` // Memory bonus
-
-	// Magic resistance bonuses
-	DrainResist              string `json:"drainresist,omitempty"`
-	FadingResist             string `json:"fadingresist,omitempty"`
-	DirectManaSpellResist    string `json:"directmanaspellresist,omitempty"`
-	DetectionSpellResist     string `json:"detectionspellresist,omitempty"`
-	ManaIllusionResist       string `json:"manaillusionresist,omitempty"`
-	MentalManipulationResist string `json:"mentalmanipulationresist,omitempty"`
-
-	// Attribute decrease resistance
-	DecreaseBODResist string `json:"decreasebodresist,omitempty"`
-	DecreaseAGIResist string `json:"decreaseagiresist,omitempty"`
-	DecreaseREAResist string `json:"decreaserearesist,omitempty"`
-	DecreaseSTRResist string `json:"decreasestrresist,omitempty"`
-	DecreaseCHAResist string `json:"decreasecharesist,omitempty"`
-	DecreaseINTResist string `json:"decreaseintresist,omitempty"`
-	DecreaseLOGResist string `json:"decreaselogresist,omitempty"`
-	DecreaseWILResist string `json:"decreasewilresist,omitempty"`
-
-	// Social bonuses
-	Composure              string `json:"composure,omitempty"`
-	JudgeIntentionsDefense string `json:"judgeintentionsdefense,omitempty"`
-
-	// Lifestyle cost
-	LifestyleCost string `json:"lifestylecost,omitempty"` // Lifestyle cost modifier
-
-	// Addiction resistance
-	PhysiologicalAddictionFirstTime       string `json:"physiologicaladdictionfirsttime,omitempty"`
-	PsychologicalAddictionFirstTime       string `json:"psychologicaladdictionfirsttime,omitempty"`
-	PhysiologicalAddictionAlreadyAddicted string `json:"physiologicaladdictionalreadyaddicted,omitempty"`
-	PsychologicalAddictionAlreadyAddicted string `json:"psychologicaladdictionalreadyaddicted,omitempty"`
-
-	// Special bonuses
-	DisableQuality             string                 `json:"disablequality,omitempty"`             // Quality to disable
-	AddQualities               *common.AddQualities   `json:"addqualities,omitempty"`               // Qualities to add
-	ReflexRecorderOptimization *bool                  `json:"reflexrecorderoptimization,omitempty"` // Reflex recorder optimization
-	Ambidextrous               *bool                  `json:"ambidextrous,omitempty"`               // Ambidextrous bonus
-	Adapsin                    *bool                  `json:"adapsin,omitempty"`                    // Adapsin bonus
-
-	// Unique identifier
-	Unique string `json:"+@unique,omitempty"`
-
-	// Select text
-	SelectText *common.SelectTextBonus `json:"selecttext,omitempty"`
+// Cyberwares represents a collection of cyberware
+type Cyberwares struct {
+	Cyberware []Cyberware `xml:"cyberware,omitempty" json:"cyberware,omitempty"`
 }
 
-// CyberwareRequired represents requirements for cyberware
-// Note: common.Requirement exists with unified structure including ParentDetails - future migration could use it
-type CyberwareRequired struct {
-	ParentDetails interface{} `json:"parentdetails,omitempty"` // Parent details requirement (can use common.ParentDetails)
+// Suite represents a cyberware suite
+type Suite struct {
+	Name string `xml:"name" json:"name"`
+	Grade string `xml:"grade" json:"grade"`
+	Hide *string `xml:"hide,omitempty" json:"hide,omitempty"`
+	Cyberwares CyberwaresContainer `xml:"cyberwares" json:"cyberwares"`
 }
 
-// Note: BannedGrades, Forbidden, AllowGear, AllowSubsystems, PairBonus, PairInclude
-// are type aliased in bioware.go pointing to common package types
+// Suites represents a collection of cyberware suites
+type Suites struct {
+	Suite []Suite `xml:"suite" json:"suite"`
+}
+
+// CyberwareChummer represents the root chummer element for cyberware
+type CyberwareChummer struct {
+	Version *string `xml:"version,omitempty" json:"version,omitempty"`
+	Grades []CyberwareGrades `xml:"grades,omitempty" json:"grades,omitempty"`
+	Categories []CyberwareCategories `xml:"categories,omitempty" json:"categories,omitempty"`
+	Cyberwares *Cyberwares `xml:"cyberwares,omitempty" json:"cyberwares,omitempty"`
+	Suites *Suites `xml:"suites,omitempty" json:"suites,omitempty"`
+}
+

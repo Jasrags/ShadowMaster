@@ -1,5 +1,5 @@
 import { I18nProvider } from 'react-aria-components';
-import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import { AuthProvider } from './contexts/AuthContext';
 import { ToastProvider } from './contexts/ToastContext';
 import { AppLayout } from './components/layout/AppLayout';
@@ -12,6 +12,8 @@ import { ArmorPage } from './pages/ArmorPage';
 import { WeaponsPage } from './pages/WeaponsPage';
 import { SkillsPage } from './pages/SkillsPage';
 import { QualitiesPage } from './pages/QualitiesPage';
+import { BooksPage } from './pages/BooksPage';
+import { LifestylesPage } from './pages/LifestylesPage';
 
 function App() {
   return (
@@ -32,7 +34,16 @@ function App() {
                     </AuthenticatedRoute>
                   }
                 />
-                {/* Admin-only routes - Gear, Armor, Weapons, and Skills (shown under Database tab) */}
+                {/* Admin-only routes - Database tab redirects to Gear (first nested tab) */}
+                <Route
+                  path="/database"
+                  element={
+                    <AdminRoute>
+                      <Navigate to="/gear" replace />
+                    </AdminRoute>
+                  }
+                />
+                {/* Admin-only routes - Gear, Armor, Weapons, Skills, and Qualities (shown under Database tab) */}
                 <Route
                   path="/gear"
                   element={
@@ -70,6 +81,22 @@ function App() {
                   element={
                     <AdminRoute>
                       <QualitiesPage />
+                    </AdminRoute>
+                  }
+                />
+                <Route
+                  path="/books"
+                  element={
+                    <AdminRoute>
+                      <BooksPage />
+                    </AdminRoute>
+                  }
+                />
+                <Route
+                  path="/lifestyles"
+                  element={
+                    <AdminRoute>
+                      <LifestylesPage />
                     </AdminRoute>
                   }
                 />

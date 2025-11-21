@@ -105,6 +105,8 @@ func main() {
 			r.Get("/equipment/weapons", handlers.GetWeapons)
 			r.Get("/equipment/gear", handlers.GetGears)
 			r.Get("/equipment/qualities", handlers.GetQualities)
+			r.Get("/equipment/books", handlers.GetBooks)
+		r.Get("/equipment/lifestyles", handlers.GetLifestyles)
 		})
 
 		// Group routes

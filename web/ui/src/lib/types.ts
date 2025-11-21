@@ -285,6 +285,72 @@ export interface Skill {
   requiresswimmovement?: boolean;
 }
 
+// Book types
+export interface BookMatch {
+  language: string;
+  text: string;
+  page: number;
+}
+
+export interface BookMatches {
+  match?: BookMatch[];
+}
+
+export interface Book {
+  id: string;
+  name: string;
+  code: string;
+  hide?: string;
+  permanent?: string;
+  matches?: BookMatches;
+}
+
+// Lifestyle types
+export interface FreeGrid {
+  content?: string;
+  select?: string;
+}
+
+export interface FreeGrids {
+  freegrid?: FreeGrid[];
+}
+
+export interface Lifestyle {
+  id: string;
+  name: string;
+  cost: string;
+  dice: string;
+  lp: string;
+  multiplier: string;
+  source: string;
+  page: string;
+  hide?: string;
+  freegrids?: FreeGrids;
+  costforarea?: number;
+  costforcomforts?: number;
+  costforsecurity?: number;
+  increment?: string;
+  allowbonuslp?: string;
+}
+
+export interface Comfort {
+  name: string;
+  minimum: number;
+  limit?: number;
+}
+
+export interface Neighborhood {
+  name: string;
+  minimum: number;
+  limit?: number;
+}
+
+export interface Security {
+  name: string;
+  minimum: number;
+  limit?: number;
+}
+
 // Quality types
 export interface QualityRequiredOneOf {
   metatype?: string[];

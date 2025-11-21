@@ -1,28 +1,50 @@
 package v5
 
-// SpellCategory represents a spell category with its associated skills
+import "shadowmaster/pkg/shadowrun/edition/v5/common"
+
+// This file contains spell structures generated from spells.xsd
+
+// SpellCategory represents a spell category
 type SpellCategory struct {
-	Name                 string `json:"name"`                             // Category name like "Combat", "Detection", etc.
-	UseSkill             string `json:"use_skill,omitempty"`              // Skill used for casting like "Spellcasting", "Artificing", etc.
-	AlchemicalSkill      string `json:"alchemical_skill,omitempty"`       // Skill for alchemy like "Alchemy"
-	BarehandedAdeptSkill string `json:"barehanded_adept_skill,omitempty"` // Skill for barehanded adept like "Unarmed Combat"
+	Content string `xml:",chardata" json:"+content,omitempty"`
+	UseSkill *string `xml:"useskill,attr,omitempty" json:"+@useskill,omitempty"`
+	AlchemicalSkill *string `xml:"alchemicalskill,attr,omitempty" json:"+@alchemicalskill,omitempty"`
+	BarehandedAdeptSkill *string `xml:"barehandedadeptskill,attr,omitempty" json:"+@barehandedadeptskill,omitempty"`
 }
 
-// Spell represents a spell from Shadowrun 5th Edition
+// SpellCategories represents a collection of spell categories
+type SpellCategories struct {
+	Category []SpellCategory `xml:"category,omitempty" json:"category,omitempty"`
+}
+
+// Spell represents a spell definition
 type Spell struct {
-	// Required fields
-	Name     string `json:"name"`     // Spell name
-	Category string `json:"category"` // Category like "Combat", "Detection", etc.
-	Type     string `json:"type"`     // Type: "P" (Physical) or "M" (Mana)
-	Range    string `json:"range"`    // Range like "LOS", "T", "LOS (A)", etc.
-	Duration string `json:"duration"` // Duration like "I" (Instant), "S" (Sustained), etc.
-	DV       string `json:"dv"`       // Drain value like "F-3", "F", "F+1", etc.
-	Source   string `json:"source"`   // Source book like "SR5", "SG", etc.
-
-	// Optional fields
-	Page       string      `json:"page,omitempty"`       // Page number in source book
-	Damage     string      `json:"damage,omitempty"`     // Damage type like "P" (Physical), "S" (Stun), etc.
-	Descriptor string      `json:"descriptor,omitempty"` // Descriptor like "Indirect, Elemental", "Direct, Area", etc.
-	Bonus      interface{} `json:"bonus,omitempty"`      // Bonuses (can be complex structure)
-	Required   interface{} `json:"required,omitempty"`   // Requirements (can be complex structure)
+	ID string `xml:"id" json:"id"`
+	Name string `xml:"name" json:"name"`
+	Category string `xml:"category" json:"category"`
+	Damage string `xml:"damage" json:"damage"`
+	Descriptor string `xml:"descriptor" json:"descriptor"`
+	Duration string `xml:"duration" json:"duration"`
+	DV string `xml:"dv" json:"dv"`
+	Range string `xml:"range" json:"range"`
+	Type string `xml:"type" json:"type"`
+	common.SourceReference
+	common.Visibility
+	UseSkill *string `xml:"useskill,omitempty" json:"useskill,omitempty"`
+	Bonus *common.BaseBonus `xml:"bonus,omitempty" json:"bonus,omitempty"`
+	Forbidden *common.Forbidden `xml:"forbidden,omitempty" json:"forbidden,omitempty"`
+	Required *common.Required `xml:"required,omitempty" json:"required,omitempty"`
 }
+
+// Spells represents a collection of spells
+type Spells struct {
+	Spell []Spell `xml:"spell,omitempty" json:"spell,omitempty"`
+}
+
+// SpellsChummer represents the root chummer element for spells
+type SpellsChummer struct {
+	Version *string `xml:"version,omitempty" json:"version,omitempty"`
+	Categories []SpellCategories `xml:"categories,omitempty" json:"categories,omitempty"`
+	Spells []Spells `xml:"spells,omitempty" json:"spells,omitempty"`
+}
+

@@ -5,24 +5,50 @@ Use this prompt to guide data generation, normalization, and cleanup work across
 ## Context
 
 This document covers three main areas of data management:
-1. **Data Generation**: Creating and updating Go data files from JSON source data
+1. **Data Generation**: Creating and updating Go data files from JSON/XML source data
 2. **Normalization**: Ensuring consistent data formats, structures, and patterns across data sets
 3. **Cleanup**: Improving code quality, type safety, and maintainability (including type safety refactoring)
 
 All three areas work together to maintain high-quality, consistent, and type-safe data structures throughout the project.
+
+### Source Data Types
+
+The project uses two primary source data formats:
+- **JSON files** (`data/chummer/*.json`): Legacy format, no schema definition
+- **XML files with XSD schemas** (`data/chummerxml/*.xml` and `*.xsd`): Schema-defined format
+
+**Key Principle**: When XSD schemas are available, use them as the primary guide for struct creation. When no XSD exists, examine the data and derive structs with a **bias against using `interface{}`** - prefer concrete types even if it requires handling edge cases.
 
 ## Process Overview
 
 ### Data Generation Workflow
 
 1. **Source Data Analysis**
-   - Examine JSON source files to understand data structures
-   - Identify data patterns, types, and variations
-   - Document field usage and examples
+   - **If XSD schema exists** (e.g., `data/chummerxml/*.xsd`):
+     - Use the XSD schema as the primary guide for struct creation
+     - XSD defines element types, cardinality (required/optional, min/max occurrences), and data types
+     - Map XSD types to Go types (e.g., `xs:string` → `string`, `xs:int` → `int`, `xs:boolean` → `bool`)
+     - Use XSD cardinality to determine if fields should be pointers (optional) or slices (multiple occurrences)
+   - **If no XSD schema exists**:
+     - Examine JSON/XML source files to understand data structures
+     - Identify data patterns, types, and variations
+     - **Bias against using `interface{}`**: Prefer concrete types even if it requires examining multiple examples
+     - Document field usage and examples
+   - For both approaches: Validate struct definitions against actual data to ensure accuracy
 
 2. **Struct Definition**
-   - Define or update Go structs to match data structure
-   - Add JSON tags and comments documenting data types
+   - **When XSD is available**:
+     - Follow XSD element definitions closely for field names and types
+     - Use XSD `minOccurs="0"` to determine if fields should be pointers (optional) or required
+     - Use XSD `maxOccurs="unbounded"` or `maxOccurs > 1` to determine if fields should be slices
+     - Map XSD complex types to Go structs
+     - Add both XML and JSON tags for compatibility (e.g., `xml:"fieldname" json:"fieldname"`)
+   - **When no XSD is available**:
+     - Examine actual data to derive struct definitions
+     - **Avoid `interface{}`**: Prefer concrete types based on observed data patterns
+     - If a field can be multiple types, create a union type or use the most common type with proper handling
+     - Only use `interface{}` as a last resort when types are truly unknown or highly variable
+   - Add JSON/XML tags and comments documenting data types
    - Use `common` package for shared types across editions
 
 3. **Generation Script Development/Updates**
@@ -61,9 +87,11 @@ All three areas work together to maintain high-quality, consistent, and type-saf
    - Note when fields can be null or have mixed types
 
 2. **Type Safety Refactoring**
-   - Identify `interface{}` fields that can be typed
-   - Examine JSON data to understand actual data structures
-   - Define new struct types in the `common` package if needed
+   - **If XSD exists**: Review XSD schema to see if `interface{}` fields can be replaced with XSD-defined types
+   - **If no XSD**: Identify `interface{}` fields that can be typed by examining actual data
+   - Examine JSON/XML data to understand actual data structures and patterns
+   - **Bias against `interface{}`**: Prefer concrete types even if it requires handling edge cases
+   - Define new struct types in the `common` package if needed for shared types
    - Update Go struct definitions to use concrete types
    - Regenerate or update data files to match new types
 
@@ -80,12 +108,46 @@ All three areas work together to maintain high-quality, consistent, and type-saf
 
 ## Data Generation Best Practices
 
+### Struct Definition Strategy
+
+**Priority: Use XSD when available, avoid `interface{}` when not**
+
+1. **XSD-Based Struct Creation** (Preferred when XSD exists)
+   - Parse XSD schema to understand element structure, types, and cardinality
+   - Map XSD types directly to Go types:
+     - `xs:string` → `string`
+     - `xs:int`, `xs:integer` → `int`
+     - `xs:boolean` → `bool`
+     - `xs:decimal`, `xs:double`, `xs:float` → `float64`
+   - Use XSD cardinality for field design:
+     - `minOccurs="0"` → pointer type (`*Type`) or omit if truly optional
+     - `maxOccurs="unbounded"` or `maxOccurs > 1` → slice type (`[]Type`)
+     - `minOccurs="1"` and `maxOccurs="1"` → required field (non-pointer)
+   - Generate structs with both XML and JSON tags for dual compatibility
+   - Example: `books.xsd` → `books.go` with proper type mapping
+
+2. **Data-Driven Struct Creation** (When no XSD)
+   - Examine multiple examples from the data file to understand patterns
+   - **Bias against `interface{}`**: Always prefer concrete types
+   - If a field appears as different types, analyze frequency:
+     - If 90%+ are one type, use that type and handle edge cases
+     - If truly mixed, consider union types or wrapper structs
+   - Use observed patterns to determine:
+     - Single value → direct type or pointer if optional
+     - Multiple values → slice type
+     - Object → struct type
+   - Only use `interface{}` when:
+     - Types are genuinely unknown or highly variable
+     - After attempting concrete types proves too restrictive
+     - Document why `interface{}` is necessary
+
 ### Script Development
 
 1. **Use Python or Go** for generation scripts
-   - Python is good for JSON parsing and complex transformations
+   - Python is good for JSON/XML parsing, XSD parsing, and complex transformations
    - Go scripts can be compiled and distributed with the project
    - Choose based on complexity and team familiarity
+   - For XSD-based generation, Python's `xml.etree.ElementTree` or `lxml` work well
 
 2. **Output Idiomatic Go**
    - Use proper Go formatting (gofmt-compatible)
@@ -223,9 +285,17 @@ When creating or updating generation scripts:
 3. **Type Declarations**: Include type declarations for composite literals (`&Mods{` not `Mods{`)
 
 ### Data Extraction
-1. **Flattening**: Extract `Content` from nested objects when flattening to strings
-2. **Special Attributes**: Handle XML/JSON attributes (e.g., `+content`, `+@group`) correctly
-3. **Null Handling**: Convert `null` to `nil` for pointers, omit for omitted fields
+1. **XSD-Based Extraction** (when XSD available):
+   - Parse XSD to understand element structure and types
+   - Use XSD type definitions to guide data extraction
+   - Handle XSD optional elements as pointers or omit if not present
+   - Handle XSD repeating elements as slices
+2. **Data-Driven Extraction** (when no XSD):
+   - **Bias against interface{}**: Extract concrete types based on observed patterns
+   - Prefer the most common type if variations exist
+3. **Flattening**: Extract `Content` from nested objects when flattening to strings
+4. **Special Attributes**: Handle XML/JSON attributes (e.g., `+content`, `+@group`) correctly
+5. **Null Handling**: Convert `null` to `nil` for pointers, omit for omitted fields
 
 ### Pattern Examples
 
@@ -319,23 +389,32 @@ Mutant   string `json:"mutant,omitempty"` // JSON: string (e.g., "True") or null
 I need to generate or regenerate the [WEAPONS/SPELLS/etc] data files in the ShadowMaster project.
 
 Current situation:
-- JSON source: `data/chummer/[type].json`
+- Source data: `data/chummer/[type].json` or `data/chummerxml/[type].xml`
+- XSD schema: `data/chummerxml/[type].xsd` (if available)
 - Struct definition: `pkg/shadowrun/edition/v5/[type].go`
 - Target file: `pkg/shadowrun/edition/v5/[type]_data.go`
 - Generation script: `scripts/generate_[type]_data.py` (if exists)
 
 Please:
-1. **Document the struct**: Add comments to ALL fields in `[type].go` showing JSON data types and examples
-2. **Examine JSON structure**: Review `data/chummer/[type].json` to understand data patterns
-3. **Create/update generation script**: Ensure script handles:
-   - All field types correctly
+1. **Check for XSD**: If `data/chummerxml/[type].xsd` exists:
+   - Use XSD schema as primary guide for struct creation
+   - Map XSD types to Go types (xs:string → string, xs:int → int, etc.)
+   - Use XSD cardinality (minOccurs/maxOccurs) to determine pointers vs slices
+   - Add both XML and JSON tags for compatibility
+2. **If no XSD, examine data**: Review source data to understand patterns
+   - **Bias against interface{}**: Prefer concrete types based on observed patterns
+   - Document field usage and examples
+3. **Document the struct**: Add comments to ALL fields showing data types and examples
+4. **Create/update generation script**: Ensure script handles:
+   - All field types correctly (prefer concrete types over interface{})
    - Null/empty values properly
    - Redundant type annotations removal
    - Proper Go formatting
-4. **Generate data file**: Run script and verify output
-5. **Normalize output**: Fix any normalization issues (redundant types, formatting)
-6. **Verify**: Ensure code compiles and tests pass
-7. **Update this document**: Note completion and any patterns learned
+   - XSD parsing if XSD is available
+5. **Generate data file**: Run script and verify output
+6. **Normalize output**: Fix any normalization issues (redundant types, formatting)
+7. **Verify**: Ensure code compiles and tests pass
+8. **Update this document**: Note completion and any patterns learned
 ```
 
 ### For Type Safety Cleanup
@@ -346,21 +425,25 @@ I need to refactor the [WEAPONS/SPELLS/etc] data structures in the ShadowMaster 
 Current situation:
 - File: `pkg/shadowrun/edition/v5/[type].go` contains structs with `interface{}` fields
 - File: `pkg/shadowrun/edition/v5/[type]_data.go` contains the data
-- JSON source: `data/chummer/[type].json`
+- Source data: `data/chummer/[type].json` or `data/chummerxml/[type].xml`
+- XSD schema: `data/chummerxml/[type].xsd` (if available)
 
 Please:
-1. **Document fields** (if not done): Add comments to ALL fields showing JSON data types and examples
-2. **Examine `interface{}` fields**: Identify which can be typed
-3. **Check JSON data**: Understand actual data structures and patterns
-4. **Convert `interface{}` fields**: Use incremental approach:
+1. **Check for XSD**: If XSD exists, review it to see if `interface{}` fields can be replaced with XSD-defined types
+2. **Document fields** (if not done): Add comments to ALL fields showing data types and examples
+3. **Examine `interface{}` fields**: Identify which can be typed
+4. **Check source data**: Understand actual data structures and patterns
+   - **Bias against interface{}**: Prefer concrete types even if it requires handling edge cases
+5. **Convert `interface{}` fields**: Use incremental approach:
    - Single values → pointer types (use `nil` for empty)
    - Arrays or potentially arrays → slices
    - Booleans → plain `bool` (not `*bool`)
-5. **Update struct definitions**: Change field types
-6. **Update/regenerate data file**: Match new types (update script if needed)
-7. **Normalize**: Fix redundant types, formatting issues
-8. **Verify**: Compile, test, check linter
-9. **Update this document**: Mark progress and remaining work
+   - Use XSD types if XSD is available
+6. **Update struct definitions**: Change field types (avoid interface{} when possible)
+7. **Update/regenerate data file**: Match new types (update script if needed)
+8. **Normalize**: Fix redundant types, formatting issues
+9. **Verify**: Compile, test, check linter
+10. **Update this document**: Mark progress and remaining work
 
 Follow the same patterns we used for qualities, armor, and gear.
 ```
@@ -567,6 +650,8 @@ Based on analysis, there are approximately **181 `interface{}` fields** remainin
 ## Best Practices Summary
 
 ### Data Generation
+- **Use XSD when available**: Parse XSD schemas to guide struct creation, type mapping, and cardinality
+- **Bias against interface{}**: When no XSD exists, examine data and prefer concrete types
 - Always document field types before generation
 - Use generation scripts for large data files
 - Output normalized, idiomatic Go code

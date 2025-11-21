@@ -187,3 +187,39 @@ Common languages in 2075 include Sperethiel, Russian, Spanish (and Aztlaner Span
 ## Additional Reference Placeholders
 
 *Last updated: 2025-11-08*
+
+## Code Quality Standards
+
+### Composite Literal Redundancy
+
+When creating composite literals (arrays, slices, or maps) in Go, redundant type annotations should be avoided. The Go compiler can infer element types from the composite literal's type declaration.
+
+**Redundant Pattern (Avoid):**
+```go
+SpecificSkill: []common.SpecificSkillBonus{common.SpecificSkillBonus{
+    Name: "Sneaking", Bonus: 2,
+}}
+
+// Or for multiple elements:
+SpecificSkill: []common.SpecificSkillBonus{{
+    Name: "Running", Bonus: 2,
+}, common.SpecificSkillBonus{  // ❌ Redundant type
+    Name: "Gymnastics", Bonus: 2,
+}}
+```
+
+**Correct Pattern (Use):**
+```go
+SpecificSkill: []common.SpecificSkillBonus{{
+    Name: "Sneaking", Bonus: 2,
+}}
+
+// For multiple elements:
+SpecificSkill: []common.SpecificSkillBonus{{
+    Name: "Running", Bonus: 2,
+}, {  // ✅ Use double braces, compiler infers type
+    Name: "Gymnastics", Bonus: 2,
+}}
+```
+
+The double braces `{{` indicate to the Go compiler that it should infer the element type from the slice's element type declaration. This makes the code cleaner and follows Go best practices.

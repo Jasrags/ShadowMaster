@@ -570,6 +570,30 @@ func (h *Handlers) GetQualities(w http.ResponseWriter, r *http.Request) {
 	})
 }
 
+// GetBooks handles GET /api/equipment/books
+func (h *Handlers) GetBooks(w http.ResponseWriter, r *http.Request) {
+	// Get all books from the v5 data
+	bookList := make([]sr5.Book, 0, len(sr5.DataBooks))
+	for _, book := range sr5.DataBooks {
+		bookList = append(bookList, book)
+	}
+	respondJSON(w, http.StatusOK, map[string]interface{}{
+		"books": bookList,
+	})
+}
+
+// GetLifestyles handles GET /api/equipment/lifestyles
+func (h *Handlers) GetLifestyles(w http.ResponseWriter, r *http.Request) {
+	// Get all lifestyles from the v5 data
+	lifestyleList := make([]sr5.Lifestyle, 0, len(sr5.DataLifestyles))
+	for _, lifestyle := range sr5.DataLifestyles {
+		lifestyleList = append(lifestyleList, lifestyle)
+	}
+	respondJSON(w, http.StatusOK, map[string]interface{}{
+		"lifestyles": lifestyleList,
+	})
+}
+
 // Group handlers
 
 // GetGroups handles GET /api/groups
