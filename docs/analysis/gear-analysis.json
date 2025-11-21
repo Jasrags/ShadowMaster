@@ -1,0 +1,3326 @@
+{
+  "gear": {
+    "file": "gear.xml",
+    "file_path": "data/chummerxml/gear.xml",
+    "root_element": "chummer",
+    "total_elements": 19345,
+    "fields": {
+      "chummer/categories/category": {
+        "count": 76,
+        "presence_rate": 1.0,
+        "unique_values": 76,
+        "examples": [
+          "Alchemical Tools",
+          "Alchemical Preperations",
+          "Ammunition",
+          "Animals",
+          "Armor Enhancements",
+          "Audio Devices",
+          "Audio Enhancements",
+          "Autosofts",
+          "Biotech",
+          "Breaking and Entering Gear"
+        ],
+        "type_patterns": [],
+        "numeric_ratio": 0.0,
+        "boolean_ratio": 0.0,
+        "min_length": 4,
+        "max_length": 34,
+        "all_values": [
+          "Disguises",
+          "Electronic Parts",
+          "Food",
+          "Metatype-Specific",
+          "Housewares",
+          "Toxins",
+          "Commlink Apps",
+          "Common Programs",
+          "Cyberdeck Modules",
+          "Alchemical Tools",
+          "Musical Instruments",
+          "Booster Chips",
+          "Audio Devices",
+          "Electronic Modification",
+          "Magical Supplies",
+          "Security Devices",
+          "Tir Tairngire Beverages",
+          "Foci",
+          "Grapple Gun",
+          "BTLs"
+        ],
+        "is_enum_candidate": false
+      },
+      "chummer/gears/gear/id": {
+        "count": 1598,
+        "presence_rate": 1.0,
+        "unique_values": 1598,
+        "examples": [
+          "4d96ee55-0929-480e-923d-178e69675541",
+          "60ab05a7-2850-410c-9261-c5df6b5cddf1",
+          "39042c0a-4b22-4762-8d56-623033860178",
+          "0198f16e-8bb2-4618-ab2a-f010abe0a1c6",
+          "adef0fa4-67b7-41e1-b534-f15308c9c8c1",
+          "60b7ad79-55b7-4803-8d1f-9145218eaf5b",
+          "b286a62d-c7cb-472a-bea8-0f41a300bb9c",
+          "c429fc81-d11b-434b-b98b-5fbdda9db905",
+          "75ccb148-e774-429c-b854-a27816439626",
+          "f87701a0-4ea2-47db-bcac-f5b8396c369e"
+        ],
+        "type_patterns": [],
+        "numeric_ratio": 0.0,
+        "boolean_ratio": 0.0,
+        "min_length": 36,
+        "max_length": 36,
+        "all_values": [
+          "01daa0fc-f7c3-4c06-9929-e6e9debd8665",
+          "4055ed01-a419-4b69-bbac-00260bfa653f",
+          "89dfc727-9313-4830-8bd7-929d5b0d2771",
+          "94234658-5e47-4189-8e35-ecb8392839e2",
+          "ff779a68-a360-4a68-9e57-9a363b5de0d0",
+          "bcbda097-2e5e-4ac5-bcf3-7beadb62f3d3",
+          "838a308e-a638-433e-b5bc-54222fb645c9",
+          "c03e4428-f3fe-434c-881a-68d638408715",
+          "5700f1e7-3949-4be8-8968-476d13108b09",
+          "5c86798b-c144-486f-9cc9-c0c8ec5e23b8",
+          "357492f9-adfe-491d-8893-3ba3f198b283",
+          "10e64ca8-5524-46c6-a94a-ccfeb33ec951",
+          "e1ca60aa-ddd5-4a91-b137-30d06d97f931",
+          "16632b57-57e3-4af8-b56a-d79c7fc31ef8",
+          "104549ed-d60b-4d57-bde4-8b8a92cc7408",
+          "cd2dd310-464f-4f12-ae42-cdc293e3a2df",
+          "d900aa9c-5914-4e5b-baa4-b4e0c0625123",
+          "f9648fdb-315d-48e2-be3e-3ae22c33b29b",
+          "d90a58cd-f89c-486d-b785-991d2fecf32f",
+          "A11827B3-187F-4D50-96F4-34FE066B19A8"
+        ],
+        "is_enum_candidate": false
+      },
+      "chummer/gears/gear/name": {
+        "count": 1598,
+        "presence_rate": 1.0,
+        "unique_values": 1582,
+        "examples": [
+          "Throwing Syringe",
+          "Seeker Shaft",
+          "Arrow: Monotip Head",
+          "Ammo: Depleted Uranium",
+          "Ammo: Silver",
+          "Ammo: Wood Pulp",
+          "Ammo: Hi-De Rounds",
+          "Ammo: Subsonic",
+          "Spare Clip",
+          "Speed Loader"
+        ],
+        "type_patterns": [],
+        "numeric_ratio": 0.0,
+        "boolean_ratio": 0.0,
+        "min_length": 2,
+        "max_length": 69,
+        "all_values": [
+          "Ritual Spellcasting Focus, Health",
+          "Ammo: Capsule Rounds",
+          "Leäl",
+          "Radio Shack PCD-500",
+          "Smoke and Mirrors",
+          "Noise Detector and Alarm",
+          "Etchers",
+          "Galak",
+          "Name",
+          "Grenade: Shock, Aerodynamic (2050)",
+          "Spellcasting Focus, Manipulation, Individualized, Complete",
+          "Bug Scanner",
+          "Ammo: Wood Pulp",
+          "Pillowcase",
+          "Microdeck Deckmaster, Terminal (2050)",
+          "Tool Cleanser (15 Uses)",
+          "Cryo",
+          "Grenade: Flash-Bang",
+          "MCT Scrip",
+          "Grenade: Krime Party"
+        ],
+        "is_enum_candidate": false
+      },
+      "chummer/gears/gear/category": {
+        "count": 1598,
+        "presence_rate": 1.0,
+        "unique_values": 75,
+        "examples": [
+          "Ammunition",
+          "Ammunition",
+          "Ammunition",
+          "Ammunition",
+          "Ammunition",
+          "Ammunition",
+          "Ammunition",
+          "Ammunition",
+          "Ammunition",
+          "Ammunition"
+        ],
+        "type_patterns": [],
+        "numeric_ratio": 0.0,
+        "boolean_ratio": 0.0,
+        "min_length": 4,
+        "max_length": 34,
+        "all_values": [
+          "Disguises",
+          "Electronic Parts",
+          "Food",
+          "Metatype-Specific",
+          "Animals",
+          "Housewares",
+          "Toxins",
+          "Commlink Apps",
+          "Common Programs",
+          "Cyberdeck Modules",
+          "Musical Instruments",
+          "Booster Chips",
+          "Alchemical Tools",
+          "Audio Devices",
+          "Security Devices",
+          "Magical Supplies",
+          "Electronic Modification",
+          "Tir Tairngire Beverages",
+          "Foci",
+          "Grapple Gun"
+        ],
+        "is_enum_candidate": false
+      },
+      "chummer/gears/gear/rating": {
+        "count": 1598,
+        "presence_rate": 1.0,
+        "unique_values": 21,
+        "examples": [
+          "0",
+          "0",
+          "12",
+          "0",
+          "0",
+          "0",
+          "0",
+          "0",
+          "0",
+          "0"
+        ],
+        "type_patterns": [
+          "numeric_string",
+          "mixed_boolean",
+          "enum_candidate"
+        ],
+        "numeric_ratio": 0.9943679599499374,
+        "boolean_ratio": 0.7609511889862328,
+        "min_length": 1,
+        "max_length": 15,
+        "all_values": [
+          "{Parent Rating}",
+          "3",
+          "25",
+          "100000",
+          "1000",
+          "100",
+          "12",
+          "20",
+          "6",
+          "0",
+          "5",
+          "99",
+          "2",
+          "4",
+          "8",
+          "1000000",
+          "1",
+          "18",
+          "10",
+          "20000"
+        ],
+        "is_enum_candidate": true
+      },
+      "chummer/gears/gear/source": {
+        "count": 1598,
+        "presence_rate": 1.0,
+        "unique_values": 39,
+        "examples": [
+          "HT",
+          "HT",
+          "HT",
+          "HT",
+          "HT",
+          "HT",
+          "HT",
+          "HT",
+          "SR5",
+          "SR5"
+        ],
+        "type_patterns": [
+          "mixed_numeric",
+          "enum_candidate"
+        ],
+        "numeric_ratio": 0.09324155193992491,
+        "boolean_ratio": 0.0,
+        "min_length": 2,
+        "max_length": 8,
+        "all_values": [
+          "DTR",
+          "SR5",
+          "CF",
+          "TVG",
+          "HT",
+          "GRST2019",
+          "HKS",
+          "SL",
+          "SPS",
+          "KC",
+          "NF",
+          "BOTL",
+          "PBG",
+          "CA",
+          "R5",
+          "BTB",
+          "RG",
+          "BB",
+          "KK",
+          "TCT"
+        ],
+        "is_enum_candidate": true
+      },
+      "chummer/gears/gear/page": {
+        "count": 1598,
+        "presence_rate": 1.0,
+        "unique_values": 183,
+        "examples": [
+          "183",
+          "187",
+          "187",
+          "189",
+          "189",
+          "189",
+          "189",
+          "189",
+          "433",
+          "433"
+        ],
+        "type_patterns": [
+          "numeric_string",
+          "mixed_boolean"
+        ],
+        "numeric_ratio": 1.0,
+        "boolean_ratio": 0.0006257822277847309,
+        "min_length": 1,
+        "max_length": 3,
+        "all_values": [
+          "445",
+          "439",
+          "431",
+          "187",
+          "77",
+          "199",
+          "56",
+          "78",
+          "171",
+          "52",
+          "320",
+          "326",
+          "409",
+          "204",
+          "442",
+          "255",
+          "451",
+          "413",
+          "50",
+          "57"
+        ],
+        "is_enum_candidate": false
+      },
+      "chummer/gears/gear/avail": {
+        "count": 1598,
+        "presence_rate": 1.0,
+        "unique_values": 107,
+        "examples": [
+          "6F",
+          "12F",
+          "8R",
+          "28F",
+          "12R",
+          "6R",
+          "10F",
+          "8F",
+          "4",
+          "2"
+        ],
+        "type_patterns": [
+          "mixed_numeric",
+          "mixed_boolean"
+        ],
+        "numeric_ratio": 0.5056320400500626,
+        "boolean_ratio": 0.3041301627033792,
+        "min_length": 1,
+        "max_length": 33,
+        "all_values": [
+          "8F",
+          "5R",
+          "7F",
+          "16R",
+          "24R",
+          "+4F",
+          "9F",
+          "Rating*2F",
+          "0",
+          "Rating * 2",
+          "36",
+          "FixedValues(7R,8R,9R,10R,11R,12R)",
+          "Rating",
+          "2R",
+          "+4R",
+          "2F",
+          "5F",
+          "13R",
+          "1",
+          "(Rating * 3)R"
+        ],
+        "is_enum_candidate": false
+      },
+      "chummer/gears/gear/addweapon": {
+        "count": 101,
+        "presence_rate": 1.0,
+        "unique_values": 100,
+        "examples": [
+          "Throwing Syringe",
+          "Throwing Knife",
+          "Shuriken",
+          "Electro-Net",
+          "Boomerang",
+          "Horizon BoomerEye",
+          "Harpoon",
+          "Javelin",
+          "Net",
+          "Urban Tribe Tomahawk"
+        ],
+        "type_patterns": [],
+        "numeric_ratio": 0.0,
+        "boolean_ratio": 0.0,
+        "min_length": 3,
+        "max_length": 54,
+        "all_values": [
+          "Grenade: High Explosive, Aerodynamic",
+          "Shuriken",
+          "Rocket: Anti-Personnel (2050)",
+          "Minigrenade: Smoke",
+          "Micro-Torpedo: Chemical",
+          "Ink Pouch",
+          "Grenade: Paint (Radioactive Tracking Dye)",
+          "Boomerang",
+          "Grenade: Gas",
+          "Grenade: High Explosive",
+          "Net",
+          "Grenade: Fuzzy Boom Boom Bunnies",
+          "Grenade: Halloweener Molotov Cocktail, Aerodynamic",
+          "Extendable Baton",
+          "Grenade: Shock, Aerodynamic (2050)",
+          "Rocket: Anti-Vehicle",
+          "Grenade: Smoke, Aerodynamic",
+          "Grenade: Defensive, Aerodynamic (2050)",
+          "Microgrenade: High Explosive",
+          "Grenade: Molotov Cocktail, Aerodynamic"
+        ],
+        "is_enum_candidate": false
+      },
+      "chummer/gears/gear/cost": {
+        "count": 1598,
+        "presence_rate": 1.0,
+        "unique_values": 297,
+        "examples": [
+          "40",
+          "45",
+          "(Rating * 30)",
+          "1000",
+          "250",
+          "10",
+          "150",
+          "40",
+          "5",
+          "25"
+        ],
+        "type_patterns": [
+          "mixed_numeric",
+          "mixed_boolean"
+        ],
+        "numeric_ratio": 0.7584480600750939,
+        "boolean_ratio": 0.08760951188986232,
+        "min_length": 1,
+        "max_length": 45,
+        "all_values": [
+          "Variable(2000-1000000)",
+          "30000",
+          "85",
+          "400",
+          "160",
+          "700",
+          "Variable(750-3000)",
+          "Rating * 120",
+          "Rating * 2500",
+          "1300",
+          "100 * Rating",
+          "(Rating * 2) + 15",
+          "Variable(50-500)",
+          "Children Cost * 0.1",
+          "98000",
+          "Rating * 4000",
+          "0.33333333333333",
+          "6200",
+          "Rating * 5000",
+          "2100000"
+        ],
+        "is_enum_candidate": false
+      },
+      "chummer/gears/gear/costfor": {
+        "count": 132,
+        "presence_rate": 1.0,
+        "unique_values": 10,
+        "examples": [
+          "1",
+          "1",
+          "1",
+          "10",
+          "10",
+          "10",
+          "10",
+          "10",
+          "10",
+          "10"
+        ],
+        "type_patterns": [
+          "numeric_string",
+          "mixed_boolean",
+          "enum_candidate"
+        ],
+        "numeric_ratio": 1.0,
+        "boolean_ratio": 0.2878787878787879,
+        "min_length": 1,
+        "max_length": 3,
+        "all_values": [
+          "4",
+          "100",
+          "3",
+          "20",
+          "5",
+          "6",
+          "1",
+          "2",
+          "50",
+          "10"
+        ],
+        "is_enum_candidate": true
+      },
+      "chummer/gears/gear/required/parentdetails/ammoforweapontype": {
+        "count": 1,
+        "presence_rate": 1.0,
+        "unique_values": 1,
+        "examples": [
+          "bow"
+        ],
+        "type_patterns": [],
+        "numeric_ratio": 0.0,
+        "boolean_ratio": 0.0,
+        "min_length": 3,
+        "max_length": 3,
+        "all_values": [
+          "bow"
+        ],
+        "is_enum_candidate": false
+      },
+      "chummer/gears/gear/weaponbonus/smartlinkpool": {
+        "count": 1,
+        "presence_rate": 1.0,
+        "unique_values": 1,
+        "examples": [
+          "1"
+        ],
+        "type_patterns": [
+          "numeric_string",
+          "boolean_string"
+        ],
+        "numeric_ratio": 1.0,
+        "boolean_ratio": 1.0,
+        "min_length": 1,
+        "max_length": 1,
+        "all_values": [
+          "1"
+        ],
+        "is_enum_candidate": false
+      },
+      "chummer/gears/gear/weaponbonus/ap": {
+        "count": 36,
+        "presence_rate": 1.0,
+        "unique_values": 10,
+        "examples": [
+          "-2",
+          "-5",
+          "2",
+          "4",
+          "-4",
+          "-1",
+          "5",
+          "1",
+          "2",
+          "-1"
+        ],
+        "type_patterns": [
+          "numeric_string",
+          "mixed_boolean",
+          "enum_candidate"
+        ],
+        "numeric_ratio": 1.0,
+        "boolean_ratio": 0.08333333333333333,
+        "min_length": 1,
+        "max_length": 2,
+        "all_values": [
+          "4",
+          "-5",
+          "5",
+          "-2",
+          "-4",
+          "1",
+          "6",
+          "-3",
+          "2",
+          "-1"
+        ],
+        "is_enum_candidate": true
+      },
+      "chummer/gears/gear/ammoforweapontype": {
+        "count": 167,
+        "presence_rate": 1.0,
+        "unique_values": 32,
+        "examples": [
+          "bow",
+          "gun",
+          "gun",
+          "gun",
+          "gun",
+          "gun",
+          "gun",
+          "cannon",
+          "gun",
+          "gun"
+        ],
+        "type_patterns": [
+          "enum_candidate"
+        ],
+        "numeric_ratio": 0.0,
+        "boolean_ratio": 0.0,
+        "min_length": 3,
+        "max_length": 25,
+        "all_values": [
+          "spinstorm",
+          "squirtgun",
+          "crossbow",
+          "netgun",
+          "harpoongun",
+          "netgunxl",
+          "slingshot",
+          "flame",
+          "gyrojet",
+          "supermach",
+          "torpglauncher",
+          "flaregun",
+          "taser",
+          "man-catcher",
+          "glauncher",
+          "grapplegun",
+          "cannon",
+          "mlauncher",
+          "bow",
+          "microglauncher"
+        ],
+        "is_enum_candidate": true
+      },
+      "chummer/gears/gear/weaponbonus/damage": {
+        "count": 26,
+        "presence_rate": 1.0,
+        "unique_values": 7,
+        "examples": [
+          "1",
+          "-4",
+          "-1",
+          "1",
+          "2",
+          "1",
+          "-2",
+          "2",
+          "-1",
+          "-2"
+        ],
+        "type_patterns": [
+          "numeric_string",
+          "mixed_boolean",
+          "enum_candidate"
+        ],
+        "numeric_ratio": 0.9615384615384616,
+        "boolean_ratio": 0.3076923076923077,
+        "min_length": 1,
+        "max_length": 6,
+        "all_values": [
+          "-2",
+          "-4",
+          "1",
+          "-2S(e)",
+          "-3",
+          "2",
+          "-1"
+        ],
+        "is_enum_candidate": true
+      },
+      "chummer/gears/gear/weaponbonus/damagetype": {
+        "count": 19,
+        "presence_rate": 1.0,
+        "unique_values": 6,
+        "examples": [
+          "P(f)",
+          "S(e)",
+          "S",
+          "S(e)",
+          "S",
+          "S",
+          "S",
+          "S",
+          "Acid",
+          "(M)"
+        ],
+        "type_patterns": [
+          "enum_candidate"
+        ],
+        "numeric_ratio": 0.0,
+        "boolean_ratio": 0.0,
+        "min_length": 1,
+        "max_length": 4,
+        "all_values": [
+          "(M)",
+          "Acid",
+          "P(f)",
+          "(S)",
+          "S(e)",
+          "S"
+        ],
+        "is_enum_candidate": true
+      },
+      "chummer/gears/gear/isflechetteammo": {
+        "count": 2,
+        "presence_rate": 1.0,
+        "unique_values": 1,
+        "examples": [
+          "True",
+          "True"
+        ],
+        "type_patterns": [
+          "boolean_string"
+        ],
+        "numeric_ratio": 0.0,
+        "boolean_ratio": 1.0,
+        "min_length": 4,
+        "max_length": 4,
+        "all_values": [
+          "True"
+        ],
+        "is_enum_candidate": false
+      },
+      "chummer/gears/gear/flechetteweaponbonus/damagetype": {
+        "count": 2,
+        "presence_rate": 1.0,
+        "unique_values": 2,
+        "examples": [
+          "P(f)",
+          "S(e)"
+        ],
+        "type_patterns": [
+          "enum_candidate"
+        ],
+        "numeric_ratio": 0.0,
+        "boolean_ratio": 0.0,
+        "min_length": 4,
+        "max_length": 4,
+        "all_values": [
+          "P(f)",
+          "S(e)"
+        ],
+        "is_enum_candidate": true
+      },
+      "chummer/gears/gear/flechetteweaponbonus/ap": {
+        "count": 1,
+        "presence_rate": 1.0,
+        "unique_values": 1,
+        "examples": [
+          "-5"
+        ],
+        "type_patterns": [
+          "numeric_string"
+        ],
+        "numeric_ratio": 1.0,
+        "boolean_ratio": 0.0,
+        "min_length": 2,
+        "max_length": 2,
+        "all_values": [
+          "-5"
+        ],
+        "is_enum_candidate": false
+      },
+      "chummer/gears/gear/flechetteweaponbonus/damage": {
+        "count": 1,
+        "presence_rate": 1.0,
+        "unique_values": 1,
+        "examples": [
+          "-2"
+        ],
+        "type_patterns": [
+          "numeric_string"
+        ],
+        "numeric_ratio": 1.0,
+        "boolean_ratio": 0.0,
+        "min_length": 2,
+        "max_length": 2,
+        "all_values": [
+          "-2"
+        ],
+        "is_enum_candidate": false
+      },
+      "chummer/gears/gear/addoncategory": {
+        "count": 303,
+        "presence_rate": 1.0,
+        "unique_values": 17,
+        "examples": [
+          "Drugs",
+          "Toxins",
+          "Custom",
+          "Drugs",
+          "Toxins",
+          "Custom",
+          "Drugs",
+          "Toxins",
+          "Custom",
+          "Drugs"
+        ],
+        "type_patterns": [
+          "enum_candidate"
+        ],
+        "numeric_ratio": 0.0,
+        "boolean_ratio": 0.0,
+        "min_length": 5,
+        "max_length": 23,
+        "all_values": [
+          "Drug Grades",
+          "Custom",
+          "Audio Enhancements",
+          "Toxins",
+          "Vision Enhancements",
+          "ID/Credsticks",
+          "Tools of the Trade",
+          "Common Programs",
+          "Hacking Programs",
+          "Sensor Functions",
+          "Cyberdeck Modules",
+          "Drugs",
+          "Electronic Modification",
+          "Nanogear",
+          "Sensors",
+          "Currency",
+          "Cyberdecks"
+        ],
+        "is_enum_candidate": true
+      },
+      "chummer/gears/gear/weaponbonus/apreplace": {
+        "count": 5,
+        "presence_rate": 1.0,
+        "unique_values": 5,
+        "examples": [
+          "-1",
+          "-5",
+          "-6",
+          "0",
+          "-8"
+        ],
+        "type_patterns": [
+          "numeric_string",
+          "mixed_boolean",
+          "enum_candidate"
+        ],
+        "numeric_ratio": 1.0,
+        "boolean_ratio": 0.2,
+        "min_length": 1,
+        "max_length": 2,
+        "all_values": [
+          "-5",
+          "0",
+          "-6",
+          "-8",
+          "-1"
+        ],
+        "is_enum_candidate": true
+      },
+      "chummer/gears/gear/weaponbonus/damagereplace": {
+        "count": 14,
+        "presence_rate": 1.0,
+        "unique_values": 10,
+        "examples": [
+          "7P",
+          "8P",
+          "8S(e)",
+          "12S(e)",
+          "8S(e)",
+          "12S(e)",
+          "8S(e)",
+          "8S(e)",
+          "6P",
+          "0S"
+        ],
+        "type_patterns": [
+          "enum_candidate"
+        ],
+        "numeric_ratio": 0.0,
+        "boolean_ratio": 0.0,
+        "min_length": 2,
+        "max_length": 13,
+        "all_values": [
+          "8P",
+          "6P",
+          "9P",
+          "7P",
+          "As Narcoject",
+          "As Drug/Toxin",
+          "Special",
+          "12S(e)",
+          "0S",
+          "8S(e)"
+        ],
+        "is_enum_candidate": true
+      },
+      "chummer/gears/gear/weaponbonus/modereplace": {
+        "count": 1,
+        "presence_rate": 1.0,
+        "unique_values": 1,
+        "examples": [
+          "SS"
+        ],
+        "type_patterns": [],
+        "numeric_ratio": 0.0,
+        "boolean_ratio": 0.0,
+        "min_length": 2,
+        "max_length": 2,
+        "all_values": [
+          "SS"
+        ],
+        "is_enum_candidate": false
+      },
+      "chummer/gears/gear/weaponbonus/userange": {
+        "count": 12,
+        "presence_rate": 1.0,
+        "unique_values": 2,
+        "examples": [
+          "Light Pistols",
+          "Light Pistols",
+          "Holdouts",
+          "Holdouts",
+          "Light Pistols",
+          "Light Pistols",
+          "Light Pistols",
+          "Light Pistols",
+          "Light Pistols",
+          "Light Pistols"
+        ],
+        "type_patterns": [
+          "enum_candidate"
+        ],
+        "numeric_ratio": 0.0,
+        "boolean_ratio": 0.0,
+        "min_length": 8,
+        "max_length": 13,
+        "all_values": [
+          "Light Pistols",
+          "Holdouts"
+        ],
+        "is_enum_candidate": true
+      },
+      "chummer/gears/gear/weaponbonus/accuracy": {
+        "count": 8,
+        "presence_rate": 1.0,
+        "unique_values": 2,
+        "examples": [
+          "-1",
+          "-1",
+          "-1",
+          "-2",
+          "-1",
+          "-1",
+          "-1",
+          "-1"
+        ],
+        "type_patterns": [
+          "numeric_string",
+          "enum_candidate"
+        ],
+        "numeric_ratio": 1.0,
+        "boolean_ratio": 0.0,
+        "min_length": 2,
+        "max_length": 2,
+        "all_values": [
+          "-1",
+          "-2"
+        ],
+        "is_enum_candidate": true
+      },
+      "chummer/gears/gear/weaponbonus/accuracyreplace": {
+        "count": 2,
+        "presence_rate": 1.0,
+        "unique_values": 1,
+        "examples": [
+          "3",
+          "3"
+        ],
+        "type_patterns": [
+          "numeric_string"
+        ],
+        "numeric_ratio": 1.0,
+        "boolean_ratio": 0.0,
+        "min_length": 1,
+        "max_length": 1,
+        "all_values": [
+          "3"
+        ],
+        "is_enum_candidate": false
+      },
+      "chummer/gears/gear/minrating": {
+        "count": 57,
+        "presence_rate": 1.0,
+        "unique_values": 7,
+        "examples": [
+          "5",
+          "3",
+          "6",
+          "5",
+          "6",
+          "6",
+          "4",
+          "6",
+          "1",
+          "1"
+        ],
+        "type_patterns": [
+          "numeric_string",
+          "mixed_boolean",
+          "enum_candidate"
+        ],
+        "numeric_ratio": 1.0,
+        "boolean_ratio": 0.05263157894736842,
+        "min_length": 1,
+        "max_length": 2,
+        "all_values": [
+          "4",
+          "3",
+          "12",
+          "5",
+          "6",
+          "1",
+          "2"
+        ],
+        "is_enum_candidate": true
+      },
+      "chummer/gears/gear/weight": {
+        "count": 17,
+        "presence_rate": 1.0,
+        "unique_values": 2,
+        "examples": [
+          "1",
+          "1",
+          "1",
+          "1",
+          "1",
+          "1",
+          "1",
+          "1",
+          "Rating",
+          "Rating"
+        ],
+        "type_patterns": [
+          "numeric_string",
+          "boolean_string",
+          "enum_candidate"
+        ],
+        "numeric_ratio": 0.8823529411764706,
+        "boolean_ratio": 0.8823529411764706,
+        "min_length": 1,
+        "max_length": 6,
+        "all_values": [
+          "Rating",
+          "1"
+        ],
+        "is_enum_candidate": true
+      },
+      "chummer/gears/gear/ratinglabel": {
+        "count": 204,
+        "presence_rate": 1.0,
+        "unique_values": 4,
+        "examples": [
+          "Rating_Meters",
+          "Rating_Meters",
+          "Rating_Meters",
+          "String_Force",
+          "String_Force",
+          "String_Force",
+          "String_Force",
+          "String_Force",
+          "String_Force",
+          "String_Force"
+        ],
+        "type_patterns": [
+          "enum_candidate"
+        ],
+        "numeric_ratio": 0.0,
+        "boolean_ratio": 0.0,
+        "min_length": 12,
+        "max_length": 20,
+        "all_values": [
+          "String_Force_Potency",
+          "Rating_Meters",
+          "String_Force",
+          "Rating_SqMeters"
+        ],
+        "is_enum_candidate": true
+      },
+      "chummer/gears/gear/gears/usegear/name": {
+        "count": 263,
+        "presence_rate": 1.0,
+        "unique_values": 45,
+        "examples": [
+          "Music Player",
+          "Micro Trid-Projector",
+          "Touchscreen Display",
+          "Camera, Micro",
+          "RFID Tag Scanner",
+          "GPS Guidance System",
+          "Chip Player",
+          "Credstick Reader",
+          "Earbuds",
+          "Shock- and Water-Resistant Case"
+        ],
+        "type_patterns": [
+          "enum_candidate"
+        ],
+        "numeric_ratio": 0.0,
+        "boolean_ratio": 0.0,
+        "min_length": 4,
+        "max_length": 36,
+        "all_values": [
+          "Hardened Casing",
+          "Microphone, Omni-Directional",
+          "Hammer",
+          "Decryption",
+          "Waterproof Casing",
+          "Track",
+          "Touchscreen Display",
+          "Edit",
+          "Sim Module, Hot",
+          "Water Purification Unit",
+          "RFID Tag Scanner",
+          "Commlink Functionality",
+          "Lightweight Thermal Blanket",
+          "Gas Mask",
+          "Noise Detector and Alarm",
+          "Armor",
+          "GPS Guidance System",
+          "Camera, Micro",
+          "Datasoft",
+          "Vision Magnification"
+        ],
+        "is_enum_candidate": true
+      },
+      "chummer/gears/gear/gears/usegear/category": {
+        "count": 263,
+        "presence_rate": 1.0,
+        "unique_values": 13,
+        "examples": [
+          "Electronics Accessories",
+          "Electronics Accessories",
+          "Electronics Accessories",
+          "Vision Devices",
+          "Electronics Accessories",
+          "Electronics Accessories",
+          "Electronics Accessories",
+          "Electronics Accessories",
+          "Audio Devices",
+          "Commlink Accessories"
+        ],
+        "type_patterns": [
+          "enum_candidate"
+        ],
+        "numeric_ratio": 0.0,
+        "boolean_ratio": 0.0,
+        "min_length": 5,
+        "max_length": 31,
+        "all_values": [
+          "Survival Gear",
+          "Software",
+          "Common Programs",
+          "Hacking Programs",
+          "Vision Enhancements",
+          "Tools",
+          "Sensor Functions",
+          "Audio Devices",
+          "Vision Devices",
+          "Sensors",
+          "Commlink Accessories",
+          "Commlink/Cyberdeck Form Factors",
+          "Electronics Accessories"
+        ],
+        "is_enum_candidate": true
+      },
+      "chummer/gears/gear/gears/usegear/capacity": {
+        "count": 10,
+        "presence_rate": 1.0,
+        "unique_values": 2,
+        "examples": [
+          "[0]",
+          "[0]",
+          "[0]",
+          "[0]",
+          "[0]",
+          "[0]",
+          "2/[2]",
+          "2/[2]",
+          "[0]",
+          "[0]"
+        ],
+        "type_patterns": [
+          "enum_candidate"
+        ],
+        "numeric_ratio": 0.0,
+        "boolean_ratio": 0.0,
+        "min_length": 3,
+        "max_length": 5,
+        "all_values": [
+          "[0]",
+          "2/[2]"
+        ],
+        "is_enum_candidate": true
+      },
+      "chummer/gears/gear/gears/usegear/rating": {
+        "count": 56,
+        "presence_rate": 1.0,
+        "unique_values": 3,
+        "examples": [
+          "1",
+          "1",
+          "1",
+          "1",
+          "1",
+          "1",
+          "1",
+          "1",
+          "1",
+          "1"
+        ],
+        "type_patterns": [
+          "numeric_string",
+          "boolean_string",
+          "enum_candidate"
+        ],
+        "numeric_ratio": 1.0,
+        "boolean_ratio": 0.8928571428571429,
+        "min_length": 1,
+        "max_length": 1,
+        "all_values": [
+          "2",
+          "1",
+          "3"
+        ],
+        "is_enum_candidate": true
+      },
+      "chummer/gears/gear/gears/usegear/maxrating": {
+        "count": 1,
+        "presence_rate": 1.0,
+        "unique_values": 1,
+        "examples": [
+          "1"
+        ],
+        "type_patterns": [
+          "numeric_string",
+          "boolean_string"
+        ],
+        "numeric_ratio": 1.0,
+        "boolean_ratio": 1.0,
+        "min_length": 1,
+        "max_length": 1,
+        "all_values": [
+          "1"
+        ],
+        "is_enum_candidate": false
+      },
+      "chummer/gears/gear/devicerating": {
+        "count": 187,
+        "presence_rate": 1.0,
+        "unique_values": 12,
+        "examples": [
+          "{RES}",
+          "Rating",
+          "1",
+          "2",
+          "3",
+          "4",
+          "5",
+          "6",
+          "7",
+          "6"
+        ],
+        "type_patterns": [
+          "numeric_string",
+          "mixed_boolean",
+          "enum_candidate"
+        ],
+        "numeric_ratio": 0.946524064171123,
+        "boolean_ratio": 0.20320855614973263,
+        "min_length": 1,
+        "max_length": 8,
+        "all_values": [
+          "4",
+          "8",
+          "7",
+          "3",
+          "{Rating}",
+          "2",
+          "5",
+          "{RES}",
+          "1",
+          "6",
+          "0",
+          "Rating"
+        ],
+        "is_enum_candidate": true
+      },
+      "chummer/gears/gear/attack": {
+        "count": 43,
+        "presence_rate": 1.0,
+        "unique_values": 12,
+        "examples": [
+          "{CHA}",
+          "0",
+          "0",
+          "3",
+          "4",
+          "6",
+          "8",
+          "4",
+          "5",
+          "8"
+        ],
+        "type_patterns": [
+          "numeric_string",
+          "mixed_boolean",
+          "enum_candidate"
+        ],
+        "numeric_ratio": 0.9767441860465116,
+        "boolean_ratio": 0.6744186046511628,
+        "min_length": 1,
+        "max_length": 5,
+        "all_values": [
+          "4",
+          "8",
+          "7",
+          "3",
+          "5",
+          "6",
+          "0",
+          "{CHA}",
+          "1",
+          "2",
+          "10",
+          "9"
+        ],
+        "is_enum_candidate": true
+      },
+      "chummer/gears/gear/sleaze": {
+        "count": 41,
+        "presence_rate": 1.0,
+        "unique_values": 6,
+        "examples": [
+          "{INT}",
+          "0",
+          "0",
+          "1",
+          "1",
+          "1",
+          "1",
+          "1",
+          "1",
+          "1"
+        ],
+        "type_patterns": [
+          "numeric_string",
+          "boolean_string",
+          "enum_candidate"
+        ],
+        "numeric_ratio": 0.975609756097561,
+        "boolean_ratio": 0.8292682926829268,
+        "min_length": 1,
+        "max_length": 5,
+        "all_values": [
+          "3",
+          "{INT}",
+          "5",
+          "0",
+          "6",
+          "1"
+        ],
+        "is_enum_candidate": true
+      },
+      "chummer/gears/gear/dataprocessing": {
+        "count": 98,
+        "presence_rate": 1.0,
+        "unique_values": 11,
+        "examples": [
+          "{LOG}",
+          "Rating",
+          "1",
+          "2",
+          "3",
+          "4",
+          "5",
+          "6",
+          "7",
+          "6"
+        ],
+        "type_patterns": [
+          "numeric_string",
+          "mixed_boolean",
+          "enum_candidate"
+        ],
+        "numeric_ratio": 0.9795918367346939,
+        "boolean_ratio": 0.19387755102040816,
+        "min_length": 1,
+        "max_length": 6,
+        "all_values": [
+          "4",
+          "8",
+          "7",
+          "3",
+          "2",
+          "{LOG}",
+          "5",
+          "1",
+          "6",
+          "0",
+          "Rating"
+        ],
+        "is_enum_candidate": true
+      },
+      "chummer/gears/gear/firewall": {
+        "count": 98,
+        "presence_rate": 1.0,
+        "unique_values": 12,
+        "examples": [
+          "{WIL}",
+          "Rating",
+          "1",
+          "2",
+          "3",
+          "4",
+          "5",
+          "6",
+          "7",
+          "6"
+        ],
+        "type_patterns": [
+          "numeric_string",
+          "mixed_boolean",
+          "enum_candidate"
+        ],
+        "numeric_ratio": 0.9795918367346939,
+        "boolean_ratio": 0.15306122448979592,
+        "min_length": 1,
+        "max_length": 6,
+        "all_values": [
+          "4",
+          "8",
+          "7",
+          "3",
+          "{WIL}",
+          "2",
+          "5",
+          "6",
+          "1",
+          "0",
+          "Rating",
+          "10"
+        ],
+        "is_enum_candidate": true
+      },
+      "chummer/gears/gear/canformpersona": {
+        "count": 95,
+        "presence_rate": 1.0,
+        "unique_values": 2,
+        "examples": [
+          "Self",
+          "Self",
+          "Self",
+          "Self",
+          "Self",
+          "Self",
+          "Self",
+          "Self",
+          "Self",
+          "Self"
+        ],
+        "type_patterns": [
+          "enum_candidate"
+        ],
+        "numeric_ratio": 0.0,
+        "boolean_ratio": 0.0,
+        "min_length": 4,
+        "max_length": 6,
+        "all_values": [
+          "Parent",
+          "Self"
+        ],
+        "is_enum_candidate": true
+      },
+      "chummer/gears/gear/armorcapacity": {
+        "count": 191,
+        "presence_rate": 1.0,
+        "unique_values": 10,
+        "examples": [
+          "[2]",
+          "[2]",
+          "[2]",
+          "[2]",
+          "[2]",
+          "[2]",
+          "[2]",
+          "[2]",
+          "[2]",
+          "[2]"
+        ],
+        "type_patterns": [
+          "mixed_numeric",
+          "mixed_boolean",
+          "enum_candidate"
+        ],
+        "numeric_ratio": 0.020942408376963352,
+        "boolean_ratio": 0.020942408376963352,
+        "min_length": 1,
+        "max_length": 10,
+        "all_values": [
+          "[1]",
+          "[0]",
+          "[Rating]",
+          "[4]",
+          "Rating/[1]",
+          "[5]",
+          "[3]",
+          "0",
+          "[6]",
+          "[2]"
+        ],
+        "is_enum_candidate": true
+      },
+      "chummer/gears/gear/capacity": {
+        "count": 230,
+        "presence_rate": 1.0,
+        "unique_values": 29,
+        "examples": [
+          "0",
+          "0",
+          "0",
+          "0",
+          "0",
+          "0",
+          "0",
+          "0",
+          "0",
+          "0"
+        ],
+        "type_patterns": [
+          "mixed_numeric",
+          "mixed_boolean",
+          "enum_candidate"
+        ],
+        "numeric_ratio": 0.691304347826087,
+        "boolean_ratio": 0.6347826086956522,
+        "min_length": 1,
+        "max_length": 19,
+        "all_values": [
+          "[1]",
+          "3",
+          "[0.02]",
+          "100000",
+          "[0.33333333333333]",
+          "[0.99009900990099]",
+          "[0.5]",
+          "0",
+          "[0.066666666666667]",
+          "Rating/[1]",
+          "[0.05]",
+          "[0.28571428571429]",
+          "2",
+          "Rating",
+          "[2]",
+          "[0.016666666666667]",
+          "500000",
+          "8/[6]",
+          "4",
+          "[1.25]"
+        ],
+        "is_enum_candidate": true
+      },
+      "chummer/gears/gear/required/geardetails/OR/category": {
+        "count": 113,
+        "presence_rate": 1.0,
+        "unique_values": 11,
+        "examples": [
+          "Commlinks",
+          "Custom",
+          "Commlinks",
+          "Custom",
+          "Custom",
+          "Sensors",
+          "Custom",
+          "Sensors",
+          "Custom",
+          "Sensors"
+        ],
+        "type_patterns": [
+          "enum_candidate"
+        ],
+        "numeric_ratio": 0.0,
+        "boolean_ratio": 0.0,
+        "min_length": 5,
+        "max_length": 27,
+        "all_values": [
+          "Commlinks",
+          "Custom",
+          "Cyberdecks",
+          "Commlink",
+          "Cloaks",
+          "Specialty Armor",
+          "High-Fashion Armor Clothing",
+          "Sensors",
+          "Armor",
+          "Cyberterminals",
+          "Clothing"
+        ],
+        "is_enum_candidate": true
+      },
+      "chummer/gears/gear/attributearray": {
+        "count": 32,
+        "presence_rate": 1.0,
+        "unique_values": 21,
+        "examples": [
+          "4,3,2,1",
+          "4,3,3,1",
+          "5,4,3,2",
+          "5,4,4,2",
+          "6,5,4,3",
+          "6,5,5,3",
+          "7,6,5,4",
+          "8,7,6,5",
+          "9,8,7,6",
+          "6,5,4,3"
+        ],
+        "type_patterns": [
+          "enum_candidate"
+        ],
+        "numeric_ratio": 0.0,
+        "boolean_ratio": 0.0,
+        "min_length": 7,
+        "max_length": 7,
+        "all_values": [
+          "7,5,5,4",
+          "4,3,3,1",
+          "8,5,4,3",
+          "7,6,5,5",
+          "8,7,7,5",
+          "2,2,1,1",
+          "9,9,8,8",
+          "6,5,4,3",
+          "5,4,4,2",
+          "4,3,2,1",
+          "7,6,5,4",
+          "7,4,3,2",
+          "8,6,4,2",
+          "5,4,1,1",
+          "9,8,7,6",
+          "6,5,5,3",
+          "7,5,3,1",
+          "8,7,6,5",
+          "8,8,7,6",
+          "8,7,5,5"
+        ],
+        "is_enum_candidate": true
+      },
+      "chummer/gears/gear/programs": {
+        "count": 85,
+        "presence_rate": 1.0,
+        "unique_values": 9,
+        "examples": [
+          "1",
+          "1",
+          "2",
+          "2",
+          "3",
+          "3",
+          "4",
+          "5",
+          "6",
+          "1"
+        ],
+        "type_patterns": [
+          "numeric_string",
+          "mixed_boolean",
+          "enum_candidate"
+        ],
+        "numeric_ratio": 0.9764705882352941,
+        "boolean_ratio": 0.17647058823529413,
+        "min_length": 1,
+        "max_length": 10,
+        "all_values": [
+          "4",
+          "{Rating}+2",
+          "8",
+          "3",
+          "5",
+          "6",
+          "1",
+          "2",
+          "Rating"
+        ],
+        "is_enum_candidate": true
+      },
+      "chummer/gears/gear/modattack": {
+        "count": 11,
+        "presence_rate": 1.0,
+        "unique_values": 3,
+        "examples": [
+          "{Rating}",
+          "{Rating}",
+          "1",
+          "1",
+          "-1",
+          "1",
+          "1",
+          "1",
+          "-1",
+          "-1"
+        ],
+        "type_patterns": [
+          "numeric_string",
+          "mixed_boolean",
+          "enum_candidate"
+        ],
+        "numeric_ratio": 0.8181818181818182,
+        "boolean_ratio": 0.45454545454545453,
+        "min_length": 1,
+        "max_length": 8,
+        "all_values": [
+          "1",
+          "{Rating}",
+          "-1"
+        ],
+        "is_enum_candidate": true
+      },
+      "chummer/gears/gear/required/geardetails/OR/name": {
+        "count": 56,
+        "presence_rate": 1.0,
+        "unique_values": 10,
+        "examples": [
+          "Fuchi Cyber-N",
+          "Fuchi Cyber-Ex",
+          "Fuchi Cyber-N",
+          "Fuchi Cyber-Ex",
+          "Fuchi Cyber-N",
+          "Fuchi Cyber-Ex",
+          "Fuchi Cyber-Ex",
+          "Fuchi Cyber-N",
+          "Fake SIN",
+          "Credstick, Fake (2050)"
+        ],
+        "type_patterns": [
+          "enum_candidate"
+        ],
+        "numeric_ratio": 0.0,
+        "boolean_ratio": 0.0,
+        "min_length": 6,
+        "max_length": 26,
+        "all_values": [
+          "Credstick, Standard (2050)",
+          "ProCam",
+          "Camera",
+          "Credstick, Fake (2050)",
+          "Add Sleaze Modification",
+          "Contacts",
+          "Fuchi Cyber-N",
+          "Fake SIN",
+          "Add Attack Modification",
+          "Fuchi Cyber-Ex"
+        ],
+        "is_enum_candidate": true
+      },
+      "chummer/gears/gear/modsleaze": {
+        "count": 11,
+        "presence_rate": 1.0,
+        "unique_values": 3,
+        "examples": [
+          "{Rating}",
+          "{Rating}",
+          "1",
+          "1",
+          "-1",
+          "-1",
+          "1",
+          "1",
+          "1",
+          "-1"
+        ],
+        "type_patterns": [
+          "numeric_string",
+          "mixed_boolean",
+          "enum_candidate"
+        ],
+        "numeric_ratio": 0.8181818181818182,
+        "boolean_ratio": 0.45454545454545453,
+        "min_length": 1,
+        "max_length": 8,
+        "all_values": [
+          "1",
+          "{Rating}",
+          "-1"
+        ],
+        "is_enum_candidate": true
+      },
+      "chummer/gears/gear/moddataprocessing": {
+        "count": 9,
+        "presence_rate": 1.0,
+        "unique_values": 3,
+        "examples": [
+          "{Rating}",
+          "1",
+          "-1",
+          "-1",
+          "-1",
+          "1",
+          "1",
+          "1",
+          "-1"
+        ],
+        "type_patterns": [
+          "numeric_string",
+          "mixed_boolean",
+          "enum_candidate"
+        ],
+        "numeric_ratio": 0.8888888888888888,
+        "boolean_ratio": 0.4444444444444444,
+        "min_length": 1,
+        "max_length": 8,
+        "all_values": [
+          "1",
+          "{Rating}",
+          "-1"
+        ],
+        "is_enum_candidate": true
+      },
+      "chummer/gears/gear/modfirewall": {
+        "count": 10,
+        "presence_rate": 1.0,
+        "unique_values": 3,
+        "examples": [
+          "{Rating}",
+          "{Rating}",
+          "1",
+          "-1",
+          "-1",
+          "-1",
+          "-1",
+          "1",
+          "1",
+          "1"
+        ],
+        "type_patterns": [
+          "mixed_numeric",
+          "mixed_boolean",
+          "enum_candidate"
+        ],
+        "numeric_ratio": 0.8,
+        "boolean_ratio": 0.4,
+        "min_length": 1,
+        "max_length": 8,
+        "all_values": [
+          "1",
+          "{Rating}",
+          "-1"
+        ],
+        "is_enum_candidate": true
+      },
+      "chummer/gears/gear/required/parentdetails/name": {
+        "count": 2,
+        "presence_rate": 1.0,
+        "unique_values": 2,
+        "examples": [
+          "Cyberdeck",
+          "Micro-Hardpoint"
+        ],
+        "type_patterns": [
+          "enum_candidate"
+        ],
+        "numeric_ratio": 0.0,
+        "boolean_ratio": 0.0,
+        "min_length": 9,
+        "max_length": 15,
+        "all_values": [
+          "Micro-Hardpoint",
+          "Cyberdeck"
+        ],
+        "is_enum_candidate": true
+      },
+      "chummer/gears/gear/required/parentdetails/category": {
+        "count": 1,
+        "presence_rate": 1.0,
+        "unique_values": 1,
+        "examples": [
+          "Headware"
+        ],
+        "type_patterns": [],
+        "numeric_ratio": 0.0,
+        "boolean_ratio": 0.0,
+        "min_length": 8,
+        "max_length": 8,
+        "all_values": [
+          "Headware"
+        ],
+        "is_enum_candidate": false
+      },
+      "chummer/gears/gear/gears/usegear/gears/usegear/name": {
+        "count": 1,
+        "presence_rate": 1.0,
+        "unique_values": 1,
+        "examples": [
+          "Love Life Management"
+        ],
+        "type_patterns": [],
+        "numeric_ratio": 0.0,
+        "boolean_ratio": 0.0,
+        "min_length": 20,
+        "max_length": 20,
+        "all_values": [
+          "Love Life Management"
+        ],
+        "is_enum_candidate": false
+      },
+      "chummer/gears/gear/gears/usegear/gears/usegear/category": {
+        "count": 1,
+        "presence_rate": 1.0,
+        "unique_values": 1,
+        "examples": [
+          "Software"
+        ],
+        "type_patterns": [],
+        "numeric_ratio": 0.0,
+        "boolean_ratio": 0.0,
+        "min_length": 8,
+        "max_length": 8,
+        "all_values": [
+          "Software"
+        ],
+        "is_enum_candidate": false
+      },
+      "chummer/gears/gear/bonus/activesoft/val": {
+        "count": 1,
+        "presence_rate": 1.0,
+        "unique_values": 1,
+        "examples": [
+          "Rating"
+        ],
+        "type_patterns": [],
+        "numeric_ratio": 0.0,
+        "boolean_ratio": 0.0,
+        "min_length": 6,
+        "max_length": 6,
+        "all_values": [
+          "Rating"
+        ],
+        "is_enum_candidate": false
+      },
+      "chummer/gears/gear/bonus/skillsoft/val": {
+        "count": 2,
+        "presence_rate": 1.0,
+        "unique_values": 1,
+        "examples": [
+          "Rating",
+          "Rating"
+        ],
+        "type_patterns": [],
+        "numeric_ratio": 0.0,
+        "boolean_ratio": 0.0,
+        "min_length": 6,
+        "max_length": 6,
+        "all_values": [
+          "Rating"
+        ],
+        "is_enum_candidate": false
+      },
+      "chummer/gears/gear/bonus/limitmodifier/limit": {
+        "count": 9,
+        "presence_rate": 1.0,
+        "unique_values": 3,
+        "examples": [
+          "Social",
+          "Mental",
+          "Mental",
+          "Mental",
+          "Physical",
+          "Mental",
+          "Mental",
+          "Mental",
+          "Mental"
+        ],
+        "type_patterns": [
+          "enum_candidate"
+        ],
+        "numeric_ratio": 0.0,
+        "boolean_ratio": 0.0,
+        "min_length": 6,
+        "max_length": 8,
+        "all_values": [
+          "Social",
+          "Mental",
+          "Physical"
+        ],
+        "is_enum_candidate": true
+      },
+      "chummer/gears/gear/bonus/limitmodifier/value": {
+        "count": 9,
+        "presence_rate": 1.0,
+        "unique_values": 4,
+        "examples": [
+          "1",
+          "Rating",
+          "Rating",
+          "2",
+          "Rating",
+          "Rating",
+          "Rating",
+          "1",
+          "3"
+        ],
+        "type_patterns": [
+          "mixed_numeric",
+          "mixed_boolean",
+          "enum_candidate"
+        ],
+        "numeric_ratio": 0.4444444444444444,
+        "boolean_ratio": 0.2222222222222222,
+        "min_length": 1,
+        "max_length": 6,
+        "all_values": [
+          "Rating",
+          "1",
+          "3",
+          "2"
+        ],
+        "is_enum_candidate": true
+      },
+      "chummer/gears/gear/bonus/limitmodifier/condition": {
+        "count": 9,
+        "presence_rate": 1.0,
+        "unique_values": 7,
+        "examples": [
+          "LimitCondition_Intimidation",
+          "LimitCondition_SkillsActivePerceptionVisual",
+          "LimitCondition_SkillsActivePerceptionHearing",
+          "LimitCondition_SkillsActivePerceptionSpatialRecognizer",
+          "LimitCondition_GearAutopicker",
+          "LimitCondition_SkillsActiveFirstAidMedicine",
+          "LimitCondition_SkillsActiveFirstAidMedicine",
+          "LimitCondition_SkillsActiveDisguiseImpersonation",
+          "LimitCondition_SkillsActiveFirstAidMedicine"
+        ],
+        "type_patterns": [],
+        "numeric_ratio": 0.0,
+        "boolean_ratio": 0.0,
+        "min_length": 27,
+        "max_length": 54,
+        "all_values": [
+          "LimitCondition_SkillsActiveFirstAidMedicine",
+          "LimitCondition_GearAutopicker",
+          "LimitCondition_SkillsActivePerceptionSpatialRecognizer",
+          "LimitCondition_SkillsActivePerceptionHearing",
+          "LimitCondition_SkillsActiveDisguiseImpersonation",
+          "LimitCondition_Intimidation",
+          "LimitCondition_SkillsActivePerceptionVisual"
+        ],
+        "is_enum_candidate": false
+      },
+      "chummer/gears/gear/allowrename": {
+        "count": 65,
+        "presence_rate": 1.0,
+        "unique_values": 1,
+        "examples": [
+          "True",
+          "True",
+          "True",
+          "True",
+          "True",
+          "True",
+          "True",
+          "True",
+          "True",
+          "True"
+        ],
+        "type_patterns": [
+          "boolean_string"
+        ],
+        "numeric_ratio": 0.0,
+        "boolean_ratio": 1.0,
+        "min_length": 4,
+        "max_length": 4,
+        "all_values": [
+          "True"
+        ],
+        "is_enum_candidate": false
+      },
+      "chummer/gears/gear/forbidden/geardetails/OR/name": {
+        "count": 5,
+        "presence_rate": 1.0,
+        "unique_values": 3,
+        "examples": [
+          "Fake SIN",
+          "Fuchi Cyber-N",
+          "Fuchi Cyber-Ex",
+          "Fuchi Cyber-N",
+          "Fuchi Cyber-Ex"
+        ],
+        "type_patterns": [
+          "enum_candidate"
+        ],
+        "numeric_ratio": 0.0,
+        "boolean_ratio": 0.0,
+        "min_length": 8,
+        "max_length": 14,
+        "all_values": [
+          "Fuchi Cyber-Ex",
+          "Fuchi Cyber-N",
+          "Fake SIN"
+        ],
+        "is_enum_candidate": true
+      },
+      "chummer/gears/gear/bonus/smartlink": {
+        "count": 2,
+        "presence_rate": 1.0,
+        "unique_values": 1,
+        "examples": [
+          "1",
+          "1"
+        ],
+        "type_patterns": [
+          "numeric_string",
+          "boolean_string"
+        ],
+        "numeric_ratio": 1.0,
+        "boolean_ratio": 1.0,
+        "min_length": 1,
+        "max_length": 1,
+        "all_values": [
+          "1"
+        ],
+        "is_enum_candidate": false
+      },
+      "chummer/gears/gear/forbidden/geardetails/name": {
+        "count": 1,
+        "presence_rate": 1.0,
+        "unique_values": 1,
+        "examples": [
+          "Microphone, Laser"
+        ],
+        "type_patterns": [],
+        "numeric_ratio": 0.0,
+        "boolean_ratio": 0.0,
+        "min_length": 17,
+        "max_length": 17,
+        "all_values": [
+          "Microphone, Laser"
+        ],
+        "is_enum_candidate": false
+      },
+      "chummer/gears/gear/bonus/toxincontactresist": {
+        "count": 2,
+        "presence_rate": 1.0,
+        "unique_values": 1,
+        "examples": [
+          "Rating",
+          "Rating"
+        ],
+        "type_patterns": [],
+        "numeric_ratio": 0.0,
+        "boolean_ratio": 0.0,
+        "min_length": 6,
+        "max_length": 6,
+        "all_values": [
+          "Rating"
+        ],
+        "is_enum_candidate": false
+      },
+      "chummer/gears/gear/bonus/pathogencontactresist": {
+        "count": 2,
+        "presence_rate": 1.0,
+        "unique_values": 1,
+        "examples": [
+          "Rating",
+          "Rating"
+        ],
+        "type_patterns": [],
+        "numeric_ratio": 0.0,
+        "boolean_ratio": 0.0,
+        "min_length": 6,
+        "max_length": 6,
+        "all_values": [
+          "Rating"
+        ],
+        "is_enum_candidate": false
+      },
+      "chummer/gears/gear/bonus/toxininhalationresist": {
+        "count": 2,
+        "presence_rate": 1.0,
+        "unique_values": 1,
+        "examples": [
+          "Rating",
+          "Rating"
+        ],
+        "type_patterns": [],
+        "numeric_ratio": 0.0,
+        "boolean_ratio": 0.0,
+        "min_length": 6,
+        "max_length": 6,
+        "all_values": [
+          "Rating"
+        ],
+        "is_enum_candidate": false
+      },
+      "chummer/gears/gear/bonus/pathogeninhalationresist": {
+        "count": 2,
+        "presence_rate": 1.0,
+        "unique_values": 1,
+        "examples": [
+          "Rating",
+          "Rating"
+        ],
+        "type_patterns": [],
+        "numeric_ratio": 0.0,
+        "boolean_ratio": 0.0,
+        "min_length": 6,
+        "max_length": 6,
+        "all_values": [
+          "Rating"
+        ],
+        "is_enum_candidate": false
+      },
+      "chummer/gears/gear/bonus/specificskill/name": {
+        "count": 6,
+        "presence_rate": 1.0,
+        "unique_values": 2,
+        "examples": [
+          "Alchemy",
+          "Disenchanting",
+          "Alchemy",
+          "Disenchanting",
+          "Alchemy",
+          "Disenchanting"
+        ],
+        "type_patterns": [
+          "enum_candidate"
+        ],
+        "numeric_ratio": 0.0,
+        "boolean_ratio": 0.0,
+        "min_length": 7,
+        "max_length": 13,
+        "all_values": [
+          "Alchemy",
+          "Disenchanting"
+        ],
+        "is_enum_candidate": true
+      },
+      "chummer/gears/gear/bonus/specificskill/bonus": {
+        "count": 6,
+        "presence_rate": 1.0,
+        "unique_values": 1,
+        "examples": [
+          "Rating",
+          "Rating",
+          "Rating",
+          "Rating",
+          "Rating",
+          "Rating"
+        ],
+        "type_patterns": [],
+        "numeric_ratio": 0.0,
+        "boolean_ratio": 0.0,
+        "min_length": 6,
+        "max_length": 6,
+        "all_values": [
+          "Rating"
+        ],
+        "is_enum_candidate": false
+      },
+      "chummer/gears/gear/bonus/skillattribute/name": {
+        "count": 3,
+        "presence_rate": 1.0,
+        "unique_values": 1,
+        "examples": [
+          "MAG",
+          "MAG",
+          "MAG"
+        ],
+        "type_patterns": [],
+        "numeric_ratio": 0.0,
+        "boolean_ratio": 0.0,
+        "min_length": 3,
+        "max_length": 3,
+        "all_values": [
+          "MAG"
+        ],
+        "is_enum_candidate": false
+      },
+      "chummer/gears/gear/bonus/skillattribute/bonus": {
+        "count": 3,
+        "presence_rate": 1.0,
+        "unique_values": 1,
+        "examples": [
+          "Rating",
+          "Rating",
+          "Rating"
+        ],
+        "type_patterns": [],
+        "numeric_ratio": 0.0,
+        "boolean_ratio": 0.0,
+        "min_length": 6,
+        "max_length": 6,
+        "all_values": [
+          "Rating"
+        ],
+        "is_enum_candidate": false
+      },
+      "chummer/gears/gear/bonus/selectpowers/selectpower/ignorerating": {
+        "count": 3,
+        "presence_rate": 1.0,
+        "unique_values": 1,
+        "examples": [
+          "True",
+          "True",
+          "True"
+        ],
+        "type_patterns": [
+          "boolean_string"
+        ],
+        "numeric_ratio": 0.0,
+        "boolean_ratio": 1.0,
+        "min_length": 4,
+        "max_length": 4,
+        "all_values": [
+          "True"
+        ],
+        "is_enum_candidate": false
+      },
+      "chummer/gears/gear/bonus/selectpowers/selectpower/val": {
+        "count": 3,
+        "presence_rate": 1.0,
+        "unique_values": 1,
+        "examples": [
+          "Rating",
+          "Rating",
+          "Rating"
+        ],
+        "type_patterns": [],
+        "numeric_ratio": 0.0,
+        "boolean_ratio": 0.0,
+        "min_length": 6,
+        "max_length": 6,
+        "all_values": [
+          "Rating"
+        ],
+        "is_enum_candidate": false
+      },
+      "chummer/gears/gear/bonus/selectpowers/selectpower/limit": {
+        "count": 3,
+        "presence_rate": 1.0,
+        "unique_values": 1,
+        "examples": [
+          "Rating",
+          "Rating",
+          "Rating"
+        ],
+        "type_patterns": [],
+        "numeric_ratio": 0.0,
+        "boolean_ratio": 0.0,
+        "min_length": 6,
+        "max_length": 6,
+        "all_values": [
+          "Rating"
+        ],
+        "is_enum_candidate": false
+      },
+      "chummer/gears/gear/bonus/selectpowers/selectpower/pointsperlevel": {
+        "count": 3,
+        "presence_rate": 1.0,
+        "unique_values": 1,
+        "examples": [
+          "0.25",
+          "0.25",
+          "0.25"
+        ],
+        "type_patterns": [
+          "numeric_string"
+        ],
+        "numeric_ratio": 1.0,
+        "boolean_ratio": 0.0,
+        "min_length": 4,
+        "max_length": 4,
+        "all_values": [
+          "0.25"
+        ],
+        "is_enum_candidate": false
+      },
+      "chummer/gears/gear/bonus/spellcategory/name": {
+        "count": 15,
+        "presence_rate": 1.0,
+        "unique_values": 5,
+        "examples": [
+          "Combat",
+          "Detection",
+          "Health",
+          "Illusion",
+          "Manipulation",
+          "Combat",
+          "Detection",
+          "Health",
+          "Illusion",
+          "Manipulation"
+        ],
+        "type_patterns": [
+          "enum_candidate"
+        ],
+        "numeric_ratio": 0.0,
+        "boolean_ratio": 0.0,
+        "min_length": 6,
+        "max_length": 12,
+        "all_values": [
+          "Manipulation",
+          "Detection",
+          "Health",
+          "Combat",
+          "Illusion"
+        ],
+        "is_enum_candidate": true
+      },
+      "chummer/gears/gear/bonus/spellcategory/val": {
+        "count": 15,
+        "presence_rate": 1.0,
+        "unique_values": 1,
+        "examples": [
+          "Rating",
+          "Rating",
+          "Rating",
+          "Rating",
+          "Rating",
+          "Rating",
+          "Rating",
+          "Rating",
+          "Rating",
+          "Rating"
+        ],
+        "type_patterns": [],
+        "numeric_ratio": 0.0,
+        "boolean_ratio": 0.0,
+        "min_length": 6,
+        "max_length": 6,
+        "all_values": [
+          "Rating"
+        ],
+        "is_enum_candidate": false
+      },
+      "chummer/gears/gear/bonus/weaponspecificdice": {
+        "count": 3,
+        "presence_rate": 1.0,
+        "unique_values": 1,
+        "examples": [
+          "Rating",
+          "Rating",
+          "Rating"
+        ],
+        "type_patterns": [],
+        "numeric_ratio": 0.0,
+        "boolean_ratio": 0.0,
+        "min_length": 6,
+        "max_length": 6,
+        "all_values": [
+          "Rating"
+        ],
+        "is_enum_candidate": false
+      },
+      "chummer/gears/gear/required/oneof/quality": {
+        "count": 64,
+        "presence_rate": 1.0,
+        "unique_values": 1,
+        "examples": [
+          "Mentor Spirit",
+          "Mentor Spirit",
+          "Mentor Spirit",
+          "Mentor Spirit",
+          "Mentor Spirit",
+          "Mentor Spirit",
+          "Mentor Spirit",
+          "Mentor Spirit",
+          "Mentor Spirit",
+          "Mentor Spirit"
+        ],
+        "type_patterns": [],
+        "numeric_ratio": 0.0,
+        "boolean_ratio": 0.0,
+        "min_length": 13,
+        "max_length": 13,
+        "all_values": [
+          "Mentor Spirit"
+        ],
+        "is_enum_candidate": false
+      },
+      "chummer/gears/gear/required/geardetails/category": {
+        "count": 3,
+        "presence_rate": 1.0,
+        "unique_values": 1,
+        "examples": [
+          "Drugs",
+          "Drugs",
+          "Drugs"
+        ],
+        "type_patterns": [],
+        "numeric_ratio": 0.0,
+        "boolean_ratio": 0.0,
+        "min_length": 5,
+        "max_length": 5,
+        "all_values": [
+          "Drugs"
+        ],
+        "is_enum_candidate": false
+      },
+      "chummer/gears/gear/matrixcmbonus": {
+        "count": 9,
+        "presence_rate": 1.0,
+        "unique_values": 3,
+        "examples": [
+          "-3",
+          "-2",
+          "-2",
+          "-2",
+          "-2",
+          "2",
+          "2",
+          "2",
+          "2"
+        ],
+        "type_patterns": [
+          "numeric_string",
+          "enum_candidate"
+        ],
+        "numeric_ratio": 1.0,
+        "boolean_ratio": 0.0,
+        "min_length": 1,
+        "max_length": 2,
+        "all_values": [
+          "2",
+          "-3",
+          "-2"
+        ],
+        "is_enum_candidate": true
+      },
+      "chummer/gears/gear/bonus/matrixinitiativedice": {
+        "count": 1,
+        "presence_rate": 1.0,
+        "unique_values": 1,
+        "examples": [
+          "1"
+        ],
+        "type_patterns": [
+          "numeric_string",
+          "boolean_string"
+        ],
+        "numeric_ratio": 1.0,
+        "boolean_ratio": 1.0,
+        "min_length": 1,
+        "max_length": 1,
+        "all_values": [
+          "1"
+        ],
+        "is_enum_candidate": false
+      },
+      "chummer/gears/gear/required/geardetails/OR/attack": {
+        "count": 3,
+        "presence_rate": 1.0,
+        "unique_values": 1,
+        "examples": [
+          "0",
+          "0",
+          "0"
+        ],
+        "type_patterns": [
+          "numeric_string",
+          "boolean_string"
+        ],
+        "numeric_ratio": 1.0,
+        "boolean_ratio": 1.0,
+        "min_length": 1,
+        "max_length": 1,
+        "all_values": [
+          "0"
+        ],
+        "is_enum_candidate": false
+      },
+      "chummer/gears/gear/required/geardetails/OR/sleaze": {
+        "count": 3,
+        "presence_rate": 1.0,
+        "unique_values": 1,
+        "examples": [
+          "0",
+          "0",
+          "0"
+        ],
+        "type_patterns": [
+          "numeric_string",
+          "boolean_string"
+        ],
+        "numeric_ratio": 1.0,
+        "boolean_ratio": 1.0,
+        "min_length": 1,
+        "max_length": 1,
+        "all_values": [
+          "0"
+        ],
+        "is_enum_candidate": false
+      },
+      "chummer/gears/gear/required/geardetails/OR/dataprocessing": {
+        "count": 2,
+        "presence_rate": 1.0,
+        "unique_values": 1,
+        "examples": [
+          "0",
+          "0"
+        ],
+        "type_patterns": [
+          "numeric_string",
+          "boolean_string"
+        ],
+        "numeric_ratio": 1.0,
+        "boolean_ratio": 1.0,
+        "min_length": 1,
+        "max_length": 1,
+        "all_values": [
+          "0"
+        ],
+        "is_enum_candidate": false
+      },
+      "chummer/gears/gear/required/geardetails/OR/firewall": {
+        "count": 2,
+        "presence_rate": 1.0,
+        "unique_values": 1,
+        "examples": [
+          "0",
+          "0"
+        ],
+        "type_patterns": [
+          "numeric_string",
+          "boolean_string"
+        ],
+        "numeric_ratio": 1.0,
+        "boolean_ratio": 1.0,
+        "min_length": 1,
+        "max_length": 1,
+        "all_values": [
+          "0"
+        ],
+        "is_enum_candidate": false
+      },
+      "chummer/gears/gear/required/geardetails/OR/AND/attack": {
+        "count": 6,
+        "presence_rate": 1.0,
+        "unique_values": 1,
+        "examples": [
+          "0",
+          "0",
+          "0",
+          "0",
+          "0",
+          "0"
+        ],
+        "type_patterns": [
+          "numeric_string",
+          "boolean_string"
+        ],
+        "numeric_ratio": 1.0,
+        "boolean_ratio": 1.0,
+        "min_length": 1,
+        "max_length": 1,
+        "all_values": [
+          "0"
+        ],
+        "is_enum_candidate": false
+      },
+      "chummer/gears/gear/required/geardetails/OR/AND/sleaze": {
+        "count": 6,
+        "presence_rate": 1.0,
+        "unique_values": 1,
+        "examples": [
+          "0",
+          "0",
+          "0",
+          "0",
+          "0",
+          "0"
+        ],
+        "type_patterns": [
+          "numeric_string",
+          "boolean_string"
+        ],
+        "numeric_ratio": 1.0,
+        "boolean_ratio": 1.0,
+        "min_length": 1,
+        "max_length": 1,
+        "all_values": [
+          "0"
+        ],
+        "is_enum_candidate": false
+      },
+      "chummer/gears/gear/required/geardetails/OR/AND/dataprocessing": {
+        "count": 6,
+        "presence_rate": 1.0,
+        "unique_values": 1,
+        "examples": [
+          "0",
+          "0",
+          "0",
+          "0",
+          "0",
+          "0"
+        ],
+        "type_patterns": [
+          "numeric_string",
+          "boolean_string"
+        ],
+        "numeric_ratio": 1.0,
+        "boolean_ratio": 1.0,
+        "min_length": 1,
+        "max_length": 1,
+        "all_values": [
+          "0"
+        ],
+        "is_enum_candidate": false
+      },
+      "chummer/gears/gear/required/geardetails/OR/AND/firewall": {
+        "count": 6,
+        "presence_rate": 1.0,
+        "unique_values": 1,
+        "examples": [
+          "0",
+          "0",
+          "0",
+          "0",
+          "0",
+          "0"
+        ],
+        "type_patterns": [
+          "numeric_string",
+          "boolean_string"
+        ],
+        "numeric_ratio": 1.0,
+        "boolean_ratio": 1.0,
+        "min_length": 1,
+        "max_length": 1,
+        "all_values": [
+          "0"
+        ],
+        "is_enum_candidate": false
+      },
+      "chummer/gears/gear/modattributearray": {
+        "count": 12,
+        "presence_rate": 1.0,
+        "unique_values": 12,
+        "examples": [
+          "1,-1,0,0",
+          "1,0,-1,0",
+          "1,0,0,-1",
+          "-1,1,0,0",
+          "0,1,-1,0",
+          "0,1,0,-1",
+          "-1,0,1,0",
+          "0,-1,1,0",
+          "0,0,1,-1",
+          "-1,0,0,1"
+        ],
+        "type_patterns": [
+          "enum_candidate"
+        ],
+        "numeric_ratio": 0.0,
+        "boolean_ratio": 0.0,
+        "min_length": 8,
+        "max_length": 8,
+        "all_values": [
+          "-1,1,0,0",
+          "1,0,-1,0",
+          "0,1,-1,0",
+          "0,0,-1,1",
+          "0,0,1,-1",
+          "0,-1,0,1",
+          "1,0,0,-1",
+          "0,-1,1,0",
+          "-1,0,0,1",
+          "1,-1,0,0",
+          "-1,0,1,0",
+          "0,1,0,-1"
+        ],
+        "is_enum_candidate": true
+      },
+      "chummer/gears/gear/required/geardetails/name": {
+        "count": 10,
+        "presence_rate": 1.0,
+        "unique_values": 3,
+        "examples": [
+          "Altskin",
+          "Altskin",
+          "Altskin",
+          "Altskin",
+          "Altskin",
+          "Binoculars (2050)",
+          "Binoculars (2050)",
+          "Goggles (2050)",
+          "Goggles (2050)",
+          "Goggles (2050)"
+        ],
+        "type_patterns": [
+          "enum_candidate"
+        ],
+        "numeric_ratio": 0.0,
+        "boolean_ratio": 0.0,
+        "min_length": 7,
+        "max_length": 17,
+        "all_values": [
+          "Altskin",
+          "Binoculars (2050)",
+          "Goggles (2050)"
+        ],
+        "is_enum_candidate": true
+      },
+      "chummer/gears/gear/bonus/essencepenaltyt100": {
+        "count": 1,
+        "presence_rate": 1.0,
+        "unique_values": 1,
+        "examples": [
+          "-10*Rating"
+        ],
+        "type_patterns": [],
+        "numeric_ratio": 0.0,
+        "boolean_ratio": 0.0,
+        "min_length": 10,
+        "max_length": 10,
+        "all_values": [
+          "-10*Rating"
+        ],
+        "is_enum_candidate": false
+      },
+      "chummer/gears/gear/allowgear/name": {
+        "count": 8,
+        "presence_rate": 1.0,
+        "unique_values": 2,
+        "examples": [
+          "Internal Synthlink",
+          "External Synthlink",
+          "Internal Synthlink",
+          "External Synthlink",
+          "Internal Synthlink",
+          "External Synthlink",
+          "Internal Synthlink",
+          "External Synthlink"
+        ],
+        "type_patterns": [
+          "enum_candidate"
+        ],
+        "numeric_ratio": 0.0,
+        "boolean_ratio": 0.0,
+        "min_length": 18,
+        "max_length": 18,
+        "all_values": [
+          "External Synthlink",
+          "Internal Synthlink"
+        ],
+        "is_enum_candidate": true
+      }
+    },
+    "attributes": {
+      "chummer@{http://www.w3.org/2001/XMLSchema-instance}schemaLocation": {
+        "count": 1,
+        "unique_values": 1,
+        "examples": [
+          "http://www.w3.org/2001/XMLSchema gear.xsd"
+        ],
+        "all_values": [
+          "http://www.w3.org/2001/XMLSchema gear.xsd"
+        ],
+        "is_enum_candidate": false
+      },
+      "chummer/categories/category@blackmarket": {
+        "count": 64,
+        "unique_values": 11,
+        "examples": [
+          "Magic",
+          "Magic",
+          "Weapons",
+          "Armor",
+          "Electronics"
+        ],
+        "all_values": [
+          "Magic",
+          "Electronics,Software",
+          "Software",
+          "Nanoware",
+          "Armor,Electronics",
+          "Drugs",
+          "Armor",
+          "Armor,Bioware,Cyberware,Drugs,Electronics,Geneware,Magic,Nanoware,Software,Vehicles,Weapons",
+          "Electronics",
+          "Drugs,Software",
+          "Weapons"
+        ],
+        "is_enum_candidate": false
+      },
+      "chummer/gears/gear/bonus/selectweapon@weapondetails": {
+        "count": 2,
+        "unique_values": 2,
+        "examples": [
+          "(contains(ammo, '(c)') or contains(ammo, '(d)')) and name != 'HK Urban Fighter'",
+          "contains(ammo, '(cy)')"
+        ],
+        "all_values": [
+          "(contains(ammo, '(c)') or contains(ammo, '(d)')) and name != 'HK Urban Fighter'",
+          "contains(ammo, '(cy)')"
+        ],
+        "is_enum_candidate": false
+      },
+      "chummer/gears/gear/ammoforweapontype@noextra": {
+        "count": 80,
+        "unique_values": 1,
+        "examples": [
+          "True",
+          "True",
+          "True",
+          "True",
+          "True"
+        ],
+        "all_values": [
+          "True"
+        ],
+        "is_enum_candidate": false
+      },
+      "chummer/gears/gear/bonus/selecttext@xml": {
+        "count": 34,
+        "unique_values": 9,
+        "examples": [
+          "lifemodules.xml",
+          "lifemodules.xml",
+          "vehicles.xml",
+          "vehicles.xml",
+          "vehicles.xml"
+        ],
+        "all_values": [
+          "lifemodules.xml",
+          "weapons.xml",
+          "traditions.xml",
+          "spells.xml",
+          "vehicles.xml",
+          "gear.xml",
+          "skills.xml",
+          "programs.xml",
+          "strings.xml"
+        ],
+        "is_enum_candidate": true
+      },
+      "chummer/gears/gear/bonus/selecttext@xpath": {
+        "count": 34,
+        "unique_values": 15,
+        "examples": [
+          "/chummer/storybuilder/macros/mega/persistent/*",
+          "/chummer/storybuilder/macros/mega/persistent/*",
+          "/chummer/vehicles/vehicle",
+          "/chummer/vehicles/vehicle",
+          "/chummer/vehicles/vehicle"
+        ],
+        "all_values": [
+          "/chummer/weapons/weapon[type = 'Melee']",
+          "/chummer/spells/spell[category = 'Detection']",
+          "/chummer/spells/spell[category = 'Illusion']",
+          "/chummer/vehicles/vehicle",
+          "/chummer/gears/gear[category = 'Toxins']",
+          "/chummer/spells/spell[category = 'Combat']",
+          "/chummer/programs/program",
+          "/chummer/spells/spell[category = 'Manipulation']",
+          "/chummer/weapons/weapon[type = 'Ranged']",
+          "/chummer/skills/skill/name | /chummer/knowledgeskills/skill/name",
+          "/chummer/spirits/spirit/name",
+          "/chummer/spells/spell[category = 'Health']",
+          "/chummer/spiritcategories/category",
+          "/chummer/storybuilder/macros/mega/persistent/*",
+          "/chummer/spells/spell"
+        ],
+        "is_enum_candidate": false
+      },
+      "chummer/gears/gear/bonus/selecttext@allowedit": {
+        "count": 19,
+        "unique_values": 1,
+        "examples": [
+          "True",
+          "True",
+          "True",
+          "True",
+          "True"
+        ],
+        "all_values": [
+          "True"
+        ],
+        "is_enum_candidate": false
+      },
+      "chummer/gears/gear/addweapon@rating": {
+        "count": 3,
+        "unique_values": 1,
+        "examples": [
+          "{Rating}",
+          "{Rating}",
+          "{Rating}"
+        ],
+        "all_values": [
+          "{Rating}"
+        ],
+        "is_enum_candidate": false
+      },
+      "chummer/gears/gear/gears@startcollapsed": {
+        "count": 1,
+        "unique_values": 1,
+        "examples": [
+          "True"
+        ],
+        "all_values": [
+          "True"
+        ],
+        "is_enum_candidate": false
+      },
+      "chummer/gears/gear/gears/usegear/name@select": {
+        "count": 4,
+        "unique_values": 4,
+        "examples": [
+          "Lunchbox",
+          "Bracelet",
+          "Urban Brawl News",
+          "Wristband"
+        ],
+        "all_values": [
+          "Bracelet",
+          "Wristband",
+          "Lunchbox",
+          "Urban Brawl News"
+        ],
+        "is_enum_candidate": true
+      },
+      "chummer/gears/gear/bonus/skillsoft@excludecategory": {
+        "count": 1,
+        "unique_values": 1,
+        "examples": [
+          "Language"
+        ],
+        "all_values": [
+          "Language"
+        ],
+        "is_enum_candidate": false
+      },
+      "chummer/gears/gear/bonus/skillsoft@skillcategory": {
+        "count": 1,
+        "unique_values": 1,
+        "examples": [
+          "Language"
+        ],
+        "all_values": [
+          "Language"
+        ],
+        "is_enum_candidate": false
+      },
+      "chummer/gears/gear/bonus/selectskill@limittoskill": {
+        "count": 2,
+        "unique_values": 2,
+        "examples": [
+          "First Aid,Hardware,Instruction,Aeronautics Mechanic,Automotive Mechanic,Industrial Mechanic,Nautical Mechanic,Navigation,Performance",
+          "Chemistry,Demolitions,Electronic Warfare,Lockpicking,Medicine"
+        ],
+        "all_values": [
+          "First Aid,Hardware,Instruction,Aeronautics Mechanic,Automotive Mechanic,Industrial Mechanic,Nautical Mechanic,Navigation,Performance",
+          "Chemistry,Demolitions,Electronic Warfare,Lockpicking,Medicine"
+        ],
+        "is_enum_candidate": false
+      },
+      "chummer/gears/gear/bonus/selectskill@knowledgeskills": {
+        "count": 1,
+        "unique_values": 1,
+        "examples": [
+          "True"
+        ],
+        "all_values": [
+          "True"
+        ],
+        "is_enum_candidate": false
+      },
+      "chummer/gears/gear/bonus/selectskill@skillcategory": {
+        "count": 2,
+        "unique_values": 2,
+        "examples": [
+          "Academic,Language,Professional",
+          "Physical Active"
+        ],
+        "all_values": [
+          "Academic,Language,Professional",
+          "Physical Active"
+        ],
+        "is_enum_candidate": true
+      },
+      "chummer/gears/gear/bonus@unique": {
+        "count": 19,
+        "unique_values": 7,
+        "examples": [
+          "chemicalprotection",
+          "respirator",
+          "respirator",
+          "combatspellfocus",
+          "detectionspellfocus"
+        ],
+        "all_values": [
+          "chemicalprotection",
+          "combatspellfocus",
+          "respirator",
+          "illusionspellfocus",
+          "manipulationspellfocus",
+          "healthspellfocus",
+          "detectionspellfocus"
+        ],
+        "is_enum_candidate": true
+      },
+      "chummer/gears/gear/bonus/skillattribute@precedence": {
+        "count": 3,
+        "unique_values": 1,
+        "examples": [
+          "0",
+          "0",
+          "0"
+        ],
+        "all_values": [
+          "0"
+        ],
+        "is_enum_candidate": false
+      },
+      "chummer/gears/gear/bonus/weaponspecificdice@type": {
+        "count": 3,
+        "unique_values": 1,
+        "examples": [
+          "Melee",
+          "Melee",
+          "Melee"
+        ],
+        "all_values": [
+          "Melee"
+        ],
+        "is_enum_candidate": false
+      },
+      "chummer/gears/gear/bonus/matrixinitiativedice@precedence": {
+        "count": 1,
+        "unique_values": 1,
+        "examples": [
+          "-1"
+        ],
+        "all_values": [
+          "-1"
+        ],
+        "is_enum_candidate": false
+      },
+      "chummer/gears/gear/required/geardetails/attributearray@operation": {
+        "count": 14,
+        "unique_values": 1,
+        "examples": [
+          "exists",
+          "exists",
+          "exists",
+          "exists",
+          "exists"
+        ],
+        "all_values": [
+          "exists"
+        ],
+        "is_enum_candidate": false
+      },
+      "chummer/gears/gear/required/geardetails/attributearray@NOT": {
+        "count": 2,
+        "unique_values": 0,
+        "examples": [],
+        "all_values": [],
+        "is_enum_candidate": false
+      },
+      "chummer/gears/gear/required/geardetails/OR/attack@operation": {
+        "count": 3,
+        "unique_values": 2,
+        "examples": [
+          "exists",
+          "greaterthan",
+          "greaterthan"
+        ],
+        "all_values": [
+          "greaterthan",
+          "exists"
+        ],
+        "is_enum_candidate": true
+      },
+      "chummer/gears/gear/required/geardetails/OR/attack@NOT": {
+        "count": 1,
+        "unique_values": 0,
+        "examples": [],
+        "all_values": [],
+        "is_enum_candidate": false
+      },
+      "chummer/gears/gear/required/geardetails/OR/sleaze@operation": {
+        "count": 3,
+        "unique_values": 2,
+        "examples": [
+          "exists",
+          "greaterthan",
+          "greaterthan"
+        ],
+        "all_values": [
+          "greaterthan",
+          "exists"
+        ],
+        "is_enum_candidate": true
+      },
+      "chummer/gears/gear/required/geardetails/OR/sleaze@NOT": {
+        "count": 1,
+        "unique_values": 0,
+        "examples": [],
+        "all_values": [],
+        "is_enum_candidate": false
+      },
+      "chummer/gears/gear/required/geardetails/OR/attributearray@operation": {
+        "count": 8,
+        "unique_values": 1,
+        "examples": [
+          "exists",
+          "exists",
+          "exists",
+          "exists",
+          "exists"
+        ],
+        "all_values": [
+          "exists"
+        ],
+        "is_enum_candidate": false
+      },
+      "chummer/gears/gear/required/geardetails/OR/dataprocessing@operation": {
+        "count": 2,
+        "unique_values": 1,
+        "examples": [
+          "greaterthan",
+          "greaterthan"
+        ],
+        "all_values": [
+          "greaterthan"
+        ],
+        "is_enum_candidate": false
+      },
+      "chummer/gears/gear/required/geardetails/OR/firewall@operation": {
+        "count": 2,
+        "unique_values": 1,
+        "examples": [
+          "greaterthan",
+          "greaterthan"
+        ],
+        "all_values": [
+          "greaterthan"
+        ],
+        "is_enum_candidate": false
+      },
+      "chummer/gears/gear/required/geardetails/OR/AND/attack@operation": {
+        "count": 6,
+        "unique_values": 1,
+        "examples": [
+          "greaterthan",
+          "greaterthan",
+          "greaterthan",
+          "greaterthan",
+          "greaterthan"
+        ],
+        "all_values": [
+          "greaterthan"
+        ],
+        "is_enum_candidate": false
+      },
+      "chummer/gears/gear/required/geardetails/OR/AND/sleaze@operation": {
+        "count": 6,
+        "unique_values": 1,
+        "examples": [
+          "greaterthan",
+          "greaterthan",
+          "greaterthan",
+          "greaterthan",
+          "greaterthan"
+        ],
+        "all_values": [
+          "greaterthan"
+        ],
+        "is_enum_candidate": false
+      },
+      "chummer/gears/gear/required/geardetails/OR/AND/dataprocessing@operation": {
+        "count": 6,
+        "unique_values": 1,
+        "examples": [
+          "greaterthan",
+          "greaterthan",
+          "greaterthan",
+          "greaterthan",
+          "greaterthan"
+        ],
+        "all_values": [
+          "greaterthan"
+        ],
+        "is_enum_candidate": false
+      },
+      "chummer/gears/gear/required/geardetails/OR/AND/firewall@operation": {
+        "count": 6,
+        "unique_values": 1,
+        "examples": [
+          "greaterthan",
+          "greaterthan",
+          "greaterthan",
+          "greaterthan",
+          "greaterthan"
+        ],
+        "all_values": [
+          "greaterthan"
+        ],
+        "is_enum_candidate": false
+      },
+      "chummer/gears/gear/required/geardetails/OR/name@operation": {
+        "count": 1,
+        "unique_values": 1,
+        "examples": [
+          "contains"
+        ],
+        "all_values": [
+          "contains"
+        ],
+        "is_enum_candidate": false
+      }
+    },
+    "summary": {
+      "unique_fields": 96,
+      "unique_attributes": 33,
+      "unique_elements": 139
+    }
+  }
+}

@@ -6,6 +6,11 @@ import "shadowmaster/pkg/shadowrun/edition/v5/common"
 
 // Technique represents a martial art technique
 type Technique struct {
+// Name represents name
+// Usage: always present (100.0%)
+// Unique Values: 79
+// Examples: Ballestra, Barbed Hooks, Bending of the Reed (and 7 more)
+// Length: 5-49 characters
 	Name string `xml:"name" json:"name"`
 	Hide *string `xml:"hide,omitempty" json:"hide,omitempty"`
 }
@@ -17,8 +22,23 @@ type Techniques struct {
 
 // MartialArt represents a martial art
 type MartialArt struct {
+// ID represents id
+// Usage: always present (100.0%)
+// Unique Values: 79
+// Examples: d2234863-297d-4a61-a939-ff263381e209, c46f550f-3148-4b91-a0fa-299a57e7879c, 378a6f47-9375-4810-8324-4a6230cd6914 (and 7 more)
 	ID string `xml:"id" json:"id"`
+// Name represents name
+// Usage: always present (100.0%)
+// Unique Values: 79
+// Examples: Ballestra, Barbed Hooks, Bending of the Reed (and 7 more)
+// Length: 5-49 characters
 	Name string `xml:"name" json:"name"`
+// Cost represents cost
+// Type: numeric_string
+// Usage: always present (100.0%)
+// Unique Values: 1
+// Examples: 15
+// Note: 100.0% of values are numeric strings
 	Cost *int `xml:"cost,omitempty" json:"cost,omitempty"`
 	common.Visibility
 	Bonus *common.BaseBonus `xml:"bonus,omitempty" json:"bonus,omitempty"`
@@ -34,7 +54,16 @@ type MartialArts struct {
 
 // TechniqueItem represents a standalone martial art technique
 type TechniqueItem struct {
+// ID represents id
+// Usage: always present (100.0%)
+// Unique Values: 79
+// Examples: d2234863-297d-4a61-a939-ff263381e209, c46f550f-3148-4b91-a0fa-299a57e7879c, 378a6f47-9375-4810-8324-4a6230cd6914 (and 7 more)
 	ID string `xml:"id" json:"id"`
+// Name represents name
+// Usage: always present (100.0%)
+// Unique Values: 79
+// Examples: Ballestra, Barbed Hooks, Bending of the Reed (and 7 more)
+// Length: 5-49 characters
 	Name string `xml:"name" json:"name"`
 	Bonus *common.BaseBonus `xml:"bonus,omitempty" json:"bonus,omitempty"`
 	common.Visibility

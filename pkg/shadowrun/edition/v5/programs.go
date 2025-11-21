@@ -11,6 +11,13 @@ type ProgramCategory struct {
 
 // ProgramCategories represents a collection of program categories
 type ProgramCategories struct {
+// Category represents category
+// Type: enum_candidate
+// Usage: always present (100.0%)
+// Unique Values: 5
+// Examples: Common Programs, Common Programs, Common Programs (and 7 more)
+// Enum Candidate: Advanced Programs, Autosofts, Common Programs, Hacking Programs, Software
+// Length: 8-17 characters
 	Category []ProgramCategory `xml:"category,omitempty" json:"category,omitempty"`
 }
 
@@ -21,16 +28,60 @@ type Tags struct {
 
 // ProgramItem represents a program definition
 type ProgramItem struct {
+// ID represents id
+// Usage: always present (100.0%)
+// Unique Values: 71
+// Examples: bed1f6eb-ead9-49aa-bb24-266c21d7aeb4, 734f653b-35ca-4b26-b837-f64662878e8f, dd35285a-7506-4b7e-8d5a-1b6ea8577e19 (and 7 more)
 	ID string `xml:"id" json:"id"`
+// Name represents name
+// Usage: always present (100.0%)
+// Unique Values: 71
+// Examples: Browse, Configurator, Edit (and 7 more)
+// Length: 4-28 characters
 	Name string `xml:"name" json:"name"`
+// Category represents category
+// Type: enum_candidate
+// Usage: always present (100.0%)
+// Unique Values: 5
+// Examples: Common Programs, Common Programs, Common Programs (and 7 more)
+// Enum Candidate: Advanced Programs, Autosofts, Common Programs, Hacking Programs, Software
+// Length: 8-17 characters
 	Category string `xml:"category" json:"category"`
 	common.SourceReference
 	common.Visibility
 	Tags *Tags `xml:"tags,omitempty" json:"tags,omitempty"`
+// Rating represents rating
+// Type: numeric_string, mixed_boolean, enum_candidate
+// Usage: always present (100.0%)
+// Unique Values: 4
+// Examples: 0, 0, 0 (and 7 more)
+// Note: 100.0% of values are numeric strings
+// Enum Candidate: 0, 2, 3, 6
 	Rating *string `xml:"rating,omitempty" json:"rating,omitempty"`
+// MinRating represents minrating
+// Type: numeric_string, enum_candidate
+// Usage: always present (100.0%)
+// Unique Values: 2
+// Examples: 3, 2
+// Note: 100.0% of values are numeric strings
+// Enum Candidate: 2, 3
 	MinRating *string `xml:"minrating,omitempty" json:"minrating,omitempty"`
 	ComplexForm *string `xml:"complexform,omitempty" json:"complexform,omitempty"`
+// Avail represents avail
+// Type: mixed_numeric, mixed_boolean, enum_candidate
+// Usage: always present (100.0%)
+// Unique Values: 9
+// Examples: 0, 0, 0 (and 7 more)
+// Enum Candidate: (Rating * 2)R, 0, 0F, 12F, 4, 4R, 6R, Rating * 2, Rating * 3
+// Length: 1-13 characters
 	Avail *string `xml:"avail,omitempty" json:"avail,omitempty"`
+// Cost represents cost
+// Type: numeric_string, mixed_boolean
+// Usage: always present (100.0%)
+// Unique Values: 9
+// Examples: 80, 80, 80 (and 7 more)
+// Note: 85.9% of values are numeric strings
+// Length: 1-56 characters
 	Cost *string `xml:"cost,omitempty" json:"cost,omitempty"`
 	Bonus *common.BaseBonus `xml:"bonus,omitempty" json:"bonus,omitempty"`
 	Forbidden *common.Forbidden `xml:"forbidden,omitempty" json:"forbidden,omitempty"`
@@ -54,7 +105,19 @@ type OptionTags struct {
 
 // Option represents a program option
 type Option struct {
+// Name represents name
+// Usage: always present (100.0%)
+// Unique Values: 71
+// Examples: Browse, Configurator, Edit (and 7 more)
+// Length: 4-28 characters
 	Name string `xml:"name" json:"name"`
+// Category represents category
+// Type: enum_candidate
+// Usage: always present (100.0%)
+// Unique Values: 5
+// Examples: Common Programs, Common Programs, Common Programs (and 7 more)
+// Enum Candidate: Advanced Programs, Autosofts, Common Programs, Hacking Programs, Software
+// Length: 8-17 characters
 	Category string `xml:"category" json:"category"`
 	MaxRating string `xml:"maxrating" json:"maxrating"`
 	ComplexForm string `xml:"complexform" json:"complexform"`
