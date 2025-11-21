@@ -1,0 +1,64 @@
+# Git
+.git
+.gitignore
+.gitattributes
+
+# Binaries
+bin/
+*.exe
+*.exe~
+*.dll
+*.so
+*.dylib
+*.test
+
+# Test coverage
+*.out
+coverage.html
+
+# Dependencies
+vendor/
+**/node_modules/
+scripts/__pycache__
+
+# IDE files
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+.DS_Store
+
+# Build artifacts
+*.o
+*.a
+
+# Frontend build output (will be built in container)
+web/static/
+web/ui/dist/
+web/ui/node_modules/
+
+# Data directory (should be mounted as volume)
+data/
+
+# Temporary files
+*.tmp
+*.log
+
+# Environment files
+.env
+.env.local
+.env.*.local
+
+# OS files
+Thumbs.db
+
+# Documentation (not needed in image)
+docs/
+
+# Scripts (not needed in runtime image)
+scripts/
+
+# Plan files
+*.plan.md
+

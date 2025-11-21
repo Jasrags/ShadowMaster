@@ -59,11 +59,35 @@ web/
 
 ## Getting Started
 
+### Quick Setup
+
+**macOS/Linux:**
+```bash
+./scripts/setup.sh
+```
+
+**Windows (PowerShell):**
+```powershell
+.\scripts\setup.ps1
+```
+
+For detailed platform-specific setup instructions, see the [Setup Guide](docs/getting-started/SETUP.md).
+
 ### Prerequisites
 - Go 1.21 or later
-- Make (for using Makefile commands)
+- Node.js 18+ and npm
+- Make (for using Makefile commands on macOS/Linux/WSL)
+- Docker (optional, for containerized deployment)
 
-### Using the Makefile
+**Windows Users:** You can use WSL (Windows Subsystem for Linux) for Makefile support, or use the PowerShell scripts in the `scripts/` directory.
+
+**Note for Windows:** If you get a PowerShell execution policy error, run:
+```powershell
+Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope CurrentUser
+```
+Or use the helper script: `powershell -ExecutionPolicy Bypass -File .\scripts\enable-scripts.ps1`
+
+### Using the Makefile (macOS/Linux/WSL)
 
 The project includes a Makefile for common development tasks:
 
@@ -93,6 +117,24 @@ make test
 
 # Clean build artifacts
 make clean
+```
+
+### Using PowerShell Scripts (Windows)
+
+Windows users can use PowerShell scripts as an alternative to Makefile:
+
+```powershell
+# Check prerequisites
+.\scripts\check-prerequisites.ps1
+
+# Build the project
+.\scripts\build.ps1
+
+# Run the server
+.\scripts\run.ps1
+
+# Run tests
+.\scripts\test.ps1
 ```
 
 ### Running the Server Manually
@@ -218,6 +260,30 @@ All authentication endpoints return/accept JSON and rely on HTTP-only cookies fo
 - Notes/journal system
 - WebSocket real-time updates
 - Edition abstraction layer
+
+## Docker Deployment
+
+ShadowMaster can be deployed using Docker for easy containerized deployment. See the [Deployment Guide](docs/deployment/README.md) for detailed instructions.
+
+### Quick Start with Docker
+
+```bash
+# Build Docker image
+make docker-build
+
+# Run container
+make docker-run
+```
+
+Or using docker-compose:
+
+```bash
+docker-compose up -d
+```
+
+The application will be available at `http://localhost:8080`.
+
+For Portainer deployment, see the [Portainer Deployment Guide](docs/deployment/portainer.md).
 
 ## License
 
