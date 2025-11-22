@@ -22,8 +22,36 @@ Informational issues that don't affect functionality but may indicate data quali
 ### Small Files
 
 #### actions.xml
-- Status: ⏳ Pending Analysis
-- Issues: TBD
+- Status: ✅ Analysis Complete
+- **Total Records**: 260 actions
+- **File Size**: ~50 KB
+- **Well Formed**: Yes
+- **Issues Found**: 
+  - **Critical (12)**: Empty dice field in test element for 12 defensive/interrupt actions:
+    - Block (Interrupt)
+    - Dodge (Interrupt)
+    - Parry (Interrupt)
+    - Full Defense (Interrupt)
+    - Full Matrix Defense (Interrupt)
+    - Pre-Emptive Block (Free)
+    - Pre-Emptive Dodge (Free)
+    - Pre-Emptive Parry (Free)
+    - Acrobatic Defender (Interrupt)
+    - Agile Defender (Interrupt)
+    - Perceptive Defender (Interrupt)
+    - Too Pretty to Hit (Interrupt)
+  - **Root Cause**: The struct definition has `Test ActionTest` as a required field (not a pointer), but 12 actions don't have a `<test>` element in the XML. These actions use `<boosts>` instead. The struct needs to be updated to make `Test *ActionTest` (optional pointer).
+  - **Affected Actions**: All are defensive/interrupt actions that use boost mechanics rather than dice tests.
+  - **Fix Required**: Update `pkg/shadowrun/edition/v5/actions.go` to make `Test` field optional: `Test *ActionTest \`xml:"test,omitempty"\``
+- **Action Types Distribution**:
+  - No: 29
+  - Free: 13
+  - Simple: 68
+  - Complex: 123
+  - Interrupt: 26
+  - Extended: 1
+- **Source Books**: SR5 (197), RG (44), R5 (5), DT (2), KC (12)
+- **ID Validation**: All IDs are valid UUIDs, no duplicates found
 
 #### books.xml
 - Status: ⏳ Pending Analysis

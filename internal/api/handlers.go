@@ -410,9 +410,9 @@ func (h *Handlers) CreateCharacter(w http.ResponseWriter, r *http.Request) {
 		character, err := h.CharacterService.CreateCharacter(req.Edition, req.Name, req.PlayerName, req.EditionData)
 		if err != nil {
 			// Check if it's a validation error (400) or server error (500)
-			if strings.Contains(err.Error(), "unsupported edition") || 
-			   strings.Contains(err.Error(), "invalid creation data") ||
-			   strings.Contains(err.Error(), "all priorities") {
+			if strings.Contains(err.Error(), "unsupported edition") ||
+				strings.Contains(err.Error(), "invalid creation data") ||
+				strings.Contains(err.Error(), "all priorities") {
 				http.Error(w, err.Error(), http.StatusBadRequest)
 			} else {
 				http.Error(w, err.Error(), http.StatusInternalServerError)
@@ -499,15 +499,19 @@ func (h *Handlers) GetKnowledgeSkills(w http.ResponseWriter, r *http.Request) {
 // GetSkills handles GET /api/equipment/skills
 func (h *Handlers) GetSkills(w http.ResponseWriter, r *http.Request) {
 	// Get all skills from the v5 data (both active and knowledge)
+	data := sr5.GetSkillsData()
 	skillList := make([]sr5.Skill, 0)
+
 	// Add active skills
-	for _, skill := range sr5.DataSkills {
-		skillList = append(skillList, skill)
+	for _, skillsGroup := range data.Skills {
+		skillList = append(skillList, skillsGroup.Skill...)
 	}
+
 	// Add knowledge skills
-	for _, skill := range sr5.DataKnowledgeSkills {
-		skillList = append(skillList, skill)
+	for _, knowledgeSkillsGroup := range data.KnowledgeSkills {
+		skillList = append(skillList, knowledgeSkillsGroup.Skill...)
 	}
+
 	respondJSON(w, http.StatusOK, map[string]interface{}{
 		"skills": skillList,
 	})
@@ -515,11 +519,15 @@ func (h *Handlers) GetSkills(w http.ResponseWriter, r *http.Request) {
 
 // GetWeapons handles GET /api/equipment/weapons
 func (h *Handlers) GetWeapons(w http.ResponseWriter, r *http.Request) {
-	// Get all weapons from the v5 data
+	// Get all weapons from the v5 data using the new dataset function
+	data := sr5.GetWeaponsData()
 	weaponList := make([]sr5.Weapon, 0)
-	for _, weapon := range sr5.DataWeapons {
-		weaponList = append(weaponList, weapon)
+
+	// Extract weapons from all Weapons groups
+	for _, weaponsGroup := range data.Weapons {
+		weaponList = append(weaponList, weaponsGroup.Weapon...)
 	}
+
 	respondJSON(w, http.StatusOK, map[string]interface{}{
 		"weapons": weaponList,
 	})
@@ -527,13 +535,10 @@ func (h *Handlers) GetWeapons(w http.ResponseWriter, r *http.Request) {
 
 // GetArmor handles GET /api/equipment/armor
 func (h *Handlers) GetArmor(w http.ResponseWriter, r *http.Request) {
-	// Get all armor from the data
-	armorList := make([]sr5.Armor, 0)
-	for _, armor := range sr5.DataArmors {
-		armorList = append(armorList, armor)
-	}
+	// Get all armor from the v5 data using the new dataset function
+	armor := sr5.GetAllArmor()
 	respondJSON(w, http.StatusOK, map[string]interface{}{
-		"armor": armorList,
+		"armor": armor,
 	})
 }
 
@@ -547,12 +552,16 @@ func (h *Handlers) GetCyberware(w http.ResponseWriter, r *http.Request) {
 
 // GetGears handles GET /api/equipment/gear
 func (h *Handlers) GetGears(w http.ResponseWriter, r *http.Request) {
-	// Get all gear from the data
+	// Get all gear from the v5 data using the new dataset function
+	// TODO: Once gear.xml data file is generated, uncomment and use:
+	// data := sr5.GetGearsData()
+	// gearList := make([]sr5.Gear, 0)
+	// for _, gearsGroup := range data.Gears {
+	// 	gearList = append(gearList, gearsGroup.Gear...)
+	// }
+	// For now, return empty array until data file is generated
 	gearList := make([]sr5.Gear, 0)
-	for _, gear := range sr5.DataGears {
-		gearList = append(gearList, gear)
-	}
-	
+
 	respondJSON(w, http.StatusOK, map[string]interface{}{
 		"gear": gearList,
 	})
@@ -560,11 +569,16 @@ func (h *Handlers) GetGears(w http.ResponseWriter, r *http.Request) {
 
 // GetQualities handles GET /api/equipment/qualities
 func (h *Handlers) GetQualities(w http.ResponseWriter, r *http.Request) {
-	// Get all qualities from the v5 data
-	qualityList := make([]sr5.Quality, 0)
-	for _, quality := range sr5.DataQualities {
-		qualityList = append(qualityList, quality)
-	}
+	// Get all qualities from the v5 data using the new dataset function
+	// TODO: Once qualities.xml data file is generated, uncomment and use:
+	// data := sr5.GetQualitiesData()
+	// qualityList := make([]sr5.QualityItem, 0)
+	// for _, qualitiesGroup := range data.Qualities {
+	// 	qualityList = append(qualityList, qualitiesGroup.Quality...)
+	// }
+	// For now, return empty array until data file is generated
+	qualityList := make([]sr5.QualityItem, 0)
+
 	respondJSON(w, http.StatusOK, map[string]interface{}{
 		"qualities": qualityList,
 	})
@@ -572,23 +586,25 @@ func (h *Handlers) GetQualities(w http.ResponseWriter, r *http.Request) {
 
 // GetBooks handles GET /api/equipment/books
 func (h *Handlers) GetBooks(w http.ResponseWriter, r *http.Request) {
-	// Get all books from the v5 data
-	bookList := make([]sr5.Book, 0, len(sr5.DataBooks))
-	for _, book := range sr5.DataBooks {
-		bookList = append(bookList, book)
-	}
+	// Get all books from the v5 data using the new dataset function
+	books := sr5.GetAllBooks()
 	respondJSON(w, http.StatusOK, map[string]interface{}{
-		"books": bookList,
+		"books": books,
 	})
 }
 
 // GetLifestyles handles GET /api/equipment/lifestyles
 func (h *Handlers) GetLifestyles(w http.ResponseWriter, r *http.Request) {
-	// Get all lifestyles from the v5 data
-	lifestyleList := make([]sr5.Lifestyle, 0, len(sr5.DataLifestyles))
-	for _, lifestyle := range sr5.DataLifestyles {
-		lifestyleList = append(lifestyleList, lifestyle)
-	}
+	// Get all lifestyles from the v5 data using the new dataset function
+	// TODO: Once lifestyles.xml data file is generated, uncomment and use:
+	// data := sr5.GetLifestylesData()
+	// lifestyleList := make([]sr5.LifestyleItem, 0)
+	// if data.Lifestyles != nil {
+	// 	lifestyleList = data.Lifestyles.Lifestyle
+	// }
+	// For now, return empty array until data file is generated
+	lifestyleList := make([]sr5.LifestyleItem, 0)
+
 	respondJSON(w, http.StatusOK, map[string]interface{}{
 		"lifestyles": lifestyleList,
 	})

@@ -23,3 +23,19 @@ func FromBool(b bool) Boolean {
 	}
 	return BooleanFalse
 }
+
+// GetAllBooleanValues returns all valid Boolean enum values
+func GetAllBooleanValues() []Boolean {
+	return []Boolean{
+		BooleanTrue,
+		BooleanFalse,
+	}
+}
+
+// GetAllBooleanStrings returns all valid Boolean enum values as strings
+func GetAllBooleanStrings() []string {
+	return []string{
+		string(BooleanTrue),
+		string(BooleanFalse),
+	}
+}

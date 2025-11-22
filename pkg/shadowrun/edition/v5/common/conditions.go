@@ -8,64 +8,64 @@ type Armormod struct {
 
 // Attribute represents a attribute check
 type Attribute struct {
-	Name string `xml:"name" json:"name"`
-	Total int `xml:"total" json:"total"`
+	Name    string `xml:"name" json:"name"`
+	Total   int    `xml:"total" json:"total"`
 	Natural string `xml:"natural,omitempty" json:"natural,omitempty"`
 }
 
 // Attributetotal represents a attributetotal check
 type Attributetotal struct {
 	Attributes string `xml:"attributes" json:"attributes"`
-	Val int `xml:"val" json:"val"`
-	Natural string `xml:"natural,omitempty" json:"natural,omitempty"`
+	Val        int    `xml:"val" json:"val"`
+	Natural    string `xml:"natural,omitempty" json:"natural,omitempty"`
 }
 
 // Bioware represents a bioware check
 type Bioware struct {
-	Content string `xml:",chardata" json:"+content,omitempty"`
-	Count *int `xml:"count,omitempty" json:"count,omitempty"`
-	Select *string `xml:"select,omitempty" json:"select,omitempty"`
+	Content string  `xml:",chardata" json:"+content,omitempty"`
+	Count   *int    `xml:"count,omitempty" json:"count,omitempty"`
+	Select  *string `xml:"select,omitempty" json:"select,omitempty"`
 }
 
 // Biowarecontains represents a biowarecontains check
 type Biowarecontains struct {
-	Content string `xml:",chardata" json:"+content,omitempty"`
-	Count *int `xml:"count,omitempty" json:"count,omitempty"`
-	Select *string `xml:"select,omitempty" json:"select,omitempty"`
+	Content string  `xml:",chardata" json:"+content,omitempty"`
+	Count   *int    `xml:"count,omitempty" json:"count,omitempty"`
+	Select  *string `xml:"select,omitempty" json:"select,omitempty"`
 }
 
 // Characterquality represents a characterquality check
 type Characterquality struct {
-	Content string `xml:",chardata" json:"+content,omitempty"`
-	Extra *string `xml:"extra,omitempty" json:"extra,omitempty"`
+	Content string  `xml:",chardata" json:"+content,omitempty"`
+	Extra   *string `xml:"extra,omitempty" json:"extra,omitempty"`
 }
 
 // Cyberware represents a cyberware check
 type Cyberware struct {
-	Content string `xml:",chardata" json:"+content,omitempty"`
-	Count *int `xml:"count,omitempty" json:"count,omitempty"`
-	Select *string `xml:"select,omitempty" json:"select,omitempty"`
+	Content string  `xml:",chardata" json:"+content,omitempty"`
+	Count   *int    `xml:"count,omitempty" json:"count,omitempty"`
+	Select  *string `xml:"select,omitempty" json:"select,omitempty"`
 }
 
 // Cyberwarecontains represents a cyberwarecontains check
 type Cyberwarecontains struct {
-	Content string `xml:",chardata" json:"+content,omitempty"`
-	Count *int `xml:"count,omitempty" json:"count,omitempty"`
-	Select *string `xml:"select,omitempty" json:"select,omitempty"`
+	Content string  `xml:",chardata" json:"+content,omitempty"`
+	Count   *int    `xml:"count,omitempty" json:"count,omitempty"`
+	Select  *string `xml:"select,omitempty" json:"select,omitempty"`
 }
 
 // Ess represents a ess check
 type Ess struct {
-	Content string `xml:",chardata" json:"+content,omitempty"`
-	Grade *string `xml:"grade,omitempty" json:"grade,omitempty"`
+	Content string  `xml:",chardata" json:"+content,omitempty"`
+	Grade   *string `xml:"grade,omitempty" json:"grade,omitempty"`
 }
 
 // GearCheck represents a gear check (for requirements)
 type GearCheck struct {
-	Content string `xml:",chardata" json:"+content,omitempty"`
-	Minrating *int `xml:"minrating,omitempty" json:"minrating,omitempty"`
-	Rating *int `xml:"rating,omitempty" json:"rating,omitempty"`
-	Maxrating *int `xml:"maxrating,omitempty" json:"maxrating,omitempty"`
+	Content   string `xml:",chardata" json:"+content,omitempty"`
+	Minrating *int   `xml:"minrating,omitempty" json:"minrating,omitempty"`
+	Rating    *int   `xml:"rating,omitempty" json:"rating,omitempty"`
+	Maxrating *int   `xml:"maxrating,omitempty" json:"maxrating,omitempty"`
 }
 
 // Group represents a group check
@@ -78,20 +78,20 @@ type Grouponeof struct {
 
 // Lifestylequality represents a lifestylequality check
 type Lifestylequality struct {
-	Content string `xml:",chardata" json:"+content,omitempty"`
-	Extra *string `xml:"extra,omitempty" json:"extra,omitempty"`
+	Content string  `xml:",chardata" json:"+content,omitempty"`
+	Extra   *string `xml:"extra,omitempty" json:"extra,omitempty"`
 }
 
 // QualityCheck represents a quality check (for requirements)
 type QualityCheck struct {
-	Content string `xml:",chardata" json:"+content,omitempty"`
-	Extra *string `xml:"extra,omitempty" json:"extra,omitempty"`
+	Content string  `xml:",chardata" json:"+content,omitempty"`
+	Extra   *string `xml:"extra,omitempty" json:"extra,omitempty"`
 }
 
 // Skill represents a skill check
 type Skill struct {
-	Name string `xml:"name" json:"name"`
-	Val int `xml:"val" json:"val"`
+	Name string  `xml:"name" json:"name"`
+	Val  int     `xml:"val" json:"val"`
 	Spec *string `xml:"spec,omitempty" json:"spec,omitempty"`
 	Type *string `xml:"type,omitempty" json:"type,omitempty"`
 }
@@ -99,26 +99,26 @@ type Skill struct {
 // Skillgrouptotal represents a skillgrouptotal check
 type Skillgrouptotal struct {
 	Skillgroups string `xml:"skillgroups" json:"skillgroups"`
-	Val int `xml:"val" json:"val"`
+	Val         int    `xml:"val" json:"val"`
 }
 
 // Skilltotal represents a skilltotal check
 type Skilltotal struct {
-	Skills string `xml:"skills" json:"skills"`
-	Type *string `xml:"type,omitempty" json:"type,omitempty"`
-	Val int `xml:"val" json:"val"`
+	Skills string  `xml:"skills" json:"skills"`
+	Type   *string `xml:"type,omitempty" json:"type,omitempty"`
+	Val    int     `xml:"val" json:"val"`
 }
 
 // SpellcategoryCheck represents a spellcategory check (for requirements)
 type SpellcategoryCheck struct {
-	Name string `xml:"name" json:"name"`
-	Count int `xml:"count" json:"count"`
+	Name  string `xml:"name" json:"name"`
+	Count int    `xml:"count" json:"count"`
 }
 
 // Spelldescriptor represents a spelldescriptor check
 type Spelldescriptor struct {
-	Name string `xml:"name" json:"name"`
-	Count int `xml:"count" json:"count"`
+	Name  string `xml:"name" json:"name"`
+	Count int    `xml:"count" json:"count"`
 }
 
 // accessory represents a accessory check
@@ -202,135 +202,133 @@ type traditionspiritform []string
 // Checks represents the checks group from conditions.xsd
 // This contains all possible check types that can be used in requirements
 type Checks struct {
-	Armormod []Armormod `xml:"armormod,omitempty" json:"armormod,omitempty"`
-	Attribute []Attribute `xml:"attribute,omitempty" json:"attribute,omitempty"`
-	Attributetotal []Attributetotal `xml:"attributetotal,omitempty" json:"attributetotal,omitempty"`
-	Bioware []Bioware `xml:"bioware,omitempty" json:"bioware,omitempty"`
-	Biowarecontains []Biowarecontains `xml:"biowarecontains,omitempty" json:"biowarecontains,omitempty"`
-	Characterquality []Characterquality `xml:"characterquality,omitempty" json:"characterquality,omitempty"`
-	Cyberware []Cyberware `xml:"cyberware,omitempty" json:"cyberware,omitempty"`
-	Cyberwarecontains []Cyberwarecontains `xml:"cyberwarecontains,omitempty" json:"cyberwarecontains,omitempty"`
-	Ess []Ess `xml:"ess,omitempty" json:"ess,omitempty"`
-	Gear []GearCheck `xml:"gear,omitempty" json:"gear,omitempty"`
-	Group []Group `xml:"group,omitempty" json:"group,omitempty"`
-	Grouponeof []Grouponeof `xml:"grouponeof,omitempty" json:"grouponeof,omitempty"`
-	Lifestylequality []Lifestylequality `xml:"lifestylequality,omitempty" json:"lifestylequality,omitempty"`
-	Quality []QualityCheck `xml:"quality,omitempty" json:"quality,omitempty"`
-	Skill []Skill `xml:"skill,omitempty" json:"skill,omitempty"`
-	Skillgrouptotal []Skillgrouptotal `xml:"skillgrouptotal,omitempty" json:"skillgrouptotal,omitempty"`
-	Skilltotal []Skilltotal `xml:"skilltotal,omitempty" json:"skilltotal,omitempty"`
-	Spellcategory []SpellcategoryCheck `xml:"spellcategory,omitempty" json:"spellcategory,omitempty"`
-	Spelldescriptor []Spelldescriptor `xml:"spelldescriptor,omitempty" json:"spelldescriptor,omitempty"`
-	Accessory [][]string `xml:"accessory,omitempty" json:"accessory,omitempty"`
-	Allowspiritfettering [][]string `xml:"allowspiritfettering,omitempty" json:"allowspiritfettering,omitempty"`
-	Art [][]string `xml:"art,omitempty" json:"art,omitempty"`
-	Careerkarma **int `xml:"careerkarma,omitempty" json:"careerkarma,omitempty"`
-	Critterpower [][]string `xml:"critterpower,omitempty" json:"critterpower,omitempty"`
-	Damageresistance **string `xml:"damageresistance,omitempty" json:"damageresistance,omitempty"`
-	Depenabled **string `xml:"depenabled,omitempty" json:"depenabled,omitempty"`
-	Gameplayoption **string `xml:"gameplayoption,omitempty" json:"gameplayoption,omitempty"`
-	Inherited **string `xml:"inherited,omitempty" json:"inherited,omitempty"`
-	Initiategrade **string `xml:"initiategrade,omitempty" json:"initiategrade,omitempty"`
-	Magenabled **string `xml:"magenabled,omitempty" json:"magenabled,omitempty"`
-	Martialart **string `xml:"martialart,omitempty" json:"martialart,omitempty"`
-	Martialtechnique **string `xml:"martialtechnique,omitempty" json:"martialtechnique,omitempty"`
-	Metamagic [][]string `xml:"metamagic,omitempty" json:"metamagic,omitempty"`
-	Metamagicart [][]string `xml:"metamagicart,omitempty" json:"metamagicart,omitempty"`
-	Metatype [][]string `xml:"metatype,omitempty" json:"metatype,omitempty"`
-	Metatypecategory [][]string `xml:"metatypecategory,omitempty" json:"metatypecategory,omitempty"`
-	Metavariant [][]string `xml:"metavariant,omitempty" json:"metavariant,omitempty"`
-	Power [][]string `xml:"power,omitempty" json:"power,omitempty"`
-	Program [][]string `xml:"program,omitempty" json:"program,omitempty"`
-	Resenabled **string `xml:"resenabled,omitempty" json:"resenabled,omitempty"`
-	Spell [][]string `xml:"spell,omitempty" json:"spell,omitempty"`
-	Streetcredvsnotoriety *string `xml:"streetcredvsnotoriety,omitempty" json:"streetcredvsnotoriety,omitempty"`
-	Submersiongrade **int `xml:"submersiongrade,omitempty" json:"submersiongrade,omitempty"`
-	Tradition [][]string `xml:"tradition,omitempty" json:"tradition,omitempty"`
-	Traditionspiritform [][]string `xml:"traditionspiritform,omitempty" json:"traditionspiritform,omitempty"`
+	Armormod              []Armormod           `xml:"armormod,omitempty" json:"armormod,omitempty"`
+	Attribute             []Attribute          `xml:"attribute,omitempty" json:"attribute,omitempty"`
+	Attributetotal        []Attributetotal     `xml:"attributetotal,omitempty" json:"attributetotal,omitempty"`
+	Bioware               []Bioware            `xml:"bioware,omitempty" json:"bioware,omitempty"`
+	Biowarecontains       []Biowarecontains    `xml:"biowarecontains,omitempty" json:"biowarecontains,omitempty"`
+	Characterquality      []Characterquality   `xml:"characterquality,omitempty" json:"characterquality,omitempty"`
+	Cyberware             []Cyberware          `xml:"cyberware,omitempty" json:"cyberware,omitempty"`
+	Cyberwarecontains     []Cyberwarecontains  `xml:"cyberwarecontains,omitempty" json:"cyberwarecontains,omitempty"`
+	Ess                   []Ess                `xml:"ess,omitempty" json:"ess,omitempty"`
+	Gear                  []GearCheck          `xml:"gear,omitempty" json:"gear,omitempty"`
+	Group                 []Group              `xml:"group,omitempty" json:"group,omitempty"`
+	Grouponeof            []Grouponeof         `xml:"grouponeof,omitempty" json:"grouponeof,omitempty"`
+	Lifestylequality      []Lifestylequality   `xml:"lifestylequality,omitempty" json:"lifestylequality,omitempty"`
+	Quality               []QualityCheck       `xml:"quality,omitempty" json:"quality,omitempty"`
+	Skill                 []Skill              `xml:"skill,omitempty" json:"skill,omitempty"`
+	Skillgrouptotal       []Skillgrouptotal    `xml:"skillgrouptotal,omitempty" json:"skillgrouptotal,omitempty"`
+	Skilltotal            []Skilltotal         `xml:"skilltotal,omitempty" json:"skilltotal,omitempty"`
+	Spellcategory         []SpellcategoryCheck `xml:"spellcategory,omitempty" json:"spellcategory,omitempty"`
+	Spelldescriptor       []Spelldescriptor    `xml:"spelldescriptor,omitempty" json:"spelldescriptor,omitempty"`
+	Accessory             [][]string           `xml:"accessory,omitempty" json:"accessory,omitempty"`
+	Allowspiritfettering  [][]string           `xml:"allowspiritfettering,omitempty" json:"allowspiritfettering,omitempty"`
+	Art                   [][]string           `xml:"art,omitempty" json:"art,omitempty"`
+	Careerkarma           **int                `xml:"careerkarma,omitempty" json:"careerkarma,omitempty"`
+	Critterpower          [][]string           `xml:"critterpower,omitempty" json:"critterpower,omitempty"`
+	Damageresistance      **string             `xml:"damageresistance,omitempty" json:"damageresistance,omitempty"`
+	Depenabled            **string             `xml:"depenabled,omitempty" json:"depenabled,omitempty"`
+	Gameplayoption        **string             `xml:"gameplayoption,omitempty" json:"gameplayoption,omitempty"`
+	Inherited             **string             `xml:"inherited,omitempty" json:"inherited,omitempty"`
+	Initiategrade         **string             `xml:"initiategrade,omitempty" json:"initiategrade,omitempty"`
+	Magenabled            **string             `xml:"magenabled,omitempty" json:"magenabled,omitempty"`
+	Martialart            **string             `xml:"martialart,omitempty" json:"martialart,omitempty"`
+	Martialtechnique      **string             `xml:"martialtechnique,omitempty" json:"martialtechnique,omitempty"`
+	Metamagic             [][]string           `xml:"metamagic,omitempty" json:"metamagic,omitempty"`
+	Metamagicart          [][]string           `xml:"metamagicart,omitempty" json:"metamagicart,omitempty"`
+	Metatype              [][]string           `xml:"metatype,omitempty" json:"metatype,omitempty"`
+	Metatypecategory      [][]string           `xml:"metatypecategory,omitempty" json:"metatypecategory,omitempty"`
+	Metavariant           [][]string           `xml:"metavariant,omitempty" json:"metavariant,omitempty"`
+	Power                 [][]string           `xml:"power,omitempty" json:"power,omitempty"`
+	Program               [][]string           `xml:"program,omitempty" json:"program,omitempty"`
+	Resenabled            **string             `xml:"resenabled,omitempty" json:"resenabled,omitempty"`
+	Spell                 [][]string           `xml:"spell,omitempty" json:"spell,omitempty"`
+	Streetcredvsnotoriety *string              `xml:"streetcredvsnotoriety,omitempty" json:"streetcredvsnotoriety,omitempty"`
+	Submersiongrade       **int                `xml:"submersiongrade,omitempty" json:"submersiongrade,omitempty"`
+	Tradition             [][]string           `xml:"tradition,omitempty" json:"tradition,omitempty"`
+	Traditionspiritform   [][]string           `xml:"traditionspiritform,omitempty" json:"traditionspiritform,omitempty"`
 }
 
-// GearDetailOption represents a detail option with operation attribute
-type GearDetailOption struct {
-	Content string `xml:",chardata" json:"+content,omitempty"`
+// DetailOption represents a detail option with operation attribute
+// Used for gear, vehicle, and weapon detail requirements
+type DetailOption struct {
+	Content   string  `xml:",chardata" json:"+content,omitempty"`
 	Operation *string `xml:"operation,attr,omitempty" json:"+@operation,omitempty"`
 }
 
-// VehicleDetailOption represents a detail option with operation attribute
-type VehicleDetailOption struct {
-	Content string `xml:",chardata" json:"+content,omitempty"`
-	Operation *string `xml:"operation,attr,omitempty" json:"+@operation,omitempty"`
-}
+// GearDetailOption is an alias for DetailOption for backward compatibility
+type GearDetailOption = DetailOption
 
-// WeaponDetailOption represents a detail option with operation attribute
-type WeaponDetailOption struct {
-	Content string `xml:",chardata" json:"+content,omitempty"`
-	Operation *string `xml:"operation,attr,omitempty" json:"+@operation,omitempty"`
-}
+// VehicleDetailOption is an alias for DetailOption for backward compatibility
+type VehicleDetailOption = DetailOption
+
+// WeaponDetailOption is an alias for DetailOption for backward compatibility
+type WeaponDetailOption = DetailOption
 
 // GearDetails represents gear detail requirements
 type GearDetails struct {
-	Or *GearDetailOptions `xml:"OR,omitempty" json:"or,omitempty"`
+	Or      *GearDetailOptions `xml:"OR,omitempty" json:"or,omitempty"`
 	Options *GearDetailOptions `xml:",omitempty" json:"options,omitempty"`
 }
 
 // GearDetailOptions contains gear detail option elements
 type GearDetailOptions struct {
-	Id []GearDetailOption `xml:"id,omitempty" json:"id,omitempty"`
+	Id   []GearDetailOption `xml:"id,omitempty" json:"id,omitempty"`
 	Name []GearDetailOption `xml:"name,omitempty" json:"name,omitempty"`
 }
 
 // VehicleDetails represents vehicle detail requirements
 type VehicleDetails struct {
-	Or *VehicleDetailOptions `xml:"OR,omitempty" json:"or,omitempty"`
+	Or      *VehicleDetailOptions `xml:"OR,omitempty" json:"or,omitempty"`
 	Options *VehicleDetailOptions `xml:",omitempty" json:"options,omitempty"`
 }
 
 // VehicleDetailOptions contains vehicle detail option elements
 type VehicleDetailOptions struct {
-	Body []VehicleDetailOption `xml:"body,omitempty" json:"body,omitempty"`
+	Body     []VehicleDetailOption `xml:"body,omitempty" json:"body,omitempty"`
 	Category []VehicleDetailOption `xml:"category,omitempty" json:"category,omitempty"`
-	Id []VehicleDetailOption `xml:"id,omitempty" json:"id,omitempty"`
-	Name []VehicleDetailOption `xml:"name,omitempty" json:"name,omitempty"`
-	Seats []VehicleDetailOption `xml:"seats,omitempty" json:"seats,omitempty"`
+	Id       []VehicleDetailOption `xml:"id,omitempty" json:"id,omitempty"`
+	Name     []VehicleDetailOption `xml:"name,omitempty" json:"name,omitempty"`
+	Seats    []VehicleDetailOption `xml:"seats,omitempty" json:"seats,omitempty"`
 }
 
 // WeaponDetails represents weapon detail requirements
 type WeaponDetails struct {
-	Or *WeaponDetailOptions `xml:"OR,omitempty" json:"or,omitempty"`
-	And *WeaponDetailOptions `xml:"AND,omitempty" json:"and,omitempty"`
+	Or      *WeaponDetailOptions `xml:"OR,omitempty" json:"or,omitempty"`
+	And     *WeaponDetailOptions `xml:"AND,omitempty" json:"and,omitempty"`
 	Options *WeaponDetailOptions `xml:",omitempty" json:"options,omitempty"`
 }
 
 // WeaponDetailOptions contains weapon detail option elements
 type WeaponDetailOptions struct {
-	Ammo []WeaponDetailOption `xml:"ammo,omitempty" json:"ammo,omitempty"`
+	Ammo            []WeaponDetailOption `xml:"ammo,omitempty" json:"ammo,omitempty"`
 	Accessorymounts []WeaponDetailOption `xml:"accessorymounts,omitempty" json:"accessorymounts,omitempty"`
-	Ammocategory []WeaponDetailOption `xml:"ammocategory,omitempty" json:"ammocategory,omitempty"`
-	And *WeaponDetailOptions `xml:"AND,omitempty" json:"and,omitempty"`
-	Category []WeaponDetailOption `xml:"category,omitempty" json:"category,omitempty"`
-	Conceal []WeaponDetailOption `xml:"conceal,omitempty" json:"conceal,omitempty"`
-	Damage []WeaponDetailOption `xml:"damage,omitempty" json:"damage,omitempty"`
-	Id []WeaponDetailOption `xml:"id,omitempty" json:"id,omitempty"`
-	Name []WeaponDetailOption `xml:"name,omitempty" json:"name,omitempty"`
-	Spec []WeaponDetailOption `xml:"spec,omitempty" json:"spec,omitempty"`
-	Spec2 []WeaponDetailOption `xml:"spec2,omitempty" json:"spec2,omitempty"`
-	Type []WeaponDetailOption `xml:"type,omitempty" json:"type,omitempty"`
-	Useskill []WeaponDetailOption `xml:"useskill,omitempty" json:"useskill,omitempty"`
+	Ammocategory    []WeaponDetailOption `xml:"ammocategory,omitempty" json:"ammocategory,omitempty"`
+	And             *WeaponDetailOptions `xml:"AND,omitempty" json:"and,omitempty"`
+	Category        []WeaponDetailOption `xml:"category,omitempty" json:"category,omitempty"`
+	Conceal         []WeaponDetailOption `xml:"conceal,omitempty" json:"conceal,omitempty"`
+	Damage          []WeaponDetailOption `xml:"damage,omitempty" json:"damage,omitempty"`
+	Id              []WeaponDetailOption `xml:"id,omitempty" json:"id,omitempty"`
+	Name            []WeaponDetailOption `xml:"name,omitempty" json:"name,omitempty"`
+	Spec            []WeaponDetailOption `xml:"spec,omitempty" json:"spec,omitempty"`
+	Spec2           []WeaponDetailOption `xml:"spec2,omitempty" json:"spec2,omitempty"`
+	Type            []WeaponDetailOption `xml:"type,omitempty" json:"type,omitempty"`
+	Useskill        []WeaponDetailOption `xml:"useskill,omitempty" json:"useskill,omitempty"`
 }
 
 // WeaponMountDetails represents weapon mount detail requirements
 type WeaponMountDetails struct {
-	Control []string `xml:"control,omitempty" json:"control,omitempty"`
-	Flexibility *string `xml:"flexibility,omitempty" json:"flexibility,omitempty"`
-	Size *string `xml:"size,omitempty" json:"size,omitempty"`
-	Visibility *string `xml:"visibility,omitempty" json:"visibility,omitempty"`
+	Control     []string `xml:"control,omitempty" json:"control,omitempty"`
+	Flexibility *string  `xml:"flexibility,omitempty" json:"flexibility,omitempty"`
+	Size        *string  `xml:"size,omitempty" json:"size,omitempty"`
+	Visibility  *string  `xml:"visibility,omitempty" json:"visibility,omitempty"`
 }
 
 // Details represents the details group from conditions.xsd
 type Details struct {
-	GearDetails *GearDetails `xml:"geardetails,omitempty" json:"geardetails,omitempty"`
-	VehicleDetails *VehicleDetails `xml:"vehicledetails,omitempty" json:"vehicledetails,omitempty"`
-	WeaponDetails *WeaponDetails `xml:"weapondetails,omitempty" json:"weapondetails,omitempty"`
+	GearDetails        *GearDetails        `xml:"geardetails,omitempty" json:"geardetails,omitempty"`
+	VehicleDetails     *VehicleDetails     `xml:"vehicledetails,omitempty" json:"vehicledetails,omitempty"`
+	WeaponDetails      *WeaponDetails      `xml:"weapondetails,omitempty" json:"weapondetails,omitempty"`
 	WeaponMountDetails *WeaponMountDetails `xml:"weaponmountdetails,omitempty" json:"weaponmountdetails,omitempty"`
 }
 
@@ -344,19 +342,54 @@ type RequirementAllOf struct {
 	Checks *Checks `xml:",omitempty" json:"checks,omitempty"`
 }
 
+// ConditionType represents the type of condition (required or forbidden)
+type ConditionType string
+
+const (
+	ConditionTypeRequired  ConditionType = "required"
+	ConditionTypeForbidden ConditionType = "forbidden"
+)
+
+// GetAllConditionTypeValues returns all valid ConditionType enum values
+func GetAllConditionTypeValues() []ConditionType {
+	return []ConditionType{
+		ConditionTypeRequired,
+		ConditionTypeForbidden,
+	}
+}
+
+// GetAllConditionTypeStrings returns all valid ConditionType enum values as strings
+func GetAllConditionTypeStrings() []string {
+	return []string{
+		string(ConditionTypeRequired),
+		string(ConditionTypeForbidden),
+	}
+}
+
+// Condition represents a condition element (required or forbidden)
+// This consolidates the previously separate Required and Forbidden types
+type Condition struct {
+	Type    ConditionType      `xml:"-" json:"type,omitempty"` // Not in XML, inferred from element name
+	AllOf   *RequirementAllOf  `xml:"allof,omitempty" json:"allof,omitempty"`
+	OneOf   []RequirementOneOf `xml:"oneof,omitempty" json:"oneof,omitempty"`
+	Details *Details           `xml:",omitempty" json:"details,omitempty"`
+	Unique  *string            `xml:"unique,attr,omitempty" json:"+@unique,omitempty"`
+}
+
 // Required represents a required condition element
+// This is now an alias for Condition with Type=Required for backward compatibility
 type Required struct {
-	AllOf *RequirementAllOf `xml:"allof,omitempty" json:"allof,omitempty"`
-	OneOf []RequirementOneOf `xml:"oneof,omitempty" json:"oneof,omitempty"`
-	Details *Details `xml:",omitempty" json:"details,omitempty"`
-	Unique *string `xml:"unique,attr,omitempty" json:"+@unique,omitempty"`
+	AllOf   *RequirementAllOf  `xml:"allof,omitempty" json:"allof,omitempty"`
+	OneOf   []RequirementOneOf `xml:"oneof,omitempty" json:"oneof,omitempty"`
+	Details *Details           `xml:",omitempty" json:"details,omitempty"`
+	Unique  *string            `xml:"unique,attr,omitempty" json:"+@unique,omitempty"`
 }
 
 // Forbidden represents a forbidden condition element
+// This is now an alias for Condition with Type=Forbidden for backward compatibility
 type Forbidden struct {
-	AllOf *RequirementAllOf `xml:"allof,omitempty" json:"allof,omitempty"`
-	OneOf []RequirementOneOf `xml:"oneof,omitempty" json:"oneof,omitempty"`
-	Details *Details `xml:",omitempty" json:"details,omitempty"`
-	Unique *string `xml:"unique,attr,omitempty" json:"+@unique,omitempty"`
+	AllOf   *RequirementAllOf  `xml:"allof,omitempty" json:"allof,omitempty"`
+	OneOf   []RequirementOneOf `xml:"oneof,omitempty" json:"oneof,omitempty"`
+	Details *Details           `xml:",omitempty" json:"details,omitempty"`
+	Unique  *string            `xml:"unique,attr,omitempty" json:"+@unique,omitempty"`
 }
-

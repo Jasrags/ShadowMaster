@@ -87,7 +87,12 @@ These must be processed first as they are referenced by all other schemas:
 
 These can be processed independently:
 
-5. **books.xsd** - Already done ✓
+5. **books.xsd** - Book definitions ✅
+
+- Output: `books.go` ✅
+- Types: `Book`, `Books`, `Match`, `Matches`, `BooksChummer` ✅
+- Status: Complete
+
 6. **skills.xsd** - Standalone skill definitions ✅
 
 - Output: `skills.go` ✅
@@ -105,7 +110,14 @@ These can be processed independently:
 
 These depend on Phase 1 but not on each other:
 
-8. **lifestyles.xsd** - Includes conditions (already done ✓)
+8. **lifestyles.xsd** - Includes conditions ✅
+
+- Output: `lifestyles.go` ✅
+- Types: `LifestyleItem`, `LifestyleItems`, `LifestyleCategory`, `LifestyleCategories`, `Comfort`, `Entertainment`, `Necessity`, `Neighborhood`, `Security`, `LifestyleQuality`, `LifestyleQualityItems`, `City`, `District`, `Borough`, and related structures ✅
+- Uses: `common.Visibility`, `common.SourceReference`, `common.Required`, `common.Forbidden` ✅
+- Note: Types renamed to avoid conflicts with character.go (`Lifestyle` → `LifestyleItem`, `Lifestyles` → `LifestyleItems`) ✅
+- Status: Complete
+
 9. **weapons.xsd** - Includes conditions ✅
 
 - Output: `weapons.go` ✅
@@ -187,8 +199,21 @@ These depend on Phase 1 but not on each other:
 
 These depend on Phase 1 and may reference each other:
 
-20. **armor.xsd** - Includes bonuses, conditions (already done ✓)
-21. **bioware.xsd** - Includes bonuses, conditions, gear (already done ✓)
+20. **armor.xsd** - Includes bonuses, conditions ✅
+
+- Output: `armor.go` ✅
+- Types: `ArmorItem`, `ArmorItems`, `ArmorCategory`, `ArmorCategories`, `ArmorModCategory`, `ArmorModCategories`, `ArmorModItem`, `ArmorModItems`, `ArmorItemMods`, and related structures ✅
+- Uses: `common.Visibility`, `common.SourceReference`, `common.BaseBonus`, `common.Required`, `common.Forbidden` ✅
+- Note: Renamed `ArmorMods` → `ArmorItemMods` to avoid conflict with character.go ✅
+- Status: Complete
+
+21. **bioware.xsd** - Includes bonuses, conditions, gear ✅
+
+- Output: `bioware.go` ✅
+- Types: `BiowareItem`, `BiowareItems`, `BiowareGrade`, `BiowareGrades`, `BiowareCategory`, `BiowareCategories`, `BiowareSubsystems` (recursive), and related structures ✅
+- Uses: `common.Visibility`, `common.SourceReference`, `common.BaseBonus`, `common.Required`, `common.Forbidden`, `common.Gears` ✅
+- Status: Complete
+
 22. **cyberware.xsd** - Includes bonuses, conditions, gear ✅
 
 - Output: `cyberware.go` ✅
@@ -666,6 +691,230 @@ These depend on Phase 1 and may reference each other:
 
 - ✅ character.xsd - Root schema with complete character structure including all nested elements and recursive references
 
+### Completed Work (2024-12-XX) - Missing Files Generation
+
+**Step 1: Generate Missing Go Structs - ✅ COMPLETE**
+
+1. **Generation Scripts Created:**
+
+- ✅ `scripts/generate_books_from_xsd.py` - Generates books.go
+- ✅ `scripts/generate_lifestyles_from_xsd.py` - Generates lifestyles.go
+- ✅ `scripts/generate_armor_from_xsd.py` - Generates armor.go
+- ✅ `scripts/generate_bioware_from_xsd.py` - Generates bioware.go
+
+2. **Issues Resolved:**
+
+- ✅ Fixed naming conflicts in lifestyles.go: `Lifestyle` → `LifestyleItem`, `Lifestyles` → `LifestyleItems`, `LifestyleQualities` → `LifestyleQualityItems` to avoid conflicts with character.go
+- ✅ Fixed naming conflicts in armor.go: `ArmorMods` → `ArmorItemMods` to avoid conflict with character.go
+- ✅ Removed unused import in books.go
+- ✅ All generated files use proper import paths (`shadowmaster/pkg/...`)
+- ✅ All linter errors resolved
+
+3. **Generated Files:**
+
+- ✅ `pkg/shadowrun/edition/v5/books.go` - Book structures with language matches
+- ✅ `pkg/shadowrun/edition/v5/lifestyles.go` - Lifestyle structures with qualities, comforts, securities, cities, etc.
+- ✅ `pkg/shadowrun/edition/v5/armor.go` - Armor and armor mod structures
+- ✅ `pkg/shadowrun/edition/v5/bioware.go` - Bioware structures with grades, categories, and recursive subsystems
+
+4. **Statistics:**
+
+- Total Go struct files: 40 (up from 36)
+- All 4 files successfully generated and compiled without errors
+- All files use common abstractions where appropriate
+
+### Completed Work (2024-12-XX) - Step 2
+
+**Step 2: Missing XSD Files - ✅ COMPLETE**
+
+1. **Generation Scripts Created:**
+
+- ✅ `scripts/generate_drugcomponents_from_xsd.py` - Generates drugcomponents.go
+- ✅ `scripts/generate_packs_from_xsd.py` - Generates packs.go
+- ✅ `scripts/generate_priorities_from_xsd.py` - Generates priorities.go
+- ✅ `scripts/generate_qualitylevels_from_xsd.py` - Generates qualitylevels.go
+- ✅ `scripts/generate_ranges_from_xsd.py` - Generates ranges.go
+
+2. **Issues Resolved:**
+
+- ✅ Removed unused import in priorities.go (common package not needed)
+- ✅ All generated files use proper import paths (`shadowmaster/pkg/...`)
+- ✅ All linter errors resolved
+
+3. **Generated Files:**
+
+- ✅ `pkg/shadowrun/edition/v5/drugcomponents.go` - Drug component structures with grades and effects
+- ✅ `pkg/shadowrun/edition/v5/packs.go` - Comprehensive pack structures with all nested types
+- ✅ `pkg/shadowrun/edition/v5/priorities.go` - Priority structures with talents and metatypes
+- ✅ `pkg/shadowrun/edition/v5/qualitylevels.go` - Quality level structures
+- ✅ `pkg/shadowrun/edition/v5/ranges.go` - Range structures with modifiers
+
+4. **Statistics:**
+
+- Total Go struct files: 45 (up from 40)
+- All 5 files successfully generated and compiled without errors
+- packs.go includes comprehensive pack system with recursive gear structures
+
+### Completed Work (2024-12-XX) - Step 3
+
+**Step 3: XML Files Without XSD Schemas - ✅ COMPLETE**
+
+1. **Generation Scripts Created:**
+
+- ✅ `scripts/generate_actions_from_xml.py` - Generates actions.go
+- ✅ `scripts/generate_contacts_from_xml.py` - Generates contacts.go
+- ✅ `scripts/generate_improvements_from_xml.py` - Generates improvements.go
+- ✅ `scripts/generate_licenses_from_xml.py` - Generates licenses.go
+- ✅ `scripts/generate_lifemodules_from_xml.py` - Generates lifemodules.go
+- ✅ `scripts/generate_options_from_xml.py` - Generates options.go
+- ✅ `scripts/generate_settings_from_xml.py` - Generates settings.go
+- ✅ `scripts/generate_sheets_from_xml.py` - Generates sheets.go
+- ✅ `scripts/generate_spiritpowers_from_xml.py` - Generates spiritpowers.go
+- ✅ `scripts/generate_strings_from_xml.py` - Generates strings.go
+- ✅ `scripts/generate_tips_from_xml.py` - Generates tips.go
+
+2. **Issues Resolved:**
+
+- ✅ Fixed naming conflicts: `Contacts` → `ContactTypesList` in contacts.go to avoid conflict with character.go
+- ✅ Fixed naming conflicts: `Improvement` → `ImprovementItem`, `Improvements` → `ImprovementItems` in improvements.go to avoid conflict with character.go
+- ✅ Fixed naming conflicts: `SpiritPower` → `SpiritPowerItem`, `SpiritPowers` → `SpiritPowerItems` in spiritpowers.go to avoid conflict with traditions.go
+- ✅ All generated files use proper import paths (`shadowmaster/pkg/...`)
+- ✅ All linter errors resolved
+
+3. **Generated Files:**
+
+- ✅ `pkg/shadowrun/edition/v5/actions.go` - Action structures with tests
+- ✅ `pkg/shadowrun/edition/v5/contacts.go` - Contact types and related structures
+- ✅ `pkg/shadowrun/edition/v5/improvements.go` - Improvement definitions
+- ✅ `pkg/shadowrun/edition/v5/licenses.go` - License types
+- ✅ `pkg/shadowrun/edition/v5/lifemodules.go` - Life module system with stages, versions, and bonuses
+- ✅ `pkg/shadowrun/edition/v5/options.go` - Configuration options (limb counts, PDF arguments, etc.)
+- ✅ `pkg/shadowrun/edition/v5/settings.go` - Game settings with comprehensive field definitions
+- ✅ `pkg/shadowrun/edition/v5/sheets.go` - Sheet definitions with language support
+- ✅ `pkg/shadowrun/edition/v5/spiritpowers.go` - Spirit power items
+- ✅ `pkg/shadowrun/edition/v5/strings.go` - String constants (matrix attributes, elements, etc.)
+- ✅ `pkg/shadowrun/edition/v5/tips.go` - Tip structures with required/forbidden conditions
+
+4. **Statistics:**
+
+- Total Go struct files: 56 (up from 45)
+- All 11 files successfully generated and compiled without errors
+- All files follow established patterns and use common abstractions where applicable
+- settings.go includes comprehensive struct with 100+ fields for game configuration
+- lifemodules.go includes complex nested structures for life module system
+
+### Remaining Work
+
+**Step 2: Missing XSD Files (Not in Plan) - ✅ COMPLETE**
+
+The following XSD files exist but were never added to the plan:
+
+1. **drugcomponents.xsd** - ✅ COMPLETE
+
+- Output: `drugcomponents.go` ✅
+- Types: `DrugGrade`, `DrugGrades`, `DrugEffect`, `DrugEffects`, `DrugComponent`, `DrugComponents`, `DrugComponentsChummer` ✅
+- Uses: `common.Visibility`, `common.SourceReference` ✅
+- Status: Complete
+
+2. **packs.xsd** - ✅ COMPLETE
+
+- Output: `packs.go` ✅
+- Types: `Pack`, `Packs`, `PacksChummer`, and all nested pack structures (qualities, attributes, skills, powers, programs, spells, spirits, cyberwares, biowares, armors, weapons, gears, vehicles, lifestyles) ✅
+- Status: Complete
+
+3. **priorities.xsd** - ✅ COMPLETE
+
+- Output: `priorities.go` ✅
+- Types: `Priority`, `Priorities`, `PrioritiesChummer`, `PriorityTalent`, `PriorityTalents`, `PriorityMetatype`, `PriorityMetatypes`, `PriorityMetavariant`, `PriorityMetavariants` ✅
+- Status: Complete
+
+4. **qualitylevels.xsd** - ✅ COMPLETE
+
+- Output: `qualitylevels.go` ✅
+- Types: `QualityLevel`, `QualityLevels`, `QualityGroup`, `QualityGroups`, `QualityLevelsChummer` ✅
+- Status: Complete
+
+5. **ranges.xsd** - ✅ COMPLETE
+
+- Output: `ranges.go` ✅
+- Types: `RangeModifiers`, `Range`, `Ranges`, `RangesChummer` ✅
+- Status: Complete
+
+**Step 3: XML Files Without XSD Schemas - ✅ COMPLETE**
+
+The following XML files have no corresponding XSD schemas and were generated by analyzing XML structure directly:
+
+1. **actions.xml** - ✅ COMPLETE
+
+- Output: `actions.go` ✅
+- Types: `Action`, `Actions`, `ActionTest`, `ActionsChummer` ✅
+- Status: Complete
+
+2. **contacts.xml** - ✅ COMPLETE
+
+- Output: `contacts.go` ✅
+- Types: `ContactTypesList`, `Genders`, `Ages`, `PersonalLives`, `ContactTypes`, `PreferredPayments`, `HobbiesVices`, `ContactsChummer` ✅
+- Note: Renamed `Contacts` → `ContactTypesList` to avoid conflict with character.go ✅
+- Status: Complete
+
+3. **improvements.xml** - ✅ COMPLETE
+
+- Output: `improvements.go` ✅
+- Types: `ImprovementItem`, `ImprovementItems`, `ImprovementFields`, `ImprovementsChummer` ✅
+- Note: Renamed `Improvement` → `ImprovementItem`, `Improvements` → `ImprovementItems` to avoid conflict with character.go ✅
+- Status: Complete
+
+4. **licenses.xml** - ✅ COMPLETE
+
+- Output: `licenses.go` ✅
+- Types: `Licenses`, `LicensesChummer` ✅
+- Status: Complete
+
+5. **lifemodules.xml** - ✅ COMPLETE
+
+- Output: `lifemodules.go` ✅
+- Types: `LifeModuleStage`, `LifeModuleStages`, `LifeModule`, `LifeModules`, `LifeModuleVersion`, `LifeModuleVersions`, `LifeModuleBonus`, and all nested bonus structures ✅
+- Status: Complete
+
+6. **options.xml** - ✅ COMPLETE
+
+- Output: `options.go` ✅
+- Types: `Limb`, `LimbCounts`, `PDFArgument`, `PDFArguments`, `PDFAppNames`, `BlackMarketPipelineCategories`, `Avail`, `AvailMap`, `OptionsChummer` ✅
+- Status: Complete
+
+7. **settings.xml** - ✅ COMPLETE
+
+- Output: `settings.go` ✅
+- Types: `Setting`, `Settings`, `SettingsChummer`, `KarmaCost`, `SettingBooks`, `BannedWareGrades`, `RedlineExclusion` ✅
+- Note: Comprehensive struct with all setting fields (100+ fields) ✅
+- Status: Complete
+
+8. **sheets.xml** - ✅ COMPLETE
+
+- Output: `sheets.go` ✅
+- Types: `Sheet`, `Sheets`, `SheetsChummer` ✅
+- Status: Complete
+
+9. **spiritpowers.xml** - ✅ COMPLETE
+
+- Output: `spiritpowers.go` ✅
+- Types: `SpiritPowerItem`, `SpiritPowerItems`, `SpiritPowersChummer` ✅
+- Note: Renamed `SpiritPower` → `SpiritPowerItem`, `SpiritPowers` → `SpiritPowerItems` to avoid conflict with traditions.go ✅
+- Status: Complete
+
+10. **strings.xml** - ✅ COMPLETE
+
+- Output: `strings.go` ✅
+- Types: `MatrixAttributes`, `Elements`, `Immunities`, `SpiritCategories`, `StringsChummer` ✅
+- Status: Complete
+
+11. **tips.xml** - ✅ COMPLETE
+
+- Output: `tips.go` ✅
+- Types: `Tip`, `Tips`, `TipsChummer` ✅
+- Uses: `common.Required`, `common.Forbidden` ✅
+- Status: Complete
+
 ### Notes for Future Work
 
 1. **Type Naming Conflicts:**
@@ -686,8 +935,8 @@ These depend on Phase 1 and may reference each other:
 
 - The common abstractions (SourceReference, Visibility, Grade, Category) are ready to use
 - Phase 2 files successfully use `common.Visibility` and `common.SourceReference`
-- When regenerating existing files (armor.go, bioware.go, etc.), they should embed these structs
-- This will reduce duplication and improve consistency
+- All newly generated files (books, armor, bioware, lifestyles) use common abstractions where appropriate
+- This reduces duplication and improves consistency
 
 4. **Next Steps:**
 
@@ -695,6 +944,9 @@ These depend on Phase 1 and may reference each other:
 - ✅ Phase 3: Process simple dependencies - COMPLETE
 - ✅ Phase 4: Process complex dependencies - COMPLETE
 - ✅ Phase 5: Process root schema (character.xsd) - COMPLETE
+- ✅ Step 1: Generate missing Go structs (books, armor, bioware, lifestyles) - COMPLETE
+- ✅ Step 2: Add and process 5 missing XSD files (drugcomponents, packs, priorities, qualitylevels, ranges) - COMPLETE
+- ✅ Step 3: Investigate and handle 11 XML files without XSD schemas - COMPLETE
 
 5. **Generation Script Improvements:**
 

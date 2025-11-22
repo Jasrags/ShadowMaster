@@ -26,9 +26,8 @@ type BiowareGrades struct {
 }
 
 // BiowareCategory represents a bioware category
-type BiowareCategory struct {
-	Content string `xml:",chardata" json:"+content,omitempty"`
-}
+// This is an alias for CategoryBase for backward compatibility
+type BiowareCategory = common.CategoryBase
 
 // BiowareCategories represents a collection of bioware categories
 type BiowareCategories struct {

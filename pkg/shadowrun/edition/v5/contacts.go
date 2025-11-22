@@ -1,5 +1,7 @@
 package v5
 
+import "shadowmaster/pkg/shadowrun/edition/v5/common"
+
 // This file contains contact structures generated from contacts.xml
 
 // ContactTypesList represents a collection of contact types
@@ -19,14 +21,10 @@ type Ages struct {
 
 // PersonalLives represents a collection of personal life options
 type PersonalLives struct {
-// PersonalLife represents personallife
-// Type: enum_candidate
-// Usage: always present (100.0%)
-// Unique Values: 7
-// Examples: Divorced, Familial Relationship, In Relationship (and 4 more)
-// Enum Candidate: Divorced, Familial Relationship, In Relationship, None of Your Damn Business, Single, Unknown, Widowed
-// Length: 6-26 characters
-	PersonalLife []string `xml:"personallife" json:"personallife"`
+	// PersonalLife represents personallife
+	// Usage: always present (100.0%)
+	// Unique Values: 7
+	PersonalLife []common.PersonalLife `xml:"personallife" json:"personallife"`
 }
 
 // ContactTypes represents a collection of contact types

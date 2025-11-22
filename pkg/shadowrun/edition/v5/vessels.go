@@ -20,9 +20,8 @@ type VesselPower struct {
 }
 
 // VesselCategory represents a vessel category
-type VesselCategory struct {
-	Content string `xml:",chardata" json:"+content,omitempty"`
-}
+// This is an alias for CategoryBase for backward compatibility
+type VesselCategory = common.CategoryBase
 
 // VesselCategories represents a collection of vessel categories
 type VesselCategories struct {

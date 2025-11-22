@@ -98,7 +98,7 @@ type PriorityMetavariant struct {
 // Length: 7-42 characters
 	Name string `xml:"name" json:"name"`
 	Value byte `xml:"value" json:"value"`
-	Karma byte `xml:"karma" json:"karma"`
+	Karma int8 `xml:"karma" json:"karma"`
 }
 
 // PriorityMetavariants represents a collection of metavariants

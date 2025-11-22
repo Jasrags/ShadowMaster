@@ -5,10 +5,8 @@ import "shadowmaster/pkg/shadowrun/edition/v5/common"
 // This file contains armor structures generated from armor.xsd
 
 // ArmorCategory represents an armor category
-type ArmorCategory struct {
-	Content string `xml:",chardata" json:"+content,omitempty"`
-	Blackmarket *string `xml:"blackmarket,attr,omitempty" json:"+@blackmarket,omitempty"`
-}
+// This uses CategoryWithBlackmarket for consistency
+type ArmorCategory = common.CategoryWithBlackmarket
 
 // ArmorCategories represents a collection of armor categories
 type ArmorCategories struct {
@@ -16,10 +14,8 @@ type ArmorCategories struct {
 }
 
 // ArmorModCategory represents an armor mod category
-type ArmorModCategory struct {
-	Content string `xml:",chardata" json:"+content,omitempty"`
-	Blackmarket *string `xml:"blackmarket,attr,omitempty" json:"+@blackmarket,omitempty"`
-}
+// This uses CategoryWithBlackmarket for consistency
+type ArmorModCategory = common.CategoryWithBlackmarket
 
 // ArmorModCategories represents a collection of armor mod categories
 type ArmorModCategories struct {

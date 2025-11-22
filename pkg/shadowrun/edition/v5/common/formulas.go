@@ -48,7 +48,7 @@ func (f *Formula) Evaluate(vars map[string]interface{}) (float64, error) {
 			ratingStr := fmt.Sprintf("%v", rating)
 			expr = strings.ReplaceAll(expr, "Rating", ratingStr)
 		} else {
-			return 0, fmt.Errorf("Rating variable not found in vars")
+			return 0, fmt.Errorf("rating variable not found in vars")
 		}
 	}
 

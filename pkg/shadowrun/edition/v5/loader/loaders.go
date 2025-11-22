@@ -1,8 +1,6 @@
 package loader
 
-import (
-	"shadowmaster/pkg/shadowrun/edition/v5"
-)
+import v5 "shadowmaster/pkg/shadowrun/edition/v5"
 
 // LoadActionsFromXML loads actions.xml into ActionsChummer struct
 func LoadActionsFromXML(filePath string) (*v5.ActionsChummer, error) {
@@ -98,4 +96,3 @@ func LoadSpiritPowersFromXML(filePath string) (*v5.SpiritPowersChummer, error) {
 func LoadSettingsFromXML(filePath string) (*v5.SettingsChummer, error) {
 	return LoadXMLFile[v5.SettingsChummer](filePath)
 }
-
