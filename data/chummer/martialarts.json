@@ -1,0 +1,2561 @@
+{
+  "+@xmlns": "",
+  "+@xmlns:xsi": "http://www.w3.org/2001/XMLSchema-instance",
+  "+@xsi:schemaLocation": "http://www.w3.org/2001/XMLSchema martialarts.xsd",
+  "martialarts": {
+    "martialart": [
+      {
+        "id": "de351d4e-4384-4dda-a37f-e0e4537e1445",
+        "name": "52 Blocks",
+        "bonus": {
+          "addskillspecializationoption": {
+            "skill": "Unarmed Combat",
+            "spec": "52 Blocks"
+          }
+        },
+        "techniques": {
+          "technique": [
+            {
+              "name": "Called Shot (Disarm)"
+            },
+            {
+              "name": "Kick Attack"
+            },
+            {
+              "name": "Multiple Opponent Defense (Defender has Defended)"
+            },
+            {
+              "name": "Pouncing Dragon"
+            },
+            {
+              "name": "Randori (Dirty Trick)"
+            },
+            {
+              "name": "Rooted Tree"
+            },
+            {
+              "name": "Neijia"
+            },
+            {
+              "name": "Strike the Darkness"
+            }
+          ]
+        },
+        "source": "RG",
+        "page": "128"
+      },
+      {
+        "id": "f0b55f24-a184-4d91-a4c2-71b480bace0b",
+        "name": "Aikido",
+        "bonus": {
+          "addskillspecializationoption": {
+            "skill": "Unarmed Combat",
+            "spec": "Aikido"
+          }
+        },
+        "techniques": {
+          "technique": [
+            {
+              "name": "Called Shot (Disarm)"
+            },
+            {
+              "name": "Constrictor's Crush"
+            },
+            {
+              "name": "Counterstrike"
+            },
+            {
+              "name": "Throw Person"
+            },
+            {
+              "name": "Yielding Force (Counterstrike)"
+            },
+            {
+              "name": "Yielding Force (Throw)"
+            },
+            {
+              "name": "Neijia"
+            },
+            {
+              "name": "Strike the Darkness"
+            }
+          ]
+        },
+        "source": "RG",
+        "page": "128"
+      },
+      {
+        "id": "906a51fa-584d-4d5d-8608-f28e08d61902",
+        "name": "Arnis De Mano",
+        "bonus": {
+          "addskillspecializationoption": {
+            "skill": "Clubs",
+            "spec": "Arnis De Mano"
+          }
+        },
+        "techniques": {
+          "technique": [
+            {
+              "name": "Close Quarter Defense Against Firearms"
+            },
+            {
+              "name": "Multiple Opponent Combat"
+            },
+            {
+              "name": "Opposing Force (Parry)"
+            },
+            {
+              "name": "Randori (Vitals)"
+            },
+            {
+              "name": "Two-Weapon Style Attack"
+            },
+            {
+              "name": "Two-Weapon Style Defense"
+            },
+            {
+              "name": "Neijia"
+            },
+            {
+              "name": "Strike the Darkness"
+            }
+          ]
+        },
+        "source": "RG",
+        "page": "128"
+      },
+      {
+        "id": "d866e4b6-01fe-4ec6-b7b9-292d06015fc0",
+        "name": "Bartitsu",
+        "bonus": {
+          "addskillspecializationoption": {
+            "skill": "Clubs",
+            "spec": "Bartitsu"
+          }
+        },
+        "techniques": {
+          "technique": [
+            {
+              "name": "Ballestra"
+            },
+            {
+              "name": "Bending of the Reed"
+            },
+            {
+              "name": "Called Shot (Disarm)"
+            },
+            {
+              "name": "Kick Attack"
+            },
+            {
+              "name": "Riposte"
+            },
+            {
+              "name": "Sweep"
+            },
+            {
+              "name": "Neijia"
+            },
+            {
+              "name": "Strike the Darkness"
+            }
+          ]
+        },
+        "source": "RG",
+        "page": "128"
+      },
+      {
+        "id": "03c1ba09-e8b5-492d-8752-bb9fb2ab438d",
+        "name": "Boxing (Brawler Style)",
+        "bonus": {
+          "addskillspecializationoption": {
+            "skill": "Unarmed Combat",
+            "spec": "Boxing (Brawler Style)"
+          }
+        },
+        "techniques": {
+          "technique": [
+            {
+              "name": "Clinch"
+            },
+            {
+              "name": "Full Offense"
+            },
+            {
+              "name": "Haymaker"
+            },
+            {
+              "name": "Opposing Force (Block)"
+            },
+            {
+              "name": "Stagger"
+            },
+            {
+              "name": "Thunder Strike"
+            },
+            {
+              "name": "Neijia"
+            },
+            {
+              "name": "Strike the Darkness"
+            }
+          ]
+        },
+        "source": "RG",
+        "page": "129"
+      },
+      {
+        "id": "5e02ce33-4cbd-4003-bc93-5d5971749eae",
+        "name": "Boxing (Classic Style)",
+        "bonus": {
+          "addskillspecializationoption": {
+            "skill": "Unarmed Combat",
+            "spec": "Boxing (Classic Style)"
+          }
+        },
+        "techniques": {
+          "technique": [
+            {
+              "name": "Bending of the Reed"
+            },
+            {
+              "name": "Called Shot (Feint)"
+            },
+            {
+              "name": "Haymaker"
+            },
+            {
+              "name": "Oaken Stance (Defense Against Being Knocked Down)"
+            },
+            {
+              "name": "Opposing Force (Block)"
+            },
+            {
+              "name": "Silken Storm"
+            },
+            {
+              "name": "Neijia"
+            },
+            {
+              "name": "Strike the Darkness"
+            }
+          ]
+        },
+        "source": "RG",
+        "page": "129"
+      },
+      {
+        "id": "39b7d61b-b95e-4787-b3b0-df3c2a8bec5c",
+        "name": "Boxing (Swarmer Style)",
+        "bonus": {
+          "addskillspecializationoption": {
+            "skill": "Unarmed Combat",
+            "spec": "Boxing (Swarmer Style)"
+          }
+        },
+        "techniques": {
+          "technique": [
+            {
+              "name": "Bending of the Reed"
+            },
+            {
+              "name": "Called Shot (Feint)"
+            },
+            {
+              "name": "Clinch"
+            },
+            {
+              "name": "Haymaker"
+            },
+            {
+              "name": "Silken Storm"
+            },
+            {
+              "name": "Two-Headed Snake"
+            },
+            {
+              "name": "Neijia"
+            },
+            {
+              "name": "Strike the Darkness"
+            }
+          ]
+        },
+        "source": "RG",
+        "page": "129"
+      },
+      {
+        "id": "5debcf68-304d-4ce6-97ee-9c00fc47f449",
+        "name": "Capoeira",
+        "bonus": {
+          "addskillspecializationoption": {
+            "skill": "Unarmed Combat",
+            "spec": "Capoeira"
+          }
+        },
+        "techniques": {
+          "technique": [
+            {
+              "name": "Bending of the Reed"
+            },
+            {
+              "name": "Called Shot (Feint)"
+            },
+            {
+              "name": "Kick Attack"
+            },
+            {
+              "name": "Kip-Up"
+            },
+            {
+              "name": "Sweep"
+            },
+            {
+              "name": "Tricking"
+            },
+            {
+              "name": "Neijia"
+            },
+            {
+              "name": "Strike the Darkness"
+            }
+          ]
+        },
+        "source": "RG",
+        "page": "129"
+      },
+      {
+        "id": "6ff0927a-ba0c-44cf-abea-0d180768f73b",
+        "name": "Carromeleg",
+        "bonus": {
+          "addskillspecializationoption": {
+            "skill": "Unarmed Combat",
+            "spec": "Carromeleg"
+          }
+        },
+        "techniques": {
+          "technique": [
+            {
+              "name": "Counterstrike"
+            },
+            {
+              "name": "Iaijutsu"
+            },
+            {
+              "name": "Imposing Stone"
+            },
+            {
+              "name": "Riposte"
+            },
+            {
+              "name": "Shadow Block"
+            },
+            {
+              "name": "Stagger"
+            },
+            {
+              "name": "Neijia"
+            },
+            {
+              "name": "Strike the Darkness"
+            }
+          ]
+        },
+        "source": "RG",
+        "page": "129"
+      },
+      {
+        "id": "5170a688-54a0-4a71-899a-edfea5dec0a2",
+        "name": "Chakram Fighting",
+        "techniques": {
+          "technique": [
+            {
+              "name": "Called Shot (Pin)"
+            },
+            {
+              "name": "Close Quarter Firearms (Thrown Weapons)"
+            },
+            {
+              "name": "Knucklebreaker (Disarm)"
+            },
+            {
+              "name": "Multiple Opponent Defense (Friends in Melee)"
+            },
+            {
+              "name": "Opposing Force (Block)"
+            },
+            {
+              "name": "Ti Khao"
+            },
+            {
+              "name": "Neijia"
+            },
+            {
+              "name": "Strike the Darkness"
+            }
+          ]
+        },
+        "source": "RG",
+        "page": "129"
+      },
+      {
+        "id": "2327a330-3b9c-49a9-a392-8f34579e5bce",
+        "name": "Drunken Boxing",
+        "bonus": {
+          "addskillspecializationoption": {
+            "skill": "Unarmed Combat",
+            "spec": "Drunken Boxing"
+          }
+        },
+        "techniques": {
+          "technique": [
+            {
+              "name": "Called Shot (Disarm)"
+            },
+            {
+              "name": "Called Shot (Feint)"
+            },
+            {
+              "name": "Defiant Dance"
+            },
+            {
+              "name": "Full Offense"
+            },
+            {
+              "name": "Karmic Response"
+            },
+            {
+              "name": "Two-Headed Snake"
+            },
+            {
+              "name": "Neijia"
+            },
+            {
+              "name": "Strike the Darkness"
+            }
+          ]
+        },
+        "source": "RG",
+        "page": "130"
+      },
+      {
+        "id": "15ea5191-d615-4320-84e5-bffa90f8873e",
+        "name": "Fiore Dei Liberi",
+        "bonus": {
+          "addskillspecializationoption": {
+            "skill": "Blades",
+            "spec": "Fiore dei Liberi"
+          }
+        },
+        "techniques": {
+          "technique": [
+            {
+              "name": "Called Shot (Break Weapon)"
+            },
+            {
+              "name": "Opposing Force (Parry)"
+            },
+            {
+              "name": "Riposte"
+            },
+            {
+              "name": "Two-Weapon Style Attack"
+            },
+            {
+              "name": "Two-Weapon Style Defense"
+            },
+            {
+              "name": "Yielding Force (Riposte)"
+            },
+            {
+              "name": "Neijia"
+            },
+            {
+              "name": "Strike the Darkness"
+            }
+          ]
+        },
+        "source": "RG",
+        "page": "130"
+      },
+      {
+        "id": "3a16d253-73cb-41e0-8c52-8f5b79d27a58",
+        "name": "Firefight",
+        "bonus": {
+          "addskillspecializationoption": {
+            "skills": {
+              "skill": [
+                "Pistols",
+                "Longarms",
+                "Automatics"
+              ]
+            },
+            "spec": "Firefight"
+          }
+        },
+        "techniques": {
+          "technique": [
+            {
+              "name": "Clinch"
+            },
+            {
+              "name": "Close Quarter Defense Against Firearms"
+            },
+            {
+              "name": "Close Quarter Firearms (Pistols)"
+            },
+            {
+              "name": "Multiple Opponent Defense (Friends in Melee)"
+            },
+            {
+              "name": "Oaken Stance (Defense Against Being Knocked Down)"
+            },
+            {
+              "name": "Oaken Stance (Defense Against Being Charged)"
+            },
+            {
+              "name": "Neijia"
+            },
+            {
+              "name": "Strike the Darkness"
+            }
+          ]
+        },
+        "source": "RG",
+        "page": "130"
+      },
+      {
+        "id": "23c0c9dc-da26-40ab-a578-7cd1a2231ba1",
+        "name": "Gun Kata",
+        "bonus": {
+          "addskillspecializationoption": {
+            "skills": {
+              "skill": [
+                "Pistols",
+                "Longarms",
+                "Automatics"
+              ]
+            },
+            "spec": "Gun Kata"
+          }
+        },
+        "techniques": {
+          "technique": [
+            {
+              "name": "Close Quarter Firearms (Pistols)"
+            },
+            {
+              "name": "Kip-Up"
+            },
+            {
+              "name": "Multiple Opponent Defense (Friends in Melee)"
+            },
+            {
+              "name": "Opposing Force (Block)"
+            },
+            {
+              "name": "Tricking"
+            },
+            {
+              "name": "Stagger"
+            },
+            {
+              "name": "Neijia"
+            },
+            {
+              "name": "Strike the Darkness"
+            }
+          ]
+        },
+        "source": "RG",
+        "page": "130"
+      },
+      {
+        "id": "8940f70e-e81d-4e64-b8e0-52256ee28cf9",
+        "name": "Jeet Kune Do",
+        "bonus": {
+          "addskillspecializationoption": {
+            "skill": "Unarmed Combat",
+            "spec": "Jeet Kune Do"
+          }
+        },
+        "techniques": {
+          "technique": [
+            {
+              "name": "Bending of the Reed"
+            },
+            {
+              "name": "Counterstrike"
+            },
+            {
+              "name": "Kick Attack"
+            },
+            {
+              "name": "Opposing Force (Block)"
+            },
+            {
+              "name": "Randori (Vitals)"
+            },
+            {
+              "name": "Yielding Force (Counterstrike)"
+            },
+            {
+              "name": "Neijia"
+            },
+            {
+              "name": "Strike the Darkness"
+            }
+          ]
+        },
+        "source": "RG",
+        "page": "130"
+      },
+      {
+        "id": "fa11a3e1-a658-4353-8d74-71337e3e1f29",
+        "name": "Jogo Du Pau",
+        "bonus": {
+          "addskillspecializationoption": {
+            "skill": "Clubs",
+            "spec": "Jogo Du Pau"
+          }
+        },
+        "techniques": {
+          "technique": [
+            {
+              "name": "Barbed Hooks"
+            },
+            {
+              "name": "Herding"
+            },
+            {
+              "name": "Oaken Stance (Defense Against Being Charged)"
+            },
+            {
+              "name": "Oaken Stance (Defense Against Being Knocked Down)"
+            },
+            {
+              "name": "Opposing Force (Parry)"
+            },
+            {
+              "name": "Pouncing Dragon"
+            },
+            {
+              "name": "Neijia"
+            },
+            {
+              "name": "Strike the Darkness"
+            }
+          ]
+        },
+        "source": "RG",
+        "page": "130"
+      },
+      {
+        "id": "7415286a-11b7-41b6-ad18-a4c72067cb71",
+        "name": "Jujitsu",
+        "bonus": {
+          "addskillspecializationoption": {
+            "skill": "Unarmed Combat",
+            "spec": "Jujitsu"
+          }
+        },
+        "techniques": {
+          "technique": [
+            {
+              "name": "Called Shot (Disarm)"
+            },
+            {
+              "name": "Chin Na"
+            },
+            {
+              "name": "Clinch"
+            },
+            {
+              "name": "Sacrificial Throw"
+            },
+            {
+              "name": "Sweep"
+            },
+            {
+              "name": "Throw Person"
+            },
+            {
+              "name": "Neijia"
+            },
+            {
+              "name": "Strike the Darkness"
+            }
+          ]
+        },
+        "source": "RG",
+        "page": "131"
+      },
+      {
+        "id": "16391532-2476-4a9f-b5d8-ae058b7e0f27",
+        "name": "Karate",
+        "bonus": {
+          "addskillspecializationoption": {
+            "skill": "Unarmed Combat",
+            "spec": "Karate"
+          }
+        },
+        "techniques": {
+          "technique": [
+            {
+              "name": "Counterstrike"
+            },
+            {
+              "name": "Kick Attack"
+            },
+            {
+              "name": "Kip-Up"
+            },
+            {
+              "name": "Opposing Force (Block)"
+            },
+            {
+              "name": "Sweep"
+            },
+            {
+              "name": "Yielding Force (Counterstrike)"
+            },
+            {
+              "name": "Neijia"
+            },
+            {
+              "name": "Strike the Darkness"
+            }
+          ]
+        },
+        "source": "RG",
+        "page": "131"
+      },
+      {
+        "id": "922b9b42-6e88-4ab6-a255-00fe2b025f2a",
+        "name": "Kenjutsu",
+        "bonus": {
+          "addskillspecializationoption": {
+            "skill": "Blades",
+            "spec": "Kenjutsu"
+          }
+        },
+        "techniques": {
+          "technique": [
+            {
+              "name": "Bending of the Reed"
+            },
+            {
+              "name": "Finishing Move"
+            },
+            {
+              "name": "Iaijutsu"
+            },
+            {
+              "name": "Multiple Opponent Combat"
+            },
+            {
+              "name": "Multiple Opponent Defense (Friends in Melee)"
+            },
+            {
+              "name": "Opposing Force (Parry)"
+            },
+            {
+              "name": "Neijia"
+            },
+            {
+              "name": "Strike the Darkness"
+            }
+          ]
+        },
+        "source": "RG",
+        "page": "131"
+      },
+      {
+        "id": "57a1e6dd-a78c-4fb7-94e0-db4a7b8b7f63",
+        "name": "Knight Errant Tactical",
+        "techniques": {
+          "technique": [
+            {
+              "name": "Barbed Hooks"
+            },
+            {
+              "name": "Broken Fang"
+            },
+            {
+              "name": "Called Shot (Break Weapon)"
+            },
+            {
+              "name": "Close Quarter Defense Against Firearms"
+            },
+            {
+              "name": "Hammerfist"
+            },
+            {
+              "name": "Imposing Stone"
+            },
+            {
+              "name": "Neijia"
+            },
+            {
+              "name": "Strike the Darkness"
+            }
+          ]
+        },
+        "source": "RG",
+        "page": "132"
+      },
+      {
+        "id": "3b3c2299-5a76-4cf4-962f-160fecbdd38b",
+        "name": "Krav Maga",
+        "bonus": {
+          "addskillspecializationoption": {
+            "skill": "Unarmed Combat",
+            "spec": "Krav Maga"
+          }
+        },
+        "techniques": {
+          "technique": [
+            {
+              "name": "Called Shot (Disarm)"
+            },
+            {
+              "name": "Clinch"
+            },
+            {
+              "name": "Constrictor's Crush"
+            },
+            {
+              "name": "Imposing Stone"
+            },
+            {
+              "name": "Releasing Talons"
+            },
+            {
+              "name": "Ti Khao"
+            },
+            {
+              "name": "Neijia"
+            },
+            {
+              "name": "Strike the Darkness"
+            }
+          ]
+        },
+        "source": "RG",
+        "page": "132"
+      },
+      {
+        "id": "69097cfa-cfdd-49d9-b65a-e866d2296b7e",
+        "name": "Kunst Des Fechtens",
+        "bonus": {
+          "addskillspecializationoption": {
+            "skill": "Blades",
+            "spec": "Kunst Des Fechtens (Long Sword Fighting)"
+          }
+        },
+        "techniques": {
+          "technique": [
+            {
+              "name": "Half Sword"
+            },
+            {
+              "name": "Multiple Opponent Combat"
+            },
+            {
+              "name": "Opposing Force (Parry)"
+            },
+            {
+              "name": "Pouncing Dragon"
+            },
+            {
+              "name": "Riposte"
+            },
+            {
+              "name": "Yielding Force (Riposte)"
+            },
+            {
+              "name": "Neijia"
+            },
+            {
+              "name": "Strike the Darkness"
+            }
+          ]
+        },
+        "source": "RG",
+        "page": "132"
+      },
+      {
+        "id": "7a2eb5f6-fbb5-4952-95dc-352570c00e52",
+        "name": "Kyujutsu",
+        "bonus": {
+          "addskillspecializationoption": {
+            "skill": "Archery",
+            "spec": "Kyujutsu"
+          }
+        },
+        "techniques": {
+          "technique": [
+            {
+              "name": "Called Shot (Pin)"
+            },
+            {
+              "name": "Close Quarter Firearms (Archery)"
+            },
+            {
+              "name": "Hammerfist"
+            },
+            {
+              "name": "Knucklebreaker (Blast Out of Hands)"
+            },
+            {
+              "name": "Soaring Shackles"
+            },
+            {
+              "name": "Tricking"
+            },
+            {
+              "name": "Neijia"
+            },
+            {
+              "name": "Strike the Darkness"
+            }
+          ]
+        },
+        "source": "RG",
+        "page": "132"
+      },
+      {
+        "id": "21bc338f-7b28-49df-9d11-e4db076404be",
+        "name": "La Verdadera Destreza",
+        "bonus": {
+          "addskillspecializationoption": {
+            "skill": "Blades",
+            "spec": "La Verdadera Destreza (Rapier Fighting)"
+          }
+        },
+        "techniques": {
+          "technique": [
+            {
+              "name": "Ballestra"
+            },
+            {
+              "name": "Multiple Opponent Combat"
+            },
+            {
+              "name": "Multiple Opponent Defense (Friends in Melee)"
+            },
+            {
+              "name": "Multiple Opponent Defense (Defender has Defended)"
+            },
+            {
+              "name": "Opposing Force (Parry)"
+            },
+            {
+              "name": "Riposte"
+            },
+            {
+              "name": "Yielding Force (Riposte)"
+            },
+            {
+              "name": "Neijia"
+            },
+            {
+              "name": "Strike the Darkness"
+            }
+          ]
+        },
+        "source": "RG",
+        "page": "132"
+      },
+      {
+        "id": "5366bd5d-ff0a-4277-b02d-24e10ac76319",
+        "name": "Lone Star Tactical",
+        "techniques": {
+          "technique": [
+            {
+              "name": "Called Shot (Break Weapon)"
+            },
+            {
+              "name": "Close Quarter Defense Against Firearms"
+            },
+            {
+              "name": "Herding"
+            },
+            {
+              "name": "Multiple Opponent Defense (Defender has Defended)"
+            },
+            {
+              "name": "Oaken Stance (Defense Against Being Charged)"
+            },
+            {
+              "name": "Rooted Tree"
+            },
+            {
+              "name": "Neijia"
+            },
+            {
+              "name": "Strike the Darkness"
+            }
+          ]
+        },
+        "source": "RG",
+        "page": "132"
+      },
+      {
+        "id": "af544c56-2c65-403a-a83b-e861e02c72bb",
+        "name": "Muay Thai",
+        "bonus": {
+          "addskillspecializationoption": {
+            "skill": "Unarmed Combat",
+            "spec": "Muay Thai"
+          }
+        },
+        "techniques": {
+          "technique": [
+            {
+              "name": "Clinch"
+            },
+            {
+              "name": "Crushing Jaws"
+            },
+            {
+              "name": "Finishing Move"
+            },
+            {
+              "name": "Kick Attack"
+            },
+            {
+              "name": "Thunder Strike"
+            },
+            {
+              "name": "Ti Khao"
+            },
+            {
+              "name": "Neijia"
+            },
+            {
+              "name": "Strike the Darkness"
+            }
+          ]
+        },
+        "source": "RG",
+        "page": "133"
+      },
+      {
+        "id": "0b2aba07-cd8e-40b8-8bd5-a89b0c7d9699",
+        "name": "Ninjutsu",
+        "techniques": {
+          "technique": [
+            {
+              "name": "Counterstrike"
+            },
+            {
+              "name": "Dim Mak"
+            },
+            {
+              "name": "Flying Kick"
+            },
+            {
+              "name": "Kick Attack"
+            },
+            {
+              "name": "Randori (Dirty Trick)"
+            },
+            {
+              "name": "Tricking"
+            },
+            {
+              "name": "Neijia"
+            },
+            {
+              "name": "Strike the Darkness"
+            }
+          ]
+        },
+        "source": "RG",
+        "page": "133"
+      },
+      {
+        "id": "f8c89602-b72f-4613-81b8-72951dcad4c9",
+        "name": "Okichitaw",
+        "bonus": {
+          "addskillspecializationoption": {
+            "skill": "Clubs",
+            "spec": "Okichitaw"
+          }
+        },
+        "techniques": {
+          "technique": [
+            {
+              "name": "Called Shot (Pin)"
+            },
+            {
+              "name": "Counterstrike"
+            },
+            {
+              "name": "Opposing Force (Parry)"
+            },
+            {
+              "name": "Randori (Vitals)"
+            },
+            {
+              "name": "Shadow Block"
+            },
+            {
+              "name": "Sweep"
+            },
+            {
+              "name": "Neijia"
+            },
+            {
+              "name": "Strike the Darkness"
+            }
+          ]
+        },
+        "source": "RG",
+        "page": "133"
+      },
+      {
+        "id": "e613f285-bc8d-40a2-a968-da4aa567cbcc",
+        "name": "Parkour",
+        "bonus": {
+          "addskillspecializationoption": {
+            "skill": "Gymnastics",
+            "spec": "Parkour"
+          }
+        },
+        "techniques": {
+          "technique": [
+            {
+              "name": "Bending of the Reed"
+            },
+            {
+              "name": "Kip-Up"
+            },
+            {
+              "name": "Leaping Mantis"
+            },
+            {
+              "name": "Monkey Climb"
+            },
+            {
+              "name": "Rolling Clouds"
+            },
+            {
+              "name": "Shadow Block"
+            },
+            {
+              "name": "Neijia"
+            },
+            {
+              "name": "Strike the Darkness"
+            }
+          ]
+        },
+        "source": "RG",
+        "page": "133"
+      },
+      {
+        "id": "0b792f6c-c12e-4e93-b830-1f201e267bbc",
+        "name": "Pentjak-Silat",
+        "bonus": {
+          "addskillspecializationoption": {
+            "skill": "Blades",
+            "spec": "Pentjak-Silat"
+          }
+        },
+        "techniques": {
+          "technique": [
+            {
+              "name": "Called Shot (Break Weapon)"
+            },
+            {
+              "name": "Called Shot (Disarm)"
+            },
+            {
+              "name": "Dim Mak"
+            },
+            {
+              "name": "Jiao Di (Charge)"
+            },
+            {
+              "name": "Randori (Vitals)"
+            },
+            {
+              "name": "Silken Storm"
+            },
+            {
+              "name": "Neijia"
+            },
+            {
+              "name": "Strike the Darkness"
+            }
+          ]
+        },
+        "source": "RG",
+        "page": "133"
+      },
+      {
+        "id": "36e8103e-a362-49d5-959b-689d06dac350",
+        "name": "Quarterstaff Fighting",
+        "bonus": {
+          "addskillspecializationoption": {
+            "skill": "Clubs",
+            "spec": "Quarterstaff Fighting"
+          }
+        },
+        "techniques": {
+          "technique": [
+            {
+              "name": "Jiao Di (Knock Down)"
+            },
+            {
+              "name": "Multiple Opponent Combat"
+            },
+            {
+              "name": "Opposing Force (Parry)"
+            },
+            {
+              "name": "Sweep"
+            },
+            {
+              "name": "Stagger"
+            },
+            {
+              "name": "Thunder Strike"
+            },
+            {
+              "name": "Neijia"
+            },
+            {
+              "name": "Strike the Darkness"
+            }
+          ]
+        },
+        "source": "RG",
+        "page": "133"
+      },
+      {
+        "id": "3771abcc-6307-4ddf-9ab5-df86bc591da6",
+        "name": "Sangre Y Acero",
+        "bonus": {
+          "addskillspecializationoption": {
+            "skill": "Unarmed Combat",
+            "spec": "Sangre Y Acero"
+          }
+        },
+        "techniques": {
+          "technique": [
+            {
+              "name": "Called Shot (Break Weapon)"
+            },
+            {
+              "name": "Clinch"
+            },
+            {
+              "name": "Crushing Jaws"
+            },
+            {
+              "name": "Finishing Move"
+            },
+            {
+              "name": "Pouncing Dragon"
+            },
+            {
+              "name": "Tricking"
+            },
+            {
+              "name": "Neijia"
+            },
+            {
+              "name": "Strike the Darkness"
+            }
+          ]
+        },
+        "source": "RG",
+        "page": "133"
+      },
+      {
+        "id": "3e0d63a0-b784-4315-aa66-89b92818a267",
+        "name": "Tae Kwon Do",
+        "bonus": {
+          "addskillspecializationoption": {
+            "skill": "Unarmed Combat",
+            "spec": "Tae Kwon Do"
+          }
+        },
+        "techniques": {
+          "technique": [
+            {
+              "name": "Counterstrike"
+            },
+            {
+              "name": "Flying Kick"
+            },
+            {
+              "name": "Kick Attack"
+            },
+            {
+              "name": "Opposing Force (Block)"
+            },
+            {
+              "name": "Sweep"
+            },
+            {
+              "name": "Tricking"
+            },
+            {
+              "name": "Neijia"
+            },
+            {
+              "name": "Strike the Darkness"
+            }
+          ]
+        },
+        "source": "RG",
+        "page": "133"
+      },
+      {
+        "id": "f5829122-0973-4e27-98b4-f54c9343a57c",
+        "name": "The Cowboy Way",
+        "bonus": {
+          "addskillspecializationoption": {
+            "skills": {
+              "skill": [
+                "Pistols",
+                "Longarms",
+                "Automatics"
+              ]
+            },
+            "spec": "The Cowboy Way"
+          }
+        },
+        "techniques": {
+          "technique": [
+            {
+              "name": "Called Shot (Entanglement)"
+            },
+            {
+              "name": "Hammerfist"
+            },
+            {
+              "name": "Haymaker"
+            },
+            {
+              "name": "Knucklebreaker (Blast Out of Hands)"
+            },
+            {
+              "name": "Stagger"
+            },
+            {
+              "name": "Tricking"
+            },
+            {
+              "name": "Neijia"
+            },
+            {
+              "name": "Strike the Darkness"
+            }
+          ]
+        },
+        "source": "RG",
+        "page": "133"
+      },
+      {
+        "id": "6b5ae017-9fb1-46df-839b-4548ad360534",
+        "name": "Turkish Archery",
+        "bonus": {
+          "addskillspecializationoption": {
+            "skill": "Archery",
+            "spec": "Turkish Archery"
+          }
+        },
+        "techniques": {
+          "technique": [
+            {
+              "name": "Called Shot (Pin)"
+            },
+            {
+              "name": "Close Quarter Defense Against Firearms"
+            },
+            {
+              "name": "Hammerfist"
+            },
+            {
+              "name": "Silken Storm"
+            },
+            {
+              "name": "Soaring Shackles"
+            },
+            {
+              "name": "Thunder Strike"
+            },
+            {
+              "name": "Neijia"
+            },
+            {
+              "name": "Strike the Darkness"
+            }
+          ]
+        },
+        "source": "RG",
+        "page": "134"
+      },
+      {
+        "id": "18c44152-1ca8-435c-a72d-e443d3f1e7c6",
+        "name": "Whip Fighting",
+        "techniques": {
+          "technique": [
+            {
+              "name": "Bending of the Reed"
+            },
+            {
+              "name": "Called Shot (Entanglement)"
+            },
+            {
+              "name": "Hammerfist"
+            },
+            {
+              "name": "Herding"
+            },
+            {
+              "name": "Multiple Opponent Defense (Friends in Melee)"
+            },
+            {
+              "name": "Multiple Opponent Combat"
+            },
+            {
+              "name": "Neijia"
+            },
+            {
+              "name": "Strike the Darkness"
+            }
+          ]
+        },
+        "source": "RG",
+        "page": "134"
+      },
+      {
+        "id": "df0b9bb0-bad9-4bb9-b543-eb73edfe34e8",
+        "name": "Wildcat",
+        "bonus": {
+          "addskillspecializationoption": {
+            "skill": "Unarmed Combat",
+            "spec": "Wildcat"
+          }
+        },
+        "techniques": {
+          "technique": [
+            {
+              "name": "Clinch"
+            },
+            {
+              "name": "Counterstrike"
+            },
+            {
+              "name": "Dim Mak"
+            },
+            {
+              "name": "Finishing Move"
+            },
+            {
+              "name": "Multiple Opponent Combat"
+            },
+            {
+              "name": "Ti Khao"
+            },
+            {
+              "name": "Neijia"
+            },
+            {
+              "name": "Strike the Darkness"
+            }
+          ]
+        },
+        "source": "RG",
+        "page": "134"
+      },
+      {
+        "id": "24ee13d8-9b6d-4fc0-908c-d9904db364c7",
+        "name": "Wrestling (Sport Style)",
+        "bonus": {
+          "addskillspecializationoption": {
+            "skill": "Unarmed Combat",
+            "spec": "Wrestling (Sport Style)"
+          }
+        },
+        "techniques": {
+          "technique": [
+            {
+              "name": "Clinch"
+            },
+            {
+              "name": "Constrictor's Crush"
+            },
+            {
+              "name": "Jiao Di (Knock Down)"
+            },
+            {
+              "name": "Karmic Response"
+            },
+            {
+              "name": "Sweep"
+            },
+            {
+              "name": "Throw Person"
+            },
+            {
+              "name": "Neijia"
+            },
+            {
+              "name": "Strike the Darkness"
+            }
+          ]
+        },
+        "source": "RG",
+        "page": "134"
+      },
+      {
+        "id": "03e7e806-2bf6-43d2-ae51-9a724aca67fc",
+        "name": "Wrestling (Sumo Style)",
+        "bonus": {
+          "addskillspecializationoption": {
+            "skill": "Unarmed Combat",
+            "spec": "Wrestling (Sumo Style)"
+          }
+        },
+        "techniques": {
+          "technique": [
+            {
+              "name": "Barbed Hooks"
+            },
+            {
+              "name": "Clinch"
+            },
+            {
+              "name": "Herding"
+            },
+            {
+              "name": "Jiao Di (Knock Down)"
+            },
+            {
+              "name": "Rooted Tree"
+            },
+            {
+              "name": "Throw Person"
+            },
+            {
+              "name": "Neijia"
+            },
+            {
+              "name": "Strike the Darkness"
+            }
+          ]
+        },
+        "source": "RG",
+        "page": "134"
+      },
+      {
+        "id": "06d5eac3-1ec1-4164-8014-e8f6ae47de0f",
+        "name": "Wrestling (Professional Style)",
+        "bonus": {
+          "addskillspecializationoption": {
+            "skill": "Unarmed Combat",
+            "spec": "Wrestling (Professional Style)"
+          }
+        },
+        "techniques": {
+          "technique": [
+            {
+              "name": "Clinch"
+            },
+            {
+              "name": "Jiao Di (Charge)"
+            },
+            {
+              "name": "Karmic Response"
+            },
+            {
+              "name": "Sacrifice Throw"
+            },
+            {
+              "name": "Tricking"
+            },
+            {
+              "name": "Yielding Force (Throw)"
+            },
+            {
+              "name": "Neijia"
+            },
+            {
+              "name": "Strike the Darkness"
+            }
+          ]
+        },
+        "source": "RG",
+        "page": "134"
+      },
+      {
+        "id": "43aedfbf-c4ef-4682-a8a3-9f53363a3e60",
+        "name": "Wrestling (MMA Style)",
+        "bonus": {
+          "addskillspecializationoption": {
+            "skill": "Unarmed Combat",
+            "spec": "Wrestling (MMA Style)"
+          }
+        },
+        "techniques": {
+          "technique": [
+            {
+              "name": "Clinch"
+            },
+            {
+              "name": "Constrictor's Crush"
+            },
+            {
+              "name": "Crushing Jaws"
+            },
+            {
+              "name": "Jiao Di (Knock Down)"
+            },
+            {
+              "name": "Kick Attack"
+            },
+            {
+              "name": "Pouncing Dragon"
+            },
+            {
+              "name": "Neijia"
+            },
+            {
+              "name": "Strike the Darkness"
+            }
+          ]
+        },
+        "source": "RG",
+        "page": "135"
+      },
+      {
+        "id": "bd876c27-26b0-4b37-a236-b5da99d5c503",
+        "name": "Wudang Sword",
+        "bonus": {
+          "addskillspecializationoption": {
+            "skill": "Blades",
+            "spec": "Wudang Sword"
+          }
+        },
+        "techniques": {
+          "technique": [
+            {
+              "name": "Ballestra"
+            },
+            {
+              "name": "Finishing Move"
+            },
+            {
+              "name": "Flying Kick"
+            },
+            {
+              "name": "Hammerfist"
+            },
+            {
+              "name": "Iaijutsu"
+            },
+            {
+              "name": "Riposte"
+            },
+            {
+              "name": "Neijia"
+            },
+            {
+              "name": "Strike the Darkness"
+            }
+          ]
+        },
+        "source": "RG",
+        "page": "135"
+      },
+      {
+        "id": "0325b2c8-0a48-497f-92b1-2830a5ac467f",
+        "name": "One Trick Pony",
+        "isquality": "True",
+        "alltechniques": null,
+        "source": "RG",
+        "page": "127"
+      },
+      {
+        "id": "116723ab-ef17-4078-9b6b-609c24861c96",
+        "name": "Way of Unified Mana (Hapsum-Do)",
+        "cost": "15",
+        "techniques": {
+          "technique": [
+            {
+              "name": "Called Shot (Disarm)"
+            },
+            {
+              "name": "Mana Choke"
+            },
+            {
+              "name": "Counterstrike"
+            },
+            {
+              "name": "Yielding Force (Counterstrike)"
+            },
+            {
+              "name": "Yielding Force (Throw)"
+            },
+            {
+              "name": "Mana Strike"
+            },
+            {
+              "name": "Neijia"
+            },
+            {
+              "name": "Strike the Darkness"
+            }
+          ]
+        },
+        "required": {
+          "allof": {
+            "magenabled": null
+          },
+          "oneof": {
+            "quality": [
+              "Adept",
+              "Mystic Adept"
+            ]
+          }
+        },
+        "source": "FA",
+        "page": "101"
+      },
+      {
+        "id": "d1baf7a8-d65b-46d0-b5dc-2bb4a3f18c80",
+        "name": "Alpine Wrestling",
+        "techniques": {
+          "technique": [
+            {
+              "name": "Oaken Stance"
+            },
+            {
+              "name": "Rooted Tree"
+            },
+            {
+              "name": "Clinch"
+            },
+            {
+              "name": "Karmic Response"
+            },
+            {
+              "name": "Throw Person"
+            },
+            {
+              "name": "Imposing Stone"
+            },
+            {
+              "name": "Neijia"
+            },
+            {
+              "name": "Strike the Darkness"
+            }
+          ]
+        },
+        "source": "SAG",
+        "page": "17"
+      },
+      {
+        "id": "7bbd5565-5020-4ef1-8ff0-9329cbffcfa9",
+        "name": "German Jujitsu",
+        "techniques": {
+          "technique": [
+            {
+              "name": "Called Shot (Disarm)"
+            },
+            {
+              "name": "Sweep"
+            },
+            {
+              "name": "Clinch"
+            },
+            {
+              "name": "Kick Attack"
+            },
+            {
+              "name": "Throw Person"
+            },
+            {
+              "name": "Defiant Dance"
+            },
+            {
+              "name": "Neijia"
+            },
+            {
+              "name": "Strike the Darkness"
+            }
+          ]
+        },
+        "source": "SAG",
+        "page": "17"
+      },
+      {
+        "id": "616efc1e-65cf-44fb-96ef-a312108c5419",
+        "name": "Esdo",
+        "techniques": {
+          "technique": [
+            {
+              "name": "Oaken Stance"
+            },
+            {
+              "name": "Bending of the Reed"
+            },
+            {
+              "name": "Counterstrike"
+            },
+            {
+              "name": "Kick Attack"
+            },
+            {
+              "name": "Stagger"
+            },
+            {
+              "name": "Yielding Force (Counterstrike)"
+            },
+            {
+              "name": "Neijia"
+            },
+            {
+              "name": "Strike the Darkness"
+            }
+          ]
+        },
+        "source": "SAG",
+        "page": "17"
+      },
+      {
+        "id": "d932cfb7-2a62-4878-9c17-4697998f9447",
+        "name": "Urban Brawl Parkour",
+        "techniques": {
+          "technique": [
+            {
+              "name": "Tricking"
+            },
+            {
+              "name": "Monkey Climb"
+            },
+            {
+              "name": "Close Quarter Firearms (Pistols)"
+            },
+            {
+              "name": "Close Quarter Defense Against Firearms"
+            },
+            {
+              "name": "Rolling Clouds"
+            },
+            {
+              "name": "Leaping Mantis"
+            },
+            {
+              "name": "Neijia"
+            },
+            {
+              "name": "Strike the Darkness"
+            }
+          ]
+        },
+        "source": "SAG",
+        "page": "17"
+      },
+      {
+        "id": "85623e1c-53da-43cb-b873-2357e9c5020d",
+        "name": "Sternschutz Tactical",
+        "techniques": {
+          "technique": [
+            {
+              "name": "Oaken Stance"
+            },
+            {
+              "name": "Called Shot (Break Weapon)"
+            },
+            {
+              "name": "Broken Fang"
+            },
+            {
+              "name": "Hammerfist"
+            },
+            {
+              "name": "Opposing Force (Parry)"
+            },
+            {
+              "name": "Close Quarter Defense Against Firearms"
+            },
+            {
+              "name": "Neijia"
+            },
+            {
+              "name": "Strike the Darkness"
+            }
+          ]
+        },
+        "source": "SAG",
+        "page": "17"
+      },
+      {
+        "id": "e253fc2a-87f5-4a20-9f2c-c0b9e54e0f6e",
+        "name": "Arbeitskreis INI",
+        "bonus": {
+          "addskillspecializationoption": {
+            "skill": "Blades",
+            "spec": "Arbeitskreis INI"
+          }
+        },
+        "techniques": {
+          "technique": [
+            {
+              "name": "Finishing Move"
+            },
+            {
+              "name": "Half-Sword"
+            },
+            {
+              "name": "Hammer Fist"
+            },
+            {
+              "name": "Jiao Di"
+            },
+            {
+              "name": "Knucklebreaker"
+            },
+            {
+              "name": "Full Offense"
+            },
+            {
+              "name": "Neijia"
+            },
+            {
+              "name": "Strike the Darkness"
+            }
+          ]
+        },
+        "source": "SOTG",
+        "page": "6"
+      },
+      {
+        "id": "e78deb30-4e17-4b86-b084-897009c55a15",
+        "name": "Circle Fencing",
+        "bonus": {
+          "addskillspecializationoption": {
+            "skill": "Blades",
+            "spec": "Circle Fencing"
+          }
+        },
+        "techniques": {
+          "technique": [
+            {
+              "name": "Called Shot (Feint)"
+            },
+            {
+              "name": "Called Shot (Break Weapon)"
+            },
+            {
+              "name": "Broken Fang"
+            },
+            {
+              "name": "Herding"
+            },
+            {
+              "name": "Multiple Opponent Combat"
+            },
+            {
+              "name": "Two-Headed Snake"
+            },
+            {
+              "name": "Neijia"
+            },
+            {
+              "name": "Strike the Darkness"
+            }
+          ]
+        },
+        "source": "SOTG",
+        "page": "5"
+      },
+      {
+        "id": "70f75f97-ba03-41a6-b591-7c3ae24953a2",
+        "name": "Kreussler Fencing",
+        "bonus": {
+          "addskillspecializationoption": [
+            {
+              "skill": "Blades",
+              "spec": "Kreussler Fencing"
+            },
+            {
+              "skill": "Clubs",
+              "spec": "Kreussler Fencing"
+            }
+          ]
+        },
+        "techniques": {
+          "technique": [
+            {
+              "name": "Ballestra"
+            },
+            {
+              "name": "Hammerfist"
+            },
+            {
+              "name": "Iaijutsu"
+            },
+            {
+              "name": "Knucklebreaker"
+            },
+            {
+              "name": "Riposte"
+            },
+            {
+              "name": "Yielding Force (Riposte)"
+            },
+            {
+              "name": "Neijia"
+            },
+            {
+              "name": "Strike the Darkness"
+            }
+          ]
+        },
+        "source": "SOTG",
+        "page": "5"
+      },
+      {
+        "id": "736db820-cbe4-4a0b-b6c3-d90471117731",
+        "name": "Asthenologica",
+        "bonus": {
+          "addskillspecializationoption": {
+            "skill": "Unarmed Combat",
+            "spec": "Asthenologica"
+          }
+        },
+        "techniques": {
+          "technique": [
+            {
+              "name": "Clinch"
+            },
+            {
+              "name": "Dim Mak"
+            },
+            {
+              "name": "Multiple Opponent Combat"
+            },
+            {
+              "name": "Defiant Dance"
+            },
+            {
+              "name": "Stagger"
+            },
+            {
+              "name": "Karmic Response"
+            },
+            {
+              "name": "Neijia"
+            },
+            {
+              "name": "Strike the Darkness"
+            }
+          ]
+        },
+        "source": "SOTG",
+        "page": "6"
+      }
+    ]
+  },
+  "techniques": {
+    "technique": [
+      {
+        "id": "d2234863-297d-4a61-a939-ff263381e209",
+        "name": "Ballestra",
+        "source": "RG",
+        "page": "119"
+      },
+      {
+        "id": "c46f550f-3148-4b91-a0fa-299a57e7879c",
+        "name": "Barbed Hooks",
+        "source": "RG",
+        "page": "135"
+      },
+      {
+        "id": "378a6f47-9375-4810-8324-4a6230cd6914",
+        "name": "Bending of the Reed",
+        "source": "RG",
+        "page": "135"
+      },
+      {
+        "id": "8ba77379-ee89-49ab-a2a5-37194d9a992e",
+        "name": "Broken Fang",
+        "source": "RG",
+        "page": "135"
+      },
+      {
+        "id": "eb766a12-66c7-44f4-bdc8-a3ae6f8f6770",
+        "name": "Called Shot (Break Weapon)",
+        "source": "RG",
+        "page": "111"
+      },
+      {
+        "id": "56ec87e6-d962-4b97-88e8-947cd09ea161",
+        "name": "Called Shot (Disarm)",
+        "source": "RG",
+        "page": "111"
+      },
+      {
+        "id": "d9e3774b-4b68-4dff-8c0b-3234a6a3f878",
+        "name": "Called Shot (Entanglement)",
+        "source": "RG",
+        "page": "111"
+      },
+      {
+        "id": "57bc4b34-1f4d-4a19-8413-54f2ddafecd9",
+        "name": "Called Shot (Feint)",
+        "source": "RG",
+        "page": "111"
+      },
+      {
+        "id": "a24a6c9f-6edd-4852-9d3d-785c51a40f25",
+        "name": "Called Shot (Pin)",
+        "source": "RG",
+        "page": "112"
+      },
+      {
+        "id": "3d22777f-39c5-472f-b54a-703ed042d8b3",
+        "name": "Chin Na",
+        "source": "RG",
+        "page": "136"
+      },
+      {
+        "id": "e2bedc2b-59c3-45a1-9e0f-2e4f0234a0cf",
+        "name": "Clinch",
+        "source": "RG",
+        "page": "119"
+      },
+      {
+        "id": "0f324bd2-3fad-4721-9335-f82aaaee86cf",
+        "name": "Close Quarter Firearms (Archery)",
+        "source": "RG",
+        "page": "136"
+      },
+      {
+        "id": "05666129-d102-469f-a957-a6456027c9c9",
+        "name": "Close Quarter Firearms (Thrown Weapons)",
+        "source": "RG",
+        "page": "136"
+      },
+      {
+        "id": "c04ce0ed-32d8-4e00-9d50-7be7b5e250fc",
+        "name": "Close Quarter Firearms (Automatics)",
+        "source": "RG",
+        "page": "136"
+      },
+      {
+        "id": "8022a74f-547c-4b1e-82b2-e1ce42dbae62",
+        "name": "Close Quarter Firearms (Exotic Ranged Weapon)",
+        "source": "RG",
+        "page": "136"
+      },
+      {
+        "id": "34dcd6bd-dce4-43b9-bee8-ae18ab3a52b9",
+        "name": "Close Quarter Firearms (Heavy Weapons)",
+        "source": "RG",
+        "page": "136"
+      },
+      {
+        "id": "1d0afa0f-416a-4075-abbd-cc5112429639",
+        "name": "Close Quarter Firearms (Longarms)",
+        "source": "RG",
+        "page": "136"
+      },
+      {
+        "id": "44e0f0bb-2f30-4513-beab-1e0a6c033dd5",
+        "name": "Close Quarter Firearms (Pistols)",
+        "source": "RG",
+        "page": "136"
+      },
+      {
+        "id": "e6e3ef1e-9bbc-408a-b2c0-1ac1d4143e9c",
+        "name": "Close Quarter Defense Against Firearms",
+        "source": "RG",
+        "page": "137"
+      },
+      {
+        "id": "06a17020-5b3a-409b-b8bf-19c4365fd594",
+        "name": "Constrictor's Crush",
+        "source": "RG",
+        "page": "137"
+      },
+      {
+        "id": "11a90b83-af42-4972-a028-0ab4c60e1c33",
+        "name": "Counterstrike",
+        "source": "RG",
+        "page": "124"
+      },
+      {
+        "id": "ec74b517-5c0d-46e6-a61b-5ab1b7316d5d",
+        "name": "Crushing Jaws",
+        "source": "RG",
+        "page": "137"
+      },
+      {
+        "id": "1b1dc37d-daf1-430c-a352-50f9b2cbe68e",
+        "name": "Defiant Dance",
+        "source": "RG",
+        "page": "137"
+      },
+      {
+        "id": "cf776709-ffd2-4871-8a63-35efb5b73dbb",
+        "name": "Dim Mak",
+        "source": "RG",
+        "page": "137"
+      },
+      {
+        "id": "3aba0ece-6ced-48ab-a873-3787c58df995",
+        "name": "Finishing Move",
+        "source": "RG",
+        "page": "120"
+      },
+      {
+        "id": "601d98dd-5897-4974-af2e-72b5053bde62",
+        "name": "Flying Kick",
+        "source": "RG",
+        "page": "121"
+      },
+      {
+        "id": "d98d277b-a727-4381-9512-e8f64ad275ff",
+        "name": "Full Offense",
+        "source": "RG",
+        "page": "121"
+      },
+      {
+        "id": "1df1bc89-a5d5-47e6-8685-7c09078ba17f",
+        "name": "Grasping Vines",
+        "source": "RG",
+        "page": "137"
+      },
+      {
+        "id": "f79771b2-067e-4fa4-b295-b5e6a48fc5f0",
+        "name": "Half Sword",
+        "source": "RG",
+        "page": "121"
+      },
+      {
+        "id": "2a28146f-cbd9-4cdd-98ba-59bd6eb65ded",
+        "name": "Hammerfist",
+        "source": "RG",
+        "page": "138"
+      },
+      {
+        "id": "dbeae1ec-ebb5-4283-b80e-e66ab08c892d",
+        "name": "Haymaker",
+        "source": "RG",
+        "page": "121"
+      },
+      {
+        "id": "971cac23-8ac2-4419-8d6b-f1de2641d7b3",
+        "name": "Herding",
+        "source": "RG",
+        "page": "121"
+      },
+      {
+        "id": "6de0cc4b-d9b5-485c-9b4a-c6e4abeaf7d4",
+        "name": "Iaijutsu",
+        "source": "RG",
+        "page": "122"
+      },
+      {
+        "id": "e812caf9-7e6b-4963-bb9b-ea7ce8e46ea3",
+        "name": "Imposing Stone",
+        "source": "RG",
+        "page": "138"
+      },
+      {
+        "id": "8a457d21-cc45-4f60-b9d3-0891f0c47c10",
+        "name": "Jiao Di (Charge)",
+        "source": "RG",
+        "page": "138"
+      },
+      {
+        "id": "84036a28-53d6-426f-935f-1f176964fc8a",
+        "name": "Jiao Di (Knock Down)",
+        "source": "RG",
+        "page": "138"
+      },
+      {
+        "id": "256bab6a-236d-4f76-93b1-d1dfe3b6df13",
+        "name": "Karmic Response",
+        "source": "RG",
+        "page": "138"
+      },
+      {
+        "id": "5a29bdb8-5233-44ab-b5e0-5cf892559fc1",
+        "name": "Kick Attack",
+        "bonus": {
+          "unarmedreach": "1"
+        },
+        "source": "RG",
+        "page": "138"
+      },
+      {
+        "id": "daa9edc5-d5dd-466a-8df9-7abb6a358db1",
+        "name": "Kip-Up",
+        "source": "RG",
+        "page": "122"
+      },
+      {
+        "id": "d89b18bb-9146-4ad4-8aef-efcb25a537a2",
+        "name": "Knucklebreaker (Disarm)",
+        "source": "RG",
+        "page": "139"
+      },
+      {
+        "id": "4e3d4a86-d949-40dc-83c1-3358b42fc1f8",
+        "name": "Knucklebreaker (Blast Out of Hands)",
+        "source": "RG",
+        "page": "139"
+      },
+      {
+        "id": "5d25f0c8-1bfe-476d-b7b5-672f4ea36c80",
+        "name": "Leaping Mantis",
+        "source": "RG",
+        "page": "139"
+      },
+      {
+        "id": "96191a29-30c4-4973-bb45-8e267f0e221a",
+        "name": "Monkey Climb",
+        "source": "RG",
+        "page": "139"
+      },
+      {
+        "id": "a1ef3f0f-a36d-493b-b251-6385a15c51f7",
+        "name": "Multiple Opponent Combat",
+        "source": "RG",
+        "page": "139"
+      },
+      {
+        "id": "bf72ba84-4301-486c-9c9e-f6179fd5f297",
+        "name": "Multiple Opponent Defense (Friends in Melee)",
+        "source": "RG",
+        "page": "139"
+      },
+      {
+        "id": "d5ca554c-fb2b-480c-ab0c-ad6c05fa919b",
+        "name": "Multiple Opponent Defense (Defender has Defended)",
+        "source": "RG",
+        "page": "139"
+      },
+      {
+        "id": "1ff734f2-094f-482f-9b52-3583f8d589bb",
+        "name": "Oaken Stance (Defense Against Being Knocked Down)",
+        "source": "RG",
+        "page": "139"
+      },
+      {
+        "id": "371d0b75-f8a4-4fc8-90ee-9728d27eaca4",
+        "name": "Oaken Stance (Defense Against Being Charged)",
+        "source": "RG",
+        "page": "139"
+      },
+      {
+        "id": "1f772fd3-7fd6-4c42-a17f-fd363f46f9fa",
+        "name": "Opposing Force (Block)",
+        "source": "RG",
+        "page": "139"
+      },
+      {
+        "id": "017a0f4c-6581-4f59-9c7d-52b11f51d365",
+        "name": "Opposing Force (Parry)",
+        "source": "RG",
+        "page": "139"
+      },
+      {
+        "id": "53a18dd7-a2bd-46fd-a27e-eceafe406154",
+        "name": "Releasing Talons",
+        "source": "RG",
+        "page": "139"
+      },
+      {
+        "id": "3abe5ad7-c735-4f7b-ae38-f7df1081c248",
+        "name": "Randori (Dirty Trick)",
+        "source": "RG",
+        "page": "140"
+      },
+      {
+        "id": "2747d8d5-022d-4477-a7ce-43d88806bb35",
+        "name": "Randori (Vitals)",
+        "source": "RG",
+        "page": "140"
+      },
+      {
+        "id": "5d543914-9c0c-4245-a212-9d5383e7221a",
+        "name": "Randori (Specific Location)",
+        "source": "RG",
+        "page": "140"
+      },
+      {
+        "id": "a620e473-4127-4863-b9da-ac8e96c84535",
+        "name": "Riposte",
+        "source": "RG",
+        "page": "125"
+      },
+      {
+        "id": "456dfdc7-d1e5-4ec2-86bd-85bf82d81e46",
+        "name": "Rooted Tree",
+        "source": "RG",
+        "page": "140"
+      },
+      {
+        "id": "845d010e-036b-488c-8ff6-5eec6c2b7c21",
+        "name": "Sacrifice Throw",
+        "source": "RG",
+        "page": "125"
+      },
+      {
+        "id": "a10cc1a4-c5cb-492d-aa87-448ace3d7f88",
+        "name": "Shadow Block",
+        "source": "RG",
+        "page": "125"
+      },
+      {
+        "id": "d728ad1e-259a-4af3-ba52-383ffa3e90b4",
+        "name": "Silken Storm",
+        "source": "RG",
+        "page": "140"
+      },
+      {
+        "id": "730318d1-9a03-4925-bd54-27d53dbb1769",
+        "name": "Soaring Shackles",
+        "source": "RG",
+        "page": "141"
+      },
+      {
+        "id": "693a1fb7-0c33-4959-87fc-a7f0d3bfd7bc",
+        "name": "Stagger",
+        "source": "RG",
+        "page": "141"
+      },
+      {
+        "id": "81b9073d-305e-4bcf-90a9-56855f4076f4",
+        "name": "Pouncing Dragon",
+        "source": "RG",
+        "page": "122"
+      },
+      {
+        "id": "5e00496f-5e91-4fb7-96d9-9c176ff8b80f",
+        "name": "Rolling Clouds",
+        "source": "RG",
+        "page": "141"
+      },
+      {
+        "id": "5be9b72c-1de5-49ca-9e63-73c9c58c3cac",
+        "name": "Sweep",
+        "source": "RG",
+        "page": "141"
+      },
+      {
+        "id": "9d355a11-5e68-4c03-9676-9a3f555f977f",
+        "name": "Throw Person",
+        "source": "RG",
+        "page": "123"
+      },
+      {
+        "id": "335d2151-9137-4071-af91-3e0688ef67d9",
+        "name": "Thunder Strike",
+        "source": "RG",
+        "page": "141"
+      },
+      {
+        "id": "43351aef-fbed-4a9e-a699-455a495ea2cb",
+        "name": "Ti Khao",
+        "source": "RG",
+        "page": "141"
+      },
+      {
+        "id": "8d8e3afb-7538-47e1-91e7-fc1a8d50dbc7",
+        "name": "Tricking",
+        "source": "RG",
+        "page": "141"
+      },
+      {
+        "id": "ea44f12a-0280-4d2b-8f1f-dc5006167872",
+        "name": "Two-Headed Snake",
+        "source": "RG",
+        "page": "141"
+      },
+      {
+        "id": "db67e642-c74e-4780-a44b-b85524251240",
+        "name": "Two-Weapon Style Attack",
+        "source": "RG",
+        "page": "141"
+      },
+      {
+        "id": "8938ff95-3c3a-48f5-8a46-f6962e1b16cf",
+        "name": "Two-Weapon Style Defense",
+        "source": "RG",
+        "page": "141"
+      },
+      {
+        "id": "e714b868-49df-465f-8ae0-89b7d150341c",
+        "name": "Yielding Force (Riposte)",
+        "source": "RG",
+        "page": "141"
+      },
+      {
+        "id": "091f71eb-75d7-4a5c-8d4e-8ec5ff075ff2",
+        "name": "Yielding Force (Counterstrike)",
+        "source": "RG",
+        "page": "141"
+      },
+      {
+        "id": "0dfdfe1c-a6ce-4233-a36a-d7856d655290",
+        "name": "Yielding Force (Throw)",
+        "source": "RG",
+        "page": "141"
+      },
+      {
+        "id": "c512a3e7-5711-438e-b1e7-e02dbf996b85",
+        "name": "Neijia",
+        "source": "RG",
+        "page": "140"
+      },
+      {
+        "id": "1ff5100c-6b10-453c-a05a-9af9110581e9",
+        "name": "Strike the Darkness",
+        "source": "RG",
+        "page": "141"
+      },
+      {
+        "id": "1ff5110c-6b10-453c-a05a-faf9410581e0",
+        "name": "Sacrificial Throw",
+        "source": "RG",
+        "page": "131"
+      },
+      {
+        "id": "4376ad31-af14-4204-86d1-e1a31b9cda6d",
+        "name": "Mana Choke",
+        "source": "FA",
+        "page": "102",
+        "required": {
+          "allof": {
+            "magenabled": null
+          }
+        }
+      },
+      {
+        "id": "18400527-4b06-47fb-88fc-5d31100ae8d4",
+        "name": "Mana Strike",
+        "source": "FA",
+        "page": "102",
+        "required": {
+          "allof": {
+            "magenabled": null
+          }
+        }
+      }
+    ]
+  }
+}

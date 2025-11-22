@@ -1,0 +1,3787 @@
+{
+  "+@xmlns": "",
+  "+@xmlns:xsi": "http://www.w3.org/2001/XMLSchema-instance",
+  "+@xsi:schemaLocation": "http://www.w3.org/2001/XMLSchema packs.xsd",
+  "categories": {
+    "category": [
+      "Core Packs",
+      "Weapon and Ammo Packs",
+      "Armor Packs",
+      "Cyber Packs",
+      "Lifestyle Packs",
+      "Color Packs",
+      "Vehicle Packs",
+      "Decker Packs",
+      "Drone Packs",
+      "Magic Packs",
+      "Community Packs",
+      "Custom"
+    ]
+  },
+  "packs": {
+    "pack": [
+      {
+        "name": "Intro Runner Pack",
+        "category": "Core Packs",
+        "nuyenbp": "2",
+        "armors": {
+          "armor": {
+            "name": "Armor Vest"
+          }
+        },
+        "gears": {
+          "gear": [
+            {
+              "name": "Fake SIN",
+              "category": "ID/Credsticks",
+              "rating": "1"
+            },
+            {
+              "name": "Meta Link",
+              "category": "Commlinks"
+            },
+            {
+              "name": {
+                "+content": "Ammo: Regular Ammo",
+                "+@select": "Light Pistols"
+              },
+              "category": "Ammunition",
+              "qty": "100"
+            },
+            {
+              "name": "Glasses",
+              "category": "Vision Devices",
+              "rating": "1",
+              "gears": {
+                "gear": {
+                  "name": "Image Link",
+                  "category": "Vision Enhancements"
+                }
+              }
+            },
+            {
+              "name": "Mapsoft",
+              "category": "Software"
+            },
+            {
+              "name": "Certified Credstick, Standard",
+              "category": "ID/Credsticks",
+              "rating": "1"
+            },
+            {
+              "name": "Restraint, Plastic",
+              "category": "Security Devices",
+              "qty": "20"
+            },
+            {
+              "name": "Flashlight",
+              "category": "Survival Gear"
+            },
+            {
+              "name": "Respirator",
+              "category": "Survival Gear",
+              "rating": "1"
+            }
+          ]
+        },
+        "weapons": {
+          "weapon": [
+            {
+              "name": "Colt America L36",
+              "accessories": {
+                "accessory": [
+                  {
+                    "name": "Spare Clip",
+                    "mount": null
+                  },
+                  {
+                    "name": "Spare Clip",
+                    "mount": null
+                  }
+                ]
+              }
+            },
+            {
+              "name": "Knife"
+            }
+          ]
+        }
+      },
+      {
+        "name": "Basic Runner Pack",
+        "category": "Core Packs",
+        "nuyenbp": "5",
+        "armors": {
+          "armor": {
+            "name": "Armor Vest"
+          }
+        },
+        "gears": {
+          "gear": [
+            {
+              "name": "Fake SIN",
+              "category": "ID/Credsticks",
+              "rating": "3"
+            },
+            {
+              "name": "Renraku Sensei",
+              "category": "Commlinks"
+            },
+            {
+              "name": "Micro-Transceiver",
+              "category": "Communications and Countermeasures"
+            },
+            {
+              "name": "Mapsoft",
+              "category": "Software"
+            },
+            {
+              "name": "Certified Credstick, Silver",
+              "category": "ID/Credsticks"
+            },
+            {
+              "name": "Glasses",
+              "category": "Vision Devices",
+              "rating": "1",
+              "gears": {
+                "gear": {
+                  "name": "Image Link",
+                  "category": "Vision Enhancements"
+                }
+              }
+            },
+            {
+              "name": "Earbuds",
+              "category": "Audio Devices",
+              "rating": "1"
+            },
+            {
+              "name": "Restraint, Metal",
+              "category": "Security Devices"
+            },
+            {
+              "name": "Restraint, Plastic",
+              "category": "Security Devices",
+              "qty": "10"
+            },
+            {
+              "name": "Flashlight",
+              "category": "Survival Gear"
+            },
+            {
+              "name": "Respirator",
+              "category": "Survival Gear",
+              "rating": "1"
+            },
+            {
+              "name": "Survival Kit",
+              "category": "Survival Gear"
+            },
+            {
+              "name": "Medkit",
+              "category": "Biotech",
+              "rating": "1"
+            }
+          ]
+        },
+        "weapons": {
+          "weapon": {
+            "name": "Knife"
+          }
+        }
+      },
+      {
+        "name": "Advanced Runner Pack",
+        "category": "Core Packs",
+        "nuyenbp": "10",
+        "armors": {
+          "armor": {
+            "name": "Armor Vest"
+          }
+        },
+        "gears": {
+          "gear": [
+            {
+              "name": "Fake SIN",
+              "category": "ID/Credsticks",
+              "rating": "4"
+            },
+            {
+              "name": "Erika Elite",
+              "category": "Commlinks",
+              "gears": {
+                "gear": [
+                  {
+                    "name": "Sim Module",
+                    "category": "Commlink Accessories"
+                  },
+                  {
+                    "name": "Subvocal Mic",
+                    "category": "Electronics Accessories"
+                  }
+                ]
+              }
+            },
+            {
+              "name": "Micro-Transceiver",
+              "category": "Communications and Countermeasures"
+            },
+            {
+              "name": "Tag Eraser",
+              "category": "Communications and Countermeasures"
+            },
+            {
+              "name": "Certified Credstick, Gold",
+              "category": "ID/Credsticks"
+            },
+            {
+              "name": "Mapsoft",
+              "category": "Software"
+            },
+            {
+              "name": "Contacts",
+              "category": "Vision Devices",
+              "rating": "3",
+              "gears": {
+                "gear": [
+                  {
+                    "name": "Image Link",
+                    "category": "Vision Enhancements"
+                  },
+                  {
+                    "name": "Low Light",
+                    "category": "Vision Enhancements"
+                  },
+                  {
+                    "name": "Flare Compensation",
+                    "category": "Vision Enhancements"
+                  }
+                ]
+              }
+            },
+            {
+              "name": "Earbuds",
+              "category": "Audio Devices",
+              "rating": "3",
+              "gears": {
+                "gear": {
+                  "name": "Select Sound Filter",
+                  "category": "Audio Enhancements",
+                  "rating": "2"
+                }
+              }
+            },
+            {
+              "name": "Camera",
+              "category": "Sensor Functions",
+              "rating": "1",
+              "gears": {
+                "gear": {
+                  "name": "Vision Magnification",
+                  "category": "Vision Enhancements"
+                }
+              }
+            },
+            {
+              "name": "Restraint, Metal",
+              "category": "Security Devices"
+            },
+            {
+              "name": "Flashlight",
+              "category": "Survival Gear"
+            },
+            {
+              "name": "Flashlight, Low-light",
+              "category": "Survival Gear"
+            },
+            {
+              "name": "Climbing Gear",
+              "category": "Survival Gear"
+            },
+            {
+              "name": "Diving Gear",
+              "category": "Survival Gear"
+            },
+            {
+              "name": "Gas Mask",
+              "category": "Survival Gear"
+            },
+            {
+              "name": "Respirator",
+              "category": "Survival Gear",
+              "rating": "4"
+            },
+            {
+              "name": "Survival Kit",
+              "category": "Survival Gear"
+            },
+            {
+              "name": "Standard Rope (100m)",
+              "category": "Grapple Gun"
+            },
+            {
+              "name": "Medkit",
+              "category": "Biotech",
+              "rating": "1"
+            }
+          ]
+        },
+        "weapons": {
+          "weapon": {
+            "name": "Knife"
+          }
+        }
+      },
+      {
+        "name": "Clasic Samurai Pack",
+        "category": "Weapon and Ammo Packs",
+        "nuyenbp": "2",
+        "armors": {
+          "armor": {
+            "name": "Clothing"
+          }
+        },
+        "gears": {
+          "gear": {
+            "name": {
+              "+content": "Datasoft",
+              "+@select": "The Art of War, The Book of Five Rings, The Tale of the Heike, and other assorted samurai writings and poetry"
+            },
+            "category": "Software"
+          }
+        },
+        "weapons": {
+          "weapon": [
+            {
+              "name": "Katana"
+            },
+            {
+              "name": "Sword"
+            },
+            {
+              "name": "Combat Knife"
+            },
+            {
+              "name": "Club"
+            }
+          ]
+        }
+      },
+      {
+        "name": "Up Close & Personal Pack",
+        "category": "Weapon and Ammo Packs",
+        "nuyenbp": "3",
+        "gears": {
+          "gear": {
+            "name": "Throwing Knife",
+            "category": "Ammunition",
+            "qty": "4"
+          }
+        },
+        "weapons": {
+          "weapon": [
+            {
+              "name": "Combat Axe"
+            },
+            {
+              "name": "Katana"
+            },
+            {
+              "name": "Knife"
+            },
+            {
+              "name": "Knife"
+            },
+            {
+              "name": "Combat Knife"
+            },
+            {
+              "name": "Club"
+            },
+            {
+              "name": "Extendable Baton"
+            },
+            {
+              "name": "Telescoping Staff"
+            },
+            {
+              "name": "Knucks"
+            }
+          ]
+        }
+      },
+      {
+        "name": "Blademaster Pack",
+        "category": "Weapon and Ammo Packs",
+        "nuyenbp": "1",
+        "weapons": {
+          "weapon": [
+            {
+              "name": "Knife"
+            },
+            {
+              "name": "Knife"
+            },
+            {
+              "name": "Survival Knife"
+            },
+            {
+              "name": "Survival Knife"
+            },
+            {
+              "name": "Combat Knife"
+            },
+            {
+              "name": "Combat Knife"
+            },
+            {
+              "name": "Club"
+            },
+            {
+              "name": "Extendable Baton"
+            }
+          ]
+        }
+      },
+      {
+        "name": "Monowhip Pack",
+        "category": "Weapon and Ammo Packs",
+        "nuyenbp": "10",
+        "gears": {
+          "gear": {
+            "name": "DocWagon Contract, Basic",
+            "category": "DocWagon Contract"
+          }
+        },
+        "weapons": {
+          "weapon": {
+            "name": "Monofilament Whip"
+          }
+        }
+      },
+      {
+        "name": "Basic Bowman Pack",
+        "category": "Weapon and Ammo Packs",
+        "nuyenbp": "1",
+        "gears": {
+          "gear": [
+            {
+              "name": "Survival Kit",
+              "category": "Survival Gear"
+            },
+            {
+              "name": {
+                "+content": "Arrow: Injection",
+                "+@select": "Bows"
+              },
+              "category": "Ammunition",
+              "qty": "10",
+              "rating": "4",
+              "gears": {
+                "gear": {
+                  "name": "Narcoject",
+                  "category": "Toxins"
+                }
+              }
+            },
+            {
+              "name": {
+                "+content": "Arrow: Standard",
+                "+@select": "Bows"
+              },
+              "category": "Ammunition",
+              "qty": "50",
+              "rating": "4"
+            }
+          ]
+        },
+        "weapons": {
+          "weapon": [
+            {
+              "name": "Bow (Rating 4)"
+            },
+            {
+              "name": "Survival Knife"
+            }
+          ]
+        }
+      },
+      {
+        "name": "Advanced Bowman Pack",
+        "category": "Weapon and Ammo Packs",
+        "nuyenbp": "1",
+        "gears": {
+          "gear": [
+            {
+              "name": "Survival Kit",
+              "category": "Survival Gear"
+            },
+            {
+              "name": {
+                "+content": "Arrow: Injection",
+                "+@select": "Bows"
+              },
+              "category": "Ammunition",
+              "qty": "5",
+              "rating": "6",
+              "gears": {
+                "gear": {
+                  "name": "Narcoject",
+                  "category": "Toxins"
+                }
+              }
+            },
+            {
+              "name": {
+                "+content": "Arrow: Standard",
+                "+@select": "Bows"
+              },
+              "category": "Ammunition",
+              "qty": "50",
+              "rating": "6"
+            }
+          ]
+        },
+        "weapons": {
+          "weapon": [
+            {
+              "name": "Bow (Rating 6)"
+            },
+            {
+              "name": "Knife"
+            },
+            {
+              "name": "Knife"
+            }
+          ]
+        }
+      },
+      {
+        "name": "Ares Pistol Pack",
+        "category": "Weapon and Ammo Packs",
+        "nuyenbp": "1",
+        "gears": {
+          "gear": [
+            {
+              "name": {
+                "+content": "Ammo: Regular Ammo",
+                "+@select": "Heavy Pistols"
+              },
+              "category": "Ammunition",
+              "qty": "300"
+            },
+            {
+              "name": {
+                "+content": "Ammo: Regular Ammo",
+                "+@select": "Light Pistols"
+              },
+              "category": "Ammunition",
+              "qty": "60"
+            }
+          ]
+        },
+        "weapons": {
+          "weapon": [
+            {
+              "name": "Ares Predator V",
+              "accessories": {
+                "accessory": [
+                  {
+                    "name": "Quick-Draw Holster",
+                    "mount": null
+                  },
+                  {
+                    "name": "Spare Clip",
+                    "mount": null
+                  },
+                  {
+                    "name": "Spare Clip",
+                    "mount": null
+                  },
+                  {
+                    "name": "Spare Clip",
+                    "mount": null
+                  },
+                  {
+                    "name": "Spare Clip",
+                    "mount": null
+                  }
+                ]
+              }
+            },
+            {
+              "name": "Ares Light Fire 70",
+              "accessories": {
+                "accessory": [
+                  {
+                    "name": "Concealable Holster",
+                    "mount": null
+                  },
+                  {
+                    "name": "Spare Clip",
+                    "mount": null
+                  },
+                  {
+                    "name": "Spare Clip",
+                    "mount": null
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      },
+      {
+        "name": "Big Boom Pistol Pack",
+        "category": "Weapon and Ammo Packs",
+        "nuyenbp": "1",
+        "gears": {
+          "gear": [
+            {
+              "name": {
+                "+content": "Ammo: Regular Ammo",
+                "+@select": "Heavy Pistols"
+              },
+              "category": "Ammunition",
+              "qty": "190"
+            },
+            {
+              "name": {
+                "+content": "Ammo: Flechette Rounds",
+                "+@select": "Heavy Pistols"
+              },
+              "category": "Ammunition",
+              "qty": "80"
+            }
+          ]
+        },
+        "weapons": {
+          "weapon": [
+            {
+              "name": "Remington Roomsweeper",
+              "accessories": {
+                "accessory": {
+                  "name": "Quick-Draw Holster",
+                  "mount": null
+                }
+              }
+            },
+            {
+              "name": "Ruger Super Warhawk",
+              "accessories": {
+                "accessory": [
+                  {
+                    "name": "Quick-Draw Holster",
+                    "mount": null
+                  },
+                  {
+                    "name": "Speed Loader",
+                    "mount": null
+                  },
+                  {
+                    "name": "Speed Loader",
+                    "mount": null
+                  },
+                  {
+                    "name": "Speed Loader",
+                    "mount": null
+                  },
+                  {
+                    "name": "Speed Loader",
+                    "mount": null
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      },
+      {
+        "name": "Browning And Beretta Pistol Pack",
+        "category": "Weapon and Ammo Packs",
+        "nuyenbp": "1",
+        "gears": {
+          "gear": [
+            {
+              "name": {
+                "+content": "Ammo: Regular Ammo",
+                "+@select": "Heavy Pistols"
+              },
+              "category": "Ammunition",
+              "qty": "140"
+            },
+            {
+              "name": {
+                "+content": "Ammo: Regular Ammo",
+                "+@select": "Light Pistols"
+              },
+              "category": "Ammunition",
+              "qty": "210"
+            }
+          ]
+        },
+        "weapons": {
+          "weapon": [
+            {
+              "name": "Browning Ultra-Power",
+              "accessories": {
+                "accessory": [
+                  {
+                    "name": "Quick-Draw Holster",
+                    "mount": null
+                  },
+                  {
+                    "name": "Spare Clip",
+                    "mount": null
+                  },
+                  {
+                    "name": "Spare Clip",
+                    "mount": null
+                  },
+                  {
+                    "name": "Spare Clip",
+                    "mount": null
+                  }
+                ]
+              }
+            },
+            {
+              "name": "Beretta 201T",
+              "accessories": {
+                "accessory": [
+                  {
+                    "name": "Concealable Holster",
+                    "mount": null
+                  },
+                  {
+                    "name": "Spare Clip",
+                    "mount": null
+                  },
+                  {
+                    "name": "Spare Clip",
+                    "mount": null
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      },
+      {
+        "name": "Colt Pistol Pack",
+        "category": "Weapon and Ammo Packs",
+        "nuyenbp": "1",
+        "gears": {
+          "gear": [
+            {
+              "name": {
+                "+content": "Ammo: Regular Ammo",
+                "+@select": "Heavy Pistols"
+              },
+              "category": "Ammunition",
+              "qty": "280"
+            },
+            {
+              "name": {
+                "+content": "Ammo: Regular Ammo",
+                "+@select": "Light Pistols"
+              },
+              "category": "Ammunition",
+              "qty": "110"
+            }
+          ]
+        },
+        "weapons": {
+          "weapon": [
+            {
+              "name": "Colt Government 2066",
+              "accessories": {
+                "accessory": [
+                  {
+                    "name": "Quick-Draw Holster",
+                    "mount": null
+                  },
+                  {
+                    "name": "Laser Sight",
+                    "mount": "Top/Under"
+                  },
+                  {
+                    "name": "Spare Clip",
+                    "mount": null
+                  },
+                  {
+                    "name": "Spare Clip",
+                    "mount": null
+                  },
+                  {
+                    "name": "Spare Clip",
+                    "mount": null
+                  }
+                ]
+              }
+            },
+            {
+              "name": "Colt America L36",
+              "accessories": {
+                "accessory": [
+                  {
+                    "name": "Concealable Holster",
+                    "mount": null
+                  },
+                  {
+                    "name": "Spare Clip",
+                    "mount": null
+                  },
+                  {
+                    "name": "Spare Clip",
+                    "mount": null
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      },
+      {
+        "name": "Subtle Pistol Pack",
+        "category": "Weapon and Ammo Packs",
+        "nuyenbp": "1",
+        "gears": {
+          "gear": [
+            {
+              "name": {
+                "+content": "Ammo: Flechette Rounds",
+                "+@select": "Heavy Pistols"
+              },
+              "category": "Ammunition",
+              "qty": "170"
+            },
+            {
+              "name": {
+                "+content": "Ammo: Regular Ammo",
+                "+@select": "Holdouts"
+              },
+              "category": "Ammunition",
+              "qty": "10"
+            }
+          ]
+        },
+        "weapons": {
+          "weapon": [
+            {
+              "name": "Ares Viper Slivergun",
+              "accessories": {
+                "accessory": [
+                  {
+                    "name": "Concealable Holster",
+                    "mount": null
+                  },
+                  {
+                    "name": "Spare Clip",
+                    "mount": null
+                  }
+                ]
+              }
+            },
+            {
+              "name": "Walther Palm Pistol",
+              "accessories": {
+                "accessory": {
+                  "name": "Concealable Holster",
+                  "mount": null
+                }
+              }
+            }
+          ]
+        }
+      },
+      {
+        "name": "Light Security Pack",
+        "category": "Weapon and Ammo Packs",
+        "nuyenbp": "1",
+        "gears": {
+          "gear": [
+            {
+              "name": {
+                "+content": "Ammo: Regular Ammo",
+                "+@select": "Submachine Guns"
+              },
+              "category": "Ammunition",
+              "qty": "280"
+            },
+            {
+              "name": {
+                "+content": "Ammo: Regular Ammo",
+                "+@select": "Light Pistols"
+              },
+              "category": "Ammunition",
+              "qty": "90"
+            }
+          ]
+        },
+        "weapons": {
+          "weapon": [
+            {
+              "name": "HK 227",
+              "accessories": {
+                "accessory": [
+                  {
+                    "name": "Spare Clip",
+                    "mount": null
+                  },
+                  {
+                    "name": "Spare Clip",
+                    "mount": null
+                  },
+                  {
+                    "name": "Spare Clip",
+                    "mount": null
+                  },
+                  {
+                    "name": "Spare Clip",
+                    "mount": null
+                  }
+                ]
+              }
+            },
+            {
+              "name": "Fichetti Security 600",
+              "accessories": {
+                "accessory": [
+                  {
+                    "name": "Quick-Draw Holster",
+                    "mount": null
+                  },
+                  {
+                    "name": "Spare Clip",
+                    "mount": null
+                  },
+                  {
+                    "name": "Spare Clip",
+                    "mount": null
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      },
+      {
+        "name": "Japanacorp Light Security Pack",
+        "category": "Weapon and Ammo Packs",
+        "nuyenbp": "1",
+        "gears": {
+          "gear": [
+            {
+              "name": {
+                "+content": "Ammo: Regular Ammo",
+                "+@select": "Submachine Guns"
+              },
+              "category": "Ammunition",
+              "qty": "280"
+            },
+            {
+              "name": {
+                "+content": "Ammo: Regular Ammo",
+                "+@select": "Light Pistols"
+              },
+              "category": "Ammunition",
+              "qty": "70"
+            },
+            {
+              "name": "Restraint, Plastic",
+              "category": "Security Devices",
+              "qty": "10"
+            },
+            {
+              "name": {
+                "+content": "Ammo: Gel Rounds",
+                "+@select": "Submachine Guns"
+              },
+              "category": "Ammunition",
+              "qty": "60"
+            }
+          ]
+        },
+        "weapons": {
+          "weapon": [
+            {
+              "name": "SCK Model 100",
+              "accessories": {
+                "accessory": [
+                  {
+                    "name": "Spare Clip",
+                    "mount": null
+                  },
+                  {
+                    "name": "Spare Clip",
+                    "mount": null
+                  },
+                  {
+                    "name": "Spare Clip",
+                    "mount": null
+                  }
+                ]
+              }
+            },
+            {
+              "name": "Beretta 201T",
+              "accessories": {
+                "accessory": {
+                  "name": "Spare Clip",
+                  "mount": null
+                }
+              }
+            }
+          ]
+        }
+      },
+      {
+        "name": "Smartgun Pack",
+        "category": "Weapon and Ammo Packs",
+        "nuyenbp": "1",
+        "gears": {
+          "gear": [
+            {
+              "name": {
+                "+content": "Ammo: Regular Ammo",
+                "+@select": "Submachine Guns"
+              },
+              "category": "Ammunition",
+              "qty": "200"
+            },
+            {
+              "name": {
+                "+content": "Ammo: Regular Ammo",
+                "+@select": "Heavy Pistols"
+              },
+              "category": "Ammunition",
+              "qty": "30"
+            }
+          ]
+        },
+        "weapons": {
+          "weapon": [
+            {
+              "name": "Ingram Smartgun X",
+              "accessories": {
+                "accessory": [
+                  {
+                    "name": "Spare Clip",
+                    "mount": null
+                  },
+                  {
+                    "name": "Spare Clip",
+                    "mount": null
+                  }
+                ]
+              }
+            },
+            {
+              "name": "Ares Predator V",
+              "accessories": {
+                "accessory": {
+                  "name": "Spare Clip",
+                  "mount": null
+                }
+              }
+            }
+          ]
+        }
+      },
+      {
+        "name": "Street Slugger Pack",
+        "category": "Weapon and Ammo Packs",
+        "nuyenbp": "1",
+        "gears": {
+          "gear": [
+            {
+              "name": {
+                "+content": "Ammo: Flechette Rounds",
+                "+@select": "Shotguns"
+              },
+              "category": "Ammunition",
+              "qty": "100"
+            },
+            {
+              "name": {
+                "+content": "Ammo: Regular Ammo",
+                "+@select": "Shotguns"
+              },
+              "category": "Ammunition",
+              "qty": "10"
+            },
+            {
+              "name": {
+                "+content": "Ammo: Regular Ammo",
+                "+@select": "Light Pistols"
+              },
+              "category": "Ammunition",
+              "qty": "100"
+            },
+            {
+              "name": {
+                "+content": "Ammo: Regular Ammo",
+                "+@select": "Holdouts"
+              },
+              "category": "Ammunition",
+              "qty": "30"
+            }
+          ]
+        },
+        "weapons": {
+          "weapon": [
+            {
+              "name": "Defiance T-250"
+            },
+            {
+              "name": "Colt America L36"
+            },
+            {
+              "name": "Streetline Special"
+            },
+            {
+              "name": "Knife"
+            },
+            {
+              "name": "Knucks"
+            }
+          ]
+        }
+      },
+      {
+        "name": "Heavy Security Pack",
+        "category": "Weapon and Ammo Packs",
+        "nuyenbp": "1",
+        "gears": {
+          "gear": {
+            "name": {
+              "+content": "Ammo: Regular Ammo",
+              "+@select": "Assault Rifles"
+            },
+            "category": "Ammunition",
+            "qty": "210"
+          }
+        },
+        "weapons": {
+          "weapon": {
+            "name": "FN HAR",
+            "accessories": {
+              "accessory": [
+                {
+                  "name": "Shock Pad",
+                  "mount": null
+                },
+                {
+                  "name": "Spare Clip",
+                  "mount": null
+                },
+                {
+                  "name": "Spare Clip",
+                  "mount": null
+                },
+                {
+                  "name": "Spare Clip",
+                  "mount": null
+                },
+                {
+                  "name": "Spare Clip",
+                  "mount": null
+                },
+                {
+                  "name": "Spare Clip",
+                  "mount": null
+                },
+                {
+                  "name": "Spare Clip",
+                  "mount": null
+                }
+              ]
+            }
+          }
+        }
+      },
+      {
+        "name": "Cheap Soldier Pack",
+        "category": "Weapon and Ammo Packs",
+        "nuyenbp": "1",
+        "gears": {
+          "gear": [
+            {
+              "name": {
+                "+content": "Ammo: Regular Ammo",
+                "+@select": "Assault Rifles"
+              },
+              "category": "Ammunition",
+              "qty": "300"
+            },
+            {
+              "name": "Kamikaze",
+              "category": "Drugs",
+              "qty": "3"
+            }
+          ]
+        },
+        "weapons": {
+          "weapon": [
+            {
+              "name": "Colt M23",
+              "accessories": {
+                "accessory": [
+                  {
+                    "name": "Spare Clip",
+                    "mount": null
+                  },
+                  {
+                    "name": "Spare Clip",
+                    "mount": null
+                  },
+                  {
+                    "name": "Spare Clip",
+                    "mount": null
+                  },
+                  {
+                    "name": "Spare Clip",
+                    "mount": null
+                  }
+                ]
+              }
+            },
+            {
+              "name": "Sword"
+            }
+          ]
+        }
+      },
+      {
+        "name": "Ares Alpha Gunner Pack",
+        "category": "Weapon and Ammo Packs",
+        "nuyenbp": "4",
+        "gears": {
+          "gear": [
+            {
+              "name": {
+                "+content": "Ammo: Regular Ammo",
+                "+@select": "Assault Rifles"
+              },
+              "category": "Ammunition",
+              "qty": "500"
+            },
+            {
+              "name": {
+                "+content": "Ammo: APDS",
+                "+@select": "Assault Rifles"
+              },
+              "category": "Ammunition",
+              "qty": "40"
+            },
+            {
+              "name": {
+                "+content": "Ammo: Explosive Rounds",
+                "+@select": "Assault Rifles"
+              },
+              "category": "Ammunition",
+              "qty": "120"
+            },
+            {
+              "name": "Minigrenade: High Explosive",
+              "category": "Ammunition",
+              "qty": "12"
+            },
+            {
+              "name": "Minigrenade: Fragmentation",
+              "category": "Ammunition",
+              "qty": "12"
+            }
+          ]
+        },
+        "weapons": {
+          "weapon": {
+            "name": "Ares Alpha",
+            "accessories": {
+              "accessory": [
+                {
+                  "name": "Shock Pad",
+                  "mount": null
+                },
+                {
+                  "name": "Spare Clip",
+                  "mount": null
+                },
+                {
+                  "name": "Spare Clip",
+                  "mount": null
+                },
+                {
+                  "name": "Spare Clip",
+                  "mount": null
+                },
+                {
+                  "name": "Spare Clip",
+                  "mount": null
+                },
+                {
+                  "name": "Spare Clip",
+                  "mount": null
+                },
+                {
+                  "name": "Spare Clip",
+                  "mount": null
+                },
+                {
+                  "name": "Spare Clip",
+                  "mount": null
+                },
+                {
+                  "name": "Spare Clip",
+                  "mount": null
+                }
+              ]
+            }
+          }
+        }
+      },
+      {
+        "name": "Sportsman Pack",
+        "category": "Weapon and Ammo Packs",
+        "nuyenbp": "2",
+        "gears": {
+          "gear": [
+            {
+              "name": "Survival Kit",
+              "category": "Survival Gear"
+            },
+            {
+              "name": "Flashlight",
+              "category": "Survival Gear"
+            },
+            {
+              "name": {
+                "+content": "Arrow: Standard",
+                "+@select": "Bows"
+              },
+              "category": "Ammunition",
+              "qty": "20",
+              "rating": "4"
+            },
+            {
+              "name": {
+                "+content": "Ammo: Regular Ammo",
+                "+@select": "Sniper Rifles"
+              },
+              "category": "Ammunition",
+              "qty": "250"
+            }
+          ]
+        },
+        "weapons": {
+          "weapon": [
+            {
+              "name": "Remington 950"
+            },
+            {
+              "name": "Bow (Rating 4)"
+            },
+            {
+              "name": "Survival Knife"
+            },
+            {
+              "name": "Knife"
+            }
+          ]
+        }
+      },
+      {
+        "name": "Tranq Darter Pack",
+        "category": "Weapon and Ammo Packs",
+        "nuyenbp": "1",
+        "gears": {
+          "gear": [
+            {
+              "name": {
+                "+content": "Ammo: Injection Darts",
+                "+@select": "Exotic Ranged Weapons"
+              },
+              "category": "Ammunition",
+              "qty": "10"
+            },
+            {
+              "name": "Narcoject",
+              "category": "Toxins",
+              "qty": "14"
+            }
+          ]
+        },
+        "weapons": {
+          "weapon": {
+            "name": "Parashield Dart Rifle"
+          }
+        }
+      },
+      {
+        "name": "Tranq Pistol Darter Kit",
+        "category": "Weapon and Ammo Packs",
+        "nuyenbp": "1",
+        "gears": {
+          "gear": [
+            {
+              "name": {
+                "+content": "Ammo: Injection Darts",
+                "+@select": "Exotic Ranged Weapons"
+              },
+              "category": "Ammunition",
+              "qty": "10"
+            },
+            {
+              "name": "Narcoject",
+              "category": "Toxins",
+              "qty": "14"
+            }
+          ]
+        },
+        "weapons": {
+          "weapon": [
+            {
+              "name": "Parashield Dart Pistol"
+            },
+            {
+              "name": "Parashield Dart Pistol"
+            }
+          ]
+        }
+      },
+      {
+        "name": "Squad Weapon Assault Pack",
+        "category": "Weapon and Ammo Packs",
+        "nuyenbp": "3",
+        "weapons": {
+          "weapon": {
+            "name": "Ingram Valiant",
+            "accessories": {
+              "accessory": {
+                "name": "Bipod",
+                "mount": "Under"
+              }
+            }
+          }
+        }
+      },
+      {
+        "name": "Medium Machine Gunner Pack",
+        "category": "Weapon and Ammo Packs",
+        "nuyenbp": "4",
+        "gears": {
+          "gear": {
+            "name": {
+              "+content": "Ammo: Regular Ammo",
+              "+@select": "Medium Machine Guns"
+            },
+            "category": "Ammunition",
+            "qty": "250"
+          }
+        },
+        "weapons": {
+          "weapon": {
+            "name": "Stoner-Ares M202",
+            "accessories": {
+              "accessory": {
+                "name": "Tripod",
+                "mount": "Under"
+              }
+            }
+          }
+        }
+      },
+      {
+        "name": "Rocketeer Pack",
+        "category": "Weapon and Ammo Packs",
+        "nuyenbp": "8",
+        "gears": {
+          "gear": {
+            "name": "Rocket: Fragmentation",
+            "category": "Ammunition",
+            "qty": "5"
+          }
+        },
+        "weapons": {
+          "weapon": [
+            {
+              "name": "Aztechnology Striker"
+            },
+            {
+              "name": "Aztechnology Striker"
+            },
+            {
+              "name": "Aztechnology Striker"
+            },
+            {
+              "name": "Aztechnology Striker"
+            },
+            {
+              "name": "Aztechnology Striker"
+            }
+          ]
+        }
+      },
+      {
+        "name": "Box of Grenades #1",
+        "category": "Weapon and Ammo Packs",
+        "nuyenbp": "1",
+        "gears": {
+          "gear": [
+            {
+              "name": "Grenade: Fragmentation",
+              "category": "Ammunition",
+              "qty": "10"
+            },
+            {
+              "name": "Grenade: High Explosive",
+              "category": "Ammunition",
+              "qty": "10"
+            }
+          ]
+        }
+      },
+      {
+        "name": "Box of Grenades #2",
+        "category": "Weapon and Ammo Packs",
+        "nuyenbp": "1",
+        "gears": {
+          "gear": [
+            {
+              "name": "Grenade: Flash-Bang",
+              "category": "Ammunition",
+              "qty": "5"
+            },
+            {
+              "name": "Grenade: Smoke",
+              "category": "Ammunition",
+              "qty": "10"
+            },
+            {
+              "name": "Grenade: Gas",
+              "category": "Ammunition",
+              "qty": "5",
+              "gears": {
+                "gear": {
+                  "name": "CS/Tear Gas",
+                  "category": "Toxins"
+                }
+              }
+            },
+            {
+              "name": "Gas Mask",
+              "category": "Survival Gear",
+              "qty": "5"
+            },
+            {
+              "name": "Grenade: Gas",
+              "category": "Ammunition",
+              "qty": "7",
+              "gears": {
+                "gear": {
+                  "name": "Pepper Punch",
+                  "category": "Toxins"
+                }
+              }
+            },
+            {
+              "name": "Grenade: Thermal Smoke",
+              "category": "Ammunition",
+              "qty": "5"
+            }
+          ]
+        }
+      },
+      {
+        "name": "City Slicker Pack",
+        "category": "Armor Packs",
+        "nuyenbp": "1",
+        "armors": {
+          "armor": [
+            {
+              "name": "Lined Coat",
+              "mods": {
+                "mod": {
+                  "name": "Chemical Protection",
+                  "rating": "2"
+                }
+              }
+            },
+            {
+              "name": "Armor Clothing"
+            }
+          ]
+        },
+        "gears": {
+          "gear": {
+            "name": "Respirator",
+            "category": "Survival Gear",
+            "rating": "3"
+          }
+        }
+      },
+      {
+        "name": "Go Anywhere Jacket Pack",
+        "category": "Armor Packs",
+        "nuyenbp": "2",
+        "armors": {
+          "armor": {
+            "name": "Armor Jacket",
+            "mods": {
+              "mod": [
+                {
+                  "name": "Chemical Protection",
+                  "rating": "4"
+                },
+                {
+                  "name": "Fire Resistance",
+                  "rating": "4"
+                },
+                {
+                  "name": "Insulation",
+                  "rating": "4"
+                }
+              ]
+            }
+          }
+        }
+      },
+      {
+        "name": "Neon Nights Pack",
+        "category": "Armor Packs",
+        "nuyenbp": "1",
+        "armors": {
+          "armor": [
+            {
+              "name": "Urban Explorer Jumpsuit",
+              "gears": {
+                "gear": {
+                  "name": "Biomonitor",
+                  "category": "Biotech"
+                }
+              },
+              "mods": {
+                "mod": [
+                  {
+                    "name": "Electrochromic Clothing"
+                  },
+                  {
+                    "name": "Nonconductivity",
+                    "rating": "2"
+                  },
+                  {
+                    "name": "Shock Frills"
+                  }
+                ]
+              }
+            },
+            {
+              "name": "Urban Explorer Jumpsuit: Helmet"
+            }
+          ]
+        }
+      },
+      {
+        "name": "Nightbird Pack",
+        "category": "Armor Packs",
+        "nuyenbp": "2",
+        "armors": {
+          "armor": {
+            "name": "Chameleon Suit",
+            "mods": {
+              "mod": {
+                "name": "Thermal Damping",
+                "rating": "4"
+              }
+            }
+          }
+        },
+        "gears": {
+          "gear": [
+            {
+              "name": "Gecko Tape Gloves",
+              "category": "Survival Gear"
+            },
+            {
+              "name": "Flashlight",
+              "category": "Survival Gear"
+            },
+            {
+              "name": "Flashlight, Low-light",
+              "category": "Survival Gear"
+            }
+          ]
+        }
+      },
+      {
+        "name": "Stylish Suit Pack",
+        "category": "Armor Packs",
+        "nuyenbp": "1",
+        "armors": {
+          "armor": {
+            "name": "Actioneer Business Clothes",
+            "mods": {
+              "mod": {
+                "name": "Electrochromic Clothing"
+              }
+            }
+          }
+        }
+      },
+      {
+        "name": "Tacticool Helmet Pack",
+        "category": "Armor Packs",
+        "nuyenbp": "3",
+        "armors": {
+          "armor": {
+            "name": "Helmet",
+            "gears": {
+              "gear": [
+                {
+                  "name": "Image Link",
+                  "category": "Vision Enhancements"
+                },
+                {
+                  "name": "Low Light",
+                  "category": "Vision Enhancements"
+                },
+                {
+                  "name": "Smartlink",
+                  "category": "Vision Enhancements"
+                },
+                {
+                  "name": "Micro-Transceiver",
+                  "category": "Communications and Countermeasures"
+                },
+                {
+                  "name": "Flare Compensation",
+                  "category": "Vision Enhancements"
+                },
+                {
+                  "name": "Flashlight",
+                  "category": "Survival Gear"
+                }
+              ]
+            }
+          }
+        },
+        "gears": {
+          "gear": {
+            "name": "Hermes Ikon",
+            "category": "Commlinks"
+          }
+        }
+      },
+      {
+        "name": "Tusker Toughskin Pack",
+        "category": "Armor Packs",
+        "nuyenbp": "1",
+        "armors": {
+          "armor": {
+            "name": "Armor Jacket",
+            "mods": {
+              "mod": {
+                "name": "Nonconductivity",
+                "rating": "4"
+              }
+            }
+          }
+        }
+      },
+      {
+        "name": "Sim-Setional Pack",
+        "category": "Cyber Packs",
+        "nuyenbp": "6",
+        "cyberwares": {
+          "cyberware": [
+            {
+              "name": "Datajack",
+              "grade": "Standard"
+            },
+            {
+              "name": "Olfactory Booster",
+              "rating": "1",
+              "grade": "Standard"
+            },
+            {
+              "name": "Taste Booster",
+              "rating": "1",
+              "grade": "Standard"
+            },
+            {
+              "name": "Simrig",
+              "grade": "Standard"
+            }
+          ]
+        }
+      },
+      {
+        "name": "Basic Combat Eyes Pack",
+        "category": "Cyber Packs",
+        "nuyenbp": "4",
+        "cyberwares": {
+          "cyberware": {
+            "name": "Cybereyes Basic System",
+            "rating": "1",
+            "grade": "Standard",
+            "cyberwares": {
+              "cyberware": {
+                "name": "Smartlink"
+              }
+            },
+            "gears": {
+              "gear": {
+                "name": "Camera",
+                "category": "Vision Devices",
+                "rating": "1"
+              }
+            }
+          }
+        }
+      },
+      {
+        "name": "Advanced Combat Eyes Pack",
+        "category": "Cyber Packs",
+        "nuyenbp": "7",
+        "cyberwares": {
+          "cyberware": {
+            "name": "Cybereyes Basic System",
+            "rating": "2",
+            "grade": "Standard",
+            "cyberwares": {
+              "cyberware": [
+                {
+                  "name": "Smartlink"
+                },
+                {
+                  "name": "Flare Compensation"
+                },
+                {
+                  "name": "Low-Light Vision"
+                },
+                {
+                  "name": "Thermographic Vision"
+                }
+              ]
+            },
+            "gears": {
+              "gear": {
+                "name": "Camera",
+                "category": "Vision Devices",
+                "rating": "1"
+              }
+            }
+          }
+        }
+      },
+      {
+        "name": "Eagle Eyes Pack",
+        "category": "Cyber Packs",
+        "nuyenbp": "7",
+        "cyberwares": {
+          "cyberware": {
+            "name": "Cybereyes Basic System",
+            "rating": "1",
+            "grade": "Standard",
+            "cyberwares": {
+              "cyberware": [
+                {
+                  "name": "Vision Enhancement",
+                  "rating": "2"
+                },
+                {
+                  "name": "Vision Magnification"
+                }
+              ]
+            },
+            "gears": {
+              "gear": {
+                "name": "Camera",
+                "category": "Vision Devices",
+                "rating": "1"
+              }
+            }
+          }
+        }
+      },
+      {
+        "name": "Rabbit Ears Pack",
+        "category": "Cyber Packs",
+        "nuyenbp": "9",
+        "cyberwares": {
+          "cyberware": {
+            "name": "Cyberears",
+            "rating": "1",
+            "grade": "Standard",
+            "cyberwares": {
+              "cyberware": [
+                {
+                  "name": "Select Sound Filter",
+                  "rating": "2"
+                },
+                {
+                  "name": "Audio Enhancement",
+                  "rating": "2"
+                }
+              ]
+            }
+          }
+        }
+      },
+      {
+        "name": "Bulletproof Jeff Pack",
+        "category": "Cyber Packs",
+        "nuyenbp": "12",
+        "cyberwares": {
+          "cyberware": [
+            {
+              "name": "Bone Lacing (Aluminum)",
+              "grade": "Standard"
+            },
+            {
+              "name": "Dermal Plating",
+              "rating": "2",
+              "grade": "Standard"
+            }
+          ]
+        }
+      },
+      {
+        "name": "Basic Razorboi Pack",
+        "category": "Cyber Packs",
+        "nuyenbp": "2",
+        "cyberwares": {
+          "cyberware": [
+            {
+              "name": "Hand Razors",
+              "grade": "Standard"
+            },
+            {
+              "name": "Hand Razors",
+              "grade": "Standard"
+            }
+          ]
+        },
+        "gears": {
+          "gear": {
+            "name": {
+              "+content": "Tool Kit",
+              "+@select": "Cybertechnology"
+            },
+            "category": "Tools"
+          }
+        },
+        "weapons": {
+          "weapon": [
+            {
+              "name": "Hand Razors"
+            },
+            {
+              "name": "Hand Razors"
+            },
+            {
+              "name": "Katana"
+            }
+          ]
+        }
+      },
+      {
+        "name": "Advanced Razorboi Pack",
+        "category": "Cyber Packs",
+        "nuyenbp": "6",
+        "cyberwares": {
+          "cyberware": [
+            {
+              "name": "Spurs",
+              "grade": "Standard"
+            },
+            {
+              "name": "Spurs",
+              "grade": "Standard"
+            }
+          ]
+        },
+        "gears": {
+          "gear": [
+            {
+              "name": {
+                "+content": "Tool Kit",
+                "+@select": "Cybertechnology"
+              },
+              "category": "Tools"
+            },
+            {
+              "name": "Medkit",
+              "category": "Biotech",
+              "rating": "2"
+            }
+          ]
+        },
+        "weapons": {
+          "weapon": [
+            {
+              "name": "Katana"
+            },
+            {
+              "name": "Spurs"
+            },
+            {
+              "name": "Spurs"
+            }
+          ]
+        }
+      },
+      {
+        "name": "Basic Speedboost Pack",
+        "category": "Cyber Packs",
+        "nuyenbp": "20",
+        "cyberwares": {
+          "cyberware": [
+            {
+              "name": "Datajack",
+              "grade": "Standard"
+            },
+            {
+              "name": "Wired Reflexes",
+              "rating": "1",
+              "grade": "Standard"
+            }
+          ]
+        }
+      },
+      {
+        "name": "Advanced Speedboost Pack",
+        "category": "Cyber Packs",
+        "nuyenbp": "75",
+        "cyberwares": {
+          "cyberware": [
+            {
+              "name": "Datajack",
+              "grade": "Standard"
+            },
+            {
+              "name": "Wired Reflexes",
+              "rating": "2",
+              "grade": "Standard"
+            }
+          ]
+        }
+      },
+      {
+        "name": "Basic Vatjob Pack",
+        "category": "Cyber Packs",
+        "nuyenbp": "14",
+        "cyberwares": {
+          "cyberware": [
+            {
+              "name": "Dermal Plating",
+              "rating": "1",
+              "grade": "Standard"
+            },
+            {
+              "name": "Muscle Replacement",
+              "rating": "1",
+              "grade": "Standard"
+            }
+          ]
+        }
+      },
+      {
+        "name": "Advanced Vatjob Pack",
+        "category": "Cyber Packs",
+        "nuyenbp": "28",
+        "cyberwares": {
+          "cyberware": [
+            {
+              "name": "Dermal Plating",
+              "rating": "2",
+              "grade": "Standard"
+            },
+            {
+              "name": "Muscle Replacement",
+              "rating": "2",
+              "grade": "Standard"
+            }
+          ]
+        }
+      },
+      {
+        "name": "Basic Rigger Pack",
+        "category": "Cyber Packs",
+        "nuyenbp": "28",
+        "cyberwares": {
+          "cyberware": [
+            {
+              "name": "Control Rig",
+              "rating": "1",
+              "grade": "Standard"
+            },
+            {
+              "name": "Reaction Enhancers",
+              "rating": "1",
+              "grade": "Standard"
+            }
+          ]
+        }
+      },
+      {
+        "name": "Advanced Rigger Pack",
+        "category": "Cyber Packs",
+        "nuyenbp": "52",
+        "cyberwares": {
+          "cyberware": [
+            {
+              "name": "Control Rig",
+              "rating": "2",
+              "grade": "Standard"
+            },
+            {
+              "name": "Reaction Enhancers",
+              "rating": "2",
+              "grade": "Standard"
+            }
+          ]
+        }
+      },
+      {
+        "name": "Street Samurai Classic Pack",
+        "category": "Cyber Packs",
+        "nuyenbp": "100",
+        "cyberwares": {
+          "cyberware": [
+            {
+              "name": "Cybereyes Basic System",
+              "rating": "2",
+              "grade": "Standard",
+              "cyberwares": {
+                "cyberware": [
+                  {
+                    "name": "Smartlink"
+                  },
+                  {
+                    "name": "Flare Compensation"
+                  },
+                  {
+                    "name": "Low-Light Vision"
+                  },
+                  {
+                    "name": "Thermographic Vision"
+                  }
+                ]
+              },
+              "gears": {
+                "gear": {
+                  "name": "Camera",
+                  "category": "Vision Devices",
+                  "rating": "1"
+                }
+              }
+            },
+            {
+              "name": "Datajack",
+              "grade": "Standard"
+            },
+            {
+              "name": "Wired Reflexes",
+              "rating": "2",
+              "grade": "Standard"
+            },
+            {
+              "name": "Dermal Plating",
+              "rating": "1",
+              "grade": "Standard"
+            },
+            {
+              "name": "Muscle Replacement",
+              "rating": "1",
+              "grade": "Standard"
+            },
+            {
+              "name": "Spurs",
+              "grade": "Standard"
+            },
+            {
+              "name": "Spurs",
+              "grade": "Standard"
+            }
+          ]
+        },
+        "gears": {
+          "gear": [
+            {
+              "name": {
+                "+content": "Tool Kit",
+                "+@select": "Cybertechnology"
+              },
+              "category": "Tools"
+            },
+            {
+              "name": "Medkit",
+              "category": "Biotech",
+              "rating": "2"
+            }
+          ]
+        },
+        "weapons": {
+          "weapon": [
+            {
+              "name": "Katana"
+            },
+            {
+              "name": "Spurs"
+            },
+            {
+              "name": "Spurs"
+            },
+            {
+              "name": "Spurs"
+            },
+            {
+              "name": "Spurs"
+            }
+          ]
+        }
+      },
+      {
+        "name": "Bioware Cat Pack(Catgirl pack)",
+        "category": "Cyber Packs",
+        "nuyenbp": "14",
+        "biowares": {
+          "bioware": [
+            {
+              "name": "Cat's Eyes",
+              "grade": "Standard"
+            },
+            {
+              "name": "Enhanced Articulation",
+              "grade": "Standard"
+            }
+          ]
+        }
+      },
+      {
+        "name": "Bio-Computer Pack",
+        "category": "Cyber Packs",
+        "nuyenbp": "41",
+        "biowares": {
+          "bioware": [
+            {
+              "name": "Cerebral Booster",
+              "rating": "2",
+              "grade": "Standard"
+            },
+            {
+              "name": "Mnemonic Enhancer",
+              "rating": "2",
+              "grade": "Standard"
+            }
+          ]
+        },
+        "cyberwares": {
+          "cyberware": {
+            "name": "Datajack",
+            "grade": "Standard"
+          }
+        }
+      },
+      {
+        "name": "Bioware Company Man Pack",
+        "category": "Cyber Packs",
+        "nuyenbp": "50",
+        "biowares": {
+          "bioware": [
+            {
+              "name": "Bone Density Augmentation",
+              "rating": "1",
+              "grade": "Standard"
+            },
+            {
+              "name": "Synaptic Booster",
+              "rating": "1",
+              "grade": "Standard"
+            }
+          ]
+        }
+      },
+      {
+        "name": "Basic Cyberdeck Programs Pack",
+        "category": "Decker Packs",
+        "nuyenbp": "1",
+        "gears": {
+          "gear": [
+            {
+              "name": {
+                "+content": "Tool Kit",
+                "+@select": "Software"
+              },
+              "category": "Tools"
+            },
+            {
+              "name": {
+                "+content": "Tool Kit",
+                "+@select": "Hardware"
+              },
+              "category": "Tools"
+            },
+            {
+              "name": "Broken Sony CIY-720",
+              "category": "Cyberdecks"
+            }
+          ]
+        }
+      },
+      {
+        "name": "Bug-out Bag",
+        "category": "Lifstyle Packs",
+        "nuyenbp": "2",
+        "armors": {
+          "armor": {
+            "name": "Armor Clothing"
+          }
+        },
+        "gears": {
+          "gear": [
+            {
+              "name": "Fake SIN",
+              "category": "ID/Credsticks",
+              "rating": "1"
+            },
+            {
+              "name": "Sony Emperor",
+              "category": "Commlinks"
+            },
+            {
+              "name": {
+                "+content": "Ammo: Regular Ammo",
+                "+@select": "Holdouts"
+              },
+              "category": "Ammunition",
+              "qty": "30"
+            },
+            {
+              "name": "Restraint, Metal",
+              "category": "Security Devices"
+            },
+            {
+              "name": "Datachip",
+              "category": "RFID Tags",
+              "qty": "10"
+            },
+            {
+              "name": "Security Tags",
+              "category": "RFID Tags",
+              "qty": "10"
+            },
+            {
+              "name": "Long Haul",
+              "category": "Drugs",
+              "qty": "2"
+            },
+            {
+              "name": "Certified Credstick, Standard",
+              "category": "ID/Credsticks"
+            }
+          ]
+        },
+        "weapons": {
+          "weapon": [
+            {
+              "name": "Streetline Special"
+            },
+            {
+              "name": "Knife",
+              "accessories": {
+                "accessory": {
+                  "name": "Spare Clip",
+                  "mount": null
+                }
+              }
+            }
+          ]
+        }
+      },
+      {
+        "name": "Cocktail Kid Pack",
+        "category": "Color Packs",
+        "nuyenbp": "1",
+        "gears": {
+          "gear": [
+            {
+              "name": "Disposable Syringe",
+              "category": "Biotech",
+              "qty": "10"
+            },
+            {
+              "name": "Jazz",
+              "category": "Drugs",
+              "qty": "10"
+            },
+            {
+              "name": "Long Haul",
+              "category": "Drugs",
+              "qty": "5"
+            },
+            {
+              "name": "Kamikaze",
+              "category": "Drugs",
+              "qty": "5"
+            },
+            {
+              "name": "Zen",
+              "category": "Drugs",
+              "qty": "20"
+            },
+            {
+              "name": "Novacoke",
+              "category": "Drugs",
+              "qty": "20"
+            }
+          ]
+        }
+      },
+      {
+        "name": "Drone Mechanic Pack",
+        "category": "Color Packs",
+        "nuyenbp": "1",
+        "gears": {
+          "gear": [
+            {
+              "name": {
+                "+content": "Tool Kit",
+                "+@select": "Aeronautics Mechanic"
+              },
+              "category": "Tools"
+            },
+            {
+              "name": {
+                "+content": "Tool Kit",
+                "+@select": "Electronic Warfare"
+              },
+              "category": "Tools"
+            },
+            {
+              "name": {
+                "+content": "Tool Kit",
+                "+@select": "Automotive Mechanic"
+              },
+              "category": "Tools"
+            },
+            {
+              "name": {
+                "+content": "Tool Kit",
+                "+@select": "Nautical Mechanic"
+              },
+              "category": "Tools"
+            }
+          ]
+        }
+      },
+      {
+        "name": "Mechanic Shop Pack",
+        "category": "Color Packs",
+        "nuyenbp": "3",
+        "gears": {
+          "gear": [
+            {
+              "name": {
+                "+content": "Tool Kit",
+                "+@select": "Automotive Mechanic"
+              },
+              "category": "Tools"
+            },
+            {
+              "name": {
+                "+content": "Tool Shop",
+                "+@select": "Automotive Mechanic"
+              },
+              "category": "Tools"
+            },
+            {
+              "name": {
+                "+content": "Shopsoft",
+                "+@select": "Car Parts"
+              },
+              "category": "Software"
+            },
+            {
+              "name": {
+                "+content": "Knowsoft",
+                "+@select": "Car Makes and Models"
+              },
+              "category": "Skillsofts",
+              "rating": "1"
+            },
+            {
+              "name": "Flashlight",
+              "category": "Survival Gear"
+            },
+            {
+              "name": "Chemsuit",
+              "category": "Survival Gear",
+              "rating": "1"
+            },
+            {
+              "name": "Respirator",
+              "category": "Survival Gear",
+              "rating": "1"
+            }
+          ]
+        }
+      },
+      {
+        "name": "Eavesdropper Pack",
+        "category": "Color Packs",
+        "nuyenbp": "1",
+        "gears": {
+          "gear": [
+            {
+              "name": "Data Tap",
+              "category": "Communications and Countermeasures",
+              "qty": "5"
+            },
+            {
+              "name": "Camera, Micro",
+              "category": "Vision Devices",
+              "qty": "5",
+              "rating": "1"
+            }
+          ]
+        }
+      },
+      {
+        "name": "Surveillance Pack",
+        "category": "Color Packs",
+        "nuyenbp": "1",
+        "gears": {
+          "gear": [
+            {
+              "name": "Binoculars, Optical",
+              "category": "Vision Devices",
+              "gears": {
+                "gear": {
+                  "name": "Vision Magnification",
+                  "category": "Vision Enhancements"
+                }
+              }
+            },
+            {
+              "name": "Binoculars",
+              "category": "Vision Devices",
+              "rating": "1",
+              "gears": {
+                "gear": [
+                  {
+                    "name": "Vision Magnification",
+                    "category": "Vision Enhancements"
+                  },
+                  {
+                    "name": "Low Light",
+                    "category": "Vision Enhancements"
+                  }
+                ]
+              }
+            },
+            {
+              "name": "Camera",
+              "category": "Vision Devices",
+              "rating": "1",
+              "gears": {
+                "gear": {
+                  "name": "Vision Magnification",
+                  "category": "Vision Enhancements"
+                }
+              }
+            },
+            {
+              "name": "Camera, Micro",
+              "category": "Vision Devices",
+              "rating": "1"
+            },
+            {
+              "name": "Directional Microphone",
+              "category": "Sensor Functions",
+              "rating": "1",
+              "gears": {
+                "gear": {
+                  "name": "Select Sound Filter",
+                  "category": "Audio Enhancements",
+                  "rating": "1"
+                }
+              }
+            },
+            {
+              "name": "Laser Microphone",
+              "category": "Sensor Functions",
+              "rating": "1",
+              "gears": {
+                "gear": {
+                  "name": "Audio Enhancement",
+                  "category": "Audio Enhancements",
+                  "rating": "1"
+                }
+              }
+            }
+          ]
+        }
+      },
+      {
+        "name": "Breaking and Entering Pack",
+        "category": "Color Packs",
+        "nuyenbp": "3",
+        "gears": {
+          "gear": [
+            {
+              "name": "Autopicker",
+              "category": "Breaking and Entering Gear",
+              "rating": "4"
+            },
+            {
+              "name": "Keycard Copier",
+              "category": "Breaking and Entering Gear",
+              "rating": "5"
+            },
+            {
+              "name": "Sequencer",
+              "category": "Breaking and Entering Gear",
+              "rating": "4"
+            }
+          ]
+        }
+      },
+      {
+        "name": "Jammer Pack",
+        "category": "Color Packs",
+        "nuyenbp": "1",
+        "gears": {
+          "gear": [
+            {
+              "name": "Jammer, Area",
+              "category": "Communications and Countermeasures",
+              "rating": "4"
+            },
+            {
+              "name": "Bug Scanner",
+              "category": "Communications and Countermeasures",
+              "rating": "5"
+            },
+            {
+              "name": "Tag Eraser",
+              "category": "Communications and Countermeasures"
+            },
+            {
+              "name": "White Noise Generator",
+              "category": "Communications and Countermeasures",
+              "rating": "5"
+            }
+          ]
+        }
+      },
+      {
+        "name": "Medic Pack",
+        "category": "Color Packs",
+        "nuyenbp": "1",
+        "gears": {
+          "gear": [
+            {
+              "name": "Medkit",
+              "category": "Biotech",
+              "rating": "6"
+            },
+            {
+              "name": "Biomonitor",
+              "category": "Biotech"
+            },
+            {
+              "name": "Medkit Supplies",
+              "category": "Biotech",
+              "qty": "2"
+            }
+          ]
+        }
+      },
+      {
+        "name": "Medical Patches Pack",
+        "category": "Color Packs",
+        "nuyenbp": "1",
+        "gears": {
+          "gear": [
+            {
+              "name": "Slap Patch, Antidote Patch",
+              "category": "Biotech",
+              "qty": "5",
+              "rating": "4"
+            },
+            {
+              "name": "Slap Patch, Stim Patch",
+              "category": "Biotech",
+              "rating": "4"
+            },
+            {
+              "name": "Slap Patch, Tranq Patch",
+              "category": "Biotech",
+              "qty": "4",
+              "rating": "5"
+            },
+            {
+              "name": "Slap Patch, Trauma Patch",
+              "category": "Biotech"
+            }
+          ]
+        }
+      },
+      {
+        "name": "Mountaineering Pack",
+        "category": "Color Packs",
+        "nuyenbp": "1",
+        "gears": {
+          "gear": [
+            {
+              "name": "Climbing Gear",
+              "category": "Survival Gear"
+            },
+            {
+              "name": "Flashlight",
+              "category": "Survival Gear"
+            },
+            {
+              "name": "Magnesium Torch",
+              "category": "Survival Gear",
+              "qty": "5"
+            },
+            {
+              "name": "Micro Flare Launcher",
+              "category": "Survival Gear"
+            },
+            {
+              "name": "Micro Flares",
+              "category": "Survival Gear",
+              "qty": "3"
+            },
+            {
+              "name": "Rapelling Gloves",
+              "category": "Survival Gear"
+            },
+            {
+              "name": "Survival Kit",
+              "category": "Survival Gear"
+            },
+            {
+              "name": "Grapple Gun",
+              "category": "Grapple Gun",
+              "gears": {
+                "gear": {
+                  "name": "Microwire (100m)",
+                  "category": "Grapple Gun",
+                  "qty": "4"
+                }
+              }
+            },
+            {
+              "name": "Standard Rope (100m)",
+              "category": "Grapple Gun"
+            },
+            {
+              "name": "Medkit",
+              "category": "Biotech",
+              "rating": "2"
+            }
+          ]
+        }
+      },
+      {
+        "name": "Infiltration Pack",
+        "category": "Color Packs",
+        "nuyenbp": "1",
+        "gears": {
+          "gear": [
+            {
+              "name": {
+                "+content": "Tool Kit",
+                "+@select": "Disguise"
+              },
+              "category": "Tools"
+            },
+            {
+              "name": "Lockpick Set",
+              "category": "Breaking and Entering Gear"
+            },
+            {
+              "name": "Contacts",
+              "category": "Vision Devices",
+              "rating": "2",
+              "gears": {
+                "gear": [
+                  {
+                    "name": "Image Link",
+                    "category": "Vision Enhancements"
+                  },
+                  {
+                    "name": "Low Light",
+                    "category": "Vision Enhancements"
+                  }
+                ]
+              }
+            },
+            {
+              "name": "Flashlight",
+              "category": "Survival Gear"
+            },
+            {
+              "name": "Flashlight, Low-light",
+              "category": "Survival Gear"
+            },
+            {
+              "name": "Datachip",
+              "category": "RFID Tags",
+              "qty": "20"
+            },
+            {
+              "name": "Stealth Tags",
+              "category": "RFID Tags",
+              "qty": "10"
+            },
+            {
+              "name": "Restraint, Plastic",
+              "category": "Security Devices",
+              "qty": "10"
+            },
+            {
+              "name": "Micro-Transceiver",
+              "category": "Communications and Countermeasures"
+            },
+            {
+              "name": "Camera",
+              "category": "Vision Devices",
+              "rating": "1"
+            }
+          ]
+        }
+      },
+      {
+        "name": "Demolitionist Pack",
+        "category": "Color Packs",
+        "nuyenbp": "1",
+        "gears": {
+          "gear": [
+            {
+              "name": {
+                "+content": "Tool Kit",
+                "+@select": "Demolitions"
+              },
+              "category": "Tools"
+            },
+            {
+              "name": "Commercial Explosive",
+              "category": "Explosives",
+              "qty": "12",
+              "rating": "5"
+            },
+            {
+              "name": "Detonator, Blasting Cap",
+              "category": "Explosives",
+              "qty": "8"
+            }
+          ]
+        }
+      },
+      {
+        "name": "Racing Bike Pack",
+        "category": "Vehicle Packs",
+        "nuyenbp": "5",
+        "armors": {
+          "armor": [
+            {
+              "name": "Armor Clothing"
+            },
+            {
+              "name": "Helmet"
+            },
+            {
+              "name": "Helmet"
+            }
+          ]
+        },
+        "gears": {
+          "gear": [
+            {
+              "name": {
+                "+content": "Mapsoft",
+                "+@select": "City Streets"
+              },
+              "category": "Software"
+            },
+            {
+              "name": {
+                "+content": "Shopsoft",
+                "+@select": "Motorcycles and Motorcycle Parts"
+              },
+              "category": "Software"
+            },
+            {
+              "name": {
+                "+content": "Tool Kit",
+                "+@select": "Automotive Mechanic"
+              },
+              "category": "Tools"
+            }
+          ]
+        },
+        "vehicles": {
+          "vehicle": {
+            "name": "Suzuki Mirage (Racing Bike)",
+            "gears": {
+              "gear": {
+                "name": "Sensor Array",
+                "category": "Sensors",
+                "rating": "2"
+              }
+            }
+          }
+        }
+      },
+      {
+        "name": "Off Road Pack",
+        "category": "Vehicle Packs",
+        "nuyenbp": "20",
+        "vehicles": {
+          "vehicle": [
+            {
+              "name": "Toyota Gopher (Heavy-Duty Pickup)",
+              "gears": {
+                "gear": {
+                  "name": "Sensor Array",
+                  "category": "Sensors",
+                  "rating": "2"
+                }
+              }
+            },
+            {
+              "name": "Yamaha Growler (Off-Road Bike)",
+              "gears": {
+                "gear": {
+                  "name": "Sensor Array",
+                  "category": "Sensors",
+                  "rating": "2"
+                }
+              }
+            }
+          ]
+        }
+      },
+      {
+        "name": "Basic Decker Pack",
+        "category": "Decker Packs",
+        "nuyenbp": "62",
+        "gears": {
+          "gear": [
+            {
+              "name": "Hermes Chariot",
+              "category": "Cyberdecks"
+            },
+            {
+              "name": {
+                "+content": "Tool Kit",
+                "+@select": "Hardware"
+              },
+              "category": "Tools"
+            },
+            {
+              "name": {
+                "+content": "Tool Kit",
+                "+@select": "Software"
+              },
+              "category": "Tools"
+            }
+          ]
+        }
+      },
+      {
+        "name": "Advanced Decker Pack",
+        "category": "Decker Packs",
+        "nuyenbp": "100",
+        "gears": {
+          "gear": [
+            {
+              "name": {
+                "+content": "Tool Kit",
+                "+@select": "Hardware"
+              },
+              "category": "Tools"
+            },
+            {
+              "name": {
+                "+content": "Tool Kit",
+                "+@select": "Software"
+              },
+              "category": "Tools"
+            },
+            {
+              "name": "Sony CIY-720",
+              "category": "Cyberdecks"
+            }
+          ]
+        }
+      },
+      {
+        "name": "Advanced Cyberdeck Programs Pack",
+        "category": "Decker Packs",
+        "nuyenbp": "1",
+        "gears": {
+          "gear": [
+            {
+              "name": "Armor",
+              "category": "Hacking Programs"
+            },
+            {
+              "name": "Biofeedback",
+              "category": "Hacking Programs"
+            },
+            {
+              "name": "Blackout",
+              "category": "Hacking Programs"
+            },
+            {
+              "name": "Guard",
+              "category": "Hacking Programs"
+            },
+            {
+              "name": "Hammer",
+              "category": "Hacking Programs"
+            },
+            {
+              "name": "Mugger",
+              "category": "Hacking Programs"
+            },
+            {
+              "name": "Shell",
+              "category": "Hacking Programs"
+            }
+          ]
+        }
+      },
+      {
+        "name": "Basic Spy Drone Pack",
+        "category": "Drone Packs",
+        "nuyenbp": "2",
+        "vehicles": {
+          "vehicle": {
+            "name": "Shiawase Kanmushi (Microdrone)",
+            "gears": {
+              "gear": [
+                {
+                  "name": "Sensor Array",
+                  "category": "Sensors",
+                  "rating": "3"
+                },
+                {
+                  "name": "Low Light",
+                  "category": "Vision Enhancements"
+                },
+                {
+                  "name": "Select Sound Filter",
+                  "category": "Audio Enhancements",
+                  "rating": "2"
+                }
+              ]
+            }
+          }
+        }
+      },
+      {
+        "name": "Advanced Spy Drone Pack",
+        "category": "Drone Packs",
+        "nuyenbp": "11",
+        "vehicles": {
+          "vehicle": {
+            "name": "Lockheed Optic-X2 (Small)",
+            "gears": {
+              "gear": {
+                "name": "Sensor Array",
+                "category": "Sensors",
+                "rating": "3",
+                "gears": {
+                  "gear": [
+                    {
+                      "name": "Camera",
+                      "category": "Sensor Functions",
+                      "rating": "2",
+                      "gears": {
+                        "gear": [
+                          {
+                            "name": "Vision Enhancement",
+                            "category": "Vision Enhancements",
+                            "rating": "1"
+                          },
+                          {
+                            "name": "Vision Magnification",
+                            "category": "Vision Enhancements"
+                          }
+                        ]
+                      }
+                    },
+                    {
+                      "name": "Directional Microphone",
+                      "category": "Sensor Functions",
+                      "rating": "1",
+                      "gears": {
+                        "gear": {
+                          "name": "Select Sound Filter",
+                          "category": "Audio Enhancements",
+                          "rating": "1"
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            }
+          }
+        }
+      },
+      {
+        "name": "Basic Combat Drone Pack",
+        "category": "Drone Packs",
+        "nuyenbp": "3",
+        "gears": {
+          "gear": {
+            "name": {
+              "+content": "Ammo: Regular Ammo",
+              "+@select": "Submachine Guns"
+            },
+            "category": "Ammunition",
+            "qty": "170"
+          }
+        },
+        "vehicles": {
+          "vehicle": {
+            "name": "GM-Nissan Doberman (Medium)",
+            "gears": {
+              "gear": {
+                "name": "Sensor Array",
+                "category": "Sensors",
+                "rating": "3"
+              }
+            },
+            "weapons": {
+              "weapon": {
+                "name": "Colt Cobra TZ-120"
+              }
+            }
+          }
+        }
+      },
+      {
+        "name": "Advanced Combat Drone Pack",
+        "category": "Drone Packs",
+        "nuyenbp": "14",
+        "vehicles": {
+          "vehicle": {
+            "name": "Steel Lynx Combat Drone (Large)",
+            "gears": {
+              "gear": {
+                "name": "Sensor Array",
+                "category": "Sensors",
+                "rating": "3",
+                "gears": {
+                  "gear": [
+                    {
+                      "name": "Low Light",
+                      "category": "Vision Enhancements"
+                    },
+                    {
+                      "name": "Smartlink",
+                      "category": "Vision Enhancements"
+                    },
+                    {
+                      "name": "Thermographic Vision",
+                      "category": "Vision Enhancements"
+                    }
+                  ]
+                }
+              }
+            }
+          }
+        }
+      },
+      {
+        "name": "Runnerhub Basic Gear Pack",
+        "category": "Community Packs",
+        "nuyenbp": "21",
+        "armors": {
+          "armor": [
+            {
+              "name": "Armor Jacket"
+            },
+            {
+              "name": "Helmet"
+            }
+          ]
+        },
+        "gears": {
+          "gear": [
+            {
+              "name": "Hermes Ikon",
+              "category": "Commlinks"
+            },
+            {
+              "name": "Meta Link",
+              "category": "Commlinks"
+            },
+            {
+              "name": "Trodes",
+              "category": "Electronics Accessories"
+            },
+            {
+              "name": "Micro-Transceiver",
+              "category": "Communications and Countermeasures"
+            },
+            {
+              "name": "Camera, Micro",
+              "category": "Vision Devices",
+              "rating": "1"
+            },
+            {
+              "name": "Fake SIN",
+              "category": "ID/Credsticks",
+              "rating": "4",
+              "gears": {
+                "gear": [
+                  {
+                    "name": "Fake License",
+                    "category": "ID/Credsticks",
+                    "rating": "4"
+                  },
+                  {
+                    "name": "Fake License",
+                    "category": "ID/Credsticks",
+                    "rating": "4"
+                  },
+                  {
+                    "name": "Fake License",
+                    "category": "ID/Credsticks",
+                    "rating": "4"
+                  }
+                ]
+              }
+            },
+            {
+              "name": {
+                "+content": "Ammo: APDS",
+                "+@select": "Machine Pistols"
+              },
+              "category": "Ammunition",
+              "qty": "30"
+            },
+            {
+              "name": {
+                "+content": "Ammo: Stick-n-Shock",
+                "+@select": "Machine Pistols"
+              },
+              "category": "Ammunition",
+              "qty": "30"
+            },
+            {
+              "name": "Certified Credstick, Silver",
+              "category": "ID/Credsticks"
+            },
+            {
+              "name": "Certified Credstick, Standard",
+              "category": "ID/Credsticks",
+              "qty": "5"
+            },
+            {
+              "name": "Contacts",
+              "category": "Vision Devices",
+              "rating": "3",
+              "gears": {
+                "gear": [
+                  {
+                    "name": "Image Link",
+                    "category": "Vision Enhancements"
+                  },
+                  {
+                    "name": "Flare Compensation",
+                    "category": "Vision Enhancements"
+                  },
+                  {
+                    "name": "Vision Magnification",
+                    "category": "Vision Enhancements"
+                  }
+                ]
+              }
+            },
+            {
+              "name": "Glasses",
+              "category": "Vision Devices",
+              "rating": "4",
+              "gears": {
+                "gear": [
+                  {
+                    "name": "Vision Enhancement",
+                    "category": "Vision Enhancements",
+                    "rating": "3"
+                  },
+                  {
+                    "name": "Thermographic Vision",
+                    "category": "Vision Enhancements"
+                  }
+                ]
+              }
+            },
+            {
+              "name": "Earbuds",
+              "category": "Audio Devices",
+              "rating": "3",
+              "gears": {
+                "gear": [
+                  {
+                    "name": "Select Sound Filter",
+                    "category": "Audio Enhancements",
+                    "rating": "1"
+                  },
+                  {
+                    "name": "Audio Enhancement",
+                    "category": "Audio Enhancements",
+                    "rating": "2"
+                  }
+                ]
+              }
+            },
+            {
+              "name": "Datachip",
+              "category": "RFID Tags",
+              "qty": "10"
+            },
+            {
+              "name": "Standard Tags",
+              "category": "RFID Tags",
+              "qty": "10"
+            },
+            {
+              "name": "Stealth Tags",
+              "category": "RFID Tags",
+              "qty": "10"
+            },
+            {
+              "name": "Restraint, Metal",
+              "category": "Security Devices"
+            },
+            {
+              "name": "Restraint, Plastic",
+              "category": "Security Devices",
+              "qty": "10"
+            },
+            {
+              "name": "Slap Patch, Trauma Patch",
+              "category": "Biotech"
+            },
+            {
+              "name": "Slap Patch, Stim Patch",
+              "category": "Biotech",
+              "qty": "2",
+              "rating": "6"
+            },
+            {
+              "name": "Medkit",
+              "category": "Biotech",
+              "rating": "3"
+            },
+            {
+              "name": "Medkit",
+              "category": "Biotech",
+              "rating": "6"
+            },
+            {
+              "name": "Bug Scanner",
+              "category": "Communications and Countermeasures",
+              "rating": "6"
+            },
+            {
+              "name": "Tag Eraser",
+              "category": "Communications and Countermeasures"
+            },
+            {
+              "name": "Long Haul",
+              "category": "Drugs"
+            },
+            {
+              "name": "Standard Rope (100m)",
+              "category": "Grapple Gun"
+            },
+            {
+              "name": "Survival Kit",
+              "category": "Survival Gear"
+            },
+            {
+              "name": "Gas Mask",
+              "category": "Survival Gear"
+            },
+            {
+              "name": "Crowbar",
+              "category": "Breaking and Entering Gear"
+            },
+            {
+              "name": "Miniwelder",
+              "category": "Breaking and Entering Gear"
+            }
+          ]
+        },
+        "lifestyles": {
+          "lifestyle": {
+            "baselifestyle": "Low",
+            "months": "1"
+          }
+        },
+        "vehicles": {
+          "vehicle": {
+            "name": "Chrysler-Nissan Jackrabbit (Subcompact)",
+            "gears": {
+              "gear": {
+                "name": "Sensor Array",
+                "category": "Sensors",
+                "rating": "2"
+              }
+            }
+          }
+        },
+        "weapons": {
+          "weapon": {
+            "name": "Steyr TMP",
+            "accessories": {
+              "accessory": [
+                {
+                  "name": "Silencer",
+                  "mount": "Barrel"
+                },
+                {
+                  "name": "Spare Clip",
+                  "mount": null
+                },
+                {
+                  "name": "Spare Clip",
+                  "mount": null
+                },
+                {
+                  "name": "Spare Clip",
+                  "mount": null
+                }
+              ]
+            }
+          }
+        }
+      },
+      {
+        "name": "Runnerhub Pennypincher Pack",
+        "category": "Community Packs",
+        "nuyenbp": "5",
+        "armors": {
+          "armor": [
+            {
+              "name": "Armor Jacket"
+            },
+            {
+              "name": "Helmet"
+            }
+          ]
+        },
+        "gears": {
+          "gear": [
+            {
+              "name": "Renraku Sensei",
+              "category": "Commlinks"
+            },
+            {
+              "name": "Trodes",
+              "category": "Electronics Accessories"
+            },
+            {
+              "name": "Meta Link",
+              "category": "Commlinks"
+            },
+            {
+              "name": "Micro-Transceiver",
+              "category": "Communications and Countermeasures"
+            },
+            {
+              "name": "Camera, Micro",
+              "category": "Vision Devices",
+              "rating": "1"
+            },
+            {
+              "name": "Fake SIN",
+              "category": "ID/Credsticks",
+              "rating": "3",
+              "gears": {
+                "gear": [
+                  {
+                    "name": "Fake License",
+                    "category": "ID/Credsticks",
+                    "rating": "3"
+                  },
+                  {
+                    "name": "Fake License",
+                    "category": "ID/Credsticks",
+                    "rating": "3"
+                  }
+                ]
+              }
+            },
+            {
+              "name": {
+                "+content": "Ammo: APDS",
+                "+@select": "Machine Pistols"
+              },
+              "category": "Ammunition",
+              "qty": "30"
+            },
+            {
+              "name": {
+                "+content": "Ammo: Stick-n-Shock",
+                "+@select": "Machine Pistols"
+              },
+              "category": "Ammunition",
+              "qty": "30"
+            },
+            {
+              "name": "Certified Credstick, Silver",
+              "category": "ID/Credsticks"
+            },
+            {
+              "name": "Certified Credstick, Standard",
+              "category": "ID/Credsticks",
+              "qty": "5"
+            },
+            {
+              "name": "Contacts",
+              "category": "Vision Devices",
+              "rating": "1",
+              "gears": {
+                "gear": {
+                  "name": "Image Link",
+                  "category": "Vision Enhancements"
+                }
+              }
+            },
+            {
+              "name": "Earbuds",
+              "category": "Audio Devices",
+              "rating": "1",
+              "gears": {
+                "gear": {
+                  "name": "Select Sound Filter",
+                  "category": "Audio Enhancements",
+                  "rating": "1"
+                }
+              }
+            },
+            {
+              "name": "Datachip",
+              "category": "RFID Tags",
+              "qty": "4"
+            },
+            {
+              "name": "Standard Tags",
+              "category": "RFID Tags",
+              "qty": "10"
+            },
+            {
+              "name": "Stealth Tags",
+              "category": "RFID Tags",
+              "qty": "3"
+            },
+            {
+              "name": "Slap Patch, Trauma Patch",
+              "category": "Biotech"
+            },
+            {
+              "name": "Slap Patch, Stim Patch",
+              "category": "Biotech",
+              "rating": "6"
+            }
+          ]
+        },
+        "lifestyles": {
+          "lifestyle": {
+            "baselifestyle": "Low",
+            "months": "1"
+          }
+        },
+        "weapons": {
+          "weapon": {
+            "name": "Steyr TMP",
+            "accessories": {
+              "accessory": [
+                {
+                  "name": "Silencer",
+                  "mount": "Barrel"
+                },
+                {
+                  "name": "Spare Clip",
+                  "mount": null
+                },
+                {
+                  "name": "Spare Clip",
+                  "mount": null
+                },
+                {
+                  "name": "Spare Clip",
+                  "mount": null
+                }
+              ]
+            }
+          }
+        }
+      },
+      {
+        "name": "ShadowNET starter pack",
+        "category": "Community Packs",
+        "nuyenbp": "10",
+        "armors": {
+          "armor": [
+            {
+              "name": "Armor Jacket"
+            },
+            {
+              "name": "Ballistic Mask"
+            }
+          ]
+        },
+        "gears": {
+          "gear": [
+            {
+              "name": "Renraku Sensei",
+              "category": "Commlinks"
+            },
+            {
+              "name": "Fake SIN",
+              "category": "ID/Credsticks",
+              "rating": "4"
+            },
+            {
+              "name": "AR Gloves",
+              "category": "Electronics Accessories"
+            },
+            {
+              "name": "Trodes",
+              "category": "Electronics Accessories"
+            },
+            {
+              "name": "Subvocal Mic",
+              "category": "Electronics Accessories"
+            },
+            {
+              "name": "Earbuds",
+              "category": "Audio Devices",
+              "rating": "2",
+              "gears": {
+                "gear": {
+                  "name": "Audio Enhancement",
+                  "category": "Audio Enhancements",
+                  "rating": "2"
+                }
+              }
+            },
+            {
+              "name": "Contacts",
+              "category": "Vision Devices",
+              "rating": "3",
+              "gears": {
+                "gear": [
+                  {
+                    "name": "Image Link",
+                    "category": "Vision Enhancements"
+                  },
+                  {
+                    "name": "Vision Enhancement",
+                    "category": "Vision Enhancements",
+                    "rating": "2"
+                  }
+                ]
+              }
+            },
+            {
+              "name": "Data Tap",
+              "category": "Communications and Countermeasures"
+            },
+            {
+              "name": "Tag Eraser",
+              "category": "Communications and Countermeasures"
+            },
+            {
+              "name": "Standard Tags",
+              "category": "RFID Tags",
+              "qty": "10"
+            },
+            {
+              "name": "Datachip",
+              "category": "RFID Tags",
+              "qty": "10"
+            },
+            {
+              "name": "Certified Credstick, Standard",
+              "category": "ID/Credsticks",
+              "qty": "10",
+              "rating": "1"
+            },
+            {
+              "name": "Crowbar",
+              "category": "Breaking and Entering Gear"
+            },
+            {
+              "name": "Flashlight",
+              "category": "Survival Gear"
+            },
+            {
+              "name": "Restraint, Plasteel",
+              "category": "Security Devices",
+              "qty": "5"
+            },
+            {
+              "name": "Hold-Fast Adhesive Spray",
+              "category": "Tools of the Trade",
+              "qty": "2"
+            },
+            {
+              "name": "Ultra-Glide Industrial Lubricant (liter)",
+              "category": "Tools of the Trade",
+              "qty": "2"
+            },
+            {
+              "name": "Telescoping Mirror on a Stick",
+              "category": "Tools of the Trade"
+            },
+            {
+              "name": "Medkit",
+              "category": "Biotech",
+              "rating": "3"
+            },
+            {
+              "name": "Slap Patch, Stim Patch",
+              "category": "Biotech",
+              "qty": "2",
+              "rating": "6"
+            },
+            {
+              "name": "Slap Patch, Trauma Patch",
+              "category": "Biotech"
+            }
+          ]
+        },
+        "weapons": {
+          "weapon": [
+            {
+              "name": "Survival Knife"
+            },
+            {
+              "name": "Savalette Guardian"
+            },
+            {
+              "name": "Hold-Fast Sprayer"
+            }
+          ]
+        }
+      }
+    ]
+  }
+}

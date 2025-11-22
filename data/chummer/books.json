@@ -1,0 +1,655 @@
+{
+  "+@xmlns": "",
+  "+@xmlns:xsi": "http://www.w3.org/2001/XMLSchema-instance",
+  "+@xsi:schemaLocation": "http://www.w3.org/2001/XMLSchema books.xsd",
+  "books": {
+    "book": [
+      {
+        "id": "289bc41d-6dd5-4216-9bc7-e6f0cabae9ac",
+        "name": "Assassin's Primer",
+        "code": "AP",
+        "matches": {
+          "match": [
+            {
+              "language": "en-us",
+              "text": "Whether we want to admit it or not,",
+              "page": "2"
+            },
+            {
+              "language": "de-de",
+              "text": "Soweit die Historiker das sagen können,",
+              "page": "2"
+            }
+          ]
+        }
+      },
+      {
+        "id": "b68175bc-e10f-4e11-9361-ed62bb371c8d",
+        "name": "Gun Heaven 3",
+        "code": "GH3",
+        "matches": {
+          "match": [
+            {
+              "language": "en-us",
+              "text": "The weapon is designed to be hand loaded",
+              "page": "3"
+            },
+            {
+              "language": "de-de",
+              "text": "Mit dem New Model Revolver kehrt",
+              "page": "4"
+            }
+          ]
+        }
+      },
+      {
+        "id": "5d6626a2-2400-44b5-b777-d7dac6cb512f",
+        "name": "Run and Gun",
+        "code": "RG",
+        "matches": {
+          "match": [
+            {
+              "language": "en-us",
+              "text": "The whole run was a setup. It had to be",
+              "page": "6"
+            },
+            {
+              "language": "de-de",
+              "text": "In seinem Kommandozentrum sah Sicherheitschef",
+              "page": "6"
+            }
+          ]
+        }
+      },
+      {
+        "id": "f5ec713c-98cd-41f6-a0a4-4a8eaed55b66",
+        "name": "Shadowrun 5th Edition",
+        "code": "SR5",
+        "permanent": null,
+        "matches": {
+          "match": [
+            {
+              "language": "en-us",
+              "text": "Welcome to Shadowrun, Fifth Edition. Welcome to the",
+              "page": "8"
+            },
+            {
+              "language": "de-de",
+              "text": "Die Luft war voller Rauch, durchschnitten",
+              "page": "8"
+            }
+          ]
+        }
+      },
+      {
+        "id": "3976dc50-f7db-481d-9372-fc2a5c1178ce",
+        "name": "Street Grimoire",
+        "code": "SG",
+        "matches": {
+          "match": [
+            {
+              "language": "en-us",
+              "text": "Sixth World that has developed a taste for Awakened",
+              "page": "5"
+            },
+            {
+              "language": "de-de",
+              "text": "In der Sechsten Welt sind Erwachte Personen",
+              "page": "5"
+            }
+          ]
+        }
+      },
+      {
+        "id": "ee63bbc5-2abd-4543-8371-457044bc7c63",
+        "name": "Street Grimoire Errata",
+        "code": "SGE",
+        "matches": {
+          "match": {
+            "language": "en-us",
+            "text": "PROTECT VEHICLE SUB-HEADER",
+            "page": "2"
+          }
+        }
+      },
+      {
+        "id": "d7b60868-41ee-4970-b9f2-f1a2a81b6d1a",
+        "name": "Bullets & Bandages",
+        "code": "BB",
+        "matches": {
+          "match": [
+            {
+              "language": "en-us",
+              "text": "an average troll to stand in. He was lying among a pile of",
+              "page": "3"
+            },
+            {
+              "language": "de-de",
+              "text": "Kanai erwachte von dem Sirenengeheul in seinen",
+              "page": "3"
+            }
+          ]
+        }
+      },
+      {
+        "id": "7c37e671-9d0c-48f6-aa61-891a38be18d8",
+        "name": "Sail Away, Sweet Sister",
+        "code": "SASS",
+        "matches": {
+          "match": {
+            "language": "en-us",
+            "text": "Cut to the damn chase, Eddie",
+            "page": "2"
+          }
+        }
+      },
+      {
+        "id": "ab9fd70c-6b79-4780-ae3d-dfa5f1624c9d",
+        "name": "Stolen Souls",
+        "code": "SS",
+        "matches": {
+          "match": {
+            "language": "en-us",
+            "text": "Freedom is a prison all its own",
+            "page": "4"
+          }
+        }
+      },
+      {
+        "id": "0b2e86c9-98b7-4265-800f-9f1b98ce7f96",
+        "name": "Run Faster",
+        "code": "RF",
+        "matches": {
+          "match": {
+            "language": "en-us",
+            "text": "Less than a day before",
+            "page": "6"
+          }
+        }
+      },
+      {
+        "id": "01994ce6-832f-4e29-aded-e16c1bf139bd",
+        "name": "Shadow Spells",
+        "code": "SSP",
+        "matches": {
+          "match": [
+            {
+              "language": "en-us",
+              "text": "The subject of magic is broad enough",
+              "page": "3"
+            },
+            {
+              "language": "de-de",
+              "text": "Die nordischen Legenden sind bei den Einwohnern",
+              "page": "4"
+            }
+          ]
+        }
+      },
+      {
+        "id": "07bfdff7-1331-4791-9334-6b299548f8f4",
+        "name": "Nothing Personal",
+        "code": "NP",
+        "matches": {
+          "match": {
+            "language": "en-us",
+            "text": "I let the warm water trickle down my body. Not warm",
+            "page": "2"
+          }
+        }
+      },
+      {
+        "id": "c8358d1c-2eb0-461b-9e2f-b3490ad0011d",
+        "name": "Data Trails",
+        "code": "DT",
+        "matches": {
+          "match": {
+            "language": "en-us",
+            "text": "The Matrix is the vast, wild, and wooly frontier",
+            "page": "3"
+          }
+        }
+      },
+      {
+        "id": "0b082117-8eb2-42d1-82e3-11454536c480",
+        "name": "Data Trails (Dissonant Echoes)",
+        "code": "DTD",
+        "matches": {
+          "match": {
+            "language": "en-us",
+            "text": "The Matrix is the vast, wild, and wooly frontier",
+            "page": "3"
+          }
+        }
+      },
+      {
+        "id": "cea24b81-209b-49b2-afe4-62f1286e508e",
+        "name": "Chrome Flesh",
+        "code": "CF",
+        "matches": {
+          "match": {
+            "language": "en-us",
+            "text": "The tragedy of a shadowrunner",
+            "page": "3"
+          }
+        }
+      },
+      {
+        "id": "B6642AC0-7E72-44C4-B954-3E224EBB2E64",
+        "name": "Hard Targets",
+        "code": "HT",
+        "matches": {
+          "match": {
+            "language": "en-us",
+            "text": "Shadowrunners will punch you in the face",
+            "page": "5"
+          }
+        }
+      },
+      {
+        "id": "73cbd0f7-9a44-480b-8143-5c93d0b1cdf3",
+        "name": "Bloody Business",
+        "code": "BLB",
+        "matches": {
+          "match": {
+            "language": "en-us",
+            "text": "Operations in bad times are pretty much the same",
+            "page": "5"
+          }
+        }
+      },
+      {
+        "id": "bb5c7e4e-431b-404f-89da-e69cf3b75d50",
+        "name": "Schattenhandbuch (German Handbook)",
+        "code": "SHB"
+      },
+      {
+        "id": "8798c923-8118-448e-b201-53d299d7e58c",
+        "name": "Schattenhandbuch 2 (German Handbook)",
+        "code": "SHB2"
+      },
+      {
+        "id": "08dea2f1-3add-4516-bdbe-b47ab9a5e31f",
+        "name": "Schattenhandbuch 3 (German Handbook)",
+        "code": "SHB3"
+      },
+      {
+        "id": "a1055d3f-7bc1-4ca3-a005-681c54a046a1",
+        "name": "Rigger 5.0",
+        "code": "R5",
+        "matches": {
+          "match": {
+            "language": "en-us",
+            "text": "There are obvious uses for riggers",
+            "page": "5"
+          }
+        }
+      },
+      {
+        "id": "38de6863-2911-4fa6-9a43-70db72ab8a22",
+        "name": "Howling Shadows",
+        "code": "HS",
+        "matches": {
+          "match": {
+            "language": "en-us",
+            "text": "In the Sixth World, people usually assume that the thing",
+            "page": "5"
+          }
+        }
+      },
+      {
+        "id": "2fba52dd-bc97-450f-9d07-e1d86885911d",
+        "name": "The Vladivostok Gauntlet",
+        "code": "TVG",
+        "matches": {
+          "match": {
+            "language": "en-us",
+            "text": "They grinned like wolves",
+            "page": "2"
+          }
+        }
+      },
+      {
+        "id": "6b37230a-dd55-4c3f-882d-0a1c6324a457",
+        "name": "Splintered State",
+        "code": "SPS",
+        "matches": {
+          "match": {
+            "language": "en-us",
+            "text": "FBI Agent Seth Dietrich had seen plenty of danger or",
+            "page": "3"
+          }
+        }
+      },
+      {
+        "id": "58b3ffae-7320-4b11-8c50-db92b7f0452b",
+        "name": "Shadows In Focus: Butte",
+        "code": "SFB",
+        "matches": {
+          "match": {
+            "language": "en-us",
+            "text": "This isn’t a run, this is a high school prank",
+            "page": "3"
+          }
+        }
+      },
+      {
+        "id": "7186ed14-e0b8-456e-b923-f77933f1762e",
+        "name": "Hong Kong Sourcebook",
+        "code": "HKS",
+        "matches": {
+          "match": {
+            "language": "en-us",
+            "text": "Hong Kong: Neon Contrails fleshes out the sprawl",
+            "page": "3"
+          }
+        }
+      },
+      {
+        "id": "540cfaa8-823f-46c7-b93b-79191a894bd1",
+        "name": "Lockdown",
+        "code": "LCD",
+        "matches": {
+          "match": {
+            "language": "en-us",
+            "text": "A breakdown of civilization, new threats, crazy danger, corporate desperation, and secrets",
+            "page": "8"
+          }
+        }
+      },
+      {
+        "id": "81c02566-af38-45e3-9e46-3b1d083f84f2",
+        "name": "Shadows In Focus: San Francisco Metroplex",
+        "code": "SFM",
+        "matches": {
+          "match": {
+            "language": "en-us",
+            "text": "Known for the fog rolling in off the water",
+            "page": "3"
+          }
+        }
+      },
+      {
+        "id": "ad384a90-33c2-40bd-b128-37117d02f36c",
+        "name": "Shadows In Focus: Metropole",
+        "code": "SFME",
+        "matches": {
+          "match": {
+            "language": "en-us",
+            "text": "And he was ugly",
+            "page": "3"
+          }
+        }
+      },
+      {
+        "id": "40515dbc-fec6-4530-ba79-959cc8c54c61",
+        "name": "Cutting Aces",
+        "code": "CA",
+        "matches": {
+          "match": {
+            "language": "en-us",
+            "text": "Real con artists know they never have to ask anyone",
+            "page": "3"
+          }
+        }
+      },
+      {
+        "id": "71a6304e-03dc-41db-be01-a86acab1517b",
+        "name": "Shadowrun 2050 (5th Edition)",
+        "code": "2050"
+      },
+      {
+        "id": "485cc0ae-8221-4d5e-a527-33df76fd1f21",
+        "name": "Book of the Lost",
+        "code": "BOTL",
+        "matches": {
+          "match": {
+            "language": "en-us",
+            "text": "Of course there are risks!",
+            "page": "5"
+          }
+        }
+      },
+      {
+        "id": "6e447106-e250-41b1-855a-2dd1d2075f6d",
+        "name": "Forbidden Arcana",
+        "code": "FA",
+        "matches": {
+          "match": {
+            "language": "en-us",
+            "text": "The world of magic is infinite",
+            "page": "6"
+          }
+        }
+      },
+      {
+        "id": "c6b7136f-e461-457b-b6f7-09e95c2f6313",
+        "name": "State of the Art ADL (German Handbook)",
+        "code": "SAG",
+        "matches": {
+          "match": {
+            "language": "de-de",
+            "text": "ihre Hauer oftmals etwas einschüchternd auf Norms wirkten",
+            "page": "6"
+          }
+        }
+      },
+      {
+        "id": "c4392cc2-8edd-4ae3-8198-b8c00e693c8b",
+        "name": "The Complete Trog",
+        "code": "TCT",
+        "matches": {
+          "match": {
+            "language": "en-us",
+            "text": "That’s why trogs are taking it back.",
+            "page": "6"
+          }
+        }
+      },
+      {
+        "id": "e894804c-2e11-489e-acc8-f9691a79b261",
+        "name": "Shadows In Focus: Sioux Nation: Counting Coup",
+        "code": "SFCC",
+        "matches": {
+          "match": {
+            "language": "en-us",
+            "text": "Motherfucking dammit, Charlie!",
+            "page": "3"
+          }
+        }
+      },
+      {
+        "id": "c74e950e-3554-4a44-9060-5a2840302538",
+        "name": "Dark Terrors",
+        "code": "DTR",
+        "matches": {
+          "match": {
+            "language": "en-us",
+            "text": "Knowing your opponent is a critical part of",
+            "page": "6"
+          }
+        }
+      },
+      {
+        "id": "42d5ed10-66e8-47de-8685-851fdfdcae35",
+        "name": "The Seattle Gambit",
+        "code": "TSG",
+        "matches": {
+          "match": {
+            "language": "en-us",
+            "text": "Hey, what you got in there, old man?",
+            "page": "2"
+          }
+        }
+      },
+      {
+        "id": "bfe6c53b-1c68-4d7a-b11d-9d47461df1cd",
+        "name": "Street Lethal",
+        "code": "SL",
+        "matches": {
+          "match": {
+            "language": "en-us",
+            "text": "There is no better way to get a shadowrunner",
+            "page": "6"
+          }
+        }
+      },
+      {
+        "id": "35f513da-865a-45ce-a8f9-eb0336e47427",
+        "name": "Kill Code",
+        "code": "KC",
+        "matches": {
+          "match": {
+            "language": "en-us",
+            "text": "The Matrix is not a place, but it is everywhere",
+            "page": "6"
+          }
+        }
+      },
+      {
+        "id": "6c97c3e8-8f13-43aa-b692-6218983c9396",
+        "name": "Hamburg (German-exclusive)",
+        "code": "HAMG",
+        "matches": {
+          "match": {
+            "language": "de-de",
+            "text": "Willkommen in Hamburg. Willkommen in einem Sprawl voller Gefahren und Möglichkeiten.",
+            "page": "7"
+          }
+        }
+      },
+      {
+        "id": "612af603-65e6-442c-91b8-8b8cc0c77e4a",
+        "name": "Better Than Bad",
+        "code": "BTB",
+        "matches": {
+          "match": {
+            "language": "en-us",
+            "text": "This book is not about them",
+            "page": "6"
+          }
+        }
+      },
+      {
+        "id": "be47e4b5-cc4f-427a-b4cd-cb5c1c8821ce",
+        "name": "Aetherology",
+        "code": "AET",
+        "matches": {
+          "match": [
+            {
+              "language": "en-us",
+              "text": "Once Big D offered all that nuyen for the study of danger",
+              "page": "3"
+            },
+            {
+              "language": "de-de",
+              "text": "Die Ebene der Feen ist ein endloses Tal, das sich",
+              "page": "5"
+            }
+          ]
+        }
+      },
+      {
+        "id": "e65d69fd-8717-4e2b-88b0-73bf7a22bca0",
+        "name": "No Future",
+        "code": "NF",
+        "matches": {
+          "match": {
+            "language": "en-us",
+            "text": "There is no future",
+            "page": "6"
+          }
+        }
+      },
+      {
+        "id": "b20a20e5-e9d4-4f54-9caa-57a001cb904e",
+        "name": "Datapuls SOTA 2080 (German-exclusive)",
+        "code": "SOTG",
+        "matches": {
+          "match": {
+            "language": "de-de",
+            "text": "Laserwaffen stoßen bei der Energieversorgung (noch) an ihre Grenzen",
+            "page": "4"
+          }
+        }
+      },
+      {
+        "id": "3ece5592-c3c1-4cf8-97a2-ef773388289d",
+        "name": "Datapuls Verschlusssache (German-exclusive)",
+        "code": "DPVG",
+        "matches": {
+          "match": {
+            "language": "de-de",
+            "text": "Das Verhältnis der Deutschen zu ihren Geheimdiensten ist kompliziert",
+            "page": "4"
+          }
+        }
+      },
+      {
+        "id": "e997ea2e-916b-4482-a381-bf8c49cb08ff",
+        "name": "Krime Katalog",
+        "code": "KK",
+        "matches": {
+          "match": {
+            "language": "en-us",
+            "text": "KRIME!!!!!!!",
+            "page": "2"
+          }
+        }
+      },
+      {
+        "id": "2ca3c7ce-3cdb-4bf2-b430-32ecef09fda1",
+        "name": "Shadowrun Missions 0803: 10 Block Tango",
+        "code": "SRM0803",
+        "matches": {
+          "match": {
+            "language": "en-us",
+            "text": "SRM 08-03: 10 Block Tango is a Shadowrun Missions",
+            "page": "3"
+          }
+        }
+      },
+      {
+        "id": "9d69b598-4f46-46d0-be44-dd3fd8a915b0",
+        "name": "Shadowrun Missions 0804: Dirty Laundry",
+        "code": "SRM0804",
+        "matches": {
+          "match": {
+            "language": "en-us",
+            "text": "SRM 08-04 Dirty Laundry is a Shadowrun Missions living",
+            "page": "3"
+          }
+        }
+      },
+      {
+        "id": "dd13ad69-51d3-4938-b4e9-703da8ee8e41",
+        "name": "Shadowrun Quick-Start Rules",
+        "code": "QSR",
+        "matches": {
+          "match": {
+            "language": "en-us",
+            "text": "We have specifically designed these quick-start rules",
+            "page": "2"
+          }
+        }
+      },
+      {
+        "id": "d7ac8252-fc5d-42d2-afca-2cf98ec14287",
+        "name": "Grimmes Erwachen (German-exclusive)",
+        "code": "GE"
+      },
+      {
+        "id": "775703af-df57-4ee2-b8e7-c6b829b80539",
+        "name": "Sprawl Wilds",
+        "code": "SW",
+        "matches": {
+          "match": {
+            "language": "en-us",
+            "text": "Gamemastering is more of an art than a science",
+            "page": "4"
+          }
+        }
+      }
+    ]
+  }
+}

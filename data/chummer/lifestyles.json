@@ -1,0 +1,2720 @@
+{
+  "+@xmlns": "",
+  "+@xmlns:xsi": "http://www.w3.org/2001/XMLSchema-instance",
+  "+@xsi:schemaLocation": "http://www.w3.org/2001/XMLSchema lifestyles.xsd",
+  "categories": {
+    "category": [
+      "Entertainment - Asset",
+      "Entertainment - Service",
+      "Entertainment - Outing",
+      "Positive",
+      "Negative",
+      "Contracts"
+    ]
+  },
+  "lifestyles": {
+    "lifestyle": [
+      {
+        "id": "00000000-0000-0000-0000-000000000000",
+        "name": "ID ERROR. Re-add life style to fix",
+        "hide": null,
+        "cost": "1",
+        "dice": "1",
+        "lp": "0",
+        "multiplier": "0",
+        "source": "SR5",
+        "page": "1"
+      },
+      {
+        "id": "559653df-a9af-44e2-9e04-3044c1d1b421",
+        "name": "Street",
+        "cost": "0",
+        "dice": "1",
+        "freegrids": {
+          "freegrid": {
+            "+content": "Grid Subscription",
+            "+@select": "Public Grid"
+          }
+        },
+        "lp": "2",
+        "costforarea": "50",
+        "costforcomforts": "50",
+        "costforsecurity": "50",
+        "multiplier": "20",
+        "source": "SR5",
+        "page": "369"
+      },
+      {
+        "id": "9367556e-f82f-4f9d-840e-24c8f824ca68",
+        "name": "Squatter",
+        "cost": "500",
+        "dice": "2",
+        "freegrids": {
+          "freegrid": {
+            "+content": "Grid Subscription",
+            "+@select": "Public Grid"
+          }
+        },
+        "lp": "2",
+        "multiplier": "40",
+        "source": "SR5",
+        "page": "369"
+      },
+      {
+        "id": "451eef87-d18e-4bee-a972-1ee165b08522",
+        "name": "Low",
+        "cost": "2000",
+        "dice": "3",
+        "freegrids": {
+          "freegrid": {
+            "+content": "Grid Subscription",
+            "+@select": "Public Grid"
+          }
+        },
+        "lp": "3",
+        "multiplier": "60",
+        "source": "SR5",
+        "page": "369"
+      },
+      {
+        "id": "9cb0222c-14c1-4bea-bf83-055513a1f33e",
+        "name": "Medium",
+        "cost": "5000",
+        "dice": "4",
+        "freegrids": {
+          "freegrid": [
+            {
+              "+content": "Grid Subscription",
+              "+@select": "Local Grid"
+            },
+            {
+              "+content": "Grid Subscription",
+              "+@select": "Public Grid"
+            }
+          ]
+        },
+        "lp": "4",
+        "multiplier": "100",
+        "source": "SR5",
+        "page": "369"
+      },
+      {
+        "id": "4a37d519-c9be-4ecc-97bb-e9d78708c374",
+        "name": "High",
+        "cost": "10000",
+        "dice": "5",
+        "freegrids": {
+          "freegrid": [
+            {
+              "+content": "Grid Subscription",
+              "+@select": "Global Grid"
+            },
+            {
+              "+content": "Grid Subscription",
+              "+@select": "Local Grid"
+            },
+            {
+              "+content": "Grid Subscription",
+              "+@select": "Public Grid"
+            }
+          ]
+        },
+        "lp": "6",
+        "multiplier": "500",
+        "source": "SR5",
+        "page": "369"
+      },
+      {
+        "id": "4b513ac9-9eb3-471b-931b-839a04873b84",
+        "name": "Luxury",
+        "cost": "100000",
+        "dice": "6",
+        "freegrids": {
+          "freegrid": [
+            {
+              "+content": "Grid Subscription",
+              "+@select": "Global Grid"
+            },
+            {
+              "+content": "Grid Subscription",
+              "+@select": "Local Grid"
+            },
+            {
+              "+content": "Grid Subscription",
+              "+@select": "Public Grid"
+            }
+          ]
+        },
+        "lp": "12",
+        "multiplier": "1000",
+        "source": "SR5",
+        "page": "369"
+      },
+      {
+        "id": "b7b15c35-596d-4e00-92ee-2e999f062924",
+        "name": "Commercial",
+        "cost": "8000",
+        "dice": "4",
+        "freegrids": {
+          "freegrid": [
+            {
+              "+content": "Grid Subscription",
+              "+@select": "Local Grid"
+            },
+            {
+              "+content": "Grid Subscription",
+              "+@select": "Public Grid"
+            }
+          ]
+        },
+        "lp": "4",
+        "multiplier": "100",
+        "source": "RF",
+        "page": "218"
+      },
+      {
+        "id": "1a231a81-4985-4b57-83cf-659ad920cfb7",
+        "name": "Bolt Hole",
+        "cost": "1000",
+        "dice": "1",
+        "freegrids": {
+          "freegrid": {
+            "+content": "Grid Subscription",
+            "+@select": "Public Grid"
+          }
+        },
+        "lp": "4",
+        "multiplier": "0",
+        "source": "RF",
+        "page": "216"
+      },
+      {
+        "id": "4be85958-af8f-4404-812f-0d8a426f01d6",
+        "name": "Hospitalized, Basic",
+        "cost": "500",
+        "dice": "0",
+        "freegrids": {
+          "freegrid": [
+            {
+              "+content": "Grid Subscription",
+              "+@select": "Global Grid"
+            },
+            {
+              "+content": "Grid Subscription",
+              "+@select": "Local Grid"
+            },
+            {
+              "+content": "Grid Subscription",
+              "+@select": "Public Grid"
+            }
+          ]
+        },
+        "lp": "0",
+        "multiplier": "0",
+        "increment": "day",
+        "source": "SR5",
+        "page": "369"
+      },
+      {
+        "id": "2be1a0f7-6133-4966-be57-720ed9b927a9",
+        "name": "Hospitalized, Intensive",
+        "cost": "1000",
+        "dice": "0",
+        "freegrids": {
+          "freegrid": [
+            {
+              "+content": "Grid Subscription",
+              "+@select": "Global Grid"
+            },
+            {
+              "+content": "Grid Subscription",
+              "+@select": "Local Grid"
+            },
+            {
+              "+content": "Grid Subscription",
+              "+@select": "Public Grid"
+            }
+          ]
+        },
+        "lp": "0",
+        "multiplier": "0",
+        "increment": "day",
+        "source": "SR5",
+        "page": "369"
+      },
+      {
+        "id": "ed775c22-8f0c-40a0-bc6f-5dbb980cedba",
+        "name": "Traveler",
+        "cost": "3000",
+        "dice": "3",
+        "freegrids": {
+          "freegrid": {
+            "+content": "Grid Subscription",
+            "+@select": "Public Grid"
+          }
+        },
+        "lp": "2",
+        "allowbonuslp": "True",
+        "multiplier": "60",
+        "source": "RF",
+        "page": "218"
+      }
+    ]
+  },
+  "comforts": {
+    "comfort": [
+      {
+        "name": "Bolt Hole",
+        "minimum": "1",
+        "limit": "2"
+      },
+      {
+        "name": "Street",
+        "minimum": "0",
+        "limit": "1"
+      },
+      {
+        "name": "Squatter",
+        "minimum": "1",
+        "limit": "2"
+      },
+      {
+        "name": "Low",
+        "minimum": "2",
+        "limit": "3"
+      },
+      {
+        "name": "Medium",
+        "minimum": "3",
+        "limit": "4"
+      },
+      {
+        "name": "High",
+        "minimum": "4",
+        "limit": "6"
+      },
+      {
+        "name": "Luxury",
+        "minimum": "5",
+        "limit": "8"
+      },
+      {
+        "name": "Commercial",
+        "minimum": "3",
+        "limit": "4"
+      },
+      {
+        "name": "Traveler",
+        "minimum": "2",
+        "limit": "4"
+      }
+    ]
+  },
+  "neighborhoods": {
+    "neighborhood": [
+      {
+        "name": "Bolt Hole",
+        "minimum": "1",
+        "limit": "4"
+      },
+      {
+        "name": "Street",
+        "minimum": "0",
+        "limit": "1"
+      },
+      {
+        "name": "Squatter",
+        "minimum": "1",
+        "limit": "2"
+      },
+      {
+        "name": "Low",
+        "minimum": "2",
+        "limit": "3"
+      },
+      {
+        "name": "Medium",
+        "minimum": "4",
+        "limit": "5"
+      },
+      {
+        "name": "High",
+        "minimum": "5",
+        "limit": "6"
+      },
+      {
+        "name": "Luxury",
+        "minimum": "5",
+        "limit": "7"
+      },
+      {
+        "name": "Commercial",
+        "minimum": "4",
+        "limit": "6"
+      },
+      {
+        "name": "Traveler",
+        "minimum": "2",
+        "limit": "4"
+      }
+    ]
+  },
+  "securities": {
+    "security": [
+      {
+        "name": "Bolt Hole",
+        "minimum": "1",
+        "limit": "4"
+      },
+      {
+        "name": "Street",
+        "minimum": "0",
+        "limit": "1"
+      },
+      {
+        "name": "Squatter",
+        "minimum": "1",
+        "limit": "2"
+      },
+      {
+        "name": "Low",
+        "minimum": "2",
+        "limit": "3"
+      },
+      {
+        "name": "Medium",
+        "minimum": "3",
+        "limit": "4"
+      },
+      {
+        "name": "High",
+        "minimum": "4",
+        "limit": "6"
+      },
+      {
+        "name": "Luxury",
+        "minimum": "5",
+        "limit": "8"
+      },
+      {
+        "name": "Commercial",
+        "minimum": "3",
+        "limit": "7"
+      },
+      {
+        "name": "Traveler",
+        "minimum": "2",
+        "limit": "4"
+      }
+    ]
+  },
+  "qualities": {
+    "quality": [
+      {
+        "id": "91ac54bf-0f7d-40f3-81bf-dc32e62fd94e",
+        "name": "Armory",
+        "category": "Entertainment - Asset",
+        "lp": "2",
+        "cost": "2000",
+        "allowed": "High,Luxury",
+        "source": "RF",
+        "page": "220"
+      },
+      {
+        "id": "af5b1436-abc9-4f3d-9521-64cf58724e0a",
+        "name": "Cleaning Service (Standard)",
+        "category": "Entertainment - Service",
+        "lp": "1",
+        "cost": "100",
+        "allowed": "High,Luxury",
+        "source": "RF",
+        "page": "220"
+      },
+      {
+        "id": "6f638af3-39c0-4d29-8a5d-1e0bc67ea922",
+        "name": "Cleaning Service (Mage Sensitive)",
+        "category": "Entertainment - Service",
+        "lp": "1",
+        "cost": "200",
+        "allowed": "High,Luxury",
+        "source": "RF",
+        "page": "220"
+      },
+      {
+        "id": "1fd70570-e89d-4c85-bfe7-6b56aac7c7df",
+        "name": "Cleaning Service (Pollution Sensitive)",
+        "category": "Entertainment - Service",
+        "lp": "1",
+        "cost": "400",
+        "allowed": "High,Luxury",
+        "source": "RF",
+        "page": "220"
+      },
+      {
+        "id": "080401ff-1470-4b32-86bb-bd615fd63b86",
+        "name": "Discreet Cleaning Service",
+        "category": "Entertainment - Service",
+        "lp": "4",
+        "cost": "10000",
+        "source": "RF",
+        "page": "221"
+      },
+      {
+        "id": "7e721535-3827-4a85-9771-9d20cf348d11",
+        "name": "Discreet Deliveryman",
+        "category": "Entertainment - Service",
+        "lp": "3",
+        "cost": "100",
+        "source": "RF",
+        "page": "221"
+      },
+      {
+        "id": "cc6f6198-a330-43f1-8c23-56ef9cb1f9ea",
+        "name": "Discreet Candyman",
+        "category": "Entertainment - Service",
+        "lp": "3",
+        "cost": "1000",
+        "source": "RF",
+        "page": "221"
+      },
+      {
+        "id": "280535d6-9e2a-4831-8b22-b2fb0647cff7",
+        "name": "Cramped Garage (Airplane)",
+        "category": "Entertainment - Asset",
+        "lp": "4",
+        "cost": "18000",
+        "allowed": "Luxury",
+        "allowmultiple": null,
+        "source": "RF",
+        "page": "221"
+      },
+      {
+        "id": "df7d2669-2af5-475b-853d-819498b3badc",
+        "name": "Cramped Garage (Boat)",
+        "category": "Entertainment - Asset",
+        "lp": "3",
+        "cost": "4500",
+        "allowed": "High, Luxury",
+        "allowmultiple": null,
+        "source": "RF",
+        "page": "221"
+      },
+      {
+        "id": "efe7c46c-b863-4696-a750-015837861f81",
+        "name": "Cramped Garage (Car (Body 4 or Less))",
+        "category": "Entertainment - Asset",
+        "lp": "1",
+        "cost": "45",
+        "allowed": "Medium,High,Luxury",
+        "allowmultiple": null,
+        "source": "RF",
+        "page": "221"
+      },
+      {
+        "id": "3d62f25c-8c84-476f-907d-a95073711b44",
+        "name": "Cramped Garage (Car (Body 5 or More))",
+        "category": "Entertainment - Asset",
+        "lp": "2",
+        "cost": "90",
+        "allowed": "Medium,High,Luxury",
+        "allowmultiple": null,
+        "source": "RF",
+        "page": "221"
+      },
+      {
+        "id": "10a65174-a6a3-467b-b66e-6a837bf0e11b",
+        "name": "Cramped Garage (Helicopter)",
+        "category": "Entertainment - Asset",
+        "lp": "4",
+        "cost": "9000",
+        "allowed": "Luxury",
+        "allowmultiple": null,
+        "source": "RF",
+        "page": "221"
+      },
+      {
+        "id": "efb63888-ad49-44e0-8bd7-491532c8c179",
+        "name": "Garage (Airplane)",
+        "category": "Entertainment - Asset",
+        "lp": "4",
+        "cost": "20000",
+        "allowed": "Luxury",
+        "allowmultiple": null,
+        "source": "RF",
+        "page": "221"
+      },
+      {
+        "id": "981f4509-06db-430e-9845-b3a5268f14f5",
+        "name": "Garage (Boat)",
+        "category": "Entertainment - Asset",
+        "lp": "3",
+        "cost": "5000",
+        "allowed": "High, Luxury",
+        "allowmultiple": null,
+        "source": "RF",
+        "page": "221"
+      },
+      {
+        "id": "a45f7fc8-ec90-4a65-8705-c931c408c9cc",
+        "name": "Garage (Car (Body 4 or Less))",
+        "category": "Entertainment - Asset",
+        "lp": "1",
+        "cost": "50",
+        "allowed": "Medium,High,Luxury",
+        "allowmultiple": null,
+        "source": "RF",
+        "page": "221"
+      },
+      {
+        "id": "9e7cea76-8f2e-4d87-a5ce-60395a8d701f",
+        "name": "Garage (Car (Body 5 or More))",
+        "category": "Entertainment - Asset",
+        "lp": "2",
+        "cost": "100",
+        "allowed": "Medium,High,Luxury",
+        "allowmultiple": null,
+        "source": "RF",
+        "page": "221"
+      },
+      {
+        "id": "67e41d1f-78a9-417b-88d4-94eeb58fa4ff",
+        "name": "Garage (Helicopter)",
+        "category": "Entertainment - Asset",
+        "lp": "4",
+        "cost": "10000",
+        "allowed": "Luxury",
+        "allowmultiple": null,
+        "source": "RF",
+        "page": "221"
+      },
+      {
+        "id": "0ab77035-0b81-4fe0-8e16-8674501a3782",
+        "name": "Greenhouse",
+        "category": "Entertainment - Asset",
+        "lp": "2",
+        "cost": "500",
+        "allowed": "High,Luxury",
+        "source": "RF",
+        "page": "221"
+      },
+      {
+        "id": "adaf6b3d-874a-42e5-b08b-37adf1222f23",
+        "name": "Grid Subscription",
+        "category": "Entertainment - Asset",
+        "lp": "1",
+        "cost": "50",
+        "bonus": {
+          "selecttext": null
+        },
+        "allowed": "Medium,High,Luxury",
+        "allowmultiple": null,
+        "source": "RF",
+        "page": "222"
+      },
+      {
+        "id": "23c785d3-e086-46a6-8491-603fa1e6963d",
+        "name": "Gym",
+        "category": "Entertainment - Asset",
+        "lp": "2",
+        "cost": "300",
+        "allowed": "Medium,High,Luxury",
+        "source": "RF",
+        "page": "222"
+      },
+      {
+        "id": "3e5339c7-42e3-484b-8839-66ea942e509b",
+        "name": "Indoor Arboretum",
+        "category": "Entertainment - Asset",
+        "lp": "2",
+        "cost": "500",
+        "allowed": "High,Luxury",
+        "source": "RF",
+        "page": "222"
+      },
+      {
+        "id": "7348e613-3f05-413a-b8eb-a27e480d9f88",
+        "name": "Local Bar Patron",
+        "category": "Entertainment - Outing",
+        "lp": "1",
+        "cost": "25",
+        "bonus": {
+          "selecttext": null
+        },
+        "allowed": "Low,Medium,High,Luxury",
+        "allowmultiple": null,
+        "source": "RF",
+        "page": "222"
+      },
+      {
+        "id": "c63bcf5f-fcb7-4193-bdae-2b32cdf50032",
+        "name": "Merchandise: Goods (Specific Item) (Avail 3)",
+        "category": "Entertainment - Asset",
+        "lp": "1",
+        "cost": "10000",
+        "bonus": {
+          "selecttext": null
+        },
+        "allowed": "Commercial",
+        "allowmultiple": null,
+        "source": "RF",
+        "page": "222"
+      },
+      {
+        "id": "544760af-1c45-4de7-a198-f9f7f86ec4b2",
+        "name": "Merchandise: Goods (Specific Item) (Avail 5)",
+        "category": "Entertainment - Asset",
+        "lp": "2",
+        "cost": "10000",
+        "bonus": {
+          "selecttext": null
+        },
+        "allowed": "Commercial",
+        "allowmultiple": null,
+        "source": "RF",
+        "page": "222"
+      },
+      {
+        "id": "5a7f93eb-7297-49a0-904e-466be3f3f454",
+        "name": "Merchandise: Goods (Specific Item) (Avail 7)",
+        "category": "Entertainment - Asset",
+        "lp": "3",
+        "cost": "10000",
+        "bonus": {
+          "selecttext": null
+        },
+        "allowed": "Commercial",
+        "allowmultiple": null,
+        "source": "RF",
+        "page": "222"
+      },
+      {
+        "id": "1ab883f5-3392-41c6-b4e3-b26dfc4b8aba",
+        "name": "Merchandise: Goods (Specific Item) (Avail 9)",
+        "category": "Entertainment - Asset",
+        "lp": "4",
+        "cost": "10000",
+        "bonus": {
+          "selecttext": null
+        },
+        "allowed": "Commercial",
+        "allowmultiple": null,
+        "source": "RF",
+        "page": "222"
+      },
+      {
+        "id": "35d712d8-ea04-4853-8b1f-89e079e043ce",
+        "name": "Merchandise: Pawn Shop/Thrift Store",
+        "category": "Entertainment - Service",
+        "lp": "2",
+        "cost": "10000",
+        "allowed": "Commercial",
+        "source": "RF",
+        "page": "222"
+      },
+      {
+        "id": "b8c84dbb-b59e-43e1-a07f-fa03802fe5af",
+        "name": "Merchandise: Used Goods (Specific Item)",
+        "category": "Entertainment - Service",
+        "lp": "2",
+        "cost": "10000",
+        "bonus": {
+          "selecttext": null
+        },
+        "allowed": "Commercial",
+        "allowmultiple": null,
+        "source": "RF",
+        "page": "222"
+      },
+      {
+        "id": "9db8b664-4fba-4e66-8875-54c54324d93d",
+        "name": "Panic Room",
+        "category": "Entertainment - Asset",
+        "lp": "2",
+        "cost": "1000",
+        "allowed": "High,Luxury",
+        "source": "RF",
+        "page": "222"
+      },
+      {
+        "id": "5e7c3001-03de-41ed-b2d2-03c3175669d4",
+        "name": "Patron of the Arts (Concerts/Events)",
+        "category": "Entertainment - Outing",
+        "lp": "1",
+        "cost": "100",
+        "bonus": {
+          "selecttext": null
+        },
+        "allowed": "Medium,High,Luxury",
+        "allowmultiple": null,
+        "source": "RF",
+        "page": "223"
+      },
+      {
+        "id": "903b7d38-d844-4473-8454-4e8f4875880d",
+        "name": "Patron of the Arts (Private Club)",
+        "category": "Entertainment - Outing",
+        "lp": "1",
+        "cost": "200",
+        "bonus": {
+          "selecttext": null
+        },
+        "allowed": "High,Luxury",
+        "allowmultiple": null,
+        "source": "RF",
+        "page": "223"
+      },
+      {
+        "id": "0bbec525-178b-4712-b36f-6549ea8274c2",
+        "name": "Patron of the Arts (Zoo/Museum)",
+        "category": "Entertainment - Outing",
+        "lp": "1",
+        "cost": "75",
+        "bonus": {
+          "selecttext": null
+        },
+        "allowed": "Low,Medium,High,Luxury",
+        "allowmultiple": null,
+        "source": "RF",
+        "page": "223"
+      },
+      {
+        "id": "39f7afff-173b-4c14-91b6-de2c8d315cc6",
+        "name": "Patron of the Arts (Theme Parks)",
+        "category": "Entertainment - Outing",
+        "lp": "1",
+        "cost": "100",
+        "bonus": {
+          "selecttext": null
+        },
+        "allowed": "Medium,High,Luxury",
+        "allowmultiple": null,
+        "source": "RF",
+        "page": "223"
+      },
+      {
+        "id": "679b8200-2f4a-45f8-b7cb-c91fdcd94f2d",
+        "name": "Private Room",
+        "category": "Entertainment - Asset",
+        "lp": "1",
+        "cost": "20",
+        "allowed": "Squatter,Low,Medium,High,Luxury",
+        "source": "RF",
+        "page": "223"
+      },
+      {
+        "id": "20c5e92c-deb7-4d88-9972-507ecccb1e50",
+        "name": "Public Transportation",
+        "category": "Entertainment - Service",
+        "lp": "1",
+        "cost": "50",
+        "bonus": {
+          "selecttext": null
+        },
+        "allowed": "Low,Medium,High,Luxury",
+        "allowmultiple": null,
+        "source": "RF",
+        "page": "223"
+      },
+      {
+        "id": "35e2e527-2c63-4193-abe3-1c72063c8d6f",
+        "name": "Railway Pass",
+        "category": "Entertainment - Service",
+        "lp": "1",
+        "cost": "75",
+        "bonus": {
+          "selecttext": null
+        },
+        "allowed": "Medium,High,Luxury",
+        "allowmultiple": null,
+        "source": "RF",
+        "page": "222"
+      },
+      {
+        "id": "ee56a5de-dfb0-41c3-8de7-67041a627df9",
+        "name": "Shooting Range",
+        "category": "Entertainment - Asset",
+        "lp": "2",
+        "cost": "500",
+        "allowed": "High,Luxury",
+        "source": "RF",
+        "page": "223"
+      },
+      {
+        "id": "d26a39a7-cc09-4476-a5f0-eeb55e737641",
+        "name": "Soy Processing Unit",
+        "category": "Entertainment - Asset",
+        "lp": "1",
+        "cost": "20",
+        "allowed": "Medium,High,Luxury",
+        "source": "RF",
+        "page": "223"
+      },
+      {
+        "id": "2e845204-d9b3-40a9-9d24-4b5aa9673486",
+        "name": "Sports Court - Small",
+        "category": "Entertainment - Asset",
+        "lp": "2",
+        "cost": "300",
+        "bonus": {
+          "selecttext": null
+        },
+        "allowed": "High,Luxury",
+        "allowmultiple": null,
+        "source": "RF",
+        "page": "224"
+      },
+      {
+        "id": "0503f768-dc6b-4e79-adbe-69907dd79e1b",
+        "name": "Swimming Pool",
+        "category": "Entertainment - Asset",
+        "lp": "1",
+        "cost": "100",
+        "allowed": "Medium,High,Luxury",
+        "source": "RF",
+        "page": "224"
+      },
+      {
+        "id": "71428a84-70d1-4c9c-89c3-227509cfbc25",
+        "name": "Walk-In Freezer",
+        "category": "Entertainment - Asset",
+        "lp": "1",
+        "cost": "1000",
+        "allowed": "Commercial",
+        "source": "RF",
+        "page": "224"
+      },
+      {
+        "id": "af8ac67a-7603-48b2-8ee4-940e5dcd5f29",
+        "name": "Workshop/Facility",
+        "category": "Entertainment - Asset",
+        "lp": "2",
+        "cost": "2500",
+        "bonus": {
+          "selecttext": {
+            "+@xml": "skills.xml",
+            "+@xpath": "/chummer/skills/skill/name | /chummer/knowledgeskills/skill/name",
+            "+@allowedit": "True"
+          }
+        },
+        "allowed": "Commercial",
+        "allowmultiple": null,
+        "source": "RF",
+        "page": "224"
+      },
+      {
+        "id": "867f7c74-8e6e-4467-b49c-10f4bf17fa8d",
+        "name": "Cramped Workshop/Facility",
+        "category": "Entertainment - Asset",
+        "lp": "2",
+        "cost": "2250",
+        "bonus": {
+          "selecttext": {
+            "+@xml": "skills.xml",
+            "+@xpath": "/chummer/skills/skill/name | /chummer/knowledgeskills/skill/name",
+            "+@allowedit": "True"
+          }
+        },
+        "allowed": "Commercial",
+        "allowmultiple": null,
+        "source": "RF",
+        "page": "224"
+      },
+      {
+        "id": "3dfb9fd3-c58d-4cc8-9e6b-f17fa18474b6",
+        "name": "Yard",
+        "category": "Entertainment - Asset",
+        "lp": "2",
+        "cost": "50",
+        "allowed": "Low,Medium,High,Luxury",
+        "allowmultiple": null,
+        "source": "RF",
+        "page": "224"
+      },
+      {
+        "id": "03092f1a-4018-413b-a11f-144383472c18",
+        "name": "Zen Den",
+        "category": "Entertainment - Asset",
+        "lp": "2",
+        "cost": "100",
+        "allowed": "Medium,High,Luxury",
+        "source": "RF",
+        "page": "224"
+      },
+      {
+        "id": "cc3abead-ab2a-4023-8a63-d64536ccf5e5",
+        "name": "Bat Cave",
+        "category": "Entertainment - Asset",
+        "lp": "2",
+        "cost": "100",
+        "allowed": "Medium,High,Luxury",
+        "source": "RF",
+        "page": "224"
+      },
+      {
+        "id": "910b0a59-59cb-422b-b9a4-7b8d12912c91",
+        "name": "Angry Drunk Reputation",
+        "category": "Negative",
+        "lp": "-1",
+        "forbidden": {
+          "oneof": {
+            "lifestylequality": [
+              "Local Bar Patron",
+              "Patron of the Arts (Private Club)"
+            ]
+          }
+        },
+        "source": "RF",
+        "page": "224"
+      },
+      {
+        "id": "6c47713d-46ba-495d-800c-f77c306cf9df",
+        "name": "Corporate Owned",
+        "category": "Positive",
+        "lp": "3",
+        "comfortsminimum": "1",
+        "securityminimum": "1",
+        "comforts": "1",
+        "security": "1",
+        "required": {
+          "oneof": {
+            "characterquality": [
+              "SINner (Corporate)",
+              "SINner (Corporate Limited)"
+            ]
+          }
+        },
+        "source": "RF",
+        "page": "225"
+      },
+      {
+        "id": "ff0cb981-4459-46e7-ab75-d8c5bcb0c486",
+        "name": "Cramped",
+        "category": "Negative",
+        "lp": "1",
+        "multiplier": "-10",
+        "source": "SR5",
+        "page": "370"
+      },
+      {
+        "id": "4fb84713-6171-409d-ad7c-ccbc44b891ad",
+        "name": "Extra Secure",
+        "category": "Positive",
+        "lp": "1",
+        "multiplierbaseonly": "20",
+        "source": "SR5",
+        "page": "370"
+      },
+      {
+        "id": "ae63d09f-22a1-4c27-bc99-d82887fcef15",
+        "name": "Dangerous Area",
+        "category": "Negative",
+        "lp": "-1",
+        "multiplier": "-20",
+        "source": "SR5",
+        "page": "370"
+      },
+      {
+        "id": "8cc2d931-becd-40d7-a0bd-705412037f38",
+        "name": "Hotel California",
+        "category": "Negative",
+        "lp": "-1",
+        "source": "RF",
+        "page": "226"
+      },
+      {
+        "id": "ce96f8e7-42a5-4745-8e3d-1f04c72b0385",
+        "name": "Maid is Out",
+        "category": "Negative",
+        "lp": "-1",
+        "forbidden": {
+          "oneof": {
+            "lifestylequality": "Cleaning Service"
+          }
+        },
+        "source": "RF",
+        "page": "226"
+      },
+      {
+        "id": "9a8da447-b05f-4f4a-8d7c-537344d77557",
+        "name": "Not a Home",
+        "category": "Negative",
+        "lp": "-1",
+        "comfortsmaximum": "-1",
+        "source": "RF",
+        "page": "226"
+      },
+      {
+        "id": "4aff94a9-6699-4355-81ea-ff66ee5ecca1",
+        "name": "Obscure/Difficult to Find",
+        "category": "Negative",
+        "lp": "-1",
+        "multiplier": "10",
+        "forbidden": {
+          "oneof": {
+            "lifestylequality": [
+              "Discreet Deliveryman",
+              "Discreet Candyman"
+            ]
+          }
+        },
+        "source": "SR5",
+        "page": "370"
+      },
+      {
+        "id": "a808bcae-68c5-4e96-8bfc-f432ea63cc11",
+        "name": "One Good Thing About This Place",
+        "category": "Positive",
+        "lp": "1",
+        "bonus": {
+          "selecttext": null
+        },
+        "allowed": "Traveler",
+        "source": "RF",
+        "page": "226"
+      },
+      {
+        "id": "0eee0e10-078e-4f07-ac57-14f9b83f1a36",
+        "name": "Safehouse",
+        "category": "Positive",
+        "lp": "0",
+        "cost": "500",
+        "source": "RF",
+        "page": "226"
+      },
+      {
+        "id": "c4d4c6db-7314-4a23-951d-31126514af8d",
+        "name": "Safety Third",
+        "category": "Negative",
+        "lp": "-1",
+        "required": {
+          "oneof": {
+            "lifestylequality": [
+              "Garage (Airplane)",
+              "Garage (Boat)",
+              "Garage (Car (Body 4 or Less))",
+              "Garage (Car (Body 5 or More))",
+              "Garage (Helicopter)",
+              "Cramped Garage (Airplane)",
+              "Cramped Garage (Boat)",
+              "Cramped Garage (Car (Body 4 or Less))",
+              "Cramped Garage (Car (Body 5 or More))",
+              "Cramped Garage (Helicopter)",
+              "Workshop/Facility",
+              "Cramped Workshop/Facility"
+            ]
+          }
+        },
+        "source": "RF",
+        "page": "226"
+      },
+      {
+        "id": "24c33e2d-bb97-4f82-a68d-dfa7c89a69d7",
+        "name": "Special Work Area",
+        "category": "Positive",
+        "lp": "0",
+        "cost": "1000",
+        "bonus": {
+          "selecttext": null
+        },
+        "allowmultiple": null,
+        "source": "SR5",
+        "page": "370"
+      },
+      {
+        "id": "61e7bb21-cb25-44ff-a332-639fe9dac893",
+        "name": "Thrifty",
+        "category": "Negative",
+        "lp": "2",
+        "cost": "-1000",
+        "allowed": "Traveler",
+        "source": "RF",
+        "page": "226"
+      },
+      {
+        "id": "d508fc24-6cbd-488f-a5f8-5282cfb58f9a",
+        "name": "W Zone",
+        "category": "Negative",
+        "lp": "-1",
+        "area": "-1",
+        "source": "RF",
+        "page": "226"
+      },
+      {
+        "id": "d4f23b83-d884-47e0-9bbf-7c04341e1894",
+        "name": "Skillsoft Network, Basic",
+        "category": "Contracts",
+        "lp": "0",
+        "cost": "2000",
+        "source": "CF",
+        "page": "78"
+      },
+      {
+        "id": "5e090a22-119a-4922-ada5-c8d634399797",
+        "name": "Skillsoft Network, Silver",
+        "category": "Contracts",
+        "lp": "0",
+        "cost": "10000",
+        "source": "CF",
+        "page": "78"
+      },
+      {
+        "id": "fbd64602-f7c5-410f-8ec8-5c5cd7fde945",
+        "name": "Skillsoft Network, Gold",
+        "category": "Contracts",
+        "lp": "0",
+        "cost": "15000",
+        "source": "CF",
+        "page": "78"
+      },
+      {
+        "id": "1fc363ff-b577-4e5b-b3e7-ae87bbab0fe9",
+        "name": "Skillsoft Network, Platinum",
+        "category": "Contracts",
+        "lp": "0",
+        "cost": "20000",
+        "source": "CF",
+        "page": "78"
+      },
+      {
+        "id": "4d2bac20-5051-4035-8959-2286c0879686",
+        "name": "Datahost Subscription",
+        "category": "Contracts",
+        "lp": "0",
+        "cost": "250",
+        "source": "CF",
+        "page": "80"
+      },
+      {
+        "id": "5d2d66a4-29b5-4055-859a-9471de62774b",
+        "name": "Shopsoft Network Subscription",
+        "category": "Contracts",
+        "lp": "0",
+        "cost": "250",
+        "source": "CF",
+        "page": "80"
+      },
+      {
+        "id": "dea3d03c-9441-400c-a512-d8840f6f40d5",
+        "name": "Mapping System Subscription, Basic",
+        "category": "Contracts",
+        "lp": "0",
+        "cost": "50",
+        "source": "CF",
+        "page": "81"
+      },
+      {
+        "id": "516c286b-b233-43f4-96d0-19e8295f9f88",
+        "name": "Mapping System Subscription, Silver",
+        "category": "Contracts",
+        "lp": "0",
+        "cost": "150",
+        "source": "CF",
+        "page": "81"
+      },
+      {
+        "id": "53b8cea1-aa63-4e12-8a04-b7ba72aa1cbe",
+        "name": "Mapping System Subscription, Gold",
+        "category": "Contracts",
+        "lp": "0",
+        "cost": "500",
+        "source": "CF",
+        "page": "81"
+      },
+      {
+        "id": "4f41448a-7d44-4a5f-a99a-e2cc1e2cc2b1",
+        "name": "DocWagon Contract, Basic",
+        "category": "Contracts",
+        "lp": "0",
+        "cost": "5000 div 12",
+        "source": "SR5",
+        "page": "450"
+      },
+      {
+        "id": "4f2d39cd-fbc7-4d02-a3eb-f8decdb9a415",
+        "name": "DocWagon Contract, Gold",
+        "category": "Contracts",
+        "lp": "0",
+        "cost": "25000 div 12",
+        "source": "SR5",
+        "page": "450"
+      },
+      {
+        "id": "26476ddb-52f6-4c31-b1f0-949d0ef95495",
+        "name": "DocWagon Contract, Platinum",
+        "category": "Contracts",
+        "lp": "0",
+        "cost": "50000 div 12",
+        "source": "SR5",
+        "page": "450"
+      },
+      {
+        "id": "0a58f493-a12e-4c08-b8b8-baac4c5e6591",
+        "name": "DocWagon Contract, Super-Platinum",
+        "category": "Contracts",
+        "lp": "0",
+        "cost": "100000 div 12",
+        "source": "SR5",
+        "page": "450"
+      },
+      {
+        "id": "5f272787-e3f6-4cd7-949b-ce1ed786ef61",
+        "name": "Local Grid Subscription",
+        "category": "Entertainment - Asset",
+        "lp": "1",
+        "cost": "50",
+        "bonus": {
+          "selecttext": null
+        },
+        "allowed": "Medium,High,Luxury",
+        "allowmultiple": null,
+        "source": "HT",
+        "page": "140"
+      },
+      {
+        "id": "9ad9decb-b52d-4993-9ef6-4768727c3d75",
+        "name": "Global Grid Subscription",
+        "category": "Entertainment - Asset",
+        "lp": "1",
+        "cost": "250",
+        "bonus": {
+          "selecttext": null
+        },
+        "allowed": "High,Luxury",
+        "allowmultiple": null,
+        "source": "HT",
+        "page": "140"
+      },
+      {
+        "id": "cb265e4e-b13a-487b-8c0f-b2b855138a66",
+        "name": "Subsistence Hunting/Gathering I",
+        "category": "Entertainment - Outing",
+        "lp": "1",
+        "cost": "15",
+        "allowed": "Squatter,Low,Medium,High,Luxury",
+        "source": "HT",
+        "page": "140"
+      },
+      {
+        "id": "c0051319-9565-49f1-b59d-ee1f835cf1df",
+        "name": "Subsistence Hunting/Gathering II",
+        "category": "Entertainment - Outing",
+        "lp": "2",
+        "cost": "30",
+        "allowed": "Squatter,Low,Medium,High,Luxury",
+        "source": "HT",
+        "page": "140"
+      },
+      {
+        "id": "3aca0284-8e7f-4329-83e7-9819bf73a13e",
+        "name": "Subsistence Hunting/Gathering III",
+        "category": "Entertainment - Outing",
+        "lp": "3",
+        "cost": "45",
+        "allowed": "Squatter,Low,Medium,High,Luxury",
+        "source": "HT",
+        "page": "140"
+      },
+      {
+        "id": "f2c146ea-302e-444b-8082-3cc47d165669",
+        "name": "Subsistence Hunting/Gathering IV",
+        "category": "Entertainment - Outing",
+        "lp": "4",
+        "cost": "60",
+        "allowed": "Squatter,Low,Medium,High,Luxury",
+        "source": "HT",
+        "page": "140"
+      },
+      {
+        "id": "e667f652-c908-4548-adf9-7b969d587e43",
+        "name": "Drone Maids/Manservants",
+        "category": "Entertainment - Asset",
+        "lp": "1",
+        "cost": "7000",
+        "allowed": "High,Luxury",
+        "source": "HT",
+        "page": "141"
+      },
+      {
+        "id": "1b2218d6-d4a3-4978-b941-8358159e4e3b",
+        "name": "Maids/Manservants",
+        "category": "Entertainment - Asset",
+        "lp": "1",
+        "cost": "15000",
+        "allowed": "Luxury",
+        "source": "HT",
+        "page": "141"
+      },
+      {
+        "id": "7e962b91-51c3-4a88-a7da-70044ef665db",
+        "name": "Zombie Maids/Manservants",
+        "category": "Entertainment - Asset",
+        "lp": "2",
+        "cost": "20000",
+        "allowed": "High",
+        "source": "HT",
+        "page": "141"
+      },
+      {
+        "id": "826b324f-9dd3-4fc3-8c80-b4680587f9f6",
+        "name": "Household Gremlins I",
+        "category": "Negative",
+        "lp": "0",
+        "cost": "-300",
+        "source": "HT",
+        "page": "141"
+      },
+      {
+        "id": "a7d85c5f-74b9-4f02-ab00-916cd7337d47",
+        "name": "Household Gremlins II",
+        "category": "Negative",
+        "lp": "0",
+        "cost": "-600",
+        "source": "HT",
+        "page": "141"
+      },
+      {
+        "id": "093e24c5-1f87-4cb3-8a9e-1dc701081dfb",
+        "name": "Dug a Hole",
+        "category": "Positive",
+        "lp": "0",
+        "cost": "2000",
+        "source": "HT",
+        "page": "141"
+      },
+      {
+        "id": "1fa52cd4-4342-4511-91dc-6d452032d2c7",
+        "name": "Lax Security",
+        "category": "Negative",
+        "lp": "-1",
+        "cost": "0",
+        "source": "HT",
+        "page": "141"
+      },
+      {
+        "id": "0a41dfd4-67f7-4d8d-80e5-15db2fc64f09",
+        "name": "Limited Building Space",
+        "category": "Negative",
+        "lp": "-1",
+        "cost": "0",
+        "source": "HT",
+        "page": "141"
+      },
+      {
+        "id": "7868fea6-f3b9-4db8-baee-60fd16f322cc",
+        "name": "Rough Neighborhood",
+        "category": "Negative",
+        "lp": "-1",
+        "cost": "0",
+        "area": "-1",
+        "source": "HT",
+        "page": "141"
+      },
+      {
+        "id": "23dcd584-9650-44b0-9273-896873ba6f61",
+        "name": "No Masters",
+        "category": "Negative",
+        "lp": "-1",
+        "multiplier": "-10",
+        "forbidden": {
+          "oneof": {
+            "characterquality": [
+              "SINner (Corporate)",
+              "SINner (Corporate Limited)"
+            ]
+          }
+        },
+        "source": "HT",
+        "page": "141"
+      },
+      {
+        "id": "79de178b-6064-468f-bb8d-72b510dc0239",
+        "name": "Escape Tunnel, 100 Meters",
+        "category": "Entertainment - Asset",
+        "lp": "1",
+        "cost": "200",
+        "allowed": "Squatter,Low,Medium,High,Luxury",
+        "source": "SFB",
+        "page": "20"
+      },
+      {
+        "id": "f5b675ed-2d7f-4325-b301-a63deb81356c",
+        "name": "Escape Tunnel, 200 Meters",
+        "category": "Entertainment - Asset",
+        "lp": "2",
+        "cost": "200",
+        "allowed": "Squatter,Low,Medium,High,Luxury",
+        "source": "SFB",
+        "page": "20"
+      },
+      {
+        "id": "e548ba65-e403-4cd5-bc70-3d45478ad76c",
+        "name": "Escape Tunnel, 300 Meters",
+        "category": "Entertainment - Asset",
+        "lp": "3",
+        "cost": "200",
+        "allowed": "Squatter,Low,Medium,High,Luxury",
+        "source": "SFB",
+        "page": "20"
+      },
+      {
+        "id": "7f8bdcb0-b5c6-4741-86b1-e48cff81709e",
+        "name": "Escape Tunnel, 400 Meters",
+        "category": "Entertainment - Asset",
+        "lp": "4",
+        "cost": "200",
+        "allowed": "Squatter,Low,Medium,High,Luxury",
+        "source": "SFB",
+        "page": "20"
+      },
+      {
+        "id": "fdb2718d-a88d-45f3-ba54-6ed6937321bc",
+        "name": "Escape Tunnel, 500 Meters",
+        "category": "Entertainment - Asset",
+        "lp": "5",
+        "cost": "200",
+        "allowed": "Squatter,Low,Medium,High,Luxury",
+        "source": "SFB",
+        "page": "20"
+      },
+      {
+        "id": "ffb7fb04-77ee-4a12-8823-7012aa272dbf",
+        "name": "Cramped Garage (Stable)",
+        "category": "Entertainment - Asset",
+        "lp": "1",
+        "cost": "180",
+        "allowed": "Medium,High,Luxury",
+        "allowmultiple": null,
+        "source": "SFB",
+        "page": "20"
+      },
+      {
+        "id": "24435fe5-2791-40e2-8ca1-6e397b6982d8",
+        "name": "Garage (Stable)",
+        "category": "Entertainment - Asset",
+        "lp": "1",
+        "cost": "200",
+        "allowed": "Medium,High,Luxury",
+        "allowmultiple": null,
+        "source": "SFB",
+        "page": "20"
+      },
+      {
+        "id": "665c46a9-4726-4e57-963f-392c30f653e9",
+        "name": "Haunted",
+        "category": "Negative",
+        "lp": "0",
+        "multiplier": "-20",
+        "source": "SFB",
+        "page": "20"
+      },
+      {
+        "id": "b722458f-b0af-45c4-b5c7-b3c7e2ef48f6",
+        "name": "AR Fashion Subscription, Casual",
+        "category": "Contracts",
+        "lp": "0",
+        "cost": "25",
+        "source": "CA",
+        "page": "138"
+      },
+      {
+        "id": "fc4d530e-a832-4437-b022-cdf35a22fc78",
+        "name": "AR Fashion Subscription, Business",
+        "category": "Contracts",
+        "lp": "0",
+        "cost": "100",
+        "source": "CA",
+        "page": "138"
+      },
+      {
+        "id": "1607bf0d-1a75-4582-8496-ffd92289f2b3",
+        "name": "AR Fashion Subscription, Formal",
+        "category": "Contracts",
+        "lp": "0",
+        "cost": "500",
+        "source": "CA",
+        "page": "138"
+      },
+      {
+        "id": "da100dfd-dcaa-4b1a-a76e-ad38539612a4",
+        "name": "AR Fashion Subscription, Designer",
+        "category": "Contracts",
+        "lp": "0",
+        "cost": "1500",
+        "source": "CA",
+        "page": "138"
+      },
+      {
+        "id": "190ba01c-f04e-45a8-a0d1-d6fd073d61c1",
+        "name": "CarnivoreGold",
+        "category": "Contracts",
+        "lp": "0",
+        "cost": "250",
+        "source": "CA",
+        "page": "144"
+      },
+      {
+        "id": "fe33b1e6-ad0f-44e4-b156-7c435f335682",
+        "name": "MonaLisa",
+        "category": "Contracts",
+        "lp": "0",
+        "cost": "250",
+        "source": "CA",
+        "page": "144"
+      },
+      {
+        "id": "eeb6f3b7-70b3-478b-88c6-af47bb233b44",
+        "name": "Pheromone Detection",
+        "category": "Contracts",
+        "lp": "0",
+        "cost": "250",
+        "source": "CA",
+        "page": "144"
+      },
+      {
+        "id": "7417c7e7-8940-47cf-9bd2-9f7193b5fbbf",
+        "name": "Speech Template Comparison",
+        "category": "Contracts",
+        "lp": "0",
+        "cost": "250",
+        "source": "CA",
+        "page": "144"
+      },
+      {
+        "id": "49b01e13-4228-4390-a0c3-ffb6c6276e49",
+        "name": "Target Tracking Software",
+        "category": "Contracts",
+        "lp": "0",
+        "cost": "250",
+        "source": "CA",
+        "page": "144"
+      },
+      {
+        "id": "d5239d1e-04ef-47a6-8065-a1559559a669",
+        "name": "Thermal Mood Reading",
+        "category": "Contracts",
+        "lp": "0",
+        "cost": "250",
+        "source": "CA",
+        "page": "144"
+      },
+      {
+        "id": "c5eef5c6-288a-47c0-8d2a-42353a896077",
+        "name": "Vocal Tension Lie Detection",
+        "category": "Contracts",
+        "lp": "0",
+        "cost": "250",
+        "source": "CA",
+        "page": "144"
+      }
+    ]
+  },
+  "cities": {
+    "city": [
+      {
+        "name": null,
+        "district": {
+          "name": null,
+          "borough": {
+            "name": null
+          }
+        }
+      },
+      {
+        "name": "Seattle",
+        "district": [
+          {
+            "name": "Auburn",
+            "borough": [
+              {
+                "name": "Black Diamond",
+                "secRating": "C"
+              },
+              {
+                "name": "Bolse",
+                "secRating": "D"
+              },
+              {
+                "name": "Algona",
+                "secRating": "A/B"
+              },
+              {
+                "name": "Berrydale",
+                "secRating": "A/B"
+              },
+              {
+                "name": "Pacifica",
+                "secRating": "A/B"
+              },
+              {
+                "name": "Covington",
+                "secRating": "B"
+              },
+              {
+                "name": "Georgetown",
+                "secRating": "B"
+              },
+              {
+                "name": "Maple Valley",
+                "secRating": "B"
+              },
+              {
+                "name": "Sumner",
+                "secRating": "B/C"
+              },
+              {
+                "name": "Timberlane",
+                "secRating": "B"
+              },
+              {
+                "name": "Auburn",
+                "secRating": "AA"
+              },
+              {
+                "name": "Lake Wilderness",
+                "secRating": "AA"
+              }
+            ]
+          },
+          {
+            "name": "Bellevue",
+            "borough": [
+              {
+                "name": "Beaux Arts",
+                "secRating": "AAA"
+              },
+              {
+                "name": "Hunt Point",
+                "secRating": "AAA"
+              },
+              {
+                "name": "Rosemont Beach",
+                "secRating": "AAA"
+              },
+              {
+                "name": "Inglewood",
+                "secRating": "AA"
+              },
+              {
+                "name": "Juanita",
+                "secRating": "AA"
+              },
+              {
+                "name": "Medina",
+                "secRating": "AA"
+              },
+              {
+                "name": "Regency Park",
+                "secRating": "AA"
+              },
+              {
+                "name": "Yarrow Point",
+                "secRating": "AA"
+              },
+              {
+                "name": "Bellevue",
+                "secRating": "A/B"
+              },
+              {
+                "name": "Cyde Hill",
+                "secRating": "A"
+              },
+              {
+                "name": "Kirkland",
+                "secRating": "A"
+              },
+              {
+                "name": "Newport",
+                "secRating": "A/B"
+              },
+              {
+                "name": "Bothell",
+                "secRating": "B"
+              },
+              {
+                "name": "Coalfield",
+                "secRating": "C"
+              },
+              {
+                "name": "East Gate",
+                "secRating": "C"
+              },
+              {
+                "name": "May Creek",
+                "secRating": "C"
+              },
+              {
+                "name": "Newcastle",
+                "secRating": "C"
+              },
+              {
+                "name": "Redmond",
+                "secRating": "C"
+              }
+            ]
+          },
+          {
+            "name": "Downtown",
+            "borough": [
+              {
+                "name": "Matthews Beach",
+                "secRating": "AAA"
+              },
+              {
+                "name": "Iverness",
+                "secRating": "AAA"
+              },
+              {
+                "name": "North Beach",
+                "secRating": "AA"
+              },
+              {
+                "name": "Richmond Highlands",
+                "secRating": "AA"
+              },
+              {
+                "name": "Aurora Village",
+                "secRating": "A"
+              },
+              {
+                "name": "Central",
+                "secRating": "B"
+              },
+              {
+                "name": "Columbia",
+                "secRating": "C"
+              },
+              {
+                "name": "Tukwila",
+                "secRating": "C"
+              }
+            ]
+          },
+          {
+            "name": "Everett",
+            "borough": [
+              {
+                "name": "Maedowdale",
+                "secRating": "AAA"
+              },
+              {
+                "name": "Edmonds",
+                "secRating": "AA"
+              },
+              {
+                "name": "Darlington",
+                "secRating": "A/B"
+              },
+              {
+                "name": "Lynnwood",
+                "secRating": "B"
+              },
+              {
+                "name": "Fairmount",
+                "secRating": "C"
+              },
+              {
+                "name": "Pinehurst",
+                "secRating": "D"
+              }
+            ]
+          },
+          {
+            "name": "Fort Lewis",
+            "borough": {
+              "name": "Parkland (non military housing)",
+              "secRating": "A"
+            }
+          },
+          {
+            "name": "Puyallup",
+            "borough": [
+              {
+                "name": "Puyallup City",
+                "secRating": "C"
+              },
+              {
+                "name": "Graham Cracker City",
+                "secRating": "E"
+              },
+              {
+                "name": "Hell's Kitchen",
+                "secRating": "Z"
+              },
+              {
+                "name": "The Neon Killing",
+                "secRating": "Z"
+              }
+            ]
+          },
+          {
+            "name": "Redmond",
+            "borough": [
+              {
+                "name": "Touristville",
+                "secRating": "C"
+              },
+              {
+                "name": "Barrens",
+                "secRating": "Z"
+              },
+              {
+                "name": "Plastic Jungle",
+                "secRating": "E"
+              },
+              {
+                "name": "Glow City",
+                "secRating": "Z"
+              }
+            ]
+          },
+          {
+            "name": "Renton",
+            "borough": [
+              {
+                "name": "Lake Young",
+                "secRating": "AAA"
+              },
+              {
+                "name": "Four Lakes",
+                "secRating": "AA"
+              },
+              {
+                "name": "Renton",
+                "secRating": "AA"
+              },
+              {
+                "name": "Issaquath",
+                "secRating": "A/B"
+              },
+              {
+                "name": "Cristopher",
+                "secRating": "C"
+              }
+            ]
+          },
+          {
+            "name": "Snohomish",
+            "borough": [
+              {
+                "name": "Bothell",
+                "secRating": "AA"
+              },
+              {
+                "name": "Mountain Terrace",
+                "secRating": "AA"
+              },
+              {
+                "name": "Snohomish",
+                "secRating": "A"
+              },
+              {
+                "name": "Tuner Corner",
+                "secRating": "B"
+              },
+              {
+                "name": "Cathcart",
+                "secRating": "C"
+              }
+            ]
+          },
+          {
+            "name": "Tacoma",
+            "borough": [
+              {
+                "name": "Rustin",
+                "secRating": "AAA"
+              },
+              {
+                "name": "Dupont",
+                "secRating": "AA"
+              },
+              {
+                "name": "Fircrest",
+                "secRating": "A"
+              },
+              {
+                "name": "Kent",
+                "secRating": "B"
+              },
+              {
+                "name": "Fife",
+                "secRating": "C"
+              }
+            ]
+          },
+          {
+            "name": "Ork Underground"
+          },
+          {
+            "name": "Council Island (Unofficial)"
+          },
+          {
+            "name": "Outremer (Unofficial)"
+          }
+        ]
+      },
+      {
+        "name": "Pretoria-Witwatersrand-Vaal",
+        "district": [
+          {
+            "name": "West End"
+          },
+          {
+            "name": "Pretoria"
+          },
+          {
+            "name": "Johannesburg"
+          },
+          {
+            "name": "Ekurhuleni"
+          },
+          {
+            "name": "Tshwane"
+          },
+          {
+            "name": "Kungwini"
+          },
+          {
+            "name": "Lesedi"
+          },
+          {
+            "name": "Midvaal"
+          },
+          {
+            "name": "Emfuleni"
+          },
+          {
+            "name": "Westonaria"
+          },
+          {
+            "name": "Randfontein"
+          },
+          {
+            "name": "Mogale"
+          }
+        ]
+      },
+      {
+        "name": "Denver",
+        "district": [
+          {
+            "name": "Pueblo Sector"
+          },
+          {
+            "name": "Sioux Sector"
+          },
+          {
+            "name": "UCAS Sector",
+            "borough": {
+              "name": "Aurora"
+            }
+          },
+          {
+            "name": "Aztlan Sector"
+          },
+          {
+            "name": "CAS Sector"
+          }
+        ]
+      },
+      {
+        "name": "FDC",
+        "district": [
+          {
+            "name": "Arlington"
+          },
+          {
+            "name": "Alexandria"
+          },
+          {
+            "name": "Fairfax"
+          },
+          {
+            "name": "Howard County"
+          },
+          {
+            "name": "Montgomery County"
+          },
+          {
+            "name": "Prince George's County"
+          },
+          {
+            "name": "Washington"
+          },
+          {
+            "name": "Anacostia Barrens"
+          }
+        ]
+      },
+      {
+        "name": "Portland",
+        "district": [
+          {
+            "name": "Rivergate"
+          },
+          {
+            "name": "Faloma"
+          },
+          {
+            "name": "North Portland"
+          },
+          {
+            "name": "St. Johns"
+          },
+          {
+            "name": "East St. Johns"
+          },
+          {
+            "name": "Swan Island"
+          },
+          {
+            "name": "Downtown"
+          },
+          {
+            "name": "Maywood Park"
+          },
+          {
+            "name": "Fairview"
+          },
+          {
+            "name": "Gresham"
+          },
+          {
+            "name": "Guilds Lake"
+          },
+          {
+            "name": "Willamette Heights"
+          },
+          {
+            "name": "Progress"
+          },
+          {
+            "name": "Tigard"
+          },
+          {
+            "name": "Elk Rock"
+          },
+          {
+            "name": "Milwaukee"
+          },
+          {
+            "name": "Westmoreland"
+          },
+          {
+            "name": "Gladstone"
+          }
+        ]
+      },
+      {
+        "name": "Chicago",
+        "district": [
+          {
+            "name": "Containment Zone",
+            "borough": [
+              {
+                "name": "The Core"
+              },
+              {
+                "name": "The Noose"
+              }
+            ]
+          },
+          {
+            "name": "Corridor",
+            "borough": [
+              {
+                "name": "Northside"
+              },
+              {
+                "name": "Southside"
+              },
+              {
+                "name": "Westside"
+              }
+            ]
+          },
+          {
+            "name": "Gary"
+          },
+          {
+            "name": "Joliet"
+          },
+          {
+            "name": "Naperville-Bolingbrook"
+          },
+          {
+            "name": "O'Hare Sub-Sprawl"
+          },
+          {
+            "name": "South Milwaukee"
+          }
+        ]
+      },
+      {
+        "name": "Los Angeles",
+        "district": [
+          {
+            "name": "LA Central",
+            "borough": [
+              {
+                "name": "Downtown"
+              },
+              {
+                "name": "Hollywood"
+              },
+              {
+                "name": "East LA"
+              },
+              {
+                "name": "South Central"
+              },
+              {
+                "name": "Santa Monica"
+              },
+              {
+                "name": "Westside"
+              },
+              {
+                "name": "Long Beach"
+              },
+              {
+                "name": "South Bay"
+              },
+              {
+                "name": "San Fernando Valley"
+              }
+            ]
+          },
+          {
+            "name": "Inland Empire",
+            "borough": [
+              {
+                "name": "Pomona"
+              },
+              {
+                "name": "Covina Floodwall"
+              },
+              {
+                "name": "Ontario Air Center"
+              },
+              {
+                "name": "Pasadena"
+              },
+              {
+                "name": "Riverside"
+              },
+              {
+                "name": "San Bernardino"
+              }
+            ]
+          },
+          {
+            "name": "Orange County (Fun City)",
+            "borough": [
+              {
+                "name": "Tustin"
+              },
+              {
+                "name": "Irvine"
+              }
+            ]
+          },
+          {
+            "name": "San Onofre Irradiated Zone"
+          },
+          {
+            "name": "Barstow"
+          }
+        ]
+      },
+      {
+        "name": "Cheyenne",
+        "district": [
+          {
+            "name": "Anglo Town"
+          },
+          {
+            "name": "No Boundaries Neighborhood"
+          },
+          {
+            "name": "The Corporate Zone"
+          }
+        ]
+      },
+      {
+        "name": "New York City",
+        "district": [
+          {
+            "name": "The Bronx"
+          },
+          {
+            "name": "Manhattan",
+            "borough": [
+              {
+                "name": "Inwood"
+              },
+              {
+                "name": "Washington Heights"
+              },
+              {
+                "name": "Newtown"
+              },
+              {
+                "name": "Riverside"
+              },
+              {
+                "name": "Westside"
+              },
+              {
+                "name": "Eastside"
+              },
+              {
+                "name": "Central Park",
+                "secRating": "AAA"
+              },
+              {
+                "name": "Midtown"
+              },
+              {
+                "name": "Times Square"
+              },
+              {
+                "name": "Downtown"
+              },
+              {
+                "name": "Stuyvesant",
+                "secRating": "AAA"
+              },
+              {
+                "name": "Terminal"
+              },
+              {
+                "name": "Southside"
+              },
+              {
+                "name": "The Village"
+              },
+              {
+                "name": "The Pit"
+              },
+              {
+                "name": "Soho"
+              },
+              {
+                "name": "The Towers"
+              },
+              {
+                "name": "City Center"
+              },
+              {
+                "name": "Chinatown"
+              },
+              {
+                "name": "Battery City"
+              },
+              {
+                "name": "The Underground"
+              }
+            ]
+          },
+          {
+            "name": "Queens"
+          },
+          {
+            "name": "Brooklyn"
+          },
+          {
+            "name": "Staten Island"
+          },
+          {
+            "name": "Long Island"
+          }
+        ]
+      },
+      {
+        "name": "Atlanta",
+        "district": [
+          {
+            "name": "Downtown"
+          },
+          {
+            "name": "Southtown"
+          },
+          {
+            "name": "Norcross"
+          },
+          {
+            "name": "Marietta"
+          },
+          {
+            "name": "Douglasville"
+          },
+          {
+            "name": "Decatur"
+          },
+          {
+            "name": "Buckhead"
+          }
+        ]
+      },
+      {
+        "name": "Berlin",
+        "district": [
+          {
+            "name": "AGC Siemensstadt"
+          },
+          {
+            "name": "Aztech-Schönwalde"
+          },
+          {
+            "name": "Charlottenburg-Wilmersdorf"
+          },
+          {
+            "name": "Falkensee"
+          },
+          {
+            "name": "Gropiusstadt"
+          },
+          {
+            "name": "Köpenick"
+          },
+          {
+            "name": "Kreuzhain"
+          },
+          {
+            "name": "Lichtenberg"
+          },
+          {
+            "name": "Marzahn"
+          },
+          {
+            "name": "Mitte",
+            "borough": [
+              {
+                "name": "Berliner Bankenviertel"
+              },
+              {
+                "name": "Drakequartier"
+              },
+              {
+                "name": "Moabit"
+              },
+              {
+                "name": "Wedding"
+              }
+            ]
+          },
+          {
+            "name": "Oranienburg"
+          },
+          {
+            "name": "Pankow"
+          },
+          {
+            "name": "Potsdam"
+          },
+          {
+            "name": "Reinickendorf"
+          },
+          {
+            "name": "Renrakusan"
+          },
+          {
+            "name": "S-K Tempelhof",
+            "borough": [
+              {
+                "name": "S-K Arcology"
+              },
+              {
+                "name": "Rixdorf"
+              }
+            ]
+          },
+          {
+            "name": "Schönefeld"
+          },
+          {
+            "name": "Spandau"
+          },
+          {
+            "name": "Strausberg-Fredersdorf"
+          },
+          {
+            "name": "Zehlendorf"
+          },
+          {
+            "name": "Z-IC Tegel"
+          }
+        ]
+      },
+      {
+        "name": "Hong Kong",
+        "district": [
+          {
+            "name": "Northern Reaches"
+          },
+          {
+            "name": "Tolo Harbor"
+          },
+          {
+            "name": "Lantau Island"
+          },
+          {
+            "name": "Kwai Tsing"
+          },
+          {
+            "name": "Yau Tsim Mong"
+          },
+          {
+            "name": "Kowloon Walled City"
+          },
+          {
+            "name": "Kwun Tong"
+          },
+          {
+            "name": "Sai Kung"
+          },
+          {
+            "name": "Downtown"
+          },
+          {
+            "name": "Eastern Hong Kong"
+          },
+          {
+            "name": "Southern Coast"
+          }
+        ]
+      },
+      {
+        "name": "Dubai",
+        "district": [
+          {
+            "name": "Jebel Ali"
+          },
+          {
+            "name": "Jumeirah"
+          },
+          {
+            "name": "World Archipelago"
+          }
+        ]
+      },
+      {
+        "name": "Europort",
+        "district": [
+          {
+            "name": "Portoplex"
+          },
+          {
+            "name": "Oude Centraal"
+          },
+          {
+            "name": "De Kop van Zuid"
+          },
+          {
+            "name": "Vlaardingen"
+          },
+          {
+            "name": "Schiedam"
+          }
+        ]
+      },
+      {
+        "name": "Nairobi",
+        "district": [
+          {
+            "name": "Downtown"
+          },
+          {
+            "name": "Corporate Court Complex"
+          },
+          {
+            "name": "River Road"
+          },
+          {
+            "name": "Kibera"
+          },
+          {
+            "name": "Uplands"
+          },
+          {
+            "name": "Westlands"
+          },
+          {
+            "name": "Southern Naibori"
+          }
+        ]
+      },
+      {
+        "name": "Tenochtitlán",
+        "district": [
+          {
+            "name": "Ciudad Satélite"
+          },
+          {
+            "name": "Distrito Federal"
+          },
+          {
+            "name": "Zócalo"
+          }
+        ]
+      },
+      {
+        "name": "Neo-Tokyo",
+        "district": [
+          {
+            "name": "Adachi"
+          },
+          {
+            "name": "Arakawa"
+          },
+          {
+            "name": "Bunkyo",
+            "borough": [
+              {
+                "name": "Koishikawa"
+              },
+              {
+                "name": "Pachinko Street"
+              },
+              {
+                "name": "Shirow Row"
+              }
+            ]
+          },
+          {
+            "name": "Chiyoda",
+            "borough": [
+              {
+                "name": "Ginza"
+              },
+              {
+                "name": "Kasumigaseki"
+              },
+              {
+                "name": "Kojimachi"
+              },
+              {
+                "name": "Kudan"
+              },
+              {
+                "name": "Nagatacho"
+              },
+              {
+                "name": "Nihonbashi"
+              }
+            ]
+          },
+          {
+            "name": "Edogawa"
+          },
+          {
+            "name": "Itabashi"
+          },
+          {
+            "name": "Kanda",
+            "borough": [
+              {
+                "name": "Akihabara"
+              },
+              {
+                "name": "Jinbocho"
+              },
+              {
+                "name": "Ochanomizu"
+              },
+              {
+                "name": "Ogawamachi"
+              },
+              {
+                "name": "Ningyocho"
+              }
+            ]
+          },
+          {
+            "name": "Katsushika"
+          },
+          {
+            "name": "Kita"
+          },
+          {
+            "name": "Koto"
+          },
+          {
+            "name": "Meguro"
+          },
+          {
+            "name": "Minato",
+            "borough": [
+              {
+                "name": "Aoyama"
+              },
+              {
+                "name": "Akasaka"
+              },
+              {
+                "name": "Azabu"
+              },
+              {
+                "name": "Roppongi"
+              }
+            ]
+          },
+          {
+            "name": "Nakano"
+          },
+          {
+            "name": "Nerima"
+          },
+          {
+            "name": "Odaiba"
+          },
+          {
+            "name": "Ota"
+          },
+          {
+            "name": "Setagaya"
+          },
+          {
+            "name": "Shibuya",
+            "borough": {
+              "name": "Harajuku"
+            }
+          },
+          {
+            "name": "Shinagawa"
+          },
+          {
+            "name": "Shinjuku",
+            "borough": [
+              {
+                "name": "Kabukicho"
+              },
+              {
+                "name": "Nishi-Shinjuku"
+              }
+            ]
+          },
+          {
+            "name": "Suginami"
+          },
+          {
+            "name": "Sumida"
+          },
+          {
+            "name": "Taito"
+          },
+          {
+            "name": "Toshima",
+            "borough": {
+              "name": "Ikebukuro"
+            }
+          },
+          {
+            "name": "Urayasu"
+          }
+        ]
+      }
+    ]
+  }
+}

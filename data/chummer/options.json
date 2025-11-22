@@ -1,0 +1,155 @@
+{
+  "limbcounts": {
+    "limb": [
+      {
+        "name": "4 (2 arms, 2 legs)",
+        "limbcount": "4",
+        "exclude": "torso,skull"
+      },
+      {
+        "name": "5 (2 arms, 2 legs, skull)",
+        "limbcount": "5",
+        "exclude": "torso"
+      },
+      {
+        "name": "5 (2 arms, 2 legs, torso)",
+        "limbcount": "5",
+        "exclude": "skull"
+      },
+      {
+        "name": "6 (2 arms, 2 legs, torso, skull)",
+        "limbcount": "6",
+        "exclude": null
+      }
+    ]
+  },
+  "pdfarguments": {
+    "pdfargument": [
+      {
+        "name": "Web Browser",
+        "value": "\"file://{absolutepath}#page={page}\"",
+        "appnames": {
+          "appname": [
+            "iexplore.exe",
+            "msedge.exe",
+            "chrome.exe",
+            "firefox.exe",
+            "safari.exe",
+            "opera.exe",
+            "qqbrowser.exe",
+            "sogouexplorer.exe",
+            "browser.exe",
+            "brave.exe"
+          ]
+        }
+      },
+      {
+        "name": "Acrobat-style",
+        "value": "/A \"page={page}\" \"{localpath}\"",
+        "appnames": {
+          "appname": [
+            "AcroRd32.exe",
+            "Acrobat.exe",
+            "FoxitReader.exe",
+            "FoxitPDFReader.exe",
+            "FoxitReaderPortable.exe",
+            "PDFXCView.exe",
+            "PDFXEdit.exe",
+            "PDFXHost32.exe",
+            "PDFXHost64.exe"
+          ]
+        }
+      },
+      {
+        "name": "Acrobat-style - New instance",
+        "value": "/A /N \"page={page}\" \"{localpath}\"",
+        "appnames": {
+          "appname": [
+            "AcroRd32.exe",
+            "Acrobat.exe",
+            "FoxitReader.exe",
+            "FoxitPDFReader.exe",
+            "FoxitReaderPortable.exe",
+            "PDFXCView.exe",
+            "PDFXEdit.exe",
+            "PDFXHost32.exe",
+            "PDFXHost64.exe"
+          ]
+        }
+      },
+      {
+        "name": "Unix-style",
+        "value": "-p {page} \"{localpath}\""
+      },
+      {
+        "name": "Sumatra - Re-use instance",
+        "value": "-reuse-instance -page {page} \"{localpath}\"",
+        "appnames": {
+          "appname": [
+            "sumatrapdf.exe",
+            "sumatrapdfportable.exe"
+          ]
+        }
+      },
+      {
+        "name": "Sumatra",
+        "value": "-page {page} \"{localpath}\"",
+        "appnames": {
+          "appname": [
+            "sumatrapdf.exe",
+            "sumatrapdfportable.exe"
+          ]
+        }
+      }
+    ]
+  },
+  "blackmarketpipelinecategories": {
+    "category": [
+      "Armor",
+      "Bioware",
+      "Cyberware",
+      "Drugs",
+      "Electronics",
+      "Geneware",
+      "Magic",
+      "Nanoware",
+      "Software",
+      "Vehicles",
+      "Weapons"
+    ]
+  },
+  "availmap": {
+    "avail": [
+      {
+        "id": "0A39C082-AE54-4096-94D3-0CA213ACDA0A",
+        "value": "100.0",
+        "duration": "6",
+        "interval": "String_Hours"
+      },
+      {
+        "id": "335BB55A-A1A7-48C4-8852-4EA11929F242",
+        "value": "1000.0",
+        "duration": "1",
+        "interval": "String_Day"
+      },
+      {
+        "id": "0DC43627-56E8-46DB-B4C8-3A389C6999D2",
+        "value": "10000.0",
+        "duration": "2",
+        "interval": "String_Days"
+      },
+      {
+        "id": "06B72D98-3510-4A91-825E-CB55AD873749",
+        "value": "100000.0",
+        "duration": "1",
+        "interval": "String_Week"
+      },
+      {
+        "id": "67BC5453-8AD0-4C69-A91C-8259FD070A1D",
+        "value": "79228162514264337593543950335",
+        "duration": "1",
+        "interval": "String_Month"
+      }
+    ]
+  }
+}

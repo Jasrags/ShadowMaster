@@ -1,0 +1,3283 @@
+{
+  "+@xmlns": "",
+  "+@xmlns:xsi": "http://www.w3.org/2001/XMLSchema-instance",
+  "+@xsi:schemaLocation": "http://www.w3.org/2001/XMLSchema actions.xsd",
+  "version": "0",
+  "actions": {
+    "action": [
+      {
+        "id": "c649963a-b88f-473f-96d0-2f38cd054d86",
+        "name": "Melee Defense",
+        "type": "No",
+        "test": {
+          "dice": "{REA} + {INT} + {Improvement Value: Dodge}"
+        },
+        "source": "SR5",
+        "page": "168"
+      },
+      {
+        "id": "3e5bc4f5-f36e-4152-9e2b-a07c316ed017",
+        "name": "Ranged Defense",
+        "type": "No",
+        "test": {
+          "dice": "{REA} + {INT} + {Improvement Value: Dodge}"
+        },
+        "source": "SR5",
+        "page": "186"
+      },
+      {
+        "id": "85f6b9af-45a9-45b5-90e0-5421ae2278e8",
+        "name": "Suppressive Fire Defense",
+        "type": "No",
+        "test": {
+          "dice": "{REA} + {EDG}"
+        },
+        "source": "SR5",
+        "page": "179"
+      },
+      {
+        "id": "d5bd6550-e4ef-40f7-b95c-47ea79c682d0",
+        "name": "Resist Surprise",
+        "type": "No",
+        "test": {
+          "dice": "{INT} + {REA} + {Improvement Value: SurpriseResist}"
+        },
+        "source": "SR5",
+        "page": "192"
+      },
+      {
+        "id": "0ca7d61c-88e6-4e5c-841a-9cfbbb4ab491",
+        "name": "Direct, Physical Combat Spell Defense",
+        "type": "No",
+        "test": {
+          "dice": "{BOD} + {Improvement Value: SpellResistance}"
+        },
+        "source": "SR5",
+        "page": "283"
+      },
+      {
+        "id": "7d1f1509-8c4e-43c2-b902-02c6bb82b297",
+        "name": "Direct, Mana Combat Spell Defense",
+        "type": "No",
+        "test": {
+          "dice": "{WIL} + {Improvement Value: SpellResistance}"
+        },
+        "source": "SR5",
+        "page": "283"
+      },
+      {
+        "id": "a27f4680-62ab-446d-b614-fd2f315a56cb",
+        "name": "Detection Spell Defense",
+        "type": "No",
+        "test": {
+          "dice": "{LOG} + {WIL} + {Improvement Value: SpellResistance} + {Improvement Value: DetectionSpellResist}"
+        },
+        "source": "SR5",
+        "page": "285"
+      },
+      {
+        "id": "1dbbb54b-2cc3-40f4-a94a-4da5e7c70be7",
+        "name": "Physical Illusion Spell Defense",
+        "type": "No",
+        "test": {
+          "dice": "{LOG} + {INT} + {Improvement Value: SpellResistance} + {Improvement Value: PhysicalIllusionResist}"
+        },
+        "source": "SR5",
+        "page": "290"
+      },
+      {
+        "id": "80ae61c5-c3b7-48a0-8ef2-9aaa1aa2cc05",
+        "name": "Mana Illusion Spell Defense",
+        "type": "No",
+        "test": {
+          "dice": "{LOG} + {WIL} + {Improvement Value: SpellResistance} + {Improvement Value: MentalManipulationResist}"
+        },
+        "source": "SR5",
+        "page": "290"
+      },
+      {
+        "id": "bf7d3491-c4f1-4ee4-9ab0-ce3dd6ec2e31",
+        "name": "Physical Manipulation Spell Defense",
+        "type": "No",
+        "test": {
+          "dice": "{BOD} + {STR} + {Improvement Value: SpellResistance} + {Improvement Value: PhysicalManipulationResist}"
+        },
+        "source": "SR5",
+        "page": "292"
+      },
+      {
+        "id": "804e5aed-af93-4aeb-b87a-1de291bbe261",
+        "name": "Mental Manipulation Spell Defense",
+        "type": "No",
+        "test": {
+          "dice": "{LOG} + {WIL} + {Improvement Value: SpellResistance} + {Improvement Value: ManaIllusionResist}"
+        },
+        "source": "SR5",
+        "page": "292"
+      },
+      {
+        "id": "251e9a4a-2995-4139-868d-960002e381bd",
+        "name": "Decrease {BOD} Spell Defense",
+        "type": "No",
+        "test": {
+          "dice": "{BOD} + {WIL} + {Improvement Value: SpellResistance}"
+        },
+        "source": "SR5",
+        "page": "288"
+      },
+      {
+        "id": "a9c4beec-3f7e-4538-b341-d54c20b7db43",
+        "name": "Decrease {AGI} Spell Defense",
+        "type": "No",
+        "test": {
+          "dice": "{AGI} + {WIL} + {Improvement Value: SpellResistance}"
+        },
+        "source": "SR5",
+        "page": "288"
+      },
+      {
+        "id": "251a7f01-96c5-4237-b624-3956c7139733",
+        "name": "Decrease {REA} Spell Defense",
+        "type": "No",
+        "test": {
+          "dice": "{REA} + {WIL} + {Improvement Value: SpellResistance}"
+        },
+        "source": "SR5",
+        "page": "288"
+      },
+      {
+        "id": "fa90b483-4045-4f79-990b-906b8dead55f",
+        "name": "Decrease {STR} Spell Defense",
+        "type": "No",
+        "test": {
+          "dice": "{STR} + {WIL} + {Improvement Value: SpellResistance}"
+        },
+        "source": "SR5",
+        "page": "288"
+      },
+      {
+        "id": "98f35570-a884-44fd-92f0-4fa8ad7558f5",
+        "name": "Decrease {CHA} Spell Defense",
+        "type": "No",
+        "test": {
+          "dice": "{CHA} + {WIL} + {Improvement Value: SpellResistance}"
+        },
+        "source": "SR5",
+        "page": "288"
+      },
+      {
+        "id": "5714adc1-cebc-498d-97c9-7fcc2ee3eb42",
+        "name": "Decrease {INT} Spell Defense",
+        "type": "No",
+        "test": {
+          "dice": "{INT} + {WIL} + {Improvement Value: SpellResistance}"
+        },
+        "source": "SR5",
+        "page": "288"
+      },
+      {
+        "id": "394b2920-9ac6-4630-95dc-c31e4c077c33",
+        "name": "Decrease {LOG} Spell Defense",
+        "type": "No",
+        "test": {
+          "dice": "{LOG} + {WIL} + {Improvement Value: SpellResistance}"
+        },
+        "source": "SR5",
+        "page": "288"
+      },
+      {
+        "id": "4011301d-d051-43f5-bbac-38b446c16df3",
+        "name": "Decrease {WIL} Spell Defense",
+        "type": "No",
+        "test": {
+          "dice": "{WIL} + {WIL} + {Improvement Value: SpellResistance}"
+        },
+        "source": "SR5",
+        "page": "288"
+      },
+      {
+        "id": "cc314714-81b0-447f-b7b6-f1ac272421ee",
+        "name": "Change Linked Device Mode",
+        "type": "Free",
+        "test": {
+          "dice": "None",
+          "bonusstring": "Activate, deactivate, or switch the mode of any device to which the character has a direct neural interface connection."
+        },
+        "source": "SR5",
+        "page": "163"
+      },
+      {
+        "id": "cf22cdfd-05d7-44b8-8b50-3b7d951dddfd",
+        "name": "Change Gun Mode (Linked Smartgun)",
+        "type": "Simple",
+        "test": {
+          "dice": "None",
+          "bonusstring": "Change the firing mode of a readied firearm with a linked smartgun system."
+        },
+        "source": "SR5",
+        "page": "165"
+      },
+      {
+        "id": "afab4f41-fe12-4d5e-a736-de9a47113fb6",
+        "name": "Drop Object",
+        "type": "Free",
+        "test": {
+          "dice": "None",
+          "bonusstring": "Drop one object held in the character's hand(s)."
+        },
+        "source": "SR5",
+        "page": "163"
+      },
+      {
+        "id": "69029e9c-c146-4a48-b8fe-d3991645c832",
+        "name": "Drop Prone",
+        "type": "Free",
+        "test": {
+          "dice": "None",
+          "bonusstring": "Drop to prone."
+        },
+        "source": "SR5",
+        "page": "164"
+      },
+      {
+        "id": "4b7a9284-2ac4-4a37-b4ca-b0313e29b9ef",
+        "name": "Eject Clip (Smartgun)",
+        "type": "Free",
+        "test": {
+          "dice": "None",
+          "bonusstring": "Eject the detachable magazine of a smartgun."
+        },
+        "source": "SR5",
+        "page": "164"
+      },
+      {
+        "id": "ac554ad7-5ed8-422b-a1da-995c484c42af",
+        "name": "Gesture",
+        "type": "Free",
+        "test": {
+          "dice": "None",
+          "bonusstring": "Make a few quick gestures. Targets unfamiliar with the gestures may roll {INT} v. {Threshold: 2} to understand them."
+        },
+        "source": "SR5",
+        "page": "164"
+      },
+      {
+        "id": "aa57b540-43cb-48bd-ba5c-76d8c1e8cba0",
+        "name": "Multiple Attacks",
+        "type": "Free",
+        "test": {
+          "dice": "None",
+          "bonusstring": "Attack multiple targets in a single action, splitting the character's dicepool. Must be combined with {Action: Fire Single-Shot}, {Action: Fire Semi-Auto}, {Action: Fire Burst Fire}, {Action: Fire Full-Auto Simple}, {Action: Fire Semi-Auto Burst}, {Action: Fire Long Burst}, {Action: Fire Full-Auto Complex}, {Action: Throw Weapon (Non-Grenade)}, {Action: Throw Weapon (Grenade)}, {Action: Melee Attack}, {Action: Reckless Spellcasting}, or {Action: Cast Spell}."
+        },
+        "source": "SR5",
+        "page": "164"
+      },
+      {
+        "id": "b8e322c3-c79b-4c97-8cbe-de3f6ce71907",
+        "name": "Run",
+        "type": "Free",
+        "test": {
+          "dice": "None",
+          "bonusstring": "Inflicts Running movement modifiers, and can move up to Running Movement Rate for the rest of the combat turn."
+        },
+        "source": "SR5",
+        "page": "164"
+      },
+      {
+        "id": "1f569333-34c6-4f28-ba50-7c6bcd88be9a",
+        "name": "Speak/Text/Transmit Phrase",
+        "type": "Free",
+        "test": {
+          "dice": "None",
+          "bonusstring": "Send or speak a short message."
+        },
+        "source": "SR5",
+        "page": "164"
+      },
+      {
+        "id": "d0efe44f-45f7-405d-8415-69eb159e93b3",
+        "name": "Activate Focus",
+        "type": "Simple",
+        "test": {
+          "dice": "None",
+          "bonusstring": "Activate a focus the character is carrying."
+        },
+        "source": "SR5",
+        "page": "164"
+      },
+      {
+        "id": "9991c31b-52b3-47a8-8ea8-48bae349fcdf",
+        "name": "Call Spirit",
+        "type": "Simple",
+        "test": {
+          "dice": "None",
+          "bonusstring": "Call a spirit that has already been summoned and placed on standby."
+        },
+        "source": "SR5",
+        "page": "164"
+      },
+      {
+        "id": "fcd4abdf-dfb4-46d8-9ff4-d5de466b949e",
+        "name": "Change Device Mode",
+        "type": "Simple",
+        "test": {
+          "dice": "None",
+          "bonusstring": "Activate, deactivate, or change the mode of any device with a simple switch, virtual button, or command from a commlink or other control device."
+        },
+        "source": "SR5",
+        "page": "164"
+      },
+      {
+        "id": "9a864f35-1469-4bc2-bda4-78879edd1311",
+        "name": "Change Gun Mode (Not Linked Smartgun)",
+        "type": "Simple",
+        "test": {
+          "dice": "None",
+          "bonusstring": "Change the firing mode of a readied firearm that is either not a smartgun or does not have its system linked."
+        },
+        "source": "SR5",
+        "page": "165"
+      },
+      {
+        "id": "dc0fe0d6-e841-4916-9001-dc9e66e9c177",
+        "name": "Command Spirit",
+        "type": "Simple",
+        "test": {
+          "dice": "None",
+          "bonusstring": "Issue a command to a single spirit or group of spirits under the character's control."
+        },
+        "source": "SR5",
+        "page": "165"
+      },
+      {
+        "id": "22e80495-2c0d-4230-9818-e99bf4eabd12",
+        "name": "Dismiss Spirit",
+        "type": "Simple",
+        "test": {
+          "dice": "None",
+          "bonusstring": "Free a spirit from under the character's control. The spirit is not immediately sent back, but instead is freed to do as it chooses."
+        },
+        "source": "SR5",
+        "page": "165"
+      },
+      {
+        "id": "5790e39b-2600-4b98-9a04-dcdf1643188e",
+        "name": "Fire Bow",
+        "type": "Simple",
+        "test": {
+          "dice": "{AGI} + {Weapon: Skill} v. {Action: Ranged Defense}",
+          "limit": "{Weapon: Accuracy}",
+          "bonusstring": "On success, target must resist {Weapon: DV} + net hits damage with an armor modifier of {Weapon: AP}."
+        },
+        "source": "SR5",
+        "page": "165"
+      },
+      {
+        "id": "fcc4f4c5-9113-480e-9dda-8cb3af133dd8",
+        "name": "Fire Single-Shot",
+        "type": "Simple",
+        "test": {
+          "dice": "{AGI} + {Weapon: Skill} v. {Action: Ranged Defense}",
+          "limit": "{Weapon: Accuracy}",
+          "bonusstring": "Fires 1 shot without recoil penalties. Can use {Action: Multiple Attacks} if using two weapons. On success, target must resist {Weapon: DV} + net hits damage with an armor modifier of {Weapon: AP}."
+        },
+        "source": "SR5",
+        "page": "165"
+      },
+      {
+        "id": "a84ed567-e106-40b6-b7db-355f82b34c89",
+        "name": "Fire Semi-Auto",
+        "type": "Simple",
+        "test": {
+          "dice": "{AGI} + {Weapon: Skill} v. {Action: Ranged Defense}",
+          "limit": "{Weapon: Accuracy}",
+          "bonusstring": "Fires 1 shot. Can only use {Action: Multiple Attacks} if using two weapons. On success, target must resist {Weapon: DV} + net hits damage with an armor modifier of {Weapon: AP}."
+        },
+        "source": "SR5",
+        "page": "165"
+      },
+      {
+        "id": "23ed8daf-5af3-4b2f-a681-55053cd4e6ad",
+        "name": "Fire Burst Fire",
+        "type": "Simple",
+        "test": {
+          "dice": "{AGI} + {Weapon: Skill} v. {Action: Ranged Defense} - 2",
+          "limit": "{Weapon: Accuracy}",
+          "bonusstring": "Fires 3 shots. Can use {Action: Multiple Attacks}. On success, target must resist {Weapon: DV} + net hits damage with an armor modifier of {Weapon: AP}."
+        },
+        "source": "SR5",
+        "page": "165"
+      },
+      {
+        "id": "0cad7455-41a3-4211-8f33-5e73d0cd7909",
+        "name": "Fire Full-Auto Simple",
+        "type": "Simple",
+        "test": {
+          "dice": "{AGI} + {Weapon: Skill} v. {Action: Ranged Defense} - 5",
+          "limit": "{Weapon: Accuracy}",
+          "bonusstring": "Fires 6 shots. Can use {Action: Multiple Attacks}. On success, target must resist {Weapon: DV} + net hits damage with an armor modifier of {Weapon: AP}."
+        },
+        "source": "SR5",
+        "page": "165"
+      },
+      {
+        "id": "11540296-1d7b-4a0b-b610-87e8ca6d49f8",
+        "name": "Insert Clip",
+        "type": "Simple",
+        "test": {
+          "dice": "None",
+          "bonusstring": "Insert a fresh detachable magazine into a readied firearm, but only if the previous magazine has been removed."
+        },
+        "source": "SR5",
+        "page": "165"
+      },
+      {
+        "id": "2ad8b3f7-1ad9-4fed-b642-4eef6042c9b2",
+        "name": "Nock Arrow",
+        "type": "Simple",
+        "test": {
+          "dice": "None",
+          "bonusstring": "Loads a bow with an arrow."
+        },
+        "source": "SR5",
+        "page": "163"
+      },
+      {
+        "id": "1489fd0e-0095-42b4-9ab0-1e46878d26f0",
+        "name": "Observe in Detail",
+        "type": "Simple",
+        "test": {
+          "dice": "None",
+          "bonusstring": "Make a Perception test. At the GM's discretion, immediately obvious things do not need a test."
+        },
+        "source": "SR5",
+        "page": "165"
+      },
+      {
+        "id": "42bc2749-850b-4706-8de7-bf257a7ec351",
+        "name": "Pick Up / Put Down",
+        "type": "Simple",
+        "test": {
+          "dice": "None",
+          "bonusstring": "Pick up an object in reach or put it down (gently)."
+        },
+        "source": "SR5",
+        "page": "165"
+      },
+      {
+        "id": "eeadf4b2-91c5-4677-8072-aa276c22de5b",
+        "name": "Quick Draw",
+        "type": "Simple",
+        "test": {
+          "dice": "{REA} + {Weapon: Skill} v. {Threshold: {Weapon: Quick Draw Threshold}}",
+          "limit": "{Physical}",
+          "bonusstring": "Weapon must be properly holstered. On success, the weapon is readied and immediately make a Simple Action attack. On fail, the weapon is readied. On glitch, the weapon is not readied and the character's action phase ends. On a critical glitch, bad things happen."
+        },
+        "source": "SR5",
+        "page": "165"
+      },
+      {
+        "id": "c9ce97c5-8396-4b9c-b630-4e95d4df7337",
+        "name": "Ready Weapon",
+        "type": "Simple",
+        "test": {
+          "dice": "None",
+          "bonusstring": "Weapon is readied for attacks. Weapons not in traditional holsters may require a Complex action at the GM's discretion. Small throwing weapons can be readied {{AGI} / 2} at a time per action."
+        },
+        "source": "SR5",
+        "page": "165"
+      },
+      {
+        "id": "ec637fd9-5220-42f5-852f-fab684589292",
+        "name": "Reckless Spellcasting (Direct, Physical Combat)",
+        "type": "Simple",
+        "test": {
+          "dice": "{MAG} + {Spell: Spellcasting} v. {Action: Direct, Physical Combat Spell Defense}",
+          "limit": "{Spell: Force}",
+          "bonusstring": "Cast a spell. After action, resist {{Spell: Drain} + 3} with a minimum of 2 DV."
+        },
+        "source": "SR5",
+        "page": "165"
+      },
+      {
+        "id": "a34e989f-3f2c-4799-a411-06acd0302da9",
+        "name": "Reckless Spellcasting (Direct, Mana Combat)",
+        "type": "Simple",
+        "test": {
+          "dice": "{MAG} + {Spell: Spellcasting} v. {Action: Direct, Mana Combat Spell Defense}",
+          "limit": "{Spell: Force}",
+          "bonusstring": "Cast a spell. After action, resist {{Spell: Drain} + 3} with a minimum of 2 DV."
+        },
+        "source": "SR5",
+        "page": "165"
+      },
+      {
+        "id": "36e2b033-6cbb-41ea-b08a-94b3c9cf2874",
+        "name": "Reckless Spellcasting (Indirect, Single-target Combat)",
+        "type": "Simple",
+        "test": {
+          "dice": "{MAG} + {Spell: Spellcasting} v. {Action: Ranged Defense}",
+          "limit": "{Spell: Force}",
+          "bonusstring": "Cast a spell. After action, resist {{Spell: Drain} + 3} with a minimum of 2 DV."
+        },
+        "source": "SR5",
+        "page": "165"
+      },
+      {
+        "id": "4d88eea9-ef93-4927-ad15-9644bd149bc1",
+        "name": "Reckless Spellcasting (Indirect, AoE Combat)",
+        "type": "Simple",
+        "test": {
+          "dice": "{MAG} + {Spell: Spellcasting} v. {Threshold: 3}",
+          "limit": "{Spell: Force}",
+          "bonusstring": "Cast a spell. After action, resist {{Spell: Drain} + 3} with a minimum of 2 DV."
+        },
+        "source": "SR5",
+        "page": "165"
+      },
+      {
+        "id": "38ffd621-5dc8-4b85-86db-6da5b9930176",
+        "name": "Reckless Spellcasting (Detection)",
+        "type": "Simple",
+        "test": {
+          "dice": "{MAG} + {Spell: Spellcasting} v. {Action: Detection Spell Defense}",
+          "limit": "{Spell: Force}",
+          "bonusstring": "Cast a spell. After action, resist {{Spell: Drain} + 3} with a minimum of 2 DV."
+        },
+        "source": "SR5",
+        "page": "165"
+      },
+      {
+        "id": "18d1538a-c256-4d9d-8bf0-cfe359edea5a",
+        "name": "Reckless Spellcasting (Physical Illusion)",
+        "type": "Simple",
+        "test": {
+          "dice": "{MAG} + {Spell: Spellcasting} v. {Action: Physical Illusion Spell Defense}",
+          "limit": "{Spell: Force}",
+          "bonusstring": "Cast a spell. After action, resist {{Spell: Drain} + 3} with a minimum of 2 DV."
+        },
+        "source": "SR5",
+        "page": "165"
+      },
+      {
+        "id": "3d137e4d-883c-4cd2-8058-693dd521fb11",
+        "name": "Reckless Spellcasting (Mana Illusion)",
+        "type": "Simple",
+        "test": {
+          "dice": "{MAG} + {Spell: Spellcasting} v. {Action: Mana Illusion Spell Defense}",
+          "limit": "{Spell: Force}",
+          "bonusstring": "Cast a spell. After action, resist {{Spell: Drain} + 3} with a minimum of 2 DV."
+        },
+        "source": "SR5",
+        "page": "165"
+      },
+      {
+        "id": "27b2df59-ff24-42ba-a4fa-659d4654d34a",
+        "name": "Reckless Spellcasting (Physical Manipulation)",
+        "type": "Simple",
+        "test": {
+          "dice": "{MAG} + {Spell: Spellcasting} v. {Action: Physical Manipulation Spell Defense}",
+          "limit": "{Spell: Force}",
+          "bonusstring": "Cast a spell. After action, resist {{Spell: Drain} + 3} with a minimum of 2 DV."
+        },
+        "source": "SR5",
+        "page": "165"
+      },
+      {
+        "id": "2a896b9d-26e6-4cab-b588-3a9de9658c8b",
+        "name": "Reckless Spellcasting (Mental Manipulation)",
+        "type": "Simple",
+        "test": {
+          "dice": "{MAG} + {Spell: Spellcasting} v. {Action: Mental Manipulation Spell Defense}",
+          "limit": "{Spell: Force}",
+          "bonusstring": "Cast a spell. After action, resist {{Spell: Drain} + 3} with a minimum of 2 DV."
+        },
+        "source": "SR5",
+        "page": "165"
+      },
+      {
+        "id": "bccd8bcb-95e5-489b-9821-ce0aebfdbfb2",
+        "name": "Reckless Spellcasting (Decrease {BOD})",
+        "type": "Simple",
+        "test": {
+          "dice": "{MAG} + {Spell: Spellcasting} v. {Decrease {BOD} Spell Defense}",
+          "limit": "{Spell: Force}",
+          "bonusstring": "Cast a spell. After action, resist {{Spell: Drain} + 3} with a minimum of 2 DV."
+        },
+        "source": "SR5",
+        "page": "165"
+      },
+      {
+        "id": "68a9596e-ae77-4f54-86a8-423c70e96fa8",
+        "name": "Reckless Spellcasting (Decrease {AGI})",
+        "type": "Simple",
+        "test": {
+          "dice": "{MAG} + {Spell: Spellcasting} v. {Decrease {AGI} Spell Defense}",
+          "limit": "{Spell: Force}",
+          "bonusstring": "Cast a spell. After action, resist {{Spell: Drain} + 3} with a minimum of 2 DV."
+        },
+        "source": "SR5",
+        "page": "165"
+      },
+      {
+        "id": "b901faf1-7abb-49a3-8ed7-bd06153c0359",
+        "name": "Reckless Spellcasting (Decrease {REA})",
+        "type": "Simple",
+        "test": {
+          "dice": "{MAG} + {Spell: Spellcasting} v. {Decrease {REA} Spell Defense}",
+          "limit": "{Spell: Force}",
+          "bonusstring": "Cast a spell. After action, resist {{Spell: Drain} + 3} with a minimum of 2 DV."
+        },
+        "source": "SR5",
+        "page": "165"
+      },
+      {
+        "id": "1af27cd2-c141-4707-a3ba-47e995380185",
+        "name": "Reckless Spellcasting (Decrease {STR})",
+        "type": "Simple",
+        "test": {
+          "dice": "{MAG} + {Spell: Spellcasting} v. {Decrease {STR} Spell Defense}",
+          "limit": "{Spell: Force}",
+          "bonusstring": "Cast a spell. After action, resist {{Spell: Drain} + 3} with a minimum of 2 DV."
+        },
+        "source": "SR5",
+        "page": "165"
+      },
+      {
+        "id": "ffc9e219-91c6-4b5a-82ae-5951c4225dc6",
+        "name": "Reckless Spellcasting (Decrease {CHA})",
+        "type": "Simple",
+        "test": {
+          "dice": "{MAG} + {Spell: Spellcasting} v. {Decrease {CHA} Spell Defense}",
+          "limit": "{Spell: Force}",
+          "bonusstring": "Cast a spell. After action, resist {{Spell: Drain} + 3} with a minimum of 2 DV."
+        },
+        "source": "SR5",
+        "page": "165"
+      },
+      {
+        "id": "2504b41b-c0de-4bdf-979c-8b9a3127ff77",
+        "name": "Reckless Spellcasting (Decrease {INT})",
+        "type": "Simple",
+        "test": {
+          "dice": "{MAG} + {Spell: Spellcasting} v. {Decrease {INT} Spell Defense}",
+          "limit": "{Spell: Force}",
+          "bonusstring": "Cast a spell. After action, resist {{Spell: Drain} + 3} with a minimum of 2 DV."
+        },
+        "source": "SR5",
+        "page": "165"
+      },
+      {
+        "id": "aeeafb3e-757e-47bb-9d43-3763baa9d361",
+        "name": "Reckless Spellcasting (Decrease {LOG})",
+        "type": "Simple",
+        "test": {
+          "dice": "{MAG} + {Spell: Spellcasting} v. {Decrease {LOG} Spell Defense}",
+          "limit": "{Spell: Force}",
+          "bonusstring": "Cast a spell. After action, resist {{Spell: Drain} + 3} with a minimum of 2 DV."
+        },
+        "source": "SR5",
+        "page": "165"
+      },
+      {
+        "id": "67cad023-7d98-4449-9c08-4839c02c25ff",
+        "name": "Reckless Spellcasting (Decrease {WIL})",
+        "type": "Simple",
+        "test": {
+          "dice": "{MAG} + {Spell: Spellcasting} v. {Decrease {WIL} Spell Defense}",
+          "limit": "{Spell: Force}",
+          "bonusstring": "Cast a spell. After action, resist {{Spell: Drain} + 3} with a minimum of 2 DV."
+        },
+        "source": "SR5",
+        "page": "165"
+      },
+      {
+        "id": "962f5105-31e4-4f72-a51c-f3b87bed834e",
+        "name": "Remove Clip",
+        "type": "Simple",
+        "test": {
+          "dice": "None",
+          "bonusstring": "Remove a detachable magazine from a weapon."
+        },
+        "source": "SR5",
+        "page": "166"
+      },
+      {
+        "id": "ed1abe03-c2ca-49c8-b420-94d315a06403",
+        "name": "Shift Perception",
+        "type": "Simple",
+        "test": {
+          "dice": "None",
+          "bonusstring": "Shift to or from Astral Perception."
+        },
+        "source": "SR5",
+        "page": "166"
+      },
+      {
+        "id": "e43b1215-c760-446a-9f7a-3132d5bb50c0",
+        "name": "Stand Up",
+        "type": "Simple",
+        "test": {
+          "dice": "None",
+          "bonusstring": "Stand up from being prone. If wounded, must make {{BOD} + {WIL}} v. {Threshold: 2} test to succeed."
+        },
+        "source": "SR5",
+        "page": "166"
+      },
+      {
+        "id": "79bebc25-3190-4731-8282-b90786f14c16",
+        "name": "Take Aim",
+        "type": "Simple",
+        "test": {
+          "dice": "None",
+          "bonusstring": "Add +1 dice or +1 Accuracy to the character's next attack test. If using a smartgun, apply both bonuses. If using Vision Magnification, apply its effects instead. Bonuses are cumulative for up to {{{WIL} / 2} + {Improvement Value: TakeAimCount}} times. All bonuses are lost if any other action is taken, including a Free action."
+        },
+        "source": "SR5",
+        "page": "166"
+      },
+      {
+        "id": "31c81043-6ace-4c64-ac85-b5afd87d7a97",
+        "name": "Take Cover",
+        "type": "Simple",
+        "test": {
+          "dice": "None",
+          "bonusstring": "Move behind cover. Must not be surprised."
+        },
+        "source": "SR5",
+        "page": "166"
+      },
+      {
+        "id": "92b563eb-e452-431f-bb09-d423a5fb8bef",
+        "name": "Throw Weapon (Grenade)",
+        "type": "Simple",
+        "test": {
+          "dice": "{AGI} + {Throwing Weapons} v. {Threshold: 3}",
+          "limit": "{Physical}",
+          "bonusstring": "Throw a readied grenade. Can use {Action: Multiple Attacks} if multiple grenades are readied."
+        },
+        "source": "SR5",
+        "page": "166"
+      },
+      {
+        "id": "8dd836d6-c57b-492c-b2df-a0bb6798cf1b",
+        "name": "Throw Weapon (Non-Grenade)",
+        "type": "Simple",
+        "test": {
+          "dice": "{AGI} + {Throwing Weapons} v. {Action: Ranged Defense}",
+          "limit": "{Physical}",
+          "bonusstring": "Throw a readied weapon that is not a grenade. Can use {Action: Multiple Attacks} if multiple weapons are readied. On success, target must resist {Weapon: DV} + net hits damage with an armor modifier of {Weapon: AP}."
+        },
+        "source": "SR5",
+        "page": "166"
+      },
+      {
+        "id": "e494762f-0065-4970-9aac-b0daa1a5ab78",
+        "name": "Use Simple Device",
+        "type": "Simple",
+        "test": {
+          "dice": "None",
+          "bonusstring": "Use a simple device, like those activated by a simple movement, e.g. a thumb trigger, pressing a single key, or tapping a single icon."
+        },
+        "source": "SR5",
+        "page": "166"
+      },
+      {
+        "id": "c95f3fc2-b212-4944-871e-1badaf1aaa0b",
+        "name": "Astral Projection",
+        "type": "Complex",
+        "test": {
+          "dice": "None",
+          "bonusstring": "If capable of Astral Projection, shift consciousness to the Astral Plane."
+        },
+        "source": "SR5",
+        "page": "167"
+      },
+      {
+        "id": "4c6a71ab-b58a-41c3-b5a2-c6972d1cb8a8",
+        "name": "Banish Spirit",
+        "type": "Complex",
+        "test": {
+          "dice": "{MAG} + {Banishing} v. {Spirit: Force}",
+          "limit": "{Astral}",
+          "bonusstring": "On success, reduce target spirit's services by net hits. After action, take drain equal to twice the spirit's total hits with a minimum of 2 DV."
+        },
+        "source": "SR5",
+        "page": "167"
+      },
+      {
+        "id": "1c9b5a36-fb1e-4e25-97ce-adb701bb48ef",
+        "name": "Cast Spell (Direct, Physical Combat)",
+        "type": "Complex",
+        "test": {
+          "dice": "{MAG} + {Spell: Spellcasting} v. {Action: Direct, Physical Combat Spell Defense}",
+          "limit": "{Spell: Force}",
+          "bonusstring": "Cast a spell. After action, resist {Spell: Drain} with a minimum of 2 DV."
+        },
+        "source": "SR5",
+        "page": "167"
+      },
+      {
+        "id": "3a377563-fe2c-4b7e-a2ea-0e0f09edae69",
+        "name": "Cast Spell (Direct, Mana Combat)",
+        "type": "Complex",
+        "test": {
+          "dice": "{MAG} + {Spell: Spellcasting} v. {Action: Direct, Mana Combat Spell Defense}",
+          "limit": "{Spell: Force}",
+          "bonusstring": "Cast a spell. After action, resist {Spell: Drain} with a minimum of 2 DV."
+        },
+        "source": "SR5",
+        "page": "167"
+      },
+      {
+        "id": "248972ed-9e85-4090-8311-b7fa3255380d",
+        "name": "Cast Spell (Indirect, Single-target Combat)",
+        "type": "Complex",
+        "test": {
+          "dice": "{MAG} + {Spell: Spellcasting} v. {Action: Ranged Defense}",
+          "limit": "{Spell: Force}",
+          "bonusstring": "Cast a spell. After action, resist {{Spell: Drain} with a minimum of 2 DV."
+        },
+        "source": "SR5",
+        "page": "167"
+      },
+      {
+        "id": "7c6435c9-dc13-46ab-894d-ff618779568d",
+        "name": "Cast Spell (Indirect, AoE Combat)",
+        "type": "Complex",
+        "test": {
+          "dice": "{MAG} + {Spell: Spellcasting} v. {Threshold: 3}",
+          "limit": "{Spell: Force}",
+          "bonusstring": "Cast a spell. After action, resist {Spell: Drain} with a minimum of 2 DV."
+        },
+        "source": "SR5",
+        "page": "167"
+      },
+      {
+        "id": "d3955718-54aa-4617-a3d5-1dbd6b9168a8",
+        "name": "Cast Spell (Detection)",
+        "type": "Complex",
+        "test": {
+          "dice": "{MAG} + {Spell: Spellcasting} v. {Action: Detection Spell Defense}",
+          "limit": "{Spell: Force}",
+          "bonusstring": "Cast a spell. After action, resist {Spell: Drain} with a minimum of 2 DV."
+        },
+        "source": "SR5",
+        "page": "167"
+      },
+      {
+        "id": "8c89c60c-bfe3-4302-b3a4-c68b10846fc5",
+        "name": "Cast Spell (Physical Illusion)",
+        "type": "Complex",
+        "test": {
+          "dice": "{MAG} + {Spell: Spellcasting} v. {Action: Physical Illusion Spell Defense}",
+          "limit": "{Spell: Force}",
+          "bonusstring": "Cast a spell. After action, resist {Spell: Drain} with a minimum of 2 DV."
+        },
+        "source": "SR5",
+        "page": "167"
+      },
+      {
+        "id": "0c3cda81-a983-45a8-b6f6-d7d439a36c53",
+        "name": "Cast Spell (Mana Illusion)",
+        "type": "Complex",
+        "test": {
+          "dice": "{MAG} + {Spell: Spellcasting} v. {Action: Mana Illusion Spell Defense}",
+          "limit": "{Spell: Force}",
+          "bonusstring": "Cast a spell. After action, resist {Spell: Drain} with a minimum of 2 DV."
+        },
+        "source": "SR5",
+        "page": "167"
+      },
+      {
+        "id": "e6e08c81-7076-41c3-bb3a-2aa33fbe68c7",
+        "name": "Cast Spell (Physical Manipulation)",
+        "type": "Complex",
+        "test": {
+          "dice": "{MAG} + {Spell: Spellcasting} v. {Action: Physical Manipulation Spell Defense}",
+          "limit": "{Spell: Force}",
+          "bonusstring": "Cast a spell. After action, resist {Spell: Drain} with a minimum of 2 DV."
+        },
+        "source": "SR5",
+        "page": "167"
+      },
+      {
+        "id": "d13cabf3-a963-413e-b2a0-f65434423f9f",
+        "name": "Cast Spell (Mental Manipulation)",
+        "type": "Complex",
+        "test": {
+          "dice": "{MAG} + {Spell: Spellcasting} v. {Action: Mental Manipulation Spell Defense}",
+          "limit": "{Spell: Force}",
+          "bonusstring": "Cast a spell. After action, resist {Spell: Drain} with a minimum of 2 DV."
+        },
+        "source": "SR5",
+        "page": "167"
+      },
+      {
+        "id": "ed6241fd-d214-4e73-90a3-99a4fc88a5b5",
+        "name": "Cast Spell (Decrease {BOD})",
+        "type": "Complex",
+        "test": {
+          "dice": "{MAG} + {Spell: Spellcasting} v. {Decrease {BOD} Spell Defense}",
+          "limit": "{Spell: Force}",
+          "bonusstring": "Cast a spell. After action, resist {Spell: Drain} with a minimum of 2 DV."
+        },
+        "source": "SR5",
+        "page": "167"
+      },
+      {
+        "id": "648652dc-be24-4133-947f-3dd14544ffd8",
+        "name": "Cast Spell (Decrease {AGI})",
+        "type": "Complex",
+        "test": {
+          "dice": "{MAG} + {Spell: Spellcasting} v. {Decrease {AGI} Spell Defense}",
+          "limit": "{Spell: Force}",
+          "bonusstring": "Cast a spell. After action, resist {Spell: Drain} with a minimum of 2 DV."
+        },
+        "source": "SR5",
+        "page": "167"
+      },
+      {
+        "id": "95ce6fae-8fe9-4cc0-9741-bbfc34aa55be",
+        "name": "Cast Spell (Decrease {REA})",
+        "type": "Complex",
+        "test": {
+          "dice": "{MAG} + {Spell: Spellcasting} v. {Decrease {REA} Spell Defense}",
+          "limit": "{Spell: Force}",
+          "bonusstring": "Cast a spell. After action, resist {Spell: Drain} with a minimum of 2 DV."
+        },
+        "source": "SR5",
+        "page": "167"
+      },
+      {
+        "id": "69f52882-8833-4a64-82e9-2c5a5fe7af2d",
+        "name": "Cast Spell (Decrease {STR})",
+        "type": "Complex",
+        "test": {
+          "dice": "{MAG} + {Spell: Spellcasting} v. {Decrease {STR} Spell Defense}",
+          "limit": "{Spell: Force}",
+          "bonusstring": "Cast a spell. After action, resist {Spell: Drain} with a minimum of 2 DV."
+        },
+        "source": "SR5",
+        "page": "167"
+      },
+      {
+        "id": "809545ed-f341-4f63-9ebe-e53a38d92526",
+        "name": "Cast Spell (Decrease {CHA})",
+        "type": "Complex",
+        "test": {
+          "dice": "{MAG} + {Spell: Spellcasting} v. {Decrease {CHA} Spell Defense}",
+          "limit": "{Spell: Force}",
+          "bonusstring": "Cast a spell. After action, resist {Spell: Drain} with a minimum of 2 DV."
+        },
+        "source": "SR5",
+        "page": "167"
+      },
+      {
+        "id": "6cd27ee7-2d2b-42f0-9581-d3d02195c91b",
+        "name": "Cast Spell (Decrease {INT})",
+        "type": "Complex",
+        "test": {
+          "dice": "{MAG} + {Spell: Spellcasting} v. {Decrease {INT} Spell Defense}",
+          "limit": "{Spell: Force}",
+          "bonusstring": "Cast a spell. After action, resist {Spell: Drain} with a minimum of 2 DV."
+        },
+        "source": "SR5",
+        "page": "167"
+      },
+      {
+        "id": "5a7b4036-b17c-42b9-8fa3-026b3d89bcc8",
+        "name": "Cast Spell (Decrease {LOG})",
+        "type": "Complex",
+        "test": {
+          "dice": "{MAG} + {Spell: Spellcasting} v. {Decrease {LOG} Spell Defense}",
+          "limit": "{Spell: Force}",
+          "bonusstring": "Cast a spell. After action, resist {Spell: Drain} with a minimum of 2 DV."
+        },
+        "source": "SR5",
+        "page": "167"
+      },
+      {
+        "id": "c49f3f9a-9363-4270-ad47-246af74247ec",
+        "name": "Cast Spell (Decrease {WIL})",
+        "type": "Complex",
+        "test": {
+          "dice": "{MAG} + {Spell: Spellcasting} v. {Decrease {WIL} Spell Defense}",
+          "limit": "{Spell: Force}",
+          "bonusstring": "Cast a spell. After action, resist {Spell: Drain} with a minimum of 2 DV."
+        },
+        "source": "SR5",
+        "page": "167"
+      },
+      {
+        "id": "15a4c0c9-cbc3-4687-afe7-f033858f33c7",
+        "name": "Fire Semi-Auto Burst",
+        "type": "Complex",
+        "test": {
+          "dice": "{AGI} + {Weapon: Skill} v. {Action: Ranged Defense} - 2",
+          "limit": "{Weapon: Accuracy}",
+          "bonusstring": "Fires 3 shots. Can use {Action: Multiple Attacks}. On success, target must resist {Weapon: DV} + net hits damage with an armor modifier of {Weapon: AP}."
+        },
+        "source": "SR5",
+        "page": "167"
+      },
+      {
+        "id": "45387cbe-fa43-4f87-ba1d-07a867335c46",
+        "name": "Fire Long Burst",
+        "type": "Complex",
+        "test": {
+          "dice": "{AGI} + {Weapon: Skill} v. {Action: Ranged Defense} - 5",
+          "limit": "{Weapon: Accuracy}",
+          "bonusstring": "Fires 6 shots. Can use {Action: Multiple Attacks}. On success, target must resist {Weapon: DV} + net hits damage with an armor modifier of {Weapon: AP}."
+        },
+        "source": "SR5",
+        "page": "167"
+      },
+      {
+        "id": "0bf73dca-0851-4bdf-a524-ec91c1c0aec2",
+        "name": "Fire Full-Auto Complex",
+        "type": "Complex",
+        "test": {
+          "dice": "{AGI} + {Weapon: Skill} v. {Action: Ranged Defense} - 9",
+          "limit": "{Weapon: Accuracy}",
+          "bonusstring": "Fires 10 shots. Can use {Action: Multiple Attacks}. On success, target must resist {Weapon: DV} + net hits damage with an armor modifier of {Weapon: AP}."
+        },
+        "source": "SR5",
+        "page": "167"
+      },
+      {
+        "id": "259c030b-ba8e-4f18-a02e-6f89f6cc932a",
+        "name": "Suppressive Fire",
+        "type": "Complex",
+        "test": {
+          "dice": "{AGI} + {Weapon: Skill} v. {Action: Suppressive Fire Defense}",
+          "limit": "{Weapon: Accuracy}",
+          "bonusstring": "Fires 20 shots without recoil penalties. Select a 10m x 2m cross-section within weapon range to suppress. Suppression zone remains until the end of the combat turn unless the shooter moves or takes another action. On success, everyone in the zone must always resist {Weapon: DV} damage with an armor modifier of {Weapon: AP}, and they get a penalty to all actions equal to net hits."
+        },
+        "source": "SR5",
+        "page": "179"
+      },
+      {
+        "id": "f4a61086-d8b6-467e-807f-a1995aa9cca5",
+        "name": "Fire Mounted or Vehicle Weapon",
+        "type": "Complex",
+        "test": {
+          "dice": "{AGI} + {Weapon: Skill}",
+          "limit": "{Max: {Weapon: Accuracy} or {Vehicle: Sensor}}",
+          "bonusstring": "Fires a vehicle-mounted weapon."
+        },
+        "source": "SR5",
+        "page": "167"
+      },
+      {
+        "id": "ab83c36f-1583-42f3-86e0-b32c16e3e3bd",
+        "name": "Load and Fire Bow",
+        "type": "Complex",
+        "test": {
+          "dice": "{AGI} + {Weapon: Skill} v. {Action: Ranged Defense}",
+          "limit": "{Weapon: Accuracy}",
+          "bonusstring": "Either load and fire or fire and load a readied bow."
+        },
+        "source": "SR5",
+        "page": "167"
+      },
+      {
+        "id": "d1d2a10b-36f0-456c-88d0-840221a41c9e",
+        "name": "Melee Attack",
+        "type": "Complex",
+        "test": {
+          "dice": "{AGI} + {Weapon: Skill} v. {Action: Melee Defense}",
+          "limit": "{Weapon: Limit}"
+        },
+        "source": "SR5",
+        "page": "167"
+      },
+      {
+        "id": "71d561df-5997-45e8-8b33-f6dbb6f00872",
+        "name": "Reload Firearm",
+        "type": "Complex",
+        "test": {
+          "dice": "None",
+          "bonusstring": "Reload a weapon that is belt-fed (belt), break-action (b), or muzzle loaded (ml), has a cylinder (cy), drum (d), or internal magazine (m), or uses a Speed Loader."
+        },
+        "source": "SR5",
+        "page": "167"
+      },
+      {
+        "id": "de8159d2-c178-4e65-93a8-94509c275876",
+        "name": "Rigger Jump In",
+        "type": "Complex",
+        "test": {
+          "dice": "None",
+          "bonusstring": "Jump into a vehicle with a rigger adaptation. Must have a Control Rig or equivalent."
+        },
+        "source": "SR5",
+        "page": "167"
+      },
+      {
+        "id": "da1276d9-995e-4408-b58c-0e5b1762a2fe",
+        "name": "Sprint",
+        "type": "Complex",
+        "specname": "Sprinting",
+        "test": {
+          "dice": "{STR} + {Running}",
+          "limit": "{Physical}",
+          "bonusstring": "Increase run speed by 2m/hit or 1m/hit depending on metatype."
+        },
+        "source": "SR5",
+        "page": "167"
+      },
+      {
+        "id": "c7f5ec4d-5cba-4392-a65f-819b1e3df4f6",
+        "name": "Summoning",
+        "type": "Complex",
+        "test": {
+          "dice": "{MAG} + {Spirit: Summoning} v. {Spirit: Force}",
+          "limit": "{Spirit: Force}",
+          "bonusstring": "On success, spirit is summoned with a number of services equal to net hits. After action, take drain equal to twice the spirit's total hits with a minimum of 2 DV."
+        },
+        "source": "SR5",
+        "page": "167"
+      },
+      {
+        "id": "c6f2f038-8cca-4437-835a-7e24fe83cf77",
+        "name": "Use Skill",
+        "type": "Complex",
+        "test": {
+          "dice": "Variable",
+          "limit": "Variable",
+          "bonusstring": "Use a skill with the appropriate dicepool and limit."
+        },
+        "source": "SR5",
+        "page": "167"
+      },
+      {
+        "id": "072fb7bd-0e7b-4f81-a2d6-5356f398dd5a",
+        "name": "Block",
+        "type": "Interrupt",
+        "initiativecost": "5",
+        "specname": "Blocking",
+        "boosts": {
+          "boost": {
+            "name": "Melee Defense",
+            "duration": "One Attack",
+            "dicebonus": "{Unarmed Combat}",
+            "addlimit": "{Physical}"
+          }
+        },
+        "source": "SR5",
+        "page": "168"
+      },
+      {
+        "id": "ae815225-2e93-45ba-8423-3110e32696c1",
+        "name": "Dodge",
+        "type": "Interrupt",
+        "initiativecost": "5",
+        "specname": "Dodging",
+        "boosts": {
+          "boost": {
+            "name": "Melee Defense",
+            "duration": "One Attack",
+            "dicebonus": "{Gymnastics}",
+            "addlimit": "{Physical}"
+          }
+        },
+        "source": "SR5",
+        "page": "168"
+      },
+      {
+        "id": "7bb2cf75-bdd3-4773-a890-d542bd5a4512",
+        "name": "Hit the Dirt",
+        "type": "Interrupt",
+        "initiativecost": "5",
+        "test": {
+          "dice": "None",
+          "bonusstring": "Drop prone where the character is, usually to avoid {Action: Suppressive Fire}."
+        },
+        "source": "SR5",
+        "page": "168"
+      },
+      {
+        "id": "af671982-9e48-4c79-a1c3-f4e4e930b59f",
+        "name": "Intercept",
+        "type": "Interrupt",
+        "initiativecost": "5",
+        "test": {
+          "dice": "None",
+          "bonusstring": "Intercept a target attempting to move past the character within {1 + {Weapon: Reach}} meters and perform {Action: Melee Attack} against them."
+        },
+        "source": "SR5",
+        "page": "168"
+      },
+      {
+        "id": "04b1143e-eb33-4333-9539-c38f953cca9e",
+        "name": "Parry",
+        "type": "Interrupt",
+        "initiativecost": "5",
+        "specname": "Parrying",
+        "boosts": {
+          "boost": {
+            "name": "Melee Defense",
+            "duration": "One Attack",
+            "dicebonus": "{Weapon: Skill}",
+            "addlimit": "{Weapon: Accuracy}"
+          }
+        },
+        "source": "SR5",
+        "page": "168"
+      },
+      {
+        "id": "3f40af85-650f-4398-8224-a0cb29415c1d",
+        "name": "Full Defense",
+        "type": "Interrupt",
+        "initiativecost": "10",
+        "boosts": {
+          "boost": [
+            {
+              "name": "Melee Defense",
+              "duration": "Rest of Turn",
+              "dicebonus": "{WIL}"
+            },
+            {
+              "name": "Ranged Defense",
+              "duration": "Rest of Turn",
+              "dicebonus": "{WIL}"
+            },
+            {
+              "name": "Suppressive Fire Defense",
+              "duration": "Rest of Turn",
+              "dicebonus": "{WIL}"
+            }
+          ]
+        },
+        "source": "SR5",
+        "page": "168"
+      },
+      {
+        "id": "7d28d558-249a-4323-9ad2-8712d45353f5",
+        "name": "Evade",
+        "type": "Complex",
+        "test": {
+          "dice": "{AGI} + {Gymnastics} v. {Threshold: 1}",
+          "limit": "{Physical}",
+          "bonusstring": "On success, can move past one character per net hit; they cannot use {Action: Intercept} to stop the character unless it is {Action: Shadow Block v. Evade}."
+        },
+        "source": "SR5",
+        "page": "194"
+      },
+      {
+        "id": "476dab78-f8b6-4258-8c9f-08d355d33725",
+        "name": "Escape (Subduing)",
+        "type": "Complex",
+        "test": {
+          "dice": "{STR} + {Unarmed Combat} v. {Threshold: {Action: Subduing}}",
+          "limit": "{Physical}",
+          "bonusstring": "On success, break out of Subduing."
+        },
+        "source": "SR5",
+        "page": "195"
+      },
+      {
+        "id": "ff8478ef-cac4-4f7c-aa39-9c11dd08e1ea",
+        "name": "Subduing",
+        "type": "Complex",
+        "test": {
+          "dice": "{Action: Melee Attack} v. {Action: Melee Defense}",
+          "limit": "{Physical}",
+          "bonusstring": "On success, if {STR} + net hits exceeds {Target: {Physical}}, target is grappled and subdued. Causes no damage."
+        },
+        "source": "SR5",
+        "page": "195"
+      },
+      {
+        "id": "b56ee60e-5454-47ba-9e8b-c6f623c26988",
+        "name": "Use Sensors (Detect or Active Targeting) v. Living Beings",
+        "type": "Simple",
+        "test": {
+          "dice": "{INT} + {Perception} + {Target: {Improvement Value: DetectionModifier}} - 3 v. {AGI} + {Sneaking}",
+          "limit": "{Vehicle: Sensor}",
+          "bonusstring": "On success, if this is an active targeting, apply net hits as negative dicepool modifier to target's {Action: Ranged Defense} and {Action: Melee Defense}."
+        },
+        "source": "SR5",
+        "page": "184"
+      },
+      {
+        "id": "f1bb09ac-dc7b-4731-842c-fb466013c402",
+        "name": "Use Sensors (Detect or Active Targeting) v. Vehicles",
+        "type": "Simple",
+        "test": {
+          "dice": "{INT} + {Perception} + {Target: {Improvement Value: DetectionModifier}} v. {REA} + {Min: {Sneaking}, {Vehicle: Skill}}",
+          "limit": "{Vehicle: Sensor}",
+          "bonusstring": "On success, if this is an active targeting, apply net hits as negative dicepool modifier to target's {Action: Ranged Defense} and {Action: Melee Defense}."
+        },
+        "source": "SR5",
+        "page": "184"
+      },
+      {
+        "id": "9058d2a6-c7b7-4376-b298-9d7377bb6cb0",
+        "name": "Control Vehicle",
+        "type": "Complex",
+        "test": {
+          "dice": "None",
+          "bonusstring": "Vehicle is considered under control for the remainder of the combat turn."
+        },
+        "source": "SR5",
+        "page": "203"
+      },
+      {
+        "id": "ea2311da-ebe1-4ffc-8eb3-09282852f577",
+        "name": "Make Vehicle Test",
+        "type": "Complex",
+        "test": {
+          "dice": "Variable",
+          "limit": "{Vehicle: Handling}",
+          "bonusstring": "Attempt to make a vehicle action."
+        },
+        "source": "SR5",
+        "page": "203"
+      },
+      {
+        "id": "fd333958-c114-4831-a5fe-20f4ca1915d3",
+        "name": "Ramming",
+        "type": "Complex",
+        "test": {
+          "dice": "{REA} + {Vehicle: Skill} v. {Action: Melee Defense}",
+          "limit": "{Vehicle: Handling}",
+          "bonusstring": "On success, vehicle rams target. Target cannot use {Action: Block} or {Action: Parry} against this action."
+        },
+        "source": "SR5",
+        "page": "203"
+      },
+      {
+        "id": "850f7d77-2d0f-4cd4-9aa5-2e53d0e33688",
+        "name": "WIL Attack Defense",
+        "category": "Matrix",
+        "type": "No",
+        "test": {
+          "dice": "{WIL} + {Icon: Attack}"
+        },
+        "source": "SR5",
+        "page": "238"
+      },
+      {
+        "id": "e6c4c7ab-4b2c-42d5-ab15-01ac36cc8924",
+        "name": "WIL Sleaze Defense",
+        "category": "Matrix",
+        "type": "No",
+        "test": {
+          "dice": "{WIL} + {Icon: Sleaze}"
+        },
+        "source": "SR5",
+        "page": "238"
+      },
+      {
+        "id": "5589bd26-3208-444e-89ca-8e43fd3c7e8b",
+        "name": "WIL Data Processing Defense",
+        "category": "Matrix",
+        "type": "No",
+        "test": {
+          "dice": "{WIL} + {Icon: Data Processing}"
+        },
+        "source": "SR5",
+        "page": "238"
+      },
+      {
+        "id": "6c0a4170-5b32-4fa3-9062-dc7be4766222",
+        "name": "WIL Firewall Defense",
+        "category": "Matrix",
+        "type": "No",
+        "test": {
+          "dice": "{WIL} + {Icon: Firewall}"
+        },
+        "source": "SR5",
+        "page": "238"
+      },
+      {
+        "id": "78da4b96-821a-41fe-ab55-cd2366c0be18",
+        "name": "INT Firewall Defense",
+        "category": "Matrix",
+        "type": "No",
+        "test": {
+          "dice": "{INT} + {Icon: Firewall}"
+        },
+        "source": "SR5",
+        "page": "238"
+      },
+      {
+        "id": "dbc4bb5a-9060-4f59-8d20-7fc72df953cb",
+        "name": "INT Data Processing Defense",
+        "category": "Matrix",
+        "type": "No",
+        "test": {
+          "dice": "{INT} + {Icon: Data Processing}"
+        },
+        "source": "SR5",
+        "page": "238"
+      },
+      {
+        "id": "32d32458-7363-406e-810d-5bf9fb9c3d5a",
+        "name": "LOG Firewall Defense",
+        "category": "Matrix",
+        "type": "No",
+        "test": {
+          "dice": "{LOG} + {Icon: Firewall}"
+        },
+        "source": "SR5",
+        "page": "238"
+      },
+      {
+        "id": "80b3feea-389a-4562-8a52-9bbb1fade997",
+        "name": "LOG Sleaze Defense",
+        "category": "Matrix",
+        "type": "No",
+        "test": {
+          "dice": "{LOG} + {Icon: Sleaze}"
+        },
+        "source": "SR5",
+        "page": "238"
+      },
+      {
+        "id": "b35a4b5c-23e5-4abe-80ee-afeb2743c20a",
+        "name": "LOG Attack Defense",
+        "category": "Matrix",
+        "type": "No",
+        "test": {
+          "dice": "{LOG} + {Icon: Attack}"
+        },
+        "source": "SR5",
+        "page": "238"
+      },
+      {
+        "id": "64e2aed3-d36f-4ff6-85a5-5d5208e6f7e5",
+        "name": "LOG Data Processing Defense",
+        "category": "Matrix",
+        "type": "No",
+        "test": {
+          "dice": "{LOG} + {Icon: Sleaze}"
+        },
+        "source": "SR5",
+        "page": "238"
+      },
+      {
+        "id": "73cd3043-94ac-4406-85ce-59b951d0d945",
+        "name": "Brute Force (1 Mark)",
+        "category": "Matrix",
+        "type": "Complex",
+        "test": {
+          "dice": "{LOG} + {Cybercombat} v. {Action: WIL Firewall Defense}",
+          "limit": "{Icon: Attack}",
+          "bonusstring": "On success, gain mark on target. Every 2 net hits can be used to inflict 1 DV Matrix damage."
+        },
+        "source": "SR5",
+        "page": "238"
+      },
+      {
+        "id": "8d023ffc-1683-4885-81ef-ca22253a3d87",
+        "name": "Brute Force (2 Marks)",
+        "category": "Matrix",
+        "type": "Complex",
+        "test": {
+          "dice": "{LOG} + {Cybercombat} - 4 v. {Action: WIL Firewall Defense}",
+          "limit": "{Icon: Attack}",
+          "bonusstring": "On success, gain two marks on target. Every 2 net hits can be used to inflict 1 DV Matrix damage."
+        },
+        "source": "SR5",
+        "page": "238"
+      },
+      {
+        "id": "61e231da-0ae3-42b1-ba2f-18c3fba41fab",
+        "name": "Brute Force (3 Marks)",
+        "category": "Matrix",
+        "type": "Complex",
+        "test": {
+          "dice": "{LOG} + {Cybercombat} - 10 v. {Action: WIL Firewall Defense}",
+          "limit": "{Icon: Attack}",
+          "bonusstring": "On success, gain three marks on target. Every 2 net hits can be used to inflict 1 DV Matrix damage."
+        },
+        "source": "SR5",
+        "page": "238"
+      },
+      {
+        "id": "c33b205b-1249-45b8-8ee5-da74e4311362",
+        "name": "Change Icon",
+        "category": "Matrix",
+        "type": "Simple",
+        "test": {
+          "dice": "None",
+          "limit": "{Icon: Data Processing}",
+          "bonusstring": "Requires Owner marks on target. Changes the Matrix sculpt of an Icon."
+        },
+        "source": "SR5",
+        "page": "238"
+      },
+      {
+        "id": "d6defa46-1c97-4bfd-b9f1-b1c1b2753a90",
+        "name": "Check Overwatch Score",
+        "category": "Matrix",
+        "type": "Simple",
+        "test": {
+          "dice": "{LOG} + {Electronic Warfare} v. 6",
+          "limit": "{Icon: Sleaze}",
+          "bonusstring": "On success, the character knows their OS. OS from opposed hits added after this."
+        },
+        "source": "SR5",
+        "page": "238"
+      },
+      {
+        "id": "21eda7c5-3ca5-4aba-b5e5-b05be4afe6c9",
+        "name": "Control Device (Free)",
+        "category": "Matrix",
+        "type": "Free",
+        "test": {
+          "dice": "Variable",
+          "limit": "Variable",
+          "bonusstring": "Requires 1 mark on target device. If there is no eligible test, it is {{INT} + {Electronic Warfare}} [{Icon: Sleaze}] v. {Target: {Action: INT Firewall Defense}}. On success, the character performs a Free Action with the device."
+        },
+        "source": "SR5",
+        "page": "238"
+      },
+      {
+        "id": "f3ddb8ab-01ca-4048-9570-42e00670eef8",
+        "name": "Control Device (Simple)",
+        "category": "Matrix",
+        "type": "Simple",
+        "test": {
+          "dice": "Variable",
+          "limit": "Variable",
+          "bonusstring": "Requires 2 marks on target device. If there is no eligible test, it is {{INT} + {Electronic Warfare}} [{Icon: Sleaze}] v. {Target: {Action: INT Firewall Defense}}. On success, the character performs a Simple Action with the device."
+        },
+        "source": "SR5",
+        "page": "238"
+      },
+      {
+        "id": "fa59f7ea-347c-4a25-8932-f801fa79d601",
+        "name": "Control Device (Complex)",
+        "category": "Matrix",
+        "type": "Complex",
+        "test": {
+          "dice": "Variable",
+          "limit": "Variable",
+          "bonusstring": "Requires 3 marks on target device. If there is no eligible test, it is {{INT} + {Electronic Warfare}} [{Icon: Sleaze}] v. {Target: {Action: INT Firewall Defense}}. On success, the character performs a Complex Action with the device."
+        },
+        "source": "SR5",
+        "page": "238"
+      },
+      {
+        "id": "87600eea-0c78-4474-9e6c-c36e625133ba",
+        "name": "Crack File",
+        "category": "Matrix",
+        "type": "Complex",
+        "test": {
+          "dice": "{LOG} + {Hacking} v. 2 * {Icon: Rating}",
+          "limit": "{Icon: Attack}",
+          "bonusstring": "Requires 1 mark on target file. On success, target file's protection is removed."
+        },
+        "source": "SR5",
+        "page": "238"
+      },
+      {
+        "id": "7d865af9-1073-49e6-98b2-f67f6a9cb9d3",
+        "name": "Crash Program",
+        "category": "Matrix",
+        "type": "Complex",
+        "test": {
+          "dice": "{LOG} + {Cybercombat} v. {Action: INT Firewall Defense}",
+          "limit": "{Icon: Attack}",
+          "bonusstring": "Requires 1 mark on target persona. On success, the specified running program is crashed on the target persona."
+        },
+        "source": "SR5",
+        "page": "238"
+      },
+      {
+        "id": "dc5156e3-b289-438e-b4d1-c24047357637",
+        "name": "Data Spike",
+        "category": "Matrix",
+        "type": "Complex",
+        "test": {
+          "dice": "{LOG} + {Cybercombat} v. {Action: INT Firewall Defense}",
+          "limit": "{Icon: Attack}",
+          "bonusstring": "On success, target icon must resist {Icon: Attack} + net hits Matrix damage."
+        },
+        "source": "SR5",
+        "page": "239"
+      },
+      {
+        "id": "570a3ce1-a8ea-4623-985e-b4bdcc79d2eb",
+        "name": "Disarm Data Bomb",
+        "category": "Matrix",
+        "type": "Complex",
+        "specname": "Data Bombs",
+        "test": {
+          "dice": "{INT} + {Software} v. 2 * {Icon: Rating}",
+          "limit": "{Icon: Firewall}",
+          "bonusstring": "On success, target data bomb is disarmed. On fail, the data bomb detonates."
+        },
+        "source": "SR5",
+        "page": "239"
+      },
+      {
+        "id": "8b879c36-e355-4cf4-99cb-6afcd132d573",
+        "name": "Edit File",
+        "category": "Matrix",
+        "type": "Complex",
+        "test": {
+          "dice": "{LOG} + {Computer} v. {Action: INT Firewall Defense}",
+          "limit": "{Icon: Data Processing}",
+          "bonusstring": "Requires 1 mark on target file. On success, the character can edit the target file, though any data bombs on it will detonate. The character cannot edit files that are protected. The character may use this test to protect a file as well, in which case hits become the file's protection rating."
+        },
+        "source": "SR5",
+        "page": "239"
+      },
+      {
+        "id": "ed359afd-db47-47d1-9e4b-8d13e0396005",
+        "name": "Enter/Exit Host",
+        "category": "Matrix",
+        "type": "Complex",
+        "test": {
+          "dice": "None",
+          "limit": "{Icon: Data Processing}",
+          "bonusstring": "The character enters or exits the target host. When the character leaves a host, they return to the grid from which they entered."
+        },
+        "source": "SR5",
+        "page": "239"
+      },
+      {
+        "id": "1dae5310-0d39-4464-b3a4-1b3483d0c4eb",
+        "name": "Erase Mark (1 Mark)",
+        "category": "Matrix",
+        "type": "Complex",
+        "test": {
+          "dice": "{LOG} + {Computer} v. {Action: WIL Firewall Defense}",
+          "limit": "{Icon: Attack}",
+          "bonusstring": "Requires 3 marks on target icon. On success, the character removes one mark of a chosen persona from the target. The character does not need marks on the owner of the mark that they remove."
+        },
+        "source": "SR5",
+        "page": "239"
+      },
+      {
+        "id": "ea4bcda5-b8ea-4659-92f0-b369beab4bf1",
+        "name": "Erase Mark (2 Marks)",
+        "category": "Matrix",
+        "type": "Complex",
+        "test": {
+          "dice": "{LOG} + {Computer} - 4 v. {Action: WIL Firewall Defense}",
+          "limit": "{Icon: Attack}",
+          "bonusstring": "Requires 3 marks on target icon. On success, the character removes two marks of a chosen persona from the target. The character does not need marks on the owner of the mark that they remove."
+        },
+        "source": "SR5",
+        "page": "239"
+      },
+      {
+        "id": "c544e946-3dd9-44bb-9546-cc44e24b9616",
+        "name": "Erase Mark (3 Marks)",
+        "category": "Matrix",
+        "type": "Complex",
+        "test": {
+          "dice": "{LOG} + {Computer} - 10 v. {Action: WIL Firewall Defense}",
+          "limit": "{Icon: Attack}",
+          "bonusstring": "Requires 3 marks on target icon. On success, the character removes three marks of a chosen persona from the target. The character does not need marks on the owner of the mark that they remove."
+        },
+        "source": "SR5",
+        "page": "239"
+      },
+      {
+        "id": "27c29e97-7708-42c7-a98c-be52e41fa5ed",
+        "name": "Erase Matrix Signature",
+        "category": "Matrix",
+        "type": "Complex",
+        "test": {
+          "dice": "{RES} + {Computer} v. 2 * {Icon: Rating}",
+          "limit": "{Icon: Attack}",
+          "bonusstring": "On success, the target Resonance signature is removed."
+        },
+        "source": "SR5",
+        "page": "239"
+      },
+      {
+        "id": "d8bfadcb-ea9b-4ae2-a1ae-2c84f33f9e3a",
+        "name": "Format Device",
+        "category": "Matrix",
+        "type": "Complex",
+        "test": {
+          "dice": "{LOG} + {Computer} v. {Action: WIL Firewall Defense}",
+          "limit": "{Icon: Sleaze}",
+          "bonusstring": "Requires 3 marks on target device. On success, the device will shut down for good on its next reboot and require a Software test to replace."
+        },
+        "source": "SR5",
+        "page": "239"
+      },
+      {
+        "id": "6657bd85-e651-448f-8936-2d9dc17883a3",
+        "name": "Full Matrix Defense",
+        "category": "Matrix",
+        "type": "Interrupt",
+        "initiativecost": "10",
+        "boosts": {
+          "boost": [
+            {
+              "name": "LOG Attack Defense",
+              "duration": "Rest of Turn",
+              "dicebonus": "{WIL}"
+            },
+            {
+              "name": "LOG Sleaze Defense",
+              "duration": "Rest of Turn",
+              "dicebonus": "{WIL}"
+            },
+            {
+              "name": "LOG Data Processing Defense",
+              "duration": "Rest of Turn",
+              "dicebonus": "{WIL}"
+            },
+            {
+              "name": "LOG Firewall Defense",
+              "duration": "Rest of Turn",
+              "dicebonus": "{WIL}"
+            },
+            {
+              "name": "INT Data Processing Defense",
+              "duration": "Rest of Turn",
+              "dicebonus": "{WIL}"
+            },
+            {
+              "name": "INT Firewall Defense",
+              "duration": "Rest of Turn",
+              "dicebonus": "{WIL}"
+            },
+            {
+              "name": "WIL Attack Defense",
+              "duration": "Rest of Turn",
+              "dicebonus": "{WIL}"
+            },
+            {
+              "name": "WIL Sleaze Defense",
+              "duration": "Rest of Turn",
+              "dicebonus": "{WIL}"
+            },
+            {
+              "name": "WIL Data Processing Defense",
+              "duration": "Rest of Turn",
+              "dicebonus": "{WIL}"
+            },
+            {
+              "name": "WIL Firewall Defense",
+              "duration": "Rest of Turn",
+              "dicebonus": "{WIL}"
+            }
+          ]
+        },
+        "source": "SR5",
+        "page": "240"
+      },
+      {
+        "id": "24c3dfb5-ce2b-4a48-8563-be0b26005795",
+        "name": "Grid Hop",
+        "category": "Matrix",
+        "type": "Complex",
+        "test": {
+          "dice": "None",
+          "limit": "{Icon: Data Processing}",
+          "bonusstring": "The character hops to the target grid. If the character does not have access to the target grid through their lifestyle, they must gain 1 mark on it to perform this action."
+        },
+        "source": "SR5",
+        "page": "240"
+      },
+      {
+        "id": "119aa0ed-314c-45cb-917e-17cf0644c7df",
+        "name": "Hack on the Fly (1 Mark)",
+        "category": "Matrix",
+        "type": "Complex",
+        "test": {
+          "dice": "{LOG} + {Hacking} v. {Action: INT Firewall Defense}",
+          "limit": "{Icon: Sleaze}",
+          "bonusstring": "On success, gain 1 mark on target icon. Every 2 net hits can be used as one net hit on a {Action: Matrix Perception} test."
+        },
+        "source": "SR5",
+        "page": "240"
+      },
+      {
+        "id": "4c3a4635-c1a6-43e0-99f1-0caa6f3a11fa",
+        "name": "Hack on the Fly (2 Marks)",
+        "category": "Matrix",
+        "type": "Complex",
+        "test": {
+          "dice": "{LOG} + {Hacking} - 4 v. {Action: INT Firewall Defense}",
+          "limit": "{Icon: Sleaze}",
+          "bonusstring": "On success, gain 2 marks on target icon. Every 2 net hits can be used as one net hit on a {Action: Matrix Perception} test."
+        },
+        "source": "SR5",
+        "page": "240"
+      },
+      {
+        "id": "0c174aa0-7413-4984-b829-a28b06c6fab4",
+        "name": "Hack on the Fly (3 Mark)",
+        "category": "Matrix",
+        "type": "Complex",
+        "test": {
+          "dice": "{LOG} + {Hacking} - 10 v. {Action: INT Firewall Defense}",
+          "limit": "{Icon: Sleaze}",
+          "bonusstring": "On success, gain 3 marks on target icon. Every 2 net hits can be used as one net hit on a {Action: Matrix Perception} test."
+        },
+        "source": "SR5",
+        "page": "240"
+      },
+      {
+        "id": "90a409d1-00d9-4285-8827-c8bea66d6f87",
+        "name": "Hide",
+        "category": "Matrix",
+        "type": "Complex",
+        "test": {
+          "dice": "{INT} + {Electronic Warfare} v. {Action: INT Data Processing Defense}",
+          "limit": "{Icon: Sleaze}",
+          "bonusstring": "On success, if the target persona does not have a mark on the character, it is no longer spotting them."
+        },
+        "source": "SR5",
+        "page": "240"
+      },
+      {
+        "id": "4cd14397-ae0f-48db-8339-f2abb90e9ded",
+        "name": "Invite Mark",
+        "category": "Matrix",
+        "type": "Simple",
+        "test": {
+          "dice": "None",
+          "limit": "{Icon: Data Processing}",
+          "bonusstring": "Requires Owner marks on the target icon. Choose a number of marks between 1 and 3 and send an invitation to an invitee persona. The invitee persona may gain the chosen amount of marks on the target icon with a single Free Action. The character may rescind the invitation before the invitee gains the marks, but not after."
+        },
+        "source": "SR5",
+        "page": "240"
+      },
+      {
+        "id": "1aa9df40-ade8-4e07-8877-e4147ea33fea",
+        "name": "Jack Out",
+        "category": "Matrix",
+        "type": "Simple",
+        "test": {
+          "dice": "{WIL} + {Hardware} v. {Action: LOG Attack Defense}",
+          "limit": "{Icon: Firewall}",
+          "bonusstring": "Can only target the character's own persona. Defense test only applies if the character is link-locked, and if they are link-locked by multiple personas, each one rolls a defense test. On success, the character's persona and its device are instantly rebooted, and if the character is in VR, they suffer Dumpshock."
+        },
+        "source": "SR5",
+        "page": "240"
+      },
+      {
+        "id": "0af091d7-006d-4532-9980-a8a4b4fd9087",
+        "name": "Jam Signals",
+        "category": "Matrix",
+        "type": "Complex",
+        "test": {
+          "dice": "{LOG} + {Electronic Warfare}",
+          "limit": "{Icon: Attack}",
+          "bonusstring": "Requires Owner marks on the target device. On success, the device increases the ambient noise penalty of all devices within a 100m radius by net hits."
+        },
+        "source": "SR5",
+        "page": "240"
+      },
+      {
+        "id": "a9a4a59a-babf-4dc3-b570-d52582091a8f",
+        "name": "Jump into Rigged Device",
+        "category": "Matrix",
+        "type": "Complex",
+        "test": {
+          "dice": "{LOG} + {Electronic Warfare} v. {Action: WIL Firewall Defense}",
+          "limit": "{Icon: Data Processing}",
+          "bonusstring": "Requires 3 marks on the target device. Requires VR and a Control Rig or equivalent. Requires target device to have rigger adaptation and to not currently be jumped into by someone else. No test is needed if the character has Owner marks on the target device or the target device's owner has given the character permission. On success, jump into target device."
+        },
+        "source": "SR5",
+        "page": "241"
+      },
+      {
+        "id": "ff5a636f-041d-4b9c-ba1c-4d9902cb21e5",
+        "name": "Matrix Perception",
+        "category": "Matrix",
+        "type": "Complex",
+        "test": {
+          "dice": "{INT} + {Computer} v. {Action: LOG Sleaze Defense}",
+          "limit": "{Icon: Data Processing}",
+          "bonusstring": "On success, spot target icon and gain one piece of information about target icon per net hit (see SR5 235). Target only defends if it is running silent. No test is needed to spot icons of devices within 100m that are not running silent. This test can be used to determine if there are running silent icons nearby. If the character does not know a specific feature of a running silent icon, they must randomly select a running silent icon in range to spot (remember, there are literally quadrillions of running silent icons on grids that are always in range)."
+        },
+        "source": "SR5",
+        "page": "241"
+      },
+      {
+        "id": "3015d73c-e98c-480b-a561-0bed57a3da7e",
+        "name": "Matrix Search",
+        "category": "Matrix",
+        "type": "Complex",
+        "test": {
+          "dice": "{INT} + {Computer}",
+          "limit": "{Icon: Data Processing}",
+          "bonusstring": "On success, use net hits to find pieces of information on the Matrix (see SR5 241) and/or to speed up the amount of time it takes to complete the search."
+        },
+        "source": "SR5",
+        "page": "241"
+      },
+      {
+        "id": "1989269b-df4c-446f-9087-9145a06e9ef6",
+        "name": "Reboot Device",
+        "category": "Matrix",
+        "type": "Complex",
+        "test": {
+          "dice": "{LOG} + {Computer} v. {Action: WIL Firewall Defense}",
+          "limit": "{Icon: Data Processing}",
+          "bonusstring": "Requires 3 marks on the target device. Requires target to not be link-locked. On success, target device immediately goes offline and will come back online at the end of the next combat turn. The exact delay can be chosen to be longer, but this can be overriden with physical access to the target. If target is running a persona, the persona's OS and marks are reset, and all marks others have on the persona are cleared; if the persona was in VR, they suffer dumpshock."
+        },
+        "source": "SR5",
+        "page": "242"
+      },
+      {
+        "id": "db185ca6-7e1b-49f5-bb76-1c57c3c91572",
+        "name": "Send Message",
+        "category": "Matrix",
+        "type": "Simple",
+        "test": {
+          "dice": "None",
+          "limit": "{Icon: Data Processing}",
+          "bonusstring": "Send a text or audio message the length of a short sentence, an image, or a file to a target persona whose commcode the character has. If the character has a direct neural interface, they can send longer and more complicated messages (about a paragraph's worth), even in AR. The character can also use this action to open a live feed to one or more recipients using any digital devices they have."
+        },
+        "source": "SR5",
+        "page": "242"
+      },
+      {
+        "id": "c930626c-cb53-43d4-af60-0992c5744caa",
+        "name": "Set Data Bomb",
+        "category": "Matrix",
+        "type": "Complex",
+        "test": {
+          "dice": "{LOG} + {Software} v. 2 * {Icon: Rating}",
+          "limit": "{Icon: Sleaze}",
+          "bonusstring": "Requires 1 mark on target file. On success, select a Data Bomb rating up to net hits, select a passcode for the Data Bomb, and select whether the Data Bomb deletes the file when it detonates. A file can only have one Data Bomb at a time, and if the target file already has a Data Bomb, it immediately detonates. The Data Bomb is triggered if someone attempts to read, edit, copy, protect, delete, or put a Data Bomb on the target file without using the already-in-place Data Bomb's passcode. When a Data Bomb detonates, the persona who detonated it must resist (Data Bomb Rating)D6 Matrix damage, and then the Data Bomb deletes itself. Data Bombs can be detected with Matrix Perception."
+        },
+        "source": "SR5",
+        "page": "242"
+      },
+      {
+        "id": "d50f95c8-c6b3-4312-991c-5f9b52818f77",
+        "name": "Snoop",
+        "category": "Matrix",
+        "type": "Complex",
+        "test": {
+          "dice": "{INT} + {Electronic Warfare} v. {Action: LOG Firewall Defense}",
+          "limit": "{Icon: Sleaze}",
+          "bonusstring": "Requires 1 mark on target icon. On success, intercept all Matrix traffic sent to and from the target as long as the character has a mark on the target. The character can listen to, view, and/or read this data live and/or save it for later playback/viewing on a device."
+        },
+        "source": "SR5",
+        "page": "242"
+      },
+      {
+        "id": "e11c1e7b-a6a4-4d8d-a11c-4ca9720a701d",
+        "name": "Spoof Command",
+        "category": "Matrix",
+        "type": "Complex",
+        "test": {
+          "dice": "{INT} + {Hacking} v. {Action: LOG Firewall Defense}",
+          "limit": "{Icon: Sleaze}",
+          "bonusstring": "Requires 1 mark on the persona of the owner of the target device or agent. On success, the target device or agent believes that a Matrix action command the character sent to it is legitimately from its owner."
+        },
+        "source": "SR5",
+        "page": "242"
+      },
+      {
+        "id": "f3915443-a98d-4ca0-8e94-1063fc2ba4ca",
+        "name": "Switch Interface Mode",
+        "category": "Matrix",
+        "type": "Simple",
+        "test": {
+          "dice": "None",
+          "limit": "{Icon: Data Processing}",
+          "bonusstring": "Requires that the character's persona not be link-locked. If the character is in VR, they switch their persona to AR. If they are in AR, they switch their persona to VR. If the character switches from VR to AR, they immediately lose the effect of any bonus initiative dice."
+        },
+        "source": "SR5",
+        "page": "243"
+      },
+      {
+        "id": "6b4fb263-b355-46dc-a106-088f0c7e5f3c",
+        "name": "Trace Icon",
+        "category": "Matrix",
+        "type": "Complex",
+        "test": {
+          "dice": "{INT} + {Computer} v. {Action: WIL Sleaze Defense}",
+          "limit": "{Icon: Data Processing}",
+          "bonusstring": "Requires 2 marks on the target device or persona. On success, obtain the precise physical location of the target device or the device that is running the target persona. The target's physical location is known for as long as the character has at least 1 mark on the target."
+        },
+        "source": "SR5",
+        "page": "243"
+      },
+      {
+        "id": "78d5dd63-0cfe-42d8-a20c-f021dde99b62",
+        "name": "Acid IC",
+        "type": "Complex",
+        "test": {
+          "dice": "2 * {Icon: Rating} v. {Action: WIL Firewall Defense}",
+          "limit": "{Icon: Attack}",
+          "bonusstring": "On success, reduce target persona's Firewall by 1 until they reboot. If they are at 0 Firewall, target persona must resist 1 DV Matrix damage per net hit."
+        },
+        "source": "SR5",
+        "page": "248"
+      },
+      {
+        "id": "b89451d1-3d47-4df5-b64a-cbe18f8d76f3",
+        "name": "Binder IC",
+        "type": "Complex",
+        "test": {
+          "dice": "2 * {Icon: Rating} v. {Action: WIL Data Processing Defense}",
+          "limit": "{Icon: Attack}",
+          "bonusstring": "On success, reduce target persona's Data Processing by 1 until they reboot. If they are at 0 Data Processing, target persona must resist 1 DV Matrix damage per net hit."
+        },
+        "source": "SR5",
+        "page": "248"
+      },
+      {
+        "id": "57564e6f-be28-41eb-ae9c-e4b6e0eee590",
+        "name": "Black IC",
+        "type": "Complex",
+        "test": {
+          "dice": "2 * {Icon: Rating} v. {Action: INT Firewall Defense}",
+          "limit": "{Icon: Attack}",
+          "bonusstring": "On success, link-lock target persona and they must resist {Icon: Attack} + net hits + 2 per mark Matrix DV and an equal amount of biofeedback damage."
+        },
+        "source": "SR5",
+        "page": "248"
+      },
+      {
+        "id": "f32a0bc0-f573-4ec6-be09-802f85a6fcca",
+        "name": "Blaster IC",
+        "type": "Complex",
+        "test": {
+          "dice": "2 * {Icon: Rating} v. {Action: LOG Firewall Defense}",
+          "limit": "{Icon: Attack}",
+          "bonusstring": "On success, link-lock target persona and they must resist {Icon: Attack} + net hits + 2 per mark Matrix DV and an equal amount of biofeedback damage. Biofeedback damage taken this way can only be Stun damage."
+        },
+        "source": "SR5",
+        "page": "248"
+      },
+      {
+        "id": "6cd17750-b97f-493f-b322-a3fdbbb9e78e",
+        "name": "Crash IC",
+        "type": "Complex",
+        "test": {
+          "dice": "2 * {Icon: Rating} v. {Action: INT Firewall Defense}",
+          "limit": "{Icon: Attack}",
+          "bonusstring": "On success, a running cyberprogram on the target persona crashes and cannot be run again until the target persona reboots."
+        },
+        "source": "SR5",
+        "page": "248"
+      },
+      {
+        "id": "56293915-1238-42e8-8b91-21c557a976ff",
+        "name": "Jammer IC",
+        "type": "Complex",
+        "test": {
+          "dice": "2 * {Icon: Rating} v. {Action: WIL Attack Defense}",
+          "limit": "{Icon: Attack}",
+          "bonusstring": "On success, reduce target persona's Attack by 1 until they reboot. If they are at 0 Attack, target persona must resist 1 DV Matrix damage per net hit."
+        },
+        "source": "SR5",
+        "page": "248"
+      },
+      {
+        "id": "8af0f71d-a1b1-47d1-95e2-8a1872aea3f4",
+        "name": "Killer IC",
+        "type": "Complex",
+        "test": {
+          "dice": "2 * {Icon: Rating} v. {Action: INT Firewall Defense}",
+          "limit": "{Icon: Attack}",
+          "bonusstring": "On success, target persona must resist {Icon: Attack} + net hits + 2 per mark Matrix DV."
+        },
+        "source": "SR5",
+        "page": "248"
+      },
+      {
+        "id": "236cad06-d6f1-4107-bf6f-c1abc85e139a",
+        "name": "Marker IC",
+        "type": "Complex",
+        "test": {
+          "dice": "2 * {Icon: Rating} v. {Action: WIL Sleaze Defense}",
+          "limit": "{Icon: Attack}",
+          "bonusstring": "On success, reduce target persona's Sleaze by 1 until they reboot. If they are at 0 Sleaze, target persona must resist 1 DV Matrix damage per net hit."
+        },
+        "source": "SR5",
+        "page": "248"
+      },
+      {
+        "id": "47b191ca-7e7f-4a62-81e3-787c7a70367a",
+        "name": "Patrol IC",
+        "type": "Complex",
+        "test": {
+          "dice": "2 * {Icon: Rating} v. {Action: LOG Sleaze Defense}",
+          "limit": "{Icon: Data Processing}",
+          "bonusstring": "On success, the host spots the target persona."
+        },
+        "source": "SR5",
+        "page": "248"
+      },
+      {
+        "id": "a633ea22-93ac-42fa-b81b-51bce550f78e",
+        "name": "Probe IC",
+        "type": "Complex",
+        "test": {
+          "dice": "2 * {Icon: Rating} v. {Action: INT Firewall Defense}",
+          "limit": "{Icon: Attack}",
+          "bonusstring": "On success, the host and all its IC gain a mark on the target persona."
+        },
+        "source": "SR5",
+        "page": "248"
+      },
+      {
+        "id": "932f77eb-bcea-4215-a26c-a3c348a47701",
+        "name": "Scramble IC",
+        "type": "Complex",
+        "test": {
+          "dice": "2 * {Icon: Rating} v. {Action: WIL Firewall Defense}",
+          "limit": "{Icon: Attack}",
+          "bonusstring": "On success, if the host has 3 marks on the target persona, the target persona is forced to reboot; if they are in VR, they suffer dumpshock."
+        },
+        "source": "SR5",
+        "page": "248"
+      },
+      {
+        "id": "50725e27-a14e-4732-ad92-96df30bed382",
+        "name": "Sparky IC",
+        "type": "Complex",
+        "test": {
+          "dice": "2 * {Icon: Rating} v. {Action: INT Firewall Defense}",
+          "limit": "{Icon: Attack}",
+          "bonusstring": "On success, target persona must resist {Icon: Attack} + net hits + 2 per mark Matrix DV. The attack itself is laced with biofeedback."
+        },
+        "source": "SR5",
+        "page": "248"
+      },
+      {
+        "id": "651efc72-80dc-48c4-882b-5a2a1f78fb3d",
+        "name": "Tar Baby IC",
+        "type": "Complex",
+        "test": {
+          "dice": "2 * {Icon: Rating} v. {Action: LOG Firewall Defense}",
+          "limit": "{Icon: Attack}",
+          "bonusstring": "On success, target persona is link-locked. If the target persona is already link-locked by the host, the host and all its IC gain a mark on the target persona."
+        },
+        "source": "SR5",
+        "page": "249"
+      },
+      {
+        "id": "b0262d4b-5c55-4fb9-8819-842ccfe20648",
+        "name": "Track IC",
+        "type": "Complex",
+        "test": {
+          "dice": "2 * {Icon: Rating} v. {Action: WIL Sleaze Defense}",
+          "limit": "{Icon: Attack}",
+          "bonusstring": "On success, if the host has 2 on the target persona, the target persona's real-world location is discovered and usually reported to real-world authorities immediately."
+        },
+        "source": "SR5",
+        "page": "249"
+      },
+      {
+        "id": "e8fc7f26-6a65-43b2-9f60-0a453a0424c2",
+        "name": "Call/Dismiss Sprite",
+        "type": "Simple",
+        "test": {
+          "dice": "None",
+          "bonusstring": "Call a registered sprite that is waiting in the Resonance, who will appear at the start of the next combat turn. The action can also be used to send a sprite of the characters back to the Resonance, releasing it from any tasks it still owes."
+        },
+        "source": "SR5",
+        "page": "250"
+      },
+      {
+        "id": "505d98b2-b42c-4019-a421-af02543f348d",
+        "name": "Command Sprite",
+        "type": "Simple",
+        "test": {
+          "dice": "None",
+          "bonusstring": "Command a sprite to do something for the character, using up a task."
+        },
+        "source": "SR5",
+        "page": "250"
+      },
+      {
+        "id": "25c7dd2e-5e32-4adf-913e-9468763e0afb",
+        "name": "Compile Sprite",
+        "type": "Complex",
+        "test": {
+          "dice": "{RES} + {Compiling} v. {Icon: Rating}",
+          "limit": "{Target: {Icon: Rating}}",
+          "bonusstring": "On success, a sprite is compiled with tasks equal to net hits. After action, resist fading equal to twice the sprite's total hits with a minimum of 2 DV."
+        },
+        "source": "SR5",
+        "page": "250"
+      },
+      {
+        "id": "9152220d-84cc-4911-b6df-db5a870090be",
+        "name": "Decompile Sprite",
+        "type": "Complex",
+        "test": {
+          "dice": "{RES} + {Decompiling} v. {Icon: Rating}",
+          "limit": "{Target: {Icon: Rating}}",
+          "bonusstring": "On success, reduce the target sprite's tasks by 1 for each net hit. After action, resist fading equal to twice the sprite's total hits with a minimum of 2 DV."
+        },
+        "source": "SR5",
+        "page": "250"
+      },
+      {
+        "id": "bed2a61d-26d9-474e-93e2-c8e0086dec3f",
+        "name": "Kill Complex Form",
+        "type": "Complex",
+        "test": {
+          "dice": "{RES} + {Software} v. {Spell: Force} + {RES}",
+          "limit": "{Target: {Spell: Force}}",
+          "bonusstring": "On success, reduce the number of hits on the target complex form by 1 for each net hit. After action, resist {Target: {Spell: Drain}} with a minimum of 2 DV."
+        },
+        "source": "SR5",
+        "page": "250"
+      },
+      {
+        "id": "0eb78e4b-a3b1-4894-b84d-d2c1dbb3040f",
+        "name": "Register Sprite",
+        "type": "Complex",
+        "test": {
+          "dice": "{RES} + {Registering} v. 2 * {Icon: Rating}",
+          "limit": "{Target: {Icon: Rating}}",
+          "bonusstring": "On success, target sprite is registered and its OS erase, and target sprite gains 1 extra task per net hit. After action, resist fading equal to twice the sprite's total hits with a minimum of 2 DV."
+        },
+        "source": "SR5",
+        "page": "250"
+      },
+      {
+        "id": "44e9fbdf-b298-40de-804f-6ac4bc28319a",
+        "name": "Thread Complex Form (No Opposed Test)",
+        "type": "Complex",
+        "test": {
+          "dice": "{RES} + {Software}",
+          "limit": "{Spell: Force}",
+          "bonusstring": "On success, complex form is threaded. After action, resist fading equal to {Spell: Drain} with a minimum of 2 DV."
+        },
+        "source": "SR5",
+        "page": "250"
+      },
+      {
+        "id": "b2fb8599-d12b-4250-b9c4-184de78ccb6e",
+        "name": "Thread Complex Form (v. INT Data Processing)",
+        "type": "Complex",
+        "test": {
+          "dice": "{RES} + {Software} v. {Action: INT Data Processing Defense}",
+          "limit": "{Spell: Force}",
+          "bonusstring": "On success, complex form is threaded. After action, resist fading equal to {Spell: Drain} with a minimum of 2 DV."
+        },
+        "source": "SR5",
+        "page": "250"
+      },
+      {
+        "id": "0e88dc79-4fa5-4c4f-9b3f-f2c630f96852",
+        "name": "Thread Complex Form (v. WIL Firewall)",
+        "type": "Complex",
+        "test": {
+          "dice": "{RES} + {Software} v. {Action: WIL Firewall Defense}",
+          "limit": "{Spell: Force}",
+          "bonusstring": "On success, complex form is threaded. After action, resist fading equal to {Spell: Drain} with a minimum of 2 DV."
+        },
+        "source": "SR5",
+        "page": "250"
+      },
+      {
+        "id": "08c9a6f5-b3f5-4890-8545-532c10ffa65c",
+        "name": "Thread Complex Form (v. LOG Data Processing)",
+        "type": "Complex",
+        "test": {
+          "dice": "{RES} + {Software} v. {Action: LOG Data Processing Defense}",
+          "limit": "{Spell: Force}",
+          "bonusstring": "On success, complex form is threaded. After action, resist fading equal to {Spell: Drain} with a minimum of 2 DV."
+        },
+        "source": "SR5",
+        "page": "250"
+      },
+      {
+        "id": "fe3e19fa-59c3-441e-b5a4-ad9a638902ad",
+        "name": "Sprite Power: Cookie",
+        "type": "Complex",
+        "test": {
+          "dice": "{RES} + {Hacking} v. {Action: INT Firewall Defense}",
+          "limit": "{Icon: Sleaze}",
+          "bonusstring": "On success, sprite power succeeds against target persona. Cookie file remains until its pre-programmed duration expires, after which it returns to its sprite if it is online, but otherwise disappears."
+        },
+        "source": "SR5",
+        "page": "256"
+      },
+      {
+        "id": "2eb8da0c-65f7-4b31-ba31-b3fe6034cae8",
+        "name": "Sprite Power: Diagnostics",
+        "type": "Complex",
+        "test": {
+          "dice": "{RES} + {Hardware}",
+          "limit": "{Icon: Data Processing}",
+          "bonusstring": "On success, sprite power succeeds against target device. The power consumes the sprite's complete attention while active."
+        },
+        "source": "SR5",
+        "page": "257"
+      },
+      {
+        "id": "0006274a-c3d3-418f-950e-5181f24ab071",
+        "name": "Sprite Power: Electron Storm",
+        "type": "Complex",
+        "test": {
+          "dice": "{RES} + {Cybercombat} v. {Action: INT Firewall Defense}",
+          "limit": "{Icon: Attack}",
+          "bonusstring": "On success, sprite power succeeds against target persona. The power remains until the sprite takes any Matrix damage."
+        },
+        "source": "SR5",
+        "page": "257"
+      },
+      {
+        "id": "14853b2e-9249-418d-882f-3d88ff2aa05e",
+        "name": "Sprite Power: Gremlins",
+        "type": "Complex",
+        "test": {
+          "dice": "{RES} + {Hardware} v. {Icon}",
+          "limit": "{Icon: Attack}",
+          "bonusstring": "On success, sprite power succeeds against target device and immediately causes it to suffer a glitch; if 4 or more net hits were obtained, this is upgraded to a critical glitch."
+        },
+        "source": "SR5",
+        "page": "257"
+      },
+      {
+        "id": "200d0191-018e-4b18-86de-4a776361fd2f",
+        "name": "Compensate for Noise",
+        "type": "Complex",
+        "test": {
+          "dice": "{LOG} + {Electronic Warfare}",
+          "limit": "{Icon: Data Processing}",
+          "bonusstring": "On success, add 1 noise reduction per net hit until the end of the combat turn."
+        },
+        "source": "SR5",
+        "page": "257"
+      },
+      {
+        "id": "42dcd464-2919-4cd4-b5a1-d91192ab2a41",
+        "name": "Dispelling",
+        "type": "Complex",
+        "test": {
+          "dice": "{MAG} + {Counterspelling} v. {Spell: Force} + {MAG}",
+          "limit": "{Astral}",
+          "bonusstring": "On success, reduce the hits on the target spell by 1 for each net hit. After action, resist drain equal to {Target: {Spell: Drain}}, with a minimum of 2 DV."
+        },
+        "source": "SR5",
+        "page": "295"
+      },
+      {
+        "id": "40d06d20-e124-4a80-aee3-16352d02d3ba",
+        "name": "Assense",
+        "type": "Complex",
+        "test": {
+          "dice": "{INT} + {Assensing}",
+          "limit": "{Astral}",
+          "bonusstring": "On success, consult the appropriate table to see what information is revealed."
+        },
+        "source": "SR5",
+        "page": "312"
+      },
+      {
+        "id": "f98b6892-84a4-4afe-9c29-0ae0142f3ba4",
+        "name": "Press through Mana Barrier",
+        "type": "Complex",
+        "test": {
+          "dice": "{MAG} + {CHA} v. 2 * {Spell: Force}",
+          "limit": "{Astral}",
+          "bonusstring": "On success, pass through the barrier, and the character may bring one magically-active entity with them per net hit."
+        },
+        "source": "SR5",
+        "page": "312"
+      },
+      {
+        "id": "175c83f2-7c87-41b4-98e7-6207c273573c",
+        "name": "Hide Gear (No Pat-Down)",
+        "type": "Complex",
+        "test": {
+          "dice": "{AGI} + {Palming} v. {INT} + {Max: {Perception} or {Palming}} + {Target: {Gear: Concealability}}",
+          "limit": "{Physical}",
+          "defenselimit": "{Mental}"
+        },
+        "source": "SR5",
+        "page": "419"
+      },
+      {
+        "id": "5eaf0544-fb3b-469c-be22-b1cfdb0058c2",
+        "name": "Hide Gear (Pat-Down)",
+        "type": "Complex",
+        "test": {
+          "dice": "{AGI} + {Palming} v. {Max: {INT} or {AGI}} + {Max: {Perception} or {Palming}} + {If: {Target: {Gear: Concealability}} gte 0; Then: {2 * {Target: {Gear: Concealability}}}; Else: {{Target: {Gear: Concealability}} / 2}}",
+          "limit": "{Physical}",
+          "defenselimit": "{Max: {Physical} or {Mental}}"
+        },
+        "source": "SR5",
+        "page": "419"
+      },
+      {
+        "id": "7b920367-e488-444d-a7bf-758797170b6f",
+        "name": "Aimed Burst",
+        "type": "Complex",
+        "test": {
+          "dice": "{Action: Fire Long Burst} v. {Ranged Defense}",
+          "limit": "{Weapon: Accuracy}",
+          "bonusstring": "+1 DV. Fires 3 shots instead of 6."
+        },
+        "source": "RG",
+        "page": "119"
+      },
+      {
+        "id": "24c0a1f7-97db-4c8f-9262-457df8a8df17",
+        "name": "Ballestra",
+        "type": "Complex",
+        "requireunlock": null,
+        "test": {
+          "dice": "{Action: Melee Attack} v. {Action: Melee Defense}",
+          "limit": "{Weapon: Limit}",
+          "bonusstring": "+1 Reach. After action, -1 to all Defense tests until next action phase and cannot use Active Defense techniques until next action phase."
+        },
+        "source": "RG",
+        "page": "119"
+      },
+      {
+        "id": "55c705d9-968c-481a-8e2c-31700d73e23f",
+        "name": "Brain Blaster",
+        "type": "Complex",
+        "test": {
+          "dice": "{Action: Fire Full-Auto Complex} v. {Ranged Defense}",
+          "limit": "{Weapon: Accuracy}",
+          "bonusstring": "+2 DV. Fires 6 shots instead of 10."
+        },
+        "source": "RG",
+        "page": "119"
+      },
+      {
+        "id": "de9cdc04-1d90-41e0-a21d-911500761e3d",
+        "name": "Clinch",
+        "type": "Simple",
+        "requireunlock": null,
+        "test": {
+          "dice": "{AGI} + {Gymnastics} v. {REA} + {INT}",
+          "limit": "{Physical}",
+          "bonusstring": "On success, gain Superior Position and cannot move far away from target."
+        },
+        "source": "RG",
+        "page": "119"
+      },
+      {
+        "id": "6da9ee3d-4068-45af-81e3-64d5d70ca4b3",
+        "name": "Double Tap",
+        "type": "Complex",
+        "test": {
+          "dice": "{Action: Fire Semi-Auto Burst} v. {Ranged Defense}",
+          "limit": "{Weapon: Accuracy}",
+          "bonusstring": "+1 DV. Fires 2 shots instead of 3."
+        },
+        "source": "RG",
+        "page": "120"
+      },
+      {
+        "id": "cc244439-4e28-41f3-96c0-8c84442c3bd0",
+        "name": "Escape (Clinch)",
+        "type": "Complex",
+        "test": {
+          "dice": "{STR} + {Unarmed Combat} v. {Threshold: {Action: Clinch}}",
+          "limit": "{Physical}",
+          "bonusstring": "On success, break out of Clinch."
+        },
+        "source": "RG",
+        "page": "120"
+      },
+      {
+        "id": "2b725942-799c-4855-bcfb-a943df21314e",
+        "name": "Enhanced Suppression",
+        "type": "Complex",
+        "test": {
+          "dice": "{AGI} + {Weapon: Skill} v. {Action: Suppressive Fire Defense}",
+          "limit": "{Weapon: Limit}",
+          "bonusstring": "Identical to {Action: Suppressive Fire} with a narrower AoE, but targets cannot use {Action: Drop Prone} or {Action: Hit the Dirt}."
+        },
+        "source": "RG",
+        "page": "120"
+      },
+      {
+        "id": "aab82478-8e9d-4b4f-9081-b22e8a2afd09",
+        "name": "Finishing Move",
+        "type": "Complex",
+        "requireunlock": null,
+        "initiativecost": "10",
+        "edgecost": "1",
+        "test": {
+          "dice": "{Action: Melee Attack} + 2 v. {Action: Melee Defense}",
+          "limit": "{Weapon: Limit}",
+          "bonusstring": "Can only be performed once per Combat Turn."
+        },
+        "source": "RG",
+        "page": "120"
+      },
+      {
+        "id": "51e20ac4-d580-4a11-9531-8e19f3a2ff31",
+        "name": "Flechette Suppressive Fire",
+        "type": "Complex",
+        "test": {
+          "dice": "{AGI} + {Weapon: Skill} v. {Action: Suppressive Fire Defense}",
+          "limit": "{Weapon: Limit}",
+          "bonusstring": "Requires flechette ammo type. Identical to {Action: Enhanced Suppression}, but also get modifiers per tables on RG 121."
+        },
+        "source": "RG",
+        "page": "120"
+      },
+      {
+        "id": "cb9235d4-d9a0-4c15-bae8-dbfd9ef83ba8",
+        "name": "Flying Kick",
+        "type": "Complex",
+        "requireunlock": null,
+        "test": {
+          "dice": "{Action: Melee Attack} + 1 v. {Action: Melee Defense}",
+          "limit": "{Weapon: Limit}",
+          "bonusstring": "+1 Reach. On fail, -1 to all Defense tests until next action phase."
+        },
+        "source": "RG",
+        "page": "121"
+      },
+      {
+        "id": "33896e90-0615-412f-9969-d54e36dbb647",
+        "name": "Full Offense",
+        "type": "Complex",
+        "requireunlock": null,
+        "initiativecost": "5",
+        "test": {
+          "dice": "{Action: Melee Attack} + 2 v. {Action: Melee Defense}",
+          "limit": "{Weapon: Limit}",
+          "bonusstring": "After action, cannot use any Defensive Interrupt actions until next action phase."
+        },
+        "source": "RG",
+        "page": "121"
+      },
+      {
+        "id": "14456cce-14ff-4319-81c5-5b90a8d54533",
+        "name": "Half Sword",
+        "type": "Complex",
+        "requireunlock": null,
+        "test": {
+          "dice": "{Action: Melee Attack} v. {Action: Melee Defense}",
+          "limit": "{Weapon: Limit}",
+          "bonusstring": "Extra AP -2. On fail, -2 to next action (not Defense tests) and cannot use {Action: Parry} or {Action: Block} until next action phase. Requires Ready Weapon before next attack. Requires both hands."
+        },
+        "source": "RG",
+        "page": "121"
+      },
+      {
+        "id": "f94b7a79-db0c-4581-941e-cf6610ba6741",
+        "name": "Haymaker",
+        "type": "Complex",
+        "requireunlock": null,
+        "test": {
+          "dice": "{Action: Melee Attack} v. {Action: Melee Defense} + 2",
+          "limit": "{Weapon: Accuracy}",
+          "bonusstring": "+1 DV."
+        },
+        "source": "RG",
+        "page": "121"
+      },
+      {
+        "id": "f877d70a-1a46-4b30-8572-48a7385cf26f",
+        "name": "Herding",
+        "type": "Complex",
+        "requireunlock": null,
+        "test": {
+          "dice": "{Action: Melee Attack} v. {Action: Melee Defense} + 2",
+          "limit": "{Weapon: Accuracy}",
+          "bonusstring": "Moves opponent 1m/hit instead of dealing damage, up to maximum walking rate."
+        },
+        "source": "RG",
+        "page": "121"
+      },
+      {
+        "id": "42c3084c-e8b8-4a8f-b2f4-090036454d45",
+        "name": "Iaijutsu",
+        "type": "Simple",
+        "requireunlock": null,
+        "test": {
+          "dice": "{REA} + {Weapon: Skill} v. {Threshold: {Weapon: Quick Draw Threshold}}",
+          "limit": "{Physical}",
+          "bonusstring": "On success, can make {Action: Melee Attack} with a Simple Action for that action phase."
+        },
+        "source": "RG",
+        "page": "122"
+      },
+      {
+        "id": "04296569-39b0-481d-a468-fc22f13be152",
+        "name": "Kip-Up",
+        "type": "Simple",
+        "requireunlock": null,
+        "test": {
+          "dice": "{AGI} + {Gymnastics} v. {Threshold: 3}",
+          "limit": "{Physical}",
+          "bonusstring": "On success, can immediately make {Action: Melee Attack} against a nearby target. On fail, remain prone."
+        },
+        "source": "RG",
+        "page": "122"
+      },
+      {
+        "id": "96a73d16-c9c9-4e19-8458-726f322089b8",
+        "name": "Playing Possum (Con)",
+        "type": "Simple",
+        "test": {
+          "dice": "{CHA} + {Con} v. {CHA} + {Con}",
+          "limit": "{Social}",
+          "bonusstring": "Wound penalties act as bonus instead of penalty for this action. Net hits become {Perception} threshold for target to avoid being caught unaware."
+        },
+        "source": "RG",
+        "page": "122"
+      },
+      {
+        "id": "b43fbef5-e157-4f1a-a247-738a4c4f6425",
+        "name": "Playing Possum (Performance)",
+        "type": "Simple",
+        "test": {
+          "dice": "{CHA} + {Performance} v. {CHA} + {WIL}",
+          "limit": "{Social}",
+          "bonusstring": "Wound penalties act as bonus instead of penalty for this action. Net hits become {Perception} threshold for target to avoid being caught unaware."
+        },
+        "source": "RG",
+        "page": "122"
+      },
+      {
+        "id": "d16efc4e-a54e-48a4-b705-5c7a47cc9c86",
+        "name": "Pouncing Dragon",
+        "type": "Complex",
+        "requireunlock": null,
+        "test": {
+          "dice": "{Action: Melee Attack} v. {Action: Melee Defense}",
+          "limit": "{Weapon: Accuracy}",
+          "bonusstring": "+2 DV. Requires Superior Position. After action, lose Superior Position."
+        },
+        "source": "RG",
+        "page": "122"
+      },
+      {
+        "id": "6d3a655e-c680-4f49-ad9a-be1f4f9b5e1c",
+        "name": "Pre-Emptive Block",
+        "type": "Free",
+        "initiativecost": "5",
+        "specname": "Blocking",
+        "boosts": {
+          "boost": {
+            "name": "Melee Defense",
+            "duration": "Rest of Turn",
+            "dicebonus": "{Unarmed Combat}",
+            "addlimit": "{Physical}"
+          }
+        },
+        "source": "RG",
+        "page": "122"
+      },
+      {
+        "id": "9bfa4e44-08c6-49e0-b4b6-c48925814e7d",
+        "name": "Pre-Emptive Dodge",
+        "type": "Free",
+        "initiativecost": "5",
+        "specname": "Dodging",
+        "boosts": {
+          "boost": {
+            "name": "Melee Defense",
+            "duration": "Rest of Turn",
+            "dicebonus": "{Gymnastics}",
+            "addlimit": "{Physical}"
+          }
+        },
+        "source": "RG",
+        "page": "122"
+      },
+      {
+        "id": "7f04c323-1f8b-4ed0-9b62-c87f125c6c28",
+        "name": "Pre-Emptive Parry",
+        "type": "Free",
+        "initiativecost": "5",
+        "specname": "Parrying",
+        "boosts": {
+          "boost": {
+            "name": "Melee Defense",
+            "duration": "Rest of Turn",
+            "dicebonus": "{Weapon: Skill}",
+            "addlimit": "{Weapon: Accuracy}"
+          }
+        },
+        "source": "RG",
+        "page": "122"
+      },
+      {
+        "id": "83f73100-0928-4b29-8973-81e1ed899d56",
+        "name": "Push (Simple)",
+        "type": "Simple",
+        "test": {
+          "dice": "{Action: Melee Attack} v. {Action: Melee Defense}",
+          "limit": "{Weapon: Accuracy}",
+          "bonusstring": "On success, target pushed out of reach. Cannot be in Grapple or Clinch."
+        },
+        "source": "RG",
+        "page": "123"
+      },
+      {
+        "id": "e9b8b4b4-72b4-4d01-88b0-121ea6c5670b",
+        "name": "Push (Intercept)",
+        "type": "Interrupt",
+        "initiativecost": "5",
+        "test": {
+          "dice": "{Action: Melee Attack} v. {Action: Melee Defense}",
+          "limit": "{Weapon: Accuracy}",
+          "bonusstring": "On success, target pushed out of reach. Cannot be in Grapple or Clinch."
+        },
+        "source": "RG",
+        "page": "123"
+      },
+      {
+        "id": "2e6dd5f7-bb15-48fa-9098-145222579bac",
+        "name": "Shove",
+        "type": "Simple",
+        "test": {
+          "dice": "{Action: Melee Attack} v. {Action: Melee Defense}",
+          "limit": "{Weapon: Accuracy}",
+          "bonusstring": "On success, if {STR} + net hits exceeds {Target: {Physical}}, target can be pushed. On fail, fall prone. Must be running at target."
+        },
+        "source": "RG",
+        "page": "123"
+      },
+      {
+        "id": "dc3d5d08-e0a9-4456-ab9f-be2a582e37ca",
+        "name": "Sacrifice Move",
+        "type": "Complex",
+        "test": {
+          "dice": "{Action: Melee Attack} v. {Action: Melee Defense}",
+          "limit": "{Weapon: Accuracy}",
+          "bonusstring": "On success, if {{STR} + {BOD}} + net hits exceeds {Target: {Physical}}, fall prone, and target is pushed and falls prone. On fail, fall prone. Must be running at target."
+        },
+        "source": "RG",
+        "page": "123"
+      },
+      {
+        "id": "37a75f68-6c68-4229-812f-a7f013edc811",
+        "name": "Reading the Defense",
+        "type": "Complex",
+        "test": {
+          "dice": "{INT} + {Weapon: Skill} v. {Threshold: 3}",
+          "limit": "{Mental}",
+          "bonusstring": "On success, +3 dice to next {Action: Melee Attack} against target. On fail, -1 die to next {Action: Melee Attack} against target."
+        },
+        "source": "RG",
+        "page": "123"
+      },
+      {
+        "id": "8a11fcb1-6f5c-4792-9111-875d2631b25a",
+        "name": "Throw Person (Simple)",
+        "type": "Simple",
+        "requireunlock": null,
+        "test": {
+          "dice": "{Action: Melee Attack} v. {Action: Melee Defense}",
+          "limit": "{Weapon: Accuracy}",
+          "bonusstring": "Require Clinch or Subduing against target. On success, if {STR} + net hits exceeds {Target: {Physical}}, target can be thrown. On fail, target escapes Clinch or Subduing."
+        },
+        "source": "RG",
+        "page": "123"
+      },
+      {
+        "id": "73ca02ed-6c84-4351-85dc-c6edfeb3646b",
+        "name": "Throw Person (Interrupt)",
+        "type": "Interrupt",
+        "requireunlock": null,
+        "initiativecost": "10",
+        "test": {
+          "dice": "{Action: Melee Attack} v. {Action: Melee Defense}",
+          "limit": "{Weapon: Accuracy}",
+          "bonusstring": "Require Clinch or Subduing against target. On success, if {STR} + net hits exceeds {Target: {Physical}}, target can be thrown. On fail, target escapes Clinch or Subduing."
+        },
+        "source": "RG",
+        "page": "123"
+      },
+      {
+        "id": "d1941c39-fbca-46c5-82fe-ef9161dfc223",
+        "name": "Counterstrike",
+        "type": "Interrupt",
+        "requireunlock": null,
+        "initiativecost": "7",
+        "test": {
+          "dice": "{REA} + {Unarmed Combat} v. {Action: Melee Attack}",
+          "limit": "{Weapon: Accuracy}",
+          "bonusstring": "On success, avoid attack and target takes damage. On fail, take damage as normal."
+        },
+        "source": "RG",
+        "page": "124"
+      },
+      {
+        "id": "3030d83b-6773-4659-b286-fac186aa1d3d",
+        "name": "Dive For Cover",
+        "type": "Interrupt",
+        "initiativecost": "5",
+        "test": {
+          "dice": "None",
+          "bonusstring": "Go prone behind any nearby cover within 4m."
+        },
+        "source": "RG",
+        "page": "124"
+      },
+      {
+        "id": "dc6b2c18-2565-420a-9e6e-9481d9092662",
+        "name": "Reversal (Clinch)",
+        "type": "Interrupt",
+        "requireunlock": null,
+        "initiativecost": "7",
+        "test": {
+          "dice": "{Action: Melee Attack} v. {Threshold: {Action: Clinch}}",
+          "limit": "{Weapon: Accuracy}",
+          "bonusstring": "Requires being in Clinch from target. On success, reverse positions in Clinch."
+        },
+        "source": "RG",
+        "page": "124"
+      },
+      {
+        "id": "1d6933e9-90f9-40ab-b0e5-06f49e2f4d1e",
+        "name": "Reversal (Subduing)",
+        "type": "Interrupt",
+        "requireunlock": null,
+        "initiativecost": "7",
+        "test": {
+          "dice": "{Action: Melee Attack} v. {Threshold: {Action: Subduing}}",
+          "limit": "{Weapon: Accuracy}",
+          "bonusstring": "Requires being in Subduing from target. On success, reverse positions in Subduing."
+        },
+        "source": "RG",
+        "page": "124"
+      },
+      {
+        "id": "933c74a5-54b2-4e9d-8636-1e777f0c2ef2",
+        "name": "Right Back at Ya!",
+        "type": "Interrupt",
+        "initiativecost": "10",
+        "test": {
+          "dice": "{AGI} v. {Threshold: 2}",
+          "bonusstring": "On success, perform {Action: Throw Weapon (Grenade)} at -2 penalty to throw grenade back. Bad things happen if grenade triggers before throw."
+        },
+        "source": "RG",
+        "page": "124"
+      },
+      {
+        "id": "0a3da24d-5e20-442b-ab54-2c6fd389d272",
+        "name": "Run for Your Life / Dive on the Grenade",
+        "type": "Interrupt",
+        "initiativecost": "5",
+        "test": {
+          "dice": "None",
+          "bonusstring": "Can immediately move away from grenade or indirect, combat, AoE spell."
+        },
+        "source": "RG",
+        "page": "125"
+      },
+      {
+        "id": "d8c906a3-d274-4efa-abd0-2e7f44700b87",
+        "name": "Sacrifice Throw",
+        "type": "Interrupt",
+        "requireunlock": null,
+        "initiativecost": "10",
+        "test": {
+          "dice": "{Action: Melee Attack} v. {Action: Melee Defense}",
+          "limit": "{Weapon: Accuracy}",
+          "bonusstring": "Require Clinch or Subduing against target. On success, if {{STR} + {BOD}} + net hits exceeds {Target: {Physical}}, become prone and target can be thrown. On fail, take damage and become prone."
+        },
+        "source": "RG",
+        "page": "125"
+      },
+      {
+        "id": "c583e3e4-2252-4ead-8a2a-8b51981afc26",
+        "name": "Riposte",
+        "type": "Interrupt",
+        "requireunlock": null,
+        "initiativecost": "7",
+        "test": {
+          "dice": "{REA} + {Weapon: Skill} v. {Action: Melee Attack}",
+          "limit": "{Weapon: Accuracy}",
+          "bonusstring": "On success, avoid attack and target takes damage. On fail, take damage with +2 DV extra."
+        },
+        "source": "RG",
+        "page": "125"
+      },
+      {
+        "id": "91cf6b11-95cf-4cdc-8f94-ef797d316cba",
+        "name": "Protecting the Principle",
+        "type": "Interrupt",
+        "initiativecost": "5",
+        "edgecost": "1",
+        "test": {
+          "dice": "None",
+          "bonusstring": "Move up to 2m and take damage from an attack intended at a target. Can only be used once per combat turn."
+        },
+        "source": "RG",
+        "page": "125"
+      },
+      {
+        "id": "b7b8c408-0700-4a35-b2d8-e5c9b359d63d",
+        "name": "Shadow Block v. Dodge",
+        "type": "Interrupt",
+        "requireunlock": null,
+        "initiativecost": "5",
+        "test": {
+          "dice": "{AGI} + {Gymnastics} v. {Action: Dodge}",
+          "limit": "{Physical}",
+          "bonusstring": "On success, negate hits on target's {Action: Dodge} by net hits."
+        },
+        "source": "RG",
+        "page": "125"
+      },
+      {
+        "id": "9c96dde8-157f-445a-a618-377306906814",
+        "name": "Shadow Block v. Evade",
+        "type": "Interrupt",
+        "requireunlock": null,
+        "initiativecost": "5",
+        "test": {
+          "dice": "{AGI} + {Gymnastics} v. {Action: Evade}",
+          "limit": "{Physical}",
+          "bonusstring": "On success, negate hits on target's {Action: Evade} by net hits."
+        },
+        "source": "RG",
+        "page": "125"
+      },
+      {
+        "id": "5342ece8-8719-499f-bbef-b7aea95b0a28",
+        "name": "Acrobatic Defender",
+        "type": "Interrupt",
+        "requireunlock": null,
+        "initiativecost": "10",
+        "boosts": {
+          "boost": [
+            {
+              "name": "Melee Defense",
+              "duration": "Rest of Turn",
+              "dicebonus": "{Gymnastics}"
+            },
+            {
+              "name": "Ranged Defense",
+              "duration": "Rest of Turn",
+              "dicebonus": "{Gymnastics}"
+            },
+            {
+              "name": "Suppressive Fire Defense",
+              "duration": "Rest of Turn",
+              "dicebonus": "{Gymnastics}"
+            }
+          ]
+        },
+        "source": "RG",
+        "page": "127"
+      },
+      {
+        "id": "812d4414-6fd3-40c5-b992-2c9f889f68af",
+        "name": "Agile Defender",
+        "type": "Interrupt",
+        "requireunlock": null,
+        "initiativecost": "10",
+        "boosts": {
+          "boost": [
+            {
+              "name": "Melee Defense",
+              "duration": "Rest of Turn",
+              "dicebonus": "{AGI}"
+            },
+            {
+              "name": "Ranged Defense",
+              "duration": "Rest of Turn",
+              "dicebonus": "{AGI}"
+            },
+            {
+              "name": "Suppressive Fire Defense",
+              "duration": "Rest of Turn",
+              "dicebonus": "{AGI}"
+            }
+          ]
+        },
+        "source": "RG",
+        "page": "127"
+      },
+      {
+        "id": "16067c34-3e74-4d2a-a0cf-82cfcf468606",
+        "name": "Perceptive Defender",
+        "type": "Interrupt",
+        "requireunlock": null,
+        "initiativecost": "10",
+        "boosts": {
+          "boost": [
+            {
+              "name": "Melee Defense",
+              "duration": "Rest of Turn",
+              "dicebonus": "{Perception}"
+            },
+            {
+              "name": "Ranged Defense",
+              "duration": "Rest of Turn",
+              "dicebonus": "{Perception}"
+            },
+            {
+              "name": "Suppressive Fire Defense",
+              "duration": "Rest of Turn",
+              "dicebonus": "{Perception}"
+            }
+          ]
+        },
+        "source": "RG",
+        "page": "127"
+      },
+      {
+        "id": "4d5cd769-86ff-41d2-b750-b1f615ba1b73",
+        "name": "Too Pretty to Hit",
+        "type": "Interrupt",
+        "requireunlock": null,
+        "initiativecost": "10",
+        "boosts": {
+          "boost": [
+            {
+              "name": "Melee Defense",
+              "duration": "Rest of Turn",
+              "dicebonus": "{CHA}"
+            },
+            {
+              "name": "Ranged Defense",
+              "duration": "Rest of Turn",
+              "dicebonus": "{CHA}"
+            },
+            {
+              "name": "Suppressive Fire Defense",
+              "duration": "Rest of Turn",
+              "dicebonus": "{CHA}"
+            }
+          ]
+        },
+        "source": "RG",
+        "page": "127"
+      },
+      {
+        "id": "820c536b-8461-44e2-9a12-c267d88b2b76",
+        "name": "Break Target Lock",
+        "type": "Simple",
+        "test": {
+          "dice": "{INT} + {Electronic Warfare} v. {LOG} + {Target: Sensors}",
+          "limit": "{Icon: Data Processing}",
+          "bonusstring": "For every net hit, reduce the target's lock on the character by one hit. The character's RCC's Noise Reduction rating is added as a dice pool bonus for this action."
+        },
+        "source": "R5",
+        "page": "30"
+      },
+      {
+        "id": "ecb1d3eb-4a3d-412f-b374-3bb7eb9c59df",
+        "name": "Confuse Pilot",
+        "type": "Complex",
+        "test": {
+          "dice": "{LOG} + {Electronic Warfare} v. {Target: Pilot} + {Target: {Icon: Firewall}}",
+          "limit": "{Icon: Data Processing}",
+          "bonusstring": "On success, target makes an immediate Simple Pilot * 2 test to figure out what it's going to do next with a threshold equal to half of the net hits. The character's RCC's Noise Reduction rating is added as a dice pool bonus for this action."
+        },
+        "source": "R5",
+        "page": "30"
+      },
+      {
+        "id": "8949e342-56af-49d6-a659-9e0fb39d43bd",
+        "name": "Detect Target Lock",
+        "type": "Free",
+        "test": {
+          "dice": "{LOG} + {Computer} v. {Threshold: 2}",
+          "limit": "{Icon: Data Processing}",
+          "bonusstring": "Requires Owner marks on target. The device the character is using must have wireless enabled. The character's RCC's Noise Reduction rating is added as a dice pool bonus for this action."
+        },
+        "source": "R5",
+        "page": "30"
+      },
+      {
+        "id": "0d5318e9-ed3d-4f11-99ba-6ff9c35bd79e",
+        "name": "Suppress Noise",
+        "type": "Complex",
+        "test": {
+          "dice": "{LOG} + {Electronic Warfare}",
+          "limit": "{Icon: Data Processing}",
+          "bonusstring": "Requires Owner marks on target. On success, reduce noise by hits on this test for one Combat Turn. The character's RCC's Noise Reduction rating is added as a dice pool bonus for this action."
+        },
+        "source": "R5",
+        "page": "30"
+      },
+      {
+        "id": "f8d43ba8-e5ca-4a13-97cd-68c1980cd7bf",
+        "name": "Target Device",
+        "type": "Complex",
+        "test": {
+          "dice": "{LOG} + {Electronic Warfare} v. {Action: WIL Firewall Defense}",
+          "limit": "{Icon: Data Processing}",
+          "bonusstring": "For the rest of the combat turn, any slaved devices targeting the target of this action receive a dice pool bonus equal to the net hits on this action. The character's RCC's Noise Reduction rating is added as a dice pool bonus for this action."
+        },
+        "source": "R5",
+        "page": "30"
+      },
+      {
+        "id": "2cc49ba8-e586-49f3-937d-b1359c623dd0",
+        "name": "Garbage In/Garbage Out",
+        "type": "Complex",
+        "test": {
+          "dice": "{LOG} + {Software} v. {Action: LOG Firewall Defense}",
+          "limit": "{Icon: Sleaze}",
+          "bonusstring": "Requires 3 marks on target icon. On success, reprogram a single input action to a single output action."
+        },
+        "source": "DT",
+        "page": "178"
+      },
+      {
+        "id": "802381dd-7a15-49eb-bfbe-18fb20c26b64",
+        "name": "Trackback",
+        "type": "Extended",
+        "test": {
+          "dice": "{INT} + {Computer} v. 10 + {Target: {Icon: Sleaze}}",
+          "limit": "{Icon: Data Processing}",
+          "bonusstring": "Requires Owner marks on target icon. 30 minute interval. On success if the target persona is running silent, the trail ends in the vicinity of the icon, letting the character know that there are silent icons nearby."
+        },
+        "source": "DT",
+        "page": "179"
+      },
+      {
+        "id": "0e1c5d65-051a-4b35-a077-11c6f9679829",
+        "name": "Calibration",
+        "type": "Simple",
+        "test": {
+          "dice": "{LOG} + {Electronic Warfare}",
+          "limit": "{Icon: Data Processing}",
+          "bonusstring": "Requires 1 mark on target icons. On success, increase the initiative score of all marked personas by 1 for every 2 hits. The number of affected personas cannot exceed {Icon: Data Processing}."
+        },
+        "source": "KC",
+        "page": "37"
+      },
+      {
+        "id": "e699453d-441f-4c3b-b05e-bb209fe4241c",
+        "name": "Denial of Service",
+        "type": "Simple",
+        "test": {
+          "dice": "{LOG} + {Cybercombat} v. {Action: WIL Firewall Defense}",
+          "limit": "{Icon: Attack}",
+          "bonusstring": "On success, all tests made with the target device suffer a negative dice pool modifier equal to net hits * 2 until the beginning of the next Combat Turn. For every mark  the character has on the target PAN, they may apply this effect to two additional devices slaved to the PAN."
+        },
+        "source": "KC",
+        "page": "37"
+      },
+      {
+        "id": "9dcccbd6-c4fe-4d81-b2b7-591f39247949",
+        "name": "I Am the Firewall (Complex)",
+        "type": "Complex",
+        "test": {
+          "dice": "{INT} + {Computer}",
+          "limit": "{Icon: Data Processing}",
+          "bonusstring": "On success, give a defense test bonus equal to hits to all characters with an AR feed from the user until the user's next initiative pass."
+        },
+        "source": "KC",
+        "page": "38"
+      },
+      {
+        "id": "0c3a992f-98bd-4f3f-bd14-1898225cfd4e",
+        "name": "I Am the Firewall (Interrupt)",
+        "type": "Interrupt",
+        "initiativecost": "5",
+        "test": {
+          "dice": "{INT} + {Computer}",
+          "limit": "{Icon: Data Processing}",
+          "bonusstring": "On success, give a defense test bonus equal to hits to all characters with an AR feed from the user until the user's next initiative pass."
+        },
+        "source": "KC",
+        "page": "38"
+      },
+      {
+        "id": "a56dd463-6f2c-485c-97c0-cefb3b65e073",
+        "name": "Haywire",
+        "type": "Complex",
+        "test": {
+          "dice": "{LOG} + {Cybercombat} v. {Action: WIL Firewall Defense}",
+          "limit": "{Icon: Attack}",
+          "bonusstring": "Target must be a persona not running in VR. On success, all PAN and wireless functionality on the target is disabled until the target passes a {LOG} + {Computer} [Data Processing] v. {Threshold: Net Hits} Simple action."
+        },
+        "source": "KC",
+        "page": "38"
+      },
+      {
+        "id": "95e8fe05-c341-4985-9f42-0ff02a8c3b20",
+        "name": "Intervene",
+        "type": "Interrupt",
+        "initiativecost": "5",
+        "test": {
+          "dice": "{INT} + {Computer}",
+          "limit": "{Icon: Data Processing}",
+          "bonusstring": "On success, increase the number of hits on the target icon's Matrix defense test by net hits from this action."
+        },
+        "source": "KC",
+        "page": "39"
+      },
+      {
+        "id": "7822f0d5-8634-4536-a1a2-98ff2cb5aaa2",
+        "name": "Masquerade",
+        "type": "Complex",
+        "test": {
+          "dice": "{INT} + {Hacking} v. {Action: LOG Firewall Defense}",
+          "limit": "{Icon: Sleaze}",
+          "bonusstring": "Requires 2 marks on target icon and 2 marks on masquerading persona. On success, the target icon is convinced the character is the masquerading persona for 1 minute per net hit. If the masquerading persona logs off, the masquerade drops immediately. Masquerade cannot be used to act as if the character has Owner marks on the target icon."
+        },
+        "source": "KC",
+        "page": "39"
+      },
+      {
+        "id": "643e1151-cb58-49f4-97cc-61919038f733",
+        "name": "Popup",
+        "type": "Simple",
+        "test": {
+          "dice": "{LOG} + {Max: {Hacking} or {Cybercombat}} v. {Action: WIL Firewall Defense}",
+          "limit": "{Max: {Icon: Sleaze} or {Icon: Attack}}",
+          "bonusstring": "Requires 1 mark on target icon. Target must be a persona not running in VR. On success, if the target is in wirelessly-enabled AR, the target persona's character takes a dice pool penalty to all actions equal to net hits until the start of the attacker's next Combat Turn. If using {Hacking}, net hits are also treated as if they were net hits on {Action: Matrix Perception}. If using {Cybercombat}, also deal Matrix damage equal to net hits."
+        },
+        "source": "KC",
+        "page": "39"
+      },
+      {
+        "id": "21aa0a33-9fd6-47fe-a5df-3e51427eef6d",
+        "name": "Squelch",
+        "type": "Simple",
+        "test": {
+          "dice": "{LOG} + {Electronic Warfare} v. {Action: INT Sleaze Defense}",
+          "limit": "{Icon: Attack}",
+          "bonusstring": "On success, target icon cannot make calls or send messages for a number of minutes equal to net hits."
+        },
+        "source": "KC",
+        "page": "39"
+      },
+      {
+        "id": "6b337872-6789-4e13-ad5c-1779d14adcf4",
+        "name": "Subvert Infrastructure",
+        "type": "Complex",
+        "test": {
+          "dice": "{INT} + {Electronic Warfare} v. {Action: INT Firewall Defense}",
+          "limit": "{Icon: Sleaze}",
+          "bonusstring": "Requires 1 mark on target icon. Must target hosts. On success, character gains control over one simple device slaved to the target per net hit. No attacks can be made with this action. The control can be maintained by spending one Complex Action per Combat Turn."
+        },
+        "source": "KC",
+        "page": "39"
+      },
+      {
+        "id": "7ab03865-944f-45a9-adee-6e7aa8381f5e",
+        "name": "Tag",
+        "type": "Simple",
+        "test": {
+          "dice": "{LOG} + {Computer} v. {Action: INT Sleaze Defense}",
+          "limit": "{Icon: Data Processing}",
+          "bonusstring": "On success, a number of targets on a single PAN equal to net hits are \"tagged\". \"Tagged\" targets must be within line of sight of the character, and \"tags\" can be relayed wirelessly to allies. \"Tagging\" negates up to 2 dice in penalties from Visibility and Light/Glare to ranged attack rolls, including Blind Fire. Characters can take an additional {Action: Take Aim} at \"tagged\" targets as a Free Action each initiative pass. \"Tags\" can be maintained by spending one Simple Action per Combat Turn. When using a PI-Tac, the character may add the PI-Tac's level to the number of targets that can be \"tagged\"."
+        },
+        "source": "KC",
+        "page": "40"
+      },
+      {
+        "id": "f73c5747-0494-497b-9109-8bca6217b2b1",
+        "name": "Watchdog",
+        "type": "Complex",
+        "test": {
+          "dice": "{LOG} + {Electronic Warfare} v. {Action: LOG Firewall Defense}",
+          "limit": "{Icon: Sleaze}",
+          "bonusstring": "Target must be a persona or device. On success, place a mark on the target. The character is now aware of the Matrix actions the target is going to use before they use them. The character can use {Action: Haywire} and {Action: Popup} as Interrupt Actions for -10 initiative and {Action: Squelch} as an Interrupt Action for -5 initiative against the target. This ability lasts as long as the target is marked by the character."
+        },
+        "source": "KC",
+        "page": "40"
+      }
+    ]
+  }
+}
