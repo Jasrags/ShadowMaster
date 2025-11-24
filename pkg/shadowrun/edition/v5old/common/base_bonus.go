@@ -132,7 +132,7 @@ type BaseBonus struct {
 	Biowareessmultiplier                           []string                                         `xml:"biowareessmultiplier,omitempty" json:"biowareessmultiplier,omitempty"`
 	Biowaretotalessmultiplier                      []bool                                           `xml:"biowaretotalessmultiplier,omitempty" json:"biowaretotalessmultiplier,omitempty"`
 	Blockskillgroupdefaulting                      []bool                                           `xml:"blockskillgroupdefaulting,omitempty" json:"blockskillgroupdefaulting,omitempty"`
-	Blockskillcategorydefaulting                   []bool                                           `xml:"blockskillcategorydefaulting,omitempty" json:"blockskillcategorydefaulting,omitempty"`
+	Blockskillcategorydefaulting                   []string                                         `xml:"blockskillcategorydefaulting,omitempty" json:"blockskillcategorydefaulting,omitempty"`
 	Biowareessmultipliernonretroactive             []bool                                           `xml:"biowareessmultipliernonretroactive,omitempty" json:"biowareessmultipliernonretroactive,omitempty"`
 	Biowaretotalessmultipliernonretroactive        []bool                                           `xml:"biowaretotalessmultipliernonretroactive,omitempty" json:"biowaretotalessmultipliernonretroactive,omitempty"`
 	Blackmarketdiscount                            []bool                                           `xml:"blackmarketdiscount,omitempty" json:"blackmarketdiscount,omitempty"`
@@ -145,9 +145,9 @@ type BaseBonus struct {
 	Complexformlimit                               []bool                                           `xml:"complexformlimit,omitempty" json:"complexformlimit,omitempty"`
 	Composure                                      []bool                                           `xml:"composure,omitempty" json:"composure,omitempty"`
 	Concealability                                 []bool                                           `xml:"concealability,omitempty" json:"concealability,omitempty"`
-	Contactkarma                                   []bool                                           `xml:"contactkarma,omitempty" json:"contactkarma,omitempty"`
-	Contactkarmaminimum                            []bool                                           `xml:"contactkarmaminimum,omitempty" json:"contactkarmaminimum,omitempty"`
-	Cyberseeker                                    []bool                                           `xml:"cyberseeker,omitempty" json:"cyberseeker,omitempty"`
+	Contactkarma                                   []string                                         `xml:"contactkarma,omitempty" json:"contactkarma,omitempty"`
+	Contactkarmaminimum                            []string                                         `xml:"contactkarmaminimum,omitempty" json:"contactkarmaminimum,omitempty"`
+	Cyberseeker                                    []string                                         `xml:"cyberseeker,omitempty" json:"cyberseeker,omitempty"`
 	Cyberwareessmultiplier                         []bool                                           `xml:"cyberwareessmultiplier,omitempty" json:"cyberwareessmultiplier,omitempty"`
 	Cyberwaretotalessmultiplier                    []string                                         `xml:"cyberwaretotalessmultiplier,omitempty" json:"cyberwaretotalessmultiplier,omitempty"`
 	Cyberwareessmultipliernonretroactive           []bool                                           `xml:"cyberwareessmultipliernonretroactive,omitempty" json:"cyberwareessmultipliernonretroactive,omitempty"`
@@ -156,8 +156,8 @@ type BaseBonus struct {
 	Decreaseagiresist                              []bool                                           `xml:"decreaseagiresist,omitempty" json:"decreaseagiresist,omitempty"`
 	Decreasebodresist                              []bool                                           `xml:"decreasebodresist,omitempty" json:"decreasebodresist,omitempty"`
 	Decreasecharesist                              []bool                                           `xml:"decreasecharesist,omitempty" json:"decreasecharesist,omitempty"`
-	Decreaseintresist                              []bool                                           `xml:"decreaseintresist,omitempty" json:"decreaseintresist,omitempty"`
-	Decreaselogresist                              []bool                                           `xml:"decreaselogresist,omitempty" json:"decreaselogresist,omitempty"`
+	Decreaseintresist                              []string                                         `xml:"decreaseintresist,omitempty" json:"decreaseintresist,omitempty"`
+	Decreaselogresist                              []string                                         `xml:"decreaselogresist,omitempty" json:"decreaselogresist,omitempty"`
 	Decreaserearesist                              []bool                                           `xml:"decreaserearesist,omitempty" json:"decreaserearesist,omitempty"`
 	Decreasestrresist                              []bool                                           `xml:"decreasestrresist,omitempty" json:"decreasestrresist,omitempty"`
 	Decreasewilresist                              []bool                                           `xml:"decreasewilresist,omitempty" json:"decreasewilresist,omitempty"`
@@ -172,7 +172,7 @@ type BaseBonus struct {
 	Disablecyberwaregrade                          []string                                         `xml:"disablecyberwaregrade,omitempty" json:"disablecyberwaregrade,omitempty"`
 	Electricityarmor                               []string                                         `xml:"electricityarmor,omitempty" json:"electricityarmor,omitempty"`
 	Erased                                         []bool                                           `xml:"erased,omitempty" json:"erased,omitempty"`
-	Essencemax                                     []bool                                           `xml:"essencemax,omitempty" json:"essencemax,omitempty"`
+	Essencemax                                     []string                                         `xml:"essencemax,omitempty" json:"essencemax,omitempty"`
 	Essencepenalty                                 []bool                                           `xml:"essencepenalty,omitempty" json:"essencepenalty,omitempty"`
 	Essencepenaltydeponlyt100                      []bool                                           `xml:"essencepenaltydeponlyt100,omitempty" json:"essencepenaltydeponlyt100,omitempty"`
 	Essencepenaltymagonlyt100                      []bool                                           `xml:"essencepenaltymagonlyt100,omitempty" json:"essencepenaltymagonlyt100,omitempty"`
@@ -196,7 +196,7 @@ type BaseBonus struct {
 	Initiativepassadd                              []bool                                           `xml:"initiativepassadd,omitempty" json:"initiativepassadd,omitempty"`
 	Judgeintentions                                []string                                         `xml:"judgeintentions,omitempty" json:"judgeintentions,omitempty"`
 	Judgeintentionsdefense                         []string                                         `xml:"judgeintentionsdefense,omitempty" json:"judgeintentionsdefense,omitempty"`
-	Judgeintentionsoffense                         []bool                                           `xml:"judgeintentionsoffense,omitempty" json:"judgeintentionsoffense,omitempty"`
+	Judgeintentionsoffense                         []string                                         `xml:"judgeintentionsoffense,omitempty" json:"judgeintentionsoffense,omitempty"`
 	Liftandcarry                                   []bool                                           `xml:"liftandcarry,omitempty" json:"liftandcarry,omitempty"`
 	Lightningreflexes                              []bool                                           `xml:"lightningreflexes,omitempty" json:"lightningreflexes,omitempty"`
 	Limitcritterpowercategory                      []bool                                           `xml:"limitcritterpowercategory,omitempty" json:"limitcritterpowercategory,omitempty"`
@@ -211,17 +211,17 @@ type BaseBonus struct {
 	Memory                                         []string                                         `xml:"memory,omitempty" json:"memory,omitempty"`
 	Mentallimit                                    []string                                         `xml:"mentallimit,omitempty" json:"mentallimit,omitempty"`
 	Mentalmanipulationresist                       []string                                         `xml:"mentalmanipulationresist,omitempty" json:"mentalmanipulationresist,omitempty"`
-	Metageniclimit                                 []bool                                           `xml:"metageniclimit,omitempty" json:"metageniclimit,omitempty"`
+	Metageniclimit                                 []string                                         `xml:"metageniclimit,omitempty" json:"metageniclimit,omitempty"`
 	Nativelanguagelimit                            []bool                                           `xml:"nativelanguagelimit,omitempty" json:"nativelanguagelimit,omitempty"`
-	Newaiadvancedprogramkarmacost                  []bool                                           `xml:"newaiadvancedprogramkarmacost,omitempty" json:"newaiadvancedprogramkarmacost,omitempty"`
-	Newaiadvancedprogramkarmacostmultiplier        []bool                                           `xml:"newaiadvancedprogramkarmacostmultiplier,omitempty" json:"newaiadvancedprogramkarmacostmultiplier,omitempty"`
-	Newaiprogramkarmacost                          []bool                                           `xml:"newaiprogramkarmacost,omitempty" json:"newaiprogramkarmacost,omitempty"`
-	Newaiprogramkarmacostmultiplier                []bool                                           `xml:"newaiprogramkarmacostmultiplier,omitempty" json:"newaiprogramkarmacostmultiplier,omitempty"`
-	Newcomplexformkarmacost                        []bool                                           `xml:"newcomplexformkarmacost,omitempty" json:"newcomplexformkarmacost,omitempty"`
-	Newcomplexformkarmacostmultiplier              []bool                                           `xml:"newcomplexformkarmacostmultiplier,omitempty" json:"newcomplexformkarmacostmultiplier,omitempty"`
-	Newspellkarmacostmultiplier                    []bool                                           `xml:"newspellkarmacostmultiplier,omitempty" json:"newspellkarmacostmultiplier,omitempty"`
+	Newaiadvancedprogramkarmacost                 []string                                         `xml:"newaiadvancedprogramkarmacost,omitempty" json:"newaiadvancedprogramkarmacost,omitempty"`
+	Newaiadvancedprogramkarmacostmultiplier       []string                                         `xml:"newaiadvancedprogramkarmacostmultiplier,omitempty" json:"newaiadvancedprogramkarmacostmultiplier,omitempty"`
+	Newaiprogramkarmacost                         []string                                         `xml:"newaiprogramkarmacost,omitempty" json:"newaiprogramkarmacost,omitempty"`
+	Newaiprogramkarmacostmultiplier               []string                                         `xml:"newaiprogramkarmacostmultiplier,omitempty" json:"newaiprogramkarmacostmultiplier,omitempty"`
+	Newcomplexformkarmacost                         []string                                         `xml:"newcomplexformkarmacost,omitempty" json:"newcomplexformkarmacost,omitempty"`
+	Newcomplexformkarmacostmultiplier               []string                                         `xml:"newcomplexformkarmacostmultiplier,omitempty" json:"newcomplexformkarmacostmultiplier,omitempty"`
+	Newspellkarma[]string                                           `xml:"newspellkarmacostmultiplier,omitempty" json:"newspellkarmacostmultiplier,omitempty"`
 	Notoriety                                      []string                                         `xml:"notoriety,omitempty" json:"notoriety,omitempty"`
-	Nuyenmaxbp                                     []bool                                           `xml:"nuyenmaxbp,omitempty" json:"nuyenmaxbp,omitempty"`
+	Nuyenmaxbp                                     []string                                         `xml:"nuyenmaxbp,omitempty" json:"nuyenmaxbp,omitempty"`
 	Overclocker                                    []bool                                           `xml:"overclocker,omitempty" json:"overclocker,omitempty"`
 	Pathogencontactimmune                          []bool                                           `xml:"pathogencontactimmune,omitempty" json:"pathogencontactimmune,omitempty"`
 	Pathogencontactresist                          []string                                         `xml:"pathogencontactresist,omitempty" json:"pathogencontactresist,omitempty"`
@@ -268,7 +268,7 @@ type BaseBonus struct {
 	Specialmodificationlimit                       []bool                                           `xml:"specialmodificationlimit,omitempty" json:"specialmodificationlimit,omitempty"`
 	Spelllimit                                     []bool                                           `xml:"spelllimit,omitempty" json:"spelllimit,omitempty"`
 	Spellresistance                                []string                                         `xml:"spellresistance,omitempty" json:"spellresistance,omitempty"`
-	Streetcredmultiplier                           []bool                                           `xml:"streetcredmultiplier,omitempty" json:"streetcredmultiplier,omitempty"`
+	Streetcredmultiplier                           []string                                         `xml:"streetcredmultiplier,omitempty" json:"streetcredmultiplier,omitempty"`
 	Stuncmrecovery                                 []string                                         `xml:"stuncmrecovery,omitempty" json:"stuncmrecovery,omitempty"`
 	Surprise                                       []string                                         `xml:"surprise,omitempty" json:"surprise,omitempty"`
 	Throwrange                                     []bool                                           `xml:"throwrange,omitempty" json:"throwrange,omitempty"`

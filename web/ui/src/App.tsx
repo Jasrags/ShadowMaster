@@ -10,10 +10,13 @@ import { CampaignsPage } from './pages/CampaignsPage';
 import { GearPage } from './pages/GearPage';
 import { ArmorPage } from './pages/ArmorPage';
 import { WeaponsPage } from './pages/WeaponsPage';
+import { WeaponAccessoriesPage } from './pages/WeaponAccessoriesPage';
 import { SkillsPage } from './pages/SkillsPage';
 import { QualitiesPage } from './pages/QualitiesPage';
 import { BooksPage } from './pages/BooksPage';
 import { LifestylesPage } from './pages/LifestylesPage';
+import { WeaponConsumablesPage } from './pages/WeaponConsumablesPage';
+import { ContactsPage } from './pages/ContactsPage';
 
 function App() {
   return (
@@ -69,6 +72,14 @@ function App() {
                   }
                 />
                 <Route
+                  path="/weapon-accessories"
+                  element={
+                    <AdminRoute>
+                      <WeaponAccessoriesPage />
+                    </AdminRoute>
+                  }
+                />
+                <Route
                   path="/skills"
                   element={
                     <AdminRoute>
@@ -97,6 +108,22 @@ function App() {
                   element={
                     <AdminRoute>
                       <LifestylesPage />
+                    </AdminRoute>
+                  }
+                />
+                <Route
+                  path="/weapon-consumables"
+                  element={
+                    <AdminRoute>
+                      <WeaponConsumablesPage />
+                    </AdminRoute>
+                  }
+                />
+                <Route
+                  path="/contacts"
+                  element={
+                    <AdminRoute>
+                      <ContactsPage />
                     </AdminRoute>
                   }
                 />

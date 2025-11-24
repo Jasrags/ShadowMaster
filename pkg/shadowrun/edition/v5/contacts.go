@@ -1,61 +1,52 @@
 package v5
 
-import "shadowmaster/pkg/shadowrun/edition/v5/common"
-
-// This file contains contact structures generated from contacts.xml
-
-// ContactTypesList represents a collection of contact types
-type ContactTypesList struct {
-	Contact []string `xml:"contact" json:"contact"`
+// Contact represents a contact type available to shadowrunners
+type Contact struct {
+	// ID is the unique identifier for the contact (derived from the map key)
+	ID string `json:"id,omitempty"`
+	// Name is the contact name (e.g., "Bartender", "Fixer", "Street Doc")
+	Name string `json:"name,omitempty"`
+	// Uses is a list of what the contact can be used for (e.g., "Information", "Gear", "Additional contacts")
+	Uses []string `json:"uses,omitempty"`
+	// PlacesToMeet describes where you can typically find this contact
+	PlacesToMeet string `json:"places_to_meet,omitempty"`
+	// SimilarContacts lists other contact types that serve similar purposes
+	SimilarContacts []string `json:"similar_contacts,omitempty"`
+	// Description is the full text description of the contact
+	Description string `json:"description,omitempty"`
+	// Source is the source book code (e.g., "SR5")
+	Source string `json:"source,omitempty"`
 }
 
-// Genders represents a collection of gender options
-type Genders struct {
-	Gender []string `xml:"gender" json:"gender"`
+// dataContacts is declared in contacts_data.go
+
+// GetAllContacts returns all contact definitions
+func GetAllContacts() []Contact {
+	contacts := make([]Contact, 0, len(dataContacts))
+	for key, c := range dataContacts {
+		c.ID = key
+		contacts = append(contacts, c)
+	}
+	return contacts
 }
 
-// Ages represents a collection of age options
-type Ages struct {
-	Age []string `xml:"age" json:"age"`
+// GetContactByName returns the contact definition with the given name, or nil if not found
+func GetContactByName(name string) *Contact {
+	for key, contact := range dataContacts {
+		if contact.Name == name {
+			contact.ID = key
+			return &contact
+		}
+	}
+	return nil
 }
 
-// PersonalLives represents a collection of personal life options
-type PersonalLives struct {
-	// PersonalLife represents personallife
-	// Usage: always present (100.0%)
-	// Unique Values: 7
-	PersonalLife []common.PersonalLife `xml:"personallife" json:"personallife"`
-}
-
-// ContactTypes represents a collection of contact types
-type ContactTypes struct {
-	Type []string `xml:"type" json:"type"`
-}
-
-// PreferredPayments represents a collection of preferred payment options
-type PreferredPayments struct {
-	PreferredPayment []string `xml:"preferredpayment" json:"preferredpayment"`
-}
-
-// HobbiesVices represents a collection of hobby/vice options
-type HobbiesVices struct {
-// HobbyVice represents hobbyvice
-// Type: enum_candidate
-// Usage: always present (100.0%)
-// Unique Values: 33
-// Examples: Animals (Paracritters), Bad Habit (Dream Chips), Bad Habit (Novacoke) (and 7 more)
-// Enum Candidate: Yes
-// Length: 14-44 characters
-	HobbyVice []string `xml:"hobbyvice" json:"hobbyvice"`
-}
-
-// ContactsChummer represents the root chummer element for contacts
-type ContactsChummer struct {
-	Contacts          ContactTypesList  `xml:"contacts" json:"contacts"`
-	Genders           Genders           `xml:"genders" json:"genders"`
-	Ages              Ages              `xml:"ages" json:"ages"`
-	PersonalLives     PersonalLives     `xml:"personallives" json:"personallives"`
-	Types             ContactTypes      `xml:"types" json:"types"`
-	PreferredPayments PreferredPayments `xml:"preferredpayments" json:"preferredpayments"`
-	HobbiesVices      HobbiesVices      `xml:"hobbiesvices" json:"hobbiesvices"`
+// GetContactByKey returns the contact definition with the given key, or nil if not found
+func GetContactByKey(key string) *Contact {
+	contact, ok := dataContacts[key]
+	if !ok {
+		return nil
+	}
+	contact.ID = key
+	return &contact
 }

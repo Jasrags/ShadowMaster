@@ -48,11 +48,15 @@ Migrate existing API handlers from direct package-level variables (e.g., `sr5.Da
 6. **Qualities**
    - **Handler**: `GetQualities` at line 570
    - **Status**: ⏳ Placeholder (returns empty array)
-   - **Blocking**: `qualities.xml` data file not yet generated (XML parsing errors need resolution)
+   - **Blocking**: `qualities_data.go` file not yet generated due to XML parsing error
    - **Structure**: `QualitiesChummer.Qualities` contains `[]QualityItems`, each with `[]QualityItem`
    - **Ready Code**: TODO comments include implementation to uncomment once data file exists
    - **File**: `internal/api/handlers.go:570-584`
-   - **Note**: According to `docs/analysis/xml-data-batch-plan.md`, qualities.xml has parsing errors that need fixing
+   - **Generator Tool**: `cmd/tools/generate-qualities-data/main.go` exists and is ready
+   - **XML File**: `data/chummerxml/qualities.xml` exists
+   - **Error**: `strconv.ParseBool: parsing "10": invalid syntax` - The `AddQuality.ContributeToBP` field is defined as `*bool` but the XML contains a value "10" which cannot be parsed as a boolean. This field needs to be either:
+     - Fixed in the XML (change "10" to "True" or "False")
+     - Or the struct field type needs to be changed to handle numeric strings (e.g., use `*string` or custom unmarshaller)
 
 7. **Gears**
    - **Handler**: `GetGears` at line 553

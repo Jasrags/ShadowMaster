@@ -1,139 +1,256 @@
 package v5
 
-import "shadowmaster/pkg/shadowrun/edition/v5/common"
+// SkillCategory represents the category a skill belongs to
+type SkillCategory string
 
-// This file contains skill structures generated from skills.xsd
+const (
+	SkillCategoryCombatActive   SkillCategory = "combat_active"
+	SkillCategoryPhysicalActive SkillCategory = "physical_active"
+	SkillCategorySocial         SkillCategory = "social"
+	SkillCategoryMagical        SkillCategory = "magical"
+	SkillCategoryResonance      SkillCategory = "resonance"
+	SkillCategoryTechnical      SkillCategory = "technical"
+	SkillCategoryVehicle        SkillCategory = "vehicle"
+	SkillCategoryKnowledge      SkillCategory = "knowledge"
+	SkillCategoryLanguage       SkillCategory = "language"
+)
 
-// Spec represents a skill specialization
-type Spec struct {
-	Content string `xml:",chardata" json:"+content,omitempty"`
-}
+// SkillType represents whether a skill is Active, Knowledge, or Language
+type SkillType string
 
-// Specs represents a collection of skill specializations
-type Specs struct {
-	Spec []Spec `xml:"spec,omitempty" json:"spec,omitempty"`
-}
+const (
+	SkillTypeActive    SkillType = "active"
+	SkillTypeKnowledge SkillType = "knowledge"
+	SkillTypeLanguage  SkillType = "language"
+)
 
-// Skill represents a skill definition
+// Attribute represents the attribute a skill is linked to
+type Attribute string
+
+const (
+	AttributeAgility   Attribute = "agility"
+	AttributeBody      Attribute = "body"
+	AttributeCharisma  Attribute = "charisma"
+	AttributeIntuition Attribute = "intuition"
+	AttributeLogic     Attribute = "logic"
+	AttributeMagic     Attribute = "magic"
+	AttributeReaction  Attribute = "reaction"
+	AttributeResonance Attribute = "resonance"
+	AttributeStrength  Attribute = "strength"
+	AttributeWillpower Attribute = "willpower"
+)
+
+// Skill represents a Shadowrun 5th Edition skill definition
 type Skill struct {
-// ID represents id
-// Usage: always present (100.0%)
-// Unique Values: 195
-// Examples: 9f348c99-27e8-47ac-a098-a8a6a54c446a, 60156c75-78e9-4d79-af3f-494baa20edb7, 40d28f1b-2171-4a3b-a640-6b097a4dea95 (and 7 more)
-	ID string `xml:"id" json:"id"`
-// Name represents name
-// Usage: always present (100.0%)
-// Unique Values: 195
-// Examples: Administration, Alchemy, Alcohol (and 7 more)
-// Length: 2-49 characters
-	Name string `xml:"name" json:"name"`
-	common.Visibility
-// Attribute represents attribute
-// Type: enum_candidate
-// Usage: always present (100.0%)
-// Unique Values: 2
-// Examples: LOG, LOG, INT (and 7 more)
-// Enum Candidate: INT, LOG
-	Attribute string `xml:"attribute" json:"attribute"`
-// Category represents category
-// Type: enum_candidate
-// Usage: always present (100.0%)
-// Unique Values: 5
-// Examples: Professional, Professional, Interest (and 7 more)
-// Enum Candidate: Academic, Interest, Language, Professional, Street
-// Length: 6-12 characters
-	Category string `xml:"category" json:"category"`
-// Default represents default
-// Type: boolean_string
-// Usage: always present (100.0%)
-// Unique Values: 1
-// Examples: False, False, False (and 7 more)
-// Note: 100.0% of values are boolean strings
-	Default string `xml:"default" json:"default"`
-// Exotic represents exotic
-// Type: boolean_string
-// Usage: always present (100.0%)
-// Unique Values: 1
-// Examples: True, True, True
-// Note: 100.0% of values are boolean strings
-	Exotic *string `xml:"exotic,omitempty" json:"exotic,omitempty"`
-// SkillGroup represents skillgroup
-// Type: enum_candidate
-// Usage: always present (100.0%)
-// Unique Values: 15
-// Examples: Engineering, Enchanting, Enchanting (and 7 more)
-// Enum Candidate: Acting, Athletics, Biotech, Close Combat, Conjuring, Cracking, Electronics, Enchanting, Engineering, Firearms, Influence, Outdoors, Sorcery, Stealth, Tasking
-// Length: 6-12 characters
-	SkillGroup string `xml:"skillgroup" json:"skillgroup"`
-// RequiresGroundMovement represents requiresgroundmovement
-// Type: boolean_string
-// Usage: always present (100.0%)
-// Unique Values: 1
-// Examples: True
-// Note: 100.0% of values are boolean strings
-	RequiresGroundMovement *string `xml:"requiresgroundmovement,omitempty" json:"requiresgroundmovement,omitempty"`
-// RequiresSwimMovement represents requiresswimmovement
-// Type: boolean_string
-// Usage: always present (100.0%)
-// Unique Values: 1
-// Examples: True
-// Note: 100.0% of values are boolean strings
-	RequiresSwimMovement *string `xml:"requiresswimmovement,omitempty" json:"requiresswimmovement,omitempty"`
-// RequiresFlyMovement represents requiresflymovement
-// Type: boolean_string
-// Usage: always present (100.0%)
-// Unique Values: 1
-// Examples: True
-// Note: 100.0% of values are boolean strings
-	RequiresFlyMovement *string `xml:"requiresflymovement,omitempty" json:"requiresflymovement,omitempty"`
-	Specs Specs `xml:"specs" json:"specs"`
-	common.SourceReference
+	// Name is the skill name (e.g., "Archery", "Automatics")
+	Name string `json:"name,omitempty"`
+	// Type indicates if this is an active, knowledge, or language skill
+	Type SkillType `json:"type,omitempty"`
+	// Category is the skill category
+	Category SkillCategory `json:"category,omitempty"`
+	// LinkedAttribute is the attribute this skill is linked to
+	LinkedAttribute Attribute `json:"linked_attribute,omitempty"`
+	// Description is the full text description of the skill
+	Description string `json:"description,omitempty"`
+	// CanDefault indicates if this skill can be defaulted (used untrained)
+	CanDefault bool `json:"can_default,omitempty"`
+	// SkillGroup is the name of the skill group this belongs to (empty if none)
+	SkillGroup string `json:"skill_group,omitempty"`
+	// Specializations is a list of available specializations (empty if none)
+	Specializations []string `json:"specializations,omitempty"`
+	// IsSpecific indicates if this skill must be taken once per specific instance
+	// (e.g., "Exotic Ranged Weapon (Specific)", "Pilot Exotic Vehicle (Specific)")
+	IsSpecific bool `json:"is_specific,omitempty"`
+	// Source contains source book reference information
+	Source *SourceReference `json:"source,omitempty"`
 }
 
-// SkillGroupName represents a skill group name
-type SkillGroupName struct {
-	Content string `xml:",chardata" json:"+content,omitempty"`
+// SkillGroupDefinition represents a skill group definition
+type SkillGroupDefinition struct {
+	// Name is the skill group name (e.g., "Acting", "Athletics", "Biotech")
+	Name string `json:"name,omitempty"`
+	// Description is the description of the skill group (if any)
+	Description string `json:"description,omitempty"`
+	// Skills is a list of skill names that belong to this group
+	Skills []string `json:"skills,omitempty"`
+	// Source contains source book reference information
+	Source *SourceReference `json:"source,omitempty"`
 }
 
-// SkillGroups represents a collection of skill group names
-type SkillGroups struct {
-	Name []SkillGroupName `xml:"name,omitempty" json:"name,omitempty"`
+// SkillsData represents the skills data structure (legacy format for backward compatibility)
+type SkillsData struct {
+	Skills          []SkillsGroup
+	KnowledgeSkills []KnowledgeSkillsGroup
 }
 
-// SkillCategory represents a skill category with a type attribute
-type SkillCategory struct {
-	Content string `xml:",chardata" json:"+content,omitempty"`
-	Type string `xml:"type,attr" json:"+@type"`
+// SkillsGroup represents a group of skills (legacy format)
+type SkillsGroup struct {
+	Skill []Skill
 }
 
-// SkillCategories represents a collection of skill categories
-type SkillCategories struct {
-// Category represents category
-// Type: enum_candidate
-// Usage: always present (100.0%)
-// Unique Values: 5
-// Examples: Professional, Professional, Interest (and 7 more)
-// Enum Candidate: Academic, Interest, Language, Professional, Street
-// Length: 6-12 characters
-	Category []SkillCategory `xml:"category,omitempty" json:"category,omitempty"`
+// KnowledgeSkillsGroup represents a group of knowledge skills (legacy format)
+type KnowledgeSkillsGroup struct {
+	Skill []Skill
 }
 
-// Skills represents a collection of skills
-type Skills struct {
-	Skill []Skill `xml:"skill,omitempty" json:"skill,omitempty"`
+// dataActiveSkills, dataKnowledgeSkills, and dataLanguageSkills are declared in their respective data files
+
+// GetAllSkills returns all skill definitions (active, knowledge, and language).
+func GetAllSkills() []Skill {
+	skills := make([]Skill, 0, len(dataActiveSkills)+len(dataKnowledgeSkills)+len(dataLanguageSkills))
+	for _, s := range dataActiveSkills {
+		skills = append(skills, s)
+	}
+	for _, s := range dataKnowledgeSkills {
+		skills = append(skills, s)
+	}
+	for _, s := range dataLanguageSkills {
+		skills = append(skills, s)
+	}
+	return skills
 }
 
-// KnowledgeSkills represents a collection of knowledge skills
-type KnowledgeSkills struct {
-	Skill []Skill `xml:"skill,omitempty" json:"skill,omitempty"`
+// GetAllActiveSkills returns all active skill definitions.
+func GetAllActiveSkills() []Skill {
+	skills := make([]Skill, 0, len(dataActiveSkills))
+	for _, s := range dataActiveSkills {
+		skills = append(skills, s)
+	}
+	return skills
 }
 
-// SkillsChummer represents the root chummer element for skills
-type SkillsChummer struct {
-	Version *string `xml:"version,omitempty" json:"version,omitempty"`
-	SkillGroups []SkillGroups `xml:"skillgroups,omitempty" json:"skillgroups,omitempty"`
-	Categories []SkillCategories `xml:"categories,omitempty" json:"categories,omitempty"`
-	Skills []Skills `xml:"skills,omitempty" json:"skills,omitempty"`
-	KnowledgeSkills []KnowledgeSkills `xml:"knowledgeskills,omitempty" json:"knowledgeskills,omitempty"`
+// GetAllKnowledgeSkills returns all knowledge skill definitions.
+func GetAllKnowledgeSkills() []Skill {
+	skills := make([]Skill, 0, len(dataKnowledgeSkills))
+	for _, s := range dataKnowledgeSkills {
+		skills = append(skills, s)
+	}
+	return skills
 }
 
+// GetAllLanguageSkills returns all language skill definitions.
+func GetAllLanguageSkills() []Skill {
+	skills := make([]Skill, 0, len(dataLanguageSkills))
+	for _, s := range dataLanguageSkills {
+		skills = append(skills, s)
+	}
+	return skills
+}
+
+// GetSkillByName returns the skill definition with the given name, or nil if not found.
+func GetSkillByName(name string) *Skill {
+	// Check active skills first
+	for _, s := range dataActiveSkills {
+		if s.Name == name {
+			return &s
+		}
+	}
+	// Check knowledge skills
+	for _, s := range dataKnowledgeSkills {
+		if s.Name == name {
+			return &s
+		}
+	}
+	// Check language skills
+	for _, s := range dataLanguageSkills {
+		if s.Name == name {
+			return &s
+		}
+	}
+	return nil
+}
+
+// GetSkillByKey returns the skill definition with the given key, or nil if not found.
+func GetSkillByKey(key string) *Skill {
+	// Check active skills first
+	if s, ok := dataActiveSkills[key]; ok {
+		return &s
+	}
+	// Check knowledge skills
+	if s, ok := dataKnowledgeSkills[key]; ok {
+		return &s
+	}
+	// Check language skills
+	if s, ok := dataLanguageSkills[key]; ok {
+		return &s
+	}
+	return nil
+}
+
+// GetAllSkillGroups returns all skill group definitions.
+func GetAllSkillGroups() []SkillGroupDefinition {
+	groups := make([]SkillGroupDefinition, 0, len(dataSkillGroups))
+	for _, g := range dataSkillGroups {
+		groups = append(groups, g)
+	}
+	return groups
+}
+
+// GetSkillGroupByName returns the skill group definition with the given name, or nil if not found.
+func GetSkillGroupByName(name string) *SkillGroupDefinition {
+	for _, g := range dataSkillGroups {
+		if g.Name == name {
+			return &g
+		}
+	}
+	return nil
+}
+
+// GetSkillGroupByKey returns the skill group definition with the given key, or nil if not found.
+func GetSkillGroupByKey(key string) *SkillGroupDefinition {
+	g, ok := dataSkillGroups[key]
+	if !ok {
+		return nil
+	}
+	return &g
+}
+
+// GetSkillsByGroup returns all skills that belong to the specified skill group.
+func GetSkillsByGroup(groupName string) []Skill {
+	skills := make([]Skill, 0)
+	for _, skill := range dataActiveSkills {
+		if skill.SkillGroup == groupName {
+			skills = append(skills, skill)
+		}
+	}
+	// Knowledge and language skills don't belong to skill groups
+	return skills
+}
+
+// GetSkillsData returns skills data organized by groups (for backward compatibility)
+func GetSkillsData() SkillsData {
+	// Group active skills by category for the legacy structure
+	skillsByCategory := make(map[SkillCategory][]Skill)
+
+	for _, skill := range dataActiveSkills {
+		skillsByCategory[skill.Category] = append(skillsByCategory[skill.Category], skill)
+	}
+
+	// Convert to SkillsGroup format
+	skillsGroups := make([]SkillsGroup, 0)
+	for category, skills := range skillsByCategory {
+		if category == SkillCategoryKnowledge {
+			continue // Knowledge skills go in separate group
+		}
+		skillsGroups = append(skillsGroups, SkillsGroup{
+			Skill: skills,
+		})
+	}
+
+	// Handle knowledge skills separately
+	knowledgeGroups := make([]KnowledgeSkillsGroup, 0)
+	knowledgeSkills := make([]Skill, 0, len(dataKnowledgeSkills))
+	for _, skill := range dataKnowledgeSkills {
+		knowledgeSkills = append(knowledgeSkills, skill)
+	}
+	if len(knowledgeSkills) > 0 {
+		knowledgeGroups = append(knowledgeGroups, KnowledgeSkillsGroup{
+			Skill: knowledgeSkills,
+		})
+	}
+
+	return SkillsData{
+		Skills:          skillsGroups,
+		KnowledgeSkills: knowledgeGroups,
+	}
+}

@@ -1,0 +1,4811 @@
+{
+  "metadata": {
+    "source": {
+      "name": "Chummer5 Priority Tables Dataset",
+      "version": "unknown",
+      "extracted_at": "2025-11-11T00:56:08Z",
+      "record_count": 35
+    },
+    "generated_by": "cmd/tools/chummerpriorities (ShadowMaster)",
+    "category_count": 5,
+    "table_count": 3,
+    "priority_count": 35
+  },
+  "categories": [
+    "Attributes",
+    "Heritage",
+    "Resources",
+    "Skills",
+    "Talent"
+  ],
+  "tables": [
+    "Prime Runner",
+    "Standard",
+    "Street Level"
+  ],
+  "sum_to_ten_values": {
+    "A": "4",
+    "B": "3",
+    "C": "2",
+    "D": "1",
+    "E": "0"
+  },
+  "priorities": [
+    {
+      "id": "1c4a7955-1ae1-4a5b-9ed4-5ab8525d13b0",
+      "name": "A - 24 (12) Attributes",
+      "slug": "a-24-12-attributes",
+      "value": "A",
+      "category": "Attributes",
+      "category_slug": "attributes",
+      "attributes": {
+        "attributes": "24"
+      }
+    },
+    {
+      "id": "521c1f60-f382-479e-af3b-a3eda5201f22",
+      "name": "B - 20 (10) Attributes",
+      "slug": "b-20-10-attributes",
+      "value": "B",
+      "category": "Attributes",
+      "category_slug": "attributes",
+      "attributes": {
+        "attributes": "20"
+      }
+    },
+    {
+      "id": "0a224d86-d355-4cd6-8e4e-b94e31f97c4b",
+      "name": "C - 16 (8) Attributes",
+      "slug": "c-16-8-attributes",
+      "value": "C",
+      "category": "Attributes",
+      "category_slug": "attributes",
+      "attributes": {
+        "attributes": "16"
+      }
+    },
+    {
+      "id": "984600d8-5b2f-437c-86eb-693a5bbff030",
+      "name": "D - 14 (7) Attributes",
+      "slug": "d-14-7-attributes",
+      "value": "D",
+      "category": "Attributes",
+      "category_slug": "attributes",
+      "attributes": {
+        "attributes": "14"
+      }
+    },
+    {
+      "id": "f6a36071-41ab-4f8e-884d-3cee92d8f181",
+      "name": "E - 12 (6) Attributes",
+      "slug": "e-12-6-attributes",
+      "value": "E",
+      "category": "Attributes",
+      "category_slug": "attributes",
+      "attributes": {
+        "attributes": "12"
+      }
+    },
+    {
+      "id": "55bc32fb-e097-4234-bdd5-a70e4f043b3d",
+      "name": "A - Any metatype",
+      "slug": "a-any-metatype",
+      "value": "A",
+      "category": "Heritage",
+      "category_slug": "heritage",
+      "metatypes": [
+        {
+          "name": "A.I.",
+          "value": "4",
+          "karma": "0",
+          "metavariants": [
+            {
+              "name": "E-Ghost",
+              "value": "4",
+              "karma": "0"
+            },
+            {
+              "name": "Protosapient",
+              "value": "4",
+              "karma": "0"
+            },
+            {
+              "name": "Xenosapient",
+              "value": "4",
+              "karma": "0"
+            }
+          ]
+        },
+        {
+          "name": "Centaur",
+          "value": "6",
+          "karma": "25"
+        },
+        {
+          "name": "Dwarf",
+          "value": "7",
+          "karma": "0",
+          "metavariants": [
+            {
+              "name": "Gnome",
+              "value": "7",
+              "karma": "7"
+            },
+            {
+              "name": "Hanuman",
+              "value": "7",
+              "karma": "5"
+            },
+            {
+              "name": "Koborokuru",
+              "value": "7",
+              "karma": "0"
+            },
+            {
+              "name": "Menehune",
+              "value": "7",
+              "karma": "2"
+            }
+          ]
+        },
+        {
+          "name": "Elf",
+          "value": "8",
+          "karma": "0",
+          "metavariants": [
+            {
+              "name": "Dryad",
+              "value": "8",
+              "karma": "0"
+            },
+            {
+              "name": "Nocturna",
+              "value": "8",
+              "karma": "0"
+            },
+            {
+              "name": "Wakyambi",
+              "value": "8",
+              "karma": "12"
+            },
+            {
+              "name": "Xapiri Thëpë",
+              "value": "8",
+              "karma": "0"
+            }
+          ]
+        },
+        {
+          "name": "Human",
+          "value": "9",
+          "karma": "0",
+          "metavariants": [
+            {
+              "name": "Nartaki",
+              "value": "8",
+              "karma": "0"
+            }
+          ]
+        },
+        {
+          "name": "Naga",
+          "value": "4",
+          "karma": "25"
+        },
+        {
+          "name": "Ork",
+          "value": "7",
+          "karma": "0",
+          "metavariants": [
+            {
+              "name": "Hobgoblin",
+              "value": "7",
+              "karma": "5"
+            },
+            {
+              "name": "Ogre",
+              "value": "7",
+              "karma": "8"
+            },
+            {
+              "name": "Oni",
+              "value": "7",
+              "karma": "4"
+            },
+            {
+              "name": "Satyr",
+              "value": "7",
+              "karma": "10"
+            }
+          ]
+        },
+        {
+          "name": "Pixie",
+          "value": "6",
+          "karma": "15"
+        },
+        {
+          "name": "Sasquatch",
+          "value": "5",
+          "karma": "20"
+        },
+        {
+          "name": "Shapeshifter: Bovine",
+          "value": "8",
+          "karma": "5",
+          "metavariants": [
+            {
+              "name": "Cyclops",
+              "value": "8",
+              "karma": "20"
+            },
+            {
+              "name": "Dryad",
+              "value": "8",
+              "karma": "7"
+            },
+            {
+              "name": "Dwarf",
+              "value": "8",
+              "karma": "13"
+            },
+            {
+              "name": "Elf",
+              "value": "8",
+              "karma": "10"
+            },
+            {
+              "name": "Fomorian",
+              "value": "8",
+              "karma": "23"
+            },
+            {
+              "name": "Giant",
+              "value": "8",
+              "karma": "25"
+            },
+            {
+              "name": "Gnome",
+              "value": "8",
+              "karma": "5"
+            },
+            {
+              "name": "Hanuman",
+              "value": "8",
+              "karma": "18"
+            },
+            {
+              "name": "Hobgoblin",
+              "value": "8",
+              "karma": "15"
+            },
+            {
+              "name": "Human",
+              "value": "8",
+              "karma": "5"
+            },
+            {
+              "name": "Koborokuru",
+              "value": "8",
+              "karma": "13"
+            },
+            {
+              "name": "Menehune",
+              "value": "8",
+              "karma": "15"
+            },
+            {
+              "name": "Minotaur",
+              "value": "8",
+              "karma": "25"
+            },
+            {
+              "name": "Nartaki",
+              "value": "8",
+              "karma": "5"
+            },
+            {
+              "name": "Nocturna",
+              "value": "8",
+              "karma": "10"
+            },
+            {
+              "name": "Ogre",
+              "value": "8",
+              "karma": "18"
+            },
+            {
+              "name": "Oni",
+              "value": "8",
+              "karma": "15"
+            },
+            {
+              "name": "Ork",
+              "value": "8",
+              "karma": "15"
+            },
+            {
+              "name": "Satyr",
+              "value": "8",
+              "karma": "25"
+            },
+            {
+              "name": "Troll",
+              "value": "8",
+              "karma": "25"
+            },
+            {
+              "name": "Wakyambi",
+              "value": "8",
+              "karma": "20"
+            },
+            {
+              "name": "Xapiri Thëpë",
+              "value": "8",
+              "karma": "8"
+            }
+          ]
+        },
+        {
+          "name": "Shapeshifter: Canine",
+          "value": "7",
+          "karma": "10",
+          "metavariants": [
+            {
+              "name": "Cyclops",
+              "value": "7",
+              "karma": "25"
+            },
+            {
+              "name": "Dryad",
+              "value": "7",
+              "karma": "12"
+            },
+            {
+              "name": "Dwarf",
+              "value": "7",
+              "karma": "18"
+            },
+            {
+              "name": "Elf",
+              "value": "7",
+              "karma": "15"
+            },
+            {
+              "name": "Fomorian",
+              "value": "7",
+              "karma": "28"
+            },
+            {
+              "name": "Giant",
+              "value": "7",
+              "karma": "30"
+            },
+            {
+              "name": "Gnome",
+              "value": "7",
+              "karma": "10"
+            },
+            {
+              "name": "Hanuman",
+              "value": "7",
+              "karma": "23"
+            },
+            {
+              "name": "Hobgoblin",
+              "value": "7",
+              "karma": "20"
+            },
+            {
+              "name": "Human",
+              "value": "7",
+              "karma": "10"
+            },
+            {
+              "name": "Koborokuru",
+              "value": "7",
+              "karma": "18"
+            },
+            {
+              "name": "Menehune",
+              "value": "7",
+              "karma": "20"
+            },
+            {
+              "name": "Minotaur",
+              "value": "7",
+              "karma": "30"
+            },
+            {
+              "name": "Nartaki",
+              "value": "7",
+              "karma": "10"
+            },
+            {
+              "name": "Nocturna",
+              "value": "7",
+              "karma": "15"
+            },
+            {
+              "name": "Ogre",
+              "value": "7",
+              "karma": "23"
+            },
+            {
+              "name": "Oni",
+              "value": "7",
+              "karma": "20"
+            },
+            {
+              "name": "Ork",
+              "value": "7",
+              "karma": "20"
+            },
+            {
+              "name": "Satyr",
+              "value": "7",
+              "karma": "30"
+            },
+            {
+              "name": "Troll",
+              "value": "7",
+              "karma": "30"
+            },
+            {
+              "name": "Wakyambi",
+              "value": "7",
+              "karma": "25"
+            },
+            {
+              "name": "Xapiri Thëpë",
+              "value": "7",
+              "karma": "13"
+            }
+          ]
+        },
+        {
+          "name": "Shapeshifter: Equine",
+          "value": "6",
+          "karma": "15",
+          "metavariants": [
+            {
+              "name": "Cyclops",
+              "value": "6",
+              "karma": "30"
+            },
+            {
+              "name": "Dryad",
+              "value": "6",
+              "karma": "17"
+            },
+            {
+              "name": "Dwarf",
+              "value": "6",
+              "karma": "23"
+            },
+            {
+              "name": "Elf",
+              "value": "6",
+              "karma": "20"
+            },
+            {
+              "name": "Fomorian",
+              "value": "6",
+              "karma": "33"
+            },
+            {
+              "name": "Giant",
+              "value": "6",
+              "karma": "35"
+            },
+            {
+              "name": "Gnome",
+              "value": "6",
+              "karma": "15"
+            },
+            {
+              "name": "Hanuman",
+              "value": "6",
+              "karma": "28"
+            },
+            {
+              "name": "Hobgoblin",
+              "value": "6",
+              "karma": "25"
+            },
+            {
+              "name": "Human",
+              "value": "6",
+              "karma": "15"
+            },
+            {
+              "name": "Koborokuru",
+              "value": "6",
+              "karma": "23"
+            },
+            {
+              "name": "Menehune",
+              "value": "6",
+              "karma": "25"
+            },
+            {
+              "name": "Minotaur",
+              "value": "6",
+              "karma": "35"
+            },
+            {
+              "name": "Nartaki",
+              "value": "6",
+              "karma": "15"
+            },
+            {
+              "name": "Nocturna",
+              "value": "6",
+              "karma": "20"
+            },
+            {
+              "name": "Ogre",
+              "value": "6",
+              "karma": "28"
+            },
+            {
+              "name": "Oni",
+              "value": "6",
+              "karma": "25"
+            },
+            {
+              "name": "Ork",
+              "value": "6",
+              "karma": "25"
+            },
+            {
+              "name": "Satyr",
+              "value": "6",
+              "karma": "35"
+            },
+            {
+              "name": "Troll",
+              "value": "6",
+              "karma": "35"
+            },
+            {
+              "name": "Wakyambi",
+              "value": "6",
+              "karma": "30"
+            },
+            {
+              "name": "Xapiri Thëpë",
+              "value": "6",
+              "karma": "18"
+            }
+          ]
+        },
+        {
+          "name": "Shapeshifter: Falconine",
+          "value": "7",
+          "karma": "10",
+          "metavariants": [
+            {
+              "name": "Cyclops",
+              "value": "7",
+              "karma": "25"
+            },
+            {
+              "name": "Dryad",
+              "value": "7",
+              "karma": "12"
+            },
+            {
+              "name": "Dwarf",
+              "value": "7",
+              "karma": "18"
+            },
+            {
+              "name": "Elf",
+              "value": "7",
+              "karma": "15"
+            },
+            {
+              "name": "Fomorian",
+              "value": "7",
+              "karma": "28"
+            },
+            {
+              "name": "Giant",
+              "value": "7",
+              "karma": "30"
+            },
+            {
+              "name": "Gnome",
+              "value": "7",
+              "karma": "10"
+            },
+            {
+              "name": "Hanuman",
+              "value": "7",
+              "karma": "23"
+            },
+            {
+              "name": "Hobgoblin",
+              "value": "7",
+              "karma": "20"
+            },
+            {
+              "name": "Human",
+              "value": "7",
+              "karma": "10"
+            },
+            {
+              "name": "Koborokuru",
+              "value": "7",
+              "karma": "18"
+            },
+            {
+              "name": "Menehune",
+              "value": "7",
+              "karma": "20"
+            },
+            {
+              "name": "Minotaur",
+              "value": "7",
+              "karma": "30"
+            },
+            {
+              "name": "Nartaki",
+              "value": "7",
+              "karma": "10"
+            },
+            {
+              "name": "Nocturna",
+              "value": "7",
+              "karma": "15"
+            },
+            {
+              "name": "Ogre",
+              "value": "7",
+              "karma": "23"
+            },
+            {
+              "name": "Oni",
+              "value": "7",
+              "karma": "20"
+            },
+            {
+              "name": "Ork",
+              "value": "7",
+              "karma": "20"
+            },
+            {
+              "name": "Satyr",
+              "value": "7",
+              "karma": "30"
+            },
+            {
+              "name": "Troll",
+              "value": "7",
+              "karma": "30"
+            },
+            {
+              "name": "Wakyambi",
+              "value": "7",
+              "karma": "25"
+            },
+            {
+              "name": "Xapiri Thëpë",
+              "value": "7",
+              "karma": "13"
+            }
+          ]
+        },
+        {
+          "name": "Shapeshifter: Leonine",
+          "value": "4",
+          "karma": "20",
+          "metavariants": [
+            {
+              "name": "Cyclops",
+              "value": "4",
+              "karma": "35"
+            },
+            {
+              "name": "Dryad",
+              "value": "4",
+              "karma": "22"
+            },
+            {
+              "name": "Dwarf",
+              "value": "4",
+              "karma": "28"
+            },
+            {
+              "name": "Elf",
+              "value": "4",
+              "karma": "25"
+            },
+            {
+              "name": "Fomorian",
+              "value": "4",
+              "karma": "38"
+            },
+            {
+              "name": "Giant",
+              "value": "4",
+              "karma": "40"
+            },
+            {
+              "name": "Gnome",
+              "value": "4",
+              "karma": "20"
+            },
+            {
+              "name": "Hanuman",
+              "value": "4",
+              "karma": "33"
+            },
+            {
+              "name": "Hobgoblin",
+              "value": "4",
+              "karma": "30"
+            },
+            {
+              "name": "Human",
+              "value": "4",
+              "karma": "20"
+            },
+            {
+              "name": "Koborokuru",
+              "value": "4",
+              "karma": "28"
+            },
+            {
+              "name": "Menehune",
+              "value": "4",
+              "karma": "30"
+            },
+            {
+              "name": "Minotaur",
+              "value": "4",
+              "karma": "40"
+            },
+            {
+              "name": "Nartaki",
+              "value": "4",
+              "karma": "20"
+            },
+            {
+              "name": "Nocturna",
+              "value": "4",
+              "karma": "25"
+            },
+            {
+              "name": "Ogre",
+              "value": "4",
+              "karma": "33"
+            },
+            {
+              "name": "Oni",
+              "value": "4",
+              "karma": "30"
+            },
+            {
+              "name": "Ork",
+              "value": "4",
+              "karma": "30"
+            },
+            {
+              "name": "Satyr",
+              "value": "4",
+              "karma": "40"
+            },
+            {
+              "name": "Troll",
+              "value": "4",
+              "karma": "40"
+            },
+            {
+              "name": "Wakyambi",
+              "value": "4",
+              "karma": "35"
+            },
+            {
+              "name": "Xapiri Thëpë",
+              "value": "4",
+              "karma": "23"
+            }
+          ]
+        },
+        {
+          "name": "Shapeshifter: Lupine",
+          "value": "6",
+          "karma": "15",
+          "metavariants": [
+            {
+              "name": "Cyclops",
+              "value": "6",
+              "karma": "30"
+            },
+            {
+              "name": "Dryad",
+              "value": "6",
+              "karma": "17"
+            },
+            {
+              "name": "Dwarf",
+              "value": "6",
+              "karma": "23"
+            },
+            {
+              "name": "Elf",
+              "value": "6",
+              "karma": "20"
+            },
+            {
+              "name": "Fomorian",
+              "value": "6",
+              "karma": "33"
+            },
+            {
+              "name": "Giant",
+              "value": "6",
+              "karma": "35"
+            },
+            {
+              "name": "Gnome",
+              "value": "6",
+              "karma": "15"
+            },
+            {
+              "name": "Hanuman",
+              "value": "6",
+              "karma": "28"
+            },
+            {
+              "name": "Hobgoblin",
+              "value": "6",
+              "karma": "25"
+            },
+            {
+              "name": "Human",
+              "value": "6",
+              "karma": "15"
+            },
+            {
+              "name": "Koborokuru",
+              "value": "6",
+              "karma": "23"
+            },
+            {
+              "name": "Menehune",
+              "value": "6",
+              "karma": "25"
+            },
+            {
+              "name": "Minotaur",
+              "value": "6",
+              "karma": "35"
+            },
+            {
+              "name": "Nartaki",
+              "value": "6",
+              "karma": "15"
+            },
+            {
+              "name": "Nocturna",
+              "value": "6",
+              "karma": "20"
+            },
+            {
+              "name": "Ogre",
+              "value": "6",
+              "karma": "28"
+            },
+            {
+              "name": "Oni",
+              "value": "6",
+              "karma": "25"
+            },
+            {
+              "name": "Ork",
+              "value": "6",
+              "karma": "25"
+            },
+            {
+              "name": "Satyr",
+              "value": "6",
+              "karma": "35"
+            },
+            {
+              "name": "Troll",
+              "value": "6",
+              "karma": "35"
+            },
+            {
+              "name": "Wakyambi",
+              "value": "6",
+              "karma": "30"
+            },
+            {
+              "name": "Xapiri Thëpë",
+              "value": "6",
+              "karma": "18"
+            }
+          ]
+        },
+        {
+          "name": "Shapeshifter: Pantherine",
+          "value": "4",
+          "karma": "25",
+          "metavariants": [
+            {
+              "name": "Cyclops",
+              "value": "4",
+              "karma": "40"
+            },
+            {
+              "name": "Dryad",
+              "value": "4",
+              "karma": "27"
+            },
+            {
+              "name": "Dwarf",
+              "value": "4",
+              "karma": "33"
+            },
+            {
+              "name": "Elf",
+              "value": "4",
+              "karma": "30"
+            },
+            {
+              "name": "Fomorian",
+              "value": "4",
+              "karma": "43"
+            },
+            {
+              "name": "Giant",
+              "value": "4",
+              "karma": "45"
+            },
+            {
+              "name": "Gnome",
+              "value": "4",
+              "karma": "25"
+            },
+            {
+              "name": "Hanuman",
+              "value": "4",
+              "karma": "38"
+            },
+            {
+              "name": "Hobgoblin",
+              "value": "4",
+              "karma": "35"
+            },
+            {
+              "name": "Human",
+              "value": "4",
+              "karma": "25"
+            },
+            {
+              "name": "Koborokuru",
+              "value": "4",
+              "karma": "33"
+            },
+            {
+              "name": "Menehune",
+              "value": "4",
+              "karma": "35"
+            },
+            {
+              "name": "Minotaur",
+              "value": "4",
+              "karma": "45"
+            },
+            {
+              "name": "Nartaki",
+              "value": "4",
+              "karma": "25"
+            },
+            {
+              "name": "Nocturna",
+              "value": "4",
+              "karma": "30"
+            },
+            {
+              "name": "Ogre",
+              "value": "4",
+              "karma": "38"
+            },
+            {
+              "name": "Oni",
+              "value": "4",
+              "karma": "35"
+            },
+            {
+              "name": "Ork",
+              "value": "4",
+              "karma": "35"
+            },
+            {
+              "name": "Satyr",
+              "value": "4",
+              "karma": "45"
+            },
+            {
+              "name": "Troll",
+              "value": "4",
+              "karma": "45"
+            },
+            {
+              "name": "Wakyambi",
+              "value": "4",
+              "karma": "40"
+            },
+            {
+              "name": "Xapiri Thëpë",
+              "value": "4",
+              "karma": "28"
+            }
+          ]
+        },
+        {
+          "name": "Shapeshifter: Phocine",
+          "value": "6",
+          "karma": "20",
+          "metavariants": [
+            {
+              "name": "Cyclops",
+              "value": "6",
+              "karma": "35"
+            },
+            {
+              "name": "Dryad",
+              "value": "6",
+              "karma": "22"
+            },
+            {
+              "name": "Dwarf",
+              "value": "6",
+              "karma": "28"
+            },
+            {
+              "name": "Elf",
+              "value": "6",
+              "karma": "25"
+            },
+            {
+              "name": "Fomorian",
+              "value": "6",
+              "karma": "38"
+            },
+            {
+              "name": "Giant",
+              "value": "6",
+              "karma": "60"
+            },
+            {
+              "name": "Gnome",
+              "value": "6",
+              "karma": "20"
+            },
+            {
+              "name": "Hanuman",
+              "value": "6",
+              "karma": "33"
+            },
+            {
+              "name": "Hobgoblin",
+              "value": "6",
+              "karma": "30"
+            },
+            {
+              "name": "Human",
+              "value": "6",
+              "karma": "20"
+            },
+            {
+              "name": "Koborokuru",
+              "value": "6",
+              "karma": "28"
+            },
+            {
+              "name": "Menehune",
+              "value": "6",
+              "karma": "30"
+            },
+            {
+              "name": "Minotaur",
+              "value": "6",
+              "karma": "60"
+            },
+            {
+              "name": "Nartaki",
+              "value": "6",
+              "karma": "20"
+            },
+            {
+              "name": "Nocturna",
+              "value": "6",
+              "karma": "25"
+            },
+            {
+              "name": "Ogre",
+              "value": "6",
+              "karma": "33"
+            },
+            {
+              "name": "Oni",
+              "value": "6",
+              "karma": "30"
+            },
+            {
+              "name": "Ork",
+              "value": "6",
+              "karma": "30"
+            },
+            {
+              "name": "Satyr",
+              "value": "6",
+              "karma": "60"
+            },
+            {
+              "name": "Troll",
+              "value": "6",
+              "karma": "60"
+            },
+            {
+              "name": "Wakyambi",
+              "value": "6",
+              "karma": "35"
+            },
+            {
+              "name": "Xapiri Thëpë",
+              "value": "6",
+              "karma": "23"
+            }
+          ]
+        },
+        {
+          "name": "Shapeshifter: Tigrine",
+          "value": "4",
+          "karma": "25",
+          "metavariants": [
+            {
+              "name": "Cyclops",
+              "value": "4",
+              "karma": "40"
+            },
+            {
+              "name": "Dryad",
+              "value": "4",
+              "karma": "27"
+            },
+            {
+              "name": "Dwarf",
+              "value": "4",
+              "karma": "33"
+            },
+            {
+              "name": "Elf",
+              "value": "4",
+              "karma": "30"
+            },
+            {
+              "name": "Fomorian",
+              "value": "4",
+              "karma": "43"
+            },
+            {
+              "name": "Giant",
+              "value": "4",
+              "karma": "45"
+            },
+            {
+              "name": "Gnome",
+              "value": "4",
+              "karma": "25"
+            },
+            {
+              "name": "Hanuman",
+              "value": "4",
+              "karma": "38"
+            },
+            {
+              "name": "Hobgoblin",
+              "value": "4",
+              "karma": "35"
+            },
+            {
+              "name": "Human",
+              "value": "4",
+              "karma": "25"
+            },
+            {
+              "name": "Koborokuru",
+              "value": "4",
+              "karma": "33"
+            },
+            {
+              "name": "Menehune",
+              "value": "4",
+              "karma": "35"
+            },
+            {
+              "name": "Minotaur",
+              "value": "4",
+              "karma": "45"
+            },
+            {
+              "name": "Nartaki",
+              "value": "4",
+              "karma": "25"
+            },
+            {
+              "name": "Nocturna",
+              "value": "4",
+              "karma": "30"
+            },
+            {
+              "name": "Ogre",
+              "value": "4",
+              "karma": "38"
+            },
+            {
+              "name": "Oni",
+              "value": "4",
+              "karma": "35"
+            },
+            {
+              "name": "Ork",
+              "value": "4",
+              "karma": "35"
+            },
+            {
+              "name": "Satyr",
+              "value": "4",
+              "karma": "45"
+            },
+            {
+              "name": "Troll",
+              "value": "4",
+              "karma": "45"
+            },
+            {
+              "name": "Wakyambi",
+              "value": "4",
+              "karma": "40"
+            },
+            {
+              "name": "Xapiri Thëpë",
+              "value": "4",
+              "karma": "28"
+            }
+          ]
+        },
+        {
+          "name": "Shapeshifter: Ursine",
+          "value": "4",
+          "karma": "20",
+          "metavariants": [
+            {
+              "name": "Cyclops",
+              "value": "4",
+              "karma": "35"
+            },
+            {
+              "name": "Dryad",
+              "value": "4",
+              "karma": "22"
+            },
+            {
+              "name": "Dwarf",
+              "value": "4",
+              "karma": "28"
+            },
+            {
+              "name": "Elf",
+              "value": "4",
+              "karma": "25"
+            },
+            {
+              "name": "Fomorian",
+              "value": "4",
+              "karma": "38"
+            },
+            {
+              "name": "Giant",
+              "value": "4",
+              "karma": "40"
+            },
+            {
+              "name": "Gnome",
+              "value": "4",
+              "karma": "20"
+            },
+            {
+              "name": "Hanuman",
+              "value": "4",
+              "karma": "33"
+            },
+            {
+              "name": "Hobgoblin",
+              "value": "4",
+              "karma": "30"
+            },
+            {
+              "name": "Human",
+              "value": "4",
+              "karma": "20"
+            },
+            {
+              "name": "Koborokuru",
+              "value": "4",
+              "karma": "28"
+            },
+            {
+              "name": "Menehune",
+              "value": "4",
+              "karma": "30"
+            },
+            {
+              "name": "Minotaur",
+              "value": "4",
+              "karma": "40"
+            },
+            {
+              "name": "Nartaki",
+              "value": "4",
+              "karma": "20"
+            },
+            {
+              "name": "Nocturna",
+              "value": "4",
+              "karma": "25"
+            },
+            {
+              "name": "Ogre",
+              "value": "4",
+              "karma": "33"
+            },
+            {
+              "name": "Oni",
+              "value": "4",
+              "karma": "30"
+            },
+            {
+              "name": "Ork",
+              "value": "4",
+              "karma": "30"
+            },
+            {
+              "name": "Satyr",
+              "value": "4",
+              "karma": "40"
+            },
+            {
+              "name": "Troll",
+              "value": "4",
+              "karma": "40"
+            },
+            {
+              "name": "Wakyambi",
+              "value": "4",
+              "karma": "35"
+            },
+            {
+              "name": "Xapiri Thëpë",
+              "value": "4",
+              "karma": "23"
+            }
+          ]
+        },
+        {
+          "name": "Shapeshifter: Vulpine",
+          "value": "8",
+          "karma": "5",
+          "metavariants": [
+            {
+              "name": "Cyclops",
+              "value": "8",
+              "karma": "20"
+            },
+            {
+              "name": "Dryad",
+              "value": "8",
+              "karma": "7"
+            },
+            {
+              "name": "Dwarf",
+              "value": "8",
+              "karma": "13"
+            },
+            {
+              "name": "Elf",
+              "value": "8",
+              "karma": "10"
+            },
+            {
+              "name": "Fomorian",
+              "value": "8",
+              "karma": "23"
+            },
+            {
+              "name": "Giant",
+              "value": "8",
+              "karma": "25"
+            },
+            {
+              "name": "Gnome",
+              "value": "8",
+              "karma": "5"
+            },
+            {
+              "name": "Hanuman",
+              "value": "8",
+              "karma": "18"
+            },
+            {
+              "name": "Hobgoblin",
+              "value": "8",
+              "karma": "15"
+            },
+            {
+              "name": "Human",
+              "value": "8",
+              "karma": "5"
+            },
+            {
+              "name": "Koborokuru",
+              "value": "8",
+              "karma": "13"
+            },
+            {
+              "name": "Menehune",
+              "value": "8",
+              "karma": "15"
+            },
+            {
+              "name": "Minotaur",
+              "value": "8",
+              "karma": "25"
+            },
+            {
+              "name": "Nartaki",
+              "value": "8",
+              "karma": "5"
+            },
+            {
+              "name": "Nocturna",
+              "value": "8",
+              "karma": "10"
+            },
+            {
+              "name": "Ogre",
+              "value": "8",
+              "karma": "18"
+            },
+            {
+              "name": "Oni",
+              "value": "8",
+              "karma": "15"
+            },
+            {
+              "name": "Ork",
+              "value": "8",
+              "karma": "15"
+            },
+            {
+              "name": "Satyr",
+              "value": "8",
+              "karma": "25"
+            },
+            {
+              "name": "Troll",
+              "value": "8",
+              "karma": "25"
+            },
+            {
+              "name": "Wakyambi",
+              "value": "8",
+              "karma": "20"
+            },
+            {
+              "name": "Xapiri Thëpë",
+              "value": "8",
+              "karma": "8"
+            }
+          ]
+        },
+        {
+          "name": "Troll",
+          "value": "5",
+          "karma": "0",
+          "metavariants": [
+            {
+              "name": "Cyclops",
+              "value": "5",
+              "karma": "2"
+            },
+            {
+              "name": "Fomorian",
+              "value": "5",
+              "karma": "12"
+            },
+            {
+              "name": "Giant",
+              "value": "5",
+              "karma": "2"
+            },
+            {
+              "name": "Minotaur",
+              "value": "5",
+              "karma": "2"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "f9aa712d-7140-4ddd-9e88-4a06e8bae222",
+      "name": "B - Any metatype",
+      "slug": "b-any-metatype",
+      "value": "B",
+      "category": "Heritage",
+      "category_slug": "heritage",
+      "metatypes": [
+        {
+          "name": "A.I.",
+          "value": "2",
+          "karma": "0",
+          "metavariants": [
+            {
+              "name": "E-Ghost",
+              "value": "2",
+              "karma": "0"
+            },
+            {
+              "name": "Protosapient",
+              "value": "2",
+              "karma": "0"
+            },
+            {
+              "name": "Xenosapient",
+              "value": "2",
+              "karma": "0"
+            }
+          ]
+        },
+        {
+          "name": "Centaur",
+          "value": "3",
+          "karma": "25"
+        },
+        {
+          "name": "Dwarf",
+          "value": "4",
+          "karma": "0",
+          "metavariants": [
+            {
+              "name": "Gnome",
+              "value": "4",
+              "karma": "7"
+            },
+            {
+              "name": "Hanuman",
+              "value": "4",
+              "karma": "5"
+            },
+            {
+              "name": "Koborokuru",
+              "value": "4",
+              "karma": "0"
+            },
+            {
+              "name": "Menehune",
+              "value": "4",
+              "karma": "2"
+            }
+          ]
+        },
+        {
+          "name": "Elf",
+          "value": "6",
+          "karma": "0",
+          "metavariants": [
+            {
+              "name": "Dryad",
+              "value": "6",
+              "karma": "0"
+            },
+            {
+              "name": "Nocturna",
+              "value": "6",
+              "karma": "0"
+            },
+            {
+              "name": "Wakyambi",
+              "value": "6",
+              "karma": "12"
+            },
+            {
+              "name": "Xapiri Thëpë",
+              "value": "6",
+              "karma": "0"
+            }
+          ]
+        },
+        {
+          "name": "Human",
+          "value": "7",
+          "karma": "0",
+          "metavariants": [
+            {
+              "name": "Nartaki",
+              "value": "6",
+              "karma": "0"
+            }
+          ]
+        },
+        {
+          "name": "Naga",
+          "value": "2",
+          "karma": "25"
+        },
+        {
+          "name": "Ork",
+          "value": "4",
+          "karma": "0",
+          "metavariants": [
+            {
+              "name": "Hobgoblin",
+              "value": "4",
+              "karma": "5"
+            },
+            {
+              "name": "Ogre",
+              "value": "4",
+              "karma": "8"
+            },
+            {
+              "name": "Oni",
+              "value": "4",
+              "karma": "4"
+            },
+            {
+              "name": "Satyr",
+              "value": "4",
+              "karma": "10"
+            }
+          ]
+        },
+        {
+          "name": "Pixie",
+          "value": "3",
+          "karma": "15"
+        },
+        {
+          "name": "Sasquatch",
+          "value": "2",
+          "karma": "20"
+        },
+        {
+          "name": "Shapeshifter: Bovine",
+          "value": "6",
+          "karma": "5",
+          "metavariants": [
+            {
+              "name": "Cyclops",
+              "value": "6",
+              "karma": "20"
+            },
+            {
+              "name": "Dryad",
+              "value": "6",
+              "karma": "7"
+            },
+            {
+              "name": "Dwarf",
+              "value": "6",
+              "karma": "13"
+            },
+            {
+              "name": "Elf",
+              "value": "6",
+              "karma": "10"
+            },
+            {
+              "name": "Fomorian",
+              "value": "6",
+              "karma": "23"
+            },
+            {
+              "name": "Giant",
+              "value": "6",
+              "karma": "25"
+            },
+            {
+              "name": "Gnome",
+              "value": "6",
+              "karma": "5"
+            },
+            {
+              "name": "Hanuman",
+              "value": "6",
+              "karma": "18"
+            },
+            {
+              "name": "Hobgoblin",
+              "value": "6",
+              "karma": "15"
+            },
+            {
+              "name": "Human",
+              "value": "6",
+              "karma": "5"
+            },
+            {
+              "name": "Koborokuru",
+              "value": "6",
+              "karma": "13"
+            },
+            {
+              "name": "Menehune",
+              "value": "6",
+              "karma": "15"
+            },
+            {
+              "name": "Minotaur",
+              "value": "6",
+              "karma": "25"
+            },
+            {
+              "name": "Nartaki",
+              "value": "6",
+              "karma": "5"
+            },
+            {
+              "name": "Nocturna",
+              "value": "6",
+              "karma": "5"
+            },
+            {
+              "name": "Ogre",
+              "value": "6",
+              "karma": "18"
+            },
+            {
+              "name": "Oni",
+              "value": "6",
+              "karma": "15"
+            },
+            {
+              "name": "Ork",
+              "value": "6",
+              "karma": "15"
+            },
+            {
+              "name": "Satyr",
+              "value": "6",
+              "karma": "25"
+            },
+            {
+              "name": "Troll",
+              "value": "6",
+              "karma": "25"
+            },
+            {
+              "name": "Wakyambi",
+              "value": "6",
+              "karma": "20"
+            },
+            {
+              "name": "Xapiri Thëpë",
+              "value": "6",
+              "karma": "3"
+            }
+          ]
+        },
+        {
+          "name": "Shapeshifter: Canine",
+          "value": "5",
+          "karma": "10",
+          "metavariants": [
+            {
+              "name": "Cyclops",
+              "value": "5",
+              "karma": "25"
+            },
+            {
+              "name": "Dryad",
+              "value": "5",
+              "karma": "12"
+            },
+            {
+              "name": "Dwarf",
+              "value": "5",
+              "karma": "18"
+            },
+            {
+              "name": "Elf",
+              "value": "5",
+              "karma": "15"
+            },
+            {
+              "name": "Fomorian",
+              "value": "5",
+              "karma": "28"
+            },
+            {
+              "name": "Giant",
+              "value": "5",
+              "karma": "30"
+            },
+            {
+              "name": "Gnome",
+              "value": "5",
+              "karma": "10"
+            },
+            {
+              "name": "Hanuman",
+              "value": "5",
+              "karma": "23"
+            },
+            {
+              "name": "Hobgoblin",
+              "value": "5",
+              "karma": "20"
+            },
+            {
+              "name": "Human",
+              "value": "5",
+              "karma": "10"
+            },
+            {
+              "name": "Koborokuru",
+              "value": "5",
+              "karma": "18"
+            },
+            {
+              "name": "Menehune",
+              "value": "5",
+              "karma": "20"
+            },
+            {
+              "name": "Minotaur",
+              "value": "5",
+              "karma": "30"
+            },
+            {
+              "name": "Nartaki",
+              "value": "5",
+              "karma": "10"
+            },
+            {
+              "name": "Nocturna",
+              "value": "5",
+              "karma": "15"
+            },
+            {
+              "name": "Ogre",
+              "value": "5",
+              "karma": "23"
+            },
+            {
+              "name": "Oni",
+              "value": "5",
+              "karma": "20"
+            },
+            {
+              "name": "Ork",
+              "value": "5",
+              "karma": "20"
+            },
+            {
+              "name": "Satyr",
+              "value": "5",
+              "karma": "30"
+            },
+            {
+              "name": "Troll",
+              "value": "5",
+              "karma": "30"
+            },
+            {
+              "name": "Wakyambi",
+              "value": "5",
+              "karma": "25"
+            },
+            {
+              "name": "Xapiri Thëpë",
+              "value": "5",
+              "karma": "13"
+            }
+          ]
+        },
+        {
+          "name": "Shapeshifter: Equine",
+          "value": "4",
+          "karma": "15",
+          "metavariants": [
+            {
+              "name": "Cyclops",
+              "value": "4",
+              "karma": "30"
+            },
+            {
+              "name": "Dryad",
+              "value": "4",
+              "karma": "17"
+            },
+            {
+              "name": "Dwarf",
+              "value": "4",
+              "karma": "23"
+            },
+            {
+              "name": "Elf",
+              "value": "4",
+              "karma": "20"
+            },
+            {
+              "name": "Fomorian",
+              "value": "4",
+              "karma": "33"
+            },
+            {
+              "name": "Giant",
+              "value": "4",
+              "karma": "35"
+            },
+            {
+              "name": "Gnome",
+              "value": "4",
+              "karma": "15"
+            },
+            {
+              "name": "Hanuman",
+              "value": "4",
+              "karma": "28"
+            },
+            {
+              "name": "Hobgoblin",
+              "value": "4",
+              "karma": "25"
+            },
+            {
+              "name": "Human",
+              "value": "4",
+              "karma": "15"
+            },
+            {
+              "name": "Koborokuru",
+              "value": "4",
+              "karma": "23"
+            },
+            {
+              "name": "Menehune",
+              "value": "4",
+              "karma": "25"
+            },
+            {
+              "name": "Minotaur",
+              "value": "4",
+              "karma": "35"
+            },
+            {
+              "name": "Nartaki",
+              "value": "4",
+              "karma": "15"
+            },
+            {
+              "name": "Nocturna",
+              "value": "4",
+              "karma": "20"
+            },
+            {
+              "name": "Ogre",
+              "value": "4",
+              "karma": "28"
+            },
+            {
+              "name": "Oni",
+              "value": "4",
+              "karma": "25"
+            },
+            {
+              "name": "Ork",
+              "value": "4",
+              "karma": "25"
+            },
+            {
+              "name": "Satyr",
+              "value": "4",
+              "karma": "35"
+            },
+            {
+              "name": "Troll",
+              "value": "4",
+              "karma": "35"
+            },
+            {
+              "name": "Wakyambi",
+              "value": "4",
+              "karma": "30"
+            },
+            {
+              "name": "Xapiri Thëpë",
+              "value": "4",
+              "karma": "18"
+            }
+          ]
+        },
+        {
+          "name": "Shapeshifter: Falconine",
+          "value": "5",
+          "karma": "10",
+          "metavariants": [
+            {
+              "name": "Cyclops",
+              "value": "5",
+              "karma": "25"
+            },
+            {
+              "name": "Dryad",
+              "value": "5",
+              "karma": "12"
+            },
+            {
+              "name": "Dwarf",
+              "value": "5",
+              "karma": "18"
+            },
+            {
+              "name": "Elf",
+              "value": "5",
+              "karma": "15"
+            },
+            {
+              "name": "Fomorian",
+              "value": "5",
+              "karma": "28"
+            },
+            {
+              "name": "Giant",
+              "value": "5",
+              "karma": "30"
+            },
+            {
+              "name": "Gnome",
+              "value": "5",
+              "karma": "10"
+            },
+            {
+              "name": "Hanuman",
+              "value": "5",
+              "karma": "23"
+            },
+            {
+              "name": "Hobgoblin",
+              "value": "5",
+              "karma": "20"
+            },
+            {
+              "name": "Human",
+              "value": "5",
+              "karma": "10"
+            },
+            {
+              "name": "Koborokuru",
+              "value": "5",
+              "karma": "18"
+            },
+            {
+              "name": "Menehune",
+              "value": "5",
+              "karma": "20"
+            },
+            {
+              "name": "Minotaur",
+              "value": "5",
+              "karma": "30"
+            },
+            {
+              "name": "Nartaki",
+              "value": "5",
+              "karma": "10"
+            },
+            {
+              "name": "Nocturna",
+              "value": "5",
+              "karma": "15"
+            },
+            {
+              "name": "Ogre",
+              "value": "5",
+              "karma": "23"
+            },
+            {
+              "name": "Oni",
+              "value": "5",
+              "karma": "20"
+            },
+            {
+              "name": "Ork",
+              "value": "5",
+              "karma": "20"
+            },
+            {
+              "name": "Satyr",
+              "value": "5",
+              "karma": "30"
+            },
+            {
+              "name": "Troll",
+              "value": "5",
+              "karma": "30"
+            },
+            {
+              "name": "Wakyambi",
+              "value": "5",
+              "karma": "25"
+            },
+            {
+              "name": "Xapiri Thëpë",
+              "value": "5",
+              "karma": "13"
+            }
+          ]
+        },
+        {
+          "name": "Shapeshifter: Leonine",
+          "value": "2",
+          "karma": "20",
+          "metavariants": [
+            {
+              "name": "Cyclops",
+              "value": "2",
+              "karma": "35"
+            },
+            {
+              "name": "Dryad",
+              "value": "2",
+              "karma": "22"
+            },
+            {
+              "name": "Dwarf",
+              "value": "2",
+              "karma": "28"
+            },
+            {
+              "name": "Elf",
+              "value": "2",
+              "karma": "25"
+            },
+            {
+              "name": "Fomorian",
+              "value": "2",
+              "karma": "38"
+            },
+            {
+              "name": "Giant",
+              "value": "2",
+              "karma": "40"
+            },
+            {
+              "name": "Gnome",
+              "value": "2",
+              "karma": "20"
+            },
+            {
+              "name": "Hanuman",
+              "value": "2",
+              "karma": "33"
+            },
+            {
+              "name": "Hobgoblin",
+              "value": "2",
+              "karma": "30"
+            },
+            {
+              "name": "Human",
+              "value": "2",
+              "karma": "20"
+            },
+            {
+              "name": "Koborokuru",
+              "value": "2",
+              "karma": "28"
+            },
+            {
+              "name": "Menehune",
+              "value": "2",
+              "karma": "30"
+            },
+            {
+              "name": "Minotaur",
+              "value": "2",
+              "karma": "40"
+            },
+            {
+              "name": "Nartaki",
+              "value": "2",
+              "karma": "20"
+            },
+            {
+              "name": "Nocturna",
+              "value": "2",
+              "karma": "25"
+            },
+            {
+              "name": "Ogre",
+              "value": "2",
+              "karma": "33"
+            },
+            {
+              "name": "Oni",
+              "value": "2",
+              "karma": "30"
+            },
+            {
+              "name": "Ork",
+              "value": "2",
+              "karma": "30"
+            },
+            {
+              "name": "Satyr",
+              "value": "2",
+              "karma": "40"
+            },
+            {
+              "name": "Troll",
+              "value": "2",
+              "karma": "40"
+            },
+            {
+              "name": "Wakyambi",
+              "value": "2",
+              "karma": "35"
+            },
+            {
+              "name": "Xapiri Thëpë",
+              "value": "2",
+              "karma": "23"
+            }
+          ]
+        },
+        {
+          "name": "Shapeshifter: Lupine",
+          "value": "4",
+          "karma": "15",
+          "metavariants": [
+            {
+              "name": "Cyclops",
+              "value": "4",
+              "karma": "30"
+            },
+            {
+              "name": "Dryad",
+              "value": "4",
+              "karma": "17"
+            },
+            {
+              "name": "Dwarf",
+              "value": "4",
+              "karma": "23"
+            },
+            {
+              "name": "Elf",
+              "value": "4",
+              "karma": "20"
+            },
+            {
+              "name": "Fomorian",
+              "value": "4",
+              "karma": "33"
+            },
+            {
+              "name": "Giant",
+              "value": "4",
+              "karma": "35"
+            },
+            {
+              "name": "Gnome",
+              "value": "4",
+              "karma": "15"
+            },
+            {
+              "name": "Hanuman",
+              "value": "4",
+              "karma": "28"
+            },
+            {
+              "name": "Hobgoblin",
+              "value": "4",
+              "karma": "25"
+            },
+            {
+              "name": "Human",
+              "value": "4",
+              "karma": "15"
+            },
+            {
+              "name": "Koborokuru",
+              "value": "4",
+              "karma": "23"
+            },
+            {
+              "name": "Menehune",
+              "value": "4",
+              "karma": "25"
+            },
+            {
+              "name": "Minotaur",
+              "value": "4",
+              "karma": "35"
+            },
+            {
+              "name": "Nartaki",
+              "value": "4",
+              "karma": "15"
+            },
+            {
+              "name": "Nocturna",
+              "value": "4",
+              "karma": "20"
+            },
+            {
+              "name": "Ogre",
+              "value": "4",
+              "karma": "28"
+            },
+            {
+              "name": "Oni",
+              "value": "4",
+              "karma": "25"
+            },
+            {
+              "name": "Ork",
+              "value": "4",
+              "karma": "25"
+            },
+            {
+              "name": "Satyr",
+              "value": "4",
+              "karma": "35"
+            },
+            {
+              "name": "Troll",
+              "value": "4",
+              "karma": "35"
+            },
+            {
+              "name": "Wakyambi",
+              "value": "4",
+              "karma": "30"
+            },
+            {
+              "name": "Xapiri Thëpë",
+              "value": "4",
+              "karma": "18"
+            }
+          ]
+        },
+        {
+          "name": "Shapeshifter: Pantherine",
+          "value": "2",
+          "karma": "25",
+          "metavariants": [
+            {
+              "name": "Cyclops",
+              "value": "2",
+              "karma": "40"
+            },
+            {
+              "name": "Dryad",
+              "value": "2",
+              "karma": "27"
+            },
+            {
+              "name": "Dwarf",
+              "value": "2",
+              "karma": "33"
+            },
+            {
+              "name": "Elf",
+              "value": "2",
+              "karma": "30"
+            },
+            {
+              "name": "Fomorian",
+              "value": "2",
+              "karma": "43"
+            },
+            {
+              "name": "Giant",
+              "value": "2",
+              "karma": "45"
+            },
+            {
+              "name": "Gnome",
+              "value": "2",
+              "karma": "25"
+            },
+            {
+              "name": "Hanuman",
+              "value": "2",
+              "karma": "38"
+            },
+            {
+              "name": "Hobgoblin",
+              "value": "2",
+              "karma": "35"
+            },
+            {
+              "name": "Human",
+              "value": "2",
+              "karma": "25"
+            },
+            {
+              "name": "Koborokuru",
+              "value": "2",
+              "karma": "33"
+            },
+            {
+              "name": "Menehune",
+              "value": "2",
+              "karma": "35"
+            },
+            {
+              "name": "Minotaur",
+              "value": "2",
+              "karma": "45"
+            },
+            {
+              "name": "Nartaki",
+              "value": "2",
+              "karma": "25"
+            },
+            {
+              "name": "Nocturna",
+              "value": "2",
+              "karma": "30"
+            },
+            {
+              "name": "Ogre",
+              "value": "2",
+              "karma": "38"
+            },
+            {
+              "name": "Oni",
+              "value": "2",
+              "karma": "35"
+            },
+            {
+              "name": "Ork",
+              "value": "2",
+              "karma": "35"
+            },
+            {
+              "name": "Satyr",
+              "value": "2",
+              "karma": "45"
+            },
+            {
+              "name": "Troll",
+              "value": "2",
+              "karma": "45"
+            },
+            {
+              "name": "Wakyambi",
+              "value": "2",
+              "karma": "40"
+            },
+            {
+              "name": "Xapiri Thëpë",
+              "value": "2",
+              "karma": "28"
+            }
+          ]
+        },
+        {
+          "name": "Shapeshifter: Phocine",
+          "value": "4",
+          "karma": "20",
+          "metavariants": [
+            {
+              "name": "Cyclops",
+              "value": "4",
+              "karma": "35"
+            },
+            {
+              "name": "Dryad",
+              "value": "4",
+              "karma": "22"
+            },
+            {
+              "name": "Dwarf",
+              "value": "4",
+              "karma": "28"
+            },
+            {
+              "name": "Elf",
+              "value": "4",
+              "karma": "25"
+            },
+            {
+              "name": "Fomorian",
+              "value": "4",
+              "karma": "38"
+            },
+            {
+              "name": "Giant",
+              "value": "4",
+              "karma": "40"
+            },
+            {
+              "name": "Gnome",
+              "value": "4",
+              "karma": "20"
+            },
+            {
+              "name": "Hanuman",
+              "value": "4",
+              "karma": "33"
+            },
+            {
+              "name": "Hobgoblin",
+              "value": "4",
+              "karma": "30"
+            },
+            {
+              "name": "Human",
+              "value": "4",
+              "karma": "20"
+            },
+            {
+              "name": "Koborokuru",
+              "value": "4",
+              "karma": "28"
+            },
+            {
+              "name": "Menehune",
+              "value": "4",
+              "karma": "30"
+            },
+            {
+              "name": "Minotaur",
+              "value": "4",
+              "karma": "40"
+            },
+            {
+              "name": "Nartaki",
+              "value": "4",
+              "karma": "20"
+            },
+            {
+              "name": "Nocturna",
+              "value": "4",
+              "karma": "25"
+            },
+            {
+              "name": "Ogre",
+              "value": "4",
+              "karma": "33"
+            },
+            {
+              "name": "Oni",
+              "value": "4",
+              "karma": "30"
+            },
+            {
+              "name": "Ork",
+              "value": "4",
+              "karma": "30"
+            },
+            {
+              "name": "Satyr",
+              "value": "4",
+              "karma": "40"
+            },
+            {
+              "name": "Troll",
+              "value": "4",
+              "karma": "40"
+            },
+            {
+              "name": "Wakyambi",
+              "value": "4",
+              "karma": "35"
+            },
+            {
+              "name": "Xapiri Thëpë",
+              "value": "4",
+              "karma": "23"
+            }
+          ]
+        },
+        {
+          "name": "Shapeshifter: Tigrine",
+          "value": "2",
+          "karma": "25",
+          "metavariants": [
+            {
+              "name": "Cyclops",
+              "value": "2",
+              "karma": "40"
+            },
+            {
+              "name": "Dryad",
+              "value": "2",
+              "karma": "27"
+            },
+            {
+              "name": "Dwarf",
+              "value": "2",
+              "karma": "33"
+            },
+            {
+              "name": "Elf",
+              "value": "2",
+              "karma": "30"
+            },
+            {
+              "name": "Fomorian",
+              "value": "2",
+              "karma": "43"
+            },
+            {
+              "name": "Giant",
+              "value": "2",
+              "karma": "45"
+            },
+            {
+              "name": "Gnome",
+              "value": "2",
+              "karma": "25"
+            },
+            {
+              "name": "Hanuman",
+              "value": "2",
+              "karma": "38"
+            },
+            {
+              "name": "Hobgoblin",
+              "value": "2",
+              "karma": "35"
+            },
+            {
+              "name": "Human",
+              "value": "2",
+              "karma": "25"
+            },
+            {
+              "name": "Koborokuru",
+              "value": "2",
+              "karma": "33"
+            },
+            {
+              "name": "Menehune",
+              "value": "2",
+              "karma": "35"
+            },
+            {
+              "name": "Minotaur",
+              "value": "2",
+              "karma": "45"
+            },
+            {
+              "name": "Nartaki",
+              "value": "2",
+              "karma": "25"
+            },
+            {
+              "name": "Nocturna",
+              "value": "2",
+              "karma": "30"
+            },
+            {
+              "name": "Ogre",
+              "value": "2",
+              "karma": "38"
+            },
+            {
+              "name": "Oni",
+              "value": "2",
+              "karma": "35"
+            },
+            {
+              "name": "Ork",
+              "value": "2",
+              "karma": "35"
+            },
+            {
+              "name": "Satyr",
+              "value": "2",
+              "karma": "45"
+            },
+            {
+              "name": "Troll",
+              "value": "2",
+              "karma": "45"
+            },
+            {
+              "name": "Wakyambi",
+              "value": "2",
+              "karma": "40"
+            },
+            {
+              "name": "Xapiri Thëpë",
+              "value": "2",
+              "karma": "28"
+            }
+          ]
+        },
+        {
+          "name": "Shapeshifter: Ursine",
+          "value": "2",
+          "karma": "20",
+          "metavariants": [
+            {
+              "name": "Cyclops",
+              "value": "2",
+              "karma": "35"
+            },
+            {
+              "name": "Dryad",
+              "value": "2",
+              "karma": "22"
+            },
+            {
+              "name": "Dwarf",
+              "value": "2",
+              "karma": "28"
+            },
+            {
+              "name": "Elf",
+              "value": "2",
+              "karma": "25"
+            },
+            {
+              "name": "Fomorian",
+              "value": "2",
+              "karma": "38"
+            },
+            {
+              "name": "Giant",
+              "value": "2",
+              "karma": "40"
+            },
+            {
+              "name": "Gnome",
+              "value": "2",
+              "karma": "20"
+            },
+            {
+              "name": "Hanuman",
+              "value": "2",
+              "karma": "33"
+            },
+            {
+              "name": "Hobgoblin",
+              "value": "2",
+              "karma": "30"
+            },
+            {
+              "name": "Human",
+              "value": "2",
+              "karma": "20"
+            },
+            {
+              "name": "Koborokuru",
+              "value": "2",
+              "karma": "28"
+            },
+            {
+              "name": "Menehune",
+              "value": "2",
+              "karma": "30"
+            },
+            {
+              "name": "Minotaur",
+              "value": "2",
+              "karma": "40"
+            },
+            {
+              "name": "Nartaki",
+              "value": "2",
+              "karma": "20"
+            },
+            {
+              "name": "Nocturna",
+              "value": "2",
+              "karma": "25"
+            },
+            {
+              "name": "Ogre",
+              "value": "2",
+              "karma": "33"
+            },
+            {
+              "name": "Oni",
+              "value": "2",
+              "karma": "30"
+            },
+            {
+              "name": "Ork",
+              "value": "2",
+              "karma": "30"
+            },
+            {
+              "name": "Satyr",
+              "value": "2",
+              "karma": "40"
+            },
+            {
+              "name": "Troll",
+              "value": "2",
+              "karma": "40"
+            },
+            {
+              "name": "Wakyambi",
+              "value": "2",
+              "karma": "35"
+            },
+            {
+              "name": "Xapiri Thëpë",
+              "value": "2",
+              "karma": "23"
+            }
+          ]
+        },
+        {
+          "name": "Shapeshifter: Vulpine",
+          "value": "6",
+          "karma": "5",
+          "metavariants": [
+            {
+              "name": "Cyclops",
+              "value": "6",
+              "karma": "20"
+            },
+            {
+              "name": "Dryad",
+              "value": "6",
+              "karma": "7"
+            },
+            {
+              "name": "Dwarf",
+              "value": "6",
+              "karma": "13"
+            },
+            {
+              "name": "Elf",
+              "value": "6",
+              "karma": "10"
+            },
+            {
+              "name": "Fomorian",
+              "value": "6",
+              "karma": "23"
+            },
+            {
+              "name": "Giant",
+              "value": "6",
+              "karma": "25"
+            },
+            {
+              "name": "Gnome",
+              "value": "6",
+              "karma": "5"
+            },
+            {
+              "name": "Hanuman",
+              "value": "6",
+              "karma": "18"
+            },
+            {
+              "name": "Hobgoblin",
+              "value": "6",
+              "karma": "15"
+            },
+            {
+              "name": "Human",
+              "value": "6",
+              "karma": "5"
+            },
+            {
+              "name": "Koborokuru",
+              "value": "6",
+              "karma": "13"
+            },
+            {
+              "name": "Menehune",
+              "value": "6",
+              "karma": "15"
+            },
+            {
+              "name": "Minotaur",
+              "value": "6",
+              "karma": "25"
+            },
+            {
+              "name": "Nartaki",
+              "value": "6",
+              "karma": "5"
+            },
+            {
+              "name": "Nocturna",
+              "value": "6",
+              "karma": "5"
+            },
+            {
+              "name": "Ogre",
+              "value": "6",
+              "karma": "18"
+            },
+            {
+              "name": "Oni",
+              "value": "6",
+              "karma": "15"
+            },
+            {
+              "name": "Ork",
+              "value": "6",
+              "karma": "15"
+            },
+            {
+              "name": "Satyr",
+              "value": "6",
+              "karma": "25"
+            },
+            {
+              "name": "Troll",
+              "value": "6",
+              "karma": "25"
+            },
+            {
+              "name": "Wakyambi",
+              "value": "6",
+              "karma": "20"
+            },
+            {
+              "name": "Xapiri Thëpë",
+              "value": "6",
+              "karma": "3"
+            }
+          ]
+        },
+        {
+          "name": "Troll",
+          "value": "0",
+          "karma": "0",
+          "metavariants": [
+            {
+              "name": "Cyclops",
+              "value": "0",
+              "karma": "2"
+            },
+            {
+              "name": "Fomorian",
+              "value": "0",
+              "karma": "12"
+            },
+            {
+              "name": "Giant",
+              "value": "0",
+              "karma": "2"
+            },
+            {
+              "name": "Minotaur",
+              "value": "0",
+              "karma": "2"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "988b7ce3-5739-4300-bc21-a6c92b869262",
+      "name": "C - Human, Dwarf, Elf, Ork, or A.I.",
+      "slug": "c-human-dwarf-elf-ork-or-a-i",
+      "value": "C",
+      "category": "Heritage",
+      "category_slug": "heritage",
+      "metatypes": [
+        {
+          "name": "A.I.",
+          "value": "0",
+          "karma": "0",
+          "metavariants": [
+            {
+              "name": "E-Ghost",
+              "value": "0",
+              "karma": "0"
+            },
+            {
+              "name": "Protosapient",
+              "value": "0",
+              "karma": "0"
+            },
+            {
+              "name": "Xenosapient",
+              "value": "0",
+              "karma": "0"
+            }
+          ]
+        },
+        {
+          "name": "Centaur",
+          "value": "0",
+          "karma": "25"
+        },
+        {
+          "name": "Dwarf",
+          "value": "1",
+          "karma": "0",
+          "metavariants": [
+            {
+              "name": "Gnome",
+              "value": "1",
+              "karma": "7"
+            },
+            {
+              "name": "Goblin",
+              "value": "1",
+              "karma": "27"
+            },
+            {
+              "name": "Hanuman",
+              "value": "1",
+              "karma": "5"
+            },
+            {
+              "name": "Koborokuru",
+              "value": "1",
+              "karma": "0"
+            },
+            {
+              "name": "Menehune",
+              "value": "1",
+              "karma": "2"
+            }
+          ]
+        },
+        {
+          "name": "Elf",
+          "value": "3",
+          "karma": "0",
+          "metavariants": [
+            {
+              "name": "Dryad",
+              "value": "3",
+              "karma": "0"
+            },
+            {
+              "name": "Nocturna",
+              "value": "3",
+              "karma": "0"
+            },
+            {
+              "name": "Wakyambi",
+              "value": "3",
+              "karma": "12"
+            },
+            {
+              "name": "Xapiri Thëpë",
+              "value": "3",
+              "karma": "0"
+            }
+          ]
+        },
+        {
+          "name": "Human",
+          "value": "5",
+          "karma": "0",
+          "metavariants": [
+            {
+              "name": "Nartaki",
+              "value": "4",
+              "karma": "0"
+            }
+          ]
+        },
+        {
+          "name": "Naga",
+          "value": "0",
+          "karma": "25"
+        },
+        {
+          "name": "Ork",
+          "value": "0",
+          "karma": "0",
+          "metavariants": [
+            {
+              "name": "Hobgoblin",
+              "value": "0",
+              "karma": "-5"
+            },
+            {
+              "name": "Ogre",
+              "value": "0",
+              "karma": "8"
+            },
+            {
+              "name": "Oni",
+              "value": "0",
+              "karma": "-4"
+            },
+            {
+              "name": "Satyr",
+              "value": "0",
+              "karma": "10"
+            }
+          ]
+        },
+        {
+          "name": "Pixie",
+          "value": "0",
+          "karma": "15"
+        },
+        {
+          "name": "Sasquatch",
+          "value": "0",
+          "karma": "20"
+        },
+        {
+          "name": "Shapeshifter: Bovine",
+          "value": "4",
+          "karma": "5",
+          "metavariants": [
+            {
+              "name": "Cyclops",
+              "value": "4",
+              "karma": "20"
+            },
+            {
+              "name": "Dryad",
+              "value": "4",
+              "karma": "7"
+            },
+            {
+              "name": "Dwarf",
+              "value": "4",
+              "karma": "13"
+            },
+            {
+              "name": "Elf",
+              "value": "4",
+              "karma": "10"
+            },
+            {
+              "name": "Fomorian",
+              "value": "4",
+              "karma": "23"
+            },
+            {
+              "name": "Giant",
+              "value": "4",
+              "karma": "25"
+            },
+            {
+              "name": "Gnome",
+              "value": "4",
+              "karma": "5"
+            },
+            {
+              "name": "Hanuman",
+              "value": "4",
+              "karma": "18"
+            },
+            {
+              "name": "Hobgoblin",
+              "value": "4",
+              "karma": "15"
+            },
+            {
+              "name": "Human",
+              "value": "4",
+              "karma": "5"
+            },
+            {
+              "name": "Koborokuru",
+              "value": "4",
+              "karma": "13"
+            },
+            {
+              "name": "Menehune",
+              "value": "4",
+              "karma": "15"
+            },
+            {
+              "name": "Minotaur",
+              "value": "4",
+              "karma": "25"
+            },
+            {
+              "name": "Nartaki",
+              "value": "4",
+              "karma": "5"
+            },
+            {
+              "name": "Nocturna",
+              "value": "4",
+              "karma": "10"
+            },
+            {
+              "name": "Ogre",
+              "value": "4",
+              "karma": "18"
+            },
+            {
+              "name": "Oni",
+              "value": "4",
+              "karma": "15"
+            },
+            {
+              "name": "Ork",
+              "value": "4",
+              "karma": "15"
+            },
+            {
+              "name": "Satyr",
+              "value": "4",
+              "karma": "25"
+            },
+            {
+              "name": "Troll",
+              "value": "4",
+              "karma": "25"
+            },
+            {
+              "name": "Wakyambi",
+              "value": "4",
+              "karma": "20"
+            },
+            {
+              "name": "Xapiri Thëpë",
+              "value": "4",
+              "karma": "8"
+            }
+          ]
+        },
+        {
+          "name": "Shapeshifter: Canine",
+          "value": "3",
+          "karma": "10",
+          "metavariants": [
+            {
+              "name": "Cyclops",
+              "value": "3",
+              "karma": "25"
+            },
+            {
+              "name": "Dryad",
+              "value": "3",
+              "karma": "12"
+            },
+            {
+              "name": "Dwarf",
+              "value": "3",
+              "karma": "18"
+            },
+            {
+              "name": "Elf",
+              "value": "3",
+              "karma": "15"
+            },
+            {
+              "name": "Fomorian",
+              "value": "3",
+              "karma": "28"
+            },
+            {
+              "name": "Giant",
+              "value": "3",
+              "karma": "30"
+            },
+            {
+              "name": "Gnome",
+              "value": "3",
+              "karma": "10"
+            },
+            {
+              "name": "Hanuman",
+              "value": "3",
+              "karma": "23"
+            },
+            {
+              "name": "Hobgoblin",
+              "value": "3",
+              "karma": "20"
+            },
+            {
+              "name": "Human",
+              "value": "3",
+              "karma": "10"
+            },
+            {
+              "name": "Koborokuru",
+              "value": "3",
+              "karma": "18"
+            },
+            {
+              "name": "Menehune",
+              "value": "3",
+              "karma": "20"
+            },
+            {
+              "name": "Minotaur",
+              "value": "3",
+              "karma": "30"
+            },
+            {
+              "name": "Nartaki",
+              "value": "3",
+              "karma": "10"
+            },
+            {
+              "name": "Nocturna",
+              "value": "3",
+              "karma": "15"
+            },
+            {
+              "name": "Ogre",
+              "value": "3",
+              "karma": "23"
+            },
+            {
+              "name": "Oni",
+              "value": "3",
+              "karma": "20"
+            },
+            {
+              "name": "Ork",
+              "value": "3",
+              "karma": "20"
+            },
+            {
+              "name": "Satyr",
+              "value": "3",
+              "karma": "30"
+            },
+            {
+              "name": "Troll",
+              "value": "3",
+              "karma": "30"
+            },
+            {
+              "name": "Wakyambi",
+              "value": "3",
+              "karma": "25"
+            },
+            {
+              "name": "Xapiri Thëpë",
+              "value": "3",
+              "karma": "13"
+            }
+          ]
+        },
+        {
+          "name": "Shapeshifter: Equine",
+          "value": "2",
+          "karma": "15",
+          "metavariants": [
+            {
+              "name": "Cyclops",
+              "value": "2",
+              "karma": "30"
+            },
+            {
+              "name": "Dryad",
+              "value": "2",
+              "karma": "17"
+            },
+            {
+              "name": "Dwarf",
+              "value": "2",
+              "karma": "23"
+            },
+            {
+              "name": "Elf",
+              "value": "2",
+              "karma": "20"
+            },
+            {
+              "name": "Fomorian",
+              "value": "2",
+              "karma": "33"
+            },
+            {
+              "name": "Giant",
+              "value": "2",
+              "karma": "35"
+            },
+            {
+              "name": "Gnome",
+              "value": "2",
+              "karma": "15"
+            },
+            {
+              "name": "Hanuman",
+              "value": "2",
+              "karma": "28"
+            },
+            {
+              "name": "Hobgoblin",
+              "value": "2",
+              "karma": "25"
+            },
+            {
+              "name": "Human",
+              "value": "2",
+              "karma": "15"
+            },
+            {
+              "name": "Koborokuru",
+              "value": "2",
+              "karma": "23"
+            },
+            {
+              "name": "Menehune",
+              "value": "2",
+              "karma": "25"
+            },
+            {
+              "name": "Minotaur",
+              "value": "2",
+              "karma": "35"
+            },
+            {
+              "name": "Nartaki",
+              "value": "2",
+              "karma": "15"
+            },
+            {
+              "name": "Nocturna",
+              "value": "2",
+              "karma": "20"
+            },
+            {
+              "name": "Ogre",
+              "value": "2",
+              "karma": "28"
+            },
+            {
+              "name": "Oni",
+              "value": "2",
+              "karma": "25"
+            },
+            {
+              "name": "Ork",
+              "value": "2",
+              "karma": "25"
+            },
+            {
+              "name": "Satyr",
+              "value": "2",
+              "karma": "35"
+            },
+            {
+              "name": "Troll",
+              "value": "2",
+              "karma": "35"
+            },
+            {
+              "name": "Wakyambi",
+              "value": "2",
+              "karma": "30"
+            },
+            {
+              "name": "Xapiri Thëpë",
+              "value": "2",
+              "karma": "18"
+            }
+          ]
+        },
+        {
+          "name": "Shapeshifter: Falconine",
+          "value": "3",
+          "karma": "10",
+          "metavariants": [
+            {
+              "name": "Cyclops",
+              "value": "3",
+              "karma": "25"
+            },
+            {
+              "name": "Dryad",
+              "value": "3",
+              "karma": "12"
+            },
+            {
+              "name": "Dwarf",
+              "value": "3",
+              "karma": "18"
+            },
+            {
+              "name": "Elf",
+              "value": "3",
+              "karma": "15"
+            },
+            {
+              "name": "Fomorian",
+              "value": "3",
+              "karma": "28"
+            },
+            {
+              "name": "Giant",
+              "value": "3",
+              "karma": "30"
+            },
+            {
+              "name": "Gnome",
+              "value": "3",
+              "karma": "10"
+            },
+            {
+              "name": "Hanuman",
+              "value": "3",
+              "karma": "23"
+            },
+            {
+              "name": "Hobgoblin",
+              "value": "3",
+              "karma": "20"
+            },
+            {
+              "name": "Human",
+              "value": "3",
+              "karma": "10"
+            },
+            {
+              "name": "Koborokuru",
+              "value": "3",
+              "karma": "18"
+            },
+            {
+              "name": "Menehune",
+              "value": "3",
+              "karma": "20"
+            },
+            {
+              "name": "Minotaur",
+              "value": "3",
+              "karma": "30"
+            },
+            {
+              "name": "Nartaki",
+              "value": "3",
+              "karma": "10"
+            },
+            {
+              "name": "Nocturna",
+              "value": "3",
+              "karma": "15"
+            },
+            {
+              "name": "Ogre",
+              "value": "3",
+              "karma": "23"
+            },
+            {
+              "name": "Oni",
+              "value": "3",
+              "karma": "20"
+            },
+            {
+              "name": "Ork",
+              "value": "3",
+              "karma": "20"
+            },
+            {
+              "name": "Satyr",
+              "value": "3",
+              "karma": "30"
+            },
+            {
+              "name": "Troll",
+              "value": "3",
+              "karma": "30"
+            },
+            {
+              "name": "Wakyambi",
+              "value": "3",
+              "karma": "25"
+            },
+            {
+              "name": "Xapiri Thëpë",
+              "value": "3",
+              "karma": "13"
+            }
+          ]
+        },
+        {
+          "name": "Shapeshifter: Leonine",
+          "value": "0",
+          "karma": "20",
+          "metavariants": [
+            {
+              "name": "Cyclops",
+              "value": "0",
+              "karma": "35"
+            },
+            {
+              "name": "Dryad",
+              "value": "0",
+              "karma": "22"
+            },
+            {
+              "name": "Dwarf",
+              "value": "0",
+              "karma": "28"
+            },
+            {
+              "name": "Elf",
+              "value": "0",
+              "karma": "25"
+            },
+            {
+              "name": "Fomorian",
+              "value": "0",
+              "karma": "38"
+            },
+            {
+              "name": "Giant",
+              "value": "0",
+              "karma": "40"
+            },
+            {
+              "name": "Gnome",
+              "value": "0",
+              "karma": "20"
+            },
+            {
+              "name": "Hanuman",
+              "value": "0",
+              "karma": "33"
+            },
+            {
+              "name": "Hobgoblin",
+              "value": "0",
+              "karma": "30"
+            },
+            {
+              "name": "Human",
+              "value": "0",
+              "karma": "20"
+            },
+            {
+              "name": "Koborokuru",
+              "value": "0",
+              "karma": "28"
+            },
+            {
+              "name": "Menehune",
+              "value": "0",
+              "karma": "30"
+            },
+            {
+              "name": "Minotaur",
+              "value": "0",
+              "karma": "40"
+            },
+            {
+              "name": "Nartaki",
+              "value": "0",
+              "karma": "20"
+            },
+            {
+              "name": "Nocturna",
+              "value": "0",
+              "karma": "25"
+            },
+            {
+              "name": "Ogre",
+              "value": "0",
+              "karma": "33"
+            },
+            {
+              "name": "Oni",
+              "value": "0",
+              "karma": "30"
+            },
+            {
+              "name": "Ork",
+              "value": "0",
+              "karma": "30"
+            },
+            {
+              "name": "Satyr",
+              "value": "0",
+              "karma": "40"
+            },
+            {
+              "name": "Troll",
+              "value": "0",
+              "karma": "40"
+            },
+            {
+              "name": "Wakyambi",
+              "value": "0",
+              "karma": "35"
+            },
+            {
+              "name": "Xapiri Thëpë",
+              "value": "0",
+              "karma": "23"
+            }
+          ]
+        },
+        {
+          "name": "Shapeshifter: Lupine",
+          "value": "2",
+          "karma": "15",
+          "metavariants": [
+            {
+              "name": "Cyclops",
+              "value": "2",
+              "karma": "30"
+            },
+            {
+              "name": "Dryad",
+              "value": "2",
+              "karma": "17"
+            },
+            {
+              "name": "Dwarf",
+              "value": "2",
+              "karma": "23"
+            },
+            {
+              "name": "Elf",
+              "value": "2",
+              "karma": "20"
+            },
+            {
+              "name": "Fomorian",
+              "value": "2",
+              "karma": "33"
+            },
+            {
+              "name": "Giant",
+              "value": "2",
+              "karma": "35"
+            },
+            {
+              "name": "Gnome",
+              "value": "2",
+              "karma": "15"
+            },
+            {
+              "name": "Hanuman",
+              "value": "2",
+              "karma": "28"
+            },
+            {
+              "name": "Hobgoblin",
+              "value": "2",
+              "karma": "25"
+            },
+            {
+              "name": "Human",
+              "value": "2",
+              "karma": "15"
+            },
+            {
+              "name": "Koborokuru",
+              "value": "2",
+              "karma": "23"
+            },
+            {
+              "name": "Menehune",
+              "value": "2",
+              "karma": "25"
+            },
+            {
+              "name": "Minotaur",
+              "value": "2",
+              "karma": "35"
+            },
+            {
+              "name": "Nartaki",
+              "value": "2",
+              "karma": "15"
+            },
+            {
+              "name": "Nocturna",
+              "value": "2",
+              "karma": "20"
+            },
+            {
+              "name": "Ogre",
+              "value": "2",
+              "karma": "28"
+            },
+            {
+              "name": "Oni",
+              "value": "2",
+              "karma": "25"
+            },
+            {
+              "name": "Ork",
+              "value": "2",
+              "karma": "25"
+            },
+            {
+              "name": "Satyr",
+              "value": "2",
+              "karma": "35"
+            },
+            {
+              "name": "Troll",
+              "value": "2",
+              "karma": "35"
+            },
+            {
+              "name": "Wakyambi",
+              "value": "2",
+              "karma": "30"
+            },
+            {
+              "name": "Xapiri Thëpë",
+              "value": "2",
+              "karma": "18"
+            }
+          ]
+        },
+        {
+          "name": "Shapeshifter: Pantherine",
+          "value": "0",
+          "karma": "25",
+          "metavariants": [
+            {
+              "name": "Cyclops",
+              "value": "0",
+              "karma": "40"
+            },
+            {
+              "name": "Dryad",
+              "value": "0",
+              "karma": "27"
+            },
+            {
+              "name": "Dwarf",
+              "value": "0",
+              "karma": "33"
+            },
+            {
+              "name": "Elf",
+              "value": "0",
+              "karma": "30"
+            },
+            {
+              "name": "Fomorian",
+              "value": "0",
+              "karma": "43"
+            },
+            {
+              "name": "Giant",
+              "value": "0",
+              "karma": "45"
+            },
+            {
+              "name": "Gnome",
+              "value": "0",
+              "karma": "25"
+            },
+            {
+              "name": "Hanuman",
+              "value": "0",
+              "karma": "38"
+            },
+            {
+              "name": "Hobgoblin",
+              "value": "0",
+              "karma": "35"
+            },
+            {
+              "name": "Human",
+              "value": "0",
+              "karma": "25"
+            },
+            {
+              "name": "Koborokuru",
+              "value": "0",
+              "karma": "33"
+            },
+            {
+              "name": "Menehune",
+              "value": "0",
+              "karma": "35"
+            },
+            {
+              "name": "Minotaur",
+              "value": "0",
+              "karma": "45"
+            },
+            {
+              "name": "Nartaki",
+              "value": "0",
+              "karma": "25"
+            },
+            {
+              "name": "Nocturna",
+              "value": "0",
+              "karma": "30"
+            },
+            {
+              "name": "Ogre",
+              "value": "0",
+              "karma": "38"
+            },
+            {
+              "name": "Oni",
+              "value": "0",
+              "karma": "35"
+            },
+            {
+              "name": "Ork",
+              "value": "0",
+              "karma": "35"
+            },
+            {
+              "name": "Satyr",
+              "value": "0",
+              "karma": "45"
+            },
+            {
+              "name": "Troll",
+              "value": "0",
+              "karma": "45"
+            },
+            {
+              "name": "Wakyambi",
+              "value": "0",
+              "karma": "40"
+            },
+            {
+              "name": "Xapiri Thëpë",
+              "value": "0",
+              "karma": "28"
+            }
+          ]
+        },
+        {
+          "name": "Shapeshifter: Phocine",
+          "value": "2",
+          "karma": "20",
+          "metavariants": [
+            {
+              "name": "Cyclops",
+              "value": "2",
+              "karma": "35"
+            },
+            {
+              "name": "Dryad",
+              "value": "2",
+              "karma": "22"
+            },
+            {
+              "name": "Dwarf",
+              "value": "2",
+              "karma": "28"
+            },
+            {
+              "name": "Elf",
+              "value": "2",
+              "karma": "25"
+            },
+            {
+              "name": "Fomorian",
+              "value": "2",
+              "karma": "38"
+            },
+            {
+              "name": "Giant",
+              "value": "2",
+              "karma": "20"
+            },
+            {
+              "name": "Gnome",
+              "value": "2",
+              "karma": "20"
+            },
+            {
+              "name": "Hanuman",
+              "value": "2",
+              "karma": "33"
+            },
+            {
+              "name": "Hobgoblin",
+              "value": "2",
+              "karma": "30"
+            },
+            {
+              "name": "Human",
+              "value": "2",
+              "karma": "20"
+            },
+            {
+              "name": "Koborokuru",
+              "value": "2",
+              "karma": "28"
+            },
+            {
+              "name": "Menehune",
+              "value": "2",
+              "karma": "30"
+            },
+            {
+              "name": "Minotaur",
+              "value": "2",
+              "karma": "20"
+            },
+            {
+              "name": "Nartaki",
+              "value": "2",
+              "karma": "20"
+            },
+            {
+              "name": "Nocturna",
+              "value": "2",
+              "karma": "25"
+            },
+            {
+              "name": "Ogre",
+              "value": "2",
+              "karma": "33"
+            },
+            {
+              "name": "Oni",
+              "value": "2",
+              "karma": "30"
+            },
+            {
+              "name": "Ork",
+              "value": "2",
+              "karma": "30"
+            },
+            {
+              "name": "Satyr",
+              "value": "2",
+              "karma": "20"
+            },
+            {
+              "name": "Troll",
+              "value": "2",
+              "karma": "20"
+            },
+            {
+              "name": "Wakyambi",
+              "value": "2",
+              "karma": "35"
+            },
+            {
+              "name": "Xapiri Thëpë",
+              "value": "2",
+              "karma": "23"
+            }
+          ]
+        },
+        {
+          "name": "Shapeshifter: Tigrine",
+          "value": "0",
+          "karma": "25",
+          "metavariants": [
+            {
+              "name": "Cyclops",
+              "value": "0",
+              "karma": "40"
+            },
+            {
+              "name": "Dryad",
+              "value": "0",
+              "karma": "27"
+            },
+            {
+              "name": "Dwarf",
+              "value": "0",
+              "karma": "33"
+            },
+            {
+              "name": "Elf",
+              "value": "0",
+              "karma": "30"
+            },
+            {
+              "name": "Fomorian",
+              "value": "0",
+              "karma": "43"
+            },
+            {
+              "name": "Giant",
+              "value": "0",
+              "karma": "45"
+            },
+            {
+              "name": "Gnome",
+              "value": "0",
+              "karma": "25"
+            },
+            {
+              "name": "Hanuman",
+              "value": "0",
+              "karma": "38"
+            },
+            {
+              "name": "Hobgoblin",
+              "value": "0",
+              "karma": "35"
+            },
+            {
+              "name": "Human",
+              "value": "0",
+              "karma": "25"
+            },
+            {
+              "name": "Koborokuru",
+              "value": "0",
+              "karma": "33"
+            },
+            {
+              "name": "Menehune",
+              "value": "0",
+              "karma": "35"
+            },
+            {
+              "name": "Minotaur",
+              "value": "0",
+              "karma": "45"
+            },
+            {
+              "name": "Nartaki",
+              "value": "0",
+              "karma": "25"
+            },
+            {
+              "name": "Nocturna",
+              "value": "0",
+              "karma": "30"
+            },
+            {
+              "name": "Ogre",
+              "value": "0",
+              "karma": "38"
+            },
+            {
+              "name": "Oni",
+              "value": "0",
+              "karma": "35"
+            },
+            {
+              "name": "Ork",
+              "value": "0",
+              "karma": "35"
+            },
+            {
+              "name": "Satyr",
+              "value": "0",
+              "karma": "45"
+            },
+            {
+              "name": "Troll",
+              "value": "0",
+              "karma": "45"
+            },
+            {
+              "name": "Wakyambi",
+              "value": "0",
+              "karma": "40"
+            },
+            {
+              "name": "Xapiri Thëpë",
+              "value": "0",
+              "karma": "28"
+            }
+          ]
+        },
+        {
+          "name": "Shapeshifter: Ursine",
+          "value": "0",
+          "karma": "20",
+          "metavariants": [
+            {
+              "name": "Cyclops",
+              "value": "0",
+              "karma": "35"
+            },
+            {
+              "name": "Dryad",
+              "value": "0",
+              "karma": "22"
+            },
+            {
+              "name": "Dwarf",
+              "value": "0",
+              "karma": "28"
+            },
+            {
+              "name": "Elf",
+              "value": "0",
+              "karma": "25"
+            },
+            {
+              "name": "Fomorian",
+              "value": "0",
+              "karma": "38"
+            },
+            {
+              "name": "Giant",
+              "value": "0",
+              "karma": "40"
+            },
+            {
+              "name": "Gnome",
+              "value": "0",
+              "karma": "20"
+            },
+            {
+              "name": "Hanuman",
+              "value": "0",
+              "karma": "33"
+            },
+            {
+              "name": "Hobgoblin",
+              "value": "0",
+              "karma": "30"
+            },
+            {
+              "name": "Human",
+              "value": "0",
+              "karma": "20"
+            },
+            {
+              "name": "Koborokuru",
+              "value": "0",
+              "karma": "28"
+            },
+            {
+              "name": "Menehune",
+              "value": "0",
+              "karma": "30"
+            },
+            {
+              "name": "Minotaur",
+              "value": "0",
+              "karma": "40"
+            },
+            {
+              "name": "Nartaki",
+              "value": "0",
+              "karma": "20"
+            },
+            {
+              "name": "Nocturna",
+              "value": "0",
+              "karma": "25"
+            },
+            {
+              "name": "Ogre",
+              "value": "0",
+              "karma": "33"
+            },
+            {
+              "name": "Oni",
+              "value": "0",
+              "karma": "30"
+            },
+            {
+              "name": "Ork",
+              "value": "0",
+              "karma": "30"
+            },
+            {
+              "name": "Satyr",
+              "value": "0",
+              "karma": "40"
+            },
+            {
+              "name": "Troll",
+              "value": "0",
+              "karma": "40"
+            },
+            {
+              "name": "Wakyambi",
+              "value": "0",
+              "karma": "35"
+            },
+            {
+              "name": "Xapiri Thëpë",
+              "value": "0",
+              "karma": "23"
+            }
+          ]
+        },
+        {
+          "name": "Shapeshifter: Vulpine",
+          "value": "4",
+          "karma": "5",
+          "metavariants": [
+            {
+              "name": "Cyclops",
+              "value": "4",
+              "karma": "20"
+            },
+            {
+              "name": "Dryad",
+              "value": "4",
+              "karma": "7"
+            },
+            {
+              "name": "Dwarf",
+              "value": "4",
+              "karma": "13"
+            },
+            {
+              "name": "Elf",
+              "value": "4",
+              "karma": "10"
+            },
+            {
+              "name": "Fomorian",
+              "value": "4",
+              "karma": "23"
+            },
+            {
+              "name": "Giant",
+              "value": "4",
+              "karma": "25"
+            },
+            {
+              "name": "Gnome",
+              "value": "4",
+              "karma": "5"
+            },
+            {
+              "name": "Hanuman",
+              "value": "4",
+              "karma": "18"
+            },
+            {
+              "name": "Hobgoblin",
+              "value": "4",
+              "karma": "15"
+            },
+            {
+              "name": "Human",
+              "value": "4",
+              "karma": "5"
+            },
+            {
+              "name": "Koborokuru",
+              "value": "4",
+              "karma": "13"
+            },
+            {
+              "name": "Menehune",
+              "value": "4",
+              "karma": "15"
+            },
+            {
+              "name": "Minotaur",
+              "value": "4",
+              "karma": "25"
+            },
+            {
+              "name": "Nartaki",
+              "value": "4",
+              "karma": "5"
+            },
+            {
+              "name": "Nocturna",
+              "value": "4",
+              "karma": "10"
+            },
+            {
+              "name": "Ogre",
+              "value": "4",
+              "karma": "18"
+            },
+            {
+              "name": "Oni",
+              "value": "4",
+              "karma": "15"
+            },
+            {
+              "name": "Ork",
+              "value": "4",
+              "karma": "15"
+            },
+            {
+              "name": "Satyr",
+              "value": "4",
+              "karma": "25"
+            },
+            {
+              "name": "Troll",
+              "value": "4",
+              "karma": "25"
+            },
+            {
+              "name": "Wakyambi",
+              "value": "4",
+              "karma": "20"
+            },
+            {
+              "name": "Xapiri Thëpë",
+              "value": "4",
+              "karma": "8"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "255da2ba-8d21-4a73-9f81-37156901db72",
+      "name": "D - Human or Elf",
+      "slug": "d-human-or-elf",
+      "value": "D",
+      "category": "Heritage",
+      "category_slug": "heritage",
+      "metatypes": [
+        {
+          "name": "Elf",
+          "value": "0",
+          "karma": "0",
+          "metavariants": [
+            {
+              "name": "Dryad",
+              "value": "0",
+              "karma": "0"
+            },
+            {
+              "name": "Nocturna",
+              "value": "0",
+              "karma": "0"
+            },
+            {
+              "name": "Wakyambi",
+              "value": "0",
+              "karma": "12"
+            },
+            {
+              "name": "Xapiri Thëpë",
+              "value": "0",
+              "karma": "0"
+            }
+          ]
+        },
+        {
+          "name": "Human",
+          "value": "3",
+          "karma": "0",
+          "metavariants": [
+            {
+              "name": "Nartaki",
+              "value": "2",
+              "karma": "0"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "91dccab9-c3fc-4868-abf8-1825b70e8a6c",
+      "name": "E - Human",
+      "slug": "e-human",
+      "value": "E",
+      "category": "Heritage",
+      "category_slug": "heritage",
+      "metatypes": [
+        {
+          "name": "Human",
+          "value": "1",
+          "karma": "0",
+          "metavariants": [
+            {
+              "name": "Nartaki",
+              "value": "1",
+              "karma": "0"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "dc72a445-a956-4ea5-b383-0f775c638f05",
+      "name": "A - 75,000¥",
+      "slug": "a-75-000",
+      "value": "A",
+      "category": "Resources",
+      "category_slug": "resources",
+      "attributes": {
+        "prioritytable": "Street Level",
+        "resources": "75000"
+      }
+    },
+    {
+      "id": "7e4c5695-52c8-4b16-b233-058af14a41d1",
+      "name": "A - 500,000¥",
+      "slug": "a-500-000",
+      "value": "A",
+      "category": "Resources",
+      "category_slug": "resources",
+      "attributes": {
+        "prioritytable": "Prime Runner",
+        "resources": "500000"
+      }
+    },
+    {
+      "id": "ee17af88-5564-4009-b0a1-4c8632bffaf4",
+      "name": "A - 450,000¥",
+      "slug": "a-450-000",
+      "value": "A",
+      "category": "Resources",
+      "category_slug": "resources",
+      "attributes": {
+        "prioritytable": "Standard",
+        "resources": "450000"
+      }
+    },
+    {
+      "id": "edc5db00-8d4c-4510-85d2-8d82d6c66ed6",
+      "name": "B - 50,000¥",
+      "slug": "b-50-000",
+      "value": "B",
+      "category": "Resources",
+      "category_slug": "resources",
+      "attributes": {
+        "prioritytable": "Street Level",
+        "resources": "50000"
+      }
+    },
+    {
+      "id": "1da0e4d3-e75b-40ab-b366-e1eba499e8ca",
+      "name": "B - 325,000¥",
+      "slug": "b-325-000",
+      "value": "B",
+      "category": "Resources",
+      "category_slug": "resources",
+      "attributes": {
+        "prioritytable": "Prime Runner",
+        "resources": "325000"
+      }
+    },
+    {
+      "id": "ddb56487-f6ef-480d-9812-cf6077111c2b",
+      "name": "B - 275,000¥",
+      "slug": "b-275-000",
+      "value": "B",
+      "category": "Resources",
+      "category_slug": "resources",
+      "attributes": {
+        "prioritytable": "Standard",
+        "resources": "275000"
+      }
+    },
+    {
+      "id": "9aecfa32-4d5c-4ba9-a88e-9a04f83e516b",
+      "name": "C - 25,000¥",
+      "slug": "c-25-000",
+      "value": "C",
+      "category": "Resources",
+      "category_slug": "resources",
+      "attributes": {
+        "prioritytable": "Street Level",
+        "resources": "25000"
+      }
+    },
+    {
+      "id": "be69802a-5379-457b-8084-87b22d2e9ea6",
+      "name": "C - 140,000¥",
+      "slug": "c-140-000",
+      "value": "C",
+      "category": "Resources",
+      "category_slug": "resources",
+      "attributes": {
+        "prioritytable": "Standard",
+        "resources": "140000"
+      }
+    },
+    {
+      "id": "0fdfe7f7-119d-4971-a629-4a4dea938c6c",
+      "name": "C - 210,000¥",
+      "slug": "c-210-000",
+      "value": "C",
+      "category": "Resources",
+      "category_slug": "resources",
+      "attributes": {
+        "prioritytable": "Prime Runner",
+        "resources": "210000"
+      }
+    },
+    {
+      "id": "c5b45f74-3396-45c7-afa9-b69c0c8db6ee",
+      "name": "D - 15,000¥",
+      "slug": "d-15-000",
+      "value": "D",
+      "category": "Resources",
+      "category_slug": "resources",
+      "attributes": {
+        "prioritytable": "Street Level",
+        "resources": "15000"
+      }
+    },
+    {
+      "id": "2cbe209a-ae97-4985-b42f-4839613dfb28",
+      "name": "D - 150,000¥",
+      "slug": "d-150-000",
+      "value": "D",
+      "category": "Resources",
+      "category_slug": "resources",
+      "attributes": {
+        "prioritytable": "Prime Runner",
+        "resources": "150000"
+      }
+    },
+    {
+      "id": "b977475b-9728-45a0-9873-a77bb036fb99",
+      "name": "D - 50,000¥",
+      "slug": "d-50-000",
+      "value": "D",
+      "category": "Resources",
+      "category_slug": "resources",
+      "attributes": {
+        "prioritytable": "Standard",
+        "resources": "50000"
+      }
+    },
+    {
+      "id": "860a9601-e06f-424f-8f40-bee843a6b5dc",
+      "name": "E - 100,000¥",
+      "slug": "e-100-000",
+      "value": "E",
+      "category": "Resources",
+      "category_slug": "resources",
+      "attributes": {
+        "prioritytable": "Prime Runner",
+        "resources": "100000"
+      }
+    },
+    {
+      "id": "dd4eb137-e218-4d92-9ac2-db4d6bad4704",
+      "name": "E - 6,000¥",
+      "slug": "e-6-000",
+      "value": "E",
+      "category": "Resources",
+      "category_slug": "resources",
+      "attributes": {
+        "prioritytable": "Standard",
+        "resources": "6000"
+      }
+    },
+    {
+      "id": "cb4060e7-61b9-40d7-b97f-9ab9129bfc26",
+      "name": "E - 6,000¥",
+      "slug": "e-6-000",
+      "value": "E",
+      "category": "Resources",
+      "category_slug": "resources",
+      "attributes": {
+        "prioritytable": "Street Level",
+        "resources": "6000"
+      }
+    },
+    {
+      "id": "45a5f7b4-c152-4e05-839f-1b3d14e56058",
+      "name": "A - 46 Skills/10 Skill Groups",
+      "slug": "a-46-skills-10-skill-groups",
+      "value": "A",
+      "category": "Skills",
+      "category_slug": "skills",
+      "attributes": {
+        "skillgroups": "10",
+        "skills": "46"
+      }
+    },
+    {
+      "id": "bde37645-6789-4401-bcec-4c0e61c7fe17",
+      "name": "B - 36 Skills/5 Skill Groups",
+      "slug": "b-36-skills-5-skill-groups",
+      "value": "B",
+      "category": "Skills",
+      "category_slug": "skills",
+      "attributes": {
+        "skillgroups": "5",
+        "skills": "36"
+      }
+    },
+    {
+      "id": "57c52154-489e-4e8a-b885-13b341700deb",
+      "name": "C - 28 Skills/2 Skill Groups",
+      "slug": "c-28-skills-2-skill-groups",
+      "value": "C",
+      "category": "Skills",
+      "category_slug": "skills",
+      "attributes": {
+        "skillgroups": "2",
+        "skills": "28"
+      }
+    },
+    {
+      "id": "61e1758f-e4ca-4e53-ad45-bb88a0e5ac04",
+      "name": "D - 22 Skills/0 Skill Groups",
+      "slug": "d-22-skills-0-skill-groups",
+      "value": "D",
+      "category": "Skills",
+      "category_slug": "skills",
+      "attributes": {
+        "skillgroups": "0",
+        "skills": "22"
+      }
+    },
+    {
+      "id": "b1ca5551-46a4-4ef0-9d07-c33ae0abbcd1",
+      "name": "E - 18 Skills/0 Skill Groups",
+      "slug": "e-18-skills-0-skill-groups",
+      "value": "E",
+      "category": "Skills",
+      "category_slug": "skills",
+      "attributes": {
+        "skillgroups": "0",
+        "skills": "18"
+      }
+    },
+    {
+      "id": "9d58a295-7c59-4d3f-8001-a5565da6b836",
+      "name": "A - Magician or Technomancer",
+      "slug": "a-magician-or-technomancer",
+      "value": "A",
+      "category": "Talent",
+      "category_slug": "talent",
+      "attributes": {
+        "talents": "{\"talent\":[{\"forbidden\":{\"oneof\":{\"metatype\":\"A.I.\"}},\"magic\":\"6\",\"name\":\"Magician - 6 Magic/10 Spells\",\"qualities\":{\"quality\":\"Magician\"},\"skillqty\":\"2\",\"skilltype\":\"magic\",\"skillval\":\"5\",\"spells\":\"10\",\"value\":\"Magician\"},{\"forbidden\":{\"oneof\":{\"metatype\":\"A.I.\"}},\"magic\":\"6\",\"name\":\"Mystic Adept - 6 Magic/10 Spells\",\"qualities\":{\"quality\":\"Mystic Adept\"},\"skillqty\":\"2\",\"skilltype\":\"magic\",\"skillval\":\"5\",\"spells\":\"10\",\"value\":\"Mystic Adept\"},{\"cfp\":\"7\",\"name\":\"Technomancer - 6 Resonance/7 Complex Forms\",\"qualities\":{\"quality\":\"Technomancer\"},\"required\":{\"oneof\":{\"metatypecategory\":\"Metahuman\"}},\"resonance\":\"6\",\"skillqty\":\"3\",\"skilltype\":\"resonance\",\"skillval\":\"5\",\"value\":\"Technomancer\"},{\"depth\":\"6\",\"name\":\"A.I. - 6 Depth\",\"required\":{\"oneof\":{\"metatype\":\"A.I.\"}},\"skillqty\":\"2\",\"skilltype\":\"matrix\",\"skillval\":\"5\",\"value\":\"A.I.\"}]}"
+      }
+    },
+    {
+      "id": "774fd89a-ecea-4f5f-ad2b-c4476ca46f70",
+      "name": "B - Adept, Magician, or Technomancer",
+      "slug": "b-adept-magician-or-technomancer",
+      "value": "B",
+      "category": "Talent",
+      "category_slug": "talent",
+      "attributes": {
+        "talents": "{\"talent\":[{\"forbidden\":{\"oneof\":{\"metatype\":\"A.I.\"}},\"magic\":\"6\",\"name\":\"Adept - 6 Magic\",\"qualities\":{\"quality\":\"Adept\"},\"skillqty\":\"1\",\"skilltype\":{\"+@xpath\":\"not(attribute = 'RES' or attribute = 'DEP') and (not(category = 'Magical Active') or skillgroup = '' or not(skillgroup))\",\"+content\":\"xpath\"},\"skillval\":\"4\",\"value\":\"Adept\"},{\"forbidden\":{\"oneof\":{\"metatype\":\"A.I.\"}},\"magic\":\"4\",\"name\":\"Magician - 4 Magic/7 Spells\",\"qualities\":{\"quality\":\"Magician\"},\"skillqty\":\"2\",\"skilltype\":\"magic\",\"skillval\":\"4\",\"spells\":\"7\",\"value\":\"Magician\"},{\"forbidden\":{\"oneof\":{\"metatype\":\"A.I.\"}},\"magic\":\"4\",\"name\":\"Mystic Adept - 4 Magic/7 Spells\",\"qualities\":{\"quality\":\"Mystic Adept\"},\"skillqty\":\"2\",\"skilltype\":\"magic\",\"skillval\":\"4\",\"spells\":\"7\",\"value\":\"Mystic Adept\"},{\"forbidden\":{\"oneof\":{\"metatype\":\"A.I.\"}},\"magic\":\"5\",\"name\":\"Aspected Magician - 5 Magic\",\"qualities\":{\"quality\":\"Aspected Magician\"},\"skillgroupchoices\":{\"skillgroup\":[\"Conjuring\",\"Enchanting\",\"Sorcery\"]},\"skillgroupqty\":\"1\",\"skillgrouptype\":\"grouped\",\"skillgroupval\":\"4\",\"value\":\"Aspected Magician\"},{\"forbidden\":{\"oneof\":{\"metatype\":\"A.I.\"}},\"magic\":\"5\",\"name\":\"Apprentice - 5 Magic\",\"qualities\":{\"quality\":\"Apprentice\"},\"skillgroupchoices\":{\"skillgroup\":[\"Conjuring\",\"Sorcery\"]},\"skillgroupqty\":\"1\",\"skillgrouptype\":\"grouped\",\"skillgroupval\":\"4\",\"value\":\"Apprentice\"},{\"cfp\":\"4\",\"name\":\"Technomancer - 4 Resonance/4 Complex Forms\",\"qualities\":{\"quality\":\"Technomancer\"},\"required\":{\"oneof\":{\"metatypecategory\":\"Metahuman\"}},\"resonance\":\"4\",\"skillqty\":\"3\",\"skilltype\":\"resonance\",\"skillval\":\"4\",\"value\":\"Technomancer\"},{\"depth\":\"4\",\"name\":\"A.I. - 4 Depth\",\"required\":{\"oneof\":{\"metatype\":\"A.I.\"}},\"skillqty\":\"2\",\"skilltype\":\"matrix\",\"skillval\":\"4\",\"value\":\"A.I.\"}]}"
+      }
+    },
+    {
+      "id": "aae3a140-d306-4811-a9d2-874140600150",
+      "name": "C - Adept, Magician, or Technomancer",
+      "slug": "c-adept-magician-or-technomancer",
+      "value": "C",
+      "category": "Talent",
+      "category_slug": "talent",
+      "attributes": {
+        "talents": "{\"talent\":[{\"forbidden\":{\"oneof\":{\"metatype\":\"A.I.\"}},\"magic\":\"4\",\"name\":\"Adept - 4 Magic\",\"qualities\":{\"quality\":\"Adept\"},\"skillqty\":\"1\",\"skilltype\":{\"+@xpath\":\"not(attribute = 'RES' or attribute = 'DEP') and (not(category = 'Magical Active') or skillgroup = '' or not(skillgroup))\",\"+content\":\"xpath\"},\"skillval\":\"2\",\"value\":\"Adept\"},{\"forbidden\":{\"oneof\":{\"metatype\":\"A.I.\"}},\"magic\":\"3\",\"name\":\"Magician - 3 Magic/5 Spells\",\"qualities\":{\"quality\":\"Magician\"},\"spells\":\"5\",\"value\":\"Magician\"},{\"forbidden\":{\"oneof\":{\"metatype\":\"A.I.\"}},\"magic\":\"3\",\"name\":\"Mystic Adept - 3 Magic/5 Spells\",\"qualities\":{\"quality\":\"Mystic Adept\"},\"spells\":\"5\",\"value\":\"Mystic Adept\"},{\"forbidden\":{\"oneof\":{\"metatype\":\"A.I.\"}},\"magic\":\"3\",\"name\":\"Aspected Magician - 3 Magic\",\"qualities\":{\"quality\":\"Aspected Magician\"},\"skillgroupchoices\":{\"skillgroup\":[\"Conjuring\",\"Enchanting\",\"Sorcery\"]},\"skillgroupqty\":\"1\",\"skillgrouptype\":\"grouped\",\"skillgroupval\":\"2\",\"value\":\"Aspected Magician\"},{\"forbidden\":{\"oneof\":{\"metatype\":\"A.I.\"}},\"magic\":\"5\",\"name\":\"Explorer - 5 Magic\",\"qualities\":{\"quality\":\"Explorer\"},\"skillchoices\":{\"skill\":[\"Arcana\",\"Assensing\",\"Astral Combat\"]},\"skillqty\":\"2\",\"skilltype\":\"specific\",\"skillval\":\"6\",\"value\":\"Explorer\"},{\"forbidden\":{\"oneof\":{\"metatype\":\"A.I.\"}},\"magic\":\"5\",\"name\":\"Enchanter - 5 Magic\",\"qualities\":{\"quality\":\"Enchanter\"},\"skillgroupchoices\":{\"skillgroup\":\"Enchanting\"},\"skillgroupqty\":\"1\",\"skillgrouptype\":\"grouped\",\"skillgroupval\":\"4\",\"value\":\"Enchanter\"},{\"forbidden\":{\"oneof\":{\"metatype\":\"A.I.\"}},\"magic\":\"3\",\"name\":\"Apprentice - 3 Magic\",\"qualities\":{\"quality\":\"Apprentice\"},\"skillgroupchoices\":{\"skillgroup\":[\"Conjuring\",\"Sorcery\"]},\"skillgroupqty\":\"1\",\"skillgrouptype\":\"grouped\",\"skillgroupval\":\"2\",\"value\":\"Apprentice\"},{\"cfp\":\"3\",\"name\":\"Technomancer - 3 Resonance/3 Complex Forms\",\"qualities\":{\"quality\":\"Technomancer\"},\"required\":{\"oneof\":{\"metatypecategory\":\"Metahuman\"}},\"resonance\":\"3\",\"skillqty\":\"3\",\"skilltype\":\"resonance\",\"skillval\":\"2\",\"value\":\"Technomancer\"},{\"depth\":\"3\",\"name\":\"A.I. - 3 Depth\",\"required\":{\"oneof\":{\"metatype\":\"A.I.\"}},\"skillqty\":\"1\",\"skilltype\":\"matrix\",\"skillval\":\"2\",\"value\":\"A.I.\"}]}"
+      }
+    },
+    {
+      "id": "b97be625-a732-4c3c-80e4-06c4d88bac91",
+      "name": "D - Adept or Aspected Magician",
+      "slug": "d-adept-or-aspected-magician",
+      "value": "D",
+      "category": "Talent",
+      "category_slug": "talent",
+      "attributes": {
+        "talents": "{\"talent\":[{\"forbidden\":{\"oneof\":{\"metatype\":\"A.I.\"}},\"magic\":\"2\",\"name\":\"Adept - 2 Magic\",\"qualities\":{\"quality\":\"Adept\"},\"value\":\"Adept\"},{\"forbidden\":{\"oneof\":{\"metatype\":\"A.I.\"}},\"magic\":\"2\",\"name\":\"Aspected Magician - 2 Magic\",\"qualities\":{\"quality\":\"Aspected Magician\"},\"skillgroupchoices\":{\"skillgroup\":[\"Conjuring\",\"Enchanting\",\"Sorcery\"]},\"skillgroupqty\":\"1\",\"skillgrouptype\":\"grouped\",\"skillgroupval\":\"0\",\"value\":\"Aspected Magician\"},{\"forbidden\":{\"oneof\":{\"metatype\":\"A.I.\"}},\"magic\":\"3\",\"name\":\"Aware - 3 Magic\",\"qualities\":{\"quality\":\"Aware\"},\"skillchoices\":{\"skill\":[\"Arcana\",\"Assensing\",\"Astral Combat\"]},\"skillqty\":\"1\",\"skilltype\":\"specific\",\"skillval\":\"4\",\"value\":\"Aware\"},{\"forbidden\":{\"oneof\":{\"metatype\":\"A.I.\"}},\"magic\":\"2\",\"name\":\"Apprentice - 2 Magic\",\"qualities\":{\"quality\":\"Apprentice\"},\"value\":\"Apprentice\"},{\"depth\":\"2\",\"name\":\"A.I. - 2 Depth\",\"required\":{\"oneof\":{\"metatype\":\"A.I.\"}},\"value\":\"A.I.\"}]}"
+      }
+    },
+    {
+      "id": "9753a254-94b0-46e8-83f4-e7627bdb8571",
+      "name": "E - Mundane",
+      "slug": "e-mundane",
+      "value": "E",
+      "category": "Talent",
+      "category_slug": "talent",
+      "attributes": {
+        "talents": "{\"talent\":[{\"forbidden\":{\"oneof\":{\"metatype\":\"A.I.\"}},\"name\":\"Mundane\",\"value\":\"Mundane\"},{\"depth\":\"1\",\"name\":\"A.I. - 1 Depth\",\"required\":{\"oneof\":{\"metatype\":\"A.I.\"}},\"value\":\"A.I.\"}]}"
+      }
+    }
+  ]
+}

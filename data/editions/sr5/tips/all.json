@@ -1,0 +1,185 @@
+{
+  "metadata": {
+    "source": {
+      "name": "Chummer5 Tips Dataset",
+      "version": "unknown",
+      "extracted_at": "2025-11-11T01:33:08Z",
+      "record_count": 16
+    },
+    "generated_by": "cmd/tools/chummertips (ShadowMaster)",
+    "tip_count": 16
+  },
+  "tips": [
+    {
+      "id": "c2d32a52-25a7-4565-a9b6-1bde1f65c83e",
+      "text": "Did you know that you can concealed carry SMGs in a large smuggling compartment? Why not buy an HK-227 to try it out, they're certainly better than the overpriced stuff from Ingram! This message brought to you by Heckler \u0026 Koch GmbH.",
+      "chargen_only": false,
+      "career_only": false,
+      "required": {
+        "raw": "{\"allof\":{\"cyberware\":\"Large Smuggling Compartment\",\"grouponeof\":{\"skill\":[{\"name\":\"Automatics\",\"val\":\"6\"},{\"name\":\"Automatics\",\"spec\":\"Submachine Guns\",\"val\":\"4\"}]}}}"
+      },
+      "forbidden": {
+        "raw": "{\"oneof\":{\"weapon\":[\"HK-227\",\"Ingram Smartgun X\"]}}"
+      }
+    },
+    {
+      "id": "ab52155b-d99e-4e2e-816b-16535afc206f",
+      "text": "Looks like you don't have any hobbies. Might I suggest competitive basket-weaving?",
+      "chargen_only": false,
+      "career_only": false,
+      "forbidden": {
+        "raw": "{\"allof\":{\"skill\":{\"type\":\"Interest\",\"val\":\"1\"}}}"
+      }
+    },
+    {
+      "id": "543af3b5-c490-4dcd-8db4-54ad214e32f4",
+      "text": "Looks like you're building a decker without Perfect Time. Are you sure you want to do that?",
+      "chargen_only": false,
+      "career_only": false,
+      "required": {
+        "raw": "{\"allof\":{\"attribute\":{\"name\":\"WIL\",\"total\":\"3\"},\"grouponeof\":{\"cyberware\":[\"Datajack\",\"Datajack Plus\",\"Control Rig\"],\"gear\":[\"Trodes\",\"Trode Patch\"]},\"skill\":[{\"name\":\"Hacking\",\"val\":\"6\"},{\"name\":\"Electronic Warfare\",\"val\":\"6\"},{\"name\":\"Computer\",\"val\":\"6\"}],\"skilltotal\":{\"skills\":\"Hardware+Software+Computer+Cybercombat\",\"val\":\"8\"}},\"oneof\":{\"attributetotal\":{\"attributes\":\"{LOG}+{INT}\",\"total\":\"11\"},\"group\":{\"attributetotal\":{\"attributes\":\"{LOG}+{INT}\",\"total\":\"10\"},\"metatype\":\"Troll\"}}}"
+      },
+      "forbidden": {
+        "raw": "{\"oneof\":{\"attribute\":[{\"name\":\"DEP\",\"val\":\"1\"},{\"name\":\"RES\",\"val\":\"2\"}],\"quality\":\"Perfect Time\"}}"
+      }
+    },
+    {
+      "id": "528f605f-9994-46b5-8583-cafe006507e4",
+      "text": "Looks like you're building a street samurai. Don't you need a code of honor?",
+      "chargen_only": false,
+      "career_only": false,
+      "required": {
+        "raw": "{\"allof\":{\"ess\":\"-1\",\"grouponeof\":[{\"attribute\":{\"name\":\"AGI\",\"total\":\"6\"},\"cyberwarecategory\":{\"+@count\":\"2\",\"+content\":\"Cyberlimbs\"}},{\"skill\":[{\"name\":\"Automatics\",\"val\":\"6\"},{\"name\":\"Pistols\",\"val\":\"6\"},{\"name\":\"Longarms\",\"val\":\"6\"},{\"name\":\"Archery\",\"val\":\"6\"},{\"name\":\"Throwing Weapons\",\"val\":\"6\"}]},{\"skill\":[{\"name\":\"Blades\",\"val\":\"6\"},{\"name\":\"Clubs\",\"val\":\"6\"},{\"name\":\"Unarmed Combat\",\"val\":\"6\"}]}]}}"
+      },
+      "forbidden": {
+        "raw": "{\"oneof\":{\"attribute\":{\"name\":\"DEP\",\"val\":\"1\"},\"attributetotal\":{\"attributes\":\"{RES}+{MAG}\",\"val\":\"2\"},\"quality\":[\"Code of Honor\",\"Code of Honor: Like a Boss\",\"Code of Honor: Avenging Angel\",\"Code of Honor: Black Hat\"]}}"
+      }
+    },
+    {
+      "id": "4bf9379e-101a-4664-8049-7db867073943",
+      "text": "Looks like you're into some pretty fine shootin' there, Tex.",
+      "chargen_only": false,
+      "career_only": false,
+      "required": {
+        "raw": "{\"allof\":{\"quality\":[\"Sharpshooter\",\"Strive For Perfection\"]}}"
+      }
+    },
+    {
+      "id": "42262ca7-b414-4dde-b1b3-b7f72bc160c1",
+      "text": "Looks like you've chosen to make an A.I. Are you sure you wouldn't rather be playing Eclipse Phase?",
+      "chargen_only": false,
+      "career_only": false,
+      "required": {
+        "raw": "{\"allof\":{\"metatype\":\"A.I.\"}}"
+      }
+    },
+    {
+      "id": "8bdb4ade-46e2-4ff6-b440-d8a8955766ed",
+      "text": "Oni? More like horny elves!",
+      "chargen_only": false,
+      "career_only": false,
+      "required": {
+        "raw": "{\"allof\":{\"metavariant\":\"Oni\"}}"
+      }
+    },
+    {
+      "id": "250bf4c4-b71a-4ff7-8f99-4d59aaba89c1",
+      "text": "Remember, chummer, you cannot socialize in a foreign language better than you can speak that language! You should probably increase its rating to 6.",
+      "chargen_only": false,
+      "career_only": false,
+      "required": {
+        "raw": "{\"allof\":{\"skill\":{\"type\":\"Language\",\"val\":\"1\"},\"skilltotal\":{\"skills\":\"Con+Etiquette+Negotiation+Leadership+Intimidation\",\"val\":\"13\"}},\"oneof\":{\"skill\":[{\"name\":\"Con\",\"val\":\"6\"},{\"name\":\"Etiquette\",\"val\":\"6\"},{\"name\":\"Negotiation\",\"val\":\"6\"},{\"name\":\"Leadership\",\"val\":\"6\"},{\"name\":\"Intimidation\",\"val\":\"6\"}]}}"
+      },
+      "forbidden": {
+        "raw": "{\"oneof\":{\"skill\":{\"type\":\"Language\",\"val\":\"6\"}}}"
+      }
+    },
+    {
+      "id": "b669df07-528b-4df3-829b-54d095af1791",
+      "text": "Why bother with any other weapon when you can have the Ares Alpha, the last word in automatics! This message brought to you by Ares Macrotechnology.",
+      "chargen_only": false,
+      "career_only": false,
+      "required": {
+        "raw": "{\"allof\":{\"skill\":{\"name\":\"Automatics\",\"val\":\"6\"}}}"
+      },
+      "forbidden": {
+        "raw": "{\"oneof\":{\"weapon\":\"Ares Alpha\"}}"
+      }
+    },
+    {
+      "id": "1e98f6d1-dfca-4dc3-9248-dd3da3589989",
+      "text": "You appear to be making an Alchemist. Are you sure you want to do that?",
+      "chargen_only": false,
+      "career_only": false,
+      "required": {
+        "raw": "{\"allof\":{\"skill\":{\"name\":\"Alchemy\",\"val\":\"6\"}}}"
+      }
+    },
+    {
+      "id": "d6d22084-a292-4938-a9b4-af8963111ce6",
+      "text": "You appear to have bought Boosted Reflexes. Are you sure you want to do that?",
+      "chargen_only": false,
+      "career_only": false,
+      "required": {
+        "raw": "{\"allof\":{\"cyberware\":\"Boosted Reflexes\"}}"
+      }
+    },
+    {
+      "id": "ccaae7df-40ba-4da9-837e-c0df92f07038",
+      "text": "You have enough money to retire with a Low Lifestyle. Keep at it! A nuyen saved is a nuyen earned!",
+      "chargen_only": false,
+      "career_only": false,
+      "required": {
+        "raw": "{\"allof\":{\"nuyen\":\"200000\"}}"
+      },
+      "forbidden": {
+        "raw": "{\"allof\":{\"nuyen\":\"500000\"}}"
+      }
+    },
+    {
+      "id": "b6da9d78-024d-4516-821c-93ad8207075d",
+      "text": "You have enough money to retire with a Luxury Lifestyle. Molly Millions has nothing on you!",
+      "chargen_only": false,
+      "career_only": false,
+      "required": {
+        "raw": "{\"allof\":{\"nuyen\":\"100000000\"}}"
+      }
+    },
+    {
+      "id": "ff26b01d-1aa4-45ac-8685-0d199e115d1f",
+      "text": "You have enough money to retire with a Medium Lifestyle. 2.5 kids, picket fence AR overlay, loving partner. Is it really worth saving up for that next upgrade?",
+      "chargen_only": false,
+      "career_only": false,
+      "required": {
+        "raw": "{\"allof\":{\"nuyen\":\"500000\"}}"
+      },
+      "forbidden": {
+        "raw": "{\"allof\":{\"nuyen\":\"1000000\"}}"
+      }
+    },
+    {
+      "id": "ee4bdb97-2b43-49ea-bc1e-487969258880",
+      "text": "You're a pretty established shadowrunner now, chummer. Maybe it's time for you to initiate into the higher arts?",
+      "chargen_only": false,
+      "career_only": false,
+      "required": {
+        "raw": "{\"allof\":{\"attribute\":{\"name\":\"MAG\",\"val\":\"1\"},\"careerkarma\":\"100\",\"magenabled\":null}}"
+      },
+      "forbidden": {
+        "raw": "{\"allof\":{\"initiategrade\":\"1\"}}"
+      }
+    },
+    {
+      "id": "afc35a4b-a588-4080-9e77-0dbb5d223122",
+      "text": "You're a pretty established shadowrunner now, chummer. Maybe it's time for you to submerge into the Deep Resonance?",
+      "chargen_only": false,
+      "career_only": false,
+      "required": {
+        "raw": "{\"allof\":{\"attribute\":{\"name\":\"RES\",\"val\":\"1\"},\"careerkarma\":\"100\",\"resenabled\":null}}"
+      },
+      "forbidden": {
+        "raw": "{\"allof\":{\"submersiongrade\":\"1\"}}"
+      }
+    }
+  ]
+}

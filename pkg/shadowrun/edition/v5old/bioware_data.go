@@ -2699,12 +2699,12 @@ var biowareData = &BiowareChummer{
 						Decreasecharesist: []bool{
 							// 1 items omitted
 						},
-						Decreaseintresist: []bool{
-							// 1 items omitted
-						},
-						Decreaselogresist: []bool{
-							// 1 items omitted
-						},
+					Decreaseintresist: []string{
+						// 1 items omitted
+					},
+					Decreaselogresist: []string{
+						// 1 items omitted
+					},
 						Decreaserearesist: []bool{
 							// 1 items omitted
 						},

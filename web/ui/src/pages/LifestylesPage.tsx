@@ -3,12 +3,14 @@ import { lifestyleApi } from '../lib/api';
 import type { Lifestyle } from '../lib/types';
 import { useToast } from '../contexts/ToastContext';
 import { LifestylesTable } from '../components/lifestyle/LifestylesTable';
+import { LifestylesTableGrouped } from '../components/lifestyle/LifestylesTableGrouped';
 import { DatabasePageLayout } from '../components/database/DatabasePageLayout';
 
 export function LifestylesPage() {
   const { showError } = useToast();
   const [lifestyles, setLifestyles] = useState<Lifestyle[]>([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [viewMode, setViewMode] = useState<'flat' | 'grouped'>('grouped');
 
   const loadLifestyles = useCallback(async () => {
     try {
@@ -30,11 +32,17 @@ export function LifestylesPage() {
   return (
     <DatabasePageLayout
       title="Lifestyles Database"
-      description="View and search all available lifestyles from Shadowrun 5th Edition"
+      description="View and search all available lifestyles and lifestyle options from Shadowrun 5th Edition"
       itemCount={lifestyles.length}
       isLoading={isLoading}
+      viewMode={viewMode}
+      onViewModeChange={setViewMode}
     >
-      <LifestylesTable lifestyles={lifestyles} />
+      {viewMode === 'grouped' ? (
+        <LifestylesTableGrouped lifestyles={lifestyles} />
+      ) : (
+        <LifestylesTable lifestyles={lifestyles} />
+      )}
     </DatabasePageLayout>
   );
 }

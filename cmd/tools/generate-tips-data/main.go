@@ -5,8 +5,7 @@ import (
 	"os"
 	"strings"
 
-	"shadowmaster/pkg/shadowrun/edition/v5"
-	"shadowmaster/pkg/shadowrun/edition/v5/common"
+	v5 "shadowmaster/pkg/shadowrun/edition/v5"
 	"shadowmaster/pkg/shadowrun/edition/v5/loader"
 )
 
@@ -101,4 +100,3 @@ func escapeString(s string) string {
 	s = strings.ReplaceAll(s, "\t", "\\t")
 	return s
 }
-

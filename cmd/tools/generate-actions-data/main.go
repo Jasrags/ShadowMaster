@@ -5,7 +5,7 @@ import (
 	"os"
 	"strings"
 
-	"shadowmaster/pkg/shadowrun/edition/v5"
+	v5 "shadowmaster/pkg/shadowrun/edition/v5"
 	"shadowmaster/pkg/shadowrun/edition/v5/loader"
 )
 
@@ -41,7 +41,7 @@ func generateActionsDataCode(data *v5.ActionsChummer) string {
 	b.WriteString("\tActions: Actions{\n")
 	b.WriteString("\t\tAction: []Action{\n")
 
-	for i, action := range data.Actions.Action {
+	for _, action := range data.Actions.Action {
 		b.WriteString("\t\t\t{\n")
 		b.WriteString(fmt.Sprintf("\t\t\t\tID: %q,\n", action.ID))
 		b.WriteString(fmt.Sprintf("\t\t\t\tName: %q,\n", action.Name))
@@ -167,4 +167,3 @@ func escapeString(s string) string {
 	s = strings.ReplaceAll(s, "\t", "\\t")
 	return s
 }
-

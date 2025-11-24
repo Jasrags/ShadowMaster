@@ -1,0 +1,176 @@
+{
+  "priorities": {
+    "magic": {
+      "A": {
+        "label": "Full Magician",
+        "summary": "Access to full magician abilities including spellcasting, conjuring, and astral projection."
+      },
+      "B": {
+        "label": "Adept or Aspected Magician",
+        "summary": "Choose between physical adept powers or a limited magical path (sorcery or conjuring)."
+      },
+      "C": {
+        "label": "Mundane",
+        "summary": "No magical abilities."
+      },
+      "D": {
+        "label": "Mundane"
+      },
+      "E": {
+        "label": "Mundane"
+      }
+    },
+    "metatype": {
+      "A": {
+        "label": "All metatypes"
+      },
+      "B": {
+        "label": "All metatypes"
+      },
+      "C": {
+        "label": "Troll or Elf"
+      },
+      "D": {
+        "label": "Dwarf or Ork"
+      },
+      "E": {
+        "label": "Human"
+      }
+    },
+    "attributes": {
+      "A": {
+        "label": "30 points"
+      },
+      "B": {
+        "label": "27 points"
+      },
+      "C": {
+        "label": "24 points"
+      },
+      "D": {
+        "label": "21 points"
+      },
+      "E": {
+        "label": "18 points"
+      }
+    },
+    "skills": {
+      "A": {
+        "label": "50 points"
+      },
+      "B": {
+        "label": "40 points"
+      },
+      "C": {
+        "label": "34 points"
+      },
+      "D": {
+        "label": "30 points"
+      },
+      "E": {
+        "label": "27 points"
+      }
+    },
+    "resources": {
+      "A": {
+        "label": "1,000,000¥",
+        "summary": "Prime runner"
+      },
+      "B": {
+        "label": "400,000¥"
+      },
+      "C": {
+        "label": "90,000¥"
+      },
+      "D": {
+        "label": "20,000¥"
+      },
+      "E": {
+        "label": "5,000¥"
+      }
+    }
+  },
+  "metatypes": [
+    {
+      "id": "human",
+      "name": "Human",
+      "priority_tiers": ["A", "B", "C", "D", "E"],
+      "attribute_modifiers": {
+        "body": 0,
+        "quickness": 0,
+        "strength": 0,
+        "charisma": 0,
+        "intelligence": 0,
+        "willpower": 0
+      },
+      "abilities": [
+        "Baseline metatype with no inherent modifiers"
+      ]
+    },
+    {
+      "id": "dwarf",
+      "name": "Dwarf",
+      "priority_tiers": ["A", "B", "D"],
+      "attribute_modifiers": {
+        "body": 1,
+        "quickness": -1,
+        "strength": 2,
+        "charisma": 0,
+        "intelligence": 0,
+        "willpower": 2
+      },
+      "abilities": [
+        "Thermographic vision",
+        "+2 Body to resist disease and toxins"
+      ]
+    },
+    {
+      "id": "elf",
+      "name": "Elf",
+      "priority_tiers": ["A", "B", "C"],
+      "attribute_modifiers": {
+        "body": 0,
+        "quickness": 1,
+        "strength": 0,
+        "charisma": 2,
+        "intelligence": 0,
+        "willpower": 0
+      },
+      "abilities": [
+        "Low-light vision"
+      ]
+    },
+    {
+      "id": "ork",
+      "name": "Ork",
+      "priority_tiers": ["A", "B", "D"],
+      "attribute_modifiers": {
+        "body": 3,
+        "quickness": -1,
+        "strength": 2,
+        "charisma": -1,
+        "intelligence": -1,
+        "willpower": 0
+      },
+      "abilities": []
+    },
+    {
+      "id": "troll",
+      "name": "Troll",
+      "priority_tiers": ["A", "B", "C"],
+      "attribute_modifiers": {
+        "body": 5,
+        "quickness": -2,
+        "strength": 4,
+        "charisma": -2,
+        "intelligence": -2,
+        "willpower": 1
+      },
+      "abilities": [
+        "Thermographic vision",
+        "+1 reach on melee attacks",
+        "Dermal armor (+1 Body)"
+      ]
+    }
+  ]
+}

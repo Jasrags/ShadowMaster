@@ -316,7 +316,9 @@ Most complex, will need careful struct validation and testing:
    - **Current error**: A boolean field is receiving "10" (not found as element content in bonus sections)
    - **Investigation needed**: Check nested structures or fields that might receive "10" as a numeric value
 4. ✅ `weapons.xml` (19,572 lines) → `weapons_data.go` - **COMPLETE** (31 categories, 632 weapons, 152 accessories, 0 mods)
-   - **Note**: Weapons structure simplified (omitted complex nested weapon structures)
+   - **Status**: Generator updated to include all 632 weapons with complete field generation
+   - **Note**: Previously weapons were omitted due to complex nested structures. Generator now includes all weapon fields including nested structures (Accessories, AccessoryMounts, AlternateRange, Underbarrels, WirelessWeaponBonus, etc.)
+   - **Helper Functions**: Added `GetAllWeapons()` and `GetWeaponByID()` functions
 5. ⚠️ `gear.xml` (22,338 lines) - Generator created, XML parsing error: `strconv.ParseInt: parsing "[0]": invalid syntax`
    - **Issue**: An integer field in the Gear struct is receiving bracket notation like "[0]" or "[Rating]"
    - **Status**: Generator created but cannot load XML due to type mismatch

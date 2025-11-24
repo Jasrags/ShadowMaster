@@ -1,0 +1,4136 @@
+{
+  "metadata": {
+    "source": {
+      "name": "Chummer5 Critter Powers Dataset",
+      "version": "unknown",
+      "extracted_at": "2025-11-11T00:21:34Z",
+      "record_count": 337
+    },
+    "generated_by": "cmd/tools/chummercritterpowers (ShadowMaster)",
+    "category_count": 10,
+    "power_count": 337
+  },
+  "categories": [
+    {
+      "name": "Chimeric Modification",
+      "slug": "chimeric-modification"
+    },
+    {
+      "name": "Drake",
+      "slug": "drake",
+      "attributes": {
+        "whitelist": "true"
+      }
+    },
+    {
+      "name": "Echoes",
+      "slug": "echoes",
+      "attributes": {
+        "whitelist": "true"
+      }
+    },
+    {
+      "name": "Emergent",
+      "slug": "emergent",
+      "attributes": {
+        "whitelist": "true"
+      }
+    },
+    {
+      "name": "Free Spirit",
+      "slug": "free-spirit",
+      "attributes": {
+        "whitelist": "true"
+      }
+    },
+    {
+      "name": "Infected",
+      "slug": "infected",
+      "attributes": {
+        "whitelist": "true"
+      }
+    },
+    {
+      "name": "Mundane",
+      "slug": "mundane"
+    },
+    {
+      "name": "Paranormal",
+      "slug": "paranormal"
+    },
+    {
+      "name": "Toxic Critter Powers",
+      "slug": "toxic-critter-powers",
+      "attributes": {
+        "whitelist": "true"
+      }
+    },
+    {
+      "name": "Weakness",
+      "slug": "weakness"
+    }
+  ],
+  "powers": [
+    {
+      "id": "227fa369-eaf5-400f-ab50-eb6e095684f7",
+      "name": "All-Around Sight",
+      "category": "Chimeric Modification",
+      "category_slug": "chimeric-modification",
+      "source_book": "HS",
+      "source_page": "170"
+    },
+    {
+      "id": "1aa8fb12-6f00-42df-96c9-3c5b60ddf9b3",
+      "name": "Aquatic Adaptation",
+      "category": "Chimeric Modification",
+      "category_slug": "chimeric-modification",
+      "source_book": "HS",
+      "source_page": "170",
+      "attributes": {
+        "bonus": "{\"specificattribute\":{\"name\":\"Swimming\",\"val\":\"2\"}}"
+      }
+    },
+    {
+      "id": "78be96f2-43e5-444a-b255-0e7528813b4a",
+      "name": "Attribute Enhancement (Agility)",
+      "category": "Chimeric Modification",
+      "category_slug": "chimeric-modification",
+      "source_book": "HS",
+      "source_page": "170",
+      "attributes": {
+        "bonus": "{\"specificattribute\":{\"name\":\"AGI\",\"val\":\"Rating\"}}",
+        "rating": "True"
+      }
+    },
+    {
+      "id": "24d6d5c2-8459-4f9e-8a76-dd9a07a49f9c",
+      "name": "Attribute Enhancement (Body)",
+      "category": "Chimeric Modification",
+      "category_slug": "chimeric-modification",
+      "source_book": "HS",
+      "source_page": "170",
+      "attributes": {
+        "bonus": "{\"specificattribute\":{\"name\":\"BOD\",\"val\":\"Rating\"}}",
+        "rating": "True"
+      }
+    },
+    {
+      "id": "81aab9fb-30ef-4c91-b296-b85dc2860fee",
+      "name": "Attribute Enhancement (Charisma)",
+      "category": "Chimeric Modification",
+      "category_slug": "chimeric-modification",
+      "source_book": "HS",
+      "source_page": "170",
+      "attributes": {
+        "bonus": "{\"specificattribute\":{\"name\":\"CHA\",\"val\":\"Rating\"}}",
+        "rating": "True"
+      }
+    },
+    {
+      "id": "cf88125a-c129-4e77-8813-cc4d2368e077",
+      "name": "Attribute Enhancement (Intuition)",
+      "category": "Chimeric Modification",
+      "category_slug": "chimeric-modification",
+      "source_book": "HS",
+      "source_page": "170",
+      "attributes": {
+        "bonus": "{\"specificattribute\":{\"name\":\"INT\",\"val\":\"Rating\"}}",
+        "rating": "True"
+      }
+    },
+    {
+      "id": "7af7bc12-b671-4dbf-bfb7-fb58e9ee28a4",
+      "name": "Attribute Enhancement (Logic)",
+      "category": "Chimeric Modification",
+      "category_slug": "chimeric-modification",
+      "source_book": "HS",
+      "source_page": "170",
+      "attributes": {
+        "bonus": "{\"specificattribute\":{\"name\":\"LOG\",\"val\":\"Rating\"}}",
+        "rating": "True"
+      }
+    },
+    {
+      "id": "95240c3e-99c1-43d9-adf0-6a83b792091b",
+      "name": "Attribute Enhancement (Reaction)",
+      "category": "Chimeric Modification",
+      "category_slug": "chimeric-modification",
+      "source_book": "HS",
+      "source_page": "170",
+      "attributes": {
+        "bonus": "{\"specificattribute\":{\"name\":\"REA\",\"val\":\"Rating\"}}",
+        "rating": "True"
+      }
+    },
+    {
+      "id": "26ad4ce7-439b-48d1-a870-bb1e2b2a54ad",
+      "name": "Attribute Enhancement (Strength)",
+      "category": "Chimeric Modification",
+      "category_slug": "chimeric-modification",
+      "source_book": "HS",
+      "source_page": "170",
+      "attributes": {
+        "bonus": "{\"specificattribute\":{\"name\":\"STR\",\"val\":\"Rating\"}}",
+        "rating": "True"
+      }
+    },
+    {
+      "id": "95307494-6a99-4b66-aaaf-a417fa607632",
+      "name": "Attribute Enhancement (Willpower)",
+      "category": "Chimeric Modification",
+      "category_slug": "chimeric-modification",
+      "source_book": "HS",
+      "source_page": "170",
+      "attributes": {
+        "bonus": "{\"specificattribute\":{\"name\":\"WIL\",\"val\":\"Rating\"}}",
+        "rating": "True"
+      }
+    },
+    {
+      "id": "9c315cb9-5962-44e6-ba2a-0be99cbd48ea",
+      "name": "Balance Tail",
+      "category": "Chimeric Modification",
+      "category_slug": "chimeric-modification",
+      "source_book": "HS",
+      "source_page": "170",
+      "attributes": {
+        "bonus": "{\"specificskill\":[{\"bonus\":\"1\",\"name\":\"Gymnastics\"},{\"bonus\":\"1\",\"name\":\"Free-Fall\"}]}"
+      }
+    },
+    {
+      "id": "ef6fd1c5-3403-46eb-910a-5130e2c5bca9",
+      "name": "Bioluminescence",
+      "category": "Chimeric Modification",
+      "category_slug": "chimeric-modification",
+      "source_book": "HS",
+      "source_page": "170"
+    },
+    {
+      "id": "97dd1f9c-22fa-4b2c-b10c-626c7db026c2",
+      "name": "Biotoxin Alteration (Anesthetic)",
+      "category": "Chimeric Modification",
+      "category_slug": "chimeric-modification",
+      "source_book": "HS",
+      "source_page": "170"
+    },
+    {
+      "id": "a429197f-d371-4190-b43b-53fda9d5764e",
+      "name": "Biotoxin Alteration (Formic Acid)",
+      "category": "Chimeric Modification",
+      "category_slug": "chimeric-modification",
+      "source_book": "HS",
+      "source_page": "170"
+    },
+    {
+      "id": "73880be6-7395-4d27-8511-3d3722ab2865",
+      "name": "Biotoxin Alteration (Hallucinogen)",
+      "category": "Chimeric Modification",
+      "category_slug": "chimeric-modification",
+      "source_book": "HS",
+      "source_page": "170"
+    },
+    {
+      "id": "f7cf732c-40f6-4f4f-8e5a-316cef4f5ac8",
+      "name": "Biotoxin Alteration (Nauseating)",
+      "category": "Chimeric Modification",
+      "category_slug": "chimeric-modification",
+      "source_book": "HS",
+      "source_page": "170"
+    },
+    {
+      "id": "c74444bf-7707-4eb2-b076-ccb883bd2344",
+      "name": "Camouflage",
+      "category": "Chimeric Modification",
+      "category_slug": "chimeric-modification",
+      "source_book": "HS",
+      "source_page": "171"
+    },
+    {
+      "id": "d0f88641-ff0f-448f-93d3-0d67068939c2",
+      "name": "Celerity",
+      "category": "Chimeric Modification",
+      "category_slug": "chimeric-modification",
+      "source_book": "HS",
+      "source_page": "171",
+      "attributes": {
+        "bonus": "{\"runmultiplier\":{\"category\":\"Ground\",\"percent\":\"100\"},\"sprintbonus\":{\"category\":\"Ground\",\"val\":\"100\"},\"walkmultiplier\":{\"category\":\"Ground\",\"percent\":\"100\"}}"
+      }
+    },
+    {
+      "id": "411964a6-09c3-40c1-be47-5a4627532071",
+      "name": "Climate Adaptation",
+      "category": "Chimeric Modification",
+      "category_slug": "chimeric-modification",
+      "source_book": "HS",
+      "source_page": "171"
+    },
+    {
+      "id": "2d89a28c-d407-4a0e-a636-0a44359e523c",
+      "name": "Defensive Secretion",
+      "category": "Chimeric Modification",
+      "category_slug": "chimeric-modification",
+      "source_book": "HS",
+      "source_page": "171"
+    },
+    {
+      "id": "c666f1f1-f157-4a95-a22d-10e962cfc90c",
+      "name": "Dynamic Coloration",
+      "category": "Chimeric Modification",
+      "category_slug": "chimeric-modification",
+      "source_book": "HS",
+      "source_page": "171"
+    },
+    {
+      "id": "f53310ed-9c07-4813-910e-5384cfaeaa43",
+      "name": "Echolocation",
+      "category": "Chimeric Modification",
+      "category_slug": "chimeric-modification",
+      "source_book": "HS",
+      "source_page": "171"
+    },
+    {
+      "id": "3d6429c4-fe8e-4d2b-ba47-2ac1fa0d65b0",
+      "name": "Electrocytes",
+      "category": "Chimeric Modification",
+      "category_slug": "chimeric-modification",
+      "range": "Touch",
+      "source_book": "HS",
+      "source_page": "171",
+      "attributes": {
+        "bonus": "{\"naturalweapon\":{\"accuracy\":\"Physical\",\"ap\":\"-6\",\"damage\":\"{BOD}S(e)\",\"name\":\"Electrocytes\",\"page\":\"171\",\"reach\":\"0\",\"source\":\"HS\",\"useskill\":\"Unarmed Combat\"}}"
+      }
+    },
+    {
+      "id": "faa6681f-04e2-4065-82c5-bb90ad2d3b7c",
+      "name": "Enhanced Sense (Broadened Auditory Spectrum)",
+      "category": "Chimeric Modification",
+      "category_slug": "chimeric-modification",
+      "source_book": "HS",
+      "source_page": "171"
+    },
+    {
+      "id": "048c7ca6-d626-415e-baae-80246091b8e1",
+      "name": "Enhanced Sense (Low Light Vision)",
+      "category": "Chimeric Modification",
+      "category_slug": "chimeric-modification",
+      "source_book": "HS",
+      "source_page": "171"
+    },
+    {
+      "id": "691aa349-e936-4352-9901-f119d07893a5",
+      "name": "Enhanced Sense (Scent)",
+      "category": "Chimeric Modification",
+      "category_slug": "chimeric-modification",
+      "source_book": "HS",
+      "source_page": "171"
+    },
+    {
+      "id": "383f5fa7-b15c-4cc9-bac8-d125df72df19",
+      "name": "Enhanced Sense (Thermographic Vision)",
+      "category": "Chimeric Modification",
+      "category_slug": "chimeric-modification",
+      "source_book": "HS",
+      "source_page": "171"
+    },
+    {
+      "id": "be0645f8-7a50-416e-82cb-2ed73b86a78a",
+      "name": "Extra Head",
+      "category": "Chimeric Modification",
+      "category_slug": "chimeric-modification",
+      "source_book": "HS",
+      "source_page": "172",
+      "attributes": {
+        "bonus": "{\"conditionmonitor\":{\"physical\":\"Rating\"},\"specificskill\":{\"bonus\":\"Rating\",\"name\":\"Perception\"}}",
+        "rating": "2"
+      }
+    },
+    {
+      "id": "5a3ac03e-dd4a-441e-83b0-194af9f6e594",
+      "name": "Frog Tongue",
+      "category": "Chimeric Modification",
+      "category_slug": "chimeric-modification",
+      "source_book": "HS",
+      "source_page": "172"
+    },
+    {
+      "id": "717db6d5-fb7c-405c-aa9c-ab4ad5388c19",
+      "name": "Gills",
+      "category": "Chimeric Modification",
+      "category_slug": "chimeric-modification",
+      "source_book": "HS",
+      "source_page": "172"
+    },
+    {
+      "id": "dfc5c73c-fd31-476f-9d68-78ac9a9f57e3",
+      "name": "Gliding",
+      "category": "Chimeric Modification",
+      "category_slug": "chimeric-modification",
+      "source_book": "HS",
+      "source_page": "172",
+      "attributes": {
+        "bonus": "{\"specificskill\":{\"applytorating\":\"True\",\"bonus\":\"1\",\"name\":\"Free-Fall\"}}"
+      }
+    },
+    {
+      "id": "c34c4c75-fdd2-4fa3-9e62-e37f2f57ea36",
+      "name": "Ink Extrusion",
+      "category": "Chimeric Modification",
+      "category_slug": "chimeric-modification",
+      "source_book": "HS",
+      "source_page": "172"
+    },
+    {
+      "id": "30123d64-845f-4375-9b2a-87c9a3a44c74",
+      "name": "Magnetoception",
+      "category": "Chimeric Modification",
+      "category_slug": "chimeric-modification",
+      "source_book": "HS",
+      "source_page": "172"
+    },
+    {
+      "id": "f91bb1fa-3bb6-448d-b7e4-98d4473d5a12",
+      "name": "Natural Weapon (Bite)",
+      "category": "Chimeric Modification",
+      "category_slug": "chimeric-modification",
+      "source_book": "HS",
+      "source_page": "172",
+      "attributes": {
+        "bonus": "{\"naturalweapon\":{\"accuracy\":\"Physical\",\"ap\":\"-2\",\"damage\":\"({STR}+2)P\",\"name\":\"Bite\",\"page\":\"172\",\"reach\":\"-1\",\"source\":\"HS\",\"useskill\":\"Unarmed Combat\"}}"
+      }
+    },
+    {
+      "id": "dd7e6d25-53f1-41bb-8626-ef7413e9c3b6",
+      "name": "Natural Weapon (Claws)",
+      "category": "Chimeric Modification",
+      "category_slug": "chimeric-modification",
+      "source_book": "HS",
+      "source_page": "172",
+      "attributes": {
+        "bonus": "{\"naturalweapon\":{\"accuracy\":\"Physical\",\"ap\":\"-1\",\"damage\":\"({STR}+1)P\",\"name\":\"Claws\",\"page\":\"172\",\"reach\":\"0\",\"source\":\"HS\",\"useskill\":\"Unarmed Combat\"}}"
+      }
+    },
+    {
+      "id": "fb8f1a20-892b-4946-a4c8-5cc817e55167",
+      "name": "Natural Weapon (Horns)",
+      "category": "Chimeric Modification",
+      "category_slug": "chimeric-modification",
+      "source_book": "HS",
+      "source_page": "172",
+      "attributes": {
+        "bonus": "{\"naturalweapon\":{\"accuracy\":\"Physical\",\"ap\":\"-1\",\"damage\":\"({STR}+2)P\",\"name\":\"Horns\",\"page\":\"172\",\"reach\":\"0\",\"source\":\"HS\",\"useskill\":\"Unarmed Combat\"}}"
+      }
+    },
+    {
+      "id": "6ff500ab-0691-4310-8e42-65623e289739",
+      "name": "Natural Weapon (Tail)",
+      "category": "Chimeric Modification",
+      "category_slug": "chimeric-modification",
+      "source_book": "HS",
+      "source_page": "172",
+      "attributes": {
+        "bonus": "{\"naturalweapon\":{\"accuracy\":\"Physical\",\"damage\":\"({STR}+3)P\",\"name\":\"Tail\",\"page\":\"172\",\"reach\":\"1\",\"source\":\"HS\",\"useskill\":\"Unarmed Combat\"}}"
+      }
+    },
+    {
+      "id": "c004510b-b5a8-4a34-b442-7353ef4599b5",
+      "name": "Natural Weapon (Tusk)",
+      "category": "Chimeric Modification",
+      "category_slug": "chimeric-modification",
+      "source_book": "HS",
+      "source_page": "172",
+      "attributes": {
+        "bonus": "{\"naturalweapon\":{\"accuracy\":\"Physical\",\"damage\":\"({STR}+2)P\",\"name\":\"Tusk\",\"page\":\"172\",\"reach\":\"0\",\"source\":\"HS\",\"useskill\":\"Unarmed Combat\"}}"
+      }
+    },
+    {
+      "id": "c704a705-ac65-4659-b555-babdc1edc7af",
+      "name": "Potent Venom",
+      "category": "Chimeric Modification",
+      "category_slug": "chimeric-modification",
+      "source_book": "HS",
+      "source_page": "172"
+    },
+    {
+      "id": "4f261e65-bd90-400c-92d7-97b1dd0135ca",
+      "name": "Proboscis",
+      "category": "Chimeric Modification",
+      "category_slug": "chimeric-modification",
+      "source_book": "HS",
+      "source_page": "172",
+      "attributes": {
+        "bonus": "{\"naturalweapon\":{\"accuracy\":\"Physical\",\"ap\":\"+1\",\"damage\":\"({STR}-1)P\",\"name\":\"Proboscis\",\"page\":\"172\",\"reach\":\"0\",\"source\":\"HS\",\"useskill\":\"Exotic Melee Weapon\",\"useskillspec\":\"Trunk\"}}"
+      }
+    },
+    {
+      "id": "4eeb2045-6690-470a-8926-4626ba0317eb",
+      "name": "Quills",
+      "category": "Chimeric Modification",
+      "category_slug": "chimeric-modification",
+      "source_book": "HS",
+      "source_page": "172",
+      "attributes": {
+        "bonus": "{\"naturalweapon\":{\"accuracy\":\"Physical\",\"ap\":\"+1\",\"damage\":\"({STR}+1)P\",\"name\":\"Quills\",\"page\":\"172\",\"reach\":\"0\",\"source\":\"HS\",\"useskill\":\"Exotic Melee Weapon\",\"useskillspec\":\"Quills\"}}"
+      }
+    },
+    {
+      "id": "2689dca6-ad15-46df-a2b0-fa9cb342cff2",
+      "name": "Scent Spray",
+      "category": "Chimeric Modification",
+      "category_slug": "chimeric-modification",
+      "source_book": "HS",
+      "source_page": "173"
+    },
+    {
+      "id": "2e9dcaba-10e6-4ed1-b5b4-aba4a7a99a47",
+      "name": "Skill Enhancement",
+      "category": "Chimeric Modification",
+      "category_slug": "chimeric-modification",
+      "source_book": "HS",
+      "source_page": "173",
+      "attributes": {
+        "bonus": "{\"selectskill\":{\"applytorating\":\"True\",\"val\":\"2\"}}"
+      }
+    },
+    {
+      "id": "eba7c531-84ab-477a-86f1-69400f2deb22",
+      "name": "Sturdiness",
+      "category": "Chimeric Modification",
+      "category_slug": "chimeric-modification",
+      "source_book": "HS",
+      "source_page": "173",
+      "attributes": {
+        "bonus": "{\"physicallimit\":\"1\"}"
+      }
+    },
+    {
+      "id": "e2036d44-b991-4339-a1ae-108272d405db",
+      "name": "Thermosense",
+      "category": "Chimeric Modification",
+      "category_slug": "chimeric-modification",
+      "source_book": "HS",
+      "source_page": "173"
+    },
+    {
+      "id": "3d4dec14-3a44-41b6-9f78-1d6bd42e15fe",
+      "name": "Thicker Skin",
+      "category": "Chimeric Modification",
+      "category_slug": "chimeric-modification",
+      "source_book": "HS",
+      "source_page": "173",
+      "attributes": {
+        "bonus": "{\"armor\":\"Rating\"}",
+        "rating": "True"
+      }
+    },
+    {
+      "id": "e0b4c953-efef-4162-bd92-4ee8988c6853",
+      "name": "Venom",
+      "category": "Chimeric Modification",
+      "category_slug": "chimeric-modification",
+      "source_book": "HS",
+      "source_page": "173"
+    },
+    {
+      "id": "0b2e5718-908e-4301-b185-71371d8bb184",
+      "name": "Vestigial Wings",
+      "category": "Chimeric Modification",
+      "category_slug": "chimeric-modification",
+      "source_book": "HS",
+      "source_page": "173",
+      "attributes": {
+        "bonus": "{\"specificskill\":{\"bonus\":\"2\",\"name\":\"Gymnastics\"}}"
+      }
+    },
+    {
+      "id": "221bd655-f6a4-4b41-9f53-c147fff93e40",
+      "name": "Wall Climbing",
+      "category": "Chimeric Modification",
+      "category_slug": "chimeric-modification",
+      "source_book": "HS",
+      "source_page": "173"
+    },
+    {
+      "id": "65f530b0-c124-483d-a18a-a1cf8cbebf9b",
+      "name": "Web Extrusion",
+      "category": "Chimeric Modification",
+      "category_slug": "chimeric-modification",
+      "source_book": "HS",
+      "source_page": "173"
+    },
+    {
+      "id": "dafb81bd-7b92-487a-a739-465c69bcefcd",
+      "name": "Adaptive Coloration",
+      "category": "Drake",
+      "category_slug": "drake",
+      "type": "P",
+      "action": "Auto",
+      "range": "Self",
+      "duration": "Always",
+      "karma": "6",
+      "source_book": "HS",
+      "source_page": "164",
+      "attributes": {
+        "required": "{\"oneof\":{\"quality\":\"Dracoform (Sea Drake)\"}}"
+      }
+    },
+    {
+      "id": "1c2b88fd-d2bb-4a82-ad8f-a51164ad34c9",
+      "name": "Additional Additional Natural Weapon (Claws)",
+      "category": "Drake",
+      "category_slug": "drake",
+      "type": "P",
+      "action": "Complex",
+      "range": "Touch",
+      "duration": "Instant",
+      "karma": "5",
+      "source_book": "HS",
+      "source_page": "164"
+    },
+    {
+      "id": "b5dfe517-a722-4503-be5d-9fdd7a5653c4",
+      "name": "Additional Natural Weapon (Fangs)",
+      "category": "Drake",
+      "category_slug": "drake",
+      "type": "P",
+      "action": "Complex",
+      "range": "Touch",
+      "duration": "Instant",
+      "karma": "5",
+      "source_book": "HS",
+      "source_page": "164"
+    },
+    {
+      "id": "c8384789-1127-4846-bc28-3a6922b825a9",
+      "name": "Additional Natural Weapon (Horns)",
+      "category": "Drake",
+      "category_slug": "drake",
+      "type": "P",
+      "action": "Complex",
+      "range": "Touch",
+      "duration": "Instant",
+      "karma": "5",
+      "source_book": "HS",
+      "source_page": "164"
+    },
+    {
+      "id": "82fea3f7-8e46-4a6a-a7fd-f5dc74046dac",
+      "name": "Additional Natural Weapon (Tail)",
+      "category": "Drake",
+      "category_slug": "drake",
+      "type": "P",
+      "action": "Complex",
+      "range": "Touch",
+      "duration": "Instant",
+      "karma": "5",
+      "source_book": "HS",
+      "source_page": "164"
+    },
+    {
+      "id": "185aa4ff-7975-4d06-8fbc-52a07caeb9e2",
+      "name": "Animal Control",
+      "category": "Drake",
+      "category_slug": "drake",
+      "type": "M",
+      "action": "Complex",
+      "range": "LOS",
+      "duration": "Sustained",
+      "karma": "9",
+      "source_book": "HS",
+      "source_page": "164",
+      "attributes": {
+        "bonus": "{\"selecttext\":null}"
+      }
+    },
+    {
+      "id": "79bb0c32-985c-47c8-a6ba-a9666884599f",
+      "name": "Compulsion",
+      "category": "Drake",
+      "category_slug": "drake",
+      "type": "P",
+      "action": "Complex",
+      "range": "LOS",
+      "duration": "Sustained",
+      "karma": "9",
+      "source_book": "HS",
+      "source_page": "164"
+    },
+    {
+      "id": "afa7c218-9171-4354-b694-14b1cecd93ff",
+      "name": "Corrosive Spit",
+      "category": "Drake",
+      "category_slug": "drake",
+      "type": "P",
+      "action": "Complex",
+      "range": "LOS",
+      "duration": "Special",
+      "karma": "9",
+      "source_book": "HS",
+      "source_page": "164"
+    },
+    {
+      "id": "31ad1e6d-3e95-42cc-af61-5b59c8e745e6",
+      "name": "Dracoform Mastery",
+      "category": "Drake",
+      "category_slug": "drake",
+      "type": "P",
+      "action": "Special",
+      "range": "Self",
+      "duration": "Instant",
+      "karma": "50",
+      "source_book": "HS",
+      "source_page": "190"
+    },
+    {
+      "id": "4aef932e-2d0f-4226-b00e-19c5398641bd",
+      "name": "Dragonspeech",
+      "category": "Drake",
+      "category_slug": "drake",
+      "type": "M",
+      "action": "Auto",
+      "range": "LOS",
+      "duration": "Instant",
+      "karma": "9",
+      "source_book": "HS",
+      "source_page": "164"
+    },
+    {
+      "id": "27488146-76d0-454c-b375-a63ccc492b70",
+      "name": "Enhanced Sense (Low Light Vision)",
+      "category": "Drake",
+      "category_slug": "drake",
+      "type": "P",
+      "action": "Auto",
+      "range": "Self",
+      "duration": "Always",
+      "karma": "3",
+      "source_book": "HS",
+      "source_page": "164"
+    },
+    {
+      "id": "0ed08f78-92bc-4cb3-94aa-10311b65edd4",
+      "name": "Enhanced Sense (Smell)",
+      "category": "Drake",
+      "category_slug": "drake",
+      "type": "P",
+      "action": "Auto",
+      "range": "Self",
+      "duration": "Always",
+      "karma": "3",
+      "source_book": "HS",
+      "source_page": "164"
+    },
+    {
+      "id": "ba3c227f-5436-45a7-97b3-8a56e010902a",
+      "name": "Enhanced Sense (Thermographic Vision)",
+      "category": "Drake",
+      "category_slug": "drake",
+      "type": "P",
+      "action": "Auto",
+      "range": "Self",
+      "duration": "Always",
+      "karma": "3",
+      "source_book": "HS",
+      "source_page": "164"
+    },
+    {
+      "id": "dba6b163-0466-4fa1-998a-0a5ac74edba9",
+      "name": "Enhanced Sense (Wide Band Hearing)",
+      "category": "Drake",
+      "category_slug": "drake",
+      "type": "P",
+      "action": "Auto",
+      "range": "Self",
+      "duration": "Always",
+      "karma": "3",
+      "source_book": "HS",
+      "source_page": "164"
+    },
+    {
+      "id": "dd6b0eda-44a9-4411-b471-d78e76f495fb",
+      "name": "Fear",
+      "category": "Drake",
+      "category_slug": "drake",
+      "type": "M",
+      "action": "Complex",
+      "range": "LOS",
+      "duration": "Special",
+      "karma": "9",
+      "source_book": "HS",
+      "source_page": "164"
+    },
+    {
+      "id": "eda3036b-441c-45bf-9e97-aac7cdd87054",
+      "name": "Flight",
+      "category": "Drake",
+      "category_slug": "drake",
+      "type": "M",
+      "action": "Complex",
+      "range": "LOS",
+      "duration": "Special",
+      "karma": "14",
+      "source_book": "HS",
+      "source_page": "164",
+      "attributes": {
+        "bonus": "{\"movementreplace\":[{\"category\":\"Fly\",\"speed\":\"walk\",\"val\":\"2\"},{\"category\":\"Fly\",\"speed\":\"run\",\"val\":\"4\"},{\"category\":\"Fly\",\"speed\":\"sprint\",\"val\":\"300\"}]}",
+        "forbidden": "{\"oneof\":{\"quality\":\"Dracoform (Sea Drake)\"}}",
+        "required": "{\"oneof\":{\"quality\":[\"Dracoform (Feathered Drake)\",\"Dracoform (Western Drake)\"]}}"
+      }
+    },
+    {
+      "id": "947047a8-632f-4d05-84a0-873e994be07c",
+      "name": "Heavy Scales",
+      "category": "Drake",
+      "category_slug": "drake",
+      "type": "M",
+      "action": "Auto",
+      "range": "Self",
+      "duration": "Special",
+      "karma": "6",
+      "source_book": "HS",
+      "source_page": "165",
+      "attributes": {
+        "bonus": "{\"critterpowerlevels\":{\"power\":{\"name\":\"Hardened Armor\",\"val\":\"2\"}}}",
+        "required": "{\"oneof\":{\"quality\":\"Dracoform (Western Drake)\"}}"
+      }
+    },
+    {
+      "id": "aebc05d5-43a8-4710-884e-feafa108d4c2",
+      "name": "Improved Natural Armor",
+      "category": "Drake",
+      "category_slug": "drake",
+      "type": "M",
+      "action": "Auto",
+      "range": "Self",
+      "duration": "Special",
+      "karma": "16",
+      "source_book": "HS",
+      "source_page": "165",
+      "attributes": {
+        "bonus": "{\"critterpowerlevels\":{\"power\":[{\"name\":\"Hardened Armor\",\"val\":\"1\"},{\"name\":\"Hardened Mystic Armor\",\"val\":\"1\"}]}}"
+      }
+    },
+    {
+      "id": "dfb8200f-709c-4208-a72f-5a08de55de40",
+      "name": "Influence",
+      "category": "Drake",
+      "category_slug": "drake",
+      "type": "M",
+      "action": "Complex",
+      "range": "LOS",
+      "duration": "Instant",
+      "karma": "9",
+      "source_book": "HS",
+      "source_page": "165"
+    },
+    {
+      "id": "276c718b-7176-403a-9452-48e58b1f29e3",
+      "name": "Magical Flight",
+      "category": "Drake",
+      "category_slug": "drake",
+      "type": "M",
+      "action": "Complex",
+      "range": "LOS",
+      "duration": "Special",
+      "karma": "14",
+      "source_book": "HS",
+      "source_page": "165",
+      "attributes": {
+        "bonus": "{\"movementreplace\":[{\"category\":\"Fly\",\"speed\":\"walk\",\"val\":\"3\"},{\"category\":\"Fly\",\"speed\":\"run\",\"val\":\"6\"},{\"category\":\"Fly\",\"speed\":\"sprint\",\"val\":\"500\"}]}",
+        "required": "{\"oneof\":{\"quality\":\"Dracoform (Eastern Drake)\"}}"
+      }
+    },
+    {
+      "id": "edd8b53d-ada6-4106-b8ef-111b5cb1fb40",
+      "name": "Natural Weapon",
+      "category": "Drake",
+      "category_slug": "drake",
+      "type": "P",
+      "action": "Complex",
+      "range": "Touch",
+      "duration": "Instant",
+      "source_book": "HS",
+      "source_page": "164",
+      "attributes": {
+        "bonus": "{\"selecttext\":null}"
+      }
+    },
+    {
+      "id": "61a58161-f28d-49fb-b24d-e04588f6cdd5",
+      "name": "Noxious Breath",
+      "category": "Drake",
+      "category_slug": "drake",
+      "type": "P",
+      "action": "Complex",
+      "range": "Special",
+      "duration": "Instant",
+      "karma": "9",
+      "source_book": "HS",
+      "source_page": "165"
+    },
+    {
+      "id": "a28ec7c9-809e-48cc-8c28-c90634754842",
+      "name": "Resistance to Pathogens and Toxins",
+      "category": "Drake",
+      "category_slug": "drake",
+      "type": "P",
+      "action": "Complex",
+      "range": "Special",
+      "duration": "Instant",
+      "karma": "8",
+      "source_book": "HS",
+      "source_page": "165",
+      "attributes": {
+        "bonus": "{\"pathogencontactresist\":\"1\",\"pathogeningestionresist\":\"1\",\"pathogeninhalationresist\":\"1\",\"pathogeninjectionresist\":\"1\",\"toxincontactresist\":\"1\",\"toxiningestionresist\":\"1\",\"toxininhalationresist\":\"1\",\"toxininjectionresist\":\"1\"}"
+      }
+    },
+    {
+      "id": "14d33e71-88c5-4fdb-8456-0b61ab70e8f4",
+      "name": "Shift (Dracoform)",
+      "category": "Drake",
+      "category_slug": "drake",
+      "type": "M",
+      "action": "Complex",
+      "range": "Self",
+      "duration": "Special",
+      "source_book": "HS",
+      "source_page": "194"
+    },
+    {
+      "id": "283f5a56-3d53-4155-8a85-63248e4d7cdc",
+      "name": "Tail Stinger",
+      "category": "Drake",
+      "category_slug": "drake",
+      "type": "P",
+      "action": "Complex",
+      "range": "Special",
+      "duration": "Instant",
+      "karma": "9",
+      "source_book": "HS",
+      "source_page": "165",
+      "attributes": {
+        "required": "{\"oneof\":{\"quality\":\"Dracoform (Feathered Drake)\"}}"
+      }
+    },
+    {
+      "id": "5a08fa16-afcb-4fc9-b772-12a8f3dc96a8",
+      "name": "Transcend Form",
+      "category": "Drake",
+      "category_slug": "drake",
+      "type": "P",
+      "action": "Complex",
+      "range": "Special",
+      "duration": "Instant",
+      "karma": "25",
+      "source_book": "HS",
+      "source_page": "165"
+    },
+    {
+      "id": "96eab5ca-4d3b-4b5a-a8dd-5430c0513d31",
+      "name": "Venom",
+      "category": "Drake",
+      "category_slug": "drake",
+      "type": "P",
+      "action": "Complex",
+      "range": "Special",
+      "duration": "Instant",
+      "karma": "9",
+      "source_book": "HS",
+      "source_page": "165"
+    },
+    {
+      "id": "0f0b2ab2-3f71-43e6-b815-d9f6f5c6ed60",
+      "name": "Acceleration",
+      "category": "Echoes",
+      "category_slug": "echoes",
+      "type": "P",
+      "action": "Special",
+      "range": "Special",
+      "duration": "Special",
+      "source_book": "UN",
+      "source_page": "147",
+      "attributes": {
+        "bonus": "{\"initiativepassadd\":\"1\"}"
+      }
+    },
+    {
+      "id": "728df266-8d80-4da5-bcd8-7085958ea083",
+      "name": "Advanced Overclocking",
+      "category": "Echoes",
+      "category_slug": "echoes",
+      "type": "P",
+      "action": "Special",
+      "range": "Special",
+      "duration": "Special",
+      "source_book": "UN",
+      "source_page": "147",
+      "attributes": {
+        "bonus": "{\"matrixinitiativediceadd\":\"1\"}"
+      }
+    },
+    {
+      "id": "749f73b1-f131-4a3d-82d9-9d952bc7e16c",
+      "name": "Amplification",
+      "category": "Echoes",
+      "category_slug": "echoes",
+      "type": "P",
+      "action": "Special",
+      "range": "Special",
+      "duration": "Special",
+      "source_book": "UN",
+      "source_page": "145",
+      "attributes": {
+        "bonus": "{\"livingpersona\":{\"signal\":\"1\"}}"
+      }
+    },
+    {
+      "id": "17b23235-76e1-491d-9c8a-b7a043537427",
+      "name": "Bio-Radar",
+      "category": "Echoes",
+      "category_slug": "echoes",
+      "type": "P",
+      "action": "Special",
+      "range": "Special",
+      "duration": "Special",
+      "source_book": "WAR",
+      "source_page": "179"
+    },
+    {
+      "id": "39e8b6b2-165f-4c3b-ab67-c61166c4d331",
+      "name": "Biowire",
+      "category": "Echoes",
+      "category_slug": "echoes",
+      "type": "P",
+      "action": "Special",
+      "range": "Special",
+      "duration": "Special",
+      "source_book": "UN",
+      "source_page": "145",
+      "attributes": {
+        "bonus": "{\"skillwire\":\"Rating\"}"
+      }
+    },
+    {
+      "id": "b2a4a9b7-fe37-4a03-8fd5-21b497d3bf8e",
+      "name": "Blur",
+      "category": "Echoes",
+      "category_slug": "echoes",
+      "type": "P",
+      "action": "Special",
+      "range": "Special",
+      "duration": "Special",
+      "source_book": "UN",
+      "source_page": "145"
+    },
+    {
+      "id": "7fa1db24-93cd-45dd-866a-66bb6940f0a4",
+      "name": "Coenesthesia",
+      "category": "Echoes",
+      "category_slug": "echoes",
+      "type": "P",
+      "action": "Special",
+      "range": "Special",
+      "duration": "Special",
+      "source_book": "UN",
+      "source_page": "145"
+    },
+    {
+      "id": "57538d5d-7355-4a93-8849-c67068af9e73",
+      "name": "Connectivity",
+      "category": "Echoes",
+      "category_slug": "echoes",
+      "type": "P",
+      "action": "Special",
+      "range": "Special",
+      "duration": "Special",
+      "source_book": "WAR",
+      "source_page": "179"
+    },
+    {
+      "id": "97e0ae7e-3dce-4782-8d7e-3dfb93bd42ad",
+      "name": "Contaminate",
+      "category": "Echoes",
+      "category_slug": "echoes",
+      "type": "P",
+      "action": "Special",
+      "range": "Special",
+      "duration": "Special",
+      "source_book": "UN",
+      "source_page": "178"
+    },
+    {
+      "id": "bb21e7d0-0415-4e0e-8ab0-12b866c44d70",
+      "name": "Defragmentation",
+      "category": "Echoes",
+      "category_slug": "echoes",
+      "type": "P",
+      "action": "Special",
+      "range": "Special",
+      "duration": "Special",
+      "source_book": "UN",
+      "source_page": "145"
+    },
+    {
+      "id": "3c3c2ac3-9d6a-4a29-8d93-4749dfdde03a",
+      "name": "E-sensing",
+      "category": "Echoes",
+      "category_slug": "echoes",
+      "type": "P",
+      "action": "Special",
+      "range": "Special",
+      "duration": "Special",
+      "source_book": "UN",
+      "source_page": "146"
+    },
+    {
+      "id": "1a192b38-0a18-41b2-9c49-8fa183c9a4c9",
+      "name": "Enhanced Resonance Link",
+      "category": "Echoes",
+      "category_slug": "echoes",
+      "type": "P",
+      "action": "Special",
+      "range": "Special",
+      "duration": "Special",
+      "source_book": "UN",
+      "source_page": "147"
+    },
+    {
+      "id": "4077198b-f469-4e7d-b16b-1db046378780",
+      "name": "Feral Resonance",
+      "category": "Echoes",
+      "category_slug": "echoes",
+      "type": "P",
+      "action": "Special",
+      "range": "Special",
+      "duration": "Special",
+      "source_book": "WAR",
+      "source_page": "179"
+    },
+    {
+      "id": "d4aaf380-eeae-4ee7-a7c3-6004e0fb52c6",
+      "name": "Flexible Touch",
+      "category": "Echoes",
+      "category_slug": "echoes",
+      "type": "P",
+      "action": "Special",
+      "range": "Special",
+      "duration": "Special",
+      "source_book": "UN",
+      "source_page": "146"
+    },
+    {
+      "id": "ce6d38b3-fdb3-4829-979d-381249cc4f18",
+      "name": "Immersion",
+      "category": "Echoes",
+      "category_slug": "echoes",
+      "type": "P",
+      "action": "Special",
+      "range": "Special",
+      "duration": "Special",
+      "source_book": "UN",
+      "source_page": "146"
+    },
+    {
+      "id": "32f639a6-4e1a-4077-ad59-965efc42daeb",
+      "name": "Living ECM",
+      "category": "Echoes",
+      "category_slug": "echoes",
+      "type": "P",
+      "action": "Special",
+      "range": "Special",
+      "duration": "Special",
+      "source_book": "UN",
+      "source_page": "146"
+    },
+    {
+      "id": "35c92b6e-d409-41f9-aa2e-2dafbfbc184b",
+      "name": "Macro",
+      "category": "Echoes",
+      "category_slug": "echoes",
+      "type": "P",
+      "action": "Special",
+      "range": "Special",
+      "duration": "Special",
+      "source_book": "UN",
+      "source_page": "146"
+    },
+    {
+      "id": "cd285642-e0db-47fe-8f55-2f85c8a5ec1c",
+      "name": "Malfunction",
+      "category": "Echoes",
+      "category_slug": "echoes",
+      "type": "P",
+      "action": "Special",
+      "range": "Special",
+      "duration": "Special",
+      "source_book": "UN",
+      "source_page": "179"
+    },
+    {
+      "id": "f8dd2f09-e3e8-417c-a42b-69355f7777ff",
+      "name": "Mesh Reality",
+      "category": "Echoes",
+      "category_slug": "echoes",
+      "type": "P",
+      "action": "Special",
+      "range": "Special",
+      "duration": "Special",
+      "source_book": "UN",
+      "source_page": "147"
+    },
+    {
+      "id": "ba6c1006-ab3a-4424-b803-eff2813ba392",
+      "name": "Mind Over Machine",
+      "category": "Echoes",
+      "category_slug": "echoes",
+      "type": "P",
+      "action": "Special",
+      "range": "Special",
+      "duration": "Special",
+      "source_book": "UN",
+      "source_page": "148"
+    },
+    {
+      "id": "94fb2fed-bc9d-4090-b103-7f8b0ea86d24",
+      "name": "Multiprocessing",
+      "category": "Echoes",
+      "category_slug": "echoes",
+      "type": "P",
+      "action": "Special",
+      "range": "Special",
+      "duration": "Special",
+      "source_book": "UN",
+      "source_page": "146",
+      "attributes": {
+        "+content": "re"
+      }
+    },
+    {
+      "id": "9c5bcd33-ef29-487a-8f3d-5c4f3b314723",
+      "name": "NeuroFilter",
+      "category": "Echoes",
+      "category_slug": "echoes",
+      "type": "P",
+      "action": "Special",
+      "range": "Special",
+      "duration": "Special",
+      "source_book": "SR4",
+      "source_page": "243"
+    },
+    {
+      "id": "16cd3fa6-e4c8-4980-90d5-59bfeb41b5e5",
+      "name": "Overclocking",
+      "category": "Echoes",
+      "category_slug": "echoes",
+      "type": "P",
+      "action": "Special",
+      "range": "Special",
+      "duration": "Special",
+      "source_book": "SR4",
+      "source_page": "244",
+      "attributes": {
+        "bonus": "{\"matrixinitiativediceadd\":\"1\"}"
+      }
+    },
+    {
+      "id": "80d66ca5-a96a-43de-bad3-84ab78231a57",
+      "name": "Pryon",
+      "category": "Echoes",
+      "category_slug": "echoes",
+      "type": "P",
+      "action": "Special",
+      "range": "Special",
+      "duration": "Special",
+      "source_book": "UN",
+      "source_page": "179"
+    },
+    {
+      "id": "bfb370b9-0ee7-4107-a87a-0dbc33205851",
+      "name": "Resonance Exchange",
+      "category": "Echoes",
+      "category_slug": "echoes",
+      "type": "P",
+      "action": "Special",
+      "range": "Special",
+      "duration": "Special",
+      "source_book": "UN",
+      "source_page": "148"
+    },
+    {
+      "id": "a6d7482a-2cef-4ab9-8d45-71c0926003bb",
+      "name": "Resonance Link",
+      "category": "Echoes",
+      "category_slug": "echoes",
+      "type": "P",
+      "action": "Special",
+      "range": "Special",
+      "duration": "Special",
+      "source_book": "SR4",
+      "source_page": "244"
+    },
+    {
+      "id": "7a9c3d97-22b3-4a74-b19a-490eab195100",
+      "name": "Resonance Trodes",
+      "category": "Echoes",
+      "category_slug": "echoes",
+      "type": "P",
+      "action": "Special",
+      "range": "Special",
+      "duration": "Special",
+      "source_book": "UN",
+      "source_page": "148"
+    },
+    {
+      "id": "16c51017-0e50-413d-bd17-889f7d35e5a7",
+      "name": "Sift",
+      "category": "Echoes",
+      "category_slug": "echoes",
+      "type": "P",
+      "action": "Special",
+      "range": "Special",
+      "duration": "Special",
+      "source_book": "UN",
+      "source_page": "147"
+    },
+    {
+      "id": "b804f306-b023-4431-811f-22825167165e",
+      "name": "Skinlink",
+      "category": "Echoes",
+      "category_slug": "echoes",
+      "type": "P",
+      "action": "Special",
+      "range": "Special",
+      "duration": "Special",
+      "source_book": "UN",
+      "source_page": "147"
+    },
+    {
+      "id": "2330af39-6e97-49c0-927a-d23633170e5d",
+      "name": "Sprite Link",
+      "category": "Echoes",
+      "category_slug": "echoes",
+      "type": "P",
+      "action": "Special",
+      "range": "Special",
+      "duration": "Special",
+      "source_book": "UN",
+      "source_page": "147",
+      "attributes": {
+        "bonus": "{\"selectsprite\":null}"
+      }
+    },
+    {
+      "id": "04f8ba5a-2e12-46b7-a032-7e826658dbca",
+      "name": "Swap",
+      "category": "Echoes",
+      "category_slug": "echoes",
+      "type": "P",
+      "action": "Special",
+      "range": "Special",
+      "duration": "Special",
+      "source_book": "UN",
+      "source_page": "147"
+    },
+    {
+      "id": "c3306789-1ac8-4162-819b-709457b21470",
+      "name": "System Upgrade",
+      "category": "Echoes",
+      "category_slug": "echoes",
+      "type": "P",
+      "action": "Special",
+      "range": "Special",
+      "duration": "Special",
+      "source_book": "SR4",
+      "source_page": "244",
+      "attributes": {
+        "bonus": "{\"livingpersona\":{\"system\":\"1\"}}"
+      }
+    },
+    {
+      "id": "5b3b3212-1ca5-4a82-9ac3-d2a31b8c34c1",
+      "name": "Widget Crafting",
+      "category": "Echoes",
+      "category_slug": "echoes",
+      "type": "P",
+      "action": "Special",
+      "range": "Special",
+      "duration": "Special",
+      "source_book": "UN",
+      "source_page": "147"
+    },
+    {
+      "id": "bfe55ba6-5625-425d-ad5c-08dd84ef07ca",
+      "name": "AR-Parallelism",
+      "category": "Emergent",
+      "category_slug": "emergent",
+      "source_book": "HS",
+      "source_page": "194"
+    },
+    {
+      "id": "3873ed1d-9f98-4a68-bccd-012d237a2522",
+      "name": "Active Analytics",
+      "category": "Emergent",
+      "category_slug": "emergent",
+      "source_book": "KC",
+      "source_page": "101"
+    },
+    {
+      "id": "cc29cf63-fd2b-47bc-8f68-c0c84c4e2986",
+      "name": "Assault",
+      "category": "Emergent",
+      "category_slug": "emergent",
+      "source_book": "UN",
+      "source_page": "156"
+    },
+    {
+      "id": "818bf01a-b959-4bb9-b202-45efd3b9819b",
+      "name": "Blend",
+      "category": "Emergent",
+      "category_slug": "emergent",
+      "source_book": "HS",
+      "source_page": "194"
+    },
+    {
+      "id": "765bf1cb-2e4b-46e8-aee4-f19004f031f3",
+      "name": "Bodyguard",
+      "category": "Emergent",
+      "category_slug": "emergent",
+      "source_book": "KC",
+      "source_page": "100"
+    },
+    {
+      "id": "5455b362-4c9d-4841-8069-230f44a4a3f0",
+      "name": "Borrowed IP",
+      "category": "Emergent",
+      "category_slug": "emergent",
+      "source_book": "KC",
+      "source_page": "101"
+    },
+    {
+      "id": "83289bc7-6c5d-4782-9523-bc8e08b0f521",
+      "name": "Camouflage",
+      "category": "Emergent",
+      "category_slug": "emergent",
+      "type": "File",
+      "action": "Complex",
+      "duration": "Permanent",
+      "source_book": "SR5",
+      "source_page": "256"
+    },
+    {
+      "id": "98f09b44-476f-4017-b2b0-7424756e4398",
+      "name": "Castling",
+      "category": "Emergent",
+      "category_slug": "emergent",
+      "source_book": "UN",
+      "source_page": "156"
+    },
+    {
+      "id": "fc132915-118e-4fd2-a443-2f9799a83b4a",
+      "name": "Cookie",
+      "category": "Emergent",
+      "category_slug": "emergent",
+      "type": "Persona",
+      "action": "Complex",
+      "duration": "Predetermined by Sprite",
+      "source_book": "SR5",
+      "source_page": "256"
+    },
+    {
+      "id": "5aa8f042-2180-43f9-8f46-7053a20cbe45",
+      "name": "Cozenge",
+      "category": "Emergent",
+      "category_slug": "emergent",
+      "source_book": "HS",
+      "source_page": "194"
+    },
+    {
+      "id": "dc7ed88c-ee5d-4817-bf45-5f3b3431eb63",
+      "name": "Credit",
+      "category": "Emergent",
+      "category_slug": "emergent",
+      "source_book": "UN",
+      "source_page": "160"
+    },
+    {
+      "id": "f5c90e81-cb15-4548-90bb-e403138f6dc3",
+      "name": "Datavore",
+      "category": "Emergent",
+      "category_slug": "emergent",
+      "source_book": "UN",
+      "source_page": "181"
+    },
+    {
+      "id": "ad1c42e7-315b-4c6b-ae49-856b274a129b",
+      "name": "Decompiling Resistance",
+      "category": "Emergent",
+      "category_slug": "emergent",
+      "source_book": "KC",
+      "source_page": "101"
+    },
+    {
+      "id": "c2899500-5932-4c39-81a8-fa64b08fa916",
+      "name": "Denial",
+      "category": "Emergent",
+      "category_slug": "emergent",
+      "source_book": "UN",
+      "source_page": "160"
+    },
+    {
+      "id": "b561f86f-683c-4ae3-b867-9c628d5f8953",
+      "name": "Diagnostics",
+      "category": "Emergent",
+      "category_slug": "emergent",
+      "action": "Simple",
+      "duration": "Sustained",
+      "source_book": "SR5",
+      "source_page": "257"
+    },
+    {
+      "id": "e07fca99-f35f-4dcf-8f93-4f84c5e76d51",
+      "name": "Distortion",
+      "category": "Emergent",
+      "category_slug": "emergent",
+      "source_book": "UN",
+      "source_page": "181"
+    },
+    {
+      "id": "9448e4a2-544d-4e09-bcd6-6a7db747be85",
+      "name": "Doorstop",
+      "category": "Emergent",
+      "category_slug": "emergent",
+      "source_book": "UN",
+      "source_page": "160"
+    },
+    {
+      "id": "4dc7af87-675c-4014-aa05-de6246fc8c14",
+      "name": "E-Hive",
+      "category": "Emergent",
+      "category_slug": "emergent",
+      "source_book": "HS",
+      "source_page": "195"
+    },
+    {
+      "id": "db290d50-c208-4de6-ad30-85b1b078370c",
+      "name": "Electron Storm",
+      "category": "Emergent",
+      "category_slug": "emergent",
+      "type": "Persona",
+      "action": "Complex",
+      "duration": "Sustained",
+      "source_book": "SR5",
+      "source_page": "257"
+    },
+    {
+      "id": "68bcb1c1-581c-4756-9856-690a5c3a5397",
+      "name": "Enhance",
+      "category": "Emergent",
+      "category_slug": "emergent",
+      "source_book": "KC",
+      "source_page": "101"
+    },
+    {
+      "id": "b947d60a-8ac6-4185-8a5c-fc7a24ef69eb",
+      "name": "Gremlins",
+      "category": "Emergent",
+      "category_slug": "emergent",
+      "source_book": "HS",
+      "source_page": "195"
+    },
+    {
+      "id": "f8ae2d3f-cd93-47d3-bf4c-652464a871ba",
+      "name": "Gremlins (Sprite)",
+      "category": "Emergent",
+      "category_slug": "emergent",
+      "type": "Device",
+      "action": "Complex",
+      "duration": "Instant",
+      "source_book": "SR5",
+      "source_page": "257"
+    },
+    {
+      "id": "93507c52-d8fc-4b03-9e27-b24048d87526",
+      "name": "Hash",
+      "category": "Emergent",
+      "category_slug": "emergent",
+      "type": "File",
+      "action": "Special",
+      "duration": "F × 10 Combat Turns",
+      "source_book": "SR5",
+      "source_page": "257"
+    },
+    {
+      "id": "f66e1630-7b3a-4595-868a-9143b372e6f4",
+      "name": "Holographic Concealment",
+      "category": "Emergent",
+      "category_slug": "emergent",
+      "source_book": "HS",
+      "source_page": "195"
+    },
+    {
+      "id": "de9a0dab-6477-4b1d-965d-b24cec5c22c9",
+      "name": "Info Sortilege",
+      "category": "Emergent",
+      "category_slug": "emergent",
+      "source_book": "UN",
+      "source_page": "156"
+    },
+    {
+      "id": "8e7e1bb4-ad16-4195-aef8-dd5b4c701603",
+      "name": "Navi",
+      "category": "Emergent",
+      "category_slug": "emergent",
+      "source_book": "KC",
+      "source_page": "101"
+    },
+    {
+      "id": "468b08d0-ee40-4205-b947-ec793ad4e320",
+      "name": "Peak",
+      "category": "Emergent",
+      "category_slug": "emergent",
+      "source_book": "UN",
+      "source_page": "181"
+    },
+    {
+      "id": "b3e30f26-869b-4e41-bca5-da062adb62cd",
+      "name": "Probability Distribution",
+      "category": "Emergent",
+      "category_slug": "emergent",
+      "source_book": "UN",
+      "source_page": "156"
+    },
+    {
+      "id": "1f096d1f-02bc-4fc6-a6d9-810edb8da58e",
+      "name": "Proficiency",
+      "category": "Emergent",
+      "category_slug": "emergent",
+      "source_book": "UN",
+      "source_page": "156"
+    },
+    {
+      "id": "67ec3e9a-3e21-4906-9d90-1255f6086ce7",
+      "name": "Resilient Code",
+      "category": "Emergent",
+      "category_slug": "emergent",
+      "source_book": "KC",
+      "source_page": "101"
+    },
+    {
+      "id": "27525302-faa6-4a2b-a714-9ba74c7b5924",
+      "name": "Resonance Drain",
+      "category": "Emergent",
+      "category_slug": "emergent",
+      "source_book": "UN",
+      "source_page": "181"
+    },
+    {
+      "id": "f861c488-9818-4a40-a985-0138d3f164d5",
+      "name": "Resonance Feed",
+      "category": "Emergent",
+      "category_slug": "emergent",
+      "source_book": "HS",
+      "source_page": "195"
+    },
+    {
+      "id": "1749d122-8d63-4790-ba8b-974b500d5bab",
+      "name": "Resonance Hosting",
+      "category": "Emergent",
+      "category_slug": "emergent",
+      "source_book": "KC",
+      "source_page": "168"
+    },
+    {
+      "id": "7a2d7ea2-7460-4d76-be08-dfbf5653ec7d",
+      "name": "Resonance Hosting",
+      "category": "Emergent",
+      "category_slug": "emergent",
+      "source_book": "KC",
+      "source_page": "168"
+    },
+    {
+      "id": "5c5361a9-565f-4873-91c2-f30c19634e4d",
+      "name": "Resonance Rift",
+      "category": "Emergent",
+      "category_slug": "emergent",
+      "source_book": "UN",
+      "source_page": "160"
+    },
+    {
+      "id": "91a4d3a9-bf11-4080-94aa-37e462436b12",
+      "name": "Resonance Spooling",
+      "category": "Emergent",
+      "category_slug": "emergent",
+      "source_book": "KC",
+      "source_page": "101"
+    },
+    {
+      "id": "d8e72e33-d70e-4fd5-8ca2-b6cb7da87a96",
+      "name": "Shield",
+      "category": "Emergent",
+      "category_slug": "emergent",
+      "source_book": "KC",
+      "source_page": "100"
+    },
+    {
+      "id": "9ab8f26f-f427-4fd6-ab7c-2dd0b96a8eda",
+      "name": "Siphon",
+      "category": "Emergent",
+      "category_slug": "emergent",
+      "source_book": "UN",
+      "source_page": "181"
+    },
+    {
+      "id": "3c918bc9-de6b-42c4-82b3-52c9c1044078",
+      "name": "Sparky",
+      "category": "Emergent",
+      "category_slug": "emergent",
+      "source_book": "UN",
+      "source_page": "181"
+    },
+    {
+      "id": "cf509fe7-6b69-4996-8e79-8105e02c2855",
+      "name": "Spraying",
+      "category": "Emergent",
+      "category_slug": "emergent",
+      "source_book": "HS",
+      "source_page": "195"
+    },
+    {
+      "id": "b733200f-9911-489d-b555-ebacd16110b0",
+      "name": "Stability",
+      "category": "Emergent",
+      "category_slug": "emergent",
+      "type": "Persona or Device",
+      "action": "Complex",
+      "duration": "Sustained",
+      "source_book": "SR5",
+      "source_page": "257"
+    },
+    {
+      "id": "f4026d71-afcb-430f-9336-56a280a77d36",
+      "name": "Suppression",
+      "category": "Emergent",
+      "category_slug": "emergent",
+      "type": "Host",
+      "action": "Complex",
+      "duration": "Sustained",
+      "source_book": "SR5",
+      "source_page": "257"
+    },
+    {
+      "id": "ea50163f-5dcf-4306-9ec9-1927bbbecf59",
+      "name": "Surge",
+      "category": "Emergent",
+      "category_slug": "emergent",
+      "source_book": "UN",
+      "source_page": "181"
+    },
+    {
+      "id": "1629d45d-f64e-4a39-a2d4-a07f7844f1e4",
+      "name": "Traceroute",
+      "category": "Emergent",
+      "category_slug": "emergent",
+      "source_book": "HS",
+      "source_page": "195"
+    },
+    {
+      "id": "20af1748-e083-4e46-89ec-48b4023f402b",
+      "name": "Transfer",
+      "category": "Emergent",
+      "category_slug": "emergent",
+      "source_book": "UN",
+      "source_page": "157"
+    },
+    {
+      "id": "7a2a318f-4c30-46e0-9603-7b58dcb48150",
+      "name": "Tunnel",
+      "category": "Emergent",
+      "category_slug": "emergent",
+      "source_book": "HS",
+      "source_page": "195"
+    },
+    {
+      "id": "e08eeffc-6350-4e4d-9365-6f8530801d12",
+      "name": "Venomous Code",
+      "category": "Emergent",
+      "category_slug": "emergent",
+      "source_book": "HS",
+      "source_page": "195"
+    },
+    {
+      "id": "bfaee929-a5f6-4d6c-9512-6fb29d5a8b0a",
+      "name": "Virulence",
+      "category": "Emergent",
+      "category_slug": "emergent",
+      "source_book": "UN",
+      "source_page": "181"
+    },
+    {
+      "id": "c8840b92-07ae-40a3-bd04-20152bae16b8",
+      "name": "Watermark",
+      "category": "Emergent",
+      "category_slug": "emergent",
+      "type": "Icon",
+      "action": "Complex",
+      "duration": "Permanent",
+      "source_book": "SR5",
+      "source_page": "257"
+    },
+    {
+      "id": "f1750d16-5dc2-4c4e-afae-1ad86c520fc6",
+      "name": "Astral Projection",
+      "category": "Free Spirit",
+      "category_slug": "free-spirit",
+      "type": "M",
+      "action": "Complex",
+      "range": "Self",
+      "duration": "Special",
+      "source_book": "SG",
+      "source_page": "204"
+    },
+    {
+      "id": "a3651bf9-dda2-4bf0-8c95-8c44bd8ae83b",
+      "name": "Korrigan Pact",
+      "category": "Free Spirit",
+      "category_slug": "free-spirit",
+      "source_book": "AET",
+      "source_page": "39"
+    },
+    {
+      "id": "65dd2042-b786-471b-ac26-d6cc8cd16a58",
+      "name": "Shift",
+      "category": "Free Spirit",
+      "category_slug": "free-spirit",
+      "type": "M",
+      "action": "Complex",
+      "range": "Self",
+      "duration": "Special",
+      "source_book": "AET",
+      "source_page": "38"
+    },
+    {
+      "id": "3243aece-a356-4e46-bd4c-af04cfc2a306",
+      "name": "Skill",
+      "category": "Free Spirit",
+      "category_slug": "free-spirit",
+      "source_book": "AET",
+      "source_page": "38"
+    },
+    {
+      "id": "8e1d96d9-53c9-4924-855c-059815ef973c",
+      "name": "Spirit Pact",
+      "category": "Free Spirit",
+      "category_slug": "free-spirit",
+      "type": "M",
+      "action": "Special",
+      "range": "Special",
+      "duration": "Special",
+      "source_book": "SG",
+      "source_page": "205"
+    },
+    {
+      "id": "5aa4a4c2-d27f-416a-976b-330bc878539c",
+      "name": "Transfer Energy (Essence)",
+      "category": "Free Spirit",
+      "category_slug": "free-spirit",
+      "type": "P",
+      "action": "Complex",
+      "range": "Touch",
+      "duration": "Permanent",
+      "source_book": "AET",
+      "source_page": "38"
+    },
+    {
+      "id": "1ad48bb5-2f28-4076-8f4b-185c02f85456",
+      "name": "Vanishing",
+      "category": "Free Spirit",
+      "category_slug": "free-spirit",
+      "type": "M",
+      "action": "Free",
+      "range": "Self",
+      "duration": "Special",
+      "source_book": "AET",
+      "source_page": "39"
+    },
+    {
+      "id": "9942f3f2-b486-44ff-ad34-c56fd9453d41",
+      "name": "Vessel Trading",
+      "category": "Free Spirit",
+      "category_slug": "free-spirit",
+      "type": "P",
+      "action": "Complex",
+      "range": "Touch",
+      "duration": "Instant",
+      "source_book": "SG",
+      "source_page": "205"
+    },
+    {
+      "id": "d6729bdf-9300-40fe-97a8-9966d295af33",
+      "name": "Armor",
+      "category": "Mundane",
+      "category_slug": "mundane",
+      "type": "P",
+      "action": "Auto",
+      "range": "Self",
+      "duration": "Always",
+      "source_book": "SR5",
+      "source_page": "394",
+      "attributes": {
+        "bonus": "{\"armor\":\"Rating\"}"
+      }
+    },
+    {
+      "id": "aca5b1a9-6b7f-49fa-aee4-ba20b4ee2f26",
+      "name": "Binding",
+      "category": "Mundane",
+      "category_slug": "mundane",
+      "type": "P",
+      "action": "Complex",
+      "range": "LOS",
+      "duration": "Instant",
+      "source_book": "SR5",
+      "source_page": "395"
+    },
+    {
+      "id": "2cf990bd-f80b-4e56-803d-b8595ef96244",
+      "name": "Brachiation",
+      "category": "Mundane",
+      "category_slug": "mundane",
+      "type": "P",
+      "action": "Auto",
+      "range": "Self",
+      "duration": "Always",
+      "source_book": "HS",
+      "source_page": "188"
+    },
+    {
+      "id": "d769a388-1f25-4ec0-9a7f-9bd37585723b",
+      "name": "Dive Attack",
+      "category": "Mundane",
+      "category_slug": "mundane",
+      "type": "P",
+      "action": "Complex",
+      "range": "Touch",
+      "duration": "Instant",
+      "source_book": "HS",
+      "source_page": "190"
+    },
+    {
+      "id": "6be87e77-1073-47fd-a137-b536a8700009",
+      "name": "Domesticated",
+      "category": "Mundane",
+      "category_slug": "mundane",
+      "source_book": "HS",
+      "source_page": "186"
+    },
+    {
+      "id": "b289f6de-dc68-49a2-9d08-a9dcafdf9bac",
+      "name": "Enhanced Senses",
+      "category": "Mundane",
+      "category_slug": "mundane",
+      "type": "P",
+      "action": "Auto",
+      "range": "Self",
+      "duration": "Always",
+      "source_book": "SR5",
+      "source_page": "396",
+      "attributes": {
+        "bonus": "{\"selecttext\":null}",
+        "toxic": "True"
+      }
+    },
+    {
+      "id": "ac9855da-519a-44ac-b120-a605c20450e6",
+      "name": "Enhanced Senses (Ultrasound)",
+      "category": "Mundane",
+      "category_slug": "mundane",
+      "type": "P",
+      "action": "Auto",
+      "range": "Self",
+      "duration": "Always",
+      "karma": "9",
+      "source_book": "SR5",
+      "source_page": "396",
+      "attributes": {
+        "required": "{\"allof\":{\"attribute\":{\"name\":\"MAG\",\"total\":\"3\"}},\"oneof\":{\"quality\":[\"Free Insect Spirit: Cutter Ant\",\"Free Insect Spirit: Fire Ant\",\"Free Insect Spirit: Desert Locust\",\"Free Insect Spirit: Mole Cricket\",\"Free Insect Spirit: Subterranean Termite\",\"Free Insect Spirit: Hunter Wasp\",\"Free Insect Spirit: Bee\",\"Free Insect Spirit: Goliath Beetle\",\"Free Insect Spirit: Water Beetle\",\"Free Insect Spirit: House Centipede\",\"Free Insect Spirit: Tropical Centipede\",\"Free Insect Spirit: Century Cicada\",\"Free Insect Spirit: Trapdoor Spider\",\"Free Insect Spirit: Black Widow\",\"Free Insect Spirit: Burster Firefly\",\"Free Insect Spirit: Botfly\",\"Free Insect Spirit: Dragonfly\",\"Free Insect Spirit: Mimic Mantis\",\"Free Insect Spirit: Orchid Mantis\",\"Free Insect Spirit: Vampire Mosquito\",\"Free Insect Spirit: Tick\",\"Free Insect Spirit: Death's Head Moth\",\"Free Insect Spirit: Cryptid Moth\",\"Free Insect Spirit: Cave Roach\",\"Free Insect Spirit: Silverfish\"]}}",
+        "toxic": "True"
+      }
+    },
+    {
+      "id": "94e58008-2ab1-41ed-886c-74773ec60067",
+      "name": "Gestalt Consciousness",
+      "category": "Mundane",
+      "category_slug": "mundane",
+      "type": "P",
+      "action": "Auto",
+      "range": "Self",
+      "duration": "Always",
+      "source_book": "HS",
+      "source_page": "192"
+    },
+    {
+      "id": "c5a7a660-a036-4b52-a8ab-1e9d7705e65d",
+      "name": "Gills",
+      "category": "Mundane",
+      "category_slug": "mundane",
+      "type": "P",
+      "action": "Auto",
+      "range": "Self",
+      "duration": "Always",
+      "source_book": "HS",
+      "source_page": "192"
+    },
+    {
+      "id": "fbeb215d-fb20-4151-9fd1-4d3259db9402",
+      "name": "Gliding",
+      "category": "Mundane",
+      "category_slug": "mundane",
+      "source_book": "HS",
+      "source_page": "186",
+      "attributes": {
+        "bonus": "{\"specificskill\":{\"applytorating\":\"True\",\"bonus\":\"1\",\"name\":\"Free-Fall\"}}"
+      }
+    },
+    {
+      "id": "43ff8bf8-a5e5-424c-9dc8-a5229eeea62f",
+      "name": "Magic Resistance",
+      "category": "Mundane",
+      "category_slug": "mundane",
+      "type": "P",
+      "action": "Auto",
+      "range": "Self",
+      "duration": "Always",
+      "source_book": "SR5",
+      "source_page": "76",
+      "attributes": {
+        "bonus": "{\"spellresistance\":\"Rating\"}",
+        "rating": "True"
+      }
+    },
+    {
+      "id": "9fc065db-9d63-4e8b-aba9-e19dfba07652",
+      "name": "Natural Weapon",
+      "category": "Mundane",
+      "category_slug": "mundane",
+      "type": "P",
+      "action": "Complex",
+      "range": "Touch",
+      "duration": "Instant",
+      "source_book": "SR5",
+      "source_page": "399",
+      "attributes": {
+        "bonus": "{\"selecttext\":null}"
+      }
+    },
+    {
+      "id": "ecbab218-1ba9-41b6-9add-897ccbbf1d52",
+      "name": "Pestilence",
+      "category": "Mundane",
+      "category_slug": "mundane",
+      "type": "P",
+      "action": "Auto",
+      "range": "Touch",
+      "duration": "Instant",
+      "source_book": "SG",
+      "source_page": "197",
+      "attributes": {
+        "toxic": "True"
+      }
+    },
+    {
+      "id": "9c59fb9c-85b4-449a-978a-a07d6ccf31a2",
+      "name": "Pounce",
+      "category": "Mundane",
+      "category_slug": "mundane",
+      "type": "P",
+      "action": "Complex",
+      "range": "Touch",
+      "duration": "Instant",
+      "source_book": "HS",
+      "source_page": "193"
+    },
+    {
+      "id": "bd881fa0-89e4-4734-816f-7ffe7cf5f35f",
+      "name": "Sapience",
+      "category": "Mundane",
+      "category_slug": "mundane",
+      "type": "P",
+      "action": "Auto",
+      "range": "Self",
+      "duration": "Always",
+      "source_book": "SR5",
+      "source_page": "400",
+      "attributes": {
+        "bonus": "{\"allowskilldefaulting\":null}"
+      }
+    },
+    {
+      "id": "224f6093-af49-4fd4-a30a-b0c38673ffb7",
+      "name": "Secretion/Substance Extrusion",
+      "category": "Mundane",
+      "category_slug": "mundane",
+      "type": "P",
+      "action": "Auto",
+      "range": "Self",
+      "duration": "Always",
+      "source_book": "HS",
+      "source_page": "193",
+      "attributes": {
+        "bonus": "{\"selecttext\":null}"
+      }
+    },
+    {
+      "id": "CA353685-D829-49F4-9023-1551398C31F6",
+      "name": "Secretion/Substance Extrusion (Anti-Coagulant)",
+      "category": "Mundane",
+      "category_slug": "mundane",
+      "type": "P",
+      "action": "Auto",
+      "range": "Self",
+      "duration": "Always",
+      "karma": "9",
+      "source_book": "HS",
+      "source_page": "193",
+      "attributes": {
+        "required": "{\"oneof\":{\"quality\":[\"Infected: Vampire (Human)\",\"Infected: Vampire (Non-Human)\"]}}"
+      }
+    },
+    {
+      "id": "d9e0cc36-3183-4fa6-b9a6-b7e62d7d72fc",
+      "name": "Sense Link",
+      "category": "Mundane",
+      "category_slug": "mundane",
+      "type": "M",
+      "action": "Simple",
+      "range": "MAG × 50",
+      "duration": "Always",
+      "source_book": "SG",
+      "source_page": "198"
+    },
+    {
+      "id": "fc522b4a-e281-4de0-a824-b1d636fff59b",
+      "name": "Toughness",
+      "category": "Mundane",
+      "category_slug": "mundane",
+      "type": "P",
+      "action": "Auto",
+      "range": "Self",
+      "duration": "Always",
+      "source_book": "HS",
+      "source_page": "194",
+      "attributes": {
+        "bonus": "{\"conditionmonitor\":{\"physical\":\"Rating\"}}",
+        "rating": "True"
+      }
+    },
+    {
+      "id": "5e45dcc0-ec66-4bd5-a855-d3ce577dd2b4",
+      "name": "Venom",
+      "category": "Mundane",
+      "category_slug": "mundane",
+      "type": "P",
+      "action": "Auto",
+      "range": "Touch",
+      "duration": "Instant",
+      "source_book": "SR5",
+      "source_page": "401",
+      "attributes": {
+        "toxic": "True"
+      }
+    },
+    {
+      "id": "7cdbe90b-b16a-43c0-a20e-b4a54b83c6ed",
+      "name": "Wall Walking",
+      "category": "Mundane",
+      "category_slug": "mundane",
+      "type": "P",
+      "action": "Auto",
+      "range": "Self",
+      "duration": "Always",
+      "source_book": "HS",
+      "source_page": "194"
+    },
+    {
+      "id": "CE10BCD4-EDEE-42F4-A5EE-06647D7A8492",
+      "name": "Pounce (Infected)",
+      "category": "Mundane/Infected",
+      "category_slug": "mundane-infected",
+      "type": "P",
+      "action": "Complex",
+      "range": "Touch",
+      "duration": "Instant",
+      "karma": "9",
+      "source_book": "HS",
+      "source_page": "193",
+      "attributes": {
+        "required": "{\"oneof\":{\"quality\":\"Infected: Bandersnatch\"}}"
+      }
+    },
+    {
+      "id": "99af5d63-9f6a-4a32-9bf6-9b8500a3c64c",
+      "name": "Accident",
+      "category": "Paranormal",
+      "category_slug": "paranormal",
+      "type": "P",
+      "action": "Complex",
+      "range": "LOS",
+      "duration": "Instant",
+      "source_book": "SR5",
+      "source_page": "394"
+    },
+    {
+      "id": "7f98220b-95c4-4b76-aca7-6f0308cf25a7",
+      "name": "Adaptive Coloration",
+      "category": "Paranormal",
+      "category_slug": "paranormal",
+      "type": "P",
+      "action": "Auto",
+      "range": "Self",
+      "duration": "Always",
+      "source_book": "HS",
+      "source_page": "188"
+    },
+    {
+      "id": "64437e82-ac50-40f3-8916-751c124e5676",
+      "name": "Alienate",
+      "category": "Paranormal",
+      "category_slug": "paranormal",
+      "type": "P",
+      "action": "None",
+      "range": "LOS",
+      "duration": "Sustained",
+      "source_book": "HS",
+      "source_page": "188"
+    },
+    {
+      "id": "44dd8deb-891e-4361-bc0c-47c4258ea6fd",
+      "name": "Anaphylaxis",
+      "category": "Paranormal",
+      "category_slug": "paranormal",
+      "type": "P",
+      "action": "Complex",
+      "range": "Touch",
+      "duration": "Instant",
+      "source_book": "SG",
+      "source_page": "193",
+      "attributes": {
+        "toxic": "True"
+      }
+    },
+    {
+      "id": "6414b273-897d-451a-839a-4d530f1baaab",
+      "name": "Anchored Resident",
+      "category": "Paranormal",
+      "category_slug": "paranormal",
+      "type": "M",
+      "action": "Auto",
+      "range": "Self",
+      "duration": "Always",
+      "source_book": "DTR",
+      "source_page": "49"
+    },
+    {
+      "id": "1814f970-111f-4d56-9402-f584daa02663",
+      "name": "Animal Control",
+      "category": "Paranormal",
+      "category_slug": "paranormal",
+      "type": "M",
+      "action": "Complex",
+      "range": "LOS",
+      "duration": "Sustained",
+      "source_book": "SR5",
+      "source_page": "394",
+      "attributes": {
+        "bonus": "{\"selecttext\":null}",
+        "toxic": "True"
+      }
+    },
+    {
+      "id": "3fe334d3-f0e3-4bd7-ac39-57fa395ce0be",
+      "name": "Animal Control (Insect Type)",
+      "category": "Paranormal",
+      "category_slug": "paranormal",
+      "type": "M",
+      "action": "Complex",
+      "range": "LOS",
+      "duration": "Sustained",
+      "karma": "9",
+      "source_book": "SR5",
+      "source_page": "394",
+      "attributes": {
+        "bonus": "{\"selecttext\":null}",
+        "required": "{\"allof\":{\"attribute\":{\"name\":\"MAG\",\"total\":\"3\"}},\"oneof\":{\"quality\":[\"Free Insect Spirit: Cutter Ant\",\"Free Insect Spirit: Fire Ant\",\"Free Insect Spirit: Desert Locust\",\"Free Insect Spirit: Mole Cricket\",\"Free Insect Spirit: Subterranean Termite\",\"Free Insect Spirit: Hunter Wasp\",\"Free Insect Spirit: Bee\",\"Free Insect Spirit: Goliath Beetle\",\"Free Insect Spirit: Water Beetle\",\"Free Insect Spirit: House Centipede\",\"Free Insect Spirit: Tropical Centipede\",\"Free Insect Spirit: Century Cicada\",\"Free Insect Spirit: Trapdoor Spider\",\"Free Insect Spirit: Black Widow\",\"Free Insect Spirit: Burster Firefly\",\"Free Insect Spirit: Botfly\",\"Free Insect Spirit: Dragonfly\",\"Free Insect Spirit: Mimic Mantis\",\"Free Insect Spirit: Orchid Mantis\",\"Free Insect Spirit: Vampire Mosquito\",\"Free Insect Spirit: Tick\",\"Free Insect Spirit: Death's Head Moth\",\"Free Insect Spirit: Cryptid Moth\",\"Free Insect Spirit: Cave Roach\",\"Free Insect Spirit: Silverfish\"]}}",
+        "toxic": "True"
+      }
+    },
+    {
+      "id": "0ea84be4-a293-44bf-bc60-52314495cc9a",
+      "name": "Astral Form",
+      "category": "Paranormal",
+      "category_slug": "paranormal",
+      "type": "M",
+      "action": "Auto",
+      "range": "Self",
+      "duration": "Always",
+      "source_book": "SR5",
+      "source_page": "394"
+    },
+    {
+      "id": "5dad2b71-d7b0-443f-9871-ea01a381b9d0",
+      "name": "Astral Gateway",
+      "category": "Paranormal",
+      "category_slug": "paranormal",
+      "type": "M",
+      "action": "Complex",
+      "range": "LOS (A)",
+      "duration": "Sustained",
+      "source_book": "SG",
+      "source_page": "194"
+    },
+    {
+      "id": "adf34ad4-0040-49df-a6dd-bde198c44a44",
+      "name": "Astral Venom",
+      "category": "Paranormal",
+      "category_slug": "paranormal",
+      "type": "M",
+      "action": "Auto",
+      "range": "Self",
+      "duration": "Always",
+      "source_book": "HS",
+      "source_page": "188"
+    },
+    {
+      "id": "89ad414a-9854-44b0-b505-ad0186ccb29f",
+      "name": "Aura Masking",
+      "category": "Paranormal",
+      "category_slug": "paranormal",
+      "type": "M",
+      "action": "Free",
+      "range": "Self",
+      "duration": "Sustained",
+      "source_book": "SG",
+      "source_page": "194"
+    },
+    {
+      "id": "ae00c4e4-c036-44b2-894b-1a5cd3fc8fae",
+      "name": "Banishing Resistance",
+      "category": "Paranormal",
+      "category_slug": "paranormal",
+      "type": "M",
+      "action": "Auto",
+      "range": "Self",
+      "duration": "Special",
+      "source_book": "SG",
+      "source_page": "194"
+    },
+    {
+      "id": "71a78fd2-c75a-46a8-a0f3-320e268a9b4d",
+      "name": "Binding",
+      "category": "Paranormal",
+      "category_slug": "paranormal",
+      "type": "P",
+      "action": "Complex",
+      "range": "LOS",
+      "duration": "Instant",
+      "source_book": "SR5",
+      "source_page": "395",
+      "attributes": {
+        "toxic": "True"
+      }
+    },
+    {
+      "id": "57dd33b3-7fea-421e-bcf3-336d56ea08b5",
+      "name": "Combat Skill",
+      "category": "Paranormal",
+      "category_slug": "paranormal",
+      "source_book": "SR5",
+      "source_page": "130",
+      "attributes": {
+        "bonus": "{\"selectskill\":{\"+@skillcategory\":\"Combat Active\",\"applytorating\":\"True\",\"val\":\"MAG\"}}"
+      }
+    },
+    {
+      "id": "4d923896-aabb-45fe-9708-85438a75c4a3",
+      "name": "Compulsion",
+      "category": "Paranormal",
+      "category_slug": "paranormal",
+      "type": "P",
+      "action": "Complex",
+      "range": "LOS",
+      "duration": "Sustained",
+      "karma": "9",
+      "source_book": "SR5",
+      "source_page": "395",
+      "attributes": {
+        "required": "{\"allof\":{\"attribute\":{\"name\":\"MAG\",\"total\":\"3\"}},\"oneof\":{\"quality\":[\"Free Insect Spirit: Cutter Ant\",\"Free Insect Spirit: Fire Ant\",\"Free Insect Spirit: Desert Locust\",\"Free Insect Spirit: Mole Cricket\",\"Free Insect Spirit: Subterranean Termite\",\"Free Insect Spirit: Hunter Wasp\",\"Free Insect Spirit: Bee\",\"Free Insect Spirit: Goliath Beetle\",\"Free Insect Spirit: Water Beetle\",\"Free Insect Spirit: House Centipede\",\"Free Insect Spirit: Tropical Centipede\",\"Free Insect Spirit: Century Cicada\",\"Free Insect Spirit: Trapdoor Spider\",\"Free Insect Spirit: Black Widow\",\"Free Insect Spirit: Burster Firefly\",\"Free Insect Spirit: Botfly\",\"Free Insect Spirit: Dragonfly\",\"Free Insect Spirit: Mimic Mantis\",\"Free Insect Spirit: Orchid Mantis\",\"Free Insect Spirit: Vampire Mosquito\",\"Free Insect Spirit: Tick\",\"Free Insect Spirit: Death's Head Moth\",\"Free Insect Spirit: Cryptid Moth\",\"Free Insect Spirit: Cave Roach\",\"Free Insect Spirit: Silverfish\"]}}"
+      }
+    },
+    {
+      "id": "f6631c45-a705-434c-b4a6-ba2a889d38ff",
+      "name": "Compulsion",
+      "category": "Paranormal",
+      "category_slug": "paranormal",
+      "type": "P",
+      "action": "Complex",
+      "range": "LOS",
+      "duration": "Sustained",
+      "source_book": "SR5",
+      "source_page": "395"
+    },
+    {
+      "id": "1898d408-116a-4f98-b413-939660692ce7",
+      "name": "Concealment",
+      "category": "Paranormal",
+      "category_slug": "paranormal",
+      "type": "P",
+      "action": "Simple",
+      "range": "LOS",
+      "duration": "Sustained",
+      "source_book": "SR5",
+      "source_page": "395"
+    },
+    {
+      "id": "df67deb5-91e4-47bc-9af8-baf60fc2311d",
+      "name": "Concealment (Self Only)",
+      "category": "Paranormal",
+      "category_slug": "paranormal",
+      "type": "P",
+      "action": "Simple",
+      "range": "Self",
+      "duration": "Sustained",
+      "source_book": "SR5",
+      "source_page": "395"
+    },
+    {
+      "id": "ed387fd9-5fa3-4f5d-9e97-a9a97ad17b94",
+      "name": "Confusion",
+      "category": "Paranormal",
+      "category_slug": "paranormal",
+      "type": "P",
+      "action": "Complex",
+      "range": "LOS",
+      "duration": "Sustained",
+      "karma": "9",
+      "source_book": "SR5",
+      "source_page": "395",
+      "attributes": {
+        "required": "{\"allof\":{\"attribute\":{\"name\":\"MAG\",\"total\":\"3\"}},\"oneof\":{\"quality\":[\"Free Insect Spirit: Cutter Ant\",\"Free Insect Spirit: Fire Ant\",\"Free Insect Spirit: Desert Locust\",\"Free Insect Spirit: Mole Cricket\",\"Free Insect Spirit: Subterranean Termite\",\"Free Insect Spirit: Hunter Wasp\",\"Free Insect Spirit: Bee\",\"Free Insect Spirit: Goliath Beetle\",\"Free Insect Spirit: Water Beetle\",\"Free Insect Spirit: House Centipede\",\"Free Insect Spirit: Tropical Centipede\",\"Free Insect Spirit: Century Cicada\",\"Free Insect Spirit: Trapdoor Spider\",\"Free Insect Spirit: Black Widow\",\"Free Insect Spirit: Burster Firefly\",\"Free Insect Spirit: Botfly\",\"Free Insect Spirit: Dragonfly\",\"Free Insect Spirit: Mimic Mantis\",\"Free Insect Spirit: Orchid Mantis\",\"Free Insect Spirit: Vampire Mosquito\",\"Free Insect Spirit: Tick\",\"Free Insect Spirit: Death's Head Moth\",\"Free Insect Spirit: Cryptid Moth\",\"Free Insect Spirit: Cave Roach\",\"Free Insect Spirit: Silverfish\"]}}",
+        "toxic": "True"
+      }
+    },
+    {
+      "id": "4517126f-6dcf-4c73-b7f5-cac77532c1f5",
+      "name": "Confusion",
+      "category": "Paranormal",
+      "category_slug": "paranormal",
+      "type": "P",
+      "action": "Complex",
+      "range": "LOS",
+      "duration": "Sustained",
+      "source_book": "SR5",
+      "source_page": "395",
+      "attributes": {
+        "toxic": "True"
+      }
+    },
+    {
+      "id": "73b0e681-fa65-4253-9010-4bac1f7c3179",
+      "name": "Control Focus",
+      "category": "Paranormal",
+      "category_slug": "paranormal",
+      "type": "M",
+      "action": "Auto",
+      "range": "Special",
+      "duration": "Special",
+      "source_book": "HS",
+      "source_page": "188"
+    },
+    {
+      "id": "1ddf4e08-8249-477c-ba8b-1b910428bf45",
+      "name": "Corrosive Spit",
+      "category": "Paranormal",
+      "category_slug": "paranormal",
+      "type": "P",
+      "action": "Complex",
+      "range": "LOS",
+      "duration": "Special",
+      "source_book": "SR5",
+      "source_page": "395",
+      "attributes": {
+        "toxic": "True"
+      }
+    },
+    {
+      "id": "6bd03b55-d6fb-4ecb-a098-1c01017bc81c",
+      "name": "Create Alchera",
+      "category": "Paranormal",
+      "category_slug": "paranormal",
+      "type": "P",
+      "action": "Complex",
+      "range": "LOS",
+      "duration": "Sustained",
+      "source_book": "HS",
+      "source_page": "189"
+    },
+    {
+      "id": "8af6b45a-ed52-4063-a60e-7428a818a7ab",
+      "name": "Darkness",
+      "category": "Paranormal",
+      "category_slug": "paranormal",
+      "type": "P",
+      "action": "Complex",
+      "range": "LOS",
+      "duration": "Sustained",
+      "karma": "9",
+      "source_book": "HS",
+      "source_page": "189"
+    },
+    {
+      "id": "4b017336-7806-4905-a1ca-f540cf88b7b9",
+      "name": "Deathlock",
+      "category": "Paranormal",
+      "category_slug": "paranormal",
+      "type": "P",
+      "action": "Auto",
+      "range": "Self",
+      "duration": "Always",
+      "source_book": "HS",
+      "source_page": "190"
+    },
+    {
+      "id": "f654869b-d381-4f90-82d6-835f5a4aa0ab",
+      "name": "Deathly Aura",
+      "category": "Paranormal",
+      "category_slug": "paranormal",
+      "type": "P",
+      "action": "Simple",
+      "range": "Special",
+      "duration": "Sustained",
+      "source_book": "SG",
+      "source_page": "194"
+    },
+    {
+      "id": "c3e2ee0c-7c4d-479f-997d-7079cb4dee7a",
+      "name": "Desire Reflection",
+      "category": "Paranormal",
+      "category_slug": "paranormal",
+      "type": "M",
+      "action": "Complex",
+      "range": "LOS",
+      "duration": "Sustained",
+      "karma": "9",
+      "source_book": "SG",
+      "source_page": "194",
+      "attributes": {
+        "required": "{\"oneof\":{\"quality\":\"Infected: Dzoo-Noo-Qua\"}}"
+      }
+    },
+    {
+      "id": "e525a62b-5762-477d-b242-6e166fdcd6e9",
+      "name": "Devouring",
+      "category": "Paranormal",
+      "category_slug": "paranormal",
+      "type": "P",
+      "action": "Complex",
+      "range": "Touch",
+      "duration": "Sustained",
+      "source_book": "SG",
+      "source_page": "194",
+      "attributes": {
+        "toxic": "True"
+      }
+    },
+    {
+      "id": "cf03e546-90d9-4c3d-8246-19bf57821731",
+      "name": "Divining",
+      "category": "Paranormal",
+      "category_slug": "paranormal",
+      "type": "M",
+      "action": "Special",
+      "range": "Special",
+      "duration": "Special",
+      "source_book": "SG",
+      "source_page": "194"
+    },
+    {
+      "id": "6bd7dbfd-1603-4333-86aa-b4b798caf9d1",
+      "name": "Dragonspeech",
+      "category": "Paranormal",
+      "category_slug": "paranormal",
+      "type": "M",
+      "action": "Auto",
+      "range": "LOS",
+      "duration": "Instant",
+      "source_book": "SR5",
+      "source_page": "395"
+    },
+    {
+      "id": "6ca4a4af-7da0-4cc2-b545-0fe0396cfb46",
+      "name": "Dual Natured",
+      "category": "Paranormal",
+      "category_slug": "paranormal",
+      "type": "P",
+      "action": "Auto",
+      "range": "Self",
+      "duration": "Always",
+      "source_book": "SR5",
+      "source_page": "395",
+      "attributes": {
+        "bonus": "{\"unlockskills\":[{\"+@name\":\"Assensing\",\"+content\":\"Name\"},{\"+@name\":\"Astral Combat\",\"+content\":\"Name\"}]}"
+      }
+    },
+    {
+      "id": "37e62625-1099-426f-94c9-2750aaa9902b",
+      "name": "Elemental Attack",
+      "category": "Paranormal",
+      "category_slug": "paranormal",
+      "type": "P",
+      "action": "Complex",
+      "range": "LOS",
+      "duration": "Instant",
+      "source_book": "SR5",
+      "source_page": "396",
+      "attributes": {
+        "bonus": "{\"selecttext\":{\"+@allowedit\":\"True\",\"+@xml\":\"strings.xml\",\"+@xpath\":\"/chummer/elements/*\"}}",
+        "toxic": "True"
+      }
+    },
+    {
+      "id": "8df0b8ba-ef4e-41ea-a571-8c21f221cfde",
+      "name": "Empathy",
+      "category": "Paranormal",
+      "category_slug": "paranormal",
+      "type": "M",
+      "action": "Complex",
+      "range": "LOS",
+      "duration": "Sustained",
+      "source_book": "HS",
+      "source_page": "190"
+    },
+    {
+      "id": "de152825-2002-4a58-b2a7-08247aae72be",
+      "name": "Endowment",
+      "category": "Paranormal",
+      "category_slug": "paranormal",
+      "type": "M",
+      "action": "Complex",
+      "range": "Touch",
+      "duration": "Sustained",
+      "source_book": "SG",
+      "source_page": "195"
+    },
+    {
+      "id": "37bc7c80-beb9-424d-a4b4-db8d3a31612c",
+      "name": "Energy Aura",
+      "category": "Paranormal",
+      "category_slug": "paranormal",
+      "type": "P",
+      "action": "Auto",
+      "range": "Self",
+      "duration": "Always",
+      "source_book": "SR5",
+      "source_page": "396",
+      "attributes": {
+        "toxic": "True"
+      }
+    },
+    {
+      "id": "d10138cc-924a-4f2b-a59b-44e0611fb019",
+      "name": "Energy Drain",
+      "category": "Paranormal",
+      "category_slug": "paranormal",
+      "type": "M",
+      "action": "Complex",
+      "range": "Touch or LOS",
+      "duration": "Permanent",
+      "source_book": "SG",
+      "source_page": "195"
+    },
+    {
+      "id": "f6fb5ceb-91f8-418b-99ee-413e8c16230e",
+      "name": "Engulf",
+      "category": "Paranormal",
+      "category_slug": "paranormal",
+      "type": "P",
+      "action": "Complex",
+      "range": "Touch",
+      "duration": "Sustained",
+      "source_book": "SR5",
+      "source_page": "396"
+    },
+    {
+      "id": "faf2f307-c094-4139-ab88-e06f0804d282",
+      "name": "Entropic Aura",
+      "category": "Paranormal",
+      "category_slug": "paranormal",
+      "type": "P",
+      "action": "Auto",
+      "range": "Self",
+      "duration": "Always",
+      "source_book": "HS",
+      "source_page": "190"
+    },
+    {
+      "id": "24455a2c-c98c-4748-a720-1403a726fd57",
+      "name": "Essence Drain",
+      "category": "Paranormal",
+      "category_slug": "paranormal",
+      "type": "P",
+      "action": "Complex",
+      "range": "Touch",
+      "duration": "Permanent",
+      "source_book": "SR5",
+      "source_page": "396"
+    },
+    {
+      "id": "fc4ca556-2d13-409b-824d-a4a8a16fc0ee",
+      "name": "Fear",
+      "category": "Paranormal",
+      "category_slug": "paranormal",
+      "type": "M",
+      "action": "Complex",
+      "range": "LOS",
+      "duration": "Special",
+      "karma": "9",
+      "source_book": "SR5",
+      "source_page": "397",
+      "attributes": {
+        "required": "{\"allof\":{\"attribute\":{\"name\":\"MAG\",\"total\":\"3\"}},\"oneof\":{\"quality\":[\"Free Insect Spirit: Cutter Ant\",\"Free Insect Spirit: Fire Ant\",\"Free Insect Spirit: Desert Locust\",\"Free Insect Spirit: Mole Cricket\",\"Free Insect Spirit: Subterranean Termite\",\"Free Insect Spirit: Hunter Wasp\",\"Free Insect Spirit: Bee\",\"Free Insect Spirit: Goliath Beetle\",\"Free Insect Spirit: Water Beetle\",\"Free Insect Spirit: House Centipede\",\"Free Insect Spirit: Tropical Centipede\",\"Free Insect Spirit: Century Cicada\",\"Free Insect Spirit: Trapdoor Spider\",\"Free Insect Spirit: Black Widow\",\"Free Insect Spirit: Burster Firefly\",\"Free Insect Spirit: Botfly\",\"Free Insect Spirit: Dragonfly\",\"Free Insect Spirit: Mimic Mantis\",\"Free Insect Spirit: Orchid Mantis\",\"Free Insect Spirit: Vampire Mosquito\",\"Free Insect Spirit: Tick\",\"Free Insect Spirit: Death's Head Moth\",\"Free Insect Spirit: Cryptid Moth\",\"Free Insect Spirit: Cave Roach\",\"Free Insect Spirit: Silverfish\"]}}",
+        "toxic": "True"
+      }
+    },
+    {
+      "id": "953d3e23-cba0-440d-bab4-4234f1090ac5",
+      "name": "Fear",
+      "category": "Paranormal",
+      "category_slug": "paranormal",
+      "type": "M",
+      "action": "Complex",
+      "range": "LOS",
+      "duration": "Special",
+      "source_book": "SR5",
+      "source_page": "397",
+      "attributes": {
+        "toxic": "True"
+      }
+    },
+    {
+      "id": "ca80b896-a524-435f-a787-8df807567de8",
+      "name": "Fey Glamour",
+      "category": "Paranormal",
+      "category_slug": "paranormal",
+      "type": "M",
+      "action": "Complex",
+      "range": "Special",
+      "duration": "Sustained",
+      "source_book": "HS",
+      "source_page": "191"
+    },
+    {
+      "id": "ce067614-a47e-4536-a13d-09d02b918d3a",
+      "name": "Flay Touch",
+      "category": "Paranormal",
+      "category_slug": "paranormal",
+      "type": "P",
+      "action": "Complex",
+      "range": "Touch",
+      "duration": "Instant",
+      "source_book": "HS",
+      "source_page": "191"
+    },
+    {
+      "id": "685c4e5c-d21a-4485-aa12-7deb3377d0c5",
+      "name": "Ghost Chain",
+      "category": "Paranormal",
+      "category_slug": "paranormal",
+      "type": "M",
+      "action": "Auto",
+      "range": "Special",
+      "duration": "Always",
+      "source_book": "HS",
+      "source_page": "192"
+    },
+    {
+      "id": "13dc5c5d-ef46-433e-b27b-5775a57035a8",
+      "name": "Guard",
+      "category": "Paranormal",
+      "category_slug": "paranormal",
+      "type": "P",
+      "action": "Complex",
+      "range": "LOS",
+      "duration": "Sustained",
+      "source_book": "SR5",
+      "source_page": "397"
+    },
+    {
+      "id": "08b3b1bd-94cc-4468-a61f-31baade2a08e",
+      "name": "Hardened Armor",
+      "category": "Paranormal",
+      "category_slug": "paranormal",
+      "type": "P",
+      "action": "Auto",
+      "range": "Self",
+      "duration": "Always",
+      "source_book": "SR5",
+      "source_page": "397",
+      "attributes": {
+        "bonus": "{\"armor\":\"Rating\"}",
+        "rating": "True"
+      }
+    },
+    {
+      "id": "28e8f9d8-6e2d-4bbe-bba3-e7195508a027",
+      "name": "Hardened Mystic Armor",
+      "category": "Paranormal",
+      "category_slug": "paranormal",
+      "type": "P",
+      "action": "Auto",
+      "range": "Self",
+      "duration": "Always",
+      "source_book": "SR5",
+      "source_page": "397",
+      "attributes": {
+        "rating": "True"
+      }
+    },
+    {
+      "id": "fa15d90c-5e9d-4c3f-b92a-b9cd772091b6",
+      "name": "Haunt",
+      "category": "Paranormal",
+      "category_slug": "paranormal",
+      "type": "M",
+      "action": "Auto",
+      "range": "Special",
+      "duration": "Always",
+      "source_book": "HS",
+      "source_page": "192"
+    },
+    {
+      "id": "79317297-becf-4c68-9778-6f00fd955a13",
+      "name": "Hemorrhage",
+      "category": "Paranormal",
+      "category_slug": "paranormal",
+      "type": "P",
+      "action": "Complex",
+      "range": "MAG",
+      "duration": "Instant",
+      "source_book": "SG",
+      "source_page": "91"
+    },
+    {
+      "id": "e6add326-0ed1-41bd-9d00-40ad5b17a35d",
+      "name": "Hidden Life",
+      "category": "Paranormal",
+      "category_slug": "paranormal",
+      "type": "P",
+      "action": "Complex",
+      "range": "Touch",
+      "duration": "Permanent",
+      "source_book": "SG",
+      "source_page": "205"
+    },
+    {
+      "id": "ea6c345d-1df6-42b9-92bb-b94fef3360f7",
+      "name": "Hive Mind",
+      "category": "Paranormal",
+      "category_slug": "paranormal",
+      "type": "M",
+      "action": "Auto",
+      "range": "Special",
+      "duration": "Always",
+      "source_book": "SG",
+      "source_page": "195"
+    },
+    {
+      "id": "c8ad6b5e-5520-4ea6-a472-a1fa51634c74",
+      "name": "Immunity",
+      "category": "Paranormal",
+      "category_slug": "paranormal",
+      "type": "P",
+      "action": "Auto",
+      "range": "Self",
+      "duration": "Always",
+      "source_book": "SR5",
+      "source_page": "397",
+      "attributes": {
+        "bonus": "{\"selecttext\":{\"+@allowedit\":\"True\",\"+@xml\":\"strings.xml\",\"+@xpath\":\"/chummer/elements/element | /chummer/immunities/immunity\"}}",
+        "toxic": "True"
+      }
+    },
+    {
+      "id": "951cb295-b6c6-4ff2-9a9e-2a49cc047fd1",
+      "name": "Infection",
+      "category": "Paranormal",
+      "category_slug": "paranormal",
+      "type": "P",
+      "action": "Auto",
+      "range": "Touch",
+      "duration": "Permanent",
+      "source_book": "SR5",
+      "source_page": "398"
+    },
+    {
+      "id": "e8013773-9497-472e-b2af-e96e49405290",
+      "name": "Influence",
+      "category": "Paranormal",
+      "category_slug": "paranormal",
+      "type": "M",
+      "action": "Complex",
+      "range": "LOS",
+      "duration": "Instant",
+      "source_book": "SR5",
+      "source_page": "398"
+    },
+    {
+      "id": "30918b00-6dae-4989-9b6e-219c4bd6ac7e",
+      "name": "Inhabitation",
+      "category": "Paranormal",
+      "category_slug": "paranormal",
+      "type": "P",
+      "action": "Auto",
+      "range": "Self",
+      "duration": "Special",
+      "source_book": "SG",
+      "source_page": "195"
+    },
+    {
+      "id": "9c04aead-af8d-4b17-a6b3-016c855db186",
+      "name": "Innate Ritual",
+      "category": "Paranormal",
+      "category_slug": "paranormal",
+      "type": "As ritual",
+      "action": "As ritual",
+      "range": "As ritual",
+      "duration": "As ritual",
+      "source_book": "HS",
+      "source_page": "193",
+      "attributes": {
+        "bonus": "{\"selecttext\":{\"+@xml\":\"spells.xml\",\"+@xpath\":\"/chummer/spells/spell[category = Rituals]\"}}"
+      }
+    },
+    {
+      "id": "fe38ce43-3cf2-456d-aec2-0029e0bf173f",
+      "name": "Innate Spell",
+      "category": "Paranormal",
+      "category_slug": "paranormal",
+      "type": "As Spell",
+      "action": "Complex",
+      "range": "Per Spell",
+      "duration": "Per Spell",
+      "source_book": "SR5",
+      "source_page": "398",
+      "attributes": {
+        "bonus": "{\"enabletab\":{\"name\":\"magician\"},\"selectspell\":null}"
+      }
+    },
+    {
+      "id": "e36812c9-c918-4d38-a71f-79f04a77a924",
+      "name": "Magic Sense",
+      "category": "Paranormal",
+      "category_slug": "paranormal",
+      "type": "M",
+      "action": "Auto",
+      "range": "LOS",
+      "duration": "Sustained",
+      "source_book": "HS",
+      "source_page": "193",
+      "attributes": {
+        "toxic": "True"
+      }
+    },
+    {
+      "id": "f5a654a0-91e3-4555-aa22-792d012348b8",
+      "name": "Magical Guard",
+      "category": "Paranormal",
+      "category_slug": "paranormal",
+      "type": "M",
+      "action": "Free",
+      "range": "LOS",
+      "duration": "Instant",
+      "source_book": "SG",
+      "source_page": "196",
+      "attributes": {
+        "bonus": "{\"unlockskills\":{\"+@name\":\"Counterspelling\",\"+content\":\"Name\"}}"
+      }
+    },
+    {
+      "id": "c5ecc4fa-3f9d-49da-ad63-3ee35843ca17",
+      "name": "Manifest",
+      "category": "Paranormal",
+      "category_slug": "paranormal",
+      "type": "P",
+      "action": "Complex",
+      "range": "Self",
+      "duration": "Special",
+      "source_book": "SR5",
+      "source_page": "314"
+    },
+    {
+      "id": "5edec7e8-281d-46f8-bb06-c332e8b1ba59",
+      "name": "Manipulate Magic",
+      "category": "Paranormal",
+      "category_slug": "paranormal",
+      "type": "M",
+      "action": "Auto",
+      "range": "Touch",
+      "duration": "Permanent",
+      "source_book": "HS",
+      "source_page": "193"
+    },
+    {
+      "id": "bf6c7543-0fa6-4297-8690-8230db5e46a8",
+      "name": "Materialization",
+      "category": "Paranormal",
+      "category_slug": "paranormal",
+      "type": "P",
+      "action": "Complex",
+      "range": "Self",
+      "duration": "Sustained",
+      "source_book": "SR5",
+      "source_page": "398"
+    },
+    {
+      "id": "525746a4-bd59-4150-8861-2eb2fc7665ac",
+      "name": "Metahuman Form",
+      "category": "Paranormal",
+      "category_slug": "paranormal",
+      "type": "P",
+      "action": "Complex",
+      "range": "Self",
+      "duration": "Sustained",
+      "source_book": "RF",
+      "source_page": "213"
+    },
+    {
+      "id": "153bc9aa-1a5e-41ac-877d-751470624bc7",
+      "name": "Mimicry",
+      "category": "Paranormal",
+      "category_slug": "paranormal",
+      "type": "P",
+      "action": "Simple",
+      "range": "LOS",
+      "duration": "Sustained",
+      "source_book": "SR5",
+      "source_page": "398"
+    },
+    {
+      "id": "033185f0-bade-4824-8569-8604a734e02b",
+      "name": "Mind Link",
+      "category": "Paranormal",
+      "category_slug": "paranormal",
+      "type": "M",
+      "action": "Simple",
+      "range": "LOS",
+      "duration": "Sustained",
+      "source_book": "SG",
+      "source_page": "196"
+    },
+    {
+      "id": "b43373c3-5006-4396-bbbb-a154b8c92eae",
+      "name": "Mist Form",
+      "category": "Paranormal",
+      "category_slug": "paranormal",
+      "type": "P",
+      "action": "Complex",
+      "range": "Self",
+      "duration": "Sustained",
+      "source_book": "SR5",
+      "source_page": "398"
+    },
+    {
+      "id": "5090e9d2-07ba-4fb0-965c-5d5de29062b7",
+      "name": "Movement",
+      "category": "Paranormal",
+      "category_slug": "paranormal",
+      "type": "P",
+      "action": "Complex",
+      "range": "LOS",
+      "duration": "Sustained",
+      "source_book": "SR5",
+      "source_page": "399"
+    },
+    {
+      "id": "189ab2b7-9688-414b-b8ec-35a01db372d4",
+      "name": "Mutable Form",
+      "category": "Paranormal",
+      "category_slug": "paranormal",
+      "type": "P",
+      "action": "Auto",
+      "range": "Self",
+      "duration": "Special",
+      "source_book": "SG",
+      "source_page": "204"
+    },
+    {
+      "id": "3c6b961c-cac8-4e45-91ec-03cf612ac3c3",
+      "name": "Mutagen",
+      "category": "Paranormal",
+      "category_slug": "paranormal",
+      "type": "P",
+      "action": "Complex",
+      "range": "Self",
+      "duration": "Sustained",
+      "source_book": "SG",
+      "source_page": "196",
+      "attributes": {
+        "toxic": "True"
+      }
+    },
+    {
+      "id": "aa886ded-bf17-43e6-a7b5-82d77ed96a9c",
+      "name": "Mystic Armor",
+      "category": "Paranormal",
+      "category_slug": "paranormal",
+      "type": "M",
+      "action": "Auto",
+      "range": "Self",
+      "duration": "Always",
+      "source_book": "SR5",
+      "source_page": "399",
+      "attributes": {
+        "rating": "True"
+      }
+    },
+    {
+      "id": "4709630d-f2d0-40cc-915b-4f41eb8a4092",
+      "name": "Noxious Breath",
+      "category": "Paranormal",
+      "category_slug": "paranormal",
+      "type": "P",
+      "action": "Complex",
+      "range": "Special",
+      "duration": "Instant",
+      "source_book": "SR5",
+      "source_page": "399",
+      "attributes": {
+        "toxic": "True"
+      }
+    },
+    {
+      "id": "f2c04372-d264-42fa-b0b4-534035888ad7",
+      "name": "Paralyzing Howl",
+      "category": "Paranormal",
+      "category_slug": "paranormal",
+      "type": "P",
+      "action": "Complex",
+      "range": "Special",
+      "duration": "Special",
+      "source_book": "SR5",
+      "source_page": "399"
+    },
+    {
+      "id": "39442943-8367-4322-b7d2-3575061df3fa",
+      "name": "Paralyzing Touch",
+      "category": "Paranormal",
+      "category_slug": "paranormal",
+      "type": "P",
+      "action": "Complex",
+      "range": "Touch",
+      "duration": "Special",
+      "source_book": "SR5",
+      "source_page": "400"
+    },
+    {
+      "id": "37a152ee-83ce-4a32-b81b-31e79b42c970",
+      "name": "Personal Domain",
+      "category": "Paranormal",
+      "category_slug": "paranormal",
+      "type": "M",
+      "action": "Auto",
+      "range": "LOS",
+      "duration": "Sustained",
+      "source_book": "SG",
+      "source_page": "205"
+    },
+    {
+      "id": "90c79eb4-665a-4844-90f3-e495f8cd3e61",
+      "name": "Petrification",
+      "category": "Paranormal",
+      "category_slug": "paranormal",
+      "type": "P",
+      "action": "Complex",
+      "range": "LOS",
+      "duration": "Sustained",
+      "source_book": "SR5",
+      "source_page": "400"
+    },
+    {
+      "id": "a3f11764-2569-48a1-8eb8-8cdae58b23e8",
+      "name": "Physical Skill",
+      "category": "Paranormal",
+      "category_slug": "paranormal",
+      "source_book": "SR5",
+      "source_page": "133",
+      "attributes": {
+        "bonus": "{\"selectskill\":{\"+@skillcategory\":\"Physical Active\",\"applytorating\":\"True\",\"val\":\"MAG\"}}"
+      }
+    },
+    {
+      "id": "a142b612-2f4c-4c97-8b1b-fd15c9f68866",
+      "name": "Possession",
+      "category": "Paranormal",
+      "category_slug": "paranormal",
+      "type": "P",
+      "action": "Complex",
+      "range": "Self",
+      "duration": "Sustained",
+      "source_book": "SG",
+      "source_page": "197"
+    },
+    {
+      "id": "46ee1218-4b63-458d-b9b9-ec5b2bb607f0",
+      "name": "Psychokinesis",
+      "category": "Paranormal",
+      "category_slug": "paranormal",
+      "type": "P",
+      "action": "Complex",
+      "range": "LOS",
+      "duration": "Sustained",
+      "source_book": "SR5",
+      "source_page": "400"
+    },
+    {
+      "id": "3714CACF-7D91-4E38-8898-365A53E98108",
+      "name": "Psychokinesis (Infected)",
+      "category": "Paranormal",
+      "category_slug": "paranormal",
+      "type": "P",
+      "action": "Complex",
+      "range": "LOS",
+      "duration": "Sustained",
+      "karma": "9",
+      "source_book": "SR5",
+      "source_page": "400"
+    },
+    {
+      "id": "21768675-ea17-48f4-abdc-301c3441bf8c",
+      "name": "Quake",
+      "category": "Paranormal",
+      "category_slug": "paranormal",
+      "type": "P",
+      "action": "Complex",
+      "range": "Special",
+      "duration": "Instant",
+      "source_book": "SG",
+      "source_page": "197"
+    },
+    {
+      "id": "2381a322-1b0c-4282-b3af-b28828cdf786",
+      "name": "Realistic Form",
+      "category": "Paranormal",
+      "category_slug": "paranormal",
+      "type": "P",
+      "action": "Auto",
+      "range": "Self",
+      "duration": "Special",
+      "source_book": "SG",
+      "source_page": "198"
+    },
+    {
+      "id": "244ccf0f-fc77-4690-9441-1cfeb7a6dc2a",
+      "name": "Regeneration",
+      "category": "Paranormal",
+      "category_slug": "paranormal",
+      "type": "P",
+      "action": "Auto",
+      "range": "Self",
+      "duration": "Always",
+      "source_book": "SR5",
+      "source_page": "400",
+      "attributes": {
+        "bonus": "{\"disablebiowaregrade\":[\"Standard\",\"Standard (Burnout's Way)\",\"Used\",\"Alphaware\",\"Betaware\",\"Omegaware\",\"Standard (Adapsin)\",\"Standard (Burnout's Way) (Adapsin)\",\"Used (Adapsin)\",\"Alphaware (Adapsin)\",\"Betaware (Adapsin)\",\"Omegaware (Adapsin)\"],\"disablecyberwaregrade\":[\"Standard\",\"Standard (Burnout's Way)\",\"Used\",\"Alphaware\",\"Betaware\",\"Omegaware\",\"Standard (Adapsin)\",\"Standard (Burnout's Way) (Adapsin)\",\"Used (Adapsin)\",\"Alphaware (Adapsin)\",\"Betaware (Adapsin)\",\"Omegaware (Adapsin)\"]}"
+      }
+    },
+    {
+      "id": "e5859447-89ad-40f1-aea0-8c5f1e53e9de",
+      "name": "Reinforcement",
+      "category": "Paranormal",
+      "category_slug": "paranormal",
+      "type": "P",
+      "action": "Complex",
+      "range": "Touch",
+      "duration": "Special",
+      "source_book": "SG",
+      "source_page": "198"
+    },
+    {
+      "id": "f986602a-464a-4c8b-aacc-508469401256",
+      "name": "Search",
+      "category": "Paranormal",
+      "category_slug": "paranormal",
+      "type": "P",
+      "action": "Complex",
+      "range": "Special",
+      "duration": "Special",
+      "karma": "9",
+      "source_book": "SR5",
+      "source_page": "400",
+      "attributes": {
+        "required": "{\"allof\":{\"attribute\":{\"name\":\"MAG\",\"total\":\"3\"}},\"oneof\":{\"quality\":[\"Free Insect Spirit: Cutter Ant\",\"Free Insect Spirit: Fire Ant\",\"Free Insect Spirit: Desert Locust\",\"Free Insect Spirit: Mole Cricket\",\"Free Insect Spirit: Subterranean Termite\",\"Free Insect Spirit: Hunter Wasp\",\"Free Insect Spirit: Bee\",\"Free Insect Spirit: Goliath Beetle\",\"Free Insect Spirit: Water Beetle\",\"Free Insect Spirit: House Centipede\",\"Free Insect Spirit: Tropical Centipede\",\"Free Insect Spirit: Century Cicada\",\"Free Insect Spirit: Trapdoor Spider\",\"Free Insect Spirit: Black Widow\",\"Free Insect Spirit: Burster Firefly\",\"Free Insect Spirit: Botfly\",\"Free Insect Spirit: Dragonfly\",\"Free Insect Spirit: Mimic Mantis\",\"Free Insect Spirit: Orchid Mantis\",\"Free Insect Spirit: Vampire Mosquito\",\"Free Insect Spirit: Tick\",\"Free Insect Spirit: Death's Head Moth\",\"Free Insect Spirit: Cryptid Moth\",\"Free Insect Spirit: Cave Roach\",\"Free Insect Spirit: Silverfish\"]}}"
+      }
+    },
+    {
+      "id": "4f694634-7c91-4534-a9ff-7f8ae3002a1e",
+      "name": "Search",
+      "category": "Paranormal",
+      "category_slug": "paranormal",
+      "type": "P",
+      "action": "Complex",
+      "range": "Special",
+      "duration": "Special",
+      "source_book": "SR5",
+      "source_page": "400"
+    },
+    {
+      "id": "c9045794-c7f7-4517-9156-b74438a2d5f1",
+      "name": "Shadow Cloak",
+      "category": "Paranormal",
+      "category_slug": "paranormal",
+      "type": "P",
+      "action": "Free",
+      "range": "Self",
+      "duration": "Sustained",
+      "source_book": "SG",
+      "source_page": "198"
+    },
+    {
+      "id": "9ae68e9e-65dc-49a0-bf06-72054396d371",
+      "name": "Shell Game",
+      "category": "Paranormal",
+      "category_slug": "paranormal",
+      "type": "M",
+      "action": "Auto",
+      "range": "Self",
+      "duration": "Always",
+      "source_book": "DTR",
+      "source_page": "49"
+    },
+    {
+      "id": "4881c2cc-1e45-43ad-89df-9e5b264648f2",
+      "name": "Silence",
+      "category": "Paranormal",
+      "category_slug": "paranormal",
+      "type": "P",
+      "action": "Complex",
+      "range": "Special",
+      "duration": "Sustained",
+      "source_book": "SG",
+      "source_page": "199"
+    },
+    {
+      "id": "410c17d0-0490-4e67-b2ca-4ad5e2feb016",
+      "name": "Social Skill",
+      "category": "Paranormal",
+      "category_slug": "paranormal",
+      "source_book": "SR5",
+      "source_page": "137",
+      "attributes": {
+        "bonus": "{\"selectskill\":{\"+@skillcategory\":\"Social Active\",\"applytorating\":\"True\",\"val\":\"MAG\"}}"
+      }
+    },
+    {
+      "id": "d9fdc768-9ce4-4c19-8744-b46833349cea",
+      "name": "Sonic Projection",
+      "category": "Paranormal",
+      "category_slug": "paranormal",
+      "type": "P",
+      "action": "Complex",
+      "range": "Special",
+      "duration": "Sustained",
+      "source_book": "SG",
+      "source_page": "199"
+    },
+    {
+      "id": "2cadebe7-a32d-4852-ac94-e8b86ca3619a",
+      "name": "Spirit Pact",
+      "category": "Paranormal",
+      "category_slug": "paranormal",
+      "type": "M",
+      "action": "Special",
+      "range": "Special",
+      "duration": "Special",
+      "source_book": "SG",
+      "source_page": "205"
+    },
+    {
+      "id": "ea7d01c8-50f5-4d2a-9fac-a750b189ca36",
+      "name": "Storm",
+      "category": "Paranormal",
+      "category_slug": "paranormal",
+      "type": "P",
+      "action": "Complex",
+      "range": "Special",
+      "duration": "Special",
+      "source_book": "SG",
+      "source_page": "199"
+    },
+    {
+      "id": "5fca2f99-9b2a-4fb0-b5b3-dd0626b8ed39",
+      "name": "Superior Banishing Resistance",
+      "category": "Paranormal",
+      "category_slug": "paranormal",
+      "type": "M",
+      "action": "Simple",
+      "range": "Self",
+      "duration": "Instant",
+      "source_book": "DTR",
+      "source_page": "50"
+    },
+    {
+      "id": "6d43c580-0285-4d93-bd43-b4edfa091c0e",
+      "name": "Superior Regeneration",
+      "category": "Paranormal",
+      "category_slug": "paranormal",
+      "type": "M",
+      "action": "Simple",
+      "range": "Self",
+      "duration": "Permanent",
+      "source_book": "DTR",
+      "source_page": "49"
+    },
+    {
+      "id": "07229dc9-3b46-4843-a30a-7b7c4c144ea0",
+      "name": "Technical Skill",
+      "category": "Paranormal",
+      "category_slug": "paranormal",
+      "source_book": "SR5",
+      "source_page": "143",
+      "attributes": {
+        "bonus": "{\"selectskill\":{\"+@skillcategory\":\"Technical Active\",\"applytorating\":\"True\",\"val\":\"MAG\"}}"
+      }
+    },
+    {
+      "id": "98928dbd-5b79-4dde-bc92-56dc317e293b",
+      "name": "Underwater Adaptation",
+      "category": "Paranormal",
+      "category_slug": "paranormal",
+      "type": "P",
+      "action": "Auto",
+      "range": "Self",
+      "duration": "Always",
+      "source_book": "HS",
+      "source_page": "164",
+      "attributes": {
+        "bonus": "{\"specificskill\":{\"bonus\":\"4\",\"name\":\"Swimming\"}}"
+      }
+    },
+    {
+      "id": "a8090271-057c-41d5-bd68-df117ea15b7d",
+      "name": "Vanishing",
+      "category": "Paranormal",
+      "category_slug": "paranormal",
+      "type": "M",
+      "action": "Free",
+      "range": "Self",
+      "duration": "Special",
+      "source_book": "HS",
+      "source_page": "194"
+    },
+    {
+      "id": "bb55305e-0c6f-47bd-a92f-ce85df478096",
+      "name": "Vehicle Skill",
+      "category": "Paranormal",
+      "category_slug": "paranormal",
+      "source_book": "SR5",
+      "source_page": "146",
+      "attributes": {
+        "bonus": "{\"selectskill\":{\"+@skillcategory\":\"Vehicle Active\",\"applytorating\":\"True\",\"val\":\"MAG\"}}"
+      }
+    },
+    {
+      "id": "276b92d9-efcd-447d-a86d-8a141058615e",
+      "name": "Vestigial Wings",
+      "category": "Paranormal",
+      "category_slug": "paranormal",
+      "type": "P",
+      "action": "Auto",
+      "range": "Self",
+      "duration": "Always",
+      "source_book": "HS",
+      "source_page": "173"
+    },
+    {
+      "id": "ad40556c-6632-4287-bd69-94ff25c7280e",
+      "name": "Wealth",
+      "category": "Paranormal",
+      "category_slug": "paranormal",
+      "type": "P",
+      "action": "Complex",
+      "range": "LOS",
+      "duration": "Special",
+      "source_book": "SG",
+      "source_page": "205"
+    },
+    {
+      "id": "8b460350-fca3-427d-90af-4648666e8723",
+      "name": "Weather Control",
+      "category": "Paranormal",
+      "category_slug": "paranormal",
+      "type": "P",
+      "action": "Complex",
+      "range": "LOS",
+      "duration": "Sustained",
+      "source_book": "SR5",
+      "source_page": "401",
+      "attributes": {
+        "bonus": "{\"selecttext\":null}"
+      }
+    },
+    {
+      "id": "d0615070-d0c7-4c8b-ae02-442cadd1f38d",
+      "name": "Wounded Fury",
+      "category": "Paranormal",
+      "category_slug": "paranormal",
+      "type": "M",
+      "action": "Auto",
+      "range": "Self",
+      "duration": "Always",
+      "source_book": "DTR",
+      "source_page": "49"
+    },
+    {
+      "id": "9163fb4f-0531-4f11-8894-ed681306ebfd",
+      "name": "Amphibious",
+      "category": "Paranormal/Infected",
+      "category_slug": "paranormal-infected",
+      "type": "M",
+      "action": "Auto",
+      "range": "Self",
+      "duration": "Always",
+      "karma": "6",
+      "source_book": "DTR",
+      "source_page": "156",
+      "attributes": {
+        "required": "{\"oneof\":{\"quality\":\"Infected: Fomoraig\"}}"
+      }
+    },
+    {
+      "id": "c330495b-c6af-4744-b399-c6e068864a8d",
+      "name": "Astral Brute",
+      "category": "Paranormal/Infected",
+      "category_slug": "paranormal-infected",
+      "type": "M",
+      "action": "Auto",
+      "range": "Self",
+      "duration": "Always",
+      "karma": "9",
+      "source_book": "DTR",
+      "source_page": "157",
+      "attributes": {
+        "required": "{\"oneof\":{\"quality\":\"Infected: Mutaqua\"}}"
+      }
+    },
+    {
+      "id": "c788063f-8daa-4e32-8017-9562513541a0",
+      "name": "Bacchanal",
+      "category": "Paranormal/Infected",
+      "category_slug": "paranormal-infected",
+      "type": "P",
+      "action": "Complex",
+      "range": "Self",
+      "duration": "Sustained",
+      "karma": "9",
+      "source_book": "DTR",
+      "source_page": "157",
+      "attributes": {
+        "required": "{\"oneof\":{\"quality\":\"Infected: Chiron\"}}"
+      }
+    },
+    {
+      "id": "f79f9ee8-f5db-4673-9225-e6a375aed465",
+      "name": "Bone Spikes",
+      "category": "Paranormal/Infected",
+      "category_slug": "paranormal-infected",
+      "type": "P",
+      "action": "Auto",
+      "range": "Self",
+      "duration": "Always",
+      "karma": "5",
+      "source_book": "DTR",
+      "source_page": "157",
+      "attributes": {
+        "bonus": "{\"unarmeddv\":\"2\",\"unarmeddvphysical\":null}",
+        "required": "{\"oneof\":{\"quality\":\"Infected: Dzoo-Noo-Qua\"}}"
+      }
+    },
+    {
+      "id": "363c3991-5d17-4ca7-963f-e3f2ef395fda",
+      "name": "Calcified Hide",
+      "category": "Paranormal/Infected",
+      "category_slug": "paranormal-infected",
+      "type": "P",
+      "action": "Auto",
+      "range": "Self",
+      "duration": "Always",
+      "karma": "5",
+      "source_book": "DTR",
+      "source_page": "157",
+      "attributes": {
+        "required": "{\"allof\":{\"group\":[{\"quality\":\"Infected: Fomoraig\"},{\"critterpower\":\"Armor\"}]}}"
+      }
+    },
+    {
+      "id": "ea3a7442-477a-440f-adcd-4b5050c67b52",
+      "name": "Corrosive Spit (Infected)",
+      "category": "Paranormal/Infected",
+      "category_slug": "paranormal-infected",
+      "type": "P",
+      "action": "Complex",
+      "range": "Special",
+      "duration": "Instant",
+      "karma": "9",
+      "source_book": "DTR",
+      "source_page": "159",
+      "attributes": {
+        "required": "{\"oneof\":{\"quality\":[\"Infected: Ghoul (Dwarf)\",\"Infected: Ghoul (Elf)\",\"Infected: Ghoul (Human)\",\"Infected: Ghoul (Ork)\",\"Infected: Ghoul (Sasquatch)\",\"Infected: Ghoul (Troll)\"]}}"
+      }
+    },
+    {
+      "id": "090c0194-3ac9-4ed8-8e82-7a60f18853e8",
+      "name": "Deathlock Venom",
+      "category": "Paranormal/Infected",
+      "category_slug": "paranormal-infected",
+      "type": "P",
+      "action": "Auto",
+      "range": "Self",
+      "duration": "Always",
+      "karma": "9",
+      "source_book": "DTR",
+      "source_page": "159",
+      "attributes": {
+        "required": "{\"oneof\":{\"quality\":\"Infected: Lamia\"}}"
+      }
+    },
+    {
+      "id": "6cbf07be-1491-46c1-ab67-d5f1dd4aa709",
+      "name": "Digitigrade Legs",
+      "category": "Paranormal/Infected",
+      "category_slug": "paranormal-infected",
+      "type": "P",
+      "action": "Auto",
+      "range": "Self",
+      "duration": "Always",
+      "karma": "6",
+      "source_book": "DTR",
+      "source_page": "159",
+      "attributes": {
+        "bonus": "{\"movementreplace\":{\"category\":\"Ground\",\"speed\":\"run\",\"val\":\"6\"},\"sprintbonus\":{\"category\":\"Ground\",\"val\":\"100\"}}",
+        "required": "{\"oneof\":{\"quality\":\"Infected: Loup-Garou\"}}"
+      }
+    },
+    {
+      "id": "00461512-b49c-4759-bc91-e41167682f22",
+      "name": "Drag Down",
+      "category": "Paranormal/Infected",
+      "category_slug": "paranormal-infected",
+      "type": "P",
+      "action": "Auto",
+      "range": "Self",
+      "duration": "Always",
+      "karma": "6",
+      "source_book": "DTR",
+      "source_page": "159",
+      "attributes": {
+        "required": "{\"oneof\":{\"quality\":\"Infected: Nibiinaabe\"}}"
+      }
+    },
+    {
+      "id": "dc0d00da-1d10-42b2-a57a-c336da372df7",
+      "name": "Dread Feast",
+      "category": "Paranormal/Infected",
+      "category_slug": "paranormal-infected",
+      "type": "P",
+      "action": "Auto",
+      "range": "Self",
+      "duration": "Always",
+      "karma": "12",
+      "source_book": "DTR",
+      "source_page": "159",
+      "attributes": {
+        "required": "{\"oneof\":{\"quality\":\"Infected: Chiron\"}}"
+      }
+    },
+    {
+      "id": "9a4bde71-3d1b-4852-a613-5a7a8b1898ee",
+      "name": "Dual Concealment",
+      "category": "Paranormal/Infected",
+      "category_slug": "paranormal-infected",
+      "type": "M",
+      "action": "Simple",
+      "range": "LOS",
+      "duration": "Sustained",
+      "karma": "9",
+      "source_book": "DTR",
+      "source_page": "160",
+      "attributes": {
+        "required": "{\"oneof\":{\"quality\":\"Infected: Jabberwock\"}}"
+      }
+    },
+    {
+      "id": "a9809219-9291-4efe-8f74-23a58e144d73",
+      "name": "Evolved Reflexes",
+      "category": "Paranormal/Infected",
+      "category_slug": "paranormal-infected",
+      "type": "P",
+      "action": "Auto",
+      "range": "Self",
+      "duration": "Always",
+      "karma": "12",
+      "source_book": "DTR",
+      "source_page": "160",
+      "attributes": {
+        "bonus": "{\"initiativedice\":\"1\"}",
+        "required": "{\"oneof\":{\"quality\":\"Infected: Bandersnatch\"}}"
+      }
+    },
+    {
+      "id": "3f607df5-a2af-4fc7-b1ae-9ae2de40964f",
+      "name": "Feral Dash",
+      "category": "Paranormal/Infected",
+      "category_slug": "paranormal-infected",
+      "type": "P",
+      "action": "Auto",
+      "range": "Self",
+      "duration": "Always",
+      "karma": "5",
+      "source_book": "DTR",
+      "source_page": "160",
+      "attributes": {
+        "required": "{\"oneof\":{\"quality\":\"Infected: Grendel\"}}"
+      }
+    },
+    {
+      "id": "cd9ffa1a-d300-4650-8127-4f27fce3a14b",
+      "name": "Gnashing Teeth",
+      "category": "Paranormal/Infected",
+      "category_slug": "paranormal-infected",
+      "type": "P",
+      "action": "Auto",
+      "range": "Self",
+      "duration": "Always",
+      "karma": "6",
+      "source_book": "DTR",
+      "source_page": "160",
+      "attributes": {
+        "required": "{\"oneof\":{\"quality\":\"Infected: Gnawer\"}}"
+      }
+    },
+    {
+      "id": "4FEE3C62-36E4-41C5-AD87-28256AE53CFC",
+      "name": "Immunity (Cold)",
+      "category": "Paranormal/Infected",
+      "category_slug": "paranormal-infected",
+      "type": "P",
+      "action": "Auto",
+      "range": "Self",
+      "duration": "Always",
+      "karma": "6",
+      "source_book": "DTR",
+      "source_page": "160",
+      "attributes": {
+        "required": "{\"oneof\":{\"quality\":[\"Infected: Harvester\",\"Infected: Wendigo\"]}}"
+      }
+    },
+    {
+      "id": "53a990fc-ed69-44eb-98d5-5363bf9139f7",
+      "name": "Metahuman Masque",
+      "category": "Paranormal/Infected",
+      "category_slug": "paranormal-infected",
+      "type": "M",
+      "action": "Complex",
+      "range": "Self",
+      "duration": "Sustained",
+      "karma": "12",
+      "source_book": "DTR",
+      "source_page": "160",
+      "attributes": {
+        "required": "{\"oneof\":{\"quality\":\"Infected: Lamia\"}}"
+      }
+    },
+    {
+      "id": "67B58736-8BD3-4C88-9310-5051C8683966",
+      "name": "Mimicry",
+      "category": "Paranormal/Infected",
+      "category_slug": "paranormal-infected",
+      "type": "P",
+      "action": "Simple",
+      "range": "LOS",
+      "duration": "Sustained",
+      "karma": "9",
+      "source_book": "SR5",
+      "source_page": "398"
+    },
+    {
+      "id": "09fb492d-0aa0-4a2e-8542-53e2cf97f432",
+      "name": "Morningstar Fall",
+      "category": "Paranormal/Infected",
+      "category_slug": "paranormal-infected",
+      "type": "P",
+      "action": "Auto",
+      "range": "Self",
+      "duration": "Always",
+      "karma": "9",
+      "source_book": "DTR",
+      "source_page": "161",
+      "attributes": {
+        "required": "{\"oneof\":{\"quality\":\"Infected: Jabberwock\"}}"
+      }
+    },
+    {
+      "id": "b1cef6fe-aa5f-4b12-a621-a3eb24568dbf",
+      "name": "Mystic Armor (Infected)",
+      "category": "Paranormal/Infected",
+      "category_slug": "paranormal-infected",
+      "type": "M",
+      "action": "Auto",
+      "range": "Self",
+      "duration": "Always",
+      "karma": "6",
+      "source_book": "DTR",
+      "source_page": "161",
+      "attributes": {
+        "rating": "True",
+        "required": "{\"oneof\":{\"quality\":\"Infected: Nosferatu\"}}"
+      }
+    },
+    {
+      "id": "53dfd3bb-8c93-4d28-a88f-646c187f7940",
+      "name": "Plague Bearer",
+      "category": "Paranormal/Infected",
+      "category_slug": "paranormal-infected",
+      "type": "P",
+      "action": "Auto",
+      "range": "Self",
+      "duration": "Always",
+      "karma": "12",
+      "source_book": "DTR",
+      "source_page": "161",
+      "attributes": {
+        "required": "{\"oneof\":{\"quality\":\"Infected: Goblin\"}}"
+      }
+    },
+    {
+      "id": "f61e6df3-bd1a-4ce8-9c75-b49df275cfb3",
+      "name": "Predator's Glamour",
+      "category": "Paranormal/Infected",
+      "category_slug": "paranormal-infected",
+      "type": "M",
+      "action": "Complex",
+      "range": "Self",
+      "duration": "Sustained",
+      "karma": "9",
+      "source_book": "DTR",
+      "source_page": "161",
+      "attributes": {
+        "required": "{\"oneof\":{\"quality\":\"Infected: Mutaqua\"}}"
+      }
+    },
+    {
+      "id": "80d692d9-6f13-4148-b346-bb8fc7b78d34",
+      "name": "Rat King",
+      "category": "Paranormal/Infected",
+      "category_slug": "paranormal-infected",
+      "type": "M",
+      "action": "Auto",
+      "range": "MAG x 25 m",
+      "duration": "Always",
+      "karma": "12",
+      "source_book": "DTR",
+      "source_page": "162",
+      "attributes": {
+        "required": "{\"oneof\":{\"quality\":\"Infected: Gnawer\"}}"
+      }
+    },
+    {
+      "id": "0daa8f5c-f4de-4558-aca8-82354eecb941",
+      "name": "Scythe Claws",
+      "category": "Paranormal/Infected",
+      "category_slug": "paranormal-infected",
+      "type": "P",
+      "action": "Auto",
+      "range": "Self",
+      "duration": "Always",
+      "karma": "6",
+      "source_book": "DTR",
+      "source_page": "162",
+      "attributes": {
+        "required": "{\"oneof\":{\"quality\":\"Infected: Harvester\"}}"
+      }
+    },
+    {
+      "id": "CBE25F51-67D5-49EF-BC48-13CB376E6E39",
+      "name": "Silence",
+      "category": "Paranormal/Infected",
+      "category_slug": "paranormal-infected",
+      "type": "P",
+      "action": "Complex",
+      "range": "Special",
+      "duration": "Sustained",
+      "karma": "9",
+      "source_book": "SG",
+      "source_page": "199",
+      "attributes": {
+        "required": "{\"oneof\":{\"quality\":\"Infected: Banshee\"}}"
+      }
+    },
+    {
+      "id": "96ce4db8-74c5-47ea-8305-1096858ba8ee",
+      "name": "Sonic Shriek",
+      "category": "Paranormal/Infected",
+      "category_slug": "paranormal-infected",
+      "type": "P",
+      "action": "Complex",
+      "range": "Special",
+      "duration": "Sustained",
+      "karma": "9",
+      "source_book": "DTR",
+      "source_page": "162",
+      "attributes": {
+        "required": "{\"oneof\":{\"quality\":\"Infected: Banshee\"}}"
+      }
+    },
+    {
+      "id": "a2346acb-c604-4c9d-83b6-e374348f1749",
+      "name": "Spines",
+      "category": "Paranormal/Infected",
+      "category_slug": "paranormal-infected",
+      "type": "P",
+      "action": "Auto",
+      "range": "Self",
+      "duration": "Always",
+      "karma": "6",
+      "source_book": "DTR",
+      "source_page": "162",
+      "attributes": {
+        "required": "{\"oneof\":{\"quality\":\"Infected: Nibiinaabe\"}}"
+      }
+    },
+    {
+      "id": "9b2033d3-be97-440e-a5f4-f9d8a230c09c",
+      "name": "Stupefying Miasma",
+      "category": "Paranormal/Infected",
+      "category_slug": "paranormal-infected",
+      "type": "P",
+      "action": "Simple",
+      "range": "Self",
+      "duration": "Sustained",
+      "karma": "9",
+      "source_book": "DTR",
+      "source_page": "162",
+      "attributes": {
+        "required": "{\"oneof\":{\"quality\":\"Infected: Goblin\"}}"
+      }
+    },
+    {
+      "id": "5589e7d4-0573-40c4-9798-eb6b604ef82c",
+      "name": "Terrorscape",
+      "category": "Paranormal/Infected",
+      "category_slug": "paranormal-infected",
+      "type": "M",
+      "action": "Complex",
+      "range": "Special",
+      "duration": "Sustained",
+      "karma": "12",
+      "source_book": "DTR",
+      "source_page": "162",
+      "attributes": {
+        "required": "{\"oneof\":{\"quality\":[\"Infected: Vampire (Human)\",\"Infected: Vampire (Non-Human)\"]}}"
+      }
+    },
+    {
+      "id": "97829992-2433-463d-8df7-d8ef0db20e00",
+      "name": "Traceless Walk",
+      "category": "Paranormal/Infected",
+      "category_slug": "paranormal-infected",
+      "type": "P",
+      "action": "Auto",
+      "range": "Self",
+      "duration": "Always",
+      "karma": "9",
+      "source_book": "DTR",
+      "source_page": "163",
+      "attributes": {
+        "required": "{\"oneof\":{\"quality\":\"Infected: Wendigo\"}}"
+      }
+    },
+    {
+      "id": "F713F6DD-C932-405A-9EA3-A410A1516A92",
+      "name": "Tunneling Claws",
+      "category": "Paranormal/Infected",
+      "category_slug": "paranormal-infected",
+      "karma": "6",
+      "source_book": "HS",
+      "source_page": "172",
+      "attributes": {
+        "bonus": "{\"naturalweapon\":{\"accuracy\":\"Physical\",\"ap\":\"-1\",\"damage\":\"({STR}+1)P\",\"name\":\"Tunneling Claws\",\"page\":\"163\",\"reach\":\"0\",\"source\":\"DTR\",\"useskill\":\"Unarmed Combat\"}}",
+        "required": "{\"oneof\":{\"quality\":[\"Infected: Ghoul (Dwarf)\",\"Infected: Ghoul (Elf)\",\"Infected: Ghoul (Human)\",\"Infected: Ghoul (Ork)\",\"Infected: Ghoul (Sasquatch)\",\"Infected: Ghoul (Troll)\"]}}"
+      }
+    },
+    {
+      "id": "a94dba2a-7699-4eb4-80a8-862f07beb6f6",
+      "name": "Shift (Metahuman Form)",
+      "category": "Shapeshifter",
+      "category_slug": "shapeshifter",
+      "type": "M",
+      "action": "Complex",
+      "range": "Self",
+      "duration": "Special",
+      "source_book": "RF",
+      "source_page": "123",
+      "attributes": {
+        "required": "{\"oneof\":{\"metatypecategory\":\"Shapeshifter\"}}"
+      }
+    },
+    {
+      "id": "67e02cc6-5099-473d-b185-3cd357af3e6f",
+      "name": "Allergy",
+      "category": "Weakness",
+      "category_slug": "weakness",
+      "source_book": "SR5",
+      "source_page": "401",
+      "attributes": {
+        "bonus": "{\"selecttext\":null}"
+      }
+    },
+    {
+      "id": "bfa9a7ec-f184-44cb-8599-96c5c7787595",
+      "name": "CI3D (Critter Implant Induced Immune Deficiency)",
+      "category": "Weakness",
+      "category_slug": "weakness",
+      "source_book": "HS",
+      "source_page": "186"
+    },
+    {
+      "id": "03c9acab-d172-4633-8dbf-23ec3b7faf7e",
+      "name": "CTLE-X (Critter Temporal Lobe Epilepsy)",
+      "category": "Weakness",
+      "category_slug": "weakness",
+      "source_book": "HS",
+      "source_page": "186"
+    },
+    {
+      "id": "f5515a8b-4c5e-4917-881a-363777ba03e9",
+      "name": "Critter Cyberpsychosis",
+      "category": "Weakness",
+      "category_slug": "weakness",
+      "source_book": "HS",
+      "source_page": "186"
+    },
+    {
+      "id": "f4de6eca-de5c-436b-955d-b322a9ce1a08",
+      "name": "Dietary Requirement",
+      "category": "Weakness",
+      "category_slug": "weakness",
+      "source_book": "SR5",
+      "source_page": "401",
+      "attributes": {
+        "bonus": "{\"selecttext\":null}"
+      }
+    },
+    {
+      "id": "f4865138-c3f0-46e8-8010-6003b1491b96",
+      "name": "Essence Loss",
+      "category": "Weakness",
+      "category_slug": "weakness",
+      "source_book": "SR5",
+      "source_page": "401"
+    },
+    {
+      "id": "95dcc093-88b8-4182-b62a-575428b84c84",
+      "name": "Evanescence",
+      "category": "Weakness",
+      "category_slug": "weakness",
+      "source_book": "SG",
+      "source_page": "101"
+    },
+    {
+      "id": "9c80e4ad-5999-4795-a890-0d6a1e5b542e",
+      "name": "Extra Fragile",
+      "category": "Weakness",
+      "category_slug": "weakness",
+      "source_book": "HS",
+      "source_page": "191",
+      "attributes": {
+        "bonus": "{\"conditionmonitor\":{\"physical\":\"-20\",\"stun\":\"-20\"}}"
+      }
+    },
+    {
+      "id": "031c2ae5-80d4-4cda-a2ce-65525970f281",
+      "name": "Fragile",
+      "category": "Weakness",
+      "category_slug": "weakness",
+      "type": "P",
+      "action": "Auto",
+      "range": "Self",
+      "duration": "Always",
+      "source_book": "HS",
+      "source_page": "192",
+      "attributes": {
+        "bonus": "{\"conditionmonitor\":{\"physical\":\"-Rating\"}}",
+        "rating": "20"
+      }
+    },
+    {
+      "id": "2c0e624f-b1e7-4519-ab11-509406e53b19",
+      "name": "Induced Dormancy",
+      "category": "Weakness",
+      "category_slug": "weakness",
+      "source_book": "SR5",
+      "source_page": "401",
+      "attributes": {
+        "bonus": "{\"selecttext\":null}"
+      }
+    },
+    {
+      "id": "f1a36576-1664-413b-a65f-e3b6115c266e",
+      "name": "Precarious Physiology",
+      "category": "Weakness",
+      "category_slug": "weakness",
+      "source_book": "HS",
+      "source_page": "186",
+      "attributes": {
+        "bonus": "{\"cyberwaretotalessmultiplier\":\"200\",\"disablebioware\":null}"
+      }
+    },
+    {
+      "id": "e44f268f-de46-4a03-93e8-69570dd7a2eb",
+      "name": "Reduced Senses",
+      "category": "Weakness",
+      "category_slug": "weakness",
+      "source_book": "SR5",
+      "source_page": "401",
+      "attributes": {
+        "bonus": "{\"selecttext\":null}"
+      }
+    },
+    {
+      "id": "a38a6e6e-c8be-477b-91a9-f285ec1941fa",
+      "name": "Uneducated",
+      "category": "Weakness",
+      "category_slug": "weakness",
+      "source_book": "SR5",
+      "source_page": "401",
+      "attributes": {
+        "bonus": "{\"uneducated\":null}"
+      }
+    },
+    {
+      "id": "e6ca8880-91eb-4a09-acee-478bddca145a",
+      "name": "Vanish",
+      "category": "Weakness",
+      "category_slug": "weakness",
+      "source_book": "RC",
+      "source_page": "85"
+    },
+    {
+      "id": "cc5d600e-c1fd-47d2-affd-38a939cc21ab",
+      "name": "Vulnerability",
+      "category": "Weakness",
+      "category_slug": "weakness",
+      "source_book": "SR5",
+      "source_page": "401",
+      "attributes": {
+        "bonus": "{\"selecttext\":null}"
+      }
+    }
+  ]
+}
