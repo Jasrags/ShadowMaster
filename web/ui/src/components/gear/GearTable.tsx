@@ -5,6 +5,7 @@ import { GearViewModal } from './GearViewModal';
 import { CategoryFilter } from './CategoryFilter';
 import { SourceFilter } from './SourceFilter';
 import { getCategoryDisplayName } from './categoryUtils';
+import { formatCost } from '../../lib/formatUtils';
 
 interface GearTableProps {
   gear: Gear[];
@@ -97,9 +98,10 @@ export const GearTable = memo(function GearTable({ gear }: GearTableProps) {
       header: 'Cost',
       accessor: (row: Gear) => {
         if (row.cost !== undefined) {
-          return row.cost_per_rating ? `${row.cost}¥ per rating` : `${row.cost}¥`;
+          const formattedCost = formatCost(String(row.cost));
+          return row.cost_per_rating ? `${formattedCost} per rating` : formattedCost;
         }
-        return (row.cost as string | undefined) || '-';
+        return formatCost(row.cost as string | undefined);
       },
       sortable: true,
     },

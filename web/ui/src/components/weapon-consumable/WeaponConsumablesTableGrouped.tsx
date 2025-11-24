@@ -1,32 +1,31 @@
-import { useState, useMemo, useEffect, Fragment } from 'react';
+import React, { useState, useMemo, useEffect } from 'react';
 import { Button } from 'react-aria-components';
-import type { Armor, Gear } from '../../lib/types';
-import { ArmorViewModal } from './ArmorViewModal';
-import { ArmorSourceFilter } from './ArmorSourceFilter';
+import type { WeaponConsumable } from '../../lib/types';
+import { WeaponConsumableViewModal } from './WeaponConsumableViewModal';
+import { WeaponConsumableSourceFilter } from './WeaponConsumableSourceFilter';
 import { filterData } from '../../lib/tableUtils';
 import { formatCost } from '../../lib/formatUtils';
 
-interface ArmorTableGroupedProps {
-  armor: Armor[];
-  gearMap: Map<string, Gear>;
+interface WeaponConsumablesTableGroupedProps {
+  consumables: WeaponConsumable[];
 }
 
-interface GroupedArmor {
+interface CategoryGroup {
   category: string;
-  armor: Armor[];
+  consumables: WeaponConsumable[];
   isExpanded: boolean;
 }
 
-export function ArmorTableGrouped({ armor, gearMap }: ArmorTableGroupedProps) {
-  const [selectedArmor, setSelectedArmor] = useState<Armor | null>(null);
+export function WeaponConsumablesTableGrouped({ consumables }: WeaponConsumablesTableGroupedProps) {
+  const [selectedConsumable, setSelectedConsumable] = useState<WeaponConsumable | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedSources, setSelectedSources] = useState<string[]>(['SR5']);
   const [searchTerm, setSearchTerm] = useState('');
-  const [expandedGroups, setExpandedGroups] = useState<Set<string>>(new Set());
+  const [expandedCategories, setExpandedCategories] = useState<Set<string>>(new Set());
 
-  // Filter armor by selected sources and search term
-  const filteredArmor = useMemo(() => {
-    let filtered = armor;
+  // Filter consumables by selected sources and search term
+  const filteredConsumables = useMemo(() => {
+    let filtered = consumables;
 
     // Filter by source
     if (selectedSources.length > 0) {
@@ -35,88 +34,85 @@ export function ArmorTableGrouped({ armor, gearMap }: ArmorTableGroupedProps) {
 
     // Apply search filter
     if (searchTerm) {
-      filtered = filterData(filtered, searchTerm, {}, ['name', 'category', 'source']);
+      filtered = filterData(
+        filtered,
+        searchTerm,
+        {},
+        ['name', 'category', 'description', 'cost', 'availability', 'source']
+      );
     }
 
     return filtered;
-  }, [armor, selectedSources, searchTerm]);
+  }, [consumables, selectedSources, searchTerm]);
 
-  // Group armor by category
-  const groupedArmor = useMemo(() => {
-    const groups = new Map<string, Armor[]>();
+  // Group consumables by Category
+  const groupedConsumables = useMemo(() => {
+    const categoryMap = new Map<string, WeaponConsumable[]>();
     
-    filteredArmor.forEach(item => {
+    filteredConsumables.forEach(item => {
       const category = item.category || 'Unknown';
-      if (!groups.has(category)) {
-        groups.set(category, []);
+      
+      if (!categoryMap.has(category)) {
+        categoryMap.set(category, []);
       }
-      groups.get(category)!.push(item);
+      
+      categoryMap.get(category)!.push(item);
     });
 
-    // Convert to array and sort
-    return Array.from(groups.entries())
-      .map(([category, armor]) => ({
+    // Convert to structure with expansion state
+    return Array.from(categoryMap.entries())
+      .map(([category, items]) => ({
         category,
-        armor: armor.sort((a, b) => a.name.localeCompare(b.name)),
-        isExpanded: expandedGroups.has(category),
+        consumables: items.sort((a, b) => a.name.localeCompare(b.name)),
+        isExpanded: expandedCategories.has(category),
       }))
       .sort((a, b) => a.category.localeCompare(b.category));
-  }, [filteredArmor, expandedGroups]);
+  }, [filteredConsumables, expandedCategories]);
 
-  // Auto-expand categories that have matching armor when searching
+  // Auto-expand when searching
   useEffect(() => {
     if (searchTerm.trim()) {
-      // Find categories that have matching armor
       const categoriesWithMatches = new Set<string>();
-      filteredArmor.forEach(item => {
-        const category = item.category || 'Unknown';
-        categoriesWithMatches.add(category);
+      filteredConsumables.forEach(item => {
+        categoriesWithMatches.add(item.category || 'Unknown');
       });
-      
-      // Add categories with matches to expanded groups
-      if (categoriesWithMatches.size > 0) {
-        setExpandedGroups(prev => {
-          const newExpanded = new Set(prev);
-          categoriesWithMatches.forEach(cat => newExpanded.add(cat));
-          return newExpanded;
-        });
-      }
+      setExpandedCategories(categoriesWithMatches);
     }
-  }, [searchTerm, filteredArmor]);
+  }, [searchTerm, filteredConsumables]);
 
-  const toggleGroup = (category: string) => {
-    const newExpanded = new Set(expandedGroups);
+  const toggleCategory = (category: string) => {
+    const newExpanded = new Set(expandedCategories);
     if (newExpanded.has(category)) {
       newExpanded.delete(category);
     } else {
       newExpanded.add(category);
     }
-    setExpandedGroups(newExpanded);
+    setExpandedCategories(newExpanded);
   };
 
   const expandAll = () => {
-    const allCategories = new Set(groupedArmor.map(g => g.category));
-    setExpandedGroups(allCategories);
+    const allCategories = new Set(groupedConsumables.map(g => g.category));
+    setExpandedCategories(allCategories);
   };
 
   const collapseAll = () => {
-    setExpandedGroups(new Set());
+    setExpandedCategories(new Set());
   };
 
-  const handleNameClick = (armorItem: Armor) => {
-    setSelectedArmor(armorItem);
+  const handleNameClick = (consumable: WeaponConsumable) => {
+    setSelectedConsumable(consumable);
     setIsModalOpen(true);
   };
 
-  const totalArmor = filteredArmor.length;
-  const totalGroups = groupedArmor.length;
+  const totalConsumables = filteredConsumables.length;
+  const totalCategories = groupedConsumables.length;
 
   return (
     <>
       <div className="space-y-4 mb-4">
         <div className="flex flex-wrap items-start gap-4">
-          <ArmorSourceFilter
-            armor={armor}
+          <WeaponConsumableSourceFilter
+            consumables={consumables}
             selectedSources={selectedSources}
             onSourcesChange={setSelectedSources}
           />
@@ -129,7 +125,7 @@ export function ArmorTableGrouped({ armor, gearMap }: ArmorTableGroupedProps) {
               type="text"
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
-              placeholder="Search armor by name, category, or source..."
+              placeholder="Search weapon consumables by name, category, description, or cost..."
               className="w-full px-4 py-2 bg-sr-darker border border-sr-light-gray rounded-md text-gray-100 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-sr-accent focus:border-transparent"
             />
           </div>
@@ -158,35 +154,33 @@ export function ArmorTableGrouped({ armor, gearMap }: ArmorTableGroupedProps) {
               <tr className="bg-sr-darker border-b border-sr-light-gray">
                 <th className="px-4 py-3 text-left text-sm font-semibold text-gray-300 w-12"></th>
                 <th className="px-4 py-3 text-left text-sm font-semibold text-gray-300">Name</th>
-                <th className="px-4 py-3 text-left text-sm font-semibold text-gray-300">Armor</th>
-                <th className="px-4 py-3 text-left text-sm font-semibold text-gray-300">Capacity</th>
-                <th className="px-4 py-3 text-left text-sm font-semibold text-gray-300">Source</th>
-                <th className="px-4 py-3 text-left text-sm font-semibold text-gray-300">Availability</th>
                 <th className="px-4 py-3 text-left text-sm font-semibold text-gray-300">Cost</th>
+                <th className="px-4 py-3 text-left text-sm font-semibold text-gray-300">Availability</th>
+                <th className="px-4 py-3 text-left text-sm font-semibold text-gray-300">Source</th>
               </tr>
             </thead>
             <tbody>
-              {groupedArmor.length === 0 ? (
+              {groupedConsumables.length === 0 ? (
                 <tr>
-                  <td colSpan={7} className="px-4 py-8 text-center text-gray-400">
-                    No armor found matching your criteria.
+                  <td colSpan={5} className="px-4 py-8 text-center text-gray-400">
+                    No weapon consumables found matching your criteria.
                   </td>
                 </tr>
               ) : (
-                groupedArmor.map((group) => (
-                  <Fragment key={group.category}>
-                    {/* Group Header Row */}
+                groupedConsumables.map((categoryGroup) => (
+                  <React.Fragment key={categoryGroup.category}>
+                    {/* Category Header Row */}
                     <tr
-                      className="bg-sr-light-gray/30 border-b border-sr-light-gray cursor-pointer hover:bg-sr-light-gray/50 transition-colors"
-                      onClick={() => toggleGroup(group.category)}
+                      className="bg-sr-darker/50 border-b-2 border-sr-light-gray cursor-pointer hover:bg-sr-darker transition-colors"
+                      onClick={() => toggleCategory(categoryGroup.category)}
                     >
                       <td className="px-4 py-3">
                         <button
                           className="text-gray-400 hover:text-gray-100 focus:outline-none focus:ring-2 focus:ring-sr-accent rounded"
-                          aria-label={group.isExpanded ? `Collapse ${group.category}` : `Expand ${group.category}`}
+                          aria-label={categoryGroup.isExpanded ? `Collapse ${categoryGroup.category}` : `Expand ${categoryGroup.category}`}
                         >
                           <svg
-                            className={`w-5 h-5 transition-transform ${group.isExpanded ? 'rotate-90' : ''}`}
+                            className={`w-5 h-5 transition-transform ${categoryGroup.isExpanded ? 'rotate-90' : ''}`}
                             fill="none"
                             stroke="currentColor"
                             viewBox="0 0 24 24"
@@ -197,21 +191,21 @@ export function ArmorTableGrouped({ armor, gearMap }: ArmorTableGroupedProps) {
                       </td>
                       <td className="px-4 py-3">
                         <div className="flex items-center gap-2">
-                          <span className="font-semibold text-gray-200">{group.category}</span>
+                          <span className="font-bold text-lg text-gray-100">{categoryGroup.category}</span>
                           <span className="text-xs text-gray-400 bg-sr-gray px-2 py-1 rounded">
-                            {group.armor.length} {group.armor.length === 1 ? 'item' : 'items'}
+                            {categoryGroup.consumables.length} {categoryGroup.consumables.length === 1 ? 'item' : 'items'}
                           </span>
                         </div>
                       </td>
-                      <td colSpan={5} className="px-4 py-3 text-sm text-gray-400">
-                        Click to {group.isExpanded ? 'collapse' : 'expand'}
+                      <td colSpan={3} className="px-4 py-3 text-sm text-gray-400">
+                        Click to {categoryGroup.isExpanded ? 'collapse' : 'expand'}
                       </td>
                     </tr>
 
-                    {/* Group Armor Rows */}
-                    {group.isExpanded && group.armor.map((item, index) => (
+                    {/* Consumable Rows (only show if category is expanded) */}
+                    {categoryGroup.isExpanded && categoryGroup.consumables.map((item, index) => (
                       <tr
-                        key={`${group.category}-${item.name}-${index}`}
+                        key={`${categoryGroup.category}-${item.id}-${index}`}
                         className="border-b border-sr-light-gray/50 hover:bg-sr-light-gray/20 transition-colors"
                       >
                         <td className="px-4 py-2"></td>
@@ -223,14 +217,12 @@ export function ArmorTableGrouped({ armor, gearMap }: ArmorTableGroupedProps) {
                             {item.name}
                           </button>
                         </td>
-                        <td className="px-4 py-2 text-gray-300">{item.armor || '-'}</td>
-                        <td className="px-4 py-2 text-gray-300">{item.armorcapacity || '-'}</td>
-                        <td className="px-4 py-2 text-gray-300">{item.source || '-'}</td>
-                        <td className="px-4 py-2 text-gray-300">{item.avail || '-'}</td>
-                        <td className="px-4 py-2 text-gray-300">{formatCost(item.cost as string | undefined)}</td>
+                        <td className="px-4 py-2 text-gray-300">{formatCost(item.cost)}</td>
+                        <td className="px-4 py-2 text-gray-300">{item.availability || '-'}</td>
+                        <td className="px-4 py-2 text-gray-300">{item.source}</td>
                       </tr>
                     ))}
-                  </Fragment>
+                  </React.Fragment>
                 ))
               )}
             </tbody>
@@ -239,15 +231,14 @@ export function ArmorTableGrouped({ armor, gearMap }: ArmorTableGroupedProps) {
 
         {/* Summary Footer */}
         <div className="px-4 py-3 bg-sr-darker border-t border-sr-light-gray text-sm text-gray-400">
-          Showing {totalArmor} {totalArmor === 1 ? 'item' : 'items'} in {totalGroups} {totalGroups === 1 ? 'category' : 'categories'}
+          Showing {totalConsumables} {totalConsumables === 1 ? 'item' : 'items'} across {totalCategories} {totalCategories === 1 ? 'category' : 'categories'}
         </div>
       </div>
 
-      <ArmorViewModal
-        armor={selectedArmor}
+      <WeaponConsumableViewModal
+        consumable={selectedConsumable}
         isOpen={isModalOpen}
         onOpenChange={setIsModalOpen}
-        gearMap={gearMap}
       />
     </>
   );

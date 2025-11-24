@@ -1,14 +1,14 @@
 import { useState, useMemo, useRef, useEffect } from 'react';
 import { Button, TextField, Input } from 'react-aria-components';
-import type { Gear } from '../../lib/types';
+import type { WeaponConsumable } from '../../lib/types';
 
-interface SourceFilterProps {
-  gear: Gear[];
+interface WeaponConsumableSourceFilterProps {
+  consumables: WeaponConsumable[];
   selectedSources: string[];
   onSourcesChange: (sources: string[]) => void;
 }
 
-export function SourceFilter({ gear, selectedSources, onSourcesChange }: SourceFilterProps) {
+export function WeaponConsumableSourceFilter({ consumables, selectedSources, onSourcesChange }: WeaponConsumableSourceFilterProps) {
   const [isOpen, setIsOpen] = useState(false);
   const [searchTerm, setSearchTerm] = useState('');
   const dropdownRef = useRef<HTMLDivElement>(null);
@@ -38,15 +38,15 @@ export function SourceFilter({ gear, selectedSources, onSourcesChange }: SourceF
   // Get all unique sources with counts
   const sourcesWithCounts = useMemo(() => {
     const sourceMap = new Map<string, number>();
-    gear.forEach(item => {
-      const source = typeof item.source === 'string' ? item.source : item.source?.source || 'Unknown';
+    consumables.forEach(item => {
+      const source = item.source || 'Unknown';
       sourceMap.set(source, (sourceMap.get(source) || 0) + 1);
     });
     
     return Array.from(sourceMap.entries())
       .map(([source, count]) => ({ source, count }))
       .sort((a, b) => a.source.localeCompare(b.source));
-  }, [gear]);
+  }, [consumables]);
 
   // Filter sources based on search
   const filteredSources = useMemo(() => {

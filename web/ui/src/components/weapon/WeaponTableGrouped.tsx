@@ -1,12 +1,14 @@
-import { useState, useMemo, useEffect } from 'react';
+import { useState, useMemo, useEffect, Fragment } from 'react';
 import { Button } from 'react-aria-components';
-import type { Weapon } from '../../lib/types';
+import type { Weapon, WeaponAccessoryItem } from '../../lib/types';
 import { WeaponViewModal } from './WeaponViewModal';
 import { WeaponSourceFilter } from './WeaponSourceFilter';
 import { filterData } from '../../lib/tableUtils';
+import { formatCost } from '../../lib/formatUtils';
 
 interface WeaponTableGroupedProps {
   weapons: Weapon[];
+  accessoryMap: Map<string, WeaponAccessoryItem>;
 }
 
 interface GroupedWeapons {
@@ -15,7 +17,7 @@ interface GroupedWeapons {
   isExpanded: boolean;
 }
 
-export function WeaponTableGrouped({ weapons }: WeaponTableGroupedProps) {
+export function WeaponTableGrouped({ weapons, accessoryMap }: WeaponTableGroupedProps) {
   const [selectedWeapon, setSelectedWeapon] = useState<Weapon | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedSources, setSelectedSources] = useState<string[]>(['SR5']);
@@ -174,10 +176,9 @@ export function WeaponTableGrouped({ weapons }: WeaponTableGroupedProps) {
                 </tr>
               ) : (
                 groupedWeapons.map((group) => (
-                  <>
+                  <Fragment key={group.category}>
                     {/* Group Header Row */}
                     <tr
-                      key={group.category}
                       className="bg-sr-light-gray/30 border-b border-sr-light-gray cursor-pointer hover:bg-sr-light-gray/50 transition-colors"
                       onClick={() => toggleGroup(group.category)}
                     >
@@ -230,10 +231,10 @@ export function WeaponTableGrouped({ weapons }: WeaponTableGroupedProps) {
                         <td className="px-4 py-2 text-gray-300">{weapon.ap || '-'}</td>
                         <td className="px-4 py-2 text-gray-300">{weapon.source || '-'}</td>
                         <td className="px-4 py-2 text-gray-300">{weapon.avail || '-'}</td>
-                        <td className="px-4 py-2 text-gray-300">{weapon.cost || '-'}</td>
+                        <td className="px-4 py-2 text-gray-300">{formatCost(weapon.cost)}</td>
                       </tr>
                     ))}
-                  </>
+                  </Fragment>
                 ))
               )}
             </tbody>
@@ -250,6 +251,7 @@ export function WeaponTableGrouped({ weapons }: WeaponTableGroupedProps) {
         weapon={selectedWeapon}
         isOpen={isModalOpen}
         onOpenChange={setIsModalOpen}
+        accessoryMap={accessoryMap}
       />
     </>
   );

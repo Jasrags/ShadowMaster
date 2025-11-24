@@ -1,32 +1,31 @@
-import { useState, useMemo, useEffect, Fragment } from 'react';
+import React, { useState, useMemo, useEffect } from 'react';
 import { Button } from 'react-aria-components';
-import type { Armor, Gear } from '../../lib/types';
-import { ArmorViewModal } from './ArmorViewModal';
-import { ArmorSourceFilter } from './ArmorSourceFilter';
+import type { Lifestyle } from '../../lib/types';
+import { LifestyleViewModal } from './LifestyleViewModal';
+import { LifestyleSourceFilter } from './LifestyleSourceFilter';
 import { filterData } from '../../lib/tableUtils';
 import { formatCost } from '../../lib/formatUtils';
 
-interface ArmorTableGroupedProps {
-  armor: Armor[];
-  gearMap: Map<string, Gear>;
+interface LifestylesTableGroupedProps {
+  lifestyles: Lifestyle[];
 }
 
-interface GroupedArmor {
+interface CategoryGroup {
   category: string;
-  armor: Armor[];
+  lifestyles: Lifestyle[];
   isExpanded: boolean;
 }
 
-export function ArmorTableGrouped({ armor, gearMap }: ArmorTableGroupedProps) {
-  const [selectedArmor, setSelectedArmor] = useState<Armor | null>(null);
+export function LifestylesTableGrouped({ lifestyles }: LifestylesTableGroupedProps) {
+  const [selectedLifestyle, setSelectedLifestyle] = useState<Lifestyle | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedSources, setSelectedSources] = useState<string[]>(['SR5']);
   const [searchTerm, setSearchTerm] = useState('');
-  const [expandedGroups, setExpandedGroups] = useState<Set<string>>(new Set());
+  const [expandedCategories, setExpandedCategories] = useState<Set<string>>(new Set());
 
-  // Filter armor by selected sources and search term
-  const filteredArmor = useMemo(() => {
-    let filtered = armor;
+  // Filter lifestyles by selected sources and search term
+  const filteredLifestyles = useMemo(() => {
+    let filtered = lifestyles;
 
     // Filter by source
     if (selectedSources.length > 0) {
@@ -35,88 +34,85 @@ export function ArmorTableGrouped({ armor, gearMap }: ArmorTableGroupedProps) {
 
     // Apply search filter
     if (searchTerm) {
-      filtered = filterData(filtered, searchTerm, {}, ['name', 'category', 'source']);
+      filtered = filterData(
+        filtered,
+        searchTerm,
+        {},
+        ['name', 'category', 'description', 'cost', 'source']
+      );
     }
 
     return filtered;
-  }, [armor, selectedSources, searchTerm]);
+  }, [lifestyles, selectedSources, searchTerm]);
 
-  // Group armor by category
-  const groupedArmor = useMemo(() => {
-    const groups = new Map<string, Armor[]>();
+  // Group lifestyles by Category
+  const groupedLifestyles = useMemo(() => {
+    const categoryMap = new Map<string, Lifestyle[]>();
     
-    filteredArmor.forEach(item => {
+    filteredLifestyles.forEach(item => {
       const category = item.category || 'Unknown';
-      if (!groups.has(category)) {
-        groups.set(category, []);
+      
+      if (!categoryMap.has(category)) {
+        categoryMap.set(category, []);
       }
-      groups.get(category)!.push(item);
+      
+      categoryMap.get(category)!.push(item);
     });
 
-    // Convert to array and sort
-    return Array.from(groups.entries())
-      .map(([category, armor]) => ({
+    // Convert to structure with expansion state
+    return Array.from(categoryMap.entries())
+      .map(([category, items]) => ({
         category,
-        armor: armor.sort((a, b) => a.name.localeCompare(b.name)),
-        isExpanded: expandedGroups.has(category),
+        lifestyles: items.sort((a, b) => a.name.localeCompare(b.name)),
+        isExpanded: expandedCategories.has(category),
       }))
       .sort((a, b) => a.category.localeCompare(b.category));
-  }, [filteredArmor, expandedGroups]);
+  }, [filteredLifestyles, expandedCategories]);
 
-  // Auto-expand categories that have matching armor when searching
+  // Auto-expand when searching
   useEffect(() => {
     if (searchTerm.trim()) {
-      // Find categories that have matching armor
       const categoriesWithMatches = new Set<string>();
-      filteredArmor.forEach(item => {
-        const category = item.category || 'Unknown';
-        categoriesWithMatches.add(category);
+      filteredLifestyles.forEach(item => {
+        categoriesWithMatches.add(item.category || 'Unknown');
       });
-      
-      // Add categories with matches to expanded groups
-      if (categoriesWithMatches.size > 0) {
-        setExpandedGroups(prev => {
-          const newExpanded = new Set(prev);
-          categoriesWithMatches.forEach(cat => newExpanded.add(cat));
-          return newExpanded;
-        });
-      }
+      setExpandedCategories(categoriesWithMatches);
     }
-  }, [searchTerm, filteredArmor]);
+  }, [searchTerm, filteredLifestyles]);
 
-  const toggleGroup = (category: string) => {
-    const newExpanded = new Set(expandedGroups);
+  const toggleCategory = (category: string) => {
+    const newExpanded = new Set(expandedCategories);
     if (newExpanded.has(category)) {
       newExpanded.delete(category);
     } else {
       newExpanded.add(category);
     }
-    setExpandedGroups(newExpanded);
+    setExpandedCategories(newExpanded);
   };
 
   const expandAll = () => {
-    const allCategories = new Set(groupedArmor.map(g => g.category));
-    setExpandedGroups(allCategories);
+    const allCategories = new Set(groupedLifestyles.map(g => g.category));
+    setExpandedCategories(allCategories);
   };
 
   const collapseAll = () => {
-    setExpandedGroups(new Set());
+    setExpandedCategories(new Set());
   };
 
-  const handleNameClick = (armorItem: Armor) => {
-    setSelectedArmor(armorItem);
+  const handleNameClick = (lifestyle: Lifestyle) => {
+    setSelectedLifestyle(lifestyle);
     setIsModalOpen(true);
   };
 
-  const totalArmor = filteredArmor.length;
-  const totalGroups = groupedArmor.length;
+  const totalLifestyles = filteredLifestyles.length;
+  const totalCategories = groupedLifestyles.length;
 
   return (
     <>
       <div className="space-y-4 mb-4">
         <div className="flex flex-wrap items-start gap-4">
-          <ArmorSourceFilter
-            armor={armor}
+          <LifestyleSourceFilter
+            lifestyles={lifestyles}
             selectedSources={selectedSources}
             onSourcesChange={setSelectedSources}
           />
@@ -129,7 +125,7 @@ export function ArmorTableGrouped({ armor, gearMap }: ArmorTableGroupedProps) {
               type="text"
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
-              placeholder="Search armor by name, category, or source..."
+              placeholder="Search lifestyles by name, category, description, or cost..."
               className="w-full px-4 py-2 bg-sr-darker border border-sr-light-gray rounded-md text-gray-100 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-sr-accent focus:border-transparent"
             />
           </div>
@@ -158,35 +154,32 @@ export function ArmorTableGrouped({ armor, gearMap }: ArmorTableGroupedProps) {
               <tr className="bg-sr-darker border-b border-sr-light-gray">
                 <th className="px-4 py-3 text-left text-sm font-semibold text-gray-300 w-12"></th>
                 <th className="px-4 py-3 text-left text-sm font-semibold text-gray-300">Name</th>
-                <th className="px-4 py-3 text-left text-sm font-semibold text-gray-300">Armor</th>
-                <th className="px-4 py-3 text-left text-sm font-semibold text-gray-300">Capacity</th>
-                <th className="px-4 py-3 text-left text-sm font-semibold text-gray-300">Source</th>
-                <th className="px-4 py-3 text-left text-sm font-semibold text-gray-300">Availability</th>
                 <th className="px-4 py-3 text-left text-sm font-semibold text-gray-300">Cost</th>
+                <th className="px-4 py-3 text-left text-sm font-semibold text-gray-300">Source</th>
               </tr>
             </thead>
             <tbody>
-              {groupedArmor.length === 0 ? (
+              {groupedLifestyles.length === 0 ? (
                 <tr>
-                  <td colSpan={7} className="px-4 py-8 text-center text-gray-400">
-                    No armor found matching your criteria.
+                  <td colSpan={4} className="px-4 py-8 text-center text-gray-400">
+                    No lifestyles found matching your criteria.
                   </td>
                 </tr>
               ) : (
-                groupedArmor.map((group) => (
-                  <Fragment key={group.category}>
-                    {/* Group Header Row */}
+                groupedLifestyles.map((categoryGroup) => (
+                  <React.Fragment key={categoryGroup.category}>
+                    {/* Category Header Row */}
                     <tr
-                      className="bg-sr-light-gray/30 border-b border-sr-light-gray cursor-pointer hover:bg-sr-light-gray/50 transition-colors"
-                      onClick={() => toggleGroup(group.category)}
+                      className="bg-sr-darker/50 border-b-2 border-sr-light-gray cursor-pointer hover:bg-sr-darker transition-colors"
+                      onClick={() => toggleCategory(categoryGroup.category)}
                     >
                       <td className="px-4 py-3">
                         <button
                           className="text-gray-400 hover:text-gray-100 focus:outline-none focus:ring-2 focus:ring-sr-accent rounded"
-                          aria-label={group.isExpanded ? `Collapse ${group.category}` : `Expand ${group.category}`}
+                          aria-label={categoryGroup.isExpanded ? `Collapse ${categoryGroup.category}` : `Expand ${categoryGroup.category}`}
                         >
                           <svg
-                            className={`w-5 h-5 transition-transform ${group.isExpanded ? 'rotate-90' : ''}`}
+                            className={`w-5 h-5 transition-transform ${categoryGroup.isExpanded ? 'rotate-90' : ''}`}
                             fill="none"
                             stroke="currentColor"
                             viewBox="0 0 24 24"
@@ -197,21 +190,21 @@ export function ArmorTableGrouped({ armor, gearMap }: ArmorTableGroupedProps) {
                       </td>
                       <td className="px-4 py-3">
                         <div className="flex items-center gap-2">
-                          <span className="font-semibold text-gray-200">{group.category}</span>
+                          <span className="font-bold text-lg text-gray-100">{categoryGroup.category}</span>
                           <span className="text-xs text-gray-400 bg-sr-gray px-2 py-1 rounded">
-                            {group.armor.length} {group.armor.length === 1 ? 'item' : 'items'}
+                            {categoryGroup.lifestyles.length} {categoryGroup.lifestyles.length === 1 ? 'item' : 'items'}
                           </span>
                         </div>
                       </td>
-                      <td colSpan={5} className="px-4 py-3 text-sm text-gray-400">
-                        Click to {group.isExpanded ? 'collapse' : 'expand'}
+                      <td colSpan={2} className="px-4 py-3 text-sm text-gray-400">
+                        Click to {categoryGroup.isExpanded ? 'collapse' : 'expand'}
                       </td>
                     </tr>
 
-                    {/* Group Armor Rows */}
-                    {group.isExpanded && group.armor.map((item, index) => (
+                    {/* Lifestyle Rows (only show if category is expanded) */}
+                    {categoryGroup.isExpanded && categoryGroup.lifestyles.map((item, index) => (
                       <tr
-                        key={`${group.category}-${item.name}-${index}`}
+                        key={`${categoryGroup.category}-${item.id}-${index}`}
                         className="border-b border-sr-light-gray/50 hover:bg-sr-light-gray/20 transition-colors"
                       >
                         <td className="px-4 py-2"></td>
@@ -223,14 +216,11 @@ export function ArmorTableGrouped({ armor, gearMap }: ArmorTableGroupedProps) {
                             {item.name}
                           </button>
                         </td>
-                        <td className="px-4 py-2 text-gray-300">{item.armor || '-'}</td>
-                        <td className="px-4 py-2 text-gray-300">{item.armorcapacity || '-'}</td>
-                        <td className="px-4 py-2 text-gray-300">{item.source || '-'}</td>
-                        <td className="px-4 py-2 text-gray-300">{item.avail || '-'}</td>
-                        <td className="px-4 py-2 text-gray-300">{formatCost(item.cost as string | undefined)}</td>
+                        <td className="px-4 py-2 text-gray-300">{formatCost(item.cost)}</td>
+                        <td className="px-4 py-2 text-gray-300">{item.source}</td>
                       </tr>
                     ))}
-                  </Fragment>
+                  </React.Fragment>
                 ))
               )}
             </tbody>
@@ -239,15 +229,14 @@ export function ArmorTableGrouped({ armor, gearMap }: ArmorTableGroupedProps) {
 
         {/* Summary Footer */}
         <div className="px-4 py-3 bg-sr-darker border-t border-sr-light-gray text-sm text-gray-400">
-          Showing {totalArmor} {totalArmor === 1 ? 'item' : 'items'} in {totalGroups} {totalGroups === 1 ? 'category' : 'categories'}
+          Showing {totalLifestyles} {totalLifestyles === 1 ? 'item' : 'items'} across {totalCategories} {totalCategories === 1 ? 'category' : 'categories'}
         </div>
       </div>
 
-      <ArmorViewModal
-        armor={selectedArmor}
+      <LifestyleViewModal
+        lifestyle={selectedLifestyle}
         isOpen={isModalOpen}
         onOpenChange={setIsModalOpen}
-        gearMap={gearMap}
       />
     </>
   );

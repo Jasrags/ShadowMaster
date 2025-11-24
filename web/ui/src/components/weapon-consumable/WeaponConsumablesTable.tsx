@@ -1,39 +1,39 @@
 import { useState, useMemo, memo, useCallback } from 'react';
 import { DataTable, ColumnDefinition } from '../common/DataTable';
-import type { Lifestyle } from '../../lib/types';
-import { LifestyleViewModal } from './LifestyleViewModal';
-import { LifestyleSourceFilter } from './LifestyleSourceFilter';
+import type { WeaponConsumable } from '../../lib/types';
+import { WeaponConsumableViewModal } from './WeaponConsumableViewModal';
+import { WeaponConsumableSourceFilter } from './WeaponConsumableSourceFilter';
 import { formatCost } from '../../lib/formatUtils';
 
-interface LifestylesTableProps {
-  lifestyles: Lifestyle[];
+interface WeaponConsumablesTableProps {
+  consumables: WeaponConsumable[];
 }
 
-export const LifestylesTable = memo(function LifestylesTable({ lifestyles }: LifestylesTableProps) {
-  const [selectedLifestyle, setSelectedLifestyle] = useState<Lifestyle | null>(null);
+export const WeaponConsumablesTable = memo(function WeaponConsumablesTable({ consumables }: WeaponConsumablesTableProps) {
+  const [selectedConsumable, setSelectedConsumable] = useState<WeaponConsumable | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedSources, setSelectedSources] = useState<string[]>(['SR5']);
 
-  // Filter lifestyles by selected sources
-  const filteredLifestyles = useMemo(() => {
+  // Filter consumables by selected sources
+  const filteredConsumables = useMemo(() => {
     if (selectedSources.length === 0) {
-      return lifestyles;
+      return consumables;
     }
-    return lifestyles.filter(lifestyle => selectedSources.includes(lifestyle.source));
-  }, [lifestyles, selectedSources]);
+    return consumables.filter(consumable => selectedSources.includes(consumable.source));
+  }, [consumables, selectedSources]);
 
-  const handleNameClick = useCallback((lifestyle: Lifestyle) => {
-    setSelectedLifestyle(lifestyle);
+  const handleNameClick = useCallback((consumable: WeaponConsumable) => {
+    setSelectedConsumable(consumable);
     setIsModalOpen(true);
   }, []);
 
-  const columns: ColumnDefinition<Lifestyle>[] = useMemo(() => [
+  const columns: ColumnDefinition<WeaponConsumable>[] = useMemo(() => [
     {
       id: 'name',
       header: 'Name',
       accessor: 'name',
       sortable: true,
-      render: (value: unknown, row: Lifestyle) => (
+      render: (value: unknown, row: WeaponConsumable) => (
         <button
           onClick={() => handleNameClick(row)}
           className="text-sr-accent hover:text-sr-accent/80 hover:underline cursor-pointer text-left"
@@ -56,6 +56,12 @@ export const LifestylesTable = memo(function LifestylesTable({ lifestyles }: Lif
       render: (value: unknown) => formatCost(value as string | undefined),
     },
     {
+      id: 'availability',
+      header: 'Availability',
+      accessor: 'availability',
+      sortable: true,
+    },
+    {
       id: 'source',
       header: 'Source',
       accessor: 'source',
@@ -67,28 +73,28 @@ export const LifestylesTable = memo(function LifestylesTable({ lifestyles }: Lif
     <>
       <div className="space-y-4 mb-4">
         <div className="flex flex-wrap items-start gap-4">
-          <LifestyleSourceFilter
-            lifestyles={lifestyles}
+          <WeaponConsumableSourceFilter
+            consumables={consumables}
             selectedSources={selectedSources}
             onSourcesChange={setSelectedSources}
           />
         </div>
       </div>
       <DataTable
-        data={filteredLifestyles}
+        data={filteredConsumables}
         columns={columns}
-        searchFields={['name', 'category', 'cost', 'description', 'source']}
-        searchPlaceholder="Search lifestyles by name, category, cost, description, or source..."
+        searchFields={['name', 'category', 'cost', 'availability', 'source', 'description']}
+        searchPlaceholder="Search weapon consumables by name, category, cost, availability, or source..."
         rowsPerPageOptions={[25, 50, 100, 200]}
         defaultRowsPerPage={50}
         defaultSortColumn="name"
         defaultSortDirection="asc"
-        emptyMessage="No lifestyles available"
-        emptySearchMessage="No lifestyles found matching your search criteria."
-        ariaLabel="Lifestyles data table"
+        emptyMessage="No weapon consumables available"
+        emptySearchMessage="No weapon consumables found matching your search criteria."
+        ariaLabel="Weapon consumables data table"
       />
-      <LifestyleViewModal
-        lifestyle={selectedLifestyle}
+      <WeaponConsumableViewModal
+        consumable={selectedConsumable}
         isOpen={isModalOpen}
         onOpenChange={setIsModalOpen}
       />

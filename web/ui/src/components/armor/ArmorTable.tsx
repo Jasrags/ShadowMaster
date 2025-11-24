@@ -4,6 +4,7 @@ import type { Armor, Gear } from '../../lib/types';
 import { ArmorViewModal } from './ArmorViewModal';
 import { ArmorCategoryFilter } from './ArmorCategoryFilter';
 import { ArmorSourceFilter } from './ArmorSourceFilter';
+import { formatCost } from '../../lib/formatUtils';
 
 interface ArmorTableProps {
   armor: Armor[];
@@ -88,6 +89,7 @@ export const ArmorTable = memo(function ArmorTable({ armor, gearMap }: ArmorTabl
       header: 'Cost',
       accessor: 'cost',
       sortable: true,
+      render: (value: unknown) => formatCost(value as string | undefined),
     },
   ], [handleNameClick]);
 

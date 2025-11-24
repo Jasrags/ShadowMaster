@@ -4,6 +4,7 @@ import type { WeaponAccessoryItem } from '../../lib/types';
 import { WeaponSourceFilter } from './WeaponSourceFilter';
 import { WeaponAccessoryViewModal } from './WeaponAccessoryViewModal';
 import type { Weapon } from '../../lib/types';
+import { formatCost } from '../../lib/formatUtils';
 
 interface WeaponAccessoryTableProps {
   accessories: WeaponAccessoryItem[];
@@ -97,6 +98,7 @@ export const WeaponAccessoryTable = memo(function WeaponAccessoryTable({ accesso
       header: 'Cost',
       accessor: 'cost',
       sortable: true,
+      render: (value: unknown) => formatCost(value as string | undefined),
     },
   ], [handleNameClick]);
 
