@@ -34,11 +34,16 @@ export function AppLayout({ children }: AppLayoutProps) {
           label: 'Database',
           path: '/database',
           nested: [
-            { id: 'gear', label: 'Gear', path: '/gear' },
             { id: 'armor', label: 'Armor', path: '/armor' },
-            { id: 'weapons', label: 'Weapons', path: '/weapons' },
-            { id: 'skills', label: 'Skills', path: '/skills' },
+            { id: 'books', label: 'Books', path: '/books' },
+            { id: 'contacts', label: 'Contacts', path: '/contacts' },
+            { id: 'gear', label: 'Gear', path: '/gear' },
+            { id: 'lifestyles', label: 'Lifestyles', path: '/lifestyles' },
             { id: 'qualities', label: 'Qualities', path: '/qualities' },
+            { id: 'skills', label: 'Skills', path: '/skills' },
+            { id: 'weapon-accessories', label: 'Weapon Accessories', path: '/weapon-accessories' },
+            { id: 'weapon-consumables', label: 'Weapon Consumables', path: '/weapon-consumables' },
+            { id: 'weapons', label: 'Weapons', path: '/weapons' },
           ],
         });
       }

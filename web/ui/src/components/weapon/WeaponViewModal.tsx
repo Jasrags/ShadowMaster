@@ -1,10 +1,14 @@
+import { useState } from 'react';
 import { Dialog, Modal, Heading, Button } from 'react-aria-components';
-import type { Weapon } from '../../lib/types';
+import type { Weapon, WeaponAccessoryItem } from '../../lib/types';
+import { WeaponAccessoryViewModal } from './WeaponAccessoryViewModal';
+import { formatCost } from '../../lib/formatUtils';
 
 interface WeaponViewModalProps {
   weapon: Weapon | null;
   isOpen: boolean;
   onOpenChange: (isOpen: boolean) => void;
+  accessoryMap: Map<string, WeaponAccessoryItem>;
 }
 
 // Helper function to format values for display
@@ -25,9 +29,32 @@ const formatArray = (value: unknown): string => {
   return formatValue(value);
 };
 
-export function WeaponViewModal({ weapon, isOpen, onOpenChange }: WeaponViewModalProps) {
+export function WeaponViewModal({ weapon, isOpen, onOpenChange, accessoryMap }: WeaponViewModalProps) {
+  const [selectedAccessory, setSelectedAccessory] = useState<WeaponAccessoryItem | null>(null);
+  const [isAccessoryModalOpen, setIsAccessoryModalOpen] = useState(false);
+
   const handleClose = () => {
     onOpenChange(false);
+  };
+
+  // Helper to get accessory by name (handles both string and string[])
+  const getAccessoryByName = (nameOrNames: string | string[]): WeaponAccessoryItem | undefined => {
+    const names = Array.isArray(nameOrNames) ? nameOrNames : [nameOrNames];
+    for (const name of names) {
+      const accessory = accessoryMap.get(name.toLowerCase());
+      if (accessory) {
+        return accessory;
+      }
+    }
+    return undefined;
+  };
+
+  const handleAccessoryClick = (nameOrNames: string | string[]) => {
+    const accessory = getAccessoryByName(nameOrNames);
+    if (accessory) {
+      setSelectedAccessory(accessory);
+      setIsAccessoryModalOpen(true);
+    }
   };
 
   if (!weapon || !isOpen) {
@@ -166,7 +193,7 @@ export function WeaponViewModal({ weapon, isOpen, onOpenChange }: WeaponViewModa
                   {weapon.cost && (
                     <div>
                       <label className="text-sm text-gray-400">Cost</label>
-                      <p className="text-gray-100 mt-1">{weapon.cost}</p>
+                      <p className="text-gray-100 mt-1">{formatCost(weapon.cost)}</p>
                     </div>
                   )}
                 </div>
@@ -198,40 +225,54 @@ export function WeaponViewModal({ weapon, isOpen, onOpenChange }: WeaponViewModa
                 <section>
                   <h2 className="text-lg font-semibold text-gray-200 mb-3">Pre-installed Accessories</h2>
                   <div className="space-y-2">
-                    {weapon.accessories.accessory.map((accessory, idx) => (
-                      <div key={idx} className="p-3 bg-sr-darker rounded-md">
-                        <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
-                          <div>
-                            <label className="text-sm text-gray-400">Name</label>
-                            <p className="text-gray-100 mt-1">{formatArray(accessory.name)}</p>
+                    {weapon.accessories.accessory.map((accessory, idx) => {
+                      const fullAccessory = getAccessoryByName(accessory.name);
+                      const isClickable = fullAccessory !== undefined;
+                      
+                      return (
+                        <div key={idx} className="p-3 bg-sr-darker rounded-md">
+                          <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
+                            <div>
+                              <label className="text-sm text-gray-400">Name</label>
+                              {isClickable ? (
+                                <button
+                                  onClick={() => handleAccessoryClick(accessory.name)}
+                                  className="text-sr-accent hover:text-sr-accent/80 hover:underline cursor-pointer text-left mt-1 block"
+                                >
+                                  {formatArray(accessory.name)}
+                                </button>
+                              ) : (
+                                <p className="text-gray-100 mt-1">{formatArray(accessory.name)}</p>
+                              )}
+                            </div>
+                            {accessory.mount && (
+                              <div>
+                                <label className="text-sm text-gray-400">Mount</label>
+                                <p className="text-gray-100 mt-1">{accessory.mount}</p>
+                              </div>
+                            )}
+                            {accessory.avail && (
+                              <div>
+                                <label className="text-sm text-gray-400">Availability</label>
+                                <p className="text-gray-100 mt-1">{accessory.avail}</p>
+                              </div>
+                            )}
+                            {accessory.cost && (
+                              <div>
+                                <label className="text-sm text-gray-400">Cost</label>
+                                <p className="text-gray-100 mt-1">{formatCost(accessory.cost)}</p>
+                              </div>
+                            )}
+                            {accessory.rating && (
+                              <div>
+                                <label className="text-sm text-gray-400">Rating</label>
+                                <p className="text-gray-100 mt-1">{accessory.rating}</p>
+                              </div>
+                            )}
                           </div>
-                          {accessory.mount && (
-                            <div>
-                              <label className="text-sm text-gray-400">Mount</label>
-                              <p className="text-gray-100 mt-1">{accessory.mount}</p>
-                            </div>
-                          )}
-                          {accessory.avail && (
-                            <div>
-                              <label className="text-sm text-gray-400">Availability</label>
-                              <p className="text-gray-100 mt-1">{accessory.avail}</p>
-                            </div>
-                          )}
-                          {accessory.cost && (
-                            <div>
-                              <label className="text-sm text-gray-400">Cost</label>
-                              <p className="text-gray-100 mt-1">{accessory.cost}</p>
-                            </div>
-                          )}
-                          {accessory.rating && (
-                            <div>
-                              <label className="text-sm text-gray-400">Rating</label>
-                              <p className="text-gray-100 mt-1">{accessory.rating}</p>
-                            </div>
-                          )}
                         </div>
-                      </div>
-                    ))}
+                      );
+                    })}
                   </div>
                 </section>
               )}
@@ -410,6 +451,11 @@ export function WeaponViewModal({ weapon, isOpen, onOpenChange }: WeaponViewModa
           </div>
         </Dialog>
       </div>
+      <WeaponAccessoryViewModal
+        accessory={selectedAccessory}
+        isOpen={isAccessoryModalOpen}
+        onOpenChange={setIsAccessoryModalOpen}
+      />
     </Modal>
   );
 }

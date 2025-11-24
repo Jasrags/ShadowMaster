@@ -103,8 +103,13 @@ func main() {
 			r.Use(sessionManager.RequireRole(domain.RoleAdministrator))
 			r.Get("/equipment/skills", handlers.GetSkills)
 			r.Get("/equipment/weapons", handlers.GetWeapons)
+			r.Get("/equipment/weapon-accessories", handlers.GetWeaponAccessories)
 			r.Get("/equipment/gear", handlers.GetGears)
 			r.Get("/equipment/qualities", handlers.GetQualities)
+			r.Get("/equipment/books", handlers.GetBooks)
+			r.Get("/equipment/lifestyles", handlers.GetLifestyles)
+			r.Get("/equipment/weapon-consumables", handlers.GetWeaponConsumables)
+			r.Get("/equipment/contacts", handlers.GetContacts)
 		})
 
 		// Group routes
@@ -196,7 +201,7 @@ func main() {
 func corsMiddleware(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		origin := r.Header.Get("Origin")
-		
+
 		// Allow specific origins for credentials
 		allowedOrigins := []string{
 			"http://localhost:5173", // Vite dev server
@@ -204,7 +209,7 @@ func corsMiddleware(next http.Handler) http.Handler {
 			"http://127.0.0.1:5173",
 			"http://127.0.0.1:3000",
 		}
-		
+
 		// Check if origin is allowed
 		allowed := false
 		for _, allowedOrigin := range allowedOrigins {
@@ -213,7 +218,7 @@ func corsMiddleware(next http.Handler) http.Handler {
 				break
 			}
 		}
-		
+
 		// If origin is allowed, use it; otherwise use wildcard (no credentials)
 		if allowed {
 			w.Header().Set("Access-Control-Allow-Origin", origin)
@@ -222,7 +227,7 @@ func corsMiddleware(next http.Handler) http.Handler {
 			// For non-browser requests or unknown origins, allow all (no credentials)
 			w.Header().Set("Access-Control-Allow-Origin", "*")
 		}
-		
+
 		w.Header().Set("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS")
 		w.Header().Set("Access-Control-Allow-Headers", "Content-Type, Authorization")
 		w.Header().Set("Access-Control-Expose-Headers", "Content-Type")

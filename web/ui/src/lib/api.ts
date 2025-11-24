@@ -8,8 +8,13 @@ import type {
   Gear,
   Armor,
   Weapon,
+  WeaponAccessoryItem,
   Skill,
   Quality,
+  Book,
+  Lifestyle,
+  WeaponConsumable,
+  Contact,
 } from './types';
 
 const API_BASE = '/api';
@@ -196,6 +201,10 @@ export const weaponApi = {
     const response = await apiRequest<{ weapons: Weapon[] }>('/equipment/weapons');
     return response.weapons || [];
   },
+  async getWeaponAccessories(): Promise<WeaponAccessoryItem[]> {
+    const response = await apiRequest<{ accessories: WeaponAccessoryItem[] }>('/equipment/weapon-accessories');
+    return response.accessories || [];
+  },
 };
 
 // Skill API functions (admin only)
@@ -211,6 +220,38 @@ export const qualityApi = {
   async getQualities(): Promise<Quality[]> {
     const response = await apiRequest<{ qualities: Quality[] }>('/equipment/qualities');
     return response.qualities || [];
+  },
+};
+
+// Book API functions (admin only)
+export const bookApi = {
+  async getBooks(): Promise<Book[]> {
+    const response = await apiRequest<{ books: Book[] }>('/equipment/books');
+    return response.books || [];
+  },
+};
+
+// Lifestyle API functions (admin only)
+export const lifestyleApi = {
+  async getLifestyles(): Promise<Lifestyle[]> {
+    const response = await apiRequest<{ lifestyles: Lifestyle[] }>('/equipment/lifestyles');
+    return response.lifestyles || [];
+  },
+};
+
+// Weapon Consumable API functions (admin only)
+export const weaponConsumableApi = {
+  async getWeaponConsumables(): Promise<WeaponConsumable[]> {
+    const response = await apiRequest<{ weapon_consumables: WeaponConsumable[] }>('/equipment/weapon-consumables');
+    return response.weapon_consumables || [];
+  },
+};
+
+// Contact API functions (admin only)
+export const contactApi = {
+  async getContacts(): Promise<Contact[]> {
+    const response = await apiRequest<{ contacts: Contact[] }>('/equipment/contacts');
+    return response.contacts || [];
   },
 };
 

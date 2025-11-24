@@ -1,6 +1,7 @@
 import { useState, useMemo, useRef, useEffect } from 'react';
 import { Button, TextField, Input } from 'react-aria-components';
 import type { Gear } from '../../lib/types';
+import { getCategoryDisplayName } from './categoryUtils';
 
 interface CategoryFilterProps {
   gear: Gear[];
@@ -44,8 +45,8 @@ export function CategoryFilter({ gear, selectedCategories, onCategoriesChange }:
     });
     
     return Array.from(categoryMap.entries())
-      .map(([category, count]) => ({ category, count }))
-      .sort((a, b) => a.category.localeCompare(b.category));
+      .map(([category, count]) => ({ category, count, displayName: getCategoryDisplayName(category) }))
+      .sort((a, b) => a.displayName.localeCompare(b.displayName));
   }, [gear]);
 
   // Filter categories based on search
@@ -141,7 +142,7 @@ export function CategoryFilter({ gear, selectedCategories, onCategoriesChange }:
                   </div>
                 ) : (
                   <div className="space-y-1">
-                    {filteredCategories.map(({ category, count }) => {
+                    {filteredCategories.map(({ category, count, displayName }) => {
                       const isSelected = selectedCategories.includes(category);
                       return (
                         <button
@@ -151,7 +152,7 @@ export function CategoryFilter({ gear, selectedCategories, onCategoriesChange }:
                             isSelected ? 'bg-sr-light-gray/50' : ''
                           }`}
                         >
-                          <span>{category}</span>
+                          <span>{displayName}</span>
                           <span className="text-xs text-gray-400 ml-2">({count})</span>
                         </button>
                       );
@@ -178,18 +179,20 @@ export function CategoryFilter({ gear, selectedCategories, onCategoriesChange }:
       {selectedCategories.length > 0 && (
         <div className="flex flex-wrap gap-2">
           {selectedCategories.map((category) => {
-            const count = categoriesWithCounts.find(c => c.category === category)?.count || 0;
+            const categoryInfo = categoriesWithCounts.find(c => c.category === category);
+            const count = categoryInfo?.count || 0;
+            const displayName = categoryInfo?.displayName || getCategoryDisplayName(category);
             return (
               <div
                 key={category}
                 className="inline-flex items-center gap-2 px-3 py-1 bg-sr-accent/20 border border-sr-accent/50 rounded-md text-sm"
               >
-                <span className="text-gray-200">{category}</span>
+                <span className="text-gray-200">{displayName}</span>
                 <span className="text-xs text-gray-400">({count})</span>
                 <button
                   onClick={() => handleToggleCategory(category)}
                   className="ml-1 text-gray-400 hover:text-gray-100 focus:outline-none focus:ring-2 focus:ring-sr-accent rounded"
-                  aria-label={`Remove ${category} filter`}
+                  aria-label={`Remove ${displayName} filter`}
                 >
                   <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />

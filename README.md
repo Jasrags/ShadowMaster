@@ -107,6 +107,8 @@ make server
 make run
 
 # Run in development mode
+make run-dev
+# or for server only
 make dev
 
 # Format code and run linting
@@ -132,6 +134,9 @@ Windows users can use PowerShell scripts as an alternative to Makefile:
 
 # Run the server
 .\scripts\run.ps1
+
+# Run in development mode (with live reload if Air is installed)
+.\scripts\run-dev.ps1
 
 # Run tests
 .\scripts\test.ps1
@@ -226,7 +231,8 @@ All authentication endpoints return/accept JSON and rely on HTTP-only cookies fo
 | `make build-cli` | Build the CLI binary |
 | `make build-all` | Build both server and CLI |
 | `make server` | Run the server |
-| `make dev` | Run the server in development mode |
+| `make dev` | Run the server in development mode (with live reload if Air is installed) |
+| `make run-dev` | Run both API server and frontend dev server (with live reload if Air is installed) |
 | `make cli` | Run the CLI |
 | `make install` | Build and install server to GOPATH/bin |
 | `make test` | Run tests |

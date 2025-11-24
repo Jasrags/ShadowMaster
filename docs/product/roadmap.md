@@ -286,6 +286,7 @@ In `powers.go` and `critterpowers.go`, the `Action` field uses a workaround:
   - CI pipeline for Go + React tests.
   - Packaging strategy for edition data updates (hot reload vs. build-time).
   - Plan API versioning/feature-flag strategy to guard future schema changes.
+  - **Live Reload for Go API Server**: Implement automatic rebuild and restart of the Go server on file changes. Consider using [Air](https://github.com/cosmtrek/air) or similar tool. Should work cross-platform (Windows, Linux, macOS). Frontend already has live reload via Vite HMR.
 - **Testing & QA**
   - Investigate Playwright/Cypress smoke tests for React flows (campaign creation, character wizard) to supplement Vitest coverage.
 

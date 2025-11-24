@@ -1,17 +1,25 @@
-import { useState, useMemo, useEffect } from 'react';
+import React, { useState, useMemo, useEffect } from 'react';
 import { Button } from 'react-aria-components';
 import type { Gear } from '../../lib/types';
 import { GearViewModal } from './GearViewModal';
 import { SourceFilter } from './SourceFilter';
 import { filterData } from '../../lib/tableUtils';
+import { getCategoryDisplayName } from './categoryUtils';
+import { formatCost } from '../../lib/formatUtils';
 
 interface GearTableGroupedProps {
   gear: Gear[];
 }
 
-interface GroupedGear {
-  category: string;
+interface SubcategoryGroup {
+  subcategory: string;
   gear: Gear[];
+  isExpanded: boolean;
+}
+
+interface CategoryGroup {
+  category: string;
+  subcategories: SubcategoryGroup[];
   isExpanded: boolean;
 }
 
@@ -20,7 +28,8 @@ export function GearTableGrouped({ gear }: GearTableGroupedProps) {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedSources, setSelectedSources] = useState<string[]>(['SR5']);
   const [searchTerm, setSearchTerm] = useState('');
-  const [expandedGroups, setExpandedGroups] = useState<Set<string>>(new Set());
+  const [expandedCategories, setExpandedCategories] = useState<Set<string>>(new Set());
+  const [expandedSubcategories, setExpandedSubcategories] = useState<Set<string>>(new Set());
 
   // Filter gear by selected sources and search term
   const filteredGear = useMemo(() => {
@@ -28,77 +37,139 @@ export function GearTableGrouped({ gear }: GearTableGroupedProps) {
 
     // Filter by source
     if (selectedSources.length > 0) {
-      filtered = filtered.filter(item => selectedSources.includes(item.source));
+      filtered = filtered.filter(item => {
+        const source = typeof item.source === 'string' ? item.source : item.source?.source;
+        return source && selectedSources.includes(source);
+      });
     }
 
     // Apply search filter
     if (searchTerm) {
-      filtered = filterData(filtered, searchTerm, {}, ['name', 'category', 'source']);
+      filtered = filterData(
+        filtered,
+        searchTerm,
+        {},
+        ['name', 'category', 'subcategory', 'description']
+      );
     }
 
     return filtered;
   }, [gear, selectedSources, searchTerm]);
 
-  // Group gear by category
+  // Group gear by Category → Subcategory
   const groupedGear = useMemo(() => {
-    const groups = new Map<string, Gear[]>();
+    const categoryMap = new Map<string, Map<string, Gear[]>>();
     
     filteredGear.forEach(item => {
       const category = item.category || 'Unknown';
-      if (!groups.has(category)) {
-        groups.set(category, []);
+      const subcategory = item.subcategory || 'Uncategorized';
+      
+      if (!categoryMap.has(category)) {
+        categoryMap.set(category, new Map());
       }
-      groups.get(category)!.push(item);
+      
+      const subcategoryMap = categoryMap.get(category)!;
+      if (!subcategoryMap.has(subcategory)) {
+        subcategoryMap.set(subcategory, []);
+      }
+      
+      subcategoryMap.get(subcategory)!.push(item);
     });
 
-    // Convert to array and sort
-    return Array.from(groups.entries())
-      .map(([category, gear]) => ({
-        category,
-        gear: gear.sort((a, b) => a.name.localeCompare(b.name)),
-        isExpanded: expandedGroups.has(category),
-      }))
+    // Convert to nested structure
+    return Array.from(categoryMap.entries())
+      .map(([category, subcategoryMap]) => {
+        const subcategories: SubcategoryGroup[] = Array.from(subcategoryMap.entries())
+          .map(([subcategory, gear]) => ({
+            subcategory,
+            gear: gear.sort((a, b) => a.name.localeCompare(b.name)),
+            isExpanded: expandedSubcategories.has(`${category}-${subcategory}`),
+          }))
+          .sort((a, b) => a.subcategory.localeCompare(b.subcategory));
+        
+        return {
+          category,
+          subcategories,
+          isExpanded: expandedCategories.has(category),
+        };
+      })
       .sort((a, b) => a.category.localeCompare(b.category));
-  }, [filteredGear, expandedGroups]);
+  }, [filteredGear, expandedCategories, expandedSubcategories]);
 
-  // Auto-expand categories that have matching gear when searching
+  // Auto-expand when searching
   useEffect(() => {
     if (searchTerm.trim()) {
-      // Find categories that have matching gear
       const categoriesWithMatches = new Set<string>();
+      const subcategoriesWithMatches = new Set<string>();
+      
+      // Build a map to check if categories have multiple subcategories
+      const categorySubcategoryMap = new Map<string, Set<string>>();
       filteredGear.forEach(item => {
         const category = item.category || 'Unknown';
+        const subcategory = item.subcategory || 'Uncategorized';
+        
+        if (!categorySubcategoryMap.has(category)) {
+          categorySubcategoryMap.set(category, new Set());
+        }
+        categorySubcategoryMap.get(category)!.add(subcategory);
         categoriesWithMatches.add(category);
       });
       
-      // Add categories with matches to expanded groups
-      if (categoriesWithMatches.size > 0) {
-        setExpandedGroups(prev => {
-          const newExpanded = new Set(prev);
-          categoriesWithMatches.forEach(cat => newExpanded.add(cat));
-          return newExpanded;
-        });
-      }
+      // Only track subcategories for categories that have multiple subcategories
+      filteredGear.forEach(item => {
+        const category = item.category || 'Unknown';
+        const subcategory = item.subcategory || 'Uncategorized';
+        const subcategories = categorySubcategoryMap.get(category);
+        if (subcategories && subcategories.size > 1) {
+          subcategoriesWithMatches.add(`${category}-${subcategory}`);
+        }
+      });
+      
+      setExpandedCategories(categoriesWithMatches);
+      setExpandedSubcategories(subcategoriesWithMatches);
     }
   }, [searchTerm, filteredGear]);
 
-  const toggleGroup = (category: string) => {
-    const newExpanded = new Set(expandedGroups);
+  const toggleCategory = (category: string) => {
+    const newExpanded = new Set(expandedCategories);
     if (newExpanded.has(category)) {
       newExpanded.delete(category);
     } else {
       newExpanded.add(category);
     }
-    setExpandedGroups(newExpanded);
+    setExpandedCategories(newExpanded);
+  };
+
+  const toggleSubcategory = (category: string, subcategory: string) => {
+    const key = `${category}-${subcategory}`;
+    const newExpanded = new Set(expandedSubcategories);
+    if (newExpanded.has(key)) {
+      newExpanded.delete(key);
+    } else {
+      newExpanded.add(key);
+    }
+    setExpandedSubcategories(newExpanded);
   };
 
   const expandAll = () => {
     const allCategories = new Set(groupedGear.map(g => g.category));
-    setExpandedGroups(allCategories);
+    setExpandedCategories(allCategories);
+    
+    const allSubcategories = new Set<string>();
+    groupedGear.forEach(categoryGroup => {
+      // Only expand subcategories for categories that have multiple subcategories
+      if (categoryGroup.subcategories.length > 1) {
+        categoryGroup.subcategories.forEach(subcatGroup => {
+          allSubcategories.add(`${categoryGroup.category}-${subcatGroup.subcategory}`);
+        });
+      }
+    });
+    setExpandedSubcategories(allSubcategories);
   };
 
   const collapseAll = () => {
-    setExpandedGroups(new Set());
+    setExpandedCategories(new Set());
+    setExpandedSubcategories(new Set());
   };
 
   const handleNameClick = (gearItem: Gear) => {
@@ -107,7 +178,11 @@ export function GearTableGrouped({ gear }: GearTableGroupedProps) {
   };
 
   const totalGear = filteredGear.length;
-  const totalGroups = groupedGear.length;
+  const totalCategories = groupedGear.length;
+  // Only count subcategories for categories that have multiple subcategories (skip single-subcategory categories)
+  const totalSubcategories = groupedGear.reduce((sum, categoryGroup) => {
+    return sum + (categoryGroup.subcategories.length > 1 ? categoryGroup.subcategories.length : 0);
+  }, 0);
 
   return (
     <>
@@ -155,6 +230,7 @@ export function GearTableGrouped({ gear }: GearTableGroupedProps) {
             <thead>
               <tr className="bg-sr-darker border-b border-sr-light-gray">
                 <th className="px-4 py-3 text-left text-sm font-semibold text-gray-300 w-12"></th>
+                <th className="px-4 py-3 text-left text-sm font-semibold text-gray-300 w-12"></th>
                 <th className="px-4 py-3 text-left text-sm font-semibold text-gray-300">Name</th>
                 <th className="px-4 py-3 text-left text-sm font-semibold text-gray-300">Source</th>
                 <th className="px-4 py-3 text-left text-sm font-semibold text-gray-300">Page</th>
@@ -167,26 +243,25 @@ export function GearTableGrouped({ gear }: GearTableGroupedProps) {
             <tbody>
               {groupedGear.length === 0 ? (
                 <tr>
-                  <td colSpan={8} className="px-4 py-8 text-center text-gray-400">
+                  <td colSpan={9} className="px-4 py-8 text-center text-gray-400">
                     No gear found matching your criteria.
                   </td>
                 </tr>
               ) : (
-                groupedGear.map((group) => (
-                  <>
-                    {/* Group Header Row */}
+                groupedGear.map((categoryGroup) => (
+                  <React.Fragment key={categoryGroup.category}>
+                    {/* Category Header Row */}
                     <tr
-                      key={group.category}
-                      className="bg-sr-light-gray/30 border-b border-sr-light-gray cursor-pointer hover:bg-sr-light-gray/50 transition-colors"
-                      onClick={() => toggleGroup(group.category)}
+                      className="bg-sr-darker/50 border-b-2 border-sr-light-gray cursor-pointer hover:bg-sr-darker transition-colors"
+                      onClick={() => toggleCategory(categoryGroup.category)}
                     >
                       <td className="px-4 py-3">
                         <button
                           className="text-gray-400 hover:text-gray-100 focus:outline-none focus:ring-2 focus:ring-sr-accent rounded"
-                          aria-label={group.isExpanded ? `Collapse ${group.category}` : `Expand ${group.category}`}
+                          aria-label={categoryGroup.isExpanded ? `Collapse ${getCategoryDisplayName(categoryGroup.category)}` : `Expand ${getCategoryDisplayName(categoryGroup.category)}`}
                         >
                           <svg
-                            className={`w-5 h-5 transition-transform ${group.isExpanded ? 'rotate-90' : ''}`}
+                            className={`w-5 h-5 transition-transform ${categoryGroup.isExpanded ? 'rotate-90' : ''}`}
                             fill="none"
                             stroke="currentColor"
                             viewBox="0 0 24 24"
@@ -195,43 +270,138 @@ export function GearTableGrouped({ gear }: GearTableGroupedProps) {
                           </svg>
                         </button>
                       </td>
+                      <td className="px-4 py-3"></td>
                       <td className="px-4 py-3">
                         <div className="flex items-center gap-2">
-                          <span className="font-semibold text-gray-200">{group.category}</span>
+                          <span className="font-bold text-lg text-gray-100">{getCategoryDisplayName(categoryGroup.category)}</span>
                           <span className="text-xs text-gray-400 bg-sr-gray px-2 py-1 rounded">
-                            {group.gear.length} {group.gear.length === 1 ? 'item' : 'items'}
+                            {categoryGroup.subcategories.reduce((sum, subcat) => sum + subcat.gear.length, 0)} items
                           </span>
                         </div>
                       </td>
                       <td colSpan={6} className="px-4 py-3 text-sm text-gray-400">
-                        Click to {group.isExpanded ? 'collapse' : 'expand'}
+                        Click to {categoryGroup.isExpanded ? 'collapse' : 'expand'}
                       </td>
                     </tr>
 
-                    {/* Group Gear Rows */}
-                    {group.isExpanded && group.gear.map((item, index) => (
-                      <tr
-                        key={`${group.category}-${item.name}-${index}`}
-                        className="border-b border-sr-light-gray/50 hover:bg-sr-light-gray/20 transition-colors"
-                      >
-                        <td className="px-4 py-2"></td>
-                        <td className="px-4 py-2">
-                          <button
-                            onClick={() => handleNameClick(item)}
-                            className="text-sr-accent hover:text-sr-accent/80 hover:underline cursor-pointer text-left pl-4"
+                    {/* Subcategory and Gear Rows (only show if category is expanded) */}
+                    {categoryGroup.isExpanded && (
+                      // If only one subcategory, show gear directly (skip subcategory level)
+                      categoryGroup.subcategories.length === 1 ? (
+                        categoryGroup.subcategories[0].gear.map((item, index) => (
+                          <tr
+                            key={`${categoryGroup.category}-${item.name}-${index}`}
+                            className="border-b border-sr-light-gray/50 hover:bg-sr-light-gray/20 transition-colors"
                           >
-                            {item.name}
-                          </button>
-                        </td>
-                        <td className="px-4 py-2 text-gray-300">{item.source || '-'}</td>
-                        <td className="px-4 py-2 text-gray-300">{item.page || '-'}</td>
-                        <td className="px-4 py-2 text-gray-300">{item.rating || '-'}</td>
-                        <td className="px-4 py-2 text-gray-300">{item.avail || '-'}</td>
-                        <td className="px-4 py-2 text-gray-300">{item.cost || '-'}</td>
-                        <td className="px-4 py-2 text-gray-300">{item.costfor || '-'}</td>
-                      </tr>
-                    ))}
-                  </>
+                            <td className="px-4 py-2"></td>
+                            <td className="px-4 py-2"></td>
+                            <td className="px-4 py-2">
+                              <button
+                                onClick={() => handleNameClick(item)}
+                                className="text-sr-accent hover:text-sr-accent/80 hover:underline cursor-pointer text-left pl-4"
+                              >
+                                {item.name}
+                              </button>
+                            </td>
+                            <td className="px-4 py-2 text-gray-300">
+                              {typeof item.source === 'string' ? item.source : item.source?.source || '-'}
+                            </td>
+                            <td className="px-4 py-2 text-gray-300">
+                              {item.page || (typeof item.source === 'object' ? item.source?.page : '-') || '-'}
+                            </td>
+                            <td className="px-4 py-2 text-gray-300">
+                              {item.rating !== undefined ? String(item.rating) : (item.rating as string | undefined) || '-'}
+                            </td>
+                            <td className="px-4 py-2 text-gray-300">{item.availability || item.avail || '-'}</td>
+                            <td className="px-4 py-2 text-gray-300">
+                              {item.cost !== undefined
+                                ? item.cost_per_rating
+                                  ? `${formatCost(String(item.cost))} per rating`
+                                  : formatCost(String(item.cost))
+                                : formatCost(item.cost as string | undefined)}
+                            </td>
+                            <td className="px-4 py-2 text-gray-300">{item.costfor || '-'}</td>
+                          </tr>
+                        ))
+                      ) : (
+                        // Multiple subcategories: show subcategory grouping
+                        categoryGroup.subcategories.map((subcategoryGroup) => (
+                          <React.Fragment key={`${categoryGroup.category}-${subcategoryGroup.subcategory}`}>
+                            {/* Subcategory Header Row */}
+                            <tr
+                              className="bg-sr-light-gray/30 border-b border-sr-light-gray cursor-pointer hover:bg-sr-light-gray/50 transition-colors"
+                              onClick={() => toggleSubcategory(categoryGroup.category, subcategoryGroup.subcategory)}
+                            >
+                              <td className="px-4 py-2"></td>
+                              <td className="px-4 py-2">
+                                <button
+                                  className="text-gray-400 hover:text-gray-100 focus:outline-none focus:ring-2 focus:ring-sr-accent rounded"
+                                  aria-label={subcategoryGroup.isExpanded ? `Collapse ${subcategoryGroup.subcategory}` : `Expand ${subcategoryGroup.subcategory}`}
+                                >
+                                  <svg
+                                    className={`w-4 h-4 transition-transform ${subcategoryGroup.isExpanded ? 'rotate-90' : ''}`}
+                                    fill="none"
+                                    stroke="currentColor"
+                                    viewBox="0 0 24 24"
+                                  >
+                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                                  </svg>
+                                </button>
+                              </td>
+                              <td className="px-4 py-2">
+                                <div className="flex items-center gap-2 pl-4">
+                                  <span className="font-semibold text-gray-200">{subcategoryGroup.subcategory}</span>
+                                  <span className="text-xs text-gray-400 bg-sr-gray px-2 py-1 rounded">
+                                    {subcategoryGroup.gear.length} {subcategoryGroup.gear.length === 1 ? 'item' : 'items'}
+                                  </span>
+                                </div>
+                              </td>
+                              <td colSpan={6} className="px-4 py-2 text-sm text-gray-400">
+                                Click to {subcategoryGroup.isExpanded ? 'collapse' : 'expand'}
+                              </td>
+                            </tr>
+
+                            {/* Gear Rows (only show if subcategory is expanded) */}
+                            {subcategoryGroup.isExpanded && subcategoryGroup.gear.map((item, index) => (
+                              <tr
+                                key={`${categoryGroup.category}-${subcategoryGroup.subcategory}-${item.name}-${index}`}
+                                className="border-b border-sr-light-gray/50 hover:bg-sr-light-gray/20 transition-colors"
+                              >
+                                <td className="px-4 py-2"></td>
+                                <td className="px-4 py-2"></td>
+                                <td className="px-4 py-2">
+                                  <button
+                                    onClick={() => handleNameClick(item)}
+                                    className="text-sr-accent hover:text-sr-accent/80 hover:underline cursor-pointer text-left pl-8"
+                                  >
+                                    {item.name}
+                                  </button>
+                                </td>
+                                <td className="px-4 py-2 text-gray-300">
+                                  {typeof item.source === 'string' ? item.source : item.source?.source || '-'}
+                                </td>
+                                <td className="px-4 py-2 text-gray-300">
+                                  {item.page || (typeof item.source === 'object' ? item.source?.page : '-') || '-'}
+                                </td>
+                                <td className="px-4 py-2 text-gray-300">
+                                  {item.rating !== undefined ? String(item.rating) : (item.rating as string | undefined) || '-'}
+                                </td>
+                                <td className="px-4 py-2 text-gray-300">{item.availability || item.avail || '-'}</td>
+                                <td className="px-4 py-2 text-gray-300">
+                                  {item.cost !== undefined
+                                    ? item.cost_per_rating
+                                      ? `${formatCost(String(item.cost))} per rating`
+                                      : formatCost(String(item.cost))
+                                    : formatCost(item.cost as string | undefined)}
+                                </td>
+                                <td className="px-4 py-2 text-gray-300">{item.costfor || '-'}</td>
+                              </tr>
+                            ))}
+                          </React.Fragment>
+                        ))
+                      )
+                    )}
+                  </React.Fragment>
                 ))
               )}
             </tbody>
@@ -240,7 +410,7 @@ export function GearTableGrouped({ gear }: GearTableGroupedProps) {
 
         {/* Summary Footer */}
         <div className="px-4 py-3 bg-sr-darker border-t border-sr-light-gray text-sm text-gray-400">
-          Showing {totalGear} {totalGear === 1 ? 'item' : 'items'} in {totalGroups} {totalGroups === 1 ? 'category' : 'categories'}
+          Showing {totalGear} {totalGear === 1 ? 'item' : 'items'} in {totalSubcategories} {totalSubcategories === 1 ? 'subcategory' : 'subcategories'} across {totalCategories} {totalCategories === 1 ? 'category' : 'categories'}
         </div>
       </div>
 

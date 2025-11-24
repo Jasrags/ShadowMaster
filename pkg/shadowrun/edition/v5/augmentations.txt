@@ -1,0 +1,922 @@
+AUGMENTATION
+Cyberware and bioware augmentations are every-
+where in 2075. For the rich, the poor, and everyone in
+between, bodyshops on every street corner offer minor
+modifications at your convenience, legally and other-
+wise. Even the gang-bangers on those street corners
+might be equipped with cybernetic vision, hearing en-
+hancements, or datajacks.
+Besides their wireless functionality, almost all cyber-
+ware devices are equipped with a neural interface (not
+to be confused with DNI) that lets you mentally activate
+and control their functions. You can use this in place of
+wireless control, preventing wireless hacking, as long as
+all of the “moving parts” are connected to your nervous
+system. An item that has a wireless bonus, however, can
+only gain that full level of functionality if wireless func-
+tionality is active.
+CYBERWARE AND BIOWARE GRADES
+Cyberware and bioware implants are available in five dis-
+tinct grades: standard, alphaware, betaware, deltaware,
+and used. Only standard, alphaware, and used implants
+are available for purchase at character creation. The prices
+for cyberware and bioware presented in this chapter are
+for standard ‘ware. When purchasing implants of other
+grades, apply the Essence Cost, Cost, and Availability ad-
+justments as noted on the Implant Grades table.
+All accessories and add-ons must be of the same
+grade as the implant to which they are added.
+CYBERSURGERY AND RECOVERY TIME
+Getting cyberware and bioware installed hurts. When
+you have an augmentation implanted (after character cre-
+ation), your Physical and Stun Condition Monitors each
+take a number of boxes of damage equal to the item’s
+Essence Cost x 3 (but never into overflow). Most cyber-
+clinics and body shops offer recovery rooms for patients
+to rest and heal up after cybersurgery, but beware the
+sterility and cleanliness of the less-reputable chop shops.
+HEADWARE
+These small complex devices are inserted into the head
+and typically constructed via less-invasive nanosur-
+gery. Items that have a Capacity Cost [in brackets] may
+be installed in cyberlimbs instead, costing Capacity
+rather than Essence.
+Commlink: The implanted version of the commlink
+(p. 438) comes with a sim module at no additional cost.
+An integral headware commlink is popular with corpo-
+rate operatives, company men, and sararimen on the
+go. Generally speaking, commlinks with a Device Rat-
+ing of less than 5 are not installed inside your skull, for
+security reasons.
+Control rig: This implant harnesses the raw data-co-
+ordinating and synchronization power of the middle
+brain for the express purpose of directly manipulating
+rigged vehicles and drones (and other devices with rig-
+ger interface, like turrets). It has a built-in sim module, so
+you can use it for DNI with other devices. It also comes
+with a universal data connector and about a meter of
+retractable cable (it’s like getting a free datajack). When
+you’re jumped into a vehicle or drone, the control rig
+provides its Rating as a dice pool bonus on all Vehicle
+skill tests. Additionally, the rating of your control rig is
+added to the Handling and Speed of any vehicle you are
+jumped into. As if that was not enough, your Vehicle Test
+thresholds are reduced by the rating of your control rig
+(to a minimum of 1), again when you’re jumped in.
+Cortex bomb: An illegal method of coercion, cranial
+bombs come in three flavors: kink, microbomb, and area
+bomb. Kink bombs are designed to damage only part
+of the victim’s head, either rendering specific headware
+useless or damaging the brain to cause blindness, stut-
+tering, hearing loss, or some other trauma. Of course,
+sometimes when something in your head explodes, things
+don’t go exactly as planned and the result is a bit … much.
+The microbomb version is just powerful enough to kill the
+unfortunate bearer. Area cranial bombs kill the victim, and
+they also affect a blast area exactly like a fragmentation
+grenade (p. 434). The bombs can be remote- or time-det-
+onated, or even set to discharge by sound recognition. If
+installed in cyberlimbs, these bombs are designed to de-
+stroy specific components (kink), the entire limb (regular),
+or blast the area and damage the bearer (microbomb).
+Cyberdeck: Simply put, you’ve got a deck in your
+body. This is a very convenient for ther hacker on the go
+and is often sported by G-men and military deckers.
+Datajack: A datajack gives you a direct neural inter-
+face (p. 222), which can be handy in a lot of situations.
+It also comes with a retractable spool of micro-cable
+(about a meter long) that lets you directly interface
+with any electronic device via a universal access cable.
+Datajacks are equipped with their own cache of storage
+memory for downloading or saving files. Two datajack
+users can string a fiberoptic cable between themselves
+to conduct a private mental communication immune to
+radio interception or eavesdropping.
+Wireless: The datajack gives you Rating 1 noise re-
+duction.
+Data Lock: This special datajack is popular with cou-
+riers, spies, diplomatic aids, and executive liasions. Ef-
+fectively, it turns the character in whom it is installed into
+a walking data safe. The data lock has a Device Rating
+equal to its own rating, and it protects the data from any-
+one not authorized to access it (possibly including you).
+Data locks are not wireless enabled; they can only be
+accessed via universal data connector. In fact the bearer
+of the implant doesn’t have mental access to the data—
+they’re only a carrier.
+Olfactory Booster: This cybersnout enhances, iden-
+tifies, and records smells, and can play them back later.
+The massively enhanced olfactory capabilities of a sniff-
+er open up a whole new world of sensory data to you—
+you’ll be able to sense things that ordinarily only a scent-
+hound would. You can smell people’s emotions in their
+sweat (and if applicable, the maker’s mark of their tailored
+pheromones), traces of ammunition propellant, explo-
+sives, or biological and chemical warfare compounds—
+the list goes on and on. A cut-off function allows you
+to completely ignore intense odors, possibly the most
+convenient feature for use in your daily life. The olfactory
+booster can even be used in VR to create an even more
+immersive experience. Add the booster’s rating as a dice
+pool modifier to your scent-based Perception Tests.
+Simrig: An implanted version of the simrig described
+on p. 439, this headware implant allows you to record sen-
+sory data for later replay (or sale if you’re really interesting).
+Skilljack: This headware interprets knowsofts and lin-
+guasofts for your brain so you can use them as though
+they were your own. It can also run activesofts, but they
+only act as Knowledge Skills unless you have skillwires
+(p. 455). The total of all skills running on a skilljack can-
+not exceed its Rating x 2, and the maximum Rating for
+a skill is the skilljack’s Rating. Starting skills from storage
+and stopping skills is a Free Action. You can’t use Edge
+with skills you have through a skilljack. If you have more
+than one skilljack, only one of them can operate at a time.
+Wireless: The extra boost from the Matrix increases
+the total Rating limit to the skilljack’s Rating x 3.
+Taste Booster: The taste booster performs the same
+function as the olfactory booster, except that it enhanc-
+es your taste buds. The taste booster also lets you expe-
+rience gustatory data in AR and VR environments with a
+“taste track”—caveat emptor on that one, chummer. Ap-
+ply the taste booster’s rating as a dice pool bonus to any
+Perception Test involving taste.
+Tooth Compartment: The oldest cyberware on the
+market, these hollow teeth come in storage and break-
+able models. The storage model is used to smuggle real-
+ly, really tiny contraband, the size of a datachip or a real-
+ly small RFID tag. Items can be removed with a wireless
+signal or hidden catch. The breakable model triggers a
+linked effect (such as starting a tracking signal, or releas-
+ing deadly poison into your mouth—make sure you re-
+member which is which!) with a wireless signal, or it may
+trigger when you bite down hard on the tooth.
+Ultrasound Sensor: This cyberware is exactly like the
+ultrasound sensor. When active, it replaces your normal
+vision. It can be switched between active sonar, passive
+sonar, and off with a Free Action.
+Voice Modulator: This implant gives you perfect
+pitch and enormous vocal flexibility and distortion ca-
+pabilities. You can speak with an increased volume (up
+to 100 decibels) without strain, shift your pitch to make
+perfect bird calls or mellifluous singing, and most im-
+portantly, uncanny vocal impressions. The modulator
+can also play back (and more or less perfectly imitate) a
+recorded or captured voice. Add the Rating of the mod-
+ulator to your dice pool for Impersonation skill tests.
+EYEWARE
+Probably the most common piece of cyberware avail-
+able in 2075 is cybereyes. Originally designed to gift
+the blind with normal sight, cybereyes allow for far
+more than normal human vision. While they still car-
+ry a social stigma in places, and the idea continues
+to carry a degree of squeamishness about it, it’s not
+entirely uncommon for people with perfectly good
+natural eyes to trade them out for cybernetic replace-
+ments. Cybereyes are available in any shape or color,
+from “almost natural” to all chrome to solid glowing
+purple and everything in between. Some models have
+their color and pattern easily altered by downloading
+a new skin.
+Most cybereye modifications are also offered as ret-
+inal modifications to the natural eye. Vision enhance-
+ments either take up Capacity in cybereyes or Essence
+in natural eyes, not both. As a general rule, upgrades are
+applied to both eyes so that the user’s vision doesn’t be-
+come unbalanced.
+Cybereyes: The basic cybereyes system features
+20/20 vision for both eyes, an image link, and a built-in
+camera at no extra cost, as well as capacity for vision
+enhancements.
+Flare compensation: An implanted version of the
+flare compensation enhancement (p. 444).
+Image link: An implanted version
+of the image link enhancement (p.
+444).
+Low-light vision: An implanted
+version of the low-light vision en-
+hancement (p. 444).
+Ocular drone: This enhancement
+only affects one eyeball per purchase.
+A small spyball drone is placed in your
+ocular cavity. The spyball functions as a
+normal cybereye (with all the relevant
+enhancements) until you remove it and
+control it as though it were a Horizon
+Flying Eye (p. 465). When it’s out and
+you have only one eye, you suffer a
+–3 dice pool penalty to all tasks. If you
+replace both eyes with drones, you’re
+effectively blind while those drones
+are operating apart from you. An ocu-
+lar drone is obviously not available as a
+retinal modification.
+Retinal duplication: This highly il-
+legal modification can be loaded with
+a recording of someone else’s retina
+to create an almost perfect reproduc-
+tion. Make an Opposed Test between
+the retinal duplication Rating and the
+retinal scanner Rating (Security De-
+vices, p. 362).
+Smartlink: An implanted version of
+the smartlink vision enhancement (p.
+444). Note that a smartlink installed in a natural eye or in
+a pair of cybereyes is more effective than a smartlink in-
+stalled in an external device: see Smartgun System, p. 444.
+Thermographic vision: An implanted version of the
+thermographic vision enhancement (p. 444).
+Vision enhancement: An implanted version of vi-
+sion enhancement (p. 444).
+Vision magnification: An implanted version of the
+vision magnification enhancement (p. 444).
+EARWARE
+Earware, like eyeware, is available either with complete
+cybernetic replacements (with the modifications cost-
+ing Capacity) or as a direct modification to the inner
+ear, costing essence. As a rule, upgrades are installed
+in both ears to prevent an imbalance of hearing.
+Cyberears: Ordinarily, cyberears replace only the
+inner ear, although the whole thing can be replaced
+as well if you like. Cyberears offer hearing with normal
+ranges (like an omni-directional microphone), a sound
+link, and Capacity for modifications and enhancements.
+Audio enhancement: An implanted version of audio
+enhancement (p. 445).
+Balance augmenter: The balance augmenter en-
+hances the inner ear’s natural balance mechanism. You
+receive one bonus die on all tests involving balance,
+such as climbing, walking across a narrow platform,
+landing after a jump, and so on.
+Damper: This implant protects the user from sudden
+increases in sound as well as damaging sound levels.
+The damper adds a +2 dice pool bonus to resisting sonic
+attacks, including flashbangs.
+Select sound filter: An implanted version of the se-
+lect sound filter audio enhancement, with the difference
+that the maximum available Rating is 6 instead of 3.
+Sound link: The audio equivalent of image link, sound
+link can play audio (recordings, movie soundtracks, mu-
+sic, etc.) from linked sources within the
+user’s PAN (or headware memory, or
+datajack) directly into the user’s cy-
+berears. A sound link is a common com-
+ponent of immersive AR environments,
+adding a sonic component.
+Spatial recognizer: An implanted
+version of the spatial recognizer en-
+hancement.
+BODYWARE
+Bodyware covers the goods to make
+you stronger, faster, better protected,
+and altogether more robotic, if that’s
+your thing. Bodyware cannot be in-
+stalled into cyberlimbs unless it has a
+Capacity cost [in brackets]. Bodyware
+with a Capacity cost can be installed
+in cyberlimbs, costing capacity rather
+than Essence.
+Bone lacing: Your bones are laced
+with lattice chains of reinforcing plas-
+tics or metals, improving their integri-
+ty and tensile strength (and adding to
+your body’s overall weight). Bone lacing
+comes in three types: plastic, aluminum,
+and titanium—you can only have one in-
+stalled at a time. It gives you extra Body
+for resisting physical damage, a little Ar-
+mor (cumulative with other Armor, with-
+out adding to Encumbrance), and chang-
+es your unarmed combat damage, all
+listed in the Bone Lacing table. Bone lac-
+ing is incompatible with other augmen-
+tations that add to or alter your bones
+(such as bone density augmentation).
+Dermal plating: Hard plastic and
+ceramic fiber plates are bonded to the
+user’s skin. The plates are clearly visible,
+and are even more obvious to the touch,
+but they can be cosmetically stylized for
+color and surface texture. Dermal plat-
+ing gives you bonus Armor equal to its
+Rating (cumulative with other Armor,
+without adding to Encumbrance). Der-
+mal plating cannot be combined with other augmenta-
+tions to the skin that provide armor, including orthoskin.
+Fingertip compartment: This compartment is hid-
+den in the hollowed out last joint of one finger, with a
+catch that allows the fingernail to be lifted up as an ac-
+cess panel, or the entire fingertip removed. A fingertip
+compartment allows the storage of micro-sized items,
+like a micro-drone, RFID tag, or datachip. Inserting or re-
+moving an object takes one Complex Action. Items held
+within are completely concealed, and the compartment
+itself has Concealability –10.
+One popular trick is to use a fingertip compartment
+to hold a monofilament whip (p. 422), with the fingertip
+acting as control weight. Extending a monofilament whip
+from a fingertip compartment takes a Simple Action, while
+spooling it back up requires one Complex Action. There’s
+no telling how many actions it will take for people to stop
+being impressed at what just came out of your finger.
+Wireless: Inserting or removing an item in a fingertip
+compartment takes a Simple Action.
+Grapple gun: This is an implanted version of the
+grapple gun described on p. 449. It doesn’t store any
+rope inside it, but you can attach an external rope before
+you shoot the grapple.
+Internal air tank: The internal air tank replaces part
+of one lung with a pressurized internal air reserve that
+allows you to hold your breath for up to (Rating) hours.
+This allows extended underwater operations and com-
+plete protection from inhalation-vector toxin attacks as
+long as you’re holding your breath. Activating or de-ac-
+tivating the tank is a Simple Action. Refilling the air tank
+with pressurized air through an intake valve (located un-
+der your ribcage) takes five minutes, or you can refill it
+through six hours of normal breathing.
+Wireless: Activating or de-activating the tank is a Free
+Action. You’re always aware of the tank’s exact air level
+and purity.
+Muscle replacement: Why take the time to exercise
+when you can just install a physique? Vat-grown syn-
+thetic muscles replace or augment your own, and cal-
+cium treatments and skeletal reinforcement contribute
+to your overall strength. It increases both your Strength
+and Agility attributes by its rating. It cannot be combined
+with other augmentations to the muscles, including
+muscle augmentation or muscle toner bioware.
+Reaction enhancers: By replacing specific, isolat-
+ed vertebrae of your spinal column with segments of
+superconducting material, your reactions to events be-
+come quicker. Add the Rating of reaction enhancers to
+your Reaction attribute (and remember to adjust Initiative
+and Physical limit accordingly). Reaction enhancers are
+incompatible with all other enhancements to Reaction,
+including wired reflexes.
+Wireless: Reaction enhancers are compatible with a
+wireless wired reflexes system, and the total bonus Re-
+action from the two augmentations can be above +4 if
+both systems have wireless activated.
+Skillwires: Skillwires are a system of neuromuscular
+controllers that overlie the body’s natural nervous sys-
+tem; they are capable of aiding or completely overriding
+muscular movement, controlled by the “muscle mem-
+ory” played through a skilljack (p. 452). This system
+allows you to use activesofts with a rating up to your
+skillwire’s rating, but only if that activesoft is running on
+your implanted skilljack. Skillwires are incompatible with
+reflex recorder bioware.
+Wireless: With the skillwire’s memory cache expand-
+ed, all the skills you use with it receive +1 to the relevant
+inherent Limit (Physical, Mental, or Social).
+Smuggling compartment: For items that won’t fit in
+a fingertip but that you still can’t afford to have found,
+smuggling compartments can be placed in parts of the
+body that can be easily hollowed out/replaced. This
+includes ribs and the space between them, hip bones,
+shoulder blades, and so forth. These compartments can
+allow the storage of small and mini-sized items (nothing
+bigger than a light pistol typically; your gamemaster will
+let you know if something’s too big). The compartment
+has a Concealability of –10. Inserting or retrieving an ob-
+ject requires a Complex Action.
+Wireless: Inserting or retrieving an object takes a Sim-
+ple Action.
+Wired reflexes: This highly invasive, painful,
+life-changing operation adds a multitude of neural boost-
+ers and adrenaline stimulators in strategic locations
+throughout your body work to catapult you into a whole
+new world where everything around you seems to move
+in slow motion. The system includes both manual and
+wireless triggers to turn the wired reflexes on and off;
+activating or deactivating the trigger manually requires a
+Complex Action, doing so wirelessly is a Simple Action.
+When activated, each rating point of wired reflexes gives
+you +1 Reaction (and accompanying bonus to Initiative)
+and +1D6 Initiative Die. Wired reflexes are incompatible
+with augmentations that affect Reaction or Initiative.
+Wireless: The system is compatible with wireless re-
+action enhancers, and the total Reaction bonus from
+both systems can be above +4 if both systems have
+wireless active.
+CYBERLIMBS
+In today’s world of transplant-friendly bioware, the use
+of cyberlimbs is sometimes viewed as crude and out-
+dated. On the other hand, they are cheap and easy to
+service and upgrade, so in the end they became even
+more popular for the less fortunate. Since cyberlimbs
+are more capable than most natural limbs, and you can
+load them up with all sorts of wiz tech, this kind of cy-
+berware has stayed in high demand.
+Cyberskulls and –torsos are included in the “cyber-
+limbs” category, though they are in fact shells rather
+than full replacements (or actual limbs).
+Cyberlimbs have their own Strength and Agility rat-
+ings. When a particular limb is used for a test (such as
+leading an attack with your cyberarm), use the attribute
+for that limb (natural or cyber); in any other case, take the
+average value of all limbs involved in the task. If a task
+requires the careful coordination of several limbs, use the
+value of the weakest limb. The attributes of partial limbs
+(including cyberhands and –feet) may be enhanced, but
+their attributes only apply for tests directly involving
+those limbs (such as a Strength Test when gripping some-
+thing with an enhanced cyberhand). Cyberlimbs cannot
+hold any bioware, nor any cyber-implants that take up Es-
+sence rather than Capacity. Essence cost, Capacity, and
+other stats can be found on the Cyberlimb table.
+Cyberlimbs have other useful features. They give
+you 1 extra damage box on your Physical Condition
+Monitor for each cyberlimb you possess (ignore hands
+and feet, and partial limbs count for half a limb). They
+have Capacity, letting you add cyberweapons and oth-
+er cyber systems that have a Capacity cost [in brackets].
+They can perform at superhuman levels with the right
+enhancements. Cyberlimbs can be dangerous even
+if they don’t have cyberweapons installed— their un-
+armed Damage Value is (STR)P.
+Cyberlimbs: These prosthetics are basic off-the-shelf
+models. All standard cyberlimbs come with Strength
+and Agility attributes of 3. These values can only be
+augmented by cyberlimb enhancements, not other aug-
+mentations.
+Customization: You can have your cyberlimb tailored
+and customized to your frame and musculature. Custom-
+ization lets you add to your limb’s base Strength and/or
+Agility ratings. Each increase of either attribute increases
+the limb’s Availability and cost. If either of your limb’s at-
+tributes are increased beyond your natural maximum for
+that attribute, you can’t use the cyberlimb (so don’t over-
+do it), but you can still add cyberlimb enhancements. You
+customize your cyberlimb when you buy it; you can’t cus-
+tomize it after purchase, but you can add enhancements.
+Cyberlimbs may be either obvious or synthetic.
+Obvious cyberlimbs: These implants are immedi-
+ately recognizable as ar-
+tificial limbs unless you
+cover them with clothing.
+They are often chromed
+or matte colors but visi-
+bly mechanical in nature.
+Some folks like them
+glaringly obvious and
+outlandish, some find the
+artificiality repellant and
+disturbing. This can affect
+your social dealings in
+some circles, especially
+upper-crust society and
+the purist crowd.
+Synthetic cyberlimbs:
+Synthetic limbs are dis-
+guised as natural limbs.
+The fact that they’re cy-
+bernetic gives them a –8
+Concealability (the Cy-
+bertechnology skill may
+replace Perception for this
+test) when someone’s just looking, but synthetic limbs are
+obviously artificial to the touch.
+CYBERLIMB
+ENHANCEMENTS
+Cyberlimb enhancements use up to the Capacity of the
+cyberlimb they enhance. There are three types of en-
+hancement: Agility, Armor, and Strength. Physical attri-
+bute enhancements add their Rating to the appropriate
+attribute of the limb. Armor enhancements provide an
+Armor bonus equal to their rating, cumulative with oth-
+er armor, without adding to Encumbrance. Each limb can
+have only one enhancement of each type (you can’t stack
+two Strength 3 enhancements in the same cyberarm), but
+you can replace one you have with one you want.
+CYBERLIMB ACCESSORIES
+These items may only be installed in cyberlimbs; some
+may only be installed in certain cyberlimbs.
+Cyberarm gyromount: This accessory must be in-
+stalled in a full or partial cyberarm. When activated, coun-
+terweights pop out of your wrist and a small gyro spins
+up to provide you with better balance and reduced recoil
+for improving firing capability. Meanwhile, small children
+stare at you. The effects are identical to a gyro stabiliza-
+tion system (p. 432), only with Rating 3 (this effect is not
+cumulative with a worn gyro stabilization system). Acti-
+vating or deactivating the system is a Simple Action.
+Wireless: Activating or deactivating the system is a
+Free Action.
+Cyberarm slide: An integral version of the hidden
+arm-slide, the cyberarm slide hides a hold-out, taser, or
+light pistol inside your cyberarm, concealing it from nor-
+mal vision. As a Free Action, you can ready the weapon
+in the slide.
+Cyber holster: You can hold a taser or any pistol- or
+smaller-sized weapon within the holster, completely en-
+closed until you activate it. Inserting or retrieving a weap-
+on takes one Simple Action. A cyber holster can also be
+used as a smuggling compartment to store items no larg-
+er than a pistol (the gamemaster has final discretion).
+Wireless: Readying a weapon from the holster is a
+Free Action.
+Hydraulic jacks: This implant requires you to have
+two cyberlegs with a hydraulic jack of identical Ratings
+in each leg. Each Rating point adds a +1 to your Physical
+limit for jumping and sprinting, adds twenty percent to
+your maximum jump distance, and reduces your falling
+distance by two meters for the purpose of calculating
+falling damage.
+Wireless: The jacks add a +1 dice pool bonus to tests
+involving jumping, sprinting, or lifting with your legs.
+Large smuggling compartment: This is a larger ver-
+sion of the smuggling compartment (p. 455). It can hold
+something the size of a heavy pistol or a small SMG
+(gamemaster’s discretion—think breadbox size as a
+guide). Getting something out of or putting something
+into it takes a Complex Action.
+Wireless: Getting something out of or putting some-
+thing into it takes a Simple Action.
+CYBER IMPLANT
+WEAPONS
+Cyber-implant weapons can be installed into cyberlimbs
+or directly into the meat. They’re popular with the deni-
+zens of urban wastelands like the Barrens, and with street
+samurai who never want to go anywhere unarmed.
+Cyberguns: Generally speaking, these are mount-
+ed in a cyberarm or directly into a natural arm, but you
+could install one in a leg or even your torso. Cyberguns
+are distinct from cyber holsters in that the gun itself can
+be controlled and fired directly, as an extension of your
+body. Depending on the size of the gun, cyberguns take
+up part of your forearm or replace your arm altogether,
+with the functional parts of the arm built around the gun.
+Smaller cyberguns fire through a hidden port in the palm
+or knuckles, while larger cyberguns fold back the user’s
+hand at the wrist.
+For extra concealment, cyberguns are built from
+mostly non-metallic compounds, and any metallic
+parts are incorporated into the (cyber) arm’s structure.
+All cyberguns have internal magazines (m) and can be
+equipped with a hidden external ammo port. Howev-
+er, once you attach a clip to the side of your forearm or
+the back of your elbow, the cybergun becomes kind of
+obvious. Laser sights and silencers/sound suppressors
+are also available; other weapon accessories can’t be
+installed in cyberguns. All cyberguns are pre-equipped
+with smartgun systems (p. 433).
+Cyber melee weapons: For a quarter of a centu-
+ry now, cyber-implant melee weapons have been the
+classic, favored toys of razor guys, from street muscle
+to professional urban samurai. They are available as cy-
+berarm upgrades, but can also be installed directly into
+the flesh. Cyber weapons can be readied via muscle
+flexture, neural impulse, or wireless signal. Attacks with
+cyber melee weapons use Unarmed Combat skill and
+the Physical limit.
+Hand razors are blades two to three centimeters long,
+made of chromed steel or carbon fiber. They either slide
+out from beneath your fingernails or replace them en-
+tirely. Hand blades slip out the side of the hand opposite
+the thumb, parallel to the hand, and while they are uni-
+versally thin and sharp, they come in a variety of shapes
+and styles. Spurs are one to three blades or spikes pro-
+truding from the back of your wrist or your knuckles,
+sticking out from your fist as much as thirty centime-
+ters. The shock hand is like a shock glove built into the
+palm of your hand, perfect for inflicting a nasty shock to
+anything it comes into contact with. Shock hands deal
+Electricity damage (p. 170) and have ten charges in each
+hand; when plugged in they recharge at a rate of one
+charge per ten seconds.
+BIOWARE
+Bioware is subtler, more holistic, and less invasive than
+cyberware, at the cost of being substantially pricier. In-
+stead of replacing body parts with machines, bioware
+augments the body’s own functions and integrates trans-
+planted organs that function as natural features. The
+application of biotechnology is a tricky business, as the
+fine balance of homeostasis between the body’s organic
+systems must be maintained. In the last decade, bionics
+and bio-engineering techniques have taken bioware from
+cutting edge to commonplace. Bioware is more expen-
+sive monetarily, costs less Essence, and is much harder to
+spot. Also—and we’d like to think this goes without say-
+ing—bioware has no wireless capability at all.
+Adrenaline pump: This enhanced gland is implanted
+in the lower abdomen, connected to both supradrenal
+glands. When dormant, the pump is merely a reservoir
+for adrenaline. When activated, a small muscular sac con-
+tracts, sending a surge of concentrated adrenaline into
+the blood stream. Physical and emotional stress can force
+your pump to activate if you fail a Composure Test (p.
+152); otherwise you can trigger it as a Free Action.
+While the pump is active, you ignore injury modifiers
+and don’t fall unconscious, even if your Stun Condition
+Monitor is filled. You can’t rest, but the adrenaline pump’s
+Rating is added to your Strength, Agility, Reaction, and
+Willpower attributes. The pump works for Rating x 1D6
+Combat Turns (the pump can’t be switched off early).
+When time’s up, you crash and take Stun damage equal
+to the number of Combat Turns the pump was active (use
+your natural Body + Willpower to resist the damage).
+After the effects end, your attribute values return to
+normal and you stop ignoring injury modifiers or uncon-
+sciousness from Stun damage. After use, the pump re-
+quires 1 hour to regenerate its supply. During that time, it
+cannot be activated.
+Bone density augmentation: The molecular struc-
+ture of your bones is altered to increase density and
+tensile strength. Ligaments are strengthened, and the
+increased bone density increases your weight a bit. Your
+Body attribute is increased by the bone density Rating
+for the purpose of damage resistance tests. You also
+deal Physical damage in unarmed combat, based on the
+Rating of the augmentation (see the Bone Density Aug-
+mentation table). Bone density augmentation is incom-
+patible with other augmentations to the bones, includ-
+ing bone lacing cyberware.
+Cat’s eyes: These transgenic vat-grown implants are
+very literally cats’ eyes with a modified DNA profile and
+occipital connecting structures. The structure of cat’s eyes
+amplifies light and enhances night vision, providing low-
+light vision. Cat’s eyes are slit and reflective, just like, well,
+a cat’s. This bioware is obviously not compatible with cy-
+berware eye enhancements or replacements.
+Enhanced articulation: A number of procedures like
+joint-surface coating, re-lubrication, and tendon and
+ligament augmentation lead to more fluid muscle and
+joint action. Enhanced articulation provides you with a
++1 dice pool modifier to your Escape Artist skill and a
++1 increase to your Physical limit (cumulative with other
+limit modifiers).
+Muscle augmentation: This biological weaving treat-
+ment enhances existing muscle tissue, rather than replac-
+ing it with vat-grown muscles. Specially grown muscle
+cables are woven into existing muscle fibers, enhancing
+muscle mass and brute strength while providing a bulk-
+ier look. Muscle augmentation adds its rating to your
+Strength. This bioware is incompatible with augmenta-
+tions that increase Strength, including the muscle re-
+placements cyberware.
+Muscle toner: This treatment increases muscle fi-
+ber elasticity in existing muscle tension, resulting in in-
+creased muscle tension and flexibility while providing a
+smooth and ropy physique. Muscle toner adds its rating
+to your Agility. This bioware is incompatible with aug-
+mentations that increase Agility, including the muscle
+replacements cyberware.
+Orthoskin: A web of biofibers in the skin provides the
+equivalent of personal armor while being virtually indis-
+tinguishable from natural skin. Orthoskin adds its Rating
+to your Armor Rating, and is cumulative with other Ar-
+mor. Orthoskin cannot be combined with skin augmenta-
+tions that give you Armor, including dermal plating.
+Pathogenic defense: This enhanced spleen can pro-
+duce more effective and aggressive white blood cells for
+combating pathogens. Pathogenic defense adds its Rating
+to Disease Resistance Tests.
+Platelet factories: Platelet factories increase your
+body’s ability to handle Physical damage by accelerat-
+ing the production of platelets within bone marrow and
+their concentration in the blood, which helps stop bleed-
+ing faster. Any time you would take 2 or more boxes of
+damage to your Physical Condition Monitor, reduce the
+damage by one box.
+Skin pocket: This skin flap can be located anywhere
+on your body. A nerveless “sheath” of flesh concealed
+by the flap is perfect for hiding a small object—it’s the
+bioware version of a smuggling compartment (p. 455).
+The skin pocket has a Concealability of –10. It takes a
+Complex Action to add or remove an item from a skin
+pocket.
+Suprathyroid gland: Placed on top of your existing
+thyroid gland, the suprathyroid gland supersedes the met-
+abolic functions of your thyroid. The enhanced metabolism
+produces more energy, supercharging you. While you’re
+supercharged, you might want to supersize—to fuel your
+optimized metabolism, you’ll need to eat twice as much as
+normal. You get a +1 to your Agility, Body, Reaction, and
+Strength, along with a 25 percent boost in lifestyle costs.
+And you might get a bit hyperactive.
+Symbiotes: Tailored micro-organisms in your blood-
+stream greatly enhance your healing. Add the Rating of
+the symbiotes as a dice pool modifier on healing tests
+(Physical and Stun). However, the symbi-
+otes have unusual dietary requirements
+that must be met to keep them alive.
+You need to pay (Rating x 200) nuyen
+per month for special symbiote food,
+although if you have a High Lifestyle or
+better it’s covered.
+Synthacardium: Artificially en-
+hanced myocardium allows cardiovas-
+cular functions to be performed more
+efficiently, enabling the heart to keep
+the blood better oxygenated. The syn-
+thacardium adds its Rating as a dice
+pool bonus to your tests using skills in
+the Athletics skill group.
+Tailored pheromones: These pher-
+omones are specially tailored to subtly
+influence others and can be released
+at will. Tailored pheromones add their
+Rating as a dice pool modifier to your
+skill tests for skills in the Acting and In-
+fluence skill groups, but only when the
+person you’re using them on is within a
+comfortable conversation range—if they
+can’t smell you, the pheromones don’t
+work. Tailored pheromones also work
+on you to make you feel better about
+yourself; increase your Social limit by the
+Rating. Tailored pheromones have no effect on magical
+abilities and tests.
+Toxin extractor: A specially cultivated cluster of cells
+in your liver improves its filtering capabilities. The toxin
+extractor adds its Rating as a dice pool modifier to all your
+Toxin Resistance Tests (Toxins, Drugs, and BTLs, p. 408).
+Tracheal Filter: Implanted at the top of your trachea,
+this organ can absorb airborne impurities and keep them
+from reaching your lungs. The filter adds its Rating as a
+dice pool modifier to Toxin Resistance Tests versus inha-
+lation vector toxins (Toxins, Drugs, and BTLs, p. 408).
+CULTURED BIOWARE
+Cultured bioware must be tailor-made for the body in
+which it will eventually find a home. This means it is
+more expensive and takes longer to acquire than the
+off-the-shelf kind.
+Cerebral booster: The convolutions and gyri of your
+cerebrum are augmented and amplified with additional
+nervous tissue, improving overall brain function. Your ce-
+rebral booster increases your Logic attribute by its Rating.
+Damage compensator: Damage compensators are
+essentially cut-offs stored in the nervous pathways that
+report pain from the body back to your brain. You ig-
+nore a number of damage boxes (your choice of Phys-
+ical, Stun, or a combination of the two) equal to the
+compensator’s Rating before determining your injury
+modifiers.
+Mnemonic enhancer: This highly concentrated
+growth of grey matter gets attached to the brain’s mem-
+ory centers, improving both short- and long-term mem-
+ory. Add the enhancer’s Rating as a dice pool bonus to
+your Knowledge, Language, and memory-related tests
+as well as to your Mental limit.
+Pain editor: This cluster of specialized nervous tis-
+sue is designed to filter sensory stimuli. If the pain editor
+is active, this allows you to ignore all injury modifiers,
+and you even stay conscious when your Stun Condi-
+tion Monitor is completely full. You feel no pain—you’re
+blissfully, dangerously, recklessly unaware of the extent
+of damage you’ve taken without either performing a
+self-examination (Observe In Detail action) or being in-
+formed by a biomonitor (p. 450). While active, the pain
+editor increases your Willpower by 1 and decreases your
+Intuition by 1. Additionally, all tactile Perception Tests
+you make receive a dice pool modifier of –4.
+Reflex recorder: The first step in this particular reci-
+pe is growing some extra neural material in a small clus-
+ter. When that’s fully cooked, you drop it in the skull and
+attach it to the nerves for motor reflexes. Then boom,
+you’ve got a metahuman with better muscle memory.
+The reflex recorder adds 1 to the Rating of a specific skill
+linked to a Physical attribute. Multiple recorders may be
+taken for multiple skills, but you can’t implant two reflex
+recorders for the same skill. Reflex recorder bioware is in-
+compatible with skillwires cyberware.
+Sleep regulator: The sleep regulator is a modifica-
+tion to the hypothalamus, allowing for longer periods of
+wakefulness, an incredibly useful advantage for anyone
+with any profession, not just shadowrunners. You need
+less sleep per day and the sleep you get is deep and
+restful (and harder to wake you up from). The sleep regu-
+lator lets you get by with three hours of sleep each night
+and stay awake for twice as long as normal before hav-
+ing to resist sleep deprivation fatigue (p. 172). Resting
+hours for healing purposes are not affected.
+Synaptic booster: The nerve cells making up the spi-
+nal cord are both broadened and replicated with this bio-
+ware, allowing for more neural bandwidth. The result is a
+much faster reaction time. The booster confers a bonus
+of +1 Reaction (and accompanying adjustment to Initia-
+tive and Physical limit) and +1D6 Initiative Die per point
+of Rating. The synaptic booster cannot be combined with
+any other form of Reaction or Initiative enhancement.
+
+
+Cyberware
+Part 	Device 	Essence 	Capacity 	Avail 	Cost 	Source
+Head 	Commlink 	0.2 	[2] 	- 	Commlink + 2,000¥ 	Core
+Head 	Control Rig R1 	1 	- 	5R 	43,000¥ 	Core
+Head 	Control Rig R2 	2 	- 	10R 	97,000¥ 	Core
+Head 	Control Rig R3 	3 	- 	15R 	208,000¥ 	Core
+Head 	Cortex Bomb (Kink) 	- 	[1] 	12F 	10,000¥ 	Core
+Head 	Cortex Bomb (Microbomb) 	- 	[2] 	16F 	25,000¥ 	Core
+Head 	Cortex Bomb (Area Bomb) 	- 	[3] 	20F 	40,000¥ 	Core
+Head 	Cyberdeck 	0.4 	[4] 	5R 	Deck Cost + 5,000¥ 	Core
+Head 	Datajack 	0.1 	- 	2 	1,000¥ 	Core
+Head 	Data Lock (R 1-12) 	0.1 	- 	Rating * 2 	Rating * 1,000¥ 	Core
+Head 	Olfactory Booster (R 1-6) 	0.2 	- 	Rating * 3 	Rating * 4,000¥ 	Core
+Head 	Simrig 	0.2 	- 	12R 	4,000¥ 	Core
+Head 	Skilljack (R 1-6) 	Rating * 0.1 	- 	Rating * 2 	Rating * 20,000¥ 	Core
+Head 	Taste Booster 	0.2 	- 	Rating * 3 	Rating * 3,000¥ 	Core
+Head 	Tooth Compartment 	- 	- 	8 	800¥ 	Core
+Head 	Ultrasound Sensor (R 1-6) 	0.25 	[2] 	10 	Rating * 12,000¥ 	Core
+Head 	Voice Modulator (R 1-6) 	0.2 	- 	Rating * 3F 	Rating * 5,000¥ 	Core
+Eye 	Cybereyes R1 	0.2 	4 	3 	4,000¥ 	Core
+Eye 	Cybereyes R2 	0.3 	8 	6 	6,000¥ 	Core
+Eye 	Cybereyes R3 	0.4 	12 	9 	10,000¥ 	Core
+Eye 	Cybereyes R4 	0.5 	16 	12 	14,000¥ 	Core
+Eye 	Flare Compensation 	0.1 	[1] 	4 	1,000¥ 	Core
+Eye 	Image Link 	0.1 	* 	4 	1,000¥ 	Core
+Eye 	Low-Light Vision 	0.1 	[2] 	4 	1,500¥ 	Core
+Eye 	Ocular Drone 	- 	[6] 	6 	6,000¥ 	Core
+Eye 	Retinal Duplication (R 1-6) 	0.1 	[1] 	16F 	Rating * 20,000¥ 	Core
+Eye 	Smartlink 	0.2 	[3] 	8R 	4,000¥ 	Core
+Eye 	Thermographic Vision 	0.1 	[2] 	4 	1,500¥ 	Core
+Eye 	Vision Enhancement (R 1-3) 	0.1 	[Rating] 	Rating * 3 	Rating * 4,000¥ 	Core
+Eye 	Vision Magnification 	0.1 	[2] 	4 	2,000¥ 	Core
+Ear 	Cyberears R1 	0.2 	4 	3 	3,000¥ 	Core
+Ear 	Cyberears R2 	0.3 	8 	6 	4,500¥ 	Core
+Ear 	Cyberears R3 	0.4 	12 	9 	7,500¥ 	Core
+Ear 	Cyberears R4 	0.5 	16 	12 	11,000¥ 	Core
+Ear 	Audio Enhancement (R 1-3) 	0.1 	[Rating] 	Rating * 3 	Rating * 4,000¥ 	Core
+Ear 	Balance Augmenter 	0.1 	[4] 	8 	8,000¥ 	Core
+Ear 	Damper 	0.1 	[1] 	6 	2,250¥ 	Core
+Ear 	Select Sound Filter (R 1-6) 	0.1 	[Rating] 	Rating * 3 	Rating * 3,500¥ 	Core
+Ear 	Sound Link 	0.1 	* 	4 	1,000¥ 	Core
+Ear 	Spatial Recognizer 	0.1 	[2] 	8 	4,000¥ 	Core
+Body 	Bone Lacing (Plastic) 	0.5 	- 	8R 	8,000¥ 	Core
+Body 	Bone Lacing (Aluminum) 	1 	- 	12R 	18,000¥ 	Core
+Body 	Bond Lacing (Titanium) 	1.5 	- 	16R 	30,000¥ 	Core
+Body 	Dermal Plating (R 1-6) 	Rating * 0.5 	- 	(Rating * 4)R 	Rating * 3,000¥ 	Core
+Body 	Fingertip Compartment 	0.1 	[1] 	4 	3,000¥ 	Core
+Body 	Grapple Gun 	0.5 	[4] 	8 	5,000¥ 	Core
+Body 	Internal Air Tank (R 1-3) 	0.25 	[3] 	Rating 	Rating * 4,500¥ 	Core
+Body 	Muscle Replacement (R 1-4) 	Rating 	- 	(Rating * 5)R 	Rating * 25,000¥ 	Core
+Body 	Reaction Enhancers (R 1-3) 	Rating * 0.3 	- 	(Rating * 5)R 	Rating * 13,000¥ 	Core
+Body 	Skillwires (R 1-6) 	Rating * 0.1 	- 	Rating * 4 	Rating * 20,000¥ 	Core
+Body 	Smuggling Compartment 	0.2 	[2] 	6 	7,500¥ 	Core
+Body 	Wired Reflexes R1 	2 	- 	8R 	39,000¥ 	Core
+Body 	Wired Reflexes R2 	3 	- 	12R 	149,000¥ 	Core
+Body 	Wired Reflexes R3 	5 	- 	20R 	217,000¥ 	Core
+Limb 	Obvious Full Arm 	1 	15 	4 	15,000¥ 	Core
+Limb 	Obvious Full Leg 	1 	20 	4 	15,000¥ 	Core
+Limb 	Obvious Hand/Foot 	0.25 	4 	2 	5,000¥ 	Core
+Limb 	Obvious Lower Arm 	0.45 	10 	4 	10,000¥ 	Core
+Limb 	Obvious Lower Leg 	0.45 	12 	4 	10,000¥ 	Core
+Limb 	Obvious Torso 	1.5 	10 	12 	20,000¥ 	Core
+Limb 	Obvious Skull 	0.75 	4 	16 	10,000¥ 	Core
+Limb 	Synthetic Full Arm 	1 	8 	4 	20,000¥ 	Core
+Limb 	Synthetic Full Leg 	1 	10 	4 	20,000¥ 	Core
+Limb 	Synthetic Hand/Foot 	0.25 	2 	2 	6,000¥ 	Core
+Limb 	Synthetic Lower Arm 	0.45 	5 	4 	12,000¥ 	Core
+Limb 	Synthetic Lower Leg 	0.45 	6 	4 	12,000¥ 	Core
+Limb 	Synthetic Torso 	1.5 	5 	12 	25,000¥ 	Core
+Limb 	Synthetic Skull 	0.75 	2 	16 	15,000¥ 	Core
+Limb 	Agility (R 1-3) 	- 	Rating 	(Rating * 3)R 	Rating * 6,500¥ 	Core
+Limb 	Armor (R 1-3) 	- 	Rating 	Rating * 5 	Rating * 3,000¥ 	Core
+Limb 	Strength (R 1-3) 	- 	Rating 	(Rating * 3)R 	Rating * 6,500¥ 	Core
+Limb Accessories 	Cyberarm Gyromount 	- 	[8] 	12F 	6,000¥ 	Core
+Limb Accessories 	Cyberarm Slide 	- 	[3] 	12R 	3,000¥ 	Core
+Limb Accessories 	Cyber Holster 	- 	[5] 	8R 	2,000¥ 	Core
+Limb Accessories 	Hydraulic Jacks (R 1-6) 	- 	[Rating] 	9 	Rating * 2,500¥ 	Core
+Limb Accessories 	Large Smuggling Compartment 	- 	[5] 	6 	8,000¥ 	Core
+Weapon 	Hold-Out Pistol 	0.1 	[2] 	8R 	2,000¥ 	Core
+Weapon 	Light Pistol 	0.25 	[4] 	10R 	3,900¥ 	Core
+Weapon 	Machine Pistol 	0.5 	[6] 	12R 	3,500¥ 	Core
+Weapon 	Heavy Pistol 	0.5 	[6] 	12R 	4,300¥ 	Core
+Weapon 	Submachine Gun 	1 	[8] 	12R 	4,800¥ 	Core
+Weapon 	Shotgun 	1.25 	[10] 	12R 	8,500¥ 	Core
+Weapon 	Grenade Launcher 	1.5 	[15] 	20F 	30,000¥ 	Core
+Weapon 	External Clip Port 	0.1 	[1] 	- 	+1,000¥ 	Core
+Weapon 	Laser Sight 	- 	[1] 	- 	+1,000¥ 	Core
+Weapon 	Silencer/Suppressor 	- 	[2] 	- 	+1,000¥ 	Core
+Weapon 	Hand Blade (Retractable) 	0.25 	[2] 	10F 	2,500¥ 	Core
+Weapon 	Hand Razors (Retractable) 	0.2 	[2] 	8F 	1,250¥ 	Core
+Weapon 	Spurs (Retractable) 	0.3 	[3] 	12F 	5,000¥ 	Core
+Weapon 	Shock Hand 	0.25 	[4] 	8R 	5,000¥ 	Core 
+
+Bioware
+Type 	Device 	Essence 	Avail 	Cost 	Source
+Basic 	Adrenaline Pump (R 1-3) 	Rating * 0.75 	(Rating * 6)F 	Rating * 55,000¥ 	Core
+Basic 	Bone Density Augmentation (R 1-4) 	Rating * 0.3 	Rating * 4 	Rating * 5,000¥ 	Core
+Basic 	Cat's Eye 	0.1 	4 	4,000¥ 	Core
+Basic 	Enhanced Articulation 	0.3 	12 	24,000¥ 	Core
+Basic 	Muscle Augmentation (R 1-4) 	Rating * 0.2 	(Rating * 5)R 	Rating * 31,000¥ 	Core
+Basic 	Muscle Toner (R 1-4) 	Rating * 0.2 	(Rating * 5)R 	Rating * 32,000¥ 	Core
+Basic 	Orthoskin (R 1-4) 	Rating * 0.25 	(Rating * 4)R 	Rating * 6,000¥ 	Core
+Basic 	Pathogenic Defense (R 1-6) 	Rating * 0.1 	Rating * 2 	Rating * 4,500¥ 	Core
+Basic 	Platelet Factories 	0.2 	12 	17,000¥ 	Core
+Basic 	Skin Pocket 	0.1 	4 	12,000¥ 	Core
+Basic 	Suprathyroid Gland 	0.7 	20R 	140,000¥ 	Core
+Basic 	Symbiotes (R 1-4) 	Rating * 0.2 	Rating * 5 	Rating * 3,500¥ 	Core
+Basic 	Synthacardium (R 1-3) 	Rating * 0.1 	Rating * 4 	Rating * 30,000¥ 	Core
+Basic 	Tailored Pheromones (R 1-3) 	Rating * 0.2 	(Rating * 4)R 	31,000¥ 	Core
+Basic 	Toxin Extractor (R 1-6) 	Rating * 0.2 	Rating * 3 	Rating * 4,800¥ 	Core
+Basic 	Tracheal Filter (R 1-6) 	Rating * 0.1 	Rating * 3 	Rating * 4,500¥ 	Core
+Cultured 	Cerebral Booster (R 1-3) 	Rating * 0.2 	Rating * 6 	Rating * 31,500¥ 	Core
+Cultured 	Damage Compensators (R 1-12) 	Rating * 0.1 	(Rating * 3)F 	Rating * 2,000¥ 	Core
+Cultured 	Mnemonic Enhancer (R 1-3) 	Rating * 0.1 	Rating * 5 	Rating * 9,000¥ 	Core
+Cultured 	Pain Editor 	0.3 	18F 	48,000¥ 	Core
+Cultured 	Reflex Recorder (Skill) 	0.1 	10 	14,000¥ 	Core
+Cultured 	Sleep Regulator 	0.1 	6 	12,000¥ 	Core
+Cultured 	Synaptic Booster (R 1-3) 	Rating * 0.5 	(Rating * 6)R 	Rating * 95,000¥ 	Core 

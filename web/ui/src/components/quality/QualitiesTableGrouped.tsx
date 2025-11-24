@@ -1,4 +1,4 @@
-import { useState, useMemo, useEffect } from 'react';
+import { useState, useMemo, useEffect, Fragment } from 'react';
 import { Button } from 'react-aria-components';
 import type { Quality } from '../../lib/types';
 import { QualityViewModal } from './QualityViewModal';
@@ -22,18 +22,43 @@ export function QualitiesTableGrouped({ qualities }: QualitiesTableGroupedProps)
   const [searchTerm, setSearchTerm] = useState('');
   const [expandedGroups, setExpandedGroups] = useState<Set<string>>(new Set());
 
+  // Helper to get category from type
+  const getCategory = (quality: Quality): string => {
+    return quality.type === 'positive' ? 'Positive' : 'Negative';
+  };
+
+  // Helper to get source string
+  const getSource = (quality: Quality): string => {
+    return quality.source?.source || 'Unknown';
+  };
+
+  // Helper to format karma cost
+  const formatKarma = (quality: Quality): string => {
+    const cost = quality.cost;
+    if (cost.per_rating) {
+      if (cost.max_rating > 0) {
+        return `${cost.base_cost} per rating (max ${cost.max_rating})`;
+      }
+      return `${cost.base_cost} per rating`;
+    }
+    return `${cost.base_cost}`;
+  };
+
   // Filter qualities by selected sources and search term
   const filteredQualities = useMemo(() => {
     let filtered = qualities;
 
     // Filter by source
     if (selectedSources.length > 0) {
-      filtered = filtered.filter(item => selectedSources.includes(item.source));
+      filtered = filtered.filter(item => {
+        const source = getSource(item);
+        return selectedSources.includes(source);
+      });
     }
 
     // Apply search filter
     if (searchTerm) {
-      filtered = filterData(filtered, searchTerm, {}, ['name', 'category', 'source']);
+      filtered = filterData(filtered, searchTerm, {}, ['name']);
     }
 
     return filtered;
@@ -44,7 +69,7 @@ export function QualitiesTableGrouped({ qualities }: QualitiesTableGroupedProps)
     const groups = new Map<string, Quality[]>();
     
     filteredQualities.forEach(item => {
-      const category = item.category || 'Unknown';
+      const category = getCategory(item);
       if (!groups.has(category)) {
         groups.set(category, []);
       }
@@ -67,7 +92,7 @@ export function QualitiesTableGrouped({ qualities }: QualitiesTableGroupedProps)
       // Find categories that have matching qualities
       const categoriesWithMatches = new Set<string>();
       filteredQualities.forEach(item => {
-        const category = item.category || 'Unknown';
+        const category = getCategory(item);
         categoriesWithMatches.add(category);
       });
       
@@ -170,10 +195,9 @@ export function QualitiesTableGrouped({ qualities }: QualitiesTableGroupedProps)
                 </tr>
               ) : (
                 groupedQualities.map((group) => (
-                  <>
+                  <Fragment key={group.category}>
                     {/* Group Header Row */}
                     <tr
-                      key={group.category}
                       className="bg-sr-light-gray/30 border-b border-sr-light-gray cursor-pointer hover:bg-sr-light-gray/50 transition-colors"
                       onClick={() => toggleGroup(group.category)}
                     >
@@ -228,16 +252,16 @@ export function QualitiesTableGrouped({ qualities }: QualitiesTableGroupedProps)
                         </td>
                         <td className="px-4 py-2">
                           <span className={`font-semibold ${
-                            parseInt(quality.karma) < 0 ? 'text-red-400' : 'text-green-400'
+                            quality.cost.base_cost < 0 ? 'text-red-400' : 'text-green-400'
                           }`}>
-                            {quality.karma}
+                            {formatKarma(quality)}
                           </span>
                         </td>
-                        <td className="px-4 py-2 text-gray-300">{quality.source || '-'}</td>
-                        <td className="px-4 py-2 text-gray-300">{quality.page || '-'}</td>
+                        <td className="px-4 py-2 text-gray-300">{getSource(quality)}</td>
+                        <td className="px-4 py-2 text-gray-300">{quality.source?.page || '-'}</td>
                       </tr>
                     ))}
-                  </>
+                  </Fragment>
                 ))
               )}
             </tbody>

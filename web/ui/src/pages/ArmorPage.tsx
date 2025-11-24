@@ -4,6 +4,7 @@ import type { Armor, Gear } from '../lib/types';
 import { useToast } from '../contexts/ToastContext';
 import { ArmorTable } from '../components/armor/ArmorTable';
 import { ArmorTableGrouped } from '../components/armor/ArmorTableGrouped';
+import { DatabasePageLayout } from '../components/database/DatabasePageLayout';
 
 export function ArmorPage() {
   const { showError } = useToast();
@@ -59,54 +60,21 @@ export function ArmorPage() {
     loadData();
   }, [loadData]);
 
-  if (isLoading) {
-    return (
-      <div className="flex items-center justify-center py-12">
-        <div className="text-gray-400">Loading armor...</div>
-      </div>
-    );
-  }
-
   return (
-    <div>
-      <div className="mb-6">
-        <div className="flex items-center justify-between mb-2">
-          <div>
-            <h2 className="text-2xl font-bold text-gray-100 mb-2">Armor Database</h2>
-            <p className="text-gray-400">
-              View and search all available armor from Shadowrun 5th Edition ({armor.length} items)
-            </p>
-          </div>
-          <div className="flex gap-2">
-            <button
-              onClick={() => setViewMode('flat')}
-              className={`px-4 py-2 rounded-md text-sm font-medium transition-colors ${
-                viewMode === 'flat'
-                  ? 'bg-sr-accent text-sr-dark'
-                  : 'bg-sr-gray border border-sr-light-gray text-gray-300 hover:bg-sr-light-gray'
-              }`}
-            >
-              Flat View
-            </button>
-            <button
-              onClick={() => setViewMode('grouped')}
-              className={`px-4 py-2 rounded-md text-sm font-medium transition-colors ${
-                viewMode === 'grouped'
-                  ? 'bg-sr-accent text-sr-dark'
-                  : 'bg-sr-gray border border-sr-light-gray text-gray-300 hover:bg-sr-light-gray'
-              }`}
-            >
-              Grouped View
-            </button>
-          </div>
-        </div>
-      </div>
+    <DatabasePageLayout
+      title="Armor Database"
+      description="View and search all available armor from Shadowrun 5th Edition"
+      itemCount={armor.length}
+      isLoading={isLoading}
+      viewMode={viewMode}
+      onViewModeChange={setViewMode}
+    >
       {viewMode === 'grouped' ? (
         <ArmorTableGrouped armor={armor} gearMap={gearMap} />
       ) : (
         <ArmorTable armor={armor} gearMap={gearMap} />
       )}
-    </div>
+    </DatabasePageLayout>
   );
 }
 

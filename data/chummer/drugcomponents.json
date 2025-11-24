@@ -1,0 +1,1930 @@
+{
+  "categories": {
+    "category": [
+      "Foundation",
+      "Block",
+      "Enhancer"
+    ]
+  },
+  "grades": {
+    "grade": [
+      {
+        "id": "b00a075a-2c2c-4816-bb4a-0d0a33d06370",
+        "name": "Standard",
+        "cost": "1",
+        "source": "CF"
+      },
+      {
+        "id": "b8b70858-6433-451a-835b-49b67d7b63e2",
+        "name": "Street Cooked",
+        "cost": "0.5",
+        "source": "CF"
+      },
+      {
+        "id": "b3366009-4884-44d7-9efa-34e213a75e7e",
+        "name": "Pharmaceutical",
+        "cost": "2",
+        "addictionthreshold": "-1",
+        "source": "CF"
+      },
+      {
+        "id": "cd20695d-fedb-476b-956b-1a1ecdd65f03",
+        "name": "Designer",
+        "cost": "6",
+        "source": "CF"
+      }
+    ]
+  },
+  "drugs": {
+    "drug": [
+      {
+        "id": "62bffcd7-4a43-45cd-9cf7-3067ba9688f6",
+        "name": "Bliss",
+        "category": "Drugs",
+        "rating": "0",
+        "source": "SR5",
+        "page": "411",
+        "avail": "3F",
+        "cost": "15",
+        "speed": "1",
+        "vectors": "Inhalation,Injection",
+        "duration": "(6-{BOD})*3600",
+        "bonus": {
+          "attribute": {
+            "name": "REA",
+            "value": "1"
+          },
+          "limit": [
+            {
+              "name": "Mental",
+              "value": "-1"
+            },
+            {
+              "name": "Physical",
+              "value": "-1"
+            },
+            {
+              "name": "Social",
+              "value": "-1"
+            }
+          ],
+          "quality": {
+            "+content": "High Pain Tolerance",
+            "+@rating": "3"
+          }
+        }
+      },
+      {
+        "id": "8dc829b9-8b94-4510-ab1a-2305cbad69c9",
+        "name": "Cram",
+        "category": "Drugs",
+        "rating": "0",
+        "source": "SR5",
+        "page": "411",
+        "avail": "2R",
+        "cost": "10",
+        "speed": "600",
+        "vectors": "Inhalation,Injection",
+        "duration": "(12-{BOD})*3600",
+        "bonus": {
+          "attribute": {
+            "name": "REA",
+            "value": "1"
+          },
+          "initiativedice": "1"
+        }
+      },
+      {
+        "id": "5f5bc907-ce31-4f34-b7cf-a48d9d5d10b3",
+        "name": "Deepweed",
+        "category": "Drugs",
+        "rating": "0",
+        "source": "SR5",
+        "page": "411",
+        "avail": "8F",
+        "cost": "400",
+        "speed": "1",
+        "vectors": "Inhalation,Injection",
+        "duration": "(6-{BOD})*3600",
+        "bonus": {
+          "attribute": [
+            {
+              "name": "REA",
+              "value": "1"
+            },
+            {
+              "name": "WIL",
+              "value": "1"
+            }
+          ],
+          "limit": [
+            {
+              "name": "Physical",
+              "value": "-1"
+            },
+            {
+              "name": "Mental",
+              "value": "1"
+            }
+          ],
+          "initiativedice": "1"
+        }
+      },
+      {
+        "id": "929c4835-1754-4999-9215-9859e8ec5384",
+        "name": "Jazz",
+        "category": "Drugs",
+        "rating": "0",
+        "source": "SR5",
+        "page": "411",
+        "avail": "2R",
+        "cost": "75",
+        "speed": "1",
+        "vectors": "Inhalation",
+        "duration": "{D6}*600",
+        "bonus": {
+          "attribute": {
+            "name": "REA",
+            "value": "1"
+          },
+          "limit": {
+            "name": "Physical",
+            "value": "1"
+          },
+          "initiativedice": "2"
+        }
+      },
+      {
+        "id": "098bf489-bea9-4f17-b3d9-aead979fdc32",
+        "name": "Kamikaze",
+        "category": "Drugs",
+        "rating": "0",
+        "source": "SR5",
+        "page": "412",
+        "avail": "4R",
+        "cost": "100",
+        "speed": "1",
+        "vectors": "Inhalation",
+        "duration": "{D6}*600",
+        "bonus": {
+          "attribute": [
+            {
+              "name": "AGI",
+              "value": "1"
+            },
+            {
+              "name": "BOD",
+              "value": "1"
+            },
+            {
+              "name": "REA",
+              "value": "1"
+            },
+            {
+              "name": "STR",
+              "value": "2"
+            },
+            {
+              "name": "WIL",
+              "value": "1"
+            }
+          ],
+          "limit": {
+            "name": "Physical",
+            "value": "2"
+          },
+          "initiativedice": "2",
+          "quality": {
+            "+content": "High Pain Tolerance",
+            "+@rating": "3"
+          }
+        }
+      },
+      {
+        "id": "d4cf626d-0af1-41f7-bec0-e53b4dba2eb1",
+        "name": "Long Haul",
+        "category": "Drugs",
+        "rating": "0",
+        "source": "SR5",
+        "page": "412",
+        "avail": "0",
+        "cost": "50",
+        "speed": "600",
+        "vectors": "Injection",
+        "duration": "345600"
+      },
+      {
+        "id": "d7ec13fa-8601-4f9c-a59c-6a86573b40ee",
+        "name": "Nitro",
+        "category": "Drugs",
+        "rating": "0",
+        "source": "SR5",
+        "page": "412",
+        "avail": "2R",
+        "cost": "50",
+        "speed": "6",
+        "vectors": "Inhalation",
+        "duration": "{D6}*600",
+        "bonus": {
+          "attribute": [
+            {
+              "name": "STR",
+              "value": "2"
+            },
+            {
+              "name": "WIL",
+              "value": "2"
+            }
+          ],
+          "limit": {
+            "name": "Physical",
+            "value": "2"
+          },
+          "specificskill": {
+            "name": "Perception",
+            "bonus": "2"
+          },
+          "quality": {
+            "+content": "High Pain Tolerance",
+            "+@rating": "6"
+          }
+        }
+      },
+      {
+        "id": "836f54d5-1e11-49ea-b115-34c14ed843c9",
+        "name": "Novacoke",
+        "category": "Drugs",
+        "rating": "0",
+        "source": "SR5",
+        "page": "412",
+        "avail": "2R",
+        "cost": "10",
+        "speed": "6",
+        "vectors": "Inhalation,Injection",
+        "duration": "(10-{BOD})*3600",
+        "bonus": {
+          "attribute": [
+            {
+              "name": "CHA",
+              "value": "1"
+            },
+            {
+              "name": "REA",
+              "value": "1"
+            }
+          ],
+          "limit": {
+            "name": "Social",
+            "value": "2"
+          },
+          "quality": {
+            "+content": "High Pain Tolerance",
+            "+@rating": "1"
+          },
+          "specificskill": {
+            "name": "Perception",
+            "bonus": "1"
+          }
+        }
+      },
+      {
+        "id": "778eefae-94ad-4f8c-ad03-8b9039b5c48e",
+        "name": "Psyche",
+        "category": "Drugs",
+        "rating": "0",
+        "source": "SR5",
+        "page": "412",
+        "avail": "0",
+        "cost": "200",
+        "speed": "600",
+        "vectors": "Inhalation,Injection",
+        "duration": "(12-{BOD})*3600",
+        "bonus": {
+          "attribute": [
+            {
+              "name": "INT",
+              "value": "1"
+            },
+            {
+              "name": "LOG",
+              "value": "1"
+            }
+          ],
+          "limit": {
+            "name": "Mental",
+            "value": "1"
+          }
+        }
+      },
+      {
+        "id": "3a946800-be1e-4bbb-899a-c3d1c48a3a31",
+        "name": "Zen",
+        "category": "Drugs",
+        "rating": "0",
+        "source": "SR5",
+        "page": "412",
+        "avail": "4R",
+        "cost": "5",
+        "speed": "300",
+        "vectors": "Inhalation",
+        "duration": "{D6}*600",
+        "bonus": {
+          "attribute": [
+            {
+              "name": "REA",
+              "value": "-2"
+            },
+            {
+              "name": "WIL",
+              "value": "1"
+            }
+          ]
+        }
+      },
+      {
+        "id": "35309aeb-0cbc-4b64-a809-34de50812564",
+        "name": "Crash",
+        "category": "Drugs",
+        "rating": "0",
+        "source": "BB",
+        "page": "19",
+        "avail": "3",
+        "cost": "800"
+      },
+      {
+        "id": "c4ae816f-f683-469d-a7cd-ec1931740e1e",
+        "name": "Cryo",
+        "category": "Drugs",
+        "rating": "0",
+        "source": "BB",
+        "page": "19",
+        "avail": "8R",
+        "cost": "1000"
+      },
+      {
+        "id": "5929d3b9-451b-4be8-a292-8b6509d0aeb9",
+        "name": "HemoSynth",
+        "category": "Drugs",
+        "rating": "0",
+        "source": "BB",
+        "page": "19",
+        "avail": "4",
+        "cost": "2000"
+      },
+      {
+        "id": "076825cd-dc6f-4e48-8c73-e958b21c1766",
+        "name": "NanoScan",
+        "category": "Drugs",
+        "rating": "0",
+        "source": "BB",
+        "page": "19",
+        "avail": "5",
+        "cost": "500"
+      },
+      {
+        "id": "cf2dd622-8312-4807-97f0-c5d30f9f67b4",
+        "name": "Neostigmine",
+        "category": "Drugs",
+        "rating": "0",
+        "source": "BB",
+        "page": "19",
+        "avail": "2",
+        "cost": "100"
+      },
+      {
+        "id": "1135e850-8371-4827-b2fe-94f5659583d4",
+        "name": "Ondansetron",
+        "category": "Drugs",
+        "rating": "0",
+        "source": "BB",
+        "page": "19",
+        "avail": "2",
+        "cost": "50"
+      },
+      {
+        "id": "b14cc8cf-8d19-4306-a71a-9a7f761eb321",
+        "name": "Sugammadex",
+        "category": "Drugs",
+        "rating": "0",
+        "source": "BB",
+        "page": "19",
+        "avail": "6",
+        "cost": "100"
+      },
+      {
+        "id": "1e391e72-1c21-44b3-b935-7abfba2dca43",
+        "name": "Evo Aphrodite Reactive Biomatter",
+        "category": "Drugs",
+        "rating": "0",
+        "source": "TVG",
+        "page": "19",
+        "avail": "8",
+        "cost": "1000"
+      },
+      {
+        "id": "c113d0e8-8720-47fb-9ac6-fdc9e262c94b",
+        "name": "Accelerator",
+        "category": "Drugs",
+        "rating": "0",
+        "source": "LCD",
+        "page": "205",
+        "avail": "6R",
+        "cost": "200"
+      },
+      {
+        "id": "ee783a4e-331f-4e03-bf47-7ecb93341919",
+        "name": "Buffout",
+        "category": "Drugs",
+        "rating": "0",
+        "source": "LCD",
+        "page": "204",
+        "avail": "6R",
+        "cost": "100"
+      },
+      {
+        "id": "31f51b7e-d2eb-4274-aead-72710b198c13",
+        "name": "Numb",
+        "category": "Drugs",
+        "rating": "0",
+        "source": "LCD",
+        "page": "204",
+        "avail": "6R",
+        "cost": "150"
+      },
+      {
+        "id": "87186987-c004-439a-8958-d7b82198fb69",
+        "name": "Pinpoint",
+        "category": "Drugs",
+        "rating": "0",
+        "source": "LCD",
+        "page": "204",
+        "avail": "6R",
+        "cost": "75"
+      },
+      {
+        "id": "8cb8086b-3171-4a60-bee4-2996e29d5156",
+        "name": "Liquid Nutrients",
+        "category": "Drugs",
+        "rating": "0",
+        "source": "SS",
+        "page": "189",
+        "avail": "4R",
+        "cost": "75"
+      },
+      {
+        "id": "8461fd87-ea93-4edb-92a1-4a20ad444471",
+        "name": "Normal Saline",
+        "category": "Drugs",
+        "rating": "0",
+        "source": "SS",
+        "page": "189",
+        "avail": "0",
+        "cost": "30"
+      },
+      {
+        "id": "93245f7f-2391-440c-b9ae-d0a5c8549fb2",
+        "name": "Slab",
+        "category": "Toxins",
+        "rating": "0",
+        "source": "SS",
+        "page": "189",
+        "avail": "8R",
+        "cost": "250"
+      },
+      {
+        "id": "cf54b977-b2d9-4572-8e92-c3cc949f2c42",
+        "name": "AEXD",
+        "category": "Drugs",
+        "rating": "0",
+        "source": "CF",
+        "page": "179",
+        "avail": "4",
+        "cost": "80"
+      },
+      {
+        "id": "53f656f4-bfa9-469e-a08d-ddf4fc71f824",
+        "name": "Aisa",
+        "category": "Drugs",
+        "rating": "0",
+        "source": "CF",
+        "page": "179",
+        "avail": "4",
+        "cost": "25"
+      },
+      {
+        "id": "d32f1811-5ffb-4cd4-9873-ddcf207e95cb",
+        "name": "Animal Tongue",
+        "category": "Drugs",
+        "rating": "0",
+        "source": "CF",
+        "page": "186",
+        "avail": "6R",
+        "cost": "1500"
+      },
+      {
+        "id": "009bd079-f7ee-4055-a86f-af03d6837cc8",
+        "name": "Ayao's Will",
+        "category": "Drugs",
+        "rating": "0",
+        "source": "CF",
+        "page": "184",
+        "avail": "14F",
+        "cost": "750"
+      },
+      {
+        "id": "f4eb63ce-c182-406c-b625-5699047e33a9",
+        "name": "Betameth",
+        "category": "Drugs",
+        "rating": "0",
+        "source": "CF",
+        "page": "180",
+        "avail": "5F",
+        "cost": "30"
+      },
+      {
+        "id": "67436993-439d-4e6b-b64a-3f506f44721a",
+        "name": "Betel",
+        "category": "Drugs",
+        "rating": "0",
+        "source": "CF",
+        "page": "180",
+        "avail": "4",
+        "cost": "5"
+      },
+      {
+        "id": "440ae069-da45-4721-b45f-6441c931180f",
+        "name": "Cereprax",
+        "category": "Drugs",
+        "rating": "0",
+        "source": "CF",
+        "page": "180",
+        "avail": "14F",
+        "cost": "800"
+      },
+      {
+        "id": "68c65dca-e0e1-4291-8d1b-b23649027271",
+        "name": "Crimson Orchid",
+        "category": "Drugs",
+        "rating": "0",
+        "source": "CF",
+        "page": "184",
+        "avail": "6F",
+        "cost": "300"
+      },
+      {
+        "id": "c4f2a23f-8806-4333-92b3-81d6d09ff8b5",
+        "name": "Dopadrine",
+        "category": "Drugs",
+        "rating": "0",
+        "source": "CF",
+        "page": "180",
+        "avail": "8",
+        "cost": "45"
+      },
+      {
+        "id": "27b4ed38-dc23-4225-ad8d-146bdfe2e598",
+        "name": "eX",
+        "category": "Drugs",
+        "rating": "0",
+        "source": "CF",
+        "page": "180",
+        "avail": "3R",
+        "cost": "20"
+      },
+      {
+        "id": "f7ed8b97-e26a-4296-b59d-e7c893696011",
+        "name": "Forget-Me-Not",
+        "category": "Drugs",
+        "rating": "0",
+        "source": "CF",
+        "page": "180",
+        "avail": "10F",
+        "cost": "400"
+      },
+      {
+        "id": "75e9b82f-eb1a-4db1-8cde-29d2cf0eaba6",
+        "name": "Galak",
+        "category": "Drugs",
+        "rating": "0",
+        "source": "CF",
+        "page": "180",
+        "avail": "4R",
+        "cost": "45"
+      },
+      {
+        "id": "9195ee9e-c5b1-4e8f-9b1a-786393a302dc",
+        "name": "G3",
+        "category": "Drugs",
+        "rating": "0",
+        "source": "CF",
+        "page": "181",
+        "avail": "2",
+        "cost": "15"
+      },
+      {
+        "id": "0ed6e114-6a9f-4bd6-ba27-2b4f28b10305",
+        "name": "Guts",
+        "category": "Drugs",
+        "rating": "0",
+        "source": "CF",
+        "page": "181",
+        "avail": "8R",
+        "cost": "60"
+      },
+      {
+        "id": "df660e33-ce77-46e4-8c13-a92e3b5f37e8",
+        "name": "Hecate's Blessing",
+        "category": "Drugs",
+        "rating": "0",
+        "source": "CF",
+        "page": "185",
+        "avail": "12F",
+        "cost": "500"
+      },
+      {
+        "id": "a713f573-128b-4143-adc0-32f52e698587",
+        "name": "Hurlg",
+        "category": "Drugs",
+        "rating": "0",
+        "source": "CF",
+        "page": "181",
+        "avail": "2R",
+        "cost": "10"
+      },
+      {
+        "id": "d70434e3-183c-4243-8213-b9f9166387ea",
+        "name": "Immortal Flower",
+        "category": "Drugs",
+        "rating": "0",
+        "source": "CF",
+        "page": "186",
+        "avail": "14R",
+        "cost": "2500"
+      },
+      {
+        "id": "3659055c-db84-4f75-bfa9-afe5d0f39803",
+        "name": "K-10",
+        "category": "Drugs",
+        "rating": "0",
+        "source": "CF",
+        "page": "181",
+        "avail": "16F",
+        "cost": "900"
+      },
+      {
+        "id": "f818d571-c817-49b2-86b6-ad9fb94ead54",
+        "name": "Laés",
+        "category": "Drugs",
+        "rating": "0",
+        "source": "CF",
+        "page": "185",
+        "avail": "12F",
+        "cost": "750"
+      },
+      {
+        "id": "1c672c5d-88f7-43dd-b4d0-42571eb07547",
+        "name": "Leäl",
+        "category": "Drugs",
+        "rating": "0",
+        "source": "CF",
+        "page": "185",
+        "avail": "10F",
+        "cost": "400"
+      },
+      {
+        "id": "58319c25-b724-4db4-b492-1068ca44cb73",
+        "name": "Little Smoke",
+        "category": "Drugs",
+        "rating": "0",
+        "source": "CF",
+        "page": "187",
+        "avail": "12F",
+        "cost": "1800"
+      },
+      {
+        "id": "65122a92-ae48-4e94-8c68-69c1bdc7d46a",
+        "name": "Memory Fog",
+        "category": "Drugs",
+        "rating": "0",
+        "source": "CF",
+        "page": "181",
+        "avail": "6R",
+        "cost": "100"
+      },
+      {
+        "id": "a2b0310b-5a8f-4b01-b478-967d345ce22c",
+        "name": "Nightwatch",
+        "category": "Drugs",
+        "rating": "0",
+        "source": "CF",
+        "page": "182",
+        "avail": "3R",
+        "cost": "25"
+      },
+      {
+        "id": "6e219091-8e3c-4a65-bb1d-78a351d8bf54",
+        "name": "NoPaint",
+        "category": "Drugs",
+        "rating": "0",
+        "source": "CF",
+        "page": "182",
+        "avail": "3",
+        "cost": "15"
+      },
+      {
+        "id": "11c547f4-37d1-4d6a-8760-1d11ef48c7f7",
+        "name": "Oneiro",
+        "category": "Drugs",
+        "rating": "0",
+        "source": "CF",
+        "page": "186",
+        "avail": "6F",
+        "cost": "1250"
+      },
+      {
+        "id": "aa22ff52-1615-48cb-9e55-e63539ede39a",
+        "name": "Overdrive",
+        "category": "Drugs",
+        "rating": "0",
+        "source": "CF",
+        "page": "186",
+        "avail": "10F",
+        "cost": "800"
+      },
+      {
+        "id": "7fdde8cd-95f8-4316-9ca4-2ad06f77cb15",
+        "name": "Oxygenated Fluorocarbons",
+        "category": "Drugs",
+        "rating": "0",
+        "source": "CF",
+        "page": "182",
+        "avail": "12R",
+        "cost": "2000"
+      },
+      {
+        "id": "c3965bac-b2b0-47b1-96d8-0a1a7cb4e1b6",
+        "name": "Pixie Dust",
+        "category": "Drugs",
+        "rating": "0",
+        "source": "CF",
+        "page": "186",
+        "avail": "8F",
+        "cost": "800"
+      },
+      {
+        "id": "9c3ae30d-dd3e-49da-a30b-acbe06b444ac",
+        "name": "Push",
+        "category": "Drugs",
+        "rating": "0",
+        "source": "CF",
+        "page": "182",
+        "avail": "4F",
+        "cost": "25"
+      },
+      {
+        "id": "1131acde-3791-4870-8c05-1b261e3beaa1",
+        "name": "PsychChips (Illegal)",
+        "category": "Drugs",
+        "rating": "0",
+        "source": "CF",
+        "page": "187",
+        "avail": "6F",
+        "cost": "500"
+      },
+      {
+        "id": "48c252e2-8bfd-46e4-ae77-b394b9e92773",
+        "name": "PsychChips (Legal)",
+        "category": "Drugs",
+        "rating": "0",
+        "source": "CF",
+        "page": "187",
+        "avail": "4R",
+        "cost": "350"
+      },
+      {
+        "id": "5fe2bf62-471e-4000-8ab8-641623983302",
+        "name": "Red Mescaline",
+        "category": "Drugs",
+        "rating": "0",
+        "source": "CF",
+        "page": "182",
+        "avail": "4R",
+        "cost": "50"
+      },
+      {
+        "id": "60cfe7ff-c634-405f-9894-7baee61e4445",
+        "name": "Ripper",
+        "category": "Drugs",
+        "rating": "0",
+        "source": "CF",
+        "page": "182",
+        "avail": "6F",
+        "cost": "60"
+      },
+      {
+        "id": "68ac6703-8540-4efe-b9d9-51f9db14d6b7",
+        "name": "Rock Lizard Blood",
+        "category": "Drugs",
+        "rating": "0",
+        "source": "CF",
+        "page": "187",
+        "avail": "10R",
+        "cost": "1700"
+      },
+      {
+        "id": "127e4e88-6966-44ad-a95b-eeaaa9a7472e",
+        "name": "Shade",
+        "category": "Drugs",
+        "rating": "0",
+        "source": "CF",
+        "page": "187",
+        "avail": "6R",
+        "cost": "1000"
+      },
+      {
+        "id": "62d633d1-0e3a-4ea6-a4ba-f88ccdf72cf9",
+        "name": "Slab",
+        "category": "Drugs",
+        "rating": "0",
+        "source": "CF",
+        "page": "183",
+        "avail": "8R",
+        "cost": "250"
+      },
+      {
+        "id": "cd2dd310-464f-4f12-ae42-cdc293e3a2df",
+        "name": "Snuff",
+        "category": "Drugs",
+        "rating": "0",
+        "source": "CF",
+        "page": "183",
+        "avail": "1R",
+        "cost": "10"
+      },
+      {
+        "id": "6c030daa-7dc0-4d7e-86a8-d36f4b15e13f",
+        "name": "Sober Time",
+        "category": "Drugs",
+        "rating": "0",
+        "source": "CF",
+        "page": "183",
+        "avail": "6F",
+        "cost": "125"
+      },
+      {
+        "id": "8a40ed45-a19c-47a6-8449-f3235492e809",
+        "name": "Soothsayer",
+        "category": "Drugs",
+        "rating": "0",
+        "source": "CF",
+        "page": "184",
+        "avail": "12F",
+        "cost": "150"
+      },
+      {
+        "id": "7e8a18bd-f80f-432e-b985-823fc6be0d5a",
+        "name": "Trance",
+        "category": "Drugs",
+        "rating": "0",
+        "source": "CF",
+        "page": "186",
+        "avail": "10F",
+        "cost": "1100"
+      },
+      {
+        "id": "8a01190e-f484-4fc6-981e-3e954ce17107",
+        "name": "Woad",
+        "category": "Drugs",
+        "rating": "0",
+        "source": "CF",
+        "page": "184",
+        "avail": "3R",
+        "cost": "15"
+      },
+      {
+        "id": "ca121b86-d4d1-411d-a524-389e6bd2091b",
+        "name": "Wudu'aku",
+        "category": "Drugs",
+        "rating": "0",
+        "source": "CF",
+        "page": "187",
+        "avail": "12F",
+        "cost": "2350"
+      },
+      {
+        "id": "2d35de28-3b3d-4009-8ced-de5fd3869069",
+        "name": "Zero",
+        "category": "Drugs",
+        "rating": "0",
+        "source": "CF",
+        "page": "184",
+        "avail": "8R",
+        "cost": "150"
+      },
+      {
+        "id": "dace6412-6d90-4b98-b00c-86483b278e01",
+        "name": "Zombie Dust",
+        "category": "Drugs",
+        "rating": "0",
+        "source": "CF",
+        "page": "187",
+        "avail": "12F",
+        "cost": "1500"
+      },
+      {
+        "id": "329f3767-f1ca-49ef-971a-6509ad3e8c41",
+        "name": "Shiva (Vintage)",
+        "category": "Drugs",
+        "rating": "0",
+        "avail": "12F",
+        "cost": "200",
+        "source": "SAG",
+        "page": "97"
+      },
+      {
+        "id": "c5c06863-d382-41b7-93de-bd10659515ca",
+        "name": "Shiva II",
+        "category": "Drugs",
+        "rating": "0",
+        "avail": "6R",
+        "cost": "150",
+        "source": "SAG",
+        "page": "97"
+      }
+    ]
+  },
+  "drugcomponents": {
+    "drugcomponent": [
+      {
+        "id": "33ae6b1c-62f6-4824-967d-0e2b37c7d1b9",
+        "name": "Tank",
+        "category": "Foundation",
+        "effects": {
+          "effect": {
+            "level": "0",
+            "attribute": [
+              {
+                "name": "BOD",
+                "value": "2"
+              },
+              {
+                "name": "CHA",
+                "value": "-2"
+              },
+              {
+                "name": "WIL",
+                "value": "1"
+              }
+            ],
+            "quality": {
+              "+content": "High Pain Tolerance",
+              "+@rating": "3"
+            }
+          }
+        },
+        "availability": "+4R",
+        "cost": "75",
+        "rating": "6",
+        "threshold": "2",
+        "source": "CF",
+        "page": "190"
+      },
+      {
+        "id": "ca5e7e5e-6aab-472a-a273-6d21d4e9ad2e",
+        "name": "Defender",
+        "category": "Foundation",
+        "effects": {
+          "effect": {
+            "level": "0",
+            "attribute": [
+              {
+                "name": "AGI",
+                "value": "1"
+              },
+              {
+                "name": "REA",
+                "value": "1"
+              },
+              {
+                "name": "INT",
+                "value": "1"
+              },
+              {
+                "name": "STR",
+                "value": "-1"
+              },
+              {
+                "name": "LOG",
+                "value": "-1"
+              }
+            ]
+          }
+        },
+        "availability": "+4R",
+        "cost": "75",
+        "rating": "6",
+        "threshold": "2",
+        "source": "CF",
+        "page": "190"
+      },
+      {
+        "id": "cf8a2d2b-03b9-4440-873b-829c7d82489e",
+        "name": "Genius",
+        "category": "Foundation",
+        "effects": {
+          "effect": {
+            "level": "0",
+            "attribute": [
+              {
+                "name": "LOG",
+                "value": "2"
+              },
+              {
+                "name": "INT",
+                "value": "2"
+              },
+              {
+                "name": "WIL",
+                "value": "-1"
+              },
+              {
+                "name": "REA",
+                "value": "-1"
+              }
+            ]
+          }
+        },
+        "availability": "+4R",
+        "cost": "75",
+        "rating": "6",
+        "threshold": "2",
+        "source": "CF",
+        "page": "190"
+      },
+      {
+        "id": "8ec241f7-31c0-4655-80dd-3d4ce2a0b56d",
+        "name": "Charmer",
+        "category": "Foundation",
+        "effects": {
+          "effect": {
+            "level": "0",
+            "attribute": [
+              {
+                "name": "CHA",
+                "value": "1"
+              },
+              {
+                "name": "AGI",
+                "value": "-1"
+              }
+            ],
+            "limit": {
+              "name": "Social",
+              "value": "1"
+            }
+          }
+        },
+        "availability": "+4R",
+        "cost": "75",
+        "rating": "6",
+        "threshold": "2",
+        "source": "CF",
+        "page": "190"
+      },
+      {
+        "id": "e93015ca-12ff-48c4-b45e-f1387f2ea1ef",
+        "name": "Warrior",
+        "category": "Foundation",
+        "effects": {
+          "effect": {
+            "level": "0",
+            "attribute": [
+              {
+                "name": "STR",
+                "value": "1"
+              },
+              {
+                "name": "AGI",
+                "value": "1"
+              },
+              {
+                "name": "BOD",
+                "value": "1"
+              },
+              {
+                "name": "WIL",
+                "value": "-1"
+              }
+            ]
+          }
+        },
+        "availability": "+4R",
+        "cost": "75",
+        "rating": "6",
+        "threshold": "2",
+        "source": "CF",
+        "page": "190"
+      },
+      {
+        "id": "9f4c87ba-4a0d-48e8-8c90-08b689da7203",
+        "name": "Crush",
+        "category": "Block",
+        "effects": {
+          "effect": [
+            {
+              "level": "0",
+              "attribute": [
+                {
+                  "name": "STR",
+                  "value": "1"
+                },
+                {
+                  "name": "INT",
+                  "value": "-1"
+                }
+              ]
+            },
+            {
+              "level": "1",
+              "attribute": [
+                {
+                  "name": "STR",
+                  "value": "2"
+                },
+                {
+                  "name": "INT",
+                  "value": "-1"
+                }
+              ],
+              "crashdamage": "2"
+            },
+            {
+              "level": "2",
+              "attribute": [
+                {
+                  "name": "STR",
+                  "value": "3"
+                },
+                {
+                  "name": "INT",
+                  "value": "-1"
+                }
+              ],
+              "crashdamage": "2",
+              "quality": "Low Pain Tolerance"
+            }
+          ]
+        },
+        "availability": "+1",
+        "cost": "20",
+        "source": "CF",
+        "page": "190"
+      },
+      {
+        "id": "7eebc516-8298-4a7f-afef-10dceebb5e58",
+        "name": "Brute",
+        "category": "Block",
+        "effects": {
+          "effect": [
+            {
+              "level": "0",
+              "attribute": [
+                {
+                  "name": "BOD",
+                  "value": "1"
+                },
+                {
+                  "name": "LOG",
+                  "value": "-1"
+                }
+              ]
+            },
+            {
+              "level": "1",
+              "attribute": [
+                {
+                  "name": "BOD",
+                  "value": "2"
+                },
+                {
+                  "name": "LOG",
+                  "value": "-1"
+                }
+              ],
+              "crashdamage": "2"
+            },
+            {
+              "level": "2",
+              "attribute": [
+                {
+                  "name": "BOD",
+                  "value": "3"
+                },
+                {
+                  "name": "LOG",
+                  "value": "-1"
+                },
+                {
+                  "name": "INT",
+                  "value": "-1"
+                }
+              ],
+              "crashdamage": "2"
+            }
+          ]
+        },
+        "availability": "+1",
+        "cost": "20",
+        "source": "CF",
+        "page": "190"
+      },
+      {
+        "id": "e6001189-e413-43bc-86ee-2136ca5d10bf",
+        "name": "Strike",
+        "category": "Block",
+        "effects": {
+          "effect": [
+            {
+              "level": "0",
+              "attribute": [
+                {
+                  "name": "AGI",
+                  "value": "1"
+                },
+                {
+                  "name": "STR",
+                  "value": "-1"
+                }
+              ]
+            },
+            {
+              "level": "1",
+              "attribute": [
+                {
+                  "name": "AGI",
+                  "value": "2"
+                },
+                {
+                  "name": "STR",
+                  "value": "-1"
+                }
+              ],
+              "crashdamage": "2"
+            },
+            {
+              "level": "2",
+              "attribute": [
+                {
+                  "name": "AGI",
+                  "value": "3"
+                },
+                {
+                  "name": "STR",
+                  "value": "-1"
+                }
+              ],
+              "crashdamage": "2",
+              "quality": "Unsteady Hands"
+            }
+          ]
+        },
+        "availability": "+1",
+        "cost": "20",
+        "source": "CF",
+        "page": "190"
+      },
+      {
+        "id": "04f24ebd-e1cc-4b57-abe7-c8aa3fa91539",
+        "name": "Lighting",
+        "category": "Block",
+        "effects": {
+          "effect": [
+            {
+              "level": "0",
+              "attribute": [
+                {
+                  "name": "REA",
+                  "value": "1"
+                },
+                {
+                  "name": "LOG",
+                  "value": "-1"
+                }
+              ]
+            },
+            {
+              "level": "1",
+              "attribute": [
+                {
+                  "name": "REA",
+                  "value": "2"
+                },
+                {
+                  "name": "LOG",
+                  "value": "-1"
+                },
+                {
+                  "name": "WIL",
+                  "value": "-1"
+                }
+              ]
+            },
+            {
+              "level": "2",
+              "attribute": [
+                {
+                  "name": "REA",
+                  "value": "3"
+                },
+                {
+                  "name": "LOG",
+                  "value": "-1"
+                },
+                {
+                  "name": "WIL",
+                  "value": "-1"
+                }
+              ],
+              "crashdamage": "2"
+            }
+          ]
+        },
+        "availability": "+1",
+        "cost": "20",
+        "source": "CF",
+        "page": "190"
+      },
+      {
+        "id": "7b479fef-bcb4-4f9e-80c9-b1c17c79466b",
+        "name": "Einstein",
+        "category": "Block",
+        "effects": {
+          "effect": [
+            {
+              "level": "0",
+              "attribute": [
+                {
+                  "name": "LOG",
+                  "value": "1"
+                },
+                {
+                  "name": "WIL",
+                  "value": "-1"
+                }
+              ]
+            },
+            {
+              "level": "1",
+              "attribute": [
+                {
+                  "name": "LOG",
+                  "value": "2"
+                },
+                {
+                  "name": "WIL",
+                  "value": "-1"
+                },
+                {
+                  "name": "INT",
+                  "value": "-1"
+                }
+              ]
+            },
+            {
+              "level": "2",
+              "attribute": [
+                {
+                  "name": "LOG",
+                  "value": "3"
+                },
+                {
+                  "name": "WIL",
+                  "value": "-1"
+                },
+                {
+                  "name": "INT",
+                  "value": "-1"
+                }
+              ],
+              "info": "Crash Effect: -1d6 initiative dice"
+            }
+          ]
+        },
+        "availability": "+1",
+        "cost": "20",
+        "source": "CF",
+        "page": "190"
+      },
+      {
+        "id": "ef191753-a06e-4762-9674-47e3fe90ed1e",
+        "name": "Gut Check",
+        "category": "Block",
+        "effects": {
+          "effect": [
+            {
+              "level": "0",
+              "attribute": [
+                {
+                  "name": "INT",
+                  "value": "1"
+                },
+                {
+                  "name": "STR",
+                  "value": "-1"
+                }
+              ]
+            },
+            {
+              "level": "1",
+              "attribute": [
+                {
+                  "name": "INT",
+                  "value": "2"
+                },
+                {
+                  "name": "STR",
+                  "value": "-1"
+                },
+                {
+                  "name": "REA",
+                  "value": "-1"
+                }
+              ]
+            },
+            {
+              "level": "2",
+              "attribute": [
+                {
+                  "name": "INT",
+                  "value": "3"
+                },
+                {
+                  "name": "STR",
+                  "value": "-1"
+                },
+                {
+                  "name": "REA",
+                  "value": "-1"
+                }
+              ],
+              "crashdamage": "2"
+            }
+          ]
+        },
+        "availability": "+1",
+        "cost": "20",
+        "source": "CF",
+        "page": "190"
+      },
+      {
+        "id": "47387cd3-836c-4283-a1ce-c62487dd669b",
+        "name": "Stonewall",
+        "category": "Block",
+        "effects": {
+          "effect": [
+            {
+              "level": "0",
+              "attribute": [
+                {
+                  "name": "WIL",
+                  "value": "1"
+                },
+                {
+                  "name": "BOD",
+                  "value": "-1"
+                }
+              ]
+            },
+            {
+              "level": "1",
+              "attribute": [
+                {
+                  "name": "WIL",
+                  "value": "2"
+                },
+                {
+                  "name": "BOD",
+                  "value": "-1"
+                },
+                {
+                  "name": "AGI",
+                  "value": "-1"
+                }
+              ]
+            },
+            {
+              "level": "2",
+              "attribute": [
+                {
+                  "name": "WIL",
+                  "value": "3"
+                },
+                {
+                  "name": "BOD",
+                  "value": "-1"
+                },
+                {
+                  "name": "AGI",
+                  "value": "-1"
+                },
+                {
+                  "name": "STR",
+                  "value": "-1"
+                }
+              ]
+            }
+          ]
+        },
+        "availability": "+1",
+        "cost": "20",
+        "source": "CF",
+        "page": "191"
+      },
+      {
+        "id": "41018f6e-beb4-4a6c-8d59-501db802ce1a",
+        "name": "Smoothtalk",
+        "category": "Block",
+        "effects": {
+          "effect": [
+            {
+              "level": "0",
+              "attribute": [
+                {
+                  "name": "CHA",
+                  "value": "1"
+                },
+                {
+                  "name": "STR",
+                  "value": "-1"
+                }
+              ]
+            },
+            {
+              "level": "1",
+              "attribute": [
+                {
+                  "name": "CHA",
+                  "value": "2"
+                },
+                {
+                  "name": "STR",
+                  "value": "-1"
+                }
+              ],
+              "crashdamage": "2"
+            },
+            {
+              "level": "2",
+              "attribute": [
+                {
+                  "name": "CHA",
+                  "value": "3"
+                },
+                {
+                  "name": "STR",
+                  "value": "-1"
+                }
+              ],
+              "crashdamage": "2",
+              "quality": "Uncouth"
+            }
+          ]
+        },
+        "availability": "+1",
+        "cost": "20",
+        "source": "CF",
+        "page": "191"
+      },
+      {
+        "id": "ebbb6a0e-f3b1-47f3-85c1-e408b4a6ceb2",
+        "name": "Shock and Awe",
+        "category": "Block",
+        "effects": {
+          "effect": [
+            {
+              "level": "0",
+              "crashdamage": "4",
+              "initiativedice": "1"
+            },
+            {
+              "level": "1",
+              "crashdamage": "4",
+              "initiativedice": "2",
+              "limit": [
+                {
+                  "name": "Physical",
+                  "value": "-1"
+                },
+                {
+                  "name": "Mental",
+                  "value": "-1"
+                },
+                {
+                  "name": "Social",
+                  "value": "-1"
+                }
+              ]
+            },
+            {
+              "level": "2",
+              "crashdamage": "8",
+              "initiativedice": "3",
+              "limit": [
+                {
+                  "name": "Physical",
+                  "value": "-2"
+                },
+                {
+                  "name": "Mental",
+                  "value": "-2"
+                },
+                {
+                  "name": "Social",
+                  "value": "-2"
+                }
+              ]
+            }
+          ]
+        },
+        "availability": "+2",
+        "cost": "40",
+        "source": "CF",
+        "page": "191"
+      },
+      {
+        "id": "5ff4db39-aa0e-42f5-ae24-2bf79560670b",
+        "name": "Razor Mind",
+        "category": "Block",
+        "effects": {
+          "effect": [
+            {
+              "level": "0",
+              "attribute": [
+                {
+                  "name": "INT",
+                  "value": "1"
+                },
+                {
+                  "name": "LOG",
+                  "value": "1"
+                },
+                {
+                  "name": "CHA",
+                  "value": "-1"
+                }
+              ],
+              "crashdamage": "1"
+            },
+            {
+              "level": "1",
+              "attribute": [
+                {
+                  "name": "INT",
+                  "value": "2"
+                },
+                {
+                  "name": "LOG",
+                  "value": "2"
+                },
+                {
+                  "name": "CHA",
+                  "value": "-2"
+                }
+              ],
+              "crashdamage": "2"
+            }
+          ]
+        },
+        "availability": "+2",
+        "cost": "30",
+        "source": "CF",
+        "page": "191"
+      },
+      {
+        "id": "c1a7dd91-61c9-49e1-8dfd-892882bd1816",
+        "name": "The General",
+        "category": "Block",
+        "effects": {
+          "effect": [
+            {
+              "level": "0",
+              "attribute": [
+                {
+                  "name": "CHA",
+                  "value": "1"
+                },
+                {
+                  "name": "WIL",
+                  "value": "1"
+                },
+                {
+                  "name": "STR",
+                  "value": "-1"
+                }
+              ],
+              "crashdamage": "2"
+            },
+            {
+              "level": "1",
+              "attribute": [
+                {
+                  "name": "CHA",
+                  "value": "2"
+                },
+                {
+                  "name": "WIL",
+                  "value": "2"
+                },
+                {
+                  "name": "STR",
+                  "value": "-1"
+                },
+                {
+                  "name": "AGI",
+                  "value": "-1"
+                }
+              ],
+              "crashdamage": "2"
+            }
+          ]
+        },
+        "availability": "+2",
+        "cost": "30",
+        "source": "CF",
+        "page": "191"
+      },
+      {
+        "id": "c98d587d-5651-4a53-a9ab-cc2262236658",
+        "name": "Resist",
+        "category": "Block",
+        "effects": {
+          "effect": [
+            {
+              "level": "0",
+              "attribute": [
+                {
+                  "name": "BOD",
+                  "value": "1"
+                },
+                {
+                  "name": "WIL",
+                  "value": "1"
+                },
+                {
+                  "name": "LOG",
+                  "value": "-1"
+                }
+              ],
+              "crashdamage": "1"
+            },
+            {
+              "level": "1",
+              "attribute": [
+                {
+                  "name": "BOD",
+                  "value": "2"
+                },
+                {
+                  "name": "WIL",
+                  "value": "2"
+                },
+                {
+                  "name": "LOG",
+                  "value": "-1"
+                },
+                {
+                  "name": "REA",
+                  "value": "-1"
+                }
+              ],
+              "crashdamage": "2"
+            }
+          ]
+        },
+        "availability": "+2",
+        "cost": "30",
+        "source": "CF",
+        "page": "191"
+      },
+      {
+        "id": "1ed8c102-3b31-42ae-bf0f-4d9fe22fc4fb",
+        "name": "Speed Demon",
+        "category": "Block",
+        "effects": {
+          "effect": [
+            {
+              "level": "0",
+              "attribute": [
+                {
+                  "name": "AGI",
+                  "value": "1"
+                },
+                {
+                  "name": "REA",
+                  "value": "1"
+                },
+                {
+                  "name": "STR",
+                  "value": "-1"
+                }
+              ],
+              "crashdamage": "1"
+            },
+            {
+              "level": "1",
+              "attribute": [
+                {
+                  "name": "AGI",
+                  "value": "2"
+                },
+                {
+                  "name": "REA",
+                  "value": "2"
+                },
+                {
+                  "name": "STR",
+                  "value": "-1"
+                },
+                {
+                  "name": "INT",
+                  "value": "-1"
+                }
+              ],
+              "crashdamage": "2"
+            }
+          ]
+        },
+        "availability": "+2",
+        "cost": "30",
+        "source": "CF",
+        "page": "191"
+      },
+      {
+        "id": "a4d7e764-5aa7-4394-92f1-43ff58c1a801",
+        "name": "Ingestion Enhancer",
+        "category": "Enhancer",
+        "effects": {
+          "effect": {
+            "info": "Ingestion"
+          }
+        },
+        "availability": "+1",
+        "cost": "50",
+        "rating": "1",
+        "threshold": "1",
+        "source": "CF",
+        "page": "191"
+      },
+      {
+        "id": "0737b976-ec7d-45cf-a84f-1c0524dac6f9",
+        "name": "Inhalation Enhancer",
+        "category": "Enhancer",
+        "effects": {
+          "effect": {
+            "info": "Inhalation"
+          }
+        },
+        "availability": "+1",
+        "cost": "50",
+        "rating": "1",
+        "threshold": "1",
+        "source": "CF",
+        "page": "191"
+      },
+      {
+        "id": "fdca4090-a933-4393-a3bd-7633aad967a2",
+        "name": "Speed Enhancer",
+        "category": "Enhancer",
+        "effects": {
+          "effect": {
+            "speed": "-3"
+          }
+        },
+        "availability": "+1",
+        "cost": "50",
+        "limit": "3",
+        "rating": "1",
+        "threshold": "1",
+        "source": "CF",
+        "page": "191"
+      },
+      {
+        "id": "d67dbda7-b03f-4914-9f1d-a6a238f6944e",
+        "name": "Duration Enhancer",
+        "category": "Enhancer",
+        "effects": {
+          "effect": {
+            "duration": "1"
+          }
+        },
+        "availability": "+1",
+        "cost": "50",
+        "limit": "3",
+        "rating": "1",
+        "threshold": "1",
+        "source": "CF",
+        "page": "191"
+      }
+    ]
+  }
+}

@@ -1,16 +1,17 @@
-import { useState, useMemo } from 'react';
+import { useState, useMemo, memo, useCallback } from 'react';
 import { DataTable, ColumnDefinition } from '../common/DataTable';
 import type { Armor, Gear } from '../../lib/types';
 import { ArmorViewModal } from './ArmorViewModal';
 import { ArmorCategoryFilter } from './ArmorCategoryFilter';
 import { ArmorSourceFilter } from './ArmorSourceFilter';
+import { formatCost } from '../../lib/formatUtils';
 
 interface ArmorTableProps {
   armor: Armor[];
   gearMap: Map<string, Gear>;
 }
 
-export function ArmorTable({ armor, gearMap }: ArmorTableProps) {
+export const ArmorTable = memo(function ArmorTable({ armor, gearMap }: ArmorTableProps) {
   const [selectedArmor, setSelectedArmor] = useState<Armor | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedCategories, setSelectedCategories] = useState<string[]>([]);
@@ -33,12 +34,12 @@ export function ArmorTable({ armor, gearMap }: ArmorTableProps) {
     return filtered;
   }, [armor, selectedCategories, selectedSources]);
 
-  const handleNameClick = (armorItem: Armor) => {
+  const handleNameClick = useCallback((armorItem: Armor) => {
     setSelectedArmor(armorItem);
     setIsModalOpen(true);
-  };
+  }, []);
 
-  const columns: ColumnDefinition<Armor>[] = [
+  const columns: ColumnDefinition<Armor>[] = useMemo(() => [
     {
       id: 'name',
       header: 'Name',
@@ -88,8 +89,9 @@ export function ArmorTable({ armor, gearMap }: ArmorTableProps) {
       header: 'Cost',
       accessor: 'cost',
       sortable: true,
+      render: (value: unknown) => formatCost(value as string | undefined),
     },
-  ];
+  ], [handleNameClick]);
 
   return (
     <>
@@ -128,5 +130,5 @@ export function ArmorTable({ armor, gearMap }: ArmorTableProps) {
       />
     </>
   );
-}
+});
 

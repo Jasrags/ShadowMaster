@@ -1,0 +1,255 @@
+{
+  "+@xmlns": "",
+  "+@xmlns:xsi": "http://www.w3.org/2001/XMLSchema-instance",
+  "+@xsi:schemaLocation": "http://www.w3.org/2001/XMLSchema ranges.xsd",
+  "modifiers": {
+    "short": "0",
+    "medium": "-1",
+    "long": "-3",
+    "extreme": "-6"
+  },
+  "ranges": {
+    "range": [
+      {
+        "name": "Tasers",
+        "min": "0",
+        "short": "5",
+        "medium": "10",
+        "long": "15",
+        "extreme": "20"
+      },
+      {
+        "name": "Holdouts",
+        "min": "0",
+        "short": "5",
+        "medium": "15",
+        "long": "30",
+        "extreme": "50"
+      },
+      {
+        "name": "Light Pistols",
+        "min": "0",
+        "short": "5",
+        "medium": "15",
+        "long": "30",
+        "extreme": "50"
+      },
+      {
+        "name": "Heavy Pistols",
+        "min": "0",
+        "short": "5",
+        "medium": "20",
+        "long": "40",
+        "extreme": "60"
+      },
+      {
+        "name": "Machine Pistols",
+        "min": "0",
+        "short": "5",
+        "medium": "15",
+        "long": "30",
+        "extreme": "50"
+      },
+      {
+        "name": "Submachine Guns",
+        "min": "0",
+        "short": "10",
+        "medium": "40",
+        "long": "80",
+        "extreme": "150"
+      },
+      {
+        "name": "Assault Rifles",
+        "min": "0",
+        "short": "25",
+        "medium": "150",
+        "long": "350",
+        "extreme": "550"
+      },
+      {
+        "name": "Shotguns",
+        "min": "0",
+        "short": "10",
+        "medium": "40",
+        "long": "80",
+        "extreme": "150"
+      },
+      {
+        "name": "Shotguns (slug)",
+        "min": "0",
+        "short": "10",
+        "medium": "40",
+        "long": "80",
+        "extreme": "150"
+      },
+      {
+        "name": "Shotguns (flechette)",
+        "min": "0",
+        "short": "15",
+        "medium": "30",
+        "long": "45",
+        "extreme": "60"
+      },
+      {
+        "name": "Sniper Rifles",
+        "min": "0",
+        "short": "50",
+        "medium": "350",
+        "long": "800",
+        "extreme": "1500"
+      },
+      {
+        "name": "Sporting Rifles",
+        "min": "0",
+        "short": "50",
+        "medium": "250",
+        "long": "500",
+        "extreme": "750"
+      },
+      {
+        "name": "Light Machine Guns",
+        "min": "0",
+        "short": "25",
+        "medium": "200",
+        "long": "400",
+        "extreme": "800"
+      },
+      {
+        "name": "Medium/Heavy Machinegun",
+        "min": "0",
+        "short": "40",
+        "medium": "250",
+        "long": "750",
+        "extreme": "1200"
+      },
+      {
+        "name": "Assault Cannons",
+        "min": "0",
+        "short": "50",
+        "medium": "300",
+        "long": "750",
+        "extreme": "1500"
+      },
+      {
+        "name": "Grenade Launchers",
+        "min": "5",
+        "short": "50",
+        "medium": "100",
+        "long": "150",
+        "extreme": "500"
+      },
+      {
+        "name": "Missile Launchers",
+        "min": "20",
+        "short": "70",
+        "medium": "150",
+        "long": "450",
+        "extreme": "1500"
+      },
+      {
+        "name": "Bows",
+        "min": "0",
+        "short": "{STR}",
+        "medium": "{STR}*10",
+        "long": "{STR}*30",
+        "extreme": "{STR}*60"
+      },
+      {
+        "name": "Light Crossbows",
+        "min": "0",
+        "short": "6",
+        "medium": "24",
+        "long": "60",
+        "extreme": "120"
+      },
+      {
+        "name": "Medium Crossbows",
+        "min": "0",
+        "short": "9",
+        "medium": "36",
+        "long": "90",
+        "extreme": "150"
+      },
+      {
+        "name": "Heavy Crossbows",
+        "min": "0",
+        "short": "15",
+        "medium": "45",
+        "long": "120",
+        "extreme": "180"
+      },
+      {
+        "name": "Thrown Knife",
+        "min": "0",
+        "short": "{STR}",
+        "medium": "{STR}*2",
+        "long": "{STR}*3",
+        "extreme": "{STR}*5"
+      },
+      {
+        "name": "Net",
+        "min": "0",
+        "short": "{STR}/2",
+        "medium": "{STR}",
+        "long": "{STR}*1.5",
+        "extreme": "{STR}*2.5"
+      },
+      {
+        "name": "Shuriken",
+        "min": "0",
+        "short": "{STR}",
+        "medium": "{STR}*2",
+        "long": "{STR}*5",
+        "extreme": "{STR}*7"
+      },
+      {
+        "name": "Standard Grenade",
+        "min": "0",
+        "short": "{STR}*2",
+        "medium": "{STR}*4",
+        "long": "{STR}*6",
+        "extreme": "{STR}*10"
+      },
+      {
+        "name": "Aerodynamic Grenade",
+        "min": "0",
+        "short": "{STR}*2",
+        "medium": "{STR}*4",
+        "long": "{STR}*8",
+        "extreme": "{STR}*15"
+      },
+      {
+        "name": "Harpoon Gun",
+        "min": "0",
+        "short": "5",
+        "medium": "20",
+        "long": "40",
+        "extreme": "60"
+      },
+      {
+        "name": "Harpoon Gun (Underwater)",
+        "min": "0",
+        "short": "6",
+        "medium": "24",
+        "long": "60",
+        "extreme": "120"
+      },
+      {
+        "name": "Flamethrowers",
+        "min": "0",
+        "short": "15",
+        "medium": "20",
+        "long": "-1",
+        "extreme": "-1"
+      },
+      {
+        "name": "Carbines",
+        "min": "0",
+        "short": "10",
+        "medium": "40",
+        "long": "80",
+        "extreme": "150"
+      }
+    ]
+  }
+}

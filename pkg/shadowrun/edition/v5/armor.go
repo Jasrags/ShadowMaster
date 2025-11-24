@@ -1,145 +1,166 @@
 package v5
 
-import "shadowmaster/pkg/shadowrun/edition/v5/common"
+// ArmorType represents the category of armor item
+type ArmorType string
 
-// Category represents an armor or mod category with its black market classification
-type Category struct {
-	Name        string `json:"name"`         // Category name
-	BlackMarket string `json:"black_market"` // Black market classification
-}
-
-// Armor represents a piece of armor from Shadowrun 5th Edition
-type Armor struct {
-	// Required fields
-	Name          string `json:"name"`
-	Category      string `json:"category"`
-	Armor         string `json:"armor"`         // Can be "12", "+2", "0", "Rating", etc.
-	ArmorCapacity string `json:"armorcapacity"` // Can be "12", "0", "Rating", "FixedValues(...)", etc.
-	Avail         string `json:"avail"`         // Availability like "2", "10R", "14R", "+2", etc.
-	Cost          string `json:"cost"`          // Cost like "1500", "Variable(20-100000)", "100 * Rating", etc.
-	Source        string `json:"source"`        // Source book like "SR5", "RG", etc.
-
-	// Optional fields
-	ArmorOverride          string              `json:"armoroverride,omitempty"`          // Override armor value like "+3"
-	Rating                 int                 `json:"rating,omitempty"`                 // Rating for variable rating items (always numeric)
-	AddModCategory         string              `json:"addmodcategory,omitempty"`         // Category of mods that can be added
-	SelectModsFromCategory *SelectModsCategory `json:"selectmodsfromcategory,omitempty"` // Category to select mods from
-	Gears                  *Gears              `json:"gears,omitempty"`                  // Gears that can be used with this armor
-	AddWeapon              string              `json:"addweapon,omitempty"`              // Weapon added by this armor
-	Bonus                  *Bonus              `json:"bonus,omitempty"`                  // Bonuses provided by this armor
-	WirelessBonus          *Bonus              `json:"wirelessbonus,omitempty"`          // Bonuses when wireless is enabled
-	Mods                   *Mods               `json:"mods,omitempty"`                   // Pre-installed mods
-}
-
-// ArmorMod represents an armor modification from Shadowrun 5th Edition
-type ArmorMod struct {
-	// Required fields
-	Name          string `json:"name"`
-	Category      string `json:"category"`
-	Armor         string `json:"armor"`         // Can be "0", "+2", "+3", etc.
-	MaxRating     int    `json:"maxrating"`     // Maximum rating (always numeric: 0, 1, 6, etc.)
-	ArmorCapacity string `json:"armorcapacity"` // Capacity cost like "[0]", "[2]", "FixedValues([1],[2],[3],[4],[5],[6])", etc.
-	Avail         string `json:"avail"`         // Availability like "0", "+2", "6", "10R", etc.
-	Cost          string `json:"cost"`          // Cost like "0", "500", "Rating * 250", etc.
-	Source        string `json:"source"`        // Source book like "SR5", "RG", etc.
-
-	// Optional fields
-	GearCapacity  *int      `json:"gearcapacity,omitempty"`  // Gear capacity (always numeric when present)
-	Hide          bool      `json:"hide,omitempty"`          // Whether to hide this mod
-	Required      *Required `json:"required,omitempty"`      // Requirements for this mod
-	AddonCategory []string  `json:"addoncategory,omitempty"` // Categories of addons that can be added
-	Bonus         *Bonus    `json:"bonus,omitempty"`         // Bonuses provided by this mod
-	WirelessBonus *Bonus    `json:"wirelessbonus,omitempty"` // Bonuses when wireless is enabled
-}
-
-// SelectModsCategory represents a category to select mods from
-type SelectModsCategory struct {
-	Category string `json:"category"`
-}
-
-// Gears represents gears that can be used with armor
-type Gears struct {
-	UseGear []string `json:"usegear"` // Array of gear IDs (can be empty, single item, or multiple)
-}
-
-// Mods represents pre-installed mods on armor
-type Mods struct {
-	Name []string `json:"name"` // Array of mod names (flattened from strings and ModNameEntry.Content)
-}
-
-// ModNameEntry represents a mod name entry that can have additional attributes
-type ModNameEntry struct {
-	Content string `json:"+content,omitempty"`
-	Rating  string `json:"+@rating,omitempty"` // Can be numeric string or formula
-}
-
-// Required represents requirements for an armor mod
-type Required struct {
-	ParentDetails *ParentDetails `json:"parentdetails,omitempty"`
-	OneOf         *OneOf         `json:"oneof,omitempty"`
-}
-
-// ParentDetails represents parent armor details requirement
-type ParentDetails struct {
-	Name string `json:"name"`
-}
-
-// OneOf represents a one-of requirement
-type OneOf struct {
-	ArmorMod *ArmorModRef `json:"armormod,omitempty"`
-}
-
-// ArmorModRef represents a reference to an armor mod
-type ArmorModRef struct {
-	Content    string `json:"+content,omitempty"`
-	SameParent string `json:"+@sameparent,omitempty"`
-}
-
-// Bonus represents bonuses provided by armor or mods
-// This is a flexible structure that can contain various bonus types
-type Bonus struct {
-	// Limit modifiers
-	LimitModifier []LimitModifier `json:"limitmodifier,omitempty"`
-
-	// Skill bonuses
-	SkillCategory []SkillCategoryBonus `json:"skillcategory,omitempty"`
-	SpecificSkill []SpecificSkillBonus `json:"specificskill,omitempty"`
-
-	// Social limit
-	SocialLimit string `json:"sociallimit,omitempty"` // Can be numeric string or formula
-
-	// Resistance/immunity bonuses
-	ToxinContactResist       string `json:"toxincontactresist,omitempty"` // Can be numeric string or "Rating"
-	ToxinContactImmune       bool   `json:"toxincontactimmune,omitempty"`
-	ToxinInhalationImmune    bool   `json:"toxininhalationimmune,omitempty"`
-	PathogenContactResist    string `json:"pathogencontactresist,omitempty"` // Can be numeric string or "Rating"
-	PathogenContactImmune    bool   `json:"pathogencontactimmune,omitempty"`
-	PathogenInhalationImmune bool   `json:"pathogeninhalationimmune,omitempty"`
-
-	// Armor bonuses
-	FireArmor        string `json:"firearmor,omitempty"`        // Can be numeric string or "Rating"
-	ColdArmor        string `json:"coldarmor,omitempty"`        // Can be numeric string or "Rating"
-	ElectricityArmor string `json:"electricityarmor,omitempty"` // Can be numeric string or "Rating"
-
-	// Radiation resistance
-	RadiationResist string `json:"radiationresist,omitempty"` // Can be numeric string or "Rating"
-
-	// Fatigue resistance
-	FatigueResist string `json:"fatigueresist,omitempty"` // Can be numeric string or formula
-
-	// Select armor
-	SelectArmor bool `json:"selectarmor,omitempty"`
-
-	// Unique identifier
-	Unique string `json:"+@unique,omitempty"`
-
-	// Select text
-	SelectText bool `json:"selecttext,omitempty"`
-}
-
-// Type aliases for backward compatibility
-type (
-	LimitModifier      = common.LimitModifier
-	SkillCategoryBonus = common.SkillCategoryBonus
-	SpecificSkillBonus = common.SpecificSkillBonus
+const (
+	ArmorTypeClothing     ArmorType = "clothing"
+	ArmorTypeArmor        ArmorType = "armor"
+	ArmorTypeModification ArmorType = "modification"
+	ArmorTypeHelmet       ArmorType = "helmet"
+	ArmorTypeShield       ArmorType = "shield"
 )
+
+// ArmorModificationEffect represents the mechanical effect of an armor modification
+type ArmorModificationEffect struct {
+	// Type describes what the modification affects (e.g., "Fire", "Cold", "Electricity", "Chemical")
+	Type string `json:"type,omitempty"`
+	// ArmorBonus adds to armor value when resisting specific damage types
+	ArmorBonus int `json:"armor_bonus,omitempty"`
+	// ResistanceTestBonus adds to resistance test dice pools
+	ResistanceTestBonus int `json:"resistance_test_bonus,omitempty"`
+	// LimitBonus adds to limit on specific tests
+	LimitBonus int `json:"limit_bonus,omitempty"`
+	// DicePoolBonus adds to dice pool on specific tests
+	DicePoolBonus int `json:"dice_pool_bonus,omitempty"`
+	// TestType describes what type of test is affected (e.g., "Sneaking", "Toxin Resistance")
+	TestType string `json:"test_type,omitempty"`
+	// CompleteProtection indicates if it provides complete protection (e.g., chemical seal)
+	CompleteProtection bool `json:"complete_protection,omitempty"`
+	// DurationLimit describes time limits (e.g., "1 hour")
+	DurationLimit string `json:"duration_limit,omitempty"`
+	// ActivationAction describes how to activate (e.g., "Complex Action", "Free Action")
+	ActivationAction string `json:"activation_action,omitempty"`
+	// DamageInfo describes damage dealt (for offensive modifications like shock frills)
+	DamageInfo string `json:"damage_info,omitempty"`
+	// Charges describes charge capacity and recharge rate
+	Charges string `json:"charges,omitempty"`
+}
+
+// ArmorSpecialProperty represents special properties of armor
+type ArmorSpecialProperty struct {
+	// ConcealabilityModifier modifies concealability (negative = easier to conceal)
+	ConcealabilityModifier int `json:"concealability_modifier,omitempty"`
+	// SneakingBonus adds to sneaking tests
+	SneakingBonus int `json:"sneaking_bonus,omitempty"`
+	// BuiltInFeatures lists built-in features (e.g., "music player", "biomonitor")
+	BuiltInFeatures []string `json:"built_in_features,omitempty"`
+	// Capacity describes capacity for modifications/accessories
+	Capacity int `json:"capacity,omitempty"`
+	// PhysicalLimitModifier modifies physical limit when using shield
+	PhysicalLimitModifier int `json:"physical_limit_modifier,omitempty"`
+	// EnvironmentalAdaptation indicates if can be modified for hot/cold environments
+	EnvironmentalAdaptation bool `json:"environmental_adaptation,omitempty"`
+	// ChemicallySealable indicates if can be chemically sealed
+	ChemicallySealable bool `json:"chemically_sealable,omitempty"`
+	// ColorChangeable indicates if color can be changed
+	ColorChangeable bool `json:"color_changeable,omitempty"`
+	// ActionTimeChange describes action time changes (e.g., "Simple Action to Free Action")
+	ActionTimeChange string `json:"action_time_change,omitempty"`
+}
+
+// Armor represents an armor, clothing, modification, helmet, or shield definition
+type Armor struct {
+	// Name is the item name (e.g., "Armor jacket", "Chemical protection")
+	Name string `json:"name,omitempty"`
+	// Type indicates the category of armor item
+	Type ArmorType `json:"type,omitempty"`
+	// Description is the full text description
+	Description string `json:"description,omitempty"`
+	// ArmorRating is the base armor rating (for armor pieces, helmets, shields)
+	ArmorRating int `json:"armor_rating,omitempty"`
+	// Capacity is the capacity for modifications (for armor pieces, helmets, shields)
+	Capacity int `json:"capacity,omitempty"`
+	// Rating is the rating for modifications (1-6 typically)
+	Rating int `json:"rating,omitempty"`
+	// MaxRating is the maximum rating available (for modifications)
+	MaxRating int `json:"max_rating,omitempty"`
+	// ModificationEffects describes the mechanical effects of armor modifications
+	ModificationEffects []ArmorModificationEffect `json:"modification_effects,omitempty"`
+	// SpecialProperties describes special properties of the armor
+	SpecialProperties *ArmorSpecialProperty `json:"special_properties,omitempty"`
+	// WirelessBonus describes wireless-enabled functionality
+	WirelessBonus *WirelessBonus `json:"wireless_bonus,omitempty"`
+	// CompatibleWith lists what this modification is compatible with (for modifications)
+	CompatibleWith []string `json:"compatible_with,omitempty"`
+	// Requires lists prerequisites (e.g., "full body armor with helmet" for chemical seal)
+	Requires string `json:"requires,omitempty"`
+	// Source contains source book reference information
+	Source *SourceReference `json:"source,omitempty"`
+}
+
+// ArmorData represents the complete armor data structure
+type ArmorData struct {
+	Clothing      []Armor `json:"clothing,omitempty"`
+	Armor         []Armor `json:"armor,omitempty"`
+	Modifications []Armor `json:"modifications,omitempty"`
+	Helmets       []Armor `json:"helmets,omitempty"`
+	Shields       []Armor `json:"shields,omitempty"`
+}
+
+// GetAllArmor returns all armor items
+func GetAllArmor() []Armor {
+	armor := make([]Armor, 0, len(dataArmor))
+	for _, a := range dataArmor {
+		armor = append(armor, a)
+	}
+	return armor
+}
+
+// GetArmorData returns the complete armor data structure organized by category
+func GetArmorData() ArmorData {
+	data := ArmorData{
+		Clothing:      []Armor{},
+		Armor:         []Armor{},
+		Modifications: []Armor{},
+		Helmets:       []Armor{},
+		Shields:       []Armor{},
+	}
+
+	for _, armor := range dataArmor {
+		switch armor.Type {
+		case ArmorTypeClothing:
+			data.Clothing = append(data.Clothing, armor)
+		case ArmorTypeArmor:
+			data.Armor = append(data.Armor, armor)
+		case ArmorTypeModification:
+			data.Modifications = append(data.Modifications, armor)
+		case ArmorTypeHelmet:
+			data.Helmets = append(data.Helmets, armor)
+		case ArmorTypeShield:
+			data.Shields = append(data.Shields, armor)
+		}
+	}
+
+	return data
+}
+
+// GetArmorByName returns the armor definition with the given name, or nil if not found
+func GetArmorByName(name string) *Armor {
+	for _, armor := range dataArmor {
+		if armor.Name == name {
+			return &armor
+		}
+	}
+	return nil
+}
+
+// GetArmorByKey returns the armor definition with the given key, or nil if not found
+func GetArmorByKey(key string) *Armor {
+	armor, ok := dataArmor[key]
+	if !ok {
+		return nil
+	}
+	return &armor
+}
+
+// GetArmorByType returns all armor items in the specified type
+func GetArmorByType(armorType ArmorType) []Armor {
+	armor := make([]Armor, 0)
+	for _, a := range dataArmor {
+		if a.Type == armorType {
+			armor = append(armor, a)
+		}
+	}
+	return armor
+}

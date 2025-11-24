@@ -410,9 +410,9 @@ func (h *Handlers) CreateCharacter(w http.ResponseWriter, r *http.Request) {
 		character, err := h.CharacterService.CreateCharacter(req.Edition, req.Name, req.PlayerName, req.EditionData)
 		if err != nil {
 			// Check if it's a validation error (400) or server error (500)
-			if strings.Contains(err.Error(), "unsupported edition") || 
-			   strings.Contains(err.Error(), "invalid creation data") ||
-			   strings.Contains(err.Error(), "all priorities") {
+			if strings.Contains(err.Error(), "unsupported edition") ||
+				strings.Contains(err.Error(), "invalid creation data") ||
+				strings.Contains(err.Error(), "all priorities") {
 				http.Error(w, err.Error(), http.StatusBadRequest)
 			} else {
 				http.Error(w, err.Error(), http.StatusInternalServerError)
@@ -498,42 +498,302 @@ func (h *Handlers) GetKnowledgeSkills(w http.ResponseWriter, r *http.Request) {
 
 // GetSkills handles GET /api/equipment/skills
 func (h *Handlers) GetSkills(w http.ResponseWriter, r *http.Request) {
-	// Get all skills from the v5 data (both active and knowledge)
-	skillList := make([]sr5.Skill, 0)
-	// Add active skills
-	for _, skill := range sr5.DataSkills {
-		skillList = append(skillList, skill)
-	}
-	// Add knowledge skills
-	for _, skill := range sr5.DataKnowledgeSkills {
-		skillList = append(skillList, skill)
-	}
+	// Get all skills from the v5 data (active, knowledge, and language)
+	allSkills := sr5.GetAllSkills()
+
 	respondJSON(w, http.StatusOK, map[string]interface{}{
-		"skills": skillList,
+		"skills": allSkills,
 	})
 }
 
 // GetWeapons handles GET /api/equipment/weapons
 func (h *Handlers) GetWeapons(w http.ResponseWriter, r *http.Request) {
-	// Get all weapons from the v5 data
-	weaponList := make([]sr5.Weapon, 0)
-	for _, weapon := range sr5.DataWeapons {
-		weaponList = append(weaponList, weapon)
+	// Get all weapons from the v5 data using the new dataset function
+	weapons := sr5.GetAllWeapons()
+
+	// Convert to UI-compatible format, converting Source object to string and Type to category
+	uiWeapons := make([]map[string]interface{}, 0, len(weapons))
+	for _, w := range weapons {
+		// Marshal weapon to JSON and back to map to get all fields
+		weaponJSON, _ := json.Marshal(w)
+		var weaponMap map[string]interface{}
+		json.Unmarshal(weaponJSON, &weaponMap)
+
+		// Map type to category with display name and update type field with display name
+		if typeStr, ok := weaponMap["type"].(string); ok && typeStr != "" {
+			weaponType := sr5.WeaponType(typeStr)
+			displayName := weaponTypeToDisplayName(weaponType)
+			weaponMap["category"] = displayName
+			weaponMap["type"] = displayName // Also update the type field to show display name
+		} else {
+			weaponMap["category"] = ""
+		}
+
+		// Convert source object to string (just the source name, not the page)
+		if sourceObj, ok := weaponMap["source"].(map[string]interface{}); ok {
+			if sourceName, ok := sourceObj["source"].(string); ok {
+				weaponMap["source"] = sourceName
+			} else {
+				weaponMap["source"] = ""
+			}
+		} else if weaponMap["source"] == nil {
+			weaponMap["source"] = ""
+		}
+
+		uiWeapons = append(uiWeapons, weaponMap)
 	}
+
 	respondJSON(w, http.StatusOK, map[string]interface{}{
-		"weapons": weaponList,
+		"weapons": uiWeapons,
 	})
+}
+
+// GetWeaponAccessories handles GET /api/equipment/weapon-accessories
+func (h *Handlers) GetWeaponAccessories(w http.ResponseWriter, r *http.Request) {
+	// Get all weapon accessories from the v5 data using the new dataset function
+	accessories := sr5.GetAllWeaponAccessories()
+
+	// Convert to UI-compatible format
+	uiAccessories := make([]map[string]interface{}, 0, len(accessories))
+	for _, a := range accessories {
+		uiItem := map[string]interface{}{
+			"name": a.Name,
+		}
+
+		// Map mount_types array to mount string (comma-separated)
+		if len(a.MountTypes) > 0 {
+			mountStrs := make([]string, 0, len(a.MountTypes))
+			for _, mt := range a.MountTypes {
+				switch mt {
+				case sr5.AccessoryMountBarrel:
+					mountStrs = append(mountStrs, "Barrel")
+				case sr5.AccessoryMountUnderbarrel:
+					mountStrs = append(mountStrs, "Under")
+				case sr5.AccessoryMountTop:
+					mountStrs = append(mountStrs, "Top")
+				case sr5.AccessoryMountSide:
+					mountStrs = append(mountStrs, "Side")
+				case sr5.AccessoryMountStock:
+					mountStrs = append(mountStrs, "Stock")
+				case sr5.AccessoryMountInternal:
+					mountStrs = append(mountStrs, "Internal")
+				case sr5.AccessoryMountNone:
+					mountStrs = append(mountStrs, "—")
+				}
+			}
+			uiItem["mount"] = strings.Join(mountStrs, ", ")
+		} else {
+			uiItem["mount"] = "—"
+		}
+
+		// Map availability
+		if a.Availability != "" {
+			uiItem["avail"] = a.Availability
+		} else {
+			uiItem["avail"] = ""
+		}
+
+		// Map cost
+		if a.Cost != "" {
+			uiItem["cost"] = a.Cost
+		} else {
+			uiItem["cost"] = ""
+		}
+
+		// Map source (just the source name, not the page)
+		if a.Source != nil {
+			uiItem["source"] = a.Source.Source
+			if a.Source.Page != "" {
+				uiItem["page"] = a.Source.Page
+			}
+		} else {
+			uiItem["source"] = ""
+		}
+
+		// Map special properties
+		if a.SpecialProperties != nil {
+			if a.SpecialProperties.Rating > 0 {
+				uiItem["rating"] = a.SpecialProperties.Rating
+			}
+			if a.SpecialProperties.AccuracyBonus > 0 {
+				uiItem["accuracy"] = a.SpecialProperties.AccuracyBonus
+			}
+			if a.SpecialProperties.RecoilCompensation > 0 {
+				uiItem["rc"] = a.SpecialProperties.RecoilCompensation
+			}
+			if a.SpecialProperties.ConcealabilityModifier != 0 {
+				uiItem["conceal"] = a.SpecialProperties.ConcealabilityModifier
+			}
+			// Include full special properties object for modal
+			uiItem["special_properties"] = a.SpecialProperties
+		}
+
+		// Include wireless bonus for modal
+		if a.WirelessBonus != nil {
+			uiItem["wireless_bonus"] = a.WirelessBonus
+		}
+
+		// Include description for modal
+		if a.Description != "" {
+			uiItem["description"] = a.Description
+		}
+
+		uiAccessories = append(uiAccessories, uiItem)
+	}
+
+	respondJSON(w, http.StatusOK, map[string]interface{}{
+		"accessories": uiAccessories,
+	})
+}
+
+// armorTypeToDisplayName converts ArmorType enum to display name
+func armorTypeToDisplayName(armorType sr5.ArmorType) string {
+	switch armorType {
+	case sr5.ArmorTypeClothing:
+		return "Clothing"
+	case sr5.ArmorTypeArmor:
+		return "Armor"
+	case sr5.ArmorTypeModification:
+		return "Modification"
+	case sr5.ArmorTypeHelmet:
+		return "Helmet"
+	case sr5.ArmorTypeShield:
+		return "Shield"
+	default:
+		return string(armorType)
+	}
+}
+
+// weaponTypeToDisplayName converts WeaponType enum to display name
+func weaponTypeToDisplayName(weaponType sr5.WeaponType) string {
+	switch weaponType {
+	case sr5.WeaponTypeMeleeBlade:
+		return "Melee - Blades"
+	case sr5.WeaponTypeMeleeClub:
+		return "Melee - Clubs"
+	case sr5.WeaponTypeMeleeOther:
+		return "Melee - Other"
+	case sr5.WeaponTypeThrowing:
+		return "Throwing Weapons"
+	case sr5.WeaponTypeTaser:
+		return "Tasers"
+	case sr5.WeaponTypeHoldOut:
+		return "Hold-Out Pistols"
+	case sr5.WeaponTypeLightPistol:
+		return "Light Pistols"
+	case sr5.WeaponTypeHeavyPistol:
+		return "Heavy Pistols"
+	case sr5.WeaponTypeMachinePistol:
+		return "Machine Pistols"
+	case sr5.WeaponTypeSubmachineGun:
+		return "Submachine Guns"
+	case sr5.WeaponTypeAssaultRifle:
+		return "Assault Rifles"
+	case sr5.WeaponTypeSniperRifle:
+		return "Sniper Rifles"
+	case sr5.WeaponTypeShotgun:
+		return "Shotguns"
+	case sr5.WeaponTypeSpecialWeapon:
+		return "Special Weapons"
+	case sr5.WeaponTypeMachineGun:
+		return "Machine Guns"
+	case sr5.WeaponTypeCannonLauncher:
+		return "Cannons & Launchers"
+	default:
+		return string(weaponType)
+	}
 }
 
 // GetArmor handles GET /api/equipment/armor
 func (h *Handlers) GetArmor(w http.ResponseWriter, r *http.Request) {
-	// Get all armor from the data
-	armorList := make([]sr5.Armor, 0)
-	for _, armor := range sr5.DataArmors {
-		armorList = append(armorList, armor)
+	// Get all armor from the v5 data using the new dataset function
+	armor := sr5.GetAllArmor()
+
+	// Convert to UI-compatible format
+	uiArmor := make([]map[string]interface{}, 0, len(armor))
+	for _, a := range armor {
+		uiItem := map[string]interface{}{
+			"name": a.Name,
+		}
+
+		// Map type to category with display name
+		if a.Type != "" {
+			uiItem["category"] = armorTypeToDisplayName(a.Type)
+		}
+
+		// Map armor_rating to armor (as string)
+		if a.ArmorRating > 0 {
+			uiItem["armor"] = a.ArmorRating
+		} else {
+			uiItem["armor"] = ""
+		}
+
+		// Map capacity to armorcapacity (as string)
+		if a.Capacity > 0 {
+			uiItem["armorcapacity"] = a.Capacity
+		} else {
+			uiItem["armorcapacity"] = ""
+		}
+
+		// Map source (just the source name, not the page)
+		if a.Source != nil {
+			uiItem["source"] = a.Source.Source
+		} else {
+			uiItem["source"] = ""
+		}
+
+		// Availability and cost not in our data yet, set empty
+		uiItem["avail"] = ""
+		uiItem["cost"] = ""
+
+		// Add rating if present
+		if a.Rating > 0 {
+			uiItem["rating"] = a.Rating
+		}
+
+		// Add description
+		if a.Description != "" {
+			uiItem["description"] = a.Description
+		}
+
+		// Add special properties
+		if a.SpecialProperties != nil {
+			if a.SpecialProperties.Capacity > 0 {
+				uiItem["armorcapacity"] = a.SpecialProperties.Capacity
+			}
+			uiItem["special_properties"] = a.SpecialProperties
+		}
+
+		// Add wireless bonus
+		if a.WirelessBonus != nil {
+			uiItem["wirelessbonus"] = a.WirelessBonus
+		}
+
+		// Add modification effects (don't set as bonus - that's for other bonus types)
+		if len(a.ModificationEffects) > 0 {
+			uiItem["modification_effects"] = a.ModificationEffects
+		}
+
+		// Add compatible with
+		if len(a.CompatibleWith) > 0 {
+			uiItem["compatible_with"] = a.CompatibleWith
+		}
+
+		// Add requires
+		if a.Requires != "" {
+			uiItem["requires"] = a.Requires
+		}
+
+		// Add max rating
+		if a.MaxRating > 0 {
+			uiItem["max_rating"] = a.MaxRating
+		}
+
+		uiArmor = append(uiArmor, uiItem)
 	}
+
 	respondJSON(w, http.StatusOK, map[string]interface{}{
-		"armor": armorList,
+		"armor": uiArmor,
 	})
 }
 
@@ -547,12 +807,9 @@ func (h *Handlers) GetCyberware(w http.ResponseWriter, r *http.Request) {
 
 // GetGears handles GET /api/equipment/gear
 func (h *Handlers) GetGears(w http.ResponseWriter, r *http.Request) {
-	// Get all gear from the data
-	gearList := make([]sr5.Gear, 0)
-	for _, gear := range sr5.DataGears {
-		gearList = append(gearList, gear)
-	}
-	
+	// Get all gear from the v5 data
+	gearList := sr5.GetAllGear()
+
 	respondJSON(w, http.StatusOK, map[string]interface{}{
 		"gear": gearList,
 	})
@@ -560,13 +817,86 @@ func (h *Handlers) GetGears(w http.ResponseWriter, r *http.Request) {
 
 // GetQualities handles GET /api/equipment/qualities
 func (h *Handlers) GetQualities(w http.ResponseWriter, r *http.Request) {
-	// Get all qualities from the v5 data
-	qualityList := make([]sr5.Quality, 0)
-	for _, quality := range sr5.DataQualities {
-		qualityList = append(qualityList, quality)
-	}
+	// Get all qualities from the v5 data using the new dataset function
+	qualitiesList := sr5.GetAllQualities()
+
 	respondJSON(w, http.StatusOK, map[string]interface{}{
-		"qualities": qualityList,
+		"qualities": qualitiesList,
+	})
+}
+
+// GetBooks handles GET /api/equipment/books
+func (h *Handlers) GetBooks(w http.ResponseWriter, r *http.Request) {
+	// Get all books from the v5 data using the new dataset function
+	books := sr5.GetAllBooks()
+	respondJSON(w, http.StatusOK, map[string]interface{}{
+		"books": books,
+	})
+}
+
+// GetContacts handles GET /api/equipment/contacts
+func (h *Handlers) GetContacts(w http.ResponseWriter, r *http.Request) {
+	// Get all contacts from the v5 data
+	contacts := sr5.GetAllContacts()
+	respondJSON(w, http.StatusOK, map[string]interface{}{
+		"contacts": contacts,
+	})
+}
+
+// GetLifestyles handles GET /api/equipment/lifestyles
+func (h *Handlers) GetLifestyles(w http.ResponseWriter, r *http.Request) {
+	// Get all lifestyles and lifestyle options from the v5 data
+	lifestyles := sr5.GetAllLifestyles()
+	lifestyleOptions := sr5.GetAllLifestyleOptions()
+
+	// Combine both into a single list with category field
+	type LifestyleItem struct {
+		ID          string `json:"id"`
+		Name        string `json:"name"`
+		Description string `json:"description"`
+		Cost        string `json:"cost"`
+		Source      string `json:"source"`
+		Category    string `json:"category"`
+	}
+
+	items := make([]LifestyleItem, 0, len(lifestyles)+len(lifestyleOptions))
+
+	// Add lifestyles with category "Lifestyle"
+	for _, l := range lifestyles {
+		items = append(items, LifestyleItem{
+			ID:          l.ID,
+			Name:        l.Name,
+			Description: l.Description,
+			Cost:        l.Cost,
+			Source:      l.Source,
+			Category:    "Lifestyle",
+		})
+	}
+
+	// Add lifestyle options with category "Lifestyle Option"
+	for _, o := range lifestyleOptions {
+		items = append(items, LifestyleItem{
+			ID:          o.ID,
+			Name:        o.Name,
+			Description: o.Description,
+			Cost:        o.Cost,
+			Source:      o.Source,
+			Category:    "Lifestyle Option",
+		})
+	}
+
+	respondJSON(w, http.StatusOK, map[string]interface{}{
+		"lifestyles": items,
+	})
+}
+
+// GetWeaponConsumables handles GET /api/equipment/weapon-consumables
+func (h *Handlers) GetWeaponConsumables(w http.ResponseWriter, r *http.Request) {
+	// Get all weapon consumables from the v5 data
+	consumables := sr5.GetAllWeaponConsumables()
+
+	respondJSON(w, http.StatusOK, map[string]interface{}{
+		"weapon_consumables": consumables,
 	})
 }
 

@@ -71,46 +71,70 @@ export function SkillViewModal({ skill, isOpen, onOpenChange }: SkillViewModalPr
                     <p className="text-gray-100 mt-1">{skill.name}</p>
                   </div>
                   <div>
-                    <label className="text-sm text-gray-400">Category</label>
-                    <p className="text-gray-100 mt-1">{skill.category}</p>
+                    <label className="text-sm text-gray-400">Type</label>
+                    <p className="text-gray-100 mt-1 capitalize">{skill.type || '-'}</p>
                   </div>
                   <div>
-                    <label className="text-sm text-gray-400">Attribute</label>
-                    <p className="text-gray-100 mt-1">{skill.attribute}</p>
+                    <label className="text-sm text-gray-400">Category</label>
+                    <p className="text-gray-100 mt-1">
+                      {skill.category ? skill.category.split('_').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ') : '-'}
+                    </p>
+                  </div>
+                  <div>
+                    <label className="text-sm text-gray-400">Linked Attribute</label>
+                    <p className="text-gray-100 mt-1">
+                      {skill.linked_attribute 
+                        ? skill.linked_attribute.charAt(0).toUpperCase() + skill.linked_attribute.slice(1).toLowerCase()
+                        : '-'}
+                    </p>
                   </div>
                   <div>
                     <label className="text-sm text-gray-400">Can Default</label>
-                    <p className="text-gray-100 mt-1">{skill.default === 'True' ? 'Yes' : 'No'}</p>
+                    <p className="text-gray-100 mt-1">{skill.can_default ? 'Yes' : 'No'}</p>
+                  </div>
+                  <div>
+                    <label className="text-sm text-gray-400">Is Specific</label>
+                    <p className="text-gray-100 mt-1">{skill.is_specific ? 'Yes' : 'No'}</p>
                   </div>
                   {skill.source && (
-                    <div>
-                      <label className="text-sm text-gray-400">Source</label>
-                      <p className="text-gray-100 mt-1">{skill.source}</p>
-                    </div>
-                  )}
-                  {skill.page && (
-                    <div>
-                      <label className="text-sm text-gray-400">Page</label>
-                      <p className="text-gray-100 mt-1">{skill.page}</p>
-                    </div>
+                    <>
+                      <div>
+                        <label className="text-sm text-gray-400">Source</label>
+                        <p className="text-gray-100 mt-1">{skill.source.source || '-'}</p>
+                      </div>
+                      {skill.source.page && (
+                        <div>
+                          <label className="text-sm text-gray-400">Page</label>
+                          <p className="text-gray-100 mt-1">{skill.source.page}</p>
+                        </div>
+                      )}
+                    </>
                   )}
                 </div>
               </section>
 
+              {/* Description */}
+              {skill.description && (
+                <section>
+                  <h2 className="text-lg font-semibold text-gray-200 mb-3">Description</h2>
+                  <p className="text-gray-100 whitespace-pre-wrap">{skill.description}</p>
+                </section>
+              )}
+
               {/* Skill Group */}
-              {skill.skillgroup && (
+              {skill.skill_group && (
                 <section>
                   <h2 className="text-lg font-semibold text-gray-200 mb-3">Skill Group</h2>
-                  <p className="text-gray-100">{skill.skillgroup}</p>
+                  <p className="text-gray-100">{skill.skill_group}</p>
                 </section>
               )}
 
               {/* Specializations */}
-              {skill.specs && skill.specs.spec && skill.specs.spec.length > 0 && (
+              {skill.specializations && skill.specializations.length > 0 && (
                 <section>
                   <h2 className="text-lg font-semibold text-gray-200 mb-3">Available Specializations</h2>
                   <div className="flex flex-wrap gap-2">
-                    {skill.specs.spec.map((spec, idx) => (
+                    {skill.specializations.map((spec, idx) => (
                       <span
                         key={idx}
                         className="inline-flex items-center px-3 py-1 bg-sr-accent/20 border border-sr-accent/50 rounded-md text-sm text-gray-200"
@@ -118,40 +142,6 @@ export function SkillViewModal({ skill, isOpen, onOpenChange }: SkillViewModalPr
                         {spec}
                       </span>
                     ))}
-                  </div>
-                </section>
-              )}
-
-              {/* Additional Information */}
-              {(skill.exotic !== undefined || skill.requiresflymovement !== undefined || 
-                skill.requiresgroundmovement !== undefined || skill.requiresswimmovement !== undefined) && (
-                <section>
-                  <h2 className="text-lg font-semibold text-gray-200 mb-3">Additional Information</h2>
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    {skill.exotic !== undefined && (
-                      <div>
-                        <label className="text-sm text-gray-400">Exotic Skill</label>
-                        <p className="text-gray-100 mt-1">{formatValue(skill.exotic)}</p>
-                      </div>
-                    )}
-                    {skill.requiresflymovement !== undefined && (
-                      <div>
-                        <label className="text-sm text-gray-400">Requires Fly Movement</label>
-                        <p className="text-gray-100 mt-1">{formatValue(skill.requiresflymovement)}</p>
-                      </div>
-                    )}
-                    {skill.requiresgroundmovement !== undefined && (
-                      <div>
-                        <label className="text-sm text-gray-400">Requires Ground Movement</label>
-                        <p className="text-gray-100 mt-1">{formatValue(skill.requiresgroundmovement)}</p>
-                      </div>
-                    )}
-                    {skill.requiresswimmovement !== undefined && (
-                      <div>
-                        <label className="text-sm text-gray-400">Requires Swim Movement</label>
-                        <p className="text-gray-100 mt-1">{formatValue(skill.requiresswimmovement)}</p>
-                      </div>
-                    )}
                   </div>
                 </section>
               )}

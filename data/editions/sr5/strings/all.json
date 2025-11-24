@@ -1,0 +1,36 @@
+{
+  "metadata": {
+    "source": {
+      "name": "Chummer5 Strings Dataset",
+      "version": "unknown",
+      "extracted_at": "2025-11-11T01:31:28Z"
+    },
+    "generated_by": "cmd/tools/chummerstrings (ShadowMaster)"
+  },
+  "matrix_attributes": [
+    "String_Attack",
+    "String_DataProcessing",
+    "String_Firewall",
+    "String_Sleaze"
+  ],
+  "elements": [
+    "Acid",
+    "Cold",
+    "Electricity",
+    "Fire",
+    "Pollutant",
+    "Radiation",
+    "Water"
+  ],
+  "immunities": [
+    "Age",
+    "Normal Weapons"
+  ],
+  "spirit_categories": [
+    "Combat",
+    "Detection",
+    "Health",
+    "Illusion",
+    "Manipulation"
+  ]
+}

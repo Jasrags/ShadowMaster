@@ -1,9 +1,10 @@
-import { useState, useMemo, useEffect } from 'react';
+import { useState, useMemo, useEffect, Fragment } from 'react';
 import { Button } from 'react-aria-components';
 import type { Armor, Gear } from '../../lib/types';
 import { ArmorViewModal } from './ArmorViewModal';
 import { ArmorSourceFilter } from './ArmorSourceFilter';
 import { filterData } from '../../lib/tableUtils';
+import { formatCost } from '../../lib/formatUtils';
 
 interface ArmorTableGroupedProps {
   armor: Armor[];
@@ -173,10 +174,9 @@ export function ArmorTableGrouped({ armor, gearMap }: ArmorTableGroupedProps) {
                 </tr>
               ) : (
                 groupedArmor.map((group) => (
-                  <>
+                  <Fragment key={group.category}>
                     {/* Group Header Row */}
                     <tr
-                      key={group.category}
                       className="bg-sr-light-gray/30 border-b border-sr-light-gray cursor-pointer hover:bg-sr-light-gray/50 transition-colors"
                       onClick={() => toggleGroup(group.category)}
                     >
@@ -227,10 +227,10 @@ export function ArmorTableGrouped({ armor, gearMap }: ArmorTableGroupedProps) {
                         <td className="px-4 py-2 text-gray-300">{item.armorcapacity || '-'}</td>
                         <td className="px-4 py-2 text-gray-300">{item.source || '-'}</td>
                         <td className="px-4 py-2 text-gray-300">{item.avail || '-'}</td>
-                        <td className="px-4 py-2 text-gray-300">{item.cost || '-'}</td>
+                        <td className="px-4 py-2 text-gray-300">{formatCost(item.cost as string | undefined)}</td>
                       </tr>
                     ))}
-                  </>
+                  </Fragment>
                 ))
               )}
             </tbody>

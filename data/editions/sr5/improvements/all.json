@@ -1,0 +1,845 @@
+{
+  "metadata": {
+    "source": {
+      "name": "Chummer5 Improvements Dataset",
+      "version": "unknown",
+      "extracted_at": "2025-11-11T00:28:06Z",
+      "record_count": 84
+    },
+    "generated_by": "cmd/tools/chummerimprovements (ShadowMaster)",
+    "entry_count": 84
+  },
+  "improvements": [
+    {
+      "id": "addcomplexform",
+      "name": "Add Complex Form",
+      "internal": "addcomplexform",
+      "fields": [
+        "SelectComplexForm"
+      ],
+      "xml": "{\"+@forced\":\"True\",\"+content\":\"{select}\"}",
+      "description": "Adds a free Complex Form to the character. Any Complex Form can be added, even ones for which the character would not be normally eligible."
+    },
+    {
+      "id": "addecho",
+      "name": "Add Echo",
+      "internal": "addecho",
+      "fields": [
+        "SelectEcho"
+      ],
+      "xml": "{\"+@forced\":\"True\",\"+content\":\"{select}\"}",
+      "description": "Adds a free echo to the character. Any echo can be added, even ones for which the character would not be normally eligible."
+    },
+    {
+      "id": "addmetamagic",
+      "name": "Add Metamagic",
+      "internal": "addmetamagic",
+      "fields": [
+        "SelectMetamagic"
+      ],
+      "xml": "{\"+@forced\":\"True\",\"+content\":\"{select}\"}",
+      "description": "Adds a free metamagic to the character. Any metamagic can be added, even ones for which the character would not be normally eligible."
+    },
+    {
+      "id": "addspell",
+      "name": "Add Spell",
+      "internal": "addspell",
+      "fields": [
+        "SelectSpell"
+      ],
+      "xml": "{\"+@forced\":\"True\",\"+content\":\"{select}\"}",
+      "description": "Adds a free spell to the character. Any spell can be added, even ones for which the character would not be normally eligible."
+    },
+    {
+      "id": "specificpower",
+      "name": "Adept Power",
+      "internal": "specificpower",
+      "fields": [
+        "SelectAdeptPower",
+        "val",
+        "free"
+      ],
+      "xml": "\u003cname\u003e{select}\u003c/name\u003e\u003cval\u003e{val}\u003c/val\u003e\u003cfree\u003e{free}\u003c/free\u003e",
+      "description": "Creates a free Adept Power. If the selected power already exists, the power will either be marked as free, or have free levels added to it."
+    },
+    {
+      "id": "armor",
+      "name": "Armor",
+      "internal": "armor",
+      "fields": [
+        "val"
+      ],
+      "xml": "{val}",
+      "description": "Adjusts the character's Armor Rating by the value entered. Positive numbers improve Armor. Negative numbers reduce Armor."
+    },
+    {
+      "id": "armorencumbrancepenalty",
+      "name": "Armor Encumbrance Penalty",
+      "internal": "armorencumbrancepenalty",
+      "fields": [
+        "val"
+      ],
+      "xml": "{val}",
+      "description": "Adjusts the character's Armor Encumbrance penalty by the value entered. Positive numbers increase the Armor Encumbrance penalty (bad). Negative numbers decrease the Armor Encumbrance penalty (good)."
+    },
+    {
+      "id": "specificattribute",
+      "name": "Attribute",
+      "internal": "specificattribute",
+      "fields": [
+        "SelectAttribute",
+        "val",
+        "min",
+        "max",
+        "aug"
+      ],
+      "xml": "\u003cname\u003e{select}\u003c/name\u003e\u003cval\u003e{val}\u003c/val\u003e\u003cmin\u003e{min}\u003c/min\u003e\u003cmax\u003e{max}\u003c/max\u003e\u003caug\u003e{aug}\u003c/aug\u003e",
+      "description": "Adjusts the values for one of the character's Attributes. Positive numbers increase an Attribute. Negative numbers decrease an Attribute. Select an Attribute to affect by clicking the Select Value button. Value adjusts the Attribute's current value. Minimum adjusts the Metatype's minimum value for the Attribute. Maximum adjusts the Metatype's maximum value for the Attribute. Augmented Maximum Maximum adjusts the Metatype's augmented maximum value for the Attribute. Fields may be left at 0 if you do not want to affect that particular aspect of the Attribute."
+    },
+    {
+      "id": "attributelevel",
+      "name": "Attribute Level",
+      "internal": "attributelevel",
+      "fields": [
+        "SelectAttribute",
+        "val"
+      ],
+      "xml": "\u003cname\u003e{select}\u003c/name\u003e\u003cval\u003e{val}\u003c/val\u003e",
+      "description": "Adds to the selected attribute's base Value, increasing Karma costs for subsequent purchases."
+    },
+    {
+      "id": "basicbiowareessmultiplier",
+      "name": "Basic Bioware Essence Cost",
+      "internal": "basicbiowareessmultiplier",
+      "fields": [
+        "val"
+      ],
+      "xml": "{val}",
+      "description": "Adjusts the Essence cost of Bioware in the Basic category by the percent value entered. All Basic Bioware Essence costs will now be X% of their original value. Numbers lower than 100 reduce the Essence cost. Numbers higher than 100 increase the Essence cost."
+    },
+    {
+      "id": "basiclifestylecost",
+      "name": "Basic Lifestyle Cost",
+      "internal": "basiclifestylecost",
+      "fields": [
+        "val"
+      ],
+      "xml": "{val}",
+      "description": "Adjusts the Nuyen cost of all basic Lifestyles by the percent value entered. All basic Lifestyles will now cost an additional X% per month. Basic Lifestyles are only those found in the SR4 book and do not include Advanced Lifestyles, Safehouses, or Bolt Holes. Positive number increase the basic Lifestyle's monthly Nuyen cost. Negative numbers reduce the basic Lifestyle's monthly Nuyen cost."
+    },
+    {
+      "id": "biowareessmultiplier",
+      "name": "Bioware Essence Cost",
+      "internal": "biowareessmultiplier",
+      "fields": [
+        "val"
+      ],
+      "xml": "{val}",
+      "description": "Adjusts the Essence cost of Bioware by the percent value entered. All Bioware Essence costs will now be X% of their original value. Numbers lower than 100 reduce the Essence cost. Numbers higher than 100 increase the Essence cost."
+    },
+    {
+      "id": "blockskillgroupdefaulting",
+      "name": "Block Skillgroup Defaulting",
+      "internal": "blockskillgroupdefaulting",
+      "fields": [
+        "SelectSkillGroup"
+      ],
+      "description": "Prevents the character from seeing dicepool values for skills in the selected skillgroup."
+    },
+    {
+      "id": "streetcred",
+      "name": "Bonus Street Cred",
+      "internal": "streetcred",
+      "fields": [
+        "val"
+      ],
+      "xml": "{val}",
+      "description": "Increases the character's Street Cred by the listed value."
+    },
+    {
+      "id": "composure",
+      "name": "Composure",
+      "internal": "composure",
+      "fields": [
+        "val"
+      ],
+      "xml": "{val}",
+      "description": "Adjusts the character's Composure Special Attribute by the value entered. Positive numbers improve Composure. Negative numbers reduce Composure."
+    },
+    {
+      "id": "concealability",
+      "name": "Concealability",
+      "internal": "concealability",
+      "fields": [
+        "val"
+      ],
+      "xml": "{val}",
+      "description": "Adjusts the character's ability to conceal Weapons by the value entered. This bonus applies to the Concealability of all Weapons. Positive values improve Concealability. Negative values reduce Concealability."
+    },
+    {
+      "id": "conditionmonitorphysical",
+      "name": "Condition Monitor, Physical",
+      "internal": "conditionmonitor",
+      "fields": [
+        "val"
+      ],
+      "xml": "\u003cphysical\u003e{val}\u003c/physical\u003e",
+      "description": "Adjusts the number of boxes the character has in their Physical Condition Monitor. Positive numbers increase the number of boxes in the Condition Monitor. Negative numbers reduce the number of boxes in the Condition Monitor."
+    },
+    {
+      "id": "conditionmonitorstun",
+      "name": "Condition Monitor, Stun",
+      "internal": "conditionmonitor",
+      "fields": [
+        "val"
+      ],
+      "xml": "\u003cstun\u003e{val}\u003c/stun\u003e",
+      "description": "Adjusts the number of boxes the character has in their Stun Condition Monitor. Positive numbers increase the number of boxes in the Condition Monitor. Negative numbers reduce the number of boxes in the Condition Monitor."
+    },
+    {
+      "id": "conditionmonitorthreshold",
+      "name": "Condition Monitor, Threshold",
+      "internal": "conditionmonitor",
+      "fields": [
+        "val"
+      ],
+      "xml": "\u003cthreshold\u003e{val}\u003c/threshold\u003e",
+      "description": "Adjusts the number of boxes between each Condition Monitor Threshold. Positive numbers increase the number of boxes between each Threshold. Negative numbers reduce the number of boxes between each Threshold."
+    },
+    {
+      "id": "conditionmonitoroffset",
+      "name": "Condition Monitor, Threshold Offset",
+      "internal": "conditionmonitor",
+      "fields": [
+        "val"
+      ],
+      "xml": "\u003cthresholdoffset\u003e{val}\u003c/thresholdoffset\u003e",
+      "description": "Adjusts the number of boxes between the start of each Condition Monitor and the first Threshold. Positive numbers increase the starting position of the first Threshold. Negative numbers reduce the starting position of each Threshold."
+    },
+    {
+      "id": "cyberseeker",
+      "name": "Cyber-Singularity Seeker/Redliner (Attribute)",
+      "internal": "cyberseeker",
+      "fields": [
+        "SelectAttribute"
+      ],
+      "xml": "{select}",
+      "description": "Grants bonuses to the specified attribute based on the number of cyberlimbs a character has. Special attributes are invalid"
+    },
+    {
+      "id": "cyberseeker",
+      "name": "Cyber-Singularity Seeker/Redliner (Condition Monitor)",
+      "internal": "cyberseeker",
+      "xml": "BOX",
+      "description": "Grants bonuses to the character's physical Condition Monitor based on the number of cyberlimbs a character has. See Redliner in Chrome Flesh for more details."
+    },
+    {
+      "id": "cyberwareessmultiplier",
+      "name": "Cyberware Essence Cost",
+      "internal": "cyberwareessmultiplier",
+      "fields": [
+        "val"
+      ],
+      "xml": "{val}",
+      "description": "Adjusts the Essence cost of Cyberware by the percent value entered. All Cyberware Essence costs will now be X% of their original value. Numbers lower than 100 reduce the Essence cost. Numbers higher than 100 increase the Essence cost."
+    },
+    {
+      "id": "damageresistance",
+      "name": "Damage Resistance",
+      "internal": "damageresistance",
+      "fields": [
+        "val"
+      ],
+      "xml": "{val}",
+      "description": "Adjusts the size of the character's Damage Resistance Test dice pool by the value entered. Positive numbers increase the size of the pool. Negative numbers decrease the size of the pool."
+    },
+    {
+      "id": "dodge",
+      "name": "Dodge",
+      "internal": "dodge",
+      "fields": [
+        "val"
+      ],
+      "xml": "{val}",
+      "description": "Increases the character's Dodge pool by the listed value."
+    },
+    {
+      "id": "drainresist",
+      "name": "Drain Resistance",
+      "internal": "drainresist",
+      "fields": [
+        "val"
+      ],
+      "xml": "{val}",
+      "description": "Adjusts the size of the character's Drain Resistance pool by the value entered. Positive values increase the size of the pool. Negative values decrease the size of the pool."
+    },
+    {
+      "id": "enablecrittertab",
+      "name": "Enable Critter Tab",
+      "internal": "enabletab",
+      "xml": "\u003cname\u003ecritter\u003c/name\u003e",
+      "description": "Enables the character's Critter Powers tab, allowing them to buy critter powers. The character is flagged as a Critter."
+    },
+    {
+      "id": "enablecyberzombie",
+      "name": "Enable Cyberzombie Conversion",
+      "internal": "enablecyberzombie",
+      "description": "Allows the character to be converted into a Cyberzombie."
+    },
+    {
+      "id": "enableattribute",
+      "name": "Enable Special Attribute",
+      "internal": "enableattribute",
+      "fields": [
+        "SelectSpecialAttribute"
+      ],
+      "xml": "\u003cname\u003e{select}\u003c/name\u003e",
+      "description": "Unlocks the controls for an attribute, allowing the values to be increased. Expected values are MAG, RES or DEP for Magic, Resonance and Depth respectively."
+    },
+    {
+      "id": "enablemagiciantab",
+      "name": "Enable Spells and Spirits Tab",
+      "internal": "enabletab",
+      "xml": "\u003cname\u003emagician\u003c/name\u003e",
+      "description": "Enables the character's Spells and Spirits tab, allowing them to buy spells and bind spirits. The character is flagged as a Magician for the purposes of quality requirements, but does not receive access to the Initiation tab, unlock their Magic attribute or receive any of the Magical skills. Incompatible with improvements that enable the Complex Forms and Sprites tab."
+    },
+    {
+      "id": "enabletechnomancertab",
+      "name": "Enable Technomancer Tab",
+      "internal": "enabletab",
+      "xml": "\u003cname\u003etechnomancer\u003c/name\u003e",
+      "description": "Enables the character's 'Complex Forms and Sprites' tab, allowing them to purchase Complex Forms and compile Sprites. The character is flagged as a Technomancer for the purposes of quality requirements, but does not receive access to the Submersion tab, unlock their Resonance attribute or receive any of the Resonance skills. Incompatible with improvements that enable the Spells and Spirits tab."
+    },
+    {
+      "id": "essencemax",
+      "name": "Essence Maximum",
+      "internal": "essencemax",
+      "fields": [
+        "val"
+      ],
+      "xml": "{val}",
+      "description": "Adjusts the character's Maximum Essence by the value entered. Positive values increase Maximum Essence. Negative values decrease Maximum Essence."
+    },
+    {
+      "id": "fadingresist",
+      "name": "Fading Resistance",
+      "internal": "fadingresist",
+      "fields": [
+        "val"
+      ],
+      "xml": "{val}",
+      "description": "Adjusts the size of the character's Fading Resistance pool by the value entered. Positive values increase the size of the pool. Negative values decrease the size of the pool."
+    },
+    {
+      "id": "disableinitiationtab",
+      "name": "Force Disable Initiation/Submersion Tab",
+      "internal": "disabletab",
+      "xml": "\u003cname\u003einitiation\u003c/name\u003e",
+      "description": "Forcibly disables the character's Initiation or Submersion tab, forbidding them from getting metamagics or echoes."
+    },
+    {
+      "id": "freespells",
+      "name": "Free Spells",
+      "internal": "freespells",
+      "fields": [
+        "val"
+      ],
+      "xml": "{val}",
+      "description": "Allows the character to mark some spells as Free, avoiding Karma costs."
+    },
+    {
+      "id": "genetechcostmultiplier",
+      "name": "Genetech Cost",
+      "internal": "genetechcostmultiplier",
+      "fields": [
+        "val"
+      ],
+      "xml": "{val}",
+      "description": "Adjusts the Nuyen cost of Bioware in the Genetech categories by the percent value entered. All Genetech Nuyen costs will now be X% of their original value. Numbers lower than 100 reduce the Nuyen cost. Numbers higher than 100 increase the Nuyen cost."
+    },
+    {
+      "id": "genetechessmultiplier",
+      "name": "Genetech Essence Cost",
+      "internal": "genetechessmultiplier",
+      "fields": [
+        "val"
+      ],
+      "xml": "{val}",
+      "description": "Adjusts the Essence cost of Genetech by the percent value entered. All Genetech Essence costs will now be X% of their original value. Numbers lower than 100 reduce the Essence cost. Numbers higher than 100 increase the Essence cost."
+    },
+    {
+      "id": "ignorecmpenaltyphysical",
+      "name": "Ignore Condition Monitor Penalty, Physical",
+      "internal": "ignorecmpenaltyphysical",
+      "description": "Reduces the characters Physical Condition Monitor Penalty to 0 while the Improvement is active."
+    },
+    {
+      "id": "ignorecmpenaltystun",
+      "name": "Ignore Condition Monitor Penalty, Stun",
+      "internal": "ignorecmpenaltystun",
+      "description": "Reduces the characters Stun Condition Monitor Penalty to 0 while the Improvement is active."
+    },
+    {
+      "id": "initiative",
+      "name": "Initiative",
+      "internal": "initiative",
+      "fields": [
+        "val"
+      ],
+      "xml": "{val}",
+      "description": "Adjusts the character's Initiative by the value entered. Positive numbers increase Initiative. Negative numbers reduce Initiative."
+    },
+    {
+      "id": "initiativediceadd",
+      "name": "Initiative Dice",
+      "internal": "initiativediceadd",
+      "fields": [
+        "val"
+      ],
+      "xml": "{val}",
+      "description": "Adjusts the number of Initiative Dice the character receives by the value entered. Positive numbers increase the number of Initiative Dice. Negative numbers reduce the number of Initiative Dice."
+    },
+    {
+      "id": "judgeintentions",
+      "name": "Judge Intentions",
+      "internal": "judgeintentions",
+      "fields": [
+        "val"
+      ],
+      "xml": "{val}",
+      "description": "Adjusts the character's Judge Intentions Special Attribute by the value entered. Positive numbers improve Judge Intentions. Negative numbers reduce Judge Intentions."
+    },
+    {
+      "id": "knowsoft",
+      "name": "KnowSoft",
+      "internal": "knowsoft",
+      "fields": [
+        "SelectKnowSkill",
+        "val"
+      ],
+      "xml": "\u003cname\u003e{select}\u003c/name\u003e\u003cval\u003e{val}\u003c/val\u003e\u003crequire\u003eskilljack\u003c/require\u003e",
+      "description": "Creates a Knowledge Skill that requires the skillsoftaccess improvement to be activated."
+    },
+    {
+      "id": "specificknowskill",
+      "name": "Knowledge Skill",
+      "internal": "specificskill",
+      "fields": [
+        "SelectKnowSkill",
+        "val",
+        "applytorating"
+      ],
+      "xml": "\u003cname\u003e{select}\u003c/name\u003e\u003cbonus\u003e{val}\u003c/bonus\u003e{applytorating}",
+      "description": "Adjusts the value for one of the character's Knowledge Skills by the value entered. Positive numbers increase the Knowledge Skill. Negative numbers decrease the Knowledge Skill. Select a Knowledge Skill to affect by clicking the Select Value button. The modifier can be applied to the Knowledge Skill's Rating by selecting Apply to Rating, otherwise the modifier is applied as a dice pool modifier."
+    },
+    {
+      "id": "lifestylecost",
+      "name": "Lifestyle Cost",
+      "internal": "lifestylecost",
+      "fields": [
+        "val"
+      ],
+      "xml": "{val}",
+      "description": "Adjusts the Nuyen cost of all Lifestyles by the percent value entered. All Lifestyles will now cost an additional X% per month. Positive number increase the Lifestyle's monthly Nuyen cost. Negative numbers reduce the Lifestyle's monthly Nuyen cost."
+    },
+    {
+      "id": "liftandcarry",
+      "name": "Lift and Carry",
+      "internal": "liftandcarry",
+      "fields": [
+        "val"
+      ],
+      "xml": "{val}",
+      "description": "Adjusts the character's Lift and Carry Special Attribute by the value entered. Positive numbers improve Lift and Carry. Negative numbers reduce Lift and Carry."
+    },
+    {
+      "id": "livingpersonaattack",
+      "name": "Living Persona, Attack",
+      "internal": "livingpersona",
+      "fields": [
+        "val"
+      ],
+      "xml": "\u003cattack\u003e{val}\u003c/attack\u003e",
+      "description": "Adjusts the Living Persona's Attack by the value entered. Positive numbers improve Attack. Negative numbers reduce Attack. You may enter XPath operations as well. This has no effect on characters that do not have a Living Persona."
+    },
+    {
+      "id": "livingpersonadataprocessing",
+      "name": "Living Persona, Data Processing",
+      "internal": "livingpersona",
+      "fields": [
+        "val"
+      ],
+      "xml": "\u003cdataprocessing\u003e{val}\u003c/dataprocessing\u003e",
+      "description": "Adjusts the Living Persona's Data Processing by the value entered. Positive numbers improve Data Processing. Negative numbers reduce Data Processing. You may enter XPath operations as well. This has no effect on characters that do not have a Living Persona."
+    },
+    {
+      "id": "livingpersonadevicerating",
+      "name": "Living Persona, Device Rating",
+      "internal": "livingpersona",
+      "fields": [
+        "val"
+      ],
+      "xml": "\u003cdevicerating\u003e{val}\u003c/devicerating\u003e",
+      "description": "Adjusts the Living Persona's Device Rating by the value entered. Positive numbers improve the Device Rating. Negative numbers reduce the Device Rating. You may enter XPath operations as well. This has no effect on characters that do not have a Living Persona."
+    },
+    {
+      "id": "livingpersonafirewall",
+      "name": "Living Persona, Firewall",
+      "internal": "livingpersona",
+      "fields": [
+        "val"
+      ],
+      "xml": "\u003cfirewall\u003e{val}\u003c/firewall\u003e",
+      "description": "Adjusts the Living Persona's Firewall by the value entered. Positive numbers improve Firewall. Negative numbers reduce Firewall. You may enter XPath operations as well. This has no effect on characters that do not have a Living Persona."
+    },
+    {
+      "id": "livingpersonaprogramlimit",
+      "name": "Living Persona, Program Limit",
+      "internal": "livingpersona",
+      "fields": [
+        "val"
+      ],
+      "xml": "\u003cprogramlimit\u003e{val}\u003c/programlimit\u003e",
+      "description": "Adjusts the Living Persona's Program Limit by the value entered. Positive numbers improve the Program Limit. Negative numbers reduce the Program Limit. You may enter XPath operations as well. This has no effect on characters that do not have a Living Persona."
+    },
+    {
+      "id": "livingpersonasleaze",
+      "name": "Living Persona, Sleaze",
+      "internal": "livingpersona",
+      "fields": [
+        "val"
+      ],
+      "xml": "\u003csleaze\u003e{val}\u003c/sleaze\u003e",
+      "description": "Adjusts the Living Persona's Sleaze by the value entered. Positive numbers improve Sleaze. Negative numbers reduce Sleaze. You may enter XPath operations as well. This has no effect on characters that do not have a Living Persona."
+    },
+    {
+      "id": "matrixinitiative",
+      "name": "Matrix Initiative",
+      "internal": "matrixinitiative",
+      "fields": [
+        "val"
+      ],
+      "xml": "{val}",
+      "description": "Adjusts the character's Matrix Initiative by the value entered. Positive numbers increase Matrix Initiative. Negative numbers reduce Matrix Initiative."
+    },
+    {
+      "id": "matrixinitiativediceadd",
+      "name": "Matrix Initiative Passes",
+      "internal": "matrixinitiativediceadd",
+      "fields": [
+        "val"
+      ],
+      "xml": "{val}",
+      "description": "Adjusts the number of Matrix Initiative Passes the character receives by the value entered. Positive numbers increase the number of Matrix Initiative Passes. Negative numbers reduce the number of Matrix Initiative Passes."
+    },
+    {
+      "id": "memory",
+      "name": "Memory",
+      "internal": "memory",
+      "fields": [
+        "val"
+      ],
+      "xml": "{val}",
+      "description": "Adjusts the character's Memory Special Attribute by the value entered. Positive numbers improve Memory. Negative numbers reduce Memory."
+    },
+    {
+      "id": "mentallimit",
+      "name": "Mental Limit",
+      "internal": "mentallimit",
+      "fields": [
+        "val"
+      ],
+      "xml": "{val}",
+      "description": "Adjusts the character's Mental Limit by the listed value."
+    },
+    {
+      "id": "physicallimit",
+      "name": "Physical Limit",
+      "internal": "physicallimit",
+      "fields": [
+        "val"
+      ],
+      "xml": "{val}",
+      "description": "Adjusts the character's Physical Limit by the listed value."
+    },
+    {
+      "id": "adeptpowerpoints",
+      "name": "Power Points, Adept",
+      "internal": "adeptpowerpoints",
+      "fields": [
+        "val"
+      ],
+      "xml": "{val}",
+      "description": "Adjusts the number of Power Points an Adept receives to spend on Adept Powers by the value entered. Positive numbers increase the number of Power Points. Negative numbers decrease the number of Power Points. This has no effect on non-Adept characters."
+    },
+    {
+      "id": "freespiritpowerpoints",
+      "name": "Power Points, Free Spirit",
+      "internal": "freespiritpowerpoints",
+      "fields": [
+        "val"
+      ],
+      "xml": "{val}",
+      "description": "Adjusts the number of Power Points a Free Spirit receives to spend on Critter Powers by the value entered. Positive numbers increase the number of Power Points. Negative numbers decrease the number of Power Points. This has no effect on non-Free Spirit characters."
+    },
+    {
+      "id": "quickeningmetamagic",
+      "name": "Quickening",
+      "internal": "quickeningmetamagic",
+      "description": "Grants the character access to Quickening in the same manner as the Quickening Metamagic."
+    },
+    {
+      "id": "reach",
+      "name": "Reach",
+      "internal": "reach",
+      "fields": [
+        "val"
+      ],
+      "xml": "{val}",
+      "description": "Adjusts the character's Reach by the value entered. Positive numbers increase Reach. Negative numbers reduce Reach."
+    },
+    {
+      "id": "replaceattribute",
+      "name": "Replace Attribute",
+      "internal": "replaceattributes",
+      "fields": [
+        "SelectAttribute",
+        "min",
+        "max",
+        "aug"
+      ],
+      "xml": "\u003creplaceattribute\u003e\u003cname\u003e{select}\u003c/name\u003e\u003cmin\u003e{min}\u003c/min\u003e\u003cmax\u003e{max}\u003c/max\u003e\u003caug\u003e{aug}\u003c/aug\u003e\u003c/replaceattribute\u003e",
+      "description": "Overrides the Metatype limitations for an attribute. Minimum adjusts the Metatype's minimum value for the Attribute. Maximum adjusts the Metatype's maximum value for the Attribute. Augmented Maximum Maximum adjusts the Metatype's augmented maximum value for the Attribute. Fields may be left at 0 if you do not want to affect that particular aspect of the Attribute."
+    },
+    {
+      "id": "runmultiplier",
+      "name": "Run Multiplier",
+      "internal": "runmultiplier",
+      "fields": [
+        "category",
+        "val",
+        "percent"
+      ],
+      "xml": "\u003ccategory\u003e{category}\u003c/category\u003e\u003cval\u003e{val}\u003c/val\u003e\u003cpercent\u003e{percent}\u003c/percent\u003e",
+      "description": "Increases the running speed of a character for a particular category of movement. Positive numbers increase the factor by which attributes are multiplied to get running speeds. Negative numbers decrease the factor by which attributes are multiplied to get running speeds. Category can be Ground, Swim, or Fly for running speed on land, in water, and in the air respectively. Value increases the running factor by a fixed amount. Percent increases the running factor by a percentage amount. Fields may be left at 0 if you do not want to affect running speed in that particular way."
+    },
+    {
+      "id": "specificskill",
+      "name": "Skill",
+      "internal": "specificskill",
+      "fields": [
+        "SelectSkill",
+        "val",
+        "applytorating"
+      ],
+      "xml": "\u003cname\u003e{select}\u003c/name\u003e\u003cbonus\u003e{val}\u003c/bonus\u003e{applytorating}",
+      "description": "Adjusts the value for one of the character's Skills by the value entered. Positive numbers increase the Skill. Negative numbers decrease the Skill. Select a Skill to affect by clicking the Select Value button. The modifier can be applied to the Skill's Rating by selecting Apply to Rating, otherwise the modifier is applied as a dice pool modifier."
+    },
+    {
+      "id": "skilllevel",
+      "name": "Skill Level",
+      "internal": "skilllevel",
+      "fields": [
+        "SelectSkill",
+        "val"
+      ],
+      "xml": "\u003cname\u003e{select}\u003c/name\u003e\u003cval\u003e{val}\u003c/val\u003e",
+      "description": "Adds to the selected attribute's base Value, increasing Karma costs for subsequent purchases."
+    },
+    {
+      "id": "skillcategory",
+      "name": "Skills in Category",
+      "internal": "skillcategory",
+      "fields": [
+        "SelectSkillCategory",
+        "val",
+        "applytorating"
+      ],
+      "xml": "\u003cname\u003e{select}\u003c/name\u003e\u003cbonus\u003e{val}\u003c/bonus\u003e{applytorating}",
+      "description": "Adjusts the value for all of the Skills in one category by the value entered. Positive numbers increase the Skills. Negative numbers decrease the Skills. Select a Skill category to affect by clicking the Select Value button. The modifier can be applied to the Skills' Ratings by selecting Apply to Rating, otherwise the modifier is applied as a dice pool modifier."
+    },
+    {
+      "id": "skillgroup",
+      "name": "Skills in Group",
+      "internal": "skillgroup",
+      "fields": [
+        "SelectSkillGroup",
+        "val",
+        "applytorating"
+      ],
+      "xml": "\u003cname\u003e{select}\u003c/name\u003e\u003cbonus\u003e{val}\u003c/bonus\u003e{applytorating}",
+      "description": "Adjusts the value for all of the Skills in a Skill Group by the value entered. Positive numbers increase the Skills. Negative numbers decrease the Skills. Select a Skill Group to affect by clicking the Select Value button. The modifier can be applied to the Skills' Ratings by selecting Apply to Rating, otherwise the modifier is applied as a dice pool modifier."
+    },
+    {
+      "id": "skillattribute",
+      "name": "Skills linked to Attribute",
+      "internal": "skillattribute",
+      "fields": [
+        "SelectAttribute",
+        "val",
+        "applytorating"
+      ],
+      "xml": "\u003cname\u003e{select}\u003c/name\u003e\u003cbonus\u003e{val}\u003c/bonus\u003e{applytorating}",
+      "description": "Adjusts the value for all of the Skills linked to an Attribute by the value entered. Positive numbers increase the Skills. Negative numbers decrease the Skills. Select a linked Attribute to affect by clicking the Select Value button. The modifier can be applied to the Skills' Ratings by selecting Apply to Rating, otherwise the modifier is applied as a dice pool modifier."
+    },
+    {
+      "id": "skillsoftaccess",
+      "name": "Skillsoft Access",
+      "internal": "skillsoftaccess",
+      "description": "The character can use Knowsoft and Linguasoft Skillsofts as though they had a direct neural link."
+    },
+    {
+      "id": "skillwire",
+      "name": "Skillwire Rating",
+      "internal": "skillwire",
+      "fields": [
+        "val"
+      ],
+      "xml": "{val}",
+      "description": "Grants the character access to Skillwires at the specified Rating which limits the effective Rating of all Skillsofts the character takes."
+    },
+    {
+      "id": "sociallimit",
+      "name": "Social Limit",
+      "internal": "sociallimit",
+      "fields": [
+        "val"
+      ],
+      "xml": "{val}",
+      "description": "Adjusts the character's Social Limit by the listed value."
+    },
+    {
+      "id": "spelldicepool",
+      "name": "Specific Spell Dicepool",
+      "internal": "spelldicepool",
+      "fields": [
+        "SelectSpell",
+        "val"
+      ],
+      "xml": "\u003cname\u003e{select}\u003c/name\u003e\u003cval\u003e{val}\u003c/val\u003e",
+      "description": "Adjusts the size of the character's Spellcasting pool when casting the Spell with the selected name. Positive values improve Spellcasting. Negative values reduce Spellcasting."
+    },
+    {
+      "id": "spellcategory",
+      "name": "Spells in Category",
+      "internal": "spellcategory",
+      "fields": [
+        "SelectSpellCategory",
+        "val"
+      ],
+      "xml": "\u003cname\u003e{select}\u003c/name\u003e\u003cval\u003e{val}\u003c/val\u003e",
+      "description": "Adjusts the size of the character's Spellcasting pool when casting Spell in the selected category. Positive values improve Spellcasting. Negative values reduce Spellcasting."
+    },
+    {
+      "id": "sprintbonus",
+      "name": "Sprint Bonus",
+      "internal": "sprintbonus",
+      "fields": [
+        "category",
+        "val",
+        "percent"
+      ],
+      "xml": "\u003ccategory\u003e{category}\u003c/category\u003e\u003cval\u003e{val}\u003c/val\u003e\u003cpercent\u003e{percent}\u003c/percent\u003e",
+      "description": "Increases the sprinting speed of a character for a particular category of movement. Positive numbers increase the number of meters sprinted per hit. Negative numbers decrease the number of meters sprinted per hit. Category can be Ground, Swim, or Fly for sprinting speed on land, in water, and in the air respectively. Value increases sprinted meters per hit by a fixed amount. Percent increases the sprinted meters per hit by a percentage amount. Fields may be left at 0 if you do not want to affect sprinting speed in that particular way."
+    },
+    {
+      "id": "streetcredmultiplier",
+      "name": "Street Cred Multiplier",
+      "internal": "streetcredmultiplier",
+      "fields": [
+        "val"
+      ],
+      "xml": "{val}",
+      "description": "Increases or reduces the multiplier used to calculate Street Cred."
+    },
+    {
+      "id": "surprise",
+      "name": "Surprise",
+      "internal": "surprise",
+      "fields": [
+        "val"
+      ],
+      "xml": "{val}",
+      "description": "Adjusts the character's Surprise dicepool by the value entered. Positive numbers improve the dicepool. Negative numbers reduce the dicepool."
+    },
+    {
+      "id": "swapskillattribute",
+      "name": "Swap Skill Attribute (Physical for Mental)",
+      "internal": "swapskillattribute",
+      "fields": [
+        "SelectPhysicalAttribute"
+      ],
+      "xml": "\u003cattribute\u003e{select}\u003c/attribute\u003e",
+      "description": "Swaps the Physical Attribute used by Active Skills with the corresponding Mental Attribute as described in the Astral Attributes table on SR4 192. (AGI/LOG; BOD/WIL; REA/INT; STR/CHA)"
+    },
+    {
+      "id": "throwrange",
+      "name": "Throwing Weapon Range",
+      "internal": "throwrange",
+      "fields": [
+        "val"
+      ],
+      "xml": "{val}",
+      "description": "Adjusts a character's STR for the purpose of determining the range of Throwing Weapons. Positive numbers increase the character's effective STR. Negative numbers reduce the character's effective STR."
+    },
+    {
+      "id": "throwstr",
+      "name": "Throwing Weapon STR",
+      "internal": "throwstr",
+      "fields": [
+        "val"
+      ],
+      "xml": "{val}",
+      "description": "Adjusts a character's STR for the purpose of determining the DV of Throwing Weapons. Positive numbers increase the character's effective STR. Negative numbers reduce the character's effective STR."
+    },
+    {
+      "id": "unarmedap",
+      "name": "Unarmed AP",
+      "internal": "unarmedap",
+      "fields": [
+        "val"
+      ],
+      "xml": "{val}",
+      "description": "Adjusts the Armor Penetration value for a character's Unarmed Attacks by the value entered. Positive numbers reduce Armor Penetration. Negative numbers increase Armor Penetration."
+    },
+    {
+      "id": "unarmeddv",
+      "name": "Unarmed DV",
+      "internal": "unarmeddv",
+      "fields": [
+        "val"
+      ],
+      "xml": "{val}",
+      "description": "Adjusts the Damage Value for a character's Unarmed Attacks by the value entered. Positive numbers increase the Damage Value. Negative numbers decrease the Damage Value."
+    },
+    {
+      "id": "unarmeddvphysical",
+      "name": "Unarmed DV Physical",
+      "internal": "unarmeddvphysical",
+      "description": "All of the character's Unarmed Attacks will do Physical damage instead of Stun damage."
+    },
+    {
+      "id": "walkmultiplier",
+      "name": "Walk Multiplier",
+      "internal": "walkmultiplier",
+      "fields": [
+        "category",
+        "val",
+        "percent"
+      ],
+      "xml": "\u003ccategory\u003e{category}\u003c/category\u003e\u003cval\u003e{val}\u003c/val\u003e\u003cpercent\u003e{percent}\u003c/percent\u003e",
+      "description": "Increases the walking speed of a character for a particular category of movement. Positive numbers increase the factor by which attributes are multiplied to get walking speeds. Negative numbers decrease the factor by which attributes are multiplied to get walking speeds. Category can be Ground, Swim, or Fly for walking speed on land, in water, and in the air respectively. Value increases the walking factor by a fixed amount. Percent increases the walking factor by a percentage amount. Fields may be left at 0 if you do not want to affect walking speed in that particular way."
+    },
+    {
+      "id": "weaponcategorydv",
+      "name": "Weapon Category DV",
+      "internal": "weaponcategorydv",
+      "fields": [
+        "SelectWeaponCategory",
+        "val"
+      ],
+      "xml": "\u003cname\u003e{select}\u003c/name\u003e\u003cbonus\u003e{val}\u003c/bonus\u003e",
+      "description": "Adjusts the Damage Value of all Weapons in the selected category by the value entered. Positive numbers increase Weapon Damage Value. Negative numbers decrease Weapon Damage Value."
+    }
+  ]
+}

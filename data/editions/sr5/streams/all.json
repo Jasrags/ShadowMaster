@@ -1,0 +1,216 @@
+{
+  "metadata": {
+    "source": {
+      "name": "Chummer5 Streams Dataset",
+      "version": "unknown",
+      "extracted_at": "2025-11-11T01:29:56Z",
+      "record_count": 8
+    },
+    "generated_by": "cmd/tools/chummerstreams (ShadowMaster)",
+    "tradition_count": 1,
+    "sprite_count": 7
+  },
+  "traditions": [
+    {
+      "id": "7a3ecfbe-616e-425d-b204-329de37ffdbb",
+      "name": "Default",
+      "slug": "default",
+      "drain": "{WIL} + {RES}",
+      "spirits": [
+        "Companion Sprite",
+        "Courier Sprite",
+        "Crack Sprite",
+        "Data Sprite",
+        "Fault Sprite",
+        "Generalist Sprite",
+        "Machine Sprite"
+      ],
+      "source": "SR5",
+      "page": "258"
+    }
+  ],
+  "sprites": [
+    {
+      "id": "74db183e-2fef-4e6d-84a3-63e641d93bf0",
+      "name": "Companion Sprite",
+      "slug": "companion-sprite",
+      "source": "KC",
+      "page": "100",
+      "attributes": {
+        "agi": "0",
+        "bod": "0",
+        "cha": "F-1",
+        "int": "F+1",
+        "log": "F",
+        "rea": "0",
+        "str": "0",
+        "wil": "F+4"
+      },
+      "initiative": "(F*2)",
+      "powers": [
+        "Bodyguard",
+        "Shield"
+      ],
+      "skills": [
+        "Computer",
+        "Electronic Warfare"
+      ]
+    },
+    {
+      "id": "acf0c123-0881-4f13-8a98-010516e74019",
+      "name": "Courier Sprite",
+      "slug": "courier-sprite",
+      "source": "SR5",
+      "page": "258",
+      "attributes": {
+        "agi": "0",
+        "bod": "0",
+        "cha": "F+0",
+        "int": "F+3",
+        "log": "F+1",
+        "rea": "0",
+        "str": "0",
+        "wil": "F+2"
+      },
+      "initiative": "(F*2)+1",
+      "powers": [
+        "Cookie",
+        "Hash"
+      ],
+      "skills": [
+        "Computer",
+        "Hacking"
+      ]
+    },
+    {
+      "id": "610c00a4-7f11-4c88-8074-158f33aeccc0",
+      "name": "Crack Sprite",
+      "slug": "crack-sprite",
+      "source": "SR5",
+      "page": "258",
+      "attributes": {
+        "agi": "0",
+        "bod": "0",
+        "cha": "F+0",
+        "int": "F+3",
+        "log": "F+2",
+        "rea": "0",
+        "str": "0",
+        "wil": "F+1"
+      },
+      "initiative": "(F*2)+2",
+      "powers": [
+        "Suppression"
+      ],
+      "skills": [
+        "Computer",
+        "Electronic Warfare",
+        "Hacking"
+      ]
+    },
+    {
+      "id": "61357134-dd63-442c-b532-355420b30b6e",
+      "name": "Data Sprite",
+      "slug": "data-sprite",
+      "source": "SR5",
+      "page": "258",
+      "attributes": {
+        "agi": "0",
+        "bod": "0",
+        "cha": "F-1",
+        "int": "F+0",
+        "log": "F+4",
+        "rea": "0",
+        "str": "0",
+        "wil": "F+1"
+      },
+      "initiative": "(F*2)+4",
+      "powers": [
+        "Camouflage",
+        "Watermark"
+      ],
+      "skills": [
+        "Computer",
+        "Electronic Warfare"
+      ]
+    },
+    {
+      "id": "c3be27c2-247c-4039-9529-2ff3b2e670ec",
+      "name": "Fault Sprite",
+      "slug": "fault-sprite",
+      "source": "SR5",
+      "page": "258",
+      "attributes": {
+        "agi": "0",
+        "bod": "0",
+        "cha": "F+3",
+        "int": "F+0",
+        "log": "F+1",
+        "rea": "0",
+        "str": "0",
+        "wil": "F+2"
+      },
+      "initiative": "(F*2)+1",
+      "powers": [
+        "Electron Storm"
+      ],
+      "skills": [
+        "Computer",
+        "Cybercombat",
+        "Hacking"
+      ]
+    },
+    {
+      "id": "80788abc-4b14-40b0-8ffd-e36fe60653cb",
+      "name": "Generalist Sprite",
+      "slug": "generalist-sprite",
+      "source": "KC",
+      "page": "100",
+      "attributes": {
+        "agi": "0",
+        "bod": "0",
+        "cha": "F+1",
+        "int": "F+1",
+        "log": "F+1",
+        "optionalpowers": "{\"power\":[\"Cookie\",\"Hash\",\"Suppression\",\"Camouflage\",\"Watermark\",\"Electron Storm\",\"Diagnostics\",\"Gremlins\",\"Stability\",\"Bodyguard\",\"Shield\"]}",
+        "rea": "0",
+        "str": "0",
+        "wil": "F+1"
+      },
+      "initiative": "(F*2)+1",
+      "skills": [
+        "Computer",
+        "Electronic Warfare",
+        "Hacking"
+      ]
+    },
+    {
+      "id": "80bd0cd6-fcaa-49c2-a88f-c28b4eb28c61",
+      "name": "Machine Sprite",
+      "slug": "machine-sprite",
+      "source": "SR5",
+      "page": "258",
+      "attributes": {
+        "agi": "0",
+        "bod": "0",
+        "cha": "F+1",
+        "int": "F+0",
+        "log": "F+3",
+        "rea": "0",
+        "str": "0",
+        "wil": "F+2"
+      },
+      "initiative": "(F*2)+3",
+      "powers": [
+        "Diagnostics",
+        "Gremlins",
+        "Stability"
+      ],
+      "skills": [
+        "Computer",
+        "Electronic Warfare",
+        "Hardware"
+      ]
+    }
+  ]
+}

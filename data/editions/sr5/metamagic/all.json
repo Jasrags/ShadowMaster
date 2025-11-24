@@ -1,0 +1,738 @@
+{
+  "metadata": {
+    "source": {
+      "name": "Chummer5 Metamagic Dataset",
+      "version": "unknown",
+      "extracted_at": "2025-11-11T00:42:15Z",
+      "record_count": 61
+    },
+    "generated_by": "cmd/tools/chummermetamagic (ShadowMaster)",
+    "metamagic_count": 61
+  },
+  "metamagics": [
+    {
+      "id": "94a38b4a-060d-4e95-bd58-665ff47929e7",
+      "name": "Absorption",
+      "slug": "absorption",
+      "adept": false,
+      "magician": true,
+      "source": "SG",
+      "page": "151",
+      "requirements": {
+        "raw": "{\"allof\":{\"art\":\"Apotropaic Magic\",\"metamagic\":\"Shielding\"}}"
+      }
+    },
+    {
+      "id": "03bdecec-6142-4b24-8aaa-0a0827c3eb78",
+      "name": "Adept Centering",
+      "slug": "adept-centering",
+      "adept": true,
+      "magician": false,
+      "source": "SR5",
+      "page": "325"
+    },
+    {
+      "id": "bffb21bd-30d2-4af8-a632-1d10109a1d25",
+      "name": "Advanced Alchemy",
+      "slug": "advanced-alchemy",
+      "adept": false,
+      "magician": true,
+      "source": "SG",
+      "page": "153",
+      "requirements": {
+        "raw": "{\"allof\":{\"art\":\"Advanced Alchemy\",\"metamagic\":\"Fixation\"}}"
+      }
+    },
+    {
+      "id": "bb1431df-c546-4799-8dd4-ec42125f1a47",
+      "name": "Anchoring",
+      "slug": "anchoring",
+      "adept": false,
+      "magician": true,
+      "source": "SG",
+      "page": "152",
+      "requirements": {
+        "raw": "{\"allof\":{\"art\":\"Quickening\",\"metamagic\":\"Quickening\"}}"
+      }
+    },
+    {
+      "id": "443b0790-f4f3-40d4-9a13-2c6e42cbb4fa",
+      "name": "Apex Predator",
+      "slug": "apex-predator",
+      "adept": true,
+      "magician": false,
+      "source": "SG",
+      "page": "157",
+      "requirements": {
+        "raw": "{\"oneof\":{\"quality\":\"The Beast's Way\"}}"
+      }
+    },
+    {
+      "id": "81089c40-2a69-4ac3-b3e2-40ca1c9c4b6c",
+      "name": "Astral Bluff",
+      "slug": "astral-bluff",
+      "adept": false,
+      "magician": true,
+      "source": "SG",
+      "page": "150",
+      "requirements": {
+        "raw": "{\"allof\":{\"art\":\"Flexible Signature\"}}"
+      }
+    },
+    {
+      "id": "c46f1864-8d72-4c4c-9704-cb286eab053d",
+      "name": "Astralnaut",
+      "slug": "astralnaut",
+      "adept": false,
+      "magician": true,
+      "source": "FA",
+      "page": "44",
+      "requirements": {
+        "raw": "{\"allof\":{\"metamagic\":\"Improved Astral Form\"}}"
+      }
+    },
+    {
+      "id": "866592b7-b652-4270-b696-4a8020b62b12",
+      "name": "Cannibalize",
+      "slug": "cannibalize",
+      "adept": true,
+      "magician": false,
+      "source": "SG",
+      "page": "90",
+      "requirements": {
+        "raw": "{\"allof\":{\"art\":\"Blood Magic\"}}"
+      }
+    },
+    {
+      "id": "e021b9ba-2cbe-4c17-865d-0ebc9a2df4cc",
+      "name": "Centering",
+      "slug": "centering",
+      "adept": false,
+      "magician": true,
+      "source": "SR5",
+      "page": "325",
+      "requirements": {
+        "raw": "{\"allof\":{\"art\":\"Centering\"}}"
+      }
+    },
+    {
+      "id": "fdea34cc-5ffd-4f93-a80a-f1973c08a2c3",
+      "name": "Channeling",
+      "slug": "channeling",
+      "adept": false,
+      "magician": true,
+      "source": "SG",
+      "page": "148",
+      "requirements": {
+        "raw": "{\"allof\":{\"art\":\"Channeling\"}}"
+      }
+    },
+    {
+      "id": "2cf811cd-1712-4c44-b20e-3f49ad8103a4",
+      "name": "Cleansing",
+      "slug": "cleansing",
+      "adept": false,
+      "magician": true,
+      "source": "SG",
+      "page": "155",
+      "requirements": {
+        "raw": "{\"allof\":{\"art\":\"Cleansing\"}}"
+      }
+    },
+    {
+      "id": "920770d1-a705-4fc9-8814-f3a4a455e8fb",
+      "name": "Corruption",
+      "slug": "corruption",
+      "adept": false,
+      "magician": true,
+      "source": "SG",
+      "page": "87",
+      "requirements": {
+        "raw": "{\"oneof\":{\"metamagic\":\"Paradigm Shift: Toxic\",\"tradition\":\"Elder God\"}}"
+      }
+    },
+    {
+      "id": "f2720e1b-494d-4d5b-9de2-7dc367f5b2a8",
+      "name": "Danger Sense",
+      "slug": "danger-sense",
+      "adept": false,
+      "magician": true,
+      "source": "SG",
+      "page": "145",
+      "requirements": {
+        "raw": "{\"allof\":{\"art\":\"Divination\"}}"
+      }
+    },
+    {
+      "id": "8c433e0e-d1ee-41d8-82bd-ecfc20c6a069",
+      "name": "Domain of the Spiritual",
+      "slug": "domain-of-the-spiritual",
+      "adept": true,
+      "magician": false,
+      "source": "SG",
+      "page": "158",
+      "requirements": {
+        "raw": "{\"oneof\":{\"quality\":\"The Spiritual Way\"}}"
+      }
+    },
+    {
+      "id": "605f3c8e-96c2-40f0-a09a-2857d2c5bbe6",
+      "name": "Domain of the Warrior",
+      "slug": "domain-of-the-warrior",
+      "adept": true,
+      "magician": false,
+      "source": "SG",
+      "page": "159",
+      "requirements": {
+        "raw": "{\"oneof\":{\"quality\":\"The Warrior's Way\"}}"
+      }
+    },
+    {
+      "id": "42f5af49-ade3-43a7-b501-25ae975a574b",
+      "name": "Echo Binding",
+      "slug": "echo-binding",
+      "adept": false,
+      "magician": true,
+      "source": "DTR",
+      "page": "165",
+      "requirements": {
+        "raw": "{\"allof\":{\"art\":[\"Blood Magic\",\"Invocation\",\"Necromancy\"],\"metamagic\":\"Sacrifice\"}}"
+      }
+    },
+    {
+      "id": "00aa480b-792f-4196-810d-72a91bcb81d0",
+      "name": "Efficient Ritual",
+      "slug": "efficient-ritual",
+      "adept": true,
+      "magician": true,
+      "source": "SG",
+      "page": "153",
+      "requirements": {
+        "raw": "{\"oneof\":{\"art\":\"Advanced Ritual Casting\",\"quality\":[\"Adept\",\"Mystic Adept\"]}}"
+      }
+    },
+    {
+      "id": "2bd5228e-6698-4905-aecb-45fa5653456c",
+      "name": "Enhanced Mist Form",
+      "slug": "enhanced-mist-form",
+      "adept": true,
+      "magician": true,
+      "source": "DTR",
+      "page": "165",
+      "requirements": {
+        "raw": "{\"allof\":{\"critterpower\":\"Mist Form\"}}"
+      }
+    },
+    {
+      "id": "0ab2d588-34f5-4204-aee2-b944e5db411a",
+      "name": "Essence Expansion",
+      "slug": "essence-expansion",
+      "adept": true,
+      "magician": true,
+      "source": "DTR",
+      "page": "165",
+      "requirements": {
+        "raw": "{\"oneof\":{\"quality\":[\"Infected: Bandersnatch\",\"Infected: Banshee\",\"Infected: Dzoo-Noo-Qua\",\"Infected: Fomoraig\",\"Infected: Ghoul (Dwarf)\",\"Infected: Ghoul (Elf)\",\"Infected: Ghoul (Human)\",\"Infected: Ghoul (Ork)\",\"Infected: Ghoul (Sasquatch)\",\"Infected: Ghoul (Troll)\",\"Infected: Gnawer\",\"Infected: Goblin\",\"Infected: Grendel\",\"Infected: Harvester\",\"Infected: Loup-Garou\",\"Infected: Mutaqua\",\"Infected: Nosferatu\",\"Infected: Vampire (Human)\",\"Infected: Vampire (Non-Human)\",\"Infected: Sukuyan (Human)\",\"Infected: Sukuyan (Non-Human)\",\"Infected: Wendigo\"]}}"
+      }
+    },
+    {
+      "id": "283f7a08-7e65-40d6-819c-ac40baf88f73",
+      "name": "Exorcism",
+      "slug": "exorcism",
+      "adept": true,
+      "magician": true,
+      "source": "SG",
+      "page": "148",
+      "requirements": {
+        "raw": "{\"oneof\":{\"art\":\"Exorcism\",\"quality\":\"The Spiritual Way\"}}"
+      }
+    },
+    {
+      "id": "1712175b-66ee-44bd-9149-d2f450cc63d2",
+      "name": "Extended Masking",
+      "slug": "extended-masking",
+      "adept": true,
+      "magician": true,
+      "source": "SG",
+      "page": "149",
+      "requirements": {
+        "raw": "{\"allof\":{\"metamagic\":\"Masking\"},\"oneof\":{\"art\":\"Masking\",\"quality\":[\"Adept\",\"Mystic Adept\"]}}"
+      }
+    },
+    {
+      "id": "8d16f0b3-ec2d-445e-b8f5-85ceeb32efe9",
+      "name": "Fae-Touched",
+      "slug": "fae-touched",
+      "adept": true,
+      "magician": false,
+      "source": "SG",
+      "page": "158",
+      "requirements": {
+        "raw": "{\"oneof\":{\"quality\":\"The Speaker's Way\"}}"
+      }
+    },
+    {
+      "id": "099af8f9-6d04-4aa5-8645-f7204a8bf9be",
+      "name": "Fixation",
+      "slug": "fixation",
+      "adept": false,
+      "magician": true,
+      "source": "SR5",
+      "page": "325",
+      "requirements": {
+        "raw": "{\"allof\":{\"art\":\"Advanced Alchemy\"}}"
+      }
+    },
+    {
+      "id": "666626f2-3605-4c48-8190-7bcbcdb2e89c",
+      "name": "Flexible Signature",
+      "slug": "flexible-signature",
+      "adept": true,
+      "magician": true,
+      "source": "SR5",
+      "page": "325",
+      "requirements": {
+        "raw": "{\"oneof\":{\"art\":\"Flexible Signature\",\"quality\":[\"Adept\",\"Mystic Adept\"]}}"
+      }
+    },
+    {
+      "id": "d1d6cd22-d65c-4218-a783-f7c6a62dfa48",
+      "name": "Flux",
+      "slug": "flux",
+      "adept": true,
+      "magician": true,
+      "source": "SG",
+      "page": "150",
+      "requirements": {
+        "raw": "{\"oneof\":{\"art\":\"Flexible Signature\",\"quality\":[\"Adept\",\"Mystic Adept\"]}}"
+      }
+    },
+    {
+      "id": "7b297dad-1111-4819-8c7a-ecdb95479011",
+      "name": "Great Form Possession",
+      "slug": "great-form-possession",
+      "adept": false,
+      "magician": true,
+      "source": "HT",
+      "page": "134",
+      "requirements": {
+        "raw": "{\"allof\":{\"spell\":\"Summon Great Form Spirit\"},\"oneof\":{\"metamagic\":\"Channeling\",\"traditionspiritform\":\"Possession\"}}"
+      }
+    },
+    {
+      "id": "c98c7b04-052c-4f70-bb15-19aaed70d2b7",
+      "name": "Greater Ritual",
+      "slug": "greater-ritual",
+      "adept": false,
+      "magician": true,
+      "source": "SG",
+      "page": "153",
+      "requirements": {
+        "raw": "{\"allof\":{\"art\":\"Advanced Ritual Casting\"}}"
+      }
+    },
+    {
+      "id": "4eab0dc3-a040-42b1-a21e-552047ed27af",
+      "name": "Harmonious Defense",
+      "slug": "harmonious-defense",
+      "adept": true,
+      "magician": true,
+      "source": "FA",
+      "page": "46",
+      "requirements": {
+        "raw": "{\"allof\":{\"martialart\":\"Way of Unified Mana (Hapsum-Do)\"}}"
+      }
+    },
+    {
+      "id": "680743d7-d474-4042-abbf-ea905eedc0de",
+      "name": "Harmonious Reflection",
+      "slug": "harmonious-reflection",
+      "adept": true,
+      "magician": true,
+      "source": "FA",
+      "page": "46",
+      "requirements": {
+        "raw": "{\"allof\":{\"martialart\":\"Way of Unified Mana (Hapsum-Do)\",\"metamagic\":\"Harmonious Defense\"}}"
+      }
+    },
+    {
+      "id": "b314c391-52fc-447e-bece-483943b00237",
+      "name": "Improved Astral Form",
+      "slug": "improved-astral-form",
+      "adept": false,
+      "magician": true,
+      "source": "FA",
+      "page": "44"
+    },
+    {
+      "id": "954aca74-bb3e-493d-8df1-3563803780e5",
+      "name": "Infusion",
+      "slug": "infusion",
+      "adept": true,
+      "magician": false,
+      "source": "SG",
+      "page": "156",
+      "requirements": {
+        "raw": "{\"oneof\":{\"metamagic\":\"Adept Centering\"}}"
+      }
+    },
+    {
+      "id": "505d9fe3-852c-459b-8f9e-3e22c1b91b9a",
+      "name": "Masking",
+      "slug": "masking",
+      "adept": true,
+      "magician": true,
+      "source": "SR5",
+      "page": "326",
+      "requirements": {
+        "raw": "{\"oneof\":{\"art\":\"Masking\",\"quality\":[\"Adept\",\"Mystic Adept\"]}}"
+      }
+    },
+    {
+      "id": "ef0f4461-4da9-4a24-b508-77f5c3a920d7",
+      "name": "Movement",
+      "slug": "movement",
+      "adept": true,
+      "magician": false,
+      "source": "SR5",
+      "page": "399",
+      "requirements": {
+        "raw": "{\"allof\":{\"quality\":{\"+@extra\":\"Horse\",\"+content\":\"Mentor Spirit\"}}}"
+      },
+      "bonus": {
+        "raw": "{\"critterpowers\":{\"power\":{\"+@select\":\"Self-Only × 3\",\"+content\":\"Movement\"}}}"
+      }
+    },
+    {
+      "id": "fa550487-39ef-4ea2-a613-5b9bdee0961c",
+      "name": "Noble Sacrifice",
+      "slug": "noble-sacrifice",
+      "adept": false,
+      "magician": true,
+      "source": "FA",
+      "page": "46"
+    },
+    {
+      "id": "a3015186-c234-448c-811d-43c7d722abd2",
+      "name": "Paradigm Shift: Insect Shaman",
+      "slug": "paradigm-shift-insect-shaman",
+      "adept": false,
+      "magician": true,
+      "source": "FA",
+      "page": "43"
+    },
+    {
+      "id": "a83ef030-4372-421e-874e-839ceb77a64e",
+      "name": "Paradigm Shift: Toxic",
+      "slug": "paradigm-shift-toxic",
+      "adept": false,
+      "magician": true,
+      "source": "FA",
+      "page": "44"
+    },
+    {
+      "id": "433c2fdb-7dfe-4876-988f-2ec868631922",
+      "name": "Penetrating Spell",
+      "slug": "penetrating-spell",
+      "adept": false,
+      "magician": true,
+      "source": "SG",
+      "page": "153",
+      "requirements": {
+        "raw": "{\"allof\":{\"art\":\"Advanced Spellcasting\"}}"
+      }
+    },
+    {
+      "id": "94998ad1-956f-4c04-bb3f-f4464170bf32",
+      "name": "Power Bleed",
+      "slug": "power-bleed",
+      "adept": true,
+      "magician": false,
+      "source": "SG",
+      "page": "90",
+      "requirements": {
+        "raw": "{\"allof\":{\"art\":\"Blood Magic\",\"metamagic\":\"Cannibalize\"}}"
+      }
+    },
+    {
+      "id": "406f096a-c093-4a02-b60f-002eb01a20b9",
+      "name": "Power Point",
+      "slug": "power-point",
+      "adept": true,
+      "magician": false,
+      "limit": "False",
+      "source": "SR5",
+      "page": "326",
+      "bonus": {
+        "raw": "{\"adeptpowerpoints\":\"1\"}"
+      }
+    },
+    {
+      "id": "5b2175c6-bbc9-4e8f-ac33-7a7ac6ded312",
+      "name": "Predator Feast",
+      "slug": "predator-feast",
+      "adept": true,
+      "magician": false,
+      "source": "FA",
+      "page": "131",
+      "requirements": {
+        "raw": "{\"allof\":{\"art\":\"Blood Magic\",\"metamagic\":\"Cannibalize\"}}"
+      }
+    },
+    {
+      "id": "67e53002-2302-47c6-bc3c-f0b455e73672",
+      "name": "Presence",
+      "slug": "presence",
+      "adept": true,
+      "magician": false,
+      "source": "SG",
+      "page": "159",
+      "requirements": {
+        "raw": "{\"oneof\":{\"quality\":\"The Speaker's Way\"}}"
+      }
+    },
+    {
+      "id": "49f33f95-55fd-487f-9753-8b6207d021b9",
+      "name": "Psychometry",
+      "slug": "psychometry",
+      "adept": true,
+      "magician": true,
+      "source": "SG",
+      "page": "145",
+      "requirements": {
+        "raw": "{\"oneof\":{\"art\":\"Psychometry\"}}"
+      }
+    },
+    {
+      "id": "c860a479-4bb4-45f2-b4dd-dfe1ce39c045",
+      "name": "Qi Sculpt",
+      "slug": "qi-sculpt",
+      "adept": true,
+      "magician": false,
+      "source": "SG",
+      "page": "156",
+      "requirements": {
+        "raw": "{\"allof\":{\"metamagic\":\"Adept Centering\"}}"
+      }
+    },
+    {
+      "id": "4ea558ed-0fe8-4b9e-b2fa-afffb3eb2476",
+      "name": "Quickening",
+      "slug": "quickening",
+      "adept": false,
+      "magician": true,
+      "source": "SR5",
+      "page": "326",
+      "requirements": {
+        "raw": "{\"allof\":{\"art\":\"Quickening\"}}"
+      },
+      "bonus": {
+        "raw": "{\"quickeningmetamagic\":null}"
+      }
+    },
+    {
+      "id": "f4576514-4744-42ba-baaa-02dc4aaed297",
+      "name": "Reckless Necro Conjuring",
+      "slug": "reckless-necro-conjuring",
+      "adept": false,
+      "magician": true,
+      "source": "FA",
+      "page": "45"
+    },
+    {
+      "id": "102cc073-ba99-42a5-b5c6-37c9e87c3954",
+      "name": "Reflection",
+      "slug": "reflection",
+      "adept": false,
+      "magician": true,
+      "source": "SG",
+      "page": "151",
+      "requirements": {
+        "raw": "{\"allof\":{\"art\":\"Apotropaic Magic\",\"metamagic\":\"Shielding\"}}"
+      }
+    },
+    {
+      "id": "d220ba19-5259-4d12-a61e-49c751640b4b",
+      "name": "Sacrifice",
+      "slug": "sacrifice",
+      "adept": true,
+      "magician": true,
+      "source": "SG",
+      "page": "90",
+      "requirements": {
+        "raw": "{\"allof\":{\"art\":\"Blood Magic\"}}"
+      }
+    },
+    {
+      "id": "657034b0-7c9d-4f5e-8169-578bf18069e4",
+      "name": "Sensing",
+      "slug": "sensing",
+      "adept": false,
+      "magician": true,
+      "source": "SG",
+      "page": "155",
+      "requirements": {
+        "raw": "{\"allof\":{\"art\":\"Sensing\"}}"
+      }
+    },
+    {
+      "id": "532c6fed-5ad1-49b3-94cd-6f640b988f70",
+      "name": "Shielding",
+      "slug": "shielding",
+      "adept": false,
+      "magician": true,
+      "source": "SR5",
+      "page": "326",
+      "requirements": {
+        "raw": "{\"allof\":{\"art\":\"Apotropaic Magic\"}}"
+      }
+    },
+    {
+      "id": "ba511830-7fb6-4ec0-8861-5cff07c90f41",
+      "name": "Soul Tether",
+      "slug": "soul-tether",
+      "adept": false,
+      "magician": true,
+      "source": "FA",
+      "page": "131",
+      "requirements": {
+        "raw": "{\"allof\":{\"art\":\"Blood Magic\",\"metamagic\":\"Sacrifice\"}}"
+      }
+    },
+    {
+      "id": "185c6889-2c45-47ee-9192-5f2fef3206a1",
+      "name": "Spell Shaping",
+      "slug": "spell-shaping",
+      "adept": false,
+      "magician": true,
+      "source": "SR5",
+      "page": "326",
+      "requirements": {
+        "raw": "{\"allof\":{\"art\":\"Advanced Spellcasting\"}}"
+      }
+    },
+    {
+      "id": "95a75c73-37a6-4e3c-9fef-27322d43394a",
+      "name": "Spirit Expansion: Shedim",
+      "slug": "spirit-expansion-shedim",
+      "adept": false,
+      "magician": true,
+      "source": "FA",
+      "page": "44",
+      "bonus": {
+        "raw": "{\"addspirit\":{\"spirit\":\"Shedim\"}}"
+      }
+    },
+    {
+      "id": "0b136740-8728-4c05-86f1-ddaf9368c0a8",
+      "name": "Spirit Expansion: UMT",
+      "slug": "spirit-expansion-umt",
+      "adept": false,
+      "magician": true,
+      "source": "FA",
+      "page": "44",
+      "bonus": {
+        "raw": "{\"addspirit\":{\"spirit\":[\"Guardian Spirit\",\"Guidance Spirit\",\"Spirit of Air\",\"Spirit of Beasts\",\"Spirit of Earth\",\"Spirit of Man\",\"Spirit of Fire\",\"Plant Spirit\",\"Spirit of Water\",\"Task Spirit\"]}}"
+      }
+    },
+    {
+      "id": "30774b9d-bb89-4ece-9bc4-35017cbf30b4",
+      "name": "Spiritual Sacrifice",
+      "slug": "spiritual-sacrifice",
+      "adept": false,
+      "magician": true,
+      "source": "FA",
+      "page": "131",
+      "requirements": {
+        "raw": "{\"allof\":{\"art\":\"Blood Magic\",\"metamagic\":\"Sacrifice\"}}"
+      }
+    },
+    {
+      "id": "c943ee91-ecad-4e84-bc8c-fab11b29090c",
+      "name": "Stillness of the Void",
+      "slug": "stillness-of-the-void",
+      "adept": true,
+      "magician": false,
+      "source": "SG",
+      "page": "158",
+      "requirements": {
+        "raw": "{\"allof\":{\"quality\":\"The Invisible Way\"}}"
+      }
+    },
+    {
+      "id": "5159ae63-7251-4c33-a6f9-77f6a06fa349",
+      "name": "Structured Spellcasting",
+      "slug": "structured-spellcasting",
+      "adept": false,
+      "magician": true,
+      "source": "FA",
+      "page": "44",
+      "bonus": {
+        "raw": "{\"drainvalue\":\"-1\"}"
+      }
+    },
+    {
+      "id": "69e7b92a-c5f9-4471-957f-839f5e7ac62d",
+      "name": "Supernatural Prowess",
+      "slug": "supernatural-prowess",
+      "adept": true,
+      "magician": false,
+      "source": "SG",
+      "page": "156",
+      "requirements": {
+        "raw": "{\"oneof\":{\"quality\":\"The Athlete's Way\"}}"
+      }
+    },
+    {
+      "id": "9540267c-d53c-4547-9bd2-e1f06723caee",
+      "name": "Sympathetic Linking",
+      "slug": "sympathetic-linking",
+      "adept": true,
+      "magician": true,
+      "source": "SG",
+      "page": "145",
+      "requirements": {
+        "raw": "{\"oneof\":{\"art\":\"Psychometry\"}}"
+      }
+    },
+    {
+      "id": "215dbdc3-b4f5-4ca6-98b1-5d6ea5eb5fda",
+      "name": "Taint",
+      "slug": "taint",
+      "adept": false,
+      "magician": true,
+      "source": "SG",
+      "page": "87",
+      "requirements": {
+        "raw": "{\"oneof\":{\"group\":{\"initiategrade\":\"3\",\"tradition\":\"Elder God\"},\"metamagic\":\"Paradigm Shift: Toxic\"}}"
+      }
+    },
+    {
+      "id": "59d0beab-4fba-48a9-a135-02e396ded7a4",
+      "name": "Tarot Summoning",
+      "slug": "tarot-summoning",
+      "adept": false,
+      "magician": true,
+      "source": "FA",
+      "page": "45",
+      "requirements": {
+        "raw": "{\"allof\":{\"tradition\":\"Tarot\"}}"
+      }
+    },
+    {
+      "id": "066207e4-dc08-4718-96c2-a6ab4d9d0380",
+      "name": "Totem Form (Animal)",
+      "slug": "totem-form-animal",
+      "adept": true,
+      "magician": false,
+      "source": "SG",
+      "page": "157",
+      "requirements": {
+        "raw": "{\"allof\":{\"quality\":\"The Beast's Way\",\"spell\":\"Attune Animal\"}}"
+      },
+      "bonus": {
+        "raw": "{\"selecttext\":null}"
+      }
+    }
+  ]
+}

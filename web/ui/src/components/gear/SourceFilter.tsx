@@ -39,7 +39,7 @@ export function SourceFilter({ gear, selectedSources, onSourcesChange }: SourceF
   const sourcesWithCounts = useMemo(() => {
     const sourceMap = new Map<string, number>();
     gear.forEach(item => {
-      const source = item.source || 'Unknown';
+      const source = typeof item.source === 'string' ? item.source : item.source?.source || 'Unknown';
       sourceMap.set(source, (sourceMap.get(source) || 0) + 1);
     });
     

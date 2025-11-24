@@ -1,15 +1,17 @@
-import { useState, useMemo } from 'react';
+import { useState, useMemo, memo, useCallback } from 'react';
 import { DataTable, ColumnDefinition } from '../common/DataTable';
-import type { Weapon } from '../../lib/types';
+import type { Weapon, WeaponAccessoryItem } from '../../lib/types';
 import { WeaponViewModal } from './WeaponViewModal';
 import { WeaponCategoryFilter } from './WeaponCategoryFilter';
 import { WeaponSourceFilter } from './WeaponSourceFilter';
+import { formatCost } from '../../lib/formatUtils';
 
 interface WeaponTableProps {
   weapons: Weapon[];
+  accessoryMap: Map<string, WeaponAccessoryItem>;
 }
 
-export function WeaponTable({ weapons }: WeaponTableProps) {
+export const WeaponTable = memo(function WeaponTable({ weapons, accessoryMap }: WeaponTableProps) {
   const [selectedWeapon, setSelectedWeapon] = useState<Weapon | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedCategories, setSelectedCategories] = useState<string[]>([]);
@@ -32,12 +34,12 @@ export function WeaponTable({ weapons }: WeaponTableProps) {
     return filtered;
   }, [weapons, selectedCategories, selectedSources]);
 
-  const handleNameClick = (weaponItem: Weapon) => {
+  const handleNameClick = useCallback((weaponItem: Weapon) => {
     setSelectedWeapon(weaponItem);
     setIsModalOpen(true);
-  };
+  }, []);
 
-  const columns: ColumnDefinition<Weapon>[] = [
+  const columns: ColumnDefinition<Weapon>[] = useMemo(() => [
     {
       id: 'name',
       header: 'Name',
@@ -99,8 +101,9 @@ export function WeaponTable({ weapons }: WeaponTableProps) {
       header: 'Cost',
       accessor: 'cost',
       sortable: true,
+      render: (value: unknown) => formatCost(value as string | undefined),
     },
-  ];
+  ], [handleNameClick]);
 
   return (
     <>
@@ -135,8 +138,9 @@ export function WeaponTable({ weapons }: WeaponTableProps) {
         weapon={selectedWeapon}
         isOpen={isModalOpen}
         onOpenChange={setIsModalOpen}
+        accessoryMap={accessoryMap}
       />
     </>
   );
-}
+});
 

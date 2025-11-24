@@ -1,5 +1,5 @@
 import { I18nProvider } from 'react-aria-components';
-import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import { AuthProvider } from './contexts/AuthContext';
 import { ToastProvider } from './contexts/ToastContext';
 import { AppLayout } from './components/layout/AppLayout';
@@ -10,8 +10,13 @@ import { CampaignsPage } from './pages/CampaignsPage';
 import { GearPage } from './pages/GearPage';
 import { ArmorPage } from './pages/ArmorPage';
 import { WeaponsPage } from './pages/WeaponsPage';
+import { WeaponAccessoriesPage } from './pages/WeaponAccessoriesPage';
 import { SkillsPage } from './pages/SkillsPage';
 import { QualitiesPage } from './pages/QualitiesPage';
+import { BooksPage } from './pages/BooksPage';
+import { LifestylesPage } from './pages/LifestylesPage';
+import { WeaponConsumablesPage } from './pages/WeaponConsumablesPage';
+import { ContactsPage } from './pages/ContactsPage';
 
 function App() {
   return (
@@ -32,7 +37,16 @@ function App() {
                     </AuthenticatedRoute>
                   }
                 />
-                {/* Admin-only routes - Gear, Armor, Weapons, and Skills (shown under Database tab) */}
+                {/* Admin-only routes - Database tab redirects to Gear (first nested tab) */}
+                <Route
+                  path="/database"
+                  element={
+                    <AdminRoute>
+                      <Navigate to="/gear" replace />
+                    </AdminRoute>
+                  }
+                />
+                {/* Admin-only routes - Gear, Armor, Weapons, Skills, and Qualities (shown under Database tab) */}
                 <Route
                   path="/gear"
                   element={
@@ -58,6 +72,14 @@ function App() {
                   }
                 />
                 <Route
+                  path="/weapon-accessories"
+                  element={
+                    <AdminRoute>
+                      <WeaponAccessoriesPage />
+                    </AdminRoute>
+                  }
+                />
+                <Route
                   path="/skills"
                   element={
                     <AdminRoute>
@@ -70,6 +92,38 @@ function App() {
                   element={
                     <AdminRoute>
                       <QualitiesPage />
+                    </AdminRoute>
+                  }
+                />
+                <Route
+                  path="/books"
+                  element={
+                    <AdminRoute>
+                      <BooksPage />
+                    </AdminRoute>
+                  }
+                />
+                <Route
+                  path="/lifestyles"
+                  element={
+                    <AdminRoute>
+                      <LifestylesPage />
+                    </AdminRoute>
+                  }
+                />
+                <Route
+                  path="/weapon-consumables"
+                  element={
+                    <AdminRoute>
+                      <WeaponConsumablesPage />
+                    </AdminRoute>
+                  }
+                />
+                <Route
+                  path="/contacts"
+                  element={
+                    <AdminRoute>
+                      <ContactsPage />
                     </AdminRoute>
                   }
                 />

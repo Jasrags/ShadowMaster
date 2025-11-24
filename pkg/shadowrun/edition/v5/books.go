@@ -1,25 +1,51 @@
 package v5
 
-// BookMatch represents a match entry for a book (used for identifying books by text)
-type BookMatch struct {
-	Language string `json:"language"` // Language code like "en-us", "de-de"
-	Text     string `json:"text"`     // Matching text snippet
-	Page     string `json:"page"`     // Page number where the text appears
-}
-
-// BookMatches represents a collection of matches for a book
-type BookMatches struct {
-	Match interface{} `json:"match,omitempty"` // Can be single BookMatch or []BookMatch
-}
-
-// Book represents a sourcebook from Shadowrun 5th Edition
+// Book represents a book definition
 type Book struct {
-	// Required fields
-	ID   string `json:"id"`   // Unique identifier (UUID)
-	Name string `json:"name"` // Book name
-	Code string `json:"code"` // Book code like "SR5", "RG", "SG", etc.
+	// ID is the unique identifier for the book
+	ID string `json:"id,omitempty"`
+	// Name is the book name (e.g., "Shadowrun 5th Edition", "Run and Gun")
+	Name string `json:"name,omitempty"`
+	// Code is the book code (e.g., "SR5", "RG", "AP")
+	Code string `json:"code,omitempty"`
+}
 
-	// Optional fields
-	Permanent *bool        `json:"permanent,omitempty"` // Whether the book is permanent
-	Matches   *BookMatches `json:"matches,omitempty"`   // Text matches for book identification
+// dataBooks is declared in books_data.go
+
+// GetAllBooks returns all book definitions
+func GetAllBooks() []Book {
+	books := make([]Book, 0, len(dataBooks))
+	for _, b := range dataBooks {
+		books = append(books, b)
+	}
+	return books
+}
+
+// GetBookByID returns the book definition with the given ID, or nil if not found
+func GetBookByID(id string) *Book {
+	for _, book := range dataBooks {
+		if book.ID == id {
+			return &book
+		}
+	}
+	return nil
+}
+
+// GetBookByCode returns the book definition with the given code, or nil if not found
+func GetBookByCode(code string) *Book {
+	for _, book := range dataBooks {
+		if book.Code == code {
+			return &book
+		}
+	}
+	return nil
+}
+
+// GetBookByKey returns the book definition with the given key, or nil if not found
+func GetBookByKey(key string) *Book {
+	book, ok := dataBooks[key]
+	if !ok {
+		return nil
+	}
+	return &book
 }
