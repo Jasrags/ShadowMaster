@@ -3,6 +3,7 @@ import { bookApi } from '../lib/api';
 import type { Book } from '../lib/types';
 import { useToast } from '../contexts/ToastContext';
 import { BooksTable } from '../components/book/BooksTable';
+import { DatabasePageLayout } from '../components/database/DatabasePageLayout';
 
 export function BooksPage() {
   const { showError } = useToast();
@@ -26,26 +27,15 @@ export function BooksPage() {
     loadBooks();
   }, [loadBooks]);
 
-  if (isLoading) {
-    return (
-      <div className="flex items-center justify-center py-12">
-        <div className="text-gray-400">Loading books...</div>
-      </div>
-    );
-  }
-
   return (
-    <div>
-      <div className="mb-6">
-        <div>
-          <h2 className="text-2xl font-bold text-gray-100 mb-2">Books Database</h2>
-          <p className="text-gray-400">
-            View and search all available sourcebooks from Shadowrun 5th Edition ({books.length} books)
-          </p>
-        </div>
-      </div>
+    <DatabasePageLayout
+      title="Books Database"
+      description="View and search all available sourcebooks from Shadowrun 5th Edition"
+      itemCount={books.length}
+      isLoading={isLoading}
+    >
       <BooksTable books={books} />
-    </div>
+    </DatabasePageLayout>
   );
 }
 

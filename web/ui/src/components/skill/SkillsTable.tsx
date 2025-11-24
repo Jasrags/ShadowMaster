@@ -1,4 +1,4 @@
-import { useState, useMemo } from 'react';
+import { useState, useMemo, memo, useCallback } from 'react';
 import { DataTable, ColumnDefinition } from '../common/DataTable';
 import type { Skill } from '../../lib/types';
 import { SkillViewModal } from './SkillViewModal';
@@ -9,7 +9,13 @@ interface SkillsTableProps {
   skills: Skill[];
 }
 
-export function SkillsTable({ skills }: SkillsTableProps) {
+// Helper to format attribute name to Title Case
+const formatAttributeName = (attribute: string): string => {
+  if (!attribute || attribute === '-') return '-';
+  return attribute.charAt(0).toUpperCase() + attribute.slice(1).toLowerCase();
+};
+
+export const SkillsTable = memo(function SkillsTable({ skills }: SkillsTableProps) {
   const [selectedSkill, setSelectedSkill] = useState<Skill | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedCategories, setSelectedCategories] = useState<string[]>([]);
@@ -27,7 +33,7 @@ export function SkillsTable({ skills }: SkillsTableProps) {
     // Filter by source
     if (selectedSources.length > 0) {
       filtered = filtered.filter(item => {
-        const skillSource = item.source || 'Unknown';
+        const skillSource = item.source?.source || 'Unknown';
         return selectedSources.includes(skillSource);
       });
     }
@@ -35,12 +41,12 @@ export function SkillsTable({ skills }: SkillsTableProps) {
     return filtered;
   }, [skills, selectedCategories, selectedSources]);
 
-  const handleNameClick = (skillItem: Skill) => {
+  const handleNameClick = useCallback((skillItem: Skill) => {
     setSelectedSkill(skillItem);
     setIsModalOpen(true);
-  };
+  }, []);
 
-  const columns: ColumnDefinition<Skill>[] = [
+  const columns: ColumnDefinition<Skill>[] = useMemo(() => [
     {
       id: 'name',
       header: 'Name',
@@ -56,27 +62,44 @@ export function SkillsTable({ skills }: SkillsTableProps) {
       ),
     },
     {
+      id: 'type',
+      header: 'Type',
+      accessor: 'type',
+      sortable: true,
+      render: (value: unknown) => (
+        <span className="capitalize">{String(value || '-')}</span>
+      ),
+    },
+    {
       id: 'category',
       header: 'Category',
       accessor: 'category',
       sortable: true,
+      render: (value: unknown) => {
+        const category = String(value || '');
+        return category ? category.split('_').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ') : '-';
+      },
     },
     {
-      id: 'attribute',
+      id: 'linked_attribute',
       header: 'Attribute',
-      accessor: 'attribute',
+      accessor: 'linked_attribute',
       sortable: true,
+      render: (value: unknown) => (
+        <span>{formatAttributeName(String(value || '-'))}</span>
+      ),
     },
     {
-      id: 'default',
+      id: 'can_default',
       header: 'Default',
-      accessor: 'default',
+      accessor: 'can_default',
       sortable: true,
+      render: (value: unknown) => (value ? 'Yes' : 'No'),
     },
     {
-      id: 'skillgroup',
+      id: 'skill_group',
       header: 'Skill Group',
-      accessor: 'skillgroup',
+      accessor: 'skill_group',
       sortable: true,
     },
     {
@@ -84,14 +107,22 @@ export function SkillsTable({ skills }: SkillsTableProps) {
       header: 'Source',
       accessor: 'source',
       sortable: true,
+      render: (value: unknown) => {
+        const source = value as { source?: string } | undefined;
+        return source?.source || '-';
+      },
     },
     {
       id: 'page',
       header: 'Page',
-      accessor: 'page',
+      accessor: 'source',
       sortable: true,
+      render: (value: unknown) => {
+        const source = value as { page?: string } | undefined;
+        return source?.page || '-';
+      },
     },
-  ];
+  ], [handleNameClick]);
 
   return (
     <>
@@ -112,7 +143,7 @@ export function SkillsTable({ skills }: SkillsTableProps) {
       <DataTable
         data={filteredSkills}
         columns={columns}
-        searchFields={['name', 'category', 'attribute', 'source']}
+        searchFields={['name', 'category', 'linked_attribute', 'description']}
         searchPlaceholder="Search skills by name, category, attribute, or source..."
         rowsPerPageOptions={[25, 50, 100, 200]}
         defaultRowsPerPage={50}
@@ -129,5 +160,5 @@ export function SkillsTable({ skills }: SkillsTableProps) {
       />
     </>
   );
-}
+});
 

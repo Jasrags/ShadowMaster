@@ -1,15 +1,16 @@
-import { useState, useMemo } from 'react';
+import { useState, useMemo, memo, useCallback } from 'react';
 import { DataTable, ColumnDefinition } from '../common/DataTable';
 import type { Gear } from '../../lib/types';
 import { GearViewModal } from './GearViewModal';
 import { CategoryFilter } from './CategoryFilter';
 import { SourceFilter } from './SourceFilter';
+import { getCategoryDisplayName } from './categoryUtils';
 
 interface GearTableProps {
   gear: Gear[];
 }
 
-export function GearTable({ gear }: GearTableProps) {
+export const GearTable = memo(function GearTable({ gear }: GearTableProps) {
   const [selectedGear, setSelectedGear] = useState<Gear | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedCategories, setSelectedCategories] = useState<string[]>([]);
@@ -26,18 +27,21 @@ export function GearTable({ gear }: GearTableProps) {
 
     // Filter by source
     if (selectedSources.length > 0) {
-      filtered = filtered.filter(item => selectedSources.includes(item.source));
+      filtered = filtered.filter(item => {
+        const source = typeof item.source === 'string' ? item.source : item.source?.source;
+        return source && selectedSources.includes(source);
+      });
     }
 
     return filtered;
   }, [gear, selectedCategories, selectedSources]);
 
-  const handleNameClick = (gearItem: Gear) => {
+  const handleNameClick = useCallback((gearItem: Gear) => {
     setSelectedGear(gearItem);
     setIsModalOpen(true);
-  };
+  }, []);
 
-  const columns: ColumnDefinition<Gear>[] = [
+  const columns: ColumnDefinition<Gear>[] = useMemo(() => [
     {
       id: 'name',
       header: 'Name',
@@ -55,37 +59,48 @@ export function GearTable({ gear }: GearTableProps) {
     {
       id: 'category',
       header: 'Category',
-      accessor: 'category',
+      accessor: (row: Gear) => getCategoryDisplayName(row.category),
+      sortable: true,
+    },
+    {
+      id: 'subcategory',
+      header: 'Subcategory',
+      accessor: (row: Gear) => row.subcategory || '-',
       sortable: true,
     },
     {
       id: 'source',
       header: 'Source',
-      accessor: 'source',
+      accessor: (row: Gear) => typeof row.source === 'string' ? row.source : row.source?.source || '-',
       sortable: true,
     },
     {
       id: 'page',
       header: 'Page',
-      accessor: 'page',
+      accessor: (row: Gear) => row.page || (typeof row.source === 'object' ? row.source?.page : '-') || '-',
       sortable: true,
     },
     {
       id: 'rating',
       header: 'Rating',
-      accessor: 'rating',
+      accessor: (row: Gear) => row.rating !== undefined ? String(row.rating) : (row.rating as string | undefined) || '-',
       sortable: true,
     },
     {
       id: 'avail',
       header: 'Availability',
-      accessor: 'avail',
+      accessor: (row: Gear) => row.availability || row.avail || '-',
       sortable: true,
     },
     {
       id: 'cost',
       header: 'Cost',
-      accessor: 'cost',
+      accessor: (row: Gear) => {
+        if (row.cost !== undefined) {
+          return row.cost_per_rating ? `${row.cost}¥ per rating` : `${row.cost}¥`;
+        }
+        return (row.cost as string | undefined) || '-';
+      },
       sortable: true,
     },
     {
@@ -94,7 +109,7 @@ export function GearTable({ gear }: GearTableProps) {
       accessor: 'costfor',
       sortable: true,
     },
-  ];
+  ], [handleNameClick]);
 
   return (
     <>
@@ -115,8 +130,8 @@ export function GearTable({ gear }: GearTableProps) {
       <DataTable
         data={filteredGear}
         columns={columns}
-        searchFields={['name', 'category', 'source']}
-        searchPlaceholder="Search gear by name, category, or source..."
+        searchFields={['name', 'category', 'subcategory', 'source']}
+        searchPlaceholder="Search gear by name, category, subcategory, or source..."
         rowsPerPageOptions={[25, 50, 100, 200]}
         defaultRowsPerPage={50}
         defaultSortColumn="name"
@@ -132,5 +147,5 @@ export function GearTable({ gear }: GearTableProps) {
       />
     </>
   );
-}
+});
 

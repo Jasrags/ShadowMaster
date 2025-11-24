@@ -1,4 +1,4 @@
-import { useState, useMemo, ReactNode } from 'react';
+import { useState, useMemo, ReactNode, useEffect, useDeferredValue } from 'react';
 import {
   Table,
   TableHeader,
@@ -38,6 +38,7 @@ export interface DataTableProps<T> {
   emptyMessage?: string;
   emptySearchMessage?: string;
   ariaLabel?: string;
+  getRowKey?: (row: T, index: number) => string;
 }
 
 const DEFAULT_ROWS_PER_PAGE_OPTIONS = [10, 25, 50, 100];
@@ -55,8 +56,10 @@ export function DataTable<T>({
   emptyMessage = 'No data available',
   emptySearchMessage = 'No results found. Try adjusting your search.',
   ariaLabel = 'Data table',
+  getRowKey,
 }: DataTableProps<T>) {
   const [searchTerm, setSearchTerm] = useState('');
+  const [debouncedSearchTerm, setDebouncedSearchTerm] = useState('');
   const [sortColumn, setSortColumn] = useState<keyof T | null>(defaultSortColumn || null);
   const [sortDirection, setSortDirection] = useState<'asc' | 'desc'>(defaultSortDirection);
   const [currentPage, setCurrentPage] = useState(1);
@@ -66,6 +69,15 @@ export function DataTable<T>({
     : rowsPerPageOptions[0];
   const [rowsPerPage, setRowsPerPage] = useState(validDefaultRowsPerPage);
 
+  // Debounce search term with 300ms delay
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setDebouncedSearchTerm(searchTerm);
+    }, 300);
+
+    return () => clearTimeout(timer);
+  }, [searchTerm]);
+
   // Determine search fields - use provided or all string columns
   const effectiveSearchFields = useMemo(() => {
     if (searchFields) return searchFields;
@@ -74,10 +86,32 @@ export function DataTable<T>({
       .map((col) => col.accessor as keyof T);
   }, [searchFields, columns]);
 
+  // Generate stable row key - use provided function or create composite key
+  const generateRowKey = useMemo(() => {
+    if (getRowKey) {
+      return getRowKey;
+    }
+    // Default: try to find id, name, or create composite key
+    return (row: T, index: number): string => {
+      // Try id field first (for Book, Lifestyle, etc.)
+      if ('id' in row && typeof row.id === 'string') {
+        return row.id;
+      }
+      // Try name + category for items without IDs
+      const name = 'name' in row ? String(row.name || '') : '';
+      const category = 'category' in row ? String(row.category || '') : '';
+      if (name) {
+        return category ? `${name}::${category}` : name;
+      }
+      // Fallback to index (should be rare)
+      return `row-${index}`;
+    };
+  }, [getRowKey]);
+
   // Apply filtering, sorting, and pagination
   const processedData = useMemo(() => {
-    // Filter (only global search, no column filters)
-    const filtered = filterData(data, searchTerm, {}, effectiveSearchFields);
+    // Filter (only global search, no column filters) - use debounced search term
+    const filtered = filterData(data, debouncedSearchTerm, {}, effectiveSearchFields);
 
     // Sort
     const sorted = sortData(filtered, sortColumn, sortDirection);
@@ -91,7 +125,7 @@ export function DataTable<T>({
     const paginated = paginateData(sorted, currentPage, validRowsPerPage);
 
     return paginated;
-  }, [data, searchTerm, sortColumn, sortDirection, currentPage, rowsPerPage, rowsPerPageOptions, validDefaultRowsPerPage, effectiveSearchFields]);
+  }, [data, debouncedSearchTerm, sortColumn, sortDirection, currentPage, rowsPerPage, rowsPerPageOptions, validDefaultRowsPerPage, effectiveSearchFields]);
 
   const handleSort = (column: keyof T) => {
     if (sortColumn === column) {
@@ -203,7 +237,7 @@ export function DataTable<T>({
           <TableBody>
             {processedData.data.map((row, rowIndex) => (
               <Row
-                key={rowIndex}
+                key={generateRowKey(row, processedData.startIndex - 1 + rowIndex)}
                 className="border-b border-sr-light-gray hover:bg-sr-gray/50 transition-colors"
               >
                 {columns.map((column) => (

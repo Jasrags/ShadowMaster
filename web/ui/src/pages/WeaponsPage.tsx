@@ -1,13 +1,15 @@
-import { useEffect, useState, useCallback } from 'react';
+import { useEffect, useState, useCallback, useMemo } from 'react';
 import { weaponApi } from '../lib/api';
-import type { Weapon } from '../lib/types';
+import type { Weapon, WeaponAccessoryItem } from '../lib/types';
 import { useToast } from '../contexts/ToastContext';
 import { WeaponTable } from '../components/weapon/WeaponTable';
 import { WeaponTableGrouped } from '../components/weapon/WeaponTableGrouped';
+import { DatabasePageLayout } from '../components/database/DatabasePageLayout';
 
 export function WeaponsPage() {
   const { showError } = useToast();
   const [weapons, setWeapons] = useState<Weapon[]>([]);
+  const [weaponAccessories, setWeaponAccessories] = useState<WeaponAccessoryItem[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [viewMode, setViewMode] = useState<'flat' | 'grouped'>('grouped');
 
@@ -24,58 +26,46 @@ export function WeaponsPage() {
     }
   }, [showError]);
 
+  const loadWeaponAccessories = useCallback(async () => {
+    try {
+      const data = await weaponApi.getWeaponAccessories();
+      setWeaponAccessories(data);
+    } catch (err) {
+      // Silently fail - accessories are optional
+      console.error('Failed to load weapon accessories:', err);
+    }
+  }, []);
+
   useEffect(() => {
     loadWeapons();
-  }, [loadWeapons]);
+    loadWeaponAccessories();
+  }, [loadWeapons, loadWeaponAccessories]);
 
-  if (isLoading) {
-    return (
-      <div className="flex items-center justify-center py-12">
-        <div className="text-gray-400">Loading weapons...</div>
-      </div>
-    );
-  }
+  // Create a map of accessories by name (case-insensitive)
+  const accessoryMap = useMemo(() => {
+    const map = new Map<string, WeaponAccessoryItem>();
+    weaponAccessories.forEach(acc => {
+      // Use lowercase name as key for case-insensitive lookup
+      map.set(acc.name.toLowerCase(), acc);
+    });
+    return map;
+  }, [weaponAccessories]);
 
   return (
-    <div>
-      <div className="mb-6">
-        <div className="flex items-center justify-between mb-2">
-          <div>
-            <h2 className="text-2xl font-bold text-gray-100 mb-2">Weapons Database</h2>
-            <p className="text-gray-400">
-              View and search all available weapons from Shadowrun 5th Edition ({weapons.length} items)
-            </p>
-          </div>
-          <div className="flex gap-2">
-            <button
-              onClick={() => setViewMode('flat')}
-              className={`px-4 py-2 rounded-md text-sm font-medium transition-colors ${
-                viewMode === 'flat'
-                  ? 'bg-sr-accent text-sr-dark'
-                  : 'bg-sr-gray border border-sr-light-gray text-gray-300 hover:bg-sr-light-gray'
-              }`}
-            >
-              Flat View
-            </button>
-            <button
-              onClick={() => setViewMode('grouped')}
-              className={`px-4 py-2 rounded-md text-sm font-medium transition-colors ${
-                viewMode === 'grouped'
-                  ? 'bg-sr-accent text-sr-dark'
-                  : 'bg-sr-gray border border-sr-light-gray text-gray-300 hover:bg-sr-light-gray'
-              }`}
-            >
-              Grouped View
-            </button>
-          </div>
-        </div>
-      </div>
+    <DatabasePageLayout
+      title="Weapons Database"
+      description="View and search all available weapons from Shadowrun 5th Edition"
+      itemCount={weapons.length}
+      isLoading={isLoading}
+      viewMode={viewMode}
+      onViewModeChange={setViewMode}
+    >
       {viewMode === 'grouped' ? (
-        <WeaponTableGrouped weapons={weapons} />
+        <WeaponTableGrouped weapons={weapons} accessoryMap={accessoryMap} />
       ) : (
-        <WeaponTable weapons={weapons} />
+        <WeaponTable weapons={weapons} accessoryMap={accessoryMap} />
       )}
-    </div>
+    </DatabasePageLayout>
   );
 }
 

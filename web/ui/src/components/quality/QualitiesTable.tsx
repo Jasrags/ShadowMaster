@@ -1,4 +1,4 @@
-import { useState, useMemo } from 'react';
+import { useState, useMemo, memo, useCallback } from 'react';
 import { DataTable, ColumnDefinition } from '../common/DataTable';
 import type { Quality } from '../../lib/types';
 import { QualityViewModal } from './QualityViewModal';
@@ -9,7 +9,7 @@ interface QualitiesTableProps {
   qualities: Quality[];
 }
 
-export function QualitiesTable({ qualities }: QualitiesTableProps) {
+export const QualitiesTable = memo(function QualitiesTable({ qualities }: QualitiesTableProps) {
   const [selectedQuality, setSelectedQuality] = useState<Quality | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedCategories, setSelectedCategories] = useState<string[]>([]);
@@ -32,12 +32,12 @@ export function QualitiesTable({ qualities }: QualitiesTableProps) {
     return filtered;
   }, [qualities, selectedCategories, selectedSources]);
 
-  const handleNameClick = (quality: Quality) => {
+  const handleNameClick = useCallback((quality: Quality) => {
     setSelectedQuality(quality);
     setIsModalOpen(true);
-  };
+  }, []);
 
-  const columns: ColumnDefinition<Quality>[] = [
+  const columns: ColumnDefinition<Quality>[] = useMemo(() => [
     {
       id: 'name',
       header: 'Name',
@@ -76,7 +76,7 @@ export function QualitiesTable({ qualities }: QualitiesTableProps) {
       accessor: 'page',
       sortable: true,
     },
-  ];
+  ], [handleNameClick]);
 
   return (
     <>
@@ -114,5 +114,5 @@ export function QualitiesTable({ qualities }: QualitiesTableProps) {
       />
     </>
   );
-}
+});
 

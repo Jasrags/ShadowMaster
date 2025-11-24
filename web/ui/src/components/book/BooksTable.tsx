@@ -1,4 +1,4 @@
-import { useState, useMemo } from 'react';
+import { useState, useMemo, memo, useCallback } from 'react';
 import { DataTable, ColumnDefinition } from '../common/DataTable';
 import type { Book } from '../../lib/types';
 import { BookViewModal } from './BookViewModal';
@@ -7,16 +7,16 @@ interface BooksTableProps {
   books: Book[];
 }
 
-export function BooksTable({ books }: BooksTableProps) {
+export const BooksTable = memo(function BooksTable({ books }: BooksTableProps) {
   const [selectedBook, setSelectedBook] = useState<Book | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
 
-  const handleNameClick = (book: Book) => {
+  const handleNameClick = useCallback((book: Book) => {
     setSelectedBook(book);
     setIsModalOpen(true);
-  };
+  }, []);
 
-  const columns: ColumnDefinition<Book>[] = [
+  const columns: ColumnDefinition<Book>[] = useMemo(() => [
     {
       id: 'name',
       header: 'Name',
@@ -37,7 +37,7 @@ export function BooksTable({ books }: BooksTableProps) {
       accessor: 'code',
       sortable: true,
     },
-  ];
+  ], [handleNameClick]);
 
   return (
     <>
@@ -61,5 +61,5 @@ export function BooksTable({ books }: BooksTableProps) {
       />
     </>
   );
-}
+});
 

@@ -1,4 +1,4 @@
-import { useState, useMemo } from 'react';
+import { useState, useMemo, memo, useCallback } from 'react';
 import { DataTable, ColumnDefinition } from '../common/DataTable';
 import type { Lifestyle } from '../../lib/types';
 import { LifestyleViewModal } from './LifestyleViewModal';
@@ -8,7 +8,7 @@ interface LifestylesTableProps {
   lifestyles: Lifestyle[];
 }
 
-export function LifestylesTable({ lifestyles }: LifestylesTableProps) {
+export const LifestylesTable = memo(function LifestylesTable({ lifestyles }: LifestylesTableProps) {
   const [selectedLifestyle, setSelectedLifestyle] = useState<Lifestyle | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedSources, setSelectedSources] = useState<string[]>(['SR5']);
@@ -21,12 +21,12 @@ export function LifestylesTable({ lifestyles }: LifestylesTableProps) {
     return lifestyles.filter(lifestyle => selectedSources.includes(lifestyle.source));
   }, [lifestyles, selectedSources]);
 
-  const handleNameClick = (lifestyle: Lifestyle) => {
+  const handleNameClick = useCallback((lifestyle: Lifestyle) => {
     setSelectedLifestyle(lifestyle);
     setIsModalOpen(true);
-  };
+  }, []);
 
-  const columns: ColumnDefinition<Lifestyle>[] = [
+  const columns: ColumnDefinition<Lifestyle>[] = useMemo(() => [
     {
       id: 'name',
       header: 'Name',
@@ -71,7 +71,7 @@ export function LifestylesTable({ lifestyles }: LifestylesTableProps) {
       accessor: 'source',
       sortable: true,
     },
-  ];
+  ], [handleNameClick]);
 
   return (
     <>
@@ -104,5 +104,5 @@ export function LifestylesTable({ lifestyles }: LifestylesTableProps) {
       />
     </>
   );
-}
+});
 
