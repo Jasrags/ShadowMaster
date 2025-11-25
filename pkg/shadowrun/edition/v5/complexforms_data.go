@@ -1,0 +1,150 @@
+package v5
+
+// dataComplexForms contains all complex form definitions
+var dataComplexForms = map[string]ComplexForm{
+	"cleaner": {
+		Name:     "Cleaner",
+		Target:   ComplexFormTargetPersona,
+		Duration: ComplexFormDuration{Type: ComplexFormDurationSustained, Description: "S"},
+		Fading:   FadingFormula{BaseModifier: intPtr(-2), Formula: "L-2", HasFading: true},
+		Source:   &SourceReference{Source: "SR5"},
+	},
+	"coriolis": {
+		Name:     "Coriolis",
+		Target:   ComplexFormTargetPersona,
+		Duration: ComplexFormDuration{Type: ComplexFormDurationExtended, ExtendedParameters: "5, 24 hours", Description: "E (5, 24 hours)"},
+		Fading:   FadingFormula{HasFading: false, Formula: "-"},
+		Source:   &SourceReference{Source: "SR5"},
+	},
+	"derezz": {
+		Name:     "Derezz",
+		Target:   ComplexFormTargetPersona,
+		Duration: ComplexFormDuration{Type: ComplexFormDurationInstantaneous, Description: "I"},
+		Fading:   FadingFormula{BaseModifier: intPtr(-1), Formula: "L-1", HasFading: true},
+		Source:   &SourceReference{Source: "SR5"},
+	},
+	"diffusion_of_matrix_attribute": {
+		Name:     "Diffusion of [Matrix Attribute]",
+		Target:   ComplexFormTargetDevice,
+		Duration: ComplexFormDuration{Type: ComplexFormDurationSustained, Description: "S"},
+		Fading:   FadingFormula{BaseModifier: intPtr(-2), Formula: "L-2", HasFading: true},
+		Source:   &SourceReference{Source: "SR5"},
+	},
+	"editor": {
+		Name:     "Editor",
+		Target:   ComplexFormTargetFile,
+		Duration: ComplexFormDuration{Type: ComplexFormDurationPermanent, Description: "P"},
+		Fading:   FadingFormula{BaseModifier: intPtr(-1), Formula: "L-1", HasFading: true},
+		Source:   &SourceReference{Source: "SR5"},
+	},
+	"faq": {
+		Name:     "FAQ",
+		Target:   ComplexFormTargetDevice,
+		Duration: ComplexFormDuration{Type: ComplexFormDurationPermanent, Description: "P"},
+		Fading:   FadingFormula{BaseModifier: intPtr(-3), Formula: "L-3", HasFading: true},
+		Source:   &SourceReference{Source: "SR5"},
+	},
+	"ic_tray": {
+		Name:     "IC Tray",
+		Target:   ComplexFormTargetHost,
+		Duration: ComplexFormDuration{Type: ComplexFormDurationInstantaneous, Description: "I"},
+		Fading:   FadingFormula{BaseModifier: intPtr(-5), Formula: "L-5", HasFading: true},
+		Source:   &SourceReference{Source: "SR5"},
+	},
+	"infusion_of_matrix_attribute": {
+		Name:     "Infusion of [Matrix Attribute]",
+		Target:   ComplexFormTargetDevice,
+		Duration: ComplexFormDuration{Type: ComplexFormDurationSustained, Description: "S"},
+		Fading:   FadingFormula{BaseModifier: intPtr(-2), Formula: "L-2", HasFading: true},
+		Source:   &SourceReference{Source: "SR5"},
+	},
+	"misread_marks": {
+		Name:     "Misread Marks",
+		Target:   ComplexFormTargetIC,
+		Duration: ComplexFormDuration{Type: ComplexFormDurationPermanent, Description: "P"},
+		Fading:   FadingFormula{BaseModifier: intPtr(-1), Formula: "L-1", HasFading: true},
+		Source:   &SourceReference{Source: "SR5"},
+	},
+	"pulse_storm": {
+		Name:     "Pulse Storm",
+		Target:   ComplexFormTargetPersona,
+		Duration: ComplexFormDuration{Type: ComplexFormDurationInstantaneous, Description: "I"},
+		Fading:   FadingFormula{BaseModifier: intPtr(-3), Formula: "L-3", HasFading: true},
+		Source:   &SourceReference{Source: "SR5"},
+	},
+	"puppeteer": {
+		Name:     "Puppeteer",
+		Target:   ComplexFormTargetDevice,
+		Duration: ComplexFormDuration{Type: ComplexFormDurationInstantaneous, Description: "I"},
+		Fading:   FadingFormula{BaseModifier: intPtr(1), Formula: "L+1", HasFading: true},
+		Source:   &SourceReference{Source: "SR5"},
+	},
+	"redundancy": {
+		Name:     "Redundancy",
+		Target:   ComplexFormTargetDevice,
+		Duration: ComplexFormDuration{Type: ComplexFormDurationSustained, Description: "S"},
+		Fading:   FadingFormula{BaseModifier: intPtr(-3), Formula: "L-3", HasFading: true},
+		Source:   &SourceReference{Source: "SR5"},
+	},
+	"resonance_channel": {
+		Name:     "Resonance Channel",
+		Target:   ComplexFormTargetDevice,
+		Duration: ComplexFormDuration{Type: ComplexFormDurationSustained, Description: "S"},
+		Fading:   FadingFormula{BaseModifier: intPtr(-4), Formula: "L-4", HasFading: true},
+		Source:   &SourceReference{Source: "SR5"},
+	},
+	"resonance_spike": {
+		Name:     "Resonance Spike",
+		Target:   ComplexFormTargetDevice,
+		Duration: ComplexFormDuration{Type: ComplexFormDurationInstantaneous, Description: "I"},
+		Fading:   FadingFormula{BaseModifier: intPtr(-3), Formula: "L-3", HasFading: true},
+		Source:   &SourceReference{Source: "SR5"},
+	},
+	"resonance_veil": {
+		Name:     "Resonance Veil",
+		Target:   ComplexFormTargetDevice,
+		Duration: ComplexFormDuration{Type: ComplexFormDurationSustained, Description: "S"},
+		Fading:   FadingFormula{BaseModifier: intPtr(-4), Formula: "L-4", HasFading: true},
+		Source:   &SourceReference{Source: "SR5"},
+	},
+	"static_bomb": {
+		Name:     "Static Bomb",
+		Target:   ComplexFormTargetSelf,
+		Duration: ComplexFormDuration{Type: ComplexFormDurationInstantaneous, Description: "I"},
+		Fading:   FadingFormula{BaseModifier: intPtr(-1), Formula: "L-1", HasFading: true},
+		Source:   &SourceReference{Source: "SR5"},
+	},
+	"static_veil": {
+		Name:     "Static Veil",
+		Target:   ComplexFormTargetPersona,
+		Duration: ComplexFormDuration{Type: ComplexFormDurationSustained, Description: "S"},
+		Fading:   FadingFormula{BaseModifier: intPtr(-4), Formula: "L-4", HasFading: true},
+		Source:   &SourceReference{Source: "SR5"},
+	},
+	"stitches": {
+		Name:     "Stitches",
+		Target:   ComplexFormTargetSprite,
+		Duration: ComplexFormDuration{Type: ComplexFormDurationPermanent, Description: "P"},
+		Fading:   FadingFormula{BaseModifier: intPtr(-5), Formula: "L-5", HasFading: true},
+		Source:   &SourceReference{Source: "SR5"},
+	},
+	"tattletale": {
+		Name:     "Tattletale",
+		Target:   ComplexFormTargetPersona,
+		Duration: ComplexFormDuration{Type: ComplexFormDurationPermanent, Description: "P"},
+		Fading:   FadingFormula{BaseModifier: intPtr(-5), Formula: "L-5", HasFading: true},
+		Source:   &SourceReference{Source: "SR5"},
+	},
+	"transcendent_grid": {
+		Name:     "Transcendent Grid",
+		Target:   ComplexFormTargetSelf,
+		Duration: ComplexFormDuration{Type: ComplexFormDurationInstantaneous, Description: "I"},
+		Fading:   FadingFormula{BaseModifier: intPtr(-6), Formula: "L-6", HasFading: true},
+		Source:   &SourceReference{Source: "SR5"},
+	},
+}
+
+// intPtr returns a pointer to an int
+func intPtr(i int) *int {
+	return &i
+}

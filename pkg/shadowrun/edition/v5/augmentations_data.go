@@ -121,7 +121,7 @@ var dataCyberware = map[string]Cyberware{
 	},
 	"taste_booster": {
 		Part:         "Head",
-		Device:       "Taste Booster",
+		Device:       "Taste Booster (R 1-6)",
 		Essence:      "0.2",
 		Capacity:     "-",
 		Availability: "Rating*3",
@@ -382,7 +382,7 @@ var dataCyberware = map[string]Cyberware{
 	},
 	"bone_lacing_titanium": {
 		Part:         "Body",
-		Device:       "Bond Lacing (Titanium)",
+		Device:       "Bone Lacing (Titanium)",
 		Essence:      "1.5",
 		Capacity:     "-",
 		Availability: "16R",

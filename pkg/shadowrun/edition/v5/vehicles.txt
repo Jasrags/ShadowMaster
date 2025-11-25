@@ -1,0 +1,121 @@
+# Vehicles and Drones
+
+## Groundcraft
+
+### Bikes
+
+| Vehicle | Handl | Speed | Accel | Body | Armor | Pilot | Sensor | Seats | Avail | Cost | Source |
+|---------|-------|-------|-------|------|-------|-------|--------|-------|-------|------|--------|
+| Dodge Scoot | 4/3 | 3 | 1 | 4 | 4 | 1 | 1 | 1 | - | 3,000¥ | SR5 |
+| Harley-Davidson Scorpion | 4/3 | 4 | 2 | 8 | 9 | 1 | 2 | 1 | - | 12,000¥ | SR5 |
+| Yamaha Growler | 4/5 | 3/4 | 1 | 5 | 5 | 1 | 1 | 1 | - | 5,000¥ | SR5 |
+| Suzuki Mirage | 5/3 | 6 | 3 | 5 | 6 | 1 | 2 | 1 | - | 8,500¥ | SR5 |
+
+### Cars
+
+| Vehicle | Handl | Speed | Accel | Body | Armor | Pilot | Sensor | Seats | Avail | Cost | Source |
+|---------|-------|-------|-------|------|-------|-------|--------|-------|-------|------|--------|
+| Americar | 3/2 | 4 | 2 | 8 | 6 | 1 | 1 | 4 | - | 15,000¥ | SR5 |
+| Ford Americar | 3/2 | 4 | 2 | 8 | 6 | 1 | 1 | 4 | - | 15,000¥ | SR5 |
+| GMC Bulldog Step-Van | 2/1 | 3 | 1 | 12 | 8 | 1 | 1 | 2 | - | 25,000¥ | SR5 |
+| GMC Chameleon | 4/3 | 4 | 2 | 6 | 4 | 1 | 2 | 4 | - | 18,000¥ | SR5 |
+| Hyundai Shin-Hyung | 4/3 | 4 | 2 | 6 | 5 | 1 | 2 | 4 | - | 20,000¥ | SR5 |
+| Mitsubishi Nightsky | 4/3 | 5 | 3 | 6 | 6 | 1 | 2 | 4 | - | 35,000¥ | SR5 |
+| Rover 2062 | 3/2 | 4 | 2 | 8 | 6 | 1 | 1 | 4 | - | 18,000¥ | SR5 |
+| Toyota Gopher | 3/2 | 3 | 1 | 8 | 5 | 1 | 1 | 4 | - | 12,000¥ | SR5 |
+
+### Trucks
+
+| Vehicle | Handl | Speed | Accel | Body | Armor | Pilot | Sensor | Seats | Avail | Cost | Source |
+|---------|-------|-------|-------|------|-------|-------|--------|-------|-------|------|--------|
+| GMC Banshee | 3/2 | 4 | 2 | 10 | 8 | 1 | 2 | 2 | - | 30,000¥ | SR5 |
+| GMC Phoenix | 3/2 | 4 | 2 | 10 | 8 | 1 | 2 | 2 | - | 35,000¥ | SR5 |
+
+### Other Groundcraft
+
+| Vehicle | Type | Handl | Speed | Accel | Body | Armor | Pilot | Sensor | Seats | Avail | Cost | Source |
+|---------|------|-------|-------|-------|------|-------|-------|--------|-------|-------|------|--------|
+| Ares Roadmaster | Limo | 2/1 | 3 | 1 | 14 | 12 | 1 | 2 | 6 | - | 80,000¥ | SR5 |
+| GMC Armadillo | Armored Vehicle | 2/1 | 3 | 1 | 16 | 20 | 1 | 2 | 2 | - | 120,000¥ | SR5 |
+
+## Watercraft
+
+| Vehicle | Handl | Speed | Accel | Body | Armor | Pilot | Sensor | Seats | Avail | Cost | Source |
+|---------|-------|-------|-------|------|-------|-------|--------|-------|-------|------|--------|
+| Horizon Dreamliner | 2/1 | 4 | 1 | 12 | 4 | 1 | 2 | 8 | - | 45,000¥ | SR5 |
+| Yamaha Rapier | 4/3 | 5 | 2 | 4 | 2 | 1 | 1 | 1 | - | 8,000¥ | SR5 |
+
+## Aircraft
+
+| Vehicle | Handl | Speed | Accel | Body | Armor | Pilot | Sensor | Seats | Avail | Cost | Source |
+|---------|-------|-------|-------|------|-------|-------|--------|-------|-------|------|--------|
+| Ares Dragon | 4/3 | 6 | 2 | 8 | 6 | 1 | 3 | 2 | - | 150,000¥ | SR5 |
+| Horizon Little Bird | 4/3 | 5 | 2 | 4 | 2 | 1 | 2 | 1 | - | 25,000¥ | SR5 |
+| Lockheed Optic-X | 5/4 | 7 | 3 | 6 | 4 | 1 | 3 | 1 | - | 200,000¥ | SR5 |
+| Northrup Wasp | 4/3 | 6 | 2 | 4 | 2 | 1 | 2 | 1 | - | 30,000¥ | SR5 |
+
+## Drones
+
+### Micro Drones
+
+| Drone | Handl | Speed | Accel | Body | Armor | Pilot | Sensor | Avail | Cost | Source |
+|-------|-------|-------|-------|------|-------|-------|--------|-------|------|--------|
+| MCT Fly-Spy | 2 | 1F | 1 | 1 | 0 | 1 | 1 | 2 | 500¥ | SR5 |
+| Shiawase Kanmushi | 2 | 1F | 1 | 1 | 0 | 1 | 1 | 2 | 400¥ | SR5 |
+
+### Mini Drones
+
+| Drone | Handl | Speed | Accel | Body | Armor | Pilot | Sensor | Avail | Cost | Source |
+|-------|-------|-------|-------|------|-------|-------|--------|-------|------|--------|
+| Ares Duellist | 3 | 2G | 1 | 2 | 0 | 1 | 1 | 4 | 1,200¥ | SR5 |
+| MCT-Nissan Roto-Drone | 3 | 2G | 1 | 2 | 0 | 1 | 1 | 4 | 1,000¥ | SR5 |
+| Steel Lynx | 3 | 3G | 1 | 3 | 0 | 2 | 2 | 6 | 8,000¥ | SR5 |
+
+### Small Drones
+
+| Drone | Handl | Speed | Accel | Body | Armor | Pilot | Sensor | Avail | Cost | Source |
+|-------|-------|-------|-------|------|-------|-------|--------|-------|------|--------|
+| Ares Duelist | 3 | 2G | 1 | 2 | 0 | 1 | 1 | 4 | 1,200¥ | SR5 |
+| MCT-Nissan Roto-Drone | 3 | 2G | 1 | 2 | 0 | 1 | 1 | 4 | 1,000¥ | SR5 |
+| Steel Lynx | 3 | 3G | 1 | 3 | 0 | 2 | 2 | 6 | 8,000¥ | SR5 |
+
+### Medium Drones
+
+| Drone | Handl | Speed | Accel | Body | Armor | Pilot | Sensor | Avail | Cost | Source |
+|-------|-------|-------|-------|------|-------|-------|--------|-------|------|--------|
+| MCT-Nissan Roto-Drone | 3 | 2G | 1 | 2 | 0 | 1 | 1 | 4 | 1,000¥ | SR5 |
+| Steel Lynx | 3 | 3G | 1 | 3 | 0 | 2 | 2 | 6 | 8,000¥ | SR5 |
+
+### Large Drones
+
+| Drone | Handl | Speed | Accel | Body | Armor | Pilot | Sensor | Avail | Cost | Source |
+|-------|-------|-------|-------|------|-------|-------|--------|-------|------|--------|
+
+### Huge Drones
+
+| Drone | Handl | Speed | Accel | Body | Armor | Pilot | Sensor | Avail | Cost | Source |
+|-------|-------|-------|-------|------|-------|-------|--------|-------|------|--------|
+
+### Anthro Drones
+
+| Drone | Handl | Speed | Accel | Body | Armor | Pilot | Sensor | Avail | Cost | Source |
+|-------|-------|-------|-------|------|-------|-------|--------|-------|------|--------|
+
+### Missile Drones
+
+| Drone | Handl | Speed | Accel | Body | Armor | Pilot | Sensor | Avail | Cost | Source |
+|-------|-------|-------|-------|------|-------|-------|--------|-------|------|--------|
+
+## Notes
+
+- **Handl**: Handling rating (may show off-road/on-road split like 4/3)
+- **Speed**: Movement rate (G = Ground, W = Water, J = Jet, F = Flight, P = Propeller)
+- **Accel**: Acceleration rating
+- **Body**: Body rating (may include structure rating in parentheses like 5(0))
+- **Armor**: Armor rating
+- **Pilot**: Pilot rating
+- **Sensor**: Sensor rating
+- **Seats**: Number of seats (vehicles only, not applicable to drones)
+- **Avail**: Availability rating (may include restrictions like R for Restricted, F for Forbidden)
+- **Cost**: Price in nuyen (¥)
+
