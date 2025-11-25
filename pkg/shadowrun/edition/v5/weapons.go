@@ -1,5 +1,7 @@
 package v5
 
+import "fmt"
+
 // WeaponType represents the category of weapon
 type WeaponType string
 
@@ -278,4 +280,22 @@ func GetWeaponsByType(weaponType WeaponType) []Weapon {
 		}
 	}
 	return weapons
+}
+
+// Validate validates that the weapon definition is well-formed
+func (w *Weapon) Validate() error {
+	if w.Name == "" {
+		return fmt.Errorf("weapon name is required")
+	}
+	if w.Type == "" {
+		return fmt.Errorf("weapon type is required")
+	}
+	if w.Skill == "" {
+		return fmt.Errorf("weapon skill is required")
+	}
+	// Validate exotic skill name is provided if using exotic skill
+	if (w.Skill == WeaponSkillExoticMeleeWeapon || w.Skill == WeaponSkillExoticRangedWeapon) && w.ExoticSkillName == "" {
+		return fmt.Errorf("exotic skill name is required when using exotic weapon skill")
+	}
+	return nil
 }

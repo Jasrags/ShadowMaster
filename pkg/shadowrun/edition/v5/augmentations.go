@@ -16,15 +16,27 @@ type Cyberware struct {
 	// Device is the name of the cyberware device
 	Device string `json:"device,omitempty"`
 	// Essence is the essence cost (can be a formula like "Rating * 0.1" or a fixed value like "0.2")
+	// Deprecated: Use EssenceFormula instead for structured formula handling
 	Essence string `json:"essence,omitempty"`
+	// EssenceFormula is the structured essence cost formula (new format)
+	EssenceFormula *RatingFormula `json:"essence_formula,omitempty"`
 	// Capacity is the capacity cost (can be a formula like "[Rating]" or "[2]", or "-" for no capacity)
+	// Deprecated: Use CapacityFormula instead for structured formula handling
 	Capacity string `json:"capacity,omitempty"`
+	// CapacityFormula is the structured capacity formula (new format)
+	CapacityFormula *RatingFormula `json:"capacity_formula,omitempty"`
 	// Availability is the availability rating (e.g., "5R", "12F", "Rating * 2")
+	// Deprecated: Use AvailabilityFormula instead for structured formula handling
 	Availability string `json:"availability,omitempty"`
+	// AvailabilityFormula is the structured availability formula (new format)
+	AvailabilityFormula *RatingFormula `json:"availability_formula,omitempty"`
 	// Cost is the cost in nuyen as displayed in the source (e.g., "1,000", "Rating * 20,000", "Deck Cost + 5,000")
+	// Deprecated: Use CostFormula instead for structured formula handling
 	Cost string `json:"cost,omitempty"`
-	// Source is the source book code (e.g., "Core")
-	Source string `json:"source,omitempty"`
+	// CostFormula is the structured cost formula (new format)
+	CostFormula *CostFormula `json:"cost_formula,omitempty"`
+	// Source contains source book reference information
+	Source *SourceReference `json:"source,omitempty"`
 }
 
 // Bioware represents a bioware augmentation
@@ -36,13 +48,22 @@ type Bioware struct {
 	// Device is the name of the bioware device
 	Device string `json:"device,omitempty"`
 	// Essence is the essence cost (can be a formula like "Rating * 0.2" or a fixed value like "0.1")
+	// Deprecated: Use EssenceFormula instead for structured formula handling
 	Essence string `json:"essence,omitempty"`
+	// EssenceFormula is the structured essence cost formula (new format)
+	EssenceFormula *RatingFormula `json:"essence_formula,omitempty"`
 	// Availability is the availability rating (e.g., "4", "12F", "(Rating * 6)F")
+	// Deprecated: Use AvailabilityFormula instead for structured formula handling
 	Availability string `json:"availability,omitempty"`
+	// AvailabilityFormula is the structured availability formula (new format)
+	AvailabilityFormula *RatingFormula `json:"availability_formula,omitempty"`
 	// Cost is the cost in nuyen as displayed in the source (e.g., "4,000", "Rating * 55,000")
+	// Deprecated: Use CostFormula instead for structured formula handling
 	Cost string `json:"cost,omitempty"`
-	// Source is the source book code (e.g., "Core")
-	Source string `json:"source,omitempty"`
+	// CostFormula is the structured cost formula (new format)
+	CostFormula *CostFormula `json:"cost_formula,omitempty"`
+	// Source contains source book reference information
+	Source *SourceReference `json:"source,omitempty"`
 }
 
 // dataCyberware and dataBioware are declared in augmentations_data.go
@@ -168,18 +189,62 @@ func NormalizeFormula(formula string) string {
 	return formula
 }
 
+
 // RequiresRating returns true if the field contains a rating formula
 func (c *Cyberware) RequiresRating() bool {
+	// Check structured formulas first
+	if c.EssenceFormula != nil && c.EssenceFormula.RequiresRating() {
+		return true
+	}
+	if c.CapacityFormula != nil && c.CapacityFormula.RequiresRating() {
+		return true
+	}
+	if c.AvailabilityFormula != nil && c.AvailabilityFormula.RequiresRating() {
+		return true
+	}
+	if c.CostFormula != nil && c.CostFormula.RequiresRating() {
+		return true
+	}
+	// Fall back to string-based formulas for backward compatibility
 	return strings.Contains(strings.ToLower(c.Availability), "rating") ||
 		strings.Contains(strings.ToLower(c.Cost), "rating") ||
 		strings.Contains(strings.ToLower(c.Essence), "rating") ||
 		strings.Contains(strings.ToLower(c.Capacity), "rating")
 }
 
+// Validate validates that the cyberware definition is well-formed
+func (c *Cyberware) Validate() error {
+	if c.Device == "" {
+		return fmt.Errorf("cyberware device name is required")
+	}
+	// Validate structured formulas if present
+	if c.EssenceFormula != nil && !c.EssenceFormula.IsValid() {
+		return fmt.Errorf("invalid essence formula")
+	}
+	if c.CapacityFormula != nil && !c.CapacityFormula.IsValid() {
+		return fmt.Errorf("invalid capacity formula")
+	}
+	if c.AvailabilityFormula != nil && !c.AvailabilityFormula.IsValid() {
+		return fmt.Errorf("invalid availability formula")
+	}
+	if c.CostFormula != nil && !c.CostFormula.IsValid() {
+		return fmt.Errorf("invalid cost formula")
+	}
+	return nil
+}
+
 // CalculateAvailability calculates the availability given a rating
 // Returns the calculated availability string (e.g., "9F" for rating 3 with "Rating * 3F")
 // Returns the original string if it doesn't contain a rating formula
 func (c *Cyberware) CalculateAvailability(rating int) string {
+	// Use structured formula if available
+	if c.AvailabilityFormula != nil {
+		result, err := c.AvailabilityFormula.Calculate(rating)
+		if err == nil {
+			return fmt.Sprintf("%.0f", result)
+		}
+	}
+	// Fall back to string-based formula for backward compatibility
 	return calculateRatingFormula(c.Availability, rating)
 }
 
@@ -187,6 +252,18 @@ func (c *Cyberware) CalculateAvailability(rating int) string {
 // Returns the calculated cost string (e.g., "15,000" for rating 3 with "Rating * 5,000")
 // Returns the original string if it doesn't contain a rating formula
 func (c *Cyberware) CalculateCost(rating int) string {
+	// Use structured formula if available
+	if c.CostFormula != nil {
+		cost, err := c.CostFormula.Calculate(rating)
+		if err == nil {
+			// Format with commas if >= 1000
+			if cost >= 1000 {
+				return FormatCostWithCommas(cost)
+			}
+			return fmt.Sprintf("%d", cost)
+		}
+	}
+	// Fall back to string-based formula for backward compatibility
 	return calculateRatingFormula(c.Cost, rating)
 }
 
@@ -194,6 +271,18 @@ func (c *Cyberware) CalculateCost(rating int) string {
 // Returns the calculated essence string (e.g., "0.3" for rating 3 with "Rating * 0.1")
 // Returns the original string if it doesn't contain a rating formula
 func (c *Cyberware) CalculateEssence(rating int) string {
+	// Use structured formula if available
+	if c.EssenceFormula != nil {
+		result, err := c.EssenceFormula.Calculate(rating)
+		if err == nil {
+			// Format to remove trailing zeros
+			resultStr := fmt.Sprintf("%.2f", result)
+			resultStr = strings.TrimRight(resultStr, "0")
+			resultStr = strings.TrimRight(resultStr, ".")
+			return resultStr
+		}
+	}
+	// Fall back to string-based formula for backward compatibility
 	return calculateRatingFormula(c.Essence, rating)
 }
 
@@ -295,15 +384,52 @@ func calculateRatingFormula(formula string, rating int) string {
 
 // RequiresRating returns true if the field contains a rating formula
 func (b *Bioware) RequiresRating() bool {
+	// Check structured formulas first
+	if b.EssenceFormula != nil && b.EssenceFormula.RequiresRating() {
+		return true
+	}
+	if b.AvailabilityFormula != nil && b.AvailabilityFormula.RequiresRating() {
+		return true
+	}
+	if b.CostFormula != nil && b.CostFormula.RequiresRating() {
+		return true
+	}
+	// Fall back to string-based formulas for backward compatibility
 	return strings.Contains(strings.ToLower(b.Availability), "rating") ||
 		strings.Contains(strings.ToLower(b.Cost), "rating") ||
 		strings.Contains(strings.ToLower(b.Essence), "rating")
+}
+
+// Validate validates that the bioware definition is well-formed
+func (b *Bioware) Validate() error {
+	if b.Device == "" {
+		return fmt.Errorf("bioware device name is required")
+	}
+	// Validate structured formulas if present
+	if b.EssenceFormula != nil && !b.EssenceFormula.IsValid() {
+		return fmt.Errorf("invalid essence formula")
+	}
+	if b.AvailabilityFormula != nil && !b.AvailabilityFormula.IsValid() {
+		return fmt.Errorf("invalid availability formula")
+	}
+	if b.CostFormula != nil && !b.CostFormula.IsValid() {
+		return fmt.Errorf("invalid cost formula")
+	}
+	return nil
 }
 
 // CalculateAvailability calculates the availability given a rating
 // Returns the calculated availability string (e.g., "9F" for rating 3 with "Rating * 3F")
 // Returns the original string if it doesn't contain a rating formula
 func (b *Bioware) CalculateAvailability(rating int) string {
+	// Use structured formula if available
+	if b.AvailabilityFormula != nil {
+		result, err := b.AvailabilityFormula.Calculate(rating)
+		if err == nil {
+			return fmt.Sprintf("%.0f", result)
+		}
+	}
+	// Fall back to string-based formula for backward compatibility
 	return calculateRatingFormula(b.Availability, rating)
 }
 
@@ -311,6 +437,18 @@ func (b *Bioware) CalculateAvailability(rating int) string {
 // Returns the calculated cost string (e.g., "15,000" for rating 3 with "Rating * 5,000")
 // Returns the original string if it doesn't contain a rating formula
 func (b *Bioware) CalculateCost(rating int) string {
+	// Use structured formula if available
+	if b.CostFormula != nil {
+		cost, err := b.CostFormula.Calculate(rating)
+		if err == nil {
+			// Format with commas if >= 1000
+			if cost >= 1000 {
+				return FormatCostWithCommas(cost)
+			}
+			return fmt.Sprintf("%d", cost)
+		}
+	}
+	// Fall back to string-based formula for backward compatibility
 	return calculateRatingFormula(b.Cost, rating)
 }
 
@@ -318,5 +456,17 @@ func (b *Bioware) CalculateCost(rating int) string {
 // Returns the calculated essence string (e.g., "0.6" for rating 3 with "Rating * 0.2")
 // Returns the original string if it doesn't contain a rating formula
 func (b *Bioware) CalculateEssence(rating int) string {
+	// Use structured formula if available
+	if b.EssenceFormula != nil {
+		result, err := b.EssenceFormula.Calculate(rating)
+		if err == nil {
+			// Format to remove trailing zeros
+			resultStr := fmt.Sprintf("%.2f", result)
+			resultStr = strings.TrimRight(resultStr, "0")
+			resultStr = strings.TrimRight(resultStr, ".")
+			return resultStr
+		}
+	}
+	// Fall back to string-based formula for backward compatibility
 	return calculateRatingFormula(b.Essence, rating)
 }

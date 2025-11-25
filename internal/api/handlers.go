@@ -863,24 +863,32 @@ func (h *Handlers) GetLifestyles(w http.ResponseWriter, r *http.Request) {
 
 	// Add lifestyles with category "Lifestyle"
 	for _, l := range lifestyles {
+		sourceStr := ""
+		if l.Source != nil {
+			sourceStr = l.Source.Source
+		}
 		items = append(items, LifestyleItem{
 			ID:          l.ID,
 			Name:        l.Name,
 			Description: l.Description,
 			Cost:        l.Cost,
-			Source:      l.Source,
+			Source:      sourceStr,
 			Category:    "Lifestyle",
 		})
 	}
 
 	// Add lifestyle options with category "Lifestyle Option"
 	for _, o := range lifestyleOptions {
+		sourceStr := ""
+		if o.Source != nil {
+			sourceStr = o.Source.Source
+		}
 		items = append(items, LifestyleItem{
 			ID:          o.ID,
 			Name:        o.Name,
 			Description: o.Description,
 			Cost:        o.Cost,
-			Source:      o.Source,
+			Source:      sourceStr,
 			Category:    "Lifestyle Option",
 		})
 	}

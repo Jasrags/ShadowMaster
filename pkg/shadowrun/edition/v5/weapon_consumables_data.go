@@ -11,7 +11,7 @@ var dataWeaponConsumables = map[string]WeaponConsumable{
 		Cost:                "120",
 		QuantityPerPurchase: 10,
 		UnitType:            "rounds",
-		Source:              "SR5",
+		Source: &SourceReference{Source: "SR5"},
 	},
 	"assault_cannon": {
 		Name:                "Assault Cannon",
@@ -20,7 +20,7 @@ var dataWeaponConsumables = map[string]WeaponConsumable{
 		Cost:                "400",
 		QuantityPerPurchase: 10,
 		UnitType:            "rounds",
-		Source:              "SR5",
+		Source: &SourceReference{Source: "SR5"},
 	},
 	"explosive_rounds": {
 		Name:                "Explosive Rounds",
@@ -31,7 +31,7 @@ var dataWeaponConsumables = map[string]WeaponConsumable{
 		Cost:                "80",
 		QuantityPerPurchase: 10,
 		UnitType:            "rounds",
-		Source:              "SR5",
+		Source: &SourceReference{Source: "SR5"},
 	},
 	"flechette_rounds": {
 		Name:                "Flechette Rounds",
@@ -42,7 +42,7 @@ var dataWeaponConsumables = map[string]WeaponConsumable{
 		Cost:                "65",
 		QuantityPerPurchase: 10,
 		UnitType:            "rounds",
-		Source:              "SR5",
+		Source: &SourceReference{Source: "SR5"},
 	},
 	"gel_rounds": {
 		Name:                "Gel Rounds",
@@ -53,7 +53,7 @@ var dataWeaponConsumables = map[string]WeaponConsumable{
 		Cost:                "25",
 		QuantityPerPurchase: 10,
 		UnitType:            "rounds",
-		Source:              "SR5",
+		Source: &SourceReference{Source: "SR5"},
 	},
 	"hollow_points": {
 		Name:                "Hollow Points",
@@ -64,7 +64,7 @@ var dataWeaponConsumables = map[string]WeaponConsumable{
 		Cost:                "70",
 		QuantityPerPurchase: 10,
 		UnitType:            "rounds",
-		Source:              "SR5",
+		Source: &SourceReference{Source: "SR5"},
 	},
 	"injection_darts": {
 		Name:                "Injection Darts",
@@ -73,7 +73,7 @@ var dataWeaponConsumables = map[string]WeaponConsumable{
 		Cost:                "75",
 		QuantityPerPurchase: 10,
 		UnitType:            "rounds",
-		Source:              "SR5",
+		Source: &SourceReference{Source: "SR5"},
 	},
 	"regular_ammo": {
 		Name:                "Regular Ammo",
@@ -82,7 +82,7 @@ var dataWeaponConsumables = map[string]WeaponConsumable{
 		Cost:                "20",
 		QuantityPerPurchase: 10,
 		UnitType:            "rounds",
-		Source:              "SR5",
+		Source: &SourceReference{Source: "SR5"},
 	},
 	"stick_n_shock": {
 		Name:                "Stick-n-Shock",
@@ -93,7 +93,7 @@ var dataWeaponConsumables = map[string]WeaponConsumable{
 		Cost:                "80",
 		QuantityPerPurchase: 10,
 		UnitType:            "rounds",
-		Source:              "SR5",
+		Source: &SourceReference{Source: "SR5"},
 	},
 	"taser_dart": {
 		Name:                "Taser Dart",
@@ -102,7 +102,7 @@ var dataWeaponConsumables = map[string]WeaponConsumable{
 		Cost:                "50",
 		QuantityPerPurchase: 10,
 		UnitType:            "rounds",
-		Source:              "SR5",
+		Source: &SourceReference{Source: "SR5"},
 	},
 	"tracer": {
 		Name:                "Tracer",
@@ -111,7 +111,7 @@ var dataWeaponConsumables = map[string]WeaponConsumable{
 		Cost:                "60",
 		QuantityPerPurchase: 10,
 		UnitType:            "rounds",
-		Source:              "SR5",
+		Source: &SourceReference{Source: "SR5"},
 	},
 	// Ballistic Projectile Consumables
 	"arrow": {
@@ -121,7 +121,7 @@ var dataWeaponConsumables = map[string]WeaponConsumable{
 		Cost:                "Rating*2",
 		QuantityPerPurchase: 1,
 		UnitType:            "arrow",
-		Source:              "SR5",
+		Source: &SourceReference{Source: "SR5"},
 	},
 	"bolt": {
 		Name:                "Bolt",
@@ -130,7 +130,7 @@ var dataWeaponConsumables = map[string]WeaponConsumable{
 		Cost:                "5",
 		QuantityPerPurchase: 1,
 		UnitType:            "bolt",
-		Source:              "SR5",
+		Source: &SourceReference{Source: "SR5"},
 	},
 	"injection_arrow": {
 		Name:                "Injection Arrow",
@@ -139,7 +139,7 @@ var dataWeaponConsumables = map[string]WeaponConsumable{
 		Cost:                "Rating*20",
 		QuantityPerPurchase: 1,
 		UnitType:            "arrow",
-		Source:              "SR5",
+		Source: &SourceReference{Source: "SR5"},
 	},
 	"injection_bolt": {
 		Name:                "Injection Bolt",
@@ -148,7 +148,7 @@ var dataWeaponConsumables = map[string]WeaponConsumable{
 		Cost:                "50",
 		QuantityPerPurchase: 1,
 		UnitType:            "bolt",
-		Source:              "SR5",
+		Source: &SourceReference{Source: "SR5"},
 	},
 	"mono_tip": {
 		Name:                "Mono Tip",
@@ -158,7 +158,7 @@ var dataWeaponConsumables = map[string]WeaponConsumable{
 		Cost:                "Rating*30",
 		QuantityPerPurchase: 1,
 		UnitType:            "tip",
-		Source:              "SR5:HT",
+		Source: &SourceReference{Source: "SR5:HT"},
 	},
 	"seeker_shafts": {
 		Name:                "Seeker Shafts",
@@ -167,7 +167,7 @@ var dataWeaponConsumables = map[string]WeaponConsumable{
 		Cost:                "45",
 		QuantityPerPurchase: 1,
 		UnitType:            "shaft",
-		Source:              "SR5:HT",
+		Source: &SourceReference{Source: "SR5:HT"},
 	},
 	// Grenades
 	"flash_bang": {
@@ -180,7 +180,7 @@ var dataWeaponConsumables = map[string]WeaponConsumable{
 		Cost:                "100",
 		QuantityPerPurchase: 1,
 		UnitType:            "grenade",
-		Source:              "SR5",
+		Source: &SourceReference{Source: "SR5"},
 	},
 	"flash_pak": {
 		Name:                "Flash-Pak",
@@ -191,7 +191,7 @@ var dataWeaponConsumables = map[string]WeaponConsumable{
 		Cost:                "125",
 		QuantityPerPurchase: 1,
 		UnitType:            "grenade",
-		Source:              "SR5",
+		Source: &SourceReference{Source: "SR5"},
 	},
 	"fragmentation": {
 		Name:                "Fragmentation",
@@ -203,7 +203,7 @@ var dataWeaponConsumables = map[string]WeaponConsumable{
 		Cost:                "100",
 		QuantityPerPurchase: 1,
 		UnitType:            "grenade",
-		Source:              "SR5",
+		Source: &SourceReference{Source: "SR5"},
 	},
 	"gas": {
 		Name:                "Gas",
@@ -214,7 +214,7 @@ var dataWeaponConsumables = map[string]WeaponConsumable{
 		Cost:                "Chemical+40",
 		QuantityPerPurchase: 1,
 		UnitType:            "grenade",
-		Source:              "SR5",
+		Source: &SourceReference{Source: "SR5"},
 	},
 	"high_explosive": {
 		Name:                "High Explosive",
@@ -226,7 +226,7 @@ var dataWeaponConsumables = map[string]WeaponConsumable{
 		Cost:                "100",
 		QuantityPerPurchase: 1,
 		UnitType:            "grenade",
-		Source:              "SR5",
+		Source: &SourceReference{Source: "SR5"},
 	},
 	"smoke": {
 		Name:                "Smoke",
@@ -236,7 +236,7 @@ var dataWeaponConsumables = map[string]WeaponConsumable{
 		Cost:                "40",
 		QuantityPerPurchase: 1,
 		UnitType:            "grenade",
-		Source:              "SR5",
+		Source: &SourceReference{Source: "SR5"},
 	},
 	"thermal_smoke": {
 		Name:                "Thermal Smoke",
@@ -246,7 +246,7 @@ var dataWeaponConsumables = map[string]WeaponConsumable{
 		Cost:                "40",
 		QuantityPerPurchase: 1,
 		UnitType:            "grenade",
-		Source:              "SR5",
+		Source: &SourceReference{Source: "SR5"},
 	},
 
 	// Rockets & Missiles
@@ -260,7 +260,7 @@ var dataWeaponConsumables = map[string]WeaponConsumable{
 		Cost:                "2,800",
 		QuantityPerPurchase: 1,
 		UnitType:            "rocket",
-		Source:              "SR5",
+		Source: &SourceReference{Source: "SR5"},
 	},
 	"fragmentation_rocket": {
 		Name:                "Fragmentation Rocket",
@@ -272,7 +272,7 @@ var dataWeaponConsumables = map[string]WeaponConsumable{
 		Cost:                "2,000",
 		QuantityPerPurchase: 1,
 		UnitType:            "rocket",
-		Source:              "SR5",
+		Source: &SourceReference{Source: "SR5"},
 	},
 	"high_explosive_rocket": {
 		Name:                "High-Explosive Rocket",
@@ -284,7 +284,7 @@ var dataWeaponConsumables = map[string]WeaponConsumable{
 		Cost:                "2,100",
 		QuantityPerPurchase: 1,
 		UnitType:            "rocket",
-		Source:              "SR5",
+		Source: &SourceReference{Source: "SR5"},
 	},
 	"missile": {
 		Name:                "Missile",
@@ -294,6 +294,6 @@ var dataWeaponConsumables = map[string]WeaponConsumable{
 		Cost:                "+Sensor*500",
 		QuantityPerPurchase: 1,
 		UnitType:            "missile",
-		Source:              "SR5",
+		Source: &SourceReference{Source: "SR5"},
 	},
 }

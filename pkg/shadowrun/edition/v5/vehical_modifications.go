@@ -30,15 +30,7 @@ const (
 	InstallationSkillTypeNone     InstallationSkillType = "none"
 )
 
-// CostFormula represents how the cost is calculated
-type CostFormula struct {
-	// BaseCost is the base cost in nuyen (if fixed)
-	BaseCost *int `json:"base_cost,omitempty"`
-	// Formula describes the cost formula (e.g., "Rating × 2,000¥", "Body × 500¥", "Accel × 10,000¥")
-	Formula string `json:"formula,omitempty"`
-	// IsVariable indicates if the cost is variable based on vehicle characteristics
-	IsVariable bool `json:"is_variable,omitempty"`
-}
+// CostFormula is defined in common.go - this type is now common across all entities
 
 // SlotsFormula represents how slots are calculated
 type SlotsFormula struct {

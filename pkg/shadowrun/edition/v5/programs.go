@@ -1,5 +1,10 @@
 package v5
 
+import (
+	"errors"
+	"fmt"
+)
+
 // ProgramType represents the category of Matrix program
 type ProgramType string
 
@@ -18,7 +23,18 @@ type AgentRatingRange struct {
 	MaxRating int `json:"max_rating,omitempty"`
 }
 
-// AgentCostFormula represents how agent cost is calculated
+// AgentCostFormula represents how agent cost is calculated.
+// This is a specialized formula type for agent costs in nuyen, similar to CostFormula
+// but simplified for the agent rating-based cost structure.
+//
+// Usage:
+//   Fixed cost per rating:
+//     AgentCostFormula{CostPerRating: 1000, Formula: "Rating × 1000¥"}
+//
+// Methods:
+//   Calculate(rating int) - calculates the cost for a given rating
+//   RequiresRating() - checks if formula requires a rating
+//   IsValid() - validates the formula structure
 type AgentCostFormula struct {
 	// CostPerRating is the cost per rating point (e.g., 1000¥ for rating 1-3, 2000¥ for rating 4-6)
 	CostPerRating int `json:"cost_per_rating,omitempty"`
@@ -26,12 +42,111 @@ type AgentCostFormula struct {
 	Formula string `json:"formula,omitempty"`
 }
 
-// AgentAvailabilityFormula represents how agent availability is calculated
+// RequiresRating returns true if the agent cost formula requires a rating to calculate.
+func (acf *AgentCostFormula) RequiresRating() bool {
+	if acf.CostPerRating > 0 {
+		return true
+	}
+	if acf.Formula != "" {
+		calc := NewFormulaCalculator()
+		return calc.RequiresRating(acf.Formula)
+	}
+	return false
+}
+
+// Calculate calculates the cost for a given rating.
+// Returns the calculated cost and any error.
+func (acf *AgentCostFormula) Calculate(rating int) (int, error) {
+	if rating < 0 {
+		return 0, errors.New("rating cannot be negative")
+	}
+	if acf.CostPerRating > 0 {
+		return acf.CostPerRating * rating, nil
+	}
+	if acf.Formula != "" {
+		// Try to parse formula if structured field not present
+		calc := NewFormulaCalculator()
+		cost, err := calc.EvaluateFormula(acf.Formula, map[string]interface{}{"Rating": rating})
+		if err != nil {
+			return 0, fmt.Errorf("could not evaluate formula %s: %w", acf.Formula, err)
+		}
+		return int(cost), nil
+	}
+	return 0, errors.New("no cost formula specified")
+}
+
+// IsValid validates that the agent cost formula is well-formed.
+func (acf *AgentCostFormula) IsValid() error {
+	if acf.CostPerRating < 0 {
+		return errors.New("cost per rating cannot be negative")
+	}
+	if acf.CostPerRating == 0 && acf.Formula == "" {
+		return errors.New("agent cost formula must specify either CostPerRating or Formula")
+	}
+	return nil
+}
+
+// AgentAvailabilityFormula represents how agent availability is calculated.
+// This is a specialized formula type for agent availability, similar to RatingFormula
+// but simplified for the agent rating-based availability structure.
+//
+// Usage:
+//   Availability per rating:
+//     AgentAvailabilityFormula{AvailabilityPerRating: 3, Formula: "Rating × 3"}
+//
+// Methods:
+//   Calculate(rating int) - calculates the availability for a given rating
+//   RequiresRating() - checks if formula requires a rating
+//   IsValid() - validates the formula structure
 type AgentAvailabilityFormula struct {
 	// AvailabilityPerRating is the availability per rating point (e.g., Rating × 3)
 	AvailabilityPerRating int `json:"availability_per_rating,omitempty"`
 	// Formula describes the availability formula as text (e.g., "Rating × 3")
 	Formula string `json:"formula,omitempty"`
+}
+
+// RequiresRating returns true if the availability formula requires a rating to calculate.
+func (aaf *AgentAvailabilityFormula) RequiresRating() bool {
+	if aaf.AvailabilityPerRating > 0 {
+		return true
+	}
+	if aaf.Formula != "" {
+		calc := NewFormulaCalculator()
+		return calc.RequiresRating(aaf.Formula)
+	}
+	return false
+}
+
+// Calculate calculates the availability for a given rating.
+// Returns the calculated availability and any error.
+func (aaf *AgentAvailabilityFormula) Calculate(rating int) (int, error) {
+	if rating < 0 {
+		return 0, errors.New("rating cannot be negative")
+	}
+	if aaf.AvailabilityPerRating > 0 {
+		return aaf.AvailabilityPerRating * rating, nil
+	}
+	if aaf.Formula != "" {
+		// Try to parse formula if structured field not present
+		calc := NewFormulaCalculator()
+		avail, err := calc.EvaluateFormula(aaf.Formula, map[string]interface{}{"Rating": rating})
+		if err != nil {
+			return 0, fmt.Errorf("could not evaluate formula %s: %w", aaf.Formula, err)
+		}
+		return int(avail), nil
+	}
+	return 0, errors.New("no availability formula specified")
+}
+
+// IsValid validates that the availability formula is well-formed.
+func (aaf *AgentAvailabilityFormula) IsValid() error {
+	if aaf.AvailabilityPerRating < 0 {
+		return errors.New("availability per rating cannot be negative")
+	}
+	if aaf.AvailabilityPerRating == 0 && aaf.Formula == "" {
+		return errors.New("agent availability formula must specify either AvailabilityPerRating or Formula")
+	}
+	return nil
 }
 
 // ProgramEffect represents the mechanical effect of a program
@@ -145,5 +260,61 @@ func GetProgramsByType(programType ProgramType) []Program {
 		}
 	}
 	return programs
+}
+
+// Validate validates that the Program struct has all required fields and valid data.
+func (p *Program) Validate() error {
+	if p.Name == "" {
+		return errors.New("program name is required")
+	}
+
+	// Validate program type if set
+	if p.Type != "" {
+		validTypes := []ProgramType{
+			ProgramTypeAgent,
+			ProgramTypeCommlinkApp,
+			ProgramTypeCommon,
+			ProgramTypeHacking,
+		}
+		valid := false
+		for _, vt := range validTypes {
+			if p.Type == vt {
+				valid = true
+				break
+			}
+		}
+		if !valid {
+			return fmt.Errorf("invalid program type: %s", p.Type)
+		}
+	}
+
+	// Validate cost formula if present (for agents)
+	if p.Cost != nil {
+		if err := p.Cost.IsValid(); err != nil {
+			return fmt.Errorf("invalid cost formula: %w", err)
+		}
+	}
+
+	// Validate availability formula if present (for agents)
+	if p.Availability != nil {
+		if err := p.Availability.IsValid(); err != nil {
+			return fmt.Errorf("invalid availability formula: %w", err)
+		}
+	}
+
+	// Validate rating range if present (for agents) using common utility
+	if p.RatingRange != nil {
+		if err := ValidateRating(p.RatingRange.MinRating, 0, 0); err != nil {
+			return fmt.Errorf("invalid minimum rating: %w", err)
+		}
+		if p.RatingRange.MaxRating < p.RatingRange.MinRating {
+			return errors.New("maximum rating cannot be less than minimum rating")
+		}
+		if err := ValidateRating(p.RatingRange.MaxRating, 0, 0); err != nil {
+			return fmt.Errorf("invalid maximum rating: %w", err)
+		}
+	}
+
+	return nil
 }
 

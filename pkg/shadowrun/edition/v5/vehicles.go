@@ -1,5 +1,7 @@
 package v5
 
+import "fmt"
+
 // dataVehicles contains all vehicle and drone definitions
 // This is populated in vehicles_data.go
 
@@ -250,4 +252,27 @@ func GetVehiclesBySubtype(subtype VehicleSubtype) []Vehicle {
 		}
 	}
 	return vehicles
+}
+
+// Validate validates that the vehicle definition is well-formed
+func (v *Vehicle) Validate() error {
+	if v.Name == "" {
+		return fmt.Errorf("vehicle name is required")
+	}
+	if v.Type == "" {
+		return fmt.Errorf("vehicle type is required")
+	}
+	// Validate handling rating
+	if v.Handling.OnRoad == 0 {
+		return fmt.Errorf("handling rating is required")
+	}
+	// Validate speed rating
+	if v.Speed.Value == 0 {
+		return fmt.Errorf("speed rating is required")
+	}
+	// Validate body rating
+	if v.Body.Value == 0 {
+		return fmt.Errorf("body rating is required")
+	}
+	return nil
 }

@@ -9,7 +9,7 @@ var dataCyberware = map[string]Cyberware{
 		Capacity:     "[2]",
 		Availability: "-",
 		Cost:         "Commlink + 2,000",
-		Source:       "SR5",
+		Source:       &SourceReference{Source: "SR5"},
 	},
 	"control_rig_r1": {
 		Part:         "Head",
@@ -18,7 +18,7 @@ var dataCyberware = map[string]Cyberware{
 		Capacity:     "-",
 		Availability: "5R",
 		Cost:         "43,000",
-		Source:       "SR5",
+		Source:       &SourceReference{Source: "SR5"},
 	},
 	"control_rig_r2": {
 		Part:         "Head",
@@ -27,7 +27,7 @@ var dataCyberware = map[string]Cyberware{
 		Capacity:     "-",
 		Availability: "10R",
 		Cost:         "97,000",
-		Source:       "SR5",
+		Source:       &SourceReference{Source: "SR5"},
 	},
 	"control_rig_r3": {
 		Part:         "Head",
@@ -36,7 +36,7 @@ var dataCyberware = map[string]Cyberware{
 		Capacity:     "-",
 		Availability: "15R",
 		Cost:         "208,000",
-		Source:       "SR5",
+		Source:       &SourceReference{Source: "SR5"},
 	},
 	"cortex_bomb_kink": {
 		Part:         "Head",
@@ -45,7 +45,7 @@ var dataCyberware = map[string]Cyberware{
 		Capacity:     "[1]",
 		Availability: "12F",
 		Cost:         "10,000",
-		Source:       "SR5",
+		Source:       &SourceReference{Source: "SR5"},
 	},
 	"cortex_bomb_microbomb": {
 		Part:         "Head",
@@ -54,7 +54,7 @@ var dataCyberware = map[string]Cyberware{
 		Capacity:     "[2]",
 		Availability: "16F",
 		Cost:         "25,000",
-		Source:       "SR5",
+		Source:       &SourceReference{Source: "SR5"},
 	},
 	"cortex_bomb_area_bomb": {
 		Part:         "Head",
@@ -63,7 +63,7 @@ var dataCyberware = map[string]Cyberware{
 		Capacity:     "[3]",
 		Availability: "20F",
 		Cost:         "40,000",
-		Source:       "SR5",
+		Source:       &SourceReference{Source: "SR5"},
 	},
 	"cyberdeck": {
 		Part:         "Head",
@@ -72,7 +72,7 @@ var dataCyberware = map[string]Cyberware{
 		Capacity:     "[4]",
 		Availability: "5R",
 		Cost:         "Deck Cost + 5,000",
-		Source:       "SR5",
+		Source:       &SourceReference{Source: "SR5"},
 	},
 	"datajack": {
 		Part:         "Head",
@@ -81,7 +81,7 @@ var dataCyberware = map[string]Cyberware{
 		Capacity:     "-",
 		Availability: "2",
 		Cost:         "1,000",
-		Source:       "SR5",
+		Source:       &SourceReference{Source: "SR5"},
 	},
 	"data_lock": {
 		Part:         "Head",
@@ -90,7 +90,7 @@ var dataCyberware = map[string]Cyberware{
 		Capacity:     "-",
 		Availability: "Rating*2",
 		Cost:         "Rating*1000",
-		Source:       "SR5",
+		Source:       &SourceReference{Source: "SR5"},
 	},
 	"olfactory_booster": {
 		Part:         "Head",
@@ -99,7 +99,7 @@ var dataCyberware = map[string]Cyberware{
 		Capacity:     "-",
 		Availability: "Rating*3",
 		Cost:         "Rating*4000",
-		Source:       "SR5",
+		Source:       &SourceReference{Source: "SR5"},
 	},
 	"simrig": {
 		Part:         "Head",
@@ -108,7 +108,7 @@ var dataCyberware = map[string]Cyberware{
 		Capacity:     "-",
 		Availability: "12R",
 		Cost:         "4,000",
-		Source:       "SR5",
+		Source:       &SourceReference{Source: "SR5"},
 	},
 	"skilljack": {
 		Part:         "Head",
@@ -117,7 +117,7 @@ var dataCyberware = map[string]Cyberware{
 		Capacity:     "-",
 		Availability: "Rating*2",
 		Cost:         "Rating*20000",
-		Source:       "SR5",
+		Source:       &SourceReference{Source: "SR5"},
 	},
 	"taste_booster": {
 		Part:         "Head",
@@ -126,7 +126,7 @@ var dataCyberware = map[string]Cyberware{
 		Capacity:     "-",
 		Availability: "Rating*3",
 		Cost:         "Rating*3000",
-		Source:       "SR5",
+		Source:       &SourceReference{Source: "SR5"},
 	},
 	"tooth_compartment": {
 		Part:         "Head",
@@ -135,7 +135,7 @@ var dataCyberware = map[string]Cyberware{
 		Capacity:     "-",
 		Availability: "8",
 		Cost:         "800",
-		Source:       "SR5",
+		Source:       &SourceReference{Source: "SR5"},
 	},
 	"ultrasound_sensor": {
 		Part:         "Head",
@@ -144,7 +144,7 @@ var dataCyberware = map[string]Cyberware{
 		Capacity:     "[2]",
 		Availability: "10",
 		Cost:         "Rating*12000",
-		Source:       "SR5",
+		Source:       &SourceReference{Source: "SR5"},
 	},
 	"voice_modulator": {
 		Part:         "Head",
@@ -153,7 +153,7 @@ var dataCyberware = map[string]Cyberware{
 		Capacity:     "-",
 		Availability: "Rating*3F",
 		Cost:         "Rating*5000",
-		Source:       "SR5",
+		Source:       &SourceReference{Source: "SR5"},
 	},
 	"cybereyes_r1": {
 		Part:         "Eye",
@@ -162,7 +162,7 @@ var dataCyberware = map[string]Cyberware{
 		Capacity:     "4",
 		Availability: "3",
 		Cost:         "4,000",
-		Source:       "SR5",
+		Source:       &SourceReference{Source: "SR5"},
 	},
 	"cybereyes_r2": {
 		Part:         "Eye",
@@ -171,7 +171,7 @@ var dataCyberware = map[string]Cyberware{
 		Capacity:     "8",
 		Availability: "6",
 		Cost:         "6,000",
-		Source:       "SR5",
+		Source:       &SourceReference{Source: "SR5"},
 	},
 	"cybereyes_r3": {
 		Part:         "Eye",
@@ -180,7 +180,7 @@ var dataCyberware = map[string]Cyberware{
 		Capacity:     "12",
 		Availability: "9",
 		Cost:         "10,000",
-		Source:       "SR5",
+		Source:       &SourceReference{Source: "SR5"},
 	},
 	"cybereyes_r4": {
 		Part:         "Eye",
@@ -189,7 +189,7 @@ var dataCyberware = map[string]Cyberware{
 		Capacity:     "16",
 		Availability: "12",
 		Cost:         "14,000",
-		Source:       "SR5",
+		Source:       &SourceReference{Source: "SR5"},
 	},
 	"flare_compensation": {
 		Part:         "Eye",
@@ -198,7 +198,7 @@ var dataCyberware = map[string]Cyberware{
 		Capacity:     "[1]",
 		Availability: "4",
 		Cost:         "1,000",
-		Source:       "SR5",
+		Source:       &SourceReference{Source: "SR5"},
 	},
 	"image_link": {
 		Part:         "Eye",
@@ -207,7 +207,7 @@ var dataCyberware = map[string]Cyberware{
 		Capacity:     "*",
 		Availability: "4",
 		Cost:         "1,000",
-		Source:       "SR5",
+		Source:       &SourceReference{Source: "SR5"},
 	},
 	"low_light_vision": {
 		Part:         "Eye",
@@ -216,7 +216,7 @@ var dataCyberware = map[string]Cyberware{
 		Capacity:     "[2]",
 		Availability: "4",
 		Cost:         "1,500",
-		Source:       "SR5",
+		Source:       &SourceReference{Source: "SR5"},
 	},
 	"ocular_drone": {
 		Part:         "Eye",
@@ -225,7 +225,7 @@ var dataCyberware = map[string]Cyberware{
 		Capacity:     "[6]",
 		Availability: "6",
 		Cost:         "6,000",
-		Source:       "SR5",
+		Source:       &SourceReference{Source: "SR5"},
 	},
 	"retinal_duplication": {
 		Part:         "Eye",
@@ -234,7 +234,7 @@ var dataCyberware = map[string]Cyberware{
 		Capacity:     "[1]",
 		Availability: "16F",
 		Cost:         "Rating*20000",
-		Source:       "SR5",
+		Source:       &SourceReference{Source: "SR5"},
 	},
 	"smartlink": {
 		Part:         "Eye",
@@ -243,7 +243,7 @@ var dataCyberware = map[string]Cyberware{
 		Capacity:     "[3]",
 		Availability: "8R",
 		Cost:         "4,000",
-		Source:       "SR5",
+		Source:       &SourceReference{Source: "SR5"},
 	},
 	"thermographic_vision": {
 		Part:         "Eye",
@@ -252,7 +252,7 @@ var dataCyberware = map[string]Cyberware{
 		Capacity:     "[2]",
 		Availability: "4",
 		Cost:         "1,500",
-		Source:       "SR5",
+		Source:       &SourceReference{Source: "SR5"},
 	},
 	"vision_enhancement": {
 		Part:         "Eye",
@@ -261,7 +261,7 @@ var dataCyberware = map[string]Cyberware{
 		Capacity:     "[Rating]",
 		Availability: "Rating*3",
 		Cost:         "Rating*4000",
-		Source:       "SR5",
+		Source:       &SourceReference{Source: "SR5"},
 	},
 	"vision_magnification": {
 		Part:         "Eye",
@@ -270,7 +270,7 @@ var dataCyberware = map[string]Cyberware{
 		Capacity:     "[2]",
 		Availability: "4",
 		Cost:         "2,000",
-		Source:       "SR5",
+		Source:       &SourceReference{Source: "SR5"},
 	},
 	"cyberears_r1": {
 		Part:         "Ear",
@@ -279,7 +279,7 @@ var dataCyberware = map[string]Cyberware{
 		Capacity:     "4",
 		Availability: "3",
 		Cost:         "3,000",
-		Source:       "SR5",
+		Source:       &SourceReference{Source: "SR5"},
 	},
 	"cyberears_r2": {
 		Part:         "Ear",
@@ -288,7 +288,7 @@ var dataCyberware = map[string]Cyberware{
 		Capacity:     "8",
 		Availability: "6",
 		Cost:         "4,500",
-		Source:       "SR5",
+		Source:       &SourceReference{Source: "SR5"},
 	},
 	"cyberears_r3": {
 		Part:         "Ear",
@@ -297,7 +297,7 @@ var dataCyberware = map[string]Cyberware{
 		Capacity:     "12",
 		Availability: "9",
 		Cost:         "7,500",
-		Source:       "SR5",
+		Source:       &SourceReference{Source: "SR5"},
 	},
 	"cyberears_r4": {
 		Part:         "Ear",
@@ -306,7 +306,7 @@ var dataCyberware = map[string]Cyberware{
 		Capacity:     "16",
 		Availability: "12",
 		Cost:         "11,000",
-		Source:       "SR5",
+		Source:       &SourceReference{Source: "SR5"},
 	},
 	"audio_enhancement": {
 		Part:         "Ear",
@@ -315,7 +315,7 @@ var dataCyberware = map[string]Cyberware{
 		Capacity:     "[Rating]",
 		Availability: "Rating*3",
 		Cost:         "Rating*4000",
-		Source:       "SR5",
+		Source:       &SourceReference{Source: "SR5"},
 	},
 	"balance_augmenter": {
 		Part:         "Ear",
@@ -324,7 +324,7 @@ var dataCyberware = map[string]Cyberware{
 		Capacity:     "[4]",
 		Availability: "8",
 		Cost:         "8,000",
-		Source:       "SR5",
+		Source:       &SourceReference{Source: "SR5"},
 	},
 	"damper": {
 		Part:         "Ear",
@@ -333,7 +333,7 @@ var dataCyberware = map[string]Cyberware{
 		Capacity:     "[1]",
 		Availability: "6",
 		Cost:         "2,250",
-		Source:       "SR5",
+		Source:       &SourceReference{Source: "SR5"},
 	},
 	"select_sound_filter": {
 		Part:         "Ear",
@@ -342,7 +342,7 @@ var dataCyberware = map[string]Cyberware{
 		Capacity:     "[Rating]",
 		Availability: "Rating*3",
 		Cost:         "Rating*3500",
-		Source:       "SR5",
+		Source:       &SourceReference{Source: "SR5"},
 	},
 	"sound_link": {
 		Part:         "Ear",
@@ -351,7 +351,7 @@ var dataCyberware = map[string]Cyberware{
 		Capacity:     "*",
 		Availability: "4",
 		Cost:         "1,000",
-		Source:       "SR5",
+		Source:       &SourceReference{Source: "SR5"},
 	},
 	"spatial_recognizer": {
 		Part:         "Ear",
@@ -360,7 +360,7 @@ var dataCyberware = map[string]Cyberware{
 		Capacity:     "[2]",
 		Availability: "8",
 		Cost:         "4,000",
-		Source:       "SR5",
+		Source:       &SourceReference{Source: "SR5"},
 	},
 	"bone_lacing_plastic": {
 		Part:         "Body",
@@ -369,7 +369,7 @@ var dataCyberware = map[string]Cyberware{
 		Capacity:     "-",
 		Availability: "8R",
 		Cost:         "8,000",
-		Source:       "SR5",
+		Source:       &SourceReference{Source: "SR5"},
 	},
 	"bone_lacing_aluminum": {
 		Part:         "Body",
@@ -378,7 +378,7 @@ var dataCyberware = map[string]Cyberware{
 		Capacity:     "-",
 		Availability: "12R",
 		Cost:         "18,000",
-		Source:       "SR5",
+		Source:       &SourceReference{Source: "SR5"},
 	},
 	"bone_lacing_titanium": {
 		Part:         "Body",
@@ -387,7 +387,7 @@ var dataCyberware = map[string]Cyberware{
 		Capacity:     "-",
 		Availability: "16R",
 		Cost:         "30,000",
-		Source:       "SR5",
+		Source:       &SourceReference{Source: "SR5"},
 	},
 	"dermal_plating": {
 		Part:         "Body",
@@ -396,7 +396,7 @@ var dataCyberware = map[string]Cyberware{
 		Capacity:     "-",
 		Availability: "(Rating*4)R",
 		Cost:         "Rating*3000",
-		Source:       "SR5",
+		Source:       &SourceReference{Source: "SR5"},
 	},
 	"fingertip_compartment": {
 		Part:         "Body",
@@ -405,7 +405,7 @@ var dataCyberware = map[string]Cyberware{
 		Capacity:     "[1]",
 		Availability: "4",
 		Cost:         "3,000",
-		Source:       "SR5",
+		Source:       &SourceReference{Source: "SR5"},
 	},
 	"grapple_gun": {
 		Part:         "Body",
@@ -414,7 +414,7 @@ var dataCyberware = map[string]Cyberware{
 		Capacity:     "[4]",
 		Availability: "8",
 		Cost:         "5,000",
-		Source:       "SR5",
+		Source:       &SourceReference{Source: "SR5"},
 	},
 	"internal_air_tank": {
 		Part:         "Body",
@@ -423,7 +423,7 @@ var dataCyberware = map[string]Cyberware{
 		Capacity:     "[3]",
 		Availability: "Rating",
 		Cost:         "Rating*4500",
-		Source:       "SR5",
+		Source:       &SourceReference{Source: "SR5"},
 	},
 	"muscle_replacement": {
 		Part:         "Body",
@@ -432,7 +432,7 @@ var dataCyberware = map[string]Cyberware{
 		Capacity:     "-",
 		Availability: "(Rating*5)R",
 		Cost:         "Rating*25000",
-		Source:       "SR5",
+		Source:       &SourceReference{Source: "SR5"},
 	},
 	"reaction_enhancers": {
 		Part:         "Body",
@@ -441,7 +441,7 @@ var dataCyberware = map[string]Cyberware{
 		Capacity:     "-",
 		Availability: "(Rating*5)R",
 		Cost:         "Rating*13000",
-		Source:       "SR5",
+		Source:       &SourceReference{Source: "SR5"},
 	},
 	"skillwires": {
 		Part:         "Body",
@@ -450,7 +450,7 @@ var dataCyberware = map[string]Cyberware{
 		Capacity:     "-",
 		Availability: "Rating*4",
 		Cost:         "Rating*20000",
-		Source:       "SR5",
+		Source:       &SourceReference{Source: "SR5"},
 	},
 	"smuggling_compartment": {
 		Part:         "Body",
@@ -459,7 +459,7 @@ var dataCyberware = map[string]Cyberware{
 		Capacity:     "[2]",
 		Availability: "6",
 		Cost:         "7,500",
-		Source:       "SR5",
+		Source:       &SourceReference{Source: "SR5"},
 	},
 	"wired_reflexes_r1": {
 		Part:         "Body",
@@ -468,7 +468,7 @@ var dataCyberware = map[string]Cyberware{
 		Capacity:     "-",
 		Availability: "8R",
 		Cost:         "39,000",
-		Source:       "SR5",
+		Source:       &SourceReference{Source: "SR5"},
 	},
 	"wired_reflexes_r2": {
 		Part:         "Body",
@@ -477,7 +477,7 @@ var dataCyberware = map[string]Cyberware{
 		Capacity:     "-",
 		Availability: "12R",
 		Cost:         "149,000",
-		Source:       "SR5",
+		Source:       &SourceReference{Source: "SR5"},
 	},
 	"wired_reflexes_r3": {
 		Part:         "Body",
@@ -486,7 +486,7 @@ var dataCyberware = map[string]Cyberware{
 		Capacity:     "-",
 		Availability: "20R",
 		Cost:         "217,000",
-		Source:       "SR5",
+		Source:       &SourceReference{Source: "SR5"},
 	},
 	"obvious_full_arm": {
 		Part:         "Limb",
@@ -495,7 +495,7 @@ var dataCyberware = map[string]Cyberware{
 		Capacity:     "15",
 		Availability: "4",
 		Cost:         "15,000",
-		Source:       "SR5",
+		Source:       &SourceReference{Source: "SR5"},
 	},
 	"obvious_full_leg": {
 		Part:         "Limb",
@@ -504,7 +504,7 @@ var dataCyberware = map[string]Cyberware{
 		Capacity:     "20",
 		Availability: "4",
 		Cost:         "15,000",
-		Source:       "SR5",
+		Source:       &SourceReference{Source: "SR5"},
 	},
 	"obvious_hand_foot": {
 		Part:         "Limb",
@@ -513,7 +513,7 @@ var dataCyberware = map[string]Cyberware{
 		Capacity:     "4",
 		Availability: "2",
 		Cost:         "5,000",
-		Source:       "SR5",
+		Source:       &SourceReference{Source: "SR5"},
 	},
 	"obvious_lower_arm": {
 		Part:         "Limb",
@@ -522,7 +522,7 @@ var dataCyberware = map[string]Cyberware{
 		Capacity:     "10",
 		Availability: "4",
 		Cost:         "10,000",
-		Source:       "SR5",
+		Source:       &SourceReference{Source: "SR5"},
 	},
 	"obvious_lower_leg": {
 		Part:         "Limb",
@@ -531,7 +531,7 @@ var dataCyberware = map[string]Cyberware{
 		Capacity:     "12",
 		Availability: "4",
 		Cost:         "10,000",
-		Source:       "SR5",
+		Source:       &SourceReference{Source: "SR5"},
 	},
 	"obvious_torso": {
 		Part:         "Limb",
@@ -540,7 +540,7 @@ var dataCyberware = map[string]Cyberware{
 		Capacity:     "10",
 		Availability: "12",
 		Cost:         "20,000",
-		Source:       "SR5",
+		Source:       &SourceReference{Source: "SR5"},
 	},
 	"obvious_skull": {
 		Part:         "Limb",
@@ -549,7 +549,7 @@ var dataCyberware = map[string]Cyberware{
 		Capacity:     "4",
 		Availability: "16",
 		Cost:         "10,000",
-		Source:       "SR5",
+		Source:       &SourceReference{Source: "SR5"},
 	},
 	"synthetic_full_arm": {
 		Part:         "Limb",
@@ -558,7 +558,7 @@ var dataCyberware = map[string]Cyberware{
 		Capacity:     "8",
 		Availability: "4",
 		Cost:         "20,000",
-		Source:       "SR5",
+		Source:       &SourceReference{Source: "SR5"},
 	},
 	"synthetic_full_leg": {
 		Part:         "Limb",
@@ -567,7 +567,7 @@ var dataCyberware = map[string]Cyberware{
 		Capacity:     "10",
 		Availability: "4",
 		Cost:         "20,000",
-		Source:       "SR5",
+		Source:       &SourceReference{Source: "SR5"},
 	},
 	"synthetic_hand_foot": {
 		Part:         "Limb",
@@ -576,7 +576,7 @@ var dataCyberware = map[string]Cyberware{
 		Capacity:     "2",
 		Availability: "2",
 		Cost:         "6,000",
-		Source:       "SR5",
+		Source:       &SourceReference{Source: "SR5"},
 	},
 	"synthetic_lower_arm": {
 		Part:         "Limb",
@@ -585,7 +585,7 @@ var dataCyberware = map[string]Cyberware{
 		Capacity:     "5",
 		Availability: "4",
 		Cost:         "12,000",
-		Source:       "SR5",
+		Source:       &SourceReference{Source: "SR5"},
 	},
 	"synthetic_lower_leg": {
 		Part:         "Limb",
@@ -594,7 +594,7 @@ var dataCyberware = map[string]Cyberware{
 		Capacity:     "6",
 		Availability: "4",
 		Cost:         "12,000",
-		Source:       "SR5",
+		Source:       &SourceReference{Source: "SR5"},
 	},
 	"synthetic_torso": {
 		Part:         "Limb",
@@ -603,7 +603,7 @@ var dataCyberware = map[string]Cyberware{
 		Capacity:     "5",
 		Availability: "12",
 		Cost:         "25,000",
-		Source:       "SR5",
+		Source:       &SourceReference{Source: "SR5"},
 	},
 	"synthetic_skull": {
 		Part:         "Limb",
@@ -612,7 +612,7 @@ var dataCyberware = map[string]Cyberware{
 		Capacity:     "2",
 		Availability: "16",
 		Cost:         "15,000",
-		Source:       "SR5",
+		Source:       &SourceReference{Source: "SR5"},
 	},
 	"agility_enhancement": {
 		Part:         "Limb",
@@ -621,7 +621,7 @@ var dataCyberware = map[string]Cyberware{
 		Capacity:     "Rating",
 		Availability: "(Rating*3)R",
 		Cost:         "Rating*6500",
-		Source:       "SR5",
+		Source:       &SourceReference{Source: "SR5"},
 	},
 	"armor_enhancement": {
 		Part:         "Limb",
@@ -630,7 +630,7 @@ var dataCyberware = map[string]Cyberware{
 		Capacity:     "Rating",
 		Availability: "Rating*5",
 		Cost:         "Rating*3000",
-		Source:       "SR5",
+		Source:       &SourceReference{Source: "SR5"},
 	},
 	"strength_enhancement": {
 		Part:         "Limb",
@@ -639,7 +639,7 @@ var dataCyberware = map[string]Cyberware{
 		Capacity:     "Rating",
 		Availability: "(Rating*3)R",
 		Cost:         "Rating*6500",
-		Source:       "SR5",
+		Source:       &SourceReference{Source: "SR5"},
 	},
 	"cyberarm_gyromount": {
 		Part:         "Limb Accessories",
@@ -648,7 +648,7 @@ var dataCyberware = map[string]Cyberware{
 		Capacity:     "[8]",
 		Availability: "12F",
 		Cost:         "6,000",
-		Source:       "SR5",
+		Source:       &SourceReference{Source: "SR5"},
 	},
 	"cyberarm_slide": {
 		Part:         "Limb Accessories",
@@ -657,7 +657,7 @@ var dataCyberware = map[string]Cyberware{
 		Capacity:     "[3]",
 		Availability: "12R",
 		Cost:         "3,000",
-		Source:       "SR5",
+		Source:       &SourceReference{Source: "SR5"},
 	},
 	"cyber_holster": {
 		Part:         "Limb Accessories",
@@ -666,7 +666,7 @@ var dataCyberware = map[string]Cyberware{
 		Capacity:     "[5]",
 		Availability: "8R",
 		Cost:         "2,000",
-		Source:       "SR5",
+		Source:       &SourceReference{Source: "SR5"},
 	},
 	"hydraulic_jacks": {
 		Part:         "Limb Accessories",
@@ -675,7 +675,7 @@ var dataCyberware = map[string]Cyberware{
 		Capacity:     "[Rating]",
 		Availability: "9",
 		Cost:         "Rating*2500",
-		Source:       "SR5",
+		Source:       &SourceReference{Source: "SR5"},
 	},
 	"large_smuggling_compartment": {
 		Part:         "Limb Accessories",
@@ -684,7 +684,7 @@ var dataCyberware = map[string]Cyberware{
 		Capacity:     "[5]",
 		Availability: "6",
 		Cost:         "8,000",
-		Source:       "SR5",
+		Source:       &SourceReference{Source: "SR5"},
 	},
 	"hold_out_pistol": {
 		Part:         "Weapon",
@@ -693,7 +693,7 @@ var dataCyberware = map[string]Cyberware{
 		Capacity:     "[2]",
 		Availability: "8R",
 		Cost:         "2,000",
-		Source:       "SR5",
+		Source:       &SourceReference{Source: "SR5"},
 	},
 	"light_pistol": {
 		Part:         "Weapon",
@@ -702,7 +702,7 @@ var dataCyberware = map[string]Cyberware{
 		Capacity:     "[4]",
 		Availability: "10R",
 		Cost:         "3,900",
-		Source:       "SR5",
+		Source:       &SourceReference{Source: "SR5"},
 	},
 	"machine_pistol": {
 		Part:         "Weapon",
@@ -711,7 +711,7 @@ var dataCyberware = map[string]Cyberware{
 		Capacity:     "[6]",
 		Availability: "12R",
 		Cost:         "3,500",
-		Source:       "SR5",
+		Source:       &SourceReference{Source: "SR5"},
 	},
 	"heavy_pistol": {
 		Part:         "Weapon",
@@ -720,7 +720,7 @@ var dataCyberware = map[string]Cyberware{
 		Capacity:     "[6]",
 		Availability: "12R",
 		Cost:         "4,300",
-		Source:       "SR5",
+		Source:       &SourceReference{Source: "SR5"},
 	},
 	"submachine_gun": {
 		Part:         "Weapon",
@@ -729,7 +729,7 @@ var dataCyberware = map[string]Cyberware{
 		Capacity:     "[8]",
 		Availability: "12R",
 		Cost:         "4,800",
-		Source:       "SR5",
+		Source:       &SourceReference{Source: "SR5"},
 	},
 	"shotgun": {
 		Part:         "Weapon",
@@ -738,7 +738,7 @@ var dataCyberware = map[string]Cyberware{
 		Capacity:     "[10]",
 		Availability: "12R",
 		Cost:         "8,500",
-		Source:       "SR5",
+		Source:       &SourceReference{Source: "SR5"},
 	},
 	"grenade_launcher": {
 		Part:         "Weapon",
@@ -747,7 +747,7 @@ var dataCyberware = map[string]Cyberware{
 		Capacity:     "[15]",
 		Availability: "20F",
 		Cost:         "30,000",
-		Source:       "SR5",
+		Source:       &SourceReference{Source: "SR5"},
 	},
 	"external_clip_port": {
 		Part:         "Weapon",
@@ -756,7 +756,7 @@ var dataCyberware = map[string]Cyberware{
 		Capacity:     "[1]",
 		Availability: "-",
 		Cost:         "+1,000",
-		Source:       "SR5",
+		Source:       &SourceReference{Source: "SR5"},
 	},
 	"laser_sight": {
 		Part:         "Weapon",
@@ -765,7 +765,7 @@ var dataCyberware = map[string]Cyberware{
 		Capacity:     "[1]",
 		Availability: "-",
 		Cost:         "+1,000",
-		Source:       "SR5",
+		Source:       &SourceReference{Source: "SR5"},
 	},
 	"silencer_suppressor": {
 		Part:         "Weapon",
@@ -774,7 +774,7 @@ var dataCyberware = map[string]Cyberware{
 		Capacity:     "[2]",
 		Availability: "-",
 		Cost:         "+1,000",
-		Source:       "SR5",
+		Source:       &SourceReference{Source: "SR5"},
 	},
 	"hand_blade": {
 		Part:         "Weapon",
@@ -783,7 +783,7 @@ var dataCyberware = map[string]Cyberware{
 		Capacity:     "[2]",
 		Availability: "10F",
 		Cost:         "2,500",
-		Source:       "SR5",
+		Source:       &SourceReference{Source: "SR5"},
 	},
 	"hand_razors": {
 		Part:         "Weapon",
@@ -792,7 +792,7 @@ var dataCyberware = map[string]Cyberware{
 		Capacity:     "[2]",
 		Availability: "8F",
 		Cost:         "1,250",
-		Source:       "SR5",
+		Source:       &SourceReference{Source: "SR5"},
 	},
 	"spurs": {
 		Part:         "Weapon",
@@ -801,7 +801,7 @@ var dataCyberware = map[string]Cyberware{
 		Capacity:     "[3]",
 		Availability: "12F",
 		Cost:         "5,000",
-		Source:       "SR5",
+		Source:       &SourceReference{Source: "SR5"},
 	},
 	"shock_hand": {
 		Part:         "Weapon",
@@ -810,7 +810,7 @@ var dataCyberware = map[string]Cyberware{
 		Capacity:     "[4]",
 		Availability: "8R",
 		Cost:         "5,000",
-		Source:       "SR5",
+		Source:       &SourceReference{Source: "SR5"},
 	},
 }
 
@@ -822,7 +822,7 @@ var dataBioware = map[string]Bioware{
 		Essence:      "Rating*0.75",
 		Availability: "(Rating*6)F",
 		Cost:         "Rating*55000",
-		Source:       "SR5",
+		Source:       &SourceReference{Source: "SR5"},
 	},
 	"bone_density_augmentation": {
 		Type:         "Basic",
@@ -830,7 +830,7 @@ var dataBioware = map[string]Bioware{
 		Essence:      "Rating*0.3",
 		Availability: "Rating*4",
 		Cost:         "Rating*5000",
-		Source:       "SR5",
+		Source:       &SourceReference{Source: "SR5"},
 	},
 	"cats_eye": {
 		Type:         "Basic",
@@ -838,7 +838,7 @@ var dataBioware = map[string]Bioware{
 		Essence:      "0.1",
 		Availability: "4",
 		Cost:         "4,000",
-		Source:       "SR5",
+		Source:       &SourceReference{Source: "SR5"},
 	},
 	"enhanced_articulation": {
 		Type:         "Basic",
@@ -846,7 +846,7 @@ var dataBioware = map[string]Bioware{
 		Essence:      "0.3",
 		Availability: "12",
 		Cost:         "24,000",
-		Source:       "SR5",
+		Source:       &SourceReference{Source: "SR5"},
 	},
 	"muscle_augmentation": {
 		Type:         "Basic",
@@ -854,7 +854,7 @@ var dataBioware = map[string]Bioware{
 		Essence:      "Rating*0.2",
 		Availability: "(Rating*5)R",
 		Cost:         "Rating*31000",
-		Source:       "SR5",
+		Source:       &SourceReference{Source: "SR5"},
 	},
 	"muscle_toner": {
 		Type:         "Basic",
@@ -862,7 +862,7 @@ var dataBioware = map[string]Bioware{
 		Essence:      "Rating*0.2",
 		Availability: "(Rating*5)R",
 		Cost:         "Rating*32000",
-		Source:       "SR5",
+		Source:       &SourceReference{Source: "SR5"},
 	},
 	"orthoskin": {
 		Type:         "Basic",
@@ -870,7 +870,7 @@ var dataBioware = map[string]Bioware{
 		Essence:      "Rating*0.25",
 		Availability: "(Rating*4)R",
 		Cost:         "Rating*6000",
-		Source:       "SR5",
+		Source:       &SourceReference{Source: "SR5"},
 	},
 	"pathogenic_defense": {
 		Type:         "Basic",
@@ -878,7 +878,7 @@ var dataBioware = map[string]Bioware{
 		Essence:      "Rating*0.1",
 		Availability: "Rating*2",
 		Cost:         "Rating*4500",
-		Source:       "SR5",
+		Source:       &SourceReference{Source: "SR5"},
 	},
 	"platelet_factories": {
 		Type:         "Basic",
@@ -886,7 +886,7 @@ var dataBioware = map[string]Bioware{
 		Essence:      "0.2",
 		Availability: "12",
 		Cost:         "17,000",
-		Source:       "SR5",
+		Source:       &SourceReference{Source: "SR5"},
 	},
 	"skin_pocket": {
 		Type:         "Basic",
@@ -894,7 +894,7 @@ var dataBioware = map[string]Bioware{
 		Essence:      "0.1",
 		Availability: "4",
 		Cost:         "12,000",
-		Source:       "SR5",
+		Source:       &SourceReference{Source: "SR5"},
 	},
 	"suprathyroid_gland": {
 		Type:         "Basic",
@@ -902,7 +902,7 @@ var dataBioware = map[string]Bioware{
 		Essence:      "0.7",
 		Availability: "20R",
 		Cost:         "140,000",
-		Source:       "SR5",
+		Source:       &SourceReference{Source: "SR5"},
 	},
 	"symbiotes": {
 		Type:         "Basic",
@@ -910,7 +910,7 @@ var dataBioware = map[string]Bioware{
 		Essence:      "Rating*0.2",
 		Availability: "Rating*5",
 		Cost:         "Rating*3500",
-		Source:       "SR5",
+		Source:       &SourceReference{Source: "SR5"},
 	},
 	"synthacardium": {
 		Type:         "Basic",
@@ -918,7 +918,7 @@ var dataBioware = map[string]Bioware{
 		Essence:      "Rating*0.1",
 		Availability: "Rating*4",
 		Cost:         "Rating*30000",
-		Source:       "SR5",
+		Source:       &SourceReference{Source: "SR5"},
 	},
 	"tailored_pheromones": {
 		Type:         "Basic",
@@ -926,7 +926,7 @@ var dataBioware = map[string]Bioware{
 		Essence:      "Rating*0.2",
 		Availability: "(Rating*4)R",
 		Cost:         "31,000",
-		Source:       "SR5",
+		Source:       &SourceReference{Source: "SR5"},
 	},
 	"toxin_extractor": {
 		Type:         "Basic",
@@ -934,7 +934,7 @@ var dataBioware = map[string]Bioware{
 		Essence:      "Rating*0.2",
 		Availability: "Rating*3",
 		Cost:         "Rating*4800",
-		Source:       "SR5",
+		Source:       &SourceReference{Source: "SR5"},
 	},
 	"tracheal_filter": {
 		Type:         "Basic",
@@ -942,7 +942,7 @@ var dataBioware = map[string]Bioware{
 		Essence:      "Rating*0.1",
 		Availability: "Rating*3",
 		Cost:         "Rating*4500",
-		Source:       "SR5",
+		Source:       &SourceReference{Source: "SR5"},
 	},
 	"cerebral_booster": {
 		Type:         "Cultured",
@@ -950,7 +950,7 @@ var dataBioware = map[string]Bioware{
 		Essence:      "Rating*0.2",
 		Availability: "Rating*6",
 		Cost:         "Rating*31500",
-		Source:       "SR5",
+		Source:       &SourceReference{Source: "SR5"},
 	},
 	"damage_compensators": {
 		Type:         "Cultured",
@@ -958,7 +958,7 @@ var dataBioware = map[string]Bioware{
 		Essence:      "Rating*0.1",
 		Availability: "(Rating*3)F",
 		Cost:         "Rating*2000",
-		Source:       "SR5",
+		Source:       &SourceReference{Source: "SR5"},
 	},
 	"mnemonic_enhancer": {
 		Type:         "Cultured",
@@ -966,7 +966,7 @@ var dataBioware = map[string]Bioware{
 		Essence:      "Rating*0.1",
 		Availability: "Rating*5",
 		Cost:         "Rating*9000",
-		Source:       "SR5",
+		Source:       &SourceReference{Source: "SR5"},
 	},
 	"pain_editor": {
 		Type:         "Cultured",
@@ -974,7 +974,7 @@ var dataBioware = map[string]Bioware{
 		Essence:      "0.3",
 		Availability: "18F",
 		Cost:         "48,000",
-		Source:       "SR5",
+		Source:       &SourceReference{Source: "SR5"},
 	},
 	"reflex_recorder": {
 		Type:         "Cultured",
@@ -982,7 +982,7 @@ var dataBioware = map[string]Bioware{
 		Essence:      "0.1",
 		Availability: "10",
 		Cost:         "14,000",
-		Source:       "SR5",
+		Source:       &SourceReference{Source: "SR5"},
 	},
 	"sleep_regulator": {
 		Type:         "Cultured",
@@ -990,7 +990,7 @@ var dataBioware = map[string]Bioware{
 		Essence:      "0.1",
 		Availability: "6",
 		Cost:         "12,000",
-		Source:       "SR5",
+		Source:       &SourceReference{Source: "SR5"},
 	},
 	"synaptic_booster": {
 		Type:         "Cultured",
@@ -998,6 +998,6 @@ var dataBioware = map[string]Bioware{
 		Essence:      "Rating*0.5",
 		Availability: "(Rating*6)R",
 		Cost:         "Rating*95000",
-		Source:       "SR5",
+		Source:       &SourceReference{Source: "SR5"},
 	},
 }
