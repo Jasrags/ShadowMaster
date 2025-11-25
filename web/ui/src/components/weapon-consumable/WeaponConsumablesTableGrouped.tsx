@@ -29,7 +29,10 @@ export function WeaponConsumablesTableGrouped({ consumables }: WeaponConsumables
 
     // Filter by source
     if (selectedSources.length > 0) {
-      filtered = filtered.filter(item => selectedSources.includes(item.source));
+      filtered = filtered.filter(item => {
+        const source = item.source?.source || 'Unknown';
+        return selectedSources.includes(source);
+      });
     }
 
     // Apply search filter
@@ -38,7 +41,7 @@ export function WeaponConsumablesTableGrouped({ consumables }: WeaponConsumables
         filtered,
         searchTerm,
         {},
-        ['name', 'category', 'description', 'cost', 'availability', 'source']
+        ['name', 'category', 'description', 'cost', 'availability']
       );
     }
 
@@ -219,7 +222,7 @@ export function WeaponConsumablesTableGrouped({ consumables }: WeaponConsumables
                         </td>
                         <td className="px-4 py-2 text-gray-300">{formatCost(item.cost)}</td>
                         <td className="px-4 py-2 text-gray-300">{item.availability || '-'}</td>
-                        <td className="px-4 py-2 text-gray-300">{item.source}</td>
+                        <td className="px-4 py-2 text-gray-300">{item.source?.source || '-'}</td>
                       </tr>
                     ))}
                   </React.Fragment>

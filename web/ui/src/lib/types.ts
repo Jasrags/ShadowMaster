@@ -494,7 +494,7 @@ export interface WeaponConsumable {
   name: string;
   category: string; // "Ammunition", "Ballistic Projectile", "Grenade", "Rocket & Missile"
   description?: string;
-  source: string;
+  source?: SourceReference;
   // Base weapon stats (for ammunition that replaces weapon stats)
   base_dv?: string;
   base_ap?: string;
