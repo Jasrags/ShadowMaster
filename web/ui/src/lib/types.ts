@@ -563,11 +563,7 @@ export interface CostStructure {
   max_rating: number;
 }
 
-// Source Reference
-export interface SourceReference {
-  source: string;
-  page: string;
-}
+// SourceReference is already defined above (line 202)
 
 // Skill Dice Pool Bonus
 export interface SkillDicePoolBonus {
@@ -740,5 +736,325 @@ export interface Contact {
   similar_contacts?: string[];
   description?: string;
   source?: string;
+}
+
+// Action types
+export type ActionType = 'unclassified' | 'free' | 'simple' | 'complex' | 'interrupt';
+
+export interface Action {
+  name?: string;
+  type?: ActionType;
+  description?: string;
+  initiative_cost?: number;
+  source?: SourceReference;
+}
+
+// Cyberware types
+export interface RatingFormula {
+  fixed_value?: number;
+  formula?: string;
+  is_fixed?: boolean;
+}
+
+export interface CostFormula {
+  base_cost?: number;
+  formula?: string;
+  is_fixed?: boolean;
+  is_variable?: boolean;
+}
+
+export interface Cyberware {
+  id?: string;
+  part?: string;
+  device?: string;
+  essence?: string;
+  essence_formula?: RatingFormula;
+  capacity?: string;
+  capacity_formula?: RatingFormula;
+  availability?: string;
+  availability_formula?: RatingFormula;
+  cost?: string;
+  cost_formula?: CostFormula;
+  source?: SourceReference;
+}
+
+// Bioware types
+export interface Bioware {
+  id?: string;
+  type?: string;
+  device?: string;
+  essence?: string;
+  essence_formula?: RatingFormula;
+  availability?: string;
+  availability_formula?: RatingFormula;
+  cost?: string;
+  cost_formula?: CostFormula;
+  source?: SourceReference;
+}
+
+// Complex Form types
+export type ComplexFormTargetType = 'persona' | 'device' | 'file' | 'host' | 'ic' | 'sprite' | 'self';
+export type ComplexFormDurationType = 'instantaneous' | 'sustained' | 'permanent' | 'extended';
+
+export interface FadingFormula {
+  base_modifier?: number;
+  formula?: string;
+  has_fading?: boolean;
+}
+
+export interface ComplexFormDuration {
+  type?: ComplexFormDurationType;
+  extended_parameters?: string;
+  description?: string;
+}
+
+export interface ComplexForm {
+  name?: string;
+  description?: string;
+  target?: ComplexFormTargetType;
+  duration?: ComplexFormDuration;
+  fading?: FadingFormula;
+  source?: SourceReference;
+}
+
+// Mentor types
+export interface Mentor {
+  name?: string;
+  similar_archetypes?: string[];
+  description?: string;
+  source?: SourceReference;
+}
+
+// Metatype types
+export type MetatypeCategory = 'standard' | 'metavariant' | 'shapeshifter';
+
+export interface AttributeRange {
+  min?: number;
+  max?: number;
+}
+
+export interface InitiativeCalculation {
+  formula?: string;
+  base_dice?: number;
+  additional_dice?: number;
+}
+
+export interface RacialTrait {
+  name?: string;
+  description?: string;
+}
+
+export interface Metatype {
+  name?: string;
+  category?: MetatypeCategory;
+  base_race?: string;
+  description?: string;
+  body?: AttributeRange;
+  agility?: AttributeRange;
+  reaction?: AttributeRange;
+  strength?: AttributeRange;
+  willpower?: AttributeRange;
+  logic?: AttributeRange;
+  intuition?: AttributeRange;
+  charisma?: AttributeRange;
+  edge?: AttributeRange;
+  magic?: AttributeRange;
+  essence?: number;
+  initiative?: InitiativeCalculation;
+  racial_traits?: RacialTrait[];
+  source?: SourceReference;
+}
+
+// Power types
+export type ActivationType = 'free_action' | 'simple_action' | 'interrupt' | 'passive';
+
+export interface PowerCostFormula {
+  base_cost?: number;
+  cost_per_level?: number;
+  additional_cost?: number;
+  max_level?: number;
+  cost_per_item?: number;
+  formula?: string;
+  is_variable?: boolean;
+}
+
+export interface Power {
+  name?: string;
+  parameter?: string;
+  description?: string;
+  prerequisite?: string;
+  activation?: ActivationType;
+  activation_description?: string;
+  cost?: PowerCostFormula;
+  source?: SourceReference;
+}
+
+// Program types
+export type ProgramType = 'agent' | 'commlink_app' | 'common' | 'hacking';
+
+export interface AgentRatingRange {
+  min_rating?: number;
+  max_rating?: number;
+}
+
+export interface AgentCostFormula {
+  cost_per_rating?: number;
+  formula?: string;
+}
+
+export interface AgentAvailabilityFormula {
+  availability_per_rating?: number;
+  formula?: string;
+}
+
+export interface ProgramEffect {
+  action?: string;
+  effect?: string;
+  attribute_bonus?: string;
+  dice_pool_bonus?: string;
+  damage_bonus?: string;
+  other_effects?: string;
+}
+
+export interface Program {
+  name?: string;
+  type?: ProgramType;
+  description?: string;
+  rating_range?: AgentRatingRange;
+  availability?: AgentAvailabilityFormula;
+  cost?: AgentCostFormula;
+  action_effect?: string;
+  effects?: ProgramEffect[];
+  source?: SourceReference;
+}
+
+// Spell types
+export type SpellCategory = 'combat' | 'detection' | 'health' | 'illusion' | 'manipulation';
+export type SpellType = 'physical' | 'mana';
+export type SpellRange = 'LOS' | 'T' | 'LOS(A)';
+export type SpellDamageType = 'physical' | 'stun';
+export type DurationType = 'instantaneous' | 'sustained' | 'permanent';
+
+export interface DrainFormula {
+  base_modifier?: number;
+  formula?: string;
+  minimum_drain?: number;
+}
+
+export interface SpellEffect {
+  keywords?: string[];
+  description?: string;
+}
+
+export interface Spell {
+  name?: string;
+  category?: SpellCategory;
+  description?: string;
+  effects?: SpellEffect;
+  type?: SpellType;
+  range?: SpellRange;
+  is_area?: boolean;
+  damage?: SpellDamageType;
+  duration?: DurationType;
+  drain?: DrainFormula;
+  source?: SourceReference;
+}
+
+// Tradition types
+export interface Tradition {
+  name?: string;
+  description?: string;
+  combat_element?: string;
+  detection_element?: string;
+  health_element?: string;
+  illusion_element?: string;
+  manipulation_element?: string;
+  drain_formula?: string;
+  drain_attributes?: string[];
+  source?: SourceReference;
+}
+
+// Vehicle Modification types
+export type VehicleModificationType = 'base_mods' | 'power_train' | 'protection' | 'weapon' | 'body' | 'electromagnetic' | 'cosmetic';
+export type ToolType = 'kit' | 'shop' | 'facility';
+export type InstallationSkillType = 'hardware' | 'none';
+
+export interface SlotsFormula {
+  fixed_slots?: number;
+  rating_based?: boolean;
+  is_variable?: boolean;
+  description?: string;
+}
+
+export interface ThresholdFormula {
+  fixed_threshold?: number;
+  formula?: string;
+  is_variable?: boolean;
+}
+
+export interface AvailabilityModifier {
+  value?: number;
+  restricted?: boolean;
+  forbidden?: boolean;
+  formula?: string;
+  is_variable?: boolean;
+}
+
+export interface VehicleModification {
+  name?: string;
+  type?: VehicleModificationType;
+  description?: string;
+  slots?: SlotsFormula;
+  threshold?: ThresholdFormula;
+  tools?: ToolType;
+  skill?: InstallationSkillType;
+  availability?: AvailabilityModifier;
+  cost?: CostFormula;
+  source?: SourceReference;
+}
+
+// Vehicle types
+export type VehicleType = 'groundcraft' | 'watercraft' | 'aircraft' | 'drone';
+export type VehicleSubtype = 'bike' | 'car' | 'truck' | 'other_groundcraft' | 'micro_drone' | 'mini_drone' | 'small_drone' | 'medium_drone' | 'large_drone' | 'huge_drone' | 'anthro_drone' | 'missile_drone';
+export type MovementType = 'G' | 'W' | 'J' | 'F' | 'P';
+
+export interface HandlingRating {
+  on_road?: number;
+  off_road?: number;
+}
+
+export interface SpeedRating {
+  value?: number;
+  movement_type?: MovementType;
+  alternative_speed?: number;
+}
+
+export interface BodyRating {
+  value?: number;
+  structure?: number;
+}
+
+export interface AvailabilityRating {
+  value?: number;
+  restricted?: boolean;
+  forbidden?: boolean;
+}
+
+export interface Vehicle {
+  name?: string;
+  type?: VehicleType;
+  subtype?: VehicleSubtype;
+  vehicle_type_name?: string;
+  handling?: HandlingRating;
+  speed?: SpeedRating;
+  acceleration?: number;
+  body?: BodyRating;
+  armor?: number;
+  pilot?: number;
+  sensor?: number;
+  seats?: number;
+  availability?: AvailabilityRating;
+  cost?: number;
+  source?: SourceReference;
 }
 

@@ -797,9 +797,9 @@ func (h *Handlers) GetArmor(w http.ResponseWriter, r *http.Request) {
 	})
 }
 
-// GetCyberware handles GET /api/equipment/cyberware
+// GetCyberware handles GET /api/equipment/cyberware (v5)
 func (h *Handlers) GetCyberware(w http.ResponseWriter, r *http.Request) {
-	cyberware := sr3.GetAllCyberware()
+	cyberware := sr5.GetAllCyberware()
 	respondJSON(w, http.StatusOK, map[string]interface{}{
 		"cyberware": cyberware,
 	})
@@ -905,6 +905,95 @@ func (h *Handlers) GetWeaponConsumables(w http.ResponseWriter, r *http.Request) 
 
 	respondJSON(w, http.StatusOK, map[string]interface{}{
 		"weapon_consumables": consumables,
+	})
+}
+
+// GetActions handles GET /api/equipment/actions
+func (h *Handlers) GetActions(w http.ResponseWriter, r *http.Request) {
+	actions := sr5.GetAllActions()
+	respondJSON(w, http.StatusOK, map[string]interface{}{
+		"actions": actions,
+	})
+}
+
+
+// GetBioware handles GET /api/equipment/bioware
+func (h *Handlers) GetBioware(w http.ResponseWriter, r *http.Request) {
+	bioware := sr5.GetAllBioware()
+	respondJSON(w, http.StatusOK, map[string]interface{}{
+		"bioware": bioware,
+	})
+}
+
+// GetComplexForms handles GET /api/equipment/complex-forms
+func (h *Handlers) GetComplexForms(w http.ResponseWriter, r *http.Request) {
+	complexForms := sr5.GetAllComplexForms()
+	respondJSON(w, http.StatusOK, map[string]interface{}{
+		"complex_forms": complexForms,
+	})
+}
+
+// GetMentors handles GET /api/equipment/mentors
+func (h *Handlers) GetMentors(w http.ResponseWriter, r *http.Request) {
+	mentors := sr5.GetAllMentors()
+	respondJSON(w, http.StatusOK, map[string]interface{}{
+		"mentors": mentors,
+	})
+}
+
+// GetMetatypes handles GET /api/equipment/metatypes
+func (h *Handlers) GetMetatypes(w http.ResponseWriter, r *http.Request) {
+	metatypes := sr5.GetAllMetatypes()
+	respondJSON(w, http.StatusOK, map[string]interface{}{
+		"metatypes": metatypes,
+	})
+}
+
+// GetPowers handles GET /api/equipment/powers
+func (h *Handlers) GetPowers(w http.ResponseWriter, r *http.Request) {
+	powers := sr5.GetAllPowers()
+	respondJSON(w, http.StatusOK, map[string]interface{}{
+		"powers": powers,
+	})
+}
+
+// GetPrograms handles GET /api/equipment/programs
+func (h *Handlers) GetPrograms(w http.ResponseWriter, r *http.Request) {
+	programs := sr5.GetAllPrograms()
+	respondJSON(w, http.StatusOK, map[string]interface{}{
+		"programs": programs,
+	})
+}
+
+// GetSpells handles GET /api/equipment/spells
+func (h *Handlers) GetSpells(w http.ResponseWriter, r *http.Request) {
+	spells := sr5.GetAllSpells()
+	respondJSON(w, http.StatusOK, map[string]interface{}{
+		"spells": spells,
+	})
+}
+
+// GetTraditions handles GET /api/equipment/traditions
+func (h *Handlers) GetTraditions(w http.ResponseWriter, r *http.Request) {
+	traditions := sr5.GetAllTraditions()
+	respondJSON(w, http.StatusOK, map[string]interface{}{
+		"traditions": traditions,
+	})
+}
+
+// GetVehicleModifications handles GET /api/equipment/vehicle-modifications
+func (h *Handlers) GetVehicleModifications(w http.ResponseWriter, r *http.Request) {
+	modifications := sr5.GetAllVehicleModifications()
+	respondJSON(w, http.StatusOK, map[string]interface{}{
+		"vehicle_modifications": modifications,
+	})
+}
+
+// GetVehicles handles GET /api/equipment/vehicles
+func (h *Handlers) GetVehicles(w http.ResponseWriter, r *http.Request) {
+	vehicles := sr5.GetAllVehicles()
+	respondJSON(w, http.StatusOK, map[string]interface{}{
+		"vehicles": vehicles,
 	})
 }
 

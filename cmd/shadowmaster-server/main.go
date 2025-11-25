@@ -110,6 +110,17 @@ func main() {
 			r.Get("/equipment/lifestyles", handlers.GetLifestyles)
 			r.Get("/equipment/weapon-consumables", handlers.GetWeaponConsumables)
 			r.Get("/equipment/contacts", handlers.GetContacts)
+			r.Get("/equipment/actions", handlers.GetActions)
+			r.Get("/equipment/bioware", handlers.GetBioware)
+			r.Get("/equipment/complex-forms", handlers.GetComplexForms)
+			r.Get("/equipment/mentors", handlers.GetMentors)
+			r.Get("/equipment/metatypes", handlers.GetMetatypes)
+			r.Get("/equipment/powers", handlers.GetPowers)
+			r.Get("/equipment/programs", handlers.GetPrograms)
+			r.Get("/equipment/spells", handlers.GetSpells)
+			r.Get("/equipment/traditions", handlers.GetTraditions)
+			r.Get("/equipment/vehicle-modifications", handlers.GetVehicleModifications)
+			r.Get("/equipment/vehicles", handlers.GetVehicles)
 		})
 
 		// Group routes
