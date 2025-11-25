@@ -17,8 +17,8 @@ type WeaponConsumable struct {
 	Category string `json:"category,omitempty"`
 	// Description is the full text description of the consumable
 	Description string `json:"description,omitempty"`
-	// Source is the source book code (e.g., "SR5", "SR5:R&G")
-	Source string `json:"source,omitempty"`
+	// Source contains source book reference information
+	Source *SourceReference `json:"source,omitempty"`
 
 	// Base weapon stats (for ammunition that replaces weapon stats)
 	// BaseDV is the base damage value (e.g., "8S(e)", "10S")
@@ -47,7 +47,11 @@ type WeaponConsumable struct {
 	// Availability is the availability rating (e.g., "12F", "6R", "4")
 	Availability string `json:"availability,omitempty"`
 	// Cost is the cost in nuyen as displayed in the source (e.g., "120", "100", "Rating×2")
+	// Cost is the cost in nuyen (may be a formula like "Rating * 10¥")
+	// Deprecated: Use CostFormula instead for structured cost handling
 	Cost string `json:"cost,omitempty"`
+	// CostFormula is the structured cost formula (new format)
+	CostFormula *CostFormula `json:"cost_formula,omitempty"`
 	// QuantityPerPurchase is the number of units included in one purchase (e.g., 10 for ammunition sold in packs of 10, 1 for individual items)
 	QuantityPerPurchase int `json:"quantity_per_purchase,omitempty"`
 	// UnitType is the type of unit being purchased (e.g., "rounds", "grenades", "rockets", "missiles")

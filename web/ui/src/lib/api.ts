@@ -15,6 +15,18 @@ import type {
   Lifestyle,
   WeaponConsumable,
   Contact,
+  Action,
+  Cyberware,
+  Bioware,
+  ComplexForm,
+  Mentor,
+  Metatype,
+  Power,
+  Program,
+  Spell,
+  Tradition,
+  VehicleModification,
+  Vehicle,
 } from './types';
 
 const API_BASE = '/api';
@@ -252,6 +264,102 @@ export const contactApi = {
   async getContacts(): Promise<Contact[]> {
     const response = await apiRequest<{ contacts: Contact[] }>('/equipment/contacts');
     return response.contacts || [];
+  },
+};
+
+// Action API functions (admin only)
+export const actionApi = {
+  async getActions(): Promise<Action[]> {
+    const response = await apiRequest<{ actions: Action[] }>('/equipment/actions');
+    return response.actions || [];
+  },
+};
+
+// Cyberware API functions (admin only)
+export const cyberwareApi = {
+  async getCyberware(): Promise<Cyberware[]> {
+    const response = await apiRequest<{ cyberware: Cyberware[] }>('/equipment/cyberware');
+    return response.cyberware || [];
+  },
+};
+
+// Bioware API functions (admin only)
+export const biowareApi = {
+  async getBioware(): Promise<Bioware[]> {
+    const response = await apiRequest<{ bioware: Bioware[] }>('/equipment/bioware');
+    return response.bioware || [];
+  },
+};
+
+// Complex Form API functions (admin only)
+export const complexFormApi = {
+  async getComplexForms(): Promise<ComplexForm[]> {
+    const response = await apiRequest<{ complex_forms: ComplexForm[] }>('/equipment/complex-forms');
+    return response.complex_forms || [];
+  },
+};
+
+// Mentor API functions (admin only)
+export const mentorApi = {
+  async getMentors(): Promise<Mentor[]> {
+    const response = await apiRequest<{ mentors: Mentor[] }>('/equipment/mentors');
+    return response.mentors || [];
+  },
+};
+
+// Metatype API functions (admin only)
+export const metatypeApi = {
+  async getMetatypes(): Promise<Metatype[]> {
+    const response = await apiRequest<{ metatypes: Metatype[] }>('/equipment/metatypes');
+    return response.metatypes || [];
+  },
+};
+
+// Power API functions (admin only)
+export const powerApi = {
+  async getPowers(): Promise<Power[]> {
+    const response = await apiRequest<{ powers: Power[] }>('/equipment/powers');
+    return response.powers || [];
+  },
+};
+
+// Program API functions (admin only)
+export const programApi = {
+  async getPrograms(): Promise<Program[]> {
+    const response = await apiRequest<{ programs: Program[] }>('/equipment/programs');
+    return response.programs || [];
+  },
+};
+
+// Spell API functions (admin only)
+export const spellApi = {
+  async getSpells(): Promise<Spell[]> {
+    const response = await apiRequest<{ spells: Spell[] }>('/equipment/spells');
+    return response.spells || [];
+  },
+};
+
+// Tradition API functions (admin only)
+export const traditionApi = {
+  async getTraditions(): Promise<Tradition[]> {
+    const response = await apiRequest<{ traditions: Tradition[] }>('/equipment/traditions');
+    return response.traditions || [];
+  },
+};
+
+// Vehicle Modification API functions (admin only)
+export const vehicleModificationApi = {
+  async getVehicleModifications(): Promise<VehicleModification[]> {
+    const response = await apiRequest<{ vehicle_modifications: VehicleModification[] }>('/equipment/vehicle-modifications');
+    return response.vehicle_modifications || [];
+  },
+};
+
+// Vehicle API functions (admin only)
+export const vehicleApi = {
+  async getVehicles(): Promise<Vehicle[]> {
+    const response = await apiRequest<{ vehicles: Vehicle[] }>('/equipment/vehicles');
+    return response.vehicles || [];
   },
 };
 

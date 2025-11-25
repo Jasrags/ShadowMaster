@@ -39,7 +39,7 @@ export function WeaponConsumableSourceFilter({ consumables, selectedSources, onS
   const sourcesWithCounts = useMemo(() => {
     const sourceMap = new Map<string, number>();
     consumables.forEach(item => {
-      const source = item.source || 'Unknown';
+      const source = item.source?.source || 'Unknown';
       sourceMap.set(source, (sourceMap.get(source) || 0) + 1);
     });
     

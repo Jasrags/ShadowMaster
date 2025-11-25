@@ -108,7 +108,11 @@ type WeaponAccessory struct {
 	// Availability is the availability rating (e.g., "2", "6R", "9F")
 	Availability string `json:"availability,omitempty"`
 	// Cost is the cost in nuyen (e.g., "125", "Rating×200", "2×Weapon Cost")
+	// Cost is the cost in nuyen (may be a formula like "2×Weapon Cost")
+	// Deprecated: Use CostFormula instead for structured cost handling
 	Cost string `json:"cost,omitempty"`
+	// CostFormula is the structured cost formula (new format)
+	CostFormula *CostFormula `json:"cost_formula,omitempty"`
 	// Source contains source book reference information
 	Source *SourceReference `json:"source,omitempty"`
 }

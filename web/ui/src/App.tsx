@@ -17,6 +17,18 @@ import { BooksPage } from './pages/BooksPage';
 import { LifestylesPage } from './pages/LifestylesPage';
 import { WeaponConsumablesPage } from './pages/WeaponConsumablesPage';
 import { ContactsPage } from './pages/ContactsPage';
+import { ActionsPage } from './pages/ActionsPage';
+import { CyberwarePage } from './pages/CyberwarePage';
+import { BiowarePage } from './pages/BiowarePage';
+import { ComplexFormsPage } from './pages/ComplexFormsPage';
+import { MentorsPage } from './pages/MentorsPage';
+import { MetatypesPage } from './pages/MetatypesPage';
+import { PowersPage } from './pages/PowersPage';
+import { ProgramsPage } from './pages/ProgramsPage';
+import { SpellsPage } from './pages/SpellsPage';
+import { TraditionsPage } from './pages/TraditionsPage';
+import { VehicleModificationsPage } from './pages/VehicleModificationsPage';
+import { VehiclesPage } from './pages/VehiclesPage';
 
 function App() {
   return (
@@ -124,6 +136,102 @@ function App() {
                   element={
                     <AdminRoute>
                       <ContactsPage />
+                    </AdminRoute>
+                  }
+                />
+                <Route
+                  path="/actions"
+                  element={
+                    <AdminRoute>
+                      <ActionsPage />
+                    </AdminRoute>
+                  }
+                />
+                <Route
+                  path="/cyberware"
+                  element={
+                    <AdminRoute>
+                      <CyberwarePage />
+                    </AdminRoute>
+                  }
+                />
+                <Route
+                  path="/bioware"
+                  element={
+                    <AdminRoute>
+                      <BiowarePage />
+                    </AdminRoute>
+                  }
+                />
+                <Route
+                  path="/complex-forms"
+                  element={
+                    <AdminRoute>
+                      <ComplexFormsPage />
+                    </AdminRoute>
+                  }
+                />
+                <Route
+                  path="/mentors"
+                  element={
+                    <AdminRoute>
+                      <MentorsPage />
+                    </AdminRoute>
+                  }
+                />
+                <Route
+                  path="/metatypes"
+                  element={
+                    <AdminRoute>
+                      <MetatypesPage />
+                    </AdminRoute>
+                  }
+                />
+                <Route
+                  path="/powers"
+                  element={
+                    <AdminRoute>
+                      <PowersPage />
+                    </AdminRoute>
+                  }
+                />
+                <Route
+                  path="/programs"
+                  element={
+                    <AdminRoute>
+                      <ProgramsPage />
+                    </AdminRoute>
+                  }
+                />
+                <Route
+                  path="/spells"
+                  element={
+                    <AdminRoute>
+                      <SpellsPage />
+                    </AdminRoute>
+                  }
+                />
+                <Route
+                  path="/traditions"
+                  element={
+                    <AdminRoute>
+                      <TraditionsPage />
+                    </AdminRoute>
+                  }
+                />
+                <Route
+                  path="/vehicle-modifications"
+                  element={
+                    <AdminRoute>
+                      <VehicleModificationsPage />
+                    </AdminRoute>
+                  }
+                />
+                <Route
+                  path="/vehicles"
+                  element={
+                    <AdminRoute>
+                      <VehiclesPage />
                     </AdminRoute>
                   }
                 />

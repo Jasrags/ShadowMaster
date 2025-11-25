@@ -1,0 +1,6 @@
+# Traditions
+
+| NAME | COMBAT | DETECTION | HEALTH | ILLUSION | MANIPULATION | DRAIN | SOURCE |
+|------|--------|-----------|--------|----------|--------------|-------|--------|
+| The Hermetic Mage | Fire | Air | Man | Water | Earth | Logic + Willpower | SR5 |
+| The Shaman | Beasts | Water | Earth | Air | Man | Charisma + Willpower | SR5 |

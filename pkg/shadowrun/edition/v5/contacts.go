@@ -14,8 +14,8 @@ type Contact struct {
 	SimilarContacts []string `json:"similar_contacts,omitempty"`
 	// Description is the full text description of the contact
 	Description string `json:"description,omitempty"`
-	// Source is the source book code (e.g., "SR5")
-	Source string `json:"source,omitempty"`
+	// Source contains source book reference information
+	Source *SourceReference `json:"source,omitempty"`
 }
 
 // dataContacts is declared in contacts_data.go

@@ -24,7 +24,7 @@ export function WeaponConsumableViewModal({ consumable, isOpen, onOpenChange }: 
                 <div className="flex items-start justify-between mb-4">
                   <div>
                     <h2 className="text-2xl font-bold text-gray-100 mb-1">{consumable.name}</h2>
-                    <p className="text-gray-400">Source: {consumable.source} • Category: {consumable.category}</p>
+                    <p className="text-gray-400">Source: {consumable.source?.source || 'Unknown'} • Category: {consumable.category}</p>
                   </div>
                   <button
                     onClick={close}
@@ -65,7 +65,7 @@ export function WeaponConsumableViewModal({ consumable, isOpen, onOpenChange }: 
                       )}
                       <div>
                         <dt className="text-gray-400">Source</dt>
-                        <dd className="text-gray-200">{consumable.source}</dd>
+                        <dd className="text-gray-200">{consumable.source?.source || '-'}{consumable.source?.page ? ` (p. ${consumable.source.page})` : ''}</dd>
                       </div>
                     </dl>
                   </div>

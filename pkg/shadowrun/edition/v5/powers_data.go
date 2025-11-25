@@ -1,0 +1,285 @@
+package v5
+
+// dataPowers contains all power definitions
+var dataPowers = map[string]Power{
+	"adrenaline_boost": {
+		Name:                  "Adrenaline Boost",
+		Activation:            ActivationTypeFreeAction,
+		ActivationDescription: "Free Action",
+		Cost: PowerCostFormula{
+			CostPerLevel: floatPtr(0.25),
+			Formula:      "0.25 PP per level",
+			IsVariable:   true,
+		},
+		Source: &SourceReference{Source: "SR5"},
+	},
+	"astral_perception": {
+		Name:                  "Astral Perception",
+		Activation:            ActivationTypeSimpleAction,
+		ActivationDescription: "Simple Action",
+		Cost: PowerCostFormula{
+			BaseCost: floatPtr(1.0),
+			Formula:  "1 PP",
+		},
+		Source: &SourceReference{Source: "SR5"},
+	},
+	"attribute_boost": {
+		Name:                  "Attribute Boost (Attribute)",
+		Parameter:             "Attribute",
+		Activation:            ActivationTypeSimpleAction,
+		ActivationDescription: "Simple Action",
+		Cost: PowerCostFormula{
+			CostPerLevel: floatPtr(0.25),
+			Formula:      "0.25 PP per level",
+			IsVariable:   true,
+		},
+		Source: &SourceReference{Source: "SR5"},
+	},
+	"combat_sense": {
+		Name:                  "Combat Sense",
+		Activation:            ActivationTypePassive,
+		ActivationDescription: "-",
+		Cost: PowerCostFormula{
+			CostPerLevel: floatPtr(0.5),
+			Formula:      "0.5 PP per level",
+			IsVariable:   true,
+		},
+		Source: &SourceReference{Source: "SR5"},
+	},
+	"critical_strike": {
+		Name:                  "Critical Strike (Skill)",
+		Parameter:             "Skill",
+		Activation:            ActivationTypePassive,
+		ActivationDescription: "-",
+		Cost: PowerCostFormula{
+			BaseCost: floatPtr(0.5),
+			Formula:  "0.5 PP",
+		},
+		Source: &SourceReference{Source: "SR5"},
+	},
+	"danger_sense": {
+		Name:                  "Danger Sense",
+		Activation:            ActivationTypePassive,
+		ActivationDescription: "-",
+		Cost: PowerCostFormula{
+			CostPerLevel: floatPtr(0.25),
+			Formula:      "0.25 PP per level",
+			IsVariable:   true,
+		},
+		Source: &SourceReference{Source: "SR5"},
+	},
+	"enhanced_accuracy": {
+		Name:                  "Enhanced Accuracy (Skill)",
+		Parameter:             "Skill",
+		Activation:            ActivationTypePassive,
+		ActivationDescription: "-",
+		Cost: PowerCostFormula{
+			BaseCost: floatPtr(0.25),
+			Formula:  "0.25 PP",
+		},
+		Source: &SourceReference{Source: "SR5"},
+	},
+	"enhanced_perception": {
+		Name:                  "Enhanced Perception",
+		Activation:            ActivationTypePassive,
+		ActivationDescription: "-",
+		Cost: PowerCostFormula{
+			CostPerLevel: floatPtr(0.5),
+			Formula:      "0.5 PP per level",
+			IsVariable:   true,
+		},
+		Source: &SourceReference{Source: "SR5"},
+	},
+	"improved_ability": {
+		Name:                  "Improved Ability (Skill)",
+		Parameter:             "Skill",
+		Activation:            ActivationTypePassive,
+		ActivationDescription: "-",
+		Cost: PowerCostFormula{
+			CostPerLevel: floatPtr(0.5),
+			Formula:      "0.5 PP per level",
+			IsVariable:   true,
+		},
+		Source: &SourceReference{Source: "SR5"},
+	},
+	"improved_physical_attribute": {
+		Name:                  "Improved Physical Attribute",
+		Activation:            ActivationTypePassive,
+		ActivationDescription: "-",
+		Cost: PowerCostFormula{
+			CostPerLevel: floatPtr(1.0),
+			Formula:      "1 PP per level",
+			IsVariable:   true,
+		},
+		Source: &SourceReference{Source: "SR5"},
+	},
+	"improved_potential": {
+		Name:                  "Improved Potential (Limit)",
+		Parameter:             "Limit",
+		Activation:            ActivationTypePassive,
+		ActivationDescription: "-",
+		Cost: PowerCostFormula{
+			CostPerLevel: floatPtr(0.5),
+			Formula:      "0.5 PP per level",
+			IsVariable:   true,
+		},
+		Source: &SourceReference{Source: "SR5"},
+	},
+	"improved_reflexes": {
+		Name:                  "Improved Reflexes",
+		Activation:            ActivationTypePassive,
+		ActivationDescription: "-",
+		Cost: PowerCostFormula{
+			AdditionalCost: floatPtr(0.5),
+			MaxLevel:       intPtr(3),
+			Formula:        "0.5 PP + level (Max 3)",
+			IsVariable:     true,
+		},
+		Source: &SourceReference{Source: "SR5"},
+	},
+	"improved_sense": {
+		Name:                  "Improved Sense",
+		Activation:            ActivationTypePassive,
+		ActivationDescription: "-",
+		Cost: PowerCostFormula{
+			CostPerItem: floatPtr(0.25),
+			Formula:     "0.25 PP each",
+			IsVariable:  true,
+		},
+		Source: &SourceReference{Source: "SR5"},
+	},
+	"killing_hands": {
+		Name:                  "Killing Hands",
+		Activation:            ActivationTypeFreeAction,
+		ActivationDescription: "Free Action",
+		Cost: PowerCostFormula{
+			BaseCost: floatPtr(0.5),
+			Formula:  "0.5 PP",
+		},
+		Source: &SourceReference{Source: "SR5"},
+	},
+	"kinesics": {
+		Name:                  "Kinesics",
+		Activation:            ActivationTypePassive,
+		ActivationDescription: "-",
+		Cost: PowerCostFormula{
+			CostPerLevel: floatPtr(0.25),
+			Formula:      "0.25 PP per level",
+			IsVariable:   true,
+		},
+		Source: &SourceReference{Source: "SR5"},
+	},
+	"light_body": {
+		Name:                  "Light Body",
+		Activation:            ActivationTypePassive,
+		ActivationDescription: "-",
+		Cost: PowerCostFormula{
+			CostPerLevel: floatPtr(0.25),
+			Formula:      "0.25 PP per level",
+			IsVariable:   true,
+		},
+		Source: &SourceReference{Source: "SR5"},
+	},
+	"missile_parry": {
+		Name:                  "Missile Parry",
+		Activation:            ActivationTypeInterrupt,
+		ActivationDescription: "Interrupt (-5 Initiative)",
+		Cost: PowerCostFormula{
+			CostPerLevel: floatPtr(0.25),
+			Formula:      "0.25 PP per level",
+			IsVariable:   true,
+		},
+		Source: &SourceReference{Source: "SR5"},
+	},
+	"mystic_armor": {
+		Name:                  "Mystic Armor",
+		Activation:            ActivationTypePassive,
+		ActivationDescription: "-",
+		Cost: PowerCostFormula{
+			CostPerLevel: floatPtr(0.5),
+			Formula:      "0.5 PP per level",
+			IsVariable:   true,
+		},
+		Source: &SourceReference{Source: "SR5"},
+	},
+	"natural_immunity": {
+		Name:                  "Natural Immunity",
+		Activation:            ActivationTypePassive,
+		ActivationDescription: "-",
+		Cost: PowerCostFormula{
+			CostPerLevel: floatPtr(0.25),
+			Formula:      "0.25 PP per level",
+			IsVariable:   true,
+		},
+		Source: &SourceReference{Source: "SR5"},
+	},
+	"pain_resistance": {
+		Name:                  "Pain Resistance",
+		Activation:            ActivationTypePassive,
+		ActivationDescription: "-",
+		Cost: PowerCostFormula{
+			CostPerLevel: floatPtr(0.5),
+			Formula:      "0.5 PP per level",
+			IsVariable:   true,
+		},
+		Source: &SourceReference{Source: "SR5"},
+	},
+	"rapid_healing": {
+		Name:                  "Rapid Healing",
+		Activation:            ActivationTypePassive,
+		ActivationDescription: "-",
+		Cost: PowerCostFormula{
+			CostPerLevel: floatPtr(0.5),
+			Formula:      "0.5 PP per level",
+			IsVariable:   true,
+		},
+		Source: &SourceReference{Source: "SR5"},
+	},
+	"spell_resistance": {
+		Name:                  "Spell Resistance",
+		Activation:            ActivationTypePassive,
+		ActivationDescription: "-",
+		Cost: PowerCostFormula{
+			CostPerLevel: floatPtr(0.5),
+			Formula:      "0.5 PP per level",
+			IsVariable:   true,
+		},
+		Source: &SourceReference{Source: "SR5"},
+	},
+	"traceless_walk": {
+		Name:                  "Traceless Walk",
+		Activation:            ActivationTypePassive,
+		ActivationDescription: "-",
+		Cost: PowerCostFormula{
+			BaseCost: floatPtr(1.0),
+			Formula:  "1 PP",
+		},
+		Source: &SourceReference{Source: "SR5"},
+	},
+	"voice_control": {
+		Name:                  "Voice Control",
+		Activation:            ActivationTypePassive,
+		ActivationDescription: "-",
+		Cost: PowerCostFormula{
+			CostPerLevel: floatPtr(0.5),
+			Formula:      "0.5 PP per level",
+			IsVariable:   true,
+		},
+		Source: &SourceReference{Source: "SR5"},
+	},
+	"wall_running": {
+		Name:                  "Wall Running",
+		Activation:            ActivationTypeSimpleAction,
+		ActivationDescription: "Simple Action",
+		Cost: PowerCostFormula{
+			BaseCost: floatPtr(0.5),
+			Formula:  "0.5 PP",
+		},
+		Source: &SourceReference{Source: "SR5"},
+	},
+}
+
+// floatPtr returns a pointer to a float64
+func floatPtr(f float64) *float64 {
+	return &f
+}

@@ -19,7 +19,10 @@ export const WeaponConsumablesTable = memo(function WeaponConsumablesTable({ con
     if (selectedSources.length === 0) {
       return consumables;
     }
-    return consumables.filter(consumable => selectedSources.includes(consumable.source));
+    return consumables.filter(consumable => {
+      const source = consumable.source?.source || 'Unknown';
+      return selectedSources.includes(source);
+    });
   }, [consumables, selectedSources]);
 
   const handleNameClick = useCallback((consumable: WeaponConsumable) => {
@@ -64,7 +67,7 @@ export const WeaponConsumablesTable = memo(function WeaponConsumablesTable({ con
     {
       id: 'source',
       header: 'Source',
-      accessor: 'source',
+      accessor: (row: WeaponConsumable) => row.source?.source || '',
       sortable: true,
     },
   ], [handleNameClick]);
@@ -83,7 +86,7 @@ export const WeaponConsumablesTable = memo(function WeaponConsumablesTable({ con
       <DataTable
         data={filteredConsumables}
         columns={columns}
-        searchFields={['name', 'category', 'cost', 'availability', 'source', 'description']}
+        searchFields={['name', 'category', 'cost', 'availability', 'description']}
         searchPlaceholder="Search weapon consumables by name, category, cost, availability, or source..."
         rowsPerPageOptions={[25, 50, 100, 200]}
         defaultRowsPerPage={50}

@@ -1,5 +1,7 @@
 package v5
 
+import "fmt"
+
 // ArmorType represents the category of armor item
 type ArmorType string
 
@@ -163,4 +165,19 @@ func GetArmorByType(armorType ArmorType) []Armor {
 		}
 	}
 	return armor
+}
+
+// Validate validates that the armor definition is well-formed
+func (a *Armor) Validate() error {
+	if a.Name == "" {
+		return fmt.Errorf("armor name is required")
+	}
+	if a.Type == "" {
+		return fmt.Errorf("armor type is required")
+	}
+	// Validate rating if MaxRating is set
+	if a.MaxRating > 0 && a.Rating > 0 && a.Rating > a.MaxRating {
+		return fmt.Errorf("rating %d exceeds maximum rating %d", a.Rating, a.MaxRating)
+	}
+	return nil
 }

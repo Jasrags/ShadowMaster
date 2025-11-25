@@ -1,0 +1,79 @@
+# Matrix Programs
+
+## Agents
+
+| Type | Rating | Availability | Cost | Source |
+|------|--------|--------------|------|--------|
+| Agent | 1-3 | Rating × 3 | Rating × 1000¥ | SR5 |
+| Agent | 4-6 | Rating × 3 | Rating × 2000¥ | SR5 |
+
+Agents are autonomous programs rated from 1 to 6. Each agent occupies one program slot on your deck. Agents use the Matrix attributes of the device they run on, and their rating (up to 6) for attributes. Agents also have the Computer, Hacking, and Cybercombat skills at a rating equal to their own. An agent runs as a program and can use programs running on the same device as them.
+
+You can have your agent perform Matrix actions for you. When an agent is running, it has its own persona (and icon). An agent is about as smart as a pilot program of the same rating.
+
+Any attack on an agent damages the device on which it is running, rather than the agent itself (which is, after all, merely a program). This means that if you're running an agent on your deck, you and it share the same Matrix Condition Monitor.
+
+## Commlink Apps
+
+| Name | Description | Source |
+|------|-------------|--------|
+| AR Games | Casual games displayed in augmented reality, allowing a user to enjoy them as a pastime while also still somewhat paying attention to reality. | SR5 |
+| Diagnostics | An ongoing self-evaluation system that monitors all the devices in a user's PAN, giving constant vital statistics on their behavior. Popular with computer-literate users and useful for keeping people aware of attacks against their PAN. | SR5 |
+| P2.1 | A dramatic update to the old P2.0 system put into place by Horizon, this social networking app monitors and supports all other social networks that a person might use, incorporating it all into a dramatic web of information. It also generates a P-Score that is a major piece of status in a lot of virtual places and within Horizon as a whole. | SR5 |
+| Theme Music | An algorithm that constantly monitors the owner of the PAN in all their interactions with devices. Taking this data, it attempts to determine the emotional state of the person and generates a playlist of songs to better support said user, either enhancing the feelings or dampening them. Essentially the mood ring of the Sixth World. | SR5 |
+| Ticker | A series of commlink apps that provide an information feed from a specified source, the vast majority being legitimate, such as stock markets and news organizations. Some shadow services also use these apps to give details on other shadowrunners, fixers, Mr. Johnsons, police response times, and current payment rates for a variety of services and bribes. Ticker reduces the time for subject-related Matrix Searches in half. | SR5 |
+
+A commlink can run as many apps as half its Device Rating, rounded up.
+
+## Common Programs
+
+| Name | Action/Effect | Description | Source |
+|------|---------------|-------------|--------|
+| Bootstrap | Format Device | Set up a variety of tasks in the boot record. Allows for hidden commands to be input into the device after the next reboot. Popular options include announcing the location of the device when it connects to the Matrix, adjusting the processing of the device so that the default device attributes are the choice of the user, annoying the user with constant demands for ownership permissions, and making a record of every action on the device. | SR5 |
+| Browse | Matrix Search Action - Halve Time | This handy browser and search engine cuts the time for a Matrix Search action in half. | SR5 |
+| Configurator | Swap Two Attributes / Change to preset configuration / Un/Load Program | Load preset program configurations, swap two attributes, or change to a preset configuration. | SR5 |
+| Edit | Edit File | Standard file editing program. | SR5 |
+| Encryption | Encrypt/Decrypt File | Standard encryption/decryption program. | SR5 |
+| Search | Matrix Search | Standard Matrix search program. | SR5 |
+| Shredder | Delete File | Standard file deletion program. | SR5 |
+| Signal Scrub | Reduce Noise | Reduces noise in Matrix connections. | SR5 |
+| Toolbox | Repair | Assists in repairing devices. | SR5 |
+| Virtual Machine | Run Programs | Allows running programs in an isolated environment. | SR5 |
+
+## Hacking Programs
+
+| Name | Action/Effect | Description | Source |
+|------|---------------|-------------|--------|
+| Armor | Matrix Damage | +1 dice pool modifier to resist Matrix damage. This modifier stacks with similar modifiers from other programs. | SR5 |
+| Baby Monitor | Matrix Perception | +2 dice pool modifier to Matrix Perception tests. | SR5 |
+| Biofeedback | Biofeedback Damage | +1 DV biofeedback damage caused. | SR5 |
+| Biofeedback Filter | Biofeedback Damage | +1 dice pool modifier to resist biofeedback damage. This modifier stacks with similar modifiers from other programs. | SR5 |
+| Blackout | Reboot Device | +2 to Attack attribute for Reboot Device attempts. | SR5 |
+| Cat's Paw | Brute Force | +2 to Attack attribute for Brute Force attempts. | SR5 |
+| Cloudless | Noise | Reduces noise by 1. | SR5 |
+| Crash | Crash Program | +2 to Attack attribute for Crash Program attempts. | SR5 |
+| Decryption | Decrypt File | +2 to Data Processing attribute for Decrypt File attempts. | SR5 |
+| Defuse | Disarm Data Bomb | +2 dice pool modifier to Disarm Data Bomb attempts. | SR5 |
+| Demolition | Data Bomb | +2 to Attack attribute for Data Bomb attempts. | SR5 |
+| Detonator | Data Bomb | +1 DV damage from Data Bomb. | SR5 |
+| Exploit | Hack on the Fly | +2 to Sleaze attribute when attempting a Hack on the Fly action. This program analyzes and scans a target for weaknesses in its Firewall. | SR5 |
+| Evaluate | Paydata | Calculates how much a certain amount of paydata might be worth, allowing the decker to only take an amount that would limit the amount of heat they would generate in stealing a little extra while on the job. | SR5 |
+| Fly on a Wall | Hide | While this program is running, and the decker is performing no actions other than Matrix Perception tests, the Overwatch Score only increases by 1D6 per half-hour (rolled in secret by the gamemaster as normal). The program requires a Hide action in order to activate properly, and it does not assist in any way in preventing any other icon from noticing the decker. | SR5 |
+| Fork | Single Matrix Action | You can perform a single Matrix action on two targets with this program. You make a single test, with modifiers from each target both counting toward your dice pool. Each of the targets defend with their own dice pools. Determine the result of the actions separately against each target. | SR5 |
+| Guard | Mark Damage | -1 DV Matrix Damage Received Per Mark. This program keeps an eye out for weaknesses the same way an attacker would, reducing the extra damage you take from marks by 1 DV per mark. | SR5 |
+| Hammer | Matrix Damage | +2 DV Matrix Damage caused. Whenever you cause Matrix damage with an action, this offensive program lets you inflict +2 DV worth of Matrix Damage. This does not apply against targets that take damage from failing an Attack action against you. | SR5 |
+| Hitchhiker | Special | There are some special parts of the Matrix where you can take others with you--and where you definitely don't want to be alone. Grab this program to take your non-hacker friends to foundations and UV hosts. | SR5 |
+| Lockdown | Link-Lock | Matrix Damage to persona link-locks them. When you cause damage to a persona, he or she is link-locked until you stop running this program or they successfully Jack Out. | SR5 |
+| Mugger | Mark Damage | +1 DV Matrix Damage Caused Per Mark. By actively tracking your marks, the bonus damage from them is increased by 1 DV per mark. | SR5 |
+| Nuke-from-Orbit | Edit File | A hugely powerful file destruction program that requires frequent updates as adjustments in file recovery technology continue to progress. This upgraded and outright illegal program is designed to ensure that no one will ever be able to recover a file that it destroys. If used to delete a file (the Edit File action should be used), this program ensures that no one will ever be able to recover the file from the Matrix. A brutal and decidedly unsubtle cyberprogram, any Overwatch Score generated from the Opposed Test is doubled. Offline back-ups and the Resonance realms are the only options for getting the file back. Availability: 12F | SR5 |
+| Paintjob | Erase Marks | +2 to Attack attribute for the purpose of making Erase Mark tests. Resprays and textures a persona's icon, assisting in erasing or knocking off marks as it does so, ensuring the decker is able to trust in the fact that his cyberdeck is not being affected by outsiders. | SR5 |
+| Shell | Matrix Damage / Biofeedback Damage | +1 dice pool modifier to resist both Matrix and biofeedback damage. This modifier stacks with similar modifiers from other programs. This program uses a set of filtering algorithms. | SR5 |
+| Smoke-and-Mirrors | All actions | Adds significant amounts of misleading location information in order to keep the decker from being located IRL. This program increases the cyberdeck's Sleaze attribute between 1 and 5 (user's choice) with an equivalent amount of noise added to any tests performed with the deck. The noise also affects Trace Icon tests performed against the deck using the program. This program has no effect against convergence (p. 231, SR5), as GOD and all the demiGODs cannot be distracted by so simple a trick. | SR5 |
+| Sneak | Trace User | +2 dice pool modifier to defend against Trace User actions. Additionally, if a demiGOD converges on you while this program is running, they don't get your physical location, although you're still hit with all the other bad stuff they throw at you. This utility bounces your Matrix traffic through unnecessary routes. | SR5 |
+| Stealth | Sleaze | +1 to Sleaze attribute. This clever program gives you a +1 bonus to your Sleaze attribute. | SR5 |
+| Swerve | Firewall | Add +1 to Firewall when resisting Reboot Device attempts for any device in the PAN. Just as deckers have seen the benefits of forcing other devices to reboot, they have seen a need to keep their devices safe from those efforts. Swerve adds redundant code to the OS of the cyberdeck and any connected devices in the decker's PAN, making it easier for the devices to resist crash attacks. | SR5 |
+| Tantrum | Data Spike | Does no damage. A living target in VR suffers Nausea for 3 turns. This program overlays cold simsense sensations on top of a Data Spike action, hitting the target with a quick and disgusting sensation if even a single box of Matrix Damage is scored. The program is effective against all technomancers, as well as cold sim or hot sim deckers, but it does nothing to users working in the Matrix in AR, any form of IC, and agents. The program does no damage from the Data Spike; instead, the targeted user experiences Nausea (p. 409, SR5) for three Combat Turns due to the sensory input. Popular options this program uses to make targets feel queasy include the smell of a dirty diaper or the feeling of being punched in the junk. | SR5 |
+| Tarball | Crash Program | +2 to Attack attribute and +1 to Crash Program tests (both of these bonuses only apply to Crash Program attempts), but its broader-based attack affects a random program rather than a chosen one. A powerful but inaccurate combat program based on the old tar-based IC used for decades. | SR5 |
+| Track | Trace User | +2 to Data Processing attribute when making Trace User tests with Track running. Alternately, if the target is running Sneak, Track negates the +2 dice pool bonus from that program. Note that the program delivers one of the listed benefits, not both. The Track program keeps an eye on your targets for you, making it easier to find their meat world equivalents. | SR5 |
+| Wrapper | Change Icon | This program overrides the Matrix's protocols for icons. While this program is running, your icons can be anything you want them to be when you use the Change Icon action. From the lens of the Matrix, your Hammer program could look like a music file, your Ares Predator icon could look like a credstick, and your own persona could look like a Mitsubishi Nightsky. Another persona can see what the disguised icon really is with a Matrix Perception Test, but they need to at least suspect enough to check (Matrix Perception, p. 241). | SR5 |
+

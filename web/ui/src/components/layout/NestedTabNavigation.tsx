@@ -6,6 +6,7 @@ interface NestedTabItem {
   label: string;
   path: string;
   nested?: NestedTabItem[]; // Sub-tabs
+  groupLabel?: string; // Optional group label for visual grouping
 }
 
 interface NestedTabNavigationProps {
@@ -96,7 +97,7 @@ function NestedTabs({ parentTab }: { parentTab: NestedTabItem }) {
   const location = useLocation();
   const navigate = useNavigate();
 
-  if (!parentTab.nested) return null;
+  if (!parentTab.nested || parentTab.nested.length === 0) return null;
 
   const nestedTabId = parentTab.nested.find(
     tab => location.pathname === tab.path || location.pathname.startsWith(tab.path + '/')
@@ -113,31 +114,33 @@ function NestedTabs({ parentTab }: { parentTab: NestedTabItem }) {
       }}
       className="flex flex-col"
     >
-      <TabList 
-        aria-label={`${parentTab.label} sub-navigation`} 
-        className="flex gap-1 border-b border-sr-light-gray bg-sr-gray/50 overflow-x-auto overflow-y-hidden"
-        style={{ 
-          scrollbarWidth: 'thin',
-          scrollbarColor: '#4a5568 transparent',
-          scrollBehavior: 'smooth'
-        }}
-      >
-        {parentTab.nested.map((nestedTab) => (
-          <Tab
-            key={nestedTab.id}
-            id={nestedTab.id}
-            className={({ isSelected, isFocused }) =>
-              `px-6 py-3 text-sm font-medium rounded-t-lg transition-colors focus:outline-none whitespace-nowrap flex-shrink-0 ${
-                isSelected
-                  ? 'bg-sr-dark text-sr-accent border-b-2 border-sr-accent'
-                  : 'text-gray-400 hover:text-gray-200 hover:bg-sr-light-gray/30'
-              } ${isFocused ? 'ring-2 ring-sr-accent ring-offset-2' : ''}`
-            }
-          >
-            {nestedTab.label}
-          </Tab>
-        ))}
-      </TabList>
+      <div className="border-b border-sr-light-gray bg-sr-gray/50">
+        <TabList 
+          aria-label={`${parentTab.label} sub-navigation`} 
+          className="flex gap-1 overflow-x-auto overflow-y-hidden"
+          style={{ 
+            scrollbarWidth: 'thin',
+            scrollbarColor: '#4a5568 transparent',
+            scrollBehavior: 'smooth'
+          }}
+        >
+          {parentTab.nested.map((nestedTab) => (
+            <Tab
+              key={nestedTab.id}
+              id={nestedTab.id}
+              className={({ isSelected, isFocused }) =>
+                `px-6 py-3 text-sm font-medium rounded-t-lg transition-colors focus:outline-none whitespace-nowrap flex-shrink-0 ${
+                  isSelected
+                    ? 'bg-sr-dark text-sr-accent border-b-2 border-sr-accent'
+                    : 'text-gray-400 hover:text-gray-200 hover:bg-sr-light-gray/30'
+                } ${isFocused ? 'ring-2 ring-sr-accent ring-offset-2' : ''}`
+              }
+            >
+              {nestedTab.label}
+            </Tab>
+          ))}
+        </TabList>
+      </div>
 
       {parentTab.nested.map((nestedTab) => {
         const isActive = nestedTab.id === nestedTabId;

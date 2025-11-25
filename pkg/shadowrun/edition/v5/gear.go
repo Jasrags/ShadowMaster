@@ -1,5 +1,7 @@
 package v5
 
+import "fmt"
+
 // GearCategory represents the category of gear item
 type GearCategory string
 
@@ -112,11 +114,16 @@ type Gear struct {
 	// Description is the full text description
 	Description string `json:"description,omitempty"`
 	// Cost is the cost in nuyen (0 if cost varies by rating/model)
+	// Deprecated: Use CostFormulaStruct instead for structured cost handling
 	Cost int `json:"cost,omitempty"`
 	// CostPerRating indicates if cost is per rating level
+	// Deprecated: Use CostFormulaStruct instead for structured cost handling
 	CostPerRating bool `json:"cost_per_rating,omitempty"`
 	// CostFormula is a formula for calculating cost (e.g., "Capacity*50", "Rating*100")
+	// Deprecated: Use CostFormulaStruct instead for structured cost handling
 	CostFormula string `json:"cost_formula,omitempty"`
+	// CostFormulaStruct is the structured cost formula (new format)
+	CostFormulaStruct *CostFormula `json:"cost_formula_struct,omitempty"`
 	// Availability is the availability code (e.g., "2", "4R", "8F")
 	Availability string `json:"availability,omitempty"`
 	// Rating is the rating for the item (1-6 typically, or varies)
@@ -446,4 +453,23 @@ func GetDeliveryTimeForCost(cost int) string {
 		}
 	}
 	return ""
+}
+
+// Validate validates that the gear definition is well-formed
+func (g *Gear) Validate() error {
+	if g.Name == "" {
+		return fmt.Errorf("gear name is required")
+	}
+	if g.Category == "" {
+		return fmt.Errorf("gear category is required")
+	}
+	// Validate rating if MaxRating is set
+	if g.SpecialProperties != nil && g.SpecialProperties.MaxRating > 0 && g.Rating > 0 && g.Rating > g.SpecialProperties.MaxRating {
+		return fmt.Errorf("rating %d exceeds maximum rating %d", g.Rating, g.SpecialProperties.MaxRating)
+	}
+	// Validate structured cost formula if present
+	if g.CostFormulaStruct != nil && !g.CostFormulaStruct.IsValid() {
+		return fmt.Errorf("invalid cost formula")
+	}
+	return nil
 }

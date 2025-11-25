@@ -10,8 +10,8 @@ type Lifestyle struct {
 	Description string `json:"description,omitempty"`
 	// Cost describes the cost of the lifestyle (e.g., "10,000 nuyen a month", "500 nuyen a day for basic care")
 	Cost string `json:"cost,omitempty"`
-	// Source is the source book code (e.g., "SR5")
-	Source string `json:"source,omitempty"`
+	// Source contains source book reference information
+	Source *SourceReference `json:"source,omitempty"`
 }
 
 // LifestyleOption represents a lifestyle option/modifier definition
@@ -24,8 +24,8 @@ type LifestyleOption struct {
 	Description string `json:"description,omitempty"`
 	// Cost describes the cost modifier (e.g., "+1,000 nuyen a month", "+20 percent of the lifestyle")
 	Cost string `json:"cost,omitempty"`
-	// Source is the source book code (e.g., "SR5")
-	Source string `json:"source,omitempty"`
+	// Source contains source book reference information
+	Source *SourceReference `json:"source,omitempty"`
 }
 
 // LifestylesData represents the lifestyles data structure (legacy format for backward compatibility)
