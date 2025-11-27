@@ -1,0 +1,136 @@
+| 5th Edition Rules |
+| --- |
+| Basics // Combat // Magic // Matrix // Driving // Character Creation |
+
+| **Races** |
+
+| **Humans** | **Elves** | **Dwarves** | **Orks** | **Trolls** |
+
+| **Centaurs** | **Nagas** | **Pixies** | **Sasquatches** | **Changelings** | **Shapeshifters** |
+
+| GAME INFORMATION |
+| --- |
+| The collective networking of dwarfs translates into game terms rather simply. Dwarfs are exceptionally well connected when they function within the boundaries and mores of their metatypical culture. When dealing with other dwarfs, they gain a +2 modifier to their Social limit, including checks for Availability when looking for gear. This modifier only applies to interactions between dwarfs and does not affect interactions in which one party knows the other is working with, or for the benefit of, a nondwarf. The modifier also goes away if the dwarf doesn’t act in accordance to mainstream dwarven social customs or is exiled from the larger dwarven culture—meaning you can’t be obvious about being a shadowrunner. Word travels fast in their culture, and they are quick to ostracize those who violate their mores. If a dwarf is known to flaunt these traditions, the modifier becomes –1 when dealing with other dwarfs, except for fellow exiles. The boost in credibility that comes with being a fellow exile increases characters’ Social limits by 3 when dealing with other outsiders. |
+| CHARACTERS AND DWARF CULTURE |
+| What does all this culture talk mean for your character? Simply put, either you’re in, or you’re out. It’s a decision to figure out with your gamemaster, and when you come to a decision, you have to stick with it. One of the hardest things about being part of the dwarven culture and being a shadowrunner is that the two things don’t blend well. Dwarfs don’t take kindly to shadowrunning dwarfs or law-breaking dwarfs of any kind. Theirs is a culture based around aiding each other and dealing fairly and directly with one another. In their eyes, any dwarf who has to resort to living on the wrong side of the law is choosing to refuse the help his brethren would have offered along the way. And everyone knows how shady the lives of runners are, even if most have learned it from a corporate-sponsored trid show. Truthfully, most dwarfs know that runners are people too, but they just don’t want to bring that risky element into their stable cultural philosophy. As a character, are you going to try to balance on the edge of dwarven and shadow culture? Separating your running life from your dwarven life, refusing to use your dwarven connections, even for the most trusted of non-dwarven teammates, no matter the cost? Or maybe you’ll go totally counterculture and build your contacts and relationships based on trust and friendship, instead of height and beardiness, even going so far as to avoid other dwarfs altogether. You could also be looking for the roleplaying challenge of finally coming around and trying to get back into the dwarven culture but facing the choices of your past. Or maybe you’re on the other side of that slope and have slipped into the shadows and now use your dwarven connections to benefit you and your team, but then get to see dwarven culture slowly, or suddenly, shut you out. |
+
+| **World Population:** 14% |
+
+HOMO SAPIENS PUMILIONIS
+
+| RACE | BODY | AGI | REA | STR | WIL | LOG | INT | CHA | EDGE | ESS | INIT |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| Dwarf | 3/8 | 1/6 | 1/5 | 3/8 | 2/7 | 1/6 | 1/6 | 1/6 | 1/6 | 6 | REA+INT |
+| **Racial Traits:** Thermographic Vision, +2 dice for pathogen and toxin resistance, +20% increased Lifestyle cost |
+
+Though I dislike opening with a bad pun, it fit best here. Dwarfs are, by far, the most overlooked metatype of this new age. They are stoic, silent, and strong-willed as a culture, and even the ever-present overbearing indoctrinations of the megacorporations have not reshaped the minds of the dwarfs who work within their ranks. It is that strength of will (not a weakness as some have said) that defines why the dwarfs are the only metatype that has not carved out their own nation. They have not felt the need to congregate and exert their will in a single place but have instead maintained a sense of unity even while separated by books, borders, and bottom lines.
+
+But what does that sense of unity mean to them? Well, it means that dwarfs, no matter where they fall in a nation, corporation, or religion, will usually side with, and prefer to deal with, other dwarfs before anyone else, even non-dwarfs within their parent culture. It is not a matter of racism or even a sense of superiority, but instead a sense of steadiness and understanding that they all share. When working with their own, they know what to expect, they know they will be dealt with according to a particular set of cultural norms, and they know that when the deal is made or the argument is done, it will stay that way. Within dwarven culture, a deal is a deal.
+
+Now, I know I mentioned a lack of a nation, but what the dwarfs have instead is a world. Thanks to a global Matrix and its astral equivalent, dwarfs aren’t limited by borders for their culture. They are both technologically and magically savvy. Traits that, along with their steady and willful nature, give them ways to connect over great distances. The contacts list on a dwarf’s commlink is often its largest datafile and full of connections to other dwarfs, many of whom the owner may have only met once. Or they may never have met and just got a name passed to them by a friend. This connectivity brings together nearly three-quarters of all the dwarfs in the world (with approximately a fifth of the missing members being a pumilionis metavarient). Some of the connections may be negative, such as a note pointing out a dwarf is untrustworthy or has failed to hold to an agreed deal, but through small degrees of separation, —usually less than three, never more than six—a dwarf in the larger group can be connected to another dwarf.
+
+One of the most significant disadvantages to their insular and well-connected nature is it feeds into the conspiracy-esque view of dwarfs as hoarders of wealth. Dwarf-owned shops, especially those in less well-todo neighborhoods, are frequently targeted by the dim masses in search of dwarven gold. The urban legend of well-connected dwarfs who operate as go-betweens for illicit corporate operations and keep certain valuables, such as credsticks and electronic stock certificates, has only helped fuel these rumors. Especially when these hidden wealth caches are discovered.
+
+A note on the metavarients: Due to local cultural variation, and isolation, most members of the dwarf metavarients (the koborokuru, haruman, menehune, and gnome), are not considered part of the dwarven culture as a whole. These small populations are too often defined by themselves and have not, as a whole, been integrated into the worldwide culture of their more populous kin.
+
+The dwarven counterculture is an interesting group, mostly created by outcasts and non-conformists (a rarity indeed among dwarfs) in a similar way to their kin, but they break the social standards of the broader culture. These individuals often allow their sphere of influence to include non-dwarfs, and they take far more liberties with the way they handle deals and social interactions. These are usually the primary reasons for their exile from their parent culture. Many do it out of a sense of brotherhood built up on the streets or through the influence of other cultures that are more open with their friendships, most often during the intense, trying events that occur when one is expelled from her parent megacorporation.
+
+Over time, many see the benefit of the mainstream dwarven culture. This is usually caused by a lesson learned the hard way about trusting those who are not trustworthy or those who are willing to go back on a deal. When a dwarf decides to work their way back into the good graces of their brethren, it is not easy. First, it’s hard for most dwarfs to admit they were wrong (stubbornness goes with their willfulness), and second, it’s hard for any dwarf to trust someone who has lived outside the culture of dwarven trust. More often than not, dwarfs who have strayed outside the tightly-knit, tradition-bound mainstream community are considered no different than any other metatype.
+
+## Contents
+
+- [1 GREAT DUCHY OF WESTRHINELUXEMBOURG (AGS)](#GREAT_DUCHY_OF_WESTRHINELUXEMBOURG_.28AGS.29)
+
+- [2 HOW DWARFS FIT INTO SOCIETY](#HOW_DWARFS_FIT_INTO_SOCIETY)
+
+- [3 Gnome](#Gnome)
+
+- [4 Hanuman](#Hanuman)
+
+- [5 Koborokuru](#Koborokuru)
+
+- [6 Menehune](#Menehune)
+
+### GREAT DUCHY OF WESTRHINELUXEMBOURG (AGS)
+
+While dwarfs do not have their own country, this is perhaps as close as they get. It’s an unpleasant result of the early policies on metahumans in this region. Much like the trolls and the elves, the dwarfs needed a place to call their own and find strength in numbers against unfriendly politics, so they grouped here. When the Allied German States formed, they were broad-minded enough to include the Duchy as an “associate member,” and they continue that connection to this day. They also are an important stop on the European Grand Tour, thanks to the social nature of the area’s rulers. That aside, though, the dwarfs of the Duchy are quite similar to their worldwide kin; they are simply physically closer to many of the dwarfs they know.
+
+### HOW DWARFS FIT INTO SOCIETY
+
+Very easily, just like small spaces. Sorry, I couldn’t resist, even though I know every dwarf reading this has heard the joke a thousand times. The dwarfs of the world don’t “fit” into society; they are simply part of it. Though mocked by the small-minded and sometimes made to play the fool, little people have been around all through the Fifth World and into the Sixth. They often lived slightly outside society, but they weren’t ostracized. As dwarfs arose, they simply became larger in number, more steadfast in their desire for equality, and they blended right into a world that, while not fully accepting, at least was used to seeing and dealing with little people. That made the battle for acceptance easier than it is for orks and trolls (it helps that their appearance didn’t frequently feature in horror flatvids—one Irish-accented exception aside). Dwarfs have problems similar to trolls fitting into a society not built to their size (though the problem is not as extreme for them), but they have one significant advantage—they are less likely to crush or destroy the things that don’t fit them.
+
+Then there is the fact that stereotypes sometimes work in their favor. The stereotype of trolls as brutal forces of violence makes people shy away; by contrast, the stereotype that dwarfs are the best technicians in the world provides them with many opportunities, as everyone always asks dwarfs to fix something for them. This has helped many of them grow strong, independent operations, such as repair shops and custom arms manufacturers, often using only their face, while the skilled labor is actually done by others.
+
+## Gnome
+
+| RACE | BODY | AGI | REA | STR | WIL | LOG | INT | CHA | EDGE | ESS | INIT |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| Gnome | 1/4 | 2/7 | 1/6 | 1/4 | 2/7 | 2/7 | 1/6 | 1/6 | 1/6 | 6 | REA+INT |
+| **Racial Traits:** Arcane Arrester (2), Neoteny, Thermographic Vision |
+
+**Physical Characteristics:** The gnome variant of the H. sapiens pumilionis subspecies maintains the standard thermographic vision, slightly pointed aural helix, and extended life span of the primary subspecies. Where the subspecies varies physically is in body hair, lessened height, and musculature. The gnome metavariant lacks the distinctive body hair of their primary species; in fact they lack all body hair except for head hair, which is usually dark brown or black. Though standard dwarfs are short of stature, gnomes are smaller still, with heights rarely exceeding 1.0 meter, averaging only 85 centimeters. Body masses average under 30 kilograms due to the metatype’s dense musculature. This dense muscle on a smaller frame allows gnomes a strength greater than one would expect, though still less than a standard human.
+
+**Mental Characteristics:** Due to the limited population of gnomes, little comparative data from standardized testing exists. The general consensus extracted from personal interviews and data demonstrates similar psychological traits to the primary metatype. True variation lies within a resistance to arcane castings, the source of which remains to be discovered.
+
+**Cultural Characteristics:** Little culture can develop in such a small population, especially one that has struggled to exist in a world not designed for their stature. Gnome births throughout Central Europe and Asia Minor, where their numbers are greatest, rarely occur in communities close enough for them to gather together. Overcoming this lack of proximity, gnomes have found niches throughout urban environments, including many in the shadows. They do, as a whole, seem to take any slight on their diminutive nature as a compliment, and as such always seem to be in a positive, even gleeful mood. With the rise of Evo—specifically its Metaergonomics subsidiary, EvoCulture philosophy, and the wireless Matrix—gnomes have benefited immensely, as these developments allow them far better access to the world around them. Due to the cost of living for those outside Evo’s citizenship, the megacorporation has recently seen an increase in its gnome population.
+
+**Latest World News:** Gnome abductions have seen spikes over the years, but none as large as in late 2075. Pirate Matrix site KSAF revealed the cause of this latest spike was that several Japanacorps have been abducting the gnomes to research their inherent resistance to magic. No official sources have verified the news, but investigations have been opened in several sprawls around the world.
+
+## Hanuman
+
+| RACE | BODY | AGI | REA | STR | WIL | LOG | INT | CHA | EDGE | ESS | INIT |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| Hanuman | 1/6 | 2/7 | 1/6 | 2/7 | 1/6 | 1/5 | 2/7 | 1/5 | 1/6 | 6 | REA+INT |
+| **Racial Traits:** Low-Light Vision, Monkey Paws, Prehensile Tail, Unusual Hair (Body) |
+
+**Physical Characteristics:** The hanuman variant of the H. sapiens pumilionis subspecies varies greatly from the common metatype. Though hanuman maintain the standard thermographic vision and decreased height of the basic dwarf, they vary in several physical structures, body hair, and musculature, and have unverified longevity. Hanuman are named for the Hindu god who has some physical characteristics of a monkey, which this metavarient also possesses. The resemblance includes elongated limbs, feet, and hands; profuse lower body hair and a lack of facial hair; a greatly extended aural helix; a prehensile tail; and an agile frame. These characteristics make hanuman excellent climbers. Not enough effort has been put into the study of their life span to determine if they have the same longevity as their parent metatype.
+
+**Mental Characteristics:** The few hanuman (“hanumen” is, of course, improper usage) raised in modern surroundings demonstrate a decrease across most mental aptitudes, with consideration for their cultural variation being taken into account throughout testing. Those raised in their native culture show a greater cunning than their civilized kin, something difficult to test with standard methods.
+
+**Cultural Characteristics:** Some speculate the name of the Hindu god originated from a hanuman of a previous magical cycle, but the modern incarnation bears little resemblance to a god. Most hanuman live in small tribal villages on the southern Indian subcontinent. This metavariant has existed since the Awakening—though for several decades many assumed it was an Awakened monkey species—and it exists within a strange, undefined position in the Hindu caste system. This lack of status leads hanuman that move away from their villages and attempt to integrate with the modern world while living in a social purgatory—a shadow realm that often leaves them outside the Indian Union, without a SIN, and thrust into new subcultures. Due to their frequent outsider status, hanuman often develop rebellious attitudes and earn a reputation for wildness and reckless behavior.
+
+**Latest World News:** Thanks to Evo’s open arms, hanuman are finally getting a fair shake. This dwarf subtype
+has long been recognized as a sapient race, but with so
+few in major sprawls, very little was known about them.
+With Evo’s employment invitation, several thousand hanuman moved en masse to New Delhi, the Indian Union
+capital. Evo provided all of them with corporate SINs and
+employment with several subsidiaries around the city.
+This mass migration and arrival in New Delhi has boosted hanuman status in the sprawl, but their increased exposure and their monkey-like nature has placed them in
+the crosshairs of the Humanis Policlub and other racial
+hate groups.
+
+## Koborokuru
+
+| RACE | BODY | AGI | REA | STR | WIL | LOG | INT | CHA | EDGE | ESS | INIT |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| Koborokuru | 2/7 | 1/6 | 1/6 | 2/7 | 2/7 | 1/6 | 1/6 | 1/6 | 1/6 | 6 | REA+INT |
+| **Racial Traits:** Celerity, Resistance to Pathogens/Toxins, Thermographic Vision, Unusual Hair |
+
+**Physical Characteristics:** The koborokuru variant of the H. sapiens pumilionis subspecies maintains the standard thermographic vision, decreased height, slightly pointed aural helix, extended life span, and increased toxin resistance of dwarfs. Where this subspecies varies is in eye shape, body hair, and musculature. The eyes are almond shaped, similar to other Western racial demographics. The body hair and facial hair of this subspecies are less abundant than the primary species, therefore decreasing the frequency of beards. The average koborokuru’s muscle density and bulk is also lower than that of their primary species, and their overall muscle tone and metabolic rate are higher.
+
+**Mental Characteristics:** Across standardized testing, koborokuru fall within the same general range as their parent species. Analysis of arcane potential shows a small but not insignificant increase within the subspecies. Those showing arcane potential demonstrate a high tendency toward developing split potential, commonly referred to as mystic adepts.
+
+**Cultural Characteristics:** Highly shaped by a subculture of their native Japan, koborokuru entered the Sixth World to a level of ethnic persecution not seen in Japan since the Second World War. As the Awakening brought magic and creatures of myth and legend back to the world, many first-world countries saw a resurgence of religions and cultural sects that better reflected this new world. The Ainu, an indigenous people from the Japanese island of Hokkaido, had one such culture. Their mythology included the koro-pok-guru, literally “people under the leaves of the butterbur plant,” who were underworld-dwelling spirits of the land. This was beneficial early on as the prevalent culture of Japan was unwelcoming to all of the emerging metatypes. The koborokuru were welcomed and revered in the Ainu mountain villages, but the seclusion in which they lived came at a price: As their population grew, they developed living conditions of extreme squalor that continue to this day. Koborokuru who are unable to join Ainu society or who were cast out for crimes have not integrated well into regular society. They maintain a streak of self-reliance and a tendency for clannish behavior that brand them as outcasts even among standard members of the pumilionis subtype.
+
+Seclusion and poor treatment by Japan, the nation koborokuru would call their own, have created a culture of distrust among this metavariant. Even the opening of Yomi and the increased acceptance of magic and metahumans has done little to penetrate their separatist mentality.
+
+Outside of Japan, koborokuru births are rare. Primarily occurring in ethnic Japanese neighborhoods within major urban sprawls, koborokuru children were originally subject to the persecution of Japanese culture. This culture often abandoned these “imperfect” or “deformed” children. Many died, some were taken by churches, and a few were raised on the streets within primarily dwarven communities. In these cases the koborokuru still fell outside the norm and developed a strong sense of separation from their parent and adopted cultures, usually falling into anti-authoritarian or anti-establishment subcultures.
+
+**Latest World News:** Thanks to the new Diet in Japan, the koborokuru have gained increased acceptance across the nation. However, increased government acceptance does not always translate into universal acceptance, as racial violence on the street has increased against all metatypes in the past year.
+
+## Menehune
+
+| RACE | BODY | AGI | REA | STR | WIL | LOG | INT | CHA | EDGE | ESS | INIT |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| Menehune | 2/7 | 2/7 | 1/5 | 2/7 | 1/6 | 1/6 | 1/6 | 1/6 | 1/6 | 6 | REA+INT |
+| **Racial Traits:** Resistance to Pathogens/Toxins, Thermographic Vision, Underwater Vision |
+
+**Physical Characteristics:** The menehune variant of the H. sapiens pumilionis subspecies maintains the standard thermographic vision, decreased height, slightly pointed aural helix, and extended life span of the primary subspecies. The subspecies varies in body hair, nasal shape, functional eye components, foot structure, and musculature. Menehune possess thicker, fuller, and more abundant body hair, including fuller eyebrows and a dense, wiry beard, which is usually lighter in color. Their noses are broader and flatter, and an additional muscular flap can seal the nostrils. Menehune possess a functional nictitating membrane that allows perfect vision underwater and protects the eyes from salt water. Their extended foot structure is thinner compared to their primary subspecies, with thick skin flaps connecting their toes. Menehune’s muscle density is decreased compared to that of the basic pumilionis, and they possess a thin layer of insulating fat. Menehune also do not possess the inherent resistance to toxins of their primary subspecies.
+
+The nasal muscle, nictitating membrane, webbed feet, muscle density variation, and fat layer allow the species to thrive in aquatic environments.
+
+**Mental Characteristics:** Across standardized testing, menehune fall within the same general range as their parent subspecies, with the exception of their EQ, emotional quotient, which tends to be higher, likely due to their affable and compliant nature. Analysis of arcane potential shows a significant increase within the subspecies, especially in the number of adepts.
+
+**Cultural Characteristics:** Menehune culture is strongly shaped by the island nations from which they have emerged. The menehune metavariant were not solely born in the Kingdom of Hawai’i but also on many of the islands around Transoceania. Their name means “Children of the Land” in Hawai’ian, but it also means “slave” in Tahitian. This variance among the lands from which the menehune arose likely points to a historical event from previous magical cycles, when these peo ple fled to a place of freedom. The Kingdom of Hawai’i accepts the menehune, just as they accept all metahumans, so this metavariant has not faced the racism others have confronted elsewhere. This acceptance and the nature of island life created a relaxed culture among menehune.
+
+**Latest World News:** Working across many communities, menehune have secured funding from the Atlantean Foundation in their search for the island of Mu, their mythical ancestral home. Boats with Awakened navigators have been crisscrossing the South Pacific, and a recent flurry of fund-raising among the menehune indicates that a significant discovery may be near.

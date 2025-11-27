@@ -1,0 +1,47 @@
+| 5th Edition Rules |
+| --- |
+| Basics // Combat // Magic // Matrix // Driving // Character Creation |
+
+| **Races** |
+
+| **Humans** | **Elves** | **Dwarves** | **Orks** | **Trolls** |
+
+| **Centaurs** | **Nagas** | **Pixies** | **Sasquatches** | **Changelings** | **Shapeshifters** |
+
+| CHARACTERS AND HUMAN CULTURE |
+| --- |
+| To be human is to be free to select elements from the myriad of real-world background ideas or to work with the gamemaster and create something entirely new. They can be a part of a majority human society, or they can be integrated into other metatypes’ societies through some twist of fate, feeling acceptance from those close to them but shunning others who don’t know them. They can be raised in a world of hatred by the Humanis Policlub, but then turn to kindness when they realize the destructive nature of that organization and its beliefs. They can be a true patriot, a corporate yes-man, a reclusive shaman, or anything else. Let your imagination run wild! Remember that being human means being looked at by everyone else as the “norm”—for better and for worse. Humans have it all, in the eyes of the other metatypes, and get treated special everywhere but the few nations were the other metahumans were the founding force. Some humans feel this is the way it should be, and that they should be treated a little differently because they are the most abundant. Others feel that everyone should be treated equal and that humans shouldn’t get special treatment, numbers be damned. People have contentious debates about how to best integrate societies, what the pace of integration should be, and how metatypes should get along. These are variants of arguments that have been going on for ages, and they are not likely to end soon. When building a human character, it’s good to decide where they stand in all this and what their exposure to other metatypes has been. Many humans have very limited experience with trolls, while SURGEd people, metavariants, and sapient critters are even more rare. So how will the character react when they run into a three-meter-long talking snake? And how will they move beyond that first impression, and what kind of relationship will they attempt to build? |
+
+| **World Population:** 39% |
+
+HOMO SAPIENS SAPIENS
+
+| RACE | BODY | AGI | REA | STR | WIL | LOG | INT | CHA | EDGE | ESS | INIT |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| Human | 1/6 | 1/6 | 1/6 | 1/6 | 1/6 | 1/6 | 1/6 | 1/6 | 2/7 | 6 | REA+INT |
+| **Racial Traits:** None |
+
+Though there is no single human culture, there is a sense of normality for those of the most abundant metatype. Their abundance and their presence during the down-cycle of magic gives them a sense of unity in their humanity that has only grown with the rise of the megacorporations and decline of national governments. Humans have spent thousands of years with other cultures separating themselves from one another along various lines, be they religious, national, or tribal. The rise of megacorporations, along with their individual corporate cultures, only gives humans more ideals with which to drive wedges between themselves. But this mass of humanity is the definition of their culture. They create cultures and sub-cultures, and then seek those that fit them best. Sometimes they even change cultures several times in their lifetime.
+
+So what is their counterculture? Anything that goes against the beliefs of the individual’s previous culture or the greater culture of their region. That means it can be very different for different people and when moving from one area to another, one’s previous counterculture lifestyle could become culturally acceptable. Humans find a way to make themselves fit a culture; failing that, they find a way to make the culture fit them.
+
+### HOW HUMANS FIT INTO SOCIETY
+
+By setting the ground rules and blending in. It isn’t really a matter of fitting in for them, it’s far more a matter of trying to avoid being blamed when non-humans don’t. Humanity had set the rules of societies for millennia. In fact, many societies rose and fell over the years, and none of those changed in a day. Changes take time and support. Since humans are still around, they still have support for their various sub-cultures. There is not just one culture, and they are all constantly shifting. Increased acceptance of other metatypes, agitation from younger generations (and resistance from older generations), and other forces help keep the changes moving.
+
+On the other side of the coin, in places where the other metatypes set the rules, humans try to blend in. Most who have chosen to stay in the places where other metatypes have set up governments or societies were either well aware of their position as a second-class citizen, or they were just too stubborn to move and figured they could live out the rest of their years quietly. Most of the latter died at some point in the last sixty years, but the former have stayed in place and often reproduced. Their place in the society has changed because of this, and many face problems they were ill prepared for after so many years of being a quiet part of the majority. Those problems include kids—more accurately, unruly teenagers—who are all about bucking the system. They see their parents as being oppressed and weak, and they feel the need to speak out, join underground groups, and possibly even actively rebel against their society. But the trouble hits the parents far harder than it hits the youth. Parents are ostracized, and sometimes deported, for the actions of their children.
+
+## Nartaki
+
+| RACE | BODY | AGI | REA | STR | WIL | LOG | INT | CHA | EDGE | ESS | INIT |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| Nartaki | 1/6 | 1/6 | 1/6 | 1/6 | 1/6 | 1/6 | 1/6 | 1/6 | 1/6 | 6 | REA+INT |
+| **Racial Traits:** Shiva Arms, Striking Skin Pigmentation |
+
+**Physical Characteristics:** The nartaki metavariant resembles the sapiens base type with the exception of a variable skin color and an additional set of upper limbs. These appendages are fully functional and make the nartaki one of the few six- or eight-limbed mammals, something becoming more common but still very rare. Nartaki appear with a blue, red, or gold skin tone; each color occurs with equal frequency. All known nartaki are of Indian origin.
+
+**Mental Characteristics:** Nartaki show no variation in test scores from the base sapiens subspecies. This testing was paired with standardized tests already present in the Indian Union, but the change in baseline caste within Indian culture had to be taken into account. Nartaki, regardless of previous station, were raised to the high Brahmin varna. This changed nartaki access to education and elevated the lifestyles of many who came from the street.
+
+**Cultural Characteristics:** Nartaki do not have a separate culture per se, but Hindu culture honors them. When nartaki first appeared during the SURGE cycle of 2061, they were considered touched by the deity Shiva. Most have entered into a form of Hindu priesthood and seek to live a simple and unrestricted lifestyle.
+
+**Latest World News:** A mana pulse flowing through the Ganges, similar to the one seen during the Year of the Comet, occurred during Holi celebrations and instantly boosted the nartaki population, swelling their numbers by an estimated five hundred individuals. Exact numbers couldn’t be gathered since the event caused quite a stir and panic. The event had a very unique twist: All of the new nartaki are female.
