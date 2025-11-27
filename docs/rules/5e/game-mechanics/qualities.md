@@ -30,6 +30,7 @@ Qualities represent positive and negative traits that modify a character’s cap
 ## Behavior Rules
 
 1. **Karma Accounting**
+   - Qualities must be purchased with Karma (characters start with 25 Karma at character creation).
    - Positive qualities cost Karma; negative qualities grant Karma (or impose story obligations).
    - At character creation, enforce SR5 totals: max 25 Karma in positive qualities, 25 Karma gained from negatives.
    - Track Karma spent/refunded when qualities are added or removed during advancement.

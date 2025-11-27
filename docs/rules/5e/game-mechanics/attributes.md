@@ -101,13 +101,14 @@ These guidelines should be referenced when implementing tests that rely solely o
 | Name | Formula / Base | Description | Notes |
 |------|----------------|-------------|-------|
 | Reaction | TBD | Combination of Quickness (Agility) and Intelligence? | Verify SR5 definition. |
-| Initiative | TBD | Initiative score and dice pool. | Multiple variants (physical, astral, matrix). |
-| Astral Initiative | TBD | Initiative for astral projection. | |
-| Matrix Initiative | TBD | Initiative while in VR/AR. | |
+| Initiative | Intuition + Reaction + 1d6 | Initiative score and dice pool. | Cannot be directly raised; it is a derived attribute. |
+| Astral Initiative | (Intuition × 2) + 2D6 | Initiative for astral projection. | |
+| Matrix Initiative (Cold Sim) | (Data Processing + Intuition) + 3d6 | Initiative while in VR (cold sim). | |
+| Matrix Initiative (Hot Sim) | (Data Processing + Intuition) + 4d6 | Initiative while in VR (hot sim). | |
 | Essence | 6 – (cyber/bio costs) | Remaining life force after augmentations. | Already tracked above; keep formula here for clarity. |
-| Physical Limit | TBD | Calculated limit for physical actions. | |
-| Mental Limit | TBD | Calculated limit for mental actions. | |
-| Social Limit | TBD | Calculated limit for social actions. | |
+| Physical Limit | [(Strength × 2) + Body + Reaction] / 3 (round up) | Calculated limit for physical actions. | |
+| Mental Limit | [(Logic × 2) + Intuition + Willpower] / 3 (round up) | Calculated limit for mental actions. | |
+| Social Limit | [(Charisma × 2) + Willpower + Essence] / 3 (round up) | Calculated limit for social actions. | When computing, round Essence up before applying the formula. |
 
 ## Attribute Priority Reference
 

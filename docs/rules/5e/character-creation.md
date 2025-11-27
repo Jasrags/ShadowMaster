@@ -1,5 +1,29 @@
 # Shadowrun Fifth Edition Character Creation
 
+## Recommended Order for Character Creation
+
+The following order is recommended for creating a Shadowrun 5th Edition character (p. 65):
+
+1. **Select "Magic or Resonance" Priority**
+   - Record your new Magic or Resonance starting value, if any
+2. **Select Positive and Negative Qualities**
+   - These may change your maximum Attribute and Skill levels
+3. **Select Metatype Priority**
+   - Spend Special Attribute Points
+4. **Select Attributes Priority**
+   - Spend Attribute Points
+5. **Select Skill Priority**
+   - Spend free Knowledge and Language skill points (based on Intuition + Logic)
+   - Spend "skill group points"
+   - Spend "skill points"
+6. **Select Resources Priority**
+   - Spend Nuyen
+   - Select Lifestyle
+7. **Spend Leftover Karma**
+   - Spend Free "Contacts Karma" (based on Charisma)
+   - Improve skills, attributes, etc.
+   - Make sure you have ≤7 Karma when you're done
+
 ## Step One: Tips for Character Creation
 
 A spreadsheet, word processing document, or pen and paper will help keep things organized as you go through the character creation process. Organization makes it easier to track your chosen priorities, Karma expenditures, Essence, and other elements. As you work, note any bonuses you receive from Qualities or augmentations on the character sheet, because these may modify your statistics by the end of character creation.
@@ -16,7 +40,7 @@ You do not need to understand every nuance of character creation to get started.
 
 Players and the gamemaster should collaborate to develop a team of characters suited to the campaign. The rules in this document create an experienced shadowrunner. For alternate creation levels (street level, prime runner), see the Alternate Gameplay sidebar.
 
-All characters start with 25 Karma to improve themselves and gain additional resources during the process.
+Every character (excluding Street-Level and Prime Runner games) starts with **25 Karma** to improve themselves and gain additional resources during the process.
 
 ### Implementation Notes
 
@@ -36,7 +60,17 @@ Shadowrun Fifth Edition uses the Priority System, a table with columns for Metat
 
 Character creation begins by selecting a metatype (human, elf, dwarf, ork, troll). Each metatype provides different advantages and disadvantages. Humans gain +1 Edge. Trolls receive thermographic vision, +1 Reach, dermal armor, and doubled lifestyle costs, reflecting the expense of adapting gear to their massive frames. Many metatypes adjust natural attribute limits as well. Consult the [Metatype Attribute Table](./data-tables.md#metatype-attribute-table) for details.
 
-After choosing a metatype, review the Metatype column to determine which priority levels offer enough special attribute points (Edge, Magic, Resonance). Technomancers need high Resonance, while magicians and adepts prioritise Magic. Edge starts at the value shown on the Metatype Attribute Table; Magic and Resonance start at 0.
+**Metatype Priority and Special Attribute Points:**
+- The number in parentheses of your metatype is the number of Special Attribute Points you receive.
+- Special Attributes are Edge, Magic and Resonance.
+- Special Attribute Points can be used to increase Special Attributes at a one-for-one ratio.
+- Magic and Resonance start at 0 by default.
+  - Selecting a Magic or Resonance Priority besides "E" will change your starting Magic or Resonance value.
+- Edge starts at 1 (2 if you're human) by default.
+- Special Attributes are generally capped to 6 for all metatypes at start of play.
+  - Humans can have an Edge of 7
+  - Certain qualities can bring you further (Lucky, Exceptional Attribute) which require GM approval.
+- Note that since you cannot be both a Technomancer and a Magician, there is no reason to ever have a positive number for both Magic and Resonance.
 
 Special attribute points may be allocated to Edge, Magic, or Resonance. They cannot improve physical or mental attributes. Unspent special attribute points disappear at the end of creation. If a priority selection grants zero special attribute points, players may spend Karma later to raise these attributes using the Character Advancement rules (p. 103).
 
@@ -46,7 +80,22 @@ Most metatypes cap Magic, Resonance, and Edge at 6; humans can have Edge 7. Qual
 
 Next, allocate physical and mental attribute points. Choose a priority level in the Attribute column that matches your vision for the character. The number in that column is the pool of points available to raise Body, Agility, Reaction, Strength, Charisma, Intuition, Logic, and Willpower.
 
-Refer to the Metatype Attribute Table while spending points. It lists starting ratings (before the slash) and maximums for each metatype. Characters begin at their metatype’s base ratings at no cost—human Body 1, dwarf Body 3, ork Body 4, troll Body 5, and so on. It costs one attribute point to increase a rating by 1.
+**Attributes Priority Rules:**
+- You are given between 12 and 24 "attribute points" (not to be confused with karma) depending on priority level.
+- Each attribute point raises a Physical or Mental attribute by one point.
+  - Eligible attributes are:
+    - [Physical] Body, Agility, Reaction, Strength
+    - [Mental] Willpower, Logic, Intuition and Charisma
+  - Note that special attributes (Edge, Magic, Resonance) CANNOT be raised with attribute points (they require "special attribute points" that are granted in the Metatype Priority step).
+  - Initiative can never be directly raised (it is a derived attribute). Your Initiative is Intuition + Reaction + 1d6.
+    - Astral Initiative is (Intuition × 2) + 2D6
+    - Matrix Initiative (Cold Sim) is (Data Processing + Intuition) + 3d6
+    - Matrix Initiative (Hot Sim) is (Data Processing + Intuition) + 4d6
+- All attribute points must be spent in character creation.
+- Only one Mental or Physical attribute can be at the racial maximum.
+  - This limitation does not apply to Edge, Magic or Resonance (special attributes).
+
+Refer to the Metatype Attribute Table while spending points. It lists starting ratings (before the slash) and maximums for each metatype. Characters begin at their metatype's base ratings at no cost—human Body 1, dwarf Body 3, ork Body 4, troll Body 5, and so on. It costs one attribute point to increase a rating by 1.
 
 All attribute points must be spent during character creation. You cannot use these points to raise special attributes, nor can they be saved for later. Characters may have only one physical or mental attribute at their natural maximum during creation (special attributes are exempt). Some metatypes have natural limits below 6; plan accordingly.
 
@@ -66,7 +115,14 @@ Attribute choices affect derived stats calculated later, such as Initiative and 
 
 ## Step Three: Choose Magic or Resonance
 
-The Magic/Resonance column governs magical characters (adepts, aspected magicians, full magicians, mystic adepts) and technomancers. Players uninterested in these roles assign priority E here. Review the Magic User Types sidebar, along with “Life as a Magic User in 2075” and “Life as a Technomancer in 2075,” for expectations.
+The Magic/Resonance column governs magical characters (adepts, aspected magicians, full magicians, mystic adepts) and technomancers. Players uninterested in these roles assign priority E here. Review the Magic User Types sidebar, along with "Life as a Magic User in 2075" and "Life as a Technomancer in 2075," for expectations.
+
+**Magic or Resonance Priority Rules:**
+- The priority table (p. 65) shows you what your starting Resonance or Magic special attribute level is. Your Special Attribute score should be immediately changed to reflect this, and this should be done before adding Special Attribute Points (see Metatype Priority).
+- Aspected Magicians can never change back to regular Magicians.
+- You may also get Magical Skills if you select priority "A" or "B".
+  - Magical Skills are listed on page 90.
+    - Alchemy, Artificing, Banishing, Binding, Counterspelling, Disenchanting, Ritual Spellcasting, Spellcasting, Summoning
 
 Priorities A through C specify starting Magic or Resonance ratings and bundled skills, spells, or complex forms. These bundles are prepaid and do not cost skill points or Karma, though ratings can increase later. Consult the Skills chapter (p. 128) for active skill descriptions and the list of magic and Resonance skills. Adepts should ensure their chosen skills support desired powers (p. 308). Spell lists begin on p. 283; complex forms on p. 252.
 
@@ -89,7 +145,12 @@ Players are not restricted to the bundles provided by their priority choice. Add
 
 ## Step Four: Purchase Qualities
 
-Qualities round out your character’s personality and provide bonuses or penalties. Positive Qualities grant benefits at the cost of Karma; Negative Qualities impose drawbacks but reward Karma.
+Qualities round out your character's personality and provide bonuses or penalties. Positive Qualities grant benefits at the cost of Karma; Negative Qualities impose drawbacks but reward Karma.
+
+**Purchasing Qualities:**
+- Qualities must be purchased with Karma (you start with 25 as mentioned in the beginning).
+- Negative Qualities give you karma.
+- You are capped to at most 25 karma worth of Positive Qualities and 25 karma worth of Negative Qualities.
 
 Characters begin with 25 Karma. They may spend any portion on Qualities while respecting the limits of no more than 25 Karma worth of Positive Qualities and 25 Karma worth of Negative Qualities. Qualities acquired later follow Character Advancement rules (p. 103). Negative Qualities can be awarded by the gamemaster or bought off with Karma.
 
@@ -108,6 +169,33 @@ Record each Quality on the character sheet, noting any modifiers to skills or at
 ## Step Five: Purchase Skills
 
 With attributes assigned, choose skills using the Skills priority column. At this point only two priorities remain, so select one for Skills.
+
+**Skill Priority/Purchasing Skills:**
+- Skills are classified as either Active, Knowledge or Language.
+- Your Skill Priority Level gives you a certain number of points (ranges from 18 to 46 "**skill points**", 0 to 10 "**skill group points**").
+- You are given free "Knowledge and Language" skill points equal to (Intuition + Logic) × 2
+  - They can only be used for Language and Knowledge skills.
+  - Language Skills are tested with (Language Skill) + (Intuition)
+    - In character generation, the language skill level cannot exceed 6
+  - You start with one native language as well (indicated by a "N" on the character sheet).
+  - Knowledge Skills when first selected must be either Academic, Interests, Professional or Street depending on how your character learned it.
+    - Academic and Professional skills are tested with (Knowledge skill) + (Logic)
+    - Interests and Street Knowledge skills are tested with (Knowledge skill) + (Intuition)
+- All Skills start at 0.
+- Increasing a Skill costs 1 "**skill point**" per level.
+- Increasing a Skill Group costs 1 "**skill group point**".
+  - A skill group increases all skills in the group by 1 level.
+    - Skill groups are listed on page 90 (e.g. Athletics, Electronics, Sorcery).
+  - In this step you cannot separate skill levels from the skill group level (if any). That must be done in the "Spending Leftover Karma" step.
+- You may also purchase Specializations with your "**skill points**".
+  - Specializations cost 1 "**skill point**".
+  - Specializations give you +2 dice pool when applicable.
+  - Specializations can never apply to a skill group, and once purchased they "break up" the skill group preventing them from ever being raised together as a skill group again.
+  - In this step you cannot specialize a Skill Group, as it would break it up. that must be done in the "Spending Leftover Karma" step.
+- In character generation, skills are capped to level 6 (7 with the Aptitude quality).
+  - Once play begins, skills are capped to level 12 (13 with Aptitude).
+- Magic and Resonance skills cannot be purchased unless you have the associated Special Attribute.
+- Aspected Magicians can only use one category of Magic Skills (Sorcery, Conjuring or Enchanting).
 
 Skills fall into three categories:
 
@@ -173,6 +261,28 @@ Determine whether each Knowledge skill uses Intuition or Logic based on its cate
 ## Step Six: Spend Your Resources
 
 Assign the remaining priority to Resources. This governs starting nuyen for gear and lifestyle.
+
+**Spending your Nuyen (p. 94):**
+- Your Resources Priority level will give you between 6,000 and 450,000 starting nuyen.
+- You cannot end character generation with more than 5,000 nuyen.
+- Karma can be converted to nuyen at 1 karma point = 2,000 nuyen
+  - This is capped to 20,000 extra nuyen
+- Nuyen cannot be converted to karma.
+- Note that some metatypes have cost modifiers.
+  - Trolls have a 10% Lifestyle cost increase
+  - Dwarves have a 20% Lifestyle cost increase
+  - (note that the Errata removed the extra cost for gear and increased the Lifestyle costs)
+- For character generation, there are some limitations on gear:
+  - Each attribute (Mental and Physical) cannot have an augmentation bonus of greater than +4 (from cyberware and bioware)
+  - Availability <= 12 (note that this ignores Restricted/Forbidden, Gamemasters may choose to disallow Forbidden at character creation)
+  - Device Rating <= 6
+- Essence is lost whenever installing cyberware and bioware.
+  - Essence starts at 6.0
+  - Whenever Essence is lost, it reduces Magic and Resonance.
+    - Losing .01 - 1.0 Essence reduces Magic and Resonance by 1.
+    - Losing 1.01 - 2.0 Essence reduces Magic and Resonance by 2
+    - etc.
+  - If your Magic and Resonance reaches 0, you can become permanently burned out.
 
 Spend most of your starting nuyen before game play. Up to 5,000¥ may be carried over; any remaining balance is lost. Karma cannot be converted to nuyen, but you may convert up to 10 Karma into 20,000¥ (2,000¥ per Karma) to supplement purchases.
 
@@ -248,6 +358,36 @@ Starting nuyen depends on chosen lifestyle and a dice roll specified by the Star
 
 This step is the last opportunity to polish the character before final calculations. By now, you should understand the character concept and mechanics. Spend remaining Karma to smooth rough edges, improve skills or attributes, buy spells, acquire bound spirits, bond foci, or purchase contacts. Consult the Additional Purchases and Restrictions table to confirm any limitations. You may carry over up to 7 Karma into play.
 
+**Spending Leftover Karma (p.98):**
+- Your leftover Karma amount is 25 - (Positive Quality cost) + (Negative Quality value)
+- All limits from the above steps are still in force (e.g. only one Physical or Mental attribute at maximum, skill levels cannot exceed 6)
+- Note that in this stage you are now allowed to break up Skill Groups by improving individual skills in that group with Karma, or purchasing Specializations.
+- Conversions (all conversion done at standard Character Advancement Rates p. 103)
+  - Physical and Mental Attribute levels increase at (new level × 5) Karma. Going from 5 to 6 Strength would cost 30 Karma.
+    - Note that you cannot have more than 1 Mental or Physical Attribute at the maximum during character generation.
+  - All Special Attributes can also be raised with Karma at the same cost as Physical and Mental attributes.
+    - You may have all your Special Attributes maxed out if you wish.
+  - **Active** skill levels increase at (new level × 2) Karma.
+    - Note that Active skills cannot exceed 6 in character creation (excluding Aptitude)
+  - **Knowledge and Language** skill levels increase at (new level ×1) Karma.
+    - Note that Knowledge skills cannot exceed 6 in character creation (excluding Aptitude)
+    - Note that Language skills cannot ever exceed 6.
+    - Note that skills cannot exceed 6 in character creation (excluding Aptitude)
+  - **Skill Groups** can be increased at (new level × 5) Karma.
+  - Complex Forms cost 4 Karma each.
+  - New spells cost 5 Karma each.
+  - 1 Karma per Bound Spirit service (Force = charater's Magic level)
+  - 1 Karma per Registered Spirit task
+  - Bond Foci: see page 318
+- Contacts
+  - You receive free "Contacts Karma" equal to Charisma × 3
+    - This can only be used to acquire or improve Contacts.
+  - Increasing Loyalty or Connections levels requires 1 Karma point each
+  - All Contacts must have at least 1 Connections and 1 Loyalty level, which means the minimum Karma cost for a Contact is 2.
+  - A single Contact cannot have more than 7 Karma (including "Contact Karma") spent on them.
+    - This means you are capped to 1/6, 6/1, 4/3, etc.
+- You cannot start the game with more than 7 Karma.
+
 Remember ongoing creation limits: only one attribute at its natural maximum, gear Availability no higher than 12, and Device Rating no higher than 6.
 
 When spending Karma on attributes or skills, follow the advancement rules in Character Advancement (p. 103).
@@ -277,6 +417,11 @@ Both ratings must be at least 1. Loyalty 1–2 represents a business relationshi
 ## Step Eight: Final Calculations
 
 After spending resources and Karma, compute derived mechanics. Many depend on final attribute and augmentation choices.
+
+**Inherent Limits:**
+- Mental Limit is [(Logic × 2) + Intuition + Willpower] / 3 (round up)
+- Physical Limit is [(Strength × 2) + Body + Reaction] / 3 (round up)
+- Social Limit is [(Charisma × 2) + Willpower + Essence] / 3 (round up)
 
 - **Initiative**: Intuition + Reaction. List natural and augmented values (e.g., 9 (11) + 2D6). Note additional initiative dice from augmentations.
 - **Matrix Initiative** and **Astral Initiative**: Determined by mode (cold-sim, hot-sim) or astral rules (see p. 229 and p. 313).

@@ -2,9 +2,10 @@ package domain
 
 // PriorityOption describes a single priority choice (A-E) for a category.
 type PriorityOption struct {
-	Label       string `json:"label"`
-	Summary     string `json:"summary,omitempty"`
-	Description string `json:"description,omitempty"`
+	Label         string   `json:"label"`
+	Summary       string   `json:"summary,omitempty"`
+	Description   string   `json:"description,omitempty"`
+	AvailableTypes []string `json:"available_types,omitempty"` // For magic/resonance priorities
 }
 
 // AttributeRange captures minimum and maximum natural ratings for an attribute.

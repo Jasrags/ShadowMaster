@@ -198,9 +198,12 @@ func TestCharacter_SetSR5Data(t *testing.T) {
 		Name: "Test Character",
 	}
 
-	sr5Data := map[string]interface{}{
-		"body": 4,
-		"agility": 5,
+	sr5Data := &CharacterSR5{
+		Body:    4,
+		Agility: 5,
+		ActiveSkills:    make(map[string]Skill),
+		KnowledgeSkills: make(map[string]Skill),
+		LanguageSkills:  make(map[string]Skill),
 	}
 
 	char.SetSR5Data(sr5Data)
@@ -211,6 +214,7 @@ func TestCharacter_SetSR5Data(t *testing.T) {
 	// Verify we can retrieve it
 	retrieved, err := char.GetSR5Data()
 	require.NoError(t, err)
-	assert.Equal(t, sr5Data, retrieved)
+	assert.Equal(t, sr5Data.Body, retrieved.Body)
+	assert.Equal(t, sr5Data.Agility, retrieved.Agility)
 }
 

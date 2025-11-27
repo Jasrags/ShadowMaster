@@ -38,6 +38,31 @@ Document how ShadowMaster should represent, categorize, and manage Shadowrun 5e 
 ### LifestyleAddon
 - `name`, `costModifier`, `effect` (e.g., increase security rating, add workspace).
 
+## Character Creation: Spending Nuyen
+
+During character creation, the Resources Priority level determines starting funds:
+
+- Your Resources Priority level will give you between 6,000 and 450,000 starting nuyen.
+- You cannot end character generation with more than 5,000 nuyen.
+- Karma can be converted to nuyen at 1 karma point = 2,000 nuyen
+  - This is capped to 20,000 extra nuyen (10 Karma maximum)
+- Nuyen cannot be converted to karma.
+- Note that some metatypes have cost modifiers:
+  - Trolls have a 10% Lifestyle cost increase
+  - Dwarves have a 20% Lifestyle cost increase
+  - (Note that the Errata removed the extra cost for gear and increased the Lifestyle costs)
+- For character generation, there are some limitations on gear:
+  - Each attribute (Mental and Physical) cannot have an augmentation bonus of greater than +4 (from cyberware and bioware)
+  - Availability <= 12 (note that this ignores Restricted/Forbidden, Gamemasters may choose to disallow Forbidden at character creation)
+  - Device Rating <= 6
+- Essence is lost whenever installing cyberware and bioware.
+  - Essence starts at 6.0
+  - Whenever Essence is lost, it reduces Magic and Resonance.
+    - Losing .01 - 1.0 Essence reduces Magic and Resonance by 1.
+    - Losing 1.01 - 2.0 Essence reduces Magic and Resonance by 2
+    - etc.
+  - If your Magic and Resonance reaches 0, you can become permanently burned out.
+
 ## Acquisition Mechanics
 
 - **Availability Checks**: Opposed test (`Negotiation + Charisma`) vs availability threshold; time increments per SR5 (typically `Availability × duration unit`).

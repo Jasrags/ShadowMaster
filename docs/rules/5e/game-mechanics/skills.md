@@ -26,6 +26,28 @@ Shadowrun 5e skills determine what actions a character can take and how they rol
 - Tracks free point budget for Knowledge/Language skills: `(Logic + Intuition) × 2`
 - Fields: `totalPoints`, `spentPoints`, `remainingPoints`
 
+## Skill Priority and Character Creation
+
+During character creation, the Skill Priority Level determines available points:
+
+- Your Skill Priority Level gives you a certain number of points (ranges from 18 to 46 "**skill points**", 0 to 10 "**skill group points**").
+- You are given free "Knowledge and Language" skill points equal to (Intuition + Logic) × 2
+  - They can only be used for Language and Knowledge skills.
+- All Skills start at 0.
+- Increasing a Skill costs 1 "**skill point**" per level.
+- Increasing a Skill Group costs 1 "**skill group point**".
+  - A skill group increases all skills in the group by 1 level.
+  - In character creation, you cannot separate skill levels from the skill group level (if any). That must be done in the "Spending Leftover Karma" step.
+- You may also purchase Specializations with your "**skill points**".
+  - Specializations cost 1 "**skill point**".
+  - Specializations give you +2 dice pool when applicable.
+  - Specializations can never apply to a skill group, and once purchased they "break up" the skill group preventing them from ever being raised together as a skill group again.
+  - In character creation, you cannot specialize a Skill Group, as it would break it up. That must be done in the "Spending Leftover Karma" step.
+- In character generation, skills are capped to level 6 (7 with the Aptitude quality).
+  - Once play begins, skills are capped to level 12 (13 with Aptitude).
+- Magic and Resonance skills cannot be purchased unless you have the associated Special Attribute.
+- Aspected Magicians can only use one category of Magic Skills (Sorcery, Conjuring or Enchanting).
+
 ## Behavior Rules
 
 1. **Dice Pools**: Standard tests roll `linkedAttribute + skill rating`. Specializations add +2 dice when relevant. Defaulting applies –1 die and uses attribute only.

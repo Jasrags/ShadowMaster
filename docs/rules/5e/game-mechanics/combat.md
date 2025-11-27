@@ -1,21 +1,86 @@
-# Shadowrun Fifth Edition Combat Spec
+# Shadowrun Fifth Edition Combat Specification
 
 ## Purpose
 
 Define how ShadowMaster represents and automates Shadowrun 5e combat, focusing on consistent turn handling, attack resolution, modifiers, and subsystem hooks (magic, matrix, rigging).
 
+## Glossary
+
+### Combat Turn
+A three-second chunk of time where players act in order of their initiative. A Combat Turn is composed of a series of Initiative Passes.
+
+### Initiative Pass
+Chunks of a Combat Turn. Characters get one Action Phase per Combat Turn. Typically, all characters are guaranteed an Action Phase on the first Initiative Pass, but subsequent passes will depend on how high their Initiative is.
+
+### Action Phase
+When a character acts during an Initiative Pass.
+- On an Action Phase, you can perform either one (1) Complex Action or two (2) Simple Actions.
+- Additionally, you may always take one Free Action per Action Phase.
+- If you do not use your Free Action, you may use it at any point until your next Action Phase, even if it's during another character's Action Phase.
+
 ## Turn Structure & Initiative
 
-- Combat Turn = 3 seconds; comprised of Initiative Passes.
-- Sequence per turn:
-  1. Roll Initiative (`Initiative Attribute + Initiative Dice`). Apply wound modifiers immediately.
-  2. Highest score acts first; simultaneous ties resolved by ERIC (Edge → Reaction → Intuition → coin).
-  3. Each character takes an Action Phase (declare movement, actions, resolve tests).
-  4. After all have acted, subtract 10 from remaining Initiative Scores; continue passes while score > 0.
-  5. Begin new Combat Turn and repeat.
-- Initiative variants (see Initiative Attribute Chart): physical (`REA + INT` +1d6), astral (`INT × 2` +2d6), matrix (AR = physical; cold/hot sim = matrix attributes +3/4d6), rigging jumped-in uses control rig adjustments.
-- Changing Initiative mid-turn: adjust score immediately for attribute changes; reroll added dice when Initiative Dice increase; subtract roll when dice decrease. Damage applies wound modifiers to Initiative instantly.
-- Edge options: Seize the Initiative (act first for turn), Blitz (roll 5d6 once per Edge spend).
+### Initiative System
+
+#### Initiative Attribute
+This is a derived value that depends on summing two other Attributes, depending on the Initiative Type:
+
+| Initiative Type | Formula |
+|----------------|---------|
+| Physical | `Reaction + Intuition` |
+| Rigging AR | `Reaction + Intuition` |
+| Matrix AR | `Reaction + Intuition` |
+| Astral | `Intuition × 2` |
+| Matrix (cold-sim) VR | `Data Processing + Intuition` |
+| Matrix (hot-sim) VR | `Data Processing + Intuition` |
+
+**Example**: If it's Physical Initiative and your Reaction is 3 and your Intuition is 4, your Initiative Attribute is 7.
+
+#### Initiative Dice
+Each Initiative Type has a Base Initiative Dice. Certain upgrades (such as Wired Reflexes) can give you more dice to roll, but it's not improvable with Karma.
+
+**Base Dice by Initiative Type**:
+
+| Initiative Type | Base Dice |
+|----------------|-----------|
+| Physical | 1d6 |
+| Rigging AR | 1d6 |
+| Matrix AR | 1d6 |
+| Astral | 2d6 |
+| Matrix (cold-sim) VR | 3d6 |
+| Matrix (hot-sim) VR | 4d6 |
+
+**Edge Usage**: Edge can be used to give yourself the maximum 5d6 dice for a single Combat Turn.
+- *(House Rule Note)*: Some groups limit Edge to +2d6 dice (still limited to 5d6 total)
+
+#### Initiative Score
+This is the sum of your Initiative Attribute and a **roll** of your Initiative Dice.
+
+**Example**: Astral Initiative is `(Intuition × 2) + 2d6`
+- If you had 5 Intuition and rolled a 3 and a 6, your Initiative Score would be `(5 × 2 + 3 + 6) = 19`
+
+#### Tie Resolution
+When Initiative Scores are tied, resolve in this order:
+1. **Edge** (highest Edge acts first)
+2. **Reaction** (highest Reaction acts first)
+3. **Intuition** (highest Intuition acts first)
+4. **Coin Toss** (random determination)
+
+### Combat Turn Sequence
+
+1. **Roll Initiative**: `Initiative Attribute + Initiative Dice`. Apply wound modifiers immediately.
+2. **Determine Order**: Highest score acts first; simultaneous ties resolved by Edge → Reaction → Intuition → coin toss.
+3. **Action Phases**: Each character takes an Action Phase (declare movement, actions, resolve tests).
+4. **Next Pass**: After all have acted, subtract 10 from remaining Initiative Scores; continue passes while score > 0.
+5. **New Turn**: Begin new Combat Turn and repeat.
+
+### Initiative Modifications
+
+- **Changing Initiative mid-turn**: Adjust score immediately for attribute changes; reroll added dice when Initiative Dice increase; subtract roll when dice decrease.
+- **Damage effects**: Damage applies wound modifiers to Initiative instantly.
+- **Edge options**: 
+  - **Seize the Initiative**: Act first for the turn
+  - **Blitz**: Roll 5d6 once per Edge spend
 
 ## Action Economy
 
@@ -113,5 +178,10 @@ Define how ShadowMaster represents and automates Shadowrun 5e combat, focusing o
 - Healing section should cross-reference lifestyle/medical costs and advanced treatment (docwagon, hospitals).
 - Matrix action table (combat-relevant) still TODO for quick reference.
 
-*Last updated: 2025-11-08*
+## Reference
+
+- SR5 Core Rulebook (pp. 159-160 for Initiative)
+- [Hardcore Game Mode: SR5 Combat Rules Summary](https://hardcoregamemode.blogspot.com/2014/07/shadowrun-5th-edition-combat-rules.html)
+
+*Last updated: 2025-01-XX*
 

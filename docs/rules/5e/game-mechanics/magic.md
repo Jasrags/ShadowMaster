@@ -38,6 +38,15 @@ Describes how ShadowMaster should represent and automate Shadowrun 5e magic. Sum
 - `Magic` ranges 1–6 at creation (7 via `Exceptional Attribute`). Essence loss (cyberware, bioware) reduces current and maximum `Magic` (1 per Essence point or fraction).
 - `Magic` reaching 0 disables magical skills until raised; maximum 0 results in permanent burnout (magical skills become knowledge-only).
 
+## Magic or Resonance Priority
+
+During character creation, the Magic or Resonance Priority column determines starting ratings:
+
+- The priority table (p. 65) shows your starting Resonance or Magic special attribute level. Your Special Attribute score should be immediately changed to reflect this, and this should be done **before** adding Special Attribute Points (see Metatype Priority).
+- Aspected Magicians can never change back to regular Magicians.
+- You may also get Magical Skills if you select priority "A" or "B".
+  - Magical Skills are listed on page 90: Alchemy, Artificing, Banishing, Binding, Counterspelling, Disenchanting, Ritual Spellcasting, Spellcasting, Summoning
+
 ## Skill Groups & Categories
 
 - **Sorcery**: Spellcasting, Ritual Spellcasting, Counterspelling.
