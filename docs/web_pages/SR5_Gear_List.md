@@ -1,17 +1,8 @@
 | 5th Edition Lists |
 | --- |
 | Gear // Magic // Hacking // Skills // Qualities // Packs // Creatures |
+
 | Armor/Clothing // Cyberware // Magical // Vehicles/Drones // Vehicle Mods // Weapons // Electronics // Security // Medical // Others |
-
-**DELIVERY TIMES TABLE**
-
-| GEAR COST | DELIVERY TIME |
-| --- | --- |
-| Up to 100¥ | 6 hours |
-| 101¥ to 1,000¥ | 1 day |
-| 1,000¥ to 10,000¥ | 2 days |
-| 10,001 to 100,000¥ | 1 week |
-| More than 100,000¥ | 1 month |
 
 **DEVICE RATINGS**
 
@@ -23,6 +14,16 @@
 | Advanced | 4 |
 | Cutting Edge | 5 |
 | Bleeding Edge | 6 |
+
+**DELIVERY TIMES TABLE**
+
+| GEAR COST | DELIVERY TIME |
+| --- | --- |
+| Up to 100¥ | 6 hours |
+| 101¥ to 1,000¥ | 1 day |
+| 1,000¥ to 10,000¥ | 2 days |
+| 10,001 to 100,000¥ | 1 week |
+| More than 100,000¥ | 1 month |
 
 **CONCEALABILITY MODIFIERS / *Applies to observer**
 

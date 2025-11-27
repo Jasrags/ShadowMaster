@@ -49,6 +49,10 @@ export function Step6Resources({ formData, setFormData, creationData, errors, to
   // Essence starts at 6.0, reduced by cyberware
   const essence = 6.0;
 
+  const handleClearSelections = () => {
+    setFormData({ ...formData, equipment: [] });
+  };
+
   return (
     <div className="space-y-6">
       <div>
@@ -62,9 +66,19 @@ export function Step6Resources({ formData, setFormData, creationData, errors, to
       <div className="p-4 bg-sr-light-gray/30 border border-sr-light-gray rounded-md">
         <div className="flex items-center justify-between mb-2">
           <span className="text-sm font-medium text-gray-300">Nuyen Budget</span>
-          <span className={`text-lg font-bold ${remainingNuyen >= 0 ? 'text-green-400' : 'text-sr-danger'}`}>
-            {remainingNuyen.toLocaleString()} / {totalNuyen.toLocaleString()}¥
-          </span>
+          <div className="flex items-center gap-3">
+            {equipment.length > 0 && (
+              <button
+                onClick={handleClearSelections}
+                className="px-3 py-1.5 text-xs font-medium bg-sr-gray border border-sr-light-gray text-gray-300 rounded hover:bg-sr-light-gray/50 hover:text-gray-100 transition-colors"
+              >
+                Clear Selections
+              </button>
+            )}
+            <span className={`text-lg font-bold ${remainingNuyen >= 0 ? 'text-green-400' : 'text-sr-danger'}`}>
+              {remainingNuyen.toLocaleString()} / {totalNuyen.toLocaleString()}¥
+            </span>
+          </div>
         </div>
         <p className="text-xs text-gray-400">
           Base: {baseNuyen.toLocaleString()}¥ ({resourcesPriority} priority) × {multiplier} ({gameplayLevel}) = {totalNuyen.toLocaleString()}¥

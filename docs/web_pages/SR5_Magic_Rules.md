@@ -7,6 +7,16 @@
 | Spell List | Ritual List | Spirit List | Adept Powers List | Mentor Spirits List | Metamagics List | Traditions List |
 | --- | --- | --- | --- | --- | --- | --- |
 
+## MAGIC ACTIONS
+
+**COMPLEX ACTIONS**
+
+| ACTIONS |
+| --- |
+| Astral Projection |
+| Banish Spirit |
+| Cast Spell |
+
 **SIMPLE ACTIONS**
 
 | ACTIONS |
@@ -17,13 +27,7 @@
 | Command Spirit |
 | Dismiss Spirit |
 
-**COMPLEX ACTIONS**
-
-| ACTIONS |
-| --- |
-| Astral Projection |
-| Banish Spirit |
-| Cast Spell |
+## Other Tables
 
 **OBJECT RESISTANCE TABLE**
 

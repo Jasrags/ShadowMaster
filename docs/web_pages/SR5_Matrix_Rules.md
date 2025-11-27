@@ -1,6 +1,7 @@
 | 5th Edition Rules |
 | --- |
 | Basics // Combat // Magic // Matrix // Driving // Character Creation |
+
 | Basics | Skills/Attributes | Actions | Jargon | Cyberdecks | Programs | How To | Complex Forms | Echoes | Sprites | Sprite Powers | IC |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
 
@@ -40,12 +41,12 @@
 | Spoof Command | Device Manipulation | Hacking + Intuition vs. Firewall + Logic | Sleaze | 1 |
 | Trace Icon | Information Gathering | Computer + Intuition vs. Sleaze + Willpower | Data Processing | 2 |
 
-**VARIABLE ACTIONS**
+| **VARIABLE ACTIONS**
 
 | ACTION | FUNCTION | TEST | LIMIT | MARKS |
 | --- | --- | --- | --- | --- |
 | Control Device | Device Manipulation |  | Data Processing * | Varies |
-| Matrix Search | Information Gathering | Computer + Intuition | Data Processing | Special |
+| Matrix Search | Information Gathering | Computer + Intuition | Data Processing | Special | *Control Device may or may not use Data Processing as its limit |
 
 **SIMPLE ACTIONS**
 
@@ -63,14 +64,7 @@
 | --- | --- | --- | --- | --- |
 | Full Matrix Defense | Matrix Combat | Firewall | -10 | Owner |
 
-Technomancer Actions
-
-**SIMPLE ACTIONS**
-
-| ACTION |
-| --- |
-| Call/Dismiss Sprite |
-| Command Sprite |
+## Technomancer Actions
 
 **COMPLEX ACTIONS**
 
@@ -82,3 +76,10 @@ Technomancer Actions
 | Kill Complex Form | Software + Resonance vs. Complex Form Level + Resonance | Level |
 | Register Sprite | Registering + Resonance vs. 2 * Spirit Level | Level |
 | Thread Complex Form | Software + Resonance vs. | Level |
+
+**SIMPLE ACTIONS**
+
+| ACTION |
+| --- |
+| Call/Dismiss Sprite |
+| Command Sprite |

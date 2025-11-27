@@ -465,6 +465,8 @@ func GetPrioritiesForAPI() map[string]map[string]domain.PriorityOption {
 			Label:          option.Label,
 			Summary:        option.Summary,
 			AvailableTypes: option.AvailableTypes, // Include available magic types
+			MagicRating:    option.MagicRating,    // Include magic/resonance rating
+			FreeSpells:     option.FreeSpells,     // Include free spells count
 		}
 	}
 	result["magic"] = magicMap

@@ -82,6 +82,27 @@ def clean_mediawiki_content(soup: BeautifulSoup) -> BeautifulSoup:
     return soup
 
 
+def normalize_headings(soup: BeautifulSoup) -> BeautifulSoup:
+    """Normalize headings by extracting text from nested spans.
+    
+    MediaWiki uses headings like <h2><span class="mw-headline">Text</span></h2>
+    This function extracts the text and puts it directly in the heading.
+    """
+    from bs4 import NavigableString
+    
+    for heading in soup.find_all(['h1', 'h2', 'h3', 'h4', 'h5', 'h6']):
+        # Find nested spans with mw-headline class
+        headline_span = heading.find('span', class_=re.compile(r'mw-headline', re.I))
+        if headline_span:
+            # Extract the text from the span
+            heading_text = headline_span.get_text(strip=True)
+            # Replace the entire heading content with just the text
+            heading.clear()
+            heading.string = heading_text
+    
+    return soup
+
+
 def convert_internal_links(soup: BeautifulSoup, base_url: str) -> BeautifulSoup:
     """Convert MediaWiki internal links to markdown-friendly format."""
     from bs4 import NavigableString
@@ -377,28 +398,19 @@ def html_to_markdown(html_content: str, base_url: str = '') -> str:
     # Clean MediaWiki-specific elements
     soup = clean_mediawiki_content(soup)
     
+    # Normalize headings (extract text from nested spans)
+    soup = normalize_headings(soup)
+    
     # Convert infoboxes
     soup = convert_infoboxes(soup)
     
     # Convert tables (returns soup and placeholders dict)
     soup, table_placeholders = convert_tables_to_markdown(soup)
     
-    # Convert to markdown using trafilatura or markdownify
+    # Convert to markdown using markdownify (preferred for MediaWiki) or trafilatura
     html_str = str(soup)
     
-    if TRAFILATURA_AVAILABLE:
-        try:
-            # Trafilatura is better at extracting main content
-            # But since we've already extracted the content div, pass the cleaned HTML
-            markdown = trafilatura.extract(html_str, output_format='markdown')
-            if markdown and len(markdown.strip()) > 50:  # Ensure we got substantial content
-                # Replace placeholders with actual table markdown
-                for placeholder, table_md in table_placeholders.items():
-                    markdown = markdown.replace(placeholder, table_md)
-                return markdown
-        except Exception as e:
-            logger.warning(f"trafilatura conversion failed: {e}, falling back to markdownify")
-    
+    # Prefer markdownify for MediaWiki content as it better preserves structure and headings
     if MARKDOWNIFY_AVAILABLE:
         # Use markdownify with custom options
         markdown = md(
@@ -540,8 +552,22 @@ def html_to_markdown(html_content: str, base_url: str = '') -> str:
                 markdown = re.sub(code_block_pattern, table_md, markdown)
             # Also try plain text replacement
             elif placeholder in markdown:
-                markdown = markdown.replace(placeholder, table_md)
+                    markdown = markdown.replace(placeholder, table_md)
         return markdown
+    
+    # Fallback to trafilatura if markdownify not available
+    if TRAFILATURA_AVAILABLE:
+        try:
+            # Trafilatura is better at extracting main content
+            # But since we've already extracted the content div, pass the cleaned HTML
+            markdown = trafilatura.extract(html_str, output_format='markdown')
+            if markdown and len(markdown.strip()) > 50:  # Ensure we got substantial content
+                # Replace placeholders with actual table markdown
+                for placeholder, table_md in table_placeholders.items():
+                    markdown = markdown.replace(placeholder, table_md)
+                return markdown
+        except Exception as e:
+            logger.warning(f"trafilatura conversion failed: {e}")
     
     # Fallback: basic conversion
     logger.warning("No markdown conversion library available, using basic text extraction")

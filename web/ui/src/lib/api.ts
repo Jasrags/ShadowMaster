@@ -393,5 +393,17 @@ export const characterApi = {
   async getCharacter(id: string): Promise<Character> {
     return apiRequest<Character>(`/characters/${id}`);
   },
+
+  // Get all characters
+  async getCharacters(): Promise<Character[]> {
+    return apiRequest<Character[]>('/characters');
+  },
+
+  // Delete character
+  async deleteCharacter(id: string): Promise<void> {
+    return apiRequest<void>(`/characters/${id}`, {
+      method: 'DELETE',
+    });
+  },
 };
 

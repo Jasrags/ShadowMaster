@@ -71,6 +71,13 @@ export function Step5Skills({ formData, setFormData, creationData, errors, touch
     setFormData({ ...formData, skillAllocations: newAllocations });
   };
 
+  const handleClearSelections = () => {
+    setFormData({ ...formData, skillAllocations: {} });
+  };
+
+  const hasSelections = Object.keys(skillAllocations).length > 0 && 
+    Object.values(skillAllocations).some(rating => rating > 0);
+
   const filteredSkills = skills.filter(skill => {
     const matchesSearch = searchTerm === '' || 
       skill.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -96,9 +103,19 @@ export function Step5Skills({ formData, setFormData, creationData, errors, touch
         <div className="p-4 bg-sr-light-gray/30 border border-sr-light-gray rounded-md">
           <div className="flex items-center justify-between mb-2">
             <span className="text-sm font-medium text-gray-300">Individual Skill Points</span>
-            <span className={`text-lg font-bold ${remainingIndividualPoints >= 0 ? 'text-green-400' : 'text-sr-danger'}`}>
-              {remainingIndividualPoints} / {availablePoints.individual}
-            </span>
+            <div className="flex items-center gap-3">
+              {hasSelections && (
+                <button
+                  onClick={handleClearSelections}
+                  className="px-3 py-1.5 text-xs font-medium bg-sr-gray border border-sr-light-gray text-gray-300 rounded hover:bg-sr-light-gray/50 hover:text-gray-100 transition-colors"
+                >
+                  Clear Selections
+                </button>
+              )}
+              <span className={`text-lg font-bold ${remainingIndividualPoints >= 0 ? 'text-green-400' : 'text-sr-danger'}`}>
+                {remainingIndividualPoints} / {availablePoints.individual}
+              </span>
+            </div>
           </div>
           <p className="text-xs text-gray-400">
             Used: {usedIndividualPoints} | Priority: {skillPriority}

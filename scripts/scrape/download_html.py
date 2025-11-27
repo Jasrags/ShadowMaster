@@ -132,9 +132,9 @@ def download_page(
     filename = get_filename_from_url(url)
     output_path = output_dir / filename
     
-    # Skip if already downloaded
+    # Skip if already cached
     if output_path.exists():
-        logger.debug(f"Skipping {url} - already downloaded")
+        logger.info(f"Skipping {url} - already cached as {filename}")
         return True
     
     # Random delay before request (with jitter)
@@ -296,9 +296,12 @@ def main():
             logger.debug(f"Rotated User-Agent: {user_agent[:50]}...")
         
         filename = get_filename_from_url(url)
-        if (output_dir / filename).exists():
+        output_path = output_dir / filename
+        
+        # Skip if already cached
+        if output_path.exists():
             skipped += 1
-            logger.debug(f"Skipping already downloaded: {filename}")
+            logger.info(f"Skipping {i}/{len(urls)}: {url} - already cached as {filename}")
             continue
         
         if download_page(

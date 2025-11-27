@@ -26,6 +26,30 @@ Start/max values are shown as `start/max`. Initiative is calculated as `Reaction
 | Ork   | 4/9  | 1/6     | 1/6      | 3/8      | 1/6       | 1/5   | 1/6       | 1/5      | 1/6 | 6       | REA + INT  | Low-light vision                                                       |
 | Troll | 5/10 | 1/5     | 1/6      | 5/10     | 1/6       | 1/5   | 1/5       | 1/4      | 1/6 | 6       | REA + INT  | Thermographic vision; +1 Reach; +1 dermal armor; lifestyle cost ×2     |
 
+## Metavariant Attribute Table
+
+Metavariants are variant forms of the base metatypes, available with additional karma costs during character creation. Source: SR5:Run Faster
+
+| METAVARIANT | BASE | BODY | AGI | REA | STR | WIL | LOG | INT | CHA | EDG | ESS | INIT | RACIAL TRAITS |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| **Gnome** | Dwarf | 1/4 | 2/7 | 1/6 | 1/4 | 2/7 | 2/7 | 1/6 | 1/6 | 1/6 | 6 | REA+INT | Arcane Arrester (2), Neoteny, Thermographic Vision |
+| **Hanuman** | Dwarf | 1/6 | 2/7 | 1/6 | 2/7 | 1/6 | 1/5 | 2/7 | 1/5 | 1/6 | 6 | REA+INT | Low-Light Vision, Monkey Paws, Prehensile Tail, Unusual Hair (Body) |
+| **Koborokuru** | Dwarf | 2/7 | 1/6 | 1/6 | 2/7 | 2/7 | 1/6 | 1/6 | 1/6 | 1/6 | 6 | REA+INT | Celerity, Resistance to Pathogens/Toxins, Thermographic Vision, Unusual Hair |
+| **Menehune** | Dwarf | 2/7 | 2/7 | 1/5 | 2/7 | 1/6 | 1/6 | 1/6 | 1/6 | 1/6 | 6 | REA+INT | Resistance to Pathogens/Toxins, Thermographic Vision, Underwater Vision |
+| **Dryad** | Elf | 1/6 | 2/7 | 1/6 | 1/5 | 1/6 | 1/6 | 1/6 | 3/8 | 1/6 | 6 | REA+INT | Glamour, Low-Light Vision, Symbiosis |
+| **Nocturna** | Elf | 1/5 | 3/8 | 1/6 | 1/6 | 1/6 | 1/6 | 1/6 | 2/7 | 1/6 | 6 | REA+INT | Allergy (Sunlight, Mild), Low-Light Vision, Keen-eared, Nocturnal, Unusual Hair (Colored Fur) |
+| **Wakyambi** | Elf | 1/6 | 2/7 | 1/6 | 1/6 | 1/6 | 1/5 | 2/7 | 1/6 | 2/7 | 6 | REA+INT | Celerity, Elongated Limbs, Low-Light Vision |
+| **Xapiri Thëpë** | Elf | 1/6 | 2/7 | 1/6 | 1/6 | 1/6 | 1/5 | 1/6 | 2/7 | 1/6 | 6 | REA+INT | Allergy (Pollutants, Mild), Low-Light Vision, Photometabolism |
+| **Nartaki** | Human | 1/6 | 1/6 | 1/6 | 1/6 | 1/6 | 1/6 | 1/6 | 1/6 | 1/6 | 6 | REA+INT | Shiva Arms, Striking Skin Pigmentation |
+| **Hobgoblin** | Ork | 1/6 | 1/6 | 1/6 | 2/7 | 1/6 | 1/5 | 1/6 | 2/7 | 1/6 | 6 | REA+INT | Fangs, Low-Light Vision, Extravagant Eyes, Poor Self Control (Vindictive) |
+| **Ogre** | Ork | 4/9 | 1/6 | 1/5 | 3/8 | 2/7 | 1/5 | 1/6 | 1/4 | 1/6 | 6 | REA+INT | Thermographic Vision, +1 Reach, +1 dermal armor, +50% gear and Lifestyle costs |
+| **Oni** | Ork | 3/8 | 2/7 | 1/6 | 2/7 | 1/6 | 1/5 | 1/6 | 2/7 | 1/6 | 6 | REA+INT | Low-Light Vision, Striking Skin Pigmentation |
+| **Satyr** | Ork | 2/7 | 1/6 | 2/7 | 2/7 | 1/6 | 1/6 | 1/6 | 1/5 | 1/6 | 6 | REA+INT | Low-Light Vision, Unusual Hair |
+| **Cyclopean** | Troll | 5/10 | 1/5 | 1/6 | 6/11 | 1/6 | 1/4 | 1/5 | 1/4 | 1/6 | 6 | REA+INT | Thermographic Vision, +1 Reach, +1 dermal armor, double Lifestyle costs |
+| **Fomorian** | Troll | 4/9 | 1/5 | 1/6 | 5/10 | 1/5 | 1/4 | 1/4 | 1/5 | 1/6 | 6 | REA+INT | Thermographic Vision, +1 Reach, +1 dermal armor, double Lifestyle costs |
+| **Giant** | Troll | 5/10 | 1/5 | 1/5 | 5/10 | 1/6 | 1/5 | 1/5 | 1/5 | 1/6 | 6 | REA+INT | Thermographic Vision, +1 Reach, +1 dermal armor, double Lifestyle costs |
+| **Minotaur** | Troll | 6/11 | 1/5 | 1/6 | 5/10 | 1/6 | 1/5 | 1/6 | 1/4 | 1/6 | 6 | REA+INT | Thermographic Vision, +1 Reach, +1 dermal armor, double Lifestyle costs |
+
 ## Priority Tables
 
 ### Master Priority Overview

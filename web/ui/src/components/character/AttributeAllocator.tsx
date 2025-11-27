@@ -21,17 +21,36 @@ const ATTRIBUTE_NAMES: Record<string, string> = {
 };
 
 export function AttributeAllocator({ attributes, onChange, minValues = {}, maxValues = {}, availablePoints, errors }: AttributeAllocatorProps) {
+  // Calculate used points based on current attributes
+  const calculateUsedPoints = (attrs: Record<string, number>): number => {
+    return Object.entries(attrs).reduce((sum, [attr, val]) => {
+      const min = minValues[attr] || 1;
+      return sum + Math.max(0, val - min);
+    }, 0);
+  };
+
   const handleAttributeChange = (attr: string, value: string) => {
     const numValue = parseInt(value, 10) || 0;
     const min = minValues[attr] || 1;
     const max = maxValues[attr] || 6;
     
-    if (numValue >= min && numValue <= max) {
-      onChange({ ...attributes, [attr]: numValue });
+    // Check min/max bounds first
+    if (numValue < min || numValue > max) {
+      return;
+    }
+    
+    // Calculate what the used points would be if we apply this change
+    const updatedAttributes = { ...attributes, [attr]: numValue };
+    const usedPointsAfterChange = calculateUsedPoints(updatedAttributes);
+    
+    // Only allow the change if it doesn't exceed available points
+    if (usedPointsAfterChange <= availablePoints) {
+      onChange(updatedAttributes);
     }
   };
 
-  const usedPoints = Object.values(attributes).reduce((sum, val) => sum + Math.max(0, val - 1), 0);
+  // Calculate used points based on min values (attributes start at min, points are spent above min)
+  const usedPoints = calculateUsedPoints(attributes);
   const remainingPoints = availablePoints - usedPoints;
 
   return (
@@ -50,9 +69,9 @@ export function AttributeAllocator({ attributes, onChange, minValues = {}, maxVa
 
       <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
         {Object.entries(ATTRIBUTE_NAMES).map(([key, label]) => {
-          const value = attributes[key] || 1;
           const min = minValues[key] || 1;
           const max = maxValues[key] || 6;
+          const value = attributes[key] ?? min; // Use min as default if not set
           const error = errors?.[key];
 
           return (

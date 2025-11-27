@@ -1064,6 +1064,8 @@ export interface PriorityOption {
   summary?: string;
   description?: string;
   available_types?: string[]; // For magic/resonance priorities
+  magic_rating?: number; // For magic/resonance priorities (0 for mundane)
+  free_spells?: number; // Number of free spells for Magicians/Mystic Adepts
 }
 
 export interface AttributeRange {

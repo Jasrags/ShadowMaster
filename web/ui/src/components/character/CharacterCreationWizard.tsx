@@ -40,6 +40,10 @@ interface CharacterCreationState {
   attributeAllocations?: Record<string, number>;
   magicType?: string;
   tradition?: string;
+  mentorSpirit?: string;
+  aspectedSkillGroup?: string; // 'Sorcery', 'Conjuring', or 'Enchanting' for Aspected Magicians
+  selectedSpells?: Array<{ name: string; category?: string }>;
+  selectedAdeptPowers?: Array<{ name: string; level?: number; powerPoints: number }>;
   selectedQualities?: Array<{ name: string; type: string }>;
   skillAllocations?: Record<string, number>;
   equipment?: any[];
@@ -58,11 +62,12 @@ interface CharacterCreationState {
 const STORAGE_KEY = 'character-creation-state';
 
 export function CharacterCreationWizard({ isOpen, onOpenChange, onSuccess, edition = 'sr5' }: CharacterCreationWizardProps) {
-  const { showSuccess, showError } = useToast();
+  const { showSuccess, showError, showWarning } = useToast();
   const [currentStep, setCurrentStep] = useState(1);
   const [creationData, setCreationData] = useState<CharacterCreationData | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [showExitConfirm, setShowExitConfirm] = useState(false);
   
   const [formData, setFormData] = useState<CharacterCreationState>({
     name: '',
@@ -117,8 +122,11 @@ export function CharacterCreationWizard({ isOpen, onOpenChange, onSuccess, editi
   }, [edition, showError]);
 
   const handleClose = () => {
-    onOpenChange(false);
-    // Reset form when closing
+    setShowExitConfirm(true);
+  };
+
+  const handleConfirmExit = () => {
+    // Clear all form data
     setCurrentStep(1);
     setFormData({
       name: '',
@@ -130,6 +138,12 @@ export function CharacterCreationWizard({ isOpen, onOpenChange, onSuccess, editi
       touched: {},
     });
     localStorage.removeItem(STORAGE_KEY);
+    setShowExitConfirm(false);
+    onOpenChange(false);
+  };
+
+  const handleCancelExit = () => {
+    setShowExitConfirm(false);
   };
 
   const validateStep = (step: number): boolean => {
@@ -146,13 +160,25 @@ export function CharacterCreationWizard({ isOpen, onOpenChange, onSuccess, editi
         newTouched.playerName = true;
       }
     } else if (step === 2) {
+      // Step 2: Metatype & Attributes - validate priorities, metatype, and attribute allocation
+      const missingItems: string[] = [];
+      
       if (formData.creationMethod === 'priority' && formData.priorities) {
         const p = formData.priorities;
-        if (!p.metatype_priority || !p.attributes_priority || !p.magic_priority || !p.skills_priority || !p.resources_priority) {
-          newErrors.priorities = 'All priorities must be selected (A-E for each category)';
+        if (!p.metatype_priority) {
+          missingItems.push('Metatype Priority');
+        }
+        if (!p.attributes_priority) {
+          missingItems.push('Attributes Priority');
         }
       } else if (formData.creationMethod === 'sum_to_ten' && formData.sumToTen) {
         const stt = formData.sumToTen;
+        if (!stt.metatype_priority) {
+          missingItems.push('Metatype Priority');
+        }
+        if (!stt.attributes_priority) {
+          missingItems.push('Attributes Priority');
+        }
         const costs: Record<string, number> = { A: 4, B: 3, C: 2, D: 1, E: 0 };
         const total = (costs[stt.metatype_priority] || 0) +
           (costs[stt.attributes_priority] || 0) +
@@ -163,8 +189,72 @@ export function CharacterCreationWizard({ isOpen, onOpenChange, onSuccess, editi
           newErrors.sumToTen = `Priority costs must total 10 (current: ${total})`;
         }
       }
+      
       if (!formData.selectedMetatype) {
-        newErrors.metatype = 'Metatype must be selected';
+        missingItems.push('Metatype');
+      }
+      
+      // Check attribute points allocation (only if attributes priority is already selected)
+      const attributesPriority = formData.creationMethod === 'priority' && formData.priorities?.attributes_priority
+        ? formData.priorities.attributes_priority
+        : formData.creationMethod === 'sum_to_ten' && formData.sumToTen?.attributes_priority
+        ? formData.sumToTen.attributes_priority
+        : undefined;
+      
+      if (attributesPriority && formData.selectedMetatype && creationData) {
+        const selectedMetatypeData = creationData.metatypes.find(m => m.id === formData.selectedMetatype);
+        
+        if (selectedMetatypeData?.attribute_ranges) {
+          const ATTRIBUTE_POINTS: Record<string, number> = {
+            A: 24,
+            B: 20,
+            C: 16,
+            D: 14,
+            E: 12,
+          };
+          const availablePoints = ATTRIBUTE_POINTS[attributesPriority] || 12;
+          
+          // Calculate used points based on min values
+          const attributes = formData.attributeAllocations || {};
+          const minValues: Record<string, number> = {};
+          Object.entries(selectedMetatypeData.attribute_ranges).forEach(([attr, range]) => {
+            if (range && range.min !== undefined) {
+              minValues[attr] = range.min;
+            }
+          });
+          
+          const usedPoints = Object.entries(attributes).reduce((sum, [attr, val]) => {
+            const min = minValues[attr] || 1;
+            return sum + Math.max(0, val - min);
+          }, 0);
+          
+          const remainingPoints = availablePoints - usedPoints;
+          if (remainingPoints > 0) {
+            missingItems.push(`${remainingPoints} attribute point${remainingPoints !== 1 ? 's' : ''} remaining to allocate`);
+          } else if (remainingPoints < 0) {
+            missingItems.push(`${Math.abs(remainingPoints)} attribute point${Math.abs(remainingPoints) !== 1 ? 's' : ''} over allocated`);
+          }
+        }
+      }
+      
+      // Set errors and show toast if validation fails
+      if (missingItems.length > 0) {
+        newErrors.step2 = 'Please complete all required selections';
+        const errorMessage = `Please complete the following: ${missingItems.join(', ')}`;
+        showWarning('Cannot proceed', errorMessage);
+      }
+    } else if (step === 3) {
+      // Step 3: Magic/Resonance - require magic priority to be selected
+      if (formData.creationMethod === 'priority') {
+        if (!formData.priorities?.magic_priority || formData.priorities.magic_priority === '') {
+          newErrors.magic_priority = 'Magic/Resonance priority must be selected';
+          newTouched.magic_priority = true;
+        }
+      } else if (formData.creationMethod === 'sum_to_ten') {
+        if (!formData.sumToTen?.magic_priority || formData.sumToTen.magic_priority === '') {
+          newErrors.magic_priority = 'Magic/Resonance priority must be selected';
+          newTouched.magic_priority = true;
+        }
       }
     }
 
@@ -355,13 +445,66 @@ export function CharacterCreationWizard({ isOpen, onOpenChange, onSuccess, editi
     'Final Touches',
   ];
 
+  // Check if there are any selections made
+  const hasSelections = 
+    formData.name.trim() !== '' ||
+    formData.playerName.trim() !== '' ||
+    formData.selectedMetatype !== undefined ||
+    (formData.selectedQualities && formData.selectedQualities.length > 0) ||
+    (formData.attributeAllocations && Object.keys(formData.attributeAllocations).length > 0) ||
+    (formData.skillAllocations && Object.keys(formData.skillAllocations).length > 0) ||
+    (formData.equipment && formData.equipment.length > 0) ||
+    formData.magicType !== undefined ||
+    formData.tradition !== undefined ||
+    (formData.priorities && (
+      formData.priorities.metatype_priority !== '' ||
+      formData.priorities.attributes_priority !== '' ||
+      formData.priorities.magic_priority !== '' ||
+      formData.priorities.skills_priority !== '' ||
+      formData.priorities.resources_priority !== ''
+    ));
+
   return (
-    <Modal isOpen={isOpen} onOpenChange={onOpenChange}>
-      <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
-        <div className="fixed inset-0 bg-black/50" aria-hidden="true" onClick={handleClose} />
+    <>
+      {/* Exit Confirmation Dialog */}
+      {showExitConfirm && (
+        <Modal isOpen={showExitConfirm} onOpenChange={setShowExitConfirm}>
+          <div className="fixed inset-0 z-[100] flex items-center justify-center p-4">
+            <div className="fixed inset-0 bg-black/50" aria-hidden="true" onClick={handleCancelExit} />
+            <Dialog className="relative bg-sr-gray border border-sr-light-gray rounded-lg shadow-xl max-w-md w-full outline-none">
+              <Heading className="text-xl font-semibold text-gray-100 mb-4 p-6 border-b border-sr-light-gray">
+                Exit Character Creation?
+              </Heading>
+              <div className="p-6">
+                <p className="text-sm text-gray-300 mb-6">
+                  All your selections will be cleared and you'll lose any progress made. Are you sure you want to exit?
+                </p>
+                <div className="flex justify-end gap-3">
+                  <Button
+                    onPress={handleCancelExit}
+                    className="px-4 py-2 bg-sr-gray border border-sr-light-gray rounded-md text-gray-100 hover:bg-sr-light-gray focus:outline-none focus:ring-2 focus:ring-sr-accent focus:border-transparent transition-colors"
+                  >
+                    Cancel
+                  </Button>
+                  <Button
+                    onPress={handleConfirmExit}
+                    className="px-4 py-2 bg-sr-danger border border-sr-danger rounded-md text-gray-100 hover:bg-sr-danger/80 focus:outline-none focus:ring-2 focus:ring-sr-danger focus:border-transparent transition-colors"
+                  >
+                    Exit
+                  </Button>
+                </div>
+              </div>
+            </Dialog>
+          </div>
+        </Modal>
+      )}
+
+      <Modal isOpen={isOpen} onOpenChange={hasSelections ? handleClose : () => onOpenChange(false)}>
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
+        <div className="fixed inset-0 bg-black/50" aria-hidden="true" onClick={hasSelections ? handleClose : () => onOpenChange(false)} />
         <Dialog className="relative bg-sr-gray border border-sr-light-gray rounded-lg shadow-xl max-w-4xl w-full max-h-[90vh] overflow-hidden outline-none flex flex-col">
           {/* Header */}
-          <div className="flex items-center justify-between p-6 border-b border-sr-light-gray">
+          <div className="flex items-center justify-between p-6 border-b border-sr-light-gray flex-shrink-0">
             <Heading
               slot="title"
               className="text-2xl font-semibold text-gray-100"
@@ -391,7 +534,7 @@ export function CharacterCreationWizard({ isOpen, onOpenChange, onSuccess, editi
           </div>
 
           {/* Step Indicator */}
-          <div className="px-6 py-4 border-b border-sr-light-gray bg-sr-light-gray/30 overflow-x-auto">
+          <div className="px-6 py-4 border-b border-sr-light-gray bg-sr-light-gray/30 overflow-x-auto relative z-10 flex-shrink-0">
             <div className="flex items-center gap-2 min-w-max">
               {stepNames.map((name, index) => {
                 const stepNum = index + 1;
@@ -419,12 +562,12 @@ export function CharacterCreationWizard({ isOpen, onOpenChange, onSuccess, editi
           </div>
 
           {/* Content */}
-          <div className="flex-1 overflow-y-auto p-6">
+          <div className="flex-1 overflow-y-auto p-6 relative">
             {renderStep()}
           </div>
 
           {/* Footer */}
-          <div className="p-6 border-t border-sr-light-gray flex justify-between gap-3">
+          <div className="p-6 border-t border-sr-light-gray flex justify-between gap-3 flex-shrink-0">
             <div>
               {currentStep > 1 && (
                 <Button
@@ -437,7 +580,7 @@ export function CharacterCreationWizard({ isOpen, onOpenChange, onSuccess, editi
             </div>
             <div className="flex gap-3">
               <Button
-                onPress={handleClose}
+                onPress={hasSelections ? handleClose : () => onOpenChange(false)}
                 className="px-4 py-2 bg-sr-gray border border-sr-light-gray rounded-md text-gray-100 hover:bg-sr-light-gray focus:outline-none focus:ring-2 focus:ring-sr-accent focus:border-transparent transition-colors"
               >
                 Cancel
@@ -462,7 +605,8 @@ export function CharacterCreationWizard({ isOpen, onOpenChange, onSuccess, editi
           </div>
         </Dialog>
       </div>
-    </Modal>
+      </Modal>
+    </>
   );
 }
 

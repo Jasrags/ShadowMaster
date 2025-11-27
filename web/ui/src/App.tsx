@@ -7,6 +7,7 @@ import { AuthenticatedRoute } from './components/layout/AuthenticatedRoute';
 import { AdminRoute } from './components/layout/AdminRoute';
 import { HomePage } from './pages/HomePage';
 import { CampaignsPage } from './pages/CampaignsPage';
+import { CharactersPage } from './pages/CharactersPage';
 import { CharacterCreationPage } from './pages/CharacterCreationPage';
 import { GearPage } from './pages/GearPage';
 import { ArmorPage } from './pages/ArmorPage';
@@ -64,6 +65,15 @@ function App() {
                     <AuthenticatedRoute>
                       <CharacterCreationPage />
                     </AuthenticatedRoute>
+                  }
+                />
+                {/* Admin-only routes - Characters */}
+                <Route
+                  path="/characters"
+                  element={
+                    <AdminRoute>
+                      <CharactersPage />
+                    </AdminRoute>
                   }
                 />
                 {/* Admin-only routes - Database tab redirects to Gear (first nested tab) */}

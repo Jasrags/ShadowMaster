@@ -28,6 +28,10 @@ export function AppLayout({ children }: AppLayoutProps) {
 
     if (isAuthenticated) {
       allTabs.push({ id: 'campaigns', label: 'Campaigns', path: '/campaigns' });
+      // Add admin-only Characters tab
+      if (user?.roles.includes('administrator')) {
+        allTabs.push({ id: 'characters', label: 'Characters', path: '/characters' });
+      }
       // Add admin-only Database tab with nested tabs organized by category
       if (user?.roles.includes('administrator')) {
         allTabs.push({
@@ -68,7 +72,6 @@ export function AppLayout({ children }: AppLayoutProps) {
         });
       }
       // Add more authenticated tabs here as needed
-      // allTabs.push({ id: 'characters', label: 'Characters', path: '/characters' });
       // allTabs.push({ id: 'sessions', label: 'Sessions', path: '/sessions' });
     }
 

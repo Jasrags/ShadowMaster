@@ -1,9 +1,9 @@
-import { Select, Button, Popover, ListBox, ListBoxItem, SelectValue } from 'react-aria-components';
+import { Button, TextField, Input } from 'react-aria-components';
 import type { CharacterCreationState } from '../CharacterCreationWizard';
-import type { CharacterCreationData, Tradition } from '../../../lib/types';
+import type { CharacterCreationData, Tradition, PrioritySelection, SumToTenSelection, Spell, Mentor, Power } from '../../../lib/types';
 import { MagicTypeSelector } from '../MagicTypeSelector';
-import { traditionApi } from '../../../lib/api';
-import { useState, useEffect } from 'react';
+import { traditionApi, spellApi, mentorApi, powerApi } from '../../../lib/api';
+import { useState, useEffect, useMemo, useRef } from 'react';
 
 interface Step3MagicResonanceProps {
   formData: CharacterCreationState;
@@ -16,6 +16,53 @@ interface Step3MagicResonanceProps {
 export function Step3MagicResonance({ formData, setFormData, creationData, errors, touched }: Step3MagicResonanceProps) {
   const [traditions, setTraditions] = useState<Tradition[]>([]);
   const [isLoadingTraditions, setIsLoadingTraditions] = useState(false);
+  const [mentors, setMentors] = useState<Mentor[]>([]);
+  const [isLoadingMentors, setIsLoadingMentors] = useState(false);
+  const [spells, setSpells] = useState<Spell[]>([]);
+  const [isLoadingSpells, setIsLoadingSpells] = useState(false);
+  const [powers, setPowers] = useState<Power[]>([]);
+  const [isLoadingPowers, setIsLoadingPowers] = useState(false);
+  const [searchTerm, setSearchTerm] = useState('');
+  const [powerSearchTerm, setPowerSearchTerm] = useState('');
+  
+  // Refs for scrolling to next sections
+  const traditionSelectionRef = useRef<HTMLDivElement>(null);
+  const mentorSelectionRef = useRef<HTMLDivElement>(null);
+  const aspectedSkillGroupRef = useRef<HTMLDivElement>(null);
+  const spellSelectionRef = useRef<HTMLDivElement>(null);
+  const powerSelectionRef = useRef<HTMLDivElement>(null);
+  
+  // Magic skill groups for Aspected Magicians
+  const MAGIC_SKILL_GROUPS = [
+    { id: 'Sorcery', name: 'Sorcery', description: 'Spellcasting, Ritual Spellcasting, Counterspelling. Focus on casting spells and magical combat.' },
+    { id: 'Conjuring', name: 'Conjuring', description: 'Summoning, Binding, Banishing. Focus on working with spirits and summoning allies.' },
+    { id: 'Enchanting', name: 'Enchanting', description: 'Alchemy, Artificing, Disenchanting. Focus on creating magical items and preparations.' },
+  ];
+
+  // Initialize priorities if they don't exist
+  useEffect(() => {
+    if (formData.creationMethod === 'priority' && !formData.priorities) {
+      const basePriorities: PrioritySelection = {
+        metatype_priority: '',
+        attributes_priority: '',
+        magic_priority: '',
+        skills_priority: '',
+        resources_priority: '',
+        gameplay_level: formData.gameplayLevel || 'experienced',
+      };
+      setFormData(prev => ({ ...prev, priorities: basePriorities }));
+    } else if (formData.creationMethod === 'sum_to_ten' && !formData.sumToTen) {
+      const baseSumToTen: SumToTenSelection = {
+        metatype_priority: '',
+        attributes_priority: '',
+        magic_priority: '',
+        skills_priority: '',
+        resources_priority: '',
+        gameplay_level: formData.gameplayLevel || 'experienced',
+      };
+      setFormData(prev => ({ ...prev, sumToTen: baseSumToTen }));
+    }
+  }, [formData.creationMethod, formData.gameplayLevel]);
 
   // Get magic priority from form data
   const magicPriority = formData.creationMethod === 'priority' && formData.priorities
@@ -24,7 +71,52 @@ export function Step3MagicResonance({ formData, setFormData, creationData, error
     ? formData.sumToTen.magic_priority
     : '';
 
-  const hasMagic = magicPriority && magicPriority !== 'none';
+  const hasMagic = magicPriority && magicPriority !== 'none' && magicPriority !== 'E';
+  
+  // Get magic rating from priority data (from MagicPriorityData)
+  const getMagicRating = () => {
+    if (!hasMagic) return 0;
+    const priorityData = creationData.priorities?.magic?.[magicPriority];
+    // Magic rating comes from MagicPriorityData via the API
+    return priorityData?.magic_rating ?? 0;
+  };
+
+  const magicRating = getMagicRating();
+  
+  // Check if magic priority has been selected
+  // Only consider it selected if it's a valid priority letter (A-E) and not empty/undefined
+  const magicPrioritySelected = magicPriority && magicPriority !== '' && magicPriority !== undefined && ['A', 'B', 'C', 'D', 'E'].includes(magicPriority);
+
+  // Handle magic priority selection
+  const handleMagicPriorityChange = (priority: string) => {
+    if (formData.creationMethod === 'priority') {
+      const updatedPriorities: PrioritySelection = {
+        ...(formData.priorities || {
+          metatype_priority: '',
+          attributes_priority: '',
+          magic_priority: '',
+          skills_priority: '',
+          resources_priority: '',
+          gameplay_level: formData.gameplayLevel || 'experienced',
+        }),
+        magic_priority: priority,
+      };
+      setFormData(prev => ({ ...prev, priorities: updatedPriorities }));
+    } else if (formData.creationMethod === 'sum_to_ten') {
+      const updatedSumToTen: SumToTenSelection = {
+        ...(formData.sumToTen || {
+          metatype_priority: '',
+          attributes_priority: '',
+          magic_priority: '',
+          skills_priority: '',
+          resources_priority: '',
+          gameplay_level: formData.gameplayLevel || 'experienced',
+        }),
+        magic_priority: priority,
+      };
+      setFormData(prev => ({ ...prev, sumToTen: updatedSumToTen }));
+    }
+  };
 
   // Get available magic types for the selected priority
   const getAvailableMagicTypes = (): string[] => {
@@ -101,10 +193,196 @@ export function Step3MagicResonance({ formData, setFormData, creationData, error
         sumToTen: { ...prev.sumToTen!, magic_type: typeName },
       }));
     }
-    // Clear tradition if not needed
-    if (typeId !== 'magician' && typeId !== 'mystic_adept') {
-      setFormData(prev => ({ ...prev, tradition: undefined }));
+    // Clear tradition and aspected skill group if not needed
+    if (typeId !== 'magician' && typeId !== 'mystic_adept' && typeId !== 'aspected_magician') {
+      setFormData(prev => ({ ...prev, tradition: undefined, aspectedSkillGroup: undefined }));
     }
+    // Clear aspected skill group if switching away from aspected magician
+    if (typeId !== 'aspected_magician') {
+      setFormData(prev => ({ ...prev, aspectedSkillGroup: undefined }));
+    }
+    
+    // Scroll to aspected skill group selection if needed
+    if (typeId === 'aspected_magician') {
+      setTimeout(() => {
+        aspectedSkillGroupRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }, 100);
+    }
+    // Scroll to power selection if Adept
+    if (typeId === 'adept') {
+      setTimeout(() => {
+        powerSelectionRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }, 100);
+    }
+  };
+  
+  // Load powers when Adept is selected
+  useEffect(() => {
+    if (formData.magicType === 'adept' && !powers.length) {
+      loadPowers();
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [formData.magicType]);
+  
+  const loadPowers = async () => {
+    try {
+      setIsLoadingPowers(true);
+      const data = await powerApi.getPowers();
+      setPowers(data);
+    } catch (err) {
+      console.error('Failed to load powers:', err);
+    } finally {
+      setIsLoadingPowers(false);
+    }
+  };
+  
+  // Calculate power point cost for a power
+  // Matches backend calculation in pkg/shadowrun/edition/v5/powers.go
+  const calculatePowerCost = (power: Power, level: number = 1): number => {
+    if (!power.cost) return 0;
+    if (level < 1) level = 1;
+    
+    const cost = power.cost;
+    
+    // Check max level
+    if (cost.max_level !== undefined && level > cost.max_level) {
+      level = cost.max_level;
+    }
+    
+    let totalCost = 0;
+    
+    // Base cost (applies to all levels)
+    if (cost.base_cost !== undefined) {
+      totalCost += cost.base_cost;
+    }
+    
+    // Cost per level - multiplied by level directly (not level - 1)
+    // If cost_per_level is 0.25: Level 1 = 0.25, Level 2 = 0.5, Level 3 = 0.75
+    if (cost.cost_per_level !== undefined) {
+      totalCost += cost.cost_per_level * level;
+    }
+    
+    // Cost per item (if applicable, also multiplied by level)
+    if (cost.cost_per_item !== undefined) {
+      totalCost += cost.cost_per_item * level;
+    }
+    
+    // Additional cost (if any)
+    if (cost.additional_cost !== undefined) {
+      totalCost += cost.additional_cost;
+    }
+    
+    return totalCost;
+  };
+  
+  // Selected adept powers
+  const selectedAdeptPowers = formData.selectedAdeptPowers || [];
+  
+  // Calculate total power points used
+  const totalPowerPointsUsed = useMemo(() => {
+    return selectedAdeptPowers.reduce((sum, power) => sum + (power.powerPoints || 0), 0);
+  }, [selectedAdeptPowers]);
+  
+  // Available power points (equal to Magic rating for Adepts)
+  const availablePowerPoints = magicRating;
+  
+  // Handle adept power selection
+  const handlePowerSelect = (power: Power, level: number = 1) => {
+    if (!power.name) return;
+    
+    const cost = calculatePowerCost(power, level);
+    
+    // Check if we have enough power points
+    if (totalPowerPointsUsed + cost > availablePowerPoints) {
+      return;
+    }
+    
+    // Check if already selected (for variable powers, allow multiple instances)
+    const existingPower = selectedAdeptPowers.find(p => p.name === power.name);
+    
+    if (existingPower) {
+      // Update existing power
+      const updated = selectedAdeptPowers.map(p => 
+        p.name === power.name ? { ...p, level, powerPoints: cost } : p
+      );
+      setFormData({ ...formData, selectedAdeptPowers: updated });
+    } else {
+      // Add new power
+      const newPowers = [...selectedAdeptPowers, { name: power.name, level, powerPoints: cost }];
+      setFormData({ ...formData, selectedAdeptPowers: newPowers });
+    }
+  };
+  
+  // Handle adept power removal
+  const handlePowerRemove = (powerName: string) => {
+    const newPowers = selectedAdeptPowers.filter(p => p.name !== powerName);
+    setFormData({ ...formData, selectedAdeptPowers: newPowers });
+  };
+  
+  // Handle power level change
+  const handlePowerLevelChange = (power: Power, newLevel: number) => {
+    const cost = calculatePowerCost(power, newLevel);
+    const existingPower = selectedAdeptPowers.find(p => p.name === power.name);
+    
+    if (existingPower) {
+      const costDifference = cost - existingPower.powerPoints;
+      
+      // Check if we have enough power points for the new level
+      if (totalPowerPointsUsed + costDifference > availablePowerPoints) {
+        return;
+      }
+      
+      const updated = selectedAdeptPowers.map(p => 
+        p.name === power.name ? { ...p, level: newLevel, powerPoints: cost } : p
+      );
+      setFormData({ ...formData, selectedAdeptPowers: updated });
+    }
+  };
+  
+  // Filter powers by search term
+  const filteredPowers = useMemo(() => {
+    if (!powerSearchTerm.trim()) return powers;
+    const term = powerSearchTerm.toLowerCase();
+    return powers.filter(power => 
+      power.name?.toLowerCase().includes(term) ||
+      power.description?.toLowerCase().includes(term) ||
+      power.activation_description?.toLowerCase().includes(term)
+    );
+  }, [powers, powerSearchTerm]);
+  
+  // Handle aspected magician skill group selection
+  const handleAspectedSkillGroupSelect = (skillGroup: string) => {
+    setFormData({ ...formData, aspectedSkillGroup: skillGroup });
+  };
+  
+  // Load mentors when Shaman tradition is selected
+  useEffect(() => {
+    if (formData.tradition === 'The Shaman' && !mentors.length) {
+      loadMentors();
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [formData.tradition]);
+  
+  const loadMentors = async () => {
+    try {
+      setIsLoadingMentors(true);
+      const data = await mentorApi.getMentors();
+      setMentors(data);
+    } catch (err) {
+      console.error('Failed to load mentors:', err);
+    } finally {
+      setIsLoadingMentors(false);
+    }
+  };
+  
+  // Handle mentor spirit selection
+  const handleMentorSpiritChange = (mentorName: string) => {
+    setFormData({ ...formData, mentorSpirit: mentorName });
+    
+    // Scroll to spell selection after a brief delay
+    setTimeout(() => {
+      spellSelectionRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }, 100);
   };
 
   const handleTraditionChange = (tradition: string) => {
@@ -121,21 +399,72 @@ export function Step3MagicResonance({ formData, setFormData, creationData, error
         sumToTen: { ...prev.sumToTen!, tradition },
       }));
     }
+    
+    // If Shaman, scroll to mentor selection; otherwise scroll to spell selection
+    if (tradition === 'The Shaman') {
+      setTimeout(() => {
+        mentorSelectionRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }, 100);
+    } else if (formData.magicType === 'magician' || formData.magicType === 'mystic_adept') {
+      setTimeout(() => {
+        spellSelectionRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }, 100);
+    }
   };
 
-  // Get magic rating from priority data
-  const getMagicRating = () => {
-    if (!hasMagic) return 0;
-    const priorityData = creationData.priorities?.magic?.[magicPriority];
-    // Magic rating comes from priority data (A=6, B=4, C=3, D=2, E=0 for mundane)
-    // Note: The actual rating is stored in the backend priority_data.go
-    // For now, use the standard mapping
-    const ratingMap: Record<string, number> = { A: 6, B: 4, C: 3, D: 2, E: 0 };
-    return ratingMap[magicPriority] || 0;
+  // Load spells when tradition is selected (for Magicians, Mystic Adepts, or Aspected Magicians with Sorcery)
+  // For Shamans, wait until mentor spirit is selected
+  useEffect(() => {
+    const shouldLoadSpells = 
+      formData.tradition && 
+      ((formData.magicType === 'magician' || formData.magicType === 'mystic_adept') ||
+       (formData.magicType === 'aspected_magician' && formData.aspectedSkillGroup === 'Sorcery'));
+    
+    // For Shamans, also require mentor spirit
+    if (formData.tradition === 'The Shaman') {
+      if (shouldLoadSpells && formData.mentorSpirit) {
+        loadSpells();
+      }
+    } else if (shouldLoadSpells) {
+      loadSpells();
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [formData.tradition, formData.magicType, formData.aspectedSkillGroup, formData.mentorSpirit]);
+
+  const loadSpells = async () => {
+    try {
+      setIsLoadingSpells(true);
+      const data = await spellApi.getSpells();
+      setSpells(data);
+    } catch (err) {
+      console.error('Failed to load spells:', err);
+    } finally {
+      setIsLoadingSpells(false);
+    }
   };
 
-  const magicRating = getMagicRating();
+  // Get free spells count from priority data
+  const getFreeSpellsCount = (): number => {
+    if (!hasMagic || !formData.magicType) return 0;
+    // Spells available for: Magicians, Mystic Adepts, or Aspected Magicians with Sorcery
+    const canHaveSpells = formData.magicType === 'magician' || 
+                         formData.magicType === 'mystic_adept' ||
+                         (formData.magicType === 'aspected_magician' && formData.aspectedSkillGroup === 'Sorcery');
+    
+    if (!canHaveSpells) return 0;
+    
+    const magicOption = creationData.priorities?.magic?.[magicPriority];
+    return magicOption?.free_spells ?? 0;
+  };
 
+  const freeSpellsCount = getFreeSpellsCount();
+  
+  // Max spells = Magic Rating x 2 (from character creation rules)
+  const maxSpells = magicRating * 2;
+  
+  // Selected spells
+  const selectedSpells = formData.selectedSpells || [];
+  
   // Get free benefits based on magic type
   const getFreeBenefits = () => {
     if (!formData.magicType) return null;
@@ -150,8 +479,16 @@ export function Step3MagicResonance({ formData, setFormData, creationData, error
         // Free spells come from priority data
         return {
           title: 'Free Spells',
-          description: `You receive free spells at character creation based on your priority.`,
+          description: `You receive ${freeSpellsCount} free spells at character creation. Maximum ${maxSpells} spells allowed (Magic Rating × 2).`,
         };
+      case 'aspected_magician':
+        if (formData.aspectedSkillGroup === 'Sorcery') {
+          return {
+            title: 'Free Spells',
+            description: `You receive ${freeSpellsCount} free spells at character creation. Maximum ${maxSpells} spells allowed (Magic Rating × 2).`,
+          };
+        }
+        return null;
       case 'adept':
         return {
           title: 'Power Points',
@@ -168,6 +505,256 @@ export function Step3MagicResonance({ formData, setFormData, creationData, error
   };
 
   const freeBenefits = getFreeBenefits();
+  
+  // Handle spell selection
+  const handleSpellSelect = (spell: Spell) => {
+    if (!spell.name) return;
+    
+    // Check if already selected
+    if (selectedSpells.some(s => s.name === spell.name)) {
+      return;
+    }
+    
+    // Check max spells limit
+    if (selectedSpells.length >= maxSpells) {
+      return;
+    }
+    
+    const newSpells = [...selectedSpells, { name: spell.name, category: spell.category }];
+    setFormData({ ...formData, selectedSpells: newSpells });
+  };
+  
+  // Handle spell removal
+  const handleSpellRemove = (spellName: string) => {
+    const newSpells = selectedSpells.filter(s => s.name !== spellName);
+    setFormData({ ...formData, selectedSpells: newSpells });
+  };
+  
+  // Filter spells by search term
+  const filteredSpells = useMemo(() => {
+    if (!searchTerm.trim()) return spells;
+    const term = searchTerm.toLowerCase();
+    return spells.filter(spell => 
+      spell.name?.toLowerCase().includes(term) ||
+      spell.category?.toLowerCase().includes(term) ||
+      spell.description?.toLowerCase().includes(term)
+    );
+  }, [spells, searchTerm]);
+  
+  // Group spells by category
+  const groupedSpells = useMemo(() => {
+    const groups: Record<string, Spell[]> = {};
+    filteredSpells.forEach(spell => {
+      const category = spell.category || 'Other';
+      if (!groups[category]) {
+        groups[category] = [];
+      }
+      groups[category].push(spell);
+    });
+    return groups;
+  }, [filteredSpells]);
+  
+  // Spell categories in order
+  const SPELL_CATEGORIES = ['combat', 'detection', 'health', 'illusion', 'manipulation'];
+
+  // Check if there are selections to clear
+  const hasSelections = formData.magicType !== undefined || formData.tradition !== undefined || 
+    formData.mentorSpirit !== undefined || formData.aspectedSkillGroup !== undefined ||
+    (formData.selectedSpells && formData.selectedSpells.length > 0) ||
+    (formData.selectedAdeptPowers && formData.selectedAdeptPowers.length > 0);
+
+  // Handle clear selections (clears magic type, tradition, mentor spirit, skill group, and spells, but keeps priority)
+  const handleClearSelections = () => {
+    setFormData(prev => ({ 
+      ...prev, 
+      magicType: undefined,
+      tradition: undefined,
+      mentorSpirit: undefined,
+      aspectedSkillGroup: undefined,
+      selectedSpells: [],
+      selectedAdeptPowers: [],
+    }));
+    if (formData.priorities) {
+      setFormData(prev => ({
+        ...prev,
+        priorities: { 
+          ...prev.priorities!, 
+          magic_type: undefined,
+          tradition: undefined,
+        },
+      }));
+    }
+    if (formData.sumToTen) {
+      setFormData(prev => ({
+        ...prev,
+        sumToTen: { 
+          ...prev.sumToTen!, 
+          magic_type: undefined,
+          tradition: undefined,
+        },
+      }));
+    }
+  };
+
+  // Get used priorities and their categories
+  const getUsedPriorities = (): Map<string, string> => {
+    const used = new Map<string, string>();
+    const categoryNames: Record<string, string> = {
+      metatype_priority: 'Metatype',
+      attributes_priority: 'Attributes',
+      skills_priority: 'Skills',
+      resources_priority: 'Resources',
+    };
+    
+    if (formData.creationMethod === 'priority' && formData.priorities) {
+      Object.entries(formData.priorities).forEach(([key, value]) => {
+        if (key.endsWith('_priority') && value && value !== 'none' && value !== '' && key !== 'magic_priority') {
+          const categoryName = categoryNames[key] || key.replace('_priority', '').replace(/_/g, ' ');
+          used.set(value, categoryName);
+        }
+      });
+    } else if (formData.creationMethod === 'sum_to_ten' && formData.sumToTen) {
+      Object.entries(formData.sumToTen).forEach(([key, value]) => {
+        if (key.endsWith('_priority') && value && value !== 'none' && value !== '' && key !== 'magic_priority') {
+          const categoryName = categoryNames[key] || key.replace('_priority', '').replace(/_/g, ' ');
+          used.set(value, categoryName);
+        }
+      });
+    }
+    return used;
+  };
+
+  const usedPriorities = getUsedPriorities();
+  const PRIORITY_LETTERS = ['A', 'B', 'C', 'D', 'E'];
+
+  // Get available magic types and rating for a priority
+  const getMagicOptionsForPriority = (priority: string) => {
+    const magicOption = creationData.priorities?.magic?.[priority];
+    if (!magicOption) return [];
+    
+    const availableTypes = magicOption.available_types || [];
+    // Use MagicRating from the priority data (from MagicPriorityData)
+    const magicRating = magicOption.magic_rating ?? 0;
+    
+    // Format: "Magician (6 Magic), Adept (6 Magic)" etc.
+    return availableTypes.map(type => {
+      // Technomancer uses Resonance, others use Magic
+      const attributeName = type === 'Technomancer' ? 'Resonance' : 'Magic';
+      return `${type} (${magicRating} ${attributeName})`;
+    });
+  };
+
+  // Priority selection UI for Magic/Resonance
+  const renderPrioritySelection = () => {
+    return (
+      <div className="p-4 bg-sr-light-gray/30 border border-sr-light-gray rounded-md">
+        <div className="mb-3">
+          <h4 className="text-md font-semibold text-gray-200 mb-1">Select Magic/Resonance Priority</h4>
+          <p className="text-xs text-gray-400">
+            Choose the priority level (A-E) for Magic or Resonance. This determines your starting Magic/Resonance rating.
+          </p>
+        </div>
+        
+        {/* Priority Letter Buttons */}
+        <div className="flex gap-2 flex-wrap mb-4">
+          {PRIORITY_LETTERS.map((priority) => {
+            const isSelected = magicPriority === priority;
+            const isUsedElsewhere = !isSelected && usedPriorities.has(priority);
+            
+            return (
+              <button
+                key={priority}
+                type="button"
+                onClick={() => handleMagicPriorityChange(priority)}
+                className={`
+                  w-12 h-12 flex items-center justify-center rounded-md border-2 font-bold text-lg
+                  transition-all
+                  ${isSelected
+                    ? 'bg-sr-accent border-sr-accent text-gray-100 shadow-lg scale-105'
+                    : isUsedElsewhere
+                    ? 'bg-sr-gray/50 border-sr-light-gray/50 text-gray-500 opacity-50 cursor-not-allowed'
+                    : 'bg-sr-gray border-sr-light-gray text-gray-100 hover:bg-sr-light-gray hover:border-sr-accent hover:scale-105 cursor-pointer'
+                  }
+                `}
+                disabled={isUsedElsewhere}
+                title={
+                  isSelected 
+                    ? `Priority ${priority} is assigned to Magic/Resonance`
+                    : isUsedElsewhere
+                    ? `Priority ${priority} is already assigned to another category`
+                    : `Assign Priority ${priority} to Magic/Resonance`
+                }
+              >
+                {priority}
+              </button>
+            );
+          })}
+        </div>
+
+        {/* Show available options for each priority */}
+        <div className="space-y-2 mt-4">
+          <h5 className="text-sm font-semibold text-gray-200">Available Options by Priority:</h5>
+          <div className="space-y-2">
+            {PRIORITY_LETTERS.map((priority) => {
+              const magicOptions = getMagicOptionsForPriority(priority);
+              if (magicOptions.length === 0 && priority !== 'E') return null;
+              
+              const isSelected = magicPriority === priority;
+              const isUsedElsewhere = !isSelected && usedPriorities.has(priority);
+              
+              // For Priority E, show "Mundane (no magic)"
+              const optionText = priority === 'E' 
+                ? 'Mundane (no magic or resonance)'
+                : magicOptions.join(', ');
+
+              return (
+                <div
+                  key={priority}
+                  className={`p-2 rounded-md border text-sm ${
+                    isSelected
+                      ? 'border-sr-accent bg-sr-accent/10'
+                      : isUsedElsewhere
+                      ? 'border-sr-light-gray/50 bg-sr-gray/30 opacity-60'
+                      : 'border-sr-light-gray bg-sr-gray/50'
+                  }`}
+                >
+                  <span className={`font-semibold ${
+                    isSelected ? 'text-sr-accent' : isUsedElsewhere ? 'text-gray-500' : 'text-gray-300'
+                  }`}>
+                    Priority {priority}:{' '}
+                  </span>
+                  {isUsedElsewhere ? (
+                    <span className="text-gray-500 italic">(Assigned to {usedPriorities.get(priority)})</span>
+                  ) : (
+                    <span className="text-gray-200">{optionText}</span>
+                  )}
+                </div>
+              );
+            })}
+          </div>
+        </div>
+
+        {errors.magic_priority && touched.magic_priority && (
+          <p className="text-sm text-sr-danger mt-3">{errors.magic_priority}</p>
+        )}
+      </div>
+    );
+  };
+
+  // Show priority selection if not selected yet
+  if (!magicPrioritySelected) {
+    return (
+      <div className="space-y-6">
+        <div>
+          <h3 className="text-lg font-semibold text-gray-100 mb-4">Magic or Resonance Priority</h3>
+          <p className="text-sm text-gray-400 mb-6">
+            According to the recommended character creation order, select the Magic or Resonance priority level first. This determines your starting Magic or Resonance attribute value. After selecting the priority, you can choose your magic type and tradition.
+          </p>
+        </div>
+        {renderPrioritySelection()}
+      </div>
+    );
+  }
 
   if (!hasMagic) {
     return (
@@ -180,7 +767,7 @@ export function Step3MagicResonance({ formData, setFormData, creationData, error
         </div>
         <div className="p-4 bg-sr-light-gray/30 border border-sr-light-gray rounded-md">
           <p className="text-sm text-gray-400">
-            You selected Priority E for magic/resonance in Step 2, which means your character is mundane. If you want magical abilities, go back and select a different magic priority (A-D).
+            You selected Priority E for magic/resonance, which means your character is mundane. If you want magical abilities, you will need to select a different magic priority (A-D) in the priority allocation step.
           </p>
         </div>
       </div>
@@ -193,24 +780,59 @@ export function Step3MagicResonance({ formData, setFormData, creationData, error
 
   return (
     <div className="space-y-6">
-      <div>
-        <h3 className="text-lg font-semibold text-gray-100 mb-4">Magic or Resonance</h3>
-        <p className="text-sm text-gray-400 mb-6">
-          Select your character's magical or resonance type and tradition (if applicable).
-        </p>
+      <div className="flex items-start justify-between">
+        <div>
+          <h3 className="text-lg font-semibold text-gray-100 mb-4">Magic or Resonance Priority</h3>
+          <p className="text-sm text-gray-400 mb-6">
+            According to the recommended character creation order, you should select your Magic or Resonance priority first. This determines your starting Magic or Resonance attribute value. Then select your character's magical or resonance type and tradition (if applicable).
+          </p>
+        </div>
+        {hasSelections && (
+          <button
+            onClick={handleClearSelections}
+            className="px-3 py-1.5 text-xs font-medium bg-sr-gray border border-sr-light-gray text-gray-300 rounded hover:bg-sr-light-gray/50 hover:text-gray-100 transition-colors"
+          >
+            Clear Selections
+          </button>
+        )}
       </div>
 
-      {/* Magic Rating Display */}
+      {/* Selected Priority Display */}
       <div className="p-4 bg-sr-light-gray/30 border border-sr-light-gray rounded-md">
-        <div className="flex items-center justify-between">
-          <span className="text-sm font-medium text-gray-300">
-            {formData.magicType === 'Technomancer' ? 'Resonance' : 'Magic'} Rating
-          </span>
-          <span className="text-lg font-bold text-gray-100">{magicRating}</span>
+        <div className="flex items-center justify-between mb-2">
+          <span className="text-sm font-medium text-gray-300">Selected Priority</span>
+          <Button
+            onPress={() => {
+              // Clear the priority selection
+              if (formData.creationMethod === 'priority' && formData.priorities) {
+                setFormData(prev => ({
+                  ...prev,
+                  priorities: {
+                    ...prev.priorities!,
+                    magic_priority: '',
+                  },
+                }));
+              } else if (formData.creationMethod === 'sum_to_ten' && formData.sumToTen) {
+                setFormData(prev => ({
+                  ...prev,
+                  sumToTen: {
+                    ...prev.sumToTen!,
+                    magic_priority: '',
+                  },
+                }));
+              }
+            }}
+            className="px-3 py-1.5 text-xs font-medium bg-sr-gray border border-sr-light-gray text-gray-300 rounded hover:bg-sr-light-gray/50 hover:text-gray-100 transition-colors"
+          >
+            Change Priority
+          </Button>
         </div>
-        <p className="text-xs text-gray-400 mt-1">
-          Based on {magicPriority} priority
-        </p>
+        <div className="flex items-center justify-between">
+          <span className="text-lg font-bold text-sr-accent">Priority {magicPriority}</span>
+          <span className="text-sm text-gray-400">
+            {formData.magicType === 'technomancer' ? 'Resonance' : 'Magic'} Rating: {magicRating}
+          </span>
+        </div>
       </div>
 
       {/* Magic Type Selector */}
@@ -240,47 +862,538 @@ export function Step3MagicResonance({ formData, setFormData, creationData, error
         )}
       </div>
 
-      {/* Tradition Selector (for Magicians and Mystic Adepts) */}
-      {formData.magicType && (formData.magicType === 'Magician' || formData.magicType === 'Mystic Adept') && (
-        <div className="space-y-3">
+      {/* Aspected Magician Skill Group Selection */}
+      {formData.magicType === 'aspected_magician' && (
+        <div ref={aspectedSkillGroupRef} className="space-y-3">
+          <h4 className="text-md font-semibold text-gray-200">Select Magic Skill Group</h4>
+          <p className="text-sm text-gray-400 mb-3">
+            Aspected magicians must choose one specific Magic skill group. Once chosen, you may never take skills from the other Magic skill groups, either at character creation or in the future.
+          </p>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
+            {MAGIC_SKILL_GROUPS.map((group) => (
+              <Button
+                key={group.id}
+                onPress={() => handleAspectedSkillGroupSelect(group.id)}
+                className={`p-4 border-2 rounded-lg text-left transition-colors ${
+                  formData.aspectedSkillGroup === group.id
+                    ? 'border-sr-accent bg-sr-accent/20'
+                    : 'border-sr-light-gray bg-sr-gray hover:border-sr-accent/50 hover:bg-sr-light-gray/30'
+                }`}
+              >
+                <div className="flex items-start justify-between mb-2">
+                  <h4 className="text-lg font-semibold text-gray-100">{group.name}</h4>
+                  {formData.aspectedSkillGroup === group.id && (
+                    <svg
+                      className="w-5 h-5 text-sr-accent"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth={2}
+                        d="M5 13l4 4L19 7"
+                      />
+                    </svg>
+                  )}
+                </div>
+                <p className="text-sm text-gray-400">{group.description}</p>
+              </Button>
+            ))}
+          </div>
+        </div>
+      )}
+
+      {/* Tradition Selector (for Magicians, Mystic Adepts, and Aspected Magicians after skill group is selected) */}
+      {formData.magicType && 
+        ((formData.magicType === 'magician' || formData.magicType === 'mystic_adept') ||
+         (formData.magicType === 'aspected_magician' && formData.aspectedSkillGroup)) && (
+        <div ref={traditionSelectionRef} className="space-y-3">
           <h4 className="text-md font-semibold text-gray-200">Select Tradition</h4>
           {isLoadingTraditions ? (
             <div className="text-sm text-gray-400">Loading traditions...</div>
           ) : (
-            <Select
-              selectedKey={formData.tradition}
-              onSelectionChange={(key) => handleTraditionChange(key as string)}
-              className="flex flex-col gap-1"
-            >
-              <Button className="px-3 py-2 bg-sr-gray border border-sr-light-gray rounded-md text-gray-100 focus:outline-none focus:ring-2 focus:ring-sr-accent focus:border-transparent text-left">
-                <SelectValue placeholder="Select a tradition..." />
-              </Button>
-              <Popover
-                placement="bottom start"
-                className="max-h-60 overflow-auto rounded-md border border-sr-light-gray bg-sr-gray shadow-lg"
-              >
-                <ListBox className="p-1">
-                  {traditions.map((tradition) => (
-                    <ListBoxItem
-                      key={tradition.name}
-                      id={tradition.name}
-                      textValue={tradition.name || ''}
-                      className="px-3 py-2 rounded hover:bg-sr-light-gray cursor-pointer text-gray-100 text-sm outline-none focus:bg-sr-light-gray"
-                    >
-                      <div>
-                        <div className="font-medium">{tradition.name}</div>
-                        {tradition.description && (
-                          <div className="text-xs text-gray-400 mt-0.5">{tradition.description}</div>
-                        )}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+              {traditions.map((tradition) => {
+                const isSelected = formData.tradition === tradition.name;
+                return (
+                  <Button
+                    key={tradition.name}
+                    onPress={() => handleTraditionChange(tradition.name || '')}
+                    className={`p-4 border-2 rounded-lg text-left transition-colors ${
+                      isSelected
+                        ? 'border-sr-accent bg-sr-accent/20'
+                        : 'border-sr-light-gray bg-sr-gray hover:border-sr-accent/50 hover:bg-sr-light-gray/30'
+                    }`}
+                  >
+                    <div className="flex items-start justify-between mb-2">
+                      <h4 className="text-lg font-semibold text-gray-100">{tradition.name}</h4>
+                      {isSelected && (
+                        <svg
+                          className="w-5 h-5 text-sr-accent"
+                          fill="none"
+                          stroke="currentColor"
+                          viewBox="0 0 24 24"
+                        >
+                          <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            strokeWidth={2}
+                            d="M5 13l4 4L19 7"
+                          />
+                        </svg>
+                      )}
+                    </div>
+                    {tradition.description && (
+                      <p className="text-sm text-gray-400">{tradition.description}</p>
+                    )}
+                    {/* Show element information if available */}
+                    {(tradition.combat_element || tradition.detection_element || tradition.health_element || 
+                      tradition.illusion_element || tradition.manipulation_element) && (
+                      <div className="mt-2 pt-2 border-t border-sr-light-gray/30">
+                        <p className="text-xs text-gray-500 mb-1">Elements:</p>
+                        <div className="flex flex-wrap gap-1">
+                          {tradition.combat_element && (
+                            <span className="text-xs px-2 py-0.5 bg-sr-light-gray/30 rounded text-gray-300">
+                              Combat: {tradition.combat_element}
+                            </span>
+                          )}
+                          {tradition.detection_element && (
+                            <span className="text-xs px-2 py-0.5 bg-sr-light-gray/30 rounded text-gray-300">
+                              Detection: {tradition.detection_element}
+                            </span>
+                          )}
+                          {tradition.health_element && (
+                            <span className="text-xs px-2 py-0.5 bg-sr-light-gray/30 rounded text-gray-300">
+                              Health: {tradition.health_element}
+                            </span>
+                          )}
+                          {tradition.illusion_element && (
+                            <span className="text-xs px-2 py-0.5 bg-sr-light-gray/30 rounded text-gray-300">
+                              Illusion: {tradition.illusion_element}
+                            </span>
+                          )}
+                          {tradition.manipulation_element && (
+                            <span className="text-xs px-2 py-0.5 bg-sr-light-gray/30 rounded text-gray-300">
+                              Manipulation: {tradition.manipulation_element}
+                            </span>
+                          )}
+                        </div>
                       </div>
-                    </ListBoxItem>
-                  ))}
-                </ListBox>
-              </Popover>
-            </Select>
+                    )}
+                  </Button>
+                );
+              })}
+            </div>
           )}
           {errors.tradition && touched.tradition && (
             <p className="text-sm text-sr-danger">{errors.tradition}</p>
+          )}
+        </div>
+      )}
+
+      {/* Mentor Spirit Selection (for Shamans after tradition is selected) */}
+      {formData.tradition === 'The Shaman' && !formData.mentorSpirit && (
+        <div ref={mentorSelectionRef} className="space-y-3">
+          <h4 className="text-md font-semibold text-gray-200">Select Mentor Spirit</h4>
+          <p className="text-sm text-gray-400 mb-3">
+            Shamans follow a mentor spirit that guides their magical practice. Choose your mentor spirit.
+          </p>
+          {isLoadingMentors ? (
+            <div className="text-sm text-gray-400">Loading mentor spirits...</div>
+          ) : (
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
+              {mentors.map((mentor) => {
+                const isSelected = formData.mentorSpirit === mentor.name;
+                return (
+                  <Button
+                    key={mentor.name}
+                    onPress={() => handleMentorSpiritChange(mentor.name || '')}
+                    className={`p-4 border-2 rounded-lg text-left transition-colors ${
+                      isSelected
+                        ? 'border-sr-accent bg-sr-accent/20'
+                        : 'border-sr-light-gray bg-sr-gray hover:border-sr-accent/50 hover:bg-sr-light-gray/30'
+                    }`}
+                  >
+                    <div className="flex items-start justify-between mb-2">
+                      <h4 className="text-lg font-semibold text-gray-100">{mentor.name}</h4>
+                      {isSelected && (
+                        <svg
+                          className="w-5 h-5 text-sr-accent"
+                          fill="none"
+                          stroke="currentColor"
+                          viewBox="0 0 24 24"
+                        >
+                          <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            strokeWidth={2}
+                            d="M5 13l4 4L19 7"
+                          />
+                        </svg>
+                      )}
+                    </div>
+                    {mentor.description && (
+                      <p className="text-sm text-gray-400">{mentor.description}</p>
+                    )}
+                    {mentor.similar_archetypes && mentor.similar_archetypes.length > 0 && (
+                      <div className="mt-2 pt-2 border-t border-sr-light-gray/30">
+                        <p className="text-xs text-gray-500 mb-1">Archetypes:</p>
+                        <div className="flex flex-wrap gap-1">
+                          {mentor.similar_archetypes.map((arch) => (
+                            <span key={arch} className="text-xs px-2 py-0.5 bg-sr-light-gray/30 rounded text-gray-300">
+                              {arch}
+                            </span>
+                          ))}
+                        </div>
+                      </div>
+                    )}
+                  </Button>
+                );
+              })}
+            </div>
+          )}
+        </div>
+      )}
+
+      {/* Conjuring Information (for Aspected Magicians with Conjuring skill group) */}
+      {formData.magicType === 'aspected_magician' && 
+        formData.aspectedSkillGroup === 'Conjuring' && 
+        formData.tradition && (
+        <div className="p-4 bg-blue-900/20 border border-blue-700/50 rounded-md space-y-3">
+          <h4 className="text-md font-semibold text-blue-400">Conjuring Aspected Magician</h4>
+          <p className="text-sm text-gray-300">
+            As a Conjuring Aspected Magician, you can work with spirits through the skills of <strong>Summoning</strong>, <strong>Binding</strong>, and <strong>Banishing</strong>.
+          </p>
+          <div className="space-y-2 text-sm text-gray-400">
+            <p>• You can summon spirits of your tradition ({formData.tradition})</p>
+            <p>• You can bind spirits for long-term service (up to your Charisma attribute in bound spirits)</p>
+            <p>• You can banish spirits to sever their bonds</p>
+            <p>• You will select and allocate your Conjuring skills in the Skills step</p>
+            <p>• Spirits can be selected and bound during gameplay or in the Karma Spending step</p>
+          </div>
+        </div>
+      )}
+
+      {/* Enchanting Information (for Aspected Magicians with Enchanting skill group) */}
+      {formData.magicType === 'aspected_magician' && 
+        formData.aspectedSkillGroup === 'Enchanting' && 
+        formData.tradition && (
+        <div className="p-4 bg-purple-900/20 border border-purple-700/50 rounded-md space-y-3">
+          <h4 className="text-md font-semibold text-purple-400">Enchanting Aspected Magician</h4>
+          <p className="text-sm text-gray-300">
+            As an Enchanting Aspected Magician, you can create magical items and preparations through the skills of <strong>Alchemy</strong>, <strong>Artificing</strong>, and <strong>Disenchanting</strong>.
+          </p>
+          <div className="space-y-2 text-sm text-gray-400">
+            <p>• You can create alchemical preparations (lynchpins) with various triggers</p>
+            <p>• You can craft foci and magical items through Artificing</p>
+            <p>• You can disenchant existing magical items</p>
+            <p>• You will select and allocate your Enchanting skills in the Skills step</p>
+            <p>• Alchemical preparations can be created during gameplay or in the Karma Spending step</p>
+            <p>• Maximum preparations/formulae at creation: Magic Rating × 2</p>
+          </div>
+        </div>
+      )}
+
+      {/* Spell Selection (for Magicians and Mystic Adepts after tradition is selected, or Shamans after mentor spirit, or Sorcery Aspected Magicians) */}
+      {formData.tradition && 
+        ((formData.magicType === 'magician' || formData.magicType === 'mystic_adept') ||
+         (formData.tradition === 'The Shaman' && formData.mentorSpirit) ||
+         (formData.magicType === 'aspected_magician' && formData.aspectedSkillGroup === 'Sorcery' && formData.tradition)) && (
+        <div ref={spellSelectionRef} className="space-y-3">
+          <h4 className="text-md font-semibold text-gray-200">Select Spells</h4>
+          <div className="p-4 bg-sr-light-gray/30 border border-sr-light-gray rounded-md mb-3">
+            <div className="flex items-center justify-between mb-2">
+              <span className="text-sm font-medium text-gray-300">Spell Selection</span>
+              <span className={`text-lg font-bold ${selectedSpells.length <= maxSpells ? 'text-green-400' : 'text-sr-danger'}`}>
+                {selectedSpells.length} / {maxSpells} spells
+              </span>
+            </div>
+            <p className="text-xs text-gray-400">
+              Free spells from priority: <strong className="text-gray-100">{freeSpellsCount}</strong> | 
+              Maximum allowed: <strong className="text-gray-100">{maxSpells}</strong> (Magic Rating × 2)
+            </p>
+          </div>
+
+          {/* Search */}
+          <TextField className="flex flex-col gap-1">
+            <Input
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+              placeholder="Search spells..."
+              className="px-3 py-2 bg-sr-gray border border-sr-light-gray rounded-md text-gray-100 focus:outline-none focus:ring-2 focus:ring-sr-accent focus:border-transparent"
+            />
+          </TextField>
+
+          {/* Selected Spells */}
+          {selectedSpells.length > 0 && (
+            <div className="p-3 bg-sr-light-gray/30 border border-sr-light-gray rounded-md">
+              <h5 className="text-sm font-semibold text-gray-200 mb-2">Selected Spells ({selectedSpells.length}):</h5>
+              <div className="flex flex-wrap gap-2">
+                {selectedSpells.map((spell) => (
+                  <div
+                    key={spell.name}
+                    className="flex items-center gap-2 px-3 py-1.5 bg-sr-gray border border-sr-light-gray rounded-md"
+                  >
+                    <span className="text-sm text-gray-200">{spell.name}</span>
+                    {spell.category && (
+                      <span className="text-xs text-gray-400">({spell.category})</span>
+                    )}
+                    <button
+                      onClick={() => handleSpellRemove(spell.name!)}
+                      className="text-sr-danger hover:text-sr-danger/80 text-sm font-bold"
+                      aria-label={`Remove ${spell.name}`}
+                    >
+                      ×
+                    </button>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
+
+          {/* Spells List */}
+          {isLoadingSpells ? (
+            <div className="text-sm text-gray-400">Loading spells...</div>
+          ) : (
+            <div className="space-y-4">
+              {Object.entries(groupedSpells).map(([category, categorySpells]) => (
+                <div key={category} className="border border-sr-light-gray rounded-md overflow-hidden">
+                  <div className="p-3 bg-sr-light-gray/50 border-b border-sr-light-gray">
+                    <h5 className="text-sm font-semibold text-gray-200 capitalize">{category} Spells</h5>
+                  </div>
+                  <div className="p-3 space-y-2">
+                    {categorySpells.map((spell) => {
+                      const isSelected = selectedSpells.some(s => s.name === spell.name);
+                      const canSelect = !isSelected && selectedSpells.length < maxSpells;
+                      
+                      return (
+                        <div
+                          key={spell.name}
+                          className={`p-3 rounded-md border ${
+                            isSelected
+                              ? 'border-sr-accent bg-sr-accent/10'
+                              : canSelect
+                              ? 'border-sr-light-gray bg-sr-gray hover:border-sr-accent/50 hover:bg-sr-light-gray/30 cursor-pointer'
+                              : 'border-sr-light-gray/50 bg-sr-gray/50 opacity-60 cursor-not-allowed'
+                          }`}
+                          onClick={() => canSelect && handleSpellSelect(spell)}
+                        >
+                          <div className="flex items-start justify-between">
+                            <div className="flex-1">
+                              <div className="flex items-center gap-2 mb-1">
+                                <span className="text-sm font-medium text-gray-100">{spell.name}</span>
+                                {isSelected && (
+                                  <span className="text-xs text-sr-accent font-medium">(Selected)</span>
+                                )}
+                              </div>
+                              {spell.description && (
+                                <p className="text-xs text-gray-400 line-clamp-2">{spell.description}</p>
+                              )}
+                              <div className="flex flex-wrap gap-2 mt-2">
+                                {spell.category && (
+                                  <span className="text-xs text-gray-500">Category: {spell.category}</span>
+                                )}
+                                {spell.type && (
+                                  <span className="text-xs text-gray-500">Type: {spell.type}</span>
+                                )}
+                                {spell.range && (
+                                  <span className="text-xs text-gray-500">Range: {spell.range}</span>
+                                )}
+                                {spell.duration && (
+                                  <span className="text-xs text-gray-500">Duration: {spell.duration}</span>
+                                )}
+                              </div>
+                            </div>
+                            {canSelect && (
+                              <Button
+                                onPress={() => handleSpellSelect(spell)}
+                                className="px-3 py-1 text-xs font-medium bg-sr-accent border border-sr-accent rounded-md text-gray-100 hover:bg-sr-accent/80 transition-colors"
+                              >
+                                Add
+                              </Button>
+                            )}
+                          </div>
+                        </div>
+                      );
+                    })}
+                  </div>
+                </div>
+              ))}
+            </div>
+          )}
+
+          {selectedSpells.length >= maxSpells && (
+            <div className="p-3 bg-yellow-900/20 border border-yellow-700/50 rounded-md">
+              <p className="text-sm text-yellow-400">
+                You have reached the maximum number of spells ({maxSpells}) allowed at character creation.
+              </p>
+            </div>
+          )}
+        </div>
+      )}
+
+      {/* Adept Power Selection (for Adepts) */}
+      {formData.magicType === 'adept' && (
+        <div ref={powerSelectionRef} className="space-y-3">
+          <h4 className="text-md font-semibold text-gray-200">Select Adept Powers</h4>
+          <div className="p-4 bg-sr-light-gray/30 border border-sr-light-gray rounded-md mb-3">
+            <div className="flex items-center justify-between mb-2">
+              <span className="text-sm font-medium text-gray-300">Power Points</span>
+              <span className={`text-lg font-bold ${totalPowerPointsUsed <= availablePowerPoints ? 'text-green-400' : 'text-sr-danger'}`}>
+                {totalPowerPointsUsed.toFixed(2)} / {availablePowerPoints} PP
+              </span>
+            </div>
+            <p className="text-xs text-gray-400">
+              Adepts receive Power Points equal to their Magic rating ({magicRating} PP). Select powers to spend your Power Points.
+            </p>
+            {totalPowerPointsUsed > availablePowerPoints && (
+              <p className="text-xs text-sr-danger mt-2">
+                Warning: You have exceeded your available Power Points!
+              </p>
+            )}
+          </div>
+
+          {/* Search */}
+          <TextField className="flex flex-col gap-1">
+            <Input
+              value={powerSearchTerm}
+              onChange={(e) => setPowerSearchTerm(e.target.value)}
+              placeholder="Search adept powers..."
+              className="px-3 py-2 bg-sr-gray border border-sr-light-gray rounded-md text-gray-100 focus:outline-none focus:ring-2 focus:ring-sr-accent focus:border-transparent"
+            />
+          </TextField>
+
+          {/* Selected Powers */}
+          {selectedAdeptPowers.length > 0 && (
+            <div className="p-3 bg-sr-light-gray/30 border border-sr-light-gray rounded-md">
+              <h5 className="text-sm font-semibold text-gray-200 mb-2">Selected Powers ({selectedAdeptPowers.length}):</h5>
+              <div className="flex flex-col gap-2">
+                {selectedAdeptPowers.map((selectedPower) => {
+                  const power = powers.find(p => p.name === selectedPower.name);
+                  const costFormula = power?.cost;
+                  const requiresLevel = costFormula?.is_variable || costFormula?.cost_per_level !== undefined;
+                  
+                  return (
+                    <div
+                      key={selectedPower.name}
+                      className="flex items-center justify-between gap-2 px-3 py-2 bg-sr-gray border border-sr-light-gray rounded-md"
+                    >
+                      <div className="flex-1">
+                        <div className="flex items-center gap-2">
+                          <span className="text-sm font-medium text-gray-200">{selectedPower.name}</span>
+                          {requiresLevel && selectedPower.level !== undefined && (
+                            <span className="text-xs text-gray-400">(Level {selectedPower.level})</span>
+                          )}
+                          <span className="text-xs text-gray-500">({selectedPower.powerPoints.toFixed(2)} PP)</span>
+                        </div>
+                      </div>
+                      {requiresLevel && power && (
+                        <div className="flex items-center gap-2">
+                          <label className="text-xs text-gray-400">Level:</label>
+                          <select
+                            value={selectedPower.level || 1}
+                            onChange={(e) => handlePowerLevelChange(power, parseInt(e.target.value))}
+                            className="px-2 py-1 bg-sr-gray border border-sr-light-gray rounded text-sm text-gray-100"
+                          >
+                            {Array.from({ length: (power.cost?.max_level || 6) }, (_, i) => i + 1).map(level => (
+                              <option key={level} value={level}>{level}</option>
+                            ))}
+                          </select>
+                        </div>
+                      )}
+                      <button
+                        onClick={() => handlePowerRemove(selectedPower.name)}
+                        className="text-sr-danger hover:text-sr-danger/80 text-sm font-bold"
+                        aria-label={`Remove ${selectedPower.name}`}
+                      >
+                        ×
+                      </button>
+                    </div>
+                  );
+                })}
+              </div>
+            </div>
+          )}
+
+          {/* Powers List */}
+          {isLoadingPowers ? (
+            <div className="text-sm text-gray-400">Loading adept powers...</div>
+          ) : (
+            <div className="space-y-3">
+              {filteredPowers.map((power) => {
+                if (!power.name) return null;
+                
+                const isSelected = selectedAdeptPowers.some(p => p.name === power.name);
+                const baseCost = calculatePowerCost(power, 1);
+                const costFormula = power.cost;
+                const requiresLevel = costFormula?.is_variable || costFormula?.cost_per_level !== undefined;
+                const maxLevel = costFormula?.max_level || 6;
+                const canAfford = totalPowerPointsUsed + baseCost <= availablePowerPoints;
+                
+                return (
+                  <div
+                    key={power.name}
+                    className={`p-3 rounded-md border ${
+                      isSelected
+                        ? 'border-sr-accent bg-sr-accent/10'
+                        : canAfford
+                        ? 'border-sr-light-gray bg-sr-gray hover:border-sr-accent/50 hover:bg-sr-light-gray/30'
+                        : 'border-sr-light-gray/50 bg-sr-gray/50 opacity-60'
+                    }`}
+                  >
+                    <div className="flex items-start justify-between">
+                      <div className="flex-1">
+                        <div className="flex items-center gap-2 mb-1">
+                          <span className="text-sm font-medium text-gray-100">{power.name}</span>
+                          {isSelected && (
+                            <span className="text-xs text-sr-accent font-medium">(Selected)</span>
+                          )}
+                          <span className="text-xs text-gray-500">
+                            ({baseCost.toFixed(2)} PP{requiresLevel ? ' base' : ''})
+                          </span>
+                        </div>
+                        {power.description && (
+                          <p className="text-xs text-gray-400 mb-2 line-clamp-2">{power.description}</p>
+                        )}
+                        <div className="flex flex-wrap gap-2 mt-2">
+                          {power.activation_description && (
+                            <span className="text-xs text-gray-500">Activation: {power.activation_description}</span>
+                          )}
+                          {power.prerequisite && (
+                            <span className="text-xs text-gray-500">Prerequisite: {power.prerequisite}</span>
+                          )}
+                          {requiresLevel && (
+                            <span className="text-xs text-gray-500">Levels: 1-{maxLevel}</span>
+                          )}
+                          {costFormula?.formula && (
+                            <span className="text-xs text-gray-500">Cost: {costFormula.formula}</span>
+                          )}
+                        </div>
+                      </div>
+                      {canAfford && (
+                        <Button
+                          onPress={() => handlePowerSelect(power, 1)}
+                          className="px-3 py-1 text-xs font-medium bg-sr-accent border border-sr-accent rounded-md text-gray-100 hover:bg-sr-accent/80 transition-colors"
+                          isDisabled={isSelected}
+                        >
+                          {isSelected ? 'Selected' : 'Add'}
+                        </Button>
+                      )}
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+          )}
+
+          {totalPowerPointsUsed >= availablePowerPoints && (
+            <div className="p-3 bg-yellow-900/20 border border-yellow-700/50 rounded-md">
+              <p className="text-sm text-yellow-400">
+                You have used all available Power Points ({availablePowerPoints} PP).
+              </p>
+            </div>
           )}
         </div>
       )}

@@ -4,6 +4,18 @@
 
 | Armor/Clothing // Cyberware // Magical // Vehicles/Drones // Vehicle Mods // Weapons // Electronics // Security // Medical // Others |
 
+## Contents
+
+- [1 Armor Lists](#Armor_Lists)
+  - [1.1 Clothing & Armor](#Clothing_.26_Armor)
+  - [1.2 Environmental Armor](#Environmental_Armor)
+  - [1.3 Armor Modifications](#Armor_Modifications)
+  - [1.4 Other Modifications](#Other_Modifications)
+
+# Armor Lists
+
+### Clothing & Armor
+
 | Article | Armor Rating | Capacity | Availability | Cost | Source |
 | --- | --- | --- | --- | --- | --- |
 | **Clothing** | 0 | 0 | - | 20¥ -100,000¥ | Core |
@@ -89,6 +101,8 @@
 | **Cloak** | - | (Rating) | 1 | (Rating) x 100¥ | SR5:HT |
 | **Ruthenium Polymer Cloak** | - | - | 14F | (Rating) x 4,000¥ | SR5:HT |
 
+### Environmental Armor
+
 | Article | Environment | Armor Rating | Capacity | Availability | Cost | Source |
 | --- | --- | --- | --- | --- | --- | --- |
 | **Ghillie Suit** | Universal | 4 | 4 | 6 | 600¥ | SR5:R&G |
@@ -112,6 +126,8 @@
 | **Magnetic Boots** | Space | — | 4 | 12 | 2,500¥ | SR5:R&G |
 | **Survival Bubble** | Space | 4 | 4 | Rating x 3 | 2,000¥ | SR5:R&G |
 | **MCT EE Suit** | Space | 6 | 5 | 10 | 2,500¥ | SR5:R&G |
+
+### Armor Modifications
 
 | Modification | Capacity | Availability | Cost | Source |
 | --- | --- | --- | --- | --- |
@@ -137,6 +153,25 @@
 | **Faraday Pocket** | [1] | 7R | 50¥ | SR5:HT |
 | **Gear Access** | [4] | 4 | 150¥ | SR5:HT |
 
+### Other Modifications
+
+**ARMOR MODIFICATION**
+
+| MODIFICATION | CAPACITY |
+| --- | --- |
+| Chemical Protection | [Rating] |
+| Chemical Seal | [6] |
+| Environmental Adaptation | [4] |
+| Feedback System | [3] |
+| Fire Resistance | [Rating] |
+| Gas Mask | [2] |
+| Internal Air Tank | [1 per hour] |
+| Insulation | [Rating] |
+| Nonconductivity | [Rating] |
+| Respirator | [2] |
+| Shock Frills | [2] |
+| Thermal Damping | [Rating] |
+
 **ARMOR ADD-ONS**
 
 | ADD-ON | CAPACITY |
@@ -160,34 +195,12 @@
 | Tool Kit | [6] |
 | Wire Clippers | [1] |
 
-**ARMOR MODIFICATION**
-
-| MODIFICATION | CAPACITY |
-| --- | --- |
-| Chemical Protection | [Rating] |
-| Chemical Seal | [6] |
-| Environmental Adaptation | [4] |
-| Feedback System | [3] |
-| Fire Resistance | [Rating] |
-| Gas Mask | [2] |
-| Internal Air Tank | [1 per hour] |
-| Insulation | [Rating] |
-| Nonconductivity | [Rating] |
-| Respirator | [2] |
-| Shock Frills | [2] |
-| Thermal Damping | [Rating] |
-
-**AUDIO ENHANCEMENTS**
-
 | ENHANCEMENT | CAPACITY |
 | --- | --- |
 | Audio System | [1] |
 | Audio Enhancement | [Rating] |
 | Select Sound Filter | [Rating] |
-| Spatial Recognizer | [2] |
-
-**VISION ENHANCEMENTS**
-
+| Spatial Recognizer | [2] | **VISION ENHANCEMENTS**
 | ENHANCEMENT | CAPACITY |
 | --- | --- |
 | Flare Compensation | [1] |
@@ -197,23 +210,7 @@
 | Thermographic Vision | [1] |
 | Ultrasound Sensor | [2] |
 | Vision Enhancement | [Rating] |
-| Vision Magnification | [1] |
-
-**COMMUNICATIONS GEAR**
-
-| GEAR | CAPACITY |
-| --- | --- |
-| AR Gloves | [1] |
-| Commlink | [2] |
-| Jammer | [2] |
-| Micro-transceiver | [1] |
-| RFID Tag-Sim Module | [1] |
-| Simrig | [5] |
-| Tag Eraser | [1] |
-| Trid Projector | [2] |
-| Trodes | [1] |
-| White Noise Generator | [2] |
-| Wireless Link | — |
+| Vision Magnification | [1] | |
 
 **SENSORS**
 
@@ -234,3 +231,19 @@
 | Omni-directional Microphone | [2] |
 | Radio Signal Scanner | [1] |
 | Ultrasound | [1] |
+
+**COMMUNICATIONS GEAR**
+
+| GEAR | CAPACITY |
+| --- | --- |
+| AR Gloves | [1] |
+| Commlink | [2] |
+| Jammer | [2] |
+| Micro-transceiver | [1] |
+| RFID Tag-Sim Module | [1] |
+| Simrig | [5] |
+| Tag Eraser | [1] |
+| Trid Projector | [2] |
+| Trodes | [1] |
+| White Noise Generator | [2] |
+| Wireless Link | — |

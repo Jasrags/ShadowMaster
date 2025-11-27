@@ -83,12 +83,49 @@ During character creation, the Magic or Resonance Priority column determines sta
 
 ## Conjuring & Spirits
 
-- Summoning: `Summoning + Magic [Force]` vs spirit Force; services equal net hits; drain = `2 × spirit hits` (Physical if Force > Magic).
-- Binding: Time = Force hours, reagent cost `Force × 25` drams; opposed test vs `Force × 2`; drain identical formula.
-- Banishing: `Banishing + Magic [Astral]` vs spirit Force (+ summoner Magic if bound); reduces owed services; drain follows same formula.
-- Services: differentiate unbound (combat, powers, tasks, remote) vs bound (same plus Aid Sorcery/Alchemy/Study, sustaining/binding spells). Track Charisma limit on bound spirits.
-- Spirit range: Magic × 100 meters; remote services exceed range and release unbound spirits.
-- Record spirit hostility modifiers for abusive tasks (`-1` penalty) and contested leash tests.
+Spirits are naturally astral forms, much like you're naturally a physical form. A spirit exists entirely in astral space, with astral attributes equal to its Force. A spirit can manifest, use astral travel, and get blocked by mana barriers, just like any other astral form. Its appearance strongly reflects its type and the tradition of the magician who summoned it.
+
+If a spirit wants to affect anything on the physical plane, it has to materialize first. It gets physical attributes based on its type and appears as a solid, physical version of its astral form. The spirit is dual-natured while it's materialized, which means it exists simultaneously on the physical and astral plane, meaning it can see objects in both places—and be targeted by both mages on the physical plane and astral entities, such as astrally projecting mages.
+
+### Summoning
+
+You can summon spirits of your tradition. Summoning a spirit is a Complex Action. You can only summon one spirit at a time, and it only hangs around for a limited time—a summoned spirit will return to wherever it was when you called it when it's either through with all of the services it owes you or when the sun rises or sets (whichever comes first).
+
+**Step 1: Choose Spirit Type & Force**
+
+You can only choose a spirit of a type available to your tradition—most traditions have five types to choose from. You also need to choose the spirit's Force (the higher the Force the more powerful the spirit), up to twice your Magic rating. You can call a spirit with optional powers if the Force you choose is high enough; spirits have one optional power for every 3 full points of Force (so Force 1–2 spirits have no optional powers, Force 3–5 have 1, Force 6–8 have 2, and so on). Once a spirit has been summoned, its optional powers cannot be changed.
+
+**Step 2: Attempt Summoning**
+
+Make an Opposed Test using **Summoning + Magic [Force] v. spirit's Force**. You may spend reagents to change the limit of this test. If you get no net hits, the spirit doesn't show up. If you get net hits, the spirit arrives nearby in astral space, owing you one service per net hit.
+
+**Step 3: Resist Drain**
+
+Whether you successfully summon the spirit or not, you must resist Drain from the attempt. The Drain Value is equal to twice the hits (not net hits) on the spirit's defense test, with a minimum Drain Value of 2. If the spirit's Force is greater than your Magic rating, the Drain is Physical; otherwise it's Stun.
+
+**Group Summoning**: Magicians can use teamwork to summon a spirit. All of the team members must be able to summon the type of spirit intended, and team members who are a different tradition than the team leader suffer a –2 dice pool penalty on their roll. The team uses the normal Teamwork rules for the test, and all of them suffer the same amount of Drain, which is twice the hits (not net hits) on the spirit's defense test. If successful, only the leader of the ritual may command the spirit.
+
+### Binding
+
+Binding is used to compel long-term services from a spirit that you've already summoned. This takes one hour per Force of the spirit and requires (Force x 25) drams of reagents to be used up in the binding. The test is an Opposed **Binding + Magic [Force] v. spirit's Force x 2**, and it inflicts Drain equal to twice the hits (not net hits) on the spirit's defense test, minimum 2. Additional net hits beyond the first add to the number of services the spirit owes.
+
+Once the spirit is bound, then the spirit and its services do not expire at the next sunrise or sunset. A spirit's service ends when it has no more services owed to the magician. The bound spirit can be called or dismissed with a Simple Action as they appear next to the magician from the metaplane, awaiting further instructions on the astral. A magician can bind up to his Charisma attribute in spirits.
+
+### Banishing
+
+Banishing is severing the bond between a spirit and its summoner. When the bond is broken, the spirit returns to its own plane. This is not the same as disrupting a spirit and forcing it back to their home plane—while it interrupts the spirit at what it's doing and may be annoying, banishing is not as downright unpleasant as disruption.
+
+Banishing is a Complex Action. You make an Opposed **Banishing + Magic [Astral] vs Force (+ Summoners Magic if Bound)** Test (you can spend reagents to set the limit of this test). This test is opposed by the spirit's Force (+ the summoner's Magic if the spirit is bound). For every net hit you get, the number of services the spirit owes is reduced by 1. If you reduce the spirit's owed services to zero, it's free and departs on its next action.
+
+The Drain Value for banishing is equal to twice the hits (not net hits) on the spirit's defense test, with a minimum Drain Value of 2. If the spirit's Force is greater than your Magic rating, the Drain is Physical, otherwise it's Stun.
+
+### Spirit Services
+
+**Unbound Spirit Services**: Combat, powers, tasks, remote services.
+
+**Bound Spirit Services**: Same as unbound plus Aid Sorcery/Alchemy/Study, sustaining/binding spells.
+
+Spirit range: Magic × 100 meters; remote services exceed range and release unbound spirits. Record spirit hostility modifiers for abusive tasks (`-1` penalty) and contested leash tests.
 
 ## Adepts & Power Points
 
@@ -97,6 +134,14 @@ During character creation, the Magic or Resonance Priority column determines sta
 - Track activation costs (Free/Simple/Complex) and Drain (usually Stun) for specific powers.
 - Adept content (power catalog, improved reflex tables) resides in data file placeholders.
 
+### Adept Ways
+
+Over the past few decades, adepts have expanded their knowledge of how their mojo works. A curious phenomenon has gained prominence within the adept community: the adoption of Ways. While the exact details of a Way vary from adept to adept (some include codes of conduct or spiritual trappings), dedication to a particular Way helps adepts further develop a chosen group of abilities based on their chosen Path.
+
+**Ways Available**: Artisan's Way, Artist's Way, Athlete's Way, Beast's Way, Burnout's Way, Invisible Way, Magician's Way, Speaker's Way, Spiritual Way, Warrior's Way.
+
+An adept cannot follow two Ways simultaneously. The bonuses granted by Ways to purchase adept powers all follow the same rules. For every 2 points in an adept's Magic Rating, that adept may reduce the cost of one level of one power from that Way's list by half. For example, if a player chooses an adept power that costs 1 Power Point and that power is covered by a specific Way, the cost for that power is reduced to 0.5 Power Points. This cost reduction cannot be used multiple times if the power has multiple levels: the reduction applies to only one level, but can be used for different aspects of the same power, such as a different Increased Attribute.
+
 ## Astral Fundamentals
 
 - Astral perception makes characters dual-natured (`-2` dice penalty on physical actions while perceiving); uses Assensing to interpret auras.
@@ -104,6 +149,21 @@ During character creation, the Magic or Resonance Priority column determines sta
 - Astral combat uses `Astral Combat + Willpower` vs `Intuition + Logic`; weapon foci apply `Accuracy`. Damage may be Stun or Physical; only mana spells function astrally.
 - Mana barriers: Force equals both Armor and Structure; can be brute-forced or "pressed through" with `Magic + Charisma` opposed tests. Creator always senses breaches.
 - Astral tracking uses `Assensing + Intuition (5,1 hour)` with modifiers (see data table placeholder).
+
+### Object Resistance
+
+When casting spells on objects, the object may resist based on its material composition:
+
+| Material | Threshold |
+| --- | --- |
+| Natural Objects | 3 |
+| (Trees, soil, unprocessed water, hand-carved wood, metal cold-worked by hand) |  |
+| Manufactured Low-Tech Objects and Materials | 6 |
+| (Brick, leather, simple plastics) |  |
+| Manufactured High-Tech Objects and Materials | 9 |
+| (Advanced plastics, alloys, electronic equipment, sensors) |  |
+| Highly Processed Objects | 15+ |
+| (Computers, complex toxic wastes, drones, vehicles) |  |
 
 ## Ritual Magic
 

@@ -1,15 +1,18 @@
 import { useState } from 'react';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useNavigate, useParams, useLocation } from 'react-router-dom';
 import { CharacterCreationWizard } from '../components/character/CharacterCreationWizard';
 
 export function CharacterCreationPage() {
   const navigate = useNavigate();
+  const location = useLocation();
   const { campaignId } = useParams<{ campaignId?: string }>();
   const [isWizardOpen, setIsWizardOpen] = useState(true);
 
   const handleSuccess = () => {
     if (campaignId) {
       navigate(`/campaigns/${campaignId}`);
+    } else if (location.pathname.startsWith('/characters/create')) {
+      navigate('/characters');
     } else {
       navigate('/campaigns');
     }
