@@ -26,6 +26,7 @@ export function Step4Qualities({ formData, setFormData, creationData, errors, to
   const [selectedQuality, setSelectedQuality] = useState<Quality | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [expandedGroups, setExpandedGroups] = useState<Set<string>>(new Set(['Positive', 'Negative']));
+  const [pendingRatings, setPendingRatings] = useState<Record<string, number>>({});
 
   const selectedQualities = formData.selectedQualities || [];
 
@@ -45,9 +46,10 @@ export function Step4Qualities({ formData, setFormData, creationData, errors, to
     }
   };
 
-  const calculateKarmaCost = (quality: Quality): number => {
+  const calculateKarmaCost = (quality: Quality, rating?: number): number => {
     if (quality.cost.per_rating) {
-      return quality.cost.base_cost; // For now, use base cost (rating selection would be added later)
+      const effectiveRating = rating ?? 1; // Default to 1 if no rating specified
+      return quality.cost.base_cost * effectiveRating;
     }
     return quality.cost.base_cost;
   };
@@ -58,7 +60,7 @@ export function Step4Qualities({ formData, setFormData, creationData, errors, to
       .filter(q => q.type === 'positive')
       .reduce((sum, q) => {
         const quality = qualities.find(qual => qual.name === q.name);
-        return sum + (quality ? Math.abs(calculateKarmaCost(quality)) : 0);
+        return sum + (quality ? Math.abs(calculateKarmaCost(quality, q.rating)) : 0);
       }, 0);
   }, [selectedQualities, qualities]);
 
@@ -69,7 +71,7 @@ export function Step4Qualities({ formData, setFormData, creationData, errors, to
       .reduce((sum, q) => {
         const quality = qualities.find(qual => qual.name === q.name);
         // Negative quality costs are negative numbers, so we need to make them positive
-        const cost = quality ? calculateKarmaCost(quality) : 0;
+        const cost = quality ? calculateKarmaCost(quality, q.rating) : 0;
         return sum + Math.abs(cost); // Negative qualities give karma
       }, 0);
   }, [selectedQualities, qualities]);
@@ -79,14 +81,17 @@ export function Step4Qualities({ formData, setFormData, creationData, errors, to
     return STARTING_KARMA - positiveKarmaUsed + negativeKarmaGained;
   }, [positiveKarmaUsed, negativeKarmaGained]);
 
-  const handleQualitySelect = (quality: Quality) => {
-    const cost = Math.abs(calculateKarmaCost(quality));
+  const handleQualitySelect = (quality: Quality, rating?: number) => {
+    // For per_rating qualities, default to rating 1 if not specified
+    const effectiveRating = quality.cost.per_rating ? (rating ?? 1) : undefined;
+    const cost = Math.abs(calculateKarmaCost(quality, effectiveRating));
     const isPositive = quality.type === 'positive';
     
     // Debug: Log current values
     console.log('Adding quality:', quality.name, {
       cost,
       isPositive,
+      rating: effectiveRating,
       positiveKarmaUsed,
       negativeKarmaGained,
       netKarma,
@@ -125,13 +130,62 @@ export function Step4Qualities({ formData, setFormData, creationData, errors, to
       // Note: No upper limit on net karma (can gain unlimited from negatives, but limited by 25 karma worth of negatives)
     }
 
-    const newQualities = [...selectedQualities, { name: quality.name, type: quality.type }];
+    const newQualities = [...selectedQualities, { name: quality.name, type: quality.type, rating: effectiveRating }];
     setFormData({ ...formData, selectedQualities: newQualities });
   };
 
   const handleQualityRemove = (qualityName: string) => {
     const newQualities = selectedQualities.filter(q => q.name !== qualityName);
     setFormData({ ...formData, selectedQualities: newQualities });
+  };
+
+  const handleQualityRatingChange = (qualityName: string, newRating: number) => {
+    const quality = qualities.find(q => q.name === qualityName);
+    if (!quality || !quality.cost.per_rating) return;
+
+    // Validate rating is within bounds
+    const maxRating = quality.cost.max_rating > 0 ? quality.cost.max_rating : Infinity;
+    const validRating = Math.max(1, Math.min(newRating, maxRating));
+    
+    // Calculate the cost difference
+    const currentSelected = selectedQualities.find(q => q.name === qualityName);
+    const currentCost = Math.abs(calculateKarmaCost(quality, currentSelected?.rating));
+    const newCost = Math.abs(calculateKarmaCost(quality, validRating));
+    const costDifference = newCost - currentCost;
+    const isPositive = quality.type === 'positive';
+    
+    // Check if the new rating would violate karma limits
+    if (isPositive) {
+      const newPositiveUsed = positiveKarmaUsed + costDifference;
+      if (newPositiveUsed > MAX_QUALITY_KARMA) {
+        showError(
+          'Cannot increase rating',
+          `Increasing to rating ${validRating} would exceed the ${MAX_QUALITY_KARMA} karma limit for positive qualities (would be ${newPositiveUsed}).`
+        );
+        return;
+      }
+      if (netKarma < costDifference) {
+        showError(
+          'Insufficient karma',
+          `You need ${costDifference} more karma to increase to rating ${validRating}, but only have ${netKarma} remaining.`
+        );
+        return;
+      }
+    } else {
+      const newNegativeGained = negativeKarmaGained + costDifference;
+      if (newNegativeGained > MAX_QUALITY_KARMA) {
+        showError(
+          'Cannot increase rating',
+          `Increasing to rating ${validRating} would exceed the ${MAX_QUALITY_KARMA} karma limit for negative qualities (would be ${newNegativeGained}).`
+        );
+        return;
+      }
+    }
+
+    const updatedQualities = selectedQualities.map(q => 
+      q.name === qualityName ? { ...q, rating: validRating } : q
+    );
+    setFormData({ ...formData, selectedQualities: updatedQualities });
   };
 
   const handleQualityClick = (quality: Quality) => {
@@ -144,13 +198,11 @@ export function Step4Qualities({ formData, setFormData, creationData, errors, to
   };
 
   // Helper to format karma cost
-  const formatKarma = (quality: Quality): string => {
+  const formatKarma = (quality: Quality, selectedQuality?: { name: string; type: string; rating?: number }): string => {
     const cost = quality.cost;
     if (cost.per_rating) {
-      if (cost.max_rating > 0) {
-        return `${cost.base_cost} per rating (max ${cost.max_rating})`;
-      }
-      return `${cost.base_cost} per rating`;
+      // For per_rating qualities, just show the formula since rating is visible in dropdown
+      return `${cost.base_cost} × rating`;
     }
     return `${cost.base_cost}`;
   };
@@ -354,7 +406,7 @@ export function Step4Qualities({ formData, setFormData, creationData, errors, to
                                 ? groupKarmaUsed <= MAX_QUALITY_KARMA ? 'text-green-400' : 'text-sr-danger'
                                 : groupKarmaUsed <= MAX_QUALITY_KARMA ? 'text-red-400' : 'text-sr-danger'
                             }`}>
-                              {group.category === 'Positive' ? '-' : '+'}{groupKarmaUsed} / {MAX_QUALITY_KARMA}
+                              {groupKarmaUsed} / {MAX_QUALITY_KARMA}
                             </span>
                           </td>
                           <td className="px-4 py-3"></td>
@@ -362,25 +414,30 @@ export function Step4Qualities({ formData, setFormData, creationData, errors, to
 
                         {/* Group Qualities Rows */}
                         {group.isExpanded && group.qualities.map((quality, index) => {
-                          const isSelected = selectedQualities.some(q => q.name === quality.name);
-                          const rawCost = calculateKarmaCost(quality);
-                          const cost = Math.abs(rawCost);
+                          const selectedQuality = selectedQualities.find(q => q.name === quality.name);
+                          const isSelected = !!selectedQuality;
+                          // Calculate cost with current rating (or 1 for per_rating qualities when checking if can add)
+                          const cost = Math.abs(calculateKarmaCost(quality, selectedQuality?.rating));
                           const isPositive = quality.type === 'positive';
+                          const hasRating = quality.cost.per_rating;
+                          const maxRating = quality.cost.max_rating > 0 ? quality.cost.max_rating : Infinity;
+                          const currentRating = selectedQuality?.rating ?? 1;
                           
-                          // Only calculate canAdd for unselected qualities
+                          // Only calculate canAdd for unselected qualities (check with minimum rating of 1)
                           let canAdd = false;
                           if (!isSelected) {
+                            const minCost = Math.abs(calculateKarmaCost(quality, 1));
                             if (isPositive) {
                               // Can add if: 
-                              // 1. positive karma used + cost <= 25 (max positive quality karma)
-                              // 2. net karma >= cost (must have enough karma remaining - allows spending exactly all remaining)
-                              const newPositiveUsed = positiveKarmaUsed + cost;
+                              // 1. positive karma used + minCost <= 25 (max positive quality karma)
+                              // 2. net karma >= minCost (must have enough karma remaining - allows spending exactly all remaining)
+                              const newPositiveUsed = positiveKarmaUsed + minCost;
                               const withinMaxPositive = newPositiveUsed <= MAX_QUALITY_KARMA;
-                              const hasEnoughKarma = netKarma >= cost;
+                              const hasEnoughKarma = netKarma >= minCost;
                               canAdd = withinMaxPositive && hasEnoughKarma;
                             } else {
-                              // Can add if: negative karma gained + cost <= 25 (max negative quality karma)
-                              canAdd = (negativeKarmaGained + cost) <= MAX_QUALITY_KARMA;
+                              // Can add if: negative karma gained + minCost <= 25 (max negative quality karma)
+                              canAdd = (negativeKarmaGained + minCost) <= MAX_QUALITY_KARMA;
                             }
                           }
 
@@ -409,11 +466,31 @@ export function Step4Qualities({ formData, setFormData, creationData, errors, to
                                 </p>
                               </td>
                               <td className="px-4 py-2">
-                                <span className={`font-semibold ${
-                                  quality.cost.base_cost < 0 ? 'text-red-400' : 'text-green-400'
-                                }`}>
-                                  {formatKarma(quality)}
-                                </span>
+                                <div className="flex flex-col gap-1">
+                                  <span className={`font-semibold ${
+                                    quality.cost.base_cost < 0 ? 'text-red-400' : 'text-green-400'
+                                  }`}>
+                                    {formatKarma(quality, selectedQuality)}
+                                  </span>
+                                  {isSelected && hasRating && (
+                                    <div className="flex items-center gap-2">
+                                      <span className="text-xs text-gray-400">Rating:</span>
+                                      <select
+                                        value={currentRating}
+                                        onChange={(e) => {
+                                          const newRating = parseInt(e.target.value, 10);
+                                          handleQualityRatingChange(quality.name, newRating);
+                                        }}
+                                        className="px-2 py-0.5 text-xs bg-sr-gray border border-sr-light-gray rounded text-gray-100 focus:outline-none focus:ring-1 focus:ring-sr-accent"
+                                        onClick={(e) => e.stopPropagation()}
+                                      >
+                                        {Array.from({ length: Math.min(maxRating, 10) }, (_, i) => i + 1).map(rating => (
+                                          <option key={rating} value={rating}>{rating}</option>
+                                        ))}
+                                      </select>
+                                    </div>
+                                  )}
+                                </div>
                               </td>
                               <td className="px-4 py-2">
                                 {isSelected ? (
@@ -427,15 +504,46 @@ export function Step4Qualities({ formData, setFormData, creationData, errors, to
                                     Remove
                                   </button>
                                 ) : (
-                                  <button
-                                    onClick={(e) => {
-                                      e.stopPropagation();
-                                      handleQualitySelect(quality);
-                                    }}
-                                    className="px-3 py-1 text-xs bg-sr-accent/20 border border-sr-accent rounded text-sr-accent hover:bg-sr-accent/30 cursor-pointer"
-                                  >
-                                    Add
-                                  </button>
+                                  <div className="flex items-center gap-2">
+                                    {hasRating && (
+                                      <select
+                                        value={pendingRatings[quality.name] ?? 1}
+                                        onChange={(e) => {
+                                          const rating = parseInt(e.target.value, 10);
+                                          setPendingRatings(prev => ({ ...prev, [quality.name]: rating }));
+                                        }}
+                                        className="px-2 py-1 text-xs bg-sr-gray border border-sr-light-gray rounded text-gray-100 focus:outline-none focus:ring-1 focus:ring-sr-accent"
+                                        onClick={(e) => e.stopPropagation()}
+                                      >
+                                        {Array.from({ length: Math.min(maxRating, 10) }, (_, i) => i + 1).map(rating => (
+                                          <option key={rating} value={rating}>{rating}</option>
+                                        ))}
+                                      </select>
+                                    )}
+                                    <button
+                                      onClick={(e) => {
+                                        e.stopPropagation();
+                                        const rating = hasRating ? (pendingRatings[quality.name] ?? 1) : undefined;
+                                        handleQualitySelect(quality, rating);
+                                        // Clear pending rating after adding
+                                        if (hasRating && pendingRatings[quality.name]) {
+                                          setPendingRatings(prev => {
+                                            const next = { ...prev };
+                                            delete next[quality.name];
+                                            return next;
+                                          });
+                                        }
+                                      }}
+                                      disabled={!canAdd}
+                                      className={`px-3 py-1 text-xs border rounded transition-colors ${
+                                        canAdd
+                                          ? 'bg-sr-accent/20 border-sr-accent text-sr-accent hover:bg-sr-accent/30 cursor-pointer'
+                                          : 'bg-sr-gray/50 border-sr-light-gray/50 text-gray-500 cursor-not-allowed'
+                                      }`}
+                                    >
+                                      Add
+                                    </button>
+                                  </div>
                                 )}
                               </td>
                             </tr>

@@ -44,7 +44,7 @@ interface CharacterCreationState {
   aspectedSkillGroup?: string; // 'Sorcery', 'Conjuring', or 'Enchanting' for Aspected Magicians
   selectedSpells?: Array<{ name: string; category?: string }>;
   selectedAdeptPowers?: Array<{ name: string; level?: number; powerPoints: number }>;
-  selectedQualities?: Array<{ name: string; type: string }>;
+  selectedQualities?: Array<{ name: string; type: string; rating?: number }>;
   skillAllocations?: Record<string, number>;
   equipment?: any[];
   karmaSpending?: any;
