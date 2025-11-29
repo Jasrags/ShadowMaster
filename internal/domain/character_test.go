@@ -151,8 +151,25 @@ func TestCharacter_GetSR5Data(t *testing.T) {
 		{
 			name: "valid SR5 character",
 			character: &Character{
-				Edition:     "sr5",
-				EditionData: map[string]interface{}{"test": "data"},
+				Edition: "sr5",
+				EditionData: &CharacterSR5{
+					Body:     4,
+					Agility:  5,
+					Strength: 3,
+					Charisma: 3,
+					Willpower: 4,
+					Logic:    3,
+					Intuition: 4,
+					Reaction:  4,
+					Edge:     3,
+					Metatype: "Human",
+					MetatypePriority:    "C",
+					AttributesPriority:  "B",
+					MagicPriority:       "E",
+					SkillsPriority:      "D",
+					ResourcesPriority:   "A",
+					CreationMethod:      "priority",
+				},
 			},
 		},
 		{
