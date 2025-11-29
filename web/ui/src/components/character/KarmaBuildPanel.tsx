@@ -4,7 +4,7 @@ interface KarmaBuildPanelProps {
   onKarmaChange: (used: number) => void;
 }
 
-export function KarmaBuildPanel({ startingKarma, usedKarma, onKarmaChange }: KarmaBuildPanelProps) {
+export function KarmaBuildPanel({ startingKarma, usedKarma, onKarmaChange: _onKarmaChange }: KarmaBuildPanelProps) {
   const remainingKarma = startingKarma - usedKarma;
 
   return (

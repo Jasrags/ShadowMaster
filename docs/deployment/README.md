@@ -18,6 +18,9 @@ This guide covers deploying ShadowMaster using Docker, with support for local Po
 ## Prerequisites
 
 - Docker Engine 20.10+ or Docker Desktop
+  - **macOS**: We use [Colima](https://github.com/abiosoft/colima) for local Docker. Install with `brew install colima docker docker-compose && colima start`
+  - **Linux**: Docker Engine (see [installation guide](https://docs.docker.com/engine/install/))
+  - **Windows**: Docker Desktop (see [installation guide](https://docs.docker.com/desktop/install/windows-install/))
 - Docker Compose 2.0+ (optional, for docker-compose)
 - Make (optional, for Makefile targets)
 - Git (for version extraction)

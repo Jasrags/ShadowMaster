@@ -2,6 +2,8 @@
 
 Welcome to the ShadowMaster documentation. This directory contains all documentation for the ShadowMaster RPG System, organized by topic.
 
+**Note:** This project is developed using an AI-assisted approach with [Cursor](https://cursor.sh). The development leverages AI tools for code generation, refactoring, documentation, and quality checks while maintaining clean architecture and best practices.
+
 ## Documentation Structure
 
 ### [Getting Started](./getting-started/)

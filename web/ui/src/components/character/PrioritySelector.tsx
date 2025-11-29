@@ -25,7 +25,7 @@ const CATEGORIES: CategoryInfo[] = [
 
 const PRIORITY_LETTERS = ['A', 'B', 'C', 'D', 'E'];
 
-export function PrioritySelector({ priorities, onChange, creationData, gameplayLevel, onGameplayLevelChange }: PrioritySelectorProps) {
+export function PrioritySelector({ priorities, onChange, creationData, gameplayLevel: _gameplayLevel, onGameplayLevelChange: _onGameplayLevelChange }: PrioritySelectorProps) {
   const { showWarning } = useToast();
   // Debug: Check if we have the required data
   if (!creationData) {
@@ -75,7 +75,7 @@ export function PrioritySelector({ priorities, onChange, creationData, gameplayL
       return '';
     }
     
-    const option = creationData.priorities[category]?.[priority];
+    const option = (creationData.priorities as Record<string, Record<string, { label?: string }>>)[category]?.[priority];
     if (!option) return '';
     
     return option.label || '';
@@ -175,7 +175,7 @@ export function PrioritySelector({ priorities, onChange, creationData, gameplayL
               {currentPriority && (
                 <div className="mt-3 space-y-2">
                   {(() => {
-                    const option = creationData.priorities?.[categoryName]?.[currentPriority];
+                    const option = (creationData.priorities as Record<string, Record<string, { label?: string; summary?: string; description?: string }>>)?.[categoryName]?.[currentPriority];
                     const label = option?.label || getPriorityBenefit(categoryName, currentPriority);
                     const summary = option?.summary;
                     const description = option?.description;

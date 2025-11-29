@@ -1068,11 +1068,6 @@ export interface PriorityOption {
   free_spells?: number; // Number of free spells for Magicians/Mystic Adepts
 }
 
-export interface AttributeRange {
-  min: number;
-  max: number;
-}
-
 export interface MetatypeDefinition {
   id: string;
   name: string;

@@ -7,7 +7,7 @@ interface EquipmentSelectorProps {
   onSelect: (equipment: EquipmentItem) => void;
 }
 
-export function EquipmentSelector({ nuyenBudget, usedNuyen, essence, onSelect }: EquipmentSelectorProps) {
+export function EquipmentSelector({ nuyenBudget, usedNuyen, essence, onSelect: _onSelect }: EquipmentSelectorProps) {
   const remainingNuyen = nuyenBudget - usedNuyen;
 
   return (

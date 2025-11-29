@@ -11,12 +11,6 @@ interface ArmorTableGroupedProps {
   gearMap: Map<string, Gear>;
 }
 
-interface GroupedArmor {
-  category: string;
-  armor: Armor[];
-  isExpanded: boolean;
-}
-
 export function ArmorTableGrouped({ armor, gearMap }: ArmorTableGroupedProps) {
   const [selectedArmor, setSelectedArmor] = useState<Armor | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);

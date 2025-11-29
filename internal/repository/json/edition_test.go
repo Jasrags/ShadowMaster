@@ -31,6 +31,7 @@ func TestEditionRepository(t *testing.T) {
 	})
 
 	t.Run("loads character creation and campaign support", func(t *testing.T) {
+		edition := "test"
 		creation := domain.CharacterCreationData{
 			Priorities: map[string]map[string]domain.PriorityOption{
 				"metatype": {
@@ -38,14 +39,14 @@ func TestEditionRepository(t *testing.T) {
 				},
 			},
 		}
-		require.NoError(t, store.Write(filepath.Join("editions", "sr5", characterCreationFilename), creation))
+		require.NoError(t, store.Write(filepath.Join("editions", edition, characterCreationFilename), creation))
 
 		support := domain.CampaignSupport{
 			Factions: []domain.CampaignFactionPreset{{ID: "f1", Name: "Faction"}},
 		}
-		require.NoError(t, store.Write(filepath.Join("editions", "sr5", campaignSupportFilename), support))
+		require.NoError(t, store.Write(filepath.Join("editions", edition, campaignSupportFilename), support))
 
-		data, err := repo.GetCharacterCreationData("sr5")
+		data, err := repo.GetCharacterCreationData(edition)
 		require.NoError(t, err)
 		require.NotNil(t, data)
 		assert.Equal(t, "Metatype A", data.Priorities["metatype"]["A"].Label)

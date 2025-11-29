@@ -1,3 +1,4 @@
+import { type ReactNode } from 'react';
 import { Dialog, Modal, Heading, Button } from 'react-aria-components';
 import type { WeaponAccessoryItem } from '../../lib/types';
 import { formatCost } from '../../lib/formatUtils';
@@ -15,6 +16,12 @@ const formatValue = (value: unknown): string => {
   if (typeof value === 'object') {
     return JSON.stringify(value, null, 2);
   }
+  return String(value);
+};
+
+// Helper function to safely convert unknown to ReactNode
+const toReactNode = (value: unknown): ReactNode => {
+  if (value === null || value === undefined) return null;
   return String(value);
 };
 
@@ -40,7 +47,7 @@ function SpecialPropertiesDisplay({ properties }: { properties: unknown }) {
     items.push(
       <div key="recoil">
         <span className="text-gray-400">Recoil Compensation:</span>{' '}
-        <span className="text-green-400">+{String(props.recoil_compensation)}</span>
+        <span className="text-green-400">+{toReactNode(props.recoil_compensation)}</span>
       </div>
     );
   }
@@ -50,7 +57,7 @@ function SpecialPropertiesDisplay({ properties }: { properties: unknown }) {
     items.push(
       <div key="accuracy">
         <span className="text-gray-400">Accuracy Bonus:</span>{' '}
-        <span className="text-green-400">+{String(props.accuracy_bonus)}</span>
+        <span className="text-green-400">+{toReactNode(props.accuracy_bonus)}</span>
       </div>
     );
   }
@@ -61,7 +68,7 @@ function SpecialPropertiesDisplay({ properties }: { properties: unknown }) {
       <div key="concealability">
         <span className="text-gray-400">Concealability Modifier:</span>{' '}
         <span className={Number(props.concealability_modifier) < 0 ? 'text-green-400' : 'text-gray-200'}>
-          {Number(props.concealability_modifier) > 0 ? '+' : ''}{String(props.concealability_modifier)}
+          {Number(props.concealability_modifier) > 0 ? '+' : ''}{toReactNode(props.concealability_modifier)}
         </span>
       </div>
     );
@@ -73,7 +80,7 @@ function SpecialPropertiesDisplay({ properties }: { properties: unknown }) {
       <div key="quick_draw_mod">
         <span className="text-gray-400">Quick Draw Threshold Modifier:</span>{' '}
         <span className={Number(props.quick_draw_threshold_modifier) < 0 ? 'text-green-400' : 'text-gray-200'}>
-          {Number(props.quick_draw_threshold_modifier) > 0 ? '+' : ''}{String(props.quick_draw_threshold_modifier)}
+          {Number(props.quick_draw_threshold_modifier) > 0 ? '+' : ''}{toReactNode(props.quick_draw_threshold_modifier)}
         </span>
       </div>
     );
@@ -84,7 +91,7 @@ function SpecialPropertiesDisplay({ properties }: { properties: unknown }) {
     items.push(
       <div key="quick_draw">
         <span className="text-gray-400">Quick Draw Threshold:</span>{' '}
-        <span className="text-gray-200">{String(props.quick_draw_threshold)}</span>
+        <span className="text-gray-200">{toReactNode(props.quick_draw_threshold)}</span>
       </div>
     );
   }
@@ -94,7 +101,7 @@ function SpecialPropertiesDisplay({ properties }: { properties: unknown }) {
     items.push(
       <div key="rating">
         <span className="text-gray-400">Rating:</span>{' '}
-        <span className="text-gray-200">{String(props.rating)}</span>
+        <span className="text-gray-200">{toReactNode(props.rating)}</span>
       </div>
     );
   }
@@ -104,7 +111,7 @@ function SpecialPropertiesDisplay({ properties }: { properties: unknown }) {
     items.push(
       <div key="max_rating">
         <span className="text-gray-400">Max Rating:</span>{' '}
-        <span className="text-gray-200">{String(props.max_rating)}</span>
+        <span className="text-gray-200">{toReactNode(props.max_rating)}</span>
       </div>
     );
   }
@@ -114,7 +121,7 @@ function SpecialPropertiesDisplay({ properties }: { properties: unknown }) {
     items.push(
       <div key="capacity">
         <span className="text-gray-400">Capacity:</span>{' '}
-        <span className="text-gray-200">{String(props.capacity)}</span>
+        <span className="text-gray-200">{toReactNode(props.capacity)}</span>
       </div>
     );
   }
@@ -144,7 +151,7 @@ function SpecialPropertiesDisplay({ properties }: { properties: unknown }) {
     items.push(
       <div key="installation_time">
         <span className="text-gray-400">Installation Time:</span>{' '}
-        <span className="text-gray-200">{String(props.installation_time)}</span>
+        <span className="text-gray-200">{toReactNode(props.installation_time)}</span>
       </div>
     );
   }
@@ -154,7 +161,7 @@ function SpecialPropertiesDisplay({ properties }: { properties: unknown }) {
     items.push(
       <div key="installation_test">
         <span className="text-gray-400">Installation Test:</span>{' '}
-        <span className="text-gray-200">{String(props.installation_test)}</span>
+        <span className="text-gray-200">{toReactNode(props.installation_test)}</span>
       </div>
     );
   }
@@ -164,7 +171,7 @@ function SpecialPropertiesDisplay({ properties }: { properties: unknown }) {
     items.push(
       <div key="attachment_time">
         <span className="text-gray-400">Attachment Time:</span>{' '}
-        <span className="text-gray-200">{String(props.attachment_time)}</span>
+        <span className="text-gray-200">{toReactNode(props.attachment_time)}</span>
       </div>
     );
   }
@@ -174,7 +181,7 @@ function SpecialPropertiesDisplay({ properties }: { properties: unknown }) {
     items.push(
       <div key="deployment_action">
         <span className="text-gray-400">Deployment Action:</span>{' '}
-        <span className="text-gray-200">{String(props.deployment_action)}</span>
+        <span className="text-gray-200">{toReactNode(props.deployment_action)}</span>
       </div>
     );
   }
@@ -184,7 +191,7 @@ function SpecialPropertiesDisplay({ properties }: { properties: unknown }) {
     items.push(
       <div key="removal_action">
         <span className="text-gray-400">Removal Action:</span>{' '}
-        <span className="text-gray-200">{String(props.removal_action)}</span>
+        <span className="text-gray-200">{toReactNode(props.removal_action)}</span>
       </div>
     );
   }
@@ -194,7 +201,7 @@ function SpecialPropertiesDisplay({ properties }: { properties: unknown }) {
     items.push(
       <div key="activation_action">
         <span className="text-gray-400">Activation Action:</span>{' '}
-        <span className="text-gray-200">{String(props.activation_action)}</span>
+        <span className="text-gray-200">{toReactNode(props.activation_action)}</span>
       </div>
     );
   }
@@ -224,7 +231,7 @@ function SpecialPropertiesDisplay({ properties }: { properties: unknown }) {
     items.push(
       <div key="weapon_size_restriction">
         <span className="text-gray-400">Weapon Size Restriction:</span>{' '}
-        <span className="text-gray-200">{String(props.weapon_size_restriction)}</span>
+        <span className="text-gray-200">{toReactNode(props.weapon_size_restriction)}</span>
       </div>
     );
   }
@@ -258,7 +265,7 @@ function SpecialPropertiesDisplay({ properties }: { properties: unknown }) {
     items.push(
       <div key="scatter_distance">
         <span className="text-gray-400">Scatter Distance Modifier:</span>{' '}
-        <span className="text-gray-200">{String(props.scatter_distance_modifier)}</span>
+        <span className="text-gray-200">{toReactNode(props.scatter_distance_modifier)}</span>
       </div>
     );
   }
@@ -268,7 +275,7 @@ function SpecialPropertiesDisplay({ properties }: { properties: unknown }) {
     items.push(
       <div key="firing_arc">
         <span className="text-gray-400">Firing Arc:</span>{' '}
-        <span className="text-gray-200">{String(props.firing_arc)}</span>
+        <span className="text-gray-200">{toReactNode(props.firing_arc)}</span>
       </div>
     );
   }
@@ -278,7 +285,7 @@ function SpecialPropertiesDisplay({ properties }: { properties: unknown }) {
     items.push(
       <div key="inclination">
         <span className="text-gray-400">Inclination:</span>{' '}
-        <span className="text-gray-200">{String(props.inclination)}</span>
+        <span className="text-gray-200">{toReactNode(props.inclination)}</span>
       </div>
     );
   }
@@ -288,7 +295,7 @@ function SpecialPropertiesDisplay({ properties }: { properties: unknown }) {
     items.push(
       <div key="device_rating">
         <span className="text-gray-400">Device Rating:</span>{' '}
-        <span className="text-gray-200">{String(props.device_rating)}</span>
+        <span className="text-gray-200">{toReactNode(props.device_rating)}</span>
       </div>
     );
   }
@@ -308,7 +315,7 @@ function SpecialPropertiesDisplay({ properties }: { properties: unknown }) {
     items.push(
       <div key="initiative_dice">
         <span className="text-gray-400">Initiative Dice:</span>{' '}
-        <span className="text-gray-200">{String(props.initiative_dice)}</span>
+        <span className="text-gray-200">{toReactNode(props.initiative_dice)}</span>
       </div>
     );
   }
@@ -318,7 +325,7 @@ function SpecialPropertiesDisplay({ properties }: { properties: unknown }) {
     items.push(
       <div key="reload_time">
         <span className="text-gray-400">Reload Time Modifier:</span>{' '}
-        <span className="text-gray-200">{String(props.reload_time_modifier)}</span>
+        <span className="text-gray-200">{toReactNode(props.reload_time_modifier)}</span>
       </div>
     );
   }
@@ -328,7 +335,7 @@ function SpecialPropertiesDisplay({ properties }: { properties: unknown }) {
     items.push(
       <div key="price_multiplier">
         <span className="text-gray-400">Price Multiplier:</span>{' '}
-        <span className="text-gray-200">{String(props.price_multiplier)}×</span>
+        <span className="text-gray-200">{toReactNode(props.price_multiplier)}×</span>
       </div>
     );
   }
@@ -338,7 +345,7 @@ function SpecialPropertiesDisplay({ properties }: { properties: unknown }) {
     items.push(
       <div key="price_formula">
         <span className="text-gray-400">Price Formula:</span>{' '}
-        <span className="text-gray-200">{String(props.price_formula)}</span>
+        <span className="text-gray-200">{toReactNode(props.price_formula)}</span>
       </div>
     );
   }
@@ -445,7 +452,7 @@ function WirelessBonusDisplay({ bonus }: { bonus: unknown }) {
   if (bonusObj.description) {
     items.push(
       <div key="description" className="mb-3 pb-3 border-b border-sr-light-gray/30">
-        <p className="text-gray-200 text-sm leading-relaxed">{String(bonusObj.description)}</p>
+        <p className="text-gray-200 text-sm leading-relaxed">{toReactNode(bonusObj.description)}</p>
       </div>
     );
   }
@@ -455,7 +462,7 @@ function WirelessBonusDisplay({ bonus }: { bonus: unknown }) {
     items.push(
       <div key="action_change">
         <span className="text-gray-400 text-sm">Action Change:</span>{' '}
-        <span className="text-gray-200 text-sm">{String(bonusObj.action_change)}</span>
+        <span className="text-gray-200 text-sm">{toReactNode(bonusObj.action_change)}</span>
       </div>
     );
   }
@@ -518,7 +525,7 @@ function WirelessBonusDisplay({ bonus }: { bonus: unknown }) {
     items.push(
       <div key="skill_sub">
         <span className="text-gray-400 text-sm">Skill Substitution:</span>{' '}
-        <span className="text-gray-200 text-sm">{String(bonusObj.skill_substitution)}</span>
+        <span className="text-gray-200 text-sm">{toReactNode(bonusObj.skill_substitution)}</span>
       </div>
     );
   }
@@ -528,7 +535,7 @@ function WirelessBonusDisplay({ bonus }: { bonus: unknown }) {
     items.push(
       <div key="range">
         <span className="text-gray-400 text-sm">Range Change:</span>{' '}
-        <span className="text-gray-200 text-sm">{String(bonusObj.range_change)}</span>
+        <span className="text-gray-200 text-sm">{toReactNode(bonusObj.range_change)}</span>
       </div>
     );
   }
@@ -538,7 +545,7 @@ function WirelessBonusDisplay({ bonus }: { bonus: unknown }) {
     items.push(
       <div key="other">
         <span className="text-gray-400 text-sm">Other Effects:</span>{' '}
-        <span className="text-gray-200 text-sm">{String(bonusObj.other_effects)}</span>
+        <span className="text-gray-200 text-sm">{toReactNode(bonusObj.other_effects)}</span>
       </div>
     );
   }
@@ -952,7 +959,7 @@ export function WeaponAccessoryViewModal({ accessory, isOpen, onOpenChange }: We
               )}
 
               {/* Additional Fields */}
-              {(accessory.hide !== undefined || accessory.ignoreSourceDisabled !== undefined) && (
+              {(accessory.hide !== undefined || accessory.ignoresourcedisabled !== undefined) && (
                 <section>
                   <h2 className="text-lg font-semibold text-gray-200 mb-3">Additional Information</h2>
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -962,10 +969,10 @@ export function WeaponAccessoryViewModal({ accessory, isOpen, onOpenChange }: We
                         <p className="text-gray-100 mt-1">{formatValue(accessory.hide)}</p>
                       </div>
                     )}
-                    {accessory.ignoreSourceDisabled !== undefined && (
+                    {accessory.ignoresourcedisabled !== undefined && (
                       <div>
                         <label className="text-sm text-gray-400">Ignore Source Disabled</label>
-                        <p className="text-gray-100 mt-1">{formatValue(accessory.ignoreSourceDisabled)}</p>
+                        <p className="text-gray-100 mt-1">{formatValue(accessory.ignoresourcedisabled)}</p>
                       </div>
                     )}
                   </div>

@@ -36,7 +36,7 @@ These scripts will check prerequisites and set up the project automatically.
 
 ### Required
 
-- **Go 1.21 or later** - [Download](https://go.dev/dl/)
+- **Go 1.24.3 or later** - [Download](https://go.dev/dl/)
 - **Node.js 18+ and npm** - [Download](https://nodejs.org/)
 - **Git** - Usually pre-installed
 
@@ -74,7 +74,7 @@ xcode-select --install
 #### 2. Verify Installation
 
 ```bash
-go version    # Should show 1.21 or later
+go version    # Should show 1.24.3 or later
 node --version # Should show v18 or later
 npm --version
 make --version
@@ -334,10 +334,15 @@ npm test
 
 ### Prerequisites
 
-Install Docker Desktop:
-- **macOS**: [Download](https://docs.docker.com/desktop/install/mac-install/)
+Install Docker for your platform:
+- **macOS**: We use [Colima](https://github.com/abiosoft/colima) for local Docker. Install with:
+  ```bash
+  brew install colima docker docker-compose
+  colima start
+  ```
+  Alternatively, you can use [Docker Desktop](https://docs.docker.com/desktop/install/mac-install/).
 - **Linux**: [Installation Guide](https://docs.docker.com/engine/install/)
-- **Windows**: [Download](https://docs.docker.com/desktop/install/windows-install/)
+- **Windows**: [Download Docker Desktop](https://docs.docker.com/desktop/install/windows-install/)
 
 ### Build and Run with Docker
 
@@ -370,10 +375,10 @@ For detailed Docker deployment instructions, see [Deployment Guide](../deploymen
 
 #### Go Version Issues
 
-**Problem:** `go: go.mod requires go >= 1.21`
+**Problem:** `go: go.mod requires go >= 1.24.3`
 
 **Solution:**
-- Update Go to version 1.21 or later
+- Update Go to version 1.24.3 or later
 - Verify: `go version`
 - If using package manager, update: `brew upgrade go` (macOS) or `sudo apt upgrade golang-go` (Linux)
 
@@ -476,7 +481,9 @@ make run PORT=8081
 **Problem:** `Cannot connect to the Docker daemon`
 
 **Solution:**
-- **macOS/Windows**: Start Docker Desktop application
+- **macOS (Colima)**: Start Colima: `colima start`
+- **macOS (Docker Desktop)**: Start Docker Desktop application
+- **Windows**: Start Docker Desktop application
 - **Linux**: Start Docker service: `sudo systemctl start docker`
 
 #### Frontend Build Fails

@@ -53,17 +53,30 @@ make build
 
 **Using Makefile:**
 ```bash
+# Production mode (serves built static files)
 make run
+
+# Development mode (runs API server + frontend dev server with hot reload)
+make run-dev
 ```
 
 **Using PowerShell:**
 ```powershell
+# Production mode
 .\scripts\run.ps1
+
+# Development mode (if available)
+.\scripts\run-dev.ps1
 ```
 
 ## 5. Access
 
-Open your browser to: **http://localhost:8080**
+**Production mode:**
+- Open your browser to: **http://localhost:8080**
+
+**Development mode:**
+- API server: **http://localhost:8080**
+- Frontend dev server: **http://localhost:5173** (with hot module reload)
 
 The first user you create will automatically become an Administrator.
 

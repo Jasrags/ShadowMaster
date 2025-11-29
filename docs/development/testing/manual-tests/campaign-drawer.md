@@ -37,4 +37,4 @@
 ---
 
 ### Automated Regression
-- Run `npm --prefix web/app run test:unit` to execute the Vitest suite covering preset-library interactions in the campaign drawer. Ensure it passes after completing the manual sweep.
+- Run `npm --prefix web/ui run test` to execute the test suite covering preset-library interactions in the campaign drawer. Ensure it passes after completing the manual sweep.

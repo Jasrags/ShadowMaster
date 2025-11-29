@@ -53,7 +53,7 @@ Implementation detail: rules are merged at runtime via `CampaignService.Describe
 - Costs:
   - Metatypes: `metatype_costs` map (e.g., Human 0, Elf 40).
   - Attributes: `getKarmaAttributeCost` (progressive) with restriction: only one physical + one mental attribute may be maxed (service enforces).
-  - Skills, gear, qualities: functions in `web/app/src/utils/priorities.ts` mirror service logic.
+  - Skills, gear, qualities: functions in `web/ui/src/utils/priorities.ts` mirror service logic.
 - Gear conversion: `max_karma_for_gear` and `karma_per_nuyen` govern tradeoff; validated server-side.
 - Ledger UI in React tracks spends by category with remaining budget indicator.
 
@@ -144,8 +144,8 @@ When implementing, ensure automation references campaign gameplay rules (e.g., S
 | `data/editions/sr5/<dataset>/all.json` | Gear, spells, qualities, etc. normalized from Chummer via CLI tools. |
 | `internal/service/sr5_sum_to_ten.go` | Sum-to-Ten validation logic. |
 | `internal/service/sr5_karma.go` | Karma workflow validation. |
-| `web/app/src/utils/priorities.ts` | Shared helper functions for Sum-to-Ten & Karma UI. |
-| `web/app/src/components/PriorityAssignment.tsx` | React workflows for priority-based creation.
+| `web/ui/src/utils/priorities.ts` | Shared helper functions for Sum-to-Ten & Karma UI. |
+| `web/ui/src/components/PriorityAssignment.tsx` | React workflows for priority-based creation.
 
 ---
 

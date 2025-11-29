@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, type ReactNode } from 'react';
 import { Dialog, Modal, Heading, Button } from 'react-aria-components';
 import type { Armor, Gear } from '../../lib/types';
 import { GearViewModal } from '../gear/GearViewModal';
@@ -22,6 +22,12 @@ const formatValue = (value: unknown): string => {
   return String(value);
 };
 
+// Helper function to safely convert unknown to ReactNode
+const toReactNode = (value: unknown): ReactNode => {
+  if (value === null || value === undefined) return null;
+  return String(value);
+};
+
 // Helper to format array values
 const formatArray = (value: unknown): string => {
   if (Array.isArray(value)) {
@@ -31,19 +37,19 @@ const formatArray = (value: unknown): string => {
 };
 
 // Component to display special properties
-function SpecialPropertiesDisplay({ properties }: { properties: unknown }) {
+function SpecialPropertiesDisplay({ properties }: { properties: unknown }): ReactNode {
   if (!properties || typeof properties !== 'object') {
     return null;
   }
 
   const props = properties as Record<string, unknown>;
-  const items: JSX.Element[] = [];
+  const items: ReactNode[] = [];
 
   if (props.concealability_modifier !== undefined) {
     items.push(
       <div key="concealability">
         <span className="text-gray-400">Concealability Modifier:</span>{' '}
-        <span className="text-gray-200">{String(props.concealability_modifier)}</span>
+        <span className="text-gray-200">{toReactNode(props.concealability_modifier)}</span>
       </div>
     );
   }
@@ -52,7 +58,7 @@ function SpecialPropertiesDisplay({ properties }: { properties: unknown }) {
     items.push(
       <div key="sneaking">
         <span className="text-gray-400">Sneaking Bonus:</span>{' '}
-        <span className="text-green-400">+{String(props.sneaking_bonus)}</span>
+        <span className="text-green-400">+{toReactNode(props.sneaking_bonus)}</span>
       </div>
     );
   }
@@ -70,7 +76,7 @@ function SpecialPropertiesDisplay({ properties }: { properties: unknown }) {
     items.push(
       <div key="physlimit">
         <span className="text-gray-400">Physical Limit Modifier:</span>{' '}
-        <span className="text-gray-200">{String(props.physical_limit_modifier)}</span>
+        <span className="text-gray-200">{toReactNode(props.physical_limit_modifier)}</span>
       </div>
     );
   }
@@ -128,10 +134,10 @@ function ModificationEffectsDisplay({ effects }: { effects: unknown }) {
     <div className="space-y-4">
       {validEffects.map((effect, idx) => (
         <div key={idx} className="border-b border-sr-light-gray/30 pb-3 last:border-0 last:pb-0">
-          {effect.type && (
+          {effect.type != null && (
             <div className="mb-2">
               <span className="text-sm font-semibold text-gray-300">Type: </span>
-              <span className="text-gray-200">{String(effect.type)}</span>
+              <span className="text-gray-200">{toReactNode(effect.type)}</span>
             </div>
           )}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-2 text-sm">
@@ -153,8 +159,8 @@ function ModificationEffectsDisplay({ effects }: { effects: unknown }) {
                 ) : (
                   <span className="text-gray-300">Rating-based</span>
                 )}
-                {effect.test_type && (
-                  <span className="text-gray-400 ml-1">({String(effect.test_type)})</span>
+                {effect.test_type != null && (
+                  <span className="text-gray-400 ml-1">({toReactNode(effect.test_type)})</span>
                 )}
               </div>
             )}
@@ -166,8 +172,8 @@ function ModificationEffectsDisplay({ effects }: { effects: unknown }) {
                 ) : (
                   <span className="text-gray-300">Rating-based</span>
                 )}
-                {effect.test_type && (
-                  <span className="text-gray-400 ml-1">({String(effect.test_type)})</span>
+                {effect.test_type != null && (
+                  <span className="text-gray-400 ml-1">({toReactNode(effect.test_type)})</span>
                 )}
               </div>
             )}
@@ -179,15 +185,15 @@ function ModificationEffectsDisplay({ effects }: { effects: unknown }) {
                 ) : (
                   <span className="text-gray-300">Rating-based</span>
                 )}
-                {effect.test_type && (
-                  <span className="text-gray-400 ml-1">({String(effect.test_type)})</span>
+                {effect.test_type != null && (
+                  <span className="text-gray-400 ml-1">({toReactNode(effect.test_type)})</span>
                 )}
               </div>
             )}
-            {effect.test_type && !effect.resistance_test_bonus && !effect.limit_bonus && !effect.dice_pool_bonus && (
+            {effect.test_type != null && !effect.resistance_test_bonus && !effect.limit_bonus && !effect.dice_pool_bonus && (
               <div>
                 <span className="text-gray-400">Test Type:</span>{' '}
-                <span className="text-gray-200">{String(effect.test_type)}</span>
+                <span className="text-gray-200">{toReactNode(effect.test_type)}</span>
               </div>
             )}
             {effect.complete_protection === true && (
@@ -196,28 +202,28 @@ function ModificationEffectsDisplay({ effects }: { effects: unknown }) {
                 <span className="text-green-400">Yes</span>
               </div>
             )}
-            {effect.duration_limit && (
+            {effect.duration_limit != null && (
               <div>
                 <span className="text-gray-400">Duration:</span>{' '}
-                <span className="text-gray-200">{String(effect.duration_limit)}</span>
+                <span className="text-gray-200">{toReactNode(effect.duration_limit)}</span>
               </div>
             )}
-            {effect.activation_action && (
+            {effect.activation_action != null && (
               <div>
                 <span className="text-gray-400">Activation:</span>{' '}
-                <span className="text-gray-200">{String(effect.activation_action)}</span>
+                <span className="text-gray-200">{toReactNode(effect.activation_action)}</span>
               </div>
             )}
-            {effect.damage_info && (
+            {effect.damage_info != null && (
               <div>
                 <span className="text-gray-400">Damage:</span>{' '}
-                <span className="text-gray-200">{String(effect.damage_info)}</span>
+                <span className="text-gray-200">{toReactNode(effect.damage_info)}</span>
               </div>
             )}
-            {effect.charges && (
+            {effect.charges != null && (
               <div>
                 <span className="text-gray-400">Charges:</span>{' '}
-                <span className="text-gray-200">{String(effect.charges)}</span>
+                <span className="text-gray-200">{toReactNode(effect.charges)}</span>
               </div>
             )}
           </div>
@@ -228,19 +234,19 @@ function ModificationEffectsDisplay({ effects }: { effects: unknown }) {
 }
 
 // Component to display wireless bonuses
-function WirelessBonusDisplay({ bonus }: { bonus: unknown }) {
+function WirelessBonusDisplay({ bonus }: { bonus: unknown }): ReactNode {
   if (!bonus || typeof bonus !== 'object') {
     return <p className="text-gray-400 text-sm">No wireless bonuses</p>;
   }
 
   const bonusObj = bonus as Record<string, unknown>;
-  const items: JSX.Element[] = [];
+  const items: ReactNode[] = [];
 
   // Description (usually the main text)
   if (bonusObj.description) {
     items.push(
       <div key="description" className="mb-3 pb-3 border-b border-sr-light-gray/30">
-        <p className="text-gray-200 text-sm leading-relaxed">{String(bonusObj.description)}</p>
+        <p className="text-gray-200 text-sm leading-relaxed">{toReactNode(bonusObj.description)}</p>
       </div>
     );
   }
@@ -250,7 +256,7 @@ function WirelessBonusDisplay({ bonus }: { bonus: unknown }) {
     items.push(
       <div key="action_change">
         <span className="text-gray-400 text-sm">Action Change:</span>{' '}
-        <span className="text-gray-200 text-sm">{String(bonusObj.action_change)}</span>
+        <span className="text-gray-200 text-sm">{toReactNode(bonusObj.action_change)}</span>
       </div>
     );
   }
@@ -313,7 +319,7 @@ function WirelessBonusDisplay({ bonus }: { bonus: unknown }) {
     items.push(
       <div key="skill_sub">
         <span className="text-gray-400 text-sm">Skill Substitution:</span>{' '}
-        <span className="text-gray-200 text-sm">{String(bonusObj.skill_substitution)}</span>
+        <span className="text-gray-200 text-sm">{toReactNode(bonusObj.skill_substitution)}</span>
       </div>
     );
   }
@@ -323,7 +329,7 @@ function WirelessBonusDisplay({ bonus }: { bonus: unknown }) {
     items.push(
       <div key="range">
         <span className="text-gray-400 text-sm">Range Change:</span>{' '}
-        <span className="text-gray-200 text-sm">{String(bonusObj.range_change)}</span>
+        <span className="text-gray-200 text-sm">{toReactNode(bonusObj.range_change)}</span>
       </div>
     );
   }
@@ -333,7 +339,7 @@ function WirelessBonusDisplay({ bonus }: { bonus: unknown }) {
     items.push(
       <div key="other">
         <span className="text-gray-400 text-sm">Other Effects:</span>{' '}
-        <span className="text-gray-200 text-sm">{String(bonusObj.other_effects)}</span>
+        <span className="text-gray-200 text-sm">{toReactNode(bonusObj.other_effects)}</span>
       </div>
     );
   }
@@ -421,7 +427,7 @@ export function ArmorViewModal({ armor, isOpen, onOpenChange, gearMap }: ArmorVi
           <div className="flex-1 overflow-y-auto p-6">
             <div className="space-y-6">
               {/* Description */}
-              {armor.description && (
+              {armor.description != null && (
                 <section>
                   <h2 className="text-lg font-semibold text-gray-200 mb-3">Description</h2>
                   <p className="text-gray-300 leading-relaxed">{armor.description}</p>
@@ -444,7 +450,7 @@ export function ArmorViewModal({ armor, isOpen, onOpenChange, gearMap }: ArmorVi
                     <label className="text-sm text-gray-400">Source</label>
                     <p className="text-gray-100 mt-1">{armor.source}</p>
                   </div>
-                  {armor.requires && (
+                  {armor.requires != null && (
                     <div>
                       <label className="text-sm text-gray-400">Requires</label>
                       <p className="text-gray-100 mt-1">{armor.requires}</p>
@@ -587,7 +593,7 @@ export function ArmorViewModal({ armor, isOpen, onOpenChange, gearMap }: ArmorVi
               {armor.addweapon !== undefined && armor.addweapon !== null && armor.addweapon !== '' && (
                 <section>
                   <h2 className="text-lg font-semibold text-gray-200 mb-3">Weapon</h2>
-                  <p className="text-gray-100">{String(formatValue(armor.addweapon))}</p>
+                  <p className="text-gray-100">{formatValue(armor.addweapon)}</p>
                 </section>
               )}
 
@@ -595,7 +601,7 @@ export function ArmorViewModal({ armor, isOpen, onOpenChange, gearMap }: ArmorVi
               {armor.mods?.name && (
                 <section>
                   <h2 className="text-lg font-semibold text-gray-200 mb-3">Pre-installed Mods</h2>
-                  <p className="text-gray-100">{String(formatArray(armor.mods.name))}</p>
+                  <p className="text-gray-100">{formatArray(armor.mods.name)}</p>
                 </section>
               )}
 

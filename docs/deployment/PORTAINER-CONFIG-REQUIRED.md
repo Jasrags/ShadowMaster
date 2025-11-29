@@ -1,6 +1,13 @@
 # Portainer Configuration Information Required
 
-Before deploying to Portainer, please provide the following configuration details:
+This document lists the configuration values you'll need when deploying ShadowMaster to Portainer. 
+
+**Where to provide these values:**
+- Fill in your local `.env` file with these values (for reference)
+- Enter them in Portainer's **Environment variables** section when creating the stack
+- See [How to Provide This Information](#how-to-provide-this-information) below for details
+
+Before deploying to Portainer, gather the following configuration details:
 
 ## Required Information
 
@@ -58,10 +65,30 @@ Before deploying to Portainer, please provide the following configuration detail
 
 ## How to Provide This Information
 
-Once you have these details, we can:
-1. Update `docker-compose.portainer.yml` with your specific configuration
-2. Create a customized `.env` file template
-3. Provide specific deployment instructions for your setup
+You have two options for providing this configuration:
+
+### Option 1: Use Your Local `.env` File (Recommended)
+
+1. **Update your `.env` file** with the values from this document
+2. **Copy the values** from your `.env` file when deploying in Portainer
+3. **Enter them** in Portainer's "Environment variables" section when creating the stack
+
+### Option 2: Enter Directly in Portainer
+
+When deploying the stack in Portainer:
+1. Go to **Stacks** → **Add stack**
+2. In the **Environment variables** section, add each variable from this document
+3. Portainer will use these values to substitute variables in `docker-compose.portainer.yml`
+
+### Where to Enter in Portainer
+
+When creating a new stack in Portainer:
+- **Stack name**: `shadowmaster`
+- **Build method**: Repository (or Web editor if pasting compose file)
+- **Compose path**: `docker-compose.portainer.yml` (if using Repository method)
+- **Environment variables**: Add all variables from your `.env` file here
+
+See the [Portainer Deployment Guide](./portainer.md) for detailed step-by-step instructions.
 
 ## Quick Start Template
 
