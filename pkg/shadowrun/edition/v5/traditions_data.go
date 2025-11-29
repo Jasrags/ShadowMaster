@@ -4,6 +4,7 @@ package v5
 var dataTraditions = map[string]Tradition{
 	"hermetic_mage": {
 		Name:                "The Hermetic Mage",
+		Description:         "Uses Logic + Willpower for drain resistance. Emphasizes ritualized formulae, mineral reagents, formal lodges, and comfort with binding spirits. Focuses on structured, academic approaches to magic.",
 		CombatElement:       "Fire",
 		DetectionElement:    "Air",
 		HealthElement:       "Man",
@@ -15,6 +16,7 @@ var dataTraditions = map[string]Tradition{
 	},
 	"shaman": {
 		Name:                "The Shaman",
+		Description:         "Uses Charisma + Willpower for drain resistance. Emphasizes mentor spirits, medicine lodges, natural/material reagents, and relationships with local spirits. Focuses on intuitive, spiritual connections to magic.",
 		CombatElement:       "Beasts",
 		DetectionElement:    "Water",
 		HealthElement:       "Earth",

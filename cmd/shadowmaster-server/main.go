@@ -11,6 +11,7 @@ import (
 	"shadowmaster/internal/service"
 	edition "shadowmaster/pkg/shadowrun/edition"
 	v3 "shadowmaster/pkg/shadowrun/edition/v3"
+	v5 "shadowmaster/pkg/shadowrun/edition/v5"
 	"time"
 
 	"github.com/go-chi/chi/v5"
@@ -39,6 +40,8 @@ func main() {
 	// Register edition handlers
 	sr3Handler := v3.NewSR3Handler(repos.Edition)
 	edition.Register(sr3Handler)
+	sr5Handler := v5.NewSR5Handler(repos.Edition)
+	edition.Register(sr5Handler)
 	log.Println("Registered edition handlers:", edition.ListEditions())
 
 	// Initialize services

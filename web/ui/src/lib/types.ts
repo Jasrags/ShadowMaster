@@ -1058,3 +1058,323 @@ export interface Vehicle {
   source?: SourceReference;
 }
 
+// Character Creation Types
+export interface PriorityOption {
+  label: string;
+  summary?: string;
+  description?: string;
+  available_types?: string[]; // For magic/resonance priorities
+  magic_rating?: number; // For magic/resonance priorities (0 for mundane)
+  free_spells?: number; // Number of free spells for Magicians/Mystic Adepts
+}
+
+export interface AttributeRange {
+  min: number;
+  max: number;
+}
+
+export interface MetatypeDefinition {
+  id: string;
+  name: string;
+  priority_tiers: string[];
+  attribute_modifiers?: Record<string, number>;
+  attribute_ranges?: Record<string, AttributeRange>;
+  special_attribute_points?: Record<string, number>;
+  abilities: string[];
+  notes?: string;
+}
+
+export interface GameplayLevel {
+  label: string;
+  description?: string;
+  resources?: Record<string, number>;
+  starting_karma?: number;
+  max_custom_karma?: number;
+  karma_to_nuyen_limit?: number;
+  contact_karma_multiplier?: number;
+  gear_restrictions?: {
+    max_device_rating?: number;
+    max_availability?: number;
+  };
+}
+
+export interface CreationMethod {
+  label: string;
+  description?: string;
+  supports_multiple_column_selection?: boolean;
+  point_budget?: number;
+  priority_costs?: Record<string, number>;
+  supports_multiple_A?: boolean;
+  karma_budget?: number;
+  metatype_costs?: Record<string, number>;
+  gear_conversion?: {
+    karma_per_nuyen?: number;
+    max_karma_for_gear?: number;
+    max_starting_nuyen?: number;
+  };
+  magic_qualities?: Array<{
+    name: string;
+    cost: number;
+    grants?: {
+      attribute?: string;
+      base?: number;
+      free_power_points?: string;
+      power_point_cost?: number;
+      notes?: string;
+    };
+    notes?: string;
+  }>;
+  notes?: string[];
+  references?: string[];
+}
+
+export interface AdvancementRules {
+  karma_costs: {
+    attribute_multiplier: number;
+    active_skill_multiplier: number;
+    knowledge_skill_multiplier: number;
+    skill_group_multiplier: number;
+    specialization: number;
+    new_knowledge_skill: number;
+    new_complex_form: number;
+    new_spell: number;
+    initiation_base: number;
+    initiation_per_grade: number;
+    positive_quality_multiplier: number;
+    negative_quality_removal_multiplier: number;
+  };
+  training: {
+    attribute_per_rating_weeks: number;
+    edge_requires_downtime: boolean;
+    instructor_reduction_percent?: number;
+    active_skill_brackets?: Array<{
+      min_rating: number;
+      max_rating: number;
+      per_rating: number;
+      unit: string;
+    }>;
+    skill_group_per_rating_weeks?: number;
+    specialization_months?: number;
+  };
+  limits: {
+    attribute_increase_per_downtime: number;
+    skill_increase_per_downtime: number;
+    skill_group_increase_per_downtime: number;
+    allows_simultaneous_attribute_and_skill: boolean;
+    allows_simultaneous_physical_and_mental: boolean;
+    requires_augmentation_recovery_pause: boolean;
+  };
+  focus_bonding: Array<{
+    type: string;
+    label: string;
+    karma_per_force: number;
+  }>;
+  notes?: string[];
+  future_features?: string[];
+}
+
+export interface CharacterCreationData {
+  priorities: {
+    metatype: Record<string, PriorityOption>;
+    attributes: Record<string, PriorityOption>;
+    skills: Record<string, PriorityOption>;
+    resources: Record<string, PriorityOption>;
+    magic: Record<string, PriorityOption>;
+  };
+  metatypes: MetatypeDefinition[];
+  gameplay_levels: Record<string, GameplayLevel>;
+  creation_methods: Record<string, CreationMethod>;
+  advancement?: AdvancementRules;
+}
+
+export interface PrioritySelection {
+  metatype_priority: string; // A-E
+  attributes_priority: string; // A-E
+  magic_priority: string; // A-E or "none"
+  skills_priority: string; // A-E
+  resources_priority: string; // A-E
+  selected_metatype?: string;
+  magic_type?: string;
+  tradition?: string;
+  gameplay_level?: string;
+}
+
+export interface SumToTenSelection {
+  metatype_priority: string;
+  attributes_priority: string;
+  magic_priority: string;
+  skills_priority: string;
+  resources_priority: string;
+  selected_metatype?: string;
+  magic_type?: string;
+  tradition?: string;
+  gameplay_level?: string;
+}
+
+export interface KarmaSelection {
+  metatype: string;
+  attributes: Record<string, number>;
+  magic_type?: string;
+  tradition?: string;
+  skills: Record<string, number>;
+  qualities?: Array<{ name: string; type: 'positive' | 'negative' }>;
+  equipment?: Array<{ type: string; name: string }>;
+  gameplay_level?: string;
+}
+
+export interface Character {
+  id: string;
+  name: string;
+  player_name?: string;
+  user_id?: string;
+  campaign_id?: string;
+  is_npc: boolean;
+  status?: string;
+  edition: string;
+  edition_data: CharacterSR5 | Record<string, unknown>;
+  created_at: string;
+  updated_at: string;
+}
+
+export interface InitiativeValue {
+  base: number;
+  augmented: number;
+  dice: number;
+}
+
+export interface InitiativeData {
+  physical: InitiativeValue;
+  astral: InitiativeValue;
+  matrix_ar: InitiativeValue;
+  matrix_vr_cold: InitiativeValue;
+  matrix_vr_hot: InitiativeValue;
+}
+
+export interface InherentLimits {
+  mental: number;
+  physical: number;
+  social: number;
+}
+
+export interface ConditionMonitor {
+  physical: number;
+  stun: number;
+  overflow: number;
+}
+
+export interface LivingPersona {
+  attack: number;
+  data_processing: number;
+  device_rating: number;
+  firewall: number;
+  sleaze: number;
+}
+
+// Equipment item types - union of all equipment types
+export type EquipmentItem = Weapon | Armor | Cyberware | Bioware | Gear | Vehicle;
+
+// Karma spending structure
+export interface KarmaSpending {
+  spells?: Array<{ name: string; karma_cost: number }>;
+  contacts?: Array<{ name: string; karma_cost: number }>;
+  improvements?: Array<{ type: string; description: string; karma_cost: number }>;
+  total_spent?: number;
+}
+
+// Focus types (magical foci)
+export interface Focus {
+  name: string;
+  type: string; // e.g., 'weapon', 'spell', 'power', etc.
+  rating: number;
+  force?: number;
+  source?: SourceReference;
+}
+
+// Spirit types
+export interface Spirit {
+  name: string;
+  type: string; // e.g., 'fire', 'water', 'air', 'earth', etc.
+  force: number;
+  services?: number;
+  source?: SourceReference;
+}
+
+// Adept Power types
+export interface AdeptPower {
+  name: string;
+  level?: number;
+  power_points: number;
+  description?: string;
+  source?: SourceReference;
+}
+
+export interface CharacterSR5 {
+  // Attributes
+  body: number;
+  agility: number;
+  reaction: number;
+  strength: number;
+  willpower: number;
+  logic: number;
+  intuition: number;
+  charisma: number;
+  edge: number;
+  magic?: number;
+  resonance?: number;
+  
+  // Priority system
+  metatype_priority: string;
+  attributes_priority: string;
+  magic_priority: string;
+  skills_priority: string;
+  resources_priority: string;
+  creation_method: string;
+  gameplay_level: string;
+  
+  // Metatype
+  metatype: string;
+  special_attribute_points: number;
+  
+  // Skills
+  active_skills: Record<string, Skill>;
+  knowledge_skills: Record<string, Skill>;
+  language_skills: Record<string, Skill>;
+  
+  // Qualities
+  positive_qualities: Quality[];
+  negative_qualities: Quality[];
+  
+  // Equipment
+  weapons: Weapon[];
+  armor: Armor[];
+  cyberware: Cyberware[];
+  bioware: Bioware[];
+  gear: Gear[];
+  vehicles: Vehicle[];
+  
+  // Magic
+  magic_type?: string;
+  tradition?: string;
+  spells: Spell[];
+  complex_forms: ComplexForm[];
+  focuses: Focus[];
+  spirits: Spirit[];
+  adept_powers: AdeptPower[];
+  power_points?: number;
+  
+  // Social
+  contacts: Contact[];
+  lifestyle: string;
+  
+  // Resources
+  karma: number;
+  nuyen: number;
+  essence: number;
+  
+  // Derived
+  initiative: InitiativeData;
+  inherent_limits: InherentLimits;
+  condition_monitor: ConditionMonitor;
+  living_persona?: LivingPersona;
+}
+

@@ -47,6 +47,7 @@ web/ui/node_modules/
 # Temporary files
 *.tmp
 *.log
+tmp/
 
 # Environment files
 .env

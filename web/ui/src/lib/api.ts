@@ -27,6 +27,11 @@ import type {
   Tradition,
   VehicleModification,
   Vehicle,
+  CharacterCreationData,
+  Character,
+  PrioritySelection,
+  SumToTenSelection,
+  KarmaSelection,
 } from './types';
 
 const API_BASE = '/api';
@@ -360,6 +365,45 @@ export const vehicleApi = {
   async getVehicles(): Promise<Vehicle[]> {
     const response = await apiRequest<{ vehicles: Vehicle[] }>('/equipment/vehicles');
     return response.vehicles || [];
+  },
+};
+
+// Character API functions
+export const characterApi = {
+  // Get character creation metadata
+  async getCharacterCreationData(edition: string): Promise<CharacterCreationData> {
+    const response = await apiRequest<{ character_creation: CharacterCreationData }>(`/editions/${edition}/character-creation`);
+    return response.character_creation;
+  },
+
+  // Create character
+  async createCharacter(data: {
+    name: string;
+    player_name: string;
+    edition: string;
+    creation_data: PrioritySelection | SumToTenSelection | KarmaSelection;
+  }): Promise<Character> {
+    return apiRequest<Character>('/characters', {
+      method: 'POST',
+      body: JSON.stringify(data),
+    });
+  },
+
+  // Get character
+  async getCharacter(id: string): Promise<Character> {
+    return apiRequest<Character>(`/characters/${id}`);
+  },
+
+  // Get all characters
+  async getCharacters(): Promise<Character[]> {
+    return apiRequest<Character[]>('/characters');
+  },
+
+  // Delete character
+  async deleteCharacter(id: string): Promise<void> {
+    return apiRequest<void>(`/characters/${id}`, {
+      method: 'DELETE',
+    });
   },
 };
 

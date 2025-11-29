@@ -31,10 +31,11 @@ export function WeaponsPage() {
       const data = await weaponApi.getWeaponAccessories();
       setWeaponAccessories(data);
     } catch (err) {
-      // Silently fail - accessories are optional
-      console.error('Failed to load weapon accessories:', err);
+      // Silently fail - accessories are optional, but log for debugging
+      const errorMessage = err instanceof Error ? err.message : 'Failed to load weapon accessories';
+      showError('Failed to load weapon accessories', errorMessage);
     }
-  }, []);
+  }, [showError]);
 
   useEffect(() => {
     loadWeapons();

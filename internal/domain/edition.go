@@ -2,9 +2,12 @@ package domain
 
 // PriorityOption describes a single priority choice (A-E) for a category.
 type PriorityOption struct {
-	Label       string `json:"label"`
-	Summary     string `json:"summary,omitempty"`
-	Description string `json:"description,omitempty"`
+	Label         string   `json:"label"`
+	Summary       string   `json:"summary,omitempty"`
+	Description   string   `json:"description,omitempty"`
+	AvailableTypes []string `json:"available_types,omitempty"` // For magic/resonance priorities
+	MagicRating   int      `json:"magic_rating,omitempty"`     // For magic/resonance priorities (0 for mundane)
+	FreeSpells    int      `json:"free_spells,omitempty"`       // Number of free spells for Magicians/Mystic Adepts
 }
 
 // AttributeRange captures minimum and maximum natural ratings for an attribute.

@@ -1,0 +1,27 @@
+| 5th Edition Lists |
+| --- |
+| Gear // Magic // Hacking // Skills // Qualities // Packs // Creatures |
+
+| Armor/Clothing // Cyberware // Magical // Vehicles/Drones // Vehicle Mods // Weapons // Electronics // Security // Medical // Others |
+
+## Magical Lodge Materials
+
+[![Blank.png](/Shadowrun/images/d/d2/Blank.png)](/Shadowrun/index.php/File:Blank.png)
+
+| KARMA | AVAIL | COST | SOURCE |
+| --- | --- | --- | --- |
+| - | Force x 2 | 500¥ x Force | Core |
+
+|  |  |
+| A magical lodge is a stationary collection of symbols, writings, tools, fetishes, and other mystical materials that helps spellcasters record their lore, expand their talent, and practice magic. It’s a basic tool of magicians across the world, about the size of a room. You need it to learn spells, perform rituals, craft foci, and in a pinch you can use it to protect yourself from magical threats. Each lodge is of a specific tradition—a shamanic lodge is intended for shamans, and a hermetic lodge for mages. Magical lodges don’t always look like lodges per se. A shamanic lodge is a traditional medicine lodge, but a hermetic magician’s lodge is a series of magic circles, shelves filled with arcane tomes, mystical mechanisms, and alchemical apparatuses. Every tradition has its own version of a magical lodge, but they all work the same way. Magical lodges aren’t intended to be portable (although you can make a temporary one with reagents, p. 316). To create your own, you need magical lodge materials (they cost Force x 500 nuyen) that are appropriate to your tradition. Once you have the materials, find a space to put it, like your apartment, or a cave in the wilderness, or a secret abandoned sewer tunnel—someplace you won’t mind spending some time. Then spend a number of days equal to the lodge’s Force dedicating the space, setting up the physical components, building its astral form, setting up barriers, and harmonizing it to your aura. Once you’re done, your magical lodge is up and active. An active magical lodge acts as a mana barrier (p. 315) and shares your astral signature. If you want to move your lodge, you’ll need a day to take it down, turning it back into magical lodge materials; then you can set it up again somewhere else. If you want to improve your lodge, just bring in more materials to add to the current ones and spend a day times the Force you want the lodge to have at the end of your work. |
+
+## Reagents
+
+[![Blank.png](/Shadowrun/images/d/d2/Blank.png)](/Shadowrun/index.php/File:Blank.png)
+
+| KARMA | AVAIL | COST | SOURCE |
+| --- | --- | --- | --- |
+| - | - | 20¥ | Core |
+
+|  |  |
+| Mana flows through the world and collects on objects like sediment on a seabed. Like the magical world itself, the mana in these objects waxes and wanes. If such objects are found and harvested at the right time by a skilled person, they become reagents. Reagents are sensitive to pollution and emotion, just like the astral plane, which makes the challenging task of harvesting reagents even more difficult in many areas. Reagents have a higher inherent concentration of mana than normal substances, but they are otherwise identical to their mundane counterparts. The power of a set of reagents is measured in drams of orichalcum, or simply drams, an imprecise but useful comparison to the power in the magical material known as orichalcum. Orichalcum is the purest reagent known, chunks of metal that are perfect mana conduits. A reagent that is worth a single dram of orichalcum usually weighs more than the traditional 1.77 grams, but is usually still fairly small and tends to weigh less than 5 grams (less than the weight of a pistol bullet). This means that a single object as light as 25 grams can be worth 5 drams of reagents. Reagents come in all types and forms. Orichalcum can be created through Alchemy, but it’s a lengthy process that will be covered in a separate book. Naturally occurring reagents vary by tradition. Hermetic magicians prefer minerals, pure elements, old trinkets, and virgin ores. Shamans favor parts of plants and animals, naturally polished rocks, and small, intricately crafted handmade items. A Rastafarian might be able to find magic in a coin from a street musician’s instrument case, while an aspected magician might seek natural items that are harvested under a certain moon. Reagents are surprisingly common, but not all reagents can be used by every tradition. The cube of cinnabar that the hermetic magician values is useless to a shaman, just as the shaman’s bundle of feathers is of little interest to the magician. Generally speaking, the reagents from one tradition only work at half strength to magicians of other traditions. This makes trading in reagents a tricky proposition to anyone not versed in the fine art of talismongering. Reagents are almost as versatile as mana itself. When you spend a reagent, the mana it stores dissipates, which means it ceases to be a reagent, even if its physical form remains intact. Here’s a quick rundown of the many uses of reagents. Alchemical Preparations You can spend reagents to set the limit for Alchemy when making a preparation. Rather than the spell’s Force, the limit becomes the number of drams spent on the limit. Artificing You need to spend reagents to create foci. Banishing You can spend reagents to set the limit for Banishing. Rather than your Astral limit, the limit becomes the number of drams of reagents spent. You can spend reagents to change the limit for Banishing. |

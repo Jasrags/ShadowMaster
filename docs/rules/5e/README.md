@@ -5,12 +5,14 @@ Documentation for Shadowrun 5th Edition rules and mechanics implemented in Shado
 ## Contents
 
 ### Character Creation
-- **[Character Creation Guide](./character-creation.md)** - Complete SR5 character creation workflow
+- **[Character Creation Guide](./character-creation.md)** - Complete SR5 character creation workflow and step-by-step process
 - **[Character Reference](./character.md)** - Character model and rules
 - **[Creation Methods](./creation-methods/)** - Character creation method details
-  - **[Priority](./creation-methods/priority.md)** - (Coming soon) Standard priority system
-  - **[Sum-to-Ten](./creation-methods/sum-to-ten.md)** - Sum-to-Ten point allocation
-  - **[Karma Point-Buy](./creation-methods/karma-point-buy.md)** - Karma-based creation
+  - **[Priority](./creation-methods/priority.md)** - Standard priority system (A-E assignment) with validation rules
+  - **[Sum-to-Ten](./creation-methods/sum-to-ten.md)** - Sum-to-Ten point allocation method
+  - **[Karma Point-Buy](./creation-methods/karma-point-buy.md)** - Karma-based creation method
+
+> **Note:** The [Character Creation Guide](./character-creation.md) provides the complete step-by-step workflow for all creation methods. The creation-methods files provide method-specific rules, validation requirements, and implementation details.
 
 ### Game Mechanics
 - **[Attributes](./game-mechanics/attributes.md)** - Primary and derived attributes

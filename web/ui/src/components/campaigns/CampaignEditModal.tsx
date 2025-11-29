@@ -182,7 +182,8 @@ export function CampaignEditModal({ campaign, isOpen, onOpenChange, onSuccess }:
           const validResults = Array.isArray(results) ? results : [];
           setSearchResults(validResults);
         } catch (err) {
-          console.error('Error searching users:', err);
+          const errorMessage = err instanceof Error ? err.message : 'Error searching users';
+          showError('Error searching users', errorMessage);
           setSearchResults([]);
         } finally {
           setIsSearching(false);
