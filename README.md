@@ -126,8 +126,6 @@ make init
 make build
 
 # Run the server (default port 8080)
-make server
-# or
 make run
 
 # Run in development mode
@@ -200,6 +198,18 @@ You will be greeted with a combined login/registration panel powered by the Reac
 
 ## API Endpoints
 
+### Health
+- `GET /health` - Health check endpoint (no authentication required)
+
+### Authentication
+- `POST /api/auth/register` - Create a user account (first user becomes Administrator)
+- `POST /api/auth/login` - Authenticate with email + password
+- `GET /api/auth/me` - Fetch current authenticated user profile
+- `POST /api/auth/logout` - Clear session cookie (requires active session)
+- `POST /api/auth/password` - Change password (requires current password + policy-compliant new password)
+
+All authentication endpoints return/accept JSON and rely on HTTP-only cookies for session management. The frontend client automatically includes credentials (`fetch(..., { credentials: 'include' })`) when communicating with the API.
+
 ### Characters
 - `GET /api/characters` - List all characters
 - `GET /api/characters/{id}` - Get character by ID
@@ -217,32 +227,71 @@ You will be greeted with a combined login/registration panel powered by the Reac
 ### Campaigns
 - `GET /api/campaigns` - List all campaigns
 - `GET /api/campaigns/{id}` - Get campaign by ID
-- `POST /api/campaigns` - Create campaign
-- `PUT /api/campaigns/{id}` - Update campaign
-- `DELETE /api/campaigns/{id}` - Delete campaign
+- `GET /api/campaigns/{id}/character-creation` - Get character creation data for campaign
+- `POST /api/campaigns` - Create campaign (requires Admin/GM role)
+- `PUT /api/campaigns/{id}` - Update campaign (requires Admin/GM role)
+- `DELETE /api/campaigns/{id}` - Delete campaign (requires Admin/GM role)
+- `POST /api/campaigns/{id}/invitations` - Invite player to campaign (requires Admin/GM role)
+- `GET /api/campaigns/{id}/invitations` - Get campaign invitations (requires Admin/GM role)
+- `DELETE /api/campaigns/{id}/invitations/{playerId}` - Remove invitation (requires Admin/GM role)
+- `DELETE /api/campaigns/{id}/players/{playerId}` - Remove player from campaign (requires Admin/GM role)
+
+### Campaign Invitations
+- `GET /api/invitations` - Get current user's invitations (requires authentication)
+- `POST /api/invitations/{id}/accept` - Accept invitation (requires authentication)
+- `POST /api/invitations/{id}/decline` - Decline invitation (requires authentication)
 
 ### Sessions
 - `GET /api/sessions` - List all sessions
 - `GET /api/sessions/{id}` - Get session by ID
-- `POST /api/sessions` - Create session
-- `PUT /api/sessions/{id}` - Update session
-- `DELETE /api/sessions/{id}` - Delete session
+- `POST /api/sessions` - Create session (requires Admin/GM role)
+- `PUT /api/sessions/{id}` - Update session (requires Admin/GM role)
+- `DELETE /api/sessions/{id}` - Delete session (requires Admin/GM role)
 
 ### Scenes
 - `GET /api/scenes` - List all scenes
 - `GET /api/scenes/{id}` - Get scene by ID
-- `POST /api/scenes` - Create scene
-- `PUT /api/scenes/{id}` - Update scene
-- `DELETE /api/scenes/{id}` - Delete scene
+- `POST /api/scenes` - Create scene (requires Admin/GM role)
+- `PUT /api/scenes/{id}` - Update scene (requires Admin/GM role)
+- `DELETE /api/scenes/{id}` - Delete scene (requires Admin/GM role)
 
-### Authentication
-- `POST /api/auth/register` - Create a user account (first user becomes Administrator)
-- `POST /api/auth/login` - Authenticate with email + password
-- `POST /api/auth/logout` - Clear session cookie (requires active session)
-- `GET /api/auth/me` - Fetch current authenticated user profile
-- `POST /api/auth/password` - Change password (requires current password + policy-compliant new password)
+### Editions
+- `GET /api/editions/{edition}/character-creation` - Get character creation data for edition
+- `GET /api/editions/{edition}/books` - List available source books for edition
 
-All authentication endpoints return/accept JSON and rely on HTTP-only cookies for session management. The frontend client automatically includes credentials (`fetch(..., { credentials: 'include' })`) when communicating with the API.
+### Skills
+- `GET /api/skills/active` - Get active skills
+- `GET /api/skills/knowledge` - Get knowledge skills
+
+### Equipment (Public)
+- `GET /api/equipment/armor` - Get armor equipment
+- `GET /api/equipment/cyberware` - Get cyberware equipment
+
+### Equipment (Admin Only)
+- `GET /api/equipment/skills` - Get skills data
+- `GET /api/equipment/weapons` - Get weapons data
+- `GET /api/equipment/weapon-accessories` - Get weapon accessories
+- `GET /api/equipment/gear` - Get gear
+- `GET /api/equipment/qualities` - Get qualities
+- `GET /api/equipment/books` - Get books
+- `GET /api/equipment/lifestyles` - Get lifestyles
+- `GET /api/equipment/weapon-consumables` - Get weapon consumables
+- `GET /api/equipment/contacts` - Get contacts
+- `GET /api/equipment/actions` - Get actions
+- `GET /api/equipment/bioware` - Get bioware
+- `GET /api/equipment/complex-forms` - Get complex forms
+- `GET /api/equipment/mentors` - Get mentors
+- `GET /api/equipment/metatypes` - Get metatypes
+- `GET /api/equipment/powers` - Get powers
+- `GET /api/equipment/programs` - Get programs
+- `GET /api/equipment/spells` - Get spells
+- `GET /api/equipment/traditions` - Get traditions
+- `GET /api/equipment/vehicle-modifications` - Get vehicle modifications
+- `GET /api/equipment/vehicles` - Get vehicles
+
+### Users
+- `GET /api/users` - List all users (requires Admin/GM role)
+- `GET /api/users/search` - Search users (requires authentication)
 
 ## Makefile Commands
 
@@ -251,21 +300,31 @@ All authentication endpoints return/accept JSON and rely on HTTP-only cookies fo
 | `make help` | Show all available commands |
 | `make init` | Initialize project (install deps, create directories) |
 | `make deps` | Download and install dependencies |
-| `make build` | Build the server binary |
+| `make frontend-build` | Build the frontend only |
+| `make build` | Build the server binary (includes frontend build) |
 | `make build-cli` | Build the CLI binary |
 | `make build-all` | Build both server and CLI |
-| `make server` | Run the server |
-| `make dev` | Run the server in development mode (with live reload if Air is installed) |
-| `make run-dev` | Run both API server and frontend dev server (with live reload if Air is installed) |
+| `make run` | Build and run the server in production mode |
+| `make dev` | Run the server in development mode |
+| `make run-dev` | Run both API server and frontend dev server |
 | `make cli` | Run the CLI |
 | `make install` | Build and install server to GOPATH/bin |
-| `make test` | Run tests |
+| `make install-cli` | Build and install CLI to GOPATH/bin |
+| `make test` | Run Go and React tests |
+| `make test-go` | Run Go tests only |
+| `make test-react` | Run React lint checks |
 | `make test-coverage` | Run tests with coverage report |
 | `make fmt` | Format Go code |
 | `make vet` | Run go vet |
 | `make lint` | Format code and run vet |
 | `make clean` | Clean build artifacts |
 | `make clean-data` | Clean data directory (with confirmation) |
+| `make watch` | Watch for file changes and rebuild (requires fswatch or entr) |
+| `make docker-build` | Build Docker image with version tagging |
+| `make docker-tag` | Tag Docker image for registry (requires DOCKER_REGISTRY) |
+| `make docker-push` | Push Docker image to registry (requires DOCKER_REGISTRY) |
+| `make docker-run` | Run Docker container locally |
+| `make docker-clean` | Remove Docker images |
 
 ## Development Status
 
