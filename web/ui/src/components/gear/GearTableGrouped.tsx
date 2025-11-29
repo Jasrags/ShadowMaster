@@ -17,11 +17,7 @@ interface SubcategoryGroup {
   isExpanded: boolean;
 }
 
-interface CategoryGroup {
-  category: string;
-  subcategories: SubcategoryGroup[];
-  isExpanded: boolean;
-}
+// CategoryGroup interface removed - unused
 
 export function GearTableGrouped({ gear }: GearTableGroupedProps) {
   const [selectedGear, setSelectedGear] = useState<Gear | null>(null);

@@ -102,11 +102,7 @@ export const WeaponAccessoryTable = memo(function WeaponAccessoryTable({ accesso
     },
   ], [handleNameClick]);
 
-  // Get unique sources from accessories for the filter
-  const uniqueSources = useMemo(() => {
-    const sources = new Set(accessories.map(acc => acc.source));
-    return Array.from(sources).sort();
-  }, [accessories]);
+  // uniqueSources removed - unused
 
   return (
     <>

@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useRef } from 'react';
 import type { CharacterCreationState } from '../CharacterCreationWizard';
-import type { CharacterCreationData, PrioritySelection, SumToTenSelection } from '../../../lib/types';
+import type { CharacterCreationData, PrioritySelection, SumToTenSelection, PriorityOption } from '../../../lib/types';
 import { SumToTenSelector } from '../SumToTenSelector';
 import { MetatypeSelector } from '../MetatypeSelector';
 import { AttributeAllocator } from '../AttributeAllocator';
@@ -277,7 +277,7 @@ export function Step2MetatypeAttributes({ formData, setFormData, creationData, e
   // Get priority benefit description
   const getPriorityBenefit = (category: string, priority: string): string => {
     if (!priority || !creationData?.priorities) return '';
-    const option = creationData.priorities[category]?.[priority];
+    const option = (creationData.priorities as Record<string, Record<string, PriorityOption>>)[category]?.[priority];
     return option?.label || '';
   };
 

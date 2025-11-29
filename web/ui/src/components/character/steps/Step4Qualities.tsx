@@ -1,5 +1,5 @@
-import { useState, useEffect, useMemo, Fragment, useCallback } from 'react';
-import { Input, TextField, Button } from 'react-aria-components';
+import { useState, useEffect, useMemo, Fragment } from 'react';
+import { Input, TextField } from 'react-aria-components';
 import type { CharacterCreationState } from '../CharacterCreationWizard';
 import type { CharacterCreationData, Quality } from '../../../lib/types';
 import { qualityApi } from '../../../lib/api';
@@ -18,8 +18,8 @@ const STARTING_KARMA = 25;
 const MAX_QUALITY_KARMA = 25; // Max 25 karma worth of positive OR negative qualities
 const MIN_NET_KARMA = 0; // Can't go below 0 karma
 
-export function Step4Qualities({ formData, setFormData, creationData, errors, touched }: Step4QualitiesProps) {
-  const { showError, showWarning } = useToast();
+export function Step4Qualities({ formData, setFormData, creationData: _creationData, errors: _errors, touched: _touched }: Step4QualitiesProps) {
+  const { showError } = useToast();
   const [qualities, setQualities] = useState<Quality[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [searchTerm, setSearchTerm] = useState('');
@@ -189,18 +189,13 @@ export function Step4Qualities({ formData, setFormData, creationData, errors, to
   };
 
   // Helper to format karma cost
-  const formatKarma = (quality: Quality, selectedQuality?: { name: string; type: string; rating?: number }): string => {
+  const formatKarma = (quality: Quality, _selectedQuality?: { name: string; type: string; rating?: number }): string => {
     const cost = quality.cost;
     if (cost.per_rating) {
       // For per_rating qualities, just show the formula since rating is visible in dropdown
       return `${cost.base_cost} × rating`;
     }
     return `${cost.base_cost}`;
-  };
-
-  // Helper to get source string
-  const getSource = (quality: Quality): string => {
-    return quality.source?.source || 'Unknown';
   };
 
   // Filter and group qualities
@@ -341,7 +336,6 @@ export function Step4Qualities({ formData, setFormData, creationData, errors, to
                 ) : (
                   groupedQualities.map((group) => {
                     const groupKarmaUsed = group.category === 'Positive' ? positiveKarmaUsed : negativeKarmaGained;
-                    const groupKarmaLimit = MAX_QUALITY_KARMA;
                     const groupSelectedCount = selectedQualities.filter(q => 
                       (group.category === 'Positive' && q.type === 'positive') ||
                       (group.category === 'Negative' && q.type === 'negative')
@@ -407,8 +401,6 @@ export function Step4Qualities({ formData, setFormData, creationData, errors, to
                         {group.isExpanded && group.qualities.map((quality, index) => {
                           const selectedQuality = selectedQualities.find(q => q.name === quality.name);
                           const isSelected = !!selectedQuality;
-                          // Calculate cost with current rating (or 1 for per_rating qualities when checking if can add)
-                          const cost = Math.abs(calculateKarmaCost(quality, selectedQuality?.rating));
                           const isPositive = quality.type === 'positive';
                           const hasRating = quality.cost.per_rating;
                           const maxRating = quality.cost.max_rating > 0 ? quality.cost.max_rating : Infinity;

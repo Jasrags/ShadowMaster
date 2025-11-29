@@ -4,7 +4,7 @@ interface SkillAllocatorProps {
   onAllocate: (skillName: string, points: number) => void;
 }
 
-export function SkillAllocator({ availablePoints, usedPoints, onAllocate }: SkillAllocatorProps) {
+export function SkillAllocator({ availablePoints, usedPoints, onAllocate: _onAllocate }: SkillAllocatorProps) {
   const remainingPoints = availablePoints - usedPoints;
 
   return (

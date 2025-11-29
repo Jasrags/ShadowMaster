@@ -1,5 +1,5 @@
 import { Select, Button, Popover, ListBox, ListBoxItem, SelectValue } from 'react-aria-components';
-import type { SumToTenSelection, CharacterCreationData } from '../../lib/types';
+import type { SumToTenSelection, CharacterCreationData, PriorityOption } from '../../lib/types';
 
 interface SumToTenSelectorProps {
   selection: SumToTenSelection;
@@ -33,7 +33,7 @@ export function SumToTenSelector({ selection, onChange, creationData, gameplayLe
   const isValid = total === 10;
 
   const getPriorityLabel = (category: string, priority: string) => {
-    const option = creationData.priorities[category]?.[priority];
+    const option = (creationData.priorities as Record<string, Record<string, PriorityOption>>)[category]?.[priority];
     return option ? `${priority}: ${option.label}` : priority;
   };
 

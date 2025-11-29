@@ -1,4 +1,4 @@
-import { useState, useMemo, ReactNode, useEffect, useDeferredValue } from 'react';
+import { useState, useMemo, ReactNode, useEffect } from 'react';
 import {
   Table,
   TableHeader,
@@ -17,7 +17,7 @@ import {
 } from 'react-aria-components';
 import { filterData, sortData, paginateData } from '../../lib/tableUtils';
 
-export interface ColumnDefinition<T> {
+export interface ColumnDefinition<T extends object> {
   id: string;
   header: string;
   accessor: keyof T | ((row: T) => ReactNode);
@@ -26,7 +26,7 @@ export interface ColumnDefinition<T> {
   className?: string;
 }
 
-export interface DataTableProps<T> {
+export interface DataTableProps<T extends object> {
   data: T[];
   columns: ColumnDefinition<T>[];
   searchFields?: (keyof T)[];
@@ -44,7 +44,7 @@ export interface DataTableProps<T> {
 const DEFAULT_ROWS_PER_PAGE_OPTIONS = [10, 25, 50, 100];
 const DEFAULT_ROWS_PER_PAGE = 10;
 
-export function DataTable<T>({
+export function DataTable<T extends object>({
   data,
   columns,
   searchFields,

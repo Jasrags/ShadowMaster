@@ -9,7 +9,7 @@ interface Step7KarmaSpendingProps {
   touched: Record<string, boolean>;
 }
 
-export function Step7KarmaSpending({ formData, setFormData, creationData, errors, touched }: Step7KarmaSpendingProps) {
+export function Step7KarmaSpending({ formData: _formData, setFormData: _setFormData, creationData: _creationData, errors: _errors, touched: _touched }: Step7KarmaSpendingProps) {
   return (
     <div className="space-y-6">
       <div>

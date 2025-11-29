@@ -10,11 +10,7 @@ interface LifestylesTableGroupedProps {
   lifestyles: Lifestyle[];
 }
 
-interface CategoryGroup {
-  category: string;
-  lifestyles: Lifestyle[];
-  isExpanded: boolean;
-}
+// CategoryGroup interface removed - unused
 
 export function LifestylesTableGrouped({ lifestyles }: LifestylesTableGroupedProps) {
   const [selectedLifestyle, setSelectedLifestyle] = useState<Lifestyle | null>(null);

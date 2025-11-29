@@ -33,6 +33,7 @@ const formatArray = (value: unknown): string => {
   return formatValue(value);
 };
 
+
 // Component to display special properties for weapon accessories
 function SpecialPropertiesDisplay({ properties }: { properties: unknown }) {
   if (!properties || typeof properties !== 'object') {
@@ -566,6 +567,20 @@ export function WeaponAccessoryViewModal({ accessory, isOpen, onOpenChange }: We
     return null;
   }
 
+  // Extract conditions to help TypeScript with type inference
+  const hasSpecialProperties: boolean = accessory.special_properties != null && typeof accessory.special_properties === 'object';
+  const hasWirelessBonus: boolean = accessory.wireless_bonus != null && typeof accessory.wireless_bonus === 'object';
+
+  // Render wireless bonus section with explicit type
+  const wirelessBonusSection = (hasWirelessBonus ? (
+    <section>
+      <h2 className="text-lg font-semibold text-gray-200 mb-3">Wireless Bonus</h2>
+      <div className="p-4 bg-sr-darker rounded-md">
+        <WirelessBonusDisplay bonus={accessory.wireless_bonus as Record<string, unknown>} />
+      </div>
+    </section>
+  ) : null) as ReactNode;
+
   return (
     <Modal isOpen={isOpen} onOpenChange={onOpenChange}>
       <div className="fixed inset-0 z-50 flex items-center justify-center p-4" style={{ zIndex: 50 }}>
@@ -727,24 +742,18 @@ export function WeaponAccessoryViewModal({ accessory, isOpen, onOpenChange }: We
               </section>
 
               {/* Special Properties */}
-              {accessory.special_properties && (
+              {/* @ts-ignore - TypeScript limitation with unknown types in JSX conditionals */}
+              {hasSpecialProperties ? (
                 <section>
                   <h2 className="text-lg font-semibold text-gray-200 mb-3">Special Properties</h2>
                   <div className="p-4 bg-sr-darker rounded-md">
-                    <SpecialPropertiesDisplay properties={accessory.special_properties} />
+                    <SpecialPropertiesDisplay properties={accessory.special_properties as Record<string, unknown>} />
                   </div>
                 </section>
-              )}
+              ) : null}
 
               {/* Wireless Bonus */}
-              {accessory.wireless_bonus && (
-                <section>
-                  <h2 className="text-lg font-semibold text-gray-200 mb-3">Wireless Bonus</h2>
-                  <div className="p-4 bg-sr-darker rounded-md">
-                    <WirelessBonusDisplay bonus={accessory.wireless_bonus} />
-                  </div>
-                </section>
-              )}
+              {wirelessBonusSection}
 
               {/* Ammo Modifications */}
               {(accessory.ammobonus || accessory.ammoreplace || accessory.ammoslots || accessory.modifyammocapacity) && (

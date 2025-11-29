@@ -36,10 +36,13 @@ export function QualityCategoryFilter({ qualities, selectedCategories, onCategor
   }, [isOpen]);
 
   // Get all unique categories with counts
+  // Note: Quality interface doesn't have a category property, so this filter is not functional
+  // Keeping component for potential future use
   const categoriesWithCounts = useMemo(() => {
     const categoryMap = new Map<string, number>();
+    // Since Quality doesn't have category, we'll use type as a fallback
     qualities.forEach(item => {
-      const category = item.category || 'Unknown';
+      const category = item.type || 'Unknown';
       categoryMap.set(category, (categoryMap.get(category) || 0) + 1);
     });
     

@@ -10,7 +10,7 @@ interface Step9FinalTouchesProps {
   touched: Record<string, boolean>;
 }
 
-export function Step9FinalTouches({ formData, setFormData, creationData, errors, touched }: Step9FinalTouchesProps) {
+export function Step9FinalTouches({ formData, setFormData, creationData: _creationData, errors: _errors, touched: _touched }: Step9FinalTouchesProps) {
   return (
     <div className="space-y-6">
       <div>

@@ -10,7 +10,7 @@ interface Step8FinalCalculationsProps {
   touched: Record<string, boolean>;
 }
 
-export function Step8FinalCalculations({ formData, setFormData, creationData, errors, touched }: Step8FinalCalculationsProps) {
+export function Step8FinalCalculations({ formData, setFormData: _setFormData, creationData: _creationData, errors: _errors, touched: _touched }: Step8FinalCalculationsProps) {
   // Calculate derived attributes from form data
   const attributes = formData.attributeAllocations || {};
   const body = attributes.body || 1;

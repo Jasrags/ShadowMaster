@@ -7,15 +7,7 @@ interface SkillViewModalProps {
   onOpenChange: (isOpen: boolean) => void;
 }
 
-// Helper function to format values for display
-const formatValue = (value: unknown): string => {
-  if (value === null || value === undefined || value === '') return '-';
-  if (typeof value === 'boolean') return value ? 'Yes' : 'No';
-  if (typeof value === 'object') {
-    return JSON.stringify(value, null, 2);
-  }
-  return String(value);
-};
+// formatValue helper removed - unused
 
 export function SkillViewModal({ skill, isOpen, onOpenChange }: SkillViewModalProps) {
   const handleClose = () => {

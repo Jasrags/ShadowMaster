@@ -9,11 +9,7 @@ interface QualitiesTableGroupedProps {
   qualities: Quality[];
 }
 
-interface GroupedQualities {
-  category: string;
-  qualities: Quality[];
-  isExpanded: boolean;
-}
+// GroupedQualities interface removed - unused
 
 export function QualitiesTableGrouped({ qualities }: QualitiesTableGroupedProps) {
   const [selectedQuality, setSelectedQuality] = useState<Quality | null>(null);

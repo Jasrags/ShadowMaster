@@ -544,12 +544,18 @@ export function Step3MagicResonance({ formData, setFormData, creationData, error
       return;
     }
     
+    // Ensure spell has a name before adding
+    if (!spell.name) {
+      return;
+    }
+    
     const spellWithTemplate = spell as Spell & { _sourceTemplate?: string };
-    const newSpells = [...selectedSpells, { 
-      name: spell.name, 
+    const newSpell: { name: string; category?: string; _sourceTemplate?: string } = {
+      name: spell.name,
       category: spell.category,
       _sourceTemplate: spellWithTemplate._sourceTemplate
-    } as Spell & { _sourceTemplate?: string }];
+    };
+    const newSpells = [...selectedSpells, newSpell];
     setFormData({ ...formData, selectedSpells: newSpells });
   };
   
@@ -583,8 +589,6 @@ export function Step3MagicResonance({ formData, setFormData, creationData, error
     return groups;
   }, [filteredSpells]);
   
-  // Spell categories in order
-  const SPELL_CATEGORIES = ['combat', 'detection', 'health', 'illusion', 'manipulation'];
 
   // Check if there are selections to clear
   const hasSelections = formData.magicType !== undefined || formData.tradition !== undefined || 

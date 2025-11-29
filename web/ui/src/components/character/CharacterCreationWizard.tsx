@@ -42,7 +42,7 @@ export interface CharacterCreationState {
   tradition?: string;
   mentorSpirit?: string;
   aspectedSkillGroup?: string; // 'Sorcery', 'Conjuring', or 'Enchanting' for Aspected Magicians
-  selectedSpells?: Array<{ name: string; category?: string }>;
+  selectedSpells?: Array<{ name: string; category?: string; _sourceTemplate?: string }>;
   selectedAdeptPowers?: Array<{ name: string; level?: number; powerPoints: number }>;
   selectedQualities?: Array<{ name: string; type: string; rating?: number }>;
   skillAllocations?: Record<string, number>;

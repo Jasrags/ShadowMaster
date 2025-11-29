@@ -501,14 +501,14 @@ export function ArmorViewModal({ armor, isOpen, onOpenChange, gearMap }: ArmorVi
               </section>
 
               {/* Special Properties */}
-              {armor.special_properties && typeof armor.special_properties === 'object' && (
+              {armor.special_properties != null && typeof armor.special_properties === 'object' ? (
                 <section>
                   <h2 className="text-lg font-semibold text-gray-200 mb-3">Special Properties</h2>
                   <div className="p-4 bg-sr-light-gray border border-sr-light-gray rounded-md">
-                    <SpecialPropertiesDisplay properties={armor.special_properties} />
+                    <SpecialPropertiesDisplay properties={armor.special_properties as Record<string, unknown>} />
                   </div>
                 </section>
-              )}
+              ) : null}
 
               {/* Compatible With */}
               {armor.compatible_with && armor.compatible_with.length > 0 && (
@@ -528,14 +528,14 @@ export function ArmorViewModal({ armor, isOpen, onOpenChange, gearMap }: ArmorVi
               )}
 
               {/* Modification Effects */}
-              {armor.modification_effects && (
+              {armor.modification_effects != null ? (
                 <section>
                   <h2 className="text-lg font-semibold text-gray-200 mb-3">Modification Effects</h2>
                   <div className="p-4 bg-sr-light-gray border border-sr-light-gray rounded-md">
                     <ModificationEffectsDisplay effects={armor.modification_effects} />
                   </div>
                 </section>
-              )}
+              ) : null}
 
               {/* Modifications */}
               {(armor.addmodcategory || armor.selectmodsfromcategory) && (
@@ -611,14 +611,14 @@ export function ArmorViewModal({ armor, isOpen, onOpenChange, gearMap }: ArmorVi
               )}
 
               {/* Wireless Bonuses */}
-              {armor.wirelessbonus !== undefined && armor.wirelessbonus !== null && (
+              {armor.wirelessbonus != null ? (
                 <section>
                   <h2 className="text-lg font-semibold text-gray-200 mb-3">Wireless Bonuses</h2>
                   <div className="p-4 bg-sr-light-gray border border-sr-light-gray rounded-md">
                     <WirelessBonusDisplay bonus={armor.wirelessbonus} />
                   </div>
                 </section>
-              )}
+              ) : null}
             </div>
           </div>
 

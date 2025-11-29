@@ -11,11 +11,7 @@ interface WeaponTableGroupedProps {
   accessoryMap: Map<string, WeaponAccessoryItem>;
 }
 
-interface GroupedWeapons {
-  category: string;
-  weapons: Weapon[];
-  isExpanded: boolean;
-}
+// GroupedWeapons interface removed - unused
 
 export function WeaponTableGrouped({ weapons, accessoryMap }: WeaponTableGroupedProps) {
   const [selectedWeapon, setSelectedWeapon] = useState<Weapon | null>(null);

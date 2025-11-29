@@ -1,4 +1,3 @@
-import { useState } from 'react';
 import type { CharacterCreationState } from '../CharacterCreationWizard';
 import type { CharacterCreationData } from '../../../lib/types';
 import { EquipmentSelector } from '../EquipmentSelector';
@@ -27,7 +26,7 @@ const GAMEPLAY_MULTIPLIERS: Record<string, number> = {
   prime: 1.5,
 };
 
-export function Step6Resources({ formData, setFormData, creationData, errors, touched }: Step6ResourcesProps) {
+export function Step6Resources({ formData, setFormData, creationData: _creationData, errors: _errors, touched: _touched }: Step6ResourcesProps) {
   const equipment = formData.equipment || [];
 
   // Get resources priority

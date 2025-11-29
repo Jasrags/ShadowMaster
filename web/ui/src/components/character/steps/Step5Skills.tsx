@@ -3,7 +3,6 @@ import { Input, TextField } from 'react-aria-components';
 import type { CharacterCreationState } from '../CharacterCreationWizard';
 import type { CharacterCreationData, Skill } from '../../../lib/types';
 import { skillApi } from '../../../lib/api';
-import { SkillAllocator } from '../SkillAllocator';
 import { useToast } from '../../../contexts/ToastContext';
 
 interface Step5SkillsProps {
@@ -23,7 +22,7 @@ const SKILL_POINTS: Record<string, { individual: number; group: number }> = {
   E: { individual: 18, group: 0 },
 };
 
-export function Step5Skills({ formData, setFormData, creationData, errors, touched }: Step5SkillsProps) {
+export function Step5Skills({ formData, setFormData, creationData: _creationData, errors: _errors, touched: _touched }: Step5SkillsProps) {
   const { showError } = useToast();
   const [skills, setSkills] = useState<Skill[]>([]);
   const [isLoading, setIsLoading] = useState(false);

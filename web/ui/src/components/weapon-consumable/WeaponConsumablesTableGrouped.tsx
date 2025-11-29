@@ -10,11 +10,7 @@ interface WeaponConsumablesTableGroupedProps {
   consumables: WeaponConsumable[];
 }
 
-interface CategoryGroup {
-  category: string;
-  consumables: WeaponConsumable[];
-  isExpanded: boolean;
-}
+// CategoryGroup interface removed - unused
 
 export function WeaponConsumablesTableGrouped({ consumables }: WeaponConsumablesTableGroupedProps) {
   const [selectedConsumable, setSelectedConsumable] = useState<WeaponConsumable | null>(null);

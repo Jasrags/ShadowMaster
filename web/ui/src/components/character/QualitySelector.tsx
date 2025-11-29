@@ -12,9 +12,9 @@ interface QualitySelectorProps {
 
 export function QualitySelector({ 
   qualities, 
-  selectedQualities, 
-  onSelect, 
-  onRemove, 
+  selectedQualities: _selectedQualities, 
+  onSelect: _onSelect, 
+  onRemove: _onRemove, 
   maxKarma = 25, 
   usedKarma,
   qualityType 

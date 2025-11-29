@@ -5,7 +5,6 @@ import { DeleteConfirmationDialog } from '../common/DeleteConfirmationDialog';
 import { useState } from 'react';
 import { characterApi } from '../../lib/api';
 import { useToast } from '../../contexts/ToastContext';
-import { useNavigate } from 'react-router-dom';
 
 interface CharacterTableProps {
   characters: Character[];
@@ -25,11 +24,10 @@ const getStatusColor = (status?: string) => {
 };
 
 export function CharacterTable({ characters, onCharacterUpdated }: CharacterTableProps) {
-  const navigate = useNavigate();
   const { showSuccess, showError } = useToast();
   const [isDeleting, setIsDeleting] = useState<string | null>(null);
 
-  const handleView = (character: Character) => {
+  const handleView = (_character: Character) => {
     // Character view page is not yet implemented
     // When implemented, navigate to: `/characters/${character.id}` or `/campaigns/${character.campaign_id}/characters/${character.id}`
     // For now, this button is a placeholder for future functionality
