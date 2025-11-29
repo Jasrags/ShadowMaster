@@ -44,6 +44,14 @@ web/ui/node_modules/
 !data/editions/
 !data/editions/**
 
+# User-generated data (sensitive, should not be tracked)
+data/users/
+data/campaigns/
+data/characters/
+data/sessions/
+data/scenes/
+data/groups/
+
 # Temporary files
 *.tmp
 *.log

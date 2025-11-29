@@ -1,14 +1,16 @@
 # ShadowMaster RPG System
 
-A tabletop RPG management system for Shadowrun 3rd edition with support for multiple interfaces (web and CLI) and extensibility for other editions.
+A tabletop RPG management system for Shadowrun with support for multiple editions (SR3, SR5), multiple interfaces (web and CLI), and extensibility for future editions.
 
 ## Features
 
-- **Character Management**: Create and manage Shadowrun 3rd edition characters with full attribute and skill systems
+- **Character Management**: Create and manage Shadowrun characters with full attribute and skill systems
+  - **Shadowrun 3rd Edition (SR3)**: Full character creation support
+  - **Shadowrun 5th Edition (SR5)**: Character creation with Priority, Sum to Ten, and Karma build methods
 - **Campaign Organization**: Organize characters into groups, create campaigns, manage sessions and scenes
 - **Multiple Interfaces**: 
-  - Web interface (HTML/CSS/JavaScript)
-  - CLI interface (command-line)
+  - Web interface (React + TypeScript with Vite)
+  - CLI interface (command-line, in progress)
 - **JSON File Storage**: All data stored in JSON files (extensible to database in future)
 - **REST API**: Complete REST API for all entities
 - **User Authentication**: Email-based registration, secure login, and role-based access control (Admin, Gamemaster, Player)
@@ -17,14 +19,31 @@ A tabletop RPG management system for Shadowrun 3rd edition with support for mult
 ## Architecture
 
 ### Backend
-- **Language**: Go
+- **Language**: Go 1.24.3+
 - **Routing**: Chi router
 - **Storage**: JSON files with file locking for concurrency safety
 - **API**: RESTful API with CRUD operations for all entities
+- **Edition System**: Extensible edition registry supporting multiple Shadowrun editions
 
 ### Frontend
-- **Web**: Vanilla JavaScript (can migrate to framework if needed)
-- **Style**: Custom CSS with dark theme
+- **Web**: React 18 with TypeScript
+- **Build Tool**: Vite
+- **UI Components**: React Aria Components
+- **Styling**: Tailwind CSS
+
+## Development Approach
+
+This project is being developed using a **full AI-assisted approach** with [Cursor](https://cursor.sh) and its integrated AI tools. The development process leverages:
+
+- **AI Pair Programming**: Real-time code generation, refactoring, and optimization using Cursor's AI assistant
+- **Semantic Code Search**: AI-powered codebase understanding for context-aware suggestions and implementations
+- **Automated Documentation**: AI-assisted documentation generation and updates
+- **Intelligent Code Review**: AI-driven code quality checks, linting, and best practice suggestions
+- **Cross-Language Support**: Seamless assistance across Go backend and React/TypeScript frontend development
+
+This AI-first development methodology enables rapid iteration, consistent code quality, and comprehensive feature implementation while maintaining clean architecture and best practices. The AI assistant helps with everything from initial feature design to bug fixes, test writing, and documentation updates.
+
+**Note**: While AI tools significantly accelerate development, all code decisions, architecture choices, and final implementations are reviewed and approved by the developer to ensure quality and alignment with project goals.
 
 ## Project Structure
 
@@ -42,7 +61,9 @@ internal/
   config/                   # Configuration management
 pkg/
   shadowrun/                # Shadowrun-specific game mechanics
-    edition/v3/             # SR3 specific logic
+    edition/                # Edition registry and interfaces
+      v3/                   # SR3 specific logic
+      v5/                   # SR5 specific logic
   storage/                  # JSON file storage utilities
 data/                       # JSON data files directory
   characters/
@@ -50,11 +71,14 @@ data/                       # JSON data files directory
   campaigns/
   sessions/
   scenes/
+  editions/                 # Edition-specific data files
+    sr3/
+    sr5/
 web/
-  static/                   # Static assets
-    index.html
-    css/
-    js/
+  static/                   # Built static assets (generated)
+  ui/                       # React frontend source
+    src/
+    package.json
 ```
 
 ## Getting Started
@@ -74,7 +98,7 @@ web/
 For detailed platform-specific setup instructions, see the [Setup Guide](docs/getting-started/SETUP.md).
 
 ### Prerequisites
-- Go 1.21 or later
+- Go 1.24.3 or later
 - Node.js 18+ and npm
 - Make (for using Makefile commands on macOS/Linux/WSL)
 - Docker (optional, for containerized deployment)
@@ -245,19 +269,24 @@ All authentication endpoints return/accept JSON and rely on HTTP-only cookies fo
 
 ## Development Status
 
-### Completed (Phase 1: Foundation)
+### Completed
 - ✅ Project structure and Go module setup
 - ✅ JSON file storage system with file locking
 - ✅ Domain models (Character, Group, Campaign, Session, Scene)
 - ✅ Repository layer with JSON file implementation
 - ✅ REST API endpoints for CRUD operations
-- ✅ Basic web server serving static files
-- ✅ Basic character service for SR3 character creation
+- ✅ React + TypeScript frontend with Vite
+- ✅ User authentication and role-based access control
+- ✅ Character service with edition registry
+- ✅ SR3 character creation support
+- ✅ SR5 character creation support (Priority, Sum to Ten, Karma methods)
+- ✅ Campaign management with edition and creation method selection
+- ✅ Session and scene management
 
 ### In Progress
-- Character management (SR3 character creation workflow)
-- Web UI for character creation/editing
-- CLI application
+- Character creation wizard UI improvements
+- Equipment and gear selection
+- Skill allocation interface
 
 ### Planned
 - Dice rolling system
@@ -265,7 +294,101 @@ All authentication endpoints return/accept JSON and rely on HTTP-only cookies fo
 - Combat state management
 - Notes/journal system
 - WebSocket real-time updates
-- Edition abstraction layer
+- Additional Shadowrun editions
+
+## Active Plans & Remaining Work
+
+This section tracks active development plans and remaining work items. See individual plan files in `.cursor/plans/` for detailed implementation details.
+
+### TypeScript & Code Quality
+
+- **[Fix Remaining TypeScript Errors](.cursor/plans/fix-remaining-typescript-errors-f1582b49.plan.md)** - ⏳ In Progress
+  - Fix ReactNode type errors in ArmorViewModal and WeaponAccessoryViewModal
+  - Fix duplicate AttributeRange interface declarations
+  - Fix index signature errors in SumToTenSelector and Step2MetatypeAttributes
+  - Fix unused variable/parameter warnings across multiple files
+  - Fix Spell array type mismatch in Step3MagicResonance
+  - Fix DataTable generic type constraint
+
+### Character Creation & UI
+
+- **[SR5 Character Creation UI Implementation](.cursor/plans/sr5-character-creation-ui-implementation.plan.md)** - ⏳ In Progress
+  - Backend complete, UI components pending
+  - Multi-step wizard for Priority, Sum-to-Ten, and Karma build methods
+  - Step components for all 9 character creation steps
+
+- **[SR5 Character Creation Implementation](.cursor/plans/sr5-character-creation-implementation-c4059700.plan.md)** - ✅ Backend Complete
+  - All backend implementation complete
+  - UI/frontend components not yet built
+
+- **[Reorder Character Creation Steps](.cursor/plans/reorder-character-creation-steps-13411a0f.plan.md)** - Status unknown
+
+### Campaign & Session Management
+
+- **[Campaign Creation Flow](.cursor/plans/campaign-creation-flow.plan.md)** - ⏳ Pending
+  - Multi-step wizard for GM onboarding
+  - Roster & roles management
+  - World backbone (factions, locations)
+  - Automation & house rules configuration
+  - Session seed creation
+
+- **[NPC Library](.cursor/plans/npc-library.plan.md)** - ⏳ Pending
+  - NPC creation and management system
+  - Template library for reusable NPCs
+  - Campaign integration
+  - Quick stat block creation
+
+### Database & Data Management
+
+- **[Wire in Missing v5 Database Tabs](.cursor/plans/wire-in-missing-v5-database-tabs-bbfa3b59.plan.md)** - ✅ Complete
+  - All 11 missing v5 data files have been wired in
+  - Backend handlers, frontend components, and routes all implemented
+
+- **[Data Generation, Normalization, and Cleanup](.cursor/plans/data-generation-normalization-cleanup.plan.md)** - ⏳ In Progress
+  - Type safety refactoring (converting `interface{}` to concrete types)
+  - Armor: ✅ 100% complete
+  - Gear: ✅ ~99% complete (1 intentionally complex field remaining)
+  - Qualities: 🟡 ~36% complete (incremental approach)
+  - Remaining: ~30 data sets with ~181 `interface{}` fields
+
+### Infrastructure & Development
+
+- **[Live Reload Support](.cursor/plans/live-reload-support.plan.md)** - ⏳ Pending
+  - Air integration for Go API server
+  - Cross-platform support (Windows, Linux, macOS)
+  - Fallback to `go run` when Air not installed
+
+- **[UI Code Quality Improvements](.cursor/plans/ui-code-quality-improvements-65c3c29d.plan.md)** - Status unknown
+
+### Data Processing & Generation
+
+- **[XML Data Generation Batch](.cursor/plans/xml-data-generation-batch.plan.md)** - Status unknown
+- **[XSD Data Generation Strategy](.cursor/plans/xsd-data-generation-strategy-822ead4f.plan.md)** - Status unknown
+- **[Web Scraping and Markdown Conversion](.cursor/plans/web-scraping-and-markdown-conversion-94075bec.plan.md)** - Status unknown
+- **[XML Data Analysis and Struct Enhancement](.cursor/plans/xml-data-analysis-and-struct-enhancement-7ac55486.plan.md)** - Status unknown
+
+### Backend & Domain Model
+
+- **[SR5 Character Model](.cursor/plans/sr5-character-model.plan.md)** - Status unknown
+- **[V5 Struct Improvements](.cursor/plans/v5-struct-improvements-df95544e.plan.md)** - Status unknown
+- **[V5 Struct Standardization](.cursor/plans/v5-struct-standardization-8c93ace5.plan.md)** - Status unknown
+- **[V5 Structure Improvements](.cursor/plans/v5-structure-improvements.plan.md)** - Status unknown
+- **[SR5 Character Struct](.cursor/plans/sr5-character-struct-6e1397a3.plan.md)** - Status unknown
+
+### Other Plans
+
+- **[Campaign Defaults](.cursor/plans/expose-campaign-defaults.plan.md)** - Status unknown
+- **[Enum Helper Functions](.cursor/plans/enum-helper-functions-creation.plan.md)** - Status unknown
+- **[Migrate Handlers to New Datasets](.cursor/plans/migrate-handlers-to-new-datasets.plan.md)** - Status unknown
+- **[Docs Consolidation Opportunities](.cursor/plans/docs-consolidation-opportunities.md)** - Status unknown
+
+### Plan Status Legend
+
+- ✅ **Complete** - All work finished
+- ⏳ **In Progress** - Active development
+- 🟡 **Partial** - Some work done, more remaining
+- ⚠️ **Blocked** - Waiting on dependencies
+- ❓ **Status Unknown** - Needs review to determine current status
 
 ## Docker Deployment
 
@@ -293,5 +416,15 @@ For Portainer deployment, see the [Portainer Deployment Guide](docs/deployment/p
 
 ## License
 
-[Add license information]
+This project is licensed under the GNU General Public License v3.0. See the [LICENSE](LICENSE) file for details.
+
+## Third-Party Content Disclaimer
+
+ShadowMaster is a tabletop RPG management tool that supports Shadowrun editions (SR3, SR5). This software includes game rules, equipment statistics, character creation mechanics, and other game-related data derived from Shadowrun source materials.
+
+**Shadowrun** is a trademark of [Catalyst Game Labs](https://www.catalystgamelabs.com/) and/or [Topps Company, Inc.](https://www.topps.com/). This project is not affiliated with, endorsed by, or sponsored by Catalyst Game Labs, Topps, or any Shadowrun license holders.
+
+All Shadowrun game content (rules, mechanics, terminology, equipment stats, etc.) included in this repository is for reference and utility purposes only. The copyright and trademarks for Shadowrun game content belong to their respective owners. This software is a fan-created utility tool intended to assist players in managing their Shadowrun games and characters.
+
+Users should own the appropriate Shadowrun sourcebooks to use this tool legally and are responsible for ensuring their use complies with applicable copyright and trademark laws.
 
