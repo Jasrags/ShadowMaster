@@ -83,15 +83,15 @@ function ToastContainer({ toasts, onDismiss }: { toasts: Toast[]; onDismiss: (id
   const getVariantStyles = (variant?: string) => {
     switch (variant) {
       case 'success':
-        return 'border-green-500/50 bg-green-900/20';
+        return 'border-green-500/70 bg-green-900/80';
       case 'error':
-        return 'border-red-500/50 bg-red-900/20';
+        return 'border-red-500/70 bg-red-900/80';
       case 'warning':
-        return 'border-yellow-500/50 bg-yellow-900/20';
+        return 'border-yellow-500/70 bg-yellow-900/80';
       case 'info':
-        return 'border-blue-500/50 bg-blue-900/20';
+        return 'border-blue-500/70 bg-blue-900/80';
       default:
-        return 'border-sr-light-gray bg-sr-gray';
+        return 'border-sr-light-gray bg-sr-gray/90';
     }
   };
 
@@ -151,6 +151,7 @@ function ToastContainer({ toasts, onDismiss }: { toasts: Toast[]; onDismiss: (id
   );
 }
 
+// Custom hook export - intentionally not a component
 // eslint-disable-next-line react-refresh/only-export-components
 export function useToast() {
   const context = useContext(ToastContext);

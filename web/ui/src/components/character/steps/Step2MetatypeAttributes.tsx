@@ -490,11 +490,6 @@ export function Step2MetatypeAttributes({ formData, setFormData, creationData, e
           {attributesPriority && formData.selectedMetatype && (
             <div ref={attributeAllocationRef} className="space-y-3">
               <h4 className="text-md font-semibold text-gray-200">4. Allocate Attributes</h4>
-              <div className="p-4 bg-sr-light-gray/30 border border-sr-light-gray rounded-md mb-3">
-                <p className="text-sm text-gray-300">
-                  Available Attribute Points: <strong className="text-gray-100">{availableAttributePoints}</strong>
-                </p>
-              </div>
               <AttributeAllocator
                 attributes={formData.attributeAllocations || {}}
                 onChange={(attrs) => setFormData({ ...formData, attributeAllocations: attrs })}

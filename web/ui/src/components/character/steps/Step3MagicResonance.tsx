@@ -3,7 +3,8 @@ import type { CharacterCreationState } from '../CharacterCreationWizard';
 import type { CharacterCreationData, Tradition, PrioritySelection, SumToTenSelection, Spell, Mentor, Power } from '../../../lib/types';
 import { MagicTypeSelector } from '../MagicTypeSelector';
 import { traditionApi, spellApi, mentorApi, powerApi } from '../../../lib/api';
-import { useState, useEffect, useMemo, useRef } from 'react';
+import { useState, useEffect, useMemo, useRef, useCallback } from 'react';
+import { useToast } from '../../../contexts/ToastContext';
 
 interface Step3MagicResonanceProps {
   formData: CharacterCreationState;
@@ -14,6 +15,7 @@ interface Step3MagicResonanceProps {
 }
 
 export function Step3MagicResonance({ formData, setFormData, creationData, errors, touched }: Step3MagicResonanceProps) {
+  const { showError } = useToast();
   const [traditions, setTraditions] = useState<Tradition[]>([]);
   const [isLoadingTraditions, setIsLoadingTraditions] = useState(false);
   const [mentors, setMentors] = useState<Mentor[]>([]);
@@ -24,6 +26,8 @@ export function Step3MagicResonance({ formData, setFormData, creationData, error
   const [isLoadingPowers, setIsLoadingPowers] = useState(false);
   const [searchTerm, setSearchTerm] = useState('');
   const [powerSearchTerm, setPowerSearchTerm] = useState('');
+  const [detectObjectInputs, setDetectObjectInputs] = useState<Record<string, string>>({});
+  const [detectLifeFormInputs, setDetectLifeFormInputs] = useState<Record<string, string>>({});
   
   // Refs for scrolling to next sections
   const traditionSelectionRef = useRef<HTMLDivElement>(null);
@@ -38,6 +42,26 @@ export function Step3MagicResonance({ formData, setFormData, creationData, error
     { id: 'Conjuring', name: 'Conjuring', description: 'Summoning, Binding, Banishing. Focus on working with spirits and summoning allies.' },
     { id: 'Enchanting', name: 'Enchanting', description: 'Alchemy, Artificing, Disenchanting. Focus on creating magical items and preparations.' },
   ];
+
+  // Physical and Mental attributes that can be affected by Increase/Decrease Attribute spells
+  const PHYSICAL_ATTRIBUTES = ['Body', 'Agility', 'Reaction', 'Strength'];
+  const MENTAL_ATTRIBUTES = ['Willpower', 'Logic', 'Intuition', 'Charisma'];
+  const ALL_ATTRIBUTE_SPELL_ATTRIBUTES = [...PHYSICAL_ATTRIBUTES, ...MENTAL_ATTRIBUTES];
+
+  // Check if a spell is an Increase/Decrease Attribute spell
+  const isAttributeSpell = (spellName: string): boolean => {
+    return spellName.includes('Increase [Attribute]') || spellName.includes('Decrease [Attribute]');
+  };
+
+  // Check if a spell is a Detect Object spell
+  const isDetectObjectSpell = (spellName: string): boolean => {
+    return spellName.includes('Detect [Object]');
+  };
+
+  // Check if a spell is a Detect Life Form spell
+  const isDetectLifeFormSpell = (spellName: string): boolean => {
+    return spellName.includes('Detect [Life Form]');
+  };
 
   // Initialize priorities if they don't exist
   useEffect(() => {
@@ -155,26 +179,26 @@ export function Step3MagicResonance({ formData, setFormData, creationData, error
     .filter(Boolean) as string[];
 
 
+  const loadTraditions = useCallback(async () => {
+    try {
+      setIsLoadingTraditions(true);
+      const data = await traditionApi.getTraditions();
+      setTraditions(data);
+    } catch (err) {
+      const errorMessage = err instanceof Error ? err.message : 'Failed to load traditions';
+      showError('Failed to load traditions', errorMessage);
+    } finally {
+      setIsLoadingTraditions(false);
+    }
+  }, [showError]);
+
   // Load traditions when magic type is selected
   useEffect(() => {
     const magicTypeId = formData.magicType;
     if (magicTypeId && (magicTypeId === 'magician' || magicTypeId === 'mystic_adept')) {
       loadTraditions();
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [formData.magicType]);
-
-  const loadTraditions = async () => {
-    try {
-      setIsLoadingTraditions(true);
-      const data = await traditionApi.getTraditions();
-      setTraditions(data);
-    } catch (err) {
-      console.error('Failed to load traditions:', err);
-    } finally {
-      setIsLoadingTraditions(false);
-    }
-  };
+  }, [formData.magicType, loadTraditions]);
 
   const handleMagicTypeSelect = (typeId: string) => {
     // Convert from MagicTypeSelector format to priority data format
@@ -216,25 +240,25 @@ export function Step3MagicResonance({ formData, setFormData, creationData, error
     }
   };
   
-  // Load powers when Adept is selected
-  useEffect(() => {
-    if (formData.magicType === 'adept' && !powers.length) {
-      loadPowers();
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [formData.magicType]);
-  
-  const loadPowers = async () => {
+  const loadPowers = useCallback(async () => {
     try {
       setIsLoadingPowers(true);
       const data = await powerApi.getPowers();
       setPowers(data);
     } catch (err) {
-      console.error('Failed to load powers:', err);
+      const errorMessage = err instanceof Error ? err.message : 'Failed to load powers';
+      showError('Failed to load powers', errorMessage);
     } finally {
       setIsLoadingPowers(false);
     }
-  };
+  }, [showError]);
+
+  // Load powers when Adept is selected
+  useEffect(() => {
+    if (formData.magicType === 'adept' && !powers.length) {
+      loadPowers();
+    }
+  }, [formData.magicType, powers.length, loadPowers]);
   
   // Calculate power point cost for a power
   // Matches backend calculation in pkg/shadowrun/edition/v5/powers.go
@@ -355,25 +379,25 @@ export function Step3MagicResonance({ formData, setFormData, creationData, error
     setFormData({ ...formData, aspectedSkillGroup: skillGroup });
   };
   
-  // Load mentors when Shaman tradition is selected
-  useEffect(() => {
-    if (formData.tradition === 'The Shaman' && !mentors.length) {
-      loadMentors();
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [formData.tradition]);
-  
-  const loadMentors = async () => {
+  const loadMentors = useCallback(async () => {
     try {
       setIsLoadingMentors(true);
       const data = await mentorApi.getMentors();
       setMentors(data);
     } catch (err) {
-      console.error('Failed to load mentors:', err);
+      const errorMessage = err instanceof Error ? err.message : 'Failed to load mentors';
+      showError('Failed to load mentors', errorMessage);
     } finally {
       setIsLoadingMentors(false);
     }
-  };
+  }, [showError]);
+
+  // Load mentors when Shaman tradition is selected
+  useEffect(() => {
+    if (formData.tradition === 'The Shaman' && !mentors.length) {
+      loadMentors();
+    }
+  }, [formData.tradition, mentors.length, loadMentors]);
   
   // Handle mentor spirit selection
   const handleMentorSpiritChange = (mentorName: string) => {
@@ -412,6 +436,19 @@ export function Step3MagicResonance({ formData, setFormData, creationData, error
     }
   };
 
+  const loadSpells = useCallback(async () => {
+    try {
+      setIsLoadingSpells(true);
+      const data = await spellApi.getSpells();
+      setSpells(data);
+    } catch (err) {
+      const errorMessage = err instanceof Error ? err.message : 'Failed to load spells';
+      showError('Failed to load spells', errorMessage);
+    } finally {
+      setIsLoadingSpells(false);
+    }
+  }, [showError]);
+
   // Load spells when tradition is selected (for Magicians, Mystic Adepts, or Aspected Magicians with Sorcery)
   // For Shamans, wait until mentor spirit is selected
   useEffect(() => {
@@ -428,20 +465,7 @@ export function Step3MagicResonance({ formData, setFormData, creationData, error
     } else if (shouldLoadSpells) {
       loadSpells();
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [formData.tradition, formData.magicType, formData.aspectedSkillGroup, formData.mentorSpirit]);
-
-  const loadSpells = async () => {
-    try {
-      setIsLoadingSpells(true);
-      const data = await spellApi.getSpells();
-      setSpells(data);
-    } catch (err) {
-      console.error('Failed to load spells:', err);
-    } finally {
-      setIsLoadingSpells(false);
-    }
-  };
+  }, [formData.tradition, formData.magicType, formData.aspectedSkillGroup, formData.mentorSpirit, loadSpells]);
 
   // Get free spells count from priority data
   const getFreeSpellsCount = (): number => {
@@ -520,7 +544,12 @@ export function Step3MagicResonance({ formData, setFormData, creationData, error
       return;
     }
     
-    const newSpells = [...selectedSpells, { name: spell.name, category: spell.category }];
+    const spellWithTemplate = spell as Spell & { _sourceTemplate?: string };
+    const newSpells = [...selectedSpells, { 
+      name: spell.name, 
+      category: spell.category,
+      _sourceTemplate: spellWithTemplate._sourceTemplate
+    } as Spell & { _sourceTemplate?: string }];
     setFormData({ ...formData, selectedSpells: newSpells });
   };
   
@@ -756,20 +785,49 @@ export function Step3MagicResonance({ formData, setFormData, creationData, error
     );
   }
 
-  if (!hasMagic) {
+  // If Priority E is selected (mundane), show priority selection with message
+  if (!hasMagic && magicPrioritySelected) {
     return (
       <div className="space-y-6">
-        <div>
-          <h3 className="text-lg font-semibold text-gray-100 mb-4">Magic or Resonance</h3>
-          <p className="text-sm text-gray-400 mb-6">
-            Your character is mundane (no magic or resonance abilities).
+        <div className="flex items-start justify-between">
+          <div>
+            <h3 className="text-lg font-semibold text-gray-100 mb-4">Magic or Resonance Priority</h3>
+            <p className="text-sm text-gray-400 mb-6">
+              Select the Magic or Resonance priority level. Priority E means your character is mundane (no magic or resonance abilities).
+            </p>
+          </div>
+          <button
+            onClick={() => {
+              // Clear the priority selection
+              if (formData.creationMethod === 'priority' && formData.priorities) {
+                setFormData(prev => ({
+                  ...prev,
+                  priorities: {
+                    ...prev.priorities!,
+                    magic_priority: '',
+                  },
+                }));
+              } else if (formData.creationMethod === 'sum_to_ten' && formData.sumToTen) {
+                setFormData(prev => ({
+                  ...prev,
+                  sumToTen: {
+                    ...prev.sumToTen!,
+                    magic_priority: '',
+                  },
+                }));
+              }
+            }}
+            className="px-3 py-1.5 text-xs font-medium bg-sr-gray border border-sr-light-gray text-gray-300 rounded hover:bg-sr-light-gray/50 hover:text-gray-100 transition-colors"
+          >
+            Clear Priority
+          </button>
+        </div>
+        <div className="p-4 bg-yellow-900/20 border border-yellow-700/50 rounded-md">
+          <p className="text-sm text-yellow-400">
+            You selected Priority E for magic/resonance, which means your character is mundane. If you want magical abilities, select a different magic priority (A-D) below.
           </p>
         </div>
-        <div className="p-4 bg-sr-light-gray/30 border border-sr-light-gray rounded-md">
-          <p className="text-sm text-gray-400">
-            You selected Priority E for magic/resonance, which means your character is mundane. If you want magical abilities, you will need to select a different magic priority (A-D) in the priority allocation step.
-          </p>
-        </div>
+        {renderPrioritySelection()}
       </div>
     );
   }
@@ -1167,6 +1225,12 @@ export function Step3MagicResonance({ formData, setFormData, creationData, error
                     {categorySpells.map((spell) => {
                       const isSelected = selectedSpells.some(s => s.name === spell.name);
                       const canSelect = !isSelected && selectedSpells.length < maxSpells;
+                      const isAttributeModSpell = isAttributeSpell(spell.name || '');
+                      const isDetectObjectModSpell = isDetectObjectSpell(spell.name || '');
+                      const isDetectLifeFormModSpell = isDetectLifeFormSpell(spell.name || '');
+                      const spellKey = spell.name || '';
+                      const detectObjectInput = detectObjectInputs[spellKey] || '';
+                      const detectLifeFormInput = detectLifeFormInputs[spellKey] || '';
                       
                       return (
                         <div
@@ -1175,44 +1239,332 @@ export function Step3MagicResonance({ formData, setFormData, creationData, error
                             isSelected
                               ? 'border-sr-accent bg-sr-accent/10'
                               : canSelect
-                              ? 'border-sr-light-gray bg-sr-gray hover:border-sr-accent/50 hover:bg-sr-light-gray/30 cursor-pointer'
-                              : 'border-sr-light-gray/50 bg-sr-gray/50 opacity-60 cursor-not-allowed'
+                              ? 'border-sr-light-gray bg-sr-gray hover:border-sr-accent/50 hover:bg-sr-light-gray/30'
+                              : 'border-sr-light-gray/50 bg-sr-gray/50 opacity-60'
                           }`}
-                          onClick={() => canSelect && handleSpellSelect(spell)}
                         >
                           <div className="flex items-start justify-between">
                             <div className="flex-1">
                               <div className="flex items-center gap-2 mb-1">
                                 <span className="text-sm font-medium text-gray-100">{spell.name}</span>
-                                {isSelected && (
+                                {isSelected && !isAttributeModSpell && !isDetectObjectModSpell && !isDetectLifeFormModSpell && (
                                   <span className="text-xs text-sr-accent font-medium">(Selected)</span>
                                 )}
                               </div>
-                              {spell.description && (
-                                <p className="text-xs text-gray-400 line-clamp-2">{spell.description}</p>
+                              
+                              {isDetectLifeFormModSpell ? (
+                                <div className="space-y-3 mt-2">
+                                  {/* Special display for Detect Life Form spells */}
+                                  <div className="p-3 bg-green-900/20 border border-green-700/50 rounded-md">
+                                    <p className="text-xs text-gray-300 mb-3">
+                                      The subject detects all of a specified type of life form within the range of the sense and knows their number and relative location. This is actually several different spells that must be learned separately, one for each type of life form that a caster might like to detect (Detect Orks, Detect Elves, Detect Dragons, and so forth), which are learned separately.
+                                    </p>
+                                  </div>
+                                  
+                                  {/* Text input for life form type */}
+                                  <div className="space-y-2">
+                                    <p className="text-xs font-semibold text-gray-300">Enter the type of life form to detect:</p>
+                                    <div className="flex gap-2">
+                                      <TextField className="flex-1">
+                                        <Input
+                                          value={detectLifeFormInput}
+                                          onChange={(e) => {
+                                            setDetectLifeFormInputs(prev => ({
+                                              ...prev,
+                                              [spellKey]: e.target.value
+                                            }));
+                                          }}
+                                          placeholder="e.g., Orks, Elves, Dragons"
+                                          className="px-3 py-2 bg-sr-gray border border-sr-light-gray rounded-md text-gray-100 focus:outline-none focus:ring-2 focus:ring-sr-accent focus:border-transparent"
+                                        />
+                                      </TextField>
+                                      <Button
+                                        onPress={() => {
+                                          if (detectLifeFormInput.trim()) {
+                                            const spellNameWithLifeForm = spell.name?.replace('[Life Form]', detectLifeFormInput.trim()) || `Detect ${detectLifeFormInput.trim()}`;
+                                            const isExtended = spell.name?.includes('Extended');
+                                            handleSpellSelect({ 
+                                              ...spell, 
+                                              name: spellNameWithLifeForm,
+                                              _sourceTemplate: isExtended ? 'Detect [Life Form], Extended' : 'Detect [Life Form]'
+                                            } as Spell & { _sourceTemplate?: string });
+                                            setDetectLifeFormInputs(prev => ({
+                                              ...prev,
+                                              [spellKey]: ''
+                                            }));
+                                          }
+                                        }}
+                                        isDisabled={!detectLifeFormInput.trim() || !canSelect}
+                                        className="px-4 py-2 text-xs font-medium bg-sr-accent border border-sr-accent rounded-md text-gray-100 hover:bg-sr-accent/80 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                                      >
+                                        Add
+                                      </Button>
+                                    </div>
+                                    <p className="text-xs text-gray-400 italic">
+                                      Examples: Orks, Elves, Dragons, Humans, Dwarves, Trolls, etc.
+                                    </p>
+                                  </div>
+                                  
+                                  {/* Show selected Detect Life Form variants (regular, not Extended) */}
+                                  {selectedSpells.filter(s => {
+                                    const spell = s as Spell & { _sourceTemplate?: string };
+                                    return spell._sourceTemplate === 'Detect [Life Form]';
+                                  }).length > 0 && (
+                                    <div className="space-y-2">
+                                      <p className="text-xs font-semibold text-gray-300">Selected Detect Life Form spells:</p>
+                                      <div className="flex flex-wrap gap-2">
+                                        {selectedSpells
+                                          .filter(s => {
+                                            const spell = s as Spell & { _sourceTemplate?: string };
+                                            return spell._sourceTemplate === 'Detect [Life Form]';
+                                          })
+                                          .map((selectedSpell) => (
+                                            <div
+                                              key={selectedSpell.name}
+                                              className="flex items-center gap-2 px-3 py-1.5 bg-sr-gray border border-sr-light-gray rounded-md"
+                                            >
+                                              <span className="text-sm text-gray-200">{selectedSpell.name}</span>
+                                              <button
+                                                onClick={() => handleSpellRemove(selectedSpell.name!)}
+                                                className="text-sr-danger hover:text-sr-danger/80 text-sm font-bold"
+                                                aria-label={`Remove ${selectedSpell.name}`}
+                                              >
+                                                ×
+                                              </button>
+                                            </div>
+                                          ))}
+                                      </div>
+                                    </div>
+                                  )}
+                                  
+                                  {/* Show selected Detect Life Form Extended variants */}
+                                  {selectedSpells.filter(s => {
+                                    const spell = s as Spell & { _sourceTemplate?: string };
+                                    return spell._sourceTemplate === 'Detect [Life Form], Extended';
+                                  }).length > 0 && (
+                                    <div className="space-y-2 mt-3">
+                                      <p className="text-xs font-semibold text-gray-300">Selected Detect Life Form, Extended spells:</p>
+                                      <div className="flex flex-wrap gap-2">
+                                        {selectedSpells
+                                          .filter(s => {
+                                            const spell = s as Spell & { _sourceTemplate?: string };
+                                            return spell._sourceTemplate === 'Detect [Life Form], Extended';
+                                          })
+                                          .map((selectedSpell) => (
+                                            <div
+                                              key={selectedSpell.name}
+                                              className="flex items-center gap-2 px-3 py-1.5 bg-sr-gray border border-sr-light-gray rounded-md"
+                                            >
+                                              <span className="text-sm text-gray-200">{selectedSpell.name}</span>
+                                              <button
+                                                onClick={() => handleSpellRemove(selectedSpell.name!)}
+                                                className="text-sr-danger hover:text-sr-danger/80 text-sm font-bold"
+                                                aria-label={`Remove ${selectedSpell.name}`}
+                                              >
+                                                ×
+                                              </button>
+                                            </div>
+                                          ))}
+                                      </div>
+                                    </div>
+                                  )}
+                                </div>
+                              ) : isDetectObjectModSpell ? (
+                                <div className="space-y-3 mt-2">
+                                  {/* Special display for Detect Object spells */}
+                                  <div className="p-3 bg-purple-900/20 border border-purple-700/50 rounded-md">
+                                    <p className="text-xs text-gray-300 mb-3">
+                                      The subject detects all of a specified type of object within range of the sense and knows their number and relative location. Each type of object requires a separate spell (Detect Guns, Detect Computers, Detect Explosives, and so forth). These spells must all be learned and cast separately.
+                                    </p>
+                                  </div>
+                                  
+                                  {/* Text input for object type */}
+                                  <div className="space-y-2">
+                                    <p className="text-xs font-semibold text-gray-300">Enter the type of object to detect:</p>
+                                    <div className="flex gap-2">
+                                      <TextField className="flex-1">
+                                        <Input
+                                          value={detectObjectInput}
+                                          onChange={(e) => {
+                                            setDetectObjectInputs(prev => ({
+                                              ...prev,
+                                              [spellKey]: e.target.value
+                                            }));
+                                          }}
+                                          placeholder="e.g., Guns, Computers, Explosives"
+                                          className="px-3 py-2 bg-sr-gray border border-sr-light-gray rounded-md text-gray-100 focus:outline-none focus:ring-2 focus:ring-sr-accent focus:border-transparent"
+                                        />
+                                      </TextField>
+                                      <Button
+                                        onPress={() => {
+                                          if (detectObjectInput.trim()) {
+                                            const spellNameWithObject = spell.name?.replace('[Object]', detectObjectInput.trim()) || `Detect ${detectObjectInput.trim()}`;
+                                            handleSpellSelect({ 
+                                              ...spell, 
+                                              name: spellNameWithObject,
+                                              _sourceTemplate: 'Detect [Object]'
+                                            } as Spell & { _sourceTemplate?: string });
+                                            setDetectObjectInputs(prev => ({
+                                              ...prev,
+                                              [spellKey]: ''
+                                            }));
+                                          }
+                                        }}
+                                        isDisabled={!detectObjectInput.trim() || !canSelect}
+                                        className="px-4 py-2 text-xs font-medium bg-sr-accent border border-sr-accent rounded-md text-gray-100 hover:bg-sr-accent/80 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                                      >
+                                        Add
+                                      </Button>
+                                    </div>
+                                    <p className="text-xs text-gray-400 italic">
+                                      Examples: Guns, Computers, Explosives, Weapons, Electronics, etc.
+                                    </p>
+                                  </div>
+                                  
+                                  {/* Show selected Detect Object variants */}
+                                  {selectedSpells.filter(s => {
+                                    const spell = s as Spell & { _sourceTemplate?: string };
+                                    return spell._sourceTemplate === 'Detect [Object]';
+                                  }).length > 0 && (
+                                    <div className="space-y-2">
+                                      <p className="text-xs font-semibold text-gray-300">Selected Detect Object spells:</p>
+                                      <div className="flex flex-wrap gap-2">
+                                        {selectedSpells
+                                          .filter(s => {
+                                            const spell = s as Spell & { _sourceTemplate?: string };
+                                            return spell._sourceTemplate === 'Detect [Object]';
+                                          })
+                                          .map((selectedSpell) => (
+                                            <div
+                                              key={selectedSpell.name}
+                                              className="flex items-center gap-2 px-3 py-1.5 bg-sr-gray border border-sr-light-gray rounded-md"
+                                            >
+                                              <span className="text-sm text-gray-200">{selectedSpell.name}</span>
+                                              <button
+                                                onClick={() => handleSpellRemove(selectedSpell.name!)}
+                                                className="text-sr-danger hover:text-sr-danger/80 text-sm font-bold"
+                                                aria-label={`Remove ${selectedSpell.name}`}
+                                              >
+                                                ×
+                                              </button>
+                                            </div>
+                                          ))}
+                                      </div>
+                                    </div>
+                                  )}
+                                </div>
+                              ) : isAttributeModSpell ? (
+                                <div className="space-y-3 mt-2">
+                                  {/* Special display for Increase/Decrease Attribute spells */}
+                                  <div className="p-3 bg-blue-900/20 border border-blue-700/50 rounded-md">
+                                    <p className="text-xs text-gray-300 mb-3">
+                                      This spell affects Physical and Mental Attributes (not Special Attributes like Edge, Magic, Resonance, Initiative, or Essence).
+                                    </p>
+                                    
+                                    <div className="grid grid-cols-2 gap-3 mb-3">
+                                      <div>
+                                        <p className="text-xs font-semibold text-blue-400 mb-1">Physical Attributes:</p>
+                                        <div className="flex flex-wrap gap-1">
+                                          {PHYSICAL_ATTRIBUTES.map((attr) => (
+                                            <span key={attr} className="text-xs px-2 py-0.5 bg-sr-light-gray/30 rounded text-gray-300">
+                                              {attr}
+                                            </span>
+                                          ))}
+                                        </div>
+                                      </div>
+                                      <div>
+                                        <p className="text-xs font-semibold text-blue-400 mb-1">Mental Attributes:</p>
+                                        <div className="flex flex-wrap gap-1">
+                                          {MENTAL_ATTRIBUTES.map((attr) => (
+                                            <span key={attr} className="text-xs px-2 py-0.5 bg-sr-light-gray/30 rounded text-gray-300">
+                                              {attr}
+                                            </span>
+                                          ))}
+                                        </div>
+                                      </div>
+                                    </div>
+                                    
+                                    <div className="space-y-2 text-xs text-gray-400 border-t border-blue-700/30 pt-2">
+                                      <p><strong className="text-gray-300">Force Requirement:</strong> The Force must equal or exceed the (augmented) value of the Attribute being affected.</p>
+                                      <p><strong className="text-gray-300">Effect:</strong> The Attribute is {spell.name?.includes('Increase') ? 'increased' : 'decreased'} by hits scored, up to the target's augmented maximum (excess hits are ignored).</p>
+                                      <p><strong className="text-gray-300">Limitation:</strong> Each Attribute can only be affected by a single {spell.name?.includes('Increase') ? 'Increase' : 'Decrease'} Attribute spell at a time.</p>
+                                      <p><strong className="text-gray-300">Derived Stats:</strong> {spell.name?.includes('Increase') ? 'Increasing' : 'Decreasing'} an Attribute may affect derived statistics (e.g., {spell.name?.includes('Increase') ? 'Increase' : 'Decrease'} Reaction affects Initiative; {spell.name?.includes('Increase') ? 'Increase' : 'Decrease'} Body {spell.name?.includes('Increase') ? 'adds' : 'removes'} Physical Condition Monitor boxes).</p>
+                                    </div>
+                                  </div>
+                                  
+                                  {/* Attribute selection buttons */}
+                                  <div className="space-y-2">
+                                    <p className="text-xs font-semibold text-gray-300">Select which attribute to affect:</p>
+                                    <div className="flex flex-wrap gap-2">
+                                      {ALL_ATTRIBUTE_SPELL_ATTRIBUTES.map((attr) => {
+                                        const spellNameWithAttr = spell.name?.replace('[Attribute]', attr) || `${spell.name} ${attr}`;
+                                        const isAttrSelected = selectedSpells.some(s => s.name === spellNameWithAttr);
+                                        return (
+                                          <Button
+                                            key={attr}
+                                            onPress={() => {
+                                              if (isAttrSelected) {
+                                                handleSpellRemove(spellNameWithAttr);
+                                              } else {
+                                                handleSpellSelect({ ...spell, name: spellNameWithAttr });
+                                              }
+                                            }}
+                                            className={`px-3 py-1.5 text-xs font-medium border rounded-md transition-colors ${
+                                              isAttrSelected
+                                                ? 'bg-sr-accent border-sr-accent text-gray-100'
+                                                : canSelect
+                                                ? 'bg-sr-gray border-sr-light-gray text-gray-300 hover:bg-sr-light-gray hover:border-sr-accent'
+                                                : 'bg-sr-gray/50 border-sr-light-gray/50 text-gray-500 opacity-50 cursor-not-allowed'
+                                            }`}
+                                            isDisabled={!canSelect && !isAttrSelected}
+                                          >
+                                            {isAttrSelected ? '✓ ' : ''}{attr}
+                                          </Button>
+                                        );
+                                      })}
+                                    </div>
+                                  </div>
+                                </div>
+                              ) : (
+                                <>
+                                  {spell.description && (
+                                    <p className="text-xs text-gray-400 line-clamp-2">{spell.description}</p>
+                                  )}
+                                  <div className="flex flex-wrap gap-2 mt-2">
+                                    {spell.category && (
+                                      <span className="text-xs text-gray-500">Category: {spell.category}</span>
+                                    )}
+                                    {spell.type && (
+                                      <span className="text-xs text-gray-500">Type: {spell.type}</span>
+                                    )}
+                                    {spell.range && (
+                                      <span className="text-xs text-gray-500">Range: {spell.range}</span>
+                                    )}
+                                    {spell.duration && (
+                                      <span className="text-xs text-gray-500">Duration: {spell.duration}</span>
+                                    )}
+                                  </div>
+                                </>
                               )}
-                              <div className="flex flex-wrap gap-2 mt-2">
-                                {spell.category && (
-                                  <span className="text-xs text-gray-500">Category: {spell.category}</span>
-                                )}
-                                {spell.type && (
-                                  <span className="text-xs text-gray-500">Type: {spell.type}</span>
-                                )}
-                                {spell.range && (
-                                  <span className="text-xs text-gray-500">Range: {spell.range}</span>
-                                )}
-                                {spell.duration && (
-                                  <span className="text-xs text-gray-500">Duration: {spell.duration}</span>
-                                )}
-                              </div>
                             </div>
-                            {canSelect && (
-                              <Button
-                                onPress={() => handleSpellSelect(spell)}
-                                className="px-3 py-1 text-xs font-medium bg-sr-accent border border-sr-accent rounded-md text-gray-100 hover:bg-sr-accent/80 transition-colors"
-                              >
-                                Add
-                              </Button>
+                            {!isAttributeModSpell && !isDetectObjectModSpell && !isDetectLifeFormModSpell && (
+                              <>
+                                {isSelected ? (
+                                  <Button
+                                    onPress={() => handleSpellRemove(spell.name!)}
+                                    className="px-3 py-1 text-xs font-medium bg-sr-danger border border-sr-danger rounded-md text-gray-100 hover:bg-sr-danger/80 transition-colors"
+                                  >
+                                    Remove
+                                  </Button>
+                                ) : canSelect ? (
+                                  <Button
+                                    onPress={() => handleSpellSelect(spell)}
+                                    className="px-3 py-1 text-xs font-medium bg-sr-accent border border-sr-accent rounded-md text-gray-100 hover:bg-sr-accent/80 transition-colors"
+                                  >
+                                    Add
+                                  </Button>
+                                ) : null}
+                              </>
                             )}
                           </div>
                         </div>

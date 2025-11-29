@@ -30,8 +30,9 @@ export function CharacterTable({ characters, onCharacterUpdated }: CharacterTabl
   const [isDeleting, setIsDeleting] = useState<string | null>(null);
 
   const handleView = (character: Character) => {
-    // TODO: Navigate to character view page when implemented
-    console.log('View character:', character.id);
+    // Character view page is not yet implemented
+    // When implemented, navigate to: `/characters/${character.id}` or `/campaigns/${character.campaign_id}/characters/${character.id}`
+    // For now, this button is a placeholder for future functionality
   };
 
   const handleDelete = async (character: Character) => {

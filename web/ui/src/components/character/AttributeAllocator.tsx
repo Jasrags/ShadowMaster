@@ -57,14 +57,13 @@ export function AttributeAllocator({ attributes, onChange, minValues = {}, maxVa
     <div className="space-y-4">
       <div className="p-4 bg-sr-light-gray/30 border border-sr-light-gray rounded-md">
         <div className="flex items-center justify-between">
-          <span className="text-sm font-medium text-gray-300">Attribute Points</span>
-          <span className={`text-lg font-bold ${remainingPoints >= 0 ? 'text-green-400' : 'text-sr-danger'}`}>
-            {remainingPoints} remaining
+          <span className="text-sm font-medium text-gray-300">
+            {remainingPoints >= 0 ? `${remainingPoints} points remaining` : `${Math.abs(remainingPoints)} points over allocated`}
+          </span>
+          <span className={`text-sm text-gray-400 ${remainingPoints >= 0 ? '' : 'text-sr-danger'}`}>
+            {usedPoints} / {availablePoints} used
           </span>
         </div>
-        <p className="text-xs text-gray-400 mt-1">
-          Available: {availablePoints} | Used: {usedPoints}
-        </p>
       </div>
 
       <div className="grid grid-cols-2 md:grid-cols-4 gap-4">

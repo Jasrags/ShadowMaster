@@ -1,8 +1,10 @@
+import type { EquipmentItem } from '../../lib/types';
+
 interface EquipmentSelectorProps {
   nuyenBudget: number;
   usedNuyen: number;
   essence: number;
-  onSelect: (equipment: any) => void;
+  onSelect: (equipment: EquipmentItem) => void;
 }
 
 export function EquipmentSelector({ nuyenBudget, usedNuyen, essence, onSelect }: EquipmentSelectorProps) {

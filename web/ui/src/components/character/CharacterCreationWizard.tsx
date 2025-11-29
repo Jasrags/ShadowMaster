@@ -2,7 +2,7 @@ import { Dialog, Modal, Heading, Button } from 'react-aria-components';
 import { useState, useEffect, useCallback } from 'react';
 import { characterApi } from '../../lib/api';
 import { useToast } from '../../contexts/ToastContext';
-import type { CharacterCreationData, PrioritySelection, SumToTenSelection, KarmaSelection } from '../../lib/types';
+import type { CharacterCreationData, PrioritySelection, SumToTenSelection, KarmaSelection, EquipmentItem, KarmaSpending } from '../../lib/types';
 import { Step1Concept } from './steps/Step1Concept';
 import { Step2MetatypeAttributes } from './steps/Step2MetatypeAttributes';
 import { Step3MagicResonance } from './steps/Step3MagicResonance';
@@ -20,7 +20,7 @@ interface CharacterCreationWizardProps {
   edition?: string;
 }
 
-interface CharacterCreationState {
+export interface CharacterCreationState {
   // Basic info
   name: string;
   playerName: string;
@@ -46,8 +46,8 @@ interface CharacterCreationState {
   selectedAdeptPowers?: Array<{ name: string; level?: number; powerPoints: number }>;
   selectedQualities?: Array<{ name: string; type: string; rating?: number }>;
   skillAllocations?: Record<string, number>;
-  equipment?: any[];
-  karmaSpending?: any;
+  equipment?: EquipmentItem[];
+  karmaSpending?: KarmaSpending;
   
   // Final touches
   background?: string;
@@ -65,7 +65,6 @@ export function CharacterCreationWizard({ isOpen, onOpenChange, onSuccess, editi
   const { showSuccess, showError, showWarning } = useToast();
   const [currentStep, setCurrentStep] = useState(1);
   const [creationData, setCreationData] = useState<CharacterCreationData | null>(null);
-  const [isLoading, setIsLoading] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [showExitConfirm, setShowExitConfirm] = useState(false);
   
@@ -95,7 +94,8 @@ export function CharacterCreationWizard({ isOpen, onOpenChange, onSuccess, editi
           const parsed = JSON.parse(saved);
           setFormData(prev => ({ ...prev, ...parsed }));
         } catch (e) {
-          console.error('Failed to load saved state:', e);
+          const errorMessage = e instanceof Error ? e.message : 'Failed to load saved state';
+          showError('Failed to load saved state', errorMessage);
         }
       }
     }
@@ -110,14 +110,11 @@ export function CharacterCreationWizard({ isOpen, onOpenChange, onSuccess, editi
 
   const loadCreationData = useCallback(async () => {
     try {
-      setIsLoading(true);
       const data = await characterApi.getCharacterCreationData(edition);
       setCreationData(data);
     } catch (err) {
       const errorMessage = err instanceof Error ? err.message : 'Failed to load character creation data';
       showError('Failed to load data', errorMessage);
-    } finally {
-      setIsLoading(false);
     }
   }, [edition, showError]);
 

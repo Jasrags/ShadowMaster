@@ -4,6 +4,7 @@ import type { CharacterCreationState } from '../CharacterCreationWizard';
 import type { CharacterCreationData, Skill } from '../../../lib/types';
 import { skillApi } from '../../../lib/api';
 import { SkillAllocator } from '../SkillAllocator';
+import { useToast } from '../../../contexts/ToastContext';
 
 interface Step5SkillsProps {
   formData: CharacterCreationState;
@@ -23,6 +24,7 @@ const SKILL_POINTS: Record<string, { individual: number; group: number }> = {
 };
 
 export function Step5Skills({ formData, setFormData, creationData, errors, touched }: Step5SkillsProps) {
+  const { showError } = useToast();
   const [skills, setSkills] = useState<Skill[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [searchTerm, setSearchTerm] = useState('');
@@ -42,7 +44,8 @@ export function Step5Skills({ formData, setFormData, creationData, errors, touch
       const activeSkills = data.filter(s => s.type === 'active');
       setSkills(activeSkills);
     } catch (err) {
-      console.error('Failed to load skills:', err);
+      const errorMessage = err instanceof Error ? err.message : 'Failed to load skills';
+      showError('Failed to load skills', errorMessage);
     } finally {
       setIsLoading(false);
     }

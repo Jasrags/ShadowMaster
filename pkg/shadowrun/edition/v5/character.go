@@ -42,13 +42,14 @@ func (h *SR5Handler) applyPrioritySelectionWithSelections(char *domain.Character
 	// Use selected metatype if provided, otherwise use defaults based on priority
 	metatypeName := selectedMetatype
 	if metatypeName == "" {
-		if selection.Metatype == "A" || selection.Metatype == "B" {
+		switch selection.Metatype {
+		case "A", "B":
 			metatypeName = "Human" // Default for A/B
-		} else if selection.Metatype == "C" {
+		case "C":
 			metatypeName = "Elf" // Default for C
-		} else if selection.Metatype == "D" {
+		case "D":
 			metatypeName = "Human" // Default for D
-		} else if selection.Metatype == "E" {
+		case "E":
 			metatypeName = "Human" // Only Human for E
 		}
 	}
@@ -182,7 +183,7 @@ func (h *SR5Handler) applyRacialAbilities(char *domain.CharacterSR5, metatypeNam
 }
 
 // applyAttributePoints applies attribute points from priority
-func (h *SR5Handler) applyAttributePoints(char *domain.CharacterSR5, priority string) error {
+func (h *SR5Handler) applyAttributePoints(_ *domain.CharacterSR5, priority string) error {
 	table := GetPriorityTable()
 	attrPoints, ok := table.Attributes[priority]
 	if !ok {
@@ -208,11 +209,12 @@ func (h *SR5Handler) applyMagicResonance(char *domain.CharacterSR5, priority str
 	// Determine magic type if not specified
 	if magicType == "" {
 		// Default based on priority
-		if priority == "A" || priority == "B" {
+		switch priority {
+		case "A", "B":
 			magicType = "Magician" // Default to Magician for high priorities
-		} else if priority == "D" {
+		case "D":
 			magicType = "Adept" // Default to Adept for low priority
-		} else {
+		default:
 			magicType = "Magician"
 		}
 	}

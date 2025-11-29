@@ -1270,6 +1270,44 @@ export interface LivingPersona {
   sleaze: number;
 }
 
+// Equipment item types - union of all equipment types
+export type EquipmentItem = Weapon | Armor | Cyberware | Bioware | Gear | Vehicle;
+
+// Karma spending structure
+export interface KarmaSpending {
+  spells?: Array<{ name: string; karma_cost: number }>;
+  contacts?: Array<{ name: string; karma_cost: number }>;
+  improvements?: Array<{ type: string; description: string; karma_cost: number }>;
+  total_spent?: number;
+}
+
+// Focus types (magical foci)
+export interface Focus {
+  name: string;
+  type: string; // e.g., 'weapon', 'spell', 'power', etc.
+  rating: number;
+  force?: number;
+  source?: SourceReference;
+}
+
+// Spirit types
+export interface Spirit {
+  name: string;
+  type: string; // e.g., 'fire', 'water', 'air', 'earth', etc.
+  force: number;
+  services?: number;
+  source?: SourceReference;
+}
+
+// Adept Power types
+export interface AdeptPower {
+  name: string;
+  level?: number;
+  power_points: number;
+  description?: string;
+  source?: SourceReference;
+}
+
 export interface CharacterSR5 {
   // Attributes
   body: number;
@@ -1311,7 +1349,7 @@ export interface CharacterSR5 {
   armor: Armor[];
   cyberware: Cyberware[];
   bioware: Bioware[];
-  gear: any[];
+  gear: Gear[];
   vehicles: Vehicle[];
   
   // Magic
@@ -1319,9 +1357,9 @@ export interface CharacterSR5 {
   tradition?: string;
   spells: Spell[];
   complex_forms: ComplexForm[];
-  focuses: any[];
-  spirits: any[];
-  adept_powers: any[];
+  focuses: Focus[];
+  spirits: Spirit[];
+  adept_powers: AdeptPower[];
   power_points?: number;
   
   // Social

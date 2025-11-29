@@ -4,6 +4,7 @@ import type { CharacterCreationState } from '../CharacterCreationWizard';
 import type { CharacterCreationData } from '../../../lib/types';
 import { useAuth } from '../../../contexts/AuthContext';
 import { campaignApi } from '../../../lib/api';
+import { useToast } from '../../../contexts/ToastContext';
 
 interface Step1ConceptProps {
   formData: CharacterCreationState;
@@ -15,6 +16,7 @@ interface Step1ConceptProps {
 
 export function Step1Concept({ formData, setFormData, creationData, errors, touched }: Step1ConceptProps) {
   const { user } = useAuth();
+  const { showError } = useToast();
   const [userSearchResults, setUserSearchResults] = useState<Array<{ id: string; username: string; email: string }>>([]);
   const [isSearchingUsers, setIsSearchingUsers] = useState(false);
   const [showUserDropdown, setShowUserDropdown] = useState(false);
@@ -25,8 +27,9 @@ export function Step1Concept({ formData, setFormData, creationData, errors, touc
   // Initialize player name with current user's username if not admin
   useEffect(() => {
     if (!isAdmin && user?.username && !formData.playerName) {
-      setFormData(prev => ({ ...prev, playerName: user.username }));
+      setFormData((prev: CharacterCreationState) => ({ ...prev, playerName: user.username }));
     }
+    // Note: formData.playerName intentionally excluded from deps to prevent re-running when it changes
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [user?.username, isAdmin]);
 
@@ -40,7 +43,8 @@ export function Step1Concept({ formData, setFormData, creationData, errors, touc
           setUserSearchResults(results);
           setShowUserDropdown(results.length > 0);
         } catch (err) {
-          console.error('Failed to search users:', err);
+          const errorMessage = err instanceof Error ? err.message : 'Failed to search users';
+          showError('Failed to search users', errorMessage);
           setUserSearchResults([]);
           setShowUserDropdown(false);
         } finally {
@@ -71,21 +75,27 @@ export function Step1Concept({ formData, setFormData, creationData, errors, touc
   const handleNameChange = (value: string) => {
     setFormData({ ...formData, name: value });
     if (errors.name && value.trim()) {
-      setFormData(prev => ({ ...prev, errors: { ...prev.errors, name: undefined } }));
+      setFormData((prev: CharacterCreationState) => {
+        const { name, ...restErrors } = prev.errors;
+        return { ...prev, errors: restErrors };
+      });
     }
   };
 
   const handleNameBlur = () => {
-    setFormData(prev => ({ ...prev, touched: { ...prev.touched, name: true } }));
+    setFormData((prev: CharacterCreationState) => ({ ...prev, touched: { ...prev.touched, name: true } }));
     if (!formData.name.trim()) {
-      setFormData(prev => ({ ...prev, errors: { ...prev.errors, name: 'Character name is required' } }));
+      setFormData((prev: CharacterCreationState) => ({ ...prev, errors: { ...prev.errors, name: 'Character name is required' } }));
     }
   };
 
   const handlePlayerNameChange = (value: string) => {
     setFormData({ ...formData, playerName: value });
     if (errors.playerName && value.trim()) {
-      setFormData(prev => ({ ...prev, errors: { ...prev.errors, playerName: undefined } }));
+      setFormData((prev: CharacterCreationState) => {
+        const { playerName, ...restErrors } = prev.errors;
+        return { ...prev, errors: restErrors };
+      });
     }
     if (isAdmin) {
       setShowUserDropdown(value.length >= 2);
@@ -99,9 +109,9 @@ export function Step1Concept({ formData, setFormData, creationData, errors, touc
   };
 
   const handlePlayerNameBlur = () => {
-    setFormData(prev => ({ ...prev, touched: { ...prev.touched, playerName: true } }));
+    setFormData((prev: CharacterCreationState) => ({ ...prev, touched: { ...prev.touched, playerName: true } }));
     if (!formData.playerName.trim()) {
-      setFormData(prev => ({ ...prev, errors: { ...prev.errors, playerName: 'Player name is required' } }));
+      setFormData((prev: CharacterCreationState) => ({ ...prev, errors: { ...prev.errors, playerName: 'Player name is required' } }));
     }
   };
 
@@ -116,7 +126,8 @@ export function Step1Concept({ formData, setFormData, creationData, errors, touc
           label: method?.label || key.charAt(0).toUpperCase() + key.slice(1).replace(/_/g, ' '),
         }));
       } catch (err) {
-        console.error('Error mapping creation methods:', err);
+        const errorMessage = err instanceof Error ? err.message : 'Error mapping creation methods';
+        showError('Error loading creation methods', errorMessage);
       }
     }
     
@@ -140,7 +151,8 @@ export function Step1Concept({ formData, setFormData, creationData, errors, touc
           description: level?.description || '',
         }));
       } catch (err) {
-        console.error('Error mapping gameplay levels:', err);
+        const errorMessage = err instanceof Error ? err.message : 'Error mapping gameplay levels';
+        showError('Error loading gameplay levels', errorMessage);
       }
     }
     
@@ -192,13 +204,13 @@ export function Step1Concept({ formData, setFormData, creationData, errors, touc
     setFormData({ ...formData, gameplayLevel: level as 'experienced' | 'street' | 'prime' });
     // Update priorities/sumToTen if they exist
     if (formData.priorities) {
-      setFormData(prev => ({
+      setFormData((prev: CharacterCreationState) => ({
         ...prev,
         priorities: { ...prev.priorities!, gameplay_level: level },
       }));
     }
     if (formData.sumToTen) {
-      setFormData(prev => ({
+      setFormData((prev: CharacterCreationState) => ({
         ...prev,
         sumToTen: { ...prev.sumToTen!, gameplay_level: level },
       }));
@@ -351,7 +363,9 @@ export function Step1Concept({ formData, setFormData, creationData, errors, touc
             validationBehavior="aria"
           >
             <Button className="px-3 py-2 bg-sr-gray border border-sr-light-gray rounded-md text-gray-100 focus:outline-none focus:ring-2 focus:ring-sr-accent focus:border-transparent text-left data-[invalid]:border-sr-danger">
-              <SelectValue placeholder="Select creation method..." />
+              <SelectValue>
+                {({ selectedText }) => selectedText || 'Select creation method...'}
+              </SelectValue>
             </Button>
             <Popover
               placement="bottom start"
@@ -402,7 +416,9 @@ export function Step1Concept({ formData, setFormData, creationData, errors, touc
               validationBehavior="aria"
             >
               <Button className="px-3 py-2 bg-sr-gray border border-sr-light-gray rounded-md text-gray-100 focus:outline-none focus:ring-2 focus:ring-sr-accent focus:border-transparent text-left data-[invalid]:border-sr-danger">
-                <SelectValue placeholder="Select gameplay level..." />
+                <SelectValue>
+                  {({ selectedText }) => selectedText || 'Select gameplay level...'}
+                </SelectValue>
               </Button>
               <Popover
                 placement="bottom start"

@@ -2,6 +2,7 @@ import { Dialog, Modal, Heading, Button } from 'react-aria-components';
 import { useState, useEffect } from 'react';
 import type { CampaignResponse } from '../../lib/types';
 import { campaignApi } from '../../lib/api';
+import { useToast } from '../../contexts/ToastContext';
 
 interface CampaignViewModalProps {
   campaign: CampaignResponse | null;
@@ -68,6 +69,7 @@ const getAutomationInfo = (key: string): { name: string; description: string } =
 
 
 export function CampaignViewModal({ campaign, isOpen, onOpenChange }: CampaignViewModalProps) {
+  const { showError } = useToast();
   const [bookNames, setBookNames] = useState<Record<string, string>>({});
   const [currentCampaign, setCurrentCampaign] = useState<CampaignResponse | null>(campaign);
 
@@ -84,7 +86,8 @@ export function CampaignViewModal({ campaign, isOpen, onOpenChange }: CampaignVi
           const updated = await campaignApi.getCampaign(campaign.id);
           setCurrentCampaign(updated);
         } catch (err) {
-          console.error('Failed to reload campaign:', err);
+          const errorMessage = err instanceof Error ? err.message : 'Failed to reload campaign';
+          showError('Failed to reload campaign', errorMessage);
         }
       };
       reloadCampaign();

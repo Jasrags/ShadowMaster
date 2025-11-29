@@ -1,4 +1,5 @@
 import type { PrioritySelection, CharacterCreationData } from '../../lib/types';
+import { useToast } from '../../contexts/ToastContext';
 
 interface PrioritySelectorProps {
   priorities: PrioritySelection;
@@ -25,6 +26,7 @@ const CATEGORIES: CategoryInfo[] = [
 const PRIORITY_LETTERS = ['A', 'B', 'C', 'D', 'E'];
 
 export function PrioritySelector({ priorities, onChange, creationData, gameplayLevel, onGameplayLevelChange }: PrioritySelectorProps) {
+  const { showWarning } = useToast();
   // Debug: Check if we have the required data
   if (!creationData) {
     return (
@@ -69,7 +71,7 @@ export function PrioritySelector({ priorities, onChange, creationData, gameplayL
     if (!priority) return '';
     
     if (!creationData?.priorities) {
-      console.warn('PrioritySelector: creationData.priorities is missing');
+      showWarning('Missing priority data', 'Priority data is missing from creation data');
       return '';
     }
     

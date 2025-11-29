@@ -19,7 +19,7 @@ const MAX_QUALITY_KARMA = 25; // Max 25 karma worth of positive OR negative qual
 const MIN_NET_KARMA = 0; // Can't go below 0 karma
 
 export function Step4Qualities({ formData, setFormData, creationData, errors, touched }: Step4QualitiesProps) {
-  const { showError } = useToast();
+  const { showError, showWarning } = useToast();
   const [qualities, setQualities] = useState<Quality[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [searchTerm, setSearchTerm] = useState('');
@@ -40,7 +40,8 @@ export function Step4Qualities({ formData, setFormData, creationData, errors, to
       const data = await qualityApi.getQualities();
       setQualities(data);
     } catch (err) {
-      console.error('Failed to load qualities:', err);
+      const errorMessage = err instanceof Error ? err.message : 'Failed to load qualities';
+      showError('Failed to load qualities', errorMessage);
     } finally {
       setIsLoading(false);
     }
@@ -87,16 +88,6 @@ export function Step4Qualities({ formData, setFormData, creationData, errors, to
     const cost = Math.abs(calculateKarmaCost(quality, effectiveRating));
     const isPositive = quality.type === 'positive';
     
-    // Debug: Log current values
-    console.log('Adding quality:', quality.name, {
-      cost,
-      isPositive,
-      rating: effectiveRating,
-      positiveKarmaUsed,
-      negativeKarmaGained,
-      netKarma,
-      startingKarma: STARTING_KARMA
-    });
     
     if (isPositive) {
       // Check: Can't exceed 25 karma worth of positive qualities (hard cap, separate from total karma pool)
