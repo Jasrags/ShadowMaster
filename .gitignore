@@ -45,6 +45,7 @@ web/ui/node_modules/
 !data/editions/**
 
 # User-generated data (sensitive, should not be tracked)
+data/index.json
 data/users/
 data/campaigns/
 data/characters/
