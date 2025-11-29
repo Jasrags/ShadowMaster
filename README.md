@@ -421,10 +421,7 @@ This section tracks active development plans and remaining work items. See indiv
 
 ### Data Processing & Generation
 
-- **[XML Data Generation Batch](.cursor/plans/xml-data-generation-batch.plan.md)** - Status unknown
-- **[XSD Data Generation Strategy](.cursor/plans/xsd-data-generation-strategy-822ead4f.plan.md)** - Status unknown
-- **[Web Scraping and Markdown Conversion](.cursor/plans/web-scraping-and-markdown-conversion-94075bec.plan.md)** - Status unknown
-- **[XML Data Analysis and Struct Enhancement](.cursor/plans/xml-data-analysis-and-struct-enhancement-7ac55486.plan.md)** - Status unknown
+- **[Web Scraping and Markdown Conversion](.cursor/plans/web-scraping-and-markdown-conversion-94075bec.plan.md)** - ✅ Complete
 
 ### Backend & Domain Model
 
