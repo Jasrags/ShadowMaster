@@ -2,7 +2,7 @@ import React, { useState, useMemo, useEffect } from 'react';
 import { Button } from 'react-aria-components';
 import type { Lifestyle } from '../../lib/types';
 import { LifestyleViewModal } from './LifestyleViewModal';
-import { LifestyleSourceFilter } from './LifestyleSourceFilter';
+import { SourceFilter } from '../common/SourceFilter';
 import { filterData } from '../../lib/tableUtils';
 import { formatCost } from '../../lib/formatUtils';
 
@@ -107,10 +107,11 @@ export function LifestylesTableGrouped({ lifestyles }: LifestylesTableGroupedPro
     <>
       <div className="space-y-4 mb-4">
         <div className="flex flex-wrap items-start gap-4">
-          <LifestyleSourceFilter
-            lifestyles={lifestyles}
+          <SourceFilter
+            items={lifestyles}
             selectedSources={selectedSources}
             onSourcesChange={setSelectedSources}
+            getSource={(l) => l.source || 'Unknown'}
           />
         </div>
 

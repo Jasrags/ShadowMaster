@@ -2,7 +2,7 @@ import { useState, useMemo, memo, useCallback } from 'react';
 import { DataTable, ColumnDefinition } from '../common/DataTable';
 import type { Quality } from '../../lib/types';
 import { QualityViewModal } from './QualityViewModal';
-import { QualitySourceFilter } from './QualitySourceFilter';
+import { SourceFilter } from '../common/SourceFilter';
 
 interface QualitiesTableProps {
   qualities: Quality[];
@@ -72,10 +72,11 @@ export const QualitiesTable = memo(function QualitiesTable({ qualities }: Qualit
     <>
       <div className="space-y-4 mb-4">
         <div className="flex flex-wrap items-start gap-4">
-          <QualitySourceFilter
-            qualities={qualities}
+          <SourceFilter
+            items={qualities}
             selectedSources={selectedSources}
             onSourcesChange={setSelectedSources}
+            getSource={(q) => (typeof q.source === 'string' ? q.source : q.source?.source) || 'Unknown'}
           />
         </div>
       </div>

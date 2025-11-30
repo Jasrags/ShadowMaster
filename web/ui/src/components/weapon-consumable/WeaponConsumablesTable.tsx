@@ -2,7 +2,7 @@ import { useState, useMemo, memo, useCallback } from 'react';
 import { DataTable, ColumnDefinition } from '../common/DataTable';
 import type { WeaponConsumable } from '../../lib/types';
 import { WeaponConsumableViewModal } from './WeaponConsumableViewModal';
-import { WeaponConsumableSourceFilter } from './WeaponConsumableSourceFilter';
+import { SourceFilter } from '../common/SourceFilter';
 import { formatCost } from '../../lib/formatUtils';
 
 interface WeaponConsumablesTableProps {
@@ -76,10 +76,11 @@ export const WeaponConsumablesTable = memo(function WeaponConsumablesTable({ con
     <>
       <div className="space-y-4 mb-4">
         <div className="flex flex-wrap items-start gap-4">
-          <WeaponConsumableSourceFilter
-            consumables={consumables}
+          <SourceFilter
+            items={consumables}
             selectedSources={selectedSources}
             onSourcesChange={setSelectedSources}
+            getSource={(c) => c.source?.source || 'Unknown'}
           />
         </div>
       </div>

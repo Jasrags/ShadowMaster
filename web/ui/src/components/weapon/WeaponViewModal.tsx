@@ -3,6 +3,7 @@ import { Dialog, Modal, Heading, Button } from 'react-aria-components';
 import type { Weapon, WeaponAccessoryItem } from '../../lib/types';
 import { WeaponAccessoryViewModal } from './WeaponAccessoryViewModal';
 import { formatCost } from '../../lib/formatUtils';
+import { formatValue, formatArray } from '../../lib/viewModalUtils';
 
 interface WeaponViewModalProps {
   weapon: Weapon | null;
@@ -10,24 +11,6 @@ interface WeaponViewModalProps {
   onOpenChange: (isOpen: boolean) => void;
   accessoryMap: Map<string, WeaponAccessoryItem>;
 }
-
-// Helper function to format values for display
-const formatValue = (value: unknown): string => {
-  if (value === null || value === undefined || value === '') return '-';
-  if (typeof value === 'boolean') return value ? 'Yes' : 'No';
-  if (typeof value === 'object') {
-    return JSON.stringify(value, null, 2);
-  }
-  return String(value);
-};
-
-// Helper to format array values
-const formatArray = (value: unknown): string => {
-  if (Array.isArray(value)) {
-    return value.join(', ');
-  }
-  return formatValue(value);
-};
 
 export function WeaponViewModal({ weapon, isOpen, onOpenChange, accessoryMap }: WeaponViewModalProps) {
   const [selectedAccessory, setSelectedAccessory] = useState<WeaponAccessoryItem | null>(null);

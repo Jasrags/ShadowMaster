@@ -3,7 +3,7 @@ import { DataTable, ColumnDefinition } from '../common/DataTable';
 import type { Skill } from '../../lib/types';
 import { SkillViewModal } from './SkillViewModal';
 import { SkillCategoryFilter } from './SkillCategoryFilter';
-import { SkillSourceFilter } from './SkillSourceFilter';
+import { SourceFilter } from '../common/SourceFilter';
 
 interface SkillsTableProps {
   skills: Skill[];
@@ -133,10 +133,11 @@ export const SkillsTable = memo(function SkillsTable({ skills }: SkillsTableProp
             selectedCategories={selectedCategories}
             onCategoriesChange={setSelectedCategories}
           />
-          <SkillSourceFilter
-            skills={skills}
+          <SourceFilter
+            items={skills}
             selectedSources={selectedSources}
             onSourcesChange={setSelectedSources}
+            getSource={(s) => s.source?.source || 'Unknown'}
           />
         </div>
       </div>

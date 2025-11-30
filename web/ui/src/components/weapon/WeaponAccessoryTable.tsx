@@ -1,9 +1,8 @@
 import { useState, useMemo, memo, useCallback } from 'react';
 import { DataTable, ColumnDefinition } from '../common/DataTable';
 import type { WeaponAccessoryItem } from '../../lib/types';
-import { WeaponSourceFilter } from './WeaponSourceFilter';
+import { SourceFilter } from '../common/SourceFilter';
 import { WeaponAccessoryViewModal } from './WeaponAccessoryViewModal';
-import type { Weapon } from '../../lib/types';
 import { formatCost } from '../../lib/formatUtils';
 
 interface WeaponAccessoryTableProps {
@@ -26,13 +25,6 @@ export const WeaponAccessoryTable = memo(function WeaponAccessoryTable({ accesso
 
     return filtered;
   }, [accessories, selectedSources]);
-
-  // Convert accessories to Weapon-like objects for the filter component
-  const weaponsForFilter = useMemo((): Weapon[] => {
-    return accessories.map(acc => ({
-      source: acc.source,
-    } as Weapon));
-  }, [accessories]);
 
   const handleNameClick = useCallback((accessory: WeaponAccessoryItem) => {
     setSelectedAccessory(accessory);
@@ -108,10 +100,11 @@ export const WeaponAccessoryTable = memo(function WeaponAccessoryTable({ accesso
     <>
       <div className="space-y-4 mb-4">
         <div className="flex flex-wrap items-start gap-4">
-          <WeaponSourceFilter
-            weapons={weaponsForFilter}
+          <SourceFilter
+            items={accessories}
             selectedSources={selectedSources}
             onSourcesChange={setSelectedSources}
+            getSource={(acc) => acc.source || 'Unknown'}
           />
         </div>
       </div>

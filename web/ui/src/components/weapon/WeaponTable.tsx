@@ -3,7 +3,7 @@ import { DataTable, ColumnDefinition } from '../common/DataTable';
 import type { Weapon, WeaponAccessoryItem } from '../../lib/types';
 import { WeaponViewModal } from './WeaponViewModal';
 import { WeaponCategoryFilter } from './WeaponCategoryFilter';
-import { WeaponSourceFilter } from './WeaponSourceFilter';
+import { SourceFilter } from '../common/SourceFilter';
 import { formatCost } from '../../lib/formatUtils';
 
 interface WeaponTableProps {
@@ -114,10 +114,11 @@ export const WeaponTable = memo(function WeaponTable({ weapons, accessoryMap }: 
             selectedCategories={selectedCategories}
             onCategoriesChange={setSelectedCategories}
           />
-          <WeaponSourceFilter
-            weapons={weapons}
+          <SourceFilter
+            items={weapons}
             selectedSources={selectedSources}
             onSourcesChange={setSelectedSources}
+            getSource={(w) => w.source || 'Unknown'}
           />
         </div>
       </div>

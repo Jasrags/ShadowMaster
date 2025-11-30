@@ -2,7 +2,7 @@ import React, { useState, useMemo, useEffect } from 'react';
 import { Button } from 'react-aria-components';
 import type { WeaponConsumable } from '../../lib/types';
 import { WeaponConsumableViewModal } from './WeaponConsumableViewModal';
-import { WeaponConsumableSourceFilter } from './WeaponConsumableSourceFilter';
+import { SourceFilter } from '../common/SourceFilter';
 import { filterData } from '../../lib/tableUtils';
 import { formatCost } from '../../lib/formatUtils';
 
@@ -110,10 +110,11 @@ export function WeaponConsumablesTableGrouped({ consumables }: WeaponConsumables
     <>
       <div className="space-y-4 mb-4">
         <div className="flex flex-wrap items-start gap-4">
-          <WeaponConsumableSourceFilter
-            consumables={consumables}
+          <SourceFilter
+            items={consumables}
             selectedSources={selectedSources}
             onSourcesChange={setSelectedSources}
+            getSource={(c) => c.source?.source || 'Unknown'}
           />
         </div>
 

@@ -2,7 +2,7 @@ import { useState, useMemo, useEffect, Fragment } from 'react';
 import { Button } from 'react-aria-components';
 import type { Armor, Gear } from '../../lib/types';
 import { ArmorViewModal } from './ArmorViewModal';
-import { ArmorSourceFilter } from './ArmorSourceFilter';
+import { SourceFilter } from '../common/SourceFilter';
 import { filterData } from '../../lib/tableUtils';
 import { formatCost } from '../../lib/formatUtils';
 
@@ -109,10 +109,11 @@ export function ArmorTableGrouped({ armor, gearMap }: ArmorTableGroupedProps) {
     <>
       <div className="space-y-4 mb-4">
         <div className="flex flex-wrap items-start gap-4">
-          <ArmorSourceFilter
-            armor={armor}
+          <SourceFilter
+            items={armor}
             selectedSources={selectedSources}
             onSourcesChange={setSelectedSources}
+            getSource={(a) => a.source || 'Unknown'}
           />
         </div>
 

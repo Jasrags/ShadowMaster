@@ -3,7 +3,7 @@ import { DataTable, ColumnDefinition } from '../common/DataTable';
 import type { Armor, Gear } from '../../lib/types';
 import { ArmorViewModal } from './ArmorViewModal';
 import { ArmorCategoryFilter } from './ArmorCategoryFilter';
-import { ArmorSourceFilter } from './ArmorSourceFilter';
+import { SourceFilter } from '../common/SourceFilter';
 import { formatCost } from '../../lib/formatUtils';
 
 interface ArmorTableProps {
@@ -102,10 +102,11 @@ export const ArmorTable = memo(function ArmorTable({ armor, gearMap }: ArmorTabl
             selectedCategories={selectedCategories}
             onCategoriesChange={setSelectedCategories}
           />
-          <ArmorSourceFilter
-            armor={armor}
+          <SourceFilter
+            items={armor}
             selectedSources={selectedSources}
             onSourcesChange={setSelectedSources}
+            getSource={(a) => a.source || 'Unknown'}
           />
         </div>
       </div>
