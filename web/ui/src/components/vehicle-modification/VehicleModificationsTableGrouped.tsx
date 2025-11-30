@@ -1,8 +1,8 @@
-import { useState, memo, useCallback } from 'react';
+import { useState, useMemo, memo, useCallback } from 'react';
 import type { VehicleModification } from '../../lib/types';
 import { VehicleModificationViewModal } from './VehicleModificationViewModal';
 import { SourceFilter } from '../common/SourceFilter';
-import { GroupedCardList } from '../common/GroupedCardList';
+import { GroupedTable, type GroupedTableColumn } from '../common/GroupedTable';
 
 interface VehicleModificationsTableGroupedProps {
   modifications: VehicleModification[];
@@ -14,11 +14,13 @@ export const VehicleModificationsTableGrouped = memo(function VehicleModificatio
   const [selectedSources, setSelectedSources] = useState<string[]>(['SR5']);
 
   // Filter modifications by selected sources
-  const filteredModifications = modifications.filter(mod => {
-    if (selectedSources.length === 0) return true;
-    const source = mod.source?.source;
-    return source && selectedSources.includes(source);
-  });
+  const filteredModifications = useMemo(() => {
+    if (selectedSources.length === 0) return modifications;
+    return modifications.filter(mod => {
+      const source = mod.source?.source;
+      return source && selectedSources.includes(source);
+    });
+  }, [modifications, selectedSources]);
 
   const handleNameClick = useCallback((modification: VehicleModification) => {
     setSelectedModification(modification);
@@ -35,6 +37,44 @@ export const VehicleModificationsTableGrouped = memo(function VehicleModificatio
     return groupKey.replace('_', ' ').replace(/\b\w/g, l => l.toUpperCase());
   };
 
+  const columns: GroupedTableColumn<VehicleModification>[] = [
+    {
+      header: 'Name',
+      accessor: (item) => (
+        <button
+          onClick={() => handleNameClick(item)}
+          className="text-sr-accent hover:text-sr-accent/80 hover:underline cursor-pointer text-left pl-4"
+        >
+          {item.name}
+        </button>
+      ),
+    },
+    {
+      header: 'Slots',
+      accessor: (item) => item.slots?.description || '-',
+    },
+    {
+      header: 'Cost',
+      accessor: (item) => item.cost?.formula || '-',
+    },
+    {
+      header: 'Availability',
+      accessor: (item) => {
+        if (item.availability) {
+          let avail = String(item.availability.value || '');
+          if (item.availability.restricted) avail += 'R';
+          if (item.availability.forbidden) avail += 'F';
+          return avail || item.availability.formula || '-';
+        }
+        return '-';
+      },
+    },
+    {
+      header: 'Source',
+      accessor: (item) => item.source?.source || '-',
+    },
+  ];
+
   return (
     <>
       <div className="space-y-4 mb-4">
@@ -46,28 +86,28 @@ export const VehicleModificationsTableGrouped = memo(function VehicleModificatio
         />
       </div>
 
-      <GroupedCardList
+      <GroupedTable
         items={filteredModifications}
         getGroupKey={getGroupKey}
         getGroupLabel={getGroupLabel}
+        columns={columns}
         searchFields={['name', 'type', 'description']}
-        searchPlaceholder="Search vehicle modifications..."
-        renderItem={(modification, index) => (
-          <div
-            key={modification.name || index}
-            className="flex items-center justify-between p-2 hover:bg-sr-light-gray rounded cursor-pointer"
-            onClick={() => handleNameClick(modification)}
+        searchPlaceholder="Search vehicle modifications by name, type, or description..."
+        renderItemRow={(item, index) => (
+          <tr
+            key={`${getGroupKey(item)}-${item.name}-${index}`}
+            className="border-b border-sr-light-gray/50 hover:bg-sr-light-gray/20 transition-colors"
           >
-            <div className="flex-1">
-              <div className="text-gray-100 font-medium">{modification.name}</div>
-              {modification.description && (
-                <div className="text-sm text-gray-400 mt-1 line-clamp-2">{modification.description}</div>
-              )}
-            </div>
-            {modification.source?.source && (
-              <div className="text-xs text-gray-500 ml-4">{modification.source.source}</div>
-            )}
-          </div>
+            <td className="px-4 py-2"></td>
+            {columns.map((column, colIndex) => (
+              <td
+                key={colIndex}
+                className={`px-4 py-2 text-gray-300 ${column.className || ''}`}
+              >
+                {column.accessor(item)}
+              </td>
+            ))}
+          </tr>
         )}
       />
 

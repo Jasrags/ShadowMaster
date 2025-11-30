@@ -1,8 +1,8 @@
-import { useState, memo, useCallback } from 'react';
+import { useState, useMemo, memo, useCallback } from 'react';
 import type { Vehicle } from '../../lib/types';
 import { VehicleViewModal } from './VehicleViewModal';
 import { SourceFilter } from '../common/SourceFilter';
-import { GroupedCardList } from '../common/GroupedCardList';
+import { GroupedTable, type GroupedTableColumn } from '../common/GroupedTable';
 
 interface VehiclesTableGroupedProps {
   vehicles: Vehicle[];
@@ -14,11 +14,13 @@ export const VehiclesTableGrouped = memo(function VehiclesTableGrouped({ vehicle
   const [selectedSources, setSelectedSources] = useState<string[]>(['SR5']);
 
   // Filter vehicles by selected sources
-  const filteredVehicles = vehicles.filter(vehicle => {
-    if (selectedSources.length === 0) return true;
-    const source = vehicle.source?.source;
-    return source && selectedSources.includes(source);
-  });
+  const filteredVehicles = useMemo(() => {
+    if (selectedSources.length === 0) return vehicles;
+    return vehicles.filter(vehicle => {
+      const source = vehicle.source?.source;
+      return source && selectedSources.includes(source);
+    });
+  }, [vehicles, selectedSources]);
 
   const handleNameClick = useCallback((vehicle: Vehicle) => {
     setSelectedVehicle(vehicle);
@@ -35,6 +37,56 @@ export const VehiclesTableGrouped = memo(function VehiclesTableGrouped({ vehicle
     return groupKey.replace(/\b\w/g, l => l.toUpperCase());
   };
 
+  const columns: GroupedTableColumn<Vehicle>[] = [
+    {
+      header: 'Name',
+      accessor: (item) => (
+        <button
+          onClick={() => handleNameClick(item)}
+          className="text-sr-accent hover:text-sr-accent/80 hover:underline cursor-pointer text-left pl-4"
+        >
+          {item.name}
+        </button>
+      ),
+    },
+    {
+      header: 'Subtype',
+      accessor: (item) => item.subtype ? item.subtype.replace('_', ' ').replace(/\b\w/g, l => l.toUpperCase()) : '-',
+    },
+    {
+      header: 'Handling',
+      accessor: (item) => {
+        if (item.handling) {
+          if (item.handling.off_road !== undefined) {
+            return `${item.handling.on_road}/${item.handling.off_road}`;
+          }
+          return String(item.handling.on_road || '-');
+        }
+        return '-';
+      },
+    },
+    {
+      header: 'Speed',
+      accessor: (item) => item.speed ? `${item.speed.value}${item.speed.movement_type || ''}` : '-',
+    },
+    {
+      header: 'Body',
+      accessor: (item) => item.body ? String(item.body.value || '-') : '-',
+    },
+    {
+      header: 'Armor',
+      accessor: (item) => item.armor !== undefined ? String(item.armor) : '-',
+    },
+    {
+      header: 'Cost',
+      accessor: (item) => item.cost !== undefined ? item.cost.toLocaleString() : '-',
+    },
+    {
+      header: 'Source',
+      accessor: (item) => item.source?.source || '-',
+    },
+  ];
+
   return (
     <>
       <div className="space-y-4 mb-4">
@@ -46,28 +98,28 @@ export const VehiclesTableGrouped = memo(function VehiclesTableGrouped({ vehicle
         />
       </div>
 
-      <GroupedCardList
+      <GroupedTable
         items={filteredVehicles}
         getGroupKey={getGroupKey}
         getGroupLabel={getGroupLabel}
+        columns={columns}
         searchFields={['name', 'type', 'subtype']}
-        searchPlaceholder="Search vehicles..."
-        renderItem={(vehicle, index) => (
-          <div
-            key={vehicle.name || index}
-            className="flex items-center justify-between p-2 hover:bg-sr-light-gray rounded cursor-pointer"
-            onClick={() => handleNameClick(vehicle)}
+        searchPlaceholder="Search vehicles by name, type, or subtype..."
+        renderItemRow={(item, index) => (
+          <tr
+            key={`${getGroupKey(item)}-${item.name}-${index}`}
+            className="border-b border-sr-light-gray/50 hover:bg-sr-light-gray/20 transition-colors"
           >
-            <div className="flex-1">
-              <div className="text-gray-100 font-medium">{vehicle.name}</div>
-              {vehicle.subtype && (
-                <div className="text-sm text-gray-400 mt-1">{vehicle.subtype.replace('_', ' ').replace(/\b\w/g, l => l.toUpperCase())}</div>
-              )}
-            </div>
-            {vehicle.source?.source && (
-              <div className="text-xs text-gray-500 ml-4">{vehicle.source.source}</div>
-            )}
-          </div>
+            <td className="px-4 py-2"></td>
+            {columns.map((column, colIndex) => (
+              <td
+                key={colIndex}
+                className={`px-4 py-2 text-gray-300 ${column.className || ''}`}
+              >
+                {column.accessor(item)}
+              </td>
+            ))}
+          </tr>
         )}
       />
 
