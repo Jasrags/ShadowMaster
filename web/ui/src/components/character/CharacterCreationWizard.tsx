@@ -48,7 +48,9 @@ export interface CharacterCreationState {
   selectedSpells?: Array<{ name: string; category?: string; _sourceTemplate?: string }>;
   selectedAdeptPowers?: Array<{ name: string; level?: number; powerPoints: number }>;
   selectedQualities?: Array<{ name: string; type: string; rating?: number }>;
-  skillAllocations?: Record<string, number>;
+  skillAllocations?: Record<string, { rating: number; specialization?: string }>;
+  nativeLanguage?: string;
+  languageSkills?: Array<{ name: string; rating: number }>;
   equipment?: EquipmentItem[];
   karmaSpending?: KarmaSpending;
   
@@ -335,6 +337,7 @@ export function CharacterCreationWizard({ isOpen, onOpenChange, onSuccess, editi
           edge: formData.edge,
           magic: formData.magic,
           resonance: formData.resonance,
+          skill_allocations: formData.skillAllocations,
         };
       } else if (formData.creationMethod === 'sum_to_ten' && formData.sumToTen) {
         creationData = {
@@ -346,6 +349,7 @@ export function CharacterCreationWizard({ isOpen, onOpenChange, onSuccess, editi
           edge: formData.edge,
           magic: formData.magic,
           resonance: formData.resonance,
+          skill_allocations: formData.skillAllocations,
         };
       } else if (formData.creationMethod === 'karma' && formData.karma) {
         creationData = {

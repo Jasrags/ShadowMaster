@@ -38,7 +38,16 @@ func (h *SR5Handler) applyPriorityMethod(char *domain.CharacterSR5, data map[str
 	}
 
 	// Apply priority selection with selected metatype/magic type and special attributes
-	return h.applyPrioritySelectionWithSelections(char, selection, selectedMetatype, selectedMagicType, edge, magic, resonance)
+	if err := h.applyPrioritySelectionWithSelections(char, selection, selectedMetatype, selectedMagicType, edge, magic, resonance); err != nil {
+		return err
+	}
+
+	// Apply skill allocations (ratings and specializations) from frontend
+	if err := h.applySkillAllocationsFromData(char, data); err != nil {
+		return fmt.Errorf("failed to apply skill allocations: %w", err)
+	}
+
+	return nil
 }
 
 // applyPrioritySelectionWithSelections applies priority selection with specific metatype and magic type
@@ -299,6 +308,49 @@ func (h *SR5Handler) applySkills(char *domain.CharacterSR5, priority string) err
 		char.LanguageSkills["English"] = domain.Skill{
 			Name:   "English",
 			Rating: 6,
+		}
+	}
+
+	return nil
+}
+
+// applySkillAllocationsFromData extracts and applies skill allocations (ratings and specializations) from the data map
+func (h *SR5Handler) applySkillAllocationsFromData(char *domain.CharacterSR5, data map[string]interface{}) error {
+	skillAllocations, ok := data["skill_allocations"].(map[string]interface{})
+	if !ok {
+		// No skill allocations provided, that's fine
+		return nil
+	}
+
+	for skillName, allocationData := range skillAllocations {
+		allocationMap, ok := allocationData.(map[string]interface{})
+		if !ok {
+			continue
+		}
+
+		// Extract rating
+		rating := 0
+		if ratingVal, ok := allocationMap["rating"].(float64); ok {
+			rating = int(ratingVal)
+		} else if ratingVal, ok := allocationMap["rating"].(int); ok {
+			rating = ratingVal
+		}
+
+		if rating <= 0 {
+			continue // Skip skills with 0 or negative rating
+		}
+
+		// Extract specialization (optional)
+		specialization := ""
+		if specVal, ok := allocationMap["specialization"].(string); ok && specVal != "" {
+			specialization = specVal
+		}
+
+		// Apply skill to character
+		char.ActiveSkills[skillName] = domain.Skill{
+			Name:           skillName,
+			Rating:         rating,
+			Specialization: specialization,
 		}
 	}
 

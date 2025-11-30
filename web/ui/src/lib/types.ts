@@ -1195,6 +1195,7 @@ export interface PrioritySelection {
   edge?: number;
   magic?: number;
   resonance?: number;
+  skill_allocations?: Record<string, { rating: number; specialization?: string }>;
 }
 
 export interface SumToTenSelection {
@@ -1210,6 +1211,7 @@ export interface SumToTenSelection {
   edge?: number;
   magic?: number;
   resonance?: number;
+  skill_allocations?: Record<string, { rating: number; specialization?: string }>;
 }
 
 export interface KarmaSelection {

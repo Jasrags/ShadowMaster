@@ -36,7 +36,16 @@ func (h *SR5Handler) applySumToTenMethod(char *domain.CharacterSR5, data map[str
 	selectedMetatype := getStringFromMap(data, "selected_metatype", "")
 	selectedMagicType := getStringFromMap(data, "magic_type", "")
 
-	return h.applySumToTenSelection(char, selection, selectedMetatype, selectedMagicType, edge, magic, resonance)
+	if err := h.applySumToTenSelection(char, selection, selectedMetatype, selectedMagicType, edge, magic, resonance); err != nil {
+		return err
+	}
+
+	// Apply skill allocations (ratings and specializations) from frontend
+	if err := h.applySkillAllocationsFromData(char, data); err != nil {
+		return fmt.Errorf("failed to apply skill allocations: %w", err)
+	}
+
+	return nil
 }
 
 // applySumToTenSelection applies Sum-to-Ten character creation
