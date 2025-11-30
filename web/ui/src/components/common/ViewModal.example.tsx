@@ -160,7 +160,7 @@ export function WeaponViewModalWithNested({ weapon, isOpen, onOpenChange, access
   onOpenChange: (isOpen: boolean) => void;
   accessoryMap: Map<string, any>;
 }) {
-  const [selectedAccessory, setSelectedAccessory] = useState<any | null>(null);
+  const [selectedAccessory] = useState<any | null>(null);
   const [isAccessoryModalOpen, setIsAccessoryModalOpen] = useState(false);
 
   if (!weapon) return null;
