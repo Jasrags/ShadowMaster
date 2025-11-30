@@ -1192,6 +1192,9 @@ export interface PrioritySelection {
   magic_type?: string;
   tradition?: string;
   gameplay_level?: string;
+  edge?: number;
+  magic?: number;
+  resonance?: number;
 }
 
 export interface SumToTenSelection {
@@ -1204,6 +1207,9 @@ export interface SumToTenSelection {
   magic_type?: string;
   tradition?: string;
   gameplay_level?: string;
+  edge?: number;
+  magic?: number;
+  resonance?: number;
 }
 
 export interface KarmaSelection {

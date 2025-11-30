@@ -20,11 +20,27 @@ func (h *SR5Handler) applySumToTenMethod(char *domain.CharacterSR5, data map[str
 		return err
 	}
 
-	return h.applySumToTenSelection(char, selection)
+	// Extract special attribute allocations
+	var edge, magic, resonance *int
+	if edgeVal, ok := getIntFromMap(data, "edge"); ok {
+		edge = &edgeVal
+	}
+	if magicVal, ok := getIntFromMap(data, "magic"); ok {
+		magic = &magicVal
+	}
+	if resonanceVal, ok := getIntFromMap(data, "resonance"); ok {
+		resonance = &resonanceVal
+	}
+
+	// Extract selected metatype and magic type
+	selectedMetatype := getStringFromMap(data, "selected_metatype", "")
+	selectedMagicType := getStringFromMap(data, "magic_type", "")
+
+	return h.applySumToTenSelection(char, selection, selectedMetatype, selectedMagicType, edge, magic, resonance)
 }
 
 // applySumToTenSelection applies Sum-to-Ten character creation
-func (h *SR5Handler) applySumToTenSelection(char *domain.CharacterSR5, selection SumToTenSelection) error {
+func (h *SR5Handler) applySumToTenSelection(char *domain.CharacterSR5, selection SumToTenSelection, selectedMetatype string, selectedMagicType string, edge *int, magic *int, resonance *int) error {
 	char.CreationMethod = "sum_to_ten"
 	char.MetatypePriority = selection.Metatype
 	char.AttributesPriority = selection.Attributes
@@ -44,7 +60,7 @@ func (h *SR5Handler) applySumToTenSelection(char *domain.CharacterSR5, selection
 		GameplayLevel: selection.GameplayLevel,
 	}
 
-	return h.applyPrioritySelection(char, prioritySelection)
+	return h.applyPrioritySelectionWithSelections(char, prioritySelection, selectedMetatype, selectedMagicType, edge, magic, resonance)
 }
 
 // ValidateSumToTenSelection validates that the sum of priority costs equals 10

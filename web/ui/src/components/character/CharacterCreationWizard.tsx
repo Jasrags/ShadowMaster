@@ -38,6 +38,9 @@ export interface CharacterCreationState {
   // Step-specific data
   selectedMetatype?: string;
   attributeAllocations?: Record<string, number>;
+  edge?: number;
+  magic?: number;
+  resonance?: number;
   magicType?: string;
   tradition?: string;
   mentorSpirit?: string;
@@ -157,7 +160,20 @@ export function CharacterCreationWizard({ isOpen, onOpenChange, onSuccess, editi
         newTouched.playerName = true;
       }
     } else if (step === 2) {
-      // Step 2: Metatype & Attributes - validate priorities, metatype, and attribute allocation
+      // Step 2: Magic/Resonance - require magic priority to be selected
+      if (formData.creationMethod === 'priority') {
+        if (!formData.priorities?.magic_priority || formData.priorities.magic_priority === '') {
+          newErrors.magic_priority = 'Magic/Resonance priority must be selected';
+          newTouched.magic_priority = true;
+        }
+      } else if (formData.creationMethod === 'sum_to_ten') {
+        if (!formData.sumToTen?.magic_priority || formData.sumToTen.magic_priority === '') {
+          newErrors.magic_priority = 'Magic/Resonance priority must be selected';
+          newTouched.magic_priority = true;
+        }
+      }
+    } else if (step === 3) {
+      // Step 3: Metatype & Attributes - validate priorities, metatype, and attribute allocation
       const missingItems: string[] = [];
       
       if (formData.creationMethod === 'priority' && formData.priorities) {
@@ -232,26 +248,57 @@ export function CharacterCreationWizard({ isOpen, onOpenChange, onSuccess, editi
             missingItems.push(`${Math.abs(remainingPoints)} attribute point${Math.abs(remainingPoints) !== 1 ? 's' : ''} over allocated`);
           }
         }
+        
+        // Validate special attribute points
+        const metatypePriority = formData.creationMethod === 'priority' && formData.priorities?.metatype_priority
+          ? formData.priorities.metatype_priority
+          : formData.creationMethod === 'sum_to_ten' && formData.sumToTen?.metatype_priority
+          ? formData.sumToTen.metatype_priority
+          : undefined;
+        
+        // Check if mundane
+        const magicPriority = formData.creationMethod === 'priority' && formData.priorities?.magic_priority
+          ? formData.priorities.magic_priority
+          : formData.creationMethod === 'sum_to_ten' && formData.sumToTen?.magic_priority
+          ? formData.sumToTen.magic_priority
+          : undefined;
+        const isMundane = magicPriority === 'E' || magicPriority === 'none' || !magicPriority;
+        
+        // Validate that mundane characters have Magic and Resonance at 0
+        if (isMundane) {
+          if (formData.magic && formData.magic > 0) {
+            missingItems.push('Mundane characters (Magic Priority E or none) cannot have Magic > 0');
+          }
+          if (formData.resonance && formData.resonance > 0) {
+            missingItems.push('Mundane characters (Magic Priority E or none) cannot have Resonance > 0');
+          }
+        }
+        
+        if (metatypePriority && selectedMetatypeData?.special_attribute_points) {
+          const availableSpecialPoints = selectedMetatypeData.special_attribute_points[metatypePriority] || 0;
+          if (availableSpecialPoints > 0) {
+            const edgeStart = formData.selectedMetatype === 'human' ? 2 : 1;
+            const edgeSpent = Math.max(0, (formData.edge ?? edgeStart) - edgeStart);
+            // For mundane characters, magic and resonance should be 0
+            const magicSpent = isMundane ? 0 : Math.max(0, (formData.magic ?? 0) - 0);
+            const resonanceSpent = isMundane ? 0 : Math.max(0, (formData.resonance ?? 0) - 0);
+            const usedSpecialPoints = edgeSpent + magicSpent + resonanceSpent;
+            const remainingSpecialPoints = availableSpecialPoints - usedSpecialPoints;
+            
+            if (remainingSpecialPoints > 0) {
+              missingItems.push(`${remainingSpecialPoints} special attribute point${remainingSpecialPoints !== 1 ? 's' : ''} remaining to allocate`);
+            } else if (remainingSpecialPoints < 0) {
+              missingItems.push(`${Math.abs(remainingSpecialPoints)} special attribute point${Math.abs(remainingSpecialPoints) !== 1 ? 's' : ''} over allocated`);
+            }
+          }
+        }
       }
       
       // Set errors and show toast if validation fails
       if (missingItems.length > 0) {
-        newErrors.step2 = 'Please complete all required selections';
+        newErrors.step3 = 'Please complete all required selections';
         const errorMessage = `Please complete the following: ${missingItems.join(', ')}`;
         showWarning('Cannot proceed', errorMessage);
-      }
-    } else if (step === 3) {
-      // Step 3: Magic/Resonance - require magic priority to be selected
-      if (formData.creationMethod === 'priority') {
-        if (!formData.priorities?.magic_priority || formData.priorities.magic_priority === '') {
-          newErrors.magic_priority = 'Magic/Resonance priority must be selected';
-          newTouched.magic_priority = true;
-        }
-      } else if (formData.creationMethod === 'sum_to_ten') {
-        if (!formData.sumToTen?.magic_priority || formData.sumToTen.magic_priority === '') {
-          newErrors.magic_priority = 'Magic/Resonance priority must be selected';
-          newTouched.magic_priority = true;
-        }
       }
     }
 
@@ -285,6 +332,9 @@ export function CharacterCreationWizard({ isOpen, onOpenChange, onSuccess, editi
           magic_type: formData.magicType,
           tradition: formData.tradition,
           gameplay_level: formData.gameplayLevel,
+          edge: formData.edge,
+          magic: formData.magic,
+          resonance: formData.resonance,
         };
       } else if (formData.creationMethod === 'sum_to_ten' && formData.sumToTen) {
         creationData = {
@@ -293,6 +343,9 @@ export function CharacterCreationWizard({ isOpen, onOpenChange, onSuccess, editi
           magic_type: formData.magicType,
           tradition: formData.tradition,
           gameplay_level: formData.gameplayLevel,
+          edge: formData.edge,
+          magic: formData.magic,
+          resonance: formData.resonance,
         };
       } else if (formData.creationMethod === 'karma' && formData.karma) {
         creationData = {
@@ -343,7 +396,7 @@ export function CharacterCreationWizard({ isOpen, onOpenChange, onSuccess, editi
         );
       case 2:
         return (
-          <Step2MetatypeAttributes
+          <Step3MagicResonance
             formData={formData}
             setFormData={setFormData}
             creationData={creationData}
@@ -353,7 +406,7 @@ export function CharacterCreationWizard({ isOpen, onOpenChange, onSuccess, editi
         );
       case 3:
         return (
-          <Step3MagicResonance
+          <Step2MetatypeAttributes
             formData={formData}
             setFormData={setFormData}
             creationData={creationData}
@@ -432,8 +485,8 @@ export function CharacterCreationWizard({ isOpen, onOpenChange, onSuccess, editi
 
   const stepNames = [
     'Concept',
-    'Metatype & Attributes',
     'Magic/Resonance',
+    'Metatype & Attributes',
     'Qualities',
     'Skills',
     'Resources',

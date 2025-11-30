@@ -4,6 +4,7 @@ import type { CharacterCreationData, PrioritySelection, SumToTenSelection, Prior
 import { SumToTenSelector } from '../SumToTenSelector';
 import { MetatypeSelector } from '../MetatypeSelector';
 import { AttributeAllocator } from '../AttributeAllocator';
+import { SpecialAttributeAllocator } from '../SpecialAttributeAllocator';
 
 const PRIORITY_LETTERS = ['A', 'B', 'C', 'D', 'E'];
 
@@ -78,7 +79,10 @@ export function Step2MetatypeAttributes({ formData, setFormData, creationData, e
 
     if (currentCategory) {
       // Remove from old category
-      updatedPriorities[currentCategory[0] as keyof PrioritySelection] = '';
+      const categoryKey = currentCategory[0] as keyof PrioritySelection;
+      if (categoryKey.endsWith('_priority')) {
+        (updatedPriorities as any)[categoryKey] = '';
+      }
     }
     
     updatedPriorities.metatype_priority = priority;
@@ -101,7 +105,10 @@ export function Step2MetatypeAttributes({ formData, setFormData, creationData, e
 
     if (currentCategory) {
       // Remove from old category
-      updatedPriorities[currentCategory[0] as keyof PrioritySelection] = '';
+      const categoryKey = currentCategory[0] as keyof PrioritySelection;
+      if (categoryKey.endsWith('_priority')) {
+        (updatedPriorities as any)[categoryKey] = '';
+      }
     }
     
     updatedPriorities.attributes_priority = priority;
@@ -169,6 +176,13 @@ export function Step2MetatypeAttributes({ formData, setFormData, creationData, e
     ? formData.sumToTen.attributes_priority
     : undefined;
 
+  // Get magic priority to determine if mundane
+  const magicPriority = formData.creationMethod === 'priority' && formData.priorities?.magic_priority
+    ? formData.priorities.magic_priority
+    : formData.creationMethod === 'sum_to_ten' && formData.sumToTen?.magic_priority
+    ? formData.sumToTen.magic_priority
+    : undefined;
+
   // Calculate available attribute points based on priority
   const ATTRIBUTE_POINTS: Record<string, number> = {
     A: 24,
@@ -178,6 +192,14 @@ export function Step2MetatypeAttributes({ formData, setFormData, creationData, e
     E: 12,
   };
   const availableAttributePoints = attributesPriority ? ATTRIBUTE_POINTS[attributesPriority] || 12 : 0;
+
+  // Calculate available special attribute points based on metatype and priority
+  const availableSpecialAttributePoints = useMemo(() => {
+    if (!formData.selectedMetatype || !metatypePriority) return 0;
+    const selectedMetatypeData = creationData.metatypes.find(m => m.id === formData.selectedMetatype);
+    if (!selectedMetatypeData?.special_attribute_points) return 0;
+    return selectedMetatypeData.special_attribute_points[metatypePriority] || 0;
+  }, [formData.selectedMetatype, metatypePriority, creationData.metatypes]);
 
   // Get selected metatype data and extract min/max values
   const selectedMetatypeData = useMemo(() => {
@@ -236,6 +258,32 @@ export function Step2MetatypeAttributes({ formData, setFormData, creationData, e
       });
     }
   }, [selectedMetatypeData, attributeMinMax.minValues, setFormData]);
+
+  // Initialize special attributes when metatype is selected
+  useEffect(() => {
+    if (formData.selectedMetatype && formData.edge === undefined) {
+      // Initialize Edge based on metatype (Human = 2, others = 1)
+      const edgeStart = formData.selectedMetatype === 'human' ? 2 : 1;
+      setFormData(prev => ({
+        ...prev,
+        edge: edgeStart,
+        magic: prev.magic ?? 0,
+        resonance: prev.resonance ?? 0,
+      }));
+    }
+  }, [formData.selectedMetatype, formData.edge, setFormData]);
+
+  // Ensure mundane characters have Magic and Resonance at 0
+  useEffect(() => {
+    const isMundane = magicPriority === 'E' || magicPriority === 'none' || !magicPriority;
+    if (isMundane && (formData.magic !== undefined && formData.magic > 0 || formData.resonance !== undefined && formData.resonance > 0)) {
+      setFormData(prev => ({
+        ...prev,
+        magic: 0,
+        resonance: 0,
+      }));
+    }
+  }, [magicPriority, formData.magic, formData.resonance, setFormData]);
 
   // Check if there are any selections to clear
   const hasSelections = metatypePriority || formData.selectedMetatype || attributesPriority || 
@@ -498,6 +546,40 @@ export function Step2MetatypeAttributes({ formData, setFormData, creationData, e
                 maxValues={attributeMinMax.maxValues}
                 errors={errors}
               />
+            </div>
+          )}
+
+          {/* Step 5: Special Attribute Allocation */}
+          {formData.selectedMetatype && metatypePriority && (
+            <div className="space-y-3">
+              <h4 className="text-md font-semibold text-gray-200">5. Allocate Special Attributes</h4>
+              {availableSpecialAttributePoints > 0 ? (
+                <SpecialAttributeAllocator
+                  edge={formData.edge ?? (formData.selectedMetatype === 'human' ? 2 : 1)}
+                  magic={formData.magic ?? 0}
+                  resonance={formData.resonance ?? 0}
+                  onChange={(allocations) => {
+                    setFormData(prev => ({
+                      ...prev,
+                      edge: allocations.edge,
+                      magic: allocations.magic,
+                      resonance: allocations.resonance,
+                    }));
+                  }}
+                  availablePoints={availableSpecialAttributePoints}
+                  magicType={formData.magicType} // Available from Step 2 (Magic/Resonance)
+                  magicPriority={magicPriority} // Used to determine if mundane
+                  selectedMetatype={formData.selectedMetatype}
+                  errors={errors}
+                />
+              ) : (
+                <div className="p-4 bg-sr-light-gray/30 border border-sr-light-gray rounded-md">
+                  <p className="text-sm text-gray-400">
+                    This metatype at priority {metatypePriority} provides 0 special attribute points. 
+                    You can still raise Edge, Magic, or Resonance using Karma in later steps.
+                  </p>
+                </div>
+              )}
             </div>
           )}
         </>
