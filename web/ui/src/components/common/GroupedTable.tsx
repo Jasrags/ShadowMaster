@@ -16,7 +16,7 @@ export interface GroupedTableProps<T> {
   searchFields?: (keyof T)[];
   searchPlaceholder?: string;
   onItemClick?: (item: T) => void;
-  renderGroupHeader?: (groupKey: string, itemCount: number, isExpanded: boolean) => ReactNode;
+  renderGroupHeader?: (groupKey: string, itemCount: number, isExpanded: boolean, toggleGroup: (groupKey: string) => void) => ReactNode;
   renderItemRow?: (item: T, index: number) => ReactNode;
   autoExpandOnSearch?: boolean;
   defaultExpanded?: boolean;
@@ -220,7 +220,7 @@ export function GroupedTable<T extends object>({
                 groupedItems.map((group) => (
                   <React.Fragment key={group.groupKey}>
                     {renderGroupHeader
-                      ? renderGroupHeader(group.groupKey, group.items.length, group.isExpanded)
+                      ? renderGroupHeader(group.groupKey, group.items.length, group.isExpanded, () => toggleGroup(group.groupKey))
                       : defaultRenderGroupHeader(group.groupKey, group.items.length, group.isExpanded)}
                     {group.isExpanded && group.items.map((item, index) =>
                       renderItemRow

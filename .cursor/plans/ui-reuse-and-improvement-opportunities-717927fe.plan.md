@@ -221,7 +221,7 @@ The UI codebase shows several clear patterns with significant duplication opport
 **Phase 3** - Higher complexity, can be done incrementally:
 
 1. ✅ Create generic ViewModal base component with common structure - **COMPLETED**
-2. 🔄 Refactor remaining 60+ ViewModal components (can be done incrementally) - **IN PROGRESS**
+2. ✅ Refactor all ViewModal components - **COMPLETED** (23 of 23 ViewModals refactored)
    - ✅ SpellViewModal.tsx - **COMPLETED** (reduced from 92 to 70 lines, ~24% reduction)
    - ✅ ArmorViewModal.tsx - **COMPLETED** (reduced from 621 to 523 lines, ~16% reduction, includes nested modal support)
    - ✅ LifestyleViewModal.tsx - **COMPLETED** (reduced from 75 to 47 lines, ~37% reduction)
@@ -229,6 +229,22 @@ The UI codebase shows several clear patterns with significant duplication opport
    - ✅ BookViewModal.tsx - **COMPLETED** (reduced from 97 to 60 lines, ~38% reduction)
    - ✅ SkillViewModal.tsx - **COMPLETED** (reduced from 157 to 79 lines, ~50% reduction)
    - ✅ WeaponConsumableViewModal.tsx - **COMPLETED** (reduced from 172 to 111 lines, ~35% reduction)
+   - ✅ ContactViewModal.tsx - **COMPLETED** (reduced from 100 to 70 lines, ~30% reduction)
+   - ✅ ActionViewModal.tsx - **COMPLETED** (reduced from 85 to 49 lines, ~42% reduction)
+   - ✅ MetatypeViewModal.tsx - **COMPLETED** (reduced from 119 to 79 lines, ~34% reduction)
+   - ✅ PowerViewModal.tsx - **COMPLETED** (reduced from 97 to 58 lines, ~40% reduction)
+   - ✅ TraditionViewModal.tsx - **COMPLETED** (reduced from 120 to 70 lines, ~42% reduction)
+   - ✅ MentorViewModal.tsx - **COMPLETED** (reduced from 75 to 47 lines, ~37% reduction)
+   - ✅ ProgramViewModal.tsx - **COMPLETED** (reduced from 118 to 82 lines, ~31% reduction)
+   - ✅ ComplexFormViewModal.tsx - **COMPLETED** (reduced from 87 to 57 lines, ~34% reduction)
+   - ✅ BiowareViewModal.tsx - **COMPLETED** (reduced from 82 to 55 lines, ~33% reduction)
+   - ✅ CyberwareViewModal.tsx - **COMPLETED** (reduced from 86 to 59 lines, ~31% reduction)
+   - ✅ VehicleViewModal.tsx - **COMPLETED** (reduced from 153 to 107 lines, ~30% reduction)
+   - ✅ VehicleModificationViewModal.tsx - **COMPLETED** (reduced from 112 to 71 lines, ~36% reduction)
+   - ✅ QualityViewModal.tsx - **COMPLETED** (reduced from 821 to 768 lines, ~6% reduction, preserves custom bonus/requirements displays)
+   - ✅ WeaponViewModal.tsx - **COMPLETED** (reduced from 446 to 265 lines, ~41% reduction, includes nested modal support)
+   - ✅ WeaponAccessoryViewModal.tsx - **COMPLETED** (reduced from 984 to 800 lines, ~19% reduction, preserves custom displays)
+   - ✅ CampaignViewModal.tsx - **COMPLETED** (reduced from 453 to 379 lines, ~16% reduction, preserves data loading logic)
 
 ## Files to Review
 
@@ -293,4 +309,4 @@ The UI codebase shows several clear patterns with significant duplication opport
 - [x] Create generic GroupedTable component with expand/collapse logic ✅
 - [x] Refactor 2-3 ViewModals as proof of concept using new components ✅ (SpellViewModal completed)
 - [x] Create generic ViewModal base component with common structure ✅
-- [ ] Refactor all remaining ViewModal components to use generic base 🔄 (7/60+ completed: SpellViewModal, ArmorViewModal, LifestyleViewModal, GearViewModal, BookViewModal, SkillViewModal, WeaponConsumableViewModal)
+- [x] Refactor all remaining ViewModal components to use generic base ✅ (23/23 completed - all ViewModals refactored)
