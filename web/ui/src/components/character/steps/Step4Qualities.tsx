@@ -297,6 +297,46 @@ export function Step4Qualities({ formData, setFormData, creationData: _creationD
         </div>
       </div>
 
+      {/* Selected Qualities */}
+      {selectedQualities.length > 0 && (
+        <div className="space-y-3">
+          <h4 className="text-md font-semibold text-gray-200">
+            Selected Qualities ({selectedQualities.length}):
+          </h4>
+          <div className="flex flex-wrap gap-2">
+            {selectedQualities.map((selected) => {
+              const quality = qualities.find(q => q.name === selected.name);
+              const cost = quality ? Math.abs(calculateKarmaCost(quality, selected.rating)) : 0;
+              const isPositive = selected.type === 'positive';
+              
+              return (
+                <div
+                  key={selected.name}
+                  className="flex items-center gap-2 px-3 py-2 bg-sr-gray border border-sr-light-gray rounded-md"
+                >
+                  <span className="text-sm text-gray-100">
+                    {selected.name}
+                    {selected.rating && ` (Rating ${selected.rating})`}
+                  </span>
+                  <span className={`text-xs ${isPositive ? 'text-green-400' : 'text-red-400'}`}>
+                    {isPositive ? '-' : '+'}{cost} karma
+                  </span>
+                  <button
+                    onClick={() => handleQualityRemove(selected.name)}
+                    className="ml-1 p-1 text-gray-400 hover:text-sr-danger hover:bg-sr-light-gray/50 rounded transition-colors"
+                    aria-label={`Remove ${selected.name}`}
+                  >
+                    <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                    </svg>
+                  </button>
+                </div>
+              );
+            })}
+          </div>
+        </div>
+      )}
+
       {/* Search */}
       <TextField
         value={searchTerm}
