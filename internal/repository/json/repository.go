@@ -1,6 +1,10 @@
 package jsonrepo
 
 import (
+	"fmt"
+	"os"
+	"path/filepath"
+
 	"shadowmaster/internal/repository"
 	"shadowmaster/pkg/storage"
 )
@@ -22,6 +26,15 @@ func NewRepositories(dataPath string) (*Repositories, error) {
 	store, err := storage.NewJSONStore(dataPath)
 	if err != nil {
 		return nil, err
+	}
+
+	// Ensure all required subdirectories exist
+	subdirs := []string{"campaigns", "characters", "groups", "scenes", "sessions", "users"}
+	for _, subdir := range subdirs {
+		dirPath := filepath.Join(dataPath, subdir)
+		if err := os.MkdirAll(dirPath, 0755); err != nil {
+			return nil, fmt.Errorf("failed to create directory %s: %w", dirPath, err)
+		}
 	}
 
 	// Load or create index
