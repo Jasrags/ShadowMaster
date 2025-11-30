@@ -3,12 +3,14 @@ import { biowareApi } from '../lib/api';
 import type { Bioware } from '../lib/types';
 import { useToast } from '../contexts/ToastContext';
 import { BiowareTable } from '../components/bioware/BiowareTable';
+import { BiowareTableGrouped } from '../components/bioware/BiowareTableGrouped';
 import { DatabasePageLayout } from '../components/database/DatabasePageLayout';
 
 export function BiowarePage() {
   const { showError } = useToast();
   const [bioware, setBioware] = useState<Bioware[]>([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [viewMode, setViewMode] = useState<'flat' | 'grouped'>('grouped');
 
   const loadBioware = useCallback(async () => {
     try {
@@ -33,8 +35,14 @@ export function BiowarePage() {
       description="View and search all available bioware augmentations from Shadowrun 5th Edition"
       itemCount={bioware.length}
       isLoading={isLoading}
+      viewMode={viewMode}
+      onViewModeChange={setViewMode}
     >
-      <BiowareTable bioware={bioware} />
+      {viewMode === 'grouped' ? (
+        <BiowareTableGrouped bioware={bioware} />
+      ) : (
+        <BiowareTable bioware={bioware} />
+      )}
     </DatabasePageLayout>
   );
 }

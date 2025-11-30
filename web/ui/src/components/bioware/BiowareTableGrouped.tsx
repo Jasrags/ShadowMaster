@@ -1,57 +1,65 @@
 import { useState, useMemo, memo, useCallback } from 'react';
-import type { Program } from '../../lib/types';
-import { ProgramViewModal } from './ProgramViewModal';
+import type { Bioware } from '../../lib/types';
+import { BiowareViewModal } from './BiowareViewModal';
 import { SourceFilter } from '../common/SourceFilter';
 import { GroupedTable, type GroupedTableColumn } from '../common/GroupedTable';
 
-interface ProgramsTableGroupedProps {
-  programs: Program[];
+interface BiowareTableGroupedProps {
+  bioware: Bioware[];
 }
 
-export const ProgramsTableGrouped = memo(function ProgramsTableGrouped({ programs }: ProgramsTableGroupedProps) {
-  const [selectedProgram, setSelectedProgram] = useState<Program | null>(null);
+export const BiowareTableGrouped = memo(function BiowareTableGrouped({ bioware }: BiowareTableGroupedProps) {
+  const [selectedBioware, setSelectedBioware] = useState<Bioware | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedSources, setSelectedSources] = useState<string[]>(['SR5']);
 
-  // Filter programs by selected sources
-  const filteredPrograms = useMemo(() => {
-    if (selectedSources.length === 0) return programs;
-    return programs.filter(program => {
-      const source = program.source?.source;
+  // Filter bioware by selected sources
+  const filteredBioware = useMemo(() => {
+    if (selectedSources.length === 0) return bioware;
+    return bioware.filter(item => {
+      const source = item.source?.source;
       return source && selectedSources.includes(source);
     });
-  }, [programs, selectedSources]);
+  }, [bioware, selectedSources]);
 
-  const handleNameClick = useCallback((program: Program) => {
-    setSelectedProgram(program);
+  const handleNameClick = useCallback((item: Bioware) => {
+    setSelectedBioware(item);
     setIsModalOpen(true);
   }, []);
 
   // Helper to get group key (group by type)
-  const getGroupKey = (item: Program): string => {
-    return item.type || 'common';
+  const getGroupKey = (item: Bioware): string => {
+    return item.type || 'Unknown';
   };
 
   // Helper to get group label
   const getGroupLabel = (groupKey: string): string => {
-    return groupKey.replace('_', ' ').replace(/\b\w/g, l => l.toUpperCase());
+    return groupKey || 'Unknown';
   };
 
-  const columns: GroupedTableColumn<Program>[] = [
+  const columns: GroupedTableColumn<Bioware>[] = [
     {
-      header: 'Name',
+      header: 'Device',
       accessor: (item) => (
         <button
           onClick={() => handleNameClick(item)}
           className="text-sr-accent hover:text-sr-accent/80 hover:underline cursor-pointer text-left pl-4"
         >
-          {item.name}
+          {item.device}
         </button>
       ),
     },
     {
-      header: 'Action/Effect',
-      accessor: (item) => item.action_effect || '-',
+      header: 'Essence',
+      accessor: (item) => item.essence || item.essence_formula?.formula || '-',
+    },
+    {
+      header: 'Cost',
+      accessor: (item) => item.cost || item.cost_formula?.formula || '-',
+    },
+    {
+      header: 'Availability',
+      accessor: (item) => item.availability || item.availability_formula?.formula || '-',
     },
     {
       header: 'Source',
@@ -63,7 +71,7 @@ export const ProgramsTableGrouped = memo(function ProgramsTableGrouped({ program
     <>
       <div className="space-y-4 mb-4">
         <SourceFilter
-          items={programs}
+          items={bioware}
           selectedSources={selectedSources}
           onSourcesChange={setSelectedSources}
           getSource={(item) => item.source?.source || ''}
@@ -71,15 +79,15 @@ export const ProgramsTableGrouped = memo(function ProgramsTableGrouped({ program
       </div>
 
       <GroupedTable
-        items={filteredPrograms}
+        items={filteredBioware}
         getGroupKey={getGroupKey}
         getGroupLabel={getGroupLabel}
         columns={columns}
-        searchFields={['name', 'type', 'action_effect', 'description']}
-        searchPlaceholder="Search programs by name, type, action/effect, or description..."
+        searchFields={['device', 'type', 'essence', 'cost', 'availability']}
+        searchPlaceholder="Search bioware by device, type, essence, cost, or availability..."
         renderItemRow={(item, index) => (
           <tr
-            key={`${getGroupKey(item)}-${item.name}-${index}`}
+            key={`${getGroupKey(item)}-${item.device}-${index}`}
             className="border-b border-sr-light-gray/50 hover:bg-sr-light-gray/20 transition-colors"
           >
             <td className="px-4 py-2"></td>
@@ -95,12 +103,11 @@ export const ProgramsTableGrouped = memo(function ProgramsTableGrouped({ program
         )}
       />
 
-      <ProgramViewModal
-        program={selectedProgram}
+      <BiowareViewModal
+        bioware={selectedBioware}
         isOpen={isModalOpen}
         onOpenChange={setIsModalOpen}
       />
     </>
   );
 });
-

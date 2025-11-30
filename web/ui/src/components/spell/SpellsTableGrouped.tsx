@@ -1,73 +1,71 @@
 import { useState, useMemo, memo, useCallback } from 'react';
-import { Button } from 'react-aria-components';
 import type { Spell } from '../../lib/types';
 import { SpellViewModal } from './SpellViewModal';
 import { SourceFilter } from '../common/SourceFilter';
-import { filterData } from '../../lib/tableUtils';
+import { GroupedTable, type GroupedTableColumn } from '../common/GroupedTable';
 
 interface SpellsTableGroupedProps {
   spells: Spell[];
 }
 
-
 export const SpellsTableGrouped = memo(function SpellsTableGrouped({ spells }: SpellsTableGroupedProps) {
   const [selectedSpell, setSelectedSpell] = useState<Spell | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedSources, setSelectedSources] = useState<string[]>(['SR5']);
-  const [searchTerm, setSearchTerm] = useState('');
-  const [expandedCategories, setExpandedCategories] = useState<Set<string>>(new Set());
 
+  // Filter spells by selected sources
   const filteredSpells = useMemo(() => {
-    let filtered = spells;
-
-    if (selectedSources.length > 0) {
-      filtered = filtered.filter(spell => {
-        const source = spell.source?.source;
-        return source && selectedSources.includes(source);
-      });
-    }
-
-    if (searchTerm) {
-      filtered = filterData(filtered, searchTerm, {}, ['name', 'category', 'type', 'description']);
-    }
-
-    return filtered;
-  }, [spells, selectedSources, searchTerm]);
-
-  const groupedSpells = useMemo(() => {
-    const categoryMap = new Map<string, Spell[]>();
-
-    filteredSpells.forEach(spell => {
-      const category = spell.category || 'combat';
-      if (!categoryMap.has(category)) {
-        categoryMap.set(category, []);
-      }
-      categoryMap.get(category)!.push(spell);
+    if (selectedSources.length === 0) return spells;
+    return spells.filter(spell => {
+      const source = spell.source?.source;
+      return source && selectedSources.includes(source);
     });
-
-    return Array.from(categoryMap.entries())
-      .map(([category, spells]) => ({
-        category: category.charAt(0).toUpperCase() + category.slice(1),
-        spells: spells.sort((a, b) => (a.name || '').localeCompare(b.name || '')),
-        isExpanded: expandedCategories.has(category),
-      }))
-      .sort((a, b) => a.category.localeCompare(b.category));
-  }, [filteredSpells, expandedCategories]);
-
-  const toggleCategory = useCallback((category: string) => {
-    const newExpanded = new Set(expandedCategories);
-    if (newExpanded.has(category)) {
-      newExpanded.delete(category);
-    } else {
-      newExpanded.add(category);
-    }
-    setExpandedCategories(newExpanded);
-  }, [expandedCategories]);
+  }, [spells, selectedSources]);
 
   const handleNameClick = useCallback((spell: Spell) => {
     setSelectedSpell(spell);
     setIsModalOpen(true);
   }, []);
+
+  // Helper to get group key (group by category)
+  const getGroupKey = (item: Spell): string => {
+    return item.category || 'combat';
+  };
+
+  // Helper to get group label
+  const getGroupLabel = (groupKey: string): string => {
+    return groupKey.charAt(0).toUpperCase() + groupKey.slice(1);
+  };
+
+  const columns: GroupedTableColumn<Spell>[] = [
+    {
+      header: 'Name',
+      accessor: (item) => (
+        <button
+          onClick={() => handleNameClick(item)}
+          className="text-sr-accent hover:text-sr-accent/80 hover:underline cursor-pointer text-left pl-4"
+        >
+          {item.name}
+        </button>
+      ),
+    },
+    {
+      header: 'Type',
+      accessor: (item) => item.type ? item.type.charAt(0).toUpperCase() + item.type.slice(1) : '-',
+    },
+    {
+      header: 'Range',
+      accessor: (item) => item.range || '-',
+    },
+    {
+      header: 'Drain',
+      accessor: (item) => item.drain?.formula || '-',
+    },
+    {
+      header: 'Source',
+      accessor: (item) => item.source?.source || '-',
+    },
+  ];
 
   return (
     <>
@@ -78,56 +76,32 @@ export const SpellsTableGrouped = memo(function SpellsTableGrouped({ spells }: S
           onSourcesChange={setSelectedSources}
           getSource={(item) => item.source?.source || ''}
         />
-        <div className="flex items-center gap-2">
-          <input
-            type="text"
-            placeholder="Search spells..."
-            value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
-            className="px-4 py-2 bg-sr-darker border border-sr-light-gray rounded-md text-gray-100 focus:outline-none focus:ring-2 focus:ring-sr-accent focus:border-transparent flex-1 max-w-md"
-          />
-        </div>
       </div>
 
-      <div className="space-y-4">
-        {groupedSpells.map((group) => (
-          <div key={group.category} className="bg-sr-dark border border-sr-light-gray rounded-lg overflow-hidden">
-            <Button
-              onPress={() => toggleCategory(group.category.toLowerCase())}
-              className="w-full px-4 py-3 bg-sr-gray hover:bg-sr-light-gray border-b border-sr-light-gray flex items-center justify-between text-left"
-            >
-              <div className="flex items-center gap-2">
-                <span className="text-gray-400">{group.isExpanded ? '▼' : '▶'}</span>
-                <span className="font-semibold text-gray-100">{group.category}</span>
-                <span className="text-sm text-gray-400">({group.spells.length})</span>
-              </div>
-            </Button>
-            {group.isExpanded && (
-              <div className="p-4">
-                <div className="space-y-2">
-                  {group.spells.map((spell) => (
-                    <div
-                      key={spell.name}
-                      className="flex items-center justify-between p-2 hover:bg-sr-light-gray rounded cursor-pointer"
-                      onClick={() => handleNameClick(spell)}
-                    >
-                      <div className="flex-1">
-                        <div className="text-gray-100 font-medium">{spell.name}</div>
-                        {spell.description && (
-                          <div className="text-sm text-gray-400 mt-1 line-clamp-2">{spell.description}</div>
-                        )}
-                      </div>
-                      {spell.source?.source && (
-                        <div className="text-xs text-gray-500 ml-4">{spell.source.source}</div>
-                      )}
-                    </div>
-                  ))}
-                </div>
-              </div>
-            )}
-          </div>
-        ))}
-      </div>
+      <GroupedTable
+        items={filteredSpells}
+        getGroupKey={getGroupKey}
+        getGroupLabel={getGroupLabel}
+        columns={columns}
+        searchFields={['name', 'category', 'type', 'description']}
+        searchPlaceholder="Search spells by name, category, type, or description..."
+        renderItemRow={(item, index) => (
+          <tr
+            key={`${getGroupKey(item)}-${item.name}-${index}`}
+            className="border-b border-sr-light-gray/50 hover:bg-sr-light-gray/20 transition-colors"
+          >
+            <td className="px-4 py-2"></td>
+            {columns.map((column, colIndex) => (
+              <td
+                key={colIndex}
+                className={`px-4 py-2 text-gray-300 ${column.className || ''}`}
+              >
+                {column.accessor(item)}
+              </td>
+            ))}
+          </tr>
+        )}
+      />
 
       <SpellViewModal
         spell={selectedSpell}
