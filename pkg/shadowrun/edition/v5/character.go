@@ -25,12 +25,33 @@ func (h *SR5Handler) applyPriorityMethod(char *domain.CharacterSR5, data map[str
 	selectedMetatype := getStringFromMap(data, "selected_metatype", "")
 	selectedMagicType := getStringFromMap(data, "magic_type", "")
 
-	// Apply priority selection with selected metatype/magic type
-	return h.applyPrioritySelectionWithSelections(char, selection, selectedMetatype, selectedMagicType)
+	// Extract special attribute allocations
+	var edge, magic, resonance *int
+	if edgeVal, ok := getIntFromMap(data, "edge"); ok {
+		edge = &edgeVal
+	}
+	if magicVal, ok := getIntFromMap(data, "magic"); ok {
+		magic = &magicVal
+	}
+	if resonanceVal, ok := getIntFromMap(data, "resonance"); ok {
+		resonance = &resonanceVal
+	}
+
+	// Apply priority selection with selected metatype/magic type and special attributes
+	if err := h.applyPrioritySelectionWithSelections(char, selection, selectedMetatype, selectedMagicType, edge, magic, resonance); err != nil {
+		return err
+	}
+
+	// Apply skill allocations (ratings and specializations) from frontend
+	if err := h.applySkillAllocationsFromData(char, data); err != nil {
+		return fmt.Errorf("failed to apply skill allocations: %w", err)
+	}
+
+	return nil
 }
 
 // applyPrioritySelectionWithSelections applies priority selection with specific metatype and magic type
-func (h *SR5Handler) applyPrioritySelectionWithSelections(char *domain.CharacterSR5, selection PrioritySelection, selectedMetatype string, selectedMagicType string) error {
+func (h *SR5Handler) applyPrioritySelectionWithSelections(char *domain.CharacterSR5, selection PrioritySelection, selectedMetatype string, selectedMagicType string, edge *int, magic *int, resonance *int) error {
 	char.MetatypePriority = selection.Metatype
 	char.AttributesPriority = selection.Attributes
 	char.MagicPriority = selection.Magic
@@ -70,6 +91,34 @@ func (h *SR5Handler) applyPrioritySelectionWithSelections(char *domain.Character
 		}
 	}
 
+	// Apply special attribute point allocations (after base values are set)
+	if edge != nil {
+		char.Edge = *edge
+	}
+
+	// Check if mundane - if so, magic and resonance must be 0
+	isMundane := selection.Magic == "none" || selection.Magic == "" || selection.Magic == "E"
+
+	if magic != nil {
+		if isMundane && *magic > 0 {
+			return fmt.Errorf("mundane characters (magic priority E or none) cannot have Magic > 0")
+		}
+		char.Magic = *magic
+	} else if isMundane {
+		// Ensure mundane characters have Magic = 0
+		char.Magic = 0
+	}
+
+	if resonance != nil {
+		if isMundane && *resonance > 0 {
+			return fmt.Errorf("mundane characters (magic priority E or none) cannot have Resonance > 0")
+		}
+		char.Resonance = *resonance
+	} else if isMundane {
+		// Ensure mundane characters have Resonance = 0
+		char.Resonance = 0
+	}
+
 	// Step 4: Qualities (handled separately, but initialize karma)
 	char.Karma = GetStartingKarmaForGameplayLevel(selection.GameplayLevel)
 
@@ -88,7 +137,7 @@ func (h *SR5Handler) applyPrioritySelectionWithSelections(char *domain.Character
 
 // applyPrioritySelection applies priority-based character creation
 func (h *SR5Handler) applyPrioritySelection(char *domain.CharacterSR5, selection PrioritySelection) error {
-	return h.applyPrioritySelectionWithSelections(char, selection, "", "")
+	return h.applyPrioritySelectionWithSelections(char, selection, "", "", nil, nil, nil)
 }
 
 // applyMetatype applies metatype selection and special attribute points
@@ -265,6 +314,49 @@ func (h *SR5Handler) applySkills(char *domain.CharacterSR5, priority string) err
 	return nil
 }
 
+// applySkillAllocationsFromData extracts and applies skill allocations (ratings and specializations) from the data map
+func (h *SR5Handler) applySkillAllocationsFromData(char *domain.CharacterSR5, data map[string]interface{}) error {
+	skillAllocations, ok := data["skill_allocations"].(map[string]interface{})
+	if !ok {
+		// No skill allocations provided, that's fine
+		return nil
+	}
+
+	for skillName, allocationData := range skillAllocations {
+		allocationMap, ok := allocationData.(map[string]interface{})
+		if !ok {
+			continue
+		}
+
+		// Extract rating
+		rating := 0
+		if ratingVal, ok := allocationMap["rating"].(float64); ok {
+			rating = int(ratingVal)
+		} else if ratingVal, ok := allocationMap["rating"].(int); ok {
+			rating = ratingVal
+		}
+
+		if rating <= 0 {
+			continue // Skip skills with 0 or negative rating
+		}
+
+		// Extract specialization (optional)
+		specialization := ""
+		if specVal, ok := allocationMap["specialization"].(string); ok && specVal != "" {
+			specialization = specVal
+		}
+
+		// Apply skill to character
+		char.ActiveSkills[skillName] = domain.Skill{
+			Name:           skillName,
+			Rating:         rating,
+			Specialization: specialization,
+		}
+	}
+
+	return nil
+}
+
 // Helper function to extract string from map
 func getStringFromMap(m interface{}, key string, defaultValue string) string {
 	dataMap, ok := m.(map[string]interface{})
@@ -278,4 +370,24 @@ func getStringFromMap(m interface{}, key string, defaultValue string) string {
 		}
 	}
 	return defaultValue
+}
+
+// Helper function to extract int from map
+func getIntFromMap(m interface{}, key string) (int, bool) {
+	dataMap, ok := m.(map[string]interface{})
+	if !ok {
+		return 0, false
+	}
+
+	if val, ok := dataMap[key]; ok {
+		// Try float64 first (JSON numbers come as float64)
+		if f, ok := val.(float64); ok {
+			return int(f), true
+		}
+		// Try int
+		if i, ok := val.(int); ok {
+			return i, true
+		}
+	}
+	return 0, false
 }

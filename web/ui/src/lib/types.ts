@@ -1192,6 +1192,10 @@ export interface PrioritySelection {
   magic_type?: string;
   tradition?: string;
   gameplay_level?: string;
+  edge?: number;
+  magic?: number;
+  resonance?: number;
+  skill_allocations?: Record<string, { rating: number; specialization?: string }>;
 }
 
 export interface SumToTenSelection {
@@ -1204,6 +1208,10 @@ export interface SumToTenSelection {
   magic_type?: string;
   tradition?: string;
   gameplay_level?: string;
+  edge?: number;
+  magic?: number;
+  resonance?: number;
+  skill_allocations?: Record<string, { rating: number; specialization?: string }>;
 }
 
 export interface KarmaSelection {

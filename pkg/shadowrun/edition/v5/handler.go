@@ -100,7 +100,9 @@ func (h *SR5Handler) CreateCharacter(name, playerName string, creationData inter
 		}
 	case SumToTenSelection:
 		sr5Data.CreationMethod = "sum_to_ten"
-		if err := h.applySumToTenSelection(sr5Data, data); err != nil {
+		// For struct case, extract values (currently struct doesn't have special attributes, so pass nil)
+		// This path is typically not used from frontend (which sends map), but kept for compatibility
+		if err := h.applySumToTenSelection(sr5Data, data, "", "", nil, nil, nil); err != nil {
 			return nil, fmt.Errorf("sum-to-ten selection failed: %w", err)
 		}
 	case KarmaSelection:

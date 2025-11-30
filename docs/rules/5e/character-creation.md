@@ -165,8 +165,19 @@ Attribute choices affect derived stats calculated later, such as Initiative and 
 
 - UI must support assigning unique priorities to five categories and reflect SR5-specific values.
 - Build metatype selection cards that enforce availability based on chosen priority and display racial traits/maximums.
-- Provide a special attribute allocation interface tied to Edge/Magic/Resonance with validation for caps and unspent points.
-- Attribute distribution page must preload metatype starting ratings, enforce “one attribute at natural max” rule, and track remaining points in real time.
+- **Special Attribute Allocation (Implemented)**: 
+  - Special attribute points are allocated in Step 3 (Metatype & Attributes) after regular attribute allocation.
+  - The step order has been optimized: Step 2 is Magic/Resonance (select magic type), Step 3 is Metatype & Attributes (allocate attributes and special attributes).
+  - This order ensures the magic type is already selected when allocating special attributes, so Magic/Resonance fields are immediately available.
+  - The `SpecialAttributeAllocator` component displays Edge (always available), Magic (for magical types), and Resonance (for technomancers).
+  - Magic and Resonance fields appear dynamically based on the selected magic type from Step 2:
+    - Magic appears for: Magician, Adept, Aspected Magician, Mystic Adept
+    - Resonance appears for: Technomancer
+  - The component validates that all special attribute points are allocated before proceeding to the next step.
+  - Edge starts at 1 (2 for humans) and can be raised to 6 (7 for humans).
+  - Magic and Resonance start at 0 and can be raised to 6.
+  - Unspent special attribute points are lost at the end of character creation.
+- Attribute distribution page must preload metatype starting ratings, enforce "one attribute at natural max" rule, and track remaining points in real time.
 - Persist modifier effects (e.g., troll lifestyle cost multiplier) for later steps.
 
 ### Priority Table
