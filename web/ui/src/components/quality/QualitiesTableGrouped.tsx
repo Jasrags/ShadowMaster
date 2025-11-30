@@ -2,7 +2,7 @@ import { useState, useMemo, useEffect, Fragment } from 'react';
 import { Button } from 'react-aria-components';
 import type { Quality } from '../../lib/types';
 import { QualityViewModal } from './QualityViewModal';
-import { QualitySourceFilter } from './QualitySourceFilter';
+import { SourceFilter } from '../common/SourceFilter';
 import { filterData } from '../../lib/tableUtils';
 
 interface QualitiesTableGroupedProps {
@@ -134,10 +134,11 @@ export function QualitiesTableGrouped({ qualities }: QualitiesTableGroupedProps)
     <>
       <div className="space-y-4 mb-4">
         <div className="flex flex-wrap items-start gap-4">
-          <QualitySourceFilter
-            qualities={qualities}
+          <SourceFilter
+            items={qualities}
             selectedSources={selectedSources}
             onSourcesChange={setSelectedSources}
+            getSource={(q) => (typeof q.source === 'string' ? q.source : q.source?.source) || 'Unknown'}
           />
         </div>
 

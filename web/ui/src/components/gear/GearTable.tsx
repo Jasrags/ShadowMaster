@@ -3,7 +3,7 @@ import { DataTable, ColumnDefinition } from '../common/DataTable';
 import type { Gear } from '../../lib/types';
 import { GearViewModal } from './GearViewModal';
 import { CategoryFilter } from './CategoryFilter';
-import { SourceFilter } from './SourceFilter';
+import { SourceFilter } from '../common/SourceFilter';
 import { getCategoryDisplayName } from './categoryUtils';
 import { formatCost } from '../../lib/formatUtils';
 
@@ -123,9 +123,10 @@ export const GearTable = memo(function GearTable({ gear }: GearTableProps) {
             onCategoriesChange={setSelectedCategories}
           />
           <SourceFilter
-            gear={gear}
+            items={gear}
             selectedSources={selectedSources}
             onSourcesChange={setSelectedSources}
+            getSource={(g) => (typeof g.source === 'string' ? g.source : g.source?.source) || 'Unknown'}
           />
         </div>
       </div>

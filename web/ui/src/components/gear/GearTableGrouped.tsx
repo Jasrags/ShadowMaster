@@ -2,7 +2,7 @@ import React, { useState, useMemo, useEffect } from 'react';
 import { Button } from 'react-aria-components';
 import type { Gear } from '../../lib/types';
 import { GearViewModal } from './GearViewModal';
-import { SourceFilter } from './SourceFilter';
+import { SourceFilter } from '../common/SourceFilter';
 import { filterData } from '../../lib/tableUtils';
 import { getCategoryDisplayName } from './categoryUtils';
 import { formatCost } from '../../lib/formatUtils';
@@ -185,9 +185,10 @@ export function GearTableGrouped({ gear }: GearTableGroupedProps) {
       <div className="space-y-4 mb-4">
         <div className="flex flex-wrap items-start gap-4">
           <SourceFilter
-            gear={gear}
+            items={gear}
             selectedSources={selectedSources}
             onSourcesChange={setSelectedSources}
+            getSource={(g) => (typeof g.source === 'string' ? g.source : g.source?.source) || 'Unknown'}
           />
         </div>
 

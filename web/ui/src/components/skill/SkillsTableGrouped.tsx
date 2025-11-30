@@ -2,7 +2,7 @@ import { useState, useMemo, useEffect, Fragment } from 'react';
 import { Button } from 'react-aria-components';
 import type { Skill } from '../../lib/types';
 import { SkillViewModal } from './SkillViewModal';
-import { SkillSourceFilter } from './SkillSourceFilter';
+import { SourceFilter } from '../common/SourceFilter';
 import { filterData } from '../../lib/tableUtils';
 
 interface SkillsTableGroupedProps {
@@ -194,10 +194,11 @@ export function SkillsTableGrouped({ skills }: SkillsTableGroupedProps) {
     <>
       <div className="space-y-4 mb-4">
         <div className="flex flex-wrap items-start gap-4">
-          <SkillSourceFilter
-            skills={skills}
+          <SourceFilter
+            items={skills}
             selectedSources={selectedSources}
             onSourcesChange={setSelectedSources}
+            getSource={(s) => s.source?.source || 'Unknown'}
           />
         </div>
 

@@ -2,7 +2,7 @@ import { useState, useMemo, useEffect, Fragment } from 'react';
 import { Button } from 'react-aria-components';
 import type { Weapon, WeaponAccessoryItem } from '../../lib/types';
 import { WeaponViewModal } from './WeaponViewModal';
-import { WeaponSourceFilter } from './WeaponSourceFilter';
+import { SourceFilter } from '../common/SourceFilter';
 import { filterData } from '../../lib/tableUtils';
 import { formatCost } from '../../lib/formatUtils';
 
@@ -111,10 +111,11 @@ export function WeaponTableGrouped({ weapons, accessoryMap }: WeaponTableGrouped
     <>
       <div className="space-y-4 mb-4">
         <div className="flex flex-wrap items-start gap-4">
-          <WeaponSourceFilter
-            weapons={weapons}
+          <SourceFilter
+            items={weapons}
             selectedSources={selectedSources}
             onSourcesChange={setSelectedSources}
+            getSource={(w) => w.source || 'Unknown'}
           />
         </div>
 

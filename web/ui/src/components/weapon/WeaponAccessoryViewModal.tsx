@@ -2,36 +2,13 @@ import { type ReactNode } from 'react';
 import { Dialog, Modal, Heading, Button } from 'react-aria-components';
 import type { WeaponAccessoryItem } from '../../lib/types';
 import { formatCost } from '../../lib/formatUtils';
+import { formatValue, formatArray, toReactNode } from '../../lib/viewModalUtils';
 
 interface WeaponAccessoryViewModalProps {
   accessory: WeaponAccessoryItem | null;
   isOpen: boolean;
   onOpenChange: (isOpen: boolean) => void;
 }
-
-// Helper function to format values for display
-const formatValue = (value: unknown): string => {
-  if (value === null || value === undefined || value === '') return '-';
-  if (typeof value === 'boolean') return value ? 'Yes' : 'No';
-  if (typeof value === 'object') {
-    return JSON.stringify(value, null, 2);
-  }
-  return String(value);
-};
-
-// Helper function to safely convert unknown to ReactNode
-const toReactNode = (value: unknown): ReactNode => {
-  if (value === null || value === undefined) return null;
-  return String(value);
-};
-
-// Helper to format array values
-const formatArray = (value: unknown): string => {
-  if (Array.isArray(value)) {
-    return value.join(', ');
-  }
-  return formatValue(value);
-};
 
 
 // Component to display special properties for weapon accessories

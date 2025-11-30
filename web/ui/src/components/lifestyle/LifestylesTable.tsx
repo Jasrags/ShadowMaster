@@ -2,7 +2,7 @@ import { useState, useMemo, memo, useCallback } from 'react';
 import { DataTable, ColumnDefinition } from '../common/DataTable';
 import type { Lifestyle } from '../../lib/types';
 import { LifestyleViewModal } from './LifestyleViewModal';
-import { LifestyleSourceFilter } from './LifestyleSourceFilter';
+import { SourceFilter } from '../common/SourceFilter';
 import { formatCost } from '../../lib/formatUtils';
 
 interface LifestylesTableProps {
@@ -67,10 +67,11 @@ export const LifestylesTable = memo(function LifestylesTable({ lifestyles }: Lif
     <>
       <div className="space-y-4 mb-4">
         <div className="flex flex-wrap items-start gap-4">
-          <LifestyleSourceFilter
-            lifestyles={lifestyles}
+          <SourceFilter
+            items={lifestyles}
             selectedSources={selectedSources}
             onSourcesChange={setSelectedSources}
+            getSource={(l) => l.source || 'Unknown'}
           />
         </div>
       </div>
