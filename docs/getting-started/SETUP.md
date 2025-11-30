@@ -244,6 +244,12 @@ After running the setup script, verify everything is working:
 ### Using Makefile (macOS/Linux/WSL)
 
 ```bash
+# Install dependencies (Go and Node.js)
+make deps
+
+# Initialize project (creates directories - deps are already installed)
+make init
+
 # Build the project
 make build
 
@@ -253,6 +259,8 @@ make run
 # Or run in development mode
 make dev
 ```
+
+**Note:** `make init` automatically runs `make deps`, so you can skip the `make deps` step if you're running `make init`. However, if you only need to update dependencies without recreating directories, you can run `make deps` separately.
 
 ### Using PowerShell Scripts (Windows)
 
@@ -266,22 +274,30 @@ make dev
 
 ### Manual Build
 
-**Backend:**
+**Install Dependencies:**
 ```bash
 # Install Go dependencies
 go mod download
+go mod tidy
 
-# Build
-go build -o bin/shadowmaster-server ./cmd/shadowmaster-server
-```
-
-**Frontend:**
-```bash
+# Install Node.js dependencies
 cd web/ui
 npm install
+cd ../..
+```
+
+**Build:**
+```bash
+# Build backend
+go build -o bin/shadowmaster-server ./cmd/shadowmaster-server
+
+# Build frontend
+cd web/ui
 npm run build
 cd ../..
 ```
+
+**Note:** Using `make deps` is recommended as it handles both Go and Node.js dependencies automatically.
 
 **Run:**
 ```bash
@@ -511,17 +527,21 @@ If you encounter issues not covered here:
 
 After successful setup:
 
-1. **Build the project**: `make build` or `.\scripts\build.ps1`
-2. **Run the server**: `make run` or `.\scripts\run.ps1`
-3. **Access the application**: Open `http://localhost:8080` in your browser
-4. **Create an account**: The first user becomes an Administrator
-5. **Read the documentation**: See [Application Flow](./application-flow.md) for usage
+1. **Install dependencies**: `make deps` or `make init` (which includes deps)
+2. **Build the project**: `make build` or `.\scripts\build.ps1`
+3. **Run the server**: `make run` or `.\scripts\run.ps1`
+4. **Access the application**: Open `http://localhost:8080` in your browser
+5. **Create an account**: The first user becomes an Administrator
+6. **Read the documentation**: See [Application Flow](./application-flow.md) for usage
 
 ## Development Workflow
 
 ### Daily Development
 
 ```bash
+# Ensure dependencies are installed (first time or after updates)
+make deps
+
 # Start development server (runs both API and frontend dev server)
 make run-dev
 

@@ -27,8 +27,11 @@ help: ## Show this help message
 
 deps: ## Download and install dependencies
 	@echo "$(CYAN)Installing dependencies...$(NC)"
+	@echo "$(CYAN)Installing Go dependencies...$(NC)"
 	@go mod download
 	@go mod tidy
+	@echo "$(CYAN)Installing Node.js dependencies...$(NC)"
+	@cd web/ui && npm install
 	@echo "$(GREEN)✓ Dependencies installed$(NC)"
 
 frontend-build: ## Build the frontend

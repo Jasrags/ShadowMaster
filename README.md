@@ -119,6 +119,9 @@ The project includes a Makefile for common development tasks:
 # Show all available commands
 make help
 
+# Install dependencies (Go and Node.js)
+make deps
+
 # Initialize project (install dependencies and create directories)
 make init
 

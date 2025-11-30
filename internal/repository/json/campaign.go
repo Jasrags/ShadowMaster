@@ -8,8 +8,9 @@ import (
 	"strings"
 	"time"
 
-	"github.com/google/uuid"
 	"sort"
+
+	"github.com/google/uuid"
 )
 
 // CampaignRepositoryJSON implements CampaignRepository using JSON files
@@ -284,14 +285,14 @@ func backfillHouseRulesFromFile(store *storage.JSONStore, filename string, campa
 	}
 
 	type legacyHouseRules struct {
-		Automation   map[string]bool           `json:"automation"`
-		Notes        string                    `json:"notes"`
-		Theme        string                    `json:"theme"`
-		Factions     []domain.CampaignFaction  `json:"factions"`
-		Locations    []domain.CampaignLocation `json:"locations"`
+		Automation   map[string]bool              `json:"automation"`
+		Notes        string                       `json:"notes"`
+		Theme        string                       `json:"theme"`
+		Factions     []domain.CampaignFaction     `json:"factions"`
+		Locations    []domain.CampaignLocation    `json:"locations"`
 		Placeholders []domain.CampaignPlaceholder `json:"placeholders"`
 		SessionSeed  *domain.CampaignSessionSeed  `json:"session_seed"`
-		Players      []domain.CampaignPlayer     `json:"players"`
+		Players      []domain.CampaignPlayer      `json:"players"`
 	}
 
 	var payload legacyHouseRules
@@ -464,14 +465,6 @@ func normalizePlayerUserIDs(source []string) []string {
 		return nil
 	}
 	return result
-}
-
-// Legacy function - no longer needed with unified Players model
-func clonePlayerReferences_legacy(source []domain.CampaignPlayer) []domain.CampaignPlayer {
-	if len(source) == 0 {
-		return nil
-	}
-	return source
 }
 
 func normalizeCreationMethod(edition string, creationMethod string) string {
