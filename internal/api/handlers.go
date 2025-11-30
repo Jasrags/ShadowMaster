@@ -173,13 +173,16 @@ func NewHandlers(
 // Auth handlers
 
 // RegisterUser handles POST /api/auth/register
-// HealthCheck handles GET /health
+// HealthCheck handles GET /health and HEAD /health
 func (h *Handlers) HealthCheck(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(http.StatusOK)
-	json.NewEncoder(w).Encode(map[string]string{
-		"status": "ok",
-	})
+	// HEAD requests should not have a body
+	if r.Method != http.MethodHead {
+		json.NewEncoder(w).Encode(map[string]string{
+			"status": "ok",
+		})
+	}
 }
 
 func (h *Handlers) RegisterUser(w http.ResponseWriter, r *http.Request) {

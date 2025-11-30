@@ -66,7 +66,9 @@ func main() {
 	r.Use(sessionManager.WithSession)
 
 	// Health check endpoint (no auth required)
+	// Support both GET and HEAD for Docker healthchecks
 	r.Get("/health", handlers.HealthCheck)
+	r.Head("/health", handlers.HealthCheck)
 
 	// API routes
 	r.Route("/api", func(r chi.Router) {
