@@ -1,5 +1,6 @@
-import { Dialog, Modal, Heading, Button } from 'react-aria-components';
 import type { Quality, QualityBonus, QualityRequirements } from '../../lib/types';
+import { ViewModal } from '../common/ViewModal';
+import { Section, FieldGrid, LabelValue } from '../common/FieldDisplay';
 
 interface QualityViewModalProps {
   quality: Quality | null;
@@ -694,127 +695,74 @@ function QualityRequirementsDisplay({ requirements }: { requirements: QualityReq
 }
 
 export function QualityViewModal({ quality, isOpen, onOpenChange }: QualityViewModalProps) {
-  const handleClose = () => {
-    onOpenChange(false);
-  };
-
   if (!quality || !isOpen) {
     return null;
   }
 
   return (
-    <Modal isOpen={isOpen} onOpenChange={onOpenChange}>
-      <div className="fixed inset-0 z-50 flex items-center justify-center p-4" style={{ zIndex: 50 }}>
-        <div className="fixed inset-0 bg-black/50" aria-hidden="true" onClick={handleClose} />
-        <Dialog className="relative bg-sr-gray border border-sr-light-gray rounded-lg shadow-xl max-w-4xl w-full max-h-[90vh] overflow-hidden outline-none flex flex-col">
-          <div className="flex items-center justify-between p-6 border-b border-sr-light-gray">
-            <Heading
-              slot="title"
-              className="text-2xl font-semibold text-gray-100"
-            >
-              {quality.name}
-            </Heading>
-            <Button
-              onPress={handleClose}
-              aria-label="Close quality view"
-              className="p-2 text-gray-400 hover:text-gray-100 hover:bg-sr-light-gray rounded-md focus:outline-none focus:ring-2 focus:ring-sr-accent transition-colors"
-            >
-              <svg
-                className="w-5 h-5"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-                aria-hidden="true"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M6 18L18 6M6 6l12 12"
-                />
-              </svg>
-            </Button>
-          </div>
-          
-          <div className="flex-1 overflow-y-auto p-6">
-            <div className="space-y-6">
-              {/* Basic Information */}
-              <section>
-                <h2 className="text-lg font-semibold text-gray-200 mb-3">Basic Information</h2>
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  <div>
-                    <label className="text-sm text-gray-400">Name</label>
-                    <p className="text-gray-100 mt-1">{quality.name}</p>
-                  </div>
-                  <div>
-                    <label className="text-sm text-gray-400">Type</label>
-                    <p className="text-gray-100 mt-1">
-                      <span className={`px-2 py-1 rounded text-sm ${
-                        quality.type === 'positive' 
-                          ? 'bg-green-900/30 text-green-300' 
-                          : 'bg-red-900/30 text-red-300'
-                      }`}>
-                        {quality.type === 'positive' ? 'Positive' : 'Negative'}
-                      </span>
-                    </p>
-                  </div>
-                  <div>
-                    <label className="text-sm text-gray-400">Karma Cost</label>
-                    <p className={`text-gray-100 mt-1 font-semibold ${
-                      quality.cost.base_cost < 0 ? 'text-red-400' : 'text-green-400'
-                    }`}>
-                      {formatKarmaCost(quality.cost)}
-                    </p>
-                  </div>
-                  {quality.source && (
-                    <>
-                      <div>
-                        <label className="text-sm text-gray-400">Source</label>
-                        <p className="text-gray-100 mt-1">{quality.source.source}</p>
-                      </div>
-                      {quality.source.page && (
-                        <div>
-                          <label className="text-sm text-gray-400">Page</label>
-                          <p className="text-gray-100 mt-1">{quality.source.page}</p>
-                        </div>
-                      )}
-                    </>
-                  )}
-                </div>
-              </section>
+    <ViewModal
+      item={quality}
+      isOpen={isOpen}
+      onOpenChange={onOpenChange}
+      maxWidth="4xl"
+    >
+      <div className="space-y-6">
+        {/* Basic Information */}
+        <Section title="Basic Information">
+          <FieldGrid columns={2}>
+            <LabelValue label="Name" value={quality.name} />
+            <LabelValue
+              label="Type"
+              value={
+                <span className={`px-2 py-1 rounded text-sm ${
+                  quality.type === 'positive' 
+                    ? 'bg-green-900/30 text-green-300' 
+                    : 'bg-red-900/30 text-red-300'
+                }`}>
+                  {quality.type === 'positive' ? 'Positive' : 'Negative'}
+                </span>
+              }
+            />
+            <LabelValue
+              label="Karma Cost"
+              value={
+                <span className={`font-semibold ${
+                  quality.cost.base_cost < 0 ? 'text-red-400' : 'text-green-400'
+                }`}>
+                  {formatKarmaCost(quality.cost)}
+                </span>
+              }
+            />
+            {quality.source && (
+              <>
+                <LabelValue label="Source" value={quality.source.source} />
+                {quality.source.page && (
+                  <LabelValue label="Page" value={quality.source.page} />
+                )}
+              </>
+            )}
+          </FieldGrid>
+        </Section>
 
-              {/* Description */}
-              {quality.description && (
-                <section>
-                  <h2 className="text-lg font-semibold text-gray-200 mb-3">Description</h2>
-                  <div className="p-4 bg-sr-light-gray border border-sr-light-gray rounded-md">
-                    <p className="text-gray-200 text-sm whitespace-pre-wrap">{quality.description}</p>
-                  </div>
-                </section>
-              )}
-
-              {/* Requirements */}
-              {quality.requirements && (
-                <QualityRequirementsDisplay requirements={quality.requirements} />
-              )}
-
-              {/* Bonuses/Effects */}
-              {quality.bonus && (
-                <QualityBonusDisplay bonus={quality.bonus} />
-              )}
+        {/* Description */}
+        {quality.description && (
+          <Section title="Description">
+            <div className="p-4 bg-sr-light-gray border border-sr-light-gray rounded-md">
+              <p className="text-gray-200 text-sm whitespace-pre-wrap">{quality.description}</p>
             </div>
-          </div>
+          </Section>
+        )}
 
-          <div className="p-6 border-t border-sr-light-gray flex justify-end">
-            <Button
-              onPress={handleClose}
-              className="px-4 py-2 bg-sr-gray border border-sr-light-gray rounded-md text-gray-100 hover:bg-sr-light-gray focus:outline-none focus:ring-2 focus:ring-sr-accent focus:border-transparent transition-colors"
-            >
-              Close
-            </Button>
-          </div>
-        </Dialog>
+        {/* Requirements */}
+        {quality.requirements && (
+          <QualityRequirementsDisplay requirements={quality.requirements} />
+        )}
+
+        {/* Bonuses/Effects */}
+        {quality.bonus && (
+          <QualityBonusDisplay bonus={quality.bonus} />
+        )}
       </div>
-    </Modal>
+    </ViewModal>
   );
 }

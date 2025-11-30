@@ -1,5 +1,6 @@
-import { Dialog, DialogTrigger, Modal, ModalOverlay } from 'react-aria-components';
 import type { Cyberware } from '../../lib/types';
+import { ViewModal } from '../common/ViewModal';
+import { Section, FieldGrid, LabelValue } from '../common/FieldDisplay';
 
 interface CyberwareViewModalProps {
   cyberware: Cyberware | null;
@@ -10,77 +11,49 @@ interface CyberwareViewModalProps {
 export function CyberwareViewModal({ cyberware, isOpen, onOpenChange }: CyberwareViewModalProps) {
   if (!cyberware) return null;
 
-  return (
-    <DialogTrigger isOpen={isOpen} onOpenChange={onOpenChange}>
-      <ModalOverlay
-        className="fixed inset-0 bg-black/60 flex items-center justify-center z-50"
-        isDismissable
-      >
-        <Modal className="bg-sr-gray border border-sr-light-gray rounded-lg shadow-xl max-w-2xl w-full mx-4 max-h-[90vh] overflow-y-auto">
-          <Dialog className="p-6">
-            {({ close }) => (
-              <div>
-                <div className="flex items-start justify-between mb-4">
-                  <div>
-                    <h2 className="text-2xl font-bold text-gray-100 mb-1">{cyberware.device || 'Unknown Cyberware'}</h2>
-                    {cyberware.part && <p className="text-gray-400">{cyberware.part}</p>}
-                  </div>
-                  <button
-                    onClick={close}
-                    className="text-gray-400 hover:text-gray-200 text-2xl leading-none"
-                    aria-label="Close"
-                  >
-                    ×
-                  </button>
-                </div>
+  // Cyberware uses 'device' instead of 'name', so we need to create a compatible item
+  const cyberwareWithName = { ...cyberware, name: cyberware.device || 'Unknown Cyberware' };
 
-                <div className="space-y-4">
-                  <div>
-                    <h3 className="text-sm font-semibold text-gray-300 mb-2">Details</h3>
-                    <dl className="grid grid-cols-2 gap-2 text-sm">
-                      {cyberware.part && (
-                        <div>
-                          <dt className="text-gray-400">Part</dt>
-                          <dd className="text-gray-200">{cyberware.part}</dd>
-                        </div>
-                      )}
-                      <div>
-                        <dt className="text-gray-400">Essence</dt>
-                        <dd className="text-gray-200">{cyberware.essence || cyberware.essence_formula?.formula || '-'}</dd>
-                      </div>
-                      <div>
-                        <dt className="text-gray-400">Capacity</dt>
-                        <dd className="text-gray-200">{cyberware.capacity || cyberware.capacity_formula?.formula || '-'}</dd>
-                      </div>
-                      <div>
-                        <dt className="text-gray-400">Cost</dt>
-                        <dd className="text-gray-200">{cyberware.cost || cyberware.cost_formula?.formula || '-'}</dd>
-                      </div>
-                      <div>
-                        <dt className="text-gray-400">Availability</dt>
-                        <dd className="text-gray-200">{cyberware.availability || cyberware.availability_formula?.formula || '-'}</dd>
-                      </div>
-                      {cyberware.source?.source && (
-                        <div>
-                          <dt className="text-gray-400">Source</dt>
-                          <dd className="text-gray-200">{cyberware.source.source}</dd>
-                        </div>
-                      )}
-                      {cyberware.source?.page && (
-                        <div>
-                          <dt className="text-gray-400">Page</dt>
-                          <dd className="text-gray-200">{cyberware.source.page}</dd>
-                        </div>
-                      )}
-                    </dl>
-                  </div>
-                </div>
-              </div>
+  return (
+    <ViewModal
+      item={cyberwareWithName}
+      isOpen={isOpen}
+      onOpenChange={onOpenChange}
+      subtitle={cyberware.part ? <span className="text-gray-400">{cyberware.part}</span> : undefined}
+      maxWidth="2xl"
+    >
+      <div className="space-y-4">
+        <Section title="Details">
+          <FieldGrid columns={2}>
+            {cyberware.part && (
+              <LabelValue label="Part" value={cyberware.part} />
             )}
-          </Dialog>
-        </Modal>
-      </ModalOverlay>
-    </DialogTrigger>
+            <LabelValue
+              label="Essence"
+              value={cyberware.essence || cyberware.essence_formula?.formula || '-'}
+            />
+            <LabelValue
+              label="Capacity"
+              value={cyberware.capacity || cyberware.capacity_formula?.formula || '-'}
+            />
+            <LabelValue
+              label="Cost"
+              value={cyberware.cost || cyberware.cost_formula?.formula || '-'}
+            />
+            <LabelValue
+              label="Availability"
+              value={cyberware.availability || cyberware.availability_formula?.formula || '-'}
+            />
+            {cyberware.source?.source && (
+              <LabelValue label="Source" value={cyberware.source.source} />
+            )}
+            {cyberware.source?.page && (
+              <LabelValue label="Page" value={cyberware.source.page} />
+            )}
+          </FieldGrid>
+        </Section>
+      </div>
+    </ViewModal>
   );
 }
 

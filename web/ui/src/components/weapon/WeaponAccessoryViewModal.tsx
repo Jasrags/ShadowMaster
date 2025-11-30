@@ -1,8 +1,9 @@
 import { type ReactNode } from 'react';
-import { Dialog, Modal, Heading, Button } from 'react-aria-components';
 import type { WeaponAccessoryItem } from '../../lib/types';
 import { formatCost } from '../../lib/formatUtils';
 import { formatValue, formatArray, toReactNode } from '../../lib/viewModalUtils';
+import { ViewModal } from '../common/ViewModal';
+import { Section, FieldGrid, LabelValue, ArrayDisplay } from '../common/FieldDisplay';
 
 interface WeaponAccessoryViewModalProps {
   accessory: WeaponAccessoryItem | null;
@@ -536,10 +537,6 @@ function WirelessBonusDisplay({ bonus }: { bonus: unknown }) {
 }
 
 export function WeaponAccessoryViewModal({ accessory, isOpen, onOpenChange }: WeaponAccessoryViewModalProps) {
-  const handleClose = () => {
-    onOpenChange(false);
-  };
-
   if (!accessory || !isOpen) {
     return null;
   }
@@ -548,436 +545,256 @@ export function WeaponAccessoryViewModal({ accessory, isOpen, onOpenChange }: We
   const hasSpecialProperties: boolean = accessory.special_properties != null && typeof accessory.special_properties === 'object';
   const hasWirelessBonus: boolean = accessory.wireless_bonus != null && typeof accessory.wireless_bonus === 'object';
 
-  // Render wireless bonus section with explicit type
-  const wirelessBonusSection = (hasWirelessBonus ? (
-    <section>
-      <h2 className="text-lg font-semibold text-gray-200 mb-3">Wireless Bonus</h2>
-      <div className="p-4 bg-sr-darker rounded-md">
-        <WirelessBonusDisplay bonus={accessory.wireless_bonus as Record<string, unknown>} />
-      </div>
-    </section>
-  ) : null) as ReactNode;
-
   return (
-    <Modal isOpen={isOpen} onOpenChange={onOpenChange}>
-      <div className="fixed inset-0 z-50 flex items-center justify-center p-4" style={{ zIndex: 50 }}>
-        <div className="fixed inset-0 bg-black/50" aria-hidden="true" onClick={handleClose} />
-        <Dialog className="relative bg-sr-gray border border-sr-light-gray rounded-lg shadow-xl max-w-4xl w-full max-h-[90vh] overflow-hidden outline-none flex flex-col">
-          <div className="flex items-center justify-between p-6 border-b border-sr-light-gray">
-            <Heading
-              slot="title"
-              className="text-2xl font-semibold text-gray-100"
-            >
-              {accessory.name}
-            </Heading>
-            <Button
-              onPress={handleClose}
-              aria-label="Close weapon accessory view"
-              className="p-2 text-gray-400 hover:text-gray-100 hover:bg-sr-light-gray rounded-md focus:outline-none focus:ring-2 focus:ring-sr-accent transition-colors"
-            >
-              <svg
-                className="w-5 h-5"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-                aria-hidden="true"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M6 18L18 6M6 6l12 12"
-                />
-              </svg>
-            </Button>
-          </div>
-          
-          <div className="flex-1 overflow-y-auto p-6">
-            <div className="space-y-6">
-              {/* Description */}
-              {accessory.description && (
-                <section>
-                  <h2 className="text-lg font-semibold text-gray-200 mb-3">Description</h2>
-                  <p className="text-gray-300 leading-relaxed whitespace-pre-wrap">{accessory.description}</p>
-                </section>
-              )}
+    <ViewModal
+      item={accessory}
+      isOpen={isOpen}
+      onOpenChange={onOpenChange}
+      maxWidth="4xl"
+    >
+      <div className="space-y-6">
+        {/* Description */}
+        {accessory.description && (
+          <Section title="Description">
+            <p className="text-gray-300 leading-relaxed whitespace-pre-wrap">{accessory.description}</p>
+          </Section>
+        )}
 
-              {/* Basic Information */}
-              <section>
-                <h2 className="text-lg font-semibold text-gray-200 mb-3">Basic Information</h2>
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  <div>
-                    <label className="text-sm text-gray-400">Name</label>
-                    <p className="text-gray-100 mt-1">{accessory.name}</p>
+        {/* Basic Information */}
+        <Section title="Basic Information">
+          <FieldGrid columns={2}>
+            <LabelValue label="Name" value={accessory.name} />
+            <LabelValue label="Mount" value={accessory.mount || '—'} />
+            {accessory.extramount && (
+              <LabelValue label="Extra Mount" value={accessory.extramount} />
+            )}
+            {accessory.addmount && (
+              <LabelValue label="Add Mount" value={accessory.addmount} />
+            )}
+            <LabelValue label="Source" value={accessory.source} />
+            {accessory.page && (
+              <LabelValue label="Page" value={accessory.page} />
+            )}
+          </FieldGrid>
+        </Section>
+
+        {/* Statistics */}
+        <Section title="Statistics">
+          <FieldGrid columns={2}>
+            {accessory.rating && (
+              <LabelValue label="Rating" value={accessory.rating} />
+            )}
+            {accessory.accuracy && (
+              <LabelValue label="Accuracy" value={accessory.accuracy} />
+            )}
+            {accessory.rc && (
+              <LabelValue label="Recoil Compensation (RC)" value={accessory.rc} />
+            )}
+            {accessory.rcdeployable && (
+              <LabelValue label="RC Deployable" value={accessory.rcdeployable} />
+            )}
+            {accessory.rcgroup !== undefined && (
+              <LabelValue label="RC Group" value={accessory.rcgroup} />
+            )}
+            {accessory.damage && (
+              <LabelValue label="Damage" value={accessory.damage} />
+            )}
+            {accessory.damagetype && (
+              <LabelValue label="Damage Type" value={accessory.damagetype} />
+            )}
+            {accessory.dicepool !== undefined && (
+              <LabelValue label="Dice Pool" value={accessory.dicepool} />
+            )}
+            {accessory.conceal && (
+              <LabelValue label="Concealability" value={accessory.conceal} />
+            )}
+            {accessory.avail && (
+              <LabelValue label="Availability" value={accessory.avail} />
+            )}
+            {accessory.cost && (
+              <LabelValue label="Cost" value={formatCost(accessory.cost)} />
+            )}
+            {accessory.accessorycostmultiplier && (
+              <LabelValue label="Accessory Cost Multiplier" value={accessory.accessorycostmultiplier} />
+            )}
+          </FieldGrid>
+        </Section>
+
+        {/* Special Properties */}
+        {hasSpecialProperties && (
+          <Section title="Special Properties">
+            <div className="p-4 bg-sr-darker rounded-md">
+              <SpecialPropertiesDisplay properties={accessory.special_properties as Record<string, unknown>} />
+            </div>
+          </Section>
+        )}
+
+        {/* Wireless Bonus */}
+        {hasWirelessBonus && (
+          <Section title="Wireless Bonus">
+            <div className="p-4 bg-sr-darker rounded-md">
+              <WirelessBonusDisplay bonus={accessory.wireless_bonus as Record<string, unknown>} />
+            </div>
+          </Section>
+        )}
+
+        {/* Ammo Modifications */}
+        {(accessory.ammobonus || accessory.ammoreplace || accessory.ammoslots || accessory.modifyammocapacity) && (
+          <Section title="Ammunition Modifications">
+            <FieldGrid columns={2}>
+              {accessory.ammobonus && (
+                <LabelValue label="Ammo Bonus" value={accessory.ammobonus} />
+              )}
+              {accessory.ammoreplace && (
+                <LabelValue label="Ammo Replace" value={accessory.ammoreplace} />
+              )}
+              {accessory.ammoslots && (
+                <LabelValue label="Ammo Slots" value={accessory.ammoslots} />
+              )}
+              {accessory.modifyammocapacity && (
+                <LabelValue label="Modify Ammo Capacity" value={accessory.modifyammocapacity} />
+              )}
+            </FieldGrid>
+          </Section>
+        )}
+
+        {/* Range Modifications */}
+        {accessory.replacerange && (
+          <Section title="Range Modifications">
+            <FieldGrid columns={2}>
+              <LabelValue label="Replace Range" value={accessory.replacerange} />
+            </FieldGrid>
+          </Section>
+        )}
+
+        {/* Additional Features */}
+        {(accessory.addunderbarrels || accessory.allowgear || accessory.gears || accessory.wirelessweaponbonus) && (
+          <Section title="Additional Features">
+            <div className="space-y-4">
+              {accessory.addunderbarrels?.weapon && accessory.addunderbarrels.weapon.length > 0 && (
+                <div>
+                  <label className="text-sm text-gray-400">Add Underbarrel Weapons</label>
+                  <div className="flex flex-wrap gap-2 mt-2">
+                    <ArrayDisplay
+                      items={accessory.addunderbarrels.weapon}
+                      itemClassName="inline-flex items-center px-3 py-1 bg-sr-accent/20 border border-sr-accent/50 rounded-md text-sm text-gray-200"
+                    />
                   </div>
-                  <div>
-                    <label className="text-sm text-gray-400">Mount</label>
-                    <p className="text-gray-100 mt-1">{accessory.mount || '—'}</p>
-                  </div>
-                  {accessory.extramount && (
-                    <div>
-                      <label className="text-sm text-gray-400">Extra Mount</label>
-                      <p className="text-gray-100 mt-1">{accessory.extramount}</p>
-                    </div>
-                  )}
-                  {accessory.addmount && (
-                    <div>
-                      <label className="text-sm text-gray-400">Add Mount</label>
-                      <p className="text-gray-100 mt-1">{accessory.addmount}</p>
-                    </div>
-                  )}
-                  <div>
-                    <label className="text-sm text-gray-400">Source</label>
-                    <p className="text-gray-100 mt-1">{accessory.source}</p>
-                  </div>
-                  {accessory.page && (
-                    <div>
-                      <label className="text-sm text-gray-400">Page</label>
-                      <p className="text-gray-100 mt-1">{accessory.page}</p>
-                    </div>
-                  )}
                 </div>
-              </section>
-
-              {/* Statistics */}
-              <section>
-                <h2 className="text-lg font-semibold text-gray-200 mb-3">Statistics</h2>
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  {accessory.rating && (
-                    <div>
-                      <label className="text-sm text-gray-400">Rating</label>
-                      <p className="text-gray-100 mt-1">{accessory.rating}</p>
-                    </div>
-                  )}
-                  {accessory.accuracy && (
-                    <div>
-                      <label className="text-sm text-gray-400">Accuracy</label>
-                      <p className="text-gray-100 mt-1">{accessory.accuracy}</p>
-                    </div>
-                  )}
-                  {accessory.rc && (
-                    <div>
-                      <label className="text-sm text-gray-400">Recoil Compensation (RC)</label>
-                      <p className="text-gray-100 mt-1">{accessory.rc}</p>
-                    </div>
-                  )}
-                  {accessory.rcdeployable && (
-                    <div>
-                      <label className="text-sm text-gray-400">RC Deployable</label>
-                      <p className="text-gray-100 mt-1">{accessory.rcdeployable}</p>
-                    </div>
-                  )}
-                  {accessory.rcgroup !== undefined && (
-                    <div>
-                      <label className="text-sm text-gray-400">RC Group</label>
-                      <p className="text-gray-100 mt-1">{accessory.rcgroup}</p>
-                    </div>
-                  )}
-                  {accessory.damage && (
-                    <div>
-                      <label className="text-sm text-gray-400">Damage</label>
-                      <p className="text-gray-100 mt-1">{accessory.damage}</p>
-                    </div>
-                  )}
-                  {accessory.damagetype && (
-                    <div>
-                      <label className="text-sm text-gray-400">Damage Type</label>
-                      <p className="text-gray-100 mt-1">{accessory.damagetype}</p>
-                    </div>
-                  )}
-                  {accessory.dicepool !== undefined && (
-                    <div>
-                      <label className="text-sm text-gray-400">Dice Pool</label>
-                      <p className="text-gray-100 mt-1">{accessory.dicepool}</p>
-                    </div>
-                  )}
-                  {accessory.conceal && (
-                    <div>
-                      <label className="text-sm text-gray-400">Concealability</label>
-                      <p className="text-gray-100 mt-1">{accessory.conceal}</p>
-                    </div>
-                  )}
-                  {accessory.avail && (
-                    <div>
-                      <label className="text-sm text-gray-400">Availability</label>
-                      <p className="text-gray-100 mt-1">{accessory.avail}</p>
-                    </div>
-                  )}
-                  {accessory.cost && (
-                    <div>
-                      <label className="text-sm text-gray-400">Cost</label>
-                      <p className="text-gray-100 mt-1">{formatCost(accessory.cost)}</p>
-                    </div>
-                  )}
-                  {accessory.accessorycostmultiplier && (
-                    <div>
-                      <label className="text-sm text-gray-400">Accessory Cost Multiplier</label>
-                      <p className="text-gray-100 mt-1">{accessory.accessorycostmultiplier}</p>
-                    </div>
-                  )}
+              )}
+              {accessory.allowgear?.gearcategory && accessory.allowgear.gearcategory.length > 0 && (
+                <div>
+                  <label className="text-sm text-gray-400">Allow Gear Categories</label>
+                  <div className="flex flex-wrap gap-2 mt-2">
+                    <ArrayDisplay
+                      items={accessory.allowgear.gearcategory}
+                      itemClassName="inline-flex items-center px-3 py-1 bg-sr-accent/20 border border-sr-accent/50 rounded-md text-sm text-gray-200"
+                    />
+                  </div>
                 </div>
-              </section>
-
-              {/* Special Properties */}
-              {/* @ts-ignore - TypeScript limitation with unknown types in JSX conditionals */}
-              {hasSpecialProperties ? (
-                <section>
-                  <h2 className="text-lg font-semibold text-gray-200 mb-3">Special Properties</h2>
-                  <div className="p-4 bg-sr-darker rounded-md">
-                    <SpecialPropertiesDisplay properties={accessory.special_properties as Record<string, unknown>} />
-                  </div>
-                </section>
-              ) : null}
-
-              {/* Wireless Bonus */}
-              {wirelessBonusSection}
-
-              {/* Ammo Modifications */}
-              {(accessory.ammobonus || accessory.ammoreplace || accessory.ammoslots || accessory.modifyammocapacity) && (
-                <section>
-                  <h2 className="text-lg font-semibold text-gray-200 mb-3">Ammunition Modifications</h2>
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    {accessory.ammobonus && (
-                      <div>
-                        <label className="text-sm text-gray-400">Ammo Bonus</label>
-                        <p className="text-gray-100 mt-1">{accessory.ammobonus}</p>
-                      </div>
-                    )}
-                    {accessory.ammoreplace && (
-                      <div>
-                        <label className="text-sm text-gray-400">Ammo Replace</label>
-                        <p className="text-gray-100 mt-1">{accessory.ammoreplace}</p>
-                      </div>
-                    )}
-                    {accessory.ammoslots && (
-                      <div>
-                        <label className="text-sm text-gray-400">Ammo Slots</label>
-                        <p className="text-gray-100 mt-1">{accessory.ammoslots}</p>
-                      </div>
-                    )}
-                    {accessory.modifyammocapacity && (
-                      <div>
-                        <label className="text-sm text-gray-400">Modify Ammo Capacity</label>
-                        <p className="text-gray-100 mt-1">{accessory.modifyammocapacity}</p>
-                      </div>
-                    )}
-                  </div>
-                </section>
               )}
-
-              {/* Range Modifications */}
-              {accessory.replacerange && (
-                <section>
-                  <h2 className="text-lg font-semibold text-gray-200 mb-3">Range Modifications</h2>
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <div>
-                      <label className="text-sm text-gray-400">Replace Range</label>
-                      <p className="text-gray-100 mt-1">{accessory.replacerange}</p>
-                    </div>
-                  </div>
-                </section>
-              )}
-
-              {/* Additional Features */}
-              {(accessory.addunderbarrels || accessory.allowgear || accessory.gears || accessory.wirelessweaponbonus) && (
-                <section>
-                  <h2 className="text-lg font-semibold text-gray-200 mb-3">Additional Features</h2>
-                  <div className="space-y-4">
-                    {accessory.addunderbarrels?.weapon && accessory.addunderbarrels.weapon.length > 0 && (
-                      <div>
-                        <label className="text-sm text-gray-400">Add Underbarrel Weapons</label>
-                        <div className="flex flex-wrap gap-2 mt-2">
-                          {accessory.addunderbarrels.weapon.map((weapon, idx) => (
-                            <span
-                              key={idx}
-                              className="inline-flex items-center px-3 py-1 bg-sr-accent/20 border border-sr-accent/50 rounded-md text-sm text-gray-200"
-                            >
-                              {weapon}
-                            </span>
-                          ))}
-                        </div>
-                      </div>
-                    )}
-                    {accessory.allowgear?.gearcategory && accessory.allowgear.gearcategory.length > 0 && (
-                      <div>
-                        <label className="text-sm text-gray-400">Allow Gear Categories</label>
-                        <div className="flex flex-wrap gap-2 mt-2">
-                          {accessory.allowgear.gearcategory.map((category, idx) => (
-                            <span
-                              key={idx}
-                              className="inline-flex items-center px-3 py-1 bg-sr-accent/20 border border-sr-accent/50 rounded-md text-sm text-gray-200"
-                            >
-                              {category}
-                            </span>
-                          ))}
-                        </div>
-                      </div>
-                    )}
-                    {accessory.gears && (
-                      <div>
-                        <label className="text-sm text-gray-400">Gears</label>
-                        <div className="p-4 bg-sr-darker rounded-md mt-2">
-                          <pre className="text-sm text-gray-300 whitespace-pre-wrap">
-                            {JSON.stringify(accessory.gears, null, 2)}
-                          </pre>
-                        </div>
-                      </div>
-                    )}
-                    {accessory.wirelessweaponbonus && (
-                      <div>
-                        <label className="text-sm text-gray-400">Wireless Weapon Bonus</label>
-                        <div className="p-4 bg-sr-darker rounded-md mt-2">
-                          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                            {accessory.wirelessweaponbonus.accuracy && (
-                              <div>
-                                <label className="text-sm text-gray-400">Accuracy</label>
-                                <p className="text-gray-100 mt-1">{accessory.wirelessweaponbonus.accuracy}</p>
-                              </div>
-                            )}
-                            {accessory.wirelessweaponbonus.accuracyreplace && (
-                              <div>
-                                <label className="text-sm text-gray-400">Accuracy Replace</label>
-                                <p className="text-gray-100 mt-1">{accessory.wirelessweaponbonus.accuracyreplace}</p>
-                              </div>
-                            )}
-                            {accessory.wirelessweaponbonus.ap && (
-                              <div>
-                                <label className="text-sm text-gray-400">AP</label>
-                                <p className="text-gray-100 mt-1">{accessory.wirelessweaponbonus.ap}</p>
-                              </div>
-                            )}
-                            {accessory.wirelessweaponbonus.apreplace && (
-                              <div>
-                                <label className="text-sm text-gray-400">AP Replace</label>
-                                <p className="text-gray-100 mt-1">{accessory.wirelessweaponbonus.apreplace}</p>
-                              </div>
-                            )}
-                            {accessory.wirelessweaponbonus.damage && (
-                              <div>
-                                <label className="text-sm text-gray-400">Damage</label>
-                                <p className="text-gray-100 mt-1">{accessory.wirelessweaponbonus.damage}</p>
-                              </div>
-                            )}
-                            {accessory.wirelessweaponbonus.damagereplace && (
-                              <div>
-                                <label className="text-sm text-gray-400">Damage Replace</label>
-                                <p className="text-gray-100 mt-1">{accessory.wirelessweaponbonus.damagereplace}</p>
-                              </div>
-                            )}
-                            {accessory.wirelessweaponbonus.damagetype && (
-                              <div>
-                                <label className="text-sm text-gray-400">Damage Type</label>
-                                <p className="text-gray-100 mt-1">{accessory.wirelessweaponbonus.damagetype}</p>
-                              </div>
-                            )}
-                            {accessory.wirelessweaponbonus.mode && (
-                              <div>
-                                <label className="text-sm text-gray-400">Mode</label>
-                                <p className="text-gray-100 mt-1">{accessory.wirelessweaponbonus.mode}</p>
-                              </div>
-                            )}
-                            {accessory.wirelessweaponbonus.modereplace && (
-                              <div>
-                                <label className="text-sm text-gray-400">Mode Replace</label>
-                                <p className="text-gray-100 mt-1">{accessory.wirelessweaponbonus.modereplace}</p>
-                              </div>
-                            )}
-                            {accessory.wirelessweaponbonus.pool && (
-                              <div>
-                                <label className="text-sm text-gray-400">Pool</label>
-                                <p className="text-gray-100 mt-1">{accessory.wirelessweaponbonus.pool}</p>
-                              </div>
-                            )}
-                            {accessory.wirelessweaponbonus.rangebonus !== undefined && (
-                              <div>
-                                <label className="text-sm text-gray-400">Range Bonus</label>
-                                <p className="text-gray-100 mt-1">{accessory.wirelessweaponbonus.rangebonus}</p>
-                              </div>
-                            )}
-                            {accessory.wirelessweaponbonus.rc && (
-                              <div>
-                                <label className="text-sm text-gray-400">RC</label>
-                                <p className="text-gray-100 mt-1">{accessory.wirelessweaponbonus.rc}</p>
-                              </div>
-                            )}
-                            {accessory.wirelessweaponbonus.smartlinkpool && (
-                              <div>
-                                <label className="text-sm text-gray-400">Smartlink Pool</label>
-                                <p className="text-gray-100 mt-1">{accessory.wirelessweaponbonus.smartlinkpool}</p>
-                              </div>
-                            )}
-                            {accessory.wirelessweaponbonus.userange && (
-                              <div>
-                                <label className="text-sm text-gray-400">Use Range</label>
-                                <p className="text-gray-100 mt-1">{accessory.wirelessweaponbonus.userange}</p>
-                              </div>
-                            )}
-                          </div>
-                        </div>
-                      </div>
-                    )}
-                  </div>
-                </section>
-              )}
-
-              {/* Requirements */}
-              {accessory.required && (
-                <section>
-                  <h2 className="text-lg font-semibold text-gray-200 mb-3">Requirements</h2>
-                  <div className="p-4 bg-sr-darker rounded-md">
+              {accessory.gears && (
+                <div>
+                  <label className="text-sm text-gray-400">Gears</label>
+                  <div className="p-4 bg-sr-darker rounded-md mt-2">
                     <pre className="text-sm text-gray-300 whitespace-pre-wrap">
-                      {JSON.stringify(accessory.required, null, 2)}
+                      {JSON.stringify(accessory.gears, null, 2)}
                     </pre>
                   </div>
-                </section>
+                </div>
               )}
-
-              {/* Forbidden */}
-              {accessory.forbidden && (
-                <section>
-                  <h2 className="text-lg font-semibold text-gray-200 mb-3">Forbidden</h2>
-                  <div className="p-4 bg-sr-darker rounded-md">
-                    <pre className="text-sm text-gray-300 whitespace-pre-wrap">
-                      {JSON.stringify(accessory.forbidden, null, 2)}
-                    </pre>
+              {accessory.wirelessweaponbonus && (
+                <div>
+                  <label className="text-sm text-gray-400">Wireless Weapon Bonus</label>
+                  <div className="p-4 bg-sr-darker rounded-md mt-2">
+                    <FieldGrid columns={2}>
+                      {accessory.wirelessweaponbonus.accuracy && (
+                        <LabelValue label="Accuracy" value={accessory.wirelessweaponbonus.accuracy} />
+                      )}
+                      {accessory.wirelessweaponbonus.accuracyreplace && (
+                        <LabelValue label="Accuracy Replace" value={accessory.wirelessweaponbonus.accuracyreplace} />
+                      )}
+                      {accessory.wirelessweaponbonus.ap && (
+                        <LabelValue label="AP" value={accessory.wirelessweaponbonus.ap} />
+                      )}
+                      {accessory.wirelessweaponbonus.apreplace && (
+                        <LabelValue label="AP Replace" value={accessory.wirelessweaponbonus.apreplace} />
+                      )}
+                      {accessory.wirelessweaponbonus.damage && (
+                        <LabelValue label="Damage" value={accessory.wirelessweaponbonus.damage} />
+                      )}
+                      {accessory.wirelessweaponbonus.damagereplace && (
+                        <LabelValue label="Damage Replace" value={accessory.wirelessweaponbonus.damagereplace} />
+                      )}
+                      {accessory.wirelessweaponbonus.damagetype && (
+                        <LabelValue label="Damage Type" value={accessory.wirelessweaponbonus.damagetype} />
+                      )}
+                      {accessory.wirelessweaponbonus.mode && (
+                        <LabelValue label="Mode" value={accessory.wirelessweaponbonus.mode} />
+                      )}
+                      {accessory.wirelessweaponbonus.modereplace && (
+                        <LabelValue label="Mode Replace" value={accessory.wirelessweaponbonus.modereplace} />
+                      )}
+                      {accessory.wirelessweaponbonus.pool && (
+                        <LabelValue label="Pool" value={accessory.wirelessweaponbonus.pool} />
+                      )}
+                      {accessory.wirelessweaponbonus.rangebonus !== undefined && (
+                        <LabelValue label="Range Bonus" value={accessory.wirelessweaponbonus.rangebonus} />
+                      )}
+                      {accessory.wirelessweaponbonus.rc && (
+                        <LabelValue label="RC" value={accessory.wirelessweaponbonus.rc} />
+                      )}
+                      {accessory.wirelessweaponbonus.smartlinkpool && (
+                        <LabelValue label="Smartlink Pool" value={accessory.wirelessweaponbonus.smartlinkpool} />
+                      )}
+                      {accessory.wirelessweaponbonus.userange && (
+                        <LabelValue label="Use Range" value={accessory.wirelessweaponbonus.userange} />
+                      )}
+                    </FieldGrid>
                   </div>
-                </section>
-              )}
-
-              {/* Additional Fields */}
-              {(accessory.hide !== undefined || accessory.ignoresourcedisabled !== undefined) && (
-                <section>
-                  <h2 className="text-lg font-semibold text-gray-200 mb-3">Additional Information</h2>
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    {accessory.hide !== undefined && (
-                      <div>
-                        <label className="text-sm text-gray-400">Hide</label>
-                        <p className="text-gray-100 mt-1">{formatValue(accessory.hide)}</p>
-                      </div>
-                    )}
-                    {accessory.ignoresourcedisabled !== undefined && (
-                      <div>
-                        <label className="text-sm text-gray-400">Ignore Source Disabled</label>
-                        <p className="text-gray-100 mt-1">{formatValue(accessory.ignoresourcedisabled)}</p>
-                      </div>
-                    )}
-                  </div>
-                </section>
+                </div>
               )}
             </div>
-          </div>
+          </Section>
+        )}
 
-          <div className="p-6 border-t border-sr-light-gray flex justify-end">
-            <Button
-              onPress={handleClose}
-              className="px-4 py-2 bg-sr-gray border border-sr-light-gray rounded-md text-gray-100 hover:bg-sr-light-gray focus:outline-none focus:ring-2 focus:ring-sr-accent focus:border-transparent transition-colors"
-            >
-              Close
-            </Button>
-          </div>
-        </Dialog>
+        {/* Requirements */}
+        {accessory.required && (
+          <Section title="Requirements">
+            <div className="p-4 bg-sr-darker rounded-md">
+              <pre className="text-sm text-gray-300 whitespace-pre-wrap">
+                {JSON.stringify(accessory.required, null, 2)}
+              </pre>
+            </div>
+          </Section>
+        )}
+
+        {/* Forbidden */}
+        {accessory.forbidden && (
+          <Section title="Forbidden">
+            <div className="p-4 bg-sr-darker rounded-md">
+              <pre className="text-sm text-gray-300 whitespace-pre-wrap">
+                {JSON.stringify(accessory.forbidden, null, 2)}
+              </pre>
+            </div>
+          </Section>
+        )}
+
+        {/* Additional Fields */}
+        {(accessory.hide !== undefined || accessory.ignoresourcedisabled !== undefined) && (
+          <Section title="Additional Information">
+            <FieldGrid columns={2}>
+              {accessory.hide !== undefined && (
+                <LabelValue label="Hide" value={formatValue(accessory.hide)} />
+              )}
+              {accessory.ignoresourcedisabled !== undefined && (
+                <LabelValue label="Ignore Source Disabled" value={formatValue(accessory.ignoresourcedisabled)} />
+              )}
+            </FieldGrid>
+          </Section>
+        )}
       </div>
-    </Modal>
+    </ViewModal>
   );
 }
 

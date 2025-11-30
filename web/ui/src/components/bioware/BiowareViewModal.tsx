@@ -1,5 +1,6 @@
-import { Dialog, DialogTrigger, Modal, ModalOverlay } from 'react-aria-components';
 import type { Bioware } from '../../lib/types';
+import { ViewModal } from '../common/ViewModal';
+import { Section, FieldGrid, LabelValue } from '../common/FieldDisplay';
 
 interface BiowareViewModalProps {
   bioware: Bioware | null;
@@ -10,73 +11,45 @@ interface BiowareViewModalProps {
 export function BiowareViewModal({ bioware, isOpen, onOpenChange }: BiowareViewModalProps) {
   if (!bioware) return null;
 
-  return (
-    <DialogTrigger isOpen={isOpen} onOpenChange={onOpenChange}>
-      <ModalOverlay
-        className="fixed inset-0 bg-black/60 flex items-center justify-center z-50"
-        isDismissable
-      >
-        <Modal className="bg-sr-gray border border-sr-light-gray rounded-lg shadow-xl max-w-2xl w-full mx-4 max-h-[90vh] overflow-y-auto">
-          <Dialog className="p-6">
-            {({ close }) => (
-              <div>
-                <div className="flex items-start justify-between mb-4">
-                  <div>
-                    <h2 className="text-2xl font-bold text-gray-100 mb-1">{bioware.device || 'Unknown Bioware'}</h2>
-                    {bioware.type && <p className="text-gray-400">{bioware.type}</p>}
-                  </div>
-                  <button
-                    onClick={close}
-                    className="text-gray-400 hover:text-gray-200 text-2xl leading-none"
-                    aria-label="Close"
-                  >
-                    ×
-                  </button>
-                </div>
+  // Bioware uses 'device' instead of 'name', so we need to create a compatible item
+  const biowareWithName = { ...bioware, name: bioware.device || 'Unknown Bioware' };
 
-                <div className="space-y-4">
-                  <div>
-                    <h3 className="text-sm font-semibold text-gray-300 mb-2">Details</h3>
-                    <dl className="grid grid-cols-2 gap-2 text-sm">
-                      {bioware.type && (
-                        <div>
-                          <dt className="text-gray-400">Type</dt>
-                          <dd className="text-gray-200">{bioware.type}</dd>
-                        </div>
-                      )}
-                      <div>
-                        <dt className="text-gray-400">Essence</dt>
-                        <dd className="text-gray-200">{bioware.essence || bioware.essence_formula?.formula || '-'}</dd>
-                      </div>
-                      <div>
-                        <dt className="text-gray-400">Cost</dt>
-                        <dd className="text-gray-200">{bioware.cost || bioware.cost_formula?.formula || '-'}</dd>
-                      </div>
-                      <div>
-                        <dt className="text-gray-400">Availability</dt>
-                        <dd className="text-gray-200">{bioware.availability || bioware.availability_formula?.formula || '-'}</dd>
-                      </div>
-                      {bioware.source?.source && (
-                        <div>
-                          <dt className="text-gray-400">Source</dt>
-                          <dd className="text-gray-200">{bioware.source.source}</dd>
-                        </div>
-                      )}
-                      {bioware.source?.page && (
-                        <div>
-                          <dt className="text-gray-400">Page</dt>
-                          <dd className="text-gray-200">{bioware.source.page}</dd>
-                        </div>
-                      )}
-                    </dl>
-                  </div>
-                </div>
-              </div>
+  return (
+    <ViewModal
+      item={biowareWithName}
+      isOpen={isOpen}
+      onOpenChange={onOpenChange}
+      subtitle={bioware.type ? <span className="text-gray-400">{bioware.type}</span> : undefined}
+      maxWidth="2xl"
+    >
+      <div className="space-y-4">
+        <Section title="Details">
+          <FieldGrid columns={2}>
+            {bioware.type && (
+              <LabelValue label="Type" value={bioware.type} />
             )}
-          </Dialog>
-        </Modal>
-      </ModalOverlay>
-    </DialogTrigger>
+            <LabelValue
+              label="Essence"
+              value={bioware.essence || bioware.essence_formula?.formula || '-'}
+            />
+            <LabelValue
+              label="Cost"
+              value={bioware.cost || bioware.cost_formula?.formula || '-'}
+            />
+            <LabelValue
+              label="Availability"
+              value={bioware.availability || bioware.availability_formula?.formula || '-'}
+            />
+            {bioware.source?.source && (
+              <LabelValue label="Source" value={bioware.source.source} />
+            )}
+            {bioware.source?.page && (
+              <LabelValue label="Page" value={bioware.source.page} />
+            )}
+          </FieldGrid>
+        </Section>
+      </div>
+    </ViewModal>
   );
 }
 

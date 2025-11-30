@@ -1,5 +1,6 @@
-import { Dialog, DialogTrigger, Modal, ModalOverlay } from 'react-aria-components';
 import type { ComplexForm } from '../../lib/types';
+import { ViewModal } from '../common/ViewModal';
+import { Section, FieldGrid, LabelValue } from '../common/FieldDisplay';
 
 interface ComplexFormViewModalProps {
   complexForm: ComplexForm | null;
@@ -11,78 +12,46 @@ export function ComplexFormViewModal({ complexForm, isOpen, onOpenChange }: Comp
   if (!complexForm) return null;
 
   return (
-    <DialogTrigger isOpen={isOpen} onOpenChange={onOpenChange}>
-      <ModalOverlay
-        className="fixed inset-0 bg-black/60 flex items-center justify-center z-50"
-        isDismissable
-      >
-        <Modal className="bg-sr-gray border border-sr-light-gray rounded-lg shadow-xl max-w-2xl w-full mx-4 max-h-[90vh] overflow-y-auto">
-          <Dialog className="p-6">
-            {({ close }) => (
-              <div>
-                <div className="flex items-start justify-between mb-4">
-                  <div>
-                    <h2 className="text-2xl font-bold text-gray-100 mb-1">{complexForm.name || 'Unknown Complex Form'}</h2>
-                  </div>
-                  <button
-                    onClick={close}
-                    className="text-gray-400 hover:text-gray-200 text-2xl leading-none"
-                    aria-label="Close"
-                  >
-                    ×
-                  </button>
-                </div>
+    <ViewModal
+      item={complexForm}
+      isOpen={isOpen}
+      onOpenChange={onOpenChange}
+      maxWidth="2xl"
+    >
+      <div className="space-y-4">
+        {complexForm.description && (
+          <Section title="Description">
+            <p className="text-sm text-gray-200 whitespace-pre-wrap">{complexForm.description}</p>
+          </Section>
+        )}
 
-                <div className="space-y-4">
-                  {complexForm.description && (
-                    <div>
-                      <h3 className="text-sm font-semibold text-gray-300 mb-2">Description</h3>
-                      <p className="text-sm text-gray-200 whitespace-pre-wrap">{complexForm.description}</p>
-                    </div>
-                  )}
-
-                  <div>
-                    <h3 className="text-sm font-semibold text-gray-300 mb-2">Details</h3>
-                    <dl className="grid grid-cols-2 gap-2 text-sm">
-                      {complexForm.target && (
-                        <div>
-                          <dt className="text-gray-400">Target</dt>
-                          <dd className="text-gray-200">{complexForm.target.replace('_', ' ').replace(/\b\w/g, l => l.toUpperCase())}</dd>
-                        </div>
-                      )}
-                      {complexForm.duration && (
-                        <div>
-                          <dt className="text-gray-400">Duration</dt>
-                          <dd className="text-gray-200">{complexForm.duration.description || complexForm.duration.type || '-'}</dd>
-                        </div>
-                      )}
-                      {complexForm.fading && (
-                        <div>
-                          <dt className="text-gray-400">Fading</dt>
-                          <dd className="text-gray-200">{complexForm.fading.formula || '-'}</dd>
-                        </div>
-                      )}
-                      {complexForm.source?.source && (
-                        <div>
-                          <dt className="text-gray-400">Source</dt>
-                          <dd className="text-gray-200">{complexForm.source.source}</dd>
-                        </div>
-                      )}
-                      {complexForm.source?.page && (
-                        <div>
-                          <dt className="text-gray-400">Page</dt>
-                          <dd className="text-gray-200">{complexForm.source.page}</dd>
-                        </div>
-                      )}
-                    </dl>
-                  </div>
-                </div>
-              </div>
+        <Section title="Details">
+          <FieldGrid columns={2}>
+            {complexForm.target && (
+              <LabelValue
+                label="Target"
+                value={complexForm.target.replace('_', ' ').replace(/\b\w/g, l => l.toUpperCase())}
+              />
             )}
-          </Dialog>
-        </Modal>
-      </ModalOverlay>
-    </DialogTrigger>
+            {complexForm.duration && (
+              <LabelValue
+                label="Duration"
+                value={complexForm.duration.description || complexForm.duration.type || '-'}
+              />
+            )}
+            {complexForm.fading && (
+              <LabelValue label="Fading" value={complexForm.fading.formula || '-'} />
+            )}
+            {complexForm.source?.source && (
+              <LabelValue label="Source" value={complexForm.source.source} />
+            )}
+            {complexForm.source?.page && (
+              <LabelValue label="Page" value={complexForm.source.page} />
+            )}
+          </FieldGrid>
+        </Section>
+      </div>
+    </ViewModal>
   );
 }
 
