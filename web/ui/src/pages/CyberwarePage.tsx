@@ -3,12 +3,14 @@ import { cyberwareApi } from '../lib/api';
 import type { Cyberware } from '../lib/types';
 import { useToast } from '../contexts/ToastContext';
 import { CyberwareTable } from '../components/cyberware/CyberwareTable';
+import { CyberwareTableGrouped } from '../components/cyberware/CyberwareTableGrouped';
 import { DatabasePageLayout } from '../components/database/DatabasePageLayout';
 
 export function CyberwarePage() {
   const { showError } = useToast();
   const [cyberware, setCyberware] = useState<Cyberware[]>([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [viewMode, setViewMode] = useState<'flat' | 'grouped'>('grouped');
 
   const loadCyberware = useCallback(async () => {
     try {
@@ -33,8 +35,14 @@ export function CyberwarePage() {
       description="View and search all available cyberware augmentations from Shadowrun 5th Edition"
       itemCount={cyberware.length}
       isLoading={isLoading}
+      viewMode={viewMode}
+      onViewModeChange={setViewMode}
     >
-      <CyberwareTable cyberware={cyberware} />
+      {viewMode === 'grouped' ? (
+        <CyberwareTableGrouped cyberware={cyberware} />
+      ) : (
+        <CyberwareTable cyberware={cyberware} />
+      )}
     </DatabasePageLayout>
   );
 }

@@ -67,15 +67,16 @@ The UI codebase shows several clear patterns with significant duplication opport
 **Status**: ✅ **COMPLETED**
 
 **What was done**:
+
 - Replaced 7 specialized SourceFilter components with generic `SourceFilter`
 - Updated 19+ files to use the generic component with appropriate `getSource` functions:
-  - `WeaponSourceFilter.tsx` → `SourceFilter<Weapon>` with `getSource: (w) => w.source || 'Unknown'`
-  - `QualitySourceFilter.tsx` → `SourceFilter<Quality>` with `getSource: (q) => (typeof q.source === 'string' ? q.source : q.source?.source) || 'Unknown'`
-  - `ArmorSourceFilter.tsx` → `SourceFilter<Armor>` with `getSource: (a) => a.source || 'Unknown'`
-  - `SkillSourceFilter.tsx` → `SourceFilter<Skill>` with `getSource: (s) => s.source?.source || 'Unknown'`
-  - `LifestyleSourceFilter.tsx` → `SourceFilter<Lifestyle>` with `getSource: (l) => l.source || 'Unknown'`
-  - `WeaponConsumableSourceFilter.tsx` → `SourceFilter<WeaponConsumable>` with `getSource: (c) => c.source?.source || 'Unknown'`
-  - `Gear/SourceFilter.tsx` → `SourceFilter<Gear>` with `getSource: (g) => (typeof g.source === 'string' ? g.source : g.source?.source) || 'Unknown'`
+- `WeaponSourceFilter.tsx` → `SourceFilter<Weapon>` with `getSource: (w) => w.source || 'Unknown'`
+- `QualitySourceFilter.tsx` → `SourceFilter<Quality>` with `getSource: (q) => (typeof q.source === 'string' ? q.source : q.source?.source) || 'Unknown'`
+- `ArmorSourceFilter.tsx` → `SourceFilter<Armor>` with `getSource: (a) => a.source || 'Unknown'`
+- `SkillSourceFilter.tsx` → `SourceFilter<Skill>` with `getSource: (s) => s.source?.source || 'Unknown'`
+- `LifestyleSourceFilter.tsx` → `SourceFilter<Lifestyle>` with `getSource: (l) => l.source || 'Unknown'`
+- `WeaponConsumableSourceFilter.tsx` → `SourceFilter<WeaponConsumable>` with `getSource: (c) => c.source?.source || 'Unknown'`
+- `Gear/SourceFilter.tsx` → `SourceFilter<Gear>` with `getSource: (g) => (typeof g.source === 'string' ? g.source : g.source?.source) || 'Unknown'`
 - Deleted all specialized SourceFilter files (~50KB of duplicate code removed)
 
 **Benefits Achieved**:
@@ -91,15 +92,16 @@ The UI codebase shows several clear patterns with significant duplication opport
 **Status**: ✅ **COMPLETED**
 
 **What was done**:
+
 - Created generic `GroupedTable` component with:
-  - Reusable expand/collapse functionality
-  - Consistent grouping logic via `getGroupKey` and `getGroupLabel` props
-  - Search integration with `searchFields` prop
-  - Expand All/Collapse All controls
-  - Configurable columns via `GroupedTableColumn<T>` interface
-  - Custom rendering support via `renderGroupHeader` and `renderItemRow` props
-  - Auto-expand on search functionality
-  - Summary footer with item/group counts
+- Reusable expand/collapse functionality
+- Consistent grouping logic via `getGroupKey` and `getGroupLabel` props
+- Search integration with `searchFields` prop
+- Expand All/Collapse All controls
+- Configurable columns via `GroupedTableColumn<T>` interface
+- Custom rendering support via `renderGroupHeader` and `renderItemRow` props
+- Auto-expand on search functionality
+- Summary footer with item/group counts
 
 **Benefits Achieved**:
 
@@ -108,6 +110,7 @@ The UI codebase shows several clear patterns with significant duplication opport
 - ✅ Easier to add features (e.g., remember expanded state)
 
 **Next Steps**:
+
 - Refactor existing TableGrouped components to use the generic component (can be done incrementally)
 
 ### 4. Extract Common Helper Functions ✅ COMPLETE
@@ -117,16 +120,17 @@ The UI codebase shows several clear patterns with significant duplication opport
 **Status**: ✅ **COMPLETED**
 
 **What was done**:
+
 - Created `viewModalUtils.ts` with shared utilities:
-  - `formatValue(value: unknown): string` - Formats values for display (handles null, boolean, objects, etc.)
-  - `formatArray(value: unknown): string` - Formats arrays as comma-separated strings
-  - `toReactNode(value: unknown): ReactNode` - Safely converts values to ReactNode
+- `formatValue(value: unknown): string` - Formats values for display (handles null, boolean, objects, etc.)
+- `formatArray(value: unknown): string` - Formats arrays as comma-separated strings
+- `toReactNode(value: unknown): ReactNode` - Safely converts values to ReactNode
 - Updated 5 ViewModal components to use shared utilities:
-  - `WeaponViewModal.tsx`
-  - `ArmorViewModal.tsx`
-  - `GearViewModal.tsx`
-  - `WeaponAccessoryViewModal.tsx`
-  - (Note: `SpellViewModal.tsx` doesn't use these helpers)
+- `WeaponViewModal.tsx`
+- `ArmorViewModal.tsx`
+- `GearViewModal.tsx`
+- `WeaponAccessoryViewModal.tsx`
+- (Note: `SpellViewModal.tsx` doesn't use these helpers)
 
 **Benefits Achieved**:
 
@@ -141,15 +145,16 @@ The UI codebase shows several clear patterns with significant duplication opport
 **Status**: ✅ **COMPLETED**
 
 **What was done**:
+
 - Created comprehensive `FieldDisplay.tsx` with reusable components:
-  - `LabelValue` - Standard label/value pair with consistent styling
-  - `FieldGrid` - Grid layout for multiple fields (configurable 1-4 columns)
-  - `Section` - Section wrapper with title and consistent spacing
-  - `ArrayDisplay` - Display arrays as chips/tags with customizable styling
-  - `NestedObjectDisplay` - Display nested objects as formatted JSON
-  - `ConditionalField` - Conditionally display fields based on condition
-  - `FormattedValue` - Display formatted values with custom formatters
-  - `FormattedArray` - Display formatted arrays
+- `LabelValue` - Standard label/value pair with consistent styling
+- `FieldGrid` - Grid layout for multiple fields (configurable 1-4 columns)
+- `Section` - Section wrapper with title and consistent spacing
+- `ArrayDisplay` - Display arrays as chips/tags with customizable styling
+- `NestedObjectDisplay` - Display nested objects as formatted JSON
+- `ConditionalField` - Conditionally display fields based on condition
+- `FormattedValue` - Display formatted values with custom formatters
+- `FormattedArray` - Display formatted arrays
 - Refactored `SpellViewModal.tsx` as proof of concept using new components
 
 **Benefits Achieved**:
@@ -209,42 +214,28 @@ The UI codebase shows several clear patterns with significant duplication opport
 4. **GroupedTable Component**: Created generic component with full expand/collapse functionality
 
 **Code Impact**:
+
 - ~2,000+ lines of duplicated code eliminated
 - 7 duplicate files deleted
 - 3 new reusable component files created
 - Foundation established for remaining refactoring work
 - **ViewModal Refactoring**: 7 ViewModals refactored, ~400+ lines of boilerplate removed
-  - Total reduction: ~1,649 lines → ~1,181 lines across 7 components (~28% average reduction)
+- Total reduction: ~1,649 lines → ~1,181 lines across 7 components (~28% average reduction)
 
 ### Remaining Work 🔄
 
 **Phase 3** - Higher complexity, can be done incrementally:
 
 1. ✅ Create generic ViewModal base component with common structure - **COMPLETED**
-2. ✅ Refactor all ViewModal components - **COMPLETED** (23 of 23 ViewModals refactored)
-   - ✅ SpellViewModal.tsx - **COMPLETED** (reduced from 92 to 70 lines, ~24% reduction)
-   - ✅ ArmorViewModal.tsx - **COMPLETED** (reduced from 621 to 523 lines, ~16% reduction, includes nested modal support)
-   - ✅ LifestyleViewModal.tsx - **COMPLETED** (reduced from 75 to 47 lines, ~37% reduction)
-   - ✅ GearViewModal.tsx - **COMPLETED** (reduced from 435 to 291 lines, ~33% reduction)
-   - ✅ BookViewModal.tsx - **COMPLETED** (reduced from 97 to 60 lines, ~38% reduction)
-   - ✅ SkillViewModal.tsx - **COMPLETED** (reduced from 157 to 79 lines, ~50% reduction)
-   - ✅ WeaponConsumableViewModal.tsx - **COMPLETED** (reduced from 172 to 111 lines, ~35% reduction)
-   - ✅ ContactViewModal.tsx - **COMPLETED** (reduced from 100 to 70 lines, ~30% reduction)
-   - ✅ ActionViewModal.tsx - **COMPLETED** (reduced from 85 to 49 lines, ~42% reduction)
-   - ✅ MetatypeViewModal.tsx - **COMPLETED** (reduced from 119 to 79 lines, ~34% reduction)
-   - ✅ PowerViewModal.tsx - **COMPLETED** (reduced from 97 to 58 lines, ~40% reduction)
-   - ✅ TraditionViewModal.tsx - **COMPLETED** (reduced from 120 to 70 lines, ~42% reduction)
-   - ✅ MentorViewModal.tsx - **COMPLETED** (reduced from 75 to 47 lines, ~37% reduction)
-   - ✅ ProgramViewModal.tsx - **COMPLETED** (reduced from 118 to 82 lines, ~31% reduction)
-   - ✅ ComplexFormViewModal.tsx - **COMPLETED** (reduced from 87 to 57 lines, ~34% reduction)
-   - ✅ BiowareViewModal.tsx - **COMPLETED** (reduced from 82 to 55 lines, ~33% reduction)
-   - ✅ CyberwareViewModal.tsx - **COMPLETED** (reduced from 86 to 59 lines, ~31% reduction)
-   - ✅ VehicleViewModal.tsx - **COMPLETED** (reduced from 153 to 107 lines, ~30% reduction)
-   - ✅ VehicleModificationViewModal.tsx - **COMPLETED** (reduced from 112 to 71 lines, ~36% reduction)
-   - ✅ QualityViewModal.tsx - **COMPLETED** (reduced from 821 to 768 lines, ~6% reduction, preserves custom bonus/requirements displays)
-   - ✅ WeaponViewModal.tsx - **COMPLETED** (reduced from 446 to 265 lines, ~41% reduction, includes nested modal support)
-   - ✅ WeaponAccessoryViewModal.tsx - **COMPLETED** (reduced from 984 to 800 lines, ~19% reduction, preserves custom displays)
-   - ✅ CampaignViewModal.tsx - **COMPLETED** (reduced from 453 to 379 lines, ~16% reduction, preserves data loading logic)
+2. 🔄 Refactor remaining 60+ ViewModal components (can be done incrementally) - **IN PROGRESS**
+
+- ✅ SpellViewModal.tsx - **COMPLETED** (reduced from 92 to 70 lines, ~24% reduction)
+- ✅ ArmorViewModal.tsx - **COMPLETED** (reduced from 621 to 523 lines, ~16% reduction, includes nested modal support)
+- ✅ LifestyleViewModal.tsx - **COMPLETED** (reduced from 75 to 47 lines, ~37% reduction)
+- ✅ GearViewModal.tsx - **COMPLETED** (reduced from 435 to 291 lines, ~33% reduction)
+- ✅ BookViewModal.tsx - **COMPLETED** (reduced from 97 to 60 lines, ~38% reduction)
+- ✅ SkillViewModal.tsx - **COMPLETED** (reduced from 157 to 79 lines, ~50% reduction)
+- ✅ WeaponConsumableViewModal.tsx - **COMPLETED** (reduced from 172 to 111 lines, ~35% reduction)
 
 ## Files to Review
 
@@ -265,18 +256,18 @@ The UI codebase shows several clear patterns with significant duplication opport
 ### Achieved Impact ✅
 
 - **Code Reduction**: ~2,000+ lines of duplicated code eliminated
-  - 7 SourceFilter files deleted (~50KB)
-  - Helper functions consolidated from 5+ files
-  - Foundation created for further reductions
+- 7 SourceFilter files deleted (~50KB)
+- Helper functions consolidated from 5+ files
+- Foundation created for further reductions
 - **Maintainability**: Single source of truth established for:
-  - Source filtering (1 component instead of 7)
-  - Formatting utilities (1 file instead of 5+)
-  - Field display patterns (8 reusable components)
-  - Grouped table logic (1 generic component)
+- Source filtering (1 component instead of 7)
+- Formatting utilities (1 file instead of 5+)
+- Field display patterns (8 reusable components)
+- Grouped table logic (1 generic component)
 - **Consistency**: Unified patterns established across:
-  - All source filters now use same component
-  - ViewModals using shared utilities have consistent formatting
-  - FieldDisplay components ensure consistent field rendering
+- All source filters now use same component
+- ViewModals using shared utilities have consistent formatting
+- FieldDisplay components ensure consistent field rendering
 - **Development Speed**: Faster to add new entity types with reusable components
 
 ### Potential Future Impact ⏳
@@ -288,6 +279,7 @@ The UI codebase shows several clear patterns with significant duplication opport
 ### Implementation Notes
 
 **Completed Items**:
+
 - All SourceFilter variants successfully consolidated - generic component handles all cases via `getSource` prop
 - Helper functions extracted and tested in 5 ViewModals
 - FieldDisplay components created with full TypeScript support
@@ -295,6 +287,7 @@ The UI codebase shows several clear patterns with significant duplication opport
 - SpellViewModal successfully refactored as proof of concept
 
 **Next Steps**:
+
 - ✅ Generic ViewModal base component created - extracts common modal structure (header, footer, scrollable content)
 - 🔄 Remaining ViewModals can be refactored incrementally (SpellViewModal completed as proof of concept)
 - TableGrouped components can be migrated to use generic GroupedTable incrementally
@@ -309,4 +302,4 @@ The UI codebase shows several clear patterns with significant duplication opport
 - [x] Create generic GroupedTable component with expand/collapse logic ✅
 - [x] Refactor 2-3 ViewModals as proof of concept using new components ✅ (SpellViewModal completed)
 - [x] Create generic ViewModal base component with common structure ✅
-- [x] Refactor all remaining ViewModal components to use generic base ✅ (23/23 completed - all ViewModals refactored)
+- [ ] Refactor all remaining ViewModal components to use generic base 🔄 (7/60+ completed: SpellViewModal, ArmorViewModal, LifestyleViewModal, GearViewModal, BookViewModal, SkillViewModal, WeaponConsumableViewModal)
