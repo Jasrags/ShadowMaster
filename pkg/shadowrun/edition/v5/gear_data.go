@@ -992,7 +992,7 @@ var dataGear = map[string]Gear{
 		Subcategory:  "Audio Devices",
 		Description:  "This lets you listen in on distant conversations. Solid objects or loud sounds along the line of eavesdropping interfere, of course. It's as if you're up to one hundred meters closer to whatever you're pointing the mic at.",
 		Availability: "4",
-		CostFormula:  "Capacity*50",
+		CostFormulaString:  "Capacity*50",
 		MechanicalEffects: &GearMechanicalEffect{
 			Range: "effectively 100 meters closer",
 		},
@@ -1008,7 +1008,7 @@ var dataGear = map[string]Gear{
 		Category:    GearCategoryAudioDevices,
 		Subcategory: "Audio Devices",
 		Description: "These ergonomic ear plugs are hard to spot and harder still to differentiate from the standard kind that comes with every music player and commlink.",
-		CostFormula: "Capacity*50",
+		CostFormulaString: "Capacity*50",
 		SpecialProperties: &GearSpecialProperty{
 			MaxRating: 3, // Capacity 1-3
 		},
@@ -1021,7 +1021,7 @@ var dataGear = map[string]Gear{
 		Category:    GearCategoryAudioDevices,
 		Subcategory: "Audio Devices",
 		Description: "A full headset with an adjustable headband strap, or attached to a headphone. Earbuds are harder to spot, but headphones pack more capacity.",
-		CostFormula: "Capacity*50",
+		CostFormulaString: "Capacity*50",
 		SpecialProperties: &GearSpecialProperty{
 			MaxRating: 6, // Capacity 1-6
 		},
@@ -1035,7 +1035,7 @@ var dataGear = map[string]Gear{
 		Subcategory:  "Audio Devices",
 		Description:  "This sophisticated sensor bounces a laser beam against a solid object like a windowpane, reads the vibrations on the surface, and translates them into the sounds that are occurring on the other side of the surface. Maximum range is 100 meters. A laser microphone cannot fit the spatial recognizer audio enhancement.",
 		Availability: "6R",
-		CostFormula:  "Capacity*100",
+		CostFormulaString:  "Capacity*100",
 		MechanicalEffects: &GearMechanicalEffect{
 			Range: "100 meters maximum",
 		},
@@ -1052,7 +1052,7 @@ var dataGear = map[string]Gear{
 		Category:    GearCategoryAudioDevices,
 		Subcategory: "Audio Devices",
 		Description: "A standard omni-directional audio pickup and recorder. Usually incorporated into, connected to, or wirelessly linked with a commlink or other recording device. Micro versions are available at Capacity 1 only and have a Maximum Range of only 5 meters.",
-		CostFormula: "Capacity*50",
+		CostFormulaString: "Capacity*50",
 		MechanicalEffects: &GearMechanicalEffect{
 			Range: "5 meters (micro version)",
 		},

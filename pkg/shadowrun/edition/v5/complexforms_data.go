@@ -143,8 +143,3 @@ var dataComplexForms = map[string]ComplexForm{
 		Source:   &SourceReference{Source: "SR5"},
 	},
 }
-
-// intPtr returns a pointer to an int
-func intPtr(i int) *int {
-	return &i
-}

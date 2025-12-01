@@ -278,8 +278,3 @@ var dataPowers = map[string]Power{
 		Source: &SourceReference{Source: "SR5"},
 	},
 }
-
-// floatPtr returns a pointer to a float64
-func floatPtr(f float64) *float64 {
-	return &f
-}

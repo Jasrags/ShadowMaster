@@ -7,6 +7,14 @@ import (
 	"strings"
 )
 
+// RatingStructure represents the rating structure for an augmentation
+type RatingStructure struct {
+	// HasRating indicates if this augmentation has ratings
+	HasRating bool `json:"has_rating,omitempty"`
+	// MaxRating is the maximum rating (0 if no rating, or if rating is unlimited)
+	MaxRating int `json:"max_rating,omitempty"`
+}
+
 // Cyberware represents a cyberware augmentation
 type Cyberware struct {
 	// ID is the unique identifier for the cyberware (derived from the map key)
@@ -15,6 +23,8 @@ type Cyberware struct {
 	Part string `json:"part,omitempty"`
 	// Device is the name of the cyberware device
 	Device string `json:"device,omitempty"`
+	// Rating defines the rating structure (whether it has ratings and max rating)
+	Rating RatingStructure `json:"rating,omitempty"`
 	// Essence is the essence cost (can be a formula like "Rating * 0.1" or a fixed value like "0.2")
 	// Deprecated: Use EssenceFormula instead for structured formula handling
 	Essence string `json:"essence,omitempty"`
@@ -47,6 +57,8 @@ type Bioware struct {
 	Type string `json:"type,omitempty"`
 	// Device is the name of the bioware device
 	Device string `json:"device,omitempty"`
+	// Rating defines the rating structure (whether it has ratings and max rating)
+	Rating RatingStructure `json:"rating,omitempty"`
 	// Essence is the essence cost (can be a formula like "Rating * 0.2" or a fixed value like "0.1")
 	// Deprecated: Use EssenceFormula instead for structured formula handling
 	Essence string `json:"essence,omitempty"`
@@ -163,9 +175,10 @@ var ratingRegex = regexp.MustCompile(`(?i)rating\s*\*\s*([\d,]+\.?\d*)`)
 // NormalizeFormula converts a formula string to the universal format
 // Universal format: "Rating*MULTIPLIER[SUFFIX]" with no spaces, no commas in multiplier
 // Examples:
-//   "Rating * 3F" -> "Rating*3F"
-//   "Rating * 5,000¥" -> "Rating*5000¥"
-//   "(Rating * 4)R" -> "(Rating*4)R"
+//
+//	"Rating * 3F" -> "Rating*3F"
+//	"Rating * 5,000¥" -> "Rating*5000¥"
+//	"(Rating * 4)R" -> "(Rating*4)R"
 func NormalizeFormula(formula string) string {
 	if !strings.Contains(strings.ToLower(formula), "rating") {
 		return formula
@@ -188,7 +201,6 @@ func NormalizeFormula(formula string) string {
 
 	return formula
 }
-
 
 // RequiresRating returns true if the field contains a rating formula
 func (c *Cyberware) RequiresRating() bool {

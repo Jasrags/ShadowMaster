@@ -299,3 +299,15 @@ func NewSourceReferenceFromString(source string) *SourceReference {
 	}
 }
 
+// intPtr returns a pointer to an int.
+// This helper is useful for creating pointer values for optional int fields.
+func intPtr(i int) *int {
+	return &i
+}
+
+// floatPtr returns a pointer to a float64.
+// This helper is useful for creating pointer values for optional float64 fields.
+func floatPtr(f float64) *float64 {
+	return &f
+}
+

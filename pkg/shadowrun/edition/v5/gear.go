@@ -114,16 +114,16 @@ type Gear struct {
 	// Description is the full text description
 	Description string `json:"description,omitempty"`
 	// Cost is the cost in nuyen (0 if cost varies by rating/model)
-	// Deprecated: Use CostFormulaStruct instead for structured cost handling
+	// Deprecated: Use CostFormula instead for structured cost handling
 	Cost int `json:"cost,omitempty"`
 	// CostPerRating indicates if cost is per rating level
-	// Deprecated: Use CostFormulaStruct instead for structured cost handling
+	// Deprecated: Use CostFormula instead for structured cost handling
 	CostPerRating bool `json:"cost_per_rating,omitempty"`
-	// CostFormula is a formula for calculating cost (e.g., "Capacity*50", "Rating*100")
-	// Deprecated: Use CostFormulaStruct instead for structured cost handling
-	CostFormula string `json:"cost_formula,omitempty"`
-	// CostFormulaStruct is the structured cost formula (new format)
-	CostFormulaStruct *CostFormula `json:"cost_formula_struct,omitempty"`
+	// CostFormulaString is a formula for calculating cost (e.g., "Capacity*50", "Rating*100")
+	// Deprecated: Use CostFormula instead for structured cost handling
+	CostFormulaString string `json:"cost_formula_string,omitempty"`
+	// CostFormula is the structured cost formula (new format)
+	CostFormula *CostFormula `json:"cost_formula,omitempty"`
 	// Availability is the availability code (e.g., "2", "4R", "8F")
 	Availability string `json:"availability,omitempty"`
 	// Rating is the rating for the item (1-6 typically, or varies)
@@ -468,7 +468,7 @@ func (g *Gear) Validate() error {
 		return fmt.Errorf("rating %d exceeds maximum rating %d", g.Rating, g.SpecialProperties.MaxRating)
 	}
 	// Validate structured cost formula if present
-	if g.CostFormulaStruct != nil && !g.CostFormulaStruct.IsValid() {
+	if g.CostFormula != nil && !g.CostFormula.IsValid() {
 		return fmt.Errorf("invalid cost formula")
 	}
 	return nil
