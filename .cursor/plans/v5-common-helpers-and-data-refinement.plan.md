@@ -354,11 +354,11 @@ return err
 
 ### Phase 1: Pointer Helpers ✅
 
-- [ ] Add `intPtr` and `floatPtr` to `common.go`
-- [ ] Remove `intPtr` from `complexforms_data.go`
-- [ ] Remove `floatPtr` from `powers_data.go`
-- [ ] Verify all data files compile
-- [ ] Run tests to ensure no regressions
+- [x] Add `intPtr` and `floatPtr` to `common.go` ✅ **COMPLETE** - Functions are defined at lines 302-312
+- [x] Remove `intPtr` from `complexforms_data.go` ✅ **COMPLETE** - No duplicate found
+- [x] Remove `floatPtr` from `powers_data.go` ✅ **COMPLETE** - No duplicate found
+- [x] Verify all data files compile ✅ **COMPLETE** - All files compile successfully
+- [x] Run tests to ensure no regressions ✅ **COMPLETE** - All tests pass
 
 ### Phase 2: Cost Formula Naming ✅
 

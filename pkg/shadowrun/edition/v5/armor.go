@@ -1,17 +1,60 @@
 package v5
 
-import "fmt"
+import (
+	"fmt"
+)
 
 // ArmorType represents the category of armor item
 type ArmorType string
 
 const (
-	ArmorTypeClothing     ArmorType = "clothing"
-	ArmorTypeArmor        ArmorType = "armor"
-	ArmorTypeModification ArmorType = "modification"
-	ArmorTypeHelmet       ArmorType = "helmet"
-	ArmorTypeShield       ArmorType = "shield"
+	ArmorTypeClothing     ArmorType = "Clothing"
+	ArmorTypeArmor        ArmorType = "Armor"
+	ArmorTypeModification ArmorType = "Modification"
+	ArmorTypeHelmet       ArmorType = "Helmet"
+	ArmorTypeShield       ArmorType = "Shield"
 )
+
+type NewArmor struct {
+	ID                  string               `json:"id,omitempty"`
+	Name                string               `json:"name,omitempty"`
+	Type                ArmorType            `json:"type,omitempty"`
+	Description         string               `json:"description,omitempty"`
+	ArmorRating         string               `json:"armor_rating,omitempty"`
+	Capacity            string               `json:"capacity,omitempty"`
+	Cost                string               `json:"cost,omitempty"`
+	Availability        string               `json:"availability,omitempty"`
+	LegalityType        LegalityType         `json:"legality_type,omitempty"`
+	CompatibleWith      []ArmorType          `json:"compatible_with,omitempty"`
+	ModificationEffects []ModificationEffect `json:"modification_effects,omitempty"`
+	Source              *SourceReference     `json:"source,omitempty"`
+}
+
+type NewArmorModification struct {
+	ID                  string               `json:"id,omitempty"`
+	Name                string               `json:"name,omitempty"`
+	Description         string               `json:"description,omitempty"`
+	ArmorRating         string               `json:"armor_rating,omitempty"`
+	Capacity            string               `json:"capacity,omitempty"`
+	Cost                string               `json:"cost,omitempty"`
+	Availability        string               `json:"availability,omitempty"`
+	LegalityType        LegalityType         `json:"legality_type,omitempty"`
+	CompatibleWith      []ArmorType          `json:"compatible_with,omitempty"`
+	ModificationEffects []ModificationEffect `json:"modification_effects,omitempty"`
+	Source              *SourceReference     `json:"source,omitempty"`
+}
+
+type ModificationEffect struct {
+	ActionType      ActionType      `json:"action_type,omitempty"`
+	ColorChangeable bool            `json:"color_changeable,omitempty"`
+	WirelessAction  *WirelessAction `json:"wireless_action,omitempty"`
+}
+
+type WirelessAction struct {
+	ActionType ActionType `json:"action_type,omitempty"`
+	// ActionTime  *time.Duration `json:"action_time,omitempty"`
+	Description string `json:"description,omitempty"`
+}
 
 // ArmorModificationEffect represents the mechanical effect of an armor modification
 type ArmorModificationEffect struct {
@@ -32,7 +75,7 @@ type ArmorModificationEffect struct {
 	// DurationLimit describes time limits (e.g., "1 hour")
 	DurationLimit string `json:"duration_limit,omitempty"`
 	// ActivationAction describes how to activate (e.g., "Complex Action", "Free Action")
-	ActivationAction string `json:"activation_action,omitempty"`
+	ActivationAction ActionType `json:"activation_action,omitempty"`
 	// DamageInfo describes damage dealt (for offensive modifications like shock frills)
 	DamageInfo string `json:"damage_info,omitempty"`
 	// Charges describes charge capacity and recharge rate
@@ -70,9 +113,9 @@ type Armor struct {
 	// Description is the full text description
 	Description string `json:"description,omitempty"`
 	// ArmorRating is the base armor rating (for armor pieces, helmets, shields)
-	ArmorRating int `json:"armor_rating,omitempty"`
+	ArmorRating string `json:"armor_rating,omitempty"`
 	// Capacity is the capacity for modifications (for armor pieces, helmets, shields)
-	Capacity int `json:"capacity,omitempty"`
+	// Capacity int `json:"capacity,omitempty"`
 	// Rating is the rating for modifications (1-6 typically)
 	Rating int `json:"rating,omitempty"`
 	// MaxRating is the maximum rating available (for modifications)
@@ -89,6 +132,10 @@ type Armor struct {
 	Requires string `json:"requires,omitempty"`
 	// Source contains source book reference information
 	Source *SourceReference `json:"source,omitempty"`
+
+	Capacity     string `json:"capacity,omitempty"`
+	Cost         string `json:"cost,omitempty"`
+	Availability string `json:"availability,omitempty"`
 }
 
 // ArmorData represents the complete armor data structure

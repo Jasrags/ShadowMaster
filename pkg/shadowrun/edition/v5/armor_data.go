@@ -1,5 +1,117 @@
 package v5
 
+/*
+CLOTHING
+(Synth)Leather 					Armor: 4, 	Capacity: 4, 	Device Raiting: 2, 	Cost: 220-100200
+Clothing 						Armor: 0, 	apacity: 0, 	Device Rating: 2, 	Cost: 20-100000
+ARMOR
+Armor Clothing 					Armor: 6, 	Capacity: 6, 	Device Rating: 2, 	Cost: 450, 	Availability: 2
+Armor Jacket					Armor: 10, 	Capacity: 12, 	Device Rating: 2, 	Cost: 1000,	Availability: 2
+Armor Vest						Armor: 9, 	Capacity: 9, 	Device Rating: 2, 	Cost: 500, 	Availability: 2
+Helmet							Armor: +2, 	Capacity: 6, 	Device Rating: 2, 	Cost: 100, 	Availability: 2
+Lined Coat						Armor: 9, 	Capacity: 9, 	Device Rating: 2, 	Cost: 900, 	Availability: 4
+Urban Explorer Jumpsuit 		Armor: 9, 	Capacity: 9, 	Device Rating: 2, 	Cost: 650, 	Availability: 8
+Urban Explorer Jumpsuit Helmet	Armor: +2, 	Capacity: 6, 	Device Rating: 2, 	Cost: 100, 	Availability: 8
+HIGH-FASHION ARMOR CLOTHING
+Auctioneer Business Clothes 	Armor: 8, 	Capacity: 8, 	Device Rating: 2, 	Cost: 1500, Availability: 8, Manufacturer: Vashon Island
+SPECIALTY ARMOR
+Chameleon Suit					Armor: 9, 	Capacity: 9, 	Device Rating: 2, 	Cost: 1700, Availability: 10R
+Full Body Armor					Armor: 15, 	Capacity: 15, 	Device Rating: 2, 	Cost: 2000, Availability: 14R
+Full Body Armor Helmet			Armor: +3, 	Capacity: 6, 	Device Rating: 2, 	Cost: 500, 	Availability: 14R
+SHIELDS
+Ballistic Shield				Armor: +6, 	Capacity: 6, 	Device Rating: 2, 	Cost: 1200, Availability: 12R, Accuracy: 4, Damage Ratin: (STR+2)S, Reach: 0, Wearing will make the user Encumbered
+Riot Shield						Armor: +6, 	Capacity: 6, 	Device Rating: 2, 	Cost: 1500, Availability: 10R, Accuracy: 4, Damage Raiting: (9S(e)v-5, Reach: 0, Wearing will make the user Encumbered
+ENVIRONMENTAL PROTECTION - UNDERWATER
+Diving Gear						Armor: 0, 	Capacity: 0, 	Device Rating: 2, 	Cost: 2000, Availability: 6, Resistance To Cold: +1
+ENVIRONMENTAL PROTECTION - TOXIC
+Chemsuit						Armor: 0, 	Capacity: 0, 	Device Rating: 2, 	Cost: 150*R, Availability: 2*R
+Hazmat Suit						Armor: 0, 	Capacity: 0, 	Device Rating: 2, 	Cost: 3000, 	Availability: 8, Ratings: 1-6, Adds Chemical seal protection from contact and inhalation toxin, + Geiger counter, Wireless: Suit analyzes and transmits information about the environment thatn you not touching or breating.
+SURVIVAL GEAR
+Gas Mask						Armor: 0, 	Capacity: 0, 	Device Rating: 2, 	Cost: 200, 		Availability: 0, Wireless: Gas Mask analyzes and transmits information about the environment thatn you not touching or breating.
+Respirator						Armor: 0, 	Capacity: 0, 	Device Rating: 2, 	Cost: R*50, 	Availability: 0, Ratings: 1-6, Wireless: Respirator analyzes and transmits information about the environment you're not touching or breating.
+*/
+
+var newDataArmor = map[string]NewArmor{
+	"clothing": {
+		ID:           "clothing",
+		Name:         "Clothing",
+		Type:         ArmorTypeClothing,
+		Description:  "Clothing in 2075 comes with amazing features you'll likely completely take for granted. Commlinks, music players, and other electronic devices can be woven right into the fabric, powered by interwoven batteries or special energy-gathering fabrics. On the other side of the economy, cheap soy-based \"flats\" can be had for five nuyen per article of clothing from vending machines around the Sprawl. The more money you spend on your threads, the more impressive you look.",
+		ArmorRating:  "0",
+		Availability: "0",
+		Cost:         "20-100,000",
+		Source: &SourceReference{
+			Source: "SR5",
+			Page:   "436",
+		},
+	},
+	"electrochromic_modification": {
+		ID:             "electrochromic_modification",
+		Name:           "Electrochromic modification",
+		Type:           ArmorTypeModification,
+		Description:    "Electrochromic threads can change color with voltage, letting you alter the color of your clothing or display text, images, or patterns. This is good for fashion, but great for vanishing into a crowd if you need a quick costume change. You can even get armored clothing in electrochromic styles. It takes a Simple Action to change the settings on your electrochromic clothes, but a couple of Combat Turns to complete the change.",
+		ArmorRating:    "0",
+		Availability:   "+2",
+		Cost:           "+500",
+		CompatibleWith: []ArmorType{ArmorTypeClothing, ArmorTypeArmor, ArmorTypeHelmet, ArmorTypeShield},
+		ModificationEffects: []ModificationEffect{
+			{
+				ActionType:      ActionTypeComplex,
+				ColorChangeable: true,
+				WirelessAction: &WirelessAction{
+					ActionType: ActionTypeSimple,
+					// ActionTime:  &time.Duration(2 * time.CombatTurn),
+					Description: "It takes a Simple Action to change the settings on your electrochromic clothes, but a couple of Combat Turns to complete the change.",
+				},
+			},
+		},
+		Source: &SourceReference{
+			Source: "SR5",
+			Page:   "437",
+		},
+	},
+}
+
+var newDataArmorModification = map[string]NewArmorModification{
+	"electrochromic_modification": {
+		ID:             "electrochromic_modification",
+		Name:           "Electrochromic modification",
+		Description:    "Electrochromic threads can change color with voltage, letting you alter the color of your clothing or display text, images, or patterns. This is good for fashion, but great for vanishing into a crowd if you need a quick costume change. You can even get armored clothing in electrochromic styles. It takes a Simple Action to change the settings on your electrochromic clothes, but a couple of Combat Turns to complete the change.",
+		Availability:   "+2",
+		Cost:           "+500",
+		CompatibleWith: []ArmorType{ArmorTypeClothing, ArmorTypeArmor, ArmorTypeHelmet, ArmorTypeShield},
+		ModificationEffects: []ModificationEffect{
+			{
+				ActionType:      ActionTypeComplex,
+				ColorChangeable: true,
+				WirelessAction: &WirelessAction{
+					ActionType: ActionTypeSimple,
+					// ActionTime:  &time.Duration(2 * time.CombatTurn),
+					Description: "It takes a Simple Action to change the settings on your electrochromic clothes, but a couple of Combat Turns to complete the change.",
+				},
+			},
+		},
+		Source: &SourceReference{
+			Source: "SR5",
+			Page:   "437",
+		},
+	},
+	"feedback_clothing": {
+		ID:           "feedback_clothing",
+		Name:         "Feedback clothing",
+		Description:  "This haptic clothing allows for a tactile component to an augmented reality experience.",
+		Availability: "8",
+		Cost:         "+500",
+	},
+	"synth_leather": {
+		ID:           "synth_leather",
+		Name:         "Synth leather",
+		Description:  "This is a type of leather that is made from synthetic materials. It is often used in clothing and other items.",
+		Availability: "8",
+		Cost:         "+500",
+	},
+}
+
 // dataArmor contains all armor definitions organized by category
 var dataArmor = map[string]Armor{
 	// CLOTHING
@@ -9,41 +121,42 @@ var dataArmor = map[string]Armor{
 		Description: "Clothing in 2075 comes with amazing features you'll likely completely take for granted. Commlinks, music players, and other electronic devices can be woven right into the fabric, powered by interwoven batteries or special energy-gathering fabrics. On the other side of the economy, cheap soy-based \"flats\" can be had for five nuyen per article of clothing from vending machines around the Sprawl. The more money you spend on your threads, the more impressive you look.",
 		Source: &SourceReference{
 			Source: "SR5",
-			Page:   "437",
+			Page:   "",
 		},
 	},
 	"electrochromic_clothing": {
 		Name:        "Electrochromic clothing",
-		Type:        ArmorTypeClothing,
+		Type:        ArmorTypeModification,
 		Description: "Electrochromic threads can change color with voltage, letting you alter the color of your clothing or display text, images, or patterns. This is good for fashion, but great for vanishing into a crowd if you need a quick costume change. You can even get armored clothing in electrochromic styles. It takes a Simple Action to change the settings on your electrochromic clothes, but a couple of Combat Turns to complete the change.",
 		SpecialProperties: &ArmorSpecialProperty{
 			ColorChangeable: true,
+			// ActionChange:    ActionTypeSimple,
 		},
 		WirelessBonus: &WirelessBonus{
-			ActionChange: "Free Action instead of Simple Action",
+			ActionChange: ActionTypeFree,
 			Description:  "Changing your clothes' settings is a Free Action, and while it's not good enough to be camouflage, it can display images, text files, or flat video from your commlink.",
 		},
 		Source: &SourceReference{
 			Source: "SR5",
-			Page:   "437",
+			Page:   "",
 		},
 	},
 	"feedback_clothing": {
 		Name:        "Feedback clothing",
-		Type:        ArmorTypeClothing,
+		Type:        ArmorTypeModification,
 		Description: "This haptic clothing allows for a tactile component to an augmented reality experience.",
 		Source: &SourceReference{
 			Source: "SR5",
-			Page:   "437",
+			Page:   "",
 		},
 	},
 	"leather_jacket_duster": {
 		Name:        "Leather jacket/duster",
-		Type:        ArmorTypeClothing,
+		Type:        ArmorTypeModification,
 		Description: "Usually made of synthleather unless you've got mad nuyen, this type of jacket (waist-length to duster) never goes out of style and even offers a modicum of protection. Just don't expect it to stop bullets.",
 		Source: &SourceReference{
 			Source: "SR5",
-			Page:   "437",
+			Page:   "",
 		},
 	},
 	// ARMOR
@@ -53,16 +166,20 @@ var dataArmor = map[string]Armor{
 		Description: "A discreetly armored \"power suit\" is a popular choice among Mr. Johnsons, faces, and fixers looking for a little high-class protection coupled with style. It features a concealable holster (Firearm Accessories, p. 431) in the jacket.",
 		Source: &SourceReference{
 			Source: "SR5",
-			Page:   "437",
+			Page:   "",
 		},
 	},
 	"armor_clothing": {
-		Name:        "Armor clothing",
-		Type:        ArmorTypeArmor,
-		Description: "Lightweight ballistic fiber weave makes these garments almost impossible to detect as armor. It doesn't provide as much protection as real armor, but it's available in a wide variety of styles.",
+		Name:         "Armor clothing",
+		Type:         ArmorTypeArmor,
+		ArmorRating:  "6",
+		Capacity:     "6",
+		Availability: "2",
+		Cost:         "450",
+		Description:  "Lightweight ballistic fiber weave makes these garments almost impossible to detect as armor. It doesn't provide as much protection as real armor, but it's available in a wide variety of styles.",
 		Source: &SourceReference{
 			Source: "SR5",
-			Page:   "437",
+			Page:   "",
 		},
 	},
 	"armor_jacket": {
@@ -71,7 +188,7 @@ var dataArmor = map[string]Armor{
 		Description: "The most popular armor solution on the streets comes in all styles imaginable. It offers good protection without catching too much attention. But don't think of wearing one to a dinner party.",
 		Source: &SourceReference{
 			Source: "SR5",
-			Page:   "437",
+			Page:   "",
 		},
 	},
 	"armor_vest": {
@@ -80,7 +197,7 @@ var dataArmor = map[string]Armor{
 		Description: "This modern flexible-wrap vest is designed to be worn under regular clothing without displaying any bulk. A popular and cost-effective option.",
 		Source: &SourceReference{
 			Source: "SR5",
-			Page:   "437",
+			Page:   "",
 		},
 	},
 	"chameleon_suit": {
@@ -96,7 +213,7 @@ var dataArmor = map[string]Armor{
 		},
 		Source: &SourceReference{
 			Source: "SR5",
-			Page:   "437",
+			Page:   "",
 		},
 	},
 	"full_body_armor": {
@@ -110,7 +227,7 @@ var dataArmor = map[string]Armor{
 		},
 		Source: &SourceReference{
 			Source: "SR5",
-			Page:   "437",
+			Page:   "",
 		},
 	},
 	"lined_coat": {
@@ -122,7 +239,7 @@ var dataArmor = map[string]Armor{
 		},
 		Source: &SourceReference{
 			Source: "SR5",
-			Page:   "437",
+			Page:   "",
 		},
 	},
 	"urban_explorer_jumpsuit": {
@@ -134,7 +251,7 @@ var dataArmor = map[string]Armor{
 		},
 		Source: &SourceReference{
 			Source: "SR5",
-			Page:   "437",
+			Page:   "",
 		},
 	},
 	// ARMOR MODIFICATIONS
@@ -153,7 +270,7 @@ var dataArmor = map[string]Armor{
 		CompatibleWith: []string{"any piece of worn armor"},
 		Source: &SourceReference{
 			Source: "SR5",
-			Page:   "437",
+			Page:   "",
 		},
 	},
 	"chemical_seal": {
@@ -166,7 +283,7 @@ var dataArmor = map[string]Armor{
 				Type:               "Chemical",
 				CompleteProtection: true,
 				DurationLimit:      "1 hour",
-				ActivationAction:   "Complex Action",
+				ActivationAction:   ActionTypeComplex,
 			},
 		},
 		WirelessBonus: &WirelessBonus{
@@ -175,7 +292,7 @@ var dataArmor = map[string]Armor{
 		},
 		Source: &SourceReference{
 			Source: "SR5",
-			Page:   "437",
+			Page:   "",
 		},
 	},
 	"fire_resistance": {
@@ -192,7 +309,7 @@ var dataArmor = map[string]Armor{
 		CompatibleWith: []string{"any piece of worn armor", "shields"},
 		Source: &SourceReference{
 			Source: "SR5",
-			Page:   "437",
+			Page:   "",
 		},
 	},
 	"insulation": {
@@ -209,7 +326,7 @@ var dataArmor = map[string]Armor{
 		CompatibleWith: []string{"any piece of worn armor"},
 		Source: &SourceReference{
 			Source: "SR5",
-			Page:   "437",
+			Page:   "",
 		},
 	},
 	"nonconductivity": {
@@ -226,7 +343,7 @@ var dataArmor = map[string]Armor{
 		CompatibleWith: []string{"any piece of worn armor", "shields"},
 		Source: &SourceReference{
 			Source: "SR5",
-			Page:   "437",
+			Page:   "",
 		},
 	},
 	"shock_frills": {
@@ -247,7 +364,7 @@ var dataArmor = map[string]Armor{
 		CompatibleWith: []string{"any piece of worn armor"},
 		Source: &SourceReference{
 			Source: "SR5",
-			Page:   "437",
+			Page:   "",
 		},
 	},
 	"thermal_damping": {
@@ -269,7 +386,7 @@ var dataArmor = map[string]Armor{
 		CompatibleWith: []string{"any piece of worn armor"},
 		Source: &SourceReference{
 			Source: "SR5",
-			Page:   "437",
+			Page:   "",
 		},
 	},
 	// HELMETS
@@ -280,7 +397,7 @@ var dataArmor = map[string]Armor{
 		Capacity:    6,
 		Source: &SourceReference{
 			Source: "SR5",
-			Page:   "437",
+			Page:   "",
 		},
 	},
 	// SHIELDS
@@ -293,7 +410,7 @@ var dataArmor = map[string]Armor{
 		},
 		Source: &SourceReference{
 			Source: "SR5",
-			Page:   "437",
+			Page:   "",
 		},
 	},
 	"riot_shield": {
@@ -315,7 +432,7 @@ var dataArmor = map[string]Armor{
 		},
 		Source: &SourceReference{
 			Source: "SR5",
-			Page:   "437",
+			Page:   "",
 		},
 	},
 }

@@ -26,6 +26,14 @@ import (
 	"strings"
 )
 
+type LegalityType string
+
+const (
+	LegalityTypeNone       LegalityType = ""
+	LegalityTypeRestricted LegalityType = "Restricted"
+	LegalityTypeForbidden  LegalityType = "Forbidden"
+)
+
 // SourceReference provides source book and page information
 type SourceReference struct {
 	Source string `json:"source,omitempty"`
@@ -37,7 +45,7 @@ type WirelessBonus struct {
 	// Description describes the wireless bonus effect
 	Description string `json:"description,omitempty"`
 	// ActionChange describes if an action type changes (e.g., "Free Action instead of Simple Action")
-	ActionChange string `json:"action_change,omitempty"`
+	ActionChange ActionType `json:"action_change,omitempty"`
 	// DicePoolBonus is a dice pool bonus provided
 	DicePoolBonus int `json:"dice_pool_bonus,omitempty"`
 	// LimitBonus is a limit bonus provided
@@ -57,16 +65,18 @@ type WirelessBonus struct {
 // This is the common cost formula type used across multiple entity types.
 //
 // Usage:
-//   Fixed cost:
-//     CostFormula{BaseCost: intPtr(15000), IsFixed: true}
 //
-//   Formula-based cost:
-//     CostFormula{Formula: "Rating * 20000", IsVariable: true}
+//	Fixed cost:
+//	  CostFormula{BaseCost: intPtr(15000), IsFixed: true}
+//
+//	Formula-based cost:
+//	  CostFormula{Formula: "Rating * 20000", IsVariable: true}
 //
 // Methods:
-//   RequiresRating() - checks if formula needs a rating value
-//   Calculate(rating int) - calculates the cost for a given rating
-//   IsValid() - validates the formula is well-formed
+//
+//	RequiresRating() - checks if formula needs a rating value
+//	Calculate(rating int) - calculates the cost for a given rating
+//	IsValid() - validates the formula is well-formed
 //
 // Note: For domain-specific cost calculations, see:
 // - PowerCostFormula (powers.go) - for power point costs using levels
@@ -135,16 +145,18 @@ func (cf *CostFormula) IsValid() bool {
 // It can represent either a fixed value or a formula.
 //
 // Usage:
-//   Fixed value:
-//     RatingFormula{FixedValue: floatPtr(0.2), IsFixed: true}
 //
-//   Formula-based:
-//     RatingFormula{Formula: "Rating * 0.1"}
+//	Fixed value:
+//	  RatingFormula{FixedValue: floatPtr(0.2), IsFixed: true}
+//
+//	Formula-based:
+//	  RatingFormula{Formula: "Rating * 0.1"}
 //
 // Methods:
-//   RequiresRating() - checks if formula needs a rating value
-//   Calculate(rating int) - calculates the value for a given rating
-//   IsValid() - validates the formula is well-formed
+//
+//	RequiresRating() - checks if formula needs a rating value
+//	Calculate(rating int) - calculates the value for a given rating
+//	IsValid() - validates the formula is well-formed
 type RatingFormula struct {
 	// FixedValue is the fixed value if not formula-based.
 	// Use when IsFixed is true.
@@ -279,9 +291,10 @@ type Ratable interface {
 // and return an error describing any validation failures.
 //
 // Example:
-//   if err := entity.Validate(); err != nil {
-//       // Handle validation error
-//   }
+//
+//	if err := entity.Validate(); err != nil {
+//	    // Handle validation error
+//	}
 type Validator interface {
 	Validate() error
 }
@@ -310,4 +323,3 @@ func intPtr(i int) *int {
 func floatPtr(f float64) *float64 {
 	return &f
 }
-

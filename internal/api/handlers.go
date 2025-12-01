@@ -724,10 +724,21 @@ func (h *Handlers) GetArmor(w http.ResponseWriter, r *http.Request) {
 			uiItem["category"] = armorTypeToDisplayName(a.Type)
 		}
 
-		// Map armor_rating to armor (as string)
-		if a.ArmorRating > 0 {
-			uiItem["armor"] = a.ArmorRating
-		} else {
+		// Map armor_rating to armor (as int or string)
+		switch v := a.ArmorRating.(type) {
+		case int:
+			if v > 0 {
+				uiItem["armor"] = v
+			} else {
+				uiItem["armor"] = ""
+			}
+		case string:
+			if v != "" && v != "0" {
+				uiItem["armor"] = v
+			} else {
+				uiItem["armor"] = ""
+			}
+		default:
 			uiItem["armor"] = ""
 		}
 
@@ -918,7 +929,6 @@ func (h *Handlers) GetActions(w http.ResponseWriter, r *http.Request) {
 		"actions": actions,
 	})
 }
-
 
 // GetBioware handles GET /api/equipment/bioware
 func (h *Handlers) GetBioware(w http.ResponseWriter, r *http.Request) {
