@@ -9,6 +9,7 @@ import { HomePage } from './pages/HomePage';
 import { CampaignsPage } from './pages/CampaignsPage';
 import { CharactersPage } from './pages/CharactersPage';
 import { CharacterCreationPage } from './pages/CharacterCreationPage';
+import { CharacterSheetPage } from './pages/CharacterSheetPage';
 import { GearPage } from './pages/GearPage';
 import { ArmorPage } from './pages/ArmorPage';
 import { WeaponsPage } from './pages/WeaponsPage';
@@ -73,6 +74,14 @@ function App() {
                   element={
                     <AdminRoute>
                       <CharactersPage />
+                    </AdminRoute>
+                  }
+                />
+                <Route
+                  path="/characters/:id"
+                  element={
+                    <AdminRoute>
+                      <CharacterSheetPage />
                     </AdminRoute>
                   }
                 />

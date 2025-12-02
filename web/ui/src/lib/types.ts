@@ -1225,6 +1225,8 @@ export interface KarmaSelection {
   gameplay_level?: string;
 }
 
+export type CharacterStatus = 'Creation' | 'Review' | 'Advancement';
+
 export interface Character {
   id: string;
   name: string;
@@ -1232,7 +1234,7 @@ export interface Character {
   user_id?: string;
   campaign_id?: string;
   is_npc: boolean;
-  status?: string;
+  status?: CharacterStatus;
   edition: string;
   edition_data: CharacterSR5 | Record<string, unknown>;
   created_at: string;

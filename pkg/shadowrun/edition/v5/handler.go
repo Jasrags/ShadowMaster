@@ -36,6 +36,7 @@ func (h *SR5Handler) CreateCharacter(name, playerName string, creationData inter
 		Name:       name,
 		PlayerName: playerName,
 		Edition:    "sr5",
+		Status:     "Creation",
 	}
 
 	// Initialize SR5 data structure

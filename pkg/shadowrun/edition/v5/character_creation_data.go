@@ -1,6 +1,7 @@
 package v5
 
 import (
+	"fmt"
 	"shadowmaster/internal/domain"
 )
 
@@ -74,10 +75,15 @@ func convertMetatypesToDefinitions() []domain.MetatypeDefinition {
 			attrRanges["edge"] = domain.AttributeRange{Min: mt.Edge.Min, Max: mt.Edge.Max}
 		}
 
-		// Convert racial traits to abilities list
+		// Convert racial traits to abilities list with descriptions
+		// Store as "Name" or "Name (Description)" format for frontend display
 		abilities := make([]string, len(mt.RacialTraits))
 		for i, trait := range mt.RacialTraits {
-			abilities[i] = trait.Name
+			if trait.Description != "" {
+				abilities[i] = fmt.Sprintf("%s (%s)", trait.Name, trait.Description)
+			} else {
+				abilities[i] = trait.Name
+			}
 		}
 
 		// Build special attribute points from priority data

@@ -399,6 +399,14 @@ export const characterApi = {
     return apiRequest<Character[]>('/characters');
   },
 
+  // Update character
+  async updateCharacter(id: string, character: Partial<Character>): Promise<Character> {
+    return apiRequest<Character>(`/characters/${id}`, {
+      method: 'PUT',
+      body: JSON.stringify(character),
+    });
+  },
+
   // Delete character
   async deleteCharacter(id: string): Promise<void> {
     return apiRequest<void>(`/characters/${id}`, {
