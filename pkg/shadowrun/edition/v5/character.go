@@ -17,6 +17,18 @@ func (h *SR5Handler) applyPriorityMethod(char *domain.CharacterSR5, data map[str
 		GameplayLevel: getStringFromMap(data, "gameplay_level", "experienced"),
 	}
 
+	// Check if priorities are set - if all are empty, skip validation and application
+	// This allows creating characters in "Creation" status without priorities
+	hasPriorities := selection.Metatype != "" || selection.Attributes != "" ||
+		selection.Magic != "" || selection.Skills != "" || selection.Resources != ""
+
+	if !hasPriorities {
+		// No priorities set - just set the creation method and gameplay level
+		char.CreationMethod = "priority"
+		char.GameplayLevel = selection.GameplayLevel
+		return nil
+	}
+
 	if err := ValidatePrioritySelection(selection); err != nil {
 		return err
 	}

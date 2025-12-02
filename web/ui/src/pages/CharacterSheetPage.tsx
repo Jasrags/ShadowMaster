@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { TextField, Input, TextArea, Dialog, Modal, Heading } from 'react-aria-components';
 import { Button } from 'react-aria-components';
@@ -41,7 +41,8 @@ function DamageTrack({ label, boxes, penalties }: { label: string; boxes: number
 }
 
 function StatusBadge({ status }: { status: CharacterStatus | undefined }) {
-  if (!status) return null;
+  // Default to Creation if status is undefined (matches getCharacterMode logic)
+  const effectiveStatus = status || 'Creation';
   
   const statusConfig = {
     Creation: { label: 'Creation', color: 'bg-yellow-600 text-yellow-100' },
@@ -49,7 +50,7 @@ function StatusBadge({ status }: { status: CharacterStatus | undefined }) {
     Advancement: { label: 'Advancement', color: 'bg-green-600 text-green-100' },
   };
   
-  const config = statusConfig[status] || statusConfig.Creation;
+  const config = statusConfig[effectiveStatus] || statusConfig.Creation;
   
   return (
     <span className={`px-3 py-1 rounded-full text-xs font-medium ${config.color}`}>
@@ -76,6 +77,16 @@ export function CharacterSheetPage() {
   const [showStatusConfirm, setShowStatusConfirm] = useState(false);
   const [pendingStatus, setPendingStatus] = useState<CharacterStatus | null>(null);
   const [isUpdatingStatus, setIsUpdatingStatus] = useState(false);
+  const [creationData, setCreationData] = useState<any>(null);
+  const [storedMetatype, setStoredMetatype] = useState<string | null>(null);
+  const [storedMagicType, setStoredMagicType] = useState<string | null>(null);
+  const [attributeRanges, setAttributeRanges] = useState<Record<string, { min: number; max: number }>>({});
+  const [validationErrors, setValidationErrors] = useState<Record<string, string>>({});
+  const [touchedFields, setTouchedFields] = useState<Record<string, boolean>>({});
+  const [characterName, setCharacterName] = useState<string>('');
+  const [isPrioritySectionExpanded, setIsPrioritySectionExpanded] = useState<boolean>(true);
+  const nameUpdateTimeoutRef = useRef<NodeJS.Timeout | null>(null);
+  const validationTimeoutRef = useRef<NodeJS.Timeout | null>(null);
 
   useEffect(() => {
     if (id) {
@@ -89,12 +100,503 @@ export function CharacterSheetPage() {
     }
   }, [character?.campaign_id]);
 
+  useEffect(() => {
+    if (character?.edition === 'sr5') {
+      loadCreationData();
+    }
+  }, [character?.edition]);
+
+  // Load stored metatype from localStorage
+  useEffect(() => {
+    const loadStoredMetatype = () => {
+      if (character?.id) {
+        const storageKey = `character_creation_${character.id}`;
+        const stored = localStorage.getItem(storageKey);
+        if (stored) {
+          try {
+            const parsed = JSON.parse(stored);
+            setStoredMetatype(parsed.metatype || null);
+            setStoredMagicType(parsed.magicType || null);
+            // Load attribute ranges if stored
+            if (parsed.attributeRanges) {
+              setAttributeRanges(parsed.attributeRanges);
+            }
+          } catch (e) {
+            // Ignore parse errors
+          }
+        }
+      }
+    };
+    
+    loadStoredMetatype();
+    
+    // Listen for storage changes (when metatype is selected in modal)
+    const handleStorageChange = (e: StorageEvent) => {
+      if (character?.id && e.key === `character_creation_${character.id}`) {
+        try {
+          const parsed = JSON.parse(e.newValue || '{}');
+          setStoredMetatype(parsed.metatype || null);
+          setStoredMagicType(parsed.magicType || null);
+          if (parsed.attributeRanges) {
+            setAttributeRanges(parsed.attributeRanges);
+          }
+        } catch (e) {
+          // Ignore parse errors
+        }
+      }
+    };
+    
+    // Listen for custom event (same-tab updates)
+    const handleCustomStorageChange = () => {
+      loadStoredMetatype();
+    };
+    
+    window.addEventListener('storage', handleStorageChange);
+    window.addEventListener('localStorageChange', handleCustomStorageChange);
+    return () => {
+      window.removeEventListener('storage', handleStorageChange);
+      window.removeEventListener('localStorageChange', handleCustomStorageChange);
+    };
+  }, [character?.id]);
+
+  const loadCreationData = async () => {
+    try {
+      const data = await characterApi.getCharacterCreationData('sr5');
+      setCreationData(data);
+    } catch (err) {
+      // Silently fail - creation data is optional
+      console.error('Failed to load creation data:', err);
+    }
+  };
+
+  const getMetatypeName = (): string => {
+    // First check storedMetatype state (from localStorage)
+    let metatypeId: string | undefined = storedMetatype || undefined;
+    
+    // Fall back to editionData if not in localStorage
+    if (!metatypeId) {
+      metatypeId = editionData?.metatype;
+    }
+    
+    if (!metatypeId || !creationData) return '';
+    const metatype = creationData.metatypes?.find((m: any) => m.id === metatypeId || m.name.toLowerCase() === metatypeId.toLowerCase());
+    return metatype?.name || metatypeId;
+  };
+
+  const getMetatypeData = () => {
+    let metatypeId: string | undefined = storedMetatype || editionData?.metatype;
+    if (!metatypeId || !creationData) return null;
+    return creationData.metatypes?.find((m: any) => m.id === metatypeId || m.name.toLowerCase() === metatypeId.toLowerCase());
+  };
+
+  const getEssence = (): number => {
+    // Get essence from attribute ranges (stored when metatype is selected)
+    const essenceRange = attributeRanges.essence;
+    if (essenceRange) {
+      // Return maximum value (starting essence)
+      return Math.max(0, essenceRange.max);
+    }
+    
+    // Fall back to stored value or default
+    if (character?.id) {
+      const storageKey = `character_creation_${character.id}`;
+      const stored = localStorage.getItem(storageKey);
+      if (stored) {
+        try {
+          const parsed = JSON.parse(stored);
+          if (parsed.attributes?.essence !== undefined) {
+            return Math.max(0, parsed.attributes.essence);
+          }
+        } catch (e) {
+          // Ignore parse errors
+        }
+      }
+    }
+    
+    // Default to 6 (max essence for standard metatypes)
+    return Math.max(0, editionData?.essence || 6);
+  };
+
+  const getEssenceRange = (): string => {
+    const essenceRange = attributeRanges.essence;
+    if (essenceRange) {
+      return `${essenceRange.min}/${essenceRange.max}`;
+    }
+    return '';
+  };
+
+  const getMagicPriority = (): string => {
+    // Check localStorage first
+    if (character?.id) {
+      const storageKey = `character_creation_${character.id}`;
+      const stored = localStorage.getItem(storageKey);
+      if (stored) {
+        try {
+          const parsed = JSON.parse(stored);
+          if (parsed.priorities?.magic) {
+            return parsed.priorities.magic;
+          }
+        } catch (e) {
+          // Ignore parse errors
+        }
+      }
+    }
+    // Fall back to editionData
+    return editionData?.magic_priority || '';
+  };
+
+  const getMagicValue = (): number => {
+    // Check if user is magical (not Technomancer or mundane)
+    const magicType = storedMagicType || editionData?.magic_type;
+    if (!magicType || magicType === 'Technomancer' || magicType === 'None') return 0;
+    
+    // Get magic rating from priority
+    const magicPriority = getMagicPriority();
+    if (!magicPriority || !creationData?.priorities?.magic) return 0;
+    
+    const priorityOption = creationData.priorities.magic[magicPriority];
+    if (!priorityOption) return 0;
+    
+    // Return the magic_rating from priority data (minimum value)
+    return priorityOption.magic_rating || 0;
+  };
+
+  const getResonanceValue = (): number => {
+    // Check if user is Technomancer
+    const magicType = storedMagicType || editionData?.magic_type;
+    if (magicType !== 'Technomancer') return 0;
+    
+    // Get resonance rating from priority
+    const magicPriority = getMagicPriority();
+    if (!magicPriority || !creationData?.priorities?.magic) return 0;
+    
+    const priorityOption = creationData.priorities.magic[magicPriority];
+    if (!priorityOption) return 0;
+    
+    // Return the magic_rating from priority data (which is Resonance for Technomancers)
+    return priorityOption.magic_rating || 0;
+  };
+
+  const isMagical = (): boolean => {
+    const magicType = storedMagicType || editionData?.magic_type;
+    return magicType && magicType !== 'None' && magicType !== 'Technomancer';
+  };
+
+  const isTechnomancer = (): boolean => {
+    const magicType = storedMagicType || editionData?.magic_type;
+    return magicType === 'Technomancer';
+  };
+
+  // Update attributes and essence when metatype is selected
+  useEffect(() => {
+    if (!storedMetatype || !creationData) return;
+    
+    const metatype = creationData.metatypes?.find((m: any) => m.id === storedMetatype || m.name.toLowerCase() === storedMetatype.toLowerCase());
+    if (metatype && metatype.attribute_ranges) {
+      // Convert attribute ranges to our format
+      const ranges: Record<string, { min: number; max: number }> = {};
+      Object.entries(metatype.attribute_ranges).forEach(([attr, range]: [string, any]) => {
+        ranges[attr] = {
+          min: range.min ?? range.Min ?? 1,
+          max: range.max ?? range.Max ?? 6,
+        };
+      });
+      setAttributeRanges(ranges);
+      
+      // Save to localStorage
+      if (character?.id) {
+        const storageKey = `character_creation_${character.id}`;
+        const stored = localStorage.getItem(storageKey);
+        if (stored) {
+          try {
+            const parsed = JSON.parse(stored);
+            parsed.attributeRanges = ranges;
+            // Set current values to minimums (except essence which uses max)
+            parsed.attributes = {
+              body: ranges.body?.min || 1,
+              agility: ranges.agility?.min || 1,
+              reaction: ranges.reaction?.min || 1,
+              strength: ranges.strength?.min || 1,
+              willpower: ranges.willpower?.min || 1,
+              logic: ranges.logic?.min || 1,
+              intuition: ranges.intuition?.min || 1,
+              charisma: ranges.charisma?.min || 1,
+              edge: ranges.edge?.min || 1,
+              essence: ranges.essence?.max || 6,
+            };
+            localStorage.setItem(storageKey, JSON.stringify(parsed));
+            window.dispatchEvent(new Event('localStorageChange'));
+          } catch (e) {
+            console.error('Failed to save attribute ranges:', e);
+          }
+        }
+      }
+    }
+  }, [storedMetatype, creationData, character?.id]);
+
+  const getAttributeValue = (attr: string): number => {
+    // Check localStorage for stored attribute values
+    if (character?.id) {
+      const storageKey = `character_creation_${character.id}`;
+      const stored = localStorage.getItem(storageKey);
+      if (stored) {
+        try {
+          const parsed = JSON.parse(stored);
+          if (parsed.attributes && parsed.attributes[attr] !== undefined) {
+            return parsed.attributes[attr];
+          }
+        } catch (e) {
+          // Ignore parse errors
+        }
+      }
+    }
+    
+    // Fall back to editionData
+    const value = (editionData as any)?.[attr];
+    if (value !== undefined) return value;
+    
+    // Fall back to minimum from attribute ranges
+    return attributeRanges[attr]?.min || 0;
+  };
+
+  const getAttributeRange = (attr: string): string => {
+    const range = attributeRanges[attr];
+    if (!range) return '';
+    return `${range.min}/${range.max}`;
+  };
+
+  // Validation functions
+  const validateName = (name: string): string => {
+    if (!name || name.trim().length === 0) {
+      return 'Name is required';
+    }
+    // Alphanumeric and spaces only
+    const nameRegex = /^[a-zA-Z0-9\s]+$/;
+    if (!nameRegex.test(name)) {
+      return 'Name can only contain letters, numbers, and spaces';
+    }
+    return '';
+  };
+
+  const getPriorities = (editionDataRef?: CharacterSR5): Record<string, string> => {
+    if (!character?.id) return {};
+    const storageKey = `character_creation_${character.id}`;
+    const stored = localStorage.getItem(storageKey);
+    if (stored) {
+      try {
+        const parsed = JSON.parse(stored);
+        return parsed.priorities || {};
+      } catch (e) {
+        // Ignore parse errors
+      }
+    }
+    // Fall back to editionData
+    if (editionDataRef) {
+      return {
+        metatype: editionDataRef?.metatype_priority || '',
+        attributes: editionDataRef?.attributes_priority || '',
+        magic: editionDataRef?.magic_priority || '',
+        skills: editionDataRef?.skills_priority || '',
+        resources: editionDataRef?.resources_priority || '',
+      };
+    }
+    return {};
+  };
+
+  const validatePriorities = (editionDataRef?: CharacterSR5): string => {
+    const priorities = getPriorities(editionDataRef);
+    const priorityValues = Object.values(priorities).filter(p => p && p !== 'none');
+    const uniquePriorities = new Set(priorityValues);
+    
+    if (priorityValues.length !== uniquePriorities.size) {
+      return 'Each priority level (A-E) must be used exactly once';
+    }
+    
+    // Check if all 5 priorities are assigned
+    if (priorityValues.length < 5) {
+      return 'All 5 priority levels (A-E) must be assigned';
+    }
+    
+    // Check that all A-E are present
+    const requiredPriorities = ['A', 'B', 'C', 'D', 'E'];
+    const assignedPriorities = Array.from(uniquePriorities);
+    const missingPriorities = requiredPriorities.filter(p => !assignedPriorities.includes(p));
+    if (missingPriorities.length > 0) {
+      return `Missing priority levels: ${missingPriorities.join(', ')}`;
+    }
+    
+    return '';
+  };
+
+  const validateAttributes = (): string => {
+    // Physical attributes: Body, Agility, Reaction, Strength
+    // Mental attributes: Willpower, Logic, Intuition, Charisma
+    const physicalAttrs = ['body', 'agility', 'reaction', 'strength'];
+    const mentalAttrs = ['willpower', 'logic', 'intuition', 'charisma'];
+    
+    let physicalMaxCount = 0;
+    let mentalMaxCount = 0;
+    
+    physicalAttrs.forEach(attr => {
+      const value = getAttributeValue(attr);
+      const range = attributeRanges[attr];
+      if (range && value >= range.max) {
+        physicalMaxCount++;
+      }
+    });
+    
+    mentalAttrs.forEach(attr => {
+      const value = getAttributeValue(attr);
+      const range = attributeRanges[attr];
+      if (range && value >= range.max) {
+        mentalMaxCount++;
+      }
+    });
+    
+    if (physicalMaxCount > 1) {
+      return 'Only one physical attribute can be at natural maximum';
+    }
+    
+    if (mentalMaxCount > 1) {
+      return 'Only one mental attribute can be at natural maximum';
+    }
+    
+    return '';
+  };
+
+  // Run validation when relevant data changes (debounced for performance, name validated immediately)
+  useEffect(() => {
+    if (!character) return;
+    
+    const editionDataRef = character.edition_data as CharacterSR5;
+    const characterModeRef = getCharacterMode(character.status);
+    
+    if (characterModeRef !== 'creation') {
+      setValidationErrors(prev => {
+        // Only clear non-name errors when leaving creation mode
+        const { name, ...otherErrors } = prev;
+        return name ? { name } : {};
+      });
+      return;
+    }
+    
+    // Clear any pending validation
+    if (validationTimeoutRef.current) {
+      clearTimeout(validationTimeoutRef.current);
+    }
+    
+    // Debounce validation for priorities and attributes (name is validated immediately in handleNameChange)
+    validationTimeoutRef.current = setTimeout(() => {
+      const errors: Record<string, string> = {};
+      
+      // Validate priorities (only for priority method)
+      if (editionDataRef?.creation_method === 'priority') {
+        const priorityError = validatePriorities(editionDataRef);
+        if (priorityError) {
+          errors.priorities = priorityError;
+        }
+        
+        // Validate attributes (only if we have attribute ranges)
+        if (Object.keys(attributeRanges).length > 0) {
+          const attributeError = validateAttributes();
+          if (attributeError) {
+            errors.attributes = attributeError;
+          }
+        }
+      }
+      
+      // Merge with existing name error (validated immediately in handleNameChange)
+      setValidationErrors(prev => ({
+        ...prev,
+        ...errors,
+      }));
+      validationTimeoutRef.current = null;
+    }, 300); // 300ms debounce for validation
+    
+    return () => {
+      if (validationTimeoutRef.current) {
+        clearTimeout(validationTimeoutRef.current);
+      }
+    };
+  }, [character, attributeRanges]); // Removed characterName from deps - validated immediately in handleNameChange
+
+  // Listen for priority changes in localStorage to trigger validation
+  useEffect(() => {
+    if (!character?.id) return;
+    
+    const handleStorageChange = () => {
+      // Trigger validation by updating a dependency
+      // The validation useEffect will run when character changes
+      // Force a re-render by updating a state that's in the dependency array
+      setAttributeRanges(prev => ({ ...prev }));
+    };
+    
+    window.addEventListener('localStorageChange', handleStorageChange);
+    return () => {
+      window.removeEventListener('localStorageChange', handleStorageChange);
+    };
+  }, [character?.id]);
+
+  // Update characterName when character is first loaded (but not when user is editing)
+  useEffect(() => {
+    // Only sync on initial load - don't overwrite user input while they're typing
+    if (character?.name && !touchedFields.name) {
+      // Only set if characterName is empty (initial state) or matches the character name
+      // This prevents overwriting user input
+      if (characterName === '' || characterName === character.name) {
+        setCharacterName(character.name);
+      }
+    }
+  }, [character?.id]); // Only depend on character ID, not name, to avoid resetting during edits
+  
+  // Cleanup timeouts on unmount
+  useEffect(() => {
+    return () => {
+      if (nameUpdateTimeoutRef.current) {
+        clearTimeout(nameUpdateTimeoutRef.current);
+      }
+      if (validationTimeoutRef.current) {
+        clearTimeout(validationTimeoutRef.current);
+      }
+    };
+  }, []);
+
+  const handleNameChange = (value: string) => {
+    setCharacterName(value);
+    setTouchedFields(prev => ({ ...prev, name: true }));
+    
+    // Validate name immediately (it's fast - just a regex check)
+    const nameError = validateName(value);
+    setValidationErrors(prev => ({
+      ...prev,
+      name: nameError || undefined,
+    }));
+    
+    // Clear any pending API call
+    if (nameUpdateTimeoutRef.current) {
+      clearTimeout(nameUpdateTimeoutRef.current);
+    }
+    
+    // Update character name via API (allow empty values - validation will catch it)
+    if (character?.id) {
+      // Debounce API calls to avoid too many requests while typing
+      nameUpdateTimeoutRef.current = setTimeout(() => {
+        characterApi.updateCharacter(character.id, { name: value }).catch(err => {
+          console.error('Failed to update character name:', err);
+          // On error, don't reset the field - let user keep their input
+        });
+        nameUpdateTimeoutRef.current = null;
+      }, 500); // 500ms debounce
+    }
+  };
+
   const loadCharacter = async () => {
     if (!id) return;
     try {
       setIsLoading(true);
       const data = await characterApi.getCharacter(id);
       setCharacter(data);
+      setCharacterName(data.name || '');
     } catch (err) {
       const errorMessage = err instanceof Error ? err.message : 'Failed to load character';
       showError('Failed to load character', errorMessage);
@@ -116,6 +618,51 @@ export function CharacterSheetPage() {
   };
 
   const handleStatusTransition = (newStatus: CharacterStatus) => {
+    // If moving to Review from Creation, validate first
+    if (character?.status === 'Creation' && newStatus === 'Review') {
+      // Touch all fields to show all validation errors
+      setTouchedFields({
+        name: true,
+        priorities: true,
+        attributes: true,
+      });
+      
+      // Run validation synchronously
+      const editionDataRef = character.edition_data as CharacterSR5;
+      const errors: Record<string, string> = {};
+      
+      // Validate name
+      const nameError = validateName(characterName);
+      if (nameError) {
+        errors.name = nameError;
+      }
+      
+      // Validate priorities (only for priority method)
+      if (editionDataRef?.creation_method === 'priority') {
+        const priorityError = validatePriorities(editionDataRef);
+        if (priorityError) {
+          errors.priorities = priorityError;
+        }
+        
+        // Validate attributes (only if we have attribute ranges)
+        if (Object.keys(attributeRanges).length > 0) {
+          const attributeError = validateAttributes();
+          if (attributeError) {
+            errors.attributes = attributeError;
+          }
+        }
+      }
+      
+      // Update validation errors
+      setValidationErrors(errors);
+      
+      // Check if there are any validation errors
+      if (Object.keys(errors).length > 0) {
+        showError('Validation failed', 'Please fix all validation errors before moving to Review status.');
+        return;
+      }
+    }
+    
     setPendingStatus(newStatus);
     setShowStatusConfirm(true);
   };
@@ -219,6 +766,57 @@ export function CharacterSheetPage() {
           </div>
           <div className="flex items-center gap-3">
             <StatusBadge status={character.status} />
+            {characterMode === 'creation' && (
+              <Button
+                onPress={() => {
+                  // Touch all fields to show all validation errors
+                  setTouchedFields({
+                    name: true,
+                    priorities: true,
+                    attributes: true,
+                  });
+                  
+                  // Run validation synchronously
+                  const editionDataRef = character.edition_data as CharacterSR5;
+                  const errors: Record<string, string> = {};
+                  
+                  // Validate name
+                  const nameError = validateName(characterName);
+                  if (nameError) {
+                    errors.name = nameError;
+                  }
+                  
+                  // Validate priorities (only for priority method)
+                  if (editionDataRef?.creation_method === 'priority') {
+                    const priorityError = validatePriorities(editionDataRef);
+                    if (priorityError) {
+                      errors.priorities = priorityError;
+                    }
+                    
+                    // Validate attributes (only if we have attribute ranges)
+                    if (Object.keys(attributeRanges).length > 0) {
+                      const attributeError = validateAttributes();
+                      if (attributeError) {
+                        errors.attributes = attributeError;
+                      }
+                    }
+                  }
+                  
+                  // Update validation errors
+                  setValidationErrors(errors);
+                  
+                  // Show feedback
+                  if (Object.keys(errors).length > 0) {
+                    showError('Validation failed', `Found ${Object.keys(errors).length} validation error(s). Please review and fix them.`);
+                  } else {
+                    showSuccess('Validation passed', 'All validation checks passed!');
+                  }
+                }}
+                className="px-4 py-2 bg-blue-600 border border-blue-600 rounded-md text-white hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors"
+              >
+                Validate
+              </Button>
+            )}
             <Button
               onPress={() => navigate('/characters')}
               className="px-4 py-2 bg-sr-gray border border-sr-light-gray rounded-md text-gray-100 hover:bg-sr-light-gray focus:outline-none focus:ring-2 focus:ring-sr-accent focus:border-transparent transition-colors"
@@ -267,18 +865,80 @@ export function CharacterSheetPage() {
           </div>
         )}
 
+        {/* Validation Errors Display (Creation Mode) */}
+        {characterMode === 'creation' && Object.keys(validationErrors).length > 0 && (
+          <div className="p-4 bg-red-500/10 border border-red-500/30 rounded-lg">
+            <h3 className="text-sm font-semibold text-red-400 mb-2">Validation Errors</h3>
+            <ul className="text-sm text-red-300 space-y-1 list-disc list-inside">
+              {Object.entries(validationErrors).map(([key, error]) => (
+                <li key={key}>{error}</li>
+              ))}
+            </ul>
+          </div>
+        )}
+
         {/* Creation Mode Editing Interface */}
+        {characterMode === 'creation' && !editionData && (
+          <div className="p-4 bg-yellow-500/10 border border-yellow-500/30 rounded-lg">
+            <p className="text-sm text-yellow-300">
+              Character edition data is missing. Please set the edition and creation method to continue.
+            </p>
+          </div>
+        )}
+        {characterMode === 'creation' && editionData && editionData?.creation_method !== 'priority' && (
+          <div className="p-4 bg-blue-500/10 border border-blue-500/30 rounded-lg">
+            <p className="text-sm text-blue-300">
+              Creation method is set to "{editionData?.creation_method || 'unknown'}". Priority selection is only available for priority-based character creation.
+            </p>
+          </div>
+        )}
         {characterMode === 'creation' && editionData?.creation_method === 'priority' && (
-          <div className="p-4 bg-sr-gray border border-sr-light-gray rounded-lg">
-            <h3 className="text-sm font-semibold text-gray-200 mb-4">Character Creation - Priority Selection</h3>
-            <PrioritySelectionDisplay
-              characterId={character.id}
-              editionData={editionData}
-              onPrioritiesChange={(priorities) => {
-                // Handle priority changes - will wire up to API later
-                console.log('Priorities changed:', priorities);
-              }}
-            />
+          <div className="bg-sr-gray border border-sr-light-gray rounded-lg overflow-hidden">
+            <button
+              type="button"
+              onClick={() => setIsPrioritySectionExpanded(!isPrioritySectionExpanded)}
+              className="w-full flex items-center justify-between p-4 hover:bg-sr-darker/50 transition-colors"
+            >
+              <h3 className="text-sm font-semibold text-gray-200">Character Creation - Priority Selection</h3>
+              <svg
+                className={`w-5 h-5 text-gray-300 transition-transform ${isPrioritySectionExpanded ? 'rotate-180' : ''}`}
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+              </svg>
+            </button>
+            {isPrioritySectionExpanded && (
+              <div className="p-4 pt-0">
+                <PrioritySelectionDisplay
+                  characterId={character.id}
+                  editionData={editionData}
+                  onPrioritiesChange={(priorities) => {
+                    // Handle priority changes - will wire up to API later
+                    console.log('Priorities changed:', priorities);
+                    // Trigger validation by updating localStorage and dispatching event
+                    if (character?.id) {
+                      const storageKey = `character_creation_${character.id}`;
+                      const stored = localStorage.getItem(storageKey);
+                      if (stored) {
+                        try {
+                          const parsed = JSON.parse(stored);
+                          parsed.priorities = priorities;
+                          localStorage.setItem(storageKey, JSON.stringify(parsed));
+                          window.dispatchEvent(new Event('localStorageChange'));
+                        } catch (e) {
+                          console.error('Failed to update priorities:', e);
+                        }
+                      }
+                    }
+                  }}
+                />
+                {validationErrors.priorities && (
+                  <p className="text-sm text-red-400 mt-2">{validationErrors.priorities}</p>
+                )}
+              </div>
+            )}
           </div>
         )}
       </div>
@@ -296,18 +956,34 @@ export function CharacterSheetPage() {
               <TextField className="flex flex-col gap-1">
                 <label className="text-sm font-medium text-gray-300">Name / Primary Alias</label>
                 <Input
-                  value={character.name}
-                  readOnly
-                  className="px-3 py-2 bg-sr-darker border border-sr-light-gray rounded-md text-gray-100"
+                  value={characterMode === 'creation' ? characterName : character.name}
+                  onChange={(e) => {
+                    if (characterMode === 'creation') {
+                      handleNameChange(e.target.value);
+                    }
+                  }}
+                  onBlur={() => setTouchedFields(prev => ({ ...prev, name: true }))}
+                  readOnly={characterMode !== 'creation'}
+                  className={`px-3 py-2 bg-sr-darker border rounded-md text-gray-100 ${
+                    characterMode === 'creation' 
+                      ? validationErrors.name && touchedFields.name
+                        ? 'border-red-500 focus:border-red-500 focus:ring-red-500'
+                        : 'border-sr-light-gray focus:border-sr-accent focus:ring-sr-accent'
+                      : 'border-sr-light-gray'
+                  }`}
                 />
+                {characterMode === 'creation' && validationErrors.name && touchedFields.name && (
+                  <p className="text-xs text-red-400 mt-1">{validationErrors.name}</p>
+                )}
               </TextField>
               <div className="grid grid-cols-2 gap-3">
                 <TextField className="flex flex-col gap-1">
                   <label className="text-sm font-medium text-gray-300">Metatype</label>
                   <Input
-                    value={editionData?.metatype || ''}
+                    value={getMetatypeName()}
                     readOnly
-                    className="px-3 py-2 bg-sr-darker border border-sr-light-gray rounded-md text-gray-100"
+                    placeholder="Select metatype in priority selection"
+                    className="px-3 py-2 bg-sr-darker border border-sr-light-gray rounded-md text-gray-100 placeholder:text-gray-500"
                   />
                 </TextField>
                 <TextField className="flex flex-col gap-1">
@@ -404,19 +1080,24 @@ export function CharacterSheetPage() {
             <h3 className="text-lg font-semibold text-gray-100 bg-sr-darker px-4 py-3 border-b border-sr-light-gray">
               ATTRIBUTES
             </h3>
+            {characterMode === 'creation' && validationErrors.attributes && (
+              <div className="px-4 py-2 bg-red-500/10 border-b border-red-500/30">
+                <p className="text-sm text-red-400">{validationErrors.attributes}</p>
+              </div>
+            )}
             <div className="p-4">
               <div className="grid grid-cols-2 gap-6">
                 <div className="space-y-3">
-                  <AttributeField label="Body" value={editionData?.body || 0} />
-                  <AttributeField label="Agility" value={editionData?.agility || 0} />
-                  <AttributeField label="Reaction" value={editionData?.reaction || 0} />
-                  <AttributeField label="Strength" value={editionData?.strength || 0} />
-                  <AttributeField label="Willpower" value={editionData?.willpower || 0} />
-                  <AttributeField label="Logic" value={editionData?.logic || 0} />
-                  <AttributeField label="Intuition" value={editionData?.intuition || 0} />
-                  <AttributeField label="Charisma" value={editionData?.charisma || 0} />
+                  <AttributeField label="Body" value={getAttributeValue('body')} range={getAttributeRange('body')} />
+                  <AttributeField label="Agility" value={getAttributeValue('agility')} range={getAttributeRange('agility')} />
+                  <AttributeField label="Reaction" value={getAttributeValue('reaction')} range={getAttributeRange('reaction')} />
+                  <AttributeField label="Strength" value={getAttributeValue('strength')} range={getAttributeRange('strength')} />
+                  <AttributeField label="Willpower" value={getAttributeValue('willpower')} range={getAttributeRange('willpower')} />
+                  <AttributeField label="Logic" value={getAttributeValue('logic')} range={getAttributeRange('logic')} />
+                  <AttributeField label="Intuition" value={getAttributeValue('intuition')} range={getAttributeRange('intuition')} />
+                  <AttributeField label="Charisma" value={getAttributeValue('charisma')} range={getAttributeRange('charisma')} />
                   <div className="pt-2">
-                    <AttributeField label="Edge" value={editionData?.edge || 0} />
+                    <AttributeField label="Edge" value={getAttributeValue('edge')} range={getAttributeRange('edge')} />
                     <div className="flex gap-1 mt-2">
                       {Array.from({ length: 10 }).map((_, i) => (
                         <div
@@ -428,11 +1109,13 @@ export function CharacterSheetPage() {
                   </div>
                 </div>
                 <div className="space-y-3">
-                  <AttributeField label="Essence" value={editionData?.essence?.toFixed(1) || '0.0'} />
-                  <AttributeField 
-                    label="Magic/Resonance" 
-                    value={editionData?.magic || editionData?.resonance || 0} 
-                  />
+                  <AttributeField label="Essence" value={getEssence().toFixed(1)} range={getEssenceRange()} />
+                  {isMagical() && (
+                    <AttributeField label="Magic" value={getMagicValue()} />
+                  )}
+                  {isTechnomancer() && (
+                    <AttributeField label="Resonance" value={getResonanceValue()} />
+                  )}
                   <AttributeField 
                     label="Initiative" 
                     value={editionData?.initiative?.physical?.base || 0} 

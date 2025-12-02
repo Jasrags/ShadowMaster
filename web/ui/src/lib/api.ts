@@ -381,7 +381,10 @@ export const characterApi = {
     name: string;
     player_name: string;
     edition: string;
-    creation_data: PrioritySelection | SumToTenSelection | KarmaSelection;
+    creation_method: string;
+    gameplay_level?: string;
+    user_id?: string;
+    edition_data: PrioritySelection | SumToTenSelection | KarmaSelection | any;
   }): Promise<Character> {
     return apiRequest<Character>('/characters', {
       method: 'POST',

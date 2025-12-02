@@ -35,6 +35,8 @@ interface StoredCreationData {
   priorities: Record<string, string>;
   metatype?: string;
   magicType?: string;
+  attributeRanges?: Record<string, { min: number; max: number }>;
+  attributes?: Record<string, number>;
   timestamp: number;
 }
 
@@ -418,14 +420,56 @@ export function PrioritySelectionDisplay({ characterId, editionData, onPrioritie
           // For now, save to localStorage
           const storageKey = getStorageKey(characterId);
           const stored = localStorage.getItem(storageKey);
+          
+          // Extract attribute ranges from metatype
+          const attributeRanges: Record<string, { min: number; max: number }> = {};
+          if (metatype.attribute_ranges) {
+            Object.entries(metatype.attribute_ranges).forEach(([attr, range]: [string, any]) => {
+              attributeRanges[attr] = {
+                min: range.min ?? range.Min ?? 1,
+                max: range.max ?? range.Max ?? 6,
+              };
+            });
+          }
+          
+          // Set current attribute values to minimums (except essence which uses max)
+          const attributes: Record<string, number> = {
+            body: attributeRanges.body?.min || 1,
+            agility: attributeRanges.agility?.min || 1,
+            reaction: attributeRanges.reaction?.min || 1,
+            strength: attributeRanges.strength?.min || 1,
+            willpower: attributeRanges.willpower?.min || 1,
+            logic: attributeRanges.logic?.min || 1,
+            intuition: attributeRanges.intuition?.min || 1,
+            charisma: attributeRanges.charisma?.min || 1,
+            edge: attributeRanges.edge?.min || 1,
+            essence: attributeRanges.essence?.max || 6,
+          };
+          
           if (stored) {
             try {
               const parsed: StoredCreationData = JSON.parse(stored);
               parsed.metatype = metatype.id;
+              parsed.attributeRanges = attributeRanges;
+              parsed.attributes = attributes;
               localStorage.setItem(storageKey, JSON.stringify(parsed));
+              // Trigger custom event for same-tab updates
+              window.dispatchEvent(new Event('localStorageChange'));
             } catch (e) {
               console.error('Failed to update stored metatype:', e);
             }
+          } else {
+            // Create new storage entry if it doesn't exist
+            const newStored: StoredCreationData = {
+              priorities,
+              metatype: metatype.id,
+              attributeRanges,
+              attributes,
+              timestamp: Date.now(),
+            };
+            localStorage.setItem(storageKey, JSON.stringify(newStored));
+            // Trigger custom event for same-tab updates
+            window.dispatchEvent(new Event('localStorageChange'));
           }
           console.log('Metatype selected:', metatype);
           setShowMetatypeModal(false);

@@ -14,7 +14,7 @@ var dataMetatypes = map[string]Metatype{
 		Intuition: AttributeRange{Min: 1, Max: 6},
 		Charisma:  AttributeRange{Min: 1, Max: 6},
 		Edge:      &AttributeRange{Min: 2, Max: 7},
-		Essence:   6,
+		Essence:   AttributeRange{Min: 1, Max: 6},
 		Initiative: InitiativeCalculation{
 			Formula: "REA+INT",
 		},
@@ -33,7 +33,7 @@ var dataMetatypes = map[string]Metatype{
 		Intuition: AttributeRange{Min: 1, Max: 6},
 		Charisma:  AttributeRange{Min: 3, Max: 8},
 		Edge:      &AttributeRange{Min: 1, Max: 6},
-		Essence:   6,
+		Essence:   AttributeRange{Min: 1, Max: 6},
 		Initiative: InitiativeCalculation{
 			Formula: "REA+INT",
 		},
@@ -54,7 +54,7 @@ var dataMetatypes = map[string]Metatype{
 		Intuition: AttributeRange{Min: 1, Max: 6},
 		Charisma:  AttributeRange{Min: 1, Max: 6},
 		Edge:      &AttributeRange{Min: 1, Max: 6},
-		Essence:   6,
+		Essence:   AttributeRange{Min: 1, Max: 6},
 		Initiative: InitiativeCalculation{
 			Formula: "REA+INT",
 		},
@@ -77,7 +77,7 @@ var dataMetatypes = map[string]Metatype{
 		Intuition: AttributeRange{Min: 1, Max: 6},
 		Charisma:  AttributeRange{Min: 1, Max: 6},
 		Edge:      &AttributeRange{Min: 1, Max: 5},
-		Essence:   6,
+		Essence:   AttributeRange{Min: 1, Max: 6},
 		Initiative: InitiativeCalculation{
 			Formula: "REA+INT",
 		},
@@ -98,7 +98,7 @@ var dataMetatypes = map[string]Metatype{
 		Intuition: AttributeRange{Min: 1, Max: 5},
 		Charisma:  AttributeRange{Min: 1, Max: 4},
 		Edge:      &AttributeRange{Min: 1, Max: 6},
-		Essence:   6,
+		Essence:   AttributeRange{Min: 1, Max: 6},
 		Initiative: InitiativeCalculation{
 			Formula: "REA+INT",
 		},

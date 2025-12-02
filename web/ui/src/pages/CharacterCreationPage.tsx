@@ -1,12 +1,18 @@
 import { useState } from 'react';
-import { useNavigate, useParams, useLocation } from 'react-router-dom';
+import { useNavigate, useParams, useLocation, useSearchParams } from 'react-router-dom';
 import { CharacterCreationWizard } from '../components/character/CharacterCreationWizard';
 
 export function CharacterCreationPage() {
   const navigate = useNavigate();
   const location = useLocation();
   const { campaignId } = useParams<{ campaignId?: string }>();
+  const [searchParams] = useSearchParams();
   const [isWizardOpen, setIsWizardOpen] = useState(true);
+
+  // Get edition, creation method, and gameplay level from URL params
+  const edition = searchParams.get('edition') || 'sr5';
+  const creationMethod = searchParams.get('creationMethod') || undefined;
+  const gameplayLevel = searchParams.get('gameplayLevel') as 'experienced' | 'street' | 'prime' | undefined;
 
   const handleSuccess = () => {
     if (campaignId) {
@@ -29,7 +35,9 @@ export function CharacterCreationPage() {
           }
         }}
         onSuccess={handleSuccess}
-        edition="sr5"
+        edition={edition}
+        initialCreationMethod={creationMethod as 'priority' | 'sum_to_ten' | 'karma' | undefined}
+        initialGameplayLevel={gameplayLevel}
       />
     </div>
   );

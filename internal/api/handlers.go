@@ -3,6 +3,7 @@ package api
 import (
 	"encoding/json"
 	"errors"
+	"fmt"
 	"net/http"
 	"os"
 	"shadowmaster/internal/domain"
@@ -386,42 +387,158 @@ func (h *Handlers) GetCharacter(w http.ResponseWriter, r *http.Request) {
 
 // CreateCharacter handles POST /api/characters
 func (h *Handlers) CreateCharacter(w http.ResponseWriter, r *http.Request) {
+	// Read request body
 	var req struct {
-		Name        string      `json:"name"`
-		PlayerName  string      `json:"player_name"`
-		Edition     string      `json:"edition"`
-		EditionData interface{} `json:"edition_data"`
+		Name           string      `json:"name"`
+		PlayerName     string      `json:"player_name"`
+		Edition        string      `json:"edition"`
+		CreationMethod string      `json:"creation_method"`
+		GameplayLevel  string      `json:"gameplay_level"`
+		UserID         string      `json:"user_id"`
+		EditionData    interface{} `json:"edition_data"`
 	}
 
 	if err := json.NewDecoder(r.Body).Decode(&req); err != nil {
-		http.Error(w, err.Error(), http.StatusBadRequest)
+		respondError(w, http.StatusBadRequest, "invalid request body")
 		return
+	}
+
+	// Extract and trim values from request body
+	edition := strings.TrimSpace(req.Edition)
+	creationMethod := strings.TrimSpace(req.CreationMethod)
+	gameplayLevel := strings.TrimSpace(req.GameplayLevel)
+	userID := strings.TrimSpace(req.UserID)
+
+	// Validate required edition parameter
+	if edition == "" {
+		respondError(w, http.StatusBadRequest, "edition parameter is required")
+		return
+	}
+	if edition != "sr5" {
+		respondError(w, http.StatusBadRequest, fmt.Sprintf("unsupported edition: %s (supported: sr5)", edition))
+		return
+	}
+
+	// Validate required creation_method parameter
+	if creationMethod == "" {
+		respondError(w, http.StatusBadRequest, "creation_method parameter is required")
+		return
+	}
+	if creationMethod != "priority" {
+		respondError(w, http.StatusBadRequest, fmt.Sprintf("unsupported creation_method: %s (supported: priority)", creationMethod))
+		return
+	}
+
+	// Validate gameplay_level parameter when creation_method is priority
+	if creationMethod == "priority" {
+		if gameplayLevel == "" {
+			respondError(w, http.StatusBadRequest, "gameplay_level parameter is required when creation_method is priority")
+			return
+		}
+		validGameplayLevels := map[string]bool{
+			"street":     true,
+			"experienced": true,
+			"prime":      true,
+		}
+		if !validGameplayLevels[gameplayLevel] {
+			respondError(w, http.StatusBadRequest, fmt.Sprintf("unsupported gameplay_level: %s (supported: street, experienced, prime)", gameplayLevel))
+			return
+		}
 	}
 
 	// Validate required fields
 	if req.Name == "" {
-		http.Error(w, "name is required", http.StatusBadRequest)
+		respondError(w, http.StatusBadRequest, "name is required")
 		return
 	}
-	if req.Edition == "" {
-		http.Error(w, "edition is required", http.StatusBadRequest)
-		return
+
+	// Prepare creation data - ensure creation_method and gameplay_level are in edition_data
+	// Always create a map with the required fields, even if edition_data is nil or empty
+	creationData := map[string]interface{}{
+		"creation_method": creationMethod,
+	}
+	if creationMethod == "priority" {
+		creationData["gameplay_level"] = gameplayLevel
+	}
+	
+	// If edition_data was provided and is a map, merge its contents into our creation data
+	if req.EditionData != nil {
+		if dataMap, ok := req.EditionData.(map[string]interface{}); ok {
+			// Merge existing data into our creation data (our fields take precedence)
+			for k, v := range dataMap {
+				// Don't overwrite creation_method or gameplay_level if already set
+				if k != "creation_method" && k != "gameplay_level" {
+					creationData[k] = v
+				}
+			}
+		}
 	}
 
 	// Use the character service with edition registry
 	if h.CharacterService != nil {
-		character, err := h.CharacterService.CreateCharacter(req.Edition, req.Name, req.PlayerName, req.EditionData)
+		character, err := h.CharacterService.CreateCharacter(edition, req.Name, req.PlayerName, creationData)
 		if err != nil {
 			// Check if it's a validation error (400) or server error (500)
 			if strings.Contains(err.Error(), "unsupported edition") ||
 				strings.Contains(err.Error(), "invalid creation data") ||
 				strings.Contains(err.Error(), "all priorities") {
-				http.Error(w, err.Error(), http.StatusBadRequest)
+				respondError(w, http.StatusBadRequest, err.Error())
 			} else {
-				http.Error(w, err.Error(), http.StatusInternalServerError)
+				respondError(w, http.StatusInternalServerError, err.Error())
 			}
 			return
 		}
+
+		// Ensure character has correct data
+		needsUpdate := false
+		if character.Edition != edition {
+			character.Edition = edition
+			needsUpdate = true
+		}
+		if character.Name != req.Name {
+			character.Name = req.Name
+			needsUpdate = true
+		}
+		if userID != "" && character.UserID != userID {
+			character.UserID = userID
+			needsUpdate = true
+		}
+		if character.Status == "" {
+			character.Status = "Creation"
+			needsUpdate = true
+		}
+		
+		// Ensure edition_data is set - if it's null, something went wrong
+		if character.EditionData == nil {
+			// This shouldn't happen, but if it does, create a minimal SR5 data structure
+			if edition == "sr5" {
+				sr5Data := &domain.CharacterSR5{
+					ActiveSkills:    make(map[string]domain.Skill),
+					KnowledgeSkills: make(map[string]domain.Skill),
+					LanguageSkills:  make(map[string]domain.Skill),
+					CreationMethod:  creationMethod,
+					GameplayLevel:   gameplayLevel,
+					Essence:         6.0,
+				}
+				character.SetSR5Data(sr5Data)
+				needsUpdate = true
+			}
+		}
+
+		// Update the character if needed
+		if needsUpdate {
+			if err := h.CharacterRepo.Update(character); err != nil {
+				respondError(w, http.StatusInternalServerError, fmt.Sprintf("failed to update character: %v", err))
+				return
+			}
+		}
+
+		// Ensure ID is set (should already be set by repository, but verify)
+		if character.ID == "" {
+			respondError(w, http.StatusInternalServerError, "character ID was not generated")
+			return
+		}
+
 		respondJSON(w, http.StatusCreated, character)
 		return
 	}
@@ -430,12 +547,14 @@ func (h *Handlers) CreateCharacter(w http.ResponseWriter, r *http.Request) {
 	character := &domain.Character{
 		Name:        req.Name,
 		PlayerName:  req.PlayerName,
-		Edition:     req.Edition,
-		EditionData: req.EditionData,
+		Edition:     edition,
+		EditionData: creationData,
+		Status:      "Creation",
+		UserID:      userID,
 	}
 
 	if err := h.CharacterRepo.Create(character); err != nil {
-		http.Error(w, err.Error(), http.StatusInternalServerError)
+		respondError(w, http.StatusInternalServerError, err.Error())
 		return
 	}
 

@@ -96,6 +96,9 @@ func convertMetatypesToDefinitions() []domain.MetatypeDefinition {
 			}
 		}
 
+		// Add essence to attribute ranges
+		attrRanges["essence"] = domain.AttributeRange{Min: mt.Essence.Min, Max: mt.Essence.Max}
+
 		def := domain.MetatypeDefinition{
 			ID:                     id,
 			Name:                   mt.Name,

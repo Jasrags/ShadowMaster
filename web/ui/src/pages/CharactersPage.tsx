@@ -1,16 +1,16 @@
 import { useEffect, useState, useCallback } from 'react';
 import { Button } from 'react-aria-components';
-import { useNavigate } from 'react-router-dom';
 import { characterApi } from '../lib/api';
 import type { Character } from '../lib/types';
 import { useToast } from '../contexts/ToastContext';
 import { CharacterTable } from '../components/characters/CharacterTable';
+import { CharacterCreationModal } from '../components/characters/CharacterCreationModal';
 
 export function CharactersPage() {
-  const navigate = useNavigate();
   const { showError } = useToast();
   const [characters, setCharacters] = useState<Character[]>([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   const loadCharacters = useCallback(async () => {
     try {
@@ -30,7 +30,7 @@ export function CharactersPage() {
   }, [loadCharacters]);
 
   const handleCreate = () => {
-    navigate('/characters/create');
+    setIsModalOpen(true);
   };
 
   if (isLoading) {
@@ -54,6 +54,7 @@ export function CharactersPage() {
         </Button>
       </div>
       <CharacterTable characters={characters} onCharacterUpdated={loadCharacters} />
+      <CharacterCreationModal isOpen={isModalOpen} onOpenChange={setIsModalOpen} />
     </div>
   );
 }

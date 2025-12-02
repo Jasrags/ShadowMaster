@@ -4,8 +4,8 @@ package v5
 type MetatypeCategory string
 
 const (
-	MetatypeCategoryStandard   MetatypeCategory = "standard"
-	MetatypeCategoryMetavariant MetatypeCategory = "metavariant"
+	MetatypeCategoryStandard     MetatypeCategory = "standard"
+	MetatypeCategoryMetavariant  MetatypeCategory = "metavariant"
 	MetatypeCategoryShapeshifter MetatypeCategory = "shapeshifter"
 )
 
@@ -65,8 +65,8 @@ type Metatype struct {
 	Edge *AttributeRange `json:"edge,omitempty"`
 	// Magic is the magic attribute range (for shapeshifters, replaces Edge)
 	Magic *AttributeRange `json:"magic,omitempty"`
-	// Essence is the essence value
-	Essence int `json:"essence,omitempty"`
+	// Essence is the essence attribute range
+	Essence AttributeRange `json:"essence,omitempty"`
 	// Initiative describes how initiative is calculated
 	Initiative InitiativeCalculation `json:"initiative,omitempty"`
 	// RacialTraits lists the racial traits and abilities
@@ -77,8 +77,8 @@ type Metatype struct {
 
 // MetatypeData represents the complete metatype data structure organized by category
 type MetatypeData struct {
-	Standard    []Metatype `json:"standard,omitempty"`
-	Metavariants []Metatype `json:"metavariants,omitempty"`
+	Standard      []Metatype `json:"standard,omitempty"`
+	Metavariants  []Metatype `json:"metavariants,omitempty"`
 	Shapeshifters []Metatype `json:"shapeshifters,omitempty"`
 }
 
@@ -145,4 +145,3 @@ func GetMetatypesByCategory(category MetatypeCategory) []Metatype {
 	}
 	return metatypes
 }
-

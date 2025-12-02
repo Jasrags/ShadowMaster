@@ -18,6 +18,8 @@ interface CharacterCreationWizardProps {
   onOpenChange: (isOpen: boolean) => void;
   onSuccess?: () => void;
   edition?: string;
+  initialCreationMethod?: 'priority' | 'sum_to_ten' | 'karma';
+  initialGameplayLevel?: 'experienced' | 'street' | 'prime';
 }
 
 export interface CharacterCreationState {
@@ -66,7 +68,16 @@ export interface CharacterCreationState {
 
 const STORAGE_KEY = 'character-creation-state';
 
-export function CharacterCreationWizard({ isOpen, onOpenChange, onSuccess, edition = 'sr5' }: CharacterCreationWizardProps) {
+// Initialize base priorities structure
+const basePriorities = {
+  metatype_priority: '',
+  attributes_priority: '',
+  magic_priority: '',
+  skills_priority: '',
+  resources_priority: '',
+};
+
+export function CharacterCreationWizard({ isOpen, onOpenChange, onSuccess, edition = 'sr5', initialCreationMethod, initialGameplayLevel }: CharacterCreationWizardProps) {
   const { showSuccess, showError, showWarning } = useToast();
   const [currentStep, setCurrentStep] = useState(1);
   const [creationData, setCreationData] = useState<CharacterCreationData | null>(null);
@@ -77,8 +88,10 @@ export function CharacterCreationWizard({ isOpen, onOpenChange, onSuccess, editi
     name: '',
     playerName: '',
     concept: '',
-    creationMethod: 'priority',
-    gameplayLevel: 'experienced',
+    creationMethod: initialCreationMethod || 'priority',
+    gameplayLevel: initialGameplayLevel || 'experienced',
+    priorities: initialCreationMethod === 'priority' ? basePriorities : undefined,
+    sumToTen: initialCreationMethod === 'sum_to_ten' ? basePriorities : undefined,
     errors: {},
     touched: {},
   });
@@ -97,14 +110,43 @@ export function CharacterCreationWizard({ isOpen, onOpenChange, onSuccess, editi
       if (saved) {
         try {
           const parsed = JSON.parse(saved);
+          // If initialCreationMethod is provided, override the saved creation method
+          if (initialCreationMethod) {
+            parsed.creationMethod = initialCreationMethod;
+            // Initialize the appropriate data structure based on creation method
+            if (initialCreationMethod === 'priority' && !parsed.priorities) {
+              parsed.priorities = basePriorities;
+            } else if (initialCreationMethod === 'sum_to_ten' && !parsed.sumToTen) {
+              parsed.sumToTen = basePriorities;
+            }
+          }
+          // If initialGameplayLevel is provided, override the saved gameplay level
+          if (initialGameplayLevel) {
+            parsed.gameplayLevel = initialGameplayLevel;
+          }
           setFormData(prev => ({ ...prev, ...parsed }));
         } catch (e) {
           const errorMessage = e instanceof Error ? e.message : 'Failed to load saved state';
           showError('Failed to load saved state', errorMessage);
         }
+      } else if (initialCreationMethod || initialGameplayLevel) {
+        // If no saved state but initial values are provided, set them with proper initialization
+        const newFormData: Partial<CharacterCreationState> = {};
+        if (initialCreationMethod) {
+          newFormData.creationMethod = initialCreationMethod;
+          if (initialCreationMethod === 'priority') {
+            newFormData.priorities = basePriorities;
+          } else if (initialCreationMethod === 'sum_to_ten') {
+            newFormData.sumToTen = basePriorities;
+          }
+        }
+        if (initialGameplayLevel) {
+          newFormData.gameplayLevel = initialGameplayLevel;
+        }
+        setFormData(prev => ({ ...prev, ...newFormData }));
       }
     }
-  }, [isOpen]);
+  }, [isOpen, initialCreationMethod]);
 
   // Save to localStorage whenever formData changes
   useEffect(() => {
@@ -333,7 +375,6 @@ export function CharacterCreationWizard({ isOpen, onOpenChange, onSuccess, editi
           selected_metatype: formData.selectedMetatype,
           magic_type: formData.magicType,
           tradition: formData.tradition,
-          gameplay_level: formData.gameplayLevel,
           edge: formData.edge,
           magic: formData.magic,
           resonance: formData.resonance,
@@ -345,7 +386,6 @@ export function CharacterCreationWizard({ isOpen, onOpenChange, onSuccess, editi
           selected_metatype: formData.selectedMetatype,
           magic_type: formData.magicType,
           tradition: formData.tradition,
-          gameplay_level: formData.gameplayLevel,
           edge: formData.edge,
           magic: formData.magic,
           resonance: formData.resonance,
@@ -354,7 +394,6 @@ export function CharacterCreationWizard({ isOpen, onOpenChange, onSuccess, editi
       } else if (formData.creationMethod === 'karma' && formData.karma) {
         creationData = {
           ...formData.karma,
-          gameplay_level: formData.gameplayLevel,
         };
       } else {
         throw new Error('Invalid creation method or missing data');
@@ -364,7 +403,9 @@ export function CharacterCreationWizard({ isOpen, onOpenChange, onSuccess, editi
         name: formData.name.trim(),
         player_name: formData.playerName.trim(),
         edition,
-        creation_data: creationData,
+        creation_method: formData.creationMethod,
+        gameplay_level: formData.gameplayLevel,
+        edition_data: creationData,
       });
 
       showSuccess('Character created', `Character "${formData.name}" has been created successfully.`);
