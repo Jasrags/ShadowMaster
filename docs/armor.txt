@@ -1,0 +1,30 @@
+/*
+CLOTHING
+(Synth)Leather 					Armor: 4, 	Capacity: 4, 	Device Raiting: 2, 	Cost: 220-100200
+Clothing 						Armor: 0, 	apacity: 0, 	Device Rating: 2, 	Cost: 20-100000
+ARMOR
+Armor Clothing 					Armor: 6, 	Capacity: 6, 	Device Rating: 2, 	Cost: 450, 	Availability: 2
+Armor Jacket					Armor: 10, 	Capacity: 12, 	Device Rating: 2, 	Cost: 1000,	Availability: 2
+Armor Vest						Armor: 9, 	Capacity: 9, 	Device Rating: 2, 	Cost: 500, 	Availability: 2
+Helmet							Armor: +2, 	Capacity: 6, 	Device Rating: 2, 	Cost: 100, 	Availability: 2
+Lined Coat						Armor: 9, 	Capacity: 9, 	Device Rating: 2, 	Cost: 900, 	Availability: 4
+Urban Explorer Jumpsuit 		Armor: 9, 	Capacity: 9, 	Device Rating: 2, 	Cost: 650, 	Availability: 8
+Urban Explorer Jumpsuit Helmet	Armor: +2, 	Capacity: 6, 	Device Rating: 2, 	Cost: 100, 	Availability: 8
+HIGH-FASHION ARMOR CLOTHING
+Auctioneer Business Clothes 	Armor: 8, 	Capacity: 8, 	Device Rating: 2, 	Cost: 1500, Availability: 8, Manufacturer: Vashon Island
+SPECIALTY ARMOR
+Chameleon Suit					Armor: 9, 	Capacity: 9, 	Device Rating: 2, 	Cost: 1700, Availability: 10R
+Full Body Armor					Armor: 15, 	Capacity: 15, 	Device Rating: 2, 	Cost: 2000, Availability: 14R
+Full Body Armor Helmet			Armor: +3, 	Capacity: 6, 	Device Rating: 2, 	Cost: 500, 	Availability: 14R
+SHIELDS
+Ballistic Shield				Armor: +6, 	Capacity: 6, 	Device Rating: 2, 	Cost: 1200, Availability: 12R, Accuracy: 4, Damage Ratin: (STR+2)S, Reach: 0, Wearing will make the user Encumbered
+Riot Shield						Armor: +6, 	Capacity: 6, 	Device Rating: 2, 	Cost: 1500, Availability: 10R, Accuracy: 4, Damage Raiting: (9S(e)v-5, Reach: 0, Wearing will make the user Encumbered
+ENVIRONMENTAL PROTECTION - UNDERWATER
+Diving Gear						Armor: 0, 	Capacity: 0, 	Device Rating: 2, 	Cost: 2000, Availability: 6, Resistance To Cold: +1
+ENVIRONMENTAL PROTECTION - TOXIC
+Chemsuit						Armor: 0, 	Capacity: 0, 	Device Rating: 2, 	Cost: 150*R, Availability: 2*R
+Hazmat Suit						Armor: 0, 	Capacity: 0, 	Device Rating: 2, 	Cost: 3000, 	Availability: 8, Ratings: 1-6, Adds Chemical seal protection from contact and inhalation toxin, + Geiger counter, Wireless: Suit analyzes and transmits information about the environment thatn you not touching or breating.
+SURVIVAL GEAR
+Gas Mask						Armor: 0, 	Capacity: 0, 	Device Rating: 2, 	Cost: 200, 		Availability: 0, Wireless: Gas Mask analyzes and transmits information about the environment thatn you not touching or breating.
+Respirator						Armor: 0, 	Capacity: 0, 	Device Rating: 2, 	Cost: R*50, 	Availability: 0, Ratings: 1-6, Wireless: Respirator analyzes and transmits information about the environment you're not touching or breating.
+*/

@@ -1,64 +1,63 @@
 import { createContext, useContext, useState, useEffect, ReactNode } from 'react';
 import { authApi } from '../lib/api';
-import type { UserResponse } from '../lib/types';
+import type { User } from '../lib/types';
 
 interface AuthContextType {
-  user: UserResponse | null;
-  isAuthenticated: boolean;
+  user: User | null;
   isLoading: boolean;
+  isAuthenticated: boolean;
   login: (email: string, password: string) => Promise<void>;
   register: (email: string, username: string, password: string) => Promise<void>;
   logout: () => Promise<void>;
+  refreshUser: () => Promise<void>;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 export function AuthProvider({ children }: { children: ReactNode }) {
-  const [user, setUser] = useState<UserResponse | null>(null);
+  const [user, setUser] = useState<User | null>(null);
   const [isLoading, setIsLoading] = useState(true);
 
-  // Check authentication status on mount
-  useEffect(() => {
-    checkAuth();
-  }, []);
-
-  async function checkAuth() {
+  const refreshUser = async () => {
     try {
-      setIsLoading(true);
       const currentUser = await authApi.getCurrentUser();
       setUser(currentUser);
-    } catch {
+    } catch (error) {
       setUser(null);
-      // Silently fail auth check - user just isn't logged in
     } finally {
       setIsLoading(false);
     }
-  }
+  };
 
-  async function login(email: string, password: string) {
-    const userData = await authApi.login({ email, password });
-    setUser(userData);
-  }
+  useEffect(() => {
+    refreshUser();
+  }, []);
 
-  async function register(email: string, username: string, password: string) {
-    const userData = await authApi.register({ email, username, password });
-    setUser(userData);
-  }
+  const login = async (email: string, password: string) => {
+    const loggedInUser = await authApi.login({ email, password });
+    setUser(loggedInUser);
+  };
 
-  async function logout() {
+  const register = async (email: string, username: string, password: string) => {
+    const registeredUser = await authApi.register({ email, username, password });
+    setUser(registeredUser);
+  };
+
+  const logout = async () => {
     await authApi.logout();
     setUser(null);
-  }
+  };
 
   return (
     <AuthContext.Provider
       value={{
         user,
-        isAuthenticated: !!user,
         isLoading,
+        isAuthenticated: !!user,
         login,
         register,
         logout,
+        refreshUser,
       }}
     >
       {children}
@@ -66,8 +65,6 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   );
 }
 
-// Custom hook export - intentionally not a component
-// eslint-disable-next-line react-refresh/only-export-components
 export function useAuth() {
   const context = useContext(AuthContext);
   if (context === undefined) {

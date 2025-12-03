@@ -2,34 +2,28 @@ package api
 
 import (
 	"encoding/json"
-	"errors"
-	"fmt"
 	"net/http"
-	"os"
-	"shadowmaster/internal/domain"
-	"shadowmaster/internal/repository"
-	jsonrepo "shadowmaster/internal/repository/json"
-	"shadowmaster/internal/service"
-	sr3 "shadowmaster/pkg/shadowrun/edition/v3"
-	sr5 "shadowmaster/pkg/shadowrun/edition/v5"
 	"strings"
+
+	"github.com/go-chi/chi/v5"
+
+	"shadowmaster/internal/domain"
+	"shadowmaster/internal/service"
+	"shadowmaster/pkg/shadowrun/v5/creation"
 )
 
-// Handlers wraps repository instances for API handlers
 type Handlers struct {
-	CharacterRepo    repository.CharacterRepository
-	GroupRepo        repository.GroupRepository
-	CampaignRepo     repository.CampaignRepository
-	SessionRepo      repository.SessionRepository
-	SceneRepo        repository.SceneRepository
-	EditionRepo      repository.EditionDataRepository
-	UserRepo         repository.UserRepository
-	CharacterService *service.CharacterService
 	UserService      *service.UserService
+	CharacterService *service.CharacterService
 	Sessions         *SessionManager
-	CampaignService  *service.CampaignService
-	SessionService   *service.SessionService
-	SceneService     *service.SceneService
+}
+
+func NewHandlers(userService *service.UserService, characterService *service.CharacterService, sessions *SessionManager) *Handlers {
+	return &Handlers{
+		UserService:      userService,
+		CharacterService: characterService,
+		Sessions:         sessions,
+	}
 }
 
 type registerRequest struct {
@@ -48,20 +42,9 @@ type changePasswordRequest struct {
 	NewPassword     string `json:"new_password"`
 }
 
-type campaignResponse struct {
-	*domain.Campaign
-	GameplayRules *service.GameplayRules `json:"gameplay_rules,omitempty"`
-	GMUsername    string                 `json:"gm_username,omitempty"`
-	CanEdit       bool                   `json:"can_edit"`
-	CanDelete     bool                   `json:"can_delete"`
-}
-
-type campaignCharacterCreationResponse struct {
-	CampaignID     string                        `json:"campaign_id"`
-	Edition        string                        `json:"edition"`
-	CreationMethod string                        `json:"creation_method"`
-	EditionData    *domain.CharacterCreationData `json:"edition_data"`
-	GameplayRules  *service.GameplayRules        `json:"gameplay_rules,omitempty"`
+type updateUserRequest struct {
+	Username *string  `json:"username"`
+	Roles    []string `json:"roles"`
 }
 
 type userResponse struct {
@@ -71,119 +54,27 @@ type userResponse struct {
 	Roles    []string `json:"roles"`
 }
 
-type campaignCreateRequest struct {
-	Name           string                       `json:"name"`
-	Description    string                       `json:"description"`
-	GroupID        string                       `json:"group_id"`
-	GMName         string                       `json:"gm_name"`
-	GMUserID       string                       `json:"gm_user_id"`
-	Edition        string                       `json:"edition"`
-	CreationMethod string                       `json:"creation_method"`
-	GameplayLevel  string                       `json:"gameplay_level"`
-	Theme          string                       `json:"theme"`
-	HouseRuleNotes string                       `json:"house_rule_notes"`
-	Automation     map[string]bool              `json:"automation"`
-	Factions       []campaignFactionRequest     `json:"factions"`
-	Locations      []campaignLocationRequest    `json:"locations"`
-	Placeholders   []campaignPlaceholderRequest `json:"placeholders"`
-	SessionSeed    *campaignSessionSeedRequest  `json:"session_seed"`
-	Players        []campaignPlayerRequest      `json:"players"`
-	Status         string                       `json:"status"`
-	EnabledBooks   []string                     `json:"enabled_books"`
+type createCharacterRequest struct {
+	Name           string `json:"name"`
+	Edition        string `json:"edition"`
+	CreationMethod string `json:"creation_method"`
+	PlayLevel      string `json:"play_level"`
 }
 
-type campaignUpdateRequest struct {
-	Name           *string                       `json:"name"`
-	Description    *string                       `json:"description"`
-	GMName         *string                       `json:"gm_name"`
-	GMUserID       *string                       `json:"gm_user_id"`
-	GameplayLevel  *string                       `json:"gameplay_level"`
-	Theme          *string                       `json:"theme"`
-	HouseRuleNotes *string                       `json:"house_rule_notes"`
-	Automation     *map[string]bool              `json:"automation"`
-	Factions       *[]campaignFactionRequest     `json:"factions"`
-	Locations      *[]campaignLocationRequest    `json:"locations"`
-	Placeholders   *[]campaignPlaceholderRequest `json:"placeholders"`
-	SessionSeed    *campaignSessionSeedRequest   `json:"session_seed"`
-	Players        *[]campaignPlayerRequest      `json:"players"`
-	Status         *string                       `json:"status"`
-	CreationMethod *string                       `json:"creation_method"`
-	Edition        *string                       `json:"edition"`
-	EnabledBooks   *[]string                     `json:"enabled_books"`
-}
-
-type campaignFactionRequest struct {
-	ID    string `json:"id"`
-	Name  string `json:"name"`
-	Tags  string `json:"tags"`
-	Notes string `json:"notes"`
-}
-
-type campaignLocationRequest struct {
-	ID         string `json:"id"`
-	Name       string `json:"name"`
-	Descriptor string `json:"descriptor"`
-}
-
-type campaignPlaceholderRequest struct {
-	ID   string `json:"id"`
-	Name string `json:"name"`
-	Role string `json:"role"`
-}
-
-type campaignSessionSeedRequest struct {
-	Title         string `json:"title"`
-	Objectives    string `json:"objectives"`
-	SceneTemplate string `json:"scene_template"`
-	Summary       string `json:"summary"`
-	Skip          bool   `json:"skip"`
-}
-
-type campaignPlayerRequest struct {
-	ID       string `json:"id"`
-	Username string `json:"username"`
-}
-
-// NewHandlers creates a new handlers instance
-func NewHandlers(
-	repos *jsonrepo.Repositories,
-	charService *service.CharacterService,
-	userService *service.UserService,
-	sessions *SessionManager,
-	campaignService *service.CampaignService,
-	sessionService *service.SessionService,
-	sceneService *service.SceneService,
-) *Handlers {
-	return &Handlers{
-		CharacterRepo:    repos.Character,
-		GroupRepo:        repos.Group,
-		CampaignRepo:     repos.Campaign,
-		SessionRepo:      repos.Session,
-		SceneRepo:        repos.Scene,
-		EditionRepo:      repos.Edition,
-		UserRepo:         repos.User,
-		CharacterService: charService,
-		UserService:      userService,
-		Sessions:         sessions,
-		CampaignService:  campaignService,
-		SessionService:   sessionService,
-		SceneService:     sceneService,
-	}
-}
-
-// Auth handlers
-
-// RegisterUser handles POST /api/auth/register
-// HealthCheck handles GET /health and HEAD /health
-func (h *Handlers) HealthCheck(w http.ResponseWriter, r *http.Request) {
-	w.Header().Set("Content-Type", "application/json")
-	w.WriteHeader(http.StatusOK)
-	// HEAD requests should not have a body
-	if r.Method != http.MethodHead {
-		json.NewEncoder(w).Encode(map[string]string{
-			"status": "ok",
-		})
-	}
+type characterResponse struct {
+	ID                string                      `json:"id"`
+	Name              string                      `json:"name"`
+	Description       string                      `json:"description"`
+	Age               string                      `json:"age"`
+	Gender            string                      `json:"gender"`
+	Height            string                      `json:"height"`
+	Weight            string                      `json:"weight"`
+	State             string                      `json:"state"`
+	UserID            string                      `json:"user_id"`
+	EditionData       domain.EditionData          `json:"edition_data"`
+	PriorityAssignment *domain.PriorityAssignment `json:"priority_assignment,omitempty"`
+	CreatedAt         string                      `json:"created_at"`
+	UpdatedAt         string                      `json:"updated_at"`
 }
 
 func (h *Handlers) RegisterUser(w http.ResponseWriter, r *http.Request) {
@@ -202,21 +93,28 @@ func (h *Handlers) RegisterUser(w http.ResponseWriter, r *http.Request) {
 
 	user, err := h.UserService.Register(req.Email, req.Username, req.Password)
 	if err != nil {
-		respondError(w, http.StatusBadRequest, err.Error())
+		status := http.StatusBadRequest
+		if err == service.ErrEmailExists || err == service.ErrUsernameExists {
+			status = http.StatusConflict
+		}
+		respondError(w, status, err.Error())
 		return
 	}
 
+	// Auto-login after registration
 	if err := h.Sessions.Create(w, user.ID, user.Roles); err != nil {
 		respondError(w, http.StatusInternalServerError, "failed to create session")
 		return
 	}
 
-	respondJSON(w, http.StatusCreated, map[string]interface{}{
-		"user": user,
+	respondJSON(w, http.StatusCreated, userResponse{
+		ID:       user.ID,
+		Email:    user.Email,
+		Username: user.Username,
+		Roles:    rolesToStrings(user.Roles),
 	})
 }
 
-// LoginUser handles POST /api/auth/login
 func (h *Handlers) LoginUser(w http.ResponseWriter, r *http.Request) {
 	var req loginRequest
 	if err := json.NewDecoder(r.Body).Decode(&req); err != nil {
@@ -224,19 +122,9 @@ func (h *Handlers) LoginUser(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	req.Email = strings.TrimSpace(req.Email)
-	if req.Email == "" || req.Password == "" {
-		respondError(w, http.StatusBadRequest, "email and password are required")
-		return
-	}
-
 	user, err := h.UserService.Authenticate(req.Email, req.Password)
 	if err != nil {
-		if errors.Is(err, service.ErrInvalidCredentials) {
-			respondError(w, http.StatusUnauthorized, "invalid email or password")
-			return
-		}
-		respondError(w, http.StatusInternalServerError, err.Error())
+		respondError(w, http.StatusUnauthorized, "invalid email or password")
 		return
 	}
 
@@ -245,50 +133,45 @@ func (h *Handlers) LoginUser(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	respondJSON(w, http.StatusOK, map[string]interface{}{
-		"user": user,
+	respondJSON(w, http.StatusOK, userResponse{
+		ID:       user.ID,
+		Email:    user.Email,
+		Username: user.Username,
+		Roles:    rolesToStrings(user.Roles),
 	})
 }
 
-// LogoutUser handles POST /api/auth/logout
 func (h *Handlers) LogoutUser(w http.ResponseWriter, r *http.Request) {
 	h.Sessions.Clear(w)
 	w.WriteHeader(http.StatusNoContent)
 }
 
-// GetCurrentUser handles GET /api/auth/me
 func (h *Handlers) GetCurrentUser(w http.ResponseWriter, r *http.Request) {
-	session := GetSessionFromContext(r.Context())
-	if session == nil {
-		respondJSON(w, http.StatusOK, map[string]interface{}{
-			"user": nil,
-		})
-		return
-	}
-
-	user, err := h.UserService.GetUserByID(session.UserID)
+	session, err := h.Sessions.Get(r)
 	if err != nil {
-		respondJSON(w, http.StatusOK, map[string]interface{}{
-			"user": nil,
-		})
+		respondError(w, http.StatusUnauthorized, "not authenticated")
 		return
 	}
 
-	respondJSON(w, http.StatusOK, map[string]interface{}{
-		"user": user,
+	user, err := h.UserService.GetUser(session.UserID)
+	if err != nil {
+		respondError(w, http.StatusNotFound, "user not found")
+		return
+	}
+
+	respondJSON(w, http.StatusOK, userResponse{
+		ID:       user.ID,
+		Email:    user.Email,
+		Username: user.Username,
+		Roles:    rolesToStrings(user.Roles),
 	})
 }
 
-// ChangePassword handles POST /api/auth/password
 func (h *Handlers) ChangePassword(w http.ResponseWriter, r *http.Request) {
-	session := GetSessionFromContext(r.Context())
-	if session == nil {
-		var err error
-		session, err = h.Sessions.Get(r)
-		if err != nil {
-			http.Error(w, http.StatusText(http.StatusUnauthorized), http.StatusUnauthorized)
-			return
-		}
+	session, err := h.Sessions.Get(r)
+	if err != nil {
+		respondError(w, http.StatusUnauthorized, "not authenticated")
+		return
 	}
 
 	var req changePasswordRequest
@@ -297,1506 +180,435 @@ func (h *Handlers) ChangePassword(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	if strings.TrimSpace(req.CurrentPassword) == "" || strings.TrimSpace(req.NewPassword) == "" {
-		respondError(w, http.StatusBadRequest, "current_password and new_password are required")
-		return
-	}
-
-	if err := h.UserService.ChangePasswordWithCurrent(session.UserID, req.CurrentPassword, req.NewPassword); err != nil {
-		if errors.Is(err, service.ErrInvalidCredentials) {
-			respondError(w, http.StatusUnauthorized, "invalid current password")
-			return
+	if err := h.UserService.ChangePassword(session.UserID, req.CurrentPassword, req.NewPassword); err != nil {
+		status := http.StatusBadRequest
+		if err == service.ErrInvalidCredentials {
+			status = http.StatusUnauthorized
 		}
-		respondError(w, http.StatusBadRequest, err.Error())
+		respondError(w, status, err.Error())
 		return
 	}
 
 	w.WriteHeader(http.StatusNoContent)
 }
 
-// Character handlers
-
-// GetCharacters handles GET /api/characters
-func (h *Handlers) GetCharacters(w http.ResponseWriter, r *http.Request) {
-	characters, err := h.CharacterRepo.GetAll()
+func (h *Handlers) GetUsers(w http.ResponseWriter, r *http.Request) {
+	users, err := h.UserService.GetAllUsers()
 	if err != nil {
-		http.Error(w, err.Error(), http.StatusInternalServerError)
-		return
-	}
-	respondJSON(w, http.StatusOK, characters)
-}
-
-// GetEditionCharacterCreationData handles GET /api/editions/{edition}/character-creation
-func (h *Handlers) GetEditionCharacterCreationData(w http.ResponseWriter, r *http.Request) {
-	edition := r.PathValue("edition")
-	if edition == "" {
-		http.Error(w, "edition path parameter is required", http.StatusBadRequest)
+		respondError(w, http.StatusInternalServerError, "failed to get users")
 		return
 	}
 
-	if h.EditionRepo == nil {
-		http.Error(w, "edition repository not configured", http.StatusInternalServerError)
-		return
-	}
-
-	data, err := h.EditionRepo.GetCharacterCreationData(edition)
-	if err != nil {
-		if errors.Is(err, os.ErrNotExist) {
-			http.Error(w, "edition data not found", http.StatusNotFound)
-			return
+	responses := make([]userResponse, len(users))
+	for i, user := range users {
+		responses[i] = userResponse{
+			ID:       user.ID,
+			Email:    user.Email,
+			Username: user.Username,
+			Roles:    rolesToStrings(user.Roles),
 		}
-		http.Error(w, err.Error(), http.StatusInternalServerError)
-		return
 	}
 
-	respondJSON(w, http.StatusOK, map[string]interface{}{
-		"edition":            edition,
-		"character_creation": data,
-	})
+	respondJSON(w, http.StatusOK, responses)
 }
 
-// GetEditionBooks handles GET /api/editions/{edition}/books
-func (h *Handlers) GetEditionBooks(w http.ResponseWriter, r *http.Request) {
-	edition := r.PathValue("edition")
-	if edition == "" {
-		respondError(w, http.StatusBadRequest, "edition is required")
+func (h *Handlers) UpdateUser(w http.ResponseWriter, r *http.Request) {
+	userID := chi.URLParam(r, "id")
+	if userID == "" {
+		respondError(w, http.StatusBadRequest, "user ID is required")
 		return
 	}
 
-	books, err := h.CampaignService.ListSourceBooks(edition)
-	if err != nil {
-		respondServiceError(w, err)
-		return
-	}
-
-	respondJSON(w, http.StatusOK, map[string]interface{}{
-		"books": books,
-	})
-}
-
-// GetCharacter handles GET /api/characters/{id}
-func (h *Handlers) GetCharacter(w http.ResponseWriter, r *http.Request) {
-	id := r.PathValue("id")
-	character, err := h.CharacterRepo.GetByID(id)
-	if err != nil {
-		http.Error(w, err.Error(), http.StatusNotFound)
-		return
-	}
-	respondJSON(w, http.StatusOK, character)
-}
-
-// CreateCharacter handles POST /api/characters
-func (h *Handlers) CreateCharacter(w http.ResponseWriter, r *http.Request) {
-	// Read request body
-	var req struct {
-		Name           string      `json:"name"`
-		PlayerName     string      `json:"player_name"`
-		Edition        string      `json:"edition"`
-		CreationMethod string      `json:"creation_method"`
-		GameplayLevel  string      `json:"gameplay_level"`
-		UserID         string      `json:"user_id"`
-		EditionData    interface{} `json:"edition_data"`
-	}
-
+	var req updateUserRequest
 	if err := json.NewDecoder(r.Body).Decode(&req); err != nil {
 		respondError(w, http.StatusBadRequest, "invalid request body")
 		return
 	}
 
-	// Extract and trim values from request body
-	edition := strings.TrimSpace(req.Edition)
-	creationMethod := strings.TrimSpace(req.CreationMethod)
-	gameplayLevel := strings.TrimSpace(req.GameplayLevel)
-	userID := strings.TrimSpace(req.UserID)
-
-	// Validate required edition parameter
-	if edition == "" {
-		respondError(w, http.StatusBadRequest, "edition parameter is required")
-		return
-	}
-	if edition != "sr5" {
-		respondError(w, http.StatusBadRequest, fmt.Sprintf("unsupported edition: %s (supported: sr5)", edition))
-		return
-	}
-
-	// Validate required creation_method parameter
-	if creationMethod == "" {
-		respondError(w, http.StatusBadRequest, "creation_method parameter is required")
-		return
-	}
-	if creationMethod != "priority" {
-		respondError(w, http.StatusBadRequest, fmt.Sprintf("unsupported creation_method: %s (supported: priority)", creationMethod))
-		return
-	}
-
-	// Validate gameplay_level parameter when creation_method is priority
-	if creationMethod == "priority" {
-		if gameplayLevel == "" {
-			respondError(w, http.StatusBadRequest, "gameplay_level parameter is required when creation_method is priority")
+	// Convert role strings to domain roles if provided
+	var userRoles []domain.Role
+	if req.Roles != nil {
+		roles := stringsToRoles(req.Roles)
+		if roles == nil {
+			respondError(w, http.StatusBadRequest, "invalid role provided")
 			return
 		}
-		validGameplayLevels := map[string]bool{
-			"street":     true,
-			"experienced": true,
-			"prime":      true,
-		}
-		if !validGameplayLevels[gameplayLevel] {
-			respondError(w, http.StatusBadRequest, fmt.Sprintf("unsupported gameplay_level: %s (supported: street, experienced, prime)", gameplayLevel))
-			return
-		}
+		userRoles = roles
 	}
 
-	// Validate required fields
+	// Update user
+	user, err := h.UserService.UpdateUser(userID, req.Username, userRoles)
+	if err != nil {
+		status := http.StatusBadRequest
+		if err == service.ErrUserNotFound {
+			status = http.StatusNotFound
+		} else if err == service.ErrUsernameExists {
+			status = http.StatusConflict
+		}
+		respondError(w, status, err.Error())
+		return
+	}
+
+	respondJSON(w, http.StatusOK, userResponse{
+		ID:       user.ID,
+		Email:    user.Email,
+		Username: user.Username,
+		Roles:    rolesToStrings(user.Roles),
+	})
+}
+
+func (h *Handlers) DeleteUser(w http.ResponseWriter, r *http.Request) {
+	userID := chi.URLParam(r, "id")
+	if userID == "" {
+		respondError(w, http.StatusBadRequest, "user ID is required")
+		return
+	}
+
+	if err := h.UserService.DeleteUser(userID); err != nil {
+		if err == service.ErrUserNotFound {
+			respondError(w, http.StatusNotFound, "user not found")
+			return
+		}
+		respondError(w, http.StatusInternalServerError, "failed to delete user")
+		return
+	}
+
+	w.WriteHeader(http.StatusNoContent)
+}
+
+func (h *Handlers) CreateCharacter(w http.ResponseWriter, r *http.Request) {
+	session, err := h.Sessions.Get(r)
+	if err != nil {
+		respondError(w, http.StatusUnauthorized, "not authenticated")
+		return
+	}
+
+	var req createCharacterRequest
+	if err := json.NewDecoder(r.Body).Decode(&req); err != nil {
+		respondError(w, http.StatusBadRequest, "invalid request body")
+		return
+	}
+
+	// Validate name
+	req.Name = strings.TrimSpace(req.Name)
 	if req.Name == "" {
-		respondError(w, http.StatusBadRequest, "name is required")
+		respondError(w, http.StatusBadRequest, "character name is required")
 		return
 	}
 
-	// Prepare creation data - ensure creation_method and gameplay_level are in edition_data
-	// Always create a map with the required fields, even if edition_data is nil or empty
-	creationData := map[string]interface{}{
-		"creation_method": creationMethod,
-	}
-	if creationMethod == "priority" {
-		creationData["gameplay_level"] = gameplayLevel
-	}
-	
-	// If edition_data was provided and is a map, merge its contents into our creation data
-	if req.EditionData != nil {
-		if dataMap, ok := req.EditionData.(map[string]interface{}); ok {
-			// Merge existing data into our creation data (our fields take precedence)
-			for k, v := range dataMap {
-				// Don't overwrite creation_method or gameplay_level if already set
-				if k != "creation_method" && k != "gameplay_level" {
-					creationData[k] = v
-				}
-			}
-		}
-	}
-
-	// Use the character service with edition registry
-	if h.CharacterService != nil {
-		character, err := h.CharacterService.CreateCharacter(edition, req.Name, req.PlayerName, creationData)
-		if err != nil {
-			// Check if it's a validation error (400) or server error (500)
-			if strings.Contains(err.Error(), "unsupported edition") ||
-				strings.Contains(err.Error(), "invalid creation data") ||
-				strings.Contains(err.Error(), "all priorities") {
-				respondError(w, http.StatusBadRequest, err.Error())
-			} else {
-				respondError(w, http.StatusInternalServerError, err.Error())
-			}
-			return
-		}
-
-		// Ensure character has correct data
-		needsUpdate := false
-		if character.Edition != edition {
-			character.Edition = edition
-			needsUpdate = true
-		}
-		if character.Name != req.Name {
-			character.Name = req.Name
-			needsUpdate = true
-		}
-		if userID != "" && character.UserID != userID {
-			character.UserID = userID
-			needsUpdate = true
-		}
-		if character.Status == "" {
-			character.Status = "Creation"
-			needsUpdate = true
-		}
-		
-		// Ensure edition_data is set - if it's null, something went wrong
-		if character.EditionData == nil {
-			// This shouldn't happen, but if it does, create a minimal SR5 data structure
-			if edition == "sr5" {
-				sr5Data := &domain.CharacterSR5{
-					ActiveSkills:    make(map[string]domain.Skill),
-					KnowledgeSkills: make(map[string]domain.Skill),
-					LanguageSkills:  make(map[string]domain.Skill),
-					CreationMethod:  creationMethod,
-					GameplayLevel:   gameplayLevel,
-					Essence:         6.0,
-				}
-				character.SetSR5Data(sr5Data)
-				needsUpdate = true
-			}
-		}
-
-		// Update the character if needed
-		if needsUpdate {
-			if err := h.CharacterRepo.Update(character); err != nil {
-				respondError(w, http.StatusInternalServerError, fmt.Sprintf("failed to update character: %v", err))
-				return
-			}
-		}
-
-		// Ensure ID is set (should already be set by repository, but verify)
-		if character.ID == "" {
-			respondError(w, http.StatusInternalServerError, "character ID was not generated")
-			return
-		}
-
-		respondJSON(w, http.StatusCreated, character)
+	// Validate edition data
+	if req.Edition == "" || req.CreationMethod == "" || req.PlayLevel == "" {
+		respondError(w, http.StatusBadRequest, "edition, creation method, and play level are required")
 		return
 	}
 
-	// Fallback to direct creation (shouldn't happen in normal operation)
-	character := &domain.Character{
-		Name:        req.Name,
-		PlayerName:  req.PlayerName,
-		Edition:     edition,
-		EditionData: creationData,
-		Status:      "Creation",
-		UserID:      userID,
+	editionData := domain.EditionData{
+		Edition:        req.Edition,
+		CreationMethod: req.CreationMethod,
+		PlayLevel:      req.PlayLevel,
 	}
 
-	if err := h.CharacterRepo.Create(character); err != nil {
-		respondError(w, http.StatusInternalServerError, err.Error())
+	character, err := h.CharacterService.CreateCharacter(session.UserID, req.Name, editionData)
+	if err != nil {
+		respondError(w, http.StatusInternalServerError, "failed to create character")
 		return
 	}
 
-	respondJSON(w, http.StatusCreated, character)
+	respondJSON(w, http.StatusCreated, characterResponse{
+		ID:                character.ID,
+		Name:              character.Name,
+		Description:       character.Description,
+		Age:               character.Age,
+		Gender:            character.Gender,
+		Height:            character.Height,
+		Weight:            character.Weight,
+		State:             string(character.State),
+		UserID:            character.UserID,
+		EditionData:       character.EditionData,
+		PriorityAssignment: character.PriorityAssignment,
+		CreatedAt:         character.CreatedAt.Format("2006-01-02T15:04:05Z07:00"),
+		UpdatedAt:         character.UpdatedAt.Format("2006-01-02T15:04:05Z07:00"),
+	})
 }
 
-// getStringFromMap safely extracts a string value from a map
-func getStringFromMap(m map[string]interface{}, key, defaultValue string) string {
-	if val, ok := m[key]; ok {
-		if str, ok := val.(string); ok {
-			return str
+func (h *Handlers) GetCharacters(w http.ResponseWriter, r *http.Request) {
+	session, err := h.Sessions.Get(r)
+	if err != nil {
+		respondError(w, http.StatusUnauthorized, "not authenticated")
+		return
+	}
+
+	characters, err := h.CharacterService.GetCharactersByUserID(session.UserID)
+	if err != nil {
+		respondError(w, http.StatusInternalServerError, "failed to get characters")
+		return
+	}
+
+	responses := make([]characterResponse, len(characters))
+	for i, character := range characters {
+		responses[i] = characterResponse{
+			ID:                character.ID,
+			Name:              character.Name,
+			Description:       character.Description,
+			Age:               character.Age,
+			Gender:            character.Gender,
+			Height:            character.Height,
+			Weight:            character.Weight,
+			State:             string(character.State),
+			UserID:            character.UserID,
+			EditionData:       character.EditionData,
+			PriorityAssignment: character.PriorityAssignment,
+			CreatedAt:         character.CreatedAt.Format("2006-01-02T15:04:05Z07:00"),
+			UpdatedAt:         character.UpdatedAt.Format("2006-01-02T15:04:05Z07:00"),
 		}
 	}
-	return defaultValue
+
+	respondJSON(w, http.StatusOK, responses)
 }
 
-// UpdateCharacter handles PUT /api/characters/{id}
+func (h *Handlers) GetCharacter(w http.ResponseWriter, r *http.Request) {
+	session, err := h.Sessions.Get(r)
+	if err != nil {
+		respondError(w, http.StatusUnauthorized, "not authenticated")
+		return
+	}
+
+	characterID := chi.URLParam(r, "id")
+	if characterID == "" {
+		respondError(w, http.StatusBadRequest, "character ID is required")
+		return
+	}
+
+	character, err := h.CharacterService.GetCharacter(characterID)
+	if err != nil {
+		if err == service.ErrCharacterNotFound {
+			respondError(w, http.StatusNotFound, "character not found")
+			return
+		}
+		respondError(w, http.StatusInternalServerError, "failed to get character")
+		return
+	}
+
+	// Verify the character belongs to the user
+	if character.UserID != session.UserID {
+		respondError(w, http.StatusForbidden, "you can only view your own characters")
+		return
+	}
+
+	respondJSON(w, http.StatusOK, characterResponse{
+		ID:                character.ID,
+		Name:              character.Name,
+		Description:       character.Description,
+		Age:               character.Age,
+		Gender:            character.Gender,
+		Height:            character.Height,
+		Weight:            character.Weight,
+		State:             string(character.State),
+		UserID:            character.UserID,
+		EditionData:       character.EditionData,
+		PriorityAssignment: character.PriorityAssignment,
+		CreatedAt:         character.CreatedAt.Format("2006-01-02T15:04:05Z07:00"),
+		UpdatedAt:         character.UpdatedAt.Format("2006-01-02T15:04:05Z07:00"),
+	})
+}
+
 func (h *Handlers) UpdateCharacter(w http.ResponseWriter, r *http.Request) {
-	id := r.PathValue("id")
-	var character domain.Character
-	if err := json.NewDecoder(r.Body).Decode(&character); err != nil {
-		http.Error(w, err.Error(), http.StatusBadRequest)
-		return
-	}
-
-	character.ID = id
-	if err := h.CharacterRepo.Update(&character); err != nil {
-		http.Error(w, err.Error(), http.StatusInternalServerError)
-		return
-	}
-
-	respondJSON(w, http.StatusOK, character)
-}
-
-// DeleteCharacter handles DELETE /api/characters/{id}
-func (h *Handlers) DeleteCharacter(w http.ResponseWriter, r *http.Request) {
-	id := r.PathValue("id")
-	if err := h.CharacterRepo.Delete(id); err != nil {
-		http.Error(w, err.Error(), http.StatusInternalServerError)
-		return
-	}
-
-	w.WriteHeader(http.StatusNoContent)
-}
-
-// GetActiveSkills handles GET /api/skills/active
-func (h *Handlers) GetActiveSkills(w http.ResponseWriter, r *http.Request) {
-	skills := sr3.GetAllActiveSkills()
-	respondJSON(w, http.StatusOK, map[string]interface{}{
-		"skills":     skills,
-		"categories": sr3.ActiveSkillCategories,
-	})
-}
-
-// GetKnowledgeSkills handles GET /api/skills/knowledge
-func (h *Handlers) GetKnowledgeSkills(w http.ResponseWriter, r *http.Request) {
-	skills := sr3.GetAllKnowledgeSkills()
-	respondJSON(w, http.StatusOK, map[string]interface{}{
-		"skills":     skills,
-		"categories": sr3.KnowledgeSkillCategories,
-	})
-}
-
-// GetSkills handles GET /api/equipment/skills
-func (h *Handlers) GetSkills(w http.ResponseWriter, r *http.Request) {
-	// Get all skills from the v5 data (active, knowledge, and language)
-	allSkills := sr5.GetAllSkills()
-
-	respondJSON(w, http.StatusOK, map[string]interface{}{
-		"skills": allSkills,
-	})
-}
-
-// GetWeapons handles GET /api/equipment/weapons
-func (h *Handlers) GetWeapons(w http.ResponseWriter, r *http.Request) {
-	// Get all weapons from the v5 data using the new dataset function
-	weapons := sr5.GetAllWeapons()
-
-	// Convert to UI-compatible format, converting Source object to string and Type to category
-	uiWeapons := make([]map[string]interface{}, 0, len(weapons))
-	for _, w := range weapons {
-		// Marshal weapon to JSON and back to map to get all fields
-		weaponJSON, _ := json.Marshal(w)
-		var weaponMap map[string]interface{}
-		json.Unmarshal(weaponJSON, &weaponMap)
-
-		// Map type to category with display name and update type field with display name
-		if typeStr, ok := weaponMap["type"].(string); ok && typeStr != "" {
-			weaponType := sr5.WeaponType(typeStr)
-			displayName := weaponTypeToDisplayName(weaponType)
-			weaponMap["category"] = displayName
-			weaponMap["type"] = displayName // Also update the type field to show display name
-		} else {
-			weaponMap["category"] = ""
-		}
-
-		// Convert source object to string (just the source name, not the page)
-		if sourceObj, ok := weaponMap["source"].(map[string]interface{}); ok {
-			if sourceName, ok := sourceObj["source"].(string); ok {
-				weaponMap["source"] = sourceName
-			} else {
-				weaponMap["source"] = ""
-			}
-		} else if weaponMap["source"] == nil {
-			weaponMap["source"] = ""
-		}
-
-		uiWeapons = append(uiWeapons, weaponMap)
-	}
-
-	respondJSON(w, http.StatusOK, map[string]interface{}{
-		"weapons": uiWeapons,
-	})
-}
-
-// GetWeaponAccessories handles GET /api/equipment/weapon-accessories
-func (h *Handlers) GetWeaponAccessories(w http.ResponseWriter, r *http.Request) {
-	// Get all weapon accessories from the v5 data using the new dataset function
-	accessories := sr5.GetAllWeaponAccessories()
-
-	// Convert to UI-compatible format
-	uiAccessories := make([]map[string]interface{}, 0, len(accessories))
-	for _, a := range accessories {
-		uiItem := map[string]interface{}{
-			"name": a.Name,
-		}
-
-		// Map mount_types array to mount string (comma-separated)
-		if len(a.MountTypes) > 0 {
-			mountStrs := make([]string, 0, len(a.MountTypes))
-			for _, mt := range a.MountTypes {
-				switch mt {
-				case sr5.AccessoryMountBarrel:
-					mountStrs = append(mountStrs, "Barrel")
-				case sr5.AccessoryMountUnderbarrel:
-					mountStrs = append(mountStrs, "Under")
-				case sr5.AccessoryMountTop:
-					mountStrs = append(mountStrs, "Top")
-				case sr5.AccessoryMountSide:
-					mountStrs = append(mountStrs, "Side")
-				case sr5.AccessoryMountStock:
-					mountStrs = append(mountStrs, "Stock")
-				case sr5.AccessoryMountInternal:
-					mountStrs = append(mountStrs, "Internal")
-				case sr5.AccessoryMountNone:
-					mountStrs = append(mountStrs, "—")
-				}
-			}
-			uiItem["mount"] = strings.Join(mountStrs, ", ")
-		} else {
-			uiItem["mount"] = "—"
-		}
-
-		// Map availability
-		if a.Availability != "" {
-			uiItem["avail"] = a.Availability
-		} else {
-			uiItem["avail"] = ""
-		}
-
-		// Map cost
-		if a.Cost != "" {
-			uiItem["cost"] = a.Cost
-		} else {
-			uiItem["cost"] = ""
-		}
-
-		// Map source (just the source name, not the page)
-		if a.Source != nil {
-			uiItem["source"] = a.Source.Source
-			if a.Source.Page != "" {
-				uiItem["page"] = a.Source.Page
-			}
-		} else {
-			uiItem["source"] = ""
-		}
-
-		// Map special properties
-		if a.SpecialProperties != nil {
-			if a.SpecialProperties.Rating > 0 {
-				uiItem["rating"] = a.SpecialProperties.Rating
-			}
-			if a.SpecialProperties.AccuracyBonus > 0 {
-				uiItem["accuracy"] = a.SpecialProperties.AccuracyBonus
-			}
-			if a.SpecialProperties.RecoilCompensation > 0 {
-				uiItem["rc"] = a.SpecialProperties.RecoilCompensation
-			}
-			if a.SpecialProperties.ConcealabilityModifier != 0 {
-				uiItem["conceal"] = a.SpecialProperties.ConcealabilityModifier
-			}
-			// Include full special properties object for modal
-			uiItem["special_properties"] = a.SpecialProperties
-		}
-
-		// Include wireless bonus for modal
-		if a.WirelessBonus != nil {
-			uiItem["wireless_bonus"] = a.WirelessBonus
-		}
-
-		// Include description for modal
-		if a.Description != "" {
-			uiItem["description"] = a.Description
-		}
-
-		uiAccessories = append(uiAccessories, uiItem)
-	}
-
-	respondJSON(w, http.StatusOK, map[string]interface{}{
-		"accessories": uiAccessories,
-	})
-}
-
-// armorTypeToDisplayName converts ArmorType enum to display name
-func armorTypeToDisplayName(armorType sr5.ArmorType) string {
-	switch armorType {
-	case sr5.ArmorTypeClothing:
-		return "Clothing"
-	case sr5.ArmorTypeArmor:
-		return "Armor"
-	case sr5.ArmorTypeModification:
-		return "Modification"
-	case sr5.ArmorTypeHelmet:
-		return "Helmet"
-	case sr5.ArmorTypeShield:
-		return "Shield"
-	default:
-		return string(armorType)
-	}
-}
-
-// weaponTypeToDisplayName converts WeaponType enum to display name
-func weaponTypeToDisplayName(weaponType sr5.WeaponType) string {
-	switch weaponType {
-	case sr5.WeaponTypeMeleeBlade:
-		return "Melee - Blades"
-	case sr5.WeaponTypeMeleeClub:
-		return "Melee - Clubs"
-	case sr5.WeaponTypeMeleeOther:
-		return "Melee - Other"
-	case sr5.WeaponTypeThrowing:
-		return "Throwing Weapons"
-	case sr5.WeaponTypeTaser:
-		return "Tasers"
-	case sr5.WeaponTypeHoldOut:
-		return "Hold-Out Pistols"
-	case sr5.WeaponTypeLightPistol:
-		return "Light Pistols"
-	case sr5.WeaponTypeHeavyPistol:
-		return "Heavy Pistols"
-	case sr5.WeaponTypeMachinePistol:
-		return "Machine Pistols"
-	case sr5.WeaponTypeSubmachineGun:
-		return "Submachine Guns"
-	case sr5.WeaponTypeAssaultRifle:
-		return "Assault Rifles"
-	case sr5.WeaponTypeSniperRifle:
-		return "Sniper Rifles"
-	case sr5.WeaponTypeShotgun:
-		return "Shotguns"
-	case sr5.WeaponTypeSpecialWeapon:
-		return "Special Weapons"
-	case sr5.WeaponTypeMachineGun:
-		return "Machine Guns"
-	case sr5.WeaponTypeCannonLauncher:
-		return "Cannons & Launchers"
-	default:
-		return string(weaponType)
-	}
-}
-
-// GetArmor handles GET /api/equipment/armor
-func (h *Handlers) GetArmor(w http.ResponseWriter, r *http.Request) {
-	// Get all armor from the v5 data using the new dataset function
-	armor := sr5.GetAllArmor()
-
-	// Convert to UI-compatible format
-	uiArmor := make([]map[string]interface{}, 0, len(armor))
-	for _, a := range armor {
-		uiItem := map[string]interface{}{
-			"name": a.Name,
-		}
-
-		// Map type to category with display name
-		if a.Type != "" {
-			uiItem["category"] = armorTypeToDisplayName(a.Type)
-		}
-
-		// Map armor_rating to armor (as string)
-		if a.ArmorRating > 0 {
-			uiItem["armor"] = a.ArmorRating
-		} else {
-			uiItem["armor"] = ""
-		}
-
-		// Map capacity to armorcapacity (as string)
-		if a.Capacity > 0 {
-			uiItem["armorcapacity"] = a.Capacity
-		} else {
-			uiItem["armorcapacity"] = ""
-		}
-
-		// Map source (just the source name, not the page)
-		if a.Source != nil {
-			uiItem["source"] = a.Source.Source
-		} else {
-			uiItem["source"] = ""
-		}
-
-		// Availability and cost not in our data yet, set empty
-		uiItem["avail"] = ""
-		uiItem["cost"] = ""
-
-		// Add rating if present
-		if a.Rating > 0 {
-			uiItem["rating"] = a.Rating
-		}
-
-		// Add description
-		if a.Description != "" {
-			uiItem["description"] = a.Description
-		}
-
-		// Add special properties
-		if a.SpecialProperties != nil {
-			if a.SpecialProperties.Capacity > 0 {
-				uiItem["armorcapacity"] = a.SpecialProperties.Capacity
-			}
-			uiItem["special_properties"] = a.SpecialProperties
-		}
-
-		// Add wireless bonus
-		if a.WirelessBonus != nil {
-			uiItem["wirelessbonus"] = a.WirelessBonus
-		}
-
-		// Add modification effects (don't set as bonus - that's for other bonus types)
-		if len(a.ModificationEffects) > 0 {
-			uiItem["modification_effects"] = a.ModificationEffects
-		}
-
-		// Add compatible with
-		if len(a.CompatibleWith) > 0 {
-			uiItem["compatible_with"] = a.CompatibleWith
-		}
-
-		// Add requires
-		if a.Requires != "" {
-			uiItem["requires"] = a.Requires
-		}
-
-		// Add max rating
-		if a.MaxRating > 0 {
-			uiItem["max_rating"] = a.MaxRating
-		}
-
-		uiArmor = append(uiArmor, uiItem)
-	}
-
-	respondJSON(w, http.StatusOK, map[string]interface{}{
-		"armor": uiArmor,
-	})
-}
-
-// GetCyberware handles GET /api/equipment/cyberware (v5)
-func (h *Handlers) GetCyberware(w http.ResponseWriter, r *http.Request) {
-	cyberware := sr5.GetAllCyberware()
-	respondJSON(w, http.StatusOK, map[string]interface{}{
-		"cyberware": cyberware,
-	})
-}
-
-// GetGears handles GET /api/equipment/gear
-func (h *Handlers) GetGears(w http.ResponseWriter, r *http.Request) {
-	// Get all gear from the v5 data
-	gearList := sr5.GetAllGear()
-
-	respondJSON(w, http.StatusOK, map[string]interface{}{
-		"gear": gearList,
-	})
-}
-
-// GetQualities handles GET /api/equipment/qualities
-func (h *Handlers) GetQualities(w http.ResponseWriter, r *http.Request) {
-	// Get all qualities from the v5 data using the new dataset function
-	qualitiesList := sr5.GetAllQualities()
-
-	respondJSON(w, http.StatusOK, map[string]interface{}{
-		"qualities": qualitiesList,
-	})
-}
-
-// GetBooks handles GET /api/equipment/books
-func (h *Handlers) GetBooks(w http.ResponseWriter, r *http.Request) {
-	// Get all books from the v5 data using the new dataset function
-	books := sr5.GetAllBooks()
-	respondJSON(w, http.StatusOK, map[string]interface{}{
-		"books": books,
-	})
-}
-
-// GetContacts handles GET /api/equipment/contacts
-func (h *Handlers) GetContacts(w http.ResponseWriter, r *http.Request) {
-	// Get all contacts from the v5 data
-	contacts := sr5.GetAllContacts()
-	respondJSON(w, http.StatusOK, map[string]interface{}{
-		"contacts": contacts,
-	})
-}
-
-// GetLifestyles handles GET /api/equipment/lifestyles
-func (h *Handlers) GetLifestyles(w http.ResponseWriter, r *http.Request) {
-	// Get all lifestyles and lifestyle options from the v5 data
-	lifestyles := sr5.GetAllLifestyles()
-	lifestyleOptions := sr5.GetAllLifestyleOptions()
-
-	// Combine both into a single list with category field
-	type LifestyleItem struct {
-		ID          string `json:"id"`
-		Name        string `json:"name"`
-		Description string `json:"description"`
-		Cost        string `json:"cost"`
-		Source      string `json:"source"`
-		Category    string `json:"category"`
-	}
-
-	items := make([]LifestyleItem, 0, len(lifestyles)+len(lifestyleOptions))
-
-	// Add lifestyles with category "Lifestyle"
-	for _, l := range lifestyles {
-		sourceStr := ""
-		if l.Source != nil {
-			sourceStr = l.Source.Source
-		}
-		items = append(items, LifestyleItem{
-			ID:          l.ID,
-			Name:        l.Name,
-			Description: l.Description,
-			Cost:        l.Cost,
-			Source:      sourceStr,
-			Category:    "Lifestyle",
-		})
-	}
-
-	// Add lifestyle options with category "Lifestyle Option"
-	for _, o := range lifestyleOptions {
-		sourceStr := ""
-		if o.Source != nil {
-			sourceStr = o.Source.Source
-		}
-		items = append(items, LifestyleItem{
-			ID:          o.ID,
-			Name:        o.Name,
-			Description: o.Description,
-			Cost:        o.Cost,
-			Source:      sourceStr,
-			Category:    "Lifestyle Option",
-		})
-	}
-
-	respondJSON(w, http.StatusOK, map[string]interface{}{
-		"lifestyles": items,
-	})
-}
-
-// GetWeaponConsumables handles GET /api/equipment/weapon-consumables
-func (h *Handlers) GetWeaponConsumables(w http.ResponseWriter, r *http.Request) {
-	// Get all weapon consumables from the v5 data
-	consumables := sr5.GetAllWeaponConsumables()
-
-	respondJSON(w, http.StatusOK, map[string]interface{}{
-		"weapon_consumables": consumables,
-	})
-}
-
-// GetActions handles GET /api/equipment/actions
-func (h *Handlers) GetActions(w http.ResponseWriter, r *http.Request) {
-	actions := sr5.GetAllActions()
-	respondJSON(w, http.StatusOK, map[string]interface{}{
-		"actions": actions,
-	})
-}
-
-
-// GetBioware handles GET /api/equipment/bioware
-func (h *Handlers) GetBioware(w http.ResponseWriter, r *http.Request) {
-	bioware := sr5.GetAllBioware()
-	respondJSON(w, http.StatusOK, map[string]interface{}{
-		"bioware": bioware,
-	})
-}
-
-// GetComplexForms handles GET /api/equipment/complex-forms
-func (h *Handlers) GetComplexForms(w http.ResponseWriter, r *http.Request) {
-	complexForms := sr5.GetAllComplexForms()
-	respondJSON(w, http.StatusOK, map[string]interface{}{
-		"complex_forms": complexForms,
-	})
-}
-
-// GetMentors handles GET /api/equipment/mentors
-func (h *Handlers) GetMentors(w http.ResponseWriter, r *http.Request) {
-	mentors := sr5.GetAllMentors()
-	respondJSON(w, http.StatusOK, map[string]interface{}{
-		"mentors": mentors,
-	})
-}
-
-// GetMetatypes handles GET /api/equipment/metatypes
-func (h *Handlers) GetMetatypes(w http.ResponseWriter, r *http.Request) {
-	metatypes := sr5.GetAllMetatypes()
-	respondJSON(w, http.StatusOK, map[string]interface{}{
-		"metatypes": metatypes,
-	})
-}
-
-// GetPowers handles GET /api/equipment/powers
-func (h *Handlers) GetPowers(w http.ResponseWriter, r *http.Request) {
-	powers := sr5.GetAllPowers()
-	respondJSON(w, http.StatusOK, map[string]interface{}{
-		"powers": powers,
-	})
-}
-
-// GetPrograms handles GET /api/equipment/programs
-func (h *Handlers) GetPrograms(w http.ResponseWriter, r *http.Request) {
-	programs := sr5.GetAllPrograms()
-	respondJSON(w, http.StatusOK, map[string]interface{}{
-		"programs": programs,
-	})
-}
-
-// GetSpells handles GET /api/equipment/spells
-func (h *Handlers) GetSpells(w http.ResponseWriter, r *http.Request) {
-	spells := sr5.GetAllSpells()
-	respondJSON(w, http.StatusOK, map[string]interface{}{
-		"spells": spells,
-	})
-}
-
-// GetTraditions handles GET /api/equipment/traditions
-func (h *Handlers) GetTraditions(w http.ResponseWriter, r *http.Request) {
-	traditions := sr5.GetAllTraditions()
-	respondJSON(w, http.StatusOK, map[string]interface{}{
-		"traditions": traditions,
-	})
-}
-
-// GetVehicleModifications handles GET /api/equipment/vehicle-modifications
-func (h *Handlers) GetVehicleModifications(w http.ResponseWriter, r *http.Request) {
-	modifications := sr5.GetAllVehicleModifications()
-	respondJSON(w, http.StatusOK, map[string]interface{}{
-		"vehicle_modifications": modifications,
-	})
-}
-
-// GetVehicles handles GET /api/equipment/vehicles
-func (h *Handlers) GetVehicles(w http.ResponseWriter, r *http.Request) {
-	vehicles := sr5.GetAllVehicles()
-	respondJSON(w, http.StatusOK, map[string]interface{}{
-		"vehicles": vehicles,
-	})
-}
-
-// Group handlers
-
-// GetGroups handles GET /api/groups
-func (h *Handlers) GetGroups(w http.ResponseWriter, r *http.Request) {
-	groups, err := h.GroupRepo.GetAll()
+	session, err := h.Sessions.Get(r)
 	if err != nil {
-		http.Error(w, err.Error(), http.StatusInternalServerError)
+		respondError(w, http.StatusUnauthorized, "not authenticated")
 		return
 	}
-	respondJSON(w, http.StatusOK, groups)
-}
 
-// GetGroup handles GET /api/groups/{id}
-func (h *Handlers) GetGroup(w http.ResponseWriter, r *http.Request) {
-	id := r.PathValue("id")
-	group, err := h.GroupRepo.GetByID(id)
+	characterID := chi.URLParam(r, "id")
+	if characterID == "" {
+		respondError(w, http.StatusBadRequest, "character ID is required")
+		return
+	}
+
+	// Get the current character
+	character, err := h.CharacterService.GetCharacter(characterID)
 	if err != nil {
-		http.Error(w, err.Error(), http.StatusNotFound)
-		return
-	}
-	respondJSON(w, http.StatusOK, group)
-}
-
-// CreateGroup handles POST /api/groups
-func (h *Handlers) CreateGroup(w http.ResponseWriter, r *http.Request) {
-	var group domain.Group
-	if err := json.NewDecoder(r.Body).Decode(&group); err != nil {
-		http.Error(w, err.Error(), http.StatusBadRequest)
-		return
-	}
-
-	if err := h.GroupRepo.Create(&group); err != nil {
-		http.Error(w, err.Error(), http.StatusInternalServerError)
-		return
-	}
-
-	respondJSON(w, http.StatusCreated, group)
-}
-
-// UpdateGroup handles PUT /api/groups/{id}
-func (h *Handlers) UpdateGroup(w http.ResponseWriter, r *http.Request) {
-	id := r.PathValue("id")
-	var group domain.Group
-	if err := json.NewDecoder(r.Body).Decode(&group); err != nil {
-		http.Error(w, err.Error(), http.StatusBadRequest)
-		return
-	}
-
-	group.ID = id
-	if err := h.GroupRepo.Update(&group); err != nil {
-		http.Error(w, err.Error(), http.StatusInternalServerError)
-		return
-	}
-
-	respondJSON(w, http.StatusOK, group)
-}
-
-// DeleteGroup handles DELETE /api/groups/{id}
-func (h *Handlers) DeleteGroup(w http.ResponseWriter, r *http.Request) {
-	id := r.PathValue("id")
-	if err := h.GroupRepo.Delete(id); err != nil {
-		http.Error(w, err.Error(), http.StatusInternalServerError)
-		return
-	}
-
-	w.WriteHeader(http.StatusNoContent)
-}
-
-// Campaign handlers
-
-// GetCampaigns handles GET /api/campaigns
-func (h *Handlers) GetCampaigns(w http.ResponseWriter, r *http.Request) {
-	allCampaigns, err := h.CampaignService.ListCampaigns()
-	if err != nil {
-		respondError(w, http.StatusInternalServerError, err.Error())
-		return
-	}
-
-	session := GetSessionFromContext(r.Context())
-	// Filter campaigns based on user role
-	filteredCampaigns := h.filterCampaignsByRole(allCampaigns, session)
-
-	response := make([]campaignResponse, 0, len(filteredCampaigns))
-	for _, campaign := range filteredCampaigns {
-		payload, err := h.buildCampaignResponse(session, campaign)
-		if err != nil {
-			respondServiceError(w, err)
+		if err == service.ErrCharacterNotFound {
+			respondError(w, http.StatusNotFound, "character not found")
 			return
 		}
-		response = append(response, *payload)
+		respondError(w, http.StatusInternalServerError, "failed to get character")
+		return
+	}
+
+	// Verify the character belongs to the user
+	if character.UserID != session.UserID {
+		respondError(w, http.StatusForbidden, "you can only update your own characters")
+		return
+	}
+
+	// Decode the update request
+	var req struct {
+		Name               *string                      `json:"name"`
+		Description        *string                      `json:"description"`
+		Age                *string                      `json:"age"`
+		Gender             *string                      `json:"gender"`
+		Height             *string                      `json:"height"`
+		Weight             *string                      `json:"weight"`
+		PriorityAssignment *domain.PriorityAssignment   `json:"priority_assignment,omitempty"`
+	}
+	if err := json.NewDecoder(r.Body).Decode(&req); err != nil {
+		respondError(w, http.StatusBadRequest, "invalid request body")
+		return
+	}
+
+	// Update fields if provided
+	if req.Name != nil {
+		character.Name = *req.Name
+	}
+	if req.Description != nil {
+		character.Description = *req.Description
+	}
+	if req.Age != nil {
+		character.Age = *req.Age
+	}
+	if req.Gender != nil {
+		character.Gender = *req.Gender
+	}
+	if req.Height != nil {
+		character.Height = *req.Height
+	}
+	if req.Weight != nil {
+		character.Weight = *req.Weight
+	}
+	if req.PriorityAssignment != nil {
+		character.PriorityAssignment = req.PriorityAssignment
+	}
+
+	// Save the updated character
+	if err := h.CharacterService.UpdateCharacter(character); err != nil {
+		respondError(w, http.StatusInternalServerError, "failed to update character: "+err.Error())
+		return
+	}
+
+	respondJSON(w, http.StatusOK, characterResponse{
+		ID:                character.ID,
+		Name:              character.Name,
+		Description:       character.Description,
+		Age:               character.Age,
+		Gender:            character.Gender,
+		Height:            character.Height,
+		Weight:            character.Weight,
+		State:             string(character.State),
+		UserID:            character.UserID,
+		EditionData:       character.EditionData,
+		PriorityAssignment: character.PriorityAssignment,
+		CreatedAt:         character.CreatedAt.Format("2006-01-02T15:04:05Z07:00"),
+		UpdatedAt:         character.UpdatedAt.Format("2006-01-02T15:04:05Z07:00"),
+	})
+}
+
+func (h *Handlers) DeleteCharacter(w http.ResponseWriter, r *http.Request) {
+	session, err := h.Sessions.Get(r)
+	if err != nil {
+		respondError(w, http.StatusUnauthorized, "not authenticated")
+		return
+	}
+
+	characterID := chi.URLParam(r, "id")
+	if characterID == "" {
+		respondError(w, http.StatusBadRequest, "character ID is required")
+		return
+	}
+
+	// Verify the character belongs to the user
+	character, err := h.CharacterService.GetCharacter(characterID)
+	if err != nil {
+		if err == service.ErrCharacterNotFound {
+			respondError(w, http.StatusNotFound, "character not found")
+			return
+		}
+		respondError(w, http.StatusInternalServerError, "failed to get character")
+		return
+	}
+
+	if character.UserID != session.UserID {
+		respondError(w, http.StatusForbidden, "you can only delete your own characters")
+		return
+	}
+
+	if err := h.CharacterService.DeleteCharacter(characterID); err != nil {
+		if err == service.ErrCharacterNotFound {
+			respondError(w, http.StatusNotFound, "character not found")
+			return
+		}
+		respondError(w, http.StatusInternalServerError, "failed to delete character")
+		return
+	}
+
+	w.WriteHeader(http.StatusNoContent)
+}
+
+func (h *Handlers) GetUser(w http.ResponseWriter, r *http.Request) {
+	_, err := h.Sessions.Get(r)
+	if err != nil {
+		respondError(w, http.StatusUnauthorized, "not authenticated")
+		return
+	}
+
+	userID := chi.URLParam(r, "id")
+	if userID == "" {
+		respondError(w, http.StatusBadRequest, "user ID is required")
+		return
+	}
+
+	user, err := h.UserService.GetUser(userID)
+	if err != nil {
+		if err == service.ErrUserNotFound {
+			respondError(w, http.StatusNotFound, "user not found")
+			return
+		}
+		respondError(w, http.StatusInternalServerError, "failed to get user")
+		return
+	}
+
+	respondJSON(w, http.StatusOK, userResponse{
+		ID:       user.ID,
+		Email:    user.Email,
+		Username: user.Username,
+		Roles:    rolesToStrings(user.Roles),
+	})
+}
+
+func (h *Handlers) GetPriorityTables(w http.ResponseWriter, r *http.Request) {
+	playLevel := r.URL.Query().Get("play_level")
+	if playLevel == "" {
+		playLevel = "experienced"
+	}
+
+	var level creation.PlayLevel
+	switch playLevel {
+	case "street":
+		level = creation.PlayLevelStreet
+	case "prime":
+		level = creation.PlayLevelPrime
+	default:
+		level = creation.PlayLevelExperienced
+	}
+
+	tables := creation.GetPriorityTables(level)
+	config := creation.GetPlayLevelConfig(level)
+
+	response := map[string]interface{}{
+		"tables": tables,
+		"config": config,
 	}
 
 	respondJSON(w, http.StatusOK, response)
 }
 
-// GetCampaign handles GET /api/campaigns/{id}
-func (h *Handlers) GetCampaign(w http.ResponseWriter, r *http.Request) {
-	id := r.PathValue("id")
-	campaign, err := h.CampaignService.GetCampaign(id)
-	if err != nil {
-		respondServiceError(w, err)
-		return
-	}
-	session := GetSessionFromContext(r.Context())
-	payload, err := h.buildCampaignResponse(session, campaign)
-	if err != nil {
-		respondServiceError(w, err)
-		return
-	}
-	respondJSON(w, http.StatusOK, payload)
+func (h *Handlers) HealthCheck(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(http.StatusOK)
+	json.NewEncoder(w).Encode(map[string]string{"status": "ok"})
 }
 
-// GetCampaignCharacterCreationData handles GET /api/campaigns/{id}/character-creation
-func (h *Handlers) GetCampaignCharacterCreationData(w http.ResponseWriter, r *http.Request) {
-	id := r.PathValue("id")
-	if id == "" {
-		respondError(w, http.StatusBadRequest, "campaign id is required")
-		return
-	}
-
-	campaign, err := h.CampaignService.GetCampaign(id)
-	if err != nil {
-		respondServiceError(w, err)
-		return
-	}
-
-	if h.EditionRepo == nil {
-		respondError(w, http.StatusInternalServerError, "edition repository not configured")
-		return
-	}
-
-	editionData, err := h.EditionRepo.GetCharacterCreationData(campaign.Edition)
-	if err != nil {
-		respondError(w, http.StatusInternalServerError, err.Error())
-		return
-	}
-
-	rules, err := h.CampaignService.DescribeGameplayRules(campaign)
-	if err != nil {
-		respondServiceError(w, err)
-		return
-	}
-
-	respondJSON(w, http.StatusOK, campaignCharacterCreationResponse{
-		CampaignID:     campaign.ID,
-		Edition:        campaign.Edition,
-		CreationMethod: campaign.CreationMethod,
-		EditionData:    editionData,
-		GameplayRules:  rules,
-	})
-}
-
-// CreateCampaign handles POST /api/campaigns
-func (h *Handlers) CreateCampaign(w http.ResponseWriter, r *http.Request) {
-	var req campaignCreateRequest
-	if err := json.NewDecoder(r.Body).Decode(&req); err != nil {
-		respondError(w, http.StatusBadRequest, err.Error())
-		return
-	}
-
-	session := GetSessionFromContext(r.Context())
-	if session == nil {
-		respondError(w, http.StatusUnauthorized, "authentication required")
-		return
-	}
-
-	// Get the user to set GM name from username
-	user, err := h.UserService.GetUserByID(session.UserID)
-	if err != nil {
-		respondServiceError(w, err)
-		return
-	}
-
-	// Set GM user ID and name from the creating user
-	gmUserID := session.UserID
-	gmName := user.Username
-	// Allow override of GM name if provided (for backwards compatibility)
-	if req.GMName != "" {
-		gmName = req.GMName
-	}
-
-	campaign, err := h.CampaignService.CreateCampaign(service.CampaignCreateInput{
-		Name:           req.Name,
-		Description:    req.Description,
-		GroupID:        req.GroupID,
-		GMName:         gmName,
-		GMUserID:       gmUserID,
-		Edition:        req.Edition,
-		CreationMethod: req.CreationMethod,
-		GameplayLevel:  req.GameplayLevel,
-		Theme:          req.Theme,
-		HouseRuleNotes: req.HouseRuleNotes,
-		Automation:     cloneAutomation(req.Automation),
-		Factions:       toDomainFactions(req.Factions),
-		Locations:      toDomainLocations(req.Locations),
-		Placeholders:   toDomainPlaceholders(req.Placeholders),
-		SessionSeed:    toDomainSessionSeed(req.SessionSeed),
-		Players:        toDomainPlayers(req.Players),
-		Status:         req.Status,
-		EnabledBooks:   req.EnabledBooks,
-	})
-	if err != nil {
-		respondServiceError(w, err)
-		return
-	}
-
-	payload, err := h.buildCampaignResponse(session, campaign)
-	if err != nil {
-		respondServiceError(w, err)
-		return
-	}
-	respondJSON(w, http.StatusCreated, payload)
-}
-
-// UpdateCampaign handles PUT /api/campaigns/{id}
-func (h *Handlers) UpdateCampaign(w http.ResponseWriter, r *http.Request) {
-	id := r.PathValue("id")
-	var req campaignUpdateRequest
-	if err := json.NewDecoder(r.Body).Decode(&req); err != nil {
-		respondError(w, http.StatusBadRequest, err.Error())
-		return
-	}
-
-	session := GetSessionFromContext(r.Context())
-	existing, err := h.CampaignService.GetCampaign(id)
-	if err != nil {
-		respondServiceError(w, err)
-		return
-	}
-
-	// Prevent updating soft-deleted campaigns
-	if !existing.DeletedAt.IsZero() {
-		respondError(w, http.StatusBadRequest, "cannot update a deleted campaign")
-		return
-	}
-
-	if !canManageCampaign(existing, session) {
-		respondServiceError(w, service.ErrForbidden)
-		return
-	}
-
-	campaign, err := h.CampaignService.UpdateCampaign(id, service.CampaignUpdateInput{
-		Name:           req.Name,
-		Description:    req.Description,
-		GMName:         req.GMName,
-		GMUserID:       req.GMUserID,
-		GameplayLevel:  req.GameplayLevel,
-		Theme:          req.Theme,
-		HouseRuleNotes: req.HouseRuleNotes,
-		Automation:     cloneAutomationPtr(req.Automation),
-		Factions:       toDomainFactionsPtr(req.Factions),
-		Locations:      toDomainLocationsPtr(req.Locations),
-		Placeholders:   toDomainPlaceholdersPtr(req.Placeholders),
-		SessionSeed:    toDomainSessionSeedPtr(req.SessionSeed),
-		Players:        toDomainPlayersPtr(req.Players),
-		Status:         req.Status,
-		CreationMethod: req.CreationMethod,
-		Edition:        req.Edition,
-		EnabledBooks:   req.EnabledBooks,
-	})
-	if err != nil {
-		respondServiceError(w, err)
-		return
-	}
-
-	payload, err := h.buildCampaignResponse(session, campaign)
-	if err != nil {
-		respondServiceError(w, err)
-		return
-	}
-	respondJSON(w, http.StatusOK, payload)
-}
-
-// DeleteCampaign handles DELETE /api/campaigns/{id}
-func (h *Handlers) DeleteCampaign(w http.ResponseWriter, r *http.Request) {
-	id := r.PathValue("id")
-
-	session := GetSessionFromContext(r.Context())
-	campaign, err := h.CampaignService.GetCampaign(id)
-	if err != nil {
-		respondServiceError(w, err)
-		return
-	}
-
-	// Prevent deleting already-deleted campaigns
-	if !campaign.DeletedAt.IsZero() {
-		respondError(w, http.StatusBadRequest, "campaign is already deleted")
-		return
-	}
-
-	if !canManageCampaign(campaign, session) {
-		respondServiceError(w, service.ErrForbidden)
-		return
-	}
-
-	if err := h.CampaignService.DeleteCampaign(id); err != nil {
-		respondServiceError(w, err)
-		return
-	}
-
-	w.WriteHeader(http.StatusNoContent)
-}
-
-func toDomainFactions(source []campaignFactionRequest) []domain.CampaignFaction {
-	if len(source) == 0 {
-		return nil
-	}
-	result := make([]domain.CampaignFaction, 0, len(source))
-	for _, item := range source {
-		id := strings.TrimSpace(item.ID)
-		name := strings.TrimSpace(item.Name)
-		if id == "" && name == "" {
-			continue
-		}
-		result = append(result, domain.CampaignFaction{
-			ID:    id,
-			Name:  name,
-			Tags:  strings.TrimSpace(item.Tags),
-			Notes: strings.TrimSpace(item.Notes),
-		})
-	}
-	if len(result) == 0 {
-		return nil
-	}
-	return result
-}
-
-func toDomainFactionsPtr(source *[]campaignFactionRequest) *[]domain.CampaignFaction {
-	if source == nil {
-		return nil
-	}
-	cloned := toDomainFactions(*source)
-	return &cloned
-}
-
-func toDomainLocations(source []campaignLocationRequest) []domain.CampaignLocation {
-	if len(source) == 0 {
-		return nil
-	}
-	result := make([]domain.CampaignLocation, 0, len(source))
-	for _, item := range source {
-		id := strings.TrimSpace(item.ID)
-		name := strings.TrimSpace(item.Name)
-		if id == "" && name == "" {
-			continue
-		}
-		result = append(result, domain.CampaignLocation{
-			ID:         id,
-			Name:       name,
-			Descriptor: strings.TrimSpace(item.Descriptor),
-		})
-	}
-	if len(result) == 0 {
-		return nil
-	}
-	return result
-}
-
-func toDomainLocationsPtr(source *[]campaignLocationRequest) *[]domain.CampaignLocation {
-	if source == nil {
-		return nil
-	}
-	cloned := toDomainLocations(*source)
-	return &cloned
-}
-
-func toDomainPlaceholders(source []campaignPlaceholderRequest) []domain.CampaignPlaceholder {
-	if len(source) == 0 {
-		return nil
-	}
-	result := make([]domain.CampaignPlaceholder, 0, len(source))
-	for _, item := range source {
-		id := strings.TrimSpace(item.ID)
-		name := strings.TrimSpace(item.Name)
-		if id == "" && name == "" {
-			continue
-		}
-		result = append(result, domain.CampaignPlaceholder{
-			ID:   id,
-			Name: name,
-			Role: strings.TrimSpace(item.Role),
-		})
-	}
-	if len(result) == 0 {
-		return nil
-	}
-	return result
-}
-
-func toDomainPlaceholdersPtr(source *[]campaignPlaceholderRequest) *[]domain.CampaignPlaceholder {
-	if source == nil {
-		return nil
-	}
-	cloned := toDomainPlaceholders(*source)
-	return &cloned
-}
-
-func toDomainSessionSeed(source *campaignSessionSeedRequest) *domain.CampaignSessionSeed {
-	if source == nil {
-		return nil
-	}
-	seed := &domain.CampaignSessionSeed{
-		Title:         strings.TrimSpace(source.Title),
-		Objectives:    strings.TrimSpace(source.Objectives),
-		SceneTemplate: strings.TrimSpace(source.SceneTemplate),
-		Summary:       strings.TrimSpace(source.Summary),
-		Skip:          source.Skip,
-	}
-	if seed.Title == "" && seed.Objectives == "" && seed.SceneTemplate == "" && seed.Summary == "" && !seed.Skip {
-		return nil
-	}
-	return seed
-}
-
-func toDomainSessionSeedPtr(source *campaignSessionSeedRequest) **domain.CampaignSessionSeed {
-	if source == nil {
-		return nil
-	}
-	seed := toDomainSessionSeed(source)
-	return &seed
-}
-
-func toDomainPlayers(source []campaignPlayerRequest) []domain.CampaignPlayer {
-	if len(source) == 0 {
-		return nil
-	}
-	result := make([]domain.CampaignPlayer, 0, len(source))
-	seen := make(map[string]struct{})
-	for _, item := range source {
-		id := strings.TrimSpace(item.ID)
-		if id == "" {
-			continue
-		}
-		if _, exists := seen[id]; exists {
-			continue
-		}
-		seen[id] = struct{}{}
-		result = append(result, domain.CampaignPlayer{
-			ID:       id,
-			UserID:   id, // Assume ID is userID for backward compatibility
-			Username: strings.TrimSpace(item.Username),
-			Status:   "accepted", // Default status for players added via create/update
-		})
-	}
-	if len(result) == 0 {
-		return nil
-	}
-	return result
-}
-
-func toDomainPlayersPtr(source *[]campaignPlayerRequest) *[]domain.CampaignPlayer {
-	if source == nil {
-		return nil
-	}
-	cloned := toDomainPlayers(*source)
-	return &cloned
-}
-
-func cloneAutomation(source map[string]bool) map[string]bool {
-	if len(source) == 0 {
-		return nil
-	}
-	result := make(map[string]bool, len(source))
-	for key, value := range source {
-		trimmed := strings.TrimSpace(key)
-		if trimmed == "" {
-			continue
-		}
-		result[trimmed] = value
-	}
-	if len(result) == 0 {
-		return nil
-	}
-	return result
-}
-
-func cloneAutomationPtr(source *map[string]bool) *map[string]bool {
-	if source == nil {
-		return nil
-	}
-	cloned := cloneAutomation(*source)
-	return &cloned
-}
-
-func normalizePlayerUserIDs(source []string) []string {
-	if len(source) == 0 {
-		return nil
-	}
-	seen := make(map[string]struct{}, len(source))
-	result := make([]string, 0, len(source))
-	for _, id := range source {
-		trimmed := strings.TrimSpace(id)
-		if trimmed == "" {
-			continue
-		}
-		if _, exists := seen[trimmed]; exists {
-			continue
-		}
-		seen[trimmed] = struct{}{}
-		result = append(result, trimmed)
-	}
-	if len(result) == 0 {
-		return nil
-	}
-	return result
-}
-
-// GetUsers handles GET /api/users
-func (h *Handlers) GetUsers(w http.ResponseWriter, r *http.Request) {
-	roleQuery := strings.TrimSpace(r.URL.Query().Get("role"))
-	var filters []string
-	if roleQuery != "" {
-		for _, part := range strings.Split(roleQuery, ",") {
-			part = strings.TrimSpace(part)
-			if part != "" {
-				filters = append(filters, part)
-			}
-		}
-	}
-
-	users, err := h.UserService.ListUsers(filters...)
-	if err != nil {
-		respondError(w, http.StatusInternalServerError, err.Error())
-		return
-	}
-
-	response := make([]userResponse, 0, len(users))
-	for _, user := range users {
-		response = append(response, userResponse{
-			ID:       user.ID,
-			Email:    user.Email,
-			Username: user.Username,
-			Roles:    user.Roles,
-		})
-	}
-
-	respondJSON(w, http.StatusOK, response)
-}
-
-// Session handlers
-
-// GetSessions handles GET /api/sessions
-func (h *Handlers) GetSessions(w http.ResponseWriter, r *http.Request) {
-	sessions, err := h.SessionService.ListSessions()
-	if err != nil {
-		respondError(w, http.StatusInternalServerError, err.Error())
-		return
-	}
-	respondJSON(w, http.StatusOK, sessions)
-}
-
-// GetSession handles GET /api/sessions/{id}
-func (h *Handlers) GetSession(w http.ResponseWriter, r *http.Request) {
-	id := r.PathValue("id")
-	session, err := h.SessionService.GetSession(id)
-	if err != nil {
-		respondServiceError(w, err)
-		return
-	}
-	respondJSON(w, http.StatusOK, session)
-}
-
-// CreateSession handles POST /api/sessions
-func (h *Handlers) CreateSession(w http.ResponseWriter, r *http.Request) {
-	var session domain.Session
-	if err := json.NewDecoder(r.Body).Decode(&session); err != nil {
-		respondError(w, http.StatusBadRequest, err.Error())
-		return
-	}
-
-	created, err := h.SessionService.CreateSession(&session)
-	if err != nil {
-		respondServiceError(w, err)
-		return
-	}
-
-	respondJSON(w, http.StatusCreated, created)
-}
-
-// UpdateSession handles PUT /api/sessions/{id}
-func (h *Handlers) UpdateSession(w http.ResponseWriter, r *http.Request) {
-	id := r.PathValue("id")
-	var session domain.Session
-	if err := json.NewDecoder(r.Body).Decode(&session); err != nil {
-		respondError(w, http.StatusBadRequest, err.Error())
-		return
-	}
-
-	updated, err := h.SessionService.UpdateSession(id, &session)
-	if err != nil {
-		respondServiceError(w, err)
-		return
-	}
-
-	respondJSON(w, http.StatusOK, updated)
-}
-
-// DeleteSession handles DELETE /api/sessions/{id}
-func (h *Handlers) DeleteSession(w http.ResponseWriter, r *http.Request) {
-	id := r.PathValue("id")
-	if err := h.SessionService.DeleteSession(id); err != nil {
-		respondServiceError(w, err)
-		return
-	}
-
-	w.WriteHeader(http.StatusNoContent)
-}
-
-// Scene handlers
-
-// GetScenes handles GET /api/scenes
-func (h *Handlers) GetScenes(w http.ResponseWriter, r *http.Request) {
-	scenes, err := h.SceneService.ListScenes()
-	if err != nil {
-		respondError(w, http.StatusInternalServerError, err.Error())
-		return
-	}
-	respondJSON(w, http.StatusOK, scenes)
-}
-
-// GetScene handles GET /api/scenes/{id}
-func (h *Handlers) GetScene(w http.ResponseWriter, r *http.Request) {
-	id := r.PathValue("id")
-	scene, err := h.SceneService.GetScene(id)
-	if err != nil {
-		respondServiceError(w, err)
-		return
-	}
-	respondJSON(w, http.StatusOK, scene)
-}
-
-// CreateScene handles POST /api/scenes
-func (h *Handlers) CreateScene(w http.ResponseWriter, r *http.Request) {
-	var scene domain.Scene
-	if err := json.NewDecoder(r.Body).Decode(&scene); err != nil {
-		respondError(w, http.StatusBadRequest, err.Error())
-		return
-	}
-
-	created, err := h.SceneService.CreateScene(&scene)
-	if err != nil {
-		respondServiceError(w, err)
-		return
-	}
-
-	respondJSON(w, http.StatusCreated, created)
-}
-
-// UpdateScene handles PUT /api/scenes/{id}
-func (h *Handlers) UpdateScene(w http.ResponseWriter, r *http.Request) {
-	id := r.PathValue("id")
-	var scene domain.Scene
-	if err := json.NewDecoder(r.Body).Decode(&scene); err != nil {
-		respondError(w, http.StatusBadRequest, err.Error())
-		return
-	}
-
-	updated, err := h.SceneService.UpdateScene(id, &scene)
-	if err != nil {
-		respondServiceError(w, err)
-		return
-	}
-
-	respondJSON(w, http.StatusOK, updated)
-}
-
-// DeleteScene handles DELETE /api/scenes/{id}
-func (h *Handlers) DeleteScene(w http.ResponseWriter, r *http.Request) {
-	id := r.PathValue("id")
-	if err := h.SceneService.DeleteScene(id); err != nil {
-		respondServiceError(w, err)
-		return
-	}
-
-	w.WriteHeader(http.StatusNoContent)
-}
-
-// respondJSON sends a JSON response
+// Helper functions
 func respondJSON(w http.ResponseWriter, status int, data interface{}) {
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(status)
@@ -1807,463 +619,25 @@ func respondError(w http.ResponseWriter, status int, message string) {
 	respondJSON(w, status, map[string]string{"error": message})
 }
 
-func respondServiceError(w http.ResponseWriter, err error) {
-	switch {
-	case errors.Is(err, service.ErrCampaignNotFound),
-		errors.Is(err, service.ErrSessionNotFound),
-		errors.Is(err, service.ErrSceneNotFound):
-		respondError(w, http.StatusNotFound, err.Error())
-	case errors.Is(err, service.ErrCampaignEditionRequired),
-		errors.Is(err, service.ErrCampaignCreationMethodRequired),
-		errors.Is(err, service.ErrCampaignImmutableEdition),
-		errors.Is(err, service.ErrCampaignImmutableCreation),
-		errors.Is(err, service.ErrCampaignUnknownGameplayLevel),
-		errors.Is(err, service.ErrSessionCampaignRequired),
-		errors.Is(err, service.ErrSessionImmutableCampaign),
-		errors.Is(err, service.ErrSceneSessionRequired),
-		errors.Is(err, service.ErrSceneImmutableSession):
-		respondError(w, http.StatusBadRequest, err.Error())
-	case errors.Is(err, service.ErrForbidden):
-		respondError(w, http.StatusForbidden, err.Error())
-	default:
-		respondError(w, http.StatusInternalServerError, err.Error())
+func rolesToStrings(roles []domain.Role) []string {
+	result := make([]string, len(roles))
+	for i, role := range roles {
+		result[i] = string(role)
 	}
+	return result
 }
 
-func (h *Handlers) buildCampaignResponse(session *SessionData, campaign *domain.Campaign) (*campaignResponse, error) {
-	if campaign == nil {
-		return &campaignResponse{Campaign: nil}, nil
-	}
-
-	rules, err := h.CampaignService.DescribeGameplayRules(campaign)
-	if err != nil {
-		return nil, err
-	}
-
-	canManage := canManageCampaign(campaign, session)
-
-	// Look up GM username if GM user ID is set
-	gmUsername := ""
-	if campaign.GmUserID != "" {
-		user, err := h.UserService.GetUserByID(campaign.GmUserID)
-		if err == nil && user != nil {
-			gmUsername = user.Username
+func stringsToRoles(roleStrings []string) []domain.Role {
+	roles := make([]domain.Role, 0, len(roleStrings))
+	for _, roleStr := range roleStrings {
+		role := domain.Role(strings.ToLower(roleStr))
+		// Validate role
+		switch role {
+		case domain.RoleAdministrator, domain.RoleGamemaster, domain.RolePlayer:
+			roles = append(roles, role)
+		default:
+			return nil // Invalid role found
 		}
 	}
-	// Fallback to gm_name if username lookup failed
-	if gmUsername == "" && campaign.GmName != "" {
-		gmUsername = campaign.GmName
-	}
-
-	// Enrich player usernames if missing
-	enrichedCampaign := *campaign
-	if len(enrichedCampaign.Players) > 0 {
-		enrichedPlayers := make([]domain.CampaignPlayer, len(enrichedCampaign.Players))
-		copy(enrichedPlayers, enrichedCampaign.Players)
-		for i := range enrichedPlayers {
-			if enrichedPlayers[i].Username == "" && enrichedPlayers[i].UserID != "" {
-				user, err := h.UserService.GetUserByID(enrichedPlayers[i].UserID)
-				if err == nil && user != nil {
-					enrichedPlayers[i].Username = user.Username
-				}
-			}
-		}
-		enrichedCampaign.Players = enrichedPlayers
-	}
-
-	return &campaignResponse{
-		Campaign:      &enrichedCampaign,
-		GameplayRules: rules,
-		GMUsername:    gmUsername,
-		CanEdit:       canManage,
-		CanDelete:     canManage,
-	}, nil
-}
-
-func canManageCampaign(campaign *domain.Campaign, session *SessionData) bool {
-	if campaign == nil || session == nil {
-		return false
-	}
-
-	if session.HasRole(domain.RoleAdministrator) {
-		return true
-	}
-
-	if campaign.GmUserID == "" {
-		return false
-	}
-
-	if !strings.EqualFold(session.UserID, campaign.GmUserID) {
-		return false
-	}
-
-	return session.HasRole(domain.RoleGamemaster) || session.HasRole(domain.RoleAdministrator)
-}
-
-// Invitation handlers
-
-// InvitePlayer handles POST /api/campaigns/{id}/invitations
-func (h *Handlers) InvitePlayer(w http.ResponseWriter, r *http.Request) {
-	campaignID := r.PathValue("id")
-	session := GetSessionFromContext(r.Context())
-	if session == nil {
-		respondError(w, http.StatusUnauthorized, "authentication required")
-		return
-	}
-
-	// Get campaign to verify GM permissions
-	campaign, err := h.CampaignService.GetCampaign(campaignID)
-	if err != nil {
-		respondServiceError(w, err)
-		return
-	}
-
-	if !canManageCampaign(campaign, session) {
-		respondServiceError(w, service.ErrForbidden)
-		return
-	}
-
-	var req struct {
-		Email    string `json:"email"`
-		UserID   string `json:"user_id"`
-		Username string `json:"username"`
-	}
-	if err := json.NewDecoder(r.Body).Decode(&req); err != nil {
-		respondError(w, http.StatusBadRequest, err.Error())
-		return
-	}
-
-	// If username provided, look up user
-	if req.Username != "" && req.UserID == "" {
-		user, err := h.UserService.GetUserByUsername(req.Username)
-		if err == nil && user != nil {
-			req.UserID = user.ID
-			req.Username = user.Username
-		} else {
-			respondError(w, http.StatusBadRequest, "user not found")
-			return
-		}
-	}
-
-	invitation, err := h.CampaignService.InvitePlayer(campaignID, service.InvitePlayerInput{
-		Email:     req.Email,
-		UserID:    req.UserID,
-		Username:  req.Username,
-		InvitedBy: session.UserID,
-	})
-	if err != nil {
-		respondError(w, http.StatusBadRequest, err.Error())
-		return
-	}
-
-	respondJSON(w, http.StatusCreated, invitation)
-}
-
-// GetCampaignInvitations handles GET /api/campaigns/{id}/invitations
-// Returns all players with their current status (invited, accepted, declined)
-func (h *Handlers) GetCampaignInvitations(w http.ResponseWriter, r *http.Request) {
-	campaignID := r.PathValue("id")
-	session := GetSessionFromContext(r.Context())
-	if session == nil {
-		respondError(w, http.StatusUnauthorized, "authentication required")
-		return
-	}
-
-	// Get campaign to verify GM permissions
-	campaign, err := h.CampaignService.GetCampaign(campaignID)
-	if err != nil {
-		respondServiceError(w, err)
-		return
-	}
-
-	if !canManageCampaign(campaign, session) {
-		respondServiceError(w, service.ErrForbidden)
-		return
-	}
-
-	// Return all players (which includes invitations)
-	respondJSON(w, http.StatusOK, campaign.Players)
-}
-
-// GetUserInvitations handles GET /api/invitations
-func (h *Handlers) GetUserInvitations(w http.ResponseWriter, r *http.Request) {
-	session := GetSessionFromContext(r.Context())
-	if session == nil {
-		respondError(w, http.StatusUnauthorized, "authentication required")
-		return
-	}
-
-	// Get user to get email
-	user, err := h.UserService.GetUserByID(session.UserID)
-	if err != nil {
-		respondServiceError(w, err)
-		return
-	}
-
-	invitations, err := h.CampaignService.GetUserInvitations(session.UserID, user.Email)
-	if err != nil {
-		respondServiceError(w, err)
-		return
-	}
-
-	// Format response
-	type invitationResponse struct {
-		CampaignID   string                `json:"campaign_id"`
-		CampaignName string                `json:"campaign_name"`
-		Player       domain.CampaignPlayer `json:"player"`
-	}
-
-	response := make([]invitationResponse, 0, len(invitations))
-	for _, item := range invitations {
-		response = append(response, invitationResponse{
-			CampaignID:   item.Campaign.ID,
-			CampaignName: item.Campaign.Name,
-			Player:       item.Player,
-		})
-	}
-
-	respondJSON(w, http.StatusOK, response)
-}
-
-// AcceptInvitation handles POST /api/invitations/{id}/accept
-// The {id} is now the player ID (from the unified Players list)
-func (h *Handlers) AcceptInvitation(w http.ResponseWriter, r *http.Request) {
-	playerID := r.PathValue("id")
-	session := GetSessionFromContext(r.Context())
-	if session == nil {
-		respondError(w, http.StatusUnauthorized, "authentication required")
-		return
-	}
-
-	// Find the campaign with this player entry
-	user, err := h.UserService.GetUserByID(session.UserID)
-	if err != nil {
-		respondServiceError(w, err)
-		return
-	}
-
-	invitations, err := h.CampaignService.GetUserInvitations(session.UserID, user.Email)
-	if err != nil {
-		respondServiceError(w, err)
-		return
-	}
-
-	var campaignID string
-	for _, item := range invitations {
-		if item.Player.ID == playerID {
-			campaignID = item.Campaign.ID
-			break
-		}
-	}
-
-	if campaignID == "" {
-		respondError(w, http.StatusNotFound, "invitation not found")
-		return
-	}
-
-	if err := h.CampaignService.AcceptInvitation(campaignID, playerID, session.UserID); err != nil {
-		respondError(w, http.StatusBadRequest, err.Error())
-		return
-	}
-
-	w.WriteHeader(http.StatusNoContent)
-}
-
-// DeclineInvitation handles POST /api/invitations/{id}/decline
-// The {id} is now the player ID (from the unified Players list)
-func (h *Handlers) DeclineInvitation(w http.ResponseWriter, r *http.Request) {
-	playerID := r.PathValue("id")
-	session := GetSessionFromContext(r.Context())
-	if session == nil {
-		respondError(w, http.StatusUnauthorized, "authentication required")
-		return
-	}
-
-	// Find the campaign with this player entry
-	user, err := h.UserService.GetUserByID(session.UserID)
-	if err != nil {
-		respondServiceError(w, err)
-		return
-	}
-
-	invitations, err := h.CampaignService.GetUserInvitations(session.UserID, user.Email)
-	if err != nil {
-		respondServiceError(w, err)
-		return
-	}
-
-	var campaignID string
-	for _, item := range invitations {
-		if item.Player.ID == playerID {
-			campaignID = item.Campaign.ID
-			break
-		}
-	}
-
-	if campaignID == "" {
-		respondError(w, http.StatusNotFound, "invitation not found")
-		return
-	}
-
-	if err := h.CampaignService.DeclineInvitation(campaignID, playerID, session.UserID); err != nil {
-		respondError(w, http.StatusBadRequest, err.Error())
-		return
-	}
-
-	w.WriteHeader(http.StatusNoContent)
-}
-
-// SearchUsers handles GET /api/users/search?q=username
-func (h *Handlers) SearchUsers(w http.ResponseWriter, r *http.Request) {
-	query := r.URL.Query().Get("q")
-	if query == "" {
-		respondJSON(w, http.StatusOK, []interface{}{})
-		return
-	}
-
-	query = strings.TrimSpace(strings.ToLower(query))
-	allUsers, err := h.UserRepo.GetAll()
-	if err != nil {
-		respondError(w, http.StatusInternalServerError, err.Error())
-		return
-	}
-
-	type userSearchResult struct {
-		ID       string `json:"id"`
-		Username string `json:"username"`
-		Email    string `json:"email"`
-	}
-
-	results := make([]userSearchResult, 0)
-	for _, user := range allUsers {
-		if user == nil {
-			continue
-		}
-		usernameLower := strings.ToLower(strings.TrimSpace(user.Username))
-		emailLower := strings.ToLower(strings.TrimSpace(user.Email))
-		usernameMatch := strings.Contains(usernameLower, query)
-		emailMatch := strings.Contains(emailLower, query)
-		if usernameMatch || emailMatch {
-			results = append(results, userSearchResult{
-				ID:       user.ID,
-				Username: user.Username,
-				Email:    user.Email,
-			})
-		}
-		// Limit results
-		if len(results) >= 10 {
-			break
-		}
-	}
-
-	respondJSON(w, http.StatusOK, results)
-}
-
-// RemoveInvitation handles DELETE /api/campaigns/{id}/invitations/{playerId}
-// This is now just an alias for RemovePlayer since invitations are part of the unified Players list
-func (h *Handlers) RemoveInvitation(w http.ResponseWriter, r *http.Request) {
-	campaignID := r.PathValue("id")
-	playerID := r.PathValue("playerId")
-	session := GetSessionFromContext(r.Context())
-	if session == nil {
-		respondError(w, http.StatusUnauthorized, "authentication required")
-		return
-	}
-
-	// Get campaign to verify GM permissions
-	campaign, err := h.CampaignService.GetCampaign(campaignID)
-	if err != nil {
-		respondServiceError(w, err)
-		return
-	}
-
-	if !canManageCampaign(campaign, session) {
-		respondServiceError(w, service.ErrForbidden)
-		return
-	}
-
-	if err := h.CampaignService.RemoveInvitation(campaignID, playerID); err != nil {
-		respondError(w, http.StatusBadRequest, err.Error())
-		return
-	}
-
-	w.WriteHeader(http.StatusNoContent)
-}
-
-// RemovePlayer handles DELETE /api/campaigns/{id}/players/{playerId}
-func (h *Handlers) RemovePlayer(w http.ResponseWriter, r *http.Request) {
-	campaignID := r.PathValue("id")
-	playerID := r.PathValue("playerId")
-	session := GetSessionFromContext(r.Context())
-	if session == nil {
-		respondError(w, http.StatusUnauthorized, "authentication required")
-		return
-	}
-
-	// Get campaign to verify GM permissions
-	campaign, err := h.CampaignService.GetCampaign(campaignID)
-	if err != nil {
-		respondServiceError(w, err)
-		return
-	}
-
-	if !canManageCampaign(campaign, session) {
-		respondServiceError(w, service.ErrForbidden)
-		return
-	}
-
-	if err := h.CampaignService.RemovePlayer(campaignID, playerID); err != nil {
-		respondError(w, http.StatusBadRequest, err.Error())
-		return
-	}
-
-	w.WriteHeader(http.StatusNoContent)
-}
-
-// filterCampaignsByRole filters campaigns based on the user's roles.
-// - Administrator: returns all campaigns
-// - Gamemaster: returns campaigns where the user is the GM
-// - Player: returns campaigns where the user is a player
-// If a user has multiple roles, returns the union of campaigns from all applicable roles.
-func (h *Handlers) filterCampaignsByRole(campaigns []*domain.Campaign, session *SessionData) []*domain.Campaign {
-	if session == nil {
-		return []*domain.Campaign{}
-	}
-
-	// Administrator sees all campaigns
-	if session.HasRole(domain.RoleAdministrator) {
-		return campaigns
-	}
-
-	filtered := make([]*domain.Campaign, 0)
-	seen := make(map[string]bool) // Track campaign IDs to avoid duplicates
-
-	// Gamemaster: campaigns where user is the GM
-	if session.HasRole(domain.RoleGamemaster) {
-		for _, campaign := range campaigns {
-			if campaign.GmUserID != "" && strings.EqualFold(campaign.GmUserID, session.UserID) {
-				if !seen[campaign.ID] {
-					filtered = append(filtered, campaign)
-					seen[campaign.ID] = true
-				}
-			}
-		}
-	}
-
-	// Player: campaigns where user is in players list with "accepted" status
-	if session.HasRole(domain.RolePlayer) {
-		for _, campaign := range campaigns {
-			for _, player := range campaign.Players {
-				if player.UserID != "" && strings.EqualFold(player.UserID, session.UserID) && player.Status == "accepted" {
-					if !seen[campaign.ID] {
-						filtered = append(filtered, campaign)
-						seen[campaign.ID] = true
-					}
-					break
-				}
-			}
-		}
-	}
-
-	return filtered
+	return roles
 }

@@ -1,111 +1,217 @@
 package service
 
 import (
-	"fmt"
+	"crypto/rand"
+	"encoding/hex"
+	"errors"
+	"time"
 
 	"shadowmaster/internal/domain"
 	"shadowmaster/internal/repository"
-	edition "shadowmaster/pkg/shadowrun/edition"
-	v3 "shadowmaster/pkg/shadowrun/edition/v3"
 )
 
-// CharacterService handles character business logic
+var (
+	ErrCharacterNotFound = errors.New("character not found")
+)
+
 type CharacterService struct {
-	characterRepo repository.CharacterRepository
+	repo repository.CharacterRepository
 }
 
-// NewCharacterService creates a new character service
-func NewCharacterService(characterRepo repository.CharacterRepository) *CharacterService {
-	return &CharacterService{
-		characterRepo: characterRepo,
-	}
+func NewCharacterService(repo repository.CharacterRepository) *CharacterService {
+	return &CharacterService{repo: repo}
 }
 
-// CreateCharacter creates a new character using the edition registry.
-// The edition parameter determines which edition handler to use.
-func (s *CharacterService) CreateCharacter(editionID, name, playerName string, creationData interface{}) (*domain.Character, error) {
-	// Get the edition handler
-	handler, err := edition.GetHandler(editionID)
-	if err != nil {
-		return nil, fmt.Errorf("failed to get edition handler: %w", err)
+func (s *CharacterService) CreateCharacter(userID string, name string, editionData domain.EditionData) (*domain.Character, error) {
+	// Generate ID using the same method as user service
+	id := s.generateCharacterID()
+
+	// Set timestamps
+	now := time.Now()
+
+	// Create character with initial state
+	character := &domain.Character{
+		ID:          id,
+		Name:        name,
+		UserID:      userID,
+		State:       domain.CharacterStateCreation,
+		EditionData: editionData,
+		CreatedAt:   now,
+		UpdatedAt:   now,
+		Attributes: domain.Attributes{
+			Body:      domain.IntAttribute{Min: 1, Max: 9, Value: 1},
+			Agility:   domain.IntAttribute{Min: 1, Max: 9, Value: 1},
+			Reaction:  domain.IntAttribute{Min: 1, Max: 9, Value: 1},
+			Strength:  domain.IntAttribute{Min: 1, Max: 9, Value: 1},
+			Willpower: domain.IntAttribute{Min: 1, Max: 9, Value: 1},
+			Logic:     domain.IntAttribute{Min: 1, Max: 9, Value: 1},
+			Intuition: domain.IntAttribute{Min: 1, Max: 9, Value: 1},
+			Charisma:  domain.IntAttribute{Min: 1, Max: 9, Value: 1},
+			Magic:     domain.IntAttribute{Min: 0, Max: 6, Value: 0},
+			Resonance: domain.IntAttribute{Min: 0, Max: 6, Value: 0},
+			Edge:      domain.IntAttribute{Min: 1, Max: 7, Value: 1},
+			Essence:   domain.FloatAttribute{Min: 0.0, Max: 6.0, Value: 6.0},
+		},
 	}
 
-	// Create character using the handler
-	character, err := handler.CreateCharacter(name, playerName, creationData)
-	if err != nil {
-		return nil, fmt.Errorf("failed to create character: %w", err)
-	}
-
-	// ALWAYS ensure character has required data - don't trust the handler
-	// This is defensive programming to ensure data integrity
-	character.Edition = editionID
-	character.Name = name
-	if character.Status == "" {
-		character.Status = "Creation"
-	}
-
-	// ALWAYS ensure edition_data is set for SR5 characters
-	// Check if it's nil or if it's not the right type
-	if editionID == "sr5" {
-		needsSR5Data := false
-		if character.EditionData == nil {
-			needsSR5Data = true
-		} else {
-			// Try to get SR5 data to verify it's actually set
-			_, err := character.GetSR5Data()
-			if err != nil {
-				needsSR5Data = true
-			}
-		}
-
-		if needsSR5Data {
-			// Create minimal SR5 data structure
-			sr5Data := &domain.CharacterSR5{
-				ActiveSkills:    make(map[string]domain.Skill),
-				KnowledgeSkills: make(map[string]domain.Skill),
-				LanguageSkills:  make(map[string]domain.Skill),
-				Essence:         6.0,
-			}
-			// Try to extract creation_method and gameplay_level from creationData
-			if dataMap, ok := creationData.(map[string]interface{}); ok {
-				if cm, ok := dataMap["creation_method"].(string); ok && cm != "" {
-					sr5Data.CreationMethod = cm
-				} else {
-					sr5Data.CreationMethod = "priority"
-				}
-				if gl, ok := dataMap["gameplay_level"].(string); ok && gl != "" {
-					sr5Data.GameplayLevel = gl
-				} else {
-					sr5Data.GameplayLevel = "experienced"
-				}
-			} else {
-				sr5Data.CreationMethod = "priority"
-				sr5Data.GameplayLevel = "experienced"
-			}
-			character.SetSR5Data(sr5Data)
-		}
-	}
-
-	// Skip validation for characters in "Creation" status (they're incomplete)
-	// Validation will be performed when the character is completed
-	if character.Status != "Creation" {
-		// Validate the character
-		if err := handler.ValidateCharacter(character); err != nil {
-			return nil, fmt.Errorf("character validation failed: %w", err)
-		}
-	}
-
-	// Save character
-	if err := s.characterRepo.Create(character); err != nil {
-		return nil, fmt.Errorf("failed to save character: %w", err)
+	if err := s.repo.Create(character); err != nil {
+		return nil, err
 	}
 
 	return character, nil
 }
 
-// CreateSR3Character creates a new Shadowrun 3rd edition character.
-// This method is kept for backward compatibility and delegates to the edition registry.
-// Deprecated: Use CreateCharacter instead for a more generic approach.
-func (s *CharacterService) CreateSR3Character(name, playerName string, priorities v3.PrioritySelection) (*domain.Character, error) {
-	return s.CreateCharacter("sr3", name, playerName, priorities)
+func (s *CharacterService) GetCharacter(characterID string) (*domain.Character, error) {
+	character, err := s.repo.GetByID(characterID)
+	if err != nil {
+		return nil, ErrCharacterNotFound
+	}
+	return character, nil
+}
+
+func (s *CharacterService) GetCharactersByUserID(userID string) ([]*domain.Character, error) {
+	return s.repo.GetByUserID(userID)
+}
+
+func (s *CharacterService) UpdateCharacter(character *domain.Character) error {
+	// Get the current character to compare metatype changes
+	currentCharacter, err := s.repo.GetByID(character.ID)
+	if err != nil {
+		return err
+	}
+
+	// Check if metatype has changed
+	var metatypeID string
+	if character.PriorityAssignment != nil {
+		metatypeID = character.PriorityAssignment.SelectedMetatype
+	}
+
+	var previousMetatypeID string
+	if currentCharacter.PriorityAssignment != nil {
+		previousMetatypeID = currentCharacter.PriorityAssignment.SelectedMetatype
+	}
+
+	// Apply metatype attributes if metatype changed or was cleared
+	if metatypeID != previousMetatypeID {
+		if err := s.ApplyMetatypeAttributes(character, metatypeID); err != nil {
+			return err
+		}
+	}
+
+	character.UpdatedAt = time.Now()
+	return s.repo.Update(character)
+}
+
+func (s *CharacterService) DeleteCharacter(characterID string) error {
+	return s.repo.Delete(characterID)
+}
+
+// ApplyMetatypeAttributes applies metatype attribute ranges to a character
+// If metatypeID is empty, it clears the metatype-specific attribute ranges
+func (s *CharacterService) ApplyMetatypeAttributes(character *domain.Character, metatypeID string) error {
+	if metatypeID == "" {
+		// Clear metatype-specific attributes (reset to defaults)
+		character.Attributes.Body.Min = 1
+		character.Attributes.Body.Max = 9
+		character.Attributes.Agility.Min = 1
+		character.Attributes.Agility.Max = 9
+		character.Attributes.Reaction.Min = 1
+		character.Attributes.Reaction.Max = 9
+		character.Attributes.Strength.Min = 1
+		character.Attributes.Strength.Max = 9
+		character.Attributes.Willpower.Min = 1
+		character.Attributes.Willpower.Max = 9
+		character.Attributes.Logic.Min = 1
+		character.Attributes.Logic.Max = 9
+		character.Attributes.Intuition.Min = 1
+		character.Attributes.Intuition.Max = 9
+		character.Attributes.Charisma.Min = 1
+		character.Attributes.Charisma.Max = 9
+		character.Attributes.Edge.Min = 1
+		character.Attributes.Edge.Max = 7
+		character.Attributes.Magic.Min = 0
+		character.Attributes.Magic.Max = 6
+		character.Attributes.Essence.Min = 0.0
+		character.Attributes.Essence.Max = 6.0
+		character.Attributes.Essence.Value = 6.0
+		return nil
+	}
+
+	// Look up metatype
+	metatype, exists := domain.AllMetatypes[metatypeID]
+	if !exists {
+		return errors.New("metatype not found")
+	}
+
+	// Apply attribute ranges from metatype
+	character.Attributes.Body.Min = metatype.Body.Min
+	character.Attributes.Body.Max = metatype.Body.Max
+	character.Attributes.Agility.Min = metatype.Agility.Min
+	character.Attributes.Agility.Max = metatype.Agility.Max
+	character.Attributes.Reaction.Min = metatype.Reaction.Min
+	character.Attributes.Reaction.Max = metatype.Reaction.Max
+	character.Attributes.Strength.Min = metatype.Strength.Min
+	character.Attributes.Strength.Max = metatype.Strength.Max
+	character.Attributes.Willpower.Min = metatype.Willpower.Min
+	character.Attributes.Willpower.Max = metatype.Willpower.Max
+	character.Attributes.Logic.Min = metatype.Logic.Min
+	character.Attributes.Logic.Max = metatype.Logic.Max
+	character.Attributes.Intuition.Min = metatype.Intuition.Min
+	character.Attributes.Intuition.Max = metatype.Intuition.Max
+	character.Attributes.Charisma.Min = metatype.Charisma.Min
+	character.Attributes.Charisma.Max = metatype.Charisma.Max
+
+	// Handle Edge vs Magic based on metatype category
+	if metatype.Category == domain.MetatypeCategoryShapeshifter {
+		// Shapeshifters use Magic instead of Edge
+		character.Attributes.Magic.Min = metatype.Magic.Min
+		character.Attributes.Magic.Max = metatype.Magic.Max
+		// Clear Edge ranges for shapeshifters
+		character.Attributes.Edge.Min = 0
+		character.Attributes.Edge.Max = 0
+	} else {
+		// Standard metatypes and metavariants use Edge
+		character.Attributes.Edge.Min = metatype.Edge.Min
+		character.Attributes.Edge.Max = metatype.Edge.Max
+		// Magic remains at default for non-shapeshifters
+		character.Attributes.Magic.Min = 0
+		character.Attributes.Magic.Max = 6
+	}
+
+	// Apply Essence
+	character.Attributes.Essence.Min = 0.0
+	character.Attributes.Essence.Max = metatype.Essence
+	character.Attributes.Essence.Value = metatype.Essence
+
+	// Ensure current values are within new ranges
+	character.Attributes.Body.Value = clamp(character.Attributes.Body.Value, character.Attributes.Body.Min, character.Attributes.Body.Max)
+	character.Attributes.Agility.Value = clamp(character.Attributes.Agility.Value, character.Attributes.Agility.Min, character.Attributes.Agility.Max)
+	character.Attributes.Reaction.Value = clamp(character.Attributes.Reaction.Value, character.Attributes.Reaction.Min, character.Attributes.Reaction.Max)
+	character.Attributes.Strength.Value = clamp(character.Attributes.Strength.Value, character.Attributes.Strength.Min, character.Attributes.Strength.Max)
+	character.Attributes.Willpower.Value = clamp(character.Attributes.Willpower.Value, character.Attributes.Willpower.Min, character.Attributes.Willpower.Max)
+	character.Attributes.Logic.Value = clamp(character.Attributes.Logic.Value, character.Attributes.Logic.Min, character.Attributes.Logic.Max)
+	character.Attributes.Intuition.Value = clamp(character.Attributes.Intuition.Value, character.Attributes.Intuition.Min, character.Attributes.Intuition.Max)
+	character.Attributes.Charisma.Value = clamp(character.Attributes.Charisma.Value, character.Attributes.Charisma.Min, character.Attributes.Charisma.Max)
+	character.Attributes.Edge.Value = clamp(character.Attributes.Edge.Value, character.Attributes.Edge.Min, character.Attributes.Edge.Max)
+	character.Attributes.Magic.Value = clamp(character.Attributes.Magic.Value, character.Attributes.Magic.Min, character.Attributes.Magic.Max)
+
+	return nil
+}
+
+// clamp ensures a value is within min and max bounds
+func clamp(value, min, max int) int {
+	if value < min {
+		return min
+	}
+	if value > max {
+		return max
+	}
+	return value
+}
+
+// generateCharacterID creates a simple unique ID (32-character hex string)
+func (s *CharacterService) generateCharacterID() string {
+	bytes := make([]byte, 16)
+	rand.Read(bytes)
+	return hex.EncodeToString(bytes)
 }

@@ -7,7 +7,6 @@ A tabletop RPG management system for Shadowrun with support for multiple edition
 - **Character Management**: Create and manage Shadowrun characters with full attribute and skill systems
   - **Shadowrun 3rd Edition (SR3)**: Full character creation support
   - **Shadowrun 5th Edition (SR5)**: Character creation with Priority, Sum to Ten, and Karma build methods
-- **Campaign Organization**: Organize characters into groups, create campaigns, manage sessions and scenes
 - **Multiple Interfaces**: 
   - Web interface (React + TypeScript with Vite)
   - CLI interface (command-line, in progress)
@@ -220,81 +219,19 @@ All authentication endpoints return/accept JSON and rely on HTTP-only cookies fo
 - `PUT /api/characters/{id}` - Update character
 - `DELETE /api/characters/{id}` - Delete character
 
-### Groups
-- `GET /api/groups` - List all groups
-- `GET /api/groups/{id}` - Get group by ID
-- `POST /api/groups` - Create group
-- `PUT /api/groups/{id}` - Update group
-- `DELETE /api/groups/{id}` - Delete group
-
-### Campaigns
-- `GET /api/campaigns` - List all campaigns
-- `GET /api/campaigns/{id}` - Get campaign by ID
-- `GET /api/campaigns/{id}/character-creation` - Get character creation data for campaign
-- `POST /api/campaigns` - Create campaign (requires Admin/GM role)
-- `PUT /api/campaigns/{id}` - Update campaign (requires Admin/GM role)
-- `DELETE /api/campaigns/{id}` - Delete campaign (requires Admin/GM role)
-- `POST /api/campaigns/{id}/invitations` - Invite player to campaign (requires Admin/GM role)
-- `GET /api/campaigns/{id}/invitations` - Get campaign invitations (requires Admin/GM role)
-- `DELETE /api/campaigns/{id}/invitations/{playerId}` - Remove invitation (requires Admin/GM role)
-- `DELETE /api/campaigns/{id}/players/{playerId}` - Remove player from campaign (requires Admin/GM role)
-
-### Campaign Invitations
-- `GET /api/invitations` - Get current user's invitations (requires authentication)
-- `POST /api/invitations/{id}/accept` - Accept invitation (requires authentication)
-- `POST /api/invitations/{id}/decline` - Decline invitation (requires authentication)
-
-### Sessions
-- `GET /api/sessions` - List all sessions
-- `GET /api/sessions/{id}` - Get session by ID
-- `POST /api/sessions` - Create session (requires Admin/GM role)
-- `PUT /api/sessions/{id}` - Update session (requires Admin/GM role)
-- `DELETE /api/sessions/{id}` - Delete session (requires Admin/GM role)
-
-### Scenes
-- `GET /api/scenes` - List all scenes
-- `GET /api/scenes/{id}` - Get scene by ID
-- `POST /api/scenes` - Create scene (requires Admin/GM role)
-- `PUT /api/scenes/{id}` - Update scene (requires Admin/GM role)
-- `DELETE /api/scenes/{id}` - Delete scene (requires Admin/GM role)
-
 ### Editions
 - `GET /api/editions/{edition}/character-creation` - Get character creation data for edition
-- `GET /api/editions/{edition}/books` - List available source books for edition
 
-### Skills
+### Skills (used by character creation)
 - `GET /api/skills/active` - Get active skills
 - `GET /api/skills/knowledge` - Get knowledge skills
 
-### Equipment (Public)
+### Equipment (used by character creation)
 - `GET /api/equipment/armor` - Get armor equipment
 - `GET /api/equipment/cyberware` - Get cyberware equipment
 
-### Equipment (Admin Only)
-- `GET /api/equipment/skills` - Get skills data
-- `GET /api/equipment/weapons` - Get weapons data
-- `GET /api/equipment/weapon-accessories` - Get weapon accessories
-- `GET /api/equipment/gear` - Get gear
-- `GET /api/equipment/qualities` - Get qualities
-- `GET /api/equipment/books` - Get books
-- `GET /api/equipment/lifestyles` - Get lifestyles
-- `GET /api/equipment/weapon-consumables` - Get weapon consumables
-- `GET /api/equipment/contacts` - Get contacts
-- `GET /api/equipment/actions` - Get actions
-- `GET /api/equipment/bioware` - Get bioware
-- `GET /api/equipment/complex-forms` - Get complex forms
-- `GET /api/equipment/mentors` - Get mentors
-- `GET /api/equipment/metatypes` - Get metatypes
-- `GET /api/equipment/powers` - Get powers
-- `GET /api/equipment/programs` - Get programs
-- `GET /api/equipment/spells` - Get spells
-- `GET /api/equipment/traditions` - Get traditions
-- `GET /api/equipment/vehicle-modifications` - Get vehicle modifications
-- `GET /api/equipment/vehicles` - Get vehicles
-
 ### Users
 - `GET /api/users` - List all users (requires Admin/GM role)
-- `GET /api/users/search` - Search users (requires authentication)
 
 ## Makefile Commands
 

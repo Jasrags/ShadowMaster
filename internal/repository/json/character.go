@@ -1,328 +1,363 @@
-package jsonrepo
+package json
 
 import (
+	"encoding/json"
+	"errors"
 	"fmt"
-	"shadowmaster/internal/domain"
-	"shadowmaster/pkg/storage"
-	"strings"
+	"os"
+	"path/filepath"
+	"sync"
 	"time"
 
-	"github.com/google/uuid"
+	"shadowmaster/internal/domain"
 )
 
-// CharacterRepositoryJSON implements CharacterRepository using JSON files
-type CharacterRepositoryJSON struct {
-	store *storage.JSONStore
-	index *Index
+type CharacterRepository struct {
+	dataPath string
+	mu       sync.RWMutex
+	index    *characterIndexData
 }
 
-// NewCharacterRepository creates a new JSON-based character repository
-func NewCharacterRepository(store *storage.JSONStore, index *Index) *CharacterRepositoryJSON {
-	repo := &CharacterRepositoryJSON{
-		store: store,
-		index: index,
-	}
-
-	repo.ensureIndexCollections()
-	repo.rebuildDerivedIndexes()
-
-	return repo
+type characterIndexData struct {
+	Characters     map[string]string   `json:"characters"`
+	UserCharacters map[string][]string `json:"user_characters"`
 }
 
-// Create creates a new character
-func (r *CharacterRepositoryJSON) Create(character *domain.Character) error {
-	if character.ID == "" {
-		character.ID = uuid.New().String()
-	}
-	character.CreatedAt = time.Now()
-	character.UpdatedAt = time.Now()
+type storedCharacter struct {
+	ID                string                      `json:"id"`
+	Name              string                      `json:"name"`
+	Description       string                      `json:"description"`
+	Age               string                      `json:"age"`
+	Gender            string                      `json:"gender"`
+	Height            string                      `json:"height"`
+	Weight            string                      `json:"weight"`
+	State             string                      `json:"state"`
+	UserID            string                      `json:"user_id"`
+	Attributes        domain.Attributes           `json:"attributes"`
+	EditionData       domain.EditionData          `json:"edition_data"`
+	PriorityAssignment *domain.PriorityAssignment `json:"priority_assignment,omitempty"`
+	CreatedAt         string                      `json:"created_at"`
+	UpdatedAt         string                      `json:"updated_at"`
+	DeletedAt         *string                     `json:"deleted_at,omitempty"`
+}
 
-	filename := fmt.Sprintf("characters/%s.json", character.ID)
-	if err := r.store.Write(filename, character); err != nil {
+func NewCharacterRepository(dataPath string) (*CharacterRepository, error) {
+	repo := &CharacterRepository{
+		dataPath: dataPath,
+		index: &characterIndexData{
+			Characters:     make(map[string]string),
+			UserCharacters: make(map[string][]string),
+		},
+	}
+
+	// Ensure data directory exists
+	if err := os.MkdirAll(filepath.Join(dataPath, "characters"), 0755); err != nil {
+		return nil, fmt.Errorf("failed to create characters directory: %w", err)
+	}
+
+	// Load index
+	if err := repo.loadIndex(); err != nil {
+		return nil, fmt.Errorf("failed to load index: %w", err)
+	}
+
+	return repo, nil
+}
+
+func (r *CharacterRepository) loadIndex() error {
+	indexPath := filepath.Join(r.dataPath, "index.json")
+
+	data, err := os.ReadFile(indexPath)
+	if err != nil {
+		if os.IsNotExist(err) {
+			// Index doesn't exist yet, start with empty index
+			return nil
+		}
 		return err
 	}
 
-	r.index.mu.Lock()
-	r.index.Characters[character.ID] = filename
-	r.ensureIndexCollectionsLocked()
-	r.addCharacterToIndexesLocked(character)
-	r.index.mu.Unlock()
+	var fullIndex map[string]interface{}
+	if err := json.Unmarshal(data, &fullIndex); err != nil {
+		return err
+	}
 
-	return r.saveIndex()
+	// Extract character-related data
+	if chars, ok := fullIndex["characters"].(map[string]interface{}); ok {
+		for k, v := range chars {
+			if str, ok := v.(string); ok {
+				r.index.Characters[k] = str
+			}
+		}
+	}
+
+	if userChars, ok := fullIndex["user_characters"].(map[string]interface{}); ok {
+		r.index.UserCharacters = make(map[string][]string)
+		for k, v := range userChars {
+			if arr, ok := v.([]interface{}); ok {
+				ids := make([]string, 0, len(arr))
+				for _, id := range arr {
+					if str, ok := id.(string); ok {
+						ids = append(ids, str)
+					}
+				}
+				r.index.UserCharacters[k] = ids
+			}
+		}
+	}
+
+	return nil
 }
 
-// GetByID retrieves a character by ID
-func (r *CharacterRepositoryJSON) GetByID(id string) (*domain.Character, error) {
-	r.index.mu.RLock()
-	filename, exists := r.index.Characters[id]
-	r.index.mu.RUnlock()
+func (r *CharacterRepository) saveIndex() error {
+	indexPath := filepath.Join(r.dataPath, "index.json")
 
+	// Read existing index to preserve other data
+	var fullIndex map[string]interface{}
+	data, err := os.ReadFile(indexPath)
+	if err == nil {
+		json.Unmarshal(data, &fullIndex)
+	}
+	if fullIndex == nil {
+		fullIndex = make(map[string]interface{})
+	}
+
+	// Update character-related fields
+	fullIndex["characters"] = r.index.Characters
+	fullIndex["user_characters"] = r.index.UserCharacters
+
+	// Write back
+	data, err = json.MarshalIndent(fullIndex, "", "  ")
+	if err != nil {
+		return err
+	}
+
+	return os.WriteFile(indexPath, data, 0644)
+}
+
+func (r *CharacterRepository) Create(character *domain.Character) error {
+	r.mu.Lock()
+	defer r.mu.Unlock()
+
+	// Check if character already exists
+	if _, exists := r.index.Characters[character.ID]; exists {
+		return fmt.Errorf("character already exists: %s", character.ID)
+	}
+
+	// Store character file
+	characterPath := filepath.Join(r.dataPath, "characters", character.ID+".json")
+	stored := storedCharacter{
+		ID:                character.ID,
+		Name:              character.Name,
+		Description:       character.Description,
+		Age:               character.Age,
+		Gender:            character.Gender,
+		Height:            character.Height,
+		Weight:            character.Weight,
+		State:             string(character.State),
+		UserID:            character.UserID,
+		Attributes:        character.Attributes,
+		EditionData:       character.EditionData,
+		PriorityAssignment: character.PriorityAssignment,
+		CreatedAt:         character.CreatedAt.Format("2006-01-02T15:04:05Z07:00"),
+		UpdatedAt:         character.UpdatedAt.Format("2006-01-02T15:04:05Z07:00"),
+	}
+	if character.DeletedAt != nil {
+		deletedAtStr := character.DeletedAt.Format("2006-01-02T15:04:05Z07:00")
+		stored.DeletedAt = &deletedAtStr
+	}
+
+	data, err := json.MarshalIndent(stored, "", "  ")
+	if err != nil {
+		return fmt.Errorf("failed to marshal character: %w", err)
+	}
+
+	if err := os.WriteFile(characterPath, data, 0644); err != nil {
+		return fmt.Errorf("failed to write character file: %w", err)
+	}
+
+	// Update index
+	r.index.Characters[character.ID] = characterPath
+
+	// Update user characters mapping
+	if r.index.UserCharacters == nil {
+		r.index.UserCharacters = make(map[string][]string)
+	}
+	r.index.UserCharacters[character.UserID] = append(r.index.UserCharacters[character.UserID], character.ID)
+
+	if err := r.saveIndex(); err != nil {
+		// Try to clean up file if index save fails
+		os.Remove(characterPath)
+		return fmt.Errorf("failed to save index: %w", err)
+	}
+
+	return nil
+}
+
+func (r *CharacterRepository) GetByID(id string) (*domain.Character, error) {
+	r.mu.RLock()
+	defer r.mu.RUnlock()
+
+	filePath, exists := r.index.Characters[id]
 	if !exists {
-		return nil, fmt.Errorf("character not found: %s", id)
+		return nil, errors.New("character not found")
 	}
 
-	var character domain.Character
-	if err := r.store.Read(filename, &character); err != nil {
-		return nil, err
+	data, err := os.ReadFile(filePath)
+	if err != nil {
+		return nil, fmt.Errorf("failed to read character file: %w", err)
 	}
 
-	return &character, nil
+	var stored storedCharacter
+	if err := json.Unmarshal(data, &stored); err != nil {
+		return nil, fmt.Errorf("failed to unmarshal character: %w", err)
+	}
+
+	return r.storedToDomain(&stored)
 }
 
-// GetAll retrieves all characters
-func (r *CharacterRepositoryJSON) GetAll() ([]*domain.Character, error) {
-	r.index.mu.RLock()
-	characterMap := copyStringMap(r.index.Characters)
-	r.index.mu.RUnlock()
+func (r *CharacterRepository) GetByUserID(userID string) ([]*domain.Character, error) {
+	r.mu.RLock()
+	defer r.mu.RUnlock()
 
-	characters := make([]*domain.Character, 0) // Ensure non-nil empty slice
-	for _, filename := range characterMap {
-		var character domain.Character
-		if err := r.store.Read(filename, &character); err != nil {
+	characterIDs, exists := r.index.UserCharacters[userID]
+	if !exists {
+		return []*domain.Character{}, nil
+	}
+
+	characters := make([]*domain.Character, 0, len(characterIDs))
+	for _, id := range characterIDs {
+		filePath, exists := r.index.Characters[id]
+		if !exists {
+			continue // Skip if file doesn't exist
+		}
+
+		data, err := os.ReadFile(filePath)
+		if err != nil {
 			continue // Skip files that can't be read
 		}
-		characters = append(characters, &character)
+
+		var stored storedCharacter
+		if err := json.Unmarshal(data, &stored); err != nil {
+			continue // Skip invalid files
+		}
+
+		// Skip deleted characters
+		if stored.DeletedAt != nil {
+			continue
+		}
+
+		character, err := r.storedToDomain(&stored)
+		if err != nil {
+			continue // Skip invalid characters
+		}
+
+		characters = append(characters, character)
 	}
 
 	return characters, nil
 }
 
-// GetByCampaignID fetches all characters assigned to a campaign.
-func (r *CharacterRepositoryJSON) GetByCampaignID(campaignID string) ([]*domain.Character, error) {
-	r.index.mu.RLock()
-	ids := append([]string(nil), r.index.CampaignCharacters[campaignID]...)
-	r.index.mu.RUnlock()
+func (r *CharacterRepository) Update(character *domain.Character) error {
+	r.mu.Lock()
+	defer r.mu.Unlock()
 
-	result := make([]*domain.Character, 0, len(ids))
-	for _, id := range ids {
-		character, err := r.GetByID(id)
-		if err != nil {
-			continue
-		}
-		result = append(result, character)
-	}
-	return result, nil
-}
-
-// GetByUserID fetches all characters owned by a user.
-func (r *CharacterRepositoryJSON) GetByUserID(userID string) ([]*domain.Character, error) {
-	r.index.mu.RLock()
-	ids := append([]string(nil), r.index.UserCharacters[userID]...)
-	r.index.mu.RUnlock()
-
-	result := make([]*domain.Character, 0, len(ids))
-	for _, id := range ids {
-		character, err := r.GetByID(id)
-		if err != nil {
-			continue
-		}
-		result = append(result, character)
-	}
-	return result, nil
-}
-
-// Update updates an existing character
-func (r *CharacterRepositoryJSON) Update(character *domain.Character) error {
-	existing, err := r.GetByID(character.ID)
-	if err != nil {
-		return err
-	}
-
-	character.CreatedAt = existing.CreatedAt
-	character.UpdatedAt = time.Now()
-	filename := fmt.Sprintf("characters/%s.json", character.ID)
-	if err := r.store.Write(filename, character); err != nil {
-		return err
-	}
-
-	r.index.mu.Lock()
-	r.index.Characters[character.ID] = filename
-	r.ensureIndexCollectionsLocked()
-	r.removeCharacterFromIndexesLocked(existing)
-	r.addCharacterToIndexesLocked(character)
-	r.index.mu.Unlock()
-
-	return r.saveIndex()
-}
-
-// Delete deletes a character
-func (r *CharacterRepositoryJSON) Delete(id string) error {
-	existing, err := r.GetByID(id)
-	if err != nil {
-		return err
-	}
-
-	r.index.mu.RLock()
-	filename, exists := r.index.Characters[id]
-	r.index.mu.RUnlock()
-
+	// Check if character exists
+	filePath, exists := r.index.Characters[character.ID]
 	if !exists {
-		return fmt.Errorf("character not found: %s", id)
+		return errors.New("character not found")
 	}
 
-	if err := r.store.Delete(filename); err != nil {
+	// Load existing character to preserve data
+	data, err := os.ReadFile(filePath)
+	if err != nil {
+		return fmt.Errorf("failed to read character file: %w", err)
+	}
+
+	var stored storedCharacter
+	if err := json.Unmarshal(data, &stored); err != nil {
+		return fmt.Errorf("failed to unmarshal character: %w", err)
+	}
+
+	// Update fields
+	stored.Name = character.Name
+	stored.Description = character.Description
+	stored.Age = character.Age
+	stored.Gender = character.Gender
+	stored.Height = character.Height
+	stored.Weight = character.Weight
+	stored.State = string(character.State)
+	stored.Attributes = character.Attributes
+	stored.EditionData = character.EditionData
+	stored.PriorityAssignment = character.PriorityAssignment
+	stored.UpdatedAt = character.UpdatedAt.Format("2006-01-02T15:04:05Z07:00")
+	if character.DeletedAt != nil {
+		deletedAtStr := character.DeletedAt.Format("2006-01-02T15:04:05Z07:00")
+		stored.DeletedAt = &deletedAtStr
+	} else {
+		stored.DeletedAt = nil
+	}
+
+	// Write back
+	data, err = json.MarshalIndent(stored, "", "  ")
+	if err != nil {
+		return fmt.Errorf("failed to marshal character: %w", err)
+	}
+
+	return os.WriteFile(filePath, data, 0644)
+}
+
+func (r *CharacterRepository) Delete(id string) error {
+	r.mu.Lock()
+	defer r.mu.Unlock()
+
+	// Check if character exists
+	stored, err := r.GetByID(id)
+	if err != nil {
 		return err
 	}
 
-	r.index.mu.Lock()
-	delete(r.index.Characters, id)
-	r.removeCharacterFromIndexesLocked(existing)
-	r.index.mu.Unlock()
+	// Soft delete: set deleted_at timestamp
+	now := time.Now()
+	stored.DeletedAt = &now
+	stored.UpdatedAt = now
 
-	return r.saveIndex()
+	return r.Update(stored)
 }
 
-// saveIndex saves the index file
-func (r *CharacterRepositoryJSON) saveIndex() error {
-	return r.store.Write("index.json", r.index)
-}
-
-func (r *CharacterRepositoryJSON) ensureIndexCollections() {
-	r.index.mu.Lock()
-	r.ensureIndexCollectionsLocked()
-	r.index.mu.Unlock()
-}
-
-func (r *CharacterRepositoryJSON) ensureIndexCollectionsLocked() {
-	if r.index.CampaignCharacters == nil {
-		r.index.CampaignCharacters = make(map[string][]string)
-	}
-	if r.index.UserCharacters == nil {
-		r.index.UserCharacters = make(map[string][]string)
-	}
-}
-
-func (r *CharacterRepositoryJSON) addCharacterToIndexesLocked(character *domain.Character) {
-	if character.CampaignID != "" {
-		r.index.CampaignCharacters[character.CampaignID] = appendUnique(
-			r.index.CampaignCharacters[character.CampaignID], character.ID)
-	}
-	if character.UserID != "" && !character.IsNPC {
-		r.index.UserCharacters[character.UserID] = appendUnique(
-			r.index.UserCharacters[character.UserID], character.ID)
-	}
-}
-
-func (r *CharacterRepositoryJSON) removeCharacterFromIndexesLocked(character *domain.Character) {
-	if character.CampaignID != "" {
-		if list, ok := r.index.CampaignCharacters[character.CampaignID]; ok {
-			updated := removeValue(list, character.ID)
-			if len(updated) == 0 {
-				delete(r.index.CampaignCharacters, character.CampaignID)
-			} else {
-				r.index.CampaignCharacters[character.CampaignID] = updated
-			}
-		}
-	}
-	if character.UserID != "" {
-		if list, ok := r.index.UserCharacters[character.UserID]; ok {
-			updated := removeValue(list, character.ID)
-			if len(updated) == 0 {
-				delete(r.index.UserCharacters, character.UserID)
-			} else {
-				r.index.UserCharacters[character.UserID] = updated
-			}
-		}
-	}
-}
-
-func (r *CharacterRepositoryJSON) rebuildDerivedIndexes() {
-	files, err := r.store.List("characters")
+func (r *CharacterRepository) storedToDomain(stored *storedCharacter) (*domain.Character, error) {
+	createdAt, err := time.Parse("2006-01-02T15:04:05Z07:00", stored.CreatedAt)
 	if err != nil {
-		return
+		return nil, fmt.Errorf("invalid created_at: %w", err)
 	}
 
-	characterFiles := make(map[string]string)
-	campaignCharacters := make(map[string][]string)
-	userCharacters := make(map[string][]string)
+	updatedAt, err := time.Parse("2006-01-02T15:04:05Z07:00", stored.UpdatedAt)
+	if err != nil {
+		return nil, fmt.Errorf("invalid updated_at: %w", err)
+	}
 
-	for _, file := range files {
-		if !strings.HasSuffix(file, ".json") {
-			continue
+	var deletedAt *time.Time
+	if stored.DeletedAt != nil {
+		deletedAtTime, err := time.Parse("2006-01-02T15:04:05Z07:00", *stored.DeletedAt)
+		if err != nil {
+			return nil, fmt.Errorf("invalid deleted_at: %w", err)
 		}
-
-		filename := fmt.Sprintf("characters/%s", file)
-		var character domain.Character
-		if err := r.store.Read(filename, &character); err != nil {
-			continue
-		}
-
-		charID := character.ID
-		if charID == "" {
-			charID = strings.TrimSuffix(file, ".json")
-		}
-
-		characterFiles[charID] = filename
-
-		if character.CampaignID != "" {
-			campaignCharacters[character.CampaignID] = append(
-				campaignCharacters[character.CampaignID], charID,
-			)
-		}
-		if character.UserID != "" && !character.IsNPC {
-			userCharacters[character.UserID] = append(
-				userCharacters[character.UserID], charID,
-			)
-		}
+		deletedAt = &deletedAtTime
 	}
 
-	// Deduplicate entries
-	for campaignID, ids := range campaignCharacters {
-		campaignCharacters[campaignID] = unique(ids)
-	}
-	for userID, ids := range userCharacters {
-		userCharacters[userID] = unique(ids)
-	}
-
-	r.index.mu.Lock()
-	r.index.Characters = characterFiles
-	r.index.CampaignCharacters = campaignCharacters
-	r.index.UserCharacters = userCharacters
-	r.ensureIndexCollectionsLocked()
-	r.index.mu.Unlock()
-
-	_ = r.saveIndex()
-}
-
-func appendUnique(list []string, value string) []string {
-	for _, existing := range list {
-		if existing == value {
-			return list
-		}
-	}
-	return append(list, value)
-}
-
-func removeValue(list []string, value string) []string {
-	if len(list) == 0 {
-		return list
-	}
-	result := make([]string, 0, len(list))
-	for _, existing := range list {
-		if existing != value {
-			result = append(result, existing)
-		}
-	}
-	return result
-}
-
-func unique(values []string) []string {
-	seen := make(map[string]struct{}, len(values))
-	result := make([]string, 0, len(values))
-	for _, value := range values {
-		if _, ok := seen[value]; ok {
-			continue
-		}
-		seen[value] = struct{}{}
-		result = append(result, value)
-	}
-	return result
-}
-
-func copyStringMap(src map[string]string) map[string]string {
-	dst := make(map[string]string, len(src))
-	for k, v := range src {
-		dst[k] = v
-	}
-	return dst
+	return &domain.Character{
+		ID:                stored.ID,
+		Name:              stored.Name,
+		Description:       stored.Description,
+		Age:               stored.Age,
+		Gender:            stored.Gender,
+		Height:            stored.Height,
+		Weight:            stored.Weight,
+		State:             domain.CharacterState(stored.State),
+		UserID:            stored.UserID,
+		Attributes:        stored.Attributes,
+		EditionData:       stored.EditionData,
+		PriorityAssignment: stored.PriorityAssignment,
+		CreatedAt:         createdAt,
+		UpdatedAt:         updatedAt,
+		DeletedAt:         deletedAt,
+	}, nil
 }
