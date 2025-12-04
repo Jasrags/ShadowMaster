@@ -1,11 +1,10 @@
 'use client'
 
 import { useState, FormEvent } from 'react'
-import { useRouter, useSearchParams } from 'next/navigation'
+import { useSearchParams } from 'next/navigation'
 import { createClient } from '@/lib/supabase/client'
 
 export function LoginForm() {
-  const router = useRouter()
   const searchParams = useSearchParams()
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
@@ -19,7 +18,7 @@ export function LoginForm() {
 
     try {
       const supabase = createClient()
-      const { error: signInError } = await supabase.auth.signInWithPassword({
+      const { data, error: signInError } = await supabase.auth.signInWithPassword({
         email,
         password,
       })
@@ -30,10 +29,23 @@ export function LoginForm() {
         return
       }
 
-      // Redirect to the redirect URL or home
+      if (!data.session) {
+        setError('Failed to create session. Please try again.')
+        setLoading(false)
+        return
+      }
+
+      // Verify the session is available by getting the user
+      const { data: { user } } = await supabase.auth.getUser()
+      if (!user) {
+        setError('Session verification failed. Please try again.')
+        setLoading(false)
+        return
+      }
+
+      // Use window.location for a full page reload to ensure middleware picks up the session
       const redirectTo = searchParams.get('redirect') || '/'
-      router.push(redirectTo)
-      router.refresh()
+      window.location.href = redirectTo
     } catch (err) {
       setError('An unexpected error occurred. Please try again.')
       setLoading(false)

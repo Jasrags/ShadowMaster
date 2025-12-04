@@ -1,11 +1,9 @@
 'use client'
 
 import { useState, FormEvent } from 'react'
-import { useRouter } from 'next/navigation'
 import { createClient } from '@/lib/supabase/client'
 
 export function SignupForm() {
-  const router = useRouter()
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [confirmPassword, setConfirmPassword] = useState('')
@@ -32,7 +30,7 @@ export function SignupForm() {
 
     try {
       const supabase = createClient()
-      const { error: signUpError } = await supabase.auth.signUp({
+      const { data, error: signUpError } = await supabase.auth.signUp({
         email,
         password,
       })
@@ -43,8 +41,11 @@ export function SignupForm() {
         return
       }
 
-      // Redirect to login page with success message
-      router.push('/login?message=Account created successfully. Please sign in.')
+      // Wait a moment for any session/cookie operations to complete
+      await new Promise((resolve) => setTimeout(resolve, 100))
+
+      // Use window.location for a full page reload
+      window.location.href = '/login?message=Account created successfully. Please sign in.'
     } catch (err) {
       setError('An unexpected error occurred. Please try again.')
       setLoading(false)

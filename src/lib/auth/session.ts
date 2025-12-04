@@ -32,12 +32,28 @@ export async function getSession(): Promise<Session | null> {
 
 /**
  * Check if a session is valid
- * @returns true if session exists and is valid, false otherwise
+ * @returns true if session exists and user is valid, false otherwise
  */
 export async function checkSession(): Promise<boolean> {
   try {
-    const session = await getSession()
-    return session !== null
+    const supabase = await createClient()
+    // First check if session exists
+    const {
+      data: { session },
+    } = await supabase.auth.getSession()
+    
+    if (!session) {
+      return false
+    }
+    
+    // Then validate the user actually exists
+    const {
+      data: { user },
+      error,
+    } = await supabase.auth.getUser()
+    
+    // Only return true if we have both session and valid user
+    return !error && user !== null
   } catch (error) {
     console.error('Error checking session:', error)
     return false
