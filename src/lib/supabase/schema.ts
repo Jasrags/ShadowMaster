@@ -149,7 +149,7 @@ export async function getCharacterById(client: Client, characterId: string) {
   return client
     .from('characters')
     .select(
-      '*, player:users_profile!characters_player_user_id_fkey(*), campaign:campaigns!characters_campaign_id_fkey(*)'
+      '*, player:users_profile!characters_player_user_id_fkey(id, username, avatar_url), campaign:campaigns!characters_campaign_id_fkey(id, name)'
     )
     .eq('id', characterId)
     .single()
@@ -162,9 +162,7 @@ export async function getCharactersByPlayer(
 ) {
   let query = client
     .from('characters')
-    .select(
-      '*, player:users_profile!characters_player_user_id_fkey(*), campaign:campaigns!characters_campaign_id_fkey(*)'
-    )
+    .select('*')
     .eq('player_user_id', playerUserId)
     .eq('is_active', true)
 
