@@ -3,26 +3,35 @@
 
 This plan implements Prompt 1 from the bootstrap document, setting up the foundation for the Shadowrun VTT application.
 
+## ✅ Status: COMPLETED
+
+**Commit:** `ed1ca63` - "Initialize Next.js 14 project with TypeScript, Tailwind, and Supabase"
+
+All implementation steps have been completed successfully. The project is initialized and ready for development.
+
 ## Implementation Steps
 
-### 1. Initialize Next.js Project
+### 1. Initialize Next.js Project ✅
 
-- Run `create-next-app` with TypeScript, Tailwind CSS, App Router, and `src/` directory structure
-- Project will be initialized in the current directory (ShadowMaster)
+- ✅ Manually set up Next.js 14 with TypeScript, Tailwind CSS, App Router, and `src/` directory structure
+- ✅ Created all necessary configuration files (tsconfig.json, next.config.js, tailwind.config.ts, postcss.config.js)
+- ✅ Set up basic app structure with layout.tsx, page.tsx, and globals.css
+- ✅ Configured Tailwind CSS v4 with @tailwindcss/postcss plugin
 
-### 2. Install Core Dependencies
+### 2. Install Core Dependencies ✅
 
-Install the following npm packages:
+✅ Installed the following npm packages:
 
-- `@supabase/supabase-js` (latest)
-- `@supabase/ssr` (for Next.js App Router)
-- `zustand` (state management)
-- `react-konva` and `konva` (canvas rendering)
-- `lucide-react` (icons)
+- ✅ `@supabase/supabase-js` (v2.86.0)
+- ✅ `@supabase/ssr` (v0.8.0) - for Next.js App Router
+- ✅ `zustand` (v5.0.9) - state management
+- ✅ `react-konva` (v19.2.1) and `konva` (v10.0.12) - canvas rendering
+- ✅ `lucide-react` (v0.555.0) - icons
+- ✅ `supabase` (v2.65.3) - CLI as dev dependency
 
-### 3. Create Directory Structure
+### 3. Create Directory Structure ✅
 
-Create the following directory structure under `src/`:
+✅ Created the following directory structure under `src/`:
 
 - `app/` - Next.js App Router pages (layout.tsx, page.tsx already created)
 - `(auth)/login/` and `(auth)/signup/` - Auth route groups
@@ -40,55 +49,62 @@ Create the following directory structure under `src/`:
 - `types/` - TypeScript type definitions
 - `styles/` - Additional stylesheets
 
-### 4. Environment Variables
+### 4. Environment Variables ✅
 
-Create `.env.local` template with:
+✅ Created `.env.local` template with:
 
-- `NEXT_PUBLIC_SUPABASE_URL=`
-- `NEXT_PUBLIC_SUPABASE_ANON_KEY=`
-- `SUPABASE_SERVICE_ROLE_KEY=`
+- ✅ `NEXT_PUBLIC_SUPABASE_URL=`
+- ✅ `NEXT_PUBLIC_SUPABASE_ANON_KEY=`
+- ✅ `SUPABASE_SERVICE_ROLE_KEY=`
 
-Create `.env.example` with the same structure (without values) for documentation.
+✅ Created `.env.example` with the same structure for documentation.
 
-### 5. Docker Configuration
+### 5. Docker Configuration ✅
 
-- **Dockerfile**: Multi-stage build with:
-- Stage 1: Dependencies (Node 20 Alpine, install npm packages)
-- Stage 2: Builder (copy source, build Next.js with standalone output)
-- Stage 3: Runner (minimal Node 20 Alpine, copy standalone build, non-root user, health check)
-- **.dockerignore**: Exclude node_modules, .next, .git, and development files
-- **Health check endpoint**: Create `src/app/api/health/route.ts` for Docker health checks
+✅ **Dockerfile**: Multi-stage build created with:
 
-### 6. Supabase Local Development
+- ✅ Stage 1: Dependencies (Node 20 Alpine, install npm packages)
+- ✅ Stage 2: Builder (copy source, build Next.js with standalone output)
+- ✅ Stage 3: Runner (minimal Node 20 Alpine, copy standalone build, non-root user, health check)
+- ✅ **.dockerignore**: Created to exclude node_modules, .next, .git, and development files
+- ✅ **Health check endpoint**: Created `src/app/api/health/route.ts` for Docker health checks
+- ✅ Created empty `public/` directory for Docker builds
 
-- Initialize Supabase CLI in the project (`supabase init`)
-- This will create `supabase/` directory with config and generate docker-compose.yml automatically
-- Add npm scripts to start/stop local Supabase
+### 6. Supabase Local Development ✅
 
-### 7. Update .gitignore
+- ✅ Initialized Supabase CLI in the project (`supabase init`)
+- ✅ Created `supabase/` directory with config.toml
+- ✅ docker-compose.yml will be generated automatically when `supabase start` is run
+- ✅ Added npm scripts to start/stop local Supabase
 
-Add standard Next.js and development exclusions:
+### 7. Update .gitignore ✅
 
-- `.next/`, `.env*.local`, `node_modules/`, etc.
-- Keep existing `node_modules` entry
+✅ Added standard Next.js and development exclusions:
 
-### 8. Package.json Scripts
+- ✅ `.next/`, `.env*.local`, `node_modules/`, etc.
+- ✅ Supabase-specific exclusions (.branches, .temp)
+- ✅ TypeScript build info and other development files
 
-Add the following scripts:
+### 8. Package.json Scripts ✅
 
-- `dev` - Local development (already exists, verify it works)
-- `build` - Production build (already exists)
-- `start` - Start production server (already exists)
-- `docker:build` - Build Docker image
-- `docker:run` - Run Docker container
-- `supabase:start` - Start local Supabase (using Supabase CLI)
-- `supabase:stop` - Stop local Supabase
+✅ Added the following scripts:
 
-### 9. Tailwind Configuration
+- ✅ `dev` - Local development
+- ✅ `build` - Production build
+- ✅ `start` - Start production server
+- ✅ `lint` - Run ESLint
+- ✅ `docker:build` - Build Docker image
+- ✅ `docker:run` - Run Docker container
+- ✅ `supabase:start` - Start local Supabase (using Supabase CLI)
+- ✅ `supabase:stop` - Stop local Supabase
 
-- Verify `tailwind.config.ts` exists (created by create-next-app)
-- Ensure it's configured for `src/` directory structure
-- No additional Intent UI config needed initially (as per prompt)
+### 9. Tailwind Configuration ✅
+
+- ✅ Created `tailwind.config.ts` with proper configuration
+- ✅ Configured for `src/` directory structure (content paths include src/app, src/components, src/pages)
+- ✅ Set up Tailwind CSS v4 with `@tailwindcss/postcss` plugin
+- ✅ Updated `globals.css` to use v4 syntax (`@import "tailwindcss"`)
+- ✅ No additional Intent UI config needed initially (as per prompt)
 
 ## Files to Create/Modify
 
@@ -112,19 +128,27 @@ Add the following scripts:
 
 ## Notes
 
-- Supabase CLI will handle the docker-compose.yml for local development automatically
-- The project structure uses `src/` directory as specified
-- All TypeScript configuration will be handled by create-next-app
-- Tailwind CSS will be pre-configured by create-next-app
+- ✅ Supabase CLI will handle the docker-compose.yml for local development automatically
+- ✅ The project structure uses `src/` directory as specified
+- ✅ All TypeScript configuration is properly set up
+- ✅ Tailwind CSS v4 is configured and working
+- ✅ Project uses Docker Desktop (Colima-specific changes were reverted)
+- ✅ All files committed to git (commit: ed1ca63)
+
+## Additional Notes
+
+- Fixed Tailwind CSS v4 compatibility by installing `@tailwindcss/postcss` and updating PostCSS config
+- Created empty `public/` directory to fix Docker build issues
+- Configured for Docker Desktop (removed Colima-specific configurations)
 
 ### To-dos
 
-- [ ] Initialize Next.js 14 project with create-next-app (TypeScript, Tailwind, App Router, src/ directory)
-- [ ] Install core dependencies: @supabase/supabase-js, @supabase/ssr, zustand, react-konva, konva, lucide-react
-- [ ] Create complete directory structure under src/ (app routes, components, lib, types, styles)
-- [ ] Create .env.local template and .env.example with Supabase environment variables
-- [ ] Create multi-stage Dockerfile with Node 20 Alpine, proper caching, non-root user, and health check
-- [ ] Create .dockerignore and update .gitignore with appropriate exclusions
-- [ ] Initialize Supabase CLI (creates supabase/ directory and docker-compose.yml)
-- [ ] Create /api/health route for Docker health checks
-- [ ] Add npm scripts for docker:build, docker:run, supabase:start, supabase:stop
+- [x] Initialize Next.js 14 project with create-next-app (TypeScript, Tailwind, App Router, src/ directory)
+- [x] Install core dependencies: @supabase/supabase-js, @supabase/ssr, zustand, react-konva, konva, lucide-react
+- [x] Create complete directory structure under src/ (app routes, components, lib, types, styles)
+- [x] Create .env.local template and .env.example with Supabase environment variables
+- [x] Create multi-stage Dockerfile with Node 20 Alpine, proper caching, non-root user, and health check
+- [x] Create .dockerignore and update .gitignore with appropriate exclusions
+- [x] Initialize Supabase CLI (creates supabase/ directory and docker-compose.yml)
+- [x] Create /api/health route for Docker health checks
+- [x] Add npm scripts for docker:build, docker:run, supabase:start, supabase:stop
