@@ -81,31 +81,42 @@ Implement a complete user authentication system that allows users to create acco
 **User Flow:**
 
 **Signup Flow:**
-1. User navigates to signup page
-2. User enters email/username and password
-3. System validates input (email format, password strength)
-4. System creates user record with role assignment:
+1. User navigates to `/signup` (rendered by `app/signup/page.tsx`)
+2. User enters email/username and password in form (React Aria Components)
+3. Client-side validation (email format, password strength)
+4. Form submission calls `POST /api/auth/signup` (Server Action or API route)
+5. Server validates input and checks for existing users
+6. System creates user record with role assignment:
    - If this is the first user created, assign "administrator" role
    - Otherwise, assign default "user" role
-5. System stores user record in JSON
-6. User is automatically signed in
-7. User is redirected to main application
+7. System stores user record in `data/users/{userId}.json`
+8. Server sets authentication cookie (httpOnly, secure)
+9. User is automatically signed in
+10. User is redirected to main application (`app/page.tsx`)
 
 **Signin Flow:**
-1. User navigates to signin page
-2. User enters credentials
-3. System validates credentials against stored JSON data
-4. System creates authenticated session
-5. User is redirected to main application with their data loaded
+1. User navigates to `/signin` (rendered by `app/signin/page.tsx`)
+2. User enters credentials in form (React Aria Components)
+3. Form submission calls `POST /api/auth/signin` (Server Action or API route)
+4. Server validates credentials against stored JSON data
+5. Server sets authentication cookie (httpOnly, secure)
+6. User is redirected to main application with their data loaded
 
 **Signout Flow:**
-1. User clicks signout button
-2. System clears session data
-3. User is redirected to signin page or landing page
-4. All user-specific data is cleared from memory
+1. User clicks signout button (Client Component)
+2. Client calls `POST /api/auth/signout` (Server Action or API route)
+3. Server clears authentication cookie
+4. User is redirected to signin page or landing page
+5. All user-specific data is cleared from client state
 
 **UI/UX Considerations:**
-- **Key screens:** Signup page, Signin page, User profile/settings
+- **Key screens:** Signup page (`app/signup/page.tsx`), Signin page (`app/signin/page.tsx`), User profile/settings
+- **Component architecture:**
+  - Use React Aria Components for accessible form primitives (TextField, Button, etc.)
+  - Implement forms as Client Components (`'use client'`) for interactivity
+  - Use Server Components for layout and data fetching
+  - Style with Tailwind CSS 4 utility classes
+  - Leverage Geist fonts via CSS variables (`--font-geist-sans`)
 - **Visual feedback:** 
   - Clear error messages for invalid credentials
   - Success confirmation on signup/signin
@@ -114,9 +125,10 @@ Implement a complete user authentication system that allows users to create acco
   - Show current user status (signed in/out)
   - Display user email/username when authenticated
 - **Accessibility:**
-  - Screen reader support for form fields
-  - Keyboard navigation support
+  - React Aria Components provide built-in screen reader support
+  - Keyboard navigation support via React Aria
   - Clear error messages and validation feedback
+  - Dark mode support via Tailwind CSS `prefers-color-scheme`
 
 **Character Sheet Integration:**
 - Character data automatically associated with authenticated user
@@ -124,23 +136,28 @@ Implement a complete user authentication system that allows users to create acco
 - Character list filtered by current user
 
 **Example/Inspiration:**
-- Standard authentication patterns from modern web applications
+- Next.js 16 App Router authentication patterns
 - JSON-based storage similar to local-first applications
-- Session management patterns from authentication libraries
+- Next.js cookie-based session management
+- React Aria Components form patterns for accessibility
 
 ---
 
 ## Technical Considerations
 **Technical Approach:**
-- Implement authentication endpoints/handlers for signup, signin, signout
-- Use JSON file-based storage for user records (e.g., `users.json` or `data/users/`)
+- Implement authentication API routes using Next.js 16 App Router (`app/api/auth/*/route.ts`)
+- Use TypeScript 5 for type-safe implementation throughout
+- Use JSON file-based storage for user records (e.g., `data/users/{userId}.json`)
 - Hash passwords using secure hashing algorithm (e.g., bcrypt, argon2)
-- Implement session management using tokens or session storage
-- Create user record schema for JSON storage
+- Implement session management using Next.js cookies (httpOnly, secure cookies)
+- Create TypeScript interfaces/types for user record schema
 - Implement role-based access control with role assignment logic:
   - Check if any users exist during signup
   - Assign "administrator" role to first user, "user" role to all subsequent users
   - Store role in user record for authorization checks
+- Use Server Components by default, Client Components for interactive forms
+- Leverage React Aria Components 1.13.0 for accessible form inputs
+- Style with Tailwind CSS 4 utility classes
 
 **Calculation Engine:**
 - N/A (authentication feature, not calculation-based)
@@ -164,31 +181,37 @@ Implement a complete user authentication system that allows users to create acco
   - **Default role:** `user` (assigned to all new users except the first)
   - **First user rule:** The first user created in the system is automatically granted the `administrator` role
   - **Role assignment:** Roles are assigned during user creation and stored in the user record
-- **Storage location:** `data/users.json` or `data/users/{userId}.json`
+- **Storage location:** `data/users/{userId}.json` (at project root level)
 - **Storage considerations:**
-  - Atomic writes to prevent data corruption
+  - Atomic writes using Node.js `fs` operations to prevent data corruption
   - Backup strategy for user data
-  - File locking for concurrent access
+  - File locking mechanism for concurrent access (consider `fs-extra` or similar)
+  - TypeScript type definitions for user records
 
 **Performance:**
 - Fast authentication response times (< 500ms)
-- Efficient JSON parsing and serialization
-- Index user records by email/username for quick lookups
-- Cache authenticated user data in memory during session
+- Efficient JSON parsing and serialization using Node.js native `JSON.parse/stringify`
+- Index user records by email/username for quick lookups (maintain lookup file or scan directory)
+- Cache authenticated user data in Next.js cookies (httpOnly, secure)
+- Leverage Next.js Server Component caching where appropriate
 
 **Integration Points:**
-- **API changes needed:**
-  - POST `/api/auth/signup` - Create new user
-  - POST `/api/auth/signin` - Authenticate user
-  - POST `/api/auth/signout` - End session
-  - GET `/api/auth/me` - Get current user
-- **Database changes needed:**
-  - Create user storage structure (JSON files)
-  - Implement user record CRUD operations
+- **API routes (Next.js App Router):**
+  - `app/api/auth/signup/route.ts` - POST handler for user signup
+  - `app/api/auth/signin/route.ts` - POST handler for user signin
+  - `app/api/auth/signout/route.ts` - POST handler for user signout
+  - `app/api/auth/me/route.ts` - GET handler for current user
+- **Storage structure:**
+  - Create `data/users/` directory at project root
+  - Store individual user files: `data/users/{userId}.json`
+  - Implement TypeScript utilities for user record CRUD operations
+  - Use Node.js `fs` module with file locking for concurrent access
 - **Frontend integration:**
-  - Authentication state management
-  - Protected routes/components
-  - User context/provider
+  - Create authentication context/provider (Client Component)
+  - Implement protected route middleware or layout checks
+  - Use Server Components for user data fetching
+  - Create reusable form components using React Aria Components
+  - Style authentication pages with Tailwind CSS 4
 
 ---
 
