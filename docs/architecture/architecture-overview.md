@@ -43,11 +43,9 @@ shadow-master/
 │   ├── globals.css        # Global styles with Tailwind imports
 │   └── favicon.ico        # Site favicon
 ├── docs/                   # Documentation
-│   ├── database_schema.md
-│   ├── edition_support_and_ruleset_architecture.md
-│   ├── merging_algorithm.md
-│   ├── system_design_diagram.md
-│   └── prompts/           # Feature request templates
+│   ├── architecture/      # System architecture and design docs
+│   ├── requirements/      # Requirements and planning docs
+│   └── prompts/           # Feature requests and design wireframes
 ├── public/                 # Static assets
 ├── next.config.ts         # Next.js configuration
 ├── tsconfig.json          # TypeScript configuration
@@ -80,7 +78,7 @@ The system uses a relational database with the following core entities:
 - **Rule Overrides**: Book-specific modifications to base modules
 - **Creation Methods**: Edition-specific character creation approaches
 
-See `docs/database_schema.md` for detailed schema.
+See `docs/architecture/database_schema.md` for detailed schema.
 
 #### 3. Data Flow
 
@@ -167,9 +165,12 @@ Based on the documentation, the system is designed to support:
 
 ## Related Documentation
 
-- `docs/database_schema.md` - Database structure
-- `docs/edition_support_and_ruleset_architecture.md` - Ruleset architecture details
-- `docs/merging_algorithm.md` - Ruleset merging logic
-- `docs/system_design_diagram.md` - Visual system flow
-- `docs/shadowrun_edition_support_requirements.md` - Edition support requirements
+### Architecture
+- `docs/architecture/database_schema.md` - Database structure
+- `docs/architecture/edition_support_and_ruleset_architecture.md` - Ruleset architecture details
+- `docs/architecture/merging_algorithm.md` - Ruleset merging logic
+- `docs/architecture/system_design_diagram.md` - Visual system flow
+
+### Requirements
+- `docs/requirements/shadowrun_edition_support_requirements.md` - Edition support requirements
 

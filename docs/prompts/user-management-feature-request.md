@@ -112,22 +112,31 @@ Implement a comprehensive user management interface that allows administrators t
 7. Table refreshes to show updated information
 
 **UI/UX Considerations:**
-- **Key screens:** User Management page with user table
+- **Key screens:** User Management page with user table (`app/users/page.tsx`)
+- **Component library:** React Aria Components for accessible primitives
+  - Table component for user list display
+  - Select component for role dropdown
+  - TextField components for email/username editing
+  - Button components for actions
+- **Styling:** Tailwind CSS v4 utility classes
+  - Dark mode support via `prefers-color-scheme` media query
+  - CSS custom properties for theming (`--background`, `--foreground`)
+  - Geist fonts via CSS variables (`--font-geist-sans`)
 - **Visual feedback:** 
   - Loading state while fetching users
   - Error messages for failed operations
   - Success confirmation on save
   - Inline editing with save/cancel buttons
 - **Information display:**
-  - Clear table layout with sortable columns
+  - Clear table layout with sortable columns (React Aria Table)
   - Role displayed with capitalization
   - Creation date formatted for readability
   - Visual distinction between editable and read-only states
 - **Accessibility:**
-  - Screen reader support for table navigation
+  - Screen reader support via React Aria Components
   - Keyboard navigation for form interactions
   - Clear error messages and validation feedback
-  - ARIA labels for interactive elements
+  - ARIA labels automatically provided by React Aria Components
 
 **Character Sheet Integration:**
 - User management is separate from character sheets
@@ -143,10 +152,21 @@ Implement a comprehensive user management interface that allows administrators t
 
 ## Technical Considerations
 **Technical Approach:**
-- Create user management API endpoints with admin-only access
-- Implement frontend page with user table and inline editing
+- Create user management API routes using Next.js 16 App Router (`app/api/users/route.ts`, `app/api/users/[id]/route.ts`)
+- Implement frontend page as Server Component with Client Component for interactive table
+- Use React Aria Components for accessible table, form inputs, and buttons
+- Style with Tailwind CSS v4 utility classes
 - Add validation middleware for role changes and user updates
 - Implement safety checks to prevent system-breaking changes
+- Use TypeScript throughout for type safety
+
+**Tech Stack Alignment:**
+- **Next.js 16.0.7** - App Router for file-based routing and API routes
+- **React 19.2.0** - Server Components by default, Client Components for interactivity
+- **TypeScript 5** - Type-safe implementation
+- **React Aria Components 1.13.0** - Accessible table, select, and form components
+- **Tailwind CSS 4** - Utility-first styling with dark mode support
+- **Geist Fonts** - Consistent typography via CSS variables
 
 **Calculation Engine:**
 - N/A (user management feature, not calculation-based)
@@ -180,23 +200,37 @@ Implement a comprehensive user management interface that allows administrators t
 
 **Performance:**
 - Fast user list loading (< 500ms for typical user counts)
+- Server Components for initial data fetching (reduced client-side JavaScript)
 - Efficient user lookup and updates
-- Optimistic UI updates where appropriate
+- Optimistic UI updates where appropriate (Client Component)
 - Pagination support for large user lists (future consideration)
+- Next.js optimizations (automatic code splitting, font optimization)
 
 **Integration Points:**
-- **API changes needed:**
-  - GET `/api/users` - List all users (admin only)
-  - PUT `/api/users/:id` - Update user (admin only)
-- **Middleware changes needed:**
-  - Admin role verification middleware
-  - User update validation middleware
-  - Safety check for last administrator
+- **API routes (Next.js App Router):**
+  - `app/api/users/route.ts` - GET handler to list all users (admin only)
+  - `app/api/users/[id]/route.ts` - PUT handler to update user (admin only)
+- **Middleware/validation:**
+  - Admin role verification in API route handlers
+  - User update validation in API route handlers
+  - Safety check for last administrator in update handler
 - **Frontend integration:**
-  - User Management page component
-  - User table with inline editing
-  - Role-based route protection
-  - Error handling and user feedback
+  - `app/users/page.tsx` - User Management page (Server Component)
+  - Client Component for interactive user table with inline editing
+  - React Aria Components for accessible table and form controls
+  - Role-based route protection (server-side check in page component)
+  - Error handling and user feedback with Tailwind CSS styling
+- **File structure:**
+  ```
+  app/
+  ├── users/
+  │   └── page.tsx          # User Management page
+  └── api/
+      └── users/
+          ├── route.ts       # GET /api/users
+          └── [id]/
+              └── route.ts   # PUT /api/users/[id]
+  ```
 
 ---
 
@@ -281,6 +315,11 @@ Implement a comprehensive user management interface that allows administrators t
 ---
 
 ## Additional Context
+**Architecture Reference:**
+- See `docs/architecture/architecture-overview.md` for complete tech stack and architectural patterns
+- Follows Next.js 16 App Router conventions and Server Component patterns
+- Aligns with project design principles (modularity, type safety, performance)
+
 **Related Features:**
 - User Authentication System (prerequisite - users must exist to be managed)
 - Role-Based Access Control (enabled by user management)
