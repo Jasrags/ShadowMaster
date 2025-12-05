@@ -1,0 +1,386 @@
+"use client";
+
+/**
+ * RulesetContext
+ *
+ * React context that provides the merged ruleset to the UI.
+ * Handles loading, caching, and provides convenient hooks for
+ * accessing ruleset data during character creation.
+ */
+
+import React, {
+  createContext,
+  useContext,
+  useState,
+  useEffect,
+  useCallback,
+  useMemo,
+} from "react";
+import type {
+  EditionCode,
+  MergedRuleset,
+  CreationMethod,
+  ID,
+} from "../types";
+import type {
+  MetatypeData,
+  SkillData,
+  SkillGroupData,
+  QualityData,
+  PriorityTableData,
+  MagicPathData,
+  LifestyleData,
+} from "./loader";
+
+// =============================================================================
+// TYPES
+// =============================================================================
+
+/**
+ * State of the ruleset context
+ */
+export interface RulesetContextState {
+  /** Current edition code */
+  editionCode: EditionCode | null;
+
+  /** The merged ruleset (null if not loaded) */
+  ruleset: MergedRuleset | null;
+
+  /** Available creation methods for this edition */
+  creationMethods: CreationMethod[];
+
+  /** Currently selected creation method */
+  currentCreationMethod: CreationMethod | null;
+
+  /** Loading state */
+  loading: boolean;
+
+  /** Error message if loading failed */
+  error: string | null;
+
+  /** Whether the ruleset is ready to use */
+  ready: boolean;
+}
+
+/**
+ * Actions available in the context
+ */
+export interface RulesetContextActions {
+  /** Load a ruleset for an edition */
+  loadRuleset: (editionCode: EditionCode, bookIds?: ID[]) => Promise<void>;
+
+  /** Select a creation method */
+  selectCreationMethod: (methodId: ID) => void;
+
+  /** Clear the loaded ruleset */
+  clearRuleset: () => void;
+
+  /** Refresh the current ruleset */
+  refresh: () => Promise<void>;
+}
+
+/**
+ * Extracted data from the ruleset for convenience
+ */
+export interface RulesetData {
+  metatypes: MetatypeData[];
+  skills: { activeSkills: SkillData[]; skillGroups: SkillGroupData[] };
+  qualities: { positive: QualityData[]; negative: QualityData[] };
+  priorityTable: PriorityTableData | null;
+  magicPaths: MagicPathData[];
+  lifestyles: LifestyleData[];
+}
+
+/**
+ * Full context value
+ */
+export interface RulesetContextValue extends RulesetContextState, RulesetContextActions {
+  /** Pre-extracted ruleset data */
+  data: RulesetData;
+}
+
+// =============================================================================
+// CONTEXT
+// =============================================================================
+
+const defaultData: RulesetData = {
+  metatypes: [],
+  skills: { activeSkills: [], skillGroups: [] },
+  qualities: { positive: [], negative: [] },
+  priorityTable: null,
+  magicPaths: [],
+  lifestyles: [],
+};
+
+const defaultState: RulesetContextState = {
+  editionCode: null,
+  ruleset: null,
+  creationMethods: [],
+  currentCreationMethod: null,
+  loading: false,
+  error: null,
+  ready: false,
+};
+
+const RulesetContext = createContext<RulesetContextValue | null>(null);
+
+// =============================================================================
+// PROVIDER
+// =============================================================================
+
+export interface RulesetProviderProps {
+  children: React.ReactNode;
+
+  /** Initial edition to load (optional) */
+  initialEdition?: EditionCode;
+
+  /** Initial book IDs to include (optional) */
+  initialBookIds?: ID[];
+}
+
+export function RulesetProvider({
+  children,
+  initialEdition,
+  initialBookIds,
+}: RulesetProviderProps) {
+  const [state, setState] = useState<RulesetContextState>(defaultState);
+  const [data, setData] = useState<RulesetData>(defaultData);
+
+  // Load ruleset action
+  const loadRuleset = useCallback(
+    async (editionCode: EditionCode, bookIds?: ID[]) => {
+      setState((prev) => ({
+        ...prev,
+        loading: true,
+        error: null,
+        ready: false,
+      }));
+
+      try {
+        // Dynamic import to avoid SSR issues
+        const { loadAndMergeRuleset } = await import("./merge");
+        const {
+          extractMetatypes,
+          extractSkills,
+          extractQualities,
+          extractPriorityTable,
+          extractMagicPaths,
+          extractLifestyles,
+          loadRuleset: loadRulesetFromLoader,
+        } = await import("./loader");
+
+        // Load and merge
+        const result = await loadAndMergeRuleset(editionCode, bookIds);
+
+        if (!result.success || !result.ruleset) {
+          throw new Error(result.error || "Failed to load ruleset");
+        }
+
+        // Also load the raw ruleset to get creation methods
+        const loadResult = await loadRulesetFromLoader({
+          editionCode,
+          bookIds,
+        });
+
+        const creationMethods = loadResult.ruleset?.creationMethods || [];
+        const defaultMethod = creationMethods[0] || null;
+
+        // Extract data for convenience
+        const loadedRuleset = loadResult.ruleset;
+        const extractedData: RulesetData = loadedRuleset
+          ? {
+              metatypes: extractMetatypes(loadedRuleset),
+              skills: extractSkills(loadedRuleset),
+              qualities: extractQualities(loadedRuleset),
+              priorityTable: extractPriorityTable(loadedRuleset),
+              magicPaths: extractMagicPaths(loadedRuleset),
+              lifestyles: extractLifestyles(loadedRuleset),
+            }
+          : defaultData;
+
+        setState({
+          editionCode,
+          ruleset: result.ruleset,
+          creationMethods,
+          currentCreationMethod: defaultMethod,
+          loading: false,
+          error: null,
+          ready: true,
+        });
+
+        setData(extractedData);
+      } catch (error) {
+        setState((prev) => ({
+          ...prev,
+          loading: false,
+          error: error instanceof Error ? error.message : "Unknown error",
+          ready: false,
+        }));
+      }
+    },
+    []
+  );
+
+  // Select creation method action
+  const selectCreationMethod = useCallback(
+    (methodId: ID) => {
+      const method = state.creationMethods.find((m) => m.id === methodId);
+      if (method) {
+        setState((prev) => ({
+          ...prev,
+          currentCreationMethod: method,
+        }));
+      }
+    },
+    [state.creationMethods]
+  );
+
+  // Clear ruleset action
+  const clearRuleset = useCallback(() => {
+    setState(defaultState);
+    setData(defaultData);
+  }, []);
+
+  // Refresh action
+  const refresh = useCallback(async () => {
+    if (state.editionCode) {
+      await loadRuleset(state.editionCode);
+    }
+  }, [state.editionCode, loadRuleset]);
+
+  // Load initial edition if provided
+  useEffect(() => {
+    if (initialEdition && !state.ruleset && !state.loading) {
+      loadRuleset(initialEdition, initialBookIds);
+    }
+  }, [initialEdition, initialBookIds, state.ruleset, state.loading, loadRuleset]);
+
+  // Memoize context value
+  const contextValue = useMemo<RulesetContextValue>(
+    () => ({
+      ...state,
+      data,
+      loadRuleset,
+      selectCreationMethod,
+      clearRuleset,
+      refresh,
+    }),
+    [state, data, loadRuleset, selectCreationMethod, clearRuleset, refresh]
+  );
+
+  return (
+    <RulesetContext.Provider value={contextValue}>
+      {children}
+    </RulesetContext.Provider>
+  );
+}
+
+// =============================================================================
+// HOOKS
+// =============================================================================
+
+/**
+ * Hook to access the full ruleset context
+ */
+export function useRuleset(): RulesetContextValue {
+  const context = useContext(RulesetContext);
+
+  if (!context) {
+    throw new Error("useRuleset must be used within a RulesetProvider");
+  }
+
+  return context;
+}
+
+/**
+ * Hook to get just the merged ruleset
+ */
+export function useMergedRuleset(): MergedRuleset | null {
+  const { ruleset } = useRuleset();
+  return ruleset;
+}
+
+/**
+ * Hook to get the current creation method
+ */
+export function useCreationMethod(): CreationMethod | null {
+  const { currentCreationMethod } = useRuleset();
+  return currentCreationMethod;
+}
+
+/**
+ * Hook to get available creation methods
+ */
+export function useCreationMethods(): CreationMethod[] {
+  const { creationMethods } = useRuleset();
+  return creationMethods;
+}
+
+/**
+ * Hook to get metatypes from the ruleset
+ */
+export function useMetatypes(): MetatypeData[] {
+  const { data } = useRuleset();
+  return data.metatypes;
+}
+
+/**
+ * Hook to get skills from the ruleset
+ */
+export function useSkills(): { activeSkills: SkillData[]; skillGroups: SkillGroupData[] } {
+  const { data } = useRuleset();
+  return data.skills;
+}
+
+/**
+ * Hook to get qualities from the ruleset
+ */
+export function useQualities(): { positive: QualityData[]; negative: QualityData[] } {
+  const { data } = useRuleset();
+  return data.qualities;
+}
+
+/**
+ * Hook to get the priority table
+ */
+export function usePriorityTable(): PriorityTableData | null {
+  const { data } = useRuleset();
+  return data.priorityTable;
+}
+
+/**
+ * Hook to get magic paths
+ */
+export function useMagicPaths(): MagicPathData[] {
+  const { data } = useRuleset();
+  return data.magicPaths;
+}
+
+/**
+ * Hook to get lifestyles
+ */
+export function useLifestyles(): LifestyleData[] {
+  const { data } = useRuleset();
+  return data.lifestyles;
+}
+
+/**
+ * Hook to check if ruleset is ready
+ */
+export function useRulesetReady(): boolean {
+  const { ready } = useRuleset();
+  return ready;
+}
+
+/**
+ * Hook to get loading and error state
+ */
+export function useRulesetStatus(): {
+  loading: boolean;
+  error: string | null;
+  ready: boolean;
+} {
+  const { loading, error, ready } = useRuleset();
+  return { loading, error, ready };
+}
+

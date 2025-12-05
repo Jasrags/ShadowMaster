@@ -50,3 +50,42 @@ export {
 
 export type { MergeResult } from "./merge";
 
+// Validation Engine
+export {
+  validateConstraint,
+  validateAllConstraints,
+  validateCharacter,
+  validateStep,
+  validateBudgetsComplete,
+  calculateRemainingBudget,
+  getMetatypeAttributeLimits,
+  isAttributeWithinLimits,
+} from "./validation";
+
+export type { ValidationResult, ValidationContext } from "./validation";
+
+// Ruleset Context (React)
+export {
+  RulesetProvider,
+  useRuleset,
+  useMergedRuleset,
+  useCreationMethod,
+  useCreationMethods,
+  useMetatypes,
+  useSkills,
+  useQualities,
+  usePriorityTable,
+  useMagicPaths,
+  useLifestyles,
+  useRulesetReady,
+  useRulesetStatus,
+} from "./RulesetContext";
+
+export type {
+  RulesetContextState,
+  RulesetContextActions,
+  RulesetContextValue,
+  RulesetData,
+  RulesetProviderProps,
+} from "./RulesetContext";
+
