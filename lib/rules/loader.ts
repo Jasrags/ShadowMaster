@@ -1,0 +1,428 @@
+/**
+ * Ruleset Loader
+ *
+ * Loads edition definitions and book payloads, preparing them
+ * for the merge engine to produce a final MergedRuleset.
+ */
+
+import type {
+  ID,
+  Edition,
+  EditionCode,
+  Book,
+  BookPayload,
+  RuleModuleType,
+  CreationMethod,
+  MergedRuleset,
+} from "../types";
+import {
+  getEdition,
+  getAllEditions,
+  getBookPayload,
+  getAllBookPayloads,
+  getCreationMethod,
+  getAllCreationMethods,
+} from "../storage/editions";
+
+// =============================================================================
+// TYPES
+// =============================================================================
+
+/**
+ * Configuration for loading a ruleset
+ */
+export interface RulesetLoadConfig {
+  editionCode: EditionCode;
+
+  /**
+   * Specific book IDs to include. If empty/undefined, all books are loaded.
+   */
+  bookIds?: ID[];
+
+  /**
+   * Whether to include the core rulebook (always true by default)
+   */
+  includeCore?: boolean;
+}
+
+/**
+ * A loaded ruleset before merging - contains all the raw data
+ * from the edition and books, organized for the merge engine.
+ */
+export interface LoadedRuleset {
+  edition: Edition;
+  books: LoadedBook[];
+  creationMethods: CreationMethod[];
+}
+
+/**
+ * A loaded book with its payload parsed and ready
+ */
+export interface LoadedBook {
+  id: ID;
+  title: string;
+  isCore: boolean;
+  payload: BookPayload;
+  loadOrder: number;
+}
+
+/**
+ * Result of loading a ruleset
+ */
+export interface LoadResult {
+  success: boolean;
+  ruleset?: LoadedRuleset;
+  error?: string;
+}
+
+// =============================================================================
+// LOADER FUNCTIONS
+// =============================================================================
+
+/**
+ * Load a complete ruleset for an edition with specified books.
+ *
+ * This is the main entry point for loading ruleset data.
+ * The result can be passed to the merge engine.
+ */
+export async function loadRuleset(config: RulesetLoadConfig): Promise<LoadResult> {
+  const { editionCode, bookIds, includeCore = true } = config;
+
+  // Load the edition
+  const edition = await getEdition(editionCode);
+  if (!edition) {
+    return {
+      success: false,
+      error: `Edition '${editionCode}' not found`,
+    };
+  }
+
+  // Determine which books to load
+  let booksToLoad: ID[];
+  if (bookIds && bookIds.length > 0) {
+    booksToLoad = bookIds;
+    // Always include core if requested
+    if (includeCore && !booksToLoad.includes("core-rulebook")) {
+      booksToLoad = ["core-rulebook", ...booksToLoad];
+    }
+  } else {
+    // Load all books defined in the edition
+    booksToLoad = edition.bookIds;
+  }
+
+  // Load book payloads
+  const loadedBooks: LoadedBook[] = [];
+  for (let i = 0; i < booksToLoad.length; i++) {
+    const bookId = booksToLoad[i];
+    const payload = await getBookPayload(editionCode, bookId);
+
+    if (!payload) {
+      // Core book is required
+      if (bookId === "core-rulebook" || bookId === edition.bookIds[0]) {
+        return {
+          success: false,
+          error: `Core rulebook for edition '${editionCode}' not found`,
+        };
+      }
+      // Other books are optional - log warning but continue
+      console.warn(`Book '${bookId}' not found for edition '${editionCode}'`);
+      continue;
+    }
+
+    loadedBooks.push({
+      id: bookId,
+      title: payload.meta.title,
+      isCore: payload.meta.category === "core",
+      payload,
+      loadOrder: i,
+    });
+  }
+
+  // Ensure we have at least the core book
+  const hasCore = loadedBooks.some((b) => b.isCore);
+  if (!hasCore) {
+    return {
+      success: false,
+      error: `No core rulebook found for edition '${editionCode}'`,
+    };
+  }
+
+  // Load creation methods
+  const creationMethods = await getAllCreationMethods(editionCode);
+
+  return {
+    success: true,
+    ruleset: {
+      edition,
+      books: loadedBooks,
+      creationMethods,
+    },
+  };
+}
+
+/**
+ * Load just the edition metadata
+ */
+export async function loadEdition(editionCode: EditionCode): Promise<Edition | null> {
+  return getEdition(editionCode);
+}
+
+/**
+ * Load all available editions
+ */
+export async function loadAllEditions(): Promise<Edition[]> {
+  return getAllEditions();
+}
+
+/**
+ * Load a single book's payload
+ */
+export async function loadBook(
+  editionCode: EditionCode,
+  bookId: ID
+): Promise<BookPayload | null> {
+  return getBookPayload(editionCode, bookId);
+}
+
+/**
+ * Load all book payloads for an edition
+ */
+export async function loadAllBooks(editionCode: EditionCode): Promise<BookPayload[]> {
+  return getAllBookPayloads(editionCode);
+}
+
+/**
+ * Load a specific creation method
+ */
+export async function loadCreationMethod(
+  editionCode: EditionCode,
+  methodId: ID
+): Promise<CreationMethod | null> {
+  return getCreationMethod(editionCode, methodId);
+}
+
+/**
+ * Load all creation methods for an edition
+ */
+export async function loadAllCreationMethods(
+  editionCode: EditionCode
+): Promise<CreationMethod[]> {
+  return getAllCreationMethods(editionCode);
+}
+
+// =============================================================================
+// MODULE EXTRACTION HELPERS
+// =============================================================================
+
+/**
+ * Extract a specific module type from a loaded ruleset
+ */
+export function extractModule<T = Record<string, unknown>>(
+  ruleset: LoadedRuleset,
+  moduleType: RuleModuleType
+): T | null {
+  // Find the first book that has this module (core book first due to load order)
+  for (const book of ruleset.books) {
+    const moduleEntry = book.payload.modules?.[moduleType];
+    if (moduleEntry?.payload) {
+      return moduleEntry.payload as T;
+    }
+  }
+  return null;
+}
+
+/**
+ * Extract all instances of a module type from all books
+ * (useful for seeing what each book contributes before merging)
+ */
+export function extractAllModules<T = Record<string, unknown>>(
+  ruleset: LoadedRuleset,
+  moduleType: RuleModuleType
+): Array<{ bookId: ID; payload: T }> {
+  const results: Array<{ bookId: ID; payload: T }> = [];
+
+  for (const book of ruleset.books) {
+    const moduleEntry = book.payload.modules?.[moduleType];
+    if (moduleEntry?.payload) {
+      results.push({
+        bookId: book.id,
+        payload: moduleEntry.payload as T,
+      });
+    }
+  }
+
+  return results;
+}
+
+/**
+ * Get the list of module types present in a loaded ruleset
+ */
+export function getAvailableModuleTypes(ruleset: LoadedRuleset): RuleModuleType[] {
+  const types = new Set<RuleModuleType>();
+
+  for (const book of ruleset.books) {
+    if (book.payload.modules) {
+      for (const moduleType of Object.keys(book.payload.modules)) {
+        types.add(moduleType as RuleModuleType);
+      }
+    }
+  }
+
+  return Array.from(types);
+}
+
+// =============================================================================
+// CONVENIENCE LOADERS FOR SPECIFIC DATA
+// =============================================================================
+
+/**
+ * Metatype data structure from the metatypes module
+ */
+export interface MetatypeData {
+  id: string;
+  name: string;
+  baseMetatype: string | null;
+  description?: string;
+  attributes: Record<string, { min: number; max: number } | { base: number }>;
+  racialTraits: string[];
+  priorityAvailability?: Record<string, { specialAttributePoints: number }>;
+}
+
+/**
+ * Load metatypes from a ruleset
+ */
+export function extractMetatypes(ruleset: LoadedRuleset): MetatypeData[] {
+  const module = extractModule<{ metatypes: MetatypeData[] }>(ruleset, "metatypes");
+  return module?.metatypes || [];
+}
+
+/**
+ * Skill data structure
+ */
+export interface SkillData {
+  id: string;
+  name: string;
+  linkedAttribute: string;
+  group: string | null;
+  canDefault: boolean;
+  category: string;
+  requiresMagic?: boolean;
+  requiresResonance?: boolean;
+}
+
+/**
+ * Skill group data structure
+ */
+export interface SkillGroupData {
+  id: string;
+  name: string;
+  skills: string[];
+}
+
+/**
+ * Load skills from a ruleset
+ */
+export function extractSkills(ruleset: LoadedRuleset): {
+  activeSkills: SkillData[];
+  skillGroups: SkillGroupData[];
+} {
+  const module = extractModule<{
+    activeSkills: SkillData[];
+    skillGroups: SkillGroupData[];
+  }>(ruleset, "skills");
+
+  return {
+    activeSkills: module?.activeSkills || [],
+    skillGroups: module?.skillGroups || [],
+  };
+}
+
+/**
+ * Quality data structure
+ */
+export interface QualityData {
+  id: string;
+  name: string;
+  karmaCost?: number;
+  karmaBonus?: number;
+  summary: string;
+  perRating?: boolean;
+  maxRating?: number;
+  requiresMagic?: boolean;
+}
+
+/**
+ * Load qualities from a ruleset
+ */
+export function extractQualities(ruleset: LoadedRuleset): {
+  positive: QualityData[];
+  negative: QualityData[];
+} {
+  const module = extractModule<{
+    positive: QualityData[];
+    negative: QualityData[];
+  }>(ruleset, "qualities");
+
+  return {
+    positive: module?.positive || [],
+    negative: module?.negative || [],
+  };
+}
+
+/**
+ * Priority table data structure
+ */
+export interface PriorityTableData {
+  levels: string[];
+  categories: Array<{ id: string; name: string; description?: string }>;
+  table: Record<string, Record<string, unknown>>;
+}
+
+/**
+ * Load priority table from a ruleset
+ */
+export function extractPriorityTable(ruleset: LoadedRuleset): PriorityTableData | null {
+  return extractModule<PriorityTableData>(ruleset, "priorities");
+}
+
+/**
+ * Magic path data structure
+ */
+export interface MagicPathData {
+  id: string;
+  name: string;
+  description?: string;
+  hasMagic: boolean;
+  hasResonance: boolean;
+  canAstralProject?: boolean;
+  canCastSpells?: boolean;
+  canSummonSpirits?: boolean;
+  hasAdeptPowers?: boolean;
+}
+
+/**
+ * Load magic paths from a ruleset
+ */
+export function extractMagicPaths(ruleset: LoadedRuleset): MagicPathData[] {
+  const module = extractModule<{ paths: MagicPathData[] }>(ruleset, "magic");
+  return module?.paths || [];
+}
+
+/**
+ * Lifestyle data structure
+ */
+export interface LifestyleData {
+  id: string;
+  name: string;
+  monthlyCost: number;
+  startingNuyen: string;
+}
+
+/**
+ * Load lifestyles from a ruleset
+ */
+export function extractLifestyles(ruleset: LoadedRuleset): LifestyleData[] {
+  const module = extractModule<{ lifestyles: LifestyleData[] }>(ruleset, "lifestyle");
+  return module?.lifestyles || [];
+}
+
