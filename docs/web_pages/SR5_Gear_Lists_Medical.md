@@ -1,0 +1,111 @@
+| 5th Edition Lists |
+| --- |
+| Gear // Magic // Hacking // Skills // Qualities // Packs // Creatures |
+
+| Armor/Clothing // Cyberware // Magical // Vehicles/Drones // Vehicle Mods // Weapons // Electronics // Security // Medical // Others |
+
+## Health Gear
+
+| TYPE | NAME | AVAIL | COST | SOURCE |
+| --- | --- | --- | --- | --- |
+| **** | **** | 3 | 300¥ | Core |
+| **** | **** | 3 | 10¥ | Core |
+| **** | **** | Rating | Rating x 250¥ | Core |
+| **** | **** | - | 100¥ | Core |
+| **DocWagon Contract** | **Basic** | - | 5,000¥ per year | Core |
+| **DocWagon Contract** | **Gold** | - | 25,000¥ per year | Core |
+| **DocWagon Contract** | **Platinum** | - | 50,000¥ per year | Core |
+| **DocWagon Contract** | **Super-platinum** | - | 100,000¥ per year | Core |
+| **** | **** | Rating | Rating x 50¥ | Core |
+| **** | **** | 6 | 200¥ | Core |
+| **** | **** | Rating x 2 | Rating x 25¥ | Core |
+| **** | **** | Rating x 2 | Rating x 20¥ | Core |
+| **** | **** | 6 | 500¥ | Core |
+
+## Drugs
+
+| Drug | Vector | Speed | Duration | Addiction type | Addiction rating | Addiction threshold | Effects | Crash | Availability | Cost | Source |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+|  | Ingestion | Immediate | 10*2d6 minutes | Physiological | 1 | 1 | +3 dice to resist TLE-x Seizures | N/A | 4 | 80¥ | SR5:CF |
+|  | Ingestion | Immediate | 20*2d6 minutes | Psychological | 5 | 2 | Disorientation, Hallucinations | 2S, 4S for every dose past the first | 4 | 25¥ | SR5:CF |
+|  | Ingestion | 3d6 Minutes | Essence+1d6 Hours, Maximum 12 | Psychological | 3 | 2 | Critter Power: Animal Control | Fear of animals for time equal to the drug's duration. Treat all animals as having the Fear power. | 6R | 1500¥ | SR5:CF |
+|  | Ingestion | 2 Combat Turns | 10*1d6 Minutes | Psychological | 5 | 2 | +2 Dice to resist manipulation spells | N/A | 14F | 750¥ | SR5:CF |
+|  | Inhalation | 1 minute | 9-Body Hours | Both | 9 | 3 | +2 Reaction, +1 Intuition | 6S | 5F | 30¥ | SR5:CF |
+|  | Ingestion | Immediate | 10*1d6 minutes | Physiological |  | 2 | +1 Perception | Addiction(Mild), unless you have a source of bonus dice to addiction tests. Addiction never progresses past mild. | 4 | 5¥ | SR5:CF |
+|  | Inhalation, Injection | 1 Combat Turn | (6-BOD) hours | Both | 5 | 3 | –1 Reaction, +1 to all thresholds, –1 to all Limits, High Pain Tolerance 3 | N/A | 3F | 15¥ | Core |
+|  | Ingestion | 1d6 Minutes | 12-Body Hours | Both | 9 | 3 | +2 Intuition, +3 Logic, +2 Mental Limit, Analytical Mind Quality | -2 to limits, -2 Logic, 5S. GM rolls Intuition+Edge, if drug is used before 8-Hits hours, they take 1d6 points of Intuition Damage. | 14F | 800¥ | SR5:CF |
+|  | Ingestion, Inhalation | 10 Minutes | (12-BOD) hours | Psychological | 4 | 3 | +1 Reaction, +1D6 Initiative Dice | 6 Stun Damage | 2R | 10¥ | Core |
+|  | Injection | Immediate | N/A | N/A | - | - | Allows a dying person to make an immediate stabilization test, using Body instead of First Aid or Medicine | N/A | 3 | 800¥ | SR5:B&B |
+|  | Injection | 1 Combat Turn | 12-Body Hours | Both | 9 | 3 | -3 Reaction, +1 to all Thresholds, Pain Resistance 6, Astral Beacon | N/A | 6F | 300¥ | SR5:CF |
+|  | Rapid Infuser | Immediate | (30-Body) minutes | N/A | - | - | Subject only receives an additional box of progressive or overflow damage every (Body*4) combat turns. | Subject regains consciousness after (Body) combat turns. -4 dice pool modifier to all tests, reduced by 1 for every (Body) combat turns until reduced to 0. | 8R | 1000¥ | SR5:B&B |
+|  | Ingestion, Inhalation | Immediate | (6-BOD) hours | Physiological | - | - | +1 Willpower, +1 Mental Limit, -1 Physical Limit, awakened characters astrally perceive | -1 to all dicepool modifiers, -1 all limits | 8F | 400¥ | Core |
+|  | Contact | Immediate | 10*1d6 Minutes | Both | 3 | 2 | Cancels Berserk, -1 Dice to Physical Actions | N/A | 8 | 45¥ | SR5:CF |
+|  | Ingestion | 1d6 Minutes | 8-Body Hours | Psychological | 5 | 2 | +1 Charisma, -1 Logic, +1 Perception, -1 Willpower | -2 Mental Limit for Body Hours | 3R | 20¥ | SR5:CF |
+|  | Ingestion | 1 Combat Turn | 12-Body Hours | Psychological | - | - | Immunity to Laes, or similar drugs. +3 Dice to resist Alter Memory Spells | N/A | 10F | 400¥ | SR5:CF |
+|  | Ingestion | 1 Hour | 15-Body Hours | Physiological | 2 | 1 | +1 Body when resisting Fatigue Damage, "Longevity" (Not Mechanical) | N/A | 2 | 15¥ | SR5:CF |
+|  | Ingestion | 1d6 Minutes | 9-Body Hours, Minimum 3 | Psychological | 6 | 3 | +1 Charisma, -1 Logic, +1 Perception, -1 Willpower | -2 Mental Limit for Body Hours | 4R | 45¥ | SR5:CF |
+|  | Inhalation | Immediate | 12-Body Hours | Both | 5 | 3 | Immunity to Fear | Recklessness, Logic+Willpower (3) Test to avoid doing something they wouldn't normally do at GM's discretion. | 8R | 60¥ | SR5:CF |
+|  | Ingestion | Immediate | 10*1d6 Minutes | Both | 4 | 2 | +1 Drain Resist Dice | -1 Magic for twice the duration | 12F | 500¥ | SR5:CF |
+|  | Rapid Infuser | (Body) combat turns | (Body) combat turns | N/A | - | - | Subject rolls Body*2d6, each hit removes one box of accumulated Progressive or Overflow damage. Damage cannot be reduced below the base damage that caused Progressive or Overflow. | Subject continues to accumulate damage during and after the infusion, until stabilization occurs. | 4 | 2000¥ | SR5:B&B |
+|  | Ingestion | 2d6 Minutes | 12-Body Hours | Both | 4 | 3 | -1 Logic, +1 Willpower, Disorientation for Humans and Elves unless they have an implant or magic giving them bonus dice on Toxin Resistance Tests | 9S, resisted by Body | 2R | 10¥ | SR5:CF |
+|  | Ingestion | 16 Combat Rounds | Essence+1d6 Hours, Maximum 12 | Both | 8 | 3 | Regeneration | Lose 0.1 Essence for every 20 boxes of damage sustained, 2d6 Physical if the subject has any cyberware or bioware. | 14R | 2500¥ | SR5:CF |
+|  | Inhalation | Immediate | 10*1d6 minutes | Both | 8 | 3 | +1 Reaction, +1 Physical Limit, +2d6 Initiative Dice | Disorientation | 2R | 75¥ | Core |
+|  | Injection | Immediate | 5*1d6 Minutes | Both | 11 | 3 | +3 Body, +3 Agility, +4 Strength, +1 Willpower, +5 Initiative, +High Pain Tolerance 3, Berserk | 18S, if you go Berserk, make an Edge (1) Test, failure causes permanent Berserk. | 16F | 900¥ | SR5:CF |
+|  | Inhalation | Immediate | 10*1d6 minutes | Physiological | 9 | 3 | +1 Body, +1 Agility, +2 Strength, +1 Willpower, +2 Physical limit, +2D6 Initiative Dice, High Pain Tolerance 3 | –1 Reaction, –1 Willpower, and –2 to all Limits, 6 Stun Damage | 4R | 100¥ | Core |
+|  | Ingestion, Inhalation, Injection | 1 Combat Turn | 20*1d6 Minutes | N/A | - | - | 12S, 12-Body Hours of Memories erased. | N/A | 12F | 750¥ | SR5:CF |
+|  | Ingestion | 1 Combat Turn | 5*1d6 Minutes | N/A | - | - | 12S, 120-Body(minimum 100) minutes of memories erased | N/A | 10F | 400¥ | SR5:CF |
+|  | Inhalation | 2d6 Minutes | Essence+1d6 Hours, Maximum 12 | Psychological | 6 | 3 | Critter Power: Concealment and Confusion | Perception and Willpower reduced to 1 for an equivalent duration | 12F | 1800¥ | SR5:CF |
+|  | Injection | 10 Minutes | 4 days | Psychological | 2 | 1 | Alleviates the need for sleep. A second dose extends the period for 1d6/2 days. | Dose 1: Pass out for 8d6 hours. Dose 2: 10 Stun, as above. | - | 50¥ | Core |
+|  | Ingestion | 1 minute | 14-Body Hours, minimum 2 | Both | - | - | -2 to Memory Tests to recall what happened while using the drug, -2 to all memory tests while under the drug's effects. Max -2. | N/A | 6R | 100¥ | SR5:CF |
+|  | Injection | Immediate | 24 hours, or (Nano-hive Rating) Days | N/A | - | - | Acts as a biomonitor, transmits data to a subscribed commlink or medkit | N/A | 5 | 500¥ | SR5:B&B |
+|  | Injection | Immediate | 10*1d6 minutes | N/A | - | - | Double the subject's Reaction for the purposes of determining paralysis. Halve the duration of paralysis. | N/A | 2 | 100¥ | SR5:B&B |
+|  | Contact | Immediate | 20*1d6 Minutes | Pyschological | 1 | 2 | Low-Light Vision, Glare increased by one category. | N/A | 3R | 25¥ | SR5:CF |
+|  | Inhalation | 1 Combat Turn | 10*1d6 minutes | Both | 9 | 3 | +2 Strength, +2 Willpower, +2 Perception, +2 Physical limit, High Pain Tolerance 6 | -2 to all limits, 9 Stun | 2R | 50¥ | Core |
+|  | Contact | Immediate | 1d6 hours | Both | 3 | 1 | High Pain Tolerance 3 Special: Two doses needed for Orks and Trolls | N/A | 3 | 15¥ | SR5:CF |
+|  | Inhalation, Injection | 1 Combat Turn | (10-Body) hours | Both | 7 | 2 | +1 Reaction, +1 Charisma, +1 Perception, +1 Social Limit, High Pain Tolerance 1 | Charisma and Willpower reduced to 1, -1 to all limits | 2R | 10¥ | Core |
+|  | Injection | Immediate | 10*1d6 minutes | N/A | - | - | Double the subject's Willpower for the purpose of determining incapacitation from Nauseau. Halve the duration of Nausea. | N/A | 2 | 50¥ | SR5:B&B |
+|  | Inhalation | Immediate | 3d6 Minutes | Psychological | 6 | 3 | Paralysis, Divination Metamagic | Disoriented for time equal to the duration unless the subject has the Augury and Sortilige Ritual. | 6F | 1250¥ | SR5:CF |
+|  | Inhalation | 1 Combat Turn | 10-Body Hours | Both | 5 | 3 | +1 Reaction, +1 to all Logic-linked Skills | Long term use can cause the user to get Poor-Self Control: Braggart or Paranoia | 10F | 800¥ | SR5:CF |
+|  | Transfusion | 1d6 Hours | 1 week | Physiological | 2 | 1 | +1 Agility, double the time to hold breath. | -1 Physical Limit, -1 Body for Body Days, 15P if a second dose is attempted | 12R | 2000¥ | SR5:CF |
+|  | Inhalation | Immediate | 1d6 Minutes | Both | 10 | 4 | +1 Charisma, +1 Perception, High Pain Tolerance 1, Memory Loss of the past 1d6 minutes after taking the drug. | N/A | 8F | 800¥ | SR5:CF |
+|  | Ingestion | 10 Minutes | (12-BOD) hours | Psychological | 6 | 2 | +1 Intuition, +1 Logic, +1 Mental limit, Sustained Spell dicepool modifier reduced to -1 (from -2) | N/A | - | 200¥ | Core |
+|  | DNI | Immediate | 48 Hours | Psychological | 6 | 3 | No negative penalties from negative mental qualities up to Severe, -1 Reaction. | If the user gets addicted, and stops using the chips, the negative quality goes up one step. | 6F | 500¥ | SR5:CF |
+|  | DNI | Immediate | 48 Hours | Psychological | 3 | 2 | No negative penalties from negative mental qualities up to Moderate, -1 Reaction. | If the user gets addicted, and stops using the chips, the negative quality goes up one step. | 4R | 350¥ | SR5:CF |
+|  | Ingestion | 1 Minute | 15-Body minutes | Both | 4 | 3 | Get High | N/A | 4F | 25¥ | SR5:CF |
+|  | Injection | 2 Combat Turns | 10-Body Hours | N/A | - | - | Same as Slab, -8 Dice to assense subject's aura | -4 Reaction for half the duration | 8R | 250¥ | SR5:CF |
+|  | Ingestion | 1 Hour | 18-Body Hours | Both | 5 | 3 | +1 Charisma, -2 Reaction, +2 Perception, +1 Willpower, Disorentation, Does not interact with Psyche | Charisma and Willpower reduced to 1 for 18-Body Hours | 4R | 50¥ | SR5:CF |
+|  | Injection, Contact | Immediate | 10*1d6 Minutes | Both | 5 | 3 | +1 Strength, -1 Willpower, Regular use(3x per day for 3-6 weeks) reduces Karma Cost to improve Strength by 1. | N/A | 6F | 60¥ | SR5:CF |
+|  | Ingestion | 30 Minutes | Essence+1d6 Hours, maximum 12 hours | Physical | 6 | 3 | Critter Power: Immunity against Diseases and Toxins | 2P, -4 dice for all resist disease and toxin tests for an equivalent duration | 10R | 1700¥ | SR5:CF |
+|  | Inhalation | Immediate | Essence+1d6 Hours, maximum 12 hours | Psychological | 7 | 3 | Forces Astral Projection. If you can already Project, add duration to your normal limit. If you have a spirit guide or initiate, you can access the metaplanes. | 10S, user dies if they don't return to their bodies before the duration ends. | 6R | 1000¥ | SR5:CF |
+|  | Injection | 2 Combat Turns | 10-Body Hours | N/A | - | - | Suspended Animation. Perception+Intuition(6) or Medicine+Logic(4) to determine if the subject is alive without a medkit or other medical equipment. | -4 Reaction for half the duration. | 8R | 250¥ | SR5:CF |
+|  | Ingestion, Inhalation | 1 Minute | 10*1d6 Minutes | Both | 2 | 2 | +1 Reaction, Pain Resistance 1 | -1 Intuition for twice the duration | 1R | 10¥ | SR5:CF |
+|  | Contact | 1 Combat Turn | 10*1d6 Minutes | Both | - | - | Negates penalties to Charisma, Intuition, Reaction, and/or Willpower up to a max of 6 dice total. Applied evenly if total dice >6. | Double penalties for the remainder of their original duration. If any attribute is reduced below 1, subject is immobilized and passes out until the effect wears off. | 6F | 125¥ | SR5:CF |
+|  | Contact, Injection | 1 minute | (12 - Body) Hours, minimum 1 hour | none | - | - | 8S resisted with Body only. Unless all damage is resisted, the subject also suffers Willpower –3 and Social limit –1. Each additional application reduces the DV by 1 as the subject builds up a resistance to the drug’s effects, no matter how long it has been since the last application. | N/A | 12F | 150¥ | SR5:CF |
+|  | Inhalation | 1 Combat Turn | (6 - Body) hours, minimum 1 hour | Both | 6 | 3 | +1 Intuition, +2 to all Logic-linked skills, Paralysis | Paralysis continues for an equal duration | 10F | 1100¥ | SR5:CF |
+|  | Ingestion | 1 Combat Turn | 5 x 1d6 minutes | Both | 5 | 2 | +2 Agility and Berzerk (when wounded) | -2 to all Social Tests for Duration x 10 | 3R | 15¥ | SR5:CF |
+|  | Ingestion, Injection | 2d6 minutes | Essence +1d6 Hours, Maximum 12 hours | N/A | 4 | 1 | The user receives +2 dice on all Conjuring skill group tests and adds +2 to her effective Charisma when dealing with spirits of man. | N/A | 12F | 2350¥ | SR5:CF |
+|  | Inhalation | 5 Minutes | 10*1d6 minutes | Psychological | 3 | 1 | –2 Reaction, +1 Willpower, –1 physical action dice pool modifier | N/A | 4R | 5¥ | Core |
+|  | Ingestion, Injection | 1 hour | (20 - Body) Hours, Minimum 1 | Physiological | 1 | 3 | Allergy and Addiction reduction, promotion of cyberware adaptation, –2 to Disease Resistance Tests and Toxin Resistance Tests | N/A | 8R | 150¥ | SR5:CF |
+|  | Contact, Injection | 2 Combat Turns | Essence +1d6 Hours, Maximum 12 hours | Physiological | 2 | 3 | Causes a target to be instantly prepared for possession. While this can offer a rapid conversion for a friendly ally, it can also be used aggressively against unwilling targets. Note they still get their Intuition + Willpower Test to resist possession. | N/A | 12F | 1500¥ | SR5:CF |
+|  | Ingestion | 1 Hour | 12-Body Hours | Both | - | - | Ignore Mild to Moderate Phobias, Mild Allergy(Light), -1 Perception, Glare increased by 1 | N/A | - | -¥ | SR5:CF |
+
+## Toxins
+
+| TOXIN | VECTOR | SPEED | PENETRATION | POWER | EFFECTS | AVAIL | COST (PER DOSE) | SOURCE |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- |
+|  | Contact,Inhalation | 1 Combat Turn | 0 | 8 | Disorientation, Nausea, Stun Damage | 4R | 20¥ | Core |
+|  | Injection | Immediate | 0 | 12 | Paralysis, Truth Serum | 14F | 200¥ | Core |
+|  | Injection | Immediate | 0 | 15 | Stun Damage | 8R | 50¥ | Core |
+|  | Inhalation | 3 Combat Turns | 0 | 9 | Disorientation, Nausea | 6R | 25¥ | Core |
+|  | Contact, Inhalation | 1 Combat Turn | 0 | 15 | Disorientation, Stun Damage | 12R | 60¥ | Core |
+|  | Contact, Inhalation | 1 Combat Turn | 0 | 15 | Disorientation, Stun Damage | 13R | 60¥ | Core |
+|  | Contact, Inhalation | 1 Combat Turn | -2 | 15 | Disorientation, Stun Damage | 14R | 100¥ | Core |
+|  | Contact, Inhalation | 1 Combat Turn | 0 | 11 | Nausea, Stun Damage | - | 5¥ | Core |
+|  | Contact, Inhalation | 1 Combat Turn | -2 | 12 | Physical Damage, Disorientation, Nausea | 20F | 1,000¥ | Core |
+|  | Injection, Ingestion | 1 Combat Turn | 0 | 5 | Physical Damage, Nausea, Special: Willpower + Magic (Power) to not revert to natural shape | 11F | 200¥ | SR5:HT |
+|  | Injection | Immediate | 0 | 5 | Physical Damage,Disorientation | 10F | 150¥ | SR5:HT |
+|  | Injection | 1 minute | 0 | 10 | Physical Damage | 12F | 350¥ | SR5:HT |
+|  | Injection | 1 Combat Turn | 0 | 8 | Physical Damage, Blindness (Special) | 16F | 575¥ | SR5:HT |
+|  | Injection | Immediate | 0 | Special | Physical Damage | Power*3F | Power*100¥ | SR5:HT |
+|  | Injection | 1 hour | -2 | 12 | Physical Damage | 14F | 600¥ | SR5:HT |
+|  | Injection, Ingestion | 1 Combat Turn with Injection, 10 minutes with Ingestion | 0 | 7 | Physical Damage,Paralysis/Suffocation (Special) | 8F | 1000¥ | SR5:HT |
