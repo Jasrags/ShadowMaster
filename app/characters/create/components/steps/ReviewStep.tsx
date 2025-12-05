@@ -11,11 +11,23 @@ interface StepProps {
   onComplete: (characterId: ID) => void;
 }
 
-export function ReviewStep({ state, budgetValues }: StepProps) {
+export function ReviewStep({ state, updateState, budgetValues }: StepProps) {
   const metatypes = useMetatypes();
   const { activeSkills, skillGroups } = useSkills();
   const { positive: positiveQualities, negative: negativeQualities } = useQualities();
-  const [characterName, setCharacterName] = useState("");
+  
+  // Get character name from state or default to empty
+  const characterName = (state.selections.characterName as string) || "";
+  
+  // Update character name in state
+  const setCharacterName = (name: string) => {
+    updateState({
+      selections: {
+        ...state.selections,
+        characterName: name,
+      },
+    });
+  };
 
   // Get selected metatype data
   const selectedMetatype = useMemo(() => {

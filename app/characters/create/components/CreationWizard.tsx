@@ -98,6 +98,10 @@ export function CreationWizard({ onCancel, onComplete }: CreationWizardProps) {
 
   // Track if we have a draft
   const [hasDraft, setHasDraft] = useState(false);
+  
+  // Track saving state
+  const [isSaving, setIsSaving] = useState(false);
+  const [saveError, setSaveError] = useState<string | null>(null);
 
   // Check for existing draft on mount
   useEffect(() => {
@@ -305,6 +309,109 @@ export function CreationWizard({ onCancel, onComplete }: CreationWizardProps) {
     return values;
   }, [priorityTable, state.priorities, state.selections.metatype]);
 
+  // Save character to API
+  const saveCharacter = useCallback(async (characterName: string) => {
+    setIsSaving(true);
+    setSaveError(null);
+
+    try {
+      // Get metatype data for attribute minimums
+      const selectedMetatype = metatypes.find(
+        (m) => m.id === state.selections.metatype
+      );
+
+      // Build character attributes with metatype minimums
+      const baseAttributes: Record<string, number> = {};
+      const attrKeys = ["body", "agility", "reaction", "strength", "willpower", "logic", "intuition", "charisma"];
+      for (const attr of attrKeys) {
+        const metatypeAttr = selectedMetatype?.attributes[attr];
+        const minValue = metatypeAttr && "min" in metatypeAttr ? metatypeAttr.min : 1;
+        const allocatedValue = (state.selections.attributes as Record<string, number>)?.[attr] || 0;
+        baseAttributes[attr] = minValue + allocatedValue;
+      }
+
+      // Build character data
+      const characterData = {
+        name: characterName || "Unnamed Runner",
+        metatype: (state.selections.metatype as string) || "human",
+        magicalPath: (state.selections["magical-path"] as string) || "mundane",
+        attributes: baseAttributes,
+        specialAttributes: {
+          edge: 1, // TODO: Calculate from special attribute points
+          essence: 6,
+          magic: (state.selections["magical-path"] as string) !== "mundane" ? 1 : undefined,
+        },
+        skills: (state.selections.skills as Record<string, number>) || {},
+        positiveQualities: (state.selections.positiveQualities as string[]) || [],
+        negativeQualities: (state.selections.negativeQualities as string[]) || [],
+        gear: [],
+        contacts: [],
+        nuyen: budgetValues["nuyen"] || 0,
+        startingNuyen: budgetValues["nuyen"] || 0,
+        karmaCurrent: (budgetValues["karma"] || 25) + 
+          ((state.budgets["karma-gained-negative"] as number) || 0) - 
+          ((state.budgets["karma-spent-positive"] as number) || 0),
+        karmaTotal: budgetValues["karma"] || 25,
+        karmaSpentAtCreation: (state.budgets["karma-spent-positive"] as number) || 0,
+        derivedStats: {},
+        condition: {
+          physicalDamage: 0,
+          stunDamage: 0,
+        },
+      };
+
+      // Create character draft via API
+      const createResponse = await fetch("/api/characters", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          editionId: "sr5",
+          editionCode: editionCode || "sr5",
+          creationMethodId: state.creationMethodId,
+          name: characterData.name,
+        }),
+      });
+
+      const createResult = await createResponse.json();
+      if (!createResult.success) {
+        throw new Error(createResult.error || "Failed to create character");
+      }
+
+      const characterId = createResult.character.id;
+
+      // Update the character with full data
+      const updateResponse = await fetch(`/api/characters/${characterId}`, {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(characterData),
+      });
+
+      const updateResult = await updateResponse.json();
+      if (!updateResult.success) {
+        throw new Error(updateResult.error || "Failed to update character");
+      }
+
+      // Finalize the character (change status from draft to active)
+      const finalizeResponse = await fetch(`/api/characters/${characterId}/finalize`, {
+        method: "POST",
+      });
+
+      const finalizeResult = await finalizeResponse.json();
+      if (!finalizeResult.success) {
+        throw new Error(finalizeResult.error || "Failed to finalize character");
+      }
+
+      // Clear draft and complete
+      clearDraft();
+      onComplete(characterId);
+    } catch (error) {
+      console.error("Failed to save character:", error);
+      setSaveError(error instanceof Error ? error.message : "Failed to save character");
+    } finally {
+      setIsSaving(false);
+    }
+  }, [state, metatypes, editionCode, budgetValues, onComplete]);
+
   // Render step content
   const renderStepContent = () => {
     if (!currentStep) return null;
@@ -383,6 +490,12 @@ export function CreationWizard({ onCancel, onComplete }: CreationWizardProps) {
 
         {/* Footer Navigation */}
         <div className="border-t border-zinc-200 px-6 py-4 dark:border-zinc-800">
+          {/* Save Error */}
+          {saveError && (
+            <div className="mb-4 rounded-lg border border-red-300 bg-red-50 p-3 dark:border-red-800 dark:bg-red-900/30">
+              <p className="text-sm text-red-700 dark:text-red-300">{saveError}</p>
+            </div>
+          )}
           <div className="flex items-center justify-between">
             <div className="flex gap-3">
               <Button
@@ -422,12 +535,17 @@ export function CreationWizard({ onCancel, onComplete }: CreationWizardProps) {
               ) : (
                 <Button
                   onPress={() => {
-                    clearDraft();
-                    onComplete(state.characterId);
+                    const characterName = (state.selections.characterName as string) || "";
+                    saveCharacter(characterName);
                   }}
-                  className="rounded-lg bg-emerald-600 px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-emerald-700 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:ring-offset-2"
+                  isDisabled={isSaving}
+                  className={`rounded-lg px-4 py-2 text-sm font-medium transition-colors focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:ring-offset-2 ${
+                    isSaving
+                      ? "bg-zinc-400 text-zinc-200 cursor-wait"
+                      : "bg-emerald-600 text-white hover:bg-emerald-700"
+                  }`}
                 >
-                  Create Character
+                  {isSaving ? "Creating..." : "Create Character"}
                 </Button>
               )}
             </div>

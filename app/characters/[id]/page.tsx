@@ -522,7 +522,7 @@ export default function CharacterPage({ params }: CharacterPageProps) {
           )}
 
           {/* Quick Stats Bar */}
-          <div className={`grid grid-cols-2 sm:grid-cols-4 gap-4 mt-6 pt-6 border-t border-zinc-800 ${showDiceRoller ? 'mt-4 pt-4' : ''}`}
+          <div className={`grid grid-cols-2 sm:grid-cols-4 gap-4 mt-6 pt-6 border-t border-zinc-800 ${showDiceRoller ? 'mt-4 pt-4' : ''}`}>
             <div className="space-y-1">
               <span className="text-xs font-mono text-zinc-500 uppercase">Karma</span>
               <p className="text-2xl font-bold font-mono text-amber-400">

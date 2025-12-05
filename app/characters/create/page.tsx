@@ -1,12 +1,14 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useState } from "react";
+import { useRouter } from "next/navigation";
 import { RulesetProvider, useRulesetStatus, useRuleset } from "@/lib/rules";
 import { CreationWizard } from "./components/CreationWizard";
 import { EditionSelector } from "./components/EditionSelector";
 import type { EditionCode } from "@/lib/types";
 
 function CreateCharacterContent() {
+  const router = useRouter();
   const [selectedEdition, setSelectedEdition] = useState<EditionCode | null>(null);
   const { loading, error, ready } = useRulesetStatus();
   const { loadRuleset } = useRuleset();
@@ -77,8 +79,8 @@ function CreateCharacterContent() {
       <CreationWizard
         onCancel={() => setSelectedEdition(null)}
         onComplete={(characterId) => {
-          // TODO: Navigate to character sheet
-          console.log("Character created:", characterId);
+          // Navigate to the character sheet
+          router.push(`/characters/${characterId}`);
         }}
       />
     );
