@@ -1,0 +1,774 @@
+{
+  "meta": {
+    "bookId": "core-rulebook",
+    "title": "Shadowrun 5th Edition Core Rulebook",
+    "edition": "sr5",
+    "version": "1.0.0",
+    "category": "core",
+    "publisher": "Catalyst Game Labs",
+    "releaseYear": 2013
+  },
+  "modules": {
+    "metatypes": {
+      "mergeStrategy": "replace",
+      "payload": {
+        "metatypes": [
+          {
+            "id": "human",
+            "name": "Human",
+            "baseMetatype": null,
+            "description": "The most common metatype, humans are versatile and adaptable with higher Edge potential.",
+            "worldPopulation": "39%",
+            "attributes": {
+              "body": { "min": 1, "max": 6 },
+              "agility": { "min": 1, "max": 6 },
+              "reaction": { "min": 1, "max": 6 },
+              "strength": { "min": 1, "max": 6 },
+              "willpower": { "min": 1, "max": 6 },
+              "logic": { "min": 1, "max": 6 },
+              "intuition": { "min": 1, "max": 6 },
+              "charisma": { "min": 1, "max": 6 },
+              "edge": { "min": 2, "max": 7 },
+              "essence": { "base": 6 }
+            },
+            "racialTraits": [],
+            "priorityAvailability": {
+              "A": { "specialAttributePoints": 9 },
+              "B": { "specialAttributePoints": 7 },
+              "C": { "specialAttributePoints": 5 },
+              "D": { "specialAttributePoints": 3 },
+              "E": { "specialAttributePoints": 1 }
+            }
+          },
+          {
+            "id": "elf",
+            "name": "Elf",
+            "baseMetatype": null,
+            "description": "Graceful and charismatic, elves possess enhanced agility and social abilities along with low-light vision.",
+            "attributes": {
+              "body": { "min": 1, "max": 6 },
+              "agility": { "min": 2, "max": 7 },
+              "reaction": { "min": 1, "max": 6 },
+              "strength": { "min": 1, "max": 6 },
+              "willpower": { "min": 1, "max": 6 },
+              "logic": { "min": 1, "max": 6 },
+              "intuition": { "min": 1, "max": 6 },
+              "charisma": { "min": 3, "max": 8 },
+              "edge": { "min": 1, "max": 6 },
+              "essence": { "base": 6 }
+            },
+            "racialTraits": ["Low-Light Vision"],
+            "priorityAvailability": {
+              "A": { "specialAttributePoints": 8 },
+              "B": { "specialAttributePoints": 6 },
+              "C": { "specialAttributePoints": 3 },
+              "D": { "specialAttributePoints": 0 }
+            }
+          },
+          {
+            "id": "dwarf",
+            "name": "Dwarf",
+            "baseMetatype": null,
+            "description": "Sturdy and resilient, dwarves are shorter but stronger with natural resistance to toxins.",
+            "attributes": {
+              "body": { "min": 3, "max": 8 },
+              "agility": { "min": 1, "max": 6 },
+              "reaction": { "min": 1, "max": 5 },
+              "strength": { "min": 3, "max": 8 },
+              "willpower": { "min": 2, "max": 7 },
+              "logic": { "min": 1, "max": 6 },
+              "intuition": { "min": 1, "max": 6 },
+              "charisma": { "min": 1, "max": 6 },
+              "edge": { "min": 1, "max": 6 },
+              "essence": { "base": 6 }
+            },
+            "racialTraits": [
+              "Thermographic Vision",
+              "+2 dice vs. pathogens/toxins",
+              "Lifestyle cost ×1.2"
+            ],
+            "priorityAvailability": {
+              "A": { "specialAttributePoints": 7 },
+              "B": { "specialAttributePoints": 4 },
+              "C": { "specialAttributePoints": 1 }
+            }
+          },
+          {
+            "id": "ork",
+            "name": "Ork",
+            "baseMetatype": null,
+            "description": "Physically powerful with enhanced strength and endurance, orks have low-light vision but reduced mental limits.",
+            "attributes": {
+              "body": { "min": 4, "max": 9 },
+              "agility": { "min": 1, "max": 6 },
+              "reaction": { "min": 1, "max": 6 },
+              "strength": { "min": 3, "max": 8 },
+              "willpower": { "min": 1, "max": 6 },
+              "logic": { "min": 1, "max": 5 },
+              "intuition": { "min": 1, "max": 6 },
+              "charisma": { "min": 1, "max": 5 },
+              "edge": { "min": 1, "max": 6 },
+              "essence": { "base": 6 }
+            },
+            "racialTraits": ["Low-Light Vision"],
+            "priorityAvailability": {
+              "A": { "specialAttributePoints": 7 },
+              "B": { "specialAttributePoints": 4 },
+              "C": { "specialAttributePoints": 0 }
+            }
+          },
+          {
+            "id": "troll",
+            "name": "Troll",
+            "baseMetatype": null,
+            "description": "Massive and tough, trolls have the highest physical attributes, natural armor, and extended reach.",
+            "attributes": {
+              "body": { "min": 5, "max": 10 },
+              "agility": { "min": 1, "max": 5 },
+              "reaction": { "min": 1, "max": 6 },
+              "strength": { "min": 5, "max": 10 },
+              "willpower": { "min": 1, "max": 6 },
+              "logic": { "min": 1, "max": 5 },
+              "intuition": { "min": 1, "max": 5 },
+              "charisma": { "min": 1, "max": 4 },
+              "edge": { "min": 1, "max": 6 },
+              "essence": { "base": 6 }
+            },
+            "racialTraits": [
+              "Thermographic Vision",
+              "+1 Reach",
+              "+1 Dermal Armor",
+              "Lifestyle cost ×2"
+            ],
+            "priorityAvailability": {
+              "A": { "specialAttributePoints": 5 },
+              "B": { "specialAttributePoints": 0 }
+            }
+          }
+        ]
+      }
+    },
+    "attributes": {
+      "mergeStrategy": "replace",
+      "payload": {
+        "primaryAttributes": [
+          {
+            "id": "body",
+            "name": "Body",
+            "abbreviation": "BOD",
+            "category": "physical",
+            "description": "Physical toughness, resistance to damage and illness."
+          },
+          {
+            "id": "agility",
+            "name": "Agility",
+            "abbreviation": "AGI",
+            "category": "physical",
+            "description": "Coordination, balance, and fine motor skills."
+          },
+          {
+            "id": "reaction",
+            "name": "Reaction",
+            "abbreviation": "REA",
+            "category": "physical",
+            "description": "Reflex speed and ability to respond to sudden changes."
+          },
+          {
+            "id": "strength",
+            "name": "Strength",
+            "abbreviation": "STR",
+            "category": "physical",
+            "description": "Raw physical power and lifting capacity."
+          },
+          {
+            "id": "willpower",
+            "name": "Willpower",
+            "abbreviation": "WIL",
+            "category": "mental",
+            "description": "Mental fortitude, determination, and resistance to mental manipulation."
+          },
+          {
+            "id": "logic",
+            "name": "Logic",
+            "abbreviation": "LOG",
+            "category": "mental",
+            "description": "Analytical thinking, memory, and deductive reasoning."
+          },
+          {
+            "id": "intuition",
+            "name": "Intuition",
+            "abbreviation": "INT",
+            "category": "mental",
+            "description": "Gut instincts, perception, and ability to read situations."
+          },
+          {
+            "id": "charisma",
+            "name": "Charisma",
+            "abbreviation": "CHA",
+            "category": "mental",
+            "description": "Force of personality, persuasiveness, and social presence."
+          }
+        ],
+        "specialAttributes": [
+          {
+            "id": "edge",
+            "name": "Edge",
+            "abbreviation": "EDG",
+            "category": "special",
+            "description": "Luck and ability to push outcomes in your favor."
+          },
+          {
+            "id": "essence",
+            "name": "Essence",
+            "abbreviation": "ESS",
+            "category": "special",
+            "baseValue": 6,
+            "description": "Measure of life force, reduced by cyberware and bioware."
+          },
+          {
+            "id": "magic",
+            "name": "Magic",
+            "abbreviation": "MAG",
+            "category": "special",
+            "description": "Magical aptitude. Only available to Awakened characters.",
+            "requiresMagicalPath": true
+          },
+          {
+            "id": "resonance",
+            "name": "Resonance",
+            "abbreviation": "RES",
+            "category": "special",
+            "description": "Connection to the Resonance. Only available to Technomancers.",
+            "requiresResonancePath": true
+          }
+        ],
+        "derivedAttributes": [
+          {
+            "id": "initiative",
+            "name": "Initiative",
+            "formula": "REA + INT + 1d6",
+            "description": "Determines action order in combat."
+          },
+          {
+            "id": "astralInitiative",
+            "name": "Astral Initiative",
+            "formula": "(INT × 2) + 2d6",
+            "description": "Initiative while astrally projecting."
+          },
+          {
+            "id": "matrixInitiativeCold",
+            "name": "Matrix Initiative (Cold Sim)",
+            "formula": "Data Processing + INT + 3d6",
+            "description": "Initiative in VR cold sim."
+          },
+          {
+            "id": "matrixInitiativeHot",
+            "name": "Matrix Initiative (Hot Sim)",
+            "formula": "Data Processing + INT + 4d6",
+            "description": "Initiative in VR hot sim."
+          },
+          {
+            "id": "physicalLimit",
+            "name": "Physical Limit",
+            "formula": "ceil(((STR × 2) + BOD + REA) / 3)",
+            "description": "Maximum hits on physical tests."
+          },
+          {
+            "id": "mentalLimit",
+            "name": "Mental Limit",
+            "formula": "ceil(((LOG × 2) + INT + WIL) / 3)",
+            "description": "Maximum hits on mental tests."
+          },
+          {
+            "id": "socialLimit",
+            "name": "Social Limit",
+            "formula": "ceil(((CHA × 2) + WIL + ceil(ESS)) / 3)",
+            "description": "Maximum hits on social tests."
+          },
+          {
+            "id": "physicalConditionMonitor",
+            "name": "Physical Condition Monitor",
+            "formula": "ceil(BOD / 2) + 8",
+            "description": "Boxes of physical damage before overflow."
+          },
+          {
+            "id": "stunConditionMonitor",
+            "name": "Stun Condition Monitor",
+            "formula": "ceil(WIL / 2) + 8",
+            "description": "Boxes of stun damage before unconsciousness."
+          },
+          {
+            "id": "composure",
+            "name": "Composure",
+            "formula": "CHA + WIL",
+            "description": "Resist fear and emotional stress."
+          },
+          {
+            "id": "judgeIntentions",
+            "name": "Judge Intentions",
+            "formula": "CHA + INT",
+            "description": "Read others' motives and truthfulness."
+          },
+          {
+            "id": "memory",
+            "name": "Memory",
+            "formula": "LOG + WIL",
+            "description": "Recall and memorize information."
+          },
+          {
+            "id": "liftCarry",
+            "name": "Lift/Carry",
+            "formula": "STR + BOD",
+            "description": "Lift heavy objects."
+          }
+        ]
+      }
+    },
+    "priorities": {
+      "mergeStrategy": "replace",
+      "payload": {
+        "levels": ["A", "B", "C", "D", "E"],
+        "categories": [
+          { "id": "metatype", "name": "Metatype", "description": "Determines available metatypes and special attribute points." },
+          { "id": "attributes", "name": "Attributes", "description": "Points to distribute among physical and mental attributes." },
+          { "id": "magic", "name": "Magic/Resonance", "description": "Magical or technomancer abilities." },
+          { "id": "skills", "name": "Skills", "description": "Skill points and skill group points." },
+          { "id": "resources", "name": "Resources", "description": "Starting nuyen for gear and lifestyle." }
+        ],
+        "table": {
+          "A": {
+            "metatype": {
+              "available": ["human", "elf", "dwarf", "ork", "troll"],
+              "specialAttributePoints": { "human": 9, "elf": 8, "dwarf": 7, "ork": 7, "troll": 5 }
+            },
+            "attributes": 24,
+            "magic": {
+              "options": [
+                {
+                  "path": "magician",
+                  "magicRating": 6,
+                  "freeSkills": [{ "type": "magical", "rating": 5, "count": 2 }],
+                  "spells": 10
+                },
+                {
+                  "path": "mystic-adept",
+                  "magicRating": 6,
+                  "freeSkills": [{ "type": "magical", "rating": 5, "count": 2 }],
+                  "spells": 10
+                },
+                {
+                  "path": "technomancer",
+                  "resonanceRating": 6,
+                  "freeSkills": [{ "type": "resonance", "rating": 5, "count": 2 }],
+                  "complexForms": 5
+                }
+              ]
+            },
+            "skills": { "skillPoints": 46, "skillGroupPoints": 10 },
+            "resources": 450000
+          },
+          "B": {
+            "metatype": {
+              "available": ["human", "elf", "dwarf", "ork", "troll"],
+              "specialAttributePoints": { "human": 7, "elf": 6, "dwarf": 4, "ork": 4, "troll": 0 }
+            },
+            "attributes": 20,
+            "magic": {
+              "options": [
+                {
+                  "path": "magician",
+                  "magicRating": 4,
+                  "freeSkills": [{ "type": "magical", "rating": 4, "count": 2 }],
+                  "spells": 7
+                },
+                {
+                  "path": "mystic-adept",
+                  "magicRating": 4,
+                  "freeSkills": [{ "type": "magical", "rating": 4, "count": 2 }],
+                  "spells": 7
+                },
+                {
+                  "path": "technomancer",
+                  "resonanceRating": 4,
+                  "freeSkills": [{ "type": "resonance", "rating": 4, "count": 2 }],
+                  "complexForms": 2
+                },
+                {
+                  "path": "adept",
+                  "magicRating": 6,
+                  "freeSkills": [{ "type": "active", "rating": 4, "count": 1 }]
+                },
+                {
+                  "path": "aspected-mage",
+                  "magicRating": 5,
+                  "freeSkills": [{ "type": "magicalGroup", "rating": 4, "count": 1 }]
+                }
+              ]
+            },
+            "skills": { "skillPoints": 36, "skillGroupPoints": 5 },
+            "resources": 275000
+          },
+          "C": {
+            "metatype": {
+              "available": ["human", "elf", "dwarf", "ork"],
+              "specialAttributePoints": { "human": 5, "elf": 3, "dwarf": 1, "ork": 0 }
+            },
+            "attributes": 16,
+            "magic": {
+              "options": [
+                {
+                  "path": "magician",
+                  "magicRating": 3,
+                  "spells": 5
+                },
+                {
+                  "path": "mystic-adept",
+                  "magicRating": 3,
+                  "spells": 5
+                },
+                {
+                  "path": "technomancer",
+                  "resonanceRating": 3,
+                  "complexForms": 1
+                },
+                {
+                  "path": "adept",
+                  "magicRating": 4,
+                  "freeSkills": [{ "type": "active", "rating": 2, "count": 1 }]
+                },
+                {
+                  "path": "aspected-mage",
+                  "magicRating": 3,
+                  "freeSkills": [{ "type": "magicalGroup", "rating": 2, "count": 1 }]
+                }
+              ]
+            },
+            "skills": { "skillPoints": 28, "skillGroupPoints": 2 },
+            "resources": 140000
+          },
+          "D": {
+            "metatype": {
+              "available": ["human", "elf"],
+              "specialAttributePoints": { "human": 3, "elf": 0 }
+            },
+            "attributes": 14,
+            "magic": {
+              "options": [
+                { "path": "adept", "magicRating": 2 },
+                { "path": "aspected-mage", "magicRating": 2 }
+              ]
+            },
+            "skills": { "skillPoints": 22, "skillGroupPoints": 0 },
+            "resources": 50000
+          },
+          "E": {
+            "metatype": {
+              "available": ["human"],
+              "specialAttributePoints": { "human": 1 }
+            },
+            "attributes": 12,
+            "magic": { "options": [] },
+            "skills": { "skillPoints": 18, "skillGroupPoints": 0 },
+            "resources": 6000
+          }
+        }
+      }
+    },
+    "magic": {
+      "mergeStrategy": "replace",
+      "payload": {
+        "paths": [
+          {
+            "id": "mundane",
+            "name": "Mundane",
+            "description": "No magical or resonance abilities.",
+            "hasMagic": false,
+            "hasResonance": false
+          },
+          {
+            "id": "magician",
+            "name": "Magician",
+            "description": "Full magical practitioner with access to all magical skills and abilities.",
+            "hasMagic": true,
+            "hasResonance": false,
+            "skillGroups": ["Sorcery", "Conjuring", "Enchanting"],
+            "canAstralProject": true,
+            "canCastSpells": true,
+            "canSummonSpirits": true
+          },
+          {
+            "id": "mystic-adept",
+            "name": "Mystic Adept",
+            "description": "Combines magical abilities with adept powers. Cannot astrally project.",
+            "hasMagic": true,
+            "hasResonance": false,
+            "skillGroups": ["Sorcery", "Conjuring"],
+            "canAstralProject": false,
+            "canCastSpells": true,
+            "canSummonSpirits": true,
+            "hasAdeptPowers": true
+          },
+          {
+            "id": "adept",
+            "name": "Adept",
+            "description": "Channels magic internally for physical enhancement.",
+            "hasMagic": true,
+            "hasResonance": false,
+            "canAstralProject": false,
+            "canCastSpells": false,
+            "canSummonSpirits": false,
+            "hasAdeptPowers": true,
+            "powerPointsPerMagic": 1
+          },
+          {
+            "id": "aspected-mage",
+            "name": "Aspected Magician",
+            "description": "Magician limited to one magical skill group (Sorcery, Conjuring, or Enchanting).",
+            "hasMagic": true,
+            "hasResonance": false,
+            "limitedTo": ["Sorcery", "Conjuring", "Enchanting"],
+            "canAstralProject": true,
+            "selectOneGroup": true
+          },
+          {
+            "id": "technomancer",
+            "name": "Technomancer",
+            "description": "Naturally interfaces with the Matrix through Resonance.",
+            "hasMagic": false,
+            "hasResonance": true,
+            "skillGroups": ["Tasking"],
+            "canCompileSprites": true,
+            "canThreadComplexForms": true
+          }
+        ],
+        "traditions": [
+          { "id": "hermetic", "name": "Hermetic", "drain": ["LOG", "WIL"] },
+          { "id": "shaman", "name": "Shaman", "drain": ["CHA", "WIL"] },
+          { "id": "buddhist", "name": "Buddhist", "drain": ["WIL", "INT"] },
+          { "id": "wiccan", "name": "Wiccan", "drain": ["CHA", "WIL"] },
+          { "id": "vodou", "name": "Vodou", "drain": ["CHA", "INT"] },
+          { "id": "norse", "name": "Norse", "drain": ["LOG", "WIL"] },
+          { "id": "druid", "name": "Druid", "drain": ["WIL", "INT"] },
+          { "id": "chaos", "name": "Chaos Magic", "drain": ["INT", "WIL"] }
+        ]
+      }
+    },
+    "skills": {
+      "mergeStrategy": "replace",
+      "payload": {
+        "skillGroups": [
+          { "id": "acting", "name": "Acting", "skills": ["con", "impersonation", "performance"] },
+          { "id": "athletics", "name": "Athletics", "skills": ["gymnastics", "running", "swimming"] },
+          { "id": "biotech", "name": "Biotech", "skills": ["cybertechnology", "first-aid", "medicine"] },
+          { "id": "close-combat", "name": "Close Combat", "skills": ["blades", "clubs", "unarmed-combat"] },
+          { "id": "conjuring", "name": "Conjuring", "skills": ["banishing", "binding", "summoning"] },
+          { "id": "cracking", "name": "Cracking", "skills": ["cybercombat", "electronic-warfare", "hacking"] },
+          { "id": "electronics", "name": "Electronics", "skills": ["computer", "hardware", "software"] },
+          { "id": "enchanting", "name": "Enchanting", "skills": ["alchemy", "artificing", "disenchanting"] },
+          { "id": "firearms", "name": "Firearms", "skills": ["automatics", "longarms", "pistols"] },
+          { "id": "influence", "name": "Influence", "skills": ["etiquette", "leadership", "negotiation"] },
+          { "id": "engineering", "name": "Engineering", "skills": ["aeronautics-mechanic", "automotive-mechanic", "industrial-mechanic", "nautical-mechanic"] },
+          { "id": "outdoors", "name": "Outdoors", "skills": ["navigation", "survival", "tracking"] },
+          { "id": "sorcery", "name": "Sorcery", "skills": ["counterspelling", "ritual-spellcasting", "spellcasting"] },
+          { "id": "stealth", "name": "Stealth", "skills": ["disguise", "palming", "sneaking"] },
+          { "id": "tasking", "name": "Tasking", "skills": ["compiling", "decompiling", "registering"] }
+        ],
+        "activeSkills": [
+          { "id": "archery", "name": "Archery", "linkedAttribute": "agility", "group": null, "canDefault": true, "category": "combat" },
+          { "id": "automatics", "name": "Automatics", "linkedAttribute": "agility", "group": "firearms", "canDefault": true, "category": "combat" },
+          { "id": "blades", "name": "Blades", "linkedAttribute": "agility", "group": "close-combat", "canDefault": true, "category": "combat" },
+          { "id": "clubs", "name": "Clubs", "linkedAttribute": "agility", "group": "close-combat", "canDefault": true, "category": "combat" },
+          { "id": "heavy-weapons", "name": "Heavy Weapons", "linkedAttribute": "agility", "group": null, "canDefault": true, "category": "combat" },
+          { "id": "longarms", "name": "Longarms", "linkedAttribute": "agility", "group": "firearms", "canDefault": true, "category": "combat" },
+          { "id": "pistols", "name": "Pistols", "linkedAttribute": "agility", "group": "firearms", "canDefault": true, "category": "combat" },
+          { "id": "throwing-weapons", "name": "Throwing Weapons", "linkedAttribute": "agility", "group": null, "canDefault": true, "category": "combat" },
+          { "id": "unarmed-combat", "name": "Unarmed Combat", "linkedAttribute": "agility", "group": "close-combat", "canDefault": true, "category": "combat" },
+          
+          { "id": "disguise", "name": "Disguise", "linkedAttribute": "intuition", "group": "stealth", "canDefault": true, "category": "physical" },
+          { "id": "diving", "name": "Diving", "linkedAttribute": "body", "group": null, "canDefault": true, "category": "physical" },
+          { "id": "escape-artist", "name": "Escape Artist", "linkedAttribute": "agility", "group": null, "canDefault": true, "category": "physical" },
+          { "id": "free-fall", "name": "Free-Fall", "linkedAttribute": "body", "group": null, "canDefault": true, "category": "physical" },
+          { "id": "gymnastics", "name": "Gymnastics", "linkedAttribute": "agility", "group": "athletics", "canDefault": true, "category": "physical" },
+          { "id": "palming", "name": "Palming", "linkedAttribute": "agility", "group": "stealth", "canDefault": false, "category": "physical" },
+          { "id": "perception", "name": "Perception", "linkedAttribute": "intuition", "group": null, "canDefault": true, "category": "physical" },
+          { "id": "running", "name": "Running", "linkedAttribute": "strength", "group": "athletics", "canDefault": true, "category": "physical" },
+          { "id": "sneaking", "name": "Sneaking", "linkedAttribute": "agility", "group": "stealth", "canDefault": true, "category": "physical" },
+          { "id": "survival", "name": "Survival", "linkedAttribute": "willpower", "group": "outdoors", "canDefault": true, "category": "physical" },
+          { "id": "swimming", "name": "Swimming", "linkedAttribute": "strength", "group": "athletics", "canDefault": true, "category": "physical" },
+          { "id": "tracking", "name": "Tracking", "linkedAttribute": "intuition", "group": "outdoors", "canDefault": true, "category": "physical" },
+
+          { "id": "con", "name": "Con", "linkedAttribute": "charisma", "group": "acting", "canDefault": true, "category": "social" },
+          { "id": "etiquette", "name": "Etiquette", "linkedAttribute": "charisma", "group": "influence", "canDefault": true, "category": "social" },
+          { "id": "impersonation", "name": "Impersonation", "linkedAttribute": "charisma", "group": "acting", "canDefault": true, "category": "social" },
+          { "id": "instruction", "name": "Instruction", "linkedAttribute": "charisma", "group": null, "canDefault": true, "category": "social" },
+          { "id": "intimidation", "name": "Intimidation", "linkedAttribute": "charisma", "group": null, "canDefault": true, "category": "social" },
+          { "id": "leadership", "name": "Leadership", "linkedAttribute": "charisma", "group": "influence", "canDefault": true, "category": "social" },
+          { "id": "negotiation", "name": "Negotiation", "linkedAttribute": "charisma", "group": "influence", "canDefault": true, "category": "social" },
+          { "id": "performance", "name": "Performance", "linkedAttribute": "charisma", "group": "acting", "canDefault": true, "category": "social" },
+
+          { "id": "alchemy", "name": "Alchemy", "linkedAttribute": "magic", "group": "enchanting", "canDefault": false, "category": "magical", "requiresMagic": true },
+          { "id": "arcana", "name": "Arcana", "linkedAttribute": "logic", "group": null, "canDefault": false, "category": "magical", "requiresMagic": true },
+          { "id": "artificing", "name": "Artificing", "linkedAttribute": "magic", "group": "enchanting", "canDefault": false, "category": "magical", "requiresMagic": true },
+          { "id": "assensing", "name": "Assensing", "linkedAttribute": "intuition", "group": null, "canDefault": false, "category": "magical", "requiresMagic": true },
+          { "id": "astral-combat", "name": "Astral Combat", "linkedAttribute": "willpower", "group": null, "canDefault": false, "category": "magical", "requiresMagic": true },
+          { "id": "banishing", "name": "Banishing", "linkedAttribute": "magic", "group": "conjuring", "canDefault": false, "category": "magical", "requiresMagic": true },
+          { "id": "binding", "name": "Binding", "linkedAttribute": "magic", "group": "conjuring", "canDefault": false, "category": "magical", "requiresMagic": true },
+          { "id": "counterspelling", "name": "Counterspelling", "linkedAttribute": "magic", "group": "sorcery", "canDefault": false, "category": "magical", "requiresMagic": true },
+          { "id": "disenchanting", "name": "Disenchanting", "linkedAttribute": "magic", "group": "enchanting", "canDefault": false, "category": "magical", "requiresMagic": true },
+          { "id": "ritual-spellcasting", "name": "Ritual Spellcasting", "linkedAttribute": "magic", "group": "sorcery", "canDefault": false, "category": "magical", "requiresMagic": true },
+          { "id": "spellcasting", "name": "Spellcasting", "linkedAttribute": "magic", "group": "sorcery", "canDefault": false, "category": "magical", "requiresMagic": true },
+          { "id": "summoning", "name": "Summoning", "linkedAttribute": "magic", "group": "conjuring", "canDefault": false, "category": "magical", "requiresMagic": true },
+
+          { "id": "compiling", "name": "Compiling", "linkedAttribute": "resonance", "group": "tasking", "canDefault": false, "category": "resonance", "requiresResonance": true },
+          { "id": "decompiling", "name": "Decompiling", "linkedAttribute": "resonance", "group": "tasking", "canDefault": false, "category": "resonance", "requiresResonance": true },
+          { "id": "registering", "name": "Registering", "linkedAttribute": "resonance", "group": "tasking", "canDefault": false, "category": "resonance", "requiresResonance": true },
+
+          { "id": "computer", "name": "Computer", "linkedAttribute": "logic", "group": "electronics", "canDefault": true, "category": "technical" },
+          { "id": "cybercombat", "name": "Cybercombat", "linkedAttribute": "logic", "group": "cracking", "canDefault": true, "category": "technical" },
+          { "id": "electronic-warfare", "name": "Electronic Warfare", "linkedAttribute": "logic", "group": "cracking", "canDefault": false, "category": "technical" },
+          { "id": "hacking", "name": "Hacking", "linkedAttribute": "logic", "group": "cracking", "canDefault": true, "category": "technical" },
+          { "id": "hardware", "name": "Hardware", "linkedAttribute": "logic", "group": "electronics", "canDefault": false, "category": "technical" },
+          { "id": "software", "name": "Software", "linkedAttribute": "logic", "group": "electronics", "canDefault": false, "category": "technical" },
+          { "id": "cybertechnology", "name": "Cybertechnology", "linkedAttribute": "logic", "group": "biotech", "canDefault": false, "category": "technical" },
+          { "id": "first-aid", "name": "First Aid", "linkedAttribute": "logic", "group": "biotech", "canDefault": true, "category": "technical" },
+          { "id": "medicine", "name": "Medicine", "linkedAttribute": "logic", "group": "biotech", "canDefault": false, "category": "technical" },
+          { "id": "armorer", "name": "Armorer", "linkedAttribute": "logic", "group": null, "canDefault": true, "category": "technical" },
+          { "id": "demolitions", "name": "Demolitions", "linkedAttribute": "logic", "group": null, "canDefault": true, "category": "technical" },
+          { "id": "forgery", "name": "Forgery", "linkedAttribute": "logic", "group": null, "canDefault": true, "category": "technical" },
+          { "id": "locksmith", "name": "Locksmith", "linkedAttribute": "agility", "group": null, "canDefault": false, "category": "technical" },
+          { "id": "navigation", "name": "Navigation", "linkedAttribute": "intuition", "group": "outdoors", "canDefault": true, "category": "technical" },
+
+          { "id": "gunnery", "name": "Gunnery", "linkedAttribute": "agility", "group": null, "canDefault": true, "category": "vehicle" },
+          { "id": "pilot-aircraft", "name": "Pilot Aircraft", "linkedAttribute": "reaction", "group": null, "canDefault": false, "category": "vehicle" },
+          { "id": "pilot-ground-craft", "name": "Pilot Ground Craft", "linkedAttribute": "reaction", "group": null, "canDefault": true, "category": "vehicle" },
+          { "id": "pilot-watercraft", "name": "Pilot Watercraft", "linkedAttribute": "reaction", "group": null, "canDefault": true, "category": "vehicle" }
+        ],
+        "knowledgeCategories": [
+          { "id": "academic", "name": "Academic", "linkedAttribute": "logic" },
+          { "id": "interests", "name": "Interests", "linkedAttribute": "intuition" },
+          { "id": "professional", "name": "Professional", "linkedAttribute": "logic" },
+          { "id": "street", "name": "Street", "linkedAttribute": "intuition" }
+        ],
+        "creationLimits": {
+          "maxSkillRating": 6,
+          "maxSkillRatingWithAptitude": 7,
+          "freeKnowledgePoints": "(LOG + INT) × 2",
+          "nativeLanguageRating": 6
+        }
+      }
+    },
+    "qualities": {
+      "mergeStrategy": "replace",
+      "payload": {
+        "positive": [
+          { "id": "ambidextrous", "name": "Ambidextrous", "karmaCost": 4, "summary": "Ignore off-hand penalties; both hands treated equally." },
+          { "id": "analytical-mind", "name": "Analytical Mind", "karmaCost": 5, "summary": "+2 dice to Logic tests involving pattern analysis." },
+          { "id": "aptitude", "name": "Aptitude", "karmaCost": 14, "summary": "Raise one skill max to 7 at creation, 13 after." },
+          { "id": "bilingual", "name": "Bilingual", "karmaCost": 5, "summary": "Gain a second native language." },
+          { "id": "catlike", "name": "Catlike", "karmaCost": 7, "summary": "+2 dice to Sneaking tests." },
+          { "id": "codeslinger", "name": "Codeslinger", "karmaCost": 10, "summary": "+2 dice to one chosen Matrix action." },
+          { "id": "double-jointed", "name": "Double-Jointed", "karmaCost": 6, "summary": "+2 dice to Escape Artist; fit into tight spaces." },
+          { "id": "exceptional-attribute", "name": "Exceptional Attribute", "karmaCost": 14, "summary": "Increase natural max of one attribute by 1." },
+          { "id": "first-impression", "name": "First Impression", "karmaCost": 11, "summary": "+2 dice to Social tests during first meetings." },
+          { "id": "guts", "name": "Guts", "karmaCost": 10, "summary": "+2 dice to resist fear and intimidation." },
+          { "id": "high-pain-tolerance", "name": "High Pain Tolerance", "karmaCost": 7, "perRating": true, "maxRating": 3, "summary": "Ignore 1 wound modifier per rating." },
+          { "id": "lucky", "name": "Lucky", "karmaCost": 12, "summary": "Raise Edge natural maximum by 1." },
+          { "id": "mentor-spirit", "name": "Mentor Spirit", "karmaCost": 5, "summary": "Gain mentor spirit benefits/drawbacks.", "requiresMagic": true },
+          { "id": "natural-athlete", "name": "Natural Athlete", "karmaCost": 7, "summary": "+2 dice to Running and Gymnastics." },
+          { "id": "photographic-memory", "name": "Photographic Memory", "karmaCost": 6, "summary": "Perfect recall; +2 dice to Memory tests." },
+          { "id": "quick-healer", "name": "Quick Healer", "karmaCost": 3, "summary": "+2 dice to all Healing tests." },
+          { "id": "toughness", "name": "Toughness", "karmaCost": 9, "summary": "+1 die to Body for Damage Resistance." },
+          { "id": "will-to-live", "name": "Will to Live", "karmaCost": 3, "perRating": true, "maxRating": 3, "summary": "+1 Overflow box per rating." }
+        ],
+        "negative": [
+          { "id": "addiction-mild", "name": "Addiction (Mild)", "karmaBonus": 4, "summary": "Monthly cravings, –2 dice when withdrawing." },
+          { "id": "addiction-moderate", "name": "Addiction (Moderate)", "karmaBonus": 9, "summary": "Biweekly cravings, –4 dice when withdrawing." },
+          { "id": "addiction-severe", "name": "Addiction (Severe)", "karmaBonus": 20, "summary": "Weekly cravings, –4 dice plus –2 Social always." },
+          { "id": "allergy-uncommon-mild", "name": "Allergy (Uncommon, Mild)", "karmaBonus": 5, "summary": "–2 dice to Physical tests when exposed." },
+          { "id": "allergy-common-mild", "name": "Allergy (Common, Mild)", "karmaBonus": 10, "summary": "–2 dice to Physical tests when exposed." },
+          { "id": "allergy-common-moderate", "name": "Allergy (Common, Moderate)", "karmaBonus": 15, "summary": "–4 dice to Physical tests when exposed." },
+          { "id": "bad-luck", "name": "Bad Luck", "karmaBonus": 12, "summary": "Edge occasionally backfires (1 on d6)." },
+          { "id": "bad-rep", "name": "Bad Rep", "karmaBonus": 7, "summary": "Start with 3 Notoriety." },
+          { "id": "code-of-honor", "name": "Code of Honor", "karmaBonus": 15, "summary": "Bound by strict rules about who may be harmed." },
+          { "id": "combat-paralysis", "name": "Combat Paralysis", "karmaBonus": 12, "summary": "First Initiative halved; –3 on Surprise tests." },
+          { "id": "dependents-1", "name": "Dependents (Low)", "karmaBonus": 3, "summary": "Loved ones require time/resources. +10% lifestyle." },
+          { "id": "dependents-2", "name": "Dependents (Medium)", "karmaBonus": 6, "summary": "Loved ones require time/resources. +20% lifestyle." },
+          { "id": "dependents-3", "name": "Dependents (High)", "karmaBonus": 9, "summary": "Loved ones require time/resources. +30% lifestyle." },
+          { "id": "distinctive-style", "name": "Distinctive Style", "karmaBonus": 5, "summary": "Memorable; +2 dice to identify/trace you." },
+          { "id": "gremlins", "name": "Gremlins", "karmaBonus": 4, "perRating": true, "maxRating": 4, "summary": "Tech malfunctions more around you." },
+          { "id": "incompetent", "name": "Incompetent", "karmaBonus": 5, "summary": "Cannot use one skill group." },
+          { "id": "insomnia-basic", "name": "Insomnia (Basic)", "karmaBonus": 10, "summary": "May double Stun recovery time." },
+          { "id": "low-pain-tolerance", "name": "Low Pain Tolerance", "karmaBonus": 9, "summary": "Wound modifiers every 2 boxes instead of 3." },
+          { "id": "sinner-national", "name": "SINner (National)", "karmaBonus": 5, "summary": "15% tax on income." },
+          { "id": "sinner-criminal", "name": "SINner (Criminal)", "karmaBonus": 10, "summary": "Criminal record; constant scrutiny." },
+          { "id": "sinner-corporate-limited", "name": "SINner (Corporate Limited)", "karmaBonus": 15, "summary": "20% corporate tax." },
+          { "id": "uncouth", "name": "Uncouth", "karmaBonus": 14, "summary": "–2 dice to resist social impulses; double Karma for Social skills." },
+          { "id": "uneducated", "name": "Uneducated", "karmaBonus": 8, "summary": "Cannot default Technical/Academic skills." },
+          { "id": "weak-immune-system", "name": "Weak Immune System", "karmaBonus": 10, "summary": "Disease Power +2 against you." }
+        ],
+        "creationLimits": {
+          "maxPositiveKarma": 25,
+          "maxNegativeKarma": 25
+        }
+      }
+    },
+    "lifestyle": {
+      "mergeStrategy": "replace",
+      "payload": {
+        "lifestyles": [
+          { "id": "street", "name": "Street", "monthlyCost": 0, "startingNuyen": "1d6 × 20" },
+          { "id": "squatter", "name": "Squatter", "monthlyCost": 500, "startingNuyen": "2d6 × 40" },
+          { "id": "low", "name": "Low", "monthlyCost": 2000, "startingNuyen": "3d6 × 60" },
+          { "id": "medium", "name": "Medium", "monthlyCost": 5000, "startingNuyen": "4d6 × 100" },
+          { "id": "high", "name": "High", "monthlyCost": 10000, "startingNuyen": "5d6 × 500" },
+          { "id": "luxury", "name": "Luxury", "monthlyCost": 100000, "startingNuyen": "6d6 × 1000" }
+        ]
+      }
+    },
+    "creationMethods": {
+      "mergeStrategy": "replace",
+      "payload": {
+        "creationMethods": [
+          {
+            "id": "priority",
+            "editionId": "sr5",
+            "editionCode": "sr5",
+            "name": "Priority System",
+            "type": "priority",
+            "description": "Assign priorities A-E to Metatype, Attributes, Magic/Resonance, Skills, and Resources. Each priority used exactly once.",
+            "version": "1.0.0",
+            "steps": [
+              { "id": "priorities", "title": "Assign Priorities", "type": "priority", "payload": { "type": "priority", "categories": ["metatype", "attributes", "magic", "skills", "resources"], "levels": ["A", "B", "C", "D", "E"] } },
+              { "id": "metatype", "title": "Select Metatype", "type": "select", "payload": { "type": "select", "target": "metatype" } },
+              { "id": "attributes", "title": "Allocate Attributes", "type": "allocate", "payload": { "type": "allocate", "target": "attributes", "budgetId": "attribute-points" } },
+              { "id": "magic", "title": "Magic/Resonance", "type": "select", "optional": true, "payload": { "type": "select", "target": "magical-path" } },
+              { "id": "skills", "title": "Allocate Skills", "type": "allocate", "payload": { "type": "allocate", "target": "skills", "budgetId": "skill-points" } },
+              { "id": "qualities", "title": "Select Qualities", "type": "choose", "payload": { "type": "choose", "target": "qualities", "budgetId": "karma" } },
+              { "id": "gear", "title": "Purchase Gear", "type": "purchase", "payload": { "type": "purchase", "target": "gear", "budgetId": "nuyen", "availabilityLimit": 12 } },
+              { "id": "review", "title": "Review & Finalize", "type": "validate", "payload": { "type": "validate", "validations": ["all"] } }
+            ],
+            "budgets": [
+              { "id": "attribute-points", "label": "Attribute Points", "initialValueFormula": "priorities.attributes" },
+              { "id": "special-attribute-points", "label": "Special Attribute Points", "initialValueFormula": "metatype.specialAttributePoints" },
+              { "id": "skill-points", "label": "Skill Points", "initialValueFormula": "priorities.skills.skillPoints" },
+              { "id": "skill-group-points", "label": "Skill Group Points", "initialValueFormula": "priorities.skills.skillGroupPoints" },
+              { "id": "karma", "label": "Karma", "initialValue": 25 },
+              { "id": "nuyen", "label": "Nuyen", "initialValueFormula": "priorities.resources", "displayFormat": "currency" }
+            ],
+            "constraints": [
+              { "id": "unique-priorities", "type": "custom", "description": "Each priority level (A-E) must be used exactly once.", "severity": "error", "params": {}, "errorMessage": "Each priority can only be assigned to one category." },
+              { "id": "max-one-attribute-at-max", "type": "attribute-limit", "description": "Only one attribute can be at natural maximum at creation.", "severity": "error", "params": { "maxAtMax": 1 }, "errorMessage": "Only one attribute can be at its natural maximum." },
+              { "id": "positive-quality-limit", "type": "budget-balance", "description": "Maximum 25 Karma in Positive Qualities.", "severity": "error", "params": { "budgetId": "positive-quality-karma", "max": 25 }, "errorMessage": "Cannot spend more than 25 Karma on positive qualities." },
+              { "id": "negative-quality-limit", "type": "budget-balance", "description": "Maximum 25 Karma from Negative Qualities.", "severity": "error", "params": { "budgetId": "negative-quality-karma", "max": 25 }, "errorMessage": "Cannot gain more than 25 Karma from negative qualities." },
+              { "id": "skill-max-at-creation", "type": "skill-limit", "description": "Skills capped at 6 at creation (7 with Aptitude).", "severity": "error", "params": { "max": 6, "maxWithAptitude": 7 }, "errorMessage": "Skill rating cannot exceed 6 at creation (7 with Aptitude)." },
+              { "id": "gear-availability", "type": "custom", "description": "Gear availability cannot exceed 12 at creation.", "severity": "error", "params": { "maxAvailability": 12 }, "errorMessage": "Cannot purchase gear with availability higher than 12." },
+              { "id": "essence-minimum", "type": "essence-minimum", "description": "Essence cannot drop below 0.", "severity": "error", "params": { "min": 0 }, "errorMessage": "Essence cannot drop below 0." }
+            ],
+            "createdAt": "2025-01-01T00:00:00.000Z"
+          }
+        ]
+      }
+    }
+  }
+}
+

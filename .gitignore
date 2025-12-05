@@ -40,5 +40,6 @@ yarn-error.log*
 *.tsbuildinfo
 next-env.d.ts
 
-# user data
-/data
+# user data (characters, users) - NOT edition rulesets
+/data/users
+/data/characters

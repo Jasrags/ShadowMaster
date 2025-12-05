@@ -1,0 +1,18 @@
+{
+  "id": "sr5",
+  "name": "Shadowrun 5th Edition",
+  "shortCode": "sr5",
+  "version": "1.0.0",
+  "description": "The fifth edition of Shadowrun, published by Catalyst Game Labs in 2013. Features the Priority character creation system, Limits, and an updated Matrix.",
+  "releaseYear": 2013,
+  "bookIds": [
+    "core-rulebook"
+  ],
+  "creationMethodIds": [
+    "priority"
+  ],
+  "defaultCreationMethodId": "priority",
+  "createdAt": "2025-01-01T00:00:00.000Z",
+  "updatedAt": "2025-01-01T00:00:00.000Z"
+}
+
