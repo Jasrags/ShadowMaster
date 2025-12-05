@@ -317,7 +317,7 @@ export function QualitiesStep({ state, updateState, budgetValues }: StepProps) {
       </div>
 
       {/* Quality list */}
-      <div className="grid gap-3 sm:grid-cols-2">
+      <div className="space-y-3">
         {activeTab === "positive"
           ? filteredPositive.map((q) => renderQuality(q, true))
           : filteredNegative.map((q) => renderQuality(q, false))}

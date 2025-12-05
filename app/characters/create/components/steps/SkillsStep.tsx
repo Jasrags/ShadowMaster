@@ -68,6 +68,53 @@ export function SkillsStep({ state, updateState, budgetValues }: StepProps) {
     });
   }, [activeSkills, searchQuery, selectedCategory]);
 
+  // Group filtered skills by their skill group
+  const groupedSkills = useMemo(() => {
+    const grouped: Record<string, typeof filteredSkills> = {};
+    const ungrouped: typeof filteredSkills = [];
+
+    filteredSkills.forEach((skill) => {
+      if (skill.group) {
+        if (!grouped[skill.group]) {
+          grouped[skill.group] = [];
+        }
+        grouped[skill.group].push(skill);
+      } else {
+        ungrouped.push(skill);
+      }
+    });
+
+    // Sort skills within each group by name
+    Object.keys(grouped).forEach((key) => {
+      grouped[key].sort((a, b) => a.name.localeCompare(b.name));
+    });
+    ungrouped.sort((a, b) => a.name.localeCompare(b.name));
+
+    // Create ordered array of groups based on skillGroups order
+    const orderedGroups: Array<{ groupId: string; groupName: string; skills: typeof filteredSkills }> = [];
+    
+    skillGroups.forEach((sg) => {
+      if (grouped[sg.id] && grouped[sg.id].length > 0) {
+        orderedGroups.push({
+          groupId: sg.id,
+          groupName: sg.name,
+          skills: grouped[sg.id],
+        });
+      }
+    });
+
+    // Add ungrouped at the end
+    if (ungrouped.length > 0) {
+      orderedGroups.push({
+        groupId: "ungrouped",
+        groupName: "Ungrouped Skills",
+        skills: ungrouped,
+      });
+    }
+
+    return orderedGroups;
+  }, [filteredSkills, skillGroups]);
+
   // Get available categories
   const availableCategories = useMemo(() => {
     const categories = new Set<SkillCategory>();
@@ -352,7 +399,7 @@ export function SkillsStep({ state, updateState, budgetValues }: StepProps) {
           <h3 className="mb-3 text-sm font-semibold uppercase tracking-wider text-zinc-500 dark:text-zinc-400">
             Skill Groups
           </h3>
-          <div className="grid gap-2 sm:grid-cols-2">
+          <div className="space-y-2">
             {skillGroups.map(renderGroup)}
           </div>
         </div>
@@ -396,18 +443,45 @@ export function SkillsStep({ state, updateState, budgetValues }: StepProps) {
         </select>
       </div>
 
-      {/* Individual Skills */}
+      {/* Individual Skills - Grouped by Skill Group */}
       <div>
         <h3 className="mb-3 text-sm font-semibold uppercase tracking-wider text-zinc-500 dark:text-zinc-400">
           Active Skills ({filteredSkills.length})
         </h3>
-        <div className="grid gap-2 sm:grid-cols-2 lg:grid-cols-3">
-          {filteredSkills.map(renderSkill)}
-        </div>
-        {filteredSkills.length === 0 && (
+        
+        {groupedSkills.length === 0 ? (
           <p className="py-8 text-center text-sm text-zinc-500 dark:text-zinc-400">
             No skills match your search.
           </p>
+        ) : (
+          <div className="space-y-6">
+            {groupedSkills.map(({ groupId, groupName, skills: groupSkills }) => (
+              <div key={groupId}>
+                {/* Group Header */}
+                <div className="mb-2 flex items-center gap-2">
+                  <div className={`h-px flex-1 ${groupId === "ungrouped" ? "bg-zinc-300 dark:bg-zinc-600" : "bg-purple-300 dark:bg-purple-700"}`} />
+                  <span className={`text-xs font-semibold uppercase tracking-wider ${
+                    groupId === "ungrouped" 
+                      ? "text-zinc-500 dark:text-zinc-400" 
+                      : "text-purple-600 dark:text-purple-400"
+                  }`}>
+                    {groupName}
+                    {groupId !== "ungrouped" && groups[groupId] > 0 && (
+                      <span className="ml-1.5 rounded bg-purple-100 px-1.5 py-0.5 text-purple-700 dark:bg-purple-900 dark:text-purple-300">
+                        Group Rating: {groups[groupId]}
+                      </span>
+                    )}
+                  </span>
+                  <div className={`h-px flex-1 ${groupId === "ungrouped" ? "bg-zinc-300 dark:bg-zinc-600" : "bg-purple-300 dark:bg-purple-700"}`} />
+                </div>
+                
+                {/* Skills in this group */}
+                <div className="space-y-2">
+                  {groupSkills.map(renderSkill)}
+                </div>
+              </div>
+            ))}
+          </div>
         )}
       </div>
     </div>
