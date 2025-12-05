@@ -33,7 +33,10 @@ export async function getUserById(userId: string): Promise<User | null> {
   try {
     const filePath = getUserFilePath(userId);
     const fileContent = await fs.readFile(filePath, "utf-8");
-    return JSON.parse(fileContent) as User;
+    const user = JSON.parse(fileContent) as User;
+    // Normalize role to array for backward compatibility
+    user.role = normalizeUserRole(user.role);
+    return user;
   } catch (error) {
     if ((error as NodeJS.ErrnoException).code === "ENOENT") {
       return null;
@@ -59,6 +62,16 @@ export async function getUserByEmail(email: string): Promise<User | null> {
 }
 
 /**
+ * Normalize user role to always be an array (for backward compatibility)
+ */
+function normalizeUserRole(role: UserRole | UserRole[]): UserRole[] {
+  if (Array.isArray(role)) {
+    return role;
+  }
+  return [role];
+}
+
+/**
  * Get all users (for checking if first user)
  */
 export async function getAllUsers(): Promise<User[]> {
@@ -73,6 +86,8 @@ export async function getAllUsers(): Promise<User[]> {
         const filePath = path.join(DATA_DIR, file);
         const fileContent = await fs.readFile(filePath, "utf-8");
         const user = JSON.parse(fileContent) as User;
+        // Normalize role to array for backward compatibility
+        user.role = normalizeUserRole(user.role);
         users.push(user);
       } catch (error) {
         // Skip invalid files
@@ -106,7 +121,7 @@ export async function createUser(
   await ensureDataDirectory();
   
   const isFirst = await isFirstUser();
-  const role: UserRole = isFirst ? "administrator" : "user";
+  const role: UserRole[] = isFirst ? ["administrator"] : ["user"];
   
   const user: User = {
     id: uuidv4(),
@@ -173,5 +188,25 @@ export async function updateUser(
   }
   
   return updatedUser;
+}
+
+/**
+ * Delete a user by ID
+ */
+export async function deleteUser(userId: string): Promise<void> {
+  const user = await getUserById(userId);
+  if (!user) {
+    throw new Error(`User with ID ${userId} not found`);
+  }
+  
+  const filePath = getUserFilePath(userId);
+  try {
+    await fs.unlink(filePath);
+  } catch (error) {
+    if ((error as NodeJS.ErrnoException).code !== "ENOENT") {
+      throw error;
+    }
+    // File doesn't exist, which is fine
+  }
 }
 

@@ -40,3 +40,24 @@ export async function requireAuth(): Promise<PublicUser> {
   return user;
 }
 
+/**
+ * Check if the current user is an administrator
+ * Returns false if not authenticated
+ */
+export async function isAdmin(): Promise<boolean> {
+  const user = await getCurrentUser();
+  return user?.role.includes("administrator") ?? false;
+}
+
+/**
+ * Require administrator role - throws error if not authenticated or not admin
+ * Use in Server Components or Server Actions
+ */
+export async function requireAdmin(): Promise<PublicUser> {
+  const user = await requireAuth();
+  if (!user.role.includes("administrator")) {
+    throw new Error("Administrator access required");
+  }
+  return user;
+}
+

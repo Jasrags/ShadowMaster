@@ -49,3 +49,24 @@ export function getPasswordStrengthError(password: string): string | null {
   return null;
 }
 
+/**
+ * Validate username length
+ * Username must be between 3 and 50 characters
+ */
+export function isValidUsername(username: string): boolean {
+  return username.length >= 3 && username.length <= 50;
+}
+
+/**
+ * Get username validation error message
+ */
+export function getUsernameError(username: string): string | null {
+  if (username.length < 3) {
+    return "Username must be at least 3 characters long";
+  }
+  if (username.length > 50) {
+    return "Username must be no more than 50 characters long";
+  }
+  return null;
+}
+
