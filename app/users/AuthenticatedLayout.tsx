@@ -63,13 +63,13 @@ export default function AuthenticatedLayout({ children, currentPath = "/" }: Aut
   };
 
   const navItems = [
-    { id: "home", label: "Home", icon: HomeIcon, href: "/" },
-    { id: "characters", label: "Characters", icon: UserIcon, href: "#", badge: null },
-    { id: "rulesets", label: "Rulesets", icon: BookIcon, href: "#" },
+    { id: "home", label: "Home", icon: HomeIcon, href: "/", disabled: false },
+    { id: "characters", label: "Characters", icon: UserIcon, href: "/characters", disabled: false, badge: null },
+    { id: "rulesets", label: "Rulesets", icon: BookIcon, href: "/rulesets", disabled: true },
     ...(user.role.includes("administrator")
-      ? [{ id: "users", label: "User Management", icon: UsersIcon, href: "/users" }]
+      ? [{ id: "users", label: "User Management", icon: UsersIcon, href: "/users", disabled: false }]
       : []),
-    { id: "settings", label: "Settings", icon: SettingsIcon, href: "#" },
+    { id: "settings", label: "Settings", icon: SettingsIcon, href: "/settings", disabled: true },
   ];
 
   return (
@@ -171,6 +171,25 @@ export default function AuthenticatedLayout({ children, currentPath = "/" }: Aut
             {navItems.map((item) => {
               const Icon = item.icon;
               const isActive = item.href === currentPath;
+              const isDisabled = item.disabled;
+
+              // Render disabled items as non-interactive elements
+              if (isDisabled) {
+                return (
+                  <div
+                    key={item.id}
+                    className="flex cursor-not-allowed items-center gap-3 rounded-md px-3 py-2 text-sm font-medium text-zinc-400 dark:text-zinc-600"
+                    title="Coming soon"
+                  >
+                    <Icon className="h-5 w-5" />
+                    <span>{item.label}</span>
+                    <span className="ml-auto rounded bg-zinc-100 px-1.5 py-0.5 text-[10px] font-medium uppercase text-zinc-400 dark:bg-zinc-800 dark:text-zinc-500">
+                      Soon
+                    </span>
+                  </div>
+                );
+              }
+
               return (
                 <Link
                   key={item.id}
@@ -183,9 +202,9 @@ export default function AuthenticatedLayout({ children, currentPath = "/" }: Aut
                 >
                   <Icon className="h-5 w-5" />
                   <span>{item.label}</span>
-                  {item.badge !== null && item.badge !== undefined && (
+                  {"badge" in item && (item as { badge?: string | number | null }).badge != null && (
                     <span className="ml-auto rounded-full bg-zinc-200 px-2 py-0.5 text-xs font-medium text-zinc-700 dark:bg-zinc-800 dark:text-zinc-300">
-                      {item.badge}
+                      {(item as { badge?: string | number | null }).badge}
                     </span>
                   )}
                 </Link>

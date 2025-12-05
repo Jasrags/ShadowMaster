@@ -4,7 +4,7 @@
  * RulesetContext
  *
  * React context that provides the merged ruleset to the UI.
- * Handles loading, caching, and provides convenient hooks for
+ * Handles loading via API, caching, and provides convenient hooks for
  * accessing ruleset data during character creation.
  */
 
@@ -12,7 +12,6 @@ import React, {
   createContext,
   useContext,
   useState,
-  useEffect,
   useCallback,
   useMemo,
 } from "react";
@@ -22,19 +21,64 @@ import type {
   CreationMethod,
   ID,
 } from "../types";
-import type {
-  MetatypeData,
-  SkillData,
-  SkillGroupData,
-  QualityData,
-  PriorityTableData,
-  MagicPathData,
-  LifestyleData,
-} from "./loader";
 
 // =============================================================================
 // TYPES
 // =============================================================================
+
+/**
+ * Data types for extracted ruleset data
+ */
+export interface MetatypeData {
+  id: string;
+  name: string;
+  description?: string;
+  attributes: Record<string, { min: number; max: number } | { base: number }>;
+  racialTraits?: string[];
+}
+
+export interface SkillData {
+  id: string;
+  name: string;
+  linkedAttribute: string;
+  group?: string | null;
+  canDefault?: boolean;
+  category?: string;
+}
+
+export interface SkillGroupData {
+  id: string;
+  name: string;
+  skills: string[];
+}
+
+export interface QualityData {
+  id: string;
+  name: string;
+  karmaCost?: number;
+  summary?: string;
+}
+
+export interface PriorityTableData {
+  levels: string[];
+  categories: Array<{ id: string; name: string; description?: string }>;
+  table: Record<string, Record<string, unknown>>;
+}
+
+export interface MagicPathData {
+  id: string;
+  name: string;
+  description?: string;
+  hasMagic?: boolean;
+  hasResonance?: boolean;
+}
+
+export interface LifestyleData {
+  id: string;
+  name: string;
+  cost: number;
+  description?: string;
+}
 
 /**
  * State of the ruleset context
@@ -140,13 +184,11 @@ export interface RulesetProviderProps {
 
 export function RulesetProvider({
   children,
-  initialEdition,
-  initialBookIds,
 }: RulesetProviderProps) {
   const [state, setState] = useState<RulesetContextState>(defaultState);
   const [data, setData] = useState<RulesetData>(defaultData);
 
-  // Load ruleset action
+  // Load ruleset action via API
   const loadRuleset = useCallback(
     async (editionCode: EditionCode, bookIds?: ID[]) => {
       setState((prev) => ({
@@ -157,50 +199,38 @@ export function RulesetProvider({
       }));
 
       try {
-        // Dynamic import to avoid SSR issues
-        const { loadAndMergeRuleset } = await import("./merge");
-        const {
-          extractMetatypes,
-          extractSkills,
-          extractQualities,
-          extractPriorityTable,
-          extractMagicPaths,
-          extractLifestyles,
-          loadRuleset: loadRulesetFromLoader,
-        } = await import("./loader");
+        // Build API URL
+        let url = `/api/rulesets/${editionCode}`;
+        if (bookIds && bookIds.length > 0) {
+          url += `?bookIds=${bookIds.join(",")}`;
+        }
 
-        // Load and merge
-        const result = await loadAndMergeRuleset(editionCode, bookIds);
+        // Fetch from API
+        const response = await fetch(url);
+        const result = await response.json();
 
-        if (!result.success || !result.ruleset) {
+        if (!result.success) {
           throw new Error(result.error || "Failed to load ruleset");
         }
 
-        // Also load the raw ruleset to get creation methods
-        const loadResult = await loadRulesetFromLoader({
-          editionCode,
-          bookIds,
-        });
-
-        const creationMethods = loadResult.ruleset?.creationMethods || [];
+        const { ruleset, creationMethods, extractedData } = result;
         const defaultMethod = creationMethods[0] || null;
 
-        // Extract data for convenience
-        const loadedRuleset = loadResult.ruleset;
-        const extractedData: RulesetData = loadedRuleset
+        // Transform extracted data
+        const transformedData: RulesetData = extractedData
           ? {
-              metatypes: extractMetatypes(loadedRuleset),
-              skills: extractSkills(loadedRuleset),
-              qualities: extractQualities(loadedRuleset),
-              priorityTable: extractPriorityTable(loadedRuleset),
-              magicPaths: extractMagicPaths(loadedRuleset),
-              lifestyles: extractLifestyles(loadedRuleset),
+              metatypes: extractedData.metatypes || [],
+              skills: extractedData.skills || { activeSkills: [], skillGroups: [] },
+              qualities: extractedData.qualities || { positive: [], negative: [] },
+              priorityTable: extractedData.priorityTable || null,
+              magicPaths: extractedData.magicPaths || [],
+              lifestyles: extractedData.lifestyles || [],
             }
           : defaultData;
 
         setState({
           editionCode,
-          ruleset: result.ruleset,
+          ruleset,
           creationMethods,
           currentCreationMethod: defaultMethod,
           loading: false,
@@ -208,7 +238,7 @@ export function RulesetProvider({
           ready: true,
         });
 
-        setData(extractedData);
+        setData(transformedData);
       } catch (error) {
         setState((prev) => ({
           ...prev,
@@ -247,13 +277,6 @@ export function RulesetProvider({
       await loadRuleset(state.editionCode);
     }
   }, [state.editionCode, loadRuleset]);
-
-  // Load initial edition if provided
-  useEffect(() => {
-    if (initialEdition && !state.ruleset && !state.loading) {
-      loadRuleset(initialEdition, initialBookIds);
-    }
-  }, [initialEdition, initialBookIds, state.ruleset, state.loading, loadRuleset]);
 
   // Memoize context value
   const contextValue = useMemo<RulesetContextValue>(
@@ -383,4 +406,3 @@ export function useRulesetStatus(): {
   const { loading, error, ready } = useRuleset();
   return { loading, error, ready };
 }
-
