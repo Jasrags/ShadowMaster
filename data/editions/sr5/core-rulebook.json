@@ -716,12 +716,193 @@
       "mergeStrategy": "replace",
       "payload": {
         "lifestyles": [
-          { "id": "street", "name": "Street", "monthlyCost": 0, "startingNuyen": "1d6 × 20" },
-          { "id": "squatter", "name": "Squatter", "monthlyCost": 500, "startingNuyen": "2d6 × 40" },
-          { "id": "low", "name": "Low", "monthlyCost": 2000, "startingNuyen": "3d6 × 60" },
-          { "id": "medium", "name": "Medium", "monthlyCost": 5000, "startingNuyen": "4d6 × 100" },
-          { "id": "high", "name": "High", "monthlyCost": 10000, "startingNuyen": "5d6 × 500" },
-          { "id": "luxury", "name": "Luxury", "monthlyCost": 100000, "startingNuyen": "6d6 × 1000" }
+          { "id": "street", "name": "Street", "monthlyCost": 0, "startingNuyen": "1d6 × 20", "description": "Living on the streets with no permanent shelter." },
+          { "id": "squatter", "name": "Squatter", "monthlyCost": 500, "startingNuyen": "2d6 × 40", "description": "Abandoned buildings or makeshift shelter." },
+          { "id": "low", "name": "Low", "monthlyCost": 2000, "startingNuyen": "3d6 × 60", "description": "A small apartment in a rough neighborhood." },
+          { "id": "medium", "name": "Medium", "monthlyCost": 5000, "startingNuyen": "4d6 × 100", "description": "A comfortable apartment with basic amenities." },
+          { "id": "high", "name": "High", "monthlyCost": 10000, "startingNuyen": "5d6 × 500", "description": "Upscale housing in a secure neighborhood." },
+          { "id": "luxury", "name": "Luxury", "monthlyCost": 100000, "startingNuyen": "6d6 × 1000", "description": "The finest accommodations money can buy." }
+        ],
+        "metatypeModifiers": {
+          "dwarf": 1.2,
+          "troll": 2.0
+        }
+      }
+    },
+    "gear": {
+      "mergeStrategy": "replace",
+      "payload": {
+        "categories": [
+          { "id": "weapons", "name": "Weapons" },
+          { "id": "armor", "name": "Armor" },
+          { "id": "electronics", "name": "Electronics" },
+          { "id": "commlinks", "name": "Commlinks" },
+          { "id": "cyberdecks", "name": "Cyberdecks" },
+          { "id": "tools", "name": "Tools & Kits" },
+          { "id": "survival", "name": "Survival Gear" },
+          { "id": "medical", "name": "Medical Supplies" },
+          { "id": "security", "name": "Security Devices" },
+          { "id": "miscellaneous", "name": "Miscellaneous" }
+        ],
+        "weapons": {
+          "melee": [
+            { "id": "combat-knife", "name": "Combat Knife", "category": "weapons", "subcategory": "melee", "cost": 300, "availability": 4, "damage": "(STR+1)P", "ap": -1, "reach": 0, "accuracy": 6 },
+            { "id": "katana", "name": "Katana", "category": "weapons", "subcategory": "melee", "cost": 1000, "availability": 9, "restricted": true, "damage": "(STR+3)P", "ap": -3, "reach": 1, "accuracy": 7 },
+            { "id": "survival-knife", "name": "Survival Knife", "category": "weapons", "subcategory": "melee", "cost": 100, "availability": 0, "damage": "(STR+1)P", "ap": -1, "reach": 0, "accuracy": 5 },
+            { "id": "sword", "name": "Sword", "category": "weapons", "subcategory": "melee", "cost": 500, "availability": 5, "restricted": true, "damage": "(STR+3)P", "ap": -2, "reach": 1, "accuracy": 6 },
+            { "id": "club", "name": "Club", "category": "weapons", "subcategory": "melee", "cost": 30, "availability": 0, "damage": "(STR+2)S", "ap": 0, "reach": 1, "accuracy": 4 },
+            { "id": "extendable-baton", "name": "Extendable Baton", "category": "weapons", "subcategory": "melee", "cost": 100, "availability": 4, "damage": "(STR+1)P", "ap": 0, "reach": 1, "accuracy": 5 },
+            { "id": "stun-baton", "name": "Stun Baton", "category": "weapons", "subcategory": "melee", "cost": 750, "availability": 6, "restricted": true, "damage": "9S(e)", "ap": -5, "reach": 1, "accuracy": 4 },
+            { "id": "shock-gloves", "name": "Shock Gloves", "category": "weapons", "subcategory": "melee", "cost": 550, "availability": 6, "restricted": true, "damage": "8S(e)", "ap": -5, "reach": 0, "accuracy": 0 }
+          ],
+          "pistols": [
+            { "id": "ares-predator-v", "name": "Ares Predator V", "category": "weapons", "subcategory": "pistols", "cost": 725, "availability": 5, "restricted": true, "damage": "8P", "ap": -1, "mode": ["SA"], "rc": 0, "ammo": 15, "accuracy": 5 },
+            { "id": "colt-america-l36", "name": "Colt America L36", "category": "weapons", "subcategory": "pistols", "cost": 320, "availability": 4, "restricted": true, "damage": "7P", "ap": 0, "mode": ["SA"], "rc": 0, "ammo": 11, "accuracy": 7 },
+            { "id": "fichetti-security-600", "name": "Fichetti Security 600", "category": "weapons", "subcategory": "pistols", "cost": 350, "availability": 6, "restricted": true, "damage": "7P", "ap": 0, "mode": ["SA"], "rc": 1, "ammo": 30, "accuracy": 6 },
+            { "id": "streetline-special", "name": "Streetline Special", "category": "weapons", "subcategory": "pistols", "cost": 120, "availability": 4, "restricted": true, "damage": "6P", "ap": 0, "mode": ["SA"], "rc": 0, "ammo": 6, "accuracy": 4 },
+            { "id": "ruger-super-warhawk", "name": "Ruger Super Warhawk", "category": "weapons", "subcategory": "pistols", "cost": 400, "availability": 4, "restricted": true, "damage": "9P", "ap": -2, "mode": ["SS"], "rc": 0, "ammo": 6, "accuracy": 5 },
+            { "id": "remington-roomsweeper", "name": "Remington Roomsweeper", "category": "weapons", "subcategory": "pistols", "cost": 250, "availability": 6, "restricted": true, "damage": "9P(f)", "ap": -1, "mode": ["SA"], "rc": 0, "ammo": 8, "accuracy": 4 }
+          ],
+          "smgs": [
+            { "id": "ares-crusader-ii", "name": "Ares Crusader II", "category": "weapons", "subcategory": "smgs", "cost": 830, "availability": 9, "restricted": true, "damage": "7P", "ap": 0, "mode": ["SA", "BF"], "rc": 2, "ammo": 40, "accuracy": 5 },
+            { "id": "hk-227", "name": "HK-227", "category": "weapons", "subcategory": "smgs", "cost": 730, "availability": 8, "restricted": true, "damage": "7P", "ap": 0, "mode": ["SA", "BF", "FA"], "rc": 0, "ammo": 28, "accuracy": 5 },
+            { "id": "ingram-smartgun-x", "name": "Ingram Smartgun X", "category": "weapons", "subcategory": "smgs", "cost": 800, "availability": 6, "restricted": true, "damage": "8P", "ap": 0, "mode": ["SA", "BF"], "rc": 2, "ammo": 32, "accuracy": 4 },
+            { "id": "scm-70", "name": "SCK Model 100", "category": "weapons", "subcategory": "smgs", "cost": 875, "availability": 6, "restricted": true, "damage": "8P", "ap": 0, "mode": ["SA", "BF"], "rc": 0, "ammo": 30, "accuracy": 5 },
+            { "id": "uzi-iv", "name": "Uzi IV", "category": "weapons", "subcategory": "smgs", "cost": 450, "availability": 4, "restricted": true, "damage": "7P", "ap": 0, "mode": ["SA", "BF"], "rc": 1, "ammo": 24, "accuracy": 4 }
+          ],
+          "rifles": [
+            { "id": "ak-97", "name": "AK-97", "category": "weapons", "subcategory": "rifles", "cost": 950, "availability": 4, "restricted": true, "damage": "10P", "ap": -2, "mode": ["SA", "BF", "FA"], "rc": 0, "ammo": 38, "accuracy": 5 },
+            { "id": "ares-alpha", "name": "Ares Alpha", "category": "weapons", "subcategory": "rifles", "cost": 2650, "availability": 11, "forbidden": true, "damage": "11P", "ap": -2, "mode": ["SA", "BF", "FA"], "rc": 2, "ammo": 42, "accuracy": 5 },
+            { "id": "colt-m23", "name": "Colt M23", "category": "weapons", "subcategory": "rifles", "cost": 550, "availability": 4, "restricted": true, "damage": "9P", "ap": -2, "mode": ["SA", "BF", "FA"], "rc": 0, "ammo": 40, "accuracy": 4 },
+            { "id": "fn-har", "name": "FN HAR", "category": "weapons", "subcategory": "rifles", "cost": 1500, "availability": 8, "restricted": true, "damage": "10P", "ap": -2, "mode": ["SA", "BF", "FA"], "rc": 2, "ammo": 35, "accuracy": 5 },
+            { "id": "yamaha-raiden", "name": "Yamaha Raiden", "category": "weapons", "subcategory": "rifles", "cost": 2600, "availability": 14, "forbidden": true, "damage": "11P", "ap": -2, "mode": ["SA", "BF", "FA"], "rc": 6, "ammo": 60, "accuracy": 6 }
+          ],
+          "shotguns": [
+            { "id": "defiance-t-250", "name": "Defiance T-250", "category": "weapons", "subcategory": "shotguns", "cost": 450, "availability": 4, "restricted": true, "damage": "10P", "ap": -1, "mode": ["SS", "SA"], "rc": 0, "ammo": 5, "accuracy": 4 },
+            { "id": "enfield-as-7", "name": "Enfield AS-7", "category": "weapons", "subcategory": "shotguns", "cost": 1100, "availability": 12, "forbidden": true, "damage": "13P", "ap": -1, "mode": ["SA", "BF"], "rc": 0, "ammo": 10, "accuracy": 4 },
+            { "id": "mossberg-am-cmdt", "name": "Mossberg AM-CMDT", "category": "weapons", "subcategory": "shotguns", "cost": 1000, "availability": 7, "restricted": true, "damage": "10P", "ap": -1, "mode": ["SA"], "rc": 0, "ammo": 8, "accuracy": 5 }
+          ],
+          "sniperRifles": [
+            { "id": "ares-desert-strike", "name": "Ares Desert Strike", "category": "weapons", "subcategory": "sniperRifles", "cost": 17500, "availability": 10, "forbidden": true, "damage": "13P", "ap": -4, "mode": ["SA"], "rc": 0, "ammo": 14, "accuracy": 7 },
+            { "id": "cavalier-arms-crockett-elf", "name": "Cavalier Arms Crockett ELF", "category": "weapons", "subcategory": "sniperRifles", "cost": 10300, "availability": 12, "forbidden": true, "damage": "12P", "ap": -3, "mode": ["SA"], "rc": 0, "ammo": 6, "accuracy": 6 },
+            { "id": "ranger-arms-sm-5", "name": "Ranger Arms SM-5", "category": "weapons", "subcategory": "sniperRifles", "cost": 28000, "availability": 16, "forbidden": true, "damage": "14P", "ap": -5, "mode": ["SA"], "rc": 0, "ammo": 15, "accuracy": 8 },
+            { "id": "remington-950", "name": "Remington 950", "category": "weapons", "subcategory": "sniperRifles", "cost": 2100, "availability": 4, "restricted": true, "damage": "12P", "ap": -4, "mode": ["SS"], "rc": 0, "ammo": 5, "accuracy": 7 }
+          ],
+          "throwingWeapons": [
+            { "id": "throwing-knife", "name": "Throwing Knife", "category": "weapons", "subcategory": "throwingWeapons", "cost": 25, "availability": 0, "damage": "(STR+1)P", "ap": -1, "accuracy": 0 },
+            { "id": "shuriken", "name": "Shuriken", "category": "weapons", "subcategory": "throwingWeapons", "cost": 25, "availability": 4, "damage": "(STR+1)P", "ap": -1, "accuracy": 0 }
+          ],
+          "grenades": [
+            { "id": "fragmentation-grenade", "name": "Fragmentation Grenade", "category": "weapons", "subcategory": "grenades", "cost": 100, "availability": 11, "forbidden": true, "damage": "18P(f)", "ap": 2, "blast": "-1/m" },
+            { "id": "high-explosive-grenade", "name": "High Explosive Grenade", "category": "weapons", "subcategory": "grenades", "cost": 100, "availability": 11, "forbidden": true, "damage": "16P", "ap": -2, "blast": "-2/m" },
+            { "id": "flash-bang-grenade", "name": "Flash-Bang Grenade", "category": "weapons", "subcategory": "grenades", "cost": 100, "availability": 6, "restricted": true, "damage": "10S", "ap": -4, "blast": "10m radius" },
+            { "id": "smoke-grenade", "name": "Smoke Grenade", "category": "weapons", "subcategory": "grenades", "cost": 40, "availability": 4, "restricted": true, "damage": "-", "ap": 0, "blast": "10m radius" },
+            { "id": "thermal-smoke-grenade", "name": "Thermal Smoke Grenade", "category": "weapons", "subcategory": "grenades", "cost": 60, "availability": 6, "restricted": true, "damage": "-", "ap": 0, "blast": "10m radius" },
+            { "id": "gas-grenade-cs-tear", "name": "Gas Grenade (CS/Tear)", "category": "weapons", "subcategory": "grenades", "cost": 40, "availability": 4, "restricted": true, "damage": "Nausea", "ap": 0, "blast": "10m radius" }
+          ]
+        },
+        "armor": [
+          { "id": "armor-clothing", "name": "Armor Clothing", "category": "armor", "cost": 450, "availability": 2, "armorRating": 6, "description": "Fashionable clothing with hidden armor weave." },
+          { "id": "armor-jacket", "name": "Armor Jacket", "category": "armor", "cost": 1000, "availability": 2, "armorRating": 12, "description": "Standard street armor for runners." },
+          { "id": "armor-vest", "name": "Armor Vest", "category": "armor", "cost": 500, "availability": 4, "armorRating": 9, "description": "Concealable armored vest." },
+          { "id": "chameleon-suit", "name": "Chameleon Suit", "category": "armor", "cost": 1700, "availability": 10, "restricted": true, "armorRating": 9, "description": "Thermoptic camouflage suit with ruthenium coating." },
+          { "id": "full-body-armor", "name": "Full Body Armor", "category": "armor", "cost": 2000, "availability": 14, "restricted": true, "armorRating": 15, "description": "Complete body coverage with helmet." },
+          { "id": "helmet", "name": "Helmet", "category": "armor", "cost": 100, "availability": 2, "armorRating": 2, "description": "Standard protective helmet." },
+          { "id": "lined-coat", "name": "Lined Coat", "category": "armor", "cost": 900, "availability": 4, "armorRating": 9, "description": "Long armored coat popular with street samurai." },
+          { "id": "securetech-ppe", "name": "SecureTech PPE", "category": "armor", "cost": 600, "availability": 6, "armorRating": 6, "description": "Security Personal Protective Equipment." },
+          { "id": "urban-explorer-jumpsuit", "name": "Urban Explorer Jumpsuit", "category": "armor", "cost": 650, "availability": 8, "armorRating": 9, "description": "Full-body jumpsuit with integrated armor." }
+        ],
+        "commlinks": [
+          { "id": "meta-link", "name": "Meta Link", "category": "commlinks", "cost": 100, "availability": 2, "deviceRating": 1, "description": "Basic commlink for the budget-conscious." },
+          { "id": "sony-angel", "name": "Sony Angel", "category": "commlinks", "cost": 300, "availability": 2, "deviceRating": 2, "description": "Entry-level consumer commlink." },
+          { "id": "renraku-sensei", "name": "Renraku Sensei", "category": "commlinks", "cost": 1000, "availability": 2, "deviceRating": 3, "description": "Popular mid-range commlink." },
+          { "id": "erika-elite", "name": "Erika Elite", "category": "commlinks", "cost": 2500, "availability": 4, "deviceRating": 4, "description": "High-end consumer commlink." },
+          { "id": "hermes-ikon", "name": "Hermes Ikon", "category": "commlinks", "cost": 3000, "availability": 6, "deviceRating": 5, "description": "Executive-class commlink." },
+          { "id": "transys-avalon", "name": "Transys Avalon", "category": "commlinks", "cost": 5000, "availability": 8, "deviceRating": 6, "description": "Top-of-the-line luxury commlink." },
+          { "id": "fairlight-caliban", "name": "Fairlight Caliban", "category": "commlinks", "cost": 8000, "availability": 10, "deviceRating": 7, "description": "Cutting-edge personal computing." }
+        ],
+        "cyberdecks": [
+          { "id": "erika-mcd-1", "name": "Erika MCD-1", "category": "cyberdecks", "cost": 49500, "availability": 3, "deviceRating": 1, "attributes": { "attack": 4, "sleaze": 3, "dataProcessing": 2, "firewall": 1 }, "programs": 1, "description": "Entry-level deck for aspiring deckers." },
+          { "id": "microdeck-summit", "name": "Microdeck Summit", "category": "cyberdecks", "cost": 58000, "availability": 3, "deviceRating": 1, "attributes": { "attack": 4, "sleaze": 3, "dataProcessing": 3, "firewall": 1 }, "programs": 1, "description": "Budget deck with decent specs." },
+          { "id": "microtronica-azteca-200", "name": "Microtronica Azteca 200", "category": "cyberdecks", "cost": 110250, "availability": 5, "deviceRating": 2, "attributes": { "attack": 5, "sleaze": 4, "dataProcessing": 3, "firewall": 2 }, "programs": 2, "description": "Solid mid-range deck." },
+          { "id": "hermes-chariot", "name": "Hermes Chariot", "category": "cyberdecks", "cost": 123000, "availability": 5, "deviceRating": 2, "attributes": { "attack": 5, "sleaze": 4, "dataProcessing": 4, "firewall": 2 }, "programs": 2, "description": "Popular with professional deckers." },
+          { "id": "novatech-navigator", "name": "Novatech Navigator", "category": "cyberdecks", "cost": 205750, "availability": 6, "deviceRating": 3, "attributes": { "attack": 6, "sleaze": 5, "dataProcessing": 4, "firewall": 3 }, "programs": 3, "description": "High-performance deck for serious work." },
+          { "id": "renraku-tsurugi", "name": "Renraku Tsurugi", "category": "cyberdecks", "cost": 214125, "availability": 7, "deviceRating": 3, "attributes": { "attack": 6, "sleaze": 5, "dataProcessing": 5, "firewall": 3 }, "programs": 3, "description": "Corporate-quality deck." },
+          { "id": "shiawase-cyber-5", "name": "Shiawase Cyber-5", "category": "cyberdecks", "cost": 345250, "availability": 9, "deviceRating": 4, "attributes": { "attack": 7, "sleaze": 6, "dataProcessing": 5, "firewall": 4 }, "programs": 4, "description": "Elite deck for top-tier deckers." },
+          { "id": "fairlight-excalibur", "name": "Fairlight Excalibur", "category": "cyberdecks", "cost": 823250, "availability": 12, "deviceRating": 6, "attributes": { "attack": 8, "sleaze": 7, "dataProcessing": 6, "firewall": 5 }, "programs": 6, "description": "The legendary Excalibur - the best money can buy." }
+        ],
+        "electronics": [
+          { "id": "bug-scanner", "name": "Bug Scanner", "category": "electronics", "cost": 400, "availability": 6, "rating": 6, "description": "Detects surveillance devices (Rating 1-6)." },
+          { "id": "directional-jammer", "name": "Directional Jammer", "category": "electronics", "cost": 800, "availability": 8, "restricted": true, "rating": 6, "description": "Jams wireless signals in a cone (Rating 1-6)." },
+          { "id": "area-jammer", "name": "Area Jammer", "category": "electronics", "cost": 1000, "availability": 8, "restricted": true, "rating": 6, "description": "Jams wireless signals in an area (Rating 1-6)." },
+          { "id": "white-noise-generator", "name": "White Noise Generator", "category": "electronics", "cost": 150, "availability": 4, "rating": 6, "description": "Prevents audio surveillance (Rating 1-6)." },
+          { "id": "data-tap", "name": "Data Tap", "category": "electronics", "cost": 300, "availability": 4, "description": "Physical tap for wired connections." },
+          { "id": "tag-eraser", "name": "Tag Eraser", "category": "electronics", "cost": 450, "availability": 6, "description": "Destroys RFID tags." },
+          { "id": "micro-transceiver", "name": "Micro-Transceiver", "category": "electronics", "cost": 100, "availability": 2, "description": "Basic wireless communication device." },
+          { "id": "subvocal-mic", "name": "Subvocal Microphone", "category": "electronics", "cost": 50, "availability": 2, "description": "Picks up subvocalized speech." },
+          { "id": "laser-microphone", "name": "Laser Microphone", "category": "electronics", "cost": 1000, "availability": 6, "restricted": true, "rating": 6, "description": "Long-range audio surveillance." }
+        ],
+        "tools": [
+          { "id": "lockpick-set", "name": "Lockpick Set", "category": "tools", "cost": 250, "availability": 4, "restricted": true, "description": "Tools for bypassing mechanical locks." },
+          { "id": "autopicker", "name": "Autopicker", "category": "tools", "cost": 500, "availability": 8, "restricted": true, "rating": 6, "description": "Electronic lockpick (Rating 1-6)." },
+          { "id": "sequencer", "name": "Sequencer", "category": "tools", "cost": 500, "availability": 8, "restricted": true, "rating": 6, "description": "Bypasses electronic maglock keypads (Rating 1-6)." },
+          { "id": "maglock-passkey", "name": "Maglock Passkey", "category": "tools", "cost": 2000, "availability": 12, "restricted": true, "rating": 4, "description": "Universal electronic lock key (Rating 1-4)." },
+          { "id": "cellular-glove-molder", "name": "Cellular Glove Molder", "category": "tools", "cost": 500, "availability": 12, "forbidden": true, "description": "Creates fake fingerprints from scans." },
+          { "id": "keycard-copier", "name": "Keycard Copier", "category": "tools", "cost": 600, "availability": 8, "restricted": true, "rating": 6, "description": "Copies electronic keycards (Rating 1-6)." },
+          { "id": "hardware-toolkit", "name": "Hardware Toolkit", "category": "tools", "cost": 500, "availability": 4, "description": "Electronics repair and modification tools." },
+          { "id": "armorer-toolkit", "name": "Armorer Toolkit", "category": "tools", "cost": 500, "availability": 8, "restricted": true, "description": "Weapon maintenance and modification tools." },
+          { "id": "disguise-kit", "name": "Disguise Kit", "category": "tools", "cost": 500, "availability": 4, "description": "Makeup and prosthetics for disguises." },
+          { "id": "forgery-kit", "name": "Forgery Kit", "category": "tools", "cost": 1000, "availability": 8, "restricted": true, "description": "Document and credential forgery tools." },
+          { "id": "medkit", "name": "Medkit", "category": "tools", "cost": 500, "availability": 3, "rating": 6, "description": "Portable medical supplies (Rating 1-6)." }
+        ],
+        "survival": [
+          { "id": "chemsuit", "name": "Chemsuit", "category": "survival", "cost": 600, "availability": 6, "rating": 6, "description": "Protection from chemical hazards (Rating 1-6)." },
+          { "id": "climbing-gear", "name": "Climbing Gear", "category": "survival", "cost": 200, "availability": 0, "description": "Rope, carabiners, harness." },
+          { "id": "rappelling-gloves", "name": "Rappelling Gloves", "category": "survival", "cost": 70, "availability": 0, "description": "Reinforced gloves for rope work." },
+          { "id": "flashlight", "name": "Flashlight", "category": "survival", "cost": 25, "availability": 0, "description": "Standard handheld light." },
+          { "id": "low-light-flashlight", "name": "Low Light Flashlight", "category": "survival", "cost": 50, "availability": 2, "description": "IR-capable flashlight." },
+          { "id": "grapple-gun", "name": "Grapple Gun", "category": "survival", "cost": 500, "availability": 8, "restricted": true, "description": "Pneumatic grapple launcher." },
+          { "id": "microwire", "name": "Microwire (100m)", "category": "survival", "cost": 50, "availability": 4, "description": "High-strength micro wire." },
+          { "id": "standard-rope", "name": "Standard Rope (100m)", "category": "survival", "cost": 50, "availability": 0, "description": "Heavy-duty climbing rope." },
+          { "id": "survival-kit", "name": "Survival Kit", "category": "survival", "cost": 200, "availability": 4, "description": "Wilderness survival essentials." },
+          { "id": "respirator", "name": "Respirator", "category": "survival", "cost": 50, "availability": 0, "rating": 6, "description": "Air filtration mask (Rating 1-6)." },
+          { "id": "gas-mask", "name": "Gas Mask", "category": "survival", "cost": 200, "availability": 0, "description": "Full face protection." }
+        ],
+        "medical": [
+          { "id": "stim-patch", "name": "Stim Patch", "category": "medical", "cost": 25, "availability": 6, "restricted": true, "rating": 6, "description": "Combats fatigue and injury effects (Rating 1-6)." },
+          { "id": "tranq-patch", "name": "Tranq Patch", "category": "medical", "cost": 75, "availability": 6, "restricted": true, "rating": 10, "description": "Sedative patch (Rating 1-10)." },
+          { "id": "trauma-patch", "name": "Trauma Patch", "category": "medical", "cost": 500, "availability": 6, "description": "Emergency stabilization patch." },
+          { "id": "antidote-patch", "name": "Antidote Patch", "category": "medical", "cost": 50, "availability": 4, "rating": 6, "description": "Counteracts toxins (Rating 1-6)." },
+          { "id": "slap-patch", "name": "Slap Patch", "category": "medical", "cost": 30, "availability": 0, "description": "Adhesive bandage with antiseptic." },
+          { "id": "chem-patch", "name": "Chem Patch", "category": "medical", "cost": 200, "availability": 4, "restricted": true, "rating": 6, "description": "Drug delivery patch (Rating 1-6)." },
+          { "id": "biomonitor", "name": "Biomonitor", "category": "medical", "cost": 300, "availability": 3, "description": "Tracks vital signs." }
+        ],
+        "security": [
+          { "id": "maglock", "name": "Maglock", "category": "security", "cost": 200, "availability": 2, "rating": 6, "description": "Electronic lock (Rating 1-6)." },
+          { "id": "restraint-plastic", "name": "Plastic Restraints (10)", "category": "security", "cost": 20, "availability": 0, "description": "Disposable plastic cuffs." },
+          { "id": "restraint-metal", "name": "Metal Restraints", "category": "security", "cost": 50, "availability": 2, "restricted": true, "description": "Standard handcuffs." },
+          { "id": "motion-sensor", "name": "Motion Sensor", "category": "security", "cost": 100, "availability": 4, "rating": 6, "description": "Detects movement (Rating 1-6)." },
+          { "id": "pressure-mat", "name": "Pressure Mat", "category": "security", "cost": 200, "availability": 6, "description": "Floor-mounted pressure sensor." },
+          { "id": "tripwire", "name": "Tripwire", "category": "security", "cost": 50, "availability": 4, "description": "Concealed wire alarm trigger." }
+        ],
+        "miscellaneous": [
+          { "id": "certified-credstick", "name": "Certified Credstick", "category": "miscellaneous", "cost": 25, "availability": 0, "description": "Anonymous payment stick." },
+          { "id": "standard-credstick", "name": "Standard Credstick", "category": "miscellaneous", "cost": 5, "availability": 0, "description": "Standard payment device." },
+          { "id": "fake-sin", "name": "Fake SIN", "category": "miscellaneous", "cost": 2500, "availability": 12, "forbidden": true, "rating": 4, "description": "Forged identity (Rating 1-4)." },
+          { "id": "fake-license", "name": "Fake License", "category": "miscellaneous", "cost": 200, "availability": 12, "forbidden": true, "rating": 4, "description": "Forged permit or license (Rating 1-4)." },
+          { "id": "contacts-imagelink", "name": "Contacts w/ Image Link", "category": "miscellaneous", "cost": 150, "availability": 3, "description": "AR-enabled contact lenses." },
+          { "id": "glasses-imagelink", "name": "Glasses w/ Image Link", "category": "miscellaneous", "cost": 175, "availability": 2, "description": "AR-enabled glasses." },
+          { "id": "ear-buds", "name": "Ear Buds", "category": "miscellaneous", "cost": 50, "availability": 0, "description": "Audio device with AR capability." },
+          { "id": "gecko-tape-gloves", "name": "Gecko Tape Gloves", "category": "miscellaneous", "cost": 250, "availability": 12, "description": "Allows climbing on smooth surfaces." }
+        ],
+        "ammunition": [
+          { "id": "ammo-regular", "name": "Regular Ammo (100)", "category": "ammunition", "cost": 20, "availability": 2, "restricted": true, "description": "Standard ammunition." },
+          { "id": "ammo-apds", "name": "APDS Ammo (10)", "category": "ammunition", "cost": 120, "availability": 12, "forbidden": true, "description": "Armor-Piercing Discarding Sabot (-4 AP)." },
+          { "id": "ammo-explosive", "name": "Explosive Ammo (10)", "category": "ammunition", "cost": 80, "availability": 9, "forbidden": true, "description": "Explosive rounds (+1 DV, -1 AP)." },
+          { "id": "ammo-flechette", "name": "Flechette Ammo (100)", "category": "ammunition", "cost": 65, "availability": 6, "restricted": true, "description": "Flechette rounds (+2 DV vs unarmored, +5 AP)." },
+          { "id": "ammo-gel", "name": "Gel Rounds (100)", "category": "ammunition", "cost": 25, "availability": 2, "description": "Non-lethal rounds (Stun damage, +2 AP)." },
+          { "id": "ammo-stick-n-shock", "name": "Stick-n-Shock (10)", "category": "ammunition", "cost": 80, "availability": 6, "restricted": true, "description": "Electrical rounds (-5 DV(e), -5 AP)." },
+          { "id": "ammo-tracer", "name": "Tracer Ammo (100)", "category": "ammunition", "cost": 25, "availability": 6, "restricted": true, "description": "Visible tracers for aimed fire." }
         ]
       }
     },

@@ -6,7 +6,7 @@
 
 import { NextRequest, NextResponse } from "next/server";
 import { loadAndMergeRuleset } from "@/lib/rules/merge";
-import { loadRuleset, extractMetatypes, extractSkills, extractQualities, extractPriorityTable, extractMagicPaths, extractLifestyles } from "@/lib/rules/loader";
+import { loadRuleset, extractMetatypes, extractSkills, extractQualities, extractPriorityTable, extractMagicPaths, extractLifestyles, extractLifestyleModifiers, extractGear } from "@/lib/rules/loader";
 
 export async function GET(
   request: NextRequest,
@@ -44,6 +44,8 @@ export async function GET(
           priorityTable: extractPriorityTable(loadedRuleset),
           magicPaths: extractMagicPaths(loadedRuleset),
           lifestyles: extractLifestyles(loadedRuleset),
+          lifestyleModifiers: extractLifestyleModifiers(loadedRuleset),
+          gear: extractGear(loadedRuleset),
         }
       : null;
 

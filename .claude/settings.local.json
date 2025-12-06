@@ -1,0 +1,17 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(find:*)",
+      "Bash(npx tsc:*)",
+      "Bash(npm run build:*)",
+      "Bash(git add:*)",
+      "Bash(git commit -m \"$(cat <<''EOF''\nPhase 6.2: Add Knowledge & Language skills to SkillsStep\n\n- Add tabbed interface with Active Skills, Knowledge Skills, and Languages tabs\n- Implement knowledge skill system with custom skill names and category selection\n  (Academic, Interests, Professional, Street)\n- Implement language skill system with free native language at rating 6\n- Calculate free knowledge/language points as (Logic + Intuition) × 2\n- Update extractSkills in loader.ts to include knowledge categories and creation limits\n- Update RulesetContext with KnowledgeCategoryData and SkillCreationLimitsData types\n- Fix KnowledgeSkill category type to use \"interests\" matching SR5 data\n\n🤖 Generated with [Claude Code](https://claude.com/claude-code)\n\nCo-Authored-By: Claude Opus 4.5 <noreply@anthropic.com>\nEOF\n)\")",
+      "Bash(git commit:*)",
+      "Bash(pnpm build:*)",
+      "Bash(curl:*)",
+      "Bash(python3:*)"
+    ],
+    "deny": [],
+    "ask": []
+  }
+}

@@ -456,3 +456,108 @@ export function extractLifestyles(ruleset: LoadedRuleset): LifestyleData[] {
   return module?.lifestyles || [];
 }
 
+/**
+ * Load lifestyle metatype modifiers from a ruleset
+ */
+export function extractLifestyleModifiers(ruleset: LoadedRuleset): Record<string, number> {
+  const module = extractModule<{ metatypeModifiers: Record<string, number> }>(ruleset, "lifestyle");
+  return module?.metatypeModifiers || {};
+}
+
+// =============================================================================
+// GEAR DATA TYPES AND LOADERS
+// =============================================================================
+
+/**
+ * Base gear item data structure
+ */
+export interface GearItemData {
+  id: string;
+  name: string;
+  category: string;
+  subcategory?: string;
+  cost: number;
+  availability: number;
+  restricted?: boolean;
+  forbidden?: boolean;
+  rating?: number;
+  description?: string;
+}
+
+/**
+ * Weapon data structure (extends GearItemData)
+ */
+export interface WeaponData extends GearItemData {
+  damage: string;
+  ap: number;
+  reach?: number;
+  accuracy?: number;
+  mode?: string[];
+  rc?: number;
+  ammo?: number;
+  blast?: string;
+}
+
+/**
+ * Armor data structure (extends GearItemData)
+ */
+export interface ArmorData extends GearItemData {
+  armorRating: number;
+}
+
+/**
+ * Commlink data structure (extends GearItemData)
+ */
+export interface CommlinkData extends GearItemData {
+  deviceRating: number;
+}
+
+/**
+ * Cyberdeck data structure (extends GearItemData)
+ */
+export interface CyberdeckData extends GearItemData {
+  deviceRating: number;
+  attributes: {
+    attack: number;
+    sleaze: number;
+    dataProcessing: number;
+    firewall: number;
+  };
+  programs: number;
+}
+
+/**
+ * Gear catalog data structure
+ */
+export interface GearCatalogData {
+  categories: Array<{ id: string; name: string }>;
+  weapons: {
+    melee: WeaponData[];
+    pistols: WeaponData[];
+    smgs: WeaponData[];
+    rifles: WeaponData[];
+    shotguns: WeaponData[];
+    sniperRifles: WeaponData[];
+    throwingWeapons: WeaponData[];
+    grenades: WeaponData[];
+  };
+  armor: ArmorData[];
+  commlinks: CommlinkData[];
+  cyberdecks: CyberdeckData[];
+  electronics: GearItemData[];
+  tools: GearItemData[];
+  survival: GearItemData[];
+  medical: GearItemData[];
+  security: GearItemData[];
+  miscellaneous: GearItemData[];
+  ammunition: GearItemData[];
+}
+
+/**
+ * Load gear catalog from a ruleset
+ */
+export function extractGear(ruleset: LoadedRuleset): GearCatalogData | null {
+  const module = extractModule<GearCatalogData>(ruleset, "gear");
+  return module;
+}
+

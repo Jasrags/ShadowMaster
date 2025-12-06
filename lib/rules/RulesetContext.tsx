@@ -89,8 +89,76 @@ export interface MagicPathData {
 export interface LifestyleData {
   id: string;
   name: string;
-  cost: number;
+  monthlyCost: number;
+  startingNuyen: string;
   description?: string;
+}
+
+export interface GearItemData {
+  id: string;
+  name: string;
+  category: string;
+  subcategory?: string;
+  cost: number;
+  availability: number;
+  restricted?: boolean;
+  forbidden?: boolean;
+  rating?: number;
+  description?: string;
+}
+
+export interface WeaponData extends GearItemData {
+  damage: string;
+  ap: number;
+  reach?: number;
+  accuracy?: number;
+  mode?: string[];
+  rc?: number;
+  ammo?: number;
+  blast?: string;
+}
+
+export interface ArmorData extends GearItemData {
+  armorRating: number;
+}
+
+export interface CommlinkData extends GearItemData {
+  deviceRating: number;
+}
+
+export interface CyberdeckData extends GearItemData {
+  deviceRating: number;
+  attributes: {
+    attack: number;
+    sleaze: number;
+    dataProcessing: number;
+    firewall: number;
+  };
+  programs: number;
+}
+
+export interface GearCatalogData {
+  categories: Array<{ id: string; name: string }>;
+  weapons: {
+    melee: WeaponData[];
+    pistols: WeaponData[];
+    smgs: WeaponData[];
+    rifles: WeaponData[];
+    shotguns: WeaponData[];
+    sniperRifles: WeaponData[];
+    throwingWeapons: WeaponData[];
+    grenades: WeaponData[];
+  };
+  armor: ArmorData[];
+  commlinks: CommlinkData[];
+  cyberdecks: CyberdeckData[];
+  electronics: GearItemData[];
+  tools: GearItemData[];
+  survival: GearItemData[];
+  medical: GearItemData[];
+  security: GearItemData[];
+  miscellaneous: GearItemData[];
+  ammunition: GearItemData[];
 }
 
 /**
@@ -151,6 +219,8 @@ export interface RulesetData {
   priorityTable: PriorityTableData | null;
   magicPaths: MagicPathData[];
   lifestyles: LifestyleData[];
+  lifestyleModifiers: Record<string, number>;
+  gear: GearCatalogData | null;
 }
 
 /**
@@ -182,6 +252,8 @@ const defaultData: RulesetData = {
   priorityTable: null,
   magicPaths: [],
   lifestyles: [],
+  lifestyleModifiers: {},
+  gear: null,
 };
 
 const defaultState: RulesetContextState = {
@@ -253,6 +325,8 @@ export function RulesetProvider({
               priorityTable: extractedData.priorityTable || null,
               magicPaths: extractedData.magicPaths || [],
               lifestyles: extractedData.lifestyles || [],
+              lifestyleModifiers: extractedData.lifestyleModifiers || {},
+              gear: extractedData.gear || null,
             }
           : defaultData;
 
@@ -438,4 +512,20 @@ export function useRulesetStatus(): {
 } {
   const { loading, error, ready } = useRuleset();
   return { loading, error, ready };
+}
+
+/**
+ * Hook to get gear catalog
+ */
+export function useGear(): GearCatalogData | null {
+  const { data } = useRuleset();
+  return data.gear;
+}
+
+/**
+ * Hook to get lifestyle metatype modifiers
+ */
+export function useLifestyleModifiers(): Record<string, number> {
+  const { data } = useRuleset();
+  return data.lifestyleModifiers;
 }
