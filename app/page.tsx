@@ -257,7 +257,7 @@ function AuthenticatedHomepage({
   sidebarOpen,
   setSidebarOpen 
 }: { 
-  user: { username: string; email: string; role: string; createdAt: string; lastLogin?: string | null };
+  user: { username: string; email: string; role: string[]; createdAt: string; lastLogin?: string | null };
   signOut: () => Promise<void>;
   sidebarOpen: boolean;
   setSidebarOpen: (open: boolean) => void;

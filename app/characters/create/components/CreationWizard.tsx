@@ -321,6 +321,48 @@ export function CreationWizard({ onCancel, onComplete }: CreationWizardProps) {
     setHasDraft(false);
   }, []);
 
+  // Calculate derived stats using SR5 formulas
+  const calculateDerivedStats = useCallback((
+    attributes: Record<string, number>,
+    specialAttributes: { edge: number; essence: number; magic?: number; resonance?: number }
+  ): Record<string, number> => {
+    const body = attributes.body || 1;
+    const agility = attributes.agility || 1;
+    const reaction = attributes.reaction || 1;
+    const strength = attributes.strength || 1;
+    const willpower = attributes.willpower || 1;
+    const logic = attributes.logic || 1;
+    const intuition = attributes.intuition || 1;
+    const charisma = attributes.charisma || 1;
+    const essence = specialAttributes.essence;
+
+    return {
+      // Initiative
+      initiative: intuition + reaction,
+      initiativeDice: 1,
+
+      // Limits
+      physicalLimit: Math.ceil(((strength * 2) + body + reaction) / 3),
+      mentalLimit: Math.ceil(((logic * 2) + intuition + willpower) / 3),
+      socialLimit: Math.ceil(((charisma * 2) + willpower + Math.ceil(essence)) / 3),
+
+      // Condition Monitors
+      physicalCM: Math.ceil(body / 2) + 8,
+      stunCM: Math.ceil(willpower / 2) + 8,
+      overflowCM: body,
+
+      // Composure, Judge Intentions, Memory, Lift/Carry
+      composure: charisma + willpower,
+      judgeIntentions: charisma + intuition,
+      memory: logic + willpower,
+      liftCarry: body + strength,
+
+      // Movement (meters per Combat Turn)
+      walkSpeed: agility * 2,
+      runSpeed: agility * 4,
+    };
+  }, []);
+
   // Save character to API
   const saveCharacter = useCallback(async (characterName: string) => {
     setIsSaving(true);
@@ -372,31 +414,40 @@ export function CreationWizard({ onCancel, onComplete }: CreationWizardProps) {
       const magicValue = hasMagic ? magicBase + (allocatedSpecialAttrs.magic || 0) : undefined;
       const resonanceValue = hasResonance ? resonanceBase + (allocatedSpecialAttrs.resonance || 0) : undefined;
 
+      // Build special attributes object
+      const specialAttrs = {
+        edge: edgeValue,
+        essence: 6,
+        magic: magicValue,
+        resonance: resonanceValue,
+      };
+
+      // Calculate derived stats
+      const derivedStats = calculateDerivedStats(baseAttributes, specialAttrs);
+
       // Build character data
       const characterData = {
         name: characterName || "Unnamed Runner",
         metatype: (state.selections.metatype as string) || "human",
         magicalPath: selectedMagicPath,
         attributes: baseAttributes,
-        specialAttributes: {
-          edge: edgeValue,
-          essence: 6,
-          magic: magicValue,
-          resonance: resonanceValue,
-        },
+        specialAttributes: specialAttrs,
         skills: (state.selections.skills as Record<string, number>) || {},
+        skillSpecializations: (state.selections.skillSpecializations as Record<string, string[]>) || {},
+        knowledgeSkills: (state.selections.knowledgeSkills as Array<{ name: string; category: string; rating: number }>) || [],
+        languages: (state.selections.languages as Array<{ name: string; rating: number; isNative?: boolean }>) || [],
         positiveQualities: (state.selections.positiveQualities as string[]) || [],
         negativeQualities: (state.selections.negativeQualities as string[]) || [],
         gear: [],
         contacts: [],
         nuyen: budgetValues["nuyen"] || 0,
         startingNuyen: budgetValues["nuyen"] || 0,
-        karmaCurrent: (budgetValues["karma"] || 25) + 
-          ((state.budgets["karma-gained-negative"] as number) || 0) - 
+        karmaCurrent: (budgetValues["karma"] || 25) +
+          ((state.budgets["karma-gained-negative"] as number) || 0) -
           ((state.budgets["karma-spent-positive"] as number) || 0),
         karmaTotal: budgetValues["karma"] || 25,
         karmaSpentAtCreation: (state.budgets["karma-spent-positive"] as number) || 0,
-        derivedStats: {},
+        derivedStats,
         condition: {
           physicalDamage: 0,
           stunDamage: 0,
@@ -453,7 +504,7 @@ export function CreationWizard({ onCancel, onComplete }: CreationWizardProps) {
     } finally {
       setIsSaving(false);
     }
-  }, [state, metatypes, editionCode, budgetValues, onComplete, priorityTable]);
+  }, [state, metatypes, editionCode, budgetValues, onComplete, priorityTable, calculateDerivedStats]);
 
   // Render step content
   const renderStepContent = () => {

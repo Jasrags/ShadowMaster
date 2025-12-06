@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useCallback, useMemo } from "react";
+import React, { useState, useCallback, useMemo } from "react";
 import { Button } from "react-aria-components";
 
 // =============================================================================
@@ -56,7 +56,7 @@ function DiceFace({ value, isHit, isOne, isAnimating, size = "md" }: DiceFacePro
     : "bg-zinc-800 border-zinc-600 text-zinc-300";
 
   // Dot patterns for each die face (classic d6 style)
-  const dotPatterns: Record<number, JSX.Element> = {
+  const dotPatterns: Record<number, React.JSX.Element> = {
     1: (
       <div className="absolute inset-0 flex items-center justify-center">
         <div className={`rounded-full ${isOne ? "bg-red-400" : "bg-zinc-400"} ${size === "sm" ? "w-2 h-2" : size === "md" ? "w-2.5 h-2.5" : "w-3 h-3"}`} />

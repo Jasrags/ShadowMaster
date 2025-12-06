@@ -3,7 +3,7 @@ import { requireAdmin } from "@/lib/auth/middleware";
 import { getAllUsers } from "@/lib/storage/users";
 import type { UsersListResponse, PublicUser } from "@/lib/types/user";
 
-export async function GET(request: NextRequest): Promise<NextResponse<UsersListResponse>> {
+export async function GET(request: NextRequest) {
   try {
     // Require administrator role
     await requireAdmin();

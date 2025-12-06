@@ -168,8 +168,7 @@ export default function UserEditModal({
                       errors.role
                         ? "border-red-500 dark:border-red-500"
                         : "border-zinc-300 dark:border-zinc-700"
-                    }`}
-                    isDisabled={isLoading}
+                    } ${isLoading ? "opacity-50 pointer-events-none" : ""}`}
                   >
                     <ListBoxItem
                       id="user"

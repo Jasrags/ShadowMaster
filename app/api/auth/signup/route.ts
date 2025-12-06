@@ -52,7 +52,7 @@ export async function POST(request: NextRequest): Promise<NextResponse<AuthRespo
       email: email.toLowerCase().trim(),
       username: username.trim(),
       passwordHash,
-      role: "user", // Will be overridden by createUser if first user
+      role: ["user"], // Will be overridden by createUser if first user
     });
 
     // Create session
