@@ -51,6 +51,7 @@ export interface CharacterCreationState {
   skillAllocations?: Record<string, { rating: number; specialization?: string }>;
   nativeLanguage?: string;
   languageSkills?: Array<{ name: string; rating: number }>;
+  knowledgeSkills?: Array<{ name: string; category: string; rating: number }>;
   equipment?: EquipmentItem[];
   karmaSpending?: KarmaSpending;
   
