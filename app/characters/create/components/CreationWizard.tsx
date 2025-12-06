@@ -19,6 +19,7 @@ import { AttributesStep } from "./steps/AttributesStep";
 import { MagicStep } from "./steps/MagicStep";
 import { SkillsStep } from "./steps/SkillsStep";
 import { QualitiesStep } from "./steps/QualitiesStep";
+import { ContactsStep } from "./steps/ContactsStep";
 import { GearStep } from "./steps/GearStep";
 import { ReviewStep } from "./steps/ReviewStep";
 
@@ -439,7 +440,7 @@ export function CreationWizard({ onCancel, onComplete }: CreationWizardProps) {
         positiveQualities: (state.selections.positiveQualities as string[]) || [],
         negativeQualities: (state.selections.negativeQualities as string[]) || [],
         gear: [],
-        contacts: [],
+        contacts: (state.selections.contacts as Array<{ name: string; connection: number; loyalty: number; type?: string; notes?: string }>) || [],
         nuyen: budgetValues["nuyen"] || 0,
         startingNuyen: budgetValues["nuyen"] || 0,
         karmaCurrent: (budgetValues["karma"] || 25) +
@@ -529,6 +530,8 @@ export function CreationWizard({ onCancel, onComplete }: CreationWizardProps) {
         return <SkillsStep {...stepProps} />;
       case "qualities":
         return <QualitiesStep {...stepProps} />;
+      case "contacts":
+        return <ContactsStep {...stepProps} />;
       case "gear":
         return <GearStep {...stepProps} />;
       case "review":
