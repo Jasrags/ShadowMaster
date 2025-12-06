@@ -63,6 +63,11 @@ export function SkillsStep({ state, updateState, budgetValues }: StepProps) {
     return (state.selections.languages || []) as LanguageSkill[];
   }, [state.selections.languages]);
 
+  // Get current skill specializations from state
+  const specializations = useMemo(() => {
+    return (state.selections.skillSpecializations || {}) as Record<string, string>;
+  }, [state.selections.skillSpecializations]);
+
   // Calculate attribute values for free knowledge points
   const intuition = useMemo(() => {
     const attrs = (state.selections.attributes || {}) as Record<string, number>;
@@ -79,10 +84,12 @@ export function SkillsStep({ state, updateState, budgetValues }: StepProps) {
     return (logic + intuition) * 2;
   }, [logic, intuition]);
 
-  // Calculate points spent
+  // Calculate points spent (skills + specializations at 1 point each)
   const skillPointsSpent = useMemo(() => {
-    return Object.values(skills).reduce((sum, val) => sum + val, 0);
-  }, [skills]);
+    const skillsTotal = Object.values(skills).reduce((sum, val) => sum + val, 0);
+    const specializationsTotal = Object.keys(specializations).length;
+    return skillsTotal + specializationsTotal;
+  }, [skills, specializations]);
 
   const groupPointsSpent = useMemo(() => {
     return Object.values(groups).reduce((sum, val) => sum + val, 0);
@@ -185,8 +192,12 @@ export function SkillsStep({ state, updateState, budgetValues }: StepProps) {
       const clampedValue = Math.max(0, Math.min(MAX_SKILL_RATING, newValue));
 
       const newSkills = { ...skills };
+      const newSpecializations = { ...specializations };
+
       if (clampedValue === 0) {
         delete newSkills[skillId];
+        // Also remove any specialization when skill is reduced to 0
+        delete newSpecializations[skillId];
       } else {
         newSkills[skillId] = clampedValue;
       }
@@ -197,6 +208,7 @@ export function SkillsStep({ state, updateState, budgetValues }: StepProps) {
         selections: {
           ...state.selections,
           skills: newSkills,
+          skillSpecializations: newSpecializations,
         },
         budgets: {
           ...state.budgets,
@@ -205,7 +217,7 @@ export function SkillsStep({ state, updateState, budgetValues }: StepProps) {
         },
       });
     },
-    [skills, skillPointsRemaining, state.selections, state.budgets, updateState, skillPoints]
+    [skills, specializations, skillPointsRemaining, state.selections, state.budgets, updateState, skillPoints]
   );
 
   // Handle skill group change
@@ -244,6 +256,50 @@ export function SkillsStep({ state, updateState, budgetValues }: StepProps) {
       });
     },
     [groups, groupPointsRemaining, state.selections, state.budgets, updateState, skillGroupPoints]
+  );
+
+  // Handle adding/updating a skill specialization
+  const handleSpecializationChange = useCallback(
+    (skillId: string, specialization: string) => {
+      const newSpecializations = { ...specializations };
+      const hadSpecialization = !!specializations[skillId];
+
+      if (specialization.trim()) {
+        // Adding or updating specialization
+        if (!hadSpecialization && skillPointsRemaining <= 0) {
+          // Can't add new specialization without points
+          return;
+        }
+        newSpecializations[skillId] = specialization.trim();
+      } else {
+        // Removing specialization
+        delete newSpecializations[skillId];
+      }
+
+      updateState({
+        selections: {
+          ...state.selections,
+          skillSpecializations: newSpecializations,
+        },
+      });
+    },
+    [specializations, skillPointsRemaining, state.selections, updateState]
+  );
+
+  // Handle removing a skill specialization
+  const handleRemoveSpecialization = useCallback(
+    (skillId: string) => {
+      const newSpecializations = { ...specializations };
+      delete newSpecializations[skillId];
+
+      updateState({
+        selections: {
+          ...state.selections,
+          skillSpecializations: newSpecializations,
+        },
+      });
+    },
+    [specializations, state.selections, updateState]
   );
 
   // Handle adding a knowledge skill
@@ -442,73 +498,145 @@ export function SkillsStep({ state, updateState, budgetValues }: StepProps) {
     const groupRating = skill.group ? (groups[skill.group] || 0) : 0;
     const effectiveRating = Math.max(value, groupRating);
 
+    // Specialization: can only add if skill has individual points (not just group rating)
+    // Adding a specialization to a grouped skill would break the group
+    const hasSpecialization = !!specializations[skill.id];
+    const canAddSpecialization = value > 0 && !hasSpecialization && skillPointsRemaining > 0;
+    const usingGroupOnly = groupRating > 0 && value === 0;
+
     return (
       <div
         key={skill.id}
-        className={`flex items-center gap-3 rounded-lg border p-3 transition-colors ${
+        className={`rounded-lg border p-3 transition-colors ${
           value > 0
             ? "border-emerald-200 bg-emerald-50 dark:border-emerald-800 dark:bg-emerald-900/20"
             : "border-zinc-200 bg-white dark:border-zinc-700 dark:bg-zinc-800/50"
         }`}
       >
-        {/* Skill info */}
-        <div className="flex-1 min-w-0">
-          <div className="flex items-center gap-2">
-            <span className="font-medium text-zinc-900 dark:text-zinc-50 truncate">{skill.name}</span>
-            <span className="flex-shrink-0 rounded bg-zinc-100 px-1.5 py-0.5 text-xs text-zinc-500 dark:bg-zinc-700 dark:text-zinc-400">
-              {skill.linkedAttribute?.toUpperCase().slice(0, 3)}
-            </span>
-          </div>
-          {skill.group && (
-            <div className="mt-0.5 text-xs text-zinc-500 dark:text-zinc-400">
-              Group: {skillGroups.find((g) => g.id === skill.group)?.name || skill.group}
-              {groupRating > 0 && (
-                <span className="ml-1 text-emerald-600 dark:text-emerald-400">(+{groupRating} from group)</span>
+        <div className="flex items-center gap-3">
+          {/* Skill info */}
+          <div className="flex-1 min-w-0">
+            <div className="flex items-center gap-2">
+              <span className="font-medium text-zinc-900 dark:text-zinc-50 truncate">{skill.name}</span>
+              <span className="flex-shrink-0 rounded bg-zinc-100 px-1.5 py-0.5 text-xs text-zinc-500 dark:bg-zinc-700 dark:text-zinc-400">
+                {skill.linkedAttribute?.toUpperCase().slice(0, 3)}
+              </span>
+              {hasSpecialization && (
+                <span className="flex-shrink-0 rounded bg-amber-100 px-1.5 py-0.5 text-xs text-amber-700 dark:bg-amber-800 dark:text-amber-300">
+                  +2 dice
+                </span>
               )}
             </div>
-          )}
-        </div>
-
-        {/* Value controls */}
-        <div className="flex items-center gap-1">
-          <button
-            onClick={() => handleSkillChange(skill.id, value - 1)}
-            disabled={!canDecrease}
-            className={`flex h-7 w-7 items-center justify-center rounded transition-colors ${
-              canDecrease
-                ? "bg-zinc-200 text-zinc-700 hover:bg-zinc-300 dark:bg-zinc-700 dark:text-zinc-200 dark:hover:bg-zinc-600"
-                : "cursor-not-allowed bg-zinc-100 text-zinc-300 dark:bg-zinc-800 dark:text-zinc-600"
-            }`}
-          >
-            <svg className="h-3 w-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M20 12H4" />
-            </svg>
-          </button>
-
-          <div
-            className={`flex h-8 w-10 items-center justify-center rounded text-sm font-bold ${
-              effectiveRating > 0
-                ? "bg-emerald-500 text-white"
-                : "bg-zinc-200 text-zinc-500 dark:bg-zinc-700 dark:text-zinc-400"
-            }`}
-          >
-            {effectiveRating}
+            {skill.group && (
+              <div className="mt-0.5 text-xs text-zinc-500 dark:text-zinc-400">
+                Group: {skillGroups.find((g) => g.id === skill.group)?.name || skill.group}
+                {groupRating > 0 && (
+                  <span className="ml-1 text-emerald-600 dark:text-emerald-400">(+{groupRating} from group)</span>
+                )}
+              </div>
+            )}
           </div>
 
-          <button
-            onClick={() => handleSkillChange(skill.id, value + 1)}
-            disabled={!canIncrease}
-            className={`flex h-7 w-7 items-center justify-center rounded transition-colors ${
-              canIncrease
-                ? "bg-emerald-500 text-white hover:bg-emerald-600"
-                : "cursor-not-allowed bg-zinc-100 text-zinc-300 dark:bg-zinc-800 dark:text-zinc-600"
-            }`}
-          >
-            <svg className="h-3 w-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
-            </svg>
-          </button>
+          {/* Value controls */}
+          <div className="flex items-center gap-1">
+            <button
+              onClick={() => handleSkillChange(skill.id, value - 1)}
+              disabled={!canDecrease}
+              className={`flex h-7 w-7 items-center justify-center rounded transition-colors ${
+                canDecrease
+                  ? "bg-zinc-200 text-zinc-700 hover:bg-zinc-300 dark:bg-zinc-700 dark:text-zinc-200 dark:hover:bg-zinc-600"
+                  : "cursor-not-allowed bg-zinc-100 text-zinc-300 dark:bg-zinc-800 dark:text-zinc-600"
+              }`}
+            >
+              <svg className="h-3 w-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M20 12H4" />
+              </svg>
+            </button>
+
+            <div
+              className={`flex h-8 w-10 items-center justify-center rounded text-sm font-bold ${
+                effectiveRating > 0
+                  ? "bg-emerald-500 text-white"
+                  : "bg-zinc-200 text-zinc-500 dark:bg-zinc-700 dark:text-zinc-400"
+              }`}
+            >
+              {effectiveRating}
+            </div>
+
+            <button
+              onClick={() => handleSkillChange(skill.id, value + 1)}
+              disabled={!canIncrease}
+              className={`flex h-7 w-7 items-center justify-center rounded transition-colors ${
+                canIncrease
+                  ? "bg-emerald-500 text-white hover:bg-emerald-600"
+                  : "cursor-not-allowed bg-zinc-100 text-zinc-300 dark:bg-zinc-800 dark:text-zinc-600"
+              }`}
+            >
+              <svg className="h-3 w-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
+              </svg>
+            </button>
+          </div>
         </div>
+
+        {/* Specialization section - only show if skill has individual rating */}
+        {value > 0 && (
+          <div className="mt-2 pt-2 border-t border-zinc-200 dark:border-zinc-700">
+            {hasSpecialization ? (
+              <div className="flex items-center gap-2">
+                <span className="text-xs text-zinc-500 dark:text-zinc-400">Specialization:</span>
+                <span className="rounded bg-amber-100 px-2 py-0.5 text-sm font-medium text-amber-800 dark:bg-amber-800 dark:text-amber-200">
+                  {specializations[skill.id]}
+                </span>
+                <button
+                  onClick={() => handleRemoveSpecialization(skill.id)}
+                  className="ml-auto flex h-5 w-5 items-center justify-center rounded bg-red-100 text-red-600 transition-colors hover:bg-red-200 dark:bg-red-900/30 dark:text-red-400"
+                  title="Remove specialization (refunds 1 skill point)"
+                >
+                  <svg className="h-3 w-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                  </svg>
+                </button>
+              </div>
+            ) : (
+              <div className="flex items-center gap-2">
+                <input
+                  type="text"
+                  placeholder="Add specialization (1 point, +2 dice)..."
+                  className="flex-1 rounded border border-zinc-300 bg-white px-2 py-1 text-sm focus:border-amber-500 focus:outline-none focus:ring-1 focus:ring-amber-500 dark:border-zinc-600 dark:bg-zinc-800 dark:text-zinc-100 disabled:cursor-not-allowed disabled:opacity-50"
+                  disabled={!canAddSpecialization}
+                  onKeyDown={(e) => {
+                    if (e.key === "Enter") {
+                      const input = e.currentTarget;
+                      if (input.value.trim()) {
+                        handleSpecializationChange(skill.id, input.value);
+                        input.value = "";
+                      }
+                    }
+                  }}
+                  onBlur={(e) => {
+                    if (e.currentTarget.value.trim() && canAddSpecialization) {
+                      handleSpecializationChange(skill.id, e.currentTarget.value);
+                      e.currentTarget.value = "";
+                    }
+                  }}
+                />
+                {!canAddSpecialization && skillPointsRemaining <= 0 && (
+                  <span className="text-xs text-zinc-400">No points</span>
+                )}
+              </div>
+            )}
+          </div>
+        )}
+
+        {/* Warning for group-only skills that can't have specializations */}
+        {usingGroupOnly && (
+          <div className="mt-2 pt-2 border-t border-zinc-200 dark:border-zinc-700">
+            <span className="text-xs text-zinc-400 italic">
+              Add individual skill points to enable specialization
+            </span>
+          </div>
+        )}
       </div>
     );
   };
