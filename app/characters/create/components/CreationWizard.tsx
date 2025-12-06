@@ -124,6 +124,51 @@ export function CreationWizard({ onCancel, onComplete }: CreationWizardProps) {
   // Current step
   const currentStep = steps[state.currentStep];
 
+  // Calculate budget values based on priorities (must be before validateCurrentStep)
+  const budgetValues = useMemo(() => {
+    if (!priorityTable || !state.priorities) return {};
+
+    const values: Record<string, number> = {
+      karma: 25, // Starting karma
+    };
+
+    // Get attribute points from priority
+    const attrPriority = state.priorities.attributes;
+    if (attrPriority && priorityTable.table[attrPriority]) {
+      values["attribute-points"] = priorityTable.table[attrPriority].attributes as number;
+    }
+
+    // Get skill points from priority
+    const skillPriority = state.priorities.skills;
+    if (skillPriority && priorityTable.table[skillPriority]) {
+      const skillData = priorityTable.table[skillPriority].skills as {
+        skillPoints: number;
+        skillGroupPoints: number;
+      };
+      values["skill-points"] = skillData?.skillPoints || 0;
+      values["skill-group-points"] = skillData?.skillGroupPoints || 0;
+    }
+
+    // Get resources from priority
+    const resourcePriority = state.priorities.resources;
+    if (resourcePriority && priorityTable.table[resourcePriority]) {
+      values["nuyen"] = priorityTable.table[resourcePriority].resources as number;
+    }
+
+    // Get special attribute points from metatype priority
+    const metatypePriority = state.priorities.metatype;
+    const selectedMetatype = state.selections.metatype as string;
+    if (metatypePriority && selectedMetatype && priorityTable.table[metatypePriority]) {
+      const metatypeData = priorityTable.table[metatypePriority].metatype as {
+        specialAttributePoints: Record<string, number>;
+      };
+      values["special-attribute-points"] =
+        metatypeData?.specialAttributePoints?.[selectedMetatype] || 0;
+    }
+
+    return values;
+  }, [priorityTable, state.priorities, state.selections.metatype]);
+
   // Validate current step completion
   const validateCurrentStep = useCallback((): ValidationError[] => {
     const errors: ValidationError[] = [];
@@ -166,6 +211,18 @@ export function CreationWizard({ onCancel, onComplete }: CreationWizardProps) {
             severity: "warning",
           });
         }
+        
+        // Check if all special attribute points are spent
+        const specialSpent = (state.budgets["special-attribute-points-spent"] as number) || 0;
+        const specialTotal = budgetValues["special-attribute-points"] || 0;
+        if (specialTotal > 0 && specialSpent < specialTotal) {
+          errors.push({
+            constraintId: "special-attributes-spent",
+            stepId,
+            message: `You have ${specialTotal - specialSpent} special attribute points remaining (Edge/Magic/Resonance).`,
+            severity: "warning",
+          });
+        }
         break;
 
       case "magic":
@@ -197,7 +254,7 @@ export function CreationWizard({ onCancel, onComplete }: CreationWizardProps) {
     }
 
     return errors;
-  }, [currentStep?.id, state.priorities, state.selections, state.budgets]);
+  }, [currentStep?.id, state.priorities, state.selections, state.budgets, budgetValues]);
 
   // Check if current step can proceed
   const canProceed = useMemo(() => {
@@ -264,51 +321,6 @@ export function CreationWizard({ onCancel, onComplete }: CreationWizardProps) {
     setHasDraft(false);
   }, []);
 
-  // Calculate budget values based on priorities
-  const budgetValues = useMemo(() => {
-    if (!priorityTable || !state.priorities) return {};
-
-    const values: Record<string, number> = {
-      karma: 25, // Starting karma
-    };
-
-    // Get attribute points from priority
-    const attrPriority = state.priorities.attributes;
-    if (attrPriority && priorityTable.table[attrPriority]) {
-      values["attribute-points"] = priorityTable.table[attrPriority].attributes as number;
-    }
-
-    // Get skill points from priority
-    const skillPriority = state.priorities.skills;
-    if (skillPriority && priorityTable.table[skillPriority]) {
-      const skillData = priorityTable.table[skillPriority].skills as {
-        skillPoints: number;
-        skillGroupPoints: number;
-      };
-      values["skill-points"] = skillData?.skillPoints || 0;
-      values["skill-group-points"] = skillData?.skillGroupPoints || 0;
-    }
-
-    // Get resources from priority
-    const resourcePriority = state.priorities.resources;
-    if (resourcePriority && priorityTable.table[resourcePriority]) {
-      values["nuyen"] = priorityTable.table[resourcePriority].resources as number;
-    }
-
-    // Get special attribute points from metatype priority
-    const metatypePriority = state.priorities.metatype;
-    const selectedMetatype = state.selections.metatype as string;
-    if (metatypePriority && selectedMetatype && priorityTable.table[metatypePriority]) {
-      const metatypeData = priorityTable.table[metatypePriority].metatype as {
-        specialAttributePoints: Record<string, number>;
-      };
-      values["special-attribute-points"] =
-        metatypeData?.specialAttributePoints?.[selectedMetatype] || 0;
-    }
-
-    return values;
-  }, [priorityTable, state.priorities, state.selections.metatype]);
-
   // Save character to API
   const saveCharacter = useCallback(async (characterName: string) => {
     setIsSaving(true);
@@ -330,16 +342,47 @@ export function CreationWizard({ onCancel, onComplete }: CreationWizardProps) {
         baseAttributes[attr] = minValue + allocatedValue;
       }
 
+      // Get magic path and priority info for calculating special attributes
+      const selectedMagicPath = (state.selections["magical-path"] as string) || "mundane";
+      const magicPriority = state.priorities?.magic;
+      const allocatedSpecialAttrs = (state.selections.specialAttributes || {}) as Record<string, number>;
+      
+      // Calculate edge from metatype minimum + allocated points
+      const edgeData = selectedMetatype?.attributes?.edge;
+      const edgeMin = edgeData && "min" in edgeData ? edgeData.min : 1;
+      const edgeValue = edgeMin + (allocatedSpecialAttrs.edge || 0);
+      
+      // Get magic/resonance base values from priority table
+      let magicBase = 0;
+      let resonanceBase = 0;
+      if (magicPriority && selectedMagicPath !== "mundane" && priorityTable?.table[magicPriority]) {
+        const magicData = priorityTable.table[magicPriority].magic as {
+          options: Array<{ path: string; magicRating?: number; resonanceRating?: number }>;
+        };
+        const option = magicData?.options?.find((o) => o.path === selectedMagicPath);
+        if (option) {
+          magicBase = option.magicRating || 0;
+          resonanceBase = option.resonanceRating || 0;
+        }
+      }
+      
+      // Calculate final magic/resonance values
+      const hasMagic = magicBase > 0;
+      const hasResonance = resonanceBase > 0;
+      const magicValue = hasMagic ? magicBase + (allocatedSpecialAttrs.magic || 0) : undefined;
+      const resonanceValue = hasResonance ? resonanceBase + (allocatedSpecialAttrs.resonance || 0) : undefined;
+
       // Build character data
       const characterData = {
         name: characterName || "Unnamed Runner",
         metatype: (state.selections.metatype as string) || "human",
-        magicalPath: (state.selections["magical-path"] as string) || "mundane",
+        magicalPath: selectedMagicPath,
         attributes: baseAttributes,
         specialAttributes: {
-          edge: 1, // TODO: Calculate from special attribute points
+          edge: edgeValue,
           essence: 6,
-          magic: (state.selections["magical-path"] as string) !== "mundane" ? 1 : undefined,
+          magic: magicValue,
+          resonance: resonanceValue,
         },
         skills: (state.selections.skills as Record<string, number>) || {},
         positiveQualities: (state.selections.positiveQualities as string[]) || [],
@@ -410,7 +453,7 @@ export function CreationWizard({ onCancel, onComplete }: CreationWizardProps) {
     } finally {
       setIsSaving(false);
     }
-  }, [state, metatypes, editionCode, budgetValues, onComplete]);
+  }, [state, metatypes, editionCode, budgetValues, onComplete, priorityTable]);
 
   // Render step content
   const renderStepContent = () => {

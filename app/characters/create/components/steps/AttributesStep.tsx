@@ -3,6 +3,7 @@
 import { useMemo, useCallback } from "react";
 import { useMetatypes } from "@/lib/rules";
 import type { CreationState } from "@/lib/types";
+import { SpecialAttributeAllocator } from "../SpecialAttributeAllocator";
 
 interface StepProps {
   state: CreationState;
@@ -267,6 +268,18 @@ export function AttributesStep({ state, updateState, budgetValues }: StepProps) 
           </p>
         </div>
       )}
+
+      {/* Special Attributes Section */}
+      <div className="mt-8 border-t border-zinc-200 pt-8 dark:border-zinc-700">
+        <h3 className="mb-4 text-sm font-semibold uppercase tracking-wider text-zinc-500 dark:text-zinc-400">
+          Special Attributes
+        </h3>
+        <SpecialAttributeAllocator
+          state={state}
+          updateState={updateState}
+          budgetValues={budgetValues}
+        />
+      </div>
     </div>
   );
 }
