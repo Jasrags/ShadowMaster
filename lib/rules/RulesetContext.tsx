@@ -52,6 +52,19 @@ export interface SkillGroupData {
   skills: string[];
 }
 
+export interface KnowledgeCategoryData {
+  id: string;
+  name: string;
+  linkedAttribute: string;
+}
+
+export interface SkillCreationLimitsData {
+  maxSkillRating: number;
+  maxSkillRatingWithAptitude: number;
+  freeKnowledgePoints: string;
+  nativeLanguageRating: number;
+}
+
 export interface QualityData {
   id: string;
   name: string;
@@ -128,7 +141,12 @@ export interface RulesetContextActions {
  */
 export interface RulesetData {
   metatypes: MetatypeData[];
-  skills: { activeSkills: SkillData[]; skillGroups: SkillGroupData[] };
+  skills: {
+    activeSkills: SkillData[];
+    skillGroups: SkillGroupData[];
+    knowledgeCategories: KnowledgeCategoryData[];
+    creationLimits: SkillCreationLimitsData;
+  };
   qualities: { positive: QualityData[]; negative: QualityData[] };
   priorityTable: PriorityTableData | null;
   magicPaths: MagicPathData[];
@@ -149,7 +167,17 @@ export interface RulesetContextValue extends RulesetContextState, RulesetContext
 
 const defaultData: RulesetData = {
   metatypes: [],
-  skills: { activeSkills: [], skillGroups: [] },
+  skills: {
+    activeSkills: [],
+    skillGroups: [],
+    knowledgeCategories: [],
+    creationLimits: {
+      maxSkillRating: 6,
+      maxSkillRatingWithAptitude: 7,
+      freeKnowledgePoints: "(LOG + INT) × 2",
+      nativeLanguageRating: 6,
+    },
+  },
   qualities: { positive: [], negative: [] },
   priorityTable: null,
   magicPaths: [],
@@ -220,7 +248,7 @@ export function RulesetProvider({
         const transformedData: RulesetData = extractedData
           ? {
               metatypes: extractedData.metatypes || [],
-              skills: extractedData.skills || { activeSkills: [], skillGroups: [] },
+              skills: extractedData.skills || defaultData.skills,
               qualities: extractedData.qualities || { positive: [], negative: [] },
               priorityTable: extractedData.priorityTable || null,
               magicPaths: extractedData.magicPaths || [],
@@ -350,7 +378,12 @@ export function useMetatypes(): MetatypeData[] {
 /**
  * Hook to get skills from the ruleset
  */
-export function useSkills(): { activeSkills: SkillData[]; skillGroups: SkillGroupData[] } {
+export function useSkills(): {
+  activeSkills: SkillData[];
+  skillGroups: SkillGroupData[];
+  knowledgeCategories: KnowledgeCategoryData[];
+  creationLimits: SkillCreationLimitsData;
+} {
   const { data } = useRuleset();
   return data.skills;
 }

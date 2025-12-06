@@ -320,20 +320,50 @@ export interface SkillGroupData {
 }
 
 /**
+ * Knowledge skill category data structure
+ */
+export interface KnowledgeCategoryData {
+  id: string;
+  name: string;
+  linkedAttribute: string;
+}
+
+/**
+ * Skill creation limits data structure
+ */
+export interface SkillCreationLimitsData {
+  maxSkillRating: number;
+  maxSkillRatingWithAptitude: number;
+  freeKnowledgePoints: string; // Formula like "(LOG + INT) × 2"
+  nativeLanguageRating: number;
+}
+
+/**
  * Load skills from a ruleset
  */
 export function extractSkills(ruleset: LoadedRuleset): {
   activeSkills: SkillData[];
   skillGroups: SkillGroupData[];
+  knowledgeCategories: KnowledgeCategoryData[];
+  creationLimits: SkillCreationLimitsData;
 } {
   const module = extractModule<{
     activeSkills: SkillData[];
     skillGroups: SkillGroupData[];
+    knowledgeCategories: KnowledgeCategoryData[];
+    creationLimits: SkillCreationLimitsData;
   }>(ruleset, "skills");
 
   return {
     activeSkills: module?.activeSkills || [],
     skillGroups: module?.skillGroups || [],
+    knowledgeCategories: module?.knowledgeCategories || [],
+    creationLimits: module?.creationLimits || {
+      maxSkillRating: 6,
+      maxSkillRatingWithAptitude: 7,
+      freeKnowledgePoints: "(LOG + INT) × 2",
+      nativeLanguageRating: 6,
+    },
   };
 }
 

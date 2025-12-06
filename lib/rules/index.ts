@@ -32,6 +32,8 @@ export type {
   MetatypeData,
   SkillData,
   SkillGroupData,
+  KnowledgeCategoryData,
+  SkillCreationLimitsData,
   QualityData,
   PriorityTableData,
   MagicPathData,

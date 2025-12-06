@@ -260,7 +260,7 @@ export interface Character {
 
 export interface KnowledgeSkill {
   name: string;
-  category: "academic" | "interest" | "professional" | "street";
+  category: "academic" | "interests" | "professional" | "street";
   rating: number;
 }
 
