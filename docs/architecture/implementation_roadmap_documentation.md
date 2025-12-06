@@ -339,44 +339,211 @@ Below is a compressed but structured PRD skeleton. Use this to expand into a ful
 
 High-level milestones with recommended scope.
 
-**MVP (3–6 months)** — Goal: playable SR5 character creation + campaign with GM invites
+---
 
-* SR5 core ruleset implemented (attributes, skills, gear baseline)
-* Character creation: Priority + Point-Buy
-* Basic character sheet (SR5 layout)
+#### **MVP (3–6 months)** — Goal: Complete SR5 Priority Character Creation
+
+The MVP delivers a fully functional SR5 Priority-based character creation system. This section details the specific components required based on the SR5 Core Rulebook (p. 62-107).
+
+##### MVP Completion Status
+
+| Component | Status | Notes |
+|-----------|--------|-------|
+| Priority Selection Grid | ✅ Complete | A-E assignment across 5 categories |
+| Metatype Selection | ✅ Complete | Based on priority, shows racial traits |
+| Physical/Mental Attributes | ✅ Complete | Point allocation with metatype limits |
+| Magic/Resonance Path Selection | ✅ Complete | Path selection based on priority |
+| Active Skills | ✅ Complete | Individual + group point allocation |
+| Qualities Selection | ✅ Complete | Positive/Negative with 25 Karma caps |
+| Review Step | ✅ Complete | Summary with basic validation |
+| Draft Auto-save | ✅ Complete | LocalStorage persistence |
+
+##### MVP Remaining Work — SR5 Character Creation Steps
+
+**Step 2: Metatype & Special Attributes**
+| Task | Priority | Status |
+|------|----------|--------|
+| Special Attribute Points UI | High | ❌ Not Started |
+| Edge allocation (starts 1, humans 2) | High | ❌ Not Started |
+| Magic allocation (from Magic priority) | High | ❌ Not Started |
+| Resonance allocation (Technomancers) | High | ❌ Not Started |
+| Validate special points fully spent | High | ❌ Not Started |
+| Human Edge cap 7 vs 6 for others | Medium | ❌ Not Started |
+
+**Step 3: Magic/Resonance Details**
+| Task | Priority | Status |
+|------|----------|--------|
+| Starting Magic/Resonance from priority | High | ❌ Not Started |
+| Free magical skills from priority A/B | Medium | ❌ Not Started |
+| Tradition selection for Magicians | Medium | ❌ Not Started |
+| Aspected Magician skill group lock | Medium | ❌ Not Started |
+
+**Step 5: Skills (Knowledge & Language)**
+| Task | Priority | Status |
+|------|----------|--------|
+| Knowledge Skills allocation UI | High | ❌ Not Started |
+| Language Skills allocation UI | High | ❌ Not Started |
+| Free points: (Intuition + Logic) × 2 | High | ❌ Not Started |
+| Native language at rating 6 (free) | High | ❌ Not Started |
+| Knowledge skill categories (Academic/Interest/Professional/Street) | Medium | ❌ Not Started |
+| Skill Specializations (+2 dice, 1 point) | Medium | ❌ Not Started |
+| Specialization breaks skill group rule | Low | ❌ Not Started |
+
+**Step 6: Resources/Gear**
+| Task | Priority | Status |
+|------|----------|--------|
+| Gear catalog UI (searchable) | High | ❌ Not Started |
+| Nuyen budget tracking | High | ❌ Not Started |
+| Lifestyle selection | High | ❌ Not Started |
+| Lifestyle cost modifiers (Troll +10%, Dwarf +20%) | Medium | ❌ Not Started |
+| Availability ≤12 validation | High | ❌ Not Started |
+| Device Rating ≤6 validation | Medium | ❌ Not Started |
+| 5,000¥ carryover limit | Medium | ❌ Not Started |
+| Karma-to-Nuyen conversion (max 10 Karma = 20,000¥) | Medium | ❌ Not Started |
+| Cyberware/Bioware selection | Medium | ❌ Not Started |
+| Essence tracking | Medium | ❌ Not Started |
+| Essence loss reduces Magic/Resonance | Medium | ❌ Not Started |
+| Augmentation bonus ≤+4 per attribute | Low | ❌ Not Started |
+| Starting Nuyen roll by lifestyle | Low | ❌ Not Started |
+
+**Step 7: Leftover Karma**
+| Task | Priority | Status |
+|------|----------|--------|
+| Contacts system (Connection + Loyalty) | High | ❌ Not Started |
+| Free Contacts Karma = Charisma × 3 | High | ❌ Not Started |
+| Max 7 Karma per contact | Medium | ❌ Not Started |
+| Karma purchase: Attributes (new × 5) | Medium | ❌ Not Started |
+| Karma purchase: Skills (new × 2) | Medium | ❌ Not Started |
+| Karma purchase: Spells (5 Karma each) | Medium | ❌ Not Started |
+| Karma purchase: Complex Forms (4 Karma each) | Medium | ❌ Not Started |
+| 7 Karma carryover maximum | High | ❌ Not Started |
+| Bound Spirits (1 Karma per service) | Low | ❌ Not Started |
+| Registered Sprites (1 Karma per task) | Low | ❌ Not Started |
+| Foci bonding (variable cost) | Low | ❌ Not Started |
+| Mystic Adept Power Points (5 Karma each) | Low | ❌ Not Started |
+
+**Step 8: Final Calculations**
+| Task | Priority | Status |
+|------|----------|--------|
+| Initiative = Intuition + Reaction | High | ❌ Not Started |
+| Physical Limit = [(STR×2) + BOD + REA] / 3 ↑ | High | ❌ Not Started |
+| Mental Limit = [(LOG×2) + INT + WIL] / 3 ↑ | High | ❌ Not Started |
+| Social Limit = [(CHA×2) + WIL + ESS] / 3 ↑ | High | ❌ Not Started |
+| Physical Condition Monitor = [BOD/2] + 8 | High | ❌ Not Started |
+| Stun Condition Monitor = [WIL/2] + 8 | High | ❌ Not Started |
+| Overflow = Body + augmentation bonuses | Medium | ❌ Not Started |
+| Astral Initiative (magical characters) | Medium | ❌ Not Started |
+| Matrix Initiative (deckers/technomancers) | Medium | ❌ Not Started |
+| Living Persona stats (technomancers) | Medium | ❌ Not Started |
+| Store derivedStats on character | High | ❌ Not Started |
+
+**Validation Rules (Creation-time)**
+| Task | Priority | Status |
+|------|----------|--------|
+| Each Priority Level (A-E) used exactly once | ✅ | Complete |
+| Only one Physical/Mental attribute at max | High | ❌ Not Started |
+| All attribute points must be spent | High | ⚠️ Warning only |
+| All skill points must be spent | High | ⚠️ Warning only |
+| Maximum 25 Karma positive qualities | ✅ | Complete |
+| Maximum 25 Karma negative qualities | ✅ | Complete |
+| Maximum 7 Karma carryover | High | ❌ Not Started |
+| Maximum 5,000¥ carryover | Medium | ❌ Not Started |
+| Gear Availability ≤12 | High | ❌ Not Started |
+| Device Rating ≤6 | Medium | ❌ Not Started |
+| Max bound spirits = Charisma | Low | ❌ Not Started |
+| Max registered sprites = Charisma | Low | ❌ Not Started |
+| Max complex forms = Logic | Low | ❌ Not Started |
+| Max spells = Magic × 2 | Low | ❌ Not Started |
+| Max foci Force = Magic × 2 | Low | ❌ Not Started |
+
+##### MVP — Other Systems
+
 * User accounts & campaign creation
 * GM invites and player approval flow
 * Dice roller + simple logs
 * Simple rulebook ingestion (manual JSON payload upload)
-* Basic validation engine
+* Basic character sheet (SR5 layout)
 * Web UI for desktop
 
-**Beta (6–9 months)** — Goal: richer GM tools + sourcebook support
+---
 
-* Sourcebook merging (1–2 sourcebooks)
-* Combat tracker (initiative, rounds)
-* Inventory management, damage tracking
-* Mobile-responsive UI improvements
-* Export PDF character sheet
-* Basic session persistence and WebSockets
+#### **Beta (6–9 months)** — Goal: Richer GM Tools + Sourcebook Support
 
-**v1 (9–12 months)** — Goal: multi-edition + marketplace
+* **Sourcebook merging** (Run Faster, Street Grimoire)
+  - Metavariants from Run Faster
+  - Additional qualities, skills, gear
+* **Combat tracker** (initiative order, rounds, damage application)
+* **Full inventory management** 
+  - Ammunition tracking
+  - Gear modification system
+  - Damage tracking on gear
+* **Cyberware/Bioware system** (full implementation)
+  - Grade selection (Standard, Alpha, Beta, Delta)
+  - Capacity tracking
+  - Essence hole tracking for magic users
+* **Adept Powers system**
+  - Power Point allocation
+  - Power selection catalog
+  - Level-based powers
+* **Spell management**
+  - Spell catalog with full details
+  - Ritual spells
+  - Alchemical preparations
+* **Complex Forms catalog** (Technomancers)
+* **Mobile-responsive UI** improvements
+* **Export PDF character sheet**
+* **Basic session persistence** and WebSockets
 
-* Add SR6 support + SR4A
-* Advanced creation methods (Life Modules)
-* NPC manager + encounter templates
-* Module marketplace (homebrew bundles)
-* Integration hooks for VTTs (Foundry/other)
-* Permissions & billing (if monetizing)
-* Improved analytics & monitoring
+---
 
-**v2 (12–24 months)** — Goal: deep automation + content
+#### **v1 (9–12 months)** — Goal: Multi-Edition + Advanced Features
 
-* Matrix automation, rigger subsystems, spells automation
-* AI-assisted rule linking & search (map item to book page)
-* Offline capabilities, native mobile apps
-* Expanded edition support (SR1–SR3 + Anarchy)
-* Third-party plugin API
+* **SR6 support** (new priority table, Edge system)
+* **SR4A support** (Build Points system)
+* **Advanced creation methods**
+  - Life Modules (Run Faster)
+  - Sum-to-Ten variant
+  - Karma Point-Buy (Run Faster p.64)
+* **Street-Level / Prime Runner variants**
+  - Modified resource tables
+  - Adjusted Karma pools
+  - Different availability limits
+* **NPC manager** + encounter templates
+* **Spirits & Sprites system**
+  - Spirit summoning and binding
+  - Sprite compiling and registering
+  - Service/task tracking
+* **Foci system**
+  - Bonding costs
+  - Force limits
+  - Addiction rules
+* **Module marketplace** (homebrew bundles)
+* **Integration hooks** for VTTs (Foundry/other)
+* **Permissions & billing** (if monetizing)
+* **Improved analytics & monitoring**
+
+---
+
+#### **v2 (12–24 months)** — Goal: Deep Automation + Content
+
+* **Matrix automation**
+  - Cyberdeck programs
+  - Matrix actions
+  - IC and host rules
+* **Rigger subsystems**
+  - Vehicle customization
+  - Drone control
+  - Jumped-in rules
+* **Spells automation**
+  - Drain calculation
+  - Sustained spell tracking
+  - Spell defense
+* **Mentor Spirits** system
+* **AI-assisted rule linking** & search (map item to book page)
+* **Offline capabilities**, native mobile apps
+* **Expanded edition support** (SR1–SR3 + Anarchy)
+* **Third-party plugin API**
+* **Character import/export** (Chummer, HeroLab formats)
 
 ---
 
