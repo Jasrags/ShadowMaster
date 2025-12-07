@@ -139,6 +139,9 @@ export interface Character {
   /** Negative quality IDs */
   negativeQualities: string[];
 
+  /** Racial qualities/traits from metatype (e.g., "Low-Light Vision", "Thermographic Vision") */
+  racialQualities?: string[];
+
   /** Custom quality notes (for qualities with variable effects) */
   qualityNotes?: Record<string, string>;
 

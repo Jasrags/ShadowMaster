@@ -10,19 +10,373 @@ This document breaks down the Beta phase into actionable implementation phases w
 
 ---
 
-## Phase Summary
+## Complete Implementation Order
 
-| Phase | Focus Area | Duration | Priority |
-|-------|-----------|----------|----------|
-| B1 | Cyberware/Bioware System | 2-3 weeks | High |
-| B2 | Sourcebook Integration | 2 weeks | High |
-| B3 | Inventory Management | 1-2 weeks | High |
-| B4 | Combat Tracker | 3-4 weeks | High |
-| B5 | Adept Powers System | 1-2 weeks | Medium |
-| B6 | Spell Management | 1-2 weeks | Medium |
-| B7 | Complex Forms & Matrix | 1-2 weeks | Medium |
-| B8 | Mobile Responsiveness | 1 week | Medium |
-| B9 | Session Persistence & WebSockets | 2-3 weeks | Medium |
+### Character Creation Wizard Flow (Post-Implementation)
+
+```
+1. Priority Selection       ✅ Complete (MVP)
+2. Metatype Selection       ✅ Complete (MVP) + M0.2 enhancements pending
+3. Attributes Allocation    ✅ Complete (MVP) + M0.6 karma purchases pending
+4. Magic/Resonance Path     ✅ Complete (MVP) + B6 tradition enhancements pending
+5. Skills Allocation        ✅ Complete (MVP) + M0.3/M0.6 enhancements pending
+6. Qualities Selection      ✅ Complete (MVP) + M0.4 enhancements pending
+7. Augmentations           ✅ Complete (B1)
+8. Spells/Powers           🔜 M0.7 SpellsStep (magical) / B5 AdeptPowersStep (adepts)
+9. Complex Forms           🔜 B7 (technomancers only)
+10. Contacts               ✅ Complete (MVP) + M0.5 enhancements pending
+11. Gear & Resources       ✅ Complete (MVP) + M0.6 karma-to-nuyen pending
+12. Review & Finalize      ✅ Complete (MVP)
+```
+
+### Full Phase Summary with Status
+
+| Order | Phase | Focus Area | Duration | Priority | Status |
+|-------|-------|-----------|----------|----------|--------|
+| 1 | **M0** | **MVP Gaps & Enhancements** | **1-2 weeks** | **Critical** | 🔄 In Progress |
+| | M0.1 | Bug Fixes | - | Critical | ✅ Complete |
+| | M0.2 | Metatype Enhancements | - | Critical | ✅ Complete |
+| | M0.3 | Skills Enhancements | - | Critical | 🔜 Next |
+| | M0.4 | Qualities Enhancements | - | Critical | Not Started |
+| | M0.5 | Contacts Enhancements | - | Critical | Not Started |
+| | M0.6 | Distributed Karma Architecture | - | Critical | Not Started |
+| | M0.7 | SpellsStep Creation | - | Critical | Not Started |
+| 2 | **B1** | **Cyberware/Bioware System** | **2-3 weeks** | **High** | ✅ **Complete** |
+| 3 | **B4** | **Combat Tracker** | **3-4 weeks** | **High** | Not Started |
+| 4 | **B3** | **Inventory Management** | **1-2 weeks** | **High** | Not Started |
+| 5 | **B5** | **Adept Powers System** | **1-2 weeks** | **Medium** | Not Started |
+| 6 | **B6** | **Spell Management** | **1-2 weeks** | **Medium** | Not Started |
+| 7 | **B7** | **Complex Forms & Matrix** | **1-2 weeks** | **Medium** | Not Started |
+| 8 | **B2** | **Sourcebook Integration** | **2 weeks** | **Medium** | Not Started |
+| 9 | **B8** | **UI/UX Improvements** | **1-2 weeks** | **Medium** | Not Started |
+| 10 | **B9** | **Session Persistence & WebSockets** | **2-3 weeks** | **Low** | Not Started |
+
+### Completed Work Summary
+
+| Phase | Completion Date | Key Deliverables |
+|-------|-----------------|------------------|
+| MVP Core | Dec 2024 | Priority system, metatypes, attributes, skills, qualities, contacts, gear, review |
+| B1 Cyberware | Dec 2024 | 70+ cyberware items, 60+ bioware items, essence tracking, grade selection, AugmentationsStep |
+| M0.1 Bug Fixes | Dec 2024 | Validation panel consistency fix, synced validation state across wizard |
+| M0.2 Metatype | Dec 2024 | Racial traits auto-populated, racialQualities field, ReviewStep display |
+
+### Estimated Remaining Timeline
+
+| Milestone | Phases | Est. Duration |
+|-----------|--------|---------------|
+| MVP Polish | M0 | 1-2 weeks |
+| Beta Core | B4, B3, B5, B6, B7 | 8-12 weeks |
+| Beta Polish | B2, B8, B9 | 4-6 weeks |
+| **Total to Beta Release** | All | **13-20 weeks** |
+
+---
+
+## Phase Summary (Quick Reference)
+
+| Phase | Focus Area | Duration | Priority | Status |
+|-------|-----------|----------|----------|--------|
+| **M0** | **MVP Gaps & Enhancements** | **1-2 weeks** | **Critical** | 🔄 In Progress |
+| B1 | Cyberware/Bioware System | 2-3 weeks | High | ✅ Complete |
+| B4 | Combat Tracker | 3-4 weeks | High | Not Started |
+| B3 | Inventory Management | 1-2 weeks | High | Not Started |
+| B5 | Adept Powers System | 1-2 weeks | Medium | Not Started |
+| B6 | Spell Management | 1-2 weeks | Medium | Not Started |
+| B7 | Complex Forms & Matrix | 1-2 weeks | Medium | Not Started |
+| B2 | Sourcebook Integration | 2 weeks | Medium | Not Started |
+| B8 | UI/UX Improvements | 1-2 weeks | Medium | Not Started |
+| B9 | Session Persistence & WebSockets | 2-3 weeks | Low | Not Started |
+
+---
+
+## Phase M0: MVP Gaps & Enhancements
+
+**Objective:** Address gaps and bugs discovered during MVP development before proceeding to Beta features.
+
+**Priority:** Critical - Must complete before Beta phases
+
+### M0.1 Bug Fixes
+
+**Files to modify:**
+- `/app/characters/create/components/CreationWizard.tsx`
+- `/app/characters/create/components/ValidationPanel.tsx` (or equivalent)
+
+**Tasks:**
+
+| Task | Description | Status |
+|------|-------------|--------|
+| M0.1.1 | Fix validation panel inconsistency - sidebar shows green "All validations passing" but ReviewStep shows warnings | Complete |
+| M0.1.2 | Ensure validation state is consistent across all UI elements | Complete |
+
+### M0.2 Metatype Enhancements
+
+**Files to modify:**
+- `/app/characters/create/components/steps/MetatypeStep.tsx`
+- `/lib/types/character.ts`
+
+**Tasks:**
+
+| Task | Description | Status |
+|------|-------------|--------|
+| M0.2.1 | When metatype is selected, automatically add racial traits as Racial Qualities to character | Complete |
+| M0.2.2 | Display racial qualities in character data (separate from selected qualities) | Complete |
+| M0.2.3 | Ensure racial qualities appear on character sheet/review | Complete |
+
+### M0.3 Skills Enhancements
+
+**Files to modify:**
+- `/app/characters/create/components/steps/SkillsStep.tsx`
+- `/data/editions/sr5/core-rulebook.json`
+
+**Tasks:**
+
+| Task | Description | Status |
+|------|-------------|--------|
+| M0.3.1 | Disable magical skill groups (Sorcery, Conjuring, Enchanting) for mundane characters | Not Started |
+| M0.3.2 | Disable individual magical skills for mundane characters | Not Started |
+| M0.3.3 | Add suggested specializations to skill data (e.g., Archery: "Bow", "Crossbow", "Slingshot") | Not Started |
+| M0.3.4 | Update specialization UI to show suggestions as dropdown but still allow free text | Not Started |
+| M0.3.5 | Add example knowledge skills to ruleset data (e.g., "Corporate Politics", "Seattle Gangs") | Not Started |
+| M0.3.6 | Add example language skills to ruleset data (e.g., "Or'zet", "Sperethiel", "Japanese") | Not Started |
+| M0.3.7 | Ensure custom knowledge/language skill creation still works alongside examples | Not Started |
+
+### M0.4 Qualities Enhancements
+
+**Files to modify:**
+- `/app/characters/create/components/steps/QualitiesStep.tsx`
+- `/data/editions/sr5/core-rulebook.json`
+- `/lib/types/edition.ts`
+
+**Tasks:**
+
+| Task | Description | Status |
+|------|-------------|--------|
+| M0.4.1 | Add `isRacial: boolean` flag to Quality interface | Not Started |
+| M0.4.2 | Filter out racial qualities from quality selection UI | Not Started |
+| M0.4.3 | Add `levels` or `maxRating` field to Quality interface for leveled qualities | Not Started |
+| M0.4.4 | Update quality data with levels (e.g., Addiction: Mild/Moderate/Severe/Burnout) | Not Started |
+| M0.4.5 | Add level selector UI for leveled qualities | Not Started |
+| M0.4.6 | Add `statModifiers` field to Quality interface for stat-modifying qualities | Not Started |
+| M0.4.7 | Implement Aptitude quality (raises skill max by 1, limit 1 per character) | Not Started |
+| M0.4.8 | Apply quality stat modifiers to derived stats calculations | Not Started |
+
+**Leveled Quality Example:**
+```json
+{
+  "id": "addiction",
+  "name": "Addiction",
+  "type": "negative",
+  "levels": [
+    { "level": 1, "name": "Mild", "karma": -4 },
+    { "level": 2, "name": "Moderate", "karma": -9 },
+    { "level": 3, "name": "Severe", "karma": -20 },
+    { "level": 4, "name": "Burnout", "karma": -25 }
+  ],
+  "requiresSpecification": true,
+  "specificationLabel": "Substance"
+}
+```
+
+**Stat-Modifying Quality Example:**
+```json
+{
+  "id": "aptitude",
+  "name": "Aptitude",
+  "type": "positive",
+  "karma": 14,
+  "requiresSpecification": true,
+  "specificationLabel": "Skill",
+  "statModifiers": {
+    "skillMaxBonus": 1,
+    "appliesToSpecification": true
+  },
+  "limit": 1
+}
+```
+
+### M0.5 Contacts Enhancements
+
+**Files to modify:**
+- `/app/characters/create/components/steps/ContactsStep.tsx`
+- `/data/editions/sr5/core-rulebook.json`
+
+**Tasks:**
+
+| Task | Description | Status |
+|------|-------------|--------|
+| M0.5.1 | Add example contacts to ruleset data (Fixer, Street Doc, Bartender, etc.) | Not Started |
+| M0.5.2 | Create contact template selector with pre-filled archetypes | Not Started |
+| M0.5.3 | Allow customization of selected template (edit name, adjust ratings) | Not Started |
+| M0.5.4 | Ensure fully custom contact creation still works | Not Started |
+
+**Example Contact Template:**
+```json
+{
+  "contactTemplates": [
+    {
+      "id": "fixer",
+      "name": "Fixer",
+      "description": "A shadow broker who connects runners with jobs and gear",
+      "suggestedConnection": 3,
+      "suggestedLoyalty": 2,
+      "commonMetatypes": ["Human", "Elf", "Dwarf"]
+    },
+    {
+      "id": "street-doc",
+      "name": "Street Doc",
+      "description": "An underground medical professional",
+      "suggestedConnection": 2,
+      "suggestedLoyalty": 2,
+      "commonMetatypes": ["Human", "Dwarf"]
+    }
+  ]
+}
+```
+
+### M0.6 Distributed Karma Spending Architecture
+
+**Objective:** Integrate karma spending into relevant steps instead of a monolithic KarmaStep.
+
+**Files to modify:**
+- `/lib/types/creation.ts`
+- `/app/characters/create/components/CreationWizard.tsx`
+- All step components that will support karma purchases
+
+**Tasks:**
+
+| Task | Description | Status |
+|------|-------------|--------|
+| M0.6.1 | Add global karma budget tracker to CreationState | Not Started |
+| M0.6.2 | Create KarmaBudgetContext for cross-step karma tracking | Not Started |
+| M0.6.3 | Define karma cost constants (Attributes: ×5, Skills: ×2, Spells: 5, etc.) | Not Started |
+| M0.6.4 | Create reusable KarmaPurchasePanel component | Not Started |
+| M0.6.5 | Update AttributesStep to allow karma purchases (new rating × 5) | Not Started |
+| M0.6.6 | Update SkillsStep to allow karma purchases (new rating × 2, specs: 7) | Not Started |
+| M0.6.7 | Update ContactsStep to show karma spending beyond free CHA×3 points | Not Started |
+| M0.6.8 | Update GearStep to allow Karma-to-Nuyen conversion (2,000¥ per, max 10) | Not Started |
+| M0.6.9 | Refactor KarmaStep to become "Karma Summary" or merge into ReviewStep | Not Started |
+| M0.6.10 | Ensure 7 Karma max carryover validation works with distributed spending | Not Started |
+
+**Karma Purchase Costs (SR5 Creation Rules):**
+```typescript
+const KARMA_COSTS = {
+  attribute: (newRating: number) => newRating * 5,      // New rating × 5
+  activeSkill: (newRating: number) => newRating * 2,   // New rating × 2
+  skillGroup: (newRating: number) => newRating * 5,    // New rating × 5
+  specialization: 7,                                    // Flat 7 Karma
+  spell: 5,                                            // Flat 5 Karma
+  complexForm: 4,                                       // Flat 4 Karma
+  powerPoint: 5,                                        // 5 Karma per PP (Mystic Adept)
+  contact: (connection: number, loyalty: number) => connection + loyalty,
+  nuyenConversion: 2000,                               // 2,000¥ per Karma (max 10)
+  positiveQuality: (karma: number) => karma,           // Quality's karma cost
+  buyOffNegativeQuality: (karma: number) => karma * 2, // Double karma cost (post-creation)
+};
+```
+
+**UI Pattern - Karma Purchase Section:**
+```
+┌─────────────────────────────────────────────────────────────┐
+│ ⚡ Karma Purchases                    Budget: 25 → 18 Karma │
+├─────────────────────────────────────────────────────────────┤
+│ You can spend Karma to gain additional [spells/skills/etc.] │
+│                                                             │
+│ [+ Add with Karma (5 Karma)]                               │
+│                                                             │
+│ Karma Purchases in this step:                               │
+│ • Heal spell (5 Karma)                    [Remove]          │
+│ • Levitate spell (5 Karma)                [Remove]          │
+│                                           Total: 10 Karma   │
+└─────────────────────────────────────────────────────────────┘
+```
+
+### M0.7 SpellsStep Creation
+
+**Objective:** Create dedicated spell selection step for magical characters.
+
+**Files to create:**
+- `/app/characters/create/components/steps/SpellsStep.tsx`
+
+**Files to modify:**
+- `/app/characters/create/components/CreationWizard.tsx`
+- `/lib/types/creation.ts`
+
+**Tasks:**
+
+| Task | Description | Status |
+|------|-------------|--------|
+| M0.7.1 | Create SpellsStep component | Not Started |
+| M0.7.2 | Implement free spell allocation based on Magic priority | Not Started |
+| M0.7.3 | Add spell catalog browser with category filters | Not Started |
+| M0.7.4 | Display spell details (drain, range, duration, effects) | Not Started |
+| M0.7.5 | Integrate karma purchase for additional spells (5 Karma each) | Not Started |
+| M0.7.6 | Add spell limit validation (max spells = Magic × 2) | Not Started |
+| M0.7.7 | Conditionally show step only for magical characters | Not Started |
+| M0.7.8 | Register step in CreationWizard after MagicStep | Not Started |
+| M0.7.9 | Move spell selection out of KarmaStep | Not Started |
+
+**Free Spells by Priority:**
+| Magic Priority | Free Spells |
+|----------------|-------------|
+| A (Magic 6) | 10 spells |
+| B (Magic 5) | 7 spells |
+| C (Magic 4) | 5 spells |
+| D (Magic 3) | 3 spells |
+| E | N/A (Mundane) |
+
+**SpellsStep UI Wireframe:**
+```
+┌─────────────────────────────────────────────────────────────┐
+│ Spells                              Karma Remaining: 18     │
+├─────────────────────────────────────────────────────────────┤
+│ Free Spells: 7/7 selected (Magic Priority B)               │
+│ Spell Limit: 10/12 (Magic × 2)                             │
+├─────────────────────────────────────────────────────────────┤
+│ Category: [All ▼]  Search: [____________]                   │
+│                                                             │
+│ COMBAT SPELLS                                               │
+│ ┌─────────────────────────────────────────────────────────┐│
+│ │ ☑ Manabolt           Direct | P | LOS | I | WIL        ││
+│ │   Drain: F-3         A single target spell...           ││
+│ └─────────────────────────────────────────────────────────┘│
+│ ┌─────────────────────────────────────────────────────────┐│
+│ │ ☐ Fireball           Indirect | P | LOS(A) | I | -     ││
+│ │   Drain: F+1         An area spell dealing fire...      ││
+│ │                                    [+ Add Free]         ││
+│ └─────────────────────────────────────────────────────────┘│
+├─────────────────────────────────────────────────────────────┤
+│ Selected Spells (7 free + 3 karma):                         │
+│ • Manabolt (Free)                                           │
+│ • Stunbolt (Free)                                           │
+│ • Heal (Free)                                               │
+│ • Increase Reflexes (Free)                                  │
+│ • Improved Invisibility (Free)                              │
+│ • Levitate (Free)                                           │
+│ • Physical Barrier (Free)                                   │
+│ • Detect Life (5 Karma)                    [Remove]         │
+│ • Armor (5 Karma)                          [Remove]         │
+│ • Combat Sense (5 Karma)                   [Remove]         │
+├─────────────────────────────────────────────────────────────┤
+│ ⚡ Karma spent on spells: 15                                │
+└─────────────────────────────────────────────────────────────┘
+```
+
+### M0.8 Acceptance Criteria
+
+- [x] Validation panel shows consistent state across wizard
+- [x] Racial traits automatically become racial qualities on character
+- [ ] Magical skills disabled for mundane characters
+- [ ] Skill specializations show suggestions with free text option
+- [ ] Example knowledge/language skills available
+- [ ] Racial qualities hidden from quality selection
+- [ ] Leveled qualities (Addiction) work correctly
+- [ ] Stat-modifying qualities (Aptitude) apply correctly
+- [ ] Example contacts available as templates
+- [ ] Global karma budget tracks spending across all steps
+- [ ] Each step shows karma purchase option where applicable
+- [ ] SpellsStep appears only for magical characters
+- [ ] Free spells allocated correctly by priority
+- [ ] Karma spell purchases work within SpellsStep
+- [ ] 7 Karma max carryover validated correctly
 
 ---
 
@@ -728,6 +1082,7 @@ interface Initiative {
 **Files to modify:**
 - `/data/editions/sr5/core-rulebook.json`
 - `/lib/types/character.ts`
+- `/app/characters/create/components/steps/MagicStep.tsx`
 
 **Tasks:**
 
@@ -736,8 +1091,10 @@ interface Initiative {
 | B6.1.1 | Add Tradition interface with drain attributes | Not Started |
 | B6.1.2 | Create traditions catalog (Hermetic, Shamanic, etc.) | Not Started |
 | B6.1.3 | Map traditions to spirit types | Not Started |
-| B6.1.4 | Add tradition selection to character creation | Not Started |
+| B6.1.4 | Add tradition selection to character creation (Magicians) | Not Started |
 | B6.1.5 | Calculate drain resistance based on tradition | Not Started |
+| B6.1.6 | Add magical lodge selection for Shamans | Not Started |
+| B6.1.7 | Add aspect selection for Aspected Magicians (Sorcery, Conjuring, Enchanting) | Not Started |
 
 **Tradition Structure:**
 ```json
@@ -850,37 +1207,58 @@ interface Initiative {
 
 ---
 
-## Phase B8: Mobile Responsiveness
+## Phase B8: UI/UX Improvements
 
-**Objective:** Ensure full mobile usability across all features.
+**Objective:** Improve overall UI/UX including mobile responsiveness and layout fixes.
 
-### B8.1 Audit & Testing
+### B8.1 Layout Improvements
 
-**Tasks:**
-
-| Task | Description | Status |
-|------|-------------|--------|
-| B8.1.1 | Test all creation wizard steps on mobile viewport | Not Started |
-| B8.1.2 | Test character sheet on mobile | Not Started |
-| B8.1.3 | Test combat tracker on mobile | Not Started |
-| B8.1.4 | Test inventory management on mobile | Not Started |
-| B8.1.5 | Document specific mobile issues | Not Started |
-
-### B8.2 UI Fixes
+**Files to modify:**
+- `/app/characters/create/components/CreationWizard.tsx`
+- `/components/layout/Sidebar.tsx` (or create)
+- `/app/characters/create/components/steps/GearStep.tsx`
 
 **Tasks:**
 
 | Task | Description | Status |
 |------|-------------|--------|
-| B8.2.1 | Convert fixed-width tables to responsive layouts | Not Started |
-| B8.2.2 | Add touch-friendly tap targets (minimum 44px) | Not Started |
-| B8.2.3 | Implement collapsible sections for dense content | Not Started |
-| B8.2.4 | Add swipe gestures for navigation | Not Started |
-| B8.2.5 | Optimize dice roller for touch interaction | Not Started |
-| B8.2.6 | Add bottom navigation for key actions | Not Started |
+| B8.1.1 | Make sidebar collapsible to increase main content width | Not Started |
+| B8.1.2 | Add collapse/expand toggle button to sidebar | Not Started |
+| B8.1.3 | Persist sidebar collapse state in localStorage | Not Started |
+| B8.1.4 | Fix GearStep shopping cart width - give gear catalog more horizontal space | Not Started |
+| B8.1.5 | Consider side-by-side layout for gear catalog and cart on wide screens | Not Started |
+| B8.1.6 | Add responsive breakpoints for cart layout (stack on mobile, side-by-side on desktop) | Not Started |
 
-### B8.3 Acceptance Criteria
+### B8.2 Mobile Audit & Testing
 
+**Tasks:**
+
+| Task | Description | Status |
+|------|-------------|--------|
+| B8.2.1 | Test all creation wizard steps on mobile viewport | Not Started |
+| B8.2.2 | Test character sheet on mobile | Not Started |
+| B8.2.3 | Test combat tracker on mobile | Not Started |
+| B8.2.4 | Test inventory management on mobile | Not Started |
+| B8.2.5 | Document specific mobile issues | Not Started |
+
+### B8.3 Mobile UI Fixes
+
+**Tasks:**
+
+| Task | Description | Status |
+|------|-------------|--------|
+| B8.3.1 | Convert fixed-width tables to responsive layouts | Not Started |
+| B8.3.2 | Add touch-friendly tap targets (minimum 44px) | Not Started |
+| B8.3.3 | Implement collapsible sections for dense content | Not Started |
+| B8.3.4 | Add swipe gestures for navigation | Not Started |
+| B8.3.5 | Optimize dice roller for touch interaction | Not Started |
+| B8.3.6 | Add bottom navigation for key actions | Not Started |
+
+### B8.4 Acceptance Criteria
+
+- [ ] Sidebar can be collapsed/expanded
+- [ ] Sidebar state persists across page navigation
+- [ ] Gear catalog has adequate width for browsing
 - [ ] All pages usable on 375px viewport
 - [ ] Touch targets meet accessibility guidelines
 - [ ] No horizontal scrolling on mobile

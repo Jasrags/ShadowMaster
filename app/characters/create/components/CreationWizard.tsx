@@ -290,13 +290,58 @@ export function CreationWizard({ onCancel, onComplete }: CreationWizardProps) {
         break;
 
       case "review":
-        // Final validation checks
+        // Final validation checks - comprehensive validation for all prior steps
+
         // Check character name
         if (!state.selections.characterName || !(state.selections.characterName as string).trim()) {
           errors.push({
             constraintId: "character-name",
             stepId,
             message: "Please enter a character name.",
+            severity: "warning",
+          });
+        }
+
+        // Check priorities are complete
+        if (Object.keys(state.priorities || {}).length < 5) {
+          errors.push({
+            constraintId: "priorities-incomplete",
+            stepId,
+            message: "Priorities are incomplete.",
+            severity: "error",
+          });
+        }
+
+        // Check metatype is selected
+        if (!state.selections.metatype) {
+          errors.push({
+            constraintId: "metatype-not-selected",
+            stepId,
+            message: "Metatype not selected.",
+            severity: "error",
+          });
+        }
+
+        // Check attribute points spent
+        const reviewAttrSpent = (state.budgets["attribute-points-spent"] as number) || 0;
+        const reviewAttrTotal = (state.budgets["attribute-points-total"] as number) || 0;
+        if (reviewAttrTotal > 0 && reviewAttrSpent < reviewAttrTotal - 5) {
+          errors.push({
+            constraintId: "attributes-unspent",
+            stepId,
+            message: `${reviewAttrTotal - reviewAttrSpent} attribute points unspent.`,
+            severity: "warning",
+          });
+        }
+
+        // Check skill points spent
+        const reviewSkillSpent = (state.budgets["skill-points-spent"] as number) || 0;
+        const reviewSkillTotal = (state.budgets["skill-points-total"] as number) || 0;
+        if (reviewSkillTotal > 0 && reviewSkillSpent < reviewSkillTotal * 0.5) {
+          errors.push({
+            constraintId: "skills-unspent",
+            stepId,
+            message: "Many skill points remaining.",
             severity: "warning",
           });
         }
@@ -337,11 +382,35 @@ export function CreationWizard({ onCancel, onComplete }: CreationWizardProps) {
     return errors;
   }, [currentStep?.id, state.priorities, state.selections, state.budgets, budgetValues]);
 
+  // Current step validation errors
+  const currentStepErrors = useMemo(() => {
+    return validateCurrentStep();
+  }, [validateCurrentStep]);
+
+  // Sync validation results to state for ValidationPanel display
+  useEffect(() => {
+    const errors = currentStepErrors.filter((e) => e.severity === "error");
+    const warnings = currentStepErrors.filter((e) => e.severity === "warning");
+
+    // Only update if there's a change to avoid infinite loops
+    const currentErrorMessages = state.errors.map((e) => e.message).sort().join(",");
+    const currentWarningMessages = state.warnings.map((w) => w.message).sort().join(",");
+    const newErrorMessages = errors.map((e) => e.message).sort().join(",");
+    const newWarningMessages = warnings.map((w) => w.message).sort().join(",");
+
+    if (currentErrorMessages !== newErrorMessages || currentWarningMessages !== newWarningMessages) {
+      setState((prev) => ({
+        ...prev,
+        errors,
+        warnings,
+      }));
+    }
+  }, [currentStepErrors, state.errors, state.warnings]);
+
   // Check if current step can proceed
   const canProceed = useMemo(() => {
-    const errors = validateCurrentStep();
-    return !errors.some((e) => e.severity === "error");
-  }, [validateCurrentStep]);
+    return !currentStepErrors.some((e) => e.severity === "error");
+  }, [currentStepErrors]);
 
   // Navigation handlers
   const goToStep = useCallback((stepIndex: number) => {
@@ -538,6 +607,7 @@ export function CreationWizard({ onCancel, onComplete }: CreationWizardProps) {
         languages: (state.selections.languages as Array<{ name: string; rating: number; isNative?: boolean }>) || [],
         positiveQualities: (state.selections.positiveQualities as string[]) || [],
         negativeQualities: (state.selections.negativeQualities as string[]) || [],
+        racialQualities: (state.selections.racialQualities as string[]) || [],
         spells: (state.selections.spells as string[]) || [],
         complexForms: (state.selections.complexForms as string[]) || [],
         gear: (state.selections.gear as Array<{ id: string; name: string; quantity: number; cost: number }>) || [],

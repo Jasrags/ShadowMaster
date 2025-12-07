@@ -40,10 +40,16 @@ export function MetatypeStep({ state, updateState }: StepProps) {
 
   // Handle metatype selection
   const handleSelect = (metatypeId: string) => {
+    // Find the metatype to get its racial traits
+    const selectedMeta = metatypes.find((m) => m.id === metatypeId);
+    const racialTraits = selectedMeta?.racialTraits || [];
+
     updateState({
       selections: {
         ...state.selections,
         metatype: metatypeId,
+        // Store racial traits as racial qualities (separate from user-selected qualities)
+        racialQualities: racialTraits,
       },
     });
   };

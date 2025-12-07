@@ -82,6 +82,7 @@ export function ReviewStep({ state, updateState, budgetValues }: StepProps) {
   const languages = (state.selections.languages || []) as LanguageSkill[];
   const selectedPositiveQualities = (state.selections.positiveQualities || []) as string[];
   const selectedNegativeQualities = (state.selections.negativeQualities || []) as string[];
+  const racialQualities = (state.selections.racialQualities || []) as string[];
   const contacts = (state.selections.contacts || []) as Contact[];
   const gear = (state.selections.gear || []) as GearItem[];
   const lifestyle = state.selections.lifestyle as LifestyleSelection | undefined;
@@ -229,42 +230,25 @@ export function ReviewStep({ state, updateState, budgetValues }: StepProps) {
     };
   }, [attributes, selectedMetatype, augmentationEffects]);
 
-  // Validation checks
+  // Use validation from state (synced from CreationWizard)
+  // Convert state.errors and state.warnings to the format used in the UI
   const validationIssues = useMemo(() => {
     const issues: { type: "error" | "warning"; message: string }[] = [];
 
-    if (!characterName.trim()) {
-      issues.push({ type: "warning", message: "Character name not set" });
+    // Add errors from state
+    for (const error of state.errors) {
+      issues.push({ type: "error", message: error.message });
     }
 
-    if (Object.keys(state.priorities || {}).length < 5) {
-      issues.push({ type: "error", message: "Priorities incomplete" });
-    }
-
-    if (!state.selections.metatype) {
-      issues.push({ type: "error", message: "Metatype not selected" });
-    }
-
-    if (attrTotal > 0 && attrSpent < attrTotal - 5) {
-      issues.push({ type: "warning", message: `${attrTotal - attrSpent} attribute points unspent` });
-    }
-
-    if (skillTotal > 0 && skillSpent < skillTotal * 0.5) {
-      issues.push({ type: "warning", message: "Many skill points remaining" });
-    }
-
-    if (karmaRemaining > 7) {
-      issues.push({ type: "warning", message: `${karmaRemaining} Karma remaining (max 7 carryover)` });
-    }
-
-    if (nuyenRemaining > 5000) {
-      issues.push({ type: "warning", message: `${nuyenRemaining.toLocaleString()} nuyen remaining (max 5,000 carryover)` });
+    // Add warnings from state
+    for (const warning of state.warnings) {
+      issues.push({ type: "warning", message: warning.message });
     }
 
     return issues;
-  }, [characterName, state.priorities, state.selections.metatype, attrTotal, attrSpent, skillTotal, skillSpent, karmaRemaining, nuyenRemaining]);
+  }, [state.errors, state.warnings]);
 
-  const hasErrors = validationIssues.some((i) => i.type === "error");
+  const hasErrors = state.errors.length > 0;
 
   return (
     <div className="space-y-6">
@@ -625,10 +609,29 @@ export function ReviewStep({ state, updateState, budgetValues }: StepProps) {
       )}
 
       {/* Qualities */}
-      {(selectedPositiveQualities.length > 0 || selectedNegativeQualities.length > 0) && (
+      {(racialQualities.length > 0 || selectedPositiveQualities.length > 0 || selectedNegativeQualities.length > 0) && (
         <div className="rounded-lg border border-zinc-200 bg-white p-4 dark:border-zinc-700 dark:bg-zinc-800/50">
           <h3 className="text-sm font-semibold text-zinc-900 dark:text-zinc-100">Qualities</h3>
           <div className="mt-3 space-y-3">
+            {/* Racial Qualities - innate abilities from metatype */}
+            {racialQualities.length > 0 && (
+              <div>
+                <div className="mb-2 text-xs font-medium text-blue-600 dark:text-blue-400">
+                  Racial Traits
+                  <span className="ml-1 text-zinc-400 dark:text-zinc-500">(from {selectedMetatype?.name})</span>
+                </div>
+                <div className="flex flex-wrap gap-2">
+                  {racialQualities.map((trait, index) => (
+                    <span
+                      key={index}
+                      className="rounded-full bg-blue-100 px-3 py-1 text-sm font-medium text-blue-800 dark:bg-blue-900/50 dark:text-blue-200"
+                    >
+                      {trait}
+                    </span>
+                  ))}
+                </div>
+              </div>
+            )}
             {selectedPositiveQualities.length > 0 && (
               <div>
                 <div className="mb-2 text-xs font-medium text-emerald-600 dark:text-emerald-400">Positive</div>
