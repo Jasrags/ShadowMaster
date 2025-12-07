@@ -345,6 +345,32 @@ High-level milestones with recommended scope.
 
 The MVP delivers a fully functional SR5 Priority-based character creation system. This section details the specific components required based on the SR5 Core Rulebook (p. 62-107).
 
+##### Status Legend
+- ✅ Complete — Feature fully implemented
+- ⚠️ Partial — Basic implementation, minor features missing
+- 🔜 Deferred — Intentionally moved to Beta phase
+- ❌ Not Started — Not yet implemented
+
+##### Overall Progress Summary (Updated: December 2024)
+
+**Core Character Creation:** ~95% Complete
+- All 10 creation steps implemented and functional
+- Full wizard flow with auto-save and draft recovery
+- Character saving and finalization working
+
+**Key Completed Phases:**
+- Phase 6.2: Knowledge & Language skills
+- Phase 6.3: Skill specializations
+- Phase 6.4: Derived stats calculation
+- Phase 7: Contacts system
+- Phase 8: Gear & Resources with lifestyle selection
+
+**Deferred to Beta:**
+- Cyberware/Bioware (Augmentations)
+- Adept Powers allocation
+- Spirit/Sprite binding
+- Foci bonding
+
 ##### MVP Completion Status
 
 | Component | Status | Notes |
@@ -352,10 +378,17 @@ The MVP delivers a fully functional SR5 Priority-based character creation system
 | Priority Selection Grid | ✅ Complete | A-E assignment across 5 categories |
 | Metatype Selection | ✅ Complete | Based on priority, shows racial traits |
 | Physical/Mental Attributes | ✅ Complete | Point allocation with metatype limits |
+| Special Attributes (Edge/Magic/Resonance) | ✅ Complete | SpecialAttributeAllocator component |
 | Magic/Resonance Path Selection | ✅ Complete | Path selection based on priority |
 | Active Skills | ✅ Complete | Individual + group point allocation |
+| Skill Specializations | ✅ Complete | +2 dice bonus, 1 point cost |
+| Knowledge & Language Skills | ✅ Complete | (INT+LOG)×2 free points, native language free |
 | Qualities Selection | ✅ Complete | Positive/Negative with 25 Karma caps |
-| Review Step | ✅ Complete | Summary with basic validation |
+| Contacts System | ✅ Complete | Connection + Loyalty, CHA×3 free Karma |
+| Gear & Resources | ✅ Complete | Catalog, lifestyle, Karma-to-Nuyen |
+| Spells/Complex Forms | ✅ Complete | Karma purchase, priority-based free items |
+| Derived Stats | ✅ Complete | Limits, condition monitors, initiative |
+| Review Step | ✅ Complete | Full summary with validation |
 | Draft Auto-save | ✅ Complete | LocalStorage persistence |
 
 ##### MVP Remaining Work — SR5 Character Creation Steps
@@ -363,98 +396,98 @@ The MVP delivers a fully functional SR5 Priority-based character creation system
 **Step 2: Metatype & Special Attributes**
 | Task | Priority | Status |
 |------|----------|--------|
-| Special Attribute Points UI | High | ❌ Not Started |
-| Edge allocation (starts 1, humans 2) | High | ❌ Not Started |
-| Magic allocation (from Magic priority) | High | ❌ Not Started |
-| Resonance allocation (Technomancers) | High | ❌ Not Started |
-| Validate special points fully spent | High | ❌ Not Started |
-| Human Edge cap 7 vs 6 for others | Medium | ❌ Not Started |
+| Special Attribute Points UI | High | ✅ Complete |
+| Edge allocation (starts 1, humans 2) | High | ✅ Complete |
+| Magic allocation (from Magic priority) | High | ✅ Complete |
+| Resonance allocation (Technomancers) | High | ✅ Complete |
+| Validate special points fully spent | High | ✅ Complete |
+| Human Edge cap 7 vs 6 for others | Medium | ✅ Complete |
 
 **Step 3: Magic/Resonance Details**
 | Task | Priority | Status |
 |------|----------|--------|
-| Starting Magic/Resonance from priority | High | ❌ Not Started |
-| Free magical skills from priority A/B | Medium | ❌ Not Started |
-| Tradition selection for Magicians | Medium | ❌ Not Started |
-| Aspected Magician skill group lock | Medium | ❌ Not Started |
+| Starting Magic/Resonance from priority | High | ✅ Complete |
+| Free magical skills from priority A/B | Medium | ⚠️ Partial |
+| Tradition selection for Magicians | Medium | ✅ Complete |
+| Aspected Magician skill group lock | Medium | ⚠️ Partial |
 
 **Step 5: Skills (Knowledge & Language)**
 | Task | Priority | Status |
 |------|----------|--------|
-| Knowledge Skills allocation UI | High | ❌ Not Started |
-| Language Skills allocation UI | High | ❌ Not Started |
-| Free points: (Intuition + Logic) × 2 | High | ❌ Not Started |
-| Native language at rating 6 (free) | High | ❌ Not Started |
-| Knowledge skill categories (Academic/Interest/Professional/Street) | Medium | ❌ Not Started |
-| Skill Specializations (+2 dice, 1 point) | Medium | ❌ Not Started |
-| Specialization breaks skill group rule | Low | ❌ Not Started |
+| Knowledge Skills allocation UI | High | ✅ Complete |
+| Language Skills allocation UI | High | ✅ Complete |
+| Free points: (Intuition + Logic) × 2 | High | ✅ Complete |
+| Native language at rating 6 (free) | High | ✅ Complete |
+| Knowledge skill categories (Academic/Interest/Professional/Street) | Medium | ✅ Complete |
+| Skill Specializations (+2 dice, 1 point) | Medium | ✅ Complete |
+| Specialization breaks skill group rule | Low | ⚠️ Partial |
 
 **Step 6: Resources/Gear**
 | Task | Priority | Status |
 |------|----------|--------|
-| Gear catalog UI (searchable) | High | ❌ Not Started |
-| Nuyen budget tracking | High | ❌ Not Started |
-| Lifestyle selection | High | ❌ Not Started |
-| Lifestyle cost modifiers (Troll +10%, Dwarf +20%) | Medium | ❌ Not Started |
-| Availability ≤12 validation | High | ❌ Not Started |
-| Device Rating ≤6 validation | Medium | ❌ Not Started |
-| 5,000¥ carryover limit | Medium | ❌ Not Started |
-| Karma-to-Nuyen conversion (max 10 Karma = 20,000¥) | Medium | ❌ Not Started |
-| Cyberware/Bioware selection | Medium | ❌ Not Started |
-| Essence tracking | Medium | ❌ Not Started |
-| Essence loss reduces Magic/Resonance | Medium | ❌ Not Started |
-| Augmentation bonus ≤+4 per attribute | Low | ❌ Not Started |
+| Gear catalog UI (searchable) | High | ✅ Complete |
+| Nuyen budget tracking | High | ✅ Complete |
+| Lifestyle selection | High | ✅ Complete |
+| Lifestyle cost modifiers (Troll +10%, Dwarf +20%) | Medium | ✅ Complete |
+| Availability ≤12 validation | High | ✅ Complete |
+| Device Rating ≤6 validation | Medium | ⚠️ Partial |
+| 5,000¥ carryover limit | Medium | ✅ Complete |
+| Karma-to-Nuyen conversion (max 10 Karma = 20,000¥) | Medium | ✅ Complete |
+| Cyberware/Bioware selection | Medium | 🔜 Deferred to Beta |
+| Essence tracking | Medium | 🔜 Deferred to Beta |
+| Essence loss reduces Magic/Resonance | Medium | 🔜 Deferred to Beta |
+| Augmentation bonus ≤+4 per attribute | Low | 🔜 Deferred to Beta |
 | Starting Nuyen roll by lifestyle | Low | ❌ Not Started |
 
 **Step 7: Leftover Karma**
 | Task | Priority | Status |
 |------|----------|--------|
-| Contacts system (Connection + Loyalty) | High | ❌ Not Started |
-| Free Contacts Karma = Charisma × 3 | High | ❌ Not Started |
-| Max 7 Karma per contact | Medium | ❌ Not Started |
+| Contacts system (Connection + Loyalty) | High | ✅ Complete |
+| Free Contacts Karma = Charisma × 3 | High | ✅ Complete |
+| Max 7 Karma per contact | Medium | ✅ Complete |
 | Karma purchase: Attributes (new × 5) | Medium | ❌ Not Started |
 | Karma purchase: Skills (new × 2) | Medium | ❌ Not Started |
-| Karma purchase: Spells (5 Karma each) | Medium | ❌ Not Started |
-| Karma purchase: Complex Forms (4 Karma each) | Medium | ❌ Not Started |
-| 7 Karma carryover maximum | High | ❌ Not Started |
-| Bound Spirits (1 Karma per service) | Low | ❌ Not Started |
-| Registered Sprites (1 Karma per task) | Low | ❌ Not Started |
-| Foci bonding (variable cost) | Low | ❌ Not Started |
-| Mystic Adept Power Points (5 Karma each) | Low | ❌ Not Started |
+| Karma purchase: Spells (5 Karma each) | Medium | ✅ Complete |
+| Karma purchase: Complex Forms (4 Karma each) | Medium | ✅ Complete |
+| 7 Karma carryover maximum | High | ✅ Complete |
+| Bound Spirits (1 Karma per service) | Low | 🔜 Deferred to Beta |
+| Registered Sprites (1 Karma per task) | Low | 🔜 Deferred to Beta |
+| Foci bonding (variable cost) | Low | 🔜 Deferred to Beta |
+| Mystic Adept Power Points (5 Karma each) | Low | 🔜 Deferred to Beta |
 
 **Step 8: Final Calculations**
 | Task | Priority | Status |
 |------|----------|--------|
-| Initiative = Intuition + Reaction | High | ❌ Not Started |
-| Physical Limit = [(STR×2) + BOD + REA] / 3 ↑ | High | ❌ Not Started |
-| Mental Limit = [(LOG×2) + INT + WIL] / 3 ↑ | High | ❌ Not Started |
-| Social Limit = [(CHA×2) + WIL + ESS] / 3 ↑ | High | ❌ Not Started |
-| Physical Condition Monitor = [BOD/2] + 8 | High | ❌ Not Started |
-| Stun Condition Monitor = [WIL/2] + 8 | High | ❌ Not Started |
-| Overflow = Body + augmentation bonuses | Medium | ❌ Not Started |
+| Initiative = Intuition + Reaction | High | ✅ Complete |
+| Physical Limit = [(STR×2) + BOD + REA] / 3 ↑ | High | ✅ Complete |
+| Mental Limit = [(LOG×2) + INT + WIL] / 3 ↑ | High | ✅ Complete |
+| Social Limit = [(CHA×2) + WIL + ESS] / 3 ↑ | High | ✅ Complete |
+| Physical Condition Monitor = [BOD/2] + 8 | High | ✅ Complete |
+| Stun Condition Monitor = [WIL/2] + 8 | High | ✅ Complete |
+| Overflow = Body + augmentation bonuses | Medium | ⚠️ Partial |
 | Astral Initiative (magical characters) | Medium | ❌ Not Started |
 | Matrix Initiative (deckers/technomancers) | Medium | ❌ Not Started |
 | Living Persona stats (technomancers) | Medium | ❌ Not Started |
-| Store derivedStats on character | High | ❌ Not Started |
+| Store derivedStats on character | High | ✅ Complete |
 
 **Validation Rules (Creation-time)**
 | Task | Priority | Status |
 |------|----------|--------|
 | Each Priority Level (A-E) used exactly once | ✅ | Complete |
-| Only one Physical/Mental attribute at max | High | ❌ Not Started |
+| Only one Physical/Mental attribute at max | High | ⚠️ Warning only |
 | All attribute points must be spent | High | ⚠️ Warning only |
 | All skill points must be spent | High | ⚠️ Warning only |
 | Maximum 25 Karma positive qualities | ✅ | Complete |
 | Maximum 25 Karma negative qualities | ✅ | Complete |
-| Maximum 7 Karma carryover | High | ❌ Not Started |
-| Maximum 5,000¥ carryover | Medium | ❌ Not Started |
-| Gear Availability ≤12 | High | ❌ Not Started |
-| Device Rating ≤6 | Medium | ❌ Not Started |
-| Max bound spirits = Charisma | Low | ❌ Not Started |
-| Max registered sprites = Charisma | Low | ❌ Not Started |
-| Max complex forms = Logic | Low | ❌ Not Started |
-| Max spells = Magic × 2 | Low | ❌ Not Started |
-| Max foci Force = Magic × 2 | Low | ❌ Not Started |
+| Maximum 7 Karma carryover | High | ✅ Complete |
+| Maximum 5,000¥ carryover | Medium | ✅ Complete |
+| Gear Availability ≤12 | High | ✅ Complete |
+| Device Rating ≤6 | Medium | ⚠️ Partial |
+| Max bound spirits = Charisma | Low | 🔜 Deferred to Beta |
+| Max registered sprites = Charisma | Low | 🔜 Deferred to Beta |
+| Max complex forms = Resonance | Low | ✅ Complete |
+| Max spells = Magic × 2 | Low | ✅ Complete |
+| Max foci Force = Magic × 2 | Low | 🔜 Deferred to Beta |
 
 ##### MVP — Other Systems
 

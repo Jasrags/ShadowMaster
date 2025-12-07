@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { Link, Button } from "react-aria-components";
+import { Link } from "react-aria-components";
 import type { Character } from "@/lib/types";
 
 // =============================================================================
@@ -177,13 +177,13 @@ function CharacterCard({ character, onDelete, viewMode = "grid" }: CharacterCard
               <span className="text-xs text-zinc-600 hidden md:block">
                 {new Date(character.updatedAt || character.createdAt).toLocaleDateString()}
               </span>
-              <Button
-                onPress={(e) => handleDelete(e as unknown as React.MouseEvent)}
-                isDisabled={isDeleting}
-                className="p-1.5 rounded text-zinc-500 hover:text-red-400 hover:bg-red-500/10 transition-colors opacity-0 group-hover:opacity-100"
+              <button
+                onClick={handleDelete}
+                disabled={isDeleting}
+                className="p-1.5 rounded text-zinc-500 hover:text-red-400 hover:bg-red-500/10 transition-colors opacity-0 group-hover:opacity-100 disabled:opacity-50"
               >
                 <TrashIcon className="w-4 h-4" />
-              </Button>
+              </button>
             </div>
           </div>
         </div>
@@ -269,13 +269,13 @@ function CharacterCard({ character, onDelete, viewMode = "grid" }: CharacterCard
             <span className="text-xs text-zinc-600">
               {new Date(character.updatedAt || character.createdAt).toLocaleDateString()}
             </span>
-            <Button
-              onPress={(e) => handleDelete(e as unknown as React.MouseEvent)}
-              isDisabled={isDeleting}
-              className="p-1.5 rounded text-zinc-500 hover:text-red-400 hover:bg-red-500/10 transition-colors opacity-0 group-hover:opacity-100"
+            <button
+              onClick={handleDelete}
+              disabled={isDeleting}
+              className="p-1.5 rounded text-zinc-500 hover:text-red-400 hover:bg-red-500/10 transition-colors opacity-0 group-hover:opacity-100 disabled:opacity-50"
             >
               <TrashIcon className="w-4 h-4" />
-            </Button>
+            </button>
           </div>
         </div>
       </div>

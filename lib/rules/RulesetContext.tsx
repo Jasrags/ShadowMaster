@@ -161,6 +161,35 @@ export interface GearCatalogData {
   ammunition: GearItemData[];
 }
 
+export interface SpellData {
+  id: string;
+  name: string;
+  category: "combat" | "detection" | "health" | "illusion" | "manipulation";
+  type: "mana" | "physical";
+  range: string;
+  duration: string;
+  drain: string;
+  damage?: string;
+  description?: string;
+}
+
+export interface SpellsCatalogData {
+  combat: SpellData[];
+  detection: SpellData[];
+  health: SpellData[];
+  illusion: SpellData[];
+  manipulation: SpellData[];
+}
+
+export interface ComplexFormData {
+  id: string;
+  name: string;
+  target: string;
+  duration: string;
+  fading: string;
+  description?: string;
+}
+
 /**
  * State of the ruleset context
  */
@@ -221,6 +250,8 @@ export interface RulesetData {
   lifestyles: LifestyleData[];
   lifestyleModifiers: Record<string, number>;
   gear: GearCatalogData | null;
+  spells: SpellsCatalogData | null;
+  complexForms: ComplexFormData[];
 }
 
 /**
@@ -254,6 +285,8 @@ const defaultData: RulesetData = {
   lifestyles: [],
   lifestyleModifiers: {},
   gear: null,
+  spells: null,
+  complexForms: [],
 };
 
 const defaultState: RulesetContextState = {
@@ -327,6 +360,8 @@ export function RulesetProvider({
               lifestyles: extractedData.lifestyles || [],
               lifestyleModifiers: extractedData.lifestyleModifiers || {},
               gear: extractedData.gear || null,
+              spells: extractedData.spells || null,
+              complexForms: extractedData.complexForms || [],
             }
           : defaultData;
 
@@ -528,4 +563,20 @@ export function useGear(): GearCatalogData | null {
 export function useLifestyleModifiers(): Record<string, number> {
   const { data } = useRuleset();
   return data.lifestyleModifiers;
+}
+
+/**
+ * Hook to get spells catalog
+ */
+export function useSpells(): SpellsCatalogData | null {
+  const { data } = useRuleset();
+  return data.spells;
+}
+
+/**
+ * Hook to get complex forms
+ */
+export function useComplexForms(): ComplexFormData[] {
+  const { data } = useRuleset();
+  return data.complexForms;
 }

@@ -550,6 +550,98 @@
           { "id": "norse", "name": "Norse", "drain": ["LOG", "WIL"] },
           { "id": "druid", "name": "Druid", "drain": ["WIL", "INT"] },
           { "id": "chaos", "name": "Chaos Magic", "drain": ["INT", "WIL"] }
+        ],
+        "spells": {
+          "combat": [
+            { "id": "acid-stream", "name": "Acid Stream", "category": "combat", "type": "physical", "range": "LOS", "damage": "physical", "duration": "instant", "drain": "F-3", "description": "Elemental attack dealing acid damage." },
+            { "id": "clout", "name": "Clout", "category": "combat", "type": "physical", "range": "LOS", "damage": "stun", "duration": "instant", "drain": "F-3", "description": "Direct stun damage via magical force." },
+            { "id": "flamethrower", "name": "Flamethrower", "category": "combat", "type": "physical", "range": "LOS", "damage": "physical", "duration": "instant", "drain": "F-3", "description": "Elemental fire attack in a cone." },
+            { "id": "lightning-bolt", "name": "Lightning Bolt", "category": "combat", "type": "physical", "range": "LOS", "damage": "physical", "duration": "instant", "drain": "F-3", "description": "Electrical attack that ignores some armor." },
+            { "id": "manabolt", "name": "Manabolt", "category": "combat", "type": "mana", "range": "LOS", "damage": "physical", "duration": "instant", "drain": "F-3", "description": "Direct mana damage to living targets." },
+            { "id": "manaball", "name": "Manaball", "category": "combat", "type": "mana", "range": "LOS(A)", "damage": "physical", "duration": "instant", "drain": "F", "description": "Area effect mana damage." },
+            { "id": "powerbolt", "name": "Powerbolt", "category": "combat", "type": "physical", "range": "LOS", "damage": "physical", "duration": "instant", "drain": "F-3", "description": "Direct physical damage." },
+            { "id": "powerball", "name": "Powerball", "category": "combat", "type": "physical", "range": "LOS(A)", "damage": "physical", "duration": "instant", "drain": "F", "description": "Area effect physical damage." },
+            { "id": "punch", "name": "Punch", "category": "combat", "type": "physical", "range": "touch", "damage": "stun", "duration": "instant", "drain": "F-6", "description": "Touch-range stun damage." },
+            { "id": "stunball", "name": "Stunball", "category": "combat", "type": "mana", "range": "LOS(A)", "damage": "stun", "duration": "instant", "drain": "F-1", "description": "Area effect stun damage." },
+            { "id": "stunbolt", "name": "Stunbolt", "category": "combat", "type": "mana", "range": "LOS", "damage": "stun", "duration": "instant", "drain": "F-3", "description": "Direct stun damage to living targets." }
+          ],
+          "detection": [
+            { "id": "analyze-device", "name": "Analyze Device", "category": "detection", "type": "physical", "range": "touch", "duration": "sustained", "drain": "F-3", "description": "Learn device functions and operation." },
+            { "id": "analyze-magic", "name": "Analyze Magic", "category": "detection", "type": "mana", "range": "touch", "duration": "sustained", "drain": "F-3", "description": "Analyze magical objects or effects." },
+            { "id": "analyze-truth", "name": "Analyze Truth", "category": "detection", "type": "mana", "range": "touch", "duration": "sustained", "drain": "F-2", "description": "Detect if subject is lying." },
+            { "id": "clairaudience", "name": "Clairaudience", "category": "detection", "type": "mana", "range": "touch", "duration": "sustained", "drain": "F-3", "description": "Hear from distant location." },
+            { "id": "clairvoyance", "name": "Clairvoyance", "category": "detection", "type": "mana", "range": "touch", "duration": "sustained", "drain": "F-3", "description": "See from distant location." },
+            { "id": "combat-sense", "name": "Combat Sense", "category": "detection", "type": "mana", "range": "touch", "duration": "sustained", "drain": "F", "description": "+1 die per hit to defense tests." },
+            { "id": "detect-enemies", "name": "Detect Enemies", "category": "detection", "type": "mana", "range": "touch", "duration": "sustained", "drain": "F-2", "description": "Sense hostile intent." },
+            { "id": "detect-individual", "name": "Detect Individual", "category": "detection", "type": "mana", "range": "touch", "duration": "sustained", "drain": "F-3", "description": "Sense specific person." },
+            { "id": "detect-life", "name": "Detect Life", "category": "detection", "type": "mana", "range": "touch", "duration": "sustained", "drain": "F-3", "description": "Sense living creatures." },
+            { "id": "detect-magic", "name": "Detect Magic", "category": "detection", "type": "mana", "range": "touch", "duration": "sustained", "drain": "F-2", "description": "Sense magical effects." },
+            { "id": "mindlink", "name": "Mindlink", "category": "detection", "type": "mana", "range": "touch", "duration": "sustained", "drain": "F-1", "description": "Telepathic communication." },
+            { "id": "mind-probe", "name": "Mind Probe", "category": "detection", "type": "mana", "range": "touch", "duration": "sustained", "drain": "F", "description": "Read surface or deeper thoughts." }
+          ],
+          "health": [
+            { "id": "antidote", "name": "Antidote", "category": "health", "type": "mana", "range": "touch", "duration": "permanent", "drain": "F-3", "description": "Neutralize toxins in subject." },
+            { "id": "cure-disease", "name": "Cure Disease", "category": "health", "type": "mana", "range": "touch", "duration": "permanent", "drain": "F-4", "description": "Eliminate disease from subject." },
+            { "id": "decrease-attribute", "name": "Decrease [Attribute]", "category": "health", "type": "physical", "range": "touch", "duration": "sustained", "drain": "F-2", "description": "Reduce one attribute. Choose attribute when learned." },
+            { "id": "detox", "name": "Detox", "category": "health", "type": "mana", "range": "touch", "duration": "permanent", "drain": "F-6", "description": "Remove drug effects from subject." },
+            { "id": "heal", "name": "Heal", "category": "health", "type": "mana", "range": "touch", "duration": "permanent", "drain": "F-4", "description": "Heal physical damage." },
+            { "id": "increase-attribute", "name": "Increase [Attribute]", "category": "health", "type": "physical", "range": "touch", "duration": "sustained", "drain": "F-3", "description": "Boost one attribute. Choose attribute when learned." },
+            { "id": "increase-reflexes", "name": "Increase Reflexes", "category": "health", "type": "physical", "range": "touch", "duration": "sustained", "drain": "F", "description": "Add +1 Reaction and +1d6 Initiative per hit." },
+            { "id": "oxygenate", "name": "Oxygenate", "category": "health", "type": "physical", "range": "touch", "duration": "sustained", "drain": "F-5", "description": "Subject doesn't need to breathe." },
+            { "id": "resist-pain", "name": "Resist Pain", "category": "health", "type": "mana", "range": "touch", "duration": "sustained", "drain": "F-4", "description": "Ignore wound modifiers." },
+            { "id": "stabilize", "name": "Stabilize", "category": "health", "type": "mana", "range": "touch", "duration": "permanent", "drain": "F-4", "description": "Prevent dying character from bleeding out." }
+          ],
+          "illusion": [
+            { "id": "agony", "name": "Agony", "category": "illusion", "type": "mana", "range": "LOS", "duration": "sustained", "drain": "F-4", "description": "Cause intense pain, -1 die per net hit." },
+            { "id": "bugs", "name": "Bugs", "category": "illusion", "type": "mana", "range": "LOS", "duration": "sustained", "drain": "F-3", "description": "Target believes covered in insects." },
+            { "id": "chaos", "name": "Chaos", "category": "illusion", "type": "mana", "range": "LOS", "duration": "sustained", "drain": "F-2", "description": "Target experiences random sensory chaos." },
+            { "id": "chaotic-world", "name": "Chaotic World", "category": "illusion", "type": "mana", "range": "LOS(A)", "duration": "sustained", "drain": "F", "description": "Area effect sensory chaos." },
+            { "id": "confusion", "name": "Confusion", "category": "illusion", "type": "mana", "range": "LOS", "duration": "sustained", "drain": "F-3", "description": "Cause mental disorientation." },
+            { "id": "entertainment", "name": "Entertainment", "category": "illusion", "type": "mana", "range": "LOS(A)", "duration": "sustained", "drain": "F-3", "description": "Create impressive but obvious illusions." },
+            { "id": "hush", "name": "Hush", "category": "illusion", "type": "physical", "range": "LOS(A)", "duration": "sustained", "drain": "F-2", "description": "Create zone of silence." },
+            { "id": "improved-invisibility", "name": "Improved Invisibility", "category": "illusion", "type": "physical", "range": "LOS", "duration": "sustained", "drain": "F-1", "description": "Target invisible to all senses." },
+            { "id": "invisibility", "name": "Invisibility", "category": "illusion", "type": "mana", "range": "LOS", "duration": "sustained", "drain": "F-2", "description": "Target invisible to living observers." },
+            { "id": "mass-confusion", "name": "Mass Confusion", "category": "illusion", "type": "mana", "range": "LOS(A)", "duration": "sustained", "drain": "F-1", "description": "Area effect mental disorientation." },
+            { "id": "phantasm", "name": "Phantasm", "category": "illusion", "type": "mana", "range": "LOS(A)", "duration": "sustained", "drain": "F-1", "description": "Create realistic illusion for living viewers." },
+            { "id": "physical-mask", "name": "Physical Mask", "category": "illusion", "type": "physical", "range": "touch", "duration": "sustained", "drain": "F-2", "description": "Alter appearance physically." },
+            { "id": "silence", "name": "Silence", "category": "illusion", "type": "physical", "range": "LOS(A)", "duration": "sustained", "drain": "F-1", "description": "Create area of total silence." },
+            { "id": "stealth", "name": "Stealth", "category": "illusion", "type": "physical", "range": "LOS", "duration": "sustained", "drain": "F-2", "description": "Reduce all sounds made by target." },
+            { "id": "trid-phantasm", "name": "Trid Phantasm", "category": "illusion", "type": "physical", "range": "LOS(A)", "duration": "sustained", "drain": "F", "description": "Create realistic illusion with physical presence." }
+          ],
+          "manipulation": [
+            { "id": "animate", "name": "Animate", "category": "manipulation", "type": "physical", "range": "LOS", "duration": "sustained", "drain": "F-1", "description": "Give motion to objects." },
+            { "id": "armor", "name": "Armor", "category": "manipulation", "type": "physical", "range": "LOS", "duration": "sustained", "drain": "F-2", "description": "+1 armor per hit." },
+            { "id": "barrier", "name": "Barrier", "category": "manipulation", "type": "physical", "range": "LOS", "duration": "sustained", "drain": "F-1", "description": "Create magical wall." },
+            { "id": "control-actions", "name": "Control Actions", "category": "manipulation", "type": "mana", "range": "LOS", "duration": "sustained", "drain": "F-1", "description": "Control target's physical actions." },
+            { "id": "control-thoughts", "name": "Control Thoughts", "category": "manipulation", "type": "mana", "range": "LOS", "duration": "sustained", "drain": "F-1", "description": "Control target's mind and actions." },
+            { "id": "fling", "name": "Fling", "category": "manipulation", "type": "physical", "range": "LOS", "duration": "instant", "drain": "F-2", "description": "Telekinetically throw objects." },
+            { "id": "ice-sheet", "name": "Ice Sheet", "category": "manipulation", "type": "physical", "range": "LOS(A)", "duration": "instant", "drain": "F", "description": "Create slippery ice surface." },
+            { "id": "ignite", "name": "Ignite", "category": "manipulation", "type": "physical", "range": "LOS", "duration": "permanent", "drain": "F-1", "description": "Set flammable objects on fire." },
+            { "id": "influence", "name": "Influence", "category": "manipulation", "type": "mana", "range": "LOS", "duration": "instant", "drain": "F-1", "description": "Implant suggestion in target's mind." },
+            { "id": "levitate", "name": "Levitate", "category": "manipulation", "type": "physical", "range": "LOS", "duration": "sustained", "drain": "F-2", "description": "Lift and move objects or creatures." },
+            { "id": "light", "name": "Light", "category": "manipulation", "type": "physical", "range": "LOS(A)", "duration": "sustained", "drain": "F-4", "description": "Create bright illumination." },
+            { "id": "magic-fingers", "name": "Magic Fingers", "category": "manipulation", "type": "physical", "range": "LOS", "duration": "sustained", "drain": "F-2", "description": "Manipulate objects at distance." },
+            { "id": "mob-control", "name": "Mob Control", "category": "manipulation", "type": "mana", "range": "LOS(A)", "duration": "sustained", "drain": "F+1", "description": "Area effect thought control." },
+            { "id": "mob-mind", "name": "Mob Mind", "category": "manipulation", "type": "mana", "range": "LOS(A)", "duration": "sustained", "drain": "F", "description": "Area effect suggestion." },
+            { "id": "shape-material", "name": "Shape [Material]", "category": "manipulation", "type": "physical", "range": "LOS", "duration": "sustained", "drain": "F-2", "description": "Reshape materials. Choose material when learned." },
+            { "id": "shadow", "name": "Shadow", "category": "manipulation", "type": "physical", "range": "LOS(A)", "duration": "sustained", "drain": "F-3", "description": "Create darkness in an area." }
+          ]
+        },
+        "complexForms": [
+          { "id": "cleaner", "name": "Cleaner", "target": "persona", "duration": "permanent", "fading": "L-2", "description": "Remove marks from a target." },
+          { "id": "diffusion", "name": "Diffusion of [Matrix Attribute]", "target": "device", "duration": "sustained", "fading": "L-1", "description": "Lower target's Matrix attribute. Choose attribute when learned." },
+          { "id": "editor", "name": "Editor", "target": "file", "duration": "permanent", "fading": "L-2", "description": "Edit file without leaving traces." },
+          { "id": "infusion", "name": "Infusion of [Matrix Attribute]", "target": "device", "duration": "sustained", "fading": "L-1", "description": "Boost target's Matrix attribute. Choose attribute when learned." },
+          { "id": "primed-charge", "name": "Primed Charge", "target": "self", "duration": "sustained", "fading": "L-2", "description": "Add hits to next Matrix action as bonus dice." },
+          { "id": "puppeteer", "name": "Puppeteer", "target": "device", "duration": "immediate", "fading": "L+1", "description": "Force device to perform a Matrix action." },
+          { "id": "pulse-storm", "name": "Pulse Storm", "target": "device", "duration": "immediate", "fading": "L+1", "description": "Crash all icons in an area." },
+          { "id": "resonance-channel", "name": "Resonance Channel", "target": "sprite", "duration": "sustained", "fading": "L-1", "description": "Grant sprite ability to use complex forms." },
+          { "id": "resonance-spike", "name": "Resonance Spike", "target": "persona", "duration": "immediate", "fading": "L-1", "description": "Deal Matrix damage." },
+          { "id": "resonance-veil", "name": "Resonance Veil", "target": "device", "duration": "sustained", "fading": "L-1", "description": "Make icon appear as something else." },
+          { "id": "static-veil", "name": "Static Veil", "target": "self", "duration": "sustained", "fading": "L-2", "description": "Conceal your living persona." },
+          { "id": "stitches", "name": "Stitches", "target": "sprite", "duration": "permanent", "fading": "L", "description": "Repair Matrix damage to sprite." },
+          { "id": "transcendent-grid", "name": "Transcendent Grid", "target": "self", "duration": "sustained", "fading": "L-1", "description": "Access any grid without penalty." },
+          { "id": "tattletale", "name": "Tattletale", "target": "device", "duration": "permanent", "fading": "L-2", "description": "Track device's Matrix activity." }
         ]
       }
     },
@@ -927,6 +1019,7 @@
               { "id": "qualities", "title": "Select Qualities", "type": "choose", "payload": { "type": "choose", "target": "qualities", "budgetId": "karma" } },
               { "id": "contacts", "title": "Build Contacts", "type": "allocate", "description": "Build your network of contacts using free Karma based on Charisma.", "payload": { "type": "allocate", "target": "contacts", "budgetId": "contact-karma" } },
               { "id": "gear", "title": "Purchase Gear", "type": "purchase", "payload": { "type": "purchase", "target": "gear", "budgetId": "nuyen", "availabilityLimit": 12 } },
+              { "id": "karma", "title": "Spend Karma", "type": "allocate", "description": "Spend remaining Karma on spells, complex forms, or stat improvements. Max 7 Karma carryover.", "payload": { "type": "allocate", "target": "karma", "budgetId": "karma" } },
               { "id": "review", "title": "Review & Finalize", "type": "validate", "payload": { "type": "validate", "validations": ["all"] } }
             ],
             "budgets": [

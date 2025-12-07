@@ -21,6 +21,8 @@ export {
   useLifestyles,
   useRulesetReady,
   useRulesetStatus,
+  useSpells,
+  useComplexForms,
 } from "./RulesetContext";
 
 export type {
@@ -38,4 +40,7 @@ export type {
   PriorityTableData,
   MagicPathData,
   LifestyleData,
+  SpellData,
+  SpellsCatalogData,
+  ComplexFormData,
 } from "./RulesetContext";

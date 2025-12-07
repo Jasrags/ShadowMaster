@@ -21,6 +21,7 @@ import { SkillsStep } from "./steps/SkillsStep";
 import { QualitiesStep } from "./steps/QualitiesStep";
 import { ContactsStep } from "./steps/ContactsStep";
 import { GearStep } from "./steps/GearStep";
+import { KarmaStep } from "./steps/KarmaStep";
 import { ReviewStep } from "./steps/ReviewStep";
 
 interface CreationWizardProps {
@@ -252,6 +253,84 @@ export function CreationWizard({ onCancel, onComplete }: CreationWizardProps) {
           });
         }
         break;
+
+      case "gear":
+        // Check nuyen carryover (max 5,000)
+        const nuyenBudget = budgetValues["nuyen"] || 0;
+        const nuyenSpent = (state.budgets["nuyen-spent"] as number) || 0;
+        const nuyenRemaining = nuyenBudget - nuyenSpent;
+        if (nuyenRemaining > 5000) {
+          errors.push({
+            constraintId: "nuyen-carryover",
+            stepId,
+            message: `You have ${nuyenRemaining.toLocaleString()} nuyen remaining. Maximum carryover is 5,000 nuyen.`,
+            severity: "warning",
+          });
+        }
+        break;
+
+      case "karma":
+        // Check Karma carryover (max 7)
+        const karmaBase = budgetValues["karma"] || 25;
+        const karmaGained = (state.budgets["karma-gained-negative"] as number) || 0;
+        const karmaSpentPos = (state.budgets["karma-spent-positive"] as number) || 0;
+        const karmaSpentGear = (state.budgets["karma-spent-gear"] as number) || 0;
+        const karmaSpentSpells = (state.budgets["karma-spent-spells"] as number) || 0;
+        const karmaSpentForms = (state.budgets["karma-spent-complex-forms"] as number) || 0;
+        const karmaRemaining = karmaBase + karmaGained - karmaSpentPos - karmaSpentGear - karmaSpentSpells - karmaSpentForms;
+        if (karmaRemaining > 7) {
+          errors.push({
+            constraintId: "karma-carryover",
+            stepId,
+            message: `You have ${karmaRemaining} Karma remaining. Maximum carryover is 7 Karma. Spend ${karmaRemaining - 7} more.`,
+            severity: "warning",
+          });
+        }
+        break;
+
+      case "review":
+        // Final validation checks
+        // Check character name
+        if (!state.selections.characterName || !(state.selections.characterName as string).trim()) {
+          errors.push({
+            constraintId: "character-name",
+            stepId,
+            message: "Please enter a character name.",
+            severity: "warning",
+          });
+        }
+
+        // Final Karma carryover check
+        const finalKarmaBase = budgetValues["karma"] || 25;
+        const finalKarmaGained = (state.budgets["karma-gained-negative"] as number) || 0;
+        const finalKarmaSpent =
+          ((state.budgets["karma-spent-positive"] as number) || 0) +
+          ((state.budgets["karma-spent-gear"] as number) || 0) +
+          ((state.budgets["karma-spent-spells"] as number) || 0) +
+          ((state.budgets["karma-spent-complex-forms"] as number) || 0);
+        const finalKarmaRemaining = finalKarmaBase + finalKarmaGained - finalKarmaSpent;
+        if (finalKarmaRemaining > 7) {
+          errors.push({
+            constraintId: "final-karma-carryover",
+            stepId,
+            message: `${finalKarmaRemaining} Karma remaining exceeds the 7 Karma carryover limit.`,
+            severity: "warning",
+          });
+        }
+
+        // Final nuyen carryover check
+        const finalNuyenBudget = budgetValues["nuyen"] || 0;
+        const finalNuyenSpent = (state.budgets["nuyen-spent"] as number) || 0;
+        const finalNuyenRemaining = finalNuyenBudget - finalNuyenSpent;
+        if (finalNuyenRemaining > 5000) {
+          errors.push({
+            constraintId: "final-nuyen-carryover",
+            stepId,
+            message: `${finalNuyenRemaining.toLocaleString()} nuyen remaining exceeds the 5,000 nuyen carryover limit.`,
+            severity: "warning",
+          });
+        }
+        break;
     }
 
     return errors;
@@ -426,11 +505,30 @@ export function CreationWizard({ onCancel, onComplete }: CreationWizardProps) {
       // Calculate derived stats
       const derivedStats = calculateDerivedStats(baseAttributes, specialAttrs);
 
+      // Calculate total Karma spent during creation
+      const karmaSpentAtCreation =
+        ((state.budgets["karma-spent-positive"] as number) || 0) +
+        ((state.budgets["karma-spent-gear"] as number) || 0) +
+        ((state.budgets["karma-spent-spells"] as number) || 0) +
+        ((state.budgets["karma-spent-complex-forms"] as number) || 0);
+
+      // Calculate remaining Karma (carryover into gameplay)
+      const karmaRemaining =
+        (budgetValues["karma"] || 25) +
+        ((state.budgets["karma-gained-negative"] as number) || 0) -
+        karmaSpentAtCreation;
+
+      // Calculate nuyen remaining (after gear purchases)
+      const nuyenBudget = budgetValues["nuyen"] || 0;
+      const nuyenSpent = (state.budgets["nuyen-spent"] as number) || 0;
+      const nuyenRemaining = Math.min(nuyenBudget - nuyenSpent, 5000); // Cap at 5,000 carryover
+
       // Build character data
       const characterData = {
         name: characterName || "Unnamed Runner",
         metatype: (state.selections.metatype as string) || "human",
         magicalPath: selectedMagicPath,
+        tradition: (state.selections.tradition as string) || undefined,
         attributes: baseAttributes,
         specialAttributes: specialAttrs,
         skills: (state.selections.skills as Record<string, number>) || {},
@@ -439,15 +537,16 @@ export function CreationWizard({ onCancel, onComplete }: CreationWizardProps) {
         languages: (state.selections.languages as Array<{ name: string; rating: number; isNative?: boolean }>) || [],
         positiveQualities: (state.selections.positiveQualities as string[]) || [],
         negativeQualities: (state.selections.negativeQualities as string[]) || [],
-        gear: [],
+        spells: (state.selections.spells as string[]) || [],
+        complexForms: (state.selections.complexForms as string[]) || [],
+        gear: (state.selections.gear as Array<{ id: string; name: string; quantity: number; cost: number }>) || [],
+        lifestyle: (state.selections.lifestyle as { id: string; name: string; months: number; cost: number }) || undefined,
         contacts: (state.selections.contacts as Array<{ name: string; connection: number; loyalty: number; type?: string; notes?: string }>) || [],
-        nuyen: budgetValues["nuyen"] || 0,
-        startingNuyen: budgetValues["nuyen"] || 0,
-        karmaCurrent: (budgetValues["karma"] || 25) +
-          ((state.budgets["karma-gained-negative"] as number) || 0) -
-          ((state.budgets["karma-spent-positive"] as number) || 0),
+        nuyen: nuyenRemaining,
+        startingNuyen: nuyenBudget,
+        karmaCurrent: Math.min(karmaRemaining, 7), // Cap at 7 carryover
         karmaTotal: budgetValues["karma"] || 25,
-        karmaSpentAtCreation: (state.budgets["karma-spent-positive"] as number) || 0,
+        karmaSpentAtCreation,
         derivedStats,
         condition: {
           physicalDamage: 0,
@@ -534,6 +633,8 @@ export function CreationWizard({ onCancel, onComplete }: CreationWizardProps) {
         return <ContactsStep {...stepProps} />;
       case "gear":
         return <GearStep {...stepProps} />;
+      case "karma":
+        return <KarmaStep {...stepProps} />;
       case "review":
         return <ReviewStep {...stepProps} onComplete={onComplete} />;
       default:

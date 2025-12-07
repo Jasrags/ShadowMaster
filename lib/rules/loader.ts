@@ -561,3 +561,61 @@ export function extractGear(ruleset: LoadedRuleset): GearCatalogData | null {
   return module;
 }
 
+// =============================================================================
+// SPELL AND COMPLEX FORM DATA TYPES AND LOADERS
+// =============================================================================
+
+/**
+ * Spell data structure
+ */
+export interface SpellData {
+  id: string;
+  name: string;
+  category: "combat" | "detection" | "health" | "illusion" | "manipulation";
+  type: "mana" | "physical";
+  range: string;
+  duration: string;
+  drain: string;
+  damage?: string;
+  description?: string;
+}
+
+/**
+ * Complex form data structure
+ */
+export interface ComplexFormData {
+  id: string;
+  name: string;
+  target: string;
+  duration: string;
+  fading: string;
+  description?: string;
+}
+
+/**
+ * Spells catalog data structure
+ */
+export interface SpellsCatalogData {
+  combat: SpellData[];
+  detection: SpellData[];
+  health: SpellData[];
+  illusion: SpellData[];
+  manipulation: SpellData[];
+}
+
+/**
+ * Load spells from a ruleset
+ */
+export function extractSpells(ruleset: LoadedRuleset): SpellsCatalogData | null {
+  const module = extractModule<{ spells: SpellsCatalogData }>(ruleset, "magic");
+  return module?.spells || null;
+}
+
+/**
+ * Load complex forms from a ruleset
+ */
+export function extractComplexForms(ruleset: LoadedRuleset): ComplexFormData[] {
+  const module = extractModule<{ complexForms: ComplexFormData[] }>(ruleset, "magic");
+  return module?.complexForms || [];
+}
+
