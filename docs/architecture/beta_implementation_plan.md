@@ -41,13 +41,13 @@ This document breaks down the Beta phase into actionable implementation phases w
 
 | Task | Description | Status |
 |------|-------------|--------|
-| B1.1.1 | Add CyberwareGrade type (standard, alpha, beta, delta, used) | Not Started |
-| B1.1.2 | Add CyberwareCategory enum (headware, eyeware, earware, bodyware, cyberlimbs, etc.) | Not Started |
-| B1.1.3 | Expand Cyberware interface with capacity, capacityUsed, grade, essenceCostMultiplier | Not Started |
-| B1.1.4 | Add Bioware interface mirroring Cyberware with bioIndex instead of capacity | Not Started |
-| B1.1.5 | Add EssenceHole tracking for magic users | Not Started |
-| B1.1.6 | Populate core-rulebook.json with SR5 cyberware catalog (50+ items) | Not Started |
-| B1.1.7 | Populate core-rulebook.json with SR5 bioware catalog (30+ items) | Not Started |
+| B1.1.1 | Add CyberwareGrade type (standard, alpha, beta, delta, used) | Complete |
+| B1.1.2 | Add CyberwareCategory enum (headware, eyeware, earware, bodyware, cyberlimbs, etc.) | Complete |
+| B1.1.3 | Expand Cyberware interface with capacity, capacityUsed, grade, essenceCostMultiplier | Complete |
+| B1.1.4 | Add Bioware interface mirroring Cyberware with bioIndex instead of capacity | Complete |
+| B1.1.5 | Add EssenceHole tracking for magic users | Complete |
+| B1.1.6 | Populate core-rulebook.json with SR5 cyberware catalog (50+ items) | Complete (70+ items) |
+| B1.1.7 | Populate core-rulebook.json with SR5 bioware catalog (30+ items) | Complete (60+ items) |
 
 **Cyberware Grade Essence Multipliers:**
 ```typescript
@@ -69,10 +69,10 @@ const gradeMultipliers = {
 
 | Task | Description | Status |
 |------|-------------|--------|
-| B1.2.1 | Add `useCyberware()` hook returning filtered cyberware catalog | Not Started |
-| B1.2.2 | Add `useBioware()` hook returning filtered bioware catalog | Not Started |
-| B1.2.3 | Add `useAugmentationRules()` hook for essence limits, capacity rules | Not Started |
-| B1.2.4 | Add essence calculation utilities | Not Started |
+| B1.2.1 | Add `useCyberware()` hook returning filtered cyberware catalog | Complete |
+| B1.2.2 | Add `useBioware()` hook returning filtered bioware catalog | Complete |
+| B1.2.3 | Add `useAugmentationRules()` hook for essence limits, capacity rules | Complete |
+| B1.2.4 | Add essence calculation utilities | Complete |
 
 ### B1.3 Character Creation Step
 
@@ -87,16 +87,16 @@ const gradeMultipliers = {
 
 | Task | Description | Status |
 |------|-------------|--------|
-| B1.3.1 | Create AugmentationsStep component with tabbed interface (Cyberware/Bioware) | Not Started |
-| B1.3.2 | Implement searchable augmentation catalog with category filters | Not Started |
-| B1.3.3 | Add grade selector per augmentation item | Not Started |
-| B1.3.4 | Implement real-time essence tracking display | Not Started |
-| B1.3.5 | Add capacity tracking for modular cyberware (cyberlimbs) | Not Started |
-| B1.3.6 | Implement availability validation (≤12 at creation) | Not Started |
-| B1.3.7 | Add nuyen cost tracking integrated with GearStep budget | Not Started |
-| B1.3.8 | Handle Magic/Resonance reduction from essence loss | Not Started |
-| B1.3.9 | Add augmentation bonus validation (max +4 per attribute) | Not Started |
-| B1.3.10 | Register step in CreationWizard between QualitiesStep and MagicStep | Not Started |
+| B1.3.1 | Create AugmentationsStep component with tabbed interface (Cyberware/Bioware) | Complete |
+| B1.3.2 | Implement searchable augmentation catalog with category filters | Complete |
+| B1.3.3 | Add grade selector per augmentation item | Complete |
+| B1.3.4 | Implement real-time essence tracking display | Complete |
+| B1.3.5 | Add capacity tracking for modular cyberware (cyberlimbs) | Complete |
+| B1.3.6 | Implement availability validation (≤12 at creation) | Complete |
+| B1.3.7 | Add nuyen cost tracking integrated with GearStep budget | Complete |
+| B1.3.8 | Handle Magic/Resonance reduction from essence loss | Complete |
+| B1.3.9 | Add augmentation bonus validation (max +4 per attribute) | Complete |
+| B1.3.10 | Register step in CreationWizard between QualitiesStep and ContactsStep | Complete |
 
 **UI Wireframe:**
 ```
@@ -137,21 +137,21 @@ const gradeMultipliers = {
 
 | Task | Description | Status |
 |------|-------------|--------|
-| B1.4.1 | Update derived stats calculation to include augmentation bonuses | Not Started |
-| B1.4.2 | Calculate Social Limit with reduced Essence | Not Started |
-| B1.4.3 | Calculate Overflow with augmentation Body bonuses | Not Started |
-| B1.4.4 | Display augmentation-modified attributes clearly | Not Started |
+| B1.4.1 | Update derived stats calculation to include augmentation bonuses | Complete |
+| B1.4.2 | Calculate Social Limit with reduced Essence | Complete |
+| B1.4.3 | Calculate Overflow with augmentation Body bonuses | Complete |
+| B1.4.4 | Display augmentation-modified attributes clearly | Complete |
 
 ### B1.5 Acceptance Criteria
 
-- [ ] User can browse cyberware/bioware catalog with filters
-- [ ] Essence cost correctly calculated with grade multipliers
-- [ ] Magic/Resonance automatically reduced when essence drops
-- [ ] Capacity system works for modular cyberware
-- [ ] Availability validation prevents >12 items at creation
-- [ ] Nuyen budget properly deducted
-- [ ] Augmentation bonuses apply to derived stats
-- [ ] No augmentation bonus exceeds +4 per attribute
+- [x] User can browse cyberware/bioware catalog with filters
+- [x] Essence cost correctly calculated with grade multipliers
+- [x] Magic/Resonance automatically reduced when essence drops
+- [x] Capacity system works for modular cyberware
+- [x] Availability validation prevents >12 items at creation
+- [x] Nuyen budget properly deducted
+- [x] Augmentation bonuses apply to derived stats
+- [x] No augmentation bonus exceeds +4 per attribute
 
 ---
 
