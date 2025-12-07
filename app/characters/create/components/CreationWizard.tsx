@@ -19,6 +19,7 @@ import { AttributesStep } from "./steps/AttributesStep";
 import { MagicStep } from "./steps/MagicStep";
 import { SkillsStep } from "./steps/SkillsStep";
 import { QualitiesStep } from "./steps/QualitiesStep";
+import { AugmentationsStep } from "./steps/AugmentationsStep";
 import { ContactsStep } from "./steps/ContactsStep";
 import { GearStep } from "./steps/GearStep";
 import { KarmaStep } from "./steps/KarmaStep";
@@ -629,6 +630,8 @@ export function CreationWizard({ onCancel, onComplete }: CreationWizardProps) {
         return <SkillsStep {...stepProps} />;
       case "qualities":
         return <QualitiesStep {...stepProps} />;
+      case "augmentations":
+        return <AugmentationsStep {...stepProps} />;
       case "contacts":
         return <ContactsStep {...stepProps} />;
       case "gear":

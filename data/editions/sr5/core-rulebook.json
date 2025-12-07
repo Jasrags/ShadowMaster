@@ -1213,6 +1213,7 @@
               { "id": "magic", "title": "Magic/Resonance", "type": "select", "optional": true, "payload": { "type": "select", "target": "magical-path" } },
               { "id": "skills", "title": "Allocate Skills", "type": "allocate", "payload": { "type": "allocate", "target": "skills", "budgetId": "skill-points" } },
               { "id": "qualities", "title": "Select Qualities", "type": "choose", "payload": { "type": "choose", "target": "qualities", "budgetId": "karma" } },
+              { "id": "augmentations", "title": "Augmentations", "type": "purchase", "description": "Install cyberware and bioware augmentations. Essence loss reduces Magic/Resonance.", "payload": { "type": "purchase", "target": "augmentations", "budgetId": "nuyen", "essenceLimit": 6, "availabilityLimit": 12 } },
               { "id": "contacts", "title": "Build Contacts", "type": "allocate", "description": "Build your network of contacts using free Karma based on Charisma.", "payload": { "type": "allocate", "target": "contacts", "budgetId": "contact-karma" } },
               { "id": "gear", "title": "Purchase Gear", "type": "purchase", "payload": { "type": "purchase", "target": "gear", "budgetId": "nuyen", "availabilityLimit": 12 } },
               { "id": "karma", "title": "Spend Karma", "type": "allocate", "description": "Spend remaining Karma on spells, complex forms, or stat improvements. Max 7 Karma carryover.", "payload": { "type": "allocate", "target": "karma", "budgetId": "karma" } },
