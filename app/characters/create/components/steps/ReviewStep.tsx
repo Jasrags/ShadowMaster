@@ -2,7 +2,8 @@
 
 import { useMemo } from "react";
 import { useMetatypes, useSkills, useQualities, useSpells, useComplexForms, usePriorityTable } from "@/lib/rules";
-import type { CreationState, ID, Contact } from "@/lib/types";
+import { useAugmentationRules, calculateMagicLoss } from "@/lib/rules/RulesetContext";
+import type { CreationState, ID, Contact, CyberwareItem, BiowareItem } from "@/lib/types";
 
 interface StepProps {
   state: CreationState;
@@ -44,6 +45,7 @@ export function ReviewStep({ state, updateState, budgetValues }: StepProps) {
   const spellsCatalog = useSpells();
   const complexFormsCatalog = useComplexForms();
   const priorityTable = usePriorityTable();
+  const augmentationRules = useAugmentationRules();
 
   // Get character name from state or default to empty
   const characterName = (state.selections.characterName as string) || "";
@@ -85,6 +87,8 @@ export function ReviewStep({ state, updateState, budgetValues }: StepProps) {
   const lifestyle = state.selections.lifestyle as LifestyleSelection | undefined;
   const selectedSpells = (state.selections.spells || []) as string[];
   const selectedComplexForms = (state.selections.complexForms || []) as string[];
+  const selectedCyberware = (state.selections.cyberware || []) as CyberwareItem[];
+  const selectedBioware = (state.selections.bioware || []) as BiowareItem[];
 
   // Get free spells/complex forms from priority
   const { freeSpells, freeComplexForms } = useMemo(() => {
@@ -137,31 +141,93 @@ export function ReviewStep({ state, updateState, budgetValues }: StepProps) {
     return form?.name || id;
   };
 
-  // Calculate derived stats
-  const derivedStats = useMemo(() => {
-    const body = (attributes.body || 0) + (selectedMetatype?.attributes.body && "min" in selectedMetatype.attributes.body ? selectedMetatype.attributes.body.min : 1);
-    const agility = (attributes.agility || 0) + (selectedMetatype?.attributes.agility && "min" in selectedMetatype.attributes.agility ? selectedMetatype.attributes.agility.min : 1);
-    const reaction = (attributes.reaction || 0) + (selectedMetatype?.attributes.reaction && "min" in selectedMetatype.attributes.reaction ? selectedMetatype.attributes.reaction.min : 1);
-    const strength = (attributes.strength || 0) + (selectedMetatype?.attributes.strength && "min" in selectedMetatype.attributes.strength ? selectedMetatype.attributes.strength.min : 1);
-    const willpower = (attributes.willpower || 0) + (selectedMetatype?.attributes.willpower && "min" in selectedMetatype.attributes.willpower ? selectedMetatype.attributes.willpower.min : 1);
-    const logic = (attributes.logic || 0) + (selectedMetatype?.attributes.logic && "min" in selectedMetatype.attributes.logic ? selectedMetatype.attributes.logic.min : 1);
-    const intuition = (attributes.intuition || 0) + (selectedMetatype?.attributes.intuition && "min" in selectedMetatype.attributes.intuition ? selectedMetatype.attributes.intuition.min : 1);
-    const charisma = (attributes.charisma || 0) + (selectedMetatype?.attributes.charisma && "min" in selectedMetatype.attributes.charisma ? selectedMetatype.attributes.charisma.min : 1);
-    const essence = 6;
+  // Calculate augmentation effects
+  const augmentationEffects = useMemo(() => {
+    const bonuses: Record<string, number> = {};
+    let totalEssenceLoss = 0;
+    let initiativeDiceBonus = 0;
+
+    // Process cyberware
+    for (const item of selectedCyberware) {
+      totalEssenceLoss += item.essenceCost;
+      if (item.initiativeDiceBonus) {
+        initiativeDiceBonus += item.initiativeDiceBonus;
+      }
+      if (item.attributeBonuses) {
+        for (const [attr, bonus] of Object.entries(item.attributeBonuses)) {
+          bonuses[attr] = (bonuses[attr] || 0) + bonus;
+        }
+      }
+    }
+
+    // Process bioware
+    for (const item of selectedBioware) {
+      totalEssenceLoss += item.essenceCost;
+      if (item.attributeBonuses) {
+        for (const [attr, bonus] of Object.entries(item.attributeBonuses)) {
+          bonuses[attr] = (bonuses[attr] || 0) + bonus;
+        }
+      }
+    }
+
+    const remainingEssence = Math.round((augmentationRules.maxEssence - totalEssenceLoss) * 100) / 100;
+    const magicLoss = calculateMagicLoss(totalEssenceLoss, augmentationRules.magicReductionFormula);
 
     return {
+      attributeBonuses: bonuses,
+      totalEssenceLoss: Math.round(totalEssenceLoss * 100) / 100,
+      remainingEssence,
+      magicLoss,
+      initiativeDiceBonus,
+    };
+  }, [selectedCyberware, selectedBioware, augmentationRules]);
+
+  // Calculate derived stats (including augmentation bonuses)
+  const derivedStats = useMemo(() => {
+    const augBonuses = augmentationEffects.attributeBonuses;
+
+    // Base attributes = allocated + metatype minimum + augmentation bonuses
+    const body = (attributes.body || 0) + (selectedMetatype?.attributes.body && "min" in selectedMetatype.attributes.body ? selectedMetatype.attributes.body.min : 1) + (augBonuses.body || 0);
+    const agility = (attributes.agility || 0) + (selectedMetatype?.attributes.agility && "min" in selectedMetatype.attributes.agility ? selectedMetatype.attributes.agility.min : 1) + (augBonuses.agility || 0);
+    const reaction = (attributes.reaction || 0) + (selectedMetatype?.attributes.reaction && "min" in selectedMetatype.attributes.reaction ? selectedMetatype.attributes.reaction.min : 1) + (augBonuses.reaction || 0);
+    const strength = (attributes.strength || 0) + (selectedMetatype?.attributes.strength && "min" in selectedMetatype.attributes.strength ? selectedMetatype.attributes.strength.min : 1) + (augBonuses.strength || 0);
+    const willpower = (attributes.willpower || 0) + (selectedMetatype?.attributes.willpower && "min" in selectedMetatype.attributes.willpower ? selectedMetatype.attributes.willpower.min : 1) + (augBonuses.willpower || 0);
+    const logic = (attributes.logic || 0) + (selectedMetatype?.attributes.logic && "min" in selectedMetatype.attributes.logic ? selectedMetatype.attributes.logic.min : 1) + (augBonuses.logic || 0);
+    const intuition = (attributes.intuition || 0) + (selectedMetatype?.attributes.intuition && "min" in selectedMetatype.attributes.intuition ? selectedMetatype.attributes.intuition.min : 1) + (augBonuses.intuition || 0);
+    const charisma = (attributes.charisma || 0) + (selectedMetatype?.attributes.charisma && "min" in selectedMetatype.attributes.charisma ? selectedMetatype.attributes.charisma.min : 1) + (augBonuses.charisma || 0);
+
+    // Essence is reduced by augmentations
+    const essence = augmentationEffects.remainingEssence;
+
+    // Initiative dice includes augmentation bonuses
+    const initiativeDice = 1 + augmentationEffects.initiativeDiceBonus;
+
+    return {
+      // Base attribute values with augmentation bonuses
+      body,
+      agility,
+      reaction,
+      strength,
+      willpower,
+      logic,
+      intuition,
+      charisma,
+      essence,
+      // Derived stats
       initiative: intuition + reaction,
+      initiativeDice,
       physicalLimit: Math.ceil(((strength * 2) + body + reaction) / 3),
       mentalLimit: Math.ceil(((logic * 2) + intuition + willpower) / 3),
       socialLimit: Math.ceil(((charisma * 2) + willpower + Math.ceil(essence)) / 3),
       physicalCM: Math.ceil(body / 2) + 8,
       stunCM: Math.ceil(willpower / 2) + 8,
+      overflowCM: body, // Overflow includes augmented Body
       composure: charisma + willpower,
       judgeIntentions: charisma + intuition,
       memory: logic + willpower,
       liftCarry: body + strength,
     };
-  }, [attributes, selectedMetatype]);
+  }, [attributes, selectedMetatype, augmentationEffects]);
 
   // Validation checks
   const validationIssues = useMemo(() => {
@@ -295,26 +361,55 @@ export function ReviewStep({ state, updateState, budgetValues }: StepProps) {
       {/* Attributes */}
       {Object.keys(attributes).length > 0 && (
         <div className="rounded-lg border border-zinc-200 bg-white p-4 dark:border-zinc-700 dark:bg-zinc-800/50">
-          <h3 className="text-sm font-semibold text-zinc-900 dark:text-zinc-100">Attributes</h3>
+          <h3 className="text-sm font-semibold text-zinc-900 dark:text-zinc-100">
+            Attributes
+            {Object.keys(augmentationEffects.attributeBonuses).length > 0 && (
+              <span className="ml-2 text-xs font-normal text-cyan-600 dark:text-cyan-400">
+                (includes augmentation bonuses)
+              </span>
+            )}
+          </h3>
           <div className="mt-3 grid grid-cols-4 gap-2 sm:grid-cols-8">
             {["body", "agility", "reaction", "strength", "willpower", "logic", "intuition", "charisma"].map((attr) => {
               const metatypeAttr = selectedMetatype?.attributes[attr];
               const minValue = metatypeAttr && "min" in metatypeAttr ? metatypeAttr.min : 1;
-              const totalValue = (attributes[attr] || 0) + minValue;
+              const baseValue = (attributes[attr] || 0) + minValue;
+              const augBonus = augmentationEffects.attributeBonuses[attr] || 0;
+              const totalValue = baseValue + augBonus;
+              const hasAugBonus = augBonus > 0;
+
               return (
-                <div key={attr} className="rounded bg-zinc-100 p-2 text-center dark:bg-zinc-700">
-                  <div className="text-[10px] font-medium uppercase text-zinc-500 dark:text-zinc-400">
+                <div
+                  key={attr}
+                  className={`rounded p-2 text-center ${
+                    hasAugBonus
+                      ? "bg-cyan-100 ring-1 ring-cyan-300 dark:bg-cyan-900/30 dark:ring-cyan-700"
+                      : "bg-zinc-100 dark:bg-zinc-700"
+                  }`}
+                >
+                  <div
+                    className={`text-[10px] font-medium uppercase ${
+                      hasAugBonus ? "text-cyan-600 dark:text-cyan-400" : "text-zinc-500 dark:text-zinc-400"
+                    }`}
+                  >
                     {attr.slice(0, 3)}
                   </div>
-                  <div className="text-lg font-bold text-zinc-900 dark:text-zinc-100">
+                  <div
+                    className={`text-lg font-bold ${
+                      hasAugBonus ? "text-cyan-700 dark:text-cyan-300" : "text-zinc-900 dark:text-zinc-100"
+                    }`}
+                  >
                     {totalValue}
+                    {hasAugBonus && (
+                      <span className="ml-1 text-xs text-cyan-500">+{augBonus}</span>
+                    )}
                   </div>
                 </div>
               );
             })}
           </div>
           {/* Special Attributes */}
-          <div className="mt-3 flex gap-4">
+          <div className="mt-3 flex flex-wrap gap-4">
             <div className="rounded bg-amber-100 px-3 py-2 text-center dark:bg-amber-900/30">
               <div className="text-[10px] font-medium uppercase text-amber-600 dark:text-amber-400">Edge</div>
               <div className="text-lg font-bold text-amber-700 dark:text-amber-300">
@@ -325,7 +420,10 @@ export function ReviewStep({ state, updateState, budgetValues }: StepProps) {
               <div className="rounded bg-purple-100 px-3 py-2 text-center dark:bg-purple-900/30">
                 <div className="text-[10px] font-medium uppercase text-purple-600 dark:text-purple-400">Magic</div>
                 <div className="text-lg font-bold text-purple-700 dark:text-purple-300">
-                  {(specialAttributes.magic || 0) + 1}
+                  {Math.max(0, (specialAttributes.magic || 0) + 1 - augmentationEffects.magicLoss)}
+                  {augmentationEffects.magicLoss > 0 && (
+                    <span className="ml-1 text-xs text-red-500">-{augmentationEffects.magicLoss}</span>
+                  )}
                 </div>
               </div>
             )}
@@ -333,13 +431,27 @@ export function ReviewStep({ state, updateState, budgetValues }: StepProps) {
               <div className="rounded bg-cyan-100 px-3 py-2 text-center dark:bg-cyan-900/30">
                 <div className="text-[10px] font-medium uppercase text-cyan-600 dark:text-cyan-400">Resonance</div>
                 <div className="text-lg font-bold text-cyan-700 dark:text-cyan-300">
-                  {(specialAttributes.resonance || 0) + 1}
+                  {Math.max(0, (specialAttributes.resonance || 0) + 1 - augmentationEffects.magicLoss)}
+                  {augmentationEffects.magicLoss > 0 && (
+                    <span className="ml-1 text-xs text-red-500">-{augmentationEffects.magicLoss}</span>
+                  )}
                 </div>
               </div>
             )}
-            <div className="rounded bg-rose-100 px-3 py-2 text-center dark:bg-rose-900/30">
+            <div
+              className={`rounded px-3 py-2 text-center ${
+                augmentationEffects.totalEssenceLoss > 0
+                  ? "bg-rose-100 ring-1 ring-rose-300 dark:bg-rose-900/30 dark:ring-rose-700"
+                  : "bg-rose-100 dark:bg-rose-900/30"
+              }`}
+            >
               <div className="text-[10px] font-medium uppercase text-rose-600 dark:text-rose-400">Essence</div>
-              <div className="text-lg font-bold text-rose-700 dark:text-rose-300">6.0</div>
+              <div className="text-lg font-bold text-rose-700 dark:text-rose-300">
+                {augmentationEffects.remainingEssence.toFixed(2)}
+                {augmentationEffects.totalEssenceLoss > 0 && (
+                  <span className="ml-1 text-xs text-rose-500">-{augmentationEffects.totalEssenceLoss.toFixed(2)}</span>
+                )}
+              </div>
             </div>
           </div>
         </div>
@@ -348,10 +460,21 @@ export function ReviewStep({ state, updateState, budgetValues }: StepProps) {
       {/* Derived Stats */}
       <div className="rounded-lg border border-zinc-200 bg-white p-4 dark:border-zinc-700 dark:bg-zinc-800/50">
         <h3 className="text-sm font-semibold text-zinc-900 dark:text-zinc-100">Derived Stats</h3>
-        <div className="mt-3 grid grid-cols-2 gap-3 sm:grid-cols-4">
-          <div className="rounded bg-blue-50 p-2 text-center dark:bg-blue-900/20">
+        <div className="mt-3 grid grid-cols-2 gap-3 sm:grid-cols-4 lg:grid-cols-5">
+          <div
+            className={`rounded p-2 text-center ${
+              augmentationEffects.initiativeDiceBonus > 0
+                ? "bg-blue-100 ring-1 ring-blue-300 dark:bg-blue-900/30 dark:ring-blue-700"
+                : "bg-blue-50 dark:bg-blue-900/20"
+            }`}
+          >
             <div className="text-[10px] font-medium text-blue-600 dark:text-blue-400">Initiative</div>
-            <div className="font-bold text-blue-700 dark:text-blue-300">{derivedStats.initiative} + 1d6</div>
+            <div className="font-bold text-blue-700 dark:text-blue-300">
+              {derivedStats.initiative} + {derivedStats.initiativeDice}d6
+              {augmentationEffects.initiativeDiceBonus > 0 && (
+                <span className="block text-xs text-blue-500">+{augmentationEffects.initiativeDiceBonus}d6</span>
+              )}
+            </div>
           </div>
           <div className="rounded bg-zinc-100 p-2 text-center dark:bg-zinc-700">
             <div className="text-[10px] font-medium text-zinc-500 dark:text-zinc-400">Physical Limit</div>
@@ -361,9 +484,20 @@ export function ReviewStep({ state, updateState, budgetValues }: StepProps) {
             <div className="text-[10px] font-medium text-zinc-500 dark:text-zinc-400">Mental Limit</div>
             <div className="font-bold text-zinc-900 dark:text-zinc-100">{derivedStats.mentalLimit}</div>
           </div>
-          <div className="rounded bg-zinc-100 p-2 text-center dark:bg-zinc-700">
+          <div
+            className={`rounded p-2 text-center ${
+              augmentationEffects.totalEssenceLoss > 0
+                ? "bg-zinc-100 ring-1 ring-amber-300 dark:bg-zinc-700 dark:ring-amber-700"
+                : "bg-zinc-100 dark:bg-zinc-700"
+            }`}
+          >
             <div className="text-[10px] font-medium text-zinc-500 dark:text-zinc-400">Social Limit</div>
-            <div className="font-bold text-zinc-900 dark:text-zinc-100">{derivedStats.socialLimit}</div>
+            <div className="font-bold text-zinc-900 dark:text-zinc-100">
+              {derivedStats.socialLimit}
+              {augmentationEffects.totalEssenceLoss > 0 && (
+                <span className="ml-1 text-xs text-amber-500" title="Reduced by essence loss">*</span>
+              )}
+            </div>
           </div>
           <div className="rounded bg-red-50 p-2 text-center dark:bg-red-900/20">
             <div className="text-[10px] font-medium text-red-600 dark:text-red-400">Physical CM</div>
@@ -373,6 +507,10 @@ export function ReviewStep({ state, updateState, budgetValues }: StepProps) {
             <div className="text-[10px] font-medium text-amber-600 dark:text-amber-400">Stun CM</div>
             <div className="font-bold text-amber-700 dark:text-amber-300">{derivedStats.stunCM}</div>
           </div>
+          <div className="rounded bg-zinc-200 p-2 text-center dark:bg-zinc-600">
+            <div className="text-[10px] font-medium text-zinc-600 dark:text-zinc-300">Overflow</div>
+            <div className="font-bold text-zinc-800 dark:text-zinc-100">{derivedStats.overflowCM}</div>
+          </div>
           <div className="rounded bg-zinc-100 p-2 text-center dark:bg-zinc-700">
             <div className="text-[10px] font-medium text-zinc-500 dark:text-zinc-400">Composure</div>
             <div className="font-bold text-zinc-900 dark:text-zinc-100">{derivedStats.composure}</div>
@@ -380,6 +518,10 @@ export function ReviewStep({ state, updateState, budgetValues }: StepProps) {
           <div className="rounded bg-zinc-100 p-2 text-center dark:bg-zinc-700">
             <div className="text-[10px] font-medium text-zinc-500 dark:text-zinc-400">Memory</div>
             <div className="font-bold text-zinc-900 dark:text-zinc-100">{derivedStats.memory}</div>
+          </div>
+          <div className="rounded bg-zinc-100 p-2 text-center dark:bg-zinc-700">
+            <div className="text-[10px] font-medium text-zinc-500 dark:text-zinc-400">Lift/Carry</div>
+            <div className="font-bold text-zinc-900 dark:text-zinc-100">{derivedStats.liftCarry}</div>
           </div>
         </div>
       </div>
@@ -604,6 +746,66 @@ export function ReviewStep({ state, updateState, budgetValues }: StepProps) {
                 </div>
               </div>
             ))}
+          </div>
+        </div>
+      )}
+
+      {/* Augmentations */}
+      {(selectedCyberware.length > 0 || selectedBioware.length > 0) && (
+        <div className="rounded-lg border border-zinc-200 bg-white p-4 dark:border-zinc-700 dark:bg-zinc-800/50">
+          <h3 className="text-sm font-semibold text-zinc-900 dark:text-zinc-100">
+            Augmentations
+            <span className="ml-2 text-xs font-normal text-zinc-500">
+              ({augmentationEffects.totalEssenceLoss.toFixed(2)} essence)
+            </span>
+          </h3>
+          <div className="mt-3 space-y-3">
+            {selectedCyberware.length > 0 && (
+              <div>
+                <div className="mb-2 text-xs font-medium text-cyan-600 dark:text-cyan-400">
+                  Cyberware ({selectedCyberware.length})
+                </div>
+                <div className="flex flex-wrap gap-2">
+                  {selectedCyberware.map((item, i) => (
+                    <span
+                      key={i}
+                      className="inline-flex items-center gap-1 rounded-full bg-cyan-100 px-3 py-1 text-sm dark:bg-cyan-900/50"
+                    >
+                      <span className="font-medium text-cyan-800 dark:text-cyan-200">{item.name}</span>
+                      <span className="text-cyan-600 dark:text-cyan-400">
+                        ({item.grade})
+                      </span>
+                      <span className="text-xs text-cyan-500">
+                        -{item.essenceCost.toFixed(2)} ESS
+                      </span>
+                    </span>
+                  ))}
+                </div>
+              </div>
+            )}
+            {selectedBioware.length > 0 && (
+              <div>
+                <div className="mb-2 text-xs font-medium text-green-600 dark:text-green-400">
+                  Bioware ({selectedBioware.length})
+                </div>
+                <div className="flex flex-wrap gap-2">
+                  {selectedBioware.map((item, i) => (
+                    <span
+                      key={i}
+                      className="inline-flex items-center gap-1 rounded-full bg-green-100 px-3 py-1 text-sm dark:bg-green-900/50"
+                    >
+                      <span className="font-medium text-green-800 dark:text-green-200">{item.name}</span>
+                      <span className="text-green-600 dark:text-green-400">
+                        ({item.grade})
+                      </span>
+                      <span className="text-xs text-green-500">
+                        -{item.essenceCost.toFixed(2)} ESS
+                      </span>
+                    </span>
+                  ))}
+                </div>
+              </div>
+            )}
           </div>
         </div>
       )}
