@@ -524,7 +524,6 @@ The MVP delivers a fully functional SR5 Priority-based character creation system
   - Alchemical preparations
 * **Complex Forms catalog** (Technomancers)
 * **Mobile-responsive UI** improvements
-* **Export PDF character sheet**
 * **Basic session persistence** and WebSockets
 
 ---
@@ -577,6 +576,7 @@ The MVP delivers a fully functional SR5 Priority-based character creation system
 * **Expanded edition support** (SR1–SR3 + Anarchy)
 * **Third-party plugin API**
 * **Character import/export** (Chummer, HeroLab formats)
+* **Export PDF character sheet**
 
 ---
 
