@@ -20,6 +20,9 @@ export type {
   BookPayload,
   BookModuleEntry,
   MergedRuleset,
+  CyberwareCatalogItem,
+  BiowareCatalogItem,
+  AugmentationRules,
 } from "./edition";
 
 // Character types
@@ -35,8 +38,13 @@ export type {
   GearItem,
   Weapon,
   ArmorItem,
+  CyberwareGrade,
+  CyberwareCategory,
   CyberwareItem,
+  BiowareGrade,
+  BiowareCategory,
   BiowareItem,
+  EssenceHole,
   Vehicle,
   Contact,
   CharacterDraft,
@@ -44,6 +52,14 @@ export type {
   UpdateCharacterRequest,
   CharacterResponse,
   CharactersListResponse,
+} from "./character";
+
+// Cyberware/Bioware grade multipliers and modifiers
+export {
+  CYBERWARE_GRADE_MULTIPLIERS,
+  CYBERWARE_GRADE_AVAILABILITY_MODIFIERS,
+  CYBERWARE_GRADE_COST_MULTIPLIERS,
+  BIOWARE_GRADE_MULTIPLIERS,
 } from "./character";
 
 // Creation method types

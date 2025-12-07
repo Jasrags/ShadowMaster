@@ -619,3 +619,166 @@ export function extractComplexForms(ruleset: LoadedRuleset): ComplexFormData[] {
   return module?.complexForms || [];
 }
 
+// =============================================================================
+// CYBERWARE AND BIOWARE DATA TYPES AND LOADERS
+// =============================================================================
+
+import type { CyberwareCategory, BiowareCategory } from "../types";
+
+/**
+ * Cyberware grade data structure (from ruleset)
+ */
+export interface CyberwareGradeData {
+  id: string;
+  name: string;
+  essenceMultiplier: number;
+  costMultiplier: number;
+  availabilityModifier: number;
+}
+
+/**
+ * Cyberware catalog item data structure (from ruleset)
+ */
+export interface CyberwareCatalogItemData {
+  id: string;
+  name: string;
+  category: CyberwareCategory;
+  essenceCost: number;
+  cost: number;
+  availability: number;
+  restricted?: boolean;
+  forbidden?: boolean;
+  hasRating?: boolean;
+  maxRating?: number;
+  essencePerRating?: boolean;
+  costPerRating?: boolean;
+  capacity?: number;
+  capacityCost?: number;
+  capacityPerRating?: boolean;
+  attributeBonuses?: Record<string, number>;
+  attributeBonusesPerRating?: Record<string, number>;
+  maxAttributeBonus?: number;
+  initiativeDiceBonus?: number;
+  initiativeDiceBonusPerRating?: number;
+  description?: string;
+  wirelessBonus?: string;
+  page?: number;
+  source?: string;
+  parentType?: string;
+  requirements?: string[];
+}
+
+/**
+ * Augmentation rules data structure
+ */
+export interface AugmentationRulesData {
+  maxEssence: number;
+  maxAttributeBonus: number;
+  maxAvailabilityAtCreation: number;
+  trackEssenceHoles: boolean;
+  magicReductionFormula: "roundUp" | "roundDown" | "exact";
+}
+
+/**
+ * Cyberware catalog data structure
+ */
+export interface CyberwareCatalogData {
+  rules: AugmentationRulesData;
+  grades: CyberwareGradeData[];
+  catalog: CyberwareCatalogItemData[];
+}
+
+/**
+ * Bioware grade data structure (from ruleset)
+ */
+export interface BiowareGradeData {
+  id: string;
+  name: string;
+  essenceMultiplier: number;
+  costMultiplier: number;
+  availabilityModifier: number;
+}
+
+/**
+ * Bioware catalog item data structure (from ruleset)
+ */
+export interface BiowareCatalogItemData {
+  id: string;
+  name: string;
+  category: BiowareCategory;
+  essenceCost: number;
+  cost: number;
+  availability: number;
+  restricted?: boolean;
+  forbidden?: boolean;
+  hasRating?: boolean;
+  maxRating?: number;
+  essencePerRating?: boolean;
+  costPerRating?: boolean;
+  attributeBonuses?: Record<string, number>;
+  attributeBonusesPerRating?: Record<string, number>;
+  maxAttributeBonus?: number;
+  initiativeDiceBonus?: number;
+  description?: string;
+  page?: number;
+  source?: string;
+  requirements?: string[];
+}
+
+/**
+ * Bioware catalog data structure
+ */
+export interface BiowareCatalogData {
+  grades: BiowareGradeData[];
+  catalog: BiowareCatalogItemData[];
+}
+
+/**
+ * Load cyberware catalog from a ruleset
+ */
+export function extractCyberware(ruleset: LoadedRuleset): CyberwareCatalogData | null {
+  const module = extractModule<CyberwareCatalogData>(ruleset, "cyberware");
+  if (!module) return null;
+
+  return {
+    rules: module.rules || {
+      maxEssence: 6,
+      maxAttributeBonus: 4,
+      maxAvailabilityAtCreation: 12,
+      trackEssenceHoles: true,
+      magicReductionFormula: "roundUp",
+    },
+    grades: module.grades || [],
+    catalog: module.catalog || [],
+  };
+}
+
+/**
+ * Load bioware catalog from a ruleset
+ */
+export function extractBioware(ruleset: LoadedRuleset): BiowareCatalogData | null {
+  const module = extractModule<BiowareCatalogData>(ruleset, "bioware");
+  if (!module) return null;
+
+  return {
+    grades: module.grades || [],
+    catalog: module.catalog || [],
+  };
+}
+
+/**
+ * Load augmentation rules from cyberware module
+ */
+export function extractAugmentationRules(ruleset: LoadedRuleset): AugmentationRulesData {
+  const cyberware = extractCyberware(ruleset);
+  return (
+    cyberware?.rules || {
+      maxEssence: 6,
+      maxAttributeBonus: 4,
+      maxAvailabilityAtCreation: 12,
+      trackEssenceHoles: true,
+      magicReductionFormula: "roundUp",
+    }
+  );
+}
+

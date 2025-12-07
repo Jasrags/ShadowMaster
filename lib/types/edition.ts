@@ -7,6 +7,7 @@
  */
 
 import type { ID, ISODateString, Metadata } from "./core";
+import type { CyberwareCategory, BiowareCategory } from "./character";
 
 // =============================================================================
 // EDITION
@@ -228,6 +229,123 @@ export interface BookModuleEntry {
 
   /** The actual module data */
   payload: Record<string, unknown>;
+}
+
+// =============================================================================
+// CYBERWARE & BIOWARE CATALOG TYPES (for ruleset data)
+// =============================================================================
+
+/**
+ * Cyberware catalog item in ruleset data
+ * This is the template data, not the installed item
+ */
+export interface CyberwareCatalogItem {
+  id: string;
+  name: string;
+  category: CyberwareCategory;
+  /** Base essence cost (modified by grade) */
+  essenceCost: number;
+  /** Whether the item has a rating (1-6 typically) */
+  hasRating?: boolean;
+  /** Maximum rating if applicable */
+  maxRating?: number;
+  /** Whether essence cost scales with rating */
+  essencePerRating?: boolean;
+  /** Base cost in nuyen (modified by grade) */
+  cost: number;
+  /** Whether cost scales with rating */
+  costPerRating?: boolean;
+  /** Base availability */
+  availability: number;
+  /** Whether availability is Restricted */
+  restricted?: boolean;
+  /** Whether availability is Forbidden */
+  forbidden?: boolean;
+  /** Capacity this item provides (for cyberlimbs) */
+  capacity?: number;
+  /** Capacity slots this item requires (for enhancements) */
+  capacityCost?: number;
+  /** Whether capacity cost scales with rating */
+  capacityPerRating?: boolean;
+  /** Attribute bonuses provided */
+  attributeBonuses?: Record<string, number>;
+  /** Attribute bonuses per rating */
+  attributeBonusesPerRating?: Record<string, number>;
+  /** Maximum attribute bonus (typically +4) */
+  maxAttributeBonus?: number;
+  /** Initiative dice bonus */
+  initiativeDiceBonus?: number;
+  /** Initiative dice bonus per rating level */
+  initiativeDiceBonusPerRating?: number;
+  /** Description */
+  description?: string;
+  /** Wireless bonus description */
+  wirelessBonus?: string;
+  /** Page reference in source material */
+  page?: number;
+  /** Source book reference */
+  source?: string;
+  /** Parent item ID for modular cyberware */
+  parentType?: string;
+  /** Special requirements or notes */
+  requirements?: string[];
+}
+
+/**
+ * Bioware catalog item in ruleset data
+ */
+export interface BiowareCatalogItem {
+  id: string;
+  name: string;
+  category: BiowareCategory;
+  /** Base essence cost (modified by grade) */
+  essenceCost: number;
+  /** Whether the item has a rating */
+  hasRating?: boolean;
+  /** Maximum rating if applicable */
+  maxRating?: number;
+  /** Whether essence cost scales with rating */
+  essencePerRating?: boolean;
+  /** Base cost in nuyen (modified by grade) */
+  cost: number;
+  /** Whether cost scales with rating */
+  costPerRating?: boolean;
+  /** Base availability */
+  availability: number;
+  /** Whether availability is Restricted */
+  restricted?: boolean;
+  /** Whether availability is Forbidden */
+  forbidden?: boolean;
+  /** Attribute bonuses provided */
+  attributeBonuses?: Record<string, number>;
+  /** Attribute bonuses per rating */
+  attributeBonusesPerRating?: Record<string, number>;
+  /** Maximum attribute bonus */
+  maxAttributeBonus?: number;
+  /** Description */
+  description?: string;
+  /** Page reference in source material */
+  page?: number;
+  /** Source book reference */
+  source?: string;
+  /** Special requirements or notes */
+  requirements?: string[];
+}
+
+/**
+ * Augmentation rules for an edition
+ */
+export interface AugmentationRules {
+  /** Maximum essence (typically 6) */
+  maxEssence: number;
+  /** Maximum attribute bonus from augmentations (typically +4) */
+  maxAttributeBonus: number;
+  /** Maximum availability at character creation (typically 12) */
+  maxAvailabilityAtCreation: number;
+  /** Whether to track essence holes */
+  trackEssenceHoles: boolean;
+  /** Magic/Resonance reduction formula */
+  magicReductionFormula: "roundUp" | "roundDown" | "exact";
 }
 
 // =============================================================================

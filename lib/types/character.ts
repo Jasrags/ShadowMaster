@@ -98,6 +98,12 @@ export interface Character {
     resonance?: number;
   };
 
+  /**
+   * Essence hole tracking for magic users who install/remove augmentations
+   * Tracks permanent Magic/Resonance loss from augmentation history
+   */
+  essenceHole?: EssenceHole;
+
   // -------------------------------------------------------------------------
   // Skills
   // -------------------------------------------------------------------------
@@ -321,24 +327,179 @@ export interface ArmorItem extends GearItem {
   modifications?: string[];
 }
 
+// =============================================================================
+// CYBERWARE & BIOWARE TYPES
+// =============================================================================
+
+/**
+ * Cyberware grade affects essence cost and availability
+ */
+export type CyberwareGrade = "used" | "standard" | "alpha" | "beta" | "delta";
+
+/**
+ * Cyberware grade essence cost multipliers
+ * used: +25%, standard: base, alpha: -20%, beta: -40%, delta: -50%
+ */
+export const CYBERWARE_GRADE_MULTIPLIERS: Record<CyberwareGrade, number> = {
+  used: 1.25,
+  standard: 1.0,
+  alpha: 0.8,
+  beta: 0.6,
+  delta: 0.5,
+};
+
+/**
+ * Cyberware grade availability modifiers
+ */
+export const CYBERWARE_GRADE_AVAILABILITY_MODIFIERS: Record<
+  CyberwareGrade,
+  number
+> = {
+  used: -4,
+  standard: 0,
+  alpha: 2,
+  beta: 4,
+  delta: 8,
+};
+
+/**
+ * Cyberware grade cost multipliers
+ */
+export const CYBERWARE_GRADE_COST_MULTIPLIERS: Record<CyberwareGrade, number> =
+  {
+    used: 0.75,
+    standard: 1.0,
+    alpha: 2.0,
+    beta: 4.0,
+    delta: 10.0,
+  };
+
+/**
+ * Categories of cyberware
+ */
+export type CyberwareCategory =
+  | "headware"
+  | "eyeware"
+  | "earware"
+  | "bodyware"
+  | "cyberlimb"
+  | "cyberlimb-enhancement"
+  | "cyberlimb-accessory"
+  | "hand-blade"
+  | "hand-razor"
+  | "spur"
+  | "cybernetic-weapon"
+  | "nanocyber";
+
+/**
+ * Categories of bioware
+ */
+export type BiowareCategory =
+  | "basic"
+  | "cultured"
+  | "cosmetic"
+  | "bio-weapons"
+  | "chemical-gland"
+  | "organ";
+
+/**
+ * Bioware grade (includes cultured as equivalent to alpha quality)
+ */
+export type BiowareGrade = "standard" | "alpha" | "beta" | "delta";
+
+/**
+ * Bioware grade essence cost multipliers (same as cyberware, minus used)
+ */
+export const BIOWARE_GRADE_MULTIPLIERS: Record<BiowareGrade, number> = {
+  standard: 1.0,
+  alpha: 0.8,
+  beta: 0.6,
+  delta: 0.5,
+};
+
+/**
+ * Installed cyberware on a character
+ */
 export interface CyberwareItem {
   id?: ID;
+  /** Reference to catalog item ID */
+  catalogId: string;
   name: string;
-  grade: "standard" | "alpha" | "beta" | "delta" | "used";
+  category: CyberwareCategory;
+  grade: CyberwareGrade;
+  /** Base essence cost before grade multiplier */
+  baseEssenceCost: number;
+  /** Actual essence cost after grade multiplier */
   essenceCost: number;
   rating?: number;
+  /** For modular cyberware (e.g., cyberlimbs), total capacity */
   capacity?: number;
+  /** Capacity used by installed enhancements */
   capacityUsed?: number;
+  /** Cost in nuyen */
+  cost: number;
+  /** Availability rating */
+  availability: number;
+  /** Whether availability is Restricted (R) or Forbidden (F) */
+  restricted?: boolean;
+  forbidden?: boolean;
+  /** Attribute bonuses provided by this cyberware */
+  attributeBonuses?: Record<string, number>;
+  /** Initiative dice bonuses */
+  initiativeDiceBonus?: number;
+  /** Other special effects/notes */
+  notes?: string;
+  /** Wireless bonus description */
+  wirelessBonus?: string;
+  /** Child items (for modular cyberware) */
+  enhancements?: CyberwareItem[];
+}
+
+/**
+ * Installed bioware on a character
+ */
+export interface BiowareItem {
+  id?: ID;
+  /** Reference to catalog item ID */
+  catalogId: string;
+  name: string;
+  category: BiowareCategory;
+  grade: BiowareGrade;
+  /** Base essence cost before grade multiplier */
+  baseEssenceCost: number;
+  /** Actual essence cost after grade multiplier */
+  essenceCost: number;
+  rating?: number;
+  /** Bio-index cost (used for some calculations) */
+  bioIndex?: number;
+  /** Cost in nuyen */
+  cost: number;
+  /** Availability rating */
+  availability: number;
+  /** Whether availability is Restricted (R) or Forbidden (F) */
+  restricted?: boolean;
+  forbidden?: boolean;
+  /** Attribute bonuses provided by this bioware */
+  attributeBonuses?: Record<string, number>;
+  /** Other special effects/notes */
   notes?: string;
 }
 
-export interface BiowareItem {
-  id?: ID;
-  name: string;
-  grade: "standard" | "cultured";
-  essenceCost: number;
-  rating?: number;
-  notes?: string;
+/**
+ * Essence hole tracking for magic users
+ * When a magic user gets cyberware/bioware and their Magic is reduced,
+ * then later removes the augmentation, the "hole" represents lost Magic
+ * that cannot be recovered without special means.
+ */
+export interface EssenceHole {
+  /** Total essence lost to augmentations at peak */
+  peakEssenceLoss: number;
+  /** Current essence loss from augmentations */
+  currentEssenceLoss: number;
+  /** Calculated essence hole (peak - current) */
+  essenceHole: number;
+  /** Magic/Resonance points permanently lost due to essence hole */
+  magicLost: number;
 }
 
 export interface Vehicle {
