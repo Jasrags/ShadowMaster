@@ -341,17 +341,31 @@ export interface SkillCreationLimitsData {
 /**
  * Load skills from a ruleset
  */
+export interface ExampleKnowledgeSkillData {
+  name: string;
+  category: "academic" | "interests" | "professional" | "street";
+}
+
+export interface ExampleLanguageData {
+  name: string;
+  region?: string;
+}
+
 export function extractSkills(ruleset: LoadedRuleset): {
   activeSkills: SkillData[];
   skillGroups: SkillGroupData[];
   knowledgeCategories: KnowledgeCategoryData[];
   creationLimits: SkillCreationLimitsData;
+  exampleKnowledgeSkills: ExampleKnowledgeSkillData[];
+  exampleLanguages: ExampleLanguageData[];
 } {
   const module = extractModule<{
     activeSkills: SkillData[];
     skillGroups: SkillGroupData[];
     knowledgeCategories: KnowledgeCategoryData[];
     creationLimits: SkillCreationLimitsData;
+    exampleKnowledgeSkills: ExampleKnowledgeSkillData[];
+    exampleLanguages: ExampleLanguageData[];
   }>(ruleset, "skills");
 
   return {
@@ -364,6 +378,8 @@ export function extractSkills(ruleset: LoadedRuleset): {
       freeKnowledgePoints: "(LOG + INT) × 2",
       nativeLanguageRating: 6,
     },
+    exampleKnowledgeSkills: module?.exampleKnowledgeSkills || [],
+    exampleLanguages: module?.exampleLanguages || [],
   };
 }
 

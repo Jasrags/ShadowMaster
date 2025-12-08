@@ -33,8 +33,13 @@ const KNOWLEDGE_CATEGORY_LABELS: Record<KnowledgeCategory, string> = {
 
 const MAX_SKILL_RATING = 6; // At character creation
 
+// Magical skill groups that require magic
+const MAGICAL_SKILL_GROUPS = ["sorcery", "conjuring", "enchanting"];
+// Resonance skill groups that require resonance
+const RESONANCE_SKILL_GROUPS = ["tasking"];
+
 export function SkillsStep({ state, updateState, budgetValues }: StepProps) {
-  const { activeSkills, skillGroups, knowledgeCategories, creationLimits } = useSkills();
+  const { activeSkills, skillGroups, knowledgeCategories, creationLimits, exampleKnowledgeSkills, exampleLanguages } = useSkills();
   const skillPoints = budgetValues["skill-points"] || 0;
   const skillGroupPoints = budgetValues["skill-group-points"] || 0;
   const [searchQuery, setSearchQuery] = useState("");
@@ -42,6 +47,11 @@ export function SkillsStep({ state, updateState, budgetValues }: StepProps) {
   const [activeTab, setActiveTab] = useState<TabType>("active");
   const [newKnowledgeSkill, setNewKnowledgeSkill] = useState({ name: "", category: "academic" as KnowledgeCategory });
   const [newLanguage, setNewLanguage] = useState("");
+
+  // Determine if character has magic or resonance based on their magical path
+  const magicPath = state.selections.magicPath as string | undefined;
+  const hasMagic = magicPath && ["full-mage", "aspected-mage", "mystic-adept", "adept"].includes(magicPath);
+  const hasResonance = magicPath === "technomancer";
 
   // Get current skill values from state
   const skills = useMemo(() => {
@@ -104,9 +114,17 @@ export function SkillsStep({ state, updateState, budgetValues }: StepProps) {
   const groupPointsRemaining = skillGroupPoints - groupPointsSpent;
   const knowledgePointsRemaining = freeKnowledgePoints - knowledgePointsSpent;
 
-  // Filter skills by category and search
+  // Filter skills by category, search, and magic/resonance requirements
   const filteredSkills = useMemo(() => {
     return activeSkills.filter((skill) => {
+      // Filter out magical skills if character doesn't have magic
+      if (skill.requiresMagic && !hasMagic) {
+        return false;
+      }
+      // Filter out resonance skills if character doesn't have resonance
+      if (skill.requiresResonance && !hasResonance) {
+        return false;
+      }
       // Check search query
       if (searchQuery && !skill.name.toLowerCase().includes(searchQuery.toLowerCase())) {
         return false;
@@ -117,7 +135,7 @@ export function SkillsStep({ state, updateState, budgetValues }: StepProps) {
       }
       return true;
     });
-  }, [activeSkills, searchQuery, selectedCategory]);
+  }, [activeSkills, searchQuery, selectedCategory, hasMagic, hasResonance]);
 
   // Group filtered skills by their skill group
   const groupedSkills = useMemo(() => {
@@ -166,16 +184,31 @@ export function SkillsStep({ state, updateState, budgetValues }: StepProps) {
     return orderedGroups;
   }, [filteredSkills, skillGroups]);
 
-  // Get available categories
+  // Filter skill groups based on magic/resonance
+  const filteredSkillGroups = useMemo(() => {
+    return skillGroups.filter((group) => {
+      // Filter out magical skill groups if character doesn't have magic
+      if (MAGICAL_SKILL_GROUPS.includes(group.id) && !hasMagic) {
+        return false;
+      }
+      // Filter out resonance skill groups if character doesn't have resonance
+      if (RESONANCE_SKILL_GROUPS.includes(group.id) && !hasResonance) {
+        return false;
+      }
+      return true;
+    });
+  }, [skillGroups, hasMagic, hasResonance]);
+
+  // Get available categories (exclude magical/resonance if not applicable)
   const availableCategories = useMemo(() => {
     const categories = new Set<SkillCategory>();
-    activeSkills.forEach((skill) => {
+    filteredSkills.forEach((skill) => {
       if (skill.category) {
         categories.add(skill.category as SkillCategory);
       }
     });
     return Array.from(categories).sort();
-  }, [activeSkills]);
+  }, [filteredSkills]);
 
   // Handle individual skill change
   const handleSkillChange = useCallback(
@@ -489,7 +522,7 @@ export function SkillsStep({ state, updateState, budgetValues }: StepProps) {
   }, [languages]);
 
   // Render skill row
-  const renderSkill = (skill: { id: string; name: string; linkedAttribute: string; group?: string | null }) => {
+  const renderSkill = (skill: { id: string; name: string; linkedAttribute: string; group?: string | null; suggestedSpecializations?: string[] }) => {
     const value = skills[skill.id] || 0;
     const canIncrease = value < MAX_SKILL_RATING && skillPointsRemaining > 0;
     const canDecrease = value > 0;
@@ -600,27 +633,69 @@ export function SkillsStep({ state, updateState, budgetValues }: StepProps) {
               </div>
             ) : (
               <div className="flex items-center gap-2">
-                <input
-                  type="text"
-                  placeholder="Add specialization (1 point, +2 dice)..."
-                  className="flex-1 rounded border border-zinc-300 bg-white px-2 py-1 text-sm focus:border-amber-500 focus:outline-none focus:ring-1 focus:ring-amber-500 dark:border-zinc-600 dark:bg-zinc-800 dark:text-zinc-100 disabled:cursor-not-allowed disabled:opacity-50"
-                  disabled={!canAddSpecialization}
-                  onKeyDown={(e) => {
-                    if (e.key === "Enter") {
-                      const input = e.currentTarget;
-                      if (input.value.trim()) {
-                        handleSpecializationChange(skill.id, input.value);
-                        input.value = "";
+                {skill.suggestedSpecializations && skill.suggestedSpecializations.length > 0 ? (
+                  <div className="flex flex-1 gap-2">
+                    <select
+                      className="flex-1 rounded border border-zinc-300 bg-white px-2 py-1 text-sm focus:border-amber-500 focus:outline-none focus:ring-1 focus:ring-amber-500 dark:border-zinc-600 dark:bg-zinc-800 dark:text-zinc-100 disabled:cursor-not-allowed disabled:opacity-50"
+                      disabled={!canAddSpecialization}
+                      defaultValue=""
+                      onChange={(e) => {
+                        if (e.target.value && canAddSpecialization) {
+                          handleSpecializationChange(skill.id, e.target.value);
+                          e.target.value = "";
+                        }
+                      }}
+                    >
+                      <option value="" disabled>Select or type custom...</option>
+                      {skill.suggestedSpecializations.map((spec) => (
+                        <option key={spec} value={spec}>{spec}</option>
+                      ))}
+                    </select>
+                    <input
+                      type="text"
+                      placeholder="Or custom..."
+                      className="w-28 rounded border border-zinc-300 bg-white px-2 py-1 text-sm focus:border-amber-500 focus:outline-none focus:ring-1 focus:ring-amber-500 dark:border-zinc-600 dark:bg-zinc-800 dark:text-zinc-100 disabled:cursor-not-allowed disabled:opacity-50"
+                      disabled={!canAddSpecialization}
+                      onKeyDown={(e) => {
+                        if (e.key === "Enter") {
+                          const input = e.currentTarget;
+                          if (input.value.trim()) {
+                            handleSpecializationChange(skill.id, input.value);
+                            input.value = "";
+                          }
+                        }
+                      }}
+                      onBlur={(e) => {
+                        if (e.currentTarget.value.trim() && canAddSpecialization) {
+                          handleSpecializationChange(skill.id, e.currentTarget.value);
+                          e.currentTarget.value = "";
+                        }
+                      }}
+                    />
+                  </div>
+                ) : (
+                  <input
+                    type="text"
+                    placeholder="Add specialization (1 point, +2 dice)..."
+                    className="flex-1 rounded border border-zinc-300 bg-white px-2 py-1 text-sm focus:border-amber-500 focus:outline-none focus:ring-1 focus:ring-amber-500 dark:border-zinc-600 dark:bg-zinc-800 dark:text-zinc-100 disabled:cursor-not-allowed disabled:opacity-50"
+                    disabled={!canAddSpecialization}
+                    onKeyDown={(e) => {
+                      if (e.key === "Enter") {
+                        const input = e.currentTarget;
+                        if (input.value.trim()) {
+                          handleSpecializationChange(skill.id, input.value);
+                          input.value = "";
+                        }
                       }
-                    }
-                  }}
-                  onBlur={(e) => {
-                    if (e.currentTarget.value.trim() && canAddSpecialization) {
-                      handleSpecializationChange(skill.id, e.currentTarget.value);
-                      e.currentTarget.value = "";
-                    }
-                  }}
-                />
+                    }}
+                    onBlur={(e) => {
+                      if (e.currentTarget.value.trim() && canAddSpecialization) {
+                        handleSpecializationChange(skill.id, e.currentTarget.value);
+                        e.currentTarget.value = "";
+                      }
+                    }}
+                  />
+                )}
                 {!canAddSpecialization && skillPointsRemaining <= 0 && (
                   <span className="text-xs text-zinc-400">No points</span>
                 )}
@@ -753,13 +828,13 @@ export function SkillsStep({ state, updateState, budgetValues }: StepProps) {
       </div>
 
       {/* Skill Groups */}
-      {skillGroupPoints > 0 && skillGroups.length > 0 && (
+      {skillGroupPoints > 0 && filteredSkillGroups.length > 0 && (
         <div>
           <h3 className="mb-3 text-sm font-semibold uppercase tracking-wider text-zinc-500 dark:text-zinc-400">
             Skill Groups
           </h3>
           <div className="space-y-2">
-            {skillGroups.map(renderGroup)}
+            {filteredSkillGroups.map(renderGroup)}
           </div>
         </div>
       )}
@@ -874,41 +949,83 @@ export function SkillsStep({ state, updateState, budgetValues }: StepProps) {
       {/* Add new knowledge skill */}
       <div className="rounded-lg border border-zinc-200 bg-white p-4 dark:border-zinc-700 dark:bg-zinc-800/50">
         <h4 className="mb-3 text-sm font-semibold text-zinc-700 dark:text-zinc-300">Add Knowledge Skill</h4>
-        <div className="flex flex-col gap-3 sm:flex-row">
-          <input
-            type="text"
-            placeholder="Skill name (e.g., Corporate Politics, Matrix Security)"
-            value={newKnowledgeSkill.name}
-            onChange={(e) => setNewKnowledgeSkill({ ...newKnowledgeSkill, name: e.target.value })}
-            className="flex-1 rounded-lg border border-zinc-300 bg-white px-3 py-2 text-sm focus:border-amber-500 focus:outline-none focus:ring-1 focus:ring-amber-500 dark:border-zinc-600 dark:bg-zinc-800 dark:text-zinc-100"
-          />
-          <select
-            value={newKnowledgeSkill.category}
-            onChange={(e) => setNewKnowledgeSkill({ ...newKnowledgeSkill, category: e.target.value as KnowledgeCategory })}
-            className="rounded-lg border border-zinc-300 bg-white px-3 py-2 text-sm focus:border-amber-500 focus:outline-none focus:ring-1 focus:ring-amber-500 dark:border-zinc-600 dark:bg-zinc-800 dark:text-zinc-100"
-          >
-            {(knowledgeCategories.length > 0 ? knowledgeCategories : [
-              { id: "academic", name: "Academic" },
-              { id: "interests", name: "Interests" },
-              { id: "professional", name: "Professional" },
-              { id: "street", name: "Street" },
-            ]).map((cat) => (
-              <option key={cat.id} value={cat.id}>
-                {cat.name}
-              </option>
-            ))}
-          </select>
-          <button
-            onClick={handleAddKnowledgeSkill}
-            disabled={!newKnowledgeSkill.name.trim() || knowledgePointsRemaining <= 0}
-            className={`rounded-lg px-4 py-2 text-sm font-medium transition-colors ${
-              newKnowledgeSkill.name.trim() && knowledgePointsRemaining > 0
-                ? "bg-amber-500 text-white hover:bg-amber-600"
-                : "cursor-not-allowed bg-zinc-200 text-zinc-400 dark:bg-zinc-700"
-            }`}
-          >
-            Add
-          </button>
+        <div className="flex flex-col gap-3">
+          {/* Example skills dropdown */}
+          {exampleKnowledgeSkills && exampleKnowledgeSkills.length > 0 && (
+            <div className="flex items-center gap-2">
+              <select
+                className="flex-1 rounded-lg border border-zinc-300 bg-white px-3 py-2 text-sm focus:border-amber-500 focus:outline-none focus:ring-1 focus:ring-amber-500 dark:border-zinc-600 dark:bg-zinc-800 dark:text-zinc-100"
+                defaultValue=""
+                disabled={knowledgePointsRemaining <= 0}
+                onChange={(e) => {
+                  const selected = exampleKnowledgeSkills.find(s => s.name === e.target.value);
+                  if (selected) {
+                    setNewKnowledgeSkill({ name: selected.name, category: selected.category as KnowledgeCategory });
+                  }
+                  e.target.value = "";
+                }}
+              >
+                <option value="" disabled>Quick add from examples...</option>
+                <optgroup label="Academic">
+                  {exampleKnowledgeSkills.filter(s => s.category === "academic").map((skill) => (
+                    <option key={skill.name} value={skill.name}>{skill.name}</option>
+                  ))}
+                </optgroup>
+                <optgroup label="Interests">
+                  {exampleKnowledgeSkills.filter(s => s.category === "interests").map((skill) => (
+                    <option key={skill.name} value={skill.name}>{skill.name}</option>
+                  ))}
+                </optgroup>
+                <optgroup label="Professional">
+                  {exampleKnowledgeSkills.filter(s => s.category === "professional").map((skill) => (
+                    <option key={skill.name} value={skill.name}>{skill.name}</option>
+                  ))}
+                </optgroup>
+                <optgroup label="Street">
+                  {exampleKnowledgeSkills.filter(s => s.category === "street").map((skill) => (
+                    <option key={skill.name} value={skill.name}>{skill.name}</option>
+                  ))}
+                </optgroup>
+              </select>
+            </div>
+          )}
+          {/* Custom skill input */}
+          <div className="flex flex-col gap-3 sm:flex-row">
+            <input
+              type="text"
+              placeholder="Or type custom skill name..."
+              value={newKnowledgeSkill.name}
+              onChange={(e) => setNewKnowledgeSkill({ ...newKnowledgeSkill, name: e.target.value })}
+              className="flex-1 rounded-lg border border-zinc-300 bg-white px-3 py-2 text-sm focus:border-amber-500 focus:outline-none focus:ring-1 focus:ring-amber-500 dark:border-zinc-600 dark:bg-zinc-800 dark:text-zinc-100"
+            />
+            <select
+              value={newKnowledgeSkill.category}
+              onChange={(e) => setNewKnowledgeSkill({ ...newKnowledgeSkill, category: e.target.value as KnowledgeCategory })}
+              className="rounded-lg border border-zinc-300 bg-white px-3 py-2 text-sm focus:border-amber-500 focus:outline-none focus:ring-1 focus:ring-amber-500 dark:border-zinc-600 dark:bg-zinc-800 dark:text-zinc-100"
+            >
+              {(knowledgeCategories.length > 0 ? knowledgeCategories : [
+                { id: "academic", name: "Academic" },
+                { id: "interests", name: "Interests" },
+                { id: "professional", name: "Professional" },
+                { id: "street", name: "Street" },
+              ]).map((cat) => (
+                <option key={cat.id} value={cat.id}>
+                  {cat.name}
+                </option>
+              ))}
+            </select>
+            <button
+              onClick={handleAddKnowledgeSkill}
+              disabled={!newKnowledgeSkill.name.trim() || knowledgePointsRemaining <= 0}
+              className={`rounded-lg px-4 py-2 text-sm font-medium transition-colors ${
+                newKnowledgeSkill.name.trim() && knowledgePointsRemaining > 0
+                  ? "bg-amber-500 text-white hover:bg-amber-600"
+                  : "cursor-not-allowed bg-zinc-200 text-zinc-400 dark:bg-zinc-700"
+              }`}
+            >
+              Add
+            </button>
+          </div>
         </div>
       </div>
 
@@ -1032,36 +1149,61 @@ export function SkillsStep({ state, updateState, budgetValues }: StepProps) {
       {/* Add new language */}
       <div className="rounded-lg border border-zinc-200 bg-white p-4 dark:border-zinc-700 dark:bg-zinc-800/50">
         <h4 className="mb-3 text-sm font-semibold text-zinc-700 dark:text-zinc-300">Add Language</h4>
-        <div className="flex flex-col gap-3 sm:flex-row">
-          <input
-            type="text"
-            placeholder="Language name (e.g., English, Japanese, Or'zet)"
-            value={newLanguage}
-            onChange={(e) => setNewLanguage(e.target.value)}
-            className="flex-1 rounded-lg border border-zinc-300 bg-white px-3 py-2 text-sm focus:border-sky-500 focus:outline-none focus:ring-1 focus:ring-sky-500 dark:border-zinc-600 dark:bg-zinc-800 dark:text-zinc-100"
-          />
-          <button
-            onClick={() => handleAddLanguage(true)}
-            disabled={!newLanguage.trim() || hasNativeLanguage}
-            className={`rounded-lg px-4 py-2 text-sm font-medium transition-colors ${
-              newLanguage.trim() && !hasNativeLanguage
-                ? "bg-sky-600 text-white hover:bg-sky-700"
-                : "cursor-not-allowed bg-zinc-200 text-zinc-400 dark:bg-zinc-700"
-            }`}
-          >
-            Add as Native
-          </button>
-          <button
-            onClick={() => handleAddLanguage(false)}
-            disabled={!newLanguage.trim() || knowledgePointsRemaining <= 0}
-            className={`rounded-lg px-4 py-2 text-sm font-medium transition-colors ${
-              newLanguage.trim() && knowledgePointsRemaining > 0
-                ? "bg-sky-500 text-white hover:bg-sky-600"
-                : "cursor-not-allowed bg-zinc-200 text-zinc-400 dark:bg-zinc-700"
-            }`}
-          >
-            Add
-          </button>
+        <div className="flex flex-col gap-3">
+          {/* Example languages dropdown */}
+          {exampleLanguages && exampleLanguages.length > 0 && (
+            <div className="flex items-center gap-2">
+              <select
+                className="flex-1 rounded-lg border border-zinc-300 bg-white px-3 py-2 text-sm focus:border-sky-500 focus:outline-none focus:ring-1 focus:ring-sky-500 dark:border-zinc-600 dark:bg-zinc-800 dark:text-zinc-100"
+                defaultValue=""
+                onChange={(e) => {
+                  if (e.target.value) {
+                    setNewLanguage(e.target.value);
+                  }
+                  e.target.value = "";
+                }}
+              >
+                <option value="" disabled>Quick select from examples...</option>
+                {exampleLanguages.map((lang) => (
+                  <option key={lang.name} value={lang.name}>
+                    {lang.name}{lang.region ? ` (${lang.region})` : ""}
+                  </option>
+                ))}
+              </select>
+            </div>
+          )}
+          {/* Custom language input */}
+          <div className="flex flex-col gap-3 sm:flex-row">
+            <input
+              type="text"
+              placeholder="Or type custom language..."
+              value={newLanguage}
+              onChange={(e) => setNewLanguage(e.target.value)}
+              className="flex-1 rounded-lg border border-zinc-300 bg-white px-3 py-2 text-sm focus:border-sky-500 focus:outline-none focus:ring-1 focus:ring-sky-500 dark:border-zinc-600 dark:bg-zinc-800 dark:text-zinc-100"
+            />
+            <button
+              onClick={() => handleAddLanguage(true)}
+              disabled={!newLanguage.trim() || hasNativeLanguage}
+              className={`rounded-lg px-4 py-2 text-sm font-medium transition-colors ${
+                newLanguage.trim() && !hasNativeLanguage
+                  ? "bg-sky-600 text-white hover:bg-sky-700"
+                  : "cursor-not-allowed bg-zinc-200 text-zinc-400 dark:bg-zinc-700"
+              }`}
+            >
+              Add as Native
+            </button>
+            <button
+              onClick={() => handleAddLanguage(false)}
+              disabled={!newLanguage.trim() || knowledgePointsRemaining <= 0}
+              className={`rounded-lg px-4 py-2 text-sm font-medium transition-colors ${
+                newLanguage.trim() && knowledgePointsRemaining > 0
+                  ? "bg-sky-500 text-white hover:bg-sky-600"
+                  : "cursor-not-allowed bg-zinc-200 text-zinc-400 dark:bg-zinc-700"
+              }`}
+            >
+              Add
+            </button>
+          </div>
         </div>
         {hasNativeLanguage && (
           <p className="mt-2 text-xs text-zinc-500 dark:text-zinc-400">

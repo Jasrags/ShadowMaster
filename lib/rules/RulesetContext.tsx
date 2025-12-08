@@ -44,6 +44,9 @@ export interface SkillData {
   group?: string | null;
   canDefault?: boolean;
   category?: string;
+  requiresMagic?: boolean;
+  requiresResonance?: boolean;
+  suggestedSpecializations?: string[];
 }
 
 export interface SkillGroupData {
@@ -63,6 +66,16 @@ export interface SkillCreationLimitsData {
   maxSkillRatingWithAptitude: number;
   freeKnowledgePoints: string;
   nativeLanguageRating: number;
+}
+
+export interface ExampleKnowledgeSkillData {
+  name: string;
+  category: "academic" | "interests" | "professional" | "street";
+}
+
+export interface ExampleLanguageData {
+  name: string;
+  region?: string;
 }
 
 export interface QualityData {
@@ -330,6 +343,8 @@ export interface RulesetData {
     skillGroups: SkillGroupData[];
     knowledgeCategories: KnowledgeCategoryData[];
     creationLimits: SkillCreationLimitsData;
+    exampleKnowledgeSkills: ExampleKnowledgeSkillData[];
+    exampleLanguages: ExampleLanguageData[];
   };
   qualities: { positive: QualityData[]; negative: QualityData[] };
   priorityTable: PriorityTableData | null;
@@ -376,6 +391,8 @@ const defaultData: RulesetData = {
       freeKnowledgePoints: "(LOG + INT) × 2",
       nativeLanguageRating: 6,
     },
+    exampleKnowledgeSkills: [],
+    exampleLanguages: [],
   },
   qualities: { positive: [], negative: [] },
   priorityTable: null,
@@ -596,6 +613,8 @@ export function useSkills(): {
   skillGroups: SkillGroupData[];
   knowledgeCategories: KnowledgeCategoryData[];
   creationLimits: SkillCreationLimitsData;
+  exampleKnowledgeSkills: ExampleKnowledgeSkillData[];
+  exampleLanguages: ExampleLanguageData[];
 } {
   const { data } = useRuleset();
   return data.skills;

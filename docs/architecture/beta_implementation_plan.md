@@ -36,8 +36,8 @@ This document breaks down the Beta phase into actionable implementation phases w
 | 1 | **M0** | **MVP Gaps & Enhancements** | **1-2 weeks** | **Critical** | 🔄 In Progress |
 | | M0.1 | Bug Fixes | - | Critical | ✅ Complete |
 | | M0.2 | Metatype Enhancements | - | Critical | ✅ Complete |
-| | M0.3 | Skills Enhancements | - | Critical | 🔜 Next |
-| | M0.4 | Qualities Enhancements | - | Critical | Not Started |
+| | M0.3 | Skills Enhancements | - | Critical | ✅ Complete |
+| | M0.4 | Qualities Enhancements | - | Critical | 🔜 Next |
 | | M0.5 | Contacts Enhancements | - | Critical | Not Started |
 | | M0.6 | Distributed Karma Architecture | - | Critical | Not Started |
 | | M0.7 | SpellsStep Creation | - | Critical | Not Started |
@@ -59,6 +59,7 @@ This document breaks down the Beta phase into actionable implementation phases w
 | B1 Cyberware | Dec 2024 | 70+ cyberware items, 60+ bioware items, essence tracking, grade selection, AugmentationsStep |
 | M0.1 Bug Fixes | Dec 2024 | Validation panel consistency fix, synced validation state across wizard |
 | M0.2 Metatype | Dec 2024 | Racial traits auto-populated, racialQualities field, ReviewStep display |
+| M0.3 Skills | Dec 2024 | Magical/resonance skill filtering, suggested specializations for all skills, example knowledge skills (40+) and languages (20+) with quick-add dropdowns |
 
 ### Estimated Remaining Timeline
 
@@ -131,13 +132,13 @@ This document breaks down the Beta phase into actionable implementation phases w
 
 | Task | Description | Status |
 |------|-------------|--------|
-| M0.3.1 | Disable magical skill groups (Sorcery, Conjuring, Enchanting) for mundane characters | Not Started |
-| M0.3.2 | Disable individual magical skills for mundane characters | Not Started |
-| M0.3.3 | Add suggested specializations to skill data (e.g., Archery: "Bow", "Crossbow", "Slingshot") | Not Started |
-| M0.3.4 | Update specialization UI to show suggestions as dropdown but still allow free text | Not Started |
-| M0.3.5 | Add example knowledge skills to ruleset data (e.g., "Corporate Politics", "Seattle Gangs") | Not Started |
-| M0.3.6 | Add example language skills to ruleset data (e.g., "Or'zet", "Sperethiel", "Japanese") | Not Started |
-| M0.3.7 | Ensure custom knowledge/language skill creation still works alongside examples | Not Started |
+| M0.3.1 | Disable magical skill groups (Sorcery, Conjuring, Enchanting) for mundane characters | Complete |
+| M0.3.2 | Disable individual magical skills for mundane characters | Complete |
+| M0.3.3 | Add suggested specializations to skill data (e.g., Archery: "Bow", "Crossbow", "Slingshot") | Complete |
+| M0.3.4 | Update specialization UI to show suggestions as dropdown but still allow free text | Complete |
+| M0.3.5 | Add example knowledge skills to ruleset data (e.g., "Corporate Politics", "Seattle Gangs") | Complete |
+| M0.3.6 | Add example language skills to ruleset data (e.g., "Or'zet", "Sperethiel", "Japanese") | Complete |
+| M0.3.7 | Ensure custom knowledge/language skill creation still works alongside examples | Complete |
 
 ### M0.4 Qualities Enhancements
 
