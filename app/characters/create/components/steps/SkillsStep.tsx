@@ -49,7 +49,8 @@ export function SkillsStep({ state, updateState, budgetValues }: StepProps) {
   const [newLanguage, setNewLanguage] = useState("");
 
   // Determine if character has magic or resonance based on their magical path
-  const magicPath = state.selections.magicPath as string | undefined;
+  // Note: The key is "magical-path" as set by MagicStep
+  const magicPath = state.selections["magical-path"] as string | undefined;
   const hasMagic = magicPath && ["full-mage", "aspected-mage", "mystic-adept", "adept"].includes(magicPath);
   const hasResonance = magicPath === "technomancer";
 
@@ -137,52 +138,47 @@ export function SkillsStep({ state, updateState, budgetValues }: StepProps) {
     });
   }, [activeSkills, searchQuery, selectedCategory, hasMagic, hasResonance]);
 
-  // Group filtered skills by their skill group
-  const groupedSkills = useMemo(() => {
+  // Group filtered skills by category for visual organization
+  const skillsByCategory = useMemo(() => {
     const grouped: Record<string, typeof filteredSkills> = {};
-    const ungrouped: typeof filteredSkills = [];
 
     filteredSkills.forEach((skill) => {
-      if (skill.group) {
-        if (!grouped[skill.group]) {
-          grouped[skill.group] = [];
-        }
-        grouped[skill.group].push(skill);
-      } else {
-        ungrouped.push(skill);
+      const category = skill.category || "other";
+      if (!grouped[category]) {
+        grouped[category] = [];
       }
+      grouped[category].push(skill);
     });
 
-    // Sort skills within each group by name
+    // Sort skills within each category by name
     Object.keys(grouped).forEach((key) => {
       grouped[key].sort((a, b) => a.name.localeCompare(b.name));
     });
-    ungrouped.sort((a, b) => a.name.localeCompare(b.name));
 
-    // Create ordered array of groups based on skillGroups order
-    const orderedGroups: Array<{ groupId: string; groupName: string; skills: typeof filteredSkills }> = [];
+    // Create ordered array based on CATEGORY_LABELS order
+    const orderedCategories: Array<{ categoryId: string; categoryName: string; skills: typeof filteredSkills }> = [];
 
-    skillGroups.forEach((sg) => {
-      if (grouped[sg.id] && grouped[sg.id].length > 0) {
-        orderedGroups.push({
-          groupId: sg.id,
-          groupName: sg.name,
-          skills: grouped[sg.id],
+    (Object.keys(CATEGORY_LABELS) as SkillCategory[]).forEach((cat) => {
+      if (grouped[cat] && grouped[cat].length > 0) {
+        orderedCategories.push({
+          categoryId: cat,
+          categoryName: CATEGORY_LABELS[cat],
+          skills: grouped[cat],
         });
       }
     });
 
-    // Add ungrouped at the end
-    if (ungrouped.length > 0) {
-      orderedGroups.push({
-        groupId: "ungrouped",
-        groupName: "Ungrouped Skills",
-        skills: ungrouped,
+    // Add any "other" category skills at the end
+    if (grouped["other"] && grouped["other"].length > 0) {
+      orderedCategories.push({
+        categoryId: "other",
+        categoryName: "Other",
+        skills: grouped["other"],
       });
     }
 
-    return orderedGroups;
-  }, [filteredSkills, skillGroups]);
+    return orderedCategories;
+  }, [filteredSkills]);
 
   // Filter skill groups based on magic/resonance
   const filteredSkillGroups = useMemo(() => {
@@ -877,41 +873,32 @@ export function SkillsStep({ state, updateState, budgetValues }: StepProps) {
         </select>
       </div>
 
-      {/* Individual Skills - Grouped by Skill Group */}
+      {/* Individual Skills - Grouped by Category */}
       <div>
         <h3 className="mb-3 text-sm font-semibold uppercase tracking-wider text-zinc-500 dark:text-zinc-400">
           Active Skills ({filteredSkills.length})
         </h3>
 
-        {groupedSkills.length === 0 ? (
+        {skillsByCategory.length === 0 ? (
           <p className="py-8 text-center text-sm text-zinc-500 dark:text-zinc-400">
             No skills match your search.
           </p>
         ) : (
           <div className="space-y-6">
-            {groupedSkills.map(({ groupId, groupName, skills: groupSkills }) => (
-              <div key={groupId}>
-                {/* Group Header */}
+            {skillsByCategory.map(({ categoryId, categoryName, skills: categorySkills }) => (
+              <div key={categoryId}>
+                {/* Category Header */}
                 <div className="mb-2 flex items-center gap-2">
-                  <div className={`h-px flex-1 ${groupId === "ungrouped" ? "bg-zinc-300 dark:bg-zinc-600" : "bg-purple-300 dark:bg-purple-700"}`} />
-                  <span className={`text-xs font-semibold uppercase tracking-wider ${
-                    groupId === "ungrouped"
-                      ? "text-zinc-500 dark:text-zinc-400"
-                      : "text-purple-600 dark:text-purple-400"
-                  }`}>
-                    {groupName}
-                    {groupId !== "ungrouped" && groups[groupId] > 0 && (
-                      <span className="ml-1.5 rounded bg-purple-100 px-1.5 py-0.5 text-purple-700 dark:bg-purple-900 dark:text-purple-300">
-                        Group Rating: {groups[groupId]}
-                      </span>
-                    )}
+                  <div className="h-px flex-1 bg-emerald-300 dark:bg-emerald-700" />
+                  <span className="text-xs font-semibold uppercase tracking-wider text-emerald-600 dark:text-emerald-400">
+                    {categoryName}
                   </span>
-                  <div className={`h-px flex-1 ${groupId === "ungrouped" ? "bg-zinc-300 dark:bg-zinc-600" : "bg-purple-300 dark:bg-purple-700"}`} />
+                  <div className="h-px flex-1 bg-emerald-300 dark:bg-emerald-700" />
                 </div>
 
-                {/* Skills in this group */}
+                {/* Skills in this category */}
                 <div className="space-y-2">
-                  {groupSkills.map(renderSkill)}
+                  {categorySkills.map(renderSkill)}
                 </div>
               </div>
             ))}
