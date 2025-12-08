@@ -10,6 +10,27 @@ This document breaks down the Beta phase into actionable implementation phases w
 
 ---
 
+## Recommended Work Items (Priority Order)
+
+The following items are recommended for immediate implementation to complete character creation:
+
+| # | Task | Effort | Phase | Status |
+|---|------|--------|-------|--------|
+| 1 | Fix Adept skill filtering bug - block ALL magical skill groups for adepts | Small | M0.3.8 | ✅ Complete |
+| 2 | Add Aspected Mage group selection | Medium | M0.8 | ✅ Complete |
+| 3 | Implement free skills from priority in SkillsStep | Medium | M0.3.9 | Not Started |
+| 4 | Track free spells/complex forms separately from Karma-purchased | Medium | M0.7.10 | Not Started |
+| 5 | Add Power Points budget for Adepts (free = Magic rating) | Medium | B5.1.4 | Not Started |
+| 6 | Add Karma-purchased Power Points for Mystic Adepts | Medium | B5.1.5, B5.2.6 | Not Started |
+| 7 | Add Adept Powers data to ruleset | Large | B5.1.1 | Not Started |
+| 8 | Create AdeptPowersStep component | Large | B5.2 | Not Started |
+| 9 | Add spell formula limits validation (Magic × 2 per category) | Small | M0.7.11 | Not Started |
+| 10 | Conditional Assensing for Adepts (requires powers system first) | Small | B5.1.6, B5.2.11 | Not Started |
+
+**Next Steps:** Focus on completing M0 phase items (M0.3.9, M0.4-M0.7) before moving to Beta features (B5 Adept Powers).
+
+---
+
 ## Complete Implementation Order
 
 ### Character Creation Wizard Flow (Post-Implementation)
@@ -37,10 +58,13 @@ This document breaks down the Beta phase into actionable implementation phases w
 | | M0.1 | Bug Fixes | - | Critical | ✅ Complete |
 | | M0.2 | Metatype Enhancements | - | Critical | ✅ Complete |
 | | M0.3 | Skills Enhancements | - | Critical | ✅ Complete |
+| | M0.3.8 | Adept Skill Filtering Bug Fix | - | Critical | ✅ Complete |
+| | M0.3.9 | Free Skills from Priority | - | Critical | Not Started |
 | | M0.4 | Qualities Enhancements | - | Critical | 🔜 Next |
 | | M0.5 | Contacts Enhancements | - | Critical | Not Started |
 | | M0.6 | Distributed Karma Architecture | - | Critical | Not Started |
 | | M0.7 | SpellsStep Creation | - | Critical | Not Started |
+| | M0.8 | Aspected Mage Enhancements | - | Critical | ✅ Complete |
 | 2 | **B1** | **Cyberware/Bioware System** | **2-3 weeks** | **High** | ✅ **Complete** |
 | 3 | **B4** | **Combat Tracker** | **3-4 weeks** | **High** | Not Started |
 | 4 | **B3** | **Inventory Management** | **1-2 weeks** | **High** | Not Started |
@@ -60,6 +84,8 @@ This document breaks down the Beta phase into actionable implementation phases w
 | M0.1 Bug Fixes | Dec 2024 | Validation panel consistency fix, synced validation state across wizard |
 | M0.2 Metatype | Dec 2024 | Racial traits auto-populated, racialQualities field, ReviewStep display |
 | M0.3 Skills | Dec 2024 | Magical/resonance skill filtering, suggested specializations for all skills, example knowledge skills (40+) and languages (20+) with quick-add dropdowns |
+| M0.3.8 Adept Filtering | Dec 2024 | Fixed adept skill filtering to block ALL magical skill groups (both individual skills and groups) |
+| M0.8 Aspected Mage | Dec 2024 | Aspected Mage group selection (Sorcery, Conjuring, Enchanting) implemented and working |
 
 ### Estimated Remaining Timeline
 
@@ -139,6 +165,8 @@ This document breaks down the Beta phase into actionable implementation phases w
 | M0.3.5 | Add example knowledge skills to ruleset data (e.g., "Corporate Politics", "Seattle Gangs") | Complete |
 | M0.3.6 | Add example language skills to ruleset data (e.g., "Or'zet", "Sperethiel", "Japanese") | Complete |
 | M0.3.7 | Ensure custom knowledge/language skill creation still works alongside examples | Complete |
+| M0.3.8 | Fix adept skill filtering bug - block ALL magical skill groups for adepts (both individual skills and skill groups) | Complete |
+| M0.3.9 | Implement free skills from priority in SkillsStep (track free skill points separately from karma-purchased) | Not Started |
 
 ### M0.4 Qualities Enhancements
 
@@ -299,6 +327,7 @@ const KARMA_COSTS = {
 
 **Files to modify:**
 - `/app/characters/create/components/CreationWizard.tsx`
+- `/app/characters/create/components/steps/KarmaStep.tsx`
 - `/lib/types/creation.ts`
 
 **Tasks:**
@@ -314,6 +343,8 @@ const KARMA_COSTS = {
 | M0.7.7 | Conditionally show step only for magical characters | Not Started |
 | M0.7.8 | Register step in CreationWizard after MagicStep | Not Started |
 | M0.7.9 | Move spell selection out of KarmaStep | Not Started |
+| M0.7.10 | Track free spells/complex forms separately from Karma-purchased in state | Not Started |
+| M0.7.11 | Add spell formula limits validation (Magic × 2 per category) | Not Started |
 
 **Free Spells by Priority:**
 | Magic Priority | Free Spells |
@@ -361,13 +392,33 @@ const KARMA_COSTS = {
 └─────────────────────────────────────────────────────────────┘
 ```
 
-### M0.8 Acceptance Criteria
+### M0.8 Aspected Mage Enhancements
+
+**Files to modify:**
+- `/app/characters/create/components/steps/MagicStep.tsx`
+- `/app/characters/create/components/steps/SkillsStep.tsx`
+
+**Tasks:**
+
+| Task | Description | Status |
+|------|-------------|--------|
+| M0.8.1 | Add Aspected Mage group selection UI (Sorcery, Conjuring, Enchanting) | Complete |
+| M0.8.2 | Store selected aspected mage group in CreationState | Complete |
+| M0.8.3 | Filter skills and skill groups based on selected aspect | Complete |
+| M0.8.4 | Validate aspected mage group selection before proceeding | Complete |
+
+**Note:** Aspected Mage group selection is already implemented. This section documents the completion status.
+
+### M0.9 Acceptance Criteria
 
 - [x] Validation panel shows consistent state across wizard
 - [x] Racial traits automatically become racial qualities on character
-- [ ] Magical skills disabled for mundane characters
-- [ ] Skill specializations show suggestions with free text option
-- [ ] Example knowledge/language skills available
+- [x] Magical skills disabled for mundane characters
+- [x] Adept skill filtering blocks ALL magical skill groups (both individual skills and groups)
+- [x] Skill specializations show suggestions with free text option
+- [x] Example knowledge/language skills available
+- [x] Aspected Mage group selection implemented and working
+- [ ] Free skills from priority tracked separately from karma-purchased
 - [ ] Racial qualities hidden from quality selection
 - [ ] Leveled qualities (Addiction) work correctly
 - [ ] Stat-modifying qualities (Aptitude) apply correctly
@@ -376,6 +427,8 @@ const KARMA_COSTS = {
 - [ ] Each step shows karma purchase option where applicable
 - [ ] SpellsStep appears only for magical characters
 - [ ] Free spells allocated correctly by priority
+- [ ] Free spells/complex forms tracked separately from karma-purchased
+- [ ] Spell formula limits validated (Magic × 2 per category)
 - [ ] Karma spell purchases work within SpellsStep
 - [ ] 7 Karma max carryover validated correctly
 
@@ -997,6 +1050,7 @@ interface Initiative {
 **Files to modify:**
 - `/data/editions/sr5/core-rulebook.json`
 - `/lib/types/character.ts`
+- `/lib/types/creation.ts`
 
 **Tasks:**
 
@@ -1005,7 +1059,9 @@ interface Initiative {
 | B5.1.1 | Create comprehensive adept powers catalog (~50 powers) | Not Started |
 | B5.1.2 | Add AdeptPower interface with levels, prerequisites | Not Started |
 | B5.1.3 | Add power point pool calculation to Character | Not Started |
-| B5.1.4 | Add mystic adept power point purchase tracking | Not Started |
+| B5.1.4 | Add power point budget tracking to CreationState (free = Magic rating for adepts) | Not Started |
+| B5.1.5 | Add mystic adept power point purchase tracking (5 Karma = 1 PP) | Not Started |
+| B5.1.6 | Add conditional Assensing skill availability for adepts (requires powers system) | Not Started |
 
 **Adept Power Structure:**
 ```json
@@ -1046,31 +1102,42 @@ interface Initiative {
 
 ### B5.2 Creation Step Updates
 
+**Files to create:**
+- `/app/characters/create/components/steps/AdeptPowersStep.tsx`
+
 **Files to modify:**
+- `/app/characters/create/components/CreationWizard.tsx`
 - `/app/characters/create/components/steps/MagicStep.tsx`
-- `/app/characters/create/components/steps/KarmaStep.tsx`
+- `/lib/types/creation.ts`
 
 **Tasks:**
 
 | Task | Description | Status |
 |------|-------------|--------|
-| B5.2.1 | Add AdeptPowerSelector sub-component | Not Started |
-| B5.2.2 | Display power point pool (= Magic rating) | Not Started |
+| B5.2.1 | Create AdeptPowersStep component | Not Started |
+| B5.2.2 | Add Power Points budget display (free = Magic rating for adepts) | Not Started |
 | B5.2.3 | Track spent power points with real-time display | Not Started |
 | B5.2.4 | Handle power levels with fractional costs | Not Started |
 | B5.2.5 | Enforce prerequisites between powers | Not Started |
-| B5.2.6 | For mystic adepts: implement PP purchase (5 Karma = 1 PP) | Not Started |
+| B5.2.6 | For mystic adepts: implement PP purchase with karma (5 Karma = 1 PP) | Not Started |
 | B5.2.7 | Display power effects in selection UI | Not Started |
+| B5.2.8 | Add power catalog browser with search and filters | Not Started |
+| B5.2.9 | Register AdeptPowersStep in CreationWizard (after MagicStep, before SpellsStep) | Not Started |
+| B5.2.10 | Conditionally show step only for adepts and mystic adepts | Not Started |
+| B5.2.11 | Add conditional Assensing skill availability (requires Astral Perception power) | Not Started |
 
 ### B5.3 Acceptance Criteria
 
-- [ ] Adept powers catalog fully populated
-- [ ] Power point pool calculated correctly
+- [ ] Adept powers catalog fully populated (~50 powers)
+- [ ] Power point pool calculated correctly (free = Magic rating for adepts)
+- [ ] Power point budget tracked in CreationState
 - [ ] Powers with levels correctly cost per level
 - [ ] Prerequisites enforced
-- [ ] Mystic adepts can purchase PP with Karma
+- [ ] Mystic adepts can purchase PP with Karma (5 Karma = 1 PP)
 - [ ] Power effects clearly displayed
 - [ ] Selected powers apply to derived stats
+- [ ] AdeptPowersStep appears only for adepts and mystic adepts
+- [ ] Assensing skill available only when Astral Perception power is selected
 
 ---
 
@@ -1424,7 +1491,9 @@ B4 ─────> B9 (WebSockets) ──────────────�
 └── page.tsx
 
 /app/characters/create/components/steps/
-└── AugmentationsStep.tsx
+├── AugmentationsStep.tsx
+├── SpellsStep.tsx
+└── AdeptPowersStep.tsx
 
 /components/combat/
 ├── InitiativeTracker.tsx
@@ -1448,9 +1517,9 @@ B4 ─────> B9 (WebSockets) ──────────────�
 ```
 /lib/types/character.ts        # Add inventory, augmentation types
 /lib/types/edition.ts          # Add new module types
-/lib/types/creation.ts         # Add sourcebook selection
+/lib/types/creation.ts         # Add sourcebook selection, power point budget, free spell/complex form tracking
 /lib/rules/RulesetContext.tsx  # Add new hooks
 /lib/storage/characters.ts     # Add inventory functions
-/data/editions/sr5/core-rulebook.json  # Expand catalogs
-/app/characters/create/components/CreationWizard.tsx  # Add AugmentationsStep
+/data/editions/sr5/core-rulebook.json  # Expand catalogs (adept powers, spells)
+/app/characters/create/components/CreationWizard.tsx  # Add AugmentationsStep, SpellsStep, AdeptPowersStep
 ```

@@ -51,8 +51,27 @@ export function SkillsStep({ state, updateState, budgetValues }: StepProps) {
   // Determine if character has magic or resonance based on their magical path
   // Note: The key is "magical-path" as set by MagicStep
   const magicPath = state.selections["magical-path"] as string | undefined;
-  const hasMagic = magicPath && ["full-mage", "aspected-mage", "mystic-adept", "adept"].includes(magicPath);
+
+  // Different magic types have different skill group access:
+  // - Magician (full-mage): All magical skill groups (Sorcery, Conjuring, Enchanting)
+  // - Mystic Adept: Sorcery and Conjuring (per SR5 rules, can use both)
+  // - Aspected Mage: Only ONE chosen skill group (stored in state)
+  // - Adept: NO magical skill groups (channels magic internally for powers only)
+  // - Technomancer: Tasking skill group only
+  const isFullMage = magicPath === "magician";
+  const isMysticAdept = magicPath === "mystic-adept";
+  const isAspectedMage = magicPath === "aspected-mage";
+  const isAdept = magicPath === "adept";
   const hasResonance = magicPath === "technomancer";
+
+  // Get aspected mage's chosen skill group (if applicable)
+  const aspectedMageGroup = state.selections["aspected-mage-group"] as string | undefined;
+
+  // Determine which magical skill groups this character can access
+  const canUseMagicSkillGroups = isFullMage || isMysticAdept || (isAspectedMage && aspectedMageGroup);
+
+  // For individual skill filtering (requiresMagic flag)
+  const hasMagic = magicPath && ["magician", "aspected-mage", "mystic-adept", "adept"].includes(magicPath);
 
   // Get current skill values from state
   const skills = useMemo(() => {
@@ -118,14 +137,51 @@ export function SkillsStep({ state, updateState, budgetValues }: StepProps) {
   // Filter skills by category, search, and magic/resonance requirements
   const filteredSkills = useMemo(() => {
     return activeSkills.filter((skill) => {
-      // Filter out magical skills if character doesn't have magic
-      if (skill.requiresMagic && !hasMagic) {
-        return false;
-      }
       // Filter out resonance skills if character doesn't have resonance
       if (skill.requiresResonance && !hasResonance) {
         return false;
       }
+
+      // Check if skill belongs to a magical skill group
+      const skillGroup = skill.group;
+      const isInMagicalGroup = skillGroup && MAGICAL_SKILL_GROUPS.includes(skillGroup);
+      const isInResonanceGroup = skillGroup && RESONANCE_SKILL_GROUPS.includes(skillGroup);
+
+      // Filter out resonance group skills if character doesn't have resonance
+      if (isInResonanceGroup && !hasResonance) {
+        return false;
+      }
+
+      // Filter out magical group skills based on character type
+      if (isInMagicalGroup) {
+        // Adepts cannot use ANY skills from magical skill groups
+        if (isAdept) {
+          return false;
+        }
+        // Characters without magic skill group access don't see them
+        if (!canUseMagicSkillGroups) {
+          return false;
+        }
+        // Aspected mages can only use skills from their chosen group
+        if (isAspectedMage && aspectedMageGroup) {
+          if (skillGroup !== aspectedMageGroup) {
+            return false;
+          }
+        }
+        // Mystic adepts can use Sorcery and Conjuring skills (not Enchanting)
+        if (isMysticAdept) {
+          if (skillGroup !== "sorcery" && skillGroup !== "conjuring") {
+            return false;
+          }
+        }
+      }
+
+      // Filter out other magical skills (requiresMagic) if character doesn't have magic
+      // Note: This is for skills that require Magic attribute but aren't in a magic skill group
+      if (skill.requiresMagic && !hasMagic) {
+        return false;
+      }
+
       // Check search query
       if (searchQuery && !skill.name.toLowerCase().includes(searchQuery.toLowerCase())) {
         return false;
@@ -136,7 +192,7 @@ export function SkillsStep({ state, updateState, budgetValues }: StepProps) {
       }
       return true;
     });
-  }, [activeSkills, searchQuery, selectedCategory, hasMagic, hasResonance]);
+  }, [activeSkills, searchQuery, selectedCategory, hasMagic, hasResonance, isAdept, canUseMagicSkillGroups, isAspectedMage, aspectedMageGroup, isMysticAdept]);
 
   // Group filtered skills by category for visual organization
   const skillsByCategory = useMemo(() => {
@@ -180,20 +236,40 @@ export function SkillsStep({ state, updateState, budgetValues }: StepProps) {
     return orderedCategories;
   }, [filteredSkills]);
 
-  // Filter skill groups based on magic/resonance
+  // Filter skill groups based on magic/resonance and character type
   const filteredSkillGroups = useMemo(() => {
     return skillGroups.filter((group) => {
-      // Filter out magical skill groups if character doesn't have magic
-      if (MAGICAL_SKILL_GROUPS.includes(group.id) && !hasMagic) {
-        return false;
-      }
+      const isMagicalGroup = MAGICAL_SKILL_GROUPS.includes(group.id);
+      const isResonanceGroup = RESONANCE_SKILL_GROUPS.includes(group.id);
+
       // Filter out resonance skill groups if character doesn't have resonance
-      if (RESONANCE_SKILL_GROUPS.includes(group.id) && !hasResonance) {
+      if (isResonanceGroup && !hasResonance) {
         return false;
       }
+
+      // Filter out magical skill groups based on character type
+      if (isMagicalGroup) {
+        // Adepts cannot use ANY magical skill groups
+        if (isAdept) {
+          return false;
+        }
+        // Characters without magic skill group access don't see them
+        if (!canUseMagicSkillGroups) {
+          return false;
+        }
+        // Aspected mages can only use their chosen group
+        if (isAspectedMage && aspectedMageGroup) {
+          return group.id === aspectedMageGroup;
+        }
+        // Mystic adepts can use Sorcery and Conjuring (not Enchanting per core rules)
+        if (isMysticAdept) {
+          return group.id === "sorcery" || group.id === "conjuring";
+        }
+      }
+
       return true;
     });
-  }, [skillGroups, hasMagic, hasResonance]);
+  }, [skillGroups, hasResonance, isAdept, canUseMagicSkillGroups, isAspectedMage, aspectedMageGroup, isMysticAdept]);
 
   // Get available categories (exclude magical/resonance if not applicable)
   const availableCategories = useMemo(() => {

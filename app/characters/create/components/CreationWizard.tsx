@@ -239,6 +239,15 @@ export function CreationWizard({ onCancel, onComplete }: CreationWizardProps) {
             severity: "warning",
           });
         }
+        // Aspected mages must choose their skill group focus
+        if (state.selections["magical-path"] === "aspected-mage" && !state.selections["aspected-mage-group"]) {
+          errors.push({
+            constraintId: "aspected-mage-group",
+            stepId,
+            message: "Aspected Magicians must choose a magical skill group (Sorcery, Conjuring, or Enchanting).",
+            severity: "error",
+          });
+        }
         break;
 
       // Skills, qualities, gear - show warnings but allow continuing
