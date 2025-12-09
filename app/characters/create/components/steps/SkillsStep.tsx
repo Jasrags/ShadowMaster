@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo, useCallback, useState } from "react";
+import { useMemo, useCallback, useState, useEffect } from "react";
 import { useSkills, usePriorityTable } from "@/lib/rules";
 import type { CreationState, KnowledgeSkill, LanguageSkill, FreeSkillAllocation } from "@/lib/types";
 
@@ -167,6 +167,68 @@ export function SkillsStep({ state, updateState, budgetValues }: StepProps) {
     return ratings;
   }, [freeSkillAllocations]);
 
+  // Reconciliation: Clear allocations if available free skills change (e.g. priority change)
+  useEffect(() => {
+    // Check if current allocations match available free skills structure
+    const isMismatch = availableFreeSkills.length !== freeSkillAllocations.length ||
+      availableFreeSkills.some((freeSkill, index) => {
+        const allocation = freeSkillAllocations[index];
+        if (!allocation) return true;
+        return allocation.type !== freeSkill.type ||
+          allocation.rating !== freeSkill.rating ||
+          allocation.count !== freeSkill.count;
+      });
+
+    if (isMismatch) {
+      // Reset allocations to match available structure
+      const newAllocations = availableFreeSkills.map(freeSkill => ({
+        type: freeSkill.type,
+        rating: freeSkill.rating,
+        count: freeSkill.count,
+        allocated: []
+      }));
+
+      // Cleanup stale skills/groups (remove the free rating portion)
+      const newSkills = { ...skills };
+      const newGroups = { ...groups };
+
+      freeSkillAllocations.forEach(allocation => {
+        allocation.allocated.forEach(alloc => {
+          if (alloc.skillId) {
+            const currentRating = newSkills[alloc.skillId] || 0;
+            const freeR = alloc.rating;
+            // Determine if there was any purchased rating underneath
+            const purchased = Math.max(0, currentRating - freeR);
+            if (purchased > 0) {
+              newSkills[alloc.skillId] = purchased;
+            } else {
+              delete newSkills[alloc.skillId];
+            }
+          }
+          if (alloc.groupId) {
+            const currentRating = newGroups[alloc.groupId] || 0;
+            const freeR = alloc.rating;
+            const purchased = Math.max(0, currentRating - freeR);
+            if (purchased > 0) {
+              newGroups[alloc.groupId] = purchased;
+            } else {
+              delete newGroups[alloc.groupId];
+            }
+          }
+        });
+      });
+
+      updateState({
+        selections: {
+          ...state.selections,
+          freeSkillAllocations: newAllocations,
+          skills: newSkills,
+          skillGroups: newGroups,
+        }
+      });
+    }
+  }, [availableFreeSkills, freeSkillAllocations, skills, groups, state.selections, updateState]);
+
   // Calculate points spent (skills + specializations at 1 point each)
   // Exclude free skill ratings from the calculation
   const skillPointsSpent = useMemo(() => {
@@ -192,7 +254,7 @@ export function SkillsStep({ state, updateState, budgetValues }: StepProps) {
 
   const knowledgePointsSpent = useMemo(() => {
     return knowledgeSkills.reduce((sum, skill) => sum + skill.rating, 0) +
-           languages.filter(lang => !lang.isNative).reduce((sum, lang) => sum + lang.rating, 0);
+      languages.filter(lang => !lang.isNative).reduce((sum, lang) => sum + lang.rating, 0);
   }, [knowledgeSkills, languages]);
 
   const skillPointsRemaining = skillPoints - skillPointsSpent;
@@ -744,7 +806,7 @@ export function SkillsStep({ state, updateState, budgetValues }: StepProps) {
       updatedSkills[index] = { ...skill, rating: clampedRating };
 
       const newSpent = updatedSkills.reduce((sum, s) => sum + s.rating, 0) +
-                       languages.filter(l => !l.isNative).reduce((sum, l) => sum + l.rating, 0);
+        languages.filter(l => !l.isNative).reduce((sum, l) => sum + l.rating, 0);
 
       updateState({
         selections: {
@@ -766,7 +828,7 @@ export function SkillsStep({ state, updateState, budgetValues }: StepProps) {
     (index: number) => {
       const updatedSkills = knowledgeSkills.filter((_, i) => i !== index);
       const newSpent = updatedSkills.reduce((sum, s) => sum + s.rating, 0) +
-                       languages.filter(l => !l.isNative).reduce((sum, l) => sum + l.rating, 0);
+        languages.filter(l => !l.isNative).reduce((sum, l) => sum + l.rating, 0);
 
       updateState({
         selections: {
@@ -804,7 +866,7 @@ export function SkillsStep({ state, updateState, budgetValues }: StepProps) {
       const updatedLanguages = [...languages, lang];
 
       const newSpent = knowledgeSkills.reduce((sum, s) => sum + s.rating, 0) +
-                       updatedLanguages.filter(l => !l.isNative).reduce((sum, l) => sum + l.rating, 0);
+        updatedLanguages.filter(l => !l.isNative).reduce((sum, l) => sum + l.rating, 0);
 
       updateState({
         selections: {
@@ -841,7 +903,7 @@ export function SkillsStep({ state, updateState, budgetValues }: StepProps) {
       updatedLanguages[index] = { ...lang, rating: clampedRating };
 
       const newSpent = knowledgeSkills.reduce((sum, s) => sum + s.rating, 0) +
-                       updatedLanguages.filter(l => !l.isNative).reduce((sum, l) => sum + l.rating, 0);
+        updatedLanguages.filter(l => !l.isNative).reduce((sum, l) => sum + l.rating, 0);
 
       updateState({
         selections: {
@@ -863,7 +925,7 @@ export function SkillsStep({ state, updateState, budgetValues }: StepProps) {
     (index: number) => {
       const updatedLanguages = languages.filter((_, i) => i !== index);
       const newSpent = knowledgeSkills.reduce((sum, s) => sum + s.rating, 0) +
-                       updatedLanguages.filter(l => !l.isNative).reduce((sum, l) => sum + l.rating, 0);
+        updatedLanguages.filter(l => !l.isNative).reduce((sum, l) => sum + l.rating, 0);
 
       updateState({
         selections: {
@@ -907,11 +969,10 @@ export function SkillsStep({ state, updateState, budgetValues }: StepProps) {
     return (
       <div
         key={skill.id}
-        className={`rounded-lg border p-3 transition-colors ${
-          value > 0
-            ? "border-emerald-200 bg-emerald-50 dark:border-emerald-800 dark:bg-emerald-900/20"
-            : "border-zinc-200 bg-white dark:border-zinc-700 dark:bg-zinc-800/50"
-        }`}
+        className={`rounded-lg border p-3 transition-colors ${value > 0
+          ? "border-emerald-200 bg-emerald-50 dark:border-emerald-800 dark:bg-emerald-900/20"
+          : "border-zinc-200 bg-white dark:border-zinc-700 dark:bg-zinc-800/50"
+          }`}
       >
         <div className="flex items-center gap-3">
           {/* Skill info */}
@@ -947,11 +1008,10 @@ export function SkillsStep({ state, updateState, budgetValues }: StepProps) {
             <button
               onClick={() => handleSkillChange(skill.id, value - 1)}
               disabled={!canDecrease}
-              className={`flex h-7 w-7 items-center justify-center rounded transition-colors ${
-                canDecrease
-                  ? "bg-zinc-200 text-zinc-700 hover:bg-zinc-300 dark:bg-zinc-700 dark:text-zinc-200 dark:hover:bg-zinc-600"
-                  : "cursor-not-allowed bg-zinc-100 text-zinc-300 dark:bg-zinc-800 dark:text-zinc-600"
-              }`}
+              className={`flex h-7 w-7 items-center justify-center rounded transition-colors ${canDecrease
+                ? "bg-zinc-200 text-zinc-700 hover:bg-zinc-300 dark:bg-zinc-700 dark:text-zinc-200 dark:hover:bg-zinc-600"
+                : "cursor-not-allowed bg-zinc-100 text-zinc-300 dark:bg-zinc-800 dark:text-zinc-600"
+                }`}
             >
               <svg className="h-3 w-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M20 12H4" />
@@ -959,11 +1019,10 @@ export function SkillsStep({ state, updateState, budgetValues }: StepProps) {
             </button>
 
             <div
-              className={`flex h-8 w-10 items-center justify-center rounded text-sm font-bold ${
-                effectiveRating > 0
-                  ? "bg-emerald-500 text-white"
-                  : "bg-zinc-200 text-zinc-500 dark:bg-zinc-700 dark:text-zinc-400"
-              }`}
+              className={`flex h-8 w-10 items-center justify-center rounded text-sm font-bold ${effectiveRating > 0
+                ? "bg-emerald-500 text-white"
+                : "bg-zinc-200 text-zinc-500 dark:bg-zinc-700 dark:text-zinc-400"
+                }`}
             >
               {effectiveRating}
             </div>
@@ -971,11 +1030,10 @@ export function SkillsStep({ state, updateState, budgetValues }: StepProps) {
             <button
               onClick={() => handleSkillChange(skill.id, value + 1)}
               disabled={!canIncrease}
-              className={`flex h-7 w-7 items-center justify-center rounded transition-colors ${
-                canIncrease
-                  ? "bg-emerald-500 text-white hover:bg-emerald-600"
-                  : "cursor-not-allowed bg-zinc-100 text-zinc-300 dark:bg-zinc-800 dark:text-zinc-600"
-              }`}
+              className={`flex h-7 w-7 items-center justify-center rounded transition-colors ${canIncrease
+                ? "bg-emerald-500 text-white hover:bg-emerald-600"
+                : "cursor-not-allowed bg-zinc-100 text-zinc-300 dark:bg-zinc-800 dark:text-zinc-600"
+                }`}
             >
               <svg className="h-3 w-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
@@ -1099,11 +1157,10 @@ export function SkillsStep({ state, updateState, budgetValues }: StepProps) {
     return (
       <div
         key={group.id}
-        className={`flex items-center gap-3 rounded-lg border p-3 ${
-          value > 0
-            ? "border-purple-200 bg-purple-50 dark:border-purple-800 dark:bg-purple-900/20"
-            : "border-zinc-200 bg-white dark:border-zinc-700 dark:bg-zinc-800/50"
-        }`}
+        className={`flex items-center gap-3 rounded-lg border p-3 ${value > 0
+          ? "border-purple-200 bg-purple-50 dark:border-purple-800 dark:bg-purple-900/20"
+          : "border-zinc-200 bg-white dark:border-zinc-700 dark:bg-zinc-800/50"
+          }`}
       >
         <div className="flex-1">
           <div className="flex items-center gap-2">
@@ -1123,11 +1180,10 @@ export function SkillsStep({ state, updateState, budgetValues }: StepProps) {
           <button
             onClick={() => handleGroupChange(group.id, value - 1)}
             disabled={!canDecrease}
-            className={`flex h-7 w-7 items-center justify-center rounded transition-colors ${
-              canDecrease
-                ? "bg-zinc-200 text-zinc-700 hover:bg-zinc-300 dark:bg-zinc-700 dark:text-zinc-200"
-                : "cursor-not-allowed bg-zinc-100 text-zinc-300 dark:bg-zinc-800 dark:text-zinc-600"
-            }`}
+            className={`flex h-7 w-7 items-center justify-center rounded transition-colors ${canDecrease
+              ? "bg-zinc-200 text-zinc-700 hover:bg-zinc-300 dark:bg-zinc-700 dark:text-zinc-200"
+              : "cursor-not-allowed bg-zinc-100 text-zinc-300 dark:bg-zinc-800 dark:text-zinc-600"
+              }`}
           >
             <svg className="h-3 w-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M20 12H4" />
@@ -1135,11 +1191,10 @@ export function SkillsStep({ state, updateState, budgetValues }: StepProps) {
           </button>
 
           <div
-            className={`flex h-8 w-10 items-center justify-center rounded text-sm font-bold ${
-              value > 0
-                ? "bg-purple-500 text-white"
-                : "bg-zinc-200 text-zinc-500 dark:bg-zinc-700 dark:text-zinc-400"
-            }`}
+            className={`flex h-8 w-10 items-center justify-center rounded text-sm font-bold ${value > 0
+              ? "bg-purple-500 text-white"
+              : "bg-zinc-200 text-zinc-500 dark:bg-zinc-700 dark:text-zinc-400"
+              }`}
           >
             {value}
           </div>
@@ -1147,11 +1202,10 @@ export function SkillsStep({ state, updateState, budgetValues }: StepProps) {
           <button
             onClick={() => handleGroupChange(group.id, value + 1)}
             disabled={!canIncrease}
-            className={`flex h-7 w-7 items-center justify-center rounded transition-colors ${
-              canIncrease
-                ? "bg-purple-500 text-white hover:bg-purple-600"
-                : "cursor-not-allowed bg-zinc-100 text-zinc-300 dark:bg-zinc-800 dark:text-zinc-600"
-            }`}
+            className={`flex h-7 w-7 items-center justify-center rounded transition-colors ${canIncrease
+              ? "bg-purple-500 text-white hover:bg-purple-600"
+              : "cursor-not-allowed bg-zinc-100 text-zinc-300 dark:bg-zinc-800 dark:text-zinc-600"
+              }`}
           >
             <svg className="h-3 w-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
@@ -1260,8 +1314,8 @@ export function SkillsStep({ state, updateState, budgetValues }: StepProps) {
                           alloc.skillId
                             ? applicableItems.find((i) => i.id === alloc.skillId)?.name || alloc.skillId
                             : alloc.groupId
-                            ? applicableItems.find((i) => i.id === alloc.groupId)?.name || alloc.groupId
-                            : "Unknown";
+                              ? applicableItems.find((i) => i.id === alloc.groupId)?.name || alloc.groupId
+                              : "Unknown";
                         return (
                           <div
                             key={allocIndex}
@@ -1512,11 +1566,10 @@ export function SkillsStep({ state, updateState, budgetValues }: StepProps) {
             <button
               onClick={handleAddKnowledgeSkill}
               disabled={!newKnowledgeSkill.name.trim() || knowledgePointsRemaining <= 0}
-              className={`rounded-lg px-4 py-2 text-sm font-medium transition-colors ${
-                newKnowledgeSkill.name.trim() && knowledgePointsRemaining > 0
-                  ? "bg-amber-500 text-white hover:bg-amber-600"
-                  : "cursor-not-allowed bg-zinc-200 text-zinc-400 dark:bg-zinc-700"
-              }`}
+              className={`rounded-lg px-4 py-2 text-sm font-medium transition-colors ${newKnowledgeSkill.name.trim() && knowledgePointsRemaining > 0
+                ? "bg-amber-500 text-white hover:bg-amber-600"
+                : "cursor-not-allowed bg-zinc-200 text-zinc-400 dark:bg-zinc-700"
+                }`}
             >
               Add
             </button>
@@ -1554,11 +1607,10 @@ export function SkillsStep({ state, updateState, budgetValues }: StepProps) {
                   <button
                     onClick={() => handleKnowledgeSkillChange(index, skill.rating - 1)}
                     disabled={skill.rating <= 1}
-                    className={`flex h-7 w-7 items-center justify-center rounded transition-colors ${
-                      skill.rating > 1
-                        ? "bg-zinc-200 text-zinc-700 hover:bg-zinc-300 dark:bg-zinc-700 dark:text-zinc-200"
-                        : "cursor-not-allowed bg-zinc-100 text-zinc-300 dark:bg-zinc-800 dark:text-zinc-600"
-                    }`}
+                    className={`flex h-7 w-7 items-center justify-center rounded transition-colors ${skill.rating > 1
+                      ? "bg-zinc-200 text-zinc-700 hover:bg-zinc-300 dark:bg-zinc-700 dark:text-zinc-200"
+                      : "cursor-not-allowed bg-zinc-100 text-zinc-300 dark:bg-zinc-800 dark:text-zinc-600"
+                      }`}
                   >
                     <svg className="h-3 w-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M20 12H4" />
@@ -1572,11 +1624,10 @@ export function SkillsStep({ state, updateState, budgetValues }: StepProps) {
                   <button
                     onClick={() => handleKnowledgeSkillChange(index, skill.rating + 1)}
                     disabled={skill.rating >= MAX_SKILL_RATING || knowledgePointsRemaining <= 0}
-                    className={`flex h-7 w-7 items-center justify-center rounded transition-colors ${
-                      skill.rating < MAX_SKILL_RATING && knowledgePointsRemaining > 0
-                        ? "bg-amber-500 text-white hover:bg-amber-600"
-                        : "cursor-not-allowed bg-zinc-100 text-zinc-300 dark:bg-zinc-800 dark:text-zinc-600"
-                    }`}
+                    className={`flex h-7 w-7 items-center justify-center rounded transition-colors ${skill.rating < MAX_SKILL_RATING && knowledgePointsRemaining > 0
+                      ? "bg-amber-500 text-white hover:bg-amber-600"
+                      : "cursor-not-allowed bg-zinc-100 text-zinc-300 dark:bg-zinc-800 dark:text-zinc-600"
+                      }`}
                   >
                     <svg className="h-3 w-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
@@ -1679,22 +1730,20 @@ export function SkillsStep({ state, updateState, budgetValues }: StepProps) {
             <button
               onClick={() => handleAddLanguage(true)}
               disabled={!newLanguage.trim() || hasNativeLanguage}
-              className={`rounded-lg px-4 py-2 text-sm font-medium transition-colors ${
-                newLanguage.trim() && !hasNativeLanguage
-                  ? "bg-sky-600 text-white hover:bg-sky-700"
-                  : "cursor-not-allowed bg-zinc-200 text-zinc-400 dark:bg-zinc-700"
-              }`}
+              className={`rounded-lg px-4 py-2 text-sm font-medium transition-colors ${newLanguage.trim() && !hasNativeLanguage
+                ? "bg-sky-600 text-white hover:bg-sky-700"
+                : "cursor-not-allowed bg-zinc-200 text-zinc-400 dark:bg-zinc-700"
+                }`}
             >
               Add as Native
             </button>
             <button
               onClick={() => handleAddLanguage(false)}
               disabled={!newLanguage.trim() || knowledgePointsRemaining <= 0}
-              className={`rounded-lg px-4 py-2 text-sm font-medium transition-colors ${
-                newLanguage.trim() && knowledgePointsRemaining > 0
-                  ? "bg-sky-500 text-white hover:bg-sky-600"
-                  : "cursor-not-allowed bg-zinc-200 text-zinc-400 dark:bg-zinc-700"
-              }`}
+              className={`rounded-lg px-4 py-2 text-sm font-medium transition-colors ${newLanguage.trim() && knowledgePointsRemaining > 0
+                ? "bg-sky-500 text-white hover:bg-sky-600"
+                : "cursor-not-allowed bg-zinc-200 text-zinc-400 dark:bg-zinc-700"
+                }`}
             >
               Add
             </button>
@@ -1722,11 +1771,10 @@ export function SkillsStep({ state, updateState, budgetValues }: StepProps) {
             {languages.map((lang, index) => (
               <div
                 key={`${lang.name}-${index}`}
-                className={`flex items-center gap-3 rounded-lg border p-3 ${
-                  lang.isNative
-                    ? "border-sky-300 bg-sky-100 dark:border-sky-700 dark:bg-sky-900/30"
-                    : "border-sky-200 bg-sky-50 dark:border-sky-800 dark:bg-sky-900/20"
-                }`}
+                className={`flex items-center gap-3 rounded-lg border p-3 ${lang.isNative
+                  ? "border-sky-300 bg-sky-100 dark:border-sky-700 dark:bg-sky-900/30"
+                  : "border-sky-200 bg-sky-50 dark:border-sky-800 dark:bg-sky-900/20"
+                  }`}
               >
                 <div className="flex-1 min-w-0">
                   <div className="flex items-center gap-2">
@@ -1749,11 +1797,10 @@ export function SkillsStep({ state, updateState, budgetValues }: StepProps) {
                       <button
                         onClick={() => handleLanguageChange(index, lang.rating - 1)}
                         disabled={lang.rating <= 1}
-                        className={`flex h-7 w-7 items-center justify-center rounded transition-colors ${
-                          lang.rating > 1
-                            ? "bg-zinc-200 text-zinc-700 hover:bg-zinc-300 dark:bg-zinc-700 dark:text-zinc-200"
-                            : "cursor-not-allowed bg-zinc-100 text-zinc-300 dark:bg-zinc-800 dark:text-zinc-600"
-                        }`}
+                        className={`flex h-7 w-7 items-center justify-center rounded transition-colors ${lang.rating > 1
+                          ? "bg-zinc-200 text-zinc-700 hover:bg-zinc-300 dark:bg-zinc-700 dark:text-zinc-200"
+                          : "cursor-not-allowed bg-zinc-100 text-zinc-300 dark:bg-zinc-800 dark:text-zinc-600"
+                          }`}
                       >
                         <svg className="h-3 w-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M20 12H4" />
@@ -1767,11 +1814,10 @@ export function SkillsStep({ state, updateState, budgetValues }: StepProps) {
                       <button
                         onClick={() => handleLanguageChange(index, lang.rating + 1)}
                         disabled={lang.rating >= MAX_SKILL_RATING || knowledgePointsRemaining <= 0}
-                        className={`flex h-7 w-7 items-center justify-center rounded transition-colors ${
-                          lang.rating < MAX_SKILL_RATING && knowledgePointsRemaining > 0
-                            ? "bg-sky-500 text-white hover:bg-sky-600"
-                            : "cursor-not-allowed bg-zinc-100 text-zinc-300 dark:bg-zinc-800 dark:text-zinc-600"
-                        }`}
+                        className={`flex h-7 w-7 items-center justify-center rounded transition-colors ${lang.rating < MAX_SKILL_RATING && knowledgePointsRemaining > 0
+                          ? "bg-sky-500 text-white hover:bg-sky-600"
+                          : "cursor-not-allowed bg-zinc-100 text-zinc-300 dark:bg-zinc-800 dark:text-zinc-600"
+                          }`}
                       >
                         <svg className="h-3 w-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
@@ -1804,52 +1850,46 @@ export function SkillsStep({ state, updateState, budgetValues }: StepProps) {
         <nav className="-mb-px flex space-x-8">
           <button
             onClick={() => setActiveTab("active")}
-            className={`whitespace-nowrap border-b-2 py-4 px-1 text-sm font-medium transition-colors ${
-              activeTab === "active"
-                ? "border-emerald-500 text-emerald-600 dark:text-emerald-400"
-                : "border-transparent text-zinc-500 hover:border-zinc-300 hover:text-zinc-700 dark:text-zinc-400 dark:hover:text-zinc-300"
-            }`}
+            className={`whitespace-nowrap border-b-2 py-4 px-1 text-sm font-medium transition-colors ${activeTab === "active"
+              ? "border-emerald-500 text-emerald-600 dark:text-emerald-400"
+              : "border-transparent text-zinc-500 hover:border-zinc-300 hover:text-zinc-700 dark:text-zinc-400 dark:hover:text-zinc-300"
+              }`}
           >
             Active Skills
-            <span className={`ml-2 rounded-full px-2 py-0.5 text-xs ${
-              activeTab === "active"
-                ? "bg-emerald-100 text-emerald-700 dark:bg-emerald-900/50 dark:text-emerald-300"
-                : "bg-zinc-100 text-zinc-600 dark:bg-zinc-800 dark:text-zinc-400"
-            }`}>
+            <span className={`ml-2 rounded-full px-2 py-0.5 text-xs ${activeTab === "active"
+              ? "bg-emerald-100 text-emerald-700 dark:bg-emerald-900/50 dark:text-emerald-300"
+              : "bg-zinc-100 text-zinc-600 dark:bg-zinc-800 dark:text-zinc-400"
+              }`}>
               {skillPointsRemaining}/{skillPoints}
             </span>
           </button>
           <button
             onClick={() => setActiveTab("knowledge")}
-            className={`whitespace-nowrap border-b-2 py-4 px-1 text-sm font-medium transition-colors ${
-              activeTab === "knowledge"
-                ? "border-amber-500 text-amber-600 dark:text-amber-400"
-                : "border-transparent text-zinc-500 hover:border-zinc-300 hover:text-zinc-700 dark:text-zinc-400 dark:hover:text-zinc-300"
-            }`}
+            className={`whitespace-nowrap border-b-2 py-4 px-1 text-sm font-medium transition-colors ${activeTab === "knowledge"
+              ? "border-amber-500 text-amber-600 dark:text-amber-400"
+              : "border-transparent text-zinc-500 hover:border-zinc-300 hover:text-zinc-700 dark:text-zinc-400 dark:hover:text-zinc-300"
+              }`}
           >
             Knowledge Skills
-            <span className={`ml-2 rounded-full px-2 py-0.5 text-xs ${
-              activeTab === "knowledge"
-                ? "bg-amber-100 text-amber-700 dark:bg-amber-900/50 dark:text-amber-300"
-                : "bg-zinc-100 text-zinc-600 dark:bg-zinc-800 dark:text-zinc-400"
-            }`}>
+            <span className={`ml-2 rounded-full px-2 py-0.5 text-xs ${activeTab === "knowledge"
+              ? "bg-amber-100 text-amber-700 dark:bg-amber-900/50 dark:text-amber-300"
+              : "bg-zinc-100 text-zinc-600 dark:bg-zinc-800 dark:text-zinc-400"
+              }`}>
               {knowledgeSkills.length}
             </span>
           </button>
           <button
             onClick={() => setActiveTab("language")}
-            className={`whitespace-nowrap border-b-2 py-4 px-1 text-sm font-medium transition-colors ${
-              activeTab === "language"
-                ? "border-sky-500 text-sky-600 dark:text-sky-400"
-                : "border-transparent text-zinc-500 hover:border-zinc-300 hover:text-zinc-700 dark:text-zinc-400 dark:hover:text-zinc-300"
-            }`}
+            className={`whitespace-nowrap border-b-2 py-4 px-1 text-sm font-medium transition-colors ${activeTab === "language"
+              ? "border-sky-500 text-sky-600 dark:text-sky-400"
+              : "border-transparent text-zinc-500 hover:border-zinc-300 hover:text-zinc-700 dark:text-zinc-400 dark:hover:text-zinc-300"
+              }`}
           >
             Languages
-            <span className={`ml-2 rounded-full px-2 py-0.5 text-xs ${
-              activeTab === "language"
-                ? "bg-sky-100 text-sky-700 dark:bg-sky-900/50 dark:text-sky-300"
-                : "bg-zinc-100 text-zinc-600 dark:bg-zinc-800 dark:text-zinc-400"
-            }`}>
+            <span className={`ml-2 rounded-full px-2 py-0.5 text-xs ${activeTab === "language"
+              ? "bg-sky-100 text-sky-700 dark:bg-sky-900/50 dark:text-sky-300"
+              : "bg-zinc-100 text-zinc-600 dark:bg-zinc-800 dark:text-zinc-400"
+              }`}>
               {languages.length}
             </span>
           </button>
