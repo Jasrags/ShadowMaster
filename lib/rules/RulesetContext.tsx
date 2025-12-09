@@ -21,6 +21,7 @@ import type {
   CreationMethod,
   ID,
 } from "../types";
+import { QualityData } from "./loader";
 
 // =============================================================================
 // TYPES
@@ -78,12 +79,7 @@ export interface ExampleLanguageData {
   region?: string;
 }
 
-export interface QualityData {
-  id: string;
-  name: string;
-  karmaCost?: number;
-  summary?: string;
-}
+
 
 export interface PriorityTableData {
   levels: string[];
@@ -470,20 +466,20 @@ export function RulesetProvider({
         // Transform extracted data
         const transformedData: RulesetData = extractedData
           ? {
-              metatypes: extractedData.metatypes || [],
-              skills: extractedData.skills || defaultData.skills,
-              qualities: extractedData.qualities || { positive: [], negative: [] },
-              priorityTable: extractedData.priorityTable || null,
-              magicPaths: extractedData.magicPaths || [],
-              lifestyles: extractedData.lifestyles || [],
-              lifestyleModifiers: extractedData.lifestyleModifiers || {},
-              gear: extractedData.gear || null,
-              spells: extractedData.spells || null,
-              complexForms: extractedData.complexForms || [],
-              cyberware: extractedData.cyberware || null,
-              bioware: extractedData.bioware || null,
-              augmentationRules: extractedData.augmentationRules || defaultAugmentationRules,
-            }
+            metatypes: extractedData.metatypes || [],
+            skills: extractedData.skills || defaultData.skills,
+            qualities: extractedData.qualities || { positive: [], negative: [] },
+            priorityTable: extractedData.priorityTable || null,
+            magicPaths: extractedData.magicPaths || [],
+            lifestyles: extractedData.lifestyles || [],
+            lifestyleModifiers: extractedData.lifestyleModifiers || {},
+            gear: extractedData.gear || null,
+            spells: extractedData.spells || null,
+            complexForms: extractedData.complexForms || [],
+            cyberware: extractedData.cyberware || null,
+            bioware: extractedData.bioware || null,
+            augmentationRules: extractedData.augmentationRules || defaultAugmentationRules,
+          }
           : defaultData;
 
         setState({

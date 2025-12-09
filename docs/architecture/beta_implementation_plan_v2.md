@@ -164,7 +164,7 @@ This section provides a comprehensive view of the entire implementation roadmap,
 | | M0.3 | Skills Enhancements | - | Critical | ✅ Complete |
 | | M0.3.8 | Adept Skill Filtering Bug Fix | - | Critical | ✅ Complete |
 | | M0.3.9 | Free Skills from Priority | - | Critical | ✅ Complete |
-| | M0.4 | Qualities Enhancements | - | Critical | 🔜 Next |
+| | M0.4 | Qualities Enhancements | - | Critical | ✅ Complete |
 | | M0.5 | Contacts Enhancements | - | Critical | Not Started |
 | | M0.6 | Distributed Karma Architecture | - | Critical | ✅ Complete |
 | | M0.7 | SpellsStep Creation | - | Critical | Not Started |
@@ -190,6 +190,7 @@ This section provides a comprehensive view of the entire implementation roadmap,
 | M0.3 Skills | Dec 2024 | Magical/resonance skill filtering, suggested specializations for all skills, example knowledge skills (40+) and languages (20+) with quick-add dropdowns |
 | M0.3.8 Adept Filtering | Dec 2024 | Fixed adept skill filtering to block ALL magical skill groups (both individual skills and groups) |
 | M0.8 Aspected Mage | Dec 2024 | Aspected Mage group selection (Sorcery, Conjuring, Enchanting) implemented and working |
+| M0.4 Qualities | Dec 2024 | Leveled qualities support (Addiction, Allergy, etc.), racial quality filtering, specification inputs (e.g. Mentor Spirit choice), 20+ new qualities added |
 | M0.6 Karma Arch | Dec 2024 | Distributed karma spending, global karma budget, karma-to-nuyen conversion, 7 karma carryover limit |
 | B8.1 Gear Layout | Dec 2024 | Improved gear catalog layout, shopping cart width fixes, responsive design |
 
@@ -467,9 +468,9 @@ This enhancement extends the qualities system to support leveled qualities (like
 
 | Task | Description | Status |
 |------|-------------|--------|
-| M0.4.1 | Add `isRacial: boolean` flag to Quality interface and filter racial qualities from selection UI | Not Started |
-| M0.4.2 | Implement leveled qualities system (add `levels` field to Quality interface, update quality data with levels, add level selector UI) | Not Started |
-| M0.4.3 | Implement stat-modifying qualities system (add `statModifiers` field, implement Aptitude quality, apply modifiers to derived stats calculations) | Not Started |
+| M0.4.1 | Add `isRacial: boolean` flag to Quality interface and filter racial qualities from selection UI | Complete |
+| M0.4.2 | Implement leveled qualities system (add `levels` field to Quality interface, update quality data with levels, add level selector UI) | Complete |
+| M0.4.3 | Implement stat-modifying qualities system (add `statModifiers` field, implement Aptitude quality, apply modifiers to derived stats calculations) | Complete |
 
 **Tasks JSON:**
 ```json
@@ -483,7 +484,7 @@ This enhancement extends the qualities system to support leveled qualities (like
       "/data/editions/sr5/core-rulebook.json",
       "/lib/types/edition.ts"
     ],
-    "status": "Not Started",
+    "status": "Complete",
     "dependsOn": []
   },
   {
@@ -495,7 +496,7 @@ This enhancement extends the qualities system to support leveled qualities (like
       "/data/editions/sr5/core-rulebook.json",
       "/lib/types/edition.ts"
     ],
-    "status": "Not Started",
+    "status": "Complete",
     "dependsOn": []
   },
   {
@@ -507,7 +508,7 @@ This enhancement extends the qualities system to support leveled qualities (like
       "/data/editions/sr5/core-rulebook.json",
       "/lib/types/edition.ts"
     ],
-    "status": "Not Started",
+    "status": "Complete",
     "dependsOn": []
   }
 ]

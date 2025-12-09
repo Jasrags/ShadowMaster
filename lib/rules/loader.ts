@@ -395,6 +395,12 @@ export interface QualityData {
   perRating?: boolean;
   maxRating?: number;
   requiresMagic?: boolean;
+  isRacial?: boolean;
+  levels?: Array<{ level: number; name: string; karma: number }>;
+  statModifiers?: Record<string, number | boolean>;
+  requiresSpecification?: boolean;
+  specificationLabel?: string;
+  limit?: number;
 }
 
 /**

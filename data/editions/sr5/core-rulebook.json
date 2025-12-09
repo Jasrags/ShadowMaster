@@ -3078,13 +3078,32 @@
             "id": "aptitude",
             "name": "Aptitude",
             "karmaCost": 14,
-            "summary": "Raise one skill max to 7 at creation, 13 after."
+            "summary": "Raise one skill max to 7 at creation, 13 after.",
+            "requiresSpecification": true,
+            "specificationLabel": "Skill",
+            "statModifiers": {
+              "skillMaxBonus": 1
+            },
+            "limit": 1
+          },
+          {
+            "id": "astral-chameleon",
+            "name": "Astral Chameleon",
+            "karmaCost": 10,
+            "summary": "Astral signature lasts half as long; –2 to others Assensing you.",
+            "requiresMagic": true
           },
           {
             "id": "bilingual",
             "name": "Bilingual",
             "karmaCost": 5,
             "summary": "Gain a second native language."
+          },
+          {
+            "id": "blandness",
+            "name": "Blandness",
+            "karmaCost": 8,
+            "summary": "Audience Threshold +1 to remember you; –2 to Shadow/Locate tests."
           },
           {
             "id": "catlike",
@@ -3096,7 +3115,9 @@
             "id": "codeslinger",
             "name": "Codeslinger",
             "karmaCost": 10,
-            "summary": "+2 dice to one chosen Matrix action."
+            "summary": "+2 dice to one chosen Matrix action.",
+            "requiresSpecification": true,
+            "specificationLabel": "Matrix Action"
           },
           {
             "id": "double-jointed",
@@ -3108,13 +3129,60 @@
             "id": "exceptional-attribute",
             "name": "Exceptional Attribute",
             "karmaCost": 14,
-            "summary": "Increase natural max of one attribute by 1."
+            "summary": "Increase natural max of one attribute by 1.",
+            "requiresSpecification": true,
+            "specificationLabel": "Attribute"
           },
           {
             "id": "first-impression",
             "name": "First Impression",
             "karmaCost": 11,
             "summary": "+2 dice to Social tests during first meetings."
+          },
+          {
+            "id": "focused-concentration",
+            "name": "Focused Concentration",
+            "karmaCost": 4,
+            "levels": [
+              {
+                "level": 1,
+                "name": "Rating 1",
+                "karma": 4
+              },
+              {
+                "level": 2,
+                "name": "Rating 2",
+                "karma": 8
+              },
+              {
+                "level": 3,
+                "name": "Rating 3",
+                "karma": 12
+              },
+              {
+                "level": 4,
+                "name": "Rating 4",
+                "karma": 16
+              },
+              {
+                "level": 5,
+                "name": "Rating 5",
+                "karma": 20
+              },
+              {
+                "level": 6,
+                "name": "Rating 6",
+                "karma": 24
+              }
+            ],
+            "summary": "Sustain one spell/complex form equal to rating without penalty.",
+            "requiresMagic": true
+          },
+          {
+            "id": "gearhead",
+            "name": "Gearhead",
+            "karmaCost": 11,
+            "summary": "+20% Speed or +1 Handling; +2 to stunts."
           },
           {
             "id": "guts",
@@ -3126,9 +3194,74 @@
             "id": "high-pain-tolerance",
             "name": "High Pain Tolerance",
             "karmaCost": 7,
-            "perRating": true,
-            "maxRating": 3,
+            "levels": [
+              {
+                "level": 1,
+                "name": "Rating 1",
+                "karma": 7
+              },
+              {
+                "level": 2,
+                "name": "Rating 2",
+                "karma": 14
+              },
+              {
+                "level": 3,
+                "name": "Rating 3",
+                "karma": 21
+              }
+            ],
             "summary": "Ignore 1 wound modifier per rating."
+          },
+          {
+            "id": "home-ground",
+            "name": "Home Ground",
+            "karmaCost": 10,
+            "summary": "Bonus in specific turf (Astral Acclimation, Digital Turf, etc.).",
+            "requiresSpecification": true,
+            "specificationLabel": "Category/Location"
+          },
+          {
+            "id": "human-looking",
+            "name": "Human-Looking",
+            "karmaCost": 6,
+            "summary": "Pass for human. Restricted to Elf, Dwarf, Ork."
+          },
+          {
+            "id": "indomitable",
+            "name": "Indomitable",
+            "karmaCost": 8,
+            "levels": [
+              {
+                "level": 1,
+                "name": "Level 1",
+                "karma": 8
+              },
+              {
+                "level": 2,
+                "name": "Level 2",
+                "karma": 16
+              },
+              {
+                "level": 3,
+                "name": "Level 3",
+                "karma": 24
+              }
+            ],
+            "summary": "+1 to Inherent Limits per level (Mental, Physical, or Social)."
+          },
+          {
+            "id": "juryrigger",
+            "name": "Juryrigger",
+            "karmaCost": 10,
+            "summary": "+2 dice to Mechanics for temporary fixes."
+          },
+          {
+            "id": "low-light-vision",
+            "name": "Low-Light Vision",
+            "karmaCost": 5,
+            "isRacial": true,
+            "summary": "See in dim light without penalty."
           },
           {
             "id": "lucky",
@@ -3137,17 +3270,73 @@
             "summary": "Raise Edge natural maximum by 1."
           },
           {
+            "id": "magical-resistance",
+            "name": "Magical Resistance",
+            "karmaCost": 6,
+            "levels": [
+              {
+                "level": 1,
+                "name": "Rating 1",
+                "karma": 6
+              },
+              {
+                "level": 2,
+                "name": "Rating 2",
+                "karma": 12
+              },
+              {
+                "level": 3,
+                "name": "Rating 3",
+                "karma": 18
+              },
+              {
+                "level": 4,
+                "name": "Rating 4",
+                "karma": 24
+              }
+            ],
+            "summary": "+1 die to Spell Resistance Tests per rating. Cannot be turned off."
+          },
+          {
             "id": "mentor-spirit",
             "name": "Mentor Spirit",
             "karmaCost": 5,
             "summary": "Gain mentor spirit benefits/drawbacks.",
-            "requiresMagic": true
+            "requiresMagic": true,
+            "requiresSpecification": true,
+            "specificationLabel": "Spirit"
           },
           {
             "id": "natural-athlete",
             "name": "Natural Athlete",
             "karmaCost": 7,
             "summary": "+2 dice to Running and Gymnastics."
+          },
+          {
+            "id": "natural-hardening",
+            "name": "Natural Hardening",
+            "karmaCost": 10,
+            "summary": "+1 natural Biofeedback filtering."
+          },
+          {
+            "id": "natural-immunity",
+            "name": "Natural Immunity",
+            "karmaCost": 4,
+            "levels": [
+              {
+                "level": 1,
+                "name": "Natural",
+                "karma": 4
+              },
+              {
+                "level": 2,
+                "name": "Synthetic",
+                "karma": 10
+              }
+            ],
+            "summary": "Immunity to one specific disease or toxin.",
+            "requiresSpecification": true,
+            "specificationLabel": "Disease/Toxin"
           },
           {
             "id": "photographic-memory",
@@ -3162,6 +3351,39 @@
             "summary": "+2 dice to all Healing tests."
           },
           {
+            "id": "resistance-pathogens-toxins",
+            "name": "Resistance to Pathogens/Toxins",
+            "karmaCost": 4,
+            "levels": [
+              {
+                "level": 1,
+                "name": "One",
+                "karma": 4
+              },
+              {
+                "level": 2,
+                "name": "Both",
+                "karma": 8
+              }
+            ],
+            "summary": "+1 dice pool modifier to Resistance Tests."
+          },
+          {
+            "id": "spirit-affinity",
+            "name": "Spirit Affinity",
+            "karmaCost": 7,
+            "summary": "Attuned to one spirit type; +1 service/binding bonus.",
+            "requiresSpecification": true,
+            "specificationLabel": "Spirit Type"
+          },
+          {
+            "id": "thermographic-vision",
+            "name": "Thermographic Vision",
+            "karmaCost": 5,
+            "isRacial": true,
+            "summary": "See heat signatures."
+          },
+          {
             "id": "toughness",
             "name": "Toughness",
             "karmaCost": 9,
@@ -3171,47 +3393,113 @@
             "id": "will-to-live",
             "name": "Will to Live",
             "karmaCost": 3,
-            "perRating": true,
-            "maxRating": 3,
+            "levels": [
+              {
+                "level": 1,
+                "name": "Rating 1",
+                "karma": 3
+              },
+              {
+                "level": 2,
+                "name": "Rating 2",
+                "karma": 6
+              },
+              {
+                "level": 3,
+                "name": "Rating 3",
+                "karma": 9
+              }
+            ],
             "summary": "+1 Overflow box per rating."
           }
         ],
         "negative": [
           {
-            "id": "addiction-mild",
-            "name": "Addiction (Mild)",
+            "id": "addiction",
+            "name": "Addiction",
             "karmaBonus": 4,
-            "summary": "Monthly cravings, –2 dice when withdrawing."
+            "summary": "Physical or physiological dependence on a substance.",
+            "requiresSpecification": true,
+            "specificationLabel": "Substance",
+            "levels": [
+              {
+                "level": 1,
+                "name": "Mild",
+                "karma": 4
+              },
+              {
+                "level": 2,
+                "name": "Moderate",
+                "karma": 9
+              },
+              {
+                "level": 3,
+                "name": "Severe",
+                "karma": 20
+              },
+              {
+                "level": 4,
+                "name": "Burnout",
+                "karma": 25
+              }
+            ]
           },
           {
-            "id": "addiction-moderate",
-            "name": "Addiction (Moderate)",
-            "karmaBonus": 9,
-            "summary": "Biweekly cravings, –4 dice when withdrawing."
-          },
-          {
-            "id": "addiction-severe",
-            "name": "Addiction (Severe)",
-            "karmaBonus": 20,
-            "summary": "Weekly cravings, –4 dice plus –2 Social always."
-          },
-          {
-            "id": "allergy-uncommon-mild",
-            "name": "Allergy (Uncommon, Mild)",
+            "id": "allergy",
+            "name": "Allergy",
             "karmaBonus": 5,
-            "summary": "–2 dice to Physical tests when exposed."
+            "summary": "Allergenic reaction to a substance or condition.",
+            "requiresSpecification": true,
+            "specificationLabel": "Allergen",
+            "levels": [
+              {
+                "level": 1,
+                "name": "Uncommon, Mild",
+                "karma": 5
+              },
+              {
+                "level": 2,
+                "name": "Common, Mild",
+                "karma": 10
+              },
+              {
+                "level": 3,
+                "name": "Uncommon, Moderate",
+                "karma": 10
+              },
+              {
+                "level": 4,
+                "name": "Common, Moderate",
+                "karma": 15
+              },
+              {
+                "level": 5,
+                "name": "Uncommon, Severe",
+                "karma": 15
+              },
+              {
+                "level": 6,
+                "name": "Common, Severe",
+                "karma": 20
+              },
+              {
+                "level": 7,
+                "name": "Uncommon, Extreme",
+                "karma": 20
+              },
+              {
+                "level": 8,
+                "name": "Common, Extreme",
+                "karma": 25
+              }
+            ]
           },
           {
-            "id": "allergy-common-mild",
-            "name": "Allergy (Common, Mild)",
+            "id": "astral-beacon",
+            "name": "Astral Beacon",
             "karmaBonus": 10,
-            "summary": "–2 dice to Physical tests when exposed."
-          },
-          {
-            "id": "allergy-common-moderate",
-            "name": "Allergy (Common, Moderate)",
-            "karmaBonus": 15,
-            "summary": "–4 dice to Physical tests when exposed."
+            "summary": "Highly visible astral signature; lasts twice as long.",
+            "requiresMagic": true
           },
           {
             "id": "bad-luck",
@@ -3229,7 +3517,17 @@
             "id": "code-of-honor",
             "name": "Code of Honor",
             "karmaBonus": 15,
-            "summary": "Bound by strict rules about who may be harmed."
+            "summary": "Bound by strict rules about who may be harmed.",
+            "requiresSpecification": true,
+            "specificationLabel": "Code"
+          },
+          {
+            "id": "codeblock",
+            "name": "Codeblock",
+            "karmaBonus": 10,
+            "summary": "-2 dice on one specific Matrix action.",
+            "requiresSpecification": true,
+            "specificationLabel": "Matrix Action"
           },
           {
             "id": "combat-paralysis",
@@ -3238,48 +3536,103 @@
             "summary": "First Initiative halved; –3 on Surprise tests."
           },
           {
-            "id": "dependents-1",
-            "name": "Dependents (Low)",
+            "id": "dependents",
+            "name": "Dependents",
             "karmaBonus": 3,
-            "summary": "Loved ones require time/resources. +10% lifestyle."
-          },
-          {
-            "id": "dependents-2",
-            "name": "Dependents (Medium)",
-            "karmaBonus": 6,
-            "summary": "Loved ones require time/resources. +20% lifestyle."
-          },
-          {
-            "id": "dependents-3",
-            "name": "Dependents (High)",
-            "karmaBonus": 9,
-            "summary": "Loved ones require time/resources. +30% lifestyle."
+            "summary": "Loved ones require time/resources. Increases lifestyle cost.",
+            "levels": [
+              {
+                "level": 1,
+                "name": "Low (10%)",
+                "karma": 3
+              },
+              {
+                "level": 2,
+                "name": "Medium (20%)",
+                "karma": 6
+              },
+              {
+                "level": 3,
+                "name": "High (30%)",
+                "karma": 9
+              }
+            ]
           },
           {
             "id": "distinctive-style",
             "name": "Distinctive Style",
             "karmaBonus": 5,
-            "summary": "Memorable; +2 dice to identify/trace you."
+            "summary": "Memorable; +2 dice to identify/trace you.",
+            "requiresSpecification": true,
+            "specificationLabel": "Style"
+          },
+          {
+            "id": "elf-poser",
+            "name": "Elf Poser",
+            "karmaBonus": 6,
+            "summary": "Human posing as an elf. Social stigma."
           },
           {
             "id": "gremlins",
             "name": "Gremlins",
             "karmaBonus": 4,
-            "perRating": true,
-            "maxRating": 4,
+            "levels": [
+              {
+                "level": 1,
+                "name": "Rating 1",
+                "karma": 4
+              },
+              {
+                "level": 2,
+                "name": "Rating 2",
+                "karma": 8
+              },
+              {
+                "level": 3,
+                "name": "Rating 3",
+                "karma": 12
+              },
+              {
+                "level": 4,
+                "name": "Rating 4",
+                "karma": 16
+              }
+            ],
             "summary": "Tech malfunctions more around you."
           },
           {
             "id": "incompetent",
             "name": "Incompetent",
             "karmaBonus": 5,
-            "summary": "Cannot use one skill group."
+            "summary": "Cannot use one skill group.",
+            "requiresSpecification": true,
+            "specificationLabel": "Skill Group"
           },
           {
-            "id": "insomnia-basic",
-            "name": "Insomnia (Basic)",
+            "id": "insomnia",
+            "name": "Insomnia",
             "karmaBonus": 10,
-            "summary": "May double Stun recovery time."
+            "levels": [
+              {
+                "level": 1,
+                "name": "Basic",
+                "karma": 10
+              },
+              {
+                "level": 2,
+                "name": "Severe",
+                "karma": 15
+              }
+            ],
+            "summary": "May double Stun recovery time. Severe causes chronic fatigue."
+          },
+          {
+            "id": "loss-of-confidence",
+            "name": "Loss of Confidence",
+            "karmaBonus": 10,
+            "summary": "-2 dice pool modifier for a specific skill.",
+            "requiresSpecification": true,
+            "specificationLabel": "Skill"
           },
           {
             "id": "low-pain-tolerance",
@@ -3288,22 +3641,115 @@
             "summary": "Wound modifiers every 2 boxes instead of 3."
           },
           {
-            "id": "sinner-national",
-            "name": "SINner (National)",
-            "karmaBonus": 5,
-            "summary": "15% tax on income."
+            "id": "ork-poser",
+            "name": "Ork Poser",
+            "karmaBonus": 6,
+            "summary": "Pose as an Ork. Social Stigma."
           },
           {
-            "id": "sinner-criminal",
-            "name": "SINner (Criminal)",
+            "id": "prejudiced",
+            "name": "Prejudiced",
+            "karmaBonus": 3,
+            "levels": [
+              {
+                "level": 1,
+                "name": "Biased (Common)",
+                "karma": 3
+              },
+              {
+                "level": 2,
+                "name": "Biased (Specific)",
+                "karma": 5
+              },
+              {
+                "level": 3,
+                "name": "Outspoken (Common)",
+                "karma": 5
+              },
+              {
+                "level": 4,
+                "name": "Outspoken (Specific)",
+                "karma": 7
+              },
+              {
+                "level": 5,
+                "name": "Radical (Common)",
+                "karma": 8
+              },
+              {
+                "level": 6,
+                "name": "Radical (Specific)",
+                "karma": 10
+              }
+            ],
+            "summary": "Bias against specific group. Social penalties.",
+            "requiresSpecification": true,
+            "specificationLabel": "Target Group"
+          },
+          {
+            "id": "scorched",
+            "name": "Scorched",
             "karmaBonus": 10,
-            "summary": "Criminal record; constant scrutiny."
+            "summary": "Flashbacks/neurological issues from BTL/Black IC.",
+            "requiresSpecification": true,
+            "specificationLabel": "Effect/Source"
           },
           {
-            "id": "sinner-corporate-limited",
-            "name": "SINner (Corporate Limited)",
-            "karmaBonus": 15,
-            "summary": "20% corporate tax."
+            "id": "sensitive-system",
+            "name": "Sensitive System",
+            "karmaBonus": 12,
+            "summary": "Double Essence cost for cyberware. Bioware rejected."
+          },
+          {
+            "id": "simsense-vertigo",
+            "name": "Simsense Vertigo",
+            "karmaBonus": 5,
+            "summary": "-2 to tests when using AR/VR/Simsense."
+          },
+          {
+            "id": "sinner",
+            "name": "SINner",
+            "karmaBonus": 5,
+            "levels": [
+              {
+                "level": 1,
+                "name": "National",
+                "karma": 5
+              },
+              {
+                "level": 2,
+                "name": "Criminal",
+                "karma": 10
+              },
+              {
+                "level": 3,
+                "name": "Corporate Limited",
+                "karma": 15
+              },
+              {
+                "level": 4,
+                "name": "Corporate Born",
+                "karma": 25
+              }
+            ],
+            "summary": "Legal status and tax obligations."
+          },
+          {
+            "id": "social-stress",
+            "name": "Social Stress",
+            "karmaBonus": 8,
+            "summary": "Emotional triggers interfere with interactions.",
+            "requiresSpecification": true,
+            "specificationLabel": "Trigger"
+          },
+          {
+            "id": "spirit-bane",
+            "name": "Spirit Bane",
+            "karmaBonus": 7,
+            "summary": "Spirits of a specific type are hostile.",
+            "requiresMagic": true,
+            "requiresSpecification": true,
+            "specificationLabel": "Spirit Type"
           },
           {
             "id": "uncouth",
@@ -3316,6 +3762,12 @@
             "name": "Uneducated",
             "karmaBonus": 8,
             "summary": "Cannot default Technical/Academic skills."
+          },
+          {
+            "id": "unsteady-hands",
+            "name": "Unsteady Hands",
+            "karmaBonus": 7,
+            "summary": "-2 Agility tests when stressed/shaking."
           },
           {
             "id": "weak-immune-system",
