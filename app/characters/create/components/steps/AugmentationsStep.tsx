@@ -496,61 +496,6 @@ export function AugmentationsStep({ state, updateState, budgetValues }: StepProp
     ]
   );
 
-  // Remove cyberware
-  const removeCyberware = useCallback(
-    (index: number) => {
-      const item = selectedCyberware[index];
-      const updatedCyberware = selectedCyberware.filter((_, i) => i !== index);
-
-      updateState({
-        selections: {
-          ...state.selections,
-          cyberware: updatedCyberware,
-        },
-        budgets: {
-          ...state.budgets,
-          "nuyen-spent-augmentations": augmentationSpent - item.cost,
-          "essence-spent": totalEssenceLoss - item.essenceCost,
-        },
-      });
-    },
-    [
-      selectedCyberware,
-      state.selections,
-      state.budgets,
-      updateState,
-      augmentationSpent,
-      totalEssenceLoss,
-    ]
-  );
-
-  // Remove bioware
-  const removeBioware = useCallback(
-    (index: number) => {
-      const item = selectedBioware[index];
-      const updatedBioware = selectedBioware.filter((_, i) => i !== index);
-
-      updateState({
-        selections: {
-          ...state.selections,
-          bioware: updatedBioware,
-        },
-        budgets: {
-          ...state.budgets,
-          "nuyen-spent-augmentations": augmentationSpent - item.cost,
-          "essence-spent": totalEssenceLoss - item.essenceCost,
-        },
-      });
-    },
-    [
-      selectedBioware,
-      state.selections,
-      state.budgets,
-      updateState,
-      augmentationSpent,
-      totalEssenceLoss,
-    ]
-  );
 
   // Render cyberware item
   const renderCyberwareItem = (item: CyberwareCatalogItemData) => {
@@ -872,10 +817,8 @@ export function AugmentationsStep({ state, updateState, budgetValues }: StepProp
         </div>
       )}
 
-      {/* Main Content Grid */}
-      <div className="grid gap-4 lg:grid-cols-3">
-        {/* Catalog Column */}
-        <div className="lg:col-span-2 space-y-4">
+      {/* Main Content */}
+      <div className="space-y-4">
           {/* Tabs */}
           <div className="flex gap-2 border-b border-zinc-200 dark:border-zinc-700">
             <button
@@ -989,124 +932,6 @@ export function AugmentationsStep({ state, updateState, budgetValues }: StepProp
               </tbody>
             </table>
           </div>
-        </div>
-
-        {/* Selected Augmentations Column */}
-        <div className="lg:col-span-1">
-          <div className="sticky top-4 rounded-lg border border-zinc-200 bg-white p-4 dark:border-zinc-700 dark:bg-zinc-800">
-            <h3 className="mb-3 text-sm font-medium">Installed Augmentations</h3>
-
-            {selectedCyberware.length === 0 && selectedBioware.length === 0 ? (
-              <p className="text-sm text-zinc-500 dark:text-zinc-400">
-                No augmentations installed yet.
-              </p>
-            ) : (
-              <div className="space-y-4 max-h-80 overflow-y-auto">
-                {/* Cyberware */}
-                {selectedCyberware.length > 0 && (
-                  <div>
-                    <h4 className="text-xs font-medium text-cyan-600 dark:text-cyan-400 mb-2">
-                      Cyberware
-                    </h4>
-                    <div className="space-y-2">
-                      {selectedCyberware.map((item, index) => (
-                        <div
-                          key={item.id}
-                          className="flex items-center justify-between rounded-lg bg-zinc-50 p-2 dark:bg-zinc-700/50"
-                        >
-                          <div className="flex-1 min-w-0">
-                            <p className="text-sm font-medium truncate">{item.name}</p>
-                            <p className="text-xs text-zinc-500 dark:text-zinc-400">
-                              {item.grade} | {formatEssence(item.essenceCost)} ESS | ¥
-                              {formatCurrency(item.cost)}
-                            </p>
-                          </div>
-                          <button
-                            onClick={() => removeCyberware(index)}
-                            className="ml-2 rounded p-1 text-red-500 hover:bg-red-50 dark:hover:bg-red-900/20"
-                            aria-label="Remove item"
-                          >
-                            <svg
-                              className="h-4 w-4"
-                              fill="none"
-                              viewBox="0 0 24 24"
-                              stroke="currentColor"
-                            >
-                              <path
-                                strokeLinecap="round"
-                                strokeLinejoin="round"
-                                strokeWidth={2}
-                                d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
-                              />
-                            </svg>
-                          </button>
-                        </div>
-                      ))}
-                    </div>
-                  </div>
-                )}
-
-                {/* Bioware */}
-                {selectedBioware.length > 0 && (
-                  <div>
-                    <h4 className="text-xs font-medium text-green-600 dark:text-green-400 mb-2">
-                      Bioware
-                    </h4>
-                    <div className="space-y-2">
-                      {selectedBioware.map((item, index) => (
-                        <div
-                          key={item.id}
-                          className="flex items-center justify-between rounded-lg bg-zinc-50 p-2 dark:bg-zinc-700/50"
-                        >
-                          <div className="flex-1 min-w-0">
-                            <p className="text-sm font-medium truncate">{item.name}</p>
-                            <p className="text-xs text-zinc-500 dark:text-zinc-400">
-                              {item.grade} | {formatEssence(item.essenceCost)} ESS | ¥
-                              {formatCurrency(item.cost)}
-                            </p>
-                          </div>
-                          <button
-                            onClick={() => removeBioware(index)}
-                            className="ml-2 rounded p-1 text-red-500 hover:bg-red-50 dark:hover:bg-red-900/20"
-                            aria-label="Remove item"
-                          >
-                            <svg
-                              className="h-4 w-4"
-                              fill="none"
-                              viewBox="0 0 24 24"
-                              stroke="currentColor"
-                            >
-                              <path
-                                strokeLinecap="round"
-                                strokeLinejoin="round"
-                                strokeWidth={2}
-                                d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
-                              />
-                            </svg>
-                          </button>
-                        </div>
-                      ))}
-                    </div>
-                  </div>
-                )}
-              </div>
-            )}
-
-            {/* Summary */}
-            <div className="mt-4 border-t border-zinc-200 pt-4 dark:border-zinc-600">
-              <div className="flex justify-between text-sm">
-                <span>Total Essence:</span>
-                <span className="text-amber-600 dark:text-amber-400">
-                  -{formatEssence(totalEssenceLoss)}
-                </span>
-              </div>
-              <div className="flex justify-between text-sm">
-                <span>Total Cost:</span>
-                <span>¥{formatCurrency(augmentationSpent)}</span>
-              </div>
-            </div>
-          </div>
-        </div>
       </div>
 
       {/* Help Text */}

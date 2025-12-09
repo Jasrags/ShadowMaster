@@ -8,9 +8,20 @@ import {
   usePriorityTable,
   useMetatypes,
 } from "@/lib/rules";
+import {
+  useLifestyleModifiers,
+} from "@/lib/rules/RulesetContext";
 import { StepperSidebar } from "./StepperSidebar";
 import { ValidationPanel } from "./ValidationPanel";
-import type { CreationState, ID, ValidationError } from "@/lib/types";
+import type {
+  CreationState,
+  ID,
+  ValidationError,
+  GearItem,
+  CyberwareItem,
+  BiowareItem,
+  Lifestyle,
+} from "@/lib/types";
 
 // Step components
 import { PriorityStep } from "./steps/PriorityStep";
@@ -92,6 +103,7 @@ export function CreationWizard({ onCancel, onComplete }: CreationWizardProps) {
   const creationMethod = useCreationMethod();
   const priorityTable = usePriorityTable();
   const metatypes = useMetatypes();
+  const lifestyleModifiers = useLifestyleModifiers();
 
   // Creation state - load draft if available
   const [state, setState] = useState<CreationState>(() => {
@@ -464,6 +476,46 @@ export function CreationWizard({ onCancel, onComplete }: CreationWizardProps) {
     return !currentStepErrors.some((e) => e.severity === "error");
   }, [currentStepErrors]);
 
+  // Extract cart data from state
+  const gearItems: GearItem[] = (state.selections?.gear as GearItem[]) || [];
+  const cyberwareItems: CyberwareItem[] =
+    (state.selections?.cyberware as CyberwareItem[]) || [];
+  const biowareItems: BiowareItem[] =
+    (state.selections?.bioware as BiowareItem[]) || [];
+  const lifestyle: Lifestyle | null =
+    (state.selections?.lifestyle as Lifestyle) || null;
+
+  // Calculate cart totals
+  const gearTotal = useMemo(() => {
+    return gearItems.reduce((sum, item) => sum + item.cost * item.quantity, 0);
+  }, [gearItems]);
+
+  const lifestyleCost = useMemo(() => {
+    if (!lifestyle) return 0;
+    const metatype = (state.selections?.metatype as string) || "human";
+    const modifier = lifestyleModifiers[metatype] || 1;
+    return Math.floor(lifestyle.monthlyCost * modifier);
+  }, [lifestyle, state.selections?.metatype, lifestyleModifiers]);
+
+  const augmentationTotal = useMemo(() => {
+    return (
+      cyberwareItems.reduce((sum, item) => sum + item.cost, 0) +
+      biowareItems.reduce((sum, item) => sum + item.cost, 0)
+    );
+  }, [cyberwareItems, biowareItems]);
+
+  const essenceLoss = useMemo(() => {
+    const cyberwareEssence = cyberwareItems.reduce(
+      (sum, item) => sum + item.essenceCost,
+      0
+    );
+    const biowareEssence = biowareItems.reduce(
+      (sum, item) => sum + item.essenceCost,
+      0
+    );
+    return Math.round((cyberwareEssence + biowareEssence) * 100) / 100;
+  }, [cyberwareItems, biowareItems]);
+
   // Navigation handlers
   const goToStep = useCallback((stepIndex: number) => {
     if (stepIndex >= 0 && stepIndex < steps.length) {
@@ -506,6 +558,62 @@ export function CreationWizard({ onCancel, onComplete }: CreationWizardProps) {
       updatedAt: new Date().toISOString(),
     }));
   }, []);
+
+  // Cart removal callbacks
+  const handleRemoveGear = useCallback(
+    (index: number) => {
+      const updatedGear = gearItems.filter((_, i) => i !== index);
+      updateState({
+        selections: {
+          ...state.selections,
+          gear: updatedGear,
+        },
+      });
+    },
+    [gearItems, state.selections, updateState]
+  );
+
+  const handleRemoveCyberware = useCallback(
+    (index: number) => {
+      const item = cyberwareItems[index];
+      const updatedCyberware = cyberwareItems.filter((_, i) => i !== index);
+      const currentNuyenSpent = (state.budgets["nuyen-spent-augmentations"] as number) || 0;
+      const currentEssenceSpent = (state.budgets["essence-spent"] as number) || 0;
+      updateState({
+        selections: {
+          ...state.selections,
+          cyberware: updatedCyberware,
+        },
+        budgets: {
+          ...state.budgets,
+          "nuyen-spent-augmentations": currentNuyenSpent - item.cost,
+          "essence-spent": currentEssenceSpent - item.essenceCost,
+        },
+      });
+    },
+    [cyberwareItems, state.selections, state.budgets, updateState]
+  );
+
+  const handleRemoveBioware = useCallback(
+    (index: number) => {
+      const item = biowareItems[index];
+      const updatedBioware = biowareItems.filter((_, i) => i !== index);
+      const currentNuyenSpent = (state.budgets["nuyen-spent-augmentations"] as number) || 0;
+      const currentEssenceSpent = (state.budgets["essence-spent"] as number) || 0;
+      updateState({
+        selections: {
+          ...state.selections,
+          bioware: updatedBioware,
+        },
+        budgets: {
+          ...state.budgets,
+          "nuyen-spent-augmentations": currentNuyenSpent - item.cost,
+          "essence-spent": currentEssenceSpent - item.essenceCost,
+        },
+      });
+    },
+    [biowareItems, state.selections, state.budgets, updateState]
+  );
 
   // Handle cancel with draft clearing option
   const handleCancel = useCallback(() => {
@@ -877,7 +985,22 @@ export function CreationWizard({ onCancel, onComplete }: CreationWizardProps) {
       </div>
 
       {/* Validation Panel */}
-      <ValidationPanel state={state} budgetValues={budgetValues} />
+      <ValidationPanel
+        state={state}
+        budgetValues={budgetValues}
+        currentStepId={currentStep?.id}
+        gearItems={gearItems}
+        lifestyle={lifestyle}
+        gearTotal={gearTotal}
+        lifestyleCost={lifestyleCost}
+        onRemoveGear={handleRemoveGear}
+        cyberwareItems={cyberwareItems}
+        biowareItems={biowareItems}
+        augmentationTotal={augmentationTotal}
+        essenceLoss={essenceLoss}
+        onRemoveCyberware={handleRemoveCyberware}
+        onRemoveBioware={handleRemoveBioware}
+      />
     </div>
   );
 }
