@@ -24,6 +24,7 @@ export {
   useSpells,
   useComplexForms,
   useContactTemplates,
+  useAdeptPowers,
 } from "./RulesetContext";
 
 export type {

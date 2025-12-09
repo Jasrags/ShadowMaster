@@ -121,6 +121,7 @@ export type RuleModuleType =
   | "lifestyle" // Lifestyle costs and features
   | "contacts" // Contact rules and costs
   | "contactTemplates" // Pre-defined contact templates
+  | "adeptPowers" // Adept magical abilities
   | "priorities" // Priority table for creation (SR5)
   | "creationMethods" // Available character creation methods
   | "advancement" // Karma advancement rules

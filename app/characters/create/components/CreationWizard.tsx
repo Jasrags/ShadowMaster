@@ -35,6 +35,7 @@ import { ContactsStep } from "./steps/ContactsStep";
 import { GearStep } from "./steps/GearStep";
 import { KarmaStep } from "./steps/KarmaStep";
 import { SpellsStep } from "./steps/SpellsStep";
+import { AdeptPowersStep } from "./steps/AdeptPowersStep";
 import { ReviewStep } from "./steps/ReviewStep";
 
 interface CreationWizardProps {
@@ -140,10 +141,17 @@ export function CreationWizard({ onCancel, onComplete }: CreationWizardProps) {
     // Check if character is magical (Magician, Mystic Adept, or Aspected Mage)
     const isMagical = ["magician", "mystic-adept", "aspected-mage"].includes(magicPath);
 
+    // Check if character can use adept powers
+    const isAdept = ["adept", "mystic-adept"].includes(magicPath);
+
     return rawSteps.filter((step) => {
       // Hide Spells step for mundane characters and technomancers
       // (Technomancers use Complex Forms which are currently in KarmaStep)
       if (step.id === "spells" && !isMagical) {
+        return false;
+      }
+      // Hide Adept Powers step for non-adepts
+      if (step.id === "adept-powers" && !isAdept) {
         return false;
       }
       return true;
@@ -905,6 +913,8 @@ export function CreationWizard({ onCancel, onComplete }: CreationWizardProps) {
         return <GearStep {...stepProps} />;
       case "spells":
         return <SpellsStep {...stepProps} />;
+      case "adept-powers":
+        return <AdeptPowersStep {...stepProps} />;
       case "karma":
         return <KarmaStep {...stepProps} />;
       case "review":

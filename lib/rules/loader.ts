@@ -817,3 +817,36 @@ export function extractContactTemplates(ruleset: LoadedRuleset): ContactTemplate
   const module = extractModule<{ templates: ContactTemplateData[] }>(ruleset, "contactTemplates");
   return module?.templates || [];
 }
+
+// =============================================================================
+// ADEPT POWER DATA TYPES AND LOADERS
+// =============================================================================
+
+/**
+ * Adept power catalog item from ruleset data
+ */
+export interface AdeptPowerCatalogItem {
+  id: string;
+  name: string;
+  cost: number | null;
+  costType: "fixed" | "perLevel" | "table";
+  maxLevel?: number;
+  activation?: "free" | "simple" | "complex" | "interrupt";
+  description: string;
+  requiresSkill?: boolean;
+  validSkills?: string[];
+  requiresAttribute?: boolean;
+  validAttributes?: string[];
+  requiresLimit?: boolean;
+  validLimits?: string[];
+  levels?: Array<{ level: number; cost: number; bonus: string }>;
+  variants?: Array<{ id: string; name: string; bonus?: string }>;
+}
+
+/**
+ * Load adept powers from a ruleset
+ */
+export function extractAdeptPowers(ruleset: LoadedRuleset): AdeptPowerCatalogItem[] {
+  const module = extractModule<{ powers: AdeptPowerCatalogItem[] }>(ruleset, "adeptPowers");
+  return module?.powers || [];
+}
