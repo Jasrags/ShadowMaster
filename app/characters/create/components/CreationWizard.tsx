@@ -113,7 +113,7 @@ export function CreationWizard({ onCancel, onComplete }: CreationWizardProps) {
 
   // Track if we have a draft
   const [hasDraft, setHasDraft] = useState(false);
-  
+
   // Track saving state
   const [isSaving, setIsSaving] = useState(false);
   const [saveError, setSaveError] = useState<string | null>(null);
@@ -226,7 +226,7 @@ export function CreationWizard({ onCancel, onComplete }: CreationWizardProps) {
             severity: "warning",
           });
         }
-        
+
         // Check if all special attribute points are spent
         const specialSpent = (state.budgets["special-attribute-points-spent"] as number) || 0;
         const specialTotal = budgetValues["special-attribute-points"] || 0;
@@ -275,7 +275,7 @@ export function CreationWizard({ onCancel, onComplete }: CreationWizardProps) {
             severity: "warning",
           });
         }
-        
+
         // Validate free skill allocations
         const magicPriority = state.priorities?.magic;
         const magicPath = state.selections["magical-path"] as string | undefined;
@@ -300,7 +300,7 @@ export function CreationWizard({ onCancel, onComplete }: CreationWizardProps) {
                 count: number;
                 allocated: Array<unknown>;
               }>;
-              
+
               selectedOption.freeSkills.forEach((freeSkill, index) => {
                 const allocation = freeSkillAllocations[index];
                 const allocatedCount = allocation?.allocated?.length || 0;
@@ -516,6 +516,39 @@ export function CreationWizard({ onCancel, onComplete }: CreationWizardProps) {
     return Math.round((cyberwareEssence + biowareEssence) * 100) / 100;
   }, [cyberwareItems, biowareItems]);
 
+  // Sync calculated budgets to state
+  useEffect(() => {
+    const totalNuyenSpent = gearTotal + lifestyleCost + augmentationTotal;
+
+    // Check if values have changed to avoid loops
+    const currentNuyenSpent = (state.budgets["nuyen-spent"] as number) || 0;
+    const currentEssenceSpent = (state.budgets["essence-spent"] as number) || 0;
+    const currentGearSpent = (state.budgets["nuyen-spent-gear"] as number) || 0;
+    const currentAugSpent = (state.budgets["nuyen-spent-augmentations"] as number) || 0;
+    const currentLifestyleSpent = (state.budgets["nuyen-spent-lifestyle"] as number) || 0;
+
+    if (
+      totalNuyenSpent !== currentNuyenSpent ||
+      essenceLoss !== currentEssenceSpent ||
+      gearTotal !== currentGearSpent ||
+      augmentationTotal !== currentAugSpent ||
+      lifestyleCost !== currentLifestyleSpent
+    ) {
+      setState((prev) => ({
+        ...prev,
+        budgets: {
+          ...prev.budgets,
+          "nuyen-spent": totalNuyenSpent,
+          "nuyen-spent-gear": gearTotal,
+          "nuyen-spent-augmentations": augmentationTotal,
+          "nuyen-spent-lifestyle": lifestyleCost,
+          "essence-spent": essenceLoss,
+        },
+        updatedAt: new Date().toISOString(),
+      }));
+    }
+  }, [gearTotal, lifestyleCost, augmentationTotal, essenceLoss, state.budgets]);
+
   // Navigation handlers
   const goToStep = useCallback((stepIndex: number) => {
     if (stepIndex >= 0 && stepIndex < steps.length) {
@@ -584,11 +617,6 @@ export function CreationWizard({ onCancel, onComplete }: CreationWizardProps) {
           ...state.selections,
           cyberware: updatedCyberware,
         },
-        budgets: {
-          ...state.budgets,
-          "nuyen-spent-augmentations": currentNuyenSpent - item.cost,
-          "essence-spent": currentEssenceSpent - item.essenceCost,
-        },
       });
     },
     [cyberwareItems, state.selections, state.budgets, updateState]
@@ -604,11 +632,6 @@ export function CreationWizard({ onCancel, onComplete }: CreationWizardProps) {
         selections: {
           ...state.selections,
           bioware: updatedBioware,
-        },
-        budgets: {
-          ...state.budgets,
-          "nuyen-spent-augmentations": currentNuyenSpent - item.cost,
-          "essence-spent": currentEssenceSpent - item.essenceCost,
         },
       });
     },
@@ -698,12 +721,12 @@ export function CreationWizard({ onCancel, onComplete }: CreationWizardProps) {
       const selectedMagicPath = (state.selections["magical-path"] as string) || "mundane";
       const magicPriority = state.priorities?.magic;
       const allocatedSpecialAttrs = (state.selections.specialAttributes || {}) as Record<string, number>;
-      
+
       // Calculate edge from metatype minimum + allocated points
       const edgeData = selectedMetatype?.attributes?.edge;
       const edgeMin = edgeData && "min" in edgeData ? edgeData.min : 1;
       const edgeValue = edgeMin + (allocatedSpecialAttrs.edge || 0);
-      
+
       // Get magic/resonance base values from priority table
       let magicBase = 0;
       let resonanceBase = 0;
@@ -717,7 +740,7 @@ export function CreationWizard({ onCancel, onComplete }: CreationWizardProps) {
           resonanceBase = option.resonanceRating || 0;
         }
       }
-      
+
       // Calculate final magic/resonance values
       const hasMagic = magicBase > 0;
       const hasResonance = resonanceBase > 0;
@@ -955,11 +978,10 @@ export function CreationWizard({ onCancel, onComplete }: CreationWizardProps) {
                 <Button
                   onPress={goNext}
                   isDisabled={!canProceed}
-                  className={`rounded-lg px-4 py-2 text-sm font-medium transition-colors focus:outline-none focus:ring-2 focus:ring-offset-2 ${
-                    canProceed
-                      ? "bg-emerald-600 text-white hover:bg-emerald-700 focus:ring-emerald-500"
-                      : "cursor-not-allowed bg-zinc-300 text-zinc-500 dark:bg-zinc-700 dark:text-zinc-400"
-                  }`}
+                  className={`rounded-lg px-4 py-2 text-sm font-medium transition-colors focus:outline-none focus:ring-2 focus:ring-offset-2 ${canProceed
+                    ? "bg-emerald-600 text-white hover:bg-emerald-700 focus:ring-emerald-500"
+                    : "cursor-not-allowed bg-zinc-300 text-zinc-500 dark:bg-zinc-700 dark:text-zinc-400"
+                    }`}
                 >
                   Continue
                 </Button>
@@ -970,11 +992,10 @@ export function CreationWizard({ onCancel, onComplete }: CreationWizardProps) {
                     saveCharacter(characterName);
                   }}
                   isDisabled={isSaving}
-                  className={`rounded-lg px-4 py-2 text-sm font-medium transition-colors focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:ring-offset-2 ${
-                    isSaving
-                      ? "bg-zinc-400 text-zinc-200 cursor-wait"
-                      : "bg-emerald-600 text-white hover:bg-emerald-700"
-                  }`}
+                  className={`rounded-lg px-4 py-2 text-sm font-medium transition-colors focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:ring-offset-2 ${isSaving
+                    ? "bg-zinc-400 text-zinc-200 cursor-wait"
+                    : "bg-emerald-600 text-white hover:bg-emerald-700"
+                    }`}
                 >
                   {isSaving ? "Creating..." : "Create Character"}
                 </Button>
