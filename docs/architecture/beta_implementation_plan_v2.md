@@ -142,15 +142,15 @@ This section provides a comprehensive view of the entire implementation roadmap,
 ```
 1. Priority Selection       ✅ Complete (MVP)
 2. Metatype Selection       ✅ Complete (MVP) + M0.2 enhancements pending
-3. Attributes Allocation    ✅ Complete (MVP) + M0.6 karma purchases pending
+3. Attributes Allocation    ✅ Complete (MVP) + M0.6 karma purchases completed
 4. Magic/Resonance Path     ✅ Complete (MVP) + B6 tradition enhancements pending
-5. Skills Allocation        ✅ Complete (MVP) + M0.3/M0.6 enhancements pending
+5. Skills Allocation        ✅ Complete (MVP) + M0.3 enhancements completed
 6. Qualities Selection      ✅ Complete (MVP) + M0.4 enhancements pending
 7. Augmentations           ✅ Complete (B1)
 8. Spells/Powers           🔜 M0.7 SpellsStep (magical) / B5 AdeptPowersStep (adepts)
 9. Complex Forms           🔜 B7 (technomancers only)
 10. Contacts               ✅ Complete (MVP) + M0.5 enhancements pending
-11. Gear & Resources       ✅ Complete (MVP) + M0.6 karma-to-nuyen pending
+11. Gear & Resources       ✅ Complete (MVP) + M0.6 karma-to-nuyen completed
 12. Review & Finalize      ✅ Complete (MVP)
 ```
 
@@ -163,10 +163,10 @@ This section provides a comprehensive view of the entire implementation roadmap,
 | | M0.2 | Metatype Enhancements | - | Critical | ✅ Complete |
 | | M0.3 | Skills Enhancements | - | Critical | ✅ Complete |
 | | M0.3.8 | Adept Skill Filtering Bug Fix | - | Critical | ✅ Complete |
-| | M0.3.9 | Free Skills from Priority | - | Critical | Not Started |
+| | M0.3.9 | Free Skills from Priority | - | Critical | ✅ Complete |
 | | M0.4 | Qualities Enhancements | - | Critical | 🔜 Next |
 | | M0.5 | Contacts Enhancements | - | Critical | Not Started |
-| | M0.6 | Distributed Karma Architecture | - | Critical | Not Started |
+| | M0.6 | Distributed Karma Architecture | - | Critical | ✅ Complete |
 | | M0.7 | SpellsStep Creation | - | Critical | Not Started |
 | | M0.8 | Aspected Mage Enhancements | - | Critical | ✅ Complete |
 | 2 | **B1** | **Cyberware/Bioware System** | **2-3 weeks** | **High** | ✅ **Complete** |
@@ -190,6 +190,8 @@ This section provides a comprehensive view of the entire implementation roadmap,
 | M0.3 Skills | Dec 2024 | Magical/resonance skill filtering, suggested specializations for all skills, example knowledge skills (40+) and languages (20+) with quick-add dropdowns |
 | M0.3.8 Adept Filtering | Dec 2024 | Fixed adept skill filtering to block ALL magical skill groups (both individual skills and groups) |
 | M0.8 Aspected Mage | Dec 2024 | Aspected Mage group selection (Sorcery, Conjuring, Enchanting) implemented and working |
+| M0.6 Karma Arch | Dec 2024 | Distributed karma spending, global karma budget, karma-to-nuyen conversion, 7 karma carryover limit |
+| B8.1 Gear Layout | Dec 2024 | Improved gear catalog layout, shopping cart width fixes, responsive design |
 
 ### Estimated Remaining Timeline
 
@@ -345,7 +347,7 @@ This milestone improves the skills selection experience by adding suggested spec
 | M0.3.6 | Add example language skills to ruleset data (e.g., "Or'zet", "Sperethiel", "Japanese") | Complete |
 | M0.3.7 | Ensure custom knowledge/language skill creation still works alongside examples | Complete |
 | M0.3.8 | Fix adept skill filtering bug - block ALL magical skill groups for adepts (both individual skills and skill groups) | Complete |
-| M0.3.9 | Implement free skills from priority in SkillsStep (track free skill points separately from karma-purchased) | Not Started |
+| M0.3.9 | Implement free skills from priority in SkillsStep (track free skill points separately from karma-purchased) | ✅ Complete |
 
 **Tasks JSON:**
 ```json
@@ -446,7 +448,7 @@ This milestone improves the skills selection experience by adding suggested spec
       "/app/characters/create/components/steps/SkillsStep.tsx",
       "/data/editions/sr5/core-rulebook.json"
     ],
-    "status": "Not Started",
+    "status": "Complete",
     "dependsOn": []
   }
 ]
@@ -651,12 +653,12 @@ This architectural change distributes karma spending across all relevant charact
 
 | Task | Description | Status |
 |------|-------------|--------|
-| M0.6.1 | Create karma budget tracking system (global tracker in CreationState + KarmaBudgetContext) | Not Started |
-| M0.6.2 | Define karma cost constants (Attributes: ×5, Skills: ×2, Spells: 5, etc.) | Not Started |
-| M0.6.3 | Create reusable KarmaPurchasePanel component | Not Started |
-| M0.6.4 | Integrate karma purchases into all relevant steps using KarmaPurchasePanel (AttributesStep, SkillsStep, ContactsStep, GearStep) | Not Started |
-| M0.6.5 | Refactor KarmaStep to become "Karma Summary" or merge into ReviewStep | Not Started |
-| M0.6.6 | Ensure 7 Karma max carryover validation works with distributed spending | Not Started |
+| M0.6.1 | Create karma budget tracking system (global tracker in CreationState + KarmaBudgetContext) | ✅ Complete |
+| M0.6.2 | Define karma cost constants (Attributes: ×5, Skills: ×2, Spells: 5, etc.) | ✅ Complete |
+| M0.6.3 | Create reusable KarmaPurchasePanel component | ✅ Complete |
+| M0.6.4 | Integrate karma purchases into all relevant steps using KarmaPurchasePanel (AttributesStep, SkillsStep, ContactsStep, GearStep) | ✅ Complete |
+| M0.6.5 | Refactor KarmaStep to become "Karma Summary" or merge into ReviewStep | ✅ Complete |
+| M0.6.6 | Ensure 7 Karma max carryover validation works with distributed spending | ✅ Complete |
 
 **Tasks JSON:**
 ```json
@@ -669,7 +671,7 @@ This architectural change distributes karma spending across all relevant charact
       "/lib/types/creation.ts",
       "/app/characters/create/components/CreationWizard.tsx"
     ],
-    "status": "Not Started",
+    "status": "Complete",
     "dependsOn": []
   },
   {
@@ -680,7 +682,7 @@ This architectural change distributes karma spending across all relevant charact
       "/lib/types/creation.ts",
       "/app/characters/create/components/CreationWizard.tsx"
     ],
-    "status": "Not Started",
+    "status": "Complete",
     "dependsOn": []
   },
   {
@@ -691,7 +693,7 @@ This architectural change distributes karma spending across all relevant charact
       "/lib/types/creation.ts",
       "/app/characters/create/components/CreationWizard.tsx"
     ],
-    "status": "Not Started",
+    "status": "Complete",
     "dependsOn": ["M0.6.1", "M0.6.2"]
   },
   {
@@ -702,7 +704,7 @@ This architectural change distributes karma spending across all relevant charact
       "/lib/types/creation.ts",
       "/app/characters/create/components/CreationWizard.tsx"
     ],
-    "status": "Not Started",
+    "status": "Complete",
     "dependsOn": ["M0.6.3"]
   },
   {
@@ -713,7 +715,7 @@ This architectural change distributes karma spending across all relevant charact
       "/lib/types/creation.ts",
       "/app/characters/create/components/CreationWizard.tsx"
     ],
-    "status": "Not Started",
+    "status": "Complete",
     "dependsOn": ["M0.6.4"]
   },
   {
@@ -724,7 +726,7 @@ This architectural change distributes karma spending across all relevant charact
       "/lib/types/creation.ts",
       "/app/characters/create/components/CreationWizard.tsx"
     ],
-    "status": "Not Started",
+    "status": "Complete",
     "dependsOn": ["M0.6.1"]
   }
 ]
@@ -2787,9 +2789,9 @@ This milestone addresses desktop layout issues including sidebar width managemen
 | B8.1.1 | Make sidebar collapsible to increase main content width | Not Started |
 | B8.1.2 | Add collapse/expand toggle button to sidebar | Not Started |
 | B8.1.3 | Persist sidebar collapse state in localStorage | Not Started |
-| B8.1.4 | Fix GearStep shopping cart width - give gear catalog more horizontal space | Not Started |
-| B8.1.5 | Consider side-by-side layout for gear catalog and cart on wide screens | Not Started |
-| B8.1.6 | Add responsive breakpoints for cart layout (stack on mobile, side-by-side on desktop) | Not Started |
+| B8.1.4 | Fix GearStep shopping cart width - give gear catalog more horizontal space | ✅ Complete |
+| B8.1.5 | Consider side-by-side layout for gear catalog and cart on wide screens | ✅ Complete |
+| B8.1.6 | Add responsive breakpoints for cart layout (stack on mobile, side-by-side on desktop) | ✅ Complete |
 
 **Tasks JSON:**
 ```json
@@ -2832,7 +2834,7 @@ This milestone addresses desktop layout issues including sidebar width managemen
     "files": [
       "/app/characters/create/components/steps/GearStep.tsx"
     ],
-    "status": "Not Started",
+    "status": "Complete",
     "dependsOn": []
   },
   {
@@ -2842,7 +2844,7 @@ This milestone addresses desktop layout issues including sidebar width managemen
     "files": [
       "/app/characters/create/components/steps/GearStep.tsx"
     ],
-    "status": "Not Started",
+    "status": "Complete",
     "dependsOn": ["B8.1.4"]
   },
   {
@@ -2852,7 +2854,7 @@ This milestone addresses desktop layout issues including sidebar width managemen
     "files": [
       "/app/characters/create/components/steps/GearStep.tsx"
     ],
-    "status": "Not Started",
+    "status": "Complete",
     "dependsOn": ["B8.1.5"]
   }
 ]
