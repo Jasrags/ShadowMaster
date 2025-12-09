@@ -302,9 +302,11 @@ export interface LanguageSkill {
 
 export interface AdeptPower {
   id: string;
+  catalogId: string;      // Reference to catalog power ID
   name: string;
-  rating?: number;
-  powerPointCost: number;
+  rating?: number;        // For leveled powers
+  powerPointCost: number; // Actual PP spent
+  specification?: string; // For skill/attribute-specific powers (e.g., "Agility" or "Pistols")
 }
 
 export interface BoundSpirit {

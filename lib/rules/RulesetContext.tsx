@@ -22,7 +22,7 @@ import type {
   ID,
   ContactTemplateData,
 } from "../types";
-import { QualityData } from "./loader";
+import { QualityData, AdeptPowerCatalogItem } from "./loader";
 export type { QualityData };
 
 // =============================================================================
@@ -356,6 +356,7 @@ export interface RulesetData {
   bioware: BiowareCatalogData | null;
   augmentationRules: AugmentationRulesData;
   contactTemplates: ContactTemplateData[];
+  adeptPowers: AdeptPowerCatalogItem[];
 }
 
 /**
@@ -405,6 +406,7 @@ const defaultData: RulesetData = {
   bioware: null,
   augmentationRules: defaultAugmentationRules,
   contactTemplates: [],
+  adeptPowers: [],
 };
 
 const defaultState: RulesetContextState = {
@@ -484,6 +486,7 @@ export function RulesetProvider({
             bioware: extractedData.bioware || null,
             augmentationRules: extractedData.augmentationRules || defaultAugmentationRules,
             contactTemplates: extractedData.contactTemplates || [],
+            adeptPowers: extractedData.adeptPowers || [],
           }
           : defaultData;
 
@@ -1017,4 +1020,12 @@ export function checkAttributeBonusLimit(
 export function useContactTemplates(): ContactTemplateData[] {
   const { data } = useRuleset();
   return data.contactTemplates;
+}
+
+/**
+ * Hook to get adept powers catalog
+ */
+export function useAdeptPowers(): AdeptPowerCatalogItem[] {
+  const { data } = useRuleset();
+  return data.adeptPowers;
 }

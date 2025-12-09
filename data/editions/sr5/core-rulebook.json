@@ -135,6 +135,288 @@
         ]
       }
     },
+    "adeptPowers": {
+      "mergeStrategy": "replace",
+      "payload": {
+        "powers": [
+          {
+            "id": "adrenaline-boost",
+            "name": "Adrenaline Boost",
+            "cost": 0.25,
+            "costType": "perLevel",
+            "maxLevel": 4,
+            "activation": "free",
+            "description": "+2 Initiative Score per level for the current Combat Turn. Take Drain equal to levels at beginning of next turn."
+          },
+          {
+            "id": "astral-perception",
+            "name": "Astral Perception",
+            "cost": 1,
+            "costType": "fixed",
+            "activation": "simple",
+            "description": "See into the astral plane. Dual-natured while active, can attack astral forms."
+          },
+          {
+            "id": "attribute-boost",
+            "name": "Attribute Boost",
+            "cost": 0.25,
+            "costType": "perLevel",
+            "maxLevel": 4,
+            "activation": "simple",
+            "requiresAttribute": true,
+            "validAttributes": [
+              "body",
+              "agility",
+              "reaction",
+              "strength"
+            ],
+            "description": "Boost a Physical Attribute. Make Magic + Rating Test; each hit boosts attribute by 1. Lasts 2x hits Combat Turns. Drain equal to level afterward."
+          },
+          {
+            "id": "combat-sense",
+            "name": "Combat Sense",
+            "cost": 0.5,
+            "costType": "perLevel",
+            "maxLevel": 6,
+            "description": "+1 defense pool per level against ranged/melee attacks. Always get Perception Test before surprise."
+          },
+          {
+            "id": "critical-strike",
+            "name": "Critical Strike",
+            "cost": 0.5,
+            "costType": "fixed",
+            "requiresSkill": true,
+            "validSkills": [
+              "unarmed-combat",
+              "clubs",
+              "blades",
+              "astral-combat"
+            ],
+            "description": "+1 DV with the selected melee skill. May purchase multiple times for different skills."
+          },
+          {
+            "id": "danger-sense",
+            "name": "Danger Sense",
+            "cost": 0.25,
+            "costType": "perLevel",
+            "maxLevel": 6,
+            "description": "+1 die per level on Surprise Tests."
+          },
+          {
+            "id": "enhanced-perception",
+            "name": "Enhanced Perception",
+            "cost": 0.5,
+            "costType": "perLevel",
+            "maxLevel": 6,
+            "description": "+1 die per level to all Perception and Assensing Tests."
+          },
+          {
+            "id": "enhanced-accuracy",
+            "name": "Enhanced Accuracy",
+            "cost": 0.25,
+            "costType": "fixed",
+            "requiresSkill": true,
+            "validSkills": [
+              "pistols",
+              "automatics",
+              "longarms",
+              "heavy-weapons",
+              "clubs",
+              "blades",
+              "throwing-weapons",
+              "archery"
+            ],
+            "description": "+1 Accuracy with the selected Combat Skill. Cannot use with Unarmed Combat."
+          },
+          {
+            "id": "improved-ability",
+            "name": "Improved Ability",
+            "cost": 0.5,
+            "costType": "perLevel",
+            "maxLevel": 6,
+            "requiresSkill": true,
+            "description": "+1 skill rating per level. Max improvement = current skill × 1.5 (round up). Must know the skill."
+          },
+          {
+            "id": "improved-physical-attribute",
+            "name": "Improved Physical Attribute",
+            "cost": 1,
+            "costType": "perLevel",
+            "maxLevel": 4,
+            "requiresAttribute": true,
+            "validAttributes": [
+              "body",
+              "agility",
+              "reaction",
+              "strength"
+            ],
+            "description": "Permanently increase a Physical Attribute by 1 per level, up to augmented maximum."
+          },
+          {
+            "id": "improved-potential",
+            "name": "Improved Potential",
+            "cost": 0.5,
+            "costType": "perLevel",
+            "maxLevel": 2,
+            "requiresLimit": true,
+            "validLimits": [
+              "physical",
+              "mental",
+              "social"
+            ],
+            "description": "Raise one inherent limit by 1 per level. May purchase once per limit."
+          },
+          {
+            "id": "improved-reflexes",
+            "name": "Improved Reflexes",
+            "cost": null,
+            "costType": "table",
+            "maxLevel": 3,
+            "levels": [
+              {
+                "level": 1,
+                "cost": 1.5,
+                "bonus": "+1 REA, +1D6 Initiative"
+              },
+              {
+                "level": 2,
+                "cost": 2.5,
+                "bonus": "+2 REA, +2D6 Initiative"
+              },
+              {
+                "level": 3,
+                "cost": 3.5,
+                "bonus": "+3 REA, +3D6 Initiative"
+              }
+            ],
+            "description": "Increase Reaction and Initiative Dice. Cannot combine with other Initiative enhancements."
+          },
+          {
+            "id": "improved-sense",
+            "name": "Improved Sense",
+            "cost": 0.25,
+            "costType": "fixed",
+            "variants": [
+              {
+                "id": "low-light-vision",
+                "name": "Low-Light Vision"
+              },
+              {
+                "id": "thermographic-vision",
+                "name": "Thermographic Vision"
+              },
+              {
+                "id": "direction-sense",
+                "name": "Direction Sense",
+                "bonus": "+2 Navigation"
+              },
+              {
+                "id": "improved-tactile",
+                "name": "Improved Tactile",
+                "bonus": "+2 tactile Perception"
+              },
+              {
+                "id": "perfect-pitch",
+                "name": "Perfect Pitch"
+              },
+              {
+                "id": "human-scale",
+                "name": "Human Scale"
+              }
+            ],
+            "description": "Gain a sensory enhancement not normal for your metatype."
+          },
+          {
+            "id": "killing-hands",
+            "name": "Killing Hands",
+            "cost": 0.5,
+            "costType": "fixed",
+            "activation": "free",
+            "description": "Unarmed attacks may cause Physical damage. Attacks are magical and bypass Immunity to Normal Weapons."
+          },
+          {
+            "id": "kinesics",
+            "name": "Kinesics",
+            "cost": 0.25,
+            "costType": "perLevel",
+            "maxLevel": 4,
+            "description": "+1 per level to resist Social Tests and tests to read emotions (Judge Intentions, assensing, etc.)."
+          },
+          {
+            "id": "light-body",
+            "name": "Light Body",
+            "cost": 0.25,
+            "costType": "perLevel",
+            "maxLevel": 4,
+            "description": "Add level to Agility for jump distance. +1 die per level to Gymnastics for jumps. Reduce fall damage by level meters."
+          },
+          {
+            "id": "missile-parry",
+            "name": "Missile Parry",
+            "cost": 0.25,
+            "costType": "perLevel",
+            "maxLevel": 4,
+            "activation": "interrupt",
+            "description": "+1 defense die per level vs slow projectiles (arrows, knives, grenades). Net hits = catch missile."
+          },
+          {
+            "id": "mystic-armor",
+            "name": "Mystic Armor",
+            "cost": 0.5,
+            "costType": "perLevel",
+            "maxLevel": 6,
+            "description": "+1 Armor per level. Stacks with other armor, no encumbrance. Protects in astral combat."
+          },
+          {
+            "id": "natural-immunity",
+            "name": "Natural Immunity",
+            "cost": 0.25,
+            "costType": "perLevel",
+            "maxLevel": 4,
+            "description": "+1 die per level to resist toxins and disease."
+          },
+          {
+            "id": "pain-resistance",
+            "name": "Pain Resistance",
+            "cost": 0.5,
+            "costType": "perLevel",
+            "maxLevel": 4,
+            "description": "Wound modifiers start 1 box later per level. +2 dice per level to resist torture/pain."
+          },
+          {
+            "id": "spell-resistance",
+            "name": "Spell Resistance",
+            "cost": 0.5,
+            "costType": "perLevel",
+            "maxLevel": 6,
+            "description": "+1 die per level to resist spells, rituals, preparations, and Innate Spell critter powers."
+          },
+          {
+            "id": "traceless-walk",
+            "name": "Traceless Walk",
+            "cost": 1,
+            "costType": "fixed",
+            "description": "Leave no visible traces. -4 hearing Perception to detect. Don't trip pressure/vibration sensors. -2 to Track Tests."
+          },
+          {
+            "id": "voice-control",
+            "name": "Voice Control",
+            "cost": 0.5,
+            "costType": "perLevel",
+            "maxLevel": 3,
+            "description": "Control voice pitch, tone, volume. +level to Impersonation. +level to Social limit."
+          },
+          {
+            "id": "wall-running",
+            "name": "Wall Running",
+            "cost": 0.5,
+            "costType": "fixed",
+            "activation": "simple",
+            "description": "Run up vertical surfaces. Running + Strength [Magic] Test = meters climbed per action."
+          }
+        ]
+      }
+    },
     "metatypes": {
       "mergeStrategy": "replace",
       "payload": {
@@ -7950,6 +8232,16 @@
                 "payload": {
                   "type": "custom",
                   "target": "spells"
+                }
+              },
+              {
+                "id": "adept-powers",
+                "title": "Adept Powers",
+                "type": "custom",
+                "description": "Select adept powers using your Power Points (equal to Magic for Adepts).",
+                "payload": {
+                  "type": "custom",
+                  "target": "adeptPowers"
                 }
               },
               {
