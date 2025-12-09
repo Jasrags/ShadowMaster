@@ -23,6 +23,7 @@ export {
   useRulesetStatus,
   useSpells,
   useComplexForms,
+  useContactTemplates,
 } from "./RulesetContext";
 
 export type {

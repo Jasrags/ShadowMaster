@@ -120,6 +120,7 @@ export type RuleModuleType =
   | "vehicles" // Vehicles and drones
   | "lifestyle" // Lifestyle costs and features
   | "contacts" // Contact rules and costs
+  | "contactTemplates" // Pre-defined contact templates
   | "priorities" // Priority table for creation (SR5)
   | "creationMethods" // Available character creation methods
   | "advancement" // Karma advancement rules

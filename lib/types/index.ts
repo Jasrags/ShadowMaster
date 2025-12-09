@@ -54,6 +54,7 @@ export type {
   UpdateCharacterRequest,
   CharacterResponse,
   CharactersListResponse,
+  ContactTemplateData,
 } from "./character";
 
 // Cyberware/Bioware grade multipliers and modifiers
