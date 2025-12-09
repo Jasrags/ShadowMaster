@@ -1,10 +1,26 @@
 "use client";
 
-import type { CreationState } from "@/lib/types";
+import type { CreationState, GearItem, CyberwareItem, BiowareItem, Lifestyle } from "@/lib/types";
+import { ShoppingCartSection } from "./ShoppingCartSection";
 
 interface ValidationPanelProps {
   state: CreationState;
   budgetValues: Record<string, number>;
+  currentStepId?: string;
+  
+  // Cart props
+  gearItems?: GearItem[];
+  lifestyle?: Lifestyle | null;
+  gearTotal?: number;
+  lifestyleCost?: number;
+  onRemoveGear?: (index: number) => void;
+  
+  cyberwareItems?: CyberwareItem[];
+  biowareItems?: BiowareItem[];
+  augmentationTotal?: number;
+  essenceLoss?: number;
+  onRemoveCyberware?: (index: number) => void;
+  onRemoveBioware?: (index: number) => void;
 }
 
 function formatCurrency(value: number): string {
@@ -18,7 +34,31 @@ function formatCurrency(value: number): string {
     .replace("$", "¥");
 }
 
-export function ValidationPanel({ state, budgetValues }: ValidationPanelProps) {
+export function ValidationPanel({
+  state,
+  budgetValues,
+  currentStepId,
+  gearItems,
+  lifestyle,
+  gearTotal,
+  lifestyleCost,
+  onRemoveGear,
+  cyberwareItems,
+  biowareItems,
+  augmentationTotal,
+  essenceLoss,
+  onRemoveCyberware,
+  onRemoveBioware,
+}: ValidationPanelProps) {
+  // Determine cart type based on current step
+  const cartType =
+    currentStepId === "gear"
+      ? ("gear" as const)
+      : currentStepId === "augmentations"
+      ? ("augmentations" as const)
+      : null;
+
+  const isCartVisible = cartType !== null;
   // Calculate spent values from state budgets
   const attrSpent = (state.budgets["attribute-points-spent"] as number) || 0;
   const skillSpent = (state.budgets["skill-points-spent"] as number) || 0;
@@ -158,6 +198,23 @@ export function ValidationPanel({ state, budgetValues }: ValidationPanelProps) {
           </div>
         </div>
       )}
+
+      {/* Shopping Cart Section */}
+      <ShoppingCartSection
+        cartType={cartType}
+        isVisible={isCartVisible}
+        gearItems={gearItems}
+        lifestyle={lifestyle}
+        gearTotal={gearTotal}
+        lifestyleCost={lifestyleCost}
+        onRemoveGear={onRemoveGear}
+        cyberwareItems={cyberwareItems}
+        biowareItems={biowareItems}
+        augmentationTotal={augmentationTotal}
+        essenceLoss={essenceLoss}
+        onRemoveCyberware={onRemoveCyberware}
+        onRemoveBioware={onRemoveBioware}
+      />
 
       {/* Validation Messages */}
       {(hasErrors || hasWarnings) && (

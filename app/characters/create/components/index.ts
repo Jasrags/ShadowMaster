@@ -3,6 +3,7 @@ export { EditionSelector } from "./EditionSelector";
 export { StepperSidebar } from "./StepperSidebar";
 export { ValidationPanel } from "./ValidationPanel";
 export { SpecialAttributeAllocator } from "./SpecialAttributeAllocator";
+export { ShoppingCartSection } from "./ShoppingCartSection";
 
 // Step components
 export { PriorityStep } from "./steps/PriorityStep";

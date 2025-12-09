@@ -129,10 +129,11 @@ export function AugmentationsStep({ state, updateState, budgetValues }: StepProp
   // Calculate nuyen from budget (integrating with gear)
   const nuyenBudget = budgetValues["nuyen"] || 0;
   const gearSpent = (state.budgets?.["nuyen-spent-gear"] as number) || 0;
+  const lifestyleSpent = (state.budgets?.["nuyen-spent-lifestyle"] as number) || 0;
   const cyberwareSpent = selectedCyberware.reduce((sum, item) => sum + item.cost, 0);
   const biowareSpent = selectedBioware.reduce((sum, item) => sum + item.cost, 0);
   const augmentationSpent = cyberwareSpent + biowareSpent;
-  const totalNuyenSpent = gearSpent + augmentationSpent;
+  const totalNuyenSpent = gearSpent + lifestyleSpent + augmentationSpent;
   const remainingNuyen = nuyenBudget - totalNuyenSpent;
 
   // Calculate attribute bonuses from all augmentations
@@ -393,11 +394,6 @@ export function AugmentationsStep({ state, updateState, budgetValues }: StepProp
           ...state.selections,
           cyberware: updatedCyberware,
         },
-        budgets: {
-          ...state.budgets,
-          "nuyen-spent-augmentations": augmentationSpent + cost,
-          "essence-spent": totalEssenceLoss + essenceCost,
-        },
       });
     },
     [
@@ -477,11 +473,6 @@ export function AugmentationsStep({ state, updateState, budgetValues }: StepProp
           ...state.selections,
           bioware: updatedBioware,
         },
-        budgets: {
-          ...state.budgets,
-          "nuyen-spent-augmentations": augmentationSpent + cost,
-          "essence-spent": totalEssenceLoss + essenceCost,
-        },
       });
     },
     [
@@ -496,61 +487,6 @@ export function AugmentationsStep({ state, updateState, budgetValues }: StepProp
     ]
   );
 
-  // Remove cyberware
-  const removeCyberware = useCallback(
-    (index: number) => {
-      const item = selectedCyberware[index];
-      const updatedCyberware = selectedCyberware.filter((_, i) => i !== index);
-
-      updateState({
-        selections: {
-          ...state.selections,
-          cyberware: updatedCyberware,
-        },
-        budgets: {
-          ...state.budgets,
-          "nuyen-spent-augmentations": augmentationSpent - item.cost,
-          "essence-spent": totalEssenceLoss - item.essenceCost,
-        },
-      });
-    },
-    [
-      selectedCyberware,
-      state.selections,
-      state.budgets,
-      updateState,
-      augmentationSpent,
-      totalEssenceLoss,
-    ]
-  );
-
-  // Remove bioware
-  const removeBioware = useCallback(
-    (index: number) => {
-      const item = selectedBioware[index];
-      const updatedBioware = selectedBioware.filter((_, i) => i !== index);
-
-      updateState({
-        selections: {
-          ...state.selections,
-          bioware: updatedBioware,
-        },
-        budgets: {
-          ...state.budgets,
-          "nuyen-spent-augmentations": augmentationSpent - item.cost,
-          "essence-spent": totalEssenceLoss - item.essenceCost,
-        },
-      });
-    },
-    [
-      selectedBioware,
-      state.selections,
-      state.budgets,
-      updateState,
-      augmentationSpent,
-      totalEssenceLoss,
-    ]
-  );
 
   // Render cyberware item
   const renderCyberwareItem = (item: CyberwareCatalogItemData) => {
@@ -615,13 +551,12 @@ export function AugmentationsStep({ state, updateState, budgetValues }: StepProp
         <td className="px-3 py-2 text-right">¥{formatCurrency(cost)}</td>
         <td className="px-3 py-2 text-center">
           <span
-            className={`${
-              item.restricted
+            className={`${item.restricted
                 ? "text-amber-600 dark:text-amber-400"
                 : item.forbidden
-                ? "text-red-600 dark:text-red-400"
-                : ""
-            }`}
+                  ? "text-red-600 dark:text-red-400"
+                  : ""
+              }`}
           >
             {getAvailabilityDisplay(availability, item.restricted, item.forbidden)}
           </span>
@@ -646,11 +581,10 @@ export function AugmentationsStep({ state, updateState, budgetValues }: StepProp
             onClick={() => addCyberware(item, grade, item.hasRating ? 1 : undefined)}
             disabled={!check.allowed}
             title={check.reason}
-            className={`rounded px-2 py-1 text-xs font-medium transition-colors ${
-              check.allowed
+            className={`rounded px-2 py-1 text-xs font-medium transition-colors ${check.allowed
                 ? "bg-emerald-500 text-white hover:bg-emerald-600"
                 : "cursor-not-allowed bg-zinc-200 text-zinc-400 dark:bg-zinc-700"
-            }`}
+              }`}
           >
             Add
           </button>
@@ -717,13 +651,12 @@ export function AugmentationsStep({ state, updateState, budgetValues }: StepProp
         <td className="px-3 py-2 text-right">¥{formatCurrency(cost)}</td>
         <td className="px-3 py-2 text-center">
           <span
-            className={`${
-              item.restricted
+            className={`${item.restricted
                 ? "text-amber-600 dark:text-amber-400"
                 : item.forbidden
-                ? "text-red-600 dark:text-red-400"
-                : ""
-            }`}
+                  ? "text-red-600 dark:text-red-400"
+                  : ""
+              }`}
           >
             {getAvailabilityDisplay(availability, item.restricted, item.forbidden)}
           </span>
@@ -748,11 +681,10 @@ export function AugmentationsStep({ state, updateState, budgetValues }: StepProp
             onClick={() => addBioware(item, grade, item.hasRating ? 1 : undefined)}
             disabled={!check.allowed}
             title={check.reason}
-            className={`rounded px-2 py-1 text-xs font-medium transition-colors ${
-              check.allowed
+            className={`rounded px-2 py-1 text-xs font-medium transition-colors ${check.allowed
                 ? "bg-emerald-500 text-white hover:bg-emerald-600"
                 : "cursor-not-allowed bg-zinc-200 text-zinc-400 dark:bg-zinc-700"
-            }`}
+              }`}
           >
             Add
           </button>
@@ -777,26 +709,24 @@ export function AugmentationsStep({ state, updateState, budgetValues }: StepProp
           <div>
             <p className="text-xs text-zinc-500 dark:text-zinc-400">Essence</p>
             <p
-              className={`text-lg font-semibold ${
-                remainingEssence < 1
+              className={`text-lg font-semibold ${remainingEssence < 1
                   ? "text-red-600 dark:text-red-400"
                   : remainingEssence < 3
-                  ? "text-amber-600 dark:text-amber-400"
-                  : "text-emerald-600 dark:text-emerald-400"
-              }`}
+                    ? "text-amber-600 dark:text-amber-400"
+                    : "text-emerald-600 dark:text-emerald-400"
+                }`}
             >
               {formatEssence(remainingEssence)} / {maxEssence}
             </p>
             {/* Essence bar */}
             <div className="mt-1 h-2 w-full overflow-hidden rounded-full bg-zinc-200 dark:bg-zinc-700">
               <div
-                className={`h-full transition-all ${
-                  remainingEssence < 1
+                className={`h-full transition-all ${remainingEssence < 1
                     ? "bg-red-500"
                     : remainingEssence < 3
-                    ? "bg-amber-500"
-                    : "bg-emerald-500"
-                }`}
+                      ? "bg-amber-500"
+                      : "bg-emerald-500"
+                  }`}
                 style={{ width: `${(remainingEssence / maxEssence) * 100}%` }}
               />
             </div>
@@ -804,11 +734,10 @@ export function AugmentationsStep({ state, updateState, budgetValues }: StepProp
           <div>
             <p className="text-xs text-zinc-500 dark:text-zinc-400">Nuyen Remaining</p>
             <p
-              className={`text-lg font-semibold ${
-                remainingNuyen < 0
+              className={`text-lg font-semibold ${remainingNuyen < 0
                   ? "text-red-600 dark:text-red-400"
                   : "text-emerald-600 dark:text-emerald-400"
-              }`}
+                }`}
             >
               ¥{formatCurrency(remainingNuyen)}
             </p>
@@ -825,9 +754,8 @@ export function AugmentationsStep({ state, updateState, budgetValues }: StepProp
                 {isTechnomancer ? "Resonance" : "Magic"} Loss
               </p>
               <p
-                className={`text-lg font-semibold ${
-                  magicLoss > 0 ? "text-red-600 dark:text-red-400" : "text-zinc-700 dark:text-zinc-300"
-                }`}
+                className={`text-lg font-semibold ${magicLoss > 0 ? "text-red-600 dark:text-red-400" : "text-zinc-700 dark:text-zinc-300"
+                  }`}
               >
                 -{magicLoss}
               </p>
@@ -858,11 +786,10 @@ export function AugmentationsStep({ state, updateState, budgetValues }: StepProp
             {Object.entries(attributeBonuses).map(([attr, bonus]) => (
               <span
                 key={attr}
-                className={`rounded-full px-2 py-0.5 text-xs font-medium ${
-                  bonus >= augmentationRules.maxAttributeBonus
+                className={`rounded-full px-2 py-0.5 text-xs font-medium ${bonus >= augmentationRules.maxAttributeBonus
                     ? "bg-amber-100 text-amber-800 dark:bg-amber-900/50 dark:text-amber-200"
                     : "bg-blue-100 text-blue-800 dark:bg-blue-900/50 dark:text-blue-200"
-                }`}
+                  }`}
               >
                 +{bonus} {attr.charAt(0).toUpperCase() + attr.slice(1)}
                 {bonus >= augmentationRules.maxAttributeBonus && " (max)"}
@@ -872,240 +799,116 @@ export function AugmentationsStep({ state, updateState, budgetValues }: StepProp
         </div>
       )}
 
-      {/* Main Content Grid */}
-      <div className="grid gap-4 lg:grid-cols-3">
-        {/* Catalog Column */}
-        <div className="lg:col-span-2 space-y-4">
-          {/* Tabs */}
-          <div className="flex gap-2 border-b border-zinc-200 dark:border-zinc-700">
-            <button
-              onClick={() => setActiveTab("cyberware")}
-              className={`border-b-2 px-4 py-2 text-sm font-medium transition-colors ${
-                activeTab === "cyberware"
-                  ? "border-cyan-500 text-cyan-600 dark:text-cyan-400"
-                  : "border-transparent text-zinc-500 hover:text-zinc-700 dark:text-zinc-400 dark:hover:text-zinc-200"
+      {/* Main Content */}
+      <div className="space-y-4">
+        {/* Tabs */}
+        <div className="flex gap-2 border-b border-zinc-200 dark:border-zinc-700">
+          <button
+            onClick={() => setActiveTab("cyberware")}
+            className={`border-b-2 px-4 py-2 text-sm font-medium transition-colors ${activeTab === "cyberware"
+                ? "border-cyan-500 text-cyan-600 dark:text-cyan-400"
+                : "border-transparent text-zinc-500 hover:text-zinc-700 dark:text-zinc-400 dark:hover:text-zinc-200"
               }`}
-            >
-              Cyberware ({filteredCyberware.length})
-              {selectedCyberware.length > 0 && (
-                <span className="ml-2 rounded-full bg-cyan-100 px-2 py-0.5 text-xs text-cyan-700 dark:bg-cyan-900/50 dark:text-cyan-300">
-                  {selectedCyberware.length}
-                </span>
-              )}
-            </button>
-            <button
-              onClick={() => setActiveTab("bioware")}
-              className={`border-b-2 px-4 py-2 text-sm font-medium transition-colors ${
-                activeTab === "bioware"
-                  ? "border-green-500 text-green-600 dark:text-green-400"
-                  : "border-transparent text-zinc-500 hover:text-zinc-700 dark:text-zinc-400 dark:hover:text-zinc-200"
+          >
+            Cyberware ({filteredCyberware.length})
+            {selectedCyberware.length > 0 && (
+              <span className="ml-2 rounded-full bg-cyan-100 px-2 py-0.5 text-xs text-cyan-700 dark:bg-cyan-900/50 dark:text-cyan-300">
+                {selectedCyberware.length}
+              </span>
+            )}
+          </button>
+          <button
+            onClick={() => setActiveTab("bioware")}
+            className={`border-b-2 px-4 py-2 text-sm font-medium transition-colors ${activeTab === "bioware"
+                ? "border-green-500 text-green-600 dark:text-green-400"
+                : "border-transparent text-zinc-500 hover:text-zinc-700 dark:text-zinc-400 dark:hover:text-zinc-200"
               }`}
-            >
-              Bioware ({filteredBioware.length})
-              {selectedBioware.length > 0 && (
-                <span className="ml-2 rounded-full bg-green-100 px-2 py-0.5 text-xs text-green-700 dark:bg-green-900/50 dark:text-green-300">
-                  {selectedBioware.length}
-                </span>
-              )}
-            </button>
-          </div>
+          >
+            Bioware ({filteredBioware.length})
+            {selectedBioware.length > 0 && (
+              <span className="ml-2 rounded-full bg-green-100 px-2 py-0.5 text-xs text-green-700 dark:bg-green-900/50 dark:text-green-300">
+                {selectedBioware.length}
+              </span>
+            )}
+          </button>
+        </div>
 
-          {/* Search and Filters */}
-          <div className="flex flex-wrap gap-2">
+        {/* Search and Filters */}
+        <div className="flex flex-wrap gap-2">
+          <input
+            type="text"
+            placeholder={`Search ${activeTab}...`}
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+            className="flex-1 min-w-48 rounded-lg border border-zinc-300 bg-white px-3 py-2 text-sm dark:border-zinc-600 dark:bg-zinc-800"
+          />
+          <label className="flex items-center gap-2 text-sm">
             <input
-              type="text"
-              placeholder={`Search ${activeTab}...`}
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              className="flex-1 min-w-48 rounded-lg border border-zinc-300 bg-white px-3 py-2 text-sm dark:border-zinc-600 dark:bg-zinc-800"
+              type="checkbox"
+              checked={showUnavailable}
+              onChange={(e) => setShowUnavailable(e.target.checked)}
+              className="rounded"
             />
-            <label className="flex items-center gap-2 text-sm">
-              <input
-                type="checkbox"
-                checked={showUnavailable}
-                onChange={(e) => setShowUnavailable(e.target.checked)}
-                className="rounded"
-              />
-              Show unavailable
-            </label>
-          </div>
+            Show unavailable
+          </label>
+        </div>
 
-          {/* Category Tabs */}
-          <div className="flex flex-wrap gap-1">
-            {activeTab === "cyberware"
-              ? CYBERWARE_CATEGORIES.map((cat) => (
-                  <button
-                    key={cat.id}
-                    onClick={() => setCyberwareCategory(cat.id)}
-                    className={`rounded-full px-2 py-1 text-xs transition-colors ${
-                      cyberwareCategory === cat.id
-                        ? "bg-cyan-100 text-cyan-800 dark:bg-cyan-900/50 dark:text-cyan-100"
-                        : "bg-zinc-100 text-zinc-600 hover:bg-zinc-200 dark:bg-zinc-700 dark:text-zinc-400"
-                    }`}
-                  >
-                    {cat.label}
-                  </button>
-                ))
-              : BIOWARE_CATEGORIES.map((cat) => (
-                  <button
-                    key={cat.id}
-                    onClick={() => setBiowareCategory(cat.id)}
-                    className={`rounded-full px-2 py-1 text-xs transition-colors ${
-                      biowareCategory === cat.id
-                        ? "bg-green-100 text-green-800 dark:bg-green-900/50 dark:text-green-100"
-                        : "bg-zinc-100 text-zinc-600 hover:bg-zinc-200 dark:bg-zinc-700 dark:text-zinc-400"
-                    }`}
-                  >
-                    {cat.label}
-                  </button>
-                ))}
-          </div>
+        {/* Category Tabs */}
+        <div className="flex flex-wrap gap-1">
+          {activeTab === "cyberware"
+            ? CYBERWARE_CATEGORIES.map((cat) => (
+              <button
+                key={cat.id}
+                onClick={() => setCyberwareCategory(cat.id)}
+                className={`rounded-full px-2 py-1 text-xs transition-colors ${cyberwareCategory === cat.id
+                    ? "bg-cyan-100 text-cyan-800 dark:bg-cyan-900/50 dark:text-cyan-100"
+                    : "bg-zinc-100 text-zinc-600 hover:bg-zinc-200 dark:bg-zinc-700 dark:text-zinc-400"
+                  }`}
+              >
+                {cat.label}
+              </button>
+            ))
+            : BIOWARE_CATEGORIES.map((cat) => (
+              <button
+                key={cat.id}
+                onClick={() => setBiowareCategory(cat.id)}
+                className={`rounded-full px-2 py-1 text-xs transition-colors ${biowareCategory === cat.id
+                    ? "bg-green-100 text-green-800 dark:bg-green-900/50 dark:text-green-100"
+                    : "bg-zinc-100 text-zinc-600 hover:bg-zinc-200 dark:bg-zinc-700 dark:text-zinc-400"
+                  }`}
+              >
+                {cat.label}
+              </button>
+            ))}
+        </div>
 
-          {/* Item Table */}
-          <div className="max-h-96 overflow-y-auto rounded-lg border border-zinc-200 dark:border-zinc-700">
-            <table className="w-full text-sm">
-              <thead className="sticky top-0 bg-zinc-100 dark:bg-zinc-800">
-                <tr>
-                  <th className="px-3 py-2 text-left">Item</th>
-                  <th className="px-3 py-2 text-center">Essence</th>
-                  <th className="px-3 py-2 text-right">Cost</th>
-                  <th className="px-3 py-2 text-center">Avail</th>
-                  <th className="px-3 py-2 text-center w-24">Grade</th>
-                  <th className="px-3 py-2 text-center">Action</th>
-                </tr>
-              </thead>
-              <tbody className="divide-y divide-zinc-100 dark:divide-zinc-700">
-                {activeTab === "cyberware"
-                  ? filteredCyberware.map(renderCyberwareItem)
-                  : filteredBioware.map(renderBiowareItem)}
-                {((activeTab === "cyberware" && filteredCyberware.length === 0) ||
-                  (activeTab === "bioware" && filteredBioware.length === 0)) && (
+        {/* Item Table */}
+        <div className="max-h-96 overflow-y-auto rounded-lg border border-zinc-200 dark:border-zinc-700">
+          <table className="w-full text-sm">
+            <thead className="sticky top-0 bg-zinc-100 dark:bg-zinc-800">
+              <tr>
+                <th className="px-3 py-2 text-left">Item</th>
+                <th className="px-3 py-2 text-center">Essence</th>
+                <th className="px-3 py-2 text-right">Cost</th>
+                <th className="px-3 py-2 text-center">Avail</th>
+                <th className="px-3 py-2 text-center w-24">Grade</th>
+                <th className="px-3 py-2 text-center">Action</th>
+              </tr>
+            </thead>
+            <tbody className="divide-y divide-zinc-100 dark:divide-zinc-700">
+              {activeTab === "cyberware"
+                ? filteredCyberware.map(renderCyberwareItem)
+                : filteredBioware.map(renderBiowareItem)}
+              {((activeTab === "cyberware" && filteredCyberware.length === 0) ||
+                (activeTab === "bioware" && filteredBioware.length === 0)) && (
                   <tr>
                     <td colSpan={6} className="px-3 py-8 text-center text-zinc-500">
                       No items found matching your criteria.
                     </td>
                   </tr>
                 )}
-              </tbody>
-            </table>
-          </div>
-        </div>
-
-        {/* Selected Augmentations Column */}
-        <div className="lg:col-span-1">
-          <div className="sticky top-4 rounded-lg border border-zinc-200 bg-white p-4 dark:border-zinc-700 dark:bg-zinc-800">
-            <h3 className="mb-3 text-sm font-medium">Installed Augmentations</h3>
-
-            {selectedCyberware.length === 0 && selectedBioware.length === 0 ? (
-              <p className="text-sm text-zinc-500 dark:text-zinc-400">
-                No augmentations installed yet.
-              </p>
-            ) : (
-              <div className="space-y-4 max-h-80 overflow-y-auto">
-                {/* Cyberware */}
-                {selectedCyberware.length > 0 && (
-                  <div>
-                    <h4 className="text-xs font-medium text-cyan-600 dark:text-cyan-400 mb-2">
-                      Cyberware
-                    </h4>
-                    <div className="space-y-2">
-                      {selectedCyberware.map((item, index) => (
-                        <div
-                          key={item.id}
-                          className="flex items-center justify-between rounded-lg bg-zinc-50 p-2 dark:bg-zinc-700/50"
-                        >
-                          <div className="flex-1 min-w-0">
-                            <p className="text-sm font-medium truncate">{item.name}</p>
-                            <p className="text-xs text-zinc-500 dark:text-zinc-400">
-                              {item.grade} | {formatEssence(item.essenceCost)} ESS | ¥
-                              {formatCurrency(item.cost)}
-                            </p>
-                          </div>
-                          <button
-                            onClick={() => removeCyberware(index)}
-                            className="ml-2 rounded p-1 text-red-500 hover:bg-red-50 dark:hover:bg-red-900/20"
-                            aria-label="Remove item"
-                          >
-                            <svg
-                              className="h-4 w-4"
-                              fill="none"
-                              viewBox="0 0 24 24"
-                              stroke="currentColor"
-                            >
-                              <path
-                                strokeLinecap="round"
-                                strokeLinejoin="round"
-                                strokeWidth={2}
-                                d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
-                              />
-                            </svg>
-                          </button>
-                        </div>
-                      ))}
-                    </div>
-                  </div>
-                )}
-
-                {/* Bioware */}
-                {selectedBioware.length > 0 && (
-                  <div>
-                    <h4 className="text-xs font-medium text-green-600 dark:text-green-400 mb-2">
-                      Bioware
-                    </h4>
-                    <div className="space-y-2">
-                      {selectedBioware.map((item, index) => (
-                        <div
-                          key={item.id}
-                          className="flex items-center justify-between rounded-lg bg-zinc-50 p-2 dark:bg-zinc-700/50"
-                        >
-                          <div className="flex-1 min-w-0">
-                            <p className="text-sm font-medium truncate">{item.name}</p>
-                            <p className="text-xs text-zinc-500 dark:text-zinc-400">
-                              {item.grade} | {formatEssence(item.essenceCost)} ESS | ¥
-                              {formatCurrency(item.cost)}
-                            </p>
-                          </div>
-                          <button
-                            onClick={() => removeBioware(index)}
-                            className="ml-2 rounded p-1 text-red-500 hover:bg-red-50 dark:hover:bg-red-900/20"
-                            aria-label="Remove item"
-                          >
-                            <svg
-                              className="h-4 w-4"
-                              fill="none"
-                              viewBox="0 0 24 24"
-                              stroke="currentColor"
-                            >
-                              <path
-                                strokeLinecap="round"
-                                strokeLinejoin="round"
-                                strokeWidth={2}
-                                d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
-                              />
-                            </svg>
-                          </button>
-                        </div>
-                      ))}
-                    </div>
-                  </div>
-                )}
-              </div>
-            )}
-
-            {/* Summary */}
-            <div className="mt-4 border-t border-zinc-200 pt-4 dark:border-zinc-600">
-              <div className="flex justify-between text-sm">
-                <span>Total Essence:</span>
-                <span className="text-amber-600 dark:text-amber-400">
-                  -{formatEssence(totalEssenceLoss)}
-                </span>
-              </div>
-              <div className="flex justify-between text-sm">
-                <span>Total Cost:</span>
-                <span>¥{formatCurrency(augmentationSpent)}</span>
-              </div>
-            </div>
-          </div>
+            </tbody>
+          </table>
         </div>
       </div>
 
