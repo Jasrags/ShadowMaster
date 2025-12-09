@@ -1,7 +1,8 @@
 "use client";
 
 import { useMemo, useCallback, useState } from "react";
-import type { CreationState, Contact } from "@/lib/types";
+import type { CreationState, Contact, ContactTemplateData } from "@/lib/types";
+import { useContactTemplates } from "@/lib/rules";
 
 interface StepProps {
   state: CreationState;
@@ -42,6 +43,10 @@ export function ContactsStep({ state, updateState }: StepProps) {
     loyalty: 1,
     notes: "",
   });
+  const [selectedTemplateId, setSelectedTemplateId] = useState<string | null>(null);
+
+  // Get contact templates from ruleset
+  const contactTemplates = useContactTemplates();
 
   // Get charisma from state (allocated + metatype minimum)
   const charisma = useMemo(() => {
@@ -116,8 +121,32 @@ export function ContactsStep({ state, updateState }: StepProps) {
       loyalty: 1,
       notes: "",
     });
+    setSelectedTemplateId(null);
     setIsAddingContact(false);
   }, [isNewContactValid, newContact, contacts, state.selections, state.budgets, karmaSpent, freeContactKarma, updateState]);
+
+  // Handle selecting a contact template
+  const handleSelectTemplate = useCallback((template: ContactTemplateData | null) => {
+    if (!template) {
+      setSelectedTemplateId(null);
+      setNewContact({
+        name: "",
+        type: "",
+        connection: 1,
+        loyalty: 1,
+        notes: "",
+      });
+      return;
+    }
+    setSelectedTemplateId(template.id);
+    setNewContact({
+      name: "",
+      type: template.name,
+      connection: template.suggestedConnection,
+      loyalty: template.suggestedLoyalty || 2,
+      notes: template.description,
+    });
+  }, []);
 
   // Handle updating an existing contact
   const handleUpdateContact = useCallback((index: number, updates: Partial<Contact>) => {
@@ -180,9 +209,8 @@ export function ContactsStep({ state, updateState }: StepProps) {
               key={rating}
               type="button"
               onClick={() => onChange(rating)}
-              className={`flex h-8 w-8 items-center justify-center rounded text-sm font-medium transition-colors ${
-                value >= rating ? colorClasses.active : colorClasses.inactive
-              }`}
+              className={`flex h-8 w-8 items-center justify-center rounded text-sm font-medium transition-colors ${value >= rating ? colorClasses.active : colorClasses.inactive
+                }`}
             >
               {rating}
             </button>
@@ -313,11 +341,10 @@ export function ContactsStep({ state, updateState }: StepProps) {
                   {Array.from({ length: MAX_CONNECTION }, (_, i) => (
                     <div
                       key={i}
-                      className={`h-2 w-2 rounded-full ${
-                        i < contact.connection
+                      className={`h-2 w-2 rounded-full ${i < contact.connection
                           ? "bg-blue-500"
                           : "bg-zinc-200 dark:bg-zinc-600"
-                      }`}
+                        }`}
                     />
                   ))}
                 </div>
@@ -329,11 +356,10 @@ export function ContactsStep({ state, updateState }: StepProps) {
                   {Array.from({ length: MAX_LOYALTY }, (_, i) => (
                     <div
                       key={i}
-                      className={`h-2 w-2 rounded-full ${
-                        i < contact.loyalty
+                      className={`h-2 w-2 rounded-full ${i < contact.loyalty
                           ? "bg-rose-500"
                           : "bg-zinc-200 dark:bg-zinc-600"
-                      }`}
+                        }`}
                     />
                   ))}
                 </div>
@@ -430,6 +456,45 @@ export function ContactsStep({ state, updateState }: StepProps) {
         <div className="rounded-lg border border-emerald-200 bg-emerald-50 p-4 dark:border-emerald-800 dark:bg-emerald-900/20">
           <h3 className="mb-4 text-sm font-semibold text-emerald-800 dark:text-emerald-200">New Contact</h3>
           <div className="space-y-4">
+            {/* Template Selector */}
+            {contactTemplates.length > 0 && (
+              <div>
+                <label className="mb-2 block text-sm font-medium text-zinc-700 dark:text-zinc-300">
+                  Start from Template (optional)
+                </label>
+                <div className="flex flex-wrap gap-2">
+                  <button
+                    type="button"
+                    onClick={() => handleSelectTemplate(null)}
+                    className={`rounded-lg border px-3 py-1.5 text-sm font-medium transition-colors ${selectedTemplateId === null
+                        ? "border-emerald-500 bg-emerald-50 text-emerald-700 dark:border-emerald-600 dark:bg-emerald-900/30 dark:text-emerald-300"
+                        : "border-zinc-300 text-zinc-600 hover:border-emerald-400 dark:border-zinc-600 dark:text-zinc-400 dark:hover:border-emerald-500"
+                      }`}
+                  >
+                    Custom
+                  </button>
+                  {contactTemplates.map((template) => (
+                    <button
+                      key={template.id}
+                      type="button"
+                      onClick={() => handleSelectTemplate(template)}
+                      title={template.description}
+                      className={`rounded-lg border px-3 py-1.5 text-sm font-medium transition-colors ${selectedTemplateId === template.id
+                          ? "border-emerald-500 bg-emerald-50 text-emerald-700 dark:border-emerald-600 dark:bg-emerald-900/30 dark:text-emerald-300"
+                          : "border-zinc-300 text-zinc-600 hover:border-emerald-400 dark:border-zinc-600 dark:text-zinc-400 dark:hover:border-emerald-500"
+                        }`}
+                    >
+                      {template.name}
+                    </button>
+                  ))}
+                </div>
+                {selectedTemplateId && (
+                  <p className="mt-2 text-xs text-zinc-500 dark:text-zinc-400">
+                    {contactTemplates.find(t => t.id === selectedTemplateId)?.description}
+                  </p>
+                )}
+              </div>
+            )}
             {/* Name and Type */}
             <div className="grid gap-4 sm:grid-cols-2">
               <div>
@@ -495,13 +560,12 @@ export function ContactsStep({ state, updateState }: StepProps) {
             {/* Cost indicator */}
             <div className="flex items-center justify-between rounded-lg bg-white p-3 dark:bg-zinc-800">
               <span className="text-sm text-zinc-600 dark:text-zinc-400">Contact Cost:</span>
-              <span className={`font-medium ${
-                newContactCost > MAX_KARMA_PER_CONTACT
+              <span className={`font-medium ${newContactCost > MAX_KARMA_PER_CONTACT
                   ? "text-red-600 dark:text-red-400"
                   : newContactCost > karmaRemaining
                     ? "text-amber-600 dark:text-amber-400"
                     : "text-emerald-600 dark:text-emerald-400"
-              }`}>
+                }`}>
                 {newContactCost} Karma
                 {newContactCost > MAX_KARMA_PER_CONTACT && " (max 7)"}
                 {newContactCost <= MAX_KARMA_PER_CONTACT && newContactCost > karmaRemaining && " (not enough)"}
@@ -521,6 +585,7 @@ export function ContactsStep({ state, updateState }: StepProps) {
                     loyalty: 1,
                     notes: "",
                   });
+                  setSelectedTemplateId(null);
                 }}
                 className="rounded-lg border border-zinc-300 px-4 py-2 text-sm font-medium text-zinc-700 transition-colors hover:bg-zinc-50 dark:border-zinc-600 dark:text-zinc-300 dark:hover:bg-zinc-700"
               >
@@ -530,11 +595,10 @@ export function ContactsStep({ state, updateState }: StepProps) {
                 type="button"
                 onClick={handleAddContact}
                 disabled={!isNewContactValid}
-                className={`rounded-lg px-4 py-2 text-sm font-medium transition-colors ${
-                  isNewContactValid
+                className={`rounded-lg px-4 py-2 text-sm font-medium transition-colors ${isNewContactValid
                     ? "bg-emerald-500 text-white hover:bg-emerald-600"
                     : "cursor-not-allowed bg-zinc-200 text-zinc-400 dark:bg-zinc-700"
-                }`}
+                  }`}
               >
                 Add Contact
               </button>
@@ -546,11 +610,10 @@ export function ContactsStep({ state, updateState }: StepProps) {
           type="button"
           onClick={() => setIsAddingContact(true)}
           disabled={karmaRemaining < 2}
-          className={`flex w-full items-center justify-center gap-2 rounded-lg border-2 border-dashed p-4 text-sm font-medium transition-colors ${
-            karmaRemaining >= 2
+          className={`flex w-full items-center justify-center gap-2 rounded-lg border-2 border-dashed p-4 text-sm font-medium transition-colors ${karmaRemaining >= 2
               ? "border-zinc-300 text-zinc-600 hover:border-emerald-400 hover:bg-emerald-50 hover:text-emerald-700 dark:border-zinc-600 dark:text-zinc-400 dark:hover:border-emerald-600 dark:hover:bg-emerald-900/20 dark:hover:text-emerald-400"
               : "cursor-not-allowed border-zinc-200 text-zinc-400 dark:border-zinc-700 dark:text-zinc-500"
-          }`}
+            }`}
         >
           <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />

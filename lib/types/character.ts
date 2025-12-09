@@ -390,13 +390,13 @@ export const CYBERWARE_GRADE_AVAILABILITY_MODIFIERS: Record<
  * Cyberware grade cost multipliers
  */
 export const CYBERWARE_GRADE_COST_MULTIPLIERS: Record<CyberwareGrade, number> =
-  {
-    used: 0.75,
-    standard: 1.0,
-    alpha: 2.0,
-    beta: 4.0,
-    delta: 10.0,
-  };
+{
+  used: 0.75,
+  standard: 1.0,
+  alpha: 2.0,
+  beta: 4.0,
+  delta: 10.0,
+};
 
 /**
  * Categories of cyberware
@@ -587,9 +587,22 @@ export interface CharacterResponse {
   error?: string;
 }
 
+
 export interface CharactersListResponse {
   success: boolean;
   characters: Character[];
   error?: string;
+}
+
+/**
+ * Contact Template Data
+ */
+export interface ContactTemplateData {
+  id: string;
+  name: string;
+  description: string;
+  suggestedConnection: number;
+  suggestedLoyalty?: number;
+  commonMetatypes?: string[];
 }
 

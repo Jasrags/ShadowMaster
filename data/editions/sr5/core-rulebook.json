@@ -9,6 +9,132 @@
     "releaseYear": 2013
   },
   "modules": {
+    "contactTemplates": {
+      "mergeStrategy": "replace",
+      "payload": {
+        "templates": [
+          {
+            "id": "fixer",
+            "name": "Fixer",
+            "description": "A shadow broker who connects runners with jobs, gear, and information.",
+            "suggestedConnection": 4,
+            "suggestedLoyalty": 2,
+            "commonMetatypes": [
+              "Human",
+              "Elf",
+              "Ork",
+              "Dwarf",
+              "Troll"
+            ]
+          },
+          {
+            "id": "street-doc",
+            "name": "Street Doc",
+            "description": "An underground medical professional who asks no questions.",
+            "suggestedConnection": 2,
+            "suggestedLoyalty": 2,
+            "commonMetatypes": [
+              "Human",
+              "Dwarf"
+            ]
+          },
+          {
+            "id": "arms-dealer",
+            "name": "Arms Dealer",
+            "description": "A supplier of weapons, ammo, and military-grade hardware.",
+            "suggestedConnection": 3,
+            "suggestedLoyalty": 1,
+            "commonMetatypes": [
+              "Ork",
+              "Troll",
+              "Human"
+            ]
+          },
+          {
+            "id": "talismonger",
+            "name": "Talismonger",
+            "description": "A dealer in magical supplies, foci, and reagents.",
+            "suggestedConnection": 3,
+            "suggestedLoyalty": 1,
+            "commonMetatypes": [
+              "Elf",
+              "Human"
+            ]
+          },
+          {
+            "id": "info-broker",
+            "name": "Info Broker",
+            "description": "A specialist in gathering and selling secrets and paydata.",
+            "suggestedConnection": 4,
+            "suggestedLoyalty": 1,
+            "commonMetatypes": [
+              "Elf",
+              "Human",
+              "Dwarf"
+            ]
+          },
+          {
+            "id": "mr-johnson",
+            "name": "Mr. Johnson",
+            "description": "A corporate agent who hires runners for deniable assets operations.",
+            "suggestedConnection": 5,
+            "suggestedLoyalty": 1,
+            "commonMetatypes": [
+              "Human",
+              "Elf"
+            ]
+          },
+          {
+            "id": "mechanic",
+            "name": "Mechanic",
+            "description": "A skilled technician who repairs and modifies vehicles and drones.",
+            "suggestedConnection": 2,
+            "suggestedLoyalty": 2,
+            "commonMetatypes": [
+              "Dwarf",
+              "Ork",
+              "Human"
+            ]
+          },
+          {
+            "id": "beat-cop",
+            "name": "Beat Cop",
+            "description": "A law enforcement officer willing to look the other way or share tips.",
+            "suggestedConnection": 2,
+            "suggestedLoyalty": 1,
+            "commonMetatypes": [
+              "Human",
+              "Ork",
+              "Dwarf"
+            ]
+          },
+          {
+            "id": "gang-leader",
+            "name": "Gang Leader",
+            "description": "The head of a local street gang or organized crime cell.",
+            "suggestedConnection": 3,
+            "suggestedLoyalty": 2,
+            "commonMetatypes": [
+              "Ork",
+              "Troll",
+              "Human"
+            ]
+          },
+          {
+            "id": "smuggler",
+            "name": "Smuggler",
+            "description": "A transporter of illicit goods and people across borders.",
+            "suggestedConnection": 3,
+            "suggestedLoyalty": 2,
+            "commonMetatypes": [
+              "Human",
+              "Ork",
+              "Elf"
+            ]
+          }
+        ]
+      }
+    },
     "metatypes": {
       "mergeStrategy": "replace",
       "payload": {

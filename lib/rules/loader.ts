@@ -804,3 +804,16 @@ export function extractAugmentationRules(ruleset: LoadedRuleset): AugmentationRu
   );
 }
 
+// =============================================================================
+// CONTACT TEMPLATE DATA TYPES AND LOADERS
+// =============================================================================
+
+import type { ContactTemplateData } from "../types";
+
+/**
+ * Load contact templates from a ruleset
+ */
+export function extractContactTemplates(ruleset: LoadedRuleset): ContactTemplateData[] {
+  const module = extractModule<{ templates: ContactTemplateData[] }>(ruleset, "contactTemplates");
+  return module?.templates || [];
+}

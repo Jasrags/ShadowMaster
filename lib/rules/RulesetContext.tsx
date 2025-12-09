@@ -20,8 +20,10 @@ import type {
   MergedRuleset,
   CreationMethod,
   ID,
+  ContactTemplateData,
 } from "../types";
 import { QualityData } from "./loader";
+export type { QualityData };
 
 // =============================================================================
 // TYPES
@@ -353,6 +355,7 @@ export interface RulesetData {
   cyberware: CyberwareCatalogData | null;
   bioware: BiowareCatalogData | null;
   augmentationRules: AugmentationRulesData;
+  contactTemplates: ContactTemplateData[];
 }
 
 /**
@@ -401,6 +404,7 @@ const defaultData: RulesetData = {
   cyberware: null,
   bioware: null,
   augmentationRules: defaultAugmentationRules,
+  contactTemplates: [],
 };
 
 const defaultState: RulesetContextState = {
@@ -479,6 +483,7 @@ export function RulesetProvider({
             cyberware: extractedData.cyberware || null,
             bioware: extractedData.bioware || null,
             augmentationRules: extractedData.augmentationRules || defaultAugmentationRules,
+            contactTemplates: extractedData.contactTemplates || [],
           }
           : defaultData;
 
@@ -1004,4 +1009,12 @@ export function checkAttributeBonusLimit(
   }
 
   return { allowed: violations.length === 0, violations };
+}
+
+/**
+ * Hook to get contact templates
+ */
+export function useContactTemplates(): ContactTemplateData[] {
+  const { data } = useRuleset();
+  return data.contactTemplates;
 }

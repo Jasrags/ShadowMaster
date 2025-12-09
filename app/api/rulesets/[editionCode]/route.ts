@@ -6,7 +6,7 @@
 
 import { NextRequest, NextResponse } from "next/server";
 import { loadAndMergeRuleset } from "@/lib/rules/merge";
-import { loadRuleset, extractMetatypes, extractSkills, extractQualities, extractPriorityTable, extractMagicPaths, extractLifestyles, extractLifestyleModifiers, extractGear, extractSpells, extractComplexForms, extractCyberware, extractBioware, extractAugmentationRules } from "@/lib/rules/loader";
+import { loadRuleset, extractMetatypes, extractSkills, extractQualities, extractPriorityTable, extractMagicPaths, extractLifestyles, extractLifestyleModifiers, extractGear, extractSpells, extractComplexForms, extractCyberware, extractBioware, extractAugmentationRules, extractContactTemplates } from "@/lib/rules/loader";
 
 export async function GET(
   request: NextRequest,
@@ -38,20 +38,21 @@ export async function GET(
     // Extract data for convenience
     const extractedData = loadedRuleset
       ? {
-          metatypes: extractMetatypes(loadedRuleset),
-          skills: extractSkills(loadedRuleset),
-          qualities: extractQualities(loadedRuleset),
-          priorityTable: extractPriorityTable(loadedRuleset),
-          magicPaths: extractMagicPaths(loadedRuleset),
-          lifestyles: extractLifestyles(loadedRuleset),
-          lifestyleModifiers: extractLifestyleModifiers(loadedRuleset),
-          gear: extractGear(loadedRuleset),
-          spells: extractSpells(loadedRuleset),
-          complexForms: extractComplexForms(loadedRuleset),
-          cyberware: extractCyberware(loadedRuleset),
-          bioware: extractBioware(loadedRuleset),
-          augmentationRules: extractAugmentationRules(loadedRuleset),
-        }
+        metatypes: extractMetatypes(loadedRuleset),
+        skills: extractSkills(loadedRuleset),
+        qualities: extractQualities(loadedRuleset),
+        priorityTable: extractPriorityTable(loadedRuleset),
+        magicPaths: extractMagicPaths(loadedRuleset),
+        lifestyles: extractLifestyles(loadedRuleset),
+        lifestyleModifiers: extractLifestyleModifiers(loadedRuleset),
+        gear: extractGear(loadedRuleset),
+        spells: extractSpells(loadedRuleset),
+        complexForms: extractComplexForms(loadedRuleset),
+        cyberware: extractCyberware(loadedRuleset),
+        bioware: extractBioware(loadedRuleset),
+        augmentationRules: extractAugmentationRules(loadedRuleset),
+        contactTemplates: extractContactTemplates(loadedRuleset),
+      }
       : null;
 
     return NextResponse.json({
