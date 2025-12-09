@@ -120,7 +120,7 @@ This section prioritizes the most critical remaining tasks needed to complete ch
 |---|------|--------|-------|--------|
 | 1 | Fix Adept skill filtering bug - block ALL magical skill groups for adepts | Small | M0.3.8 | ✅ Complete |
 | 2 | Add Aspected Mage group selection | Medium | M0.8 | ✅ Complete |
-| 3 | Implement free skills from priority in SkillsStep | Medium | M0.3.9 | Not Started |
+| 3 | Implement free skills from priority in SkillsStep | Medium | M0.3.9 | ✅ Complete |
 | 4 | Track free spells/complex forms separately from Karma-purchased | Medium | M0.7.10 | ✅ Complete |
 | 5 | Add Power Points budget for Adepts (free = Magic rating) | Medium | B5.1.4 | Not Started |
 | 6 | Add Karma-purchased Power Points for Mystic Adepts | Medium | B5.1.5, B5.2.6 | Not Started |
@@ -349,6 +349,7 @@ This milestone improves the skills selection experience by adding suggested spec
 | M0.3.7 | Ensure custom knowledge/language skill creation still works alongside examples | Complete |
 | M0.3.8 | Fix adept skill filtering bug - block ALL magical skill groups for adepts (both individual skills and skill groups) | Complete |
 | M0.3.9 | Implement free skills from priority in SkillsStep (track free skill points separately from karma-purchased) | ✅ Complete |
+| M0.3.10 | Update skill data with detailed descriptions and missing skills (e.g. pilot-aerospace, exotic-ranged-weapon) | ✅ Complete |
 
 **Tasks JSON:**
 ```json
@@ -1029,7 +1030,7 @@ This section defines the acceptance criteria that must be met for Phase M0 to be
 - **M0.9.AC.5** [x] Skill specializations show suggestions with free text option
 - **M0.9.AC.6** [x] Example knowledge/language skills available
 - **M0.9.AC.7** [x] Aspected Mage group selection implemented and working
-- **M0.9.AC.8** [ ] Free skills from priority tracked separately from karma-purchased
+- **M0.9.AC.8** [x] Free skills from priority tracked separately from karma-purchased
 - **M0.9.AC.9** [ ] Racial qualities hidden from quality selection
 - **M0.9.AC.10** [ ] Leveled qualities (Addiction) work correctly
 - **M0.9.AC.11** [ ] Stat-modifying qualities (Aptitude) apply correctly
