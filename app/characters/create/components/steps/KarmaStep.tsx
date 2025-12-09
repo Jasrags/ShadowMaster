@@ -1,9 +1,9 @@
 "use client";
 
 import { useMemo, useState, useCallback } from "react";
-import { useSpells, useComplexForms, usePriorityTable } from "@/lib/rules";
+import { useComplexForms, usePriorityTable } from "@/lib/rules";
 import type { CreationState } from "@/lib/types";
-import type { SpellData, ComplexFormData } from "@/lib/rules";
+import type { ComplexFormData } from "@/lib/rules";
 
 interface StepProps {
   state: CreationState;
@@ -15,23 +15,12 @@ const SPELL_KARMA_COST = 5;
 const COMPLEX_FORM_KARMA_COST = 4;
 const MAX_KARMA_CARRYOVER = 7;
 
-type SpellCategory = "combat" | "detection" | "health" | "illusion" | "manipulation";
 
-const SPELL_CATEGORIES: { id: SpellCategory; name: string }[] = [
-  { id: "combat", name: "Combat" },
-  { id: "detection", name: "Detection" },
-  { id: "health", name: "Health" },
-  { id: "illusion", name: "Illusion" },
-  { id: "manipulation", name: "Manipulation" },
-];
 
 export function KarmaStep({ state, updateState, budgetValues }: StepProps) {
-  const spellsCatalog = useSpells();
   const complexFormsCatalog = useComplexForms();
   const priorityTable = usePriorityTable();
 
-  const [spellFilter, setSpellFilter] = useState<SpellCategory | "all">("all");
-  const [spellSearch, setSpellSearch] = useState("");
   const [complexFormSearch, setComplexFormSearch] = useState("");
 
   // Get selected magical path
@@ -95,37 +84,9 @@ export function KarmaStep({ state, updateState, budgetValues }: StepProps) {
   const karmaSpent = karmaSpentPositive + karmaSpentGear + karmaSpentOnSpells + karmaSpentOnComplexForms;
   const karmaRemaining = karmaTotal - karmaSpent;
 
-  // Flatten spell catalog for display
-  const allSpells = useMemo(() => {
-    if (!spellsCatalog) return [];
-    const spells: SpellData[] = [];
-    for (const category of SPELL_CATEGORIES) {
-      if (spellsCatalog[category.id]) {
-        spells.push(...spellsCatalog[category.id]);
-      }
-    }
-    return spells;
-  }, [spellsCatalog]);
 
-  // Filter spells
-  const filteredSpells = useMemo(() => {
-    let spells = allSpells;
 
-    if (spellFilter !== "all") {
-      spells = spells.filter((s) => s.category === spellFilter);
-    }
 
-    if (spellSearch.trim()) {
-      const search = spellSearch.toLowerCase();
-      spells = spells.filter(
-        (s) =>
-          s.name.toLowerCase().includes(search) ||
-          s.description?.toLowerCase().includes(search)
-      );
-    }
-
-    return spells;
-  }, [allSpells, spellFilter, spellSearch]);
 
   // Filter complex forms
   const filteredComplexForms = useMemo(() => {
@@ -141,38 +102,7 @@ export function KarmaStep({ state, updateState, budgetValues }: StepProps) {
     );
   }, [complexFormsCatalog, complexFormSearch]);
 
-  // Handle spell selection
-  const toggleSpell = useCallback(
-    (spellId: string) => {
-      const isSelected = selectedSpells.includes(spellId);
-      let newSpells: string[];
 
-      if (isSelected) {
-        newSpells = selectedSpells.filter((id) => id !== spellId);
-      } else {
-        // Check if can add more spells
-        if (selectedSpells.length >= maxTotalSpells) return;
-        // Check if have Karma for it (if beyond free spells)
-        if (selectedSpells.length >= freeSpells && karmaRemaining < SPELL_KARMA_COST) return;
-        newSpells = [...selectedSpells, spellId];
-      }
-
-      const newSpellsBeyondFree = Math.max(0, newSpells.length - freeSpells);
-      const newKarmaSpentOnSpells = newSpellsBeyondFree * SPELL_KARMA_COST;
-
-      updateState({
-        selections: {
-          ...state.selections,
-          spells: newSpells,
-        },
-        budgets: {
-          ...state.budgets,
-          "karma-spent-spells": newKarmaSpentOnSpells,
-        },
-      });
-    },
-    [selectedSpells, maxTotalSpells, freeSpells, karmaRemaining, state.selections, state.budgets, updateState]
-  );
 
   // Handle complex form selection
   const toggleComplexForm = useCallback(
@@ -207,10 +137,7 @@ export function KarmaStep({ state, updateState, budgetValues }: StepProps) {
     [selectedComplexForms, maxTotalComplexForms, freeComplexForms, karmaRemaining, state.selections, state.budgets, updateState]
   );
 
-  // Get spell data by ID
-  const getSpellById = (id: string): SpellData | undefined => {
-    return allSpells.find((s) => s.id === id);
-  };
+
 
   // Get complex form data by ID
   const getComplexFormById = (id: string): ComplexFormData | undefined => {
@@ -229,11 +156,10 @@ export function KarmaStep({ state, updateState, budgetValues }: StepProps) {
             </div>
           </div>
           <div className="text-right">
-            <div className={`text-2xl font-bold ${
-              karmaRemaining > MAX_KARMA_CARRYOVER
+            <div className={`text-2xl font-bold ${karmaRemaining > MAX_KARMA_CARRYOVER
                 ? "text-amber-600 dark:text-amber-400"
                 : "text-purple-700 dark:text-purple-300"
-            }`}>
+              }`}>
               {karmaRemaining}
             </div>
             <div className="text-xs text-purple-600 dark:text-purple-400">remaining</div>
@@ -310,158 +236,7 @@ export function KarmaStep({ state, updateState, budgetValues }: StepProps) {
       )}
 
       {/* Spell Selection for Magical Characters */}
-      {isMagician && spellsCatalog && (
-        <div className="space-y-4">
-          <div className="flex items-center justify-between">
-            <h3 className="text-sm font-semibold uppercase tracking-wider text-zinc-500 dark:text-zinc-400">
-              Spells
-            </h3>
-            <div className="text-sm">
-              <span className={selectedSpells.length > freeSpells ? "text-amber-600 dark:text-amber-400" : "text-emerald-600 dark:text-emerald-400"}>
-                {selectedSpells.length}
-              </span>
-              <span className="text-zinc-400"> / {freeSpells} free</span>
-              {selectedSpells.length > freeSpells && (
-                <span className="text-zinc-400"> ({spellsBeyondFree} × {SPELL_KARMA_COST} Karma)</span>
-              )}
-              <span className="text-zinc-400"> (max {maxTotalSpells})</span>
-            </div>
-          </div>
 
-          {/* Selected Spells */}
-          {selectedSpells.length > 0 && (
-            <div className="rounded-lg border border-emerald-200 bg-emerald-50 p-3 dark:border-emerald-800 dark:bg-emerald-900/20">
-              <div className="mb-2 text-xs font-medium text-emerald-700 dark:text-emerald-300">Selected Spells</div>
-              <div className="flex flex-wrap gap-2">
-                {selectedSpells.map((spellId, index) => {
-                  const spell = getSpellById(spellId);
-                  const isFree = index < freeSpells;
-                  return (
-                    <button
-                      key={spellId}
-                      onClick={() => toggleSpell(spellId)}
-                      className="inline-flex items-center gap-1 rounded-full bg-emerald-100 px-3 py-1 text-sm transition-colors hover:bg-emerald-200 dark:bg-emerald-800 dark:hover:bg-emerald-700"
-                    >
-                      <span className="font-medium text-emerald-800 dark:text-emerald-200">
-                        {spell?.name || spellId}
-                      </span>
-                      {!isFree && (
-                        <span className="text-xs text-amber-600 dark:text-amber-400">({SPELL_KARMA_COST}K)</span>
-                      )}
-                      <svg className="h-3 w-3 text-emerald-600 dark:text-emerald-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-                      </svg>
-                    </button>
-                  );
-                })}
-              </div>
-            </div>
-          )}
-
-          {/* Spell Filters */}
-          <div className="flex flex-wrap items-center gap-3">
-            <div className="flex-1">
-              <input
-                type="text"
-                placeholder="Search spells..."
-                value={spellSearch}
-                onChange={(e) => setSpellSearch(e.target.value)}
-                className="w-full rounded-lg border border-zinc-300 bg-white px-3 py-2 text-sm focus:border-purple-500 focus:outline-none focus:ring-1 focus:ring-purple-500 dark:border-zinc-600 dark:bg-zinc-800 dark:text-zinc-100"
-              />
-            </div>
-            <div className="flex gap-1">
-              <button
-                onClick={() => setSpellFilter("all")}
-                className={`rounded px-2 py-1 text-xs font-medium transition-colors ${
-                  spellFilter === "all"
-                    ? "bg-purple-500 text-white"
-                    : "bg-zinc-100 text-zinc-600 hover:bg-zinc-200 dark:bg-zinc-700 dark:text-zinc-300"
-                }`}
-              >
-                All
-              </button>
-              {SPELL_CATEGORIES.map((cat) => (
-                <button
-                  key={cat.id}
-                  onClick={() => setSpellFilter(cat.id)}
-                  className={`rounded px-2 py-1 text-xs font-medium transition-colors ${
-                    spellFilter === cat.id
-                      ? "bg-purple-500 text-white"
-                      : "bg-zinc-100 text-zinc-600 hover:bg-zinc-200 dark:bg-zinc-700 dark:text-zinc-300"
-                  }`}
-                >
-                  {cat.name}
-                </button>
-              ))}
-            </div>
-          </div>
-
-          {/* Spell List */}
-          <div className="max-h-80 space-y-2 overflow-y-auto">
-            {filteredSpells.map((spell) => {
-              const isSelected = selectedSpells.includes(spell.id);
-              const canSelect = isSelected || (
-                selectedSpells.length < maxTotalSpells &&
-                (selectedSpells.length < freeSpells || karmaRemaining >= SPELL_KARMA_COST)
-              );
-
-              return (
-                <button
-                  key={spell.id}
-                  onClick={() => canSelect && toggleSpell(spell.id)}
-                  disabled={!canSelect}
-                  className={`w-full rounded-lg border p-3 text-left transition-colors ${
-                    isSelected
-                      ? "border-purple-300 bg-purple-50 dark:border-purple-700 dark:bg-purple-900/30"
-                      : canSelect
-                      ? "border-zinc-200 bg-white hover:border-purple-200 hover:bg-purple-50/50 dark:border-zinc-700 dark:bg-zinc-800/50 dark:hover:border-purple-800"
-                      : "cursor-not-allowed border-zinc-200 bg-zinc-50 opacity-50 dark:border-zinc-700 dark:bg-zinc-800/30"
-                  }`}
-                >
-                  <div className="flex items-start justify-between gap-2">
-                    <div className="min-w-0 flex-1">
-                      <div className="flex items-center gap-2">
-                        <span className="font-medium text-zinc-900 dark:text-zinc-100">{spell.name}</span>
-                        <span className={`rounded px-1.5 py-0.5 text-[10px] font-medium uppercase ${
-                          spell.type === "mana"
-                            ? "bg-blue-100 text-blue-700 dark:bg-blue-900/50 dark:text-blue-300"
-                            : "bg-amber-100 text-amber-700 dark:bg-amber-900/50 dark:text-amber-300"
-                        }`}>
-                          {spell.type}
-                        </span>
-                        <span className="rounded bg-zinc-100 px-1.5 py-0.5 text-[10px] font-medium text-zinc-600 dark:bg-zinc-700 dark:text-zinc-400">
-                          {spell.category}
-                        </span>
-                      </div>
-                      {spell.description && (
-                        <p className="mt-1 text-sm text-zinc-500 dark:text-zinc-400 line-clamp-1">
-                          {spell.description}
-                        </p>
-                      )}
-                      <div className="mt-1 flex gap-3 text-xs text-zinc-500 dark:text-zinc-400">
-                        <span>Range: {spell.range}</span>
-                        <span>Duration: {spell.duration}</span>
-                        <span>Drain: {spell.drain}</span>
-                      </div>
-                    </div>
-                    <div className={`flex h-5 w-5 flex-shrink-0 items-center justify-center rounded-full border-2 ${
-                      isSelected
-                        ? "border-purple-500 bg-purple-500 text-white"
-                        : "border-zinc-300 dark:border-zinc-600"
-                    }`}>
-                      {isSelected && (
-                        <svg className="h-3 w-3" fill="currentColor" viewBox="0 0 20 20">
-                          <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
-                        </svg>
-                      )}
-                    </div>
-                  </div>
-                </button>
-              );
-            })}
-          </div>
-        </div>
-      )}
 
       {/* Complex Form Selection for Technomancers */}
       {isTechnomancer && complexFormsCatalog && (
@@ -537,13 +312,12 @@ export function KarmaStep({ state, updateState, budgetValues }: StepProps) {
                   key={form.id}
                   onClick={() => canSelect && toggleComplexForm(form.id)}
                   disabled={!canSelect}
-                  className={`w-full rounded-lg border p-3 text-left transition-colors ${
-                    isSelected
+                  className={`w-full rounded-lg border p-3 text-left transition-colors ${isSelected
                       ? "border-cyan-300 bg-cyan-50 dark:border-cyan-700 dark:bg-cyan-900/30"
                       : canSelect
-                      ? "border-zinc-200 bg-white hover:border-cyan-200 hover:bg-cyan-50/50 dark:border-zinc-700 dark:bg-zinc-800/50 dark:hover:border-cyan-800"
-                      : "cursor-not-allowed border-zinc-200 bg-zinc-50 opacity-50 dark:border-zinc-700 dark:bg-zinc-800/30"
-                  }`}
+                        ? "border-zinc-200 bg-white hover:border-cyan-200 hover:bg-cyan-50/50 dark:border-zinc-700 dark:bg-zinc-800/50 dark:hover:border-cyan-800"
+                        : "cursor-not-allowed border-zinc-200 bg-zinc-50 opacity-50 dark:border-zinc-700 dark:bg-zinc-800/30"
+                    }`}
                 >
                   <div className="flex items-start justify-between gap-2">
                     <div className="min-w-0 flex-1">
@@ -563,11 +337,10 @@ export function KarmaStep({ state, updateState, budgetValues }: StepProps) {
                         <span>Fading: {form.fading}</span>
                       </div>
                     </div>
-                    <div className={`flex h-5 w-5 flex-shrink-0 items-center justify-center rounded-full border-2 ${
-                      isSelected
+                    <div className={`flex h-5 w-5 flex-shrink-0 items-center justify-center rounded-full border-2 ${isSelected
                         ? "border-cyan-500 bg-cyan-500 text-white"
                         : "border-zinc-300 dark:border-zinc-600"
-                    }`}>
+                      }`}>
                       {isSelected && (
                         <svg className="h-3 w-3" fill="currentColor" viewBox="0 0 20 20">
                           <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />

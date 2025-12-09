@@ -121,7 +121,7 @@ This section prioritizes the most critical remaining tasks needed to complete ch
 | 1 | Fix Adept skill filtering bug - block ALL magical skill groups for adepts | Small | M0.3.8 | ✅ Complete |
 | 2 | Add Aspected Mage group selection | Medium | M0.8 | ✅ Complete |
 | 3 | Implement free skills from priority in SkillsStep | Medium | M0.3.9 | Not Started |
-| 4 | Track free spells/complex forms separately from Karma-purchased | Medium | M0.7.10 | Not Started |
+| 4 | Track free spells/complex forms separately from Karma-purchased | Medium | M0.7.10 | ✅ Complete |
 | 5 | Add Power Points budget for Adepts (free = Magic rating) | Medium | B5.1.4 | Not Started |
 | 6 | Add Karma-purchased Power Points for Mystic Adepts | Medium | B5.1.5, B5.2.6 | Not Started |
 | 7 | Add Adept Powers data to ruleset | Large | B5.1.1 | Not Started |
@@ -167,7 +167,7 @@ This section provides a comprehensive view of the entire implementation roadmap,
 | | M0.4 | Qualities Enhancements | - | Critical | ✅ Complete |
 | | M0.5 | Contacts Enhancements | - | Critical | Not Started |
 | | M0.6 | Distributed Karma Architecture | - | Critical | ✅ Complete |
-| | M0.7 | SpellsStep Creation | - | Critical | Not Started |
+| | M0.7 | SpellsStep Creation | - | Critical | ✅ Complete |
 | | M0.8 | Aspected Mage Enhancements | - | Critical | ✅ Complete |
 | 2 | **B1** | **Cyberware/Bioware System** | **2-3 weeks** | **High** | ✅ **Complete** |
 | 3 | **B4** | **Combat Tracker** | **3-4 weeks** | **High** | Not Started |
@@ -784,14 +784,14 @@ This milestone creates a dedicated step for spell selection that replaces spell 
 
 | Task | Description | Status |
 |------|-------------|--------|
-| M0.7.1 | Create SpellsStep component | Not Started |
-| M0.7.2 | Implement free spell allocation and tracking system (based on Magic priority, track source: 'free' | 'karma' on each spell) | Not Started |
-| M0.7.3 | Add spell catalog browser with category filters | Not Started |
-| M0.7.4 | Display spell details (drain, range, duration, effects) | Not Started |
-| M0.7.5 | Integrate karma purchase for additional spells (5 Karma each) | Not Started |
-| M0.7.6 | Implement spell validation (total limit = Magic × 2 + formula limits = Magic × 2 per category) | Not Started |
-| M0.7.7 | Conditionally show step only for magical characters | Not Started |
-| M0.7.8 | Register step in CreationWizard after MagicStep and move spell selection out of KarmaStep | Not Started |
+| M0.7.1 | Create SpellsStep component | ✅ Complete |
+| M0.7.2 | Implement free spell allocation and tracking system (based on Magic priority, track source: 'free' | 'karma' on each spell) | ✅ Complete |
+| M0.7.3 | Add spell catalog browser with category filters | ✅ Complete |
+| M0.7.4 | Display spell details (drain, range, duration, effects) | ✅ Complete |
+| M0.7.5 | Integrate karma purchase for additional spells (5 Karma each) | ✅ Complete |
+| M0.7.6 | Implement spell validation (total limit = Magic × 2 + formula limits = Magic × 2 per category) | ✅ Complete |
+| M0.7.7 | Conditionally show step only for magical characters | ✅ Complete |
+| M0.7.8 | Register step in CreationWizard after MagicStep and move spell selection out of KarmaStep | ✅ Complete |
 
 **Tasks JSON:**
 ```json
@@ -806,7 +806,7 @@ This milestone creates a dedicated step for spell selection that replaces spell 
       "/app/characters/create/components/steps/KarmaStep.tsx",
       "/lib/types/creation.ts"
     ],
-    "status": "Not Started",
+    "status": "Complete",
     "dependsOn": []
   },
   {
@@ -819,7 +819,7 @@ This milestone creates a dedicated step for spell selection that replaces spell 
       "/app/characters/create/components/steps/KarmaStep.tsx",
       "/lib/types/creation.ts"
     ],
-    "status": "Not Started",
+    "status": "Complete",
     "dependsOn": ["M0.7.1"]
   },
   {
@@ -832,7 +832,7 @@ This milestone creates a dedicated step for spell selection that replaces spell 
       "/app/characters/create/components/steps/KarmaStep.tsx",
       "/lib/types/creation.ts"
     ],
-    "status": "Not Started",
+    "status": "Complete",
     "dependsOn": ["M0.7.1"]
   },
   {
@@ -845,7 +845,7 @@ This milestone creates a dedicated step for spell selection that replaces spell 
       "/app/characters/create/components/steps/KarmaStep.tsx",
       "/lib/types/creation.ts"
     ],
-    "status": "Not Started",
+    "status": "Complete",
     "dependsOn": ["M0.7.1"]
   },
   {
@@ -858,7 +858,7 @@ This milestone creates a dedicated step for spell selection that replaces spell 
       "/app/characters/create/components/steps/KarmaStep.tsx",
       "/lib/types/creation.ts"
     ],
-    "status": "Not Started",
+    "status": "Complete",
     "dependsOn": ["M0.7.2", "M0.6.3"]
   },
   {
@@ -871,7 +871,7 @@ This milestone creates a dedicated step for spell selection that replaces spell 
       "/app/characters/create/components/steps/KarmaStep.tsx",
       "/lib/types/creation.ts"
     ],
-    "status": "Not Started",
+    "status": "Complete",
     "dependsOn": ["M0.7.2"]
   },
   {
@@ -884,7 +884,7 @@ This milestone creates a dedicated step for spell selection that replaces spell 
       "/app/characters/create/components/steps/KarmaStep.tsx",
       "/lib/types/creation.ts"
     ],
-    "status": "Not Started",
+    "status": "Complete",
     "dependsOn": ["M0.7.1"]
   },
   {
@@ -897,8 +897,8 @@ This milestone creates a dedicated step for spell selection that replaces spell 
       "/app/characters/create/components/steps/KarmaStep.tsx",
       "/lib/types/creation.ts"
     ],
-    "status": "Not Started",
-    "dependsOn": ["M0.7.1", "M0.7.2", "M0.7.3", "M0.7.4", "M0.7.5", "M0.7.6", "M0.7.7"]
+    "status": "Complete",
+    "dependsOn": ["M0.7.7", "M0.6.5"]
   }
 ]
 ```

@@ -967,84 +967,18 @@
               "damage": "physical",
               "duration": "instant",
               "drain": "F-3",
-              "description": "Elemental attack dealing acid damage."
+              "description": "Creates a powerful corrosive stream that sprays the target, causing terrible burns and eating away organic and metallic material. Treat as Acid damage."
             },
             {
-              "id": "clout",
-              "name": "Clout",
-              "category": "combat",
-              "type": "physical",
-              "range": "LOS",
-              "damage": "stun",
-              "duration": "instant",
-              "drain": "F-3",
-              "description": "Direct stun damage via magical force."
-            },
-            {
-              "id": "flamethrower",
-              "name": "Flamethrower",
-              "category": "combat",
-              "type": "physical",
-              "range": "LOS",
-              "damage": "physical",
-              "duration": "instant",
-              "drain": "F-3",
-              "description": "Elemental fire attack in a cone."
-            },
-            {
-              "id": "lightning-bolt",
-              "name": "Lightning Bolt",
-              "category": "combat",
-              "type": "physical",
-              "range": "LOS",
-              "damage": "physical",
-              "duration": "instant",
-              "drain": "F-3",
-              "description": "Electrical attack that ignores some armor."
-            },
-            {
-              "id": "manabolt",
-              "name": "Manabolt",
-              "category": "combat",
-              "type": "mana",
-              "range": "LOS",
-              "damage": "physical",
-              "duration": "instant",
-              "drain": "F-3",
-              "description": "Direct mana damage to living targets."
-            },
-            {
-              "id": "manaball",
-              "name": "Manaball",
-              "category": "combat",
-              "type": "mana",
-              "range": "LOS(A)",
-              "damage": "physical",
-              "duration": "instant",
-              "drain": "F",
-              "description": "Area effect mana damage."
-            },
-            {
-              "id": "powerbolt",
-              "name": "Powerbolt",
-              "category": "combat",
-              "type": "physical",
-              "range": "LOS",
-              "damage": "physical",
-              "duration": "instant",
-              "drain": "F-3",
-              "description": "Direct physical damage."
-            },
-            {
-              "id": "powerball",
-              "name": "Powerball",
+              "id": "toxic-wave",
+              "name": "Toxic Wave",
               "category": "combat",
               "type": "physical",
               "range": "LOS(A)",
               "damage": "physical",
               "duration": "instant",
-              "drain": "F",
-              "description": "Area effect physical damage."
+              "drain": "F-1",
+              "description": "Area version of Acid Stream. Creates a powerful corrosive wave that sprays targets, causing terrible burns and eating away organic and metallic material."
             },
             {
               "id": "punch",
@@ -1055,18 +989,150 @@
               "damage": "stun",
               "duration": "instant",
               "drain": "F-6",
-              "description": "Touch-range stun damage."
+              "description": "Smacks the target with invisible psychokinetic force, similar to a bruising punch, inflicting Stun damage. Requires touching the target."
             },
             {
-              "id": "stunball",
-              "name": "Stunball",
+              "id": "clout",
+              "name": "Clout",
               "category": "combat",
-              "type": "mana",
+              "type": "physical",
+              "range": "LOS",
+              "damage": "stun",
+              "duration": "instant",
+              "drain": "F-3",
+              "description": "Smacks the target with invisible psychokinetic force, similar to a bruising punch, inflicting Stun damage at range."
+            },
+            {
+              "id": "blast",
+              "name": "Blast",
+              "category": "combat",
+              "type": "physical",
               "range": "LOS(A)",
               "damage": "stun",
               "duration": "instant",
+              "drain": "F",
+              "description": "Area version of Clout. Smacks targets with invisible psychokinetic force, inflicting Stun damage."
+            },
+            {
+              "id": "death-touch",
+              "name": "Death Touch",
+              "category": "combat",
+              "type": "mana",
+              "range": "touch",
+              "damage": "physical",
+              "duration": "instant",
+              "drain": "F-6",
+              "description": "Channels destructive magical power into the target, doing Physical damage. Only affects living and magical targets. Requires touching the target."
+            },
+            {
+              "id": "manabolt",
+              "name": "Manabolt",
+              "category": "combat",
+              "type": "mana",
+              "range": "LOS",
+              "damage": "physical",
+              "duration": "instant",
+              "drain": "F-3",
+              "description": "Channels destructive magical power into the target, doing Physical damage. Only affects living and magical targets."
+            },
+            {
+              "id": "manaball",
+              "name": "Manaball",
+              "category": "combat",
+              "type": "mana",
+              "range": "LOS(A)",
+              "damage": "physical",
+              "duration": "instant",
+              "drain": "F",
+              "description": "Area version of Manabolt. Channels destructive magical power into targets, doing Physical damage."
+            },
+            {
+              "id": "flamethrower",
+              "name": "Flamethrower",
+              "category": "combat",
+              "type": "physical",
+              "range": "LOS",
+              "damage": "physical",
+              "duration": "instant",
+              "drain": "F-3",
+              "description": "Creates an explosion of flames that scorch the target, dealing Fire damage. May ignite flammable materials."
+            },
+            {
+              "id": "fireball",
+              "name": "Fireball",
+              "category": "combat",
+              "type": "physical",
+              "range": "LOS(A)",
+              "damage": "physical",
+              "duration": "instant",
               "drain": "F-1",
-              "description": "Area effect stun damage."
+              "description": "Area version of Flamethrower. Creates an explosion of flames that scorch targets, dealing Fire damage."
+            },
+            {
+              "id": "lightning-bolt",
+              "name": "Lightning Bolt",
+              "category": "combat",
+              "type": "physical",
+              "range": "LOS",
+              "damage": "physical",
+              "duration": "instant",
+              "drain": "F-3",
+              "description": "Creates and directs a vicious strike of electricity that causes Electricity damage."
+            },
+            {
+              "id": "ball-lightning",
+              "name": "Ball Lightning",
+              "category": "combat",
+              "type": "physical",
+              "range": "LOS(A)",
+              "damage": "physical",
+              "duration": "instant",
+              "drain": "F-1",
+              "description": "Area version of Lightning Bolt. Creates vicious strikes of electricity that cause Electricity damage."
+            },
+            {
+              "id": "shatter",
+              "name": "Shatter",
+              "category": "combat",
+              "type": "physical",
+              "range": "touch",
+              "damage": "physical",
+              "duration": "instant",
+              "drain": "F-6",
+              "description": "Channels destructive magical power into the target causing Physical damage. Affects living and non-living targets. Requires touching the target."
+            },
+            {
+              "id": "powerbolt",
+              "name": "Powerbolt",
+              "category": "combat",
+              "type": "physical",
+              "range": "LOS",
+              "damage": "physical",
+              "duration": "instant",
+              "drain": "F-3",
+              "description": "Channels destructive magical power into the target causing Physical damage. Affects living and non-living targets."
+            },
+            {
+              "id": "powerball",
+              "name": "Powerball",
+              "category": "combat",
+              "type": "physical",
+              "range": "LOS(A)",
+              "damage": "physical",
+              "duration": "instant",
+              "drain": "F",
+              "description": "Area version of Powerbolt. Channels destructive magical power into targets causing Physical damage."
+            },
+            {
+              "id": "knockout",
+              "name": "Knockout",
+              "category": "combat",
+              "type": "mana",
+              "range": "touch",
+              "damage": "stun",
+              "duration": "instant",
+              "drain": "F-6",
+              "description": "Channels magical energy directly into the target, causing Stun damage. Requires touching the target."
             },
             {
               "id": "stunbolt",
@@ -1077,7 +1143,18 @@
               "damage": "stun",
               "duration": "instant",
               "drain": "F-3",
-              "description": "Direct stun damage to living targets."
+              "description": "Channels magical energy directly into the target, causing Stun damage."
+            },
+            {
+              "id": "stunball",
+              "name": "Stunball",
+              "category": "combat",
+              "type": "mana",
+              "range": "LOS(A)",
+              "damage": "stun",
+              "duration": "instant",
+              "drain": "F",
+              "description": "Area version of Stunbolt. Channels magical energy directly into targets, causing Stun damage."
             }
           ],
           "detection": [
@@ -1089,17 +1166,17 @@
               "range": "touch",
               "duration": "sustained",
               "drain": "F-3",
-              "description": "Learn device functions and operation."
+              "description": "Allows the subject to analyze the purpose and operation of a device or piece of equipment within range."
             },
             {
               "id": "analyze-magic",
               "name": "Analyze Magic",
               "category": "detection",
-              "type": "mana",
+              "type": "physical",
               "range": "touch",
               "duration": "sustained",
               "drain": "F-3",
-              "description": "Analyze magical objects or effects."
+              "description": "Allows the subject to analyze the purpose of a magical object (e.g., foci, alchemical preparations, magical lodges)."
             },
             {
               "id": "analyze-truth",
@@ -1109,7 +1186,7 @@
               "range": "touch",
               "duration": "sustained",
               "drain": "F-2",
-              "description": "Detect if subject is lying."
+              "description": "The subject can tell whether a target’s statements are the truth (or at least if the subject honestly believes them to be true)."
             },
             {
               "id": "clairaudience",
@@ -1119,7 +1196,7 @@
               "range": "touch",
               "duration": "sustained",
               "drain": "F-3",
-              "description": "Hear from distant location."
+              "description": "The subject can hear distant sounds as if physically present at a chosen point within the sensory range of the spell."
             },
             {
               "id": "clairvoyance",
@@ -1129,7 +1206,7 @@
               "range": "touch",
               "duration": "sustained",
               "drain": "F-3",
-              "description": "See from distant location."
+              "description": "The subject can see distant scenes as if physically present at a chosen point within the sensory range of the spell."
             },
             {
               "id": "combat-sense",
@@ -1139,7 +1216,7 @@
               "range": "touch",
               "duration": "sustained",
               "drain": "F",
-              "description": "+1 die per hit to defense tests."
+              "description": "Subject can subconsciously analyze combat situations. Every hit adds 1 die to Reaction on Surprise Tests and defense tests."
             },
             {
               "id": "detect-enemies",
@@ -1149,7 +1226,17 @@
               "range": "touch",
               "duration": "sustained",
               "drain": "F-2",
-              "description": "Sense hostile intent."
+              "description": "The subject can sense the presence of living things within range that have hostile intentions."
+            },
+            {
+              "id": "detect-enemies-extended",
+              "name": "Detect Enemies, Extended",
+              "category": "detection",
+              "type": "mana",
+              "range": "touch",
+              "duration": "sustained",
+              "drain": "F",
+              "description": "Extended range version of Detect Enemies."
             },
             {
               "id": "detect-individual",
@@ -1159,7 +1246,7 @@
               "range": "touch",
               "duration": "sustained",
               "drain": "F-3",
-              "description": "Sense specific person."
+              "description": "The subject can detect the presence of a particular individual anywhere within range."
             },
             {
               "id": "detect-life",
@@ -1169,7 +1256,17 @@
               "range": "touch",
               "duration": "sustained",
               "drain": "F-3",
-              "description": "Sense living creatures."
+              "description": "The subject can detect all living beings within range of the sense and knows their number and relative location."
+            },
+            {
+              "id": "detect-life-extended",
+              "name": "Detect Life, Extended",
+              "category": "detection",
+              "type": "mana",
+              "range": "touch",
+              "duration": "sustained",
+              "drain": "F-1",
+              "description": "Extended range version of Detect Life."
             },
             {
               "id": "detect-magic",
@@ -1179,7 +1276,17 @@
               "range": "touch",
               "duration": "sustained",
               "drain": "F-2",
-              "description": "Sense magical effects."
+              "description": "The subject can detect the presence of all foci, spells, wards, magical lodges, and spirits within range."
+            },
+            {
+              "id": "detect-magic-extended",
+              "name": "Detect Magic, Extended",
+              "category": "detection",
+              "type": "mana",
+              "range": "touch",
+              "duration": "sustained",
+              "drain": "F",
+              "description": "Extended range version of Detect Magic."
             },
             {
               "id": "mindlink",
@@ -1189,7 +1296,7 @@
               "range": "touch",
               "duration": "sustained",
               "drain": "F-1",
-              "description": "Telepathic communication."
+              "description": "Allows the magician and one voluntary subject to communicate mentally."
             },
             {
               "id": "mind-probe",
@@ -1199,7 +1306,7 @@
               "range": "touch",
               "duration": "sustained",
               "drain": "F",
-              "description": "Read surface or deeper thoughts."
+              "description": "Allows the subject to telepathically probe the mind of a specific target within range."
             }
           ],
           "health": [
@@ -1211,7 +1318,7 @@
               "range": "touch",
               "duration": "permanent",
               "drain": "F-3",
-              "description": "Neutralize toxins in subject."
+              "description": "Helps a poisoned subject overcome a toxin. Add hits to Toxin Resistance Test."
             },
             {
               "id": "cure-disease",
@@ -1221,7 +1328,7 @@
               "range": "touch",
               "duration": "permanent",
               "drain": "F-4",
-              "description": "Eliminate disease from subject."
+              "description": "Helps a patient overcome illness. Adds dice to Disease Resistance Test."
             },
             {
               "id": "decrease-attribute",
@@ -1231,7 +1338,7 @@
               "range": "touch",
               "duration": "sustained",
               "drain": "F-2",
-              "description": "Reduce one attribute. Choose attribute when learned."
+              "description": "Weakens the target by decreasing a designated Attribute."
             },
             {
               "id": "detox",
@@ -1241,7 +1348,7 @@
               "range": "touch",
               "duration": "permanent",
               "drain": "F-6",
-              "description": "Remove drug effects from subject."
+              "description": "Relieves the side effects of a drug or poison. Eliminates symptoms."
             },
             {
               "id": "heal",
@@ -1251,7 +1358,7 @@
               "range": "touch",
               "duration": "permanent",
               "drain": "F-4",
-              "description": "Heal physical damage."
+              "description": "Repairs physical injuries. Heals Physical damage damage equal to hits."
             },
             {
               "id": "increase-attribute",
@@ -1261,7 +1368,7 @@
               "range": "touch",
               "duration": "sustained",
               "drain": "F-3",
-              "description": "Boost one attribute. Choose attribute when learned."
+              "description": "Increases an Attribute (natural or augmented) on a voluntary subject."
             },
             {
               "id": "increase-reflexes",
@@ -1271,7 +1378,7 @@
               "range": "touch",
               "duration": "sustained",
               "drain": "F",
-              "description": "Add +1 Reaction and +1d6 Initiative per hit."
+              "description": "Increases initiative. Each hit adds +1 Initiative, every 2 hits adds +1d6."
             },
             {
               "id": "oxygenate",
@@ -1281,7 +1388,17 @@
               "range": "touch",
               "duration": "sustained",
               "drain": "F-5",
-              "description": "Subject doesn't need to breathe."
+              "description": "Oxygenates the blood, providing extra Body dice to resist suffocation and allowing underwater breathing."
+            },
+            {
+              "id": "prophylaxis",
+              "name": "Prophylaxis",
+              "category": "health",
+              "type": "mana",
+              "range": "touch",
+              "duration": "sustained",
+              "drain": "F-4",
+              "description": "Provides extra dice to resist infection, drugs, or toxins."
             },
             {
               "id": "resist-pain",
@@ -1291,7 +1408,7 @@
               "range": "touch",
               "duration": "sustained",
               "drain": "F-4",
-              "description": "Ignore wound modifiers."
+              "description": "Allows subject to ignore pain penalties from Physical or Stun damage."
             },
             {
               "id": "stabilize",
@@ -1301,7 +1418,7 @@
               "range": "touch",
               "duration": "permanent",
               "drain": "F-4",
-              "description": "Prevent dying character from bleeding out."
+              "description": "Stabilizes all vital functions and prevents the character from dying from Physical overflow."
             }
           ],
           "illusion": [
@@ -1313,7 +1430,17 @@
               "range": "LOS",
               "duration": "sustained",
               "drain": "F-4",
-              "description": "Cause intense pain, -1 die per net hit."
+              "description": "Inflicts an illusion of terrible pain. Hits cause pseudo-damage."
+            },
+            {
+              "id": "mass-agony",
+              "name": "Mass Agony",
+              "category": "illusion",
+              "type": "mana",
+              "range": "LOS(A)",
+              "duration": "sustained",
+              "drain": "F-2",
+              "description": "Area version of Agony."
             },
             {
               "id": "bugs",
@@ -1323,27 +1450,17 @@
               "range": "LOS",
               "duration": "sustained",
               "drain": "F-3",
-              "description": "Target believes covered in insects."
+              "description": "Makes target believe they are covered in bugs. Reduces Initiative Score."
             },
             {
-              "id": "chaos",
-              "name": "Chaos",
-              "category": "illusion",
-              "type": "mana",
-              "range": "LOS",
-              "duration": "sustained",
-              "drain": "F-2",
-              "description": "Target experiences random sensory chaos."
-            },
-            {
-              "id": "chaotic-world",
-              "name": "Chaotic World",
+              "id": "swarm",
+              "name": "Swarm",
               "category": "illusion",
               "type": "mana",
               "range": "LOS(A)",
               "duration": "sustained",
-              "drain": "F",
-              "description": "Area effect sensory chaos."
+              "drain": "F-1",
+              "description": "Area version of Bugs."
             },
             {
               "id": "confusion",
@@ -1353,47 +1470,7 @@
               "range": "LOS",
               "duration": "sustained",
               "drain": "F-3",
-              "description": "Cause mental disorientation."
-            },
-            {
-              "id": "entertainment",
-              "name": "Entertainment",
-              "category": "illusion",
-              "type": "mana",
-              "range": "LOS(A)",
-              "duration": "sustained",
-              "drain": "F-3",
-              "description": "Create impressive but obvious illusions."
-            },
-            {
-              "id": "hush",
-              "name": "Hush",
-              "category": "illusion",
-              "type": "physical",
-              "range": "LOS(A)",
-              "duration": "sustained",
-              "drain": "F-2",
-              "description": "Create zone of silence."
-            },
-            {
-              "id": "improved-invisibility",
-              "name": "Improved Invisibility",
-              "category": "illusion",
-              "type": "physical",
-              "range": "LOS",
-              "duration": "sustained",
-              "drain": "F-1",
-              "description": "Target invisible to all senses."
-            },
-            {
-              "id": "invisibility",
-              "name": "Invisibility",
-              "category": "illusion",
-              "type": "mana",
-              "range": "LOS",
-              "duration": "sustained",
-              "drain": "F-2",
-              "description": "Target invisible to living observers."
+              "description": "Produces a storm of conflicting sensations. Target suffers dice pool penalty."
             },
             {
               "id": "mass-confusion",
@@ -1403,7 +1480,87 @@
               "range": "LOS(A)",
               "duration": "sustained",
               "drain": "F-1",
-              "description": "Area effect mental disorientation."
+              "description": "Area version of Confusion."
+            },
+            {
+              "id": "chaos",
+              "name": "Chaos",
+              "category": "illusion",
+              "type": "physical",
+              "range": "LOS",
+              "duration": "sustained",
+              "drain": "F-2",
+              "description": "Physical version of Confusion. Affects technological systems too."
+            },
+            {
+              "id": "chaotic-world",
+              "name": "Chaotic World",
+              "category": "illusion",
+              "type": "physical",
+              "range": "LOS(A)",
+              "duration": "sustained",
+              "drain": "F",
+              "description": "Area version of Chaos."
+            },
+            {
+              "id": "entertainment",
+              "name": "Entertainment",
+              "category": "illusion",
+              "type": "mana",
+              "range": "LOS(A)",
+              "duration": "sustained",
+              "drain": "F-3",
+              "description": "Creates obvious, but entertaining, illusions in the minds of subjects."
+            },
+            {
+              "id": "trid-entertainment",
+              "name": "Trid Entertainment",
+              "category": "illusion",
+              "type": "physical",
+              "range": "LOS(A)",
+              "duration": "sustained",
+              "drain": "F-2",
+              "description": "Physical version of Entertainment. Creates obvious illusions perceivable by sensors."
+            },
+            {
+              "id": "invisibility",
+              "name": "Invisibility",
+              "category": "illusion",
+              "type": "mana",
+              "range": "LOS",
+              "duration": "sustained",
+              "drain": "F-2",
+              "description": "Makes subject difficult to detect by normal visual senses (living minds only)."
+            },
+            {
+              "id": "improved-invisibility",
+              "name": "Improved Invisibility",
+              "category": "illusion",
+              "type": "physical",
+              "range": "LOS",
+              "duration": "sustained",
+              "drain": "F-1",
+              "description": "Makes subject difficult to detect by visual senses (affects cameras/sensors)."
+            },
+            {
+              "id": "mask",
+              "name": "Mask",
+              "category": "illusion",
+              "type": "mana",
+              "range": "touch",
+              "duration": "sustained",
+              "drain": "F-2",
+              "description": "Subject assumes a different physical appearance in the minds of viewers."
+            },
+            {
+              "id": "physical-mask",
+              "name": "Physical Mask",
+              "category": "illusion",
+              "type": "physical",
+              "range": "touch",
+              "duration": "sustained",
+              "drain": "F-1",
+              "description": "Subject assumes a different physical appearance (affects cameras/sensors)."
             },
             {
               "id": "phantasm",
@@ -1413,37 +1570,7 @@
               "range": "LOS(A)",
               "duration": "sustained",
               "drain": "F-1",
-              "description": "Create realistic illusion for living viewers."
-            },
-            {
-              "id": "physical-mask",
-              "name": "Physical Mask",
-              "category": "illusion",
-              "type": "physical",
-              "range": "touch",
-              "duration": "sustained",
-              "drain": "F-2",
-              "description": "Alter appearance physically."
-            },
-            {
-              "id": "silence",
-              "name": "Silence",
-              "category": "illusion",
-              "type": "physical",
-              "range": "LOS(A)",
-              "duration": "sustained",
-              "drain": "F-1",
-              "description": "Create area of total silence."
-            },
-            {
-              "id": "stealth",
-              "name": "Stealth",
-              "category": "illusion",
-              "type": "physical",
-              "range": "LOS",
-              "duration": "sustained",
-              "drain": "F-2",
-              "description": "Reduce all sounds made by target."
+              "description": "Creates convincing illusions of any object, creature, or scene (living minds only)."
             },
             {
               "id": "trid-phantasm",
@@ -1453,7 +1580,37 @@
               "range": "LOS(A)",
               "duration": "sustained",
               "drain": "F",
-              "description": "Create realistic illusion with physical presence."
+              "description": "Creates convincing illusions of any object, creature, or scene (affects cameras/sensors)."
+            },
+            {
+              "id": "hush",
+              "name": "Hush",
+              "category": "illusion",
+              "type": "mana",
+              "range": "LOS(A)",
+              "duration": "sustained",
+              "drain": "F-2",
+              "description": "Creates an area that dampens sound (affects living beings)."
+            },
+            {
+              "id": "silence",
+              "name": "Silence",
+              "category": "illusion",
+              "type": "physical",
+              "range": "LOS(A)",
+              "duration": "sustained",
+              "drain": "F-1",
+              "description": "Creates an area that dampens sound (affects technology)."
+            },
+            {
+              "id": "stealth",
+              "name": "Stealth",
+              "category": "illusion",
+              "type": "physical",
+              "range": "LOS",
+              "duration": "sustained",
+              "drain": "F-2",
+              "description": "Makes the subject less audible to normal and augmented hearing."
             }
           ],
           "manipulation": [
@@ -1465,7 +1622,17 @@
               "range": "LOS",
               "duration": "sustained",
               "drain": "F-1",
-              "description": "Give motion to objects."
+              "description": "Causes inanimate objects to move."
+            },
+            {
+              "id": "mass-animate",
+              "name": "Mass Animate",
+              "category": "manipulation",
+              "type": "physical",
+              "range": "LOS(A)",
+              "duration": "sustained",
+              "drain": "F+1",
+              "description": "Area version of Animate."
             },
             {
               "id": "armor",
@@ -1475,17 +1642,7 @@
               "range": "LOS",
               "duration": "sustained",
               "drain": "F-2",
-              "description": "+1 armor per hit."
-            },
-            {
-              "id": "barrier",
-              "name": "Barrier",
-              "category": "manipulation",
-              "type": "physical",
-              "range": "LOS",
-              "duration": "sustained",
-              "drain": "F-1",
-              "description": "Create magical wall."
+              "description": "Creates a glowing field of magical energy that protects against Physical Damage. Adds Armor."
             },
             {
               "id": "control-actions",
@@ -1495,87 +1652,7 @@
               "range": "LOS",
               "duration": "sustained",
               "drain": "F-1",
-              "description": "Control target's physical actions."
-            },
-            {
-              "id": "control-thoughts",
-              "name": "Control Thoughts",
-              "category": "manipulation",
-              "type": "mana",
-              "range": "LOS",
-              "duration": "sustained",
-              "drain": "F-1",
-              "description": "Control target's mind and actions."
-            },
-            {
-              "id": "fling",
-              "name": "Fling",
-              "category": "manipulation",
-              "type": "physical",
-              "range": "LOS",
-              "duration": "instant",
-              "drain": "F-2",
-              "description": "Telekinetically throw objects."
-            },
-            {
-              "id": "ice-sheet",
-              "name": "Ice Sheet",
-              "category": "manipulation",
-              "type": "physical",
-              "range": "LOS(A)",
-              "duration": "instant",
-              "drain": "F",
-              "description": "Create slippery ice surface."
-            },
-            {
-              "id": "ignite",
-              "name": "Ignite",
-              "category": "manipulation",
-              "type": "physical",
-              "range": "LOS",
-              "duration": "permanent",
-              "drain": "F-1",
-              "description": "Set flammable objects on fire."
-            },
-            {
-              "id": "influence",
-              "name": "Influence",
-              "category": "manipulation",
-              "type": "mana",
-              "range": "LOS",
-              "duration": "instant",
-              "drain": "F-1",
-              "description": "Implant suggestion in target's mind."
-            },
-            {
-              "id": "levitate",
-              "name": "Levitate",
-              "category": "manipulation",
-              "type": "physical",
-              "range": "LOS",
-              "duration": "sustained",
-              "drain": "F-2",
-              "description": "Lift and move objects or creatures."
-            },
-            {
-              "id": "light",
-              "name": "Light",
-              "category": "manipulation",
-              "type": "physical",
-              "range": "LOS(A)",
-              "duration": "sustained",
-              "drain": "F-4",
-              "description": "Create bright illumination."
-            },
-            {
-              "id": "magic-fingers",
-              "name": "Magic Fingers",
-              "category": "manipulation",
-              "type": "physical",
-              "range": "LOS",
-              "duration": "sustained",
-              "drain": "F-2",
-              "description": "Manipulate objects at distance."
+              "description": "Controls the physical actions of the target like a puppeteer."
             },
             {
               "id": "mob-control",
@@ -1585,27 +1662,127 @@
               "range": "LOS(A)",
               "duration": "sustained",
               "drain": "F+1",
-              "description": "Area effect thought control."
+              "description": "Area version of Control Actions."
+            },
+            {
+              "id": "control-thoughts",
+              "name": "Control Thoughts",
+              "category": "manipulation",
+              "type": "mana",
+              "range": "LOS",
+              "duration": "sustained",
+              "drain": "F-1",
+              "description": "Seizes control of the target's mind, directing everything they think."
             },
             {
               "id": "mob-mind",
               "name": "Mob Mind",
               "category": "manipulation",
               "type": "mana",
-              "range": "LOS(A)",
+              "range": "LOS",
               "duration": "sustained",
-              "drain": "F",
-              "description": "Area effect suggestion."
+              "drain": "F+1",
+              "description": "Area version of Control Thoughts."
             },
             {
-              "id": "shape-material",
-              "name": "Shape [Material]",
+              "id": "fling",
+              "name": "Fling",
+              "category": "manipulation",
+              "type": "physical",
+              "range": "LOS",
+              "duration": "instant",
+              "drain": "F-2",
+              "description": "Psychokinetically hurls a single object at a target."
+            },
+            {
+              "id": "ice-sheet",
+              "name": "Ice Sheet",
+              "category": "manipulation",
+              "type": "physical",
+              "range": "LOS(A)",
+              "duration": "instant",
+              "drain": "F",
+              "description": "Creates a slippery sheet of ice over the area."
+            },
+            {
+              "id": "ignite",
+              "name": "Ignite",
+              "category": "manipulation",
+              "type": "physical",
+              "range": "LOS",
+              "duration": "permanent",
+              "drain": "F-1",
+              "description": "Accelerates molecular motion, causing the target to catch fire."
+            },
+            {
+              "id": "influence",
+              "name": "Influence",
+              "category": "manipulation",
+              "type": "mana",
+              "range": "LOS",
+              "duration": "permanent",
+              "drain": "F-1",
+              "description": "Implants a single suggestion in the victim's mind."
+            },
+            {
+              "id": "levitate",
+              "name": "Levitate",
               "category": "manipulation",
               "type": "physical",
               "range": "LOS",
               "duration": "sustained",
               "drain": "F-2",
-              "description": "Reshape materials. Choose material when learned."
+              "description": "Allows telekinetic lifting and moving of a person or object."
+            },
+            {
+              "id": "light",
+              "name": "Light",
+              "category": "manipulation",
+              "type": "physical",
+              "range": "LOS(A)",
+              "duration": "sustained",
+              "drain": "F-4",
+              "description": "Creates a mobile point of light."
+            },
+            {
+              "id": "magic-fingers",
+              "name": "Magic Fingers",
+              "category": "manipulation",
+              "type": "physical",
+              "range": "LOS",
+              "duration": "sustained",
+              "drain": "F-2",
+              "description": "Creates a psychokinetic effect as a sort of invisible hand."
+            },
+            {
+              "id": "mana-barrier",
+              "name": "Mana Barrier",
+              "category": "manipulation",
+              "type": "mana",
+              "range": "LOS(A)",
+              "duration": "sustained",
+              "drain": "F-2",
+              "description": "Creates an invisible barrier of magical energy that impedes spirits and spells."
+            },
+            {
+              "id": "physical-barrier",
+              "name": "Physical Barrier",
+              "category": "manipulation",
+              "type": "physical",
+              "range": "LOS(A)",
+              "duration": "sustained",
+              "drain": "F-1",
+              "description": "Creates a glowing, translucent force field (wall or dome)."
+            },
+            {
+              "id": "poltergeist",
+              "name": "Poltergeist",
+              "category": "manipulation",
+              "type": "physical",
+              "range": "LOS(A)",
+              "duration": "sustained",
+              "drain": "F-2",
+              "description": "Picks up small objects and whirls them around, causing damage and visibility penalties."
             },
             {
               "id": "shadow",
@@ -1615,7 +1792,7 @@
               "range": "LOS(A)",
               "duration": "sustained",
               "drain": "F-3",
-              "description": "Create darkness in an area."
+              "description": "Creates a globe of darkness."
             }
           ]
         },
@@ -7374,6 +7551,16 @@
                   "budgetId": "nuyen",
                   "essenceLimit": 6,
                   "availabilityLimit": 12
+                }
+              },
+              {
+                "id": "spells",
+                "title": "Spells",
+                "type": "custom",
+                "description": "Select spells if you are a magician or mystic adept.",
+                "payload": {
+                  "type": "custom",
+                  "target": "spells"
                 }
               },
               {
