@@ -383,6 +383,24 @@ export interface SR5SkillsPriority {
 }
 
 // =============================================================================
+// FREE SKILL ALLOCATIONS
+// =============================================================================
+
+/**
+ * Tracks free skill allocations from priority table (Magic/Resonance priority)
+ */
+export interface FreeSkillAllocation {
+  type: "magical" | "resonance" | "active" | "magicalGroup";
+  rating: number;
+  count: number;
+  allocated: Array<{
+    skillId?: string; // For individual skills
+    groupId?: string; // For skill groups
+    rating: number;
+  }>;
+}
+
+// =============================================================================
 // CREATION STATE (Runtime)
 // =============================================================================
 

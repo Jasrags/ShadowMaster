@@ -115,6 +115,12 @@ export interface Character {
   skills: Record<string, number>;
 
   /**
+   * Source tracking for skills (optional, for tracking free vs purchased skills)
+   * Maps skill ID to source type
+   */
+  skillSources?: Record<string, SkillSource>;
+
+  /**
    * Skill specializations keyed by skill ID
    */
   skillSpecializations?: Record<string, string[]>;
@@ -266,6 +272,21 @@ export interface Character {
 // =============================================================================
 // SUPPORTING TYPES
 // =============================================================================
+
+/**
+ * Source of skill points (for tracking free vs purchased skills)
+ */
+export type SkillSource = "free" | "priority" | "karma";
+
+/**
+ * Skill with source tracking
+ */
+export interface SkillWithSource {
+  rating: number;
+  source: SkillSource;
+  freeRating?: number; // Free rating from priority (if applicable)
+  purchasedRating?: number; // Rating purchased with skill points or karma
+}
 
 export interface KnowledgeSkill {
   name: string;

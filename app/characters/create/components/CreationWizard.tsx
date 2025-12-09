@@ -228,7 +228,7 @@ export function CreationWizard({ onCancel, onComplete }: CreationWizardProps) {
         }
         break;
 
-      case "magic":
+      case "magic": {
         // Magic path must be selected if available
         const magicPriority = state.priorities?.magic;
         if (magicPriority && magicPriority !== "E" && !state.selections["magical-path"]) {
@@ -249,9 +249,10 @@ export function CreationWizard({ onCancel, onComplete }: CreationWizardProps) {
           });
         }
         break;
+      }
 
       // Skills, qualities, gear - show warnings but allow continuing
-      case "skills":
+      case "skills": {
         const skillSpent = (state.budgets["skill-points-spent"] as number) || 0;
         const skillTotal = (state.budgets["skill-points-total"] as number) || 0;
         if (skillTotal > 0 && skillSpent < skillTotal * 0.5) {
@@ -262,7 +263,49 @@ export function CreationWizard({ onCancel, onComplete }: CreationWizardProps) {
             severity: "warning",
           });
         }
+        
+        // Validate free skill allocations
+        const magicPriority = state.priorities?.magic;
+        const magicPath = state.selections["magical-path"] as string | undefined;
+        if (magicPriority && magicPath && priorityTable?.table[magicPriority]) {
+          const priorityData = priorityTable.table[magicPriority];
+          if (priorityData?.magic) {
+            const magicData = priorityData.magic as {
+              options: Array<{
+                path: string;
+                freeSkills?: Array<{
+                  type: string;
+                  rating: number;
+                  count: number;
+                }>;
+              }>;
+            };
+            const selectedOption = magicData.options?.find((opt) => opt.path === magicPath);
+            if (selectedOption?.freeSkills) {
+              const freeSkillAllocations = (state.selections.freeSkillAllocations || []) as Array<{
+                type: string;
+                rating: number;
+                count: number;
+                allocated: Array<unknown>;
+              }>;
+              
+              selectedOption.freeSkills.forEach((freeSkill, index) => {
+                const allocation = freeSkillAllocations[index];
+                const allocatedCount = allocation?.allocated?.length || 0;
+                if (allocatedCount < freeSkill.count) {
+                  errors.push({
+                    constraintId: `free-skills-${index}`,
+                    stepId,
+                    message: `You must allocate ${freeSkill.count - allocatedCount} more ${freeSkill.type === "magicalGroup" ? "magical skill group" : freeSkill.type === "active" ? "active skill" : freeSkill.type === "resonance" ? "resonance skill" : "magical skill"}${freeSkill.count - allocatedCount > 1 ? "s" : ""} at rating ${freeSkill.rating} from your priority.`,
+                    severity: "error",
+                  });
+                }
+              });
+            }
+          }
+        }
         break;
+      }
 
       case "gear":
         // Check nuyen carryover (max 5,000)

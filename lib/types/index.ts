@@ -32,6 +32,8 @@ export type {
   Character,
   KnowledgeSkill,
   LanguageSkill,
+  SkillSource,
+  SkillWithSource,
   AdeptPower,
   BoundSpirit,
   Lifestyle,
@@ -88,6 +90,7 @@ export type {
   SR5MetatypePriority,
   SR5MagicPriority,
   SR5SkillsPriority,
+  FreeSkillAllocation,
   CreationState,
   ValidationError,
 } from "./creation";

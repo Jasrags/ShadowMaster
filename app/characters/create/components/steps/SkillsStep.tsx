@@ -1,8 +1,8 @@
 "use client";
 
 import { useMemo, useCallback, useState } from "react";
-import { useSkills } from "@/lib/rules";
-import type { CreationState, KnowledgeSkill, LanguageSkill } from "@/lib/types";
+import { useSkills, usePriorityTable } from "@/lib/rules";
+import type { CreationState, KnowledgeSkill, LanguageSkill, FreeSkillAllocation } from "@/lib/types";
 
 interface StepProps {
   state: CreationState;
@@ -40,6 +40,7 @@ const RESONANCE_SKILL_GROUPS = ["tasking"];
 
 export function SkillsStep({ state, updateState, budgetValues }: StepProps) {
   const { activeSkills, skillGroups, knowledgeCategories, creationLimits, exampleKnowledgeSkills, exampleLanguages } = useSkills();
+  const priorityTable = usePriorityTable();
   const skillPoints = budgetValues["skill-points"] || 0;
   const skillGroupPoints = budgetValues["skill-group-points"] || 0;
   const [searchQuery, setSearchQuery] = useState("");
@@ -114,16 +115,80 @@ export function SkillsStep({ state, updateState, budgetValues }: StepProps) {
     return (logic + intuition) * 2;
   }, [logic, intuition]);
 
+  // Get current free skill allocations from state
+  const freeSkillAllocations = useMemo(() => {
+    return (state.selections.freeSkillAllocations || []) as FreeSkillAllocation[];
+  }, [state.selections.freeSkillAllocations]);
+
+  // Calculate available free skills from priority table
+  const availableFreeSkills = useMemo(() => {
+    if (!priorityTable || !state.priorities?.magic || !magicPath) {
+      return [];
+    }
+
+    const magicPriority = state.priorities.magic;
+    const priorityData = priorityTable.table[magicPriority];
+    if (!priorityData?.magic) {
+      return [];
+    }
+
+    const magicData = priorityData.magic as {
+      options: Array<{
+        path: string;
+        freeSkills?: Array<{
+          type: "magical" | "resonance" | "active" | "magicalGroup";
+          rating: number;
+          count: number;
+        }>;
+      }>;
+    };
+
+    const selectedOption = magicData.options?.find((opt) => opt.path === magicPath);
+    if (!selectedOption?.freeSkills) {
+      return [];
+    }
+
+    return selectedOption.freeSkills;
+  }, [priorityTable, state.priorities?.magic, magicPath]);
+
+  // Calculate free skill ratings allocated per skill/group
+  const freeSkillRatings = useMemo(() => {
+    const ratings: Record<string, number> = {};
+    freeSkillAllocations.forEach((allocation) => {
+      allocation.allocated.forEach((alloc) => {
+        if (alloc.skillId) {
+          ratings[alloc.skillId] = (ratings[alloc.skillId] || 0) + alloc.rating;
+        }
+        if (alloc.groupId) {
+          ratings[alloc.groupId] = (ratings[alloc.groupId] || 0) + alloc.rating;
+        }
+      });
+    });
+    return ratings;
+  }, [freeSkillAllocations]);
+
   // Calculate points spent (skills + specializations at 1 point each)
+  // Exclude free skill ratings from the calculation
   const skillPointsSpent = useMemo(() => {
-    const skillsTotal = Object.values(skills).reduce((sum, val) => sum + val, 0);
+    let skillsTotal = 0;
+    Object.entries(skills).forEach(([skillId, rating]) => {
+      const freeRating = freeSkillRatings[skillId] || 0;
+      const purchasedRating = Math.max(0, rating - freeRating);
+      skillsTotal += purchasedRating;
+    });
     const specializationsTotal = Object.keys(specializations).length;
     return skillsTotal + specializationsTotal;
-  }, [skills, specializations]);
+  }, [skills, specializations, freeSkillRatings]);
 
   const groupPointsSpent = useMemo(() => {
-    return Object.values(groups).reduce((sum, val) => sum + val, 0);
-  }, [groups]);
+    let total = 0;
+    Object.entries(groups).forEach(([groupId, rating]) => {
+      const freeRating = freeSkillRatings[groupId] || 0;
+      const purchasedRating = Math.max(0, rating - freeRating);
+      total += purchasedRating;
+    });
+    return total;
+  }, [groups, freeSkillRatings]);
 
   const knowledgePointsSpent = useMemo(() => {
     return knowledgeSkills.reduce((sum, skill) => sum + skill.rating, 0) +
@@ -271,6 +336,57 @@ export function SkillsStep({ state, updateState, budgetValues }: StepProps) {
     });
   }, [skillGroups, hasResonance, isAdept, canUseMagicSkillGroups, isAspectedMage, aspectedMageGroup, isMysticAdept]);
 
+  // Get all applicable skills for free skill allocation (not filtered by search/category)
+  const allApplicableSkills = useMemo(() => {
+    return activeSkills.filter((skill) => {
+      // Filter out resonance skills if character doesn't have resonance
+      if (skill.requiresResonance && !hasResonance) {
+        return false;
+      }
+
+      // Check if skill belongs to a magical skill group
+      const skillGroup = skill.group;
+      const isInMagicalGroup = skillGroup && MAGICAL_SKILL_GROUPS.includes(skillGroup);
+      const isInResonanceGroup = skillGroup && RESONANCE_SKILL_GROUPS.includes(skillGroup);
+
+      // Filter out resonance group skills if character doesn't have resonance
+      if (isInResonanceGroup && !hasResonance) {
+        return false;
+      }
+
+      // Filter out magical group skills based on character type
+      if (isInMagicalGroup) {
+        // Adepts cannot use ANY skills from magical skill groups
+        if (isAdept) {
+          return false;
+        }
+        // Characters without magic skill group access don't see them
+        if (!canUseMagicSkillGroups) {
+          return false;
+        }
+        // Aspected mages can only use skills from their chosen group
+        if (isAspectedMage && aspectedMageGroup) {
+          if (skillGroup !== aspectedMageGroup) {
+            return false;
+          }
+        }
+        // Mystic adepts can use Sorcery and Conjuring skills (not Enchanting)
+        if (isMysticAdept) {
+          if (skillGroup !== "sorcery" && skillGroup !== "conjuring") {
+            return false;
+          }
+        }
+      }
+
+      // Filter out other magical skills (requiresMagic) if character doesn't have magic
+      if (skill.requiresMagic && !hasMagic) {
+        return false;
+      }
+
+      return true;
+    });
+  }, [activeSkills, hasMagic, hasResonance, isAdept, canUseMagicSkillGroups, isAspectedMage, aspectedMageGroup, isMysticAdept]);
+
   // Get available categories (exclude magical/resonance if not applicable)
   const availableCategories = useMemo(() => {
     const categories = new Set<SkillCategory>();
@@ -282,11 +398,173 @@ export function SkillsStep({ state, updateState, budgetValues }: StepProps) {
     return Array.from(categories).sort();
   }, [filteredSkills]);
 
+  // Handle allocating a free skill
+  const handleAllocateFreeSkill = useCallback(
+    (freeSkillIndex: number, skillId: string) => {
+      const freeSkill = availableFreeSkills[freeSkillIndex];
+      if (!freeSkill) return;
+
+      const currentAllocation = freeSkillAllocations[freeSkillIndex] || {
+        type: freeSkill.type,
+        rating: freeSkill.rating,
+        count: freeSkill.count,
+        allocated: [],
+      };
+
+      // Check if we've already allocated all free skills of this type
+      if (currentAllocation.allocated.length >= freeSkill.count) {
+        return;
+      }
+
+      // Check if this skill already has a free allocation
+      const existingAlloc = currentAllocation.allocated.find((a) => a.skillId === skillId);
+      if (existingAlloc) {
+        return; // Already allocated
+      }
+
+      // Add the allocation
+      const newAllocated = [
+        ...currentAllocation.allocated,
+        { skillId, rating: freeSkill.rating },
+      ];
+
+      const newAllocations = [...freeSkillAllocations];
+      newAllocations[freeSkillIndex] = {
+        ...currentAllocation,
+        allocated: newAllocated,
+      };
+
+      // Update the skill rating to include the free rating
+      const currentSkillRating = skills[skillId] || 0;
+      const newSkills = { ...skills };
+      newSkills[skillId] = Math.max(currentSkillRating, freeSkill.rating);
+
+      updateState({
+        selections: {
+          ...state.selections,
+          freeSkillAllocations: newAllocations,
+          skills: newSkills,
+        },
+      });
+    },
+    [availableFreeSkills, freeSkillAllocations, skills, state.selections, updateState]
+  );
+
+  // Handle allocating a free skill group
+  const handleAllocateFreeSkillGroup = useCallback(
+    (freeSkillIndex: number, groupId: string) => {
+      const freeSkill = availableFreeSkills[freeSkillIndex];
+      if (!freeSkill || freeSkill.type !== "magicalGroup") return;
+
+      const currentAllocation = freeSkillAllocations[freeSkillIndex] || {
+        type: freeSkill.type,
+        rating: freeSkill.rating,
+        count: freeSkill.count,
+        allocated: [],
+      };
+
+      // Check if we've already allocated all free groups
+      if (currentAllocation.allocated.length >= freeSkill.count) {
+        return;
+      }
+
+      // Check if this group already has a free allocation
+      const existingAlloc = currentAllocation.allocated.find((a) => a.groupId === groupId);
+      if (existingAlloc) {
+        return; // Already allocated
+      }
+
+      // Add the allocation
+      const newAllocated = [
+        ...currentAllocation.allocated,
+        { groupId, rating: freeSkill.rating },
+      ];
+
+      const newAllocations = [...freeSkillAllocations];
+      newAllocations[freeSkillIndex] = {
+        ...currentAllocation,
+        allocated: newAllocated,
+      };
+
+      // Update the group rating to include the free rating
+      const currentGroupRating = groups[groupId] || 0;
+      const newGroups = { ...groups };
+      newGroups[groupId] = Math.max(currentGroupRating, freeSkill.rating);
+
+      updateState({
+        selections: {
+          ...state.selections,
+          freeSkillAllocations: newAllocations,
+          skillGroups: newGroups,
+        },
+      });
+    },
+    [availableFreeSkills, freeSkillAllocations, groups, state.selections, updateState]
+  );
+
+  // Handle removing a free skill allocation
+  const handleRemoveFreeSkillAllocation = useCallback(
+    (freeSkillIndex: number, skillId?: string, groupId?: string) => {
+      const currentAllocation = freeSkillAllocations[freeSkillIndex];
+      if (!currentAllocation) return;
+
+      const newAllocated = currentAllocation.allocated.filter(
+        (a) => a.skillId !== skillId && a.groupId !== groupId
+      );
+
+      const newAllocations = [...freeSkillAllocations];
+      newAllocations[freeSkillIndex] = {
+        ...currentAllocation,
+        allocated: newAllocated,
+      };
+
+      // If removing a skill allocation, reduce the skill rating (but keep purchased rating)
+      const newSkills = { ...skills };
+      if (skillId) {
+        const freeRating = freeSkillRatings[skillId] || 0;
+        const currentRating = skills[skillId] || 0;
+        // Keep the purchased rating (current - free)
+        const purchasedRating = Math.max(0, currentRating - freeRating);
+        if (purchasedRating > 0) {
+          newSkills[skillId] = purchasedRating;
+        } else {
+          delete newSkills[skillId];
+        }
+      }
+
+      // If removing a group allocation, reduce the group rating
+      const newGroups = { ...groups };
+      if (groupId) {
+        const freeRating = freeSkillRatings[groupId] || 0;
+        const currentRating = groups[groupId] || 0;
+        const purchasedRating = Math.max(0, currentRating - freeRating);
+        if (purchasedRating > 0) {
+          newGroups[groupId] = purchasedRating;
+        } else {
+          delete newGroups[groupId];
+        }
+      }
+
+      updateState({
+        selections: {
+          ...state.selections,
+          freeSkillAllocations: newAllocations,
+          skills: newSkills,
+          skillGroups: newGroups,
+        },
+      });
+    },
+    [freeSkillAllocations, skills, groups, freeSkillRatings, state.selections, updateState]
+  );
+
   // Handle individual skill change
   const handleSkillChange = useCallback(
     (skillId: string, newValue: number) => {
       const currentValue = skills[skillId] || 0;
-      const valueDiff = newValue - currentValue;
+      const freeRating = freeSkillRatings[skillId] || 0;
+      const purchasedRating = Math.max(0, currentValue - freeRating);
+      const newPurchasedRating = Math.max(0, newValue - freeRating);
+      const valueDiff = newPurchasedRating - purchasedRating;
 
       // Check if we have enough points for increase
       if (valueDiff > 0 && valueDiff > skillPointsRemaining) {
@@ -299,7 +577,7 @@ export function SkillsStep({ state, updateState, budgetValues }: StepProps) {
       const newSkills = { ...skills };
       const newSpecializations = { ...specializations };
 
-      if (clampedValue === 0) {
+      if (clampedValue === 0 && freeRating === 0) {
         delete newSkills[skillId];
         // Also remove any specialization when skill is reduced to 0
         delete newSpecializations[skillId];
@@ -307,7 +585,13 @@ export function SkillsStep({ state, updateState, budgetValues }: StepProps) {
         newSkills[skillId] = clampedValue;
       }
 
-      const newSpent = Object.values(newSkills).reduce((sum, val) => sum + val, 0);
+      // Recalculate spent points (excluding free ratings)
+      let newSpent = 0;
+      Object.entries(newSkills).forEach(([sid, rating]) => {
+        const free = freeSkillRatings[sid] || 0;
+        newSpent += Math.max(0, rating - free);
+      });
+      newSpent += Object.keys(newSpecializations).length;
 
       updateState({
         selections: {
@@ -322,14 +606,17 @@ export function SkillsStep({ state, updateState, budgetValues }: StepProps) {
         },
       });
     },
-    [skills, specializations, skillPointsRemaining, state.selections, state.budgets, updateState, skillPoints]
+    [skills, specializations, skillPointsRemaining, freeSkillRatings, state.selections, state.budgets, updateState, skillPoints]
   );
 
   // Handle skill group change
   const handleGroupChange = useCallback(
     (groupId: string, newValue: number) => {
       const currentValue = groups[groupId] || 0;
-      const valueDiff = newValue - currentValue;
+      const freeRating = freeSkillRatings[groupId] || 0;
+      const purchasedRating = Math.max(0, currentValue - freeRating);
+      const newPurchasedRating = Math.max(0, newValue - freeRating);
+      const valueDiff = newPurchasedRating - purchasedRating;
 
       // Check if we have enough points for increase
       if (valueDiff > 0 && valueDiff > groupPointsRemaining) {
@@ -340,13 +627,18 @@ export function SkillsStep({ state, updateState, budgetValues }: StepProps) {
       const clampedValue = Math.max(0, Math.min(MAX_SKILL_RATING, newValue));
 
       const newGroups = { ...groups };
-      if (clampedValue === 0) {
+      if (clampedValue === 0 && freeRating === 0) {
         delete newGroups[groupId];
       } else {
         newGroups[groupId] = clampedValue;
       }
 
-      const newSpent = Object.values(newGroups).reduce((sum, val) => sum + val, 0);
+      // Recalculate spent points (excluding free ratings)
+      let newSpent = 0;
+      Object.entries(newGroups).forEach(([gid, rating]) => {
+        const free = freeSkillRatings[gid] || 0;
+        newSpent += Math.max(0, rating - free);
+      });
 
       updateState({
         selections: {
@@ -360,7 +652,7 @@ export function SkillsStep({ state, updateState, budgetValues }: StepProps) {
         },
       });
     },
-    [groups, groupPointsRemaining, state.selections, state.budgets, updateState, skillGroupPoints]
+    [groups, groupPointsRemaining, freeSkillRatings, state.selections, state.budgets, updateState, skillGroupPoints]
   );
 
   // Handle adding/updating a skill specialization
@@ -596,11 +888,14 @@ export function SkillsStep({ state, updateState, budgetValues }: StepProps) {
   // Render skill row
   const renderSkill = (skill: { id: string; name: string; linkedAttribute: string; group?: string | null; suggestedSpecializations?: string[] }) => {
     const value = skills[skill.id] || 0;
-    const canIncrease = value < MAX_SKILL_RATING && skillPointsRemaining > 0;
-    const canDecrease = value > 0;
+    const freeRating = freeSkillRatings[skill.id] || 0;
+    const purchasedRating = Math.max(0, value - freeRating);
+    const canIncrease = value < MAX_SKILL_RATING && (skillPointsRemaining > 0 || freeRating > 0);
+    const canDecrease = purchasedRating > 0; // Can decrease if there's purchased rating (free rating stays)
 
     // Check if this skill is covered by a group
     const groupRating = skill.group ? (groups[skill.group] || 0) : 0;
+    const groupFreeRating = skill.group ? (freeSkillRatings[skill.group] || 0) : 0;
     const effectiveRating = Math.max(value, groupRating);
 
     // Specialization: can only add if skill has individual points (not just group rating)
@@ -626,6 +921,11 @@ export function SkillsStep({ state, updateState, budgetValues }: StepProps) {
               <span className="flex-shrink-0 rounded bg-zinc-100 px-1.5 py-0.5 text-xs text-zinc-500 dark:bg-zinc-700 dark:text-zinc-400">
                 {skill.linkedAttribute?.toUpperCase().slice(0, 3)}
               </span>
+              {freeRating > 0 && (
+                <span className="flex-shrink-0 rounded bg-blue-100 px-1.5 py-0.5 text-xs font-medium text-blue-700 dark:bg-blue-900/50 dark:text-blue-300" title="Free from priority">
+                  Free {freeRating}
+                </span>
+              )}
               {hasSpecialization && (
                 <span className="flex-shrink-0 rounded bg-amber-100 px-1.5 py-0.5 text-xs text-amber-700 dark:bg-amber-800 dark:text-amber-300">
                   +2 dice
@@ -791,8 +1091,10 @@ export function SkillsStep({ state, updateState, budgetValues }: StepProps) {
   // Render skill group
   const renderGroup = (group: { id: string; name: string; skills: string[] }) => {
     const value = groups[group.id] || 0;
-    const canIncrease = value < MAX_SKILL_RATING && groupPointsRemaining > 0;
-    const canDecrease = value > 0;
+    const freeRating = freeSkillRatings[group.id] || 0;
+    const purchasedRating = Math.max(0, value - freeRating);
+    const canIncrease = value < MAX_SKILL_RATING && (groupPointsRemaining > 0 || freeRating > 0);
+    const canDecrease = purchasedRating > 0; // Can decrease if there's purchased rating (free rating stays)
 
     return (
       <div
@@ -804,7 +1106,14 @@ export function SkillsStep({ state, updateState, budgetValues }: StepProps) {
         }`}
       >
         <div className="flex-1">
-          <div className="font-medium text-zinc-900 dark:text-zinc-50">{group.name}</div>
+          <div className="flex items-center gap-2">
+            <div className="font-medium text-zinc-900 dark:text-zinc-50">{group.name}</div>
+            {freeRating > 0 && (
+              <span className="flex-shrink-0 rounded bg-blue-100 px-1.5 py-0.5 text-xs font-medium text-blue-700 dark:bg-blue-900/50 dark:text-blue-300" title="Free from priority">
+                Free {freeRating}
+              </span>
+            )}
+          </div>
           <div className="mt-0.5 text-xs text-zinc-500 dark:text-zinc-400">
             Includes: {group.skills.map((s) => activeSkills.find((as) => as.id === s)?.name || s).join(", ")}
           </div>
@@ -856,6 +1165,129 @@ export function SkillsStep({ state, updateState, budgetValues }: StepProps) {
   // Render Active Skills tab content
   const renderActiveSkillsTab = () => (
     <>
+      {/* Free Skills from Priority */}
+      {availableFreeSkills.length > 0 && (
+        <div className="rounded-lg border-2 border-blue-200 bg-blue-50 p-4 dark:border-blue-800 dark:bg-blue-900/20">
+          <h3 className="mb-3 text-sm font-semibold text-blue-900 dark:text-blue-100">
+            Free Skills from Priority
+          </h3>
+          <div className="space-y-3">
+            {availableFreeSkills.map((freeSkill, index) => {
+              const currentAllocation = freeSkillAllocations[index] || {
+                type: freeSkill.type,
+                rating: freeSkill.rating,
+                count: freeSkill.count,
+                allocated: [],
+              };
+              const allocatedCount = currentAllocation.allocated.length;
+              const remainingCount = freeSkill.count - allocatedCount;
+
+              // Get applicable skills/groups based on type
+              let applicableItems: Array<{ id: string; name: string }> = [];
+              if (freeSkill.type === "magical") {
+                applicableItems = allApplicableSkills
+                  .filter((s) => {
+                    const skillGroup = s.group;
+                    return skillGroup && MAGICAL_SKILL_GROUPS.includes(skillGroup);
+                  })
+                  .map((s) => ({ id: s.id, name: s.name }));
+              } else if (freeSkill.type === "resonance") {
+                applicableItems = allApplicableSkills
+                  .filter((s) => {
+                    const skillGroup = s.group;
+                    return skillGroup && RESONANCE_SKILL_GROUPS.includes(skillGroup);
+                  })
+                  .map((s) => ({ id: s.id, name: s.name }));
+              } else if (freeSkill.type === "active") {
+                applicableItems = allApplicableSkills.map((s) => ({ id: s.id, name: s.name }));
+              } else if (freeSkill.type === "magicalGroup") {
+                applicableItems = filteredSkillGroups
+                  .filter((g) => MAGICAL_SKILL_GROUPS.includes(g.id))
+                  .map((g) => ({ id: g.id, name: g.name }));
+              }
+
+              return (
+                <div key={index} className="rounded border border-blue-200 bg-white p-3 dark:border-blue-800 dark:bg-zinc-800/50">
+                  <div className="mb-2 flex items-center justify-between">
+                    <div>
+                      <span className="font-medium text-blue-900 dark:text-blue-100">
+                        {freeSkill.count} {freeSkill.type === "magicalGroup" ? "magical skill group" : freeSkill.type === "active" ? "active skill" : freeSkill.type === "resonance" ? "resonance skill" : "magical skill"}
+                        {freeSkill.count > 1 ? "s" : ""} at rating {freeSkill.rating}
+                      </span>
+                      <span className="ml-2 text-sm text-blue-600 dark:text-blue-400">
+                        ({allocatedCount} allocated, {remainingCount} remaining)
+                      </span>
+                    </div>
+                  </div>
+                  {remainingCount > 0 && (
+                    <div className="space-y-2">
+                      <select
+                        className="w-full rounded border border-blue-300 bg-white px-2 py-1 text-sm focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500 dark:border-blue-600 dark:bg-zinc-800 dark:text-zinc-100"
+                        defaultValue=""
+                        onChange={(e) => {
+                          if (e.target.value) {
+                            if (freeSkill.type === "magicalGroup") {
+                              handleAllocateFreeSkillGroup(index, e.target.value);
+                            } else {
+                              handleAllocateFreeSkill(index, e.target.value);
+                            }
+                            e.target.value = "";
+                          }
+                        }}
+                      >
+                        <option value="" disabled>
+                          Select {freeSkill.type === "magicalGroup" ? "skill group" : "skill"}...
+                        </option>
+                        {applicableItems
+                          .filter((item) => {
+                            // Filter out already allocated items
+                            return !currentAllocation.allocated.some(
+                              (a) => a.skillId === item.id || a.groupId === item.id
+                            );
+                          })
+                          .map((item) => (
+                            <option key={item.id} value={item.id}>
+                              {item.name}
+                            </option>
+                          ))}
+                      </select>
+                    </div>
+                  )}
+                  {currentAllocation.allocated.length > 0 && (
+                    <div className="mt-2 space-y-1">
+                      {currentAllocation.allocated.map((alloc, allocIndex) => {
+                        const itemName =
+                          alloc.skillId
+                            ? applicableItems.find((i) => i.id === alloc.skillId)?.name || alloc.skillId
+                            : alloc.groupId
+                            ? applicableItems.find((i) => i.id === alloc.groupId)?.name || alloc.groupId
+                            : "Unknown";
+                        return (
+                          <div
+                            key={allocIndex}
+                            className="flex items-center justify-between rounded bg-blue-100 px-2 py-1 text-sm dark:bg-blue-900/30"
+                          >
+                            <span className="text-blue-900 dark:text-blue-100">{itemName} (rating {alloc.rating})</span>
+                            <button
+                              onClick={() =>
+                                handleRemoveFreeSkillAllocation(index, alloc.skillId, alloc.groupId)
+                              }
+                              className="text-blue-600 hover:text-blue-800 dark:text-blue-400 dark:hover:text-blue-200"
+                            >
+                              Remove
+                            </button>
+                          </div>
+                        );
+                      })}
+                    </div>
+                  )}
+                </div>
+              );
+            })}
+          </div>
+        </div>
+      )}
+
       {/* Points remaining indicators */}
       <div className="grid gap-4 sm:grid-cols-2">
         <div className="rounded-lg bg-emerald-50 p-4 dark:bg-emerald-900/20">
