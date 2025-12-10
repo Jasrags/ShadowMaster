@@ -1,6 +1,7 @@
 {
   "name": "shadow-master",
   "version": "0.1.0",
+  "packageManager": "pnpm@10.0.0",
   "private": true,
   "scripts": {
     "dev": "next dev",

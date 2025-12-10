@@ -158,14 +158,14 @@ This section provides a comprehensive view of the entire implementation roadmap,
 
 | Order | Phase | Focus Area | Duration | Priority | Status |
 |-------|-------|-----------|----------|----------|--------|
-| 1 | **M0** | **MVP Gaps & Enhancements** | **1-2 weeks** | **Critical** | ✅ Complete |
+| 1 | **M0** | **MVP Gaps & Enhancements** | **1-2 weeks** | **Critical** | 🔄 In Progress |
 | | M0.1 | Bug Fixes | - | Critical | ✅ Complete |
 | | M0.2 | Metatype Enhancements | - | Critical | ✅ Complete |
 | | M0.3 | Skills Enhancements | - | Critical | ✅ Complete |
 | | M0.3.8 | Adept Skill Filtering Bug Fix | - | Critical | ✅ Complete |
 | | M0.3.9 | Free Skills from Priority | - | Critical | ✅ Complete |
 | | M0.4 | Qualities Enhancements | - | Critical | ✅ Complete |
-| | M0.5 | Contacts Enhancements | - | Critical | ✅ Complete |
+| | M0.5 | Contacts Enhancements | - | Critical | Not Started |
 | | M0.6 | Distributed Karma Architecture | - | Critical | ✅ Complete |
 | | M0.7 | SpellsStep Creation | - | Critical | ✅ Complete |
 | | M0.8 | Aspected Mage Enhancements | - | Critical | ✅ Complete |
@@ -193,7 +193,6 @@ This section provides a comprehensive view of the entire implementation roadmap,
 | M0.4 Qualities | Dec 2024 | Leveled qualities support (Addiction, Allergy, etc.), racial quality filtering, specification inputs (e.g. Mentor Spirit choice), 20+ new qualities added |
 | M0.6 Karma Arch | Dec 2024 | Distributed karma spending, global karma budget, karma-to-nuyen conversion, 7 karma carryover limit |
 | B8.1 Gear Layout | Dec 2024 | Improved gear catalog layout, shopping cart width fixes, responsive design |
-| M0.5 Contacts | Dec 2024 | 10 contact templates (Fixer, Street Doc, etc.), template selector UI, customization support |
 
 ### Estimated Remaining Timeline
 
@@ -210,7 +209,7 @@ This section provides a comprehensive view of the entire implementation roadmap,
 
 | Phase | Focus Area | Duration | Priority | Status |
 |-------|-----------|----------|----------|--------|
-| **M0** | **MVP Gaps & Enhancements** | **1-2 weeks** | **Critical** | ✅ Complete |
+| **M0** | **MVP Gaps & Enhancements** | **1-2 weeks** | **Critical** | 🔄 In Progress |
 | B1 | Cyberware/Bioware System | 2-3 weeks | High | ✅ Complete |
 | B4 | Combat Tracker | 3-4 weeks | High | Not Started |
 | B3 | Inventory Management | 1-2 weeks | High | Not Started |
@@ -562,10 +561,10 @@ This milestone adds example contact templates (Fixer, Street Doc, Bartender, etc
 
 | Task | Description | Status |
 |------|-------------|--------|
-| M0.5.1 | Add example contacts to ruleset data (Fixer, Street Doc, Bartender, etc.) | Complete |
-| M0.5.2 | Create contact template selector with pre-filled archetypes | Complete |
-| M0.5.3 | Allow customization of selected template (edit name, adjust ratings) | Complete |
-| M0.5.4 | Ensure fully custom contact creation still works | Complete |
+| M0.5.1 | Add example contacts to ruleset data (Fixer, Street Doc, Bartender, etc.) | Not Started |
+| M0.5.2 | Create contact template selector with pre-filled archetypes | Not Started |
+| M0.5.3 | Allow customization of selected template (edit name, adjust ratings) | Not Started |
+| M0.5.4 | Ensure fully custom contact creation still works | Not Started |
 
 **Tasks JSON:**
 ```json
@@ -578,7 +577,7 @@ This milestone adds example contact templates (Fixer, Street Doc, Bartender, etc
       "/app/characters/create/components/steps/ContactsStep.tsx",
       "/data/editions/sr5/core-rulebook.json"
     ],
-    "status": "Complete",
+    "status": "Not Started",
     "dependsOn": []
   },
   {
@@ -589,7 +588,7 @@ This milestone adds example contact templates (Fixer, Street Doc, Bartender, etc
       "/app/characters/create/components/steps/ContactsStep.tsx",
       "/data/editions/sr5/core-rulebook.json"
     ],
-    "status": "Complete",
+    "status": "Not Started",
     "dependsOn": ["M0.5.1"]
   },
   {
@@ -600,7 +599,7 @@ This milestone adds example contact templates (Fixer, Street Doc, Bartender, etc
       "/app/characters/create/components/steps/ContactsStep.tsx",
       "/data/editions/sr5/core-rulebook.json"
     ],
-    "status": "Complete",
+    "status": "Not Started",
     "dependsOn": ["M0.5.2"]
   },
   {
@@ -611,7 +610,7 @@ This milestone adds example contact templates (Fixer, Street Doc, Bartender, etc
       "/app/characters/create/components/steps/ContactsStep.tsx",
       "/data/editions/sr5/core-rulebook.json"
     ],
-    "status": "Complete",
+    "status": "Not Started",
     "dependsOn": ["M0.5.2"]
   }
 ]
