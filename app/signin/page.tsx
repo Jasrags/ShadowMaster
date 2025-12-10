@@ -87,11 +87,10 @@ export default function SigninPage() {
                 required
                 aria-invalid={!!validationErrors.email}
                 aria-describedby={validationErrors.email ? "email-error" : undefined}
-                className={`w-full rounded-md border px-3 py-2 text-black placeholder-zinc-500 focus:outline-none focus:ring-2 focus:ring-zinc-500 focus:ring-offset-2 dark:bg-zinc-800 dark:text-zinc-50 dark:placeholder-zinc-400 dark:focus:ring-zinc-600 ${
-                  validationErrors.email
+                className={`w-full rounded-md border px-3 py-2 text-black placeholder-zinc-500 focus:outline-none focus:ring-2 focus:ring-zinc-500 focus:ring-offset-2 dark:bg-zinc-800 dark:text-zinc-50 dark:placeholder-zinc-400 dark:focus:ring-zinc-600 ${validationErrors.email
                     ? "border-red-500 dark:border-red-500"
                     : "border-zinc-300 dark:border-zinc-700"
-                }`}
+                  }`}
                 placeholder="you@example.com"
               />
               {validationErrors.email && (
@@ -114,11 +113,10 @@ export default function SigninPage() {
                 required
                 aria-invalid={!!validationErrors.password}
                 aria-describedby={validationErrors.password ? "password-error" : undefined}
-                className={`w-full rounded-md border px-3 py-2 text-black placeholder-zinc-500 focus:outline-none focus:ring-2 focus:ring-zinc-500 focus:ring-offset-2 dark:bg-zinc-800 dark:text-zinc-50 dark:placeholder-zinc-400 dark:focus:ring-zinc-600 ${
-                  validationErrors.password
+                className={`w-full rounded-md border px-3 py-2 text-black placeholder-zinc-500 focus:outline-none focus:ring-2 focus:ring-zinc-500 focus:ring-offset-2 dark:bg-zinc-800 dark:text-zinc-50 dark:placeholder-zinc-400 dark:focus:ring-zinc-600 ${validationErrors.password
                     ? "border-red-500 dark:border-red-500"
                     : "border-zinc-300 dark:border-zinc-700"
-                }`}
+                  }`}
                 placeholder="••••••••"
               />
               {validationErrors.password && (
@@ -154,7 +152,7 @@ export default function SigninPage() {
           </form>
 
           <p className="mt-6 text-center text-sm text-zinc-600 dark:text-zinc-400">
-            Don't have an account?{" "}
+            Don&apos;t have an account?{" "}
             <Link
               href="/signup"
               className="font-medium text-zinc-950 underline hover:text-zinc-700 dark:text-zinc-50 dark:hover:text-zinc-300"

@@ -36,6 +36,7 @@ export default function UserEditModal({
   const [errors, setErrors] = useState<Record<string, string>>({});
 
   // Reset form when user changes or modal opens
+   
   useEffect(() => {
     if (isOpen) {
       setEmail(user.email);
@@ -113,11 +114,10 @@ export default function UserEditModal({
                     type="email"
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
-                    className={`w-full rounded-md border px-3 py-2 text-black placeholder-zinc-500 focus:outline-none focus:ring-2 focus:ring-zinc-500 focus:ring-offset-2 dark:bg-zinc-800 dark:text-zinc-50 dark:placeholder-zinc-400 dark:focus:ring-zinc-600 ${
-                      errors.email
-                        ? "border-red-500 dark:border-red-500"
-                        : "border-zinc-300 dark:border-zinc-700"
-                    }`}
+                    className={`w-full rounded-md border px-3 py-2 text-black placeholder-zinc-500 focus:outline-none focus:ring-2 focus:ring-zinc-500 focus:ring-offset-2 dark:bg-zinc-800 dark:text-zinc-50 dark:placeholder-zinc-400 dark:focus:ring-zinc-600 ${errors.email
+                      ? "border-red-500 dark:border-red-500"
+                      : "border-zinc-300 dark:border-zinc-700"
+                      }`}
                     placeholder="user@example.com"
                     disabled={isLoading}
                   />
@@ -139,11 +139,10 @@ export default function UserEditModal({
                     type="text"
                     value={username}
                     onChange={(e) => setUsername(e.target.value)}
-                    className={`w-full rounded-md border px-3 py-2 text-black placeholder-zinc-500 focus:outline-none focus:ring-2 focus:ring-zinc-500 focus:ring-offset-2 dark:bg-zinc-800 dark:text-zinc-50 dark:placeholder-zinc-400 dark:focus:ring-zinc-600 ${
-                      errors.username
-                        ? "border-red-500 dark:border-red-500"
-                        : "border-zinc-300 dark:border-zinc-700"
-                    }`}
+                    className={`w-full rounded-md border px-3 py-2 text-black placeholder-zinc-500 focus:outline-none focus:ring-2 focus:ring-zinc-500 focus:ring-offset-2 dark:bg-zinc-800 dark:text-zinc-50 dark:placeholder-zinc-400 dark:focus:ring-zinc-600 ${errors.username
+                      ? "border-red-500 dark:border-red-500"
+                      : "border-zinc-300 dark:border-zinc-700"
+                      }`}
                     placeholder="username"
                     disabled={isLoading}
                   />
@@ -164,11 +163,10 @@ export default function UserEditModal({
                       setSelectedRoles(new Set(keys as Iterable<UserRole>));
                     }}
                     selectionMode="multiple"
-                    className={`w-full rounded-md border bg-white focus:outline-none focus:ring-2 focus:ring-zinc-500 focus:ring-offset-2 dark:bg-zinc-800 dark:focus:ring-zinc-600 ${
-                      errors.role
-                        ? "border-red-500 dark:border-red-500"
-                        : "border-zinc-300 dark:border-zinc-700"
-                    } ${isLoading ? "opacity-50 pointer-events-none" : ""}`}
+                    className={`w-full rounded-md border bg-white focus:outline-none focus:ring-2 focus:ring-zinc-500 focus:ring-offset-2 dark:bg-zinc-800 dark:focus:ring-zinc-600 ${errors.role
+                      ? "border-red-500 dark:border-red-500"
+                      : "border-zinc-300 dark:border-zinc-700"
+                      } ${isLoading ? "opacity-50 pointer-events-none" : ""}`}
                   >
                     <ListBoxItem
                       id="user"
