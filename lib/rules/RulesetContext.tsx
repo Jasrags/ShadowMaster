@@ -748,7 +748,7 @@ export function useCyberware(options?: {
       ...data.cyberware,
       catalog: filteredCatalog,
     };
-  }, [data.cyberware, options?.category, options?.maxAvailability, options?.excludeForbidden, options?.excludeRestricted]);
+  }, [data.cyberware, options]);
 }
 
 /**
@@ -791,7 +791,7 @@ export function useBioware(options?: {
       ...data.bioware,
       catalog: filteredCatalog,
     };
-  }, [data.bioware, options?.category, options?.maxAvailability, options?.excludeForbidden, options?.excludeRestricted]);
+  }, [data.bioware, options]);
 }
 
 /**

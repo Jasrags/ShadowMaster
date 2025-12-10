@@ -149,7 +149,7 @@ export function SkillsStep({ state, updateState, budgetValues }: StepProps) {
     }
 
     return selectedOption.freeSkills;
-  }, [priorityTable, state.priorities?.magic, magicPath]);
+  }, [priorityTable, state.priorities, magicPath]);
 
   // Calculate free skill ratings allocated per skill/group
   const freeSkillRatings = useMemo(() => {

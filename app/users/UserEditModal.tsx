@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import {
   Dialog,
   Modal,
@@ -28,23 +28,13 @@ export default function UserEditModal({
   onSave,
   isLoading = false,
 }: UserEditModalProps) {
+  // Initialize state from user prop - component will remount when user.id changes (via key prop)
   const [email, setEmail] = useState(user.email);
   const [username, setUsername] = useState(user.username);
   const [selectedRoles, setSelectedRoles] = useState<Set<UserRole>>(
     new Set(Array.isArray(user.role) ? user.role : [user.role])
   );
   const [errors, setErrors] = useState<Record<string, string>>({});
-
-  // Reset form when user changes or modal opens
-   
-  useEffect(() => {
-    if (isOpen) {
-      setEmail(user.email);
-      setUsername(user.username);
-      setSelectedRoles(new Set(Array.isArray(user.role) ? user.role : [user.role]));
-      setErrors({});
-    }
-  }, [user, isOpen]);
 
   const validate = (): boolean => {
     const newErrors: Record<string, string> = {};
@@ -85,6 +75,7 @@ export default function UserEditModal({
 
   return (
     <ModalOverlay
+      key={user.id}
       isOpen={isOpen}
       onOpenChange={(isOpen) => !isOpen && onClose()}
       className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4"
