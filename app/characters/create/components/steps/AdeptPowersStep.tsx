@@ -504,49 +504,6 @@ export function AdeptPowersStep({ state, updateState, budgetValues }: StepProps)
                         </div>
                     )}
 
-                    {/* Current Powers */}
-                    <div className="rounded-lg border border-zinc-200 bg-zinc-50/50 p-4 dark:border-zinc-700 dark:bg-zinc-800/30">
-                        <h3 className="mb-3 text-sm font-semibold text-zinc-900 dark:text-zinc-100">
-                            Selected Powers ({selectedPowers.length})
-                        </h3>
-
-                        {selectedPowers.length === 0 ? (
-                            <p className="py-4 text-center text-xs text-zinc-500 italic">
-                                No powers selected yet.
-                            </p>
-                        ) : (
-                            <div className="space-y-2">
-                                {selectedPowers.map((power) => (
-                                    <div
-                                        key={power.id}
-                                        className="flex items-center justify-between rounded bg-white p-2 shadow-sm dark:bg-zinc-800"
-                                    >
-                                        <div className="min-w-0 flex-1">
-                                            <div className="flex items-center gap-2">
-                                                <span className="truncate text-sm font-medium text-zinc-900 dark:text-zinc-100">
-                                                    {power.name}
-                                                    {power.rating && ` ${power.rating}`}
-                                                    {power.specification && ` (${power.specification})`}
-                                                </span>
-                                                <span className="flex-shrink-0 rounded bg-violet-100 px-1.5 py-0.5 text-[10px] font-bold text-violet-700 dark:bg-violet-900/40 dark:text-violet-300">
-                                                    {power.powerPointCost} PP
-                                                </span>
-                                            </div>
-                                        </div>
-                                        <button
-                                            onClick={() => handleRemovePower(power.id)}
-                                            className="ml-2 rounded p-1 text-zinc-400 hover:bg-red-50 hover:text-red-500 dark:hover:bg-red-900/20"
-                                            title="Remove power"
-                                        >
-                                            <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-                                            </svg>
-                                        </button>
-                                    </div>
-                                ))}
-                            </div>
-                        )}
-                    </div>
                 </div>
             </div>
         </div>
