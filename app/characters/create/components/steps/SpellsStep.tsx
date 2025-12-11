@@ -55,8 +55,10 @@ export function SpellsStep({ state, updateState, budgetValues }: StepProps) {
         };
     }, [state.priorities?.magic, priorityTable, magicalPath]);
 
-    // Max spells = Magic × 2
+    // Max spells = Magic × 2 (total limit)
     const maxTotalSpells = magicRating * 2;
+    // Max spells per category = Magic × 2 (formula limit)
+    const maxPerCategory = magicRating * 2;
 
     // Get current selections
     const selectedSpells = (state.selections.spells || []) as string[];
@@ -77,6 +79,44 @@ export function SpellsStep({ state, updateState, budgetValues }: StepProps) {
         }
         return spells;
     }, [spellsCatalog]);
+
+    // Calculate spells per category for selected spells
+    const spellsPerCategory = useMemo(() => {
+        const counts: Record<SpellCategory, number> = {
+            combat: 0,
+            detection: 0,
+            health: 0,
+            illusion: 0,
+            manipulation: 0,
+        };
+
+        selectedSpells.forEach((spellId) => {
+            const spell = allSpells.find((s) => s.id === spellId);
+            if (spell && spell.category in counts) {
+                counts[spell.category as SpellCategory]++;
+            }
+        });
+
+        return counts;
+    }, [selectedSpells, allSpells]);
+
+    // Check if a category is at or over limit
+    const isCategoryAtLimit = useCallback(
+        (category: SpellCategory) => {
+            return spellsPerCategory[category] >= maxPerCategory;
+        },
+        [spellsPerCategory, maxPerCategory]
+    );
+
+    // Check if adding a spell would exceed its category limit
+    const wouldExceedCategoryLimit = useCallback(
+        (spellId: string) => {
+            const spell = allSpells.find((s) => s.id === spellId);
+            if (!spell) return false;
+            return isCategoryAtLimit(spell.category as SpellCategory);
+        },
+        [allSpells, isCategoryAtLimit]
+    );
 
     // Filter spells
     const filteredSpells = useMemo(() => {
@@ -108,8 +148,11 @@ export function SpellsStep({ state, updateState, budgetValues }: StepProps) {
             if (isSelected) {
                 newSpells = selectedSpells.filter((id) => id !== spellId);
             } else {
-                // Check limits
+                // Check total limit
                 if (selectedSpells.length >= maxTotalSpells) return;
+
+                // Check category limit (formula limit)
+                if (wouldExceedCategoryLimit(spellId)) return;
 
                 // Check cost (if beyond free)
                 const willBeFree = selectedSpells.length < freeSpells;
@@ -133,10 +176,15 @@ export function SpellsStep({ state, updateState, budgetValues }: StepProps) {
                 },
             });
         },
-        [selectedSpells, maxTotalSpells, freeSpells, karmaRemaining, state.selections, state.budgets, updateState]
+        [selectedSpells, maxTotalSpells, wouldExceedCategoryLimit, freeSpells, karmaRemaining, state.selections, state.budgets, updateState]
     );
 
     const spellsBeyondFree = Math.max(0, selectedSpells.length - freeSpells);
+
+    // Get categories that are at or over limit
+    const categoriesAtLimit = useMemo(() => {
+        return SPELL_CATEGORIES.filter((cat) => isCategoryAtLimit(cat.id));
+    }, [isCategoryAtLimit]);
 
     return (
         <div className="space-y-6">
@@ -151,12 +199,6 @@ export function SpellsStep({ state, updateState, budgetValues }: StepProps) {
                         </p>
                     </div>
                     <div className="flex flex-col items-end gap-1">
-                        <div className="text-sm font-medium">
-                            <span className={selectedSpells.length > maxTotalSpells ? "text-red-600" : "text-zinc-600 dark:text-zinc-300"}>
-                                {selectedSpells.length}
-                            </span>
-                            <span className="text-zinc-500"> / {maxTotalSpells} Max (Magic × 2)</span>
-                        </div>
                         {spellsBeyondFree > 0 && (
                             <div className="text-xs text-amber-600 dark:text-amber-400">
                                 {spellsBeyondFree} purchased with Karma (-{spellsBeyondFree * SPELL_KARMA_COST})
@@ -169,9 +211,38 @@ export function SpellsStep({ state, updateState, budgetValues }: StepProps) {
                 <div className="mt-4 h-2 w-full overflow-hidden rounded-full bg-emerald-200 dark:bg-emerald-900/50">
                     <div
                         className="h-full bg-emerald-500 transition-all"
-                        style={{ width: `${Math.min(100, (selectedSpells.length / maxTotalSpells) * 100)}%` }}
+                        style={{ width: `${freeSpells > 0 ? Math.min(100, (Math.min(selectedSpells.length, freeSpells) / freeSpells) * 100) : 0}%` }}
                     />
                 </div>
+
+                {/* Category Limits Display */}
+                {magicRating > 0 && (
+                    <div className="mt-4 space-y-2">
+                        <div className="text-xs font-medium text-emerald-800 dark:text-emerald-200">
+                            Formula Limits (Max {maxPerCategory} per category):
+                        </div>
+                        <div className="flex flex-wrap gap-2">
+                            {SPELL_CATEGORIES.map((cat) => {
+                                const count = spellsPerCategory[cat.id];
+                                const isAtLimit = count >= maxPerCategory;
+                                return (
+                                    <div
+                                        key={cat.id}
+                                        className={`rounded px-2 py-1 text-xs font-medium ${
+                                            isAtLimit
+                                                ? "bg-red-100 text-red-700 dark:bg-red-900/40 dark:text-red-300"
+                                                : count > 0
+                                                    ? "bg-amber-100 text-amber-700 dark:bg-amber-900/40 dark:text-amber-300"
+                                                    : "bg-zinc-100 text-zinc-600 dark:bg-zinc-700 dark:text-zinc-400"
+                                        }`}
+                                    >
+                                        {cat.name}: {count}/{maxPerCategory}
+                                    </div>
+                                );
+                            })}
+                        </div>
+                    </div>
+                )}
             </div>
 
             <div className="grid gap-6 lg:grid-cols-3">
@@ -195,26 +266,37 @@ export function SpellsStep({ state, updateState, budgetValues }: StepProps) {
                             >
                                 All
                             </button>
-                            {SPELL_CATEGORIES.map((cat) => (
+                            {SPELL_CATEGORIES.map((cat) => {
+                                const count = spellsPerCategory[cat.id];
+                                const isAtLimit = count >= maxPerCategory;
+                                return (
                                 <button
                                     key={cat.id}
                                     onClick={() => setSpellFilter(cat.id)}
-                                    className={`rounded px-2.5 py-1 text-xs font-medium transition-colors ${spellFilter === cat.id
+                                        className={`rounded px-2.5 py-1 text-xs font-medium transition-colors ${
+                                            spellFilter === cat.id
                                             ? "bg-emerald-600 text-white"
+                                                : isAtLimit
+                                                    ? "bg-red-100 text-red-700 hover:bg-red-200 dark:bg-red-900/40 dark:text-red-300 dark:hover:bg-red-900/60"
                                             : "bg-zinc-100 text-zinc-600 hover:bg-zinc-200 dark:bg-zinc-800 dark:text-zinc-400 dark:hover:bg-zinc-700"
                                         }`}
+                                        title={isAtLimit ? `Category limit reached (${count}/${maxPerCategory})` : `${count}/${maxPerCategory} spells`}
                                 >
-                                    {cat.name}
+                                        {cat.name} {isAtLimit && "⚠️"}
                                 </button>
-                            ))}
+                                );
+                            })}
                         </div>
                     </div>
 
                     <div className="grid gap-3 sm:grid-cols-2">
                         {filteredSpells.map((spell) => {
                             const isSelected = selectedSpells.includes(spell.id);
+                            const categoryCount = spellsPerCategory[spell.category as SpellCategory];
+                            const categoryAtLimit = categoryCount >= maxPerCategory;
                             const canSelect = isSelected || (
                                 selectedSpells.length < maxTotalSpells &&
+                                !categoryAtLimit &&
                                 (selectedSpells.length < freeSpells || karmaRemaining >= SPELL_KARMA_COST)
                             );
 
@@ -229,6 +311,7 @@ export function SpellsStep({ state, updateState, budgetValues }: StepProps) {
                                                 ? "border-zinc-200 bg-white hover:border-emerald-300 hover:shadow-sm dark:border-zinc-700 dark:bg-zinc-800/50 dark:hover:border-emerald-700"
                                                 : "cursor-not-allowed border-zinc-200 bg-zinc-50 opacity-50 dark:border-zinc-700 dark:bg-zinc-800/30"
                                         }`}
+                                    title={!canSelect && !isSelected && categoryAtLimit ? `Category limit reached: ${categoryCount}/${maxPerCategory} ${spell.category} spells` : undefined}
                                 >
                                     <div className="flex w-full items-start justify-between gap-2">
                                         <div className="font-medium text-zinc-900 dark:text-zinc-100">
@@ -250,7 +333,11 @@ export function SpellsStep({ state, updateState, budgetValues }: StepProps) {
                                             }`}>
                                             {spell.type}
                                         </span>
-                                        <span className="rounded bg-zinc-100 px-1.5 py-0.5 font-medium text-zinc-600 dark:bg-zinc-700 dark:text-zinc-400">
+                                        <span className={`rounded px-1.5 py-0.5 font-medium ${
+                                            categoryAtLimit && !isSelected
+                                                ? "bg-red-100 text-red-700 dark:bg-red-900/40 dark:text-red-300"
+                                                : "bg-zinc-100 text-zinc-600 dark:bg-zinc-700 dark:text-zinc-400"
+                                        }`}>
                                             {spell.category}
                                         </span>
                                     </div>
@@ -331,6 +418,19 @@ export function SpellsStep({ state, updateState, budgetValues }: StepProps) {
                         {selectedSpells.length > maxTotalSpells && (
                             <div className="mt-4 rounded bg-red-50 p-2 text-xs text-red-600 dark:bg-red-900/20 dark:text-red-400">
                                 You have exceeded the maximum of {maxTotalSpells} spells (Magic × 2).
+                            </div>
+                        )}
+
+                        {categoriesAtLimit.length > 0 && (
+                            <div className="mt-4 rounded bg-amber-50 p-2 text-xs text-amber-700 dark:bg-amber-900/20 dark:text-amber-400">
+                                <div className="font-medium mb-1">Category limits reached:</div>
+                                <ul className="list-disc list-inside space-y-0.5">
+                                    {categoriesAtLimit.map((cat) => (
+                                        <li key={cat.id}>
+                                            {cat.name}: {spellsPerCategory[cat.id]}/{maxPerCategory} (Magic × 2)
+                                        </li>
+                                    ))}
+                                </ul>
                             </div>
                         )}
                     </div>
