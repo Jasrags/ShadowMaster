@@ -150,8 +150,9 @@ This section provides a comprehensive view of the entire implementation roadmap,
 8. Spells/Powers           ✅ M0.7 SpellsStep (magical) / ✅ B5 AdeptPowersStep (adepts)
 9. Complex Forms           🔜 B7 (technomancers only)
 10. Contacts               ✅ Complete (MVP) + M0.5 enhancements completed
-11. Gear & Resources       ✅ Complete (MVP) + M0.6 karma-to-nuyen completed
-12. Review & Finalize      ✅ Complete (MVP)
+11. Gear & Resources       ✅ Complete (MVP) + M0.6 karma-to-nuyen completed + 🔜 B10 modifications support
+12. Identities & Lifestyles 🔜 B11 (SINs, licenses, lifestyle management)
+13. Review & Finalize      ✅ Complete (MVP)
 ```
 
 ### Full Phase Summary with Status
@@ -173,11 +174,13 @@ This section provides a comprehensive view of the entire implementation roadmap,
 | 3 | **B4** | **Combat Tracker** | **3-4 weeks** | **High** | Not Started |
 | 4 | **B3** | **Inventory Management** | **1-2 weeks** | **High** | Not Started |
 | 5 | **B5** | **Adept Powers System** | **1-2 weeks** | **Medium** | ✅ **Complete** |
-| 6 | **B6** | **Spell Management** | **1-2 weeks** | **Medium** | Not Started |
-| 7 | **B7** | **Complex Forms & Matrix** | **1-2 weeks** | **Medium** | Not Started |
-| 8 | **B2** | **Sourcebook Integration** | **2 weeks** | **Medium** | Not Started |
-| 9 | **B8** | **UI/UX Improvements** | **1-2 weeks** | **Medium** | Not Started |
-| 10 | **B9** | **Session Persistence & WebSockets** | **2-3 weeks** | **Low** | Not Started |
+| 7 | **B6** | **Spell Management** | **1-2 weeks** | **Medium** | Not Started |
+| 8 | **B7** | **Complex Forms & Matrix** | **1-2 weeks** | **Medium** | Not Started |
+| 9 | **B2** | **Sourcebook Integration** | **2 weeks** | **Medium** | Not Started |
+| 10 | **B8** | **UI/UX Improvements** | **1-2 weeks** | **Medium** | Not Started |
+| 11 | **B10** | **Gear Modifications** | **2-3 weeks** | **Medium** | Not Started |
+| 12 | **B11** | **Identity/Lifestyle/SIN System** | **2-3 weeks** | **Medium** | Not Started |
+| 13 | **B9** | **Session Persistence & WebSockets** | **2-3 weeks** | **Low** | Not Started |
 
 ### Completed Work Summary
 
@@ -203,8 +206,8 @@ This section provides a comprehensive view of the entire implementation roadmap,
 |-----------|--------|---------------|
 | MVP Polish | M0 | 1-2 weeks |
 | Beta Core | B4, B3, B5, B6, B7 | 8-12 weeks |
-| Beta Polish | B2, B8, B9 | 4-6 weeks |
-| **Total to Beta Release** | All | **13-20 weeks** |
+| Beta Polish | B2, B8, B10, B11, B9 | 6-8 weeks |
+| **Total to Beta Release** | All | **17-25 weeks** |
 
 ---
 
@@ -221,6 +224,8 @@ This section provides a comprehensive view of the entire implementation roadmap,
 | B7 | Complex Forms & Matrix | 1-2 weeks | Medium | Not Started |
 | B2 | Sourcebook Integration | 2 weeks | Medium | Not Started |
 | B8 | UI/UX Improvements | 1-2 weeks | Medium | Not Started |
+| B10 | Gear Modifications | 2-3 weeks | Medium | Not Started |
+| B11 | Identity/Lifestyle/SIN System | 2-3 weeks | Medium | Not Started |
 | B9 | Session Persistence & WebSockets | 2-3 weeks | Low | Not Started |
 
 ---
@@ -1719,6 +1724,910 @@ This milestone creates comprehensive tests for the ruleset merging system to ens
 - **B2.4.AC.5** [ ] Sourcebook selection persists across wizard navigation
 - **B2.4.AC.6** [ ] Merge conflicts handled gracefully with clear error messages
 - **B2.4.AC.7** [ ] Character records which sourcebooks were used
+
+---
+
+## Phase B10: Gear Modifications in Character Creation
+
+**Objective:** Support purchasing and applying modifications to weapons, armor, and cyberware during character creation.
+
+This phase enables players to customize their gear during character creation by adding modifications such as weapon accessories (smartgun systems, scopes, silencers), armor upgrades (chemical protection, nonconductivity), and cyberware enhancements. It provides a complete modification system with capacity/slot tracking, cost validation, and availability checks. The result allows players to fully customize their starting equipment within the constraints of their Resources Priority budget.
+
+### B10.1 Modification Data Structures
+
+This milestone establishes the data structures needed to represent modifications for weapons, armor, and cyberware. It defines interfaces for modification catalog items, modification instances on gear, and capacity/slot tracking systems. The goal is to create a flexible system that supports all modification types with proper validation rules.
+
+**Files to modify:**
+- **B10.1.FM.1** `/lib/types/character.ts`
+- **B10.1.FM.2** `/lib/types/edition.ts`
+
+**Tasks:**
+
+| Task | Description | Status |
+|------|-------------|--------|
+| B10.1.1 | Add ModificationCatalogItem interface with capacity/slot costs, applicable categories, and effects | Not Started |
+| B10.1.2 | Add ModificationInstance interface for installed modifications on gear items | Not Started |
+| B10.1.3 | Add WeaponModificationMount enum (top, underbarrel, side, internal, barrel, stock) | Not Started |
+| B10.1.4 | Update Weapon interface to include modifications array and mount tracking | Not Started |
+| B10.1.5 | Update ArmorItem interface to include modifications array and capacity tracking | Not Started |
+| B10.1.6 | Update CyberwareItem interface to properly support enhancements as modifications | Not Started |
+
+**Tasks JSON:**
+```json
+[
+  {
+    "id": "B10.1.1",
+    "title": "Add ModificationCatalogItem interface with capacity/slot costs, applicable categories, and effects",
+    "description": "This milestone establishes the data structures needed to represent modifications for weapons, armor, and cyberware. It defines interfaces for modification catalog items, modification instances on gear, and capacity/slot tracking systems. The goal is to create a flexible system that supports all modification types with proper validation rules. Add ModificationCatalogItem interface with capacity/slot costs, applicable categories, and effects.",
+    "files": [
+      "/lib/types/edition.ts"
+    ],
+    "status": "Not Started",
+    "dependsOn": []
+  },
+  {
+    "id": "B10.1.2",
+    "title": "Add ModificationInstance interface for installed modifications on gear items",
+    "description": "This milestone establishes the data structures needed to represent modifications for weapons, armor, and cyberware. It defines interfaces for modification catalog items, modification instances on gear, and capacity/slot tracking systems. The goal is to create a flexible system that supports all modification types with proper validation rules. Add ModificationInstance interface for installed modifications on gear items.",
+    "files": [
+      "/lib/types/character.ts"
+    ],
+    "status": "Not Started",
+    "dependsOn": []
+  },
+  {
+    "id": "B10.1.3",
+    "title": "Add WeaponModificationMount enum (top, underbarrel, side, internal, barrel, stock)",
+    "description": "This milestone establishes the data structures needed to represent modifications for weapons, armor, and cyberware. It defines interfaces for modification catalog items, modification instances on gear, and capacity/slot tracking systems. The goal is to create a flexible system that supports all modification types with proper validation rules. Add WeaponModificationMount enum (top, underbarrel, side, internal, barrel, stock).",
+    "files": [
+      "/lib/types/character.ts"
+    ],
+    "status": "Not Started",
+    "dependsOn": []
+  },
+  {
+    "id": "B10.1.4",
+    "title": "Update Weapon interface to include modifications array and mount tracking",
+    "description": "This milestone establishes the data structures needed to represent modifications for weapons, armor, and cyberware. It defines interfaces for modification catalog items, modification instances on gear, and capacity/slot tracking systems. The goal is to create a flexible system that supports all modification types with proper validation rules. Update Weapon interface to include modifications array and mount tracking.",
+    "files": [
+      "/lib/types/character.ts"
+    ],
+    "status": "Not Started",
+    "dependsOn": ["B10.1.2", "B10.1.3"]
+  },
+  {
+    "id": "B10.1.5",
+    "title": "Update ArmorItem interface to include modifications array and capacity tracking",
+    "description": "This milestone establishes the data structures needed to represent modifications for weapons, armor, and cyberware. It defines interfaces for modification catalog items, modification instances on gear, and capacity/slot tracking systems. The goal is to create a flexible system that supports all modification types with proper validation rules. Update ArmorItem interface to include modifications array and capacity tracking.",
+    "files": [
+      "/lib/types/character.ts"
+    ],
+    "status": "Not Started",
+    "dependsOn": ["B10.1.2"]
+  },
+  {
+    "id": "B10.1.6",
+    "title": "Update CyberwareItem interface to properly support enhancements as modifications",
+    "description": "This milestone establishes the data structures needed to represent modifications for weapons, armor, and cyberware. It defines interfaces for modification catalog items, modification instances on gear, and capacity/slot tracking systems. The goal is to create a flexible system that supports all modification types with proper validation rules. Update CyberwareItem interface to properly support enhancements as modifications.",
+    "files": [
+      "/lib/types/character.ts"
+    ],
+    "status": "Not Started",
+    "dependsOn": ["B10.1.2"]
+  }
+]
+```
+
+**Modification Data Structure:**
+```typescript
+interface ModificationCatalogItem {
+  id: string;
+  name: string;
+  category: 'weapon' | 'armor' | 'cyberware';
+  applicableSubcategories?: string[]; // e.g., ['pistols', 'rifles'] for weapon mods
+  capacityCost?: number;              // For armor/cyberware (armor capacity = armor rating)
+  capacityPerRating?: boolean;        // If capacity cost scales with rating
+  slotCost?: number;                  // For weapon mounts (typically 1 per mount)
+  mountType?: WeaponModificationMount[]; // For weapons: which mounts can hold this
+  hasRating?: boolean;                // Whether modification has a rating (1-6)
+  maxRating?: number;                 // Maximum rating if applicable
+  cost: number;                       // Base cost in nuyen
+  costPerRating?: boolean;            // If cost scales with rating
+  availability: number;
+  restricted?: boolean;
+  forbidden?: boolean;
+  description?: string;
+  effects?: Record<string, unknown>;   // Structured effects (e.g., { recoilCompensation: 2 })
+  requirements?: string[];            // Special requirements (e.g., 'full-body-armor', 'helmet')
+  source?: string;
+  page?: number;
+}
+
+interface ModificationInstance {
+  catalogId: string;
+  name: string;
+  rating?: number;                    // If modification has a rating
+  mount?: WeaponModificationMount;     // For weapon modifications
+  cost: number;                       // Actual cost paid (may include rating multiplier)
+  capacityUsed?: number;               // Capacity consumed (for armor/cyberware)
+}
+
+enum WeaponModificationMount {
+  TOP = 'top',
+  UNDERBARREL = 'underbarrel',
+  SIDE = 'side',
+  INTERNAL = 'internal',
+  BARREL = 'barrel',
+  STOCK = 'stock'
+}
+```
+
+### B10.2 Modification Ruleset Module
+
+This milestone creates the modification catalog data in the ruleset system. It adds a new "modifications" rule module type and populates it with weapon accessories, armor modifications, and cyberware enhancements from the SR5 core rulebook. The goal is to provide a complete catalog of all available modifications that can be referenced during character creation.
+
+**Files to create:**
+- **B10.2.FC.1** `/data/editions/sr5/core-rulebook.json` (add modifications module)
+
+**Files to modify:**
+- **B10.2.FM.1** `/lib/types/edition.ts` (add 'modifications' to RuleModuleType)
+
+**Tasks:**
+
+| Task | Description | Status |
+|------|-------------|--------|
+| B10.2.1 | Add 'modifications' to RuleModuleType enum | Not Started |
+| B10.2.2 | Create weapon accessories catalog (40+ items: smartgun systems, scopes, silencers, gas-vent systems, etc.) | Not Started |
+| B10.2.3 | Create armor modifications catalog (21+ items: chemical protection, chemical seal, fire resistance, nonconductivity, etc.) | Not Started |
+| B10.2.4 | Create cyberware enhancements catalog (integrate with existing cyberware capacity system) | Not Started |
+| B10.2.5 | Add modification loading hooks to RulesetContext | Not Started |
+
+**Tasks JSON:**
+```json
+[
+  {
+    "id": "B10.2.1",
+    "title": "Add 'modifications' to RuleModuleType enum",
+    "description": "This milestone creates the modification catalog data in the ruleset system. It adds a new \"modifications\" rule module type and populates it with weapon accessories, armor modifications, and cyberware enhancements from the SR5 core rulebook. The goal is to provide a complete catalog of all available modifications that can be referenced during character creation. Add 'modifications' to RuleModuleType enum.",
+    "files": [
+      "/lib/types/edition.ts"
+    ],
+    "status": "Not Started",
+    "dependsOn": []
+  },
+  {
+    "id": "B10.2.2",
+    "title": "Create weapon accessories catalog (40+ items: smartgun systems, scopes, silencers, gas-vent systems, etc.)",
+    "description": "This milestone creates the modification catalog data in the ruleset system. It adds a new \"modifications\" rule module type and populates it with weapon accessories, armor modifications, and cyberware enhancements from the SR5 core rulebook. The goal is to provide a complete catalog of all available modifications that can be referenced during character creation. Create weapon accessories catalog (40+ items: smartgun systems, scopes, silencers, gas-vent systems, etc.).",
+    "files": [
+      "/data/editions/sr5/core-rulebook.json"
+    ],
+    "status": "Not Started",
+    "dependsOn": ["B10.2.1", "B10.1.1"]
+  },
+  {
+    "id": "B10.2.3",
+    "title": "Create armor modifications catalog (21+ items: chemical protection, chemical seal, fire resistance, nonconductivity, etc.)",
+    "description": "This milestone creates the modification catalog data in the ruleset system. It adds a new \"modifications\" rule module type and populates it with weapon accessories, armor modifications, and cyberware enhancements from the SR5 core rulebook. The goal is to provide a complete catalog of all available modifications that can be referenced during character creation. Create armor modifications catalog (21+ items: chemical protection, chemical seal, fire resistance, nonconductivity, etc.).",
+    "files": [
+      "/data/editions/sr5/core-rulebook.json"
+    ],
+    "status": "Not Started",
+    "dependsOn": ["B10.2.1", "B10.1.1"]
+  },
+  {
+    "id": "B10.2.4",
+    "title": "Create cyberware enhancements catalog (integrate with existing cyberware capacity system)",
+    "description": "This milestone creates the modification catalog data in the ruleset system. It adds a new \"modifications\" rule module type and populates it with weapon accessories, armor modifications, and cyberware enhancements from the SR5 core rulebook. The goal is to provide a complete catalog of all available modifications that can be referenced during character creation. Create cyberware enhancements catalog (integrate with existing cyberware capacity system).",
+    "files": [
+      "/data/editions/sr5/core-rulebook.json"
+    ],
+    "status": "Not Started",
+    "dependsOn": ["B10.2.1", "B10.1.1"]
+  },
+  {
+    "id": "B10.2.5",
+    "title": "Add modification loading hooks to RulesetContext",
+    "description": "This milestone creates the modification catalog data in the ruleset system. It adds a new \"modifications\" rule module type and populates it with weapon accessories, armor modifications, and cyberware enhancements from the SR5 core rulebook. The goal is to provide a complete catalog of all available modifications that can be referenced during character creation. Add modification loading hooks to RulesetContext.",
+    "files": [
+      "/lib/rules/RulesetContext.tsx"
+    ],
+    "status": "Not Started",
+    "dependsOn": ["B10.2.2", "B10.2.3", "B10.2.4"]
+  }
+]
+```
+
+### B10.3 Gear Modification UI in Character Creation
+
+This milestone enhances the GearStep component to support adding modifications to purchased gear. It provides UI for selecting modifications, choosing mount locations (for weapons), setting ratings, and tracking capacity/slot usage. The goal is to create an intuitive interface that makes gear customization feel natural and integrated into the character creation flow.
+
+**Files to modify:**
+- **B10.3.FM.1** `/app/characters/create/components/steps/GearStep.tsx`
+- **B10.3.FM.2** `/app/characters/create/components/ShoppingCartSection.tsx`
+
+**Files to create:**
+- **B10.3.FC.1** `/app/characters/create/components/ModificationSelector.tsx`
+- **B10.3.FC.2** `/app/characters/create/components/ModificationModal.tsx`
+
+**Tasks:**
+
+| Task | Description | Status |
+|------|-------------|--------|
+| B10.3.1 | Add modification button/icon to gear items in shopping cart | Not Started |
+| B10.3.2 | Create ModificationModal component with catalog search and filters | Not Started |
+| B10.3.3 | Create ModificationSelector component for choosing mount locations (weapons) and ratings | Not Started |
+| B10.3.4 | Add capacity/slot usage display to gear items (show used/total) | Not Started |
+| B10.3.5 | Integrate modification costs into nuyen budget tracking | Not Started |
+| B10.3.6 | Add validation for capacity/slot limits and mount compatibility | Not Started |
+| B10.3.7 | Display installed modifications on gear items in cart | Not Started |
+
+**Tasks JSON:**
+```json
+[
+  {
+    "id": "B10.3.1",
+    "title": "Add modification button/icon to gear items in shopping cart",
+    "description": "This milestone enhances the GearStep component to support adding modifications to purchased gear. It provides UI for selecting modifications, choosing mount locations (for weapons), setting ratings, and tracking capacity/slot usage. The goal is to create an intuitive interface that makes gear customization feel natural and integrated into the character creation flow. Add modification button/icon to gear items in shopping cart.",
+    "files": [
+      "/app/characters/create/components/ShoppingCartSection.tsx"
+    ],
+    "status": "Not Started",
+    "dependsOn": ["B10.2.5"]
+  },
+  {
+    "id": "B10.3.2",
+    "title": "Create ModificationModal component with catalog search and filters",
+    "description": "This milestone enhances the GearStep component to support adding modifications to purchased gear. It provides UI for selecting modifications, choosing mount locations (for weapons), setting ratings, and tracking capacity/slot usage. The goal is to create an intuitive interface that makes gear customization feel natural and integrated into the character creation flow. Create ModificationModal component with catalog search and filters.",
+    "files": [
+      "/app/characters/create/components/ModificationModal.tsx"
+    ],
+    "status": "Not Started",
+    "dependsOn": ["B10.2.5"]
+  },
+  {
+    "id": "B10.3.3",
+    "title": "Create ModificationSelector component for choosing mount locations (weapons) and ratings",
+    "description": "This milestone enhances the GearStep component to support adding modifications to purchased gear. It provides UI for selecting modifications, choosing mount locations (for weapons), setting ratings, and tracking capacity/slot usage. The goal is to create an intuitive interface that makes gear customization feel natural and integrated into the character creation flow. Create ModificationSelector component for choosing mount locations (weapons) and ratings.",
+    "files": [
+      "/app/characters/create/components/ModificationSelector.tsx"
+    ],
+    "status": "Not Started",
+    "dependsOn": ["B10.3.2"]
+  },
+  {
+    "id": "B10.3.4",
+    "title": "Add capacity/slot usage display to gear items (show used/total)",
+    "description": "This milestone enhances the GearStep component to support adding modifications to purchased gear. It provides UI for selecting modifications, choosing mount locations (for weapons), setting ratings, and tracking capacity/slot usage. The goal is to create an intuitive interface that makes gear customization feel natural and integrated into the character creation flow. Add capacity/slot usage display to gear items (show used/total).",
+    "files": [
+      "/app/characters/create/components/ShoppingCartSection.tsx"
+    ],
+    "status": "Not Started",
+    "dependsOn": ["B10.3.1"]
+  },
+  {
+    "id": "B10.3.5",
+    "title": "Integrate modification costs into nuyen budget tracking",
+    "description": "This milestone enhances the GearStep component to support adding modifications to purchased gear. It provides UI for selecting modifications, choosing mount locations (for weapons), setting ratings, and tracking capacity/slot usage. The goal is to create an intuitive interface that makes gear customization feel natural and integrated into the character creation flow. Integrate modification costs into nuyen budget tracking.",
+    "files": [
+      "/app/characters/create/components/steps/GearStep.tsx",
+      "/app/characters/create/components/ShoppingCartSection.tsx"
+    ],
+    "status": "Not Started",
+    "dependsOn": ["B10.3.1"]
+  },
+  {
+    "id": "B10.3.6",
+    "title": "Add validation for capacity/slot limits and mount compatibility",
+    "description": "This milestone enhances the GearStep component to support adding modifications to purchased gear. It provides UI for selecting modifications, choosing mount locations (for weapons), setting ratings, and tracking capacity/slot usage. The goal is to create an intuitive interface that makes gear customization feel natural and integrated into the character creation flow. Add validation for capacity/slot limits and mount compatibility.",
+    "files": [
+      "/app/characters/create/components/ModificationModal.tsx",
+      "/app/characters/create/components/steps/GearStep.tsx"
+    ],
+    "status": "Not Started",
+    "dependsOn": ["B10.3.2", "B10.3.3"]
+  },
+  {
+    "id": "B10.3.7",
+    "title": "Display installed modifications on gear items in cart",
+    "description": "This milestone enhances the GearStep component to support adding modifications to purchased gear. It provides UI for selecting modifications, choosing mount locations (for weapons), setting ratings, and tracking capacity/slot usage. The goal is to create an intuitive interface that makes gear customization feel natural and integrated into the character creation flow. Display installed modifications on gear items in cart.",
+    "files": [
+      "/app/characters/create/components/ShoppingCartSection.tsx"
+    ],
+    "status": "Not Started",
+    "dependsOn": ["B10.3.1", "B10.3.2"]
+  }
+]
+```
+
+### B10.4 Validation and Cost Tracking
+
+This milestone implements comprehensive validation for modifications including availability checks, capacity/slot limits, mount compatibility, and requirement validation (e.g., chemical seal requires full-body armor with helmet). It also ensures modification costs are properly tracked in the nuyen budget and displayed in the review step.
+
+**Files to modify:**
+- **B10.4.FM.1** `/app/characters/create/components/steps/GearStep.tsx`
+- **B10.4.FM.2** `/app/characters/create/components/steps/ReviewStep.tsx`
+- **B10.4.FM.3** `/lib/rules/validation.ts`
+
+**Tasks:**
+
+| Task | Description | Status |
+|------|-------------|--------|
+| B10.4.1 | Add modification availability validation (availability <= 12 at creation) | Not Started |
+| B10.4.2 | Add capacity/slot limit validation (prevent over-capacity modifications) | Not Started |
+| B10.4.3 | Add mount compatibility validation (weapon type restrictions, mount availability) | Not Started |
+| B10.4.4 | Add requirement validation (e.g., chemical seal requires full-body armor + helmet) | Not Started |
+| B10.4.5 | Update ReviewStep to display modifications with costs | Not Started |
+| B10.4.6 | Ensure modification costs included in total nuyen spent calculation | Not Started |
+
+**Tasks JSON:**
+```json
+[
+  {
+    "id": "B10.4.1",
+    "title": "Add modification availability validation (availability <= 12 at creation)",
+    "description": "This milestone implements comprehensive validation for modifications including availability checks, capacity/slot limits, mount compatibility, and requirement validation (e.g., chemical seal requires full-body armor with helmet). It also ensures modification costs are properly tracked in the nuyen budget and displayed in the review step. Add modification availability validation (availability <= 12 at creation).",
+    "files": [
+      "/lib/rules/validation.ts",
+      "/app/characters/create/components/ModificationModal.tsx"
+    ],
+    "status": "Not Started",
+    "dependsOn": ["B10.3.2"]
+  },
+  {
+    "id": "B10.4.2",
+    "title": "Add capacity/slot limit validation (prevent over-capacity modifications)",
+    "description": "This milestone implements comprehensive validation for modifications including availability checks, capacity/slot limits, mount compatibility, and requirement validation (e.g., chemical seal requires full-body armor with helmet). It also ensures modification costs are properly tracked in the nuyen budget and displayed in the review step. Add capacity/slot limit validation (prevent over-capacity modifications).",
+    "files": [
+      "/lib/rules/validation.ts",
+      "/app/characters/create/components/ModificationModal.tsx"
+    ],
+    "status": "Not Started",
+    "dependsOn": ["B10.3.4"]
+  },
+  {
+    "id": "B10.4.3",
+    "title": "Add mount compatibility validation (weapon type restrictions, mount availability)",
+    "description": "This milestone implements comprehensive validation for modifications including availability checks, capacity/slot limits, mount compatibility, and requirement validation (e.g., chemical seal requires full-body armor with helmet). It also ensures modification costs are properly tracked in the nuyen budget and displayed in the review step. Add mount compatibility validation (weapon type restrictions, mount availability).",
+    "files": [
+      "/lib/rules/validation.ts",
+      "/app/characters/create/components/ModificationSelector.tsx"
+    ],
+    "status": "Not Started",
+    "dependsOn": ["B10.3.3"]
+  },
+  {
+    "id": "B10.4.4",
+    "title": "Add requirement validation (e.g., chemical seal requires full-body armor + helmet)",
+    "description": "This milestone implements comprehensive validation for modifications including availability checks, capacity/slot limits, mount compatibility, and requirement validation (e.g., chemical seal requires full-body armor with helmet). It also ensures modification costs are properly tracked in the nuyen budget and displayed in the review step. Add requirement validation (e.g., chemical seal requires full-body armor + helmet).",
+    "files": [
+      "/lib/rules/validation.ts",
+      "/app/characters/create/components/ModificationModal.tsx"
+    ],
+    "status": "Not Started",
+    "dependsOn": ["B10.3.2"]
+  },
+  {
+    "id": "B10.4.5",
+    "title": "Update ReviewStep to display modifications with costs",
+    "description": "This milestone implements comprehensive validation for modifications including availability checks, capacity/slot limits, mount compatibility, and requirement validation (e.g., chemical seal requires full-body armor with helmet). It also ensures modification costs are properly tracked in the nuyen budget and displayed in the review step. Update ReviewStep to display modifications with costs.",
+    "files": [
+      "/app/characters/create/components/steps/ReviewStep.tsx"
+    ],
+    "status": "Not Started",
+    "dependsOn": ["B10.3.7"]
+  },
+  {
+    "id": "B10.4.6",
+    "title": "Ensure modification costs included in total nuyen spent calculation",
+    "description": "This milestone implements comprehensive validation for modifications including availability checks, capacity/slot limits, mount compatibility, and requirement validation (e.g., chemical seal requires full-body armor with helmet). It also ensures modification costs are properly tracked in the nuyen budget and displayed in the review step. Ensure modification costs included in total nuyen spent calculation.",
+    "files": [
+      "/app/characters/create/components/steps/GearStep.tsx",
+      "/app/characters/create/components/steps/ReviewStep.tsx"
+    ],
+    "status": "Not Started",
+    "dependsOn": ["B10.3.5"]
+  }
+]
+```
+
+### B10.5 Acceptance Criteria
+
+- **B10.5.AC.1** [ ] User can view modification catalog filtered by gear type (weapon/armor/cyberware)
+- **B10.5.AC.2** [ ] User can add modifications to weapons in shopping cart (with mount selection)
+- **B10.5.AC.3** [ ] User can add modifications to armor in shopping cart (with capacity tracking)
+- **B10.5.AC.4** [ ] User can add modifications to cyberware (using existing capacity system)
+- **B10.5.AC.5** [ ] Modification costs deducted from nuyen budget correctly
+- **B10.5.AC.6** [ ] Capacity/slot limits enforced (cannot exceed available capacity)
+- **B10.5.AC.7** [ ] Mount compatibility validated (e.g., light pistols only top/barrel mounts)
+- **B10.5.AC.8** [ ] Requirement validation works (e.g., chemical seal requires full-body armor)
+- **B10.5.AC.9** [ ] Availability validation enforced (modifications <= 12 at creation)
+- **B10.5.AC.10** [ ] Modifications displayed in ReviewStep with individual costs
+- **B10.5.AC.11** [ ] Rating-based modifications (e.g., Gas-Vent Rating 1-3) work correctly
+- **B10.5.AC.12** [ ] Modification removal works (with cost refund)
+
+---
+
+## Phase B11: Identity/Lifestyle/SIN System
+
+**Objective:** Implement comprehensive identity management system with SINs, licenses, and lifestyle tracking per SR5 rules.
+
+This phase implements the identity, lifestyle, SIN, and license system as specified in the SR5 rules. It enables characters to have multiple identities (fake SINs or real SINs from SINner quality), each with associated licenses and lifestyles. The system supports fake SINs/licenses (Rating 1-4), real SINs from SINner quality, lifestyle modifications, subscriptions, and proper validation rules. The result allows players to create shadowrunners with proper identity management for operating in the Sixth World.
+
+**Dependencies:**
+- MVP character creation complete (M0)
+- Gear system (B1) - for purchasing fake SINs/licenses
+- Qualities system (M0.4) - for SINner quality
+
+**Priority:** Medium
+
+### B11.1 Data Structures
+
+This milestone establishes the TypeScript data structures for identities, lifestyles, SINs, and licenses based on the SR5 specification. It defines interfaces that properly separate identities (SIN + licenses) from lifestyles (living conditions), ensuring correct relationships and validation rules.
+
+**Files to modify:**
+- **B11.1.FM.1** `/lib/types/character.ts`
+- **B11.1.FM.2** `/lib/types/edition.ts`
+
+**Tasks:**
+
+| Task | Description | Status |
+|------|-------------|--------|
+| B11.1.1 | Add Identity interface with name, SIN (fake/real), licenses array, and associatedLifestyleId | Not Started |
+| B11.1.2 | Add SIN type definition (fake with rating 1-4, real with sinnerQuality type) | Not Started |
+| B11.1.3 | Add License interface with type (fake/real), rating (1-4 for fake), name/type, and tied SIN reference | Not Started |
+| B11.1.4 | Add Lifestyle interface with type, monthlyCost, isPermanent, modifications, subscriptions, customExpenses, customIncome | Not Started |
+| B11.1.5 | Add LifestyleModification interface with type (positive/negative), modifier (percentage or fixed cost), and effects | Not Started |
+| B11.1.6 | Update Character interface to include identities array, primaryLifestyleId, lifestyles array, and optional sinnerQuality | Not Started |
+| B11.1.7 | Add SinnerQuality type enum (national, criminal, corporate-limited, corporate-born) | Not Started |
+
+**Tasks JSON:**
+```json
+[
+  {
+    "id": "B11.1.1",
+    "title": "Add Identity interface with name, SIN (fake/real), licenses array, and associatedLifestyleId",
+    "description": "This milestone establishes the TypeScript data structures for identities, lifestyles, SINs, and licenses based on the SR5 specification. It defines interfaces that properly separate identities (SIN + licenses) from lifestyles (living conditions), ensuring correct relationships and validation rules. Add Identity interface with name, SIN (fake/real), licenses array, and associatedLifestyleId.",
+    "files": [
+      "/lib/types/character.ts"
+    ],
+    "status": "Not Started",
+    "dependsOn": []
+  },
+  {
+    "id": "B11.1.2",
+    "title": "Add SIN type definition (fake with rating 1-4, real with sinnerQuality type)",
+    "description": "This milestone establishes the TypeScript data structures for identities, lifestyles, SINs, and licenses based on the SR5 specification. It defines interfaces that properly separate identities (SIN + licenses) from lifestyles (living conditions), ensuring correct relationships and validation rules. Add SIN type definition (fake with rating 1-4, real with sinnerQuality type).",
+    "files": [
+      "/lib/types/character.ts"
+    ],
+    "status": "Not Started",
+    "dependsOn": []
+  },
+  {
+    "id": "B11.1.3",
+    "title": "Add License interface with type (fake/real), rating (1-4 for fake), name/type, and tied SIN reference",
+    "description": "This milestone establishes the TypeScript data structures for identities, lifestyles, SINs, and licenses based on the SR5 specification. It defines interfaces that properly separate identities (SIN + licenses) from lifestyles (living conditions), ensuring correct relationships and validation rules. Add License interface with type (fake/real), rating (1-4 for fake), name/type, and tied SIN reference.",
+    "files": [
+      "/lib/types/character.ts"
+    ],
+    "status": "Not Started",
+    "dependsOn": []
+  },
+  {
+    "id": "B11.1.4",
+    "title": "Add Lifestyle interface with type, monthlyCost, isPermanent, modifications, subscriptions, customExpenses, customIncome",
+    "description": "This milestone establishes the TypeScript data structures for identities, lifestyles, SINs, and licenses based on the SR5 specification. It defines interfaces that properly separate identities (SIN + licenses) from lifestyles (living conditions), ensuring correct relationships and validation rules. Add Lifestyle interface with type, monthlyCost, isPermanent, modifications, subscriptions, customExpenses, customIncome.",
+    "files": [
+      "/lib/types/character.ts"
+    ],
+    "status": "Not Started",
+    "dependsOn": []
+  },
+  {
+    "id": "B11.1.5",
+    "title": "Add LifestyleModification interface with type (positive/negative), modifier (percentage or fixed cost), and effects",
+    "description": "This milestone establishes the TypeScript data structures for identities, lifestyles, SINs, and licenses based on the SR5 specification. It defines interfaces that properly separate identities (SIN + licenses) from lifestyles (living conditions), ensuring correct relationships and validation rules. Add LifestyleModification interface with type (positive/negative), modifier (percentage or fixed cost), and effects.",
+    "files": [
+      "/lib/types/character.ts"
+    ],
+    "status": "Not Started",
+    "dependsOn": []
+  },
+  {
+    "id": "B11.1.6",
+    "title": "Update Character interface to include identities array, primaryLifestyleId, lifestyles array, and optional sinnerQuality",
+    "description": "This milestone establishes the TypeScript data structures for identities, lifestyles, SINs, and licenses based on the SR5 specification. It defines interfaces that properly separate identities (SIN + licenses) from lifestyles (living conditions), ensuring correct relationships and validation rules. Update Character interface to include identities array, primaryLifestyleId, lifestyles array, and optional sinnerQuality.",
+    "files": [
+      "/lib/types/character.ts"
+    ],
+    "status": "Not Started",
+    "dependsOn": ["B11.1.1", "B11.1.4", "B11.1.7"]
+  },
+  {
+    "id": "B11.1.7",
+    "title": "Add SinnerQuality type enum (national, criminal, corporate-limited, corporate-born)",
+    "description": "This milestone establishes the TypeScript data structures for identities, lifestyles, SINs, and licenses based on the SR5 specification. It defines interfaces that properly separate identities (SIN + licenses) from lifestyles (living conditions), ensuring correct relationships and validation rules. Add SinnerQuality type enum (national, criminal, corporate-limited, corporate-born).",
+    "files": [
+      "/lib/types/character.ts"
+    ],
+    "status": "Not Started",
+    "dependsOn": []
+  }
+]
+```
+
+### B11.2 Identity Management in Character Creation
+
+This milestone integrates identity management into the character creation wizard. It adds an IdentitiesStep component that allows players to create multiple identities, assign fake SINs (purchased as gear) or real SINs (from SINner quality), and add licenses tied to each SIN. The step validates SIN/license relationships and ensures proper SR5 rules compliance.
+
+**Files to create:**
+- **B11.2.FC.1** `/app/characters/create/components/steps/IdentitiesStep.tsx`
+- **B11.2.FC.2** `/app/characters/create/components/IdentityEditor.tsx`
+- **B11.2.FC.3** `/app/characters/create/components/LicenseEditor.tsx`
+
+**Files to modify:**
+- **B11.2.FM.1** `/app/characters/create/components/CreationWizard.tsx`
+- **B11.2.FM.2** `/lib/types/creation.ts`
+- **B11.2.FM.3** `/app/characters/create/components/steps/GearStep.tsx` (for fake SIN/license purchases)
+
+**Tasks:**
+
+| Task | Description | Status |
+|------|-------------|--------|
+| B11.2.1 | Create IdentitiesStep component with identity list, add/remove identity buttons | Not Started |
+| B11.2.2 | Create IdentityEditor component for editing identity name, SIN type, and SIN details | Not Started |
+| B11.2.3 | Integrate fake SIN purchase from GearStep (link fake SINs purchased as gear to identities) | Not Started |
+| B11.2.4 | Integrate real SIN from SINner quality (validate character has SINner quality if using real SIN) | Not Started |
+| B11.2.5 | Create LicenseEditor component for adding/editing licenses tied to SIN | Not Started |
+| B11.2.6 | Add validation: every identity must have exactly one SIN (fake or real) | Not Started |
+| B11.2.7 | Add validation: fake SINs must have rating 1-4, real SINs must reference SINner quality | Not Started |
+| B11.2.8 | Add validation: licenses must match SIN type (fake licenses for fake SIN, real licenses for real SIN) | Not Started |
+| B11.2.9 | Add validation: character must have at least one identity | Not Started |
+| B11.2.10 | Update CreationWizard to include IdentitiesStep in wizard flow (after GearStep, before ReviewStep) | Not Started |
+
+**Tasks JSON:**
+```json
+[
+  {
+    "id": "B11.2.1",
+    "title": "Create IdentitiesStep component with identity list, add/remove identity buttons",
+    "description": "This milestone integrates identity management into the character creation wizard. It adds an IdentitiesStep component that allows players to create multiple identities, assign fake SINs (purchased as gear) or real SINs (from SINner quality), and add licenses tied to each SIN. The step validates SIN/license relationships and ensures proper SR5 rules compliance. Create IdentitiesStep component with identity list, add/remove identity buttons.",
+    "files": [
+      "/app/characters/create/components/steps/IdentitiesStep.tsx"
+    ],
+    "status": "Not Started",
+    "dependsOn": ["B11.1.6"]
+  },
+  {
+    "id": "B11.2.2",
+    "title": "Create IdentityEditor component for editing identity name, SIN type, and SIN details",
+    "description": "This milestone integrates identity management into the character creation wizard. It adds an IdentitiesStep component that allows players to create multiple identities, assign fake SINs (purchased as gear) or real SINs (from SINner quality), and add licenses tied to each SIN. The step validates SIN/license relationships and ensures proper SR5 rules compliance. Create IdentityEditor component for editing identity name, SIN type, and SIN details.",
+    "files": [
+      "/app/characters/create/components/IdentityEditor.tsx"
+    ],
+    "status": "Not Started",
+    "dependsOn": ["B11.1.1", "B11.1.2"]
+  },
+  {
+    "id": "B11.2.3",
+    "title": "Integrate fake SIN purchase from GearStep (link fake SINs purchased as gear to identities)",
+    "description": "This milestone integrates identity management into the character creation wizard. It adds an IdentitiesStep component that allows players to create multiple identities, assign fake SINs (purchased as gear) or real SINs (from SINner quality), and add licenses tied to each SIN. The step validates SIN/license relationships and ensures proper SR5 rules compliance. Integrate fake SIN purchase from GearStep (link fake SINs purchased as gear to identities).",
+    "files": [
+      "/app/characters/create/components/steps/GearStep.tsx",
+      "/app/characters/create/components/steps/IdentitiesStep.tsx"
+    ],
+    "status": "Not Started",
+    "dependsOn": ["B11.2.1", "B11.2.2"]
+  },
+  {
+    "id": "B11.2.4",
+    "title": "Integrate real SIN from SINner quality (validate character has SINner quality if using real SIN)",
+    "description": "This milestone integrates identity management into the character creation wizard. It adds an IdentitiesStep component that allows players to create multiple identities, assign fake SINs (purchased as gear) or real SINs (from SINner quality), and add licenses tied to each SIN. The step validates SIN/license relationships and ensures proper SR5 rules compliance. Integrate real SIN from SINner quality (validate character has SINner quality if using real SIN).",
+    "files": [
+      "/app/characters/create/components/steps/IdentitiesStep.tsx",
+      "/app/characters/create/components/steps/QualitiesStep.tsx"
+    ],
+    "status": "Not Started",
+    "dependsOn": ["B11.2.1", "B11.2.2"]
+  },
+  {
+    "id": "B11.2.5",
+    "title": "Create LicenseEditor component for adding/editing licenses tied to SIN",
+    "description": "This milestone integrates identity management into the character creation wizard. It adds an IdentitiesStep component that allows players to create multiple identities, assign fake SINs (purchased as gear) or real SINs (from SINner quality), and add licenses tied to each SIN. The step validates SIN/license relationships and ensures proper SR5 rules compliance. Create LicenseEditor component for adding/editing licenses tied to SIN.",
+    "files": [
+      "/app/characters/create/components/LicenseEditor.tsx"
+    ],
+    "status": "Not Started",
+    "dependsOn": ["B11.1.3"]
+  },
+  {
+    "id": "B11.2.6",
+    "title": "Add validation: every identity must have exactly one SIN (fake or real)",
+    "description": "This milestone integrates identity management into the character creation wizard. It adds an IdentitiesStep component that allows players to create multiple identities, assign fake SINs (purchased as gear) or real SINs (from SINner quality), and add licenses tied to each SIN. The step validates SIN/license relationships and ensures proper SR5 rules compliance. Add validation: every identity must have exactly one SIN (fake or real).",
+    "files": [
+      "/app/characters/create/components/steps/IdentitiesStep.tsx",
+      "/lib/rules/validation.ts"
+    ],
+    "status": "Not Started",
+    "dependsOn": ["B11.2.1"]
+  },
+  {
+    "id": "B11.2.7",
+    "title": "Add validation: fake SINs must have rating 1-4, real SINs must reference SINner quality",
+    "description": "This milestone integrates identity management into the character creation wizard. It adds an IdentitiesStep component that allows players to create multiple identities, assign fake SINs (purchased as gear) or real SINs (from SINner quality), and add licenses tied to each SIN. The step validates SIN/license relationships and ensures proper SR5 rules compliance. Add validation: fake SINs must have rating 1-4, real SINs must reference SINner quality.",
+    "files": [
+      "/app/characters/create/components/steps/IdentitiesStep.tsx",
+      "/lib/rules/validation.ts"
+    ],
+    "status": "Not Started",
+    "dependsOn": ["B11.2.1"]
+  },
+  {
+    "id": "B11.2.8",
+    "title": "Add validation: licenses must match SIN type (fake licenses for fake SIN, real licenses for real SIN)",
+    "description": "This milestone integrates identity management into the character creation wizard. It adds an IdentitiesStep component that allows players to create multiple identities, assign fake SINs (purchased as gear) or real SINs (from SINner quality), and add licenses tied to each SIN. The step validates SIN/license relationships and ensures proper SR5 rules compliance. Add validation: licenses must match SIN type (fake licenses for fake SIN, real licenses for real SIN).",
+    "files": [
+      "/app/characters/create/components/steps/IdentitiesStep.tsx",
+      "/lib/rules/validation.ts"
+    ],
+    "status": "Not Started",
+    "dependsOn": ["B11.2.5"]
+  },
+  {
+    "id": "B11.2.9",
+    "title": "Add validation: character must have at least one identity",
+    "description": "This milestone integrates identity management into the character creation wizard. It adds an IdentitiesStep component that allows players to create multiple identities, assign fake SINs (purchased as gear) or real SINs (from SINner quality), and add licenses tied to each SIN. The step validates SIN/license relationships and ensures proper SR5 rules compliance. Add validation: character must have at least one identity.",
+    "files": [
+      "/app/characters/create/components/steps/IdentitiesStep.tsx",
+      "/lib/rules/validation.ts"
+    ],
+    "status": "Not Started",
+    "dependsOn": ["B11.2.1"]
+  },
+  {
+    "id": "B11.2.10",
+    "title": "Update CreationWizard to include IdentitiesStep in wizard flow (after GearStep, before ReviewStep)",
+    "description": "This milestone integrates identity management into the character creation wizard. It adds an IdentitiesStep component that allows players to create multiple identities, assign fake SINs (purchased as gear) or real SINs (from SINner quality), and add licenses tied to each SIN. The step validates SIN/license relationships and ensures proper SR5 rules compliance. Update CreationWizard to include IdentitiesStep in wizard flow (after GearStep, before ReviewStep).",
+    "files": [
+      "/app/characters/create/components/CreationWizard.tsx",
+      "/lib/types/creation.ts"
+    ],
+    "status": "Not Started",
+    "dependsOn": ["B11.2.1"]
+  }
+]
+```
+
+### B11.3 Lifestyle Management in Character Creation
+
+This milestone enhances the existing lifestyle selection in GearStep to support full lifestyle management including modifications, subscriptions, custom expenses/income, and permanent purchase options. It also enables multiple lifestyles for different identities and proper lifestyle-identity associations.
+
+**Files to modify:**
+- **B11.3.FM.1** `/app/characters/create/components/steps/GearStep.tsx`
+- **B11.3.FM.2** `/app/characters/create/components/steps/IdentitiesStep.tsx`
+
+**Files to create:**
+- **B11.3.FC.1** `/app/characters/create/components/LifestyleEditor.tsx`
+- **B11.3.FC.2** `/app/characters/create/components/LifestyleModificationSelector.tsx`
+
+**Tasks:**
+
+| Task | Description | Status |
+|------|-------------|--------|
+| B11.3.1 | Enhance lifestyle selection UI to support multiple lifestyles (primary + additional) | Not Started |
+| B11.3.2 | Create LifestyleEditor component for editing lifestyle type, cost, and options | Not Started |
+| B11.3.3 | Add permanent lifestyle purchase option (100 × monthly cost, one-time payment) | Not Started |
+| B11.3.4 | Create LifestyleModificationSelector for adding lifestyle modifications (positive/negative, percentage/fixed) | Not Started |
+| B11.3.5 | Add lifestyle subscriptions UI (DocWagon contracts, food services, etc.) | Not Started |
+| B11.3.6 | Add custom expenses/income fields to lifestyle editor | Not Started |
+| B11.3.7 | Add lifestyle-identity association (allow identities to reference lifestyles) | Not Started |
+| B11.3.8 | Update lifestyle cost calculation to include modifications, subscriptions, expenses, income | Not Started |
+| B11.3.9 | Add validation: character must have at least one lifestyle (primary) | Not Started |
+| B11.3.10 | Add validation: permanent lifestyle cost = 100 × monthly cost | Not Started |
+
+**Tasks JSON:**
+```json
+[
+  {
+    "id": "B11.3.1",
+    "title": "Enhance lifestyle selection UI to support multiple lifestyles (primary + additional)",
+    "description": "This milestone enhances the existing lifestyle selection in GearStep to support full lifestyle management including modifications, subscriptions, custom expenses/income, and permanent purchase options. It also enables multiple lifestyles for different identities and proper lifestyle-identity associations. Enhance lifestyle selection UI to support multiple lifestyles (primary + additional).",
+    "files": [
+      "/app/characters/create/components/steps/GearStep.tsx"
+    ],
+    "status": "Not Started",
+    "dependsOn": ["B11.1.4"]
+  },
+  {
+    "id": "B11.3.2",
+    "title": "Create LifestyleEditor component for editing lifestyle type, cost, and options",
+    "description": "This milestone enhances the existing lifestyle selection in GearStep to support full lifestyle management including modifications, subscriptions, custom expenses/income, and permanent purchase options. It also enables multiple lifestyles for different identities and proper lifestyle-identity associations. Create LifestyleEditor component for editing lifestyle type, cost, and options.",
+    "files": [
+      "/app/characters/create/components/LifestyleEditor.tsx"
+    ],
+    "status": "Not Started",
+    "dependsOn": ["B11.1.4"]
+  },
+  {
+    "id": "B11.3.3",
+    "title": "Add permanent lifestyle purchase option (100 × monthly cost, one-time payment)",
+    "description": "This milestone enhances the existing lifestyle selection in GearStep to support full lifestyle management including modifications, subscriptions, custom expenses/income, and permanent purchase options. It also enables multiple lifestyles for different identities and proper lifestyle-identity associations. Add permanent lifestyle purchase option (100 × monthly cost, one-time payment).",
+    "files": [
+      "/app/characters/create/components/LifestyleEditor.tsx"
+    ],
+    "status": "Not Started",
+    "dependsOn": ["B11.3.2"]
+  },
+  {
+    "id": "B11.3.4",
+    "title": "Create LifestyleModificationSelector for adding lifestyle modifications (positive/negative, percentage/fixed)",
+    "description": "This milestone enhances the existing lifestyle selection in GearStep to support full lifestyle management including modifications, subscriptions, custom expenses/income, and permanent purchase options. It also enables multiple lifestyles for different identities and proper lifestyle-identity associations. Create LifestyleModificationSelector for adding lifestyle modifications (positive/negative, percentage/fixed).",
+    "files": [
+      "/app/characters/create/components/LifestyleModificationSelector.tsx"
+    ],
+    "status": "Not Started",
+    "dependsOn": ["B11.1.5"]
+  },
+  {
+    "id": "B11.3.5",
+    "title": "Add lifestyle subscriptions UI (DocWagon contracts, food services, etc.)",
+    "description": "This milestone enhances the existing lifestyle selection in GearStep to support full lifestyle management including modifications, subscriptions, custom expenses/income, and permanent purchase options. It also enables multiple lifestyles for different identities and proper lifestyle-identity associations. Add lifestyle subscriptions UI (DocWagon contracts, food services, etc.).",
+    "files": [
+      "/app/characters/create/components/LifestyleEditor.tsx"
+    ],
+    "status": "Not Started",
+    "dependsOn": ["B11.3.2"]
+  },
+  {
+    "id": "B11.3.6",
+    "title": "Add custom expenses/income fields to lifestyle editor",
+    "description": "This milestone enhances the existing lifestyle selection in GearStep to support full lifestyle management including modifications, subscriptions, custom expenses/income, and permanent purchase options. It also enables multiple lifestyles for different identities and proper lifestyle-identity associations. Add custom expenses/income fields to lifestyle editor.",
+    "files": [
+      "/app/characters/create/components/LifestyleEditor.tsx"
+    ],
+    "status": "Not Started",
+    "dependsOn": ["B11.3.2"]
+  },
+  {
+    "id": "B11.3.7",
+    "title": "Add lifestyle-identity association (allow identities to reference lifestyles)",
+    "description": "This milestone enhances the existing lifestyle selection in GearStep to support full lifestyle management including modifications, subscriptions, custom expenses/income, and permanent purchase options. It also enables multiple lifestyles for different identities and proper lifestyle-identity associations. Add lifestyle-identity association (allow identities to reference lifestyles).",
+    "files": [
+      "/app/characters/create/components/steps/IdentitiesStep.tsx",
+      "/app/characters/create/components/steps/GearStep.tsx"
+    ],
+    "status": "Not Started",
+    "dependsOn": ["B11.2.1", "B11.3.1"]
+  },
+  {
+    "id": "B11.3.8",
+    "title": "Update lifestyle cost calculation to include modifications, subscriptions, expenses, income",
+    "description": "This milestone enhances the existing lifestyle selection in GearStep to support full lifestyle management including modifications, subscriptions, custom expenses/income, and permanent purchase options. It also enables multiple lifestyles for different identities and proper lifestyle-identity associations. Update lifestyle cost calculation to include modifications, subscriptions, expenses, income.",
+    "files": [
+      "/app/characters/create/components/LifestyleEditor.tsx",
+      "/lib/rules/validation.ts"
+    ],
+    "status": "Not Started",
+    "dependsOn": ["B11.3.3", "B11.3.4", "B11.3.5", "B11.3.6"]
+  },
+  {
+    "id": "B11.3.9",
+    "title": "Add validation: character must have at least one lifestyle (primary)",
+    "description": "This milestone enhances the existing lifestyle selection in GearStep to support full lifestyle management including modifications, subscriptions, custom expenses/income, and permanent purchase options. It also enables multiple lifestyles for different identities and proper lifestyle-identity associations. Add validation: character must have at least one lifestyle (primary).",
+    "files": [
+      "/app/characters/create/components/steps/GearStep.tsx",
+      "/lib/rules/validation.ts"
+    ],
+    "status": "Not Started",
+    "dependsOn": ["B11.3.1"]
+  },
+  {
+    "id": "B11.3.10",
+    "title": "Add validation: permanent lifestyle cost = 100 × monthly cost",
+    "description": "This milestone enhances the existing lifestyle selection in GearStep to support full lifestyle management including modifications, subscriptions, custom expenses/income, and permanent purchase options. It also enables multiple lifestyles for different identities and proper lifestyle-identity associations. Add validation: permanent lifestyle cost = 100 × monthly cost.",
+    "files": [
+      "/app/characters/create/components/LifestyleEditor.tsx",
+      "/lib/rules/validation.ts"
+    ],
+    "status": "Not Started",
+    "dependsOn": ["B11.3.3"]
+  }
+]
+```
+
+### B11.4 Review Step Integration
+
+This milestone updates the ReviewStep to display identities, SINs, licenses, and lifestyles with proper formatting and validation status. It ensures all identity/lifestyle information is visible during character review and finalization.
+
+**Files to modify:**
+- **B11.4.FM.1** `/app/characters/create/components/steps/ReviewStep.tsx`
+
+**Tasks:**
+
+| Task | Description | Status |
+|------|-------------|--------|
+| B11.4.1 | Add identities section to ReviewStep displaying all identities with SINs and licenses | Not Started |
+| B11.4.2 | Add lifestyles section to ReviewStep displaying all lifestyles with modifications and costs | Not Started |
+| B11.4.3 | Display lifestyle-identity associations in ReviewStep | Not Started |
+| B11.4.4 | Show validation status for identities (SIN validation, license validation) | Not Started |
+| B11.4.5 | Show validation status for lifestyles (cost validation, modification validation) | Not Started |
+
+**Tasks JSON:**
+```json
+[
+  {
+    "id": "B11.4.1",
+    "title": "Add identities section to ReviewStep displaying all identities with SINs and licenses",
+    "description": "This milestone updates the ReviewStep to display identities, SINs, licenses, and lifestyles with proper formatting and validation status. It ensures all identity/lifestyle information is visible during character review and finalization. Add identities section to ReviewStep displaying all identities with SINs and licenses.",
+    "files": [
+      "/app/characters/create/components/steps/ReviewStep.tsx"
+    ],
+    "status": "Not Started",
+    "dependsOn": ["B11.2.10"]
+  },
+  {
+    "id": "B11.4.2",
+    "title": "Add lifestyles section to ReviewStep displaying all lifestyles with modifications and costs",
+    "description": "This milestone updates the ReviewStep to display identities, SINs, licenses, and lifestyles with proper formatting and validation status. It ensures all identity/lifestyle information is visible during character review and finalization. Add lifestyles section to ReviewStep displaying all lifestyles with modifications and costs.",
+    "files": [
+      "/app/characters/create/components/steps/ReviewStep.tsx"
+    ],
+    "status": "Not Started",
+    "dependsOn": ["B11.3.8"]
+  },
+  {
+    "id": "B11.4.3",
+    "title": "Display lifestyle-identity associations in ReviewStep",
+    "description": "This milestone updates the ReviewStep to display identities, SINs, licenses, and lifestyles with proper formatting and validation status. It ensures all identity/lifestyle information is visible during character review and finalization. Display lifestyle-identity associations in ReviewStep.",
+    "files": [
+      "/app/characters/create/components/steps/ReviewStep.tsx"
+    ],
+    "status": "Not Started",
+    "dependsOn": ["B11.4.1", "B11.4.2"]
+  },
+  {
+    "id": "B11.4.4",
+    "title": "Show validation status for identities (SIN validation, license validation)",
+    "description": "This milestone updates the ReviewStep to display identities, SINs, licenses, and lifestyles with proper formatting and validation status. It ensures all identity/lifestyle information is visible during character review and finalization. Show validation status for identities (SIN validation, license validation).",
+    "files": [
+      "/app/characters/create/components/steps/ReviewStep.tsx"
+    ],
+    "status": "Not Started",
+    "dependsOn": ["B11.4.1"]
+  },
+  {
+    "id": "B11.4.5",
+    "title": "Show validation status for lifestyles (cost validation, modification validation)",
+    "description": "This milestone updates the ReviewStep to display identities, SINs, licenses, and lifestyles with proper formatting and validation status. It ensures all identity/lifestyle information is visible during character review and finalization. Show validation status for lifestyles (cost validation, modification validation).",
+    "files": [
+      "/app/characters/create/components/steps/ReviewStep.tsx"
+    ],
+    "status": "Not Started",
+    "dependsOn": ["B11.4.2"]
+  }
+]
+```
+
+### B11.5 Acceptance Criteria
+
+- **B11.5.AC.1** [ ] Character can have multiple identities (1+)
+- **B11.5.AC.2** [ ] Each identity must have exactly one SIN (fake Rating 1-4 or real from SINner quality)
+- **B11.5.AC.3** [ ] Fake SINs can be purchased as gear and linked to identities
+- **B11.5.AC.4** [ ] Real SINs require SINner quality on character
+- **B11.5.AC.5** [ ] Each identity can have multiple licenses (0+)
+- **B11.5.AC.6** [ ] Fake licenses (Rating 1-4) must be tied to fake SINs
+- **B11.5.AC.7** [ ] Real licenses must be tied to real SINs
+- **B11.5.AC.8** [ ] Character must have at least one lifestyle (primary)
+- **B11.5.AC.9** [ ] Character can have multiple lifestyles (for alternate identities/safehouses)
+- **B11.5.AC.10** [ ] Lifestyles can have modifications (positive/negative, percentage or fixed cost)
+- **B11.5.AC.11** [ ] Lifestyles can have subscriptions (DocWagon, food services, etc.)
+- **B11.5.AC.12** [ ] Lifestyles can have custom expenses and income
+- **B11.5.AC.13** [ ] Permanent lifestyle purchase costs 100 × monthly cost
+- **B11.5.AC.14** [ ] Identities can be associated with lifestyles
+- **B11.5.AC.15** [ ] All identity/lifestyle data displayed in ReviewStep
+- **B11.5.AC.16** [ ] Validation prevents invalid SIN/license combinations
+- **B11.5.AC.17** [ ] Validation enforces SR5 rules (fake SINs 1-4, real SINs from SINner quality)
 
 ---
 
