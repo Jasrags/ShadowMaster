@@ -126,10 +126,10 @@ This section prioritizes the most critical remaining tasks needed to complete ch
 | 6 | Add Karma-purchased Power Points for Mystic Adepts | Medium | B5.1.5, B5.2.6 | Not Started |
 | 7 | Add Adept Powers data to ruleset | Large | B5.1.1 | Not Started |
 | 8 | Create AdeptPowersStep component | Large | B5.2 | Not Started |
-| 9 | Add spell formula limits validation (Magic × 2 per category) | Small | M0.7.11 | Not Started |
+| 9 | Add spell formula limits validation (Magic × 2 per category). Progress bar tracks free spells. Category limits are selection/validation limits. | Small | M0.7.11 | ✅ Complete |
 | 10 | Conditional Assensing for Adepts (requires powers system first) | Small | B5.1.6, B5.2.11 | Not Started |
 
-**Next Steps:** Focus on completing M0 phase items (M0.3.9, M0.4-M0.7) before moving to Beta features (B5 Adept Powers).
+**Next Steps:** M0 phase complete. Move to Beta features, starting with B5 Adept Powers System.
 
 ---
 
@@ -149,7 +149,7 @@ This section provides a comprehensive view of the entire implementation roadmap,
 7. Augmentations           ✅ Complete (B1)
 8. Spells/Powers           🔜 M0.7 SpellsStep (magical) / B5 AdeptPowersStep (adepts)
 9. Complex Forms           🔜 B7 (technomancers only)
-10. Contacts               ✅ Complete (MVP) + M0.5 enhancements pending
+10. Contacts               ✅ Complete (MVP) + M0.5 enhancements completed
 11. Gear & Resources       ✅ Complete (MVP) + M0.6 karma-to-nuyen completed
 12. Review & Finalize      ✅ Complete (MVP)
 ```
@@ -165,7 +165,7 @@ This section provides a comprehensive view of the entire implementation roadmap,
 | | M0.3.8 | Adept Skill Filtering Bug Fix | - | Critical | ✅ Complete |
 | | M0.3.9 | Free Skills from Priority | - | Critical | ✅ Complete |
 | | M0.4 | Qualities Enhancements | - | Critical | ✅ Complete |
-| | M0.5 | Contacts Enhancements | - | Critical | Not Started |
+| | M0.5 | Contacts Enhancements | - | Critical | ✅ Complete |
 | | M0.6 | Distributed Karma Architecture | - | Critical | ✅ Complete |
 | | M0.7 | SpellsStep Creation | - | Critical | ✅ Complete |
 | | M0.8 | Aspected Mage Enhancements | - | Critical | ✅ Complete |
@@ -192,6 +192,8 @@ This section provides a comprehensive view of the entire implementation roadmap,
 | M0.8 Aspected Mage | Dec 2024 | Aspected Mage group selection (Sorcery, Conjuring, Enchanting) implemented and working |
 | M0.4 Qualities | Dec 2024 | Leveled qualities support (Addiction, Allergy, etc.), racial quality filtering, specification inputs (e.g. Mentor Spirit choice), 20+ new qualities added |
 | M0.6 Karma Arch | Dec 2024 | Distributed karma spending, global karma budget, karma-to-nuyen conversion, 7 karma carryover limit |
+| M0.5 Contacts | Dec 2024 | 10 contact templates (Fixer, Street Doc, Arms Dealer, etc.), template selector with customization, full custom creation support |
+| M0.7 SpellsStep | Jan 2025 | SpellsStep component with free spell allocation, karma purchases, category limits validation (Magic × 2 per category), progress bar tracking free spells |
 | B8.1 Gear Layout | Dec 2024 | Improved gear catalog layout, shopping cart width fixes, responsive design |
 
 ### Estimated Remaining Timeline
@@ -561,10 +563,10 @@ This milestone adds example contact templates (Fixer, Street Doc, Bartender, etc
 
 | Task | Description | Status |
 |------|-------------|--------|
-| M0.5.1 | Add example contacts to ruleset data (Fixer, Street Doc, Bartender, etc.) | Not Started |
-| M0.5.2 | Create contact template selector with pre-filled archetypes | Not Started |
-| M0.5.3 | Allow customization of selected template (edit name, adjust ratings) | Not Started |
-| M0.5.4 | Ensure fully custom contact creation still works | Not Started |
+| M0.5.1 | Add example contacts to ruleset data (Fixer, Street Doc, Bartender, etc.) | ✅ Complete |
+| M0.5.2 | Create contact template selector with pre-filled archetypes | ✅ Complete |
+| M0.5.3 | Allow customization of selected template (edit name, adjust ratings) | ✅ Complete |
+| M0.5.4 | Ensure fully custom contact creation still works | ✅ Complete |
 
 **Tasks JSON:**
 ```json
@@ -577,7 +579,7 @@ This milestone adds example contact templates (Fixer, Street Doc, Bartender, etc
       "/app/characters/create/components/steps/ContactsStep.tsx",
       "/data/editions/sr5/core-rulebook.json"
     ],
-    "status": "Not Started",
+    "status": "Complete",
     "dependsOn": []
   },
   {
@@ -588,7 +590,7 @@ This milestone adds example contact templates (Fixer, Street Doc, Bartender, etc
       "/app/characters/create/components/steps/ContactsStep.tsx",
       "/data/editions/sr5/core-rulebook.json"
     ],
-    "status": "Not Started",
+    "status": "Complete",
     "dependsOn": ["M0.5.1"]
   },
   {
@@ -599,7 +601,7 @@ This milestone adds example contact templates (Fixer, Street Doc, Bartender, etc
       "/app/characters/create/components/steps/ContactsStep.tsx",
       "/data/editions/sr5/core-rulebook.json"
     ],
-    "status": "Not Started",
+    "status": "Complete",
     "dependsOn": ["M0.5.2"]
   },
   {
@@ -610,7 +612,7 @@ This milestone adds example contact templates (Fixer, Street Doc, Bartender, etc
       "/app/characters/create/components/steps/ContactsStep.tsx",
       "/data/editions/sr5/core-rulebook.json"
     ],
-    "status": "Not Started",
+    "status": "Complete",
     "dependsOn": ["M0.5.2"]
   }
 ]
@@ -790,9 +792,10 @@ This milestone creates a dedicated step for spell selection that replaces spell 
 | M0.7.3 | Add spell catalog browser with category filters | ✅ Complete |
 | M0.7.4 | Display spell details (drain, range, duration, effects) | ✅ Complete |
 | M0.7.5 | Integrate karma purchase for additional spells (5 Karma each) | ✅ Complete |
-| M0.7.6 | Implement spell validation (total limit = Magic × 2 + formula limits = Magic × 2 per category) | ✅ Complete |
+| M0.7.6 | Implement spell validation (total limit = Magic × 2) | ✅ Complete |
 | M0.7.7 | Conditionally show step only for magical characters | ✅ Complete |
 | M0.7.8 | Register step in CreationWizard after MagicStep and move spell selection out of KarmaStep | ✅ Complete |
+| M0.7.11 | Add spell formula limits validation (Magic × 2 per category). Progress bar tracks free spells (from priority). Category limits are selection/validation limits based on Magic × 2. | Not Started |
 
 **Tasks JSON:**
 ```json
@@ -864,8 +867,8 @@ This milestone creates a dedicated step for spell selection that replaces spell 
   },
   {
     "id": "M0.7.6",
-    "title": "Implement spell validation (total limit = Magic × 2 + formula limits = Magic × 2 per category)",
-    "description": "This milestone creates a dedicated step for spell selection that replaces spell management currently embedded in KarmaStep. It implements free spell allocation based on Magic priority, karma purchases for additional spells, and proper validation of spell formula limits. The step only appears for magical characters and provides a comprehensive spell catalog browser with category filters. Implement spell validation (total limit = Magic × 2 + formula limits = Magic × 2 per category).",
+    "title": "Implement spell validation (total limit = Magic × 2)",
+    "description": "This milestone creates a dedicated step for spell selection that replaces spell management currently embedded in KarmaStep. It implements free spell allocation based on Magic priority, karma purchases for additional spells, and proper validation of spell formula limits. The step only appears for magical characters and provides a comprehensive spell catalog browser with category filters. Implement spell validation (total limit = Magic × 2).",
     "files": [
       "/app/characters/create/components/steps/SpellsStep.tsx",
       "/app/characters/create/components/CreationWizard.tsx",
@@ -900,7 +903,16 @@ This milestone creates a dedicated step for spell selection that replaces spell 
     ],
     "status": "Complete",
     "dependsOn": ["M0.7.7", "M0.6.5"]
-  }
+  },
+  {
+    "id": "M0.7.11",
+    "title": "Add spell formula limits validation (Magic × 2 per category)",
+    "description": "This milestone creates a dedicated step for spell selection that replaces spell management currently embedded in KarmaStep. It implements free spell allocation based on Magic priority, karma purchases for additional spells, and proper validation of spell formula limits. The step only appears for magical characters and provides a comprehensive spell catalog browser with category filters. Add spell formula limits validation (Magic × 2 per category). Progress bar tracks free spells (from priority). Category limits are selection/validation limits based on Magic × 2.",
+    "files": [
+      "/app/characters/create/components/steps/SpellsStep.tsx"
+    ],
+    "status": "Complete",
+    "dependsOn": ["M0.7.6"]
 ]
 ```
 
@@ -3185,7 +3197,7 @@ MVP Core (Complete)
 │   ├─► M0.6: Distributed Karma Architecture
 │   │   └─► Required for: M0.7.5, B5.1.4
 │   ├─► M0.7: SpellsStep Creation
-│   │   ├─► M0.7.1-8: All tasks
+│   │   ├─► M0.7.1-8: Complete, M0.7.11: Not Started
 │   │   └─► Required for: B6.1.1, B6.1.2, B6.1.3
 │   └─► M0.8: Aspected Mage ✅
 │
@@ -3441,7 +3453,7 @@ Post-Creation Components:
         "M0.5": {
           "id": "M0.5",
           "name": "Contacts Enhancements",
-          "status": "Not Started",
+          "status": "Complete",
           "dependsOn": [],
           "dataStructures": ["contactTemplates in ruleset"],
           "components": ["ContactsStep.tsx"],
@@ -3469,7 +3481,7 @@ Post-Creation Components:
         "M0.7": {
           "id": "M0.7",
           "name": "SpellsStep Creation",
-          "status": "Not Started",
+          "status": "In Progress",
           "dependsOn": [],
           "dataStructures": [
             "spell source tracking ('free' | 'karma')"
