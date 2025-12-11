@@ -292,8 +292,8 @@ export interface MetatypeData {
  * Load metatypes from a ruleset
  */
 export function extractMetatypes(ruleset: LoadedRuleset): MetatypeData[] {
-  const module = extractModule<{ metatypes: MetatypeData[] }>(ruleset, "metatypes");
-  return module?.metatypes || [];
+  const ruleModule = extractModule<{ metatypes: MetatypeData[] }>(ruleset, "metatypes");
+  return ruleModule?.metatypes || [];
 }
 
 /**
@@ -359,7 +359,7 @@ export function extractSkills(ruleset: LoadedRuleset): {
   exampleKnowledgeSkills: ExampleKnowledgeSkillData[];
   exampleLanguages: ExampleLanguageData[];
 } {
-  const module = extractModule<{
+  const ruleModule = extractModule<{
     activeSkills: SkillData[];
     skillGroups: SkillGroupData[];
     knowledgeCategories: KnowledgeCategoryData[];
@@ -369,17 +369,17 @@ export function extractSkills(ruleset: LoadedRuleset): {
   }>(ruleset, "skills");
 
   return {
-    activeSkills: module?.activeSkills || [],
-    skillGroups: module?.skillGroups || [],
-    knowledgeCategories: module?.knowledgeCategories || [],
-    creationLimits: module?.creationLimits || {
+    activeSkills: ruleModule?.activeSkills || [],
+    skillGroups: ruleModule?.skillGroups || [],
+    knowledgeCategories: ruleModule?.knowledgeCategories || [],
+    creationLimits: ruleModule?.creationLimits || {
       maxSkillRating: 6,
       maxSkillRatingWithAptitude: 7,
       freeKnowledgePoints: "(LOG + INT) × 2",
       nativeLanguageRating: 6,
     },
-    exampleKnowledgeSkills: module?.exampleKnowledgeSkills || [],
-    exampleLanguages: module?.exampleLanguages || [],
+    exampleKnowledgeSkills: ruleModule?.exampleKnowledgeSkills || [],
+    exampleLanguages: ruleModule?.exampleLanguages || [],
   };
 }
 
@@ -410,14 +410,14 @@ export function extractQualities(ruleset: LoadedRuleset): {
   positive: QualityData[];
   negative: QualityData[];
 } {
-  const module = extractModule<{
+  const ruleModule = extractModule<{
     positive: QualityData[];
     negative: QualityData[];
   }>(ruleset, "qualities");
 
   return {
-    positive: module?.positive || [],
-    negative: module?.negative || [],
+    positive: ruleModule?.positive || [],
+    negative: ruleModule?.negative || [],
   };
 }
 
@@ -456,8 +456,8 @@ export interface MagicPathData {
  * Load magic paths from a ruleset
  */
 export function extractMagicPaths(ruleset: LoadedRuleset): MagicPathData[] {
-  const module = extractModule<{ paths: MagicPathData[] }>(ruleset, "magic");
-  return module?.paths || [];
+  const ruleModule = extractModule<{ paths: MagicPathData[] }>(ruleset, "magic");
+  return ruleModule?.paths || [];
 }
 
 /**
@@ -474,16 +474,16 @@ export interface LifestyleData {
  * Load lifestyles from a ruleset
  */
 export function extractLifestyles(ruleset: LoadedRuleset): LifestyleData[] {
-  const module = extractModule<{ lifestyles: LifestyleData[] }>(ruleset, "lifestyle");
-  return module?.lifestyles || [];
+  const ruleModule = extractModule<{ lifestyles: LifestyleData[] }>(ruleset, "lifestyle");
+  return ruleModule?.lifestyles || [];
 }
 
 /**
  * Load lifestyle metatype modifiers from a ruleset
  */
 export function extractLifestyleModifiers(ruleset: LoadedRuleset): Record<string, number> {
-  const module = extractModule<{ metatypeModifiers: Record<string, number> }>(ruleset, "lifestyle");
-  return module?.metatypeModifiers || {};
+  const ruleModule = extractModule<{ metatypeModifiers: Record<string, number> }>(ruleset, "lifestyle");
+  return ruleModule?.metatypeModifiers || {};
 }
 
 // =============================================================================
@@ -579,8 +579,8 @@ export interface GearCatalogData {
  * Load gear catalog from a ruleset
  */
 export function extractGear(ruleset: LoadedRuleset): GearCatalogData | null {
-  const module = extractModule<GearCatalogData>(ruleset, "gear");
-  return module;
+  const ruleModule = extractModule<GearCatalogData>(ruleset, "gear");
+  return ruleModule;
 }
 
 // =============================================================================
@@ -629,16 +629,16 @@ export interface SpellsCatalogData {
  * Load spells from a ruleset
  */
 export function extractSpells(ruleset: LoadedRuleset): SpellsCatalogData | null {
-  const module = extractModule<{ spells: SpellsCatalogData }>(ruleset, "magic");
-  return module?.spells || null;
+  const ruleModule = extractModule<{ spells: SpellsCatalogData }>(ruleset, "magic");
+  return ruleModule?.spells || null;
 }
 
 /**
  * Load complex forms from a ruleset
  */
 export function extractComplexForms(ruleset: LoadedRuleset): ComplexFormData[] {
-  const module = extractModule<{ complexForms: ComplexFormData[] }>(ruleset, "magic");
-  return module?.complexForms || [];
+  const ruleModule = extractModule<{ complexForms: ComplexFormData[] }>(ruleset, "magic");
+  return ruleModule?.complexForms || [];
 }
 
 // =============================================================================
@@ -759,19 +759,19 @@ export interface BiowareCatalogData {
  * Load cyberware catalog from a ruleset
  */
 export function extractCyberware(ruleset: LoadedRuleset): CyberwareCatalogData | null {
-  const module = extractModule<CyberwareCatalogData>(ruleset, "cyberware");
-  if (!module) return null;
+  const ruleModule = extractModule<CyberwareCatalogData>(ruleset, "cyberware");
+  if (!ruleModule) return null;
 
   return {
-    rules: module.rules || {
+    rules: ruleModule.rules || {
       maxEssence: 6,
       maxAttributeBonus: 4,
       maxAvailabilityAtCreation: 12,
       trackEssenceHoles: true,
       magicReductionFormula: "roundUp",
     },
-    grades: module.grades || [],
-    catalog: module.catalog || [],
+    grades: ruleModule.grades || [],
+    catalog: ruleModule.catalog || [],
   };
 }
 
@@ -779,12 +779,12 @@ export function extractCyberware(ruleset: LoadedRuleset): CyberwareCatalogData |
  * Load bioware catalog from a ruleset
  */
 export function extractBioware(ruleset: LoadedRuleset): BiowareCatalogData | null {
-  const module = extractModule<BiowareCatalogData>(ruleset, "bioware");
-  if (!module) return null;
+  const ruleModule = extractModule<BiowareCatalogData>(ruleset, "bioware");
+  if (!ruleModule) return null;
 
   return {
-    grades: module.grades || [],
-    catalog: module.catalog || [],
+    grades: ruleModule.grades || [],
+    catalog: ruleModule.catalog || [],
   };
 }
 
@@ -814,8 +814,8 @@ import type { ContactTemplateData } from "../types";
  * Load contact templates from a ruleset
  */
 export function extractContactTemplates(ruleset: LoadedRuleset): ContactTemplateData[] {
-  const module = extractModule<{ templates: ContactTemplateData[] }>(ruleset, "contactTemplates");
-  return module?.templates || [];
+  const ruleModule = extractModule<{ templates: ContactTemplateData[] }>(ruleset, "contactTemplates");
+  return ruleModule?.templates || [];
 }
 
 // =============================================================================
@@ -847,6 +847,6 @@ export interface AdeptPowerCatalogItem {
  * Load adept powers from a ruleset
  */
 export function extractAdeptPowers(ruleset: LoadedRuleset): AdeptPowerCatalogItem[] {
-  const module = extractModule<{ powers: AdeptPowerCatalogItem[] }>(ruleset, "adeptPowers");
-  return module?.powers || [];
+  const ruleModule = extractModule<{ powers: AdeptPowerCatalogItem[] }>(ruleset, "adeptPowers");
+  return ruleModule?.powers || [];
 }

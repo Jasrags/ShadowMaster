@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import {
   Dialog,
   Modal,
@@ -28,22 +28,13 @@ export default function UserEditModal({
   onSave,
   isLoading = false,
 }: UserEditModalProps) {
+  // Initialize state from user prop - component will remount when user.id changes (via key prop)
   const [email, setEmail] = useState(user.email);
   const [username, setUsername] = useState(user.username);
   const [selectedRoles, setSelectedRoles] = useState<Set<UserRole>>(
     new Set(Array.isArray(user.role) ? user.role : [user.role])
   );
   const [errors, setErrors] = useState<Record<string, string>>({});
-
-  // Reset form when user changes or modal opens
-  useEffect(() => {
-    if (isOpen) {
-      setEmail(user.email);
-      setUsername(user.username);
-      setSelectedRoles(new Set(Array.isArray(user.role) ? user.role : [user.role]));
-      setErrors({});
-    }
-  }, [user, isOpen]);
 
   const validate = (): boolean => {
     const newErrors: Record<string, string> = {};
@@ -84,6 +75,7 @@ export default function UserEditModal({
 
   return (
     <ModalOverlay
+      key={user.id}
       isOpen={isOpen}
       onOpenChange={(isOpen) => !isOpen && onClose()}
       className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4"
@@ -113,11 +105,10 @@ export default function UserEditModal({
                     type="email"
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
-                    className={`w-full rounded-md border px-3 py-2 text-black placeholder-zinc-500 focus:outline-none focus:ring-2 focus:ring-zinc-500 focus:ring-offset-2 dark:bg-zinc-800 dark:text-zinc-50 dark:placeholder-zinc-400 dark:focus:ring-zinc-600 ${
-                      errors.email
-                        ? "border-red-500 dark:border-red-500"
-                        : "border-zinc-300 dark:border-zinc-700"
-                    }`}
+                    className={`w-full rounded-md border px-3 py-2 text-black placeholder-zinc-500 focus:outline-none focus:ring-2 focus:ring-zinc-500 focus:ring-offset-2 dark:bg-zinc-800 dark:text-zinc-50 dark:placeholder-zinc-400 dark:focus:ring-zinc-600 ${errors.email
+                      ? "border-red-500 dark:border-red-500"
+                      : "border-zinc-300 dark:border-zinc-700"
+                      }`}
                     placeholder="user@example.com"
                     disabled={isLoading}
                   />
@@ -139,11 +130,10 @@ export default function UserEditModal({
                     type="text"
                     value={username}
                     onChange={(e) => setUsername(e.target.value)}
-                    className={`w-full rounded-md border px-3 py-2 text-black placeholder-zinc-500 focus:outline-none focus:ring-2 focus:ring-zinc-500 focus:ring-offset-2 dark:bg-zinc-800 dark:text-zinc-50 dark:placeholder-zinc-400 dark:focus:ring-zinc-600 ${
-                      errors.username
-                        ? "border-red-500 dark:border-red-500"
-                        : "border-zinc-300 dark:border-zinc-700"
-                    }`}
+                    className={`w-full rounded-md border px-3 py-2 text-black placeholder-zinc-500 focus:outline-none focus:ring-2 focus:ring-zinc-500 focus:ring-offset-2 dark:bg-zinc-800 dark:text-zinc-50 dark:placeholder-zinc-400 dark:focus:ring-zinc-600 ${errors.username
+                      ? "border-red-500 dark:border-red-500"
+                      : "border-zinc-300 dark:border-zinc-700"
+                      }`}
                     placeholder="username"
                     disabled={isLoading}
                   />
@@ -164,11 +154,10 @@ export default function UserEditModal({
                       setSelectedRoles(new Set(keys as Iterable<UserRole>));
                     }}
                     selectionMode="multiple"
-                    className={`w-full rounded-md border bg-white focus:outline-none focus:ring-2 focus:ring-zinc-500 focus:ring-offset-2 dark:bg-zinc-800 dark:focus:ring-zinc-600 ${
-                      errors.role
-                        ? "border-red-500 dark:border-red-500"
-                        : "border-zinc-300 dark:border-zinc-700"
-                    } ${isLoading ? "opacity-50 pointer-events-none" : ""}`}
+                    className={`w-full rounded-md border bg-white focus:outline-none focus:ring-2 focus:ring-zinc-500 focus:ring-offset-2 dark:bg-zinc-800 dark:focus:ring-zinc-600 ${errors.role
+                      ? "border-red-500 dark:border-red-500"
+                      : "border-zinc-300 dark:border-zinc-700"
+                      } ${isLoading ? "opacity-50 pointer-events-none" : ""}`}
                   >
                     <ListBoxItem
                       id="user"
