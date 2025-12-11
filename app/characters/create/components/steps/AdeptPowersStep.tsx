@@ -11,6 +11,8 @@ interface StepProps {
     budgetValues: Record<string, number>;
 }
 
+const POWER_POINT_KARMA_COST = 5; // 5 Karma = 1 Power Point
+
 export function AdeptPowersStep({ state, updateState, budgetValues }: StepProps) {
     const adeptPowersCatalog = useAdeptPowers();
     const priorityTable = usePriorityTable();
@@ -43,9 +45,27 @@ export function AdeptPowersStep({ state, updateState, budgetValues }: StepProps)
     // Mystic Adepts allocate a portion of their Magic to PP
     // For now, assume full Magic = PP for adepts
     const isMysticAdept = (state.selections["magical-path"] as string) === "mystic-adept";
-    const powerPointBudget = isMysticAdept
+    
+    // Calculate karma-purchased power points
+    const karmaSpentPowerPoints = (state.budgets["karma-spent-power-points"] as number) || 0;
+    const karmaPurchasedPP = Math.floor(karmaSpentPowerPoints / POWER_POINT_KARMA_COST);
+    
+    // Base power point budget (allocation for mystic adepts, Magic rating for regular adepts)
+    const basePowerPointBudget = isMysticAdept
         ? ((state.selections["power-points-allocation"] as number) || 0)
         : magicRating;
+    
+    // Total power point budget includes karma-purchased points
+    const powerPointBudget = basePowerPointBudget + karmaPurchasedPP;
+    
+    // Calculate karma remaining
+    const karmaBase = budgetValues["karma"] || 25;
+    const karmaGained = (state.budgets["karma-gained-negative"] as number) || 0;
+    const karmaSpentPos = (state.budgets["karma-spent-positive"] as number) || 0;
+    const karmaSpentGear = (state.budgets["karma-spent-gear"] as number) || 0;
+    const karmaSpentSpells = (state.budgets["karma-spent-spells"] as number) || 0;
+    const karmaSpentForms = (state.budgets["karma-spent-complex-forms"] as number) || 0;
+    const karmaRemaining = karmaBase + karmaGained - karmaSpentPos - karmaSpentGear - karmaSpentSpells - karmaSpentForms - karmaSpentPowerPoints;
 
     // Get current adept powers from state
     const selectedPowers = useMemo(() => {
@@ -160,6 +180,37 @@ export function AdeptPowersStep({ state, updateState, budgetValues }: StepProps)
         });
     }, [selectedPowers, ppSpent, state.selections, state.budgets, updateState]);
 
+    // Purchase power point with karma (mystic adepts only)
+    const handlePurchasePowerPoint = useCallback(() => {
+        // Validate: must be mystic adept, have enough karma, and not exceed Magic rating limit
+        if (!isMysticAdept) return;
+        if (karmaRemaining < POWER_POINT_KARMA_COST) return;
+        if (powerPointBudget >= magicRating) return; // Max PP = Magic rating
+
+        const newKarmaSpent = karmaSpentPowerPoints + POWER_POINT_KARMA_COST;
+
+        updateState({
+            budgets: {
+                ...state.budgets,
+                "karma-spent-power-points": newKarmaSpent,
+            },
+        });
+    }, [isMysticAdept, karmaRemaining, powerPointBudget, magicRating, karmaSpentPowerPoints, state.budgets, updateState]);
+
+    // Remove purchased power point (refund karma)
+    const handleRemovePowerPoint = useCallback(() => {
+        if (karmaSpentPowerPoints < POWER_POINT_KARMA_COST) return;
+
+        const newKarmaSpent = karmaSpentPowerPoints - POWER_POINT_KARMA_COST;
+
+        updateState({
+            budgets: {
+                ...state.budgets,
+                "karma-spent-power-points": Math.max(0, newKarmaSpent),
+            },
+        });
+    }, [karmaSpentPowerPoints, state.budgets, updateState]);
+
     // Get selected power for detail view
     const selectedPowerData = selectedPowerId ? getPowerById(selectedPowerId) : null;
     const selectedCost = selectedPowerData ? calculateCost(selectedPowerData, selectedLevel) : 0;
@@ -172,7 +223,10 @@ export function AdeptPowersStep({ state, updateState, budgetValues }: StepProps)
                     <div>
                         <div className="text-sm font-medium text-violet-800 dark:text-violet-200">Power Points</div>
                         <div className="text-xs text-violet-600 dark:text-violet-400">
-                            {isMysticAdept ? "Allocated from Magic rating" : `Magic Rating ${magicRating}`}
+                            {isMysticAdept 
+                                ? `Allocated: ${basePowerPointBudget}${karmaPurchasedPP > 0 ? ` + ${karmaPurchasedPP} (Karma)` : ""}`
+                                : `Magic Rating ${magicRating}`
+                            }
                         </div>
                     </div>
                     <div className="text-right">
@@ -190,32 +244,106 @@ export function AdeptPowersStep({ state, updateState, budgetValues }: StepProps)
 
             {/* Mystic Adept PP Allocation */}
             {isMysticAdept && (
-                <div className="rounded-lg border border-amber-200 bg-amber-50 p-4 dark:border-amber-800 dark:bg-amber-900/20">
-                    <label className="block text-sm font-medium text-amber-800 dark:text-amber-200 mb-2">
-                        Power Points Allocation (Magic Rating: {magicRating})
-                    </label>
-                    <input
-                        type="range"
-                        min={0}
-                        max={magicRating}
-                        step={1}
-                        value={powerPointBudget}
-                        onChange={(e) =>
-                            updateState({
-                                selections: {
-                                    ...state.selections,
-                                    "power-points-allocation": parseInt(e.target.value),
-                                },
-                            })
-                        }
-                        className="w-full"
-                    />
-                    <div className="flex justify-between text-xs text-amber-600 dark:text-amber-400 mt-1">
-                        <span>0 PP (Full Spellcasting)</span>
-                        <span className="font-bold">{powerPointBudget} PP</span>
-                        <span>{magicRating} PP (Full Adept)</span>
+                <>
+                    <div className="rounded-lg border border-amber-200 bg-amber-50 p-4 dark:border-amber-800 dark:bg-amber-900/20">
+                        <label className="block text-sm font-medium text-amber-800 dark:text-amber-200 mb-2">
+                            Power Points Allocation (Magic Rating: {magicRating})
+                        </label>
+                        <input
+                            type="range"
+                            min={0}
+                            max={magicRating}
+                            step={1}
+                            value={basePowerPointBudget}
+                            onChange={(e) =>
+                                updateState({
+                                    selections: {
+                                        ...state.selections,
+                                        "power-points-allocation": parseInt(e.target.value),
+                                    },
+                                })
+                            }
+                            className="w-full"
+                        />
+                        <div className="flex justify-between text-xs text-amber-600 dark:text-amber-400 mt-1">
+                            <span>0 PP (Full Spellcasting)</span>
+                            <span className="font-bold">{basePowerPointBudget} PP</span>
+                            <span>{magicRating} PP (Full Adept)</span>
+                        </div>
                     </div>
-                </div>
+
+                    {/* Karma Purchase Section */}
+                    <div className="rounded-lg border border-violet-200 bg-violet-50 p-4 dark:border-violet-800 dark:bg-violet-900/20">
+                        <div className="flex items-center justify-between mb-3">
+                            <div>
+                                <h3 className="text-sm font-medium text-violet-800 dark:text-violet-200">
+                                    Purchase Power Points with Karma
+                                </h3>
+                                <p className="text-xs text-violet-600 dark:text-violet-400 mt-1">
+                                    {POWER_POINT_KARMA_COST} Karma = 1 Power Point (max {magicRating} total)
+                                </p>
+                            </div>
+                            <div className="text-right">
+                                <div className="text-xs text-violet-600 dark:text-violet-400">Karma Remaining</div>
+                                <div className={`text-lg font-bold ${karmaRemaining < POWER_POINT_KARMA_COST ? "text-red-600 dark:text-red-400" : "text-violet-700 dark:text-violet-300"}`}>
+                                    {karmaRemaining}
+                                </div>
+                            </div>
+                        </div>
+
+                        {/* Purchased Power Points List */}
+                        {karmaPurchasedPP > 0 && (
+                            <div className="mb-3 space-y-2">
+                                {Array.from({ length: karmaPurchasedPP }, (_, i) => (
+                                    <div
+                                        key={i}
+                                        className="flex items-center justify-between rounded bg-white p-2 shadow-sm dark:bg-zinc-800"
+                                    >
+                                        <div className="flex items-center gap-2">
+                                            <span className="text-sm font-medium text-violet-900 dark:text-violet-100">
+                                                +1 Power Point
+                                            </span>
+                                            <span className="rounded bg-amber-100 px-1.5 py-0.5 text-[10px] font-bold text-amber-700 dark:bg-amber-900/40 dark:text-amber-300">
+                                                {POWER_POINT_KARMA_COST} Karma
+                                            </span>
+                                        </div>
+                                        <button
+                                            onClick={handleRemovePowerPoint}
+                                            className="rounded p-1 text-zinc-400 hover:bg-red-50 hover:text-red-500 dark:hover:bg-red-900/20"
+                                            title="Remove purchased power point"
+                                        >
+                                            <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                                            </svg>
+                                        </button>
+                                    </div>
+                                ))}
+                            </div>
+                        )}
+
+                        {/* Purchase Button */}
+                        <button
+                            onClick={handlePurchasePowerPoint}
+                            disabled={
+                                karmaRemaining < POWER_POINT_KARMA_COST ||
+                                powerPointBudget >= magicRating
+                            }
+                            className="w-full rounded-lg bg-violet-500 py-2 text-sm font-medium text-white transition-colors hover:bg-violet-600 disabled:cursor-not-allowed disabled:bg-zinc-300 disabled:text-zinc-500"
+                        >
+                            {powerPointBudget >= magicRating
+                                ? `Max Power Points Reached (${magicRating})`
+                                : `+1 Power Point (${POWER_POINT_KARMA_COST} Karma)`
+                            }
+                        </button>
+
+                        {/* Summary */}
+                        {karmaPurchasedPP > 0 && (
+                            <div className="mt-3 text-xs text-violet-600 dark:text-violet-400">
+                                {karmaPurchasedPP} power point{karmaPurchasedPP !== 1 ? "s" : ""} purchased with Karma (-{karmaSpentPowerPoints} Karma)
+                            </div>
+                        )}
+                    </div>
+                </>
             )}
 
             <div className="grid gap-6 lg:grid-cols-3">

@@ -364,7 +364,8 @@ export function CreationWizard({ onCancel, onComplete }: CreationWizardProps) {
         const karmaSpentGear = (state.budgets["karma-spent-gear"] as number) || 0;
         const karmaSpentSpells = (state.budgets["karma-spent-spells"] as number) || 0;
         const karmaSpentForms = (state.budgets["karma-spent-complex-forms"] as number) || 0;
-        const karmaRemaining = karmaBase + karmaGained - karmaSpentPos - karmaSpentGear - karmaSpentSpells - karmaSpentForms;
+        const karmaSpentPowerPoints = (state.budgets["karma-spent-power-points"] as number) || 0;
+        const karmaRemaining = karmaBase + karmaGained - karmaSpentPos - karmaSpentGear - karmaSpentSpells - karmaSpentForms - karmaSpentPowerPoints;
         if (karmaRemaining > 7) {
           errors.push({
             constraintId: "karma-carryover",
@@ -439,7 +440,8 @@ export function CreationWizard({ onCancel, onComplete }: CreationWizardProps) {
           ((state.budgets["karma-spent-positive"] as number) || 0) +
           ((state.budgets["karma-spent-gear"] as number) || 0) +
           ((state.budgets["karma-spent-spells"] as number) || 0) +
-          ((state.budgets["karma-spent-complex-forms"] as number) || 0);
+          ((state.budgets["karma-spent-complex-forms"] as number) || 0) +
+          ((state.budgets["karma-spent-power-points"] as number) || 0);
         const finalKarmaRemaining = finalKarmaBase + finalKarmaGained - finalKarmaSpent;
         if (finalKarmaRemaining > 7) {
           errors.push({
@@ -785,7 +787,8 @@ export function CreationWizard({ onCancel, onComplete }: CreationWizardProps) {
         ((state.budgets["karma-spent-positive"] as number) || 0) +
         ((state.budgets["karma-spent-gear"] as number) || 0) +
         ((state.budgets["karma-spent-spells"] as number) || 0) +
-        ((state.budgets["karma-spent-complex-forms"] as number) || 0);
+        ((state.budgets["karma-spent-complex-forms"] as number) || 0) +
+        ((state.budgets["karma-spent-power-points"] as number) || 0);
 
       // Calculate remaining Karma (carryover into gameplay)
       const karmaRemaining =
