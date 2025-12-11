@@ -2,7 +2,7 @@
 
 import { useMemo, useCallback, useState, useEffect } from "react";
 import { useSkills, usePriorityTable } from "@/lib/rules";
-import type { CreationState, KnowledgeSkill, LanguageSkill, FreeSkillAllocation } from "@/lib/types";
+import type { CreationState, KnowledgeSkill, LanguageSkill, FreeSkillAllocation, AdeptPower } from "@/lib/types";
 
 interface StepProps {
   state: CreationState;
@@ -73,6 +73,32 @@ export function SkillsStep({ state, updateState, budgetValues }: StepProps) {
 
   // For individual skill filtering (requiresMagic flag)
   const hasMagic = magicPath && ["magician", "aspected-mage", "mystic-adept", "adept"].includes(magicPath);
+
+  // Check if character has Astral Perception (required for Assensing skill)
+  // Note: Technomancers don't see magical skills at all (filtered out), so we only need to check for adepts/mystic adepts
+  const hasAstralPerception = useMemo(() => {
+    // Magicians and Aspected Mages have astral perception by default
+    if (isFullMage || isAspectedMage) {
+      return true;
+    }
+    
+    // For adepts and mystic adepts, check if they have the Astral Perception power
+    if (isAdept || isMysticAdept) {
+      const adeptPowers = (state.selections.adeptPowers || []) as AdeptPower[];
+      return adeptPowers.some(power => power.catalogId === "astral-perception");
+    }
+    
+    // Technomancers and mundane don't have astral perception (but technomancers don't see magical skills anyway)
+    return false;
+  }, [state.selections.adeptPowers, isFullMage, isAspectedMage, isAdept, isMysticAdept]);
+
+  // Get tooltip message for disabled Assensing (only for adepts/mystic adepts without Astral Perception)
+  const getAssensingDisabledReason = useCallback(() => {
+    if ((isAdept || isMysticAdept) && !hasAstralPerception) {
+      return "Requires Astral Perception adept power";
+    }
+    return "";
+  }, [isAdept, isMysticAdept, hasAstralPerception]);
 
   // Get current skill values from state
   const skills = useMemo(() => {
@@ -622,6 +648,14 @@ export function SkillsStep({ state, updateState, budgetValues }: StepProps) {
   // Handle individual skill change
   const handleSkillChange = useCallback(
     (skillId: string, newValue: number) => {
+      // Prevent changes to Assensing if it's disabled (only for adepts/mystic adepts without Astral Perception)
+      if (skillId === "assensing") {
+        const isDisabled = (isAdept || isMysticAdept) && !hasAstralPerception;
+        if (isDisabled) {
+          return;
+        }
+      }
+      
       const currentValue = skills[skillId] || 0;
       const freeRating = freeSkillRatings[skillId] || 0;
       const purchasedRating = Math.max(0, currentValue - freeRating);
@@ -667,8 +701,8 @@ export function SkillsStep({ state, updateState, budgetValues }: StepProps) {
           "skill-points-total": skillPoints,
         },
       });
-    },
-    [skills, specializations, skillPointsRemaining, freeSkillRatings, state.selections, state.budgets, updateState, skillPoints]
+        },
+    [skills, specializations, skillPointsRemaining, freeSkillRatings, state.selections, state.budgets, updateState, skillPoints, hasMagic, isAdept, isMysticAdept, hasAstralPerception]
   );
 
   // Handle skill group change
@@ -952,7 +986,13 @@ export function SkillsStep({ state, updateState, budgetValues }: StepProps) {
     const value = skills[skill.id] || 0;
     const freeRating = freeSkillRatings[skill.id] || 0;
     const purchasedRating = Math.max(0, value - freeRating);
-    const canIncrease = value < MAX_SKILL_RATING && (skillPointsRemaining > 0 || freeRating > 0);
+    
+    // Check if Assensing should be disabled (only for adepts/mystic adepts without Astral Perception)
+    // Note: Technomancers don't see magical skills at all, so they're already filtered out
+    const isAssensingDisabled = skill.id === "assensing" && (isAdept || isMysticAdept) && !hasAstralPerception;
+    const assensingDisabledReason = isAssensingDisabled ? getAssensingDisabledReason() : "";
+    
+    const canIncrease = !isAssensingDisabled && value < MAX_SKILL_RATING && (skillPointsRemaining > 0 || freeRating > 0);
     const canDecrease = purchasedRating > 0; // Can decrease if there's purchased rating (free rating stays)
 
     // Check if this skill is covered by a group
@@ -963,22 +1003,32 @@ export function SkillsStep({ state, updateState, budgetValues }: StepProps) {
     // Specialization: can only add if skill has individual points (not just group rating)
     // Adding a specialization to a grouped skill would break the group
     const hasSpecialization = !!specializations[skill.id];
-    const canAddSpecialization = value > 0 && !hasSpecialization && skillPointsRemaining > 0;
+    const canAddSpecialization = !isAssensingDisabled && value > 0 && !hasSpecialization && skillPointsRemaining > 0;
     const usingGroupOnly = groupRating > 0 && value === 0;
 
     return (
       <div
         key={skill.id}
-        className={`rounded-lg border p-3 transition-colors ${value > 0
-          ? "border-emerald-200 bg-emerald-50 dark:border-emerald-800 dark:bg-emerald-900/20"
-          : "border-zinc-200 bg-white dark:border-zinc-700 dark:bg-zinc-800/50"
+        className={`rounded-lg border p-3 transition-colors ${isAssensingDisabled
+          ? "border-zinc-300 bg-zinc-100 opacity-60 dark:border-zinc-600 dark:bg-zinc-800/30"
+          : value > 0
+            ? "border-emerald-200 bg-emerald-50 dark:border-emerald-800 dark:bg-emerald-900/20"
+            : "border-zinc-200 bg-white dark:border-zinc-700 dark:bg-zinc-800/50"
           }`}
+        title={isAssensingDisabled ? assensingDisabledReason : undefined}
       >
         <div className="flex items-center gap-3">
           {/* Skill info */}
           <div className="flex-1 min-w-0">
             <div className="flex items-center gap-2">
-              <span className="font-medium text-zinc-900 dark:text-zinc-50 truncate">{skill.name}</span>
+              <span className={`font-medium truncate ${isAssensingDisabled ? "text-zinc-500 dark:text-zinc-400" : "text-zinc-900 dark:text-zinc-50"}`}>
+                {skill.name}
+                {isAssensingDisabled && assensingDisabledReason && (
+                  <span className="ml-2 text-xs text-amber-600 dark:text-amber-400" title={assensingDisabledReason}>
+                    ({assensingDisabledReason})
+                  </span>
+                )}
+              </span>
               <span className="flex-shrink-0 rounded bg-zinc-100 px-1.5 py-0.5 text-xs text-zinc-500 dark:bg-zinc-700 dark:text-zinc-400">
                 {skill.linkedAttribute?.toUpperCase().slice(0, 3)}
               </span>
@@ -1007,8 +1057,9 @@ export function SkillsStep({ state, updateState, budgetValues }: StepProps) {
           <div className="flex items-center gap-1">
             <button
               onClick={() => handleSkillChange(skill.id, value - 1)}
-              disabled={!canDecrease}
-              className={`flex h-7 w-7 items-center justify-center rounded transition-colors ${canDecrease
+              disabled={!canDecrease || isAssensingDisabled}
+              title={isAssensingDisabled ? assensingDisabledReason : undefined}
+              className={`flex h-7 w-7 items-center justify-center rounded transition-colors ${canDecrease && !isAssensingDisabled
                 ? "bg-zinc-200 text-zinc-700 hover:bg-zinc-300 dark:bg-zinc-700 dark:text-zinc-200 dark:hover:bg-zinc-600"
                 : "cursor-not-allowed bg-zinc-100 text-zinc-300 dark:bg-zinc-800 dark:text-zinc-600"
                 }`}
@@ -1029,8 +1080,9 @@ export function SkillsStep({ state, updateState, budgetValues }: StepProps) {
 
             <button
               onClick={() => handleSkillChange(skill.id, value + 1)}
-              disabled={!canIncrease}
-              className={`flex h-7 w-7 items-center justify-center rounded transition-colors ${canIncrease
+              disabled={!canIncrease || isAssensingDisabled}
+              title={isAssensingDisabled ? assensingDisabledReason : undefined}
+              className={`flex h-7 w-7 items-center justify-center rounded transition-colors ${canIncrease && !isAssensingDisabled
                 ? "bg-emerald-500 text-white hover:bg-emerald-600"
                 : "cursor-not-allowed bg-zinc-100 text-zinc-300 dark:bg-zinc-800 dark:text-zinc-600"
                 }`}
@@ -1053,8 +1105,12 @@ export function SkillsStep({ state, updateState, budgetValues }: StepProps) {
                 </span>
                 <button
                   onClick={() => handleRemoveSpecialization(skill.id)}
-                  className="ml-auto flex h-5 w-5 items-center justify-center rounded bg-red-100 text-red-600 transition-colors hover:bg-red-200 dark:bg-red-900/30 dark:text-red-400"
-                  title="Remove specialization (refunds 1 skill point)"
+                  disabled={isAssensingDisabled}
+                  title={isAssensingDisabled ? assensingDisabledReason : "Remove specialization (refunds 1 skill point)"}
+                  className={`ml-auto flex h-5 w-5 items-center justify-center rounded transition-colors ${isAssensingDisabled
+                    ? "cursor-not-allowed bg-zinc-100 text-zinc-300 dark:bg-zinc-800 dark:text-zinc-600"
+                    : "bg-red-100 text-red-600 hover:bg-red-200 dark:bg-red-900/30 dark:text-red-400"
+                    }`}
                 >
                   <svg className="h-3 w-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
@@ -1067,7 +1123,8 @@ export function SkillsStep({ state, updateState, budgetValues }: StepProps) {
                   <div className="flex flex-1 gap-2">
                     <select
                       className="flex-1 rounded border border-zinc-300 bg-white px-2 py-1 text-sm focus:border-amber-500 focus:outline-none focus:ring-1 focus:ring-amber-500 dark:border-zinc-600 dark:bg-zinc-800 dark:text-zinc-100 disabled:cursor-not-allowed disabled:opacity-50"
-                      disabled={!canAddSpecialization}
+                      disabled={!canAddSpecialization || isAssensingDisabled}
+                      title={isAssensingDisabled ? assensingDisabledReason : undefined}
                       defaultValue=""
                       onChange={(e) => {
                         if (e.target.value && canAddSpecialization) {
@@ -1085,7 +1142,8 @@ export function SkillsStep({ state, updateState, budgetValues }: StepProps) {
                       type="text"
                       placeholder="Or custom..."
                       className="w-28 rounded border border-zinc-300 bg-white px-2 py-1 text-sm focus:border-amber-500 focus:outline-none focus:ring-1 focus:ring-amber-500 dark:border-zinc-600 dark:bg-zinc-800 dark:text-zinc-100 disabled:cursor-not-allowed disabled:opacity-50"
-                      disabled={!canAddSpecialization}
+                      disabled={!canAddSpecialization || isAssensingDisabled}
+                      title={isAssensingDisabled ? assensingDisabledReason : undefined}
                       onKeyDown={(e) => {
                         if (e.key === "Enter") {
                           const input = e.currentTarget;
@@ -1242,6 +1300,10 @@ export function SkillsStep({ state, updateState, budgetValues }: StepProps) {
                 applicableItems = allApplicableSkills
                   .filter((s) => {
                     const skillGroup = s.group;
+                    // Filter out Assensing if character doesn't have Astral Perception
+                    if (s.id === "assensing" && !hasAstralPerception) {
+                      return false;
+                    }
                     return skillGroup && MAGICAL_SKILL_GROUPS.includes(skillGroup);
                   })
                   .map((s) => ({ id: s.id, name: s.name }));
@@ -1253,7 +1315,15 @@ export function SkillsStep({ state, updateState, budgetValues }: StepProps) {
                   })
                   .map((s) => ({ id: s.id, name: s.name }));
               } else if (freeSkill.type === "active") {
-                applicableItems = allApplicableSkills.map((s) => ({ id: s.id, name: s.name }));
+                applicableItems = allApplicableSkills
+                  .filter((s) => {
+                    // Filter out Assensing if character doesn't have Astral Perception
+                    if (s.id === "assensing" && !hasAstralPerception) {
+                      return false;
+                    }
+                    return true;
+                  })
+                  .map((s) => ({ id: s.id, name: s.name }));
               } else if (freeSkill.type === "magicalGroup") {
                 applicableItems = filteredSkillGroups
                   .filter((g) => MAGICAL_SKILL_GROUPS.includes(g.id))
