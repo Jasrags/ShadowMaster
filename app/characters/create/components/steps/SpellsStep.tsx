@@ -138,8 +138,6 @@ export function SpellsStep({ state, updateState, budgetValues }: StepProps) {
         return spells;
     }, [allSpells, spellFilter, searchQuery]);
 
-    const getSpellById = useCallback((id: string) => allSpells.find(s => s.id === id), [allSpells]);
-
     const toggleSpell = useCallback(
         (spellId: string) => {
             const isSelected = selectedSpells.includes(spellId);
@@ -245,9 +243,7 @@ export function SpellsStep({ state, updateState, budgetValues }: StepProps) {
                 )}
             </div>
 
-            <div className="grid gap-6 lg:grid-cols-3">
-                {/* Left Column: Search & List */}
-                <div className="lg:col-span-2 space-y-4">
+            <div className="space-y-4">
                     <div className="sticky top-0 z-10 space-y-2 bg-white pb-2 dark:bg-zinc-900">
                         <input
                             type="text"
@@ -361,80 +357,6 @@ export function SpellsStep({ state, updateState, budgetValues }: StepProps) {
                             </div>
                         )}
                     </div>
-                </div>
-
-                {/* Right Column: Selected Spells */}
-                <div className="space-y-4">
-                    <div className="sticky top-4 rounded-lg border border-zinc-200 bg-zinc-50/50 p-4 dark:border-zinc-700 dark:bg-zinc-800/30">
-                        <h3 className="mb-3 text-sm font-semibold text-zinc-900 dark:text-zinc-100">
-                            Selected Spells ({selectedSpells.length})
-                        </h3>
-
-                        {selectedSpells.length === 0 ? (
-                            <p className="py-4 text-center text-xs text-zinc-500 italic">
-                                No spells selected yet.
-                            </p>
-                        ) : (
-                            <div className="space-y-2">
-                                {selectedSpells.map((id, index) => {
-                                    const spell = getSpellById(id);
-                                    const isFree = index < freeSpells;
-
-                                    return (
-                                        <div key={id} className="flex items-center justify-between rounded bg-white p-2 shadow-sm dark:bg-zinc-800">
-                                            <div className="min-w-0 flex-1">
-                                                <div className="flex items-center gap-2">
-                                                    <span className="truncate text-sm font-medium text-zinc-900 dark:text-zinc-100">
-                                                        {spell?.name || id}
-                                                    </span>
-                                                    {!isFree && (
-                                                        <span className="flex-shrink-0 rounded bg-amber-100 px-1.5 py-0.5 text-[10px] font-bold text-amber-700 dark:bg-amber-900/40 dark:text-amber-300">
-                                                            {SPELL_KARMA_COST}K
-                                                        </span>
-                                                    )}
-                                                    {isFree && (
-                                                        <span className="flex-shrink-0 rounded bg-emerald-100 px-1.5 py-0.5 text-[10px] font-bold text-emerald-700 dark:bg-emerald-900/40 dark:text-emerald-300">
-                                                            FREE
-                                                        </span>
-                                                    )}
-                                                </div>
-                                            </div>
-                                            <button
-                                                onClick={() => toggleSpell(id)}
-                                                className="ml-2 rounded p-1 text-zinc-400 hover:bg-red-50 hover:text-red-500 dark:hover:bg-red-900/20"
-                                                title="Remove spell"
-                                            >
-                                                <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-                                                </svg>
-                                            </button>
-                                        </div>
-                                    );
-                                })}
-                            </div>
-                        )}
-
-                        {/* Validation Messages */}
-                        {selectedSpells.length > maxTotalSpells && (
-                            <div className="mt-4 rounded bg-red-50 p-2 text-xs text-red-600 dark:bg-red-900/20 dark:text-red-400">
-                                You have exceeded the maximum of {maxTotalSpells} spells (Magic × 2).
-                            </div>
-                        )}
-
-                        {categoriesAtLimit.length > 0 && (
-                            <div className="mt-4 rounded bg-amber-50 p-2 text-xs text-amber-700 dark:bg-amber-900/20 dark:text-amber-400">
-                                <div className="font-medium mb-1">Category limits reached:</div>
-                                <ul className="list-disc list-inside space-y-0.5">
-                                    {categoriesAtLimit.map((cat) => (
-                                        <li key={cat.id}>
-                                            {cat.name}: {spellsPerCategory[cat.id]}/{maxPerCategory} (Magic × 2)
-                                        </li>
-                                    ))}
-                                </ul>
-                            </div>
-                        )}
-                    </div>
-                </div>
             </div>
         </div>
     );

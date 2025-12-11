@@ -10,6 +10,7 @@ import {
 } from "@/lib/rules";
 import {
   useLifestyleModifiers,
+  useSpells,
 } from "@/lib/rules/RulesetContext";
 import { StepperSidebar } from "./StepperSidebar";
 import { ValidationPanel } from "./ValidationPanel";
@@ -21,6 +22,7 @@ import type {
   CyberwareItem,
   BiowareItem,
   Lifestyle,
+  AdeptPower,
 } from "@/lib/types";
 
 // Step components
@@ -106,6 +108,7 @@ export function CreationWizard({ onCancel, onComplete }: CreationWizardProps) {
   const priorityTable = usePriorityTable();
   const metatypes = useMetatypes();
   const lifestyleModifiers = useLifestyleModifiers();
+  const spellsCatalog = useSpells();
 
   // Creation state - load draft if available
   const [state, setState] = useState<CreationState>(() => {
@@ -508,6 +511,8 @@ export function CreationWizard({ onCancel, onComplete }: CreationWizardProps) {
     (state.selections?.bioware as BiowareItem[]) || [];
   const lifestyle: Lifestyle | null =
     (state.selections?.lifestyle as Lifestyle) || null;
+  const selectedSpells: string[] = (state.selections?.spells as string[]) || [];
+  const selectedAdeptPowers: AdeptPower[] = (state.selections?.adeptPowers as AdeptPower[]) || [];
 
   // Calculate cart totals
   const gearTotal = useMemo(() => {
@@ -539,6 +544,83 @@ export function CreationWizard({ onCancel, onComplete }: CreationWizardProps) {
     );
     return Math.round((cyberwareEssence + biowareEssence) * 100) / 100;
   }, [cyberwareItems, biowareItems]);
+
+  // Calculate spells data
+  const spellsKarmaSpent = useMemo(() => {
+    return (state.budgets["karma-spent-spells"] as number) || 0;
+  }, [state.budgets]);
+
+  const freeSpellsCount = useMemo(() => {
+    const magicPriority = state.priorities?.magic;
+    const magicalPath = (state.selections["magical-path"] as string) || "mundane";
+    
+    if (!magicPriority || !priorityTable?.table[magicPriority]) {
+      return 0;
+    }
+
+    const magicData = priorityTable.table[magicPriority].magic as {
+      options?: Array<{
+        path: string;
+        spells?: number;
+        magicRating?: number;
+      }>;
+    };
+
+    const option = magicData?.options?.find((o) => o.path === magicalPath);
+    return option?.spells || 0;
+  }, [state.priorities?.magic, priorityTable, state.selections]);
+
+  // Calculate adept powers data
+  const powerPointsSpent = useMemo(() => {
+    return (state.budgets["power-points-spent"] as number) || 0;
+  }, [state.budgets]);
+
+  const powerPointsBudget = useMemo(() => {
+    const magicPriority = state.priorities?.magic;
+    const magicalPath = (state.selections["magical-path"] as string) || "mundane";
+    const isMysticAdept = magicalPath === "mystic-adept";
+    
+    if (!magicPriority || !priorityTable?.table[magicPriority]) {
+      return 0;
+    }
+
+    const magicData = priorityTable.table[magicPriority].magic as {
+      options?: Array<{
+        path: string;
+        magicRating?: number;
+      }>;
+    };
+
+    const option = magicData?.options?.find((o) => o.path === magicalPath);
+    const magicRating = option?.magicRating || 0;
+    
+    // Base PP budget
+    const basePP = isMysticAdept
+      ? ((state.selections["power-points-allocation"] as number) || 0)
+      : magicRating;
+    
+    // Add karma-purchased PP
+    const karmaSpentPP = (state.budgets["karma-spent-power-points"] as number) || 0;
+    const karmaPurchasedPP = Math.floor(karmaSpentPP / 5); // 5 Karma = 1 PP
+    
+    return basePP + karmaPurchasedPP;
+  }, [state.priorities?.magic, priorityTable, state.selections, state.budgets]);
+
+  // Get spell name helper (will be passed to ValidationPanel)
+  const getSpellName = useCallback((spellId: string): string => {
+    if (!spellsCatalog) return spellId;
+    
+    // Search through all spell categories
+    const categories = ['combat', 'detection', 'health', 'illusion', 'manipulation'] as const;
+    for (const category of categories) {
+      if (spellsCatalog[category]) {
+        const spell = spellsCatalog[category].find((s) => s.id === spellId);
+        if (spell) return spell.name;
+      }
+    }
+    
+    return spellId;
+  }, [spellsCatalog]);
 
   // Sync calculated budgets to state
   useEffect(() => {
@@ -660,6 +742,48 @@ export function CreationWizard({ onCancel, onComplete }: CreationWizardProps) {
       });
     },
     [biowareItems, state.selections, state.budgets, updateState]
+  );
+
+  const handleRemoveSpell = useCallback(
+    (spellId: string) => {
+      const updatedSpells = selectedSpells.filter((id) => id !== spellId);
+      const spellsBeyondFree = Math.max(0, updatedSpells.length - freeSpellsCount);
+      const newKarmaSpentOnSpells = spellsBeyondFree * 5; // 5 Karma per spell
+
+      updateState({
+        selections: {
+          ...state.selections,
+          spells: updatedSpells,
+        },
+        budgets: {
+          ...state.budgets,
+          "karma-spent-spells": newKarmaSpentOnSpells,
+        },
+      });
+    },
+    [selectedSpells, freeSpellsCount, state.selections, state.budgets, updateState]
+  );
+
+  const handleRemoveAdeptPower = useCallback(
+    (powerId: string) => {
+      const power = selectedAdeptPowers.find((p) => p.id === powerId);
+      if (!power) return;
+
+      const updatedPowers = selectedAdeptPowers.filter((p) => p.id !== powerId);
+      const newPPSpent = powerPointsSpent - power.powerPointCost;
+
+      updateState({
+        selections: {
+          ...state.selections,
+          adeptPowers: updatedPowers,
+        },
+        budgets: {
+          ...state.budgets,
+          "power-points-spent": Math.max(0, newPPSpent),
+        },
+      });
+    },
+    [selectedAdeptPowers, powerPointsSpent, state.selections, state.budgets, updateState]
   );
 
   // Handle cancel with draft clearing option
@@ -1050,6 +1174,15 @@ export function CreationWizard({ onCancel, onComplete }: CreationWizardProps) {
         essenceLoss={essenceLoss}
         onRemoveCyberware={handleRemoveCyberware}
         onRemoveBioware={handleRemoveBioware}
+        spells={selectedSpells}
+        spellsKarmaSpent={spellsKarmaSpent}
+        freeSpellsCount={freeSpellsCount}
+        onRemoveSpell={handleRemoveSpell}
+        getSpellName={getSpellName}
+        adeptPowers={selectedAdeptPowers}
+        powerPointsSpent={powerPointsSpent}
+        powerPointsBudget={powerPointsBudget}
+        onRemoveAdeptPower={handleRemoveAdeptPower}
       />
     </div>
   );

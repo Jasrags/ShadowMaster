@@ -1,6 +1,6 @@
 "use client";
 
-import type { CreationState, GearItem, CyberwareItem, BiowareItem, Lifestyle } from "@/lib/types";
+import type { CreationState, GearItem, CyberwareItem, BiowareItem, Lifestyle, AdeptPower } from "@/lib/types";
 import { ShoppingCartSection } from "./ShoppingCartSection";
 
 interface ValidationPanelProps {
@@ -21,6 +21,19 @@ interface ValidationPanelProps {
   essenceLoss?: number;
   onRemoveCyberware?: (index: number) => void;
   onRemoveBioware?: (index: number) => void;
+  
+  // Spells cart props
+  spells?: string[];
+  spellsKarmaSpent?: number;
+  freeSpellsCount?: number;
+  onRemoveSpell?: (spellId: string) => void;
+  getSpellName?: (spellId: string) => string;
+  
+  // Adept powers cart props
+  adeptPowers?: AdeptPower[];
+  powerPointsSpent?: number;
+  powerPointsBudget?: number;
+  onRemoveAdeptPower?: (powerId: string) => void;
 }
 
 function formatCurrency(value: number): string {
@@ -49,6 +62,15 @@ export function ValidationPanel({
   essenceLoss,
   onRemoveCyberware,
   onRemoveBioware,
+  spells,
+  spellsKarmaSpent,
+  freeSpellsCount,
+  onRemoveSpell,
+  getSpellName,
+  adeptPowers,
+  powerPointsSpent,
+  powerPointsBudget,
+  onRemoveAdeptPower,
 }: ValidationPanelProps) {
   // Determine cart type based on current step
   const cartType =
@@ -56,6 +78,10 @@ export function ValidationPanel({
       ? ("gear" as const)
       : currentStepId === "augmentations"
       ? ("augmentations" as const)
+      : currentStepId === "spells"
+      ? ("spells" as const)
+      : currentStepId === "adept-powers"
+      ? ("adept-powers" as const)
       : null;
 
   const isCartVisible = cartType !== null;
@@ -214,6 +240,15 @@ export function ValidationPanel({
         essenceLoss={essenceLoss}
         onRemoveCyberware={onRemoveCyberware}
         onRemoveBioware={onRemoveBioware}
+        spells={spells}
+        spellsKarmaSpent={spellsKarmaSpent}
+        freeSpellsCount={freeSpellsCount}
+        onRemoveSpell={onRemoveSpell}
+        getSpellName={getSpellName}
+        adeptPowers={adeptPowers}
+        powerPointsSpent={powerPointsSpent}
+        powerPointsBudget={powerPointsBudget}
+        onRemoveAdeptPower={onRemoveAdeptPower}
       />
 
       {/* Validation Messages */}

@@ -1,10 +1,10 @@
 "use client";
 
 import { useState } from "react";
-import type { GearItem, CyberwareItem, BiowareItem, Lifestyle } from "@/lib/types";
+import type { GearItem, CyberwareItem, BiowareItem, Lifestyle, AdeptPower } from "@/lib/types";
 
 interface ShoppingCartSectionProps {
-  cartType: 'gear' | 'augmentations' | null;
+  cartType: 'gear' | 'augmentations' | 'spells' | 'adept-powers' | null;
   isVisible: boolean;
   
   // Gear cart props
@@ -21,6 +21,19 @@ interface ShoppingCartSectionProps {
   essenceLoss?: number;
   onRemoveCyberware?: (index: number) => void;
   onRemoveBioware?: (index: number) => void;
+  
+  // Spells cart props
+  spells?: string[];
+  spellsKarmaSpent?: number;
+  freeSpellsCount?: number;
+  onRemoveSpell?: (spellId: string) => void;
+  getSpellName?: (spellId: string) => string;
+  
+  // Adept powers cart props
+  adeptPowers?: AdeptPower[];
+  powerPointsSpent?: number;
+  powerPointsBudget?: number;
+  onRemoveAdeptPower?: (powerId: string) => void;
 }
 
 function formatCurrency(value: number): string {
@@ -49,6 +62,15 @@ export function ShoppingCartSection({
   essenceLoss = 0,
   onRemoveCyberware,
   onRemoveBioware,
+  spells = [],
+  spellsKarmaSpent = 0,
+  freeSpellsCount = 0,
+  onRemoveSpell,
+  getSpellName,
+  adeptPowers = [],
+  powerPointsSpent = 0,
+  powerPointsBudget = 0,
+  onRemoveAdeptPower,
 }: ShoppingCartSectionProps) {
   const [isCollapsed, setIsCollapsed] = useState(false);
 
@@ -58,7 +80,11 @@ export function ShoppingCartSection({
 
   const itemCount = cartType === 'gear' 
     ? gearItems.length 
-    : cyberwareItems.length + biowareItems.length;
+    : cartType === 'augmentations'
+    ? cyberwareItems.length + biowareItems.length
+    : cartType === 'spells'
+    ? spells.length
+    : adeptPowers.length;
 
   return (
     <div className="border-b border-zinc-200 dark:border-zinc-800">
@@ -68,7 +94,10 @@ export function ShoppingCartSection({
           className="flex w-full items-center justify-between text-xs font-semibold uppercase tracking-wider text-zinc-500 dark:text-zinc-400 hover:text-zinc-700 dark:hover:text-zinc-300"
         >
           <span>
-            {cartType === 'gear' ? 'Shopping Cart' : 'Installed Augmentations'}
+            {cartType === 'gear' ? 'Shopping Cart' 
+            : cartType === 'augmentations' ? 'Installed Augmentations'
+            : cartType === 'spells' ? 'Selected Spells'
+            : 'Selected Powers'}
           </span>
           <div className="flex items-center gap-2">
             {itemCount > 0 && (
@@ -94,7 +123,147 @@ export function ShoppingCartSection({
 
         {!isCollapsed && (
           <div className="mt-3 space-y-2">
-            {cartType === 'gear' ? (
+            {cartType === 'spells' ? (
+              <>
+                {spells.length === 0 ? (
+                  <p className="text-sm text-zinc-500 dark:text-zinc-400">
+                    No spells selected yet.
+                  </p>
+                ) : (
+                  <div className="max-h-[300px] space-y-2 overflow-y-auto">
+                    {spells.map((spellId, index) => {
+                      const isFree = index < freeSpellsCount;
+                      const spellName = getSpellName ? getSpellName(spellId) : spellId;
+                      return (
+                        <div
+                          key={spellId}
+                          className="flex items-center justify-between rounded-lg bg-zinc-50 p-2 dark:bg-zinc-700/50"
+                        >
+                          <div className="flex-1 min-w-0">
+                            <div className="flex items-center gap-2">
+                              <p className="text-sm font-medium truncate">{spellName}</p>
+                              {isFree ? (
+                                <span className="flex-shrink-0 rounded bg-emerald-100 px-1.5 py-0.5 text-[10px] font-bold text-emerald-700 dark:bg-emerald-900/40 dark:text-emerald-300">
+                                  FREE
+                                </span>
+                              ) : (
+                                <span className="flex-shrink-0 rounded bg-amber-100 px-1.5 py-0.5 text-[10px] font-bold text-amber-700 dark:bg-amber-900/40 dark:text-amber-300">
+                                  5K
+                                </span>
+                              )}
+                            </div>
+                          </div>
+                          {onRemoveSpell && (
+                            <button
+                              onClick={() => onRemoveSpell(spellId)}
+                              className="ml-2 rounded p-1 text-red-500 hover:bg-red-50 dark:hover:bg-red-900/20"
+                              aria-label="Remove spell"
+                            >
+                              <svg
+                                className="h-4 w-4"
+                                fill="none"
+                                viewBox="0 0 24 24"
+                                stroke="currentColor"
+                              >
+                                <path
+                                  strokeLinecap="round"
+                                  strokeLinejoin="round"
+                                  strokeWidth={2}
+                                  d="M6 18L18 6M6 6l12 12"
+                                />
+                              </svg>
+                            </button>
+                          )}
+                        </div>
+                      );
+                    })}
+                  </div>
+                )}
+
+                {/* Summary */}
+                {spells.length > 0 && (
+                  <div className="mt-4 border-t border-zinc-200 pt-4 dark:border-zinc-600">
+                    <div className="flex justify-between text-sm">
+                      <span className="text-zinc-600 dark:text-zinc-400">Total Spells:</span>
+                      <span className="font-medium text-zinc-900 dark:text-zinc-100">
+                        {spells.length}
+                      </span>
+                    </div>
+                    {spellsKarmaSpent > 0 && (
+                      <div className="flex justify-between text-sm">
+                        <span className="text-zinc-600 dark:text-zinc-400">Karma Spent:</span>
+                        <span className="font-medium text-amber-600 dark:text-amber-400">
+                          -{spellsKarmaSpent}
+                        </span>
+                      </div>
+                    )}
+                  </div>
+                )}
+              </>
+            ) : cartType === 'adept-powers' ? (
+              <>
+                {adeptPowers.length === 0 ? (
+                  <p className="text-sm text-zinc-500 dark:text-zinc-400">
+                    No powers selected yet.
+                  </p>
+                ) : (
+                  <div className="max-h-[300px] space-y-2 overflow-y-auto">
+                    {adeptPowers.map((power) => (
+                      <div
+                        key={power.id}
+                        className="flex items-center justify-between rounded-lg bg-zinc-50 p-2 dark:bg-zinc-700/50"
+                      >
+                        <div className="flex-1 min-w-0">
+                          <div className="flex items-center gap-2">
+                            <p className="text-sm font-medium truncate">
+                              {power.name}
+                              {power.rating && ` ${power.rating}`}
+                              {power.specification && ` (${power.specification})`}
+                            </p>
+                            <span className="flex-shrink-0 rounded bg-violet-100 px-1.5 py-0.5 text-[10px] font-bold text-violet-700 dark:bg-violet-900/40 dark:text-violet-300">
+                              {power.powerPointCost} PP
+                            </span>
+                          </div>
+                        </div>
+                        {onRemoveAdeptPower && (
+                          <button
+                            onClick={() => onRemoveAdeptPower(power.id)}
+                            className="ml-2 rounded p-1 text-red-500 hover:bg-red-50 dark:hover:bg-red-900/20"
+                            aria-label="Remove power"
+                          >
+                            <svg
+                              className="h-4 w-4"
+                              fill="none"
+                              viewBox="0 0 24 24"
+                              stroke="currentColor"
+                            >
+                              <path
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                                strokeWidth={2}
+                                d="M6 18L18 6M6 6l12 12"
+                              />
+                            </svg>
+                          </button>
+                        )}
+                      </div>
+                    ))}
+                  </div>
+                )}
+
+                {/* Summary */}
+                {adeptPowers.length > 0 && (
+                  <div className="mt-4 border-t border-zinc-200 pt-4 dark:border-zinc-600">
+                    <div className="flex justify-between text-sm">
+                      <span className="text-zinc-600 dark:text-zinc-400">Power Points Used:</span>
+                      <span className="font-medium text-violet-600 dark:text-violet-400">
+                        {powerPointsSpent.toFixed(1)} / {powerPointsBudget.toFixed(1)} PP
+                      </span>
+                    </div>
+                  </div>
+                )}
+              </>
+            ) : cartType === 'gear' ? (
               <>
                 {gearItems.length === 0 ? (
                   <p className="text-sm text-zinc-500 dark:text-zinc-400">
