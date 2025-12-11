@@ -384,6 +384,14 @@
             "description": "Wound modifiers start 1 box later per level. +2 dice per level to resist torture/pain."
           },
           {
+            "id": "rapid-healing",
+            "name": "Rapid Healing",
+            "cost": 0.5,
+            "costType": "perLevel",
+            "maxLevel": 4,
+            "description": "You recover from damage more quickly, magically healing yourself over periods of time. Add +1 die per level to your Body for Healing Tests. Also add +1 die per level to any tests made to heal you through magical or mundane means (such as a Heal spell or the First Aid skill), whether the attempt is made by you or another character."
+          },
+          {
             "id": "spell-resistance",
             "name": "Spell Resistance",
             "cost": 0.5,

@@ -122,14 +122,14 @@ This section prioritizes the most critical remaining tasks needed to complete ch
 | 2 | Add Aspected Mage group selection | Medium | M0.8 | ✅ Complete |
 | 3 | Implement free skills from priority in SkillsStep | Medium | M0.3.9 | ✅ Complete |
 | 4 | Track free spells/complex forms separately from Karma-purchased | Medium | M0.7.10 | ✅ Complete |
-| 5 | Add Power Points budget for Adepts (free = Magic rating) | Medium | B5.1.4 | Not Started |
-| 6 | Add Karma-purchased Power Points for Mystic Adepts | Medium | B5.1.5, B5.2.6 | Not Started |
-| 7 | Add Adept Powers data to ruleset | Large | B5.1.1 | Not Started |
-| 8 | Create AdeptPowersStep component | Large | B5.2 | Not Started |
+| 5 | Add Power Points budget for Adepts (free = Magic rating) | Medium | B5.1.2 | ✅ Complete |
+| 6 | Add Karma-purchased Power Points for Mystic Adepts | Medium | B5.1.4 | Not Started |
+| 7 | Add Adept Powers data to ruleset | Large | B5.1.1 | ✅ Complete |
+| 8 | Create AdeptPowersStep component | Large | B5.1.3 | ✅ Complete |
 | 9 | Add spell formula limits validation (Magic × 2 per category). Progress bar tracks free spells. Category limits are selection/validation limits. | Small | M0.7.11 | ✅ Complete |
-| 10 | Conditional Assensing for Adepts (requires powers system first) | Small | B5.1.6, B5.2.11 | Not Started |
+| 10 | Conditional Assensing for Adepts (requires powers system first) | Small | B5.1.5 | Not Started |
 
-**Next Steps:** M0 phase complete. Move to Beta features, starting with B5 Adept Powers System.
+**Next Steps:** B5 Adept Powers System in progress. Complete remaining tasks: B5.1.4 (Karma purchase for mystic adepts) and B5.1.5 (Conditional Assensing).
 
 ---
 
@@ -172,7 +172,7 @@ This section provides a comprehensive view of the entire implementation roadmap,
 | 2 | **B1** | **Cyberware/Bioware System** | **2-3 weeks** | **High** | ✅ **Complete** |
 | 3 | **B4** | **Combat Tracker** | **3-4 weeks** | **High** | Not Started |
 | 4 | **B3** | **Inventory Management** | **1-2 weeks** | **High** | Not Started |
-| 5 | **B5** | **Adept Powers System** | **1-2 weeks** | **Medium** | Not Started |
+| 5 | **B5** | **Adept Powers System** | **1-2 weeks** | **Medium** | 🔄 In Progress |
 | 6 | **B6** | **Spell Management** | **1-2 weeks** | **Medium** | Not Started |
 | 7 | **B7** | **Complex Forms & Matrix** | **1-2 weeks** | **Medium** | Not Started |
 | 8 | **B2** | **Sourcebook Integration** | **2 weeks** | **Medium** | Not Started |
@@ -2479,12 +2479,12 @@ This milestone implements the complete adept powers system including data struct
 
 | Task | Description | Status |
 |------|-------------|--------|
-| B5.1.1 | Create comprehensive adept powers catalog (~50 powers) and AdeptPower interface | Not Started |
-| B5.1.2 | Add power point pool calculation to Character and budget tracking to CreationState (free = Magic rating for adepts) | Not Started |
-| B5.1.3 | Create AdeptPowersStep component with power catalog browser, real-time tracking, and prerequisite validation | Not Started |
+| B5.1.1 | Create comprehensive adept powers catalog (~50 powers) and AdeptPower interface | ✅ Complete |
+| B5.1.2 | Add power point pool calculation to Character and budget tracking to CreationState (free = Magic rating for adepts) | ✅ Complete |
+| B5.1.3 | Create AdeptPowersStep component with power catalog browser, real-time tracking, and prerequisite validation | ✅ Complete |
 | B5.1.4 | Implement mystic adept power point purchase with karma (5 Karma = 1 PP) | Not Started |
 | B5.1.5 | Add conditional Assensing skill availability (requires Astral Perception power) | Not Started |
-| B5.1.6 | Register AdeptPowersStep in CreationWizard (after MagicStep, before SpellsStep) and conditionally show for adepts/mystic adepts | Not Started |
+| B5.1.6 | Register AdeptPowersStep in CreationWizard (after MagicStep, before SpellsStep) and conditionally show for adepts/mystic adepts | ✅ Complete |
 
 **Tasks JSON:**
 ```json
@@ -2497,7 +2497,7 @@ This milestone implements the complete adept powers system including data struct
       "/data/editions/sr5/core-rulebook.json",
       "/lib/types/character.ts"
     ],
-    "status": "Not Started",
+    "status": "Complete",
     "dependsOn": []
   },
   {
@@ -2508,7 +2508,7 @@ This milestone implements the complete adept powers system including data struct
       "/lib/types/character.ts",
       "/lib/types/creation.ts"
     ],
-    "status": "Not Started",
+    "status": "Complete",
     "dependsOn": []
   },
   {
@@ -2519,7 +2519,7 @@ This milestone implements the complete adept powers system including data struct
       "/app/characters/create/components/steps/AdeptPowersStep.tsx",
       "/app/characters/create/components/CreationWizard.tsx"
     ],
-    "status": "Not Started",
+    "status": "Complete",
     "dependsOn": ["B5.1.1", "B5.1.2"]
   },
   {
@@ -2553,7 +2553,7 @@ This milestone implements the complete adept powers system including data struct
       "/app/characters/create/components/CreationWizard.tsx",
       "/app/characters/create/components/steps/MagicStep.tsx"
     ],
-    "status": "Not Started",
+    "status": "Complete",
     "dependsOn": ["B5.1.3", "B5.1.4", "B5.1.5"]
   }
 ]
