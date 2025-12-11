@@ -117,9 +117,10 @@ export function ReviewStep({ state, updateState, budgetValues }: StepProps) {
   const karmaSpentGear = (state.budgets["karma-spent-gear"] as number) || 0;
   const karmaSpentSpells = (state.budgets["karma-spent-spells"] as number) || 0;
   const karmaSpentComplexForms = (state.budgets["karma-spent-complex-forms"] as number) || 0;
+  const karmaSpentPowerPoints = (state.budgets["karma-spent-power-points"] as number) || 0;
 
   const karmaTotal = (budgetValues["karma"] || 25) + karmaGainedNegative;
-  const karmaSpent = karmaSpentPositive + karmaSpentGear + karmaSpentSpells + karmaSpentComplexForms;
+  const karmaSpent = karmaSpentPositive + karmaSpentGear + karmaSpentSpells + karmaSpentComplexForms + karmaSpentPowerPoints;
   const karmaRemaining = karmaTotal - karmaSpent;
 
   const nuyenTotal = budgetValues["nuyen"] || 0;
@@ -701,6 +702,11 @@ export function ReviewStep({ state, updateState, budgetValues }: StepProps) {
             <span className="ml-2 text-xs font-normal text-violet-600 dark:text-violet-400">
               ({((state.selections.adeptPowers as Array<{ id: string; name: string; rating?: number; powerPointCost: number; specification?: string }>) || []).reduce((sum, p) => sum + p.powerPointCost, 0).toFixed(2)} PP)
             </span>
+            {karmaSpentPowerPoints > 0 && (
+              <span className="ml-2 text-xs font-normal text-amber-600 dark:text-amber-400">
+                ({Math.floor(karmaSpentPowerPoints / 5)} PP purchased with Karma)
+              </span>
+            )}
           </h3>
           <div className="mt-3 flex flex-wrap gap-2">
             {((state.selections.adeptPowers as Array<{ id: string; name: string; rating?: number; powerPointCost: number; specification?: string }>) || []).map((power) => (
