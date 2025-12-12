@@ -1709,13 +1709,13 @@ This milestone creates a UI component that allows players to select which source
 This milestone creates comprehensive tests for the ruleset merging system to ensure all sourcebooks combine correctly without conflicts. It verifies that append, replace, and other merge strategies work as intended when combining core rules with sourcebook content. The goal is to catch merge conflicts and data inconsistencies before they affect character creation, and to create a testing framework that works for current and future sourcebooks.
 
 **Files to create:**
-- **B2.3.FC.1** `/lib/rules/__tests__/merge.test.ts` (when testing framework added)
+- **B2.3.FC.1** `/lib/rules/__tests__/merge.test.ts` ✅ Complete - Testing framework implemented with Vitest
 
 **Tasks:**
 
 | Task | Description | Status |
 |------|-------------|--------|
-| B2.3.1 | Create comprehensive merge testing framework (test append/replace strategies, verify merge order, test ID conflicts) | Not Started |
+| B2.3.1 | Create comprehensive merge testing framework (test append/replace strategies, verify merge order, test ID conflicts) | ✅ Complete |
 | B2.3.2 | Document any ID conflicts and resolutions | Not Started |
 
 **Tasks JSON:**
@@ -1728,7 +1728,7 @@ This milestone creates comprehensive tests for the ruleset merging system to ens
     "files": [
       "/lib/rules/__tests__/merge.test.ts"
     ],
-    "status": "Not Started",
+    "status": "✅ Complete",
     "dependsOn": ["B2.1.2", "B2.1.4"]
   },
   {
@@ -1743,6 +1743,12 @@ This milestone creates comprehensive tests for the ruleset merging system to ens
   }
 ]
 ```
+
+**Note:** Testing infrastructure has been fully implemented (Phase 1 & 2 complete):
+- Vitest configured with React Testing Library
+- 182 unit tests passing (merge, loader, storage, auth)
+- CI/CD integration complete
+- See `/lib/rules/__tests__/merge.test.ts` for comprehensive merge strategy tests (37 tests covering all merge strategies, edge cases, and immutability)
 
 ### B2.4 Acceptance Criteria
 
@@ -4545,7 +4551,7 @@ Post-Creation Components:
         "B2.3": {
           "id": "B2.3",
           "name": "Merge Algorithm Testing",
-          "status": "Not Started",
+          "status": "✅ Complete",
           "dependsOn": ["B2.1.2", "B2.1.4"],
           "dataStructures": [],
           "components": [],
@@ -4882,7 +4888,7 @@ This section documents all external dependencies, data requirements, and phase i
 | Dependency | Required For | Notes |
 |------------|--------------|-------|
 | WebSocket library | B9 | Socket.io recommended for Next.js |
-| Test framework | B2.4 | Jest + React Testing Library |
+| Test framework | B2.4 | Vitest + React Testing Library |
 | Mobile testing | B8 | Physical devices or BrowserStack |
 
 ### Data Dependencies
