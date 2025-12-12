@@ -7,8 +7,8 @@ on:
     branches: [ main, develop ]
 
 jobs:
-  lint-and-build:
-    name: Lint and Build
+  lint-test-build:
+    name: Lint, Test, and Build
     runs-on: ubuntu-latest
     
     strategy:
@@ -41,6 +41,11 @@ jobs:
       
       - name: Run linter
         run: pnpm lint --max-warnings 100
+      
+      - name: Run unit tests
+        run: pnpm test:ci --reporter=verbose
+        env:
+          NODE_ENV: test
       
       - name: Build application
         run: pnpm build

@@ -9,7 +9,9 @@
       "Bash(git commit:*)",
       "Bash(pnpm build:*)",
       "Bash(curl:*)",
-      "Bash(python3:*)"
+      "Bash(python3:*)",
+      "Bash(git checkout:*)",
+      "Bash(git pull:*)"
     ],
     "deny": [],
     "ask": []
