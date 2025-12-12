@@ -75,7 +75,6 @@ export function GearStep({ state, updateState, budgetValues }: StepProps) {
   const [weaponSubcategory, setWeaponSubcategory] = useState<WeaponSubcategory>("all");
   const [searchQuery, setSearchQuery] = useState("");
   const [showUnavailable, setShowUnavailable] = useState(false);
-  const [karmaConversion, setKarmaConversion] = useState(0);
 
   // Get selections from state
   const selectedGear: GearItem[] = (state.selections?.gear as GearItem[]) || [];
@@ -85,9 +84,34 @@ export function GearStep({ state, updateState, budgetValues }: StepProps) {
   const metatype = (state.selections?.metatype as string) || "human";
   const lifestyleModifier = lifestyleModifiers[metatype] || 1;
 
+  // Karma-to-nuyen conversion is tracked globally in CreationState budgets
+  const karmaConversion = (state.budgets?.["karma-spent-gear"] as number) || 0;
+
+  const karmaAvailableForConversion = useMemo(() => {
+    const karmaBase = budgetValues["karma"] || 0;
+    const karmaGainedNegative = (state.budgets?.["karma-gained-negative"] as number) || 0;
+
+    // Total spent excluding the conversion itself (so we can clamp correctly)
+    const karmaSpentPositive = (state.budgets?.["karma-spent-positive"] as number) || 0;
+    const karmaSpentSpells = (state.budgets?.["karma-spent-spells"] as number) || 0;
+    const karmaSpentComplexForms = (state.budgets?.["karma-spent-complex-forms"] as number) || 0;
+    const karmaSpentPowerPoints = (state.budgets?.["karma-spent-power-points"] as number) || 0;
+
+    const available =
+      karmaBase +
+      karmaGainedNegative -
+      (karmaSpentPositive + karmaSpentSpells + karmaSpentComplexForms + karmaSpentPowerPoints);
+
+    // Allow reducing conversion back down even if available is low/negative
+    return Math.max(0, available + karmaConversion);
+  }, [
+    budgetValues,
+    state.budgets,
+    karmaConversion,
+  ]);
+
   // Calculate budget
   const baseNuyen = budgetValues["nuyen"] || 0;
-  const karmaAvailable = budgetValues["karma"] || 0;
   const convertedNuyen = karmaConversion * KARMA_TO_NUYEN_RATE;
   const totalNuyen = baseNuyen + convertedNuyen;
 
@@ -151,8 +175,14 @@ export function GearStep({ state, updateState, budgetValues }: StepProps) {
 
   // Handle karma conversion
   const handleKarmaConversion = (value: number) => {
-    const clampedValue = Math.max(0, Math.min(value, Math.min(MAX_KARMA_CONVERSION, karmaAvailable)));
-    setKarmaConversion(clampedValue);
+    const maxAllowed = Math.min(MAX_KARMA_CONVERSION, karmaAvailableForConversion);
+    const clampedValue = Math.max(0, Math.min(value, maxAllowed));
+    updateState({
+      budgets: {
+        ...state.budgets,
+        "karma-spent-gear": clampedValue,
+      },
+    });
   };
 
   // Flatten gear catalog for searching
@@ -334,13 +364,13 @@ export function GearStep({ state, updateState, budgetValues }: StepProps) {
         <h3 className="mb-2 text-sm font-medium">Karma to Nuyen Conversion</h3>
         <p className="mb-3 text-xs text-zinc-500 dark:text-zinc-400">
           Convert up to {MAX_KARMA_CONVERSION} Karma to Nuyen at {formatCurrency(KARMA_TO_NUYEN_RATE)}{" "}
-          nuyen per Karma. Available Karma: {karmaAvailable}
+          nuyen per Karma. Available Karma: {karmaAvailableForConversion}
         </p>
         <div className="flex items-center gap-4">
           <input
             type="range"
             min="0"
-            max={Math.min(MAX_KARMA_CONVERSION, karmaAvailable)}
+            max={Math.min(MAX_KARMA_CONVERSION, karmaAvailableForConversion)}
             value={karmaConversion}
             onChange={(e) => handleKarmaConversion(parseInt(e.target.value))}
             className="flex-1"

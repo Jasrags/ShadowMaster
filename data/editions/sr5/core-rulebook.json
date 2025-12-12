@@ -6324,7 +6324,7 @@
           "maxAttributeBonus": 4,
           "maxAvailabilityAtCreation": 12,
           "trackEssenceHoles": true,
-          "magicReductionFormula": "roundUp"
+          "magicReductionFormula": "roundDown"
         },
         "grades": [
           {

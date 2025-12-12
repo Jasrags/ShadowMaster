@@ -123,7 +123,8 @@ export function ReviewStep({ state, updateState, budgetValues }: StepProps) {
   const karmaSpent = karmaSpentPositive + karmaSpentGear + karmaSpentSpells + karmaSpentComplexForms + karmaSpentPowerPoints;
   const karmaRemaining = karmaTotal - karmaSpent;
 
-  const nuyenTotal = budgetValues["nuyen"] || 0;
+  const karmaToNuyen = (state.budgets["karma-spent-gear"] as number) || 0;
+  const nuyenTotal = (budgetValues["nuyen"] || 0) + karmaToNuyen * 2000;
   const nuyenSpent = (state.budgets["nuyen-spent"] as number) || 0;
   const nuyenRemaining = nuyenTotal - nuyenSpent;
 
@@ -516,35 +517,35 @@ export function ReviewStep({ state, updateState, budgetValues }: StepProps) {
             <div className="rounded bg-cyan-100 p-2 text-center dark:bg-cyan-800/50">
               <div className="text-[10px] font-medium text-cyan-600 dark:text-cyan-400">Attack</div>
               <div className="font-bold text-cyan-700 dark:text-cyan-300">
-                {attributes.logic || 1}
+                {derivedStats.logic || 1}
               </div>
               <div className="text-[9px] text-cyan-500 dark:text-cyan-500">Logic</div>
             </div>
             <div className="rounded bg-cyan-100 p-2 text-center dark:bg-cyan-800/50">
               <div className="text-[10px] font-medium text-cyan-600 dark:text-cyan-400">Sleaze</div>
               <div className="font-bold text-cyan-700 dark:text-cyan-300">
-                {attributes.intuition || 1}
+                {derivedStats.intuition || 1}
               </div>
               <div className="text-[9px] text-cyan-500 dark:text-cyan-500">Intuition</div>
             </div>
             <div className="rounded bg-cyan-100 p-2 text-center dark:bg-cyan-800/50">
               <div className="text-[10px] font-medium text-cyan-600 dark:text-cyan-400">Data Proc.</div>
               <div className="font-bold text-cyan-700 dark:text-cyan-300">
-                {attributes.logic || 1}
+                {derivedStats.logic || 1}
               </div>
               <div className="text-[9px] text-cyan-500 dark:text-cyan-500">Logic</div>
             </div>
             <div className="rounded bg-cyan-100 p-2 text-center dark:bg-cyan-800/50">
               <div className="text-[10px] font-medium text-cyan-600 dark:text-cyan-400">Firewall</div>
               <div className="font-bold text-cyan-700 dark:text-cyan-300">
-                {attributes.willpower || 1}
+                {derivedStats.willpower || 1}
               </div>
               <div className="text-[9px] text-cyan-500 dark:text-cyan-500">Willpower</div>
             </div>
             <div className="rounded bg-cyan-200 p-2 text-center dark:bg-cyan-700/50">
               <div className="text-[10px] font-medium text-cyan-700 dark:text-cyan-300">Matrix Init.</div>
               <div className="font-bold text-cyan-800 dark:text-cyan-200">
-                {((attributes.logic || 1) * 2) + (attributes.reaction || 1) + (attributes.intuition || 1)} + 4d6
+                {((derivedStats.logic || 1) * 2) + (derivedStats.reaction || 1) + (derivedStats.intuition || 1)} + 4d6
               </div>
               <div className="text-[9px] text-cyan-600 dark:text-cyan-400">(DP×2)+REA+INT</div>
             </div>
