@@ -123,7 +123,8 @@ export function ReviewStep({ state, updateState, budgetValues }: StepProps) {
   const karmaSpent = karmaSpentPositive + karmaSpentGear + karmaSpentSpells + karmaSpentComplexForms + karmaSpentPowerPoints;
   const karmaRemaining = karmaTotal - karmaSpent;
 
-  const nuyenTotal = budgetValues["nuyen"] || 0;
+  const karmaToNuyen = (state.budgets["karma-spent-gear"] as number) || 0;
+  const nuyenTotal = (budgetValues["nuyen"] || 0) + karmaToNuyen * 2000;
   const nuyenSpent = (state.budgets["nuyen-spent"] as number) || 0;
   const nuyenRemaining = nuyenTotal - nuyenSpent;
 
@@ -504,6 +505,53 @@ export function ReviewStep({ state, updateState, budgetValues }: StepProps) {
           </div>
         </div>
       </div>
+
+      {/* Living Persona (Technomancers Only) */}
+      {isTechnomancer && (
+        <div className="rounded-lg border border-cyan-300 bg-cyan-50 p-4 dark:border-cyan-700 dark:bg-cyan-900/20">
+          <h3 className="text-sm font-semibold text-cyan-900 dark:text-cyan-100">Living Persona</h3>
+          <p className="mt-1 text-xs text-cyan-700 dark:text-cyan-400">
+            Your Matrix attributes are derived from your mental attributes
+          </p>
+          <div className="mt-3 grid grid-cols-2 gap-3 sm:grid-cols-5">
+            <div className="rounded bg-cyan-100 p-2 text-center dark:bg-cyan-800/50">
+              <div className="text-[10px] font-medium text-cyan-600 dark:text-cyan-400">Attack</div>
+              <div className="font-bold text-cyan-700 dark:text-cyan-300">
+                {derivedStats.logic || 1}
+              </div>
+              <div className="text-[9px] text-cyan-500 dark:text-cyan-500">Logic</div>
+            </div>
+            <div className="rounded bg-cyan-100 p-2 text-center dark:bg-cyan-800/50">
+              <div className="text-[10px] font-medium text-cyan-600 dark:text-cyan-400">Sleaze</div>
+              <div className="font-bold text-cyan-700 dark:text-cyan-300">
+                {derivedStats.intuition || 1}
+              </div>
+              <div className="text-[9px] text-cyan-500 dark:text-cyan-500">Intuition</div>
+            </div>
+            <div className="rounded bg-cyan-100 p-2 text-center dark:bg-cyan-800/50">
+              <div className="text-[10px] font-medium text-cyan-600 dark:text-cyan-400">Data Proc.</div>
+              <div className="font-bold text-cyan-700 dark:text-cyan-300">
+                {derivedStats.logic || 1}
+              </div>
+              <div className="text-[9px] text-cyan-500 dark:text-cyan-500">Logic</div>
+            </div>
+            <div className="rounded bg-cyan-100 p-2 text-center dark:bg-cyan-800/50">
+              <div className="text-[10px] font-medium text-cyan-600 dark:text-cyan-400">Firewall</div>
+              <div className="font-bold text-cyan-700 dark:text-cyan-300">
+                {derivedStats.willpower || 1}
+              </div>
+              <div className="text-[9px] text-cyan-500 dark:text-cyan-500">Willpower</div>
+            </div>
+            <div className="rounded bg-cyan-200 p-2 text-center dark:bg-cyan-700/50">
+              <div className="text-[10px] font-medium text-cyan-700 dark:text-cyan-300">Matrix Init.</div>
+              <div className="font-bold text-cyan-800 dark:text-cyan-200">
+                {((derivedStats.logic || 1) * 2) + (derivedStats.reaction || 1) + (derivedStats.intuition || 1)} + 4d6
+              </div>
+              <div className="text-[9px] text-cyan-600 dark:text-cyan-400">(DP×2)+REA+INT</div>
+            </div>
+          </div>
+        </div>
+      )}
 
       {/* Skills */}
       {Object.keys(selectedSkills).length > 0 && (

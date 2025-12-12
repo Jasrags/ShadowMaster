@@ -2218,8 +2218,8 @@
             "name": "Cleaner",
             "target": "persona",
             "duration": "permanent",
-            "fading": "L-2",
-            "description": "Remove marks from a target."
+            "fading": "L+1",
+            "description": "Remove your marks from a target persona. Each net hit removes one mark."
           },
           {
             "id": "diffusion",
@@ -2227,15 +2227,15 @@
             "target": "device",
             "duration": "sustained",
             "fading": "L-1",
-            "description": "Lower target's Matrix attribute. Choose attribute when learned."
+            "description": "Lower target's Matrix attribute by 1 per net hit (minimum 1). Choose attribute when learned: Attack, Sleaze, Data Processing, or Firewall."
           },
           {
             "id": "editor",
             "name": "Editor",
             "target": "file",
             "duration": "permanent",
-            "fading": "L-2",
-            "description": "Edit file without leaving traces."
+            "fading": "L+2",
+            "description": "Edit a file without leaving any editing history. Requires 1 mark on the file's host."
           },
           {
             "id": "infusion",
@@ -2243,47 +2243,47 @@
             "target": "device",
             "duration": "sustained",
             "fading": "L-1",
-            "description": "Boost target's Matrix attribute. Choose attribute when learned."
+            "description": "Increase target's Matrix attribute by 1 per net hit. Choose attribute when learned: Attack, Sleaze, Data Processing, or Firewall."
           },
           {
             "id": "primed-charge",
             "name": "Primed Charge",
             "target": "self",
             "duration": "sustained",
-            "fading": "L-2",
-            "description": "Add hits to next Matrix action as bonus dice."
+            "fading": "L-1",
+            "description": "Add hits from threading as bonus dice to your next Matrix action."
           },
           {
             "id": "puppeteer",
             "name": "Puppeteer",
             "target": "device",
             "duration": "immediate",
-            "fading": "L+1",
-            "description": "Force device to perform a Matrix action."
+            "fading": "L+4",
+            "description": "Force a device to perform a single Matrix action. Requires 3 marks on the target device."
           },
           {
             "id": "pulse-storm",
             "name": "Pulse Storm",
-            "target": "device",
+            "target": "persona",
             "duration": "immediate",
-            "fading": "L+1",
-            "description": "Crash all icons in an area."
+            "fading": "L",
+            "description": "Crash all icons within 100 meters. Affects all personas in the area equally."
           },
           {
             "id": "resonance-channel",
             "name": "Resonance Channel",
-            "target": "sprite",
+            "target": "device",
             "duration": "sustained",
             "fading": "L-1",
-            "description": "Grant sprite ability to use complex forms."
+            "description": "Grant a registered sprite the ability to use one of your complex forms."
           },
           {
             "id": "resonance-spike",
             "name": "Resonance Spike",
-            "target": "persona",
+            "target": "device",
             "duration": "immediate",
-            "fading": "L-1",
-            "description": "Deal Matrix damage."
+            "fading": "L",
+            "description": "Deal Matrix damage equal to net hits. Opposed by Intuition + Firewall."
           },
           {
             "id": "resonance-veil",
@@ -2291,39 +2291,186 @@
             "target": "device",
             "duration": "sustained",
             "fading": "L-1",
-            "description": "Make icon appear as something else."
+            "description": "Make an icon appear as something else. Viewers must make Matrix Perception test against your net hits to see through."
+          },
+          {
+            "id": "static-bomb",
+            "name": "Static Bomb",
+            "target": "self",
+            "duration": "immediate",
+            "fading": "L+2",
+            "description": "Create a burst of static that clears marks from all devices you own within 100 meters."
           },
           {
             "id": "static-veil",
             "name": "Static Veil",
             "target": "self",
             "duration": "sustained",
-            "fading": "L-2",
-            "description": "Conceal your living persona."
+            "fading": "L-1",
+            "description": "Conceal your living persona from Matrix Perception tests. Viewers must beat your net hits to detect you."
           },
           {
             "id": "stitches",
             "name": "Stitches",
             "target": "sprite",
             "duration": "permanent",
-            "fading": "L",
-            "description": "Repair Matrix damage to sprite."
+            "fading": "L-2",
+            "description": "Repair Matrix damage to a sprite. Each net hit heals 1 box of Matrix damage."
           },
           {
             "id": "transcendent-grid",
             "name": "Transcendent Grid",
             "target": "self",
             "duration": "sustained",
-            "fading": "L-1",
-            "description": "Access any grid without penalty."
+            "fading": "L-3",
+            "description": "Access any grid without penalty. You appear to be a legitimate user of that grid."
           },
           {
             "id": "tattletale",
             "name": "Tattletale",
-            "target": "device",
+            "target": "persona",
             "duration": "permanent",
             "fading": "L-2",
-            "description": "Track device's Matrix activity."
+            "description": "Track a persona's Matrix activity. You receive alerts when the target performs Matrix actions."
+          }
+        ],
+        "spriteTypes": [
+          {
+            "id": "courier",
+            "name": "Courier Sprite",
+            "description": "Specialized in moving data quickly and securely through the Matrix.",
+            "attributes": {
+              "attack": "L",
+              "sleaze": "L+3",
+              "dataProcessing": "L+1",
+              "firewall": "L+2"
+            },
+            "initiative": {
+              "formula": "(L*2)+1",
+              "dice": 4
+            },
+            "resonance": "L",
+            "skills": ["computer", "hacking"],
+            "powers": ["cookie", "hash"]
+          },
+          {
+            "id": "crack",
+            "name": "Crack Sprite",
+            "description": "Expert at breaking through security and disrupting electronic warfare.",
+            "attributes": {
+              "attack": "L",
+              "sleaze": "L+3",
+              "dataProcessing": "L+2",
+              "firewall": "L+1"
+            },
+            "initiative": {
+              "formula": "(L*2)+2",
+              "dice": 4
+            },
+            "resonance": "L",
+            "skills": ["computer", "electronic-warfare", "hacking"],
+            "powers": ["suppression"]
+          },
+          {
+            "id": "data",
+            "name": "Data Sprite",
+            "description": "Specialized in finding, analyzing, and protecting data.",
+            "attributes": {
+              "attack": "L-1",
+              "sleaze": "L",
+              "dataProcessing": "L+4",
+              "firewall": "L+1"
+            },
+            "initiative": {
+              "formula": "(L*2)+4",
+              "dice": 4
+            },
+            "resonance": "L",
+            "skills": ["computer", "electronic-warfare"],
+            "powers": ["camouflage", "watermark"]
+          },
+          {
+            "id": "fault",
+            "name": "Fault Sprite",
+            "description": "Aggressive sprites focused on Matrix combat and causing damage.",
+            "attributes": {
+              "attack": "L+3",
+              "sleaze": "L",
+              "dataProcessing": "L+1",
+              "firewall": "L+2"
+            },
+            "initiative": {
+              "formula": "(L*2)+1",
+              "dice": 4
+            },
+            "resonance": "L",
+            "skills": ["computer", "cybercombat", "hacking"],
+            "powers": ["electron-storm"]
+          },
+          {
+            "id": "machine",
+            "name": "Machine Sprite",
+            "description": "Expert at interfacing with and controlling devices and drones.",
+            "attributes": {
+              "attack": "L+1",
+              "sleaze": "L",
+              "dataProcessing": "L+3",
+              "firewall": "L+2"
+            },
+            "initiative": {
+              "formula": "(L*2)+3",
+              "dice": 4
+            },
+            "resonance": "L",
+            "skills": ["computer", "electronic-warfare", "hardware"],
+            "powers": ["diagnostics", "gremlins", "stability"]
+          }
+        ],
+        "spritePowers": [
+          {
+            "id": "camouflage",
+            "name": "Camouflage",
+            "description": "The sprite can mask the presence of a file, making it harder to find with Matrix searches. Add the sprite's Level to the threshold of any Matrix Search actions to find the protected file."
+          },
+          {
+            "id": "cookie",
+            "name": "Cookie",
+            "description": "The sprite can tag a target with a cookie that allows the technomancer to track the target's Matrix activity. The cookie lasts for (Level) hours."
+          },
+          {
+            "id": "diagnostics",
+            "name": "Diagnostics",
+            "description": "The sprite can analyze a device and provide a bonus equal to its Level to any test made to repair, diagnose, or operate that device."
+          },
+          {
+            "id": "electron-storm",
+            "name": "Electron Storm",
+            "description": "The sprite can cause a burst of damaging Matrix energy. This is a Matrix attack with DV equal to the sprite's Level."
+          },
+          {
+            "id": "gremlins",
+            "name": "Gremlins",
+            "description": "The sprite can cause a device to malfunction. The device's owner must make a Device Rating test with a threshold equal to the sprite's Level or the device glitches."
+          },
+          {
+            "id": "hash",
+            "name": "Hash",
+            "description": "The sprite can encrypt data with protection equal to its Level. The encryption can be broken with a Hacking + Logic [Sleaze] test vs. Level x 2."
+          },
+          {
+            "id": "stability",
+            "name": "Stability",
+            "description": "The sprite can stabilize a device, preventing crashes and glitches. Add the sprite's Level as a dice pool bonus to resist Matrix damage or glitches."
+          },
+          {
+            "id": "suppression",
+            "name": "Suppression",
+            "description": "The sprite can jam wireless signals in an area. All wireless noise in the area increases by the sprite's Level."
+          },
+          {
+            "id": "watermark",
+            "name": "Watermark",
+            "description": "The sprite can embed hidden data in a file that is nearly impossible to detect or remove. The watermark can be found with a Computer + Intuition [Data Processing] test with a threshold equal to the sprite's Level x 2."
           }
         ]
       }
@@ -6177,7 +6324,7 @@
           "maxAttributeBonus": 4,
           "maxAvailabilityAtCreation": 12,
           "trackEssenceHoles": true,
-          "magicReductionFormula": "roundUp"
+          "magicReductionFormula": "roundDown"
         },
         "grades": [
           {

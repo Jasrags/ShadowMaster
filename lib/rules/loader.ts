@@ -615,6 +615,37 @@ export interface ComplexFormData {
 }
 
 /**
+ * Sprite type data structure for technomancers
+ */
+export interface SpriteTypeData {
+  id: string;
+  name: string;
+  description: string;
+  attributes: {
+    attack: string;
+    sleaze: string;
+    dataProcessing: string;
+    firewall: string;
+  };
+  initiative: {
+    formula: string;
+    dice: number;
+  };
+  resonance: string;
+  skills: string[];
+  powers: string[];
+}
+
+/**
+ * Sprite power data structure
+ */
+export interface SpritePowerData {
+  id: string;
+  name: string;
+  description: string;
+}
+
+/**
  * Spells catalog data structure
  */
 export interface SpellsCatalogData {
@@ -639,6 +670,22 @@ export function extractSpells(ruleset: LoadedRuleset): SpellsCatalogData | null 
 export function extractComplexForms(ruleset: LoadedRuleset): ComplexFormData[] {
   const ruleModule = extractModule<{ complexForms: ComplexFormData[] }>(ruleset, "magic");
   return ruleModule?.complexForms || [];
+}
+
+/**
+ * Load sprite types from a ruleset
+ */
+export function extractSpriteTypes(ruleset: LoadedRuleset): SpriteTypeData[] {
+  const ruleModule = extractModule<{ spriteTypes: SpriteTypeData[] }>(ruleset, "magic");
+  return ruleModule?.spriteTypes || [];
+}
+
+/**
+ * Load sprite powers from a ruleset
+ */
+export function extractSpritePowers(ruleset: LoadedRuleset): SpritePowerData[] {
+  const ruleModule = extractModule<{ spritePowers: SpritePowerData[] }>(ruleset, "magic");
+  return ruleModule?.spritePowers || [];
 }
 
 // =============================================================================
