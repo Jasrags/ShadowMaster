@@ -23,6 +23,8 @@ export {
   useRulesetStatus,
   useSpells,
   useComplexForms,
+  useSpriteTypes,
+  useSpritePowers,
   useContactTemplates,
   useAdeptPowers,
 } from "./RulesetContext";
@@ -45,4 +47,6 @@ export type {
   SpellData,
   SpellsCatalogData,
   ComplexFormData,
+  SpriteTypeData,
+  SpritePowerData,
 } from "./RulesetContext";
