@@ -171,32 +171,19 @@ This section provides a comprehensive view of the entire implementation roadmap,
 | | M0.7 | SpellsStep Creation | - | Critical | ✅ Complete |
 | | M0.8 | Aspected Mage Enhancements | - | Critical | ✅ Complete |
 | 2 | **B1** | **Cyberware/Bioware System** | **2-3 weeks** | **High** | ✅ **Complete** |
-<<<<<<< Updated upstream
-| 3 | **B4** | **Combat Tracker** | **3-4 weeks** | **High** | Not Started |
-| 4 | **B3** | **Inventory Management** | **1-2 weeks** | **High** | Not Started |
-| 5 | **B5** | **Adept Powers System** | **1-2 weeks** | **Medium** | ✅ **Complete** |
-| 7 | **B6** | **Spell Management** | **1-2 weeks** | **Medium** | Not Started |
-| 8 | **B7** | **Complex Forms & Matrix** | **1-2 weeks** | **Medium** | Not Started |
-| 9 | **B2** | **Sourcebook Integration** | **2 weeks** | **Medium** | Not Started |
-| 10 | **B8** | **UI/UX Improvements** | **1-2 weeks** | **Medium** | Not Started |
-| 11 | **B10** | **Gear Modifications** | **2-3 weeks** | **Medium** | Not Started |
-| 12 | **B11** | **Identity/Lifestyle/SIN System** | **2-3 weeks** | **Medium** | Not Started |
-| 13 | **B9** | **Session Persistence & WebSockets** | **2-3 weeks** | **Low** | Not Started |
-=======
-| 3 | **B5** | **Adept Powers System** | **1-2 weeks** | **High** | ✅ **Complete** |
-| 4 | **B7** | **Complex Forms & Matrix** | **1-2 weeks** | **High** | ✅ **Complete** |
-| 5 | **B12** | **Rigger Support (Vehicles & Drones)** | **2-3 weeks** | **High** | Not Started |
-| 6 | **B13** | **Decker Support (Programs)** | **1 week** | **High** | Not Started |
-| 7 | **B14** | **Foci & Spirits** | **2 weeks** | **High** | Not Started |
-| 8 | **B11** | **Identity/Lifestyle/SIN System** | **2-3 weeks** | **High** | Not Started |
-| 9 | **B6** | **Spell Management** | **1-2 weeks** | **High** | Not Started |
-| 10 | **B10** | **Gear Modifications** | **2-3 weeks** | **Medium** | Not Started |
-| 11 | **B2** | **Sourcebook Integration** | **2 weeks** | **Medium** | Not Started |
-| 12 | **B8** | **UI/UX Improvements** | **1-2 weeks** | **Medium** | Not Started |
-| 13 | **B4** | **Combat Tracker** | **3-4 weeks** | **Medium** | Not Started |
-| 14 | **B3** | **Inventory Management** | **1-2 weeks** | **Medium** | Not Started |
-| 15 | **B9** | **Session Persistence & WebSockets** | **2-3 weeks** | **Low** | Not Started |
->>>>>>> Stashed changes
+| 3  | **B5**  | **Adept Powers System**             | **1-2 weeks**  | **High**   | ✅ **Complete**   |
+| 4  | **B7**  | **Complex Forms & Matrix**          | **1-2 weeks**  | **High**   | ✅ **Complete**   |
+| 5  | **B12** | **Rigger Support (Vehicles & Drones)** | **2-3 weeks**  | **High**   | Not Started      |
+| 6  | **B13** | **Decker Support (Programs)**       | **1 week**     | **High**   | Not Started      |
+| 7  | **B14** | **Foci & Spirits**                  | **2 weeks**    | **High**   | Not Started      |
+| 8  | **B11** | **Identity/Lifestyle/SIN System**   | **2-3 weeks**  | **High**   | Not Started      |
+| 9  | **B6**  | **Spell Management**                | **1-2 weeks**  | **High**   | Not Started      |
+| 10 | **B10** | **Gear Modifications**              | **2-3 weeks**  | **Medium** | Not Started      |
+| 11 | **B2**  | **Sourcebook Integration**          | **2 weeks**    | **Medium** | Not Started      |
+| 12 | **B8**  | **UI/UX Improvements**              | **1-2 weeks**  | **Medium** | Not Started      |
+| 13 | **B4**  | **Combat Tracker**                  | **3-4 weeks**  | **Medium** | Not Started      |
+| 14 | **B3**  | **Inventory Management**            | **1-2 weeks**  | **Medium** | Not Started      |
+| 15 | **B9**  | **Session Persistence & WebSockets**| **2-3 weeks**  | **Low**    | Not Started      |
 
 ### Completed Work Summary
 
@@ -235,22 +222,14 @@ This section provides a comprehensive view of the entire implementation roadmap,
 |-------|-----------|----------|----------|--------|
 | **M0** | **MVP Gaps & Enhancements** | **1-2 weeks** | **Critical** | 🔄 In Progress |
 | B1 | Cyberware/Bioware System | 2-3 weeks | High | ✅ Complete |
-<<<<<<< Updated upstream
-| B4 | Combat Tracker | 3-4 weeks | High | Not Started |
-| B3 | Inventory Management | 1-2 weeks | High | Not Started |
-| B5 | Adept Powers System | 1-2 weeks | Medium | ✅ Complete |
-| B6 | Spell Management | 1-2 weeks | Medium | Not Started |
-| B7 | Complex Forms & Matrix | 1-2 weeks | Medium | Not Started |
-=======
-| B5 | Adept Powers System | 1-2 weeks | High | ✅ Complete |
-| B7 | Complex Forms & Matrix | 1-2 weeks | High | ✅ Complete |
-| B12 | Rigger Support (Vehicles & Drones) | 2-3 weeks | High | Not Started |
-| B13 | Decker Support (Programs) | 1 week | High | Not Started |
-| B14 | Foci & Spirits | 2 weeks | High | Not Started |
-| B11 | Identity/Lifestyle/SIN System | 2-3 weeks | High | Not Started |
-| B6 | Spell Management | 1-2 weeks | High | Not Started |
-| B10 | Gear Modifications | 2-3 weeks | Medium | Not Started |
->>>>>>> Stashed changes
+| B5  | Adept Powers System              | 1-2 weeks  | High   | ✅ Complete   |
+| B7  | Complex Forms & Matrix           | 1-2 weeks  | High   | ✅ Complete   |
+| B12 | Rigger Support (Vehicles & Drones)| 2-3 weeks | High   | Not Started  |
+| B13 | Decker Support (Programs)        | 1 week     | High   | Not Started  |
+| B14 | Foci & Spirits                   | 2 weeks    | High   | Not Started  |
+| B11 | Identity/Lifestyle/SIN System    | 2-3 weeks  | High   | Not Started  |
+| B6  | Spell Management                 | 1-2 weeks  | High   | Not Started  |
+| B10 | Gear Modifications               | 2-3 weeks  | Medium | Not Started  |
 | B2 | Sourcebook Integration | 2 weeks | Medium | Not Started |
 | B8 | UI/UX Improvements | 1-2 weeks | Medium | Not Started |
 | B10 | Gear Modifications | 2-3 weeks | Medium | Not Started |
