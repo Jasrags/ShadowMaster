@@ -262,6 +262,7 @@ describe('User Storage', () => {
 
       const updated = await updateUser(user.id, {
         id: 'new-id',
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
       } as any);
 
       expect(updated.id).toBe(user.id);

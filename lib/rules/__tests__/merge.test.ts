@@ -6,8 +6,8 @@
 
 import { describe, it, expect } from 'vitest';
 import { mergeRules, produceMergedRuleset, getModule, hasModule, getModuleTypes } from '../merge';
-import type { MergeStrategy, ModulePayload } from '@/lib/types';
-import type { LoadedRuleset, LoadedBook } from '../loader';
+import type { MergeStrategy } from '@/lib/types';
+import type { LoadedRuleset } from '../loader';
 
 describe('mergeRules', () => {
   describe('replace strategy', () => {
@@ -75,16 +75,16 @@ describe('mergeRules', () => {
       const result = mergeRules(base, override, 'merge');
       
       expect(result.items).toHaveLength(3);
-      expect(result.items.find((i: any) => i.id === '1')).toEqual({ 
+      expect((result.items as Array<{ id: string; value: string; extra?: string }>).find((i) => i.id === '1')).toEqual({ 
         id: '1', 
         value: 'A', 
         extra: 'base' // Preserved from base
       });
-      expect(result.items.find((i: any) => i.id === '2')).toEqual({ 
+      expect((result.items as Array<{ id: string; value: string }>).find((i) => i.id === '2')).toEqual({ 
         id: '2', 
         value: 'b' 
       });
-      expect(result.items.find((i: any) => i.id === '3')).toEqual({ 
+      expect((result.items as Array<{ id: string; value: string }>).find((i) => i.id === '3')).toEqual({ 
         id: '3', 
         value: 'c' 
       });
@@ -167,12 +167,12 @@ describe('mergeRules', () => {
       const result = mergeRules(base, override, 'append');
       
       expect(result.items).toHaveLength(3);
-      expect(result.items.find((i: any) => i.id === '1')).toEqual({
+      expect((result.items as Array<{ id: string; value: string; newProp?: string }>).find((i) => i.id === '1')).toEqual({
         id: '1',
         value: 'A',
         newProp: 'added'
       });
-      expect(result.items.find((i: any) => i.id === '3')).toEqual({
+      expect((result.items as Array<{ id: string; value: string }>).find((i) => i.id === '3')).toEqual({
         id: '3',
         value: 'c'
       });
@@ -313,8 +313,7 @@ describe('mergeRules', () => {
       // isArrayWithIds requires ALL items to have IDs
       expect(result.mixed.length).toBeGreaterThan(2);
       // The item with id '1' from base should remain, and override items appended
-      const baseItem = result.mixed.find((i: any) => i?.id === '1' && i?.value === 'a');
-      const overrideItem = result.mixed.find((i: any) => i?.id === '1' && i?.value === 'A');
+      // Since arrays don't all have IDs, items are appended, so both may exist
       // Since arrays don't all have IDs, items are appended, so both may exist
       expect(result.mixed).toContain('primitive');
       expect(result.mixed).toContain(42);
@@ -331,6 +330,7 @@ describe('mergeRules', () => {
       expect(result.nested).not.toBe(base.nested);
       
       // Modifying result should not affect base
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       (result.nested as any).c = 3;
       expect(base.nested).not.toHaveProperty('c');
     });
@@ -453,6 +453,7 @@ describe('produceMergedRuleset', () => {
     expect(result.ruleset).toBeDefined();
     
     // Both metatypes should be present
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const metatypes = result.ruleset?.modules.metatypes as any;
     expect(metatypes.human).toBeDefined();
     expect(metatypes.elf).toBeDefined();
@@ -509,6 +510,7 @@ describe('produceMergedRuleset', () => {
     const result = produceMergedRuleset(loadedRuleset);
 
     expect(result.success).toBe(true);
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const skills = result.ruleset?.modules.skills as any;
     
     // Firearms should be merged (name preserved, rating updated)
@@ -571,6 +573,7 @@ describe('produceMergedRuleset', () => {
     const result = produceMergedRuleset(loadedRuleset);
 
     expect(result.success).toBe(true);
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const skills = result.ruleset?.modules.skills as any;
     
     // Replace strategy should completely replace
@@ -694,6 +697,7 @@ describe('produceMergedRuleset', () => {
     
     // Attempting to modify should throw in strict mode
     expect(() => {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       (result.ruleset as any).newProperty = 'test';
     }).toThrow(); // Object.freeze() throws when trying to add properties
   });
@@ -719,6 +723,7 @@ describe('produceMergedRuleset', () => {
           payload: {
             modules: {
               metatypes: {
+                // eslint-disable-next-line @typescript-eslint/no-explicit-any
                 mergeStrategy: 'invalid-strategy' as any,
                 payload: {},
               },
@@ -747,6 +752,7 @@ describe('convenience functions', () => {
       skills: { firearms: { id: 'firearms' } },
     },
     createdAt: new Date().toISOString(),
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
   } as any;
 
   describe('getModule', () => {

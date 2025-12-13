@@ -5,7 +5,7 @@
  * without loading the full SR5 ruleset.
  */
 
-import type { Edition, Book, MergedRuleset, EditionCode } from '@/lib/types';
+import type { Edition, Book, MergedRuleset } from '@/lib/types';
 
 /**
  * Minimal edition data for testing

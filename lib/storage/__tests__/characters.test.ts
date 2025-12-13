@@ -252,6 +252,7 @@ describe('Character Storage', () => {
       const updated = await updateCharacter(userId1, draft.id, {
         id: 'new-id',
         ownerId: 'new-owner',
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
       } as any);
 
       expect(updated.id).toBe(draft.id);

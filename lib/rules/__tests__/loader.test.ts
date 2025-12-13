@@ -68,7 +68,9 @@ describe('loadRuleset', () => {
       },
     };
 
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     vi.mocked(storageModule.getEdition).mockResolvedValue(mockEdition as any);
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     vi.mocked(storageModule.getBookPayload).mockResolvedValue(mockBookPayload as any);
     vi.mocked(storageModule.getAllCreationMethods).mockResolvedValue([]);
 
@@ -112,9 +114,12 @@ describe('loadRuleset', () => {
       modules: {},
     };
 
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     vi.mocked(storageModule.getEdition).mockResolvedValue(mockEdition as any);
     vi.mocked(storageModule.getBookPayload)
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       .mockResolvedValueOnce(mockCoreBook as any)
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       .mockResolvedValueOnce(mockSourcebook as any);
     vi.mocked(storageModule.getAllCreationMethods).mockResolvedValue([]);
 
@@ -137,6 +142,7 @@ describe('loadRuleset', () => {
       createdAt: new Date().toISOString(),
     };
 
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     vi.mocked(storageModule.getEdition).mockResolvedValue(mockEdition as any);
     vi.mocked(storageModule.getBookPayload).mockResolvedValue(null);
     vi.mocked(storageModule.getAllCreationMethods).mockResolvedValue([]);
@@ -163,7 +169,9 @@ describe('loadRuleset', () => {
       modules: {},
     };
 
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     vi.mocked(storageModule.getEdition).mockResolvedValue(mockEdition as any);
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     vi.mocked(storageModule.getBookPayload).mockResolvedValue(mockBook as any);
     vi.mocked(storageModule.getAllCreationMethods).mockResolvedValue([]);
 
@@ -314,6 +322,7 @@ describe('extraction functions', () => {
       },
     ],
     creationMethods: [],
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
   } as any;
 
   describe('extractModule', () => {
@@ -325,6 +334,7 @@ describe('extraction functions', () => {
     });
 
     it('should return null for non-existent module', () => {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       const result = extractModule(mockLoadedRuleset, 'nonexistent' as any);
       expect(result).toBeNull();
     });
@@ -566,6 +576,7 @@ describe('convenience loaders', () => {
       createdAt: new Date().toISOString(),
     };
 
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     vi.mocked(storageModule.getEdition).mockResolvedValue(mockEdition as any);
 
     const result = await loadEdition('sr5');
@@ -577,6 +588,7 @@ describe('convenience loaders', () => {
       { id: 'sr5', name: 'SR5', shortCode: 'sr5' as EditionCode, releaseYear: 2013, bookIds: [], creationMethodIds: [], createdAt: new Date().toISOString() },
     ];
 
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     vi.mocked(storageModule.getAllEditions).mockResolvedValue(mockEditions as any);
 
     const result = await loadAllEditions();
@@ -589,6 +601,7 @@ describe('convenience loaders', () => {
       modules: {},
     };
 
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     vi.mocked(storageModule.getBookPayload).mockResolvedValue(mockPayload as any);
 
     const result = await loadBook('sr5', 'core-rulebook');
@@ -600,6 +613,7 @@ describe('convenience loaders', () => {
       { meta: { title: 'Book1', category: 'core' }, modules: {} },
     ];
 
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     vi.mocked(storageModule.getAllBookPayloads).mockResolvedValue(mockPayloads as any);
 
     const result = await loadAllBooks('sr5');
@@ -613,6 +627,7 @@ describe('convenience loaders', () => {
       editionId: 'sr5',
     };
 
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     vi.mocked(storageModule.getCreationMethod).mockResolvedValue(mockMethod as any);
 
     const result = await loadCreationMethod('sr5', 'priority');
@@ -624,6 +639,7 @@ describe('convenience loaders', () => {
       { id: 'priority', name: 'Priority', editionId: 'sr5' },
     ];
 
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     vi.mocked(storageModule.getAllCreationMethods).mockResolvedValue(mockMethods as any);
 
     const result = await loadAllCreationMethods('sr5');

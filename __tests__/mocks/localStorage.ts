@@ -53,6 +53,7 @@ export function setupLocalStorageMock(): MockLocalStorage {
  * Clean up localStorage mock after tests
  */
 export function cleanupLocalStorageMock(): void {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   delete (window as any).localStorage;
 }
 

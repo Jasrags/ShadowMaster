@@ -42,11 +42,13 @@ describe('Session Management', () => {
 
   beforeEach(() => {
     vi.clearAllMocks();
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     vi.mocked(cookies).mockResolvedValue(mockCookieStore as any);
   });
 
   describe('createSession', () => {
     it('should set session cookie with user ID', () => {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       const response = mockNextResponse as any;
       const userId = 'test-user-id';
 
@@ -67,10 +69,12 @@ describe('Session Management', () => {
       const originalEnv = process.env.NODE_ENV;
       process.env.NODE_ENV = 'production';
 
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       const response = mockNextResponse as any;
       vi.clearAllMocks();
       createSession('user-id', response);
 
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       const callArgs = (response.cookies.set as any).mock.calls[0];
       expect(callArgs[2].secure).toBe(true);
 
@@ -81,10 +85,12 @@ describe('Session Management', () => {
       const originalEnv = process.env.NODE_ENV;
       process.env.NODE_ENV = 'development';
 
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       const response = mockNextResponse as any;
       vi.clearAllMocks();
       createSession('user-id', response);
 
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       const callArgs = (response.cookies.set as any).mock.calls[0];
       expect(callArgs[2].secure).toBe(false);
 
@@ -92,10 +98,12 @@ describe('Session Management', () => {
     });
 
     it('should set expiration date', () => {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       const response = mockNextResponse as any;
       vi.clearAllMocks();
       createSession('user-id', response);
 
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       const callArgs = (response.cookies.set as any).mock.calls[0];
       expect(callArgs[2].expires).toBeInstanceOf(Date);
       
@@ -136,6 +144,7 @@ describe('Session Management', () => {
 
   describe('clearSession', () => {
     it('should delete session cookie', () => {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       const response = mockNextResponse as any;
       vi.clearAllMocks();
 

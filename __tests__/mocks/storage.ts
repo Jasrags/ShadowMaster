@@ -5,14 +5,13 @@
  * for testing without touching the actual file system.
  */
 
-import { vi } from 'vitest';
-import type { Character, User, EditionCode } from '@/lib/types';
+import type { Character, User } from '@/lib/types';
 
 /**
  * Mock file system storage
  */
 export class MockFileStorage {
-  private files: Map<string, any> = new Map();
+  private files: Map<string, unknown> = new Map();
   private directories: Set<string> = new Set();
 
   /**
