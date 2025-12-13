@@ -127,7 +127,8 @@ export function AugmentationsStep({ state, updateState, budgetValues }: StepProp
   );
 
   // Calculate nuyen from budget (integrating with gear)
-  const nuyenBudget = budgetValues["nuyen"] || 0;
+  const karmaToNuyen = (state.budgets?.["karma-spent-gear"] as number) || 0;
+  const nuyenBudget = (budgetValues["nuyen"] || 0) + karmaToNuyen * 2000;
   const gearSpent = (state.budgets?.["nuyen-spent-gear"] as number) || 0;
   const lifestyleSpent = (state.budgets?.["nuyen-spent-lifestyle"] as number) || 0;
   const cyberwareSpent = selectedCyberware.reduce((sum, item) => sum + item.cost, 0);

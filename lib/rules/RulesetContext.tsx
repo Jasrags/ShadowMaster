@@ -201,6 +201,31 @@ export interface ComplexFormData {
   description?: string;
 }
 
+export interface SpriteTypeData {
+  id: string;
+  name: string;
+  description: string;
+  attributes: {
+    attack: string;
+    sleaze: string;
+    dataProcessing: string;
+    firewall: string;
+  };
+  initiative: {
+    formula: string;
+    dice: number;
+  };
+  resonance: string;
+  skills: string[];
+  powers: string[];
+}
+
+export interface SpritePowerData {
+  id: string;
+  name: string;
+  description: string;
+}
+
 export interface CyberwareGradeData {
   id: string;
   name: string;
@@ -352,6 +377,8 @@ export interface RulesetData {
   gear: GearCatalogData | null;
   spells: SpellsCatalogData | null;
   complexForms: ComplexFormData[];
+  spriteTypes: SpriteTypeData[];
+  spritePowers: SpritePowerData[];
   cyberware: CyberwareCatalogData | null;
   bioware: BiowareCatalogData | null;
   augmentationRules: AugmentationRulesData;
@@ -402,6 +429,8 @@ const defaultData: RulesetData = {
   gear: null,
   spells: null,
   complexForms: [],
+  spriteTypes: [],
+  spritePowers: [],
   cyberware: null,
   bioware: null,
   augmentationRules: defaultAugmentationRules,
@@ -482,6 +511,8 @@ export function RulesetProvider({
             gear: extractedData.gear || null,
             spells: extractedData.spells || null,
             complexForms: extractedData.complexForms || [],
+            spriteTypes: extractedData.spriteTypes || [],
+            spritePowers: extractedData.spritePowers || [],
             cyberware: extractedData.cyberware || null,
             bioware: extractedData.bioware || null,
             augmentationRules: extractedData.augmentationRules || defaultAugmentationRules,
@@ -706,6 +737,22 @@ export function useSpells(): SpellsCatalogData | null {
 export function useComplexForms(): ComplexFormData[] {
   const { data } = useRuleset();
   return data.complexForms;
+}
+
+/**
+ * Hook to get sprite types for technomancers
+ */
+export function useSpriteTypes(): SpriteTypeData[] {
+  const { data } = useRuleset();
+  return data.spriteTypes;
+}
+
+/**
+ * Hook to get sprite powers
+ */
+export function useSpritePowers(): SpritePowerData[] {
+  const { data } = useRuleset();
+  return data.spritePowers;
 }
 
 /**

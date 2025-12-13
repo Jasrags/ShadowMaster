@@ -921,7 +921,9 @@ export function CreationWizard({ onCancel, onComplete }: CreationWizardProps) {
         karmaSpentAtCreation;
 
       // Calculate nuyen remaining (after gear purchases)
-      const nuyenBudget = budgetValues["nuyen"] || 0;
+      const nuyenBudget =
+        (budgetValues["nuyen"] || 0) +
+        (((state.budgets["karma-spent-gear"] as number) || 0) * 2000);
       const nuyenSpent = (state.budgets["nuyen-spent"] as number) || 0;
       const nuyenRemaining = Math.min(nuyenBudget - nuyenSpent, 5000); // Cap at 5,000 carryover
 

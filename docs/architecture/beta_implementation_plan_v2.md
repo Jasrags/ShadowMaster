@@ -129,7 +129,7 @@ This section prioritizes the most critical remaining tasks needed to complete ch
 | 9 | Add spell formula limits validation (Magic × 2 per category). Progress bar tracks free spells. Category limits are selection/validation limits. | Small | M0.7.11 | ✅ Complete |
 | 10 | Conditional Assensing for Adepts (requires powers system first) | Small | B5.1.5 | ✅ Complete |
 
-**Next Steps:** B5 Adept Powers System complete! All tasks finished.
+**Next Steps:** Begin B7 Complex Forms & Matrix to complete technomancer character creation.
 
 ---
 
@@ -141,11 +141,11 @@ This section provides a comprehensive view of the entire implementation roadmap,
 
 ```
 1. Priority Selection       ✅ Complete (MVP)
-2. Metatype Selection       ✅ Complete (MVP) + M0.2 enhancements pending
+2. Metatype Selection       ✅ Complete (MVP) + M0.2 enhancements completed
 3. Attributes Allocation    ✅ Complete (MVP) + M0.6 karma purchases completed
 4. Magic/Resonance Path     ✅ Complete (MVP) + B6 tradition enhancements pending
 5. Skills Allocation        ✅ Complete (MVP) + M0.3 enhancements completed
-6. Qualities Selection      ✅ Complete (MVP) + M0.4 enhancements pending
+6. Qualities Selection      ✅ Complete (MVP) + M0.4 enhancements completed
 7. Augmentations           ✅ Complete (B1)
 8. Spells/Powers           ✅ M0.7 SpellsStep (magical) / ✅ B5 AdeptPowersStep (adepts)
 9. Complex Forms           ✅ B7 (technomancers only)
@@ -157,9 +157,11 @@ This section provides a comprehensive view of the entire implementation roadmap,
 
 ### Full Phase Summary with Status
 
+> **Priority Strategy:** Character creation features are prioritized over gameplay features. All character archetypes (mundane, mage, adept, technomancer) should be fully creatable before implementing combat/session management.
+
 | Order | Phase | Focus Area | Duration | Priority | Status |
 |-------|-------|-----------|----------|----------|--------|
-| 1 | **M0** | **MVP Gaps & Enhancements** | **1-2 weeks** | **Critical** | 🔄 In Progress |
+| 1 | **M0** | **MVP Gaps & Enhancements** | **1-2 weeks** | **Critical** | ✅ **Complete** |
 | | M0.1 | Bug Fixes | - | Critical | ✅ Complete |
 | | M0.2 | Metatype Enhancements | - | Critical | ✅ Complete |
 | | M0.3 | Skills Enhancements | - | Critical | ✅ Complete |
@@ -203,24 +205,28 @@ This section provides a comprehensive view of the entire implementation roadmap,
 | M0.6 Karma Arch | Dec 2024 | Distributed karma spending, global karma budget, karma-to-nuyen conversion, 7 karma carryover limit |
 | M0.5 Contacts | Dec 2024 | 10 contact templates (Fixer, Street Doc, Arms Dealer, etc.), template selector with customization, full custom creation support |
 | M0.7 SpellsStep | Jan 2025 | SpellsStep component with free spell allocation, karma purchases, category limits validation (Magic × 2 per category), progress bar tracking free spells |
+| **M0 Complete** | **Jan 2025** | **All MVP gaps and enhancements complete: bug fixes, metatype enhancements, skills improvements, qualities system, contacts templates, distributed karma architecture, SpellsStep, Aspected Mage support** |
 | B8.1 Gear Layout | Dec 2024 | Improved gear catalog layout, shopping cart width fixes, responsive design |
 
 ### Estimated Remaining Timeline
 
 | Milestone | Phases | Est. Duration |
 |-----------|--------|---------------|
-| MVP Polish | M0 | 1-2 weeks |
-| Beta Core | B4, B3, B5, B6, B7 | 8-12 weeks |
-| Beta Polish | B2, B8, B10, B11, B9 | 6-8 weeks |
-| **Total to Beta Release** | All | **17-25 weeks** |
+| MVP Polish | M0 | ✅ Complete |
+| Character Creation Complete | B7, B12, B13, B14, B11, B6, B10 | 11-16 weeks |
+| Sourcebooks & Polish | B2, B8 | 3-4 weeks |
+| Gameplay Features | B4, B3, B9 | 6-9 weeks |
+| **Total to Beta Release** | All | **20-29 weeks** |
 
 ---
 
 ## Phase Summary (Quick Reference)
 
+> **Priority Strategy:** Character creation first, gameplay second.
+
 | Phase | Focus Area | Duration | Priority | Status |
 |-------|-----------|----------|----------|--------|
-| **M0** | **MVP Gaps & Enhancements** | **1-2 weeks** | **Critical** | 🔄 In Progress |
+| **M0** | **MVP Gaps & Enhancements** | **1-2 weeks** | **Critical** | ✅ **Complete** |
 | B1 | Cyberware/Bioware System | 2-3 weeks | High | ✅ Complete |
 | B5  | Adept Powers System              | 1-2 weeks  | High   | ✅ Complete   |
 | B7  | Complex Forms & Matrix           | 1-2 weeks  | High   | ✅ Complete   |
@@ -232,8 +238,8 @@ This section provides a comprehensive view of the entire implementation roadmap,
 | B10 | Gear Modifications               | 2-3 weeks  | Medium | Not Started  |
 | B2 | Sourcebook Integration | 2 weeks | Medium | Not Started |
 | B8 | UI/UX Improvements | 1-2 weeks | Medium | Not Started |
-| B10 | Gear Modifications | 2-3 weeks | Medium | Not Started |
-| B11 | Identity/Lifestyle/SIN System | 2-3 weeks | Medium | Not Started |
+| B4 | Combat Tracker | 3-4 weeks | Medium | Not Started |
+| B3 | Inventory Management | 1-2 weeks | Medium | Not Started |
 | B9 | Session Persistence & WebSockets | 2-3 weeks | Low | Not Started |
 
 ---
@@ -4097,6 +4103,844 @@ This milestone implements session joining, state persistence across reconnection
 - **B9.4.AC.2** [ ] Updates appear in real-time for all participants
 - **B9.4.AC.3** [ ] Disconnected users can rejoin and sync state
 - **B9.4.AC.4** [ ] GM actions properly authorized
+
+---
+
+## Phase B12: Rigger Support (Vehicles & Drones)
+
+**Objective:** Complete rigger character creation with vehicles, drones, RCCs, and autosofts.
+
+This phase implements the complete vehicle and drone system from the SR5 Core Rulebook (Chapter 11), enabling rigger characters to be fully created. It includes vehicle catalogs (groundcraft, aircraft, watercraft, walker), drone catalogs by size, rigger command consoles (RCCs), and autosofts. The result enables riggers to select and customize their vehicle/drone fleet during character creation.
+
+### B12.1 Vehicle & Drone Data Structures
+
+This milestone establishes the core data structures for vehicles, drones, RCCs, and autosofts. It defines interfaces that capture all SR5 CRB vehicle attributes including handling, speed, acceleration, body, armor, pilot, sensor, and device rating.
+
+**Files to create:**
+- **B12.1.FC.1** `/lib/types/vehicles.ts`
+
+**Files to modify:**
+- **B12.1.FM.1** `/lib/types/edition.ts` (add vehicle modules)
+- **B12.1.FM.2** `/lib/types/character.ts` (add vehicle ownership)
+
+**Tasks:**
+
+| Task | Description | Status |
+|------|-------------|--------|
+| B12.1.1 | Create Vehicle interface (handling, speed, accel, body, armor, pilot, sensor, seats, deviceRating) | Not Started |
+| B12.1.2 | Create Drone interface extending Vehicle (size category: micro/mini/small/medium/large/huge) | Not Started |
+| B12.1.3 | Create RCC interface (deviceRating, dataProcessing, firewall, programs) | Not Started |
+| B12.1.4 | Create Autosoft interface (name, rating, targetModel or wildcard) | Not Started |
+| B12.1.5 | Create VehicleModification interface for vehicle mods | Not Started |
+| B12.1.6 | Add vehicles, drones, rccs, autosofts to Character interface | Not Started |
+
+**Tasks JSON:**
+```json
+[
+  {
+    "id": "B12.1.1",
+    "title": "Create Vehicle interface (handling, speed, accel, body, armor, pilot, sensor, seats, deviceRating)",
+    "description": "This milestone establishes the core data structures for vehicles, drones, RCCs, and autosofts. Create Vehicle interface with all SR5 CRB attributes.",
+    "files": ["/lib/types/vehicles.ts"],
+    "status": "Not Started",
+    "dependsOn": []
+  },
+  {
+    "id": "B12.1.2",
+    "title": "Create Drone interface extending Vehicle (size category: micro/mini/small/medium/large/huge)",
+    "description": "This milestone establishes the core data structures for vehicles, drones, RCCs, and autosofts. Create Drone interface with size categories.",
+    "files": ["/lib/types/vehicles.ts"],
+    "status": "Not Started",
+    "dependsOn": ["B12.1.1"]
+  },
+  {
+    "id": "B12.1.3",
+    "title": "Create RCC interface (deviceRating, dataProcessing, firewall, programs)",
+    "description": "This milestone establishes the core data structures for vehicles, drones, RCCs, and autosofts. Create RCC interface.",
+    "files": ["/lib/types/vehicles.ts"],
+    "status": "Not Started",
+    "dependsOn": []
+  },
+  {
+    "id": "B12.1.4",
+    "title": "Create Autosoft interface (name, rating, targetModel or wildcard)",
+    "description": "This milestone establishes the core data structures for vehicles, drones, RCCs, and autosofts. Create Autosoft interface.",
+    "files": ["/lib/types/vehicles.ts"],
+    "status": "Not Started",
+    "dependsOn": []
+  },
+  {
+    "id": "B12.1.5",
+    "title": "Create VehicleModification interface for vehicle mods",
+    "description": "This milestone establishes the core data structures for vehicles, drones, RCCs, and autosofts. Create VehicleModification interface.",
+    "files": ["/lib/types/vehicles.ts"],
+    "status": "Not Started",
+    "dependsOn": ["B12.1.1"]
+  },
+  {
+    "id": "B12.1.6",
+    "title": "Add vehicles, drones, rccs, autosofts to Character interface",
+    "description": "This milestone establishes the core data structures for vehicles, drones, RCCs, and autosofts. Update Character interface to include vehicle ownership.",
+    "files": ["/lib/types/character.ts"],
+    "status": "Not Started",
+    "dependsOn": ["B12.1.1", "B12.1.2", "B12.1.3", "B12.1.4"]
+  }
+]
+```
+
+### B12.2 Vehicle & Drone Catalog Data
+
+This milestone populates the SR5 Core Rulebook vehicles and drones into the ruleset data. It includes all vehicles from Chapter 11: groundcraft, watercraft, aircraft, and walkers, plus all drone types by size category.
+
+**Files to modify:**
+- **B12.2.FM.1** `/data/editions/sr5/core-rulebook.json`
+
+**Tasks:**
+
+| Task | Description | Status |
+|------|-------------|--------|
+| B12.2.1 | Add groundcraft vehicles (bikes, cars, trucks, etc.) to core-rulebook.json | Not Started |
+| B12.2.2 | Add watercraft vehicles (boats, submarines) to core-rulebook.json | Not Started |
+| B12.2.3 | Add aircraft vehicles (rotorcraft, fixed-wing, VTOL, LAV) to core-rulebook.json | Not Started |
+| B12.2.4 | Add walker vehicles (anthroform) to core-rulebook.json | Not Started |
+| B12.2.5 | Add drones by size category (micro, mini, small, medium, large, huge) to core-rulebook.json | Not Started |
+| B12.2.6 | Add RCCs to core-rulebook.json | Not Started |
+| B12.2.7 | Add autosofts (Clearsight, Electronic Warfare, Evasion, Maneuvering, Stealth, Targeting) to core-rulebook.json | Not Started |
+| B12.2.8 | Add vehicle modifications (sensor upgrades, armor, weapons mounts, etc.) to core-rulebook.json | Not Started |
+
+**Tasks JSON:**
+```json
+[
+  {
+    "id": "B12.2.1",
+    "title": "Add groundcraft vehicles (bikes, cars, trucks, etc.) to core-rulebook.json",
+    "description": "Populate SR5 CRB groundcraft including Dodge Scoot, Yamaha Growler, Hyundai Shin-Hyung, etc.",
+    "files": ["/data/editions/sr5/core-rulebook.json"],
+    "status": "Not Started",
+    "dependsOn": ["B12.1.1"]
+  },
+  {
+    "id": "B12.2.2",
+    "title": "Add watercraft vehicles (boats, submarines) to core-rulebook.json",
+    "description": "Populate SR5 CRB watercraft.",
+    "files": ["/data/editions/sr5/core-rulebook.json"],
+    "status": "Not Started",
+    "dependsOn": ["B12.1.1"]
+  },
+  {
+    "id": "B12.2.3",
+    "title": "Add aircraft vehicles (rotorcraft, fixed-wing, VTOL, LAV) to core-rulebook.json",
+    "description": "Populate SR5 CRB aircraft including Hughes Stallion, Cessna C750, Ares Dragon, etc.",
+    "files": ["/data/editions/sr5/core-rulebook.json"],
+    "status": "Not Started",
+    "dependsOn": ["B12.1.1"]
+  },
+  {
+    "id": "B12.2.4",
+    "title": "Add walker vehicles (anthroform) to core-rulebook.json",
+    "description": "Populate SR5 CRB walker vehicles.",
+    "files": ["/data/editions/sr5/core-rulebook.json"],
+    "status": "Not Started",
+    "dependsOn": ["B12.1.1"]
+  },
+  {
+    "id": "B12.2.5",
+    "title": "Add drones by size category (micro, mini, small, medium, large, huge) to core-rulebook.json",
+    "description": "Populate SR5 CRB drones including MCT Fly-Spy, Lockheed Optic-X2, Ares Duelist, GM-Nissan Doberman, Steel Lynx, etc.",
+    "files": ["/data/editions/sr5/core-rulebook.json"],
+    "status": "Not Started",
+    "dependsOn": ["B12.1.2"]
+  },
+  {
+    "id": "B12.2.6",
+    "title": "Add RCCs to core-rulebook.json",
+    "description": "Populate SR5 CRB RCCs with device ratings and capabilities.",
+    "files": ["/data/editions/sr5/core-rulebook.json"],
+    "status": "Not Started",
+    "dependsOn": ["B12.1.3"]
+  },
+  {
+    "id": "B12.2.7",
+    "title": "Add autosofts (Clearsight, Electronic Warfare, Evasion, Maneuvering, Stealth, Targeting) to core-rulebook.json",
+    "description": "Populate SR5 CRB autosofts.",
+    "files": ["/data/editions/sr5/core-rulebook.json"],
+    "status": "Not Started",
+    "dependsOn": ["B12.1.4"]
+  },
+  {
+    "id": "B12.2.8",
+    "title": "Add vehicle modifications (sensor upgrades, armor, weapons mounts, etc.) to core-rulebook.json",
+    "description": "Populate SR5 CRB vehicle modifications.",
+    "files": ["/data/editions/sr5/core-rulebook.json"],
+    "status": "Not Started",
+    "dependsOn": ["B12.1.5"]
+  }
+]
+```
+
+### B12.3 Ruleset Context & Hooks
+
+This milestone creates the React context hooks for accessing vehicle and drone data in components.
+
+**Files to modify:**
+- **B12.3.FM.1** `/lib/rules/RulesetContext.tsx`
+- **B12.3.FM.2** `/lib/rules/loader.ts`
+
+**Tasks:**
+
+| Task | Description | Status |
+|------|-------------|--------|
+| B12.3.1 | Add vehicle/drone extractors to loader.ts | Not Started |
+| B12.3.2 | Create useVehicles() hook in RulesetContext | Not Started |
+| B12.3.3 | Create useDrones() hook in RulesetContext | Not Started |
+| B12.3.4 | Create useRCCs() hook in RulesetContext | Not Started |
+| B12.3.5 | Create useAutosofts() hook in RulesetContext | Not Started |
+
+**Tasks JSON:**
+```json
+[
+  {
+    "id": "B12.3.1",
+    "title": "Add vehicle/drone extractors to loader.ts",
+    "description": "Update loader to extract vehicles, drones, RCCs, autosofts from ruleset.",
+    "files": ["/lib/rules/loader.ts"],
+    "status": "Not Started",
+    "dependsOn": ["B12.2.1", "B12.2.5", "B12.2.6", "B12.2.7"]
+  },
+  {
+    "id": "B12.3.2",
+    "title": "Create useVehicles() hook in RulesetContext",
+    "description": "Create hook for accessing vehicle catalog.",
+    "files": ["/lib/rules/RulesetContext.tsx"],
+    "status": "Not Started",
+    "dependsOn": ["B12.3.1"]
+  },
+  {
+    "id": "B12.3.3",
+    "title": "Create useDrones() hook in RulesetContext",
+    "description": "Create hook for accessing drone catalog.",
+    "files": ["/lib/rules/RulesetContext.tsx"],
+    "status": "Not Started",
+    "dependsOn": ["B12.3.1"]
+  },
+  {
+    "id": "B12.3.4",
+    "title": "Create useRCCs() hook in RulesetContext",
+    "description": "Create hook for accessing RCC catalog.",
+    "files": ["/lib/rules/RulesetContext.tsx"],
+    "status": "Not Started",
+    "dependsOn": ["B12.3.1"]
+  },
+  {
+    "id": "B12.3.5",
+    "title": "Create useAutosofts() hook in RulesetContext",
+    "description": "Create hook for accessing autosoft catalog.",
+    "files": ["/lib/rules/RulesetContext.tsx"],
+    "status": "Not Started",
+    "dependsOn": ["B12.3.1"]
+  }
+]
+```
+
+### B12.4 VehiclesStep Component
+
+This milestone creates the character creation step for selecting vehicles, drones, and RCCs during character creation.
+
+**Files to create:**
+- **B12.4.FC.1** `/app/characters/create/components/steps/VehiclesStep.tsx`
+
+**Files to modify:**
+- **B12.4.FM.1** `/app/characters/create/components/CreationWizard.tsx`
+- **B12.4.FM.2** `/lib/types/creation.ts`
+
+**Tasks:**
+
+| Task | Description | Status |
+|------|-------------|--------|
+| B12.4.1 | Create VehiclesStep component with vehicle catalog browser | Not Started |
+| B12.4.2 | Add drone selection with size category filtering | Not Started |
+| B12.4.3 | Add RCC selection for riggers | Not Started |
+| B12.4.4 | Add autosoft selection tied to owned drones | Not Started |
+| B12.4.5 | Implement nuyen budget tracking for vehicles/drones | Not Started |
+| B12.4.6 | Register VehiclesStep in CreationWizard | Not Started |
+| B12.4.7 | Display vehicles/drones in ReviewStep | Not Started |
+
+**Tasks JSON:**
+```json
+[
+  {
+    "id": "B12.4.1",
+    "title": "Create VehiclesStep component with vehicle catalog browser",
+    "description": "Create the main VehiclesStep component with browsable vehicle catalog.",
+    "files": ["/app/characters/create/components/steps/VehiclesStep.tsx"],
+    "status": "Not Started",
+    "dependsOn": ["B12.3.2"]
+  },
+  {
+    "id": "B12.4.2",
+    "title": "Add drone selection with size category filtering",
+    "description": "Add drone selection UI with filtering by size category.",
+    "files": ["/app/characters/create/components/steps/VehiclesStep.tsx"],
+    "status": "Not Started",
+    "dependsOn": ["B12.3.3"]
+  },
+  {
+    "id": "B12.4.3",
+    "title": "Add RCC selection for riggers",
+    "description": "Add RCC selection for rigger characters.",
+    "files": ["/app/characters/create/components/steps/VehiclesStep.tsx"],
+    "status": "Not Started",
+    "dependsOn": ["B12.3.4"]
+  },
+  {
+    "id": "B12.4.4",
+    "title": "Add autosoft selection tied to owned drones",
+    "description": "Add autosoft selection that works with selected drones.",
+    "files": ["/app/characters/create/components/steps/VehiclesStep.tsx"],
+    "status": "Not Started",
+    "dependsOn": ["B12.3.5", "B12.4.2"]
+  },
+  {
+    "id": "B12.4.5",
+    "title": "Implement nuyen budget tracking for vehicles/drones",
+    "description": "Track nuyen spending on vehicles and drones against budget.",
+    "files": ["/app/characters/create/components/steps/VehiclesStep.tsx"],
+    "status": "Not Started",
+    "dependsOn": ["B12.4.1"]
+  },
+  {
+    "id": "B12.4.6",
+    "title": "Register VehiclesStep in CreationWizard",
+    "description": "Add VehiclesStep to the creation wizard step registry.",
+    "files": ["/app/characters/create/components/CreationWizard.tsx"],
+    "status": "Not Started",
+    "dependsOn": ["B12.4.1"]
+  },
+  {
+    "id": "B12.4.7",
+    "title": "Display vehicles/drones in ReviewStep",
+    "description": "Show selected vehicles and drones in the review step.",
+    "files": ["/app/characters/create/components/steps/ReviewStep.tsx"],
+    "status": "Not Started",
+    "dependsOn": ["B12.4.6"]
+  }
+]
+```
+
+### B12.5 Acceptance Criteria
+
+- **B12.5.AC.1** [ ] All SR5 CRB vehicles available in catalog
+- **B12.5.AC.2** [ ] All SR5 CRB drones available by size category
+- **B12.5.AC.3** [ ] RCCs selectable with correct device ratings
+- **B12.5.AC.4** [ ] Autosofts purchasable for drones
+- **B12.5.AC.5** [ ] Nuyen budget properly tracked
+- **B12.5.AC.6** [ ] Vehicles/drones appear in ReviewStep
+- **B12.5.AC.7** [ ] Rigger character archetype fully creatable
+
+---
+
+## Phase B13: Decker Support (Programs)
+
+**Objective:** Complete decker character creation with Matrix programs.
+
+This phase implements the Matrix program system from the SR5 Core Rulebook (Chapter 10), enabling decker characters to be fully created with their required software. It includes common programs, hacking programs, and agent programs. Cyberdecks already exist in the gear system; this phase adds the programs to run on them.
+
+### B13.1 Program Data Structures
+
+This milestone establishes the data structures for Matrix programs.
+
+**Files to modify:**
+- **B13.1.FM.1** `/lib/types/edition.ts` (add Program interface)
+- **B13.1.FM.2** `/lib/types/character.ts` (add programs to character)
+
+**Tasks:**
+
+| Task | Description | Status |
+|------|-------------|--------|
+| B13.1.1 | Create Program interface (name, category: common/hacking/agent, cost, description, effects) | Not Started |
+| B13.1.2 | Add programs array to Character interface | Not Started |
+
+**Tasks JSON:**
+```json
+[
+  {
+    "id": "B13.1.1",
+    "title": "Create Program interface (name, category: common/hacking/agent, cost, description, effects)",
+    "description": "Create the Program interface for Matrix programs.",
+    "files": ["/lib/types/edition.ts"],
+    "status": "Not Started",
+    "dependsOn": []
+  },
+  {
+    "id": "B13.1.2",
+    "title": "Add programs array to Character interface",
+    "description": "Update Character interface to include owned programs.",
+    "files": ["/lib/types/character.ts"],
+    "status": "Not Started",
+    "dependsOn": ["B13.1.1"]
+  }
+]
+```
+
+### B13.2 Program Catalog Data
+
+This milestone populates the SR5 Core Rulebook programs into the ruleset data.
+
+**Files to modify:**
+- **B13.2.FM.1** `/data/editions/sr5/core-rulebook.json`
+
+**Tasks:**
+
+| Task | Description | Status |
+|------|-------------|--------|
+| B13.2.1 | Add common programs (Browse, Configurator, Edit, Encryption, Signal Scrub, Toolbox, Virtual Machine) | Not Started |
+| B13.2.2 | Add hacking programs (Armor, Baby Monitor, Biofeedback, Biofeedback Filter, Blackout, Decryption, Defuse, Demolition, Exploit, Fork, Guard, Hammer, Lockdown, Mugger, Shell, Sneak, Stealth, Track, Wrapper) | Not Started |
+| B13.2.3 | Add agent programs with ratings | Not Started |
+
+**Tasks JSON:**
+```json
+[
+  {
+    "id": "B13.2.1",
+    "title": "Add common programs (Browse, Configurator, Edit, Encryption, Signal Scrub, Toolbox, Virtual Machine)",
+    "description": "Populate SR5 CRB common programs.",
+    "files": ["/data/editions/sr5/core-rulebook.json"],
+    "status": "Not Started",
+    "dependsOn": ["B13.1.1"]
+  },
+  {
+    "id": "B13.2.2",
+    "title": "Add hacking programs (Armor, Baby Monitor, Biofeedback, etc.)",
+    "description": "Populate SR5 CRB hacking programs.",
+    "files": ["/data/editions/sr5/core-rulebook.json"],
+    "status": "Not Started",
+    "dependsOn": ["B13.1.1"]
+  },
+  {
+    "id": "B13.2.3",
+    "title": "Add agent programs with ratings",
+    "description": "Populate SR5 CRB agent programs.",
+    "files": ["/data/editions/sr5/core-rulebook.json"],
+    "status": "Not Started",
+    "dependsOn": ["B13.1.1"]
+  }
+]
+```
+
+### B13.3 Ruleset Context & Hooks
+
+This milestone creates the React context hooks for accessing program data.
+
+**Files to modify:**
+- **B13.3.FM.1** `/lib/rules/RulesetContext.tsx`
+- **B13.3.FM.2** `/lib/rules/loader.ts`
+
+**Tasks:**
+
+| Task | Description | Status |
+|------|-------------|--------|
+| B13.3.1 | Add program extractor to loader.ts | Not Started |
+| B13.3.2 | Create usePrograms() hook in RulesetContext | Not Started |
+
+**Tasks JSON:**
+```json
+[
+  {
+    "id": "B13.3.1",
+    "title": "Add program extractor to loader.ts",
+    "description": "Update loader to extract programs from ruleset.",
+    "files": ["/lib/rules/loader.ts"],
+    "status": "Not Started",
+    "dependsOn": ["B13.2.1", "B13.2.2", "B13.2.3"]
+  },
+  {
+    "id": "B13.3.2",
+    "title": "Create usePrograms() hook in RulesetContext",
+    "description": "Create hook for accessing program catalog.",
+    "files": ["/lib/rules/RulesetContext.tsx"],
+    "status": "Not Started",
+    "dependsOn": ["B13.3.1"]
+  }
+]
+```
+
+### B13.4 Program Selection in GearStep
+
+This milestone integrates program selection into the existing GearStep, since programs are purchased with nuyen like other gear.
+
+**Files to modify:**
+- **B13.4.FM.1** `/app/characters/create/components/steps/GearStep.tsx`
+
+**Tasks:**
+
+| Task | Description | Status |
+|------|-------------|--------|
+| B13.4.1 | Add programs category/tab to GearStep | Not Started |
+| B13.4.2 | Filter programs by category (common, hacking, agent) | Not Started |
+| B13.4.3 | Validate program count against cyberdeck capacity | Not Started |
+| B13.4.4 | Display owned programs in ReviewStep | Not Started |
+
+**Tasks JSON:**
+```json
+[
+  {
+    "id": "B13.4.1",
+    "title": "Add programs category/tab to GearStep",
+    "description": "Add a programs section to the GearStep for purchasing Matrix programs.",
+    "files": ["/app/characters/create/components/steps/GearStep.tsx"],
+    "status": "Not Started",
+    "dependsOn": ["B13.3.2"]
+  },
+  {
+    "id": "B13.4.2",
+    "title": "Filter programs by category (common, hacking, agent)",
+    "description": "Add filtering for program categories.",
+    "files": ["/app/characters/create/components/steps/GearStep.tsx"],
+    "status": "Not Started",
+    "dependsOn": ["B13.4.1"]
+  },
+  {
+    "id": "B13.4.3",
+    "title": "Validate program count against cyberdeck capacity",
+    "description": "Ensure programs don't exceed cyberdeck's program limit.",
+    "files": ["/app/characters/create/components/steps/GearStep.tsx"],
+    "status": "Not Started",
+    "dependsOn": ["B13.4.1"]
+  },
+  {
+    "id": "B13.4.4",
+    "title": "Display owned programs in ReviewStep",
+    "description": "Show purchased programs in the review step.",
+    "files": ["/app/characters/create/components/steps/ReviewStep.tsx"],
+    "status": "Not Started",
+    "dependsOn": ["B13.4.1"]
+  }
+]
+```
+
+### B13.5 Acceptance Criteria
+
+- **B13.5.AC.1** [ ] All SR5 CRB common programs available
+- **B13.5.AC.2** [ ] All SR5 CRB hacking programs available
+- **B13.5.AC.3** [ ] Agent programs available with ratings
+- **B13.5.AC.4** [ ] Program count validated against cyberdeck capacity
+- **B13.5.AC.5** [ ] Decker character archetype fully creatable
+
+---
+
+## Phase B14: Foci & Spirits
+
+**Objective:** Complete magical character creation with foci catalog and spirit data.
+
+This phase implements magical foci and spirit stats from the SR5 Core Rulebook, enabling full magical character creation. It includes the foci catalog (weapon foci, power foci, sustaining foci, etc.) and spirit data with powers for summoning reference. Mages can purchase foci during character creation and have reference data for the spirits they can summon.
+
+### B14.1 Foci Data Structures
+
+This milestone establishes the data structures for magical foci.
+
+**Files to modify:**
+- **B14.1.FM.1** `/lib/types/edition.ts` (add Focus interface)
+- **B14.1.FM.2** `/lib/types/character.ts` (add foci to character)
+
+**Tasks:**
+
+| Task | Description | Status |
+|------|-------------|--------|
+| B14.1.1 | Create Focus interface (type, force, bonded, karmaTooBond, cost) | Not Started |
+| B14.1.2 | Create FocusType enum (Enchanting, Metamagic, Power, Qi, Spell, Spirit, Weapon) | Not Started |
+| B14.1.3 | Add foci array to Character interface | Not Started |
+
+**Tasks JSON:**
+```json
+[
+  {
+    "id": "B14.1.1",
+    "title": "Create Focus interface (type, force, bonded, karmaToBond, cost)",
+    "description": "Create the Focus interface for magical foci.",
+    "files": ["/lib/types/edition.ts"],
+    "status": "Not Started",
+    "dependsOn": []
+  },
+  {
+    "id": "B14.1.2",
+    "title": "Create FocusType enum (Enchanting, Metamagic, Power, Qi, Spell, Spirit, Weapon)",
+    "description": "Create enum for focus types from SR5 CRB.",
+    "files": ["/lib/types/edition.ts"],
+    "status": "Not Started",
+    "dependsOn": []
+  },
+  {
+    "id": "B14.1.3",
+    "title": "Add foci array to Character interface",
+    "description": "Update Character interface to include owned foci.",
+    "files": ["/lib/types/character.ts"],
+    "status": "Not Started",
+    "dependsOn": ["B14.1.1"]
+  }
+]
+```
+
+### B14.2 Spirit Data Structures
+
+This milestone establishes the data structures for spirits that mages can summon.
+
+**Files to modify:**
+- **B14.2.FM.1** `/lib/types/edition.ts` (add Spirit interface)
+
+**Tasks:**
+
+| Task | Description | Status |
+|------|-------------|--------|
+| B14.2.1 | Create Spirit interface (type, force, services, powers, optionalPowers, weaknesses) | Not Started |
+| B14.2.2 | Create SpiritPower interface (name, description, action, range, duration) | Not Started |
+| B14.2.3 | Create SpiritType enum (Air, Beasts, Earth, Fire, Man, Water, Guardian, Guidance, Plant, Task) | Not Started |
+
+**Tasks JSON:**
+```json
+[
+  {
+    "id": "B14.2.1",
+    "title": "Create Spirit interface (type, force, services, powers, optionalPowers, weaknesses)",
+    "description": "Create the Spirit interface for summoned spirits.",
+    "files": ["/lib/types/edition.ts"],
+    "status": "Not Started",
+    "dependsOn": []
+  },
+  {
+    "id": "B14.2.2",
+    "title": "Create SpiritPower interface (name, description, action, range, duration)",
+    "description": "Create interface for spirit powers.",
+    "files": ["/lib/types/edition.ts"],
+    "status": "Not Started",
+    "dependsOn": []
+  },
+  {
+    "id": "B14.2.3",
+    "title": "Create SpiritType enum (Air, Beasts, Earth, Fire, Man, Water, Guardian, Guidance, Plant, Task)",
+    "description": "Create enum for spirit types from SR5 CRB.",
+    "files": ["/lib/types/edition.ts"],
+    "status": "Not Started",
+    "dependsOn": []
+  }
+]
+```
+
+### B14.3 Foci & Spirit Catalog Data
+
+This milestone populates the SR5 Core Rulebook foci and spirit data.
+
+**Files to modify:**
+- **B14.3.FM.1** `/data/editions/sr5/core-rulebook.json`
+
+**Tasks:**
+
+| Task | Description | Status |
+|------|-------------|--------|
+| B14.3.1 | Add foci types with costs (Force × multiplier) to core-rulebook.json | Not Started |
+| B14.3.2 | Add spirit types with base powers to core-rulebook.json | Not Started |
+| B14.3.3 | Add spirit optional powers list to core-rulebook.json | Not Started |
+| B14.3.4 | Add spirit weaknesses by type to core-rulebook.json | Not Started |
+
+**Tasks JSON:**
+```json
+[
+  {
+    "id": "B14.3.1",
+    "title": "Add foci types with costs (Force × multiplier) to core-rulebook.json",
+    "description": "Populate SR5 CRB foci with cost formulas (e.g., Weapon Focus = Force × 7,000¥).",
+    "files": ["/data/editions/sr5/core-rulebook.json"],
+    "status": "Not Started",
+    "dependsOn": ["B14.1.1", "B14.1.2"]
+  },
+  {
+    "id": "B14.3.2",
+    "title": "Add spirit types with base powers to core-rulebook.json",
+    "description": "Populate SR5 CRB spirit types with their innate powers.",
+    "files": ["/data/editions/sr5/core-rulebook.json"],
+    "status": "Not Started",
+    "dependsOn": ["B14.2.1", "B14.2.2", "B14.2.3"]
+  },
+  {
+    "id": "B14.3.3",
+    "title": "Add spirit optional powers list to core-rulebook.json",
+    "description": "Populate the optional powers spirits can have.",
+    "files": ["/data/editions/sr5/core-rulebook.json"],
+    "status": "Not Started",
+    "dependsOn": ["B14.2.2"]
+  },
+  {
+    "id": "B14.3.4",
+    "title": "Add spirit weaknesses by type to core-rulebook.json",
+    "description": "Populate spirit weaknesses (Allergy to sunlight, etc.).",
+    "files": ["/data/editions/sr5/core-rulebook.json"],
+    "status": "Not Started",
+    "dependsOn": ["B14.2.1"]
+  }
+]
+```
+
+### B14.4 Ruleset Context & Hooks
+
+This milestone creates the React context hooks for accessing foci and spirit data.
+
+**Files to modify:**
+- **B14.4.FM.1** `/lib/rules/RulesetContext.tsx`
+- **B14.4.FM.2** `/lib/rules/loader.ts`
+
+**Tasks:**
+
+| Task | Description | Status |
+|------|-------------|--------|
+| B14.4.1 | Add foci extractor to loader.ts | Not Started |
+| B14.4.2 | Add spirits extractor to loader.ts | Not Started |
+| B14.4.3 | Create useFoci() hook in RulesetContext | Not Started |
+| B14.4.4 | Create useSpirits() hook in RulesetContext | Not Started |
+
+**Tasks JSON:**
+```json
+[
+  {
+    "id": "B14.4.1",
+    "title": "Add foci extractor to loader.ts",
+    "description": "Update loader to extract foci from ruleset.",
+    "files": ["/lib/rules/loader.ts"],
+    "status": "Not Started",
+    "dependsOn": ["B14.3.1"]
+  },
+  {
+    "id": "B14.4.2",
+    "title": "Add spirits extractor to loader.ts",
+    "description": "Update loader to extract spirits from ruleset.",
+    "files": ["/lib/rules/loader.ts"],
+    "status": "Not Started",
+    "dependsOn": ["B14.3.2"]
+  },
+  {
+    "id": "B14.4.3",
+    "title": "Create useFoci() hook in RulesetContext",
+    "description": "Create hook for accessing foci catalog.",
+    "files": ["/lib/rules/RulesetContext.tsx"],
+    "status": "Not Started",
+    "dependsOn": ["B14.4.1"]
+  },
+  {
+    "id": "B14.4.4",
+    "title": "Create useSpirits() hook in RulesetContext",
+    "description": "Create hook for accessing spirit data.",
+    "files": ["/lib/rules/RulesetContext.tsx"],
+    "status": "Not Started",
+    "dependsOn": ["B14.4.2"]
+  }
+]
+```
+
+### B14.5 Foci Selection in GearStep
+
+This milestone integrates foci selection into the GearStep for magical characters.
+
+**Files to modify:**
+- **B14.5.FM.1** `/app/characters/create/components/steps/GearStep.tsx`
+
+**Tasks:**
+
+| Task | Description | Status |
+|------|-------------|--------|
+| B14.5.1 | Add foci category/tab to GearStep (magical characters only) | Not Started |
+| B14.5.2 | Implement focus force selection (1-6 for starting characters) | Not Started |
+| B14.5.3 | Calculate focus costs (Force × type multiplier) | Not Started |
+| B14.5.4 | Track karma cost for bonding foci (Focus Force × bonding multiplier) | Not Started |
+| B14.5.5 | Display owned foci in ReviewStep | Not Started |
+
+**Tasks JSON:**
+```json
+[
+  {
+    "id": "B14.5.1",
+    "title": "Add foci category/tab to GearStep (magical characters only)",
+    "description": "Add a foci section to GearStep, visible only for magical characters.",
+    "files": ["/app/characters/create/components/steps/GearStep.tsx"],
+    "status": "Not Started",
+    "dependsOn": ["B14.4.3"]
+  },
+  {
+    "id": "B14.5.2",
+    "title": "Implement focus force selection (1-6 for starting characters)",
+    "description": "Allow selecting force rating for foci.",
+    "files": ["/app/characters/create/components/steps/GearStep.tsx"],
+    "status": "Not Started",
+    "dependsOn": ["B14.5.1"]
+  },
+  {
+    "id": "B14.5.3",
+    "title": "Calculate focus costs (Force × type multiplier)",
+    "description": "Implement cost calculation for foci purchases.",
+    "files": ["/app/characters/create/components/steps/GearStep.tsx"],
+    "status": "Not Started",
+    "dependsOn": ["B14.5.2"]
+  },
+  {
+    "id": "B14.5.4",
+    "title": "Track karma cost for bonding foci (Focus Force × bonding multiplier)",
+    "description": "Track karma spent on bonding foci.",
+    "files": ["/app/characters/create/components/steps/GearStep.tsx"],
+    "status": "Not Started",
+    "dependsOn": ["B14.5.2"]
+  },
+  {
+    "id": "B14.5.5",
+    "title": "Display owned foci in ReviewStep",
+    "description": "Show purchased foci in the review step.",
+    "files": ["/app/characters/create/components/steps/ReviewStep.tsx"],
+    "status": "Not Started",
+    "dependsOn": ["B14.5.1"]
+  }
+]
+```
+
+### B14.6 Spirit Reference Display
+
+This milestone adds spirit reference information for magical characters to help with summoning.
+
+**Files to modify:**
+- **B14.6.FM.1** `/app/characters/create/components/steps/MagicStep.tsx` (or new component)
+
+**Tasks:**
+
+| Task | Description | Status |
+|------|-------------|--------|
+| B14.6.1 | Display available spirit types based on tradition | Not Started |
+| B14.6.2 | Show spirit powers and weaknesses for reference | Not Started |
+
+**Tasks JSON:**
+```json
+[
+  {
+    "id": "B14.6.1",
+    "title": "Display available spirit types based on tradition",
+    "description": "Show which spirits the character can summon based on their tradition.",
+    "files": ["/app/characters/create/components/steps/MagicStep.tsx"],
+    "status": "Not Started",
+    "dependsOn": ["B14.4.4"]
+  },
+  {
+    "id": "B14.6.2",
+    "title": "Show spirit powers and weaknesses for reference",
+    "description": "Display spirit stat blocks for reference during creation.",
+    "files": ["/app/characters/create/components/steps/MagicStep.tsx"],
+    "status": "Not Started",
+    "dependsOn": ["B14.6.1"]
+  }
+]
+```
+
+### B14.7 Acceptance Criteria
+
+- **B14.7.AC.1** [ ] All SR5 CRB foci types available
+- **B14.7.AC.2** [ ] Focus costs calculated correctly (Force × multiplier)
+- **B14.7.AC.3** [ ] Karma bonding costs tracked
+- **B14.7.AC.4** [ ] All SR5 CRB spirit types with powers documented
+- **B14.7.AC.5** [ ] Spirit reference available based on tradition
+- **B14.7.AC.6** [ ] Full mage/shaman character creatable with foci
 
 ---
 
