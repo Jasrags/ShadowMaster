@@ -1,0 +1,173 @@
+/**
+ * Minimal ruleset data for testing
+ * 
+ * Provides simplified ruleset data that can be used in tests
+ * without loading the full SR5 ruleset.
+ */
+
+import type { Edition, Book, MergedRuleset } from '@/lib/types';
+
+/**
+ * Minimal edition data for testing
+ */
+export function createMockEdition(overrides?: Partial<Edition>): Edition {
+  return {
+    id: 'sr5',
+    name: 'Shadowrun 5th Edition',
+    shortCode: 'sr5',
+    version: '1.0.0',
+    description: 'Test edition',
+    releaseYear: 2013,
+    bookIds: ['core-rulebook'],
+    creationMethodIds: ['priority'],
+    defaultCreationMethodId: 'priority',
+    createdAt: new Date().toISOString(),
+    updatedAt: new Date().toISOString(),
+    ...overrides,
+  };
+}
+
+/**
+ * Minimal book data for testing
+ */
+export function createMockBook(overrides?: Partial<Book>): Book {
+  return {
+    id: 'core-rulebook',
+    editionId: 'sr5',
+    name: 'Core Rulebook',
+    loadOrder: 1,
+    payload: {
+      modules: {
+        metatypes: {
+          payload: {
+            human: {
+              id: 'human',
+              name: 'Human',
+              attributes: {
+                body: { min: 1, max: 6 },
+                agility: { min: 1, max: 6 },
+                reaction: { min: 1, max: 6 },
+                strength: { min: 1, max: 6 },
+                willpower: { min: 1, max: 6 },
+                logic: { min: 1, max: 6 },
+                intuition: { min: 1, max: 6 },
+                charisma: { min: 1, max: 6 },
+              },
+            },
+            elf: {
+              id: 'elf',
+              name: 'Elf',
+              attributes: {
+                body: { min: 1, max: 6 },
+                agility: { min: 1, max: 7 },
+                reaction: { min: 1, max: 6 },
+                strength: { min: 1, max: 6 },
+                willpower: { min: 1, max: 6 },
+                logic: { min: 1, max: 6 },
+                intuition: { min: 1, max: 6 },
+                charisma: { min: 2, max: 8 },
+              },
+            },
+          },
+        },
+        skills: {
+          payload: {
+            'firearms': {
+              id: 'firearms',
+              name: 'Firearms',
+              linkedAttribute: 'agility',
+              group: 'combat',
+              canDefault: true,
+            },
+            'athletics': {
+              id: 'athletics',
+              name: 'Athletics',
+              linkedAttribute: 'strength',
+              group: 'physical',
+              canDefault: true,
+            },
+          },
+        },
+        'priority-table': {
+          payload: {
+            levels: ['A', 'B', 'C', 'D', 'E'],
+            categories: [
+              { id: 'metatype', name: 'Metatype' },
+              { id: 'attributes', name: 'Attributes' },
+              { id: 'skills', name: 'Skills' },
+              { id: 'magic', name: 'Magic/Resonance' },
+              { id: 'resources', name: 'Resources' },
+            ],
+            table: {
+              A: { metatype: 'human', attributes: 24, skills: 46, magic: 'mundane', resources: 450000 },
+              B: { metatype: 'human', attributes: 20, skills: 36, magic: 'mundane', resources: 275000 },
+              C: { metatype: 'human', attributes: 16, skills: 28, magic: 'mundane', resources: 140000 },
+              D: { metatype: 'human', attributes: 14, skills: 22, magic: 'mundane', resources: 50000 },
+              E: { metatype: 'human', attributes: 12, skills: 18, magic: 'mundane', resources: 6000 },
+            },
+          },
+        },
+      },
+    },
+    ...overrides,
+  };
+}
+
+/**
+ * Minimal merged ruleset for testing
+ */
+export function createMockMergedRuleset(overrides?: Partial<MergedRuleset>): MergedRuleset {
+  return {
+    snapshotId: 'test-snapshot-id',
+    editionId: 'sr5',
+    editionCode: 'sr5',
+    bookIds: ['core-rulebook'],
+    modules: {
+      metatypes: {
+        human: {
+          id: 'human',
+          name: 'Human',
+          attributes: {
+            body: { min: 1, max: 6 },
+            agility: { min: 1, max: 6 },
+            reaction: { min: 1, max: 6 },
+            strength: { min: 1, max: 6 },
+            willpower: { min: 1, max: 6 },
+            logic: { min: 1, max: 6 },
+            intuition: { min: 1, max: 6 },
+            charisma: { min: 1, max: 6 },
+          },
+        },
+      },
+      skills: {
+        'firearms': {
+          id: 'firearms',
+          name: 'Firearms',
+          linkedAttribute: 'agility',
+          group: 'combat',
+          canDefault: true,
+        },
+      },
+      'priority-table': {
+        levels: ['A', 'B', 'C', 'D', 'E'],
+        categories: [
+          { id: 'metatype', name: 'Metatype' },
+          { id: 'attributes', name: 'Attributes' },
+          { id: 'skills', name: 'Skills' },
+          { id: 'magic', name: 'Magic/Resonance' },
+          { id: 'resources', name: 'Resources' },
+        ],
+        table: {
+          A: { metatype: 'human', attributes: 24, skills: 46, magic: 'mundane', resources: 450000 },
+          B: { metatype: 'human', attributes: 20, skills: 36, magic: 'mundane', resources: 275000 },
+          C: { metatype: 'human', attributes: 16, skills: 28, magic: 'mundane', resources: 140000 },
+          D: { metatype: 'human', attributes: 14, skills: 22, magic: 'mundane', resources: 50000 },
+          E: { metatype: 'human', attributes: 12, skills: 18, magic: 'mundane', resources: 6000 },
+        },
+      },
+    },
+    createdAt: new Date().toISOString(),
+    ...overrides,
+  };
+}
+

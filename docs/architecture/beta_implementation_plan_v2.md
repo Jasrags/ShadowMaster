@@ -148,7 +148,7 @@ This section provides a comprehensive view of the entire implementation roadmap,
 6. Qualities Selection      ✅ Complete (MVP) + M0.4 enhancements completed
 7. Augmentations           ✅ Complete (B1)
 8. Spells/Powers           ✅ M0.7 SpellsStep (magical) / ✅ B5 AdeptPowersStep (adepts)
-9. Complex Forms           🔜 B7 (technomancers only)
+9. Complex Forms           ✅ B7 (technomancers only)
 10. Contacts               ✅ Complete (MVP) + M0.5 enhancements completed
 11. Gear & Resources       ✅ Complete (MVP) + M0.6 karma-to-nuyen completed + 🔜 B10 modifications support
 12. Identities & Lifestyles 🔜 B11 (SINs, licenses, lifestyle management)
@@ -173,19 +173,19 @@ This section provides a comprehensive view of the entire implementation roadmap,
 | | M0.7 | SpellsStep Creation | - | Critical | ✅ Complete |
 | | M0.8 | Aspected Mage Enhancements | - | Critical | ✅ Complete |
 | 2 | **B1** | **Cyberware/Bioware System** | **2-3 weeks** | **High** | ✅ **Complete** |
-| 3 | **B5** | **Adept Powers System** | **1-2 weeks** | **High** | ✅ **Complete** |
-| 4 | **B7** | **Complex Forms & Matrix** | **1-2 weeks** | **High** | 🔜 Not Started |
-| 5 | **B12** | **Rigger Support (Vehicles & Drones)** | **2-3 weeks** | **High** | Not Started |
-| 6 | **B13** | **Decker Support (Programs)** | **1 week** | **High** | Not Started |
-| 7 | **B14** | **Foci & Spirits** | **2 weeks** | **High** | Not Started |
-| 8 | **B11** | **Identity/Lifestyle/SIN System** | **2-3 weeks** | **High** | Not Started |
-| 9 | **B6** | **Spell Management** | **1-2 weeks** | **High** | Not Started |
-| 10 | **B10** | **Gear Modifications** | **2-3 weeks** | **Medium** | Not Started |
-| 11 | **B2** | **Sourcebook Integration** | **2 weeks** | **Medium** | Not Started |
-| 12 | **B8** | **UI/UX Improvements** | **1-2 weeks** | **Medium** | Not Started |
-| 13 | **B4** | **Combat Tracker** | **3-4 weeks** | **Medium** | Not Started |
-| 14 | **B3** | **Inventory Management** | **1-2 weeks** | **Medium** | Not Started |
-| 15 | **B9** | **Session Persistence & WebSockets** | **2-3 weeks** | **Low** | Not Started |
+| 3  | **B5**  | **Adept Powers System**             | **1-2 weeks**  | **High**   | ✅ **Complete**   |
+| 4  | **B7**  | **Complex Forms & Matrix**          | **1-2 weeks**  | **High**   | ✅ **Complete**   |
+| 5  | **B12** | **Rigger Support (Vehicles & Drones)** | **2-3 weeks**  | **High**   | Not Started      |
+| 6  | **B13** | **Decker Support (Programs)**       | **1 week**     | **High**   | Not Started      |
+| 7  | **B14** | **Foci & Spirits**                  | **2 weeks**    | **High**   | Not Started      |
+| 8  | **B11** | **Identity/Lifestyle/SIN System**   | **2-3 weeks**  | **High**   | Not Started      |
+| 9  | **B6**  | **Spell Management**                | **1-2 weeks**  | **High**   | Not Started      |
+| 10 | **B10** | **Gear Modifications**              | **2-3 weeks**  | **Medium** | Not Started      |
+| 11 | **B2**  | **Sourcebook Integration**          | **2 weeks**    | **Medium** | Not Started      |
+| 12 | **B8**  | **UI/UX Improvements**              | **1-2 weeks**  | **Medium** | Not Started      |
+| 13 | **B4**  | **Combat Tracker**                  | **3-4 weeks**  | **Medium** | Not Started      |
+| 14 | **B3**  | **Inventory Management**            | **1-2 weeks**  | **Medium** | Not Started      |
+| 15 | **B9**  | **Session Persistence & WebSockets**| **2-3 weeks**  | **Low**    | Not Started      |
 
 ### Completed Work Summary
 
@@ -194,6 +194,8 @@ This section provides a comprehensive view of the entire implementation roadmap,
 | MVP Core | Dec 2024 | Priority system, metatypes, attributes, skills, qualities, contacts, gear, review |
 | B1 Cyberware | Dec 2024 | 70+ cyberware items, 60+ bioware items, essence tracking, grade selection, AugmentationsStep |
 | B5 Adept Powers | Jan 2025 | 50+ adept powers catalog, AdeptPowersStep component, power point budgeting, mystic adept karma purchases (5 Karma = 1 PP), conditional Assensing skill availability |
+| B7 Complex Forms & Matrix | Dec 2025 | Complex forms corrections, sprite types/powers added, Living Persona + Matrix Initiative display fixes |
+| Maintenance | Dec 2025 | SR5 Magic/Resonance loss rounding fix (small essence loss no longer drops 1 point); persist Karma→Nuyen conversion so augmentations and gear share one consistent nuyen budget |
 | M0.1 Bug Fixes | Dec 2024 | Validation panel consistency fix, synced validation state across wizard |
 | M0.2 Metatype | Dec 2024 | Racial traits auto-populated, racialQualities field, ReviewStep display |
 | M0.3 Skills | Dec 2024 | Magical/resonance skill filtering, suggested specializations for all skills, example knowledge skills (40+) and languages (20+) with quick-add dropdowns |
@@ -226,14 +228,14 @@ This section provides a comprehensive view of the entire implementation roadmap,
 |-------|-----------|----------|----------|--------|
 | **M0** | **MVP Gaps & Enhancements** | **1-2 weeks** | **Critical** | ✅ **Complete** |
 | B1 | Cyberware/Bioware System | 2-3 weeks | High | ✅ Complete |
-| B5 | Adept Powers System | 1-2 weeks | High | ✅ Complete |
-| B7 | Complex Forms & Matrix | 1-2 weeks | High | 🔜 Next |
-| B12 | Rigger Support (Vehicles & Drones) | 2-3 weeks | High | Not Started |
-| B13 | Decker Support (Programs) | 1 week | High | Not Started |
-| B14 | Foci & Spirits | 2 weeks | High | Not Started |
-| B11 | Identity/Lifestyle/SIN System | 2-3 weeks | High | Not Started |
-| B6 | Spell Management | 1-2 weeks | High | Not Started |
-| B10 | Gear Modifications | 2-3 weeks | Medium | Not Started |
+| B5  | Adept Powers System              | 1-2 weeks  | High   | ✅ Complete   |
+| B7  | Complex Forms & Matrix           | 1-2 weeks  | High   | ✅ Complete   |
+| B12 | Rigger Support (Vehicles & Drones)| 2-3 weeks | High   | Not Started  |
+| B13 | Decker Support (Programs)        | 1 week     | High   | Not Started  |
+| B14 | Foci & Spirits                   | 2 weeks    | High   | Not Started  |
+| B11 | Identity/Lifestyle/SIN System    | 2-3 weeks  | High   | Not Started  |
+| B6  | Spell Management                 | 1-2 weeks  | High   | Not Started  |
+| B10 | Gear Modifications               | 2-3 weeks  | Medium | Not Started  |
 | B2 | Sourcebook Integration | 2 weeks | Medium | Not Started |
 | B8 | UI/UX Improvements | 1-2 weeks | Medium | Not Started |
 | B4 | Combat Tracker | 3-4 weeks | Medium | Not Started |
@@ -1692,13 +1694,13 @@ This milestone creates a UI component that allows players to select which source
 This milestone creates comprehensive tests for the ruleset merging system to ensure all sourcebooks combine correctly without conflicts. It verifies that append, replace, and other merge strategies work as intended when combining core rules with sourcebook content. The goal is to catch merge conflicts and data inconsistencies before they affect character creation, and to create a testing framework that works for current and future sourcebooks.
 
 **Files to create:**
-- **B2.3.FC.1** `/lib/rules/__tests__/merge.test.ts` (when testing framework added)
+- **B2.3.FC.1** `/lib/rules/__tests__/merge.test.ts` ✅ Complete - Testing framework implemented with Vitest
 
 **Tasks:**
 
 | Task | Description | Status |
 |------|-------------|--------|
-| B2.3.1 | Create comprehensive merge testing framework (test append/replace strategies, verify merge order, test ID conflicts) | Not Started |
+| B2.3.1 | Create comprehensive merge testing framework (test append/replace strategies, verify merge order, test ID conflicts) | ✅ Complete |
 | B2.3.2 | Document any ID conflicts and resolutions | Not Started |
 
 **Tasks JSON:**
@@ -1711,7 +1713,7 @@ This milestone creates comprehensive tests for the ruleset merging system to ens
     "files": [
       "/lib/rules/__tests__/merge.test.ts"
     ],
-    "status": "Not Started",
+    "status": "✅ Complete",
     "dependsOn": ["B2.1.2", "B2.1.4"]
   },
   {
@@ -1726,6 +1728,12 @@ This milestone creates comprehensive tests for the ruleset merging system to ens
   }
 ]
 ```
+
+**Note:** Testing infrastructure has been fully implemented (Phase 1 & 2 complete):
+- Vitest configured with React Testing Library
+- 182 unit tests passing (merge, loader, storage, auth)
+- CI/CD integration complete
+- See `/lib/rules/__tests__/merge.test.ts` for comprehensive merge strategy tests (37 tests covering all merge strategies, edge cases, and immutability)
 
 ### B2.4 Acceptance Criteria
 
@@ -3662,8 +3670,8 @@ This milestone implements complete technomancer character support including the 
 
 | Task | Description | Status |
 |------|-------------|--------|
-| B7.1.1 | Expand complex forms catalog (~30 forms) with ComplexForm interface, categorization, and threading rules | Not Started |
-| B7.1.2 | Implement Living Persona calculations and display (Matrix attributes, Matrix Initiative) | Not Started |
+| B7.1.1 | Expand complex forms catalog (~30 forms) with ComplexForm interface, categorization, and threading rules | Complete |
+| B7.1.2 | Implement Living Persona calculations and display (Matrix attributes, Matrix Initiative) | Complete |
 
 **Tasks JSON:**
 ```json
@@ -3676,7 +3684,7 @@ This milestone implements complete technomancer character support including the 
       "/data/editions/sr5/core-rulebook.json",
       "/app/characters/create/components/steps/ReviewStep.tsx"
     ],
-    "status": "Not Started",
+    "status": "Complete",
     "dependsOn": []
   },
   {
@@ -3686,7 +3694,7 @@ This milestone implements complete technomancer character support including the 
     "files": [
       "/app/characters/create/components/steps/ReviewStep.tsx"
     ],
-    "status": "Not Started",
+    "status": "Complete",
     "dependsOn": ["B7.1.1"]
   }
 ]
@@ -3694,10 +3702,10 @@ This milestone implements complete technomancer character support including the 
 
 ### B7.2 Acceptance Criteria
 
-- **B7.2.AC.1** [ ] Complete complex forms catalog available
-- **B7.2.AC.2** [ ] Fading values correctly displayed
-- **B7.2.AC.3** [ ] Living Persona calculated for technomancers
-- **B7.2.AC.4** [ ] Matrix Initiative calculated correctly
+- **B7.2.AC.1** [x] Complete complex forms catalog available
+- **B7.2.AC.2** [x] Fading values correctly displayed
+- **B7.2.AC.3** [x] Living Persona calculated for technomancers
+- **B7.2.AC.4** [x] Matrix Initiative calculated correctly
 
 ---
 
@@ -5366,7 +5374,7 @@ Post-Creation Components:
         "B2.3": {
           "id": "B2.3",
           "name": "Merge Algorithm Testing",
-          "status": "Not Started",
+          "status": "✅ Complete",
           "dependsOn": ["B2.1.2", "B2.1.4"],
           "dataStructures": [],
           "components": [],
@@ -5703,7 +5711,7 @@ This section documents all external dependencies, data requirements, and phase i
 | Dependency | Required For | Notes |
 |------------|--------------|-------|
 | WebSocket library | B9 | Socket.io recommended for Next.js |
-| Test framework | B2.4 | Jest + React Testing Library |
+| Test framework | B2.4 | Vitest + React Testing Library |
 | Mobile testing | B8 | Physical devices or BrowserStack |
 
 ### Data Dependencies
