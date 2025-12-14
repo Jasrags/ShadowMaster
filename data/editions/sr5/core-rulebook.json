@@ -9644,7 +9644,7 @@
               },
               {
                 "id": "programs",
-                "name": "Matrix Programs",
+                "title": "Matrix Programs",
                 "description": "Select Matrix programs for your cyberdeck",
                 "type": "purchase",
                 "payload": {

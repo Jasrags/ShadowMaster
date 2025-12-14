@@ -72,34 +72,16 @@ export function ProgramsStep({ state, updateState, budgetValues }: StepProps) {
     (state.selections?.gear as Array<{ cost: number; quantity: number }>) || []
   ).reduce((sum, item) => sum + item.cost * item.quantity, 0);
 
-  const vehiclesSpent = (
-    (state.selections?.vehicles as Array<{ cost: number }>) || []
-  ).reduce((sum, item) => sum + item.cost, 0);
+  const lifestyleCost = (state.selections?.lifestyle as { monthlyCost: number })?.monthlyCost || 0;
+  const augmentationSpent = (state.budgets?.["nuyen-spent-augmentations"] as number) || 0;
+  const vehiclesSpent =
+    ((state.selections?.vehicles as Array<{ cost: number }>) || []).reduce((sum, v) => sum + v.cost, 0) +
+    ((state.selections?.drones as Array<{ cost: number }>) || []).reduce((sum, d) => sum + d.cost, 0) +
+    ((state.selections?.rccs as Array<{ cost: number }>) || []).reduce((sum, r) => sum + r.cost, 0) +
+    ((state.selections?.autosofts as Array<{ cost: number }>) || []).reduce((sum, a) => sum + a.cost, 0);
 
-  const dronesSpent = (
-    (state.selections?.drones as Array<{ cost: number }>) || []
-  ).reduce((sum, item) => sum + item.cost, 0);
-
-  const rccsSpent = (
-    (state.selections?.rccs as Array<{ cost: number }>) || []
-  ).reduce((sum, item) => sum + item.cost, 0);
-
-  const autosoftsSpent = (
-    (state.selections?.autosofts as Array<{ cost: number }>) || []
-  ).reduce((sum, item) => sum + item.cost, 0);
-
-  const programsSpent = selectedPrograms.reduce(
-    (sum, program) => sum + program.cost,
-    0
-  );
-
-  const totalSpent =
-    gearSpent +
-    vehiclesSpent +
-    dronesSpent +
-    rccsSpent +
-    autosoftsSpent +
-    programsSpent;
+  const programsSpent = selectedPrograms.reduce((sum, program) => sum + program.cost, 0);
+  const totalSpent = gearSpent + lifestyleCost + augmentationSpent + vehiclesSpent + programsSpent;
   const remaining = totalNuyen - totalSpent;
 
   // Filter programs based on tab and search
@@ -111,14 +93,13 @@ export function ProgramsStep({ state, updateState, budgetValues }: StepProps) {
       items = items.filter(
         (item) =>
           item.name.toLowerCase().includes(query) ||
-          item.description?.toLowerCase().includes(query)
+          item.description?.toLowerCase().includes(query) ||
+          item.effects?.toLowerCase().includes(query)
       );
     }
 
     if (!showUnavailable) {
-      items = items.filter((item) =>
-        isItemAvailable(item.availability, item.forbidden)
-      );
+      items = items.filter((item) => isItemAvailable(item.availability, item.forbidden));
     }
 
     return items.sort((a, b) => a.name.localeCompare(b.name));
@@ -132,14 +113,13 @@ export function ProgramsStep({ state, updateState, budgetValues }: StepProps) {
       items = items.filter(
         (item) =>
           item.name.toLowerCase().includes(query) ||
-          item.description?.toLowerCase().includes(query)
+          item.description?.toLowerCase().includes(query) ||
+          item.effects?.toLowerCase().includes(query)
       );
     }
 
     if (!showUnavailable) {
-      items = items.filter((item) =>
-        isItemAvailable(item.availability, item.forbidden)
-      );
+      items = items.filter((item) => isItemAvailable(item.availability, item.forbidden));
     }
 
     return items.sort((a, b) => a.name.localeCompare(b.name));
@@ -153,12 +133,25 @@ export function ProgramsStep({ state, updateState, budgetValues }: StepProps) {
       items = items.filter(
         (item) =>
           item.name.toLowerCase().includes(query) ||
-          item.description?.toLowerCase().includes(query)
+          item.description?.toLowerCase().includes(query) ||
+          item.effects?.toLowerCase().includes(query)
       );
     }
 
     return items;
   }, [programsByCategory.agents, searchQuery]);
+
+  // Get current filtered items based on active tab
+  const currentFilteredItems = useMemo(() => {
+    switch (activeTab) {
+      case "common":
+        return filteredCommon;
+      case "hacking":
+        return filteredHacking;
+      case "agents":
+        return filteredAgents;
+    }
+  }, [activeTab, filteredCommon, filteredHacking, filteredAgents]);
 
   // Add program
   const addProgram = useCallback(
@@ -211,271 +204,217 @@ export function ProgramsStep({ state, updateState, budgetValues }: StepProps) {
     return selectedPrograms.some((p) => p.catalogId === catalogId);
   };
 
-  // Render program item
-  const renderProgramItem = (program: ProgramCatalogItemData) => {
-    const isOwned = isProgramOwned(program.id);
-    const isAgent = program.category === "agent";
-    const rating = agentRating[program.id] || program.minRating || 1;
-
-    const displayCost = isAgent
-      ? calculateAgentCost(program.costPerRating || 1000, rating)
-      : program.cost;
-
-    const displayAvailability = isAgent
-      ? calculateAgentAvailability(rating)
-      : program.availability;
-
-    const canAfford = displayCost <= remaining;
-    const isAvailable = isItemAvailable(displayAvailability, program.forbidden);
-
-    return (
-      <div
-        key={program.id}
-        className={`p-3 rounded-lg border ${
-          !isAvailable
-            ? "border-red-500/30 bg-red-950/20"
-            : isOwned
-            ? "border-green-500/50 bg-green-950/20"
-            : "border-zinc-700 bg-zinc-800/50"
-        }`}
-      >
-        <div className="flex justify-between items-start gap-2">
-          <div className="flex-1">
-            <div className="font-medium text-white flex items-center gap-2">
-              {program.name}
-              {program.restricted && (
-                <span className="text-xs text-yellow-500">(R)</span>
-              )}
-              {program.forbidden && (
-                <span className="text-xs text-red-500">(F)</span>
-              )}
-            </div>
-            {program.effects && (
-              <div className="text-sm text-zinc-400 mt-1">{program.effects}</div>
-            )}
-            {program.description && (
-              <div className="text-xs text-zinc-500 mt-1">
-                {program.description}
-              </div>
-            )}
-          </div>
-          <div className="text-right shrink-0">
-            <div className="text-sm text-zinc-300">
-              {formatCurrency(displayCost)}¥
-            </div>
-            <div className="text-xs text-zinc-500">
-              Avail: {getAvailabilityDisplay(displayAvailability, program.restricted, program.forbidden)}
-            </div>
-          </div>
-        </div>
-
-        {isAgent && (
-          <div className="mt-2 flex items-center gap-2">
-            <label className="text-sm text-zinc-400">Rating:</label>
-            <select
-              value={rating}
-              onChange={(e) =>
-                setAgentRating((prev) => ({
-                  ...prev,
-                  [program.id]: parseInt(e.target.value),
-                }))
-              }
-              className="bg-zinc-700 text-white text-sm rounded px-2 py-1"
-            >
-              {Array.from(
-                { length: (program.maxRating || 6) - (program.minRating || 1) + 1 },
-                (_, i) => (program.minRating || 1) + i
-              ).map((r) => (
-                <option key={r} value={r}>
-                  {r}
-                </option>
-              ))}
-            </select>
-            <span className="text-xs text-zinc-500">
-              Cost: {formatCurrency(calculateAgentCost(program.costPerRating || 1000, rating))}¥
-            </span>
-          </div>
-        )}
-
-        <div className="mt-2 flex justify-end">
-          {isOwned ? (
-            <span className="text-sm text-green-400">Owned</span>
-          ) : (
-            <button
-              onClick={() => addProgram(program, isAgent ? rating : undefined)}
-              disabled={!canAfford || (!showUnavailable && !isAvailable)}
-              className={`px-3 py-1 text-sm rounded ${
-                canAfford && (showUnavailable || isAvailable)
-                  ? "bg-blue-600 hover:bg-blue-500 text-white"
-                  : "bg-zinc-700 text-zinc-500 cursor-not-allowed"
-              }`}
-            >
-              {!canAfford ? "Can't Afford" : "Add"}
-            </button>
-          )}
-        </div>
-      </div>
-    );
-  };
-
   return (
     <div className="space-y-6">
-      {/* Header */}
-      <div>
-        <h2 className="text-xl font-bold text-white">Matrix Programs</h2>
-        <p className="text-zinc-400 mt-1">
-          Select Matrix programs for your cyberdeck or commlink. Common programs
-          provide utility functions, hacking programs are needed for illegal
-          Matrix operations, and agents can act autonomously.
-        </p>
-      </div>
-
       {/* Budget Summary */}
-      <div className="bg-zinc-800 rounded-lg p-4">
-        <h3 className="text-sm font-medium text-zinc-300 mb-2">Nuyen Budget</h3>
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-sm">
+      <div className="rounded-lg border border-zinc-200 bg-zinc-50 p-4 dark:border-zinc-700 dark:bg-zinc-800/50">
+        <div className="grid grid-cols-2 gap-4 sm:grid-cols-4">
           <div>
-            <span className="text-zinc-500">Total:</span>
-            <span className="ml-2 text-white">{formatCurrency(totalNuyen)}¥</span>
+            <p className="text-xs text-zinc-500 dark:text-zinc-400">Total Budget</p>
+            <p className="text-lg font-semibold">¥{formatCurrency(totalNuyen)}</p>
           </div>
           <div>
-            <span className="text-zinc-500">Spent:</span>
-            <span className="ml-2 text-white">{formatCurrency(totalSpent)}¥</span>
+            <p className="text-xs text-zinc-500 dark:text-zinc-400">Programs</p>
+            <p className="text-lg font-semibold text-blue-600 dark:text-blue-400">
+              ¥{formatCurrency(programsSpent)}
+            </p>
           </div>
           <div>
-            <span className="text-zinc-500">Programs:</span>
-            <span className="ml-2 text-cyan-400">
-              {formatCurrency(programsSpent)}¥
-            </span>
+            <p className="text-xs text-zinc-500 dark:text-zinc-400">Total Spent</p>
+            <p className="text-lg font-semibold text-red-600 dark:text-red-400">
+              ¥{formatCurrency(totalSpent)}
+            </p>
           </div>
           <div>
-            <span className="text-zinc-500">Remaining:</span>
-            <span
-              className={`ml-2 ${
-                remaining >= 0 ? "text-green-400" : "text-red-400"
+            <p className="text-xs text-zinc-500 dark:text-zinc-400">Remaining</p>
+            <p
+              className={`text-lg font-semibold ${
+                remaining < 0
+                  ? "text-red-600 dark:text-red-400"
+                  : "text-emerald-600 dark:text-emerald-400"
               }`}
             >
-              {formatCurrency(remaining)}¥
-            </span>
+              ¥{formatCurrency(remaining)}
+            </p>
           </div>
         </div>
       </div>
 
-      {/* Tabs */}
-      <div className="flex gap-2 border-b border-zinc-700">
-        {(["common", "hacking", "agents"] as ProgramTab[]).map((tab) => (
+      {/* Tab Navigation */}
+      <div className="flex border-b border-zinc-200 dark:border-zinc-700">
+        {[
+          { id: "common", label: "Common", count: filteredCommon.length },
+          { id: "hacking", label: "Hacking", count: filteredHacking.length },
+          { id: "agents", label: "Agents", count: filteredAgents.length },
+        ].map((tab) => (
           <button
-            key={tab}
-            onClick={() => setActiveTab(tab)}
-            className={`px-4 py-2 text-sm font-medium capitalize ${
-              activeTab === tab
-                ? "text-blue-400 border-b-2 border-blue-400"
-                : "text-zinc-400 hover:text-zinc-200"
+            key={tab.id}
+            onClick={() => setActiveTab(tab.id as ProgramTab)}
+            className={`px-4 py-2 text-sm font-medium transition-colors ${
+              activeTab === tab.id
+                ? "border-b-2 border-emerald-500 text-emerald-600 dark:text-emerald-400"
+                : "text-zinc-500 hover:text-zinc-700 dark:text-zinc-400 dark:hover:text-zinc-300"
             }`}
           >
-            {tab}
-            <span className="ml-1 text-xs text-zinc-500">
-              (
-              {tab === "common"
-                ? filteredCommon.length
-                : tab === "hacking"
-                ? filteredHacking.length
-                : filteredAgents.length}
-              )
-            </span>
+            {tab.label}
+            {tab.count > 0 && (
+              <span className="ml-1 rounded-full bg-emerald-100 px-1.5 py-0.5 text-xs dark:bg-emerald-900">
+                {tab.count}
+              </span>
+            )}
           </button>
         ))}
       </div>
 
       {/* Search and Filters */}
-      <div className="flex flex-wrap gap-4">
+      <div className="flex flex-wrap gap-2">
         <input
           type="text"
-          placeholder="Search programs..."
+          placeholder={`Search ${activeTab} programs...`}
           value={searchQuery}
           onChange={(e) => setSearchQuery(e.target.value)}
-          className="flex-1 min-w-[200px] bg-zinc-800 text-white placeholder-zinc-500 rounded-lg px-4 py-2 text-sm border border-zinc-700 focus:border-blue-500 focus:outline-none"
+          className="flex-1 min-w-48 rounded-lg border border-zinc-300 bg-white px-3 py-2 text-sm dark:border-zinc-600 dark:bg-zinc-800"
         />
-        <label className="flex items-center gap-2 text-sm text-zinc-400">
+        <label className="flex items-center gap-2 text-sm">
           <input
             type="checkbox"
             checked={showUnavailable}
             onChange={(e) => setShowUnavailable(e.target.checked)}
-            className="rounded bg-zinc-700 border-zinc-600"
+            className="rounded"
           />
-          Show unavailable (Avail &gt; 12)
+          Show unavailable
         </label>
       </div>
 
       {/* Program List */}
-      <div className="grid gap-3">
-        {activeTab === "common" && (
-          <>
-            {filteredCommon.length === 0 ? (
-              <div className="text-center py-8 text-zinc-500">
-                No common programs found
-              </div>
-            ) : (
-              filteredCommon.map(renderProgramItem)
-            )}
-          </>
-        )}
+      <div className="max-h-80 overflow-y-auto rounded-lg border border-zinc-200 dark:border-zinc-700">
+        <table className="w-full text-sm">
+          <thead className="sticky top-0 bg-zinc-100 dark:bg-zinc-800">
+            <tr>
+              <th className="px-3 py-2 text-left">Program</th>
+              <th className="px-3 py-2 text-center">Category</th>
+              <th className="px-3 py-2 text-center">Rating</th>
+              <th className="px-3 py-2 text-right">Cost</th>
+              <th className="px-3 py-2 text-center">Avail</th>
+              <th className="px-3 py-2 text-center">Action</th>
+            </tr>
+          </thead>
+          <tbody className="divide-y divide-zinc-100 dark:divide-zinc-700">
+            {currentFilteredItems.map((program) => {
+              const isAgent = program.category === "agent";
+              const rating = agentRating[program.id] || program.minRating || 1;
+              const displayCost = isAgent
+                ? calculateAgentCost(program.costPerRating || 1000, rating)
+                : program.cost;
+              const displayAvailability = isAgent
+                ? calculateAgentAvailability(rating)
+                : program.availability;
+              const available = isItemAvailable(displayAvailability, program.forbidden);
+              const canAfford = displayCost <= remaining;
+              const isOwned = isProgramOwned(program.id);
 
-        {activeTab === "hacking" && (
-          <>
-            {filteredHacking.length === 0 ? (
-              <div className="text-center py-8 text-zinc-500">
-                No hacking programs found
-              </div>
-            ) : (
-              filteredHacking.map(renderProgramItem)
+              return (
+                <tr
+                  key={program.id}
+                  className={`${!available ? "opacity-50" : ""} hover:bg-zinc-50 dark:hover:bg-zinc-800/50`}
+                >
+                  <td className="px-3 py-2">
+                    <p className="font-medium">{program.name}</p>
+                    {program.effects && (
+                      <p className="text-xs text-zinc-500 dark:text-zinc-400 truncate max-w-xs">
+                        {program.effects}
+                      </p>
+                    )}
+                    {program.description && (
+                      <p className="text-xs text-zinc-500 dark:text-zinc-400 truncate max-w-xs">
+                        {program.description}
+                      </p>
+                    )}
+                  </td>
+                  <td className="px-3 py-2 text-center capitalize">{program.category}</td>
+                  <td className="px-3 py-2 text-center">
+                    {isAgent ? (
+                      <select
+                        value={rating}
+                        onChange={(e) =>
+                          setAgentRating({ ...agentRating, [program.id]: parseInt(e.target.value) })
+                        }
+                        className="w-16 rounded border border-zinc-300 bg-white px-1 py-0.5 text-center text-xs dark:border-zinc-600 dark:bg-zinc-800"
+                      >
+                        {Array.from(
+                          { length: (program.maxRating || 6) - (program.minRating || 1) + 1 },
+                          (_, i) => (program.minRating || 1) + i
+                        ).map((r) => (
+                          <option key={r} value={r}>
+                            {r}
+                          </option>
+                        ))}
+                      </select>
+                    ) : (
+                      <span className="text-zinc-500">-</span>
+                    )}
+                  </td>
+                  <td className="px-3 py-2 text-right">¥{formatCurrency(displayCost)}</td>
+                  <td className="px-3 py-2 text-center">
+                    <span
+                      className={`${
+                        program.restricted
+                          ? "text-amber-600 dark:text-amber-400"
+                          : program.forbidden
+                            ? "text-red-600 dark:text-red-400"
+                            : ""
+                      }`}
+                    >
+                      {getAvailabilityDisplay(displayAvailability, program.restricted, program.forbidden)}
+                    </span>
+                  </td>
+                  <td className="px-3 py-2 text-center">
+                    {isOwned ? (
+                      <span className="text-xs text-emerald-600 dark:text-emerald-400">Owned</span>
+                    ) : (
+                      <button
+                        onClick={() => addProgram(program, isAgent ? rating : undefined)}
+                        disabled={!available || !canAfford}
+                        className={`rounded px-2 py-1 text-xs font-medium transition-colors ${
+                          available && canAfford
+                            ? "bg-emerald-500 text-white hover:bg-emerald-600"
+                            : "cursor-not-allowed bg-zinc-200 text-zinc-400 dark:bg-zinc-700"
+                        }`}
+                      >
+                        Add
+                      </button>
+                    )}
+                  </td>
+                </tr>
+              );
+            })}
+            {currentFilteredItems.length === 0 && (
+              <tr>
+                <td colSpan={6} className="px-3 py-8 text-center text-zinc-500">
+                  No {activeTab} programs found matching your criteria.
+                </td>
+              </tr>
             )}
-          </>
-        )}
-
-        {activeTab === "agents" && (
-          <>
-            {filteredAgents.length === 0 ? (
-              <div className="text-center py-8 text-zinc-500">
-                No agent programs found
-              </div>
-            ) : (
-              filteredAgents.map(renderProgramItem)
-            )}
-          </>
-        )}
+          </tbody>
+        </table>
       </div>
 
       {/* Selected Programs */}
       {selectedPrograms.length > 0 && (
-        <div className="mt-6">
-          <h3 className="text-lg font-medium text-white mb-3">
-            Selected Programs ({selectedPrograms.length})
-          </h3>
-          <div className="space-y-2">
+        <div className="rounded-lg border border-emerald-200 bg-emerald-50 p-3 dark:border-emerald-800 dark:bg-emerald-900/20">
+          <h4 className="mb-2 text-sm font-medium">Selected Programs ({selectedPrograms.length})</h4>
+          <div className="space-y-1">
             {selectedPrograms.map((program) => (
-              <div
-                key={program.id}
-                className="flex justify-between items-center p-3 bg-zinc-800 rounded-lg border border-zinc-700"
-              >
-                <div>
-                  <span className="text-white">{program.name}</span>
-                  {program.rating && (
-                    <span className="ml-2 text-sm text-zinc-400">
-                      Rating {program.rating}
-                    </span>
-                  )}
-                  <span className="ml-2 text-xs text-zinc-500 capitalize">
-                    ({program.category})
-                  </span>
-                </div>
-                <div className="flex items-center gap-4">
-                  <span className="text-sm text-zinc-300">
-                    {formatCurrency(program.cost)}¥
-                  </span>
+              <div key={program.id} className="flex items-center justify-between text-sm">
+                <span>
+                  {program.name}
+                  {program.rating && <span className="ml-1 text-zinc-500">R{program.rating}</span>}
+                </span>
+                <div className="flex items-center gap-2">
+                  <span className="text-zinc-500">¥{formatCurrency(program.cost)}</span>
                   <button
                     onClick={() => removeProgram(program.id!)}
-                    className="text-red-400 hover:text-red-300 text-sm"
+                    className="text-red-500 hover:text-red-700"
                   >
                     Remove
                   </button>
@@ -485,6 +424,13 @@ export function ProgramsStep({ state, updateState, budgetValues }: StepProps) {
           </div>
         </div>
       )}
+
+      {/* Help Text */}
+      <p className="text-xs text-zinc-500 dark:text-zinc-400">
+        Maximum availability at creation: {MAX_AVAILABILITY}. Restricted (R) items require a license.
+        Forbidden (F) items are not available at creation. Programs are installed on cyberdecks or
+        commlinks and count against device program capacity.
+      </p>
     </div>
   );
 }

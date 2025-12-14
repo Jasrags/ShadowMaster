@@ -4566,51 +4566,79 @@ This milestone creates the React context hooks for accessing program data.
 ]
 ```
 
-### B13.4 Program Selection in GearStep
+### B13.4 ProgramsStep Component
 
-This milestone integrates program selection into the existing GearStep, since programs are purchased with nuyen like other gear.
+This milestone creates a dedicated ProgramsStep component for program selection, following the same pattern as VehiclesStep. Programs are purchased with nuyen like other gear, but have their own dedicated step for better UX.
 
 **Files to modify:**
-- **B13.4.FM.1** `/app/characters/create/components/steps/GearStep.tsx`
+- **B13.4.FM.1** `/app/characters/create/components/steps/ProgramsStep.tsx`
+- **B13.4.FM.2** `/data/editions/sr5/core-rulebook.json` (fix step title)
 
 **Tasks:**
 
 | Task | Description | Status |
 |------|-------------|--------|
-| B13.4.1 | Add programs category/tab to GearStep | Not Started |
-| B13.4.2 | Filter programs by category (common, hacking, agent) | Not Started |
-| B13.4.3 | Validate program count against cyberdeck capacity | Not Started |
-| B13.4.4 | Display owned programs in ReviewStep | Not Started |
+| B13.4.1 | Create ProgramsStep component with table layout | Complete |
+| B13.4.2 | Filter programs by category (common, hacking, agent) | Complete |
+| B13.4.3 | Fix programs step title in creation method | Complete |
+| B13.4.4 | Refactor ProgramsStep to match VehiclesStep/GearStep pattern | Complete |
+| B13.4.5 | Register ProgramsStep in CreationWizard | Complete |
+| B13.4.6 | Validate program count against cyberdeck capacity | Not Started |
+| B13.4.7 | Display owned programs in ReviewStep | Not Started |
 
 **Tasks JSON:**
 ```json
 [
   {
     "id": "B13.4.1",
-    "title": "Add programs category/tab to GearStep",
-    "description": "Add a programs section to the GearStep for purchasing Matrix programs.",
-    "files": ["/app/characters/create/components/steps/GearStep.tsx"],
-    "status": "Not Started",
+    "title": "Create ProgramsStep component with table layout",
+    "description": "Create a dedicated step component for purchasing Matrix programs.",
+    "files": ["/app/characters/create/components/steps/ProgramsStep.tsx"],
+    "status": "Complete",
     "dependsOn": ["B13.3.2"]
   },
   {
     "id": "B13.4.2",
     "title": "Filter programs by category (common, hacking, agent)",
-    "description": "Add filtering for program categories.",
-    "files": ["/app/characters/create/components/steps/GearStep.tsx"],
-    "status": "Not Started",
+    "description": "Add filtering for program categories with tab navigation.",
+    "files": ["/app/characters/create/components/steps/ProgramsStep.tsx"],
+    "status": "Complete",
     "dependsOn": ["B13.4.1"]
   },
   {
     "id": "B13.4.3",
+    "title": "Fix programs step title in creation method",
+    "description": "Fix step definition to use 'title' instead of 'name' for proper sidebar display.",
+    "files": ["/data/editions/sr5/core-rulebook.json"],
+    "status": "Complete",
+    "dependsOn": []
+  },
+  {
+    "id": "B13.4.4",
+    "title": "Refactor ProgramsStep to match VehiclesStep/GearStep pattern",
+    "description": "Update ProgramsStep styling and layout to match the table-based pattern used in VehiclesStep and GearStep.",
+    "files": ["/app/characters/create/components/steps/ProgramsStep.tsx"],
+    "status": "Complete",
+    "dependsOn": ["B13.4.1"]
+  },
+  {
+    "id": "B13.4.5",
+    "title": "Register ProgramsStep in CreationWizard",
+    "description": "Add ProgramsStep to the creation wizard step registry.",
+    "files": ["/app/characters/create/components/CreationWizard.tsx"],
+    "status": "Complete",
+    "dependsOn": ["B13.4.1"]
+  },
+  {
+    "id": "B13.4.6",
     "title": "Validate program count against cyberdeck capacity",
     "description": "Ensure programs don't exceed cyberdeck's program limit.",
-    "files": ["/app/characters/create/components/steps/GearStep.tsx"],
+    "files": ["/app/characters/create/components/steps/ProgramsStep.tsx"],
     "status": "Not Started",
     "dependsOn": ["B13.4.1"]
   },
   {
-    "id": "B13.4.4",
+    "id": "B13.4.7",
     "title": "Display owned programs in ReviewStep",
     "description": "Show purchased programs in the review step.",
     "files": ["/app/characters/create/components/steps/ReviewStep.tsx"],
@@ -4622,11 +4650,14 @@ This milestone integrates program selection into the existing GearStep, since pr
 
 ### B13.5 Acceptance Criteria
 
-- **B13.5.AC.1** [ ] All SR5 CRB common programs available
-- **B13.5.AC.2** [ ] All SR5 CRB hacking programs available
-- **B13.5.AC.3** [ ] Agent programs available with ratings
-- **B13.5.AC.4** [ ] Program count validated against cyberdeck capacity
-- **B13.5.AC.5** [ ] Decker character archetype fully creatable
+- **B13.5.AC.1** [x] All SR5 CRB common programs available
+- **B13.5.AC.2** [x] All SR5 CRB hacking programs available
+- **B13.5.AC.3** [x] Agent programs available with ratings
+- **B13.5.AC.4** [x] ProgramsStep component created with table layout matching VehiclesStep pattern
+- **B13.5.AC.5** [x] Programs step title fixed in sidebar
+- **B13.5.AC.6** [ ] Program count validated against cyberdeck capacity
+- **B13.5.AC.7** [ ] Programs displayed in ReviewStep
+- **B13.5.AC.8** [ ] Decker character archetype fully creatable
 
 ---
 
