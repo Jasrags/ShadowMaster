@@ -1229,36 +1229,37 @@ export function useDrones(options?: {
   excludeRestricted?: boolean;
 }): DroneCatalogItemData[] {
   const { data } = useRuleset();
+  const drones = data.vehicles?.drones;
 
   return useMemo(() => {
-    if (!data.vehicles?.drones) return [];
+    if (!drones) return [];
 
-    let drones = [...data.vehicles.drones];
+    let result = [...drones];
 
     if (options?.size) {
-      drones = drones.filter((drone) => drone.size === options.size);
+      result = result.filter((drone) => drone.size === options.size);
     }
 
     if (options?.droneType) {
-      drones = drones.filter((drone) => drone.droneType === options.droneType);
+      result = result.filter((drone) => drone.droneType === options.droneType);
     }
 
     if (options?.maxAvailability !== undefined) {
-      drones = drones.filter(
+      result = result.filter(
         (drone) => drone.availability <= options.maxAvailability!
       );
     }
 
     if (options?.excludeForbidden) {
-      drones = drones.filter((drone) => !drone.forbidden);
+      result = result.filter((drone) => !drone.forbidden);
     }
 
     if (options?.excludeRestricted) {
-      drones = drones.filter((drone) => !drone.restricted);
+      result = result.filter((drone) => !drone.restricted);
     }
 
-    return drones;
-  }, [data.vehicles?.drones, options]);
+    return result;
+  }, [drones, options]);
 }
 
 /**
@@ -1278,30 +1279,31 @@ export function useRCCs(options?: {
   excludeRestricted?: boolean;
 }): RCCCatalogItemData[] {
   const { data } = useRuleset();
+  const rccs = data.vehicles?.rccs;
 
   return useMemo(() => {
-    if (!data.vehicles?.rccs) return [];
+    if (!rccs) return [];
 
-    let rccs = [...data.vehicles.rccs];
+    let result = [...rccs];
 
     if (options?.minDeviceRating !== undefined) {
-      rccs = rccs.filter(
+      result = result.filter(
         (rcc) => rcc.deviceRating >= options.minDeviceRating!
       );
     }
 
     if (options?.maxAvailability !== undefined) {
-      rccs = rccs.filter(
+      result = result.filter(
         (rcc) => rcc.availability <= options.maxAvailability!
       );
     }
 
     if (options?.excludeRestricted) {
-      rccs = rccs.filter((rcc) => !rcc.restricted);
+      result = result.filter((rcc) => !rcc.restricted);
     }
 
-    return rccs;
-  }, [data.vehicles?.rccs, options]);
+    return result;
+  }, [rccs, options]);
 }
 
 /**
@@ -1313,26 +1315,27 @@ export function useAutosofts(options?: {
   requiresTarget?: boolean;
 }): AutosoftCatalogItemData[] {
   const { data } = useRuleset();
+  const autosofts = data.vehicles?.autosofts;
 
   return useMemo(() => {
-    if (!data.vehicles?.autosofts) return [];
+    if (!autosofts) return [];
 
-    let autosofts = [...data.vehicles.autosofts];
+    let result = [...autosofts];
 
     if (options?.category) {
-      autosofts = autosofts.filter(
+      result = result.filter(
         (autosoft) => autosoft.category === options.category
       );
     }
 
     if (options?.requiresTarget !== undefined) {
-      autosofts = autosofts.filter(
+      result = result.filter(
         (autosoft) => autosoft.requiresTarget === options.requiresTarget
       );
     }
 
-    return autosofts;
-  }, [data.vehicles?.autosofts, options]);
+    return result;
+  }, [autosofts, options]);
 }
 
 /**

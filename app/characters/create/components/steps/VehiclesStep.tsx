@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useMemo } from "react";
+import { useState, useMemo, useCallback } from "react";
 import type { CreationState, CharacterDrone, CharacterRCC, CharacterAutosoft } from "@/lib/types";
 import {
   useVehicles,
@@ -59,6 +59,12 @@ function getAvailabilityDisplay(availability: number, restricted?: boolean, forb
 
 function isItemAvailable(availability: number, forbidden?: boolean): boolean {
   return availability <= MAX_AVAILABILITY && !forbidden;
+}
+
+// Counter for generating unique IDs
+let idCounter = 0;
+function generateId(prefix: string): string {
+  return `${prefix}-${++idCounter}-${Math.random().toString(36).slice(2, 9)}`;
 }
 
 export function VehiclesStep({ state, updateState, budgetValues }: StepProps) {
@@ -180,9 +186,9 @@ export function VehiclesStep({ state, updateState, budgetValues }: StepProps) {
   }, [rccs, searchQuery, showUnavailable]);
 
   // Add vehicle
-  const addVehicle = (vehicle: VehicleCatalogItemData) => {
+  const addVehicle = useCallback((vehicle: VehicleCatalogItemData) => {
     const newVehicle: OwnedVehicle = {
-      id: `vehicle-${Date.now()}`,
+      id: generateId("vehicle"),
       catalogId: vehicle.id,
       name: vehicle.name,
       category: vehicle.category,
@@ -198,22 +204,22 @@ export function VehiclesStep({ state, updateState, budgetValues }: StepProps) {
         vehicles: [...selectedVehicles, newVehicle],
       },
     });
-  };
+  }, [state.selections, selectedVehicles, updateState]);
 
   // Remove vehicle
-  const removeVehicle = (id: string) => {
+  const removeVehicle = useCallback((id: string) => {
     updateState({
       selections: {
         ...state.selections,
         vehicles: selectedVehicles.filter((v) => v.id !== id),
       },
     });
-  };
+  }, [state.selections, selectedVehicles, updateState]);
 
   // Add drone
-  const addDrone = (drone: DroneCatalogItemData) => {
+  const addDrone = useCallback((drone: DroneCatalogItemData) => {
     const newDrone: CharacterDrone = {
-      id: `drone-${Date.now()}`,
+      id: generateId("drone"),
       catalogId: drone.id,
       name: drone.name,
       size: drone.size as CharacterDrone["size"],
@@ -236,22 +242,22 @@ export function VehiclesStep({ state, updateState, budgetValues }: StepProps) {
         drones: [...selectedDrones, newDrone],
       },
     });
-  };
+  }, [state.selections, selectedDrones, updateState]);
 
   // Remove drone
-  const removeDrone = (id: string) => {
+  const removeDrone = useCallback((id: string) => {
     updateState({
       selections: {
         ...state.selections,
         drones: selectedDrones.filter((d) => d.id !== id),
       },
     });
-  };
+  }, [state.selections, selectedDrones, updateState]);
 
   // Add RCC
-  const addRCC = (rcc: RCCCatalogItemData) => {
+  const addRCC = useCallback((rcc: RCCCatalogItemData) => {
     const newRCC: CharacterRCC = {
-      id: `rcc-${Date.now()}`,
+      id: generateId("rcc"),
       catalogId: rcc.id,
       name: rcc.name,
       deviceRating: rcc.deviceRating,
@@ -268,26 +274,26 @@ export function VehiclesStep({ state, updateState, budgetValues }: StepProps) {
         rccs: [...selectedRCCs, newRCC],
       },
     });
-  };
+  }, [state.selections, selectedRCCs, updateState]);
 
   // Remove RCC
-  const removeRCC = (id: string) => {
+  const removeRCC = useCallback((id: string) => {
     updateState({
       selections: {
         ...state.selections,
         rccs: selectedRCCs.filter((r) => r.id !== id),
       },
     });
-  };
+  }, [state.selections, selectedRCCs, updateState]);
 
   // Add autosoft
-  const addAutosoft = (autosoft: AutosoftCatalogItemData) => {
+  const addAutosoft = useCallback((autosoft: AutosoftCatalogItemData) => {
     const rating = autosoftRating[autosoft.id] || 1;
     const cost = calculateAutosoftCost(autosoft.costPerRating, rating);
     const availability = calculateAutosoftAvailability(autosoft.availabilityPerRating, rating);
 
     const newAutosoft: CharacterAutosoft = {
-      id: `autosoft-${Date.now()}`,
+      id: generateId("autosoft"),
       catalogId: autosoft.id,
       name: autosoft.name,
       category: autosoft.category as CharacterAutosoft["category"],
@@ -302,7 +308,7 @@ export function VehiclesStep({ state, updateState, budgetValues }: StepProps) {
         autosofts: [...selectedAutosofts, newAutosoft],
       },
     });
-  };
+  }, [state.selections, selectedAutosofts, autosoftRating, updateState]);
 
   // Remove autosoft
   const removeAutosoft = (id: string) => {
