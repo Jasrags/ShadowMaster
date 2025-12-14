@@ -135,3 +135,11 @@ export type {
   VehiclesModuleData,
 } from "./vehicles";
 
+// Matrix Program types
+export type {
+  ProgramCategory,
+  ProgramCatalogItem,
+  ProgramsModule,
+  CharacterProgram,
+} from "./programs";
+

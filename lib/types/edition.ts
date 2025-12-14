@@ -118,6 +118,7 @@ export type RuleModuleType =
   | "cyberware" // Cyberware and essence costs
   | "bioware" // Bioware (edition-dependent)
   | "vehicles" // Vehicles and drones
+  | "programs" // Matrix programs for cyberdecks
   | "lifestyle" // Lifestyle costs and features
   | "contacts" // Contact rules and costs
   | "contactTemplates" // Pre-defined contact templates

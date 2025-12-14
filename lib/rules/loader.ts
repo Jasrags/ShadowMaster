@@ -1263,3 +1263,97 @@ export function extractAutosofts(ruleset: LoadedRuleset): AutosoftCatalogItemDat
 export function extractVehiclesCatalog(ruleset: LoadedRuleset): VehiclesCatalogData | null {
   return extractModule<VehiclesCatalogData>(ruleset, "vehicles");
 }
+
+// =============================================================================
+// PROGRAM DATA EXTRACTORS
+// =============================================================================
+
+/**
+ * Program catalog item data returned from loader
+ */
+export interface ProgramCatalogItemData {
+  id: string;
+  name: string;
+  category: "common" | "hacking" | "agent";
+  cost: number;
+  availability: number;
+  restricted?: boolean;
+  forbidden?: boolean;
+  minRating?: number;
+  maxRating?: number;
+  costPerRating?: number;
+  description?: string;
+  effects?: string;
+  page?: number;
+  source?: string;
+}
+
+/**
+ * Programs module data from ruleset
+ */
+export interface ProgramsCatalogData {
+  common: ProgramCatalogItemData[];
+  hacking: ProgramCatalogItemData[];
+  agents: ProgramCatalogItemData[];
+}
+
+/**
+ * Load all programs from a ruleset
+ */
+export function extractPrograms(ruleset: LoadedRuleset): ProgramCatalogItemData[] {
+  const ruleModule = extractModule<ProgramsCatalogData>(ruleset, "programs");
+  if (!ruleModule) return [];
+
+  return [
+    ...(ruleModule.common || []),
+    ...(ruleModule.hacking || []),
+    ...(ruleModule.agents || []),
+  ];
+}
+
+/**
+ * Load programs by category
+ */
+export function extractProgramsByCategory(ruleset: LoadedRuleset): {
+  common: ProgramCatalogItemData[];
+  hacking: ProgramCatalogItemData[];
+  agents: ProgramCatalogItemData[];
+} {
+  const ruleModule = extractModule<ProgramsCatalogData>(ruleset, "programs");
+  return {
+    common: ruleModule?.common || [],
+    hacking: ruleModule?.hacking || [],
+    agents: ruleModule?.agents || [],
+  };
+}
+
+/**
+ * Load common programs from a ruleset
+ */
+export function extractCommonPrograms(ruleset: LoadedRuleset): ProgramCatalogItemData[] {
+  const ruleModule = extractModule<ProgramsCatalogData>(ruleset, "programs");
+  return ruleModule?.common || [];
+}
+
+/**
+ * Load hacking programs from a ruleset
+ */
+export function extractHackingPrograms(ruleset: LoadedRuleset): ProgramCatalogItemData[] {
+  const ruleModule = extractModule<ProgramsCatalogData>(ruleset, "programs");
+  return ruleModule?.hacking || [];
+}
+
+/**
+ * Load agent programs from a ruleset
+ */
+export function extractAgentPrograms(ruleset: LoadedRuleset): ProgramCatalogItemData[] {
+  const ruleModule = extractModule<ProgramsCatalogData>(ruleset, "programs");
+  return ruleModule?.agents || [];
+}
+
+/**
+ * Load complete programs module data from a ruleset
+ */
+export function extractProgramsCatalog(ruleset: LoadedRuleset): ProgramsCatalogData | null {
+  return extractModule<ProgramsCatalogData>(ruleset, "programs");
+}

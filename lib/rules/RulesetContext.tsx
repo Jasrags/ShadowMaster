@@ -22,8 +22,8 @@ import type {
   ID,
   ContactTemplateData,
 } from "../types";
-import { QualityData, AdeptPowerCatalogItem, TraditionData, MentorSpiritData, TraditionSpiritTypes, MentorSpiritAdvantages, RitualData, RitualKeywordData, MinionStatsData, VehicleCategoryData, DroneSizeData, VehicleCatalogItemData, DroneCatalogItemData, RCCCatalogItemData, AutosoftCatalogItemData, HandlingRatingData, DroneWeaponMountsData } from "./loader";
-export type { QualityData, TraditionData, MentorSpiritData, TraditionSpiritTypes, MentorSpiritAdvantages, RitualData, RitualKeywordData, MinionStatsData, VehicleCategoryData, DroneSizeData, VehicleCatalogItemData, DroneCatalogItemData, RCCCatalogItemData, AutosoftCatalogItemData, HandlingRatingData, DroneWeaponMountsData };
+import { QualityData, AdeptPowerCatalogItem, TraditionData, MentorSpiritData, TraditionSpiritTypes, MentorSpiritAdvantages, RitualData, RitualKeywordData, MinionStatsData, VehicleCategoryData, DroneSizeData, VehicleCatalogItemData, DroneCatalogItemData, RCCCatalogItemData, AutosoftCatalogItemData, HandlingRatingData, DroneWeaponMountsData, ProgramCatalogItemData, ProgramsCatalogData } from "./loader";
+export type { QualityData, TraditionData, MentorSpiritData, TraditionSpiritTypes, MentorSpiritAdvantages, RitualData, RitualKeywordData, MinionStatsData, VehicleCategoryData, DroneSizeData, VehicleCatalogItemData, DroneCatalogItemData, RCCCatalogItemData, AutosoftCatalogItemData, HandlingRatingData, DroneWeaponMountsData, ProgramCatalogItemData, ProgramsCatalogData };
 
 // =============================================================================
 // TYPES
@@ -403,6 +403,7 @@ export interface RulesetData {
   rituals: RitualData[];
   ritualKeywords: RitualKeywordData[];
   vehicles: VehiclesCatalogData | null;
+  programs: ProgramsCatalogData | null;
 }
 
 /**
@@ -460,6 +461,7 @@ const defaultData: RulesetData = {
   rituals: [],
   ritualKeywords: [],
   vehicles: null,
+  programs: null,
 };
 
 const defaultState: RulesetContextState = {
@@ -547,6 +549,7 @@ export function RulesetProvider({
             rituals: extractedData.rituals || [],
             ritualKeywords: extractedData.ritualKeywords || [],
             vehicles: extractedData.vehicles || null,
+            programs: extractedData.programs || null,
           }
           : defaultData;
 
@@ -1366,4 +1369,119 @@ export function formatHandlingRating(handling: HandlingRatingData): string {
     return String(handling);
   }
   return `${handling.onRoad}/${handling.offRoad}`;
+}
+
+// =============================================================================
+// PROGRAM HOOKS
+// =============================================================================
+
+/**
+ * Hook to get the complete programs catalog
+ */
+export function useProgramsCatalog(): ProgramsCatalogData | null {
+  const { data } = useRuleset();
+  return data.programs;
+}
+
+/**
+ * Hook to get all programs with optional filtering
+ */
+export function usePrograms(options?: {
+  category?: "common" | "hacking" | "agent";
+  maxAvailability?: number;
+  excludeForbidden?: boolean;
+  excludeRestricted?: boolean;
+}): ProgramCatalogItemData[] {
+  const { data } = useRuleset();
+  const programs = data.programs;
+
+  return useMemo(() => {
+    if (!programs) return [];
+
+    let allPrograms: ProgramCatalogItemData[] = [
+      ...(programs.common || []),
+      ...(programs.hacking || []),
+      ...(programs.agents || []),
+    ];
+
+    if (options?.category) {
+      allPrograms = allPrograms.filter(
+        (item) => item.category === options.category
+      );
+    }
+
+    if (options?.maxAvailability !== undefined) {
+      allPrograms = allPrograms.filter(
+        (item) => item.availability <= options.maxAvailability!
+      );
+    }
+
+    if (options?.excludeForbidden) {
+      allPrograms = allPrograms.filter((item) => !item.forbidden);
+    }
+
+    if (options?.excludeRestricted) {
+      allPrograms = allPrograms.filter((item) => !item.restricted);
+    }
+
+    return allPrograms.sort((a, b) => a.name.localeCompare(b.name));
+  }, [programs, options]);
+}
+
+/**
+ * Hook to get programs by category
+ */
+export function useProgramsByCategory(): {
+  common: ProgramCatalogItemData[];
+  hacking: ProgramCatalogItemData[];
+  agents: ProgramCatalogItemData[];
+} {
+  const { data } = useRuleset();
+  return useMemo(() => ({
+    common: data.programs?.common || [],
+    hacking: data.programs?.hacking || [],
+    agents: data.programs?.agents || [],
+  }), [data.programs]);
+}
+
+/**
+ * Hook to get common programs only
+ */
+export function useCommonPrograms(): ProgramCatalogItemData[] {
+  const { data } = useRuleset();
+  return data.programs?.common || [];
+}
+
+/**
+ * Hook to get hacking programs only
+ */
+export function useHackingPrograms(): ProgramCatalogItemData[] {
+  const { data } = useRuleset();
+  return data.programs?.hacking || [];
+}
+
+/**
+ * Hook to get agent programs only
+ */
+export function useAgentPrograms(): ProgramCatalogItemData[] {
+  const { data } = useRuleset();
+  return data.programs?.agents || [];
+}
+
+/**
+ * Calculate the cost of an agent at a specific rating
+ */
+export function calculateAgentCost(
+  costPerRating: number,
+  rating: number
+): number {
+  return costPerRating * rating;
+}
+
+/**
+ * Calculate the availability of an agent at a specific rating
+ * Agents have availability = rating * 2
+ */
+export function calculateAgentAvailability(rating: number): number {
+  return rating * 2;
 }
