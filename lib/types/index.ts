@@ -49,6 +49,9 @@ export type {
   EssenceHole,
   Vehicle,
   Contact,
+  CharacterDrone,
+  CharacterRCC,
+  CharacterAutosoft,
   CharacterDraft,
   CreateCharacterRequest,
   UpdateCharacterRequest,
@@ -109,4 +112,26 @@ export type {
   UsersListResponse,
   DeleteUserResponse,
 } from "./user";
+
+// Vehicle & Drone catalog types (for ruleset data)
+export type {
+  VehicleCategory,
+  HandlingRating,
+  VehicleCatalogItem,
+  DroneSize,
+  Drone,
+  DroneCatalogItem,
+  RCC,
+  RCCCatalogItem,
+  AutosoftCategory,
+  Autosoft,
+  AutosoftCatalogItem,
+  VehicleModCategory,
+  VehicleModification,
+  OwnedVehicle,
+  OwnedDrone,
+  OwnedRCC,
+  OwnedAutosoft,
+  VehiclesModuleData,
+} from "./vehicles";
 

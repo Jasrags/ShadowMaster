@@ -204,8 +204,17 @@ export interface Character {
   /** Bioware installed (edition-dependent) */
   bioware?: BiowareItem[];
 
-  /** Vehicles and drones owned */
+  /** Vehicles owned */
   vehicles?: Vehicle[];
+
+  /** Drones owned (separate from vehicles for riggers) */
+  drones?: CharacterDrone[];
+
+  /** Rigger Command Consoles owned */
+  rccs?: CharacterRCC[];
+
+  /** Autosofts owned (can be installed on drones or run from RCC) */
+  autosofts?: CharacterAutosoft[];
 
   // -------------------------------------------------------------------------
   // Contacts
@@ -551,6 +560,91 @@ export interface Contact {
   connection: number; // 1-6, how connected/useful
   loyalty: number; // 1-6, how loyal to character
   type?: string; // "Fixer", "Street Doc", etc.
+  notes?: string;
+}
+
+// =============================================================================
+// RIGGER EQUIPMENT TYPES (Character-owned)
+// =============================================================================
+
+/**
+ * Drone owned by a character (simplified from catalog Drone)
+ */
+export interface CharacterDrone {
+  id?: ID;
+  /** Reference to catalog drone ID */
+  catalogId: string;
+  name: string;
+  /** Custom name given by player */
+  customName?: string;
+  /** Drone size category */
+  size: "micro" | "mini" | "small" | "medium" | "large" | "huge";
+  /** Core attributes */
+  handling: number;
+  speed: number;
+  acceleration: number;
+  body: number;
+  armor: number;
+  pilot: number;
+  sensor: number;
+  /** Cost in nuyen */
+  cost: number;
+  /** Availability rating */
+  availability: number;
+  restricted?: boolean;
+  forbidden?: boolean;
+  /** Installed autosofts */
+  installedAutosofts?: string[];
+  /** Notes */
+  notes?: string;
+}
+
+/**
+ * RCC (Rigger Command Console) owned by a character
+ */
+export interface CharacterRCC {
+  id?: ID;
+  /** Reference to catalog RCC ID */
+  catalogId: string;
+  name: string;
+  /** Custom name given by player */
+  customName?: string;
+  /** Device rating (1-6) */
+  deviceRating: number;
+  /** Data processing attribute */
+  dataProcessing: number;
+  /** Firewall attribute */
+  firewall: number;
+  /** Cost in nuyen */
+  cost: number;
+  /** Availability rating */
+  availability: number;
+  restricted?: boolean;
+  /** Currently running autosofts (shared to all slaved drones) */
+  runningAutosofts?: string[];
+  /** Notes */
+  notes?: string;
+}
+
+/**
+ * Autosoft owned by a character
+ */
+export interface CharacterAutosoft {
+  id?: ID;
+  /** Reference to catalog autosoft ID */
+  catalogId: string;
+  name: string;
+  /** Autosoft category */
+  category: "perception" | "defense" | "movement" | "combat" | "electronic-warfare" | "stealth";
+  /** Purchased rating */
+  rating: number;
+  /** Target for Maneuvering/Targeting autosofts (e.g., weapon type or vehicle model) */
+  target?: string;
+  /** Cost in nuyen */
+  cost: number;
+  /** Availability rating */
+  availability: number;
+  /** Notes */
   notes?: string;
 }
 

@@ -39,6 +39,7 @@ import { KarmaStep } from "./steps/KarmaStep";
 import { SpellsStep } from "./steps/SpellsStep";
 import { RitualsStep } from "./steps/RitualsStep";
 import { AdeptPowersStep } from "./steps/AdeptPowersStep";
+import { VehiclesStep } from "./steps/VehiclesStep";
 import { ReviewStep } from "./steps/ReviewStep";
 
 interface CreationWizardProps {
@@ -1041,6 +1042,8 @@ export function CreationWizard({ onCancel, onComplete }: CreationWizardProps) {
         return <ContactsStep {...stepProps} />;
       case "gear":
         return <GearStep {...stepProps} />;
+      case "vehicles":
+        return <VehiclesStep {...stepProps} />;
       case "spells":
         return <SpellsStep {...stepProps} />;
       case "rituals":

@@ -235,7 +235,7 @@
             "costType": "perLevel",
             "maxLevel": 6,
             "requiresSkill": true,
-            "description": "+1 skill rating per level. Max improvement = current skill × 1.5 (round up). Must know the skill."
+            "description": "+1 skill rating per level. Max improvement = current skill \u00d7 1.5 (round up). Must know the skill."
           },
           {
             "id": "improved-physical-attribute",
@@ -608,7 +608,7 @@
             "racialTraits": [
               "Thermographic Vision",
               "+2 dice vs. pathogens/toxins",
-              "Lifestyle cost ×1.2"
+              "Lifestyle cost \u00d71.2"
             ],
             "priorityAvailability": {
               "A": {
@@ -733,7 +733,7 @@
               "Thermographic Vision",
               "+1 Reach",
               "+1 Dermal Armor",
-              "Lifestyle cost ×2"
+              "Lifestyle cost \u00d72"
             ],
             "priorityAvailability": {
               "A": {
@@ -851,7 +851,7 @@
           {
             "id": "astralInitiative",
             "name": "Astral Initiative",
-            "formula": "(INT × 2) + 2d6",
+            "formula": "(INT \u00d7 2) + 2d6",
             "description": "Initiative while astrally projecting."
           },
           {
@@ -869,19 +869,19 @@
           {
             "id": "physicalLimit",
             "name": "Physical Limit",
-            "formula": "ceil(((STR × 2) + BOD + REA) / 3)",
+            "formula": "ceil(((STR \u00d7 2) + BOD + REA) / 3)",
             "description": "Maximum hits on physical tests."
           },
           {
             "id": "mentalLimit",
             "name": "Mental Limit",
-            "formula": "ceil(((LOG × 2) + INT + WIL) / 3)",
+            "formula": "ceil(((LOG \u00d7 2) + INT + WIL) / 3)",
             "description": "Maximum hits on mental tests."
           },
           {
             "id": "socialLimit",
             "name": "Social Limit",
-            "formula": "ceil(((CHA × 2) + WIL + ceil(ESS)) / 3)",
+            "formula": "ceil(((CHA \u00d7 2) + WIL + ceil(ESS)) / 3)",
             "description": "Maximum hits on social tests."
           },
           {
@@ -1310,7 +1310,10 @@
           {
             "id": "hermetic",
             "name": "Hermetic",
-            "drainAttributes": ["LOG", "WIL"],
+            "drainAttributes": [
+              "LOG",
+              "WIL"
+            ],
             "spiritTypes": {
               "combat": "fire",
               "detection": "air",
@@ -1324,7 +1327,10 @@
           {
             "id": "shaman",
             "name": "Shaman",
-            "drainAttributes": ["CHA", "WIL"],
+            "drainAttributes": [
+              "CHA",
+              "WIL"
+            ],
             "spiritTypes": {
               "combat": "beasts",
               "detection": "water",
@@ -1566,7 +1572,7 @@
               "range": "touch",
               "duration": "sustained",
               "drain": "F-2",
-              "description": "The subject can tell whether a target’s statements are the truth (or at least if the subject honestly believes them to be true)."
+              "description": "The subject can tell whether a target\u2019s statements are the truth (or at least if the subject honestly believes them to be true)."
             },
             {
               "id": "clairaudience",
@@ -2314,8 +2320,14 @@
               "dice": 4
             },
             "resonance": "L",
-            "skills": ["computer", "hacking"],
-            "powers": ["cookie", "hash"]
+            "skills": [
+              "computer",
+              "hacking"
+            ],
+            "powers": [
+              "cookie",
+              "hash"
+            ]
           },
           {
             "id": "crack",
@@ -2332,8 +2344,14 @@
               "dice": 4
             },
             "resonance": "L",
-            "skills": ["computer", "electronic-warfare", "hacking"],
-            "powers": ["suppression"]
+            "skills": [
+              "computer",
+              "electronic-warfare",
+              "hacking"
+            ],
+            "powers": [
+              "suppression"
+            ]
           },
           {
             "id": "data",
@@ -2350,8 +2368,14 @@
               "dice": 4
             },
             "resonance": "L",
-            "skills": ["computer", "electronic-warfare"],
-            "powers": ["camouflage", "watermark"]
+            "skills": [
+              "computer",
+              "electronic-warfare"
+            ],
+            "powers": [
+              "camouflage",
+              "watermark"
+            ]
           },
           {
             "id": "fault",
@@ -2368,8 +2392,14 @@
               "dice": 4
             },
             "resonance": "L",
-            "skills": ["computer", "cybercombat", "hacking"],
-            "powers": ["electron-storm"]
+            "skills": [
+              "computer",
+              "cybercombat",
+              "hacking"
+            ],
+            "powers": [
+              "electron-storm"
+            ]
           },
           {
             "id": "machine",
@@ -2386,8 +2416,16 @@
               "dice": 4
             },
             "resonance": "L",
-            "skills": ["computer", "electronic-warfare", "hardware"],
-            "powers": ["diagnostics", "gremlins", "stability"]
+            "skills": [
+              "computer",
+              "electronic-warfare",
+              "hardware"
+            ],
+            "powers": [
+              "diagnostics",
+              "gremlins",
+              "stability"
+            ]
           }
         ],
         "spritePowers": [
@@ -2487,7 +2525,7 @@
               "magician": "+2 dice for Combat spells, preparations, and rituals",
               "adept": "1 free level of Enhanced Accuracy (skill) and 1 free level of Danger Sense"
             },
-            "disadvantage": "If you break a promise, whether by choice or by accident, you take a –1 dice pool modifier to all actions until you make good on your promise.",
+            "disadvantage": "If you break a promise, whether by choice or by accident, you take a \u20131 dice pool modifier to all actions until you make good on your promise.",
             "source": "Core"
           },
           {
@@ -2630,13 +2668,13 @@
               "magician": "+2 dice for spells, preparations, and spell rituals in the Combat category",
               "adept": "1 free level of Improved Ability on a Combat skill"
             },
-            "disadvantage": "If you act dishonorably or without courtesy, whether by choice or by accident, you take a –1 dice pool modifier to all actions until you atone for your behavior.",
+            "disadvantage": "If you act dishonorably or without courtesy, whether by choice or by accident, you take a \u20131 dice pool modifier to all actions until you atone for your behavior.",
             "source": "Core"
           },
           {
             "id": "wolf",
             "name": "Wolf",
-            "description": "Wolf is recognized as a hunter and warrior worldwide. He is devoted to the other members of his pack. Wolf wins every fight but one—the one that kills him.",
+            "description": "Wolf is recognized as a hunter and warrior worldwide. He is devoted to the other members of his pack. Wolf wins every fight but one\u2014the one that kills him.",
             "karmaCost": 5,
             "advantages": {
               "all": "+2 dice to Tracking tests",
@@ -2651,7 +2689,10 @@
           {
             "id": "curse",
             "name": "Curse",
-            "keywords": ["material-link", "spell"],
+            "keywords": [
+              "material-link",
+              "spell"
+            ],
             "spellCategory": "illusion",
             "description": "A Curse allows an illusion spell to be cast on a subject through a material link rather than a mystic link from observing the subject. A Curse can be used on any target, whether within visual range of the leader or not, provided there is a link to the target. If the spell applies to multiple targets, such as in a mass spell, then the ritual must have a link to each of the targets. The link is used as part of the offering and is effectively destroyed during the ritual.",
             "duration": "Force hours",
@@ -2660,7 +2701,10 @@
           {
             "id": "prodigal-spell",
             "name": "Prodigal Spell",
-            "keywords": ["spell", "spotter"],
+            "keywords": [
+              "spell",
+              "spotter"
+            ],
             "spellCategory": "combat",
             "description": "This ritual allows you to cast any Combat spell at a distant target that is out of line of sight of your ritual team. The Combat spell can be either direct or indirect. Direct combat spells travel to the target in astral space. Indirect combat spells travel to the target in physical space, requiring a clear (but not necessarily straight) path in the physical world between the ritual team and target.",
             "duration": "Force hours",
@@ -2669,7 +2713,10 @@
           {
             "id": "remote-sensing",
             "name": "Remote Sensing",
-            "keywords": ["spell", "spotter"],
+            "keywords": [
+              "spell",
+              "spotter"
+            ],
             "spellCategory": "detection",
             "description": "This ritual allows you to cast any Detection spell with an even greater range. The area of the spell is increased to Force x (sum total of the participants' Magic attributes) x 100 meters. The spell's subject must be present in the foundation during the ritual but may then take his new sense outside the foundation while the ritual participants sustain it for him.",
             "duration": "Force hours",
@@ -2678,8 +2725,10 @@
           {
             "id": "ward",
             "name": "Ward",
-            "keywords": ["anchored"],
-            "description": "The ward is a basic ritual, taught to many magicians. It creates an astral barrier with a Force equal to the Force of the ritual. The ward may encompass a volume of up to fifty cubic meters times the sum of the participants' Magic ratings. The ward lasts for a number of weeks equal to the net hits from the sealing step of the ritual—if the leader spends an amount of karma equal to the ward's Force, the ward is permanent.",
+            "keywords": [
+              "anchored"
+            ],
+            "description": "The ward is a basic ritual, taught to many magicians. It creates an astral barrier with a Force equal to the Force of the ritual. The ward may encompass a volume of up to fifty cubic meters times the sum of the participants' Magic ratings. The ward lasts for a number of weeks equal to the net hits from the sealing step of the ritual\u2014if the leader spends an amount of karma equal to the ward's Force, the ward is permanent.",
             "duration": "Force hours",
             "canBePermanent": true,
             "permanentKarmaCost": "Force",
@@ -2688,7 +2737,9 @@
           {
             "id": "circle-of-protection",
             "name": "Circle of Protection",
-            "keywords": ["anchored"],
+            "keywords": [
+              "anchored"
+            ],
             "description": "The circle of protection is a small astral and physical barrier. Even though it's called a circle, it creates a sphere around the anchor that has a radius in meters equal to the leader's Magic rating. The circle acts as a combination of the physical barrier and mana barrier spells with a Force equal to the Force of the ritual. The mana barrier is dual-natured. Anyone or anything within the barrier is protected from outside physical objects and magical attacks. If something crosses the barrier from the inside, then the ward ends.",
             "duration": "Net hits hours",
             "source": "Core"
@@ -2696,7 +2747,10 @@
           {
             "id": "circle-of-healing",
             "name": "Circle of Healing",
-            "keywords": ["anchored", "spell"],
+            "keywords": [
+              "anchored",
+              "spell"
+            ],
             "spellCategory": "health",
             "description": "This ritual is used to cast a healing magic on a number of targets at once. Even though it's called a circle, it creates a sphere around the anchor that has a radius in meters equal to the leader's Magic rating. The net hits from the sealing step are used as the net hits for the spell, and apply to everyone in the circle as long as they remain in the circle.",
             "duration": "Force days",
@@ -2705,7 +2759,10 @@
           {
             "id": "renascence",
             "name": "Renascence",
-            "keywords": ["anchored", "spell"],
+            "keywords": [
+              "anchored",
+              "spell"
+            ],
             "spellCategory": "manipulation",
             "description": "This ritual sustains and maintains an area manipulation spell for a time. The area of the spell is a sphere with a radius equal to the leader's Magic rating, and the effect is based on the ritual's Force and the net hits from the sealing step. The base duration of the effect is 1 hour, which is doubled for each net hit from the sealing step of the ritual.",
             "duration": "Force hours",
@@ -2714,7 +2771,9 @@
           {
             "id": "watcher",
             "name": "Watcher",
-            "keywords": ["minion"],
+            "keywords": [
+              "minion"
+            ],
             "description": "Watchers are like spirits, but in actuality are entities born from the ritual leader's own mind rather than the metaplanes. They are a creation of mana, woven with the personalities of the ritual participants. A watcher can speak any language its creators can speak. A watcher is bound only to the leader of the ritual and follows his orders. A watcher lasts for a number of hours equal to its Force times the net hits on the sealing test. A watcher's skills are equal to half the Force of the ritual (rounded up). A leader can dismiss a watcher bound to him as a Free Action. Watchers cannot be banished or counterspelled.",
             "duration": "Force minutes",
             "minionStats": {
@@ -2729,8 +2788,17 @@
                 "charisma": "F-2"
               },
               "astralInitiative": "(F x 2) + 1D6",
-              "skills": ["Assensing", "Astral Combat", "Perception"],
-              "powers": ["Astral Form", "Manifest", "Search", "Sapience"],
+              "skills": [
+                "Assensing",
+                "Astral Combat",
+                "Perception"
+              ],
+              "powers": [
+                "Astral Form",
+                "Manifest",
+                "Search",
+                "Sapience"
+              ],
               "notes": "Watchers don't have a corporeal body."
             },
             "source": "Core"
@@ -2738,7 +2806,9 @@
           {
             "id": "homunculus",
             "name": "Homunculus",
-            "keywords": ["minion"],
+            "keywords": [
+              "minion"
+            ],
             "description": "The magician can bind a spark of intelligence into an inanimate form, creating a homunculus. The homunculus has a physical form but isn't very bright. It understands any language its creators speak and has a modicum of a personality that reflects those of its creators. You need an inanimate object to animate for the ritual. It can be at most (Force x 10) kilograms in mass. The homunculus obeys the leader's commands as much as possible within the limitations of its physical capabilities. A homunculus lasts for a number of days equal to its Force times the net hits on the sealing test.",
             "duration": "Force hours",
             "minionStats": {
@@ -2753,8 +2823,15 @@
               },
               "initiative": "(F + 1) + 1D6",
               "movement": "x2/x4/+1",
-              "skills": ["Assensing", "Astral Combat", "Perception", "Unarmed Combat"],
-              "powers": ["Sapience"],
+              "skills": [
+                "Assensing",
+                "Astral Combat",
+                "Perception",
+                "Unarmed Combat"
+              ],
+              "powers": [
+                "Sapience"
+              ],
               "notes": "The body of a minion is equivalent to the Structure rating of the material used in creating it."
             },
             "source": "Core"
@@ -2784,7 +2861,7 @@
           {
             "id": "spotter",
             "name": "Spotter",
-            "description": "If the ritual's target is not in sight of the leader, the leader needs to designate someone who can see the target for them. The spotter must be a member of the group casting the ritual—or a spirit bound to a member—and must be able to astrally perceive the target."
+            "description": "If the ritual's target is not in sight of the leader, the leader needs to designate someone who can see the target for them. The spotter must be a member of the group casting the ritual\u2014or a spirit bound to a member\u2014and must be able to astrally perceive the target."
           }
         ]
       }
@@ -2995,7 +3072,7 @@
           {
             "id": "exotic-ranged-weapon",
             "name": "Exotic Ranged Weapon",
-            "description": "Sometimes a regular gun or blade won’t do the job and you need something fancier. Or weirder. This skill must be taken once for each unusual ranged weapon you want to use. Some examples include blowguns, gyrojet pistols, flamethrowers, and lasers.",
+            "description": "Sometimes a regular gun or blade won\u2019t do the job and you need something fancier. Or weirder. This skill must be taken once for each unusual ranged weapon you want to use. Some examples include blowguns, gyrojet pistols, flamethrowers, and lasers.",
             "linkedAttribute": "agility",
             "group": null,
             "canDefault": false,
@@ -3005,7 +3082,7 @@
           {
             "id": "heavy-weapons",
             "name": "Heavy Weapons",
-            "description": "The term heavy weapon is designated for all projectile weaponry larger than an assault rifle, such as grenade launchers, machine guns, and assault cannons. This skill is exclusive to handheld and non-vehicle-mounted weaponry—if you’ve got a gun mounted on or in a vehicle, use Gunnery.",
+            "description": "The term heavy weapon is designated for all projectile weaponry larger than an assault rifle, such as grenade launchers, machine guns, and assault cannons. This skill is exclusive to handheld and non-vehicle-mounted weaponry\u2014if you\u2019ve got a gun mounted on or in a vehicle, use Gunnery.",
             "linkedAttribute": "agility",
             "group": null,
             "canDefault": true,
@@ -3115,7 +3192,7 @@
           {
             "id": "escape-artist",
             "name": "Escape Artist",
-            "description": "Escape Artist measures the character’s ability to escape from bindings by using body contortion and manual dexterity. See Using Escape Artist, p. 135.",
+            "description": "Escape Artist measures the character\u2019s ability to escape from bindings by using body contortion and manual dexterity. See Using Escape Artist, p. 135.",
             "linkedAttribute": "agility",
             "group": null,
             "canDefault": true,
@@ -3214,7 +3291,7 @@
           {
             "id": "sneaking",
             "name": "Sneaking",
-            "description": "Need to get where you’re not supposed to be? This skill allows you to remain inconspicuous in various situations. See Using Stealth Skills, p. 136.",
+            "description": "Need to get where you\u2019re not supposed to be? This skill allows you to remain inconspicuous in various situations. See Using Stealth Skills, p. 136.",
             "linkedAttribute": "agility",
             "group": "stealth",
             "canDefault": true,
@@ -3228,7 +3305,7 @@
           {
             "id": "survival",
             "name": "Survival",
-            "description": "In the desert with nothing more than a tin cup, a poncho, and an iron rod? You’ll need this skill to help you get out alive. Survival is the ability to stay alive in extreme environmental conditions for extended periods of time. The skill governs a character’s ability to perform vital outdoor tasks such as start a fire, build a shelter, scrounge for food, etc. in hostile environments. See Using Survival, p. 136.",
+            "description": "In the desert with nothing more than a tin cup, a poncho, and an iron rod? You\u2019ll need this skill to help you get out alive. Survival is the ability to stay alive in extreme environmental conditions for extended periods of time. The skill governs a character\u2019s ability to perform vital outdoor tasks such as start a fire, build a shelter, scrounge for food, etc. in hostile environments. See Using Survival, p. 136.",
             "linkedAttribute": "willpower",
             "group": "outdoors",
             "canDefault": true,
@@ -3245,7 +3322,7 @@
           {
             "id": "swimming",
             "name": "Swimming",
-            "description": "This skill determines the character’s ability to swim in various bodies of water. The skill level affects the distance and speed at which a character can swim. See Using Swimming, p. 137",
+            "description": "This skill determines the character\u2019s ability to swim in various bodies of water. The skill level affects the distance and speed at which a character can swim. See Using Swimming, p. 137",
             "linkedAttribute": "strength",
             "group": "athletics",
             "canDefault": true,
@@ -3336,7 +3413,7 @@
           {
             "id": "intimidation",
             "name": "Intimidation",
-            "description": "Intimidation is about creating the impression that you are more menacing than another person in order to get them to do what you want. The skill may be applied multiple ways, from negotiation to interrogation. Intimidation is an Opposed Intimidation + Charisma [Social] Test against the target’s Charisma + Willpower, modified by the appropriate entries on the Social Modifiers Table (p. 140).",
+            "description": "Intimidation is about creating the impression that you are more menacing than another person in order to get them to do what you want. The skill may be applied multiple ways, from negotiation to interrogation. Intimidation is an Opposed Intimidation + Charisma [Social] Test against the target\u2019s Charisma + Willpower, modified by the appropriate entries on the Social Modifiers Table (p. 140).",
             "linkedAttribute": "charisma",
             "group": null,
             "canDefault": true,
@@ -3351,7 +3428,7 @@
           {
             "id": "leadership",
             "name": "Leadership",
-            "description": "Leadership is the ability to direct and motivate others. It’s like Con, except rather than using deception you’re using a position of authority. This skill is especially helpful in situations where the will of a teammate is shaken or someone is being asked to do something uncomfortable. The Leadership skill is not meant to replace or make up for poor teamwork. When using Leadership make an opposed test Charisma + Leadership. See Using Social Influence Skills, at right, for test modifiers.",
+            "description": "Leadership is the ability to direct and motivate others. It\u2019s like Con, except rather than using deception you\u2019re using a position of authority. This skill is especially helpful in situations where the will of a teammate is shaken or someone is being asked to do something uncomfortable. The Leadership skill is not meant to replace or make up for poor teamwork. When using Leadership make an opposed test Charisma + Leadership. See Using Social Influence Skills, at right, for test modifiers.",
             "linkedAttribute": "charisma",
             "group": "influence",
             "canDefault": true,
@@ -3366,7 +3443,7 @@
           {
             "id": "negotiation",
             "name": "Negotiation",
-            "description": "Negotiation governs a character’s ability to apply their charisma, tactics, and knowledge of situational psychology in order to create a better position when making deals.",
+            "description": "Negotiation governs a character\u2019s ability to apply their charisma, tactics, and knowledge of situational psychology in order to create a better position when making deals.",
             "linkedAttribute": "charisma",
             "group": "influence",
             "canDefault": true,
@@ -3429,7 +3506,7 @@
           {
             "id": "artificing",
             "name": "Artificing",
-            "description": "Artificing is the process of crafting magical foci. The skill may also be used forensically, in order to assense qualities about an existing focus’ creation and purpose. See Artificing p. 306.",
+            "description": "Artificing is the process of crafting magical foci. The skill may also be used forensically, in order to assense qualities about an existing focus\u2019 creation and purpose. See Artificing p. 306.",
             "linkedAttribute": "magic",
             "group": "enchanting",
             "canDefault": false,
@@ -3443,7 +3520,7 @@
           {
             "id": "assensing",
             "name": "Assensing",
-            "description": "Assensing is a magic user’s ability to read and interpret fluctuations in the astral world. This skill allows practitioners to learn information by reading astral auras. Only characters capable of astral perception may take this skill. For more information, see Astral Perception, p. 312",
+            "description": "Assensing is a magic user\u2019s ability to read and interpret fluctuations in the astral world. This skill allows practitioners to learn information by reading astral auras. Only characters capable of astral perception may take this skill. For more information, see Astral Perception, p. 312",
             "linkedAttribute": "intuition",
             "group": null,
             "canDefault": false,
@@ -3526,7 +3603,7 @@
           {
             "id": "disenchanting",
             "name": "Disenchanting",
-            "description": "This skill governs a character’s ability to remove the enchantment from an item. See Disenchanting, p. 307.",
+            "description": "This skill governs a character\u2019s ability to remove the enchantment from an item. See Disenchanting, p. 307.",
             "linkedAttribute": "magic",
             "group": "enchanting",
             "canDefault": false,
@@ -3610,7 +3687,7 @@
           {
             "id": "decompiling",
             "name": "Decompiling",
-            "description": "Decompiling is a character’s ability to effectively delete previously compiled sprites. See Sprites, p. 254.",
+            "description": "Decompiling is a character\u2019s ability to effectively delete previously compiled sprites. See Sprites, p. 254.",
             "linkedAttribute": "resonance",
             "group": "tasking",
             "canDefault": false,
@@ -3663,7 +3740,7 @@
           {
             "id": "animal-handling",
             "name": "Animal Handling",
-            "description": "This skill governs the training, care, riding (if they’re big enough), and control of non-sentient animals. Competent trainers have the ability to handle multiple animals. It is even possible to approach an untrained animal and get it to trust you, or at least not eat you.",
+            "description": "This skill governs the training, care, riding (if they\u2019re big enough), and control of non-sentient animals. Competent trainers have the ability to handle multiple animals. It is even possible to approach an untrained animal and get it to trust you, or at least not eat you.",
             "linkedAttribute": "charisma",
             "group": null,
             "canDefault": true,
@@ -3700,7 +3777,7 @@
           {
             "id": "artisan",
             "name": "Artisan",
-            "description": "This skill includes several different forms of artistic impression as well as the handcrafting of fine objects that would otherwise be produced on an assembly line. The world’s top artists and crafters are considered artisans.",
+            "description": "This skill includes several different forms of artistic impression as well as the handcrafting of fine objects that would otherwise be produced on an assembly line. The world\u2019s top artists and crafters are considered artisans.",
             "linkedAttribute": "intuition",
             "group": null,
             "canDefault": false,
@@ -3730,7 +3807,7 @@
           {
             "id": "biotechnology",
             "name": "Biotechnology",
-            "description": "Biotechnology is a wide-ranging skill primarily used by doctors and scientists to grow organic body parts. This skill is the basis for cloning as well as all forms of bioware. Provided the right equipment is available, biotechnology can be used to repair damaged bioware, clone new tissue, or detect any bioware in a subject’s body. This skill does not allow characters to install or remove bioware.",
+            "description": "Biotechnology is a wide-ranging skill primarily used by doctors and scientists to grow organic body parts. This skill is the basis for cloning as well as all forms of bioware. Provided the right equipment is available, biotechnology can be used to repair damaged bioware, clone new tissue, or detect any bioware in a subject\u2019s body. This skill does not allow characters to install or remove bioware.",
             "linkedAttribute": "logic",
             "group": null,
             "canDefault": false,
@@ -3822,7 +3899,7 @@
           {
             "id": "electronic-warfare",
             "name": "Electronic Warfare",
-            "description": "Electronic Warfare is the basis of military signals intelligence. It governs the encoding, disruption, spoofing, and decoding of communication systems. Providing the user has the proper equipment, the skill can be used to manipulate or even take over the signal of any item’s communication system. See Using Electronic Warfare, p. 226.",
+            "description": "Electronic Warfare is the basis of military signals intelligence. It governs the encoding, disruption, spoofing, and decoding of communication systems. Providing the user has the proper equipment, the skill can be used to manipulate or even take over the signal of any item\u2019s communication system. See Using Electronic Warfare, p. 226.",
             "linkedAttribute": "logic",
             "group": "cracking",
             "canDefault": false,
@@ -3933,7 +4010,7 @@
           {
             "id": "medicine",
             "name": "Medicine",
-            "description": "Medicine is used to perform advanced medical procedures such as surgeries. It includes long-term medical support for disease and illness, and the skill can be used to diagnose a character’s medical condition. This skill is used to implant or remove cybernetics and bioware but cannot be used to repair or maintain implanted devices. For more information, see Healing, p. 205.",
+            "description": "Medicine is used to perform advanced medical procedures such as surgeries. It includes long-term medical support for disease and illness, and the skill can be used to diagnose a character\u2019s medical condition. This skill is used to implant or remove cybernetics and bioware but cannot be used to repair or maintain implanted devices. For more information, see Healing, p. 205.",
             "linkedAttribute": "logic",
             "group": "biotech",
             "canDefault": false,
@@ -3981,7 +4058,7 @@
           {
             "id": "software",
             "name": "Software",
-            "description": "Software is the skill used to create and manipulate programming in the Matrix. See Using Software, p. 226. It’s also what technomancers use when they create their complex forms (Threading, p. 251).",
+            "description": "Software is the skill used to create and manipulate programming in the Matrix. See Using Software, p. 226. It\u2019s also what technomancers use when they create their complex forms (Threading, p. 251).",
             "linkedAttribute": "logic",
             "group": "electronics",
             "canDefault": false,
@@ -4126,7 +4203,7 @@
         "creationLimits": {
           "maxSkillRating": 6,
           "maxSkillRatingWithAptitude": 7,
-          "freeKnowledgePoints": "(LOG + INT) × 2",
+          "freeKnowledgePoints": "(LOG + INT) \u00d7 2",
           "nativeLanguageRating": 6
         },
         "exampleKnowledgeSkills": [
@@ -4407,7 +4484,7 @@
             "id": "astral-chameleon",
             "name": "Astral Chameleon",
             "karmaCost": 10,
-            "summary": "Astral signature lasts half as long; –2 to others Assensing you.",
+            "summary": "Astral signature lasts half as long; \u20132 to others Assensing you.",
             "requiresMagic": true
           },
           {
@@ -4420,7 +4497,7 @@
             "id": "blandness",
             "name": "Blandness",
             "karmaCost": 8,
-            "summary": "Audience Threshold +1 to remember you; –2 to Shadow/Locate tests."
+            "summary": "Audience Threshold +1 to remember you; \u20132 to Shadow/Locate tests."
           },
           {
             "id": "catlike",
@@ -4851,7 +4928,7 @@
             "id": "combat-paralysis",
             "name": "Combat Paralysis",
             "karmaBonus": 12,
-            "summary": "First Initiative halved; –3 on Surprise tests."
+            "summary": "First Initiative halved; \u20133 on Surprise tests."
           },
           {
             "id": "dependents",
@@ -5073,7 +5150,7 @@
             "id": "uncouth",
             "name": "Uncouth",
             "karmaBonus": 14,
-            "summary": "–2 dice to resist social impulses; double Karma for Social skills."
+            "summary": "\u20132 dice to resist social impulses; double Karma for Social skills."
           },
           {
             "id": "uneducated",
@@ -5108,42 +5185,42 @@
             "id": "street",
             "name": "Street",
             "monthlyCost": 0,
-            "startingNuyen": "1d6 × 20",
+            "startingNuyen": "1d6 \u00d7 20",
             "description": "Living on the streets with no permanent shelter."
           },
           {
             "id": "squatter",
             "name": "Squatter",
             "monthlyCost": 500,
-            "startingNuyen": "2d6 × 40",
+            "startingNuyen": "2d6 \u00d7 40",
             "description": "Abandoned buildings or makeshift shelter."
           },
           {
             "id": "low",
             "name": "Low",
             "monthlyCost": 2000,
-            "startingNuyen": "3d6 × 60",
+            "startingNuyen": "3d6 \u00d7 60",
             "description": "A small apartment in a rough neighborhood."
           },
           {
             "id": "medium",
             "name": "Medium",
             "monthlyCost": 5000,
-            "startingNuyen": "4d6 × 100",
+            "startingNuyen": "4d6 \u00d7 100",
             "description": "A comfortable apartment with basic amenities."
           },
           {
             "id": "high",
             "name": "High",
             "monthlyCost": 10000,
-            "startingNuyen": "5d6 × 500",
+            "startingNuyen": "5d6 \u00d7 500",
             "description": "Upscale housing in a secure neighborhood."
           },
           {
             "id": "luxury",
             "name": "Luxury",
             "monthlyCost": 100000,
-            "startingNuyen": "6d6 × 1000",
+            "startingNuyen": "6d6 \u00d7 1000",
             "description": "The finest accommodations money can buy."
           }
         ],
@@ -8597,6 +8674,814 @@
         ]
       }
     },
+    "vehicles": {
+      "mergeStrategy": "replace",
+      "payload": {
+        "categories": [
+          {
+            "id": "bikes",
+            "name": "Bikes",
+            "description": "Motorcycles and scooters"
+          },
+          {
+            "id": "cars",
+            "name": "Cars",
+            "description": "Personal automobiles"
+          },
+          {
+            "id": "trucks",
+            "name": "Trucks & Vans",
+            "description": "Commercial and utility vehicles"
+          },
+          {
+            "id": "boats",
+            "name": "Boats",
+            "description": "Watercraft and small vessels"
+          },
+          {
+            "id": "submarines",
+            "name": "Submarines",
+            "description": "Submersible vehicles"
+          },
+          {
+            "id": "fixed-wing",
+            "name": "Fixed-Wing Aircraft",
+            "description": "Airplanes and jets"
+          },
+          {
+            "id": "rotorcraft",
+            "name": "Rotorcraft",
+            "description": "Helicopters"
+          },
+          {
+            "id": "vtol",
+            "name": "VTOL/LAV",
+            "description": "Vertical takeoff aircraft and low-altitude vehicles"
+          },
+          {
+            "id": "walkers",
+            "name": "Walkers",
+            "description": "Legged vehicles"
+          }
+        ],
+        "droneSizes": [
+          {
+            "id": "micro",
+            "name": "Micro",
+            "bodyRange": "0",
+            "description": "Insect-sized surveillance drones"
+          },
+          {
+            "id": "mini",
+            "name": "Mini",
+            "bodyRange": "1",
+            "description": "Small handheld drones"
+          },
+          {
+            "id": "small",
+            "name": "Small",
+            "bodyRange": "2",
+            "description": "Man-portable drones"
+          },
+          {
+            "id": "medium",
+            "name": "Medium",
+            "bodyRange": "3",
+            "description": "Human-sized drones"
+          },
+          {
+            "id": "large",
+            "name": "Large",
+            "bodyRange": "4-6",
+            "description": "Large combat and utility drones"
+          },
+          {
+            "id": "huge",
+            "name": "Huge",
+            "bodyRange": "7+",
+            "description": "Vehicle-scale drones"
+          }
+        ],
+        "groundcraft": [
+          {
+            "id": "dodge-scoot",
+            "name": "Dodge Scoot",
+            "category": "bikes",
+            "handling": 4,
+            "speed": 3,
+            "acceleration": 1,
+            "body": 4,
+            "armor": 4,
+            "pilot": 1,
+            "sensor": 1,
+            "seats": 1,
+            "cost": 3000,
+            "availability": 0,
+            "page": 462
+          },
+          {
+            "id": "harley-davidson-scorpion",
+            "name": "Harley-Davidson Scorpion",
+            "category": "bikes",
+            "handling": 4,
+            "speed": 4,
+            "acceleration": 2,
+            "body": 5,
+            "armor": 6,
+            "pilot": 1,
+            "sensor": 1,
+            "seats": 1,
+            "cost": 12000,
+            "availability": 0,
+            "page": 462
+          },
+          {
+            "id": "suzuki-mirage",
+            "name": "Suzuki Mirage",
+            "category": "bikes",
+            "handling": 5,
+            "speed": 6,
+            "acceleration": 3,
+            "body": 5,
+            "armor": 6,
+            "pilot": 1,
+            "sensor": 2,
+            "seats": 1,
+            "cost": 8500,
+            "availability": 0,
+            "page": 462
+          },
+          {
+            "id": "yamaha-growler",
+            "name": "Yamaha Growler",
+            "category": "bikes",
+            "handling": {
+              "onRoad": 4,
+              "offRoad": 5
+            },
+            "speed": 4,
+            "acceleration": 2,
+            "body": 5,
+            "armor": 6,
+            "pilot": 1,
+            "sensor": 2,
+            "seats": 2,
+            "cost": 11000,
+            "availability": 0,
+            "page": 463
+          },
+          {
+            "id": "ford-americar",
+            "name": "Ford Americar",
+            "category": "cars",
+            "handling": {
+              "onRoad": 5,
+              "offRoad": 4
+            },
+            "speed": 3,
+            "acceleration": 2,
+            "body": 8,
+            "armor": 4,
+            "pilot": 1,
+            "sensor": 1,
+            "seats": 4,
+            "cost": 16000,
+            "availability": 0,
+            "page": 462
+          },
+          {
+            "id": "hyundai-shin-hyung",
+            "name": "Hyundai Shin-Hyung",
+            "category": "cars",
+            "handling": {
+              "onRoad": 4,
+              "offRoad": 3
+            },
+            "speed": 4,
+            "acceleration": 2,
+            "body": 10,
+            "armor": 6,
+            "pilot": 1,
+            "sensor": 2,
+            "seats": 4,
+            "cost": 28000,
+            "availability": 0,
+            "page": 462
+          },
+          {
+            "id": "eurocar-westwind-3000",
+            "name": "Eurocar Westwind 3000",
+            "category": "cars",
+            "handling": {
+              "onRoad": 4,
+              "offRoad": 2
+            },
+            "speed": 7,
+            "acceleration": 3,
+            "body": 10,
+            "armor": 8,
+            "pilot": 2,
+            "sensor": 2,
+            "seats": 2,
+            "cost": 110000,
+            "availability": 8,
+            "page": 462
+          },
+          {
+            "id": "mitsubishi-nightsky",
+            "name": "Mitsubishi Nightsky",
+            "category": "cars",
+            "handling": {
+              "onRoad": 4,
+              "offRoad": 3
+            },
+            "speed": 4,
+            "acceleration": 2,
+            "body": 12,
+            "armor": 12,
+            "pilot": 2,
+            "sensor": 3,
+            "seats": 4,
+            "cost": 200000,
+            "availability": 12,
+            "page": 462
+          },
+          {
+            "id": "toyota-gopher",
+            "name": "Toyota Gopher",
+            "category": "cars",
+            "handling": {
+              "onRoad": 5,
+              "offRoad": 5
+            },
+            "speed": 4,
+            "acceleration": 2,
+            "body": 8,
+            "armor": 4,
+            "pilot": 1,
+            "sensor": 2,
+            "seats": 2,
+            "cost": 25000,
+            "availability": 0,
+            "page": 462
+          },
+          {
+            "id": "gmc-bulldog-step-van",
+            "name": "GMC Bulldog Step-Van",
+            "category": "trucks",
+            "handling": {
+              "onRoad": 4,
+              "offRoad": 3
+            },
+            "speed": 3,
+            "acceleration": 1,
+            "body": 16,
+            "armor": 6,
+            "pilot": 1,
+            "sensor": 1,
+            "seats": 3,
+            "cost": 35000,
+            "availability": 0,
+            "page": 463
+          },
+          {
+            "id": "ares-roadmaster",
+            "name": "Ares Roadmaster",
+            "category": "trucks",
+            "handling": {
+              "onRoad": 3,
+              "offRoad": 3
+            },
+            "speed": 3,
+            "acceleration": 1,
+            "body": 18,
+            "armor": 14,
+            "pilot": 2,
+            "sensor": 2,
+            "seats": 8,
+            "cost": 52000,
+            "availability": 6,
+            "page": 463
+          }
+        ],
+        "watercraft": [
+          {
+            "id": "samuvani-criscraft-otter",
+            "name": "Samuvani Criscraft Otter",
+            "category": "boats",
+            "handling": 4,
+            "speed": 3,
+            "acceleration": 1,
+            "body": 8,
+            "armor": 2,
+            "pilot": 1,
+            "sensor": 1,
+            "seats": 6,
+            "cost": 19000,
+            "availability": 0,
+            "page": 463
+          },
+          {
+            "id": "yongkang-gala-trinity",
+            "name": "Yongkang Gala Trinity",
+            "category": "boats",
+            "handling": 3,
+            "speed": 5,
+            "acceleration": 3,
+            "body": 8,
+            "armor": 4,
+            "pilot": 2,
+            "sensor": 1,
+            "seats": 3,
+            "cost": 55000,
+            "availability": 0,
+            "page": 463
+          },
+          {
+            "id": "proteus-lamprey",
+            "name": "Proteus Lamprey",
+            "category": "submarines",
+            "handling": 4,
+            "speed": 3,
+            "acceleration": 1,
+            "body": 8,
+            "armor": 3,
+            "pilot": 2,
+            "sensor": 3,
+            "seats": 2,
+            "cost": 110000,
+            "availability": 10,
+            "restricted": true,
+            "page": 463
+          }
+        ],
+        "aircraft": [
+          {
+            "id": "cessna-c750",
+            "name": "Cessna C750",
+            "category": "fixed-wing",
+            "handling": 3,
+            "speed": 5,
+            "acceleration": 2,
+            "body": 12,
+            "armor": 6,
+            "pilot": 2,
+            "sensor": 2,
+            "seats": 6,
+            "cost": 146000,
+            "availability": 6,
+            "page": 463
+          },
+          {
+            "id": "artemis-nightwing",
+            "name": "Artemis Nightwing",
+            "category": "fixed-wing",
+            "handling": 4,
+            "speed": 6,
+            "acceleration": 3,
+            "body": 8,
+            "armor": 4,
+            "pilot": 2,
+            "sensor": 2,
+            "seats": 2,
+            "cost": 105000,
+            "availability": 8,
+            "restricted": true,
+            "page": 463
+          },
+          {
+            "id": "ares-dragon",
+            "name": "Ares Dragon",
+            "category": "vtol",
+            "handling": 4,
+            "speed": 5,
+            "acceleration": 3,
+            "body": 16,
+            "armor": 12,
+            "pilot": 3,
+            "sensor": 3,
+            "seats": 12,
+            "cost": 600000,
+            "availability": 18,
+            "forbidden": true,
+            "page": 463
+          },
+          {
+            "id": "northrup-wasp",
+            "name": "Northrup Wasp",
+            "category": "rotorcraft",
+            "handling": 4,
+            "speed": 4,
+            "acceleration": 2,
+            "body": 8,
+            "armor": 4,
+            "pilot": 2,
+            "sensor": 2,
+            "seats": 2,
+            "cost": 75000,
+            "availability": 6,
+            "page": 464
+          },
+          {
+            "id": "federated-boeing-commuter",
+            "name": "Federated Boeing Commuter",
+            "category": "rotorcraft",
+            "handling": 3,
+            "speed": 4,
+            "acceleration": 2,
+            "body": 14,
+            "armor": 8,
+            "pilot": 2,
+            "sensor": 2,
+            "seats": 8,
+            "cost": 110000,
+            "availability": 4,
+            "page": 464
+          },
+          {
+            "id": "gmn-banshee",
+            "name": "GMN Banshee",
+            "category": "vtol",
+            "handling": 3,
+            "speed": 5,
+            "acceleration": 2,
+            "body": 10,
+            "armor": 8,
+            "pilot": 3,
+            "sensor": 3,
+            "seats": 4,
+            "cost": 225000,
+            "availability": 12,
+            "restricted": true,
+            "page": 464
+          }
+        ],
+        "drones": [
+          {
+            "id": "mct-fly-spy",
+            "name": "MCT Fly-Spy",
+            "size": "micro",
+            "droneType": "surveillance",
+            "handling": 4,
+            "speed": 3,
+            "acceleration": 2,
+            "body": 1,
+            "armor": 0,
+            "pilot": 3,
+            "sensor": 3,
+            "canFly": true,
+            "cost": 2000,
+            "availability": 0,
+            "description": "Insect-sized flying surveillance drone",
+            "page": 465
+          },
+          {
+            "id": "shiawase-kanmushi",
+            "name": "Shiawase Kanmushi",
+            "size": "micro",
+            "droneType": "surveillance",
+            "handling": 4,
+            "speed": 2,
+            "acceleration": 2,
+            "body": 0,
+            "armor": 0,
+            "pilot": 3,
+            "sensor": 3,
+            "cost": 1000,
+            "availability": 0,
+            "description": "Cockroach-like crawler drone",
+            "page": 466
+          },
+          {
+            "id": "lockheed-optic-x2",
+            "name": "Lockheed Optic-X2",
+            "size": "mini",
+            "droneType": "surveillance",
+            "handling": 4,
+            "speed": 4,
+            "acceleration": 2,
+            "body": 1,
+            "armor": 0,
+            "pilot": 3,
+            "sensor": 3,
+            "canFly": true,
+            "cost": 21000,
+            "availability": 6,
+            "description": "Advanced surveillance drone with stealth features",
+            "page": 466
+          },
+          {
+            "id": "mct-nissan-roto-drone",
+            "name": "MCT-Nissan Roto-Drone",
+            "size": "small",
+            "droneType": "aerial",
+            "handling": 4,
+            "speed": 4,
+            "acceleration": 2,
+            "body": 3,
+            "armor": 4,
+            "pilot": 3,
+            "sensor": 3,
+            "canFly": true,
+            "weaponMounts": {
+              "standard": 1
+            },
+            "cost": 5000,
+            "availability": 4,
+            "restricted": true,
+            "description": "Popular aerial drone with weapon mount",
+            "page": 466
+          },
+          {
+            "id": "cyberspace-designs-crawler",
+            "name": "Cyberspace Designs Crawler",
+            "size": "small",
+            "droneType": "ground",
+            "handling": 4,
+            "speed": 2,
+            "acceleration": 1,
+            "body": 3,
+            "armor": 2,
+            "pilot": 2,
+            "sensor": 2,
+            "cost": 4000,
+            "availability": 0,
+            "description": "Ground-based utility drone",
+            "page": 465
+          },
+          {
+            "id": "ares-duelist",
+            "name": "Ares Duelist",
+            "size": "medium",
+            "droneType": "combat",
+            "handling": 4,
+            "speed": 3,
+            "acceleration": 1,
+            "body": 4,
+            "armor": 6,
+            "pilot": 3,
+            "sensor": 3,
+            "weaponMounts": {
+              "standard": 2
+            },
+            "cost": 10500,
+            "availability": 8,
+            "restricted": true,
+            "description": "Anthroform combat drone with sword arms",
+            "page": 465
+          },
+          {
+            "id": "gm-nissan-doberman",
+            "name": "GM-Nissan Doberman",
+            "size": "medium",
+            "droneType": "combat",
+            "handling": 5,
+            "speed": 3,
+            "acceleration": 1,
+            "body": 4,
+            "armor": 4,
+            "pilot": 3,
+            "sensor": 3,
+            "weaponMounts": {
+              "standard": 1
+            },
+            "cost": 5000,
+            "availability": 4,
+            "restricted": true,
+            "description": "Four-legged combat patrol drone",
+            "page": 465
+          },
+          {
+            "id": "mct-roto-drone",
+            "name": "MCT Gun Turret",
+            "size": "medium",
+            "droneType": "combat",
+            "handling": 4,
+            "speed": 0,
+            "acceleration": 0,
+            "body": 3,
+            "armor": 6,
+            "pilot": 3,
+            "sensor": 3,
+            "weaponMounts": {
+              "standard": 1,
+              "heavy": 1
+            },
+            "cost": 4500,
+            "availability": 6,
+            "restricted": true,
+            "description": "Stationary gun turret platform",
+            "page": 466
+          },
+          {
+            "id": "cyberspace-designs-dalmatian",
+            "name": "Cyberspace Designs Dalmatian",
+            "size": "large",
+            "droneType": "utility",
+            "handling": 4,
+            "speed": 3,
+            "acceleration": 2,
+            "body": 5,
+            "armor": 6,
+            "pilot": 3,
+            "sensor": 3,
+            "weaponMounts": {
+              "standard": 1
+            },
+            "cost": 8000,
+            "availability": 4,
+            "description": "Large utility drone with cargo capacity",
+            "page": 465
+          },
+          {
+            "id": "ares-steel-lynx",
+            "name": "Ares Steel Lynx Combat Drone",
+            "size": "huge",
+            "droneType": "combat",
+            "handling": 5,
+            "speed": 4,
+            "acceleration": 2,
+            "body": 6,
+            "armor": 12,
+            "pilot": 3,
+            "sensor": 3,
+            "weaponMounts": {
+              "standard": 1,
+              "heavy": 1
+            },
+            "cost": 25000,
+            "availability": 10,
+            "restricted": true,
+            "description": "Heavy combat drone with turret-mounted weaponry",
+            "page": 466
+          },
+          {
+            "id": "horizon-cuu-drone",
+            "name": "Horizon CU\u00b3 Drone",
+            "size": "huge",
+            "droneType": "utility",
+            "handling": 4,
+            "speed": 3,
+            "acceleration": 1,
+            "body": 6,
+            "armor": 4,
+            "pilot": 3,
+            "sensor": 3,
+            "cost": 12000,
+            "availability": 0,
+            "description": "Large cargo and utility drone",
+            "page": 465
+          }
+        ],
+        "rccs": [
+          {
+            "id": "sony-ciy-720",
+            "name": "Sony CIY-720",
+            "deviceRating": 2,
+            "dataProcessing": 2,
+            "firewall": 2,
+            "cost": 14000,
+            "availability": 3,
+            "description": "Budget rigger command console",
+            "page": 441
+          },
+          {
+            "id": "essy-motors-dronemaster",
+            "name": "Essy Motors DroneMaster",
+            "deviceRating": 3,
+            "dataProcessing": 3,
+            "firewall": 3,
+            "cost": 34000,
+            "availability": 6,
+            "description": "Mid-range rigger command console",
+            "page": 441
+          },
+          {
+            "id": "mct-drone-web",
+            "name": "MCT Drone Web",
+            "deviceRating": 4,
+            "dataProcessing": 3,
+            "firewall": 3,
+            "cost": 52000,
+            "availability": 8,
+            "description": "Professional-grade RCC",
+            "page": 441
+          },
+          {
+            "id": "proteus-poseidon",
+            "name": "Proteus Poseidon",
+            "deviceRating": 4,
+            "dataProcessing": 4,
+            "firewall": 3,
+            "cost": 62000,
+            "availability": 10,
+            "description": "High-end RCC for rigger professionals",
+            "page": 441
+          },
+          {
+            "id": "vulcan-liegelord",
+            "name": "Vulcan Liegelord",
+            "deviceRating": 4,
+            "dataProcessing": 4,
+            "firewall": 4,
+            "cost": 72000,
+            "availability": 12,
+            "restricted": true,
+            "description": "Military-spec rigger command console",
+            "page": 441
+          },
+          {
+            "id": "ares-transport",
+            "name": "Ares Transporter",
+            "deviceRating": 5,
+            "dataProcessing": 5,
+            "firewall": 4,
+            "cost": 110000,
+            "availability": 12,
+            "description": "Top-tier commercial RCC",
+            "page": 441
+          },
+          {
+            "id": "maersk-spider",
+            "name": "Maersk Spider",
+            "deviceRating": 6,
+            "dataProcessing": 6,
+            "firewall": 5,
+            "cost": 215000,
+            "availability": 14,
+            "restricted": true,
+            "description": "The ultimate RCC for serious riggers",
+            "page": 441
+          }
+        ],
+        "autosofts": [
+          {
+            "id": "clearsight",
+            "name": "Clearsight",
+            "category": "perception",
+            "maxRating": 6,
+            "costPerRating": 500,
+            "availabilityPerRating": 2,
+            "description": "Drone Perception tests",
+            "page": 269
+          },
+          {
+            "id": "electronic-warfare",
+            "name": "Electronic Warfare",
+            "category": "electronic-warfare",
+            "maxRating": 6,
+            "costPerRating": 500,
+            "availabilityPerRating": 2,
+            "description": "EW tests for drones",
+            "page": 269
+          },
+          {
+            "id": "evasion",
+            "name": "Evasion",
+            "category": "defense",
+            "maxRating": 6,
+            "costPerRating": 500,
+            "availabilityPerRating": 2,
+            "description": "Defense tests for drones",
+            "page": 269
+          },
+          {
+            "id": "maneuvering",
+            "name": "Maneuvering",
+            "category": "movement",
+            "maxRating": 6,
+            "costPerRating": 500,
+            "availabilityPerRating": 2,
+            "requiresTarget": true,
+            "targetType": "vehicle",
+            "description": "Piloting tests for specific vehicle type",
+            "page": 269
+          },
+          {
+            "id": "stealth",
+            "name": "Stealth",
+            "category": "stealth",
+            "maxRating": 6,
+            "costPerRating": 500,
+            "availabilityPerRating": 2,
+            "description": "Sneaking tests for drones",
+            "page": 269
+          },
+          {
+            "id": "targeting",
+            "name": "Targeting",
+            "category": "combat",
+            "maxRating": 6,
+            "costPerRating": 500,
+            "availabilityPerRating": 2,
+            "requiresTarget": true,
+            "targetType": "weapon",
+            "description": "Attack tests with specific weapon type",
+            "page": 269
+          }
+        ]
+      }
+    },
     "creationMethods": {
       "mergeStrategy": "replace",
       "payload": {
@@ -8742,6 +9627,17 @@
                 "payload": {
                   "type": "purchase",
                   "target": "gear",
+                  "budgetId": "nuyen",
+                  "availabilityLimit": 12
+                }
+              },
+              {
+                "id": "vehicles",
+                "title": "Vehicles & Drones",
+                "type": "purchase",
+                "payload": {
+                  "type": "purchase",
+                  "target": "vehicles",
                   "budgetId": "nuyen",
                   "availabilityLimit": 12
                 }
