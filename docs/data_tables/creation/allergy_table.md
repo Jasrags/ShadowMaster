@@ -1,0 +1,10 @@
+# Allergy Table
+
+| Condition | Value | Description |
+| :-------- | :---- | :---------- |
+| Uncommon | 2 | The substance or condition is rare for the local environment. Examples: silver, gold, antibiotics, grass. |
+| Common | 7 | The substance or condition is prevalent in the local environment. Examples: sunlight, seafood, bees, pollen, pollutants, Wi-Fi sensitivity, soy, wheat. |
+| Mild | 3 | Symptoms are discomfiting and distracting. Apply a -2 dice pool modifier to the character's Physical Tests while under the effects of the Allergy. |
+| Moderate | 8 | Contact with the allergen produces intense pain. Apply a -4 dice pool modifier to all Physical Tests made while a character experiences the symptoms. |
+| Severe | 13 | Contact with the allergen results in extreme pain and actual physical damage. Apply a -4 dice pool modifier to all tests made while a character experiences symptoms. The character also suffers 1 box of Physical Damage (unresisted) for every 1 minute they are exposed to the allergen. |
+| Extreme | 18 | A character at this level, when exposed to the allergen, goes into full anaphylactic shock. The character receives a -6 dice pool modifier for anything they do. The character is considered to be in excruciating agony. The character suffers 1 box of Physical Damage (unresisted) for every 30 seconds they are exposed to the allergen. First Aid, Medicine, or magical means can stop the damage taken from the anaphylactic shock. |

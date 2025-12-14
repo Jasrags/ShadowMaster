@@ -2,13 +2,17 @@
 
 import { useState, useMemo } from "react";
 import type { CreationState, GearItem, Lifestyle } from "@/lib/types";
+import type { FocusItem } from "@/lib/types/character";
+import type { FocusType } from "@/lib/types/edition";
 import {
   useGear,
   useLifestyles,
   useLifestyleModifiers,
+  useFoci,
   type GearItemData,
   type WeaponData,
   type ArmorData,
+  type FocusCatalogItemData,
 } from "@/lib/rules/RulesetContext";
 
 interface StepProps {
@@ -70,6 +74,7 @@ export function GearStep({ state, updateState, budgetValues }: StepProps) {
   const gearCatalog = useGear();
   const lifestyles = useLifestyles();
   const lifestyleModifiers = useLifestyleModifiers();
+  const fociCatalog = useFoci();
 
   const [selectedCategory, setSelectedCategory] = useState<GearCategory>("all");
   const [weaponSubcategory, setWeaponSubcategory] = useState<WeaponSubcategory>("all");
@@ -79,6 +84,11 @@ export function GearStep({ state, updateState, budgetValues }: StepProps) {
   // Get selections from state
   const selectedGear: GearItem[] = (state.selections?.gear as GearItem[]) || [];
   const selectedLifestyle: Lifestyle | null = (state.selections?.lifestyle as Lifestyle) || null;
+  const selectedFoci: FocusItem[] = (state.selections?.foci as FocusItem[]) || [];
+  
+  // Check if character is magical
+  const magicPath = (state.selections?.["magical-path"] as string) || "mundane";
+  const isMagical = ["magician", "mystic-adept", "aspected-mage"].includes(magicPath);
 
   // Get metatype for lifestyle modifier
   const metatype = (state.selections?.metatype as string) || "human";
@@ -96,11 +106,12 @@ export function GearStep({ state, updateState, budgetValues }: StepProps) {
     const karmaSpentSpells = (state.budgets?.["karma-spent-spells"] as number) || 0;
     const karmaSpentComplexForms = (state.budgets?.["karma-spent-complex-forms"] as number) || 0;
     const karmaSpentPowerPoints = (state.budgets?.["karma-spent-power-points"] as number) || 0;
+    const karmaSpentFociBonding = (state.budgets?.["karma-spent-foci-bonding"] as number) || 0;
 
     const available =
       karmaBase +
       karmaGainedNegative -
-      (karmaSpentPositive + karmaSpentSpells + karmaSpentComplexForms + karmaSpentPowerPoints);
+      (karmaSpentPositive + karmaSpentSpells + karmaSpentComplexForms + karmaSpentPowerPoints + karmaSpentFociBonding);
 
     // Allow reducing conversion back down even if available is low/negative
     return Math.max(0, available + karmaConversion);
@@ -116,13 +127,13 @@ export function GearStep({ state, updateState, budgetValues }: StepProps) {
   const totalNuyen = baseNuyen + convertedNuyen;
 
   // Calculate spent
-  // Calculate spent
   const gearSpent = selectedGear.reduce((sum, item) => sum + item.cost * item.quantity, 0);
+  const fociSpent = selectedFoci.reduce((sum, focus) => sum + focus.cost, 0);
   const lifestyleCost = selectedLifestyle
     ? Math.floor(selectedLifestyle.monthlyCost * lifestyleModifier)
     : 0;
   const augmentationSpent = (state.budgets["nuyen-spent-augmentations"] as number) || 0;
-  const totalSpent = gearSpent + lifestyleCost + augmentationSpent;
+  const totalSpent = gearSpent + fociSpent + lifestyleCost + augmentationSpent;
   const remaining = totalNuyen - totalSpent;
 
   // Helper to add gear item
@@ -169,6 +180,58 @@ export function GearStep({ state, updateState, budgetValues }: StepProps) {
       selections: {
         ...state.selections,
         lifestyle: newLifestyle,
+      },
+    });
+  };
+
+  // Helper to add focus
+  const addFocus = (focusCatalogItem: FocusCatalogItemData, force: number, bonded: boolean) => {
+    const cost = force * focusCatalogItem.costMultiplier;
+    const karmaToBond = bonded ? force * focusCatalogItem.bondingKarmaMultiplier : 0;
+    const availability = force * 4; // Availability is Force × 4R for foci
+    
+    const newFocus: FocusItem = {
+      catalogId: focusCatalogItem.id,
+      name: `${focusCatalogItem.name} (Force ${force})`,
+      type: focusCatalogItem.type as FocusType,
+      force,
+      bonded,
+      karmaToBond,
+      cost,
+      availability,
+      restricted: focusCatalogItem.restricted,
+    };
+    
+    const updatedFoci = [...selectedFoci, newFocus];
+    
+    // Update karma budget for bonding
+    const newFociBondingKarma = updatedFoci.reduce((sum, f) => sum + (f.bonded ? f.karmaToBond : 0), 0);
+    
+    updateState({
+      selections: {
+        ...state.selections,
+        foci: updatedFoci,
+      },
+      budgets: {
+        ...state.budgets,
+        "karma-spent-foci-bonding": newFociBondingKarma,
+      },
+    });
+  };
+  
+  // Helper to remove focus
+  const removeFocus = (index: number) => {
+    const updatedFoci = selectedFoci.filter((_, i) => i !== index);
+    const newFociBondingKarma = updatedFoci.reduce((sum, f) => sum + (f.bonded ? f.karmaToBond : 0), 0);
+    
+    updateState({
+      selections: {
+        ...state.selections,
+        foci: updatedFoci,
+      },
+      budgets: {
+        ...state.budgets,
+        "karma-spent-foci-bonding": newFociBondingKarma,
       },
     });
   };
@@ -461,6 +524,7 @@ export function GearStep({ state, updateState, budgetValues }: StepProps) {
             { id: "medical", label: "Medical" },
             { id: "miscellaneous", label: "Misc" },
             { id: "ammunition", label: "Ammo" },
+            ...(isMagical ? [{ id: "foci", label: "Foci" }] : []),
           ].map((cat) => (
             <button
               key={cat.id}
@@ -506,7 +570,130 @@ export function GearStep({ state, updateState, budgetValues }: StepProps) {
           </div>
         )}
 
+        {/* Foci Selection */}
+        {selectedCategory === "foci" && (
+          <div className="space-y-4">
+            {/* Selected Foci */}
+            {selectedFoci.length > 0 && (
+              <div className="rounded-lg border border-zinc-200 bg-zinc-50 p-4 dark:border-zinc-700 dark:bg-zinc-800/50">
+                <h3 className="mb-2 text-sm font-semibold">Selected Foci</h3>
+                <div className="space-y-2">
+                  {selectedFoci.map((focus, index) => (
+                    <div
+                      key={index}
+                      className="flex items-center justify-between rounded border border-zinc-200 bg-white p-2 dark:border-zinc-600 dark:bg-zinc-800"
+                    >
+                      <div className="flex-1">
+                        <p className="text-sm font-medium">{focus.name}</p>
+                        <p className="text-xs text-zinc-500 dark:text-zinc-400">
+                          ¥{formatCurrency(focus.cost)}
+                          {focus.bonded && ` | Bonded (${focus.karmaToBond} Karma)`}
+                        </p>
+                      </div>
+                      <button
+                        onClick={() => removeFocus(index)}
+                        className="rounded px-2 py-1 text-xs text-red-600 hover:bg-red-50 dark:text-red-400 dark:hover:bg-red-900/20"
+                      >
+                        Remove
+                      </button>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
+
+            {/* Foci Catalog */}
+            <div className="max-h-96 overflow-y-auto rounded-lg border border-zinc-200 dark:border-zinc-700">
+              <table className="w-full text-sm">
+                <thead className="sticky top-0 bg-zinc-100 dark:bg-zinc-800">
+                  <tr>
+                    <th className="px-3 py-2 text-left">Focus</th>
+                    <th className="px-3 py-2 text-center">Force</th>
+                    <th className="px-3 py-2 text-center">Bond</th>
+                    <th className="px-3 py-2 text-right">Cost</th>
+                    <th className="px-3 py-2 text-center">Karma</th>
+                    <th className="px-3 py-2 text-center">Action</th>
+                  </tr>
+                </thead>
+                <tbody className="divide-y divide-zinc-100 dark:divide-zinc-700">
+                  {fociCatalog.map((focus) => {
+                    return [1, 2, 3, 4, 5, 6].map((force) => {
+                      const cost = force * focus.costMultiplier;
+                      const bondingKarma = force * focus.bondingKarmaMultiplier;
+                      const canAfford = cost <= remaining;
+
+                      return (
+                        <tr
+                          key={`${focus.id}-${force}`}
+                          className="hover:bg-zinc-50 dark:hover:bg-zinc-800/50"
+                        >
+                          <td className="px-3 py-2">
+                            <p className="font-medium">{focus.name}</p>
+                            {focus.description && (
+                              <p className="text-xs text-zinc-500 dark:text-zinc-400 truncate max-w-xs">
+                                {focus.description}
+                              </p>
+                            )}
+                          </td>
+                          <td className="px-3 py-2 text-center">{force}</td>
+                          <td className="px-3 py-2 text-center">
+                            <label className="flex items-center justify-center">
+                              <input
+                                type="checkbox"
+                                checked={false}
+                                readOnly
+                                className="rounded"
+                              />
+                            </label>
+                          </td>
+                          <td className="px-3 py-2 text-right">¥{formatCurrency(cost)}</td>
+                          <td className="px-3 py-2 text-center text-xs text-zinc-500 dark:text-zinc-400">
+                            {bondingKarma}
+                          </td>
+                          <td className="px-3 py-2 text-center">
+                            <div className="flex gap-1">
+                              <button
+                                onClick={() => addFocus(focus, force, false)}
+                                disabled={!canAfford}
+                                className={`rounded px-2 py-1 text-xs font-medium transition-colors ${canAfford
+                                    ? "bg-emerald-500 text-white hover:bg-emerald-600"
+                                    : "cursor-not-allowed bg-zinc-200 text-zinc-400 dark:bg-zinc-700"
+                                  }`}
+                              >
+                                Add
+                              </button>
+                              <button
+                                onClick={() => addFocus(focus, force, true)}
+                                disabled={!canAfford}
+                                className={`rounded px-2 py-1 text-xs font-medium transition-colors ${canAfford
+                                    ? "bg-blue-500 text-white hover:bg-blue-600"
+                                    : "cursor-not-allowed bg-zinc-200 text-zinc-400 dark:bg-zinc-700"
+                                  }`}
+                                title={`Add and bond (costs ${bondingKarma} Karma)`}
+                              >
+                                +Bond
+                              </button>
+                            </div>
+                          </td>
+                        </tr>
+                      );
+                    });
+                  })}
+                  {fociCatalog.length === 0 && (
+                    <tr>
+                      <td colSpan={6} className="px-3 py-8 text-center text-zinc-500">
+                        No foci available.
+                      </td>
+                    </tr>
+                  )}
+                </tbody>
+              </table>
+            </div>
+          </div>
+        )}
+
         {/* Item List */}
+        {selectedCategory !== "foci" && (
         <div className="max-h-96 overflow-y-auto rounded-lg border border-zinc-200 dark:border-zinc-700">
           <table className="w-full text-sm">
             <thead className="sticky top-0 bg-zinc-100 dark:bg-zinc-800">
@@ -583,6 +770,7 @@ export function GearStep({ state, updateState, budgetValues }: StepProps) {
             </tbody>
           </table>
         </div>
+        )}
       </div>
 
       {/* Help Text */}

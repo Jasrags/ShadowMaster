@@ -3,7 +3,7 @@
 import { useMemo } from "react";
 import { useMetatypes, useSkills, useQualities, useSpells, useComplexForms, usePriorityTable, useTraditions, useMentorSpirits } from "@/lib/rules";
 import { useAugmentationRules, calculateMagicLoss } from "@/lib/rules/RulesetContext";
-import type { CreationState, ID, Contact, CyberwareItem, BiowareItem } from "@/lib/types";
+import type { CreationState, ID, Contact, CyberwareItem, BiowareItem, FocusItem } from "@/lib/types";
 
 interface StepProps {
   state: CreationState;
@@ -98,6 +98,7 @@ export function ReviewStep({ state, updateState, budgetValues }: StepProps) {
   const selectedComplexForms = (state.selections.complexForms || []) as string[];
   const selectedCyberware = (state.selections.cyberware || []) as CyberwareItem[];
   const selectedBioware = (state.selections.bioware || []) as BiowareItem[];
+  const selectedFoci = (state.selections.foci || []) as FocusItem[];
 
   // Get free spells/complex forms from priority
   const { freeSpells, freeComplexForms } = useMemo(() => {
@@ -126,9 +127,10 @@ export function ReviewStep({ state, updateState, budgetValues }: StepProps) {
   const karmaSpentSpells = (state.budgets["karma-spent-spells"] as number) || 0;
   const karmaSpentComplexForms = (state.budgets["karma-spent-complex-forms"] as number) || 0;
   const karmaSpentPowerPoints = (state.budgets["karma-spent-power-points"] as number) || 0;
+  const karmaSpentFociBonding = (state.budgets["karma-spent-foci-bonding"] as number) || 0;
 
   const karmaTotal = (budgetValues["karma"] || 25) + karmaGainedNegative;
-  const karmaSpent = karmaSpentPositive + karmaSpentGear + karmaSpentSpells + karmaSpentComplexForms + karmaSpentPowerPoints;
+  const karmaSpent = karmaSpentPositive + karmaSpentGear + karmaSpentSpells + karmaSpentComplexForms + karmaSpentPowerPoints + karmaSpentFociBonding;
   const karmaRemaining = karmaTotal - karmaSpent;
 
   const karmaToNuyen = (state.budgets["karma-spent-gear"] as number) || 0;
@@ -913,7 +915,7 @@ export function ReviewStep({ state, updateState, budgetValues }: StepProps) {
       )}
 
       {/* Gear & Lifestyle */}
-      {(gear.length > 0 || lifestyle) && (
+      {(gear.length > 0 || lifestyle || selectedFoci.length > 0) && (
         <div className="rounded-lg border border-zinc-200 bg-white p-4 dark:border-zinc-700 dark:bg-zinc-800/50">
           <h3 className="text-sm font-semibold text-zinc-900 dark:text-zinc-100">Gear & Lifestyle</h3>
           <div className="mt-3 space-y-3">
@@ -925,6 +927,29 @@ export function ReviewStep({ state, updateState, budgetValues }: StepProps) {
                 <span className="ml-2 text-sm text-emerald-600 dark:text-emerald-400">
                   ({lifestyle.months} month{lifestyle.months > 1 ? "s" : ""})
                 </span>
+              </div>
+            )}
+            {selectedFoci.length > 0 && (
+              <div className="space-y-2">
+                <div className="text-xs font-medium text-zinc-600 dark:text-zinc-400">Foci</div>
+                <div className="flex flex-wrap gap-2">
+                  {selectedFoci.map((focus, i) => (
+                    <span
+                      key={i}
+                      className={`inline-flex items-center gap-1 rounded-full px-3 py-1 text-sm ${focus.bonded
+                          ? "bg-purple-100 text-purple-800 dark:bg-purple-900/50 dark:text-purple-200"
+                          : "bg-zinc-100 text-zinc-800 dark:bg-zinc-700 dark:text-zinc-200"
+                        }`}
+                    >
+                      <span>{focus.name}</span>
+                      {focus.bonded && (
+                        <span className="text-xs text-purple-600 dark:text-purple-400" title={`Bonded (${focus.karmaToBond} Karma)`}>
+                          ⚡
+                        </span>
+                      )}
+                    </span>
+                  ))}
+                </div>
               </div>
             )}
             {gear.length > 0 && (

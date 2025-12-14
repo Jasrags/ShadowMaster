@@ -235,7 +235,7 @@ This section provides a comprehensive view of the entire implementation roadmap,
 | B6  | Spell Management                 | 1-2 weeks  | High   | ✅ Complete   |
 | B12 | Rigger Support (Vehicles & Drones)| 2-3 weeks | High   | ✅ Complete   |
 | B13 | Decker Support (Programs)        | 1 week     | High   | 🔜 Next      |
-| B14 | Foci & Spirits                   | 2 weeks    | High   | Not Started  |
+| B14 | Foci & Spirits                   | 2 weeks    | High   | ✅ Complete  |
 | B11 | Identity/Lifestyle/SIN System    | 2-3 weeks  | High   | Not Started  |
 | B10 | Gear Modifications               | 2-3 weeks  | Medium | Not Started  |
 | B2 | Sourcebook Integration | 2 weeks | Medium | Not Started |
@@ -4679,9 +4679,9 @@ This milestone establishes the data structures for magical foci.
 
 | Task | Description | Status |
 |------|-------------|--------|
-| B14.1.1 | Create Focus interface (type, force, bonded, karmaTooBond, cost) | Not Started |
-| B14.1.2 | Create FocusType enum (Enchanting, Metamagic, Power, Qi, Spell, Spirit, Weapon) | Not Started |
-| B14.1.3 | Add foci array to Character interface | Not Started |
+| B14.1.1 | Create Focus interface (type, force, bonded, karmaTooBond, cost) | ✅ Complete |
+| B14.1.2 | Create FocusType enum (Enchanting, Metamagic, Power, Qi, Spell, Spirit, Weapon) | ✅ Complete |
+| B14.1.3 | Add foci array to Character interface | ✅ Complete |
 
 **Tasks JSON:**
 ```json
@@ -4691,7 +4691,7 @@ This milestone establishes the data structures for magical foci.
     "title": "Create Focus interface (type, force, bonded, karmaToBond, cost)",
     "description": "Create the Focus interface for magical foci.",
     "files": ["/lib/types/edition.ts"],
-    "status": "Not Started",
+    "status": "Complete",
     "dependsOn": []
   },
   {
@@ -4699,7 +4699,7 @@ This milestone establishes the data structures for magical foci.
     "title": "Create FocusType enum (Enchanting, Metamagic, Power, Qi, Spell, Spirit, Weapon)",
     "description": "Create enum for focus types from SR5 CRB.",
     "files": ["/lib/types/edition.ts"],
-    "status": "Not Started",
+    "status": "Complete",
     "dependsOn": []
   },
   {
@@ -4707,7 +4707,7 @@ This milestone establishes the data structures for magical foci.
     "title": "Add foci array to Character interface",
     "description": "Update Character interface to include owned foci.",
     "files": ["/lib/types/character.ts"],
-    "status": "Not Started",
+    "status": "Complete",
     "dependsOn": ["B14.1.1"]
   }
 ]
@@ -4724,9 +4724,9 @@ This milestone establishes the data structures for spirits that mages can summon
 
 | Task | Description | Status |
 |------|-------------|--------|
-| B14.2.1 | Create Spirit interface (type, force, services, powers, optionalPowers, weaknesses) | Not Started |
-| B14.2.2 | Create SpiritPower interface (name, description, action, range, duration) | Not Started |
-| B14.2.3 | Create SpiritType enum (Air, Beasts, Earth, Fire, Man, Water, Guardian, Guidance, Plant, Task) | Not Started |
+| B14.2.1 | Create Spirit interface (type, force, services, powers, optionalPowers, weaknesses) | ✅ Complete |
+| B14.2.2 | Create SpiritPower interface (name, description, action, range, duration) | ✅ Complete |
+| B14.2.3 | Create SpiritType enum (Air, Beasts, Earth, Fire, Man, Water, Guardian, Guidance, Plant, Task) | ✅ Complete |
 
 **Tasks JSON:**
 ```json
@@ -4736,7 +4736,7 @@ This milestone establishes the data structures for spirits that mages can summon
     "title": "Create Spirit interface (type, force, services, powers, optionalPowers, weaknesses)",
     "description": "Create the Spirit interface for summoned spirits.",
     "files": ["/lib/types/edition.ts"],
-    "status": "Not Started",
+    "status": "Complete",
     "dependsOn": []
   },
   {
@@ -4744,7 +4744,7 @@ This milestone establishes the data structures for spirits that mages can summon
     "title": "Create SpiritPower interface (name, description, action, range, duration)",
     "description": "Create interface for spirit powers.",
     "files": ["/lib/types/edition.ts"],
-    "status": "Not Started",
+    "status": "Complete",
     "dependsOn": []
   },
   {
@@ -4752,7 +4752,7 @@ This milestone establishes the data structures for spirits that mages can summon
     "title": "Create SpiritType enum (Air, Beasts, Earth, Fire, Man, Water, Guardian, Guidance, Plant, Task)",
     "description": "Create enum for spirit types from SR5 CRB.",
     "files": ["/lib/types/edition.ts"],
-    "status": "Not Started",
+    "status": "Complete",
     "dependsOn": []
   }
 ]
@@ -4769,10 +4769,10 @@ This milestone populates the SR5 Core Rulebook foci and spirit data.
 
 | Task | Description | Status |
 |------|-------------|--------|
-| B14.3.1 | Add foci types with costs (Force × multiplier) to core-rulebook.json | Not Started |
-| B14.3.2 | Add spirit types with base powers to core-rulebook.json | Not Started |
-| B14.3.3 | Add spirit optional powers list to core-rulebook.json | Not Started |
-| B14.3.4 | Add spirit weaknesses by type to core-rulebook.json | Not Started |
+| B14.3.1 | Add foci types with costs (Force × multiplier) to core-rulebook.json | ✅ Complete |
+| B14.3.2 | Add spirit types with base powers to core-rulebook.json | ✅ Complete |
+| B14.3.3 | Add spirit optional powers list to core-rulebook.json | ✅ Complete |
+| B14.3.4 | Add spirit weaknesses by type to core-rulebook.json | ✅ Complete |
 
 **Tasks JSON:**
 ```json
@@ -4782,7 +4782,7 @@ This milestone populates the SR5 Core Rulebook foci and spirit data.
     "title": "Add foci types with costs (Force × multiplier) to core-rulebook.json",
     "description": "Populate SR5 CRB foci with cost formulas (e.g., Weapon Focus = Force × 7,000¥).",
     "files": ["/data/editions/sr5/core-rulebook.json"],
-    "status": "Not Started",
+    "status": "Complete",
     "dependsOn": ["B14.1.1", "B14.1.2"]
   },
   {
@@ -4790,7 +4790,7 @@ This milestone populates the SR5 Core Rulebook foci and spirit data.
     "title": "Add spirit types with base powers to core-rulebook.json",
     "description": "Populate SR5 CRB spirit types with their innate powers.",
     "files": ["/data/editions/sr5/core-rulebook.json"],
-    "status": "Not Started",
+    "status": "Complete",
     "dependsOn": ["B14.2.1", "B14.2.2", "B14.2.3"]
   },
   {
@@ -4798,7 +4798,7 @@ This milestone populates the SR5 Core Rulebook foci and spirit data.
     "title": "Add spirit optional powers list to core-rulebook.json",
     "description": "Populate the optional powers spirits can have.",
     "files": ["/data/editions/sr5/core-rulebook.json"],
-    "status": "Not Started",
+    "status": "Complete",
     "dependsOn": ["B14.2.2"]
   },
   {
@@ -4806,7 +4806,7 @@ This milestone populates the SR5 Core Rulebook foci and spirit data.
     "title": "Add spirit weaknesses by type to core-rulebook.json",
     "description": "Populate spirit weaknesses (Allergy to sunlight, etc.).",
     "files": ["/data/editions/sr5/core-rulebook.json"],
-    "status": "Not Started",
+    "status": "Complete",
     "dependsOn": ["B14.2.1"]
   }
 ]
@@ -4824,10 +4824,10 @@ This milestone creates the React context hooks for accessing foci and spirit dat
 
 | Task | Description | Status |
 |------|-------------|--------|
-| B14.4.1 | Add foci extractor to loader.ts | Not Started |
-| B14.4.2 | Add spirits extractor to loader.ts | Not Started |
-| B14.4.3 | Create useFoci() hook in RulesetContext | Not Started |
-| B14.4.4 | Create useSpirits() hook in RulesetContext | Not Started |
+| B14.4.1 | Add foci extractor to loader.ts | ✅ Complete |
+| B14.4.2 | Add spirits extractor to loader.ts | ✅ Complete |
+| B14.4.3 | Create useFoci() hook in RulesetContext | ✅ Complete |
+| B14.4.4 | Create useSpirits() hook in RulesetContext | ✅ Complete |
 
 **Tasks JSON:**
 ```json
@@ -4837,7 +4837,7 @@ This milestone creates the React context hooks for accessing foci and spirit dat
     "title": "Add foci extractor to loader.ts",
     "description": "Update loader to extract foci from ruleset.",
     "files": ["/lib/rules/loader.ts"],
-    "status": "Not Started",
+    "status": "Complete",
     "dependsOn": ["B14.3.1"]
   },
   {
@@ -4845,7 +4845,7 @@ This milestone creates the React context hooks for accessing foci and spirit dat
     "title": "Add spirits extractor to loader.ts",
     "description": "Update loader to extract spirits from ruleset.",
     "files": ["/lib/rules/loader.ts"],
-    "status": "Not Started",
+    "status": "Complete",
     "dependsOn": ["B14.3.2"]
   },
   {
@@ -4853,7 +4853,7 @@ This milestone creates the React context hooks for accessing foci and spirit dat
     "title": "Create useFoci() hook in RulesetContext",
     "description": "Create hook for accessing foci catalog.",
     "files": ["/lib/rules/RulesetContext.tsx"],
-    "status": "Not Started",
+    "status": "Complete",
     "dependsOn": ["B14.4.1"]
   },
   {
@@ -4861,7 +4861,7 @@ This milestone creates the React context hooks for accessing foci and spirit dat
     "title": "Create useSpirits() hook in RulesetContext",
     "description": "Create hook for accessing spirit data.",
     "files": ["/lib/rules/RulesetContext.tsx"],
-    "status": "Not Started",
+    "status": "Complete",
     "dependsOn": ["B14.4.2"]
   }
 ]
@@ -4878,11 +4878,11 @@ This milestone integrates foci selection into the GearStep for magical character
 
 | Task | Description | Status |
 |------|-------------|--------|
-| B14.5.1 | Add foci category/tab to GearStep (magical characters only) | Not Started |
-| B14.5.2 | Implement focus force selection (1-6 for starting characters) | Not Started |
-| B14.5.3 | Calculate focus costs (Force × type multiplier) | Not Started |
-| B14.5.4 | Track karma cost for bonding foci (Focus Force × bonding multiplier) | Not Started |
-| B14.5.5 | Display owned foci in ReviewStep | Not Started |
+| B14.5.1 | Add foci category/tab to GearStep (magical characters only) | ✅ Complete |
+| B14.5.2 | Implement focus force selection (1-6 for starting characters) | ✅ Complete |
+| B14.5.3 | Calculate focus costs (Force × type multiplier) | ✅ Complete |
+| B14.5.4 | Track karma cost for bonding foci (Focus Force × bonding multiplier) | ✅ Complete |
+| B14.5.5 | Display owned foci in ReviewStep | ✅ Complete |
 
 **Tasks JSON:**
 ```json
@@ -4892,7 +4892,7 @@ This milestone integrates foci selection into the GearStep for magical character
     "title": "Add foci category/tab to GearStep (magical characters only)",
     "description": "Add a foci section to GearStep, visible only for magical characters.",
     "files": ["/app/characters/create/components/steps/GearStep.tsx"],
-    "status": "Not Started",
+    "status": "Complete",
     "dependsOn": ["B14.4.3"]
   },
   {
@@ -4900,7 +4900,7 @@ This milestone integrates foci selection into the GearStep for magical character
     "title": "Implement focus force selection (1-6 for starting characters)",
     "description": "Allow selecting force rating for foci.",
     "files": ["/app/characters/create/components/steps/GearStep.tsx"],
-    "status": "Not Started",
+    "status": "Complete",
     "dependsOn": ["B14.5.1"]
   },
   {
@@ -4908,7 +4908,7 @@ This milestone integrates foci selection into the GearStep for magical character
     "title": "Calculate focus costs (Force × type multiplier)",
     "description": "Implement cost calculation for foci purchases.",
     "files": ["/app/characters/create/components/steps/GearStep.tsx"],
-    "status": "Not Started",
+    "status": "Complete",
     "dependsOn": ["B14.5.2"]
   },
   {
@@ -4916,7 +4916,7 @@ This milestone integrates foci selection into the GearStep for magical character
     "title": "Track karma cost for bonding foci (Focus Force × bonding multiplier)",
     "description": "Track karma spent on bonding foci.",
     "files": ["/app/characters/create/components/steps/GearStep.tsx"],
-    "status": "Not Started",
+    "status": "Complete",
     "dependsOn": ["B14.5.2"]
   },
   {
@@ -4924,7 +4924,7 @@ This milestone integrates foci selection into the GearStep for magical character
     "title": "Display owned foci in ReviewStep",
     "description": "Show purchased foci in the review step.",
     "files": ["/app/characters/create/components/steps/ReviewStep.tsx"],
-    "status": "Not Started",
+    "status": "Complete",
     "dependsOn": ["B14.5.1"]
   }
 ]
@@ -4941,8 +4941,8 @@ This milestone adds spirit reference information for magical characters to help 
 
 | Task | Description | Status |
 |------|-------------|--------|
-| B14.6.1 | Display available spirit types based on tradition | Not Started |
-| B14.6.2 | Show spirit powers and weaknesses for reference | Not Started |
+| B14.6.1 | Display available spirit types based on tradition | ✅ Complete |
+| B14.6.2 | Show spirit powers and weaknesses for reference | ✅ Complete |
 
 **Tasks JSON:**
 ```json
@@ -4952,7 +4952,7 @@ This milestone adds spirit reference information for magical characters to help 
     "title": "Display available spirit types based on tradition",
     "description": "Show which spirits the character can summon based on their tradition.",
     "files": ["/app/characters/create/components/steps/MagicStep.tsx"],
-    "status": "Not Started",
+    "status": "Complete",
     "dependsOn": ["B14.4.4"]
   },
   {
@@ -4960,7 +4960,7 @@ This milestone adds spirit reference information for magical characters to help 
     "title": "Show spirit powers and weaknesses for reference",
     "description": "Display spirit stat blocks for reference during creation.",
     "files": ["/app/characters/create/components/steps/MagicStep.tsx"],
-    "status": "Not Started",
+    "status": "Complete",
     "dependsOn": ["B14.6.1"]
   }
 ]
@@ -4968,12 +4968,12 @@ This milestone adds spirit reference information for magical characters to help 
 
 ### B14.7 Acceptance Criteria
 
-- **B14.7.AC.1** [ ] All SR5 CRB foci types available
-- **B14.7.AC.2** [ ] Focus costs calculated correctly (Force × multiplier)
-- **B14.7.AC.3** [ ] Karma bonding costs tracked
-- **B14.7.AC.4** [ ] All SR5 CRB spirit types with powers documented
-- **B14.7.AC.5** [ ] Spirit reference available based on tradition
-- **B14.7.AC.6** [ ] Full mage/shaman character creatable with foci
+- **B14.7.AC.1** [x] All SR5 CRB foci types available
+- **B14.7.AC.2** [x] Focus costs calculated correctly (Force × multiplier)
+- **B14.7.AC.3** [x] Karma bonding costs tracked
+- **B14.7.AC.4** [x] All SR5 CRB spirit types with powers documented
+- **B14.7.AC.5** [x] Spirit reference available based on tradition
+- **B14.7.AC.6** [x] Full mage/shaman character creatable with foci
 
 ---
 

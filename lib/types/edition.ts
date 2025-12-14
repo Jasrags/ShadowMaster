@@ -123,6 +123,8 @@ export type RuleModuleType =
   | "contacts" // Contact rules and costs
   | "contactTemplates" // Pre-defined contact templates
   | "adeptPowers" // Adept magical abilities
+  | "foci" // Magical foci catalog
+  | "spirits" // Spirit types and powers
   | "priorities" // Priority table for creation (SR5)
   | "creationMethods" // Available character creation methods
   | "advancement" // Karma advancement rules
@@ -349,6 +351,105 @@ export interface AugmentationRules {
   trackEssenceHoles: boolean;
   /** Magic/Resonance reduction formula */
   magicReductionFormula: "roundUp" | "roundDown" | "exact";
+}
+
+// =============================================================================
+// FOCI TYPES (for ruleset data)
+// =============================================================================
+
+/**
+ * Types of magical foci from SR5 Core Rulebook
+ */
+export enum FocusType {
+  Enchanting = "enchanting",
+  Metamagic = "metamagic",
+  Power = "power",
+  Qi = "qi",
+  Spell = "spell",
+  Spirit = "spirit",
+  Weapon = "weapon",
+}
+
+/**
+ * Focus interface for magical foci
+ * This represents a focus owned by a character
+ */
+export interface Focus {
+  type: FocusType;
+  force: number;
+  bonded: boolean;
+  karmaToBond: number;
+  cost: number;
+}
+
+/**
+ * Focus catalog item in ruleset data
+ * This is the template data, not the owned item
+ */
+export interface FocusCatalogItem {
+  id: string;
+  name: string;
+  type: FocusType;
+  /** Cost multiplier (cost = Force × multiplier) */
+  costMultiplier: number;
+  /** Karma cost multiplier for bonding (karma = Force × multiplier) */
+  bondingKarmaMultiplier: number;
+  /** Base availability */
+  availability: number;
+  /** Whether availability is Restricted (R) or Forbidden (F) */
+  restricted?: boolean;
+  forbidden?: boolean;
+  /** Description */
+  description?: string;
+  /** Page reference in source material */
+  page?: number;
+  /** Source book reference */
+  source?: string;
+}
+
+// =============================================================================
+// SPIRIT TYPES (for ruleset data)
+// =============================================================================
+
+/**
+ * Types of spirits from SR5 Core Rulebook
+ */
+export enum SpiritType {
+  Air = "air",
+  Beasts = "beasts",
+  Earth = "earth",
+  Fire = "fire",
+  Man = "man",
+  Water = "water",
+  Guardian = "guardian",
+  Guidance = "guidance",
+  Plant = "plant",
+  Task = "task",
+}
+
+/**
+ * Spirit power interface
+ * Represents a power that a spirit can have
+ */
+export interface SpiritPower {
+  name: string;
+  description?: string;
+  action?: string;
+  range?: string;
+  duration?: string;
+}
+
+/**
+ * Spirit catalog data in ruleset
+ * This represents the template data for spirits that can be summoned
+ */
+export interface Spirit {
+  type: SpiritType;
+  force: number;
+  services: number;
+  powers: SpiritPower[];
+  optionalPowers?: SpiritPower[];
+  weaknesses?: string[];
 }
 
 // =============================================================================

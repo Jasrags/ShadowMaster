@@ -10121,6 +10121,407 @@
           }
         ]
       }
+    },
+    "foci": {
+      "mergeStrategy": "replace",
+      "payload": {
+        "foci": [
+          {
+            "id": "weapon-focus",
+            "name": "Weapon Focus",
+            "type": "weapon",
+            "costMultiplier": 7000,
+            "bondingKarmaMultiplier": 3,
+            "availability": 0,
+            "restricted": true,
+            "description": "A weapon that has been enchanted to serve as a focus. Adds its Force rating to the wielder's Magic attribute for the purposes of weapon skill tests. The bonding cost is (3 + weapon's Reach) × Force in Karma.",
+            "page": 318,
+            "source": "SR5"
+          },
+          {
+            "id": "power-focus",
+            "name": "Power Focus",
+            "type": "power",
+            "costMultiplier": 18000,
+            "bondingKarmaMultiplier": 8,
+            "availability": 0,
+            "restricted": true,
+            "description": "Increases the wielder's Magic attribute by its Force rating. This is the most powerful and expensive type of focus.",
+            "page": 318,
+            "source": "SR5"
+          },
+          {
+            "id": "spell-focus",
+            "name": "Spell Focus",
+            "type": "spell",
+            "costMultiplier": 4000,
+            "bondingKarmaMultiplier": 4,
+            "availability": 0,
+            "restricted": true,
+            "description": "Adds its Force rating as a dice pool modifier to Spellcasting tests for a specific spell. Must be bonded to a single spell.",
+            "page": 318,
+            "source": "SR5"
+          },
+          {
+            "id": "spirit-focus",
+            "name": "Spirit Focus",
+            "type": "spirit",
+            "costMultiplier": 4000,
+            "bondingKarmaMultiplier": 4,
+            "availability": 0,
+            "restricted": true,
+            "description": "Adds its Force rating as a dice pool modifier to Summoning tests for a specific spirit type.",
+            "page": 318,
+            "source": "SR5"
+          },
+          {
+            "id": "enchanting-focus",
+            "name": "Enchanting Focus",
+            "type": "enchanting",
+            "costMultiplier": 5000,
+            "bondingKarmaMultiplier": 3,
+            "availability": 0,
+            "restricted": true,
+            "description": "Adds its Force rating as a dice pool modifier to Enchanting tests.",
+            "page": 318,
+            "source": "SR5"
+          },
+          {
+            "id": "metamagic-focus",
+            "name": "Metamagic Focus",
+            "type": "metamagic",
+            "costMultiplier": 9000,
+            "bondingKarmaMultiplier": 5,
+            "availability": 0,
+            "restricted": true,
+            "description": "Adds its Force rating as a dice pool modifier when using specific metamagic techniques.",
+            "page": 318,
+            "source": "SR5"
+          },
+          {
+            "id": "qi-focus",
+            "name": "Qi Focus",
+            "type": "qi",
+            "costMultiplier": 3000,
+            "bondingKarmaMultiplier": 2,
+            "availability": 0,
+            "restricted": true,
+            "description": "Adds its Force rating as a dice pool modifier to specific Adept Power tests. Only usable by adepts.",
+            "page": 318,
+            "source": "SR5"
+          }
+        ]
+      }
+    },
+    "spirits": {
+      "mergeStrategy": "replace",
+      "payload": {
+        "spiritTypes": [
+          {
+            "type": "air",
+            "name": "Spirits of Air",
+            "basePowers": [
+              {
+                "name": "Concealment",
+                "description": "The spirit can hide itself or others from detection."
+              },
+              {
+                "name": "Movement",
+                "description": "The spirit can move itself or others at high speeds."
+              },
+              {
+                "name": "Engulf",
+                "description": "The spirit can surround and trap targets."
+              }
+            ],
+            "weaknesses": [
+              "Vulnerable to Earth-based attacks"
+            ]
+          },
+          {
+            "type": "beasts",
+            "name": "Spirits of Beasts",
+            "basePowers": [
+              {
+                "name": "Fear",
+                "description": "The spirit can cause fear in targets."
+              },
+              {
+                "name": "Guard",
+                "description": "The spirit can protect a location or person."
+              },
+              {
+                "name": "Movement",
+                "description": "The spirit can move itself or others."
+              }
+            ],
+            "weaknesses": []
+          },
+          {
+            "type": "earth",
+            "name": "Spirits of Earth",
+            "basePowers": [
+              {
+                "name": "Engulf",
+                "description": "The spirit can surround and trap targets."
+              },
+              {
+                "name": "Materialization",
+                "description": "The spirit can manifest physically in the material world."
+              },
+              {
+                "name": "Movement",
+                "description": "The spirit can move through earth and stone."
+              }
+            ],
+            "weaknesses": [
+              "Vulnerable to Air-based attacks"
+            ]
+          },
+          {
+            "type": "fire",
+            "name": "Spirits of Fire",
+            "basePowers": [
+              {
+                "name": "Engulf",
+                "description": "The spirit can surround and burn targets."
+              },
+              {
+                "name": "Flame Aura",
+                "description": "The spirit radiates intense heat and flame."
+              },
+              {
+                "name": "Guard",
+                "description": "The spirit can protect a location or person."
+              }
+            ],
+            "weaknesses": [
+              "Severe allergy to Water"
+            ]
+          },
+          {
+            "type": "man",
+            "name": "Spirits of Man",
+            "basePowers": [
+              {
+                "name": "Accident",
+                "description": "The spirit can cause accidents and mishaps."
+              },
+              {
+                "name": "Concealment",
+                "description": "The spirit can hide itself or others from detection."
+              },
+              {
+                "name": "Influence",
+                "description": "The spirit can influence the thoughts and actions of others."
+              }
+            ],
+            "weaknesses": []
+          },
+          {
+            "type": "water",
+            "name": "Spirits of Water",
+            "basePowers": [
+              {
+                "name": "Engulf",
+                "description": "The spirit can surround and trap targets in water."
+              },
+              {
+                "name": "Materialization",
+                "description": "The spirit can manifest physically in the material world."
+              },
+              {
+                "name": "Movement",
+                "description": "The spirit can move through water and liquid."
+              }
+            ],
+            "weaknesses": [
+              "Vulnerable to Fire-based attacks"
+            ]
+          },
+          {
+            "type": "guardian",
+            "name": "Guardian Spirits",
+            "basePowers": [
+              {
+                "name": "Guard",
+                "description": "The spirit protects a location or person."
+              },
+              {
+                "name": "Materialization",
+                "description": "The spirit can manifest physically."
+              }
+            ],
+            "weaknesses": []
+          },
+          {
+            "type": "guidance",
+            "name": "Guidance Spirits",
+            "basePowers": [
+              {
+                "name": "Concealment",
+                "description": "The spirit can hide information or objects."
+              },
+              {
+                "name": "Influence",
+                "description": "The spirit can provide guidance and advice."
+              }
+            ],
+            "weaknesses": []
+          },
+          {
+            "type": "plant",
+            "name": "Plant Spirits",
+            "basePowers": [
+              {
+                "name": "Guard",
+                "description": "The spirit can protect natural areas."
+              },
+              {
+                "name": "Movement",
+                "description": "The spirit can move through plant matter."
+              }
+            ],
+            "weaknesses": []
+          },
+          {
+            "type": "task",
+            "name": "Task Spirits",
+            "basePowers": [
+              {
+                "name": "Materialization",
+                "description": "The spirit can manifest physically to perform tasks."
+              },
+              {
+                "name": "Movement",
+                "description": "The spirit can move objects and perform physical tasks."
+              }
+            ],
+            "weaknesses": []
+          }
+        ],
+        "optionalPowers": [
+          {
+            "name": "Accident",
+            "description": "The spirit can cause accidents and mishaps.",
+            "action": "Complex",
+            "range": "LOS",
+            "duration": "Instant"
+          },
+          {
+            "name": "Astral Gateway",
+            "description": "The spirit can create a gateway between the astral and material planes.",
+            "action": "Complex",
+            "range": "Touch",
+            "duration": "Sustained"
+          },
+          {
+            "name": "Binding",
+            "description": "The spirit can bind other spirits.",
+            "action": "Complex",
+            "range": "LOS",
+            "duration": "Permanent"
+          },
+          {
+            "name": "Confusion",
+            "description": "The spirit can confuse and disorient targets.",
+            "action": "Complex",
+            "range": "LOS",
+            "duration": "Sustained"
+          },
+          {
+            "name": "Divining",
+            "description": "The spirit can locate objects or people.",
+            "action": "Complex",
+            "range": "LOS",
+            "duration": "Instant"
+          },
+          {
+            "name": "Drain",
+            "description": "The spirit can drain attributes or abilities from targets.",
+            "action": "Complex",
+            "range": "Touch",
+            "duration": "Sustained"
+          },
+          {
+            "name": "Elemental Attack",
+            "description": "The spirit can make elemental attacks.",
+            "action": "Simple",
+            "range": "LOS",
+            "duration": "Instant"
+          },
+          {
+            "name": "Fear",
+            "description": "The spirit can cause fear in targets.",
+            "action": "Complex",
+            "range": "LOS",
+            "duration": "Sustained"
+          },
+          {
+            "name": "Guard",
+            "description": "The spirit can protect a location or person.",
+            "action": "Free",
+            "range": "Self",
+            "duration": "Permanent"
+          },
+          {
+            "name": "Influence",
+            "description": "The spirit can influence the thoughts and actions of others.",
+            "action": "Complex",
+            "range": "LOS",
+            "duration": "Sustained"
+          },
+          {
+            "name": "Materialization",
+            "description": "The spirit can manifest physically in the material world.",
+            "action": "Complex",
+            "range": "Self",
+            "duration": "Sustained"
+          },
+          {
+            "name": "Movement",
+            "description": "The spirit can move itself or others at high speeds.",
+            "action": "Simple",
+            "range": "Touch",
+            "duration": "Instant"
+          },
+          {
+            "name": "Noxious Breath",
+            "description": "The spirit can emit a noxious cloud.",
+            "action": "Simple",
+            "range": "LOS",
+            "duration": "Instant"
+          },
+          {
+            "name": "Paralyzing Touch",
+            "description": "The spirit can paralyze targets with a touch.",
+            "action": "Complex",
+            "range": "Touch",
+            "duration": "Sustained"
+          },
+          {
+            "name": "Psychokinesis",
+            "description": "The spirit can manipulate objects with its mind.",
+            "action": "Complex",
+            "range": "LOS",
+            "duration": "Sustained"
+          },
+          {
+            "name": "Search",
+            "description": "The spirit can search for specific objects or information.",
+            "action": "Complex",
+            "range": "LOS",
+            "duration": "Instant"
+          },
+          {
+            "name": "Sustain",
+            "description": "The spirit can sustain spells for the summoner.",
+            "action": "Free",
+            "range": "LOS",
+            "duration": "Sustained"
+          }
+        ]
+      }
     }
   }
 }
