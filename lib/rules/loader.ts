@@ -400,6 +400,8 @@ export interface QualityData {
   statModifiers?: Record<string, number | boolean>;
   requiresSpecification?: boolean;
   specificationLabel?: string;
+  /** Source of specification options - e.g., "mentorSpirits" to pull from mentorSpirits data */
+  specificationSource?: string;
   limit?: number;
 }
 
@@ -896,4 +898,154 @@ export interface AdeptPowerCatalogItem {
 export function extractAdeptPowers(ruleset: LoadedRuleset): AdeptPowerCatalogItem[] {
   const ruleModule = extractModule<{ powers: AdeptPowerCatalogItem[] }>(ruleset, "adeptPowers");
   return ruleModule?.powers || [];
+}
+
+// =============================================================================
+// TRADITION DATA TYPES AND LOADERS
+// =============================================================================
+
+/**
+ * Spirit type mapping for a tradition
+ */
+export interface TraditionSpiritTypes {
+  combat: string;
+  detection: string;
+  health: string;
+  illusion: string;
+  manipulation: string;
+}
+
+/**
+ * Drain variant for traditions with conditional drain attributes
+ */
+export interface DrainVariant {
+  condition: string;
+  alternateAttributes: [string, string];
+}
+
+/**
+ * Tradition data structure from ruleset
+ */
+export interface TraditionData {
+  id: string;
+  name: string;
+  drainAttributes: [string, string];
+  spiritTypes: TraditionSpiritTypes;
+  description: string;
+  source?: string;
+  isPossessionTradition?: boolean;
+  drainVariant?: DrainVariant;
+}
+
+/**
+ * Load traditions from a ruleset
+ */
+export function extractTraditions(ruleset: LoadedRuleset): TraditionData[] {
+  const ruleModule = extractModule<{ traditions: TraditionData[] }>(ruleset, "magic");
+  return ruleModule?.traditions || [];
+}
+
+// =============================================================================
+// MENTOR SPIRIT DATA TYPES AND LOADERS
+// =============================================================================
+
+/**
+ * Mentor spirit advantages by character type
+ */
+export interface MentorSpiritAdvantages {
+  all: string;
+  magician?: string;
+  adept?: string;
+}
+
+/**
+ * Mentor spirit data structure from ruleset
+ */
+export interface MentorSpiritData {
+  id: string;
+  name: string;
+  description: string;
+  karmaCost: number;
+  advantages: MentorSpiritAdvantages;
+  disadvantage: string;
+  source?: string;
+}
+
+/**
+ * Load mentor spirits from a ruleset
+ */
+export function extractMentorSpirits(ruleset: LoadedRuleset): MentorSpiritData[] {
+  const ruleModule = extractModule<{ mentorSpirits: MentorSpiritData[] }>(ruleset, "magic");
+  return ruleModule?.mentorSpirits || [];
+}
+
+// =============================================================================
+// RITUAL DATA TYPES AND LOADERS
+// =============================================================================
+
+/**
+ * Ritual keyword data structure
+ */
+export interface RitualKeywordData {
+  id: string;
+  name: string;
+  description: string;
+}
+
+/**
+ * Minion stats for rituals that create minions (Watcher, Homunculus)
+ */
+export interface MinionStatsData {
+  attributes: {
+    body?: string | number | null;
+    agility?: string | number | null;
+    reaction?: string | number | null;
+    strength?: string | number | null;
+    willpower?: string | number | null;
+    logic?: string | number | null;
+    intuition?: string | number | null;
+    charisma?: string | number | null;
+  };
+  initiative?: string;
+  astralInitiative?: string;
+  movement?: string;
+  skills: string[];
+  powers: string[];
+  notes?: string;
+}
+
+/**
+ * Ritual data structure from ruleset
+ */
+export interface RitualData {
+  id: string;
+  name: string;
+  keywords: string[];
+  /** For spell rituals, which spell category it works with */
+  spellCategory?: "combat" | "detection" | "health" | "illusion" | "manipulation";
+  description: string;
+  duration: string;
+  /** Whether this ritual can be made permanent with karma */
+  canBePermanent?: boolean;
+  /** Karma cost formula to make permanent (e.g., "Force") */
+  permanentKarmaCost?: string;
+  /** Stats for minion rituals (Watcher, Homunculus) */
+  minionStats?: MinionStatsData;
+  source?: string;
+}
+
+/**
+ * Load rituals from a ruleset
+ */
+export function extractRituals(ruleset: LoadedRuleset): RitualData[] {
+  const ruleModule = extractModule<{ rituals: RitualData[] }>(ruleset, "magic");
+  return ruleModule?.rituals || [];
+}
+
+/**
+ * Load ritual keywords from a ruleset
+ */
+export function extractRitualKeywords(ruleset: LoadedRuleset): RitualKeywordData[] {
+  const ruleModule = extractModule<{ ritualKeywords: RitualKeywordData[] }>(ruleset, "magic");
+  return ruleModule?.ritualKeywords || [];
 }
