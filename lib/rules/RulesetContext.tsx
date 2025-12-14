@@ -22,8 +22,8 @@ import type {
   ID,
   ContactTemplateData,
 } from "../types";
-import { QualityData, AdeptPowerCatalogItem, TraditionData, MentorSpiritData, TraditionSpiritTypes, MentorSpiritAdvantages, RitualData, RitualKeywordData, MinionStatsData, VehicleCategoryData, DroneSizeData, VehicleCatalogItemData, DroneCatalogItemData, RCCCatalogItemData, AutosoftCatalogItemData, HandlingRatingData, DroneWeaponMountsData, ProgramCatalogItemData, ProgramsCatalogData } from "./loader";
-export type { QualityData, TraditionData, MentorSpiritData, TraditionSpiritTypes, MentorSpiritAdvantages, RitualData, RitualKeywordData, MinionStatsData, VehicleCategoryData, DroneSizeData, VehicleCatalogItemData, DroneCatalogItemData, RCCCatalogItemData, AutosoftCatalogItemData, HandlingRatingData, DroneWeaponMountsData, ProgramCatalogItemData, ProgramsCatalogData };
+import { QualityData, AdeptPowerCatalogItem, TraditionData, MentorSpiritData, TraditionSpiritTypes, MentorSpiritAdvantages, RitualData, RitualKeywordData, MinionStatsData, VehicleCategoryData, DroneSizeData, VehicleCatalogItemData, DroneCatalogItemData, RCCCatalogItemData, AutosoftCatalogItemData, HandlingRatingData, DroneWeaponMountsData, ProgramCatalogItemData, ProgramsCatalogData, FocusCatalogItemData, SpiritsCatalogData } from "./loader";
+export type { QualityData, TraditionData, MentorSpiritData, TraditionSpiritTypes, MentorSpiritAdvantages, RitualData, RitualKeywordData, MinionStatsData, VehicleCategoryData, DroneSizeData, VehicleCatalogItemData, DroneCatalogItemData, RCCCatalogItemData, AutosoftCatalogItemData, HandlingRatingData, DroneWeaponMountsData, ProgramCatalogItemData, ProgramsCatalogData, FocusCatalogItemData, SpiritsCatalogData };
 
 // =============================================================================
 // TYPES
@@ -404,6 +404,8 @@ export interface RulesetData {
   ritualKeywords: RitualKeywordData[];
   vehicles: VehiclesCatalogData | null;
   programs: ProgramsCatalogData | null;
+  foci: FocusCatalogItemData[];
+  spirits: SpiritsCatalogData | null;
 }
 
 /**
@@ -462,6 +464,8 @@ const defaultData: RulesetData = {
   ritualKeywords: [],
   vehicles: null,
   programs: null,
+  foci: [],
+  spirits: null,
 };
 
 const defaultState: RulesetContextState = {
@@ -550,6 +554,8 @@ export function RulesetProvider({
             ritualKeywords: extractedData.ritualKeywords || [],
             vehicles: extractedData.vehicles || null,
             programs: extractedData.programs || null,
+            foci: extractedData.foci || [],
+            spirits: extractedData.spirits || null,
           }
           : defaultData;
 
@@ -1484,4 +1490,20 @@ export function calculateAgentCost(
  */
 export function calculateAgentAvailability(rating: number): number {
   return rating * 2;
+}
+
+/**
+ * Hook to get foci catalog
+ */
+export function useFoci(): FocusCatalogItemData[] {
+  const { data } = useRuleset();
+  return data.foci;
+}
+
+/**
+ * Hook to get spirits catalog
+ */
+export function useSpirits(): SpiritsCatalogData | null {
+  const { data } = useRuleset();
+  return data.spirits;
 }

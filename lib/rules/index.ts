@@ -31,6 +31,8 @@ export {
   useSpritePowers,
   useContactTemplates,
   useAdeptPowers,
+  useFoci,
+  useSpirits,
 } from "./RulesetContext";
 
 export type {

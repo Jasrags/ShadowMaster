@@ -7,7 +7,7 @@
  */
 
 import type { ID, ISODateString, Metadata } from "./core";
-import type { EditionCode } from "./edition";
+import type { EditionCode, FocusType } from "./edition";
 import type { CharacterProgram } from "./programs";
 
 // =============================================================================
@@ -219,6 +219,9 @@ export interface Character {
 
   /** Matrix programs owned (for cyberdecks/commlinks) */
   programs?: CharacterProgram[];
+
+  /** Magical foci owned */
+  foci?: FocusItem[];
 
   // -------------------------------------------------------------------------
   // Contacts
@@ -648,6 +651,32 @@ export interface CharacterAutosoft {
   cost: number;
   /** Availability rating */
   availability: number;
+  /** Notes */
+  notes?: string;
+}
+
+/**
+ * Magical focus owned by a character
+ */
+export interface FocusItem {
+  id?: ID;
+  /** Reference to catalog focus ID */
+  catalogId: string;
+  name: string;
+  type: FocusType;
+  /** Force rating (1-6 for starting characters) */
+  force: number;
+  /** Whether the focus is bonded */
+  bonded: boolean;
+  /** Karma cost to bond this focus (Force × bonding multiplier) */
+  karmaToBond: number;
+  /** Cost in nuyen (Force × cost multiplier) */
+  cost: number;
+  /** Availability rating */
+  availability: number;
+  /** Whether availability is Restricted (R) or Forbidden (F) */
+  restricted?: boolean;
+  forbidden?: boolean;
   /** Notes */
   notes?: string;
 }

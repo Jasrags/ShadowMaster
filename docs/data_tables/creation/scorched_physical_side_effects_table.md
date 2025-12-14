@@ -1,0 +1,9 @@
+# Scorched Physical Side Effects Table
+
+| Effect | Game Rules |
+| :----- | :--------- |
+| Memory Loss (short term) | The character does not remember slotting a BTL chip. The character makes another Withdrawal Test immediately. A failed test means the craving comes back immediately, as do the symptoms of withdrawal. Character must slot another chip. For encountering IC, a character must make a Memory Test with a threshold increased by +1. A failed Memory Test results in gaps in memory and possible disorientation while in host. |
+| Memory Loss (long term) | The same effects of Memory Loss (short term) apply. In addition, for the duration of the effect, the character loses access to one active skill. He simply does not remember how to use it (for example, the Pistols skill). Treat as unaware in that skill until symptoms abate. |
+| Blackout | For the duration of the effect, the character retains no memories of events during that time frame. Memory cannot be restored by technological or magical means. |
+| Migraines | The character receives -2 to all Physical and Mental tests, sensitivity to light, and nausea (p. 409). |
+| Paranoia/Anxiety | Character must make Social Tests for even basic interactions. These are Success Tests with a threshold of 5. If no apparent skill applies, the character must default to Charisma -1. Failure means the character reacts with paranoia or anxiety in that situation for the duration of the effect. |

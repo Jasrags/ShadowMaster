@@ -1,6 +1,6 @@
 "use client";
 
-import { useMagicPaths, usePriorityTable, useTraditions, useMentorSpirits, useQualities } from "@/lib/rules";
+import { useMagicPaths, usePriorityTable, useTraditions, useMentorSpirits, useQualities, useSpirits } from "@/lib/rules";
 import type { TraditionData } from "@/lib/rules";
 import type { CreationState } from "@/lib/types";
 import type { QualityData } from "@/lib/rules/loader";
@@ -85,6 +85,7 @@ export function MagicStep({ state, updateState, budgetValues }: StepProps) {
   const traditions = useTraditions();
   const mentorSpirits = useMentorSpirits();
   const { positive: positiveQualitiesData } = useQualities();
+  const spiritsCatalog = useSpirits();
   const selectedPath = state.selections["magical-path"] as string | undefined;
   const selectedAspectedGroup = state.selections["aspected-mage-group"] as string | undefined;
   const selectedTradition = state.selections["tradition"] as string | undefined;
@@ -447,6 +448,87 @@ export function MagicStep({ state, updateState, budgetValues }: StepProps) {
               Please select a tradition to continue.
             </p>
           )}
+        </div>
+      )}
+
+      {/* Spirit Reference Information */}
+      {canSelectTradition && selectedTradition && spiritsCatalog && (
+        <div className="mt-6 space-y-4">
+          <div className="rounded-lg border border-cyan-200 bg-cyan-50 p-4 dark:border-cyan-800 dark:bg-cyan-900/20">
+            <h4 className="font-semibold text-cyan-900 dark:text-cyan-100">
+              Spirit Reference Information
+            </h4>
+            <p className="mt-1 text-sm text-cyan-700 dark:text-cyan-300">
+              Reference information for the spirits you can summon based on your tradition. Use this as a guide when summoning spirits during gameplay.
+            </p>
+          </div>
+
+          <div className="grid gap-4 sm:grid-cols-2">
+            {(() => {
+              const tradition = traditions.find(t => t.id === selectedTradition);
+              if (!tradition || !spiritsCatalog.spiritTypes) return null;
+
+              // Get unique spirit types from tradition
+              const traditionSpiritTypes = Object.values(tradition.spiritTypes);
+              const uniqueSpiritTypes = Array.from(new Set(traditionSpiritTypes));
+
+              return uniqueSpiritTypes.map((spiritTypeId) => {
+                const spiritType = spiritsCatalog.spiritTypes.find(st => st.type === spiritTypeId);
+                if (!spiritType) return null;
+
+                return (
+                  <div
+                    key={spiritTypeId}
+                    className="rounded-lg border border-zinc-200 bg-white p-4 dark:border-zinc-700 dark:bg-zinc-800/50"
+                  >
+                    <h5 className="text-lg font-semibold text-zinc-900 dark:text-zinc-100">
+                      {spiritType.name}
+                    </h5>
+
+                    {/* Base Powers */}
+                    {spiritType.basePowers && spiritType.basePowers.length > 0 && (
+                      <div className="mt-3">
+                        <p className="text-xs font-medium text-zinc-600 dark:text-zinc-400">Base Powers:</p>
+                        <div className="mt-1 space-y-1">
+                          {spiritType.basePowers.map((power, idx) => (
+                            <div key={idx} className="text-xs text-zinc-700 dark:text-zinc-300">
+                              <span className="font-medium">{power.name}</span>
+                              {power.description && (
+                                <span className="ml-1 text-zinc-500 dark:text-zinc-400">
+                                  — {power.description}
+                                </span>
+                              )}
+                            </div>
+                          ))}
+                        </div>
+                      </div>
+                    )}
+
+                    {/* Weaknesses */}
+                    {spiritType.weaknesses && spiritType.weaknesses.length > 0 && (
+                      <div className="mt-3 rounded bg-red-50 p-2 dark:bg-red-900/20">
+                        <p className="text-xs font-medium text-red-700 dark:text-red-300">Weaknesses:</p>
+                        <div className="mt-1">
+                          {spiritType.weaknesses.map((weakness, idx) => (
+                            <p key={idx} className="text-xs text-red-600 dark:text-red-400">
+                              {weakness}
+                            </p>
+                          ))}
+                        </div>
+                      </div>
+                    )}
+
+                    {/* Optional Powers Note */}
+                    {spiritsCatalog.optionalPowers && spiritsCatalog.optionalPowers.length > 0 && (
+                      <div className="mt-3 text-xs text-zinc-500 dark:text-zinc-400">
+                        Note: Spirits may also have optional powers chosen when summoned.
+                      </div>
+                    )}
+                  </div>
+                );
+              });
+            })()}
+          </div>
         </div>
       )}
 

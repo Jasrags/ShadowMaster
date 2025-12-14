@@ -1357,3 +1357,73 @@ export function extractAgentPrograms(ruleset: LoadedRuleset): ProgramCatalogItem
 export function extractProgramsCatalog(ruleset: LoadedRuleset): ProgramsCatalogData | null {
   return extractModule<ProgramsCatalogData>(ruleset, "programs");
 }
+
+// =============================================================================
+// FOCI DATA TYPES AND LOADERS
+// =============================================================================
+
+/**
+ * Focus catalog item data structure
+ */
+export interface FocusCatalogItemData {
+  id: string;
+  name: string;
+  type: string;
+  costMultiplier: number;
+  bondingKarmaMultiplier: number;
+  availability: number;
+  restricted?: boolean;
+  forbidden?: boolean;
+  description?: string;
+  page?: number;
+  source?: string;
+}
+
+/**
+ * Load foci from a ruleset
+ */
+export function extractFoci(ruleset: LoadedRuleset): FocusCatalogItemData[] {
+  const ruleModule = extractModule<{ foci: FocusCatalogItemData[] }>(ruleset, "foci");
+  return ruleModule?.foci || [];
+}
+
+// =============================================================================
+// SPIRIT DATA TYPES AND LOADERS
+// =============================================================================
+
+/**
+ * Spirit power data structure
+ */
+export interface SpiritPowerData {
+  name: string;
+  description?: string;
+  action?: string;
+  range?: string;
+  duration?: string;
+}
+
+/**
+ * Spirit type data structure
+ */
+export interface SpiritTypeData {
+  type: string;
+  name: string;
+  basePowers: SpiritPowerData[];
+  weaknesses?: string[];
+}
+
+/**
+ * Spirits catalog data structure
+ */
+export interface SpiritsCatalogData {
+  spiritTypes: SpiritTypeData[];
+  optionalPowers: SpiritPowerData[];
+}
+
+/**
+ * Load spirits from a ruleset
+ */
+export function extractSpirits(ruleset: LoadedRuleset): SpiritsCatalogData | null {
+  const ruleModule = extractModule<SpiritsCatalogData>(ruleset, "spirits");
+  return ruleModule || null;
+}
