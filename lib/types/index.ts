@@ -52,6 +52,7 @@ export type {
   CharacterDrone,
   CharacterRCC,
   CharacterAutosoft,
+  FocusItem,
   CharacterDraft,
   CreateCharacterRequest,
   UpdateCharacterRequest,

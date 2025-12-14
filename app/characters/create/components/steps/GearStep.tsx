@@ -33,7 +33,8 @@ type GearCategory =
   | "medical"
   | "security"
   | "miscellaneous"
-  | "ammunition";
+  | "ammunition"
+  | "foci";
 
 type WeaponSubcategory =
   | "all"
