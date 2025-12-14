@@ -6,7 +6,7 @@
 
 import { NextRequest, NextResponse } from "next/server";
 import { loadAndMergeRuleset } from "@/lib/rules/merge";
-import { loadRuleset, extractMetatypes, extractSkills, extractQualities, extractPriorityTable, extractMagicPaths, extractLifestyles, extractLifestyleModifiers, extractGear, extractSpells, extractComplexForms, extractSpriteTypes, extractSpritePowers, extractCyberware, extractBioware, extractAugmentationRules, extractContactTemplates, extractAdeptPowers } from "@/lib/rules/loader";
+import { loadRuleset, extractMetatypes, extractSkills, extractQualities, extractPriorityTable, extractMagicPaths, extractTraditions, extractMentorSpirits, extractRituals, extractRitualKeywords, extractLifestyles, extractLifestyleModifiers, extractGear, extractSpells, extractComplexForms, extractSpriteTypes, extractSpritePowers, extractCyberware, extractBioware, extractAugmentationRules, extractContactTemplates, extractAdeptPowers } from "@/lib/rules/loader";
 
 export async function GET(
   request: NextRequest,
@@ -43,6 +43,10 @@ export async function GET(
         qualities: extractQualities(loadedRuleset),
         priorityTable: extractPriorityTable(loadedRuleset),
         magicPaths: extractMagicPaths(loadedRuleset),
+        traditions: extractTraditions(loadedRuleset),
+        mentorSpirits: extractMentorSpirits(loadedRuleset),
+        rituals: extractRituals(loadedRuleset),
+        ritualKeywords: extractRitualKeywords(loadedRuleset),
         lifestyles: extractLifestyles(loadedRuleset),
         lifestyleModifiers: extractLifestyleModifiers(loadedRuleset),
         gear: extractGear(loadedRuleset),

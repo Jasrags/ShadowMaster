@@ -22,8 +22,8 @@ import type {
   ID,
   ContactTemplateData,
 } from "../types";
-import { QualityData, AdeptPowerCatalogItem } from "./loader";
-export type { QualityData };
+import { QualityData, AdeptPowerCatalogItem, TraditionData, MentorSpiritData, TraditionSpiritTypes, MentorSpiritAdvantages, RitualData, RitualKeywordData, MinionStatsData } from "./loader";
+export type { QualityData, TraditionData, MentorSpiritData, TraditionSpiritTypes, MentorSpiritAdvantages, RitualData, RitualKeywordData, MinionStatsData };
 
 // =============================================================================
 // TYPES
@@ -372,6 +372,8 @@ export interface RulesetData {
   qualities: { positive: QualityData[]; negative: QualityData[] };
   priorityTable: PriorityTableData | null;
   magicPaths: MagicPathData[];
+  traditions: TraditionData[];
+  mentorSpirits: MentorSpiritData[];
   lifestyles: LifestyleData[];
   lifestyleModifiers: Record<string, number>;
   gear: GearCatalogData | null;
@@ -384,6 +386,8 @@ export interface RulesetData {
   augmentationRules: AugmentationRulesData;
   contactTemplates: ContactTemplateData[];
   adeptPowers: AdeptPowerCatalogItem[];
+  rituals: RitualData[];
+  ritualKeywords: RitualKeywordData[];
 }
 
 /**
@@ -424,6 +428,8 @@ const defaultData: RulesetData = {
   qualities: { positive: [], negative: [] },
   priorityTable: null,
   magicPaths: [],
+  traditions: [],
+  mentorSpirits: [],
   lifestyles: [],
   lifestyleModifiers: {},
   gear: null,
@@ -436,6 +442,8 @@ const defaultData: RulesetData = {
   augmentationRules: defaultAugmentationRules,
   contactTemplates: [],
   adeptPowers: [],
+  rituals: [],
+  ritualKeywords: [],
 };
 
 const defaultState: RulesetContextState = {
@@ -506,6 +514,8 @@ export function RulesetProvider({
             qualities: extractedData.qualities || { positive: [], negative: [] },
             priorityTable: extractedData.priorityTable || null,
             magicPaths: extractedData.magicPaths || [],
+            traditions: extractedData.traditions || [],
+            mentorSpirits: extractedData.mentorSpirits || [],
             lifestyles: extractedData.lifestyles || [],
             lifestyleModifiers: extractedData.lifestyleModifiers || {},
             gear: extractedData.gear || null,
@@ -518,6 +528,8 @@ export function RulesetProvider({
             augmentationRules: extractedData.augmentationRules || defaultAugmentationRules,
             contactTemplates: extractedData.contactTemplates || [],
             adeptPowers: extractedData.adeptPowers || [],
+            rituals: extractedData.rituals || [],
+            ritualKeywords: extractedData.ritualKeywords || [],
           }
           : defaultData;
 
@@ -1075,4 +1087,36 @@ export function useContactTemplates(): ContactTemplateData[] {
 export function useAdeptPowers(): AdeptPowerCatalogItem[] {
   const { data } = useRuleset();
   return data.adeptPowers;
+}
+
+/**
+ * Hook to get traditions from the ruleset
+ */
+export function useTraditions(): TraditionData[] {
+  const { data } = useRuleset();
+  return data.traditions;
+}
+
+/**
+ * Hook to get mentor spirits from the ruleset
+ */
+export function useMentorSpirits(): MentorSpiritData[] {
+  const { data } = useRuleset();
+  return data.mentorSpirits;
+}
+
+/**
+ * Hook to get rituals from the ruleset
+ */
+export function useRituals(): RitualData[] {
+  const { data } = useRuleset();
+  return data.rituals;
+}
+
+/**
+ * Hook to get ritual keywords from the ruleset
+ */
+export function useRitualKeywords(): RitualKeywordData[] {
+  const { data } = useRuleset();
+  return data.ritualKeywords;
 }

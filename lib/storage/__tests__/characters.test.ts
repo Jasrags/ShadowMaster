@@ -237,6 +237,10 @@ describe('Character Storage', () => {
   describe('updateCharacter', () => {
     it('should update character fields', async () => {
       const draft = await createCharacterDraft(userId1, 'sr5', 'sr5', 'priority', 'Original');
+
+      // Small delay to ensure updatedAt timestamp differs
+      await new Promise(resolve => setTimeout(resolve, 10));
+
       const updated = await updateCharacter(userId1, draft.id, {
         name: 'Updated',
         metatype: 'Elf',

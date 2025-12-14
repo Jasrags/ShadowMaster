@@ -175,11 +175,11 @@ This section provides a comprehensive view of the entire implementation roadmap,
 | 2 | **B1** | **Cyberware/Bioware System** | **2-3 weeks** | **High** | ✅ **Complete** |
 | 3  | **B5**  | **Adept Powers System**             | **1-2 weeks**  | **High**   | ✅ **Complete**   |
 | 4  | **B7**  | **Complex Forms & Matrix**          | **1-2 weeks**  | **High**   | ✅ **Complete**   |
-| 5  | **B12** | **Rigger Support (Vehicles & Drones)** | **2-3 weeks**  | **High**   | Not Started      |
-| 6  | **B13** | **Decker Support (Programs)**       | **1 week**     | **High**   | Not Started      |
-| 7  | **B14** | **Foci & Spirits**                  | **2 weeks**    | **High**   | Not Started      |
-| 8  | **B11** | **Identity/Lifestyle/SIN System**   | **2-3 weeks**  | **High**   | Not Started      |
-| 9  | **B6**  | **Spell Management**                | **1-2 weeks**  | **High**   | Not Started      |
+| 5  | **B6**  | **Spell Management**                | **1-2 weeks**  | **High**   | ✅ **Complete**   |
+| 6  | **B12** | **Rigger Support (Vehicles & Drones)** | **2-3 weeks**  | **High**   | 🔜 Next          |
+| 7  | **B13** | **Decker Support (Programs)**       | **1 week**     | **High**   | Not Started      |
+| 8  | **B14** | **Foci & Spirits**                  | **2 weeks**    | **High**   | Not Started      |
+| 9  | **B11** | **Identity/Lifestyle/SIN System**   | **2-3 weeks**  | **High**   | Not Started      |
 | 10 | **B10** | **Gear Modifications**              | **2-3 weeks**  | **Medium** | Not Started      |
 | 11 | **B2**  | **Sourcebook Integration**          | **2 weeks**    | **Medium** | Not Started      |
 | 12 | **B8**  | **UI/UX Improvements**              | **1-2 weeks**  | **Medium** | Not Started      |
@@ -207,6 +207,7 @@ This section provides a comprehensive view of the entire implementation roadmap,
 | M0.7 SpellsStep | Jan 2025 | SpellsStep component with free spell allocation, karma purchases, category limits validation (Magic × 2 per category), progress bar tracking free spells |
 | **M0 Complete** | **Jan 2025** | **All MVP gaps and enhancements complete: bug fixes, metatype enhancements, skills improvements, qualities system, contacts templates, distributed karma architecture, SpellsStep, Aspected Mage support** |
 | B8.1 Gear Layout | Dec 2024 | Improved gear catalog layout, shopping cart width fixes, responsive design |
+| B6 Spell Management | Dec 2024 | Traditions system (drain attributes, spirit types), 16 mentor spirits with quality integration, 9 rituals with RitualsStep component, Watcher/Homunculus minion stats |
 
 ### Estimated Remaining Timeline
 
@@ -230,11 +231,11 @@ This section provides a comprehensive view of the entire implementation roadmap,
 | B1 | Cyberware/Bioware System | 2-3 weeks | High | ✅ Complete |
 | B5  | Adept Powers System              | 1-2 weeks  | High   | ✅ Complete   |
 | B7  | Complex Forms & Matrix           | 1-2 weeks  | High   | ✅ Complete   |
-| B12 | Rigger Support (Vehicles & Drones)| 2-3 weeks | High   | Not Started  |
+| B6  | Spell Management                 | 1-2 weeks  | High   | ✅ Complete   |
+| B12 | Rigger Support (Vehicles & Drones)| 2-3 weeks | High   | 🔜 Next      |
 | B13 | Decker Support (Programs)        | 1 week     | High   | Not Started  |
 | B14 | Foci & Spirits                   | 2 weeks    | High   | Not Started  |
 | B11 | Identity/Lifestyle/SIN System    | 2-3 weeks  | High   | Not Started  |
-| B6  | Spell Management                 | 1-2 weeks  | High   | Not Started  |
 | B10 | Gear Modifications               | 2-3 weeks  | Medium | Not Started  |
 | B2 | Sourcebook Integration | 2 weeks | Medium | Not Started |
 | B8 | UI/UX Improvements | 1-2 weeks | Medium | Not Started |
@@ -3563,9 +3564,9 @@ This milestone implements the complete enhanced magic system including tradition
 
 | Task | Description | Status |
 |------|-------------|--------|
-| B6.1.1 | Implement tradition system (Tradition interface, traditions catalog, tradition selection, drain resistance calculation, magical lodge selection, aspect selection) | Not Started |
-| B6.1.2 | Implement mentor spirits system (MentorSpirit interface, catalog, selection, bonus/drawback application) | Not Started |
-| B6.1.3 | Implement ritual magic system (ritual spells in catalog, RitualSelector component or SpellsStep integration, material/reagent tracking, teamwork rules) | Not Started |
+| B6.1.1 | Implement tradition system (Tradition interface, traditions catalog, tradition selection, drain resistance calculation, magical lodge selection, aspect selection) | ✅ Complete |
+| B6.1.2 | Implement mentor spirits system (MentorSpirit interface, catalog, selection, bonus/drawback application) | ✅ Complete |
+| B6.1.3 | Implement ritual magic system (ritual spells in catalog, RitualSelector component or SpellsStep integration, material/reagent tracking, teamwork rules) | ✅ Complete |
 
 **Tasks JSON:**
 ```json
@@ -3579,7 +3580,7 @@ This milestone implements the complete enhanced magic system including tradition
       "/lib/types/character.ts",
       "/app/characters/create/components/steps/MagicStep.tsx"
     ],
-    "status": "Not Started",
+    "status": "Complete",
     "dependsOn": ["M0.7.1"]
   },
   {
@@ -3591,7 +3592,7 @@ This milestone implements the complete enhanced magic system including tradition
       "/lib/types/character.ts",
       "/app/characters/create/components/steps/MagicStep.tsx"
     ],
-    "status": "Not Started",
+    "status": "Complete",
     "dependsOn": ["M0.7.1"]
   },
   {
@@ -3600,10 +3601,10 @@ This milestone implements the complete enhanced magic system including tradition
     "description": "This milestone implements the complete enhanced magic system including traditions, mentor spirits, and ritual magic. All three components affect the same magic system and share data structures, so they are implemented together. It provides tradition-based drain calculations, mentor spirit bonuses and drawbacks, and ritual spellcasting mechanics. Implement ritual magic system (ritual spells in catalog, RitualSelector component or SpellsStep integration, material/reagent tracking, teamwork rules).",
     "files": [
       "/data/editions/sr5/core-rulebook.json",
-      "/components/magic/RitualSelector.tsx",
-      "/app/characters/create/components/steps/SpellsStep.tsx"
+      "/app/characters/create/components/steps/RitualsStep.tsx",
+      "/app/characters/create/components/CreationWizard.tsx"
     ],
-    "status": "Not Started",
+    "status": "Complete",
     "dependsOn": ["M0.7.1"]
   }
 ]
@@ -3645,10 +3646,10 @@ This milestone implements the complete enhanced magic system including tradition
 
 ### B6.2 Acceptance Criteria
 
-- **B6.2.AC.1** [ ] Traditions affect drain resistance calculation
-- **B6.2.AC.2** [ ] Mentor spirits provide correct bonuses
-- **B6.2.AC.3** [ ] Ritual spells distinguished from standard spells
-- **B6.2.AC.4** [ ] Drain calculated correctly per tradition
+- **B6.2.AC.1** [x] Traditions affect drain resistance calculation
+- **B6.2.AC.2** [x] Mentor spirits provide correct bonuses
+- **B6.2.AC.3** [x] Ritual spells distinguished from standard spells
+- **B6.2.AC.4** [x] Drain calculated correctly per tradition
 
 ---
 

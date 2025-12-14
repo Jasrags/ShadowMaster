@@ -1,7 +1,7 @@
 "use client";
 
 import { useMemo } from "react";
-import { useMetatypes, useSkills, useQualities, useSpells, useComplexForms, usePriorityTable } from "@/lib/rules";
+import { useMetatypes, useSkills, useQualities, useSpells, useComplexForms, usePriorityTable, useTraditions, useMentorSpirits } from "@/lib/rules";
 import { useAugmentationRules, calculateMagicLoss } from "@/lib/rules/RulesetContext";
 import type { CreationState, ID, Contact, CyberwareItem, BiowareItem } from "@/lib/types";
 
@@ -46,6 +46,8 @@ export function ReviewStep({ state, updateState, budgetValues }: StepProps) {
   const complexFormsCatalog = useComplexForms();
   const priorityTable = usePriorityTable();
   const augmentationRules = useAugmentationRules();
+  const traditions = useTraditions();
+  const mentorSpirits = useMentorSpirits();
 
   // Get character name from state or default to empty
   const characterName = (state.selections.characterName as string) || "";
@@ -68,9 +70,15 @@ export function ReviewStep({ state, updateState, budgetValues }: StepProps) {
 
   // Get magical path and tradition
   const magicalPath = (state.selections["magical-path"] as string) || "mundane";
-  const tradition = (state.selections.tradition as string) || "";
-  const isMagical = magicalPath !== "mundane" && magicalPath !== "adept";
+  const traditionId = (state.selections.tradition as string) || "";
+  const mentorSpiritId = (state.selections["mentor-spirit"] as string) || "";
   const isTechnomancer = magicalPath === "technomancer";
+  const canHaveTradition = ["magician", "mystic-adept", "aspected-mage"].includes(magicalPath);
+  const canHaveMentorSpirit = ["magician", "mystic-adept", "aspected-mage", "adept"].includes(magicalPath);
+
+  // Get tradition and mentor spirit data
+  const selectedTradition = traditions.find(t => t.id === traditionId);
+  const selectedMentorSpirit = mentorSpirits.find(m => m.id === mentorSpiritId);
 
   // Get attributes from state
   const attributes = (state.selections.attributes || {}) as Record<string, number>;
@@ -301,11 +309,27 @@ export function ReviewStep({ state, updateState, budgetValues }: StepProps) {
                 {magicalPath.replace("-", " ")}
               </span>
             </div>
-            {tradition && isMagical && (
+            {selectedTradition && canHaveTradition && (
               <div className="flex items-center justify-between">
                 <span className="text-sm text-zinc-600 dark:text-zinc-400">Tradition</span>
-                <span className="text-sm font-medium capitalize text-zinc-900 dark:text-zinc-100">
-                  {tradition}
+                <span className="text-sm font-medium text-zinc-900 dark:text-zinc-100">
+                  {selectedTradition.name}
+                </span>
+              </div>
+            )}
+            {selectedTradition && canHaveTradition && (
+              <div className="flex items-center justify-between">
+                <span className="text-sm text-zinc-600 dark:text-zinc-400">Drain</span>
+                <span className="text-sm font-medium text-zinc-900 dark:text-zinc-100">
+                  {selectedTradition.drainAttributes.join(" + ")}
+                </span>
+              </div>
+            )}
+            {selectedMentorSpirit && canHaveMentorSpirit && (
+              <div className="flex items-center justify-between">
+                <span className="text-sm text-zinc-600 dark:text-zinc-400">Mentor Spirit</span>
+                <span className="text-sm font-medium text-zinc-900 dark:text-zinc-100">
+                  {selectedMentorSpirit.name}
                 </span>
               </div>
             )}

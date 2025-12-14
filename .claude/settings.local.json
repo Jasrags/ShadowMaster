@@ -11,7 +11,9 @@
       "Bash(curl:*)",
       "Bash(python3:*)",
       "Bash(git checkout:*)",
-      "Bash(git pull:*)"
+      "Bash(git pull:*)",
+      "Bash(pnpm lint:*)",
+      "WebSearch"
     ],
     "deny": [],
     "ask": []

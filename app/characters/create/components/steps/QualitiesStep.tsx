@@ -1,7 +1,7 @@
 "use client";
 
 import { useMemo, useCallback, useState } from "react";
-import { useQualities } from "@/lib/rules";
+import { useQualities, useMentorSpirits } from "@/lib/rules";
 import type { CreationState } from "@/lib/types";
 import { QualityData } from "@/lib/rules/loader";
 
@@ -16,9 +16,18 @@ const MAX_NEGATIVE_KARMA = 25;
 
 export function QualitiesStep({ state, updateState, budgetValues }: StepProps) {
   const { positive: positiveQualities, negative: negativeQualities } = useQualities();
+  const mentorSpirits = useMentorSpirits();
   const startingKarma = budgetValues["karma"] || 25;
   const [searchQuery, setSearchQuery] = useState("");
   const [activeTab, setActiveTab] = useState<"positive" | "negative">("positive");
+
+  // Build specification options map for qualities that reference other data sources
+  const specificationOptionsMap = useMemo(() => {
+    const map: Record<string, Array<{ id: string; name: string }>> = {};
+    // Add mentor spirits as options for qualities with specificationSource: "mentorSpirits"
+    map["mentorSpirits"] = mentorSpirits.map(m => ({ id: m.id, name: m.name }));
+    return map;
+  }, [mentorSpirits]);
 
   // Get selected qualities from state
   const selectedPositive = useMemo(() => {
@@ -122,21 +131,40 @@ export function QualitiesStep({ state, updateState, budgetValues }: StepProps) {
       return sum + cost;
     }, 0);
 
+    // Sync mentor-spirit selection with quality specification
+    // If mentor-spirit quality is selected and has a specification, find the matching mentor spirit ID
+    const newSelections: Record<string, unknown> = {
+      ...state.selections,
+      positiveQualities: newSelectedPositive,
+      negativeQualities: newSelectedNegative,
+      qualityLevels: newLevels,
+      qualitySpecifications: newSpecs
+    };
+
+    // Handle mentor spirit quality sync
+    const hasMentorSpiritQuality = newSelectedPositive.includes("mentor-spirit");
+    const mentorSpiritSpec = newSpecs["mentor-spirit"];
+
+    if (hasMentorSpiritQuality && mentorSpiritSpec) {
+      // Find the mentor spirit by name and set its ID
+      const matchingMentor = mentorSpirits.find(m => m.name === mentorSpiritSpec);
+      if (matchingMentor) {
+        newSelections["mentor-spirit"] = matchingMentor.id;
+      }
+    } else if (!hasMentorSpiritQuality) {
+      // Remove mentor-spirit selection if quality is removed
+      delete newSelections["mentor-spirit"];
+    }
+
     updateState({
-      selections: {
-        ...state.selections,
-        positiveQualities: newSelectedPositive,
-        negativeQualities: newSelectedNegative,
-        qualityLevels: newLevels,
-        qualitySpecifications: newSpecs
-      },
+      selections: newSelections,
       budgets: {
         ...state.budgets,
         "karma-spent-positive": newPosSpent,
         "karma-gained-negative": newNegGained
       }
     });
-  }, [positiveQualities, negativeQualities, state.selections, state.budgets, updateState]);
+  }, [positiveQualities, negativeQualities, mentorSpirits, state.selections, state.budgets, updateState]);
 
   // Toggle quality selection
   const toggleQuality = useCallback(
@@ -294,13 +322,30 @@ export function QualitiesStep({ state, updateState, budgetValues }: StepProps) {
                 <label className="mb-1 block text-xs font-medium text-zinc-500 dark:text-zinc-400">
                   {quality.specificationLabel || "Specification"}
                 </label>
-                <input
-                  type="text"
-                  value={qualitySpecifications[quality.id] || ""}
-                  onChange={(e) => updateSpec(quality.id, e.target.value, isPositive)}
-                  className="w-full rounded border border-zinc-300 bg-white px-2 py-1 text-sm focus:border-emerald-500 focus:outline-none dark:border-zinc-600 dark:bg-zinc-800 dark:text-white"
-                  placeholder={quality.specificationLabel ? `e.g. ${quality.specificationLabel}` : "Specify..."}
-                />
+                {quality.specificationSource && specificationOptionsMap[quality.specificationSource] ? (
+                  // Show dropdown for qualities with a defined specification source
+                  <select
+                    value={qualitySpecifications[quality.id] || ""}
+                    onChange={(e) => updateSpec(quality.id, e.target.value, isPositive)}
+                    className="w-full rounded border border-zinc-300 bg-white px-2 py-1 text-sm focus:border-emerald-500 focus:outline-none dark:border-zinc-600 dark:bg-zinc-800 dark:text-white"
+                  >
+                    <option value="">Select {quality.specificationLabel || "option"}...</option>
+                    {specificationOptionsMap[quality.specificationSource].map(option => (
+                      <option key={option.id} value={option.name}>
+                        {option.name}
+                      </option>
+                    ))}
+                  </select>
+                ) : (
+                  // Show text input for free-form specifications
+                  <input
+                    type="text"
+                    value={qualitySpecifications[quality.id] || ""}
+                    onChange={(e) => updateSpec(quality.id, e.target.value, isPositive)}
+                    className="w-full rounded border border-zinc-300 bg-white px-2 py-1 text-sm focus:border-emerald-500 focus:outline-none dark:border-zinc-600 dark:bg-zinc-800 dark:text-white"
+                    placeholder={quality.specificationLabel ? `e.g. ${quality.specificationLabel}` : "Specify..."}
+                  />
+                )}
               </div>
             )}
           </div>

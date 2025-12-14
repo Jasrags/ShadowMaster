@@ -160,6 +160,9 @@ export interface Character {
   /** For mages: tradition (Hermetic, Shaman, etc.) */
   tradition?: string;
 
+  /** For mages/adepts: mentor spirit ID */
+  mentorSpirit?: string;
+
   /** For technomancers: stream */
   stream?: string;
 

@@ -1310,66 +1310,30 @@
           {
             "id": "hermetic",
             "name": "Hermetic",
-            "drain": [
-              "LOG",
-              "WIL"
-            ]
+            "drainAttributes": ["LOG", "WIL"],
+            "spiritTypes": {
+              "combat": "fire",
+              "detection": "air",
+              "health": "man",
+              "illusion": "water",
+              "manipulation": "earth"
+            },
+            "description": "The hermetic mage relies on logic, practice, and execution of a planned formula rather than intuition and improvisation. They have learned to control magic and believe the universe follows patterns that can be manipulated through complex symbols and arcane knowledge.",
+            "source": "Core"
           },
           {
             "id": "shaman",
             "name": "Shaman",
-            "drain": [
-              "CHA",
-              "WIL"
-            ]
-          },
-          {
-            "id": "buddhist",
-            "name": "Buddhist",
-            "drain": [
-              "WIL",
-              "INT"
-            ]
-          },
-          {
-            "id": "wiccan",
-            "name": "Wiccan",
-            "drain": [
-              "CHA",
-              "WIL"
-            ]
-          },
-          {
-            "id": "vodou",
-            "name": "Vodou",
-            "drain": [
-              "CHA",
-              "INT"
-            ]
-          },
-          {
-            "id": "norse",
-            "name": "Norse",
-            "drain": [
-              "LOG",
-              "WIL"
-            ]
-          },
-          {
-            "id": "druid",
-            "name": "Druid",
-            "drain": [
-              "WIL",
-              "INT"
-            ]
-          },
-          {
-            "id": "chaos",
-            "name": "Chaos Magic",
-            "drain": [
-              "INT",
-              "WIL"
-            ]
+            "drainAttributes": ["CHA", "WIL"],
+            "spiritTypes": {
+              "combat": "beasts",
+              "detection": "water",
+              "health": "earth",
+              "illusion": "air",
+              "manipulation": "man"
+            },
+            "description": "The shaman uses mana to balance the world of nature and their own will. They believe in harmony and guidance, observing the world and using emotion to weave magic. To the shaman, the earth is a living being.",
+            "source": "Core"
           }
         ],
         "spells": {
@@ -2471,6 +2435,356 @@
             "id": "watermark",
             "name": "Watermark",
             "description": "The sprite can embed hidden data in a file that is nearly impossible to detect or remove. The watermark can be found with a Computer + Intuition [Data Processing] test with a threshold equal to the sprite's Level x 2."
+          }
+        ],
+        "mentorSpirits": [
+          {
+            "id": "bear",
+            "name": "Bear",
+            "description": "This mentor symbolizes strength and protection. He is a healer and cannot turn down those in need without good reason, and he defends those under his care.",
+            "karmaCost": 5,
+            "advantages": {
+              "all": "+2 dice for tests to resist damage (not including Drain)",
+              "magician": "+2 dice for health spells, preparations, and health spell rituals",
+              "adept": "1 free level of Rapid Healing"
+            },
+            "disadvantage": "You might go berserk when you take Physical damage in combat or if someone under your care is badly injured. Make a Simple Charisma + Willpower Test (wound modifiers apply). You go berserk for 3 turns minus 1 turn per hit.",
+            "source": "Core"
+          },
+          {
+            "id": "cat",
+            "name": "Cat",
+            "description": "Cat is honored in cultures around the world. Cat is often seen as the guardian of mystical secrets. She is stealthy, sly, and arrogant.",
+            "karmaCost": 5,
+            "advantages": {
+              "all": "+2 dice to either Gymnastics or Infiltration Tests (choose one)",
+              "magician": "+2 dice for illusion spells, preparations, and illusion spell rituals",
+              "adept": "2 free levels of Light Body"
+            },
+            "disadvantage": "Cat magicians toy with their prey. Unless you succeed in a Charisma + Willpower (3) Test at the start of combat, you cannot make an attack that incapacitates your target.",
+            "source": "Core"
+          },
+          {
+            "id": "dog",
+            "name": "Dog",
+            "description": "Dog is a loyal friend. He fights ferociously to defend his home and those under his protection. Dog is loyal, generous, and helpful to those who show him kindness.",
+            "karmaCost": 5,
+            "advantages": {
+              "all": "+2 dice for Tracking tests",
+              "magician": "+2 dice for Detection spells, preparations, and rituals",
+              "adept": "2 free Improved Sense powers"
+            },
+            "disadvantage": "A Dog magician is stubbornly loyal. You can never leave someone behind, betray your comrades, or let another sacrifice themselves in your place without making a successful Charisma + Willpower (3) Test.",
+            "source": "Core"
+          },
+          {
+            "id": "dragonslayer",
+            "name": "Dragonslayer",
+            "description": "This most heroic of mentor spirits is also the most fun loving. Though he fights to protect his own against all dangers, he loves a good party even more.",
+            "karmaCost": 5,
+            "advantages": {
+              "all": "+2 dice pool modifier for one social skill of choice",
+              "magician": "+2 dice for Combat spells, preparations, and rituals",
+              "adept": "1 free level of Enhanced Accuracy (skill) and 1 free level of Danger Sense"
+            },
+            "disadvantage": "If you break a promise, whether by choice or by accident, you take a –1 dice pool modifier to all actions until you make good on your promise.",
+            "source": "Core"
+          },
+          {
+            "id": "eagle",
+            "name": "Eagle",
+            "description": "Eagle is the highest-flying bird in the sky, considered the most noble by many cultures. He is proud and solitary, and sees everything happening in the world below.",
+            "karmaCost": 5,
+            "advantages": {
+              "all": "+2 dice to Perception Tests",
+              "magician": "+2 dice for summoning spirits of air",
+              "adept": "1 free level of Combat Sense"
+            },
+            "disadvantage": "You get the Allergy (pollutants, mild) quality (no bonus Karma for this negative quality).",
+            "source": "Core"
+          },
+          {
+            "id": "fire-bringer",
+            "name": "Fire-Bringer",
+            "description": "The Fire-Bringer stole the secret of fire from the heavens and gave it to metahumanity as a gift and a tool. He is a shaper and creator, devoted to the betterment of others.",
+            "karmaCost": 5,
+            "advantages": {
+              "all": "+2 dice to Artisan skill tests or Alchemy skill tests (choose one)",
+              "magician": "+2 dice for spells, preparations, and spell rituals in the Manipulation category",
+              "adept": "1 free level of Improved Ability on a non-combat skill"
+            },
+            "disadvantage": "When someone sincerely asks you for help, you can't refuse without succeeding in a Simple Charisma + Willpower (3) Test.",
+            "source": "Core"
+          },
+          {
+            "id": "mountain",
+            "name": "Mountain",
+            "description": "Mountain is rooted in the very heart of the Earth but reaches toward lofty heights. She has limitless strength and endurance, but Mountain's inflexible nature limits her.",
+            "karmaCost": 5,
+            "advantages": {
+              "all": "+2 dice to Survival Tests",
+              "magician": "+2 dice for Counterspelling Tests and anchored rituals",
+              "adept": "1 free level of Mystic Armor"
+            },
+            "disadvantage": "When a Mountain magician makes a plan, she sticks to it. You must make a Charisma + Willpower (3) Test to abandon a planned course of action in favor of a new one.",
+            "source": "Core"
+          },
+          {
+            "id": "rat",
+            "name": "Rat",
+            "description": "Rat is found wherever humans and the things they discard are. Rat is a scavenger, a stealthy thief who takes what he needs to survive.",
+            "karmaCost": 5,
+            "advantages": {
+              "all": "+2 dice for Sneaking Tests",
+              "magician": "+2 dice to Alchemy tests when harvesting reagents, and you may use reagents of any tradition",
+              "adept": "2 free levels of Natural Immunity"
+            },
+            "disadvantage": "A Rat magician must make a Charisma + Willpower (3) Test to not immediately flee or seek cover whenever caught in a combat situation.",
+            "source": "Core"
+          },
+          {
+            "id": "raven",
+            "name": "Raven",
+            "description": "Raven is a harbinger of trouble in cultures worldwide. He is a trickster and a transformer, dark and devious. Raven thrives off the bounty of carnage and chaos.",
+            "karmaCost": 5,
+            "advantages": {
+              "all": "+2 dice for Con tests",
+              "magician": "+2 dice for spells, preparations, and spell rituals in the Manipulation category",
+              "adept": "Free Traceless Walk and 1 level of Voice Control"
+            },
+            "disadvantage": "You must make a Charisma + Willpower (3) Test to avoid exploiting someone else's misfortune to your own advantage or to pull a clever trick or prank.",
+            "source": "Core"
+          },
+          {
+            "id": "sea",
+            "name": "Sea",
+            "description": "Sea is the birthplace of all living creatures. She is unfathomable and moody, tranquil and comforting one moment, fearsome and destructive the next.",
+            "karmaCost": 5,
+            "advantages": {
+              "all": "+2 dice for Swimming Tests",
+              "magician": "+2 for summoning spirits of water",
+              "adept": "1 free level of Improved Ability on an athletic skill"
+            },
+            "disadvantage": "You must make a Charisma + Willpower (3) Test to give away something you own or be charitable in some way.",
+            "source": "Core"
+          },
+          {
+            "id": "seducer",
+            "name": "Seducer",
+            "description": "The Seducer is the incarnation of desire. He has many whims and vices that he must frequently satisfy. He encourages jealousy and greed.",
+            "karmaCost": 5,
+            "advantages": {
+              "all": "+2 dice for Con Tests",
+              "magician": "+2 dice for spells, preparations, and spell rituals of the Illusion category",
+              "adept": "1 free level of Improved Ability for a skill in the Acting or Influence skill group"
+            },
+            "disadvantage": "You must succeed in a Charisma + Willpower (3) Test to avoid pursuing a vice or indulgence (drugs, BTLs, sex, and so on) when it is made available.",
+            "source": "Core"
+          },
+          {
+            "id": "shark",
+            "name": "Shark",
+            "description": "Shark is a cold and relentless hunter. His power is known to all who live near the sea. When Shark strikes, he does so without mercy, driven into a frenzy by blood.",
+            "karmaCost": 5,
+            "advantages": {
+              "all": "+2 dice to Unarmed Combat tests",
+              "magician": "+2 dice for spells, preparations, and spell rituals of the Combat category",
+              "adept": "Free Killing Hands"
+            },
+            "disadvantage": "You might go berserk when you take Physical damage in combat. Make a Simple Charisma + Willpower Test. You go berserk for 3 turns minus 1 turn per hit.",
+            "source": "Core"
+          },
+          {
+            "id": "snake",
+            "name": "Snake",
+            "description": "Snake is wise and knows many secrets. She is a good counselor, but always exacts a price for her advice. Snake characters fight only to protect themselves and others.",
+            "karmaCost": 5,
+            "advantages": {
+              "all": "+2 to Arcana tests",
+              "magician": "+2 dice for spells, preparations, and spell rituals of the Detection category",
+              "adept": "2 free levels of Kinesics"
+            },
+            "disadvantage": "You must succeed in a Charisma + Willpower (3) Test to avoid pursuing secrets or knowledge that few people know about when you receive hints of its existence.",
+            "source": "Core"
+          },
+          {
+            "id": "thunderbird",
+            "name": "Thunderbird",
+            "description": "Thunderbird is a majestic creature who is storm incarnate. Her wings are dark clouds, her beak and claws lightning, and her cries the clap of thunder.",
+            "karmaCost": 5,
+            "advantages": {
+              "all": "+2 dice for Intimidation Tests",
+              "magician": "+2 dice for summoning spirits of air",
+              "adept": "1 free level of Critical Strike (skill)"
+            },
+            "disadvantage": "A Thunderbird magician must succeed in a Charisma + Willpower (3) Test to avoid responding to an insult in kind.",
+            "source": "Core"
+          },
+          {
+            "id": "wise-warrior",
+            "name": "Wise Warrior",
+            "description": "The Wise Warrior is skilled in the art of war, for battle is an art to her. She studies the tactics of her foes and overcomes them through superior strategy.",
+            "karmaCost": 5,
+            "advantages": {
+              "all": "+2 dice to Leadership or Instruction skill tests (choose one)",
+              "magician": "+2 dice for spells, preparations, and spell rituals in the Combat category",
+              "adept": "1 free level of Improved Ability on a Combat skill"
+            },
+            "disadvantage": "If you act dishonorably or without courtesy, whether by choice or by accident, you take a –1 dice pool modifier to all actions until you atone for your behavior.",
+            "source": "Core"
+          },
+          {
+            "id": "wolf",
+            "name": "Wolf",
+            "description": "Wolf is recognized as a hunter and warrior worldwide. He is devoted to the other members of his pack. Wolf wins every fight but one—the one that kills him.",
+            "karmaCost": 5,
+            "advantages": {
+              "all": "+2 dice to Tracking tests",
+              "magician": "+2 dice for spells, preparations, and rituals in the Combat category",
+              "adept": "2 free levels of Attribute Boost (Agility)"
+            },
+            "disadvantage": "You must succeed in a Charisma + Willpower (3) Test to retreat from a fight.",
+            "source": "Core"
+          }
+        ],
+        "rituals": [
+          {
+            "id": "curse",
+            "name": "Curse",
+            "keywords": ["material-link", "spell"],
+            "spellCategory": "illusion",
+            "description": "A Curse allows an illusion spell to be cast on a subject through a material link rather than a mystic link from observing the subject. A Curse can be used on any target, whether within visual range of the leader or not, provided there is a link to the target. If the spell applies to multiple targets, such as in a mass spell, then the ritual must have a link to each of the targets. The link is used as part of the offering and is effectively destroyed during the ritual.",
+            "duration": "Force hours",
+            "source": "Core"
+          },
+          {
+            "id": "prodigal-spell",
+            "name": "Prodigal Spell",
+            "keywords": ["spell", "spotter"],
+            "spellCategory": "combat",
+            "description": "This ritual allows you to cast any Combat spell at a distant target that is out of line of sight of your ritual team. The Combat spell can be either direct or indirect. Direct combat spells travel to the target in astral space. Indirect combat spells travel to the target in physical space, requiring a clear (but not necessarily straight) path in the physical world between the ritual team and target.",
+            "duration": "Force hours",
+            "source": "Core"
+          },
+          {
+            "id": "remote-sensing",
+            "name": "Remote Sensing",
+            "keywords": ["spell", "spotter"],
+            "spellCategory": "detection",
+            "description": "This ritual allows you to cast any Detection spell with an even greater range. The area of the spell is increased to Force x (sum total of the participants' Magic attributes) x 100 meters. The spell's subject must be present in the foundation during the ritual but may then take his new sense outside the foundation while the ritual participants sustain it for him.",
+            "duration": "Force hours",
+            "source": "Core"
+          },
+          {
+            "id": "ward",
+            "name": "Ward",
+            "keywords": ["anchored"],
+            "description": "The ward is a basic ritual, taught to many magicians. It creates an astral barrier with a Force equal to the Force of the ritual. The ward may encompass a volume of up to fifty cubic meters times the sum of the participants' Magic ratings. The ward lasts for a number of weeks equal to the net hits from the sealing step of the ritual—if the leader spends an amount of karma equal to the ward's Force, the ward is permanent.",
+            "duration": "Force hours",
+            "canBePermanent": true,
+            "permanentKarmaCost": "Force",
+            "source": "Core"
+          },
+          {
+            "id": "circle-of-protection",
+            "name": "Circle of Protection",
+            "keywords": ["anchored"],
+            "description": "The circle of protection is a small astral and physical barrier. Even though it's called a circle, it creates a sphere around the anchor that has a radius in meters equal to the leader's Magic rating. The circle acts as a combination of the physical barrier and mana barrier spells with a Force equal to the Force of the ritual. The mana barrier is dual-natured. Anyone or anything within the barrier is protected from outside physical objects and magical attacks. If something crosses the barrier from the inside, then the ward ends.",
+            "duration": "Net hits hours",
+            "source": "Core"
+          },
+          {
+            "id": "circle-of-healing",
+            "name": "Circle of Healing",
+            "keywords": ["anchored", "spell"],
+            "spellCategory": "health",
+            "description": "This ritual is used to cast a healing magic on a number of targets at once. Even though it's called a circle, it creates a sphere around the anchor that has a radius in meters equal to the leader's Magic rating. The net hits from the sealing step are used as the net hits for the spell, and apply to everyone in the circle as long as they remain in the circle.",
+            "duration": "Force days",
+            "source": "Core"
+          },
+          {
+            "id": "renascence",
+            "name": "Renascence",
+            "keywords": ["anchored", "spell"],
+            "spellCategory": "manipulation",
+            "description": "This ritual sustains and maintains an area manipulation spell for a time. The area of the spell is a sphere with a radius equal to the leader's Magic rating, and the effect is based on the ritual's Force and the net hits from the sealing step. The base duration of the effect is 1 hour, which is doubled for each net hit from the sealing step of the ritual.",
+            "duration": "Force hours",
+            "source": "Core"
+          },
+          {
+            "id": "watcher",
+            "name": "Watcher",
+            "keywords": ["minion"],
+            "description": "Watchers are like spirits, but in actuality are entities born from the ritual leader's own mind rather than the metaplanes. They are a creation of mana, woven with the personalities of the ritual participants. A watcher can speak any language its creators can speak. A watcher is bound only to the leader of the ritual and follows his orders. A watcher lasts for a number of hours equal to its Force times the net hits on the sealing test. A watcher's skills are equal to half the Force of the ritual (rounded up). A leader can dismiss a watcher bound to him as a Free Action. Watchers cannot be banished or counterspelled.",
+            "duration": "Force minutes",
+            "minionStats": {
+              "attributes": {
+                "body": null,
+                "agility": null,
+                "reaction": null,
+                "strength": null,
+                "willpower": "F-2",
+                "logic": "F-2",
+                "intuition": "F-2",
+                "charisma": "F-2"
+              },
+              "astralInitiative": "(F x 2) + 1D6",
+              "skills": ["Assensing", "Astral Combat", "Perception"],
+              "powers": ["Astral Form", "Manifest", "Search", "Sapience"],
+              "notes": "Watchers don't have a corporeal body."
+            },
+            "source": "Core"
+          },
+          {
+            "id": "homunculus",
+            "name": "Homunculus",
+            "keywords": ["minion"],
+            "description": "The magician can bind a spark of intelligence into an inanimate form, creating a homunculus. The homunculus has a physical form but isn't very bright. It understands any language its creators speak and has a modicum of a personality that reflects those of its creators. You need an inanimate object to animate for the ritual. It can be at most (Force x 10) kilograms in mass. The homunculus obeys the leader's commands as much as possible within the limitations of its physical capabilities. A homunculus lasts for a number of days equal to its Force times the net hits on the sealing test.",
+            "duration": "Force hours",
+            "minionStats": {
+              "attributes": {
+                "body": "Structure",
+                "agility": "F-2",
+                "reaction": "F-2",
+                "strength": "F",
+                "willpower": 1,
+                "logic": 1,
+                "intuition": 1
+              },
+              "initiative": "(F + 1) + 1D6",
+              "movement": "x2/x4/+1",
+              "skills": ["Assensing", "Astral Combat", "Perception", "Unarmed Combat"],
+              "powers": ["Sapience"],
+              "notes": "The body of a minion is equivalent to the Structure rating of the material used in creating it."
+            },
+            "source": "Core"
+          }
+        ],
+        "ritualKeywords": [
+          {
+            "id": "anchored",
+            "name": "Anchored",
+            "description": "All anchored rituals must be placed on a physical object or symbol of mystical significance that serves as the ritual's focal point. The anchor cannot be moved relative to the Gaiasphere during the duration of the ritual's effect, or the ritual collapses and the effect ends early."
+          },
+          {
+            "id": "material-link",
+            "name": "Material Link",
+            "description": "The ritual requires a material link to the target, something that was once a part of the target. Material links from living beings aren't usable in rituals forever."
+          },
+          {
+            "id": "minion",
+            "name": "Minion",
+            "description": "The ritual creates a semi-autonomous entity, usually something to help the magician who makes it. Whatever minion is created is bound to the ritual leader, who can't have more minions at a time than his Charisma rating."
+          },
+          {
+            "id": "spell",
+            "name": "Spell",
+            "description": "This ritual is used in conjunction with a spell that the ritual leader knows. If the leader has any modifiers to the spell from a mentor spirit, the modifiers apply to the ritual, too. These rituals are susceptible to dispelling."
+          },
+          {
+            "id": "spotter",
+            "name": "Spotter",
+            "description": "If the ritual's target is not in sight of the leader, the leader needs to designate someone who can see the target for them. The spotter must be a member of the group casting the ritual—or a spirit bound to a member—and must be able to astrally perceive the target."
           }
         ]
       }
@@ -4307,7 +4621,8 @@
             "summary": "Gain mentor spirit benefits/drawbacks.",
             "requiresMagic": true,
             "requiresSpecification": true,
-            "specificationLabel": "Spirit"
+            "specificationLabel": "Spirit",
+            "specificationSource": "mentorSpirits"
           },
           {
             "id": "natural-athlete",
@@ -8387,6 +8702,16 @@
                 "payload": {
                   "type": "custom",
                   "target": "spells"
+                }
+              },
+              {
+                "id": "rituals",
+                "title": "Rituals",
+                "type": "custom",
+                "description": "Learn ritual spellcasting if your magical path includes it.",
+                "payload": {
+                  "type": "custom",
+                  "target": "rituals"
                 }
               },
               {
