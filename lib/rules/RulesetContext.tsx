@@ -22,8 +22,8 @@ import type {
   ID,
   ContactTemplateData,
 } from "../types";
-import { QualityData, AdeptPowerCatalogItem, TraditionData, MentorSpiritData, TraditionSpiritTypes, MentorSpiritAdvantages, RitualData, RitualKeywordData, MinionStatsData } from "./loader";
-export type { QualityData, TraditionData, MentorSpiritData, TraditionSpiritTypes, MentorSpiritAdvantages, RitualData, RitualKeywordData, MinionStatsData };
+import { QualityData, AdeptPowerCatalogItem, TraditionData, MentorSpiritData, TraditionSpiritTypes, MentorSpiritAdvantages, RitualData, RitualKeywordData, MinionStatsData, VehicleCategoryData, DroneSizeData, VehicleCatalogItemData, DroneCatalogItemData, RCCCatalogItemData, AutosoftCatalogItemData, HandlingRatingData, DroneWeaponMountsData } from "./loader";
+export type { QualityData, TraditionData, MentorSpiritData, TraditionSpiritTypes, MentorSpiritAdvantages, RitualData, RitualKeywordData, MinionStatsData, VehicleCategoryData, DroneSizeData, VehicleCatalogItemData, DroneCatalogItemData, RCCCatalogItemData, AutosoftCatalogItemData, HandlingRatingData, DroneWeaponMountsData };
 
 // =============================================================================
 // TYPES
@@ -359,6 +359,20 @@ export interface RulesetContextActions {
 /**
  * Extracted data from the ruleset for convenience
  */
+/**
+ * Vehicles catalog data structure
+ */
+export interface VehiclesCatalogData {
+  categories: VehicleCategoryData[];
+  droneSizes: DroneSizeData[];
+  groundcraft: VehicleCatalogItemData[];
+  watercraft: VehicleCatalogItemData[];
+  aircraft: VehicleCatalogItemData[];
+  drones: DroneCatalogItemData[];
+  rccs: RCCCatalogItemData[];
+  autosofts: AutosoftCatalogItemData[];
+}
+
 export interface RulesetData {
   metatypes: MetatypeData[];
   skills: {
@@ -388,6 +402,7 @@ export interface RulesetData {
   adeptPowers: AdeptPowerCatalogItem[];
   rituals: RitualData[];
   ritualKeywords: RitualKeywordData[];
+  vehicles: VehiclesCatalogData | null;
 }
 
 /**
@@ -444,6 +459,7 @@ const defaultData: RulesetData = {
   adeptPowers: [],
   rituals: [],
   ritualKeywords: [],
+  vehicles: null,
 };
 
 const defaultState: RulesetContextState = {
@@ -530,6 +546,7 @@ export function RulesetProvider({
             adeptPowers: extractedData.adeptPowers || [],
             rituals: extractedData.rituals || [],
             ritualKeywords: extractedData.ritualKeywords || [],
+            vehicles: extractedData.vehicles || null,
           }
           : defaultData;
 
@@ -1119,4 +1136,234 @@ export function useRituals(): RitualData[] {
 export function useRitualKeywords(): RitualKeywordData[] {
   const { data } = useRuleset();
   return data.ritualKeywords;
+}
+
+// =============================================================================
+// VEHICLE, DRONE, RCC, AND AUTOSOFT HOOKS
+// =============================================================================
+
+/**
+ * Hook to get vehicles catalog
+ */
+export function useVehiclesCatalog(): VehiclesCatalogData | null {
+  const { data } = useRuleset();
+  return data.vehicles;
+}
+
+/**
+ * Hook to get all vehicles (groundcraft, watercraft, aircraft combined)
+ */
+export function useVehicles(options?: {
+  category?: string;
+  maxAvailability?: number;
+  excludeForbidden?: boolean;
+  excludeRestricted?: boolean;
+}): VehicleCatalogItemData[] {
+  const { data } = useRuleset();
+
+  return useMemo(() => {
+    if (!data.vehicles) return [];
+
+    let allVehicles = [
+      ...(data.vehicles.groundcraft || []),
+      ...(data.vehicles.watercraft || []),
+      ...(data.vehicles.aircraft || []),
+    ];
+
+    if (options?.category) {
+      allVehicles = allVehicles.filter(
+        (item) => item.category === options.category
+      );
+    }
+
+    if (options?.maxAvailability !== undefined) {
+      allVehicles = allVehicles.filter(
+        (item) => item.availability <= options.maxAvailability!
+      );
+    }
+
+    if (options?.excludeForbidden) {
+      allVehicles = allVehicles.filter((item) => !item.forbidden);
+    }
+
+    if (options?.excludeRestricted) {
+      allVehicles = allVehicles.filter((item) => !item.restricted);
+    }
+
+    return allVehicles;
+  }, [data.vehicles, options]);
+}
+
+/**
+ * Hook to get vehicles by type (groundcraft, watercraft, aircraft)
+ */
+export function useVehiclesByType(): {
+  groundcraft: VehicleCatalogItemData[];
+  watercraft: VehicleCatalogItemData[];
+  aircraft: VehicleCatalogItemData[];
+} {
+  const { data } = useRuleset();
+  return useMemo(() => ({
+    groundcraft: data.vehicles?.groundcraft || [],
+    watercraft: data.vehicles?.watercraft || [],
+    aircraft: data.vehicles?.aircraft || [],
+  }), [data.vehicles]);
+}
+
+/**
+ * Hook to get vehicle categories metadata
+ */
+export function useVehicleCategories(): VehicleCategoryData[] {
+  const { data } = useRuleset();
+  return data.vehicles?.categories || [];
+}
+
+/**
+ * Hook to get drones with optional filtering
+ */
+export function useDrones(options?: {
+  size?: string;
+  droneType?: string;
+  maxAvailability?: number;
+  excludeForbidden?: boolean;
+  excludeRestricted?: boolean;
+}): DroneCatalogItemData[] {
+  const { data } = useRuleset();
+  const drones = data.vehicles?.drones;
+
+  return useMemo(() => {
+    if (!drones) return [];
+
+    let result = [...drones];
+
+    if (options?.size) {
+      result = result.filter((drone) => drone.size === options.size);
+    }
+
+    if (options?.droneType) {
+      result = result.filter((drone) => drone.droneType === options.droneType);
+    }
+
+    if (options?.maxAvailability !== undefined) {
+      result = result.filter(
+        (drone) => drone.availability <= options.maxAvailability!
+      );
+    }
+
+    if (options?.excludeForbidden) {
+      result = result.filter((drone) => !drone.forbidden);
+    }
+
+    if (options?.excludeRestricted) {
+      result = result.filter((drone) => !drone.restricted);
+    }
+
+    return result;
+  }, [drones, options]);
+}
+
+/**
+ * Hook to get drone size categories
+ */
+export function useDroneSizes(): DroneSizeData[] {
+  const { data } = useRuleset();
+  return data.vehicles?.droneSizes || [];
+}
+
+/**
+ * Hook to get RCCs (Rigger Command Consoles) with optional filtering
+ */
+export function useRCCs(options?: {
+  minDeviceRating?: number;
+  maxAvailability?: number;
+  excludeRestricted?: boolean;
+}): RCCCatalogItemData[] {
+  const { data } = useRuleset();
+  const rccs = data.vehicles?.rccs;
+
+  return useMemo(() => {
+    if (!rccs) return [];
+
+    let result = [...rccs];
+
+    if (options?.minDeviceRating !== undefined) {
+      result = result.filter(
+        (rcc) => rcc.deviceRating >= options.minDeviceRating!
+      );
+    }
+
+    if (options?.maxAvailability !== undefined) {
+      result = result.filter(
+        (rcc) => rcc.availability <= options.maxAvailability!
+      );
+    }
+
+    if (options?.excludeRestricted) {
+      result = result.filter((rcc) => !rcc.restricted);
+    }
+
+    return result;
+  }, [rccs, options]);
+}
+
+/**
+ * Hook to get autosofts with optional filtering
+ */
+export function useAutosofts(options?: {
+  category?: string;
+  maxRating?: number;
+  requiresTarget?: boolean;
+}): AutosoftCatalogItemData[] {
+  const { data } = useRuleset();
+  const autosofts = data.vehicles?.autosofts;
+
+  return useMemo(() => {
+    if (!autosofts) return [];
+
+    let result = [...autosofts];
+
+    if (options?.category) {
+      result = result.filter(
+        (autosoft) => autosoft.category === options.category
+      );
+    }
+
+    if (options?.requiresTarget !== undefined) {
+      result = result.filter(
+        (autosoft) => autosoft.requiresTarget === options.requiresTarget
+      );
+    }
+
+    return result;
+  }, [autosofts, options]);
+}
+
+/**
+ * Calculate the cost of an autosoft at a specific rating
+ */
+export function calculateAutosoftCost(
+  costPerRating: number,
+  rating: number
+): number {
+  return costPerRating * rating;
+}
+
+/**
+ * Calculate the availability of an autosoft at a specific rating
+ */
+export function calculateAutosoftAvailability(
+  availabilityPerRating: number,
+  rating: number
+): number {
+  return availabilityPerRating * rating;
+}
+
+/**
+ * Format handling rating for display
+ */
+export function formatHandlingRating(handling: HandlingRatingData): string {
+  if (typeof handling === "number") {
+    return String(handling);
+  }
+  return `${handling.onRoad}/${handling.offRoad}`;
 }

@@ -129,7 +129,7 @@ This section prioritizes the most critical remaining tasks needed to complete ch
 | 9 | Add spell formula limits validation (Magic × 2 per category). Progress bar tracks free spells. Category limits are selection/validation limits. | Small | M0.7.11 | ✅ Complete |
 | 10 | Conditional Assensing for Adepts (requires powers system first) | Small | B5.1.5 | ✅ Complete |
 
-**Next Steps:** Begin B7 Complex Forms & Matrix to complete technomancer character creation.
+**Next Steps:** Begin B13 Decker Support (Programs) to complete decker character creation.
 
 ---
 
@@ -176,8 +176,8 @@ This section provides a comprehensive view of the entire implementation roadmap,
 | 3  | **B5**  | **Adept Powers System**             | **1-2 weeks**  | **High**   | ✅ **Complete**   |
 | 4  | **B7**  | **Complex Forms & Matrix**          | **1-2 weeks**  | **High**   | ✅ **Complete**   |
 | 5  | **B6**  | **Spell Management**                | **1-2 weeks**  | **High**   | ✅ **Complete**   |
-| 6  | **B12** | **Rigger Support (Vehicles & Drones)** | **2-3 weeks**  | **High**   | 🔜 Next          |
-| 7  | **B13** | **Decker Support (Programs)**       | **1 week**     | **High**   | Not Started      |
+| 6  | **B12** | **Rigger Support (Vehicles & Drones)** | **2-3 weeks**  | **High**   | ✅ **Complete**   |
+| 7  | **B13** | **Decker Support (Programs)**       | **1 week**     | **High**   | 🔜 Next          |
 | 8  | **B14** | **Foci & Spirits**                  | **2 weeks**    | **High**   | Not Started      |
 | 9  | **B11** | **Identity/Lifestyle/SIN System**   | **2-3 weeks**  | **High**   | Not Started      |
 | 10 | **B10** | **Gear Modifications**              | **2-3 weeks**  | **Medium** | Not Started      |
@@ -208,6 +208,7 @@ This section provides a comprehensive view of the entire implementation roadmap,
 | **M0 Complete** | **Jan 2025** | **All MVP gaps and enhancements complete: bug fixes, metatype enhancements, skills improvements, qualities system, contacts templates, distributed karma architecture, SpellsStep, Aspected Mage support** |
 | B8.1 Gear Layout | Dec 2024 | Improved gear catalog layout, shopping cart width fixes, responsive design |
 | B6 Spell Management | Dec 2024 | Traditions system (drain attributes, spirit types), 16 mentor spirits with quality integration, 9 rituals with RitualsStep component, Watcher/Homunculus minion stats |
+| B12 Rigger Support | Dec 2024 | Vehicle/drone type definitions, SR5 CRB catalog (11 groundcraft, 3 watercraft, 6 aircraft, 11 drones, 7 RCCs, 6 autosofts), extraction functions and hooks, VehiclesStep component with tabbed interface, wizard integration |
 
 ### Estimated Remaining Timeline
 
@@ -232,8 +233,8 @@ This section provides a comprehensive view of the entire implementation roadmap,
 | B5  | Adept Powers System              | 1-2 weeks  | High   | ✅ Complete   |
 | B7  | Complex Forms & Matrix           | 1-2 weeks  | High   | ✅ Complete   |
 | B6  | Spell Management                 | 1-2 weeks  | High   | ✅ Complete   |
-| B12 | Rigger Support (Vehicles & Drones)| 2-3 weeks | High   | 🔜 Next      |
-| B13 | Decker Support (Programs)        | 1 week     | High   | Not Started  |
+| B12 | Rigger Support (Vehicles & Drones)| 2-3 weeks | High   | ✅ Complete   |
+| B13 | Decker Support (Programs)        | 1 week     | High   | 🔜 Next      |
 | B14 | Foci & Spirits                   | 2 weeks    | High   | Not Started  |
 | B11 | Identity/Lifestyle/SIN System    | 2-3 weeks  | High   | Not Started  |
 | B10 | Gear Modifications               | 2-3 weeks  | Medium | Not Started  |
@@ -4128,12 +4129,12 @@ This milestone establishes the core data structures for vehicles, drones, RCCs, 
 
 | Task | Description | Status |
 |------|-------------|--------|
-| B12.1.1 | Create Vehicle interface (handling, speed, accel, body, armor, pilot, sensor, seats, deviceRating) | Not Started |
-| B12.1.2 | Create Drone interface extending Vehicle (size category: micro/mini/small/medium/large/huge) | Not Started |
-| B12.1.3 | Create RCC interface (deviceRating, dataProcessing, firewall, programs) | Not Started |
-| B12.1.4 | Create Autosoft interface (name, rating, targetModel or wildcard) | Not Started |
-| B12.1.5 | Create VehicleModification interface for vehicle mods | Not Started |
-| B12.1.6 | Add vehicles, drones, rccs, autosofts to Character interface | Not Started |
+| B12.1.1 | Create Vehicle interface (handling, speed, accel, body, armor, pilot, sensor, seats, deviceRating) | Complete |
+| B12.1.2 | Create Drone interface extending Vehicle (size category: micro/mini/small/medium/large/huge) | Complete |
+| B12.1.3 | Create RCC interface (deviceRating, dataProcessing, firewall, programs) | Complete |
+| B12.1.4 | Create Autosoft interface (name, rating, targetModel or wildcard) | Complete |
+| B12.1.5 | Create VehicleModification interface for vehicle mods | Complete |
+| B12.1.6 | Add vehicles, drones, rccs, autosofts to Character interface | Complete |
 
 **Tasks JSON:**
 ```json
@@ -4143,7 +4144,7 @@ This milestone establishes the core data structures for vehicles, drones, RCCs, 
     "title": "Create Vehicle interface (handling, speed, accel, body, armor, pilot, sensor, seats, deviceRating)",
     "description": "This milestone establishes the core data structures for vehicles, drones, RCCs, and autosofts. Create Vehicle interface with all SR5 CRB attributes.",
     "files": ["/lib/types/vehicles.ts"],
-    "status": "Not Started",
+    "status": "Complete",
     "dependsOn": []
   },
   {
@@ -4151,7 +4152,7 @@ This milestone establishes the core data structures for vehicles, drones, RCCs, 
     "title": "Create Drone interface extending Vehicle (size category: micro/mini/small/medium/large/huge)",
     "description": "This milestone establishes the core data structures for vehicles, drones, RCCs, and autosofts. Create Drone interface with size categories.",
     "files": ["/lib/types/vehicles.ts"],
-    "status": "Not Started",
+    "status": "Complete",
     "dependsOn": ["B12.1.1"]
   },
   {
@@ -4159,7 +4160,7 @@ This milestone establishes the core data structures for vehicles, drones, RCCs, 
     "title": "Create RCC interface (deviceRating, dataProcessing, firewall, programs)",
     "description": "This milestone establishes the core data structures for vehicles, drones, RCCs, and autosofts. Create RCC interface.",
     "files": ["/lib/types/vehicles.ts"],
-    "status": "Not Started",
+    "status": "Complete",
     "dependsOn": []
   },
   {
@@ -4167,7 +4168,7 @@ This milestone establishes the core data structures for vehicles, drones, RCCs, 
     "title": "Create Autosoft interface (name, rating, targetModel or wildcard)",
     "description": "This milestone establishes the core data structures for vehicles, drones, RCCs, and autosofts. Create Autosoft interface.",
     "files": ["/lib/types/vehicles.ts"],
-    "status": "Not Started",
+    "status": "Complete",
     "dependsOn": []
   },
   {
@@ -4175,7 +4176,7 @@ This milestone establishes the core data structures for vehicles, drones, RCCs, 
     "title": "Create VehicleModification interface for vehicle mods",
     "description": "This milestone establishes the core data structures for vehicles, drones, RCCs, and autosofts. Create VehicleModification interface.",
     "files": ["/lib/types/vehicles.ts"],
-    "status": "Not Started",
+    "status": "Complete",
     "dependsOn": ["B12.1.1"]
   },
   {
@@ -4183,7 +4184,7 @@ This milestone establishes the core data structures for vehicles, drones, RCCs, 
     "title": "Add vehicles, drones, rccs, autosofts to Character interface",
     "description": "This milestone establishes the core data structures for vehicles, drones, RCCs, and autosofts. Update Character interface to include vehicle ownership.",
     "files": ["/lib/types/character.ts"],
-    "status": "Not Started",
+    "status": "Complete",
     "dependsOn": ["B12.1.1", "B12.1.2", "B12.1.3", "B12.1.4"]
   }
 ]
@@ -4200,13 +4201,13 @@ This milestone populates the SR5 Core Rulebook vehicles and drones into the rule
 
 | Task | Description | Status |
 |------|-------------|--------|
-| B12.2.1 | Add groundcraft vehicles (bikes, cars, trucks, etc.) to core-rulebook.json | Not Started |
-| B12.2.2 | Add watercraft vehicles (boats, submarines) to core-rulebook.json | Not Started |
-| B12.2.3 | Add aircraft vehicles (rotorcraft, fixed-wing, VTOL, LAV) to core-rulebook.json | Not Started |
-| B12.2.4 | Add walker vehicles (anthroform) to core-rulebook.json | Not Started |
-| B12.2.5 | Add drones by size category (micro, mini, small, medium, large, huge) to core-rulebook.json | Not Started |
-| B12.2.6 | Add RCCs to core-rulebook.json | Not Started |
-| B12.2.7 | Add autosofts (Clearsight, Electronic Warfare, Evasion, Maneuvering, Stealth, Targeting) to core-rulebook.json | Not Started |
+| B12.2.1 | Add groundcraft vehicles (bikes, cars, trucks, etc.) to core-rulebook.json | Complete |
+| B12.2.2 | Add watercraft vehicles (boats, submarines) to core-rulebook.json | Complete |
+| B12.2.3 | Add aircraft vehicles (rotorcraft, fixed-wing, VTOL, LAV) to core-rulebook.json | Complete |
+| B12.2.4 | Add walker vehicles (anthroform) to core-rulebook.json | Complete |
+| B12.2.5 | Add drones by size category (micro, mini, small, medium, large, huge) to core-rulebook.json | Complete |
+| B12.2.6 | Add RCCs to core-rulebook.json | Complete |
+| B12.2.7 | Add autosofts (Clearsight, Electronic Warfare, Evasion, Maneuvering, Stealth, Targeting) to core-rulebook.json | Complete |
 | B12.2.8 | Add vehicle modifications (sensor upgrades, armor, weapons mounts, etc.) to core-rulebook.json | Not Started |
 
 **Tasks JSON:**
@@ -4217,7 +4218,7 @@ This milestone populates the SR5 Core Rulebook vehicles and drones into the rule
     "title": "Add groundcraft vehicles (bikes, cars, trucks, etc.) to core-rulebook.json",
     "description": "Populate SR5 CRB groundcraft including Dodge Scoot, Yamaha Growler, Hyundai Shin-Hyung, etc.",
     "files": ["/data/editions/sr5/core-rulebook.json"],
-    "status": "Not Started",
+    "status": "Complete",
     "dependsOn": ["B12.1.1"]
   },
   {
@@ -4225,7 +4226,7 @@ This milestone populates the SR5 Core Rulebook vehicles and drones into the rule
     "title": "Add watercraft vehicles (boats, submarines) to core-rulebook.json",
     "description": "Populate SR5 CRB watercraft.",
     "files": ["/data/editions/sr5/core-rulebook.json"],
-    "status": "Not Started",
+    "status": "Complete",
     "dependsOn": ["B12.1.1"]
   },
   {
@@ -4233,7 +4234,7 @@ This milestone populates the SR5 Core Rulebook vehicles and drones into the rule
     "title": "Add aircraft vehicles (rotorcraft, fixed-wing, VTOL, LAV) to core-rulebook.json",
     "description": "Populate SR5 CRB aircraft including Hughes Stallion, Cessna C750, Ares Dragon, etc.",
     "files": ["/data/editions/sr5/core-rulebook.json"],
-    "status": "Not Started",
+    "status": "Complete",
     "dependsOn": ["B12.1.1"]
   },
   {
@@ -4241,7 +4242,7 @@ This milestone populates the SR5 Core Rulebook vehicles and drones into the rule
     "title": "Add walker vehicles (anthroform) to core-rulebook.json",
     "description": "Populate SR5 CRB walker vehicles.",
     "files": ["/data/editions/sr5/core-rulebook.json"],
-    "status": "Not Started",
+    "status": "Complete",
     "dependsOn": ["B12.1.1"]
   },
   {
@@ -4249,7 +4250,7 @@ This milestone populates the SR5 Core Rulebook vehicles and drones into the rule
     "title": "Add drones by size category (micro, mini, small, medium, large, huge) to core-rulebook.json",
     "description": "Populate SR5 CRB drones including MCT Fly-Spy, Lockheed Optic-X2, Ares Duelist, GM-Nissan Doberman, Steel Lynx, etc.",
     "files": ["/data/editions/sr5/core-rulebook.json"],
-    "status": "Not Started",
+    "status": "Complete",
     "dependsOn": ["B12.1.2"]
   },
   {
@@ -4257,7 +4258,7 @@ This milestone populates the SR5 Core Rulebook vehicles and drones into the rule
     "title": "Add RCCs to core-rulebook.json",
     "description": "Populate SR5 CRB RCCs with device ratings and capabilities.",
     "files": ["/data/editions/sr5/core-rulebook.json"],
-    "status": "Not Started",
+    "status": "Complete",
     "dependsOn": ["B12.1.3"]
   },
   {
@@ -4265,7 +4266,7 @@ This milestone populates the SR5 Core Rulebook vehicles and drones into the rule
     "title": "Add autosofts (Clearsight, Electronic Warfare, Evasion, Maneuvering, Stealth, Targeting) to core-rulebook.json",
     "description": "Populate SR5 CRB autosofts.",
     "files": ["/data/editions/sr5/core-rulebook.json"],
-    "status": "Not Started",
+    "status": "Complete",
     "dependsOn": ["B12.1.4"]
   },
   {
@@ -4291,11 +4292,11 @@ This milestone creates the React context hooks for accessing vehicle and drone d
 
 | Task | Description | Status |
 |------|-------------|--------|
-| B12.3.1 | Add vehicle/drone extractors to loader.ts | Not Started |
-| B12.3.2 | Create useVehicles() hook in RulesetContext | Not Started |
-| B12.3.3 | Create useDrones() hook in RulesetContext | Not Started |
-| B12.3.4 | Create useRCCs() hook in RulesetContext | Not Started |
-| B12.3.5 | Create useAutosofts() hook in RulesetContext | Not Started |
+| B12.3.1 | Add vehicle/drone extractors to loader.ts | Complete |
+| B12.3.2 | Create useVehicles() hook in RulesetContext | Complete |
+| B12.3.3 | Create useDrones() hook in RulesetContext | Complete |
+| B12.3.4 | Create useRCCs() hook in RulesetContext | Complete |
+| B12.3.5 | Create useAutosofts() hook in RulesetContext | Complete |
 
 **Tasks JSON:**
 ```json
@@ -4305,7 +4306,7 @@ This milestone creates the React context hooks for accessing vehicle and drone d
     "title": "Add vehicle/drone extractors to loader.ts",
     "description": "Update loader to extract vehicles, drones, RCCs, autosofts from ruleset.",
     "files": ["/lib/rules/loader.ts"],
-    "status": "Not Started",
+    "status": "Complete",
     "dependsOn": ["B12.2.1", "B12.2.5", "B12.2.6", "B12.2.7"]
   },
   {
@@ -4313,7 +4314,7 @@ This milestone creates the React context hooks for accessing vehicle and drone d
     "title": "Create useVehicles() hook in RulesetContext",
     "description": "Create hook for accessing vehicle catalog.",
     "files": ["/lib/rules/RulesetContext.tsx"],
-    "status": "Not Started",
+    "status": "Complete",
     "dependsOn": ["B12.3.1"]
   },
   {
@@ -4321,7 +4322,7 @@ This milestone creates the React context hooks for accessing vehicle and drone d
     "title": "Create useDrones() hook in RulesetContext",
     "description": "Create hook for accessing drone catalog.",
     "files": ["/lib/rules/RulesetContext.tsx"],
-    "status": "Not Started",
+    "status": "Complete",
     "dependsOn": ["B12.3.1"]
   },
   {
@@ -4329,7 +4330,7 @@ This milestone creates the React context hooks for accessing vehicle and drone d
     "title": "Create useRCCs() hook in RulesetContext",
     "description": "Create hook for accessing RCC catalog.",
     "files": ["/lib/rules/RulesetContext.tsx"],
-    "status": "Not Started",
+    "status": "Complete",
     "dependsOn": ["B12.3.1"]
   },
   {
@@ -4337,7 +4338,7 @@ This milestone creates the React context hooks for accessing vehicle and drone d
     "title": "Create useAutosofts() hook in RulesetContext",
     "description": "Create hook for accessing autosoft catalog.",
     "files": ["/lib/rules/RulesetContext.tsx"],
-    "status": "Not Started",
+    "status": "Complete",
     "dependsOn": ["B12.3.1"]
   }
 ]
@@ -4358,12 +4359,12 @@ This milestone creates the character creation step for selecting vehicles, drone
 
 | Task | Description | Status |
 |------|-------------|--------|
-| B12.4.1 | Create VehiclesStep component with vehicle catalog browser | Not Started |
-| B12.4.2 | Add drone selection with size category filtering | Not Started |
-| B12.4.3 | Add RCC selection for riggers | Not Started |
-| B12.4.4 | Add autosoft selection tied to owned drones | Not Started |
-| B12.4.5 | Implement nuyen budget tracking for vehicles/drones | Not Started |
-| B12.4.6 | Register VehiclesStep in CreationWizard | Not Started |
+| B12.4.1 | Create VehiclesStep component with vehicle catalog browser | Complete |
+| B12.4.2 | Add drone selection with size category filtering | Complete |
+| B12.4.3 | Add RCC selection for riggers | Complete |
+| B12.4.4 | Add autosoft selection tied to owned drones | Complete |
+| B12.4.5 | Implement nuyen budget tracking for vehicles/drones | Complete |
+| B12.4.6 | Register VehiclesStep in CreationWizard | Complete |
 | B12.4.7 | Display vehicles/drones in ReviewStep | Not Started |
 
 **Tasks JSON:**
@@ -4374,7 +4375,7 @@ This milestone creates the character creation step for selecting vehicles, drone
     "title": "Create VehiclesStep component with vehicle catalog browser",
     "description": "Create the main VehiclesStep component with browsable vehicle catalog.",
     "files": ["/app/characters/create/components/steps/VehiclesStep.tsx"],
-    "status": "Not Started",
+    "status": "Complete",
     "dependsOn": ["B12.3.2"]
   },
   {
@@ -4382,7 +4383,7 @@ This milestone creates the character creation step for selecting vehicles, drone
     "title": "Add drone selection with size category filtering",
     "description": "Add drone selection UI with filtering by size category.",
     "files": ["/app/characters/create/components/steps/VehiclesStep.tsx"],
-    "status": "Not Started",
+    "status": "Complete",
     "dependsOn": ["B12.3.3"]
   },
   {
@@ -4390,7 +4391,7 @@ This milestone creates the character creation step for selecting vehicles, drone
     "title": "Add RCC selection for riggers",
     "description": "Add RCC selection for rigger characters.",
     "files": ["/app/characters/create/components/steps/VehiclesStep.tsx"],
-    "status": "Not Started",
+    "status": "Complete",
     "dependsOn": ["B12.3.4"]
   },
   {
@@ -4398,7 +4399,7 @@ This milestone creates the character creation step for selecting vehicles, drone
     "title": "Add autosoft selection tied to owned drones",
     "description": "Add autosoft selection that works with selected drones.",
     "files": ["/app/characters/create/components/steps/VehiclesStep.tsx"],
-    "status": "Not Started",
+    "status": "Complete",
     "dependsOn": ["B12.3.5", "B12.4.2"]
   },
   {
@@ -4406,7 +4407,7 @@ This milestone creates the character creation step for selecting vehicles, drone
     "title": "Implement nuyen budget tracking for vehicles/drones",
     "description": "Track nuyen spending on vehicles and drones against budget.",
     "files": ["/app/characters/create/components/steps/VehiclesStep.tsx"],
-    "status": "Not Started",
+    "status": "Complete",
     "dependsOn": ["B12.4.1"]
   },
   {
@@ -4414,7 +4415,7 @@ This milestone creates the character creation step for selecting vehicles, drone
     "title": "Register VehiclesStep in CreationWizard",
     "description": "Add VehiclesStep to the creation wizard step registry.",
     "files": ["/app/characters/create/components/CreationWizard.tsx"],
-    "status": "Not Started",
+    "status": "Complete",
     "dependsOn": ["B12.4.1"]
   },
   {
@@ -4430,11 +4431,11 @@ This milestone creates the character creation step for selecting vehicles, drone
 
 ### B12.5 Acceptance Criteria
 
-- **B12.5.AC.1** [ ] All SR5 CRB vehicles available in catalog
-- **B12.5.AC.2** [ ] All SR5 CRB drones available by size category
-- **B12.5.AC.3** [ ] RCCs selectable with correct device ratings
-- **B12.5.AC.4** [ ] Autosofts purchasable for drones
-- **B12.5.AC.5** [ ] Nuyen budget properly tracked
+- **B12.5.AC.1** [x] All SR5 CRB vehicles available in catalog
+- **B12.5.AC.2** [x] All SR5 CRB drones available by size category
+- **B12.5.AC.3** [x] RCCs selectable with correct device ratings
+- **B12.5.AC.4** [x] Autosofts purchasable for drones
+- **B12.5.AC.5** [x] Nuyen budget properly tracked
 - **B12.5.AC.6** [ ] Vehicles/drones appear in ReviewStep
 - **B12.5.AC.7** [ ] Rigger character archetype fully creatable
 

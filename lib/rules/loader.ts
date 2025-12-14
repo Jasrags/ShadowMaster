@@ -1049,3 +1049,217 @@ export function extractRitualKeywords(ruleset: LoadedRuleset): RitualKeywordData
   const ruleModule = extractModule<{ ritualKeywords: RitualKeywordData[] }>(ruleset, "magic");
   return ruleModule?.ritualKeywords || [];
 }
+
+// =============================================================================
+// VEHICLE, DRONE, RCC, AND AUTOSOFT DATA TYPES AND LOADERS
+// =============================================================================
+
+/**
+ * Vehicle category metadata
+ */
+export interface VehicleCategoryData {
+  id: string;
+  name: string;
+  description?: string;
+}
+
+/**
+ * Drone size category metadata
+ */
+export interface DroneSizeData {
+  id: string;
+  name: string;
+  bodyRange: string;
+  description?: string;
+}
+
+/**
+ * Handling rating - can be single value or on-road/off-road pair
+ */
+export type HandlingRatingData = number | { onRoad: number; offRoad: number };
+
+/**
+ * Vehicle catalog item from ruleset data
+ */
+export interface VehicleCatalogItemData {
+  id: string;
+  name: string;
+  category: string;
+  handling: HandlingRatingData;
+  speed: number;
+  acceleration: number;
+  body: number;
+  armor: number;
+  pilot: number;
+  sensor: number;
+  seats?: number;
+  deviceRating?: number;
+  cost: number;
+  availability: number;
+  restricted?: boolean;
+  forbidden?: boolean;
+  description?: string;
+  page?: number;
+  source?: string;
+}
+
+/**
+ * Drone weapon mount configuration
+ */
+export interface DroneWeaponMountsData {
+  standard?: number;
+  heavy?: number;
+}
+
+/**
+ * Drone catalog item from ruleset data
+ */
+export interface DroneCatalogItemData {
+  id: string;
+  name: string;
+  size: string;
+  droneType: string;
+  handling: number;
+  speed: number;
+  acceleration: number;
+  body: number;
+  armor: number;
+  pilot: number;
+  sensor: number;
+  canFly?: boolean;
+  isAquatic?: boolean;
+  weaponMounts?: DroneWeaponMountsData;
+  cost: number;
+  availability: number;
+  restricted?: boolean;
+  forbidden?: boolean;
+  description?: string;
+  page?: number;
+  source?: string;
+}
+
+/**
+ * RCC (Rigger Command Console) catalog item from ruleset data
+ */
+export interface RCCCatalogItemData {
+  id: string;
+  name: string;
+  deviceRating: number;
+  dataProcessing: number;
+  firewall: number;
+  cost: number;
+  availability: number;
+  restricted?: boolean;
+  description?: string;
+  page?: number;
+  source?: string;
+}
+
+/**
+ * Autosoft catalog item from ruleset data
+ */
+export interface AutosoftCatalogItemData {
+  id: string;
+  name: string;
+  category: string;
+  maxRating: number;
+  costPerRating: number;
+  availabilityPerRating: number;
+  requiresTarget?: boolean;
+  targetType?: "weapon" | "vehicle";
+  description?: string;
+  page?: number;
+  source?: string;
+}
+
+/**
+ * Complete vehicles module data from ruleset
+ */
+export interface VehiclesCatalogData {
+  categories: VehicleCategoryData[];
+  droneSizes: DroneSizeData[];
+  groundcraft: VehicleCatalogItemData[];
+  watercraft: VehicleCatalogItemData[];
+  aircraft: VehicleCatalogItemData[];
+  drones: DroneCatalogItemData[];
+  rccs: RCCCatalogItemData[];
+  autosofts: AutosoftCatalogItemData[];
+}
+
+/**
+ * Load vehicles catalog from a ruleset
+ */
+export function extractVehicles(ruleset: LoadedRuleset): VehicleCatalogItemData[] {
+  const ruleModule = extractModule<VehiclesCatalogData>(ruleset, "vehicles");
+  if (!ruleModule) return [];
+
+  // Combine all vehicle types
+  return [
+    ...(ruleModule.groundcraft || []),
+    ...(ruleModule.watercraft || []),
+    ...(ruleModule.aircraft || []),
+  ];
+}
+
+/**
+ * Load vehicles by category from a ruleset
+ */
+export function extractVehiclesByCategory(ruleset: LoadedRuleset): {
+  groundcraft: VehicleCatalogItemData[];
+  watercraft: VehicleCatalogItemData[];
+  aircraft: VehicleCatalogItemData[];
+} {
+  const ruleModule = extractModule<VehiclesCatalogData>(ruleset, "vehicles");
+  return {
+    groundcraft: ruleModule?.groundcraft || [],
+    watercraft: ruleModule?.watercraft || [],
+    aircraft: ruleModule?.aircraft || [],
+  };
+}
+
+/**
+ * Load vehicle categories metadata from a ruleset
+ */
+export function extractVehicleCategories(ruleset: LoadedRuleset): VehicleCategoryData[] {
+  const ruleModule = extractModule<VehiclesCatalogData>(ruleset, "vehicles");
+  return ruleModule?.categories || [];
+}
+
+/**
+ * Load drones from a ruleset
+ */
+export function extractDrones(ruleset: LoadedRuleset): DroneCatalogItemData[] {
+  const ruleModule = extractModule<VehiclesCatalogData>(ruleset, "vehicles");
+  return ruleModule?.drones || [];
+}
+
+/**
+ * Load drone size categories from a ruleset
+ */
+export function extractDroneSizes(ruleset: LoadedRuleset): DroneSizeData[] {
+  const ruleModule = extractModule<VehiclesCatalogData>(ruleset, "vehicles");
+  return ruleModule?.droneSizes || [];
+}
+
+/**
+ * Load RCCs (Rigger Command Consoles) from a ruleset
+ */
+export function extractRCCs(ruleset: LoadedRuleset): RCCCatalogItemData[] {
+  const ruleModule = extractModule<VehiclesCatalogData>(ruleset, "vehicles");
+  return ruleModule?.rccs || [];
+}
+
+/**
+ * Load autosofts from a ruleset
+ */
+export function extractAutosofts(ruleset: LoadedRuleset): AutosoftCatalogItemData[] {
+  const ruleModule = extractModule<VehiclesCatalogData>(ruleset, "vehicles");
+  return ruleModule?.autosofts || [];
+}
+
+/**
+ * Load complete vehicles module data from a ruleset
+ */
+export function extractVehiclesCatalog(ruleset: LoadedRuleset): VehiclesCatalogData | null {
+  return extractModule<VehiclesCatalogData>(ruleset, "vehicles");
+}
