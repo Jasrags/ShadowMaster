@@ -8,6 +8,7 @@
 
 import type { ID, ISODateString, Metadata } from "./core";
 import type { EditionCode } from "./edition";
+import type { CharacterProgram } from "./programs";
 
 // =============================================================================
 // CHARACTER CORE
@@ -215,6 +216,9 @@ export interface Character {
 
   /** Autosofts owned (can be installed on drones or run from RCC) */
   autosofts?: CharacterAutosoft[];
+
+  /** Matrix programs owned (for cyberdecks/commlinks) */
+  programs?: CharacterProgram[];
 
   // -------------------------------------------------------------------------
   // Contacts
