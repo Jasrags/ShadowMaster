@@ -1,0 +1,28 @@
+services:
+  shadow-master-dev:
+    build:
+      context: .
+      dockerfile: Dockerfile.dev
+    image: shadow-master:dev
+    container_name: shadow-master-dev
+    ports:
+      - "3000:3000"
+    environment:
+      - NODE_ENV=development
+      - PORT=3000
+      - NEXT_TELEMETRY_DISABLED=1
+      # Mount .env.local if it exists
+    volumes:
+      # Mount source code for hot-reload
+      - .:/app
+      - /app/node_modules
+      - /app/.next
+    command: pnpm dev
+    restart: unless-stopped
+    networks:
+      - shadow-master-network
+
+networks:
+  shadow-master-network:
+    driver: bridge
+

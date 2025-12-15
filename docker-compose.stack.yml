@@ -1,0 +1,85 @@
+services:
+  shadow-master:
+    # image: ghcr.io/jasrags/shadow-master:latest
+    image: docker.io/jasrags/shadow-master:latest
+    container_name: shadow-master-app
+    ports:
+      - "3000:3000"
+    environment:
+      - NODE_ENV=staging
+      - PORT=3000
+      - NEXT_TELEMETRY_DISABLED=1
+      # Add your custom environment variables here
+      # - DATABASE_URL=your_database_url
+      # - API_KEY=your_api_key
+    volumes:
+      # Persistent volumes for user and character data
+      # These directories are gitignored and contain dynamic user data
+      - shadow-master-users:/app/data/users
+      - shadow-master-characters:/app/data/characters
+      # Editions are version-controlled and baked into the image
+      # Uncomment below if you need to override/update editions without rebuilding:
+      # - shadow-master-editions:/app/data/editions
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "node", "-e", "require('http').get('http://localhost:3000/api/health', (r) => {process.exit(r.statusCode === 200 ? 0 : 1)})"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+    networks:
+      - shadow-master-network
+    labels:
+      # Watchtower label - enables automatic updates
+      - "com.centurylinklabs.watchtower.enable=true"
+      # Optional: Only update on specific tag pattern
+      # - "com.centurylinklabs.watchtower.lifecycle.pre-update=/scripts/pre-update.sh"
+
+  watchtower:
+    image: containrrr/watchtower
+    container_name: shadow-master-watchtower
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+    environment:
+      # Poll interval in seconds (300 = 5 minutes)
+      # Set to higher value for production (e.g., 3600 = 1 hour)
+      - WATCHTOWER_POLL_INTERVAL=3600
+      # Clean up old images after update
+      - WATCHTOWER_CLEANUP=true
+      # Send notifications (optional - configure if needed)
+      # - WATCHTOWER_NOTIFICATIONS=slack
+      # - WATCHTOWER_NOTIFICATION_SLACK_HOOK_URL=https://hooks.slack.com/...
+      # Only monitor containers with the watchtower.enable label
+      - WATCHTOWER_LABEL_ENABLE=true
+      # Timezone for logs
+      - TZ=UTC
+    restart: unless-stopped
+    networks:
+      - shadow-master-network
+
+volumes:
+  shadow-master-users:
+    driver: local
+    # Optional: Use a named volume with specific driver
+    # For backup purposes, you might want to use a specific driver
+    # driver_opts:
+    #   type: none
+    #   o: bind
+    #   device: /path/to/backup/users
+
+  shadow-master-characters:
+    driver: local
+    # Optional: Use a named volume with specific driver
+    # driver_opts:
+    #   type: none
+    #   o: bind
+    #   device: /path/to/backup/characters
+
+  # Uncomment if you want persistent editions volume
+  # shadow-master-editions:
+  #   driver: local
+
+networks:
+  shadow-master-network:
+    driver: bridge
+
