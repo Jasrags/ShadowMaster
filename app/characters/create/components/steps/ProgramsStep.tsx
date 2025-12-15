@@ -80,8 +80,9 @@ export function ProgramsStep({ state, updateState, budgetValues }: StepProps) {
     ((state.selections?.rccs as Array<{ cost: number }>) || []).reduce((sum, r) => sum + r.cost, 0) +
     ((state.selections?.autosofts as Array<{ cost: number }>) || []).reduce((sum, a) => sum + a.cost, 0);
 
+  const identitySpent = (state.budgets?.["nuyen-spent-identities"] as number) || 0;
   const programsSpent = selectedPrograms.reduce((sum, program) => sum + program.cost, 0);
-  const totalSpent = gearSpent + lifestyleCost + augmentationSpent + vehiclesSpent + programsSpent;
+  const totalSpent = gearSpent + lifestyleCost + augmentationSpent + vehiclesSpent + identitySpent + programsSpent;
   const remaining = totalNuyen - totalSpent;
 
   // Filter programs based on tab and search

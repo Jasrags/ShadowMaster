@@ -37,6 +37,11 @@ export type {
   AdeptPower,
   BoundSpirit,
   Lifestyle,
+  LifestyleModification,
+  LifestyleSubscription,
+  SIN,
+  License,
+  Identity,
   GearItem,
   Weapon,
   ArmorItem,
@@ -67,6 +72,7 @@ export {
   CYBERWARE_GRADE_AVAILABILITY_MODIFIERS,
   CYBERWARE_GRADE_COST_MULTIPLIERS,
   BIOWARE_GRADE_MULTIPLIERS,
+  SinnerQuality,
 } from "./character";
 
 // Creation method types

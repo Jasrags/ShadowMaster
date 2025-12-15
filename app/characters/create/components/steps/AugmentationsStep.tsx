@@ -131,10 +131,11 @@ export function AugmentationsStep({ state, updateState, budgetValues }: StepProp
   const nuyenBudget = (budgetValues["nuyen"] || 0) + karmaToNuyen * 2000;
   const gearSpent = (state.budgets?.["nuyen-spent-gear"] as number) || 0;
   const lifestyleSpent = (state.budgets?.["nuyen-spent-lifestyle"] as number) || 0;
+  const identitySpent = (state.budgets?.["nuyen-spent-identities"] as number) || 0;
   const cyberwareSpent = selectedCyberware.reduce((sum, item) => sum + item.cost, 0);
   const biowareSpent = selectedBioware.reduce((sum, item) => sum + item.cost, 0);
   const augmentationSpent = cyberwareSpent + biowareSpent;
-  const totalNuyenSpent = gearSpent + lifestyleSpent + augmentationSpent;
+  const totalNuyenSpent = gearSpent + lifestyleSpent + identitySpent + augmentationSpent;
   const remainingNuyen = nuyenBudget - totalNuyenSpent;
 
   // Calculate attribute bonuses from all augmentations

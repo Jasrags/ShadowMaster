@@ -9664,6 +9664,16 @@
                 }
               },
               {
+                "id": "identities",
+                "title": "Identities & SINs",
+                "type": "choose",
+                "description": "Create identities with SINs (fake or real) and licenses. Each character must have at least one identity.",
+                "payload": {
+                  "type": "choose",
+                  "target": "identities"
+                }
+              },
+              {
                 "id": "review",
                 "title": "Review & Finalize",
                 "type": "validate",
