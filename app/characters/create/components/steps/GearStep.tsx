@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useMemo } from "react";
-import type { CreationState, GearItem } from "@/lib/types";
+import type { CreationState, GearItem, Weapon, ArmorItem, InstalledWeaponMod, InstalledArmorMod, WeaponMount } from "@/lib/types";
 import type { FocusItem } from "@/lib/types/character";
 import type { FocusType } from "@/lib/types/edition";
 import {
@@ -12,6 +12,7 @@ import {
   type ArmorData,
   type FocusCatalogItemData,
 } from "@/lib/rules/RulesetContext";
+import { ModificationModal } from "../ModificationModal";
 
 interface StepProps {
   state: CreationState;
@@ -78,8 +79,14 @@ export function GearStep({ state, updateState, budgetValues }: StepProps) {
   const [searchQuery, setSearchQuery] = useState("");
   const [showUnavailable, setShowUnavailable] = useState(false);
 
+  // Modification modal state
+  const [modModalOpen, setModModalOpen] = useState(false);
+  const [modifyingItem, setModifyingItem] = useState<{ item: Weapon | ArmorItem; type: "weapon" | "armor"; index: number } | null>(null);
+
   // Get selections from state
   const selectedGear: GearItem[] = (state.selections?.gear as GearItem[]) || [];
+  const selectedWeapons: Weapon[] = (state.selections?.weapons as Weapon[]) || [];
+  const selectedArmor: ArmorItem[] = (state.selections?.armor as ArmorItem[]) || [];
   const selectedFoci: FocusItem[] = (state.selections?.foci as FocusItem[]) || [];
   
   // Check if character is magical
@@ -118,17 +125,80 @@ export function GearStep({ state, updateState, budgetValues }: StepProps) {
   const convertedNuyen = karmaConversion * KARMA_TO_NUYEN_RATE;
   const totalNuyen = baseNuyen + convertedNuyen;
 
-  // Calculate spent
+  // Calculate spent - include weapons, armor with their modifications
   const gearSpent = selectedGear.reduce((sum, item) => sum + item.cost * item.quantity, 0);
+  const weaponsSpent = selectedWeapons.reduce((sum, weapon) => {
+    const baseCost = weapon.cost * weapon.quantity;
+    const modsCost = (weapon.modifications || []).reduce((modSum, mod) => modSum + mod.cost, 0);
+    return sum + baseCost + modsCost;
+  }, 0);
+  const armorSpent = selectedArmor.reduce((sum, armor) => {
+    const baseCost = armor.cost * armor.quantity;
+    const modsCost = (armor.modifications || []).reduce((modSum, mod) => modSum + mod.cost, 0);
+    return sum + baseCost + modsCost;
+  }, 0);
   const fociSpent = selectedFoci.reduce((sum, focus) => sum + focus.cost, 0);
   const augmentationSpent = (state.budgets["nuyen-spent-augmentations"] as number) || 0;
   const lifestyleSpent = (state.budgets["nuyen-spent-lifestyle"] as number) || 0;
   const identitySpent = (state.budgets["nuyen-spent-identities"] as number) || 0;
-  const totalSpent = gearSpent + fociSpent + augmentationSpent + lifestyleSpent + identitySpent;
+  const totalSpent = gearSpent + weaponsSpent + armorSpent + fociSpent + augmentationSpent + lifestyleSpent + identitySpent;
   const remaining = totalNuyen - totalSpent;
 
-  // Helper to add gear item
+  // Helper to add gear item - routes weapons and armor to separate lists
   const addGearItem = (item: GearItemData) => {
+    // Handle weapons separately
+    if (item.category === "weapons" && "damage" in item) {
+      const weaponItem = item as WeaponData;
+      const newWeapon: Weapon = {
+        catalogId: weaponItem.id,
+        name: weaponItem.name,
+        category: "weapons",
+        quantity: 1,
+        cost: weaponItem.cost,
+        availability: weaponItem.availability,
+        damage: weaponItem.damage,
+        ap: weaponItem.ap,
+        mode: weaponItem.mode || [],
+        recoil: weaponItem.rc,
+        accuracy: weaponItem.accuracy,
+        modifications: [],
+        occupiedMounts: [],
+      };
+      updateState({
+        selections: {
+          ...state.selections,
+          weapons: [...selectedWeapons, newWeapon],
+        },
+      });
+      return;
+    }
+
+    // Handle armor separately
+    if (item.category === "armor" && "armorRating" in item) {
+      const armorItem = item as ArmorData;
+      const newArmor: ArmorItem = {
+        catalogId: armorItem.id,
+        name: armorItem.name,
+        category: "armor",
+        quantity: 1,
+        cost: armorItem.cost,
+        availability: armorItem.availability,
+        armorRating: armorItem.armorRating,
+        equipped: false,
+        capacity: armorItem.armorRating, // Capacity equals armor rating
+        capacityUsed: 0,
+        modifications: [],
+      };
+      updateState({
+        selections: {
+          ...state.selections,
+          armor: [...selectedArmor, newArmor],
+        },
+      });
+      return;
+    }
+
+    // Handle other gear as before
     const existingIndex = selectedGear.findIndex((g) => g.name === item.name);
     let updatedGear: GearItem[];
 
@@ -152,6 +222,136 @@ export function GearStep({ state, updateState, budgetValues }: StepProps) {
       selections: {
         ...state.selections,
         gear: updatedGear,
+      },
+    });
+  };
+
+  // Helper to remove weapon
+  const removeWeapon = (index: number) => {
+    const updatedWeapons = selectedWeapons.filter((_, i) => i !== index);
+    updateState({
+      selections: {
+        ...state.selections,
+        weapons: updatedWeapons,
+      },
+    });
+  };
+
+  // Helper to remove armor
+  const removeArmor = (index: number) => {
+    const updatedArmor = selectedArmor.filter((_, i) => i !== index);
+    updateState({
+      selections: {
+        ...state.selections,
+        armor: updatedArmor,
+      },
+    });
+  };
+
+  // Helper to open modification modal
+  const openModificationModal = (item: Weapon | ArmorItem, type: "weapon" | "armor", index: number) => {
+    setModifyingItem({ item, type, index });
+    setModModalOpen(true);
+  };
+
+  // Helper to install weapon mod
+  const handleInstallWeaponMod = (mod: InstalledWeaponMod) => {
+    if (!modifyingItem || modifyingItem.type !== "weapon") return;
+
+    const updatedWeapons = selectedWeapons.map((weapon, i) => {
+      if (i !== modifyingItem.index) return weapon;
+
+      const updatedMods = [...(weapon.modifications || []), mod];
+      const updatedMounts = mod.mount
+        ? [...(weapon.occupiedMounts || []), mod.mount]
+        : weapon.occupiedMounts;
+
+      return {
+        ...weapon,
+        modifications: updatedMods,
+        occupiedMounts: updatedMounts,
+      };
+    });
+
+    updateState({
+      selections: {
+        ...state.selections,
+        weapons: updatedWeapons,
+      },
+    });
+  };
+
+  // Helper to install armor mod
+  const handleInstallArmorMod = (mod: InstalledArmorMod) => {
+    if (!modifyingItem || modifyingItem.type !== "armor") return;
+
+    const updatedArmor = selectedArmor.map((armor, i) => {
+      if (i !== modifyingItem.index) return armor;
+
+      const updatedMods = [...(armor.modifications || []), mod];
+      const updatedCapacityUsed = (armor.capacityUsed || 0) + mod.capacityUsed;
+
+      return {
+        ...armor,
+        modifications: updatedMods,
+        capacityUsed: updatedCapacityUsed,
+      };
+    });
+
+    updateState({
+      selections: {
+        ...state.selections,
+        armor: updatedArmor,
+      },
+    });
+  };
+
+  // Helper to remove weapon mod
+  const removeWeaponMod = (weaponIndex: number, modIndex: number) => {
+    const updatedWeapons = selectedWeapons.map((weapon, i) => {
+      if (i !== weaponIndex) return weapon;
+
+      const modToRemove = weapon.modifications?.[modIndex];
+      const updatedMods = (weapon.modifications || []).filter((_, mi) => mi !== modIndex);
+      const updatedMounts = modToRemove?.mount
+        ? (weapon.occupiedMounts || []).filter((m) => m !== modToRemove.mount)
+        : weapon.occupiedMounts;
+
+      return {
+        ...weapon,
+        modifications: updatedMods,
+        occupiedMounts: updatedMounts,
+      };
+    });
+
+    updateState({
+      selections: {
+        ...state.selections,
+        weapons: updatedWeapons,
+      },
+    });
+  };
+
+  // Helper to remove armor mod
+  const removeArmorMod = (armorIndex: number, modIndex: number) => {
+    const updatedArmor = selectedArmor.map((armor, i) => {
+      if (i !== armorIndex) return armor;
+
+      const modToRemove = armor.modifications?.[modIndex];
+      const updatedMods = (armor.modifications || []).filter((_, mi) => mi !== modIndex);
+      const updatedCapacityUsed = (armor.capacityUsed || 0) - (modToRemove?.capacityUsed || 0);
+
+      return {
+        ...armor,
+        modifications: updatedMods,
+        capacityUsed: Math.max(0, updatedCapacityUsed),
+      };
+    });
+
+    updateState({
+      selections: {
+        ...state.selections,
+        armor: updatedArmor,
       },
     });
   };
@@ -704,11 +904,171 @@ export function GearStep({ state, updateState, budgetValues }: StepProps) {
         )}
       </div>
 
+      {/* Selected Weapons & Armor with Modifications */}
+      {(selectedWeapons.length > 0 || selectedArmor.length > 0) && (
+        <div className="space-y-4">
+          {/* Selected Weapons */}
+          {selectedWeapons.length > 0 && (
+            <div className="rounded-lg border border-zinc-200 bg-zinc-50 p-4 dark:border-zinc-700 dark:bg-zinc-800/50">
+              <h3 className="mb-2 text-sm font-semibold">Weapons</h3>
+              <div className="space-y-3">
+                {selectedWeapons.map((weapon, wIndex) => {
+                  const weaponTotalCost = weapon.cost + (weapon.modifications || []).reduce((sum, mod) => sum + mod.cost, 0);
+                  return (
+                    <div
+                      key={wIndex}
+                      className="rounded border border-zinc-200 bg-white p-3 dark:border-zinc-600 dark:bg-zinc-800"
+                    >
+                      <div className="flex items-start justify-between">
+                        <div className="flex-1">
+                          <p className="font-medium">{weapon.name}</p>
+                          <p className="text-xs text-zinc-500 dark:text-zinc-400">
+                            DMG: {weapon.damage} | AP: {weapon.ap} | Base: ¥{formatCurrency(weapon.cost)}
+                          </p>
+                          {weapon.occupiedMounts && weapon.occupiedMounts.length > 0 && (
+                            <p className="text-xs text-zinc-500 dark:text-zinc-400">
+                              Mounts: {weapon.occupiedMounts.join(", ")}
+                            </p>
+                          )}
+                        </div>
+                        <div className="flex items-center gap-2">
+                          <span className="text-sm font-medium">¥{formatCurrency(weaponTotalCost)}</span>
+                          <button
+                            onClick={() => openModificationModal(weapon, "weapon", wIndex)}
+                            className="rounded bg-blue-500 px-2 py-1 text-xs font-medium text-white hover:bg-blue-600"
+                          >
+                            +Mod
+                          </button>
+                          <button
+                            onClick={() => removeWeapon(wIndex)}
+                            className="rounded px-2 py-1 text-xs text-red-600 hover:bg-red-50 dark:text-red-400 dark:hover:bg-red-900/20"
+                          >
+                            Remove
+                          </button>
+                        </div>
+                      </div>
+                      {/* Installed mods */}
+                      {weapon.modifications && weapon.modifications.length > 0 && (
+                        <div className="mt-2 space-y-1 border-t border-zinc-200 pt-2 dark:border-zinc-600">
+                          {weapon.modifications.map((mod, mIndex) => (
+                            <div key={mIndex} className="flex items-center justify-between text-xs">
+                              <div className="flex items-center gap-2">
+                                <span className="text-zinc-700 dark:text-zinc-300">{mod.name}</span>
+                                {mod.mount && (
+                                  <span className="rounded bg-zinc-100 px-1.5 py-0.5 text-[10px] text-zinc-500 dark:bg-zinc-700 dark:text-zinc-400">
+                                    {mod.mount}
+                                  </span>
+                                )}
+                              </div>
+                              <div className="flex items-center gap-2">
+                                <span className="text-zinc-500 dark:text-zinc-400">¥{formatCurrency(mod.cost)}</span>
+                                <button
+                                  onClick={() => removeWeaponMod(wIndex, mIndex)}
+                                  className="text-red-500 hover:text-red-600"
+                                >
+                                  ×
+                                </button>
+                              </div>
+                            </div>
+                          ))}
+                        </div>
+                      )}
+                    </div>
+                  );
+                })}
+              </div>
+            </div>
+          )}
+
+          {/* Selected Armor */}
+          {selectedArmor.length > 0 && (
+            <div className="rounded-lg border border-zinc-200 bg-zinc-50 p-4 dark:border-zinc-700 dark:bg-zinc-800/50">
+              <h3 className="mb-2 text-sm font-semibold">Armor</h3>
+              <div className="space-y-3">
+                {selectedArmor.map((armor, aIndex) => {
+                  const armorTotalCost = armor.cost + (armor.modifications || []).reduce((sum, mod) => sum + mod.cost, 0);
+                  return (
+                    <div
+                      key={aIndex}
+                      className="rounded border border-zinc-200 bg-white p-3 dark:border-zinc-600 dark:bg-zinc-800"
+                    >
+                      <div className="flex items-start justify-between">
+                        <div className="flex-1">
+                          <p className="font-medium">{armor.name}</p>
+                          <p className="text-xs text-zinc-500 dark:text-zinc-400">
+                            Armor: {armor.armorRating} | Capacity: {armor.capacityUsed || 0}/{armor.capacity || armor.armorRating} | Base: ¥{formatCurrency(armor.cost)}
+                          </p>
+                        </div>
+                        <div className="flex items-center gap-2">
+                          <span className="text-sm font-medium">¥{formatCurrency(armorTotalCost)}</span>
+                          <button
+                            onClick={() => openModificationModal(armor, "armor", aIndex)}
+                            className="rounded bg-blue-500 px-2 py-1 text-xs font-medium text-white hover:bg-blue-600"
+                          >
+                            +Mod
+                          </button>
+                          <button
+                            onClick={() => removeArmor(aIndex)}
+                            className="rounded px-2 py-1 text-xs text-red-600 hover:bg-red-50 dark:text-red-400 dark:hover:bg-red-900/20"
+                          >
+                            Remove
+                          </button>
+                        </div>
+                      </div>
+                      {/* Installed mods */}
+                      {armor.modifications && armor.modifications.length > 0 && (
+                        <div className="mt-2 space-y-1 border-t border-zinc-200 pt-2 dark:border-zinc-600">
+                          {armor.modifications.map((mod, mIndex) => (
+                            <div key={mIndex} className="flex items-center justify-between text-xs">
+                              <div className="flex items-center gap-2">
+                                <span className="text-zinc-700 dark:text-zinc-300">{mod.name}</span>
+                                <span className="rounded bg-blue-100 px-1.5 py-0.5 text-[10px] text-blue-600 dark:bg-blue-900/50 dark:text-blue-300">
+                                  {mod.capacityUsed} cap
+                                </span>
+                              </div>
+                              <div className="flex items-center gap-2">
+                                <span className="text-zinc-500 dark:text-zinc-400">¥{formatCurrency(mod.cost)}</span>
+                                <button
+                                  onClick={() => removeArmorMod(aIndex, mIndex)}
+                                  className="text-red-500 hover:text-red-600"
+                                >
+                                  ×
+                                </button>
+                              </div>
+                            </div>
+                          ))}
+                        </div>
+                      )}
+                    </div>
+                  );
+                })}
+              </div>
+            </div>
+          )}
+        </div>
+      )}
+
       {/* Help Text */}
       <p className="text-xs text-zinc-500 dark:text-zinc-400">
         Maximum availability at creation: {MAX_AVAILABILITY}. Restricted (R) items require a
         license. Forbidden (F) items are not available at creation.
       </p>
+
+      {/* Modification Modal */}
+      {modifyingItem && (
+        <ModificationModal
+          isOpen={modModalOpen}
+          onClose={() => {
+            setModModalOpen(false);
+            setModifyingItem(null);
+          }}
+          item={modifyingItem.item}
+          itemType={modifyingItem.type}
+          remainingNuyen={remaining}
+          onInstallWeaponMod={handleInstallWeaponMod}
+          onInstallArmorMod={handleInstallArmorMod}
+        />
+      )}
     </div>
   );
 }

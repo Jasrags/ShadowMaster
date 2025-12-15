@@ -1,19 +1,23 @@
 "use client";
 
-import type { CreationState, GearItem, CyberwareItem, BiowareItem, Lifestyle, AdeptPower } from "@/lib/types";
+import type { CreationState, GearItem, CyberwareItem, BiowareItem, Lifestyle, AdeptPower, Weapon, ArmorItem } from "@/lib/types";
 import { ShoppingCartSection } from "./ShoppingCartSection";
 
 interface ValidationPanelProps {
   state: CreationState;
   budgetValues: Record<string, number>;
   currentStepId?: string;
-  
+
   // Cart props
   gearItems?: GearItem[];
+  weapons?: Weapon[];
+  armorItems?: ArmorItem[];
   lifestyle?: Lifestyle | null;
   gearTotal?: number;
   lifestyleCost?: number;
   onRemoveGear?: (index: number) => void;
+  onRemoveWeapon?: (index: number) => void;
+  onRemoveArmor?: (index: number) => void;
   
   cyberwareItems?: CyberwareItem[];
   biowareItems?: BiowareItem[];
@@ -52,10 +56,14 @@ export function ValidationPanel({
   budgetValues,
   currentStepId,
   gearItems,
+  weapons,
+  armorItems,
   lifestyle,
   gearTotal,
   lifestyleCost,
   onRemoveGear,
+  onRemoveWeapon,
+  onRemoveArmor,
   cyberwareItems,
   biowareItems,
   augmentationTotal,
@@ -230,10 +238,14 @@ export function ValidationPanel({
         cartType={cartType}
         isVisible={isCartVisible}
         gearItems={gearItems}
+        weapons={weapons}
+        armorItems={armorItems}
         lifestyle={lifestyle}
         gearTotal={gearTotal}
         lifestyleCost={lifestyleCost}
         onRemoveGear={onRemoveGear}
+        onRemoveWeapon={onRemoveWeapon}
+        onRemoveArmor={onRemoveArmor}
         cyberwareItems={cyberwareItems}
         biowareItems={biowareItems}
         augmentationTotal={augmentationTotal}

@@ -453,7 +453,52 @@ export interface GearItem {
   metadata?: Metadata;
 }
 
+/**
+ * Mount point types for weapon accessories
+ */
+export type WeaponMount = "top" | "under" | "side" | "barrel" | "stock" | "internal";
+
+/**
+ * Installed weapon modification on a character's weapon
+ */
+export interface InstalledWeaponMod {
+  /** Reference to catalog modification ID */
+  catalogId: string;
+  name: string;
+  /** Mount point used (if applicable) */
+  mount?: WeaponMount;
+  /** Rating if the mod has one */
+  rating?: number;
+  /** Actual cost paid for this mod */
+  cost: number;
+  /** Actual availability of this mod */
+  availability: number;
+  restricted?: boolean;
+  forbidden?: boolean;
+}
+
+/**
+ * Installed armor modification on a character's armor
+ */
+export interface InstalledArmorMod {
+  /** Reference to catalog modification ID */
+  catalogId: string;
+  name: string;
+  /** Rating if the mod has one */
+  rating?: number;
+  /** Capacity slots used by this mod */
+  capacityUsed: number;
+  /** Actual cost paid for this mod */
+  cost: number;
+  /** Actual availability of this mod */
+  availability: number;
+  restricted?: boolean;
+  forbidden?: boolean;
+}
+
 export interface Weapon extends GearItem {
+  /** Reference to catalog weapon ID */
+  catalogId?: string;
   damage: string; // e.g., "8P" for 8 physical
   ap: number; // Armor penetration
   mode: string[]; // "SS", "SA", "BF", "FA"
@@ -462,12 +507,24 @@ export interface Weapon extends GearItem {
   ammoCapacity?: number;
   currentAmmo?: number;
   reach?: number; // For melee weapons
+  accuracy?: number; // Base accuracy
+  /** Installed modifications on this weapon */
+  modifications?: InstalledWeaponMod[];
+  /** Track which mounts are occupied */
+  occupiedMounts?: WeaponMount[];
 }
 
 export interface ArmorItem extends GearItem {
+  /** Reference to catalog armor ID */
+  catalogId?: string;
   armorRating: number;
   equipped: boolean;
-  modifications?: string[];
+  /** Total capacity for modifications (equals armor rating) */
+  capacity?: number;
+  /** Capacity currently used by modifications */
+  capacityUsed?: number;
+  /** Installed modifications on this armor */
+  modifications?: InstalledArmorMod[];
 }
 
 // =============================================================================

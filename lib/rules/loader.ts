@@ -1427,3 +1427,128 @@ export function extractSpirits(ruleset: LoadedRuleset): SpiritsCatalogData | nul
   const ruleModule = extractModule<SpiritsCatalogData>(ruleset, "spirits");
   return ruleModule || null;
 }
+
+// =============================================================================
+// GEAR MODIFICATION DATA TYPES AND LOADERS
+// =============================================================================
+
+/**
+ * Weapon modification catalog item data structure
+ */
+export interface WeaponModificationCatalogItemData {
+  id: string;
+  name: string;
+  /** Mount point required (undefined means no mount needed) */
+  mount?: "top" | "under" | "side" | "barrel" | "stock" | "internal";
+  /** Weapon types this mod is compatible with */
+  compatibleWeapons?: string[];
+  /** Weapon types this mod is NOT compatible with */
+  incompatibleWeapons?: string[];
+  /** Minimum weapon size */
+  minimumWeaponSize?: string;
+  /** Base cost in nuyen */
+  cost?: number;
+  /** Whether cost is a multiplier of weapon cost */
+  costMultiplier?: number;
+  /** Whether the mod has a rating */
+  hasRating?: boolean;
+  /** Maximum rating if applicable */
+  maxRating?: number;
+  /** Whether cost scales with rating */
+  costPerRating?: boolean;
+  /** Base availability */
+  availability: number;
+  /** Whether availability is Restricted */
+  restricted?: boolean;
+  /** Whether availability is Forbidden */
+  forbidden?: boolean;
+  /** Recoil compensation provided */
+  recoilCompensation?: number;
+  /** Accuracy modifier */
+  accuracyModifier?: number;
+  /** Concealability modifier */
+  concealabilityModifier?: number;
+  /** Description */
+  description?: string;
+  /** Wireless bonus description */
+  wirelessBonus?: string;
+  /** Page reference */
+  page?: number;
+  /** Source book */
+  source?: string;
+}
+
+/**
+ * Armor modification catalog item data structure
+ */
+export interface ArmorModificationCatalogItemData {
+  id: string;
+  name: string;
+  /** Capacity cost */
+  capacityCost: number;
+  /** Whether capacity cost scales with rating */
+  capacityPerRating?: boolean;
+  /** Whether this uses no capacity (bracketed in rulebook) */
+  noCapacityCost?: boolean;
+  /** Whether the mod has a rating */
+  hasRating?: boolean;
+  /** Maximum rating if applicable */
+  maxRating?: number;
+  /** Base cost in nuyen */
+  cost: number;
+  /** Whether cost scales with rating */
+  costPerRating?: boolean;
+  /** Whether cost is a multiplier of armor cost */
+  costMultiplier?: number;
+  /** Base availability */
+  availability: number;
+  /** Availability modifier (adds to armor's base) */
+  availabilityModifier?: number;
+  /** Whether availability is Restricted */
+  restricted?: boolean;
+  /** Whether availability is Forbidden */
+  forbidden?: boolean;
+  /** Armor bonus provided */
+  armorBonus?: number;
+  /** Requirements (e.g., "full body armor", "helmet") */
+  requirements?: string[];
+  /** Description */
+  description?: string;
+  /** Wireless bonus description */
+  wirelessBonus?: string;
+  /** Page reference */
+  page?: number;
+  /** Source book */
+  source?: string;
+}
+
+/**
+ * Complete modifications catalog data structure
+ */
+export interface ModificationsCatalogData {
+  weaponMods: WeaponModificationCatalogItemData[];
+  armorMods: ArmorModificationCatalogItemData[];
+}
+
+/**
+ * Load weapon modifications from a ruleset
+ */
+export function extractWeaponModifications(ruleset: LoadedRuleset): WeaponModificationCatalogItemData[] {
+  const ruleModule = extractModule<ModificationsCatalogData>(ruleset, "modifications");
+  return ruleModule?.weaponMods || [];
+}
+
+/**
+ * Load armor modifications from a ruleset
+ */
+export function extractArmorModifications(ruleset: LoadedRuleset): ArmorModificationCatalogItemData[] {
+  const ruleModule = extractModule<ModificationsCatalogData>(ruleset, "modifications");
+  return ruleModule?.armorMods || [];
+}
+
+/**
+ * Load complete modifications catalog from a ruleset
+ */
+export function extractModifications(ruleset: LoadedRuleset): ModificationsCatalogData | null {
+  return extractModule<ModificationsCatalogData>(ruleset, "modifications");
+}

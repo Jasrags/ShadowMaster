@@ -6708,6 +6708,313 @@
         ]
       }
     },
+    "modifications": {
+      "mergeStrategy": "replace",
+      "payload": {
+        "weaponMods": [
+          {
+            "id": "airburst-link",
+            "name": "Airburst Link",
+            "availability": 6,
+            "restricted": true,
+            "cost": 600,
+            "description": "Reduces scatter distance for launched grenades by 2m per net hit instead of 1m.",
+            "compatibleWeapons": ["grenade-launcher", "rocket-launcher"],
+            "page": 432,
+            "source": "Core"
+          },
+          {
+            "id": "bipod",
+            "name": "Bipod",
+            "mount": "under",
+            "availability": 2,
+            "cost": 200,
+            "recoilCompensation": 2,
+            "description": "Provides 2 points of Recoil Compensation when properly deployed.",
+            "page": 432,
+            "source": "Core"
+          },
+          {
+            "id": "concealable-holster",
+            "name": "Concealable Holster",
+            "availability": 2,
+            "cost": 150,
+            "concealabilityModifier": -1,
+            "description": "Adds -1 to the item's Concealability. Only fits pistols and tasers.",
+            "compatibleWeapons": ["holdout", "light-pistol", "heavy-pistol", "machine-pistol", "taser"],
+            "page": 432,
+            "source": "Core"
+          },
+          {
+            "id": "gas-vent-system",
+            "name": "Gas-Vent System",
+            "mount": "barrel",
+            "hasRating": true,
+            "maxRating": 3,
+            "availability": 3,
+            "restricted": true,
+            "cost": 200,
+            "costPerRating": true,
+            "description": "Provides Recoil Compensation equal to its rating. Cannot be removed once installed.",
+            "incompatibleWeapons": ["revolver"],
+            "page": 432,
+            "source": "Core"
+          },
+          {
+            "id": "gyro-mount",
+            "name": "Gyro Mount",
+            "mount": "under",
+            "availability": 7,
+            "cost": 1400,
+            "recoilCompensation": 6,
+            "description": "Heavy upper-body harness with motorized gyro-stabilized arm. Neutralizes up to 6 points of recoil and movement modifiers.",
+            "minimumWeaponSize": "rifle",
+            "page": 432,
+            "source": "Core"
+          },
+          {
+            "id": "hidden-arm-slide",
+            "name": "Hidden Arm Slide",
+            "availability": 4,
+            "restricted": true,
+            "cost": 350,
+            "concealabilityModifier": -1,
+            "description": "Forearm slide for quick-drawing small weapons. Threshold for quick draw is 2.",
+            "compatibleWeapons": ["holdout", "light-pistol", "taser"],
+            "page": 432,
+            "source": "Core"
+          },
+          {
+            "id": "imaging-scope",
+            "name": "Imaging Scope",
+            "mount": "top",
+            "availability": 2,
+            "cost": 300,
+            "description": "Classic scope with micro camera and vision magnification. Has Capacity 3 for vision enhancements.",
+            "page": 432,
+            "source": "Core"
+          },
+          {
+            "id": "laser-sight",
+            "name": "Laser Sight",
+            "mount": "top",
+            "availability": 2,
+            "cost": 125,
+            "accuracyModifier": 1,
+            "description": "Projects a visible dot on target. Increases Accuracy by 1 (not cumulative with smartlink).",
+            "page": 432,
+            "source": "Core"
+          },
+          {
+            "id": "periscope",
+            "name": "Periscope",
+            "mount": "top",
+            "availability": 3,
+            "cost": 70,
+            "description": "Allows targeting around corners with -2 dice pool penalty instead of -3.",
+            "page": 433,
+            "source": "Core"
+          },
+          {
+            "id": "quick-draw-holster",
+            "name": "Quick-Draw Holster",
+            "availability": 4,
+            "cost": 175,
+            "description": "Reduces the threshold for quick-drawing by 1. Fits machine pistol or smaller.",
+            "compatibleWeapons": ["holdout", "light-pistol", "heavy-pistol", "machine-pistol", "taser"],
+            "page": 433,
+            "source": "Core"
+          },
+          {
+            "id": "shock-pad",
+            "name": "Shock Pad",
+            "mount": "stock",
+            "availability": 2,
+            "cost": 50,
+            "recoilCompensation": 1,
+            "description": "Shock-absorbing pad for rifles, shotguns, or heavy weapons. Provides 1 point of recoil compensation.",
+            "minimumWeaponSize": "rifle",
+            "page": 433,
+            "source": "Core"
+          },
+          {
+            "id": "silencer-suppressor",
+            "name": "Silencer/Suppressor",
+            "mount": "barrel",
+            "availability": 9,
+            "forbidden": true,
+            "cost": 500,
+            "description": "Reduces sound and flash of weapon discharge. -4 dice pool modifier on Perception Tests to notice or locate firer. Cannot be used with revolvers or shotguns.",
+            "incompatibleWeapons": ["revolver", "shotgun"],
+            "page": 433,
+            "source": "Core"
+          },
+          {
+            "id": "smart-firing-platform",
+            "name": "Smart Firing Platform",
+            "mount": "under",
+            "availability": 12,
+            "forbidden": true,
+            "cost": 2500,
+            "recoilCompensation": 5,
+            "description": "Non-mobile robotic tripod with Pilot 3 and Targeting autosoft 3. Provides 5 points of Recoil Compensation.",
+            "page": 433,
+            "source": "Core"
+          },
+          {
+            "id": "smartgun-internal",
+            "name": "Smartgun System, Internal",
+            "mount": "internal",
+            "availability": 2,
+            "restricted": true,
+            "costMultiplier": 2,
+            "accuracyModifier": 2,
+            "description": "Internal smartgun system. Increases Accuracy by 2 when used with smartlink.",
+            "page": 433,
+            "source": "Core"
+          },
+          {
+            "id": "smartgun-external",
+            "name": "Smartgun System, External",
+            "mount": "top",
+            "availability": 4,
+            "restricted": true,
+            "cost": 200,
+            "accuracyModifier": 2,
+            "description": "External smartgun system. Increases Accuracy by 2 when used with smartlink.",
+            "page": 433,
+            "source": "Core"
+          },
+          {
+            "id": "spare-clip",
+            "name": "Spare Clip",
+            "availability": 4,
+            "cost": 5,
+            "description": "A spare clip that holds the maximum rounds for the weapon.",
+            "page": 433,
+            "source": "Core"
+          },
+          {
+            "id": "speed-loader",
+            "name": "Speed Loader",
+            "availability": 2,
+            "cost": 25,
+            "description": "Allows fully reloading a revolver as a Complex Action instead of one round at a time.",
+            "compatibleWeapons": ["revolver"],
+            "page": 433,
+            "source": "Core"
+          },
+          {
+            "id": "tripod",
+            "name": "Tripod",
+            "mount": "under",
+            "availability": 4,
+            "cost": 500,
+            "recoilCompensation": 6,
+            "description": "Provides stable base for firing. 6 points of Recoil Compensation when deployed.",
+            "minimumWeaponSize": "rifle",
+            "page": 433,
+            "source": "Core"
+          }
+        ],
+        "armorMods": [
+          {
+            "id": "chemical-protection",
+            "name": "Chemical Protection",
+            "hasRating": true,
+            "maxRating": 6,
+            "capacityCost": 1,
+            "capacityPerRating": true,
+            "availability": 6,
+            "cost": 250,
+            "costPerRating": true,
+            "description": "Adds rating to tests to resist contact-vector toxin attacks.",
+            "page": 437,
+            "source": "Core"
+          },
+          {
+            "id": "chemical-seal",
+            "name": "Chemical Seal",
+            "capacityCost": 6,
+            "availability": 12,
+            "restricted": true,
+            "cost": 3000,
+            "description": "Airtight environmental control providing complete protection against contact and inhalation vector chemicals. Requires full body armor with helmet.",
+            "requirements": ["full-body-armor", "helmet"],
+            "page": 437,
+            "source": "Core"
+          },
+          {
+            "id": "fire-resistance",
+            "name": "Fire Resistance",
+            "hasRating": true,
+            "maxRating": 6,
+            "capacityCost": 1,
+            "capacityPerRating": true,
+            "availability": 6,
+            "cost": 250,
+            "costPerRating": true,
+            "description": "Adds rating to Armor value when resisting Fire attacks or checking if armor catches fire.",
+            "page": 437,
+            "source": "Core"
+          },
+          {
+            "id": "insulation",
+            "name": "Insulation",
+            "hasRating": true,
+            "maxRating": 6,
+            "capacityCost": 1,
+            "capacityPerRating": true,
+            "availability": 6,
+            "cost": 250,
+            "costPerRating": true,
+            "description": "Adds rating to Armor value when resisting Cold attacks.",
+            "page": 437,
+            "source": "Core"
+          },
+          {
+            "id": "nonconductivity",
+            "name": "Nonconductivity",
+            "hasRating": true,
+            "maxRating": 6,
+            "capacityCost": 1,
+            "capacityPerRating": true,
+            "availability": 6,
+            "cost": 250,
+            "costPerRating": true,
+            "description": "Adds rating to Armor value when resisting Electricity attacks.",
+            "page": 438,
+            "source": "Core"
+          },
+          {
+            "id": "shock-frills",
+            "name": "Shock Frills",
+            "capacityCost": 2,
+            "availability": 6,
+            "restricted": true,
+            "cost": 250,
+            "description": "Electrically charged strips that inflict Electricity damage to anyone touching you. 10 charges, recharges 1 per 10 seconds when plugged in.",
+            "page": 438,
+            "source": "Core"
+          },
+          {
+            "id": "thermal-damping",
+            "name": "Thermal Damping",
+            "hasRating": true,
+            "maxRating": 6,
+            "capacityCost": 1,
+            "capacityPerRating": true,
+            "availability": 10,
+            "restricted": true,
+            "cost": 500,
+            "costPerRating": true,
+            "description": "Reduces thermal signature. Adds rating to limit on Sneaking tests against thermographic vision or thermal sensors.",
+            "page": 438,
+            "source": "Core"
+          }
+        ]
+      }
+    },
     "cyberware": {
       "mergeStrategy": "replace",
       "payload": {

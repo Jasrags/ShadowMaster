@@ -22,8 +22,8 @@ import type {
   ID,
   ContactTemplateData,
 } from "../types";
-import { QualityData, AdeptPowerCatalogItem, TraditionData, MentorSpiritData, TraditionSpiritTypes, MentorSpiritAdvantages, RitualData, RitualKeywordData, MinionStatsData, VehicleCategoryData, DroneSizeData, VehicleCatalogItemData, DroneCatalogItemData, RCCCatalogItemData, AutosoftCatalogItemData, HandlingRatingData, DroneWeaponMountsData, ProgramCatalogItemData, ProgramsCatalogData, FocusCatalogItemData, SpiritsCatalogData } from "./loader";
-export type { QualityData, TraditionData, MentorSpiritData, TraditionSpiritTypes, MentorSpiritAdvantages, RitualData, RitualKeywordData, MinionStatsData, VehicleCategoryData, DroneSizeData, VehicleCatalogItemData, DroneCatalogItemData, RCCCatalogItemData, AutosoftCatalogItemData, HandlingRatingData, DroneWeaponMountsData, ProgramCatalogItemData, ProgramsCatalogData, FocusCatalogItemData, SpiritsCatalogData };
+import { QualityData, AdeptPowerCatalogItem, TraditionData, MentorSpiritData, TraditionSpiritTypes, MentorSpiritAdvantages, RitualData, RitualKeywordData, MinionStatsData, VehicleCategoryData, DroneSizeData, VehicleCatalogItemData, DroneCatalogItemData, RCCCatalogItemData, AutosoftCatalogItemData, HandlingRatingData, DroneWeaponMountsData, ProgramCatalogItemData, ProgramsCatalogData, FocusCatalogItemData, SpiritsCatalogData, ModificationsCatalogData, WeaponModificationCatalogItemData, ArmorModificationCatalogItemData } from "./loader";
+export type { QualityData, TraditionData, MentorSpiritData, TraditionSpiritTypes, MentorSpiritAdvantages, RitualData, RitualKeywordData, MinionStatsData, VehicleCategoryData, DroneSizeData, VehicleCatalogItemData, DroneCatalogItemData, RCCCatalogItemData, AutosoftCatalogItemData, HandlingRatingData, DroneWeaponMountsData, ProgramCatalogItemData, ProgramsCatalogData, FocusCatalogItemData, SpiritsCatalogData, ModificationsCatalogData, WeaponModificationCatalogItemData, ArmorModificationCatalogItemData };
 
 // =============================================================================
 // TYPES
@@ -391,6 +391,7 @@ export interface RulesetData {
   lifestyles: LifestyleData[];
   lifestyleModifiers: Record<string, number>;
   gear: GearCatalogData | null;
+  modifications: ModificationsCatalogData | null;
   spells: SpellsCatalogData | null;
   complexForms: ComplexFormData[];
   spriteTypes: SpriteTypeData[];
@@ -451,6 +452,7 @@ const defaultData: RulesetData = {
   lifestyles: [],
   lifestyleModifiers: {},
   gear: null,
+  modifications: null,
   spells: null,
   complexForms: [],
   spriteTypes: [],
@@ -541,6 +543,7 @@ export function RulesetProvider({
             lifestyles: extractedData.lifestyles || [],
             lifestyleModifiers: extractedData.lifestyleModifiers || {},
             gear: extractedData.gear || null,
+            modifications: extractedData.modifications || null,
             spells: extractedData.spells || null,
             complexForms: extractedData.complexForms || [],
             spriteTypes: extractedData.spriteTypes || [],
@@ -751,6 +754,94 @@ export function useRulesetStatus(): {
 export function useGear(): GearCatalogData | null {
   const { data } = useRuleset();
   return data.gear;
+}
+
+/**
+ * Hook to get modifications catalog
+ */
+export function useModifications(): ModificationsCatalogData | null {
+  const { data } = useRuleset();
+  return data.modifications;
+}
+
+/**
+ * Hook to get weapon modifications with optional filtering
+ */
+export function useWeaponModifications(options?: {
+  maxAvailability?: number;
+  excludeForbidden?: boolean;
+  excludeRestricted?: boolean;
+  mountType?: "top" | "under" | "side" | "barrel" | "stock" | "internal";
+}): WeaponModificationCatalogItemData[] {
+  const { data } = useRuleset();
+
+  return useMemo(() => {
+    if (!data.modifications?.weaponMods) return [];
+
+    let filtered = [...data.modifications.weaponMods];
+
+    if (options?.maxAvailability !== undefined) {
+      filtered = filtered.filter(
+        (item) => item.availability <= options.maxAvailability!
+      );
+    }
+
+    if (options?.excludeForbidden) {
+      filtered = filtered.filter((item) => !item.forbidden);
+    }
+
+    if (options?.excludeRestricted) {
+      filtered = filtered.filter((item) => !item.restricted);
+    }
+
+    if (options?.mountType) {
+      filtered = filtered.filter(
+        (item) => item.mount === options.mountType || !item.mount
+      );
+    }
+
+    return filtered;
+  }, [data.modifications, options]);
+}
+
+/**
+ * Hook to get armor modifications with optional filtering
+ */
+export function useArmorModifications(options?: {
+  maxAvailability?: number;
+  excludeForbidden?: boolean;
+  excludeRestricted?: boolean;
+  maxCapacityCost?: number;
+}): ArmorModificationCatalogItemData[] {
+  const { data } = useRuleset();
+
+  return useMemo(() => {
+    if (!data.modifications?.armorMods) return [];
+
+    let filtered = [...data.modifications.armorMods];
+
+    if (options?.maxAvailability !== undefined) {
+      filtered = filtered.filter(
+        (item) => item.availability <= options.maxAvailability!
+      );
+    }
+
+    if (options?.excludeForbidden) {
+      filtered = filtered.filter((item) => !item.forbidden);
+    }
+
+    if (options?.excludeRestricted) {
+      filtered = filtered.filter((item) => !item.restricted);
+    }
+
+    if (options?.maxCapacityCost !== undefined) {
+      filtered = filtered.filter(
+        (item) => item.capacityCost <= options.maxCapacityCost!
+      );
+    }
+
+    return filtered;
+  }, [data.modifications, options]);
 }
 
 /**

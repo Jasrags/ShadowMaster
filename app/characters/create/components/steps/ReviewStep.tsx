@@ -3,7 +3,7 @@
 import { useMemo } from "react";
 import { useMetatypes, useSkills, useQualities, useSpells, useComplexForms, usePriorityTable, useTraditions, useMentorSpirits } from "@/lib/rules";
 import { useAugmentationRules, calculateMagicLoss, useLifestyles } from "@/lib/rules/RulesetContext";
-import type { CreationState, ID, Contact, CyberwareItem, BiowareItem, FocusItem, Identity, Lifestyle, SinnerQuality } from "@/lib/types";
+import type { CreationState, ID, Contact, CyberwareItem, BiowareItem, FocusItem, Identity, Lifestyle, SinnerQuality, Weapon, ArmorItem } from "@/lib/types";
 import { SinnerQuality as SinnerQualityEnum } from "@/lib/types/character";
 
 // Helper function to get lifestyle display name with proper casing
@@ -105,6 +105,8 @@ export function ReviewStep({ state, updateState, budgetValues }: StepProps) {
   const racialQualities = (state.selections.racialQualities || []) as string[];
   const contacts = (state.selections.contacts || []) as Contact[];
   const gear = (state.selections.gear || []) as GearItem[];
+  const weapons = (state.selections.weapons || []) as Weapon[];
+  const armor = (state.selections.armor || []) as ArmorItem[];
   const lifestyle = state.selections.lifestyle as LifestyleSelection | undefined; // Legacy
   const identities = (state.selections.identities || []) as Identity[];
   const lifestyles = (state.selections.lifestyles || []) as Lifestyle[];
@@ -1219,11 +1221,98 @@ export function ReviewStep({ state, updateState, budgetValues }: StepProps) {
         </div>
       )}
 
-      {/* Gear */}
-      {(gear.length > 0 || selectedFoci.length > 0) && (
+      {/* Gear, Weapons & Armor */}
+      {(gear.length > 0 || weapons.length > 0 || armor.length > 0 || selectedFoci.length > 0) && (
         <div className="rounded-lg border border-zinc-200 bg-white p-4 dark:border-zinc-700 dark:bg-zinc-800/50">
           <h3 className="text-sm font-semibold text-zinc-900 dark:text-zinc-100">Gear</h3>
           <div className="mt-3 space-y-3">
+            {/* Weapons */}
+            {weapons.length > 0 && (
+              <div className="space-y-2">
+                <div className="text-xs font-medium text-zinc-600 dark:text-zinc-400">Weapons</div>
+                <div className="space-y-2">
+                  {weapons.map((weapon, i) => {
+                    const modsCount = weapon.modifications?.length || 0;
+                    const modsCost = (weapon.modifications || []).reduce((sum, mod) => sum + mod.cost, 0);
+                    const totalCost = weapon.cost + modsCost;
+                    return (
+                      <div key={i} className="rounded border border-zinc-200 bg-zinc-50 p-2 dark:border-zinc-700 dark:bg-zinc-800">
+                        <div className="flex items-start justify-between">
+                          <div>
+                            <span className="font-medium text-zinc-800 dark:text-zinc-200">{weapon.name}</span>
+                            <span className="ml-2 text-xs text-zinc-500 dark:text-zinc-400">
+                              (DMG: {weapon.damage} | AP: {weapon.ap})
+                            </span>
+                          </div>
+                          <span className="text-sm font-medium text-zinc-700 dark:text-zinc-300">
+                            ¥{totalCost.toLocaleString()}
+                          </span>
+                        </div>
+                        {modsCount > 0 && (
+                          <div className="mt-1 flex flex-wrap gap-1">
+                            {weapon.modifications?.map((mod, mi) => (
+                              <span
+                                key={mi}
+                                className="inline-flex items-center gap-1 rounded bg-blue-100 px-1.5 py-0.5 text-xs text-blue-700 dark:bg-blue-900/50 dark:text-blue-300"
+                              >
+                                {mod.name}
+                                {mod.mount && (
+                                  <span className="text-blue-500 dark:text-blue-400">[{mod.mount}]</span>
+                                )}
+                              </span>
+                            ))}
+                          </div>
+                        )}
+                      </div>
+                    );
+                  })}
+                </div>
+              </div>
+            )}
+
+            {/* Armor */}
+            {armor.length > 0 && (
+              <div className="space-y-2">
+                <div className="text-xs font-medium text-zinc-600 dark:text-zinc-400">Armor</div>
+                <div className="space-y-2">
+                  {armor.map((armorItem, i) => {
+                    const modsCount = armorItem.modifications?.length || 0;
+                    const modsCost = (armorItem.modifications || []).reduce((sum, mod) => sum + mod.cost, 0);
+                    const totalCost = armorItem.cost + modsCost;
+                    return (
+                      <div key={i} className="rounded border border-zinc-200 bg-zinc-50 p-2 dark:border-zinc-700 dark:bg-zinc-800">
+                        <div className="flex items-start justify-between">
+                          <div>
+                            <span className="font-medium text-zinc-800 dark:text-zinc-200">{armorItem.name}</span>
+                            <span className="ml-2 text-xs text-zinc-500 dark:text-zinc-400">
+                              (Armor: {armorItem.armorRating} | Cap: {armorItem.capacityUsed || 0}/{armorItem.capacity || armorItem.armorRating})
+                            </span>
+                          </div>
+                          <span className="text-sm font-medium text-zinc-700 dark:text-zinc-300">
+                            ¥{totalCost.toLocaleString()}
+                          </span>
+                        </div>
+                        {modsCount > 0 && (
+                          <div className="mt-1 flex flex-wrap gap-1">
+                            {armorItem.modifications?.map((mod, mi) => (
+                              <span
+                                key={mi}
+                                className="inline-flex items-center gap-1 rounded bg-green-100 px-1.5 py-0.5 text-xs text-green-700 dark:bg-green-900/50 dark:text-green-300"
+                              >
+                                {mod.name}
+                                <span className="text-green-500 dark:text-green-400">[{mod.capacityUsed} cap]</span>
+                              </span>
+                            ))}
+                          </div>
+                        )}
+                      </div>
+                    );
+                  })}
+                </div>
+              </div>
+            )}
+
+            {/* Foci */}
             {selectedFoci.length > 0 && (
               <div className="space-y-2">
                 <div className="text-xs font-medium text-zinc-600 dark:text-zinc-400">Foci</div>
@@ -1239,7 +1328,7 @@ export function ReviewStep({ state, updateState, budgetValues }: StepProps) {
                       <span>{focus.name}</span>
                       {focus.bonded && (
                         <span className="text-xs text-purple-600 dark:text-purple-400" title={`Bonded (${focus.karmaToBond} Karma)`}>
-                          ⚡
+                          *
                         </span>
                       )}
                     </span>
@@ -1247,19 +1336,24 @@ export function ReviewStep({ state, updateState, budgetValues }: StepProps) {
                 </div>
               </div>
             )}
+
+            {/* Other Gear */}
             {gear.length > 0 && (
-              <div className="flex flex-wrap gap-2">
-                {gear.map((item, i) => (
-                  <span
-                    key={i}
-                    className="inline-flex items-center gap-1 rounded-full bg-zinc-100 px-3 py-1 text-sm dark:bg-zinc-700"
-                  >
-                    <span className="text-zinc-800 dark:text-zinc-200">{item.name}</span>
-                    {item.quantity > 1 && (
-                      <span className="text-zinc-500 dark:text-zinc-400">x{item.quantity}</span>
-                    )}
-                  </span>
-                ))}
+              <div className="space-y-2">
+                <div className="text-xs font-medium text-zinc-600 dark:text-zinc-400">Other Gear</div>
+                <div className="flex flex-wrap gap-2">
+                  {gear.map((item, i) => (
+                    <span
+                      key={i}
+                      className="inline-flex items-center gap-1 rounded-full bg-zinc-100 px-3 py-1 text-sm dark:bg-zinc-700"
+                    >
+                      <span className="text-zinc-800 dark:text-zinc-200">{item.name}</span>
+                      {item.quantity > 1 && (
+                        <span className="text-zinc-500 dark:text-zinc-400">x{item.quantity}</span>
+                      )}
+                    </span>
+                  ))}
+                </div>
               </div>
             )}
           </div>
