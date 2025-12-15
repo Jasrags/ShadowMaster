@@ -1,13 +1,11 @@
 "use client";
 
 import { useState, useMemo } from "react";
-import type { CreationState, GearItem, Lifestyle } from "@/lib/types";
+import type { CreationState, GearItem } from "@/lib/types";
 import type { FocusItem } from "@/lib/types/character";
 import type { FocusType } from "@/lib/types/edition";
 import {
   useGear,
-  useLifestyles,
-  useLifestyleModifiers,
   useFoci,
   type GearItemData,
   type WeaponData,
@@ -73,8 +71,6 @@ function isItemAvailable(item: GearItemData): boolean {
 
 export function GearStep({ state, updateState, budgetValues }: StepProps) {
   const gearCatalog = useGear();
-  const lifestyles = useLifestyles();
-  const lifestyleModifiers = useLifestyleModifiers();
   const fociCatalog = useFoci();
 
   const [selectedCategory, setSelectedCategory] = useState<GearCategory>("all");
@@ -84,16 +80,11 @@ export function GearStep({ state, updateState, budgetValues }: StepProps) {
 
   // Get selections from state
   const selectedGear: GearItem[] = (state.selections?.gear as GearItem[]) || [];
-  const selectedLifestyle: Lifestyle | null = (state.selections?.lifestyle as Lifestyle) || null;
   const selectedFoci: FocusItem[] = (state.selections?.foci as FocusItem[]) || [];
   
   // Check if character is magical
   const magicPath = (state.selections?.["magical-path"] as string) || "mundane";
   const isMagical = ["magician", "mystic-adept", "aspected-mage"].includes(magicPath);
-
-  // Get metatype for lifestyle modifier
-  const metatype = (state.selections?.metatype as string) || "human";
-  const lifestyleModifier = lifestyleModifiers[metatype] || 1;
 
   // Karma-to-nuyen conversion is tracked globally in CreationState budgets
   const karmaConversion = (state.budgets?.["karma-spent-gear"] as number) || 0;
@@ -130,11 +121,10 @@ export function GearStep({ state, updateState, budgetValues }: StepProps) {
   // Calculate spent
   const gearSpent = selectedGear.reduce((sum, item) => sum + item.cost * item.quantity, 0);
   const fociSpent = selectedFoci.reduce((sum, focus) => sum + focus.cost, 0);
-  const lifestyleCost = selectedLifestyle
-    ? Math.floor(selectedLifestyle.monthlyCost * lifestyleModifier)
-    : 0;
   const augmentationSpent = (state.budgets["nuyen-spent-augmentations"] as number) || 0;
-  const totalSpent = gearSpent + fociSpent + lifestyleCost + augmentationSpent;
+  const lifestyleSpent = (state.budgets["nuyen-spent-lifestyle"] as number) || 0;
+  const identitySpent = (state.budgets["nuyen-spent-identities"] as number) || 0;
+  const totalSpent = gearSpent + fociSpent + augmentationSpent + lifestyleSpent + identitySpent;
   const remaining = totalNuyen - totalSpent;
 
   // Helper to add gear item
@@ -167,23 +157,6 @@ export function GearStep({ state, updateState, budgetValues }: StepProps) {
   };
 
 
-  // Helper to select lifestyle
-  const selectLifestyle = (lifestyle: typeof lifestyles[0] | null) => {
-    const newLifestyle: Lifestyle | null = lifestyle
-      ? {
-        type: lifestyle.name,
-        monthlyCost: lifestyle.monthlyCost,
-        prepaidMonths: 1,
-      }
-      : null;
-
-    updateState({
-      selections: {
-        ...state.selections,
-        lifestyle: newLifestyle,
-      },
-    });
-  };
 
   // Helper to add focus
   const addFocus = (focusCatalogItem: FocusCatalogItemData, force: number, bonded: boolean) => {
@@ -445,49 +418,6 @@ export function GearStep({ state, updateState, budgetValues }: StepProps) {
         </div>
       </div>
 
-      {/* Lifestyle Selection */}
-      <div className="rounded-lg border border-zinc-200 bg-white p-4 dark:border-zinc-700 dark:bg-zinc-800">
-        <h3 className="mb-3 text-sm font-medium">
-          Lifestyle{" "}
-          <span className="text-xs font-normal text-zinc-500">(Required - 1 month prepaid)</span>
-        </h3>
-        {lifestyleModifier !== 1 && (
-          <p className="mb-2 text-xs text-amber-600 dark:text-amber-400">
-            {metatype.charAt(0).toUpperCase() + metatype.slice(1)} modifier: ×{lifestyleModifier}
-          </p>
-        )}
-        <div className="grid grid-cols-2 gap-2 sm:grid-cols-3 md:grid-cols-6">
-          {lifestyles.map((lifestyle) => {
-            const adjustedCost = Math.floor(lifestyle.monthlyCost * lifestyleModifier);
-            const isSelected = selectedLifestyle?.type === lifestyle.name;
-            const canAfford = adjustedCost <= remaining + (selectedLifestyle?.monthlyCost || 0) * lifestyleModifier;
-
-            return (
-              <button
-                key={lifestyle.id}
-                onClick={() => selectLifestyle(isSelected ? null : lifestyle)}
-                disabled={!canAfford && !isSelected}
-                className={`rounded-lg border p-2 text-left transition-colors ${isSelected
-                    ? "border-emerald-500 bg-emerald-50 dark:border-emerald-400 dark:bg-emerald-900/20"
-                    : canAfford
-                      ? "border-zinc-200 hover:border-zinc-400 dark:border-zinc-600 dark:hover:border-zinc-500"
-                      : "cursor-not-allowed border-zinc-200 opacity-50 dark:border-zinc-700"
-                  }`}
-              >
-                <p className="text-xs font-medium">{lifestyle.name}</p>
-                <p className="text-xs text-zinc-500 dark:text-zinc-400">
-                  ¥{formatCurrency(adjustedCost)}
-                </p>
-              </button>
-            );
-          })}
-        </div>
-        {selectedLifestyle && (
-          <p className="mt-2 text-xs text-zinc-600 dark:text-zinc-400">
-            Selected: {selectedLifestyle.type} (¥{formatCurrency(lifestyleCost)}/month)
-          </p>
-        )}
-      </div>
 
       {/* Gear Catalog */}
       <div className="space-y-4">

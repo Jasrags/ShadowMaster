@@ -107,7 +107,8 @@ export function VehiclesStep({ state, updateState, budgetValues }: StepProps) {
     selectedDrones.reduce((sum, d) => sum + d.cost, 0) +
     selectedRCCs.reduce((sum, r) => sum + r.cost, 0) +
     selectedAutosofts.reduce((sum, a) => sum + a.cost, 0);
-  const totalSpent = gearSpent + lifestyleCost + augmentationSpent + vehiclesSpent;
+  const identitySpent = (state.budgets?.["nuyen-spent-identities"] as number) || 0;
+  const totalSpent = gearSpent + lifestyleCost + augmentationSpent + vehiclesSpent + identitySpent;
   const remaining = totalNuyen - totalSpent;
 
   // Filter vehicles

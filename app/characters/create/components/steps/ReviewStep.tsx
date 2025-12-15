@@ -2,8 +2,20 @@
 
 import { useMemo } from "react";
 import { useMetatypes, useSkills, useQualities, useSpells, useComplexForms, usePriorityTable, useTraditions, useMentorSpirits } from "@/lib/rules";
-import { useAugmentationRules, calculateMagicLoss } from "@/lib/rules/RulesetContext";
-import type { CreationState, ID, Contact, CyberwareItem, BiowareItem, FocusItem } from "@/lib/types";
+import { useAugmentationRules, calculateMagicLoss, useLifestyles } from "@/lib/rules/RulesetContext";
+import type { CreationState, ID, Contact, CyberwareItem, BiowareItem, FocusItem, Identity, Lifestyle, SinnerQuality } from "@/lib/types";
+import { SinnerQuality as SinnerQualityEnum } from "@/lib/types/character";
+
+// Helper function to get lifestyle display name with proper casing
+function getLifestyleDisplayName(lifestyle: Lifestyle, availableLifestyles: Array<{ id: string; name: string }>): string {
+  const found = availableLifestyles.find((l) => l.id === lifestyle.type || l.name.toLowerCase() === lifestyle.type.toLowerCase());
+  return found?.name || lifestyle.type.charAt(0).toUpperCase() + lifestyle.type.slice(1);
+}
+
+// Helper function to check if lifestyle is permanent
+function isLifestylePermanent(lifestyle: Lifestyle): boolean {
+  return lifestyle.modifications?.some((mod) => mod.catalogId === "permanent-lifestyle" || mod.name.toLowerCase() === "permanent lifestyle") || false;
+}
 
 interface StepProps {
   state: CreationState;
@@ -93,7 +105,11 @@ export function ReviewStep({ state, updateState, budgetValues }: StepProps) {
   const racialQualities = (state.selections.racialQualities || []) as string[];
   const contacts = (state.selections.contacts || []) as Contact[];
   const gear = (state.selections.gear || []) as GearItem[];
-  const lifestyle = state.selections.lifestyle as LifestyleSelection | undefined;
+  const lifestyle = state.selections.lifestyle as LifestyleSelection | undefined; // Legacy
+  const identities = (state.selections.identities || []) as Identity[];
+  const lifestyles = (state.selections.lifestyles || []) as Lifestyle[];
+  const primaryLifestyleId = (state.selections.primaryLifestyleId as string) || undefined;
+  const availableLifestyles = useLifestyles();
   const selectedSpells = (state.selections.spells || []) as string[];
   const selectedComplexForms = (state.selections.complexForms || []) as string[];
   const selectedCyberware = (state.selections.cyberware || []) as CyberwareItem[];
@@ -829,6 +845,120 @@ export function ReviewStep({ state, updateState, budgetValues }: StepProps) {
         </div>
       )}
 
+      {/* Identities */}
+      {identities.length > 0 && (
+        <div className="rounded-lg border border-zinc-200 bg-white p-4 dark:border-zinc-700 dark:bg-zinc-800/50">
+          <h3 className="text-sm font-semibold text-zinc-900 dark:text-zinc-100">
+            Identities ({identities.length})
+          </h3>
+          <div className="mt-3 space-y-3">
+            {identities.map((identity, i) => {
+              // Validation checks
+              const hasValidSIN = !!identity.sin;
+              const sinTypeValid = identity.sin
+                ? identity.sin.type === "fake"
+                  ? identity.sin.rating >= 1 && identity.sin.rating <= 4
+                  : identity.sin.type === "real"
+                : false;
+              const licensesValid = identity.licenses?.every((license) => {
+                if (identity.sin?.type === "fake" && license.type !== "fake") return false;
+                if (identity.sin?.type === "real" && license.type !== "real") return false;
+                if (license.type === "fake" && (!license.rating || license.rating < 1 || license.rating > 4)) return false;
+                return true;
+              }) ?? true;
+
+              const isValid = hasValidSIN && sinTypeValid && licensesValid;
+              const associatedLifestyle = identity.associatedLifestyleId
+                ? lifestyles.find((l) => l.id === identity.associatedLifestyleId)
+                : undefined;
+
+              return (
+                <div
+                  key={i}
+                  className={`rounded border p-3 ${
+                    isValid
+                      ? "border-zinc-200 bg-zinc-50 dark:border-zinc-700 dark:bg-zinc-700/50"
+                      : "border-red-300 bg-red-50 dark:border-red-800 dark:bg-red-900/20"
+                  }`}
+                >
+                  <div className="flex items-start justify-between">
+                    <div className="flex-1">
+                      <div className="flex items-center gap-2">
+                        <h4 className="font-medium text-zinc-900 dark:text-zinc-100">
+                          {identity.name}
+                        </h4>
+                        {!isValid && (
+                          <span className="rounded-full bg-red-100 px-2 py-0.5 text-xs font-medium text-red-800 dark:bg-red-900 dark:text-red-200">
+                            Validation Error
+                          </span>
+                        )}
+                        {isValid && (
+                          <span className="rounded-full bg-emerald-100 px-2 py-0.5 text-xs font-medium text-emerald-800 dark:bg-emerald-900 dark:text-emerald-200">
+                            Valid
+                          </span>
+                        )}
+                      </div>
+
+                      {/* SIN Display */}
+                      {identity.sin && (
+                        <div className="mt-2">
+                          {identity.sin.type === "fake" ? (
+                            <span className="inline-flex items-center rounded-full bg-blue-100 px-2.5 py-0.5 text-xs font-medium text-blue-800 dark:bg-blue-900 dark:text-blue-200">
+                              Fake SIN (Rating {identity.sin.rating})
+                            </span>
+                          ) : (
+                            <span className="inline-flex items-center rounded-full bg-emerald-100 px-2.5 py-0.5 text-xs font-medium text-emerald-800 dark:bg-emerald-900 dark:text-emerald-200">
+                              Real SIN ({identity.sin.sinnerQuality})
+                            </span>
+                          )}
+                        </div>
+                      )}
+
+                      {/* Licenses */}
+                      {identity.licenses && identity.licenses.length > 0 && (
+                        <div className="mt-2">
+                          <div className="text-xs font-medium text-zinc-600 dark:text-zinc-400">
+                            Licenses ({identity.licenses.length}):
+                          </div>
+                          <div className="mt-1 flex flex-wrap gap-1">
+                            {identity.licenses.map((license, licenseIndex) => (
+                              <span
+                                key={licenseIndex}
+                                className="inline-flex items-center rounded-full bg-zinc-100 px-2 py-0.5 text-xs text-zinc-700 dark:bg-zinc-800 dark:text-zinc-300"
+                              >
+                                {license.name}
+                                {license.type === "fake" && license.rating && ` (R${license.rating})`}
+                              </span>
+                            ))}
+                          </div>
+                        </div>
+                      )}
+
+                      {/* Associated Lifestyle */}
+                      {associatedLifestyle && (
+                        <div className="mt-2 text-xs text-zinc-600 dark:text-zinc-400">
+                          <span className="font-medium">Associated Lifestyle:</span>{" "}
+                          {associatedLifestyle.type}
+                        </div>
+                      )}
+
+                      {/* Validation Errors */}
+                      {!isValid && (
+                        <div className="mt-2 text-xs text-red-600 dark:text-red-400">
+                          {!hasValidSIN && "• Missing SIN"}
+                          {hasValidSIN && !sinTypeValid && "• Invalid SIN rating or type"}
+                          {!licensesValid && "• License type mismatch or invalid rating"}
+                        </div>
+                      )}
+                    </div>
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+        </div>
+      )}
+
       {/* Contacts */}
       {contacts.length > 0 && (
         <div className="rounded-lg border border-zinc-200 bg-white p-4 dark:border-zinc-700 dark:bg-zinc-800/50">
@@ -914,21 +1044,186 @@ export function ReviewStep({ state, updateState, budgetValues }: StepProps) {
         </div>
       )}
 
-      {/* Gear & Lifestyle */}
-      {(gear.length > 0 || lifestyle || selectedFoci.length > 0) && (
+      {/* Lifestyles */}
+      {(lifestyles.length > 0 || lifestyle) && (
         <div className="rounded-lg border border-zinc-200 bg-white p-4 dark:border-zinc-700 dark:bg-zinc-800/50">
-          <h3 className="text-sm font-semibold text-zinc-900 dark:text-zinc-100">Gear & Lifestyle</h3>
+          <h3 className="text-sm font-semibold text-zinc-900 dark:text-zinc-100">
+            Lifestyles ({lifestyles.length || (lifestyle ? 1 : 0)})
+          </h3>
           <div className="mt-3 space-y-3">
-            {lifestyle && (
-              <div className="rounded bg-emerald-50 p-2 dark:bg-emerald-900/20">
-                <span className="font-medium text-emerald-800 dark:text-emerald-200">
-                  {lifestyle.name} Lifestyle
-                </span>
-                <span className="ml-2 text-sm text-emerald-600 dark:text-emerald-400">
-                  ({lifestyle.months} month{lifestyle.months > 1 ? "s" : ""})
-                </span>
+            {/* Legacy lifestyle support */}
+            {lifestyle && lifestyles.length === 0 && (
+              <div className="rounded border border-amber-200 bg-amber-50 p-3 dark:border-amber-800 dark:bg-amber-900/20">
+                <div className="flex items-center justify-between">
+                  <div>
+                    <span className="font-medium text-amber-800 dark:text-amber-200">
+                      {lifestyle.name} Lifestyle
+                    </span>
+                    <span className="ml-2 text-sm text-amber-600 dark:text-amber-400">
+                      ({lifestyle.months} month{lifestyle.months > 1 ? "s" : ""})
+                    </span>
+                  </div>
+                  <span className="rounded-full bg-amber-100 px-2 py-0.5 text-xs font-medium text-amber-800 dark:bg-amber-900 dark:text-amber-200">
+                    Legacy Format
+                  </span>
+                </div>
               </div>
             )}
+
+            {/* New lifestyles */}
+            {lifestyles.map((lifestyleItem, i) => {
+              const isPrimary = lifestyleItem.id === primaryLifestyleId;
+              const isPermanent = isLifestylePermanent(lifestyleItem);
+              const cost = isPermanent
+                ? lifestyleItem.monthlyCost * 100
+                : lifestyleItem.monthlyCost;
+              const displayName = getLifestyleDisplayName(lifestyleItem, availableLifestyles);
+              
+              // Validation: permanent cost should be 100 × monthly
+              const permanentCostValid = !isPermanent || cost === lifestyleItem.monthlyCost * 100;
+              const hasModifications = (lifestyleItem.modifications?.length || 0) > 0;
+              const hasSubscriptions = (lifestyleItem.subscriptions?.length || 0) > 0;
+              const associatedIdentities = identities.filter(
+                (id) => id.associatedLifestyleId === lifestyleItem.id
+              );
+
+              return (
+                <div
+                  key={i}
+                  className={`rounded border p-3 ${
+                    permanentCostValid
+                      ? "border-zinc-200 bg-zinc-50 dark:border-zinc-700 dark:bg-zinc-700/50"
+                      : "border-red-300 bg-red-50 dark:border-red-800 dark:bg-red-900/20"
+                  }`}
+                >
+                  <div className="flex items-start justify-between">
+                    <div className="flex-1">
+                      <div className="flex items-center gap-2">
+                        <h4 className="font-medium text-zinc-900 dark:text-zinc-100">
+                          {displayName}
+                        </h4>
+                        {isPrimary && (
+                          <span className="rounded-full bg-emerald-100 px-2 py-0.5 text-xs font-medium text-emerald-800 dark:bg-emerald-900 dark:text-emerald-200">
+                            Primary
+                          </span>
+                        )}
+                        {isPermanent && (
+                          <span className="rounded-full bg-blue-100 px-2 py-0.5 text-xs font-medium text-blue-800 dark:bg-blue-900 dark:text-blue-200">
+                            Permanent
+                          </span>
+                        )}
+                        {!permanentCostValid && (
+                          <span className="rounded-full bg-red-100 px-2 py-0.5 text-xs font-medium text-red-800 dark:bg-red-900 dark:text-red-200">
+                            Cost Error
+                          </span>
+                        )}
+                      </div>
+
+                      <div className="mt-2 text-sm text-zinc-600 dark:text-zinc-400">
+                        {isPermanent ? (
+                          <span>
+                            One-time cost: ¥{cost.toLocaleString()}
+                          </span>
+                        ) : (
+                          <span>
+                            Monthly cost: ¥{lifestyleItem.monthlyCost.toLocaleString()}
+                          </span>
+                        )}
+                        {lifestyleItem.location && (
+                          <span className="ml-2">• {lifestyleItem.location}</span>
+                        )}
+                      </div>
+
+                      {/* Modifications */}
+                      {hasModifications && (
+                        <div className="mt-2">
+                          <div className="text-xs font-medium text-zinc-600 dark:text-zinc-400">
+                            Modifications ({lifestyleItem.modifications?.length}):
+                          </div>
+                          <div className="mt-1 flex flex-wrap gap-1">
+                            {lifestyleItem.modifications?.map((mod, modIndex) => (
+                              <span
+                                key={modIndex}
+                                className={`inline-flex items-center rounded-full px-2 py-0.5 text-xs ${
+                                  mod.type === "positive"
+                                    ? "bg-emerald-100 text-emerald-800 dark:bg-emerald-900 dark:text-emerald-200"
+                                    : "bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-200"
+                                }`}
+                              >
+                                {mod.name} ({mod.type === "positive" ? "+" : "-"}
+                                {mod.modifierType === "percentage" ? `${mod.modifier}%` : `${mod.modifier.toLocaleString()}¥`})
+                              </span>
+                            ))}
+                          </div>
+                        </div>
+                      )}
+
+                      {/* Subscriptions */}
+                      {hasSubscriptions && (
+                        <div className="mt-2">
+                          <div className="text-xs font-medium text-zinc-600 dark:text-zinc-400">
+                            Subscriptions ({lifestyleItem.subscriptions?.length}):
+                          </div>
+                          <div className="mt-1 flex flex-wrap gap-1">
+                            {lifestyleItem.subscriptions?.map((sub, subIndex) => (
+                              <span
+                                key={subIndex}
+                                className="inline-flex items-center rounded-full bg-blue-100 px-2 py-0.5 text-xs text-blue-800 dark:bg-blue-900 dark:text-blue-200"
+                              >
+                                {sub.name} (¥{sub.monthlyCost.toLocaleString()}/month)
+                              </span>
+                            ))}
+                          </div>
+                        </div>
+                      )}
+
+                      {/* Custom Expenses/Income */}
+                      {(lifestyleItem.customExpenses || lifestyleItem.customIncome) && (
+                        <div className="mt-2 text-xs text-zinc-600 dark:text-zinc-400">
+                          {lifestyleItem.customExpenses && (
+                            <span>Custom Expenses: +¥{lifestyleItem.customExpenses.toLocaleString()}/month</span>
+                          )}
+                          {lifestyleItem.customIncome && (
+                            <span className={lifestyleItem.customExpenses ? " ml-2" : ""}>
+                              Custom Income: -¥{lifestyleItem.customIncome.toLocaleString()}/month
+                            </span>
+                          )}
+                        </div>
+                      )}
+
+                      {/* Associated Identities */}
+                      {associatedIdentities.length > 0 && (
+                        <div className="mt-2 text-xs text-zinc-600 dark:text-zinc-400">
+                          <span className="font-medium">Associated Identities:</span>{" "}
+                          {associatedIdentities.map((id, idx) => (
+                            <span key={idx}>
+                              {id.name}
+                              {idx < associatedIdentities.length - 1 && ", "}
+                            </span>
+                          ))}
+                        </div>
+                      )}
+
+                      {/* Validation Error */}
+                      {!permanentCostValid && (
+                        <div className="mt-2 text-xs text-red-600 dark:text-red-400">
+                          • Permanent lifestyle cost should be 100 × monthly cost
+                        </div>
+                      )}
+                    </div>
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+        </div>
+      )}
+
+      {/* Gear */}
+      {(gear.length > 0 || selectedFoci.length > 0) && (
+        <div className="rounded-lg border border-zinc-200 bg-white p-4 dark:border-zinc-700 dark:bg-zinc-800/50">
+          <h3 className="text-sm font-semibold text-zinc-900 dark:text-zinc-100">Gear</h3>
+          <div className="mt-3 space-y-3">
             {selectedFoci.length > 0 && (
               <div className="space-y-2">
                 <div className="text-xs font-medium text-zinc-600 dark:text-zinc-400">Foci</div>

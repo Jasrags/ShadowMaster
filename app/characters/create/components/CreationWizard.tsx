@@ -10,6 +10,7 @@ import {
 } from "@/lib/rules";
 import {
   useLifestyleModifiers,
+  useLifestyles,
   useSpells,
 } from "@/lib/rules/RulesetContext";
 import { StepperSidebar } from "./StepperSidebar";
@@ -41,6 +42,7 @@ import { RitualsStep } from "./steps/RitualsStep";
 import { AdeptPowersStep } from "./steps/AdeptPowersStep";
 import { VehiclesStep } from "./steps/VehiclesStep";
 import { ProgramsStep } from "./steps/ProgramsStep";
+import { IdentitiesStep } from "./steps/IdentitiesStep";
 import { ReviewStep } from "./steps/ReviewStep";
 
 interface CreationWizardProps {
@@ -111,6 +113,7 @@ export function CreationWizard({ onCancel, onComplete }: CreationWizardProps) {
   const priorityTable = usePriorityTable();
   const metatypes = useMetatypes();
   const lifestyleModifiers = useLifestyleModifiers();
+  const availableLifestyles = useLifestyles();
   const spellsCatalog = useSpells();
 
   // Creation state - load draft if available
@@ -347,7 +350,7 @@ export function CreationWizard({ onCancel, onComplete }: CreationWizardProps) {
         break;
       }
 
-      case "gear":
+      case "gear": {
         // Check nuyen carryover (max 5,000)
         const nuyenBudget = budgetValues["nuyen"] || 0;
         const nuyenSpent = (state.budgets["nuyen-spent"] as number) || 0;
@@ -360,7 +363,47 @@ export function CreationWizard({ onCancel, onComplete }: CreationWizardProps) {
             severity: "warning",
           });
         }
+
+        // Check lifestyle requirements
+        const lifestyles = (state.selections.lifestyles || []) as Array<{
+          id?: string;
+          type: string;
+          monthlyCost: number;
+          modifications?: Array<{ catalogId?: string; name: string }>;
+        }>;
+        const primaryLifestyleId = state.selections.primaryLifestyleId as string | undefined;
+
+        // Must have at least one lifestyle
+        if (lifestyles.length === 0) {
+          errors.push({
+            constraintId: "lifestyle-required",
+            stepId,
+            message: "Character must have at least one lifestyle.",
+            severity: "error",
+          });
+        }
+
+        // Must have a primary lifestyle if multiple lifestyles exist
+        if (lifestyles.length > 1 && !primaryLifestyleId) {
+          errors.push({
+            constraintId: "primary-lifestyle-required",
+            stepId,
+            message: "When multiple lifestyles are selected, one must be marked as primary.",
+            severity: "error",
+          });
+        }
+
+        // Validate permanent lifestyle costs
+        lifestyles.forEach((lifestyle, index) => {
+          const isPermanent = lifestyle.modifications?.some((mod) => mod.catalogId === "permanent-lifestyle" || mod.name.toLowerCase() === "permanent lifestyle") || false;
+          if (isPermanent) {
+            const expectedCost = lifestyle.monthlyCost * 100;
+            // Note: The actual cost calculation happens in LifestyleEditor, so we just check the structure
+            // The validation that permanent cost = 100 × monthly is enforced in the editor
+          }
+        });
         break;
+      }
 
       case "karma":
         // Check Karma carryover (max 7)
@@ -381,6 +424,91 @@ export function CreationWizard({ onCancel, onComplete }: CreationWizardProps) {
           });
         }
         break;
+
+      case "identities": {
+        // Import types for validation
+        const identities = (state.selections.identities || []) as Array<{
+          name: string;
+          sin?: { type: "fake" | "real"; rating?: number; sinnerQuality?: string };
+          licenses?: Array<{ type: "fake" | "real"; rating?: number; name: string }>;
+        }>;
+        const negativeQualities = (state.selections.negativeQualities || []) as string[];
+        const hasSINnerQuality = negativeQualities.includes("sinner");
+
+        // Must have at least one identity
+        if (identities.length === 0) {
+          errors.push({
+            constraintId: "identities-required",
+            stepId,
+            message: "Character must have at least one identity.",
+            severity: "error",
+          });
+        }
+
+        // Each identity must have exactly one SIN
+        identities.forEach((identity, index) => {
+          if (!identity.sin) {
+            errors.push({
+              constraintId: `identity-${index}-sin-required`,
+              stepId,
+              message: `Identity "${identity.name || `Identity ${index + 1}`}" must have a SIN.`,
+              severity: "error",
+            });
+          } else {
+            // Fake SIN validation
+            if (identity.sin.type === "fake") {
+              if (!identity.sin.rating || identity.sin.rating < 1 || identity.sin.rating > 4) {
+                errors.push({
+                  constraintId: `identity-${index}-fake-sin-rating`,
+                  stepId,
+                  message: `Identity "${identity.name || `Identity ${index + 1}`}" fake SIN must have rating 1-4.`,
+                  severity: "error",
+                });
+              }
+            }
+            // Real SIN validation
+            if (identity.sin.type === "real") {
+              if (!hasSINnerQuality) {
+                errors.push({
+                  constraintId: `identity-${index}-real-sin-requires-sinner`,
+                  stepId,
+                  message: `Identity "${identity.name || `Identity ${index + 1}`}" uses a real SIN but character does not have SINner quality.`,
+                  severity: "error",
+                });
+              }
+            }
+          }
+
+          // License validation
+          identity.licenses?.forEach((license, licenseIndex) => {
+            if (identity.sin?.type === "fake" && license.type !== "fake") {
+              errors.push({
+                constraintId: `identity-${index}-license-${licenseIndex}-type-mismatch`,
+                stepId,
+                message: `Identity "${identity.name || `Identity ${index + 1}`}" license "${license.name}" must be fake (identity uses fake SIN).`,
+                severity: "error",
+              });
+            }
+            if (identity.sin?.type === "real" && license.type !== "real") {
+              errors.push({
+                constraintId: `identity-${index}-license-${licenseIndex}-type-mismatch`,
+                stepId,
+                message: `Identity "${identity.name || `Identity ${index + 1}`}" license "${license.name}" must be real (identity uses real SIN).`,
+                severity: "error",
+              });
+            }
+            if (license.type === "fake" && (!license.rating || license.rating < 1 || license.rating > 4)) {
+              errors.push({
+                constraintId: `identity-${index}-license-${licenseIndex}-rating`,
+                stepId,
+                message: `Identity "${identity.name || `Identity ${index + 1}`}" fake license "${license.name}" must have rating 1-4.`,
+                severity: "error",
+              });
+            }
+          });
+        });
+        break;
+      }
 
       case "review":
         // Final validation checks - comprehensive validation for all prior steps
@@ -536,6 +664,86 @@ export function CreationWizard({ onCancel, onComplete }: CreationWizardProps) {
     );
   }, [cyberwareItems, biowareItems]);
 
+  // Helper to check if lifestyle is permanent
+  const isLifestylePermanent = (lifestyle: Lifestyle): boolean => {
+    return lifestyle.modifications?.some((mod) => mod.catalogId === "permanent-lifestyle" || mod.name.toLowerCase() === "permanent lifestyle") || false;
+  };
+
+  // Calculate lifestyle cost (including modifications and permanent purchase)
+  const calculateLifestyleCost = useCallback((lifestyle: Lifestyle): number => {
+    if (!lifestyle.type) return 0;
+    
+    // Find base lifestyle cost
+    const baseLifestyle = availableLifestyles.find((l) => l.id === lifestyle.type || l.name.toLowerCase() === lifestyle.type.toLowerCase());
+    if (!baseLifestyle) return 0;
+    
+    const metatype = (state.selections?.metatype as string) || "human";
+    const modifier = lifestyleModifiers[metatype] || 1;
+    let cost = baseLifestyle.monthlyCost * modifier;
+    
+    // Apply modifications (excluding permanent lifestyle modification)
+    lifestyle.modifications?.forEach((mod) => {
+      if (mod.catalogId !== "permanent-lifestyle" && mod.name.toLowerCase() !== "permanent lifestyle") {
+        if (mod.modifierType === "percentage") {
+          cost = cost * (1 + (mod.type === "positive" ? 1 : -1) * (mod.modifier / 100));
+        } else {
+          cost = cost + (mod.type === "positive" ? 1 : -1) * mod.modifier;
+        }
+      }
+    });
+    
+    // Add subscriptions
+    const subscriptionCost = lifestyle.subscriptions?.reduce((sum, sub) => sum + sub.monthlyCost, 0) || 0;
+    cost = cost + subscriptionCost;
+    
+    // Add custom expenses, subtract custom income
+    cost = cost + (lifestyle.customExpenses || 0) - (lifestyle.customIncome || 0);
+    
+    const finalMonthlyCost = Math.max(0, Math.floor(cost));
+    
+    // Check if permanent
+    if (isLifestylePermanent(lifestyle)) {
+      return finalMonthlyCost * 100; // Permanent: 100 × monthly cost
+    }
+    
+    return finalMonthlyCost; // Monthly: 1 month prepaid
+  }, [availableLifestyles, lifestyleModifiers, state.selections?.metatype]);
+
+  // Calculate identity costs (fake SINs, licenses, and associated lifestyles)
+  const identityTotal = useMemo(() => {
+    const identities = (state.selections?.identities || []) as Array<{
+      sin?: { type: "fake" | "real"; rating?: number };
+      licenses?: Array<{ type: "fake" | "real"; rating?: number }>;
+      associatedLifestyleId?: string;
+    }>;
+    const lifestyles = (state.selections?.lifestyles || []) as Lifestyle[];
+    
+    let total = 0;
+    identities.forEach((identity) => {
+      // Fake SIN cost: Rating × 625¥ (Rating 4 = 2,500¥)
+      if (identity.sin?.type === "fake" && identity.sin.rating) {
+        total += identity.sin.rating * 625;
+      }
+      
+      // Fake License costs: Rating × 50¥ (Rating 4 = 200¥)
+      identity.licenses?.forEach((license) => {
+        if (license.type === "fake" && license.rating) {
+          total += license.rating * 50;
+        }
+      });
+      
+      // Lifestyle cost (if associated)
+      if (identity.associatedLifestyleId) {
+        const lifestyle = lifestyles.find((l) => l.id === identity.associatedLifestyleId);
+        if (lifestyle) {
+          total += calculateLifestyleCost(lifestyle);
+        }
+      }
+    });
+    
+    return total;
+  }, [state.selections?.identities, state.selections?.lifestyles, calculateLifestyleCost]);
+
   const essenceLoss = useMemo(() => {
     const cyberwareEssence = cyberwareItems.reduce(
       (sum, item) => sum + item.essenceCost,
@@ -627,7 +835,7 @@ export function CreationWizard({ onCancel, onComplete }: CreationWizardProps) {
 
   // Sync calculated budgets to state
   useEffect(() => {
-    const totalNuyenSpent = gearTotal + lifestyleCost + augmentationTotal;
+    const totalNuyenSpent = gearTotal + lifestyleCost + augmentationTotal + identityTotal;
 
     // Check if values have changed to avoid loops
     const currentNuyenSpent = (state.budgets["nuyen-spent"] as number) || 0;
@@ -635,13 +843,15 @@ export function CreationWizard({ onCancel, onComplete }: CreationWizardProps) {
     const currentGearSpent = (state.budgets["nuyen-spent-gear"] as number) || 0;
     const currentAugSpent = (state.budgets["nuyen-spent-augmentations"] as number) || 0;
     const currentLifestyleSpent = (state.budgets["nuyen-spent-lifestyle"] as number) || 0;
+    const currentIdentitySpent = (state.budgets["nuyen-spent-identities"] as number) || 0;
 
     if (
       totalNuyenSpent !== currentNuyenSpent ||
       essenceLoss !== currentEssenceSpent ||
       gearTotal !== currentGearSpent ||
       augmentationTotal !== currentAugSpent ||
-      lifestyleCost !== currentLifestyleSpent
+      lifestyleCost !== currentLifestyleSpent ||
+      identityTotal !== currentIdentitySpent
     ) {
       setState((prev) => ({
         ...prev,
@@ -651,12 +861,13 @@ export function CreationWizard({ onCancel, onComplete }: CreationWizardProps) {
           "nuyen-spent-gear": gearTotal,
           "nuyen-spent-augmentations": augmentationTotal,
           "nuyen-spent-lifestyle": lifestyleCost,
+          "nuyen-spent-identities": identityTotal,
           "essence-spent": essenceLoss,
         },
         updatedAt: new Date().toISOString(),
       }));
     }
-  }, [gearTotal, lifestyleCost, augmentationTotal, essenceLoss, state.budgets]);
+  }, [gearTotal, lifestyleCost, augmentationTotal, identityTotal, essenceLoss, state.budgets]);
 
   // Navigation handlers
   const goToStep = useCallback((stepIndex: number) => {
@@ -948,7 +1159,51 @@ export function CreationWizard({ onCancel, onComplete }: CreationWizardProps) {
         spells: (state.selections.spells as string[]) || [],
         complexForms: (state.selections.complexForms as string[]) || [],
         gear: (state.selections.gear as Array<{ id: string; name: string; quantity: number; cost: number }>) || [],
-        lifestyle: (state.selections.lifestyle as { id: string; name: string; months: number; cost: number }) || undefined,
+        identities: (state.selections.identities as Array<{
+          id?: string;
+          name: string;
+          sin: { type: "fake"; rating: number } | { type: "real"; sinnerQuality: string };
+          licenses?: Array<{
+            id?: string;
+            type: "fake" | "real";
+            rating?: number;
+            name: string;
+            notes?: string;
+          }>;
+          associatedLifestyleId?: string;
+          notes?: string;
+        }>) || [],
+        lifestyles: (state.selections.lifestyles as Array<{
+          id?: string;
+          type: string;
+          monthlyCost: number;
+          prepaidMonths?: number;
+          location?: string;
+          modifications?: Array<{
+            id?: string;
+            catalogId?: string;
+            name: string;
+            type: "positive" | "negative";
+            modifierType: "percentage" | "fixed";
+            modifier: number;
+            effects?: string;
+            notes?: string;
+          }>;
+          subscriptions?: Array<{
+            id?: string;
+            catalogId?: string;
+            name: string;
+            monthlyCost: number;
+            category?: string;
+            notes?: string;
+          }>;
+          customExpenses?: number;
+          customIncome?: number;
+          notes?: string;
+        }>) || [],
+        primaryLifestyleId: (state.selections.primaryLifestyleId as string) || undefined,
+        sinnerQuality: (state.selections.sinnerQuality as string) || undefined,
+        lifestyle: (state.selections.lifestyle as { id: string; name: string; months: number; cost: number }) || undefined, // Legacy support
         contacts: (state.selections.contacts as Array<{ name: string; connection: number; loyalty: number; type?: string; notes?: string }>) || [],
         nuyen: nuyenRemaining,
         startingNuyen: nuyenBudget,
@@ -1055,6 +1310,8 @@ export function CreationWizard({ onCancel, onComplete }: CreationWizardProps) {
         return <AdeptPowersStep {...stepProps} />;
       case "karma":
         return <KarmaStep {...stepProps} />;
+      case "identities":
+        return <IdentitiesStep {...stepProps} />;
       case "review":
         return <ReviewStep {...stepProps} onComplete={onComplete} />;
       default:

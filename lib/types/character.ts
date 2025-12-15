@@ -187,8 +187,21 @@ export interface Character {
   nuyen: number;
   startingNuyen: number;
 
-  /** Current lifestyle */
-  lifestyle?: Lifestyle;
+  // -------------------------------------------------------------------------
+  // Identities & Lifestyles
+  // -------------------------------------------------------------------------
+
+  /** Character identities (each with SIN and licenses) */
+  identities?: Identity[];
+
+  /** Primary lifestyle ID (reference to lifestyles array) */
+  primaryLifestyleId?: ID;
+
+  /** All lifestyles owned by character */
+  lifestyles?: Lifestyle[];
+
+  /** SINner quality type (if character has real SIN from SINner quality) */
+  sinnerQuality?: SinnerQuality;
 
   /** All owned gear */
   gear: GearItem[];
@@ -335,11 +348,96 @@ export interface BoundSpirit {
   bound: boolean;
 }
 
+// =============================================================================
+// IDENTITY & LIFESTYLE TYPES
+// =============================================================================
+
+/**
+ * Types of SINner quality for real SINs
+ */
+export enum SinnerQuality {
+  National = "national",
+  Criminal = "criminal",
+  CorporateLimited = "corporate-limited",
+  CorporateBorn = "corporate-born",
+}
+
+/**
+ * SIN (System Identification Number) - can be fake or real
+ */
+export type SIN = 
+  | {
+      type: "fake";
+      rating: number; // 1-4 for fake SINs
+    }
+  | {
+      type: "real";
+      sinnerQuality: SinnerQuality; // References SINner quality level
+    };
+
+/**
+ * License tied to a SIN (fake or real)
+ */
+export interface License {
+  id?: ID;
+  type: "fake" | "real";
+  rating?: number; // 1-4 for fake licenses (must match SIN rating if fake)
+  name: string; // License name/type (e.g., "Firearms License", "Driver's License")
+  sinId?: ID; // Reference to the SIN this license is tied to
+  notes?: string;
+}
+
+/**
+ * Identity represents a character's persona with SIN and licenses
+ */
+export interface Identity {
+  id?: ID;
+  name: string; // Identity name (e.g., "John Smith", "Jane Doe")
+  sin: SIN; // Exactly one SIN (fake or real)
+  licenses: License[]; // 0+ licenses tied to this identity's SIN
+  associatedLifestyleId?: ID; // Optional reference to a lifestyle
+  notes?: string;
+}
+
+/**
+ * Lifestyle modification (positive or negative cost modifier)
+ */
+export interface LifestyleModification {
+  id?: ID;
+  catalogId?: string; // Reference to ruleset modification ID
+  name: string;
+  type: "positive" | "negative";
+  modifierType: "percentage" | "fixed";
+  modifier: number; // Percentage (e.g., 20 for +20%) or fixed cost (e.g., 1000 for +1,000¥)
+  effects?: string; // Optional game effects description
+  notes?: string;
+}
+
+/**
+ * Lifestyle subscription (e.g., DocWagon, food service)
+ */
+export interface LifestyleSubscription {
+  id?: ID;
+  catalogId?: string; // Reference to ruleset subscription ID
+  name: string;
+  monthlyCost: number;
+  category?: string; // e.g., "medical", "security", "food", "entertainment"
+  notes?: string;
+}
+
+/**
+ * Lifestyle represents a character's living conditions
+ */
 export interface Lifestyle {
-  type: string; // "Street", "Squatter", "Low", "Medium", "High", "Luxury"
+  id?: ID;
+  type: string; // Lifestyle type ID (e.g., "street", "squatter", "low", "medium", "high", "luxury")
   monthlyCost: number;
   prepaidMonths?: number;
   location?: string;
+  modifications?: LifestyleModification[]; // Lifestyle modifications (positive/negative) - includes "Permanent Lifestyle" modification
+  subscriptions?: LifestyleSubscription[]; // Subscriptions (DocWagon, food service, etc.)
+  customExpenses?: number; // Custom monthly expenses
+  customIncome?: number; // Custom monthly income
   notes?: string;
 }
 
