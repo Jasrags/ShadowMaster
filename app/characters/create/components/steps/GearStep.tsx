@@ -1,16 +1,30 @@
 "use client";
 
-import { useState, useMemo } from "react";
-import type { CreationState, GearItem, Weapon, ArmorItem, InstalledWeaponMod, InstalledArmorMod, WeaponMount } from "@/lib/types";
+import { useState, useMemo, useCallback } from "react";
+import type { CreationState, GearItem, Weapon, ArmorItem, InstalledWeaponMod, InstalledArmorMod, WeaponMount, CyberwareItem, BiowareItem } from "@/lib/types";
 import type { FocusItem } from "@/lib/types/character";
 import type { FocusType } from "@/lib/types/edition";
 import {
   useGear,
   useFoci,
+  useCyberware,
+  useBioware,
+  useAugmentationRules,
+  useCyberwareGrades,
+  useBiowareGrades,
+  calculateCyberwareEssenceCost,
+  calculateCyberwareCost,
+  calculateCyberwareAvailability,
+  calculateBiowareEssenceCost,
+  calculateBiowareCost,
+  calculateBiowareAvailability,
+  calculateMagicLoss,
   type GearItemData,
   type WeaponData,
   type ArmorData,
   type FocusCatalogItemData,
+  type CyberwareCatalogItemData,
+  type BiowareCatalogItemData,
 } from "@/lib/rules/RulesetContext";
 import { ModificationModal } from "../ModificationModal";
 
@@ -24,6 +38,7 @@ type GearCategory =
   | "all"
   | "weapons"
   | "armor"
+  | "augmentations"
   | "commlinks"
   | "cyberdecks"
   | "electronics"
@@ -34,6 +49,37 @@ type GearCategory =
   | "miscellaneous"
   | "ammunition"
   | "foci";
+
+type AugmentationSubcategory = "cyberware" | "bioware";
+
+type CyberwareCategory =
+  | "all"
+  | "headware"
+  | "eyeware"
+  | "earware"
+  | "bodyware"
+  | "cyberlimb"
+  | "cyberlimb-enhancement"
+  | "cyberlimb-accessory";
+
+type BiowareCategory = "all" | "basic" | "cultured";
+
+const CYBERWARE_CATEGORIES: Array<{ id: CyberwareCategory; label: string }> = [
+  { id: "all", label: "All" },
+  { id: "headware", label: "Headware" },
+  { id: "eyeware", label: "Eyeware" },
+  { id: "earware", label: "Earware" },
+  { id: "bodyware", label: "Bodyware" },
+  { id: "cyberlimb", label: "Cyberlimbs" },
+  { id: "cyberlimb-enhancement", label: "Enhancements" },
+  { id: "cyberlimb-accessory", label: "Accessories" },
+];
+
+const BIOWARE_CATEGORIES: Array<{ id: BiowareCategory; label: string }> = [
+  { id: "all", label: "All" },
+  { id: "basic", label: "Basic" },
+  { id: "cultured", label: "Cultured" },
+];
 
 type WeaponSubcategory =
   | "all"
@@ -59,10 +105,25 @@ function formatCurrency(value: number): string {
   }).format(value);
 }
 
+function formatEssence(value: number): string {
+  return value.toFixed(2);
+}
+
 function getAvailabilityDisplay(item: GearItemData): string {
   let display = String(item.availability);
   if (item.restricted) display += "R";
   if (item.forbidden) display += "F";
+  return display;
+}
+
+function getAugmentationAvailabilityDisplay(
+  availability: number,
+  restricted?: boolean,
+  forbidden?: boolean
+): string {
+  let display = String(availability);
+  if (restricted) display += "R";
+  if (forbidden) display += "F";
   return display;
 }
 
@@ -73,11 +134,20 @@ function isItemAvailable(item: GearItemData): boolean {
 export function GearStep({ state, updateState, budgetValues }: StepProps) {
   const gearCatalog = useGear();
   const fociCatalog = useFoci();
+  const cyberwareCatalog = useCyberware({ excludeForbidden: false });
+  const biowareCatalog = useBioware({ excludeForbidden: false });
+  const augmentationRules = useAugmentationRules();
+  const cyberwareGrades = useCyberwareGrades();
+  const biowareGrades = useBiowareGrades();
 
   const [selectedCategory, setSelectedCategory] = useState<GearCategory>("all");
   const [weaponSubcategory, setWeaponSubcategory] = useState<WeaponSubcategory>("all");
+  const [augmentationSubcategory, setAugmentationSubcategory] = useState<AugmentationSubcategory>("cyberware");
+  const [cyberwareCategory, setCyberwareCategory] = useState<CyberwareCategory>("all");
+  const [biowareCategory, setBiowareCategory] = useState<BiowareCategory>("all");
   const [searchQuery, setSearchQuery] = useState("");
   const [showUnavailable, setShowUnavailable] = useState(false);
+  const [selectedGrades, setSelectedGrades] = useState<Record<string, string>>({});
 
   // Modification modal state
   const [modModalOpen, setModModalOpen] = useState(false);
@@ -88,10 +158,14 @@ export function GearStep({ state, updateState, budgetValues }: StepProps) {
   const selectedWeapons: Weapon[] = (state.selections?.weapons as Weapon[]) || [];
   const selectedArmor: ArmorItem[] = (state.selections?.armor as ArmorItem[]) || [];
   const selectedFoci: FocusItem[] = (state.selections?.foci as FocusItem[]) || [];
-  
+  const selectedCyberware: CyberwareItem[] = (state.selections?.cyberware as CyberwareItem[]) || [];
+  const selectedBioware: BiowareItem[] = (state.selections?.bioware as BiowareItem[]) || [];
+
   // Check if character is magical
   const magicPath = (state.selections?.["magical-path"] as string) || "mundane";
   const isMagical = ["magician", "mystic-adept", "aspected-mage"].includes(magicPath);
+  const isTechnomancer = magicPath === "technomancer";
+  const hasSpecialAttribute = isMagical || isTechnomancer;
 
   // Karma-to-nuyen conversion is tracked globally in CreationState budgets
   const karmaConversion = (state.budgets?.["karma-spent-gear"] as number) || 0;
@@ -138,11 +212,49 @@ export function GearStep({ state, updateState, budgetValues }: StepProps) {
     return sum + baseCost + modsCost;
   }, 0);
   const fociSpent = selectedFoci.reduce((sum, focus) => sum + focus.cost, 0);
-  const augmentationSpent = (state.budgets["nuyen-spent-augmentations"] as number) || 0;
+  const cyberwareSpent = selectedCyberware.reduce((sum, item) => sum + item.cost, 0);
+  const biowareSpent = selectedBioware.reduce((sum, item) => sum + item.cost, 0);
+  const augmentationSpent = cyberwareSpent + biowareSpent;
   const lifestyleSpent = (state.budgets["nuyen-spent-lifestyle"] as number) || 0;
   const identitySpent = (state.budgets["nuyen-spent-identities"] as number) || 0;
   const totalSpent = gearSpent + weaponsSpent + armorSpent + fociSpent + augmentationSpent + lifestyleSpent + identitySpent;
   const remaining = totalNuyen - totalSpent;
+
+  // Calculate essence values
+  const maxEssence = augmentationRules.maxEssence;
+  const cyberwareEssence = selectedCyberware.reduce((sum, item) => sum + item.essenceCost, 0);
+  const biowareEssence = selectedBioware.reduce((sum, item) => sum + item.essenceCost, 0);
+  const totalEssenceLoss = Math.round((cyberwareEssence + biowareEssence) * 100) / 100;
+  const remainingEssence = Math.round((maxEssence - totalEssenceLoss) * 100) / 100;
+  const magicLoss = calculateMagicLoss(totalEssenceLoss, augmentationRules.magicReductionFormula);
+
+  // Calculate attribute bonuses from all augmentations
+  const attributeBonuses = useMemo(() => {
+    const bonuses: Record<string, number> = {};
+    for (const item of selectedCyberware) {
+      if (item.attributeBonuses) {
+        for (const [attr, bonus] of Object.entries(item.attributeBonuses)) {
+          bonuses[attr] = (bonuses[attr] || 0) + bonus;
+        }
+      }
+    }
+    for (const item of selectedBioware) {
+      if (item.attributeBonuses) {
+        for (const [attr, bonus] of Object.entries(item.attributeBonuses)) {
+          bonuses[attr] = (bonuses[attr] || 0) + bonus;
+        }
+      }
+    }
+    return bonuses;
+  }, [selectedCyberware, selectedBioware]);
+
+  // Get selected grade for an item
+  const getItemGrade = useCallback(
+    (itemId: string, defaultGrade: string = "standard"): string => {
+      return selectedGrades[itemId] || defaultGrade;
+    },
+    [selectedGrades]
+  );
 
   // Helper to add gear item - routes weapons and armor to separate lists
   const addGearItem = (item: GearItemData) => {
@@ -356,7 +468,197 @@ export function GearStep({ state, updateState, budgetValues }: StepProps) {
     });
   };
 
+  // Check if augmentation can be added
+  const canAddAugmentation = useCallback(
+    (
+      itemCost: number,
+      essenceCost: number,
+      availability: number,
+      newBonuses?: Record<string, number>,
+      forbidden?: boolean
+    ): { allowed: boolean; reason?: string } => {
+      if (forbidden) {
+        return { allowed: false, reason: "Forbidden items not allowed at creation" };
+      }
+      if (availability > augmentationRules.maxAvailabilityAtCreation) {
+        return {
+          allowed: false,
+          reason: `Availability ${availability} exceeds ${augmentationRules.maxAvailabilityAtCreation}`,
+        };
+      }
+      if (itemCost > remaining) {
+        return { allowed: false, reason: "Insufficient nuyen" };
+      }
+      if (essenceCost > remainingEssence) {
+        return { allowed: false, reason: "Insufficient essence" };
+      }
+      if (newBonuses) {
+        for (const [attr, bonus] of Object.entries(newBonuses)) {
+          const currentBonus = attributeBonuses[attr] || 0;
+          if (currentBonus + bonus > augmentationRules.maxAttributeBonus) {
+            return {
+              allowed: false,
+              reason: `${attr} bonus would exceed +${augmentationRules.maxAttributeBonus}`,
+            };
+          }
+        }
+      }
+      return { allowed: true };
+    },
+    [augmentationRules, remaining, remainingEssence, attributeBonuses]
+  );
 
+  // Add cyberware
+  const addCyberware = useCallback(
+    (item: CyberwareCatalogItemData, grade: string, rating?: number) => {
+      const essenceCost = calculateCyberwareEssenceCost(
+        item.essenceCost,
+        grade,
+        cyberwareGrades,
+        rating,
+        item.essencePerRating
+      );
+      const cost = calculateCyberwareCost(
+        item.cost,
+        grade,
+        cyberwareGrades,
+        rating,
+        item.costPerRating
+      );
+      const availability = calculateCyberwareAvailability(item.availability, grade, cyberwareGrades);
+
+      let itemBonuses: Record<string, number> | undefined;
+      if (item.attributeBonuses || item.attributeBonusesPerRating) {
+        itemBonuses = {};
+        if (item.attributeBonuses) {
+          for (const [attr, bonus] of Object.entries(item.attributeBonuses)) {
+            itemBonuses[attr] = bonus;
+          }
+        }
+        if (item.attributeBonusesPerRating && rating) {
+          for (const [attr, bonus] of Object.entries(item.attributeBonusesPerRating)) {
+            itemBonuses[attr] = (itemBonuses[attr] || 0) + bonus * rating;
+          }
+        }
+      }
+
+      const check = canAddAugmentation(cost, essenceCost, availability, itemBonuses, item.forbidden);
+      if (!check.allowed) return;
+
+      const newItem: CyberwareItem = {
+        id: crypto.randomUUID(),
+        catalogId: item.id,
+        name: item.name,
+        category: item.category as CyberwareItem["category"],
+        grade: grade as CyberwareItem["grade"],
+        baseEssenceCost: item.essenceCost,
+        essenceCost,
+        rating,
+        cost,
+        availability,
+        restricted: item.restricted,
+        forbidden: item.forbidden,
+        attributeBonuses: itemBonuses,
+        initiativeDiceBonus: item.initiativeDiceBonus,
+        capacity: item.capacity,
+        capacityUsed: 0,
+        wirelessBonus: item.wirelessBonus,
+      };
+
+      updateState({
+        selections: {
+          ...state.selections,
+          cyberware: [...selectedCyberware, newItem],
+        },
+      });
+    },
+    [cyberwareGrades, canAddAugmentation, selectedCyberware, state.selections, updateState]
+  );
+
+  // Add bioware
+  const addBioware = useCallback(
+    (item: BiowareCatalogItemData, grade: string, rating?: number) => {
+      const essenceCost = calculateBiowareEssenceCost(
+        item.essenceCost,
+        grade,
+        biowareGrades,
+        rating,
+        item.essencePerRating
+      );
+      const cost = calculateBiowareCost(
+        item.cost,
+        grade,
+        biowareGrades,
+        rating,
+        item.costPerRating
+      );
+      const availability = calculateBiowareAvailability(item.availability, grade, biowareGrades);
+
+      let itemBonuses: Record<string, number> | undefined;
+      if (item.attributeBonuses || item.attributeBonusesPerRating) {
+        itemBonuses = {};
+        if (item.attributeBonuses) {
+          for (const [attr, bonus] of Object.entries(item.attributeBonuses)) {
+            itemBonuses[attr] = bonus;
+          }
+        }
+        if (item.attributeBonusesPerRating && rating) {
+          for (const [attr, bonus] of Object.entries(item.attributeBonusesPerRating)) {
+            itemBonuses[attr] = (itemBonuses[attr] || 0) + bonus * rating;
+          }
+        }
+      }
+
+      const check = canAddAugmentation(cost, essenceCost, availability, itemBonuses, item.forbidden);
+      if (!check.allowed) return;
+
+      const newItem: BiowareItem = {
+        id: crypto.randomUUID(),
+        catalogId: item.id,
+        name: item.name,
+        category: item.category as BiowareItem["category"],
+        grade: grade as BiowareItem["grade"],
+        baseEssenceCost: item.essenceCost,
+        essenceCost,
+        rating,
+        cost,
+        availability,
+        restricted: item.restricted,
+        forbidden: item.forbidden,
+        attributeBonuses: itemBonuses,
+      };
+
+      updateState({
+        selections: {
+          ...state.selections,
+          bioware: [...selectedBioware, newItem],
+        },
+      });
+    },
+    [biowareGrades, canAddAugmentation, selectedBioware, state.selections, updateState]
+  );
+
+  // Remove cyberware
+  const removeCyberware = (index: number) => {
+    const updatedCyberware = selectedCyberware.filter((_, i) => i !== index);
+    updateState({
+      selections: {
+        ...state.selections,
+        cyberware: updatedCyberware,
+      },
+    });
+  };
+
+  // Remove bioware
+  const removeBioware = (index: number) => {
+    const updatedBioware = selectedBioware.filter((_, i) => i !== index);
+    updateState({
+      selections: {
+        ...state.selections,
+        bioware: updatedBioware,
+      },
+    });
+  };
 
   // Helper to add focus
   const addFocus = (focusCatalogItem: FocusCatalogItemData, force: number, bonded: boolean) => {
@@ -545,6 +847,108 @@ export function GearStep({ state, updateState, budgetValues }: StepProps) {
     return items;
   }, [allGearItems, selectedCategory, weaponSubcategory, searchQuery, showUnavailable]);
 
+  // Filter cyberware catalog
+  const filteredCyberware = useMemo(() => {
+    if (!cyberwareCatalog) return [];
+
+    let items = [...cyberwareCatalog.catalog];
+
+    // Filter by category
+    if (cyberwareCategory !== "all") {
+      items = items.filter((item) => item.category === cyberwareCategory);
+    }
+
+    // Filter by search
+    if (searchQuery) {
+      const query = searchQuery.toLowerCase();
+      items = items.filter(
+        (item) =>
+          item.name.toLowerCase().includes(query) ||
+          item.description?.toLowerCase().includes(query)
+      );
+    }
+
+    // Filter by availability
+    if (!showUnavailable) {
+      items = items.filter((item) => {
+        const grade = getItemGrade(item.id);
+        const adjustedAvail = calculateCyberwareAvailability(
+          item.availability,
+          grade,
+          cyberwareGrades
+        );
+        return (
+          adjustedAvail <= augmentationRules.maxAvailabilityAtCreation &&
+          !item.forbidden
+        );
+      });
+    }
+
+    // Sort by name
+    items.sort((a, b) => a.name.localeCompare(b.name));
+
+    return items;
+  }, [
+    cyberwareCatalog,
+    cyberwareCategory,
+    searchQuery,
+    showUnavailable,
+    getItemGrade,
+    cyberwareGrades,
+    augmentationRules.maxAvailabilityAtCreation,
+  ]);
+
+  // Filter bioware catalog
+  const filteredBioware = useMemo(() => {
+    if (!biowareCatalog) return [];
+
+    let items = [...biowareCatalog.catalog];
+
+    // Filter by category
+    if (biowareCategory !== "all") {
+      items = items.filter((item) => item.category === biowareCategory);
+    }
+
+    // Filter by search
+    if (searchQuery) {
+      const query = searchQuery.toLowerCase();
+      items = items.filter(
+        (item) =>
+          item.name.toLowerCase().includes(query) ||
+          item.description?.toLowerCase().includes(query)
+      );
+    }
+
+    // Filter by availability
+    if (!showUnavailable) {
+      items = items.filter((item) => {
+        const grade = getItemGrade(item.id);
+        const adjustedAvail = calculateBiowareAvailability(
+          item.availability,
+          grade,
+          biowareGrades
+        );
+        return (
+          adjustedAvail <= augmentationRules.maxAvailabilityAtCreation &&
+          !item.forbidden
+        );
+      });
+    }
+
+    // Sort by name
+    items.sort((a, b) => a.name.localeCompare(b.name));
+
+    return items;
+  }, [
+    biowareCatalog,
+    biowareCategory,
+    searchQuery,
+    showUnavailable,
+    getItemGrade,
+    biowareGrades,
+    augmentationRules.maxAvailabilityAtCreation,
+  ]);
+
   if (!gearCatalog) {
     return (
       <div className="rounded-lg border border-amber-200 bg-amber-50 p-4 dark:border-amber-800 dark:bg-amber-900/20">
@@ -647,6 +1051,7 @@ export function GearStep({ state, updateState, budgetValues }: StepProps) {
             { id: "all", label: "All" },
             { id: "weapons", label: "Weapons" },
             { id: "armor", label: "Armor" },
+            { id: "augmentations", label: "Augmentations" },
             { id: "commlinks", label: "Commlinks" },
             { id: "cyberdecks", label: "Cyberdecks" },
             { id: "electronics", label: "Electronics" },
@@ -662,6 +1067,10 @@ export function GearStep({ state, updateState, budgetValues }: StepProps) {
               onClick={() => {
                 setSelectedCategory(cat.id as GearCategory);
                 if (cat.id !== "weapons") setWeaponSubcategory("all");
+                if (cat.id !== "augmentations") {
+                  setCyberwareCategory("all");
+                  setBiowareCategory("all");
+                }
               }}
               className={`px-3 py-1.5 text-xs font-medium transition-colors ${selectedCategory === cat.id
                   ? "border-b-2 border-emerald-500 text-emerald-600 dark:text-emerald-400"
@@ -698,6 +1107,378 @@ export function GearStep({ state, updateState, budgetValues }: StepProps) {
                 {sub.label}
               </button>
             ))}
+          </div>
+        )}
+
+        {/* Augmentations Section */}
+        {selectedCategory === "augmentations" && (
+          <div className="space-y-4">
+            {/* Essence Summary */}
+            <div className="rounded-lg border border-zinc-200 bg-zinc-50 p-3 dark:border-zinc-700 dark:bg-zinc-800/50">
+              <div className="grid grid-cols-2 gap-4 sm:grid-cols-4">
+                <div>
+                  <p className="text-xs text-zinc-500 dark:text-zinc-400">Essence</p>
+                  <p
+                    className={`text-lg font-semibold ${remainingEssence < 1
+                        ? "text-red-600 dark:text-red-400"
+                        : remainingEssence < 3
+                          ? "text-amber-600 dark:text-amber-400"
+                          : "text-emerald-600 dark:text-emerald-400"
+                      }`}
+                  >
+                    {formatEssence(remainingEssence)} / {maxEssence}
+                  </p>
+                  <div className="mt-1 h-2 w-full overflow-hidden rounded-full bg-zinc-200 dark:bg-zinc-700">
+                    <div
+                      className={`h-full transition-all ${remainingEssence < 1
+                          ? "bg-red-500"
+                          : remainingEssence < 3
+                            ? "bg-amber-500"
+                            : "bg-emerald-500"
+                        }`}
+                      style={{ width: `${(remainingEssence / maxEssence) * 100}%` }}
+                    />
+                  </div>
+                </div>
+                <div>
+                  <p className="text-xs text-zinc-500 dark:text-zinc-400">Aug. Cost</p>
+                  <p className="text-lg font-semibold text-zinc-700 dark:text-zinc-300">
+                    ¥{formatCurrency(augmentationSpent)}
+                  </p>
+                </div>
+                {hasSpecialAttribute && (
+                  <div>
+                    <p className="text-xs text-zinc-500 dark:text-zinc-400">
+                      {isTechnomancer ? "Resonance" : "Magic"} Loss
+                    </p>
+                    <p
+                      className={`text-lg font-semibold ${magicLoss > 0 ? "text-red-600 dark:text-red-400" : "text-zinc-700 dark:text-zinc-300"
+                        }`}
+                    >
+                      -{magicLoss}
+                    </p>
+                  </div>
+                )}
+              </div>
+            </div>
+
+            {/* Attribute Bonuses */}
+            {Object.keys(attributeBonuses).length > 0 && (
+              <div className="rounded-lg border border-blue-200 bg-blue-50 p-2 dark:border-blue-800 dark:bg-blue-900/20">
+                <p className="text-xs font-medium text-blue-800 dark:text-blue-200">
+                  Attribute Bonuses:
+                </p>
+                <div className="mt-1 flex flex-wrap gap-1">
+                  {Object.entries(attributeBonuses).map(([attr, bonus]) => (
+                    <span
+                      key={attr}
+                      className={`rounded-full px-2 py-0.5 text-xs font-medium ${bonus >= augmentationRules.maxAttributeBonus
+                          ? "bg-amber-100 text-amber-800 dark:bg-amber-900/50 dark:text-amber-200"
+                          : "bg-blue-100 text-blue-800 dark:bg-blue-900/50 dark:text-blue-200"
+                        }`}
+                    >
+                      +{bonus} {attr.charAt(0).toUpperCase() + attr.slice(1)}
+                      {bonus >= augmentationRules.maxAttributeBonus && " (max)"}
+                    </span>
+                  ))}
+                </div>
+              </div>
+            )}
+
+            {/* Cyberware/Bioware Tabs */}
+            <div className="flex gap-2 border-b border-zinc-200 dark:border-zinc-700">
+              <button
+                onClick={() => setAugmentationSubcategory("cyberware")}
+                className={`border-b-2 px-4 py-2 text-sm font-medium transition-colors ${augmentationSubcategory === "cyberware"
+                    ? "border-cyan-500 text-cyan-600 dark:text-cyan-400"
+                    : "border-transparent text-zinc-500 hover:text-zinc-700 dark:text-zinc-400 dark:hover:text-zinc-200"
+                  }`}
+              >
+                Cyberware ({filteredCyberware.length})
+                {selectedCyberware.length > 0 && (
+                  <span className="ml-2 rounded-full bg-cyan-100 px-2 py-0.5 text-xs text-cyan-700 dark:bg-cyan-900/50 dark:text-cyan-300">
+                    {selectedCyberware.length}
+                  </span>
+                )}
+              </button>
+              <button
+                onClick={() => setAugmentationSubcategory("bioware")}
+                className={`border-b-2 px-4 py-2 text-sm font-medium transition-colors ${augmentationSubcategory === "bioware"
+                    ? "border-green-500 text-green-600 dark:text-green-400"
+                    : "border-transparent text-zinc-500 hover:text-zinc-700 dark:text-zinc-400 dark:hover:text-zinc-200"
+                  }`}
+              >
+                Bioware ({filteredBioware.length})
+                {selectedBioware.length > 0 && (
+                  <span className="ml-2 rounded-full bg-green-100 px-2 py-0.5 text-xs text-green-700 dark:bg-green-900/50 dark:text-green-300">
+                    {selectedBioware.length}
+                  </span>
+                )}
+              </button>
+            </div>
+
+            {/* Category Filters */}
+            <div className="flex flex-wrap gap-1">
+              {augmentationSubcategory === "cyberware"
+                ? CYBERWARE_CATEGORIES.map((cat) => (
+                    <button
+                      key={cat.id}
+                      onClick={() => setCyberwareCategory(cat.id)}
+                      className={`rounded-full px-2 py-1 text-xs transition-colors ${cyberwareCategory === cat.id
+                          ? "bg-cyan-100 text-cyan-800 dark:bg-cyan-900/50 dark:text-cyan-100"
+                          : "bg-zinc-100 text-zinc-600 hover:bg-zinc-200 dark:bg-zinc-700 dark:text-zinc-400"
+                        }`}
+                    >
+                      {cat.label}
+                    </button>
+                  ))
+                : BIOWARE_CATEGORIES.map((cat) => (
+                    <button
+                      key={cat.id}
+                      onClick={() => setBiowareCategory(cat.id)}
+                      className={`rounded-full px-2 py-1 text-xs transition-colors ${biowareCategory === cat.id
+                          ? "bg-green-100 text-green-800 dark:bg-green-900/50 dark:text-green-100"
+                          : "bg-zinc-100 text-zinc-600 hover:bg-zinc-200 dark:bg-zinc-700 dark:text-zinc-400"
+                        }`}
+                    >
+                      {cat.label}
+                    </button>
+                  ))}
+            </div>
+
+            {/* Augmentation Table */}
+            <div className="max-h-96 overflow-y-auto rounded-lg border border-zinc-200 dark:border-zinc-700">
+              <table className="w-full text-sm">
+                <thead className="sticky top-0 bg-zinc-100 dark:bg-zinc-800">
+                  <tr>
+                    <th className="px-3 py-2 text-left">Item</th>
+                    <th className="px-3 py-2 text-center">Essence</th>
+                    <th className="px-3 py-2 text-right">Cost</th>
+                    <th className="px-3 py-2 text-center">Avail</th>
+                    <th className="px-3 py-2 text-center w-24">Grade</th>
+                    <th className="px-3 py-2 text-center">Action</th>
+                  </tr>
+                </thead>
+                <tbody className="divide-y divide-zinc-100 dark:divide-zinc-700">
+                  {augmentationSubcategory === "cyberware"
+                    ? filteredCyberware.map((item) => {
+                        const grade = getItemGrade(item.id);
+                        const essenceCost = calculateCyberwareEssenceCost(
+                          item.essenceCost,
+                          grade,
+                          cyberwareGrades,
+                          item.hasRating ? 1 : undefined,
+                          item.essencePerRating
+                        );
+                        const cost = calculateCyberwareCost(
+                          item.cost,
+                          grade,
+                          cyberwareGrades,
+                          item.hasRating ? 1 : undefined,
+                          item.costPerRating
+                        );
+                        const availability = calculateCyberwareAvailability(item.availability, grade, cyberwareGrades);
+                        const check = canAddAugmentation(cost, essenceCost, availability, item.attributeBonuses, item.forbidden);
+
+                        return (
+                          <tr
+                            key={item.id}
+                            className={`${!check.allowed ? "opacity-50" : ""} hover:bg-zinc-50 dark:hover:bg-zinc-800/50`}
+                          >
+                            <td className="px-3 py-2">
+                              <p className="font-medium">{item.name}</p>
+                              {item.description && (
+                                <p className="text-xs text-zinc-500 dark:text-zinc-400 truncate max-w-xs">
+                                  {item.description}
+                                </p>
+                              )}
+                              {item.attributeBonuses && (
+                                <p className="text-xs text-emerald-600 dark:text-emerald-400">
+                                  {Object.entries(item.attributeBonuses)
+                                    .map(([attr, bonus]) => `+${bonus} ${attr.toUpperCase()}`)
+                                    .join(", ")}
+                                </p>
+                              )}
+                              {item.capacity && item.capacity > 0 && (
+                                <p className="text-xs text-blue-600 dark:text-blue-400">
+                                  Capacity: {item.capacity}
+                                </p>
+                              )}
+                            </td>
+                            <td className="px-3 py-2 text-center">
+                              <span className="text-amber-600 dark:text-amber-400">{formatEssence(essenceCost)}</span>
+                            </td>
+                            <td className="px-3 py-2 text-right">¥{formatCurrency(cost)}</td>
+                            <td className="px-3 py-2 text-center">
+                              <span className={item.restricted ? "text-amber-600 dark:text-amber-400" : item.forbidden ? "text-red-600 dark:text-red-400" : ""}>
+                                {getAugmentationAvailabilityDisplay(availability, item.restricted, item.forbidden)}
+                              </span>
+                            </td>
+                            <td className="px-3 py-2">
+                              <select
+                                value={grade}
+                                onChange={(e) => setSelectedGrades((prev) => ({ ...prev, [item.id]: e.target.value }))}
+                                className="w-full rounded border border-zinc-300 bg-white px-2 py-1 text-xs dark:border-zinc-600 dark:bg-zinc-800"
+                              >
+                                {cyberwareGrades.map((g) => (
+                                  <option key={g.id} value={g.id}>{g.name}</option>
+                                ))}
+                              </select>
+                            </td>
+                            <td className="px-3 py-2 text-center">
+                              <button
+                                onClick={() => addCyberware(item, grade, item.hasRating ? 1 : undefined)}
+                                disabled={!check.allowed}
+                                title={check.reason}
+                                className={`rounded px-2 py-1 text-xs font-medium transition-colors ${check.allowed
+                                    ? "bg-emerald-500 text-white hover:bg-emerald-600"
+                                    : "cursor-not-allowed bg-zinc-200 text-zinc-400 dark:bg-zinc-700"
+                                  }`}
+                              >
+                                Add
+                              </button>
+                            </td>
+                          </tr>
+                        );
+                      })
+                    : filteredBioware.map((item) => {
+                        const grade = getItemGrade(item.id);
+                        const essenceCost = calculateBiowareEssenceCost(
+                          item.essenceCost,
+                          grade,
+                          biowareGrades,
+                          item.hasRating ? 1 : undefined,
+                          item.essencePerRating
+                        );
+                        const cost = calculateBiowareCost(
+                          item.cost,
+                          grade,
+                          biowareGrades,
+                          item.hasRating ? 1 : undefined,
+                          item.costPerRating
+                        );
+                        const availability = calculateBiowareAvailability(item.availability, grade, biowareGrades);
+                        const check = canAddAugmentation(cost, essenceCost, availability, item.attributeBonuses, item.forbidden);
+
+                        return (
+                          <tr
+                            key={item.id}
+                            className={`${!check.allowed ? "opacity-50" : ""} hover:bg-zinc-50 dark:hover:bg-zinc-800/50`}
+                          >
+                            <td className="px-3 py-2">
+                              <p className="font-medium">{item.name}</p>
+                              {item.description && (
+                                <p className="text-xs text-zinc-500 dark:text-zinc-400 truncate max-w-xs">
+                                  {item.description}
+                                </p>
+                              )}
+                              {item.attributeBonuses && (
+                                <p className="text-xs text-emerald-600 dark:text-emerald-400">
+                                  {Object.entries(item.attributeBonuses)
+                                    .map(([attr, bonus]) => `+${bonus} ${attr.toUpperCase()}`)
+                                    .join(", ")}
+                                </p>
+                              )}
+                            </td>
+                            <td className="px-3 py-2 text-center">
+                              <span className="text-amber-600 dark:text-amber-400">{formatEssence(essenceCost)}</span>
+                            </td>
+                            <td className="px-3 py-2 text-right">¥{formatCurrency(cost)}</td>
+                            <td className="px-3 py-2 text-center">
+                              <span className={item.restricted ? "text-amber-600 dark:text-amber-400" : item.forbidden ? "text-red-600 dark:text-red-400" : ""}>
+                                {getAugmentationAvailabilityDisplay(availability, item.restricted, item.forbidden)}
+                              </span>
+                            </td>
+                            <td className="px-3 py-2">
+                              <select
+                                value={grade}
+                                onChange={(e) => setSelectedGrades((prev) => ({ ...prev, [item.id]: e.target.value }))}
+                                className="w-full rounded border border-zinc-300 bg-white px-2 py-1 text-xs dark:border-zinc-600 dark:bg-zinc-800"
+                              >
+                                {biowareGrades.map((g) => (
+                                  <option key={g.id} value={g.id}>{g.name}</option>
+                                ))}
+                              </select>
+                            </td>
+                            <td className="px-3 py-2 text-center">
+                              <button
+                                onClick={() => addBioware(item, grade, item.hasRating ? 1 : undefined)}
+                                disabled={!check.allowed}
+                                title={check.reason}
+                                className={`rounded px-2 py-1 text-xs font-medium transition-colors ${check.allowed
+                                    ? "bg-emerald-500 text-white hover:bg-emerald-600"
+                                    : "cursor-not-allowed bg-zinc-200 text-zinc-400 dark:bg-zinc-700"
+                                  }`}
+                              >
+                                Add
+                              </button>
+                            </td>
+                          </tr>
+                        );
+                      })}
+                  {((augmentationSubcategory === "cyberware" && filteredCyberware.length === 0) ||
+                    (augmentationSubcategory === "bioware" && filteredBioware.length === 0)) && (
+                    <tr>
+                      <td colSpan={6} className="px-3 py-8 text-center text-zinc-500">
+                        No items found matching your criteria.
+                      </td>
+                    </tr>
+                  )}
+                </tbody>
+              </table>
+            </div>
+
+            {/* Selected Augmentations */}
+            {(selectedCyberware.length > 0 || selectedBioware.length > 0) && (
+              <div className="space-y-3">
+                {selectedCyberware.length > 0 && (
+                  <div className="rounded-lg border border-zinc-200 bg-zinc-50 p-3 dark:border-zinc-700 dark:bg-zinc-800/50">
+                    <h4 className="text-sm font-semibold text-cyan-700 dark:text-cyan-300">Cyberware</h4>
+                    <div className="mt-2 space-y-1">
+                      {selectedCyberware.map((item, index) => (
+                        <div key={item.id || index} className="flex items-center justify-between text-xs">
+                          <div className="flex-1">
+                            <span className="font-medium">{item.name}</span>
+                            <span className="ml-2 text-zinc-500 dark:text-zinc-400">
+                              ({item.grade}) | ESS: {formatEssence(item.essenceCost)} | ¥{formatCurrency(item.cost)}
+                            </span>
+                          </div>
+                          <button
+                            onClick={() => removeCyberware(index)}
+                            className="text-red-500 hover:text-red-600"
+                          >
+                            ×
+                          </button>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                )}
+                {selectedBioware.length > 0 && (
+                  <div className="rounded-lg border border-zinc-200 bg-zinc-50 p-3 dark:border-zinc-700 dark:bg-zinc-800/50">
+                    <h4 className="text-sm font-semibold text-green-700 dark:text-green-300">Bioware</h4>
+                    <div className="mt-2 space-y-1">
+                      {selectedBioware.map((item, index) => (
+                        <div key={item.id || index} className="flex items-center justify-between text-xs">
+                          <div className="flex-1">
+                            <span className="font-medium">{item.name}</span>
+                            <span className="ml-2 text-zinc-500 dark:text-zinc-400">
+                              ({item.grade}) | ESS: {formatEssence(item.essenceCost)} | ¥{formatCurrency(item.cost)}
+                            </span>
+                          </div>
+                          <button
+                            onClick={() => removeBioware(index)}
+                            className="text-red-500 hover:text-red-600"
+                          >
+                            ×
+                          </button>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                )}
+              </div>
+            )}
           </div>
         )}
 
@@ -824,7 +1605,7 @@ export function GearStep({ state, updateState, budgetValues }: StepProps) {
         )}
 
         {/* Item List */}
-        {selectedCategory !== "foci" && (
+        {selectedCategory !== "foci" && selectedCategory !== "augmentations" && (
         <div className="max-h-96 overflow-y-auto rounded-lg border border-zinc-200 dark:border-zinc-700">
           <table className="w-full text-sm">
             <thead className="sticky top-0 bg-zinc-100 dark:bg-zinc-800">
