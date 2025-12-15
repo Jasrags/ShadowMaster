@@ -273,7 +273,7 @@ export function LifestyleEditor({
             </div>
           ) : (
             <p className="text-xs text-zinc-500 dark:text-zinc-400">
-              No modifications added. Click "Add Modification" to add lifestyle modifications.
+              No modifications added. Click &quot;Add Modification&quot; to add lifestyle modifications.
             </p>
           )}
         </div>
@@ -331,7 +331,7 @@ export function LifestyleEditor({
             </div>
           ) : (
             <p className="text-xs text-zinc-500 dark:text-zinc-400">
-              No subscriptions added. Click "Add Subscription" to add services like DocWagon contracts.
+              No subscriptions added. Click &quot;Add Subscription&quot; to add services like DocWagon contracts.
             </p>
           )}
         </div>

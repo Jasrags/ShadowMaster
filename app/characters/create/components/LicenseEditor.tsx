@@ -34,7 +34,6 @@ export function LicenseEditor({
   onCancel,
 }: LicenseEditorProps) {
   const [name, setName] = useState(license?.name || "");
-  const [type, setType] = useState<"fake" | "real">(license?.type || sinType);
   const [rating, setRating] = useState<number>(license?.rating || 1);
   const [notes, setNotes] = useState(license?.notes || "");
 
@@ -117,7 +116,7 @@ export function LicenseEditor({
             )}
           </div>
           <p className="mt-1 text-xs text-zinc-600 dark:text-zinc-400">
-            License type automatically matches the identity's SIN type.
+            License type automatically matches the identity&apos;s SIN type.
           </p>
         </div>
 

@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { Button, Dialog, DialogTrigger, Modal, OverlayArrow } from "react-aria-components";
+import { Button, Dialog, DialogTrigger, Modal } from "react-aria-components";
 import type { LifestyleModification } from "@/lib/types";
 
 interface LifestyleModificationSelectorProps {

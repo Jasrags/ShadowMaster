@@ -2,8 +2,7 @@
 
 import { useMemo, useCallback, useState } from "react";
 import { Button } from "react-aria-components";
-import type { CreationState, Identity, SIN, License, SinnerQuality, GearItem, Lifestyle } from "@/lib/types";
-import { useQualities } from "@/lib/rules";
+import type { CreationState, Identity, License, SinnerQuality, GearItem, Lifestyle } from "@/lib/types";
 import { useLifestyles, useLifestyleModifiers } from "@/lib/rules/RulesetContext";
 import { IdentityEditor } from "../IdentityEditor";
 import { LicenseEditor } from "../LicenseEditor";
@@ -27,13 +26,11 @@ interface StepProps {
 }
 
 export function IdentitiesStep({ state, updateState, budgetValues }: StepProps) {
-  const { negative: negativeQualities } = useQualities();
   const availableLifestyles = useLifestyles();
   const lifestyleModifiers = useLifestyleModifiers();
   const [editingIdentityIndex, setEditingIdentityIndex] = useState<number | null>(null);
   const [editingLicenseIndex, setEditingLicenseIndex] = useState<{ identityIndex: number; licenseIndex: number } | null>(null);
   const [editingLifestyleIndex, setEditingLifestyleIndex] = useState<{ identityIndex: number } | null>(null);
-  const [isAddingIdentity, setIsAddingIdentity] = useState(false);
 
   // Get identities from state
   const identities = useMemo(() => {
@@ -206,7 +203,6 @@ export function IdentitiesStep({ state, updateState, budgetValues }: StepProps) 
   // Cancel editing
   const handleCancelEdit = useCallback(() => {
     setEditingIdentityIndex(null);
-    setIsAddingIdentity(false);
     setEditingLicenseIndex(null);
     setEditingLifestyleIndex(null);
   }, []);
@@ -254,46 +250,6 @@ export function IdentitiesStep({ state, updateState, budgetValues }: StepProps) 
     });
   }, [identities, state.selections, updateState]);
 
-  // Save lifestyle (create or update) - used by IdentityEditor
-  const handleSaveLifestyle = useCallback((lifestyle: Lifestyle) => {
-    const updated = [...lifestyles];
-    const existingIndex = lifestyle.id 
-      ? updated.findIndex((l) => l.id === lifestyle.id)
-      : -1;
-    
-    let lifestyleWithId: Lifestyle;
-    if (existingIndex >= 0) {
-      // Update existing lifestyle
-      lifestyleWithId = lifestyle;
-      updated[existingIndex] = lifestyleWithId;
-    } else {
-      // Add new lifestyle
-      lifestyleWithId = lifestyle.id 
-        ? lifestyle 
-        : { ...lifestyle, id: `lifestyle-${crypto.randomUUID()}` };
-      updated.push(lifestyleWithId);
-      
-      // If this is the first lifestyle, set it as primary
-      const primaryLifestyleId = (state.selections.primaryLifestyleId as string) || undefined;
-      const newPrimaryId = updated.length === 1 ? lifestyleWithId.id : primaryLifestyleId;
-      
-      updateState({
-        selections: {
-          ...state.selections,
-          lifestyles: updated,
-          primaryLifestyleId: newPrimaryId,
-        },
-      });
-      return;
-    }
-    
-    updateState({
-      selections: {
-        ...state.selections,
-        lifestyles: updated,
-      },
-    });
-  }, [lifestyles, state.selections, updateState]);
 
   // Save lifestyle inline (from identity card)
   const handleSaveLifestyleInline = useCallback((identityIndex: number, lifestyle: Lifestyle) => {
@@ -401,7 +357,7 @@ export function IdentitiesStep({ state, updateState, budgetValues }: StepProps) 
       }
       
       // Licenses must match SIN type
-      identity.licenses?.forEach((license, licenseIndex) => {
+      identity.licenses?.forEach((license) => {
         if (identity.sin.type === "fake" && license.type !== "fake") {
           errors.push(`Identity "${identity.name || `Identity ${index + 1}`}" license "${license.name}" must be fake (identity uses fake SIN)`);
         }
@@ -705,7 +661,7 @@ export function IdentitiesStep({ state, updateState, budgetValues }: StepProps) 
                     </ul>
                   ) : (
                     <p className="mt-2 text-xs text-zinc-500 dark:text-zinc-400">
-                      No licenses added yet. Click "Add License" to add a license to this identity.
+                      No licenses added yet. Click &quot;Add License&quot; to add a license to this identity.
                     </p>
                   )}
                 </div>
@@ -794,7 +750,7 @@ export function IdentitiesStep({ state, updateState, budgetValues }: StepProps) 
                     </div>
                   ) : (
                     <p className="mt-2 text-xs text-zinc-500 dark:text-zinc-400">
-                      No lifestyle associated yet. Click "Add Lifestyle" to create or select a lifestyle for this identity.
+                      No lifestyle associated yet. Click &quot;Add Lifestyle&quot; to create or select a lifestyle for this identity.
                     </p>
                   )}
                 </div>

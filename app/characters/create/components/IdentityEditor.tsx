@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useMemo, useEffect } from "react";
+import { useState, useMemo } from "react";
 import { Button, RadioGroup, Radio } from "react-aria-components";
 import type { Identity, SIN, SinnerQuality, GearItem } from "@/lib/types";
 import { SinnerQuality as SinnerQualityEnum } from "@/lib/types/character";
@@ -27,26 +27,21 @@ export function IdentityEditor({
   const [fakeSINRating, setFakeSINRating] = useState<number>(
     identity.sin?.type === "fake" ? identity.sin.rating : 1
   );
-  const [selectedFakeSINGearId, setSelectedFakeSINGearId] = useState<string | null>(null);
+  // Initialize selected fake SIN gear if identity already has a fake SIN
+  const initialFakeSINGearId = useMemo(() => {
+    if (identity.sin?.type === "fake" && fakeSINsFromGear.length > 0) {
+      // For now, just select first available (simplified - in real implementation might need better matching)
+      return fakeSINsFromGear[0]?.id || null;
+    }
+    return null;
+  }, [identity.sin?.type, fakeSINsFromGear]);
+  
+  const [selectedFakeSINGearId, setSelectedFakeSINGearId] = useState<string | null>(initialFakeSINGearId);
   const [realSINQuality, setRealSINQuality] = useState<SinnerQuality>(
     identity.sin?.type === "real" 
       ? identity.sin.sinnerQuality 
       : (sinnerQualityLevel || SinnerQualityEnum.National)
   );
-
-  // Initialize selected fake SIN gear if identity already has a fake SIN
-  useEffect(() => {
-    if (identity.sin?.type === "fake" && fakeSINsFromGear.length > 0) {
-      // Try to match by rating (simplified - in real implementation might need better matching)
-      const matching = fakeSINsFromGear.find((gear) => {
-        // Extract rating from gear name or metadata if available
-        return true; // For now, just select first available
-      });
-      if (matching) {
-        setSelectedFakeSINGearId(matching.id || null);
-      }
-    }
-  }, [identity.sin, fakeSINsFromGear]);
 
   // Validation
   const isValid = useMemo(() => {

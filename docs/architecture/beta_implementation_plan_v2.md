@@ -2195,13 +2195,13 @@ This milestone establishes the TypeScript data structures for identities, lifest
 
 | Task | Description | Status |
 |------|-------------|--------|
-| B11.1.1 | Add Identity interface with name, SIN (fake/real), licenses array, and associatedLifestyleId | Not Started |
-| B11.1.2 | Add SIN type definition (fake with rating 1-4, real with sinnerQuality type) | Not Started |
-| B11.1.3 | Add License interface with type (fake/real), rating (1-4 for fake), name/type, and tied SIN reference | Not Started |
-| B11.1.4 | Add Lifestyle interface with type, monthlyCost, isPermanent, modifications, subscriptions, customExpenses, customIncome | Not Started |
-| B11.1.5 | Add LifestyleModification interface with type (positive/negative), modifier (percentage or fixed cost), and effects | Not Started |
-| B11.1.6 | Update Character interface to include identities array, primaryLifestyleId, lifestyles array, and optional sinnerQuality | Not Started |
-| B11.1.7 | Add SinnerQuality type enum (national, criminal, corporate-limited, corporate-born) | Not Started |
+| B11.1.1 | Add Identity interface with name, SIN (fake/real), licenses array, and associatedLifestyleId | ✅ Completed |
+| B11.1.2 | Add SIN type definition (fake with rating 1-4, real with sinnerQuality type) | ✅ Completed |
+| B11.1.3 | Add License interface with type (fake/real), rating (1-4 for fake), name/type, and tied SIN reference | ✅ Completed |
+| B11.1.4 | Add Lifestyle interface with type, monthlyCost, modifications, subscriptions, customExpenses, customIncome (isPermanent moved to modification) | ✅ Completed |
+| B11.1.5 | Add LifestyleModification interface with type (positive/negative), modifier (percentage or fixed cost), and effects | ✅ Completed |
+| B11.1.6 | Update Character interface to include identities array, primaryLifestyleId, lifestyles array, and optional sinnerQuality | ✅ Completed |
+| B11.1.7 | Add SinnerQuality type enum (national, criminal, corporate-limited, corporate-born) | ✅ Completed |
 
 **Tasks JSON:**
 ```json
@@ -2297,16 +2297,16 @@ This milestone integrates identity management into the character creation wizard
 
 | Task | Description | Status |
 |------|-------------|--------|
-| B11.2.1 | Create IdentitiesStep component with identity list, add/remove identity buttons | Not Started |
-| B11.2.2 | Create IdentityEditor component for editing identity name, SIN type, and SIN details | Not Started |
-| B11.2.3 | Integrate fake SIN purchase from GearStep (link fake SINs purchased as gear to identities) | Not Started |
-| B11.2.4 | Integrate real SIN from SINner quality (validate character has SINner quality if using real SIN) | Not Started |
-| B11.2.5 | Create LicenseEditor component for adding/editing licenses tied to SIN | Not Started |
-| B11.2.6 | Add validation: every identity must have exactly one SIN (fake or real) | Not Started |
-| B11.2.7 | Add validation: fake SINs must have rating 1-4, real SINs must reference SINner quality | Not Started |
-| B11.2.8 | Add validation: licenses must match SIN type (fake licenses for fake SIN, real licenses for real SIN) | Not Started |
-| B11.2.9 | Add validation: character must have at least one identity | Not Started |
-| B11.2.10 | Update CreationWizard to include IdentitiesStep in wizard flow (after GearStep, before ReviewStep) | Not Started |
+| B11.2.1 | Create IdentitiesStep component with identity list, add/remove identity buttons | ✅ Completed |
+| B11.2.2 | Create IdentityEditor component for editing identity name, SIN type, and SIN details | ✅ Completed |
+| B11.2.3 | Integrate fake SIN purchase from GearStep (link fake SINs purchased as gear to identities) | ✅ Completed |
+| B11.2.4 | Integrate real SIN from SINner quality (validate character has SINner quality if using real SIN) | ✅ Completed |
+| B11.2.5 | Create LicenseEditor component for adding/editing licenses tied to SIN | ✅ Completed |
+| B11.2.6 | Add validation: every identity must have exactly one SIN (fake or real) | ✅ Completed |
+| B11.2.7 | Add validation: fake SINs must have rating 1-4, real SINs must reference SINner quality | ✅ Completed |
+| B11.2.8 | Add validation: licenses must match SIN type (fake licenses for fake SIN, real licenses for real SIN) | ✅ Completed |
+| B11.2.9 | Add validation: character must have at least one identity | ✅ Completed |
+| B11.2.10 | Update CreationWizard to include IdentitiesStep in wizard flow (after GearStep, before ReviewStep) | ✅ Completed |
 
 **Tasks JSON:**
 ```json
@@ -2318,7 +2318,7 @@ This milestone integrates identity management into the character creation wizard
     "files": [
       "/app/characters/create/components/steps/IdentitiesStep.tsx"
     ],
-    "status": "Not Started",
+    "status": "Completed",
     "dependsOn": ["B11.1.6"]
   },
   {
@@ -2569,11 +2569,11 @@ This milestone updates the ReviewStep to display identities, SINs, licenses, and
 
 | Task | Description | Status |
 |------|-------------|--------|
-| B11.4.1 | Add identities section to ReviewStep displaying all identities with SINs and licenses | Not Started |
-| B11.4.2 | Add lifestyles section to ReviewStep displaying all lifestyles with modifications and costs | Not Started |
-| B11.4.3 | Display lifestyle-identity associations in ReviewStep | Not Started |
-| B11.4.4 | Show validation status for identities (SIN validation, license validation) | Not Started |
-| B11.4.5 | Show validation status for lifestyles (cost validation, modification validation) | Not Started |
+| B11.4.1 | Add identities section to ReviewStep displaying all identities with SINs and licenses | ✅ Completed |
+| B11.4.2 | Add lifestyles section to ReviewStep displaying all lifestyles with modifications and costs | ✅ Completed |
+| B11.4.3 | Display lifestyle-identity associations in ReviewStep | ✅ Completed |
+| B11.4.4 | Show validation status for identities (SIN validation, license validation) | ✅ Completed |
+| B11.4.5 | Show validation status for lifestyles (cost validation, modification validation) | ✅ Completed |
 
 **Tasks JSON:**
 ```json
@@ -2633,23 +2633,23 @@ This milestone updates the ReviewStep to display identities, SINs, licenses, and
 
 ### B11.5 Acceptance Criteria
 
-- **B11.5.AC.1** [ ] Character can have multiple identities (1+)
-- **B11.5.AC.2** [ ] Each identity must have exactly one SIN (fake Rating 1-4 or real from SINner quality)
-- **B11.5.AC.3** [ ] Fake SINs can be purchased as gear and linked to identities
-- **B11.5.AC.4** [ ] Real SINs require SINner quality on character
-- **B11.5.AC.5** [ ] Each identity can have multiple licenses (0+)
-- **B11.5.AC.6** [ ] Fake licenses (Rating 1-4) must be tied to fake SINs
-- **B11.5.AC.7** [ ] Real licenses must be tied to real SINs
-- **B11.5.AC.8** [ ] Character must have at least one lifestyle (primary)
-- **B11.5.AC.9** [ ] Character can have multiple lifestyles (for alternate identities/safehouses)
-- **B11.5.AC.10** [ ] Lifestyles can have modifications (positive/negative, percentage or fixed cost)
-- **B11.5.AC.11** [ ] Lifestyles can have subscriptions (DocWagon, food services, etc.)
-- **B11.5.AC.12** [ ] Lifestyles can have custom expenses and income
-- **B11.5.AC.13** [ ] Permanent lifestyle purchase costs 100 × monthly cost
-- **B11.5.AC.14** [ ] Identities can be associated with lifestyles
-- **B11.5.AC.15** [ ] All identity/lifestyle data displayed in ReviewStep
-- **B11.5.AC.16** [ ] Validation prevents invalid SIN/license combinations
-- **B11.5.AC.17** [ ] Validation enforces SR5 rules (fake SINs 1-4, real SINs from SINner quality)
+- **B11.5.AC.1** [x] Character can have multiple identities (1+)
+- **B11.5.AC.2** [x] Each identity must have exactly one SIN (fake Rating 1-4 or real from SINner quality)
+- **B11.5.AC.3** [x] Fake SINs can be purchased as gear and linked to identities
+- **B11.5.AC.4** [x] Real SINs require SINner quality on character
+- **B11.5.AC.5** [x] Each identity can have multiple licenses (0+)
+- **B11.5.AC.6** [x] Fake licenses (Rating 1-4) must be tied to fake SINs
+- **B11.5.AC.7** [x] Real licenses must be tied to real SINs
+- **B11.5.AC.8** [x] Character must have at least one lifestyle (primary)
+- **B11.5.AC.9** [x] Character can have multiple lifestyles (for alternate identities/safehouses)
+- **B11.5.AC.10** [x] Lifestyles can have modifications (positive/negative, percentage or fixed cost)
+- **B11.5.AC.11** [x] Lifestyles can have subscriptions (DocWagon, food services, etc.)
+- **B11.5.AC.12** [x] Lifestyles can have custom expenses and income
+- **B11.5.AC.13** [x] Permanent lifestyle purchase costs 100 × monthly cost (implemented as modification)
+- **B11.5.AC.14** [x] Identities can be associated with lifestyles
+- **B11.5.AC.15** [x] All identity/lifestyle data displayed in ReviewStep
+- **B11.5.AC.16** [x] Validation prevents invalid SIN/license combinations
+- **B11.5.AC.17** [x] Validation enforces SR5 rules (fake SINs 1-4, real SINs from SINner quality)
 
 ---
 
