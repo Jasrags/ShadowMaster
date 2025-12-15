@@ -373,13 +373,13 @@ export function ReviewStep({ state, updateState, budgetValues }: StepProps) {
             <div className="flex items-center justify-between">
               <span className="text-zinc-600 dark:text-zinc-400">Karma</span>
               <span className={`font-medium ${karmaRemaining > 7 ? "text-amber-600 dark:text-amber-400" : "text-zinc-900 dark:text-zinc-100"}`}>
-                {karmaRemaining} remaining
+                {karmaRemaining}
               </span>
             </div>
             <div className="flex items-center justify-between">
               <span className="text-zinc-600 dark:text-zinc-400">Nuyen</span>
               <span className={`font-medium ${nuyenRemaining > 5000 ? "text-amber-600 dark:text-amber-400" : "text-zinc-900 dark:text-zinc-100"}`}>
-                {nuyenRemaining.toLocaleString()} remaining
+                ¥{nuyenRemaining.toLocaleString()}
               </span>
             </div>
           </div>

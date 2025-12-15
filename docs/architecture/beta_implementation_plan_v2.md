@@ -1587,7 +1587,7 @@ This milestone creates the sourcebook data files for Run Faster and Street Grimo
     "files": [
       "/data/editions/sr5/run-faster.json"
     ],
-    "status": "Not Started",
+    "status": "Completed",
     "dependsOn": []
   },
   {
@@ -1597,7 +1597,7 @@ This milestone creates the sourcebook data files for Run Faster and Street Grimo
     "files": [
       "/data/editions/sr5/run-faster.json"
     ],
-    "status": "Not Started",
+    "status": "Completed",
     "dependsOn": ["B2.1.1"]
   },
   {
@@ -1607,7 +1607,7 @@ This milestone creates the sourcebook data files for Run Faster and Street Grimo
     "files": [
       "/data/editions/sr5/street-grimoire.json"
     ],
-    "status": "Not Started",
+    "status": "Completed",
     "dependsOn": []
   },
   {
@@ -1617,7 +1617,7 @@ This milestone creates the sourcebook data files for Run Faster and Street Grimo
     "files": [
       "/data/editions/sr5/street-grimoire.json"
     ],
-    "status": "Not Started",
+    "status": "Completed",
     "dependsOn": ["B2.1.3"]
   }
 ]
@@ -1685,7 +1685,7 @@ This milestone creates a UI component that allows players to select which source
       "/app/characters/create/page.tsx",
       "/lib/types/creation.ts"
     ],
-    "status": "Not Started",
+    "status": "Completed",
     "dependsOn": ["B2.1.1", "B2.1.3"]
   }
 ]
@@ -1725,7 +1725,7 @@ This milestone creates comprehensive tests for the ruleset merging system to ens
     "files": [
       "/lib/rules/__tests__/merge.test.ts"
     ],
-    "status": "Not Started",
+    "status": "Completed",
     "dependsOn": ["B2.3.1"]
   }
 ]
@@ -1784,7 +1784,7 @@ This milestone establishes the data structures needed to represent modifications
     "files": [
       "/lib/types/edition.ts"
     ],
-    "status": "Not Started",
+    "status": "Completed",
     "dependsOn": []
   },
   {
@@ -1794,7 +1794,7 @@ This milestone establishes the data structures needed to represent modifications
     "files": [
       "/lib/types/character.ts"
     ],
-    "status": "Not Started",
+    "status": "Completed",
     "dependsOn": []
   },
   {
@@ -1804,7 +1804,7 @@ This milestone establishes the data structures needed to represent modifications
     "files": [
       "/lib/types/character.ts"
     ],
-    "status": "Not Started",
+    "status": "Completed",
     "dependsOn": []
   },
   {
@@ -1814,7 +1814,7 @@ This milestone establishes the data structures needed to represent modifications
     "files": [
       "/lib/types/character.ts"
     ],
-    "status": "Not Started",
+    "status": "Completed",
     "dependsOn": ["B10.1.2", "B10.1.3"]
   },
   {
@@ -1824,7 +1824,7 @@ This milestone establishes the data structures needed to represent modifications
     "files": [
       "/lib/types/character.ts"
     ],
-    "status": "Not Started",
+    "status": "Completed",
     "dependsOn": ["B10.1.2"]
   },
   {
@@ -1834,7 +1834,7 @@ This milestone establishes the data structures needed to represent modifications
     "files": [
       "/lib/types/character.ts"
     ],
-    "status": "Not Started",
+    "status": "Completed",
     "dependsOn": ["B10.1.2"]
   }
 ]
@@ -1914,7 +1914,7 @@ This milestone creates the modification catalog data in the ruleset system. It a
     "files": [
       "/lib/types/edition.ts"
     ],
-    "status": "Not Started",
+    "status": "Completed",
     "dependsOn": []
   },
   {
@@ -1924,7 +1924,7 @@ This milestone creates the modification catalog data in the ruleset system. It a
     "files": [
       "/data/editions/sr5/core-rulebook.json"
     ],
-    "status": "Not Started",
+    "status": "Completed",
     "dependsOn": ["B10.2.1", "B10.1.1"]
   },
   {
@@ -1934,7 +1934,7 @@ This milestone creates the modification catalog data in the ruleset system. It a
     "files": [
       "/data/editions/sr5/core-rulebook.json"
     ],
-    "status": "Not Started",
+    "status": "Completed",
     "dependsOn": ["B10.2.1", "B10.1.1"]
   },
   {
@@ -1944,7 +1944,7 @@ This milestone creates the modification catalog data in the ruleset system. It a
     "files": [
       "/data/editions/sr5/core-rulebook.json"
     ],
-    "status": "Not Started",
+    "status": "Completed",
     "dependsOn": ["B10.2.1", "B10.1.1"]
   },
   {
@@ -1954,7 +1954,7 @@ This milestone creates the modification catalog data in the ruleset system. It a
     "files": [
       "/lib/rules/RulesetContext.tsx"
     ],
-    "status": "Not Started",
+    "status": "Completed",
     "dependsOn": ["B10.2.2", "B10.2.3", "B10.2.4"]
   }
 ]
@@ -1994,7 +1994,7 @@ This milestone enhances the GearStep component to support adding modifications t
     "files": [
       "/app/characters/create/components/ShoppingCartSection.tsx"
     ],
-    "status": "Not Started",
+    "status": "Completed",
     "dependsOn": ["B10.2.5"]
   },
   {
@@ -2004,7 +2004,7 @@ This milestone enhances the GearStep component to support adding modifications t
     "files": [
       "/app/characters/create/components/ModificationModal.tsx"
     ],
-    "status": "Not Started",
+    "status": "Completed",
     "dependsOn": ["B10.2.5"]
   },
   {
@@ -2014,7 +2014,7 @@ This milestone enhances the GearStep component to support adding modifications t
     "files": [
       "/app/characters/create/components/ModificationSelector.tsx"
     ],
-    "status": "Not Started",
+    "status": "Completed",
     "dependsOn": ["B10.3.2"]
   },
   {
@@ -2024,7 +2024,7 @@ This milestone enhances the GearStep component to support adding modifications t
     "files": [
       "/app/characters/create/components/ShoppingCartSection.tsx"
     ],
-    "status": "Not Started",
+    "status": "Completed",
     "dependsOn": ["B10.3.1"]
   },
   {
@@ -2035,7 +2035,7 @@ This milestone enhances the GearStep component to support adding modifications t
       "/app/characters/create/components/steps/GearStep.tsx",
       "/app/characters/create/components/ShoppingCartSection.tsx"
     ],
-    "status": "Not Started",
+    "status": "Completed",
     "dependsOn": ["B10.3.1"]
   },
   {
@@ -2046,7 +2046,7 @@ This milestone enhances the GearStep component to support adding modifications t
       "/app/characters/create/components/ModificationModal.tsx",
       "/app/characters/create/components/steps/GearStep.tsx"
     ],
-    "status": "Not Started",
+    "status": "Completed",
     "dependsOn": ["B10.3.2", "B10.3.3"]
   },
   {
@@ -2213,7 +2213,7 @@ This milestone establishes the TypeScript data structures for identities, lifest
     "files": [
       "/lib/types/character.ts"
     ],
-    "status": "Not Started",
+    "status": "Completed",
     "dependsOn": []
   },
   {
@@ -2223,7 +2223,7 @@ This milestone establishes the TypeScript data structures for identities, lifest
     "files": [
       "/lib/types/character.ts"
     ],
-    "status": "Not Started",
+    "status": "Completed",
     "dependsOn": []
   },
   {
@@ -2233,7 +2233,7 @@ This milestone establishes the TypeScript data structures for identities, lifest
     "files": [
       "/lib/types/character.ts"
     ],
-    "status": "Not Started",
+    "status": "Completed",
     "dependsOn": []
   },
   {
@@ -2243,7 +2243,7 @@ This milestone establishes the TypeScript data structures for identities, lifest
     "files": [
       "/lib/types/character.ts"
     ],
-    "status": "Not Started",
+    "status": "Completed",
     "dependsOn": []
   },
   {
@@ -2253,7 +2253,7 @@ This milestone establishes the TypeScript data structures for identities, lifest
     "files": [
       "/lib/types/character.ts"
     ],
-    "status": "Not Started",
+    "status": "Completed",
     "dependsOn": []
   },
   {
@@ -2263,7 +2263,7 @@ This milestone establishes the TypeScript data structures for identities, lifest
     "files": [
       "/lib/types/character.ts"
     ],
-    "status": "Not Started",
+    "status": "Completed",
     "dependsOn": ["B11.1.1", "B11.1.4", "B11.1.7"]
   },
   {
@@ -2273,7 +2273,7 @@ This milestone establishes the TypeScript data structures for identities, lifest
     "files": [
       "/lib/types/character.ts"
     ],
-    "status": "Not Started",
+    "status": "Completed",
     "dependsOn": []
   }
 ]
@@ -2328,7 +2328,7 @@ This milestone integrates identity management into the character creation wizard
     "files": [
       "/app/characters/create/components/IdentityEditor.tsx"
     ],
-    "status": "Not Started",
+    "status": "Completed",
     "dependsOn": ["B11.1.1", "B11.1.2"]
   },
   {
@@ -2339,7 +2339,7 @@ This milestone integrates identity management into the character creation wizard
       "/app/characters/create/components/steps/GearStep.tsx",
       "/app/characters/create/components/steps/IdentitiesStep.tsx"
     ],
-    "status": "Not Started",
+    "status": "Completed",
     "dependsOn": ["B11.2.1", "B11.2.2"]
   },
   {
@@ -2350,7 +2350,7 @@ This milestone integrates identity management into the character creation wizard
       "/app/characters/create/components/steps/IdentitiesStep.tsx",
       "/app/characters/create/components/steps/QualitiesStep.tsx"
     ],
-    "status": "Not Started",
+    "status": "Completed",
     "dependsOn": ["B11.2.1", "B11.2.2"]
   },
   {
@@ -2360,7 +2360,7 @@ This milestone integrates identity management into the character creation wizard
     "files": [
       "/app/characters/create/components/LicenseEditor.tsx"
     ],
-    "status": "Not Started",
+    "status": "Completed",
     "dependsOn": ["B11.1.3"]
   },
   {
@@ -2371,7 +2371,7 @@ This milestone integrates identity management into the character creation wizard
       "/app/characters/create/components/steps/IdentitiesStep.tsx",
       "/lib/rules/validation.ts"
     ],
-    "status": "Not Started",
+    "status": "Completed",
     "dependsOn": ["B11.2.1"]
   },
   {
@@ -2382,7 +2382,7 @@ This milestone integrates identity management into the character creation wizard
       "/app/characters/create/components/steps/IdentitiesStep.tsx",
       "/lib/rules/validation.ts"
     ],
-    "status": "Not Started",
+    "status": "Completed",
     "dependsOn": ["B11.2.1"]
   },
   {
@@ -2393,7 +2393,7 @@ This milestone integrates identity management into the character creation wizard
       "/app/characters/create/components/steps/IdentitiesStep.tsx",
       "/lib/rules/validation.ts"
     ],
-    "status": "Not Started",
+    "status": "Completed",
     "dependsOn": ["B11.2.5"]
   },
   {
@@ -2404,7 +2404,7 @@ This milestone integrates identity management into the character creation wizard
       "/app/characters/create/components/steps/IdentitiesStep.tsx",
       "/lib/rules/validation.ts"
     ],
-    "status": "Not Started",
+    "status": "Completed",
     "dependsOn": ["B11.2.1"]
   },
   {
@@ -2415,7 +2415,7 @@ This milestone integrates identity management into the character creation wizard
       "/app/characters/create/components/CreationWizard.tsx",
       "/lib/types/creation.ts"
     ],
-    "status": "Not Started",
+    "status": "Completed",
     "dependsOn": ["B11.2.1"]
   }
 ]

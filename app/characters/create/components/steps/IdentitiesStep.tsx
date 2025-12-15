@@ -1,9 +1,10 @@
 "use client";
 
-import { useMemo, useCallback, useState } from "react";
+import { useMemo, useCallback, useState, useEffect, useRef } from "react";
 import { Button } from "react-aria-components";
 import type { CreationState, Identity, License, SinnerQuality, GearItem, Lifestyle } from "@/lib/types";
-import { useLifestyles, useLifestyleModifiers } from "@/lib/rules/RulesetContext";
+import { SinnerQuality as SinnerQualityEnum } from "@/lib/types/character";
+import { useLifestyles, useLifestyleModifiers, useQualities } from "@/lib/rules/RulesetContext";
 import { IdentityEditor } from "../IdentityEditor";
 import { LicenseEditor } from "../LicenseEditor";
 import { LifestyleEditor } from "../LifestyleEditor";
@@ -28,6 +29,7 @@ interface StepProps {
 export function IdentitiesStep({ state, updateState, budgetValues }: StepProps) {
   const availableLifestyles = useLifestyles();
   const lifestyleModifiers = useLifestyleModifiers();
+  const { negative: negativeQualities } = useQualities();
   const [editingIdentityIndex, setEditingIdentityIndex] = useState<number | null>(null);
   const [editingLicenseIndex, setEditingLicenseIndex] = useState<{ identityIndex: number; licenseIndex: number } | null>(null);
   const [editingLifestyleIndex, setEditingLifestyleIndex] = useState<{ identityIndex: number } | null>(null);
@@ -144,50 +146,136 @@ export function IdentitiesStep({ state, updateState, budgetValues }: StepProps) 
     return negativeQualitiesList.includes("sinner");
   }, [state.selections.negativeQualities]);
 
-  // Get SINner quality level if present
+  // Map between qualityLevels (1-4) and SinnerQuality enum values
+  const levelToSinnerQuality: Record<number, SinnerQuality> = {
+    1: SinnerQualityEnum.National,
+    2: SinnerQualityEnum.Criminal,
+    3: SinnerQualityEnum.CorporateLimited,
+    4: SinnerQualityEnum.CorporateBorn,
+  };
+  
+  const sinnerQualityToLevel: Record<SinnerQuality, number> = {
+    [SinnerQualityEnum.National]: 1,
+    [SinnerQualityEnum.Criminal]: 2,
+    [SinnerQualityEnum.CorporateLimited]: 3,
+    [SinnerQualityEnum.CorporateBorn]: 4,
+  };
+
+  // Get SINner quality level if present (from qualityLevels, the source of truth for karma costs)
   const sinnerQualityLevel = useMemo(() => {
     if (!hasSINnerQuality) return null;
-    const qualityNotes = (state.selections.qualityNotes || {}) as Record<string, string>;
-    const sinnerNote = qualityNotes["sinner"];
-    if (!sinnerNote) return null;
+    const qualityLevels = (state.selections.qualityLevels || {}) as Record<string, number>;
+    const sinnerLevel = qualityLevels["sinner"] || 1; // Default to level 1 (National)
+    return levelToSinnerQuality[sinnerLevel] || SinnerQualityEnum.National;
+  }, [hasSINnerQuality, state.selections.qualityLevels]);
+
+  // Track previous sinnerQualityLevel to detect changes from Qualities step
+  const prevSinnerQualityLevelRef = useRef<SinnerQuality | null>(sinnerQualityLevel);
+  
+  // Sync Quality → Identity: When SINner quality level changes (from Qualities step), update all real SIN identities
+  useEffect(() => {
+    const prevLevel = prevSinnerQualityLevelRef.current;
+    prevSinnerQualityLevelRef.current = sinnerQualityLevel;
     
-    // Parse SINner level from note (e.g., "National", "Criminal", etc.)
-    const levelMap: Record<string, SinnerQuality> = {
-      "national": SinnerQuality.National,
-      "criminal": SinnerQuality.Criminal,
-      "corporate-limited": SinnerQuality.CorporateLimited,
-      "corporate born": SinnerQuality.CorporateBorn,
-      "corporate-born": SinnerQuality.CorporateBorn,
-    };
+    // Only sync if the level actually changed and we have a valid level
+    if (!sinnerQualityLevel || prevLevel === sinnerQualityLevel) return;
     
-    const lowerNote = sinnerNote.toLowerCase();
-    for (const [key, value] of Object.entries(levelMap)) {
-      if (lowerNote.includes(key)) {
-        return value;
+    // Check if any identities have real SINs that need updating
+    const hasRealSINsToUpdate = identities.some(
+      (identity) => identity.sin?.type === "real" && identity.sin.sinnerQuality !== sinnerQualityLevel
+    );
+    
+    if (!hasRealSINsToUpdate) return;
+    
+    // Update all real SIN identities to match the new SINner quality level
+    const updatedIdentities = identities.map((identity) => {
+      if (identity.sin?.type === "real" && identity.sin.sinnerQuality !== sinnerQualityLevel) {
+        return {
+          ...identity,
+          sin: {
+            ...identity.sin,
+            sinnerQuality: sinnerQualityLevel,
+          },
+        };
       }
-    }
-    return null;
-  }, [hasSINnerQuality, state.selections.qualityNotes]);
+      return identity;
+    });
+    
+    updateState({
+      selections: {
+        ...state.selections,
+        identities: updatedIdentities,
+      },
+    });
+  }, [sinnerQualityLevel, identities, state.selections, updateState]);
 
   // Add new identity
   const handleAddIdentity = useCallback(() => {
-    setIsAddingIdentity(true);
     setEditingIdentityIndex(identities.length);
   }, [identities.length]);
+
+  // Helper to calculate karma gained from negative qualities
+  const calculateNegativeKarmaGained = useCallback((
+    selectedNegativeIds: string[],
+    qualityLevelsMap: Record<string, number>
+  ): number => {
+    return selectedNegativeIds.reduce((sum, id) => {
+      const quality = negativeQualities.find((q) => q.id === id);
+      if (!quality) return sum;
+      
+      // Check if it has levels
+      if (quality.levels && quality.levels.length > 0) {
+        const levelIdx = qualityLevelsMap[id] || 1;
+        const levelData = quality.levels.find((l) => l.level === levelIdx);
+        return sum + (levelData ? Math.abs(levelData.karma) : (quality.karmaCost || quality.karmaBonus || 0));
+      }
+      return sum + (quality.karmaCost || quality.karmaBonus || 0);
+    }, 0);
+  }, [negativeQualities]);
 
   // Update identity
   const handleUpdateIdentity = useCallback((index: number, identity: Identity) => {
     const updated = [...identities];
     updated[index] = identity;
-    updateState({
+    
+    const updates: Partial<CreationState> = {
       selections: {
         ...state.selections,
         identities: updated,
       },
-    });
+    };
+    
+    // If identity has a real SIN, sync the SINner quality and level
+    if (identity.sin?.type === "real") {
+      const newSinnerLevel = sinnerQualityToLevel[identity.sin.sinnerQuality] || 1;
+      
+      // Add SINner quality to negative qualities if not present
+      const currentNegativeQualities = [...((state.selections.negativeQualities || []) as string[])];
+      if (!currentNegativeQualities.includes("sinner")) {
+        currentNegativeQualities.push("sinner");
+      }
+      
+      // Update qualityLevels with the correct level (this controls karma cost)
+      const newQualityLevels = { ...((state.selections.qualityLevels || {}) as Record<string, number>) };
+      newQualityLevels["sinner"] = newSinnerLevel;
+      
+      updates.selections = {
+        ...updates.selections,
+        negativeQualities: currentNegativeQualities,
+        qualityLevels: newQualityLevels,
+      };
+      
+      // Recalculate karma-gained-negative budget to reflect the new sinner level
+      const newKarmaGained = calculateNegativeKarmaGained(currentNegativeQualities, newQualityLevels);
+      updates.budgets = {
+        ...state.budgets,
+        "karma-gained-negative": newKarmaGained,
+      };
+    }
+    
+    updateState(updates);
     setEditingIdentityIndex(null);
-    setIsAddingIdentity(false);
-  }, [identities, state.selections, updateState]);
+  }, [identities, state.selections, state.budgets, updateState, sinnerQualityToLevel, calculateNegativeKarmaGained]);
 
   // Remove identity
   const handleRemoveIdentity = useCallback((index: number) => {
@@ -340,20 +428,26 @@ export function IdentitiesStep({ state, updateState, budgetValues }: StepProps) 
       errors.push("Character must have at least one identity");
     }
     
+    // If character has SINner quality, MUST have at least one real SIN identity
+    if (hasSINnerQuality) {
+      const hasRealSIN = identities.some((identity) => identity.sin?.type === "real");
+      if (!hasRealSIN) {
+        errors.push("Character has SINner quality and must have at least one identity with a real SIN");
+      }
+    }
+    
     // Each identity must have exactly one SIN
     identities.forEach((identity, index) => {
       if (!identity.sin) {
         errors.push(`Identity "${identity.name || `Identity ${index + 1}`}" must have a SIN`);
       } else if (identity.sin.type === "fake") {
         // Fake SIN must have rating 1-4
-        if (identity.sin.rating < 1 || identity.sin.rating > 4) {
+        if (identity.sin.type === "fake" && (identity.sin.rating < 1 || identity.sin.rating > 4)) {
           errors.push(`Identity "${identity.name || `Identity ${index + 1}`}" fake SIN must have rating 1-4`);
         }
       } else if (identity.sin.type === "real") {
-        // Real SIN requires SINner quality
-        if (!hasSINnerQuality) {
-          errors.push(`Identity "${identity.name || `Identity ${index + 1}`}" uses a real SIN but character does not have SINner quality`);
-        }
+        // Real SIN syncs with SINner quality - no validation needed here
+        // The SINner quality is automatically added/updated when identity is saved
       }
       
       // Licenses must match SIN type
@@ -371,7 +465,7 @@ export function IdentitiesStep({ state, updateState, budgetValues }: StepProps) 
     });
     
     return errors;
-  }, [identities, hasSINnerQuality]);
+  }, [identities, hasSINnerQuality, sinnerQualityLevel]);
 
   // If editing identity, show editor
   if (editingIdentityIndex !== null) {
@@ -516,7 +610,7 @@ export function IdentitiesStep({ state, updateState, budgetValues }: StepProps) 
                         {identity.name || `Identity ${index + 1}`}
                       </h4>
                       <div className="mt-1 space-y-1 text-xs text-zinc-600 dark:text-zinc-400">
-                        {sinCost > 0 && (
+                        {sinCost > 0 && identity.sin.type === "fake" && (
                           <div>
                             Fake SIN (Rating {identity.sin.rating}): ¥{formatCurrency(sinCost)}
                           </div>
@@ -567,9 +661,14 @@ export function IdentitiesStep({ state, updateState, budgetValues }: StepProps) 
           You can use fake SINs (purchased as gear) or real SINs (from the SINner quality).
         </p>
         {hasSINnerQuality && (
-          <p className="mt-2 text-sm text-emerald-600 dark:text-emerald-400">
-            ✓ Character has SINner quality - can use real SINs
-          </p>
+          <div className="mt-2 rounded-md border border-emerald-200 bg-emerald-50 p-3 dark:border-emerald-800 dark:bg-emerald-900/20">
+            <p className="text-sm font-medium text-emerald-800 dark:text-emerald-300">
+              ⚠ Required: Character has SINner quality
+            </p>
+            <p className="mt-1 text-xs text-emerald-700 dark:text-emerald-400">
+              You must create at least one identity with a real SIN. The real SIN level ({sinnerQualityLevel || "not set"}) must match your SINner quality level.
+            </p>
+          </div>
         )}
         {fakeSINsFromGear.length > 0 && (
           <p className="mt-2 text-sm text-blue-600 dark:text-blue-400">
@@ -710,7 +809,7 @@ export function IdentitiesStep({ state, updateState, budgetValues }: StepProps) 
                                     Modifications ({lifestyle.modifications?.length}):
                                   </div>
                                   <div className="mt-1 flex flex-wrap gap-1">
-                                    {lifestyle.modifications.map((mod, modIndex) => (
+                                    {lifestyle.modifications?.map((mod, modIndex) => (
                                       <span
                                         key={modIndex}
                                         className={`inline-flex items-center rounded-full px-2 py-0.5 text-xs ${

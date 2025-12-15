@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useMemo } from "react";
+import { useState, useMemo, useEffect } from "react";
 import { Button, RadioGroup, Radio } from "react-aria-components";
 import type { Identity, SIN, SinnerQuality, GearItem } from "@/lib/types";
 import { SinnerQuality as SinnerQualityEnum } from "@/lib/types/character";
@@ -37,11 +37,23 @@ export function IdentityEditor({
   }, [identity.sin?.type, fakeSINsFromGear]);
   
   const [selectedFakeSINGearId, setSelectedFakeSINGearId] = useState<string | null>(initialFakeSINGearId);
+  // Real SIN quality: use existing value if editing, otherwise use SINner quality level, default to National
   const [realSINQuality, setRealSINQuality] = useState<SinnerQuality>(
     identity.sin?.type === "real" 
       ? identity.sin.sinnerQuality 
       : (sinnerQualityLevel || SinnerQualityEnum.National)
   );
+  
+  // Update realSINQuality when sinnerQualityLevel changes (if creating new real SIN or switching to real SIN)
+  useEffect(() => {
+    if (sinType === "real" && sinnerQualityLevel) {
+      // If editing existing real SIN, only update if it doesn't have a sinnerQuality set
+      // If creating new real SIN, always use the SINner quality level
+      if (!identity.sin || identity.sin.type !== "real" || !identity.sin.sinnerQuality) {
+        setRealSINQuality(sinnerQualityLevel);
+      }
+    }
+  }, [sinType, sinnerQualityLevel, identity.sin]);
 
   // Validation
   const isValid = useMemo(() => {
@@ -50,11 +62,10 @@ export function IdentityEditor({
       if (fakeSINRating < 1 || fakeSINRating > 4) return false;
       // If fake SINs from gear are available, must select one
       if (fakeSINsFromGear.length > 0 && !selectedFakeSINGearId) return false;
-    } else {
-      if (!hasSINnerQuality) return false;
     }
+    // Real SIN: any level is valid - save will sync SINner quality level
     return true;
-  }, [name, sinType, fakeSINRating, selectedFakeSINGearId, hasSINnerQuality, fakeSINsFromGear.length]);
+  }, [name, sinType, fakeSINRating, selectedFakeSINGearId, fakeSINsFromGear.length]);
 
   const handleSave = () => {
     let sin: SIN;
@@ -203,13 +214,17 @@ export function IdentityEditor({
               onChange={(e) => setRealSINQuality(e.target.value as SinnerQuality)}
               className="w-full rounded-md border border-zinc-300 bg-white px-3 py-2 text-sm dark:border-zinc-700 dark:bg-zinc-800"
             >
-              <option value={SinnerQualityEnum.National}>National</option>
-              <option value={SinnerQualityEnum.Criminal}>Criminal</option>
-              <option value={SinnerQualityEnum.CorporateLimited}>Corporate Limited</option>
-              <option value={SinnerQualityEnum.CorporateBorn}>Corporate Born</option>
+              <option value={SinnerQualityEnum.National}>National (5 Karma)</option>
+              <option value={SinnerQualityEnum.Criminal}>Criminal (10 Karma)</option>
+              <option value={SinnerQualityEnum.CorporateLimited}>Corporate Limited (15 Karma)</option>
+              <option value={SinnerQualityEnum.CorporateBorn}>Corporate Born (25 Karma)</option>
             </select>
             <p className="text-xs text-zinc-600 dark:text-zinc-400">
-              This must match the SINner quality level selected in the Qualities step.
+              {hasSINnerQuality ? (
+                <>Changing this will update the SINner quality level and karma cost.</>
+              ) : (
+                <>Selecting a real SIN will add the SINner quality to your character with this level.</>
+              )}
             </p>
           </div>
         )}

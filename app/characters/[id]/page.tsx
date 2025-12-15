@@ -751,19 +751,75 @@ export default function CharacterPage({ params }: CharacterPageProps) {
             )}
           </Section>
 
-          {/* Lifestyle */}
-          {character.lifestyle && (
-            <Section title="Lifestyle">
-              <div className="p-3 bg-zinc-800/30 rounded">
-                <div className="flex items-center justify-between">
-                  <span className="text-sm font-medium text-zinc-200">{character.lifestyle.type}</span>
-                  <span className="text-xs font-mono text-emerald-400">
-                    ¥{character.lifestyle.monthlyCost.toLocaleString()}/mo
-                  </span>
-                </div>
-                {character.lifestyle.location && (
-                  <p className="text-xs text-zinc-500 mt-1">{character.lifestyle.location}</p>
-                )}
+          {/* Lifestyles */}
+          {character.lifestyles && character.lifestyles.length > 0 && (
+            <Section title="Lifestyles">
+              <div className="space-y-2">
+                {character.lifestyles.map((lifestyle) => {
+                  // Calculate total monthly cost
+                  let totalMonthlyCost = lifestyle.monthlyCost || 0;
+                  
+                  // Apply modifications (excluding permanent lifestyle modification)
+                  (lifestyle.modifications || []).forEach((mod) => {
+                    // Skip permanent lifestyle modification (it's a one-time purchase, not monthly)
+                    if (mod.catalogId === "permanent-lifestyle" || mod.name.toLowerCase() === "permanent lifestyle") {
+                      return;
+                    }
+                    
+                    if (mod.modifierType === "percentage") {
+                      totalMonthlyCost = totalMonthlyCost * (1 + (mod.type === "positive" ? 1 : -1) * (mod.modifier / 100));
+                    } else if (mod.modifierType === "fixed") {
+                      totalMonthlyCost = totalMonthlyCost + (mod.type === "positive" ? 1 : -1) * mod.modifier;
+                    }
+                  });
+                  
+                  // Add subscription costs
+                  const subscriptionCost = (lifestyle.subscriptions || []).reduce(
+                    (sum, sub) => sum + (sub.monthlyCost || 0),
+                    0
+                  );
+                  totalMonthlyCost = totalMonthlyCost + subscriptionCost;
+                  
+                  // Add custom expenses/income
+                  if (lifestyle.customExpenses) {
+                    totalMonthlyCost = totalMonthlyCost + lifestyle.customExpenses;
+                  }
+                  if (lifestyle.customIncome) {
+                    totalMonthlyCost = totalMonthlyCost - lifestyle.customIncome;
+                  }
+                  
+                  // Check if permanent
+                  const isPermanent = lifestyle.modifications?.some(
+                    (mod) => mod.catalogId === "permanent-lifestyle" || mod.name.toLowerCase() === "permanent lifestyle"
+                  ) || false;
+                  
+                  // Get lifestyle name (use type as display name)
+                  const lifestyleName = lifestyle.type;
+                  
+                  return (
+                    <div key={lifestyle.id || lifestyle.type} className="p-3 bg-zinc-800/30 rounded">
+                      <div className="flex items-center justify-between">
+                        <div className="flex items-center gap-2">
+                          <span className="text-sm font-medium text-zinc-200">
+                            {lifestyleName}
+                            {character.primaryLifestyleId === lifestyle.id && (
+                              <span className="ml-2 text-xs text-amber-400">(Primary)</span>
+                            )}
+                          </span>
+                          {isPermanent && (
+                            <span className="text-xs text-emerald-400">(Permanent)</span>
+                          )}
+                        </div>
+                        <span className="text-xs font-mono text-emerald-400">
+                          {isPermanent ? "Purchased" : `¥${Math.round(totalMonthlyCost).toLocaleString()}/mo`}
+                        </span>
+                      </div>
+                      {lifestyle.location && (
+                        <p className="text-xs text-zinc-500 mt-1">{lifestyle.location}</p>
+                      )}
+                    </div>
+                  );
+                })}
               </div>
             </Section>
           )}
