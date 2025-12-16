@@ -94,7 +94,7 @@ function CharacterCard({ character, onDelete, viewMode = "grid" }: CharacterCard
   const handleDelete = async (e: React.MouseEvent) => {
     e.preventDefault();
     e.stopPropagation();
-    
+
     if (!confirm(`Are you sure you want to delete ${character.name || "this character"}?`)) {
       return;
     }
@@ -104,7 +104,7 @@ function CharacterCard({ character, onDelete, viewMode = "grid" }: CharacterCard
       const response = await fetch(`/api/characters/${character.id}`, {
         method: "DELETE",
       });
-      
+
       if (response.ok) {
         onDelete(character.id);
       }
@@ -118,7 +118,7 @@ function CharacterCard({ character, onDelete, viewMode = "grid" }: CharacterCard
   if (viewMode === "list") {
     return (
       <Link
-        href={`/characters/${character.id}`}
+        href={character.status === "draft" ? `/characters/${character.id}/edit` : `/characters/${character.id}`}
         className="group relative block"
       >
         <div className="relative overflow-hidden rounded-lg border border-zinc-800 bg-zinc-900 transition-all duration-200 hover:border-emerald-500/50 hover:bg-zinc-800/50">
@@ -194,14 +194,14 @@ function CharacterCard({ character, onDelete, viewMode = "grid" }: CharacterCard
   // Grid view (default)
   return (
     <Link
-      href={`/characters/${character.id}`}
+      href={character.status === "draft" ? `/characters/${character.id}/edit` : `/characters/${character.id}`}
       className="group relative block"
     >
       {/* Card */}
       <div className="relative overflow-hidden rounded-lg border border-zinc-800 bg-gradient-to-br from-zinc-900 via-zinc-900 to-zinc-800 transition-all duration-300 hover:border-emerald-500/50 hover:shadow-lg hover:shadow-emerald-500/5">
         {/* Background pattern */}
         <div className="absolute inset-0 opacity-5 group-hover:opacity-10 transition-opacity">
-          <div 
+          <div
             className="absolute inset-0"
             style={{
               backgroundImage: `url("data:image/svg+xml,%3Csvg width='40' height='40' viewBox='0 0 40 40' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='%23ffffff' fill-opacity='1' fill-rule='evenodd'%3E%3Cpath d='M0 40L40 0H20L0 20M40 40V20L20 40'/%3E%3C/g%3E%3C/svg%3E")`,
@@ -367,17 +367,15 @@ function FilterTabs({ activeFilter, onFilterChange, counts }: FilterTabsProps) {
         <button
           key={filter.id}
           onClick={() => onFilterChange(filter.id)}
-          className={`px-3 py-1.5 text-sm font-medium rounded-md transition-colors ${
-            activeFilter === filter.id
+          className={`px-3 py-1.5 text-sm font-medium rounded-md transition-colors ${activeFilter === filter.id
               ? "bg-emerald-600 text-white"
               : "text-zinc-400 hover:text-zinc-200 hover:bg-zinc-700"
-          }`}
+            }`}
         >
           {filter.label}
           {counts[filter.id] !== undefined && (
-            <span className={`ml-1.5 text-xs ${
-              activeFilter === filter.id ? "text-emerald-200" : "text-zinc-500"
-            }`}>
+            <span className={`ml-1.5 text-xs ${activeFilter === filter.id ? "text-emerald-200" : "text-zinc-500"
+              }`}>
               ({counts[filter.id]})
             </span>
           )}
@@ -405,11 +403,11 @@ export default function CharactersPage() {
       try {
         const response = await fetch("/api/characters");
         const data = await response.json();
-        
+
         if (!data.success) {
           throw new Error(data.error || "Failed to load characters");
         }
-        
+
         setCharacters(data.characters || []);
       } catch (err) {
         setError(err instanceof Error ? err.message : "An error occurred");
@@ -417,7 +415,7 @@ export default function CharactersPage() {
         setLoading(false);
       }
     }
-    
+
     fetchCharacters();
   }, []);
 
@@ -430,7 +428,7 @@ export default function CharactersPage() {
     .filter((c) => {
       // Status filter
       if (activeFilter !== "all" && c.status !== activeFilter) return false;
-      
+
       // Search filter
       if (searchQuery) {
         const query = searchQuery.toLowerCase();
@@ -439,7 +437,7 @@ export default function CharactersPage() {
         const pathMatch = (c.magicalPath || "").toLowerCase().includes(query);
         return nameMatch || metatypeMatch || pathMatch;
       }
-      
+
       return true;
     })
     .sort((a, b) => {
@@ -452,8 +450,8 @@ export default function CharactersPage() {
           return new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime();
         case "updated":
         default:
-          return new Date(b.updatedAt || b.createdAt).getTime() - 
-                 new Date(a.updatedAt || a.createdAt).getTime();
+          return new Date(b.updatedAt || b.createdAt).getTime() -
+            new Date(a.updatedAt || a.createdAt).getTime();
       }
     });
 
@@ -512,27 +510,25 @@ export default function CharactersPage() {
                     onFilterChange={setActiveFilter}
                     counts={counts}
                   />
-                  
+
                   {/* View Toggle */}
                   <div className="flex items-center gap-1 p-1 bg-zinc-800/50 rounded-lg">
                     <button
                       onClick={() => setViewMode("grid")}
-                      className={`p-1.5 rounded transition-colors ${
-                        viewMode === "grid"
+                      className={`p-1.5 rounded transition-colors ${viewMode === "grid"
                           ? "bg-zinc-700 text-zinc-100"
                           : "text-zinc-500 hover:text-zinc-300"
-                      }`}
+                        }`}
                       aria-label="Grid view"
                     >
                       <GridIcon className="w-4 h-4" />
                     </button>
                     <button
                       onClick={() => setViewMode("list")}
-                      className={`p-1.5 rounded transition-colors ${
-                        viewMode === "list"
+                      className={`p-1.5 rounded transition-colors ${viewMode === "list"
                           ? "bg-zinc-700 text-zinc-100"
                           : "text-zinc-500 hover:text-zinc-300"
-                      }`}
+                        }`}
                       aria-label="List view"
                     >
                       <ListIcon className="w-4 h-4" />
@@ -561,7 +557,7 @@ export default function CharactersPage() {
                       </button>
                     )}
                   </div>
-                  
+
                   {/* Sort */}
                   <select
                     value={sortBy}
@@ -588,7 +584,7 @@ export default function CharactersPage() {
               {filteredCharacters.length === 0 ? (
                 <div className="text-center py-12">
                   <p className="text-zinc-500">
-                    {searchQuery 
+                    {searchQuery
                       ? `No characters matching "${searchQuery}"`
                       : `No ${activeFilter === "all" ? "" : activeFilter} characters found`
                     }
