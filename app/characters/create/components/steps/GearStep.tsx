@@ -660,6 +660,179 @@ export function GearStep({ state, updateState, budgetValues }: StepProps) {
     });
   };
 
+  // Get cyberware that can receive enhancements (has capacity > 0)
+  const cyberwareWithCapacity = useMemo(() => {
+    return selectedCyberware.filter((item) => item.capacity && item.capacity > 0);
+  }, [selectedCyberware]);
+
+  // Get available enhancements for a specific cyberware item
+  const getAvailableEnhancements = useCallback(
+    (parentItem: CyberwareItem) => {
+      if (!cyberwareCatalog) return [];
+
+      // Determine parent type based on category
+      let parentType = "";
+      if (parentItem.category === "cyberlimb" || parentItem.category.startsWith("cyberlimb")) {
+        parentType = "cyberlimb";
+      } else if (parentItem.category === "eyeware") {
+        parentType = "cybereyes";
+      } else if (parentItem.category === "earware") {
+        parentType = "cyberears";
+      }
+
+      // Filter enhancements that match this parent type
+      return cyberwareCatalog.catalog.filter((item) => {
+        // Must have parentType matching
+        if (item.parentType !== parentType) return false;
+        // Must have capacity cost
+        if (!item.capacityCost) return false;
+        return true;
+      });
+    },
+    [cyberwareCatalog]
+  );
+
+  // Add enhancement to cyberware
+  const addCyberwareEnhancement = useCallback(
+    (parentIndex: number, enhancement: CyberwareCatalogItemData, rating?: number) => {
+      const parent = selectedCyberware[parentIndex];
+      if (!parent || !parent.capacity) return;
+
+      // Calculate capacity cost
+      const capacityCost = enhancement.capacityPerRating && rating
+        ? enhancement.capacityCost! * rating
+        : enhancement.capacityCost || 0;
+
+      // Check if there's enough capacity
+      const currentUsed = parent.capacityUsed || 0;
+      if (currentUsed + capacityCost > parent.capacity) return;
+
+      // Calculate cost
+      const enhancementCost = enhancement.costPerRating && rating
+        ? enhancement.cost * rating
+        : enhancement.cost;
+
+      // Check if we can afford it
+      if (enhancementCost > remaining) return;
+
+      // Calculate availability with grade modifier
+      const availability = calculateCyberwareAvailability(
+        enhancement.availability,
+        parent.grade,
+        cyberwareGrades
+      );
+
+      // Check availability
+      if (availability > augmentationRules.maxAvailabilityAtCreation) return;
+
+      // Create the enhancement item
+      const enhancementItem: CyberwareItem = {
+        id: crypto.randomUUID(),
+        catalogId: enhancement.id,
+        name: enhancement.name + (rating ? ` R${rating}` : ""),
+        category: enhancement.category as CyberwareItem["category"],
+        grade: parent.grade, // Inherit parent grade
+        baseEssenceCost: 0,
+        essenceCost: 0, // Enhancements don't cost essence
+        rating,
+        cost: enhancementCost,
+        availability,
+        restricted: enhancement.restricted,
+        forbidden: enhancement.forbidden,
+        attributeBonuses: enhancement.attributeBonusesPerRating && rating
+          ? Object.fromEntries(
+              Object.entries(enhancement.attributeBonusesPerRating).map(([attr, bonus]) => [
+                attr,
+                bonus * rating,
+              ])
+            )
+          : enhancement.attributeBonuses,
+      };
+
+      // Update the parent with the new enhancement
+      const updatedCyberware = selectedCyberware.map((item, i) => {
+        if (i !== parentIndex) return item;
+        return {
+          ...item,
+          capacityUsed: currentUsed + capacityCost,
+          cost: item.cost + enhancementCost,
+          enhancements: [...(item.enhancements || []), enhancementItem],
+          // Merge attribute bonuses
+          attributeBonuses: {
+            ...(item.attributeBonuses || {}),
+            ...(enhancementItem.attributeBonuses
+              ? Object.fromEntries(
+                  Object.entries(enhancementItem.attributeBonuses).map(([attr, bonus]) => [
+                    attr,
+                    (item.attributeBonuses?.[attr] || 0) + bonus,
+                  ])
+                )
+              : {}),
+          },
+        };
+      });
+
+      updateState({
+        selections: {
+          ...state.selections,
+          cyberware: updatedCyberware,
+        },
+      });
+    },
+    [selectedCyberware, remaining, cyberwareGrades, augmentationRules.maxAvailabilityAtCreation, state.selections, updateState]
+  );
+
+  // Remove enhancement from cyberware
+  const removeCyberwareEnhancement = useCallback(
+    (parentIndex: number, enhancementIndex: number) => {
+      const parent = selectedCyberware[parentIndex];
+      if (!parent || !parent.enhancements) return;
+
+      const enhancement = parent.enhancements[enhancementIndex];
+      if (!enhancement) return;
+
+      // Calculate capacity to restore
+      const catalogItem = cyberwareCatalog?.catalog.find((c) => c.id === enhancement.catalogId);
+      const capacityCost = catalogItem?.capacityPerRating && enhancement.rating
+        ? (catalogItem.capacityCost || 0) * enhancement.rating
+        : catalogItem?.capacityCost || 0;
+
+      // Update parent
+      const updatedCyberware = selectedCyberware.map((item, i) => {
+        if (i !== parentIndex) return item;
+
+        // Remove attribute bonuses from enhancement
+        const newBonuses = { ...(item.attributeBonuses || {}) };
+        if (enhancement.attributeBonuses) {
+          for (const [attr, bonus] of Object.entries(enhancement.attributeBonuses)) {
+            newBonuses[attr] = (newBonuses[attr] || 0) - bonus;
+            if (newBonuses[attr] <= 0) delete newBonuses[attr];
+          }
+        }
+
+        return {
+          ...item,
+          capacityUsed: Math.max(0, (item.capacityUsed || 0) - capacityCost),
+          cost: item.cost - enhancement.cost,
+          enhancements: item.enhancements?.filter((_, ei) => ei !== enhancementIndex),
+          attributeBonuses: Object.keys(newBonuses).length > 0 ? newBonuses : undefined,
+        };
+      });
+
+      updateState({
+        selections: {
+          ...state.selections,
+          cyberware: updatedCyberware,
+        },
+      });
+    },
+    [selectedCyberware, cyberwareCatalog, state.selections, updateState]
+  );
+
+  // State for enhancement modal
+  const [enhancementModalOpen, setEnhancementModalOpen] = useState(false);
+  const [enhancingCyberwareIndex, setEnhancingCyberwareIndex] = useState<number | null>(null);
+
   // Helper to add focus
   const addFocus = (focusCatalogItem: FocusCatalogItemData, force: number, bonded: boolean) => {
     const cost = force * focusCatalogItem.costMultiplier;
@@ -1434,21 +1607,68 @@ export function GearStep({ state, updateState, budgetValues }: StepProps) {
                 {selectedCyberware.length > 0 && (
                   <div className="rounded-lg border border-zinc-200 bg-zinc-50 p-3 dark:border-zinc-700 dark:bg-zinc-800/50">
                     <h4 className="text-sm font-semibold text-cyan-700 dark:text-cyan-300">Cyberware</h4>
-                    <div className="mt-2 space-y-1">
+                    <div className="mt-2 space-y-2">
                       {selectedCyberware.map((item, index) => (
-                        <div key={item.id || index} className="flex items-center justify-between text-xs">
-                          <div className="flex-1">
-                            <span className="font-medium">{item.name}</span>
-                            <span className="ml-2 text-zinc-500 dark:text-zinc-400">
-                              ({item.grade}) | ESS: {formatEssence(item.essenceCost)} | ¥{formatCurrency(item.cost)}
-                            </span>
+                        <div key={item.id || index} className="rounded border border-zinc-200 bg-white p-2 dark:border-zinc-600 dark:bg-zinc-800">
+                          <div className="flex items-center justify-between text-xs">
+                            <div className="flex-1">
+                              <span className="font-medium">{item.name}</span>
+                              <span className="ml-2 text-zinc-500 dark:text-zinc-400">
+                                ({item.grade}) | ESS: {formatEssence(item.essenceCost)} | ¥{formatCurrency(item.cost)}
+                              </span>
+                              {/* Capacity indicator */}
+                              {item.capacity && item.capacity > 0 && (
+                                <span className="ml-2 text-blue-600 dark:text-blue-400">
+                                  Cap: {item.capacityUsed || 0}/{item.capacity}
+                                </span>
+                              )}
+                            </div>
+                            <div className="flex items-center gap-1">
+                              {/* Add mod button for items with capacity */}
+                              {item.capacity && item.capacity > 0 && (item.capacityUsed || 0) < item.capacity && (
+                                <button
+                                  onClick={() => {
+                                    setEnhancingCyberwareIndex(index);
+                                    setEnhancementModalOpen(true);
+                                  }}
+                                  className="rounded bg-blue-500 px-2 py-0.5 text-xs text-white hover:bg-blue-600"
+                                >
+                                  +Mod
+                                </button>
+                              )}
+                              <button
+                                onClick={() => removeCyberware(index)}
+                                className="text-red-500 hover:text-red-600"
+                              >
+                                ×
+                              </button>
+                            </div>
                           </div>
-                          <button
-                            onClick={() => removeCyberware(index)}
-                            className="text-red-500 hover:text-red-600"
-                          >
-                            ×
-                          </button>
+                          {/* Show installed enhancements */}
+                          {item.enhancements && item.enhancements.length > 0 && (
+                            <div className="mt-1 ml-3 space-y-0.5">
+                              {item.enhancements.map((enh, enhIndex) => (
+                                <div key={enh.id || enhIndex} className="flex items-center justify-between text-xs text-zinc-600 dark:text-zinc-400">
+                                  <span>
+                                    └ {enh.name} (¥{formatCurrency(enh.cost)})
+                                    {enh.attributeBonuses && (
+                                      <span className="ml-1 text-emerald-600 dark:text-emerald-400">
+                                        {Object.entries(enh.attributeBonuses)
+                                          .map(([attr, bonus]) => `+${bonus} ${attr.toUpperCase()}`)
+                                          .join(", ")}
+                                      </span>
+                                    )}
+                                  </span>
+                                  <button
+                                    onClick={() => removeCyberwareEnhancement(index, enhIndex)}
+                                    className="text-red-400 hover:text-red-500"
+                                  >
+                                    ×
+                                  </button>
+                                </div>
+                              ))}
+                            </div>
+                          )}
                         </div>
                       ))}
                     </div>
@@ -1477,6 +1697,136 @@ export function GearStep({ state, updateState, budgetValues }: StepProps) {
                     </div>
                   </div>
                 )}
+              </div>
+            )}
+
+            {/* Cyberware Enhancement Modal */}
+            {enhancementModalOpen && enhancingCyberwareIndex !== null && (
+              <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50">
+                <div className="max-h-[80vh] w-full max-w-lg overflow-hidden rounded-lg bg-white shadow-xl dark:bg-zinc-900">
+                  <div className="flex items-center justify-between border-b border-zinc-200 p-4 dark:border-zinc-700">
+                    <div>
+                      <h3 className="text-lg font-semibold">Add Enhancement</h3>
+                      <p className="text-sm text-zinc-500">
+                        {selectedCyberware[enhancingCyberwareIndex]?.name} - Capacity:{" "}
+                        {selectedCyberware[enhancingCyberwareIndex]?.capacityUsed || 0}/
+                        {selectedCyberware[enhancingCyberwareIndex]?.capacity}
+                      </p>
+                    </div>
+                    <button
+                      onClick={() => {
+                        setEnhancementModalOpen(false);
+                        setEnhancingCyberwareIndex(null);
+                      }}
+                      className="text-zinc-500 hover:text-zinc-700"
+                    >
+                      ✕
+                    </button>
+                  </div>
+                  <div className="max-h-96 overflow-y-auto p-4">
+                    <table className="w-full text-sm">
+                      <thead className="sticky top-0 bg-zinc-100 dark:bg-zinc-800">
+                        <tr>
+                          <th className="px-2 py-1 text-left">Enhancement</th>
+                          <th className="px-2 py-1 text-center">Cap</th>
+                          <th className="px-2 py-1 text-right">Cost</th>
+                          <th className="px-2 py-1 text-center">Action</th>
+                        </tr>
+                      </thead>
+                      <tbody className="divide-y divide-zinc-100 dark:divide-zinc-700">
+                        {getAvailableEnhancements(selectedCyberware[enhancingCyberwareIndex]).map((enh) => {
+                          const parent = selectedCyberware[enhancingCyberwareIndex];
+                          const remainingCapacity = (parent.capacity || 0) - (parent.capacityUsed || 0);
+
+                          // For rated enhancements, show multiple rows
+                          if (enh.hasRating && enh.maxRating) {
+                            return Array.from({ length: enh.maxRating }, (_, i) => i + 1).map((rating) => {
+                              const capacityCost = enh.capacityPerRating ? (enh.capacityCost || 0) * rating : enh.capacityCost || 0;
+                              const cost = enh.costPerRating ? enh.cost * rating : enh.cost;
+                              const canAdd = capacityCost <= remainingCapacity && cost <= remaining;
+
+                              return (
+                                <tr key={`${enh.id}-${rating}`} className={!canAdd ? "opacity-50" : ""}>
+                                  <td className="px-2 py-1">
+                                    <span className="font-medium">{enh.name}</span>
+                                    <span className="ml-1 text-zinc-500">R{rating}</span>
+                                    {enh.attributeBonusesPerRating && (
+                                      <span className="ml-1 text-xs text-emerald-600 dark:text-emerald-400">
+                                        {Object.entries(enh.attributeBonusesPerRating)
+                                          .map(([attr, bonus]) => `+${bonus * rating} ${attr.toUpperCase()}`)
+                                          .join(", ")}
+                                      </span>
+                                    )}
+                                  </td>
+                                  <td className="px-2 py-1 text-center">{capacityCost}</td>
+                                  <td className="px-2 py-1 text-right">¥{formatCurrency(cost)}</td>
+                                  <td className="px-2 py-1 text-center">
+                                    <button
+                                      onClick={() => {
+                                        addCyberwareEnhancement(enhancingCyberwareIndex, enh, rating);
+                                        setEnhancementModalOpen(false);
+                                        setEnhancingCyberwareIndex(null);
+                                      }}
+                                      disabled={!canAdd}
+                                      className={`rounded px-2 py-0.5 text-xs font-medium ${
+                                        canAdd
+                                          ? "bg-emerald-500 text-white hover:bg-emerald-600"
+                                          : "cursor-not-allowed bg-zinc-200 text-zinc-400"
+                                      }`}
+                                    >
+                                      Add
+                                    </button>
+                                  </td>
+                                </tr>
+                              );
+                            });
+                          }
+
+                          // Non-rated enhancement
+                          const capacityCost = enh.capacityCost || 0;
+                          const canAdd = capacityCost <= remainingCapacity && enh.cost <= remaining;
+
+                          return (
+                            <tr key={enh.id} className={!canAdd ? "opacity-50" : ""}>
+                              <td className="px-2 py-1">
+                                <span className="font-medium">{enh.name}</span>
+                                {enh.description && (
+                                  <p className="text-xs text-zinc-500 truncate max-w-xs">{enh.description}</p>
+                                )}
+                              </td>
+                              <td className="px-2 py-1 text-center">{capacityCost}</td>
+                              <td className="px-2 py-1 text-right">¥{formatCurrency(enh.cost)}</td>
+                              <td className="px-2 py-1 text-center">
+                                <button
+                                  onClick={() => {
+                                    addCyberwareEnhancement(enhancingCyberwareIndex, enh);
+                                    setEnhancementModalOpen(false);
+                                    setEnhancingCyberwareIndex(null);
+                                  }}
+                                  disabled={!canAdd}
+                                  className={`rounded px-2 py-0.5 text-xs font-medium ${
+                                    canAdd
+                                      ? "bg-emerald-500 text-white hover:bg-emerald-600"
+                                      : "cursor-not-allowed bg-zinc-200 text-zinc-400"
+                                  }`}
+                                >
+                                  Add
+                                </button>
+                              </td>
+                            </tr>
+                          );
+                        })}
+                        {getAvailableEnhancements(selectedCyberware[enhancingCyberwareIndex]).length === 0 && (
+                          <tr>
+                            <td colSpan={4} className="px-2 py-4 text-center text-zinc-500">
+                              No enhancements available for this item.
+                            </td>
+                          </tr>
+                        )}
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
               </div>
             )}
           </div>

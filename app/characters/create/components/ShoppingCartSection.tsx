@@ -463,35 +463,62 @@ export function ShoppingCartSection({
                           {cyberwareItems.map((item, index) => (
                             <div
                               key={item.id || index}
-                              className="flex items-center justify-between rounded-lg bg-zinc-50 p-2 dark:bg-zinc-700/50"
+                              className="rounded-lg bg-zinc-50 p-2 dark:bg-zinc-700/50"
                             >
-                              <div className="flex-1 min-w-0">
-                                <p className="text-sm font-medium truncate">{item.name}</p>
-                                <p className="text-xs text-zinc-500 dark:text-zinc-400">
-                                  {item.grade} | {formatEssence(item.essenceCost)} ESS | ¥
-                                  {formatCurrency(item.cost)}
-                                </p>
-                              </div>
-                              {onRemoveCyberware && (
-                                <button
-                                  onClick={() => onRemoveCyberware(index)}
-                                  className="ml-2 rounded p-1 text-red-500 hover:bg-red-50 dark:hover:bg-red-900/20"
-                                  aria-label="Remove item"
-                                >
-                                  <svg
-                                    className="h-4 w-4"
-                                    fill="none"
-                                    viewBox="0 0 24 24"
-                                    stroke="currentColor"
+                              <div className="flex items-center justify-between">
+                                <div className="flex-1 min-w-0">
+                                  <p className="text-sm font-medium truncate">{item.name}</p>
+                                  <p className="text-xs text-zinc-500 dark:text-zinc-400">
+                                    {item.grade} | {formatEssence(item.essenceCost)} ESS | ¥
+                                    {formatCurrency(item.cost)}
+                                    {item.capacity && item.capacity > 0 && (
+                                      <span className="ml-1 text-blue-600 dark:text-blue-400">
+                                        | Cap: {item.capacityUsed || 0}/{item.capacity}
+                                      </span>
+                                    )}
+                                  </p>
+                                </div>
+                                {onRemoveCyberware && (
+                                  <button
+                                    onClick={() => onRemoveCyberware(index)}
+                                    className="ml-2 rounded p-1 text-red-500 hover:bg-red-50 dark:hover:bg-red-900/20"
+                                    aria-label="Remove item"
                                   >
-                                    <path
-                                      strokeLinecap="round"
-                                      strokeLinejoin="round"
-                                      strokeWidth={2}
-                                      d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
-                                    />
-                                  </svg>
-                                </button>
+                                    <svg
+                                      className="h-4 w-4"
+                                      fill="none"
+                                      viewBox="0 0 24 24"
+                                      stroke="currentColor"
+                                    >
+                                      <path
+                                        strokeLinecap="round"
+                                        strokeLinejoin="round"
+                                        strokeWidth={2}
+                                        d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
+                                      />
+                                    </svg>
+                                  </button>
+                                )}
+                              </div>
+                              {/* Show installed enhancements */}
+                              {item.enhancements && item.enhancements.length > 0 && (
+                                <div className="mt-1 flex flex-wrap gap-1">
+                                  {item.enhancements.map((enh, enhIndex) => (
+                                    <span
+                                      key={enhIndex}
+                                      className="rounded bg-cyan-100 px-1.5 py-0.5 text-[10px] text-cyan-700 dark:bg-cyan-900/50 dark:text-cyan-300"
+                                    >
+                                      {enh.name}
+                                      {enh.attributeBonuses && Object.keys(enh.attributeBonuses).length > 0 && (
+                                        <span className="ml-1">
+                                          ({Object.entries(enh.attributeBonuses)
+                                            .map(([attr, bonus]) => `+${bonus} ${attr.toUpperCase()}`)
+                                            .join(", ")})
+                                        </span>
+                                      )}
+                                    </span>
+                                  ))}
+                                </div>
                               )}
                             </div>
                           ))}
