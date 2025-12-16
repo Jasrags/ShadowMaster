@@ -22,8 +22,8 @@ import type {
   ID,
   ContactTemplateData,
 } from "../types";
-import { QualityData, AdeptPowerCatalogItem, TraditionData, MentorSpiritData, TraditionSpiritTypes, MentorSpiritAdvantages, RitualData, RitualKeywordData, MinionStatsData, VehicleCategoryData, DroneSizeData, VehicleCatalogItemData, DroneCatalogItemData, RCCCatalogItemData, AutosoftCatalogItemData, HandlingRatingData, DroneWeaponMountsData, ProgramCatalogItemData, ProgramsCatalogData, FocusCatalogItemData, SpiritsCatalogData, ModificationsCatalogData, WeaponModificationCatalogItemData, ArmorModificationCatalogItemData } from "./loader";
-export type { QualityData, TraditionData, MentorSpiritData, TraditionSpiritTypes, MentorSpiritAdvantages, RitualData, RitualKeywordData, MinionStatsData, VehicleCategoryData, DroneSizeData, VehicleCatalogItemData, DroneCatalogItemData, RCCCatalogItemData, AutosoftCatalogItemData, HandlingRatingData, DroneWeaponMountsData, ProgramCatalogItemData, ProgramsCatalogData, FocusCatalogItemData, SpiritsCatalogData, ModificationsCatalogData, WeaponModificationCatalogItemData, ArmorModificationCatalogItemData };
+import { QualityData, AdeptPowerCatalogItem, TraditionData, MentorSpiritData, TraditionSpiritTypes, MentorSpiritAdvantages, RitualData, RitualKeywordData, MinionStatsData, VehicleCategoryData, DroneSizeData, VehicleCatalogItemData, DroneCatalogItemData, RCCCatalogItemData, AutosoftCatalogItemData, HandlingRatingData, DroneWeaponMountsData, ProgramCatalogItemData, ProgramsCatalogData, FocusCatalogItemData, SpiritsCatalogData, ModificationsCatalogData, WeaponModificationCatalogItemData, ArmorModificationCatalogItemData, CyberwareModificationCatalogItemData, LifestyleSubscriptionCatalogItem } from "./loader";
+export type { QualityData, TraditionData, MentorSpiritData, TraditionSpiritTypes, MentorSpiritAdvantages, RitualData, RitualKeywordData, MinionStatsData, VehicleCategoryData, DroneSizeData, VehicleCatalogItemData, DroneCatalogItemData, RCCCatalogItemData, AutosoftCatalogItemData, HandlingRatingData, DroneWeaponMountsData, ProgramCatalogItemData, ProgramsCatalogData, FocusCatalogItemData, SpiritsCatalogData, ModificationsCatalogData, WeaponModificationCatalogItemData, ArmorModificationCatalogItemData, CyberwareModificationCatalogItemData, LifestyleSubscriptionCatalogItem };
 
 // =============================================================================
 // TYPES
@@ -390,6 +390,7 @@ export interface RulesetData {
   mentorSpirits: MentorSpiritData[];
   lifestyles: LifestyleData[];
   lifestyleModifiers: Record<string, number>;
+  lifestyleSubscriptions: LifestyleSubscriptionCatalogItem[];
   gear: GearCatalogData | null;
   modifications: ModificationsCatalogData | null;
   spells: SpellsCatalogData | null;
@@ -451,6 +452,7 @@ const defaultData: RulesetData = {
   mentorSpirits: [],
   lifestyles: [],
   lifestyleModifiers: {},
+  lifestyleSubscriptions: [],
   gear: null,
   modifications: null,
   spells: null,
@@ -542,6 +544,7 @@ export function RulesetProvider({
             mentorSpirits: extractedData.mentorSpirits || [],
             lifestyles: extractedData.lifestyles || [],
             lifestyleModifiers: extractedData.lifestyleModifiers || {},
+            lifestyleSubscriptions: extractedData.lifestyleSubscriptions || [],
             gear: extractedData.gear || null,
             modifications: extractedData.modifications || null,
             spells: extractedData.spells || null,
@@ -845,11 +848,79 @@ export function useArmorModifications(options?: {
 }
 
 /**
+ * Hook to get cyberware modifications
+ */
+export function useCyberwareModifications(options?: {
+  maxAvailability?: number;
+  excludeForbidden?: boolean;
+  excludeRestricted?: boolean;
+  maxCapacityCost?: number;
+  applicableCategories?: string[];
+  parentType?: string;
+}): CyberwareModificationCatalogItemData[] {
+  const { data } = useRuleset();
+
+  return useMemo(() => {
+    if (!data.modifications?.cyberwareMods) return [];
+
+    let filtered = [...data.modifications.cyberwareMods];
+
+    if (options?.maxAvailability !== undefined) {
+      filtered = filtered.filter(
+        (item) => item.availability <= options.maxAvailability!
+      );
+    }
+
+    if (options?.excludeForbidden) {
+      filtered = filtered.filter((item) => !item.forbidden);
+    }
+
+    if (options?.excludeRestricted) {
+      filtered = filtered.filter((item) => !item.restricted);
+    }
+
+    if (options?.maxCapacityCost !== undefined) {
+      filtered = filtered.filter(
+        (item) => item.capacityCost <= options.maxCapacityCost!
+      );
+    }
+
+    if (options?.applicableCategories && options.applicableCategories.length > 0) {
+      filtered = filtered.filter((item) => {
+        if (!item.applicableCategories || item.applicableCategories.length === 0) {
+          return true; // If no categories specified, allow all
+        }
+        return item.applicableCategories.some((cat) =>
+          options.applicableCategories!.includes(cat)
+        );
+      });
+    }
+
+    if (options?.parentType) {
+      filtered = filtered.filter((item) => {
+        if (!item.parentType) return true; // If no parentType specified, allow all
+        return item.parentType === options.parentType;
+      });
+    }
+
+    return filtered;
+  }, [data.modifications, options]);
+}
+
+/**
  * Hook to get lifestyle metatype modifiers
  */
 export function useLifestyleModifiers(): Record<string, number> {
   const { data } = useRuleset();
   return data.lifestyleModifiers;
+}
+
+/**
+ * Hook to get lifestyle subscriptions catalog
+ */
+export function useLifestyleSubscriptions(): LifestyleSubscriptionCatalogItem[] {
+  const { data } = useRuleset();
+  return data.lifestyleSubscriptions;
 }
 
 /**

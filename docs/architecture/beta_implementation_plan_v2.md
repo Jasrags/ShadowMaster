@@ -146,14 +146,15 @@ This section provides a comprehensive view of the entire implementation roadmap,
 4. Magic/Resonance Path     ✅ Complete (MVP) + B6 tradition enhancements pending
 5. Skills Allocation        ✅ Complete (MVP) + M0.3 enhancements completed
 6. Qualities Selection      ✅ Complete (MVP) + M0.4 enhancements completed
-7. Augmentations           ✅ Complete (B1)
-8. Spells/Powers           ✅ M0.7 SpellsStep (magical) / ✅ B5 AdeptPowersStep (adepts)
-9. Complex Forms           ✅ B7 (technomancers only)
-10. Contacts               ✅ Complete (MVP) + M0.5 enhancements completed
-11. Gear & Resources       ✅ Complete (MVP) + M0.6 karma-to-nuyen completed + 🔜 B10 modifications support
-12. Identities & Lifestyles 🔜 B11 (SINs, licenses, lifestyle management)
-13. Review & Finalize      ✅ Complete (MVP)
+7. Spells/Powers           ✅ M0.7 SpellsStep (magical) / ✅ B5 AdeptPowersStep (adepts)
+8. Complex Forms           ✅ B7 (technomancers only)
+9. Contacts               ✅ Complete (MVP) + M0.5 enhancements completed
+10. Gear & Resources       ✅ Complete (MVP) + M0.6 karma-to-nuyen completed + ✅ B1 cyberware/bioware + 🔄 B10 modifications support (weapons/armor/cyberware)
+11. Identities & Lifestyles 🔜 B11 (SINs, licenses, lifestyle management)
+12. Review & Finalize      ✅ Complete (MVP)
 ```
+
+**Note:** AugmentationsStep (B1) was removed and cyberware/bioware functionality was integrated into GearStep. Cyberware modifications (B10.6) are also handled within GearStep alongside weapon and armor modifications.
 
 ### Full Phase Summary with Status
 
@@ -178,9 +179,9 @@ This section provides a comprehensive view of the entire implementation roadmap,
 | 5  | **B6**  | **Spell Management**                | **1-2 weeks**  | **High**   | ✅ **Complete**   |
 | 6  | **B12** | **Rigger Support (Vehicles & Drones)** | **2-3 weeks**  | **High**   | ✅ **Complete**   |
 | 7  | **B13** | **Decker Support (Programs)**       | **1 week**     | **High**   | 🔜 Next          |
-| 8  | **B14** | **Foci & Spirits**                  | **2 weeks**    | **High**   | Not Started      |
-| 9  | **B11** | **Identity/Lifestyle/SIN System**   | **2-3 weeks**  | **High**   | Not Started      |
-| 10 | **B10** | **Gear Modifications**              | **2-3 weeks**  | **Medium** | Not Started      |
+| 8  | **B14** | **Foci & Spirits**                  | **2 weeks**    | **High**   | ✅ **Complete**      |
+| 9  | **B11** | **Identity/Lifestyle/SIN System**   | **2-3 weeks**  | **High**   | ✅ **Complete**      |
+| 10 | **B10** | **Gear Modifications**              | **2-3 weeks**  | **Medium** | ✅ **Complete**      |
 | 11 | **B2**  | **Sourcebook Integration**          | **2 weeks**    | **Medium** | Not Started      |
 | 12 | **B8**  | **UI/UX Improvements**              | **1-2 weeks**  | **Medium** | Not Started      |
 | 13 | **B4**  | **Combat Tracker**                  | **3-4 weeks**  | **Medium** | Not Started      |
@@ -193,7 +194,7 @@ This section provides a comprehensive view of the entire implementation roadmap,
 | Phase | Completion Date | Key Deliverables |
 |-------|-----------------|------------------|
 | MVP Core | Dec 2024 | Priority system, metatypes, attributes, skills, qualities, contacts, gear, review |
-| B1 Cyberware | Dec 2024 | 70+ cyberware items, 60+ bioware items, essence tracking, grade selection, AugmentationsStep |
+| B1 Cyberware | Dec 2024 | 70+ cyberware items, 60+ bioware items, essence tracking, grade selection, integrated into GearStep (AugmentationsStep removed) |
 | B5 Adept Powers | Jan 2025 | 50+ adept powers catalog, AdeptPowersStep component, power point budgeting, mystic adept karma purchases (5 Karma = 1 PP), conditional Assensing skill availability |
 | B7 Complex Forms & Matrix | Dec 2025 | Complex forms corrections, sprite types/powers added, Living Persona + Matrix Initiative display fixes |
 | Maintenance | Dec 2025 | SR5 Magic/Resonance loss rounding fix (small essence loss no longer drops 1 point); persist Karma→Nuyen conversion so augmentations and gear share one consistent nuyen budget |
@@ -210,13 +211,18 @@ This section provides a comprehensive view of the entire implementation roadmap,
 | B8.1 Gear Layout | Dec 2024 | Improved gear catalog layout, shopping cart width fixes, responsive design |
 | B6 Spell Management | Dec 2024 | Traditions system (drain attributes, spirit types), 16 mentor spirits with quality integration, 9 rituals with RitualsStep component, Watcher/Homunculus minion stats |
 | B12 Rigger Support | Dec 2024 | Vehicle/drone type definitions, SR5 CRB catalog (11 groundcraft, 3 watercraft, 6 aircraft, 11 drones, 7 RCCs, 6 autosofts), extraction functions and hooks, VehiclesStep component with tabbed interface, wizard integration |
+| B10 Gear Modifications | Jan 2025 | Weapon/armor/cyberware modification system with ModificationModal, ModificationSelector, capacity/slot tracking, mount compatibility, availability validation, cost tracking, ReviewStep display. Cyberware enhancements integrated into GearStep. |
+| B14 Foci & Spirits | Jan 2025 | Foci catalog (7 types), foci selection in GearStep with force rating and bonding karma tracking, spirit catalog with types/powers/weaknesses, spirit reference display in MagicStep, foci display in ReviewStep |
+| B11.2 Identity Management | Jan 2025 | IdentitiesStep component, IdentityEditor, LicenseEditor, fake/real SIN support, license management, SIN/license validation, identity-lifestyle associations, identities display in ReviewStep |
+| B11.3 Lifestyle Management | Jan 2025 | LifestyleEditor component, LifestyleModificationSelector, LifestyleSubscriptionSelector with catalog (DocWagon contracts, Food Service), multiple lifestyles support, permanent lifestyle purchase, subscriptions catalog integration, custom expenses/income, lifestyle-identity associations, cost calculations, validation rules |
+| **B11 Complete** | **Jan 2025** | **Full identity/lifestyle/SIN system: multiple identities with fake/real SINs, licenses, multiple lifestyles with modifications/subscriptions, lifestyle-identity associations, all validation rules** |
 
 ### Estimated Remaining Timeline
 
 | Milestone | Phases | Est. Duration |
 |-----------|--------|---------------|
 | MVP Polish | M0 | ✅ Complete |
-| Character Creation Complete | B7, B12, B13, B14, B11, B6, B10 | 11-16 weeks |
+| Character Creation Complete | B7, B12, B13, B14, B11, B6, B10 | ✅ B10, B14, B11 Complete; B13 ~95% (ReviewStep display pending) |
 | Sourcebooks & Polish | B2, B8 | 3-4 weeks |
 | Gameplay Features | B4, B3, B9 | 6-9 weeks |
 | **Total to Beta Release** | All | **20-29 weeks** |
@@ -237,8 +243,8 @@ This section provides a comprehensive view of the entire implementation roadmap,
 | B12 | Rigger Support (Vehicles & Drones)| 2-3 weeks | High   | ✅ Complete   |
 | B13 | Decker Support (Programs)        | 1 week     | High   | 🔜 Next      |
 | B14 | Foci & Spirits                   | 2 weeks    | High   | ✅ Complete  |
-| B11 | Identity/Lifestyle/SIN System    | 2-3 weeks  | High   | Not Started  |
-| B10 | Gear Modifications               | 2-3 weeks  | Medium | Not Started  |
+| B11 | Identity/Lifestyle/SIN System    | 2-3 weeks  | High   | ✅ Complete  |
+| B10 | Gear Modifications               | 2-3 weeks  | Medium | ✅ Complete  |
 | B2 | Sourcebook Integration | 2 weeks | Medium | Not Started |
 | B8 | UI/UX Improvements | 1-2 weeks | Medium | Not Started |
 | B4 | Combat Tracker | 3-4 weeks | Medium | Not Started |
@@ -1275,20 +1281,20 @@ This milestone adds React hooks to the RulesetContext that provide easy access t
 
 ### B1.3 Character Creation Step
 
-This milestone creates the AugmentationsStep component that allows players to select and install cyberware and bioware during character creation. It provides a searchable catalog with category filters, grade selection, real-time essence tracking, and availability validation. The component integrates with the character creation wizard and enforces all augmentation rules from the SR5 core rulebook.
+This milestone integrates cyberware and bioware selection into the GearStep component, allowing players to select and install augmentations during character creation. It provides a searchable catalog with category filters, grade selection, real-time essence tracking, and availability validation. The component integrates with the character creation wizard and enforces all augmentation rules from the SR5 core rulebook.
 
-**Files to create:**
-- **B1.3.FC.1** `/app/characters/create/components/steps/AugmentationsStep.tsx`
+**Architectural Note:** The separate AugmentationsStep component was removed and cyberware/bioware functionality was integrated into GearStep for a unified gear management experience. This change simplifies the character creation flow and allows all gear-related purchases (weapons, armor, cyberware, bioware, and modifications) to be managed in one place.
 
 **Files to modify:**
-- **B1.3.FM.1** `/app/characters/create/components/CreationWizard.tsx`
-- **B1.3.FM.2** `/lib/types/creation.ts`
+- **B1.3.FM.1** `/app/characters/create/components/steps/GearStep.tsx`
+- **B1.3.FM.2** `/app/characters/create/components/CreationWizard.tsx`
+- **B1.3.FM.3** `/lib/types/creation.ts`
 
 **Tasks:**
 
 | Task | Description | Status |
 |------|-------------|--------|
-| B1.3.1 | Create AugmentationsStep component with tabbed interface (Cyberware/Bioware) | Complete |
+| B1.3.1 | Integrate cyberware/bioware selection into GearStep with tabbed interface (Cyberware/Bioware) | Complete |
 | B1.3.2 | Implement searchable augmentation catalog with category filters | Complete |
 | B1.3.3 | Add grade selector per augmentation item | Complete |
 | B1.3.4 | Implement real-time essence tracking display | Complete |
@@ -1297,17 +1303,17 @@ This milestone creates the AugmentationsStep component that allows players to se
 | B1.3.7 | Add nuyen cost tracking integrated with GearStep budget | Complete |
 | B1.3.8 | Handle Magic/Resonance reduction from essence loss | Complete |
 | B1.3.9 | Add augmentation bonus validation (max +4 per attribute) | Complete |
-| B1.3.10 | Register step in CreationWizard between QualitiesStep and ContactsStep | Complete |
+| B1.3.10 | Integrate cyberware/bioware into GearStep (no separate step registration needed) | Complete |
 
 **Tasks JSON:**
 ```json
 [
   {
     "id": "B1.3.1",
-    "title": "Create AugmentationsStep component with tabbed interface (Cyberware/Bioware)",
-    "description": "This milestone creates the AugmentationsStep component that allows players to select and install cyberware and bioware during character creation. It provides a searchable catalog with category filters, grade selection, real-time essence tracking, and availability validation. The component integrates with the character creation wizard and enforces all augmentation rules from the SR5 core rulebook. Create AugmentationsStep component with tabbed interface (Cyberware/Bioware).",
+    "title": "Integrate cyberware/bioware selection into GearStep with tabbed interface (Cyberware/Bioware)",
+    "description": "This milestone integrates cyberware and bioware selection into the GearStep component, allowing players to select and install augmentations during character creation. It provides a searchable catalog with category filters, grade selection, real-time essence tracking, and availability validation. The component integrates with the character creation wizard and enforces all augmentation rules from the SR5 core rulebook. Integrate cyberware/bioware selection into GearStep with tabbed interface (Cyberware/Bioware).",
     "files": [
-      "/app/characters/create/components/steps/AugmentationsStep.tsx",
+      "/app/characters/create/components/steps/GearStep.tsx",
       "/app/characters/create/components/CreationWizard.tsx",
       "/lib/types/creation.ts"
     ],
@@ -1317,9 +1323,9 @@ This milestone creates the AugmentationsStep component that allows players to se
   {
     "id": "B1.3.2",
     "title": "Implement searchable augmentation catalog with category filters",
-    "description": "This milestone creates the AugmentationsStep component that allows players to select and install cyberware and bioware during character creation. It provides a searchable catalog with category filters, grade selection, real-time essence tracking, and availability validation. The component integrates with the character creation wizard and enforces all augmentation rules from the SR5 core rulebook. Implement searchable augmentation catalog with category filters.",
+    "description": "This milestone integrates cyberware and bioware selection into the GearStep component, allowing players to select and install augmentations during character creation. It provides a searchable catalog with category filters, grade selection, real-time essence tracking, and availability validation. The component integrates with the character creation wizard and enforces all augmentation rules from the SR5 core rulebook. Implement searchable augmentation catalog with category filters.",
     "files": [
-      "/app/characters/create/components/steps/AugmentationsStep.tsx",
+      "/app/characters/create/components/steps/GearStep.tsx",
       "/app/characters/create/components/CreationWizard.tsx",
       "/lib/types/creation.ts"
     ],
@@ -1329,9 +1335,9 @@ This milestone creates the AugmentationsStep component that allows players to se
   {
     "id": "B1.3.3",
     "title": "Add grade selector per augmentation item",
-    "description": "This milestone creates the AugmentationsStep component that allows players to select and install cyberware and bioware during character creation. It provides a searchable catalog with category filters, grade selection, real-time essence tracking, and availability validation. The component integrates with the character creation wizard and enforces all augmentation rules from the SR5 core rulebook. Add grade selector per augmentation item.",
+    "description": "This milestone integrates cyberware and bioware selection into the GearStep component, allowing players to select and install augmentations during character creation. It provides a searchable catalog with category filters, grade selection, real-time essence tracking, and availability validation. The component integrates with the character creation wizard and enforces all augmentation rules from the SR5 core rulebook. Add grade selector per augmentation item.",
     "files": [
-      "/app/characters/create/components/steps/AugmentationsStep.tsx",
+      "/app/characters/create/components/steps/GearStep.tsx",
       "/app/characters/create/components/CreationWizard.tsx",
       "/lib/types/creation.ts"
     ],
@@ -1412,8 +1418,8 @@ This milestone creates the AugmentationsStep component that allows players to se
   },
   {
     "id": "B1.3.10",
-    "title": "Register step in CreationWizard between QualitiesStep and ContactsStep",
-    "description": "This milestone creates the AugmentationsStep component that allows players to select and install cyberware and bioware during character creation. It provides a searchable catalog with category filters, grade selection, real-time essence tracking, and availability validation. The component integrates with the character creation wizard and enforces all augmentation rules from the SR5 core rulebook. Register step in CreationWizard between QualitiesStep and ContactsStep.",
+    "title": "Integrate cyberware/bioware into GearStep (no separate step registration needed)",
+    "description": "This milestone integrates cyberware and bioware selection into the GearStep component, allowing players to select and install augmentations during character creation. It provides a searchable catalog with category filters, grade selection, real-time essence tracking, and availability validation. The component integrates with the character creation wizard and enforces all augmentation rules from the SR5 core rulebook. Cyberware/bioware functionality is integrated into GearStep, so no separate step registration is needed.",
     "files": [
       "/app/characters/create/components/steps/AugmentationsStep.tsx",
       "/app/characters/create/components/CreationWizard.tsx",
@@ -1755,6 +1761,8 @@ This milestone creates comprehensive tests for the ruleset merging system to ens
 **Objective:** Support purchasing and applying modifications to weapons, armor, and cyberware during character creation.
 
 This phase enables players to customize their gear during character creation by adding modifications such as weapon accessories (smartgun systems, scopes, silencers), armor upgrades (chemical protection, nonconductivity), and cyberware enhancements. It provides a complete modification system with capacity/slot tracking, cost validation, and availability checks. The result allows players to fully customize their starting equipment within the constraints of their Resources Priority budget.
+
+**Architectural Note:** Cyberware modifications are integrated directly into GearStep alongside weapon and armor modifications. The separate AugmentationsStep component (from B1) was removed, and all cyberware/bioware purchasing and modification functionality is now handled within GearStep for a unified gear management experience.
 
 ### B10.1 Modification Data Structures
 
@@ -2171,12 +2179,14 @@ This milestone implements comprehensive validation for modifications including a
 
 ### B10.6 Cyberware Modification Integration
 
-This milestone specifically integrates the modification system (from B10.2-B10.4) with the cyberware system (from B1), enabling players to add enhancements to cyberware items during character creation. While the generic modification catalog structure includes cyberware enhancements (B10.2.4), this milestone ensures proper integration with cyberware capacity tracking, character model updates, UI components, and validation rules specific to cyberware modifications. The goal is to complete the cyberware customization workflow by connecting the modification catalog to the existing cyberware capacity system and AugmentationsStep component.
+This milestone specifically integrates the modification system (from B10.2-B10.4) with the cyberware system (from B1), enabling players to add enhancements to cyberware items during character creation. While the generic modification catalog structure includes cyberware enhancements (B10.2.4), this milestone ensures proper integration with cyberware capacity tracking, character model updates, UI components, and validation rules specific to cyberware modifications. The goal is to complete the cyberware customization workflow by connecting the modification catalog to the existing cyberware capacity system within GearStep.
+
+**Architectural Change:** Cyberware modifications are integrated directly into GearStep alongside weapon and armor modifications. The separate AugmentationsStep component was removed, and all cyberware/bioware purchasing and modification functionality is now handled within GearStep for a unified gear management experience.
 
 **Dependencies:**
 - **B1.1** (Cyberware Data Structures) - Provides CyberwareItem interface with capacity tracking
 - **B1.2** (Ruleset Context Hooks) - Provides useCyberware() hook and augmentation utilities
-- **B1.3** (Character Creation Step) - Provides AugmentationsStep component as integration point
+- **B1.3** (Character Creation Step) - Cyberware/bioware functionality integrated into GearStep
 - **B10.2.4** (Cyberware Enhancements Catalog) - Provides cyberware modification catalog data
 - **B10.2.5** (Modification Loading Hooks) - Provides base modification extraction functions
 - **B10.4** (Validation and Cost Tracking) - Provides modification validation framework
@@ -2186,23 +2196,23 @@ This milestone specifically integrates the modification system (from B10.2-B10.4
 - **B10.6.FM.2** `/lib/rules/RulesetContext.tsx` (add useCyberwareModifications hook)
 - **B10.6.FM.3** `/lib/types/character.ts` (ensure CyberwareItem supports modifications array)
 - **B10.6.FM.4** `/lib/types/edition.ts` (ensure ModificationsCatalogData includes cyberwareMods)
-- **B10.6.FM.5** `/app/characters/create/components/steps/AugmentationsStep.tsx` (integrate modification UI)
+- **B10.6.FM.5** `/app/characters/create/components/steps/GearStep.tsx` (integrate cyberware modification UI)
 - **B10.6.FM.6** `/app/characters/create/components/steps/ReviewStep.tsx` (display cyberware mods)
 
 **Tasks:**
 
 | Task | Description | Status |
 |------|-------------|--------|
-| B10.6.1 | Add cyberwareMods array to ModificationsCatalogData interface in loader.ts | Not Started |
-| B10.6.2 | Add extractCyberwareModifications function in loader.ts (mirrors extractWeaponModifications/extractArmorModifications) | Not Started |
-| B10.6.3 | Add useCyberwareModifications hook to RulesetContext (returns filtered cyberware mods) | Not Started |
-| B10.6.4 | Ensure CyberwareItem interface has modifications array and InstalledCyberwareMod type | Not Started |
-| B10.6.5 | Update AugmentationsStep to show modification button/icon for cyberware with capacity | Not Started |
-| B10.6.6 | Integrate ModificationModal for cyberware items (filter by applicable cyberware categories) | Not Started |
-| B10.6.7 | Add capacity validation for cyberware modifications (prevent over-capacity) | Not Started |
-| B10.6.8 | Update cyberware cost tracking to include modification costs in nuyen budget | Not Started |
-| B10.6.9 | Update ReviewStep to display installed cyberware modifications with costs | Not Started |
-| B10.6.10 | Add cyberware modification availability validation (availability <= 12 at creation) | Not Started |
+| B10.6.1 | Add cyberwareMods array to ModificationsCatalogData interface in loader.ts | ✅ Complete |
+| B10.6.2 | Add extractCyberwareModifications function in loader.ts (mirrors extractWeaponModifications/extractArmorModifications) | ✅ Complete |
+| B10.6.3 | Add useCyberwareModifications hook to RulesetContext (returns filtered cyberware mods) | ✅ Complete |
+| B10.6.4 | Ensure CyberwareItem interface has modifications array and InstalledCyberwareMod type | ✅ Complete |
+| B10.6.5 | Update GearStep to show modification button/icon for cyberware with capacity | ✅ Complete |
+| B10.6.6 | Integrate ModificationModal for cyberware items in GearStep (filter by applicable cyberware categories) | ✅ Complete |
+| B10.6.7 | Add capacity validation for cyberware modifications (prevent over-capacity) | ✅ Complete |
+| B10.6.8 | Update cyberware cost tracking to include modification costs in nuyen budget | ✅ Complete |
+| B10.6.9 | Update ReviewStep to display installed cyberware modifications with costs | ✅ Complete |
+| B10.6.10 | Add cyberware modification availability validation (availability <= 12 at creation) | ✅ Complete |
 
 **Tasks JSON:**
 ```json
@@ -2210,132 +2220,135 @@ This milestone specifically integrates the modification system (from B10.2-B10.4
   {
     "id": "B10.6.1",
     "title": "Add cyberwareMods array to ModificationsCatalogData interface in loader.ts",
-    "description": "This milestone specifically integrates the modification system (from B10.2-B10.4) with the cyberware system (from B1), enabling players to add enhancements to cyberware items during character creation. While the generic modification catalog structure includes cyberware enhancements (B10.2.4), this milestone ensures proper integration with cyberware capacity tracking, character model updates, UI components, and validation rules specific to cyberware modifications. The goal is to complete the cyberware customization workflow by connecting the modification catalog to the existing cyberware capacity system and AugmentationsStep component. Add cyberwareMods array to ModificationsCatalogData interface in loader.ts.",
+    "description": "This milestone specifically integrates the modification system (from B10.2-B10.4) with the cyberware system (from B1), enabling players to add enhancements to cyberware items during character creation. While the generic modification catalog structure includes cyberware enhancements (B10.2.4), this milestone ensures proper integration with cyberware capacity tracking, character model updates, UI components, and validation rules specific to cyberware modifications. The goal is to complete the cyberware customization workflow by connecting the modification catalog to the existing cyberware capacity system within GearStep. Added cyberwareMods array to ModificationsCatalogData interface and created CyberwareModificationCatalogItemData type.",
     "files": [
       "/lib/rules/loader.ts"
     ],
-    "status": "Not Started",
+    "status": "Complete",
     "dependsOn": ["B10.2.4"]
   },
   {
     "id": "B10.6.2",
     "title": "Add extractCyberwareModifications function in loader.ts (mirrors extractWeaponModifications/extractArmorModifications)",
-    "description": "This milestone specifically integrates the modification system (from B10.2-B10.4) with the cyberware system (from B1), enabling players to add enhancements to cyberware items during character creation. While the generic modification catalog structure includes cyberware enhancements (B10.2.4), this milestone ensures proper integration with cyberware capacity tracking, character model updates, UI components, and validation rules specific to cyberware modifications. The goal is to complete the cyberware customization workflow by connecting the modification catalog to the existing cyberware capacity system and AugmentationsStep component. Add extractCyberwareModifications function in loader.ts (mirrors extractWeaponModifications/extractArmorModifications).",
+    "description": "This milestone specifically integrates the modification system (from B10.2-B10.4) with the cyberware system (from B1), enabling players to add enhancements to cyberware items during character creation. While the generic modification catalog structure includes cyberware enhancements (B10.2.4), this milestone ensures proper integration with cyberware capacity tracking, character model updates, UI components, and validation rules specific to cyberware modifications. The goal is to complete the cyberware customization workflow by connecting the modification catalog to the existing cyberware capacity system within GearStep. Added extractCyberwareModifications function that extracts cyberwareMods from the modifications module.",
     "files": [
       "/lib/rules/loader.ts"
     ],
-    "status": "Not Started",
+    "status": "Complete",
     "dependsOn": ["B10.6.1"]
   },
   {
     "id": "B10.6.3",
     "title": "Add useCyberwareModifications hook to RulesetContext (returns filtered cyberware mods)",
-    "description": "This milestone specifically integrates the modification system (from B10.2-B10.4) with the cyberware system (from B1), enabling players to add enhancements to cyberware items during character creation. While the generic modification catalog structure includes cyberware enhancements (B10.2.4), this milestone ensures proper integration with cyberware capacity tracking, character model updates, UI components, and validation rules specific to cyberware modifications. The goal is to complete the cyberware customization workflow by connecting the modification catalog to the existing cyberware capacity system and AugmentationsStep component. Add useCyberwareModifications hook to RulesetContext (returns filtered cyberware mods).",
+    "description": "This milestone specifically integrates the modification system (from B10.2-B10.4) with the cyberware system (from B1), enabling players to add enhancements to cyberware items during character creation. While the generic modification catalog structure includes cyberware enhancements (B10.2.4), this milestone ensures proper integration with cyberware capacity tracking, character model updates, UI components, and validation rules specific to cyberware modifications. The goal is to complete the cyberware customization workflow by connecting the modification catalog to the existing cyberware capacity system within GearStep. Added useCyberwareModifications hook with filtering options for availability, forbidden/restricted status, capacity cost, applicable categories, and parent type.",
     "files": [
       "/lib/rules/RulesetContext.tsx"
     ],
-    "status": "Not Started",
+    "status": "Complete",
     "dependsOn": ["B10.6.2", "B10.2.5"]
   },
   {
     "id": "B10.6.4",
-    "title": "Ensure CyberwareItem interface has modifications array and InstalledCyberwareMod type",
-    "description": "This milestone specifically integrates the modification system (from B10.2-B10.4) with the cyberware system (from B1), enabling players to add enhancements to cyberware items during character creation. While the generic modification catalog structure includes cyberware enhancements (B10.2.4), this milestone ensures proper integration with cyberware capacity tracking, character model updates, UI components, and validation rules specific to cyberware modifications. The goal is to complete the cyberware customization workflow by connecting the modification catalog to the existing cyberware capacity system and AugmentationsStep component. Ensure CyberwareItem interface has modifications array and InstalledCyberwareMod type.",
+    "title": "Ensure CyberwareItem interface has enhancements array",
+    "description": "This milestone specifically integrates the modification system (from B10.2-B10.4) with the cyberware system (from B1), enabling players to add enhancements to cyberware items during character creation. While the generic modification catalog structure includes cyberware enhancements (B10.2.4), this milestone ensures proper integration with cyberware capacity tracking, character model updates, UI components, and validation rules specific to cyberware modifications. The goal is to complete the cyberware customization workflow by connecting the modification catalog to the existing cyberware capacity system within GearStep. CyberwareItem interface includes enhancements array (stored as nested CyberwareItem[]).",
     "files": [
       "/lib/types/character.ts"
     ],
-    "status": "Not Started",
+    "status": "Complete",
     "dependsOn": ["B1.1.3", "B10.1.2"]
   },
   {
     "id": "B10.6.5",
-    "title": "Update AugmentationsStep to show modification button/icon for cyberware with capacity",
-    "description": "This milestone specifically integrates the modification system (from B10.2-B10.4) with the cyberware system (from B1), enabling players to add enhancements to cyberware items during character creation. While the generic modification catalog structure includes cyberware enhancements (B10.2.4), this milestone ensures proper integration with cyberware capacity tracking, character model updates, UI components, and validation rules specific to cyberware modifications. The goal is to complete the cyberware customization workflow by connecting the modification catalog to the existing cyberware capacity system and AugmentationsStep component. Update AugmentationsStep to show modification button/icon for cyberware with capacity.",
+    "title": "Update GearStep to show modification button/icon for cyberware with capacity",
+    "description": "This milestone specifically integrates the modification system (from B10.2-B10.4) with the cyberware system (from B1), enabling players to add enhancements to cyberware items during character creation. While the generic modification catalog structure includes cyberware enhancements (B10.2.4), this milestone ensures proper integration with cyberware capacity tracking, character model updates, UI components, and validation rules specific to cyberware modifications. The goal is to complete the cyberware customization workflow by connecting the modification catalog to the existing cyberware capacity system within GearStep. Update GearStep to show modification button/icon for cyberware with capacity.",
     "files": [
-      "/app/characters/create/components/steps/AugmentationsStep.tsx"
+      "/app/characters/create/components/steps/GearStep.tsx"
     ],
-    "status": "Not Started",
-    "dependsOn": ["B10.6.3", "B10.6.4", "B1.3.1"]
+    "status": "Complete",
+    "dependsOn": ["B10.6.3", "B10.6.4", "B10.3.1"]
   },
   {
     "id": "B10.6.6",
-    "title": "Integrate ModificationModal for cyberware items (filter by applicable cyberware categories)",
-    "description": "This milestone specifically integrates the modification system (from B10.2-B10.4) with the cyberware system (from B1), enabling players to add enhancements to cyberware items during character creation. While the generic modification catalog structure includes cyberware enhancements (B10.2.4), this milestone ensures proper integration with cyberware capacity tracking, character model updates, UI components, and validation rules specific to cyberware modifications. The goal is to complete the cyberware customization workflow by connecting the modification catalog to the existing cyberware capacity system and AugmentationsStep component. Integrate ModificationModal for cyberware items (filter by applicable cyberware categories).",
+    "title": "Integrate ModificationModal for cyberware items in GearStep (filter by applicable cyberware categories)",
+    "description": "This milestone specifically integrates the modification system (from B10.2-B10.4) with the cyberware system (from B1), enabling players to add enhancements to cyberware items during character creation. While the generic modification catalog structure includes cyberware enhancements (B10.2.4), this milestone ensures proper integration with cyberware capacity tracking, character model updates, UI components, and validation rules specific to cyberware modifications. The goal is to complete the cyberware customization workflow by connecting the modification catalog to the existing cyberware capacity system within GearStep. Integrate ModificationModal for cyberware items in GearStep (filter by applicable cyberware categories).",
     "files": [
-      "/app/characters/create/components/steps/AugmentationsStep.tsx"
+      "/app/characters/create/components/steps/GearStep.tsx"
     ],
-    "status": "Not Started",
+    "status": "Complete",
     "dependsOn": ["B10.6.5", "B10.3.2"]
   },
   {
     "id": "B10.6.7",
     "title": "Add capacity validation for cyberware modifications (prevent over-capacity)",
-    "description": "This milestone specifically integrates the modification system (from B10.2-B10.4) with the cyberware system (from B1), enabling players to add enhancements to cyberware items during character creation. While the generic modification catalog structure includes cyberware enhancements (B10.2.4), this milestone ensures proper integration with cyberware capacity tracking, character model updates, UI components, and validation rules specific to cyberware modifications. The goal is to complete the cyberware customization workflow by connecting the modification catalog to the existing cyberware capacity system and AugmentationsStep component. Add capacity validation for cyberware modifications (prevent over-capacity).",
+    "description": "This milestone specifically integrates the modification system (from B10.2-B10.4) with the cyberware system (from B1), enabling players to add enhancements to cyberware items during character creation. While the generic modification catalog structure includes cyberware enhancements (B10.2.4), this milestone ensures proper integration with cyberware capacity tracking, character model updates, UI components, and validation rules specific to cyberware modifications. The goal is to complete the cyberware customization workflow by connecting the modification catalog to the existing cyberware capacity system within GearStep. Add capacity validation for cyberware modifications (prevent over-capacity).",
     "files": [
-      "/app/characters/create/components/steps/AugmentationsStep.tsx",
+      "/app/characters/create/components/steps/GearStep.tsx",
       "/lib/rules/validation.ts"
     ],
-    "status": "Not Started",
+    "status": "Complete",
     "dependsOn": ["B10.6.6", "B10.4.2"]
   },
   {
     "id": "B10.6.8",
     "title": "Update cyberware cost tracking to include modification costs in nuyen budget",
-    "description": "This milestone specifically integrates the modification system (from B10.2-B10.4) with the cyberware system (from B1), enabling players to add enhancements to cyberware items during character creation. While the generic modification catalog structure includes cyberware enhancements (B10.2.4), this milestone ensures proper integration with cyberware capacity tracking, character model updates, UI components, and validation rules specific to cyberware modifications. The goal is to complete the cyberware customization workflow by connecting the modification catalog to the existing cyberware capacity system and AugmentationsStep component. Update cyberware cost tracking to include modification costs in nuyen budget.",
+    "description": "This milestone specifically integrates the modification system (from B10.2-B10.4) with the cyberware system (from B1), enabling players to add enhancements to cyberware items during character creation. While the generic modification catalog structure includes cyberware enhancements (B10.2.4), this milestone ensures proper integration with cyberware capacity tracking, character model updates, UI components, and validation rules specific to cyberware modifications. The goal is to complete the cyberware customization workflow by connecting the modification catalog to the existing cyberware capacity system within GearStep. Update cyberware cost tracking to include modification costs in nuyen budget.",
     "files": [
-      "/app/characters/create/components/steps/AugmentationsStep.tsx"
+      "/app/characters/create/components/steps/GearStep.tsx"
     ],
-    "status": "Not Started",
+    "status": "Complete",
     "dependsOn": ["B10.6.6", "B10.3.5"]
   },
   {
     "id": "B10.6.9",
     "title": "Update ReviewStep to display installed cyberware modifications with costs",
-    "description": "This milestone specifically integrates the modification system (from B10.2-B10.4) with the cyberware system (from B1), enabling players to add enhancements to cyberware items during character creation. While the generic modification catalog structure includes cyberware enhancements (B10.2.4), this milestone ensures proper integration with cyberware capacity tracking, character model updates, UI components, and validation rules specific to cyberware modifications. The goal is to complete the cyberware customization workflow by connecting the modification catalog to the existing cyberware capacity system and AugmentationsStep component. Update ReviewStep to display installed cyberware modifications with costs.",
+    "description": "This milestone specifically integrates the modification system (from B10.2-B10.4) with the cyberware system (from B1), enabling players to add enhancements to cyberware items during character creation. While the generic modification catalog structure includes cyberware enhancements (B10.2.4), this milestone ensures proper integration with cyberware capacity tracking, character model updates, UI components, and validation rules specific to cyberware modifications. The goal is to complete the cyberware customization workflow by connecting the modification catalog to the existing cyberware capacity system within GearStep. Updated ReviewStep to display cyberware enhancements in a nested format similar to weapon/armor modifications, showing individual enhancement costs and total cost breakdown.",
     "files": [
       "/app/characters/create/components/steps/ReviewStep.tsx"
     ],
-    "status": "Not Started",
+    "status": "Complete",
     "dependsOn": ["B10.6.8", "B10.4.5"]
   },
   {
     "id": "B10.6.10",
     "title": "Add cyberware modification availability validation (availability <= 12 at creation)",
-    "description": "This milestone specifically integrates the modification system (from B10.2-B10.4) with the cyberware system (from B1), enabling players to add enhancements to cyberware items during character creation. While the generic modification catalog structure includes cyberware enhancements (B10.2.4), this milestone ensures proper integration with cyberware capacity tracking, character model updates, UI components, and validation rules specific to cyberware modifications. The goal is to complete the cyberware customization workflow by connecting the modification catalog to the existing cyberware capacity system and AugmentationsStep component. Add cyberware modification availability validation (availability <= 12 at creation).",
+    "description": "This milestone specifically integrates the modification system (from B10.2-B10.4) with the cyberware system (from B1), enabling players to add enhancements to cyberware items during character creation. While the generic modification catalog structure includes cyberware enhancements (B10.2.4), this milestone ensures proper integration with cyberware capacity tracking, character model updates, UI components, and validation rules specific to cyberware modifications. The goal is to complete the cyberware customization workflow by connecting the modification catalog to the existing cyberware capacity system within GearStep. Add cyberware modification availability validation (availability <= 12 at creation).",
     "files": [
       "/lib/rules/validation.ts",
-      "/app/characters/create/components/steps/AugmentationsStep.tsx"
+      "/app/characters/create/components/steps/GearStep.tsx"
     ],
-    "status": "Not Started",
+    "status": "Complete",
     "dependsOn": ["B10.6.6", "B10.4.1"]
   }
 ]
 ```
 
 **Notes:**
-- Cyberware modifications use the same `ModificationCatalogItem` structure as weapon/armor mods, but with `category: 'cyberware'` and `capacityCost` for capacity tracking
+- Cyberware modifications (called "enhancements" in the implementation) use the same `ModificationCatalogItem` structure as weapon/armor mods, but with `category: 'cyberware'` and `capacityCost` for capacity tracking
 - Cyberware capacity equals the cyberware item's `capacity` property (typically cyberlimbs have capacity, other items don't)
-- Modification costs are separate from cyberware base costs and must be tracked in the nuyen budget
+- Enhancement costs are added to the parent cyberware item's cost (not tracked separately), so the nuyen budget calculation automatically includes them
 - Some cyberware modifications may have rating-based capacity costs (e.g., capacityPerRating: true)
+- **Implementation Note:** Enhancements are stored as nested `CyberwareItem[]` in the `enhancements` array on the parent cyberware item, rather than using a separate `InstalledCyberwareMod` type. This approach works well and integrates seamlessly with the existing cyberware system.
 
 **Acceptance Criteria:**
 
-- **B10.6.AC.1** [ ] `extractCyberwareModifications()` function exists and returns cyberware mods from ruleset
-- **B10.6.AC.2** [ ] `useCyberwareModifications()` hook available in RulesetContext and filters by category
-- **B10.6.AC.3** [ ] CyberwareItem interface includes modifications array with InstalledCyberwareMod type
-- **B10.6.AC.4** [ ] AugmentationsStep displays modification button for cyberware items with capacity > 0
-- **B10.6.AC.5** [ ] ModificationModal filters cyberware mods by applicable cyberware categories/subcategories
-- **B10.6.AC.6** [ ] Capacity validation prevents installing mods that exceed cyberware capacity
-- **B10.6.AC.7** [ ] Cyberware modification costs included in nuyen budget tracking
-- **B10.6.AC.8** [ ] Capacity usage display shows used/total capacity for cyberware with mods
-- **B10.6.AC.9** [ ] ReviewStep displays installed cyberware modifications with individual costs
-- **B10.6.AC.10** [ ] Cyberware modification availability validation enforced (availability <= 12)
-- **B10.6.AC.11** [ ] Rating-based cyberware modifications calculate capacity/cost correctly
-- **B10.6.AC.12** [ ] Cyberware modification removal works (with cost refund and capacity freed)
+- **B10.6.AC.1** [x] `extractCyberwareModifications()` function exists and returns cyberware mods from ruleset
+- **B10.6.AC.2** [x] `useCyberwareModifications()` hook available in RulesetContext and filters by category, parent type, availability, and capacity cost
+- **B10.6.AC.3** [x] CyberwareItem interface includes enhancements array (stored as nested CyberwareItem[])
+- **B10.6.AC.4** [x] GearStep displays modification button for cyberware items with capacity > 0
+- **B10.6.AC.5** [x] Enhancement modal filters cyberware enhancements by applicable cyberware categories/subcategories (via `getAvailableEnhancements()`)
+- **B10.6.AC.6** [x] Capacity validation prevents installing enhancements that exceed cyberware capacity
+- **B10.6.AC.7** [x] Cyberware enhancement costs included in nuyen budget tracking (added to parent item cost)
+- **B10.6.AC.8** [x] Capacity usage display shows used/total capacity for cyberware with enhancements
+- **B10.6.AC.9** [x] ReviewStep displays installed cyberware enhancements with individual costs in nested format
+- **B10.6.AC.10** [x] Cyberware enhancement availability validation enforced (availability <= 12 at creation)
+- **B10.6.AC.11** [x] Rating-based cyberware enhancements calculate capacity/cost correctly
+- **B10.6.AC.12** [x] Cyberware enhancement removal works (with cost refund and capacity freed)
 
 ---
 
 ## Phase B11: Identity/Lifestyle/SIN System
+
+**Status:** ✅ **Complete**
 
 **Objective:** Implement comprehensive identity management system with SINs, licenses, and lifestyle tracking per SR5 rules.
 
@@ -2445,6 +2458,8 @@ This milestone establishes the TypeScript data structures for identities, lifest
 ```
 
 ### B11.2 Identity Management in Character Creation
+
+**Status:** ✅ **Complete**
 
 This milestone integrates identity management into the character creation wizard. It adds an IdentitiesStep component that allows players to create multiple identities, assign fake SINs (purchased as gear) or real SINs (from SINner quality), and add licenses tied to each SIN. The step validates SIN/license relationships and ensures proper SR5 rules compliance.
 
@@ -2588,30 +2603,37 @@ This milestone integrates identity management into the character creation wizard
 
 ### B11.3 Lifestyle Management in Character Creation
 
+**Status:** ✅ **Complete**
+
 This milestone enhances the existing lifestyle selection in GearStep to support full lifestyle management including modifications, subscriptions, custom expenses/income, and permanent purchase options. It also enables multiple lifestyles for different identities and proper lifestyle-identity associations.
 
 **Files to modify:**
 - **B11.3.FM.1** `/app/characters/create/components/steps/GearStep.tsx`
 - **B11.3.FM.2** `/app/characters/create/components/steps/IdentitiesStep.tsx`
+- **B11.3.FM.3** `/data/editions/sr5/core-rulebook.json` (add subscription catalog)
+- **B11.3.FM.4** `/lib/rules/loader.ts` (add subscription extractor)
+- **B11.3.FM.5** `/lib/rules/RulesetContext.tsx` (add subscription hook)
+- **B11.3.FM.6** `/app/api/rulesets/[editionCode]/route.ts` (extract subscriptions)
 
 **Files to create:**
 - **B11.3.FC.1** `/app/characters/create/components/LifestyleEditor.tsx`
 - **B11.3.FC.2** `/app/characters/create/components/LifestyleModificationSelector.tsx`
+- **B11.3.FC.3** `/app/characters/create/components/LifestyleSubscriptionSelector.tsx`
 
 **Tasks:**
 
 | Task | Description | Status |
 |------|-------------|--------|
-| B11.3.1 | Enhance lifestyle selection UI to support multiple lifestyles (primary + additional) | Not Started |
-| B11.3.2 | Create LifestyleEditor component for editing lifestyle type, cost, and options | Not Started |
-| B11.3.3 | Add permanent lifestyle purchase option (100 × monthly cost, one-time payment) | Not Started |
-| B11.3.4 | Create LifestyleModificationSelector for adding lifestyle modifications (positive/negative, percentage/fixed) | Not Started |
-| B11.3.5 | Add lifestyle subscriptions UI (DocWagon contracts, food services, etc.) | Not Started |
-| B11.3.6 | Add custom expenses/income fields to lifestyle editor | Not Started |
-| B11.3.7 | Add lifestyle-identity association (allow identities to reference lifestyles) | Not Started |
-| B11.3.8 | Update lifestyle cost calculation to include modifications, subscriptions, expenses, income | Not Started |
-| B11.3.9 | Add validation: character must have at least one lifestyle (primary) | Not Started |
-| B11.3.10 | Add validation: permanent lifestyle cost = 100 × monthly cost | Not Started |
+| B11.3.1 | Enhance lifestyle selection UI to support multiple lifestyles (primary + additional) | ✅ Complete |
+| B11.3.2 | Create LifestyleEditor component for editing lifestyle type, cost, and options | ✅ Complete |
+| B11.3.3 | Add permanent lifestyle purchase option (100 × monthly cost, one-time payment) | ✅ Complete |
+| B11.3.4 | Create LifestyleModificationSelector for adding lifestyle modifications (positive/negative, percentage/fixed) | ✅ Complete |
+| B11.3.5 | Add lifestyle subscriptions UI (DocWagon contracts, food services, etc.) | ✅ Complete |
+| B11.3.6 | Add custom expenses/income fields to lifestyle editor | ✅ Complete |
+| B11.3.7 | Add lifestyle-identity association (allow identities to reference lifestyles) | ✅ Complete |
+| B11.3.8 | Update lifestyle cost calculation to include modifications, subscriptions, expenses, income | ✅ Complete |
+| B11.3.9 | Add validation: character must have at least one lifestyle (primary) | ✅ Complete |
+| B11.3.10 | Add validation: permanent lifestyle cost = 100 × monthly cost | ✅ Complete |
 
 **Tasks JSON:**
 ```json
@@ -2623,7 +2645,7 @@ This milestone enhances the existing lifestyle selection in GearStep to support 
     "files": [
       "/app/characters/create/components/steps/GearStep.tsx"
     ],
-    "status": "Not Started",
+    "status": "Complete",
     "dependsOn": ["B11.1.4"]
   },
   {
@@ -2633,7 +2655,7 @@ This milestone enhances the existing lifestyle selection in GearStep to support 
     "files": [
       "/app/characters/create/components/LifestyleEditor.tsx"
     ],
-    "status": "Not Started",
+    "status": "Complete",
     "dependsOn": ["B11.1.4"]
   },
   {
@@ -2643,7 +2665,7 @@ This milestone enhances the existing lifestyle selection in GearStep to support 
     "files": [
       "/app/characters/create/components/LifestyleEditor.tsx"
     ],
-    "status": "Not Started",
+    "status": "Complete",
     "dependsOn": ["B11.3.2"]
   },
   {
@@ -2653,17 +2675,22 @@ This milestone enhances the existing lifestyle selection in GearStep to support 
     "files": [
       "/app/characters/create/components/LifestyleModificationSelector.tsx"
     ],
-    "status": "Not Started",
+    "status": "Complete",
     "dependsOn": ["B11.1.5"]
   },
   {
     "id": "B11.3.5",
     "title": "Add lifestyle subscriptions UI (DocWagon contracts, food services, etc.)",
-    "description": "This milestone enhances the existing lifestyle selection in GearStep to support full lifestyle management including modifications, subscriptions, custom expenses/income, and permanent purchase options. It also enables multiple lifestyles for different identities and proper lifestyle-identity associations. Add lifestyle subscriptions UI (DocWagon contracts, food services, etc.).",
+    "description": "This milestone enhances the existing lifestyle selection in GearStep to support full lifestyle management including modifications, subscriptions, custom expenses/income, and permanent purchase options. It also enables multiple lifestyles for different identities and proper lifestyle-identity associations. Implemented LifestyleSubscriptionSelector component with catalog-based selection (similar to LifestyleModificationSelector). Added subscription catalog data to ruleset (DocWagon contracts: Basic, Gold, Platinum, Super-Platinum; Food Service with rating-based pricing). Integrated selector into LifestyleEditor, replacing prompt-based input. Added subscription extractor functions and hooks for accessing subscription catalog.",
     "files": [
-      "/app/characters/create/components/LifestyleEditor.tsx"
+      "/app/characters/create/components/LifestyleEditor.tsx",
+      "/app/characters/create/components/LifestyleSubscriptionSelector.tsx",
+      "/data/editions/sr5/core-rulebook.json",
+      "/lib/rules/loader.ts",
+      "/lib/rules/RulesetContext.tsx",
+      "/app/api/rulesets/[editionCode]/route.ts"
     ],
-    "status": "Not Started",
+    "status": "Complete",
     "dependsOn": ["B11.3.2"]
   },
   {
@@ -2673,7 +2700,7 @@ This milestone enhances the existing lifestyle selection in GearStep to support 
     "files": [
       "/app/characters/create/components/LifestyleEditor.tsx"
     ],
-    "status": "Not Started",
+    "status": "Complete",
     "dependsOn": ["B11.3.2"]
   },
   {
@@ -2684,7 +2711,7 @@ This milestone enhances the existing lifestyle selection in GearStep to support 
       "/app/characters/create/components/steps/IdentitiesStep.tsx",
       "/app/characters/create/components/steps/GearStep.tsx"
     ],
-    "status": "Not Started",
+    "status": "Complete",
     "dependsOn": ["B11.2.1", "B11.3.1"]
   },
   {
@@ -2695,7 +2722,7 @@ This milestone enhances the existing lifestyle selection in GearStep to support 
       "/app/characters/create/components/LifestyleEditor.tsx",
       "/lib/rules/validation.ts"
     ],
-    "status": "Not Started",
+    "status": "Complete",
     "dependsOn": ["B11.3.3", "B11.3.4", "B11.3.5", "B11.3.6"]
   },
   {
@@ -2706,7 +2733,7 @@ This milestone enhances the existing lifestyle selection in GearStep to support 
       "/app/characters/create/components/steps/GearStep.tsx",
       "/lib/rules/validation.ts"
     ],
-    "status": "Not Started",
+    "status": "Complete",
     "dependsOn": ["B11.3.1"]
   },
   {
@@ -2717,7 +2744,7 @@ This milestone enhances the existing lifestyle selection in GearStep to support 
       "/app/characters/create/components/LifestyleEditor.tsx",
       "/lib/rules/validation.ts"
     ],
-    "status": "Not Started",
+    "status": "Complete",
     "dependsOn": ["B11.3.3"]
   }
 ]
@@ -2806,9 +2833,12 @@ This milestone updates the ReviewStep to display identities, SINs, licenses, and
 - **B11.5.AC.6** [x] Fake licenses (Rating 1-4) must be tied to fake SINs
 - **B11.5.AC.7** [x] Real licenses must be tied to real SINs
 - **B11.5.AC.8** [x] Character must have at least one lifestyle (primary)
+- **B11.5.AC.9** [x] Lifestyle subscriptions available via catalog selector (DocWagon contracts, Food Service)
+- **B11.5.AC.10** [x] Subscription costs calculated correctly (yearly-to-monthly conversion, rating-based pricing)
+- **B11.5.AC.11** [x] LifestyleSubscriptionSelector component integrated into LifestyleEditor
 - **B11.5.AC.9** [x] Character can have multiple lifestyles (for alternate identities/safehouses)
 - **B11.5.AC.10** [x] Lifestyles can have modifications (positive/negative, percentage or fixed cost)
-- **B11.5.AC.11** [x] Lifestyles can have subscriptions (DocWagon, food services, etc.)
+- **B11.5.AC.11** [x] Lifestyles can have subscriptions via LifestyleSubscriptionSelector catalog (DocWagon contracts: Basic, Gold, Platinum, Super-Platinum; Food Service with rating-based pricing)
 - **B11.5.AC.12** [x] Lifestyles can have custom expenses and income
 - **B11.5.AC.13** [x] Permanent lifestyle purchase costs 100 × monthly cost (implemented as modification)
 - **B11.5.AC.14** [x] Identities can be associated with lifestyles
@@ -4827,6 +4857,8 @@ This milestone creates a dedicated ProgramsStep component for program selection,
 ---
 
 ## Phase B14: Foci & Spirits
+
+**Status:** ✅ **Complete**
 
 **Objective:** Complete magical character creation with foci catalog and spirit data.
 

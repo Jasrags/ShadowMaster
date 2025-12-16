@@ -474,6 +474,22 @@ export interface LifestyleData {
   startingNuyen: string;
 }
 
+export interface LifestyleSubscriptionCatalogItem {
+  id: string;
+  name: string;
+  monthlyCost?: number;
+  yearlyCost?: number;
+  costPerRating?: boolean;
+  minRating?: number;
+  maxRating?: number;
+  category?: string;
+  description?: string;
+}
+
+export interface LifestyleSubscriptionsCatalogData {
+  subscriptions: LifestyleSubscriptionCatalogItem[];
+}
+
 /**
  * Load lifestyles from a ruleset
  */
@@ -488,6 +504,14 @@ export function extractLifestyles(ruleset: LoadedRuleset): LifestyleData[] {
 export function extractLifestyleModifiers(ruleset: LoadedRuleset): Record<string, number> {
   const ruleModule = extractModule<{ metatypeModifiers: Record<string, number> }>(ruleset, "lifestyle");
   return ruleModule?.metatypeModifiers || {};
+}
+
+/**
+ * Load lifestyle subscriptions from a ruleset
+ */
+export function extractLifestyleSubscriptions(ruleset: LoadedRuleset): LifestyleSubscriptionCatalogItem[] {
+  const ruleModule = extractModule<LifestyleSubscriptionsCatalogData>(ruleset, "lifestyle");
+  return ruleModule?.subscriptions || [];
 }
 
 // =============================================================================
@@ -1514,11 +1538,56 @@ export interface ArmorModificationCatalogItemData {
 }
 
 /**
+ * Cyberware modification catalog item data structure
+ */
+export interface CyberwareModificationCatalogItemData {
+  id: string;
+  name: string;
+  /** Capacity cost */
+  capacityCost: number;
+  /** Whether capacity cost scales with rating */
+  capacityPerRating?: boolean;
+  /** Whether this uses no capacity (bracketed in rulebook) */
+  noCapacityCost?: boolean;
+  /** Whether the mod has a rating */
+  hasRating?: boolean;
+  /** Maximum rating if applicable */
+  maxRating?: number;
+  /** Base cost in nuyen */
+  cost: number;
+  /** Whether cost scales with rating */
+  costPerRating?: boolean;
+  /** Base availability */
+  availability: number;
+  /** Whether availability is Restricted */
+  restricted?: boolean;
+  /** Whether availability is Forbidden */
+  forbidden?: boolean;
+  /** Applicable cyberware categories/subcategories */
+  applicableCategories?: string[];
+  /** Parent type (e.g., "cyberlimb" for cyberlimb enhancements) */
+  parentType?: string;
+  /** Attribute bonuses provided */
+  attributeBonuses?: Record<string, number>;
+  /** Attribute bonuses per rating */
+  attributeBonusesPerRating?: Record<string, number>;
+  /** Requirements */
+  requirements?: string[];
+  /** Description */
+  description?: string;
+  /** Page reference */
+  page?: number;
+  /** Source book */
+  source?: string;
+}
+
+/**
  * Complete modifications catalog data structure
  */
 export interface ModificationsCatalogData {
   weaponMods: WeaponModificationCatalogItemData[];
   armorMods: ArmorModificationCatalogItemData[];
+  cyberwareMods?: CyberwareModificationCatalogItemData[];
 }
 
 /**
@@ -1535,6 +1604,14 @@ export function extractWeaponModifications(ruleset: LoadedRuleset): WeaponModifi
 export function extractArmorModifications(ruleset: LoadedRuleset): ArmorModificationCatalogItemData[] {
   const ruleModule = extractModule<ModificationsCatalogData>(ruleset, "modifications");
   return ruleModule?.armorMods || [];
+}
+
+/**
+ * Load cyberware modifications from a ruleset
+ */
+export function extractCyberwareModifications(ruleset: LoadedRuleset): CyberwareModificationCatalogItemData[] {
+  const ruleModule = extractModule<ModificationsCatalogData>(ruleset, "modifications");
+  return ruleModule?.cyberwareMods || [];
 }
 
 /**
