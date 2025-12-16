@@ -26,11 +26,16 @@ todos:
     status: completed
     dependencies:
       - validation-cost
+  - id: augmentation-integration
+    content: Integrate Augmentations into GearStep with cyberware enhancements
+    status: completed
+    dependencies:
+      - review-display
   - id: testing
     content: Run acceptance checks for B10.5 AC1-AC12
     status: pending
     dependencies:
-      - review-display
+      - augmentation-integration
 ---
 
 # Phase B10: Gear Modifications Plan
