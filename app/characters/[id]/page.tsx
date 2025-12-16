@@ -28,7 +28,7 @@ function EditIcon({ className }: { className?: string }) {
 function DiceIcon({ className }: { className?: string }) {
   return (
     <svg className={className} viewBox="0 0 24 24" fill="currentColor">
-      <path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zM7.5 18c-.83 0-1.5-.67-1.5-1.5S6.67 15 7.5 15s1.5.67 1.5 1.5S8.33 18 7.5 18zm0-9C6.67 9 6 8.33 6 7.5S6.67 6 7.5 6 9 6.67 9 7.5 8.33 9 7.5 9zm4.5 4.5c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5zm4.5 4.5c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5zm0-9c-.83 0-1.5-.67-1.5-1.5S15.67 6 16.5 6s1.5.67 1.5 1.5S17.33 9 16.5 9z"/>
+      <path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zM7.5 18c-.83 0-1.5-.67-1.5-1.5S6.67 15 7.5 15s1.5.67 1.5 1.5S8.33 18 7.5 18zm0-9C6.67 9 6 8.33 6 7.5S6.67 6 7.5 6 9 6.67 9 7.5 8.33 9 7.5 9zm4.5 4.5c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5zm4.5 4.5c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5zm0-9c-.83 0-1.5-.67-1.5-1.5S15.67 6 16.5 6s1.5.67 1.5 1.5S17.33 9 16.5 9z" />
     </svg>
   );
 }
@@ -91,7 +91,7 @@ function ConditionMonitor({ label, maxBoxes, filledBoxes, color }: ConditionMoni
     },
   };
   const colors = colorClasses[color];
-  
+
   // Group boxes in rows of 3 (Shadowrun style)
   const rows = [];
   for (let i = 0; i < maxBoxes; i += 3) {
@@ -104,9 +104,8 @@ function ConditionMonitor({ label, maxBoxes, filledBoxes, color }: ConditionMoni
           return (
             <div
               key={boxIndex}
-              className={`h-5 w-5 border-2 transition-all ${
-                isFilled ? `${colors.filled} shadow-sm` : colors.empty
-              }`}
+              className={`h-5 w-5 border-2 transition-all ${isFilled ? `${colors.filled} shadow-sm` : colors.empty
+                }`}
               style={{ clipPath: "polygon(15% 0, 100% 0, 100% 85%, 85% 100%, 0 100%, 0 15%)" }}
             />
           );
@@ -147,9 +146,9 @@ interface AttributeBlockProps {
 function AttributeBlock({ id, value, max }: AttributeBlockProps) {
   const display = ATTRIBUTE_DISPLAY[id];
   if (!display) return null;
-  
+
   const percentage = max ? (value / max) * 100 : (value / 6) * 100;
-  
+
   return (
     <div className="group relative">
       <div className="absolute inset-0 bg-gradient-to-r from-zinc-800/50 to-transparent rounded" />
@@ -159,7 +158,7 @@ function AttributeBlock({ id, value, max }: AttributeBlockProps) {
         </span>
         <div className="flex-1">
           <div className="h-1.5 bg-zinc-800 rounded-full overflow-hidden">
-            <div 
+            <div
               className={`h-full bg-gradient-to-r from-zinc-500 to-zinc-400 transition-all duration-500`}
               style={{ width: `${Math.min(percentage, 100)}%` }}
             />
@@ -192,7 +191,7 @@ function Section({ title, icon, children, className = "" }: SectionProps) {
       <div className="absolute -top-px -right-px w-4 h-4 border-t-2 border-r-2 border-emerald-500/50" />
       <div className="absolute -bottom-px -left-px w-4 h-4 border-b-2 border-l-2 border-emerald-500/50" />
       <div className="absolute -bottom-px -right-px w-4 h-4 border-b-2 border-r-2 border-emerald-500/50" />
-      
+
       <div className="border border-zinc-800 bg-zinc-900/80 backdrop-blur-sm">
         <div className="flex items-center gap-2 border-b border-zinc-800 px-4 py-2 bg-zinc-900">
           {icon}
@@ -218,7 +217,7 @@ interface SkillListProps {
 
 function SkillList({ skills, linkedAttributes = {} }: SkillListProps) {
   const sortedSkills = Object.entries(skills).sort((a, b) => b[1] - a[1]);
-  
+
   if (sortedSkills.length === 0) {
     return <p className="text-sm text-zinc-500 italic">No skills assigned</p>;
   }
@@ -228,9 +227,9 @@ function SkillList({ skills, linkedAttributes = {} }: SkillListProps) {
       {sortedSkills.map(([skillId, rating]) => {
         const linkedAttr = linkedAttributes[skillId];
         const attrDisplay = linkedAttr ? ATTRIBUTE_DISPLAY[linkedAttr] : null;
-        
+
         return (
-          <div 
+          <div
             key={skillId}
             className="flex items-center justify-between py-1 px-2 rounded hover:bg-zinc-800/50 transition-colors group"
           >
@@ -246,14 +245,14 @@ function SkillList({ skills, linkedAttributes = {} }: SkillListProps) {
             </div>
             <div className="flex items-center gap-1">
               {Array.from({ length: rating }).map((_, i) => (
-                <div 
-                  key={i} 
+                <div
+                  key={i}
                   className="w-2 h-2 bg-emerald-500 rounded-sm"
                 />
               ))}
               {Array.from({ length: Math.max(0, 6 - rating) }).map((_, i) => (
-                <div 
-                  key={i} 
+                <div
+                  key={i}
                   className="w-2 h-2 bg-zinc-700 rounded-sm"
                 />
               ))}
@@ -281,11 +280,10 @@ function QualityBadge({ name, type }: QualityBadgeProps) {
   const isPositive = type === "positive";
   return (
     <span
-      className={`inline-flex items-center px-2 py-1 text-xs font-medium rounded border ${
-        isPositive 
-          ? "bg-emerald-950/50 text-emerald-400 border-emerald-700/50"
-          : "bg-red-950/50 text-red-400 border-red-700/50"
-      }`}
+      className={`inline-flex items-center px-2 py-1 text-xs font-medium rounded border ${isPositive
+        ? "bg-emerald-950/50 text-emerald-400 border-emerald-700/50"
+        : "bg-red-950/50 text-red-400 border-red-700/50"
+        }`}
     >
       <span className={`mr-1 ${isPositive ? "text-emerald-500" : "text-red-500"}`}>
         {isPositive ? "+" : "−"}
@@ -345,11 +343,11 @@ export default function CharacterPage({ params }: CharacterPageProps) {
       try {
         const response = await fetch(`/api/characters/${resolvedParams.id}`);
         const data = await response.json();
-        
+
         if (!data.success) {
           throw new Error(data.error || "Failed to load character");
         }
-        
+
         setCharacter(data.character);
       } catch (err) {
         setError(err instanceof Error ? err.message : "An error occurred");
@@ -357,7 +355,7 @@ export default function CharacterPage({ params }: CharacterPageProps) {
         setLoading(false);
       }
     }
-    
+
     fetchCharacter();
   }, [resolvedParams.id]);
 
@@ -386,7 +384,7 @@ export default function CharacterPage({ params }: CharacterPageProps) {
           </svg>
         </div>
         <p className="text-red-400 font-mono">{error || "Character not found"}</p>
-        <Link 
+        <Link
           href="/characters"
           className="text-sm text-zinc-400 hover:text-emerald-400 transition-colors"
         >
@@ -400,19 +398,19 @@ export default function CharacterPage({ params }: CharacterPageProps) {
   const physicalMonitorMax = Math.ceil((character.attributes?.body || 1) / 2) + 8;
   const stunMonitorMax = Math.ceil((character.attributes?.willpower || 1) / 2) + 8;
   const physicalLimit = Math.ceil(
-    (((character.attributes?.strength || 1) * 2) + 
-     (character.attributes?.body || 1) + 
-     (character.attributes?.reaction || 1)) / 3
+    (((character.attributes?.strength || 1) * 2) +
+      (character.attributes?.body || 1) +
+      (character.attributes?.reaction || 1)) / 3
   );
   const mentalLimit = Math.ceil(
-    (((character.attributes?.logic || 1) * 2) + 
-     (character.attributes?.intuition || 1) + 
-     (character.attributes?.willpower || 1)) / 3
+    (((character.attributes?.logic || 1) * 2) +
+      (character.attributes?.intuition || 1) +
+      (character.attributes?.willpower || 1)) / 3
   );
   const socialLimit = Math.ceil(
-    (((character.attributes?.charisma || 1) * 2) + 
-     (character.attributes?.willpower || 1) + 
-     Math.ceil(character.specialAttributes?.essence || 6)) / 3
+    (((character.attributes?.charisma || 1) * 2) +
+      (character.attributes?.willpower || 1) +
+      Math.ceil(character.specialAttributes?.essence || 6)) / 3
   );
   const initiative = (character.attributes?.reaction || 1) + (character.attributes?.intuition || 1);
 
@@ -439,14 +437,14 @@ export default function CharacterPage({ params }: CharacterPageProps) {
       <div className="relative overflow-hidden rounded-lg border border-zinc-800 bg-gradient-to-br from-zinc-900 via-zinc-900 to-zinc-800">
         {/* Background pattern */}
         <div className="absolute inset-0 opacity-5">
-          <div 
+          <div
             className="absolute inset-0"
             style={{
               backgroundImage: `url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='1'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E")`,
             }}
           />
         </div>
-        
+
         {/* Scan line effect */}
         <div className="absolute inset-0 pointer-events-none overflow-hidden">
           <div className="absolute inset-0 bg-gradient-to-b from-transparent via-emerald-500/5 to-transparent animate-pulse" />
@@ -459,13 +457,12 @@ export default function CharacterPage({ params }: CharacterPageProps) {
                 <h1 className="text-3xl font-bold text-zinc-50 tracking-tight">
                   {character.name || "Unnamed Runner"}
                 </h1>
-                <span className={`px-2 py-0.5 text-xs font-mono uppercase rounded ${
-                  character.status === "active" 
-                    ? "bg-emerald-500/20 text-emerald-400 border border-emerald-500/30"
-                    : character.status === "draft"
+                <span className={`px-2 py-0.5 text-xs font-mono uppercase rounded ${character.status === "active"
+                  ? "bg-emerald-500/20 text-emerald-400 border border-emerald-500/30"
+                  : character.status === "draft"
                     ? "bg-amber-500/20 text-amber-400 border border-amber-500/30"
                     : "bg-zinc-500/20 text-zinc-400 border border-zinc-500/30"
-                }`}>
+                  }`}>
                   {character.status}
                 </span>
               </div>
@@ -482,32 +479,44 @@ export default function CharacterPage({ params }: CharacterPageProps) {
                 )}
               </div>
             </div>
-            
+
             <div className="flex items-center gap-2">
               <Button
                 onPress={() => setShowDiceRoller(!showDiceRoller)}
-                className={`p-2 rounded-lg border transition-colors ${
-                  showDiceRoller 
-                    ? "border-emerald-500/50 bg-emerald-500/10 text-emerald-400" 
-                    : "border-zinc-700 hover:border-emerald-500/50 hover:bg-emerald-500/10 text-zinc-400 hover:text-emerald-400"
-                }`}
+                className={`p-2 rounded-lg border transition-colors ${showDiceRoller
+                  ? "border-emerald-500/50 bg-emerald-500/10 text-emerald-400"
+                  : "border-zinc-700 hover:border-emerald-500/50 hover:bg-emerald-500/10 text-zinc-400 hover:text-emerald-400"
+                  }`}
               >
                 <DiceIcon className="w-5 h-5" />
               </Button>
-              <Link
-                href={`/characters/${character.id}/edit`}
-                className="p-2 rounded-lg border border-zinc-700 hover:border-emerald-500/50 hover:bg-emerald-500/10 transition-colors group"
-              >
-                <EditIcon className="w-5 h-5 text-zinc-400 group-hover:text-emerald-400" />
-              </Link>
+              {character.status === "draft" && (
+                <Link
+                  href={`/characters/${character.id}/edit`}
+                  className="p-2 rounded-lg border border-zinc-700 hover:border-emerald-500/50 hover:bg-emerald-500/10 transition-colors group"
+                >
+                  <EditIcon className="w-5 h-5 text-zinc-400 group-hover:text-emerald-400" />
+                </Link>
+              )}
             </div>
+            {/* Resume Button for Drafts */}
+            {character.status === "draft" && (
+              <div className="flex items-center">
+                <Link
+                  href={`/characters/${character.id}/edit`}
+                  className="rounded-lg bg-emerald-600 px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-emerald-700 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:ring-offset-2 focus:ring-offset-black"
+                >
+                  Resume Creation
+                </Link>
+              </div>
+            )}
           </div>
 
           {/* Collapsible Dice Roller */}
           {showDiceRoller && (
             <div className="mt-6 pt-6 border-t border-zinc-800">
               <div className="max-w-md mx-auto">
-                <DiceRoller 
+                <DiceRoller
                   initialPool={Math.max(
                     (character.attributes?.agility || 3) + (character.skills?.pistols || 0),
                     6
@@ -562,7 +571,7 @@ export default function CharacterPage({ params }: CharacterPageProps) {
                 <AttributeBlock key={id} id={id} value={value} />
               ))}
             </div>
-            
+
             {/* Magic/Resonance if applicable */}
             {character.specialAttributes?.magic !== undefined && (
               <div className="mt-4 pt-4 border-t border-zinc-800">
@@ -638,7 +647,7 @@ export default function CharacterPage({ params }: CharacterPageProps) {
             <Section title="Knowledge">
               <div className="space-y-1">
                 {character.knowledgeSkills.map((skill, index) => (
-                  <div 
+                  <div
                     key={index}
                     className="flex items-center justify-between py-1 px-2 rounded hover:bg-zinc-800/50"
                   >
@@ -658,13 +667,12 @@ export default function CharacterPage({ params }: CharacterPageProps) {
             <Section title="Languages">
               <div className="flex flex-wrap gap-2">
                 {character.languages.map((lang, index) => (
-                  <span 
+                  <span
                     key={index}
-                    className={`px-2 py-1 text-xs rounded border ${
-                      lang.isNative 
-                        ? "bg-emerald-950/50 text-emerald-400 border-emerald-700/50"
-                        : "bg-zinc-800/50 text-zinc-300 border-zinc-700/50"
-                    }`}
+                    className={`px-2 py-1 text-xs rounded border ${lang.isNative
+                      ? "bg-emerald-950/50 text-emerald-400 border-emerald-700/50"
+                      : "bg-zinc-800/50 text-zinc-300 border-zinc-700/50"
+                      }`}
                   >
                     {lang.name} {lang.isNative ? "(N)" : `(${lang.rating})`}
                   </span>
@@ -678,8 +686,8 @@ export default function CharacterPage({ params }: CharacterPageProps) {
         <div className="space-y-6">
           {/* Qualities */}
           <Section title="Qualities">
-            {(character.positiveQualities?.length || 0) === 0 && 
-             (character.negativeQualities?.length || 0) === 0 ? (
+            {(character.positiveQualities?.length || 0) === 0 &&
+              (character.negativeQualities?.length || 0) === 0 ? (
               <p className="text-sm text-zinc-500 italic">No qualities selected</p>
             ) : (
               <div className="space-y-4">
@@ -727,7 +735,7 @@ export default function CharacterPage({ params }: CharacterPageProps) {
             ) : (
               <div className="space-y-2">
                 {character.contacts.map((contact, index) => (
-                  <div 
+                  <div
                     key={index}
                     className="p-3 bg-zinc-800/30 rounded border-l-2 border-zinc-600"
                   >
@@ -758,28 +766,28 @@ export default function CharacterPage({ params }: CharacterPageProps) {
                 {character.lifestyles.map((lifestyle) => {
                   // Calculate total monthly cost
                   let totalMonthlyCost = lifestyle.monthlyCost || 0;
-                  
+
                   // Apply modifications (excluding permanent lifestyle modification)
                   (lifestyle.modifications || []).forEach((mod) => {
                     // Skip permanent lifestyle modification (it's a one-time purchase, not monthly)
                     if (mod.catalogId === "permanent-lifestyle" || mod.name.toLowerCase() === "permanent lifestyle") {
                       return;
                     }
-                    
+
                     if (mod.modifierType === "percentage") {
                       totalMonthlyCost = totalMonthlyCost * (1 + (mod.type === "positive" ? 1 : -1) * (mod.modifier / 100));
                     } else if (mod.modifierType === "fixed") {
                       totalMonthlyCost = totalMonthlyCost + (mod.type === "positive" ? 1 : -1) * mod.modifier;
                     }
                   });
-                  
+
                   // Add subscription costs
                   const subscriptionCost = (lifestyle.subscriptions || []).reduce(
                     (sum, sub) => sum + (sub.monthlyCost || 0),
                     0
                   );
                   totalMonthlyCost = totalMonthlyCost + subscriptionCost;
-                  
+
                   // Add custom expenses/income
                   if (lifestyle.customExpenses) {
                     totalMonthlyCost = totalMonthlyCost + lifestyle.customExpenses;
@@ -787,15 +795,15 @@ export default function CharacterPage({ params }: CharacterPageProps) {
                   if (lifestyle.customIncome) {
                     totalMonthlyCost = totalMonthlyCost - lifestyle.customIncome;
                   }
-                  
+
                   // Check if permanent
                   const isPermanent = lifestyle.modifications?.some(
                     (mod) => mod.catalogId === "permanent-lifestyle" || mod.name.toLowerCase() === "permanent lifestyle"
                   ) || false;
-                  
+
                   // Get lifestyle name (use type as display name)
                   const lifestyleName = lifestyle.type;
-                  
+
                   return (
                     <div key={lifestyle.id || lifestyle.type} className="p-3 bg-zinc-800/30 rounded">
                       <div className="flex items-center justify-between">

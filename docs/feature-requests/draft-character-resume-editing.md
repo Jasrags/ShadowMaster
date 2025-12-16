@@ -107,6 +107,9 @@ Enable draft characters to appear in the characters list with a "Resume Editing"
 ---
 
 ## Technical Considerations
+
+> **📋 Technical Specification:** For detailed API contracts, route structures, error handling, and implementation details, see the [Technical Specification](./draft-character-resume-editing-technical-spec.md).
+
 **Technical Approach:**
 1. Modify character creation wizard to accept an optional `characterId` prop
 2. When `characterId` is provided, load existing draft from API (includes `character.metadata.creationState`)
@@ -211,6 +214,9 @@ Enable draft characters to appear in the characters list with a "Resume Editing"
 ---
 
 ## Additional Context
+**Related Documentation:**
+- [Technical Specification](./draft-character-resume-editing-technical-spec.md) - Detailed API contracts, route structures, error handling, and implementation details
+
 **Related Features:**
 - Character creation wizard (`/app/characters/create/components/CreationWizard.tsx`)
 - Character list page (`/app/characters/page.tsx`)

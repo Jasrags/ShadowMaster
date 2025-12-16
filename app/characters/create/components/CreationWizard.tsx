@@ -47,68 +47,15 @@ import { IdentitiesStep } from "./steps/IdentitiesStep";
 import { ReviewStep } from "./steps/ReviewStep";
 
 interface CreationWizardProps {
+  characterId?: ID;
+  initialState?: CreationState;
   onCancel: () => void;
   onComplete: (characterId: ID) => void;
 }
 
-// Local storage key for draft saving
-const DRAFT_STORAGE_KEY = "shadowmaster-character-draft";
 
-// Initial creation state
-function createInitialState(): CreationState {
-  return {
-    characterId: crypto.randomUUID(),
-    creationMethodId: "priority",
-    currentStep: 0,
-    completedSteps: [],
-    budgets: {},
-    selections: {},
-    priorities: {},
-    errors: [],
-    warnings: [],
-    updatedAt: new Date().toISOString(),
-  };
-}
 
-// Load draft from local storage
-function loadDraft(): CreationState | null {
-  if (typeof window === "undefined") return null;
-  try {
-    const saved = localStorage.getItem(DRAFT_STORAGE_KEY);
-    if (saved) {
-      const parsed = JSON.parse(saved);
-      // Validate it's a valid state
-      if (parsed.characterId && parsed.creationMethodId) {
-        return parsed;
-      }
-    }
-  } catch {
-    // Ignore parse errors
-  }
-  return null;
-}
-
-// Save draft to local storage
-function saveDraft(state: CreationState): void {
-  if (typeof window === "undefined") return;
-  try {
-    localStorage.setItem(DRAFT_STORAGE_KEY, JSON.stringify(state));
-  } catch {
-    // Ignore storage errors
-  }
-}
-
-// Clear draft from local storage
-function clearDraft(): void {
-  if (typeof window === "undefined") return;
-  try {
-    localStorage.removeItem(DRAFT_STORAGE_KEY);
-  } catch {
-    // Ignore storage errors
-  }
-}
-
-export function CreationWizard({ onCancel, onComplete }: CreationWizardProps) {
+export function CreationWizard({ onCancel, onComplete, characterId: initialCharacterId, initialState }: CreationWizardProps) {
   const { ruleset, editionCode } = useRuleset();
   const creationMethod = useCreationMethod();
   const priorityTable = usePriorityTable();
@@ -117,31 +64,152 @@ export function CreationWizard({ onCancel, onComplete }: CreationWizardProps) {
   const availableLifestyles = useLifestyles();
   const spellsCatalog = useSpells();
 
+  // Initial creation state
+  function createInitialState(): CreationState {
+    return {
+      characterId: crypto.randomUUID(),
+      creationMethodId: "priority",
+      currentStep: 0,
+      completedSteps: [],
+      budgets: {},
+      selections: {},
+      priorities: {},
+      errors: [],
+      warnings: [],
+      updatedAt: new Date().toISOString(),
+    };
+  }
+
   // Creation state - load draft if available
   const [state, setState] = useState<CreationState>(() => {
-    const draft = loadDraft();
-    return draft || createInitialState();
+    if (initialState) return initialState;
+    return createInitialState();
   });
 
-  // Track if we have a draft
-  const [hasDraft, setHasDraft] = useState(false);
+  // Track character ID (prop or created during auto-save)
+  const [characterId, setCharacterId] = useState<string | undefined>(initialCharacterId);
+
+  // Track if we have a draft (either from prop or local)
+  const [hasDraft, setHasDraft] = useState(!!initialCharacterId);
 
   // Track saving state
   const [isSaving, setIsSaving] = useState(false);
   const [saveError, setSaveError] = useState<string | null>(null);
 
-  // Check for existing draft on mount
+  // Update hasDraft status
   useEffect(() => {
-    const draft = loadDraft();
-    setHasDraft(!!draft);
-  }, []);
+    setHasDraft(!!characterId);
+  }, [characterId]);
 
-  // Auto-save draft on state changes
-  useEffect(() => {
-    if (Object.keys(state.priorities || {}).length > 0) {
-      saveDraft(state);
+  // Server-side save function (debounced in effect)
+  const saveToServer = useCallback(async (currentState: CreationState) => {
+    try {
+      if (characterId) {
+        // Update existing draft
+        await fetch(`/api/characters/${characterId}`, {
+          method: "PATCH",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            metadata: {
+              creationState: {
+                ...currentState,
+                characterId // Ensure ID matches
+              }
+            }
+          })
+        });
+      } else {
+        // Create new draft if we have enough info (at least creation method)
+        // We need edition info which is not in creation state directly, but we have hooks
+        // Actually, we use the POST /api/characters endpoint which requires name, edition, etc.
+        // We might not want to create the server draft IMMEDIATELY on first selection if we don't have basic info?
+        // But the wizard starts with defaults.
+
+        // Wait, the POST /api/characters requries: editionId, editionCode, creationMethodId, name.
+        // We have these (name defaults to "Unnamed Runner").
+        // But wait, if we create it now, it shows up in list. That's desired.
+
+        // However, we need to be careful not to spam POST.
+        // Let's rely on the auto-save effect to call this.
+      }
+    } catch (e) {
+      console.error("Auto-save failed", e);
     }
-  }, [state]);
+  }, [characterId]);
+
+  // Auto-save effect
+  useEffect(() => {
+    // Debounce timer
+    const timer = setTimeout(async () => {
+      // Logic:
+      // 1. If we have characterId -> PATCH
+      // 2. If we DON'T have characterId -> POST (create) then PATCH?
+      //    OR just save to localStorage until we have characterId?
+      //    The spec says "Replace localStorage". So we should create server draft.
+
+      if (Object.keys(state.priorities || {}).length > 0) {
+        if (characterId) {
+          // Save to server
+          await fetch(`/api/characters/${characterId}`, {
+            method: "PATCH",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+              metadata: {
+                creationState: {
+                  ...state,
+                  characterId
+                }
+              }
+            })
+          });
+        } else if (!initialCharacterId) {
+          // No ID yet? Create server draft!
+          // We need editionId, creationMethodId, etc.
+          // editionCode and creationMethodId are available.
+          // editionId is technically 'sr5' based on our current hardcoding elsewhere or available in ruleset?
+          // ruleset object itself should have it. 
+          // But wait, `useRuleset` gives `ruleset`. `ruleset.id`?
+
+          try {
+            const response = await fetch("/api/characters", {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify({
+                editionId: ruleset?.editionId || "sr5", // Fallback or assume sr5
+                editionCode: editionCode || "sr5",
+                creationMethodId: state.creationMethodId,
+                name: (state.selections.characterName as string) || "Unnamed Runner",
+              }),
+            });
+
+            const result = await response.json();
+            if (result.success && result.character) {
+              const newId = result.character.id;
+              setCharacterId(newId);
+
+              // Now save the state to this new character
+              await fetch(`/api/characters/${newId}`, {
+                method: "PATCH",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({
+                  metadata: {
+                    creationState: {
+                      ...state,
+                      characterId: newId
+                    }
+                  }
+                })
+              });
+            }
+          } catch (e) {
+            console.error("Failed to auto-create draft", e);
+          }
+        }
+      }
+    }, 1000); // 1s debounce
+
+    return () => clearTimeout(timer);
+  }, [state, characterId, initialCharacterId, editionCode, ruleset]);
 
   // Get steps from creation method and filter based on character type
   const steps = useMemo(() => {
@@ -693,15 +761,15 @@ export function CreationWizard({ onCancel, onComplete }: CreationWizardProps) {
   // Calculate lifestyle cost (including modifications and permanent purchase)
   const calculateLifestyleCost = useCallback((lifestyle: Lifestyle): number => {
     if (!lifestyle.type) return 0;
-    
+
     // Find base lifestyle cost
     const baseLifestyle = availableLifestyles.find((l) => l.id === lifestyle.type || l.name.toLowerCase() === lifestyle.type.toLowerCase());
     if (!baseLifestyle) return 0;
-    
+
     const metatype = (state.selections?.metatype as string) || "human";
     const modifier = lifestyleModifiers[metatype] || 1;
     let cost = baseLifestyle.monthlyCost * modifier;
-    
+
     // Apply modifications (excluding permanent lifestyle modification)
     lifestyle.modifications?.forEach((mod) => {
       if (mod.catalogId !== "permanent-lifestyle" && mod.name.toLowerCase() !== "permanent lifestyle") {
@@ -712,21 +780,21 @@ export function CreationWizard({ onCancel, onComplete }: CreationWizardProps) {
         }
       }
     });
-    
+
     // Add subscriptions
     const subscriptionCost = lifestyle.subscriptions?.reduce((sum, sub) => sum + sub.monthlyCost, 0) || 0;
     cost = cost + subscriptionCost;
-    
+
     // Add custom expenses, subtract custom income
     cost = cost + (lifestyle.customExpenses || 0) - (lifestyle.customIncome || 0);
-    
+
     const finalMonthlyCost = Math.max(0, Math.floor(cost));
-    
+
     // Check if permanent
     if (isLifestylePermanent(lifestyle)) {
       return finalMonthlyCost * 100; // Permanent: 100 × monthly cost
     }
-    
+
     return finalMonthlyCost; // Monthly: 1 month prepaid
   }, [availableLifestyles, lifestyleModifiers, state.selections?.metatype]);
 
@@ -738,21 +806,21 @@ export function CreationWizard({ onCancel, onComplete }: CreationWizardProps) {
       associatedLifestyleId?: string;
     }>;
     const lifestyles = (state.selections?.lifestyles || []) as Lifestyle[];
-    
+
     let total = 0;
     identities.forEach((identity) => {
       // Fake SIN cost: Rating × 625¥ (Rating 4 = 2,500¥)
       if (identity.sin?.type === "fake" && identity.sin.rating) {
         total += identity.sin.rating * 625;
       }
-      
+
       // Fake License costs: Rating × 50¥ (Rating 4 = 200¥)
       identity.licenses?.forEach((license) => {
         if (license.type === "fake" && license.rating) {
           total += license.rating * 50;
         }
       });
-      
+
       // Lifestyle cost (if associated)
       if (identity.associatedLifestyleId) {
         const lifestyle = lifestyles.find((l) => l.id === identity.associatedLifestyleId);
@@ -761,7 +829,7 @@ export function CreationWizard({ onCancel, onComplete }: CreationWizardProps) {
         }
       }
     });
-    
+
     return total;
   }, [state.selections?.identities, state.selections?.lifestyles, calculateLifestyleCost]);
 
@@ -785,7 +853,7 @@ export function CreationWizard({ onCancel, onComplete }: CreationWizardProps) {
   const freeSpellsCount = useMemo(() => {
     const magicPriority = state.priorities?.magic;
     const magicalPath = (state.selections["magical-path"] as string) || "mundane";
-    
+
     if (!magicPriority || !priorityTable?.table[magicPriority]) {
       return 0;
     }
@@ -811,7 +879,7 @@ export function CreationWizard({ onCancel, onComplete }: CreationWizardProps) {
     const magicPriority = state.priorities?.magic;
     const magicalPath = (state.selections["magical-path"] as string) || "mundane";
     const isMysticAdept = magicalPath === "mystic-adept";
-    
+
     if (!magicPriority || !priorityTable?.table[magicPriority]) {
       return 0;
     }
@@ -825,23 +893,23 @@ export function CreationWizard({ onCancel, onComplete }: CreationWizardProps) {
 
     const option = magicData?.options?.find((o) => o.path === magicalPath);
     const magicRating = option?.magicRating || 0;
-    
+
     // Base PP budget
     const basePP = isMysticAdept
       ? ((state.selections["power-points-allocation"] as number) || 0)
       : magicRating;
-    
+
     // Add karma-purchased PP
     const karmaSpentPP = (state.budgets["karma-spent-power-points"] as number) || 0;
     const karmaPurchasedPP = Math.floor(karmaSpentPP / 5); // 5 Karma = 1 PP
-    
+
     return basePP + karmaPurchasedPP;
   }, [state.priorities?.magic, priorityTable, state.selections, state.budgets]);
 
   // Get spell name helper (will be passed to ValidationPanel)
   const getSpellName = useCallback((spellId: string): string => {
     if (!spellsCatalog) return spellId;
-    
+
     // Search through all spell categories
     const categories = ['combat', 'detection', 'health', 'illusion', 'manipulation'] as const;
     for (const category of categories) {
@@ -850,7 +918,7 @@ export function CreationWizard({ onCancel, onComplete }: CreationWizardProps) {
         if (spell) return spell.name;
       }
     }
-    
+
     return spellId;
   }, [spellsCatalog]);
 
@@ -1050,15 +1118,15 @@ export function CreationWizard({ onCancel, onComplete }: CreationWizardProps) {
   // Handle cancel with draft clearing option
   const handleCancel = useCallback(() => {
     if (Object.keys(state.priorities || {}).length > 0) {
-      // Show confirmation? For now just clear and cancel
-      clearDraft();
+      // Show confirmation? For now just exit
+      // clearDraft(); // No local storage to clear
     }
     onCancel();
   }, [state.priorities, onCancel]);
 
   // Start fresh (clear draft)
   const startFresh = useCallback(() => {
-    clearDraft();
+    // clearDraft();
     setState(createInitialState());
     setHasDraft(false);
   }, []);
@@ -1265,30 +1333,48 @@ export function CreationWizard({ onCancel, onComplete }: CreationWizardProps) {
         },
       };
 
-      // Create character draft via API
-      const createResponse = await fetch("/api/characters", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          editionId: "sr5",
-          editionCode: editionCode || "sr5",
-          creationMethodId: state.creationMethodId,
-          name: characterData.name,
-        }),
-      });
+      let activeId = characterId;
 
-      const createResult = await createResponse.json();
-      if (!createResult.success) {
-        throw new Error(createResult.error || "Failed to create character");
+      // If we don't have a server draft yet, create one
+      if (!activeId) {
+        // Create character draft via API
+        const createResponse = await fetch("/api/characters", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            editionId: "sr5",
+            editionCode: editionCode || "sr5",
+            creationMethodId: state.creationMethodId,
+            name: characterData.name,
+          }),
+        });
+
+        const createResult = await createResponse.json();
+        if (!createResult.success) {
+          throw new Error(createResult.error || "Failed to create character");
+        }
+        activeId = createResult.character.id;
+        // Update local ID
+        setCharacterId(activeId);
       }
 
-      const characterId = createResult.character.id;
+      // Assert activeId is string
+      const finalId = activeId as string;
 
-      // Update the character with full data
-      const updateResponse = await fetch(`/api/characters/${characterId}`, {
+      // Update the character with full data AND creation state
+      // We explicitly save creationState as well so it's consistent if we ever un-finalize or check history
+      const updateResponse = await fetch(`/api/characters/${finalId}`, {
         method: "PATCH",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(characterData),
+        body: JSON.stringify({
+          ...characterData,
+          metadata: {
+            creationState: {
+              ...state,
+              characterId: finalId
+            }
+          }
+        }),
       });
 
       const updateResult = await updateResponse.json();
@@ -1297,7 +1383,7 @@ export function CreationWizard({ onCancel, onComplete }: CreationWizardProps) {
       }
 
       // Finalize the character (change status from draft to active)
-      const finalizeResponse = await fetch(`/api/characters/${characterId}/finalize`, {
+      const finalizeResponse = await fetch(`/api/characters/${finalId}/finalize`, {
         method: "POST",
       });
 
@@ -1307,15 +1393,15 @@ export function CreationWizard({ onCancel, onComplete }: CreationWizardProps) {
       }
 
       // Clear draft and complete
-      clearDraft();
-      onComplete(characterId);
+      // clearDraft(); // No longer using local storage
+      onComplete(finalId);
     } catch (error) {
       console.error("Failed to save character:", error);
       setSaveError(error instanceof Error ? error.message : "Failed to save character");
     } finally {
       setIsSaving(false);
     }
-  }, [state, metatypes, editionCode, budgetValues, onComplete, priorityTable, calculateDerivedStats]);
+  }, [state, metatypes, editionCode, budgetValues, onComplete, priorityTable, calculateDerivedStats, characterId]);
 
   // Render step content
   const renderStepContent = () => {
