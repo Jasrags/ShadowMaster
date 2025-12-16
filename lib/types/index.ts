@@ -29,6 +29,9 @@ export type {
   WeaponModificationCatalogItem,
   ArmorModificationCatalogItem,
   ModificationsCatalog,
+  // Spirit types
+  SpiritPower,
+  Spirit,
 } from "./edition";
 
 // Character types
@@ -84,6 +87,9 @@ export {
   BIOWARE_GRADE_MULTIPLIERS,
   SinnerQuality,
 } from "./character";
+
+// Spirit types enum
+export { SpiritType } from "./edition";
 
 // Creation method types
 export type {

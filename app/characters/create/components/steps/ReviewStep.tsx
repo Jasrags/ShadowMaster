@@ -17,6 +17,17 @@ function isLifestylePermanent(lifestyle: Lifestyle): boolean {
   return lifestyle.modifications?.some((mod) => mod.catalogId === "permanent-lifestyle" || mod.name.toLowerCase() === "permanent lifestyle") || false;
 }
 
+// Helper function to get display name for SinnerQuality enum value
+function getSinnerQualityDisplayName(quality: SinnerQuality): string {
+  const displayNames: Record<SinnerQuality, string> = {
+    [SinnerQualityEnum.National]: "National",
+    [SinnerQualityEnum.Criminal]: "Criminal",
+    [SinnerQualityEnum.CorporateLimited]: "Corporate Limited",
+    [SinnerQualityEnum.CorporateBorn]: "Corporate Born",
+  };
+  return displayNames[quality] || quality;
+}
+
 interface StepProps {
   state: CreationState;
   updateState: (updates: Partial<CreationState>) => void;
@@ -910,7 +921,7 @@ export function ReviewStep({ state, updateState, budgetValues }: StepProps) {
                             </span>
                           ) : (
                             <span className="inline-flex items-center rounded-full bg-emerald-100 px-2.5 py-0.5 text-xs font-medium text-emerald-800 dark:bg-emerald-900 dark:text-emerald-200">
-                              Real SIN ({identity.sin.sinnerQuality})
+                              Real SIN ({getSinnerQualityDisplayName(identity.sin.sinnerQuality as SinnerQuality)})
                             </span>
                           )}
                         </div>

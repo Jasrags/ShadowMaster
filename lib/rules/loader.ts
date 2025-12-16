@@ -14,6 +14,8 @@ import type {
   RuleModuleType,
   CreationMethod,
   MergedRuleset,
+  SpiritType,
+  SpiritPower,
 } from "../types";
 import {
   getEdition,
@@ -1392,23 +1394,12 @@ export function extractFoci(ruleset: LoadedRuleset): FocusCatalogItemData[] {
 // =============================================================================
 
 /**
- * Spirit power data structure
- */
-export interface SpiritPowerData {
-  name: string;
-  description?: string;
-  action?: string;
-  range?: string;
-  duration?: string;
-}
-
-/**
  * Spirit type data structure
  */
 export interface SpiritTypeData {
-  type: string;
+  type: SpiritType;
   name: string;
-  basePowers: SpiritPowerData[];
+  basePowers: SpiritPower[];
   weaknesses?: string[];
 }
 
@@ -1417,7 +1408,7 @@ export interface SpiritTypeData {
  */
 export interface SpiritsCatalogData {
   spiritTypes: SpiritTypeData[];
-  optionalPowers: SpiritPowerData[];
+  optionalPowers: SpiritPower[];
 }
 
 /**

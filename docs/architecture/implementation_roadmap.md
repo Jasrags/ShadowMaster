@@ -105,4 +105,7 @@
 
 ---
 
-*See [implementation_roadmap_documentation.md](./implementation_roadmap_documentation.md) for detailed task breakdowns, TypeScript schemas, and architecture diagrams.*
+*See detailed roadmaps:*
+- **[v1_roadmap.md](./v1_roadmap.md)** - Comprehensive v1.0 roadmap with phases, timelines, and priorities
+- **[implementation_roadmap_documentation.md](./implementation_roadmap_documentation.md)** - Detailed task breakdowns, TypeScript schemas, and architecture diagrams
+- **[mvp_gap_analysis.md](./mvp_gap_analysis.md)** - Current MVP gaps and remaining work

@@ -7,7 +7,7 @@
  */
 
 import type { ID, ISODateString, Metadata } from "./core";
-import type { EditionCode, FocusType } from "./edition";
+import type { EditionCode, FocusType, SpiritType } from "./edition";
 import type { CharacterProgram } from "./programs";
 
 // =============================================================================
@@ -342,7 +342,7 @@ export interface AdeptPower {
 }
 
 export interface BoundSpirit {
-  type: string; // Spirit type
+  type: SpiritType; // Spirit type
   force: number;
   services: number;
   bound: boolean;

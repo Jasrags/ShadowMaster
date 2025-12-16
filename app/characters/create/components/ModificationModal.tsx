@@ -40,6 +40,32 @@ function getAvailabilityDisplay(
   return display;
 }
 
+// Calculate weapon mod cost - moved outside component for stable reference
+function calculateWeaponModCost(
+  mod: WeaponModificationCatalogItemData,
+  weapon: Weapon,
+  rating: number
+): number {
+  if (mod.costMultiplier) {
+    return weapon.cost * mod.costMultiplier;
+  }
+  if (mod.costPerRating && mod.cost) {
+    return mod.cost * rating;
+  }
+  return mod.cost || 0;
+}
+
+// Calculate armor mod cost - moved outside component for stable reference
+function calculateArmorModCost(
+  mod: ArmorModificationCatalogItemData,
+  rating: number
+): number {
+  if (mod.costPerRating) {
+    return mod.cost * rating;
+  }
+  return mod.cost;
+}
+
 export function ModificationModal({
   isOpen,
   onClose,
@@ -151,31 +177,6 @@ export function ModificationModal({
     return mods;
   }, [armorMods, searchQuery, armorCapacityInfo, remainingNuyen, itemType, selectedRating]);
 
-  // Calculate weapon mod cost
-  function calculateWeaponModCost(
-    mod: WeaponModificationCatalogItemData,
-    weapon: Weapon,
-    rating: number
-  ): number {
-    if (mod.costMultiplier) {
-      return weapon.cost * mod.costMultiplier;
-    }
-    if (mod.costPerRating && mod.cost) {
-      return mod.cost * rating;
-    }
-    return mod.cost || 0;
-  }
-
-  // Calculate armor mod cost
-  function calculateArmorModCost(
-    mod: ArmorModificationCatalogItemData,
-    rating: number
-  ): number {
-    if (mod.costPerRating) {
-      return mod.cost * rating;
-    }
-    return mod.cost;
-  }
 
   // Calculate armor mod capacity
   function calculateArmorModCapacity(

@@ -57,9 +57,11 @@ export function ProgramsStep({ state, updateState, budgetValues }: StepProps) {
   const [showUnavailable, setShowUnavailable] = useState(false);
   const [agentRating, setAgentRating] = useState<Record<string, number>>({});
 
-  // Get selections from state
-  const selectedPrograms: CharacterProgram[] =
-    (state.selections?.programs as CharacterProgram[]) || [];
+  // Get selections from state - memoized to provide stable reference
+  const selectedPrograms = useMemo(
+    () => (state.selections?.programs as CharacterProgram[]) || [],
+    [state.selections?.programs]
+  );
 
   // Calculate budget from gear step (programs share nuyen budget with gear)
   const baseNuyen = budgetValues["nuyen"] || 0;
