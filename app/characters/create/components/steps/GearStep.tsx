@@ -670,23 +670,28 @@ export function GearStep({ state, updateState, budgetValues }: StepProps) {
     (parentItem: CyberwareItem) => {
       if (!cyberwareCatalog) return [];
 
-      // Determine parent type based on category
-      let parentType = "";
-      if (parentItem.category === "cyberlimb" || parentItem.category.startsWith("cyberlimb")) {
-        parentType = "cyberlimb";
-      } else if (parentItem.category === "eyeware") {
-        parentType = "cybereyes";
-      } else if (parentItem.category === "earware") {
-        parentType = "cyberears";
-      }
-
-      // Filter enhancements that match this parent type
+      // Filter enhancements based on parent item category
       return cyberwareCatalog.catalog.filter((item) => {
-        // Must have parentType matching
-        if (item.parentType !== parentType) return false;
-        // Must have capacity cost
-        if (!item.capacityCost) return false;
-        return true;
+        // Must have capacity cost (indicating it's an enhancement)
+        // Note: capacityCost of 0 is valid (e.g., Image Link)
+        if (item.capacityCost === undefined) return false;
+
+        // For cyberlimbs, look for items with parentType: "cyberlimb"
+        if (parentItem.category === "cyberlimb" || parentItem.category.startsWith("cyberlimb")) {
+          return item.parentType === "cyberlimb";
+        }
+
+        // For eyeware, match items in eyeware category that have capacityCost but no capacity (they're mods, not base items)
+        if (parentItem.category === "eyeware") {
+          return item.category === "eyeware" && item.capacityCost !== undefined && !item.capacity;
+        }
+
+        // For earware, match items in earware category that have capacityCost but no capacity
+        if (parentItem.category === "earware") {
+          return item.category === "earware" && item.capacityCost !== undefined && !item.capacity;
+        }
+
+        return false;
       });
     },
     [cyberwareCatalog]
