@@ -4,6 +4,7 @@ import { useState, useMemo } from "react";
 import { Button } from "react-aria-components";
 import type { Lifestyle, LifestyleModification, LifestyleSubscription } from "@/lib/types";
 import { LifestyleModificationSelector } from "./LifestyleModificationSelector";
+import { LifestyleSubscriptionSelector } from "./LifestyleSubscriptionSelector";
 
 interface LifestyleEditorProps {
   lifestyle: Lifestyle;
@@ -284,25 +285,10 @@ export function LifestyleEditor({
             <label className="text-sm font-medium text-zinc-700 dark:text-zinc-300">
               Subscriptions
             </label>
-            <Button
-              onPress={() => {
-                // For now, create a simple subscription editor inline
-                // In a full implementation, this would open a subscription selector
-                const name = prompt("Subscription name:");
-                if (name) {
-                  const cost = Number.parseFloat(prompt("Monthly cost (¥):") || "0");
-                  if (cost > 0) {
-                    handleAddSubscription({
-                      name: name.trim(),
-                      monthlyCost: cost,
-                    });
-                  }
-                }
-              }}
-              className="text-xs text-blue-600 hover:text-blue-800 dark:text-blue-400 dark:hover:text-blue-300"
-            >
-              + Add Subscription
-            </Button>
+            <LifestyleSubscriptionSelector
+              onAdd={handleAddSubscription}
+              existingSubscriptions={subscriptions}
+            />
           </div>
           {subscriptions.length > 0 ? (
             <div className="space-y-2">

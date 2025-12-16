@@ -5227,7 +5227,51 @@
         "metatypeModifiers": {
           "dwarf": 1.2,
           "troll": 2.0
-        }
+        },
+        "subscriptions": [
+          {
+            "id": "docwagon-basic",
+            "name": "DocWagon Contract (Basic)",
+            "monthlyCost": 416.67,
+            "yearlyCost": 5000,
+            "category": "medical",
+            "description": "Medical response service covering Zones 1-2. Yearly cost: 5,000¥"
+          },
+          {
+            "id": "docwagon-gold",
+            "name": "DocWagon Contract (Gold)",
+            "monthlyCost": 2083.33,
+            "yearlyCost": 25000,
+            "category": "medical",
+            "description": "Medical response service covering Zones 1-6. Yearly cost: 25,000¥"
+          },
+          {
+            "id": "docwagon-platinum",
+            "name": "DocWagon Contract (Platinum)",
+            "monthlyCost": 4166.67,
+            "yearlyCost": 50000,
+            "category": "medical",
+            "description": "Medical response service covering Zones 1-8. Yearly cost: 50,000¥"
+          },
+          {
+            "id": "docwagon-super-platinum",
+            "name": "DocWagon Contract (Super-Platinum)",
+            "monthlyCost": 8333.33,
+            "yearlyCost": 100000,
+            "category": "medical",
+            "description": "Medical response service covering Zones 1-8 with premium service. Yearly cost: 100,000¥"
+          },
+          {
+            "id": "food-service-basic",
+            "name": "Food Service (Basic)",
+            "monthlyCost": 200,
+            "costPerRating": true,
+            "minRating": 1,
+            "maxRating": 6,
+            "category": "food",
+            "description": "Basic meal delivery service. Cost: Rating × 200¥/month"
+          }
+        ]
       }
     },
     "gear": {

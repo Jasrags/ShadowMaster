@@ -1012,21 +1012,68 @@ export function ReviewStep({ state, updateState, budgetValues }: StepProps) {
                 <div className="mb-2 text-xs font-medium text-cyan-600 dark:text-cyan-400">
                   Cyberware ({selectedCyberware.length})
                 </div>
-                <div className="flex flex-wrap gap-2">
-                  {selectedCyberware.map((item, i) => (
-                    <span
-                      key={i}
-                      className="inline-flex items-center gap-1 rounded-full bg-cyan-100 px-3 py-1 text-sm dark:bg-cyan-900/50"
-                    >
-                      <span className="font-medium text-cyan-800 dark:text-cyan-200">{item.name}</span>
-                      <span className="text-cyan-600 dark:text-cyan-400">
-                        ({item.grade})
-                      </span>
-                      <span className="text-xs text-cyan-500">
-                        -{item.essenceCost.toFixed(2)} ESS
-                      </span>
-                    </span>
-                  ))}
+                <div className="space-y-2">
+                  {selectedCyberware.map((item, i) => {
+                    const enhancementsCount = item.enhancements?.length || 0;
+                    const enhancementsCost = (item.enhancements || []).reduce((sum, enh) => sum + enh.cost, 0);
+                    // item.cost already includes enhancement costs (from GearStep)
+                    const totalCost = item.cost;
+                    const hasEnhancements = enhancementsCount > 0;
+                    
+                    return (
+                      <div key={i} className="rounded border border-zinc-200 bg-zinc-50 p-2 dark:border-zinc-700 dark:bg-zinc-800">
+                        <div className="flex items-start justify-between">
+                          <div>
+                            <span className="font-medium text-cyan-800 dark:text-cyan-200">{item.name}</span>
+                            <span className="ml-2 text-xs text-cyan-600 dark:text-cyan-400">
+                              ({item.grade})
+                            </span>
+                            {item.capacity !== undefined && (
+                              <span className="ml-2 text-xs text-zinc-500 dark:text-zinc-400">
+                                | Cap: {item.capacityUsed || 0}/{item.capacity}
+                              </span>
+                            )}
+                            <span className="ml-2 text-xs text-cyan-500">
+                              -{item.essenceCost.toFixed(2)} ESS
+                            </span>
+                          </div>
+                          <div className="text-right">
+                            <div className="text-sm font-medium text-zinc-800 dark:text-zinc-200">
+                              ¥{totalCost.toLocaleString()}
+                            </div>
+                            {hasEnhancements && (
+                              <div className="text-xs text-zinc-500 dark:text-zinc-400">
+                                incl. ¥{enhancementsCost.toLocaleString()} enhancements
+                              </div>
+                            )}
+                          </div>
+                        </div>
+                        {hasEnhancements && (
+                          <div className="mt-2 border-t border-zinc-200 pt-2 dark:border-zinc-700">
+                            <div className="text-xs font-medium text-zinc-600 dark:text-zinc-400 mb-1">
+                              Enhancements ({enhancementsCount}):
+                            </div>
+                            <div className="flex flex-wrap gap-1">
+                              {item.enhancements?.map((enh, ei) => (
+                                <span
+                                  key={ei}
+                                  className="inline-flex items-center gap-1 rounded bg-cyan-100 px-1.5 py-0.5 text-xs text-cyan-700 dark:bg-cyan-900/50 dark:text-cyan-300"
+                                >
+                                  {enh.name}
+                                  {enh.rating && (
+                                    <span className="text-cyan-500 dark:text-cyan-400">R{enh.rating}</span>
+                                  )}
+                                  <span className="text-cyan-500 dark:text-cyan-400">
+                                    ¥{enh.cost.toLocaleString()}
+                                  </span>
+                                </span>
+                              ))}
+                            </div>
+                          </div>
+                        )}
+                      </div>
+                    );
+                  })}
                 </div>
               </div>
             )}
