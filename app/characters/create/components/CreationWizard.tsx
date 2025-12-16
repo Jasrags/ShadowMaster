@@ -35,7 +35,6 @@ import { AttributesStep } from "./steps/AttributesStep";
 import { MagicStep } from "./steps/MagicStep";
 import { SkillsStep } from "./steps/SkillsStep";
 import { QualitiesStep } from "./steps/QualitiesStep";
-import { AugmentationsStep } from "./steps/AugmentationsStep";
 import { ContactsStep } from "./steps/ContactsStep";
 import { GearStep } from "./steps/GearStep";
 import { KarmaStep } from "./steps/KarmaStep";
@@ -155,6 +154,9 @@ export function CreationWizard({ onCancel, onComplete }: CreationWizardProps) {
     // Check if character can use adept powers
     const isAdept = ["adept", "mystic-adept"].includes(magicPath);
 
+    // Check if character can learn rituals (only Magician, Mystic Adept, or Aspected Mage)
+    const canLearnRituals = isMagical;
+
     return rawSteps.filter((step) => {
       // Hide Spells step for mundane characters and technomancers
       // (Technomancers use Complex Forms which are currently in KarmaStep)
@@ -163,6 +165,10 @@ export function CreationWizard({ onCancel, onComplete }: CreationWizardProps) {
       }
       // Hide Adept Powers step for non-adepts
       if (step.id === "adept-powers" && !isAdept) {
+        return false;
+      }
+      // Hide Rituals step for mundane characters (and technomancers/adepts)
+      if (step.id === "rituals" && !canLearnRituals) {
         return false;
       }
       return true;
@@ -1333,8 +1339,6 @@ export function CreationWizard({ onCancel, onComplete }: CreationWizardProps) {
         return <SkillsStep {...stepProps} />;
       case "qualities":
         return <QualitiesStep {...stepProps} />;
-      case "augmentations":
-        return <AugmentationsStep {...stepProps} />;
       case "contacts":
         return <ContactsStep {...stepProps} />;
       case "gear":

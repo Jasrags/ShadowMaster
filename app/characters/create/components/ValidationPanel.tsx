@@ -84,8 +84,6 @@ export function ValidationPanel({
   const cartType =
     currentStepId === "gear"
       ? ("gear" as const)
-      : currentStepId === "augmentations"
-      ? ("augmentations" as const)
       : currentStepId === "spells"
       ? ("spells" as const)
       : currentStepId === "adept-powers"

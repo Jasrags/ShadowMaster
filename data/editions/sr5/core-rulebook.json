@@ -9874,19 +9874,6 @@
                 }
               },
               {
-                "id": "augmentations",
-                "title": "Augmentations",
-                "type": "purchase",
-                "description": "Install cyberware and bioware augmentations. Essence loss reduces Magic/Resonance.",
-                "payload": {
-                  "type": "purchase",
-                  "target": "augmentations",
-                  "budgetId": "nuyen",
-                  "essenceLimit": 6,
-                  "availabilityLimit": 12
-                }
-              },
-              {
                 "id": "spells",
                 "title": "Spells",
                 "type": "custom",
