@@ -148,6 +148,8 @@ export function GearStep({ state, updateState, budgetValues }: StepProps) {
   const [searchQuery, setSearchQuery] = useState("");
   const [showUnavailable, setShowUnavailable] = useState(false);
   const [selectedGrades, setSelectedGrades] = useState<Record<string, string>>({});
+  const [configuringGear, setConfiguringGear] = useState<{ item: GearItemData; index?: number } | null>(null);
+  const [gearConfigRating, setGearConfigRating] = useState<number>(1);
 
   // Modification modal state
   const [modModalOpen, setModModalOpen] = useState(false);
@@ -180,11 +182,12 @@ export function GearStep({ state, updateState, budgetValues }: StepProps) {
     const karmaSpentComplexForms = (state.budgets?.["karma-spent-complex-forms"] as number) || 0;
     const karmaSpentPowerPoints = (state.budgets?.["karma-spent-power-points"] as number) || 0;
     const karmaSpentFociBonding = (state.budgets?.["karma-spent-foci-bonding"] as number) || 0;
+    const karmaSpentContacts = (state.budgets?.["karma-spent-contacts"] as number) || 0;
 
     const available =
       karmaBase +
       karmaGainedNegative -
-      (karmaSpentPositive + karmaSpentSpells + karmaSpentComplexForms + karmaSpentPowerPoints + karmaSpentFociBonding);
+      (karmaSpentPositive + karmaSpentSpells + karmaSpentComplexForms + karmaSpentPowerPoints + karmaSpentFociBonding + karmaSpentContacts);
 
     // Allow reducing conversion back down even if available is low/negative
     return Math.max(0, available + karmaConversion);
@@ -256,6 +259,19 @@ export function GearStep({ state, updateState, budgetValues }: StepProps) {
     [selectedGrades]
   );
 
+  // Check if gear item needs rating configuration
+  const needsRatingConfig = (item: GearItemData): boolean => {
+    // Check if description mentions rating range (e.g., "Rating 1-6")
+    if (item.description && /rating\s+\d+\s*-\s*\d+/i.test(item.description)) {
+      return true;
+    }
+    // Check if item has a rating field that represents max rating
+    if (item.rating && item.rating > 1) {
+      return true;
+    }
+    return false;
+  };
+
   // Helper to add gear item - routes weapons and armor to separate lists
   const addGearItem = (item: GearItemData) => {
     // Handle weapons separately
@@ -310,8 +326,15 @@ export function GearStep({ state, updateState, budgetValues }: StepProps) {
       return;
     }
 
+    // If gear item needs rating configuration, open modal
+    if (needsRatingConfig(item)) {
+      setGearConfigRating(1);
+      setConfiguringGear({ item });
+      return;
+    }
+
     // Handle other gear as before
-    const existingIndex = selectedGear.findIndex((g) => g.name === item.name);
+    const existingIndex = selectedGear.findIndex((g) => g.name === item.name && (!g.rating || g.rating === item.rating));
     let updatedGear: GearItem[];
 
     if (existingIndex >= 0) {
@@ -336,6 +359,69 @@ export function GearStep({ state, updateState, budgetValues }: StepProps) {
         gear: updatedGear,
       },
     });
+  };
+
+  // Handle gear configuration confirmation
+  const confirmGearConfig = () => {
+    if (!configuringGear) return;
+
+    const item = configuringGear.item;
+    const maxRating = item.rating || 6; // Default to 6 if not specified
+    const selectedRating = gearConfigRating;
+
+    // Calculate cost based on rating (if costPerRating, otherwise use base cost)
+    // For now, assume base cost is per rating level (common pattern)
+    const costPerRating = item.cost / maxRating;
+    const finalCost = costPerRating * selectedRating;
+
+    const newItem: GearItem = {
+      name: item.name,
+      category: item.category,
+      quantity: 1,
+      cost: finalCost,
+      availability: item.availability,
+      rating: selectedRating,
+    };
+
+    // If editing existing item
+    if (configuringGear.index !== undefined) {
+      const updatedGear = selectedGear.map((g, i) =>
+        i === configuringGear.index ? newItem : g
+      );
+      updateState({
+        selections: {
+          ...state.selections,
+          gear: updatedGear,
+        },
+      });
+    } else {
+      // Adding new item
+      updateState({
+        selections: {
+          ...state.selections,
+          gear: [...selectedGear, newItem],
+        },
+      });
+    }
+
+    setConfiguringGear(null);
+    setGearConfigRating(1);
+  };
+
+  // Open gear configuration for existing item
+  const configureGearItem = (index: number) => {
+    const item = selectedGear[index];
+    const catalogItem = gearCatalog?.categories
+      .flatMap((cat) => {
+        const catData = gearCatalog[cat.id as keyof typeof gearCatalog] as GearItemData[] | undefined;
+        return catData || [];
+      })
+      .find((g) => g.name === item.name);
+
+    if (catalogItem && needsRatingConfig(catalogItem)) {
+      setGearConfigRating(item.rating || 1);
+      setConfiguringGear({ item: catalogItem, index });
+    }
   };
 
   // Helper to remove weapon
@@ -2040,6 +2126,68 @@ export function GearStep({ state, updateState, budgetValues }: StepProps) {
         )}
       </div>
 
+      {/* Selected Gear Items */}
+      {selectedGear.length > 0 && (
+        <div className="space-y-4">
+          <div className="rounded-lg border border-zinc-200 bg-zinc-50 p-4 dark:border-zinc-700 dark:bg-zinc-800/50">
+            <h3 className="mb-2 text-sm font-semibold">Gear</h3>
+            <div className="space-y-3">
+              {selectedGear.map((gear, gIndex) => {
+                const catalogItem = gearCatalog?.categories
+                  .flatMap((cat) => {
+                    const catData = gearCatalog[cat.id as keyof typeof gearCatalog] as GearItemData[] | undefined;
+                    return catData || [];
+                  })
+                  .find((g) => g.name === gear.name);
+                const needsConfig = catalogItem ? needsRatingConfig(catalogItem) : false;
+                return (
+                  <div
+                    key={gIndex}
+                    className="rounded border border-zinc-200 bg-white p-3 dark:border-zinc-600 dark:bg-zinc-800"
+                  >
+                    <div className="flex items-start justify-between">
+                      <div className="flex-1">
+                        <p className="font-medium">{gear.name}</p>
+                        <p className="text-xs text-zinc-500 dark:text-zinc-400">
+                          {gear.rating && `Rating: ${gear.rating} | `}
+                          Base: ¥{formatCurrency(gear.cost)}
+                          {gear.quantity > 1 && ` | Qty: ${gear.quantity}`}
+                        </p>
+                      </div>
+                      <div className="flex items-center gap-2">
+                        <span className="text-sm font-medium">¥{formatCurrency(gear.cost * gear.quantity)}</span>
+                        {needsConfig && (
+                          <button
+                            onClick={() => configureGearItem(gIndex)}
+                            className="rounded bg-blue-500 px-2 py-1 text-xs font-medium text-white hover:bg-blue-600"
+                          >
+                            Config
+                          </button>
+                        )}
+                        <button
+                          onClick={() => {
+                            const updatedGear = selectedGear.filter((_, i) => i !== gIndex);
+                            updateState({
+                              selections: {
+                                ...state.selections,
+                                gear: updatedGear,
+                              },
+                            });
+                          }}
+                          className="rounded px-2 py-1 text-xs text-red-600 hover:bg-red-50 dark:text-red-400 dark:hover:bg-red-900/20"
+                        >
+                          Remove
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+        </div>
+      )}
+
       {/* Selected Weapons & Armor with Modifications */}
       {(selectedWeapons.length > 0 || selectedArmor.length > 0) && (
         <div className="space-y-4">
@@ -2204,6 +2352,56 @@ export function GearStep({ state, updateState, budgetValues }: StepProps) {
           onInstallWeaponMod={handleInstallWeaponMod}
           onInstallArmorMod={handleInstallArmorMod}
         />
+      )}
+
+      {/* Gear Configuration Modal */}
+      {configuringGear && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50">
+          <div className="w-full max-w-md rounded-lg border border-zinc-200 bg-white p-6 shadow-xl dark:border-zinc-700 dark:bg-zinc-800">
+            <h3 className="mb-4 text-lg font-semibold">Configure {configuringGear.item.name}</h3>
+            {configuringGear.item.description && (
+              <p className="mb-4 text-sm text-zinc-600 dark:text-zinc-400">{configuringGear.item.description}</p>
+            )}
+            <div className="space-y-4">
+              <div>
+                <label className="mb-2 block text-sm font-medium">Rating</label>
+                <select
+                  value={gearConfigRating}
+                  onChange={(e) => setGearConfigRating(Number(e.target.value))}
+                  className="w-full rounded border border-zinc-300 bg-white px-3 py-2 text-sm dark:border-zinc-600 dark:bg-zinc-700"
+                >
+                  {Array.from({ length: configuringGear.item.rating || 6 }, (_, i) => i + 1).map((rating) => (
+                    <option key={rating} value={rating}>
+                      {rating}
+                    </option>
+                  ))}
+                </select>
+              </div>
+              <div className="rounded bg-zinc-50 p-3 dark:bg-zinc-900">
+                <p className="text-sm text-zinc-600 dark:text-zinc-400">
+                  Cost: ¥{formatCurrency((configuringGear.item.cost / (configuringGear.item.rating || 6)) * gearConfigRating)}
+                </p>
+              </div>
+              <div className="flex gap-2">
+                <button
+                  onClick={confirmGearConfig}
+                  className="flex-1 rounded bg-emerald-500 px-4 py-2 text-sm font-medium text-white hover:bg-emerald-600"
+                >
+                  {configuringGear.index !== undefined ? "Update" : "Add"}
+                </button>
+                <button
+                  onClick={() => {
+                    setConfiguringGear(null);
+                    setGearConfigRating(1);
+                  }}
+                  className="flex-1 rounded border border-zinc-300 bg-white px-4 py-2 text-sm font-medium text-zinc-700 hover:bg-zinc-50 dark:border-zinc-600 dark:bg-zinc-700 dark:text-zinc-200 dark:hover:bg-zinc-600"
+                >
+                  Cancel
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
       )}
     </div>
   );

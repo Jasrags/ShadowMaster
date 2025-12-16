@@ -73,6 +73,7 @@ export function KarmaStep({ state, updateState, budgetValues }: StepProps) {
   const karmaGainedNegative = (state.budgets["karma-gained-negative"] as number) || 0;
   const karmaSpentPositive = (state.budgets["karma-spent-positive"] as number) || 0;
   const karmaSpentGear = (state.budgets["karma-spent-gear"] as number) || 0;
+  const karmaSpentContacts = (state.budgets["karma-spent-contacts"] as number) || 0;
 
   // Calculate spells/complex forms purchased with Karma (beyond free ones)
   const spellsBeyondFree = Math.max(0, selectedSpells.length - freeSpells);
@@ -81,7 +82,7 @@ export function KarmaStep({ state, updateState, budgetValues }: StepProps) {
   const karmaSpentOnComplexForms = complexFormsBeyondFree * COMPLEX_FORM_KARMA_COST;
 
   const karmaTotal = karmaBase + karmaGainedNegative;
-  const karmaSpent = karmaSpentPositive + karmaSpentGear + karmaSpentOnSpells + karmaSpentOnComplexForms;
+  const karmaSpent = karmaSpentPositive + karmaSpentGear + karmaSpentOnSpells + karmaSpentOnComplexForms + karmaSpentContacts;
   const karmaRemaining = karmaTotal - karmaSpent;
 
 

@@ -371,45 +371,6 @@ export function CreationWizard({ onCancel, onComplete }: CreationWizardProps) {
             severity: "warning",
           });
         }
-
-        // Check lifestyle requirements
-        const lifestyles = (state.selections.lifestyles || []) as Array<{
-          id?: string;
-          type: string;
-          monthlyCost: number;
-          modifications?: Array<{ catalogId?: string; name: string }>;
-        }>;
-        const primaryLifestyleId = state.selections.primaryLifestyleId as string | undefined;
-
-        // Must have at least one lifestyle
-        if (lifestyles.length === 0) {
-          errors.push({
-            constraintId: "lifestyle-required",
-            stepId,
-            message: "Character must have at least one lifestyle.",
-            severity: "error",
-          });
-        }
-
-        // Must have a primary lifestyle if multiple lifestyles exist
-        if (lifestyles.length > 1 && !primaryLifestyleId) {
-          errors.push({
-            constraintId: "primary-lifestyle-required",
-            stepId,
-            message: "When multiple lifestyles are selected, one must be marked as primary.",
-            severity: "error",
-          });
-        }
-
-        // Validate permanent lifestyle costs
-        lifestyles.forEach((lifestyle, index) => {
-          const isPermanent = lifestyle.modifications?.some((mod) => mod.catalogId === "permanent-lifestyle" || mod.name.toLowerCase() === "permanent lifestyle") || false;
-          if (isPermanent) {
-            const expectedCost = lifestyle.monthlyCost * 100;
-            // Note: The actual cost calculation happens in LifestyleEditor, so we just check the structure
-            // The validation that permanent cost = 100 × monthly is enforced in the editor
-          }
-        });
         break;
       }
 
@@ -514,6 +475,45 @@ export function CreationWizard({ onCancel, onComplete }: CreationWizardProps) {
               });
             }
           });
+        });
+
+        // Check lifestyle requirements
+        const lifestyles = (state.selections.lifestyles || []) as Array<{
+          id?: string;
+          type: string;
+          monthlyCost: number;
+          modifications?: Array<{ catalogId?: string; name: string }>;
+        }>;
+        const primaryLifestyleId = state.selections.primaryLifestyleId as string | undefined;
+
+        // Must have at least one lifestyle
+        if (lifestyles.length === 0) {
+          errors.push({
+            constraintId: "lifestyle-required",
+            stepId,
+            message: "Character must have at least one lifestyle.",
+            severity: "error",
+          });
+        }
+
+        // Must have a primary lifestyle if multiple lifestyles exist
+        if (lifestyles.length > 1 && !primaryLifestyleId) {
+          errors.push({
+            constraintId: "primary-lifestyle-required",
+            stepId,
+            message: "When multiple lifestyles are selected, one must be marked as primary.",
+            severity: "error",
+          });
+        }
+
+        // Validate permanent lifestyle costs
+        lifestyles.forEach((lifestyle, index) => {
+          const isPermanent = lifestyle.modifications?.some((mod) => mod.catalogId === "permanent-lifestyle" || mod.name.toLowerCase() === "permanent lifestyle") || false;
+          if (isPermanent) {
+            const expectedCost = lifestyle.monthlyCost * 100;
+            // Note: The actual cost calculation happens in LifestyleEditor, so we just check the structure
+            // The validation that permanent cost = 100 × monthly is enforced in the editor
+          }
         });
         break;
       }
@@ -1173,7 +1173,8 @@ export function CreationWizard({ onCancel, onComplete }: CreationWizardProps) {
         ((state.budgets["karma-spent-gear"] as number) || 0) +
         ((state.budgets["karma-spent-spells"] as number) || 0) +
         ((state.budgets["karma-spent-complex-forms"] as number) || 0) +
-        ((state.budgets["karma-spent-power-points"] as number) || 0);
+        ((state.budgets["karma-spent-power-points"] as number) || 0) +
+        ((state.budgets["karma-spent-contacts"] as number) || 0);
 
       // Calculate remaining Karma (carryover into gameplay)
       const karmaRemaining =

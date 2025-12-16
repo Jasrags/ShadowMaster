@@ -2,7 +2,7 @@
 
 import { useMemo, useCallback, useState } from "react";
 import type { CreationState, Contact, ContactTemplateData } from "@/lib/types";
-import { useContactTemplates } from "@/lib/rules";
+import { useContactTemplates, useMetatypes } from "@/lib/rules";
 
 interface StepProps {
   state: CreationState;
@@ -32,8 +32,9 @@ const CONTACT_TYPE_SUGGESTIONS = [
 const MAX_CONNECTION = 6;
 const MAX_LOYALTY = 6;
 const MAX_KARMA_PER_CONTACT = 7;
+const MIN_KARMA_PER_CONTACT = 2; // Minimum Karma requirement = 2 (Connection 1 + Loyalty 1)
 
-export function ContactsStep({ state, updateState }: StepProps) {
+export function ContactsStep({ state, updateState, budgetValues }: StepProps) {
   const [isAddingContact, setIsAddingContact] = useState(false);
   const [editingIndex, setEditingIndex] = useState<number | null>(null);
   const [newContact, setNewContact] = useState<Partial<Contact>>({
@@ -47,13 +48,29 @@ export function ContactsStep({ state, updateState }: StepProps) {
 
   // Get contact templates from ruleset
   const contactTemplates = useContactTemplates();
+  
+  // Get metatypes for attribute minimum lookup
+  const metatypes = useMetatypes();
 
-  // Get charisma from state (allocated + metatype minimum)
+  // Get charisma from state (attributes are stored as full values including minimum)
   const charisma = useMemo(() => {
     const attrs = (state.selections.attributes || {}) as Record<string, number>;
-    // Add 1 for metatype minimum (simplified - actual min depends on metatype)
-    return (attrs.charisma || 0) + 1;
-  }, [state.selections.attributes]);
+    const metatypeId = state.selections.metatype as string;
+    const selectedMetatype = metatypes.find((m) => m.id === metatypeId);
+    
+    // Attributes in state are stored as full values (minimum + allocated points)
+    // If undefined, default to metatype minimum
+    if (attrs.charisma !== undefined) {
+      return attrs.charisma;
+    }
+    
+    // If not set, use metatype minimum
+    const metatypeMin = selectedMetatype?.attributes?.charisma && "min" in selectedMetatype.attributes.charisma
+      ? selectedMetatype.attributes.charisma.min
+      : 1;
+    
+    return metatypeMin;
+  }, [state.selections.attributes, state.selections.metatype, metatypes]);
 
   // Calculate free contact Karma budget: CHA × 3
   const freeContactKarma = useMemo(() => {
@@ -66,13 +83,38 @@ export function ContactsStep({ state, updateState }: StepProps) {
   }, [state.selections.contacts]);
 
   // Calculate total Karma spent on contacts
-  const karmaSpent = useMemo(() => {
+  const totalContactKarmaSpent = useMemo(() => {
     return contacts.reduce((sum, contact) => {
       return sum + contact.connection + contact.loyalty;
     }, 0);
   }, [contacts]);
 
-  const karmaRemaining = freeContactKarma - karmaSpent;
+  // Calculate how much was spent from free contact karma vs general karma
+  const freeContactKarmaSpent = Math.min(totalContactKarmaSpent, freeContactKarma);
+  const generalKarmaSpentOnContacts = Math.max(0, totalContactKarmaSpent - freeContactKarma);
+
+  // Calculate general karma remaining (for purchasing contacts beyond free limit)
+  const generalKarmaRemaining = useMemo(() => {
+    const karmaBase = budgetValues["karma"] || 25;
+    const karmaGainedNegative = (state.budgets["karma-gained-negative"] as number) || 0;
+    const karmaSpentPositive = (state.budgets["karma-spent-positive"] as number) || 0;
+    const karmaSpentGear = (state.budgets["karma-spent-gear"] as number) || 0;
+    const karmaSpentSpells = (state.budgets["karma-spent-spells"] as number) || 0;
+    const karmaSpentComplexForms = (state.budgets["karma-spent-complex-forms"] as number) || 0;
+    const karmaSpentPowerPoints = (state.budgets["karma-spent-power-points"] as number) || 0;
+    const karmaSpentFociBonding = (state.budgets["karma-spent-foci-bonding"] as number) || 0;
+    const karmaSpentContacts = (state.budgets["karma-spent-contacts"] as number) || 0;
+
+    const karmaTotal = karmaBase + karmaGainedNegative;
+    const karmaSpent = karmaSpentPositive + karmaSpentGear + karmaSpentSpells + karmaSpentComplexForms + karmaSpentPowerPoints + karmaSpentFociBonding + karmaSpentContacts;
+    return karmaTotal - karmaSpent;
+  }, [budgetValues, state.budgets]);
+
+  // Free contact karma remaining
+  const freeContactKarmaRemaining = freeContactKarma - freeContactKarmaSpent;
+  
+  // Total karma available for new contacts (free + general)
+  const totalKarmaAvailableForContacts = freeContactKarmaRemaining + generalKarmaRemaining;
 
   // Calculate cost of current new contact
   const newContactCost = useMemo(() => {
@@ -82,10 +124,12 @@ export function ContactsStep({ state, updateState }: StepProps) {
   // Check if new contact is valid
   const isNewContactValid = useMemo(() => {
     if (!newContact.name?.trim()) return false;
+    if (newContactCost < MIN_KARMA_PER_CONTACT) return false; // Minimum 2 karma required
     if (newContactCost > MAX_KARMA_PER_CONTACT) return false;
-    if (newContactCost > karmaRemaining) return false;
+    // Can use free contact karma first, then general karma
+    if (newContactCost > totalKarmaAvailableForContacts) return false;
     return true;
-  }, [newContact.name, newContactCost, karmaRemaining]);
+  }, [newContact.name, newContactCost, totalKarmaAvailableForContacts]);
 
   // Handle adding a new contact
   const handleAddContact = useCallback(() => {
@@ -99,7 +143,13 @@ export function ContactsStep({ state, updateState }: StepProps) {
       notes: newContact.notes?.trim() || undefined,
     };
 
+    const contactCost = contact.connection + contact.loyalty;
     const updatedContacts = [...contacts, contact];
+    const newTotalContactKarmaSpent = totalContactKarmaSpent + contactCost;
+    
+    // Calculate new free contact karma spent vs general karma spent
+    const newFreeContactKarmaSpent = Math.min(newTotalContactKarmaSpent, freeContactKarma);
+    const newGeneralKarmaSpentOnContacts = Math.max(0, newTotalContactKarmaSpent - freeContactKarma);
 
     updateState({
       selections: {
@@ -108,8 +158,9 @@ export function ContactsStep({ state, updateState }: StepProps) {
       },
       budgets: {
         ...state.budgets,
-        "contact-karma-spent": karmaSpent + contact.connection + contact.loyalty,
+        "contact-karma-spent": newTotalContactKarmaSpent,
         "contact-karma-total": freeContactKarma,
+        "karma-spent-contacts": newGeneralKarmaSpentOnContacts,
       },
     });
 
@@ -123,7 +174,7 @@ export function ContactsStep({ state, updateState }: StepProps) {
     });
     setSelectedTemplateId(null);
     setIsAddingContact(false);
-  }, [isNewContactValid, newContact, contacts, state.selections, state.budgets, karmaSpent, freeContactKarma, updateState]);
+  }, [isNewContactValid, newContact, contacts, state.selections, state.budgets, totalContactKarmaSpent, freeContactKarma, updateState]);
 
   // Handle selecting a contact template
   const handleSelectTemplate = useCallback((template: ContactTemplateData | null) => {
@@ -153,7 +204,11 @@ export function ContactsStep({ state, updateState }: StepProps) {
     const updatedContacts = [...contacts];
     updatedContacts[index] = { ...updatedContacts[index], ...updates };
 
-    const newKarmaSpent = updatedContacts.reduce((sum, c) => sum + c.connection + c.loyalty, 0);
+    const newTotalContactKarmaSpent = updatedContacts.reduce((sum, c) => sum + c.connection + c.loyalty, 0);
+    
+    // Calculate new free contact karma spent vs general karma spent
+    const newFreeContactKarmaSpent = Math.min(newTotalContactKarmaSpent, freeContactKarma);
+    const newGeneralKarmaSpentOnContacts = Math.max(0, newTotalContactKarmaSpent - freeContactKarma);
 
     updateState({
       selections: {
@@ -162,8 +217,9 @@ export function ContactsStep({ state, updateState }: StepProps) {
       },
       budgets: {
         ...state.budgets,
-        "contact-karma-spent": newKarmaSpent,
+        "contact-karma-spent": newTotalContactKarmaSpent,
         "contact-karma-total": freeContactKarma,
+        "karma-spent-contacts": newGeneralKarmaSpentOnContacts,
       },
     });
   }, [contacts, state.selections, state.budgets, freeContactKarma, updateState]);
@@ -173,6 +229,12 @@ export function ContactsStep({ state, updateState }: StepProps) {
     const removedContact = contacts[index];
     const updatedContacts = contacts.filter((_, i) => i !== index);
 
+    const newTotalContactKarmaSpent = totalContactKarmaSpent - (removedContact.connection + removedContact.loyalty);
+    
+    // Calculate new free contact karma spent vs general karma spent
+    const newFreeContactKarmaSpent = Math.min(newTotalContactKarmaSpent, freeContactKarma);
+    const newGeneralKarmaSpentOnContacts = Math.max(0, newTotalContactKarmaSpent - freeContactKarma);
+
     updateState({
       selections: {
         ...state.selections,
@@ -180,11 +242,12 @@ export function ContactsStep({ state, updateState }: StepProps) {
       },
       budgets: {
         ...state.budgets,
-        "contact-karma-spent": karmaSpent - removedContact.connection - removedContact.loyalty,
+        "contact-karma-spent": newTotalContactKarmaSpent,
         "contact-karma-total": freeContactKarma,
+        "karma-spent-contacts": newGeneralKarmaSpentOnContacts,
       },
     });
-  }, [contacts, state.selections, state.budgets, karmaSpent, freeContactKarma, updateState]);
+  }, [contacts, state.selections, state.budgets, totalContactKarmaSpent, freeContactKarma, updateState]);
 
   // Render rating selector (1-6)
   const renderRatingSelector = (
@@ -266,7 +329,15 @@ export function ContactsStep({ state, updateState }: StepProps) {
                 contact.connection,
                 (value) => {
                   const newCost = value + contact.loyalty;
-                  if (newCost <= MAX_KARMA_PER_CONTACT && newCost - cost <= karmaRemaining) {
+                  const costDiff = newCost - cost;
+                  const newTotalKarmaSpent = totalContactKarmaSpent + costDiff;
+                  const newFreeContactKarmaSpent = Math.min(newTotalKarmaSpent, freeContactKarma);
+                  const newGeneralKarmaSpentOnContacts = Math.max(0, newTotalKarmaSpent - freeContactKarma);
+                  const newGeneralKarmaRemaining = generalKarmaRemaining - (newGeneralKarmaSpentOnContacts - generalKarmaSpentOnContacts);
+                  const newFreeContactKarmaRemaining = freeContactKarma - newFreeContactKarmaSpent;
+                  const newTotalAvailable = newFreeContactKarmaRemaining + newGeneralKarmaRemaining;
+                  
+                  if (newCost >= MIN_KARMA_PER_CONTACT && newCost <= MAX_KARMA_PER_CONTACT && costDiff <= newTotalAvailable) {
                     handleUpdateContact(index, { connection: value });
                   }
                 },
@@ -278,7 +349,15 @@ export function ContactsStep({ state, updateState }: StepProps) {
                 contact.loyalty,
                 (value) => {
                   const newCost = contact.connection + value;
-                  if (newCost <= MAX_KARMA_PER_CONTACT && newCost - cost <= karmaRemaining) {
+                  const costDiff = newCost - cost;
+                  const newTotalKarmaSpent = totalContactKarmaSpent + costDiff;
+                  const newFreeContactKarmaSpent = Math.min(newTotalKarmaSpent, freeContactKarma);
+                  const newGeneralKarmaSpentOnContacts = Math.max(0, newTotalKarmaSpent - freeContactKarma);
+                  const newGeneralKarmaRemaining = generalKarmaRemaining - (newGeneralKarmaSpentOnContacts - generalKarmaSpentOnContacts);
+                  const newFreeContactKarmaRemaining = freeContactKarma - newFreeContactKarmaSpent;
+                  const newTotalAvailable = newFreeContactKarmaRemaining + newGeneralKarmaRemaining;
+                  
+                  if (newCost >= MIN_KARMA_PER_CONTACT && newCost <= MAX_KARMA_PER_CONTACT && costDiff <= newTotalAvailable) {
                     handleUpdateContact(index, { loyalty: value });
                   }
                 },
@@ -414,23 +493,58 @@ export function ContactsStep({ state, updateState }: StepProps) {
 
       {/* Karma Budget */}
       <div className="rounded-lg bg-indigo-50 p-4 dark:bg-indigo-900/20">
-        <div className="flex items-center justify-between">
-          <div>
-            <div className="text-sm font-medium text-indigo-800 dark:text-indigo-200">Contact Karma</div>
-            <div className="text-xs text-indigo-600 dark:text-indigo-400">
-              Charisma ({charisma}) x 3 = {freeContactKarma} free Karma
+        <div className="space-y-3">
+          {/* Free Contact Karma */}
+          <div className="flex items-center justify-between">
+            <div>
+              <div className="text-sm font-medium text-indigo-800 dark:text-indigo-200">Free Contact Karma</div>
+              <div className="text-xs text-indigo-600 dark:text-indigo-400">
+                Charisma ({charisma}) × 3 = {freeContactKarma} free
+              </div>
+            </div>
+            <div className="text-right">
+              <div className={`text-xl font-bold ${freeContactKarmaRemaining >= 0 ? "text-indigo-700 dark:text-indigo-300" : "text-amber-600 dark:text-amber-400"}`}>
+                {freeContactKarmaRemaining}
+              </div>
+              <div className="text-xs text-indigo-600 dark:text-indigo-400">remaining</div>
             </div>
           </div>
-          <div className="text-right">
-            <div className="text-2xl font-bold text-indigo-700 dark:text-indigo-300">{karmaRemaining}</div>
-            <div className="text-xs text-indigo-600 dark:text-indigo-400">remaining</div>
+          <div className="h-1.5 overflow-hidden rounded-full bg-indigo-200 dark:bg-indigo-800">
+            <div
+              className="h-full rounded-full bg-indigo-500 transition-all duration-300"
+              style={{ width: `${freeContactKarma > 0 ? (freeContactKarmaSpent / freeContactKarma) * 100 : 0}%` }}
+            />
           </div>
-        </div>
-        <div className="mt-2 h-1.5 overflow-hidden rounded-full bg-indigo-200 dark:bg-indigo-800">
-          <div
-            className="h-full rounded-full bg-indigo-500 transition-all duration-300"
-            style={{ width: `${freeContactKarma > 0 ? (karmaSpent / freeContactKarma) * 100 : 0}%` }}
-          />
+          
+          {/* General Karma (for contacts beyond free) */}
+          {generalKarmaSpentOnContacts > 0 || freeContactKarmaRemaining <= 0 ? (
+            <div className="mt-3 border-t border-indigo-200 pt-3 dark:border-indigo-800">
+              <div className="flex items-center justify-between">
+                <div>
+                  <div className="text-sm font-medium text-indigo-800 dark:text-indigo-200">General Karma</div>
+                  <div className="text-xs text-indigo-600 dark:text-indigo-400">
+                    {generalKarmaSpentOnContacts > 0 ? `${generalKarmaSpentOnContacts} spent on contacts` : "Available for contacts"}
+                  </div>
+                </div>
+                <div className="text-right">
+                  <div className={`text-xl font-bold ${generalKarmaRemaining >= 0 ? "text-indigo-700 dark:text-indigo-300" : "text-red-600 dark:text-red-400"}`}>
+                    {generalKarmaRemaining}
+                  </div>
+                  <div className="text-xs text-indigo-600 dark:text-indigo-400">remaining</div>
+                </div>
+              </div>
+            </div>
+          ) : null}
+          
+          {/* Total Available */}
+          <div className="mt-2 border-t border-indigo-200 pt-2 dark:border-indigo-800">
+            <div className="flex items-center justify-between">
+              <div className="text-xs font-medium text-indigo-700 dark:text-indigo-300">Total Available for Contacts</div>
+              <div className={`text-lg font-bold ${totalKarmaAvailableForContacts >= MIN_KARMA_PER_CONTACT ? "text-indigo-700 dark:text-indigo-300" : "text-amber-600 dark:text-amber-400"}`}>
+                {totalKarmaAvailableForContacts}
+              </div>
+            </div>
+          </div>
         </div>
       </div>
 
@@ -562,13 +676,13 @@ export function ContactsStep({ state, updateState }: StepProps) {
               <span className="text-sm text-zinc-600 dark:text-zinc-400">Contact Cost:</span>
               <span className={`font-medium ${newContactCost > MAX_KARMA_PER_CONTACT
                   ? "text-red-600 dark:text-red-400"
-                  : newContactCost > karmaRemaining
+                  : newContactCost > totalKarmaAvailableForContacts
                     ? "text-amber-600 dark:text-amber-400"
                     : "text-emerald-600 dark:text-emerald-400"
                 }`}>
                 {newContactCost} Karma
                 {newContactCost > MAX_KARMA_PER_CONTACT && " (max 7)"}
-                {newContactCost <= MAX_KARMA_PER_CONTACT && newContactCost > karmaRemaining && " (not enough)"}
+                {newContactCost <= MAX_KARMA_PER_CONTACT && newContactCost > totalKarmaAvailableForContacts && " (not enough)"}
               </span>
             </div>
 
@@ -609,8 +723,8 @@ export function ContactsStep({ state, updateState }: StepProps) {
         <button
           type="button"
           onClick={() => setIsAddingContact(true)}
-          disabled={karmaRemaining < 2}
-          className={`flex w-full items-center justify-center gap-2 rounded-lg border-2 border-dashed p-4 text-sm font-medium transition-colors ${karmaRemaining >= 2
+          disabled={totalKarmaAvailableForContacts < MIN_KARMA_PER_CONTACT}
+          className={`flex w-full items-center justify-center gap-2 rounded-lg border-2 border-dashed p-4 text-sm font-medium transition-colors ${totalKarmaAvailableForContacts >= MIN_KARMA_PER_CONTACT
               ? "border-zinc-300 text-zinc-600 hover:border-emerald-400 hover:bg-emerald-50 hover:text-emerald-700 dark:border-zinc-600 dark:text-zinc-400 dark:hover:border-emerald-600 dark:hover:bg-emerald-900/20 dark:hover:text-emerald-400"
               : "cursor-not-allowed border-zinc-200 text-zinc-400 dark:border-zinc-700 dark:text-zinc-500"
             }`}
@@ -619,7 +733,7 @@ export function ContactsStep({ state, updateState }: StepProps) {
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
           </svg>
           Add Contact
-          {karmaRemaining < 2 && <span className="text-xs">(not enough Karma)</span>}
+          {totalKarmaAvailableForContacts < MIN_KARMA_PER_CONTACT && <span className="text-xs">(not enough Karma)</span>}
         </button>
       )}
 
