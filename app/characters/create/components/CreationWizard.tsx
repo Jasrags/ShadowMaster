@@ -20,6 +20,8 @@ import type {
   ID,
   ValidationError,
   GearItem,
+  Weapon,
+  ArmorItem,
   CyberwareItem,
   BiowareItem,
   Lifestyle,
@@ -33,7 +35,6 @@ import { AttributesStep } from "./steps/AttributesStep";
 import { MagicStep } from "./steps/MagicStep";
 import { SkillsStep } from "./steps/SkillsStep";
 import { QualitiesStep } from "./steps/QualitiesStep";
-import { AugmentationsStep } from "./steps/AugmentationsStep";
 import { ContactsStep } from "./steps/ContactsStep";
 import { GearStep } from "./steps/GearStep";
 import { KarmaStep } from "./steps/KarmaStep";
@@ -153,6 +154,9 @@ export function CreationWizard({ onCancel, onComplete }: CreationWizardProps) {
     // Check if character can use adept powers
     const isAdept = ["adept", "mystic-adept"].includes(magicPath);
 
+    // Check if character can learn rituals (only Magician, Mystic Adept, or Aspected Mage)
+    const canLearnRituals = isMagical;
+
     return rawSteps.filter((step) => {
       // Hide Spells step for mundane characters and technomancers
       // (Technomancers use Complex Forms which are currently in KarmaStep)
@@ -161,6 +165,10 @@ export function CreationWizard({ onCancel, onComplete }: CreationWizardProps) {
       }
       // Hide Adept Powers step for non-adepts
       if (step.id === "adept-powers" && !isAdept) {
+        return false;
+      }
+      // Hide Rituals step for mundane characters (and technomancers/adepts)
+      if (step.id === "rituals" && !canLearnRituals) {
         return false;
       }
       return true;
@@ -636,6 +644,8 @@ export function CreationWizard({ onCancel, onComplete }: CreationWizardProps) {
 
   // Extract cart data from state
   const gearItems: GearItem[] = (state.selections?.gear as GearItem[]) || [];
+  const weapons: Weapon[] = (state.selections?.weapons as Weapon[]) || [];
+  const armorItems: ArmorItem[] = (state.selections?.armor as ArmorItem[]) || [];
   const cyberwareItems: CyberwareItem[] =
     (state.selections?.cyberware as CyberwareItem[]) || [];
   const biowareItems: BiowareItem[] =
@@ -645,10 +655,21 @@ export function CreationWizard({ onCancel, onComplete }: CreationWizardProps) {
   const selectedSpells: string[] = (state.selections?.spells as string[]) || [];
   const selectedAdeptPowers: AdeptPower[] = (state.selections?.adeptPowers as AdeptPower[]) || [];
 
-  // Calculate cart totals
+  // Calculate cart totals (including weapons and armor with their mods)
   const gearTotal = useMemo(() => {
-    return gearItems.reduce((sum, item) => sum + item.cost * item.quantity, 0);
-  }, [gearItems]);
+    const basicGearTotal = gearItems.reduce((sum, item) => sum + item.cost * item.quantity, 0);
+    const weaponsTotal = weapons.reduce((sum, weapon) => {
+      const baseCost = weapon.cost * weapon.quantity;
+      const modsCost = (weapon.modifications || []).reduce((modSum, mod) => modSum + mod.cost, 0);
+      return sum + baseCost + modsCost;
+    }, 0);
+    const armorTotal = armorItems.reduce((sum, armor) => {
+      const baseCost = armor.cost * armor.quantity;
+      const modsCost = (armor.modifications || []).reduce((modSum, mod) => modSum + mod.cost, 0);
+      return sum + baseCost + modsCost;
+    }, 0);
+    return basicGearTotal + weaponsTotal + armorTotal;
+  }, [gearItems, weapons, armorItems]);
 
   const lifestyleCost = useMemo(() => {
     if (!lifestyle) return 0;
@@ -924,6 +945,32 @@ export function CreationWizard({ onCancel, onComplete }: CreationWizardProps) {
       });
     },
     [gearItems, state.selections, updateState]
+  );
+
+  const handleRemoveWeapon = useCallback(
+    (index: number) => {
+      const updatedWeapons = weapons.filter((_, i) => i !== index);
+      updateState({
+        selections: {
+          ...state.selections,
+          weapons: updatedWeapons,
+        },
+      });
+    },
+    [weapons, state.selections, updateState]
+  );
+
+  const handleRemoveArmor = useCallback(
+    (index: number) => {
+      const updatedArmor = armorItems.filter((_, i) => i !== index);
+      updateState({
+        selections: {
+          ...state.selections,
+          armor: updatedArmor,
+        },
+      });
+    },
+    [armorItems, state.selections, updateState]
   );
 
   const handleRemoveCyberware = useCallback(
@@ -1292,8 +1339,6 @@ export function CreationWizard({ onCancel, onComplete }: CreationWizardProps) {
         return <SkillsStep {...stepProps} />;
       case "qualities":
         return <QualitiesStep {...stepProps} />;
-      case "augmentations":
-        return <AugmentationsStep {...stepProps} />;
       case "contacts":
         return <ContactsStep {...stepProps} />;
       case "gear":
@@ -1432,10 +1477,14 @@ export function CreationWizard({ onCancel, onComplete }: CreationWizardProps) {
         budgetValues={budgetValues}
         currentStepId={currentStep?.id}
         gearItems={gearItems}
+        weapons={weapons}
+        armorItems={armorItems}
         lifestyle={lifestyle}
         gearTotal={gearTotal}
         lifestyleCost={lifestyleCost}
         onRemoveGear={handleRemoveGear}
+        onRemoveWeapon={handleRemoveWeapon}
+        onRemoveArmor={handleRemoveArmor}
         cyberwareItems={cyberwareItems}
         biowareItems={biowareItems}
         augmentationTotal={augmentationTotal}

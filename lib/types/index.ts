@@ -23,6 +23,15 @@ export type {
   CyberwareCatalogItem,
   BiowareCatalogItem,
   AugmentationRules,
+  // Modification catalog types
+  WeaponMountType,
+  ModifiableGearType,
+  WeaponModificationCatalogItem,
+  ArmorModificationCatalogItem,
+  ModificationsCatalog,
+  // Spirit types
+  SpiritPower,
+  Spirit,
 } from "./edition";
 
 // Character types
@@ -45,6 +54,10 @@ export type {
   GearItem,
   Weapon,
   ArmorItem,
+  // Modification types for character gear
+  WeaponMount,
+  InstalledWeaponMod,
+  InstalledArmorMod,
   CyberwareGrade,
   CyberwareCategory,
   CyberwareItem,
@@ -74,6 +87,9 @@ export {
   BIOWARE_GRADE_MULTIPLIERS,
   SinnerQuality,
 } from "./character";
+
+// Spirit types enum
+export { SpiritType } from "./edition";
 
 // Creation method types
 export type {

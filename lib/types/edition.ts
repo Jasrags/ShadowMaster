@@ -115,6 +115,7 @@ export type RuleModuleType =
   | "combat" // Combat rules and actions
   | "matrix" // Matrix/decking rules
   | "gear" // Equipment, weapons, armor
+  | "modifications" // Weapon, armor, and gear modifications
   | "cyberware" // Cyberware and essence costs
   | "bioware" // Bioware (edition-dependent)
   | "vehicles" // Vehicles and drones
@@ -450,6 +451,134 @@ export interface Spirit {
   powers: SpiritPower[];
   optionalPowers?: SpiritPower[];
   weaknesses?: string[];
+}
+
+// =============================================================================
+// MODIFICATION TYPES (for ruleset data)
+// =============================================================================
+
+/**
+ * Mount points for weapon accessories
+ */
+export type WeaponMountType =
+  | "top"       // Top rail mount
+  | "under"     // Underbarrel mount
+  | "side"      // Side mount
+  | "barrel"    // Barrel modifications
+  | "stock"     // Stock modifications
+  | "internal"; // Internal modifications
+
+/**
+ * Types of gear that can be modified
+ */
+export type ModifiableGearType =
+  | "weapon"
+  | "armor"
+  | "vehicle"
+  | "drone"
+  | "cyberdeck"
+  | "commlink";
+
+/**
+ * Weapon modification catalog item in ruleset data
+ * Based on SR5 Run & Gun and Core Rulebook
+ */
+export interface WeaponModificationCatalogItem {
+  id: string;
+  name: string;
+  /** Mount point required (undefined means no mount needed) */
+  mount?: WeaponMountType;
+  /** Weapon types this mod is compatible with */
+  compatibleWeapons?: string[];
+  /** Weapon types this mod is NOT compatible with */
+  incompatibleWeapons?: string[];
+  /** Minimum weapon size (e.g., "rifle" for underbarrel attachments) */
+  minimumWeaponSize?: "holdout" | "light-pistol" | "heavy-pistol" | "smg" | "rifle" | "heavy";
+  /** Base cost in nuyen */
+  cost: number;
+  /** Whether cost is a multiplier of weapon cost */
+  costMultiplier?: number;
+  /** Whether the mod has a rating (1-6 typically) */
+  hasRating?: boolean;
+  /** Maximum rating if applicable */
+  maxRating?: number;
+  /** Whether cost scales with rating */
+  costPerRating?: boolean;
+  /** Base availability */
+  availability: number;
+  /** Whether availability is Restricted */
+  restricted?: boolean;
+  /** Whether availability is Forbidden */
+  forbidden?: boolean;
+  /** Recoil compensation provided */
+  recoilCompensation?: number;
+  /** Accuracy modifier */
+  accuracyModifier?: number;
+  /** Concealability modifier */
+  concealabilityModifier?: number;
+  /** Description */
+  description?: string;
+  /** Wireless bonus description */
+  wirelessBonus?: string;
+  /** Page reference in source material */
+  page?: number;
+  /** Source book reference */
+  source?: string;
+}
+
+/**
+ * Armor modification catalog item in ruleset data
+ * Based on SR5 Core Rulebook and Run & Gun
+ */
+export interface ArmorModificationCatalogItem {
+  id: string;
+  name: string;
+  /** Capacity cost (can be flat or in brackets for no capacity use) */
+  capacityCost: number;
+  /** Whether capacity cost scales with rating */
+  capacityPerRating?: boolean;
+  /** Whether this uses no capacity (bracketed in rulebook) */
+  noCapacityCost?: boolean;
+  /** Whether the mod has a rating (1-6 typically) */
+  hasRating?: boolean;
+  /** Maximum rating if applicable */
+  maxRating?: number;
+  /** Base cost in nuyen */
+  cost: number;
+  /** Whether cost scales with rating */
+  costPerRating?: boolean;
+  /** Whether cost is a multiplier of armor cost */
+  costMultiplier?: number;
+  /** Base availability */
+  availability: number;
+  /** Availability modifier (adds to armor's base) */
+  availabilityModifier?: number;
+  /** Whether availability is Restricted */
+  restricted?: boolean;
+  /** Whether availability is Forbidden */
+  forbidden?: boolean;
+  /** Armor bonus provided */
+  armorBonus?: number;
+  /** Requirements (e.g., "full body armor", "helmet") */
+  requirements?: string[];
+  /** Description */
+  description?: string;
+  /** Wireless bonus description */
+  wirelessBonus?: string;
+  /** Page reference in source material */
+  page?: number;
+  /** Source book reference */
+  source?: string;
+}
+
+/**
+ * Complete modifications catalog structure
+ */
+export interface ModificationsCatalog {
+  /** Weapon accessories and modifications */
+  weaponMods: WeaponModificationCatalogItem[];
+  /** Armor modifications */
+  armorMods: ArmorModificationCatalogItem[];
 }
 
 // =============================================================================

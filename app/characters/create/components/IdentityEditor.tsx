@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useMemo, useEffect } from "react";
+import { useState, useMemo } from "react";
 import { Button, RadioGroup, Radio } from "react-aria-components";
 import type { Identity, SIN, SinnerQuality, GearItem } from "@/lib/types";
 import { SinnerQuality as SinnerQualityEnum } from "@/lib/types/character";
@@ -37,23 +37,19 @@ export function IdentityEditor({
   }, [identity.sin?.type, fakeSINsFromGear]);
   
   const [selectedFakeSINGearId, setSelectedFakeSINGearId] = useState<string | null>(initialFakeSINGearId);
-  // Real SIN quality: use existing value if editing, otherwise use SINner quality level, default to National
-  const [realSINQuality, setRealSINQuality] = useState<SinnerQuality>(
-    identity.sin?.type === "real" 
-      ? identity.sin.sinnerQuality 
-      : (sinnerQualityLevel || SinnerQualityEnum.National)
-  );
-  
-  // Update realSINQuality when sinnerQualityLevel changes (if creating new real SIN or switching to real SIN)
-  useEffect(() => {
-    if (sinType === "real" && sinnerQualityLevel) {
-      // If editing existing real SIN, only update if it doesn't have a sinnerQuality set
-      // If creating new real SIN, always use the SINner quality level
-      if (!identity.sin || identity.sin.type !== "real" || !identity.sin.sinnerQuality) {
-        setRealSINQuality(sinnerQualityLevel);
-      }
+  // Compute default real SIN quality: use existing value if editing, otherwise use SINner quality level, default to National
+  const defaultRealSINQuality = useMemo(() => {
+    if (identity.sin?.type === "real" && identity.sin.sinnerQuality) {
+      return identity.sin.sinnerQuality;
     }
-  }, [sinType, sinnerQualityLevel, identity.sin]);
+    return sinnerQualityLevel || SinnerQualityEnum.National;
+  }, [identity.sin, sinnerQualityLevel]);
+
+  // Real SIN quality: use computed default, but allow user to override
+  const [realSINQuality, setRealSINQuality] = useState<SinnerQuality>(defaultRealSINQuality);
+  
+  // Reset to default when switching to real SIN type (if no existing value)
+  // This is done in the onChange handler, not in an effect, to avoid cascading renders
 
   // Validation
   const isValid = useMemo(() => {
@@ -120,7 +116,14 @@ export function IdentityEditor({
           </label>
           <RadioGroup
             value={sinType}
-            onChange={(value) => setSinType(value as "fake" | "real")}
+            onChange={(value) => {
+              const newSinType = value as "fake" | "real";
+              setSinType(newSinType);
+              // When switching to real SIN, reset quality to default if no existing value
+              if (newSinType === "real" && (!identity.sin || identity.sin.type !== "real" || !identity.sin.sinnerQuality)) {
+                setRealSINQuality(defaultRealSINQuality);
+              }
+            }}
             className="space-y-2"
           >
             <Radio

@@ -185,7 +185,8 @@ This section provides a comprehensive view of the entire implementation roadmap,
 | 12 | **B8**  | **UI/UX Improvements**              | **1-2 weeks**  | **Medium** | Not Started      |
 | 13 | **B4**  | **Combat Tracker**                  | **3-4 weeks**  | **Medium** | Not Started      |
 | 14 | **B3**  | **Inventory Management**            | **1-2 weeks**  | **Medium** | Not Started      |
-| 15 | **B9**  | **Session Persistence & WebSockets**| **2-3 weeks**  | **Low**    | Not Started      |
+| 15 | **B15** | **Draft Character Resume Editing**   | **1-2 weeks**  | **High**   | Not Started      |
+| 16 | **B9**  | **Session Persistence & WebSockets**| **2-3 weeks**  | **Low**    | Not Started      |
 
 ### Completed Work Summary
 
@@ -2167,6 +2168,170 @@ This milestone implements comprehensive validation for modifications including a
 - **B10.5.AC.10** [ ] Modifications displayed in ReviewStep with individual costs
 - **B10.5.AC.11** [ ] Rating-based modifications (e.g., Gas-Vent Rating 1-3) work correctly
 - **B10.5.AC.12** [ ] Modification removal works (with cost refund)
+
+### B10.6 Cyberware Modification Integration
+
+This milestone specifically integrates the modification system (from B10.2-B10.4) with the cyberware system (from B1), enabling players to add enhancements to cyberware items during character creation. While the generic modification catalog structure includes cyberware enhancements (B10.2.4), this milestone ensures proper integration with cyberware capacity tracking, character model updates, UI components, and validation rules specific to cyberware modifications. The goal is to complete the cyberware customization workflow by connecting the modification catalog to the existing cyberware capacity system and AugmentationsStep component.
+
+**Dependencies:**
+- **B1.1** (Cyberware Data Structures) - Provides CyberwareItem interface with capacity tracking
+- **B1.2** (Ruleset Context Hooks) - Provides useCyberware() hook and augmentation utilities
+- **B1.3** (Character Creation Step) - Provides AugmentationsStep component as integration point
+- **B10.2.4** (Cyberware Enhancements Catalog) - Provides cyberware modification catalog data
+- **B10.2.5** (Modification Loading Hooks) - Provides base modification extraction functions
+- **B10.4** (Validation and Cost Tracking) - Provides modification validation framework
+
+**Files to modify:**
+- **B10.6.FM.1** `/lib/rules/loader.ts` (add extractCyberwareModifications function)
+- **B10.6.FM.2** `/lib/rules/RulesetContext.tsx` (add useCyberwareModifications hook)
+- **B10.6.FM.3** `/lib/types/character.ts` (ensure CyberwareItem supports modifications array)
+- **B10.6.FM.4** `/lib/types/edition.ts` (ensure ModificationsCatalogData includes cyberwareMods)
+- **B10.6.FM.5** `/app/characters/create/components/steps/AugmentationsStep.tsx` (integrate modification UI)
+- **B10.6.FM.6** `/app/characters/create/components/steps/ReviewStep.tsx` (display cyberware mods)
+
+**Tasks:**
+
+| Task | Description | Status |
+|------|-------------|--------|
+| B10.6.1 | Add cyberwareMods array to ModificationsCatalogData interface in loader.ts | Not Started |
+| B10.6.2 | Add extractCyberwareModifications function in loader.ts (mirrors extractWeaponModifications/extractArmorModifications) | Not Started |
+| B10.6.3 | Add useCyberwareModifications hook to RulesetContext (returns filtered cyberware mods) | Not Started |
+| B10.6.4 | Ensure CyberwareItem interface has modifications array and InstalledCyberwareMod type | Not Started |
+| B10.6.5 | Update AugmentationsStep to show modification button/icon for cyberware with capacity | Not Started |
+| B10.6.6 | Integrate ModificationModal for cyberware items (filter by applicable cyberware categories) | Not Started |
+| B10.6.7 | Add capacity validation for cyberware modifications (prevent over-capacity) | Not Started |
+| B10.6.8 | Update cyberware cost tracking to include modification costs in nuyen budget | Not Started |
+| B10.6.9 | Update ReviewStep to display installed cyberware modifications with costs | Not Started |
+| B10.6.10 | Add cyberware modification availability validation (availability <= 12 at creation) | Not Started |
+
+**Tasks JSON:**
+```json
+[
+  {
+    "id": "B10.6.1",
+    "title": "Add cyberwareMods array to ModificationsCatalogData interface in loader.ts",
+    "description": "This milestone specifically integrates the modification system (from B10.2-B10.4) with the cyberware system (from B1), enabling players to add enhancements to cyberware items during character creation. While the generic modification catalog structure includes cyberware enhancements (B10.2.4), this milestone ensures proper integration with cyberware capacity tracking, character model updates, UI components, and validation rules specific to cyberware modifications. The goal is to complete the cyberware customization workflow by connecting the modification catalog to the existing cyberware capacity system and AugmentationsStep component. Add cyberwareMods array to ModificationsCatalogData interface in loader.ts.",
+    "files": [
+      "/lib/rules/loader.ts"
+    ],
+    "status": "Not Started",
+    "dependsOn": ["B10.2.4"]
+  },
+  {
+    "id": "B10.6.2",
+    "title": "Add extractCyberwareModifications function in loader.ts (mirrors extractWeaponModifications/extractArmorModifications)",
+    "description": "This milestone specifically integrates the modification system (from B10.2-B10.4) with the cyberware system (from B1), enabling players to add enhancements to cyberware items during character creation. While the generic modification catalog structure includes cyberware enhancements (B10.2.4), this milestone ensures proper integration with cyberware capacity tracking, character model updates, UI components, and validation rules specific to cyberware modifications. The goal is to complete the cyberware customization workflow by connecting the modification catalog to the existing cyberware capacity system and AugmentationsStep component. Add extractCyberwareModifications function in loader.ts (mirrors extractWeaponModifications/extractArmorModifications).",
+    "files": [
+      "/lib/rules/loader.ts"
+    ],
+    "status": "Not Started",
+    "dependsOn": ["B10.6.1"]
+  },
+  {
+    "id": "B10.6.3",
+    "title": "Add useCyberwareModifications hook to RulesetContext (returns filtered cyberware mods)",
+    "description": "This milestone specifically integrates the modification system (from B10.2-B10.4) with the cyberware system (from B1), enabling players to add enhancements to cyberware items during character creation. While the generic modification catalog structure includes cyberware enhancements (B10.2.4), this milestone ensures proper integration with cyberware capacity tracking, character model updates, UI components, and validation rules specific to cyberware modifications. The goal is to complete the cyberware customization workflow by connecting the modification catalog to the existing cyberware capacity system and AugmentationsStep component. Add useCyberwareModifications hook to RulesetContext (returns filtered cyberware mods).",
+    "files": [
+      "/lib/rules/RulesetContext.tsx"
+    ],
+    "status": "Not Started",
+    "dependsOn": ["B10.6.2", "B10.2.5"]
+  },
+  {
+    "id": "B10.6.4",
+    "title": "Ensure CyberwareItem interface has modifications array and InstalledCyberwareMod type",
+    "description": "This milestone specifically integrates the modification system (from B10.2-B10.4) with the cyberware system (from B1), enabling players to add enhancements to cyberware items during character creation. While the generic modification catalog structure includes cyberware enhancements (B10.2.4), this milestone ensures proper integration with cyberware capacity tracking, character model updates, UI components, and validation rules specific to cyberware modifications. The goal is to complete the cyberware customization workflow by connecting the modification catalog to the existing cyberware capacity system and AugmentationsStep component. Ensure CyberwareItem interface has modifications array and InstalledCyberwareMod type.",
+    "files": [
+      "/lib/types/character.ts"
+    ],
+    "status": "Not Started",
+    "dependsOn": ["B1.1.3", "B10.1.2"]
+  },
+  {
+    "id": "B10.6.5",
+    "title": "Update AugmentationsStep to show modification button/icon for cyberware with capacity",
+    "description": "This milestone specifically integrates the modification system (from B10.2-B10.4) with the cyberware system (from B1), enabling players to add enhancements to cyberware items during character creation. While the generic modification catalog structure includes cyberware enhancements (B10.2.4), this milestone ensures proper integration with cyberware capacity tracking, character model updates, UI components, and validation rules specific to cyberware modifications. The goal is to complete the cyberware customization workflow by connecting the modification catalog to the existing cyberware capacity system and AugmentationsStep component. Update AugmentationsStep to show modification button/icon for cyberware with capacity.",
+    "files": [
+      "/app/characters/create/components/steps/AugmentationsStep.tsx"
+    ],
+    "status": "Not Started",
+    "dependsOn": ["B10.6.3", "B10.6.4", "B1.3.1"]
+  },
+  {
+    "id": "B10.6.6",
+    "title": "Integrate ModificationModal for cyberware items (filter by applicable cyberware categories)",
+    "description": "This milestone specifically integrates the modification system (from B10.2-B10.4) with the cyberware system (from B1), enabling players to add enhancements to cyberware items during character creation. While the generic modification catalog structure includes cyberware enhancements (B10.2.4), this milestone ensures proper integration with cyberware capacity tracking, character model updates, UI components, and validation rules specific to cyberware modifications. The goal is to complete the cyberware customization workflow by connecting the modification catalog to the existing cyberware capacity system and AugmentationsStep component. Integrate ModificationModal for cyberware items (filter by applicable cyberware categories).",
+    "files": [
+      "/app/characters/create/components/steps/AugmentationsStep.tsx"
+    ],
+    "status": "Not Started",
+    "dependsOn": ["B10.6.5", "B10.3.2"]
+  },
+  {
+    "id": "B10.6.7",
+    "title": "Add capacity validation for cyberware modifications (prevent over-capacity)",
+    "description": "This milestone specifically integrates the modification system (from B10.2-B10.4) with the cyberware system (from B1), enabling players to add enhancements to cyberware items during character creation. While the generic modification catalog structure includes cyberware enhancements (B10.2.4), this milestone ensures proper integration with cyberware capacity tracking, character model updates, UI components, and validation rules specific to cyberware modifications. The goal is to complete the cyberware customization workflow by connecting the modification catalog to the existing cyberware capacity system and AugmentationsStep component. Add capacity validation for cyberware modifications (prevent over-capacity).",
+    "files": [
+      "/app/characters/create/components/steps/AugmentationsStep.tsx",
+      "/lib/rules/validation.ts"
+    ],
+    "status": "Not Started",
+    "dependsOn": ["B10.6.6", "B10.4.2"]
+  },
+  {
+    "id": "B10.6.8",
+    "title": "Update cyberware cost tracking to include modification costs in nuyen budget",
+    "description": "This milestone specifically integrates the modification system (from B10.2-B10.4) with the cyberware system (from B1), enabling players to add enhancements to cyberware items during character creation. While the generic modification catalog structure includes cyberware enhancements (B10.2.4), this milestone ensures proper integration with cyberware capacity tracking, character model updates, UI components, and validation rules specific to cyberware modifications. The goal is to complete the cyberware customization workflow by connecting the modification catalog to the existing cyberware capacity system and AugmentationsStep component. Update cyberware cost tracking to include modification costs in nuyen budget.",
+    "files": [
+      "/app/characters/create/components/steps/AugmentationsStep.tsx"
+    ],
+    "status": "Not Started",
+    "dependsOn": ["B10.6.6", "B10.3.5"]
+  },
+  {
+    "id": "B10.6.9",
+    "title": "Update ReviewStep to display installed cyberware modifications with costs",
+    "description": "This milestone specifically integrates the modification system (from B10.2-B10.4) with the cyberware system (from B1), enabling players to add enhancements to cyberware items during character creation. While the generic modification catalog structure includes cyberware enhancements (B10.2.4), this milestone ensures proper integration with cyberware capacity tracking, character model updates, UI components, and validation rules specific to cyberware modifications. The goal is to complete the cyberware customization workflow by connecting the modification catalog to the existing cyberware capacity system and AugmentationsStep component. Update ReviewStep to display installed cyberware modifications with costs.",
+    "files": [
+      "/app/characters/create/components/steps/ReviewStep.tsx"
+    ],
+    "status": "Not Started",
+    "dependsOn": ["B10.6.8", "B10.4.5"]
+  },
+  {
+    "id": "B10.6.10",
+    "title": "Add cyberware modification availability validation (availability <= 12 at creation)",
+    "description": "This milestone specifically integrates the modification system (from B10.2-B10.4) with the cyberware system (from B1), enabling players to add enhancements to cyberware items during character creation. While the generic modification catalog structure includes cyberware enhancements (B10.2.4), this milestone ensures proper integration with cyberware capacity tracking, character model updates, UI components, and validation rules specific to cyberware modifications. The goal is to complete the cyberware customization workflow by connecting the modification catalog to the existing cyberware capacity system and AugmentationsStep component. Add cyberware modification availability validation (availability <= 12 at creation).",
+    "files": [
+      "/lib/rules/validation.ts",
+      "/app/characters/create/components/steps/AugmentationsStep.tsx"
+    ],
+    "status": "Not Started",
+    "dependsOn": ["B10.6.6", "B10.4.1"]
+  }
+]
+```
+
+**Notes:**
+- Cyberware modifications use the same `ModificationCatalogItem` structure as weapon/armor mods, but with `category: 'cyberware'` and `capacityCost` for capacity tracking
+- Cyberware capacity equals the cyberware item's `capacity` property (typically cyberlimbs have capacity, other items don't)
+- Modification costs are separate from cyberware base costs and must be tracked in the nuyen budget
+- Some cyberware modifications may have rating-based capacity costs (e.g., capacityPerRating: true)
+
+**Acceptance Criteria:**
+
+- **B10.6.AC.1** [ ] `extractCyberwareModifications()` function exists and returns cyberware mods from ruleset
+- **B10.6.AC.2** [ ] `useCyberwareModifications()` hook available in RulesetContext and filters by category
+- **B10.6.AC.3** [ ] CyberwareItem interface includes modifications array with InstalledCyberwareMod type
+- **B10.6.AC.4** [ ] AugmentationsStep displays modification button for cyberware items with capacity > 0
+- **B10.6.AC.5** [ ] ModificationModal filters cyberware mods by applicable cyberware categories/subcategories
+- **B10.6.AC.6** [ ] Capacity validation prevents installing mods that exceed cyberware capacity
+- **B10.6.AC.7** [ ] Cyberware modification costs included in nuyen budget tracking
+- **B10.6.AC.8** [ ] Capacity usage display shows used/total capacity for cyberware with mods
+- **B10.6.AC.9** [ ] ReviewStep displays installed cyberware modifications with individual costs
+- **B10.6.AC.10** [ ] Cyberware modification availability validation enforced (availability <= 12)
+- **B10.6.AC.11** [ ] Rating-based cyberware modifications calculate capacity/cost correctly
+- **B10.6.AC.12** [ ] Cyberware modification removal works (with cost refund and capacity freed)
 
 ---
 
@@ -4974,6 +5139,393 @@ This milestone adds spirit reference information for magical characters to help 
 - **B14.7.AC.4** [x] All SR5 CRB spirit types with powers documented
 - **B14.7.AC.5** [x] Spirit reference available based on tradition
 - **B14.7.AC.6** [x] Full mage/shaman character creatable with foci
+
+---
+
+## Phase B15: Draft Character Resume Editing
+
+**Objective:** Enable draft characters to be resumed from the characters list with full creation state preservation.
+
+This phase implements server-side draft state persistence and resume functionality, allowing users to pause character creation and resume it later from any device. Draft characters appear in the characters list with visual indicators, and clicking a draft loads the creation wizard with the saved state restored. This solves the critical UX issue where users lose progress when switching devices or closing the browser, significantly improving character creation completion rates.
+
+**Dependencies:**
+- MVP character creation complete (M0)
+- Character creation wizard exists (`CreationWizard` component)
+- Server-side draft creation already exists (`createCharacterDraft` API)
+
+**Priority:** High
+
+### B15.1 CreationState Storage in Character Metadata
+
+This milestone establishes the data structure for storing `CreationState` in character metadata. It ensures that all wizard state (current step, priorities, budgets, selections, errors, warnings) is persisted server-side and can be restored when resuming a draft.
+
+**Files to modify:**
+- **B15.1.FM.1** `/lib/types/character.ts` (add creationState to CharacterMetadata interface)
+- **B15.1.FM.2** `/lib/storage/characters.ts` (update character save/load to handle creationState)
+
+**Tasks:**
+
+| Task | Description | Status |
+|------|-------------|--------|
+| B15.1.1 | Add creationState field to CharacterMetadata interface (optional CreationState) | Not Started |
+| B15.1.2 | Update createCharacterDraft to initialize metadata.creationState as null | Not Started |
+| B15.1.3 | Update updateCharacter to preserve creationState when updating other fields | Not Started |
+| B15.1.4 | Ensure GET /api/characters/[id] returns creationState in metadata | Not Started |
+
+**Tasks JSON:**
+```json
+[
+  {
+    "id": "B15.1.1",
+    "title": "Add creationState field to CharacterMetadata interface (optional CreationState)",
+    "description": "This milestone establishes the data structure for storing CreationState in character metadata. It ensures that all wizard state (current step, priorities, budgets, selections, errors, warnings) is persisted server-side and can be restored when resuming a draft. Add creationState field to CharacterMetadata interface (optional CreationState).",
+    "files": [
+      "/lib/types/character.ts"
+    ],
+    "status": "Not Started",
+    "dependsOn": []
+  },
+  {
+    "id": "B15.1.2",
+    "title": "Update createCharacterDraft to initialize metadata.creationState as null",
+    "description": "This milestone establishes the data structure for storing CreationState in character metadata. It ensures that all wizard state (current step, priorities, budgets, selections, errors, warnings) is persisted server-side and can be restored when resuming a draft. Update createCharacterDraft to initialize metadata.creationState as null.",
+    "files": [
+      "/lib/storage/characters.ts"
+    ],
+    "status": "Not Started",
+    "dependsOn": ["B15.1.1"]
+  },
+  {
+    "id": "B15.1.3",
+    "title": "Update updateCharacter to preserve creationState when updating other fields",
+    "description": "This milestone establishes the data structure for storing CreationState in character metadata. It ensures that all wizard state (current step, priorities, budgets, selections, errors, warnings) is persisted server-side and can be restored when resuming a draft. Update updateCharacter to preserve creationState when updating other fields.",
+    "files": [
+      "/lib/storage/characters.ts"
+    ],
+    "status": "Not Started",
+    "dependsOn": ["B15.1.1"]
+  },
+  {
+    "id": "B15.1.4",
+    "title": "Ensure GET /api/characters/[id] returns creationState in metadata",
+    "description": "This milestone establishes the data structure for storing CreationState in character metadata. It ensures that all wizard state (current step, priorities, budgets, selections, errors, warnings) is persisted server-side and can be restored when resuming a draft. Ensure GET /api/characters/[id] returns creationState in metadata.",
+    "files": [
+      "/app/api/characters/[id]/route.ts"
+    ],
+    "status": "Not Started",
+    "dependsOn": ["B15.1.1"]
+  }
+]
+```
+
+### B15.2 CreationWizard Resume Support
+
+This milestone modifies the CreationWizard component to accept an optional `characterId` prop and load existing draft state from the server when provided. It replaces localStorage-based draft saving with server-side persistence, ensuring drafts are accessible across devices.
+
+**Files to modify:**
+- **B15.2.FM.1** `/app/characters/create/components/CreationWizard.tsx`
+- **B15.2.FM.2** `/app/api/characters/[id]/route.ts` (ensure creationState is returned)
+
+**Files to create:**
+- **B15.2.FC.1** `/app/characters/[id]/edit/page.tsx` (resume route)
+
+**Tasks:**
+
+| Task | Description | Status |
+|------|-------------|--------|
+| B15.2.1 | Add optional characterId prop to CreationWizard component | Not Started |
+| B15.2.2 | Add useEffect to load draft state from API when characterId is provided | Not Started |
+| B15.2.3 | Replace localStorage saveDraft with server-side PATCH /api/characters/[id] | Not Started |
+| B15.2.4 | Update auto-save logic to persist creationState to character.metadata.creationState | Not Started |
+| B15.2.5 | Create /characters/[id]/edit route that loads character and passes characterId to CreationWizard | Not Started |
+| B15.2.6 | Handle loading state while fetching draft from server | Not Started |
+| B15.2.7 | Handle error state if draft cannot be loaded (character not found, not a draft, etc.) | Not Started |
+
+**Tasks JSON:**
+```json
+[
+  {
+    "id": "B15.2.1",
+    "title": "Add optional characterId prop to CreationWizard component",
+    "description": "This milestone modifies the CreationWizard component to accept an optional characterId prop and load existing draft state from the server when provided. It replaces localStorage-based draft saving with server-side persistence, ensuring drafts are accessible across devices. Add optional characterId prop to CreationWizard component.",
+    "files": [
+      "/app/characters/create/components/CreationWizard.tsx"
+    ],
+    "status": "Not Started",
+    "dependsOn": ["B15.1.4"]
+  },
+  {
+    "id": "B15.2.2",
+    "title": "Add useEffect to load draft state from API when characterId is provided",
+    "description": "This milestone modifies the CreationWizard component to accept an optional characterId prop and load existing draft state from the server when provided. It replaces localStorage-based draft saving with server-side persistence, ensuring drafts are accessible across devices. Add useEffect to load draft state from API when characterId is provided.",
+    "files": [
+      "/app/characters/create/components/CreationWizard.tsx"
+    ],
+    "status": "Not Started",
+    "dependsOn": ["B15.2.1"]
+  },
+  {
+    "id": "B15.2.3",
+    "title": "Replace localStorage saveDraft with server-side PATCH /api/characters/[id]",
+    "description": "This milestone modifies the CreationWizard component to accept an optional characterId prop and load existing draft state from the server when provided. It replaces localStorage-based draft saving with server-side persistence, ensuring drafts are accessible across devices. Replace localStorage saveDraft with server-side PATCH /api/characters/[id].",
+    "files": [
+      "/app/characters/create/components/CreationWizard.tsx",
+      "/app/api/characters/[id]/route.ts"
+    ],
+    "status": "Not Started",
+    "dependsOn": ["B15.2.1", "B15.1.3"]
+  },
+  {
+    "id": "B15.2.4",
+    "title": "Update auto-save logic to persist creationState to character.metadata.creationState",
+    "description": "This milestone modifies the CreationWizard component to accept an optional characterId prop and load existing draft state from the server when provided. It replaces localStorage-based draft saving with server-side persistence, ensuring drafts are accessible across devices. Update auto-save logic to persist creationState to character.metadata.creationState.",
+    "files": [
+      "/app/characters/create/components/CreationWizard.tsx"
+    ],
+    "status": "Not Started",
+    "dependsOn": ["B15.2.3"]
+  },
+  {
+    "id": "B15.2.5",
+    "title": "Create /characters/[id]/edit route that loads character and passes characterId to CreationWizard",
+    "description": "This milestone modifies the CreationWizard component to accept an optional characterId prop and load existing draft state from the server when provided. It replaces localStorage-based draft saving with server-side persistence, ensuring drafts are accessible across devices. Create /characters/[id]/edit route that loads character and passes characterId to CreationWizard.",
+    "files": [
+      "/app/characters/[id]/edit/page.tsx"
+    ],
+    "status": "Not Started",
+    "dependsOn": ["B15.2.2"]
+  },
+  {
+    "id": "B15.2.6",
+    "title": "Handle loading state while fetching draft from server",
+    "description": "This milestone modifies the CreationWizard component to accept an optional characterId prop and load existing draft state from the server when provided. It replaces localStorage-based draft saving with server-side persistence, ensuring drafts are accessible across devices. Handle loading state while fetching draft from server.",
+    "files": [
+      "/app/characters/create/components/CreationWizard.tsx",
+      "/app/characters/[id]/edit/page.tsx"
+    ],
+    "status": "Not Started",
+    "dependsOn": ["B15.2.2"]
+  },
+  {
+    "id": "B15.2.7",
+    "title": "Handle error state if draft cannot be loaded (character not found, not a draft, etc.)",
+    "description": "This milestone modifies the CreationWizard component to accept an optional characterId prop and load existing draft state from the server when provided. It replaces localStorage-based draft saving with server-side persistence, ensuring drafts are accessible across devices. Handle error state if draft cannot be loaded (character not found, not a draft, etc.).",
+    "files": [
+      "/app/characters/create/components/CreationWizard.tsx",
+      "/app/characters/[id]/edit/page.tsx"
+    ],
+    "status": "Not Started",
+    "dependsOn": ["B15.2.2"]
+  }
+]
+```
+
+### B15.3 Characters List Draft Display
+
+This milestone updates the characters list page to display draft characters with visual indicators and enables clicking drafts to resume editing. Drafts are sorted by "last updated" to show recent work first.
+
+**Files to modify:**
+- **B15.3.FM.1** `/app/characters/page.tsx` (characters list)
+- **B15.3.FM.2** `/app/characters/components/CharacterCard.tsx` (if exists, or create)
+
+**Tasks:**
+
+| Task | Description | Status |
+|------|-------------|--------|
+| B15.3.1 | Ensure characters list shows draft characters (already shows all characters) | Not Started |
+| B15.3.2 | Add "Draft" status badge to draft character cards (amber/yellow badge) | Not Started |
+| B15.3.3 | Add visual distinction for draft cards (subtle border or background color) | Not Started |
+| B15.3.4 | Update character card click handler to navigate to /characters/[id]/edit for drafts | Not Started |
+| B15.3.5 | Sort drafts by updatedAt descending (most recent first) | Not Started |
+| B15.3.6 | Display last updated timestamp on draft character cards | Not Started |
+
+**Tasks JSON:**
+```json
+[
+  {
+    "id": "B15.3.1",
+    "title": "Ensure characters list shows draft characters (already shows all characters)",
+    "description": "This milestone updates the characters list page to display draft characters with visual indicators and enables clicking drafts to resume editing. Drafts are sorted by \"last updated\" to show recent work first. Ensure characters list shows draft characters (already shows all characters).",
+    "files": [
+      "/app/characters/page.tsx"
+    ],
+    "status": "Not Started",
+    "dependsOn": []
+  },
+  {
+    "id": "B15.3.2",
+    "title": "Add \"Draft\" status badge to draft character cards (amber/yellow badge)",
+    "description": "This milestone updates the characters list page to display draft characters with visual indicators and enables clicking drafts to resume editing. Drafts are sorted by \"last updated\" to show recent work first. Add \"Draft\" status badge to draft character cards (amber/yellow badge).",
+    "files": [
+      "/app/characters/page.tsx",
+      "/app/characters/components/CharacterCard.tsx"
+    ],
+    "status": "Not Started",
+    "dependsOn": ["B15.3.1"]
+  },
+  {
+    "id": "B15.3.3",
+    "title": "Add visual distinction for draft cards (subtle border or background color)",
+    "description": "This milestone updates the characters list page to display draft characters with visual indicators and enables clicking drafts to resume editing. Drafts are sorted by \"last updated\" to show recent work first. Add visual distinction for draft cards (subtle border or background color).",
+    "files": [
+      "/app/characters/page.tsx",
+      "/app/characters/components/CharacterCard.tsx"
+    ],
+    "status": "Not Started",
+    "dependsOn": ["B15.3.1"]
+  },
+  {
+    "id": "B15.3.4",
+    "title": "Update character card click handler to navigate to /characters/[id]/edit for drafts",
+    "description": "This milestone updates the characters list page to display draft characters with visual indicators and enables clicking drafts to resume editing. Drafts are sorted by \"last updated\" to show recent work first. Update character card click handler to navigate to /characters/[id]/edit for drafts.",
+    "files": [
+      "/app/characters/page.tsx",
+      "/app/characters/components/CharacterCard.tsx"
+    ],
+    "status": "Not Started",
+    "dependsOn": ["B15.2.5"]
+  },
+  {
+    "id": "B15.3.5",
+    "title": "Sort drafts by updatedAt descending (most recent first)",
+    "description": "This milestone updates the characters list page to display draft characters with visual indicators and enables clicking drafts to resume editing. Drafts are sorted by \"last updated\" to show recent work first. Sort drafts by updatedAt descending (most recent first).",
+    "files": [
+      "/app/characters/page.tsx"
+    ],
+    "status": "Not Started",
+    "dependsOn": ["B15.3.1"]
+  },
+  {
+    "id": "B15.3.6",
+    "title": "Display last updated timestamp on draft character cards",
+    "description": "This milestone updates the characters list page to display draft characters with visual indicators and enables clicking drafts to resume editing. Drafts are sorted by \"last updated\" to show recent work first. Display last updated timestamp on draft character cards.",
+    "files": [
+      "/app/characters/page.tsx",
+      "/app/characters/components/CharacterCard.tsx"
+    ],
+    "status": "Not Started",
+    "dependsOn": ["B15.3.1"]
+  }
+]
+```
+
+### B15.4 Character Sheet Resume Integration
+
+This milestone adds "Resume Creation" functionality to the character detail page for draft characters, allowing users to resume editing from the character sheet view.
+
+**Files to modify:**
+- **B15.4.FM.1** `/app/characters/[id]/page.tsx` (character detail page)
+
+**Tasks:**
+
+| Task | Description | Status |
+|------|-------------|--------|
+| B15.4.1 | Add "Resume Creation" button to character detail page for draft characters | Not Started |
+| B15.4.2 | Update edit button to navigate to /characters/[id]/edit for draft characters | Not Started |
+| B15.4.3 | Hide "Resume Creation" button for active (non-draft) characters | Not Started |
+
+**Tasks JSON:**
+```json
+[
+  {
+    "id": "B15.4.1",
+    "title": "Add \"Resume Creation\" button to character detail page for draft characters",
+    "description": "This milestone adds \"Resume Creation\" functionality to the character detail page for draft characters, allowing users to resume editing from the character sheet view. Add \"Resume Creation\" button to character detail page for draft characters.",
+    "files": [
+      "/app/characters/[id]/page.tsx"
+    ],
+    "status": "Not Started",
+    "dependsOn": ["B15.2.5"]
+  },
+  {
+    "id": "B15.4.2",
+    "title": "Update edit button to navigate to /characters/[id]/edit for draft characters",
+    "description": "This milestone adds \"Resume Creation\" functionality to the character detail page for draft characters, allowing users to resume editing from the character sheet view. Update edit button to navigate to /characters/[id]/edit for draft characters.",
+    "files": [
+      "/app/characters/[id]/page.tsx"
+    ],
+    "status": "Not Started",
+    "dependsOn": ["B15.2.5"]
+  },
+  {
+    "id": "B15.4.3",
+    "title": "Hide \"Resume Creation\" button for active (non-draft) characters",
+    "description": "This milestone adds \"Resume Creation\" functionality to the character detail page for draft characters, allowing users to resume editing from the character sheet view. Hide \"Resume Creation\" button for active (non-draft) characters.",
+    "files": [
+      "/app/characters/[id]/page.tsx"
+    ],
+    "status": "Not Started",
+    "dependsOn": ["B15.4.1"]
+  }
+]
+```
+
+### B15.5 API Updates for CreationState Persistence
+
+This milestone ensures the API endpoints properly handle creationState persistence, including updating both character data and creationState in a single request.
+
+**Files to modify:**
+- **B15.5.FM.1** `/app/api/characters/[id]/route.ts` (PATCH endpoint)
+
+**Tasks:**
+
+| Task | Description | Status |
+|------|-------------|--------|
+| B15.5.1 | Update PATCH /api/characters/[id] to accept creationState in metadata | Not Started |
+| B15.5.2 | Ensure creationState updates are atomic with character data updates | Not Started |
+| B15.5.3 | Add validation to ensure characterId in creationState matches route parameter | Not Started |
+
+**Tasks JSON:**
+```json
+[
+  {
+    "id": "B15.5.1",
+    "title": "Update PATCH /api/characters/[id] to accept creationState in metadata",
+    "description": "This milestone ensures the API endpoints properly handle creationState persistence, including updating both character data and creationState in a single request. Update PATCH /api/characters/[id] to accept creationState in metadata.",
+    "files": [
+      "/app/api/characters/[id]/route.ts"
+    ],
+    "status": "Not Started",
+    "dependsOn": ["B15.1.3"]
+  },
+  {
+    "id": "B15.5.2",
+    "title": "Ensure creationState updates are atomic with character data updates",
+    "description": "This milestone ensures the API endpoints properly handle creationState persistence, including updating both character data and creationState in a single request. Ensure creationState updates are atomic with character data updates.",
+    "files": [
+      "/app/api/characters/[id]/route.ts",
+      "/lib/storage/characters.ts"
+    ],
+    "status": "Not Started",
+    "dependsOn": ["B15.5.1"]
+  },
+  {
+    "id": "B15.5.3",
+    "title": "Add validation to ensure characterId in creationState matches route parameter",
+    "description": "This milestone ensures the API endpoints properly handle creationState persistence, including updating both character data and creationState in a single request. Add validation to ensure characterId in creationState matches route parameter.",
+    "files": [
+      "/app/api/characters/[id]/route.ts"
+    ],
+    "status": "Not Started",
+    "dependsOn": ["B15.5.1"]
+  }
+]
+```
+
+### B15.6 Acceptance Criteria
+
+- **B15.6.AC.1** [ ] Draft characters appear in the characters list with "Draft" status badge
+- **B15.6.AC.2** [ ] Draft characters are sorted by "last updated" by default when filtering by draft status
+- **B15.6.AC.3** [ ] Clicking a draft character card navigates to creation wizard with saved state loaded
+- **B15.6.AC.4** [ ] Creation wizard correctly restores all creation state from `character.metadata.creationState` (step, priorities, selections, budgets)
+- **B15.6.AC.5** [ ] "Create Character" button always starts a new character (does not resume drafts)
+- **B15.6.AC.6** [ ] Draft state is persisted server-side and accessible from any device
+- **B15.6.AC.7** [ ] Resuming a draft shows the correct step in the wizard
+- **B15.6.AC.8** [ ] Draft characters can be deleted from the characters list
+- **B15.6.AC.9** [ ] Character sheet shows "Resume Creation" button for draft characters
+- **B15.6.AC.10** [ ] Works correctly for all supported editions (SR5, SR6, etc.)
+- **B15.6.AC.11** [ ] CreationState is saved automatically on every wizard state change
+- **B15.6.AC.12** [ ] Resuming a draft preserves all intermediate selections and validation state
 
 ---
 
