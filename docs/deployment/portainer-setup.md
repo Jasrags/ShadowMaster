@@ -90,21 +90,65 @@ For private repositories, you need to authenticate with GHCR:
 
 ## Deploying as a Stack
 
-Stacks provide better configuration management and multi-service deployments.
+Stacks provide better configuration management and multi-service deployments. The recommended stack configuration includes:
 
-### Create a Stack
+- **Persistent volumes** for user and character data (`/data/users` and `/data/characters`)
+- **Watchtower** for automated container updates
+- **Health checks** for monitoring container status
+
+### Recommended: Use the Provided Stack File
+
+The repository includes a ready-to-use stack configuration file: `docker-compose.stack.yml`
 
 1. Navigate to **Stacks** → **Add stack**
 
 2. **Name**: `shadow-master`
 
-3. **Build method**: Web editor
+3. **Build method**: Choose one:
+   - **Web editor**: Copy and paste the contents of `docker-compose.stack.yml`
+   - **Repository**: Use Git repository method and reference the file
+   - **Upload**: Upload the `docker-compose.stack.yml` file directly
 
-4. **Stack file content**:
+4. **Stack file content** (from `docker-compose.stack.yml`):
+
+The stack includes:
+- Shadow Master application service with persistent volumes
+- Watchtower service for automatic updates
+- Named volumes for data persistence
+- Health checks and restart policies
+
+See the `docker-compose.stack.yml` file in the repository root for the complete configuration.
+
+### Key Features of the Stack Configuration
+
+**Persistent Volumes:**
+- `shadow-master-users`: Stores user account data (`/data/users`)
+- `shadow-master-characters`: Stores character data (`/data/characters`)
+- Data persists across container updates and recreations
+
+**Watchtower Integration:**
+- Automatically monitors for new image versions
+- Updates containers when new images are available
+- Configurable poll interval (default: 1 hour)
+- Automatic cleanup of old images
+
+**Health Monitoring:**
+- Built-in health checks via `/api/health` endpoint
+- Automatic container restart on failure
+- Start period grace time for application initialization
+
+5. **Environment variables** (optional):
+   - Click **Add environment variable** to override stack variables
+   - Or use the `.env` file section
+   - See [Environment Variables](#environment-variables) section below
+
+6. Click **Deploy the stack**
+
+### Alternative: Minimal Stack (Without Watchtower)
+
+If you prefer manual updates, you can use a minimal stack configuration without Watchtower:
 
 ```yaml
-version: '3.8'
-
 services:
   shadow-master:
     image: ghcr.io/jasrags/shadow-master:latest
@@ -114,12 +158,12 @@ services:
     environment:
       - NODE_ENV=production
       - PORT=3000
-      # Add your custom environment variables here
-      # - DATABASE_URL=your_database_url
-      # - API_KEY=your_api_key
+    volumes:
+      - shadow-master-users:/app/data/users
+      - shadow-master-characters:/app/data/characters
     restart: unless-stopped
     healthcheck:
-      test: ["CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://localhost:3000/api/health"]
+      test: ["CMD", "node", "-e", "require('http').get('http://localhost:3000/api/health', (r) => {process.exit(r.statusCode === 200 ? 0 : 1)})"]
       interval: 30s
       timeout: 10s
       retries: 3
@@ -127,21 +171,16 @@ services:
     networks:
       - shadow-master-network
 
+volumes:
+  shadow-master-users:
+    driver: local
+  shadow-master-characters:
+    driver: local
+
 networks:
   shadow-master-network:
     driver: bridge
-
-# Optional: Add volumes for persistent data
-# volumes:
-#   shadow-master-data:
-#     driver: local
 ```
-
-5. **Environment variables** (optional):
-   - Click **Add environment variable** to override stack variables
-   - Or use the `.env` file section
-
-6. Click **Deploy the stack**
 
 ## Environment Variables
 
@@ -205,24 +244,109 @@ API_KEY=your-api-key-here
    - Update image tag if needed (e.g., `:v1.0.0` → `:v1.1.0`)
    - Click **Update the stack**
 
-### Automated Updates with Watchtower (Optional)
+### Automated Updates with Watchtower
 
-Add Watchtower to automatically update containers:
+The provided `docker-compose.stack.yml` includes Watchtower for automated container updates.
 
-```yaml
-services:
-  watchtower:
-    image: containrrr/watchtower
-    volumes:
-      - /var/run/docker.sock:/var/run/docker.sock
-    environment:
-      - WATCHTOWER_POLL_INTERVAL=300  # Check every 5 minutes
-      - WATCHTOWER_CLEANUP=true
-    restart: unless-stopped
-```
+**How Watchtower Works:**
+- Polls Docker registry (GHCR) at configured intervals
+- Detects when new images are available
+- Automatically pulls and updates containers with the `com.centurylinklabs.watchtower.enable=true` label
+- Cleans up old images to save disk space
+
+**Configuration:**
+- **Poll Interval**: Default is 3600 seconds (1 hour) for production
+- **Cleanup**: Automatically removes old images after updates
+- **Label-based**: Only updates containers with the watchtower label
+
+**Adjusting Poll Interval:**
+Edit the `WATCHTOWER_POLL_INTERVAL` environment variable in the stack:
+- `300` = 5 minutes (for testing/staging)
+- `3600` = 1 hour (recommended for production)
+- `86400` = 24 hours (for critical production)
+
+**Disabling Watchtower:**
+If you prefer manual updates, you can:
+1. Remove the watchtower service from the stack
+2. Remove the `com.centurylinklabs.watchtower.enable=true` label from the shadow-master service
 
 > [!WARNING]
-> Automatic updates in production should be carefully considered. Test updates in staging first.
+> Automatic updates in production should be carefully considered. Test updates in staging first. Watchtower will update containers automatically, so ensure you have proper backups and monitoring in place.
+
+## Data Management and Backups
+
+### Persistent Volumes
+
+The stack configuration uses Docker named volumes to persist user and character data:
+
+- **shadow-master-users**: User account data stored in `/app/data/users`
+- **shadow-master-characters**: Character data stored in `/app/data/characters`
+
+These volumes persist data across container updates, recreations, and restarts.
+
+### Backup Strategy
+
+**Option 1: Backup Docker Volumes Directly**
+
+```bash
+# List volumes
+docker volume ls
+
+# Backup a volume
+docker run --rm \
+  -v shadow-master-users:/data \
+  -v $(pwd):/backup \
+  alpine tar czf /backup/users-backup-$(date +%Y%m%d).tar.gz -C /data .
+
+docker run --rm \
+  -v shadow-master-characters:/data \
+  -v $(pwd):/backup \
+  alpine tar czf /backup/characters-backup-$(date +%Y%m%d).tar.gz -C /data .
+```
+
+**Option 2: Backup via Container**
+
+```bash
+# Create backup from running container
+docker exec shadow-master-app tar czf /tmp/users-backup.tar.gz -C /app/data/users .
+docker exec shadow-master-app tar czf /tmp/characters-backup.tar.gz -C /app/data/characters .
+docker cp shadow-master-app:/tmp/users-backup.tar.gz .
+docker cp shadow-master-app:/tmp/characters-backup.tar.gz .
+```
+
+**Option 3: Use Bind Mounts (Advanced)**
+
+For more control over backup location, you can modify the stack to use bind mounts:
+
+```yaml
+volumes:
+  - /path/to/backups/users:/app/data/users
+  - /path/to/backups/characters:/app/data/characters
+```
+
+> [!NOTE]
+> When using bind mounts, ensure the host directories exist and have correct permissions. The container runs as user `nextjs` (UID 1001).
+
+### Restoring from Backup
+
+```bash
+# Restore a volume from backup
+docker run --rm \
+  -v shadow-master-users:/data \
+  -v $(pwd):/backup \
+  alpine sh -c "cd /data && rm -rf * && tar xzf /backup/users-backup-YYYYMMDD.tar.gz"
+```
+
+### Volume Location
+
+Docker volumes are typically stored at:
+- **Linux**: `/var/lib/docker/volumes/`
+- **macOS/Windows (Docker Desktop)**: Managed by Docker Desktop
+
+To find the exact location:
+```bash
+docker volume inspect shadow-master-users
+```
 
 ## Troubleshooting
 
@@ -276,6 +400,24 @@ services:
    - Check if image was actually published
    - Confirm tag exists (e.g., `latest` vs `v1.0.0`)
 
+### Volume and data persistence issues
+
+1. **Data not persisting after container restart**:
+   - Verify volumes are properly defined in the stack
+   - Check volume mount paths match (`/app/data/users`, `/app/data/characters`)
+   - Ensure volumes exist: `docker volume ls | grep shadow-master`
+   - Inspect volume: `docker volume inspect shadow-master-users`
+
+2. **Permission errors on volumes**:
+   - Container runs as user `nextjs` (UID 1001)
+   - If using bind mounts, ensure host directory permissions allow UID 1001
+   - Check container logs for permission errors
+
+3. **Volume backup/restore issues**:
+   - Ensure container is stopped before backing up volumes (or use live backup methods)
+   - Verify backup file integrity before restoring
+   - Test restore in a separate environment first
+
 ### Performance issues
 
 1. **Set resource limits**:
@@ -292,6 +434,22 @@ services:
 2. **Monitor container stats**:
    - Use Portainer **Stats** view
    - Check CPU and memory usage
+
+### Watchtower issues
+
+1. **Watchtower not updating containers**:
+   - Verify container has label: `com.centurylinklabs.watchtower.enable=true`
+   - Check Watchtower logs: `docker logs shadow-master-watchtower`
+   - Ensure `WATCHTOWER_LABEL_ENABLE=true` is set in Watchtower environment
+   - Verify image registry is accessible from Watchtower container
+
+2. **Too frequent updates**:
+   - Increase `WATCHTOWER_POLL_INTERVAL` (default: 3600 seconds = 1 hour)
+   - Use specific image tags instead of `latest` in production
+
+3. **Old images not being cleaned up**:
+   - Verify `WATCHTOWER_CLEANUP=true` is set
+   - Check available disk space: `docker system df`
 
 ## Additional Resources
 
