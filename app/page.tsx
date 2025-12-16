@@ -3,6 +3,7 @@
 import { Link, Button, Menu, MenuTrigger, MenuItem, Popover } from "react-aria-components";
 import { useAuth } from "@/lib/auth/AuthProvider";
 import { useState } from "react";
+import AuthenticatedLayout from "./users/AuthenticatedLayout";
 
 export default function Home() {
   const { user, isLoading, signOut } = useAuth();
@@ -251,287 +252,120 @@ export default function Home() {
 }
 
 // Authenticated Homepage Component
-function AuthenticatedHomepage({ 
-  user, 
+function AuthenticatedHomepage({
+  user,
   signOut,
   sidebarOpen,
-  setSidebarOpen 
-}: { 
+  setSidebarOpen
+}: {
   user: { username: string; email: string; role: string[]; createdAt: string; lastLogin?: string | null };
   signOut: () => Promise<void>;
   sidebarOpen: boolean;
   setSidebarOpen: (open: boolean) => void;
 }) {
-  const handleSignOut = async () => {
-    await signOut();
-  };
-
-  const navItems = [
-    { id: "home", label: "Home", icon: HomeIcon, href: "/", disabled: false },
-    { id: "characters", label: "Characters", icon: UserIcon, href: "/characters", disabled: false, badge: null },
-    { id: "rulesets", label: "Rulesets", icon: BookIcon, href: "/rulesets", disabled: true },
-    ...(user.role.includes("administrator")
-      ? [{ id: "users", label: "User Management", icon: UsersIcon, href: "/users", disabled: false }]
-      : []),
-    { id: "settings", label: "Settings", icon: SettingsIcon, href: "/settings", disabled: true },
-  ];
-
   return (
-    <div className="flex min-h-screen flex-col bg-zinc-50 font-sans dark:bg-black">
-      {/* Header */}
-      <header className="fixed top-0 z-50 w-full border-b border-zinc-200 bg-white/80 backdrop-blur-sm dark:border-zinc-800 dark:bg-black/80">
-        <div className="flex h-16 items-center justify-between px-4 sm:px-6 lg:px-8">
-          <div className="flex items-center gap-4">
-            {/* Mobile hamburger menu */}
-            <Button
-              onPress={() => setSidebarOpen(!sidebarOpen)}
-              className="lg:hidden flex h-10 w-10 items-center justify-center rounded-md text-zinc-600 transition-colors hover:bg-zinc-100 focus:outline-none focus:ring-2 focus:ring-zinc-500 focus:ring-offset-2 dark:text-zinc-400 dark:hover:bg-zinc-900 dark:focus:ring-zinc-400"
-              aria-label="Toggle sidebar"
-            >
-              <svg className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
-              </svg>
-            </Button>
-            <Link
-              href="/"
-              className="text-xl font-semibold text-black transition-colors hover:text-zinc-700 dark:text-zinc-50 dark:hover:text-zinc-300"
-            >
-              Shadow Master
-            </Link>
+    <AuthenticatedLayout>
+      {/* Welcome Section */}
+      <section className="mb-8">
+        <h1 className="text-3xl font-semibold tracking-tight text-black dark:text-zinc-50 sm:text-4xl">
+          Welcome back, {user.username}!
+        </h1>
+        <div className="mt-4 flex flex-wrap items-center gap-4 text-sm text-zinc-600 dark:text-zinc-400">
+          <span>{user.email}</span>
+          <span>•</span>
+          <span>{Array.isArray(user.role) ? user.role.join(", ") : user.role}</span>
+          <span>•</span>
+          <span>Account created: {new Date(user.createdAt).toLocaleDateString()}</span>
+          {user.lastLogin && (
+            <>
+              <span>•</span>
+              <span>Last login: {new Date(user.lastLogin).toLocaleDateString()}</span>
+            </>
+          )}
+        </div>
+      </section>
+
+      {/* Quick Actions / Dashboard */}
+      <section className="mb-8">
+        <h2 className="mb-4 text-xl font-semibold text-black dark:text-zinc-50">Quick Actions</h2>
+        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+          <Link
+            href="/characters/create"
+            className="flex flex-col items-center justify-center rounded-lg border border-zinc-200 bg-white p-6 text-center transition-all hover:border-zinc-300 hover:shadow-md focus:outline-none focus:ring-2 focus:ring-zinc-500 focus:ring-offset-2 dark:border-zinc-800 dark:bg-black dark:hover:border-zinc-700 dark:focus:ring-zinc-400"
+          >
+            <svg className="mb-2 h-8 w-8 text-zinc-600 dark:text-zinc-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
+            </svg>
+            <span className="text-sm font-medium text-black dark:text-zinc-50">Create New Character</span>
+          </Link>
+          <Link
+            href="/characters"
+            className="flex flex-col items-center justify-center rounded-lg border border-zinc-200 bg-white p-6 text-center transition-all hover:border-zinc-300 hover:shadow-md focus:outline-none focus:ring-2 focus:ring-zinc-500 focus:ring-offset-2 dark:border-zinc-800 dark:bg-black dark:hover:border-zinc-700 dark:focus:ring-zinc-400"
+          >
+            <UserIcon className="mb-2 h-8 w-8 text-zinc-600 dark:text-zinc-400" />
+            <span className="text-sm font-medium text-black dark:text-zinc-50">Browse Characters</span>
+          </Link>
+          {/* Rulesets - Coming Soon */}
+          <div
+            className="flex cursor-not-allowed flex-col items-center justify-center rounded-lg border border-zinc-200 bg-zinc-50 p-6 text-center opacity-60 dark:border-zinc-800 dark:bg-zinc-900"
+            title="Coming soon"
+          >
+            <BookIcon className="mb-2 h-8 w-8 text-zinc-400 dark:text-zinc-600" />
+            <span className="text-sm font-medium text-zinc-400 dark:text-zinc-600">View Rulesets</span>
+            <span className="mt-1 rounded bg-zinc-200 px-1.5 py-0.5 text-[10px] font-medium uppercase text-zinc-400 dark:bg-zinc-800 dark:text-zinc-500">
+              Soon
+            </span>
           </div>
-          <div className="flex items-center gap-3">
-            {/* Notifications */}
-            <Button
-              className="flex h-10 w-10 items-center justify-center rounded-md text-zinc-600 transition-colors hover:bg-zinc-100 focus:outline-none focus:ring-2 focus:ring-zinc-500 focus:ring-offset-2 dark:text-zinc-400 dark:hover:bg-zinc-900 dark:focus:ring-zinc-400"
-              aria-label="Notifications"
-            >
-              <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" />
-              </svg>
-            </Button>
-            {/* Settings */}
-            <Button
-              className="flex h-10 w-10 items-center justify-center rounded-md text-zinc-600 transition-colors hover:bg-zinc-100 focus:outline-none focus:ring-2 focus:ring-zinc-500 focus:ring-offset-2 dark:text-zinc-400 dark:hover:bg-zinc-900 dark:focus:ring-zinc-400"
-              aria-label="Settings"
-            >
-              <SettingsIcon className="h-5 w-5" />
-            </Button>
-            {/* User Menu */}
-            <MenuTrigger>
-              <Button
-                className="flex items-center gap-2 rounded-md px-3 py-2 text-sm font-medium text-black transition-colors hover:bg-zinc-100 focus:outline-none focus:ring-2 focus:ring-zinc-500 focus:ring-offset-2 dark:text-zinc-50 dark:hover:bg-zinc-900 dark:focus:ring-zinc-400"
-                aria-label="User menu"
-              >
-                <div className="flex h-8 w-8 items-center justify-center rounded-full bg-zinc-200 dark:bg-zinc-800">
-                  <span className="text-xs font-medium text-zinc-700 dark:text-zinc-300">
-                    {user.username.charAt(0).toUpperCase()}
-                  </span>
-                </div>
-                <span className="hidden sm:inline">{user.username}</span>
-                <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
-                </svg>
-              </Button>
-              <Popover className="min-w-[200px] rounded-lg border border-zinc-200 bg-white shadow-lg dark:border-zinc-800 dark:bg-zinc-900">
-                <Menu className="p-1">
-                  <MenuItem
-                    className="flex flex-col items-start rounded-md px-3 py-2 text-sm text-zinc-900 outline-none focus:bg-zinc-100 dark:text-zinc-50 dark:focus:bg-zinc-800"
-                  >
-                    <div className="font-medium">{user.username}</div>
-                    <div className="text-xs text-zinc-600 dark:text-zinc-400">{user.email}</div>
-                    <div className="text-xs text-zinc-600 dark:text-zinc-400">{Array.isArray(user.role) ? user.role.join(", ") : user.role}</div>
-                  </MenuItem>
-                  <MenuItem
-                    className="rounded-md px-3 py-2 text-sm text-zinc-900 outline-none focus:bg-zinc-100 dark:text-zinc-50 dark:focus:bg-zinc-800"
-                  >
-                    Profile
-                  </MenuItem>
-                  <MenuItem
-                    className="rounded-md px-3 py-2 text-sm text-zinc-900 outline-none focus:bg-zinc-100 dark:text-zinc-50 dark:focus:bg-zinc-800"
-                  >
-                    Settings
-                  </MenuItem>
-                  <MenuItem
-                    onAction={handleSignOut}
-                    className="rounded-md px-3 py-2 text-sm text-red-600 outline-none focus:bg-zinc-100 dark:text-red-400 dark:focus:bg-zinc-800"
-                  >
-                    Sign Out
-                  </MenuItem>
-                </Menu>
-              </Popover>
-            </MenuTrigger>
+          {/* Recent Activity - Coming Soon */}
+          <div
+            className="flex cursor-not-allowed flex-col items-center justify-center rounded-lg border border-zinc-200 bg-zinc-50 p-6 text-center opacity-60 dark:border-zinc-800 dark:bg-zinc-900"
+            title="Coming soon"
+          >
+            <svg className="mb-2 h-8 w-8 text-zinc-400 dark:text-zinc-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+            </svg>
+            <span className="text-sm font-medium text-zinc-400 dark:text-zinc-600">Recent Activity</span>
+            <span className="mt-1 rounded bg-zinc-200 px-1.5 py-0.5 text-[10px] font-medium uppercase text-zinc-400 dark:bg-zinc-800 dark:text-zinc-500">
+              Soon
+            </span>
           </div>
         </div>
-      </header>
+      </section>
 
-      <div className="flex flex-1 pt-16">
-        {/* Sidebar */}
-        <aside
-          className={`fixed left-0 top-16 z-40 h-[calc(100vh-4rem)] w-60 border-r border-zinc-200 bg-white transition-transform dark:border-zinc-800 dark:bg-black lg:translate-x-0 ${
-            sidebarOpen ? "translate-x-0" : "-translate-x-full"
-          }`}
-        >
-          <nav className="flex h-full flex-col p-4">
-            {navItems.map((item) => {
-              const Icon = item.icon;
-              const isActive = item.id === "home";
-              const isDisabled = item.disabled;
-
-              // Render disabled items as non-interactive elements
-              if (isDisabled) {
-                return (
-                  <div
-                    key={item.id}
-                    className="flex cursor-not-allowed items-center gap-3 rounded-md px-3 py-2 text-sm font-medium text-zinc-400 dark:text-zinc-600"
-                    title="Coming soon"
-                  >
-                    <Icon className="h-5 w-5" />
-                    <span>{item.label}</span>
-                    <span className="ml-auto rounded bg-zinc-100 px-1.5 py-0.5 text-[10px] font-medium uppercase text-zinc-400 dark:bg-zinc-800 dark:text-zinc-500">
-                      Soon
-                    </span>
-                  </div>
-                );
-              }
-
-              return (
-                <Link
-                  key={item.id}
-                  href={item.href}
-                  className={`flex items-center gap-3 rounded-md px-3 py-2 text-sm font-medium transition-colors focus:outline-none focus:ring-2 focus:ring-zinc-500 focus:ring-offset-2 dark:focus:ring-zinc-400 ${
-                    isActive
-                      ? "bg-zinc-100 text-black dark:bg-zinc-900 dark:text-zinc-50"
-                      : "text-zinc-600 hover:bg-zinc-100 hover:text-black dark:text-zinc-400 dark:hover:bg-zinc-900 dark:hover:text-zinc-50"
-                  }`}
-                >
-                  <Icon className="h-5 w-5" />
-                  <span>{item.label}</span>
-                  {"badge" in item && (item as { badge?: string | number | null }).badge != null && (
-                    <span className="ml-auto rounded-full bg-zinc-200 px-2 py-0.5 text-xs font-medium text-zinc-700 dark:bg-zinc-800 dark:text-zinc-300">
-                      {(item as { badge?: string | number | null }).badge}
-                    </span>
-                  )}
-                </Link>
-              );
-            })}
-          </nav>
-        </aside>
-
-        {/* Sidebar overlay for mobile */}
-        {sidebarOpen && (
-          <div
-            className="fixed inset-0 z-30 bg-black/50 lg:hidden"
-            onClick={() => setSidebarOpen(false)}
-          />
-        )}
-
-        {/* Main Content */}
-        <main className="flex-1 lg:ml-60">
-          <div className="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
-            {/* Welcome Section */}
-            <section className="mb-8">
-              <h1 className="text-3xl font-semibold tracking-tight text-black dark:text-zinc-50 sm:text-4xl">
-                Welcome back, {user.username}!
-              </h1>
-              <div className="mt-4 flex flex-wrap items-center gap-4 text-sm text-zinc-600 dark:text-zinc-400">
-                <span>{user.email}</span>
-                <span>•</span>
-                <span>{Array.isArray(user.role) ? user.role.join(", ") : user.role}</span>
-                <span>•</span>
-                <span>Account created: {new Date(user.createdAt).toLocaleDateString()}</span>
-                {user.lastLogin && (
-                  <>
-                    <span>•</span>
-                    <span>Last login: {new Date(user.lastLogin).toLocaleDateString()}</span>
-                  </>
-                )}
-              </div>
-            </section>
-
-            {/* Quick Actions / Dashboard */}
-            <section className="mb-8">
-              <h2 className="mb-4 text-xl font-semibold text-black dark:text-zinc-50">Quick Actions</h2>
-              <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-                <Link
-                  href="/characters/create"
-                  className="flex flex-col items-center justify-center rounded-lg border border-zinc-200 bg-white p-6 text-center transition-all hover:border-zinc-300 hover:shadow-md focus:outline-none focus:ring-2 focus:ring-zinc-500 focus:ring-offset-2 dark:border-zinc-800 dark:bg-black dark:hover:border-zinc-700 dark:focus:ring-zinc-400"
-                >
-                  <svg className="mb-2 h-8 w-8 text-zinc-600 dark:text-zinc-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
-                  </svg>
-                  <span className="text-sm font-medium text-black dark:text-zinc-50">Create New Character</span>
-                </Link>
-                <Link
-                  href="/characters"
-                  className="flex flex-col items-center justify-center rounded-lg border border-zinc-200 bg-white p-6 text-center transition-all hover:border-zinc-300 hover:shadow-md focus:outline-none focus:ring-2 focus:ring-zinc-500 focus:ring-offset-2 dark:border-zinc-800 dark:bg-black dark:hover:border-zinc-700 dark:focus:ring-zinc-400"
-                >
-                  <UserIcon className="mb-2 h-8 w-8 text-zinc-600 dark:text-zinc-400" />
-                  <span className="text-sm font-medium text-black dark:text-zinc-50">Browse Characters</span>
-                </Link>
-                {/* Rulesets - Coming Soon */}
-                <div
-                  className="flex cursor-not-allowed flex-col items-center justify-center rounded-lg border border-zinc-200 bg-zinc-50 p-6 text-center opacity-60 dark:border-zinc-800 dark:bg-zinc-900"
-                  title="Coming soon"
-                >
-                  <BookIcon className="mb-2 h-8 w-8 text-zinc-400 dark:text-zinc-600" />
-                  <span className="text-sm font-medium text-zinc-400 dark:text-zinc-600">View Rulesets</span>
-                  <span className="mt-1 rounded bg-zinc-200 px-1.5 py-0.5 text-[10px] font-medium uppercase text-zinc-400 dark:bg-zinc-800 dark:text-zinc-500">
-                    Soon
-                  </span>
-                </div>
-                {/* Recent Activity - Coming Soon */}
-                <div
-                  className="flex cursor-not-allowed flex-col items-center justify-center rounded-lg border border-zinc-200 bg-zinc-50 p-6 text-center opacity-60 dark:border-zinc-800 dark:bg-zinc-900"
-                  title="Coming soon"
-                >
-                  <svg className="mb-2 h-8 w-8 text-zinc-400 dark:text-zinc-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
-                  </svg>
-                  <span className="text-sm font-medium text-zinc-400 dark:text-zinc-600">Recent Activity</span>
-                  <span className="mt-1 rounded bg-zinc-200 px-1.5 py-0.5 text-[10px] font-medium uppercase text-zinc-400 dark:bg-zinc-800 dark:text-zinc-500">
-                    Soon
-                  </span>
-                </div>
-              </div>
-            </section>
-
-            {/* Character List / Overview */}
-            <section>
-              <h2 className="mb-4 text-xl font-semibold text-black dark:text-zinc-50">Your Characters</h2>
-              {/* Empty State */}
-              <div className="rounded-lg border border-zinc-200 bg-white p-12 text-center dark:border-zinc-800 dark:bg-black">
-                <svg
-                  className="mx-auto h-12 w-12 text-zinc-400 dark:text-zinc-600"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke="currentColor"
-                  aria-hidden="true"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
-                  />
-                </svg>
-                <h3 className="mt-4 text-lg font-medium text-black dark:text-zinc-50">No characters yet</h3>
-                <p className="mt-2 text-sm text-zinc-600 dark:text-zinc-400">
-                  Get started by creating your first Shadowrun character.
-                </p>
-                <div className="mt-6">
-                  <Link
-                    href="/characters/create"
-                    className="inline-flex items-center justify-center rounded-md bg-foreground px-4 py-2 text-sm font-medium text-background transition-colors hover:bg-[#383838] focus:outline-none focus:ring-2 focus:ring-zinc-500 focus:ring-offset-2 dark:hover:bg-[#ccc] dark:focus:ring-zinc-400"
-                  >
-                    Create your first character
-                  </Link>
-                </div>
-              </div>
-            </section>
+      {/* Character List / Overview */}
+      <section>
+        <h2 className="mb-4 text-xl font-semibold text-black dark:text-zinc-50">Your Characters</h2>
+        {/* Empty State */}
+        <div className="rounded-lg border border-zinc-200 bg-white p-12 text-center dark:border-zinc-800 dark:bg-black">
+          <svg
+            className="mx-auto h-12 w-12 text-zinc-400 dark:text-zinc-600"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+            aria-hidden="true"
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth={2}
+              d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
+            />
+          </svg>
+          <h3 className="mt-4 text-lg font-medium text-black dark:text-zinc-50">No characters yet</h3>
+          <p className="mt-2 text-sm text-zinc-600 dark:text-zinc-400">
+            Get started by creating your first Shadowrun character.
+          </p>
+          <div className="mt-6">
+            <Link
+              href="/characters/create"
+              className="inline-flex items-center justify-center rounded-md bg-foreground px-4 py-2 text-sm font-medium text-background transition-colors hover:bg-[#383838] focus:outline-none focus:ring-2 focus:ring-zinc-500 focus:ring-offset-2 dark:hover:bg-[#ccc] dark:focus:ring-zinc-400"
+            >
+              Create your first character
+            </Link>
           </div>
-        </main>
-      </div>
-    </div>
+        </div>
+      </section>
+    </AuthenticatedLayout>
   );
 }
 

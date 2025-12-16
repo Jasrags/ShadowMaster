@@ -1455,20 +1455,38 @@ export function CreationWizard({ onCancel, onComplete, characterId: initialChara
     }
   };
 
+  // Sidebar collapse state
+  const [isSidebarCollapsed, setIsSidebarCollapsed] = useState(false);
+
+  // Load sidebar state from localStorage
+  useEffect(() => {
+    const saved = localStorage.getItem("shadow-master-sidebar-collapsed");
+    if (saved) {
+      setIsSidebarCollapsed(JSON.parse(saved));
+    }
+  }, []);
+
+  // Toggle sidebar and save
+  const toggleSidebar = () => {
+    const newState = !isSidebarCollapsed;
+    setIsSidebarCollapsed(newState);
+    localStorage.setItem("shadow-master-sidebar-collapsed", JSON.stringify(newState));
+  };
+
   return (
-    <div className="flex min-h-[600px] rounded-xl border border-zinc-200 bg-white shadow-sm dark:border-zinc-800 dark:bg-zinc-900">
-      {/* Sidebar */}
+    <div className="flex h-screen flex-row overflow-hidden bg-white text-zinc-900 dark:bg-zinc-950 dark:text-zinc-100">
       <StepperSidebar
         steps={steps}
         currentStepIndex={state.currentStep}
         completedSteps={state.completedSteps}
         onStepClick={goToStep}
+        isCollapsed={isSidebarCollapsed}
+        onToggleCollapse={toggleSidebar}
       />
 
-      {/* Main Content */}
-      <div className="flex flex-1 flex-col">
-        {/* Step Header */}
-        <div className="border-b border-zinc-200 px-6 py-4 dark:border-zinc-800">
+      <div className="flex flex-1 flex-col overflow-hidden relative">
+        {/* Header */}
+        <div className="flex flex-shrink-0 items-center justify-between border-b border-zinc-200 bg-white px-6 py-4 dark:border-zinc-800 dark:bg-zinc-950/50">
           <div className="flex items-center justify-between">
             <div>
               <h2 className="text-lg font-semibold text-zinc-900 dark:text-zinc-50">
@@ -1588,7 +1606,7 @@ export function CreationWizard({ onCancel, onComplete, characterId: initialChara
         powerPointsBudget={powerPointsBudget}
         onRemoveAdeptPower={handleRemoveAdeptPower}
       />
-    </div>
+    </div >
   );
 }
 
