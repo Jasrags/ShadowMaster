@@ -7013,6 +7013,33 @@
         ],
         "electronics": [
           {
+            "id": "area-jammer",
+            "name": "Area Jammer",
+            "category": "electronics",
+            "cost": 1000,
+            "availability": 8,
+            "restricted": true,
+            "rating": 6,
+            "description": "Jams wireless signals in an area (Rating 1-6)."
+          },
+          {
+            "id": "binoculars",
+            "name": "Binoculars",
+            "category": "electronics",
+            "cost": 50,
+            "availability": 0,
+            "hasRating": true,
+            "maxRating": 3,
+            "costPerRating": true
+          },
+          {
+            "id": "binoculars-optical",
+            "name": "Binoculars, Optical",
+            "category": "electronics",
+            "cost": 50,
+            "availability": 0
+          },
+          {
             "id": "bug-scanner",
             "name": "Bug Scanner",
             "category": "electronics",
@@ -7020,6 +7047,24 @@
             "availability": 6,
             "rating": 6,
             "description": "Detects surveillance devices (Rating 1-6)."
+          },
+          {
+            "id": "camera",
+            "name": "Camera",
+            "category": "electronics",
+            "cost": 100,
+            "availability": 0,
+            "hasRating": true,
+            "maxRating": 6,
+            "costPerRating": true
+          },
+          {
+            "id": "data-tap",
+            "name": "Data Tap",
+            "category": "electronics",
+            "cost": 300,
+            "availability": 4,
+            "description": "Physical tap for wired connections."
           },
           {
             "id": "directional-jammer",
@@ -7032,39 +7077,55 @@
             "description": "Jams wireless signals in a cone (Rating 1-6)."
           },
           {
-            "id": "area-jammer",
-            "name": "Area Jammer",
+            "id": "directional-mic",
+            "name": "Directional mic",
             "category": "electronics",
-            "cost": 1000,
-            "availability": 8,
-            "restricted": true,
-            "rating": 6,
-            "description": "Jams wireless signals in an area (Rating 1-6)."
-          },
-          {
-            "id": "white-noise-generator",
-            "name": "White Noise Generator",
-            "category": "electronics",
-            "cost": 150,
+            "cost": 50,
             "availability": 4,
-            "rating": 6,
-            "description": "Prevents audio surveillance (Rating 1-6)."
+            "hasRating": true,
+            "maxRating": 6,
+            "costPerRating": true
           },
           {
-            "id": "data-tap",
-            "name": "Data Tap",
+            "id": "goggles",
+            "name": "Goggles",
             "category": "electronics",
-            "cost": 300,
-            "availability": 4,
-            "description": "Physical tap for wired connections."
+            "cost": 50,
+            "availability": 0,
+            "hasRating": true,
+            "maxRating": 6,
+            "costPerRating": true
           },
           {
-            "id": "tag-eraser",
-            "name": "Tag Eraser",
+            "id": "headphones",
+            "name": "Headphones",
             "category": "electronics",
-            "cost": 450,
+            "cost": 50,
+            "availability": 0,
+            "hasRating": true,
+            "maxRating": 6,
+            "costPerRating": true
+          },
+          {
+            "id": "laser-microphone",
+            "name": "Laser Microphone",
+            "category": "electronics",
+            "cost": 100,
             "availability": 6,
-            "description": "Destroys RFID tags."
+            "restricted": true,
+            "hasRating": true,
+            "maxRating": 6,
+            "costPerRating": true,
+            "description": "Long-range audio surveillance (Capacity 1-6)."
+          },
+          {
+            "id": "micro-camera",
+            "name": "Micro-Camera",
+            "category": "electronics",
+            "cost": 100,
+            "availability": 0,
+            "hasRating": true,
+            "maxRating": 1
           },
           {
             "id": "micro-transceiver",
@@ -7075,6 +7136,27 @@
             "description": "Basic wireless communication device."
           },
           {
+            "id": "monocle",
+            "name": "Monocle",
+            "category": "electronics",
+            "cost": 3000,
+            "availability": 12,
+            "hasRating": true,
+            "maxRating": 4,
+            "costPerRating": true,
+            "restricted": true
+          },
+          {
+            "id": "omni-directional-mic",
+            "name": "Omni-directional mic",
+            "category": "electronics",
+            "cost": 50,
+            "availability": 0,
+            "hasRating": true,
+            "maxRating": 6,
+            "costPerRating": true
+          },
+          {
             "id": "subvocal-mic",
             "name": "Subvocal Microphone",
             "category": "electronics",
@@ -7083,14 +7165,21 @@
             "description": "Picks up subvocalized speech."
           },
           {
-            "id": "laser-microphone",
-            "name": "Laser Microphone",
+            "id": "tag-eraser",
+            "name": "Tag Eraser",
             "category": "electronics",
-            "cost": 1000,
+            "cost": 450,
             "availability": 6,
-            "restricted": true,
+            "description": "Destroys RFID tags."
+          },
+          {
+            "id": "white-noise-generator",
+            "name": "White Noise Generator",
+            "category": "electronics",
+            "cost": 150,
+            "availability": 4,
             "rating": 6,
-            "description": "Long-range audio surveillance."
+            "description": "Prevents audio surveillance (Rating 1-6)."
           }
         ],
         "tools": [
@@ -7429,36 +7518,46 @@
             "name": "Fake SIN",
             "category": "miscellaneous",
             "cost": 2500,
-            "availability": 12,
+            "availability": 3,
             "forbidden": true,
-            "rating": 4,
-            "description": "Forged identity (Rating 1-4)."
+            "hasRating": true,
+            "maxRating": 6,
+            "costPerRating": true,
+            "description": "Forged identity (Rating 1-6)."
           },
           {
             "id": "fake-license",
             "name": "Fake License",
             "category": "miscellaneous",
             "cost": 200,
-            "availability": 12,
+            "availability": 3,
             "forbidden": true,
-            "rating": 4,
-            "description": "Forged permit or license (Rating 1-4)."
+            "hasRating": true,
+            "maxRating": 6,
+            "costPerRating": true,
+            "description": "Forged permit or license (Rating 1-6)."
           },
           {
             "id": "contacts-imagelink",
             "name": "Contacts w/ Image Link",
             "category": "miscellaneous",
-            "cost": 150,
+            "cost": 200,
             "availability": 3,
-            "description": "AR-enabled contact lenses."
+            "description": "AR-enabled contact lenses.",
+            "hasRating": true,
+            "maxRating": 3,
+            "costPerRating": true
           },
           {
             "id": "glasses-imagelink",
             "name": "Glasses w/ Image Link",
             "category": "miscellaneous",
-            "cost": 175,
+            "cost": 100,
             "availability": 2,
-            "description": "AR-enabled glasses."
+            "description": "AR-enabled glasses.",
+            "hasRating": true,
+            "maxRating": 4,
+            "costPerRating": true
           },
           {
             "id": "ear-buds",
@@ -7466,7 +7565,10 @@
             "category": "miscellaneous",
             "cost": 50,
             "availability": 0,
-            "description": "Audio device with AR capability."
+            "description": "Audio device with AR capability.",
+            "hasRating": true,
+            "maxRating": 3,
+            "costPerRating": true
           },
           {
             "id": "gecko-tape-gloves",
