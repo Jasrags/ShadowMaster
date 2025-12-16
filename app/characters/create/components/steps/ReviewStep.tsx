@@ -3,7 +3,7 @@
 import { useMemo } from "react";
 import { useMetatypes, useSkills, useQualities, useSpells, useComplexForms, usePriorityTable, useTraditions, useMentorSpirits } from "@/lib/rules";
 import { useAugmentationRules, calculateMagicLoss, useLifestyles } from "@/lib/rules/RulesetContext";
-import type { CreationState, ID, Contact, CyberwareItem, BiowareItem, FocusItem, Identity, Lifestyle, SinnerQuality, Weapon, ArmorItem } from "@/lib/types";
+import type { CreationState, ID, Contact, CyberwareItem, BiowareItem, FocusItem, Identity, Lifestyle, SinnerQuality, Weapon, ArmorItem, CharacterProgram, CharacterDrone, CharacterRCC, CharacterAutosoft } from "@/lib/types";
 import { SinnerQuality as SinnerQualityEnum } from "@/lib/types/character";
 
 // Helper function to get lifestyle display name with proper casing
@@ -128,6 +128,11 @@ export function ReviewStep({ state, updateState, budgetValues }: StepProps) {
   const selectedCyberware = (state.selections.cyberware || []) as CyberwareItem[];
   const selectedBioware = (state.selections.bioware || []) as BiowareItem[];
   const selectedFoci = (state.selections.foci || []) as FocusItem[];
+  const selectedPrograms = (state.selections.programs || []) as CharacterProgram[];
+  const selectedVehicles = (state.selections.vehicles || []) as Array<{ id: string; name: string; category: string; cost: number }>;
+  const selectedDrones = (state.selections.drones || []) as CharacterDrone[];
+  const selectedRCCs = (state.selections.rccs || []) as CharacterRCC[];
+  const selectedAutosofts = (state.selections.autosofts || []) as CharacterAutosoft[];
 
   // Get free spells/complex forms from priority
   const { freeSpells, freeComplexForms } = useMemo(() => {
@@ -157,9 +162,10 @@ export function ReviewStep({ state, updateState, budgetValues }: StepProps) {
   const karmaSpentComplexForms = (state.budgets["karma-spent-complex-forms"] as number) || 0;
   const karmaSpentPowerPoints = (state.budgets["karma-spent-power-points"] as number) || 0;
   const karmaSpentFociBonding = (state.budgets["karma-spent-foci-bonding"] as number) || 0;
+  const karmaSpentContacts = (state.budgets["karma-spent-contacts"] as number) || 0;
 
   const karmaTotal = (budgetValues["karma"] || 25) + karmaGainedNegative;
-  const karmaSpent = karmaSpentPositive + karmaSpentGear + karmaSpentSpells + karmaSpentComplexForms + karmaSpentPowerPoints + karmaSpentFociBonding;
+  const karmaSpent = karmaSpentPositive + karmaSpentGear + karmaSpentSpells + karmaSpentComplexForms + karmaSpentPowerPoints + karmaSpentFociBonding + karmaSpentContacts;
   const karmaRemaining = karmaTotal - karmaSpent;
 
   const karmaToNuyen = (state.budgets["karma-spent-gear"] as number) || 0;
@@ -228,15 +234,22 @@ export function ReviewStep({ state, updateState, budgetValues }: StepProps) {
   const derivedStats = useMemo(() => {
     const augBonuses = augmentationEffects.attributeBonuses;
 
-    // Base attributes = allocated + metatype minimum + augmentation bonuses
-    const body = (attributes.body || 0) + (selectedMetatype?.attributes.body && "min" in selectedMetatype.attributes.body ? selectedMetatype.attributes.body.min : 1) + (augBonuses.body || 0);
-    const agility = (attributes.agility || 0) + (selectedMetatype?.attributes.agility && "min" in selectedMetatype.attributes.agility ? selectedMetatype.attributes.agility.min : 1) + (augBonuses.agility || 0);
-    const reaction = (attributes.reaction || 0) + (selectedMetatype?.attributes.reaction && "min" in selectedMetatype.attributes.reaction ? selectedMetatype.attributes.reaction.min : 1) + (augBonuses.reaction || 0);
-    const strength = (attributes.strength || 0) + (selectedMetatype?.attributes.strength && "min" in selectedMetatype.attributes.strength ? selectedMetatype.attributes.strength.min : 1) + (augBonuses.strength || 0);
-    const willpower = (attributes.willpower || 0) + (selectedMetatype?.attributes.willpower && "min" in selectedMetatype.attributes.willpower ? selectedMetatype.attributes.willpower.min : 1) + (augBonuses.willpower || 0);
-    const logic = (attributes.logic || 0) + (selectedMetatype?.attributes.logic && "min" in selectedMetatype.attributes.logic ? selectedMetatype.attributes.logic.min : 1) + (augBonuses.logic || 0);
-    const intuition = (attributes.intuition || 0) + (selectedMetatype?.attributes.intuition && "min" in selectedMetatype.attributes.intuition ? selectedMetatype.attributes.intuition.min : 1) + (augBonuses.intuition || 0);
-    const charisma = (attributes.charisma || 0) + (selectedMetatype?.attributes.charisma && "min" in selectedMetatype.attributes.charisma ? selectedMetatype.attributes.charisma.min : 1) + (augBonuses.charisma || 0);
+    // Get metatype minimums for fallback
+    const getMinValue = (attr: string): number => {
+      const metatypeAttr = selectedMetatype?.attributes[attr];
+      return metatypeAttr && "min" in metatypeAttr ? metatypeAttr.min : 1;
+    };
+
+    // Base attributes = full value (already includes minimum + allocated) + augmentation bonuses
+    // attributes[attr] already contains the full value, so we don't add minimum again
+    const body = (attributes.body ?? getMinValue("body")) + (augBonuses.body || 0);
+    const agility = (attributes.agility ?? getMinValue("agility")) + (augBonuses.agility || 0);
+    const reaction = (attributes.reaction ?? getMinValue("reaction")) + (augBonuses.reaction || 0);
+    const strength = (attributes.strength ?? getMinValue("strength")) + (augBonuses.strength || 0);
+    const willpower = (attributes.willpower ?? getMinValue("willpower")) + (augBonuses.willpower || 0);
+    const logic = (attributes.logic ?? getMinValue("logic")) + (augBonuses.logic || 0);
+    const intuition = (attributes.intuition ?? getMinValue("intuition")) + (augBonuses.intuition || 0);
+    const charisma = (attributes.charisma ?? getMinValue("charisma")) + (augBonuses.charisma || 0);
 
     // Essence is reduced by augmentations
     const essence = augmentationEffects.remainingEssence;
@@ -265,9 +278,11 @@ export function ReviewStep({ state, updateState, budgetValues }: StepProps) {
       stunCM: Math.ceil(willpower / 2) + 8,
       overflowCM: body, // Overflow includes augmented Body
       composure: charisma + willpower,
-      judgeIntentions: charisma + intuition,
+      judgeIntentions: charisma + intuition, // Judge Intentions = CHA + INT
       memory: logic + willpower,
-      liftCarry: body + strength,
+      liftCarry: strength * 2, // Lift/Carry = STR × 2
+      walkSpeed: agility * 2, // Walk Speed = AGI × 2 meters per Combat Turn
+      runSpeed: agility * 4, // Run Speed = AGI × 4 meters per Combat Turn
     };
   }, [attributes, selectedMetatype, augmentationEffects]);
 
@@ -414,7 +429,9 @@ export function ReviewStep({ state, updateState, budgetValues }: StepProps) {
             {["body", "agility", "reaction", "strength", "willpower", "logic", "intuition", "charisma"].map((attr) => {
               const metatypeAttr = selectedMetatype?.attributes[attr];
               const minValue = metatypeAttr && "min" in metatypeAttr ? metatypeAttr.min : 1;
-              const baseValue = (attributes[attr] || 0) + minValue;
+              // attributes[attr] already contains the full value (minimum + allocated points)
+              // so we don't need to add minValue again
+              const baseValue = attributes[attr] ?? minValue;
               const augBonus = augmentationEffects.attributeBonuses[attr] || 0;
               const totalValue = baseValue + augBonus;
               const hasAugBonus = augBonus > 0;
@@ -499,10 +516,11 @@ export function ReviewStep({ state, updateState, budgetValues }: StepProps) {
         <h3 className="text-sm font-semibold text-zinc-900 dark:text-zinc-100">Derived Stats</h3>
         <div className="mt-3 grid grid-cols-2 gap-3 sm:grid-cols-4 lg:grid-cols-5">
           <div
-            className={`rounded p-2 text-center ${augmentationEffects.initiativeDiceBonus > 0
+            className={`rounded p-2 text-center cursor-help ${augmentationEffects.initiativeDiceBonus > 0
                 ? "bg-blue-100 ring-1 ring-blue-300 dark:bg-blue-900/30 dark:ring-blue-700"
                 : "bg-blue-50 dark:bg-blue-900/20"
               }`}
+            title="Initiative: (Intuition + Reaction) + 1D6"
           >
             <div className="text-[10px] font-medium text-blue-600 dark:text-blue-400">Initiative</div>
             <div className="font-bold text-blue-700 dark:text-blue-300">
@@ -512,19 +530,26 @@ export function ReviewStep({ state, updateState, budgetValues }: StepProps) {
               )}
             </div>
           </div>
-          <div className="rounded bg-zinc-100 p-2 text-center dark:bg-zinc-700">
+          <div 
+            className="rounded bg-zinc-100 p-2 text-center cursor-help dark:bg-zinc-700"
+            title="Physical Limit: ⌈((STR × 2) + BOD + REA) / 3⌉"
+          >
             <div className="text-[10px] font-medium text-zinc-500 dark:text-zinc-400">Physical Limit</div>
             <div className="font-bold text-zinc-900 dark:text-zinc-100">{derivedStats.physicalLimit}</div>
           </div>
-          <div className="rounded bg-zinc-100 p-2 text-center dark:bg-zinc-700">
+          <div 
+            className="rounded bg-zinc-100 p-2 text-center cursor-help dark:bg-zinc-700"
+            title="Mental Limit: ⌈((LOG × 2) + INT + WIL) / 3⌉"
+          >
             <div className="text-[10px] font-medium text-zinc-500 dark:text-zinc-400">Mental Limit</div>
             <div className="font-bold text-zinc-900 dark:text-zinc-100">{derivedStats.mentalLimit}</div>
           </div>
           <div
-            className={`rounded p-2 text-center ${augmentationEffects.totalEssenceLoss > 0
+            className={`rounded p-2 text-center cursor-help ${augmentationEffects.totalEssenceLoss > 0
                 ? "bg-zinc-100 ring-1 ring-amber-300 dark:bg-zinc-700 dark:ring-amber-700"
                 : "bg-zinc-100 dark:bg-zinc-700"
               }`}
+            title="Social Limit: ⌈((CHA × 2) + WIL + ⌈ESS⌉) / 3⌉"
           >
             <div className="text-[10px] font-medium text-zinc-500 dark:text-zinc-400">Social Limit</div>
             <div className="font-bold text-zinc-900 dark:text-zinc-100">
@@ -534,29 +559,68 @@ export function ReviewStep({ state, updateState, budgetValues }: StepProps) {
               )}
             </div>
           </div>
-          <div className="rounded bg-red-50 p-2 text-center dark:bg-red-900/20">
+          <div 
+            className="rounded bg-red-50 p-2 text-center cursor-help dark:bg-red-900/20"
+            title="Physical Condition Monitor: ⌈BOD / 2⌉ + 8"
+          >
             <div className="text-[10px] font-medium text-red-600 dark:text-red-400">Physical CM</div>
             <div className="font-bold text-red-700 dark:text-red-300">{derivedStats.physicalCM}</div>
           </div>
-          <div className="rounded bg-amber-50 p-2 text-center dark:bg-amber-900/20">
+          <div 
+            className="rounded bg-amber-50 p-2 text-center cursor-help dark:bg-amber-900/20"
+            title="Stun Condition Monitor: ⌈WIL / 2⌉ + 8"
+          >
             <div className="text-[10px] font-medium text-amber-600 dark:text-amber-400">Stun CM</div>
             <div className="font-bold text-amber-700 dark:text-amber-300">{derivedStats.stunCM}</div>
           </div>
-          <div className="rounded bg-zinc-200 p-2 text-center dark:bg-zinc-600">
+          <div 
+            className="rounded bg-zinc-200 p-2 text-center cursor-help dark:bg-zinc-600"
+            title="Overflow: BOD + Augmentation bonuses"
+          >
             <div className="text-[10px] font-medium text-zinc-600 dark:text-zinc-300">Overflow</div>
             <div className="font-bold text-zinc-800 dark:text-zinc-100">{derivedStats.overflowCM}</div>
           </div>
-          <div className="rounded bg-zinc-100 p-2 text-center dark:bg-zinc-700">
+          <div 
+            className="rounded bg-zinc-100 p-2 text-center cursor-help dark:bg-zinc-700"
+            title="Composure: CHA + WIL"
+          >
             <div className="text-[10px] font-medium text-zinc-500 dark:text-zinc-400">Composure</div>
             <div className="font-bold text-zinc-900 dark:text-zinc-100">{derivedStats.composure}</div>
           </div>
-          <div className="rounded bg-zinc-100 p-2 text-center dark:bg-zinc-700">
+          <div 
+            className="rounded bg-zinc-100 p-2 text-center cursor-help dark:bg-zinc-700"
+            title="Judge Intentions: CHA + INT"
+          >
+            <div className="text-[10px] font-medium text-zinc-500 dark:text-zinc-400">Judge Intentions</div>
+            <div className="font-bold text-zinc-900 dark:text-zinc-100">{derivedStats.judgeIntentions}</div>
+          </div>
+          <div 
+            className="rounded bg-zinc-100 p-2 text-center cursor-help dark:bg-zinc-700"
+            title="Memory: LOG + WIL"
+          >
             <div className="text-[10px] font-medium text-zinc-500 dark:text-zinc-400">Memory</div>
             <div className="font-bold text-zinc-900 dark:text-zinc-100">{derivedStats.memory}</div>
           </div>
-          <div className="rounded bg-zinc-100 p-2 text-center dark:bg-zinc-700">
+          <div 
+            className="rounded bg-zinc-100 p-2 text-center cursor-help dark:bg-zinc-700"
+            title="Lift/Carry: STR × 2"
+          >
             <div className="text-[10px] font-medium text-zinc-500 dark:text-zinc-400">Lift/Carry</div>
             <div className="font-bold text-zinc-900 dark:text-zinc-100">{derivedStats.liftCarry}</div>
+          </div>
+          <div 
+            className="rounded bg-zinc-100 p-2 text-center cursor-help dark:bg-zinc-700"
+            title="Walk Speed: AGI × 2 meters per Combat Turn"
+          >
+            <div className="text-[10px] font-medium text-zinc-500 dark:text-zinc-400">Walk Speed</div>
+            <div className="font-bold text-zinc-900 dark:text-zinc-100">{derivedStats.walkSpeed}m</div>
+          </div>
+          <div 
+            className="rounded bg-zinc-100 p-2 text-center cursor-help dark:bg-zinc-700"
+            title="Run Speed: AGI × 4 meters per Combat Turn"
+          >
+            <div className="text-[10px] font-medium text-zinc-500 dark:text-zinc-400">Run Speed</div>
+            <div className="font-bold text-zinc-900 dark:text-zinc-100">{derivedStats.runSpeed}m</div>
           </div>
         </div>
       </div>
@@ -1410,6 +1474,153 @@ export function ReviewStep({ state, updateState, budgetValues }: StepProps) {
                         <span className="text-zinc-500 dark:text-zinc-400">x{item.quantity}</span>
                       )}
                     </span>
+                  ))}
+                </div>
+              </div>
+            )}
+          </div>
+        </div>
+      )}
+
+      {/* Programs */}
+      {selectedPrograms.length > 0 && (
+        <div className="rounded-lg border border-zinc-200 bg-white p-4 dark:border-zinc-700 dark:bg-zinc-800/50">
+          <h3 className="text-sm font-semibold text-zinc-900 dark:text-zinc-100">
+            Matrix Programs ({selectedPrograms.length})
+          </h3>
+          <div className="mt-3 space-y-2">
+            {selectedPrograms.map((program, i) => (
+              <div key={i} className="rounded border border-zinc-200 bg-zinc-50 p-2 dark:border-zinc-700 dark:bg-zinc-800">
+                <div className="flex items-start justify-between">
+                  <div>
+                    <span className="font-medium text-zinc-800 dark:text-zinc-200">{program.name}</span>
+                    <span className="ml-2 text-xs text-zinc-600 dark:text-zinc-400">
+                      ({program.category})
+                    </span>
+                    {program.rating && (
+                      <span className="ml-2 text-xs text-zinc-500 dark:text-zinc-400">
+                        Rating {program.rating}
+                      </span>
+                    )}
+                  </div>
+                  <span className="text-sm font-medium text-zinc-700 dark:text-zinc-300">
+                    ¥{program.cost.toLocaleString()}
+                  </span>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
+
+      {/* Vehicles & Drones */}
+      {(selectedVehicles.length > 0 || selectedDrones.length > 0 || selectedRCCs.length > 0 || selectedAutosofts.length > 0) && (
+        <div className="rounded-lg border border-zinc-200 bg-white p-4 dark:border-zinc-700 dark:bg-zinc-800/50">
+          <h3 className="text-sm font-semibold text-zinc-900 dark:text-zinc-100">
+            Vehicles & Drones
+          </h3>
+          <div className="mt-3 space-y-3">
+            {/* Vehicles */}
+            {selectedVehicles.length > 0 && (
+              <div className="space-y-2">
+                <div className="text-xs font-medium text-zinc-600 dark:text-zinc-400">Vehicles ({selectedVehicles.length})</div>
+                <div className="space-y-2">
+                  {selectedVehicles.map((vehicle, i) => (
+                    <div key={i} className="rounded border border-zinc-200 bg-zinc-50 p-2 dark:border-zinc-700 dark:bg-zinc-800">
+                      <div className="flex items-start justify-between">
+                        <div>
+                          <span className="font-medium text-zinc-800 dark:text-zinc-200">{vehicle.name}</span>
+                          <span className="ml-2 text-xs text-zinc-500 dark:text-zinc-400">
+                            ({vehicle.category})
+                          </span>
+                        </div>
+                        <span className="text-sm font-medium text-zinc-700 dark:text-zinc-300">
+                          ¥{vehicle.cost.toLocaleString()}
+                        </span>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
+
+            {/* Drones */}
+            {selectedDrones.length > 0 && (
+              <div className="space-y-2">
+                <div className="text-xs font-medium text-zinc-600 dark:text-zinc-400">Drones ({selectedDrones.length})</div>
+                <div className="space-y-2">
+                  {selectedDrones.map((drone, i) => (
+                    <div key={i} className="rounded border border-zinc-200 bg-zinc-50 p-2 dark:border-zinc-700 dark:bg-zinc-800">
+                      <div className="flex items-start justify-between">
+                        <div>
+                          <span className="font-medium text-zinc-800 dark:text-zinc-200">{drone.name}</span>
+                          <span className="ml-2 text-xs text-zinc-500 dark:text-zinc-400">
+                            ({drone.size})
+                          </span>
+                          {drone.customName && (
+                            <span className="ml-2 text-xs text-zinc-600 dark:text-zinc-400">
+                              "{drone.customName}"
+                            </span>
+                          )}
+                        </div>
+                        <span className="text-sm font-medium text-zinc-700 dark:text-zinc-300">
+                          ¥{drone.cost.toLocaleString()}
+                        </span>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
+
+            {/* RCCs */}
+            {selectedRCCs.length > 0 && (
+              <div className="space-y-2">
+                <div className="text-xs font-medium text-zinc-600 dark:text-zinc-400">RCCs ({selectedRCCs.length})</div>
+                <div className="space-y-2">
+                  {selectedRCCs.map((rcc, i) => (
+                    <div key={i} className="rounded border border-zinc-200 bg-zinc-50 p-2 dark:border-zinc-700 dark:bg-zinc-800">
+                      <div className="flex items-start justify-between">
+                        <div>
+                          <span className="font-medium text-zinc-800 dark:text-zinc-200">{rcc.name}</span>
+                          <span className="ml-2 text-xs text-zinc-500 dark:text-zinc-400">
+                            (DR {rcc.deviceRating}, DP {rcc.dataProcessing}, FW {rcc.firewall})
+                          </span>
+                        </div>
+                        <span className="text-sm font-medium text-zinc-700 dark:text-zinc-300">
+                          ¥{rcc.cost.toLocaleString()}
+                        </span>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
+
+            {/* Autosofts */}
+            {selectedAutosofts.length > 0 && (
+              <div className="space-y-2">
+                <div className="text-xs font-medium text-zinc-600 dark:text-zinc-400">Autosofts ({selectedAutosofts.length})</div>
+                <div className="space-y-2">
+                  {selectedAutosofts.map((autosoft, i) => (
+                    <div key={i} className="rounded border border-zinc-200 bg-zinc-50 p-2 dark:border-zinc-700 dark:bg-zinc-800">
+                      <div className="flex items-start justify-between">
+                        <div>
+                          <span className="font-medium text-zinc-800 dark:text-zinc-200">{autosoft.name}</span>
+                          <span className="ml-2 text-xs text-zinc-500 dark:text-zinc-400">
+                            Rating {autosoft.rating}
+                          </span>
+                          {autosoft.target && (
+                            <span className="ml-2 text-xs text-zinc-600 dark:text-zinc-400">
+                              ({autosoft.target})
+                            </span>
+                          )}
+                        </div>
+                        <span className="text-sm font-medium text-zinc-700 dark:text-zinc-300">
+                          ¥{autosoft.cost.toLocaleString()}
+                        </span>
+                      </div>
+                    </div>
                   ))}
                 </div>
               </div>

@@ -65,7 +65,8 @@ export function AdeptPowersStep({ state, updateState, budgetValues }: StepProps)
     const karmaSpentGear = (state.budgets["karma-spent-gear"] as number) || 0;
     const karmaSpentSpells = (state.budgets["karma-spent-spells"] as number) || 0;
     const karmaSpentForms = (state.budgets["karma-spent-complex-forms"] as number) || 0;
-    const karmaRemaining = karmaBase + karmaGained - karmaSpentPos - karmaSpentGear - karmaSpentSpells - karmaSpentForms - karmaSpentPowerPoints;
+    const karmaSpentContacts = (state.budgets["karma-spent-contacts"] as number) || 0;
+    const karmaRemaining = karmaBase + karmaGained - karmaSpentPos - karmaSpentGear - karmaSpentSpells - karmaSpentForms - karmaSpentContacts - karmaSpentPowerPoints;
 
     // Get current adept powers from state
     const selectedPowers = useMemo(() => {

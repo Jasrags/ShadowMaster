@@ -178,7 +178,7 @@ This section provides a comprehensive view of the entire implementation roadmap,
 | 4  | **B7**  | **Complex Forms & Matrix**          | **1-2 weeks**  | **High**   | ✅ **Complete**   |
 | 5  | **B6**  | **Spell Management**                | **1-2 weeks**  | **High**   | ✅ **Complete**   |
 | 6  | **B12** | **Rigger Support (Vehicles & Drones)** | **2-3 weeks**  | **High**   | ✅ **Complete**   |
-| 7  | **B13** | **Decker Support (Programs)**       | **1 week**     | **High**   | 🔜 Next          |
+| 7  | **B13** | **Decker Support (Programs)**       | **1 week**     | **High**   | ✅ **Complete**      |
 | 8  | **B14** | **Foci & Spirits**                  | **2 weeks**    | **High**   | ✅ **Complete**      |
 | 9  | **B11** | **Identity/Lifestyle/SIN System**   | **2-3 weeks**  | **High**   | ✅ **Complete**      |
 | 10 | **B10** | **Gear Modifications**              | **2-3 weeks**  | **Medium** | ✅ **Complete**      |
@@ -210,7 +210,8 @@ This section provides a comprehensive view of the entire implementation roadmap,
 | **M0 Complete** | **Jan 2025** | **All MVP gaps and enhancements complete: bug fixes, metatype enhancements, skills improvements, qualities system, contacts templates, distributed karma architecture, SpellsStep, Aspected Mage support** |
 | B8.1 Gear Layout | Dec 2024 | Improved gear catalog layout, shopping cart width fixes, responsive design |
 | B6 Spell Management | Dec 2024 | Traditions system (drain attributes, spirit types), 16 mentor spirits with quality integration, 9 rituals with RitualsStep component, Watcher/Homunculus minion stats |
-| B12 Rigger Support | Dec 2024 | Vehicle/drone type definitions, SR5 CRB catalog (11 groundcraft, 3 watercraft, 6 aircraft, 11 drones, 7 RCCs, 6 autosofts), extraction functions and hooks, VehiclesStep component with tabbed interface, wizard integration |
+| B12 Rigger Support | Dec 2024 | Vehicle/drone type definitions, SR5 CRB catalog (11 groundcraft, 3 watercraft, 6 aircraft, 11 drones, 7 RCCs, 6 autosofts), extraction functions and hooks, VehiclesStep component with tabbed interface, wizard integration, ReviewStep display |
+| B13 Decker Support | Jan 2025 | ProgramsStep component, program catalog (common, hacking, agent programs), program selection with rating support, ReviewStep display with category and cost |
 | B10 Gear Modifications | Jan 2025 | Weapon/armor/cyberware modification system with ModificationModal, ModificationSelector, capacity/slot tracking, mount compatibility, availability validation, cost tracking, ReviewStep display. Cyberware enhancements integrated into GearStep. |
 | B14 Foci & Spirits | Jan 2025 | Foci catalog (7 types), foci selection in GearStep with force rating and bonding karma tracking, spirit catalog with types/powers/weaknesses, spirit reference display in MagicStep, foci display in ReviewStep |
 | B11.2 Identity Management | Jan 2025 | IdentitiesStep component, IdentityEditor, LicenseEditor, fake/real SIN support, license management, SIN/license validation, identity-lifestyle associations, identities display in ReviewStep |
@@ -222,7 +223,7 @@ This section provides a comprehensive view of the entire implementation roadmap,
 | Milestone | Phases | Est. Duration |
 |-----------|--------|---------------|
 | MVP Polish | M0 | ✅ Complete |
-| Character Creation Complete | B7, B12, B13, B14, B11, B6, B10 | ✅ B10, B14, B11 Complete; B13 ~95% (ReviewStep display pending) |
+| Character Creation Complete | B7, B12, B13, B14, B11, B6, B10 | ✅ B10, B14, B11, B12, B13 Complete (all ReviewStep displays done) |
 | Sourcebooks & Polish | B2, B8 | 3-4 weeks |
 | Gameplay Features | B4, B3, B9 | 6-9 weeks |
 | **Total to Beta Release** | All | **20-29 weeks** |
@@ -241,7 +242,7 @@ This section provides a comprehensive view of the entire implementation roadmap,
 | B7  | Complex Forms & Matrix           | 1-2 weeks  | High   | ✅ Complete   |
 | B6  | Spell Management                 | 1-2 weeks  | High   | ✅ Complete   |
 | B12 | Rigger Support (Vehicles & Drones)| 2-3 weeks | High   | ✅ Complete   |
-| B13 | Decker Support (Programs)        | 1 week     | High   | 🔜 Next      |
+| B13 | Decker Support (Programs)        | 1 week     | High   | ✅ Complete      |
 | B14 | Foci & Spirits                   | 2 weeks    | High   | ✅ Complete  |
 | B11 | Identity/Lifestyle/SIN System    | 2-3 weeks  | High   | ✅ Complete  |
 | B10 | Gear Modifications               | 2-3 weeks  | Medium | ✅ Complete  |
@@ -4560,7 +4561,7 @@ This milestone creates the character creation step for selecting vehicles, drone
 | B12.4.4 | Add autosoft selection tied to owned drones | Complete |
 | B12.4.5 | Implement nuyen budget tracking for vehicles/drones | Complete |
 | B12.4.6 | Register VehiclesStep in CreationWizard | Complete |
-| B12.4.7 | Display vehicles/drones in ReviewStep | Not Started |
+| B12.4.7 | Display vehicles/drones in ReviewStep | ✅ Complete |
 
 **Tasks JSON:**
 ```json
@@ -4616,9 +4617,9 @@ This milestone creates the character creation step for selecting vehicles, drone
   {
     "id": "B12.4.7",
     "title": "Display vehicles/drones in ReviewStep",
-    "description": "Show selected vehicles and drones in the review step.",
+    "description": "Show selected vehicles, drones, RCCs, and autosofts in the review step with costs and relevant stats.",
     "files": ["/app/characters/create/components/steps/ReviewStep.tsx"],
-    "status": "Not Started",
+    "status": "Complete",
     "dependsOn": ["B12.4.6"]
   }
 ]
@@ -4631,12 +4632,14 @@ This milestone creates the character creation step for selecting vehicles, drone
 - **B12.5.AC.3** [x] RCCs selectable with correct device ratings
 - **B12.5.AC.4** [x] Autosofts purchasable for drones
 - **B12.5.AC.5** [x] Nuyen budget properly tracked
-- **B12.5.AC.6** [ ] Vehicles/drones appear in ReviewStep
+- **B12.5.AC.6** [x] Vehicles/drones/RCCs/autosofts appear in ReviewStep with costs and stats
 - **B12.5.AC.7** [ ] Rigger character archetype fully creatable
 
 ---
 
 ## Phase B13: Decker Support (Programs)
+
+**Status:** ✅ **Complete**
 
 **Objective:** Complete decker character creation with Matrix programs.
 
@@ -4779,7 +4782,7 @@ This milestone creates a dedicated ProgramsStep component for program selection,
 | B13.4.4 | Refactor ProgramsStep to match VehiclesStep/GearStep pattern | Complete |
 | B13.4.5 | Register ProgramsStep in CreationWizard | Complete |
 | B13.4.6 | Validate program count against cyberdeck capacity | Not Started |
-| B13.4.7 | Display owned programs in ReviewStep | Not Started |
+| B13.4.7 | Display owned programs in ReviewStep | ✅ Complete |
 
 **Tasks JSON:**
 ```json
@@ -4835,9 +4838,9 @@ This milestone creates a dedicated ProgramsStep component for program selection,
   {
     "id": "B13.4.7",
     "title": "Display owned programs in ReviewStep",
-    "description": "Show purchased programs in the review step.",
+    "description": "Show purchased programs in the review step with category, rating (for agents), and cost.",
     "files": ["/app/characters/create/components/steps/ReviewStep.tsx"],
-    "status": "Not Started",
+    "status": "Complete",
     "dependsOn": ["B13.4.1"]
   }
 ]
@@ -4851,7 +4854,7 @@ This milestone creates a dedicated ProgramsStep component for program selection,
 - **B13.5.AC.4** [x] ProgramsStep component created with table layout matching VehiclesStep pattern
 - **B13.5.AC.5** [x] Programs step title fixed in sidebar
 - **B13.5.AC.6** [ ] Program count validated against cyberdeck capacity
-- **B13.5.AC.7** [ ] Programs displayed in ReviewStep
+- **B13.5.AC.7** [x] Programs displayed in ReviewStep with category, rating, and cost
 - **B13.5.AC.8** [ ] Decker character archetype fully creatable
 
 ---

@@ -5235,7 +5235,7 @@
             "monthlyCost": 416.67,
             "yearlyCost": 5000,
             "category": "medical",
-            "description": "Medical response service covering Zones 1-2. Yearly cost: 5,000¥"
+            "description": "Medical response service covering Zones 1-2. Yearly cost: 5,000\u00a5"
           },
           {
             "id": "docwagon-gold",
@@ -5243,7 +5243,7 @@
             "monthlyCost": 2083.33,
             "yearlyCost": 25000,
             "category": "medical",
-            "description": "Medical response service covering Zones 1-6. Yearly cost: 25,000¥"
+            "description": "Medical response service covering Zones 1-6. Yearly cost: 25,000\u00a5"
           },
           {
             "id": "docwagon-platinum",
@@ -5251,7 +5251,7 @@
             "monthlyCost": 4166.67,
             "yearlyCost": 50000,
             "category": "medical",
-            "description": "Medical response service covering Zones 1-8. Yearly cost: 50,000¥"
+            "description": "Medical response service covering Zones 1-8. Yearly cost: 50,000\u00a5"
           },
           {
             "id": "docwagon-super-platinum",
@@ -5259,7 +5259,7 @@
             "monthlyCost": 8333.33,
             "yearlyCost": 100000,
             "category": "medical",
-            "description": "Medical response service covering Zones 1-8 with premium service. Yearly cost: 100,000¥"
+            "description": "Medical response service covering Zones 1-8 with premium service. Yearly cost: 100,000\u00a5"
           },
           {
             "id": "food-service-basic",
@@ -5269,7 +5269,7 @@
             "minRating": 1,
             "maxRating": 6,
             "category": "food",
-            "description": "Basic meal delivery service. Cost: Rating × 200¥/month"
+            "description": "Basic meal delivery service. Cost: Rating \u00d7 200\u00a5/month"
           }
         ]
       }
@@ -5322,6 +5322,18 @@
         "weapons": {
           "melee": [
             {
+              "id": "club",
+              "name": "Club",
+              "category": "weapons",
+              "subcategory": "melee",
+              "cost": 30,
+              "availability": 0,
+              "damage": "(STR+2)S",
+              "ap": 0,
+              "reach": 1,
+              "accuracy": 4
+            },
+            {
               "id": "combat-knife",
               "name": "Combat Knife",
               "category": "weapons",
@@ -5332,6 +5344,43 @@
               "ap": -1,
               "reach": 0,
               "accuracy": 6
+            },
+            {
+              "id": "combat-axe",
+              "name": "Combat axe",
+              "category": "weapons",
+              "subcategory": "melee",
+              "accuracy": 4,
+              "reach": 2,
+              "damage": "(STR+5)P",
+              "ap": -4,
+              "availability": 12,
+              "restricted": true,
+              "cost": 4000
+            },
+            {
+              "id": "extendable-baton",
+              "name": "Extendable Baton",
+              "category": "weapons",
+              "subcategory": "melee",
+              "cost": 100,
+              "availability": 4,
+              "damage": "(STR+1)P",
+              "ap": 0,
+              "reach": 1,
+              "accuracy": 5
+            },
+            {
+              "id": "forearm-snap-blades",
+              "name": "Forearm snap-blades",
+              "category": "weapons",
+              "subcategory": "melee",
+              "accuracy": 4,
+              "damage": "(STR+2)P",
+              "ap": -2,
+              "availability": 7,
+              "restricted": true,
+              "cost": 200
             },
             {
               "id": "katana",
@@ -5345,6 +5394,99 @@
               "ap": -3,
               "reach": 1,
               "accuracy": 7
+            },
+            {
+              "id": "knife",
+              "name": "Knife",
+              "category": "weapons",
+              "subcategory": "melee",
+              "accuracy": 5,
+              "damage": "(STR+1)P",
+              "ap": -1,
+              "availability": 0,
+              "cost": 10
+            },
+            {
+              "id": "knucks",
+              "name": "Knucks",
+              "category": "weapons",
+              "subcategory": "melee",
+              "damage": "(STR+1)P",
+              "availability": 2,
+              "restricted": true,
+              "cost": 100
+            },
+            {
+              "id": "monofilament-whip",
+              "name": "Monofilament whip",
+              "category": "weapons",
+              "subcategory": "melee",
+              "reach": 2,
+              "damage": "12P",
+              "ap": -8,
+              "availability": 12,
+              "forbidden": true,
+              "cost": 10000
+            },
+            {
+              "id": "pole-arm",
+              "name": "Pole arm",
+              "category": "weapons",
+              "subcategory": "melee",
+              "accuracy": 5,
+              "reach": 3,
+              "damage": "(STR+3)P",
+              "ap": -2,
+              "availability": 6,
+              "restricted": true,
+              "cost": 1000
+            },
+            {
+              "id": "sap",
+              "name": "Sap",
+              "category": "weapons",
+              "subcategory": "melee",
+              "accuracy": 5,
+              "damage": "(STR+2)P",
+              "availability": 2,
+              "cost": 30
+            },
+            {
+              "id": "shock-gloves",
+              "name": "Shock Gloves",
+              "category": "weapons",
+              "subcategory": "melee",
+              "cost": 550,
+              "availability": 6,
+              "restricted": true,
+              "damage": "8S(e)",
+              "ap": -5,
+              "reach": 0,
+              "accuracy": 0
+            },
+            {
+              "id": "staff",
+              "name": "Staff",
+              "category": "weapons",
+              "subcategory": "melee",
+              "accuracy": 6,
+              "reach": 2,
+              "damage": "(STR+3)P",
+              "availability": 3,
+              "cost": 100
+            },
+            {
+              "id": "stun-baton",
+              "name": "Stun Baton",
+              "category": "weapons",
+              "subcategory": "melee",
+              "cost": 750,
+              "availability": 6,
+              "restricted": true,
+              "damage": "9S(e)",
+              "ap": -5,
+              "reach": 1,
+              "accuracy": 4
             },
             {
               "id": "survival-knife",
@@ -5372,57 +5514,50 @@
               "accuracy": 6
             },
             {
-              "id": "club",
-              "name": "Club",
+              "id": "telescoping-staff",
+              "name": "Telescoping staff",
               "category": "weapons",
               "subcategory": "melee",
-              "cost": 30,
-              "availability": 0,
-              "damage": "(STR+2)S",
-              "ap": 0,
-              "reach": 1,
-              "accuracy": 4
-            },
-            {
-              "id": "extendable-baton",
-              "name": "Extendable Baton",
-              "category": "weapons",
-              "subcategory": "melee",
-              "cost": 100,
+              "accuracy": 4,
+              "reach": 2,
+              "damage": "(STR+2)P",
               "availability": 4,
-              "damage": "(STR+1)P",
-              "ap": 0,
-              "reach": 1,
-              "accuracy": 5
-            },
-            {
-              "id": "stun-baton",
-              "name": "Stun Baton",
-              "category": "weapons",
-              "subcategory": "melee",
-              "cost": 750,
-              "availability": 6,
-              "restricted": true,
-              "damage": "9S(e)",
-              "ap": -5,
-              "reach": 1,
-              "accuracy": 4
-            },
-            {
-              "id": "shock-gloves",
-              "name": "Shock Gloves",
-              "category": "weapons",
-              "subcategory": "melee",
-              "cost": 550,
-              "availability": 6,
-              "restricted": true,
-              "damage": "8S(e)",
-              "ap": -5,
-              "reach": 0,
-              "accuracy": 0
+              "cost": 350
             }
           ],
           "pistols": [
+            {
+              "id": "ares-light-fire-70",
+              "name": "Ares Light Fire 70",
+              "category": "weapons",
+              "subcategory": "pistols",
+              "accuracy": 7,
+              "damage": "6P",
+              "mode": [
+                "SA"
+              ],
+              "rc": 0,
+              "ammo": 16,
+              "availability": 3,
+              "restricted": true,
+              "cost": 200
+            },
+            {
+              "id": "ares-light-fire-75",
+              "name": "Ares Light Fire 75",
+              "category": "weapons",
+              "subcategory": "pistols",
+              "accuracy": 6,
+              "damage": "6P",
+              "mode": [
+                "SA"
+              ],
+              "rc": 0,
+              "ammo": 16,
+              "availability": 6,
+              "forbidden": true,
+              "cost": 1250
+            },
             {
               "id": "ares-predator-v",
               "name": "Ares Predator V",
@@ -5439,6 +5574,74 @@
               "rc": 0,
               "ammo": 15,
               "accuracy": 5
+            },
+            {
+              "id": "ares-s-iii-super-squirt",
+              "name": "Ares S-III Super Squirt",
+              "category": "weapons",
+              "subcategory": "pistols",
+              "accuracy": 3,
+              "damage": "Chemical",
+              "mode": [
+                "SA"
+              ],
+              "rc": 0,
+              "ammo": 20,
+              "availability": 7,
+              "restricted": true,
+              "cost": 950
+            },
+            {
+              "id": "ares-viper-slivergun",
+              "name": "Ares Viper Slivergun",
+              "category": "weapons",
+              "subcategory": "pistols",
+              "accuracy": 4,
+              "damage": "9P (f)",
+              "ap": 4,
+              "mode": [
+                "SA",
+                "BF"
+              ],
+              "rc": 0,
+              "ammo": 30,
+              "availability": 8,
+              "forbidden": true,
+              "cost": 380
+            },
+            {
+              "id": "beretta-201t",
+              "name": "Beretta 201T",
+              "category": "weapons",
+              "subcategory": "pistols",
+              "accuracy": 6,
+              "damage": "6P",
+              "mode": [
+                "SA",
+                "BF"
+              ],
+              "rc": 1,
+              "ammo": 21,
+              "availability": 7,
+              "restricted": true,
+              "cost": 210
+            },
+            {
+              "id": "browning-ultra-power",
+              "name": "Browning Ultra-Power",
+              "category": "weapons",
+              "subcategory": "pistols",
+              "accuracy": 5,
+              "damage": "8P",
+              "ap": -1,
+              "mode": [
+                "SA"
+              ],
+              "rc": 0,
+              "ammo": 10,
+              "availability": 4,
+              "restricted": true,
+              "cost": 640
             },
             {
               "id": "colt-america-l36",
@@ -5458,6 +5661,54 @@
               "accuracy": 7
             },
             {
+              "id": "colt-government-2066",
+              "name": "Colt Government 2066",
+              "category": "weapons",
+              "subcategory": "pistols",
+              "accuracy": 6,
+              "damage": "7P",
+              "ap": -1,
+              "mode": [
+                "SA"
+              ],
+              "rc": 0,
+              "ammo": 14,
+              "availability": 7,
+              "restricted": true,
+              "cost": 425
+            },
+            {
+              "id": "defiance-ex-shocker",
+              "name": "Defiance EX Shocker",
+              "category": "weapons",
+              "subcategory": "pistols",
+              "accuracy": 4,
+              "damage": "9S(e)",
+              "ap": -5,
+              "mode": [
+                "SS"
+              ],
+              "rc": 0,
+              "ammo": 4,
+              "availability": 0,
+              "cost": 250
+            },
+            {
+              "id": "fichetti-pain-inducer",
+              "name": "Fichetti Pain Inducer",
+              "category": "weapons",
+              "subcategory": "pistols",
+              "accuracy": 3,
+              "damage": "Special",
+              "mode": [
+                "SS"
+              ],
+              "rc": 0,
+              "availability": 11,
+              "restricted": true,
+              "cost": 5000
+            },
+            {
               "id": "fichetti-security-600",
               "name": "Fichetti Security 600",
               "category": "weapons",
@@ -5475,20 +5726,69 @@
               "accuracy": 6
             },
             {
-              "id": "streetline-special",
-              "name": "Streetline Special",
+              "id": "fichetti-tiffani-needler",
+              "name": "Fichetti Tiffani Needler",
               "category": "weapons",
               "subcategory": "pistols",
-              "cost": 120,
+              "accuracy": 5,
+              "damage": "8P(f)",
+              "ap": 5,
+              "mode": [
+                "SA"
+              ],
+              "rc": 0,
+              "ammo": 4,
+              "availability": 5,
+              "restricted": true,
+              "cost": 1000
+            },
+            {
+              "id": "parashield-dart-pistol",
+              "name": "Parashield Dart Pistol",
+              "category": "weapons",
+              "subcategory": "pistols",
+              "accuracy": 5,
+              "damage": "as Drug/Toxin",
+              "mode": [
+                "SA"
+              ],
+              "rc": 0,
+              "ammo": 5,
               "availability": 4,
               "restricted": true,
-              "damage": "6P",
-              "ap": 0,
+              "cost": 600
+            },
+            {
+              "id": "parashield-dart-rifle",
+              "name": "Parashield Dart Rifle",
+              "category": "weapons",
+              "subcategory": "pistols",
+              "accuracy": 6,
+              "damage": "as Drug/Toxin",
               "mode": [
                 "SA"
               ],
               "rc": 0,
               "ammo": 6,
+              "availability": 6,
+              "restricted": true,
+              "cost": 1200
+            },
+            {
+              "id": "remington-roomsweeper",
+              "name": "Remington Roomsweeper",
+              "category": "weapons",
+              "subcategory": "pistols",
+              "cost": 250,
+              "availability": 6,
+              "restricted": true,
+              "damage": "9P(f)",
+              "ap": -1,
+              "mode": [
+                "SA"
+              ],
+              "rc": 0,
+              "ammo": 8,
               "accuracy": 4
             },
             {
@@ -5509,21 +5809,72 @@
               "accuracy": 5
             },
             {
-              "id": "remington-roomsweeper",
-              "name": "Remington Roomsweeper",
+              "id": "streetline-special",
+              "name": "Streetline Special",
               "category": "weapons",
               "subcategory": "pistols",
-              "cost": 250,
-              "availability": 6,
+              "cost": 120,
+              "availability": 4,
               "restricted": true,
-              "damage": "9P(f)",
-              "ap": -1,
+              "damage": "6P",
+              "ap": 0,
               "mode": [
                 "SA"
               ],
               "rc": 0,
-              "ammo": 8,
+              "ammo": 6,
               "accuracy": 4
+            },
+            {
+              "id": "taurus-omni-6",
+              "name": "Taurus Omni-6",
+              "category": "weapons",
+              "subcategory": "pistols",
+              "accuracy": 5,
+              "damage": "6P/7P",
+              "ap": 0,
+              "mode": [
+                "SA",
+                "SS"
+              ],
+              "rc": 0,
+              "ammo": 6,
+              "availability": 3,
+              "restricted": true,
+              "cost": 300
+            },
+            {
+              "id": "walther-palm-pistol",
+              "name": "Walther Palm Pistol",
+              "category": "weapons",
+              "subcategory": "pistols",
+              "accuracy": 4,
+              "damage": "7P",
+              "mode": [
+                "SS",
+                "BF"
+              ],
+              "rc": 0,
+              "ammo": 2,
+              "availability": 4,
+              "restricted": true,
+              "cost": 180
+            },
+            {
+              "id": "yamaha-pulsar",
+              "name": "Yamaha Pulsar",
+              "category": "weapons",
+              "subcategory": "pistols",
+              "accuracy": 5,
+              "damage": "7S(e)",
+              "ap": -5,
+              "mode": [
+                "SA"
+              ],
+              "rc": 0,
+              "ammo": 4,
+              "availability": 0,
+              "cost": 180
             }
           ],
           "smgs": [
@@ -5544,6 +5895,59 @@
               "rc": 2,
               "ammo": 40,
               "accuracy": 5
+            },
+            {
+              "id": "ceska-black-scorpion",
+              "name": "Ceska Black Scorpion",
+              "category": "weapons",
+              "subcategory": "smgs",
+              "accuracy": 5,
+              "damage": "6P",
+              "mode": [
+                "SA",
+                "BF"
+              ],
+              "rc": 1,
+              "ammo": 35,
+              "availability": 6,
+              "restricted": true,
+              "cost": 270
+            },
+            {
+              "id": "colt-cobra-tz-120",
+              "name": "Colt Cobra TZ-120",
+              "category": "weapons",
+              "subcategory": "smgs",
+              "accuracy": 4,
+              "damage": "7P",
+              "mode": [
+                "SA",
+                "BF",
+                "FA"
+              ],
+              "rc": 2,
+              "ammo": 32,
+              "availability": 5,
+              "restricted": true,
+              "cost": 660
+            },
+            {
+              "id": "fn-p93-praetor",
+              "name": "FN P93 Praetor",
+              "category": "weapons",
+              "subcategory": "smgs",
+              "accuracy": 6,
+              "damage": "8P",
+              "mode": [
+                "SA",
+                "BF",
+                "FA"
+              ],
+              "rc": 1,
+              "ammo": 50,
+              "availability": 11,
+              "forbidden": true,
+              "cost": 900
             },
             {
               "id": "hk-227",
@@ -5599,6 +6003,24 @@
               "rc": 0,
               "ammo": 30,
               "accuracy": 5
+            },
+            {
+              "id": "steyr-tmp",
+              "name": "Steyr TMP",
+              "category": "weapons",
+              "subcategory": "smgs",
+              "accuracy": 4,
+              "damage": "7P",
+              "mode": [
+                "SA",
+                "BF",
+                "FA"
+              ],
+              "rc": 0,
+              "ammo": 30,
+              "availability": 8,
+              "restricted": true,
+              "cost": 350
             },
             {
               "id": "uzi-iv",
@@ -5659,6 +6081,54 @@
               "accuracy": 5
             },
             {
+              "id": "ares-antioch-2",
+              "name": "Ares Antioch-2",
+              "category": "weapons",
+              "subcategory": "rifles",
+              "accuracy": 4,
+              "damage": "Grenade",
+              "mode": [
+                "SS"
+              ],
+              "rc": 0,
+              "ammo": 8,
+              "availability": 8,
+              "forbidden": true,
+              "cost": 3200
+            },
+            {
+              "id": "armtech-mgl-12",
+              "name": "ArmTech MGL-12",
+              "category": "weapons",
+              "subcategory": "rifles",
+              "accuracy": 4,
+              "damage": "Grenade",
+              "mode": [
+                "SA"
+              ],
+              "rc": 0,
+              "ammo": 12,
+              "availability": 10,
+              "forbidden": true,
+              "cost": 5000
+            },
+            {
+              "id": "aztechnology-striker",
+              "name": "Aztechnology Striker",
+              "category": "weapons",
+              "subcategory": "rifles",
+              "accuracy": 5,
+              "damage": "Missile",
+              "mode": [
+                "SS"
+              ],
+              "rc": 0,
+              "ammo": 1,
+              "availability": 10,
+              "forbidden": true,
+              "cost": 1200
+            },
+            {
               "id": "colt-m23",
               "name": "Colt M23",
               "category": "weapons",
@@ -5695,6 +6165,108 @@
               "rc": 2,
               "ammo": 35,
               "accuracy": 5
+            },
+            {
+              "id": "ingram-valiant",
+              "name": "Ingram Valiant",
+              "category": "weapons",
+              "subcategory": "rifles",
+              "accuracy": 5,
+              "damage": "9P",
+              "ap": -2,
+              "mode": [
+                "BF",
+                "FA"
+              ],
+              "rc": 2,
+              "ammo": 50,
+              "availability": 12,
+              "forbidden": true,
+              "cost": 5800
+            },
+            {
+              "id": "krime-cannon",
+              "name": "Krime Cannon",
+              "category": "weapons",
+              "subcategory": "rifles",
+              "accuracy": 4,
+              "damage": "16P",
+              "ap": -6,
+              "mode": [
+                "SA"
+              ],
+              "rc": 1,
+              "ammo": 6,
+              "availability": 20,
+              "forbidden": true,
+              "cost": 21000
+            },
+            {
+              "id": "onotari-interceptor",
+              "name": "Onotari Interceptor",
+              "category": "weapons",
+              "subcategory": "rifles",
+              "accuracy": 4,
+              "damage": "Missile",
+              "mode": [
+                "SS"
+              ],
+              "rc": 0,
+              "ammo": 2,
+              "availability": 18,
+              "forbidden": true,
+              "cost": 14000
+            },
+            {
+              "id": "panther-xxl",
+              "name": "Panther XXL",
+              "category": "weapons",
+              "subcategory": "rifles",
+              "accuracy": 5,
+              "damage": "17P",
+              "ap": -6,
+              "mode": [
+                "SS"
+              ],
+              "rc": 0,
+              "ammo": 15,
+              "availability": 20,
+              "forbidden": true,
+              "cost": 43000
+            },
+            {
+              "id": "rpk-hmg",
+              "name": "RPK HMG",
+              "category": "weapons",
+              "subcategory": "rifles",
+              "accuracy": 5,
+              "damage": "12P",
+              "ap": -4,
+              "mode": [
+                "FA"
+              ],
+              "rc": 6,
+              "ammo": 50,
+              "availability": 16,
+              "forbidden": true,
+              "cost": 16300
+            },
+            {
+              "id": "stoner-ares-m202",
+              "name": "Stoner-Ares M202",
+              "category": "weapons",
+              "subcategory": "rifles",
+              "accuracy": 5,
+              "damage": "10P",
+              "ap": -3,
+              "mode": [
+                "FA"
+              ],
+              "rc": 0,
+              "ammo": 50,
+              "availability": 12,
+              "forbidden": true,
+              "cost": 7000
             },
             {
               "id": "yamaha-raiden",
@@ -5769,6 +6341,23 @@
               "rc": 0,
               "ammo": 8,
               "accuracy": 5
+            },
+            {
+              "id": "pjss-model-55",
+              "name": "PJSS Model 55",
+              "category": "weapons",
+              "subcategory": "shotguns",
+              "accuracy": 6,
+              "damage": "11P",
+              "ap": -1,
+              "mode": [
+                "SS"
+              ],
+              "rc": 1,
+              "ammo": 2,
+              "availability": 9,
+              "restricted": true,
+              "cost": 1000
             }
           ],
           "sniperRifles": [
@@ -5788,6 +6377,24 @@
               "rc": 0,
               "ammo": 14,
               "accuracy": 7
+            },
+            {
+              "id": "cavalier-arms-crockett-ebr",
+              "name": "Cavalier Arms Crockett EBR",
+              "category": "weapons",
+              "subcategory": "sniperRifles",
+              "accuracy": 6,
+              "damage": "12P",
+              "ap": -3,
+              "mode": [
+                "SA",
+                "BF"
+              ],
+              "rc": 1,
+              "ammo": 20,
+              "availability": 12,
+              "forbidden": true,
+              "cost": 10300
             },
             {
               "id": "cavalier-arms-crockett-elf",
@@ -5839,20 +6446,26 @@
               "rc": 0,
               "ammo": 5,
               "accuracy": 7
+            },
+            {
+              "id": "ruger-100",
+              "name": "Ruger 100",
+              "category": "weapons",
+              "subcategory": "sniperRifles",
+              "accuracy": 6,
+              "damage": "11P",
+              "ap": -3,
+              "mode": [
+                "SA"
+              ],
+              "rc": 1,
+              "ammo": 8,
+              "availability": 4,
+              "restricted": true,
+              "cost": 1300
             }
           ],
           "throwingWeapons": [
-            {
-              "id": "throwing-knife",
-              "name": "Throwing Knife",
-              "category": "weapons",
-              "subcategory": "throwingWeapons",
-              "cost": 25,
-              "availability": 0,
-              "damage": "(STR+1)P",
-              "ap": -1,
-              "accuracy": 0
-            },
             {
               "id": "shuriken",
               "name": "Shuriken",
@@ -5863,9 +6476,78 @@
               "damage": "(STR+1)P",
               "ap": -1,
               "accuracy": 0
+            },
+            {
+              "id": "throwing-knife",
+              "name": "Throwing Knife",
+              "category": "weapons",
+              "subcategory": "throwingWeapons",
+              "cost": 25,
+              "availability": 0,
+              "damage": "(STR+1)P",
+              "ap": -1,
+              "accuracy": 0
             }
           ],
           "grenades": [
+            {
+              "id": "anti-vehicle-rocket",
+              "name": "Anti-vehicle Rocket",
+              "category": "weapons",
+              "subcategory": "grenades",
+              "damage": "24P",
+              "cost": 2800,
+              "ap": -4,
+              "blast": "-4/m",
+              "availability": 18,
+              "forbidden": true
+            },
+            {
+              "id": "flash-bang-grenade",
+              "name": "Flash-Bang Grenade",
+              "category": "weapons",
+              "subcategory": "grenades",
+              "cost": 100,
+              "availability": 6,
+              "restricted": true,
+              "damage": "10S",
+              "ap": -4,
+              "blast": "10m radius"
+            },
+            {
+              "id": "flash-bang",
+              "name": "Flash-bang",
+              "category": "weapons",
+              "subcategory": "grenades",
+              "damage": "10S",
+              "cost": 100,
+              "ap": -4,
+              "blast": "10m Radius",
+              "availability": 6,
+              "restricted": true
+            },
+            {
+              "id": "flash-pak",
+              "name": "Flash-pak",
+              "category": "weapons",
+              "subcategory": "grenades",
+              "damage": "Special",
+              "cost": 125,
+              "blast": "Special",
+              "availability": 4
+            },
+            {
+              "id": "fragmentation",
+              "name": "Fragmentation",
+              "category": "weapons",
+              "subcategory": "grenades",
+              "damage": "18P (f)",
+              "cost": 100,
+              "ap": 5,
+              "blast": "-1/m",
+              "availability": 11,
+              "forbidden": true
+            },
             {
               "id": "fragmentation-grenade",
               "name": "Fragmentation Grenade",
@@ -5877,6 +6559,40 @@
               "damage": "18P(f)",
               "ap": 2,
               "blast": "-1/m"
+            },
+            {
+              "id": "fragmentation-rocket",
+              "name": "Fragmentation Rocket",
+              "category": "weapons",
+              "subcategory": "grenades",
+              "damage": "23P (f)",
+              "cost": 2000,
+              "ap": 5,
+              "blast": "-1/m",
+              "availability": 12,
+              "forbidden": true
+            },
+            {
+              "id": "gas",
+              "name": "Gas",
+              "category": "weapons",
+              "subcategory": "grenades",
+              "damage": "as Chemical",
+              "cost": 0,
+              "blast": "10m Radius",
+              "availability": 2
+            },
+            {
+              "id": "gas-grenade-cs-tear",
+              "name": "Gas Grenade (CS/Tear)",
+              "category": "weapons",
+              "subcategory": "grenades",
+              "cost": 40,
+              "availability": 4,
+              "restricted": true,
+              "damage": "Nausea",
+              "ap": 0,
+              "blast": "10m radius"
             },
             {
               "id": "high-explosive-grenade",
@@ -5891,16 +6607,39 @@
               "blast": "-2/m"
             },
             {
-              "id": "flash-bang-grenade",
-              "name": "Flash-Bang Grenade",
+              "id": "high-explosive",
+              "name": "High explosive",
               "category": "weapons",
               "subcategory": "grenades",
+              "damage": "16P",
               "cost": 100,
-              "availability": 6,
-              "restricted": true,
-              "damage": "10S",
-              "ap": -4,
-              "blast": "10m radius"
+              "ap": -2,
+              "blast": "-2/m",
+              "availability": 11,
+              "forbidden": true
+            },
+            {
+              "id": "high-explosive-rocket",
+              "name": "High-explosive Rocket",
+              "category": "weapons",
+              "subcategory": "grenades",
+              "damage": "21P",
+              "cost": 2100,
+              "ap": -2,
+              "blast": "-2/m",
+              "availability": 18,
+              "forbidden": true
+            },
+            {
+              "id": "smoke",
+              "name": "Smoke",
+              "category": "weapons",
+              "subcategory": "grenades",
+              "damage": "\u2014",
+              "cost": 40,
+              "blast": "10m Radius",
+              "availability": 4,
+              "restricted": true
             },
             {
               "id": "smoke-grenade",
@@ -5927,20 +6666,35 @@
               "blast": "10m radius"
             },
             {
-              "id": "gas-grenade-cs-tear",
-              "name": "Gas Grenade (CS/Tear)",
+              "id": "thermal-smoke",
+              "name": "Thermal smoke",
               "category": "weapons",
               "subcategory": "grenades",
-              "cost": 40,
-              "availability": 4,
-              "restricted": true,
-              "damage": "Nausea",
-              "ap": 0,
-              "blast": "10m radius"
+              "damage": "\u2014",
+              "cost": 60,
+              "blast": "10m Radius",
+              "availability": 6,
+              "restricted": true
             }
           ]
         },
         "armor": [
+          {
+            "id": "synth-leather",
+            "name": "(Synth)Leather",
+            "category": "armor",
+            "armorRating": 4,
+            "cost": 200,
+            "availability": 0
+          },
+          {
+            "id": "actioneer-business-clothes",
+            "name": "Actioneer Business Clothes",
+            "category": "armor",
+            "armorRating": 8,
+            "cost": 1500,
+            "availability": 8
+          },
           {
             "id": "armor-clothing",
             "name": "Armor Clothing",
@@ -5969,6 +6723,16 @@
             "description": "Concealable armored vest."
           },
           {
+            "id": "ballistic-shield",
+            "name": "Ballistic shield",
+            "category": "armor",
+            "armorRating": 6,
+            "armorModifier": true,
+            "cost": 1200,
+            "availability": 12,
+            "restricted": true
+          },
+          {
             "id": "chameleon-suit",
             "name": "Chameleon Suit",
             "category": "armor",
@@ -5979,6 +6743,14 @@
             "description": "Thermoptic camouflage suit with ruthenium coating."
           },
           {
+            "id": "clothing",
+            "name": "Clothing",
+            "category": "armor",
+            "armorRating": 0,
+            "cost": 0,
+            "availability": 0
+          },
+          {
             "id": "full-body-armor",
             "name": "Full Body Armor",
             "category": "armor",
@@ -5987,6 +6759,15 @@
             "restricted": true,
             "armorRating": 15,
             "description": "Complete body coverage with helmet."
+          },
+          {
+            "id": "full-helmet",
+            "name": "Full Helmet",
+            "category": "armor",
+            "armorRating": 3,
+            "armorModifier": true,
+            "cost": 500,
+            "availability": 0
           },
           {
             "id": "helmet",
@@ -6005,6 +6786,16 @@
             "availability": 4,
             "armorRating": 9,
             "description": "Long armored coat popular with street samurai."
+          },
+          {
+            "id": "riot-shield",
+            "name": "Riot shield",
+            "category": "armor",
+            "armorRating": 6,
+            "armorModifier": true,
+            "cost": 1500,
+            "availability": 10,
+            "restricted": true
           },
           {
             "id": "securetech-ppe",
@@ -6222,6 +7013,33 @@
         ],
         "electronics": [
           {
+            "id": "area-jammer",
+            "name": "Area Jammer",
+            "category": "electronics",
+            "cost": 1000,
+            "availability": 8,
+            "restricted": true,
+            "rating": 6,
+            "description": "Jams wireless signals in an area (Rating 1-6)."
+          },
+          {
+            "id": "binoculars",
+            "name": "Binoculars",
+            "category": "electronics",
+            "cost": 50,
+            "availability": 0,
+            "hasRating": true,
+            "maxRating": 3,
+            "costPerRating": true
+          },
+          {
+            "id": "binoculars-optical",
+            "name": "Binoculars, Optical",
+            "category": "electronics",
+            "cost": 50,
+            "availability": 0
+          },
+          {
             "id": "bug-scanner",
             "name": "Bug Scanner",
             "category": "electronics",
@@ -6229,6 +7047,24 @@
             "availability": 6,
             "rating": 6,
             "description": "Detects surveillance devices (Rating 1-6)."
+          },
+          {
+            "id": "camera",
+            "name": "Camera",
+            "category": "electronics",
+            "cost": 100,
+            "availability": 0,
+            "hasRating": true,
+            "maxRating": 6,
+            "costPerRating": true
+          },
+          {
+            "id": "data-tap",
+            "name": "Data Tap",
+            "category": "electronics",
+            "cost": 300,
+            "availability": 4,
+            "description": "Physical tap for wired connections."
           },
           {
             "id": "directional-jammer",
@@ -6241,39 +7077,55 @@
             "description": "Jams wireless signals in a cone (Rating 1-6)."
           },
           {
-            "id": "area-jammer",
-            "name": "Area Jammer",
+            "id": "directional-mic",
+            "name": "Directional mic",
             "category": "electronics",
-            "cost": 1000,
-            "availability": 8,
-            "restricted": true,
-            "rating": 6,
-            "description": "Jams wireless signals in an area (Rating 1-6)."
-          },
-          {
-            "id": "white-noise-generator",
-            "name": "White Noise Generator",
-            "category": "electronics",
-            "cost": 150,
+            "cost": 50,
             "availability": 4,
-            "rating": 6,
-            "description": "Prevents audio surveillance (Rating 1-6)."
+            "hasRating": true,
+            "maxRating": 6,
+            "costPerRating": true
           },
           {
-            "id": "data-tap",
-            "name": "Data Tap",
+            "id": "goggles",
+            "name": "Goggles",
             "category": "electronics",
-            "cost": 300,
-            "availability": 4,
-            "description": "Physical tap for wired connections."
+            "cost": 50,
+            "availability": 0,
+            "hasRating": true,
+            "maxRating": 6,
+            "costPerRating": true
           },
           {
-            "id": "tag-eraser",
-            "name": "Tag Eraser",
+            "id": "headphones",
+            "name": "Headphones",
             "category": "electronics",
-            "cost": 450,
+            "cost": 50,
+            "availability": 0,
+            "hasRating": true,
+            "maxRating": 6,
+            "costPerRating": true
+          },
+          {
+            "id": "laser-microphone",
+            "name": "Laser Microphone",
+            "category": "electronics",
+            "cost": 100,
             "availability": 6,
-            "description": "Destroys RFID tags."
+            "restricted": true,
+            "hasRating": true,
+            "maxRating": 6,
+            "costPerRating": true,
+            "description": "Long-range audio surveillance (Capacity 1-6)."
+          },
+          {
+            "id": "micro-camera",
+            "name": "Micro-Camera",
+            "category": "electronics",
+            "cost": 100,
+            "availability": 0,
+            "hasRating": true,
+            "maxRating": 1
           },
           {
             "id": "micro-transceiver",
@@ -6284,6 +7136,27 @@
             "description": "Basic wireless communication device."
           },
           {
+            "id": "monocle",
+            "name": "Monocle",
+            "category": "electronics",
+            "cost": 3000,
+            "availability": 12,
+            "hasRating": true,
+            "maxRating": 4,
+            "costPerRating": true,
+            "restricted": true
+          },
+          {
+            "id": "omni-directional-mic",
+            "name": "Omni-directional mic",
+            "category": "electronics",
+            "cost": 50,
+            "availability": 0,
+            "hasRating": true,
+            "maxRating": 6,
+            "costPerRating": true
+          },
+          {
             "id": "subvocal-mic",
             "name": "Subvocal Microphone",
             "category": "electronics",
@@ -6292,14 +7165,21 @@
             "description": "Picks up subvocalized speech."
           },
           {
-            "id": "laser-microphone",
-            "name": "Laser Microphone",
+            "id": "tag-eraser",
+            "name": "Tag Eraser",
             "category": "electronics",
-            "cost": 1000,
+            "cost": 450,
             "availability": 6,
-            "restricted": true,
+            "description": "Destroys RFID tags."
+          },
+          {
+            "id": "white-noise-generator",
+            "name": "White Noise Generator",
+            "category": "electronics",
+            "cost": 150,
+            "availability": 4,
             "rating": 6,
-            "description": "Long-range audio surveillance."
+            "description": "Prevents audio surveillance (Rating 1-6)."
           }
         ],
         "tools": [
@@ -6638,36 +7518,46 @@
             "name": "Fake SIN",
             "category": "miscellaneous",
             "cost": 2500,
-            "availability": 12,
+            "availability": 3,
             "forbidden": true,
-            "rating": 4,
-            "description": "Forged identity (Rating 1-4)."
+            "hasRating": true,
+            "maxRating": 6,
+            "costPerRating": true,
+            "description": "Forged identity (Rating 1-6)."
           },
           {
             "id": "fake-license",
             "name": "Fake License",
             "category": "miscellaneous",
             "cost": 200,
-            "availability": 12,
+            "availability": 3,
             "forbidden": true,
-            "rating": 4,
-            "description": "Forged permit or license (Rating 1-4)."
+            "hasRating": true,
+            "maxRating": 6,
+            "costPerRating": true,
+            "description": "Forged permit or license (Rating 1-6)."
           },
           {
             "id": "contacts-imagelink",
             "name": "Contacts w/ Image Link",
             "category": "miscellaneous",
-            "cost": 150,
+            "cost": 200,
             "availability": 3,
-            "description": "AR-enabled contact lenses."
+            "description": "AR-enabled contact lenses.",
+            "hasRating": true,
+            "maxRating": 3,
+            "costPerRating": true
           },
           {
             "id": "glasses-imagelink",
             "name": "Glasses w/ Image Link",
             "category": "miscellaneous",
-            "cost": 175,
+            "cost": 100,
             "availability": 2,
-            "description": "AR-enabled glasses."
+            "description": "AR-enabled glasses.",
+            "hasRating": true,
+            "maxRating": 4,
+            "costPerRating": true
           },
           {
             "id": "ear-buds",
@@ -6675,7 +7565,10 @@
             "category": "miscellaneous",
             "cost": 50,
             "availability": 0,
-            "description": "Audio device with AR capability."
+            "description": "Audio device with AR capability.",
+            "hasRating": true,
+            "maxRating": 3,
+            "costPerRating": true
           },
           {
             "id": "gecko-tape-gloves",
@@ -6688,13 +7581,15 @@
         ],
         "ammunition": [
           {
-            "id": "ammo-regular",
-            "name": "Regular Ammo (100)",
-            "category": "ammunition",
-            "cost": 20,
-            "availability": 2,
-            "restricted": true,
-            "description": "Standard ammunition."
+            "id": "apds",
+            "name": "APDS",
+            "category": "gear",
+            "subcategory": "ammunition",
+            "cost": 120,
+            "quantity": 10,
+            "apModifier": -4,
+            "availability": 12,
+            "forbidden": true
           },
           {
             "id": "ammo-apds",
@@ -6706,6 +7601,16 @@
             "description": "Armor-Piercing Discarding Sabot (-4 AP)."
           },
           {
+            "id": "assault-cannon",
+            "name": "Assault cannon",
+            "category": "gear",
+            "subcategory": "ammunition",
+            "cost": 400,
+            "quantity": 10,
+            "availability": 12,
+            "forbidden": true
+          },
+          {
             "id": "ammo-explosive",
             "name": "Explosive Ammo (10)",
             "category": "ammunition",
@@ -6713,6 +7618,18 @@
             "availability": 9,
             "forbidden": true,
             "description": "Explosive rounds (+1 DV, -1 AP)."
+          },
+          {
+            "id": "explosive-rounds",
+            "name": "Explosive rounds",
+            "category": "gear",
+            "subcategory": "ammunition",
+            "cost": 80,
+            "quantity": 10,
+            "damageModifier": "+1",
+            "apModifier": -1,
+            "availability": 9,
+            "forbidden": true
           },
           {
             "id": "ammo-flechette",
@@ -6724,12 +7641,89 @@
             "description": "Flechette rounds (+2 DV vs unarmored, +5 AP)."
           },
           {
+            "id": "flechette-rounds",
+            "name": "Flechette rounds",
+            "category": "gear",
+            "subcategory": "ammunition",
+            "cost": 65,
+            "quantity": 10,
+            "damageModifier": "+2",
+            "apModifier": 5,
+            "availability": 6,
+            "restricted": true
+          },
+          {
             "id": "ammo-gel",
             "name": "Gel Rounds (100)",
             "category": "ammunition",
             "cost": 25,
             "availability": 2,
             "description": "Non-lethal rounds (Stun damage, +2 AP)."
+          },
+          {
+            "id": "gel-rounds",
+            "name": "Gel rounds",
+            "category": "gear",
+            "subcategory": "ammunition",
+            "cost": 25,
+            "quantity": 10,
+            "damageModifier": "+0S",
+            "apModifier": 1,
+            "availability": 2,
+            "restricted": true
+          },
+          {
+            "id": "hollow-points",
+            "name": "Hollow points",
+            "category": "gear",
+            "subcategory": "ammunition",
+            "cost": 70,
+            "quantity": 10,
+            "damageModifier": "+1",
+            "apModifier": 2,
+            "availability": 4,
+            "forbidden": true
+          },
+          {
+            "id": "injection-darts",
+            "name": "Injection darts",
+            "category": "gear",
+            "subcategory": "ammunition",
+            "cost": 75,
+            "quantity": 10,
+            "availability": 4,
+            "restricted": true
+          },
+          {
+            "id": "ammo-regular",
+            "name": "Regular Ammo (100)",
+            "category": "ammunition",
+            "cost": 20,
+            "availability": 2,
+            "restricted": true,
+            "description": "Standard ammunition."
+          },
+          {
+            "id": "regular-ammo",
+            "name": "Regular ammo",
+            "category": "gear",
+            "subcategory": "ammunition",
+            "cost": 20,
+            "quantity": 10,
+            "availability": 2,
+            "restricted": true
+          },
+          {
+            "id": "stick-n-shock",
+            "name": "Stick-n-Shock",
+            "category": "gear",
+            "subcategory": "ammunition",
+            "cost": 80,
+            "quantity": 10,
+            "damageModifier": "-2S (e)",
+            "apModifier": -5,
+            "availability": 6,
+            "restricted": true
           },
           {
             "id": "ammo-stick-n-shock",
@@ -6739,6 +7733,25 @@
             "availability": 6,
             "restricted": true,
             "description": "Electrical rounds (-5 DV(e), -5 AP)."
+          },
+          {
+            "id": "taser-dart",
+            "name": "Taser dart",
+            "category": "gear",
+            "subcategory": "ammunition",
+            "cost": 50,
+            "quantity": 10,
+            "availability": 3
+          },
+          {
+            "id": "tracer",
+            "name": "Tracer",
+            "category": "gear",
+            "subcategory": "ammunition",
+            "cost": 60,
+            "quantity": 10,
+            "availability": 6,
+            "restricted": true
           },
           {
             "id": "ammo-tracer",
@@ -6763,7 +7776,10 @@
             "restricted": true,
             "cost": 600,
             "description": "Reduces scatter distance for launched grenades by 2m per net hit instead of 1m.",
-            "compatibleWeapons": ["grenade-launcher", "rocket-launcher"],
+            "compatibleWeapons": [
+              "grenade-launcher",
+              "rocket-launcher"
+            ],
             "page": 432,
             "source": "Core"
           },
@@ -6785,7 +7801,13 @@
             "cost": 150,
             "concealabilityModifier": -1,
             "description": "Adds -1 to the item's Concealability. Only fits pistols and tasers.",
-            "compatibleWeapons": ["holdout", "light-pistol", "heavy-pistol", "machine-pistol", "taser"],
+            "compatibleWeapons": [
+              "holdout",
+              "light-pistol",
+              "heavy-pistol",
+              "machine-pistol",
+              "taser"
+            ],
             "page": 432,
             "source": "Core"
           },
@@ -6800,7 +7822,9 @@
             "cost": 200,
             "costPerRating": true,
             "description": "Provides Recoil Compensation equal to its rating. Cannot be removed once installed.",
-            "incompatibleWeapons": ["revolver"],
+            "incompatibleWeapons": [
+              "revolver"
+            ],
             "page": 432,
             "source": "Core"
           },
@@ -6824,7 +7848,11 @@
             "cost": 350,
             "concealabilityModifier": -1,
             "description": "Forearm slide for quick-drawing small weapons. Threshold for quick draw is 2.",
-            "compatibleWeapons": ["holdout", "light-pistol", "taser"],
+            "compatibleWeapons": [
+              "holdout",
+              "light-pistol",
+              "taser"
+            ],
             "page": 432,
             "source": "Core"
           },
@@ -6865,7 +7893,13 @@
             "availability": 4,
             "cost": 175,
             "description": "Reduces the threshold for quick-drawing by 1. Fits machine pistol or smaller.",
-            "compatibleWeapons": ["holdout", "light-pistol", "heavy-pistol", "machine-pistol", "taser"],
+            "compatibleWeapons": [
+              "holdout",
+              "light-pistol",
+              "heavy-pistol",
+              "machine-pistol",
+              "taser"
+            ],
             "page": 433,
             "source": "Core"
           },
@@ -6889,7 +7923,10 @@
             "forbidden": true,
             "cost": 500,
             "description": "Reduces sound and flash of weapon discharge. -4 dice pool modifier on Perception Tests to notice or locate firer. Cannot be used with revolvers or shotguns.",
-            "incompatibleWeapons": ["revolver", "shotgun"],
+            "incompatibleWeapons": [
+              "revolver",
+              "shotgun"
+            ],
             "page": 433,
             "source": "Core"
           },
@@ -6944,7 +7981,9 @@
             "availability": 2,
             "cost": 25,
             "description": "Allows fully reloading a revolver as a Complex Action instead of one round at a time.",
-            "compatibleWeapons": ["revolver"],
+            "compatibleWeapons": [
+              "revolver"
+            ],
             "page": 433,
             "source": "Core"
           },
@@ -6984,7 +8023,10 @@
             "restricted": true,
             "cost": 3000,
             "description": "Airtight environmental control providing complete protection against contact and inhalation vector chemicals. Requires full body armor with helmet.",
-            "requirements": ["full-body-armor", "helmet"],
+            "requirements": [
+              "full-body-armor",
+              "helmet"
+            ],
             "page": 437,
             "source": "Core"
           },
@@ -10482,7 +11524,7 @@
             "bondingKarmaMultiplier": 3,
             "availability": 0,
             "restricted": true,
-            "description": "A weapon that has been enchanted to serve as a focus. Adds its Force rating to the wielder's Magic attribute for the purposes of weapon skill tests. The bonding cost is (3 + weapon's Reach) × Force in Karma.",
+            "description": "A weapon that has been enchanted to serve as a focus. Adds its Force rating to the wielder's Magic attribute for the purposes of weapon skill tests. The bonding cost is (3 + weapon's Reach) \u00d7 Force in Karma.",
             "page": 318,
             "source": "SR5"
           },

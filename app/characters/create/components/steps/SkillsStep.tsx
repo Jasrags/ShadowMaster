@@ -120,6 +120,17 @@ export function SkillsStep({ state, updateState, budgetValues }: StepProps) {
     return (state.selections.languages || []) as LanguageSkill[];
   }, [state.selections.languages]);
 
+  // Check if character has Bilingual quality
+  const hasBilingual = useMemo(() => {
+    const positiveQualities = (state.selections.positiveQualities || []) as string[];
+    return positiveQualities.includes("bilingual");
+  }, [state.selections.positiveQualities]);
+
+  // Count native languages
+  const nativeLanguageCount = useMemo(() => {
+    return languages.filter(l => l.isNative).length;
+  }, [languages]);
+
   // Get current skill specializations from state
   const specializations = useMemo(() => {
     return (state.selections.skillSpecializations || {}) as Record<string, string>;
@@ -887,9 +898,13 @@ export function SkillsStep({ state, updateState, budgetValues }: StepProps) {
       // Check if adding a native language (free) or regular language
       if (!isNative && knowledgePointsRemaining <= 0) return;
 
-      // Check if we already have a native language
-      const hasNative = languages.some(l => l.isNative);
-      if (isNative && hasNative) return;
+      // Check native language limits
+      // - Everyone gets 1 free native language
+      // - Bilingual quality grants a second free native language
+      if (isNative) {
+        const maxNativeLanguages = hasBilingual ? 2 : 1;
+        if (nativeLanguageCount >= maxNativeLanguages) return;
+      }
 
       const lang: LanguageSkill = {
         name: newLanguage.trim(),
@@ -916,7 +931,7 @@ export function SkillsStep({ state, updateState, budgetValues }: StepProps) {
 
       setNewLanguage("");
     },
-    [newLanguage, languages, knowledgeSkills, knowledgePointsRemaining, creationLimits.nativeLanguageRating, freeKnowledgePoints, state.selections, state.budgets, updateState]
+    [newLanguage, languages, knowledgeSkills, knowledgePointsRemaining, creationLimits.nativeLanguageRating, freeKnowledgePoints, hasBilingual, nativeLanguageCount, state.selections, state.budgets, updateState]
   );
 
   // Handle changing language rating
@@ -976,10 +991,11 @@ export function SkillsStep({ state, updateState, budgetValues }: StepProps) {
     [languages, knowledgeSkills, freeKnowledgePoints, state.selections, state.budgets, updateState]
   );
 
-  // Check if character has a native language
-  const hasNativeLanguage = useMemo(() => {
-    return languages.some(l => l.isNative);
-  }, [languages]);
+  // Check if we've reached max native languages (1 normally, 2 with Bilingual quality)
+  const hasMaxNativeLanguages = useMemo(() => {
+    const maxNativeLanguages = hasBilingual ? 2 : 1;
+    return nativeLanguageCount >= maxNativeLanguages;
+  }, [hasBilingual, nativeLanguageCount]);
 
   // Render skill row
   const renderSkill = (skill: { id: string; name: string; linkedAttribute: string; group?: string | null; suggestedSpecializations?: string[] }) => {
@@ -1756,6 +1772,9 @@ export function SkillsStep({ state, updateState, budgetValues }: StepProps) {
             <p className="font-medium">Native Language</p>
             <p className="mt-1 text-sky-600 dark:text-sky-400">
               Every character gets one native language at rating {creationLimits.nativeLanguageRating} for free.
+              {hasBilingual && (
+                <> Characters with the <strong>Bilingual</strong> quality can have a second native language for free.</>
+              )}
               Additional languages cost points from your Knowledge pool.
             </p>
           </div>
@@ -1799,8 +1818,8 @@ export function SkillsStep({ state, updateState, budgetValues }: StepProps) {
             />
             <button
               onClick={() => handleAddLanguage(true)}
-              disabled={!newLanguage.trim() || hasNativeLanguage}
-              className={`rounded-lg px-4 py-2 text-sm font-medium transition-colors ${newLanguage.trim() && !hasNativeLanguage
+              disabled={!newLanguage.trim() || hasMaxNativeLanguages}
+              className={`rounded-lg px-4 py-2 text-sm font-medium transition-colors ${newLanguage.trim() && !hasMaxNativeLanguages
                 ? "bg-sky-600 text-white hover:bg-sky-700"
                 : "cursor-not-allowed bg-zinc-200 text-zinc-400 dark:bg-zinc-700"
                 }`}
@@ -1819,9 +1838,11 @@ export function SkillsStep({ state, updateState, budgetValues }: StepProps) {
             </button>
           </div>
         </div>
-        {hasNativeLanguage && (
+        {hasMaxNativeLanguages && (
           <p className="mt-2 text-xs text-zinc-500 dark:text-zinc-400">
-            You already have a native language. Additional languages will start at rating 1.
+            {hasBilingual 
+              ? "You already have two native languages (one free + one from Bilingual quality). Additional languages will start at rating 1."
+              : "You already have a native language. Additional languages will start at rating 1."}
           </p>
         )}
       </div>
