@@ -62,6 +62,22 @@ export async function getUserByEmail(email: string): Promise<User | null> {
 }
 
 /**
+ * Get user by username
+ */
+export async function getUserByUsername(username: string): Promise<User | null> {
+  try {
+    const users = await getAllUsers();
+    return users.find((user) => user.username.toLowerCase() === username.toLowerCase()) || null;
+  } catch (error) {
+    // If directory doesn't exist, return null
+    if ((error as NodeJS.ErrnoException).code === "ENOENT") {
+      return null;
+    }
+    throw error;
+  }
+}
+
+/**
  * Normalize user role to always be an array (for backward compatibility)
  */
 function normalizeUserRole(role: UserRole | UserRole[]): UserRole[] {
@@ -79,7 +95,7 @@ export async function getAllUsers(): Promise<User[]> {
     await ensureDataDirectory();
     const files = await fs.readdir(DATA_DIR);
     const jsonFiles = files.filter((file) => file.endsWith(".json"));
-    
+
     const users: User[] = [];
     for (const file of jsonFiles) {
       try {
@@ -119,10 +135,10 @@ export async function createUser(
   userData: Omit<User, "id" | "createdAt" | "lastLogin" | "characters">
 ): Promise<User> {
   await ensureDataDirectory();
-  
+
   const isFirst = await isFirstUser();
   const role: UserRole[] = isFirst ? ["administrator"] : ["user"];
-  
+
   const user: User = {
     id: uuidv4(),
     ...userData,
@@ -131,11 +147,11 @@ export async function createUser(
     lastLogin: null,
     characters: [],
   };
-  
+
   // Atomic write: write to temp file, then rename
   const filePath = getUserFilePath(user.id);
   const tempFilePath = `${filePath}.tmp`;
-  
+
   try {
     await fs.writeFile(tempFilePath, JSON.stringify(user, null, 2), "utf-8");
     await fs.rename(tempFilePath, filePath);
@@ -148,7 +164,7 @@ export async function createUser(
     }
     throw error;
   }
-  
+
   return user;
 }
 
@@ -163,17 +179,17 @@ export async function updateUser(
   if (!user) {
     throw new Error(`User with ID ${userId} not found`);
   }
-  
+
   const updatedUser: User = {
     ...user,
     ...updates,
     id: user.id, // Ensure ID cannot be changed
   };
-  
+
   // Atomic write: write to temp file, then rename
   const filePath = getUserFilePath(userId);
   const tempFilePath = `${filePath}.tmp`;
-  
+
   try {
     await fs.writeFile(tempFilePath, JSON.stringify(updatedUser, null, 2), "utf-8");
     await fs.rename(tempFilePath, filePath);
@@ -186,7 +202,7 @@ export async function updateUser(
     }
     throw error;
   }
-  
+
   return updatedUser;
 }
 
@@ -198,7 +214,7 @@ export async function deleteUser(userId: string): Promise<void> {
   if (!user) {
     throw new Error(`User with ID ${userId} not found`);
   }
-  
+
   const filePath = getUserFilePath(userId);
   try {
     await fs.unlink(filePath);

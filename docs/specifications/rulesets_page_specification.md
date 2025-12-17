@@ -1,7 +1,7 @@
 # Rulesets Page Specification
 
 **Last Updated:** 2025-01-27  
-**Status:** Specification  
+**Status:** Implemented (MVP)
 **Category:** UI/UX, Ruleset Management  
 **Affected Editions:** All editions (architecture supports all)
 
@@ -18,7 +18,7 @@ The Rulesets page (`/rulesets`) provides a comprehensive interface for users to 
 - Preview ruleset content (skills, metatypes, gear, etc.)
 - Compare editions side-by-side (future enhancement)
 
-This page is accessible from the main navigation sidebar and is currently marked as "Coming Soon" in the UI.
+This page is accessible from the main navigation sidebar.
 
 ---
 
@@ -38,11 +38,22 @@ This page is accessible from the main navigation sidebar and is currently marked
 
 ---
 
+## Implementation Record (MVP - 2025-01-27)
+
+The logic for this page was implemented as specified, with the following technical notes:
+
+- **Layout**: The page is wrapped in `AuthenticatedLayout` (consistent with Characters/User Management) rather than inheriting directly from root.
+- **Icons**: Used `lucide-react` for UI icons (`BookOpen`, `UserPlus`, `Layers`, etc.).
+- **Sidebar**: The navigation link "Rulesets" was enabled in `AuthenticatedLayout.tsx`.
+- **Dashboard**: The dashboard card for "View Rulesets" was enabled in `app/page.tsx`.
+
+---
+
 ## Page Structure
 
 ### Route
 - **Path:** `/app/rulesets/page.tsx`
-- **Layout:** Uses `AuthenticatedLayout` (inherits sidebar navigation)
+- **Layout:** Uses `RulesetsLayout` (wrapping `AuthenticatedLayout`)
 - **Authentication:** Required (protected route)
 
 ### Layout Structure
@@ -369,6 +380,7 @@ interface ContentPreviewTabsProps {
 ```
 app/rulesets/
 ├── page.tsx                          # Main page component
+├── layout.tsx                        # AuthenticatedLayout wrapper
 └── components/
     ├── EditionBrowser.tsx            # Edition grid
     ├── EditionDetailView.tsx         # Detail view
@@ -404,16 +416,16 @@ app/rulesets/
 
 ### MVP (Minimum Viable Product)
 
-- [ ] Page displays all available editions in a grid/list view
-- [ ] Each edition card shows: name, year, description, availability status
-- [ ] Clicking an edition opens a detail view
-- [ ] Detail view shows: edition metadata, books list, creation methods
-- [ ] "Create Character" button navigates to character creation with edition pre-selected
-- [ ] Page is responsive (mobile, tablet, desktop)
-- [ ] Dark mode support
-- [ ] Loading states for async data
-- [ ] Error handling for failed API calls
-- [ ] Accessibility: keyboard navigation, screen reader support
+- [x] Page displays all available editions in a grid/list view
+- [x] Each edition card shows: name, year, description, availability status
+- [x] Clicking an edition opens a detail view
+- [x] Detail view shows: edition metadata, books list, creation methods
+- [x] "Create Character" button navigates to character creation with edition pre-selected
+- [x] Page is responsive (mobile, tablet, desktop)
+- [x] Dark mode support
+- [x] Loading states for async data
+- [x] Error handling for failed API calls
+- [x] Accessibility: keyboard navigation, screen reader support
 
 ### Enhanced Features (Future)
 

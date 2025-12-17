@@ -182,11 +182,11 @@ This section provides a comprehensive view of the entire implementation roadmap,
 | 8  | **B14** | **Foci & Spirits**                  | **2 weeks**    | **High**   | ✅ **Complete**      |
 | 9  | **B11** | **Identity/Lifestyle/SIN System**   | **2-3 weeks**  | **High**   | ✅ **Complete**      |
 | 10 | **B10** | **Gear Modifications**              | **2-3 weeks**  | **Medium** | ✅ **Complete**      |
-| 11 | **B2**  | **Sourcebook Integration**          | **2 weeks**    | **Medium** | Not Started      |
-| 12 | **B8**  | **UI/UX Improvements**              | **1-2 weeks**  | **Medium** | Not Started      |
-| 13 | **B4**  | **Combat Tracker**                  | **3-4 weeks**  | **Medium** | Not Started      |
-| 14 | **B3**  | **Inventory Management**            | **1-2 weeks**  | **Medium** | Not Started      |
-| 15 | **B15** | **Draft Character Resume Editing**   | **1-2 weeks**  | **High**   | Not Started      |
+| 11 | **B15** | **Draft Character Resume Editing**   | **1-2 weeks**  | **High**   | ✅ **Complete**      |
+| 12 | **B8**  | **UI/UX Improvements**              | **1-2 weeks**  | **Medium** | ✅ **Complete**      |
+| 13 | **B2**  | **Sourcebook Integration**          | **2 weeks**    | **Medium** | Not Started      |
+| 14 | **B4**  | **Combat Tracker**                  | **3-4 weeks**  | **Medium** | Not Started      |
+| 15 | **B3**  | **Inventory Management**            | **1-2 weeks**  | **Medium** | Not Started      |
 | 16 | **B9**  | **Session Persistence & WebSockets**| **2-3 weeks**  | **Low**    | Not Started      |
 
 ### Completed Work Summary
@@ -217,16 +217,77 @@ This section provides a comprehensive view of the entire implementation roadmap,
 | B11.2 Identity Management | Jan 2025 | IdentitiesStep component, IdentityEditor, LicenseEditor, fake/real SIN support, license management, SIN/license validation, identity-lifestyle associations, identities display in ReviewStep |
 | B11.3 Lifestyle Management | Jan 2025 | LifestyleEditor component, LifestyleModificationSelector, LifestyleSubscriptionSelector with catalog (DocWagon contracts, Food Service), multiple lifestyles support, permanent lifestyle purchase, subscriptions catalog integration, custom expenses/income, lifestyle-identity associations, cost calculations, validation rules |
 | **B11 Complete** | **Jan 2025** | **Full identity/lifestyle/SIN system: multiple identities with fake/real SINs, licenses, multiple lifestyles with modifications/subscriptions, lifestyle-identity associations, all validation rules** |
+| B15 Draft Resume Editing | Jan 2025 | CreationState persistence in character metadata, CreationWizard resume support with characterId prop, /characters/[id]/edit route, draft indicators in characters list, "Resume Creation" button on character detail page, server-side auto-save replacing localStorage |
+| B8 UI/UX Improvements | Jan 2025 | Collapsible sidebar in AuthenticatedLayout and CreationWizard with localStorage persistence, responsive gear catalog layout, mobile-optimized layouts |
 
 ### Estimated Remaining Timeline
 
 | Milestone | Phases | Est. Duration |
 |-----------|--------|---------------|
 | MVP Polish | M0 | ✅ Complete |
-| Character Creation Complete | B7, B12, B13, B14, B11, B6, B10 | ✅ B10, B14, B11, B12, B13 Complete (all ReviewStep displays done) |
-| Sourcebooks & Polish | B2, B8 | 3-4 weeks |
+| Character Creation Complete | B7, B12, B13, B14, B11, B6, B10, B15 | ✅ Complete (all character creation features done) |
+| Sourcebooks & Polish | B2, B8 | ✅ B8 Complete, B2 remaining (2 weeks) |
 | Gameplay Features | B4, B3, B9 | 6-9 weeks |
-| **Total to Beta Release** | All | **20-29 weeks** |
+| **Total to Beta Release** | All | **8-12 weeks** |
+
+### Remaining Tasks by Category
+
+The remaining phases are categorized by their primary purpose to help prioritize development efforts:
+
+#### Foundational (Infrastructure & Content Expansion)
+These phases establish infrastructure or expand content options without directly affecting gameplay:
+
+| Phase | Focus Area | Duration | Priority | Status |
+|-------|-----------|----------|----------|--------|
+| **B2** | **Sourcebook Integration** | **2 weeks** | **Medium** | **Not Started** |
+| **B9** | **Session Persistence & WebSockets** | **2-3 weeks** | **Low** | **Not Started** |
+
+**B2 - Sourcebook Integration:**
+- Enables Run Faster and Street Grimoire content
+- Adds metavariants, new spells, traditions, qualities
+- Expands character creation options
+- **Impact:** Content expansion, more character variety
+
+**B9 - Session Persistence & WebSockets:**
+- Real-time multiplayer infrastructure
+- WebSocket server/client implementation
+- Session state management and conflict resolution
+- **Impact:** Enables collaborative gameplay features
+- **Dependency:** Requires B4 (Combat Tracker) to be useful
+
+#### Character Creation (Post-Creation Workflow)
+These phases improve the character creation workflow but don't affect in-game mechanics:
+
+*All character creation phases are complete. No remaining tasks in this category.*
+
+#### Gameplay (In-Game Features)
+These phases implement features used during actual gameplay sessions:
+
+| Phase | Focus Area | Duration | Priority | Status |
+|-------|-----------|----------|----------|--------|
+| **B4** | **Combat Tracker** | **3-4 weeks** | **Medium** | **Not Started** |
+| **B3** | **Inventory Management** | **1-2 weeks** | **Medium** | **Not Started** |
+
+**B4 - Combat Tracker:**
+- Combat session management
+- Initiative tracking and turn order
+- Damage application and health tracking
+- Combat logging and action history
+- **Impact:** Core GM tool for running combat encounters
+- **Dependency:** Required for B9 (WebSockets) to be useful
+
+**B3 - Inventory Management:**
+- Post-creation gear tracking
+- Equipment slots and encumbrance
+- Ammunition management
+- Item condition tracking
+- **Impact:** Character management during gameplay
+
+**Recommended Development Order:**
+1. **B2** (Sourcebook Integration) - Independent, expands content options
+2. **B4** (Combat Tracker) - Core gameplay feature, enables B9
+3. **B3** (Inventory Management) - Post-creation character management
+4. **B9** (WebSockets) - Depends on B4, adds real-time collaboration
 
 ---
 
@@ -246,8 +307,9 @@ This section provides a comprehensive view of the entire implementation roadmap,
 | B14 | Foci & Spirits                   | 2 weeks    | High   | ✅ Complete  |
 | B11 | Identity/Lifestyle/SIN System    | 2-3 weeks  | High   | ✅ Complete  |
 | B10 | Gear Modifications               | 2-3 weeks  | Medium | ✅ Complete  |
+| B15 | Draft Character Resume Editing   | 1-2 weeks  | High   | ✅ Complete  |
+| B8 | UI/UX Improvements | 1-2 weeks | Medium | ✅ Complete |
 | B2 | Sourcebook Integration | 2 weeks | Medium | Not Started |
-| B8 | UI/UX Improvements | 1-2 weeks | Medium | Not Started |
 | B4 | Combat Tracker | 3-4 weeks | Medium | Not Started |
 | B3 | Inventory Management | 1-2 weeks | Medium | Not Started |
 | B9 | Session Persistence & WebSockets | 2-3 weeks | Low | Not Started |
@@ -3928,9 +3990,9 @@ This milestone addresses desktop layout issues including sidebar width managemen
 
 | Task | Description | Status |
 |------|-------------|--------|
-| B8.1.1 | Make sidebar collapsible to increase main content width | Not Started |
-| B8.1.2 | Add collapse/expand toggle button to sidebar | Not Started |
-| B8.1.3 | Persist sidebar collapse state in localStorage | Not Started |
+| B8.1.1 | Make sidebar collapsible to increase main content width | ✅ Complete |
+| B8.1.2 | Add collapse/expand toggle button to sidebar | ✅ Complete |
+| B8.1.3 | Persist sidebar collapse state in localStorage | ✅ Complete |
 | B8.1.4 | Fix GearStep shopping cart width - give gear catalog more horizontal space | ✅ Complete |
 | B8.1.5 | Consider side-by-side layout for gear catalog and cart on wide screens | ✅ Complete |
 | B8.1.6 | Add responsive breakpoints for cart layout (stack on mobile, side-by-side on desktop) | ✅ Complete |
@@ -3946,7 +4008,7 @@ This milestone addresses desktop layout issues including sidebar width managemen
       "/app/characters/create/components/CreationWizard.tsx",
       "/components/layout/Sidebar.tsx"
     ],
-    "status": "Not Started",
+    "status": "Complete",
     "dependsOn": []
   },
   {
@@ -3956,7 +4018,7 @@ This milestone addresses desktop layout issues including sidebar width managemen
     "files": [
       "/components/layout/Sidebar.tsx"
     ],
-    "status": "Not Started",
+    "status": "Complete",
     "dependsOn": ["B8.1.1"]
   },
   {
@@ -3966,7 +4028,7 @@ This milestone addresses desktop layout issues including sidebar width managemen
     "files": [
       "/components/layout/Sidebar.tsx"
     ],
-    "status": "Not Started",
+    "status": "Complete",
     "dependsOn": ["B8.1.2"]
   },
   {
@@ -5202,10 +5264,10 @@ This milestone establishes the data structure for storing `CreationState` in cha
 
 | Task | Description | Status |
 |------|-------------|--------|
-| B15.1.1 | Add creationState field to CharacterMetadata interface (optional CreationState) | Not Started |
-| B15.1.2 | Update createCharacterDraft to initialize metadata.creationState as null | Not Started |
-| B15.1.3 | Update updateCharacter to preserve creationState when updating other fields | Not Started |
-| B15.1.4 | Ensure GET /api/characters/[id] returns creationState in metadata | Not Started |
+| B15.1.1 | Add creationState field to CharacterMetadata interface (optional CreationState) | ✅ Complete |
+| B15.1.2 | Update createCharacterDraft to initialize metadata.creationState as null | ✅ Complete |
+| B15.1.3 | Update updateCharacter to preserve creationState when updating other fields | ✅ Complete |
+| B15.1.4 | Ensure GET /api/characters/[id] returns creationState in metadata | ✅ Complete |
 
 **Tasks JSON:**
 ```json
@@ -5217,7 +5279,7 @@ This milestone establishes the data structure for storing `CreationState` in cha
     "files": [
       "/lib/types/character.ts"
     ],
-    "status": "Not Started",
+    "status": "Complete",
     "dependsOn": []
   },
   {
@@ -5227,7 +5289,7 @@ This milestone establishes the data structure for storing `CreationState` in cha
     "files": [
       "/lib/storage/characters.ts"
     ],
-    "status": "Not Started",
+    "status": "Complete",
     "dependsOn": ["B15.1.1"]
   },
   {
@@ -5237,7 +5299,7 @@ This milestone establishes the data structure for storing `CreationState` in cha
     "files": [
       "/lib/storage/characters.ts"
     ],
-    "status": "Not Started",
+    "status": "Complete",
     "dependsOn": ["B15.1.1"]
   },
   {
@@ -5247,7 +5309,7 @@ This milestone establishes the data structure for storing `CreationState` in cha
     "files": [
       "/app/api/characters/[id]/route.ts"
     ],
-    "status": "Not Started",
+    "status": "Complete",
     "dependsOn": ["B15.1.1"]
   }
 ]
@@ -5268,13 +5330,13 @@ This milestone modifies the CreationWizard component to accept an optional `char
 
 | Task | Description | Status |
 |------|-------------|--------|
-| B15.2.1 | Add optional characterId prop to CreationWizard component | Not Started |
-| B15.2.2 | Add useEffect to load draft state from API when characterId is provided | Not Started |
-| B15.2.3 | Replace localStorage saveDraft with server-side PATCH /api/characters/[id] | Not Started |
-| B15.2.4 | Update auto-save logic to persist creationState to character.metadata.creationState | Not Started |
-| B15.2.5 | Create /characters/[id]/edit route that loads character and passes characterId to CreationWizard | Not Started |
-| B15.2.6 | Handle loading state while fetching draft from server | Not Started |
-| B15.2.7 | Handle error state if draft cannot be loaded (character not found, not a draft, etc.) | Not Started |
+| B15.2.1 | Add optional characterId prop to CreationWizard component | ✅ Complete |
+| B15.2.2 | Add useEffect to load draft state from API when characterId is provided | ✅ Complete |
+| B15.2.3 | Replace localStorage saveDraft with server-side PATCH /api/characters/[id] | ✅ Complete |
+| B15.2.4 | Update auto-save logic to persist creationState to character.metadata.creationState | ✅ Complete |
+| B15.2.5 | Create /characters/[id]/edit route that loads character and passes characterId to CreationWizard | ✅ Complete |
+| B15.2.6 | Handle loading state while fetching draft from server | ✅ Complete |
+| B15.2.7 | Handle error state if draft cannot be loaded (character not found, not a draft, etc.) | ✅ Complete |
 
 **Tasks JSON:**
 ```json
@@ -5286,7 +5348,7 @@ This milestone modifies the CreationWizard component to accept an optional `char
     "files": [
       "/app/characters/create/components/CreationWizard.tsx"
     ],
-    "status": "Not Started",
+    "status": "Complete",
     "dependsOn": ["B15.1.4"]
   },
   {
@@ -5296,7 +5358,7 @@ This milestone modifies the CreationWizard component to accept an optional `char
     "files": [
       "/app/characters/create/components/CreationWizard.tsx"
     ],
-    "status": "Not Started",
+    "status": "Complete",
     "dependsOn": ["B15.2.1"]
   },
   {
@@ -5307,7 +5369,7 @@ This milestone modifies the CreationWizard component to accept an optional `char
       "/app/characters/create/components/CreationWizard.tsx",
       "/app/api/characters/[id]/route.ts"
     ],
-    "status": "Not Started",
+    "status": "Complete",
     "dependsOn": ["B15.2.1", "B15.1.3"]
   },
   {
@@ -5317,7 +5379,7 @@ This milestone modifies the CreationWizard component to accept an optional `char
     "files": [
       "/app/characters/create/components/CreationWizard.tsx"
     ],
-    "status": "Not Started",
+    "status": "Complete",
     "dependsOn": ["B15.2.3"]
   },
   {
@@ -5327,7 +5389,7 @@ This milestone modifies the CreationWizard component to accept an optional `char
     "files": [
       "/app/characters/[id]/edit/page.tsx"
     ],
-    "status": "Not Started",
+    "status": "Complete",
     "dependsOn": ["B15.2.2"]
   },
   {
@@ -5338,7 +5400,7 @@ This milestone modifies the CreationWizard component to accept an optional `char
       "/app/characters/create/components/CreationWizard.tsx",
       "/app/characters/[id]/edit/page.tsx"
     ],
-    "status": "Not Started",
+    "status": "Complete",
     "dependsOn": ["B15.2.2"]
   },
   {
@@ -5349,7 +5411,7 @@ This milestone modifies the CreationWizard component to accept an optional `char
       "/app/characters/create/components/CreationWizard.tsx",
       "/app/characters/[id]/edit/page.tsx"
     ],
-    "status": "Not Started",
+    "status": "Complete",
     "dependsOn": ["B15.2.2"]
   }
 ]
@@ -5367,12 +5429,12 @@ This milestone updates the characters list page to display draft characters with
 
 | Task | Description | Status |
 |------|-------------|--------|
-| B15.3.1 | Ensure characters list shows draft characters (already shows all characters) | Not Started |
-| B15.3.2 | Add "Draft" status badge to draft character cards (amber/yellow badge) | Not Started |
-| B15.3.3 | Add visual distinction for draft cards (subtle border or background color) | Not Started |
-| B15.3.4 | Update character card click handler to navigate to /characters/[id]/edit for drafts | Not Started |
-| B15.3.5 | Sort drafts by updatedAt descending (most recent first) | Not Started |
-| B15.3.6 | Display last updated timestamp on draft character cards | Not Started |
+| B15.3.1 | Ensure characters list shows draft characters (already shows all characters) | ✅ Complete |
+| B15.3.2 | Add "Draft" status badge to draft character cards (amber/yellow badge) | ✅ Complete |
+| B15.3.3 | Add visual distinction for draft cards (subtle border or background color) | ✅ Complete |
+| B15.3.4 | Update character card click handler to navigate to /characters/[id]/edit for drafts | ✅ Complete |
+| B15.3.5 | Sort drafts by updatedAt descending (most recent first) | ✅ Complete |
+| B15.3.6 | Display last updated timestamp on draft character cards | ✅ Complete |
 
 **Tasks JSON:**
 ```json
@@ -5384,7 +5446,7 @@ This milestone updates the characters list page to display draft characters with
     "files": [
       "/app/characters/page.tsx"
     ],
-    "status": "Not Started",
+    "status": "Complete",
     "dependsOn": []
   },
   {
@@ -5395,7 +5457,7 @@ This milestone updates the characters list page to display draft characters with
       "/app/characters/page.tsx",
       "/app/characters/components/CharacterCard.tsx"
     ],
-    "status": "Not Started",
+    "status": "Complete",
     "dependsOn": ["B15.3.1"]
   },
   {
@@ -5406,7 +5468,7 @@ This milestone updates the characters list page to display draft characters with
       "/app/characters/page.tsx",
       "/app/characters/components/CharacterCard.tsx"
     ],
-    "status": "Not Started",
+    "status": "Complete",
     "dependsOn": ["B15.3.1"]
   },
   {
@@ -5417,7 +5479,7 @@ This milestone updates the characters list page to display draft characters with
       "/app/characters/page.tsx",
       "/app/characters/components/CharacterCard.tsx"
     ],
-    "status": "Not Started",
+    "status": "Complete",
     "dependsOn": ["B15.2.5"]
   },
   {
@@ -5427,7 +5489,7 @@ This milestone updates the characters list page to display draft characters with
     "files": [
       "/app/characters/page.tsx"
     ],
-    "status": "Not Started",
+    "status": "Complete",
     "dependsOn": ["B15.3.1"]
   },
   {
@@ -5438,7 +5500,7 @@ This milestone updates the characters list page to display draft characters with
       "/app/characters/page.tsx",
       "/app/characters/components/CharacterCard.tsx"
     ],
-    "status": "Not Started",
+    "status": "Complete",
     "dependsOn": ["B15.3.1"]
   }
 ]
@@ -5455,9 +5517,9 @@ This milestone adds "Resume Creation" functionality to the character detail page
 
 | Task | Description | Status |
 |------|-------------|--------|
-| B15.4.1 | Add "Resume Creation" button to character detail page for draft characters | Not Started |
-| B15.4.2 | Update edit button to navigate to /characters/[id]/edit for draft characters | Not Started |
-| B15.4.3 | Hide "Resume Creation" button for active (non-draft) characters | Not Started |
+| B15.4.1 | Add "Resume Creation" button to character detail page for draft characters | ✅ Complete |
+| B15.4.2 | Update edit button to navigate to /characters/[id]/edit for draft characters | ✅ Complete |
+| B15.4.3 | Hide "Resume Creation" button for active (non-draft) characters | ✅ Complete |
 
 **Tasks JSON:**
 ```json
@@ -5469,7 +5531,7 @@ This milestone adds "Resume Creation" functionality to the character detail page
     "files": [
       "/app/characters/[id]/page.tsx"
     ],
-    "status": "Not Started",
+    "status": "Complete",
     "dependsOn": ["B15.2.5"]
   },
   {
@@ -5479,7 +5541,7 @@ This milestone adds "Resume Creation" functionality to the character detail page
     "files": [
       "/app/characters/[id]/page.tsx"
     ],
-    "status": "Not Started",
+    "status": "Complete",
     "dependsOn": ["B15.2.5"]
   },
   {
@@ -5489,7 +5551,7 @@ This milestone adds "Resume Creation" functionality to the character detail page
     "files": [
       "/app/characters/[id]/page.tsx"
     ],
-    "status": "Not Started",
+    "status": "Complete",
     "dependsOn": ["B15.4.1"]
   }
 ]

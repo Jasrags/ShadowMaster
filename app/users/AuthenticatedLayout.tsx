@@ -82,11 +82,11 @@ export default function AuthenticatedLayout({ children, currentPath = "/" }: Aut
   const navItems = [
     { id: "home", label: "Home", icon: HomeIcon, href: "/", disabled: false },
     { id: "characters", label: "Characters", icon: UserIcon, href: "/characters", disabled: false, badge: null },
-    { id: "rulesets", label: "Rulesets", icon: BookIcon, href: "/rulesets", disabled: true },
+    { id: "rulesets", label: "Rulesets", icon: BookIcon, href: "/rulesets" },
     ...(user.role.includes("administrator")
       ? [{ id: "users", label: "User Management", icon: UsersIcon, href: "/users", disabled: false }]
       : []),
-    { id: "settings", label: "Settings", icon: SettingsIcon, href: "/settings", disabled: true },
+    { id: "settings", label: "Settings", icon: SettingsIcon, href: "/settings" },
   ];
 
   return (
