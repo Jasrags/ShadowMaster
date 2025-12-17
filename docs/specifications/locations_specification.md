@@ -1,7 +1,7 @@
 # Locations Specification
 
-**Last Updated:** 2025-01-27  
-**Status:** Specification  
+**Last Updated:** 2025-12-17  
+**Status:** Implemented  
 **Category:** Campaign Content, World Building, Reference Management  
 **Affected Editions:** All editions (location concepts are edition-agnostic)
 
@@ -1229,35 +1229,35 @@ app/api/locations/
 
 ### MVP (Minimum Viable Product)
 
-- [ ] GM can create locations with name, type, description
-- [ ] GM can set location visibility (GM-only or players)
-- [ ] GM can add physical properties (address, coordinates, district, city)
-- [ ] GM can create location hierarchies (parent/child)
-- [ ] GM can add GM-only notes and content
-- [ ] GM can link NPCs, grunt teams, and encounters to locations
-- [ ] GM can search and filter locations by type, tags, visibility
-- [ ] Players can view locations shared by GM
-- [ ] System tracks location visits
-- [ ] All forms have proper validation
-- [ ] Success and error messages display appropriately
-- [ ] Page is responsive (mobile, tablet, desktop)
-- [ ] Dark mode support
-- [ ] Accessibility: keyboard navigation, screen reader support
+- [x] GM can create locations with name, type, description
+- [x] GM can set location visibility (GM-only or players)
+- [x] GM can add physical properties (address, coordinates, district, city)
+- [x] GM can create location hierarchies (parent/child)
+- [x] GM can add GM-only notes and content (Basic `gmNotes` supported; structured `gmOnlyContent` for hidden links deferred to Phase 2)
+- [x] GM can link NPCs, grunt teams, and encounters to locations
+- [x] GM can search and filter locations by type, tags, visibility
+- [x] Players can view locations shared by GM
+- [x] System tracks location visits (Aggregate stats implemented; detailed timeline deferred)
+- [x] All forms have proper validation
+- [x] Success and error messages display appropriately
+- [x] Page is responsive (mobile, tablet, desktop)
+- [x] Dark mode support
+- [x] Accessibility: keyboard navigation, screen reader support
 
 ### Enhanced Features (Future)
 
-- [ ] Location templates (create from template, save as template)
-- [ ] Image galleries and map integration
-- [ ] Matrix host and astral properties support
+- [x] Location templates (create from template, save as template)
+- [ ] Image galleries and map integration (Basic URL fields implemented in MVP)
+- [ ] Matrix host and astral properties support (Fields implemented in MVP; deeper integration future)
 - [ ] Location-specific modifiers and rules
 - [ ] Visual location hierarchy tree
 - [ ] Location connection diagrams
 - [ ] Export/import locations between campaigns
-- [ ] Location history timeline
+- [ ] Location history timeline (Detailed chronological log)
 - [ ] Location statistics and analytics
 - [ ] Integration with campaign notes and sessions
 - [ ] Location search with full-text search
-- [ ] Location tags and categorization
+- [ ] Location tags and categorization (Basic tagging implemented in MVP)
 - [ ] Public location template library
 
 ---
@@ -1392,3 +1392,30 @@ This feature enables GMs to build rich campaign worlds with detailed locations, 
 - Location hierarchies support complex world structures (cities → districts → buildings → rooms)
 - Edition support: Location concepts are edition-agnostic, though specific mechanics (Matrix hosts, astral properties) may vary by edition
 
+
+## Implemented Features (Phase 5-7 Additions)
+
+### 12. Location Templates System
+**Location:** `/app/campaigns/[campaignId]/locations/templates/page.tsx`
+- **Create Template:** Create reusable templates from existing locations or from scratch.
+- **Save as Template:** "Save as Template" button on Location Detail page.
+- **Public/Private:** Share templates visibly or keep them private.
+- **Usage:** Create new locations pre-filled from selected templates.
+
+### 13. Export/Import System
+**API Routes:**
+- `GET /api/campaigns/[campaignId]/locations/export`: Download full campaign location data as JSON.
+- `POST /api/campaigns/[campaignId]/locations/import`: Import location data from JSON.
+
+**UI:**
+- **Export Button:** On Locations List page header.
+- **Import Button:** Opens `LocationImportDialog` to paste or upload JSON.
+
+### 14. Location Tree View
+**Location:** `/app/campaigns/[campaignId]/locations/components/LocationTree.tsx`
+- **Visualization:** Recursive tree display of location hierarchy.
+- **Interaction:** Expand/collapse nodes, click to view details.
+- **Toggle:** Switch between List and Tree views on the main locations page.
+
+### 15. Content Generation
+- **Seattle Data:** Pre-generated `seattle-locations.json` included in repository for quick start.

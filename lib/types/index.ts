@@ -182,3 +182,24 @@ export type {
   CampaignsListResponse,
   JoinCampaignRequest,
 } from "./campaign";
+
+// Location types
+export type {
+  LocationType,
+  LocationVisibility,
+  LocationConnectionType,
+  Location,
+  LocationConnection,
+  CreateLocationRequest,
+  UpdateLocationRequest,
+  LinkContentRequest,
+  RecordVisitRequest,
+  LocationResponse,
+  LocationsListResponse,
+  LocationDetailResponse,
+  LocationFilters,
+  LocationTemplate,
+  CreateLocationTemplateRequest,
+  LocationTemplateFilters,
+} from "./location";
+
