@@ -38,6 +38,7 @@ export type {
 export type {
   MagicalPath,
   CharacterStatus,
+  CharacterApprovalStatus,
   Character,
   KnowledgeSkill,
   LanguageSkill,
@@ -166,3 +167,18 @@ export type {
   CharacterProgram,
 } from "./programs";
 
+// Campaign types
+export type {
+  CampaignVisibility,
+  GameplayLevel,
+  CampaignStatus,
+  Campaign,
+  CampaignMembership,
+  CampaignNote,
+  CampaignSession,
+  CreateCampaignRequest,
+  UpdateCampaignRequest,
+  CampaignResponse,
+  CampaignsListResponse,
+  JoinCampaignRequest,
+} from "./campaign";

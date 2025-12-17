@@ -49,13 +49,14 @@ import { ReviewStep } from "./steps/ReviewStep";
 interface CreationWizardProps {
   characterId?: ID;
   initialState?: CreationState;
+  campaignId?: string;
   onCancel: () => void;
   onComplete: (characterId: ID) => void;
 }
 
 
 
-export function CreationWizard({ onCancel, onComplete, characterId: initialCharacterId, initialState }: CreationWizardProps) {
+export function CreationWizard({ onCancel, onComplete, characterId: initialCharacterId, initialState, campaignId }: CreationWizardProps) {
   const { ruleset, editionCode } = useRuleset();
   const creationMethod = useCreationMethod();
   const priorityTable = usePriorityTable();
@@ -137,6 +138,7 @@ export function CreationWizard({ onCancel, onComplete, characterId: initialChara
                 editionCode: editionCode || "sr5",
                 creationMethodId: state.creationMethodId,
                 name: (state.selections.characterName as string) || "Unnamed Runner",
+                campaignId: campaignId, // Link to campaign if provided
               }),
             });
 

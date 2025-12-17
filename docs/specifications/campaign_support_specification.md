@@ -1017,20 +1017,20 @@ app/api/campaigns/
 
 ### MVP (Minimum Viable Product)
 
-- [ ] GM can create a campaign with edition, books, creation methods, and gameplay level
-- [ ] Campaign list page shows user's campaigns (as GM and player)
-- [ ] Campaign detail page displays campaign information
+- [x] GM can create a campaign with edition, books, creation methods, and gameplay level
+- [x] Campaign list page shows user's campaigns (as GM and player)
+- [x] Campaign detail page displays campaign information
 - [ ] GM can invite players by email
-- [ ] Players can join campaigns via invite code
-- [ ] Players can create characters for a campaign (campaign constraints applied)
-- [ ] Campaign characters tab shows all characters (GM) or own characters (player)
-- [ ] Campaign roster tab shows player list (GM-only)
+- [x] Players can join campaigns via invite code
+- [x] Players can create characters for a campaign (campaign constraints applied)
+- [x] Campaign characters tab shows all characters (GM) or own characters (player)
+- [x] Campaign roster tab shows player list (GM-only)
 - [ ] Campaign settings tab allows GM to update campaign configuration
-- [ ] Campaign ruleset configuration affects character creation wizard
-- [ ] All forms have proper validation
-- [ ] Success and error messages display appropriately
-- [ ] Page is responsive (mobile, tablet, desktop)
-- [ ] Dark mode support
+- [x] Campaign ruleset configuration affects character creation wizard
+- [x] All forms have proper validation
+- [x] Success and error messages display appropriately
+- [x] Page is responsive (mobile, tablet, desktop)
+- [x] Dark mode support
 - [ ] Accessibility: keyboard navigation, screen reader support
 
 ### Enhanced Features (Future)
@@ -1043,11 +1043,11 @@ app/api/campaigns/
 - [ ] Campaign statistics dashboard
 - [ ] Export campaign data (characters, notes)
 - [ ] Campaign templates (save common configurations)
-- [ ] Campaign notes and journal entries
-- [ ] Session tracking and scheduling
+- [x] Campaign notes and journal entries *(Phase 3 complete)*
+- [x] Session tracking and scheduling *(Phase 3 complete)*
 - [ ] Campaign-specific dice roller
 - [ ] Campaign announcements/bulletin board
-- [ ] Character approval workflow (GM approves characters)
+- [x] Character approval workflow (GM approves characters) *(Phase 3 complete)*
 - [ ] Campaign calendar integration
 
 ---
@@ -1082,14 +1082,18 @@ app/api/campaigns/
 
 ## Future Enhancements
 
-### Phase 2: Advanced Campaign Features
+### Phase 2: Advanced Campaign Features *(COMPLETED)*
 
-- Campaign templates and presets
-- Campaign calendar and session scheduling
-- Campaign notes and journal system
-- Campaign-specific announcements
-- Player character approval workflow
-- Campaign statistics and analytics
+- [x] Campaign detail page refactored with tabbed interface
+- [x] Campaign characters API and tab
+- [x] Campaign roster management (remove player, regenerate code)
+- [x] Character creation integration with campaigns
+
+### Phase 3: Campaign Management Features *(COMPLETED)*
+
+- [x] Campaign notes and journal system
+- [x] Session tracking and scheduling
+- [x] Character approval workflow
 
 ### Phase 3: Multi-Campaign Management
 
@@ -1101,7 +1105,7 @@ app/api/campaigns/
 
 ### Phase 4: Campaign Content
 
-- Campaign-specific NPCs and locations
+- Campaign-specific NPCs and locations (see [NPCs/Grunts Specification](/docs/specifications/npcs_grunts_specification.md) and [Locations Specification](/docs/specifications/locations_specification.md))
 - Mission/adventure tracking
 - Campaign maps and handouts
 - Campaign-specific house rules automation
@@ -1124,6 +1128,8 @@ app/api/campaigns/
 - **Ruleset System:** `/docs/architecture/ruleset_architecture_and_source_material_system.md`
 - **Edition Support:** `/docs/architecture/edition_support_and_ruleset_architecture.md`
 - **Rules Reference:** `/docs/rules/reference.md` (Campaign Configuration section)
+- **NPCs/Grunts:** `/docs/specifications/npcs_grunts_specification.md`
+- **Locations:** `/docs/specifications/locations_specification.md`
 
 ---
 

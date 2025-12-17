@@ -91,7 +91,7 @@ export async function POST(request: NextRequest) {
 
     // Parse body
     const body = await request.json();
-    const { editionId, editionCode, creationMethodId, name } = body;
+    const { editionId, editionCode, creationMethodId, name, campaignId } = body;
 
     // Validate required fields
     if (!editionId || !editionCode || !creationMethodId) {
@@ -107,7 +107,8 @@ export async function POST(request: NextRequest) {
       editionId,
       editionCode as EditionCode,
       creationMethodId,
-      name
+      name,
+      campaignId // Pass campaign ID if provided
     );
 
     return NextResponse.json({
