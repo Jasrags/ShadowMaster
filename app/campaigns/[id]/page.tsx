@@ -49,7 +49,7 @@ export default function CampaignDetailPage({ params }: CampaignDetailProps) {
     const [books, setBooks] = useState<Book[]>([]);
     const [creationMethods, setCreationMethods] = useState<CreationMethod[]>([]);
     const [copiedCode, setCopiedCode] = useState(false);
-    const [activeTab, setActiveTab] = useState<"overview" | "characters" | "notes" | "sessions" | "roster">("overview");
+    const [activeTab, setActiveTab] = useState<"overview" | "characters" | "notes" | "sessions" | "roster" | "locations">("overview");
 
     useEffect(() => {
         async function fetchCampaign() {
