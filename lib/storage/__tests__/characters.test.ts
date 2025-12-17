@@ -36,7 +36,7 @@ import {
   retireCharacter,
   killCharacter,
 } from '../characters';
-import type { Character, CharacterStatus, EditionCode } from '@/lib/types';
+
 
 const TEST_DATA_DIR = path.join(process.cwd(), '__tests__', 'temp-characters');
 
@@ -94,13 +94,13 @@ describe('Character Storage', () => {
     it('should initialize default values', async () => {
       const draft = await createCharacterDraft(userId1, 'sr5', 'sr5', 'priority');
 
-      expect(draft.specialAttributes.edge).toBe(0);
-      expect(draft.specialAttributes.essence).toBe(6);
+      expect(draft.specialAttributes?.edge).toBe(0);
+      expect(draft.specialAttributes?.essence).toBe(6);
       expect(draft.magicalPath).toBe('mundane');
       expect(draft.nuyen).toBe(0);
       expect(draft.karmaCurrent).toBe(0);
-      expect(draft.condition.physicalDamage).toBe(0);
-      expect(draft.condition.stunDamage).toBe(0);
+      expect(draft.condition?.physicalDamage).toBe(0);
+      expect(draft.condition?.stunDamage).toBe(0);
     });
   });
 
@@ -155,7 +155,7 @@ describe('Character Storage', () => {
 
       const user1Chars = await getUserCharacters(userId1);
       const user2Chars = await getUserCharacters(userId2);
-      
+
       // Should find our test characters
       expect(user1Chars.find(c => c.id === char1.id)?.name).toBe('User1');
       expect(user2Chars.find(c => c.id === char2.id)?.name).toBe('User2');
@@ -211,7 +211,7 @@ describe('Character Storage', () => {
 
       const sr5Chars = await getCharactersByEdition(userId1, 'sr5');
       const sr6Chars = await getCharactersByEdition(userId1, 'sr6');
-      
+
       // Should include our test characters
       expect(sr5Chars.find(c => c.id === sr5Char.id)).toBeDefined();
       expect(sr5Chars.find(c => c.id === sr5Char.id)?.editionCode).toBe('sr5');
@@ -342,7 +342,7 @@ describe('Character Storage', () => {
     it('should update character gear and nuyen', async () => {
       const draft = await createCharacterDraft(userId1, 'sr5', 'sr5', 'priority');
       const gear = [
-        { id: 'gun-1', name: 'Pistol', cost: 500, quantity: 1 },
+        { id: 'gun-1', name: 'Pistol', cost: 500, quantity: 1, category: 'Gear' },
       ];
       const updated = await updateCharacterGear(userId1, draft.id, gear, 1000);
 

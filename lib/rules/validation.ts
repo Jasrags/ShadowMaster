@@ -370,12 +370,10 @@ function validateEssenceMinimum(
  * Custom validation - placeholder for extensibility
  */
 function validateCustom(
-  constraint: CreationConstraint,
-  context: ValidationContext
 ): ValidationError | null {
   // Custom validators would be registered and looked up by name
   // For now, this is a placeholder that always passes
-  const params = constraint.params as { validatorName?: string };
+  // const params = _constraint.params as { validatorName?: string };
 
   // In the future, we could have a registry of custom validators:
   // const validator = customValidators[params.validatorName];
@@ -454,7 +452,7 @@ export function validateCharacter(context: ValidationContext): ValidationResult 
 function validateBasicCharacter(context: ValidationContext): ValidationResult {
   const errors: ValidationError[] = [];
   const warnings: ValidationError[] = [];
-  const { character, ruleset } = context;
+  const { character } = context;
 
   // Check metatype exists
   if (!character.metatype) {
@@ -527,7 +525,7 @@ export function validateStep(
  */
 export function calculateRemainingBudget(
   budgetId: string,
-  character: Character | CharacterDraft,
+  _character: Character | CharacterDraft,
   creationState?: CreationState
 ): number {
   // If we have creation state with tracked budgets, use that

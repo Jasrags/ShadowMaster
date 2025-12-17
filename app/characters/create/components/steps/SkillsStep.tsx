@@ -81,13 +81,13 @@ export function SkillsStep({ state, updateState, budgetValues }: StepProps) {
     if (isFullMage || isAspectedMage) {
       return true;
     }
-    
+
     // For adepts and mystic adepts, check if they have the Astral Perception power
     if (isAdept || isMysticAdept) {
       const adeptPowers = (state.selections.adeptPowers || []) as AdeptPower[];
       return adeptPowers.some(power => power.catalogId === "astral-perception");
     }
-    
+
     // Technomancers and mundane don't have astral perception (but technomancers don't see magical skills anyway)
     return false;
   }, [state.selections.adeptPowers, isFullMage, isAspectedMage, isAdept, isMysticAdept]);
@@ -666,7 +666,7 @@ export function SkillsStep({ state, updateState, budgetValues }: StepProps) {
           return;
         }
       }
-      
+
       const currentValue = skills[skillId] || 0;
       const freeRating = freeSkillRatings[skillId] || 0;
       const purchasedRating = Math.max(0, currentValue - freeRating);
@@ -712,8 +712,8 @@ export function SkillsStep({ state, updateState, budgetValues }: StepProps) {
           "skill-points-total": skillPoints,
         },
       });
-        },
-    [skills, specializations, skillPointsRemaining, freeSkillRatings, state.selections, state.budgets, updateState, skillPoints, hasMagic, isAdept, isMysticAdept, hasAstralPerception]
+    },
+    [skills, specializations, skillPointsRemaining, freeSkillRatings, state.selections, state.budgets, updateState, skillPoints, isAdept, isMysticAdept, hasAstralPerception]
   );
 
   // Handle skill group change
@@ -1002,18 +1002,17 @@ export function SkillsStep({ state, updateState, budgetValues }: StepProps) {
     const value = skills[skill.id] || 0;
     const freeRating = freeSkillRatings[skill.id] || 0;
     const purchasedRating = Math.max(0, value - freeRating);
-    
+
     // Check if Assensing should be disabled (only for adepts/mystic adepts without Astral Perception)
     // Note: Technomancers don't see magical skills at all, so they're already filtered out
     const isAssensingDisabled = skill.id === "assensing" && (isAdept || isMysticAdept) && !hasAstralPerception;
     const assensingDisabledReason = isAssensingDisabled ? getAssensingDisabledReason() : "";
-    
+
     const canIncrease = !isAssensingDisabled && value < MAX_SKILL_RATING && (skillPointsRemaining > 0 || freeRating > 0);
     const canDecrease = purchasedRating > 0; // Can decrease if there's purchased rating (free rating stays)
 
     // Check if this skill is covered by a group
     const groupRating = skill.group ? (groups[skill.group] || 0) : 0;
-    const groupFreeRating = skill.group ? (freeSkillRatings[skill.group] || 0) : 0;
     const effectiveRating = Math.max(value, groupRating);
 
     // Specialization: can only add if skill has individual points (not just group rating)
@@ -1840,7 +1839,7 @@ export function SkillsStep({ state, updateState, budgetValues }: StepProps) {
         </div>
         {hasMaxNativeLanguages && (
           <p className="mt-2 text-xs text-zinc-500 dark:text-zinc-400">
-            {hasBilingual 
+            {hasBilingual
               ? "You already have two native languages (one free + one from Bilingual quality). Additional languages will start at rating 1."
               : "You already have a native language. Additional languages will start at rating 1."}
           </p>

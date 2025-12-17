@@ -52,8 +52,8 @@ function DiceFace({ value, isHit, isOne, isAnimating, size = "md" }: DiceFacePro
   const colorClasses = isHit
     ? "bg-emerald-500/20 border-emerald-500 text-emerald-400 shadow-lg shadow-emerald-500/20"
     : isOne
-    ? "bg-red-500/20 border-red-500 text-red-400 shadow-lg shadow-red-500/20"
-    : "bg-zinc-800 border-zinc-600 text-zinc-300";
+      ? "bg-red-500/20 border-red-500 text-red-400 shadow-lg shadow-red-500/20"
+      : "bg-zinc-800 border-zinc-600 text-zinc-300";
 
   // Dot patterns for each die face (classic d6 style)
   const dotPatterns: Record<number, React.JSX.Element> = {
@@ -310,7 +310,7 @@ export function DiceRoller({
           </Button>
           <span className="text-zinc-500 font-mono">d6</span>
         </div>
-        
+
         {/* Quick Presets */}
         {!compact && (
           <div className="flex gap-1.5 mt-2">
@@ -318,11 +318,10 @@ export function DiceRoller({
               <button
                 key={preset}
                 onClick={() => setPoolSize(preset)}
-                className={`px-2.5 py-1 text-xs font-mono rounded transition-colors ${
-                  poolSize === preset
+                className={`px-2.5 py-1 text-xs font-mono rounded transition-colors ${poolSize === preset
                     ? "bg-emerald-600 text-white"
                     : "bg-zinc-800 text-zinc-400 hover:bg-zinc-700 hover:text-zinc-300"
-                }`}
+                  }`}
               >
                 {preset}
               </button>
@@ -335,13 +334,11 @@ export function DiceRoller({
       <Button
         onPress={rollDice}
         isDisabled={isRolling}
-        className={`w-full font-bold rounded-lg transition-all focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:ring-offset-2 focus:ring-offset-zinc-900 ${
-          compact ? "py-2 text-sm" : "py-3 text-lg"
-        } ${
-          isRolling
+        className={`w-full font-bold rounded-lg transition-all focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:ring-offset-2 focus:ring-offset-zinc-900 ${compact ? "py-2 text-sm" : "py-3 text-lg"
+          } ${isRolling
             ? "bg-zinc-700 text-zinc-400 cursor-wait"
             : "bg-gradient-to-r from-emerald-600 to-emerald-500 text-white hover:from-emerald-500 hover:to-emerald-400 shadow-lg shadow-emerald-500/20 hover:shadow-emerald-500/30"
-        }`}
+          }`}
       >
         {isRolling ? (
           <span className="flex items-center justify-center gap-2">
@@ -354,7 +351,7 @@ export function DiceRoller({
         ) : (
           <span className="flex items-center justify-center gap-2">
             <svg className="w-5 h-5" viewBox="0 0 24 24" fill="currentColor">
-              <path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zM7.5 18c-.83 0-1.5-.67-1.5-1.5S6.67 15 7.5 15s1.5.67 1.5 1.5S8.33 18 7.5 18zm0-9C6.67 9 6 8.33 6 7.5S6.67 6 7.5 6 9 6.67 9 7.5 8.33 9 7.5 9zm4.5 4.5c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5zm4.5 4.5c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5zm0-9c-.83 0-1.5-.67-1.5-1.5S15.67 6 16.5 6s1.5.67 1.5 1.5S17.33 9 16.5 9z"/>
+              <path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zM7.5 18c-.83 0-1.5-.67-1.5-1.5S6.67 15 7.5 15s1.5.67 1.5 1.5S8.33 18 7.5 18zm0-9C6.67 9 6 8.33 6 7.5S6.67 6 7.5 6 9 6.67 9 7.5 8.33 9 7.5 9zm4.5 4.5c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5zm4.5 4.5c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5zm0-9c-.83 0-1.5-.67-1.5-1.5S15.67 6 16.5 6s1.5.67 1.5 1.5S17.33 9 16.5 9z" />
             </svg>
             Roll {poolSize}d6
           </span>
@@ -363,28 +360,25 @@ export function DiceRoller({
 
       {/* Current Result */}
       {currentResult && (
-        <div className={`rounded-lg border overflow-hidden ${
-          currentResult.isCriticalGlitch
+        <div className={`rounded-lg border overflow-hidden ${currentResult.isCriticalGlitch
             ? "border-red-500/50 bg-red-950/30"
             : currentResult.isGlitch
-            ? "border-amber-500/50 bg-amber-950/30"
-            : currentResult.hits > 0
-            ? "border-emerald-500/50 bg-emerald-950/30"
-            : "border-zinc-700 bg-zinc-800/50"
-        }`}>
+              ? "border-amber-500/50 bg-amber-950/30"
+              : currentResult.hits > 0
+                ? "border-emerald-500/50 bg-emerald-950/30"
+                : "border-zinc-700 bg-zinc-800/50"
+          }`}>
           {/* Result Header */}
-          <div className={`px-4 py-2 border-b ${
-            currentResult.isCriticalGlitch
+          <div className={`px-4 py-2 border-b ${currentResult.isCriticalGlitch
               ? "border-red-500/30 bg-red-900/20"
               : currentResult.isGlitch
-              ? "border-amber-500/30 bg-amber-900/20"
-              : "border-zinc-700 bg-zinc-800/30"
-          }`}>
+                ? "border-amber-500/30 bg-amber-900/20"
+                : "border-zinc-700 bg-zinc-800/30"
+            }`}>
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-3">
-                <span className={`text-3xl font-bold font-mono ${
-                  currentResult.hits > 0 ? "text-emerald-400" : "text-zinc-400"
-                }`}>
+                <span className={`text-3xl font-bold font-mono ${currentResult.hits > 0 ? "text-emerald-400" : "text-zinc-400"
+                  }`}>
                   {currentResult.hits}
                 </span>
                 <span className="text-sm text-zinc-400">
@@ -420,7 +414,7 @@ export function DiceRoller({
                 />
               ))}
             </div>
-            
+
             {/* Stats Summary */}
             <div className="flex justify-center gap-6 mt-4 pt-3 border-t border-zinc-700/50">
               <div className="text-center">
@@ -448,7 +442,7 @@ export function DiceRoller({
             <div className="flex-1 h-px bg-zinc-800" />
           </div>
           <div className="space-y-1.5">
-            {history.slice(1).map((result, idx) => (
+            {history.slice(1).map((result) => (
               <RollHistoryItem key={result.timestamp} result={result} compact />
             ))}
           </div>
@@ -470,19 +464,19 @@ export interface EdgeRerollProps {
 
 export function EdgeRerollButton({ result, edgeAvailable, onReroll }: EdgeRerollProps) {
   const [isRerolling, setIsRerolling] = useState(false);
-  
+
   // Count non-hits that can be rerolled
   const rerollableCount = result.dice.filter(d => !d.isHit).length;
 
   const handleReroll = () => {
     if (edgeAvailable <= 0 || rerollableCount === 0) return;
-    
+
     setIsRerolling(true);
-    
+
     setTimeout(() => {
       const newDice: DiceResult[] = result.dice.map(d => {
         if (d.isHit) return d; // Keep hits
-        
+
         // Reroll non-hits
         const value = Math.floor(Math.random() * 6) + 1;
         return {
@@ -532,7 +526,7 @@ export function EdgeRerollButton({ result, edgeAvailable, onReroll }: EdgeReroll
       className="flex items-center gap-2 px-3 py-1.5 text-sm font-medium rounded bg-rose-500/20 text-rose-400 border border-rose-500/30 hover:bg-rose-500/30 transition-colors disabled:opacity-50"
     >
       <svg className="w-4 h-4" viewBox="0 0 24 24" fill="currentColor">
-        <path d="M12 4V1L8 5l4 4V6c3.31 0 6 2.69 6 6 0 1.01-.25 1.97-.7 2.8l1.46 1.46A7.93 7.93 0 0020 12c0-4.42-3.58-8-8-8zm0 14c-3.31 0-6-2.69-6-6 0-1.01.25-1.97.7-2.8L5.24 7.74A7.93 7.93 0 004 12c0 4.42 3.58 8 8 8v3l4-4-4-4v3z"/>
+        <path d="M12 4V1L8 5l4 4V6c3.31 0 6 2.69 6 6 0 1.01-.25 1.97-.7 2.8l1.46 1.46A7.93 7.93 0 0020 12c0-4.42-3.58-8-8-8zm0 14c-3.31 0-6-2.69-6-6 0-1.01.25-1.97.7-2.8L5.24 7.74A7.93 7.93 0 004 12c0 4.42 3.58 8 8 8v3l4-4-4-4v3z" />
       </svg>
       {isRerolling ? "Rerolling..." : `Spend Edge (${edgeAvailable})`}
     </Button>

@@ -48,7 +48,7 @@ export function ContactsStep({ state, updateState, budgetValues }: StepProps) {
 
   // Get contact templates from ruleset
   const contactTemplates = useContactTemplates();
-  
+
   // Get metatypes for attribute minimum lookup
   const metatypes = useMetatypes();
 
@@ -57,18 +57,18 @@ export function ContactsStep({ state, updateState, budgetValues }: StepProps) {
     const attrs = (state.selections.attributes || {}) as Record<string, number>;
     const metatypeId = state.selections.metatype as string;
     const selectedMetatype = metatypes.find((m) => m.id === metatypeId);
-    
+
     // Attributes in state are stored as full values (minimum + allocated points)
     // If undefined, default to metatype minimum
     if (attrs.charisma !== undefined) {
       return attrs.charisma;
     }
-    
+
     // If not set, use metatype minimum
     const metatypeMin = selectedMetatype?.attributes?.charisma && "min" in selectedMetatype.attributes.charisma
       ? selectedMetatype.attributes.charisma.min
       : 1;
-    
+
     return metatypeMin;
   }, [state.selections.attributes, state.selections.metatype, metatypes]);
 
@@ -103,16 +103,15 @@ export function ContactsStep({ state, updateState, budgetValues }: StepProps) {
     const karmaSpentComplexForms = (state.budgets["karma-spent-complex-forms"] as number) || 0;
     const karmaSpentPowerPoints = (state.budgets["karma-spent-power-points"] as number) || 0;
     const karmaSpentFociBonding = (state.budgets["karma-spent-foci-bonding"] as number) || 0;
-    const karmaSpentContacts = (state.budgets["karma-spent-contacts"] as number) || 0;
 
     const karmaTotal = karmaBase + karmaGainedNegative;
-    const karmaSpent = karmaSpentPositive + karmaSpentGear + karmaSpentSpells + karmaSpentComplexForms + karmaSpentPowerPoints + karmaSpentFociBonding + karmaSpentContacts;
+    const karmaSpent = karmaSpentPositive + karmaSpentGear + karmaSpentSpells + karmaSpentComplexForms + karmaSpentPowerPoints + karmaSpentFociBonding;
     return karmaTotal - karmaSpent;
   }, [budgetValues, state.budgets]);
 
   // Free contact karma remaining
   const freeContactKarmaRemaining = freeContactKarma - freeContactKarmaSpent;
-  
+
   // Total karma available for new contacts (free + general)
   const totalKarmaAvailableForContacts = freeContactKarmaRemaining + generalKarmaRemaining;
 
@@ -146,9 +145,9 @@ export function ContactsStep({ state, updateState, budgetValues }: StepProps) {
     const contactCost = contact.connection + contact.loyalty;
     const updatedContacts = [...contacts, contact];
     const newTotalContactKarmaSpent = totalContactKarmaSpent + contactCost;
-    
+
     // Calculate new free contact karma spent vs general karma spent
-    const newFreeContactKarmaSpent = Math.min(newTotalContactKarmaSpent, freeContactKarma);
+    // Calculate new free contact karma spent vs general karma spent
     const newGeneralKarmaSpentOnContacts = Math.max(0, newTotalContactKarmaSpent - freeContactKarma);
 
     updateState({
@@ -205,9 +204,9 @@ export function ContactsStep({ state, updateState, budgetValues }: StepProps) {
     updatedContacts[index] = { ...updatedContacts[index], ...updates };
 
     const newTotalContactKarmaSpent = updatedContacts.reduce((sum, c) => sum + c.connection + c.loyalty, 0);
-    
+
     // Calculate new free contact karma spent vs general karma spent
-    const newFreeContactKarmaSpent = Math.min(newTotalContactKarmaSpent, freeContactKarma);
+    // Calculate new free contact karma spent vs general karma spent
     const newGeneralKarmaSpentOnContacts = Math.max(0, newTotalContactKarmaSpent - freeContactKarma);
 
     updateState({
@@ -230,9 +229,9 @@ export function ContactsStep({ state, updateState, budgetValues }: StepProps) {
     const updatedContacts = contacts.filter((_, i) => i !== index);
 
     const newTotalContactKarmaSpent = totalContactKarmaSpent - (removedContact.connection + removedContact.loyalty);
-    
+
     // Calculate new free contact karma spent vs general karma spent
-    const newFreeContactKarmaSpent = Math.min(newTotalContactKarmaSpent, freeContactKarma);
+    // Calculate new free contact karma spent vs general karma spent
     const newGeneralKarmaSpentOnContacts = Math.max(0, newTotalContactKarmaSpent - freeContactKarma);
 
     updateState({
@@ -336,7 +335,7 @@ export function ContactsStep({ state, updateState, budgetValues }: StepProps) {
                   const newGeneralKarmaRemaining = generalKarmaRemaining - (newGeneralKarmaSpentOnContacts - generalKarmaSpentOnContacts);
                   const newFreeContactKarmaRemaining = freeContactKarma - newFreeContactKarmaSpent;
                   const newTotalAvailable = newFreeContactKarmaRemaining + newGeneralKarmaRemaining;
-                  
+
                   if (newCost >= MIN_KARMA_PER_CONTACT && newCost <= MAX_KARMA_PER_CONTACT && costDiff <= newTotalAvailable) {
                     handleUpdateContact(index, { connection: value });
                   }
@@ -356,7 +355,7 @@ export function ContactsStep({ state, updateState, budgetValues }: StepProps) {
                   const newGeneralKarmaRemaining = generalKarmaRemaining - (newGeneralKarmaSpentOnContacts - generalKarmaSpentOnContacts);
                   const newFreeContactKarmaRemaining = freeContactKarma - newFreeContactKarmaSpent;
                   const newTotalAvailable = newFreeContactKarmaRemaining + newGeneralKarmaRemaining;
-                  
+
                   if (newCost >= MIN_KARMA_PER_CONTACT && newCost <= MAX_KARMA_PER_CONTACT && costDiff <= newTotalAvailable) {
                     handleUpdateContact(index, { loyalty: value });
                   }
@@ -421,8 +420,8 @@ export function ContactsStep({ state, updateState, budgetValues }: StepProps) {
                     <div
                       key={i}
                       className={`h-2 w-2 rounded-full ${i < contact.connection
-                          ? "bg-blue-500"
-                          : "bg-zinc-200 dark:bg-zinc-600"
+                        ? "bg-blue-500"
+                        : "bg-zinc-200 dark:bg-zinc-600"
                         }`}
                     />
                   ))}
@@ -436,8 +435,8 @@ export function ContactsStep({ state, updateState, budgetValues }: StepProps) {
                     <div
                       key={i}
                       className={`h-2 w-2 rounded-full ${i < contact.loyalty
-                          ? "bg-rose-500"
-                          : "bg-zinc-200 dark:bg-zinc-600"
+                        ? "bg-rose-500"
+                        : "bg-zinc-200 dark:bg-zinc-600"
                         }`}
                     />
                   ))}
@@ -515,7 +514,7 @@ export function ContactsStep({ state, updateState, budgetValues }: StepProps) {
               style={{ width: `${freeContactKarma > 0 ? (freeContactKarmaSpent / freeContactKarma) * 100 : 0}%` }}
             />
           </div>
-          
+
           {/* General Karma (for contacts beyond free) */}
           {generalKarmaSpentOnContacts > 0 || freeContactKarmaRemaining <= 0 ? (
             <div className="mt-3 border-t border-indigo-200 pt-3 dark:border-indigo-800">
@@ -535,7 +534,7 @@ export function ContactsStep({ state, updateState, budgetValues }: StepProps) {
               </div>
             </div>
           ) : null}
-          
+
           {/* Total Available */}
           <div className="mt-2 border-t border-indigo-200 pt-2 dark:border-indigo-800">
             <div className="flex items-center justify-between">
@@ -581,8 +580,8 @@ export function ContactsStep({ state, updateState, budgetValues }: StepProps) {
                     type="button"
                     onClick={() => handleSelectTemplate(null)}
                     className={`rounded-lg border px-3 py-1.5 text-sm font-medium transition-colors ${selectedTemplateId === null
-                        ? "border-emerald-500 bg-emerald-50 text-emerald-700 dark:border-emerald-600 dark:bg-emerald-900/30 dark:text-emerald-300"
-                        : "border-zinc-300 text-zinc-600 hover:border-emerald-400 dark:border-zinc-600 dark:text-zinc-400 dark:hover:border-emerald-500"
+                      ? "border-emerald-500 bg-emerald-50 text-emerald-700 dark:border-emerald-600 dark:bg-emerald-900/30 dark:text-emerald-300"
+                      : "border-zinc-300 text-zinc-600 hover:border-emerald-400 dark:border-zinc-600 dark:text-zinc-400 dark:hover:border-emerald-500"
                       }`}
                   >
                     Custom
@@ -594,8 +593,8 @@ export function ContactsStep({ state, updateState, budgetValues }: StepProps) {
                       onClick={() => handleSelectTemplate(template)}
                       title={template.description}
                       className={`rounded-lg border px-3 py-1.5 text-sm font-medium transition-colors ${selectedTemplateId === template.id
-                          ? "border-emerald-500 bg-emerald-50 text-emerald-700 dark:border-emerald-600 dark:bg-emerald-900/30 dark:text-emerald-300"
-                          : "border-zinc-300 text-zinc-600 hover:border-emerald-400 dark:border-zinc-600 dark:text-zinc-400 dark:hover:border-emerald-500"
+                        ? "border-emerald-500 bg-emerald-50 text-emerald-700 dark:border-emerald-600 dark:bg-emerald-900/30 dark:text-emerald-300"
+                        : "border-zinc-300 text-zinc-600 hover:border-emerald-400 dark:border-zinc-600 dark:text-zinc-400 dark:hover:border-emerald-500"
                         }`}
                     >
                       {template.name}
@@ -675,10 +674,10 @@ export function ContactsStep({ state, updateState, budgetValues }: StepProps) {
             <div className="flex items-center justify-between rounded-lg bg-white p-3 dark:bg-zinc-800">
               <span className="text-sm text-zinc-600 dark:text-zinc-400">Contact Cost:</span>
               <span className={`font-medium ${newContactCost > MAX_KARMA_PER_CONTACT
-                  ? "text-red-600 dark:text-red-400"
-                  : newContactCost > totalKarmaAvailableForContacts
-                    ? "text-amber-600 dark:text-amber-400"
-                    : "text-emerald-600 dark:text-emerald-400"
+                ? "text-red-600 dark:text-red-400"
+                : newContactCost > totalKarmaAvailableForContacts
+                  ? "text-amber-600 dark:text-amber-400"
+                  : "text-emerald-600 dark:text-emerald-400"
                 }`}>
                 {newContactCost} Karma
                 {newContactCost > MAX_KARMA_PER_CONTACT && " (max 7)"}
@@ -710,8 +709,8 @@ export function ContactsStep({ state, updateState, budgetValues }: StepProps) {
                 onClick={handleAddContact}
                 disabled={!isNewContactValid}
                 className={`rounded-lg px-4 py-2 text-sm font-medium transition-colors ${isNewContactValid
-                    ? "bg-emerald-500 text-white hover:bg-emerald-600"
-                    : "cursor-not-allowed bg-zinc-200 text-zinc-400 dark:bg-zinc-700"
+                  ? "bg-emerald-500 text-white hover:bg-emerald-600"
+                  : "cursor-not-allowed bg-zinc-200 text-zinc-400 dark:bg-zinc-700"
                   }`}
               >
                 Add Contact
@@ -725,8 +724,8 @@ export function ContactsStep({ state, updateState, budgetValues }: StepProps) {
           onClick={() => setIsAddingContact(true)}
           disabled={totalKarmaAvailableForContacts < MIN_KARMA_PER_CONTACT}
           className={`flex w-full items-center justify-center gap-2 rounded-lg border-2 border-dashed p-4 text-sm font-medium transition-colors ${totalKarmaAvailableForContacts >= MIN_KARMA_PER_CONTACT
-              ? "border-zinc-300 text-zinc-600 hover:border-emerald-400 hover:bg-emerald-50 hover:text-emerald-700 dark:border-zinc-600 dark:text-zinc-400 dark:hover:border-emerald-600 dark:hover:bg-emerald-900/20 dark:hover:text-emerald-400"
-              : "cursor-not-allowed border-zinc-200 text-zinc-400 dark:border-zinc-700 dark:text-zinc-500"
+            ? "border-zinc-300 text-zinc-600 hover:border-emerald-400 hover:bg-emerald-50 hover:text-emerald-700 dark:border-zinc-600 dark:text-zinc-400 dark:hover:border-emerald-600 dark:hover:bg-emerald-900/20 dark:hover:text-emerald-400"
+            : "cursor-not-allowed border-zinc-200 text-zinc-400 dark:border-zinc-700 dark:text-zinc-500"
             }`}
         >
           <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">

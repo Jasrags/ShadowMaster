@@ -11,6 +11,7 @@
 import { describe, it, expect, beforeEach, afterEach } from 'vitest';
 import { promises as fs } from 'fs';
 import path from 'path';
+import { UserRole } from '../../types/user';
 import {
   getUserById,
   getUserByEmail,
@@ -19,7 +20,7 @@ import {
   updateUser,
   deleteUser,
 } from '../users';
-import type { User } from '@/lib/types/user';
+
 
 const TEST_DATA_DIR = path.join(process.cwd(), '__tests__', 'temp-users');
 
@@ -47,14 +48,15 @@ describe('User Storage', () => {
       const userData = {
         email: 'test@example.com',
         passwordHash: 'hashed-password',
-        name: 'Test User',
+        username: 'Test User',
+        role: ['user' as UserRole],
       };
 
       const user = await createUser(userData);
 
       expect(user.id).toBeDefined();
       expect(user.email).toBe('test@example.com');
-      expect(user.name).toBe('Test User');
+      expect(user.username).toBe('Test User');
       expect(user.passwordHash).toBe('hashed-password');
       expect(user.createdAt).toBeDefined();
       expect(user.lastLogin).toBeNull();
@@ -69,7 +71,8 @@ describe('User Storage', () => {
       const userData = {
         email: `admin-${Date.now()}@test.example.com`,
         passwordHash: 'hash',
-        name: 'Admin',
+        username: 'Admin',
+        role: ['administrator' as UserRole],
       };
 
       const user = await createUser(userData);
@@ -87,14 +90,16 @@ describe('User Storage', () => {
       await createUser({
         email: 'admin@example.com',
         passwordHash: 'hash',
-        name: 'Admin',
+        username: 'Admin',
+        role: ['administrator' as UserRole],
       });
 
       // Create second user (regular user)
       const userData = {
         email: 'user@example.com',
         passwordHash: 'hash',
-        name: 'User',
+        username: 'User',
+        role: ['user' as UserRole],
       };
 
       const user = await createUser(userData);
@@ -107,13 +112,15 @@ describe('User Storage', () => {
       const user1 = await createUser({
         email: 'user1@example.com',
         passwordHash: 'hash',
-        name: 'User1',
+        username: 'User1',
+        role: ['user' as UserRole],
       });
 
       const user2 = await createUser({
         email: 'user2@example.com',
         passwordHash: 'hash',
-        name: 'User2',
+        username: 'User2',
+        role: ['user' as UserRole],
       });
 
       expect(user1.id).not.toBe(user2.id);
@@ -125,7 +132,8 @@ describe('User Storage', () => {
       const created = await createUser({
         email: 'test@example.com',
         passwordHash: 'hash',
-        name: 'Test',
+        username: 'Test',
+        role: ['user' as UserRole],
       });
 
       const retrieved = await getUserById(created.id);
@@ -145,7 +153,8 @@ describe('User Storage', () => {
       const user = await createUser({
         email: 'test@example.com',
         passwordHash: 'hash',
-        name: 'Test',
+        username: 'Test',
+        role: ['user' as UserRole],
       });
 
       const retrieved = await getUserById(user.id);
@@ -158,7 +167,8 @@ describe('User Storage', () => {
       await createUser({
         email: 'test@example.com',
         passwordHash: 'hash',
-        name: 'Test',
+        username: 'Test',
+        role: ['user' as UserRole],
       });
 
       const retrieved = await getUserByEmail('test@example.com');
@@ -171,7 +181,8 @@ describe('User Storage', () => {
       await createUser({
         email: 'Test@Example.com',
         passwordHash: 'hash',
-        name: 'Test',
+        username: 'Test',
+        role: ['user' as UserRole],
       });
 
       const retrieved = await getUserByEmail('test@example.com');
@@ -190,13 +201,15 @@ describe('User Storage', () => {
       const user1 = await createUser({
         email: `user1-${timestamp}@test.example.com`,
         passwordHash: 'hash',
-        name: 'User1',
+        username: 'User1',
+        role: ['user' as UserRole],
       });
 
       const user2 = await createUser({
         email: `user2-${timestamp}@test.example.com`,
         passwordHash: 'hash',
-        name: 'User2',
+        username: 'User2',
+        role: ['user' as UserRole],
       });
 
       const users = await getAllUsers();
@@ -220,7 +233,8 @@ describe('User Storage', () => {
       await createUser({
         email: 'valid@example.com',
         passwordHash: 'hash',
-        name: 'Valid',
+        username: 'Valid',
+        role: ['user' as UserRole],
       });
 
       // Create an invalid JSON file manually
@@ -240,15 +254,16 @@ describe('User Storage', () => {
       const user = await createUser({
         email: 'test@example.com',
         passwordHash: 'hash',
-        name: 'Original',
+        username: 'Original',
+        role: ['user' as UserRole],
       });
 
       const updated = await updateUser(user.id, {
-        name: 'Updated',
+        username: 'Updated',
         email: 'updated@example.com',
       });
 
-      expect(updated.name).toBe('Updated');
+      expect(updated.username).toBe('Updated');
       expect(updated.email).toBe('updated@example.com');
       expect(updated.id).toBe(user.id); // ID should not change
     });
@@ -257,7 +272,8 @@ describe('User Storage', () => {
       const user = await createUser({
         email: 'test@example.com',
         passwordHash: 'hash',
-        name: 'Test',
+        username: 'Test',
+        role: ['user' as UserRole],
       });
 
       const updated = await updateUser(user.id, {
@@ -270,7 +286,7 @@ describe('User Storage', () => {
 
     it('should throw error for non-existent user', async () => {
       await expect(
-        updateUser('nonexistent-id', { name: 'Test' })
+        updateUser('nonexistent-id', { username: 'Test' })
       ).rejects.toThrow('not found');
     });
   });
@@ -280,7 +296,8 @@ describe('User Storage', () => {
       const user = await createUser({
         email: 'test@example.com',
         passwordHash: 'hash',
-        name: 'Test',
+        username: 'Test',
+        role: ['user' as UserRole],
       });
 
       await deleteUser(user.id);
@@ -299,16 +316,17 @@ describe('User Storage', () => {
       const user = await createUser({
         email: 'test@example.com',
         passwordHash: 'hash',
-        name: 'Test',
+        username: 'Test',
+        role: ['user' as UserRole],
       });
 
       // Update should use atomic write
-      const updated = await updateUser(user.id, { name: 'Updated' });
+      const updated = await updateUser(user.id, { username: 'Updated' });
 
-      expect(updated.name).toBe('Updated');
+      expect(updated.username).toBe('Updated');
       // Verify file exists and is valid
       const retrieved = await getUserById(user.id);
-      expect(retrieved?.name).toBe('Updated');
+      expect(retrieved?.username).toBe('Updated');
     });
   });
 });

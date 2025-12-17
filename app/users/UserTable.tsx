@@ -38,13 +38,13 @@ export default function UserTable({ initialUsers }: UserTableProps) {
       });
       const response = await fetch(`/api/users?${params}`);
       const data = await response.json();
-      
+
       if (data.success) {
         setUsers(data.users);
       } else {
         setError(data.error || "Failed to fetch users");
       }
-    } catch (err) {
+    } catch {
       setError("An error occurred while fetching users");
     } finally {
       setLoading(false);
@@ -75,7 +75,7 @@ export default function UserTable({ initialUsers }: UserTableProps) {
 
     setLoading(true);
     setError(null);
-    
+
     try {
       const response = await fetch(`/api/users/${editingUser.id}`, {
         method: "PUT",
@@ -86,7 +86,7 @@ export default function UserTable({ initialUsers }: UserTableProps) {
       });
 
       const result = await response.json();
-      
+
       if (result.success) {
         setIsModalOpen(false);
         setEditingUser(null);
@@ -95,7 +95,7 @@ export default function UserTable({ initialUsers }: UserTableProps) {
       } else {
         setError(result.error || "Failed to update user");
       }
-    } catch (err) {
+    } catch {
       setError("An error occurred while updating user");
     } finally {
       setLoading(false);
@@ -110,21 +110,21 @@ export default function UserTable({ initialUsers }: UserTableProps) {
 
     setLoading(true);
     setError(null);
-    
+
     try {
       const response = await fetch(`/api/users/${userId}`, {
         method: "DELETE",
       });
 
       const data = await response.json();
-      
+
       if (data.success) {
         // Refresh users
         await fetchUsers();
       } else {
         setError(data.error || "Failed to delete user");
       }
-    } catch (err) {
+    } catch {
       setError("An error occurred while deleting user");
     } finally {
       setLoading(false);

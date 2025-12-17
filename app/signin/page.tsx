@@ -1,7 +1,6 @@
 "use client";
 
 import { useState } from "react";
-import { useRouter } from "next/navigation";
 import { Link } from "react-aria-components";
 import { useAuth } from "@/lib/auth/AuthProvider";
 import { isValidEmail } from "@/lib/auth/validation";
@@ -18,7 +17,6 @@ export default function SigninPage() {
   }>({});
 
   const { signIn } = useAuth();
-  const router = useRouter();
 
   const validateForm = (): boolean => {
     const errors: typeof validationErrors = {};
@@ -52,8 +50,8 @@ export default function SigninPage() {
       if (!result.success) {
         setError(result.error || "Sign in failed");
       }
-    } catch (err) {
-      setError("An unexpected error occurred");
+    } catch {
+      setError("Invalid email or password");
     } finally {
       setIsLoading(false);
     }
@@ -88,8 +86,8 @@ export default function SigninPage() {
                 aria-invalid={!!validationErrors.email}
                 aria-describedby={validationErrors.email ? "email-error" : undefined}
                 className={`w-full rounded-md border px-3 py-2 text-black placeholder-zinc-500 focus:outline-none focus:ring-2 focus:ring-zinc-500 focus:ring-offset-2 dark:bg-zinc-800 dark:text-zinc-50 dark:placeholder-zinc-400 dark:focus:ring-zinc-600 ${validationErrors.email
-                    ? "border-red-500 dark:border-red-500"
-                    : "border-zinc-300 dark:border-zinc-700"
+                  ? "border-red-500 dark:border-red-500"
+                  : "border-zinc-300 dark:border-zinc-700"
                   }`}
                 placeholder="you@example.com"
               />
@@ -114,8 +112,8 @@ export default function SigninPage() {
                 aria-invalid={!!validationErrors.password}
                 aria-describedby={validationErrors.password ? "password-error" : undefined}
                 className={`w-full rounded-md border px-3 py-2 text-black placeholder-zinc-500 focus:outline-none focus:ring-2 focus:ring-zinc-500 focus:ring-offset-2 dark:bg-zinc-800 dark:text-zinc-50 dark:placeholder-zinc-400 dark:focus:ring-zinc-600 ${validationErrors.password
-                    ? "border-red-500 dark:border-red-500"
-                    : "border-zinc-300 dark:border-zinc-700"
+                  ? "border-red-500 dark:border-red-500"
+                  : "border-zinc-300 dark:border-zinc-700"
                   }`}
                 placeholder="••••••••"
               />

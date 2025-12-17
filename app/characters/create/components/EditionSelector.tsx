@@ -1,7 +1,7 @@
+
 "use client";
 
-import { useState, useEffect } from "react";
-import type { Edition, EditionCode } from "@/lib/types";
+import type { EditionCode } from "@/lib/types";
 
 interface EditionSelectorProps {
   onSelect: (editionCode: EditionCode) => void;
@@ -15,39 +15,37 @@ const AVAILABLE_EDITIONS: Array<{
   description: string;
   available: boolean;
 }> = [
-  {
-    code: "sr5",
-    name: "Shadowrun 5th Edition",
-    year: 2013,
-    description: "Priority-based character creation with Limits system. The most popular edition.",
-    available: true,
-  },
-  {
-    code: "sr6",
-    name: "Shadowrun 6th Edition",
-    year: 2019,
-    description: "Streamlined rules with Edge economy. (Coming Soon)",
-    available: false,
-  },
-  {
-    code: "sr4a",
-    name: "Shadowrun 4th Edition (20A)",
-    year: 2009,
-    description: "Build Point system with wireless Matrix. (Coming Soon)",
-    available: false,
-  },
-  {
-    code: "anarchy",
-    name: "Shadowrun: Anarchy",
-    year: 2016,
-    description: "Narrative rules-light system with Cues. (Coming Soon)",
-    available: false,
-  },
-];
+    {
+      code: "sr5",
+      name: "Shadowrun 5th Edition",
+      year: 2013,
+      description: "Priority-based character creation with Limits system. The most popular edition.",
+      available: true,
+    },
+    {
+      code: "sr6",
+      name: "Shadowrun 6th Edition",
+      year: 2019,
+      description: "Streamlined rules with Edge economy. (Coming Soon)",
+      available: false,
+    },
+    {
+      code: "sr4a",
+      name: "Shadowrun 4th Edition (20A)",
+      year: 2009,
+      description: "Build Point system with wireless Matrix. (Coming Soon)",
+      available: false,
+    },
+    {
+      code: "anarchy",
+      name: "Shadowrun: Anarchy",
+      year: 2016,
+      description: "Narrative rules-light system with Cues. (Coming Soon)",
+      available: false,
+    },
+  ];
 
 export function EditionSelector({ onSelect }: EditionSelectorProps) {
-  const [hoveredEdition, setHoveredEdition] = useState<EditionCode | null>(null);
-
   return (
     <div className="space-y-6">
       <div className="text-center">
@@ -63,24 +61,20 @@ export function EditionSelector({ onSelect }: EditionSelectorProps) {
         {AVAILABLE_EDITIONS.map((edition) => (
           <button
             key={edition.code}
-            onClick={() => edition.available && onSelect(edition.code)}
-            onMouseEnter={() => setHoveredEdition(edition.code)}
-            onMouseLeave={() => setHoveredEdition(null)}
-            disabled={!edition.available}
-            className={`group relative rounded-xl border-2 p-6 text-left transition-all focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:ring-offset-2 dark:focus:ring-offset-black ${
-              edition.available
-                ? "border-zinc-200 bg-white hover:border-emerald-500 hover:shadow-lg dark:border-zinc-700 dark:bg-zinc-900 dark:hover:border-emerald-500"
-                : "cursor-not-allowed border-zinc-100 bg-zinc-50 opacity-60 dark:border-zinc-800 dark:bg-zinc-950"
-            }`}
+            type="button"
+            onClick={() => onSelect(edition.code)}
+            className={`relative rounded-xl border-2 p-4 text-left transition-all outline-none ring-offset-2 focus:ring-2 focus:ring-emerald-500 focus:ring-offset-2 dark:focus:ring-offset-black ${edition.available
+              ? "border-zinc-200 bg-white hover:border-emerald-500 hover:shadow-lg dark:border-zinc-700 dark:bg-zinc-900 dark:hover:border-emerald-500"
+              : "cursor-not-allowed border-zinc-100 bg-zinc-50 opacity-60 dark:border-zinc-800 dark:bg-zinc-950"
+              } `}
           >
             {/* Edition badge */}
             <div className="flex items-start justify-between">
               <div
-                className={`inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-medium ${
-                  edition.available
-                    ? "bg-emerald-100 text-emerald-800 dark:bg-emerald-900 dark:text-emerald-200"
-                    : "bg-zinc-100 text-zinc-600 dark:bg-zinc-800 dark:text-zinc-400"
-                }`}
+                className={`inline - flex items - center rounded - full px - 2.5 py - 0.5 text - xs font - medium ${edition.available
+                  ? "bg-emerald-100 text-emerald-800 dark:bg-emerald-900 dark:text-emerald-200"
+                  : "bg-zinc-100 text-zinc-600 dark:bg-zinc-800 dark:text-zinc-400"
+                  } `}
               >
                 {edition.year}
               </div>
@@ -93,22 +87,20 @@ export function EditionSelector({ onSelect }: EditionSelectorProps) {
 
             {/* Edition name */}
             <h3
-              className={`mt-4 text-lg font-semibold ${
-                edition.available
-                  ? "text-zinc-900 group-hover:text-emerald-600 dark:text-zinc-50 dark:group-hover:text-emerald-400"
-                  : "text-zinc-500 dark:text-zinc-500"
-              }`}
+              className={`mt - 4 text - lg font - semibold ${edition.available
+                ? "text-zinc-900 group-hover:text-emerald-600 dark:text-zinc-50 dark:group-hover:text-emerald-400"
+                : "text-zinc-500 dark:text-zinc-500"
+                } `}
             >
               {edition.name}
             </h3>
 
             {/* Description */}
             <p
-              className={`mt-2 text-sm ${
-                edition.available
-                  ? "text-zinc-600 dark:text-zinc-400"
-                  : "text-zinc-400 dark:text-zinc-600"
-              }`}
+              className={`mt - 2 text - sm ${edition.available
+                ? "text-zinc-600 dark:text-zinc-400"
+                : "text-zinc-400 dark:text-zinc-600"
+                } `}
             >
               {edition.description}
             </p>

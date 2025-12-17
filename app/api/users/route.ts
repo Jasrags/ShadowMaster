@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { requireAdmin } from "@/lib/auth/middleware";
 import { getAllUsers } from "@/lib/storage/users";
-import type { UsersListResponse, PublicUser } from "@/lib/types/user";
+import type { PublicUser } from "@/lib/types/user";
 
 export async function GET(request: NextRequest) {
   try {
@@ -96,7 +96,7 @@ export async function GET(request: NextRequest) {
     });
   } catch (error) {
     const errorMessage = error instanceof Error ? error.message : "An error occurred";
-    
+
     // Check if it's an authentication/authorization error
     if (errorMessage === "Authentication required" || errorMessage === "Administrator access required") {
       return NextResponse.json(

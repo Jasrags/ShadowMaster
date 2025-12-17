@@ -43,7 +43,7 @@ describe('Storage Base Utilities', () => {
     it('should create directory if it does not exist', async () => {
       const dirPath = path.join(TEST_DIR, 'new-dir');
       await ensureDirectory(dirPath);
-      
+
       const exists = await directoryExists(dirPath);
       expect(exists).toBe(true);
     });
@@ -51,7 +51,7 @@ describe('Storage Base Utilities', () => {
     it('should create nested directories recursively', async () => {
       const dirPath = path.join(TEST_DIR, 'level1', 'level2', 'level3');
       await ensureDirectory(dirPath);
-      
+
       const exists = await directoryExists(dirPath);
       expect(exists).toBe(true);
     });
@@ -60,7 +60,7 @@ describe('Storage Base Utilities', () => {
       const dirPath = path.join(TEST_DIR, 'existing-dir');
       await ensureDirectory(dirPath);
       await ensureDirectory(dirPath); // Call again
-      
+
       const exists = await directoryExists(dirPath);
       expect(exists).toBe(true);
     });
@@ -141,7 +141,7 @@ describe('Storage Base Utilities', () => {
 
       // Start write
       const writePromise = writeJsonFile(filePath, testData);
-      
+
       // Check that temp file exists during write
       const tempPath = `${filePath}.tmp`;
       let tempExists = false;
@@ -151,13 +151,14 @@ describe('Storage Base Utilities', () => {
       } catch {
         // Temp file might not exist yet or already renamed
       }
+      expect(tempExists).toBe(true);
 
       await writePromise;
 
       // Final file should exist
       const result = await readJsonFile(filePath);
       expect(result).toEqual(testData);
-      
+
       // Temp file should not exist
       try {
         await fs.access(tempPath);
@@ -213,7 +214,7 @@ describe('Storage Base Utilities', () => {
     it('should create directory if it does not exist', async () => {
       const newDir = path.join(TEST_DIR, 'new-list-dir');
       const result = await listJsonFiles(newDir);
-      
+
       expect(result).toEqual([]);
       const exists = await directoryExists(newDir);
       expect(exists).toBe(true);

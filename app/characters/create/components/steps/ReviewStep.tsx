@@ -104,7 +104,7 @@ export function ReviewStep({ state, updateState, budgetValues }: StepProps) {
   const selectedMentorSpirit = mentorSpirits.find(m => m.id === mentorSpiritId);
 
   // Get attributes from state
-  const attributes = (state.selections.attributes || {}) as Record<string, number>;
+  const attributes = useMemo(() => (state.selections.attributes || {}) as Record<string, number>, [state.selections.attributes]);
   const specialAttributes = (state.selections.specialAttributes || {}) as Record<string, number>;
   const selectedSkills = (state.selections.skills || {}) as Record<string, number>;
   const selectedSkillGroups = (state.selections.skillGroups || {}) as Record<string, number>;
@@ -125,8 +125,8 @@ export function ReviewStep({ state, updateState, budgetValues }: StepProps) {
   const availableLifestyles = useLifestyles();
   const selectedSpells = (state.selections.spells || []) as string[];
   const selectedComplexForms = (state.selections.complexForms || []) as string[];
-  const selectedCyberware = (state.selections.cyberware || []) as CyberwareItem[];
-  const selectedBioware = (state.selections.bioware || []) as BiowareItem[];
+  const selectedCyberware = useMemo(() => (state.selections.cyberware || []) as CyberwareItem[], [state.selections.cyberware]);
+  const selectedBioware = useMemo(() => (state.selections.bioware || []) as BiowareItem[], [state.selections.bioware]);
   const selectedFoci = (state.selections.foci || []) as FocusItem[];
   const selectedPrograms = (state.selections.programs || []) as CharacterProgram[];
   const selectedVehicles = (state.selections.vehicles || []) as Array<{ id: string; name: string; category: string; cost: number }>;
@@ -440,8 +440,8 @@ export function ReviewStep({ state, updateState, budgetValues }: StepProps) {
                 <div
                   key={attr}
                   className={`rounded p-2 text-center ${hasAugBonus
-                      ? "bg-cyan-100 ring-1 ring-cyan-300 dark:bg-cyan-900/30 dark:ring-cyan-700"
-                      : "bg-zinc-100 dark:bg-zinc-700"
+                    ? "bg-cyan-100 ring-1 ring-cyan-300 dark:bg-cyan-900/30 dark:ring-cyan-700"
+                    : "bg-zinc-100 dark:bg-zinc-700"
                     }`}
                 >
                   <div
@@ -495,8 +495,8 @@ export function ReviewStep({ state, updateState, budgetValues }: StepProps) {
             )}
             <div
               className={`rounded px-3 py-2 text-center ${augmentationEffects.totalEssenceLoss > 0
-                  ? "bg-rose-100 ring-1 ring-rose-300 dark:bg-rose-900/30 dark:ring-rose-700"
-                  : "bg-rose-100 dark:bg-rose-900/30"
+                ? "bg-rose-100 ring-1 ring-rose-300 dark:bg-rose-900/30 dark:ring-rose-700"
+                : "bg-rose-100 dark:bg-rose-900/30"
                 }`}
             >
               <div className="text-[10px] font-medium uppercase text-rose-600 dark:text-rose-400">Essence</div>
@@ -517,8 +517,8 @@ export function ReviewStep({ state, updateState, budgetValues }: StepProps) {
         <div className="mt-3 grid grid-cols-2 gap-3 sm:grid-cols-4 lg:grid-cols-5">
           <div
             className={`rounded p-2 text-center cursor-help ${augmentationEffects.initiativeDiceBonus > 0
-                ? "bg-blue-100 ring-1 ring-blue-300 dark:bg-blue-900/30 dark:ring-blue-700"
-                : "bg-blue-50 dark:bg-blue-900/20"
+              ? "bg-blue-100 ring-1 ring-blue-300 dark:bg-blue-900/30 dark:ring-blue-700"
+              : "bg-blue-50 dark:bg-blue-900/20"
               }`}
             title="Initiative: (Intuition + Reaction) + 1D6"
           >
@@ -530,14 +530,14 @@ export function ReviewStep({ state, updateState, budgetValues }: StepProps) {
               )}
             </div>
           </div>
-          <div 
+          <div
             className="rounded bg-zinc-100 p-2 text-center cursor-help dark:bg-zinc-700"
             title="Physical Limit: ⌈((STR × 2) + BOD + REA) / 3⌉"
           >
             <div className="text-[10px] font-medium text-zinc-500 dark:text-zinc-400">Physical Limit</div>
             <div className="font-bold text-zinc-900 dark:text-zinc-100">{derivedStats.physicalLimit}</div>
           </div>
-          <div 
+          <div
             className="rounded bg-zinc-100 p-2 text-center cursor-help dark:bg-zinc-700"
             title="Mental Limit: ⌈((LOG × 2) + INT + WIL) / 3⌉"
           >
@@ -546,8 +546,8 @@ export function ReviewStep({ state, updateState, budgetValues }: StepProps) {
           </div>
           <div
             className={`rounded p-2 text-center cursor-help ${augmentationEffects.totalEssenceLoss > 0
-                ? "bg-zinc-100 ring-1 ring-amber-300 dark:bg-zinc-700 dark:ring-amber-700"
-                : "bg-zinc-100 dark:bg-zinc-700"
+              ? "bg-zinc-100 ring-1 ring-amber-300 dark:bg-zinc-700 dark:ring-amber-700"
+              : "bg-zinc-100 dark:bg-zinc-700"
               }`}
             title="Social Limit: ⌈((CHA × 2) + WIL + ⌈ESS⌉) / 3⌉"
           >
@@ -559,63 +559,63 @@ export function ReviewStep({ state, updateState, budgetValues }: StepProps) {
               )}
             </div>
           </div>
-          <div 
+          <div
             className="rounded bg-red-50 p-2 text-center cursor-help dark:bg-red-900/20"
             title="Physical Condition Monitor: ⌈BOD / 2⌉ + 8"
           >
             <div className="text-[10px] font-medium text-red-600 dark:text-red-400">Physical CM</div>
             <div className="font-bold text-red-700 dark:text-red-300">{derivedStats.physicalCM}</div>
           </div>
-          <div 
+          <div
             className="rounded bg-amber-50 p-2 text-center cursor-help dark:bg-amber-900/20"
             title="Stun Condition Monitor: ⌈WIL / 2⌉ + 8"
           >
             <div className="text-[10px] font-medium text-amber-600 dark:text-amber-400">Stun CM</div>
             <div className="font-bold text-amber-700 dark:text-amber-300">{derivedStats.stunCM}</div>
           </div>
-          <div 
+          <div
             className="rounded bg-zinc-200 p-2 text-center cursor-help dark:bg-zinc-600"
             title="Overflow: BOD + Augmentation bonuses"
           >
             <div className="text-[10px] font-medium text-zinc-600 dark:text-zinc-300">Overflow</div>
             <div className="font-bold text-zinc-800 dark:text-zinc-100">{derivedStats.overflowCM}</div>
           </div>
-          <div 
+          <div
             className="rounded bg-zinc-100 p-2 text-center cursor-help dark:bg-zinc-700"
             title="Composure: CHA + WIL"
           >
             <div className="text-[10px] font-medium text-zinc-500 dark:text-zinc-400">Composure</div>
             <div className="font-bold text-zinc-900 dark:text-zinc-100">{derivedStats.composure}</div>
           </div>
-          <div 
+          <div
             className="rounded bg-zinc-100 p-2 text-center cursor-help dark:bg-zinc-700"
             title="Judge Intentions: CHA + INT"
           >
             <div className="text-[10px] font-medium text-zinc-500 dark:text-zinc-400">Judge Intentions</div>
             <div className="font-bold text-zinc-900 dark:text-zinc-100">{derivedStats.judgeIntentions}</div>
           </div>
-          <div 
+          <div
             className="rounded bg-zinc-100 p-2 text-center cursor-help dark:bg-zinc-700"
             title="Memory: LOG + WIL"
           >
             <div className="text-[10px] font-medium text-zinc-500 dark:text-zinc-400">Memory</div>
             <div className="font-bold text-zinc-900 dark:text-zinc-100">{derivedStats.memory}</div>
           </div>
-          <div 
+          <div
             className="rounded bg-zinc-100 p-2 text-center cursor-help dark:bg-zinc-700"
             title="Lift/Carry: STR × 2"
           >
             <div className="text-[10px] font-medium text-zinc-500 dark:text-zinc-400">Lift/Carry</div>
             <div className="font-bold text-zinc-900 dark:text-zinc-100">{derivedStats.liftCarry}</div>
           </div>
-          <div 
+          <div
             className="rounded bg-zinc-100 p-2 text-center cursor-help dark:bg-zinc-700"
             title="Walk Speed: AGI × 2 meters per Combat Turn"
           >
             <div className="text-[10px] font-medium text-zinc-500 dark:text-zinc-400">Walk Speed</div>
             <div className="font-bold text-zinc-900 dark:text-zinc-100">{derivedStats.walkSpeed}m</div>
           </div>
-          <div 
+          <div
             className="rounded bg-zinc-100 p-2 text-center cursor-help dark:bg-zinc-700"
             title="Run Speed: AGI × 4 meters per Combat Turn"
           >
@@ -850,8 +850,8 @@ export function ReviewStep({ state, updateState, budgetValues }: StepProps) {
               <span
                 key={spellId}
                 className={`rounded-full px-3 py-1 text-sm font-medium ${index < freeSpells
-                    ? "bg-purple-100 text-purple-800 dark:bg-purple-900/50 dark:text-purple-200"
-                    : "bg-amber-100 text-amber-800 dark:bg-amber-900/50 dark:text-amber-200"
+                  ? "bg-purple-100 text-purple-800 dark:bg-purple-900/50 dark:text-purple-200"
+                  : "bg-amber-100 text-amber-800 dark:bg-amber-900/50 dark:text-amber-200"
                   }`}
               >
                 {getSpellName(spellId)}
@@ -911,8 +911,8 @@ export function ReviewStep({ state, updateState, budgetValues }: StepProps) {
               <span
                 key={formId}
                 className={`rounded-full px-3 py-1 text-sm font-medium ${index < freeComplexForms
-                    ? "bg-cyan-100 text-cyan-800 dark:bg-cyan-900/50 dark:text-cyan-200"
-                    : "bg-amber-100 text-amber-800 dark:bg-amber-900/50 dark:text-amber-200"
+                  ? "bg-cyan-100 text-cyan-800 dark:bg-cyan-900/50 dark:text-cyan-200"
+                  : "bg-amber-100 text-amber-800 dark:bg-amber-900/50 dark:text-amber-200"
                   }`}
               >
                 {getComplexFormName(formId)}
@@ -952,11 +952,10 @@ export function ReviewStep({ state, updateState, budgetValues }: StepProps) {
               return (
                 <div
                   key={i}
-                  className={`rounded border p-3 ${
-                    isValid
-                      ? "border-zinc-200 bg-zinc-50 dark:border-zinc-700 dark:bg-zinc-700/50"
-                      : "border-red-300 bg-red-50 dark:border-red-800 dark:bg-red-900/20"
-                  }`}
+                  className={`rounded border p-3 ${isValid
+                    ? "border-zinc-200 bg-zinc-50 dark:border-zinc-700 dark:bg-zinc-700/50"
+                    : "border-red-300 bg-red-50 dark:border-red-800 dark:bg-red-900/20"
+                    }`}
                 >
                   <div className="flex items-start justify-between">
                     <div className="flex-1">
@@ -1083,7 +1082,7 @@ export function ReviewStep({ state, updateState, budgetValues }: StepProps) {
                     // item.cost already includes enhancement costs (from GearStep)
                     const totalCost = item.cost;
                     const hasEnhancements = enhancementsCount > 0;
-                    
+
                     return (
                       <div key={i} className="rounded border border-zinc-200 bg-zinc-50 p-2 dark:border-zinc-700 dark:bg-zinc-800">
                         <div className="flex items-start justify-between">
@@ -1202,7 +1201,7 @@ export function ReviewStep({ state, updateState, budgetValues }: StepProps) {
                 ? lifestyleItem.monthlyCost * 100
                 : lifestyleItem.monthlyCost;
               const displayName = getLifestyleDisplayName(lifestyleItem, availableLifestyles);
-              
+
               // Validation: permanent cost should be 100 × monthly
               const permanentCostValid = !isPermanent || cost === lifestyleItem.monthlyCost * 100;
               const hasModifications = (lifestyleItem.modifications?.length || 0) > 0;
@@ -1214,11 +1213,10 @@ export function ReviewStep({ state, updateState, budgetValues }: StepProps) {
               return (
                 <div
                   key={i}
-                  className={`rounded border p-3 ${
-                    permanentCostValid
-                      ? "border-zinc-200 bg-zinc-50 dark:border-zinc-700 dark:bg-zinc-700/50"
-                      : "border-red-300 bg-red-50 dark:border-red-800 dark:bg-red-900/20"
-                  }`}
+                  className={`rounded border p-3 ${permanentCostValid
+                    ? "border-zinc-200 bg-zinc-50 dark:border-zinc-700 dark:bg-zinc-700/50"
+                    : "border-red-300 bg-red-50 dark:border-red-800 dark:bg-red-900/20"
+                    }`}
                 >
                   <div className="flex items-start justify-between">
                     <div className="flex-1">
@@ -1268,11 +1266,10 @@ export function ReviewStep({ state, updateState, budgetValues }: StepProps) {
                             {lifestyleItem.modifications?.map((mod, modIndex) => (
                               <span
                                 key={modIndex}
-                                className={`inline-flex items-center rounded-full px-2 py-0.5 text-xs ${
-                                  mod.type === "positive"
-                                    ? "bg-emerald-100 text-emerald-800 dark:bg-emerald-900 dark:text-emerald-200"
-                                    : "bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-200"
-                                }`}
+                                className={`inline-flex items-center rounded-full px-2 py-0.5 text-xs ${mod.type === "positive"
+                                  ? "bg-emerald-100 text-emerald-800 dark:bg-emerald-900 dark:text-emerald-200"
+                                  : "bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-200"
+                                  }`}
                               >
                                 {mod.name} ({mod.type === "positive" ? "+" : "-"}
                                 {mod.modifierType === "percentage" ? `${mod.modifier}%` : `${mod.modifier.toLocaleString()}¥`})
@@ -1443,8 +1440,8 @@ export function ReviewStep({ state, updateState, budgetValues }: StepProps) {
                     <span
                       key={i}
                       className={`inline-flex items-center gap-1 rounded-full px-3 py-1 text-sm ${focus.bonded
-                          ? "bg-purple-100 text-purple-800 dark:bg-purple-900/50 dark:text-purple-200"
-                          : "bg-zinc-100 text-zinc-800 dark:bg-zinc-700 dark:text-zinc-200"
+                        ? "bg-purple-100 text-purple-800 dark:bg-purple-900/50 dark:text-purple-200"
+                        : "bg-zinc-100 text-zinc-800 dark:bg-zinc-700 dark:text-zinc-200"
                         }`}
                     >
                       <span>{focus.name}</span>
@@ -1559,7 +1556,7 @@ export function ReviewStep({ state, updateState, budgetValues }: StepProps) {
                           </span>
                           {drone.customName && (
                             <span className="ml-2 text-xs text-zinc-600 dark:text-zinc-400">
-                              "{drone.customName}"
+                              &quot;{drone.customName}&quot;
                             </span>
                           )}
                         </div>
@@ -1632,18 +1629,18 @@ export function ReviewStep({ state, updateState, budgetValues }: StepProps) {
       {/* Validation Status */}
       <div
         className={`rounded-lg p-4 ${hasErrors
-            ? "border border-red-200 bg-red-50 dark:border-red-800 dark:bg-red-900/20"
-            : validationIssues.length > 0
-              ? "border border-amber-200 bg-amber-50 dark:border-amber-800 dark:bg-amber-900/20"
-              : "border border-emerald-200 bg-emerald-50 dark:border-emerald-800 dark:bg-emerald-900/20"
+          ? "border border-red-200 bg-red-50 dark:border-red-800 dark:bg-red-900/20"
+          : validationIssues.length > 0
+            ? "border border-amber-200 bg-amber-50 dark:border-amber-800 dark:bg-amber-900/20"
+            : "border border-emerald-200 bg-emerald-50 dark:border-emerald-800 dark:bg-emerald-900/20"
           }`}
       >
         <h3
           className={`text-sm font-semibold ${hasErrors
-              ? "text-red-800 dark:text-red-200"
-              : validationIssues.length > 0
-                ? "text-amber-800 dark:text-amber-200"
-                : "text-emerald-800 dark:text-emerald-200"
+            ? "text-red-800 dark:text-red-200"
+            : validationIssues.length > 0
+              ? "text-amber-800 dark:text-amber-200"
+              : "text-emerald-800 dark:text-emerald-200"
             }`}
         >
           {hasErrors ? "Issues to Resolve" : validationIssues.length > 0 ? "Warnings" : "Ready to Create"}
@@ -1654,8 +1651,8 @@ export function ReviewStep({ state, updateState, budgetValues }: StepProps) {
               <li
                 key={i}
                 className={`flex items-center gap-2 text-sm ${issue.type === "error"
-                    ? "text-red-700 dark:text-red-300"
-                    : "text-amber-700 dark:text-amber-300"
+                  ? "text-red-700 dark:text-red-300"
+                  : "text-amber-700 dark:text-amber-300"
                   }`}
               >
                 {issue.type === "error" ? (

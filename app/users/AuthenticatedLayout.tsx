@@ -59,6 +59,7 @@ export default function AuthenticatedLayout({ children, currentPath = "/" }: Aut
   useEffect(() => {
     const saved = localStorage.getItem("shadow-master-sidebar-collapsed-global");
     if (saved) {
+      // eslint-disable-next-line react-hooks/set-state-in-effect
       setIsCollapsed(JSON.parse(saved));
     }
   }, []);

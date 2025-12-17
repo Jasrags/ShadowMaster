@@ -12,6 +12,8 @@ import * as sessionModule from '@/lib/auth/session';
 import * as userStorageModule from '@/lib/storage/users';
 import * as characterStorageModule from '@/lib/storage/characters';
 
+import type { Character, UserRole } from "@/lib/types";
+
 // Mock dependencies
 vi.mock('@/lib/auth/session');
 vi.mock('@/lib/storage/users');
@@ -24,12 +26,12 @@ function createMockRequest(url: string, body?: unknown, method = 'GET'): NextReq
     body: body ? JSON.stringify(body) : undefined,
     headers: body ? { 'Content-Type': 'application/json' } : undefined,
   });
-  
+
   // Mock json() method if body is provided
   if (body) {
     (request as { json: () => Promise<unknown> }).json = async () => body;
   }
-  
+
   return request;
 }
 
@@ -39,7 +41,7 @@ describe('GET /api/characters', () => {
     email: 'test@example.com',
     username: 'testuser',
     passwordHash: 'hash',
-    role: ['user'],
+    role: ['user'] as UserRole[],
     createdAt: new Date().toISOString(),
     lastLogin: null,
     characters: [],
@@ -54,7 +56,7 @@ describe('GET /api/characters', () => {
       status: 'draft',
       createdAt: new Date('2024-01-01').toISOString(),
       updatedAt: new Date('2024-01-02').toISOString(),
-    },
+    } as unknown as Character,
     {
       id: 'char-2',
       userId: 'test-user-id',
@@ -63,7 +65,7 @@ describe('GET /api/characters', () => {
       status: 'active',
       createdAt: new Date('2024-01-03').toISOString(),
       updatedAt: new Date('2024-01-04').toISOString(),
-    },
+    } as unknown as Character,
   ];
 
   beforeEach(() => {
@@ -132,7 +134,7 @@ describe('GET /api/characters', () => {
     };
     const draftCharacters = [draftCharacter];
     // Then edition filter is applied
-    const filteredCharacters = draftCharacters.filter((c) => c.editionCode === 'sr5');
+    draftCharacters.filter((c) => c.editionCode === 'sr5');
 
     vi.mocked(sessionModule.getSession).mockResolvedValue('test-user-id');
     vi.mocked(userStorageModule.getUserById).mockResolvedValue(mockUser);
@@ -216,8 +218,8 @@ describe('GET /api/characters', () => {
 
   it('should return 500 when an error occurs', async () => {
     // Suppress console.error output for this test
-    const consoleErrorSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
-    
+    const consoleErrorSpy = vi.spyOn(console, 'error').mockImplementation(() => { });
+
     vi.mocked(sessionModule.getSession).mockResolvedValue('test-user-id');
     vi.mocked(userStorageModule.getUserById).mockResolvedValue(mockUser);
     vi.mocked(characterStorageModule.getUserCharacters).mockRejectedValue(
@@ -231,7 +233,7 @@ describe('GET /api/characters', () => {
     expect(response.status).toBe(500);
     expect(data.success).toBe(false);
     expect(data.error).toBe('Failed to get characters');
-    
+
     // Restore console.error
     consoleErrorSpy.mockRestore();
   });
@@ -243,7 +245,7 @@ describe('POST /api/characters', () => {
     email: 'test@example.com',
     username: 'testuser',
     passwordHash: 'hash',
-    role: ['user'],
+    role: ['user'] as UserRole[],
     createdAt: new Date().toISOString(),
     lastLogin: null,
     characters: [],
@@ -427,8 +429,8 @@ describe('POST /api/characters', () => {
 
   it('should return 500 when an error occurs', async () => {
     // Suppress console.error output for this test
-    const consoleErrorSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
-    
+    const consoleErrorSpy = vi.spyOn(console, 'error').mockImplementation(() => { });
+
     const requestBody = {
       editionId: 'sr5',
       editionCode: 'sr5',
@@ -453,7 +455,7 @@ describe('POST /api/characters', () => {
     expect(response.status).toBe(500);
     expect(data.success).toBe(false);
     expect(data.error).toBe('Failed to create character');
-    
+
     // Restore console.error
     consoleErrorSpy.mockRestore();
   });

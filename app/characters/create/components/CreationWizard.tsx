@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useMemo, useCallback, useEffect } from "react";
-import { Button, Link } from "react-aria-components";
+import { Button } from "react-aria-components";
 import {
   useRuleset,
   useCreationMethod,
@@ -89,53 +89,11 @@ export function CreationWizard({ onCancel, onComplete, characterId: initialChara
   // Track character ID (prop or created during auto-save)
   const [characterId, setCharacterId] = useState<string | undefined>(initialCharacterId);
 
-  // Track if we have a draft (either from prop or local)
-  const [hasDraft, setHasDraft] = useState(!!initialCharacterId);
-
   // Track saving state
   const [isSaving, setIsSaving] = useState(false);
   const [saveError, setSaveError] = useState<string | null>(null);
 
-  // Update hasDraft status
-  useEffect(() => {
-    setHasDraft(!!characterId);
-  }, [characterId]);
 
-  // Server-side save function (debounced in effect)
-  const saveToServer = useCallback(async (currentState: CreationState) => {
-    try {
-      if (characterId) {
-        // Update existing draft
-        await fetch(`/api/characters/${characterId}`, {
-          method: "PATCH",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
-            metadata: {
-              creationState: {
-                ...currentState,
-                characterId // Ensure ID matches
-              }
-            }
-          })
-        });
-      } else {
-        // Create new draft if we have enough info (at least creation method)
-        // We need edition info which is not in creation state directly, but we have hooks
-        // Actually, we use the POST /api/characters endpoint which requires name, edition, etc.
-        // We might not want to create the server draft IMMEDIATELY on first selection if we don't have basic info?
-        // But the wizard starts with defaults.
-
-        // Wait, the POST /api/characters requries: editionId, editionCode, creationMethodId, name.
-        // We have these (name defaults to "Unnamed Runner").
-        // But wait, if we create it now, it shows up in list. That's desired.
-
-        // However, we need to be careful not to spam POST.
-        // Let's rely on the auto-save effect to call this.
-      }
-    } catch (e) {
-      console.error("Auto-save failed", e);
-    }
-  }, [characterId]);
 
   // Auto-save effect
   useEffect(() => {
@@ -241,7 +199,7 @@ export function CreationWizard({ onCancel, onComplete, characterId: initialChara
       }
       return true;
     });
-  }, [creationMethod, state.selections["magical-path"]]);
+  }, [creationMethod, state.selections]);
 
   // Current step
   const currentStep = steps[state.currentStep];
@@ -575,14 +533,7 @@ export function CreationWizard({ onCancel, onComplete, characterId: initialChara
         }
 
         // Validate permanent lifestyle costs
-        lifestyles.forEach((lifestyle, index) => {
-          const isPermanent = lifestyle.modifications?.some((mod) => mod.catalogId === "permanent-lifestyle" || mod.name.toLowerCase() === "permanent lifestyle") || false;
-          if (isPermanent) {
-            const expectedCost = lifestyle.monthlyCost * 100;
-            // Note: The actual cost calculation happens in LifestyleEditor, so we just check the structure
-            // The validation that permanent cost = 100 × monthly is enforced in the editor
-          }
-        });
+
         break;
       }
 
@@ -678,7 +629,7 @@ export function CreationWizard({ onCancel, onComplete, characterId: initialChara
     }
 
     return errors;
-  }, [currentStep?.id, state.priorities, state.selections, state.budgets, budgetValues]);
+  }, [currentStep?.id, state.priorities, state.selections, state.budgets, budgetValues, priorityTable]);
 
   // Current step validation errors
   const currentStepErrors = useMemo(() => {
@@ -711,17 +662,14 @@ export function CreationWizard({ onCancel, onComplete, characterId: initialChara
   }, [currentStepErrors]);
 
   // Extract cart data from state
-  const gearItems: GearItem[] = (state.selections?.gear as GearItem[]) || [];
-  const weapons: Weapon[] = (state.selections?.weapons as Weapon[]) || [];
-  const armorItems: ArmorItem[] = (state.selections?.armor as ArmorItem[]) || [];
-  const cyberwareItems: CyberwareItem[] =
-    (state.selections?.cyberware as CyberwareItem[]) || [];
-  const biowareItems: BiowareItem[] =
-    (state.selections?.bioware as BiowareItem[]) || [];
-  const lifestyle: Lifestyle | null =
-    (state.selections?.lifestyle as Lifestyle) || null;
-  const selectedSpells: string[] = (state.selections?.spells as string[]) || [];
-  const selectedAdeptPowers: AdeptPower[] = (state.selections?.adeptPowers as AdeptPower[]) || [];
+  const gearItems = useMemo(() => (state.selections?.gear as GearItem[]) || [], [state.selections?.gear]);
+  const weapons = useMemo(() => (state.selections?.weapons as Weapon[]) || [], [state.selections?.weapons]);
+  const armorItems = useMemo(() => (state.selections?.armor as ArmorItem[]) || [], [state.selections?.armor]);
+  const cyberwareItems = useMemo(() => (state.selections?.cyberware as CyberwareItem[]) || [], [state.selections?.cyberware]);
+  const biowareItems = useMemo(() => (state.selections?.bioware as BiowareItem[]) || [], [state.selections?.bioware]);
+  const lifestyle = useMemo(() => (state.selections?.lifestyle as Lifestyle) || null, [state.selections?.lifestyle]);
+  const selectedSpells = useMemo(() => (state.selections?.spells as string[]) || [], [state.selections?.spells]);
+  const selectedAdeptPowers = useMemo(() => (state.selections?.adeptPowers as AdeptPower[]) || [], [state.selections?.adeptPowers]);
 
   // Calculate cart totals (including weapons and armor with their mods)
   const gearTotal = useMemo(() => {
@@ -1043,10 +991,7 @@ export function CreationWizard({ onCancel, onComplete, characterId: initialChara
 
   const handleRemoveCyberware = useCallback(
     (index: number) => {
-      const item = cyberwareItems[index];
       const updatedCyberware = cyberwareItems.filter((_, i) => i !== index);
-      const currentNuyenSpent = (state.budgets["nuyen-spent-augmentations"] as number) || 0;
-      const currentEssenceSpent = (state.budgets["essence-spent"] as number) || 0;
       updateState({
         selections: {
           ...state.selections,
@@ -1054,15 +999,12 @@ export function CreationWizard({ onCancel, onComplete, characterId: initialChara
         },
       });
     },
-    [cyberwareItems, state.selections, state.budgets, updateState]
+    [cyberwareItems, state.selections, updateState]
   );
 
   const handleRemoveBioware = useCallback(
     (index: number) => {
-      const item = biowareItems[index];
       const updatedBioware = biowareItems.filter((_, i) => i !== index);
-      const currentNuyenSpent = (state.budgets["nuyen-spent-augmentations"] as number) || 0;
-      const currentEssenceSpent = (state.budgets["essence-spent"] as number) || 0;
       updateState({
         selections: {
           ...state.selections,
@@ -1070,7 +1012,7 @@ export function CreationWizard({ onCancel, onComplete, characterId: initialChara
         },
       });
     },
-    [biowareItems, state.selections, state.budgets, updateState]
+    [biowareItems, state.selections, updateState]
   );
 
   const handleRemoveSpell = useCallback(
@@ -1124,12 +1066,14 @@ export function CreationWizard({ onCancel, onComplete, characterId: initialChara
     onCancel();
   }, [state.priorities, onCancel]);
 
+  /*
   // Start fresh (clear draft)
   const startFresh = useCallback(() => {
     // clearDraft();
     setState(createInitialState());
     setHasDraft(false);
   }, []);
+  */
 
   // Calculate derived stats using SR5 formulas
   const calculateDerivedStats = useCallback((
