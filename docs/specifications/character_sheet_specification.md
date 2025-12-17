@@ -105,13 +105,13 @@ The Character Sheet is the primary interface for viewing and interacting with Sh
 
 ### Future Phases (Backlog)
 
-**Phase 2 - Enhanced Details (Content Expansion):**
-- [ ] **Detailed Weapon Cards:** Show Damage, AP, Reach, Recoil, and Ammo for weapons (currently just generic gear items).
-- [ ] **Detailed Armor Cards:** Show Armor Rating, Encumbrance, and modification details.
-- [ ] **Spells & Powers:** Dedicated section for Spells (Mages) showing type, range, damage, drain.
-- [ ] **Adept Powers:** Dedicated section for Adept Powers showing cost and level.
-- [ ] **Cyber/Bioware:** Dedicated section detailing grade, essence cost, and bonuses.
-- [ ] **Vehicle/Drone:** Dedicated section for vehicles containing their specific attributes (Handling, Speed, etc.).
+### Phase 2 - Enhanced Details (Content Expansion) - COMPLETED
+- [x] **Detailed Weapon Cards:** Show Damage, AP, Reach, Recoil, and Ammo for weapons with specialized labels.
+- [x] **Detailed Armor Cards:** Show Armor Rating and modification details (Mounts/Capacity).
+- [x] **Spells & Powers:** Dedicated section for Spells (Mages) showing type, range, duration, and drain.
+- [x] **Adept Powers:** Dedicated section for Adept Powers showing cost and level.
+- [x] **Cyber/Bioware:** Dedicated section detailing grade, essence cost, and category.
+- [x] **Vehicle/Drone:** Dedicated section for vehicles containing their specific attributes (Handling, Speed, Body, Armor, etc.).
 
 **Phase 3 - Interactive Management:**
 - [ ] **Condition Monitor Editing:** Allow users to click boxes to take/heal damage directly on the sheet.
@@ -771,10 +771,13 @@ const poolSize = Math.max(
 │  Left    │  Middle  │  Right           │
 │  Column  │  Column  │  Column          │
 │          │          │                  │
-│  • Attr  │  • Skills│  • Qualities     │
-│  • Stats │  • Know  │  • Gear          │
-│  • Cond  │  • Lang  │  • Contacts      │
-│          │          │  • Lifestyles    │
+│ • Attr   │ • Skills │ • Magic/Res      │
+│ • Stats  │ • Know   │ • Augmentations  │
+│ • Cond   │ • Lang   │ • Qualities      │
+│          │          │ • Gear           │
+│          │          │ • Contacts       │
+│          │          │ • Lifestyles     │
+│          │          │ • Vehicles       │
 └──────────┴──────────┴──────────────────┘
 ```
 
@@ -878,15 +881,14 @@ const data = await response.json();
 
 ### Phase 1: Enhanced Display
 
-**Expanded Sections:**
-- Weapons section with stats
-- Armor section with ratings
-- Cyberware/Bioware sections
-- Vehicles section
-- Drones section
-- Spells section (for mages)
-- Adept Powers section (for adepts)
-- Complex Forms section (for technomancers)
+**Expanded Sections - COMPLETED:**
+- [x] Weapons section with stats (Damage, AP, Modes, etc.)
+- [x] Armor section with ratings and modifications
+- [x] Cyberware/Bioware sections
+- [x] Vehicles/Drones/RCCs section
+- [x] Spells section (for mages)
+- [x] Adept Powers section (for adepts)
+- [ ] Complex Forms section (for technomancers)
 
 **Improved Visualizations:**
 - Weapon cards with damage, AP, modes
@@ -1132,6 +1134,13 @@ const data = await response.json();
 - Initial specification created
 - Documents current character sheet implementation
 - Defines future enhancement roadmap
+
+### 2025-12-17
+- Implemented Phase 2: Enhanced Details
+- Added detailed cards for Weapons, Armor, Spells, Adept Powers, Augmentations, and Vehicles
+- Integrated catalog lookups for spell data
+- Refactored layout to a cleaner three-column grid
+- Added RulesetProvider for edition-specific data loading
 
 ---
 
