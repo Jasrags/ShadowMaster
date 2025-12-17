@@ -3,8 +3,8 @@
 import { useEffect, useState, useCallback } from "react";
 import { useParams, useRouter } from "next/navigation";
 import Link from "next/link";
-import { ArrowLeft, Loader2, Plus, Search, Copy, Globe, Lock, Filter } from "lucide-react";
-import type { LocationTemplate, Campaign, LocationType } from "@/lib/types";
+import { ArrowLeft, Loader2, Search, Copy, Globe, Lock, Filter } from "lucide-react";
+import type { LocationTemplate, LocationType } from "@/lib/types";
 import { LocationTypeBadge } from "../components/LocationTypeBadge";
 
 export default function LocationTemplatesPage() {
@@ -35,7 +35,7 @@ export default function LocationTemplatesPage() {
                 throw new Error(data.error || "Failed to fetch templates");
             }
 
-            let filteredTemplates = data.templates;
+            const filteredTemplates = data.templates;
             if (viewMode === "private") {
                 // Client-side filter for now as API returns (user's + public)
                 // We'd need to know current user ID to filter strictly "mine and private" vs "mine and public"
@@ -156,7 +156,7 @@ export default function LocationTemplatesPage() {
                         Try adjusting your filters or search query.
                     </p>
                     <p className="mt-4 text-sm text-zinc-500">
-                        You can create templates from existing locations using the "Save as Template" button on the location details page.
+                        You can create templates from existing locations using the &quot;Save as Template&quot; button on the location details page.
                     </p>
                 </div>
             ) : (

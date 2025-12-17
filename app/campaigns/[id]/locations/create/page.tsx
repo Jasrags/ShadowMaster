@@ -533,7 +533,7 @@ function CreateLocationForm() {
                                             matrixHost: {
                                                 hostRating: 0,
                                                 ...formData.matrixHost,
-                                                hostType: e.target.value as any,
+                                                hostType: e.target.value as "public" | "private" | "restricted" | "public-grid",
                                             },
                                         })
                                     }

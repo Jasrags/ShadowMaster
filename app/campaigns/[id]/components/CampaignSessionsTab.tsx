@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react";
 import type { Campaign, CampaignSession } from "@/lib/types";
-import { Plus, Loader2, Calendar, Check, X, Clock, Users, Edit2, Trash2 } from "lucide-react";
+import { Plus, Loader2, Calendar, Check, Clock, Users, Edit2, Trash2 } from "lucide-react";
 
 interface CampaignSessionsTabProps {
     campaign: Campaign;

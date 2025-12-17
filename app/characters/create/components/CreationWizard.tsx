@@ -169,7 +169,7 @@ export function CreationWizard({ onCancel, onComplete, characterId: initialChara
     }, 1000); // 1s debounce
 
     return () => clearTimeout(timer);
-  }, [state, characterId, initialCharacterId, editionCode, ruleset]);
+  }, [state, characterId, initialCharacterId, editionCode, ruleset, campaignId]);
 
   // Get steps from creation method and filter based on character type
   const steps = useMemo(() => {

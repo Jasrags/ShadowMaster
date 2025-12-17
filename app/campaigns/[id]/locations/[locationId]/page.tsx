@@ -3,8 +3,8 @@
 import { useEffect, useState, useCallback } from "react";
 import { useParams, useRouter } from "next/navigation";
 import Link from "next/link";
-import { ArrowLeft, Loader2, Plus, Trash2, Calendar, History, Link as LinkIcon, Save } from "lucide-react";
-import type { Location, Campaign, ID } from "@/lib/types";
+import { ArrowLeft, Loader2, Plus, Trash2, Calendar, History, Save } from "lucide-react";
+import type { Location, Campaign } from "@/lib/types";
 import { LocationTypeBadge } from "../components/LocationTypeBadge";
 import { LocationVisibilityBadge } from "../components/LocationVisibilityBadge";
 
@@ -197,7 +197,6 @@ export default function LocationDetailPage() {
                 {activeTab === "history" && (
                     <HistoryTab
                         location={location}
-                        campaignId={campaignId}
                         locationId={locationId}
                         isGM={isGM}
                         onUpdate={fetchLocation}
@@ -391,12 +390,14 @@ function OverviewTab({ location, isGM }: { location: Location; isGM: boolean }) 
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                         {location.imageUrl && (
                             <div className="rounded-lg overflow-hidden border border-zinc-200 dark:border-zinc-800">
+                                {/* eslint-disable-next-line @next/next/no-img-element */}
                                 <img src={location.imageUrl} alt={location.name} className="w-full h-auto object-cover" />
                                 <div className="p-2 bg-zinc-50 dark:bg-zinc-900 text-xs text-center text-zinc-500">Image</div>
                             </div>
                         )}
                         {location.mapUrl && (
                             <div className="rounded-lg overflow-hidden border border-zinc-200 dark:border-zinc-800">
+                                {/* eslint-disable-next-line @next/next/no-img-element */}
                                 <img src={location.mapUrl} alt="Map" className="w-full h-auto object-cover" />
                                 <div className="p-2 bg-zinc-50 dark:bg-zinc-900 text-xs text-center text-zinc-500">Map</div>
                             </div>
@@ -634,7 +635,7 @@ function ConnectionsTab({
                                 <label className="block text-xs font-medium text-zinc-500 mb-1">Type</label>
                                 <select
                                     value={linkType}
-                                    onChange={(e) => setLinkType(e.target.value as any)}
+                                    onChange={(e) => setLinkType(e.target.value as "npc" | "grunt" | "encounter")}
                                     className="rounded-md border border-zinc-300 dark:border-zinc-700 bg-white dark:bg-black px-2 py-1.5 text-sm"
                                 >
                                     <option value="npc">NPC</option>
@@ -902,13 +903,13 @@ function ConnectionsTab({
 // History Tab Component
 function HistoryTab({
     location,
-    campaignId,
+
     locationId,
     isGM,
     onUpdate
 }: {
     location: Location;
-    campaignId: string;
+
     locationId: string;
     isGM: boolean;
     onUpdate: () => void;

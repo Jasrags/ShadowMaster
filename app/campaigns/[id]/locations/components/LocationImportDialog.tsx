@@ -65,7 +65,7 @@ export function LocationImportDialog({ isOpen, onClose, onImport, loading }: Loc
                 JSON.parse(text);
                 await onImport(text);
                 setFile(null);
-            } catch (err) {
+            } catch {
                 setError("Invalid JSON file content.");
             }
         };
@@ -92,8 +92,8 @@ export function LocationImportDialog({ isOpen, onClose, onImport, loading }: Loc
 
                     <div
                         className={`relative flex h-32 cursor-pointer flex-col items-center justify-center rounded-lg border-2 border-dashed transition-colors ${dragActive
-                                ? "border-indigo-500 bg-indigo-50 dark:border-indigo-400 dark:bg-indigo-900/10"
-                                : "border-zinc-300 hover:border-zinc-400 dark:border-zinc-700 dark:hover:border-zinc-600"
+                            ? "border-indigo-500 bg-indigo-50 dark:border-indigo-400 dark:bg-indigo-900/10"
+                            : "border-zinc-300 hover:border-zinc-400 dark:border-zinc-700 dark:hover:border-zinc-600"
                             }`}
                         onDragEnter={handleDrag}
                         onDragLeave={handleDrag}
