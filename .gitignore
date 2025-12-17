@@ -47,5 +47,7 @@ next-env.d.ts
 # user data (characters, users) - NOT edition rulesets
 /data/users
 /data/characters
+/data/campaigns
 .cursor/
 .claude/
+seattle-locations.json

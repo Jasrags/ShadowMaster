@@ -35,6 +35,15 @@ export type CharacterStatus =
   | "deceased"; // Character died in game
 
 /**
+ * Approval status for campaign characters (GM workflow)
+ */
+export type CharacterApprovalStatus =
+  | "pending" // Awaiting GM review
+  | "approved" // Approved by GM
+  | "rejected" // Rejected by GM (with feedback)
+  | "not-applicable"; // Not in a campaign or no approval required
+
+/**
  * A complete Shadowrun character
  */
 export interface Character {
@@ -77,6 +86,12 @@ export interface Character {
   imageUrl?: string;
 
   status: CharacterStatus;
+
+  /** Approval status for campaign characters (GM workflow) */
+  approvalStatus?: CharacterApprovalStatus;
+
+  /** GM feedback when character is approved/rejected */
+  approvalFeedback?: string;
 
   // -------------------------------------------------------------------------
   // Attributes
@@ -365,15 +380,15 @@ export enum SinnerQuality {
 /**
  * SIN (System Identification Number) - can be fake or real
  */
-export type SIN = 
+export type SIN =
   | {
-      type: "fake";
-      rating: number; // 1-4 for fake SINs
-    }
+    type: "fake";
+    rating: number; // 1-4 for fake SINs
+  }
   | {
-      type: "real";
-      sinnerQuality: SinnerQuality; // References SINner quality level
-    };
+    type: "real";
+    sinnerQuality: SinnerQuality; // References SINner quality level
+  };
 
 /**
  * License tied to a SIN (fake or real)

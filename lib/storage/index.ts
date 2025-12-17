@@ -68,3 +68,18 @@ export {
   deleteUser,
 } from "./users";
 
+// Location storage
+export {
+  createLocation,
+  getLocation,
+  getLocationsByCampaign,
+  getLocationHierarchy,
+  updateLocation,
+  deleteLocation,
+  linkContentToLocation,
+  unlinkContentFromLocation,
+  recordLocationVisit,
+  searchLocations,
+} from "./locations";
+
+

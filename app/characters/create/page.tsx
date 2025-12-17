@@ -1,17 +1,32 @@
 "use client";
 
-import { useState } from "react";
-import { useRouter } from "next/navigation";
+import { useState, useEffect } from "react";
+import { useRouter, useSearchParams } from "next/navigation";
 import { RulesetProvider, useRulesetStatus, useRuleset } from "@/lib/rules";
 import { CreationWizard } from "./components/CreationWizard";
 import { EditionSelector } from "./components/EditionSelector";
-import type { EditionCode } from "@/lib/types";
+import type { EditionCode, Campaign } from "@/lib/types";
+import { Loader2 } from "lucide-react";
 
-function CreateCharacterContent() {
+interface CreateCharacterContentProps {
+  campaignId?: string;
+  campaign?: Campaign | null;
+}
+
+function CreateCharacterContent({ campaignId, campaign }: CreateCharacterContentProps) {
   const router = useRouter();
-  const [selectedEdition, setSelectedEdition] = useState<EditionCode | null>(null);
+  const [selectedEdition, setSelectedEdition] = useState<EditionCode | null>(
+    campaign?.editionCode || null
+  );
   const { loading, error, ready } = useRulesetStatus();
   const { loadRuleset } = useRuleset();
+
+  // Auto-load ruleset if campaign is provided
+  useEffect(() => {
+    if (campaign?.editionCode && !ready && !loading) {
+      loadRuleset(campaign.editionCode);
+    }
+  }, [campaign, ready, loading, loadRuleset]);
 
   // Handle edition selection
   const handleEditionSelect = async (editionCode: EditionCode) => {
@@ -19,8 +34,8 @@ function CreateCharacterContent() {
     await loadRuleset(editionCode);
   };
 
-  // Show edition selector if no edition selected
-  if (!selectedEdition) {
+  // Show edition selector if no edition selected (and no campaign)
+  if (!selectedEdition && !campaign) {
     return <EditionSelector onSelect={handleEditionSelect} />;
   }
 
@@ -77,7 +92,14 @@ function CreateCharacterContent() {
   if (ready) {
     return (
       <CreationWizard
-        onCancel={() => setSelectedEdition(null)}
+        campaignId={campaignId}
+        onCancel={() => {
+          if (campaignId) {
+            router.push(`/campaigns/${campaignId}`);
+          } else {
+            setSelectedEdition(null);
+          }
+        }}
         onComplete={(characterId) => {
           // Navigate to the character sheet
           router.push(`/characters/${characterId}`);
@@ -90,6 +112,43 @@ function CreateCharacterContent() {
 }
 
 export default function CreateCharacterPage() {
+  const searchParams = useSearchParams();
+  const campaignId = searchParams.get("campaignId") || undefined;
+  const [campaign, setCampaign] = useState<Campaign | null>(null);
+  const [loadingCampaign, setLoadingCampaign] = useState(!!campaignId);
+
+  // Load campaign if campaignId is provided
+  useEffect(() => {
+    if (!campaignId) {
+      setLoadingCampaign(false);
+      return;
+    }
+
+    async function loadCampaign() {
+      try {
+        const res = await fetch(`/api/campaigns/${campaignId}`);
+        const data = await res.json();
+        if (data.success) {
+          setCampaign(data.campaign);
+        }
+      } catch (e) {
+        console.error("Failed to load campaign", e);
+      } finally {
+        setLoadingCampaign(false);
+      }
+    }
+
+    loadCampaign();
+  }, [campaignId]);
+
+  if (loadingCampaign) {
+    return (
+      <div className="flex min-h-[400px] items-center justify-center">
+        <Loader2 className="h-8 w-8 animate-spin text-zinc-400" />
+      </div>
+    );
+  }
+
   return (
     <div className="space-y-6">
       {/* Header */}
@@ -98,15 +157,16 @@ export default function CreateCharacterPage() {
           Create Character
         </h1>
         <p className="mt-1 text-sm text-zinc-600 dark:text-zinc-400">
-          Build a new Shadowrun character step by step
+          {campaign
+            ? `Creating character for campaign: ${campaign.title}`
+            : "Build a new Shadowrun character step by step"}
         </p>
       </div>
 
       {/* Content wrapped in RulesetProvider */}
       <RulesetProvider>
-        <CreateCharacterContent />
+        <CreateCharacterContent campaignId={campaignId} campaign={campaign} />
       </RulesetProvider>
     </div>
   );
 }
-

@@ -60,6 +60,17 @@ export async function getCharacter(
 }
 
 /**
+ * Get a character by ID without knowing the owner (for GM/admin access)
+ * This iterates through all users, so use sparingly.
+ */
+export async function getCharacterById(
+  characterId: ID
+): Promise<Character | null> {
+  const allCharacters = await getAllCharacters();
+  return allCharacters.find((c) => c.id === characterId) || null;
+}
+
+/**
  * Get all characters for a user
  */
 export async function getUserCharacters(userId: ID): Promise<Character[]> {
@@ -142,7 +153,8 @@ export async function createCharacterDraft(
   editionId: ID,
   editionCode: EditionCode,
   creationMethodId: ID,
-  name?: string
+  name?: string,
+  campaignId?: ID
 ): Promise<CharacterDraft> {
   await ensureDirectory(getUserCharactersDir(userId));
 
@@ -159,6 +171,7 @@ export async function createCharacterDraft(
     name: name || "Unnamed Character",
     createdAt: now,
     updatedAt: now,
+    campaignId,
 
     // Initialize empty/default fields
     attributes: {},

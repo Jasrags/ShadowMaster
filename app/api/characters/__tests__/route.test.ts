@@ -391,7 +391,8 @@ describe('POST /api/characters', () => {
       'sr5',
       'sr5',
       'priority',
-      'New Character'
+      'New Character',
+      undefined
     );
   });
 

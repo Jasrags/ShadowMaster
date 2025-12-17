@@ -5,7 +5,7 @@
  */
 
 import { NextRequest, NextResponse } from "next/server";
-import { getEdition, getBook, getAllBooks } from "@/lib/storage/editions";
+import { getEdition, getBook, getAllBooks, getAllCreationMethods } from "@/lib/storage/editions";
 
 export async function GET(
   request: NextRequest,
@@ -36,10 +36,14 @@ export async function GET(
       books = await getAllBooks(editionCode as "sr5" | "sr6" | "sr4a" | "sr4" | "sr3" | "sr2" | "sr1" | "anarchy");
     }
 
+    // Load creation methods
+    const creationMethods = await getAllCreationMethods(editionCode as "sr5" | "sr6" | "sr4a" | "sr4" | "sr3" | "sr2" | "sr1" | "anarchy");
+
     return NextResponse.json({
       success: true,
       edition,
       books,
+      creationMethods,
     });
   } catch (error) {
     console.error("Failed to load edition:", error);

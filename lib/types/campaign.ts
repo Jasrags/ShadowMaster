@@ -1,0 +1,231 @@
+/**
+ * Campaign type definitions
+ * 
+ * Types for campaign support feature - enabling GMs to create campaigns
+ * with ruleset constraints and players to join and create characters.
+ */
+
+import type { ID, ISODateString, Metadata } from "./core";
+import type { EditionCode } from "./edition";
+
+/**
+ * Campaign visibility levels
+ */
+export type CampaignVisibility = "private" | "invite-only" | "public";
+
+/**
+ * Gameplay level affects starting resources and restrictions
+ */
+export type GameplayLevel = "street" | "experienced" | "prime-runner";
+
+/**
+ * Campaign status
+ */
+export type CampaignStatus = "active" | "paused" | "archived" | "completed";
+
+/**
+ * A Shadowrun campaign managed by a GM
+ */
+export interface Campaign {
+    id: ID;
+
+    /** GM user ID (campaign creator/owner) */
+    gmId: ID;
+
+    /** Campaign title */
+    title: string;
+
+    /** Campaign description/narrative */
+    description?: string;
+
+    /** Campaign status */
+    status: CampaignStatus;
+
+    // -------------------------------------------------------------------------
+    // Ruleset Configuration
+    // -------------------------------------------------------------------------
+
+    /** Edition this campaign uses */
+    editionId: ID;
+    editionCode: EditionCode;
+
+    /** Books/sourcebooks enabled for this campaign */
+    enabledBookIds: ID[];
+
+    /** Creation methods allowed for character creation */
+    enabledCreationMethodIds: ID[];
+
+    /** Gameplay level (Street, Experienced, Prime Runner) */
+    gameplayLevel: GameplayLevel;
+
+    /** Optional rules enabled (e.g., "wireless bonuses", "alternate init") */
+    enabledOptionalRules?: string[];
+
+    /** House rules (freeform text or structured JSON) */
+    houseRules?: string | Record<string, unknown>;
+
+    // -------------------------------------------------------------------------
+    // Roster & Access
+    // -------------------------------------------------------------------------
+
+    /** Player user IDs (excluding GM) */
+    playerIds: ID[];
+
+    /** Campaign visibility */
+    visibility: CampaignVisibility;
+
+    /** Invite code for join-by-code (generated if visibility is "invite-only") */
+    inviteCode?: string;
+
+    /** Maximum number of players (null = unlimited) */
+    maxPlayers?: number;
+
+    // -------------------------------------------------------------------------
+    // Metadata
+    // -------------------------------------------------------------------------
+
+    /** Campaign start date (first session) */
+    startDate?: ISODateString;
+
+    /** Campaign end date (if completed/archived) */
+    endDate?: ISODateString;
+
+    /** Campaign image/logo URL */
+    imageUrl?: string;
+
+    /** Tags/categories for discoverability */
+    tags?: string[];
+
+    /** GM-only notes */
+    gmNotes?: string;
+
+    /** Campaign notes/journal entries */
+    notes?: CampaignNote[];
+
+    /** Campaign sessions (scheduled and completed) */
+    sessions?: CampaignSession[];
+
+    createdAt: ISODateString;
+    updatedAt: ISODateString;
+
+    /** Extensible metadata */
+    metadata?: Metadata;
+}
+
+/**
+ * Player membership in a campaign
+ */
+export interface CampaignMembership {
+    id: ID;
+    campaignId: ID;
+    userId: ID;
+    role: "gm" | "player";
+    joinedAt: ISODateString;
+    status: "active" | "invited" | "left";
+    /** Optional player-specific notes from GM */
+    notes?: string;
+}
+
+/**
+ * A note or journal entry in a campaign (GM-only by default)
+ */
+export interface CampaignNote {
+    id: ID;
+    /** Note title */
+    title: string;
+    /** Note content (markdown supported) */
+    content: string;
+    /** Note category for organization */
+    category?: "general" | "session" | "npc" | "location" | "plot" | "rules";
+    /** Whether players can view this note */
+    playerVisible: boolean;
+    /** Author user ID */
+    authorId: ID;
+    createdAt: ISODateString;
+    updatedAt: ISODateString;
+}
+
+/**
+ * A scheduled or completed session
+ */
+export interface CampaignSession {
+    id: ID;
+    /** Session title/name */
+    title: string;
+    /** Session date and time */
+    scheduledAt: ISODateString;
+    /** Session duration in minutes */
+    durationMinutes?: number;
+    /** Session status */
+    status: "scheduled" | "completed" | "cancelled";
+    /** Players who attended/will attend */
+    attendeeIds: ID[];
+    /** Session notes (GM-only) */
+    notes?: string;
+    /** Karma awarded this session */
+    karmaAwarded?: number;
+    createdAt: ISODateString;
+    updatedAt: ISODateString;
+}
+
+// -----------------------------------------------------------------------------
+// API Request/Response Types
+// -----------------------------------------------------------------------------
+
+/**
+ * Request to create a new campaign
+ */
+export interface CreateCampaignRequest {
+    title: string;
+    description?: string;
+    editionCode: EditionCode;
+    enabledBookIds: ID[];
+    enabledCreationMethodIds: ID[];
+    gameplayLevel: GameplayLevel;
+    enabledOptionalRules?: string[];
+    houseRules?: string | Record<string, unknown>;
+    visibility: CampaignVisibility;
+    maxPlayers?: number;
+}
+
+/**
+ * Request to update campaign settings
+ */
+export interface UpdateCampaignRequest {
+    title?: string;
+    description?: string;
+    enabledBookIds?: ID[];
+    enabledCreationMethodIds?: ID[];
+    gameplayLevel?: GameplayLevel;
+    enabledOptionalRules?: string[];
+    houseRules?: string | Record<string, unknown>;
+    status?: CampaignStatus;
+    visibility?: CampaignVisibility;
+    maxPlayers?: number;
+}
+
+/**
+ * Response for campaign operations
+ */
+export interface CampaignResponse {
+    success: boolean;
+    campaign?: Campaign;
+    userRole?: "gm" | "player" | null;
+    error?: string;
+}
+
+/**
+ * Response for campaign list
+ */
+export interface CampaignsListResponse {
+    success: boolean;
+    campaigns: Campaign[];
+    error?: string;
+}
+
+/**
+ * Request to join a campaign
+ */
+export interface JoinCampaignRequest {
+    inviteCode?: string;
+}
