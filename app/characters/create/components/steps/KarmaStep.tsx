@@ -66,7 +66,7 @@ export function KarmaStep({ state, updateState, budgetValues }: StepProps) {
 
   // Get current selections
   const selectedSpells = (state.selections.spells || []) as string[];
-  const selectedComplexForms = (state.selections.complexForms || []) as string[];
+  const selectedComplexForms = useMemo(() => (state.selections.complexForms || []) as string[], [state.selections.complexForms]);
 
   // Calculate Karma values
   const karmaBase = budgetValues["karma"] || 25;
@@ -158,8 +158,8 @@ export function KarmaStep({ state, updateState, budgetValues }: StepProps) {
           </div>
           <div className="text-right">
             <div className={`text-2xl font-bold ${karmaRemaining > MAX_KARMA_CARRYOVER
-                ? "text-amber-600 dark:text-amber-400"
-                : "text-purple-700 dark:text-purple-300"
+              ? "text-amber-600 dark:text-amber-400"
+              : "text-purple-700 dark:text-purple-300"
               }`}>
               {karmaRemaining}
             </div>
@@ -314,10 +314,10 @@ export function KarmaStep({ state, updateState, budgetValues }: StepProps) {
                   onClick={() => canSelect && toggleComplexForm(form.id)}
                   disabled={!canSelect}
                   className={`w-full rounded-lg border p-3 text-left transition-colors ${isSelected
-                      ? "border-cyan-300 bg-cyan-50 dark:border-cyan-700 dark:bg-cyan-900/30"
-                      : canSelect
-                        ? "border-zinc-200 bg-white hover:border-cyan-200 hover:bg-cyan-50/50 dark:border-zinc-700 dark:bg-zinc-800/50 dark:hover:border-cyan-800"
-                        : "cursor-not-allowed border-zinc-200 bg-zinc-50 opacity-50 dark:border-zinc-700 dark:bg-zinc-800/30"
+                    ? "border-cyan-300 bg-cyan-50 dark:border-cyan-700 dark:bg-cyan-900/30"
+                    : canSelect
+                      ? "border-zinc-200 bg-white hover:border-cyan-200 hover:bg-cyan-50/50 dark:border-zinc-700 dark:bg-zinc-800/50 dark:hover:border-cyan-800"
+                      : "cursor-not-allowed border-zinc-200 bg-zinc-50 opacity-50 dark:border-zinc-700 dark:bg-zinc-800/30"
                     }`}
                 >
                   <div className="flex items-start justify-between gap-2">
@@ -339,8 +339,8 @@ export function KarmaStep({ state, updateState, budgetValues }: StepProps) {
                       </div>
                     </div>
                     <div className={`flex h-5 w-5 flex-shrink-0 items-center justify-center rounded-full border-2 ${isSelected
-                        ? "border-cyan-500 bg-cyan-500 text-white"
-                        : "border-zinc-300 dark:border-zinc-600"
+                      ? "border-cyan-500 bg-cyan-500 text-white"
+                      : "border-zinc-300 dark:border-zinc-600"
                       }`}>
                       {isSelected && (
                         <svg className="h-3 w-3" fill="currentColor" viewBox="0 0 20 20">

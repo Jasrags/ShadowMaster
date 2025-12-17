@@ -84,10 +84,22 @@ export function VehiclesStep({ state, updateState, budgetValues }: StepProps) {
   const [autosoftRating, setAutosoftRating] = useState<Record<string, number>>({});
 
   // Get selections from state
-  const selectedVehicles: OwnedVehicle[] = (state.selections?.vehicles as OwnedVehicle[]) || [];
-  const selectedDrones: CharacterDrone[] = (state.selections?.drones as CharacterDrone[]) || [];
-  const selectedRCCs: CharacterRCC[] = (state.selections?.rccs as CharacterRCC[]) || [];
-  const selectedAutosofts: CharacterAutosoft[] = (state.selections?.autosofts as CharacterAutosoft[]) || [];
+  const selectedVehicles = useMemo(() =>
+    (state.selections?.vehicles as OwnedVehicle[]) || [],
+    [state.selections?.vehicles]
+  );
+  const selectedDrones = useMemo(() =>
+    (state.selections?.drones as CharacterDrone[]) || [],
+    [state.selections?.drones]
+  );
+  const selectedRCCs = useMemo(() =>
+    (state.selections?.rccs as CharacterRCC[]) || [],
+    [state.selections?.rccs]
+  );
+  const selectedAutosofts = useMemo(() =>
+    (state.selections?.autosofts as CharacterAutosoft[]) || [],
+    [state.selections?.autosofts]
+  );
 
   // Calculate budget from gear step
   const baseNuyen = budgetValues["nuyen"] || 0;
@@ -345,11 +357,10 @@ export function VehiclesStep({ state, updateState, budgetValues }: StepProps) {
           <div>
             <p className="text-xs text-zinc-500 dark:text-zinc-400">Remaining</p>
             <p
-              className={`text-lg font-semibold ${
-                remaining < 0
+              className={`text-lg font-semibold ${remaining < 0
                   ? "text-red-600 dark:text-red-400"
                   : "text-emerald-600 dark:text-emerald-400"
-              }`}
+                }`}
             >
               ¥{formatCurrency(remaining)}
             </p>
@@ -368,11 +379,10 @@ export function VehiclesStep({ state, updateState, budgetValues }: StepProps) {
           <button
             key={tab.id}
             onClick={() => setActiveTab(tab.id as VehicleTab)}
-            className={`px-4 py-2 text-sm font-medium transition-colors ${
-              activeTab === tab.id
+            className={`px-4 py-2 text-sm font-medium transition-colors ${activeTab === tab.id
                 ? "border-b-2 border-emerald-500 text-emerald-600 dark:text-emerald-400"
                 : "text-zinc-500 hover:text-zinc-700 dark:text-zinc-400 dark:hover:text-zinc-300"
-            }`}
+              }`}
           >
             {tab.label}
             {tab.count > 0 && (
@@ -421,11 +431,10 @@ export function VehiclesStep({ state, updateState, budgetValues }: StepProps) {
                   setVehicleTypeFilter(type.id as VehicleType);
                   setVehicleCategoryFilter("all");
                 }}
-                className={`rounded-full px-3 py-1 text-xs transition-colors ${
-                  vehicleTypeFilter === type.id
+                className={`rounded-full px-3 py-1 text-xs transition-colors ${vehicleTypeFilter === type.id
                     ? "bg-emerald-500 text-white"
                     : "bg-zinc-100 text-zinc-600 hover:bg-zinc-200 dark:bg-zinc-700 dark:text-zinc-400"
-                }`}
+                  }`}
               >
                 {type.label}
               </button>
@@ -437,11 +446,10 @@ export function VehiclesStep({ state, updateState, budgetValues }: StepProps) {
             <div className="flex flex-wrap gap-1">
               <button
                 onClick={() => setVehicleCategoryFilter("all")}
-                className={`rounded-full px-2 py-1 text-xs transition-colors ${
-                  vehicleCategoryFilter === "all"
+                className={`rounded-full px-2 py-1 text-xs transition-colors ${vehicleCategoryFilter === "all"
                     ? "bg-zinc-300 text-zinc-800 dark:bg-zinc-600"
                     : "bg-zinc-100 text-zinc-600 hover:bg-zinc-200 dark:bg-zinc-700 dark:text-zinc-400"
-                }`}
+                  }`}
               >
                 All
               </button>
@@ -458,11 +466,10 @@ export function VehiclesStep({ state, updateState, budgetValues }: StepProps) {
                   <button
                     key={cat.id}
                     onClick={() => setVehicleCategoryFilter(cat.id)}
-                    className={`rounded-full px-2 py-1 text-xs transition-colors ${
-                      vehicleCategoryFilter === cat.id
+                    className={`rounded-full px-2 py-1 text-xs transition-colors ${vehicleCategoryFilter === cat.id
                         ? "bg-zinc-300 text-zinc-800 dark:bg-zinc-600"
                         : "bg-zinc-100 text-zinc-600 hover:bg-zinc-200 dark:bg-zinc-700 dark:text-zinc-400"
-                    }`}
+                      }`}
                   >
                     {cat.name}
                   </button>
@@ -510,13 +517,12 @@ export function VehiclesStep({ state, updateState, budgetValues }: StepProps) {
                       <td className="px-3 py-2 text-right">¥{formatCurrency(vehicle.cost)}</td>
                       <td className="px-3 py-2 text-center">
                         <span
-                          className={`${
-                            vehicle.restricted
+                          className={`${vehicle.restricted
                               ? "text-amber-600 dark:text-amber-400"
                               : vehicle.forbidden
                                 ? "text-red-600 dark:text-red-400"
                                 : ""
-                          }`}
+                            }`}
                         >
                           {getAvailabilityDisplay(vehicle.availability, vehicle.restricted, vehicle.forbidden)}
                         </span>
@@ -525,11 +531,10 @@ export function VehiclesStep({ state, updateState, budgetValues }: StepProps) {
                         <button
                           onClick={() => addVehicle(vehicle)}
                           disabled={!available || !canAfford}
-                          className={`rounded px-2 py-1 text-xs font-medium transition-colors ${
-                            available && canAfford
+                          className={`rounded px-2 py-1 text-xs font-medium transition-colors ${available && canAfford
                               ? "bg-emerald-500 text-white hover:bg-emerald-600"
                               : "cursor-not-allowed bg-zinc-200 text-zinc-400 dark:bg-zinc-700"
-                          }`}
+                            }`}
                         >
                           Add
                         </button>
@@ -585,11 +590,10 @@ export function VehiclesStep({ state, updateState, budgetValues }: StepProps) {
               <button
                 key={size.id}
                 onClick={() => setDroneSizeFilter(size.id as DroneSize)}
-                className={`rounded-full px-3 py-1 text-xs transition-colors ${
-                  droneSizeFilter === size.id
+                className={`rounded-full px-3 py-1 text-xs transition-colors ${droneSizeFilter === size.id
                     ? "bg-emerald-500 text-white"
                     : "bg-zinc-100 text-zinc-600 hover:bg-zinc-200 dark:bg-zinc-700 dark:text-zinc-400"
-                }`}
+                  }`}
               >
                 {size.label}
               </button>
@@ -638,13 +642,12 @@ export function VehiclesStep({ state, updateState, budgetValues }: StepProps) {
                       <td className="px-3 py-2 text-right">¥{formatCurrency(drone.cost)}</td>
                       <td className="px-3 py-2 text-center">
                         <span
-                          className={`${
-                            drone.restricted
+                          className={`${drone.restricted
                               ? "text-amber-600 dark:text-amber-400"
                               : drone.forbidden
                                 ? "text-red-600 dark:text-red-400"
                                 : ""
-                          }`}
+                            }`}
                         >
                           {getAvailabilityDisplay(drone.availability, drone.restricted, drone.forbidden)}
                         </span>
@@ -653,11 +656,10 @@ export function VehiclesStep({ state, updateState, budgetValues }: StepProps) {
                         <button
                           onClick={() => addDrone(drone)}
                           disabled={!available || !canAfford}
-                          className={`rounded px-2 py-1 text-xs font-medium transition-colors ${
-                            available && canAfford
+                          className={`rounded px-2 py-1 text-xs font-medium transition-colors ${available && canAfford
                               ? "bg-emerald-500 text-white hover:bg-emerald-600"
                               : "cursor-not-allowed bg-zinc-200 text-zinc-400 dark:bg-zinc-700"
-                          }`}
+                            }`}
                         >
                           Add
                         </button>
@@ -750,11 +752,10 @@ export function VehiclesStep({ state, updateState, budgetValues }: StepProps) {
                         <button
                           onClick={() => addRCC(rcc)}
                           disabled={!available || !canAfford}
-                          className={`rounded px-2 py-1 text-xs font-medium transition-colors ${
-                            available && canAfford
+                          className={`rounded px-2 py-1 text-xs font-medium transition-colors ${available && canAfford
                               ? "bg-emerald-500 text-white hover:bg-emerald-600"
                               : "cursor-not-allowed bg-zinc-200 text-zinc-400 dark:bg-zinc-700"
-                          }`}
+                            }`}
                         >
                           Add
                         </button>
@@ -861,11 +862,10 @@ export function VehiclesStep({ state, updateState, budgetValues }: StepProps) {
                         <button
                           onClick={() => addAutosoft(autosoft)}
                           disabled={!available || !canAfford}
-                          className={`rounded px-2 py-1 text-xs font-medium transition-colors ${
-                            available && canAfford
+                          className={`rounded px-2 py-1 text-xs font-medium transition-colors ${available && canAfford
                               ? "bg-emerald-500 text-white hover:bg-emerald-600"
                               : "cursor-not-allowed bg-zinc-200 text-zinc-400 dark:bg-zinc-700"
-                          }`}
+                            }`}
                         >
                           Add
                         </button>

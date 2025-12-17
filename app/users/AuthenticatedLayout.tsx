@@ -2,7 +2,7 @@
 
 import { Link, Button, Menu, MenuTrigger, MenuItem, Popover } from "react-aria-components";
 import { useAuth } from "@/lib/auth/AuthProvider";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 interface AuthenticatedLayoutProps {
   children: React.ReactNode;
@@ -53,6 +53,23 @@ function UsersIcon({ className }: { className?: string }) {
 export default function AuthenticatedLayout({ children, currentPath = "/" }: AuthenticatedLayoutProps) {
   const { user, signOut } = useAuth();
   const [sidebarOpen, setSidebarOpen] = useState(false);
+  const [isCollapsed, setIsCollapsed] = useState(false);
+
+  // Load collapsed state from localStorage
+  useEffect(() => {
+    const saved = localStorage.getItem("shadow-master-sidebar-collapsed-global");
+    if (saved) {
+      // eslint-disable-next-line react-hooks/set-state-in-effect
+      setIsCollapsed(JSON.parse(saved));
+    }
+  }, []);
+
+  const toggleCollapse = () => {
+    const newState = !isCollapsed;
+    setIsCollapsed(newState);
+    localStorage.setItem("shadow-master-sidebar-collapsed-global", JSON.stringify(newState));
+  };
+
 
   if (!user) {
     return null;
@@ -163,55 +180,84 @@ export default function AuthenticatedLayout({ children, currentPath = "/" }: Aut
       <div className="flex flex-1 pt-16">
         {/* Sidebar */}
         <aside
-          className={`fixed left-0 top-16 z-40 h-[calc(100vh-4rem)] w-60 border-r border-zinc-200 bg-white transition-transform dark:border-zinc-800 dark:bg-black lg:translate-x-0 ${
-            sidebarOpen ? "translate-x-0" : "-translate-x-full"
-          }`}
+          className={`fixed left-0 top-16 z-40 h-[calc(100vh-4rem)] border-r border-zinc-200 bg-white transition-all duration-300 dark:border-zinc-800 dark:bg-black lg:translate-x-0 ${sidebarOpen ? "translate-x-0" : "-translate-x-full"
+            } ${isCollapsed ? "w-16" : "w-64"}`}
         >
-          <nav className="flex h-full flex-col p-4">
-            {navItems.map((item) => {
-              const Icon = item.icon;
-              const isActive = item.href === currentPath;
-              const isDisabled = item.disabled;
+          <div className="flex h-full flex-col">
+            <div className="flex items-center justify-end p-2 border-b border-zinc-100 dark:border-zinc-800/50">
+              <button
+                onClick={toggleCollapse}
+                className="hidden lg:flex h-6 w-6 items-center justify-center rounded-md text-zinc-400 hover:bg-zinc-100 hover:text-zinc-600 dark:text-zinc-500 dark:hover:bg-zinc-800 dark:hover:text-zinc-300"
+                aria-label={isCollapsed ? "Expand sidebar" : "Collapse sidebar"}
+              >
+                {isCollapsed ? (
+                  <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 5l7 7-7 7M5 5l7 7-7 7" />
+                  </svg>
+                ) : (
+                  <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 19l-7-7 7-7m8 14l-7-7 7-7" />
+                  </svg>
+                )}
+              </button>
+            </div>
 
-              // Render disabled items as non-interactive elements
-              if (isDisabled) {
+            <nav className={`flex-1 overflow-y-auto p-2 ${isCollapsed ? "items-center" : ""}`}>
+              {navItems.map((item) => {
+                const Icon = item.icon;
+                const isActive = item.href === currentPath;
+                const isDisabled = item.disabled;
+
+                // Render disabled items as non-interactive elements
+                if (isDisabled) {
+                  return (
+                    <div
+                      key={item.id}
+                      className={`flex cursor-not-allowed items-center rounded-md px-3 py-2 text-sm font-medium text-zinc-400 dark:text-zinc-600 ${isCollapsed ? "justify-center" : "gap-3"
+                        }`}
+                      title={isCollapsed ? item.label : "Coming soon"}
+                    >
+                      <Icon className="h-5 w-5 flex-shrink-0" />
+                      {!isCollapsed && (
+                        <>
+                          <span className="truncate">{item.label}</span>
+                          <span className="ml-auto rounded bg-zinc-100 px-1.5 py-0.5 text-[10px] font-medium uppercase text-zinc-400 dark:bg-zinc-800 dark:text-zinc-500">
+                            Soon
+                          </span>
+                        </>
+                      )}
+                    </div>
+                  );
+                }
+
                 return (
-                  <div
+                  <Link
                     key={item.id}
-                    className="flex cursor-not-allowed items-center gap-3 rounded-md px-3 py-2 text-sm font-medium text-zinc-400 dark:text-zinc-600"
-                    title="Coming soon"
+                    href={item.href}
+                    className={`flex items-center rounded-md py-2 text-sm font-medium transition-colors focus:outline-none focus:ring-2 focus:ring-zinc-500 focus:ring-offset-2 dark:focus:ring-zinc-400 ${isCollapsed ? "justify-center px-2" : "gap-3 px-3"
+                      } ${isActive
+                        ? "bg-zinc-100 text-black dark:bg-zinc-900 dark:text-zinc-50"
+                        : "text-zinc-600 hover:bg-zinc-100 hover:text-black dark:text-zinc-400 dark:hover:bg-zinc-900 dark:hover:text-zinc-50"
+                      }`}
                   >
-                    <Icon className="h-5 w-5" />
-                    <span>{item.label}</span>
-                    <span className="ml-auto rounded bg-zinc-100 px-1.5 py-0.5 text-[10px] font-medium uppercase text-zinc-400 dark:bg-zinc-800 dark:text-zinc-500">
-                      Soon
-                    </span>
-                  </div>
+                    <Icon className="h-5 w-5 flex-shrink-0" />
+                    {!isCollapsed && (
+                      <>
+                        <span className="truncate">{item.label}</span>
+                        {"badge" in item && (item as { badge?: string | number | null }).badge != null && (
+                          <span className="ml-auto rounded-full bg-zinc-200 px-2 py-0.5 text-xs font-medium text-zinc-700 dark:bg-zinc-800 dark:text-zinc-300">
+                            {(item as { badge?: string | number | null }).badge}
+                          </span>
+                        )}
+                      </>
+                    )}
+                  </Link>
                 );
-              }
-
-              return (
-                <Link
-                  key={item.id}
-                  href={item.href}
-                  className={`flex items-center gap-3 rounded-md px-3 py-2 text-sm font-medium transition-colors focus:outline-none focus:ring-2 focus:ring-zinc-500 focus:ring-offset-2 dark:focus:ring-zinc-400 ${
-                    isActive
-                      ? "bg-zinc-100 text-black dark:bg-zinc-900 dark:text-zinc-50"
-                      : "text-zinc-600 hover:bg-zinc-100 hover:text-black dark:text-zinc-400 dark:hover:bg-zinc-900 dark:hover:text-zinc-50"
-                  }`}
-                >
-                  <Icon className="h-5 w-5" />
-                  <span>{item.label}</span>
-                  {"badge" in item && (item as { badge?: string | number | null }).badge != null && (
-                    <span className="ml-auto rounded-full bg-zinc-200 px-2 py-0.5 text-xs font-medium text-zinc-700 dark:bg-zinc-800 dark:text-zinc-300">
-                      {(item as { badge?: string | number | null }).badge}
-                    </span>
-                  )}
-                </Link>
-              );
-            })}
-          </nav>
+              })}
+            </nav>
+          </div>
         </aside>
+
 
         {/* Sidebar overlay for mobile */}
         {sidebarOpen && (
@@ -222,7 +268,10 @@ export default function AuthenticatedLayout({ children, currentPath = "/" }: Aut
         )}
 
         {/* Main Content */}
-        <main className="flex-1 lg:ml-60">
+        <main
+          className={`flex-1 transition-all duration-300 lg:ml-${isCollapsed ? "16" : "60"}`}
+          style={{ marginLeft: isCollapsed ? "4rem" : undefined }} // Inline style as fallback/override for dynamic class
+        >
           <div className="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
             {children}
           </div>

@@ -33,13 +33,7 @@ function DiceIcon({ className }: { className?: string }) {
   );
 }
 
-function ChevronDownIcon({ className }: { className?: string }) {
-  return (
-    <svg className={className} fill="none" viewBox="0 0 24 24" stroke="currentColor">
-      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
-    </svg>
-  );
-}
+
 
 // =============================================================================
 // ATTRIBUTE HELPERS
@@ -56,15 +50,7 @@ const ATTRIBUTE_DISPLAY: Record<string, { abbr: string; color: string }> = {
   charisma: { abbr: "CHA", color: "text-pink-400" },
 };
 
-const SKILL_CATEGORIES: Record<string, { name: string; color: string }> = {
-  combat: { name: "Combat", color: "border-red-500/50" },
-  physical: { name: "Physical", color: "border-amber-500/50" },
-  social: { name: "Social", color: "border-pink-500/50" },
-  technical: { name: "Technical", color: "border-blue-500/50" },
-  magical: { name: "Magical", color: "border-purple-500/50" },
-  resonance: { name: "Resonance", color: "border-cyan-500/50" },
-  vehicle: { name: "Vehicle", color: "border-orange-500/50" },
-};
+
 
 // =============================================================================
 // CONDITION MONITOR COMPONENT

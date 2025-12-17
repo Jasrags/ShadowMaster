@@ -2,10 +2,10 @@
 
 import { useEffect, useState, use } from "react";
 import { useRouter } from "next/navigation";
-import { Link, Button } from "react-aria-components";
+import { Link } from "react-aria-components";
 import { RulesetProvider, useRulesetStatus, useRuleset } from "@/lib/rules";
 import { CreationWizard } from "../../create/components/CreationWizard";
-import type { Character, CreationState, EditionCode } from "@/lib/types";
+import type { Character, CreationState } from "@/lib/types";
 
 interface ResumeContentProps {
     character: Character;

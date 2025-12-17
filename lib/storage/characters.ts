@@ -25,7 +25,6 @@ import {
   readJsonFile,
   writeJsonFile,
   deleteFile,
-  listJsonFiles,
   readAllJsonFiles,
 } from "./base";
 

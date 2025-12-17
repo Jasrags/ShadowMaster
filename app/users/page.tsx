@@ -11,7 +11,7 @@ export default async function UsersPage() {
   try {
     // Require administrator role
     await requireAdmin();
-  } catch (_error) {
+  } catch {
     // Redirect to home if not admin or not authenticated
     redirect("/");
   }
@@ -29,7 +29,7 @@ export default async function UsersPage() {
       lastLogin: user.lastLogin,
       characters: user.characters,
     }));
-  } catch (_error) {
+  } catch {
     // If data fetching fails, redirect to home
     redirect("/");
   }

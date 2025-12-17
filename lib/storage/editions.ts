@@ -21,7 +21,6 @@ import type {
 } from "../types";
 import {
   readJsonFile,
-  readAllJsonFiles,
   listSubdirectories,
   directoryExists,
 } from "./base";

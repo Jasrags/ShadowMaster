@@ -1,7 +1,7 @@
 "use client";
 
 import { useMemo, useState, useCallback } from "react";
-import { useRituals, useRitualKeywords, usePriorityTable } from "@/lib/rules";
+import { useRituals, useRitualKeywords } from "@/lib/rules";
 import type { CreationState } from "@/lib/types";
 import type { RitualData } from "@/lib/rules";
 
@@ -32,7 +32,7 @@ const SORCERY_GROUP = "sorcery";
 export function RitualsStep({ state, updateState, budgetValues }: StepProps) {
   const rituals = useRituals();
   const ritualKeywords = useRitualKeywords();
-  const priorityTable = usePriorityTable();
+  /* const priorityTable = usePriorityTable(); */ // Removed as unused
 
   const [keywordFilter, setKeywordFilter] = useState<string>("all");
   const [searchQuery, setSearchQuery] = useState("");
@@ -51,26 +51,9 @@ export function RitualsStep({ state, updateState, budgetValues }: StepProps) {
     return true;
   }, [magicalPath, aspectedGroup]);
 
-  // Get magic priority and rating
-  const magicRating = useMemo(() => {
-    const magicPriority = state.priorities?.magic;
-    if (!magicPriority || !priorityTable?.table[magicPriority]) {
-      return 0;
-    }
-
-    const magicData = priorityTable.table[magicPriority].magic as {
-      options?: Array<{
-        path: string;
-        magicRating?: number;
-      }>;
-    };
-
-    const option = magicData?.options?.find((o) => o.path === magicalPath);
-    return option?.magicRating || 0;
-  }, [state.priorities?.magic, priorityTable, magicalPath]);
 
   // Get current selections
-  const selectedRituals = (state.selections.rituals || []) as string[];
+  const selectedRituals = useMemo(() => (state.selections.rituals || []) as string[], [state.selections.rituals]);
 
   // Calculate Karma
   const karmaBase = budgetValues["karma"] || 25;
@@ -337,13 +320,12 @@ function RitualCard({
 
   return (
     <div
-      className={`rounded-xl border-2 p-4 transition-all ${
-        isSelected
-          ? "border-purple-500 bg-purple-50 dark:border-purple-500 dark:bg-purple-900/20"
-          : !canSelect
-            ? "cursor-not-allowed border-zinc-200 bg-zinc-100 opacity-50 dark:border-zinc-700 dark:bg-zinc-800/50"
-            : "border-zinc-200 bg-white hover:border-zinc-300 dark:border-zinc-700 dark:bg-zinc-900 dark:hover:border-zinc-600"
-      }`}
+      className={`rounded-xl border-2 p-4 transition-all ${isSelected
+        ? "border-purple-500 bg-purple-50 dark:border-purple-500 dark:bg-purple-900/20"
+        : !canSelect
+          ? "cursor-not-allowed border-zinc-200 bg-zinc-100 opacity-50 dark:border-zinc-700 dark:bg-zinc-800/50"
+          : "border-zinc-200 bg-white hover:border-zinc-300 dark:border-zinc-700 dark:bg-zinc-900 dark:hover:border-zinc-600"
+        }`}
     >
       <div className="flex items-start justify-between gap-4">
         <div className="flex-1">
@@ -461,13 +443,12 @@ function RitualCard({
         <button
           onClick={onToggle}
           disabled={!canSelect}
-          className={`rounded-lg px-4 py-2 text-sm font-medium transition-colors ${
-            isSelected
-              ? "bg-purple-600 text-white hover:bg-purple-700"
-              : !canSelect
-                ? "cursor-not-allowed bg-zinc-200 text-zinc-400 dark:bg-zinc-700 dark:text-zinc-500"
-                : "bg-zinc-200 text-zinc-800 hover:bg-zinc-300 dark:bg-zinc-700 dark:text-zinc-200 dark:hover:bg-zinc-600"
-          }`}
+          className={`rounded-lg px-4 py-2 text-sm font-medium transition-colors ${isSelected
+            ? "bg-purple-600 text-white hover:bg-purple-700"
+            : !canSelect
+              ? "cursor-not-allowed bg-zinc-200 text-zinc-400 dark:bg-zinc-700 dark:text-zinc-500"
+              : "bg-zinc-200 text-zinc-800 hover:bg-zinc-300 dark:bg-zinc-700 dark:text-zinc-200 dark:hover:bg-zinc-600"
+            }`}
         >
           {isSelected ? "Remove" : "Add"}
         </button>

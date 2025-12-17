@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useMemo, useCallback } from "react";
-import type { CreationState, GearItem, Weapon, ArmorItem, InstalledWeaponMod, InstalledArmorMod, WeaponMount, CyberwareItem, BiowareItem } from "@/lib/types";
+import type { CreationState, GearItem, Weapon, ArmorItem, InstalledWeaponMod, InstalledArmorMod, CyberwareItem, BiowareItem } from "@/lib/types";
 import type { FocusItem } from "@/lib/types/character";
 import type { FocusType } from "@/lib/types/edition";
 import {
@@ -160,8 +160,9 @@ export function GearStep({ state, updateState, budgetValues }: StepProps) {
   const selectedWeapons: Weapon[] = (state.selections?.weapons as Weapon[]) || [];
   const selectedArmor: ArmorItem[] = (state.selections?.armor as ArmorItem[]) || [];
   const selectedFoci: FocusItem[] = (state.selections?.foci as FocusItem[]) || [];
-  const selectedCyberware: CyberwareItem[] = (state.selections?.cyberware as CyberwareItem[]) || [];
-  const selectedBioware: BiowareItem[] = (state.selections?.bioware as BiowareItem[]) || [];
+  // Get selected cyberware and bioware
+  const selectedCyberware = useMemo(() => (state.selections.cyberware || []) as CyberwareItem[], [state.selections.cyberware]);
+  const selectedBioware = useMemo(() => (state.selections.bioware || []) as BiowareItem[], [state.selections.bioware]);
 
   // Check if character is magical
   const magicPath = (state.selections?.["magical-path"] as string) || "mundane";
@@ -746,11 +747,6 @@ export function GearStep({ state, updateState, budgetValues }: StepProps) {
     });
   };
 
-  // Get cyberware that can receive enhancements (has capacity > 0)
-  const cyberwareWithCapacity = useMemo(() => {
-    return selectedCyberware.filter((item) => item.capacity && item.capacity > 0);
-  }, [selectedCyberware]);
-
   // Get available enhancements for a specific cyberware item
   const getAvailableEnhancements = useCallback(
     (parentItem: CyberwareItem) => {
@@ -832,11 +828,11 @@ export function GearStep({ state, updateState, budgetValues }: StepProps) {
         forbidden: enhancement.forbidden,
         attributeBonuses: enhancement.attributeBonusesPerRating && rating
           ? Object.fromEntries(
-              Object.entries(enhancement.attributeBonusesPerRating).map(([attr, bonus]) => [
-                attr,
-                bonus * rating,
-              ])
-            )
+            Object.entries(enhancement.attributeBonusesPerRating).map(([attr, bonus]) => [
+              attr,
+              bonus * rating,
+            ])
+          )
           : enhancement.attributeBonuses,
       };
 
@@ -853,11 +849,11 @@ export function GearStep({ state, updateState, budgetValues }: StepProps) {
             ...(item.attributeBonuses || {}),
             ...(enhancementItem.attributeBonuses
               ? Object.fromEntries(
-                  Object.entries(enhancementItem.attributeBonuses).map(([attr, bonus]) => [
-                    attr,
-                    (item.attributeBonuses?.[attr] || 0) + bonus,
-                  ])
-                )
+                Object.entries(enhancementItem.attributeBonuses).map(([attr, bonus]) => [
+                  attr,
+                  (item.attributeBonuses?.[attr] || 0) + bonus,
+                ])
+              )
               : {}),
           },
         };
@@ -929,7 +925,7 @@ export function GearStep({ state, updateState, budgetValues }: StepProps) {
     const cost = force * focusCatalogItem.costMultiplier;
     const karmaToBond = bonded ? force * focusCatalogItem.bondingKarmaMultiplier : 0;
     const availability = force * 4; // Availability is Force × 4R for foci
-    
+
     const newFocus: FocusItem = {
       catalogId: focusCatalogItem.id,
       name: `${focusCatalogItem.name} (Force ${force})`,
@@ -941,12 +937,12 @@ export function GearStep({ state, updateState, budgetValues }: StepProps) {
       availability,
       restricted: focusCatalogItem.restricted,
     };
-    
+
     const updatedFoci = [...selectedFoci, newFocus];
-    
+
     // Update karma budget for bonding
     const newFociBondingKarma = updatedFoci.reduce((sum, f) => sum + (f.bonded ? f.karmaToBond : 0), 0);
-    
+
     updateState({
       selections: {
         ...state.selections,
@@ -958,12 +954,12 @@ export function GearStep({ state, updateState, budgetValues }: StepProps) {
       },
     });
   };
-  
+
   // Helper to remove focus
   const removeFocus = (index: number) => {
     const updatedFoci = selectedFoci.filter((_, i) => i !== index);
     const newFociBondingKarma = updatedFoci.reduce((sum, f) => sum + (f.bonded ? f.karmaToBond : 0), 0);
-    
+
     updateState({
       selections: {
         ...state.selections,
@@ -1246,10 +1242,10 @@ export function GearStep({ state, updateState, budgetValues }: StepProps) {
             <p className="text-xs text-zinc-500 dark:text-zinc-400">Remaining</p>
             <p
               className={`text-lg font-semibold ${remaining < 0
-                  ? "text-red-600 dark:text-red-400"
-                  : remaining > MAX_NUYEN_CARRYOVER
-                    ? "text-amber-600 dark:text-amber-400"
-                    : "text-emerald-600 dark:text-emerald-400"
+                ? "text-red-600 dark:text-red-400"
+                : remaining > MAX_NUYEN_CARRYOVER
+                  ? "text-amber-600 dark:text-amber-400"
+                  : "text-emerald-600 dark:text-emerald-400"
                 }`}
             >
               ¥{formatCurrency(remaining)}
@@ -1337,8 +1333,8 @@ export function GearStep({ state, updateState, budgetValues }: StepProps) {
                 }
               }}
               className={`px-3 py-1.5 text-xs font-medium transition-colors ${selectedCategory === cat.id
-                  ? "border-b-2 border-emerald-500 text-emerald-600 dark:text-emerald-400"
-                  : "text-zinc-500 hover:text-zinc-700 dark:text-zinc-400 dark:hover:text-zinc-300"
+                ? "border-b-2 border-emerald-500 text-emerald-600 dark:text-emerald-400"
+                : "text-zinc-500 hover:text-zinc-700 dark:text-zinc-400 dark:hover:text-zinc-300"
                 }`}
             >
               {cat.label}
@@ -1364,8 +1360,8 @@ export function GearStep({ state, updateState, budgetValues }: StepProps) {
                 key={sub.id}
                 onClick={() => setWeaponSubcategory(sub.id as WeaponSubcategory)}
                 className={`rounded-full px-2 py-1 text-xs transition-colors ${weaponSubcategory === sub.id
-                    ? "bg-zinc-200 text-zinc-800 dark:bg-zinc-600 dark:text-zinc-100"
-                    : "bg-zinc-100 text-zinc-600 hover:bg-zinc-200 dark:bg-zinc-700 dark:text-zinc-400"
+                  ? "bg-zinc-200 text-zinc-800 dark:bg-zinc-600 dark:text-zinc-100"
+                  : "bg-zinc-100 text-zinc-600 hover:bg-zinc-200 dark:bg-zinc-700 dark:text-zinc-400"
                   }`}
               >
                 {sub.label}
@@ -1384,10 +1380,10 @@ export function GearStep({ state, updateState, budgetValues }: StepProps) {
                   <p className="text-xs text-zinc-500 dark:text-zinc-400">Essence</p>
                   <p
                     className={`text-lg font-semibold ${remainingEssence < 1
-                        ? "text-red-600 dark:text-red-400"
-                        : remainingEssence < 3
-                          ? "text-amber-600 dark:text-amber-400"
-                          : "text-emerald-600 dark:text-emerald-400"
+                      ? "text-red-600 dark:text-red-400"
+                      : remainingEssence < 3
+                        ? "text-amber-600 dark:text-amber-400"
+                        : "text-emerald-600 dark:text-emerald-400"
                       }`}
                   >
                     {formatEssence(remainingEssence)} / {maxEssence}
@@ -1395,10 +1391,10 @@ export function GearStep({ state, updateState, budgetValues }: StepProps) {
                   <div className="mt-1 h-2 w-full overflow-hidden rounded-full bg-zinc-200 dark:bg-zinc-700">
                     <div
                       className={`h-full transition-all ${remainingEssence < 1
-                          ? "bg-red-500"
-                          : remainingEssence < 3
-                            ? "bg-amber-500"
-                            : "bg-emerald-500"
+                        ? "bg-red-500"
+                        : remainingEssence < 3
+                          ? "bg-amber-500"
+                          : "bg-emerald-500"
                         }`}
                       style={{ width: `${(remainingEssence / maxEssence) * 100}%` }}
                     />
@@ -1437,8 +1433,8 @@ export function GearStep({ state, updateState, budgetValues }: StepProps) {
                     <span
                       key={attr}
                       className={`rounded-full px-2 py-0.5 text-xs font-medium ${bonus >= augmentationRules.maxAttributeBonus
-                          ? "bg-amber-100 text-amber-800 dark:bg-amber-900/50 dark:text-amber-200"
-                          : "bg-blue-100 text-blue-800 dark:bg-blue-900/50 dark:text-blue-200"
+                        ? "bg-amber-100 text-amber-800 dark:bg-amber-900/50 dark:text-amber-200"
+                        : "bg-blue-100 text-blue-800 dark:bg-blue-900/50 dark:text-blue-200"
                         }`}
                     >
                       +{bonus} {attr.charAt(0).toUpperCase() + attr.slice(1)}
@@ -1454,8 +1450,8 @@ export function GearStep({ state, updateState, budgetValues }: StepProps) {
               <button
                 onClick={() => setAugmentationSubcategory("cyberware")}
                 className={`border-b-2 px-4 py-2 text-sm font-medium transition-colors ${augmentationSubcategory === "cyberware"
-                    ? "border-cyan-500 text-cyan-600 dark:text-cyan-400"
-                    : "border-transparent text-zinc-500 hover:text-zinc-700 dark:text-zinc-400 dark:hover:text-zinc-200"
+                  ? "border-cyan-500 text-cyan-600 dark:text-cyan-400"
+                  : "border-transparent text-zinc-500 hover:text-zinc-700 dark:text-zinc-400 dark:hover:text-zinc-200"
                   }`}
               >
                 Cyberware ({filteredCyberware.length})
@@ -1468,8 +1464,8 @@ export function GearStep({ state, updateState, budgetValues }: StepProps) {
               <button
                 onClick={() => setAugmentationSubcategory("bioware")}
                 className={`border-b-2 px-4 py-2 text-sm font-medium transition-colors ${augmentationSubcategory === "bioware"
-                    ? "border-green-500 text-green-600 dark:text-green-400"
-                    : "border-transparent text-zinc-500 hover:text-zinc-700 dark:text-zinc-400 dark:hover:text-zinc-200"
+                  ? "border-green-500 text-green-600 dark:text-green-400"
+                  : "border-transparent text-zinc-500 hover:text-zinc-700 dark:text-zinc-400 dark:hover:text-zinc-200"
                   }`}
               >
                 Bioware ({filteredBioware.length})
@@ -1485,29 +1481,29 @@ export function GearStep({ state, updateState, budgetValues }: StepProps) {
             <div className="flex flex-wrap gap-1">
               {augmentationSubcategory === "cyberware"
                 ? CYBERWARE_CATEGORIES.map((cat) => (
-                    <button
-                      key={cat.id}
-                      onClick={() => setCyberwareCategory(cat.id)}
-                      className={`rounded-full px-2 py-1 text-xs transition-colors ${cyberwareCategory === cat.id
-                          ? "bg-cyan-100 text-cyan-800 dark:bg-cyan-900/50 dark:text-cyan-100"
-                          : "bg-zinc-100 text-zinc-600 hover:bg-zinc-200 dark:bg-zinc-700 dark:text-zinc-400"
-                        }`}
-                    >
-                      {cat.label}
-                    </button>
-                  ))
+                  <button
+                    key={cat.id}
+                    onClick={() => setCyberwareCategory(cat.id)}
+                    className={`rounded-full px-2 py-1 text-xs transition-colors ${cyberwareCategory === cat.id
+                      ? "bg-cyan-100 text-cyan-800 dark:bg-cyan-900/50 dark:text-cyan-100"
+                      : "bg-zinc-100 text-zinc-600 hover:bg-zinc-200 dark:bg-zinc-700 dark:text-zinc-400"
+                      }`}
+                  >
+                    {cat.label}
+                  </button>
+                ))
                 : BIOWARE_CATEGORIES.map((cat) => (
-                    <button
-                      key={cat.id}
-                      onClick={() => setBiowareCategory(cat.id)}
-                      className={`rounded-full px-2 py-1 text-xs transition-colors ${biowareCategory === cat.id
-                          ? "bg-green-100 text-green-800 dark:bg-green-900/50 dark:text-green-100"
-                          : "bg-zinc-100 text-zinc-600 hover:bg-zinc-200 dark:bg-zinc-700 dark:text-zinc-400"
-                        }`}
-                    >
-                      {cat.label}
-                    </button>
-                  ))}
+                  <button
+                    key={cat.id}
+                    onClick={() => setBiowareCategory(cat.id)}
+                    className={`rounded-full px-2 py-1 text-xs transition-colors ${biowareCategory === cat.id
+                      ? "bg-green-100 text-green-800 dark:bg-green-900/50 dark:text-green-100"
+                      : "bg-zinc-100 text-zinc-600 hover:bg-zinc-200 dark:bg-zinc-700 dark:text-zinc-400"
+                      }`}
+                  >
+                    {cat.label}
+                  </button>
+                ))}
             </div>
 
             {/* Augmentation Table */}
@@ -1526,168 +1522,168 @@ export function GearStep({ state, updateState, budgetValues }: StepProps) {
                 <tbody className="divide-y divide-zinc-100 dark:divide-zinc-700">
                   {augmentationSubcategory === "cyberware"
                     ? filteredCyberware.map((item) => {
-                        const grade = getItemGrade(item.id);
-                        const essenceCost = calculateCyberwareEssenceCost(
-                          item.essenceCost,
-                          grade,
-                          cyberwareGrades,
-                          item.hasRating ? 1 : undefined,
-                          item.essencePerRating
-                        );
-                        const cost = calculateCyberwareCost(
-                          item.cost,
-                          grade,
-                          cyberwareGrades,
-                          item.hasRating ? 1 : undefined,
-                          item.costPerRating
-                        );
-                        const availability = calculateCyberwareAvailability(item.availability, grade, cyberwareGrades);
-                        const check = canAddAugmentation(cost, essenceCost, availability, item.attributeBonuses, item.forbidden);
+                      const grade = getItemGrade(item.id);
+                      const essenceCost = calculateCyberwareEssenceCost(
+                        item.essenceCost,
+                        grade,
+                        cyberwareGrades,
+                        item.hasRating ? 1 : undefined,
+                        item.essencePerRating
+                      );
+                      const cost = calculateCyberwareCost(
+                        item.cost,
+                        grade,
+                        cyberwareGrades,
+                        item.hasRating ? 1 : undefined,
+                        item.costPerRating
+                      );
+                      const availability = calculateCyberwareAvailability(item.availability, grade, cyberwareGrades);
+                      const check = canAddAugmentation(cost, essenceCost, availability, item.attributeBonuses, item.forbidden);
 
-                        return (
-                          <tr
-                            key={item.id}
-                            className={`${!check.allowed ? "opacity-50" : ""} hover:bg-zinc-50 dark:hover:bg-zinc-800/50`}
-                          >
-                            <td className="px-3 py-2">
-                              <p className="font-medium">{item.name}</p>
-                              {item.description && (
-                                <p className="text-xs text-zinc-500 dark:text-zinc-400 truncate max-w-xs">
-                                  {item.description}
-                                </p>
-                              )}
-                              {item.attributeBonuses && (
-                                <p className="text-xs text-emerald-600 dark:text-emerald-400">
-                                  {Object.entries(item.attributeBonuses)
-                                    .map(([attr, bonus]) => `+${bonus} ${attr.toUpperCase()}`)
-                                    .join(", ")}
-                                </p>
-                              )}
-                              {item.capacity && item.capacity > 0 && (
-                                <p className="text-xs text-blue-600 dark:text-blue-400">
-                                  Capacity: {item.capacity}
-                                </p>
-                              )}
-                            </td>
-                            <td className="px-3 py-2 text-center">
-                              <span className="text-amber-600 dark:text-amber-400">{formatEssence(essenceCost)}</span>
-                            </td>
-                            <td className="px-3 py-2 text-right">¥{formatCurrency(cost)}</td>
-                            <td className="px-3 py-2 text-center">
-                              <span className={item.restricted ? "text-amber-600 dark:text-amber-400" : item.forbidden ? "text-red-600 dark:text-red-400" : ""}>
-                                {getAugmentationAvailabilityDisplay(availability, item.restricted, item.forbidden)}
-                              </span>
-                            </td>
-                            <td className="px-3 py-2">
-                              <select
-                                value={grade}
-                                onChange={(e) => setSelectedGrades((prev) => ({ ...prev, [item.id]: e.target.value }))}
-                                className="w-full rounded border border-zinc-300 bg-white px-2 py-1 text-xs dark:border-zinc-600 dark:bg-zinc-800"
-                              >
-                                {cyberwareGrades.map((g) => (
-                                  <option key={g.id} value={g.id}>{g.name}</option>
-                                ))}
-                              </select>
-                            </td>
-                            <td className="px-3 py-2 text-center">
-                              <button
-                                onClick={() => addCyberware(item, grade, item.hasRating ? 1 : undefined)}
-                                disabled={!check.allowed}
-                                title={check.reason}
-                                className={`rounded px-2 py-1 text-xs font-medium transition-colors ${check.allowed
-                                    ? "bg-emerald-500 text-white hover:bg-emerald-600"
-                                    : "cursor-not-allowed bg-zinc-200 text-zinc-400 dark:bg-zinc-700"
-                                  }`}
-                              >
-                                Add
-                              </button>
-                            </td>
-                          </tr>
-                        );
-                      })
+                      return (
+                        <tr
+                          key={item.id}
+                          className={`${!check.allowed ? "opacity-50" : ""} hover:bg-zinc-50 dark:hover:bg-zinc-800/50`}
+                        >
+                          <td className="px-3 py-2">
+                            <p className="font-medium">{item.name}</p>
+                            {item.description && (
+                              <p className="text-xs text-zinc-500 dark:text-zinc-400 truncate max-w-xs">
+                                {item.description}
+                              </p>
+                            )}
+                            {item.attributeBonuses && (
+                              <p className="text-xs text-emerald-600 dark:text-emerald-400">
+                                {Object.entries(item.attributeBonuses)
+                                  .map(([attr, bonus]) => `+${bonus} ${attr.toUpperCase()}`)
+                                  .join(", ")}
+                              </p>
+                            )}
+                            {item.capacity && item.capacity > 0 && (
+                              <p className="text-xs text-blue-600 dark:text-blue-400">
+                                Capacity: {item.capacity}
+                              </p>
+                            )}
+                          </td>
+                          <td className="px-3 py-2 text-center">
+                            <span className="text-amber-600 dark:text-amber-400">{formatEssence(essenceCost)}</span>
+                          </td>
+                          <td className="px-3 py-2 text-right">¥{formatCurrency(cost)}</td>
+                          <td className="px-3 py-2 text-center">
+                            <span className={item.restricted ? "text-amber-600 dark:text-amber-400" : item.forbidden ? "text-red-600 dark:text-red-400" : ""}>
+                              {getAugmentationAvailabilityDisplay(availability, item.restricted, item.forbidden)}
+                            </span>
+                          </td>
+                          <td className="px-3 py-2">
+                            <select
+                              value={grade}
+                              onChange={(e) => setSelectedGrades((prev) => ({ ...prev, [item.id]: e.target.value }))}
+                              className="w-full rounded border border-zinc-300 bg-white px-2 py-1 text-xs dark:border-zinc-600 dark:bg-zinc-800"
+                            >
+                              {cyberwareGrades.map((g) => (
+                                <option key={g.id} value={g.id}>{g.name}</option>
+                              ))}
+                            </select>
+                          </td>
+                          <td className="px-3 py-2 text-center">
+                            <button
+                              onClick={() => addCyberware(item, grade, item.hasRating ? 1 : undefined)}
+                              disabled={!check.allowed}
+                              title={check.reason}
+                              className={`rounded px-2 py-1 text-xs font-medium transition-colors ${check.allowed
+                                ? "bg-emerald-500 text-white hover:bg-emerald-600"
+                                : "cursor-not-allowed bg-zinc-200 text-zinc-400 dark:bg-zinc-700"
+                                }`}
+                            >
+                              Add
+                            </button>
+                          </td>
+                        </tr>
+                      );
+                    })
                     : filteredBioware.map((item) => {
-                        const grade = getItemGrade(item.id);
-                        const essenceCost = calculateBiowareEssenceCost(
-                          item.essenceCost,
-                          grade,
-                          biowareGrades,
-                          item.hasRating ? 1 : undefined,
-                          item.essencePerRating
-                        );
-                        const cost = calculateBiowareCost(
-                          item.cost,
-                          grade,
-                          biowareGrades,
-                          item.hasRating ? 1 : undefined,
-                          item.costPerRating
-                        );
-                        const availability = calculateBiowareAvailability(item.availability, grade, biowareGrades);
-                        const check = canAddAugmentation(cost, essenceCost, availability, item.attributeBonuses, item.forbidden);
+                      const grade = getItemGrade(item.id);
+                      const essenceCost = calculateBiowareEssenceCost(
+                        item.essenceCost,
+                        grade,
+                        biowareGrades,
+                        item.hasRating ? 1 : undefined,
+                        item.essencePerRating
+                      );
+                      const cost = calculateBiowareCost(
+                        item.cost,
+                        grade,
+                        biowareGrades,
+                        item.hasRating ? 1 : undefined,
+                        item.costPerRating
+                      );
+                      const availability = calculateBiowareAvailability(item.availability, grade, biowareGrades);
+                      const check = canAddAugmentation(cost, essenceCost, availability, item.attributeBonuses, item.forbidden);
 
-                        return (
-                          <tr
-                            key={item.id}
-                            className={`${!check.allowed ? "opacity-50" : ""} hover:bg-zinc-50 dark:hover:bg-zinc-800/50`}
-                          >
-                            <td className="px-3 py-2">
-                              <p className="font-medium">{item.name}</p>
-                              {item.description && (
-                                <p className="text-xs text-zinc-500 dark:text-zinc-400 truncate max-w-xs">
-                                  {item.description}
-                                </p>
-                              )}
-                              {item.attributeBonuses && (
-                                <p className="text-xs text-emerald-600 dark:text-emerald-400">
-                                  {Object.entries(item.attributeBonuses)
-                                    .map(([attr, bonus]) => `+${bonus} ${attr.toUpperCase()}`)
-                                    .join(", ")}
-                                </p>
-                              )}
-                            </td>
-                            <td className="px-3 py-2 text-center">
-                              <span className="text-amber-600 dark:text-amber-400">{formatEssence(essenceCost)}</span>
-                            </td>
-                            <td className="px-3 py-2 text-right">¥{formatCurrency(cost)}</td>
-                            <td className="px-3 py-2 text-center">
-                              <span className={item.restricted ? "text-amber-600 dark:text-amber-400" : item.forbidden ? "text-red-600 dark:text-red-400" : ""}>
-                                {getAugmentationAvailabilityDisplay(availability, item.restricted, item.forbidden)}
-                              </span>
-                            </td>
-                            <td className="px-3 py-2">
-                              <select
-                                value={grade}
-                                onChange={(e) => setSelectedGrades((prev) => ({ ...prev, [item.id]: e.target.value }))}
-                                className="w-full rounded border border-zinc-300 bg-white px-2 py-1 text-xs dark:border-zinc-600 dark:bg-zinc-800"
-                              >
-                                {biowareGrades.map((g) => (
-                                  <option key={g.id} value={g.id}>{g.name}</option>
-                                ))}
-                              </select>
-                            </td>
-                            <td className="px-3 py-2 text-center">
-                              <button
-                                onClick={() => addBioware(item, grade, item.hasRating ? 1 : undefined)}
-                                disabled={!check.allowed}
-                                title={check.reason}
-                                className={`rounded px-2 py-1 text-xs font-medium transition-colors ${check.allowed
-                                    ? "bg-emerald-500 text-white hover:bg-emerald-600"
-                                    : "cursor-not-allowed bg-zinc-200 text-zinc-400 dark:bg-zinc-700"
-                                  }`}
-                              >
-                                Add
-                              </button>
-                            </td>
-                          </tr>
-                        );
-                      })}
+                      return (
+                        <tr
+                          key={item.id}
+                          className={`${!check.allowed ? "opacity-50" : ""} hover:bg-zinc-50 dark:hover:bg-zinc-800/50`}
+                        >
+                          <td className="px-3 py-2">
+                            <p className="font-medium">{item.name}</p>
+                            {item.description && (
+                              <p className="text-xs text-zinc-500 dark:text-zinc-400 truncate max-w-xs">
+                                {item.description}
+                              </p>
+                            )}
+                            {item.attributeBonuses && (
+                              <p className="text-xs text-emerald-600 dark:text-emerald-400">
+                                {Object.entries(item.attributeBonuses)
+                                  .map(([attr, bonus]) => `+${bonus} ${attr.toUpperCase()}`)
+                                  .join(", ")}
+                              </p>
+                            )}
+                          </td>
+                          <td className="px-3 py-2 text-center">
+                            <span className="text-amber-600 dark:text-amber-400">{formatEssence(essenceCost)}</span>
+                          </td>
+                          <td className="px-3 py-2 text-right">¥{formatCurrency(cost)}</td>
+                          <td className="px-3 py-2 text-center">
+                            <span className={item.restricted ? "text-amber-600 dark:text-amber-400" : item.forbidden ? "text-red-600 dark:text-red-400" : ""}>
+                              {getAugmentationAvailabilityDisplay(availability, item.restricted, item.forbidden)}
+                            </span>
+                          </td>
+                          <td className="px-3 py-2">
+                            <select
+                              value={grade}
+                              onChange={(e) => setSelectedGrades((prev) => ({ ...prev, [item.id]: e.target.value }))}
+                              className="w-full rounded border border-zinc-300 bg-white px-2 py-1 text-xs dark:border-zinc-600 dark:bg-zinc-800"
+                            >
+                              {biowareGrades.map((g) => (
+                                <option key={g.id} value={g.id}>{g.name}</option>
+                              ))}
+                            </select>
+                          </td>
+                          <td className="px-3 py-2 text-center">
+                            <button
+                              onClick={() => addBioware(item, grade, item.hasRating ? 1 : undefined)}
+                              disabled={!check.allowed}
+                              title={check.reason}
+                              className={`rounded px-2 py-1 text-xs font-medium transition-colors ${check.allowed
+                                ? "bg-emerald-500 text-white hover:bg-emerald-600"
+                                : "cursor-not-allowed bg-zinc-200 text-zinc-400 dark:bg-zinc-700"
+                                }`}
+                            >
+                              Add
+                            </button>
+                          </td>
+                        </tr>
+                      );
+                    })}
                   {((augmentationSubcategory === "cyberware" && filteredCyberware.length === 0) ||
                     (augmentationSubcategory === "bioware" && filteredBioware.length === 0)) && (
-                    <tr>
-                      <td colSpan={6} className="px-3 py-8 text-center text-zinc-500">
-                        No items found matching your criteria.
-                      </td>
-                    </tr>
-                  )}
+                      <tr>
+                        <td colSpan={6} className="px-3 py-8 text-center text-zinc-500">
+                          No items found matching your criteria.
+                        </td>
+                      </tr>
+                    )}
                 </tbody>
               </table>
             </div>
@@ -1859,11 +1855,10 @@ export function GearStep({ state, updateState, budgetValues }: StepProps) {
                                         setEnhancingCyberwareIndex(null);
                                       }}
                                       disabled={!canAdd}
-                                      className={`rounded px-2 py-0.5 text-xs font-medium ${
-                                        canAdd
-                                          ? "bg-emerald-500 text-white hover:bg-emerald-600"
-                                          : "cursor-not-allowed bg-zinc-200 text-zinc-400"
-                                      }`}
+                                      className={`rounded px-2 py-0.5 text-xs font-medium ${canAdd
+                                        ? "bg-emerald-500 text-white hover:bg-emerald-600"
+                                        : "cursor-not-allowed bg-zinc-200 text-zinc-400"
+                                        }`}
                                     >
                                       Add
                                     </button>
@@ -1895,11 +1890,10 @@ export function GearStep({ state, updateState, budgetValues }: StepProps) {
                                     setEnhancingCyberwareIndex(null);
                                   }}
                                   disabled={!canAdd}
-                                  className={`rounded px-2 py-0.5 text-xs font-medium ${
-                                    canAdd
-                                      ? "bg-emerald-500 text-white hover:bg-emerald-600"
-                                      : "cursor-not-allowed bg-zinc-200 text-zinc-400"
-                                  }`}
+                                  className={`rounded px-2 py-0.5 text-xs font-medium ${canAdd
+                                    ? "bg-emerald-500 text-white hover:bg-emerald-600"
+                                    : "cursor-not-allowed bg-zinc-200 text-zinc-400"
+                                    }`}
                                 >
                                   Add
                                 </button>
@@ -2009,8 +2003,8 @@ export function GearStep({ state, updateState, budgetValues }: StepProps) {
                                 onClick={() => addFocus(focus, force, false)}
                                 disabled={!canAfford}
                                 className={`rounded px-2 py-1 text-xs font-medium transition-colors ${canAfford
-                                    ? "bg-emerald-500 text-white hover:bg-emerald-600"
-                                    : "cursor-not-allowed bg-zinc-200 text-zinc-400 dark:bg-zinc-700"
+                                  ? "bg-emerald-500 text-white hover:bg-emerald-600"
+                                  : "cursor-not-allowed bg-zinc-200 text-zinc-400 dark:bg-zinc-700"
                                   }`}
                               >
                                 Add
@@ -2019,8 +2013,8 @@ export function GearStep({ state, updateState, budgetValues }: StepProps) {
                                 onClick={() => addFocus(focus, force, true)}
                                 disabled={!canAfford}
                                 className={`rounded px-2 py-1 text-xs font-medium transition-colors ${canAfford
-                                    ? "bg-blue-500 text-white hover:bg-blue-600"
-                                    : "cursor-not-allowed bg-zinc-200 text-zinc-400 dark:bg-zinc-700"
+                                  ? "bg-blue-500 text-white hover:bg-blue-600"
+                                  : "cursor-not-allowed bg-zinc-200 text-zinc-400 dark:bg-zinc-700"
                                   }`}
                                 title={`Add and bond (costs ${bondingKarma} Karma)`}
                               >
@@ -2047,82 +2041,82 @@ export function GearStep({ state, updateState, budgetValues }: StepProps) {
 
         {/* Item List */}
         {selectedCategory !== "foci" && selectedCategory !== "augmentations" && (
-        <div className="max-h-96 overflow-y-auto rounded-lg border border-zinc-200 dark:border-zinc-700">
-          <table className="w-full text-sm">
-            <thead className="sticky top-0 bg-zinc-100 dark:bg-zinc-800">
-              <tr>
-                <th className="px-3 py-2 text-left">Item</th>
-                <th className="px-3 py-2 text-right">Cost</th>
-                <th className="px-3 py-2 text-center">Avail</th>
-                <th className="px-3 py-2 text-center">Action</th>
-              </tr>
-            </thead>
-            <tbody className="divide-y divide-zinc-100 dark:divide-zinc-700">
-              {filteredGearItems.map((item, index) => {
-                const available = isItemAvailable(item);
-                const canAfford = item.cost <= remaining;
+          <div className="max-h-96 overflow-y-auto rounded-lg border border-zinc-200 dark:border-zinc-700">
+            <table className="w-full text-sm">
+              <thead className="sticky top-0 bg-zinc-100 dark:bg-zinc-800">
+                <tr>
+                  <th className="px-3 py-2 text-left">Item</th>
+                  <th className="px-3 py-2 text-right">Cost</th>
+                  <th className="px-3 py-2 text-center">Avail</th>
+                  <th className="px-3 py-2 text-center">Action</th>
+                </tr>
+              </thead>
+              <tbody className="divide-y divide-zinc-100 dark:divide-zinc-700">
+                {filteredGearItems.map((item, index) => {
+                  const available = isItemAvailable(item);
+                  const canAfford = item.cost <= remaining;
 
-                return (
-                  <tr
-                    key={`${item.id}-${index}`}
-                    className={`${!available ? "opacity-50" : ""} hover:bg-zinc-50 dark:hover:bg-zinc-800/50`}
-                  >
-                    <td className="px-3 py-2">
-                      <p className="font-medium">{item.name}</p>
-                      {item.description && (
-                        <p className="text-xs text-zinc-500 dark:text-zinc-400 truncate max-w-xs">
-                          {item.description}
-                        </p>
-                      )}
-                      {(item as WeaponData).damage && (
-                        <p className="text-xs text-zinc-500 dark:text-zinc-400">
-                          DMG: {(item as WeaponData).damage} | AP: {(item as WeaponData).ap}
-                        </p>
-                      )}
-                      {(item as ArmorData).armorRating && (
-                        <p className="text-xs text-zinc-500 dark:text-zinc-400">
-                          Armor: {(item as ArmorData).armorRating}
-                        </p>
-                      )}
-                    </td>
-                    <td className="px-3 py-2 text-right">¥{formatCurrency(item.cost)}</td>
-                    <td className="px-3 py-2 text-center">
-                      <span
-                        className={`${item.restricted
+                  return (
+                    <tr
+                      key={`${item.id}-${index}`}
+                      className={`${!available ? "opacity-50" : ""} hover:bg-zinc-50 dark:hover:bg-zinc-800/50`}
+                    >
+                      <td className="px-3 py-2">
+                        <p className="font-medium">{item.name}</p>
+                        {item.description && (
+                          <p className="text-xs text-zinc-500 dark:text-zinc-400 truncate max-w-xs">
+                            {item.description}
+                          </p>
+                        )}
+                        {(item as WeaponData).damage && (
+                          <p className="text-xs text-zinc-500 dark:text-zinc-400">
+                            DMG: {(item as WeaponData).damage} | AP: {(item as WeaponData).ap}
+                          </p>
+                        )}
+                        {(item as ArmorData).armorRating && (
+                          <p className="text-xs text-zinc-500 dark:text-zinc-400">
+                            Armor: {(item as ArmorData).armorRating}
+                          </p>
+                        )}
+                      </td>
+                      <td className="px-3 py-2 text-right">¥{formatCurrency(item.cost)}</td>
+                      <td className="px-3 py-2 text-center">
+                        <span
+                          className={`${item.restricted
                             ? "text-amber-600 dark:text-amber-400"
                             : item.forbidden
                               ? "text-red-600 dark:text-red-400"
                               : ""
-                          }`}
-                      >
-                        {getAvailabilityDisplay(item)}
-                      </span>
-                    </td>
-                    <td className="px-3 py-2 text-center">
-                      <button
-                        onClick={() => addGearItem(item)}
-                        disabled={!available || !canAfford}
-                        className={`rounded px-2 py-1 text-xs font-medium transition-colors ${available && canAfford
+                            }`}
+                        >
+                          {getAvailabilityDisplay(item)}
+                        </span>
+                      </td>
+                      <td className="px-3 py-2 text-center">
+                        <button
+                          onClick={() => addGearItem(item)}
+                          disabled={!available || !canAfford}
+                          className={`rounded px-2 py-1 text-xs font-medium transition-colors ${available && canAfford
                             ? "bg-emerald-500 text-white hover:bg-emerald-600"
                             : "cursor-not-allowed bg-zinc-200 text-zinc-400 dark:bg-zinc-700"
-                          }`}
-                      >
-                        Add
-                      </button>
+                            }`}
+                        >
+                          Add
+                        </button>
+                      </td>
+                    </tr>
+                  );
+                })}
+                {filteredGearItems.length === 0 && (
+                  <tr>
+                    <td colSpan={4} className="px-3 py-8 text-center text-zinc-500">
+                      No items found matching your criteria.
                     </td>
                   </tr>
-                );
-              })}
-              {filteredGearItems.length === 0 && (
-                <tr>
-                  <td colSpan={4} className="px-3 py-8 text-center text-zinc-500">
-                    No items found matching your criteria.
-                  </td>
-                </tr>
-              )}
-            </tbody>
-          </table>
-        </div>
+                )}
+              </tbody>
+            </table>
+          </div>
         )}
       </div>
 

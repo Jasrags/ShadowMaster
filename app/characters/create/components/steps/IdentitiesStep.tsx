@@ -26,6 +26,21 @@ interface StepProps {
   budgetValues: Record<string, number>;
 }
 
+// Map between qualityLevels (1-4) and SinnerQuality enum values
+const levelToSinnerQuality: Record<number, SinnerQuality> = {
+  1: SinnerQualityEnum.National,
+  2: SinnerQualityEnum.Criminal,
+  3: SinnerQualityEnum.CorporateLimited,
+  4: SinnerQualityEnum.CorporateBorn,
+};
+
+const sinnerQualityToLevel: Record<SinnerQuality, number> = {
+  [SinnerQualityEnum.National]: 1,
+  [SinnerQualityEnum.Criminal]: 2,
+  [SinnerQualityEnum.CorporateLimited]: 3,
+  [SinnerQualityEnum.CorporateBorn]: 4,
+};
+
 export function IdentitiesStep({ state, updateState, budgetValues }: StepProps) {
   const availableLifestyles = useLifestyles();
   const lifestyleModifiers = useLifestyleModifiers();
@@ -52,14 +67,14 @@ export function IdentitiesStep({ state, updateState, budgetValues }: StepProps) 
   // Calculate lifestyle cost for a given lifestyle (including modifications and permanent purchase)
   const calculateLifestyleCost = useCallback((lifestyle: Lifestyle): number => {
     if (!lifestyle.type) return 0;
-    
+
     // Find base lifestyle cost
     const baseLifestyle = availableLifestyles.find((l) => l.id === lifestyle.type || l.name.toLowerCase() === lifestyle.type.toLowerCase());
     if (!baseLifestyle) return 0;
-    
+
     const modifier = lifestyleModifiers[metatype] || 1;
     let cost = baseLifestyle.monthlyCost * modifier;
-    
+
     // Apply modifications (excluding permanent lifestyle modification)
     lifestyle.modifications?.forEach((mod) => {
       if (mod.catalogId !== "permanent-lifestyle" && mod.name.toLowerCase() !== "permanent lifestyle") {
@@ -70,42 +85,42 @@ export function IdentitiesStep({ state, updateState, budgetValues }: StepProps) 
         }
       }
     });
-    
+
     // Add subscriptions
     const subscriptionCost = lifestyle.subscriptions?.reduce((sum, sub) => sum + sub.monthlyCost, 0) || 0;
     cost = cost + subscriptionCost;
-    
+
     // Add custom expenses, subtract custom income
     cost = cost + (lifestyle.customExpenses || 0) - (lifestyle.customIncome || 0);
-    
+
     const finalMonthlyCost = Math.max(0, Math.floor(cost));
-    
+
     // Check if permanent
     const isPermanent = isLifestylePermanent(lifestyle);
     if (isPermanent) {
       return finalMonthlyCost * 100; // Permanent: 100 × monthly cost
     }
-    
+
     return finalMonthlyCost; // Monthly: 1 month prepaid
   }, [availableLifestyles, lifestyleModifiers, metatype]);
 
   // Calculate identity costs (fake SINs, licenses, and associated lifestyles)
   const identityCosts = useMemo(() => {
     let total = 0;
-    
+
     identities.forEach((identity) => {
       // Fake SIN cost: Rating × 625¥ (Rating 4 = 2,500¥)
       if (identity.sin?.type === "fake" && identity.sin.rating) {
         total += identity.sin.rating * 625;
       }
-      
+
       // Fake License costs: Rating × 50¥ (Rating 4 = 200¥)
       identity.licenses?.forEach((license) => {
         if (license.type === "fake" && license.rating) {
           total += license.rating * 50;
         }
       });
-      
+
       // Lifestyle cost (if associated)
       if (identity.associatedLifestyleId) {
         const lifestyle = lifestyles.find((l) => l.id === identity.associatedLifestyleId);
@@ -114,7 +129,7 @@ export function IdentitiesStep({ state, updateState, budgetValues }: StepProps) 
         }
       }
     });
-    
+
     return total;
   }, [identities, lifestyles, calculateLifestyleCost]);
 
@@ -146,20 +161,6 @@ export function IdentitiesStep({ state, updateState, budgetValues }: StepProps) 
     return negativeQualitiesList.includes("sinner");
   }, [state.selections.negativeQualities]);
 
-  // Map between qualityLevels (1-4) and SinnerQuality enum values
-  const levelToSinnerQuality: Record<number, SinnerQuality> = {
-    1: SinnerQualityEnum.National,
-    2: SinnerQualityEnum.Criminal,
-    3: SinnerQualityEnum.CorporateLimited,
-    4: SinnerQualityEnum.CorporateBorn,
-  };
-  
-  const sinnerQualityToLevel: Record<SinnerQuality, number> = {
-    [SinnerQualityEnum.National]: 1,
-    [SinnerQualityEnum.Criminal]: 2,
-    [SinnerQualityEnum.CorporateLimited]: 3,
-    [SinnerQualityEnum.CorporateBorn]: 4,
-  };
 
   // Get SINner quality level if present (from qualityLevels, the source of truth for karma costs)
   const sinnerQualityLevel = useMemo(() => {
@@ -171,22 +172,22 @@ export function IdentitiesStep({ state, updateState, budgetValues }: StepProps) 
 
   // Track previous sinnerQualityLevel to detect changes from Qualities step
   const prevSinnerQualityLevelRef = useRef<SinnerQuality | null>(sinnerQualityLevel);
-  
+
   // Sync Quality → Identity: When SINner quality level changes (from Qualities step), update all real SIN identities
   useEffect(() => {
     const prevLevel = prevSinnerQualityLevelRef.current;
     prevSinnerQualityLevelRef.current = sinnerQualityLevel;
-    
+
     // Only sync if the level actually changed and we have a valid level
     if (!sinnerQualityLevel || prevLevel === sinnerQualityLevel) return;
-    
+
     // Check if any identities have real SINs that need updating
     const hasRealSINsToUpdate = identities.some(
       (identity) => identity.sin?.type === "real" && identity.sin.sinnerQuality !== sinnerQualityLevel
     );
-    
+
     if (!hasRealSINsToUpdate) return;
-    
+
     // Update all real SIN identities to match the new SINner quality level
     const updatedIdentities = identities.map((identity) => {
       if (identity.sin?.type === "real" && identity.sin.sinnerQuality !== sinnerQualityLevel) {
@@ -200,7 +201,7 @@ export function IdentitiesStep({ state, updateState, budgetValues }: StepProps) 
       }
       return identity;
     });
-    
+
     updateState({
       selections: {
         ...state.selections,
@@ -222,7 +223,7 @@ export function IdentitiesStep({ state, updateState, budgetValues }: StepProps) 
     return selectedNegativeIds.reduce((sum, id) => {
       const quality = negativeQualities.find((q) => q.id === id);
       if (!quality) return sum;
-      
+
       // Check if it has levels
       if (quality.levels && quality.levels.length > 0) {
         const levelIdx = qualityLevelsMap[id] || 1;
@@ -237,34 +238,34 @@ export function IdentitiesStep({ state, updateState, budgetValues }: StepProps) 
   const handleUpdateIdentity = useCallback((index: number, identity: Identity) => {
     const updated = [...identities];
     updated[index] = identity;
-    
+
     const updates: Partial<CreationState> = {
       selections: {
         ...state.selections,
         identities: updated,
       },
     };
-    
+
     // If identity has a real SIN, sync the SINner quality and level
     if (identity.sin?.type === "real") {
       const newSinnerLevel = sinnerQualityToLevel[identity.sin.sinnerQuality] || 1;
-      
+
       // Add SINner quality to negative qualities if not present
       const currentNegativeQualities = [...((state.selections.negativeQualities || []) as string[])];
       if (!currentNegativeQualities.includes("sinner")) {
         currentNegativeQualities.push("sinner");
       }
-      
+
       // Update qualityLevels with the correct level (this controls karma cost)
       const newQualityLevels = { ...((state.selections.qualityLevels || {}) as Record<string, number>) };
       newQualityLevels["sinner"] = newSinnerLevel;
-      
+
       updates.selections = {
         ...updates.selections,
         negativeQualities: currentNegativeQualities,
         qualityLevels: newQualityLevels,
       };
-      
+
       // Recalculate karma-gained-negative budget to reflect the new sinner level
       const newKarmaGained = calculateNegativeKarmaGained(currentNegativeQualities, newQualityLevels);
       updates.budgets = {
@@ -272,10 +273,10 @@ export function IdentitiesStep({ state, updateState, budgetValues }: StepProps) 
         "karma-gained-negative": newKarmaGained,
       };
     }
-    
+
     updateState(updates);
     setEditingIdentityIndex(null);
-  }, [identities, state.selections, state.budgets, updateState, sinnerQualityToLevel, calculateNegativeKarmaGained]);
+  }, [identities, state.selections, state.budgets, updateState, calculateNegativeKarmaGained]);
 
   // Remove identity
   const handleRemoveIdentity = useCallback((index: number) => {
@@ -304,7 +305,7 @@ export function IdentitiesStep({ state, updateState, budgetValues }: StepProps) 
   const handleUpdateLicense = useCallback((identityIndex: number, licenseIndex: number, license: License) => {
     const updated = [...identities];
     const identity = { ...updated[identityIndex] };
-    
+
     if (licenseIndex === -1) {
       // Adding new license
       identity.licenses = [...(identity.licenses || []), license];
@@ -313,7 +314,7 @@ export function IdentitiesStep({ state, updateState, budgetValues }: StepProps) 
       identity.licenses = [...(identity.licenses || [])];
       identity.licenses[licenseIndex] = license;
     }
-    
+
     updated[identityIndex] = identity;
     updateState({
       selections: {
@@ -344,34 +345,34 @@ export function IdentitiesStep({ state, updateState, budgetValues }: StepProps) 
     const updated = [...lifestyles];
     const identity = identities[identityIndex];
     const existingLifestyleId = identity.associatedLifestyleId;
-    
+
     let lifestyleWithId: Lifestyle;
     const existingIndex = existingLifestyleId
       ? updated.findIndex((l) => l.id === existingLifestyleId)
       : -1;
-    
+
     if (existingIndex >= 0) {
       // Update existing lifestyle
       lifestyleWithId = lifestyle;
       updated[existingIndex] = lifestyleWithId;
     } else {
       // Add new lifestyle
-      lifestyleWithId = lifestyle.id 
-        ? lifestyle 
+      lifestyleWithId = lifestyle.id
+        ? lifestyle
         : { ...lifestyle, id: `lifestyle-${crypto.randomUUID()}` };
       updated.push(lifestyleWithId);
-      
+
       // If this is the first lifestyle, set it as primary
       const primaryLifestyleId = (state.selections.primaryLifestyleId as string) || undefined;
       const newPrimaryId = updated.length === 1 ? lifestyleWithId.id : primaryLifestyleId;
-      
+
       // Update identity to associate with new lifestyle
       const updatedIdentities = [...identities];
       updatedIdentities[identityIndex] = {
         ...identity,
         associatedLifestyleId: lifestyleWithId.id,
       };
-      
+
       updateState({
         selections: {
           ...state.selections,
@@ -383,7 +384,7 @@ export function IdentitiesStep({ state, updateState, budgetValues }: StepProps) 
       setEditingLifestyleIndex(null);
       return;
     }
-    
+
     // Update identity association if needed
     const updatedIdentities = [...identities];
     if (!identity.associatedLifestyleId || identity.associatedLifestyleId !== lifestyleWithId.id) {
@@ -392,7 +393,7 @@ export function IdentitiesStep({ state, updateState, budgetValues }: StepProps) 
         associatedLifestyleId: lifestyleWithId.id,
       };
     }
-    
+
     updateState({
       selections: {
         ...state.selections,
@@ -410,7 +411,7 @@ export function IdentitiesStep({ state, updateState, budgetValues }: StepProps) 
       ...identities[identityIndex],
       associatedLifestyleId: undefined,
     };
-    
+
     updateState({
       selections: {
         ...state.selections,
@@ -422,12 +423,12 @@ export function IdentitiesStep({ state, updateState, budgetValues }: StepProps) 
   // Validation errors
   const validationErrors = useMemo(() => {
     const errors: string[] = [];
-    
+
     // Must have at least one identity
     if (identities.length === 0) {
       errors.push("Character must have at least one identity");
     }
-    
+
     // If character has SINner quality, MUST have at least one real SIN identity
     if (hasSINnerQuality) {
       const hasRealSIN = identities.some((identity) => identity.sin?.type === "real");
@@ -435,7 +436,7 @@ export function IdentitiesStep({ state, updateState, budgetValues }: StepProps) 
         errors.push("Character has SINner quality and must have at least one identity with a real SIN");
       }
     }
-    
+
     // Each identity must have exactly one SIN
     identities.forEach((identity, index) => {
       if (!identity.sin) {
@@ -449,7 +450,7 @@ export function IdentitiesStep({ state, updateState, budgetValues }: StepProps) 
         // Real SIN syncs with SINner quality - no validation needed here
         // The SINner quality is automatically added/updated when identity is saved
       }
-      
+
       // Licenses must match SIN type
       identity.licenses?.forEach((license) => {
         if (identity.sin.type === "fake" && license.type !== "fake") {
@@ -463,9 +464,9 @@ export function IdentitiesStep({ state, updateState, budgetValues }: StepProps) 
         }
       });
     });
-    
+
     return errors;
-  }, [identities, hasSINnerQuality, sinnerQualityLevel]);
+  }, [identities, hasSINnerQuality]);
 
   // If editing identity, show editor
   if (editingIdentityIndex !== null) {
@@ -484,10 +485,10 @@ export function IdentitiesStep({ state, updateState, budgetValues }: StepProps) 
   // If editing license, show license editor
   if (editingLicenseIndex !== null) {
     const identity = identities[editingLicenseIndex.identityIndex];
-    const license = editingLicenseIndex.licenseIndex >= 0 
+    const license = editingLicenseIndex.licenseIndex >= 0
       ? identity.licenses?.[editingLicenseIndex.licenseIndex]
       : undefined;
-    
+
     return (
       <LicenseEditor
         license={license}
@@ -508,7 +509,7 @@ export function IdentitiesStep({ state, updateState, budgetValues }: StepProps) 
     const associatedLifestyle = identity.associatedLifestyleId
       ? lifestyles.find((l) => l.id === identity.associatedLifestyleId)
       : undefined;
-    
+
     return (
       <LifestyleEditor
         lifestyle={associatedLifestyle || { type: "", monthlyCost: 0, modifications: [], subscriptions: [] }}
@@ -559,11 +560,10 @@ export function IdentitiesStep({ state, updateState, budgetValues }: StepProps) 
           <div>
             <p className="text-xs text-zinc-500 dark:text-zinc-400">Remaining</p>
             <p
-              className={`text-lg font-semibold ${
-                remaining < 0
-                  ? "text-red-600 dark:text-red-400"
-                  : "text-emerald-600 dark:text-emerald-400"
-              }`}
+              className={`text-lg font-semibold ${remaining < 0
+                ? "text-red-600 dark:text-red-400"
+                : "text-emerald-600 dark:text-emerald-400"
+                }`}
             >
               ¥{formatCurrency(remaining)}
             </p>
@@ -588,17 +588,17 @@ export function IdentitiesStep({ state, updateState, budgetValues }: StepProps) 
                 }
                 return sum;
               }, 0) || 0;
-              
+
               // Calculate lifestyle cost for this identity
               const associatedLifestyle = identity.associatedLifestyleId
                 ? lifestyles.find((l) => l.id === identity.associatedLifestyleId)
                 : undefined;
               const lifestyleCost = associatedLifestyle ? calculateLifestyleCost(associatedLifestyle) : 0;
-              
+
               const identityTotal = sinCost + licenseCosts + lifestyleCost;
-              
+
               if (identityTotal === 0) return null;
-              
+
               return (
                 <div
                   key={index}
@@ -657,7 +657,7 @@ export function IdentitiesStep({ state, updateState, budgetValues }: StepProps) 
           Identities & SINs
         </h3>
         <p className="text-sm text-zinc-600 dark:text-zinc-400">
-          Each character needs at least one identity with a SIN (System Identification Number). 
+          Each character needs at least one identity with a SIN (System Identification Number).
           You can use fake SINs (purchased as gear) or real SINs (from the SINner quality).
         </p>
         {hasSINnerQuality && (
@@ -703,7 +703,7 @@ export function IdentitiesStep({ state, updateState, budgetValues }: StepProps) 
                 <h4 className="text-base font-semibold text-zinc-900 dark:text-zinc-50">
                   {identity.name || `Identity ${index + 1}`}
                 </h4>
-                
+
                 {/* SIN Display */}
                 <div className="mt-2">
                   {identity.sin.type === "fake" ? (
@@ -812,11 +812,10 @@ export function IdentitiesStep({ state, updateState, budgetValues }: StepProps) 
                                     {lifestyle.modifications?.map((mod, modIndex) => (
                                       <span
                                         key={modIndex}
-                                        className={`inline-flex items-center rounded-full px-2 py-0.5 text-xs ${
-                                          mod.type === "positive"
-                                            ? "bg-emerald-100 text-emerald-800 dark:bg-emerald-900 dark:text-emerald-200"
-                                            : "bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-200"
-                                        }`}
+                                        className={`inline-flex items-center rounded-full px-2 py-0.5 text-xs ${mod.type === "positive"
+                                          ? "bg-emerald-100 text-emerald-800 dark:bg-emerald-900 dark:text-emerald-200"
+                                          : "bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-200"
+                                          }`}
                                       >
                                         {mod.name}
                                         {mod.modifierType === "percentage" && mod.modifier !== 0 && (

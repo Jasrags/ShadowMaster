@@ -3,7 +3,6 @@
 import { useState, useMemo, useCallback } from "react";
 import type { CreationState, CharacterProgram } from "@/lib/types";
 import {
-  usePrograms,
   useProgramsByCategory,
   calculateAgentCost,
   calculateAgentAvailability,
@@ -231,11 +230,10 @@ export function ProgramsStep({ state, updateState, budgetValues }: StepProps) {
           <div>
             <p className="text-xs text-zinc-500 dark:text-zinc-400">Remaining</p>
             <p
-              className={`text-lg font-semibold ${
-                remaining < 0
+              className={`text-lg font-semibold ${remaining < 0
                   ? "text-red-600 dark:text-red-400"
                   : "text-emerald-600 dark:text-emerald-400"
-              }`}
+                }`}
             >
               ¥{formatCurrency(remaining)}
             </p>
@@ -253,11 +251,10 @@ export function ProgramsStep({ state, updateState, budgetValues }: StepProps) {
           <button
             key={tab.id}
             onClick={() => setActiveTab(tab.id as ProgramTab)}
-            className={`px-4 py-2 text-sm font-medium transition-colors ${
-              activeTab === tab.id
+            className={`px-4 py-2 text-sm font-medium transition-colors ${activeTab === tab.id
                 ? "border-b-2 border-emerald-500 text-emerald-600 dark:text-emerald-400"
                 : "text-zinc-500 hover:text-zinc-700 dark:text-zinc-400 dark:hover:text-zinc-300"
-            }`}
+              }`}
           >
             {tab.label}
             {tab.count > 0 && (
@@ -360,13 +357,12 @@ export function ProgramsStep({ state, updateState, budgetValues }: StepProps) {
                   <td className="px-3 py-2 text-right">¥{formatCurrency(displayCost)}</td>
                   <td className="px-3 py-2 text-center">
                     <span
-                      className={`${
-                        program.restricted
+                      className={`${program.restricted
                           ? "text-amber-600 dark:text-amber-400"
                           : program.forbidden
                             ? "text-red-600 dark:text-red-400"
                             : ""
-                      }`}
+                        }`}
                     >
                       {getAvailabilityDisplay(displayAvailability, program.restricted, program.forbidden)}
                     </span>
@@ -378,11 +374,10 @@ export function ProgramsStep({ state, updateState, budgetValues }: StepProps) {
                       <button
                         onClick={() => addProgram(program, isAgent ? rating : undefined)}
                         disabled={!available || !canAfford}
-                        className={`rounded px-2 py-1 text-xs font-medium transition-colors ${
-                          available && canAfford
+                        className={`rounded px-2 py-1 text-xs font-medium transition-colors ${available && canAfford
                             ? "bg-emerald-500 text-white hover:bg-emerald-600"
                             : "cursor-not-allowed bg-zinc-200 text-zinc-400 dark:bg-zinc-700"
-                        }`}
+                          }`}
                       >
                         Add
                       </button>

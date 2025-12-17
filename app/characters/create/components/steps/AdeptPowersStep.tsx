@@ -45,19 +45,19 @@ export function AdeptPowersStep({ state, updateState, budgetValues }: StepProps)
     // Mystic Adepts allocate a portion of their Magic to PP
     // For now, assume full Magic = PP for adepts
     const isMysticAdept = (state.selections["magical-path"] as string) === "mystic-adept";
-    
+
     // Calculate karma-purchased power points
     const karmaSpentPowerPoints = (state.budgets["karma-spent-power-points"] as number) || 0;
     const karmaPurchasedPP = Math.floor(karmaSpentPowerPoints / POWER_POINT_KARMA_COST);
-    
+
     // Base power point budget (allocation for mystic adepts, Magic rating for regular adepts)
     const basePowerPointBudget = isMysticAdept
         ? ((state.selections["power-points-allocation"] as number) || 0)
         : magicRating;
-    
+
     // Total power point budget includes karma-purchased points
     const powerPointBudget = basePowerPointBudget + karmaPurchasedPP;
-    
+
     // Calculate karma remaining
     const karmaBase = budgetValues["karma"] || 25;
     const karmaGained = (state.budgets["karma-gained-negative"] as number) || 0;
@@ -162,24 +162,7 @@ export function AdeptPowersStep({ state, updateState, budgetValues }: StepProps)
         setSelectedSpec("");
     }, [selectedPowerId, selectedLevel, selectedSpec, getPowerById, calculateCost, ppRemaining, isPowerSelected, selectedPowers, ppSpent, state.selections, state.budgets, updateState]);
 
-    // Remove power
-    const handleRemovePower = useCallback((powerId: string) => {
-        const power = selectedPowers.find((p) => p.id === powerId);
-        if (!power) return;
 
-        const updatedPowers = selectedPowers.filter((p) => p.id !== powerId);
-
-        updateState({
-            selections: {
-                ...state.selections,
-                adeptPowers: updatedPowers,
-            },
-            budgets: {
-                ...state.budgets,
-                "power-points-spent": ppSpent - power.powerPointCost,
-            },
-        });
-    }, [selectedPowers, ppSpent, state.selections, state.budgets, updateState]);
 
     // Purchase power point with karma (mystic adepts only)
     const handlePurchasePowerPoint = useCallback(() => {
@@ -224,7 +207,7 @@ export function AdeptPowersStep({ state, updateState, budgetValues }: StepProps)
                     <div>
                         <div className="text-sm font-medium text-violet-800 dark:text-violet-200">Power Points</div>
                         <div className="text-xs text-violet-600 dark:text-violet-400">
-                            {isMysticAdept 
+                            {isMysticAdept
                                 ? `Allocated: ${basePowerPointBudget}${karmaPurchasedPP > 0 ? ` + ${karmaPurchasedPP} (Karma)` : ""}`
                                 : `Magic Rating ${magicRating}`
                             }
@@ -375,10 +358,10 @@ export function AdeptPowersStep({ state, updateState, budgetValues }: StepProps)
                                         setSelectedSpec("");
                                     }}
                                     className={`relative flex flex-col items-start gap-2 rounded-lg border p-3 text-left transition-all ${isSelected
-                                            ? "border-violet-500 bg-violet-50 ring-1 ring-violet-500 dark:border-violet-400 dark:bg-violet-900/30"
-                                            : alreadyHas && !power.requiresSkill && !power.requiresAttribute
-                                                ? "border-emerald-300 bg-emerald-50/50 dark:border-emerald-700 dark:bg-emerald-900/20"
-                                                : "border-zinc-200 bg-white hover:border-violet-300 hover:shadow-sm dark:border-zinc-700 dark:bg-zinc-800/50 dark:hover:border-violet-700"
+                                        ? "border-violet-500 bg-violet-50 ring-1 ring-violet-500 dark:border-violet-400 dark:bg-violet-900/30"
+                                        : alreadyHas && !power.requiresSkill && !power.requiresAttribute
+                                            ? "border-emerald-300 bg-emerald-50/50 dark:border-emerald-700 dark:bg-emerald-900/20"
+                                            : "border-zinc-200 bg-white hover:border-violet-300 hover:shadow-sm dark:border-zinc-700 dark:bg-zinc-800/50 dark:hover:border-violet-700"
                                         }`}
                                 >
                                     <div className="flex w-full items-start justify-between gap-2">
@@ -429,8 +412,8 @@ export function AdeptPowersStep({ state, updateState, budgetValues }: StepProps)
                                                 key={lvl}
                                                 onClick={() => setSelectedLevel(lvl)}
                                                 className={`flex h-8 w-8 items-center justify-center rounded text-sm font-medium transition-colors ${selectedLevel >= lvl
-                                                        ? "bg-violet-500 text-white"
-                                                        : "bg-white text-zinc-600 hover:bg-violet-100 dark:bg-zinc-700 dark:text-zinc-300"
+                                                    ? "bg-violet-500 text-white"
+                                                    : "bg-white text-zinc-600 hover:bg-violet-100 dark:bg-zinc-700 dark:text-zinc-300"
                                                     }`}
                                             >
                                                 {lvl}
