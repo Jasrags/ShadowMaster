@@ -293,17 +293,14 @@ function AuthenticatedHomepage({ user }: { user: { username: string; email: stri
             <UserIcon className="mb-2 h-8 w-8 text-zinc-600 dark:text-zinc-400" />
             <span className="text-sm font-medium text-black dark:text-zinc-50">Browse Characters</span>
           </Link>
-          {/* Rulesets - Coming Soon */}
-          <div
-            className="flex cursor-not-allowed flex-col items-center justify-center rounded-lg border border-zinc-200 bg-zinc-50 p-6 text-center opacity-60 dark:border-zinc-800 dark:bg-zinc-900"
-            title="Coming soon"
+          {/* Rulesets */}
+          <Link
+            href="/rulesets"
+            className="flex flex-col items-center justify-center rounded-lg border border-zinc-200 bg-white p-6 text-center transition-all hover:border-zinc-300 hover:shadow-md focus:outline-none focus:ring-2 focus:ring-zinc-500 focus:ring-offset-2 dark:border-zinc-800 dark:bg-black dark:hover:border-zinc-700 dark:focus:ring-zinc-400"
           >
-            <BookIcon className="mb-2 h-8 w-8 text-zinc-400 dark:text-zinc-600" />
-            <span className="text-sm font-medium text-zinc-400 dark:text-zinc-600">View Rulesets</span>
-            <span className="mt-1 rounded bg-zinc-200 px-1.5 py-0.5 text-[10px] font-medium uppercase text-zinc-400 dark:bg-zinc-800 dark:text-zinc-500">
-              Soon
-            </span>
-          </div>
+            <BookIcon className="mb-2 h-8 w-8 text-zinc-600 dark:text-zinc-400" />
+            <span className="text-sm font-medium text-black dark:text-zinc-50">View Rulesets</span>
+          </Link>
           {/* Recent Activity - Coming Soon */}
           <div
             className="flex cursor-not-allowed flex-col items-center justify-center rounded-lg border border-zinc-200 bg-zinc-50 p-6 text-center opacity-60 dark:border-zinc-800 dark:bg-zinc-900"

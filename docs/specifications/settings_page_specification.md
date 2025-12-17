@@ -1,7 +1,7 @@
 # Settings Page Specification
 
 **Last Updated:** 2025-01-27  
-**Status:** Specification  
+**Status:** Implemented (MVP)  
 **Category:** UI/UX, User Management  
 **Affected Editions:** All editions (user-facing feature)
 
@@ -48,7 +48,7 @@ This page is accessible from the main navigation sidebar and is currently marked
 
 ### Route
 - **Path:** `/app/settings/page.tsx`
-- **Layout:** Uses `AuthenticatedLayout` (inherits sidebar navigation)
+- **Layout:** Uses `SettingsLayout` (wrapping `AuthenticatedLayout`)
 - **Authentication:** Required (protected route)
 
 ### Layout Structure
@@ -499,6 +499,7 @@ interface UserPreferences {
 ```
 app/settings/
 ├── page.tsx                          # Main settings page
+├── layout.tsx                        # AuthenticatedLayout wrapper
 └── components/
     ├── SettingsNavigation.tsx        # Section navigation
     ├── AccountSection.tsx            # Account management
