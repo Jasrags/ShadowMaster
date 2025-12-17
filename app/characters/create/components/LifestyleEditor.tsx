@@ -26,7 +26,7 @@ export function LifestyleEditor({
   const [modifications, setModifications] = useState<LifestyleModification[]>(
     lifestyle.modifications || []
   );
-  
+
   // Check if permanent modification exists (for cost calculation display)
   const hasPermanentModification = useMemo(() => {
     return modifications.some((mod) => mod.catalogId === "permanent-lifestyle" || mod.name.toLowerCase() === "permanent lifestyle");
@@ -75,8 +75,8 @@ export function LifestyleEditor({
 
   // Validation
   const isValid = useMemo(() => {
-    return lifestyleType !== "" && baseMonthlyCost > 0;
-  }, [lifestyleType, baseMonthlyCost]);
+    return lifestyleType !== "";
+  }, [lifestyleType]);
 
   const handleSave = () => {
     const updatedLifestyle: Lifestyle = {

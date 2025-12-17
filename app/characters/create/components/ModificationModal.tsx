@@ -5,6 +5,7 @@ import type { Weapon, ArmorItem, InstalledWeaponMod, InstalledArmorMod, WeaponMo
 import {
   useWeaponModifications,
   useArmorModifications,
+  getAvailableMountsForWeaponType,
   type WeaponModificationCatalogItemData,
   type ArmorModificationCatalogItemData,
 } from "@/lib/rules/RulesetContext";
@@ -88,6 +89,13 @@ export function ModificationModal({
   const [selectedMountFilter, setSelectedMountFilter] = useState<WeaponMount | "all">("all");
   const [selectedRating, setSelectedRating] = useState<number>(1);
 
+  // Get available mounts for this weapon type
+  const availableMountsForType = useMemo(() => {
+    if (itemType !== "weapon") return [];
+    const weapon = item as Weapon;
+    return getAvailableMountsForWeaponType(weapon.subcategory);
+  }, [item, itemType]);
+
   // Get occupied mounts for weapon
   const occupiedMounts = useMemo(() => {
     if (itemType !== "weapon") return [];
@@ -134,6 +142,61 @@ export function ModificationModal({
       return !occupiedMounts.includes(mod.mount as WeaponMount);
     });
 
+    // Filter by weapon type compatibility (SR5 rules)
+    mods = mods.filter((mod) => {
+      // If mod has a specific mount, check if that mount is available for this weapon type
+      if (mod.mount && !availableMountsForType.includes(mod.mount)) {
+        return false;
+      }
+
+      // Check minimum weapon size
+      if (mod.minimumWeaponSize) {
+        const weapon = item as Weapon;
+        const sub = weapon.subcategory.toLowerCase();
+        const sizeOrder = ["holdout", "light-pistol", "heavy-pistol", "smg", "rifle", "heavy"];
+        const modSizeIndex = sizeOrder.indexOf(mod.minimumWeaponSize);
+
+        // Map common subcategories to size indices
+        const weaponSizeMap: Record<string, number> = {
+          "holdout": 0, "holdouts": 0, "hold-outs": 0, "hold-out": 0,
+          "light-pistol": 1, "light-pistols": 1,
+          "heavy-pistol": 2, "heavy-pistols": 2, "machine-pistol": 2, "machine-pistols": 2,
+          "smg": 3, "smgs": 3,
+          "rifle": 4, "rifles": 4, "asault-rifles": 4, "assault-rifle": 4, "sporting-rifles": 4, "sniper-rifles": 4, "sniper-rifle": 4,
+          "heavy": 5, "heavy-weapons": 5, "machine-guns": 5, "machine-gun": 5, "cannons": 5, "cannon": 5, "launcher": 5, "launchers": 5, "shotgun": 5, "shotguns": 5
+        };
+
+        const weaponSizeIndex = weaponSizeMap[sub] ?? 2; // Default to heavy pistol if unknown
+        if (weaponSizeIndex < modSizeIndex) return false;
+      }
+
+      // Check explicit compatibility lists
+      if (mod.compatibleWeapons && mod.compatibleWeapons.length > 0) {
+        const weapon = item as Weapon;
+        const sub = weapon.subcategory.toLowerCase();
+        // Check both direct subcategory match and specific item ID match
+        if (!mod.compatibleWeapons.some(comp =>
+          comp.toLowerCase() === sub ||
+          comp === weapon.catalogId ||
+          (sub === "pistols" && (comp === "light-pistol" || comp === "heavy-pistol"))
+        )) {
+          return false;
+        }
+      }
+
+      if (mod.incompatibleWeapons && mod.incompatibleWeapons.length > 0) {
+        const weapon = item as Weapon;
+        const sub = weapon.subcategory.toLowerCase();
+        if (mod.incompatibleWeapons.some(incomp =>
+          incomp.toLowerCase() === sub || incomp === weapon.catalogId
+        )) {
+          return false;
+        }
+      }
+
+      return true;
+    });
+
     // Filter by cost
     mods = mods.filter((mod) => {
       const cost = calculateWeaponModCost(mod, item as Weapon, selectedRating);
@@ -141,7 +204,7 @@ export function ModificationModal({
     });
 
     return mods;
-  }, [weaponMods, searchQuery, selectedMountFilter, occupiedMounts, remainingNuyen, item, itemType, selectedRating]);
+  }, [weaponMods, searchQuery, selectedMountFilter, occupiedMounts, remainingNuyen, item, itemType, selectedRating, availableMountsForType]);
 
   // Filter armor modifications
   const filteredArmorMods = useMemo(() => {
@@ -311,12 +374,21 @@ export function ModificationModal({
                 onChange={(e) => setSelectedMountFilter(e.target.value as WeaponMount | "all")}
                 className="rounded-lg border border-zinc-300 bg-white px-3 py-2 text-sm outline-none focus:border-emerald-500 dark:border-zinc-600 dark:bg-zinc-700"
               >
-                {mountTypes.map((mount) => (
-                  <option key={mount} value={mount} disabled={mount !== "all" && occupiedMounts.includes(mount as WeaponMount)}>
-                    {mount === "all" ? "All Mounts" : `${mount.charAt(0).toUpperCase() + mount.slice(1)} Mount`}
-                    {mount !== "all" && occupiedMounts.includes(mount as WeaponMount) && " (Occupied)"}
-                  </option>
-                ))}
+                <option value="all">All Mounts</option>
+                {mountTypes.filter(m => m !== "all").map((mount) => {
+                  const isAvailableForType = availableMountsForType.includes(mount as WeaponMount);
+                  const isOccupied = occupiedMounts.includes(mount as WeaponMount);
+                  return (
+                    <option
+                      key={mount}
+                      value={mount}
+                      disabled={!isAvailableForType || isOccupied}
+                    >
+                      {mount.charAt(0).toUpperCase() + mount.slice(1)} Mount
+                      {!isAvailableForType ? " (Not Available for Type)" : isOccupied ? " (Occupied)" : ""}
+                    </option>
+                  );
+                })}
               </select>
             )}
 

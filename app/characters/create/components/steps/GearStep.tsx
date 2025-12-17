@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useMemo, useCallback } from "react";
-import type { CreationState, GearItem, Weapon, ArmorItem, InstalledWeaponMod, InstalledArmorMod, CyberwareItem, BiowareItem } from "@/lib/types";
+import type { CreationState, GearItem, Weapon, ArmorItem, InstalledWeaponMod, InstalledArmorMod, CyberwareItem, BiowareItem, WeaponMount } from "@/lib/types";
 import type { FocusItem } from "@/lib/types/character";
 import type { FocusType } from "@/lib/types/edition";
 import {
@@ -9,6 +9,7 @@ import {
   useFoci,
   useCyberware,
   useBioware,
+  useModifications,
   useAugmentationRules,
   useCyberwareGrades,
   useBiowareGrades,
@@ -139,6 +140,7 @@ export function GearStep({ state, updateState, budgetValues }: StepProps) {
   const augmentationRules = useAugmentationRules();
   const cyberwareGrades = useCyberwareGrades();
   const biowareGrades = useBiowareGrades();
+  const modificationsCatalog = useModifications();
 
   const [selectedCategory, setSelectedCategory] = useState<GearCategory>("all");
   const [weaponSubcategory, setWeaponSubcategory] = useState<WeaponSubcategory>("all");
@@ -278,10 +280,37 @@ export function GearStep({ state, updateState, budgetValues }: StepProps) {
     // Handle weapons separately
     if (item.category === "weapons" && "damage" in item) {
       const weaponItem = item as WeaponData;
+
+      // Auto-install built-in modifications
+      const builtinMods: InstalledWeaponMod[] = [];
+      const builtinMounts: WeaponMount[] = [];
+
+      if (weaponItem.builtInModifications && modificationsCatalog?.weaponMods) {
+        weaponItem.builtInModifications.forEach(builtIn => {
+          const modData = modificationsCatalog.weaponMods.find(m => m.id === builtIn.modificationId);
+          if (modData) {
+            builtinMods.push({
+              catalogId: modData.id,
+              name: modData.name,
+              mount: builtIn.mount || modData.mount,
+              cost: 0,
+              availability: modData.availability,
+              restricted: modData.restricted,
+              forbidden: modData.forbidden,
+              isBuiltIn: true
+            });
+            if (builtIn.mount || modData.mount) {
+              builtinMounts.push(builtIn.mount || modData.mount!);
+            }
+          }
+        });
+      }
+
       const newWeapon: Weapon = {
         catalogId: weaponItem.id,
         name: weaponItem.name,
         category: "weapons",
+        subcategory: weaponItem.subcategory || "pistols", // Default fallback
         quantity: 1,
         cost: weaponItem.cost,
         availability: weaponItem.availability,
@@ -290,8 +319,8 @@ export function GearStep({ state, updateState, budgetValues }: StepProps) {
         mode: weaponItem.mode || [],
         recoil: weaponItem.rc,
         accuracy: weaponItem.accuracy,
-        modifications: [],
-        occupiedMounts: [],
+        modifications: builtinMods,
+        occupiedMounts: builtinMounts,
       };
       updateState({
         selections: {
@@ -2240,12 +2269,18 @@ export function GearStep({ state, updateState, budgetValues }: StepProps) {
                               </div>
                               <div className="flex items-center gap-2">
                                 <span className="text-zinc-500 dark:text-zinc-400">¥{formatCurrency(mod.cost)}</span>
-                                <button
-                                  onClick={() => removeWeaponMod(wIndex, mIndex)}
-                                  className="text-red-500 hover:text-red-600"
-                                >
-                                  ×
-                                </button>
+                                {!mod.isBuiltIn ? (
+                                  <button
+                                    onClick={() => removeWeaponMod(wIndex, mIndex)}
+                                    className="text-red-500 hover:text-red-600"
+                                  >
+                                    ×
+                                  </button>
+                                ) : (
+                                  <span className="text-[10px] font-bold uppercase text-blue-500 dark:text-blue-400">
+                                    Built-in
+                                  </span>
+                                )}
                               </div>
                             </div>
                           ))}

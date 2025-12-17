@@ -202,6 +202,8 @@ export interface DiceRollerProps {
   compact?: boolean;
   /** Label for the dice pool input */
   label?: string;
+  /** Label for the current operation (e.g. "Pistols Roll") */
+  contextLabel?: string;
 }
 
 export function DiceRoller({
@@ -213,11 +215,24 @@ export function DiceRoller({
   maxHistory = 5,
   compact = false,
   label = "Dice Pool",
+  contextLabel,
 }: DiceRollerProps) {
-  const [poolSize, setPoolSize] = useState(initialPool);
+  const [basePoolSize, setBasePoolSize] = useState(initialPool);
+  const [modifier, setModifier] = useState(0);
   const [isRolling, setIsRolling] = useState(false);
   const [currentResult, setCurrentResult] = useState<RollResult | null>(null);
   const [history, setHistory] = useState<RollResult[]>([]);
+
+  // Calculate total pool
+  const totalPoolSize = Math.max(minPool, Math.min(maxPool, basePoolSize + modifier));
+
+  // Update base pool when initialPool prop changes (Context Awareness)
+  React.useEffect(() => {
+    setBasePoolSize(initialPool);
+    // Optional: reset modifier when context changes? 
+    // Usually a good idea so a previous situational mod doesn't apply to a new skill roll automatically.
+    setModifier(0);
+  }, [initialPool]);
 
   // Roll dice
   const rollDice = useCallback(() => {
@@ -229,7 +244,7 @@ export function DiceRoller({
       let hits = 0;
       let ones = 0;
 
-      for (let i = 0; i < poolSize; i++) {
+      for (let i = 0; i < totalPoolSize; i++) {
         const value = Math.floor(Math.random() * 6) + 1;
         const isHit = value >= 5;
         const isOne = value === 1;
@@ -250,7 +265,7 @@ export function DiceRoller({
       });
 
       // Check for glitch (more 1s than half the dice pool)
-      const isGlitch = ones > poolSize / 2;
+      const isGlitch = ones > totalPoolSize / 2;
       const isCriticalGlitch = isGlitch && hits === 0;
 
       const result: RollResult = {
@@ -259,7 +274,7 @@ export function DiceRoller({
         ones,
         isGlitch,
         isCriticalGlitch,
-        poolSize,
+        poolSize: totalPoolSize,
         timestamp: Date.now(),
       };
 
@@ -268,11 +283,11 @@ export function DiceRoller({
       setIsRolling(false);
       onRoll?.(result);
     }, 300);
-  }, [poolSize, maxHistory, onRoll]);
+  }, [totalPoolSize, maxHistory, onRoll]);
 
-  // Handle pool size change
-  const handlePoolChange = (delta: number) => {
-    setPoolSize((prev) => Math.max(minPool, Math.min(maxPool, prev + delta)));
+  // Handle base pool size change
+  const handleBasePoolChange = (delta: number) => {
+    setBasePoolSize((prev) => Math.max(minPool, Math.min(maxPool, prev + delta)));
   };
 
   // Quick pool presets
@@ -280,54 +295,98 @@ export function DiceRoller({
 
   return (
     <div className={`${compact ? "space-y-3" : "space-y-4"}`}>
-      {/* Pool Size Input */}
-      <div className="space-y-2">
-        <label className="block text-xs font-mono text-zinc-400 uppercase tracking-wider">
-          {label}
-        </label>
-        <div className="flex items-center gap-2">
-          <Button
-            onPress={() => handlePoolChange(-1)}
-            isDisabled={poolSize <= minPool}
-            className="w-10 h-10 rounded-lg bg-zinc-800 border border-zinc-700 text-zinc-300 hover:bg-zinc-700 hover:border-zinc-600 disabled:opacity-50 disabled:cursor-not-allowed transition-colors font-bold text-xl"
-          >
-            −
-          </Button>
-          <input
-            type="number"
-            value={poolSize}
-            onChange={(e) => setPoolSize(Math.max(minPool, Math.min(maxPool, parseInt(e.target.value) || minPool)))}
-            min={minPool}
-            max={maxPool}
-            className="w-20 h-10 text-center font-mono text-xl font-bold bg-zinc-900 border border-zinc-700 rounded-lg text-zinc-100 focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 focus:outline-none"
-          />
-          <Button
-            onPress={() => handlePoolChange(1)}
-            isDisabled={poolSize >= maxPool}
-            className="w-10 h-10 rounded-lg bg-zinc-800 border border-zinc-700 text-zinc-300 hover:bg-zinc-700 hover:border-zinc-600 disabled:opacity-50 disabled:cursor-not-allowed transition-colors font-bold text-xl"
-          >
-            +
-          </Button>
-          <span className="text-zinc-500 font-mono">d6</span>
-        </div>
+      {/* Pool Size Input and Modifiers */}
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div className="space-y-2">
+          <label className="block text-xs font-mono text-zinc-400 uppercase tracking-wider">
+            {label} {contextLabel && <span className="text-emerald-500">({contextLabel})</span>}
+          </label>
+          <div className="flex items-center gap-2">
+            <Button
+              onPress={() => handleBasePoolChange(-1)}
+              isDisabled={basePoolSize <= minPool}
+              className="w-10 h-10 rounded-lg bg-zinc-800 border border-zinc-700 text-zinc-300 hover:bg-zinc-700 hover:border-zinc-600 disabled:opacity-50 disabled:cursor-not-allowed transition-colors font-bold text-xl"
+            >
+              −
+            </Button>
+            <input
+              type="number"
+              value={basePoolSize}
+              onChange={(e) => setBasePoolSize(Math.max(minPool, Math.min(maxPool, parseInt(e.target.value) || minPool)))}
+              min={minPool}
+              max={maxPool}
+              className="w-20 h-10 text-center font-mono text-xl font-bold bg-zinc-900 border border-zinc-700 rounded-lg text-zinc-100 focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 focus:outline-none placeholder-zinc-700"
+            />
+            <Button
+              onPress={() => handleBasePoolChange(1)}
+              isDisabled={basePoolSize >= maxPool}
+              className="w-10 h-10 rounded-lg bg-zinc-800 border border-zinc-700 text-zinc-300 hover:bg-zinc-700 hover:border-zinc-600 disabled:opacity-50 disabled:cursor-not-allowed transition-colors font-bold text-xl"
+            >
+              +
+            </Button>
+            <span className="text-zinc-500 font-mono">base</span>
+          </div>
 
-        {/* Quick Presets */}
-        {!compact && (
-          <div className="flex gap-1.5 mt-2">
-            {poolPresets.map((preset) => (
-              <button
-                key={preset}
-                onClick={() => setPoolSize(preset)}
-                className={`px-2.5 py-1 text-xs font-mono rounded transition-colors ${poolSize === preset
+          {/* Quick Presets */}
+          {!compact && (
+            <div className="flex flex-wrap gap-1.5 mt-2">
+              {poolPresets.map((preset) => (
+                <button
+                  key={preset}
+                  onClick={() => setBasePoolSize(preset)}
+                  className={`px-2.5 py-1 text-xs font-mono rounded transition-colors ${basePoolSize === preset
                     ? "bg-emerald-600 text-white"
                     : "bg-zinc-800 text-zinc-400 hover:bg-zinc-700 hover:text-zinc-300"
-                  }`}
+                    }`}
+                >
+                  {preset}
+                </button>
+              ))}
+            </div>
+          )}
+        </div>
+
+        {/* Modifiers Section */}
+        <div className="space-y-2">
+          <label className="block text-xs font-mono text-zinc-400 uppercase tracking-wider">
+            Modifiers
+          </label>
+          <div className="flex items-center gap-2">
+            <Button
+              onPress={() => setModifier(prev => prev - 1)}
+              className="w-10 h-10 rounded-lg bg-zinc-800 border border-zinc-700 text-zinc-300 hover:bg-zinc-700 hover:border-zinc-600 transition-colors font-bold text-xl"
+            >
+              −
+            </Button>
+            <div className={`w-20 h-10 flex items-center justify-center font-mono text-xl font-bold rounded-lg border ${modifier > 0 ? "text-emerald-400 border-emerald-500/50 bg-emerald-500/10" : modifier < 0 ? "text-red-400 border-red-500/50 bg-red-500/10" : "text-zinc-400 border-zinc-700 bg-zinc-900"}`}>
+              {modifier > 0 ? `+${modifier}` : modifier}
+            </div>
+            <Button
+              onPress={() => setModifier(prev => prev + 1)}
+              className="w-10 h-10 rounded-lg bg-zinc-800 border border-zinc-700 text-zinc-300 hover:bg-zinc-700 hover:border-zinc-600 transition-colors font-bold text-xl"
+            >
+              +
+            </Button>
+            <span className="text-zinc-500 font-mono">mod</span>
+          </div>
+          <div className="flex gap-1.5 mt-2">
+            {[-2, -1, 1, 2].map((val) => (
+              <button
+                key={val}
+                onClick={() => setModifier(prev => prev + val)}
+                className="px-2.5 py-1 text-xs font-mono rounded bg-zinc-800 text-zinc-400 hover:bg-zinc-700 hover:text-zinc-300 transition-colors"
               >
-                {preset}
+                {val > 0 ? `+${val}` : val}
               </button>
             ))}
+            <button
+              onClick={() => setModifier(0)}
+              className="px-2.5 py-1 text-xs font-mono rounded bg-zinc-800 text-zinc-400 hover:bg-red-900/40 hover:text-red-400 transition-colors"
+            >
+              Clear
+            </button>
           </div>
-        )}
+        </div>
       </div>
 
       {/* Roll Button */}
@@ -353,7 +412,12 @@ export function DiceRoller({
             <svg className="w-5 h-5" viewBox="0 0 24 24" fill="currentColor">
               <path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zM7.5 18c-.83 0-1.5-.67-1.5-1.5S6.67 15 7.5 15s1.5.67 1.5 1.5S8.33 18 7.5 18zm0-9C6.67 9 6 8.33 6 7.5S6.67 6 7.5 6 9 6.67 9 7.5 8.33 9 7.5 9zm4.5 4.5c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5zm4.5 4.5c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5zm0-9c-.83 0-1.5-.67-1.5-1.5S15.67 6 16.5 6s1.5.67 1.5 1.5S17.33 9 16.5 9z" />
             </svg>
-            Roll {poolSize}d6
+            Roll {totalPoolSize}d6
+            {modifier !== 0 && (
+              <span className="text-xs font-mono opacity-80">
+                ({basePoolSize}{modifier > 0 ? "+" : ""}{modifier})
+              </span>
+            )}
           </span>
         )}
       </Button>
@@ -361,19 +425,19 @@ export function DiceRoller({
       {/* Current Result */}
       {currentResult && (
         <div className={`rounded-lg border overflow-hidden ${currentResult.isCriticalGlitch
-            ? "border-red-500/50 bg-red-950/30"
-            : currentResult.isGlitch
-              ? "border-amber-500/50 bg-amber-950/30"
-              : currentResult.hits > 0
-                ? "border-emerald-500/50 bg-emerald-950/30"
-                : "border-zinc-700 bg-zinc-800/50"
+          ? "border-red-500/50 bg-red-950/30"
+          : currentResult.isGlitch
+            ? "border-amber-500/50 bg-amber-950/30"
+            : currentResult.hits > 0
+              ? "border-emerald-500/50 bg-emerald-950/30"
+              : "border-zinc-700 bg-zinc-800/50"
           }`}>
           {/* Result Header */}
           <div className={`px-4 py-2 border-b ${currentResult.isCriticalGlitch
-              ? "border-red-500/30 bg-red-900/20"
-              : currentResult.isGlitch
-                ? "border-amber-500/30 bg-amber-900/20"
-                : "border-zinc-700 bg-zinc-800/30"
+            ? "border-red-500/30 bg-red-900/20"
+            : currentResult.isGlitch
+              ? "border-amber-500/30 bg-amber-900/20"
+              : "border-zinc-700 bg-zinc-800/30"
             }`}>
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-3">

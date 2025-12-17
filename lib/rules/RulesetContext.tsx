@@ -21,6 +21,7 @@ import type {
   CreationMethod,
   ID,
   ContactTemplateData,
+  WeaponMountType,
 } from "../types";
 import { QualityData, AdeptPowerCatalogItem, TraditionData, MentorSpiritData, TraditionSpiritTypes, MentorSpiritAdvantages, RitualData, RitualKeywordData, MinionStatsData, VehicleCategoryData, DroneSizeData, VehicleCatalogItemData, DroneCatalogItemData, RCCCatalogItemData, AutosoftCatalogItemData, HandlingRatingData, DroneWeaponMountsData, ProgramCatalogItemData, ProgramsCatalogData, FocusCatalogItemData, SpiritsCatalogData, ModificationsCatalogData, WeaponModificationCatalogItemData, ArmorModificationCatalogItemData, CyberwareModificationCatalogItemData, LifestyleSubscriptionCatalogItem } from "./loader";
 export type { QualityData, TraditionData, MentorSpiritData, TraditionSpiritTypes, MentorSpiritAdvantages, RitualData, RitualKeywordData, MinionStatsData, VehicleCategoryData, DroneSizeData, VehicleCatalogItemData, DroneCatalogItemData, RCCCatalogItemData, AutosoftCatalogItemData, HandlingRatingData, DroneWeaponMountsData, ProgramCatalogItemData, ProgramsCatalogData, FocusCatalogItemData, SpiritsCatalogData, ModificationsCatalogData, WeaponModificationCatalogItemData, ArmorModificationCatalogItemData, CyberwareModificationCatalogItemData, LifestyleSubscriptionCatalogItem };
@@ -127,6 +128,11 @@ export interface WeaponData extends GearItemData {
   rc?: number;
   ammo?: number;
   blast?: string;
+  /** New: Integrated modifications for specific weapons */
+  builtInModifications?: Array<{
+    modificationId: string;
+    mount?: WeaponMountType;
+  }>;
 }
 
 export interface ArmorData extends GearItemData {
@@ -799,12 +805,41 @@ export function useWeaponModifications(options?: {
 
     if (options?.mountType) {
       filtered = filtered.filter(
-        (item) => item.mount === options.mountType || !item.mount
+        (item) => item.mount === options.mountType
       );
     }
 
     return filtered;
   }, [data.modifications, options]);
+}
+
+/**
+ * Utility to determine available mount points based on weapon subcategory.
+ * (SR5 Core Rules)
+ */
+export function getAvailableMountsForWeaponType(
+  subcategory: string
+): WeaponMountType[] {
+  const sub = subcategory.toLowerCase();
+
+  // Hold-outs: no mounts
+  if (sub === "hold-out" || sub === "hold-outs" || sub === "holdouts") return [];
+
+  // Light pistols: top and barrel only
+  if (sub === "light-pistol" || sub === "light-pistols") return ["top", "barrel"];
+
+  // Heavy pistols and Machine pistols: top, under, and barrel
+  if (
+    sub === "heavy-pistol" ||
+    sub === "heavy-pistols" ||
+    sub === "machine-pistol" ||
+    sub === "machine-pistols"
+  ) {
+    return ["top", "under", "barrel"];
+  }
+
+  // SMGs, rifles, shotguns, machine guns, cannons, launchers: all mounts
+  return ["top", "under", "side", "barrel", "stock", "internal"];
 }
 
 /**

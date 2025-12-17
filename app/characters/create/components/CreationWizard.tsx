@@ -26,6 +26,10 @@ import type {
   BiowareItem,
   Lifestyle,
   AdeptPower,
+  Vehicle,
+  CharacterDrone,
+  CharacterRCC,
+  CharacterAutosoft,
 } from "@/lib/types";
 
 // Step components
@@ -1220,6 +1224,15 @@ export function CreationWizard({ onCancel, onComplete, characterId: initialChara
         racialQualities: (state.selections.racialQualities as string[]) || [],
         spells: (state.selections.spells as string[]) || [],
         complexForms: (state.selections.complexForms as string[]) || [],
+        adeptPowers: (state.selections.adeptPowers as AdeptPower[]) || [],
+        weapons: (state.selections.weapons as Weapon[]) || [],
+        armor: (state.selections.armor as ArmorItem[]) || [],
+        cyberware: (state.selections.cyberware as CyberwareItem[]) || [],
+        bioware: (state.selections.bioware as BiowareItem[]) || [],
+        vehicles: (state.selections.vehicles as Vehicle[]) || [],
+        drones: (state.selections.drones as CharacterDrone[]) || [],
+        rccs: (state.selections.rccs as CharacterRCC[]) || [],
+        autosofts: (state.selections.autosofts as CharacterAutosoft[]) || [],
         gear: (state.selections.gear as Array<{ id: string; name: string; quantity: number; cost: number }>) || [],
         identities: (state.selections.identities as Array<{
           id?: string;
