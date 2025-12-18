@@ -5,7 +5,7 @@ import { useRouter } from "next/navigation";
 import type { Campaign } from "@/lib/types";
 import CampaignCard from "./CampaignCard";
 import JoinCampaignDialog from "./JoinCampaignDialog";
-import { Plus, Key, Loader2 } from "lucide-react";
+import { Plus, Key, Loader2, Globe } from "lucide-react";
 
 export default function CampaignList() {
     const router = useRouter();
@@ -105,6 +105,13 @@ export default function CampaignList() {
                     >
                         <Key className="h-4 w-4" />
                         Join with Code
+                    </button>
+                    <button
+                        onClick={() => router.push("/campaigns/discover")}
+                        className="inline-flex items-center gap-2 rounded-md border border-zinc-300 bg-white px-4 py-2 text-sm font-medium text-zinc-700 transition-colors hover:bg-zinc-50 dark:border-zinc-700 dark:bg-zinc-800 dark:text-zinc-300 dark:hover:bg-zinc-700"
+                    >
+                        <Globe className="h-4 w-4" />
+                        Browse Broker
                     </button>
                     <button
                         onClick={handleCreateCampaign}

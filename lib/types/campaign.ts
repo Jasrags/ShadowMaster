@@ -105,11 +105,36 @@ export interface Campaign {
     /** Campaign sessions (scheduled and completed) */
     sessions?: CampaignSession[];
 
+    /** Campaign bulletin board posts */
+    posts?: CampaignPost[];
+
+    /** Campaign calendar events */
+    events?: CampaignEvent[];
+
     createdAt: ISODateString;
     updatedAt: ISODateString;
 
     /** Extensible metadata */
     metadata?: Metadata;
+}
+
+/**
+ * Campaign Template (Reusable Configuration)
+ */
+export interface CampaignTemplate {
+    id: ID;
+    name: string;
+    description?: string;
+    editionCode: EditionCode;
+    enabledBookIds: ID[];
+    enabledCreationMethodIds: ID[];
+    gameplayLevel: GameplayLevel;
+    enabledOptionalRules?: string[];
+    houseRules?: string | Record<string, unknown>;
+    createdBy: ID; // User who created the template
+    isPublic: boolean; // If true, other GMs can use this template
+    createdAt: ISODateString;
+    updatedAt: ISODateString;
 }
 
 /**
@@ -168,6 +193,34 @@ export interface CampaignSession {
     updatedAt: ISODateString;
 }
 
+/**
+ * A bulletin board post
+ */
+export interface CampaignPost {
+    id: ID;
+    title: string;
+    content: string;
+    authorId: ID; // Usually GM for "announcements", but could be players for "rumors"
+    createdAt: ISODateString;
+    updatedAt: ISODateString;
+    isPinned: boolean;
+    type: "announcement" | "rumor" | "general";
+}
+
+/**
+ * A calendar event (distinct from Session, more detailed)
+ */
+export interface CampaignEvent {
+    id: ID;
+    title: string;
+    description?: string;
+    date: ISODateString;
+    type: "session" | "deadline" | "downtime" | "other";
+    createdBy: ID;
+    createdAt: ISODateString;
+    updatedAt: ISODateString;
+}
+
 // -----------------------------------------------------------------------------
 // API Request/Response Types
 // -----------------------------------------------------------------------------
@@ -186,6 +239,10 @@ export interface CreateCampaignRequest {
     houseRules?: string | Record<string, unknown>;
     visibility: CampaignVisibility;
     maxPlayers?: number;
+    imageUrl?: string;
+    startDate?: ISODateString;
+    endDate?: ISODateString;
+    tags?: string[];
 }
 
 /**
@@ -202,6 +259,10 @@ export interface UpdateCampaignRequest {
     status?: CampaignStatus;
     visibility?: CampaignVisibility;
     maxPlayers?: number;
+    imageUrl?: string;
+    startDate?: ISODateString;
+    endDate?: ISODateString;
+    tags?: string[];
 }
 
 /**

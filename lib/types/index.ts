@@ -181,6 +181,9 @@ export type {
   CampaignResponse,
   CampaignsListResponse,
   JoinCampaignRequest,
+  CampaignPost,
+  CampaignEvent,
+  CampaignTemplate,
 } from "./campaign";
 
 // Location types

@@ -20,6 +20,9 @@ import CampaignCharactersTab from "./components/CampaignCharactersTab";
 import CampaignNotesTab from "./components/CampaignNotesTab";
 import CampaignSessionsTab from "./components/CampaignSessionsTab";
 import CampaignRosterTab from "./components/CampaignRosterTab";
+import CampaignPostsTab from "./components/CampaignPostsTab";
+import CampaignCalendarTab from "./components/CampaignCalendarTab";
+import CampaignLocationsTab from "./components/CampaignLocationsTab";
 
 interface CampaignDetailProps {
     params: Promise<{ id: string }>;
@@ -49,7 +52,7 @@ export default function CampaignDetailPage({ params }: CampaignDetailProps) {
     const [books, setBooks] = useState<Book[]>([]);
     const [creationMethods, setCreationMethods] = useState<CreationMethod[]>([]);
     const [copiedCode, setCopiedCode] = useState(false);
-    const [activeTab, setActiveTab] = useState<"overview" | "characters" | "notes" | "sessions" | "roster" | "locations">("overview");
+    const [activeTab, setActiveTab] = useState<"overview" | "characters" | "notes" | "roster" | "locations" | "posts" | "calendar">("overview");
 
     useEffect(() => {
         async function fetchCampaign() {
@@ -245,6 +248,18 @@ export default function CampaignDetailPage({ params }: CampaignDetailProps) {
                         creationMethods={creationMethods}
                     />
                 )}
+                {activeTab === "posts" && (
+                    <CampaignPostsTab
+                        campaign={campaign}
+                        userRole={userRole || "player"}
+                    />
+                )}
+                {activeTab === "calendar" && (
+                    <CampaignCalendarTab
+                        campaign={campaign}
+                        userRole={userRole || "player"}
+                    />
+                )}
                 {activeTab === "characters" && (
                     <CampaignCharactersTab
                         campaign={campaign}
@@ -257,10 +272,10 @@ export default function CampaignDetailPage({ params }: CampaignDetailProps) {
                         isGM={userRole === "gm"}
                     />
                 )}
-                {activeTab === "sessions" && (
-                    <CampaignSessionsTab
+                {activeTab === "locations" && (
+                    <CampaignLocationsTab
                         campaign={campaign}
-                        isGM={userRole === "gm"}
+                        userRole={userRole || "player"}
                     />
                 )}
                 {activeTab === "roster" && userRole === "gm" && (

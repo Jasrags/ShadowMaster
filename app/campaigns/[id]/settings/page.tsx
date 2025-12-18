@@ -3,7 +3,7 @@
 import { useState, useEffect, use } from "react";
 import { useRouter } from "next/navigation";
 import type { Campaign, Book, CreationMethod, GameplayLevel, CampaignVisibility, CampaignStatus } from "@/lib/types";
-import { ArrowLeft, Loader2, Save, AlertTriangle, Trash2, Archive } from "lucide-react";
+import { ArrowLeft, Loader2, Save, AlertTriangle, Trash2, Archive, Download, LayoutTemplate, Tag } from "lucide-react";
 
 interface SettingsPageProps {
     params: Promise<{ id: string }>;
@@ -46,6 +46,16 @@ export default function CampaignSettingsPage({ params }: SettingsPageProps) {
     const [visibility, setVisibility] = useState<CampaignVisibility>("invite-only");
     const [status, setStatus] = useState<CampaignStatus>("active");
     const [maxPlayers, setMaxPlayers] = useState<number | undefined>(undefined);
+    const [imageUrl, setImageUrl] = useState("");
+    const [startDate, setStartDate] = useState("");
+    const [endDate, setEndDate] = useState("");
+    const [tags, setTags] = useState<string[]>([]);
+    const [tagInput, setTagInput] = useState("");
+
+    // Template state
+    const [showTemplateDialog, setShowTemplateDialog] = useState(false);
+    const [templateName, setTemplateName] = useState("");
+    const [savingTemplate, setSavingTemplate] = useState(false);
 
     // Edition data
     const [books, setBooks] = useState<Book[]>([]);
@@ -81,6 +91,10 @@ export default function CampaignSettingsPage({ params }: SettingsPageProps) {
                 setVisibility(c.visibility);
                 setStatus(c.status);
                 setMaxPlayers(c.maxPlayers);
+                setImageUrl(c.imageUrl || "");
+                setStartDate(c.startDate ? c.startDate.split("T")[0] : "");
+                setEndDate(c.endDate ? c.endDate.split("T")[0] : "");
+                setTags(c.tags || []);
 
                 // Fetch edition data
                 const editionRes = await fetch(`/api/editions/${c.editionCode}`);
@@ -117,6 +131,10 @@ export default function CampaignSettingsPage({ params }: SettingsPageProps) {
                     visibility,
                     status,
                     maxPlayers: maxPlayers || undefined,
+                    imageUrl: imageUrl || undefined,
+                    startDate: startDate ? new Date(startDate).toISOString() : undefined,
+                    endDate: endDate ? new Date(endDate).toISOString() : undefined,
+                    tags: tags.length > 0 ? tags : undefined,
                 }),
             });
 
@@ -192,6 +210,53 @@ export default function CampaignSettingsPage({ params }: SettingsPageProps) {
         setEnabledCreationMethodIds((prev) =>
             prev.includes(methodId) ? prev.filter((id) => id !== methodId) : [...prev, methodId]
         );
+    };
+
+    const handleExport = () => {
+        if (!campaign) return;
+        const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(campaign, null, 2));
+        const downloadAnchorNode = document.createElement("a");
+        downloadAnchorNode.setAttribute("href", dataStr);
+        downloadAnchorNode.setAttribute("download", `campaign_${campaign.id}_export.json`);
+        document.body.appendChild(downloadAnchorNode);
+        downloadAnchorNode.click();
+        downloadAnchorNode.remove();
+    };
+
+    const handleSaveTemplate = async () => {
+        if (!templateName.trim()) return;
+        setSavingTemplate(true);
+        try {
+            const res = await fetch(`/api/campaigns/${id}/template`, {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ name: templateName }),
+            });
+            const data = await res.json();
+            if (data.success) {
+                setSuccessMessage("Template saved successfully");
+                setShowTemplateDialog(false);
+                setTemplateName("");
+                setTimeout(() => setSuccessMessage(null), 3000);
+            } else {
+                setError(data.error || "Failed to save template");
+            }
+        } catch {
+            setError("An error occurred while saving template");
+        } finally {
+            setSavingTemplate(false);
+        }
+    };
+
+    const addTag = () => {
+        if (tagInput.trim() && !tags.includes(tagInput.trim())) {
+            setTags([...tags, tagInput.trim()]);
+            setTagInput("");
+        }
+    };
+
+    const removeTag = (tagToRemove: string) => {
+        setTags(tags.filter(tag => tag !== tagToRemove));
     };
 
     if (loading) {
@@ -399,6 +464,8 @@ export default function CampaignSettingsPage({ params }: SettingsPageProps) {
                     </div>
                 </section>
 
+
+
                 {/* Visibility & Access */}
                 <section className="rounded-lg border border-zinc-200 bg-white p-6 dark:border-zinc-800 dark:bg-black">
                     <h2 className="mb-4 text-lg font-semibold text-zinc-900 dark:text-zinc-50">
@@ -449,8 +516,117 @@ export default function CampaignSettingsPage({ params }: SettingsPageProps) {
                                 Current players: {campaign?.playerIds.length || 0}
                             </p>
                         </div>
+
+                        <div>
+                            <label className="block text-sm font-medium text-zinc-700 dark:text-zinc-300">
+                                Tags
+                            </label>
+                            <div className="mt-1 flex gap-2">
+                                <input
+                                    type="text"
+                                    value={tagInput}
+                                    onChange={(e) => setTagInput(e.target.value)}
+                                    onKeyDown={(e) => e.key === "Enter" && addTag()}
+                                    className="block w-full rounded-md border border-zinc-300 px-3 py-2 focus:border-indigo-500 focus:ring-indigo-500 dark:border-zinc-700 dark:bg-black dark:text-white"
+                                    placeholder="Add a tag..."
+                                />
+                                <button
+                                    onClick={addTag}
+                                    type="button"
+                                    title="Add Tag"
+                                    className="rounded-md bg-zinc-100 px-3 py-2 text-zinc-700 hover:bg-zinc-200 dark:bg-zinc-800 dark:text-zinc-300 dark:hover:bg-zinc-700"
+                                >
+                                    <Tag className="h-4 w-4" />
+                                </button>
+                            </div>
+                            <div className="mt-2 flex flex-wrap gap-2">
+                                {tags.map((tag) => (
+                                    <span key={tag} className="inline-flex items-center gap-1 rounded-full bg-indigo-100 px-2.5 py-0.5 text-xs font-medium text-indigo-800 dark:bg-indigo-900/30 dark:text-indigo-400">
+                                        {tag}
+                                        <button
+                                            onClick={() => removeTag(tag)}
+                                            className="ml-1 text-indigo-600 hover:text-indigo-800 dark:text-indigo-400 dark:hover:text-indigo-300"
+                                        >
+                                            ×
+                                        </button>
+                                    </span>
+                                ))}
+                            </div>
+                        </div>
                     </div>
                 </section>
+
+                {/* Data Management */}
+                <section className="rounded-lg border border-zinc-200 bg-white p-6 dark:border-zinc-800 dark:bg-black">
+                    <h2 className="mb-4 text-lg font-semibold text-zinc-900 dark:text-zinc-50">
+                        Data Components
+                    </h2>
+                    <div className="grid gap-4 sm:grid-cols-2">
+                        <div className="rounded-md border border-zinc-200 p-4 dark:border-zinc-700">
+                            <h3 className="font-medium text-zinc-900 dark:text-zinc-50">Export Campaign</h3>
+                            <p className="mb-3 text-sm text-zinc-500 dark:text-zinc-400">
+                                Download a JSON backup of your campaign data, including notes and characters.
+                            </p>
+                            <button
+                                onClick={handleExport}
+                                className="inline-flex items-center gap-2 rounded-md border border-zinc-300 bg-white px-3 py-2 text-sm font-medium text-zinc-700 shadow-sm hover:bg-zinc-50 dark:border-zinc-600 dark:bg-zinc-800 dark:text-zinc-200 dark:hover:bg-zinc-700"
+                            >
+                                <Download className="h-4 w-4" />
+                                Export JSON
+                            </button>
+                        </div>
+
+                        <div className="rounded-md border border-zinc-200 p-4 dark:border-zinc-700">
+                            <h3 className="font-medium text-zinc-900 dark:text-zinc-50">Save as Template</h3>
+                            <p className="mb-3 text-sm text-zinc-500 dark:text-zinc-400">
+                                Save this campaign&apos;s ruleset and configuration as a reusable template.
+                            </p>
+                            <button
+                                onClick={() => setShowTemplateDialog(true)}
+                                className="inline-flex items-center gap-2 rounded-md border border-zinc-300 bg-white px-3 py-2 text-sm font-medium text-zinc-700 shadow-sm hover:bg-zinc-50 dark:border-zinc-600 dark:bg-zinc-800 dark:text-zinc-200 dark:hover:bg-zinc-700"
+                            >
+                                <LayoutTemplate className="h-4 w-4" />
+                                Save Template
+                            </button>
+                        </div>
+                    </div>
+                </section>
+
+                {/* Template Dialog */}
+                {showTemplateDialog && (
+                    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4">
+                        <div className="w-full max-w-md rounded-lg bg-white p-6 shadow-lg dark:bg-zinc-900">
+                            <h3 className="mb-4 text-lg font-bold text-zinc-900 dark:text-zinc-50">Save Campaign Template</h3>
+                            <p className="mb-4 text-sm text-zinc-600 dark:text-zinc-400">
+                                Give your template a unique name.
+                            </p>
+                            <input
+                                type="text"
+                                value={templateName}
+                                onChange={(e) => setTemplateName(e.target.value)}
+                                className="mb-4 block w-full rounded-md border border-zinc-300 px-3 py-2 focus:border-indigo-500 focus:ring-indigo-500 dark:border-zinc-700 dark:bg-black dark:text-white"
+                                placeholder="Template Name"
+                                autoFocus
+                            />
+                            <div className="flex justify-end gap-2">
+                                <button
+                                    onClick={() => setShowTemplateDialog(false)}
+                                    className="rounded-md px-4 py-2 text-sm font-medium text-zinc-600 hover:bg-zinc-100 dark:text-zinc-400 dark:hover:bg-zinc-800"
+                                >
+                                    Cancel
+                                </button>
+                                <button
+                                    onClick={handleSaveTemplate}
+                                    disabled={savingTemplate || !templateName.trim()}
+                                    className="inline-flex items-center gap-2 rounded-md bg-indigo-600 px-4 py-2 text-sm font-medium text-white hover:bg-indigo-700 disabled:opacity-50"
+                                >
+                                    {savingTemplate && <Loader2 className="h-4 w-4 animate-spin" />}
+                                    Save Template
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                )}
 
                 {/* Danger Zone */}
                 <section className="rounded-lg border border-red-200 bg-red-50 p-6 dark:border-red-900 dark:bg-red-900/10">
@@ -492,6 +668,6 @@ export default function CampaignSettingsPage({ params }: SettingsPageProps) {
                     </div>
                 </section>
             </div>
-        </div>
+        </div >
     );
 }
