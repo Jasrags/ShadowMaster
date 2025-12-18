@@ -205,6 +205,40 @@ export async function createCharacterDraft(
 }
 
 /**
+ * Import a character from JSON
+ * Generates a new ID and owner ID to avoid collisions/security issues
+ */
+export async function importCharacter(
+  userId: ID,
+  characterData: Partial<Character>
+): Promise<Character> {
+  await ensureDirectory(getUserCharactersDir(userId));
+
+  const now = new Date().toISOString();
+  const characterId = uuidv4();
+
+  // Create clean character object with new ID and owner
+  const character: Character = {
+    ...characterData, // Spread imported data first
+    id: characterId, // Overwrite ID
+    ownerId: userId, // Overwrite owner
+    createdAt: now, // Reset creation date
+    updatedAt: now, // Reset update date
+    campaignId: undefined, // Clear campaign association
+  } as Character;
+
+  // Validate critical fields
+  if (!character.name || !character.editionCode || !character.creationMethodId) {
+    throw new Error("Invalid character data: missing required fields");
+  }
+
+  const filePath = getCharacterFilePath(userId, characterId);
+  await writeJsonFile(filePath, character);
+
+  return character;
+}
+
+/**
  * Update a character
  */
 export async function updateCharacter(

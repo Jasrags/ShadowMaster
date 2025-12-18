@@ -23,7 +23,7 @@ The Dice Roller is a core gameplay component that enables players to perform Sha
 - Quick pool size presets
 - Visual feedback with animations and color coding
 
-**Current Status:** Fully implemented. This specification documents current implementation and defines future enhancements.
+**Current Status:** Fully implemented. See [Acceptance Criteria](#acceptance-criteria) for detailed status.
 
 ---
 
@@ -68,6 +68,51 @@ The Dice Roller is a core gameplay component that enables players to perform Sha
 16. **As a combat system**, I want to use the dice roller for attack and defense rolls so combat resolution is consistent.
 
 17. **As a skill test system**, I want to use the dice roller for skill checks so all tests use the same mechanics.
+
+---
+
+## Acceptance Criteria
+
+### MVP (Phase 1) - Core Dice Mechanics
+
+**Functionality:**
+- [x] **Pool Management:** Support dice pools from 1 to 50 dice.
+- [x] **Adjust Controls:** Easy increment/decrement buttons and direct text input for pool size.
+- [x] **Presets:** Quick selection buttons for common pool sizes (4, 8, 12, 16, 20).
+- [x] **Rolling:** Generate random results (1-6) for each die in the pool.
+- [x] **Calculating:** Automatically count "Hits" (5s and 6s) and "Ones".
+- [x] **Glitch Detection:** Correctly identify a Glitch (> 50% ones).
+- [x] **Critical Glitch:** Correctly identify a Critical Glitch (Glitch + 0 Hits).
+- [x] **Sorting:** Display results sorted by Hits (successes first) then descending value.
+- [x] **Edge Reroll:** Button to "Spend Edge" appearing only when applicable (non-hits available).
+   - [x] **Logic:** Reroll only non-hits (1-4), preserve original hits (5-6).
+   - [x] **Recalculation:** Correctly new hits/glitches after reroll.
+
+**Display & UX:**
+- [x] **Visual Dice:** Render custom die faces with pips (dots) rather than just numbers.
+- [x] **Feedback:** Animated rolling effect (bounce/spin) before settling.
+- [x] **Color Coding:** Distinct colors for Hits (Green), Ones (Red), and Glitch Warnings (Amber/Red).
+- [x] **Responsiveness:** Layout adapts to available width (wrapping dice).
+- [x] **Compact Mode:** Ability to render a smaller version for tight UI spaces.
+- [x] **History:** Display a list of recent previous rolls with timestamps.
+
+### Future Phases (Backlog)
+
+**Phase 2 - Advanced Integration:**
+- [x] **Context Awareness:** Automatically set pool size based on Character context (e.g. clicking "Pistols" skill sets pool).
+- [x] **Modifiers UI:** Interface to add simple modifiers (+/- dice) separate from base pool.
+- [ ] **Test Types:** Dedicated modes for "Opposed Tests" (roll vs X hits).
+- [ ] **Extended Tests:** Tracking cumulative hits over multiple rolls.
+
+**Phase 3 - Advanced Edge Actions:**
+- [ ] **Push the Limit:** "Exploding" 6s logic (Rule of Six).
+- [ ] **Second Chance:** Reroll all failures (distinct from current implementation if rules differ).
+- [ ] **Pre-Edging:** Add Edge attribute to pool before rolling.
+
+**Phase 4 - Polish & customization:**
+- [ ] **3D Physics:** Implement 3D canvas based dice rolling for premium feel.
+- [ ] **Theming:** Allow users to choose dice colors/skins.
+- [ ] **Sound:** Optional sound effects for rolling.
 
 ---
 
@@ -134,11 +179,14 @@ interface DiceRollerProps {
   compact?: boolean;            // Default: false
   /** Label for the dice pool input */
   label?: string;              // Default: "Dice Pool"
+  /** Label for the current operation (e.g. "Pistols Roll") */
+  contextLabel?: string;
 }
 ```
 
 **State:**
-- `poolSize: number` - Current dice pool size
+- `basePoolSize: number` - Current base dice pool size
+- `modifier: number` - Current situational modifier (+/-)
 - `isRolling: boolean` - Whether a roll is in progress
 - `currentResult: RollResult | null` - Most recent roll result
 - `history: RollResult[]` - Array of previous roll results
@@ -149,8 +197,9 @@ interface DiceRollerProps {
 
 **Visual Features:**
 - Pool size input with +/- buttons
-- Quick preset buttons (4, 8, 12, 16, 20)
-- Roll button with loading state
+- Situational Modifier input with quick presets (+1, -1, +2, -2)
+- Quick preset buttons for base pool (4, 8, 12, 16, 20)
+- Roll button with loading state and total pool display (Base + Mod)
 - Current result display with color-coded dice
 - Statistics summary (hits, ones, pool size)
 - Roll history list
@@ -343,9 +392,11 @@ interface RollResult {
 
 **Current Usage:**
 - Integrated in `/app/characters/[id]/page.tsx`
-- Pool size calculated from character attributes and skills
-- Example: `Agility + Pistols` for weapon attacks
-- Collapsible section with toggle
+- **Context Awareness:** Attributes and Skills are interactive. Clicking an attribute or skill:
+   - Sets the base pool size to the rating.
+   - Sets the `contextLabel` to the attribute/skill name.
+   - Automatically expands the Dice Roller section.
+- Supports situational modifiers via the internal `modifier` state.
 
 **Integration Pattern:**
 ```typescript

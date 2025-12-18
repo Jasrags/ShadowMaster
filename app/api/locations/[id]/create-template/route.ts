@@ -65,25 +65,26 @@ export async function POST(
         }
 
         // Extract template data, excluding ID-specific fields
-        // eslint-disable-next-line @typescript-eslint/no-unused-vars
+        /* eslint-disable @typescript-eslint/no-unused-vars */
         const {
-            id: _id,
-            campaignId: _campaignId,
-            createdAt: _createdAt,
-            updatedAt: _updatedAt,
-            npcIds: _npcIds,
-            gruntTeamIds: _gruntTeamIds,
-            encounterIds: _encounterIds,
-            sessionIds: _sessionIds,
-            visitedByCharacterIds: _visitedByCharacterIds,
-            visitCount: _visitCount,
-            firstVisitedAt: _firstVisitedAt,
-            lastVisitedAt: _lastVisitedAt,
-            parentLocationId: _parentLocationId,
-            childLocationIds: _childLocationIds,
-            relatedLocationIds: _relatedLocationIds,
+            id,
+            campaignId,
+            createdAt,
+            updatedAt,
+            npcIds,
+            gruntTeamIds,
+            encounterIds,
+            sessionIds,
+            visitedByCharacterIds,
+            visitCount,
+            firstVisitedAt,
+            lastVisitedAt,
+            parentLocationId,
+            childLocationIds,
+            relatedLocationIds,
             ...templateData
         } = foundLocation;
+        /* eslint-enable @typescript-eslint/no-unused-vars */
 
         const template = await createLocationTemplate(userId, {
             name: body.name,

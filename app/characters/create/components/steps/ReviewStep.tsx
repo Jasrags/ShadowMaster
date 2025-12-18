@@ -1372,11 +1372,19 @@ export function ReviewStep({ state, updateState, budgetValues }: StepProps) {
                             {weapon.modifications?.map((mod, mi) => (
                               <span
                                 key={mi}
-                                className="inline-flex items-center gap-1 rounded bg-blue-100 px-1.5 py-0.5 text-xs text-blue-700 dark:bg-blue-900/50 dark:text-blue-300"
+                                className={`inline-flex items-center gap-1 rounded px-1.5 py-0.5 text-xs ${mod.isBuiltIn
+                                  ? "bg-zinc-200 text-zinc-700 dark:bg-zinc-700 dark:text-zinc-300 border border-zinc-300 dark:border-zinc-600"
+                                  : "bg-blue-100 text-blue-700 dark:bg-blue-900/50 dark:text-blue-300"
+                                  }`}
                               >
                                 {mod.name}
+                                {mod.isBuiltIn && (
+                                  <span className="text-[10px] font-bold uppercase text-zinc-500">Built-in</span>
+                                )}
                                 {mod.mount && (
-                                  <span className="text-blue-500 dark:text-blue-400">[{mod.mount}]</span>
+                                  <span className={mod.isBuiltIn ? "text-zinc-500" : "text-blue-500 dark:text-blue-400"}>
+                                    [{mod.mount}]
+                                  </span>
                                 )}
                               </span>
                             ))}

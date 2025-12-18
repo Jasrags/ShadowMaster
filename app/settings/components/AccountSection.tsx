@@ -34,10 +34,10 @@ export function AccountSection({ user, onUpdate }: AccountSectionProps) {
   };
 
   return (
-    <div className="rounded-lg border border-zinc-200 bg-white shadow-sm dark:border-zinc-800 dark:bg-zinc-900">
-      <div className="border-b border-zinc-200 px-6 py-4 dark:border-zinc-800">
-        <h2 className="text-lg font-medium text-zinc-900 dark:text-zinc-50">Account Information</h2>
-        <p className="mt-1 text-sm text-zinc-500 dark:text-zinc-400">
+    <div className="rounded-lg border border-border bg-card shadow-sm transition-colors">
+      <div className="border-b border-border px-6 py-4">
+        <h2 className="text-lg font-medium text-foreground">Account Information</h2>
+        <p className="mt-1 text-sm text-muted-foreground">
           Update your account details and profile information.
         </p>
       </div>
@@ -45,20 +45,20 @@ export function AccountSection({ user, onUpdate }: AccountSectionProps) {
       <form onSubmit={handleSubmit} className="p-6">
         <div className="space-y-6">
           {message && (
-            <div className={`rounded-md p-4 ${message.type === 'success'
-              ? 'bg-green-50 text-green-700 dark:bg-green-900/30 dark:text-green-400'
-              : 'bg-red-50 text-red-700 dark:bg-red-900/30 dark:text-red-400'
+            <div className={`rounded-md p-4 transition-colors ${message.type === 'success'
+              ? 'bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-500/20'
+              : 'bg-red-500/10 text-red-600 dark:text-red-400 border border-red-500/20'
               }`}>
               {message.text}
             </div>
           )}
 
           <div>
-            <label htmlFor="username" className="block text-sm font-medium text-zinc-700 dark:text-zinc-300">
+            <label htmlFor="username" className="block text-sm font-medium text-foreground/80">
               Username
             </label>
             <div className="mt-1 flex rounded-md shadow-sm">
-              <span className="inline-flex items-center rounded-l-md border border-r-0 border-zinc-300 bg-zinc-50 px-3 text-zinc-500 dark:border-zinc-700 dark:bg-zinc-800">
+              <span className="inline-flex items-center rounded-l-md border border-r-0 border-input bg-muted px-3 text-muted-foreground">
                 <User className="h-4 w-4" />
               </span>
               <input
@@ -67,17 +67,17 @@ export function AccountSection({ user, onUpdate }: AccountSectionProps) {
                 id="username"
                 value={username}
                 onChange={(e) => setUsername(e.target.value)}
-                className="block w-full min-w-0 flex-1 rounded-none rounded-r-md border-zinc-300 px-3 py-2 focus:border-indigo-500 focus:ring-indigo-500 dark:border-zinc-700 dark:bg-black dark:text-white dark:focus:border-indigo-400"
+                className="block w-full min-w-0 flex-1 rounded-none rounded-r-md border-input bg-background text-foreground px-3 py-2 focus:border-primary focus:ring-primary sm:text-sm"
               />
             </div>
           </div>
 
           <div>
-            <label htmlFor="email" className="block text-sm font-medium text-zinc-700 dark:text-zinc-300">
+            <label htmlFor="email" className="block text-sm font-medium text-foreground/80">
               Email Address
             </label>
             <div className="mt-1 flex rounded-md shadow-sm">
-              <span className="inline-flex items-center rounded-l-md border border-r-0 border-zinc-300 bg-zinc-50 px-3 text-zinc-500 dark:border-zinc-700 dark:bg-zinc-800">
+              <span className="inline-flex items-center rounded-l-md border border-r-0 border-input bg-muted px-3 text-muted-foreground">
                 <Mail className="h-4 w-4" />
               </span>
               <input
@@ -86,25 +86,25 @@ export function AccountSection({ user, onUpdate }: AccountSectionProps) {
                 id="email"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                className="block w-full min-w-0 flex-1 rounded-none rounded-r-md border-zinc-300 px-3 py-2 focus:border-indigo-500 focus:ring-indigo-500 dark:border-zinc-700 dark:bg-black dark:text-white dark:focus:border-indigo-400"
+                className="block w-full min-w-0 flex-1 rounded-none rounded-r-md border-input bg-background text-foreground px-3 py-2 focus:border-primary focus:ring-primary sm:text-sm"
               />
             </div>
           </div>
 
           <div className="grid grid-cols-1 gap-6 sm:grid-cols-2">
             <div>
-              <label className="block text-sm font-medium text-zinc-700 dark:text-zinc-300">
+              <label className="block text-sm font-medium text-foreground/80">
                 Role
               </label>
-              <div className="mt-1 block w-full rounded-md border border-zinc-200 bg-zinc-50 px-3 py-2 text-zinc-500 dark:border-zinc-700 dark:bg-zinc-800 dark:text-zinc-400">
+              <div className="mt-1 block w-full rounded-md border border-border bg-muted px-3 py-2 text-muted-foreground">
                 {user.role.join(", ")}
               </div>
             </div>
             <div>
-              <label className="block text-sm font-medium text-zinc-700 dark:text-zinc-300">
+              <label className="block text-sm font-medium text-foreground/80">
                 Member Since
               </label>
-              <div className="mt-1 block w-full rounded-md border border-zinc-200 bg-zinc-50 px-3 py-2 text-zinc-500 dark:border-zinc-700 dark:bg-zinc-800 dark:text-zinc-400">
+              <div className="mt-1 block w-full rounded-md border border-border bg-muted px-3 py-2 text-muted-foreground">
                 {new Date(user.createdAt).toLocaleDateString()}
               </div>
             </div>

@@ -40,10 +40,10 @@ export function SecuritySection({ onChangePassword }: SecuritySectionProps) {
     };
 
     return (
-        <div className="rounded-lg border border-zinc-200 bg-white shadow-sm dark:border-zinc-800 dark:bg-zinc-900">
-            <div className="border-b border-zinc-200 px-6 py-4 dark:border-zinc-800">
-                <h2 className="text-lg font-medium text-zinc-900 dark:text-zinc-50">Security Settings</h2>
-                <p className="mt-1 text-sm text-zinc-500 dark:text-zinc-400">
+        <div className="rounded-lg border border-border bg-card shadow-sm transition-colors">
+            <div className="border-b border-border px-6 py-4">
+                <h2 className="text-lg font-medium text-foreground">Security Settings</h2>
+                <p className="mt-1 text-sm text-muted-foreground">
                     Manage your password and security preferences.
                 </p>
             </div>
@@ -51,20 +51,20 @@ export function SecuritySection({ onChangePassword }: SecuritySectionProps) {
             <form onSubmit={handleSubmit} className="p-6">
                 <div className="space-y-6">
                     {message && (
-                        <div className={`rounded-md p-4 ${message.type === 'success'
-                            ? 'bg-green-50 text-green-700 dark:bg-green-900/30 dark:text-green-400'
-                            : 'bg-red-50 text-red-700 dark:bg-red-900/30 dark:text-red-400'
+                        <div className={`rounded-md p-4 transition-colors ${message.type === 'success'
+                            ? 'bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-500/20'
+                            : 'bg-destructive/10 text-destructive dark:text-destructive border border-destructive/20'
                             }`}>
                             {message.text}
                         </div>
                     )}
 
                     <div>
-                        <label htmlFor="current-password" className="block text-sm font-medium text-zinc-700 dark:text-zinc-300">
+                        <label htmlFor="current-password" className="block text-sm font-medium text-foreground/80">
                             Current Password
                         </label>
                         <div className="mt-1 flex rounded-md shadow-sm">
-                            <span className="inline-flex items-center rounded-l-md border border-r-0 border-zinc-300 bg-zinc-50 px-3 text-zinc-500 dark:border-zinc-700 dark:bg-zinc-800">
+                            <span className="inline-flex items-center rounded-l-md border border-r-0 border-input bg-muted px-3 text-muted-foreground">
                                 <Lock className="h-4 w-4" />
                             </span>
                             <input
@@ -72,18 +72,18 @@ export function SecuritySection({ onChangePassword }: SecuritySectionProps) {
                                 id="current-password"
                                 value={currentPassword}
                                 onChange={(e) => setCurrentPassword(e.target.value)}
-                                className="block w-full min-w-0 flex-1 rounded-none rounded-r-md border-zinc-300 px-3 py-2 focus:border-indigo-500 focus:ring-indigo-500 dark:border-zinc-700 dark:bg-black dark:text-white dark:focus:border-indigo-400"
+                                className="block w-full min-w-0 flex-1 rounded-none rounded-r-md border-input bg-background text-foreground px-3 py-2 focus:border-primary focus:ring-primary sm:text-sm"
                                 required
                             />
                         </div>
                     </div>
 
                     <div>
-                        <label htmlFor="new-password" className="block text-sm font-medium text-zinc-700 dark:text-zinc-300">
+                        <label htmlFor="new-password" className="block text-sm font-medium text-foreground/80">
                             New Password
                         </label>
                         <div className="mt-1 flex rounded-md shadow-sm">
-                            <span className="inline-flex items-center rounded-l-md border border-r-0 border-zinc-300 bg-zinc-50 px-3 text-zinc-500 dark:border-zinc-700 dark:bg-zinc-800">
+                            <span className="inline-flex items-center rounded-l-md border border-r-0 border-input bg-muted px-3 text-muted-foreground">
                                 <Lock className="h-4 w-4" />
                             </span>
                             <input
@@ -91,20 +91,20 @@ export function SecuritySection({ onChangePassword }: SecuritySectionProps) {
                                 id="new-password"
                                 value={newPassword}
                                 onChange={(e) => setNewPassword(e.target.value)}
-                                className="block w-full min-w-0 flex-1 rounded-none rounded-r-md border-zinc-300 px-3 py-2 focus:border-indigo-500 focus:ring-indigo-500 dark:border-zinc-700 dark:bg-black dark:text-white dark:focus:border-indigo-400"
+                                className="block w-full min-w-0 flex-1 rounded-none rounded-r-md border-input bg-background text-foreground px-3 py-2 focus:border-primary focus:ring-primary sm:text-sm"
                                 required
                                 minLength={8}
                             />
                         </div>
-                        <p className="mt-1 text-xs text-zinc-500 dark:text-zinc-400">Minimum 8 characters</p>
+                        <p className="mt-1 text-xs text-muted-foreground">Minimum 8 characters</p>
                     </div>
 
                     <div>
-                        <label htmlFor="confirm-password" className="block text-sm font-medium text-zinc-700 dark:text-zinc-300">
+                        <label htmlFor="confirm-password" className="block text-sm font-medium text-foreground/80">
                             Confirm New Password
                         </label>
                         <div className="mt-1 flex rounded-md shadow-sm">
-                            <span className="inline-flex items-center rounded-l-md border border-r-0 border-zinc-300 bg-zinc-50 px-3 text-zinc-500 dark:border-zinc-700 dark:bg-zinc-800">
+                            <span className="inline-flex items-center rounded-l-md border border-r-0 border-input bg-muted px-3 text-muted-foreground">
                                 <Lock className="h-4 w-4" />
                             </span>
                             <input
@@ -112,7 +112,7 @@ export function SecuritySection({ onChangePassword }: SecuritySectionProps) {
                                 id="confirm-password"
                                 value={confirmPassword}
                                 onChange={(e) => setConfirmPassword(e.target.value)}
-                                className="block w-full min-w-0 flex-1 rounded-none rounded-r-md border-zinc-300 px-3 py-2 focus:border-indigo-500 focus:ring-indigo-500 dark:border-zinc-700 dark:bg-black dark:text-white dark:focus:border-indigo-400"
+                                className="block w-full min-w-0 flex-1 rounded-none rounded-r-md border-input bg-background text-foreground px-3 py-2 focus:border-primary focus:ring-primary sm:text-sm"
                                 required
                             />
                         </div>

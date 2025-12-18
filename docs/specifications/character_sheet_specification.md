@@ -23,7 +23,7 @@ The Character Sheet is the primary interface for viewing and interacting with Sh
 - Character status indicators
 - Navigation and editing controls
 
-**Current Status:** Fully implemented for viewing. Editing capabilities limited to draft characters. This specification documents current implementation and defines future enhancements.
+**Current Status:** Fully implemented for viewing. Editing capabilities limited to draft characters. See [Acceptance Criteria](#acceptance-criteria) for detailed status.
 
 ---
 
@@ -70,6 +70,59 @@ The Character Sheet is the primary interface for viewing and interacting with Sh
 17. **As a character editor**, I want to link to the character sheet so users can view their characters after editing.
 
 18. **As a GM**, I want to view character sheets so I can understand player capabilities during games.
+
+---
+
+## Acceptance Criteria
+
+### MVP (Phase 1) - Viewing & Navigation
+
+**Character Display:**
+- [x] **Header Information:** Display Name, Metatype, Magic/Resonance Path, Edition, and Status (Active/Draft).
+- [x] **Quick Stats:** Display Current Karma, Nuyen, Essence, and Edge in a prominent bar.
+- [x] **Attributes:** Visual display of all core attributes (BOD, AGI, REA, STR, WIL, LOG, INT, CHA) with progress bars.
+- [x] **Special Attributes:** Conditionally display Magic and Resonance if applicable.
+- [x] **Derived Stats:** Calculate and display Physical Limit, Mental Limit, Social Limit, and Initiative (Base + Dice).
+- [x] **Condition Monitors:** Visual track for Physical and Stun damage, including wound modifier indicators (-1 per 3 boxes).
+- [x] **Skills:** List active skills sorted by rating, showing linked attribute and visual rating dots.
+- [x] **Knowledge & Languages:** Display knowledge skills (categorized) and languages (identifying native vs acquired).
+- [x] **Qualities:** distinct visual badges for Positive and Negative qualities.
+- [x] **Gear:** Simple list of gear with Quantity, Rating, and Category.
+- [x] **Contacts:** Cards showing Connection and Loyalty ratings.
+- [x] **Lifestyles:** Detailed breakdown of lifestyles including monthly cost calculations with modifiers.
+
+**Functionality:**
+- [x] **Navigation:** "Back to Characters" link functioning correctly.
+- [x] **Draft Editing:** "Edit" button visible only for Draft characters, linking to the wizard.
+   - [x] **Resume Creation:** Prominent "Resume Creation" button for draft characters.
+- [x] **Dice Roller:** Integrated toggleable Dice Roller component.
+   - [x] **Context:** Pre-calculates a default pool (e.g. Agility + Pistols) or generic pool.
+- [x] **Responsive Design:**
+   - [x] **Mobile:** Single column layout, stacked sections.
+   - [x] **Desktop:** Multi-column grid layout (Attributes/Stats left, Skills middle, Gear/Qualities right).
+- [x] **Loading States:** Visual feedback while fetching character data.
+- [x] **Error Handling:** Graceful error message if character not found or load fails.
+
+### Future Phases (Backlog)
+
+### Phase 2 - Enhanced Details (Content Expansion) - COMPLETED
+- [x] **Detailed Weapon Cards:** Show Damage, AP, Reach, Recoil, and Ammo for weapons with specialized labels.
+- [x] **Detailed Armor Cards:** Show Armor Rating and modification details (Mounts/Capacity).
+- [x] **Spells & Powers:** Dedicated section for Spells (Mages) showing type, range, duration, and drain.
+- [x] **Adept Powers:** Dedicated section for Adept Powers showing cost and level.
+- [x] **Cyber/Bioware:** Dedicated section detailing grade, essence cost, and category.
+- [x] **Vehicle/Drone:** Dedicated section for vehicles containing their specific attributes (Handling, Speed, Body, Armor, etc.).
+
+**Phase 3 - Interactive Management:**
+- [ ] **Condition Monitor Editing:** Allow users to click boxes to take/heal damage directly on the sheet.
+- [ ] **Edge/Karma Spending:** Interactive buttons to spend Edge or Karma.
+- [ ] **Inventory Management:** Equip/Unequip items to update stats/armor.
+- [ ] **Quick Rolls:** Clickable attributes/skills to immediately roll that dice pool.
+
+**Phase 4 - Export & Tools:**
+- [ ] **PDF Export:** Generate a printable PDF version of the character sheet.
+- [ ] **Public Share Link:** Read-only link for sharing characters with GMs/others (unauthenticated view).
+- [ ] **Character Log:** View history of changes (Karma spent, Nuyen earned).
 
 ---
 
@@ -718,10 +771,13 @@ const poolSize = Math.max(
 │  Left    │  Middle  │  Right           │
 │  Column  │  Column  │  Column          │
 │          │          │                  │
-│  • Attr  │  • Skills│  • Qualities     │
-│  • Stats │  • Know  │  • Gear          │
-│  • Cond  │  • Lang  │  • Contacts      │
-│          │          │  • Lifestyles    │
+│ • Attr   │ • Skills │ • Magic/Res      │
+│ • Stats  │ • Know   │ • Augmentations  │
+│ • Cond   │ • Lang   │ • Qualities      │
+│          │          │ • Gear           │
+│          │          │ • Contacts       │
+│          │          │ • Lifestyles     │
+│          │          │ • Vehicles       │
 └──────────┴──────────┴──────────────────┘
 ```
 
@@ -825,15 +881,14 @@ const data = await response.json();
 
 ### Phase 1: Enhanced Display
 
-**Expanded Sections:**
-- Weapons section with stats
-- Armor section with ratings
-- Cyberware/Bioware sections
-- Vehicles section
-- Drones section
-- Spells section (for mages)
-- Adept Powers section (for adepts)
-- Complex Forms section (for technomancers)
+**Expanded Sections - COMPLETED:**
+- [x] Weapons section with stats (Damage, AP, Modes, etc.)
+- [x] Armor section with ratings and modifications
+- [x] Cyberware/Bioware sections
+- [x] Vehicles/Drones/RCCs section
+- [x] Spells section (for mages)
+- [x] Adept Powers section (for adepts)
+- [ ] Complex Forms section (for technomancers)
 
 **Improved Visualizations:**
 - Weapon cards with damage, AP, modes
@@ -1079,6 +1134,13 @@ const data = await response.json();
 - Initial specification created
 - Documents current character sheet implementation
 - Defines future enhancement roadmap
+
+### 2025-12-17
+- Implemented Phase 2: Enhanced Details
+- Added detailed cards for Weapons, Armor, Spells, Adept Powers, Augmentations, and Vehicles
+- Integrated catalog lookups for spell data
+- Refactored layout to a cleaner three-column grid
+- Added RulesetProvider for edition-specific data loading
 
 ---
 

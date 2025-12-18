@@ -490,6 +490,8 @@ export interface InstalledWeaponMod {
   availability: number;
   restricted?: boolean;
   forbidden?: boolean;
+  /** New: Flags built-in mods that cannot be removed */
+  isBuiltIn?: boolean;
 }
 
 /**
@@ -523,6 +525,8 @@ export interface Weapon extends GearItem {
   currentAmmo?: number;
   reach?: number; // For melee weapons
   accuracy?: number; // Base accuracy
+  /** New: Required for compatibility check */
+  subcategory: string;
   /** Installed modifications on this weapon */
   modifications?: InstalledWeaponMod[];
   /** Track which mounts are occupied */
