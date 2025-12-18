@@ -314,6 +314,10 @@ export interface Character {
 
   /** Extensible metadata */
   metadata?: Metadata;
+  /** UI Preferences */
+  uiPreferences?: {
+    theme?: string;
+  };
 }
 
 // =============================================================================
