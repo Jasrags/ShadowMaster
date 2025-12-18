@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-aria-components";
 import type { Character } from "@/lib/types";
+import { CharacterImportDialog } from "./components/CharacterImportDialog";
 
 // =============================================================================
 // ICONS
@@ -52,6 +53,14 @@ function ListIcon({ className }: { className?: string }) {
   return (
     <svg className={className} fill="none" viewBox="0 0 24 24" stroke="currentColor">
       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 10h16M4 14h16M4 18h16" />
+    </svg>
+  );
+}
+
+function UploadIcon({ className }: { className?: string }) {
+  return (
+    <svg className={className} fill="none" viewBox="0 0 24 24" stroke="currentColor">
+      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12" />
     </svg>
   );
 }
@@ -401,6 +410,8 @@ export default function CharactersPage() {
   const [searchQuery, setSearchQuery] = useState("");
   const [sortBy, setSortBy] = useState<SortOption>("updated");
   const [viewMode, setViewMode] = useState<ViewMode>("grid");
+  const [isImporting, setIsImporting] = useState(false);
+  const [showImportDialog, setShowImportDialog] = useState(false);
 
   useEffect(() => {
     async function fetchCharacters() {
@@ -425,6 +436,41 @@ export default function CharactersPage() {
 
   const handleDelete = (id: string) => {
     setCharacters((prev) => prev.filter((c) => c.id !== id));
+  };
+
+  const handleImport = async (characterData: object) => {
+    setIsImporting(true);
+    try {
+      const response = await fetch("/api/characters/import", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ character: characterData }),
+      });
+
+      const data = await response.json();
+
+      if (!data.success) {
+        throw new Error(data.error || "Failed to import character");
+      }
+
+      // Add new character to list
+      setCharacters((prev) => [data.character, ...prev]);
+
+      // Select appropriate filter to view new character
+      if (activeFilter !== 'all' && data.character.status !== activeFilter) {
+        setActiveFilter('all');
+      }
+
+      setShowImportDialog(false);
+      alert(`Successfully imported "${data.character.name}"`);
+    } catch (err) {
+      console.error("Import error:", err);
+      alert(err instanceof Error ? err.message : "Failed to import character");
+    } finally {
+      setIsImporting(false);
+    }
   };
 
   // Filter and sort characters
@@ -479,14 +525,31 @@ export default function CharactersPage() {
             Manage your Shadowrun characters
           </p>
         </div>
-        <Link
-          href="/characters/create"
-          className="inline-flex items-center justify-center gap-2 rounded-lg bg-emerald-600 px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-emerald-700 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:ring-offset-2 focus:ring-offset-black"
-        >
-          <PlusIcon className="h-4 w-4" />
-          Create Character
-        </Link>
+        <div className="flex items-center gap-2">
+          <button
+            onClick={() => setShowImportDialog(true)}
+            className="inline-flex items-center justify-center gap-2 rounded-lg border border-border bg-card px-4 py-2 text-sm font-medium text-foreground transition-colors hover:bg-muted focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2"
+          >
+            <UploadIcon className="h-4 w-4" />
+            Import JSON
+          </button>
+
+          <Link
+            href="/characters/create"
+            className="inline-flex items-center justify-center gap-2 rounded-lg bg-emerald-600 px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-emerald-700 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:ring-offset-2 focus:ring-offset-black"
+          >
+            <PlusIcon className="h-4 w-4" />
+            Create Character
+          </Link>
+        </div>
       </div>
+
+      <CharacterImportDialog
+        isOpen={showImportDialog}
+        onClose={() => setShowImportDialog(false)}
+        onImport={handleImport}
+        loading={isImporting}
+      />
 
       {/* Error State */}
       {error && (

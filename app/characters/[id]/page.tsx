@@ -23,6 +23,7 @@ import {
   type SpellData,
   type SpellsCatalogData
 } from "@/lib/rules";
+import { DownloadIcon } from "lucide-react";
 
 // =============================================================================
 // ICONS
@@ -51,6 +52,8 @@ function DiceIcon({ className }: { className?: string }) {
     </svg>
   );
 }
+
+
 
 
 
@@ -779,6 +782,16 @@ function CharacterSheet({
   );
   const initiative = (character.attributes?.reaction || 1) + (character.attributes?.intuition || 1);
 
+  const handleExport = () => {
+    const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(character, null, 2));
+    const downloadAnchorNode = document.createElement('a');
+    downloadAnchorNode.setAttribute("href", dataStr);
+    downloadAnchorNode.setAttribute("download", `${character.name || 'character'}.json`);
+    document.body.appendChild(downloadAnchorNode); // required for firefox
+    downloadAnchorNode.click();
+    downloadAnchorNode.remove();
+  };
+
   return (
     <div className="space-y-6">
       {/* Navigation Header */}
@@ -791,6 +804,15 @@ function CharacterSheet({
           Back to Characters
         </Link>
         <div className="flex items-center gap-2">
+          <button
+            onClick={handleExport}
+            className="flex items-center gap-2 px-3 py-1.5 text-xs font-medium bg-muted/50 hover:bg-muted text-muted-foreground hover:text-foreground rounded border border-border transition-colors"
+            title="Export Character JSON"
+          >
+            <DownloadIcon className="w-3.5 h-3.5" />
+            <span className="hidden sm:inline">Export JSON</span>
+          </button>
+          <div className="h-4 w-px bg-border mx-1" />
           <span className="text-xs font-mono text-muted-foreground uppercase">
             {character.editionCode}
           </span>
