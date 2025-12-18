@@ -124,8 +124,8 @@ The Character Sheet is the primary interface for viewing and interacting with Sh
 - [ ] **Edge/Karma Spending:** Interactive buttons to spend Edge or Karma.
 - [ ] **Inventory Management:** Equip/Unequip items to update stats/armor.
 - [ ] **Quick Rolls:** Clickable attributes/skills to immediately roll that dice pool.
-- [ ] **Theme Support:** Support for multiple visual themes (e.g., Neon Rain, Tactical Data, Modern Card).
-- [ ] **Theme Persistence:** Selected theme is saved with the character and persists across sessions.
+- [x] **Theme Support:** Support for multiple visual themes (e.g., Neon Rain, Modern Card).
+- [x] **Theme Persistence:** Selected theme is saved with the character and persists across sessions (currently via LocalStorage).
 
 **Phase 4 - Export & Tools:**
 - [ ] **PDF Export:** Generate a printable PDF version of the character sheet.
@@ -713,9 +713,10 @@ if (lifestyle.customIncome) {
 - Visual feedback (active state)
 
 **Theme Selector:**
-- Dropdown or modal to select visual theme
-- Options: "Neon Rain" (Cyberpunk), "Tactical Data" (High Contrast), "Modern Card" (Clean)
-- Persists selection to character settings/local storage
+- Interactive toggle buttons in the character header to select visual theme
+- Options: "Neon Rain" (Cyberpunk/Default), "Modern Card" (Clean/Responsive)
+- Persists selection to `localStorage` (key: `character-theme-{id}`) and prioritizes `character.uiPreferences.theme` if available.
+- Implementation defined in `lib/themes.ts` using CSS variable-like tokens for easy expansion.
 
 **Dice Roller:**
 - Integrated DiceRoller component
