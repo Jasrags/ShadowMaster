@@ -116,7 +116,7 @@ function ConditionMonitor({ label, maxBoxes, filledBoxes, color }: ConditionMoni
           );
         })}
         {/* Wound modifier marker */}
-        <span className="ml-1 text-xs text-zinc-600 tabular-nums">
+        <span className="ml-1 text-xs text-muted-foreground tabular-nums">
           {Math.floor((i + 3) / 3) > 0 ? `-${Math.floor((i + 3) / 3)}` : ""}
         </span>
       </div>
@@ -129,7 +129,7 @@ function ConditionMonitor({ label, maxBoxes, filledBoxes, color }: ConditionMoni
         <span className={`text-xs font-mono uppercase tracking-wider ${colors.text}`}>
           {label}
         </span>
-        <span className="text-xs font-mono text-zinc-500">
+        <span className="text-xs font-mono text-muted-foreground">
           {filledBoxes}/{maxBoxes}
         </span>
       </div>
@@ -160,20 +160,20 @@ function AttributeBlock({ id, value, max, onSelect }: AttributeBlockProps) {
       onClick={() => onSelect?.(id, value)}
       className="group relative w-full text-left transition-transform active:scale-[0.98]"
     >
-      <div className="absolute inset-0 bg-gradient-to-r from-zinc-800/50 to-transparent rounded group-hover:from-emerald-500/10 transition-colors" />
+      <div className="absolute inset-0 bg-gradient-to-r from-muted/50 to-transparent rounded group-hover:from-emerald-500/10 transition-colors" />
       <div className="relative flex items-center gap-3 p-3">
         <span className={`font-mono text-sm font-bold ${display.color}`}>
           {display.abbr}
         </span>
         <div className="flex-1">
-          <div className="h-1.5 bg-zinc-800 rounded-full overflow-hidden">
+          <div className="h-1.5 bg-muted rounded-full overflow-hidden">
             <div
-              className={`h-full bg-gradient-to-r from-zinc-500 to-zinc-400 group-hover:from-emerald-500 group-hover:to-emerald-400 transition-all duration-500`}
+              className={`h-full bg-gradient-to-r from-muted-foreground/60 to-muted-foreground/40 group-hover:from-emerald-500 group-hover:to-emerald-400 transition-all duration-500`}
               style={{ width: `${Math.min(percentage, 100)}%` }}
             />
           </div>
         </div>
-        <span className="font-mono text-lg font-bold text-zinc-100 tabular-nums w-6 text-right">
+        <span className="font-mono text-lg font-bold text-foreground tabular-nums w-6 text-right">
           {value}
         </span>
       </div>
@@ -201,8 +201,8 @@ function Section({ title, icon, children, className = "" }: SectionProps) {
       <div className="absolute -bottom-px -left-px w-4 h-4 border-b-2 border-l-2 border-emerald-500/50" />
       <div className="absolute -bottom-px -right-px w-4 h-4 border-b-2 border-r-2 border-emerald-500/50" />
 
-      <div className="border border-zinc-800 bg-zinc-900/80 backdrop-blur-sm">
-        <div className="flex items-center gap-2 border-b border-zinc-800 px-4 py-2 bg-zinc-900">
+      <div className="border border-border bg-card/80 backdrop-blur-sm">
+        <div className="flex items-center gap-2 border-b border-border px-4 py-2 bg-card">
           {icon}
           <h3 className="text-xs font-mono uppercase tracking-widest text-emerald-400">
             {title}
@@ -242,10 +242,10 @@ function SkillList({ skills, linkedAttributes = {}, onSelect }: SkillListProps) 
           <button
             key={skillId}
             onClick={() => onSelect?.(skillId, rating, attrDisplay?.abbr)}
-            className="flex items-center justify-between py-1 px-2 rounded hover:bg-zinc-800 transition-all group text-left w-full active:scale-[0.99]"
+            className="flex items-center justify-between py-1 px-2 rounded hover:bg-muted transition-all group text-left w-full active:scale-[0.99]"
           >
             <div className="flex items-center gap-2">
-              <span className="text-sm text-zinc-300 capitalize group-hover:text-emerald-400 transition-colors">
+              <span className="text-sm text-foreground/80 capitalize group-hover:text-emerald-400 transition-colors">
                 {skillId.replace(/-/g, " ")}
               </span>
               {attrDisplay && (
@@ -264,10 +264,10 @@ function SkillList({ skills, linkedAttributes = {}, onSelect }: SkillListProps) 
               {Array.from({ length: Math.max(0, 6 - rating) }).map((_, i) => (
                 <div
                   key={i}
-                  className="w-2 h-2 bg-zinc-700 rounded-sm"
+                  className="w-2 h-2 bg-muted rounded-sm"
                 />
               ))}
-              <span className="ml-2 text-sm font-mono text-zinc-400 tabular-nums w-4 text-right">
+              <span className="ml-2 text-sm font-mono text-muted-foreground tabular-nums w-4 text-right">
                 {rating}
               </span>
             </div>
@@ -319,16 +319,16 @@ interface GearItemProps {
 
 function GearItem({ item }: GearItemProps) {
   return (
-    <div className="flex items-center justify-between py-2 px-3 bg-zinc-800/30 rounded border-l-2 border-zinc-600 group hover:bg-zinc-800/50 transition-colors">
+    <div className="flex items-center justify-between py-2 px-3 bg-muted/50 rounded border-l-2 border-primary/40 group hover:bg-muted/80 transition-colors">
       <div>
-        <span className="text-sm text-zinc-200 group-hover:text-emerald-400 transition-colors">{item.name}</span>
+        <span className="text-sm text-foreground group-hover:text-emerald-400 transition-colors">{item.name}</span>
         {item.rating && (
-          <span className="ml-2 text-xs text-zinc-500">R{item.rating}</span>
+          <span className="ml-2 text-xs text-muted-foreground">R{item.rating}</span>
         )}
-        <span className="ml-2 text-xs text-zinc-600">{item.category}</span>
+        <span className="ml-2 text-xs text-muted-foreground">{item.category}</span>
       </div>
       {item.quantity > 1 && (
-        <span className="text-xs font-mono text-zinc-400">×{item.quantity}</span>
+        <span className="text-xs font-mono text-muted-foreground">×{item.quantity}</span>
       )}
     </div>
   );
@@ -349,51 +349,51 @@ function WeaponCard({ weapon, onSelect }: WeaponCardProps) {
   return (
     <div
       onClick={() => onSelect?.(weapon)}
-      className="p-3 bg-zinc-800/40 rounded border-l-2 border-emerald-500/50 group hover:bg-emerald-500/5 transition-all cursor-pointer"
+      className="p-3 bg-muted/50 rounded border-l-2 border-emerald-500/50 group hover:bg-emerald-500/5 transition-all cursor-pointer"
     >
       <div className="flex items-start justify-between">
         <div className="space-y-1">
           <div className="flex items-center gap-2">
-            <span className="text-sm font-bold text-zinc-100 group-hover:text-emerald-400 transition-colors">
+            <span className="text-sm font-bold text-foreground group-hover:text-emerald-400 transition-colors">
               {weapon.name}
             </span>
-            <span className="text-[10px] font-mono text-zinc-600 uppercase tracking-tighter px-1.5 py-0.5 border border-zinc-800 rounded">
+            <span className="text-[10px] font-mono text-muted-foreground uppercase tracking-tighter px-1.5 py-0.5 border border-border rounded">
               {weapon.category}
             </span>
           </div>
 
           <div className="flex flex-wrap gap-x-4 gap-y-1 text-[11px] font-mono">
             <div className="flex gap-1.5">
-              <span className="text-zinc-500">DMG</span>
-              <span className="text-emerald-400 font-bold">{weapon.damage}</span>
+              <span className="text-muted-foreground">DMG</span>
+              <span className="text-emerald-600 dark:text-emerald-400 font-bold">{weapon.damage}</span>
             </div>
             <div className="flex gap-1.5">
-              <span className="text-zinc-500">AP</span>
+              <span className="text-muted-foreground">AP</span>
               <span className="text-amber-500">{weapon.ap}</span>
             </div>
             {isMelee ? (
               weapon.reach !== undefined && (
                 <div className="flex gap-1.5">
-                  <span className="text-zinc-500">REACH</span>
-                  <span className="text-purple-400">{weapon.reach}</span>
+                  <span className="text-muted-foreground">REACH</span>
+                  <span className="text-purple-500 dark:text-purple-400">{weapon.reach}</span>
                 </div>
               )
             ) : (
               <>
                 <div className="flex gap-1.5">
-                  <span className="text-zinc-500">ACC</span>
-                  <span className="text-cyan-400">{weapon.accuracy}</span>
+                  <span className="text-muted-foreground">ACC</span>
+                  <span className="text-cyan-600 dark:text-cyan-400">{weapon.accuracy}</span>
                 </div>
                 {weapon.mode && weapon.mode.length > 0 && (
                   <div className="flex gap-1.5">
-                    <span className="text-zinc-500">MODE</span>
-                    <span className="text-orange-400">{weapon.mode.join(", ")}</span>
+                    <span className="text-muted-foreground">MODE</span>
+                    <span className="text-orange-500 dark:text-orange-400">{weapon.mode.join(", ")}</span>
                   </div>
                 )}
                 {weapon.recoil !== undefined && weapon.recoil > 0 && (
                   <div className="flex gap-1.5">
-                    <span className="text-zinc-500">RC</span>
-                    <span className="text-rose-400">{weapon.recoil}</span>
+                    <span className="text-muted-foreground">RC</span>
+                    <span className="text-rose-500 dark:text-rose-400">{weapon.recoil}</span>
                   </div>
                 )}
               </>
@@ -403,10 +403,10 @@ function WeaponCard({ weapon, onSelect }: WeaponCardProps) {
 
         {!isMelee && weapon.ammoCapacity && (
           <div className="text-right">
-            <div className="text-[10px] text-zinc-500 uppercase font-mono">Ammo</div>
-            <div className="text-sm font-mono text-zinc-300">
+            <div className="text-[10px] text-muted-foreground uppercase font-mono">Ammo</div>
+            <div className="text-sm font-mono text-foreground/80">
               {weapon.currentAmmo ?? weapon.ammoCapacity}/{weapon.ammoCapacity}
-              <span className="text-[10px] text-zinc-600 ml-1">({weapon.ammoType})</span>
+              <span className="text-[10px] text-muted-foreground ml-1">({weapon.ammoType})</span>
             </div>
           </div>
         )}
@@ -414,16 +414,16 @@ function WeaponCard({ weapon, onSelect }: WeaponCardProps) {
 
       {/* Modifications */}
       {weapon.modifications && weapon.modifications.length > 0 && (
-        <div className="mt-2 pt-2 border-t border-zinc-800/50 flex flex-wrap gap-1.5">
+        <div className="mt-2 pt-2 border-t border-border/50 flex flex-wrap gap-1.5">
           {weapon.modifications.map((mod, idx) => (
             <span
               key={idx}
-              className="px-1.5 py-0.5 bg-zinc-900/50 text-[10px] text-zinc-500 rounded border border-zinc-800 flex items-center gap-1"
+              className="px-1.5 py-0.5 bg-muted/50 text-[10px] text-muted-foreground rounded border border-border flex items-center gap-1"
               title={mod.mount ? `Mount: ${mod.mount}` : undefined}
             >
               {mod.isBuiltIn && <span className="w-1 h-1 rounded-full bg-emerald-500/50" />}
               {mod.name}
-              {mod.rating && <span className="text-[9px] text-zinc-600">R{mod.rating}</span>}
+              {mod.rating && <span className="text-[9px] text-muted-foreground opacity-70">R{mod.rating}</span>}
             </span>
           ))}
         </div>
@@ -442,11 +442,11 @@ interface ArmorCardProps {
 
 function ArmorCard({ armor }: ArmorCardProps) {
   return (
-    <div className="p-3 bg-zinc-800/40 rounded border-l-2 border-blue-500/50 group hover:bg-blue-500/5 transition-all">
+    <div className="p-3 bg-muted/20 rounded border-l-2 border-blue-500/50 group hover:bg-blue-500/5 transition-all">
       <div className="flex items-start justify-between">
         <div>
           <div className="flex items-center gap-2">
-            <span className="text-sm font-bold text-zinc-100 group-hover:text-blue-400 transition-colors">
+            <span className="text-sm font-bold text-foreground group-hover:text-blue-400 transition-colors">
               {armor.name}
             </span>
             {armor.equipped && (
@@ -455,11 +455,11 @@ function ArmorCard({ armor }: ArmorCardProps) {
               </span>
             )}
           </div>
-          <p className="text-[10px] text-zinc-600 uppercase font-mono mt-0.5">{armor.category}</p>
+          <p className="text-[10px] text-muted-foreground uppercase font-mono mt-0.5">{armor.category}</p>
         </div>
 
         <div className="text-right">
-          <div className="text-[10px] text-zinc-500 uppercase font-mono leading-none mb-1">Armor</div>
+          <div className="text-[10px] text-muted-foreground uppercase font-mono leading-none mb-1">Armor</div>
           <div className="text-xl font-bold font-mono text-blue-400 leading-none">
             {armor.armorRating}
           </div>
@@ -468,11 +468,11 @@ function ArmorCard({ armor }: ArmorCardProps) {
 
       {/* Modifications & Capacity */}
       {(armor.capacity !== undefined || (armor.modifications && armor.modifications.length > 0)) && (
-        <div className="mt-2 pt-2 border-t border-zinc-800/50 space-y-2">
+        <div className="mt-2 pt-2 border-t border-border/50 space-y-2">
           {armor.capacity !== undefined && (
             <div className="flex items-center justify-between text-[10px] font-mono">
-              <span className="text-zinc-500 uppercase">Capacity</span>
-              <span className="text-zinc-300">
+              <span className="text-muted-foreground uppercase">Capacity</span>
+              <span className="text-foreground/80">
                 {armor.capacityUsed ?? 0}/{armor.capacity}
               </span>
             </div>
@@ -482,10 +482,10 @@ function ArmorCard({ armor }: ArmorCardProps) {
               {armor.modifications.map((mod, idx) => (
                 <span
                   key={idx}
-                  className="px-1.5 py-0.5 bg-zinc-900/50 text-[10px] text-zinc-400 rounded border border-zinc-800"
+                  className="px-1.5 py-0.5 bg-muted/50 text-[10px] text-muted-foreground rounded border border-border"
                 >
                   {mod.name}
-                  {mod.rating && <span className="text-[9px] text-zinc-600 ml-1">R{mod.rating}</span>}
+                  {mod.rating && <span className="text-[9px] text-muted-foreground opacity-70 ml-1">R{mod.rating}</span>}
                 </span>
               ))}
             </div>
@@ -522,36 +522,36 @@ function SpellCard({ spellId, spellsCatalog, onSelect }: SpellCardProps) {
   return (
     <div
       onClick={() => onSelect?.(6, spell.name)}
-      className="p-3 bg-zinc-800/40 rounded border-l-2 border-violet-500/50 group hover:bg-violet-500/5 transition-all cursor-pointer"
+      className="p-3 bg-muted/20 rounded border-l-2 border-violet-500/50 group hover:bg-violet-500/5 transition-all cursor-pointer"
     >
       <div className="flex items-start justify-between">
         <div className="space-y-1">
           <div className="flex items-center gap-2">
-            <span className="text-sm font-bold text-zinc-100 group-hover:text-violet-400 transition-colors">
+            <span className="text-sm font-bold text-foreground group-hover:text-violet-400 transition-colors">
               {spell.name}
             </span>
-            <span className="text-[10px] font-mono text-zinc-600 uppercase tracking-tighter px-1.5 py-0.5 border border-zinc-800 rounded">
+            <span className="text-[10px] font-mono text-muted-foreground uppercase tracking-tighter px-1.5 py-0.5 border border-border rounded">
               {spell.category}
             </span>
           </div>
-          <p className="text-[11px] text-zinc-500 line-clamp-2 leading-relaxed">{spell.description}</p>
+          <p className="text-[11px] text-muted-foreground line-clamp-2 leading-relaxed">{spell.description}</p>
           <div className="flex flex-wrap gap-x-4 gap-y-1 text-[11px] font-mono mt-1">
             <div className="flex gap-1.5">
-              <span className="text-zinc-600">TYPE</span>
+              <span className="text-muted-foreground opacity-70">TYPE</span>
               <span className="text-blue-400 uppercase">{spell.type}</span>
             </div>
             <div className="flex gap-1.5">
-              <span className="text-zinc-600">RANGE</span>
+              <span className="text-muted-foreground opacity-70">RANGE</span>
               <span className="text-emerald-400 uppercase">{spell.range}</span>
             </div>
             <div className="flex gap-1.5">
-              <span className="text-zinc-600">DUR</span>
+              <span className="text-muted-foreground opacity-70">DUR</span>
               <span className="text-amber-400 uppercase">{spell.duration}</span>
             </div>
           </div>
         </div>
         <div className="text-right flex-shrink-0">
-          <div className="text-[10px] text-zinc-500 uppercase font-mono leading-none mb-1">Drain</div>
+          <div className="text-[10px] text-muted-foreground uppercase font-mono leading-none mb-1">Drain</div>
           <div className="text-sm font-mono text-violet-400 font-bold leading-none">{spell.drain}</div>
         </div>
       </div>
@@ -569,11 +569,11 @@ interface AdeptPowerCardProps {
 
 function AdeptPowerCard({ power }: AdeptPowerCardProps) {
   return (
-    <div className="p-3 bg-zinc-800/40 rounded border-l-2 border-amber-500/50 group hover:bg-amber-500/5 transition-all">
+    <div className="p-3 bg-muted/50 rounded border-l-2 border-amber-500/50 group hover:bg-amber-500/5 transition-all">
       <div className="flex items-start justify-between">
         <div className="space-y-1">
           <div className="flex items-center gap-2">
-            <span className="text-sm font-bold text-zinc-100 group-hover:text-amber-400 transition-colors">
+            <span className="text-sm font-bold text-foreground group-hover:text-amber-400 transition-colors">
               {power.name}
             </span>
             {power.rating && (
@@ -583,14 +583,14 @@ function AdeptPowerCard({ power }: AdeptPowerCardProps) {
             )}
           </div>
           {power.specification && (
-            <p className="text-[11px] text-zinc-500 font-mono italic">
+            <p className="text-[11px] text-muted-foreground font-mono italic">
               Spec: {power.specification}
             </p>
           )}
         </div>
         <div className="text-right flex-shrink-0">
-          <div className="text-[10px] text-zinc-500 uppercase font-mono leading-none mb-1">Cost</div>
-          <div className="text-sm font-mono text-amber-400 font-bold leading-none">{power.powerPointCost} PP</div>
+          <div className="text-[10px] text-muted-foreground uppercase font-mono leading-none mb-1">Cost</div>
+          <div className="text-sm font-mono text-amber-500 dark:text-amber-400 font-bold leading-none">{power.powerPointCost} PP</div>
         </div>
       </div>
     </div>
@@ -606,11 +606,11 @@ function AugmentationCard({ item }: { item: CyberwareItem | BiowareItem }) {
   const grade = isCyber ? (item as CyberwareItem).grade : (item as BiowareItem).grade;
 
   return (
-    <div className={`p-3 bg-zinc-800/40 rounded border-l-2 ${isCyber ? 'border-cyan-500/50' : 'border-emerald-500/50'} group hover:bg-zinc-800/60 transition-all`}>
+    <div className={`p-3 bg-muted/20 rounded border-l-2 ${isCyber ? 'border-cyan-500/50' : 'border-emerald-500/50'} group hover:bg-muted/40 transition-all`}>
       <div className="flex items-start justify-between">
         <div className="space-y-1">
           <div className="flex items-center gap-2">
-            <span className={`text-sm font-bold text-zinc-100 group-hover:${isCyber ? 'text-cyan-400' : 'text-emerald-400'} transition-colors`}>
+            <span className={`text-sm font-bold text-foreground group-hover:${isCyber ? 'text-cyan-400' : 'text-emerald-400'} transition-colors`}>
               {item.name}
             </span>
             <span className={`text-[9px] font-mono uppercase tracking-tighter px-1.5 py-0.5 border rounded ${isCyber ? 'border-cyan-500/30 text-cyan-500 bg-cyan-500/5' : 'border-emerald-500/30 text-emerald-500 bg-emerald-500/5'
@@ -618,14 +618,14 @@ function AugmentationCard({ item }: { item: CyberwareItem | BiowareItem }) {
               {grade}
             </span>
           </div>
-          <div className="flex flex-wrap gap-x-3 gap-y-1 text-[10px] font-mono uppercase text-zinc-500">
+          <div className="flex flex-wrap gap-x-3 gap-y-1 text-[10px] font-mono uppercase text-muted-foreground opacity-70">
             <span>{item.category}</span>
             {item.rating && <span>Rating: {item.rating}</span>}
           </div>
           {item.attributeBonuses && Object.keys(item.attributeBonuses).length > 0 && (
             <div className="flex flex-wrap gap-1.5 mt-1">
               {Object.entries(item.attributeBonuses).map(([attr, bonus]) => (
-                <span key={attr} className="px-1 px-1.5 text-[10px] font-mono bg-zinc-900 text-emerald-400 rounded">
+                <span key={attr} className="px-1.5 py-0.5 text-[10px] font-mono bg-muted text-emerald-400 rounded">
                   {attr.toUpperCase()} +{bonus}
                 </span>
               ))}
@@ -633,8 +633,8 @@ function AugmentationCard({ item }: { item: CyberwareItem | BiowareItem }) {
           )}
         </div>
         <div className="text-right flex-shrink-0">
-          <div className="text-[10px] text-zinc-500 uppercase font-mono leading-none mb-1">Essence</div>
-          <div className="text-sm font-mono text-zinc-300 font-bold leading-none">{item.essenceCost.toFixed(2)}</div>
+          <div className="text-[10px] text-muted-foreground uppercase font-mono leading-none mb-1">Essence</div>
+          <div className="text-sm font-mono text-foreground/80 font-bold leading-none">{item.essenceCost.toFixed(2)}</div>
         </div>
       </div>
     </div>
@@ -650,60 +650,60 @@ function VehicleCard({ vehicle }: { vehicle: Vehicle | CharacterDrone | Characte
   const isDrone = 'size' in vehicle;
 
   return (
-    <div className={`p-3 bg-zinc-800/40 rounded border-l-2 ${isRCC ? 'border-orange-500/50' : 'border-zinc-500/50'} group hover:bg-zinc-800/60 transition-all`}>
+    <div className={`p-3 bg-muted/20 rounded border-l-2 ${isRCC ? 'border-orange-500/50' : 'border-border/50'} group hover:bg-muted/40 transition-all`}>
       <div className="flex items-start justify-between mb-2">
         <div>
-          <div className="font-bold text-zinc-100 group-hover:text-amber-400 transition-colors">{vehicle.name}</div>
-          <div className="text-[10px] text-zinc-600 uppercase font-mono">
+          <div className="font-bold text-foreground group-hover:text-amber-400 transition-colors">{vehicle.name}</div>
+          <div className="text-[10px] text-muted-foreground uppercase font-mono">
             {isRCC ? 'RCC' : isDrone ? `${(vehicle as CharacterDrone).size} Drone` : 'Vehicle'}
           </div>
         </div>
         {isRCC && (
           <div className="text-right">
-            <div className="text-[10px] text-zinc-500 uppercase font-mono">Rating</div>
+            <div className="text-[10px] text-muted-foreground uppercase font-mono">Rating</div>
             <div className="text-lg font-bold font-mono text-orange-400">{(vehicle as CharacterRCC).deviceRating}</div>
           </div>
         )}
       </div>
 
       {!isRCC && (
-        <div className="grid grid-cols-4 gap-2 text-center border-t border-zinc-800/50 pt-2">
+        <div className="grid grid-cols-4 gap-2 text-center border-t border-border/50 pt-2">
           <div className="space-y-0.5">
-            <div className="text-[9px] text-zinc-600 uppercase font-mono">Hand</div>
-            <div className="text-xs font-mono text-zinc-300">{(vehicle as Vehicle).handling}</div>
+            <div className="text-[9px] text-muted-foreground opacity-70 uppercase font-mono">Hand</div>
+            <div className="text-xs font-mono text-foreground/80">{(vehicle as Vehicle).handling}</div>
           </div>
           <div className="space-y-0.5">
-            <div className="text-[9px] text-zinc-600 uppercase font-mono">Spd</div>
-            <div className="text-xs font-mono text-zinc-300">{(vehicle as Vehicle).speed}</div>
+            <div className="text-[9px] text-muted-foreground opacity-70 uppercase font-mono">Spd</div>
+            <div className="text-xs font-mono text-foreground/80">{(vehicle as Vehicle).speed}</div>
           </div>
           <div className="space-y-0.5">
-            <div className="text-[9px] text-zinc-600 uppercase font-mono">Body</div>
-            <div className="text-xs font-mono text-zinc-300">{(vehicle as Vehicle).body}</div>
+            <div className="text-[9px] text-muted-foreground opacity-70 uppercase font-mono">Body</div>
+            <div className="text-xs font-mono text-foreground/80">{(vehicle as Vehicle).body}</div>
           </div>
           <div className="space-y-0.5">
-            <div className="text-[9px] text-zinc-600 uppercase font-mono">Armor</div>
-            <div className="text-xs font-mono text-zinc-300">{(vehicle as Vehicle).armor}</div>
+            <div className="text-[9px] text-muted-foreground opacity-70 uppercase font-mono">Armor</div>
+            <div className="text-xs font-mono text-foreground/80">{(vehicle as Vehicle).armor}</div>
           </div>
           <div className="space-y-0.5">
-            <div className="text-[9px] text-zinc-600 uppercase font-mono">Pilot</div>
-            <div className="text-xs font-mono text-zinc-300">{(vehicle as Vehicle).pilot}</div>
+            <div className="text-[9px] text-muted-foreground opacity-70 uppercase font-mono">Pilot</div>
+            <div className="text-xs font-mono text-foreground/80">{(vehicle as Vehicle).pilot}</div>
           </div>
           <div className="space-y-0.5">
-            <div className="text-[9px] text-zinc-600 uppercase font-mono">Sens</div>
-            <div className="text-xs font-mono text-zinc-300">{(vehicle as Vehicle).sensor}</div>
+            <div className="text-[9px] text-muted-foreground opacity-70 uppercase font-mono">Sens</div>
+            <div className="text-xs font-mono text-foreground/80">{(vehicle as Vehicle).sensor}</div>
           </div>
         </div>
       )}
 
       {isRCC && (
-        <div className="grid grid-cols-2 gap-4 text-center border-t border-zinc-800/50 pt-2">
+        <div className="grid grid-cols-2 gap-4 text-center border-t border-border/50 pt-2">
           <div className="space-y-0.5">
-            <div className="text-[9px] text-zinc-600 uppercase font-mono">Data Proc</div>
-            <div className="text-xs font-mono text-zinc-300">{(vehicle as CharacterRCC).dataProcessing}</div>
+            <div className="text-[9px] text-muted-foreground opacity-70 uppercase font-mono">Data Proc</div>
+            <div className="text-xs font-mono text-foreground/80">{(vehicle as CharacterRCC).dataProcessing}</div>
           </div>
           <div className="space-y-0.5">
-            <div className="text-[9px] text-zinc-600 uppercase font-mono">Firewall</div>
-            <div className="text-xs font-mono text-zinc-300">{(vehicle as CharacterRCC).firewall}</div>
+            <div className="text-[9px] text-muted-foreground opacity-70 uppercase font-mono">Firewall</div>
+            <div className="text-xs font-mono text-foreground/80">{(vehicle as CharacterRCC).firewall}</div>
           </div>
         </div>
       )}
@@ -751,7 +751,7 @@ function CharacterSheet({
             <div className="w-12 h-12 border-2 border-emerald-500/20 rounded-full" />
             <div className="absolute inset-0 w-12 h-12 border-2 border-transparent border-t-emerald-500 rounded-full animate-spin" />
           </div>
-          <span className="text-sm font-mono text-zinc-500 animate-pulse uppercase">
+          <span className="text-sm font-mono text-muted-foreground animate-pulse uppercase">
             Synchronizing Ruleset Data...
           </span>
         </div>
@@ -785,13 +785,13 @@ function CharacterSheet({
       <div className="flex items-center justify-between">
         <Link
           href="/characters"
-          className="inline-flex items-center gap-2 text-sm text-zinc-400 hover:text-emerald-400 transition-colors"
+          className="inline-flex items-center gap-2 text-sm text-muted-foreground hover:text-emerald-400 transition-colors"
         >
           <ArrowLeftIcon className="w-4 h-4" />
           Back to Characters
         </Link>
         <div className="flex items-center gap-2">
-          <span className="text-xs font-mono text-zinc-600 uppercase">
+          <span className="text-xs font-mono text-muted-foreground uppercase">
             {character.editionCode}
           </span>
           <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
@@ -799,9 +799,9 @@ function CharacterSheet({
       </div>
 
       {/* Character Header */}
-      <div className="relative overflow-hidden rounded-lg border border-zinc-800 bg-gradient-to-br from-zinc-900 via-zinc-900 to-zinc-800">
+      <div className="relative overflow-hidden rounded-lg border border-border bg-gradient-to-br from-card via-card to-muted scanlines shadow-cyber">
         {/* Background pattern */}
-        <div className="absolute inset-0 opacity-5">
+        <div className="absolute inset-0 opacity-[0.03]">
           <div
             className="absolute inset-0"
             style={{
@@ -810,28 +810,23 @@ function CharacterSheet({
           />
         </div>
 
-        {/* Scan line effect */}
-        <div className="absolute inset-0 pointer-events-none overflow-hidden">
-          <div className="absolute inset-0 bg-gradient-to-b from-transparent via-emerald-500/5 to-transparent animate-pulse" />
-        </div>
-
         <div className="relative p-6">
           <div className="flex items-start justify-between">
             <div className="space-y-2">
               <div className="flex items-center gap-3">
-                <h1 className="text-3xl font-bold text-zinc-50 tracking-tight">
+                <h1 className="text-3xl font-bold text-foreground tracking-tight">
                   {character.name || "Unnamed Runner"}
                 </h1>
                 <span className={`px-2 py-0.5 text-xs font-mono uppercase rounded ${character.status === "active"
                   ? "bg-emerald-500/20 text-emerald-400 border border-emerald-500/30"
                   : character.status === "draft"
                     ? "bg-amber-500/20 text-amber-400 border border-amber-500/30"
-                    : "bg-zinc-500/20 text-zinc-400 border border-zinc-500/30"
+                    : "bg-muted text-muted-foreground border border-border"
                   }`}>
                   {character.status}
                 </span>
               </div>
-              <div className="flex items-center gap-4 text-sm text-zinc-400">
+              <div className="flex items-center gap-4 text-sm text-muted-foreground opacity-80">
                 <span className="flex items-center gap-1.5">
                   <span className="w-1.5 h-1.5 rounded-full bg-purple-500" />
                   {character.metatype || "Unknown Metatype"}
@@ -868,7 +863,7 @@ function CharacterSheet({
 
           {/* Collapsible Dice Roller */}
           {showDiceRoller && (
-            <div className="mt-6 pt-6 border-t border-zinc-800">
+            <div className="mt-6 pt-6 border-t border-border">
               <div className="max-w-md mx-auto">
                 <DiceRoller
                   initialPool={targetPool}
@@ -883,27 +878,27 @@ function CharacterSheet({
           )}
 
           {/* Quick Stats Bar */}
-          <div className={`grid grid-cols-2 sm:grid-cols-4 gap-4 mt-6 pt-6 border-t border-zinc-800 ${showDiceRoller ? 'mt-4 pt-4' : ''}`}>
+          <div className={`grid grid-cols-2 sm:grid-cols-4 gap-4 mt-6 pt-6 border-t border-border ${showDiceRoller ? 'mt-4 pt-4' : ''}`}>
             <div className="space-y-1">
-              <span className="text-xs font-mono text-zinc-500 uppercase">Karma</span>
+              <span className="text-xs font-mono text-muted-foreground uppercase">Karma</span>
               <p className="text-2xl font-bold font-mono text-amber-400">
                 {character.karmaCurrent ?? 0}
               </p>
             </div>
             <div className="space-y-1">
-              <span className="text-xs font-mono text-zinc-500 uppercase">Nuyen</span>
+              <span className="text-xs font-mono text-muted-foreground uppercase">Nuyen</span>
               <p className="text-2xl font-bold font-mono text-emerald-400">
                 ¥{(character.nuyen ?? 0).toLocaleString()}
               </p>
             </div>
             <div className="space-y-1">
-              <span className="text-xs font-mono text-zinc-500 uppercase">Essence</span>
+              <span className="text-xs font-mono text-muted-foreground uppercase">Essence</span>
               <p className="text-2xl font-bold font-mono text-cyan-400">
                 {(character.specialAttributes?.essence ?? 6).toFixed(2)}
               </p>
             </div>
             <div className="space-y-1">
-              <span className="text-xs font-mono text-zinc-500 uppercase">Edge</span>
+              <span className="text-xs font-mono text-muted-foreground uppercase">Edge</span>
               <p className="text-2xl font-bold font-mono text-rose-400">
                 {character.specialAttributes?.edge ?? 1}
               </p>
@@ -935,20 +930,20 @@ function CharacterSheet({
 
             {/* Magic/Resonance if applicable */}
             {character.specialAttributes?.magic !== undefined && (
-              <div className="mt-4 pt-4 border-t border-zinc-800">
+              <div className="mt-4 pt-4 border-t border-border">
                 <div className="flex items-center justify-between">
                   <span className="font-mono text-sm font-bold text-violet-400">MAG</span>
-                  <span className="font-mono text-lg font-bold text-zinc-100">
+                  <span className="font-mono text-lg font-bold text-foreground">
                     {character.specialAttributes.magic}
                   </span>
                 </div>
               </div>
             )}
             {character.specialAttributes?.resonance !== undefined && (
-              <div className="mt-4 pt-4 border-t border-zinc-800">
+              <div className="mt-4 pt-4 border-t border-border">
                 <div className="flex items-center justify-between">
                   <span className="font-mono text-sm font-bold text-cyan-400">RES</span>
-                  <span className="font-mono text-lg font-bold text-zinc-100">
+                  <span className="font-mono text-lg font-bold text-foreground">
                     {character.specialAttributes.resonance}
                   </span>
                 </div>
@@ -959,20 +954,20 @@ function CharacterSheet({
           {/* Derived Stats */}
           <Section title="Derived Stats">
             <div className="grid grid-cols-2 gap-4">
-              <div className="text-center p-3 bg-zinc-800/30 rounded">
-                <span className="block text-xs font-mono text-zinc-500 uppercase">Physical</span>
-                <span className="text-xl font-bold text-red-400">{physicalLimit}</span>
+              <div className="text-center p-3 bg-muted/30 rounded">
+                <span className="block text-xs font-mono text-muted-foreground uppercase">Physical</span>
+                <span className="text-xl font-bold text-red-500">{physicalLimit}</span>
               </div>
-              <div className="text-center p-3 bg-zinc-800/30 rounded">
-                <span className="block text-xs font-mono text-zinc-500 uppercase">Mental</span>
+              <div className="text-center p-3 bg-muted/30 rounded">
+                <span className="block text-xs font-mono text-muted-foreground uppercase">Mental</span>
                 <span className="text-xl font-bold text-blue-400">{mentalLimit}</span>
               </div>
-              <div className="text-center p-3 bg-zinc-800/30 rounded">
-                <span className="block text-xs font-mono text-zinc-500 uppercase">Social</span>
+              <div className="text-center p-3 bg-muted/30 rounded">
+                <span className="block text-xs font-mono text-muted-foreground uppercase">Social</span>
                 <span className="text-xl font-bold text-pink-400">{socialLimit}</span>
               </div>
-              <div className="text-center p-3 bg-zinc-800/30 rounded">
-                <span className="block text-xs font-mono text-zinc-500 uppercase">Initiative</span>
+              <div className="text-center p-3 bg-muted/30 rounded">
+                <span className="block text-xs font-mono text-muted-foreground uppercase">Initiative</span>
                 <span className="text-xl font-bold text-emerald-400">{initiative}+1d6</span>
               </div>
             </div>
@@ -1056,13 +1051,13 @@ function CharacterSheet({
                 {character.knowledgeSkills.map((skill, index) => (
                   <div
                     key={index}
-                    className="flex items-center justify-between py-1 px-2 rounded hover:bg-zinc-800/50"
+                    className="flex items-center justify-between py-1 px-2 rounded hover:bg-muted/50 transition-colors"
                   >
                     <div className="flex items-center gap-2">
-                      <span className="text-sm text-zinc-300">{skill.name}</span>
-                      <span className="text-xs text-zinc-600 capitalize">({skill.category})</span>
+                      <span className="text-sm text-foreground/80">{skill.name}</span>
+                      <span className="text-xs text-muted-foreground opacity-60 capitalize">({skill.category})</span>
                     </div>
-                    <span className="text-sm font-mono text-zinc-400">{skill.rating}</span>
+                    <span className="text-sm font-mono text-muted-foreground">{skill.rating}</span>
                   </div>
                 ))}
               </div>
@@ -1077,8 +1072,8 @@ function CharacterSheet({
                   <span
                     key={index}
                     className={`px-2 py-1 text-xs rounded border ${lang.isNative
-                      ? "bg-emerald-950/50 text-emerald-400 border-emerald-700/50"
-                      : "bg-zinc-800/50 text-zinc-300 border-zinc-700/50"
+                      ? "bg-emerald-500/10 text-emerald-400 border-emerald-500/30"
+                      : "bg-muted text-muted-foreground border-border"
                       }`}
                   >
                     {lang.name} {lang.isNative ? "(N)" : `(${lang.rating})`}
@@ -1226,20 +1221,20 @@ function CharacterSheet({
                 {character.contacts.map((contact, index) => (
                   <div
                     key={`contact-${index}`}
-                    className="p-3 bg-zinc-800/30 rounded border-l-2 border-zinc-600"
+                    className="p-3 bg-muted/50 rounded border-l-2 border-primary/40 hover:bg-muted/80 transition-colors"
                   >
                     <div className="flex items-center justify-between">
-                      <span className="text-sm font-medium text-zinc-200">{contact.name}</span>
+                      <span className="text-sm font-medium text-foreground">{contact.name}</span>
                       {contact.type && (
-                        <span className="text-xs text-zinc-500">{contact.type}</span>
+                        <span className="text-xs text-muted-foreground">{contact.type}</span>
                       )}
                     </div>
                     <div className="flex gap-4 mt-2 text-xs">
-                      <span className="text-zinc-400">
-                        Connection: <span className="text-amber-400 font-mono">{contact.connection}</span>
+                      <span className="text-muted-foreground">
+                        Connection: <span className="text-amber-500 dark:text-amber-400 font-mono">{contact.connection}</span>
                       </span>
-                      <span className="text-zinc-400">
-                        Loyalty: <span className="text-emerald-400 font-mono">{contact.loyalty}</span>
+                      <span className="text-muted-foreground">
+                        Loyalty: <span className="text-emerald-600 dark:text-emerald-400 font-mono">{contact.loyalty}</span>
                       </span>
                     </div>
                   </div>
@@ -1258,13 +1253,13 @@ function CharacterSheet({
                     <div
                       key={`lifestyle-${index}`}
                       className={`p-3 rounded border-l-2 transition-colors ${isPrimary
-                        ? "bg-emerald-500/5 border-emerald-500/50"
-                        : "bg-zinc-800/30 border-zinc-600"
+                        ? "bg-emerald-500/10 border-emerald-500/50"
+                        : "bg-muted/30 border-border"
                         }`}
                     >
                       <div className="flex items-center justify-between">
                         <div className="flex items-center gap-2">
-                          <span className="text-sm font-medium text-zinc-200 capitalize">
+                          <span className="text-sm font-medium text-foreground/90 capitalize">
                             {lifestyle.type}
                           </span>
                           {isPrimary && (
@@ -1278,7 +1273,7 @@ function CharacterSheet({
                         </span>
                       </div>
                       {lifestyle.location && (
-                        <p className="text-xs text-zinc-500 mt-1">{lifestyle.location}</p>
+                        <p className="text-xs text-muted-foreground mt-1">{lifestyle.location}</p>
                       )}
                     </div>
                   );
@@ -1290,7 +1285,7 @@ function CharacterSheet({
       </div>
 
       {/* Footer with metadata */}
-      <div className="flex items-center justify-between text-xs text-zinc-600 border-t border-zinc-800 pt-4">
+      <div className="flex items-center justify-between text-xs text-muted-foreground border-t border-border pt-4">
         <span className="font-mono">ID: {character.id}</span>
         <span className="font-mono">
           Created: {new Date(character.createdAt).toLocaleDateString()}
@@ -1343,7 +1338,7 @@ export default function CharacterPage({ params }: CharacterPageProps) {
             <div className="w-12 h-12 border-2 border-emerald-500/20 rounded-full" />
             <div className="absolute inset-0 w-12 h-12 border-2 border-transparent border-t-emerald-500 rounded-full animate-spin" />
           </div>
-          <span className="text-sm font-mono text-zinc-500 animate-pulse uppercase">
+          <span className="text-sm font-mono text-muted-foreground animate-pulse uppercase">
             Loading Runner Data...
           </span>
         </div>
@@ -1362,7 +1357,7 @@ export default function CharacterPage({ params }: CharacterPageProps) {
         <p className="text-red-400 font-mono">{error || "Character not found"}</p>
         <Link
           href="/characters"
-          className="text-sm text-zinc-400 hover:text-emerald-400 transition-colors"
+          className="text-sm text-muted-foreground hover:text-emerald-400 transition-colors"
         >
           ← Return to characters
         </Link>
