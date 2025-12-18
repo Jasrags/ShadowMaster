@@ -42,27 +42,39 @@ This feature is critical for multiplayer Shadowrun sessions where the GM needs t
 
 7. **As a GM**, I want to see campaign statistics (number of players, characters, active sessions).
 
+8. **As a GM**, I want to upload a campaign image or logo to establish the visual theme.
+
+9. **As a GM**, I want to track the campaign timeline with start and end dates.
+
+10. **As a GM**, I want to post announcements and news for my players (Bulletin Board).
+
+11. **As a GM**, I want to schedule sessions on a campaign calendar.
+
+12. **As a GM**, I want to export campaign data (characters, notes) for backup or offline use.
+
+13. **As a GM**, I want to save my campaign configuration as a template for future campaigns.
+
 ### Primary Use Cases (Player)
 
-8. **As a player**, I want to browse available campaigns I can join.
+14. **As a player**, I want to browse and discover public campaigns ("Broker" style).
 
-9. **As a player**, I want to join a campaign using an invite code or link.
+15. **As a player**, I want to search and filter campaigns by edition, tags, and gameplay style.
 
-10. **As a player**, I want to create a character specifically for a campaign, ensuring it follows campaign rules.
+16. **As a player**, I want to join a campaign using an invite code or link.
 
-11. **As a player**, I want to see which campaigns my characters belong to.
+17. **As a player**, I want to create a character specifically for a campaign, ensuring it follows campaign rules.
 
-12. **As a player**, I want to view campaign details (edition, allowed books, gameplay level).
+18. **As a player**, I want to see which campaigns my characters belong to.
+
+19. **As a player**, I want to view campaign details (edition, allowed books, gameplay level).
 
 ### Secondary Use Cases
 
-13. **As a GM**, I want to archive or close a campaign when it ends.
+20. **As a GM**, I want to archive or close a campaign when it ends.
 
-14. **As a player**, I want to leave a campaign if I'm no longer participating.
+21. **As a player**, I want to leave a campaign if I'm no longer participating.
 
-15. **As a GM**, I want to export campaign data (characters, notes) for backup.
-
-16. **As a GM**, I want to set campaign visibility (private, invite-only, public).
+22. **As a GM**, I want to set campaign visibility (private, invite-only, public).
 
 ---
 
@@ -76,11 +88,23 @@ This feature is critical for multiplayer Shadowrun sessions where the GM needs t
 - **Authentication:** Required (protected route)
 - **Description:** Lists all campaigns the user is involved in (as GM or player)
 
+#### Campaign Discovery Page
+- **Path:** `/app/campaigns/discover/page.tsx`
+- **Layout:** Uses `AuthenticatedLayout`
+- **Authentication:** Required (protected route)
+- **Description:** "Broker" interface for finding public campaigns with search and filtering.
+
 #### Campaign Detail Page
 - **Path:** `/app/campaigns/[id]/page.tsx`
 - **Layout:** Uses `AuthenticatedLayout`
 - **Authentication:** Required (protected route)
 - **Description:** Shows campaign details, roster, characters, settings
+- **Tabs:**
+    - `overview`: Dashboard, announcements, stats
+    - `characters`: Character list
+    - `roster`: Player list
+    - `calendar`: Session scheduling
+    - `settings`: GM configuration
 
 #### Campaign Creation Page
 - **Path:** `/app/campaigns/create/page.tsx`
@@ -104,19 +128,20 @@ This feature is critical for multiplayer Shadowrun sessions where the GM needs t
 │ (nav)     │                                                       │
 │           │ ┌─────────────────────────────────────────────────┐ │
 │           │ │ Campaign Header                                  │ │
-│           │ │ - Title, Edition Badge                           │ │
+│           │ │ - Title, Edition Badge, Image                    │ │
 │           │ │ - GM info, player count                          │ │
 │           │ │ - Actions (Join, Leave, Settings if GM)          │ │
 │           │ └─────────────────────────────────────────────────┘ │
 │           │                                                       │
 │           │ ┌─────────────────────────────────────────────────┐ │
 │           │ │ Campaign Navigation Tabs                         │ │
-│           │ │ - Overview | Characters | Roster | Settings      │ │
+│           │ │ - Overview | Characters | Roster | Calendar      │ │
+│           │ │ - Settings (GM only)                             │ │
 │           │ └─────────────────────────────────────────────────┘ │
 │           │                                                       │
 │           │ ┌─────────────────────────────────────────────────┐ │
 │           │ │ Active Tab Content                               │ │
-│           │ │ (Overview/Characters/Roster/Settings)            │ │
+│           │ │ (Overview/Characters/Roster/Calendar/Settings)  │ │
 │           │ └─────────────────────────────────────────────────┘ │
 └───────────┴──────────────────────────────────────────────────────┘
 ```
@@ -196,7 +221,7 @@ export interface Campaign {
   maxPlayers?: number;
 
   // -------------------------------------------------------------------------
-  // Metadata
+  // Metadata & Social
   // -------------------------------------------------------------------------
 
   /** Campaign start date (first session) */
@@ -208,7 +233,7 @@ export interface Campaign {
   /** Campaign image/logo URL */
   imageUrl?: string;
 
-  /** Tags/categories for discoverability */
+  /** Tags/categories for discoverability (e.g., "Roleplay Heavy", "Pink Mohawk") */
   tags?: string[];
 
   /** GM-only notes */
@@ -237,6 +262,56 @@ export interface CampaignMembership {
   status: "active" | "invited" | "left";
   /** Optional player-specific notes from GM */
   notes?: string;
+}
+```
+
+### Campaign Tools Types
+
+```typescript
+/**
+ * Campaign Bulletin Board Post
+ */
+export interface CampaignPost {
+  id: ID;
+  campaignId: ID;
+  authorId: ID;
+  title: string;
+  content: string;
+  isPinned: boolean;
+  createdAt: ISODateString;
+  updatedAt: ISODateString;
+}
+
+/**
+ * Campaign Calendar Event
+ */
+export interface CampaignEvent {
+  id: ID;
+  campaignId: ID;
+  title: string;
+  description?: string;
+  startTime: ISODateString;
+  endTime?: ISODateString;
+  location?: string;
+  type: "session" | "deadline" | "other";
+  attendees: ID[]; // User IDs
+}
+
+/**
+ * Campaign Template (Reusable Configuration)
+ */
+export interface CampaignTemplate {
+  id: ID;
+  name: string;
+  description?: string;
+  editionCode: EditionCode;
+  enabledBookIds: ID[];
+  enabledCreationMethodIds: ID[];
+  gameplayLevel: GameplayLevel;
+  enabledOptionalRules?: string[];
+  houseRules?: string | Record<string, unknown>;
+  createdBy: ID; // User who created the template
+  isPublic: boolean; // If true, other GMs can use this template
 }
 ```
 
@@ -382,19 +457,20 @@ interface CampaignTabsProps {
 **Description:** Overview of campaign configuration and ruleset.
 
 **Sections:**
-- Campaign description
-- Ruleset summary:
+- **Dashboard Header:**
+  - Quick stats (sessions played, next session date)
+  - Campaign image covering
+- **Bulletin Board:**
+  - Pinned announcements
+  - Recent posts separate section
+- **Ruleset Summary:**
   - Edition name and version
   - Enabled books (expandable list)
   - Allowed creation methods
   - Gameplay level effects
-  - Enabled optional rules
-  - House rules (if any)
-- Campaign statistics:
-  - Start date
-  - Number of sessions (future)
-  - Total karma awarded (future)
-- Recent activity (future)
+- **Recent Activity:**
+  - Character updates
+  - Membership changes
 
 **Props:**
 ```typescript
@@ -402,8 +478,38 @@ interface CampaignOverviewTabProps {
   campaign: Campaign;
   enabledBooks: Book[];
   creationMethods: CreationMethod[];
+  posts: CampaignPost[];
+  stats: CampaignStats;
 }
 ```
+
+---
+
+### 7. CampaignCalendarTab
+
+**Location:** `/app/campaigns/[id]/components/CampaignCalendarTab.tsx`
+
+**Description:** Calendar interface for scheduling and managing sessions.
+
+**Features:**
+- Monthly/Weekly view of sessions
+- "Propose Session" action for GMs
+- RSVP status for players (Attending/Declined)
+- Integration with external calendars (ICS export)
+
+**Props:**
+```typescript
+interface CampaignCalendarTabProps {
+  campaign: Campaign;
+  events: CampaignEvent[];
+  userRole: "gm" | "player";
+  onAddEvent: (event: Partial<CampaignEvent>) => Promise<void>;
+}
+```
+
+---
+
+### 8. CampaignCharactersTab
 
 ---
 
@@ -464,24 +570,30 @@ interface CampaignRosterTabProps {
 
 ---
 
-### 9. CampaignSettingsTab
+### 10. CampaignSettingsTab
 
 **Location:** `/app/campaigns/[id]/components/CampaignSettingsTab.tsx`
 
 **Description:** Campaign configuration (GM-only).
 
 **Sections:**
-- Basic Info (title, description, image)
-- Ruleset Configuration:
-  - Edition (immutable after creation)
-  - Enabled books (multi-select)
-  - Allowed creation methods (multi-select)
-  - Gameplay level (dropdown)
-  - Optional rules (checkboxes)
-  - House rules (textarea or JSON editor)
-- Campaign Status (active, paused, archived)
-- Visibility Settings (private, invite-only, public)
-- Danger Zone (archive, delete campaign)
+- **General Settings:**
+  - Basic Info: Title, Description, Image Upload
+  - Status: Active/Paused/Completed
+  - Dates: Start Date, End Date
+  - Templates: "Save as Template" button
+- **Ruleset Configuration:** (Warning on modify if active)
+  - Edition (immutable)
+  - Books & Methods
+  - Gameplay Level
+  - Optional/House Rules
+- **Access & Visibility:**
+  - Visibility (Public/Private/Invite)
+  - Max Players
+  - Join Settings
+- **Data Management:**
+  - Export Campaign Data (JSON)
+  - Archive/Delete Campaign
 
 **Props:**
 ```typescript
@@ -492,6 +604,8 @@ interface CampaignSettingsTabProps {
   onUpdate: (updates: Partial<Campaign>) => Promise<void>;
   onArchive: () => Promise<void>;
   onDelete: () => Promise<void>;
+  onExport: () => void;
+  onSaveTemplate: () => void;
 }
 ```
 
@@ -773,11 +887,13 @@ interface CreateCampaignWizardProps {
 
 #### 11. GET `/api/campaigns/public`
 
-**Purpose:** List public campaigns (for discovery)
+**Purpose:** List public campaigns (for discovery/broker)
 
 **Query Parameters:**
 - `editionCode?: EditionCode` - Filter by edition
 - `search?: string` - Search by title/description
+- `tags?: string[]` - Filter by tags
+- `gameplayLevel?: GameplayLevel` - Filter by level
 - `limit?: number` - Limit results (default: 20)
 - `offset?: number` - Pagination offset
 
@@ -792,6 +908,27 @@ interface CreateCampaignWizardProps {
 ```
 
 **Implementation:** New endpoint - query campaigns where `visibility = "public"` and `status = "active"`
+
+---
+
+#### 12. GET/POST `/api/campaigns/[id]/posts`
+
+**Purpose:** Manage campaign bulletin board posts
+
+**Endpoints:**
+- `GET`: List posts (pagination)
+- `POST`: Create new post (GM only)
+
+---
+
+#### 13. GET/POST `/api/campaigns/[id]/events`
+
+**Purpose:** Manage campaign calendar events
+
+**Endpoints:**
+- `GET`: List events (date range)
+- `POST`: Create new event (GM only)
+
 
 ---
 
@@ -1033,16 +1170,25 @@ app/api/campaigns/
 - [x] Dark mode support
 - [ ] Accessibility: keyboard navigation, screen reader support
 
-### Enhanced Features (Future)
+### Enhanced Features (Phase 3+)
 
-- [ ] Public campaign discovery and browsing
-- [ ] Campaign search and filtering
-- [ ] Campaign tags and categories
-- [ ] Campaign image/logo upload
-- [ ] Campaign start/end date tracking
-- [ ] Campaign statistics dashboard
-- [ ] Export campaign data (characters, notes)
-- [ ] Campaign templates (save common configurations)
+- [ ] **Campaign Management**
+  - [ ] GM can upload campaign image/logo
+  - [ ] GM can set start and end dates for campaign
+  - [ ] GM can export campaign data to JSON
+  - [ ] GM can save campaign settings as a template
+  - [ ] Campaign statistics dashboard implemented
+
+- [ ] **Discovery & Social**
+  - [ ] Public campaign "Broker" page implemented
+  - [ ] Players can search campaigns by tag, edition, and level
+  - [ ] Campaign tags system operational
+
+- [ ] **Campaign Tools**
+  - [ ] Bulletin Board/Announcements system
+  - [ ] Calendar system for scheduling sessions
+  - [ ] ICS export for calendar events
+
 - [x] Campaign notes and journal entries *(Phase 3 complete)*
 - [x] Session tracking and scheduling *(Phase 3 complete)*
 - [ ] Campaign-specific dice roller
