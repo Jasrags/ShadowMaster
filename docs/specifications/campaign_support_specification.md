@@ -101,9 +101,12 @@ This feature is critical for multiplayer Shadowrun sessions where the GM needs t
 - **Description:** Shows campaign details, roster, characters, settings
 - **Tabs:**
     - `overview`: Dashboard, announcements, stats
+    - `posts`: Bulletin Board
+    - `calendar`: Schedule & Events (Sessions)
     - `characters`: Character list
-    - `roster`: Player list
-    - `calendar`: Session scheduling
+    - `locations`: Map & POI management
+    - `roster`: Player list (GM only)
+    - `notes`: Campaign notes
     - `settings`: GM configuration
 
 #### Campaign Creation Page
@@ -489,21 +492,42 @@ interface CampaignOverviewTabProps {
 
 **Location:** `/app/campaigns/[id]/components/CampaignCalendarTab.tsx`
 
-**Description:** Calendar interface for scheduling and managing sessions.
+**Description:** Consolidated interface for scheduling sessions and managing campaign events. Replaces redundant "Sessions" tab.
 
 **Features:**
-- Monthly/Weekly view of sessions
-- "Propose Session" action for GMs
-- RSVP status for players (Attending/Declined)
-- Integration with external calendars (ICS export)
+- Monthly/Weekly view of sessions and events
+- Create "Session" events with duration and notes
+- Create general events (deadlines, downtime)
+- "Upcoming Sessions" list
+- Event history
 
 **Props:**
 ```typescript
 interface CampaignCalendarTabProps {
   campaign: Campaign;
-  events: CampaignEvent[];
   userRole: "gm" | "player";
-  onAddEvent: (event: Partial<CampaignEvent>) => Promise<void>;
+}
+```
+
+---
+
+### 8. CampaignLocationsTab
+
+**Location:** `/app/campaigns/[id]/components/CampaignLocationsTab.tsx`
+
+**Description:** Integrated locations management within the campaign view.
+
+**Features:**
+- Grid/List/Tree view of locations
+- Filter by type (Safe House, Corporate, etc.)
+- Create/Edit locations
+- Import/Export locations
+
+**Props:**
+```typescript
+interface CampaignLocationsTabProps {
+  campaign: Campaign;
+  userRole: "gm" | "player";
 }
 ```
 
@@ -1172,10 +1196,10 @@ app/api/campaigns/
 
 ### Enhanced Features (Phase 3+)
 
-- [ ] **Campaign Management**
+- [x] **Campaign Management**
   - [ ] GM can upload campaign image/logo
   - [ ] GM can set start and end dates for campaign
-  - [ ] GM can export campaign data to JSON
+  - [x] GM can export campaign data to JSON
   - [ ] GM can save campaign settings as a template
   - [ ] Campaign statistics dashboard implemented
 
@@ -1184,17 +1208,16 @@ app/api/campaigns/
   - [ ] Players can search campaigns by tag, edition, and level
   - [ ] Campaign tags system operational
 
-- [ ] **Campaign Tools**
-  - [ ] Bulletin Board/Announcements system
-  - [ ] Calendar system for scheduling sessions
+- [x] **Campaign Tools**
+  - [x] Bulletin Board/Announcements system
+  - [x] Calendar system for scheduling sessions
   - [ ] ICS export for calendar events
+  - [x] Locations tab integration
 
 - [x] Campaign notes and journal entries *(Phase 3 complete)*
 - [x] Session tracking and scheduling *(Phase 3 complete)*
 - [ ] Campaign-specific dice roller
-- [ ] Campaign announcements/bulletin board
 - [x] Character approval workflow (GM approves characters) *(Phase 3 complete)*
-- [ ] Campaign calendar integration
 
 ---
 
@@ -1238,8 +1261,10 @@ app/api/campaigns/
 ### Phase 3: Campaign Management Features *(COMPLETED)*
 
 - [x] Campaign notes and journal system
-- [x] Session tracking and scheduling
+- [x] Session tracking and scheduling (Consolidated into Calendar)
 - [x] Character approval workflow
+- [x] Bulletin Board (Posts)
+- [x] Locations Integration
 
 ### Phase 3: Multi-Campaign Management
 

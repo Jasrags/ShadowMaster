@@ -7,10 +7,11 @@
 import { promises as fs } from "fs";
 import path from "path";
 import { v4 as uuidv4 } from "uuid";
-import type { Campaign, CreateCampaignRequest, ID } from "../types";
+import type { Campaign, CampaignTemplate, CreateCampaignRequest, ID, CampaignPost, CampaignEvent } from "../types";
 import { getEdition } from "./editions";
 
 const DATA_DIR = path.join(process.cwd(), "data", "campaigns");
+const TEMPLATES_DIR = path.join(process.cwd(), "data", "campaign_templates");
 
 /**
  * Ensures the data directory exists, creating it if necessary
@@ -18,6 +19,7 @@ const DATA_DIR = path.join(process.cwd(), "data", "campaigns");
 async function ensureDataDirectory(): Promise<void> {
     try {
         await fs.mkdir(DATA_DIR, { recursive: true });
+        await fs.mkdir(TEMPLATES_DIR, { recursive: true });
     } catch (error) {
         if ((error as NodeJS.ErrnoException).code !== "EEXIST") {
             throw error;
@@ -113,6 +115,52 @@ export async function getPublicCampaigns(): Promise<Campaign[]> {
 }
 
 /**
+ * Search public campaigns
+ */
+export async function searchCampaigns(params: {
+    query?: string;
+    editionCode?: string;
+    gameplayLevel?: string;
+    tags?: string[];
+}): Promise<Campaign[]> {
+    const publicCampaigns = await getPublicCampaigns();
+
+    return publicCampaigns.filter((campaign) => {
+        // Text Match
+        if (params.query) {
+            const q = params.query.toLowerCase();
+            const titleMatch = campaign.title.toLowerCase().includes(q);
+            const descMatch = campaign.description?.toLowerCase().includes(q) || false;
+            // Also search tags text
+            const tagMatch = campaign.tags?.some(t => t.toLowerCase().includes(q)) || false;
+
+            if (!titleMatch && !descMatch && !tagMatch) return false;
+        }
+
+        // Edition filter
+        if (params.editionCode && campaign.editionCode !== params.editionCode) {
+            return false;
+        }
+
+        // Gameplay Level filter
+        if (params.gameplayLevel && campaign.gameplayLevel !== params.gameplayLevel) {
+            return false;
+        }
+
+        // Tags filter (exact match of selected tags)
+        if (params.tags && params.tags.length > 0) {
+            if (!campaign.tags || campaign.tags.length === 0) return false;
+            const campaignTags = campaign.tags.map(t => t.toLowerCase());
+            // Check if every requested tag exists in campaign tags
+            const allTagsMatch = params.tags.every(tag => campaignTags.includes(tag.toLowerCase()));
+            if (!allTagsMatch) return false;
+        }
+
+        return true;
+    });
+}
+
+/**
  * Get campaign by invite code
  */
 export async function getCampaignByInviteCode(inviteCode: string): Promise<Campaign | null> {
@@ -159,6 +207,10 @@ export async function createCampaign(
         maxPlayers: data.maxPlayers,
         createdAt: now,
         updatedAt: now,
+        imageUrl: data.imageUrl,
+        startDate: data.startDate,
+        endDate: data.endDate,
+        tags: data.tags,
     };
 
     // Atomic write
@@ -295,4 +347,151 @@ export async function regenerateInviteCode(campaignId: string): Promise<Campaign
     return updateCampaign(campaignId, {
         inviteCode: generateInviteCode(),
     });
+}
+
+/**
+ * Save a campaign as a template
+ */
+export async function saveCampaignAsTemplate(
+    campaignId: string,
+    templateName: string,
+    userId: ID
+): Promise<CampaignTemplate> {
+    const campaign = await getCampaignById(campaignId);
+    if (!campaign) {
+        throw new Error(`Campaign with ID ${campaignId} not found`);
+    }
+
+    await ensureDataDirectory();
+
+    const now = new Date().toISOString();
+    const template: CampaignTemplate = {
+        id: uuidv4(),
+        name: templateName,
+        description: campaign.description,
+        editionCode: campaign.editionCode,
+        enabledBookIds: campaign.enabledBookIds,
+        enabledCreationMethodIds: campaign.enabledCreationMethodIds,
+        gameplayLevel: campaign.gameplayLevel,
+        enabledOptionalRules: campaign.enabledOptionalRules,
+        houseRules: campaign.houseRules,
+        createdBy: userId,
+        isPublic: false, // Default to private
+        createdAt: now,
+        updatedAt: now,
+    };
+
+    const filePath = path.join(TEMPLATES_DIR, `${template.id}.json`);
+    await fs.writeFile(filePath, JSON.stringify(template, null, 2), "utf-8");
+
+    return template;
+}
+
+/**
+ * Get all available templates (user's own + public)
+ */
+export async function getCampaignTemplates(userId: ID): Promise<CampaignTemplate[]> {
+    try {
+        await ensureDataDirectory();
+
+        // Ensure templates dir exists (it might be empty if we just created it)
+        try {
+            await fs.access(TEMPLATES_DIR);
+        } catch {
+            await fs.mkdir(TEMPLATES_DIR, { recursive: true });
+        }
+
+        const files = await fs.readdir(TEMPLATES_DIR);
+        const jsonFiles = files.filter((file) => file.endsWith(".json"));
+
+        const templates: CampaignTemplate[] = [];
+        for (const file of jsonFiles) {
+            try {
+                const filePath = path.join(TEMPLATES_DIR, file);
+                const fileContent = await fs.readFile(filePath, "utf-8");
+                const template = JSON.parse(fileContent) as CampaignTemplate;
+
+                // Filter: Created by user OR is public
+                if (template.createdBy === userId || template.isPublic) {
+                    templates.push(template);
+                }
+            } catch (error) {
+                console.error(`Error reading template file ${file}:`, error);
+            }
+        }
+        return templates;
+    } catch (error) {
+        if ((error as NodeJS.ErrnoException).code === "ENOENT") {
+            return [];
+        }
+        throw error;
+    }
+}
+
+/**
+ * Get campaign posts
+ */
+export async function getCampaignPosts(campaignId: string): Promise<CampaignPost[]> {
+    const campaign = await getCampaignById(campaignId);
+    if (!campaign) throw new Error("Campaign not found");
+    return campaign.posts || [];
+}
+
+/**
+ * Create a campaign post
+ */
+export async function createCampaignPost(
+    campaignId: string,
+    postData: Omit<CampaignPost, "id" | "createdAt" | "updatedAt">
+): Promise<CampaignPost> {
+    const campaign = await getCampaignById(campaignId);
+    if (!campaign) throw new Error("Campaign not found");
+
+    const now = new Date().toISOString();
+    const newPost: CampaignPost = {
+        id: uuidv4(),
+        ...postData,
+        createdAt: now,
+        updatedAt: now,
+    };
+
+    const updatedPosts = [newPost, ...(campaign.posts || [])];
+
+    await updateCampaign(campaignId, { posts: updatedPosts });
+    return newPost;
+}
+
+/**
+ * Get campaign events
+ */
+export async function getCampaignEvents(campaignId: string): Promise<CampaignEvent[]> {
+    const campaign = await getCampaignById(campaignId);
+    if (!campaign) throw new Error("Campaign not found");
+    return campaign.events || [];
+}
+
+/**
+ * Create a campaign event
+ */
+export async function createCampaignEvent(
+    campaignId: string,
+    eventData: Omit<CampaignEvent, "id" | "createdAt" | "updatedAt">
+): Promise<CampaignEvent> {
+    const campaign = await getCampaignById(campaignId);
+    if (!campaign) throw new Error("Campaign not found");
+
+    const now = new Date().toISOString();
+    const newEvent: CampaignEvent = {
+        id: uuidv4(),
+        ...eventData,
+        createdAt: now,
+        updatedAt: now,
+    };
+
+    const updatedEvents = [...(campaign.events || []), newEvent].sort(
+        (a, b) => new Date(a.date).getTime() - new Date(b.date).getTime()
+    );
+
+    await updateCampaign(campaignId, { events: updatedEvents });
+    return newEvent;
 }

@@ -61,15 +61,21 @@ The Character Sheet is the primary interface for viewing and interacting with Sh
 
 14. **As a player**, I want to see my character's limits (Physical, Mental, Social) so I know my action constraints.
 
+### Customization Use Cases
+
+15. **As a player**, I want to select a visual theme (e.g. Neon, Tactical, Modern) for my character sheet to personalize the appearance.
+
+16. **As a player**, I want my chosen theme to be saved with the character sheet so it remembers my preference next time I view it.
+
 ### Integration Use Cases
 
-15. **As a dice roller**, I want to receive character data so I can calculate dice pools automatically.
+17. **As a dice roller**, I want to receive character data so I can calculate dice pools automatically.
 
-16. **As a combat system**, I want to read character stats so I can resolve combat actions.
+18. **As a combat system**, I want to read character stats so I can resolve combat actions.
 
-17. **As a character editor**, I want to link to the character sheet so users can view their characters after editing.
+19. **As a character editor**, I want to link to the character sheet so users can view their characters after editing.
 
-18. **As a GM**, I want to view character sheets so I can understand player capabilities during games.
+20. **As a GM**, I want to view character sheets so I can understand player capabilities during games.
 
 ---
 
@@ -118,6 +124,8 @@ The Character Sheet is the primary interface for viewing and interacting with Sh
 - [ ] **Edge/Karma Spending:** Interactive buttons to spend Edge or Karma.
 - [ ] **Inventory Management:** Equip/Unequip items to update stats/armor.
 - [ ] **Quick Rolls:** Clickable attributes/skills to immediately roll that dice pool.
+- [ ] **Theme Support:** Support for multiple visual themes (e.g., Neon Rain, Tactical Data, Modern Card).
+- [ ] **Theme Persistence:** Selected theme is saved with the character and persists across sessions.
 
 **Phase 4 - Export & Tools:**
 - [ ] **PDF Export:** Generate a printable PDF version of the character sheet.
@@ -148,7 +156,7 @@ The Character Sheet is the primary interface for viewing and interacting with Sh
 - Character name and status badge
 - Metatype and magical path indicators
 - Edition code indicator
-- Action buttons (Dice Roller toggle, Edit button for drafts)
+- Action buttons (Dice Roller toggle, Theme Selector, Edit button for drafts)
 
 **Character Header Card:**
 - Character name (large, prominent)
@@ -236,7 +244,7 @@ The Character Sheet is the primary interface for viewing and interacting with Sh
 - Metatype indicator
 - Magical path indicator (if applicable)
 - Edition code
-- Action buttons (Dice Roller, Edit)
+- Action buttons (Dice Roller, Theme Selector, Edit)
 
 **Quick Stats Bar:**
 - Karma (current)
@@ -701,7 +709,13 @@ if (lifestyle.customIncome) {
 **Toggle Button:**
 - Located in character header
 - Shows/hides dice roller section
+
 - Visual feedback (active state)
+
+**Theme Selector:**
+- Dropdown or modal to select visual theme
+- Options: "Neon Rain" (Cyberpunk), "Tactical Data" (High Contrast), "Modern Card" (Clean)
+- Persists selection to character settings/local storage
 
 **Dice Roller:**
 - Integrated DiceRoller component
@@ -821,6 +835,8 @@ const poolSize = Math.max(
 
 **UI State:**
 - `showDiceRoller: boolean` - Dice roller visibility
+- `showThemeSelector: boolean` - Theme selector visibility
+- `currentTheme: string` - Selected theme ID
 
 ### Data Fetching
 
