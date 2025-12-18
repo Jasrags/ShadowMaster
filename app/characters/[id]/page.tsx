@@ -816,11 +816,12 @@ function CharacterSheet({
   useEffect(() => {
     if (!character.uiPreferences?.theme) {
       const saved = localStorage.getItem(`character-theme-${character.id}`);
-      if (saved && THEMES[saved as ThemeId]) {
+      if (saved && THEMES[saved as ThemeId] && saved !== currentThemeId) {
+        // eslint-disable-next-line react-hooks/set-state-in-effect
         setCurrentThemeId(saved as ThemeId);
       }
     }
-  }, [character.id, character.uiPreferences]);
+  }, [character.id, character.uiPreferences, currentThemeId]);
 
   if (!ready || rulesetLoading) {
     return (
@@ -986,7 +987,7 @@ function CharacterSheet({
             <div className="mt-6 pt-6 border-t border-border animate-in slide-in-from-top-2 fade-in duration-200">
               <div className="max-w-xl">
                 <DiceRoller
-                  defaultPoolSize={Math.max((character.attributes?.agility || 0) + 3, 2)} // Simple default
+                  initialPool={targetPool}
                   contextLabel={poolContext || "Quick Roll"}
                   compact={false}
                   showHistory={true}
