@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState, use, useMemo } from "react";
-import { Link, Button } from "react-aria-components";
+import { Link, Button, Modal, ModalOverlay, Dialog, Heading } from "react-aria-components";
 import type {
   Character,
   Weapon,
@@ -20,10 +20,13 @@ import {
   useRuleset,
   useRulesetStatus,
   useSpells,
+  useMetatypes,
+  useSkills,
+  type SkillData,
   type SpellData,
   type SpellsCatalogData
 } from "@/lib/rules";
-import { DownloadIcon } from "lucide-react";
+import { DownloadIcon, X } from "lucide-react";
 import { THEMES, DEFAULT_THEME, type Theme, type ThemeId } from "@/lib/themes";
 
 // =============================================================================
@@ -73,6 +76,38 @@ const ATTRIBUTE_DISPLAY: Record<string, { abbr: string; color: string }> = {
   charisma: { abbr: "CHA", color: "text-pink-400" },
 };
 
+/**
+ * Calculate total bonus for an attribute from all sources (Cyberware, Bioware, Adept Powers)
+ */
+function getAttributeBonus(character: Character, attrId: string): Array<{ source: string, value: number }> {
+  const bonuses: Array<{ source: string, value: number }> = [];
+
+  // Check Cyberware
+  character.cyberware?.forEach(item => {
+    if (item.attributeBonuses?.[attrId]) {
+      bonuses.push({ source: item.name, value: item.attributeBonuses[attrId] });
+    }
+  });
+
+  // Check Bioware
+  character.bioware?.forEach(item => {
+    if (item.attributeBonuses?.[attrId]) {
+      bonuses.push({ source: item.name, value: item.attributeBonuses[attrId] });
+    }
+  });
+
+  // Check Adept Powers
+  character.adeptPowers?.forEach(power => {
+    if (power.name.toLowerCase().includes("improved physical attribute") &&
+      power.specification?.toLowerCase() === attrId.toLowerCase() &&
+      power.rating) {
+      bonuses.push({ source: power.name, value: power.rating });
+    }
+  });
+
+  return bonuses;
+}
+
 
 
 // =============================================================================
@@ -83,7 +118,7 @@ interface ConditionMonitorProps {
   label: string;
   maxBoxes: number;
   filledBoxes: number;
-  color: "physical" | "stun";
+  color: "physical" | "stun" | "overflow";
   theme?: Theme;
 }
 
@@ -101,46 +136,72 @@ function ConditionMonitor({ label, maxBoxes, filledBoxes, color, theme }: Condit
       empty: t.id === 'modern-card' ? "border-amber-200 bg-amber-50" : "border-amber-900/50 bg-amber-950/30",
       text: "text-amber-600 dark:text-amber-400",
     },
+    overflow: {
+      filled: "bg-zinc-500 border-zinc-400 shadow-zinc-500/50",
+      empty: t.id === 'modern-card' ? "border-zinc-200 bg-zinc-50" : "border-zinc-800 bg-zinc-900/50",
+      text: "text-zinc-500 dark:text-zinc-400",
+    },
   };
   const colors = colorClasses[color];
 
-  // Group boxes in rows of 3 (Shadowrun style)
-  const rows = [];
-  for (let i = 0; i < maxBoxes; i += 3) {
-    rows.push(
-      <div key={i} className="flex gap-1">
-        {[0, 1, 2].map((offset) => {
-          const boxIndex = i + offset;
-          if (boxIndex >= maxBoxes) return null;
-          const isFilled = boxIndex < filledBoxes;
-          return (
-            <div
-              key={boxIndex}
-              className={`h-5 w-5 border-2 transition-all ${isFilled ? `${colors.filled} shadow-sm` : colors.empty
-                } ${t.id === 'modern-card' ? 'rounded-sm' : ''}`}
-              style={t.id === 'neon-rain' ? { clipPath: "polygon(15% 0, 100% 0, 100% 85%, 85% 100%, 0 100%, 0 15%)" } : undefined}
-            />
-          );
-        })}
-        {/* Wound modifier marker */}
-        <span className="ml-1 text-xs text-muted-foreground tabular-nums">
-          {Math.floor((i + 3) / 3) > 0 ? `-${Math.floor((i + 3) / 3)}` : ""}
-        </span>
-      </div>
-    );
+  const isStandard = color === "physical" || color === "stun";
+  let content;
+
+  if (isStandard) {
+    const rows = [];
+    for (let i = 0; i < maxBoxes; i += 3) {
+      const boxesInRow = [];
+      for (let j = 0; j < 3; j++) {
+        const boxIndex = i + j;
+        if (boxIndex >= maxBoxes) break;
+        const isFilled = boxIndex < filledBoxes;
+        boxesInRow.push(
+          <div
+            key={boxIndex}
+            className={`h-5 w-5 border-2 transition-all ${isFilled ? `${colors.filled} shadow-sm` : colors.empty
+              } ${t.id === 'modern-card' ? 'rounded-sm' : ''}`}
+            style={t.id === 'neon-rain' ? { clipPath: "polygon(15% 0, 100% 0, 100% 85%, 85% 100%, 0 100%, 0 15%)" } : undefined}
+          />
+        );
+      }
+      const penalty = Math.floor((i + 3) / 3);
+      rows.push(
+        <div key={i} className="flex items-center gap-1.5">
+          <div className="flex gap-1">{boxesInRow}</div>
+          <span className="text-[9px] font-bold text-muted-foreground/40 tabular-nums w-4">
+            -{penalty}
+          </span>
+        </div>
+      );
+    }
+    content = <div className="flex flex-col gap-2">{rows}</div>;
+  } else {
+    const boxes = [];
+    for (let i = 0; i < maxBoxes; i++) {
+      const isFilled = i < filledBoxes;
+      boxes.push(
+        <div
+          key={i}
+          className={`h-5 w-5 border-2 transition-all ${isFilled ? `${colors.filled} shadow-sm` : colors.empty
+            } ${t.id === 'modern-card' ? 'rounded-sm' : ''}`}
+          style={t.id === 'neon-rain' ? { clipPath: "polygon(15% 0, 100% 0, 100% 85%, 85% 100%, 0 100%, 0 15%)" } : undefined}
+        />
+      );
+    }
+    content = <div className="flex flex-wrap gap-2 items-start">{boxes}</div>;
   }
 
   return (
-    <div className="space-y-2">
-      <div className="flex items-center justify-between">
-        <span className={`text-xs ${t.fonts.mono} uppercase tracking-wider ${colors.text}`}>
+    <div className={`p-2 rounded hover:bg-muted/30 transition-colors group ${t.id === 'modern-card' ? 'bg-stone-50 dark:bg-stone-900 border border-stone-200 dark:border-stone-800' : ''}`}>
+      <div className="flex items-center gap-2 mb-2 pb-1.5 border-b border-border/10">
+        <span className={`text-[10px] ${t.fonts.mono} font-bold uppercase tracking-wider text-muted-foreground group-hover:${colors.text} transition-colors`}>
           {label}
         </span>
-        <span className={`text-xs ${t.fonts.mono} text-muted-foreground`}>
-          {filledBoxes}/{maxBoxes}
+        <span className={`text-[10px] ${t.fonts.mono} font-bold text-muted-foreground/40 tabular-nums`}>
+          [{filledBoxes}/{maxBoxes}]
         </span>
       </div>
-      <div className="space-y-1">{rows}</div>
+      {content}
     </div>
   );
 }
@@ -149,47 +210,114 @@ function ConditionMonitor({ label, maxBoxes, filledBoxes, color, theme }: Condit
 // ATTRIBUTE BLOCK COMPONENT
 // =============================================================================
 
-interface AttributeBlockProps {
-  id: string;
-  value: number;
-  max?: number;
+// =============================================================================
+// ATTRIBUTES TABLE COMPONENT
+// =============================================================================
+
+interface AttributesTableProps {
+  character: Character;
   onSelect?: (id: string, value: number) => void;
   theme?: Theme;
 }
 
-function AttributeBlock({ id, value, max, onSelect, theme }: AttributeBlockProps) {
-  const display = ATTRIBUTE_DISPLAY[id];
+function AttributesTable({ character, onSelect, theme }: AttributesTableProps) {
   const t = theme || THEMES[DEFAULT_THEME];
-  if (!display) return null;
+  const metatypes = useMetatypes();
 
-  const percentage = max ? (value / max) * 100 : (value / 6) * 100;
+  // Find current metatype data for limits
+  const metatypeData = metatypes.find(m => m.name.toLowerCase() === character.metatype.toLowerCase());
+
+  // Calculate attribute bonuses from all sources
+  const getAugmentations = (attrId: string) => getAttributeBonus(character, attrId);
+
+  const attributes = [
+    { id: 'body', label: 'Body' },
+    { id: 'agility', label: 'Agility' },
+    { id: 'reaction', label: 'Reaction' },
+    { id: 'strength', label: 'Strength' },
+    { id: 'willpower', label: 'Willpower' },
+    { id: 'logic', label: 'Logic' },
+    { id: 'intuition', label: 'Intuition' },
+    { id: 'charisma', label: 'Charisma' },
+  ];
 
   return (
-    <button
-      onClick={() => onSelect?.(id, value)}
-      className="group relative w-full text-left transition-transform active:scale-[0.98]"
-    >
-      <div className={`absolute inset-0 bg-gradient-to-r from-muted/50 to-transparent rounded transition-colors ${t.id === 'modern-card' ? 'group-hover:bg-muted' : 'group-hover:from-emerald-500/10'}`} />
-      <div className="relative flex items-center gap-3 p-3">
-        <span className={`${t.fonts.mono} text-sm font-bold ${display.color}`}>
-          {display.abbr}
-        </span>
-        <div className="flex-1">
-          <div className="h-1.5 bg-muted rounded-full overflow-hidden">
-            <div
-              className={`h-full transition-all duration-500 ${t.id === 'modern-card'
-                ? `${display.color.replace('text-', 'bg-')} bg-opacity-80`
-                : 'bg-gradient-to-r from-muted-foreground/60 to-muted-foreground/40 group-hover:from-emerald-500 group-hover:to-emerald-400'
-                }`}
-              style={{ width: `${Math.min(percentage, 100)}%` }}
-            />
+    <div className="w-full overflow-x-auto">
+      <table className={`w-full text-left border-collapse ${t.fonts.mono} text-xs`}>
+        <thead>
+          <tr className="border-b border-border/50">
+            <th className="py-2 px-1 font-bold text-muted-foreground uppercase">Attribute</th>
+            <th className="py-2 px-1 font-bold text-muted-foreground uppercase text-center">Base</th>
+            <th className="py-2 px-1 font-bold text-muted-foreground uppercase text-center">Aug</th>
+            <th className="py-2 px-1 font-bold text-muted-foreground uppercase text-center">Min/Max</th>
+            <th className="py-2 px-1 font-bold text-muted-foreground uppercase">Notes</th>
+          </tr>
+        </thead>
+        <tbody>
+          {attributes.map(({ id, label }) => {
+            const base = character.attributes[id] || 0;
+            const bonuses = getAugmentations(id);
+            const augTotal = bonuses.reduce((sum, b) => sum + b.value, 0);
+            const display = ATTRIBUTE_DISPLAY[id];
+
+            // Get metatype limits
+            const limit = metatypeData?.attributes[id];
+            const minMaxStr = limit && 'min' in limit && 'max' in limit
+              ? `(${limit.min}/${limit.max})`
+              : '(1/6)';
+
+            return (
+              <tr
+                key={id}
+                onClick={() => onSelect?.(id, base + augTotal)}
+                className="group border-b border-border/20 hover:bg-muted/30 cursor-pointer transition-colors"
+              >
+                <td className="py-2 px-1">
+                  <span className={`font-bold ${display?.color || 'text-foreground'}`}>{label}</span>
+                </td>
+                <td className="py-2 px-1 text-center font-bold">
+                  [{base}]
+                </td>
+                <td className="py-2 px-1 text-center font-bold text-emerald-500">
+                  {augTotal > 0 ? `[+${augTotal}]` : '[  ]'}
+                </td>
+                <td className="py-2 px-1 text-center text-muted-foreground">
+                  {minMaxStr}
+                </td>
+                <td className="py-2 px-1 text-[10px] text-muted-foreground italic truncate max-w-[120px]" title={bonuses.map(b => `${b.source} (+${b.value})`).join(", ")}>
+                  {bonuses.length > 0 ? bonuses.map(b => b.source).join(", ") : ""}
+                </td>
+              </tr>
+            );
+          })}
+        </tbody>
+      </table>
+
+      <div className={`mt-4 pt-4 border-t border-border/50 grid grid-cols-1 sm:grid-cols-2 gap-4 ${t.fonts.mono} text-xs`}>
+        <div className="flex items-center justify-between">
+          <span className="text-muted-foreground uppercase">Edge</span>
+          <div className="flex items-center gap-2">
+            <span className="font-bold">[{character.specialAttributes.edge}]</span>
+            <span className="text-muted-foreground">/</span>
+            <span className="font-bold">[{character.specialAttributes.edge}]</span>
           </div>
         </div>
-        <span className={`${t.fonts.mono} text-lg font-bold text-foreground tabular-nums w-6 text-right`}>
-          {value}
-        </span>
+        <div className="flex items-center justify-between">
+          <span className="text-muted-foreground uppercase">Essence</span>
+          <span className="font-bold text-blue-400">[{character.specialAttributes.essence.toFixed(2)}]</span>
+        </div>
+        {(character.specialAttributes.magic !== undefined || character.specialAttributes.resonance !== undefined) && (
+          <div className="flex items-center justify-between">
+            <span className="text-muted-foreground uppercase">
+              {character.specialAttributes.magic !== undefined ? "Magic" : "Resonance"}
+            </span>
+            <span className={`font-bold ${character.specialAttributes.magic !== undefined ? "text-violet-400" : "text-cyan-400"}`}>
+              [{character.specialAttributes.magic ?? character.specialAttributes.resonance}]
+            </span>
+          </div>
+        )}
       </div>
-    </button>
+    </div>
   );
 }
 
@@ -239,69 +367,162 @@ function Section({ title, icon, children, className = "", theme }: SectionProps)
 // =============================================================================
 
 interface SkillListProps {
-  skills: Record<string, number>;
-  linkedAttributes?: Record<string, string>;
+  character: Character;
   onSelect?: (skillId: string, rating: number, attrAbbr?: string) => void;
   theme?: Theme;
 }
 
-function SkillList({ skills, linkedAttributes = {}, onSelect, theme }: SkillListProps) {
+function SkillList({ character, onSelect, theme }: SkillListProps) {
   const t = theme || THEMES[DEFAULT_THEME];
+  const { activeSkills } = useSkills();
+  const skills = character.skills || {};
+  const specializations = character.skillSpecializations || {};
   const sortedSkills = Object.entries(skills).sort((a, b) => b[1] - a[1]);
 
   if (sortedSkills.length === 0) {
-    return <p className="text-sm text-zinc-500 italic">No skills assigned</p>;
+    return <p className="text-sm text-zinc-500 italic px-1">No skills assigned</p>;
   }
 
   return (
-    <div className="grid gap-1">
-      {sortedSkills.map(([skillId, rating]) => {
-        const linkedAttr = linkedAttributes[skillId];
-        const attrDisplay = linkedAttr ? ATTRIBUTE_DISPLAY[linkedAttr] : null;
+    <div className="w-full overflow-x-auto">
+      <table className={`w-full text-left border-collapse ${t.fonts.mono} text-xs`}>
+        <thead>
+          <tr className="border-b border-border/50">
+            <th className="py-2 px-1 font-bold text-muted-foreground uppercase text-[10px]">Skill</th>
+            <th className="py-2 px-1 font-bold text-muted-foreground uppercase text-[10px] text-center">Attr</th>
+            <th className="py-2 px-1 font-bold text-muted-foreground uppercase text-[10px] text-center">Rtg</th>
+            <th className="py-2 px-1 font-bold text-muted-foreground uppercase text-[10px]">Spec</th>
+            <th className="py-2 px-1 font-bold text-muted-foreground uppercase text-[10px] text-right">Dice Pool</th>
+          </tr>
+        </thead>
+        <tbody>
+          {sortedSkills.map(([skillId, rating]) => {
+            const skillData = activeSkills.find((s: SkillData) => s.id === skillId);
+            const attrId = skillData?.linkedAttribute.toLowerCase();
+            const attrDisplay = attrId ? ATTRIBUTE_DISPLAY[attrId] : null;
 
-        return (
-          <button
-            key={skillId}
-            onClick={() => onSelect?.(skillId, rating, attrDisplay?.abbr)}
-            className="flex items-center justify-between py-1 px-2 rounded hover:bg-muted transition-all group text-left w-full active:scale-[0.99]"
-          >
-            <div className="flex items-center gap-2">
-              <span className={`text-sm text-foreground/80 capitalize transition-colors ${t.id === 'modern-card' ? 'group-hover:text-foreground font-medium' : 'group-hover:text-emerald-400'}`}>
-                {skillId.replace(/-/g, " ")}
-              </span>
-              {attrDisplay && (
-                <span className={`text-xs ${t.fonts.mono} ${attrDisplay.color} opacity-50 group-hover:opacity-100`}>
-                  [{attrDisplay.abbr}]
-                </span>
-              )}
-            </div>
-            <div className="flex items-center gap-1">
-              {Array.from({ length: rating }).map((_, i) => (
-                <div
-                  key={i}
-                  className={`w-2 h-2 rounded-sm ${t.id === 'modern-card' ? 'bg-indigo-500 group-hover:bg-indigo-600' : 'bg-emerald-500 group-hover:bg-emerald-400'}`}
-                />
-              ))}
-              {Array.from({ length: Math.max(0, 6 - rating) }).map((_, i) => (
-                <div
-                  key={i}
-                  className="w-2 h-2 bg-muted rounded-sm"
-                />
-              ))}
-              <span className={`ml-2 text-sm ${t.fonts.mono} text-muted-foreground tabular-nums w-4 text-right`}>
-                {rating}
-              </span>
-            </div>
-          </button>
-        );
-      })}
+            // Calculate Dice Pool: Augmented Attribute + Rating
+            let dicePool = rating;
+            if (attrId) {
+              const baseAttr = character.attributes[attrId] || 0;
+              const bonuses = getAttributeBonus(character, attrId);
+              const augTotal = bonuses.reduce((sum, b) => sum + b.value, 0);
+              dicePool += (baseAttr + augTotal);
+            }
+
+            const specs = specializations[skillId] || [];
+            const specDisplay = specs.length > 0 ? specs.join(", ") : "__________";
+
+            return (
+              <tr
+                key={skillId}
+                onClick={() => onSelect?.(skillId, dicePool, attrDisplay?.abbr)}
+                className="group border-b border-border/20 hover:bg-muted/30 cursor-pointer transition-colors"
+              >
+                <td className="py-2 px-1 max-w-[100px] truncate">
+                  <span className={`capitalize ${t.id === 'modern-card' ? 'font-medium text-foreground' : 'text-foreground/90'}`}>
+                    {skillId.replace(/-/g, " ")}
+                  </span>
+                </td>
+                <td className="py-2 px-1 text-center">
+                  {attrDisplay && (
+                    <span className={`text-[10px] ${attrDisplay.color}`}>
+                      {attrDisplay.abbr}
+                    </span>
+                  )}
+                </td>
+                <td className="py-2 px-1 text-center font-bold">
+                  [{rating}]
+                </td>
+                <td className="py-2 px-1 max-w-[120px] truncate">
+                  <span className="text-muted-foreground italic text-[10px]">
+                    {specDisplay}
+                  </span>
+                </td>
+                <td className="py-2 px-1 text-right font-bold tabular-nums">
+                  <span className={t.id === 'modern-card' ? 'text-indigo-500' : 'text-emerald-500'}>
+                    {dicePool}
+                  </span>
+                </td>
+              </tr>
+            );
+          })}
+        </tbody>
+      </table>
     </div>
   );
 }
 
 // =============================================================================
-// QUALITY BADGE COMPONENT
+// KNOWLEDGE & LANGUAGES COMPONENT
 // =============================================================================
+
+interface KnowledgeAndLanguagesProps {
+  character: Character;
+  onSelect?: (pool: number, label: string) => void;
+  theme?: Theme;
+}
+
+function KnowledgeAndLanguages({ character, onSelect, theme }: KnowledgeAndLanguagesProps) {
+  const t = theme || THEMES[DEFAULT_THEME];
+  const knowledgeSkills = character.knowledgeSkills || [];
+  const languages = character.languages || [];
+
+  if (knowledgeSkills.length === 0 && languages.length === 0) {
+    return <p className="text-sm text-zinc-500 italic px-1">No knowledge skills or languages</p>;
+  }
+
+  return (
+    <div className="space-y-6">
+      {knowledgeSkills.length > 0 && (
+        <div className="w-full overflow-x-auto">
+          <table className={`w-full text-left border-collapse ${t.fonts.mono} text-xs`}>
+            <thead>
+              <tr className="border-b border-border/50">
+                <th className="py-2 px-1 font-bold text-muted-foreground uppercase text-[10px]">Knowledge Skill</th>
+                <th className="py-2 px-1 font-bold text-muted-foreground uppercase text-[10px] text-center">Type</th>
+                <th className="py-2 px-1 font-bold text-muted-foreground uppercase text-[10px] text-right">Rating</th>
+              </tr>
+            </thead>
+            <tbody>
+              {knowledgeSkills.map((skill, index) => (
+                <tr
+                  key={index}
+                  onClick={() => onSelect?.(skill.rating, skill.name)}
+                  className="border-b border-border/20 hover:bg-muted/30 transition-colors cursor-pointer group"
+                >
+                  <td className="py-2 px-1 text-foreground/90 group-hover:text-foreground">{skill.name}</td>
+                  <td className="py-2 px-1 text-center text-muted-foreground capitalize text-[10px]">{skill.category}</td>
+                  <td className="py-2 px-1 text-right font-bold tabular-nums">[{skill.rating}]</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      )}
+
+      {languages.length > 0 && (
+        <div className="pt-2 border-t border-border/20">
+          <div className="flex flex-wrap items-center gap-2">
+            <span className={`text-[10px] font-bold text-muted-foreground uppercase ${t.fonts.mono}`}>Languages:</span>
+            {languages.map((lang, index) => (
+              <span
+                key={index}
+                onClick={() => !lang.isNative && onSelect?.(lang.rating, lang.name)}
+                className={`px-2 py-1 text-[11px] rounded border transition-colors ${lang.isNative
+                  ? "bg-emerald-500/10 text-emerald-400 border-emerald-500/30 font-medium"
+                  : "bg-muted text-muted-foreground border-border hover:bg-muted/80 hover:text-foreground cursor-pointer"
+                  }`}
+              >
+                {lang.name} {lang.isNative ? "(N)" : `(${lang.rating})`}
+              </span>
+            ))}
+          </div>
+        </div>
+      )}
+    </div>
+  );
+}
 
 interface QualityBadgeProps {
   name: string;
@@ -982,19 +1203,51 @@ function CharacterSheet({
             </div>
           </div>
 
-          {/* Dice Roller Collapsible Section */}
-          {showDiceRoller && (
-            <div className="mt-6 pt-6 border-t border-border animate-in slide-in-from-top-2 fade-in duration-200">
-              <div className="max-w-xl">
-                <DiceRoller
-                  initialPool={targetPool}
-                  contextLabel={poolContext || "Quick Roll"}
-                  compact={false}
-                  showHistory={true}
-                />
-              </div>
-            </div>
-          )}
+          {/* Dice Roller Modal */}
+          <ModalOverlay
+            isOpen={showDiceRoller}
+            onOpenChange={setShowDiceRoller}
+            isDismissable
+            className={({ isEntering, isExiting }) => `
+              fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm
+              ${isEntering ? 'animate-in fade-in duration-300' : ''}
+              ${isExiting ? 'animate-out fade-out duration-200' : ''}
+            `}
+          >
+            <Modal
+              className={({ isEntering, isExiting }) => `
+                w-full max-w-lg overflow-hidden rounded-xl border border-zinc-700 bg-zinc-900 shadow-2xl
+                ${isEntering ? 'animate-in zoom-in-95 duration-300' : ''}
+                ${isExiting ? 'animate-out zoom-out-95 duration-200' : ''}
+              `}
+            >
+              <Dialog className="outline-none">
+                {({ close }) => (
+                  <div className="flex flex-col">
+                    <div className="flex items-center justify-between p-4 border-b border-zinc-800">
+                      <Heading slot="title" className={`text-lg font-bold ${theme.colors.heading}`}>
+                        Dice Roller
+                      </Heading>
+                      <Button
+                        onPress={close}
+                        className="p-2 rounded-full hover:bg-zinc-800 text-muted-foreground hover:text-foreground transition-colors"
+                      >
+                        <X className="w-5 h-5" />
+                      </Button>
+                    </div>
+                    <div className="p-6 max-h-[80vh] overflow-y-auto custom-scrollbar">
+                      <DiceRoller
+                        initialPool={targetPool}
+                        contextLabel={poolContext || "Quick Roll"}
+                        compact={false}
+                        showHistory={true}
+                      />
+                    </div>
+                  </div>
+                )}
+              </Dialog>
+            </Modal>
+          </ModalOverlay>
         </div>
 
         {/* Main Content Grid */}
@@ -1003,43 +1256,15 @@ function CharacterSheet({
           <div className="space-y-6">
             {/* Attributes */}
             <Section title="Attributes" theme={theme}>
-              <div className="space-y-1">
-                {Object.entries(character.attributes || {}).map(([id, value]) => (
-                  <AttributeBlock
-                    theme={theme}
-                    key={id}
-                    id={id}
-                    value={value as number}
-                    onSelect={(attrId, val) => {
-                      setTargetPool(val);
-                      setPoolContext(ATTRIBUTE_DISPLAY[attrId]?.abbr);
-                      setShowDiceRoller(true);
-                    }}
-                  />
-                ))}
-              </div>
-
-              {/* Magic/Resonance if applicable */}
-              {character.specialAttributes?.magic !== undefined && (
-                <div className="mt-4 pt-4 border-t border-border">
-                  <div className="flex items-center justify-between">
-                    <span className="font-mono text-sm font-bold text-violet-400">MAG</span>
-                    <span className="font-mono text-lg font-bold text-foreground">
-                      {character.specialAttributes.magic}
-                    </span>
-                  </div>
-                </div>
-              )}
-              {character.specialAttributes?.resonance !== undefined && (
-                <div className="mt-4 pt-4 border-t border-border">
-                  <div className="flex items-center justify-between">
-                    <span className="font-mono text-sm font-bold text-cyan-400">RES</span>
-                    <span className="font-mono text-lg font-bold text-foreground">
-                      {character.specialAttributes.resonance}
-                    </span>
-                  </div>
-                </div>
-              )}
+              <AttributesTable
+                character={character}
+                theme={theme}
+                onSelect={(attrId, val) => {
+                  setTargetPool(val);
+                  setPoolContext(ATTRIBUTE_DISPLAY[attrId]?.abbr);
+                  setShowDiceRoller(true);
+                }}
+              />
             </Section>
 
             {/* Derived Stats */}
@@ -1067,19 +1292,28 @@ function CharacterSheet({
             {/* Condition Monitors */}
             <Section theme={theme} title="Condition">
               <div className="space-y-6">
+                <div className="grid grid-cols-2 gap-4">
+                  <ConditionMonitor
+                    theme={theme}
+                    label="Physical"
+                    maxBoxes={physicalMonitorMax}
+                    filledBoxes={character.condition?.physicalDamage ?? 0}
+                    color="physical"
+                  />
+                  <ConditionMonitor
+                    theme={theme}
+                    label="Stun"
+                    maxBoxes={stunMonitorMax}
+                    filledBoxes={character.condition?.stunDamage ?? 0}
+                    color="stun"
+                  />
+                </div>
                 <ConditionMonitor
                   theme={theme}
-                  label="Physical"
-                  maxBoxes={physicalMonitorMax}
-                  filledBoxes={character.condition?.physicalDamage ?? 0}
-                  color="physical"
-                />
-                <ConditionMonitor
-                  theme={theme}
-                  label="Stun"
-                  maxBoxes={stunMonitorMax}
-                  filledBoxes={character.condition?.stunDamage ?? 0}
-                  color="stun"
+                  label="Overflow"
+                  maxBoxes={character.attributes?.body || 3}
+                  filledBoxes={character.condition?.overflowDamage ?? 0}
+                  color="overflow"
                 />
               </div>
             </Section>
@@ -1090,11 +1324,11 @@ function CharacterSheet({
             <Section theme={theme} title="Skills">
               <SkillList
                 theme={theme}
-                skills={character.skills || {}}
-                onSelect={(skillId, rating, attrAbbr) => {
+                character={character}
+                onSelect={(skillId, pool, attrAbbr) => {
                   const skillName = skillId.replace(/-/g, " ");
                   const context = attrAbbr ? `${attrAbbr} + ${skillName}` : skillName;
-                  setTargetPool(rating);
+                  setTargetPool(pool);
                   setPoolContext(context);
                   setShowDiceRoller(true);
                 }}
@@ -1139,44 +1373,18 @@ function CharacterSheet({
               </Section>
             ) : null}
 
-            {/* Knowledge Skills */}
-            {character.knowledgeSkills && character.knowledgeSkills.length > 0 && (
-              <Section theme={theme} title="Knowledge">
-                <div className="space-y-1">
-                  {character.knowledgeSkills.map((skill, index) => (
-                    <div
-                      key={index}
-                      className="flex items-center justify-between py-1 px-2 rounded hover:bg-muted/50 transition-colors"
-                    >
-                      <div className="flex items-center gap-2">
-                        <span className="text-sm text-foreground/80">{skill.name}</span>
-                        <span className="text-xs text-muted-foreground opacity-60 capitalize">({skill.category})</span>
-                      </div>
-                      <span className="text-sm font-mono text-muted-foreground">{skill.rating}</span>
-                    </div>
-                  ))}
-                </div>
-              </Section>
-            )}
-
-            {/* Languages */}
-            {character.languages && character.languages.length > 0 && (
-              <Section theme={theme} title="Languages">
-                <div className="flex flex-wrap gap-2">
-                  {character.languages.map((lang, index) => (
-                    <span
-                      key={index}
-                      className={`px-2 py-1 text-xs rounded border ${lang.isNative
-                        ? "bg-emerald-500/10 text-emerald-400 border-emerald-500/30"
-                        : "bg-muted text-muted-foreground border-border"
-                        }`}
-                    >
-                      {lang.name} {lang.isNative ? "(N)" : `(${lang.rating})`}
-                    </span>
-                  ))}
-                </div>
-              </Section>
-            )}
+            {/* Knowledge Skills & Languages */}
+            <Section theme={theme} title="Knowledge & Languages">
+              <KnowledgeAndLanguages
+                character={character}
+                theme={theme}
+                onSelect={(pool, label) => {
+                  setTargetPool(pool);
+                  setPoolContext(label);
+                  setShowDiceRoller(true);
+                }}
+              />
+            </Section>
           </div>
 
           {/* Right Column - Gear & Assets */}
