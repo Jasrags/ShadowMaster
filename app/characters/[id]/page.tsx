@@ -581,167 +581,182 @@ function GearItem({ item, theme }: GearItemProps) {
 }
 
 // =============================================================================
+// WEAPON HELPERS
+// =============================================================================
+
+function isMeleeWeapon(w: Weapon): boolean {
+  const hasReach = typeof w.reach === 'number';
+  const cat = w.category.toLowerCase();
+  const subcat = (w.subcategory || "").toLowerCase();
+  const dmg = w.damage.toLowerCase();
+  const mode = w.mode || [];
+
+  return hasReach ||
+    cat.includes('melee') || subcat.includes('melee') ||
+    cat.includes('blade') || subcat.includes('blade') ||
+    cat.includes('club') || subcat.includes('club') ||
+    cat.includes('unarmed') || subcat.includes('unarmed') ||
+    dmg.includes('str') ||
+    mode.length === 0;
+}
+
+// =============================================================================
 // WEAPON CARD COMPONENT
 // =============================================================================
 
-interface WeaponCardProps {
-  weapon: Weapon;
-  onSelect?: (weapon: Weapon) => void;
+interface WeaponTableProps {
+  weapons: Weapon[];
+  character: Character;
+  type: "ranged" | "melee";
+  onSelect?: (pool: number, label: string) => void;
   theme?: Theme;
 }
 
-function WeaponCard({ weapon, onSelect, theme }: WeaponCardProps) {
-  const isMelee = !!weapon.reach || !weapon.ammoCapacity;
+function WeaponTable({ weapons, character, type, onSelect, theme }: WeaponTableProps) {
   const t = theme || THEMES[DEFAULT_THEME];
+  const skills = character.skills || {};
 
   return (
-    <div
-      onClick={() => onSelect?.(weapon)}
-      className={`p-3 rounded transition-all cursor-pointer group ${t.components.card.wrapper} ${t.components.card.hover} ${t.id === 'modern-card' ? t.components.card.border : 'border-emerald-500/50'}`}
-    >
-      <div className="flex items-start justify-between">
-        <div className="space-y-1">
-          <div className="flex items-center gap-2">
-            <span className={`text-sm font-bold text-foreground transition-colors ${t.id === 'modern-card' ? 'group-hover:text-foreground' : 'group-hover:text-emerald-400'}`}>
-              {weapon.name}
-            </span>
-            <span className={`text-[10px] ${t.fonts.mono} text-muted-foreground uppercase tracking-tighter px-1.5 py-0.5 border border-border rounded`}>
-              {weapon.category}
-            </span>
-          </div>
-
-          <div className={`flex flex-wrap gap-x-4 gap-y-1 text-[11px] ${t.fonts.mono}`}>
-            <div className="flex gap-1.5">
-              <span className="text-muted-foreground">DMG</span>
-              <span className="text-emerald-600 dark:text-emerald-400 font-bold">{weapon.damage}</span>
-            </div>
-            <div className="flex gap-1.5">
-              <span className="text-muted-foreground">AP</span>
-              <span className="text-amber-500">{weapon.ap}</span>
-            </div>
-            {isMelee ? (
-              weapon.reach !== undefined && (
-                <div className="flex gap-1.5">
-                  <span className="text-muted-foreground">REACH</span>
-                  <span className="text-purple-500 dark:text-purple-400">{weapon.reach}</span>
-                </div>
-              )
-            ) : (
+    <div className="w-full overflow-x-auto">
+      <table className={`w-full text-left border-collapse ${t.fonts.mono} text-xs`}>
+        <thead>
+          <tr className="border-b border-border/50">
+            <th className="py-2 px-1 font-bold text-muted-foreground uppercase text-[10px]">Name</th>
+            <th className="py-2 px-1 font-bold text-muted-foreground uppercase text-[10px] text-center">Dmg</th>
+            <th className="py-2 px-1 font-bold text-muted-foreground uppercase text-[10px] text-center">AP</th>
+            {type === "ranged" ? (
               <>
-                <div className="flex gap-1.5">
-                  <span className="text-muted-foreground">ACC</span>
-                  <span className="text-cyan-600 dark:text-cyan-400">{weapon.accuracy}</span>
-                </div>
-                {weapon.mode && weapon.mode.length > 0 && (
-                  <div className="flex gap-1.5">
-                    <span className="text-muted-foreground">MODE</span>
-                    <span className="text-orange-500 dark:text-orange-400">{weapon.mode.join(", ")}</span>
-                  </div>
-                )}
-                {weapon.recoil !== undefined && weapon.recoil > 0 && (
-                  <div className="flex gap-1.5">
-                    <span className="text-muted-foreground">RC</span>
-                    <span className="text-rose-500 dark:text-rose-400">{weapon.recoil}</span>
-                  </div>
-                )}
+                <th className="py-2 px-1 font-bold text-muted-foreground uppercase text-[10px] text-center">Acc</th>
+                <th className="py-2 px-1 font-bold text-muted-foreground uppercase text-[10px] text-center">Mode</th>
               </>
+            ) : (
+              <th className="py-2 px-1 font-bold text-muted-foreground uppercase text-[10px] text-center">Reach</th>
             )}
-          </div>
-        </div>
+            <th className="py-2 px-1 font-bold text-muted-foreground uppercase text-[10px] text-right">Pool</th>
+          </tr>
+        </thead>
+        <tbody>
+          {weapons.map((w, idx) => {
+            const isMelee = isMeleeWeapon(w);
+            const hasReach = typeof w.reach === 'number';
 
-        {!isMelee && weapon.ammoCapacity && (
-          <div className="text-right">
-            <div className={`text-[10px] text-muted-foreground uppercase ${t.fonts.mono}`}>Ammo</div>
-            <div className={`text-sm ${t.fonts.mono} text-foreground/80`}>
-              {weapon.currentAmmo ?? weapon.ammoCapacity}/{weapon.ammoCapacity}
-              <span className="text-[10px] text-muted-foreground ml-1">({weapon.ammoType})</span>
-            </div>
-          </div>
-        )}
-      </div>
+            let basePool = 0;
+            let poolLabel = w.name;
 
-      {/* Modifications */}
-      {weapon.modifications && weapon.modifications.length > 0 && (
-        <div className="mt-2 pt-2 border-t border-border/50 flex flex-wrap gap-1.5">
-          {weapon.modifications.map((mod, idx) => (
-            <span
-              key={idx}
-              className="px-1.5 py-0.5 bg-muted/50 text-[10px] text-muted-foreground rounded border border-border flex items-center gap-1"
-              title={mod.mount ? `Mount: ${mod.mount}` : undefined}
-            >
-              {mod.isBuiltIn && <span className="w-1 h-1 rounded-full bg-emerald-500/50" />}
-              {mod.name}
-              {mod.rating && <span className="text-[9px] text-muted-foreground opacity-70">R{mod.rating}</span>}
-            </span>
-          ))}
-        </div>
-      )}
+            if (isMelee) {
+              basePool = character.attributes?.strength || 3;
+              poolLabel = `STR + ${w.name}`;
+            } else {
+              basePool = character.attributes?.agility || 3;
+              poolLabel = `AGI + ${w.name}`;
+            }
+
+            const commonCombatSkills = ['pistols', 'automatics', 'longarms', 'unarmed-combat', 'blades', 'clubs', 'archery', 'throwing-weapons'];
+            const foundSkill = commonCombatSkills.find(s => w.category.toLowerCase().includes(s.replace(/-/g, ' ')));
+
+            if (foundSkill && skills[foundSkill]) {
+              basePool += skills[foundSkill];
+              poolLabel = `${isMelee ? 'STR' : 'AGI'} + ${foundSkill.replace(/-/g, ' ')}`;
+            }
+
+            return (
+              <tr
+                key={`${w.name}-${idx}`}
+                onClick={() => onSelect?.(basePool, poolLabel)}
+                className="group border-b border-border/20 hover:bg-muted/30 cursor-pointer transition-colors"
+              >
+                <td className="py-2 px-1">
+                  <div className="flex flex-col">
+                    <span className={`font-bold ${t.id === 'modern-card' ? 'text-foreground' : 'text-foreground/90'}`}>
+                      {w.name}
+                    </span>
+                    <span className="text-[9px] text-muted-foreground uppercase opacity-70">
+                      {w.subcategory}
+                    </span>
+                  </div>
+                </td>
+                <td className="py-2 px-1 text-center">
+                  <span className={t.id === 'modern-card' ? 'text-emerald-600' : 'text-emerald-500'}>
+                    {w.damage}
+                  </span>
+                </td>
+                <td className="py-2 px-1 text-center text-amber-500">
+                  {w.ap}
+                </td>
+                {type === "ranged" ? (
+                  <>
+                    <td className="py-2 px-1 text-center text-cyan-500">
+                      {w.accuracy || '-'}
+                    </td>
+                    <td className="py-2 px-1 text-center text-[9px] text-muted-foreground">
+                      {w.mode?.join('/') || '-'}
+                    </td>
+                  </>
+                ) : (
+                  <td className="py-2 px-1 text-center text-purple-500">
+                    {(w.reach != null && Number(w.reach) !== 0) ? w.reach : '-'}
+                  </td>
+                )}
+                <td className="py-2 px-1 text-right font-bold tabular-nums">
+                  <span className={t.id === 'modern-card' ? 'text-indigo-500' : 'text-emerald-500'}>
+                    {basePool}
+                  </span>
+                </td>
+              </tr>
+            );
+          })}
+        </tbody>
+      </table>
     </div>
   );
 }
 
 // =============================================================================
-// ARMOR CARD COMPONENT
+// ARMOR TABLE COMPONENT
 // =============================================================================
 
-interface ArmorCardProps {
-  armor: ArmorItem;
+interface ArmorTableProps {
+  armor: ArmorItem[];
   theme?: Theme;
 }
 
-function ArmorCard({ armor, theme }: ArmorCardProps) {
+function ArmorTable({ armor, theme }: ArmorTableProps) {
   const t = theme || THEMES[DEFAULT_THEME];
+
   return (
-    <div className={`p-3 rounded transition-all group ${t.components.card.wrapper} ${t.components.card.hover} ${t.id === 'modern-card' ? t.components.card.border : 'border-blue-500/50'}`}>
-      <div className="flex items-start justify-between">
-        <div>
-          <div className="flex items-center gap-2">
-            <span className={`text-sm font-bold text-foreground transition-colors ${t.id === 'modern-card' ? 'group-hover:text-foreground' : 'group-hover:text-blue-400'}`}>
-              {armor.name}
-            </span>
-            {armor.equipped && (
-              <span className="text-[10px] bg-blue-500 text-white font-mono uppercase tracking-tighter px-1.5 py-0.5 rounded">
-                Equipped
-              </span>
-            )}
-          </div>
-          <p className="text-[10px] text-muted-foreground uppercase font-mono mt-0.5">{armor.category}</p>
-        </div>
-
-        <div className="text-right">
-          <div className="text-[10px] text-muted-foreground uppercase font-mono leading-none mb-1">Armor</div>
-          <div className="text-xl font-bold font-mono text-blue-400 leading-none">
-            {armor.armorRating}
-          </div>
-        </div>
-      </div>
-
-      {/* Modifications & Capacity */}
-      {(armor.capacity !== undefined || (armor.modifications && armor.modifications.length > 0)) && (
-        <div className="mt-2 pt-2 border-t border-border/50 space-y-2">
-          {armor.capacity !== undefined && (
-            <div className="flex items-center justify-between text-[10px] font-mono">
-              <span className="text-muted-foreground uppercase">Capacity</span>
-              <span className="text-foreground/80">
-                {armor.capacityUsed ?? 0}/{armor.capacity}
-              </span>
-            </div>
-          )}
-          {armor.modifications && armor.modifications.length > 0 && (
-            <div className="flex flex-wrap gap-1.5">
-              {armor.modifications.map((mod, idx) => (
-                <span
-                  key={idx}
-                  className="px-1.5 py-0.5 bg-muted/50 text-[10px] text-muted-foreground rounded border border-border"
-                >
-                  {mod.name}
-                  {mod.rating && <span className="text-[9px] text-muted-foreground opacity-70 ml-1">R{mod.rating}</span>}
-                </span>
-              ))}
-            </div>
-          )}
-        </div>
-      )}
+    <div className="w-full overflow-x-auto">
+      <table className={`w-full text-left border-collapse ${t.fonts.mono} text-xs`}>
+        <thead>
+          <tr className="border-b border-border/50">
+            <th className="py-2 px-1 font-bold text-muted-foreground uppercase text-[10px]">Name</th>
+            <th className="py-2 px-1 font-bold text-muted-foreground uppercase text-[10px] text-center">Rating</th>
+            <th className="py-2 px-1 font-bold text-muted-foreground uppercase text-[10px] text-right">Status</th>
+          </tr>
+        </thead>
+        <tbody>
+          {armor.map((a, idx) => (
+            <tr key={`${a.name}-${idx}`} className="border-b border-border/20 hover:bg-muted/10 transition-colors">
+              <td className="py-2 px-1">
+                <div className="flex flex-col">
+                  <span className="font-bold text-foreground/90">{a.name}</span>
+                </div>
+              </td>
+              <td className="py-2 px-1 text-center">
+                <span className="text-blue-400 font-bold">{a.armorRating}</span>
+              </td>
+              <td className="py-2 px-1 text-right">
+                {a.equipped ? (
+                  <span className="text-[9px] bg-blue-500/20 text-blue-400 border border-blue-500/30 px-1 py-0.5 rounded uppercase font-bold">
+                    Equipped
+                  </span>
+                ) : (
+                  <span className="text-[9px] text-muted-foreground/40 uppercase">Stored</span>
+                )}
+              </td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
     </div>
   );
 }
@@ -1392,43 +1407,61 @@ function CharacterSheet({
             {/* Combat Gear */}
             {(character.weapons?.length || character.armor?.length) ? (
               <Section theme={theme} title="Combat Gear">
-                <div className="space-y-3">
-                  {character.weapons && character.weapons.map((weapon, index) => (
-                    <WeaponCard
-                      theme={theme}
-                      key={`weapon-${index}`}
-                      weapon={weapon}
-                      onSelect={(w) => {
-                        const isMelee = !!w.reach || !w.ammoCapacity;
-                        let basePool = 0;
-                        let label = w.name;
+                <div className="space-y-6">
+                  {/* Ranged Weapons */}
+                  {(() => {
+                    const ranged = character.weapons?.filter(w => !isMeleeWeapon(w)) || [];
+                    if (ranged.length === 0) return null;
+                    return (
+                      <div className="space-y-2">
+                        <span className="text-[10px] font-mono text-muted-foreground uppercase tracking-widest block ml-1">Ranged Weapons</span>
+                        <WeaponTable
+                          theme={theme}
+                          type="ranged"
+                          character={character}
+                          weapons={ranged}
+                          onSelect={(pool, label) => {
+                            setTargetPool(pool);
+                            setPoolContext(label);
+                            setShowDiceRoller(true);
+                          }}
+                        />
+                      </div>
+                    );
+                  })()}
 
-                        if (isMelee) {
-                          basePool = character.attributes?.strength || 3;
-                          label = `STR + ${w.name}`;
-                        } else {
-                          basePool = character.attributes?.agility || 3;
-                          label = `AGI + ${w.name}`;
-                        }
+                  {/* Melee Weapons */}
+                  {(() => {
+                    const melee = character.weapons?.filter(w => isMeleeWeapon(w)) || [];
+                    if (melee.length === 0) return null;
+                    return (
+                      <div className="space-y-2">
+                        <span className="text-[10px] font-mono text-muted-foreground uppercase tracking-widest block ml-1">Melee Weapons</span>
+                        <WeaponTable
+                          theme={theme}
+                          type="melee"
+                          character={character}
+                          weapons={melee}
+                          onSelect={(pool, label) => {
+                            setTargetPool(pool);
+                            setPoolContext(label);
+                            setShowDiceRoller(true);
+                          }}
+                        />
+                      </div>
+                    );
+                  })()}
 
-                        const skills = character.skills || {};
-                        const commonCombatSkills = ['pistols', 'automatics', 'longarms', 'unarmed-combat', 'blades', 'clubs'];
-                        const foundSkill = commonCombatSkills.find(s => w.category.toLowerCase().includes(s.replace(/-/g, ' ')));
-
-                        if (foundSkill && skills[foundSkill]) {
-                          basePool += skills[foundSkill];
-                          label = `${isMelee ? 'STR' : 'AGI'} + ${foundSkill.replace(/-/g, ' ')}`;
-                        }
-
-                        setTargetPool(basePool);
-                        setPoolContext(label);
-                        setShowDiceRoller(true);
-                      }}
-                    />
-                  ))}
-                  {character.armor && character.armor.map((armor, index) => (
-                    <ArmorCard theme={theme} key={`armor-${index}`} armor={armor} />
-                  ))}
+                  {/* Armor & Clothing */}
+                  {character.armor && character.armor.length > 0 && (
+                    <div className="space-y-2">
+                      <span className="text-[10px] font-mono text-muted-foreground uppercase tracking-widest block ml-1">Armor & Clothing</span>
+                      <ArmorTable
+                        theme={theme}
+                        armor={character.armor}
+                      />
+                    </div>
+                  )}
                 </div>
               </Section>
             ) : null}
