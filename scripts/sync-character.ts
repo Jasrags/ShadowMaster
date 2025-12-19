@@ -94,9 +94,10 @@ async function syncCharacter(characterId: string) {
     if (character.vehicles) syncItems(character.vehicles);
 
     // Sync Qualities
-    const syncQualities = (charQuals: string[], rulebookQuals: any[]) => {
+    const syncQualities = (charQuals: any[], rulebookQuals: any[]) => {
         if (!charQuals) return;
-        charQuals.forEach((qId, index) => {
+        charQuals.forEach((q, index) => {
+            const qId = typeof q === 'string' ? q : q.id;
             const rbQ = rulebookQuals.find(rq => rq.id === qId || rq.name === qId);
             if (rbQ) {
                 console.log(`Verified quality: ${qId}`);
