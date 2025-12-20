@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useMemo, useCallback } from "react";
-import type { CreationState, GearItem, Weapon, ArmorItem, InstalledWeaponMod, InstalledArmorMod, CyberwareItem, BiowareItem, WeaponMount } from "@/lib/types";
+import type { CreationState, GearItem, Weapon, ArmorItem, InstalledWeaponMod, InstalledArmorMod, InstalledGearMod, CyberwareItem, BiowareItem, WeaponMount } from "@/lib/types";
 import type { FocusItem } from "@/lib/types/character";
 import type { FocusType } from "@/lib/types/edition";
 import {
@@ -155,7 +155,7 @@ export function GearStep({ state, updateState, budgetValues }: StepProps) {
 
   // Modification modal state
   const [modModalOpen, setModModalOpen] = useState(false);
-  const [modifyingItem, setModifyingItem] = useState<{ item: Weapon | ArmorItem; type: "weapon" | "armor"; index: number } | null>(null);
+  const [modifyingItem, setModifyingItem] = useState<{ item: Weapon | ArmorItem | GearItem; type: "weapon" | "armor" | "gear"; index: number } | null>(null);
 
   // Get selections from state
   const selectedGear: GearItem[] = (state.selections?.gear as GearItem[]) || [];
@@ -206,7 +206,6 @@ export function GearStep({ state, updateState, budgetValues }: StepProps) {
   const totalNuyen = baseNuyen + convertedNuyen;
 
   // Calculate spent - include weapons, armor with their modifications
-  const gearSpent = selectedGear.reduce((sum, item) => sum + item.cost * item.quantity, 0);
   const weaponsSpent = selectedWeapons.reduce((sum, weapon) => {
     const baseCost = weapon.cost * weapon.quantity;
     const modsCost = (weapon.modifications || []).reduce((modSum, mod) => modSum + mod.cost, 0);
@@ -215,6 +214,12 @@ export function GearStep({ state, updateState, budgetValues }: StepProps) {
   const armorSpent = selectedArmor.reduce((sum, armor) => {
     const baseCost = armor.cost * armor.quantity;
     const modsCost = (armor.modifications || []).reduce((modSum, mod) => modSum + mod.cost, 0);
+    return sum + baseCost + modsCost;
+  }, 0);
+  // Gear spent includes mods now
+  const gearSpent = selectedGear.reduce((sum, gear) => {
+    const baseCost = gear.cost * gear.quantity;
+    const modsCost = (gear.modifications || []).reduce((modSum, mod) => modSum + mod.cost, 0) * gear.quantity;
     return sum + baseCost + modsCost;
   }, 0);
   const fociSpent = selectedFoci.reduce((sum, focus) => sum + focus.cost, 0);
@@ -264,6 +269,10 @@ export function GearStep({ state, updateState, budgetValues }: StepProps) {
 
   // Check if gear item needs rating configuration
   const needsRatingConfig = (item: GearItemData): boolean => {
+    // Explicit rating flag from data
+    if (item.hasRating) {
+      return true;
+    }
     // Check if description mentions rating range (e.g., "Rating 1-6")
     if (item.description && /rating\s+\d+\s*-\s*\d+/i.test(item.description)) {
       return true;
@@ -297,7 +306,8 @@ export function GearStep({ state, updateState, budgetValues }: StepProps) {
               availability: modData.availability,
               restricted: modData.restricted,
               forbidden: modData.forbidden,
-              isBuiltIn: true
+              isBuiltIn: true,
+              capacityUsed: 0, // Weapon mods use mount points, not capacity
             });
             if (builtIn.mount || modData.mount) {
               builtinMounts.push(builtIn.mount || modData.mount!);
@@ -379,6 +389,9 @@ export function GearStep({ state, updateState, budgetValues }: StepProps) {
         cost: item.cost,
         availability: item.availability,
         rating: item.rating,
+        capacity: item.capacity || 0,
+        capacityUsed: 0,
+        modifications: [],
       };
       updatedGear = [...selectedGear, newItem];
     }
@@ -396,13 +409,33 @@ export function GearStep({ state, updateState, budgetValues }: StepProps) {
     if (!configuringGear) return;
 
     const item = configuringGear.item;
-    const maxRating = item.rating || 6; // Default to 6 if not specified
     const selectedRating = gearConfigRating;
 
-    // Calculate cost based on rating (if costPerRating, otherwise use base cost)
-    // For now, assume base cost is per rating level (common pattern)
-    const costPerRating = item.cost / maxRating;
-    const finalCost = costPerRating * selectedRating;
+    // Calculate cost based on rating
+    let finalCost = item.cost;
+    if (item.costPerRating) {
+      finalCost = item.cost * selectedRating;
+    } else if (item.rating && !item.hasRating && item.description && /rating\s+\d+\s*-\s*\d+/i.test(item.description)) {
+      // Fallback for inferred rating items: assume base cost is per rating if it looks like a variable rating item
+      // This preserves potential legacy behavior or fixes the previous buggy logic
+      // Previous logic was: costPerRating = item.cost / maxRating; which seemed wrong.
+      // We'll assume for legacy inferred items, the listed cost is for Rating 1 (or per rating).
+      finalCost = item.cost * selectedRating;
+    }
+
+    // Calculate capacity
+    let capacity = item.capacity || 0;
+    let capacityPerRating = item.capacityPerRating;
+
+    // Patch: Ensure Ear Buds has capacity even if catalog data is stale
+    if (item.name === "Ear Buds" && !capacity) {
+      capacity = 1;
+      capacityPerRating = true;
+    }
+
+    if (capacityPerRating && selectedRating) {
+      capacity *= selectedRating;
+    }
 
     const newItem: GearItem = {
       name: item.name,
@@ -411,6 +444,9 @@ export function GearStep({ state, updateState, budgetValues }: StepProps) {
       cost: finalCost,
       availability: item.availability,
       rating: selectedRating,
+      capacity: capacity > 0 ? capacity : undefined,
+      capacityUsed: capacity > 0 ? 0 : undefined,
+      modifications: [],
     };
 
     // If editing existing item
@@ -477,7 +513,7 @@ export function GearStep({ state, updateState, budgetValues }: StepProps) {
   };
 
   // Helper to open modification modal
-  const openModificationModal = (item: Weapon | ArmorItem, type: "weapon" | "armor", index: number) => {
+  const openModificationModal = (item: Weapon | ArmorItem | GearItem, type: "weapon" | "armor" | "gear", index: number) => {
     setModifyingItem({ item, type, index });
     setModModalOpen(true);
   };
@@ -580,6 +616,55 @@ export function GearStep({ state, updateState, budgetValues }: StepProps) {
       selections: {
         ...state.selections,
         armor: updatedArmor,
+      },
+    });
+  };
+
+  // Helper to install gear mod
+  const handleInstallGearMod = (mod: InstalledGearMod) => {
+    if (!modifyingItem || modifyingItem.type !== "gear") return;
+
+    const updatedGear = selectedGear.map((gear, i) => {
+      if (i !== modifyingItem.index) return gear;
+
+      const updatedMods = [...(gear.modifications || []), mod];
+      const updatedCapacityUsed = (gear.capacityUsed || 0) + mod.capacityUsed;
+
+      return {
+        ...gear,
+        modifications: updatedMods,
+        capacityUsed: updatedCapacityUsed,
+      };
+    });
+
+    updateState({
+      selections: {
+        ...state.selections,
+        gear: updatedGear,
+      },
+    });
+  };
+
+  // Helper to remove gear mod
+  const removeGearMod = (gearIndex: number, modIndex: number) => {
+    const updatedGear = selectedGear.map((gear, i) => {
+      if (i !== gearIndex) return gear;
+
+      const modToRemove = gear.modifications?.[modIndex];
+      const updatedMods = (gear.modifications || []).filter((_, mi) => mi !== modIndex);
+      const updatedCapacityUsed = (gear.capacityUsed || 0) - (modToRemove?.capacityUsed || 0);
+
+      return {
+        ...gear,
+        modifications: updatedMods,
+        capacityUsed: Math.max(0, updatedCapacityUsed),
+      };
+    });
+
+    updateState({
+      selections: {
+        ...state.selections,
+        gear: updatedGear,
       },
     });
   };
@@ -2163,6 +2248,10 @@ export function GearStep({ state, updateState, budgetValues }: StepProps) {
                   })
                   .find((g) => g.name === gear.name);
                 const needsConfig = catalogItem ? needsRatingConfig(catalogItem) : false;
+                const modsCost = (gear.modifications || []).reduce((sum, mod) => sum + mod.cost, 0);
+                const totalUnitCost = gear.cost + modsCost;
+                const hasCapacity = gear.capacity && gear.capacity > 0;
+
                 return (
                   <div
                     key={gIndex}
@@ -2176,15 +2265,28 @@ export function GearStep({ state, updateState, budgetValues }: StepProps) {
                           Base: ¥{formatCurrency(gear.cost)}
                           {gear.quantity > 1 && ` | Qty: ${gear.quantity}`}
                         </p>
+                        {hasCapacity && (
+                          <p className="text-xs text-zinc-500 dark:text-zinc-400">
+                            Capacity: {gear.capacityUsed || 0}/{gear.capacity}
+                          </p>
+                        )}
                       </div>
                       <div className="flex items-center gap-2">
-                        <span className="text-sm font-medium">¥{formatCurrency(gear.cost * gear.quantity)}</span>
+                        <span className="text-sm font-medium">¥{formatCurrency(totalUnitCost * gear.quantity)}</span>
                         {needsConfig && (
                           <button
                             onClick={() => configureGearItem(gIndex)}
                             className="rounded bg-blue-500 px-2 py-1 text-xs font-medium text-white hover:bg-blue-600"
                           >
                             Config
+                          </button>
+                        )}
+                        {hasCapacity && (
+                          <button
+                            onClick={() => openModificationModal(gear, "gear", gIndex)}
+                            className="rounded bg-blue-500 px-2 py-1 text-xs font-medium text-white hover:bg-blue-600"
+                          >
+                            +Mod
                           </button>
                         )}
                         <button
@@ -2203,6 +2305,30 @@ export function GearStep({ state, updateState, budgetValues }: StepProps) {
                         </button>
                       </div>
                     </div>
+                    {/* Installed mods */}
+                    {gear.modifications && gear.modifications.length > 0 && (
+                      <div className="mt-2 space-y-1 border-t border-zinc-200 pt-2 dark:border-zinc-600">
+                        {gear.modifications.map((mod, mIndex) => (
+                          <div key={mIndex} className="flex items-center justify-between text-xs">
+                            <div className="flex items-center gap-2">
+                              <span className="text-zinc-700 dark:text-zinc-300">{mod.name}</span>
+                              <span className="rounded bg-zinc-100 px-1.5 py-0.5 text-[10px] text-zinc-500 dark:bg-zinc-700 dark:text-zinc-400">
+                                {mod.capacityUsed} Cap
+                              </span>
+                            </div>
+                            <div className="flex items-center gap-2">
+                              <span className="text-zinc-500 dark:text-zinc-400">¥{formatCurrency(mod.cost)}</span>
+                              <button
+                                onClick={() => removeGearMod(gIndex, mIndex)}
+                                className="text-red-500 hover:text-red-600"
+                              >
+                                ×
+                              </button>
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+                    )}
                   </div>
                 );
               })}
@@ -2375,11 +2501,12 @@ export function GearStep({ state, updateState, budgetValues }: StepProps) {
             setModModalOpen(false);
             setModifyingItem(null);
           }}
-          item={modifyingItem.item}
-          itemType={modifyingItem.type}
+          item={modifyingItem?.item as Weapon | ArmorItem | GearItem}
+          itemType={modifyingItem?.type as "weapon" | "armor" | "gear"}
           remainingNuyen={remaining}
           onInstallWeaponMod={handleInstallWeaponMod}
           onInstallArmorMod={handleInstallArmorMod}
+          onInstallGearMod={handleInstallGearMod}
         />
       )}
 
@@ -2399,7 +2526,7 @@ export function GearStep({ state, updateState, budgetValues }: StepProps) {
                   onChange={(e) => setGearConfigRating(Number(e.target.value))}
                   className="w-full rounded border border-zinc-300 bg-white px-3 py-2 text-sm dark:border-zinc-600 dark:bg-zinc-700"
                 >
-                  {Array.from({ length: configuringGear.item.rating || 6 }, (_, i) => i + 1).map((rating) => (
+                  {Array.from({ length: configuringGear.item.maxRating || configuringGear.item.rating || 6 }, (_, i) => i + 1).map((rating) => (
                     <option key={rating} value={rating}>
                       {rating}
                     </option>
@@ -2408,7 +2535,13 @@ export function GearStep({ state, updateState, budgetValues }: StepProps) {
               </div>
               <div className="rounded bg-zinc-50 p-3 dark:bg-zinc-900">
                 <p className="text-sm text-zinc-600 dark:text-zinc-400">
-                  Cost: ¥{formatCurrency((configuringGear.item.cost / (configuringGear.item.rating || 6)) * gearConfigRating)}
+                  Cost: ¥{formatCurrency(
+                    configuringGear.item.costPerRating
+                      ? configuringGear.item.cost * gearConfigRating
+                      : (configuringGear.item.rating && !configuringGear.item.hasRating && configuringGear.item.description && /rating\s+\d+\s*-\s*\d+/i.test(configuringGear.item.description))
+                        ? configuringGear.item.cost * gearConfigRating
+                        : (configuringGear.item.cost / (configuringGear.item.maxRating || configuringGear.item.rating || 6)) * gearConfigRating
+                  )}
                 </p>
               </div>
               <div className="flex gap-2">

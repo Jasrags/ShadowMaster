@@ -19,6 +19,7 @@ import type {
   CharacterDraft,
   CharacterStatus,
   EditionCode,
+  QualitySelection,
 } from "../types";
 import {
   ensureDirectory,
@@ -321,11 +322,15 @@ export async function updateCharacterSkills(
 /**
  * Update character qualities
  */
+
+/**
+ * Update character qualities
+ */
 export async function updateCharacterQualities(
   userId: ID,
   characterId: ID,
-  positiveQualities: string[],
-  negativeQualities: string[]
+  positiveQualities: QualitySelection[],
+  negativeQualities: QualitySelection[]
 ): Promise<Character> {
   return updateCharacter(userId, characterId, {
     positiveQualities,

@@ -145,7 +145,7 @@ function validateSkillLimit(
     maxWithAptitude?: number;
   };
 
-  const hasAptitude = character.positiveQualities?.includes("aptitude");
+  const hasAptitude = character.positiveQualities?.some(q => q.id === "aptitude");
   const maxRating = hasAptitude ? (params.maxWithAptitude || 7) : (params.max || 6);
 
   for (const [skillId, rating] of Object.entries(character.skills || {})) {
@@ -278,7 +278,7 @@ function validateForbiddenCombination(
       presentItems = [
         ...(character.positiveQualities || []),
         ...(character.negativeQualities || []),
-      ];
+      ].map(q => q.id);
       break;
     case "skill":
       presentItems = Object.keys(character.skills || {});
@@ -322,7 +322,7 @@ function validateRequiredCombination(
     const allQualities = [
       ...(character.positiveQualities || []),
       ...(character.negativeQualities || []),
-    ].map((q) => q.toLowerCase());
+    ].map((q) => q.id.toLowerCase());
 
     if (
       allQualities.includes(params.ifHas.toLowerCase()) &&

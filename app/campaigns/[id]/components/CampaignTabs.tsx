@@ -1,8 +1,5 @@
 "use client";
 
-import Link from "next/link";
-import { useParams } from "next/navigation";
-
 interface CampaignTabsProps {
     activeTab: "overview" | "characters" | "notes" | "roster" | "locations" | "posts" | "calendar";
     onTabChange: (tab: "overview" | "characters" | "notes" | "roster" | "locations" | "posts" | "calendar") => void;
@@ -10,8 +7,6 @@ interface CampaignTabsProps {
 }
 
 export default function CampaignTabs({ activeTab, onTabChange, isGM }: CampaignTabsProps) {
-    const params = useParams();
-    const campaignId = params.id as string;
 
     const tabs = [
         { id: "overview" as const, label: "Overview" },

@@ -330,13 +330,21 @@ describe('Character Storage', () => {
       const updated = await updateCharacterQualities(
         userId1,
         draft.id,
-        ['aptitude', 'lucky'],
-        ['allergy']
+        [{ id: 'aptitude' }, { id: 'lucky' }],
+        [{ id: 'allergy' }]
       );
 
-      expect(updated.positiveQualities).toContain('aptitude');
-      expect(updated.positiveQualities).toContain('lucky');
-      expect(updated.negativeQualities).toContain('allergy');
+      expect(updated.positiveQualities).toEqual(
+        expect.arrayContaining([
+          expect.objectContaining({ id: 'aptitude' }),
+          expect.objectContaining({ id: 'lucky' })
+        ])
+      );
+      expect(updated.negativeQualities).toEqual(
+        expect.arrayContaining([
+          expect.objectContaining({ id: 'allergy' })
+        ])
+      );
     });
 
     it('should update character gear and nuyen', async () => {

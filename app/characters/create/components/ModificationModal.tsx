@@ -1,13 +1,15 @@
 "use client";
 
 import { useState, useMemo } from "react";
-import type { Weapon, ArmorItem, InstalledWeaponMod, InstalledArmorMod, WeaponMount } from "@/lib/types";
+import type { Weapon, ArmorItem, GearItem, InstalledWeaponMod, InstalledArmorMod, InstalledGearMod, WeaponMount } from "@/lib/types";
 import {
   useWeaponModifications,
   useArmorModifications,
+  useGearModifications,
   getAvailableMountsForWeaponType,
   type WeaponModificationCatalogItemData,
   type ArmorModificationCatalogItemData,
+  type GearModificationCatalogItemData,
 } from "@/lib/rules/RulesetContext";
 
 const MAX_AVAILABILITY = 12;
@@ -15,11 +17,12 @@ const MAX_AVAILABILITY = 12;
 interface ModificationModalProps {
   isOpen: boolean;
   onClose: () => void;
-  item: Weapon | ArmorItem;
-  itemType: "weapon" | "armor";
+  item: Weapon | ArmorItem | GearItem;
+  itemType: "weapon" | "armor" | "gear";
   remainingNuyen: number;
   onInstallWeaponMod?: (mod: InstalledWeaponMod) => void;
   onInstallArmorMod?: (mod: InstalledArmorMod) => void;
+  onInstallGearMod?: (mod: InstalledGearMod) => void;
 }
 
 function formatCurrency(value: number): string {
@@ -67,6 +70,17 @@ function calculateArmorModCost(
   return mod.cost;
 }
 
+// Calculate gear mod cost
+function calculateGearModCost(
+  mod: GearModificationCatalogItemData,
+  rating: number
+): number {
+  if (mod.costPerRating) {
+    return mod.cost * rating;
+  }
+  return mod.cost;
+}
+
 export function ModificationModal({
   isOpen,
   onClose,
@@ -75,6 +89,7 @@ export function ModificationModal({
   remainingNuyen,
   onInstallWeaponMod,
   onInstallArmorMod,
+  onInstallGearMod,
 }: ModificationModalProps) {
   const weaponMods = useWeaponModifications({
     maxAvailability: MAX_AVAILABILITY,
@@ -83,6 +98,11 @@ export function ModificationModal({
   const armorMods = useArmorModifications({
     maxAvailability: MAX_AVAILABILITY,
     excludeForbidden: true,
+  });
+  const gearMods = useGearModifications({
+    maxAvailability: MAX_AVAILABILITY,
+    excludeForbidden: true,
+    category: itemType === "gear" ? item.category : undefined,
   });
 
   const [searchQuery, setSearchQuery] = useState("");
@@ -103,14 +123,23 @@ export function ModificationModal({
     return weapon.occupiedMounts || [];
   }, [item, itemType]);
 
-  // Get used capacity for armor
-  const armorCapacityInfo = useMemo(() => {
-    if (itemType !== "armor") return { total: 0, used: 0 };
-    const armor = item as ArmorItem;
-    return {
-      total: armor.capacity || armor.armorRating,
-      used: armor.capacityUsed || 0,
-    };
+  // Get used capacity for armor/gear
+  const capacityInfo = useMemo(() => {
+    if (itemType === "armor") {
+      const armor = item as ArmorItem;
+      return {
+        total: armor.capacity || armor.armorRating,
+        used: armor.capacityUsed || 0,
+      };
+    }
+    if (itemType === "gear") {
+      const gear = item as GearItem;
+      return {
+        total: gear.capacity || 0,
+        used: gear.capacityUsed || 0,
+      };
+    }
+    return { total: 0, used: 0 };
   }, [item, itemType]);
 
   // Filter weapon modifications
@@ -223,7 +252,7 @@ export function ModificationModal({
     }
 
     // Filter by available capacity
-    const availableCapacity = armorCapacityInfo.total - armorCapacityInfo.used;
+    const availableCapacity = capacityInfo.total - capacityInfo.used;
     mods = mods.filter((mod) => {
       const capacityNeeded = mod.capacityPerRating
         ? mod.capacityCost * selectedRating
@@ -238,7 +267,41 @@ export function ModificationModal({
     });
 
     return mods;
-  }, [armorMods, searchQuery, armorCapacityInfo, remainingNuyen, itemType, selectedRating]);
+  }, [armorMods, searchQuery, capacityInfo, remainingNuyen, itemType, selectedRating]);
+
+  // Filter gear modifications
+  const filteredGearMods = useMemo(() => {
+    if (itemType !== "gear") return [];
+
+    let mods = gearMods;
+
+    // Filter by search
+    if (searchQuery) {
+      const query = searchQuery.toLowerCase();
+      mods = mods.filter(
+        (mod) =>
+          mod.name.toLowerCase().includes(query) ||
+          mod.description?.toLowerCase().includes(query)
+      );
+    }
+
+    // Filter by available capacity
+    const availableCapacity = capacityInfo.total - capacityInfo.used;
+    mods = mods.filter((mod) => {
+      const capacityNeeded = mod.capacityPerRating
+        ? mod.capacityCost * selectedRating
+        : mod.capacityCost;
+      return capacityNeeded <= availableCapacity;
+    });
+
+    // Filter by cost
+    mods = mods.filter((mod) => {
+      const cost = calculateGearModCost(mod, selectedRating);
+      return cost <= remainingNuyen;
+    });
+
+    return mods;
+  }, [gearMods, searchQuery, capacityInfo, remainingNuyen, itemType, selectedRating]);
 
 
   // Calculate armor mod capacity
@@ -247,6 +310,17 @@ export function ModificationModal({
     rating: number
   ): number {
     if (mod.noCapacityCost) return 0;
+    if (mod.capacityPerRating) {
+      return mod.capacityCost * rating;
+    }
+    return mod.capacityCost;
+  }
+
+  // Calculate gear mod capacity
+  function calculateGearModCapacity(
+    mod: GearModificationCatalogItemData,
+    rating: number
+  ): number {
     if (mod.capacityPerRating) {
       return mod.capacityCost * rating;
     }
@@ -270,6 +344,7 @@ export function ModificationModal({
       availability: mod.availability * (rating || 1),
       restricted: mod.restricted,
       forbidden: mod.forbidden,
+      capacityUsed: 0, // Weapon mods use mount points, not capacity
     };
 
     onInstallWeaponMod(installedMod);
@@ -299,6 +374,29 @@ export function ModificationModal({
     onClose();
   };
 
+  // Handle installing gear mod
+  const handleInstallGearMod = (mod: GearModificationCatalogItemData) => {
+    if (!onInstallGearMod) return;
+
+    const cost = calculateGearModCost(mod, selectedRating);
+    const capacityUsed = calculateGearModCapacity(mod, selectedRating);
+    const rating = mod.hasRating ? selectedRating : undefined;
+
+    const installedMod: InstalledGearMod = {
+      catalogId: mod.id,
+      name: mod.hasRating ? `${mod.name} (R${selectedRating})` : mod.name,
+      rating,
+      capacityUsed,
+      cost,
+      availability: mod.availability, // Gear mods valid at creation are usually flat avail
+      restricted: mod.restricted,
+      forbidden: mod.forbidden,
+    };
+
+    onInstallGearMod(installedMod);
+    onClose();
+  };
+
   if (!isOpen) return null;
 
   const mountTypes: (WeaponMount | "all")[] = ["all", "top", "under", "side", "barrel", "stock", "internal"];
@@ -317,7 +415,7 @@ export function ModificationModal({
         <div className="border-b border-zinc-200 p-4 dark:border-zinc-700">
           <div className="flex items-center justify-between">
             <h2 className="text-lg font-semibold text-zinc-900 dark:text-zinc-100">
-              {itemType === "weapon" ? "Weapon Modifications" : "Armor Modifications"}
+              {itemType === "weapon" ? "Weapon Modifications" : itemType === "armor" ? "Armor Modifications" : "Gear Modifications"}
             </h2>
             <button
               onClick={onClose}
@@ -332,9 +430,9 @@ export function ModificationModal({
           {/* Item info */}
           <div className="mt-2 text-sm text-zinc-600 dark:text-zinc-400">
             <span className="font-medium">{item.name}</span>
-            {itemType === "armor" && (
+            {(itemType === "armor" || itemType === "gear") && (
               <span className="ml-2">
-                (Capacity: {armorCapacityInfo.used}/{armorCapacityInfo.total})
+                (Capacity: {capacityInfo.used}/{capacityInfo.total})
               </span>
             )}
             {itemType === "weapon" && occupiedMounts.length > 0 && (
@@ -468,7 +566,7 @@ export function ModificationModal({
                 })}
               </div>
             )
-          ) : (
+          ) : itemType === "armor" ? (
             filteredArmorMods.length === 0 ? (
               <p className="text-center text-sm text-zinc-500 dark:text-zinc-400">
                 No compatible modifications available.
@@ -514,6 +612,61 @@ export function ModificationModal({
                         </span>
                         <button
                           onClick={() => handleInstallArmorMod(mod)}
+                          className="rounded-lg bg-emerald-600 px-3 py-1.5 text-sm font-medium text-white hover:bg-emerald-700"
+                        >
+                          Install
+                        </button>
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+            )
+          ) : (
+            /* Gear Mods */
+            filteredGearMods.length === 0 ? (
+              <p className="text-center text-sm text-zinc-500 dark:text-zinc-400">
+                No compatible modifications available.
+              </p>
+            ) : (
+              <div className="space-y-2">
+                {filteredGearMods.map((mod) => {
+                  const cost = calculateGearModCost(mod, selectedRating);
+                  const capacity = calculateGearModCapacity(mod, selectedRating);
+
+                  return (
+                    <div
+                      key={mod.id}
+                      className="flex items-center justify-between rounded-lg border border-zinc-200 p-3 dark:border-zinc-700 hover:bg-zinc-50 dark:hover:bg-zinc-700/50"
+                    >
+                      <div className="flex-1 min-w-0">
+                        <div className="flex items-center gap-2">
+                          <span className="font-medium text-sm text-zinc-900 dark:text-zinc-100">
+                            {mod.name}
+                            {mod.hasRating && ` (R${selectedRating})`}
+                          </span>
+                          <span className="rounded bg-blue-100 px-1.5 py-0.5 text-[10px] font-medium text-blue-700 dark:bg-blue-900/50 dark:text-blue-300">
+                            {capacity} Cap
+                          </span>
+                          {mod.restricted && (
+                            <span className="rounded bg-amber-100 px-1.5 py-0.5 text-[10px] font-medium text-amber-700 dark:bg-amber-900/50 dark:text-amber-300">
+                              R
+                            </span>
+                          )}
+                        </div>
+                        <p className="mt-1 text-xs text-zinc-500 dark:text-zinc-400 line-clamp-2">
+                          {mod.description}
+                        </p>
+                        <div className="mt-1 flex items-center gap-3 text-xs text-zinc-500 dark:text-zinc-400">
+                          <span>Avail: {getAvailabilityDisplay(mod.availability, mod.restricted, mod.forbidden)}</span>
+                        </div>
+                      </div>
+                      <div className="ml-4 flex items-center gap-3">
+                        <span className="text-sm font-medium text-zinc-900 dark:text-zinc-100">
+                          ¥{formatCurrency(cost)}
+                        </span>
+                        <button
+                          onClick={() => handleInstallGearMod(mod)}
                           className="rounded-lg bg-emerald-600 px-3 py-1.5 text-sm font-medium text-white hover:bg-emerald-700"
                         >
                           Install
