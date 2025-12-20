@@ -6,10 +6,15 @@ import path from 'path';
 const CORE_RULEBOOK_PATH = path.join(process.cwd(), 'data/editions/sr5/core-rulebook.json');
 const CHARACTERS_BASE_DIR = path.join(process.cwd(), 'data/characters');
 
+interface QualityData {
+    id: string;
+    name?: string;
+}
+
 interface RulesetData {
     modules: {
-        qualities: { payload: { positive: any[]; negative: any[]; racial?: any[] } };
-        gear: { payload: { [key: string]: any } };
+        qualities: { payload: { positive: QualityData[]; negative: QualityData[]; racial?: QualityData[] } };
+        gear: { payload: Record<string, unknown> };
     };
 }
 
@@ -54,25 +59,36 @@ async function syncCharacter(characterId: string) {
 
     // Flatten all catalog items from gear payload
     const gearPayload = rulebook.modules.gear.payload;
-    const allCatalogItems: any[] = [];
+    const allCatalogItems: Record<string, unknown>[] = [];
 
     Object.keys(gearPayload).forEach(key => {
         if (key === 'categories') return;
-        if (key === 'weapons') {
-            Object.values(gearPayload.weapons).forEach((weaponList: any) => {
-                allCatalogItems.push(...weaponList);
+        const payloadValue = gearPayload[key];
+        if (key === 'weapons' && payloadValue && typeof payloadValue === 'object') {
+            const weapons = payloadValue as Record<string, unknown>;
+            Object.values(weapons).forEach((weaponList) => {
+                if (Array.isArray(weaponList)) {
+                    allCatalogItems.push(...(weaponList as Record<string, unknown>[]));
+                }
             });
-        } else if (Array.isArray(gearPayload[key])) {
-            allCatalogItems.push(...gearPayload[key]);
+        } else if (Array.isArray(payloadValue)) {
+            allCatalogItems.push(...(payloadValue as Record<string, unknown>[]));
         }
     });
 
-    const syncItems = (items: any[]) => {
+    const syncItems = (items: Record<string, unknown>[] | undefined) => {
         if (!items) return;
         items.forEach(item => {
-            const rulebookItem = allCatalogItems.find(ri => ri.id === (item.catalogId || item.id) || ri.name === item.name);
+            const itemId = (item.catalogId || item.id || item.name) as string | undefined;
+            if (!itemId) return;
+            
+            const rulebookItem = allCatalogItems.find(ri => {
+                const riId = ri.id as string | undefined;
+                const riName = ri.name as string | undefined;
+                return riId === itemId || riName === itemId || riId === (item.id as string) || riName === (item.name as string);
+            });
             if (rulebookItem) {
-                console.log(`Syncing item: ${item.name || item.id}`);
+                console.log(`Syncing item: ${(item.name || item.id) as string}`);
                 Object.keys(rulebookItem).forEach(key => {
                     if (key !== 'id' && key !== 'name' && key !== 'quantity' && key !== 'equipped') {
                         item[key] = rulebookItem[key];
@@ -83,20 +99,20 @@ async function syncCharacter(characterId: string) {
     };
 
     // Sync Weapons, Armor, Gear, Vehicles
-    syncItems(charData.weapons);
-    syncItems(charData.armor);
-    syncItems(charData.gear);
-    syncItems(charData.vehicles);
+    syncItems(charData.weapons as Record<string, unknown>[] | undefined);
+    syncItems(charData.armor as Record<string, unknown>[] | undefined);
+    syncItems(charData.gear as Record<string, unknown>[] | undefined);
+    syncItems(charData.vehicles as Record<string, unknown>[] | undefined);
 
-    if (character.weapons) syncItems(character.weapons);
-    if (character.armor) syncItems(character.armor);
-    if (character.gear) syncItems(character.gear);
-    if (character.vehicles) syncItems(character.vehicles);
+    if (character.weapons) syncItems(character.weapons as Record<string, unknown>[]);
+    if (character.armor) syncItems(character.armor as Record<string, unknown>[]);
+    if (character.gear) syncItems(character.gear as Record<string, unknown>[]);
+    if (character.vehicles) syncItems(character.vehicles as Record<string, unknown>[]);
 
     // Sync Qualities
-    const syncQualities = (charQuals: any[], rulebookQuals: any[]) => {
+    const syncQualities = (charQuals: (string | { id: string })[] | undefined, rulebookQuals: QualityData[]) => {
         if (!charQuals) return;
-        charQuals.forEach((q, index) => {
+        charQuals.forEach((q) => {
             const qId = typeof q === 'string' ? q : q.id;
             const rbQ = rulebookQuals.find(rq => rq.id === qId || rq.name === qId);
             if (rbQ) {

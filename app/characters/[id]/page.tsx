@@ -4,6 +4,7 @@ import { useEffect, useState, use, useMemo } from "react";
 import { Link, Button, Modal, ModalOverlay, Dialog, Heading } from "react-aria-components";
 import type {
   Character,
+  QualitySelection,
   Weapon,
   ArmorItem,
   AdeptPower,
@@ -22,9 +23,11 @@ import {
   useSpells,
   useMetatypes,
   useSkills,
+  useQualities,
   type SkillData,
   type SpellData,
-  type SpellsCatalogData
+  type SpellsCatalogData,
+  type QualityData
 } from "@/lib/rules";
 import { DownloadIcon, X } from "lucide-react";
 import { THEMES, DEFAULT_THEME, type Theme, type ThemeId } from "@/lib/themes";
@@ -524,26 +527,114 @@ function KnowledgeAndLanguages({ character, onSelect, theme }: KnowledgeAndLangu
   );
 }
 
-interface QualityBadgeProps {
-  name: string;
-  type: "positive" | "negative";
+interface QualitiesSectionProps {
+  character: Character;
   theme?: Theme;
 }
 
-function QualityBadge({ name, type, theme }: QualityBadgeProps) {
-  const t = theme || THEMES[DEFAULT_THEME];
-  const isPositive = type === "positive";
-  const badgeStyle = isPositive ? t.components.badge.positive : t.components.badge.negative;
+function QualitiesSection({ character, theme }: QualitiesSectionProps) {
+  const { positive: positiveData, negative: negativeData } = useQualities();
+
+  const renderQualityList = (selections: QualitySelection[], isPositive: boolean) => {
+    if (!selections || selections.length === 0) return null;
+
+    return (
+      <div className="space-y-2">
+        <span className="text-[10px] font-mono text-muted-foreground uppercase tracking-widest block ml-1">
+          {isPositive ? 'Positive Qualities' : 'Negative Qualities'}
+        </span>
+        <div className="space-y-1.5 px-0.5">
+          {selections.map((selection) => {
+            const id = typeof selection === 'string' ? selection : selection.id;
+            const data = (isPositive
+              ? positiveData.find((q: QualityData) => q.id === id)
+              : negativeData.find((q: QualityData) => q.id === id)) as QualityData | undefined;
+
+            const name = data?.name || id.replace(/-/g, ' ');
+
+            // Use structured data first, then fall back to creationState metadata
+            const rawSelection = typeof selection === 'string' ? {} as Partial<QualitySelection> : selection;
+            const creationState = character.metadata?.creationState;
+            const selections = creationState && typeof creationState === 'object' && 'selections' in creationState 
+              ? creationState.selections as Record<string, unknown>
+              : undefined;
+            const qualityLevels = selections && typeof selections === 'object' && 'qualityLevels' in selections
+              ? selections.qualityLevels as Record<string, number | undefined> | undefined
+              : undefined;
+            const qualitySpecifications = selections && typeof selections === 'object' && 'qualitySpecifications' in selections
+              ? selections.qualitySpecifications as Record<string, string | undefined> | undefined
+              : undefined;
+            const level = rawSelection.rating ?? qualityLevels?.[id];
+            const spec = rawSelection.specification ?? qualitySpecifications?.[id];
+
+            const extraParts: string[] = [];
+
+            if (level !== undefined && level !== null) {
+              if (data?.levels) {
+                const levelInfo = data.levels.find((l: { level: number; name?: string }) => l.level === level);
+                if (levelInfo) {
+                  extraParts.push(levelInfo.name);
+                } else {
+                  extraParts.push(`Rating ${level}`);
+                }
+              } else {
+                extraParts.push(`Rating ${level}`);
+              }
+            }
+
+            if (spec) {
+              extraParts.push(spec);
+            }
+
+            if (character.sinnerQuality && id === 'sinner') {
+              // Special case for SINner quality which often has a type
+              extraParts.push(character.sinnerQuality.charAt(0).toUpperCase() + character.sinnerQuality.slice(1));
+            }
+
+            // Fallback to notes if nothing else
+            if (extraParts.length === 0 && character.qualityNotes?.[id]) {
+              extraParts.push(character.qualityNotes[id]);
+            }
+
+            const extra = extraParts.join(", ");
+
+            return (
+              <div
+                key={id}
+                className={`flex items-center justify-between py-2 px-3 bg-muted/30 rounded border-l-2 transition-all ${isPositive ? 'border-emerald-500/30' : 'border-red-500/30'
+                  } hover:bg-muted/50 group`}
+              >
+                <span className="text-xs font-medium text-foreground/90 group-hover:text-foreground">
+                  {name}
+                </span>
+                {extra && (
+                  <span className="text-[10px] font-mono text-amber-500 dark:text-amber-400 font-bold px-2 py-0.5 bg-background/50 rounded-sm">
+                    {extra}
+                  </span>
+                )}
+              </div>
+            );
+          })}
+        </div>
+      </div>
+    );
+  };
+
+  if (!character.positiveQualities?.length && !character.negativeQualities?.length) {
+    return (
+      <Section theme={theme} title="Qualities">
+        <p className="text-sm text-zinc-500 italic px-1">No qualities selected</p>
+      </Section>
+    );
+  }
 
   return (
-    <span
-      className={`inline-flex items-center px-2 py-1 text-xs font-medium rounded border ${badgeStyle}`}
-    >
-      <span className={`mr-1 ${isPositive ? (t.id === 'modern-card' ? "text-green-600 dark:text-green-400" : "text-emerald-500") : (t.id === 'modern-card' ? "text-red-600 dark:text-red-400" : "text-red-500")}`}>
-        {isPositive ? "+" : "−"}
-      </span>
-      {name.replace(/-/g, " ")}
-    </span>
+    <Section theme={theme} title="Qualities">
+      <div className="space-y-6">
+        {renderQualityList(character.positiveQualities, true)}
+        {renderQualityList(character.negativeQualities, false)}
+      </div>
+    </Section>
   );
 }
 
@@ -563,18 +654,30 @@ interface GearItemProps {
 
 function GearItem({ item, theme }: GearItemProps) {
   const t = theme || THEMES[DEFAULT_THEME];
+
+  // Use a neutral but tech-y color for gear, maybe blue/indigo to distinguish from weapons
+  const borderColor = t.id === 'modern-card' ? 'border-indigo-400/50' : 'border-indigo-500/40';
+  const ratingColor = t.id === 'modern-card' ? 'text-indigo-600 bg-indigo-50' : 'text-indigo-400 bg-indigo-500/10';
+
   return (
-    <div className={`flex items-center justify-between py-2 px-3 bg-muted/50 rounded border-l-2 group hover:bg-muted/80 transition-colors ${t.id === 'modern-card' ? 'border-primary/20 hover:border-primary' : 'border-primary/40'
-      }`}>
-      <div>
-        <span className={`text-sm text-foreground transition-colors ${t.id === 'modern-card' ? '' : 'group-hover:text-emerald-400'}`}>{item.name}</span>
-        {item.rating && (
-          <span className="ml-2 text-xs text-muted-foreground">R{item.rating}</span>
-        )}
-        <span className="ml-2 text-xs text-muted-foreground">{item.category}</span>
+    <div className={`flex items-center justify-between py-2 px-3 bg-muted/30 rounded border-l-2 transition-all ${borderColor} hover:bg-muted/50 group`}>
+      <div className="flex flex-col gap-0.5">
+        <div className="flex items-center gap-2">
+          <span className="text-xs font-medium text-foreground/90 group-hover:text-foreground">
+            {item.name}
+          </span>
+          {item.rating && (
+            <span className={`text-[9px] font-mono font-bold px-1.5 py-px rounded-sm ${ratingColor}`}>
+              R{item.rating}
+            </span>
+          )}
+        </div>
+        <span className="text-[10px] text-muted-foreground/60 uppercase tracking-wider">{item.category}</span>
       </div>
       {item.quantity > 1 && (
-        <span className={`text-xs ${t.fonts.mono} text-muted-foreground`}>×{item.quantity}</span>
+        <span className={`text-xs ${t.fonts.mono} font-medium text-muted-foreground bg-background/50 px-2 py-1 rounded`}>
+          ×{item.quantity}
+        </span>
       )}
     </div>
   );
@@ -638,7 +741,6 @@ function WeaponTable({ weapons, character, type, onSelect, theme }: WeaponTableP
         <tbody>
           {weapons.map((w, idx) => {
             const isMelee = isMeleeWeapon(w);
-            const hasReach = typeof w.reach === 'number';
 
             let basePool = 0;
             let poolLabel = w.name;
@@ -1506,35 +1608,7 @@ function CharacterSheet({
             ) : null}
 
             {/* Qualities */}
-            <Section theme={theme} title="Qualities">
-              {(character.positiveQualities?.length || 0) === 0 &&
-                (character.negativeQualities?.length || 0) === 0 ? (
-                <p className="text-sm text-zinc-500 italic">No qualities selected</p>
-              ) : (
-                <div className="space-y-4">
-                  {character.positiveQualities && character.positiveQualities.length > 0 && (
-                    <div>
-                      <span className="text-xs font-mono text-emerald-500 uppercase mb-2 block">Positive</span>
-                      <div className="flex flex-wrap gap-2">
-                        {character.positiveQualities.map((quality) => (
-                          <QualityBadge theme={theme} key={quality} name={quality} type="positive" />
-                        ))}
-                      </div>
-                    </div>
-                  )}
-                  {character.negativeQualities && character.negativeQualities.length > 0 && (
-                    <div>
-                      <span className="text-xs font-mono text-red-500 uppercase mb-2 block">Negative</span>
-                      <div className="flex flex-wrap gap-2">
-                        {character.negativeQualities.map((quality) => (
-                          <QualityBadge theme={theme} key={quality} name={quality} type="negative" />
-                        ))}
-                      </div>
-                    </div>
-                  )}
-                </div>
-              )}
-            </Section>
+            <QualitiesSection character={character} theme={theme} />
 
             {/* General Gear */}
             <Section theme={theme} title="General Gear">

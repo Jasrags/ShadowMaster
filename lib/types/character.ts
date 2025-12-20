@@ -44,6 +44,15 @@ export type CharacterApprovalStatus =
   | "not-applicable"; // Not in a campaign or no approval required
 
 /**
+ * Selection of a quality during character creation/advancement
+ */
+export interface QualitySelection {
+  id: string;
+  rating?: number;
+  specification?: string;
+}
+
+/**
  * A complete Shadowrun character
  */
 export interface Character {
@@ -155,11 +164,11 @@ export interface Character {
   // Qualities
   // -------------------------------------------------------------------------
 
-  /** Positive quality IDs */
-  positiveQualities: string[];
+  /** Positive quality IDs with ratings/specifications */
+  positiveQualities: QualitySelection[];
 
-  /** Negative quality IDs */
-  negativeQualities: string[];
+  /** Negative quality IDs with ratings/specifications */
+  negativeQualities: QualitySelection[];
 
   /** Racial qualities/traits from metatype (e.g., "Low-Light Vision", "Thermographic Vision") */
   racialQualities?: string[];
@@ -460,14 +469,40 @@ export interface Lifestyle {
   notes?: string;
 }
 
+/**
+ * Installed modification on a gear item
+ */
+export interface InstalledGearMod {
+  /** Reference to catalog modification ID */
+  catalogId: string;
+  name: string;
+  /** Rating if the mod has one */
+  rating?: number;
+  /** Capacity slots used by this mod */
+  capacityUsed: number;
+  /** Actual cost paid for this mod */
+  cost: number;
+  /** Actual availability of this mod */
+  availability: number;
+  restricted?: boolean;
+  forbidden?: boolean;
+}
+
 export interface GearItem {
   id?: ID;
   name: string;
   category: string;
   quantity: number;
+  /** Total cost including mods */
   cost: number;
   availability?: number;
   rating?: number;
+  /** Total capacity for modifications */
+  capacity?: number;
+  /** Capacity currently used by modifications */
+  capacityUsed?: number;
+  /** Installed modifications on this item */
+  modifications?: InstalledGearMod[];
   notes?: string;
   metadata?: Metadata;
 }
@@ -496,6 +531,8 @@ export interface InstalledWeaponMod {
   forbidden?: boolean;
   /** New: Flags built-in mods that cannot be removed */
   isBuiltIn?: boolean;
+  /** Capacity/Slots used by this mod */
+  capacityUsed?: number;
 }
 
 /**

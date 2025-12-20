@@ -23,8 +23,8 @@ import type {
   ContactTemplateData,
   WeaponMountType,
 } from "../types";
-import { QualityData, AdeptPowerCatalogItem, TraditionData, MentorSpiritData, TraditionSpiritTypes, MentorSpiritAdvantages, RitualData, RitualKeywordData, MinionStatsData, VehicleCategoryData, DroneSizeData, VehicleCatalogItemData, DroneCatalogItemData, RCCCatalogItemData, AutosoftCatalogItemData, HandlingRatingData, DroneWeaponMountsData, ProgramCatalogItemData, ProgramsCatalogData, FocusCatalogItemData, SpiritsCatalogData, ModificationsCatalogData, WeaponModificationCatalogItemData, ArmorModificationCatalogItemData, CyberwareModificationCatalogItemData, LifestyleSubscriptionCatalogItem } from "./loader";
-export type { QualityData, TraditionData, MentorSpiritData, TraditionSpiritTypes, MentorSpiritAdvantages, RitualData, RitualKeywordData, MinionStatsData, VehicleCategoryData, DroneSizeData, VehicleCatalogItemData, DroneCatalogItemData, RCCCatalogItemData, AutosoftCatalogItemData, HandlingRatingData, DroneWeaponMountsData, ProgramCatalogItemData, ProgramsCatalogData, FocusCatalogItemData, SpiritsCatalogData, ModificationsCatalogData, WeaponModificationCatalogItemData, ArmorModificationCatalogItemData, CyberwareModificationCatalogItemData, LifestyleSubscriptionCatalogItem };
+import { QualityData, AdeptPowerCatalogItem, TraditionData, MentorSpiritData, TraditionSpiritTypes, MentorSpiritAdvantages, RitualData, RitualKeywordData, MinionStatsData, VehicleCategoryData, DroneSizeData, VehicleCatalogItemData, DroneCatalogItemData, RCCCatalogItemData, AutosoftCatalogItemData, HandlingRatingData, DroneWeaponMountsData, ProgramCatalogItemData, ProgramsCatalogData, FocusCatalogItemData, SpiritsCatalogData, ModificationsCatalogData, WeaponModificationCatalogItemData, ArmorModificationCatalogItemData, CyberwareModificationCatalogItemData, GearModificationCatalogItemData, LifestyleSubscriptionCatalogItem } from "./loader";
+export type { QualityData, TraditionData, MentorSpiritData, TraditionSpiritTypes, MentorSpiritAdvantages, RitualData, RitualKeywordData, MinionStatsData, VehicleCategoryData, DroneSizeData, VehicleCatalogItemData, DroneCatalogItemData, RCCCatalogItemData, AutosoftCatalogItemData, HandlingRatingData, DroneWeaponMountsData, ProgramCatalogItemData, ProgramsCatalogData, FocusCatalogItemData, SpiritsCatalogData, ModificationsCatalogData, WeaponModificationCatalogItemData, ArmorModificationCatalogItemData, CyberwareModificationCatalogItemData, GearModificationCatalogItemData, LifestyleSubscriptionCatalogItem };
 
 // =============================================================================
 // TYPES
@@ -117,6 +117,11 @@ export interface GearItemData {
   forbidden?: boolean;
   rating?: number;
   description?: string;
+  hasRating?: boolean;
+  maxRating?: number;
+  costPerRating?: boolean;
+  capacity?: number;
+  capacityPerRating?: boolean;
 }
 
 export interface WeaponData extends GearItemData {
@@ -875,6 +880,49 @@ export function useArmorModifications(options?: {
     if (options?.maxCapacityCost !== undefined) {
       filtered = filtered.filter(
         (item) => item.capacityCost <= options.maxCapacityCost!
+      );
+    }
+
+    return filtered;
+  }, [data.modifications, options]);
+}
+
+/**
+ * Hook to get gear modifications with optional filtering
+ */
+export function useGearModifications(options?: {
+  maxAvailability?: number;
+  excludeForbidden?: boolean;
+  excludeRestricted?: boolean;
+  maxCapacityCost?: number;
+  category?: string;
+}): GearModificationCatalogItemData[] {
+  const { data } = useRuleset();
+
+  return useMemo(() => {
+    if (!data.modifications?.gearMods) return [];
+
+    let filtered = [...data.modifications.gearMods];
+
+    if (options?.maxAvailability !== undefined) {
+      filtered = filtered.filter(
+        (item) => item.availability <= options.maxAvailability!
+      );
+    }
+
+    if (options?.excludeForbidden) {
+      filtered = filtered.filter((item) => !item.forbidden);
+    }
+
+    if (options?.excludeRestricted) {
+      filtered = filtered.filter((item) => !item.restricted);
+    }
+
+    if (options?.category) {
+      filtered = filtered.filter(
+        (item) =>
+          !item.applicableCategories ||
+          item.applicableCategories.includes(options.category!)
       );
     }
 

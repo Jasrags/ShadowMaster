@@ -18,7 +18,6 @@ import CampaignTabs from "./components/CampaignTabs";
 import CampaignOverviewTab from "./components/CampaignOverviewTab";
 import CampaignCharactersTab from "./components/CampaignCharactersTab";
 import CampaignNotesTab from "./components/CampaignNotesTab";
-import CampaignSessionsTab from "./components/CampaignSessionsTab";
 import CampaignRosterTab from "./components/CampaignRosterTab";
 import CampaignPostsTab from "./components/CampaignPostsTab";
 import CampaignCalendarTab from "./components/CampaignCalendarTab";

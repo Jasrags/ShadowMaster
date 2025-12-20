@@ -1219,8 +1219,16 @@ export function CreationWizard({ onCancel, onComplete, characterId: initialChara
         skillSpecializations: (state.selections.skillSpecializations as Record<string, string[]>) || {},
         knowledgeSkills: (state.selections.knowledgeSkills as Array<{ name: string; category: string; rating: number }>) || [],
         languages: (state.selections.languages as Array<{ name: string; rating: number; isNative?: boolean }>) || [],
-        positiveQualities: (state.selections.positiveQualities as string[]) || [],
-        negativeQualities: (state.selections.negativeQualities as string[]) || [],
+        positiveQualities: ((state.selections.positiveQualities as string[]) || []).map(id => ({
+          id,
+          rating: (state.selections.qualityLevels as Record<string, number>)?.[id],
+          specification: (state.selections.qualitySpecifications as Record<string, string>)?.[id]
+        })),
+        negativeQualities: ((state.selections.negativeQualities as string[]) || []).map(id => ({
+          id,
+          rating: (state.selections.qualityLevels as Record<string, number>)?.[id],
+          specification: (state.selections.qualitySpecifications as Record<string, string>)?.[id]
+        })),
         racialQualities: (state.selections.racialQualities as string[]) || [],
         spells: (state.selections.spells as string[]) || [],
         complexForms: (state.selections.complexForms as string[]) || [],

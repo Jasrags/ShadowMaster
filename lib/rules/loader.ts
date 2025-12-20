@@ -530,6 +530,11 @@ export interface GearItemData {
   forbidden?: boolean;
   rating?: number;
   description?: string;
+  hasRating?: boolean;
+  maxRating?: number;
+  costPerRating?: boolean;
+  capacity?: number;
+  capacityPerRating?: boolean;
 }
 
 /**
@@ -1580,12 +1585,47 @@ export interface CyberwareModificationCatalogItemData {
 }
 
 /**
+ * Gear modification catalog item data structure
+ */
+export interface GearModificationCatalogItemData {
+  id: string;
+  name: string;
+  /** Capacity cost */
+  capacityCost: number;
+  /** Whether capacity cost scales with rating */
+  capacityPerRating?: boolean;
+  /** Whether the mod has a rating */
+  hasRating?: boolean;
+  /** Maximum rating if applicable */
+  maxRating?: number;
+  /** Base cost in nuyen */
+  cost: number;
+  /** Whether cost scales with rating */
+  costPerRating?: boolean;
+  /** Base availability */
+  availability: number;
+  /** Whether availability is Restricted */
+  restricted?: boolean;
+  /** Whether availability is Forbidden */
+  forbidden?: boolean;
+  /** Applicable gear categories/subcategories (e.g., "audio") */
+  applicableCategories?: string[];
+  /** Description */
+  description?: string;
+  /** Page reference */
+  page?: number;
+  /** Source book */
+  source?: string;
+}
+
+/**
  * Complete modifications catalog data structure
  */
 export interface ModificationsCatalogData {
   weaponMods: WeaponModificationCatalogItemData[];
   armorMods: ArmorModificationCatalogItemData[];
   cyberwareMods?: CyberwareModificationCatalogItemData[];
+  gearMods?: GearModificationCatalogItemData[];
 }
 
 /**
@@ -1610,6 +1650,14 @@ export function extractArmorModifications(ruleset: LoadedRuleset): ArmorModifica
 export function extractCyberwareModifications(ruleset: LoadedRuleset): CyberwareModificationCatalogItemData[] {
   const ruleModule = extractModule<ModificationsCatalogData>(ruleset, "modifications");
   return ruleModule?.cyberwareMods || [];
+}
+
+/**
+ * Load gear modifications from a ruleset
+ */
+export function extractGearModifications(ruleset: LoadedRuleset): GearModificationCatalogItemData[] {
+  const ruleModule = extractModule<ModificationsCatalogData>(ruleset, "modifications");
+  return ruleModule?.gearMods || [];
 }
 
 /**
