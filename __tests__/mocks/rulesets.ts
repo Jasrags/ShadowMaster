@@ -34,81 +34,11 @@ export function createMockBook(overrides?: Partial<Book>): Book {
   return {
     id: 'core-rulebook',
     editionId: 'sr5',
-    name: 'Core Rulebook',
-    loadOrder: 1,
-    payload: {
-      modules: {
-        metatypes: {
-          payload: {
-            human: {
-              id: 'human',
-              name: 'Human',
-              attributes: {
-                body: { min: 1, max: 6 },
-                agility: { min: 1, max: 6 },
-                reaction: { min: 1, max: 6 },
-                strength: { min: 1, max: 6 },
-                willpower: { min: 1, max: 6 },
-                logic: { min: 1, max: 6 },
-                intuition: { min: 1, max: 6 },
-                charisma: { min: 1, max: 6 },
-              },
-            },
-            elf: {
-              id: 'elf',
-              name: 'Elf',
-              attributes: {
-                body: { min: 1, max: 6 },
-                agility: { min: 1, max: 7 },
-                reaction: { min: 1, max: 6 },
-                strength: { min: 1, max: 6 },
-                willpower: { min: 1, max: 6 },
-                logic: { min: 1, max: 6 },
-                intuition: { min: 1, max: 6 },
-                charisma: { min: 2, max: 8 },
-              },
-            },
-          },
-        },
-        skills: {
-          payload: {
-            'firearms': {
-              id: 'firearms',
-              name: 'Firearms',
-              linkedAttribute: 'agility',
-              group: 'combat',
-              canDefault: true,
-            },
-            'athletics': {
-              id: 'athletics',
-              name: 'Athletics',
-              linkedAttribute: 'strength',
-              group: 'physical',
-              canDefault: true,
-            },
-          },
-        },
-        'priority-table': {
-          payload: {
-            levels: ['A', 'B', 'C', 'D', 'E'],
-            categories: [
-              { id: 'metatype', name: 'Metatype' },
-              { id: 'attributes', name: 'Attributes' },
-              { id: 'skills', name: 'Skills' },
-              { id: 'magic', name: 'Magic/Resonance' },
-              { id: 'resources', name: 'Resources' },
-            ],
-            table: {
-              A: { metatype: 'human', attributes: 24, skills: 46, magic: 'mundane', resources: 450000 },
-              B: { metatype: 'human', attributes: 20, skills: 36, magic: 'mundane', resources: 275000 },
-              C: { metatype: 'human', attributes: 16, skills: 28, magic: 'mundane', resources: 140000 },
-              D: { metatype: 'human', attributes: 14, skills: 22, magic: 'mundane', resources: 50000 },
-              E: { metatype: 'human', attributes: 12, skills: 18, magic: 'mundane', resources: 6000 },
-            },
-          },
-        },
-      },
-    },
+    title: 'Core Rulebook',
+    isCore: true,
+    categories: ['core'],
+    payloadRef: 'data/editions/sr5/core-rulebook.json',
+    createdAt: new Date().toISOString(),
     ...overrides,
   };
 }
@@ -148,7 +78,7 @@ export function createMockMergedRuleset(overrides?: Partial<MergedRuleset>): Mer
           canDefault: true,
         },
       },
-      'priority-table': {
+      priorities: {
         levels: ['A', 'B', 'C', 'D', 'E'],
         categories: [
           { id: 'metatype', name: 'Metatype' },
