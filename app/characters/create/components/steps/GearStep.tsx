@@ -306,7 +306,8 @@ export function GearStep({ state, updateState, budgetValues }: StepProps) {
               availability: modData.availability,
               restricted: modData.restricted,
               forbidden: modData.forbidden,
-              isBuiltIn: true
+              isBuiltIn: true,
+              capacityUsed: 0, // Weapon mods use mount points, not capacity
             });
             if (builtIn.mount || modData.mount) {
               builtinMounts.push(builtIn.mount || modData.mount!);

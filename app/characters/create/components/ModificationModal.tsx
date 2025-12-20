@@ -344,6 +344,7 @@ export function ModificationModal({
       availability: mod.availability * (rating || 1),
       restricted: mod.restricted,
       forbidden: mod.forbidden,
+      capacityUsed: 0, // Weapon mods use mount points, not capacity
     };
 
     onInstallWeaponMod(installedMod);

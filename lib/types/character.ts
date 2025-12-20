@@ -532,7 +532,7 @@ export interface InstalledWeaponMod {
   /** New: Flags built-in mods that cannot be removed */
   isBuiltIn?: boolean;
   /** Capacity/Slots used by this mod */
-  capacityUsed?: number;
+  capacityUsed: number;
 }
 
 /**
