@@ -22,6 +22,7 @@ import type {
   ID,
   ContactTemplateData,
   WeaponMountType,
+  CatalogItemRatingSpec,
 } from "../types";
 import { QualityData, AdeptPowerCatalogItem, TraditionData, MentorSpiritData, TraditionSpiritTypes, MentorSpiritAdvantages, RitualData, RitualKeywordData, MinionStatsData, VehicleCategoryData, DroneSizeData, VehicleCatalogItemData, DroneCatalogItemData, RCCCatalogItemData, AutosoftCatalogItemData, HandlingRatingData, DroneWeaponMountsData, ProgramCatalogItemData, ProgramsCatalogData, FocusCatalogItemData, SpiritsCatalogData, ModificationsCatalogData, WeaponModificationCatalogItemData, ArmorModificationCatalogItemData, CyberwareModificationCatalogItemData, GearModificationCatalogItemData, LifestyleSubscriptionCatalogItem } from "./loader";
 export type { QualityData, TraditionData, MentorSpiritData, TraditionSpiritTypes, MentorSpiritAdvantages, RitualData, RitualKeywordData, MinionStatsData, VehicleCategoryData, DroneSizeData, VehicleCatalogItemData, DroneCatalogItemData, RCCCatalogItemData, AutosoftCatalogItemData, HandlingRatingData, DroneWeaponMountsData, ProgramCatalogItemData, ProgramsCatalogData, FocusCatalogItemData, SpiritsCatalogData, ModificationsCatalogData, WeaponModificationCatalogItemData, ArmorModificationCatalogItemData, CyberwareModificationCatalogItemData, GearModificationCatalogItemData, LifestyleSubscriptionCatalogItem };
@@ -117,10 +118,29 @@ export interface GearItemData {
   forbidden?: boolean;
   rating?: number;
   description?: string;
+
+  /**
+   * Unified rating specification (preferred over legacy properties)
+   * @see CatalogItemRatingSpec
+   */
+  ratingSpec?: CatalogItemRatingSpec;
+
+  /**
+   * @deprecated Use ratingSpec.rating.hasRating instead
+   */
   hasRating?: boolean;
+  /**
+   * @deprecated Use ratingSpec.rating.maxRating instead
+   */
   maxRating?: number;
+  /**
+   * @deprecated Use ratingSpec.costScaling.perRating instead
+   */
   costPerRating?: boolean;
   capacity?: number;
+  /**
+   * @deprecated Use ratingSpec.capacityCostScaling.perRating instead
+   */
   capacityPerRating?: boolean;
 }
 
@@ -254,17 +274,45 @@ export interface CyberwareCatalogItemData {
   availability: number;
   restricted?: boolean;
   forbidden?: boolean;
+
+  /**
+   * Unified rating specification (preferred over legacy properties)
+   * @see CatalogItemRatingSpec
+   */
+  ratingSpec?: CatalogItemRatingSpec;
+
+  /**
+   * @deprecated Use ratingSpec.rating.hasRating instead
+   */
   hasRating?: boolean;
+  /**
+   * @deprecated Use ratingSpec.rating.maxRating instead
+   */
   maxRating?: number;
+  /**
+   * @deprecated Use ratingSpec.essenceScaling.perRating instead
+   */
   essencePerRating?: boolean;
+  /**
+   * @deprecated Use ratingSpec.costScaling.perRating instead
+   */
   costPerRating?: boolean;
   capacity?: number;
   capacityCost?: number;
+  /**
+   * @deprecated Use ratingSpec.capacityCostScaling.perRating instead
+   */
   capacityPerRating?: boolean;
   attributeBonuses?: Record<string, number>;
+  /**
+   * @deprecated Use ratingSpec.attributeBonusScaling instead
+   */
   attributeBonusesPerRating?: Record<string, number>;
   maxAttributeBonus?: number;
   initiativeDiceBonus?: number;
+  /**
+   * @deprecated Consider using ratingSpec.attributeBonusScaling if applicable
+   */
   initiativeDiceBonusPerRating?: number;
   description?: string;
   wirelessBonus?: string;
@@ -297,11 +345,33 @@ export interface BiowareCatalogItemData {
   availability: number;
   restricted?: boolean;
   forbidden?: boolean;
+
+  /**
+   * Unified rating specification (preferred over legacy properties)
+   * @see CatalogItemRatingSpec
+   */
+  ratingSpec?: CatalogItemRatingSpec;
+
+  /**
+   * @deprecated Use ratingSpec.rating.hasRating instead
+   */
   hasRating?: boolean;
+  /**
+   * @deprecated Use ratingSpec.rating.maxRating instead
+   */
   maxRating?: number;
+  /**
+   * @deprecated Use ratingSpec.essenceScaling.perRating instead
+   */
   essencePerRating?: boolean;
+  /**
+   * @deprecated Use ratingSpec.costScaling.perRating instead
+   */
   costPerRating?: boolean;
   attributeBonuses?: Record<string, number>;
+  /**
+   * @deprecated Use ratingSpec.attributeBonusScaling instead
+   */
   attributeBonusesPerRating?: Record<string, number>;
   maxAttributeBonus?: number;
   initiativeDiceBonus?: number;
