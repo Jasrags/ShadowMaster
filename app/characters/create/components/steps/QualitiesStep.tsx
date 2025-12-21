@@ -1,9 +1,12 @@
 "use client";
 
 import { useMemo, useCallback, useState } from "react";
-import { useQualities, useMentorSpirits } from "@/lib/rules";
+import { useQualities, useMentorSpirits, useRuleset } from "@/lib/rules";
 import type { CreationState } from "@/lib/types";
 import { QualityData } from "@/lib/rules/loader";
+import { buildCharacterFromCreationState } from "@/lib/rules/qualities/creation-helper";
+import { QualityCard } from "../QualityCard";
+import { QualityDetailModal } from "../QualityDetailModal";
 
 interface StepProps {
   state: CreationState;
@@ -17,9 +20,12 @@ const MAX_NEGATIVE_KARMA = 25;
 export function QualitiesStep({ state, updateState, budgetValues }: StepProps) {
   const { positive: positiveQualities, negative: negativeQualities } = useQualities();
   const mentorSpirits = useMentorSpirits();
+  const { ruleset, editionCode } = useRuleset();
   const startingKarma = budgetValues["karma"] || 25;
   const [searchQuery, setSearchQuery] = useState("");
   const [activeTab, setActiveTab] = useState<"positive" | "negative">("positive");
+  const [detailModalQuality, setDetailModalQuality] = useState<QualityData | null>(null);
+  const [isDetailModalOpen, setIsDetailModalOpen] = useState(false);
 
   // Build specification options map for qualities that reference other data sources
   const specificationOptionsMap = useMemo(() => {
@@ -82,6 +88,17 @@ export function QualitiesStep({ state, updateState, budgetValues }: StepProps) {
   const karmaRemaining = startingKarma + negativeKarmaGained - positiveKarmaSpent;
   const canTakeMoreNegative = negativeKarmaGained < MAX_NEGATIVE_KARMA;
   const canSpendMoreOnPositive = positiveKarmaSpent < MAX_POSITIVE_KARMA;
+
+  // Build partial character for validation
+  const validationCharacter = useMemo(() => {
+    if (!editionCode) return undefined;
+    return buildCharacterFromCreationState(state, editionCode);
+  }, [state, editionCode]);
+
+  // Get all selected quality IDs for incompatibility checking
+  const allSelectedQualityIds = useMemo(() => {
+    return [...selectedPositive, ...selectedNegative];
+  }, [selectedPositive, selectedNegative]);
 
   // Filter qualities by search and flags
   const filterQualities = useCallback((qualities: QualityData[]) => {
@@ -230,79 +247,39 @@ export function QualitiesStep({ state, updateState, budgetValues }: StepProps) {
   }, [qualityLevels, qualitySpecifications, selectedPositive, selectedNegative, handleSelectionChange]);
 
 
-  // Render quality card
+  // Render quality card using QualityCard component
   const renderQuality = (quality: QualityData, isPositive: boolean) => {
     const isSelected = isPositive
       ? selectedPositive.includes(quality.id)
       : selectedNegative.includes(quality.id);
 
-    const cost = getQualityCost(quality, quality.id); // Valid calculation for display? 
-    // If not selected, shows base cost (level 1). If selected, shows actual cost.
+    const cost = getQualityCost(quality, quality.id);
 
     const canSelect = isPositive
       ? canSpendMoreOnPositive && karmaRemaining >= cost
       : canTakeMoreNegative;
 
     return (
-      <div
-        key={quality.id}
-        className={`group relative w-full rounded-lg border-2 p-4 transition-all ${isSelected
-          ? isPositive
-            ? "border-emerald-500 bg-emerald-50 dark:border-emerald-500 dark:bg-emerald-900/30"
-            : "border-amber-500 bg-amber-50 dark:border-amber-500 dark:bg-amber-900/30"
-          : !canSelect
-            ? "border-zinc-200 bg-zinc-50 opacity-70 dark:border-zinc-700 dark:bg-zinc-800/50"
-            : "border-zinc-200 bg-white hover:border-zinc-300 dark:border-zinc-700 dark:bg-zinc-800/50 dark:hover:border-zinc-600"
-          }`}
-      >
-        <div
-          className="cursor-pointer"
-          onClick={() => toggleQuality(quality.id, isPositive)}
-        >
-          {/* Selection indicator */}
-          {isSelected && (
-            <div
-              className={`absolute right-3 top-3 flex h-5 w-5 items-center justify-center rounded-full ${isPositive ? "bg-emerald-500" : "bg-amber-500"
-                }`}
-            >
-              <svg className="h-3 w-3 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-              </svg>
-            </div>
-          )}
+      <div key={quality.id}>
+        <QualityCard
+          quality={quality}
+          isPositive={isPositive}
+          isSelected={isSelected}
+          canSelect={canSelect}
+          cost={cost}
+          character={validationCharacter}
+          ruleset={ruleset || undefined}
+          selectedQualityIds={allSelectedQualityIds}
+          onToggle={() => toggleQuality(quality.id, isPositive)}
+          onViewDetails={() => {
+            setDetailModalQuality(quality);
+            setIsDetailModalOpen(true);
+          }}
+        />
 
-          {/* Quality name and cost */}
-          <div className="flex items-start justify-between pr-8">
-            <h4 className="font-medium text-zinc-900 dark:text-zinc-50">{quality.name}</h4>
-            <span
-              className={`ml-2 flex-shrink-0 rounded-full px-2 py-0.5 text-xs font-bold ${isPositive
-                ? "bg-emerald-100 text-emerald-700 dark:bg-emerald-900/50 dark:text-emerald-300"
-                : "bg-amber-100 text-amber-700 dark:bg-amber-900/50 dark:text-amber-300"
-                }`}
-            >
-              {isPositive ? `-${cost}` : `+${cost}`}
-            </span>
-          </div>
-
-          {/* Summary */}
-          {quality.summary && (
-            <p className="mt-2 text-sm text-zinc-600 dark:text-zinc-400">{quality.summary}</p>
-          )}
-
-          {/* Prerequisite indicator - requiresMagic */}
-          {quality.requiresMagic && (
-            <div className="mt-2 flex items-center gap-1 text-xs text-amber-600 dark:text-amber-400">
-              <svg className="h-3 w-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
-              </svg>
-              <span>Requires Magic attribute</span>
-            </div>
-          )}
-        </div>
-
-        {/* Extended Inputs (Levels/Specs) - only if selected */}
-        {isSelected && (
-          <div className="mt-4 space-y-3 border-t border-zinc-200/50 pt-3 dark:border-zinc-700/50">
+        {/* Extended Inputs (Levels/Specs) - only if selected and has levels or requires specification */}
+        {isSelected && (quality.levels || quality.requiresSpecification) && (
+          <div className="mt-2 space-y-3 rounded-lg border border-zinc-200 bg-zinc-50 p-4 dark:border-zinc-700 dark:bg-zinc-800/50">
             {/* Levels Selector */}
             {quality.levels && (
               <div>
@@ -343,6 +320,20 @@ export function QualitiesStep({ state, updateState, budgetValues }: StepProps) {
                     {specificationOptionsMap[quality.specificationSource].map(option => (
                       <option key={option.id} value={option.name}>
                         {option.name}
+                      </option>
+                    ))}
+                  </select>
+                ) : quality.specificationOptions && quality.specificationOptions.length > 0 ? (
+                  // Show dropdown for qualities with specificationOptions array
+                  <select
+                    value={qualitySpecifications[quality.id] || ""}
+                    onChange={(e) => updateSpec(quality.id, e.target.value, isPositive)}
+                    className="w-full rounded border border-zinc-300 bg-white px-2 py-1 text-sm focus:border-emerald-500 focus:outline-none dark:border-zinc-600 dark:bg-zinc-800 dark:text-white"
+                  >
+                    <option value="">Select {quality.specificationLabel || "option"}...</option>
+                    {quality.specificationOptions.map(option => (
+                      <option key={option} value={option}>
+                        {option}
                       </option>
                     ))}
                   </select>
@@ -525,6 +516,19 @@ export function QualitiesStep({ state, updateState, budgetValues }: StepProps) {
           You can take up to {MAX_POSITIVE_KARMA} karma of each type at character creation.
         </p>
       </div>
+
+      {/* Quality Detail Modal */}
+      {detailModalQuality && (
+        <QualityDetailModal
+          quality={detailModalQuality}
+          isPositive={activeTab === "positive"}
+          character={validationCharacter}
+          ruleset={ruleset || undefined}
+          selectedQualityIds={allSelectedQualityIds}
+          isOpen={isDetailModalOpen}
+          onOpenChange={setIsDetailModalOpen}
+        />
+      )}
     </div>
   );
 }

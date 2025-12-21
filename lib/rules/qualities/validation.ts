@@ -5,14 +5,13 @@
  */
 
 import type { Character, QualitySelection } from "@/lib/types";
-import type { Quality, QualityPrerequisites, MergedRuleset } from "@/lib/types";
+import type { Quality, MergedRuleset } from "@/lib/types";
 import {
   getQualityDefinition,
   characterHasQuality,
   countQualityInstances,
   getAllQualityIds,
 } from "./utils";
-import { calculateQualityCost } from "./karma";
 
 /**
  * Result of prerequisite validation
@@ -28,7 +27,7 @@ export interface PrerequisiteValidationResult {
 export function validatePrerequisites(
   quality: Quality,
   character: Character,
-  ruleset: MergedRuleset
+  _ruleset: MergedRuleset
 ): PrerequisiteValidationResult {
   const prerequisites = quality.prerequisites;
   if (!prerequisites) {
@@ -189,7 +188,8 @@ export function checkIncompatibilities(
 export function canTakeQuality(
   quality: Quality,
   character: Character,
-  ruleset: MergedRuleset
+  ruleset: MergedRuleset,
+  options?: { skipLimitCheck?: boolean }
 ): PrerequisiteValidationResult {
   // Check prerequisites
   const prerequisiteCheck = validatePrerequisites(quality, character, ruleset);
@@ -204,13 +204,16 @@ export function canTakeQuality(
   }
 
   // Check quality limit (how many times it can be taken)
-  const currentCount = countQualityInstances(character, quality.id);
-  const limit = quality.limit || 1;
-  if (currentCount >= limit) {
-    return {
-      allowed: false,
-      reason: `Already have maximum instances (${limit})`,
-    };
+  // Skip this check when validating existing qualities
+  if (!options?.skipLimitCheck) {
+    const currentCount = countQualityInstances(character, quality.id);
+    const limit = quality.limit || 1;
+    if (currentCount >= limit) {
+      return {
+        allowed: false,
+        reason: `Already have maximum instances (${limit})`,
+      };
+    }
   }
 
   return { allowed: true };
@@ -222,7 +225,7 @@ export function canTakeQuality(
 export function validateQualitySelection(
   selection: QualitySelection,
   quality: Quality,
-  character: Character
+  _character: Character
 ): {
   valid: boolean;
   errors: Array<{ message: string; field?: string }>;
@@ -307,7 +310,8 @@ export function validateAllQualities(
     }
 
     // Validate prerequisites (character may have changed since selection)
-    const canTake = canTakeQuality(quality, character, ruleset);
+    // Skip limit check since this quality is already selected
+    const canTake = canTakeQuality(quality, character, ruleset, { skipLimitCheck: true });
     if (!canTake.allowed) {
       errors.push({
         qualityId,

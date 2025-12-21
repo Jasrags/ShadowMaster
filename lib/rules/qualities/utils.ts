@@ -6,7 +6,6 @@
 
 import type { Character, QualitySelection } from "@/lib/types";
 import type { Quality, MergedRuleset } from "@/lib/types";
-import { getModule } from "../merge";
 
 /**
  * Get quality definition from ruleset catalog
@@ -15,10 +14,11 @@ export function getQualityDefinition(
   ruleset: MergedRuleset,
   qualityId: string
 ): Quality | null {
-  const qualitiesModule = getModule<{
+  // Access modules directly to avoid importing from merge.ts (which imports server-only code)
+  const qualitiesModule = ruleset.modules.qualities as {
     positive: Quality[];
     negative: Quality[];
-  }>(ruleset, "qualities");
+  } | undefined;
 
   if (!qualitiesModule) return null;
 

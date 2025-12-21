@@ -4525,7 +4525,19 @@
             "karmaCost": 14,
             "summary": "Increase natural max of one attribute by 1.",
             "requiresSpecification": true,
-            "specificationLabel": "Attribute"
+            "specificationLabel": "Attribute",
+            "specificationOptions": [
+              "Body",
+              "Agility",
+              "Reaction",
+              "Strength",
+              "Willpower",
+              "Logic",
+              "Intuition",
+              "Charisma",
+              "Magic",
+              "Resonance"
+            ]
           },
           {
             "id": "first-impression",

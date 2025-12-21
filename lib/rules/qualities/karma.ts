@@ -4,7 +4,7 @@
  * Functions for calculating karma costs and tracking karma spent/gained on qualities.
  */
 
-import type { Character, QualitySelection } from "@/lib/types";
+import type { Character } from "@/lib/types";
 import type { Quality, MergedRuleset } from "@/lib/types";
 import { getQualityDefinition } from "./utils";
 
