@@ -1,6 +1,6 @@
 # Specifications Index
 
-**Last Updated:** 2025-01-27
+**Last Updated:** 2025-12-21
 
 This directory contains detailed specifications for all major features and systems in Shadow Master. This document tracks the status and progress of each specification.
 
@@ -22,6 +22,7 @@ Specifications in this directory define requirements, user stories, technical de
 | Specification | Status | Category | Last Updated | Notes |
 |---------------|--------|----------|--------------|-------|
 | [Authentication](authentication_specification.md) | Specification | Security, Authentication | 2025-01-27 | Basic auth implemented; enhancements planned |
+| [Cyberware & Bioware](cyberware_bioware_specification.md) | Specification | Core Functionality, Gameplay | 2025-12-21 | Foundation implemented; enhanced creation and gameplay planned |
 | [Campaign Support](campaign_support_specification.md) | Specification | UI/UX, Campaign Management | 2025-01-27 | Not implemented |
 | [Character Creation & Management](character_creation_and_management_specification.md) | Specification | Core Functionality | 2025-01-27 | Basic implementation complete, ongoing enhancements |
 | [Character Sheet](character_sheet_specification.md) | Specification | User Interface | 2025-01-27 | Fully implemented for viewing; editing limited to drafts |
@@ -65,6 +66,7 @@ Specifications in this directory define requirements, user stories, technical de
 ### Core Functionality
 - [Character Creation & Management](character_creation_and_management_specification.md) - ✅ Basic implementation
 - [Character Sheet](character_sheet_specification.md) - ✅ Fully implemented (viewing)
+- [Cyberware & Bioware](cyberware_bioware_specification.md) - 📋 Foundation implemented
 
 ### Gameplay Systems
 - [Dice Roller](dice_roller_specification.md) - ✅ Fully implemented
