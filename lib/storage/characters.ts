@@ -351,6 +351,29 @@ export async function updateCharacterGear(
 }
 
 /**
+ * Update quality dynamic state
+ */
+export async function updateQualityDynamicState(
+  userId: ID,
+  characterId: ID,
+  qualityId: ID,
+  updates: Partial<import("../types").QualityDynamicState["state"]>
+): Promise<Character> {
+  const character = await getCharacter(userId, characterId);
+  if (!character) {
+    throw new Error(`Character with ID ${characterId} not found`);
+  }
+
+  const { updateDynamicState } = await import("../rules/qualities/dynamic-state");
+  const updatedCharacter = updateDynamicState(character, qualityId, updates);
+
+  return updateCharacter(userId, characterId, {
+    positiveQualities: updatedCharacter.positiveQualities,
+    negativeQualities: updatedCharacter.negativeQualities,
+  });
+}
+
+/**
  * Apply damage to a character
  */
 export async function applyDamage(

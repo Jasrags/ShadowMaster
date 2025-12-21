@@ -68,3 +68,36 @@ export {
   getHealingModifiers,
 } from "./effects/integration";
 
+// Dynamic state management functions
+export {
+  initializeDynamicState,
+  updateDynamicState,
+  getDynamicState,
+  validateDynamicState,
+} from "./dynamic-state";
+
+export {
+  checkAddictionCraving,
+  makeCravingTest,
+  beginWithdrawal,
+  recordDose,
+  attemptRecovery,
+  calculateWithdrawalPenalties,
+} from "./dynamic-state/addiction";
+
+export {
+  checkExposure,
+  beginExposure,
+  endExposure,
+  calculateAllergyPenalties,
+  applyAllergyDamage,
+} from "./dynamic-state/allergy";
+
+export {
+  updateDependentStatus,
+  calculateLifestyleModifier,
+  calculateTotalLifestyleModifier,
+  calculateTimeCommitment,
+  calculateTotalTimeCommitment,
+} from "./dynamic-state/dependents";
+
