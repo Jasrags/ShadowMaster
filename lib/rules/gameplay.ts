@@ -94,16 +94,19 @@ export type RatingBonusType =
 /**
  * Get dice pool bonus from rated equipment
  * Most rated equipment adds its rating to relevant dice pools
+ * @param _bonusType Reserved for future item-specific bonus formulas
  */
 export function getRatingDiceBonus(
   item: { rating?: number },
-  bonusType: RatingBonusType
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  _bonusType: RatingBonusType
 ): number {
   const rating = item.rating ?? 0;
 
   // Most rated equipment adds its rating to relevant dice pools
   // Specific items may have different formulas (could be extended with item-specific rules)
   // For example, Vision Enhancement adds to Perception, Smartgun adds to Attack, etc.
+  // bonusType parameter reserved for future item-specific bonus formulas
   return rating;
 }
 

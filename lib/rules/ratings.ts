@@ -198,7 +198,6 @@ export function validateRatingAvailability(
 
   if (availability > context.maxAvailability) {
     // Find the maximum rating that meets availability constraint
-    const maxRating = spec.rating?.maxRating ?? 6;
     let suggestedRating = rating;
 
     for (let r = rating - 1; r >= (spec.rating?.minRating ?? 1); r--) {

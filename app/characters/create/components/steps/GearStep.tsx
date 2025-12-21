@@ -33,7 +33,6 @@ import {
   convertLegacyRatingSpec,
   calculateRatedItemValues,
 } from "@/lib/rules/ratings";
-import type { CatalogItemRatingSpec } from "@/lib/types/ratings";
 
 interface StepProps {
   state: CreationState;
