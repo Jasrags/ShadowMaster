@@ -5,7 +5,7 @@
  */
 
 import { v4 as uuidv4 } from "uuid";
-import type { Character, MergedRuleset, AdvancementRecord, TrainingPeriod } from "@/lib/types";
+import type { Character, MergedRuleset, AdvancementRecord, TrainingPeriod, CampaignEvent } from "@/lib/types";
 import { calculateAdvancementCost } from "./costs";
 import { calculateAdvancementTrainingTime } from "./training";
 import { validateAttributeAdvancement } from "./validation";
@@ -44,6 +44,7 @@ export interface AdvanceAttributeOptions {
   instructorBonus?: boolean;
   timeModifier?: number; // Percentage modifier (e.g., +50 for Dependents quality)
   notes?: string;
+  campaignEvents?: CampaignEvent[]; // For downtime limit validation
 }
 
 /**
@@ -79,8 +80,15 @@ export function advanceAttribute(
   ruleset: MergedRuleset,
   options: AdvanceAttributeOptions = {}
 ): AdvanceAttributeResult {
-  // Validate advancement
-  const validation = validateAttributeAdvancement(character, attributeId, newRating, ruleset);
+  // Validate advancement (including downtime limits if applicable)
+  const validation = validateAttributeAdvancement(
+    character,
+    attributeId,
+    newRating,
+    ruleset,
+    options.downtimePeriodId,
+    options.campaignEvents
+  );
   if (!validation.valid) {
     throw new Error(
       `Cannot advance attribute: ${validation.errors.map((e) => e.message).join(", ")}`

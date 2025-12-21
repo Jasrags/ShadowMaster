@@ -74,3 +74,22 @@ export {
   type ResumeTrainingResult,
 } from "./interruption";
 
+// Campaign downtime integration
+export {
+  getDowntimeEvents,
+  getDowntimeEventById,
+  countDowntimeAdvancements,
+  validateDowntimeLimits,
+  getDowntimeTraining,
+  getDowntimeAdvancements,
+} from "./downtime";
+
+// GM approval workflow
+export {
+  approveAdvancement,
+  rejectAdvancement,
+  isCampaignGM,
+  requiresGMApproval,
+  type ApproveAdvancementResult,
+} from "./approval";
+

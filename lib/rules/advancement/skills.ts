@@ -5,7 +5,7 @@
  */
 
 import { v4 as uuidv4 } from "uuid";
-import type { Character, MergedRuleset, AdvancementRecord, TrainingPeriod } from "@/lib/types";
+import type { Character, MergedRuleset, AdvancementRecord, TrainingPeriod, CampaignEvent } from "@/lib/types";
 import { calculateAdvancementCost } from "./costs";
 import { calculateAdvancementTrainingTime } from "./training";
 import { validateSkillAdvancement } from "./validation";
@@ -20,6 +20,7 @@ export interface AdvanceSkillOptions {
   instructorBonus?: boolean;
   timeModifier?: number; // Percentage modifier (e.g., +50 for Dependents quality)
   notes?: string;
+  campaignEvents?: CampaignEvent[]; // For downtime limit validation
 }
 
 /**
@@ -80,8 +81,15 @@ export function advanceSkill(
   ruleset: MergedRuleset,
   options: AdvanceSkillOptions = {}
 ): AdvanceSkillResult {
-  // Validate advancement
-  const validation = validateSkillAdvancement(character, skillId, newRating, ruleset);
+  // Validate advancement (including downtime limits if applicable)
+  const validation = validateSkillAdvancement(
+    character,
+    skillId,
+    newRating,
+    ruleset,
+    options.downtimePeriodId,
+    options.campaignEvents
+  );
   if (!validation.valid) {
     throw new Error(
       `Cannot advance skill: ${validation.errors.map((e) => e.message).join(", ")}`

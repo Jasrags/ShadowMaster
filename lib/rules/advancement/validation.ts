@@ -4,9 +4,10 @@
  * Validates advancement requests against character state and rules.
  */
 
-import type { Character, MergedRuleset, AdvancementType } from "@/lib/types";
+import type { Character, MergedRuleset, AdvancementType, CampaignEvent } from "@/lib/types";
 import { getMetatypeAttributeLimits, isAttributeWithinLimits } from "../validation";
 import { calculateAdvancementCost } from "./costs";
+import { validateDowntimeLimits } from "./downtime";
 
 /**
  * Result of advancement validation
@@ -65,13 +66,17 @@ export function getAttributeMaximum(
  * @param attributeId - Attribute ID to advance
  * @param newRating - Target rating
  * @param ruleset - Merged ruleset
+ * @param downtimePeriodId - Optional downtime period ID for limit validation
+ * @param campaignEvents - Optional campaign events for downtime validation
  * @returns Validation result
  */
 export function validateAttributeAdvancement(
   character: Character,
   attributeId: string,
   newRating: number,
-  ruleset: MergedRuleset
+  ruleset: MergedRuleset,
+  downtimePeriodId?: string,
+  campaignEvents?: CampaignEvent[]
 ): AdvancementValidationResult {
   const errors: Array<{ message: string; field?: string }> = [];
 
@@ -101,6 +106,21 @@ export function validateAttributeAdvancement(
       message: "Rating must be at least 1",
       field: "rating",
     });
+  }
+
+  // Validate downtime limits if downtime period is provided
+  if (downtimePeriodId && campaignEvents) {
+    const downtimeLimitCheck = validateDowntimeLimits(
+      character,
+      downtimePeriodId,
+      "attribute"
+    );
+    if (!downtimeLimitCheck.valid) {
+      errors.push({
+        message: downtimeLimitCheck.error || "Downtime limit exceeded",
+        field: "downtime",
+      });
+    }
   }
 
   // Calculate cost and validate karma
@@ -161,13 +181,17 @@ export function getSkillMaximum(
  * @param skillId - Skill ID to advance
  * @param newRating - Target rating
  * @param ruleset - Merged ruleset
+ * @param downtimePeriodId - Optional downtime period ID for limit validation
+ * @param campaignEvents - Optional campaign events for downtime validation
  * @returns Validation result
  */
 export function validateSkillAdvancement(
   character: Character,
   skillId: string,
   newRating: number,
-  ruleset: MergedRuleset
+  ruleset: MergedRuleset,
+  downtimePeriodId?: string,
+  campaignEvents?: CampaignEvent[]
 ): AdvancementValidationResult {
   const errors: Array<{ message: string; field?: string }> = [];
 
@@ -197,6 +221,21 @@ export function validateSkillAdvancement(
       message: "Rating must be at least 1",
       field: "rating",
     });
+  }
+
+  // Validate downtime limits if downtime period is provided
+  if (downtimePeriodId && campaignEvents) {
+    const downtimeLimitCheck = validateDowntimeLimits(
+      character,
+      downtimePeriodId,
+      "skill"
+    );
+    if (!downtimeLimitCheck.valid) {
+      errors.push({
+        message: downtimeLimitCheck.error || "Downtime limit exceeded",
+        field: "downtime",
+      });
+    }
   }
 
   // Calculate cost and validate karma

@@ -8,6 +8,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { getSession } from "@/lib/auth/session";
 import { getUserById } from "@/lib/storage/users";
 import { getCharacter, updateCharacter } from "@/lib/storage/characters";
+import { getCampaignById, getCampaignEvents } from "@/lib/storage/campaigns";
 import { loadAndMergeRuleset } from "@/lib/rules/merge";
 import { advanceSkill, type AdvanceSkillOptions } from "@/lib/rules/advancement/skills";
 
@@ -92,6 +93,17 @@ export async function POST(
       );
     }
 
+    // Load campaign events if character is in a campaign and downtime period is specified
+    let campaignEvents;
+    if (character.campaignId && downtimePeriodId) {
+      try {
+        campaignEvents = await getCampaignEvents(character.campaignId);
+      } catch (error) {
+        // Campaign events not found - continue without downtime validation
+        console.warn("Failed to load campaign events:", error);
+      }
+    }
+
     // Prepare options
     const options: AdvanceSkillOptions = {
       downtimePeriodId,
@@ -100,6 +112,7 @@ export async function POST(
       instructorBonus,
       timeModifier,
       notes,
+      campaignEvents,
     };
 
     // Advance skill
