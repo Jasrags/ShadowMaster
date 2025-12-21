@@ -386,6 +386,10 @@ export function extractSkills(ruleset: LoadedRuleset): {
 
 /**
  * Quality data structure
+ *
+ * This interface matches the Quality type from the spec but is kept
+ * separate for backward compatibility with existing code.
+ * @see Quality in @/lib/types/qualities for the complete type definition
  */
 export interface QualityData {
   id: string;
@@ -393,17 +397,25 @@ export interface QualityData {
   karmaCost?: number;
   karmaBonus?: number;
   summary: string;
+  description?: string;
   perRating?: boolean;
   maxRating?: number;
   requiresMagic?: boolean;
   isRacial?: boolean;
-  levels?: Array<{ level: number; name: string; karma: number }>;
+  levels?: Array<{ level: number; name: string; karma: number; effects?: unknown[] }>;
   statModifiers?: Record<string, number | boolean>;
   requiresSpecification?: boolean;
   specificationLabel?: string;
   /** Source of specification options - e.g., "mentorSpirits" to pull from mentorSpirits data */
   specificationSource?: string;
+  specificationOptions?: string[];
   limit?: number;
+  tags?: string[];
+  prerequisites?: unknown; // Will be QualityPrerequisites when fully implemented
+  incompatibilities?: string[];
+  effects?: unknown[]; // Will be QualityEffect[] when fully implemented
+  source?: { book: string; page: number };
+  dynamicState?: string; // Will be DynamicStateType when fully implemented
 }
 
 /**

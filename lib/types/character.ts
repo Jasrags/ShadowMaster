@@ -9,6 +9,7 @@
 import type { ID, ISODateString, Metadata } from "./core";
 import type { EditionCode, FocusType, SpiritType } from "./edition";
 import type { CharacterProgram } from "./programs";
+import type { AcquisitionSource, QualityDynamicState } from "./qualities";
 
 // =============================================================================
 // CHARACTER CORE
@@ -45,11 +46,24 @@ export type CharacterApprovalStatus =
 
 /**
  * Selection of a quality during character creation/advancement
+ *
+ * @deprecated The `id` field is deprecated. Use `qualityId` instead.
+ * This field is maintained for backward compatibility during migration.
  */
 export interface QualitySelection {
-  id: string;
-  rating?: number;
-  specification?: string;
+  /** @deprecated Use qualityId instead */
+  id?: string;
+  qualityId: string; // References catalog Quality.id
+  rating?: number; // Chosen rating for per-rating qualities
+  specification?: string; // Player-specified detail (e.g., skill name)
+  specificationId?: string; // ID when specification references another catalog
+  source?: AcquisitionSource; // How/when quality was acquired (defaults to "creation" for backward compat)
+  acquisitionDate?: ISODateString; // When quality was acquired
+  originalKarma?: number; // Original karma value (for buy-off calculations)
+  variant?: string; // For qualities with variants (e.g., Addiction severity)
+  notes?: string; // Player/GM annotations
+  active?: boolean; // Whether quality is currently active (default: true)
+  dynamicState?: QualityDynamicState; // Current state for dynamic qualities
 }
 
 /**

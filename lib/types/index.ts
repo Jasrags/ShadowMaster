@@ -7,7 +7,7 @@
 // Core types
 export type { ID, ISODateString, Metadata } from "./core";
 
-// Edition and ruleset types
+  // Edition and ruleset types
 export type {
   EditionCode,
   Edition,
@@ -32,6 +32,14 @@ export type {
   // Spirit types
   SpiritPower,
   Spirit,
+  // Quality catalog types (re-exported from qualities.ts for convenience)
+  Quality,
+  QualityCatalog,
+  QualityEffect,
+  QualityPrerequisites,
+  QualityLevel,
+  SourceReference,
+  DynamicStateType,
 } from "./edition";
 
 // Character types
@@ -81,6 +89,21 @@ export type {
   CharactersListResponse,
   ContactTemplateData,
 } from "./character";
+
+// Quality types (additional types not re-exported from edition)
+export type {
+  QualitySelection as QualitySelectionType,
+  EffectType,
+  EffectTrigger,
+  EffectTarget,
+  EffectCondition,
+  AcquisitionSource,
+  QualityDynamicState,
+  AddictionState,
+  AllergyState,
+  DependentState,
+  CodeOfHonorState,
+} from "./qualities";
 
 // Cyberware/Bioware grade multipliers and modifiers
 export {

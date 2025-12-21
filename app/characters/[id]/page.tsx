@@ -545,12 +545,15 @@ function QualitiesSection({ character, theme }: QualitiesSectionProps) {
         </span>
         <div className="space-y-1.5 px-0.5">
           {selections.map((selection) => {
-            const id = typeof selection === 'string' ? selection : selection.id;
+            // Support both new qualityId and deprecated id field for backward compatibility
+            const id = typeof selection === 'string' 
+              ? selection 
+              : (selection.qualityId || selection.id || '');
             const data = (isPositive
               ? positiveData.find((q: QualityData) => q.id === id)
               : negativeData.find((q: QualityData) => q.id === id)) as QualityData | undefined;
 
-            const name = data?.name || id.replace(/-/g, ' ');
+            const name = data?.name || (id ? id.replace(/-/g, ' ') : 'Unknown Quality');
 
             // Use structured data first, then fall back to creationState metadata
             const rawSelection = typeof selection === 'string' ? {} as Partial<QualitySelection> : selection;
