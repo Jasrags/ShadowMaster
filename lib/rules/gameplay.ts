@@ -215,3 +215,28 @@ export function getAttackBonus(
   return getItemDiceBonus(item, 'attack', context);
 }
 
+// =============================================================================
+// WOUND MODIFIERS
+// =============================================================================
+
+/**
+ * Calculate wound modifier for a character
+ * 
+ * Base calculation: every 3 boxes = -1 modifier
+ * Modified by qualities like High Pain Tolerance (boxes ignored)
+ * and Low Pain Tolerance (interval change)
+ * 
+ * @param damage - Current damage boxes
+ * @param boxesIgnored - Boxes ignored before penalties apply (from High Pain Tolerance, etc.)
+ * @param penaltyInterval - Boxes per -1 modifier (default 3, modified by Low Pain Tolerance)
+ * @returns Wound modifier (negative number, e.g., -2)
+ */
+export function calculateWoundModifier(
+  damage: number,
+  boxesIgnored: number = 0,
+  penaltyInterval: number = 3
+): number {
+  const effectiveDamage = Math.max(0, damage - boxesIgnored);
+  return -Math.floor(effectiveDamage / penaltyInterval);
+}
+

@@ -22,6 +22,10 @@ import {
   validateRatingAvailability,
   convertLegacyRatingSpec,
 } from "./ratings";
+import {
+  validateAllQualities,
+  validateKarmaLimits,
+} from "./qualities";
 import type {
   GearCatalogData,
   CyberwareCatalogData,
@@ -356,7 +360,7 @@ function validateSkillLimit(
     maxWithAptitude?: number;
   };
 
-  const hasAptitude = character.positiveQualities?.some(q => q.id === "aptitude");
+  const hasAptitude = character.positiveQualities?.some(q => (q.qualityId || q.id) === "aptitude");
   const maxRating = hasAptitude ? (params.maxWithAptitude || 7) : (params.max || 6);
 
   for (const [skillId, rating] of Object.entries(character.skills || {})) {
@@ -489,7 +493,7 @@ function validateForbiddenCombination(
       presentItems = [
         ...(character.positiveQualities || []),
         ...(character.negativeQualities || []),
-      ].map(q => q.id);
+      ].map(q => q.qualityId || q.id).filter((id): id is string => !!id);
       break;
     case "skill":
       presentItems = Object.keys(character.skills || {});
@@ -533,7 +537,7 @@ function validateRequiredCombination(
     const allQualities = [
       ...(character.positiveQualities || []),
       ...(character.negativeQualities || []),
-    ].map((q) => q.id.toLowerCase());
+    ].map((q) => (q.qualityId || q.id || '').toLowerCase()).filter(id => id);
 
     if (
       allQualities.includes(params.ifHas.toLowerCase()) &&
@@ -663,7 +667,7 @@ export function validateCharacter(context: ValidationContext): ValidationResult 
 function validateBasicCharacter(context: ValidationContext): ValidationResult {
   const errors: ValidationError[] = [];
   const warnings: ValidationError[] = [];
-  const { character } = context;
+  const { character, ruleset } = context;
 
   // Check metatype exists
   if (!character.metatype) {
@@ -694,6 +698,30 @@ function validateBasicCharacter(context: ValidationContext): ValidationResult {
       message: "Essence must be between 0 and 6",
       severity: "error",
     });
+  }
+
+  // Validate qualities if ruleset is available and character is not a draft
+  if (ruleset && character.status !== "draft") {
+    const qualityValidation = validateAllQualities(character as Character, ruleset);
+    for (const error of qualityValidation.errors) {
+      errors.push({
+        constraintId: "quality-validation",
+        field: `qualities.${error.qualityId}`,
+        message: error.message,
+        severity: "error",
+      });
+    }
+
+    // Validate karma limits
+    const karmaValidation = validateKarmaLimits(character as Character, ruleset);
+    for (const error of karmaValidation.errors) {
+      errors.push({
+        constraintId: "quality-karma-limit",
+        field: error.field,
+        message: error.message,
+        severity: "error",
+      });
+    }
   }
 
   return {

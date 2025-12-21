@@ -1,0 +1,485 @@
+{
+    "locations": [
+        {
+            "id": "seattle-root",
+            "campaignId": "placeholder",
+            "name": "Seattle Metroplex",
+            "description": "The shadowrunning capital of the world. A major sprawl in the UCAS, bordering the Salish-Shidhe Council.",
+            "type": "other",
+            "parentLocationId": null,
+            "childLocationIds": [
+                "downtown",
+                "bellevue",
+                "redmond",
+                "tacoma",
+                "everett",
+                "renton"
+            ],
+            "relatedLocationIds": [],
+            "images": [],
+            "mapPosition": {
+                "x": 0,
+                "y": 0
+            },
+            "tags": [
+                "Metroplex",
+                "Sprawl",
+                "UCAS"
+            ],
+            "visibility": "public",
+            "gmNotes": "Key themes: Corporate intrigue, varied districts, rain.",
+            "gmOnlyContent": {},
+            "npcIds": [],
+            "gruntTeamIds": [],
+            "encounterIds": [],
+            "sessionIds": [],
+            "visitedByCharacterIds": [],
+            "visitCount": 0,
+            "createdAt": "2025-12-17T12:00:00Z",
+            "updatedAt": "2025-12-17T12:00:00Z"
+        },
+        {
+            "id": "downtown",
+            "campaignId": "placeholder",
+            "name": "Downtown Seattle",
+            "description": "The corporate heart of the metroplex. Skyscrapers, arcologies, and the center of power.",
+            "type": "corporate",
+            "parentLocationId": "seattle-root",
+            "childLocationIds": [
+                "pike-place",
+                "space-needle",
+                "renraku-arcology",
+                "dantes-inferno",
+                "underground"
+            ],
+            "relatedLocationIds": [],
+            "images": [],
+            "mapPosition": {
+                "x": 0,
+                "y": 0
+            },
+            "tags": [
+                "Corporate",
+                "Density",
+                "High Security"
+            ],
+            "visibility": "public",
+            "gmNotes": "High Knight Errant presence.",
+            "gmOnlyContent": {},
+            "npcIds": [],
+            "gruntTeamIds": [],
+            "encounterIds": [],
+            "sessionIds": [],
+            "visitedByCharacterIds": [],
+            "visitCount": 0,
+            "createdAt": "2025-12-17T12:00:00Z",
+            "updatedAt": "2025-12-17T12:00:00Z"
+        },
+        {
+            "id": "pike-place",
+            "campaignId": "placeholder",
+            "name": "Pike Place Market",
+            "description": "A historic multi-level market overlooking the waterfront. A mix of tourists, locals, and shadows.",
+            "type": "commercial",
+            "parentLocationId": "downtown",
+            "childLocationIds": [],
+            "relatedLocationIds": [],
+            "images": [],
+            "mapPosition": {
+                "x": 0,
+                "y": 0
+            },
+            "tags": [
+                "Market",
+                "Historic",
+                "Smuggling"
+            ],
+            "visibility": "public",
+            "gmNotes": "Good place for meets. Easy to lose a tail.",
+            "gmOnlyContent": {},
+            "npcIds": [],
+            "gruntTeamIds": [],
+            "encounterIds": [],
+            "sessionIds": [],
+            "visitedByCharacterIds": [],
+            "visitCount": 0,
+            "createdAt": "2025-12-17T12:00:00Z",
+            "updatedAt": "2025-12-17T12:00:00Z"
+        },
+        {
+            "id": "space-needle",
+            "campaignId": "placeholder",
+            "name": "The Space Needle",
+            "description": "The most iconic landmark of Seattle. High-end dining and observation deck.",
+            "type": "commercial",
+            "parentLocationId": "downtown",
+            "childLocationIds": [],
+            "relatedLocationIds": [],
+            "images": [],
+            "mapPosition": {
+                "x": 0,
+                "y": 0
+            },
+            "tags": [
+                "Landmark",
+                "Luxury",
+                "Tourist"
+            ],
+            "visibility": "public",
+            "gmNotes": "",
+            "gmOnlyContent": {},
+            "npcIds": [],
+            "gruntTeamIds": [],
+            "encounterIds": [],
+            "sessionIds": [],
+            "visitedByCharacterIds": [],
+            "visitCount": 0,
+            "createdAt": "2025-12-17T12:00:00Z",
+            "updatedAt": "2025-12-17T12:00:00Z"
+        },
+        {
+            "id": "renraku-arcology",
+            "campaignId": "placeholder",
+            "name": "Renraku Arcology",
+            "description": "A massive self-contained city-within-a-city. Dominates the skyline.",
+            "type": "corporate",
+            "parentLocationId": "downtown",
+            "childLocationIds": [],
+            "relatedLocationIds": [],
+            "images": [],
+            "mapPosition": {
+                "x": 0,
+                "y": 0
+            },
+            "tags": [
+                "Arcology",
+                "Renraku",
+                "Fortress"
+            ],
+            "visibility": "public",
+            "gmNotes": "Depending on timeline: Shutdown (Deus) or ACI.",
+            "gmOnlyContent": {},
+            "npcIds": [],
+            "gruntTeamIds": [],
+            "encounterIds": [],
+            "sessionIds": [],
+            "visitedByCharacterIds": [],
+            "visitCount": 0,
+            "createdAt": "2025-12-17T12:00:00Z",
+            "updatedAt": "2025-12-17T12:00:00Z"
+        },
+        {
+            "id": "dantes-inferno",
+            "campaignId": "placeholder",
+            "name": "Dante's Inferno",
+            "description": "The premier nightclub in the sprawl. Nine levels of hellish fun.",
+            "type": "commercial",
+            "parentLocationId": "downtown",
+            "childLocationIds": [],
+            "relatedLocationIds": [],
+            "images": [],
+            "mapPosition": {
+                "x": 0,
+                "y": 0
+            },
+            "tags": [
+                "Club",
+                "Connects",
+                "Vice"
+            ],
+            "visibility": "public",
+            "gmNotes": "Owner is Earl.",
+            "gmOnlyContent": {},
+            "npcIds": [],
+            "gruntTeamIds": [],
+            "encounterIds": [],
+            "sessionIds": [],
+            "visitedByCharacterIds": [],
+            "visitCount": 0,
+            "createdAt": "2025-12-17T12:00:00Z",
+            "updatedAt": "2025-12-17T12:00:00Z"
+        },
+        {
+            "id": "underground",
+            "campaignId": "placeholder",
+            "name": "Ork Underground",
+            "description": "The literal underground city beneath Seattle, home to many Orks and Trolls.",
+            "type": "underground",
+            "parentLocationId": "downtown",
+            "childLocationIds": [],
+            "relatedLocationIds": [],
+            "images": [],
+            "mapPosition": {
+                "x": 0,
+                "y": 0
+            },
+            "tags": [
+                "Ork",
+                "Underground",
+                "Smuggling"
+            ],
+            "visibility": "restricted",
+            "gmNotes": "Entrance requires contacts or bribes.",
+            "gmOnlyContent": {},
+            "npcIds": [],
+            "gruntTeamIds": [],
+            "encounterIds": [],
+            "sessionIds": [],
+            "visitedByCharacterIds": [],
+            "visitCount": 0,
+            "createdAt": "2025-12-17T12:00:00Z",
+            "updatedAt": "2025-12-17T12:00:00Z"
+        },
+        {
+            "id": "bellevue",
+            "campaignId": "placeholder",
+            "name": "Bellevue",
+            "description": "Upscale, clean, and heavily patrolled. Home to many corp execs.",
+            "type": "residential",
+            "parentLocationId": "seattle-root",
+            "childLocationIds": [
+                "bellevue-square"
+            ],
+            "relatedLocationIds": [],
+            "images": [],
+            "mapPosition": {
+                "x": 0,
+                "y": 0
+            },
+            "tags": [
+                "Rich",
+                "High Security",
+                "Suburban"
+            ],
+            "visibility": "public",
+            "gmNotes": "",
+            "gmOnlyContent": {},
+            "npcIds": [],
+            "gruntTeamIds": [],
+            "encounterIds": [],
+            "sessionIds": [],
+            "visitedByCharacterIds": [],
+            "visitCount": 0,
+            "createdAt": "2025-12-17T12:00:00Z",
+            "updatedAt": "2025-12-17T12:00:00Z"
+        },
+        {
+            "id": "bellevue-square",
+            "campaignId": "placeholder",
+            "name": "Bellevue Square",
+            "description": "High-end shopping mall.",
+            "type": "commercial",
+            "parentLocationId": "bellevue",
+            "childLocationIds": [],
+            "relatedLocationIds": [],
+            "images": [],
+            "mapPosition": {
+                "x": 0,
+                "y": 0
+            },
+            "tags": [
+                "Shopping",
+                "Luxury"
+            ],
+            "visibility": "public",
+            "gmNotes": "",
+            "gmOnlyContent": {},
+            "npcIds": [],
+            "gruntTeamIds": [],
+            "encounterIds": [],
+            "sessionIds": [],
+            "visitedByCharacterIds": [],
+            "visitCount": 0,
+            "createdAt": "2025-12-17T12:00:00Z",
+            "updatedAt": "2025-12-17T12:00:00Z"
+        },
+        {
+            "id": "redmond",
+            "campaignId": "placeholder",
+            "name": "Redmond Barrens",
+            "description": "A lawless wasteland of decaying suburbs and industry. Home to the SINless.",
+            "type": "residential",
+            "parentLocationId": "seattle-root",
+            "childLocationIds": [
+                "touristville",
+                "glow-city"
+            ],
+            "relatedLocationIds": [],
+            "images": [],
+            "mapPosition": {
+                "x": 0,
+                "y": 0
+            },
+            "tags": [
+                "Barrens",
+                "Lawless",
+                "Gang Territory"
+            ],
+            "visibility": "public",
+            "gmNotes": "Police Zone Z.",
+            "gmOnlyContent": {},
+            "npcIds": [],
+            "gruntTeamIds": [],
+            "encounterIds": [],
+            "sessionIds": [],
+            "visitedByCharacterIds": [],
+            "visitCount": 0,
+            "createdAt": "2025-12-17T12:00:00Z",
+            "updatedAt": "2025-12-17T12:00:00Z"
+        },
+        {
+            "id": "touristville",
+            "campaignId": "placeholder",
+            "name": "Touristville",
+            "description": "The 'safe' edge of the Barrens where thrill-seekers go to slum it.",
+            "type": "commercial",
+            "parentLocationId": "redmond",
+            "childLocationIds": [],
+            "relatedLocationIds": [],
+            "images": [],
+            "mapPosition": {
+                "x": 0,
+                "y": 0
+            },
+            "tags": [
+                "Vice",
+                "Clubs",
+                "Danger"
+            ],
+            "visibility": "public",
+            "gmNotes": "",
+            "gmOnlyContent": {},
+            "npcIds": [],
+            "gruntTeamIds": [],
+            "encounterIds": [],
+            "sessionIds": [],
+            "visitedByCharacterIds": [],
+            "visitCount": 0,
+            "createdAt": "2025-12-17T12:00:00Z",
+            "updatedAt": "2025-12-17T12:00:00Z"
+        },
+        {
+            "id": "glow-city",
+            "campaignId": "placeholder",
+            "name": "Glow City",
+            "description": "Irradiated zone due to a reactor leak. Mutants and glowing ghuls.",
+            "type": "other",
+            "parentLocationId": "redmond",
+            "childLocationIds": [],
+            "relatedLocationIds": [],
+            "images": [],
+            "mapPosition": {
+                "x": 0,
+                "y": 0
+            },
+            "tags": [
+                "Radioactive",
+                "Hazard",
+                "Ghouls"
+            ],
+            "visibility": "public",
+            "gmNotes": "Magical background count is high and twisted.",
+            "gmOnlyContent": {},
+            "npcIds": [],
+            "gruntTeamIds": [],
+            "encounterIds": [],
+            "sessionIds": [],
+            "visitedByCharacterIds": [],
+            "visitCount": 0,
+            "createdAt": "2025-12-17T12:00:00Z",
+            "updatedAt": "2025-12-17T12:00:00Z"
+        },
+        {
+            "id": "tacoma",
+            "campaignId": "placeholder",
+            "name": "Tacoma",
+            "description": "blue-collar industrial district. Major port.",
+            "type": "industrial",
+            "parentLocationId": "seattle-root",
+            "childLocationIds": [],
+            "relatedLocationIds": [],
+            "images": [],
+            "mapPosition": {
+                "x": 0,
+                "y": 0
+            },
+            "tags": [
+                "Industry",
+                "Port",
+                "Smuggling"
+            ],
+            "visibility": "public",
+            "gmNotes": "",
+            "gmOnlyContent": {},
+            "npcIds": [],
+            "gruntTeamIds": [],
+            "encounterIds": [],
+            "sessionIds": [],
+            "visitedByCharacterIds": [],
+            "visitCount": 0,
+            "createdAt": "2025-12-17T12:00:00Z",
+            "updatedAt": "2025-12-17T12:00:00Z"
+        },
+        {
+            "id": "everett",
+            "campaignId": "placeholder",
+            "name": "Everett",
+            "description": "Industrial and shipping to the north. Home to Boeing/Federated Boeing.",
+            "type": "industrial",
+            "parentLocationId": "seattle-root",
+            "childLocationIds": [],
+            "relatedLocationIds": [],
+            "images": [],
+            "mapPosition": {
+                "x": 0,
+                "y": 0
+            },
+            "tags": [
+                "Industry",
+                "Port",
+                "Aerospace"
+            ],
+            "visibility": "public",
+            "gmNotes": "",
+            "gmOnlyContent": {},
+            "npcIds": [],
+            "gruntTeamIds": [],
+            "encounterIds": [],
+            "sessionIds": [],
+            "visitedByCharacterIds": [],
+            "visitCount": 0,
+            "createdAt": "2025-12-17T12:00:00Z",
+            "updatedAt": "2025-12-17T12:00:00Z"
+        },
+        {
+            "id": "renton",
+            "campaignId": "placeholder",
+            "name": "Renton",
+            "description": "Residential and Light Industrial. Secure but not fancy.",
+            "type": "residential",
+            "parentLocationId": "seattle-root",
+            "childLocationIds": [],
+            "relatedLocationIds": [],
+            "images": [],
+            "mapPosition": {
+                "x": 0,
+                "y": 0
+            },
+            "tags": [
+                "Suburban",
+                "Safe"
+            ],
+            "visibility": "public",
+            "gmNotes": "",
+            "gmOnlyContent": {},
+            "npcIds": [],
+            "gruntTeamIds": [],
+            "encounterIds": [],
+            "sessionIds": [],
+            "visitedByCharacterIds": [],
+            "visitCount": 0,
+            "createdAt": "2025-12-17T12:00:00Z",
+            "updatedAt": "2025-12-17T12:00:00Z"
+        }
+    ]
+}

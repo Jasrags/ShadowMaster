@@ -8,6 +8,8 @@ import {
   usePriorityTable,
   useMetatypes,
 } from "@/lib/rules";
+import { validateAllQualities } from "@/lib/rules/qualities/validation";
+import { buildCharacterFromCreationState } from "@/lib/rules/qualities/creation-helper";
 import {
   useLifestyleModifiers,
   useLifestyles,
@@ -19,6 +21,7 @@ import type {
   CreationState,
   ID,
   ValidationError,
+  Character,
   GearItem,
   Weapon,
   ArmorItem,
@@ -390,6 +393,48 @@ export function CreationWizard({ onCancel, onComplete, characterId: initialChara
         break;
       }
 
+      case "qualities": {
+        // Validate karma limits
+        const positiveKarmaSpent = (state.budgets["karma-spent-positive"] as number) || 0;
+        const negativeKarmaGained = (state.budgets["karma-gained-negative"] as number) || 0;
+
+        if (positiveKarmaSpent > 25) {
+          errors.push({
+            constraintId: "positive-karma-limit",
+            stepId,
+            message: `Positive qualities exceed 25 Karma limit (${positiveKarmaSpent} spent).`,
+            severity: "error",
+          });
+        }
+
+        if (negativeKarmaGained > 25) {
+          errors.push({
+            constraintId: "negative-karma-limit",
+            stepId,
+            message: `Negative qualities exceed 25 Karma limit (${negativeKarmaGained} gained).`,
+            severity: "error",
+          });
+        }
+
+        // Validate quality prerequisites and incompatibilities if we have ruleset
+        if (ruleset && editionCode) {
+          const validationCharacter = buildCharacterFromCreationState(state, editionCode);
+          const qualityValidation = validateAllQualities(validationCharacter as Character, ruleset);
+
+          if (!qualityValidation.valid) {
+            for (const error of qualityValidation.errors) {
+              errors.push({
+                constraintId: `quality-${error.qualityId}`,
+                stepId,
+                message: `${error.qualityId}: ${error.message}`,
+                severity: "error",
+              });
+            }
+          }
+        }
+        break;
+      }
+
       case "gear": {
         // Check nuyen carryover (max 5,000)
         const nuyenBudget = budgetValues["nuyen"] || 0;
@@ -635,7 +680,7 @@ export function CreationWizard({ onCancel, onComplete, characterId: initialChara
     }
 
     return errors;
-  }, [currentStep?.id, state.priorities, state.selections, state.budgets, budgetValues, priorityTable]);
+  }, [currentStep?.id, state, budgetValues, priorityTable, ruleset, editionCode]);
 
   // Current step validation errors
   const currentStepErrors = useMemo(() => {

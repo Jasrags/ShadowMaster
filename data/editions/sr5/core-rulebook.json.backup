@@ -235,7 +235,7 @@
             "costType": "perLevel",
             "maxLevel": 6,
             "requiresSkill": true,
-            "description": "+1 skill rating per level. Max improvement = current skill × 1.5 (round up). Must know the skill."
+            "description": "+1 skill rating per level. Max improvement = current skill \u00d7 1.5 (round up). Must know the skill."
           },
           {
             "id": "improved-physical-attribute",
@@ -608,7 +608,7 @@
             "racialTraits": [
               "Thermographic Vision",
               "+2 dice vs. pathogens/toxins",
-              "Lifestyle cost ×1.2"
+              "Lifestyle cost \u00d71.2"
             ],
             "priorityAvailability": {
               "A": {
@@ -733,7 +733,7 @@
               "Thermographic Vision",
               "+1 Reach",
               "+1 Dermal Armor",
-              "Lifestyle cost ×2"
+              "Lifestyle cost \u00d72"
             ],
             "priorityAvailability": {
               "A": {
@@ -851,7 +851,7 @@
           {
             "id": "astralInitiative",
             "name": "Astral Initiative",
-            "formula": "(INT × 2) + 2d6",
+            "formula": "(INT \u00d7 2) + 2d6",
             "description": "Initiative while astrally projecting."
           },
           {
@@ -869,19 +869,19 @@
           {
             "id": "physicalLimit",
             "name": "Physical Limit",
-            "formula": "ceil(((STR × 2) + BOD + REA) / 3)",
+            "formula": "ceil(((STR \u00d7 2) + BOD + REA) / 3)",
             "description": "Maximum hits on physical tests."
           },
           {
             "id": "mentalLimit",
             "name": "Mental Limit",
-            "formula": "ceil(((LOG × 2) + INT + WIL) / 3)",
+            "formula": "ceil(((LOG \u00d7 2) + INT + WIL) / 3)",
             "description": "Maximum hits on mental tests."
           },
           {
             "id": "socialLimit",
             "name": "Social Limit",
-            "formula": "ceil(((CHA × 2) + WIL + ceil(ESS)) / 3)",
+            "formula": "ceil(((CHA \u00d7 2) + WIL + ceil(ESS)) / 3)",
             "description": "Maximum hits on social tests."
           },
           {
@@ -1572,7 +1572,7 @@
               "range": "touch",
               "duration": "sustained",
               "drain": "F-2",
-              "description": "The subject can tell whether a target’s statements are the truth (or at least if the subject honestly believes them to be true)."
+              "description": "The subject can tell whether a target\u2019s statements are the truth (or at least if the subject honestly believes them to be true)."
             },
             {
               "id": "clairaudience",
@@ -2525,7 +2525,7 @@
               "magician": "+2 dice for Combat spells, preparations, and rituals",
               "adept": "1 free level of Enhanced Accuracy (skill) and 1 free level of Danger Sense"
             },
-            "disadvantage": "If you break a promise, whether by choice or by accident, you take a –1 dice pool modifier to all actions until you make good on your promise.",
+            "disadvantage": "If you break a promise, whether by choice or by accident, you take a \u20131 dice pool modifier to all actions until you make good on your promise.",
             "source": "Core"
           },
           {
@@ -2668,13 +2668,13 @@
               "magician": "+2 dice for spells, preparations, and spell rituals in the Combat category",
               "adept": "1 free level of Improved Ability on a Combat skill"
             },
-            "disadvantage": "If you act dishonorably or without courtesy, whether by choice or by accident, you take a –1 dice pool modifier to all actions until you atone for your behavior.",
+            "disadvantage": "If you act dishonorably or without courtesy, whether by choice or by accident, you take a \u20131 dice pool modifier to all actions until you atone for your behavior.",
             "source": "Core"
           },
           {
             "id": "wolf",
             "name": "Wolf",
-            "description": "Wolf is recognized as a hunter and warrior worldwide. He is devoted to the other members of his pack. Wolf wins every fight but one—the one that kills him.",
+            "description": "Wolf is recognized as a hunter and warrior worldwide. He is devoted to the other members of his pack. Wolf wins every fight but one\u2014the one that kills him.",
             "karmaCost": 5,
             "advantages": {
               "all": "+2 dice to Tracking tests",
@@ -2728,7 +2728,7 @@
             "keywords": [
               "anchored"
             ],
-            "description": "The ward is a basic ritual, taught to many magicians. It creates an astral barrier with a Force equal to the Force of the ritual. The ward may encompass a volume of up to fifty cubic meters times the sum of the participants' Magic ratings. The ward lasts for a number of weeks equal to the net hits from the sealing step of the ritual—if the leader spends an amount of karma equal to the ward's Force, the ward is permanent.",
+            "description": "The ward is a basic ritual, taught to many magicians. It creates an astral barrier with a Force equal to the Force of the ritual. The ward may encompass a volume of up to fifty cubic meters times the sum of the participants' Magic ratings. The ward lasts for a number of weeks equal to the net hits from the sealing step of the ritual\u2014if the leader spends an amount of karma equal to the ward's Force, the ward is permanent.",
             "duration": "Force hours",
             "canBePermanent": true,
             "permanentKarmaCost": "Force",
@@ -2861,7 +2861,7 @@
           {
             "id": "spotter",
             "name": "Spotter",
-            "description": "If the ritual's target is not in sight of the leader, the leader needs to designate someone who can see the target for them. The spotter must be a member of the group casting the ritual—or a spirit bound to a member—and must be able to astrally perceive the target."
+            "description": "If the ritual's target is not in sight of the leader, the leader needs to designate someone who can see the target for them. The spotter must be a member of the group casting the ritual\u2014or a spirit bound to a member\u2014and must be able to astrally perceive the target."
           }
         ]
       }
@@ -3072,7 +3072,7 @@
           {
             "id": "exotic-ranged-weapon",
             "name": "Exotic Ranged Weapon",
-            "description": "Sometimes a regular gun or blade won’t do the job and you need something fancier. Or weirder. This skill must be taken once for each unusual ranged weapon you want to use. Some examples include blowguns, gyrojet pistols, flamethrowers, and lasers.",
+            "description": "Sometimes a regular gun or blade won\u2019t do the job and you need something fancier. Or weirder. This skill must be taken once for each unusual ranged weapon you want to use. Some examples include blowguns, gyrojet pistols, flamethrowers, and lasers.",
             "linkedAttribute": "agility",
             "group": null,
             "canDefault": false,
@@ -3082,7 +3082,7 @@
           {
             "id": "heavy-weapons",
             "name": "Heavy Weapons",
-            "description": "The term heavy weapon is designated for all projectile weaponry larger than an assault rifle, such as grenade launchers, machine guns, and assault cannons. This skill is exclusive to handheld and non-vehicle-mounted weaponry—if you’ve got a gun mounted on or in a vehicle, use Gunnery.",
+            "description": "The term heavy weapon is designated for all projectile weaponry larger than an assault rifle, such as grenade launchers, machine guns, and assault cannons. This skill is exclusive to handheld and non-vehicle-mounted weaponry\u2014if you\u2019ve got a gun mounted on or in a vehicle, use Gunnery.",
             "linkedAttribute": "agility",
             "group": null,
             "canDefault": true,
@@ -3192,7 +3192,7 @@
           {
             "id": "escape-artist",
             "name": "Escape Artist",
-            "description": "Escape Artist measures the character’s ability to escape from bindings by using body contortion and manual dexterity. See Using Escape Artist, p. 135.",
+            "description": "Escape Artist measures the character\u2019s ability to escape from bindings by using body contortion and manual dexterity. See Using Escape Artist, p. 135.",
             "linkedAttribute": "agility",
             "group": null,
             "canDefault": true,
@@ -3291,7 +3291,7 @@
           {
             "id": "sneaking",
             "name": "Sneaking",
-            "description": "Need to get where you’re not supposed to be? This skill allows you to remain inconspicuous in various situations. See Using Stealth Skills, p. 136.",
+            "description": "Need to get where you\u2019re not supposed to be? This skill allows you to remain inconspicuous in various situations. See Using Stealth Skills, p. 136.",
             "linkedAttribute": "agility",
             "group": "stealth",
             "canDefault": true,
@@ -3305,7 +3305,7 @@
           {
             "id": "survival",
             "name": "Survival",
-            "description": "In the desert with nothing more than a tin cup, a poncho, and an iron rod? You’ll need this skill to help you get out alive. Survival is the ability to stay alive in extreme environmental conditions for extended periods of time. The skill governs a character’s ability to perform vital outdoor tasks such as start a fire, build a shelter, scrounge for food, etc. in hostile environments. See Using Survival, p. 136.",
+            "description": "In the desert with nothing more than a tin cup, a poncho, and an iron rod? You\u2019ll need this skill to help you get out alive. Survival is the ability to stay alive in extreme environmental conditions for extended periods of time. The skill governs a character\u2019s ability to perform vital outdoor tasks such as start a fire, build a shelter, scrounge for food, etc. in hostile environments. See Using Survival, p. 136.",
             "linkedAttribute": "willpower",
             "group": "outdoors",
             "canDefault": true,
@@ -3322,7 +3322,7 @@
           {
             "id": "swimming",
             "name": "Swimming",
-            "description": "This skill determines the character’s ability to swim in various bodies of water. The skill level affects the distance and speed at which a character can swim. See Using Swimming, p. 137",
+            "description": "This skill determines the character\u2019s ability to swim in various bodies of water. The skill level affects the distance and speed at which a character can swim. See Using Swimming, p. 137",
             "linkedAttribute": "strength",
             "group": "athletics",
             "canDefault": true,
@@ -3413,7 +3413,7 @@
           {
             "id": "intimidation",
             "name": "Intimidation",
-            "description": "Intimidation is about creating the impression that you are more menacing than another person in order to get them to do what you want. The skill may be applied multiple ways, from negotiation to interrogation. Intimidation is an Opposed Intimidation + Charisma [Social] Test against the target’s Charisma + Willpower, modified by the appropriate entries on the Social Modifiers Table (p. 140).",
+            "description": "Intimidation is about creating the impression that you are more menacing than another person in order to get them to do what you want. The skill may be applied multiple ways, from negotiation to interrogation. Intimidation is an Opposed Intimidation + Charisma [Social] Test against the target\u2019s Charisma + Willpower, modified by the appropriate entries on the Social Modifiers Table (p. 140).",
             "linkedAttribute": "charisma",
             "group": null,
             "canDefault": true,
@@ -3428,7 +3428,7 @@
           {
             "id": "leadership",
             "name": "Leadership",
-            "description": "Leadership is the ability to direct and motivate others. It’s like Con, except rather than using deception you’re using a position of authority. This skill is especially helpful in situations where the will of a teammate is shaken or someone is being asked to do something uncomfortable. The Leadership skill is not meant to replace or make up for poor teamwork. When using Leadership make an opposed test Charisma + Leadership. See Using Social Influence Skills, at right, for test modifiers.",
+            "description": "Leadership is the ability to direct and motivate others. It\u2019s like Con, except rather than using deception you\u2019re using a position of authority. This skill is especially helpful in situations where the will of a teammate is shaken or someone is being asked to do something uncomfortable. The Leadership skill is not meant to replace or make up for poor teamwork. When using Leadership make an opposed test Charisma + Leadership. See Using Social Influence Skills, at right, for test modifiers.",
             "linkedAttribute": "charisma",
             "group": "influence",
             "canDefault": true,
@@ -3443,7 +3443,7 @@
           {
             "id": "negotiation",
             "name": "Negotiation",
-            "description": "Negotiation governs a character’s ability to apply their charisma, tactics, and knowledge of situational psychology in order to create a better position when making deals.",
+            "description": "Negotiation governs a character\u2019s ability to apply their charisma, tactics, and knowledge of situational psychology in order to create a better position when making deals.",
             "linkedAttribute": "charisma",
             "group": "influence",
             "canDefault": true,
@@ -3506,7 +3506,7 @@
           {
             "id": "artificing",
             "name": "Artificing",
-            "description": "Artificing is the process of crafting magical foci. The skill may also be used forensically, in order to assense qualities about an existing focus’ creation and purpose. See Artificing p. 306.",
+            "description": "Artificing is the process of crafting magical foci. The skill may also be used forensically, in order to assense qualities about an existing focus\u2019 creation and purpose. See Artificing p. 306.",
             "linkedAttribute": "magic",
             "group": "enchanting",
             "canDefault": false,
@@ -3520,7 +3520,7 @@
           {
             "id": "assensing",
             "name": "Assensing",
-            "description": "Assensing is a magic user’s ability to read and interpret fluctuations in the astral world. This skill allows practitioners to learn information by reading astral auras. Only characters capable of astral perception may take this skill. For more information, see Astral Perception, p. 312",
+            "description": "Assensing is a magic user\u2019s ability to read and interpret fluctuations in the astral world. This skill allows practitioners to learn information by reading astral auras. Only characters capable of astral perception may take this skill. For more information, see Astral Perception, p. 312",
             "linkedAttribute": "intuition",
             "group": null,
             "canDefault": false,
@@ -3603,7 +3603,7 @@
           {
             "id": "disenchanting",
             "name": "Disenchanting",
-            "description": "This skill governs a character’s ability to remove the enchantment from an item. See Disenchanting, p. 307.",
+            "description": "This skill governs a character\u2019s ability to remove the enchantment from an item. See Disenchanting, p. 307.",
             "linkedAttribute": "magic",
             "group": "enchanting",
             "canDefault": false,
@@ -3687,7 +3687,7 @@
           {
             "id": "decompiling",
             "name": "Decompiling",
-            "description": "Decompiling is a character’s ability to effectively delete previously compiled sprites. See Sprites, p. 254.",
+            "description": "Decompiling is a character\u2019s ability to effectively delete previously compiled sprites. See Sprites, p. 254.",
             "linkedAttribute": "resonance",
             "group": "tasking",
             "canDefault": false,
@@ -3740,7 +3740,7 @@
           {
             "id": "animal-handling",
             "name": "Animal Handling",
-            "description": "This skill governs the training, care, riding (if they’re big enough), and control of non-sentient animals. Competent trainers have the ability to handle multiple animals. It is even possible to approach an untrained animal and get it to trust you, or at least not eat you.",
+            "description": "This skill governs the training, care, riding (if they\u2019re big enough), and control of non-sentient animals. Competent trainers have the ability to handle multiple animals. It is even possible to approach an untrained animal and get it to trust you, or at least not eat you.",
             "linkedAttribute": "charisma",
             "group": null,
             "canDefault": true,
@@ -3777,7 +3777,7 @@
           {
             "id": "artisan",
             "name": "Artisan",
-            "description": "This skill includes several different forms of artistic impression as well as the handcrafting of fine objects that would otherwise be produced on an assembly line. The world’s top artists and crafters are considered artisans.",
+            "description": "This skill includes several different forms of artistic impression as well as the handcrafting of fine objects that would otherwise be produced on an assembly line. The world\u2019s top artists and crafters are considered artisans.",
             "linkedAttribute": "intuition",
             "group": null,
             "canDefault": false,
@@ -3807,7 +3807,7 @@
           {
             "id": "biotechnology",
             "name": "Biotechnology",
-            "description": "Biotechnology is a wide-ranging skill primarily used by doctors and scientists to grow organic body parts. This skill is the basis for cloning as well as all forms of bioware. Provided the right equipment is available, biotechnology can be used to repair damaged bioware, clone new tissue, or detect any bioware in a subject’s body. This skill does not allow characters to install or remove bioware.",
+            "description": "Biotechnology is a wide-ranging skill primarily used by doctors and scientists to grow organic body parts. This skill is the basis for cloning as well as all forms of bioware. Provided the right equipment is available, biotechnology can be used to repair damaged bioware, clone new tissue, or detect any bioware in a subject\u2019s body. This skill does not allow characters to install or remove bioware.",
             "linkedAttribute": "logic",
             "group": null,
             "canDefault": false,
@@ -3899,7 +3899,7 @@
           {
             "id": "electronic-warfare",
             "name": "Electronic Warfare",
-            "description": "Electronic Warfare is the basis of military signals intelligence. It governs the encoding, disruption, spoofing, and decoding of communication systems. Providing the user has the proper equipment, the skill can be used to manipulate or even take over the signal of any item’s communication system. See Using Electronic Warfare, p. 226.",
+            "description": "Electronic Warfare is the basis of military signals intelligence. It governs the encoding, disruption, spoofing, and decoding of communication systems. Providing the user has the proper equipment, the skill can be used to manipulate or even take over the signal of any item\u2019s communication system. See Using Electronic Warfare, p. 226.",
             "linkedAttribute": "logic",
             "group": "cracking",
             "canDefault": false,
@@ -4010,7 +4010,7 @@
           {
             "id": "medicine",
             "name": "Medicine",
-            "description": "Medicine is used to perform advanced medical procedures such as surgeries. It includes long-term medical support for disease and illness, and the skill can be used to diagnose a character’s medical condition. This skill is used to implant or remove cybernetics and bioware but cannot be used to repair or maintain implanted devices. For more information, see Healing, p. 205.",
+            "description": "Medicine is used to perform advanced medical procedures such as surgeries. It includes long-term medical support for disease and illness, and the skill can be used to diagnose a character\u2019s medical condition. This skill is used to implant or remove cybernetics and bioware but cannot be used to repair or maintain implanted devices. For more information, see Healing, p. 205.",
             "linkedAttribute": "logic",
             "group": "biotech",
             "canDefault": false,
@@ -4058,7 +4058,7 @@
           {
             "id": "software",
             "name": "Software",
-            "description": "Software is the skill used to create and manipulate programming in the Matrix. See Using Software, p. 226. It’s also what technomancers use when they create their complex forms (Threading, p. 251).",
+            "description": "Software is the skill used to create and manipulate programming in the Matrix. See Using Software, p. 226. It\u2019s also what technomancers use when they create their complex forms (Threading, p. 251).",
             "linkedAttribute": "logic",
             "group": "electronics",
             "canDefault": false,
@@ -4203,7 +4203,7 @@
         "creationLimits": {
           "maxSkillRating": 6,
           "maxSkillRatingWithAptitude": 7,
-          "freeKnowledgePoints": "(LOG + INT) × 2",
+          "freeKnowledgePoints": "(LOG + INT) \u00d7 2",
           "nativeLanguageRating": 6
         },
         "exampleKnowledgeSkills": [
@@ -4484,7 +4484,7 @@
             "id": "astral-chameleon",
             "name": "Astral Chameleon",
             "karmaCost": 10,
-            "summary": "Astral signature lasts half as long; –2 to others Assensing you.",
+            "summary": "Astral signature lasts half as long; \u20132 to others Assensing you.",
             "requiresMagic": true
           },
           {
@@ -4497,7 +4497,7 @@
             "id": "blandness",
             "name": "Blandness",
             "karmaCost": 8,
-            "summary": "Audience Threshold +1 to remember you; –2 to Shadow/Locate tests."
+            "summary": "Audience Threshold +1 to remember you; \u20132 to Shadow/Locate tests."
           },
           {
             "id": "catlike",
@@ -4525,19 +4525,7 @@
             "karmaCost": 14,
             "summary": "Increase natural max of one attribute by 1.",
             "requiresSpecification": true,
-            "specificationLabel": "Attribute",
-            "specificationOptions": [
-              "Body",
-              "Agility",
-              "Reaction",
-              "Strength",
-              "Willpower",
-              "Logic",
-              "Intuition",
-              "Charisma",
-              "Magic",
-              "Resonance"
-            ]
+            "specificationLabel": "Attribute"
           },
           {
             "id": "first-impression",
@@ -4940,7 +4928,7 @@
             "id": "combat-paralysis",
             "name": "Combat Paralysis",
             "karmaBonus": 12,
-            "summary": "First Initiative halved; –3 on Surprise tests."
+            "summary": "First Initiative halved; \u20133 on Surprise tests."
           },
           {
             "id": "dependents",
@@ -5162,7 +5150,7 @@
             "id": "uncouth",
             "name": "Uncouth",
             "karmaBonus": 14,
-            "summary": "–2 dice to resist social impulses; double Karma for Social skills."
+            "summary": "\u20132 dice to resist social impulses; double Karma for Social skills."
           },
           {
             "id": "uneducated",
@@ -5197,48 +5185,48 @@
             "id": "street",
             "name": "Street",
             "monthlyCost": 0,
-            "startingNuyen": "1d6 × 20",
+            "startingNuyen": "1d6 \u00d7 20",
             "description": "Living on the streets with no permanent shelter."
           },
           {
             "id": "squatter",
             "name": "Squatter",
             "monthlyCost": 500,
-            "startingNuyen": "2d6 × 40",
+            "startingNuyen": "2d6 \u00d7 40",
             "description": "Abandoned buildings or makeshift shelter."
           },
           {
             "id": "low",
             "name": "Low",
             "monthlyCost": 2000,
-            "startingNuyen": "3d6 × 60",
+            "startingNuyen": "3d6 \u00d7 60",
             "description": "A small apartment in a rough neighborhood."
           },
           {
             "id": "medium",
             "name": "Medium",
             "monthlyCost": 5000,
-            "startingNuyen": "4d6 × 100",
+            "startingNuyen": "4d6 \u00d7 100",
             "description": "A comfortable apartment with basic amenities."
           },
           {
             "id": "high",
             "name": "High",
             "monthlyCost": 10000,
-            "startingNuyen": "5d6 × 500",
+            "startingNuyen": "5d6 \u00d7 500",
             "description": "Upscale housing in a secure neighborhood."
           },
           {
             "id": "luxury",
             "name": "Luxury",
             "monthlyCost": 100000,
-            "startingNuyen": "6d6 × 1000",
+            "startingNuyen": "6d6 \u00d7 1000",
             "description": "The finest accommodations money can buy."
           }
         ],
         "metatypeModifiers": {
           "dwarf": 1.2,
-          "troll": 2
+          "troll": 2.0
         },
         "subscriptions": [
           {
@@ -5247,7 +5235,7 @@
             "monthlyCost": 416.67,
             "yearlyCost": 5000,
             "category": "medical",
-            "description": "Medical response service covering Zones 1-2. Yearly cost: 5,000¥"
+            "description": "Medical response service covering Zones 1-2. Yearly cost: 5,000\u00a5"
           },
           {
             "id": "docwagon-gold",
@@ -5255,7 +5243,7 @@
             "monthlyCost": 2083.33,
             "yearlyCost": 25000,
             "category": "medical",
-            "description": "Medical response service covering Zones 1-6. Yearly cost: 25,000¥"
+            "description": "Medical response service covering Zones 1-6. Yearly cost: 25,000\u00a5"
           },
           {
             "id": "docwagon-platinum",
@@ -5263,7 +5251,7 @@
             "monthlyCost": 4166.67,
             "yearlyCost": 50000,
             "category": "medical",
-            "description": "Medical response service covering Zones 1-8. Yearly cost: 50,000¥"
+            "description": "Medical response service covering Zones 1-8. Yearly cost: 50,000\u00a5"
           },
           {
             "id": "docwagon-super-platinum",
@@ -5271,7 +5259,7 @@
             "monthlyCost": 8333.33,
             "yearlyCost": 100000,
             "category": "medical",
-            "description": "Medical response service covering Zones 1-8 with premium service. Yearly cost: 100,000¥"
+            "description": "Medical response service covering Zones 1-8 with premium service. Yearly cost: 100,000\u00a5"
           },
           {
             "id": "food-service-basic",
@@ -5281,7 +5269,7 @@
             "minRating": 1,
             "maxRating": 6,
             "category": "food",
-            "description": "Basic meal delivery service. Cost: Rating × 200¥/month"
+            "description": "Basic meal delivery service. Cost: Rating \u00d7 200\u00a5/month"
           }
         ]
       }
@@ -6669,7 +6657,7 @@
               "name": "Smoke",
               "category": "weapons",
               "subcategory": "grenades",
-              "damage": "—",
+              "damage": "\u2014",
               "cost": 40,
               "blast": "10m Radius",
               "availability": 4,
@@ -6704,7 +6692,7 @@
               "name": "Thermal smoke",
               "category": "weapons",
               "subcategory": "grenades",
-              "damage": "—",
+              "damage": "\u2014",
               "cost": 60,
               "blast": "10m Radius",
               "availability": 6,
@@ -7064,22 +7052,7 @@
             "availability": 0,
             "hasRating": true,
             "maxRating": 3,
-            "costPerRating": true,
-            "ratingSpec": {
-              "rating": {
-                "hasRating": true,
-                "minRating": 1,
-                "maxRating": 3
-              },
-              "costScaling": {
-                "baseValue": 50,
-                "perRating": true
-              },
-              "availabilityScaling": {
-                "baseValue": 0,
-                "perRating": false
-              }
-            }
+            "costPerRating": true
           },
           {
             "id": "binoculars-optical",
@@ -7105,22 +7078,7 @@
             "availability": 0,
             "hasRating": true,
             "maxRating": 6,
-            "costPerRating": true,
-            "ratingSpec": {
-              "rating": {
-                "hasRating": true,
-                "minRating": 1,
-                "maxRating": 6
-              },
-              "costScaling": {
-                "baseValue": 100,
-                "perRating": true
-              },
-              "availabilityScaling": {
-                "baseValue": 0,
-                "perRating": false
-              }
-            }
+            "costPerRating": true
           },
           {
             "id": "data-tap",
@@ -7148,22 +7106,7 @@
             "availability": 4,
             "hasRating": true,
             "maxRating": 6,
-            "costPerRating": true,
-            "ratingSpec": {
-              "rating": {
-                "hasRating": true,
-                "minRating": 1,
-                "maxRating": 6
-              },
-              "costScaling": {
-                "baseValue": 50,
-                "perRating": true
-              },
-              "availabilityScaling": {
-                "baseValue": 4,
-                "perRating": false
-              }
-            }
+            "costPerRating": true
           },
           {
             "id": "goggles",
@@ -7173,22 +7116,7 @@
             "availability": 0,
             "hasRating": true,
             "maxRating": 6,
-            "costPerRating": true,
-            "ratingSpec": {
-              "rating": {
-                "hasRating": true,
-                "minRating": 1,
-                "maxRating": 6
-              },
-              "costScaling": {
-                "baseValue": 50,
-                "perRating": true
-              },
-              "availabilityScaling": {
-                "baseValue": 0,
-                "perRating": false
-              }
-            }
+            "costPerRating": true
           },
           {
             "id": "headphones",
@@ -7201,22 +7129,7 @@
             "costPerRating": true,
             "capacity": 1,
             "capacityPerRating": true,
-            "description": "Over-ear audio device.",
-            "ratingSpec": {
-              "rating": {
-                "hasRating": true,
-                "minRating": 1,
-                "maxRating": 6
-              },
-              "costScaling": {
-                "baseValue": 50,
-                "perRating": true
-              },
-              "availabilityScaling": {
-                "baseValue": 0,
-                "perRating": false
-              }
-            }
+            "description": "Over-ear audio device."
           },
           {
             "id": "laser-microphone",
@@ -7228,22 +7141,7 @@
             "hasRating": true,
             "maxRating": 6,
             "costPerRating": true,
-            "description": "Long-range audio surveillance (Capacity 1-6).",
-            "ratingSpec": {
-              "rating": {
-                "hasRating": true,
-                "minRating": 1,
-                "maxRating": 6
-              },
-              "costScaling": {
-                "baseValue": 100,
-                "perRating": true
-              },
-              "availabilityScaling": {
-                "baseValue": 6,
-                "perRating": false
-              }
-            }
+            "description": "Long-range audio surveillance (Capacity 1-6)."
           },
           {
             "id": "micro-camera",
@@ -7252,22 +7150,7 @@
             "cost": 100,
             "availability": 0,
             "hasRating": true,
-            "maxRating": 1,
-            "ratingSpec": {
-              "rating": {
-                "hasRating": true,
-                "minRating": 1,
-                "maxRating": 1
-              },
-              "costScaling": {
-                "baseValue": 100,
-                "perRating": false
-              },
-              "availabilityScaling": {
-                "baseValue": 0,
-                "perRating": false
-              }
-            }
+            "maxRating": 1
           },
           {
             "id": "micro-transceiver",
@@ -7286,22 +7169,7 @@
             "hasRating": true,
             "maxRating": 4,
             "costPerRating": true,
-            "restricted": true,
-            "ratingSpec": {
-              "rating": {
-                "hasRating": true,
-                "minRating": 1,
-                "maxRating": 4
-              },
-              "costScaling": {
-                "baseValue": 3000,
-                "perRating": true
-              },
-              "availabilityScaling": {
-                "baseValue": 12,
-                "perRating": false
-              }
-            }
+            "restricted": true
           },
           {
             "id": "omni-directional-mic",
@@ -7311,22 +7179,7 @@
             "availability": 0,
             "hasRating": true,
             "maxRating": 6,
-            "costPerRating": true,
-            "ratingSpec": {
-              "rating": {
-                "hasRating": true,
-                "minRating": 1,
-                "maxRating": 6
-              },
-              "costScaling": {
-                "baseValue": 50,
-                "perRating": true
-              },
-              "availabilityScaling": {
-                "baseValue": 0,
-                "perRating": false
-              }
-            }
+            "costPerRating": true
           },
           {
             "id": "subvocal-mic",
@@ -7695,22 +7548,7 @@
             "hasRating": true,
             "maxRating": 6,
             "costPerRating": true,
-            "description": "Forged identity (Rating 1-6).",
-            "ratingSpec": {
-              "rating": {
-                "hasRating": true,
-                "minRating": 1,
-                "maxRating": 6
-              },
-              "costScaling": {
-                "baseValue": 2500,
-                "perRating": true
-              },
-              "availabilityScaling": {
-                "baseValue": 3,
-                "perRating": false
-              }
-            }
+            "description": "Forged identity (Rating 1-6)."
           },
           {
             "id": "fake-license",
@@ -7722,22 +7560,7 @@
             "hasRating": true,
             "maxRating": 6,
             "costPerRating": true,
-            "description": "Forged permit or license (Rating 1-6).",
-            "ratingSpec": {
-              "rating": {
-                "hasRating": true,
-                "minRating": 1,
-                "maxRating": 6
-              },
-              "costScaling": {
-                "baseValue": 200,
-                "perRating": true
-              },
-              "availabilityScaling": {
-                "baseValue": 3,
-                "perRating": false
-              }
-            }
+            "description": "Forged permit or license (Rating 1-6)."
           },
           {
             "id": "contacts-imagelink",
@@ -7748,22 +7571,7 @@
             "description": "AR-enabled contact lenses.",
             "hasRating": true,
             "maxRating": 3,
-            "costPerRating": true,
-            "ratingSpec": {
-              "rating": {
-                "hasRating": true,
-                "minRating": 1,
-                "maxRating": 3
-              },
-              "costScaling": {
-                "baseValue": 200,
-                "perRating": true
-              },
-              "availabilityScaling": {
-                "baseValue": 3,
-                "perRating": false
-              }
-            }
+            "costPerRating": true
           },
           {
             "id": "glasses-imagelink",
@@ -7774,22 +7582,7 @@
             "description": "AR-enabled glasses.",
             "hasRating": true,
             "maxRating": 4,
-            "costPerRating": true,
-            "ratingSpec": {
-              "rating": {
-                "hasRating": true,
-                "minRating": 1,
-                "maxRating": 4
-              },
-              "costScaling": {
-                "baseValue": 100,
-                "perRating": true
-              },
-              "availabilityScaling": {
-                "baseValue": 2,
-                "perRating": false
-              }
-            }
+            "costPerRating": true
           },
           {
             "id": "ear-buds",
@@ -7802,22 +7595,7 @@
             "costPerRating": true,
             "capacity": 1,
             "capacityPerRating": true,
-            "description": "Small audio device fitting into the ear.",
-            "ratingSpec": {
-              "rating": {
-                "hasRating": true,
-                "minRating": 1,
-                "maxRating": 3
-              },
-              "costScaling": {
-                "baseValue": 50,
-                "perRating": true
-              },
-              "availabilityScaling": {
-                "baseValue": 0,
-                "perRating": false
-              }
-            }
+            "description": "Small audio device fitting into the ear."
           },
           {
             "id": "gecko-tape-gloves",
@@ -8075,22 +7853,7 @@
               "revolver"
             ],
             "page": 432,
-            "source": "Core",
-            "ratingSpec": {
-              "rating": {
-                "hasRating": true,
-                "minRating": 1,
-                "maxRating": 3
-              },
-              "costScaling": {
-                "baseValue": 200,
-                "perRating": true
-              },
-              "availabilityScaling": {
-                "baseValue": 3,
-                "perRating": false
-              }
-            }
+            "source": "Core"
           },
           {
             "id": "gyro-mount",
@@ -8277,26 +8040,7 @@
             "costPerRating": true,
             "description": "Adds rating to tests to resist contact-vector toxin attacks.",
             "page": 437,
-            "source": "Core",
-            "ratingSpec": {
-              "rating": {
-                "hasRating": true,
-                "minRating": 1,
-                "maxRating": 6
-              },
-              "costScaling": {
-                "baseValue": 250,
-                "perRating": true
-              },
-              "availabilityScaling": {
-                "baseValue": 6,
-                "perRating": false
-              },
-              "capacityCostScaling": {
-                "baseValue": 1,
-                "perRating": true
-              }
-            }
+            "source": "Core"
           },
           {
             "id": "chemical-seal",
@@ -8325,26 +8069,7 @@
             "costPerRating": true,
             "description": "Adds rating to Armor value when resisting Fire attacks or checking if armor catches fire.",
             "page": 437,
-            "source": "Core",
-            "ratingSpec": {
-              "rating": {
-                "hasRating": true,
-                "minRating": 1,
-                "maxRating": 6
-              },
-              "costScaling": {
-                "baseValue": 250,
-                "perRating": true
-              },
-              "availabilityScaling": {
-                "baseValue": 6,
-                "perRating": false
-              },
-              "capacityCostScaling": {
-                "baseValue": 1,
-                "perRating": true
-              }
-            }
+            "source": "Core"
           },
           {
             "id": "insulation",
@@ -8358,26 +8083,7 @@
             "costPerRating": true,
             "description": "Adds rating to Armor value when resisting Cold attacks.",
             "page": 437,
-            "source": "Core",
-            "ratingSpec": {
-              "rating": {
-                "hasRating": true,
-                "minRating": 1,
-                "maxRating": 6
-              },
-              "costScaling": {
-                "baseValue": 250,
-                "perRating": true
-              },
-              "availabilityScaling": {
-                "baseValue": 6,
-                "perRating": false
-              },
-              "capacityCostScaling": {
-                "baseValue": 1,
-                "perRating": true
-              }
-            }
+            "source": "Core"
           },
           {
             "id": "nonconductivity",
@@ -8391,26 +8097,7 @@
             "costPerRating": true,
             "description": "Adds rating to Armor value when resisting Electricity attacks.",
             "page": 438,
-            "source": "Core",
-            "ratingSpec": {
-              "rating": {
-                "hasRating": true,
-                "minRating": 1,
-                "maxRating": 6
-              },
-              "costScaling": {
-                "baseValue": 250,
-                "perRating": true
-              },
-              "availabilityScaling": {
-                "baseValue": 6,
-                "perRating": false
-              },
-              "capacityCostScaling": {
-                "baseValue": 1,
-                "perRating": true
-              }
-            }
+            "source": "Core"
           },
           {
             "id": "shock-frills",
@@ -8436,26 +8123,7 @@
             "costPerRating": true,
             "description": "Reduces thermal signature. Adds rating to limit on Sneaking tests against thermographic vision or thermal sensors.",
             "page": 438,
-            "source": "Core",
-            "ratingSpec": {
-              "rating": {
-                "hasRating": true,
-                "minRating": 1,
-                "maxRating": 6
-              },
-              "costScaling": {
-                "baseValue": 500,
-                "perRating": true
-              },
-              "availabilityScaling": {
-                "baseValue": 10,
-                "perRating": false
-              },
-              "capacityCostScaling": {
-                "baseValue": 1,
-                "perRating": true
-              }
-            }
+            "source": "Core"
           }
         ],
         "gearMods": [
@@ -8476,26 +8144,7 @@
             "description": "Provides efficient noise filtering and audio enhancement.",
             "wirelessBonus": "+Dice Pool bonus to Audio Perception equal to rating.",
             "page": 445,
-            "source": "Core",
-            "ratingSpec": {
-              "rating": {
-                "hasRating": true,
-                "minRating": 1,
-                "maxRating": 3
-              },
-              "costScaling": {
-                "baseValue": 100,
-                "perRating": true
-              },
-              "availabilityScaling": {
-                "baseValue": 2,
-                "perRating": false
-              },
-              "capacityCostScaling": {
-                "baseValue": 1,
-                "perRating": true
-              }
-            }
+            "source": "Core"
           },
           {
             "id": "select-sound-filter",
@@ -8514,26 +8163,7 @@
             "description": "Allows user to selectively filter specific sounds.",
             "wirelessBonus": "+Dice Pool bonus to Audio Perception vs specific sound equal to rating.",
             "page": 445,
-            "source": "Core",
-            "ratingSpec": {
-              "rating": {
-                "hasRating": true,
-                "minRating": 1,
-                "maxRating": 6
-              },
-              "costScaling": {
-                "baseValue": 250,
-                "perRating": true
-              },
-              "availabilityScaling": {
-                "baseValue": 3,
-                "perRating": false
-              },
-              "capacityCostScaling": {
-                "baseValue": 1,
-                "perRating": true
-              }
-            }
+            "source": "Core"
           }
         ]
       }
@@ -8559,29 +8189,29 @@
           {
             "id": "standard",
             "name": "Standard",
-            "essenceMultiplier": 1,
-            "costMultiplier": 1,
+            "essenceMultiplier": 1.0,
+            "costMultiplier": 1.0,
             "availabilityModifier": 0
           },
           {
             "id": "alpha",
             "name": "Alphaware",
             "essenceMultiplier": 0.8,
-            "costMultiplier": 2,
+            "costMultiplier": 2.0,
             "availabilityModifier": 2
           },
           {
             "id": "beta",
             "name": "Betaware",
             "essenceMultiplier": 0.6,
-            "costMultiplier": 4,
+            "costMultiplier": 4.0,
             "availabilityModifier": 4
           },
           {
             "id": "delta",
             "name": "Deltaware",
             "essenceMultiplier": 0.5,
-            "costMultiplier": 10,
+            "costMultiplier": 10.0,
             "availabilityModifier": 8
           }
         ],
@@ -8611,7 +8241,7 @@
             "id": "control-rig-1",
             "name": "Control Rig (Rating 1)",
             "category": "headware",
-            "essenceCost": 1,
+            "essenceCost": 1.0,
             "cost": 43000,
             "availability": 5,
             "restricted": true,
@@ -8626,7 +8256,7 @@
             "id": "control-rig-2",
             "name": "Control Rig (Rating 2)",
             "category": "headware",
-            "essenceCost": 2,
+            "essenceCost": 2.0,
             "cost": 97000,
             "availability": 10,
             "restricted": true,
@@ -8641,7 +8271,7 @@
             "id": "control-rig-3",
             "name": "Control Rig (Rating 3)",
             "category": "headware",
-            "essenceCost": 3,
+            "essenceCost": 3.0,
             "cost": 208000,
             "availability": 15,
             "restricted": true,
@@ -8707,26 +8337,7 @@
             "maxRating": 6,
             "costPerRating": true,
             "description": "Enhanced sense of smell. +Rating to smell-based Perception tests.",
-            "page": 453,
-            "ratingSpec": {
-              "rating": {
-                "hasRating": true,
-                "minRating": 1,
-                "maxRating": 6
-              },
-              "costScaling": {
-                "baseValue": 4000,
-                "perRating": true
-              },
-              "availabilityScaling": {
-                "baseValue": 6,
-                "perRating": false
-              },
-              "essenceScaling": {
-                "baseValue": 0.2,
-                "perRating": false
-              }
-            }
+            "page": 453
           },
           {
             "id": "taste-booster",
@@ -8739,26 +8350,7 @@
             "maxRating": 6,
             "costPerRating": true,
             "description": "Enhanced taste sensitivity. +Rating to taste analysis tests.",
-            "page": 453,
-            "ratingSpec": {
-              "rating": {
-                "hasRating": true,
-                "minRating": 1,
-                "maxRating": 6
-              },
-              "costScaling": {
-                "baseValue": 3000,
-                "perRating": true
-              },
-              "availabilityScaling": {
-                "baseValue": 4,
-                "perRating": false
-              },
-              "essenceScaling": {
-                "baseValue": 0.2,
-                "perRating": false
-              }
-            }
+            "page": 453
           },
           {
             "id": "tooth-compartment",
@@ -8781,26 +8373,7 @@
             "maxRating": 6,
             "costPerRating": true,
             "description": "Sonar imaging system. Can 'see' in complete darkness.",
-            "page": 453,
-            "ratingSpec": {
-              "rating": {
-                "hasRating": true,
-                "minRating": 1,
-                "maxRating": 6
-              },
-              "costScaling": {
-                "baseValue": 12000,
-                "perRating": true
-              },
-              "availabilityScaling": {
-                "baseValue": 10,
-                "perRating": false
-              },
-              "essenceScaling": {
-                "baseValue": 0.25,
-                "perRating": false
-              }
-            }
+            "page": 453
           },
           {
             "id": "voice-modulator",
@@ -8813,26 +8386,7 @@
             "maxRating": 6,
             "costPerRating": true,
             "description": "Modify vocal patterns. +Rating to vocal impersonation.",
-            "page": 453,
-            "ratingSpec": {
-              "rating": {
-                "hasRating": true,
-                "minRating": 1,
-                "maxRating": 6
-              },
-              "costScaling": {
-                "baseValue": 5000,
-                "perRating": true
-              },
-              "availabilityScaling": {
-                "baseValue": 6,
-                "perRating": false
-              },
-              "essenceScaling": {
-                "baseValue": 0.2,
-                "perRating": false
-              }
-            }
+            "page": 453
           },
           {
             "id": "cybereyes-1",
@@ -8951,30 +8505,7 @@
             "capacityCost": 1,
             "capacityPerRating": true,
             "description": "+Rating to visual Perception tests.",
-            "page": 454,
-            "ratingSpec": {
-              "rating": {
-                "hasRating": true,
-                "minRating": 1,
-                "maxRating": 3
-              },
-              "costScaling": {
-                "baseValue": 4000,
-                "perRating": true
-              },
-              "availabilityScaling": {
-                "baseValue": 8,
-                "perRating": false
-              },
-              "essenceScaling": {
-                "baseValue": 0.1,
-                "perRating": false
-              },
-              "capacityCostScaling": {
-                "baseValue": 1,
-                "perRating": true
-              }
-            }
+            "page": 454
           },
           {
             "id": "eye-vision-magnification",
@@ -9000,30 +8531,7 @@
             "costPerRating": true,
             "capacityCost": 1,
             "description": "Copy a target's retinal pattern.",
-            "page": 454,
-            "ratingSpec": {
-              "rating": {
-                "hasRating": true,
-                "minRating": 1,
-                "maxRating": 6
-              },
-              "costScaling": {
-                "baseValue": 20000,
-                "perRating": true
-              },
-              "availabilityScaling": {
-                "baseValue": 16,
-                "perRating": false
-              },
-              "essenceScaling": {
-                "baseValue": 0.1,
-                "perRating": false
-              },
-              "capacityCostScaling": {
-                "baseValue": 1,
-                "perRating": false
-              }
-            }
+            "page": 454
           },
           {
             "id": "cyberears-1",
@@ -9086,30 +8594,7 @@
             "capacityCost": 1,
             "capacityPerRating": true,
             "description": "+Rating to audio Perception tests.",
-            "page": 454,
-            "ratingSpec": {
-              "rating": {
-                "hasRating": true,
-                "minRating": 1,
-                "maxRating": 3
-              },
-              "costScaling": {
-                "baseValue": 4000,
-                "perRating": true
-              },
-              "availabilityScaling": {
-                "baseValue": 8,
-                "perRating": false
-              },
-              "essenceScaling": {
-                "baseValue": 0.1,
-                "perRating": false
-              },
-              "capacityCostScaling": {
-                "baseValue": 1,
-                "perRating": true
-              }
-            }
+            "page": 454
           },
           {
             "id": "ear-balance-augmenter",
@@ -9146,30 +8631,7 @@
             "capacityCost": 1,
             "capacityPerRating": true,
             "description": "Filter specific sounds from environment.",
-            "page": 455,
-            "ratingSpec": {
-              "rating": {
-                "hasRating": true,
-                "minRating": 1,
-                "maxRating": 6
-              },
-              "costScaling": {
-                "baseValue": 3500,
-                "perRating": true
-              },
-              "availabilityScaling": {
-                "baseValue": 10,
-                "perRating": false
-              },
-              "essenceScaling": {
-                "baseValue": 0.1,
-                "perRating": false
-              },
-              "capacityCostScaling": {
-                "baseValue": 1,
-                "perRating": true
-              }
-            }
+            "page": 455
           },
           {
             "id": "ear-spatial-recognizer",
@@ -9200,7 +8662,7 @@
             "id": "bone-lacing-aluminum",
             "name": "Bone Lacing (Aluminum)",
             "category": "bodyware",
-            "essenceCost": 1,
+            "essenceCost": 1.0,
             "cost": 18000,
             "availability": 12,
             "restricted": true,
@@ -9242,7 +8704,7 @@
             "id": "dermal-plating-2",
             "name": "Dermal Plating (Rating 2)",
             "category": "bodyware",
-            "essenceCost": 1,
+            "essenceCost": 1.0,
             "cost": 12000,
             "availability": 12,
             "restricted": true,
@@ -9270,7 +8732,7 @@
             "id": "dermal-plating-4",
             "name": "Dermal Plating (Rating 4)",
             "category": "bodyware",
-            "essenceCost": 2,
+            "essenceCost": 2.0,
             "cost": 30000,
             "availability": 16,
             "restricted": true,
@@ -9298,7 +8760,7 @@
             "id": "dermal-plating-6",
             "name": "Dermal Plating (Rating 6)",
             "category": "bodyware",
-            "essenceCost": 3,
+            "essenceCost": 3.0,
             "cost": 75000,
             "availability": 20,
             "restricted": true,
@@ -9343,7 +8805,7 @@
             "id": "muscle-replacement-1",
             "name": "Muscle Replacement (Rating 1)",
             "category": "bodyware",
-            "essenceCost": 1,
+            "essenceCost": 1.0,
             "cost": 25000,
             "availability": 11,
             "restricted": true,
@@ -9358,7 +8820,7 @@
             "id": "muscle-replacement-2",
             "name": "Muscle Replacement (Rating 2)",
             "category": "bodyware",
-            "essenceCost": 2,
+            "essenceCost": 2.0,
             "cost": 50000,
             "availability": 13,
             "restricted": true,
@@ -9373,7 +8835,7 @@
             "id": "muscle-replacement-3",
             "name": "Muscle Replacement (Rating 3)",
             "category": "bodyware",
-            "essenceCost": 3,
+            "essenceCost": 3.0,
             "cost": 80000,
             "availability": 15,
             "restricted": true,
@@ -9388,7 +8850,7 @@
             "id": "muscle-replacement-4",
             "name": "Muscle Replacement (Rating 4)",
             "category": "bodyware",
-            "essenceCost": 4,
+            "essenceCost": 4.0,
             "cost": 120000,
             "availability": 17,
             "restricted": true,
@@ -9445,7 +8907,7 @@
             "id": "orthoskin-4",
             "name": "Orthoskin (Rating 4)",
             "category": "bodyware",
-            "essenceCost": 1,
+            "essenceCost": 1.0,
             "cost": 30000,
             "availability": 16,
             "restricted": true,
@@ -9520,26 +8982,7 @@
             "essencePerRating": true,
             "costPerRating": true,
             "description": "Use skillsofts up to rating.",
-            "page": 457,
-            "ratingSpec": {
-              "rating": {
-                "hasRating": true,
-                "minRating": 1,
-                "maxRating": 6
-              },
-              "costScaling": {
-                "baseValue": 20000,
-                "perRating": true
-              },
-              "availabilityScaling": {
-                "baseValue": 8,
-                "perRating": false
-              },
-              "essenceScaling": {
-                "baseValue": 0.1,
-                "perRating": true
-              }
-            }
+            "page": 457
           },
           {
             "id": "smuggling-compartment",
@@ -9602,7 +9045,7 @@
             "id": "wired-reflexes-1",
             "name": "Wired Reflexes (Rating 1)",
             "category": "bodyware",
-            "essenceCost": 2,
+            "essenceCost": 2.0,
             "cost": 39000,
             "availability": 8,
             "restricted": true,
@@ -9617,7 +9060,7 @@
             "id": "wired-reflexes-2",
             "name": "Wired Reflexes (Rating 2)",
             "category": "bodyware",
-            "essenceCost": 3,
+            "essenceCost": 3.0,
             "cost": 149000,
             "availability": 12,
             "restricted": true,
@@ -9632,7 +9075,7 @@
             "id": "wired-reflexes-3",
             "name": "Wired Reflexes (Rating 3)",
             "category": "bodyware",
-            "essenceCost": 5,
+            "essenceCost": 5.0,
             "cost": 217000,
             "availability": 20,
             "restricted": true,
@@ -9647,7 +9090,7 @@
             "id": "cyberlimb-arm",
             "name": "Obvious Cyberarm",
             "category": "cyberlimb",
-            "essenceCost": 1,
+            "essenceCost": 1.0,
             "cost": 15000,
             "availability": 4,
             "capacity": 10,
@@ -9658,7 +9101,7 @@
             "id": "cyberlimb-arm-synthetic",
             "name": "Synthetic Cyberarm",
             "category": "cyberlimb",
-            "essenceCost": 1,
+            "essenceCost": 1.0,
             "cost": 20000,
             "availability": 4,
             "capacity": 5,
@@ -9669,7 +9112,7 @@
             "id": "cyberlimb-leg",
             "name": "Obvious Cyberleg",
             "category": "cyberlimb",
-            "essenceCost": 1,
+            "essenceCost": 1.0,
             "cost": 15000,
             "availability": 4,
             "capacity": 12,
@@ -9680,7 +9123,7 @@
             "id": "cyberlimb-leg-synthetic",
             "name": "Synthetic Cyberleg",
             "category": "cyberlimb",
-            "essenceCost": 1,
+            "essenceCost": 1.0,
             "cost": 20000,
             "availability": 4,
             "capacity": 6,
@@ -9768,30 +9211,7 @@
             "capacityPerRating": true,
             "parentType": "cyberlimb",
             "description": "+Rating to limb AGI (max +3 over base).",
-            "page": 458,
-            "ratingSpec": {
-              "rating": {
-                "hasRating": true,
-                "minRating": 1,
-                "maxRating": 3
-              },
-              "costScaling": {
-                "baseValue": 3000,
-                "perRating": true
-              },
-              "availabilityScaling": {
-                "baseValue": 8,
-                "perRating": false
-              },
-              "essenceScaling": {
-                "baseValue": 0,
-                "perRating": false
-              },
-              "capacityCostScaling": {
-                "baseValue": 1,
-                "perRating": true
-              }
-            }
+            "page": 458
           },
           {
             "id": "cyberlimb-strength",
@@ -9808,30 +9228,7 @@
             "capacityPerRating": true,
             "parentType": "cyberlimb",
             "description": "+Rating to limb STR (max +3 over base).",
-            "page": 458,
-            "ratingSpec": {
-              "rating": {
-                "hasRating": true,
-                "minRating": 1,
-                "maxRating": 3
-              },
-              "costScaling": {
-                "baseValue": 3000,
-                "perRating": true
-              },
-              "availabilityScaling": {
-                "baseValue": 8,
-                "perRating": false
-              },
-              "essenceScaling": {
-                "baseValue": 0,
-                "perRating": false
-              },
-              "capacityCostScaling": {
-                "baseValue": 1,
-                "perRating": true
-              }
-            }
+            "page": 458
           },
           {
             "id": "cyberlimb-armor",
@@ -9848,30 +9245,7 @@
             "capacityPerRating": true,
             "parentType": "cyberlimb",
             "description": "+Rating armor for limb.",
-            "page": 458,
-            "ratingSpec": {
-              "rating": {
-                "hasRating": true,
-                "minRating": 1,
-                "maxRating": 3
-              },
-              "costScaling": {
-                "baseValue": 3000,
-                "perRating": true
-              },
-              "availabilityScaling": {
-                "baseValue": 8,
-                "perRating": false
-              },
-              "essenceScaling": {
-                "baseValue": 0,
-                "perRating": false
-              },
-              "capacityCostScaling": {
-                "baseValue": 1,
-                "perRating": true
-              }
-            }
+            "page": 458
           },
           {
             "id": "cyberlimb-gyromount",
@@ -9977,29 +9351,29 @@
           {
             "id": "standard",
             "name": "Standard",
-            "essenceMultiplier": 1,
-            "costMultiplier": 1,
+            "essenceMultiplier": 1.0,
+            "costMultiplier": 1.0,
             "availabilityModifier": 0
           },
           {
             "id": "alpha",
             "name": "Alphaware",
             "essenceMultiplier": 0.8,
-            "costMultiplier": 2,
+            "costMultiplier": 2.0,
             "availabilityModifier": 2
           },
           {
             "id": "beta",
             "name": "Betaware",
             "essenceMultiplier": 0.6,
-            "costMultiplier": 4,
+            "costMultiplier": 4.0,
             "availabilityModifier": 4
           },
           {
             "id": "delta",
             "name": "Deltaware",
             "essenceMultiplier": 0.5,
-            "costMultiplier": 10,
+            "costMultiplier": 10.0,
             "availabilityModifier": 8
           }
         ],
@@ -10315,7 +9689,7 @@
             "id": "orthoskin-bio-4",
             "name": "Orthoskin (Bioware, Rating 4)",
             "category": "basic",
-            "essenceCost": 1,
+            "essenceCost": 1.0,
             "cost": 33000,
             "availability": 16,
             "restricted": true,
@@ -10731,7 +10105,7 @@
             "id": "synaptic-booster-2",
             "name": "Synaptic Booster (Rating 2)",
             "category": "cultured",
-            "essenceCost": 1,
+            "essenceCost": 1.0,
             "cost": 190000,
             "availability": 14,
             "restricted": true,
@@ -11403,7 +10777,7 @@
           },
           {
             "id": "horizon-cuu-drone",
-            "name": "Horizon CU³ Drone",
+            "name": "Horizon CU\u00b3 Drone",
             "size": "huge",
             "droneType": "utility",
             "handling": 4,
@@ -12200,17 +11574,7 @@
             "description": "An autonomous program that can perform Matrix actions on your behalf.",
             "effects": "Agent uses its rating for all Matrix attributes. Can perform autonomous Matrix actions.",
             "page": 246,
-            "source": "SR5",
-            "ratingSpec": {
-              "costScaling": {
-                "baseValue": 0,
-                "perRating": 1000
-              },
-              "availabilityScaling": {
-                "baseValue": 0,
-                "perRating": false
-              }
-            }
+            "source": "SR5"
           }
         ]
       }
@@ -12227,7 +11591,7 @@
             "bondingKarmaMultiplier": 3,
             "availability": 0,
             "restricted": true,
-            "description": "A weapon that has been enchanted to serve as a focus. Adds its Force rating to the wielder's Magic attribute for the purposes of weapon skill tests. The bonding cost is (3 + weapon's Reach) × Force in Karma.",
+            "description": "A weapon that has been enchanted to serve as a focus. Adds its Force rating to the wielder's Magic attribute for the purposes of weapon skill tests. The bonding cost is (3 + weapon's Reach) \u00d7 Force in Karma.",
             "page": 318,
             "source": "SR5"
           },

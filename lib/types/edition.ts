@@ -9,6 +9,15 @@
 import type { ID, ISODateString, Metadata } from "./core";
 import type { CyberwareCategory, BiowareCategory } from "./character";
 import type { CatalogItemRatingSpec } from "./ratings";
+import type {
+  Quality,
+  QualityCatalog,
+  QualityEffect,
+  QualityPrerequisites,
+  QualityLevel,
+  SourceReference,
+  DynamicStateType,
+} from "./qualities";
 
 // =============================================================================
 // EDITION
@@ -404,6 +413,16 @@ export interface AugmentationRules {
   /** Magic/Resonance reduction formula */
   magicReductionFormula: "roundUp" | "roundDown" | "exact";
 }
+
+// =============================================================================
+// QUALITY CATALOG TYPES (re-exported for convenience)
+// =============================================================================
+
+/**
+ * Quality catalog item in ruleset data
+ * @see Quality in ./qualities.ts for full type definition
+ */
+export type { Quality, QualityCatalog, QualityEffect, QualityPrerequisites, QualityLevel, SourceReference, DynamicStateType };
 
 // =============================================================================
 // FOCI TYPES (for ruleset data)

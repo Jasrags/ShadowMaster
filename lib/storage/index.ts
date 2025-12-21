@@ -49,6 +49,7 @@ export {
   updateCharacterSkills,
   updateCharacterQualities,
   updateCharacterGear,
+  updateQualityDynamicState,
   applyDamage,
   healCharacter,
   spendKarma,
