@@ -66,6 +66,82 @@ export interface QualitySelection {
   dynamicState?: QualityDynamicState; // Current state for dynamic qualities
 }
 
+// =============================================================================
+// ADVANCEMENT TYPES (defined early for use in Character interface)
+// =============================================================================
+
+/**
+ * Type of advancement being made
+ */
+export type AdvancementType =
+  | "attribute"
+  | "skill"
+  | "skillGroup"
+  | "specialization"
+  | "knowledgeSkill"
+  | "languageSkill"
+  | "spell"
+  | "ritual"
+  | "complexForm"
+  | "focus"
+  | "initiation"
+  | "edge"
+  | "quality";
+
+/**
+ * Status of a training period
+ */
+export type TrainingStatus = "pending" | "in-progress" | "completed" | "interrupted";
+
+/**
+ * Record of a single advancement made to a character
+ * Immutable - these records are never modified, only new ones are created
+ */
+export interface AdvancementRecord {
+  id: ID;
+  type: AdvancementType;
+  targetId: string; // Attribute code (e.g., "bod", "agi"), skill ID, etc.
+  targetName: string; // Display name (e.g., "Body", "Pistols")
+  previousValue?: number; // Previous rating/value before advancement
+  newValue: number; // New rating/value after advancement
+  karmaCost: number; // Karma spent for this advancement
+  karmaSpentAt: ISODateString; // When karma was spent (immediately)
+  trainingRequired: boolean; // Whether training time is required
+  trainingStatus: TrainingStatus; // Current status of associated training
+  trainingPeriodId?: ID; // Link to TrainingPeriod if applicable
+  downtimePeriodId?: ID; // Link to campaign downtime event
+  campaignSessionId?: ID; // Link to campaign session
+  gmApproved: boolean; // Whether GM has approved (for campaign characters)
+  gmApprovedBy?: ID; // GM user ID who approved
+  gmApprovedAt?: ISODateString; // When GM approved
+  notes?: string; // Optional notes about the advancement
+  createdAt: ISODateString; // When advancement was initiated
+  completedAt?: ISODateString; // When advancement was completed (training finished)
+}
+
+/**
+ * Active training period tracking
+ */
+export interface TrainingPeriod {
+  id: ID;
+  advancementRecordId: ID; // Link to AdvancementRecord
+  type: AdvancementType;
+  targetId: string;
+  targetName: string;
+  requiredTime: number; // Required training time in days
+  timeSpent: number; // Time spent in days (cumulative)
+  startDate: ISODateString; // When training started
+  expectedCompletionDate?: ISODateString; // Calculated completion date
+  actualCompletionDate?: ISODateString; // When training actually completed
+  status: TrainingStatus;
+  downtimePeriodId?: ID; // Link to campaign downtime event
+  instructorBonus?: boolean; // Whether 25% time reduction from instructor applies
+  timeModifier?: number; // Percentage modifier (e.g., +50 for Dependents quality)
+  interruptionDate?: ISODateString; // When training was interrupted
+  interruptionReason?: string; // Reason for interruption
+  createdAt: ISODateString;
+}
+
 /**
  * A complete Shadowrun character
  */
@@ -311,6 +387,12 @@ export interface Character {
 
   /** Karma spent during creation */
   karmaSpentAtCreation: number;
+
+  /** Advancement history - immutable records of all advancements */
+  advancementHistory?: AdvancementRecord[];
+
+  /** Active training periods - training currently in progress */
+  activeTraining?: TrainingPeriod[];
 
   /** Street cred, notoriety, public awareness (SR5) */
   reputation?: {

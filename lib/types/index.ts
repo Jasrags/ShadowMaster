@@ -88,6 +88,11 @@ export type {
   CharacterResponse,
   CharactersListResponse,
   ContactTemplateData,
+  // Advancement types
+  AdvancementType,
+  TrainingStatus,
+  AdvancementRecord,
+  TrainingPeriod,
 } from "./character";
 
 // Quality types (additional types not re-exported from edition)
