@@ -245,3 +245,16 @@ export type {
   RatingDisplayOptions,
 } from "./ratings";
 
+// Gameplay context types
+export type {
+  GameplayContext,
+  TestContext,
+  CombatContext,
+  MagicContext,
+  MatrixContext,
+  HealingContext,
+  DamageContext,
+  CostContext,
+  ResolvedEffect,
+} from "./gameplay";
+

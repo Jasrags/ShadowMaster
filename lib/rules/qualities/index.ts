@@ -38,3 +38,33 @@ export {
   buildCharacterFromCreationState,
 } from "./creation-helper";
 
+// Effects system functions
+export {
+  resolveTemplateVariable,
+  resolveEffectValue,
+  resolveEffectTarget,
+  matchesCondition,
+  matchesTrigger,
+  shouldApplyEffect,
+  getActiveEffects,
+  filterEffectsByTrigger,
+  filterEffectsByTarget,
+} from "./effects";
+
+export {
+  registerEffectHandler,
+  getEffectHandler,
+  processEffect,
+} from "./effects/handlers";
+
+export {
+  getAllCharacterEffects,
+  getDicePoolModifiers,
+  getLimitModifiers,
+  getWoundModifierModifiers,
+  getAttributeModifiers,
+  getAttributeMaximumModifiers,
+  getLifestyleCostModifiers,
+  getHealingModifiers,
+} from "./effects/integration";
+
