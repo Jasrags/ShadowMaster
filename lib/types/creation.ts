@@ -278,6 +278,7 @@ export type ConstraintType =
   | "forbidden-combination" // Cannot have X and Y together
   | "required-combination" // Must have X if you have Y
   | "essence-minimum" // Essence cannot drop below value
+  | "equipment-rating" // Equipment ratings must be valid
   | "custom"; // Custom validation function name
 
 /**
