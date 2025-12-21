@@ -3,7 +3,7 @@
 import { useMemo, useState, useCallback } from "react";
 import { useAdeptPowers, usePriorityTable } from "@/lib/rules";
 import type { CreationState, AdeptPower } from "@/lib/types";
-import type { AdeptPowerCatalogItem } from "@/lib/rules/loader";
+import type { AdeptPowerCatalogItem } from "@/lib/rules/loader-types";
 
 interface StepProps {
     state: CreationState;

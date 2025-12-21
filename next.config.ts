@@ -24,6 +24,9 @@ const nextConfig: NextConfig = {
     // Faster refresh with optimized package imports
     optimizePackageImports: ["lucide-react", "react-aria-components"],
   },
+
+  // Turbopack configuration
+  turbopack: {},
 };
 
 export default nextConfig;

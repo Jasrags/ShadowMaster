@@ -8,7 +8,7 @@
 
 import type { Character, QualitySelection, MergedRuleset } from "@/lib/types";
 import type { Quality } from "@/lib/types";
-import { getQualityDefinition, characterHasQuality, countQualityInstances } from "./utils";
+import { getQualityDefinition } from "./utils";
 import { canTakeQuality, validateQualitySelection } from "./validation";
 import { calculateQualityCost } from "./karma";
 import { initializeDynamicState } from "./dynamic-state";
@@ -293,11 +293,12 @@ export function removeQuality(
   character: Character,
   qualityId: string,
   ruleset: MergedRuleset,
-  reason?: string
+  _reason?: string
 ): {
   cost: number;
   updatedCharacter: Character;
 } {
+  void _reason; // Parameter kept for interface compatibility
   // Validate removal
   const validation = validateQualityRemoval(character, qualityId, ruleset);
   if (!validation.valid) {

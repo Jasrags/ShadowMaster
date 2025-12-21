@@ -3,11 +3,11 @@
 import { useState, useMemo, useCallback } from "react";
 import { Button, Dialog, Heading, Modal, ModalOverlay, TextField, TextArea } from "react-aria-components";
 import type { Character, QualitySelection } from "@/lib/types";
-import type { QualityData } from "@/lib/rules/loader";
+import type { QualityData } from "@/lib/rules/loader-types";
 import { useQualities, useMergedRuleset, useRulesetStatus } from "@/lib/rules";
 import { getQualityDefinition } from "@/lib/rules/qualities/utils";
 import { validateQualityAcquisition, validateQualityRemoval, calculatePostCreationCost, calculateBuyOffCost } from "@/lib/rules/qualities/advancement";
-import { X, Plus, Trash2, AlertCircle } from "lucide-react";
+import { X, Plus, AlertCircle } from "lucide-react";
 
 interface QualitiesAdvancementProps {
   character: Character;
@@ -80,7 +80,9 @@ export function QualitiesAdvancement({ character, onCharacterUpdate }: Qualities
     setIsAcquireModalOpen(true);
   }, []);
 
-  // Handle remove quality
+  // Handle remove quality (buy off negative quality)
+  // Note: This function is defined for future use when buy-off functionality is fully implemented
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const handleRemoveClick = useCallback((qualityId: string) => {
     const allQualities = [
       ...(character.positiveQualities || []),

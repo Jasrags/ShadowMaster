@@ -31,7 +31,7 @@ import type {
   CyberwareCatalogData,
   GearItemData,
   CyberwareCatalogItemData,
-} from "./loader";
+} from "./loader-types";
 
 // =============================================================================
 // TYPES

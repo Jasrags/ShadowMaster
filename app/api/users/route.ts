@@ -35,8 +35,8 @@ export async function GET(request: NextRequest) {
       const searchLower = search.toLowerCase();
       filteredUsers = filteredUsers.filter(
         (user) =>
-          user.email.toLowerCase().includes(searchLower) ||
-          user.username.toLowerCase().includes(searchLower)
+          user.email?.toLowerCase().includes(searchLower) ||
+          user.username?.toLowerCase().includes(searchLower)
       );
     }
 
@@ -47,12 +47,12 @@ export async function GET(request: NextRequest) {
 
       switch (sortBy) {
         case "email":
-          aValue = a.email.toLowerCase();
-          bValue = b.email.toLowerCase();
+          aValue = (a.email || "").toLowerCase();
+          bValue = (b.email || "").toLowerCase();
           break;
         case "username":
-          aValue = a.username.toLowerCase();
-          bValue = b.username.toLowerCase();
+          aValue = (a.username || "").toLowerCase();
+          bValue = (b.username || "").toLowerCase();
           break;
         case "role":
           // Sort by first role, or join roles for comparison

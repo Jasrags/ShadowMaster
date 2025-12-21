@@ -8,7 +8,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { getSession } from "@/lib/auth/session";
 import { getUserById } from "@/lib/storage/users";
 import { getCharacter, updateCharacter } from "@/lib/storage/characters";
-import { getCampaignById, getCampaignEvents } from "@/lib/storage/campaigns";
+import { getCampaignEvents } from "@/lib/storage/campaigns";
 import { loadAndMergeRuleset } from "@/lib/rules/merge";
 import { advanceAttribute, type AdvanceAttributeOptions } from "@/lib/rules/advancement/attributes";
 

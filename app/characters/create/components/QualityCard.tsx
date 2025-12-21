@@ -1,7 +1,7 @@
 "use client";
 
 import { useMemo } from "react";
-import type { QualityData } from "@/lib/rules/loader";
+import type { QualityData } from "@/lib/rules/loader-types";
 import type { Quality } from "@/lib/types/qualities";
 import type { Character } from "@/lib/types";
 import { validatePrerequisites, checkIncompatibilities } from "@/lib/rules/qualities/validation";

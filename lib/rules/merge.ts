@@ -19,7 +19,7 @@ import type {
   MergedRuleset,
   BookModuleEntry,
 } from "../types";
-import type { LoadedRuleset } from "./loader";
+import type { LoadedRuleset } from "./loader-types";
 
 // =============================================================================
 // TYPES

@@ -6,7 +6,6 @@
 
 import { v4 as uuidv4 } from "uuid";
 import type { Character, MergedRuleset, AdvancementRecord, TrainingPeriod, CampaignEvent } from "@/lib/types";
-import { calculateAdvancementCost } from "./costs";
 import { calculateAdvancementTrainingTime } from "./training";
 import { validateAttributeAdvancement } from "./validation";
 

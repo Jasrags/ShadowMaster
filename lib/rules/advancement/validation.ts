@@ -5,7 +5,6 @@
  */
 
 import type { Character, MergedRuleset, AdvancementType, CampaignEvent } from "@/lib/types";
-import { getMetatypeAttributeLimits, isAttributeWithinLimits } from "../validation";
 import { calculateAdvancementCost } from "./costs";
 import { validateDowntimeLimits } from "./downtime";
 
@@ -36,6 +35,41 @@ export function validateKarmaAvailability(
     };
   }
   return { valid: true };
+}
+
+/**
+ * Get metatype attribute limits
+ * Accesses modules directly to avoid importing from merge.ts (which would pull in loader.ts)
+ */
+function getMetatypeAttributeLimits(
+  metatypeId: string,
+  ruleset: MergedRuleset
+): Record<string, { min: number; max: number }> | null {
+  // Access modules directly to avoid importing from merge.ts (which imports server-only code)
+  const metatypesModule = ruleset.modules.metatypes as {
+    metatypes: Array<{
+      id: string;
+      attributes: Record<string, { min: number; max: number } | { base: number }>;
+    }>;
+  } | undefined;
+
+  if (!metatypesModule) return null;
+
+  const metatype = metatypesModule.metatypes.find(
+    (m) => m.id.toLowerCase() === metatypeId.toLowerCase()
+  );
+
+  if (!metatype) return null;
+
+  // Convert to consistent format
+  const limits: Record<string, { min: number; max: number }> = {};
+  for (const [attrId, value] of Object.entries(metatype.attributes)) {
+    if ("min" in value && "max" in value) {
+      limits[attrId] = { min: value.min, max: value.max };
+    }
+  }
+
+  return limits;
 }
 
 /**
@@ -150,11 +184,13 @@ export function validateAttributeAdvancement(
  * @param ruleset - Merged ruleset (for checking Aptitude quality)
  * @returns Maximum rating allowed
  */
+ 
 export function getSkillMaximum(
   character: Character,
   skillId: string,
-  ruleset: MergedRuleset
+  _ruleset: MergedRuleset
 ): number {
+  void _ruleset; // Parameter kept for interface compatibility
   // Check if character has Aptitude quality for this skill
   const hasAptitude = character.positiveQualities?.some((q) => {
     const qualityId = q.qualityId || q.id;
@@ -260,14 +296,15 @@ export function validateSkillAdvancement(
  *
  * @param character - Character to validate
  * @param skillId - Skill ID for specialization
- * @param ruleset - Merged ruleset
+ * @param _ruleset - Merged ruleset (currently unused, kept for interface compatibility)
  * @returns Validation result
  */
 export function validateSpecializationAdvancement(
   character: Character,
   skillId: string,
-  ruleset: MergedRuleset
+  _ruleset: MergedRuleset
 ): AdvancementValidationResult {
+  void _ruleset; // Parameter kept for interface compatibility
   const errors: Array<{ message: string; field?: string }> = [];
 
   // Get current skill rating

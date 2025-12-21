@@ -1,10 +1,13 @@
 "use client";
 
 import { useEffect, useState, use } from "react";
-import { useRouter } from "next/navigation";
 import { Link } from "react-aria-components";
 import { RulesetProvider, useRulesetStatus, useRuleset } from "@/lib/rules";
 import { QualitiesAdvancement } from "./qualities";
+import { AttributesTab } from "./components/AttributesTab";
+import { SkillsTab } from "./components/SkillsTab";
+import { TrainingDashboard } from "./components/TrainingDashboard";
+import { HistoryTab } from "./components/HistoryTab";
 import type { Character } from "@/lib/types";
 
 interface AdvancementContentProps {
@@ -12,11 +15,13 @@ interface AdvancementContentProps {
   characterId: string;
 }
 
+type AdvancementTab = "attributes" | "skills" | "qualities" | "training" | "history";
+
 function AdvancementContent({ character, characterId }: AdvancementContentProps) {
-  const router = useRouter();
   const { loading, error, ready } = useRulesetStatus();
-  const { loadRuleset } = useRuleset();
+  const { loadRuleset, ruleset } = useRuleset();
   const [currentCharacter, setCurrentCharacter] = useState<Character>(character);
+  const [activeTab, setActiveTab] = useState<AdvancementTab>("attributes");
 
   useEffect(() => {
     if (character.editionCode) {
@@ -64,16 +69,72 @@ function AdvancementContent({ character, characterId }: AdvancementContentProps)
     );
   }
 
-  if (ready) {
-    return (
-      <QualitiesAdvancement
-        character={currentCharacter}
-        onCharacterUpdate={handleCharacterUpdate}
-      />
-    );
+  if (!ready || !ruleset) {
+    return null;
   }
 
-  return null;
+  // Tabs configuration
+  const tabs: Array<{ id: AdvancementTab; label: string }> = [
+    { id: "attributes", label: "Attributes" },
+    { id: "skills", label: "Skills" },
+    { id: "qualities", label: "Qualities" },
+    { id: "training", label: "Training" },
+    { id: "history", label: "History" },
+  ];
+
+  return (
+    <div className="space-y-6">
+      {/* Tabs */}
+      <div className="flex gap-2 border-b border-zinc-700">
+        {tabs.map((tab) => (
+          <button
+            key={tab.id}
+            onClick={() => setActiveTab(tab.id)}
+            className={`px-4 py-2 font-medium transition-colors ${
+              activeTab === tab.id
+                ? "text-zinc-100 border-b-2 border-emerald-500"
+                : "text-zinc-400 hover:text-zinc-200"
+            }`}
+          >
+            {tab.label}
+          </button>
+        ))}
+      </div>
+
+      {/* Tab Content */}
+      <div className="min-h-[400px]">
+        {activeTab === "attributes" && ruleset && (
+          <AttributesTab
+            character={currentCharacter}
+            ruleset={ruleset}
+            onCharacterUpdate={handleCharacterUpdate}
+          />
+        )}
+        {activeTab === "skills" && ruleset && (
+          <SkillsTab
+            character={currentCharacter}
+            ruleset={ruleset}
+            onCharacterUpdate={handleCharacterUpdate}
+          />
+        )}
+        {activeTab === "qualities" && (
+          <QualitiesAdvancement
+            character={currentCharacter}
+            onCharacterUpdate={handleCharacterUpdate}
+          />
+        )}
+        {activeTab === "training" && (
+          <TrainingDashboard
+            character={currentCharacter}
+            onCharacterUpdate={handleCharacterUpdate}
+          />
+        )}
+        {activeTab === "history" && (
+          <HistoryTab character={currentCharacter} />
+        )}
+      </div>
+    </div>
+  );
 }
 
 export default function AdvancementPage({ params }: { params: Promise<{ id: string }> }) {
@@ -145,10 +206,10 @@ export default function AdvancementPage({ params }: { params: Promise<{ id: stri
       <div className="flex items-center justify-between">
         <div>
           <h1 className="text-2xl font-bold text-zinc-900 dark:text-zinc-50">
-            Quality Advancement
+            Character Advancement
           </h1>
           <p className="mt-1 text-sm text-zinc-600 dark:text-zinc-400">
-            Manage qualities for {character.name || "your character"}
+            Advance {character.name || "your character"} with karma
           </p>
         </div>
         <Link
