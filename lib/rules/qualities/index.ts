@@ -33,3 +33,8 @@ export {
   validateKarmaLimits,
 } from "./karma";
 
+// Creation helper functions
+export {
+  buildCharacterFromCreationState,
+} from "./creation-helper";
+

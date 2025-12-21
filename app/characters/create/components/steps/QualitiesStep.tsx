@@ -288,6 +288,16 @@ export function QualitiesStep({ state, updateState, budgetValues }: StepProps) {
           {quality.summary && (
             <p className="mt-2 text-sm text-zinc-600 dark:text-zinc-400">{quality.summary}</p>
           )}
+
+          {/* Prerequisite indicator - requiresMagic */}
+          {quality.requiresMagic && (
+            <div className="mt-2 flex items-center gap-1 text-xs text-amber-600 dark:text-amber-400">
+              <svg className="h-3 w-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+              </svg>
+              <span>Requires Magic attribute</span>
+            </div>
+          )}
         </div>
 
         {/* Extended Inputs (Levels/Specs) - only if selected */}
@@ -356,7 +366,7 @@ export function QualitiesStep({ state, updateState, budgetValues }: StepProps) {
 
   return (
     <div className="space-y-6">
-      {/* Karma summary (unchanged) */}
+      {/* Karma summary with progress bars */}
       <div className="grid gap-4 sm:grid-cols-3">
         <div className="rounded-lg bg-zinc-100 p-4 dark:bg-zinc-800">
           <div className="text-sm text-zinc-600 dark:text-zinc-400">Starting Karma</div>
@@ -370,6 +380,21 @@ export function QualitiesStep({ state, updateState, budgetValues }: StepProps) {
           <div className="mt-1 text-2xl font-bold text-emerald-700 dark:text-emerald-300">
             -{positiveKarmaSpent}
           </div>
+          {/* Progress bar */}
+          <div className="mt-2 h-2 w-full overflow-hidden rounded-full bg-emerald-200 dark:bg-emerald-900/50">
+            <div
+              className={`h-full transition-all ${positiveKarmaSpent > MAX_POSITIVE_KARMA
+                ? "bg-red-500"
+                : "bg-emerald-500"
+                }`}
+              style={{ width: `${Math.min(100, (positiveKarmaSpent / MAX_POSITIVE_KARMA) * 100)}%` }}
+            />
+          </div>
+          {positiveKarmaSpent > MAX_POSITIVE_KARMA && (
+            <div className="mt-1 text-xs text-red-600 dark:text-red-400">
+              Exceeds limit by {positiveKarmaSpent - MAX_POSITIVE_KARMA}
+            </div>
+          )}
         </div>
         <div className="rounded-lg bg-amber-50 p-4 dark:bg-amber-900/20">
           <div className="flex items-center justify-between">
@@ -379,6 +404,21 @@ export function QualitiesStep({ state, updateState, budgetValues }: StepProps) {
           <div className="mt-1 text-2xl font-bold text-amber-700 dark:text-amber-300">
             +{negativeKarmaGained}
           </div>
+          {/* Progress bar */}
+          <div className="mt-2 h-2 w-full overflow-hidden rounded-full bg-amber-200 dark:bg-amber-900/50">
+            <div
+              className={`h-full transition-all ${negativeKarmaGained > MAX_NEGATIVE_KARMA
+                ? "bg-red-500"
+                : "bg-amber-500"
+                }`}
+              style={{ width: `${Math.min(100, (negativeKarmaGained / MAX_NEGATIVE_KARMA) * 100)}%` }}
+            />
+          </div>
+          {negativeKarmaGained > MAX_NEGATIVE_KARMA && (
+            <div className="mt-1 text-xs text-red-600 dark:text-red-400">
+              Exceeds limit by {negativeKarmaGained - MAX_NEGATIVE_KARMA}
+            </div>
+          )}
         </div>
       </div>
 
