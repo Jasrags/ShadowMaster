@@ -1,380 +1,1393 @@
 # Character Advancement Specification
 
-**Last Updated:** 2025-01-27  
-**Status:** Draft - Awaiting Requirements  
-**Category:** Core Functionality, Character Management, Post-Creation Features  
-**Affected Editions:** All editions (edition-aware implementation)
+**Last Updated:** 2025-01-27
+**Status:** Specification
+**Category:** Character Management, Gameplay, Campaign Integration
+**Affected Editions:** All editions (costs vary by edition)
 
 ---
 
 ## Overview
 
-Character advancement allows players to improve their characters after creation by spending earned karma on attributes, skills, qualities, spells, and other improvements. Unlike character creation, advancement requires training time (downtime) for most improvements and follows different cost structures (often 2× for qualities).
+Character advancement is the post-creation system for improving characters using Karma earned during gameplay. This specification defines how characters grow over time through attribute improvements, skill development, quality acquisition, magical advancement, and other progression paths.
 
 **Key Features:**
-- Post-creation karma spending on attributes, skills, spells, etc.
-- Training time tracking and downtime management
-- Advancement history and ledger
-- Validation against character state and rules
-- Integration with campaign downtime periods
+- Karma-based advancement with edition-specific costs
+- Campaign-integrated reward distribution
+- GM approval workflows for significant changes
+- Full advancement history and audit trail
+- Training time rules (optional)
+- Advancement validation against prerequisites and limits
+
+**Integration Points:**
+- **Campaigns:** GMs award karma, set house rules, approve advancements
+- **Character Sheets:** Display advancement options and karma balance
+- **Gameplay Actions:** Low-level karma transactions
+- **Ruleset System:** Edition-specific costs and constraints
 
 ---
 
-## What We Know (Current State)
+## User Stories
 
-### 1. Karma Tracking (Implemented)
+### Primary Use Cases (Players)
 
-**Current Implementation:**
-- Character has `karmaTotal`, `karmaCurrent`, `karmaSpentAtCreation` fields
-- Basic storage functions: `spendKarma()`, `awardKarma()`
-- API endpoint: `POST /api/characters/[id]/gameplay` with `spendKarma`/`awardKarma` actions
-- Basic validation (sufficient karma available)
+1. **As a player**, I want to spend karma to improve my character's attributes so they become more capable.
 
-**Status:** ✅ Basic karma tracking works
+2. **As a player**, I want to increase my skill ratings so I can succeed at more difficult tests.
 
-### 2. Quality Advancement (Phase 7 - Completed)
+3. **As a player**, I want to learn new skills and specializations to expand my character's abilities.
 
-**Current Implementation:**
-- Post-creation quality acquisition (2× karma cost)
-- Negative quality buy-off (2× original karma bonus)
-- Validation functions: `validateQualityAcquisition()`, `validateQualityRemoval()`
-- API endpoints: `POST /api/characters/[id]/qualities`, `DELETE /api/characters/[id]/qualities/[qualityId]`
-- UI component: `/characters/[id]/advancement/qualities`
+4. **As a player**, I want to acquire new positive qualities to gain new advantages.
 
-**Status:** ✅ Quality advancement fully implemented
+5. **As a player**, I want to buy off negative qualities that no longer fit my character's story.
 
-### 3. Advancement Rules (Documented)
+6. **As a player**, I want to learn new spells, rituals, and complex forms to expand my magical/resonance repertoire.
 
-**Karma Costs (from `docs/rules/reference.md`):**
-- **Attributes (Physical, Mental, Magic, Resonance):** `new rating × 5`
-- **Active skills:** `new rating × 2`
-- **Knowledge/Language skills:** `new rating × 1`
-- **Skill groups:** `new rating × 5`
-- **Specializations:** 7 karma
-- **New knowledge/language skill:** 1 karma
-- **New complex form:** 4 karma
-- **New spell / ritual / preparation:** 5 karma
-- **Initiation:** `10 + (grade × 3)` karma
-- **Positive quality (post-play):** listed cost × 2
-- **Removing negative quality:** bonus karma × 2 (with GM approval)
-- **Focus bonding:** varies by type (Force × 2-6)
-- **Edge:** same as attributes (`new rating × 5`) but no downtime required
+7. **As a player**, I want to initiate/submerge to gain access to metamagics and echoes.
 
-**Training Times:**
-- **Attributes:** `new rating × 1 week`
-- **Active skills:**
-  - Ratings 1–4: `new rating × 1 day`
-  - Ratings 5–8: `new rating × 1 week`
-  - Ratings 9–13: `new rating × 2 weeks`
-- **Skill groups:** `new rating × 2 weeks`
-- **Specializations:** 1 month
-- **Edge:** no downtime required
+8. **As a player**, I want to see my karma balance and advancement history at a glance.
 
-**Training Rules:**
-- Training is required before karma is spent (except Edge)
-- Attribute training time cannot be reduced
-- Instructor can reduce skill training time by 25% (round down)
-- A downtime period may cover:
-  - One physical + one mental attribute, OR
-  - One attribute + one skill
-- Skill groups consume the whole downtime
-- Rating increases capped per downtime:
-  - Attributes: +2 max
-  - Skills: +3 max
-  - Skill groups: +1 max
-- Augmentation recovery blocks attribute training for the same rating in that downtime
-- If character focuses only on skills during downtime, may learn/improve up to `Logic ÷ 2` (round up) skills
-- Specializations take 1 month and cannot be learned with anything else
-- Training can be interrupted but must resume quickly or benefits are lost
+9. **As a player**, I want to understand what advancements are available and their costs before committing.
 
-**Status:** ✅ Rules documented, not yet implemented
+10. **As a player**, I want to track how my character has grown since creation.
+
+### Primary Use Cases (GMs)
+
+11. **As a GM**, I want to award karma to characters after runs and sessions.
+
+12. **As a GM**, I want to award karma to all campaign characters at once after a session.
+
+13. **As a GM**, I want to review and approve significant character advancements (initiation, new qualities).
+
+14. **As a GM**, I want to configure house rules for advancement costs in my campaign.
+
+15. **As a GM**, I want to see an advancement log for all characters in my campaign.
+
+16. **As a GM**, I want to enforce training time requirements if my campaign uses them.
+
+17. **As a GM**, I want to restrict certain advancements in my campaign (e.g., no awakening after creation).
+
+### System Use Cases
+
+18. **As the system**, I need to validate all advancement requests against karma availability.
+
+19. **As the system**, I need to enforce prerequisites for advancements.
+
+20. **As the system**, I need to calculate derived stats after advancement.
+
+21. **As the system**, I need to maintain a complete audit trail of all advancements.
 
 ---
 
-## Major Gaps (What's Missing)
+## Advancement Rules (SR5)
 
-### 1. Advancement UI/System
+### Karma Cost Formulas
 
-**Gap:** No centralized advancement interface or workflow
+The following tables define karma costs for Shadowrun 5th Edition. Other editions may have different costs defined in their ruleset data.
 
-**Missing:**
-- [ ] Unified advancement page/section
-- [ ] Attribute advancement interface
-- [ ] Skill advancement interface
-- [ ] Spell/ritual/complex form learning interface
-- [ ] Specialization learning interface
-- [ ] Focus bonding interface
-- [ ] Initiation/Submersion interface
-- [ ] Edge advancement interface
+#### Attribute Improvement
 
-**Question:** Should advancement be:
-- [X] A single unified page with tabs/sections for each advancement type?
-- [ ] Separate pages for each advancement type?
-- [ ] A wizard-style flow (like character creation)?
-- [ ] Something else? (Please specify: _______________)
+| Improvement | Karma Cost | Notes |
+|-------------|------------|-------|
+| Physical/Mental Attribute | New Rating × 5 | Cannot exceed racial maximum |
+| Special Attribute (Edge) | New Rating × 5 | Cannot exceed racial maximum |
+| Special Attribute (Magic/Resonance) | New Rating × 5 | Requires Awakened/Emerged |
 
-### 2. Training Time Tracking
+**Example:** Raising Agility from 4 to 5 costs 5 × 5 = 25 karma.
 
-**Gap:** No system to track training periods, downtime, or training progress
+**Cumulative Costs (Starting → Target):**
 
-**Missing:**
-- [ ] Training queue/active training tracking
-- [ ] Downtime period management
-- [ ] Training progress tracking
-- [ ] Training interruption handling
-- [ ] Instructor bonus application (25% time reduction)
-- [ ] Dependents quality time modifier application (+50% training time)
+| From | To 2 | To 3 | To 4 | To 5 | To 6 | To 7 | To 8 | To 9 | To 10 |
+|------|------|------|------|------|------|------|------|------|-------|
+| 1 | 10 | 25 | 45 | 70 | 100 | 135 | 175 | 220 | 270 |
+| 2 | — | 15 | 35 | 60 | 90 | 125 | 165 | 210 | 260 |
+| 3 | — | — | 20 | 45 | 75 | 110 | 150 | 195 | 245 |
+| 4 | — | — | — | 25 | 55 | 90 | 130 | 175 | 225 |
+| 5 | — | — | — | — | 30 | 65 | 105 | 150 | 200 |
+| 6 | — | — | — | — | — | 35 | 75 | 120 | 170 |
 
-**Question:** How should training time be managed?
-- [ ] Manual entry by player (player enters downtime dates)
-- [X] Campaign-driven (tied to campaign downtime periods)
-- [X] Automatic calculation (system calculates when training completes)
-- [ ] Hybrid approach (Please specify: _______________)
+#### Skill Improvement
 
-**Question:** Should training be:
-- [ ] Required (cannot spend karma until training completes)?
-- [ ] Optional (can spend karma immediately, training tracked separately)?
-- [X] Configurable per campaign/GM preference?
+| Skill Type | Karma Cost | Notes |
+|------------|------------|-------|
+| Active Skill | New Rating × 2 | Max rating = linked attribute |
+| Skill Group | New Rating × 5 | All skills must be at same rating |
+| Knowledge Skill | New Rating × 1 | — |
+| Language Skill | New Rating × 1 | — |
 
-**Question:** How should we handle training interruptions?
-- [ ] Training resets if interrupted
-- [X] Training pauses and resumes
-- [ ] Partial progress is lost after X days
-- [ ] Other? (Please specify: _______________)
+**Example:** Raising Pistols from 4 to 5 costs 5 × 2 = 10 karma.
 
-### 3. Advancement Constraints & Validation
+**Cumulative Costs (Active Skills):**
 
-**Gap:** No validation of per-downtime limits, augmentation recovery, or other constraints
+| From | To 1 | To 2 | To 3 | To 4 | To 5 | To 6 | To 7 | To 8 | To 9 | To 10 | To 11 | To 12 |
+|------|------|------|------|------|------|------|------|------|------|-------|-------|-------|
+| 0 | 2 | 6 | 12 | 20 | 30 | 42 | 56 | 72 | 90 | 110 | 132 | 156 |
 
-**Missing:**
-- [ ] Per-downtime limit validation (attributes +2, skills +3, skill groups +1)
-- [ ] Augmentation recovery blocking validation
-- [ ] Training prerequisite validation (must complete training before spending karma)
-- [ ] Maximum rating validation (attributes, skills)
-- [ ] Skill group integrity validation
-- [ ] Specialization prerequisite validation (must have skill at rating 4+)
+#### New Skills and Specializations
 
-**Question:** Should validation be:
-- [ ] Strict (block invalid actions)?
-- [ ] Warning-based (allow but warn)?
-- [X] Configurable per campaign?
+| Improvement | Karma Cost | Notes |
+|-------------|------------|-------|
+| New Active Skill (Rating 1) | 2 | Must have linked attribute ≥ 1 |
+| New Knowledge/Language Skill | 1 | — |
+| New Specialization | 7 | Skill must be Rating 1+ |
+| New Expertise | 14 | Requires specialization first (optional rule) |
 
-### 4. Advancement History & Ledger
+#### Qualities
 
-**Gap:** No tracking of what was advanced, when, or how much karma was spent
+| Improvement | Karma Cost | Notes |
+|-------------|------------|-------|
+| New Positive Quality | Quality Cost × 2 | Subject to prerequisites and GM approval |
+| Buy Off Negative Quality | Bonus Value × 2 | Subject to story justification |
 
-**Missing:**
-- [ ] Advancement history/ledger
-- [ ] Karma transaction log with timestamps
-- [ ] Training completion records
-- [ ] Advancement source tracking (which downtime/campaign session)
+**Example:** Acquiring Ambidextrous (4 karma at creation) costs 4 × 2 = 8 karma post-creation.
 
-**Question:** What level of detail should the advancement ledger track?
-- [ ] Basic: What was advanced, karma cost, date
-- [ ] Detailed: Include training time, downtime period, GM approval status
-- [ ] Comprehensive: Full audit trail with before/after values, validation results
-- [ ] Other? (Please specify: _______________)
+**Example:** Buying off Addiction (Mild, 4 karma bonus) costs 4 × 2 = 8 karma.
 
-### 5. Data Structures
+#### Magic and Resonance
 
-**Gap:** Missing data models for advancement tracking
+| Improvement | Karma Cost | Notes |
+|-------------|------------|-------|
+| New Spell | 5 | Requires Spellcasting skill |
+| New Ritual | 5 | Requires Ritual Spellcasting skill |
+| New Preparation Formula | 5 | Requires Alchemy skill |
+| New Complex Form | 4 | Technomancers only |
+| New Adept Power | Power Point cost × ? | See Adept section |
+| New Initiate Grade | 10 + (Grade × 3) | Awakened only |
+| New Submersion Grade | 10 + (Grade × 3) | Technomancers only |
 
-**Missing Types/Interfaces:**
-- [ ] `AdvancementRecord` - Single advancement entry
-- [ ] `TrainingPeriod` - Active training tracking
-- [ ] `DowntimePeriod` - Downtime management
-- [ ] `AdvancementQueue` - Planned advancements
-- [ ] `KarmaTransaction` - Karma spending history
+**Initiation/Submersion Costs:**
 
-**Question:** Should we add these to the Character type or create separate storage?
-- [X] Add to Character type (e.g., `character.advancementHistory[]`)
-- [ ] Separate storage (e.g., `/data/advancements/{characterId}/`)
-- [ ] Hybrid (recent in Character, full history in separate storage)
+| Grade | Base Cost | With Ordeal/Task | With Group |
+|-------|-----------|------------------|------------|
+| 1 | 13 | 10 | 10 |
+| 2 | 16 | 13 | 13 |
+| 3 | 19 | 15 | 15 |
+| 4 | 22 | 18 | 18 |
+| 5 | 25 | 20 | 20 |
+| 6 | 28 | 22 | 22 |
 
-### 6. Campaign Integration
+**Ordeal Discount:** −10% (round down)
+**Group Discount:** −10% (round down)
+**Both:** −20% (round down)
 
-**Gap:** No connection between advancement and campaign downtime/events
+#### Adept Powers
 
-**Missing:**
-- [ ] Campaign downtime period tracking
-- [ ] GM approval workflow for advancement
-- [ ] Advancement tied to specific campaign sessions
-- [ ] Campaign-level advancement rules/restrictions
+Adepts gain Power Points equal to their Magic attribute. Additional Power Points can be purchased:
 
-**Question:** How should advancement integrate with campaigns?
-- [ ] Advancement is independent (player manages their own downtime)
-- [X] Advancement tied to campaign downtime periods (GM creates downtime, players advance during it)
-- [X] GM must approve all advancements
-- [ ] Hybrid (Please specify: _______________)
+| Improvement | Karma Cost | Notes |
+|-------------|------------|-------|
+| Power Point | 5 | Cannot exceed Magic rating |
 
-**Question:** Should campaigns be able to set advancement rules?
-- [ ] Yes, campaigns can override default rules (e.g., different karma costs, training times)
-- [ ] No, advancement always follows core rules
-- [X] Campaigns can enable/disable certain advancement types
+Adept powers cost Power Points, not karma directly. The PP cost varies by power.
 
-### 7. Edge Cases & Special Rules
+#### Contacts
 
-**Gap:** No handling of special cases
-
-**Missing:**
-- [ ] Edge advancement (no downtime, but karma cost)
-- [ ] Focus bonding workflow
-- [ ] Initiation/Submersion workflow
-- [ ] Technomancer Echoes (post-submersion)
-- [ ] Augmentation recovery blocking
-- [ ] Character death during training
-- [ ] Quality effects on training (Dependents, etc.)
-
-**Question:** Which special cases are highest priority?
-- [X] Edge advancement (simple, no downtime)
-- [ ] Focus bonding
-- [ ] Initiation/Submersion
-- [ ] Technomancer Echoes
-- [ ] Other? (Please specify: _______________)
+| Improvement | Karma Cost | Notes |
+|-------------|------------|-------|
+| New Contact | (Connection + Loyalty) × 1 | Subject to narrative justification |
+| Increase Connection | New Rating × 1 | Requires story interaction |
+| Increase Loyalty | New Rating × 1 | Requires story interaction |
 
 ---
 
-## User Experience Questions
+## Advancement Constraints
 
-### Workflow
+### Attribute Limits
 
-**Question:** What should the advancement workflow look like?
-- [X] Step 1: Select what to advance → Step 2: Pay karma → Step 3: Start training → Step 4: Complete training
-- [ ] Step 1: Start training → Step 2: Complete training → Step 3: Pay karma (karma locked during training)
-- [ ] Single action: Pay karma and training starts automatically
-- [ ] Other? (Please specify: _______________)
+- **Racial Maximum:** Each metatype has maximum attribute ratings. Standard humans max at 6, with exceptional attribute quality allowing 7.
+- **Augmented Maximum:** Racial maximum + 4 (from augmentations/magic)
+- **Special Attributes:** Edge, Magic, and Resonance have their own racial limits
 
-**Question:** Should players be able to queue multiple advancements?
-- [ ] Yes, queue multiple items for a single downtime period
-- [ ] Yes, queue across multiple downtime periods
-- [X] No, one advancement at a time
-- [ ] Other? (Please specify: _______________)
+### Skill Limits
 
-### UI/UX
+- **Maximum Rating:** Active skills cannot exceed the linked attribute rating without qualities (Aptitude allows rating 7 in one skill)
+- **Skill Group Integrity:** To raise a skill group, all component skills must be at the same rating
+- **Specializations:** Limited to one per skill (expertise is optional additional specialization)
 
-**Question:** How should the advancement interface be organized?
-- [X] Single page with sections/tabs for each advancement type
-- [ ] Separate pages for each advancement type (like current `/advancement/qualities`)
-- [ ] Wizard-style flow (like character creation)
-- [ ] Dashboard view showing all advancement options with quick actions
-- [ ] Other? (Please specify: _______________)
+### Quality Restrictions
 
-**Question:** Should there be a training dashboard/queue view?
-- [X] Yes, show all active training with progress bars
-- [ ] Yes, show training queue for upcoming downtime
-- [ ] No, training is just a background process
-- [ ] Other? (Please specify: _______________)
+- **Prerequisites:** Many qualities have attribute, skill, or other quality prerequisites
+- **Incompatibilities:** Some qualities cannot be taken together
+- **GM Approval:** Post-creation quality acquisition typically requires GM approval
+- **Story Justification:** Buying off negative qualities requires appropriate in-game narrative
 
-**Question:** How should karma costs be displayed?
-- [ ] Show cost for each rating level (e.g., "Rating 5: 10 karma, Rating 6: 12 karma")
-- [X] Show incremental cost (e.g., "Current: 4, Next: 5 (costs 10 karma)")
-- [ ] Show cumulative cost table
-- [ ] Other? (Please specify: _______________)
+### Magic/Resonance Restrictions
+
+- **Cannot Awaken:** Non-magical characters cannot become magical after creation
+- **Cannot Emerge:** Non-technomancer characters cannot become technomancers after creation
+- **Initiation Requirements:** Must be Awakened, may require group membership or ordeal completion
+- **Tradition Limits:** Some spells/powers restricted to certain traditions
 
 ---
 
-## Implementation Priorities
+## Training Time Rules (Optional)
 
-**Question:** What should be implemented first? (Rank 1-10, 1 = highest priority)
+Some campaigns use training time to pace advancement. When enabled:
 
-- [ ] **1. Attribute Advancement** - Most common advancement type
-- [ ] **2. Skill Advancement** - Very common, multiple types (active, knowledge, language)
-- [ ] **3. Training Time System** - Core mechanic for advancement
-- [ ] **4. Advancement History/Ledger** - Track what's been done
-- [ ] **5. Spell/Ritual Learning** - For magical characters
-- [ ] **6. Specialization Learning** - Common skill improvement
-- [ ] **7. Edge Advancement** - Simple (no downtime)
-- [ ] **8. Focus Bonding** - For magical characters
-- [ ] **9. Initiation/Submersion** - Advanced magical/technomancer feature
-- [ ] **10. Complex Form Learning** - For technomancers
+| Improvement | Training Time | Notes |
+|-------------|---------------|-------|
+| Attribute | (New Rating) weeks | May require trainer |
+| Active Skill | (New Rating) days | May require trainer or practice |
+| Skill Group | (New Rating) weeks | All skills train together |
+| New Skill (Rating 1) | 1 week | May require instruction |
+| Specialization | 1 week | Focused practice |
+| Spell/Ritual | 1 week | Study or instruction |
+| Complex Form | 1 week | Resonance meditation |
+| Initiation | 1 month minimum | Ordeal, group ritual, or solo quest |
+| Quality | Varies | GM discretion based on narrative |
 
-**Question:** Should we implement a minimal viable advancement system first?
-- [X] Yes, start with attributes + skills + basic training tracking
-- [ ] No, implement full system from the start
-- [ ] Phased approach (Please specify phases: _______________)
+**Trainer Bonus:** Having a qualified trainer reduces time by 25-50% (GM discretion).
 
 ---
 
-## Technical Questions
+## Data Model
 
-### Data Model
+### Advancement Request
 
-**Question:** Should advancement records be immutable (append-only)?
-- [X] Yes, create new records, never modify (full audit trail)
-- [ ] No, allow editing/canceling advancements
-- [ ] Hybrid (recent can be edited, old are immutable)
+```typescript
+/**
+ * Types of advancements that can be made
+ */
+export type AdvancementType =
+  | "attribute"
+  | "active_skill"
+  | "skill_group"
+  | "knowledge_skill"
+  | "language_skill"
+  | "specialization"
+  | "positive_quality"
+  | "buy_off_quality"
+  | "spell"
+  | "ritual"
+  | "complex_form"
+  | "adept_power"
+  | "power_point"
+  | "initiation"
+  | "submersion"
+  | "metamagic"
+  | "echo"
+  | "contact"
+  | "contact_improvement";
 
-**Question:** How should we handle character state updates?
-- [ ] Immediate (update character when advancement is initiated)
-- [ ] Deferred (update character when training completes)
-- [X] Hybrid (karma spent immediately, attributes/skills updated when training completes)
+/**
+ * Request to advance a character
+ */
+export interface AdvancementRequest {
+  /** Type of advancement */
+  type: AdvancementType;
 
-### API Design
+  /** Target being improved (attribute ID, skill ID, quality ID, etc.) */
+  targetId: string;
 
-**Question:** Should advancement have dedicated API endpoints?
-- [ ] Yes, `/api/characters/[id]/advancement/*` endpoints
-- [ ] No, use existing `/api/characters/[id]/gameplay` endpoint
-- [ ] Hybrid (some via gameplay, complex via dedicated endpoints)
+  /** Human-readable target name */
+  targetName?: string;
 
-**Question:** Should training management have separate endpoints?
-- [ ] Yes, `/api/characters/[id]/training/*` endpoints
-- [ ] No, training is part of advancement endpoints
-- [ ] Other? (Please specify: _______________)
+  /** New rating (for rating-based improvements) */
+  newRating?: number;
+
+  /** Additional options (specialization name, spell details, etc.) */
+  options?: Record<string, unknown>;
+
+  /** Player notes/justification */
+  notes?: string;
+
+  /** If this requires GM approval */
+  requiresApproval?: boolean;
+}
+
+/**
+ * Result of advancement validation
+ */
+export interface AdvancementValidationResult {
+  valid: boolean;
+  errors: Array<{ message: string; field?: string }>;
+  warnings?: Array<{ message: string }>;
+  cost: number;
+  trainingTime?: {
+    duration: number;
+    unit: "days" | "weeks" | "months";
+  };
+  requiresApproval: boolean;
+  prerequisites?: Array<{
+    met: boolean;
+    description: string;
+  }>;
+}
+
+/**
+ * Completed advancement record
+ */
+export interface AdvancementRecord {
+  id: ID;
+  characterId: ID;
+  campaignId?: ID;
+  sessionId?: ID;
+
+  /** Type of advancement */
+  type: AdvancementType;
+
+  /** What was improved */
+  targetId: string;
+  targetName: string;
+
+  /** Before and after values */
+  previousValue?: number | string;
+  newValue: number | string;
+
+  /** Karma spent */
+  karmaCost: number;
+
+  /** Training time (if applicable) */
+  trainingTime?: {
+    duration: number;
+    unit: "days" | "weeks" | "months";
+    startDate?: ISODateString;
+    endDate?: ISODateString;
+  };
+
+  /** Approval tracking */
+  status: "pending" | "approved" | "rejected" | "completed";
+  approvedBy?: ID;
+  approvedAt?: ISODateString;
+  rejectionReason?: string;
+
+  /** Player notes */
+  notes?: string;
+
+  /** Timestamps */
+  requestedAt: ISODateString;
+  completedAt?: ISODateString;
+}
+```
+
+### Karma Transaction
+
+```typescript
+/**
+ * Categories of karma transactions
+ */
+export type KarmaCategory =
+  | "run_reward"
+  | "session_reward"
+  | "attribute"
+  | "skill"
+  | "quality"
+  | "magic"
+  | "resonance"
+  | "contact"
+  | "other"
+  | "gm_adjustment";
+
+/**
+ * A single karma transaction in the ledger
+ */
+export interface KarmaTransaction {
+  id: ID;
+  characterId: ID;
+  campaignId?: ID;
+  sessionId?: ID;
+
+  /** Transaction type */
+  type: "award" | "expense";
+
+  /** Amount (positive for awards, positive for expenses - type determines sign) */
+  amount: number;
+
+  /** Category for grouping/filtering */
+  category: KarmaCategory;
+
+  /** Description of the transaction */
+  description: string;
+
+  /** Link to advancement record if this was an expense */
+  advancementId?: ID;
+
+  /** Link to specific target (skill ID, quality ID, etc.) */
+  targetId?: string;
+  targetName?: string;
+
+  /** Who recorded this transaction */
+  recordedBy: ID;
+
+  /** GM approval status */
+  gmApproved?: boolean;
+  approvedBy?: ID;
+
+  /** Timestamp */
+  timestamp: ISODateString;
+
+  /** Additional metadata */
+  metadata?: Record<string, unknown>;
+}
+
+/**
+ * Character's karma summary
+ */
+export interface KarmaSummary {
+  /** Total karma ever earned */
+  karmaTotal: number;
+
+  /** Current unspent karma */
+  karmaCurrent: number;
+
+  /** Breakdown by category */
+  earned: {
+    runRewards: number;
+    sessionRewards: number;
+    gmAwards: number;
+    other: number;
+  };
+
+  /** Breakdown by category */
+  spent: {
+    attributes: number;
+    skills: number;
+    qualities: number;
+    magic: number;
+    contacts: number;
+    other: number;
+  };
+
+  /** Recent transactions */
+  recentTransactions: KarmaTransaction[];
+}
+```
+
+### Campaign Advancement Settings
+
+```typescript
+/**
+ * Campaign-specific advancement configuration
+ */
+export interface CampaignAdvancementSettings {
+  /** Training time rules enabled */
+  trainingTimeEnabled: boolean;
+
+  /** Trainer availability modifier (0.5 = 50% time reduction) */
+  trainerModifier?: number;
+
+  /** Advancements requiring GM approval */
+  requireApprovalFor: AdvancementType[];
+
+  /** Restricted advancement types (not allowed in this campaign) */
+  restrictedAdvancements?: AdvancementType[];
+
+  /** Karma cost modifiers (multipliers) */
+  costModifiers?: Partial<Record<AdvancementType, number>>;
+
+  /** House rules (freeform) */
+  houseRules?: string;
+
+  /** Maximum rating caps (overrides ruleset) */
+  ratingCaps?: {
+    attributes?: number;
+    skills?: number;
+    magic?: number;
+  };
+
+  /** Auto-approve minor advancements (skills below rating X) */
+  autoApproveThreshold?: number;
+}
+```
+
+---
+
+## API Endpoints
+
+### Character Advancement
+
+#### GET `/api/characters/[characterId]/advancement`
+
+**Purpose:** Get character's advancement history and available options
+
+**Response:**
+```typescript
+{
+  success: boolean;
+  karmaSummary: KarmaSummary;
+  advancementHistory: AdvancementRecord[];
+  pendingAdvancements: AdvancementRecord[];
+  availableAdvancements: AvailableAdvancement[];
+  error?: string;
+}
+```
+
+---
+
+#### POST `/api/characters/[characterId]/advancement`
+
+**Purpose:** Request a character advancement
+
+**Request:**
+```typescript
+{
+  type: AdvancementType;
+  targetId: string;
+  newRating?: number;
+  options?: Record<string, unknown>;
+  notes?: string;
+}
+```
+
+**Response:**
+```typescript
+{
+  success: boolean;
+  advancement?: AdvancementRecord;
+  transaction?: KarmaTransaction;
+  updatedCharacter?: Character;
+  error?: string;
+  validationErrors?: Array<{ message: string; field?: string }>;
+}
+```
+
+**Validation:**
+- Character must belong to authenticated user
+- Character must have sufficient karma
+- Target must exist and be improvable
+- Prerequisites must be met
+- Rating limits must not be exceeded
+- Campaign restrictions must be respected
+
+---
+
+#### GET `/api/characters/[characterId]/advancement/options`
+
+**Purpose:** Get available advancement options with costs
+
+**Query Parameters:**
+- `type?: AdvancementType` - Filter by type
+- `affordable?: boolean` - Only show affordable options
+
+**Response:**
+```typescript
+{
+  success: boolean;
+  options: {
+    attributes: AttributeAdvancementOption[];
+    skills: SkillAdvancementOption[];
+    qualities: QualityAdvancementOption[];
+    magic: MagicAdvancementOption[];
+    other: OtherAdvancementOption[];
+  };
+  karmaCurrent: number;
+  error?: string;
+}
+```
+
+---
+
+#### POST `/api/characters/[characterId]/advancement/validate`
+
+**Purpose:** Validate an advancement request without executing it
+
+**Request:**
+```typescript
+{
+  type: AdvancementType;
+  targetId: string;
+  newRating?: number;
+  options?: Record<string, unknown>;
+}
+```
+
+**Response:**
+```typescript
+{
+  success: boolean;
+  validation: AdvancementValidationResult;
+  error?: string;
+}
+```
+
+---
+
+### Karma Management
+
+#### GET `/api/characters/[characterId]/karma`
+
+**Purpose:** Get character's karma ledger
+
+**Query Parameters:**
+- `limit?: number` - Number of transactions (default 50)
+- `offset?: number` - Pagination offset
+- `category?: KarmaCategory` - Filter by category
+- `type?: "award" | "expense"` - Filter by type
+
+**Response:**
+```typescript
+{
+  success: boolean;
+  summary: KarmaSummary;
+  transactions: KarmaTransaction[];
+  total: number;
+  error?: string;
+}
+```
+
+---
+
+#### POST `/api/characters/[characterId]/karma`
+
+**Purpose:** Record a karma transaction (award or manual expense)
+
+**Request:**
+```typescript
+{
+  type: "award" | "expense";
+  amount: number;
+  category: KarmaCategory;
+  description: string;
+  sessionId?: ID;
+  metadata?: Record<string, unknown>;
+}
+```
+
+**Response:**
+```typescript
+{
+  success: boolean;
+  transaction?: KarmaTransaction;
+  updatedKarma?: { total: number; current: number };
+  error?: string;
+}
+```
+
+**Validation:**
+- GM or character owner can award karma
+- Only character owner can spend karma (via advancement endpoints)
+- Amount must be positive
+- Cannot spend more than available
+
+---
+
+### Campaign Advancement
+
+#### GET `/api/campaigns/[campaignId]/advancement`
+
+**Purpose:** Get advancement log for entire campaign (GM only)
+
+**Query Parameters:**
+- `status?: "pending" | "approved" | "completed"` - Filter by status
+- `characterId?: ID` - Filter by character
+- `type?: AdvancementType` - Filter by type
+- `limit?: number` - Pagination limit
+- `offset?: number` - Pagination offset
+
+**Response:**
+```typescript
+{
+  success: boolean;
+  advancements: AdvancementRecord[];
+  total: number;
+  pendingCount: number;
+  error?: string;
+}
+```
+
+---
+
+#### POST `/api/campaigns/[campaignId]/karma/award`
+
+**Purpose:** Award karma to multiple characters at once (GM only)
+
+**Request:**
+```typescript
+{
+  characterIds: ID[];        // Characters to award (empty = all active)
+  amount: number;
+  category: KarmaCategory;
+  description: string;
+  sessionId?: ID;
+}
+```
+
+**Response:**
+```typescript
+{
+  success: boolean;
+  transactions: KarmaTransaction[];
+  error?: string;
+}
+```
+
+---
+
+#### PUT `/api/campaigns/[campaignId]/advancement/[advancementId]`
+
+**Purpose:** Approve or reject a pending advancement (GM only)
+
+**Request:**
+```typescript
+{
+  action: "approve" | "reject";
+  reason?: string;
+}
+```
+
+**Response:**
+```typescript
+{
+  success: boolean;
+  advancement?: AdvancementRecord;
+  error?: string;
+}
+```
+
+---
+
+#### PUT `/api/campaigns/[campaignId]/settings/advancement`
+
+**Purpose:** Update campaign advancement settings (GM only)
+
+**Request:**
+```typescript
+{
+  settings: Partial<CampaignAdvancementSettings>;
+}
+```
+
+**Response:**
+```typescript
+{
+  success: boolean;
+  settings?: CampaignAdvancementSettings;
+  error?: string;
+}
+```
+
+---
+
+## Components
+
+### 1. AdvancementPanel
+
+**Location:** `/app/characters/[id]/components/AdvancementPanel.tsx`
+
+**Description:** Main panel for viewing and managing character advancement.
+
+**Features:**
+- Karma summary display (total, current, breakdown)
+- Quick advancement shortcuts for common improvements
+- Pending advancement queue (if any awaiting approval)
+- Link to full advancement history
+- Context-aware suggestions based on character build
+
+**Props:**
+```typescript
+interface AdvancementPanelProps {
+  character: Character;
+  campaign?: Campaign;
+  onAdvance: (request: AdvancementRequest) => Promise<void>;
+}
+```
+
+---
+
+### 2. KarmaSummaryCard
+
+**Location:** `/app/characters/[id]/components/KarmaSummaryCard.tsx`
+
+**Description:** Compact display of karma status.
+
+**Features:**
+- Current karma prominently displayed
+- Total earned karma
+- Pie chart or bar showing spent by category
+- Recent transactions preview
+- Link to full karma ledger
+
+---
+
+### 3. AdvancementDialog
+
+**Location:** `/app/characters/[id]/components/AdvancementDialog.tsx`
+
+**Description:** Modal dialog for executing an advancement.
+
+**Features:**
+- Target selection (attribute, skill, etc.)
+- Current and new value display
+- Cost calculation with breakdown
+- Prerequisites checklist
+- Training time display (if enabled)
+- Confirmation with karma deduction preview
+- GM approval notice (if required)
+
+---
+
+### 4. AdvancementOptionsGrid
+
+**Location:** `/app/characters/[id]/components/AdvancementOptionsGrid.tsx`
+
+**Description:** Grid/list of available advancement options.
+
+**Sections:**
+- Attributes (grouped by category)
+- Skills (grouped by group, with linked attribute shown)
+- Qualities (positive available for purchase)
+- Magic/Resonance (spells, powers, initiation)
+- Contacts (improvement options)
+
+**Features:**
+- Cost display for each option
+- Affordable/unaffordable visual distinction
+- Prerequisites indicator
+- Quick-advance action for simple improvements
+- Search/filter functionality
+
+---
+
+### 5. KarmaLedger
+
+**Location:** `/app/characters/[id]/components/KarmaLedger.tsx`
+
+**Description:** Full karma transaction history.
+
+**Features:**
+- Chronological transaction list
+- Category filters
+- Type filters (awards vs expenses)
+- Running balance display
+- Export to CSV
+- Session grouping option
+
+---
+
+### 6. CampaignAdvancementLog
+
+**Location:** `/app/campaigns/[id]/components/CampaignAdvancementLog.tsx`
+
+**Description:** Campaign-wide advancement history (GM view).
+
+**Features:**
+- All character advancements in one view
+- Pending approvals queue
+- Filter by character, type, status
+- Bulk approval actions
+- Export functionality
+
+---
+
+### 7. SessionRewardDialog
+
+**Location:** `/app/campaigns/[id]/components/SessionRewardDialog.tsx`
+
+**Description:** GM dialog for awarding post-session karma.
+
+**Features:**
+- Session selection (from calendar)
+- Character checklist (select who participated)
+- Karma amount input
+- Nuyen amount input (separate tracking)
+- Suggested amounts based on SR5 formulas
+- Notes field
+- Bulk award execution
+
+---
+
+### 8. PendingApprovalCard
+
+**Location:** `/components/advancement/PendingApprovalCard.tsx`
+
+**Description:** Card showing a pending advancement awaiting GM approval.
+
+**Features:**
+- Character name and advancement summary
+- Cost and impact preview
+- Player notes/justification
+- Approve/Reject buttons (GM only)
+- Rejection reason input
+
+---
+
+## UI/UX Workflows
+
+### Player: Advancing a Skill
+
+1. Player opens character sheet
+2. Player clicks skill rating or "Improve" button
+3. System shows AdvancementDialog with:
+   - Current rating: 4
+   - New rating: 5
+   - Karma cost: 10
+   - Prerequisites: ✓ Linked attribute 5+
+   - Training time: 5 days (if enabled)
+4. Player confirms advancement
+5. System validates and processes:
+   - Deducts karma
+   - Updates skill rating
+   - Records transaction and advancement
+   - Recalculates derived stats
+6. Character sheet updates with new rating
+7. Karma display updates
+
+### Player: Acquiring a Quality
+
+1. Player opens Qualities section or Advancement Panel
+2. Player browses available qualities
+3. Player selects desired quality
+4. System shows AdvancementDialog with:
+   - Quality: Ambidextrous
+   - Karma cost: 8 (base 4 × 2)
+   - Prerequisites: ✓ None
+   - Status: Requires GM Approval
+5. Player submits request with notes
+6. System creates pending advancement
+7. GM receives notification
+8. GM reviews and approves/rejects
+9. If approved:
+   - Karma deducted
+   - Quality added to character
+   - Notifications sent
+
+### GM: Awarding Session Karma
+
+1. GM opens campaign detail page
+2. GM navigates to Calendar or Sessions
+3. GM clicks "Award Rewards" on completed session
+4. SessionRewardDialog opens:
+   - Session: "Run Against Aztechnology" - Jan 15
+   - Participants: [✓] Alice [✓] Bob [✓] Charlie
+   - Karma: 6 (suggested based on difficulty)
+   - Nuyen: 15,000 per runner
+   - Notes: "Bonus for creative solution"
+5. GM confirms
+6. System creates transactions for each character
+7. Players receive notifications
+8. Campaign advancement log updated
+
+### GM: Reviewing Pending Advancements
+
+1. GM opens campaign detail page
+2. GM sees "3 Pending Approvals" badge
+3. GM clicks to view pending queue
+4. For each pending advancement:
+   - Reviews character, advancement type, cost
+   - Reads player justification
+   - Approves or rejects with reason
+5. System processes approved advancements
+6. Players notified of decisions
+
+---
+
+## Validation Logic
+
+### Attribute Advancement Validation
+
+```typescript
+function validateAttributeAdvancement(
+  character: Character,
+  attributeId: string,
+  newRating: number,
+  ruleset: MergedRuleset,
+  campaign?: Campaign
+): AdvancementValidationResult {
+  const errors: Array<{ message: string; field?: string }> = [];
+  const warnings: Array<{ message: string }> = [];
+
+  // Get current rating
+  const currentRating = character.attributes[attributeId] || 1;
+
+  // Check rating increase is valid (can only increase by 1)
+  if (newRating !== currentRating + 1) {
+    errors.push({
+      message: "Can only increase attribute by 1 at a time",
+      field: "newRating"
+    });
+  }
+
+  // Get racial maximum
+  const metatype = ruleset.metatypes.find(m => m.id === character.metatypeId);
+  const racialMax = metatype?.attributeLimits?.[attributeId]?.max || 6;
+  const exceptionalMax = characterHasQuality(character, "exceptional_attribute", attributeId)
+    ? racialMax + 1
+    : racialMax;
+
+  // Check against maximum
+  if (newRating > exceptionalMax) {
+    errors.push({
+      message: `Cannot exceed racial maximum of ${exceptionalMax}`,
+      field: "newRating"
+    });
+  }
+
+  // Calculate cost
+  const cost = newRating * 5;
+
+  // Check karma availability
+  if (character.karmaCurrent < cost) {
+    errors.push({
+      message: `Insufficient karma. Need ${cost}, have ${character.karmaCurrent}`,
+      field: "karma"
+    });
+  }
+
+  // Check campaign restrictions
+  if (campaign?.advancementSettings?.restrictedAdvancements?.includes("attribute")) {
+    errors.push({
+      message: "Attribute advancement is restricted in this campaign"
+    });
+  }
+
+  // Apply campaign cost modifiers
+  let finalCost = cost;
+  if (campaign?.advancementSettings?.costModifiers?.attribute) {
+    finalCost = Math.ceil(cost * campaign.advancementSettings.costModifiers.attribute);
+  }
+
+  // Calculate training time
+  const trainingTime = campaign?.advancementSettings?.trainingTimeEnabled
+    ? { duration: newRating, unit: "weeks" as const }
+    : undefined;
+
+  // Determine if approval needed
+  const requiresApproval = campaign?.advancementSettings?.requireApprovalFor?.includes("attribute")
+    ?? false;
+
+  return {
+    valid: errors.length === 0,
+    errors,
+    warnings,
+    cost: finalCost,
+    trainingTime,
+    requiresApproval,
+    prerequisites: []
+  };
+}
+```
+
+### Skill Advancement Validation
+
+```typescript
+function validateSkillAdvancement(
+  character: Character,
+  skillId: string,
+  newRating: number,
+  ruleset: MergedRuleset,
+  campaign?: Campaign
+): AdvancementValidationResult {
+  const errors: Array<{ message: string; field?: string }> = [];
+  const prerequisites: Array<{ met: boolean; description: string }> = [];
+
+  // Get skill definition
+  const skill = ruleset.skills.find(s => s.id === skillId);
+  if (!skill) {
+    return {
+      valid: false,
+      errors: [{ message: `Skill '${skillId}' not found` }],
+      cost: 0,
+      requiresApproval: false
+    };
+  }
+
+  // Get current rating
+  const currentRating = character.skills?.[skillId]?.rating || 0;
+
+  // Check rating increase is valid
+  if (newRating !== currentRating + 1) {
+    errors.push({
+      message: "Can only increase skill by 1 at a time",
+      field: "newRating"
+    });
+  }
+
+  // Check linked attribute limit
+  const linkedAttribute = skill.linkedAttribute;
+  const attributeRating = character.attributes[linkedAttribute] || 1;
+
+  const aptitudeSkill = getAptitudeSkillId(character);
+  const maxRating = aptitudeSkill === skillId ? 7 : Math.min(attributeRating, 6);
+
+  prerequisites.push({
+    met: newRating <= attributeRating,
+    description: `${linkedAttribute} must be at least ${newRating}`
+  });
+
+  if (newRating > maxRating) {
+    errors.push({
+      message: `Cannot exceed skill maximum of ${maxRating}`,
+      field: "newRating"
+    });
+  }
+
+  // Check skill group integrity (if part of group)
+  if (skill.groupId && character.skillGroups?.[skill.groupId]) {
+    // Breaking from group - that's allowed but warn
+    warnings.push({
+      message: "This will break the skill group"
+    });
+  }
+
+  // Calculate cost
+  const isNewSkill = currentRating === 0;
+  const cost = isNewSkill ? 2 : newRating * 2;
+
+  // Check karma
+  if (character.karmaCurrent < cost) {
+    errors.push({
+      message: `Insufficient karma. Need ${cost}, have ${character.karmaCurrent}`,
+      field: "karma"
+    });
+  }
+
+  // Training time
+  const trainingTime = campaign?.advancementSettings?.trainingTimeEnabled
+    ? { duration: newRating, unit: "days" as const }
+    : undefined;
+
+  // Approval threshold
+  const autoApproveThreshold = campaign?.advancementSettings?.autoApproveThreshold ?? 6;
+  const requiresApproval = newRating > autoApproveThreshold ||
+    campaign?.advancementSettings?.requireApprovalFor?.includes("active_skill");
+
+  return {
+    valid: errors.length === 0,
+    errors,
+    warnings,
+    cost,
+    trainingTime,
+    requiresApproval,
+    prerequisites
+  };
+}
+```
+
+---
+
+## Integration with Campaign System
+
+### Campaign Settings Extension
+
+The Campaign type should be extended to include advancement settings:
+
+```typescript
+interface Campaign {
+  // ... existing fields ...
+
+  /** Advancement configuration */
+  advancementSettings?: CampaignAdvancementSettings;
+}
+```
+
+### Run Reward Integration
+
+When a session is marked complete in the campaign calendar:
+
+1. GM can trigger "Award Run Rewards" action
+2. System suggests karma/nuyen based on SR5 formulas:
+   - Base karma: 2 (survival) + 2 (objectives) + difficulty bonus
+   - Base nuyen: 3,000¥ + negotiation bonus
+3. GM adjusts as needed
+4. System creates karma transactions for all participating characters
+5. Transactions link to session for audit trail
+
+### Character Creation Karma
+
+Characters created for a campaign start with 0 post-creation karma. Any leftover karma from creation (if the creation method allows) should be recorded as:
+- Type: "award"
+- Category: "other"
+- Description: "Leftover karma from character creation"
+
+---
+
+## Storage Layer
+
+### File Structure
+
+```
+data/
+├── characters/
+│   └── {userId}/
+│       └── {characterId}.json  # Includes karma fields
+└── advancement/
+    └── {characterId}/
+        ├── transactions.json   # Karma ledger
+        └── history.json        # Advancement records
+```
+
+### Storage Functions
+
+**Location:** `/lib/storage/advancement.ts`
+
+```typescript
+// Karma transactions
+export function getKarmaTransactions(characterId: ID, options?: QueryOptions): KarmaTransaction[];
+export function createKarmaTransaction(transaction: Omit<KarmaTransaction, "id">): KarmaTransaction;
+export function getKarmaSummary(characterId: ID): KarmaSummary;
+
+// Advancement records
+export function getAdvancementHistory(characterId: ID, options?: QueryOptions): AdvancementRecord[];
+export function createAdvancementRecord(record: Omit<AdvancementRecord, "id">): AdvancementRecord;
+export function updateAdvancementRecord(recordId: ID, updates: Partial<AdvancementRecord>): AdvancementRecord;
+export function getPendingAdvancements(campaignId: ID): AdvancementRecord[];
+
+// Campaign-level queries
+export function getCampaignAdvancementLog(campaignId: ID, options?: QueryOptions): AdvancementRecord[];
+export function awardKarmaToCampaign(campaignId: ID, amount: number, description: string, characterIds?: ID[]): KarmaTransaction[];
+```
+
+---
+
+## Acceptance Criteria
+
+### MVP Features
+
+- [ ] Attribute advancement with karma cost calculation
+- [ ] Active skill advancement with karma cost calculation
+- [ ] Knowledge/language skill advancement
+- [ ] New specialization acquisition
+- [ ] Karma ledger with transaction history
+- [ ] Karma summary display on character sheet
+- [ ] Basic advancement validation (karma, prerequisites)
+- [ ] Advancement history tracking
+- [ ] GM karma award action
+
+### Phase 2: Quality Advancement
+
+- [ ] Post-creation positive quality acquisition (2× cost)
+- [ ] Negative quality buy-off (2× bonus)
+- [ ] Quality prerequisite validation
+- [ ] GM approval workflow for qualities
+
+### Phase 3: Magic/Resonance Advancement
+
+- [ ] New spell/ritual acquisition
+- [ ] Complex form acquisition
+- [ ] Initiation/submersion with ordeal options
+- [ ] Metamagic/echo selection
+- [ ] Adept power point acquisition
+- [ ] Magic/Resonance attribute advancement
+
+### Phase 4: Campaign Integration
+
+- [ ] Campaign advancement settings
+- [ ] Session-based karma awards
+- [ ] Campaign advancement log
+- [ ] Bulk karma distribution
+- [ ] Training time rules
+- [ ] House rule cost modifiers
+
+### Phase 5: Advanced Features
+
+- [ ] Advancement planning/wishlists
+- [ ] Advancement recommendations
+- [ ] Character build comparison tools
+- [ ] Advancement milestone tracking
+- [ ] Export advancement history
+
+---
+
+## Security Considerations
+
+### Authorization
+
+- Players can only advance their own characters
+- Players can only spend their own karma
+- GMs can award karma to any character in their campaign
+- GMs can approve/reject advancements in their campaign
+- Only GMs can modify campaign advancement settings
 
 ### Validation
 
-**Question:** Where should validation logic live?
-- [ ] Client-side only (faster UX)
-- [ ] Server-side only (security)
-- [X] Both (client for UX, server for security)
+- All advancement requests validated server-side
+- Karma balance verified before any expense
+- Prerequisites checked against current character state
+- Rating limits enforced per ruleset and campaign
+- Transaction amounts must be positive integers
+
+### Audit Trail
+
+- All karma transactions recorded with timestamp and source
+- All advancement records preserved indefinitely
+- GM approvals/rejections logged with reason
+- No deletion of historical records (soft delete only)
 
 ---
 
-## Open Questions (Your Input Needed)
+## Related Documentation
 
-### General Philosophy
-
-**Question:** What is the primary goal of the advancement system?
-- [ ] Track character growth over time
-- [ ] Enforce rules and prevent errors
-- [ ] Provide tools for players to manage advancement
-- [ ] Support GM oversight and campaign management
-- [X] All of the above
-- [ ] Other? (Please specify: _______________)
-
-**Question:** Should advancement be:
-- [ ] Strictly rule-compliant (no house rules)
-- [ ] Flexible (allow GM/campaign overrides)
-- [X] Configurable (settings for common house rules)
-
-### Edge Cases
-
-**Question:** What happens if a character dies during training?
-- [ ] Training is lost, karma is refunded
-- [X] Training is lost, karma is not refunded
-- [ ] Training completes posthumously (if that makes sense)
-- [ ] Other? (Please specify: _______________)
-
-**Question:** How should we handle characters who leave/join campaigns mid-training?
-- [X] Training continues regardless
-- [ ] Training pauses when character leaves campaign
-- [ ] Training is tied to campaign downtime
-- [ ] Other? (Please specify: _______________)
+- **Campaign Support:** `/docs/specifications/campaign_support_specification.md`
+- **Gameplay Actions:** `/docs/specifications/gameplay_actions_specification.md`
+- **Character Creation:** `/docs/specifications/character_creation_and_management_specification.md`
+- **Qualities System:** `/docs/specifications/qualities_specification.md`
+- **SR5 Rules Reference:** `/docs/rules/5e/`
+- **Karma Tables:** `/docs/data_tables/creation/`
 
 ---
 
-## Next Steps
+## SR5 Core Rulebook References
 
-Once this document is filled in, we will:
-1. Create detailed feature specifications for each advancement type
-2. Design data models and API endpoints
-3. Create implementation plan with phases
-4. Begin implementation based on priorities
+### Character Improvement (p. 103-107)
+
+> **Improving Attributes**
+> Increasing an attribute costs New Rating × 5 Karma. A character cannot raise an attribute above their natural maximum for their metatype.
+
+> **Improving Skills**
+> Increasing an Active skill costs New Rating × 2 Karma. Increasing a skill group costs New Rating × 5 Karma. Increasing a Knowledge or Language skill costs New Rating × 1 Karma.
+
+> **Learning New Skills**
+> A character can learn a new Active skill at Rating 1 for 2 Karma. A new Knowledge or Language skill costs 1 Karma.
+
+> **Specializations**
+> A character can add a specialization to an existing skill for 7 Karma.
+
+> **Improving Qualities**
+> Positive qualities may be acquired after character creation at double the listed Karma cost, subject to GM approval. Negative qualities may be bought off at double the Karma bonus received, subject to appropriate in-game justification.
+
+### Initiation and Submersion (p. 324-326, 325-327)
+
+> **Initiation**
+> Awakened characters can undergo initiation to increase their magical abilities. The Karma cost for each grade is 10 + (Grade × 3). Ordeals and magical group membership can reduce this cost.
+
+> **Submersion**
+> Technomancers follow a similar path called submersion. The cost formula is identical to initiation.
+
+### Contact Improvement (p. 389)
+
+> **Improving Contacts**
+> Characters can improve their contacts' Connection or Loyalty ratings by paying Karma equal to the new rating. New contacts cost (Connection + Loyalty) Karma.
 
 ---
 
-## Notes
+## Open Questions
 
-- Quality advancement (Phase 7) is already complete and can serve as a reference implementation
-- All advancement costs and training times are documented in `docs/rules/reference.md`
-- Character creation karma spending is already implemented and can inform advancement UI patterns
+1. **Skill Group Advancement:** When a player wants to advance a skill group, should all component skills already be at the same rating, or can we automatically bring them up?
+   - **Recommendation:** Require all skills at same rating before group advancement
+
+2. **Partial Advancements:** Should players be able to "reserve" karma toward a future advancement?
+   - **Recommendation:** No reservation - karma is spent immediately or not at all
+
+3. **Advancement Rollback:** Should GMs be able to undo approved advancements?
+   - **Recommendation:** Yes, with audit trail, but only for recent advancements
+
+4. **Cross-Campaign Characters:** If a character is in multiple campaigns, how do advancement settings interact?
+   - **Recommendation:** Characters can only be in one campaign at a time (per campaign spec)
+
+5. **Training During Play:** Should training time pause during active runs/sessions?
+   - **Recommendation:** Training time is "downtime" between sessions, GM discretion
+
+6. **Attribute vs Skill Priority:** Should the system warn if a player tries to raise a skill above its linked attribute?
+   - **Recommendation:** Yes, show warning but allow the skill increase (will be "capped" at attribute for tests)
+
+7. **Negative Karma:** Can karma balance go negative (debt)?
+   - **Recommendation:** No - karma cannot go below 0
+
+8. **Retroactive Advancements:** If campaign settings change, do existing advancements get re-validated?
+   - **Recommendation:** No - already-completed advancements are grandfathered
+
+---
+
+## Change Log
+
+### 2025-01-27
+- Initial specification created
+- Defined SR5 karma cost formulas
+- Designed data models for transactions and records
+- Defined API endpoints
+- Integrated with campaign system
+- Added validation logic examples
+
+---
+
+*This specification is a living document and will be updated as the advancement system evolves.*
