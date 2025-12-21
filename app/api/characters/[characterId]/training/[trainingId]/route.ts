@@ -7,7 +7,13 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getSession } from "@/lib/auth/session";
 import { getUserById } from "@/lib/storage/users";
-import { getCharacter, updateCharacter } from "@/lib/storage/characters";
+import {
+  getCharacter,
+  updateCharacter,
+  updateTrainingPeriod,
+  updateAdvancementRecord,
+  removeTrainingPeriod,
+} from "@/lib/storage/characters";
 import {
   completeTraining,
   interruptTraining,
@@ -67,7 +73,6 @@ export async function POST(
     }
 
     let result;
-    let updatedCharacter: typeof character;
 
     try {
       switch (action) {
@@ -77,8 +82,33 @@ export async function POST(
             completedTrainingPeriod: completionResult.completedTrainingPeriod,
             completedAdvancementRecord: completionResult.completedAdvancementRecord,
           };
-          updatedCharacter = completionResult.updatedCharacter;
-          break;
+
+          // Persist changes using storage helpers
+          // Update advancement record status
+          await updateAdvancementRecord(
+            userId,
+            characterId,
+            completionResult.completedAdvancementRecord.id,
+            {
+              trainingStatus: "completed",
+              completedAt: completionResult.completedAdvancementRecord.completedAt,
+            }
+          );
+
+          // Remove training period from activeTraining
+          await removeTrainingPeriod(userId, characterId, trainingId);
+
+          // Update character stats (attributes/skills) - this happens when training completes
+          const savedCharacter = await updateCharacter(userId, characterId, {
+            attributes: completionResult.updatedCharacter.attributes,
+            skills: completionResult.updatedCharacter.skills,
+          });
+
+          return NextResponse.json({
+            success: true,
+            character: savedCharacter,
+            ...result,
+          });
         }
 
         case "interrupt": {
@@ -87,8 +117,34 @@ export async function POST(
             interruptedTrainingPeriod: interruptResult.interruptedTrainingPeriod,
             updatedAdvancementRecord: interruptResult.updatedAdvancementRecord,
           };
-          updatedCharacter = interruptResult.updatedCharacter;
-          break;
+
+          // Update training period status
+          await updateTrainingPeriod(userId, characterId, trainingId, {
+            status: "interrupted",
+            interruptionDate: interruptResult.interruptedTrainingPeriod.interruptionDate,
+            interruptionReason: interruptResult.interruptedTrainingPeriod.interruptionReason,
+          });
+
+          // Update advancement record status
+          await updateAdvancementRecord(
+            userId,
+            characterId,
+            interruptResult.updatedAdvancementRecord.id,
+            {
+              trainingStatus: "interrupted",
+            }
+          );
+
+          const savedCharacter = await getCharacter(userId, characterId);
+          if (!savedCharacter) {
+            throw new Error("Character not found after update");
+          }
+
+          return NextResponse.json({
+            success: true,
+            character: savedCharacter,
+            ...result,
+          });
         }
 
         case "resume": {
@@ -97,8 +153,32 @@ export async function POST(
             resumedTrainingPeriod: resumeResult.resumedTrainingPeriod,
             updatedAdvancementRecord: resumeResult.updatedAdvancementRecord,
           };
-          updatedCharacter = resumeResult.updatedCharacter;
-          break;
+
+          // Update training period status
+          await updateTrainingPeriod(userId, characterId, trainingId, {
+            status: "in-progress",
+          });
+
+          // Update advancement record status
+          await updateAdvancementRecord(
+            userId,
+            characterId,
+            resumeResult.updatedAdvancementRecord.id,
+            {
+              trainingStatus: "in-progress",
+            }
+          );
+
+          const savedCharacter = await getCharacter(userId, characterId);
+          if (!savedCharacter) {
+            throw new Error("Character not found after update");
+          }
+
+          return NextResponse.json({
+            success: true,
+            character: savedCharacter,
+            ...result,
+          });
         }
 
         default:
@@ -108,19 +188,6 @@ export async function POST(
           );
       }
 
-      // Update character in storage
-      const savedCharacter = await updateCharacter(userId, characterId, {
-        attributes: updatedCharacter.attributes,
-        skills: updatedCharacter.skills,
-        advancementHistory: updatedCharacter.advancementHistory,
-        activeTraining: updatedCharacter.activeTraining,
-      });
-
-      return NextResponse.json({
-        success: true,
-        character: savedCharacter,
-        ...result,
-      });
     } catch (error) {
       const errorMessage =
         error instanceof Error ? error.message : `Failed to ${action} training`;

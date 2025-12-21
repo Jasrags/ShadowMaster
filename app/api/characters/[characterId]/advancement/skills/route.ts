@@ -7,7 +7,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getSession } from "@/lib/auth/session";
 import { getUserById } from "@/lib/storage/users";
-import { getCharacter, updateCharacter } from "@/lib/storage/characters";
+import { getCharacter, addAdvancementRecord } from "@/lib/storage/characters";
 import { getCampaignEvents } from "@/lib/storage/campaigns";
 import { loadAndMergeRuleset } from "@/lib/rules/merge";
 import { advanceSkill, type AdvanceSkillOptions } from "@/lib/rules/advancement/skills";
@@ -125,13 +125,14 @@ export async function POST(
         options
       );
 
-      // Update character with advancement record and training period
-      const updatedCharacter = await updateCharacter(userId, characterId, {
-        karmaCurrent: result.updatedCharacter.karmaCurrent,
-        advancementHistory: result.updatedCharacter.advancementHistory,
-        activeTraining: result.updatedCharacter.activeTraining,
-        // Note: skill value is NOT updated yet - that happens when training completes
-      });
+      // Persist advancement record and training period using storage helper
+      const updatedCharacter = await addAdvancementRecord(
+        userId,
+        characterId,
+        result.advancementRecord,
+        result.trainingPeriod,
+        result.advancementRecord.karmaCost
+      );
 
       return NextResponse.json({
         success: true,
