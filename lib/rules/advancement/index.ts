@@ -58,3 +58,19 @@ export {
   type AdvanceSkillResult,
 } from "./skills";
 
+// Training completion
+export {
+  completeTraining,
+  getActiveTraining,
+  getCompletedTraining,
+  type CompleteTrainingResult,
+} from "./completion";
+
+// Training interruption/resumption
+export {
+  interruptTraining,
+  resumeTraining,
+  type InterruptTrainingResult,
+  type ResumeTrainingResult,
+} from "./interruption";
+
