@@ -112,3 +112,16 @@ export {
   calculateAttributeMaximum,
 } from "./gameplay-integration";
 
+// Advancement functions (post-creation quality management)
+export {
+  validateQualityAcquisition,
+  validateQualityRemoval,
+  acquireQuality,
+  removeQuality,
+  calculatePostCreationCost,
+  calculateBuyOffCost,
+  type AcquireQualityOptions,
+  type AcquisitionValidationResult,
+  type RemovalValidationResult,
+} from "./advancement";
+
