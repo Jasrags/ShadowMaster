@@ -7,7 +7,6 @@
 
 import type { Character } from "@/lib/types";
 import type { AddictionState } from "@/lib/types";
-import { findQualitySelection } from "../utils";
 import { updateDynamicState, getDynamicState } from "../dynamic-state";
 
 /**

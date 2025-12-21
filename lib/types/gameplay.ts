@@ -5,8 +5,6 @@
  * during actual play (skill tests, combat, etc.)
  */
 
-import type { Character } from "./character";
-
 /**
  * Base context for effect application
  */

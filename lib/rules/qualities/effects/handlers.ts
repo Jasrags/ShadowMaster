@@ -7,7 +7,6 @@
 
 import type { QualityEffect, EffectType } from "@/lib/types";
 import type { ResolvedEffect } from "@/lib/types/gameplay";
-import { resolveEffectValue, resolveEffectTarget } from "../effects";
 
 /**
  * Handler function for a specific effect type

@@ -27,6 +27,7 @@ export interface PrerequisiteValidationResult {
 export function validatePrerequisites(
   quality: Quality,
   character: Character,
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   _ruleset: MergedRuleset
 ): PrerequisiteValidationResult {
   const prerequisites = quality.prerequisites;
@@ -225,6 +226,7 @@ export function canTakeQuality(
 export function validateQualitySelection(
   selection: QualitySelection,
   quality: Quality,
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   _character: Character
 ): {
   valid: boolean;

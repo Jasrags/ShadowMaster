@@ -19,6 +19,7 @@ import { DiceRoller } from "@/components";
 import {
   RulesetProvider,
   useRuleset,
+  useMergedRuleset,
   useRulesetStatus,
   useSpells,
   useMetatypes,
@@ -29,6 +30,9 @@ import {
   type SpellsCatalogData,
   type QualityData
 } from "@/lib/rules";
+import {
+  calculateLimit,
+} from "@/lib/rules/qualities";
 import { DownloadIcon, X } from "lucide-react";
 import { THEMES, DEFAULT_THEME, type Theme, type ThemeId } from "@/lib/themes";
 
@@ -1130,6 +1134,9 @@ function CharacterSheet({
   const { loadRuleset } = useRuleset();
   const { ready, loading: rulesetLoading } = useRulesetStatus();
   const spellsCatalog = useSpells();
+  
+  // Get ruleset for quality effect calculations (must be called before any early returns)
+  const ruleset = useMergedRuleset();
 
   // Theme State
   const [currentThemeId, setCurrentThemeId] = useState<ThemeId>(
@@ -1164,6 +1171,47 @@ function CharacterSheet({
     }
   }, [character.id, character.uiPreferences, currentThemeId]);
 
+  // Calculate derived values with quality effects (must be called before any early returns)
+  const physicalMonitorMax = Math.ceil((character.attributes?.body || 1) / 2) + 8;
+  const stunMonitorMax = Math.ceil((character.attributes?.willpower || 1) / 2) + 8;
+  
+  // Calculate limits with quality modifiers if ruleset is available
+  const physicalLimit = useMemo(() => {
+    if (ruleset) {
+      return calculateLimit(character, ruleset, "physical");
+    }
+    // Fallback to base calculation
+    return Math.ceil(
+      (((character.attributes?.strength || 1) * 2) +
+        (character.attributes?.body || 1) +
+        (character.attributes?.reaction || 1)) / 3
+    );
+  }, [character, ruleset]);
+
+  const mentalLimit = useMemo(() => {
+    if (ruleset) {
+      return calculateLimit(character, ruleset, "mental");
+    }
+    // Fallback to base calculation
+    return Math.ceil(
+      (((character.attributes?.logic || 1) * 2) +
+        (character.attributes?.intuition || 1) +
+        (character.attributes?.willpower || 1)) / 3
+    );
+  }, [character, ruleset]);
+
+  const socialLimit = useMemo(() => {
+    if (ruleset) {
+      return calculateLimit(character, ruleset, "social");
+    }
+    // Fallback to base calculation
+    return Math.ceil(
+      (((character.attributes?.charisma || 1) * 2) +
+        (character.attributes?.willpower || 1) +
+        Math.ceil(character.specialAttributes?.essence || 6)) / 3
+    );
+  }, [character, ruleset]);
+
   if (!ready || rulesetLoading) {
     return (
       <div className="flex items-center justify-center min-h-[400px]">
@@ -1180,24 +1228,6 @@ function CharacterSheet({
     );
   }
 
-  // Calculate derived values
-  const physicalMonitorMax = Math.ceil((character.attributes?.body || 1) / 2) + 8;
-  const stunMonitorMax = Math.ceil((character.attributes?.willpower || 1) / 2) + 8;
-  const physicalLimit = Math.ceil(
-    (((character.attributes?.strength || 1) * 2) +
-      (character.attributes?.body || 1) +
-      (character.attributes?.reaction || 1)) / 3
-  );
-  const mentalLimit = Math.ceil(
-    (((character.attributes?.logic || 1) * 2) +
-      (character.attributes?.intuition || 1) +
-      (character.attributes?.willpower || 1)) / 3
-  );
-  const socialLimit = Math.ceil(
-    (((character.attributes?.charisma || 1) * 2) +
-      (character.attributes?.willpower || 1) +
-      Math.ceil(character.specialAttributes?.essence || 6)) / 3
-  );
   const initiative = (character.attributes?.reaction || 1) + (character.attributes?.intuition || 1);
 
   const handleExport = () => {

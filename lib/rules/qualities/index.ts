@@ -101,3 +101,14 @@ export {
   calculateTotalTimeCommitment,
 } from "./dynamic-state/dependents";
 
+// Gameplay integration functions
+export {
+  calculateWoundModifier,
+  calculateSkillDicePool,
+  calculateLimit,
+  calculateLifestyleCost,
+  calculateHealingDicePool,
+  calculateAttributeValue,
+  calculateAttributeMaximum,
+} from "./gameplay-integration";
+
