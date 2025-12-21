@@ -1,0 +1,28 @@
+{
+  "recommendations": [
+    // Essential: Linting and Formatting
+    "dbaeumer.vscode-eslint",
+    "esbenp.prettier-vscode",
+    
+    // Essential: TypeScript and React
+    "ms-vscode.vscode-typescript-next",
+    
+    // Essential: Tailwind CSS
+    "bradlc.vscode-tailwindcss",
+    
+    // Testing: Vitest and Playwright
+    "vitest.explorer",
+    "ms-playwright.playwright",
+    
+    // Quality of Life: Error Display and Path Intelligence
+    "usernamehw.errorlens",
+    "christian-kohler.path-intellisense",
+    
+    // Optional: Git Integration
+    "eamodio.gitlens",
+    
+    // Optional: Next.js Support
+    "pulkitgangwar.nextjs-snippets"
+  ]
+}
+

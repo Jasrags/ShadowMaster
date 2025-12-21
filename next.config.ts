@@ -12,6 +12,18 @@ const nextConfig: NextConfig = {
   images: {
     unoptimized: false,
   },
+
+  // TypeScript configuration
+  typescript: {
+    // Don't block builds on type errors (we have watch mode for that)
+    ignoreBuildErrors: false, // Keep false for CI
+  },
+
+  // Optimize development experience
+  experimental: {
+    // Faster refresh with optimized package imports
+    optimizePackageImports: ["lucide-react", "react-aria-components"],
+  },
 };
 
 export default nextConfig;

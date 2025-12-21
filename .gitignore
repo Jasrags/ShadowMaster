@@ -44,6 +44,9 @@ yarn-error.log*
 *.tsbuildinfo
 next-env.d.ts
 
+# eslint
+.eslintcache
+
 # user data (characters, users) - NOT edition rulesets
 /data/users
 /data/characters

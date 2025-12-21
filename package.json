@@ -1,17 +1,28 @@
 {
   "name": "shadow-master",
   "version": "0.1.0",
-  "packageManager": "pnpm@10.0.0",
+  "packageManager": "pnpm@10.26.1",
   "private": true,
   "scripts": {
     "dev": "next dev",
+    "dev:all": "concurrently \"pnpm dev\" \"pnpm type-check:watch\" \"pnpm lint:watch\"",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint",
+    "lint": "eslint . --cache --cache-location .eslintcache",
+    "lint:watch": "nodemon --watch . --ext ts,tsx --ignore .next --ignore node_modules --ignore .git --ignore dist --ignore build --exec \"pnpm lint\"",
+    "type-check": "tsc --noEmit",
+    "type-check:watch": "tsc --noEmit --watch",
     "test": "vitest",
+    "test:watch": "vitest --watch",
     "test:ci": "vitest run",
     "test:e2e": "playwright test",
-    "test:e2e:ui": "playwright test --ui"
+    "test:e2e:ui": "playwright test --ui",
+    "prepare": "husky"
+  },
+  "lint-staged": {
+    "*.{ts,tsx}": [
+      "eslint --fix"
+    ]
   },
   "dependencies": {
     "bcryptjs": "^3.0.3",
@@ -35,9 +46,13 @@
     "@types/uuid": "^11.0.0",
     "@vitejs/plugin-react": "^5.1.2",
     "@vitest/ui": "^4.0.15",
+    "concurrently": "^9.0.0",
     "eslint": "^9",
     "eslint-config-next": "16.0.7",
+    "husky": "^9.0.0",
     "jsdom": "^27.3.0",
+    "lint-staged": "^15.0.0",
+    "nodemon": "^3.1.11",
     "tailwindcss": "^4",
     "typescript": "^5",
     "vitest": "^4.0.15"
