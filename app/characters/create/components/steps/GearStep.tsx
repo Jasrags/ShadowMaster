@@ -28,6 +28,11 @@ import {
   type BiowareCatalogItemData,
 } from "@/lib/rules/RulesetContext";
 import { ModificationModal } from "../ModificationModal";
+import { RatingSelector } from "../RatingSelector";
+import {
+  convertLegacyRatingSpec,
+  calculateRatedItemValues,
+} from "@/lib/rules/ratings";
 
 interface StepProps {
   state: CreationState;
@@ -411,30 +416,35 @@ export function GearStep({ state, updateState, budgetValues }: StepProps) {
     const item = configuringGear.item;
     const selectedRating = gearConfigRating;
 
-    // Calculate cost based on rating
-    let finalCost = item.cost;
-    if (item.costPerRating) {
-      finalCost = item.cost * selectedRating;
-    } else if (item.rating && !item.hasRating && item.description && /rating\s+\d+\s*-\s*\d+/i.test(item.description)) {
-      // Fallback for inferred rating items: assume base cost is per rating if it looks like a variable rating item
-      // This preserves potential legacy behavior or fixes the previous buggy logic
-      // Previous logic was: costPerRating = item.cost / maxRating; which seemed wrong.
-      // We'll assume for legacy inferred items, the listed cost is for Rating 1 (or per rating).
-      finalCost = item.cost * selectedRating;
-    }
+    // Convert to rating spec format
+    const ratingSpec = convertLegacyRatingSpec(item);
 
-    // Calculate capacity
+    // Calculate values using rating utilities
+    let finalCost = item.cost;
+    let finalAvailability = item.availability;
     let capacity = item.capacity || 0;
-    let capacityPerRating = item.capacityPerRating;
+
+    if (ratingSpec.rating?.hasRating && selectedRating) {
+      const calculatedValues = calculateRatedItemValues(ratingSpec, selectedRating);
+      finalCost = calculatedValues.cost || item.cost;
+      finalAvailability = calculatedValues.availability ?? item.availability;
+      capacity = calculatedValues.capacity ?? capacity;
+    } else {
+      // Fallback for items without rating spec (use legacy calculation)
+      if (item.costPerRating) {
+        finalCost = item.cost * selectedRating;
+      }
+      if (item.capacityPerRating && selectedRating) {
+        capacity *= selectedRating;
+      }
+    }
 
     // Patch: Ensure Ear Buds has capacity even if catalog data is stale
     if (item.name === "Ear Buds" && !capacity) {
       capacity = 1;
-      capacityPerRating = true;
-    }
-
-    if (capacityPerRating && selectedRating) {
-      capacity *= selectedRating;
+      if (item.capacityPerRating && selectedRating) {
+        capacity *= selectedRating;
+      }
     }
 
     const newItem: GearItem = {
@@ -442,7 +452,7 @@ export function GearStep({ state, updateState, budgetValues }: StepProps) {
       category: item.category,
       quantity: 1,
       cost: finalCost,
-      availability: item.availability,
+      availability: finalAvailability,
       rating: selectedRating,
       capacity: capacity > 0 ? capacity : undefined,
       capacityUsed: capacity > 0 ? 0 : undefined,
@@ -2519,31 +2529,22 @@ export function GearStep({ state, updateState, budgetValues }: StepProps) {
               <p className="mb-4 text-sm text-zinc-600 dark:text-zinc-400">{configuringGear.item.description}</p>
             )}
             <div className="space-y-4">
-              <div>
-                <label className="mb-2 block text-sm font-medium">Rating</label>
-                <select
-                  value={gearConfigRating}
-                  onChange={(e) => setGearConfigRating(Number(e.target.value))}
-                  className="w-full rounded border border-zinc-300 bg-white px-3 py-2 text-sm dark:border-zinc-600 dark:bg-zinc-700"
-                >
-                  {Array.from({ length: configuringGear.item.maxRating || configuringGear.item.rating || 6 }, (_, i) => i + 1).map((rating) => (
-                    <option key={rating} value={rating}>
-                      {rating}
-                    </option>
-                  ))}
-                </select>
-              </div>
-              <div className="rounded bg-zinc-50 p-3 dark:bg-zinc-900">
-                <p className="text-sm text-zinc-600 dark:text-zinc-400">
-                  Cost: ¥{formatCurrency(
-                    configuringGear.item.costPerRating
-                      ? configuringGear.item.cost * gearConfigRating
-                      : (configuringGear.item.rating && !configuringGear.item.hasRating && configuringGear.item.description && /rating\s+\d+\s*-\s*\d+/i.test(configuringGear.item.description))
-                        ? configuringGear.item.cost * gearConfigRating
-                        : (configuringGear.item.cost / (configuringGear.item.maxRating || configuringGear.item.rating || 6)) * gearConfigRating
-                  )}
-                </p>
-              </div>
+              {(() => {
+                const ratingSpec = convertLegacyRatingSpec(configuringGear.item);
+                if (ratingSpec.rating?.hasRating) {
+                  return (
+                    <RatingSelector
+                      itemSpec={ratingSpec}
+                      selectedRating={gearConfigRating}
+                      onRatingChange={setGearConfigRating}
+                      validationContext={{ maxAvailability: 12 }}
+                      showCost={true}
+                      showAvailability={true}
+                    />
+                  );
+                }
+                return null;
+              })()}
               <div className="flex gap-2">
                 <button
                   onClick={confirmGearConfig}

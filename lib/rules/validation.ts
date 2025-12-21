@@ -14,8 +14,20 @@ import type {
   CreationState,
   ValidationError,
   ConstraintType,
+  RatingValidationContext,
 } from "../types";
 import { getModule } from "./merge";
+import {
+  validateRating,
+  validateRatingAvailability,
+  convertLegacyRatingSpec,
+} from "./ratings";
+import type {
+  GearCatalogData,
+  CyberwareCatalogData,
+  GearItemData,
+  CyberwareCatalogItemData,
+} from "./loader";
 
 // =============================================================================
 // TYPES
@@ -52,6 +64,204 @@ type ConstraintValidator = (
 // CONSTRAINT VALIDATORS
 // =============================================================================
 
+// =============================================================================
+// HELPER FUNCTIONS FOR CATALOG LOOKUP
+// =============================================================================
+
+/**
+ * Find a gear catalog item by ID or name
+ */
+function findGearCatalogItem(
+  ruleset: MergedRuleset,
+  identifier: string
+): GearItemData | null {
+  const gearCatalog = getModule<GearCatalogData>(ruleset, "gear");
+  if (!gearCatalog) return null;
+
+  // Search all gear categories
+  const allGear: GearItemData[] = [
+    ...(gearCatalog.electronics || []),
+    ...(gearCatalog.tools || []),
+    ...(gearCatalog.survival || []),
+    ...(gearCatalog.medical || []),
+    ...(gearCatalog.security || []),
+    ...(gearCatalog.miscellaneous || []),
+    ...(gearCatalog.ammunition || []),
+    ...(gearCatalog.armor || []),
+    ...(gearCatalog.commlinks || []),
+    ...(gearCatalog.cyberdecks || []),
+    // Weapons
+    ...(gearCatalog.weapons?.melee || []),
+    ...(gearCatalog.weapons?.pistols || []),
+    ...(gearCatalog.weapons?.smgs || []),
+    ...(gearCatalog.weapons?.rifles || []),
+    ...(gearCatalog.weapons?.shotguns || []),
+    ...(gearCatalog.weapons?.sniperRifles || []),
+    ...(gearCatalog.weapons?.throwingWeapons || []),
+    ...(gearCatalog.weapons?.grenades || []),
+  ];
+
+  return (
+    allGear.find((item) => item.id === identifier || item.name === identifier) ||
+    null
+  );
+}
+
+/**
+ * Find a cyberware catalog item by ID or name
+ */
+function findCyberwareCatalogItem(
+  ruleset: MergedRuleset,
+  identifier: string
+): CyberwareCatalogItemData | null {
+  const cyberwareCatalog = getModule<CyberwareCatalogData>(ruleset, "cyberware");
+  if (!cyberwareCatalog) return null;
+
+  const catalog = cyberwareCatalog.catalog || [];
+  return (
+    catalog.find(
+      (item) => item.id === identifier || item.name === identifier
+    ) || null
+  );
+}
+
+// =============================================================================
+// EQUIPMENT RATING VALIDATION
+// =============================================================================
+
+/**
+ * Validate equipment ratings on character gear, cyberware, and foci
+ */
+function validateEquipmentRatings(
+  constraint: CreationConstraint,
+  context: ValidationContext
+): ValidationError | null {
+  const errors = validateEquipmentRatingsInternal(context);
+  return errors.length > 0 ? errors[0] : null;
+}
+
+/**
+ * Internal function that returns all rating validation errors
+ */
+function validateEquipmentRatingsInternal(
+  context: ValidationContext
+): ValidationError[] {
+  const errors: ValidationError[] = [];
+  const { character, ruleset } = context;
+
+  // Determine if we're in creation (stricter availability rules)
+  const isCreation = character.status === "draft";
+  const maxAvailability = isCreation ? 12 : undefined;
+
+  const validationContext: RatingValidationContext = {
+    maxAvailability,
+    allowForbidden: !isCreation,
+    allowRestricted: true,
+  };
+
+  // Validate gear ratings
+  for (const item of character.gear || []) {
+    if (item.rating !== undefined) {
+      const catalogItem = findGearCatalogItem(
+        ruleset,
+        item.id || item.name
+      );
+
+      if (catalogItem) {
+        const spec = convertLegacyRatingSpec(catalogItem);
+
+        if (spec.rating) {
+          // Validate rating is in range
+          const ratingValidation = validateRating(
+            item.rating,
+            spec.rating,
+            validationContext
+          );
+          if (!ratingValidation.valid) {
+            errors.push({
+              constraintId: "equipment-rating-range",
+              field: `gear.${item.id || item.name}`,
+              message: `${item.name}: ${ratingValidation.error}`,
+              severity: "error",
+            });
+          }
+
+          // Validate availability at creation
+          if (isCreation) {
+            const availValidation = validateRatingAvailability(
+              spec,
+              item.rating,
+              validationContext
+            );
+            if (!availValidation.valid) {
+              errors.push({
+                constraintId: "equipment-rating-availability",
+                field: `gear.${item.id || item.name}`,
+                message: `${item.name}: ${availValidation.error}`,
+                severity: "error",
+              });
+            }
+          }
+        }
+      }
+    }
+  }
+
+  // Validate cyberware ratings
+  for (const item of character.cyberware || []) {
+    if (item.rating !== undefined) {
+      const catalogItem = findCyberwareCatalogItem(
+        ruleset,
+        item.catalogId || item.name
+      );
+
+      if (catalogItem) {
+        const spec = convertLegacyRatingSpec(catalogItem);
+
+        if (spec.rating) {
+          const ratingValidation = validateRating(
+            item.rating,
+            spec.rating,
+            validationContext
+          );
+          if (!ratingValidation.valid) {
+            errors.push({
+              constraintId: "cyberware-rating-range",
+              field: `cyberware.${item.id || item.name}`,
+              message: `${item.name}: ${ratingValidation.error}`,
+              severity: "error",
+            });
+          }
+        }
+      }
+    }
+  }
+
+  // Validate focus force ratings
+  for (const focus of character.foci || []) {
+    // Force 1-6 for starting characters
+    if (isCreation && focus.force > 6) {
+      errors.push({
+        constraintId: "focus-force-creation",
+        field: `foci.${focus.id || focus.name}`,
+        message: `${focus.name}: Force cannot exceed 6 at character creation`,
+        severity: "error",
+      });
+    }
+
+    if (focus.force < 1) {
+      errors.push({
+        constraintId: "focus-force-minimum",
+        field: `foci.${focus.id || focus.name}`,
+        message: `${focus.name}: Force must be at least 1`,
+        severity: "error",
+      });
+    }
+  }
+
+  return errors;
+}
+
 /**
  * Registry of constraint validators by type
  */
@@ -63,6 +273,7 @@ const constraintValidators: Record<ConstraintType, ConstraintValidator> = {
   "forbidden-combination": validateForbiddenCombination,
   "required-combination": validateRequiredCombination,
   "essence-minimum": validateEssenceMinimum,
+  "equipment-rating": validateEquipmentRatings,
   custom: validateCustom,
 };
 

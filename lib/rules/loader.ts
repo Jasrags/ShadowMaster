@@ -14,6 +14,7 @@ import type {
   CreationMethod,
   SpiritType,
   SpiritPower,
+  CatalogItemRatingSpec,
 } from "../types";
 import {
   getEdition,
@@ -530,10 +531,29 @@ export interface GearItemData {
   forbidden?: boolean;
   rating?: number;
   description?: string;
+
+  /**
+   * Unified rating specification (preferred over legacy properties)
+   * @see CatalogItemRatingSpec
+   */
+  ratingSpec?: CatalogItemRatingSpec;
+
+  /**
+   * @deprecated Use ratingSpec.rating.hasRating instead
+   */
   hasRating?: boolean;
+  /**
+   * @deprecated Use ratingSpec.rating.maxRating instead
+   */
   maxRating?: number;
+  /**
+   * @deprecated Use ratingSpec.costScaling.perRating instead
+   */
   costPerRating?: boolean;
   capacity?: number;
+  /**
+   * @deprecated Use ratingSpec.capacityCostScaling.perRating instead
+   */
   capacityPerRating?: boolean;
 }
 
@@ -748,17 +768,45 @@ export interface CyberwareCatalogItemData {
   availability: number;
   restricted?: boolean;
   forbidden?: boolean;
+
+  /**
+   * Unified rating specification (preferred over legacy properties)
+   * @see CatalogItemRatingSpec
+   */
+  ratingSpec?: CatalogItemRatingSpec;
+
+  /**
+   * @deprecated Use ratingSpec.rating.hasRating instead
+   */
   hasRating?: boolean;
+  /**
+   * @deprecated Use ratingSpec.rating.maxRating instead
+   */
   maxRating?: number;
+  /**
+   * @deprecated Use ratingSpec.essenceScaling.perRating instead
+   */
   essencePerRating?: boolean;
+  /**
+   * @deprecated Use ratingSpec.costScaling.perRating instead
+   */
   costPerRating?: boolean;
   capacity?: number;
   capacityCost?: number;
+  /**
+   * @deprecated Use ratingSpec.capacityCostScaling.perRating instead
+   */
   capacityPerRating?: boolean;
   attributeBonuses?: Record<string, number>;
+  /**
+   * @deprecated Use ratingSpec.attributeBonusScaling instead
+   */
   attributeBonusesPerRating?: Record<string, number>;
   maxAttributeBonus?: number;
   initiativeDiceBonus?: number;
+  /**
+   * @deprecated Consider using ratingSpec.attributeBonusScaling if applicable
+   */
   initiativeDiceBonusPerRating?: number;
   description?: string;
   wirelessBonus?: string;
@@ -811,11 +859,33 @@ export interface BiowareCatalogItemData {
   availability: number;
   restricted?: boolean;
   forbidden?: boolean;
+
+  /**
+   * Unified rating specification (preferred over legacy properties)
+   * @see CatalogItemRatingSpec
+   */
+  ratingSpec?: CatalogItemRatingSpec;
+
+  /**
+   * @deprecated Use ratingSpec.rating.hasRating instead
+   */
   hasRating?: boolean;
+  /**
+   * @deprecated Use ratingSpec.rating.maxRating instead
+   */
   maxRating?: number;
+  /**
+   * @deprecated Use ratingSpec.essenceScaling.perRating instead
+   */
   essencePerRating?: boolean;
+  /**
+   * @deprecated Use ratingSpec.costScaling.perRating instead
+   */
   costPerRating?: boolean;
   attributeBonuses?: Record<string, number>;
+  /**
+   * @deprecated Use ratingSpec.attributeBonusScaling instead
+   */
   attributeBonusesPerRating?: Record<string, number>;
   maxAttributeBonus?: number;
   initiativeDiceBonus?: number;
@@ -1468,11 +1538,27 @@ export interface WeaponModificationCatalogItemData {
   cost?: number;
   /** Whether cost is a multiplier of weapon cost */
   costMultiplier?: number;
-  /** Whether the mod has a rating */
+
+  /**
+   * Unified rating specification (preferred over legacy properties)
+   * @see CatalogItemRatingSpec
+   */
+  ratingSpec?: CatalogItemRatingSpec;
+
+  /**
+   * Whether the mod has a rating
+   * @deprecated Use ratingSpec.rating.hasRating instead
+   */
   hasRating?: boolean;
-  /** Maximum rating if applicable */
+  /**
+   * Maximum rating if applicable
+   * @deprecated Use ratingSpec.rating.maxRating instead
+   */
   maxRating?: number;
-  /** Whether cost scales with rating */
+  /**
+   * Whether cost scales with rating
+   * @deprecated Use ratingSpec.costScaling.perRating instead
+   */
   costPerRating?: boolean;
   /** Base availability */
   availability: number;
@@ -1504,17 +1590,36 @@ export interface ArmorModificationCatalogItemData {
   name: string;
   /** Capacity cost */
   capacityCost: number;
-  /** Whether capacity cost scales with rating */
+
+  /**
+   * Unified rating specification (preferred over legacy properties)
+   * @see CatalogItemRatingSpec
+   */
+  ratingSpec?: CatalogItemRatingSpec;
+
+  /**
+   * Whether capacity cost scales with rating
+   * @deprecated Use ratingSpec.capacityCostScaling.perRating instead
+   */
   capacityPerRating?: boolean;
   /** Whether this uses no capacity (bracketed in rulebook) */
   noCapacityCost?: boolean;
-  /** Whether the mod has a rating */
+  /**
+   * Whether the mod has a rating
+   * @deprecated Use ratingSpec.rating.hasRating instead
+   */
   hasRating?: boolean;
-  /** Maximum rating if applicable */
+  /**
+   * Maximum rating if applicable
+   * @deprecated Use ratingSpec.rating.maxRating instead
+   */
   maxRating?: number;
   /** Base cost in nuyen */
   cost: number;
-  /** Whether cost scales with rating */
+  /**
+   * Whether cost scales with rating
+   * @deprecated Use ratingSpec.costScaling.perRating instead
+   */
   costPerRating?: boolean;
   /** Whether cost is a multiplier of armor cost */
   costMultiplier?: number;
