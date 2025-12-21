@@ -1,7 +1,7 @@
 /**
- * API Route: /api/characters/[characterId]/advancement/attributes
+ * API Route: /api/characters/[characterId]/advancement/specializations
  *
- * POST - Advance a character attribute (costs karma, requires training)
+ * POST - Learn a skill specialization (costs karma, requires training)
  */
 
 import { NextRequest, NextResponse } from "next/server";
@@ -10,7 +10,7 @@ import { getUserById } from "@/lib/storage/users";
 import { getCharacter, addAdvancementRecord } from "@/lib/storage/characters";
 import { getCampaignEvents } from "@/lib/storage/campaigns";
 import { loadAndMergeRuleset } from "@/lib/rules/merge";
-import { advanceAttribute, type AdvanceAttributeOptions } from "@/lib/rules/advancement/attributes";
+import { advanceSpecialization, type AdvanceSpecializationOptions } from "@/lib/rules/advancement/specializations";
 import { requiresGMApproval } from "@/lib/rules/advancement/approval";
 
 export async function POST(
@@ -49,7 +49,7 @@ export async function POST(
     // Character must be active (not draft)
     if (character.status === "draft") {
       return NextResponse.json(
-        { success: false, error: "Cannot advance attributes during character creation" },
+        { success: false, error: "Cannot learn specializations during character creation" },
         { status: 400 }
       );
     }
@@ -57,8 +57,8 @@ export async function POST(
     // Parse body
     const body = await request.json();
     const {
-      attributeId,
-      newRating,
+      skillId,
+      specializationName,
       downtimePeriodId,
       campaignSessionId,
       gmApproved,
@@ -67,16 +67,16 @@ export async function POST(
       notes,
     } = body;
 
-    if (!attributeId || typeof attributeId !== "string") {
+    if (!skillId || typeof skillId !== "string") {
       return NextResponse.json(
-        { success: false, error: "Missing or invalid attributeId" },
+        { success: false, error: "Missing or invalid skillId" },
         { status: 400 }
       );
     }
 
-    if (typeof newRating !== "number" || newRating < 1) {
+    if (!specializationName || typeof specializationName !== "string" || !specializationName.trim()) {
       return NextResponse.json(
-        { success: false, error: "Missing or invalid newRating (must be >= 1)" },
+        { success: false, error: "Missing or invalid specializationName" },
         { status: 400 }
       );
     }
@@ -116,7 +116,7 @@ export async function POST(
     }
 
     // Prepare options (gmApproved will be false for campaign characters)
-    const options: AdvanceAttributeOptions = {
+    const options: AdvanceSpecializationOptions = {
       downtimePeriodId,
       campaignSessionId,
       gmApproved: needsApproval ? false : gmApproved, // Force false if approval required
@@ -126,12 +126,12 @@ export async function POST(
       campaignEvents,
     };
 
-    // Advance attribute
+    // Advance specialization
     try {
-      const result = advanceAttribute(
+      const result = advanceSpecialization(
         character,
-        attributeId,
-        newRating,
+        skillId,
+        specializationName.trim(),
         mergeResult.ruleset,
         options
       );
@@ -154,16 +154,16 @@ export async function POST(
       });
     } catch (error) {
       const errorMessage =
-        error instanceof Error ? error.message : "Failed to advance attribute";
+        error instanceof Error ? error.message : "Failed to learn specialization";
       return NextResponse.json(
         { success: false, error: errorMessage },
         { status: 400 }
       );
     }
   } catch (error) {
-    console.error("Failed to advance attribute:", error);
+    console.error("Failed to learn specialization:", error);
     const errorMessage =
-      error instanceof Error ? error.message : "Failed to advance attribute";
+      error instanceof Error ? error.message : "Failed to learn specialization";
     return NextResponse.json(
       { success: false, error: errorMessage },
       { status: 500 }

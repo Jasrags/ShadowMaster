@@ -98,8 +98,24 @@ export function completeTraining(
       ...character.skills,
       [advancementRecord.targetId]: advancementRecord.newValue,
     };
+  } else if (advancementRecord.type === "specialization") {
+    // Extract specialization name from notes (format: "Specialization: {name}")
+    const specializationMatch = advancementRecord.notes?.match(/^Specialization:\s*(.+)$/);
+    if (specializationMatch) {
+      const specializationName = specializationMatch[1].trim();
+      const skillId = advancementRecord.targetId;
+      const existingSpecializations = character.skillSpecializations?.[skillId] || [];
+      
+      // Add specialization if not already present
+      if (!existingSpecializations.includes(specializationName)) {
+        updatedCharacter.skillSpecializations = {
+          ...character.skillSpecializations,
+          [skillId]: [...existingSpecializations, specializationName],
+        };
+      }
+    }
   } else {
-    // Other advancement types (skill groups, specializations, etc.) will be handled later
+    // Other advancement types (skill groups, etc.) will be handled later
     // For now, we just complete the training without stat updates
   }
 

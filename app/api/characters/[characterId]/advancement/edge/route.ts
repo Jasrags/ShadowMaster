@@ -1,16 +1,15 @@
 /**
- * API Route: /api/characters/[characterId]/advancement/attributes
+ * API Route: /api/characters/[characterId]/advancement/edge
  *
- * POST - Advance a character attribute (costs karma, requires training)
+ * POST - Advance character Edge (costs karma, no training time required)
  */
 
 import { NextRequest, NextResponse } from "next/server";
 import { getSession } from "@/lib/auth/session";
 import { getUserById } from "@/lib/storage/users";
 import { getCharacter, addAdvancementRecord } from "@/lib/storage/characters";
-import { getCampaignEvents } from "@/lib/storage/campaigns";
 import { loadAndMergeRuleset } from "@/lib/rules/merge";
-import { advanceAttribute, type AdvanceAttributeOptions } from "@/lib/rules/advancement/attributes";
+import { advanceEdge, type AdvanceEdgeOptions } from "@/lib/rules/advancement/edge";
 import { requiresGMApproval } from "@/lib/rules/advancement/approval";
 
 export async function POST(
@@ -49,7 +48,7 @@ export async function POST(
     // Character must be active (not draft)
     if (character.status === "draft") {
       return NextResponse.json(
-        { success: false, error: "Cannot advance attributes during character creation" },
+        { success: false, error: "Cannot advance Edge during character creation" },
         { status: 400 }
       );
     }
@@ -57,22 +56,11 @@ export async function POST(
     // Parse body
     const body = await request.json();
     const {
-      attributeId,
       newRating,
-      downtimePeriodId,
       campaignSessionId,
       gmApproved,
-      instructorBonus,
-      timeModifier,
       notes,
     } = body;
-
-    if (!attributeId || typeof attributeId !== "string") {
-      return NextResponse.json(
-        { success: false, error: "Missing or invalid attributeId" },
-        { status: 400 }
-      );
-    }
 
     if (typeof newRating !== "number" || newRating < 1) {
       return NextResponse.json(
@@ -94,17 +82,6 @@ export async function POST(
       );
     }
 
-    // Load campaign events if character is in a campaign and downtime period is specified
-    let campaignEvents;
-    if (character.campaignId && downtimePeriodId) {
-      try {
-        campaignEvents = await getCampaignEvents(character.campaignId);
-      } catch (error) {
-        // Campaign events not found - continue without downtime validation
-        console.warn("Failed to load campaign events:", error);
-      }
-    }
-
     // Enforce GM approval requirement for campaign characters
     const needsApproval = requiresGMApproval(character);
     if (needsApproval && gmApproved) {
@@ -116,54 +93,57 @@ export async function POST(
     }
 
     // Prepare options (gmApproved will be false for campaign characters)
-    const options: AdvanceAttributeOptions = {
-      downtimePeriodId,
+    const options: AdvanceEdgeOptions = {
       campaignSessionId,
       gmApproved: needsApproval ? false : gmApproved, // Force false if approval required
-      instructorBonus,
-      timeModifier,
       notes,
-      campaignEvents,
     };
 
-    // Advance attribute
+    // Advance Edge
     try {
-      const result = advanceAttribute(
+      const result = advanceEdge(
         character,
-        attributeId,
         newRating,
         mergeResult.ruleset,
         options
       );
 
-      // Persist advancement record and training period using storage helper
+      // Persist advancement record (no training period for Edge)
       const updatedCharacter = await addAdvancementRecord(
         userId,
         characterId,
         result.advancementRecord,
-        result.trainingPeriod,
+        undefined, // No training period for Edge
         result.advancementRecord.karmaCost
       );
 
+      // Edge is updated immediately (no training), so we need to update the character's Edge value
+      const { updateCharacter } = await import("@/lib/storage/characters");
+      const finalCharacter = await updateCharacter(userId, characterId, {
+        specialAttributes: {
+          ...updatedCharacter.specialAttributes,
+          edge: newRating,
+        },
+      });
+
       return NextResponse.json({
         success: true,
-        character: updatedCharacter,
+        character: finalCharacter,
         advancementRecord: result.advancementRecord,
-        trainingPeriod: result.trainingPeriod,
         cost: result.advancementRecord.karmaCost,
       });
     } catch (error) {
       const errorMessage =
-        error instanceof Error ? error.message : "Failed to advance attribute";
+        error instanceof Error ? error.message : "Failed to advance Edge";
       return NextResponse.json(
         { success: false, error: errorMessage },
         { status: 400 }
       );
     }
   } catch (error) {
-    console.error("Failed to advance attribute:", error);
+    console.error("Failed to advance Edge:", error);
     const errorMessage =
-      error instanceof Error ? error.message : "Failed to advance attribute";
+      error instanceof Error ? error.message : "Failed to advance Edge";
     return NextResponse.json(
       { success: false, error: errorMessage },
       { status: 500 }

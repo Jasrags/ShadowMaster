@@ -58,6 +58,20 @@ export {
   type AdvanceSkillResult,
 } from "./skills";
 
+// Edge advancement
+export {
+  advanceEdge,
+  type AdvanceEdgeOptions,
+  type AdvanceEdgeResult,
+} from "./edge";
+
+// Specialization advancement
+export {
+  advanceSpecialization,
+  type AdvanceSpecializationOptions,
+  type AdvanceSpecializationResult,
+} from "./specializations";
+
 // Training completion
 export {
   completeTraining,

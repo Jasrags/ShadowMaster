@@ -11,6 +11,7 @@ import { getCharacter, addAdvancementRecord } from "@/lib/storage/characters";
 import { getCampaignEvents } from "@/lib/storage/campaigns";
 import { loadAndMergeRuleset } from "@/lib/rules/merge";
 import { advanceSkill, type AdvanceSkillOptions } from "@/lib/rules/advancement/skills";
+import { requiresGMApproval } from "@/lib/rules/advancement/approval";
 
 export async function POST(
   request: NextRequest,
@@ -104,11 +105,21 @@ export async function POST(
       }
     }
 
-    // Prepare options
+    // Enforce GM approval requirement for campaign characters
+    const needsApproval = requiresGMApproval(character);
+    if (needsApproval && gmApproved) {
+      // Players cannot self-approve - only GM can approve via approval endpoint
+      return NextResponse.json(
+        { success: false, error: "GM approval is required for campaign characters. Please request approval from your GM." },
+        { status: 403 }
+      );
+    }
+
+    // Prepare options (gmApproved will be false for campaign characters)
     const options: AdvanceSkillOptions = {
       downtimePeriodId,
       campaignSessionId,
-      gmApproved,
+      gmApproved: needsApproval ? false : gmApproved, // Force false if approval required
       instructorBonus,
       timeModifier,
       notes,
