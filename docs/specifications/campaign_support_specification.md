@@ -1,9 +1,10 @@
 # Campaign Support Specification
 
-**Last Updated:** 2025-01-27  
-**Status:** Specification  
-**Category:** UI/UX, Campaign Management, Ruleset Control  
+**Last Updated:** 2025-01-27
+**Status:** Specification
+**Category:** UI/UX, Campaign Management, Ruleset Control, Character Advancement
 **Affected Editions:** All editions (campaign controls ruleset selection)
+**Related Specs:** [Character Advancement Specification](./character_advancement_specification.md)
 
 ---
 
@@ -19,6 +20,10 @@ Campaign support enables Game Masters (GMs) to create and manage Shadowrun campa
 - Campaign-specific character validation
 - Campaign roster management (players and characters)
 - Optional rules and house rules management
+- **Session-based karma and nuyen rewards** (integrated with character advancement)
+- **Campaign advancement settings** (training time, approval workflows, cost modifiers)
+- **Activity feed** tracking campaign events and changes
+- **Notification system** for invites, approvals, and session reminders
 
 This feature is critical for multiplayer Shadowrun sessions where the GM needs to enforce consistent rules across all player characters.
 
@@ -68,13 +73,41 @@ This feature is critical for multiplayer Shadowrun sessions where the GM needs t
 
 19. **As a player**, I want to view campaign details (edition, allowed books, gameplay level).
 
+### Advancement & Rewards Use Cases
+
+20. **As a GM**, I want to award karma to all characters after a session completes.
+
+21. **As a GM**, I want to award nuyen to characters for completed runs.
+
+22. **As a GM**, I want to configure advancement rules for my campaign (training time, cost modifiers).
+
+23. **As a GM**, I want to approve or reject character advancements that require my review.
+
+24. **As a GM**, I want to see an advancement log showing all character improvements in my campaign.
+
+25. **As a player**, I want to receive notifications when my advancement requests are approved/rejected.
+
+26. **As a player**, I want to see my karma earnings linked to specific sessions.
+
+### Notification Use Cases
+
+27. **As a player**, I want to receive a notification when I'm invited to a campaign.
+
+28. **As a player**, I want to receive reminders before scheduled sessions.
+
+29. **As a GM**, I want to be notified when a player submits a character for approval.
+
+30. **As a GM**, I want to be notified when a player requests an advancement requiring approval.
+
+31. **As a user**, I want to see all my notifications in one place.
+
 ### Secondary Use Cases
 
-20. **As a GM**, I want to archive or close a campaign when it ends.
+32. **As a GM**, I want to archive or close a campaign when it ends.
 
-21. **As a player**, I want to leave a campaign if I'm no longer participating.
+33. **As a player**, I want to leave a campaign if I'm no longer participating.
 
-22. **As a GM**, I want to set campaign visibility (private, invite-only, public).
+34. **As a GM**, I want to set campaign visibility (private, invite-only, public).
 
 ---
 
@@ -208,6 +241,13 @@ export interface Campaign {
   houseRules?: string | Record<string, unknown>;
 
   // -------------------------------------------------------------------------
+  // Advancement Configuration (see character_advancement_specification.md)
+  // -------------------------------------------------------------------------
+
+  /** Advancement settings for this campaign */
+  advancementSettings?: CampaignAdvancementSettings;
+
+  // -------------------------------------------------------------------------
   // Roster & Access
   // -------------------------------------------------------------------------
 
@@ -315,6 +355,160 @@ export interface CampaignTemplate {
   houseRules?: string | Record<string, unknown>;
   createdBy: ID; // User who created the template
   isPublic: boolean; // If true, other GMs can use this template
+}
+
+/**
+ * Campaign advancement configuration
+ * Controls how characters advance within this campaign
+ */
+export interface CampaignAdvancementSettings {
+  /** Training time rules enabled */
+  trainingTimeEnabled: boolean;
+
+  /** Trainer availability modifier (0.5 = 50% time reduction) */
+  trainerModifier?: number;
+
+  /** Advancements requiring GM approval */
+  requireApprovalFor: AdvancementType[];
+
+  /** Restricted advancement types (not allowed in this campaign) */
+  restrictedAdvancements?: AdvancementType[];
+
+  /** Karma cost modifiers (multipliers, e.g., 1.5 = 150% cost) */
+  costModifiers?: Partial<Record<AdvancementType, number>>;
+
+  /** House rules text for advancement */
+  advancementHouseRules?: string;
+
+  /** Maximum rating caps (overrides ruleset) */
+  ratingCaps?: {
+    attributes?: number;
+    skills?: number;
+    magic?: number;
+  };
+
+  /** Auto-approve minor advancements (skills below this rating) */
+  autoApproveThreshold?: number;
+}
+
+/**
+ * Extended session tracking for calendar events
+ */
+export interface CampaignSession extends CampaignEvent {
+  type: "session";
+
+  /** Session number in the campaign */
+  sessionNumber: number;
+
+  /** Session status */
+  sessionStatus: "scheduled" | "completed" | "cancelled";
+
+  /** Characters that participated */
+  participantCharacterIds?: ID[];
+
+  /** Session recap/notes (visible to all) */
+  recap?: string;
+
+  /** GM-only session notes */
+  gmSessionNotes?: string;
+
+  /** Whether rewards have been distributed */
+  rewardsDistributed: boolean;
+
+  /** Karma awarded (if distributed) */
+  karmaAwarded?: number;
+
+  /** Nuyen awarded per character (if distributed) */
+  nuyenAwarded?: number;
+}
+
+/**
+ * Activity types for the campaign feed
+ */
+export type CampaignActivityType =
+  | "player_joined"
+  | "player_left"
+  | "character_created"
+  | "character_approved"
+  | "character_retired"
+  | "session_scheduled"
+  | "session_completed"
+  | "karma_awarded"
+  | "advancement_approved"
+  | "advancement_rejected"
+  | "post_created"
+  | "campaign_updated"
+  | "location_added";
+
+/**
+ * Campaign activity feed entry
+ */
+export interface CampaignActivityEvent {
+  id: ID;
+  campaignId: ID;
+  type: CampaignActivityType;
+
+  /** User who triggered the activity */
+  actorId: ID;
+
+  /** Target of the activity (character, player, session, etc.) */
+  targetId?: ID;
+  targetType?: "character" | "player" | "session" | "post" | "location";
+  targetName?: string;
+
+  /** Human-readable description */
+  description: string;
+
+  /** Additional metadata */
+  metadata?: Record<string, unknown>;
+
+  timestamp: ISODateString;
+}
+
+/**
+ * Notification types
+ */
+export type NotificationType =
+  | "campaign_invite"
+  | "campaign_join_request"
+  | "session_reminder"
+  | "session_cancelled"
+  | "character_approval_requested"
+  | "character_approved"
+  | "character_rejected"
+  | "advancement_approval_requested"
+  | "advancement_approved"
+  | "advancement_rejected"
+  | "karma_awarded"
+  | "post_created"
+  | "mentioned";
+
+/**
+ * User notification
+ */
+export interface CampaignNotification {
+  id: ID;
+  userId: ID;
+  campaignId: ID;
+  type: NotificationType;
+
+  /** Notification title */
+  title: string;
+
+  /** Notification message */
+  message: string;
+
+  /** Link to relevant page */
+  actionUrl?: string;
+
+  /** Whether the notification has been read */
+  read: boolean;
+
+  /** Whether the notification has been dismissed */
+  dismissed: boolean;
+
+  createdAt: ISODateString;
+  readAt?: ISODateString;
 }
 ```
 
@@ -664,6 +858,169 @@ interface CreateCampaignWizardProps {
 
 ---
 
+### 11. SessionRewardDialog
+
+**Location:** `/app/campaigns/[id]/components/SessionRewardDialog.tsx`
+
+**Description:** GM dialog for marking sessions complete and distributing rewards.
+
+**Features:**
+- Session selection (from recent sessions)
+- Participant character checklist
+- Karma amount input with SR5 suggested values
+- Nuyen amount input
+- Session recap text area
+- Reward calculation helpers
+- Bulk distribution execution
+
+**Props:**
+```typescript
+interface SessionRewardDialogProps {
+  campaign: Campaign;
+  session: CampaignSession;
+  characters: Character[];
+  onDistribute: (data: SessionRewardData) => Promise<void>;
+  onClose: () => void;
+}
+
+interface SessionRewardData {
+  participantCharacterIds: ID[];
+  karmaAward: number;
+  nuyenAward: number;
+  recap?: string;
+}
+```
+
+---
+
+### 12. CampaignActivityFeed
+
+**Location:** `/app/campaigns/[id]/components/CampaignActivityFeed.tsx`
+
+**Description:** Real-time activity feed showing campaign events.
+
+**Features:**
+- Chronological list of activities
+- Activity type icons
+- Actor and target links
+- Relative timestamps ("2 hours ago")
+- Filter by activity type
+- Load more pagination
+- Auto-refresh option
+
+**Props:**
+```typescript
+interface CampaignActivityFeedProps {
+  campaignId: ID;
+  limit?: number;
+  showFilters?: boolean;
+  autoRefresh?: boolean;
+}
+```
+
+---
+
+### 13. NotificationBell
+
+**Location:** `/components/notifications/NotificationBell.tsx`
+
+**Description:** Header notification indicator with dropdown.
+
+**Features:**
+- Unread count badge
+- Dropdown with recent notifications
+- Mark as read on click
+- Mark all as read action
+- Link to full notifications page
+- Real-time updates (polling or websockets)
+
+**Props:**
+```typescript
+interface NotificationBellProps {
+  userId: ID;
+}
+```
+
+---
+
+### 14. NotificationList
+
+**Location:** `/app/notifications/components/NotificationList.tsx`
+
+**Description:** Full notifications page/panel.
+
+**Features:**
+- All notifications with pagination
+- Filter by campaign
+- Filter by read/unread
+- Bulk actions (mark all read, dismiss)
+- Notification type grouping
+- Click to navigate to relevant page
+
+**Props:**
+```typescript
+interface NotificationListProps {
+  userId: ID;
+  campaignId?: ID;
+  initialFilter?: "all" | "unread";
+}
+```
+
+---
+
+### 15. AdvancementApprovalQueue
+
+**Location:** `/app/campaigns/[id]/components/AdvancementApprovalQueue.tsx`
+
+**Description:** GM queue for pending character advancement approvals.
+
+**Features:**
+- List of pending advancements
+- Character and player info
+- Advancement details (type, cost, before/after)
+- Player justification notes
+- Approve/Reject actions
+- Bulk approval
+- Filter by character or type
+
+**Props:**
+```typescript
+interface AdvancementApprovalQueueProps {
+  campaignId: ID;
+  onApprove: (advancementId: ID) => Promise<void>;
+  onReject: (advancementId: ID, reason: string) => Promise<void>;
+}
+```
+
+---
+
+### 16. CampaignAdvancementSettingsForm
+
+**Location:** `/app/campaigns/[id]/settings/components/CampaignAdvancementSettingsForm.tsx`
+
+**Description:** Form for configuring campaign advancement rules.
+
+**Features:**
+- Training time toggle
+- Trainer modifier slider
+- Approval requirements checklist (by advancement type)
+- Restricted advancements checklist
+- Cost modifier inputs
+- Rating caps configuration
+- Auto-approve threshold slider
+- House rules text area
+
+**Props:**
+```typescript
+interface CampaignAdvancementSettingsFormProps {
+  settings: CampaignAdvancementSettings;
+  onChange: (settings: CampaignAdvancementSettings) => void;
+  onSave: () => Promise<void>;
+}
+```
+
+---
+
 ## Data Requirements
 
 ### API Endpoints
@@ -953,6 +1310,221 @@ interface CreateCampaignWizardProps {
 - `GET`: List events (date range)
 - `POST`: Create new event (GM only)
 
+---
+
+#### 14. PUT `/api/campaigns/[id]/sessions/[sessionId]/complete`
+
+**Purpose:** Mark a session as complete and optionally distribute rewards
+
+**Request:**
+```typescript
+{
+  participantCharacterIds: ID[];    // Characters who participated
+  recap?: string;                    // Session summary
+  karmaAward?: number;               // Karma to award each participant
+  nuyenAward?: number;               // Nuyen to award each participant
+  distributeRewards: boolean;        // Whether to distribute now
+}
+```
+
+**Response:**
+```typescript
+{
+  success: boolean;
+  session?: CampaignSession;
+  karmaTransactions?: KarmaTransaction[];  // If rewards distributed
+  error?: string;
+}
+```
+
+**Implementation:** Mark session complete, optionally create karma transactions for each participating character.
+
+---
+
+#### 15. POST `/api/campaigns/[id]/karma/award`
+
+**Purpose:** Bulk award karma to campaign characters (GM only)
+
+**Request:**
+```typescript
+{
+  characterIds: ID[];        // Characters to award (empty = all active)
+  amount: number;
+  category: KarmaCategory;
+  description: string;
+  sessionId?: ID;            // Link to session if applicable
+}
+```
+
+**Response:**
+```typescript
+{
+  success: boolean;
+  transactions: KarmaTransaction[];
+  error?: string;
+}
+```
+
+**Implementation:** Create karma transactions for each specified character, linked to campaign and optionally session.
+
+---
+
+#### 16. GET `/api/campaigns/[id]/advancement`
+
+**Purpose:** Get campaign advancement log (GM only)
+
+**Query Parameters:**
+- `status?: "pending" | "approved" | "completed"` - Filter by status
+- `characterId?: ID` - Filter by character
+- `type?: AdvancementType` - Filter by type
+- `limit?: number` - Pagination
+- `offset?: number` - Pagination
+
+**Response:**
+```typescript
+{
+  success: boolean;
+  advancements: AdvancementRecord[];
+  pendingCount: number;
+  total: number;
+  error?: string;
+}
+```
+
+---
+
+#### 17. PUT `/api/campaigns/[id]/advancement/[advancementId]`
+
+**Purpose:** Approve or reject a pending advancement (GM only)
+
+**Request:**
+```typescript
+{
+  action: "approve" | "reject";
+  reason?: string;
+}
+```
+
+**Response:**
+```typescript
+{
+  success: boolean;
+  advancement?: AdvancementRecord;
+  error?: string;
+}
+```
+
+---
+
+#### 18. PUT `/api/campaigns/[id]/settings/advancement`
+
+**Purpose:** Update campaign advancement settings (GM only)
+
+**Request:**
+```typescript
+{
+  settings: Partial<CampaignAdvancementSettings>;
+}
+```
+
+**Response:**
+```typescript
+{
+  success: boolean;
+  settings?: CampaignAdvancementSettings;
+  error?: string;
+}
+```
+
+---
+
+#### 19. GET `/api/campaigns/[id]/activity`
+
+**Purpose:** Get campaign activity feed
+
+**Query Parameters:**
+- `limit?: number` - Number of events (default 50)
+- `offset?: number` - Pagination offset
+- `type?: CampaignActivityType` - Filter by type
+- `since?: ISODateString` - Events after this date
+
+**Response:**
+```typescript
+{
+  success: boolean;
+  activities: CampaignActivityEvent[];
+  total: number;
+  error?: string;
+}
+```
+
+---
+
+#### 20. GET `/api/notifications`
+
+**Purpose:** Get user's notifications across all campaigns
+
+**Query Parameters:**
+- `campaignId?: ID` - Filter by campaign
+- `unreadOnly?: boolean` - Only unread notifications
+- `limit?: number` - Pagination
+- `offset?: number` - Pagination
+
+**Response:**
+```typescript
+{
+  success: boolean;
+  notifications: CampaignNotification[];
+  unreadCount: number;
+  total: number;
+  error?: string;
+}
+```
+
+---
+
+#### 21. PUT `/api/notifications/[notificationId]`
+
+**Purpose:** Mark notification as read or dismissed
+
+**Request:**
+```typescript
+{
+  read?: boolean;
+  dismissed?: boolean;
+}
+```
+
+**Response:**
+```typescript
+{
+  success: boolean;
+  notification?: CampaignNotification;
+  error?: string;
+}
+```
+
+---
+
+#### 22. POST `/api/notifications/mark-all-read`
+
+**Purpose:** Mark all notifications as read
+
+**Request:**
+```typescript
+{
+  campaignId?: ID;  // Optional: only for specific campaign
+}
+```
+
+**Response:**
+```typescript
+{
+  success: boolean;
+  updatedCount: number;
+  error?: string;
+}
+```
 
 ---
 
@@ -960,9 +1532,16 @@ interface CreateCampaignWizardProps {
 
 **File Structure:**
 ```
-data/campaigns/
-├── {campaignId}.json
-└── {campaignId}.json
+data/
+├── campaigns/
+│   └── {campaignId}.json           # Campaign data
+├── sessions/
+│   └── {campaignId}/
+│       └── {sessionId}.json        # Session data with rewards
+├── activity/
+│   └── {campaignId}.json           # Activity feed (append-only log)
+└── notifications/
+    └── {userId}.json               # User notifications
 ```
 
 **Functions needed in `/lib/storage/campaigns.ts`:**
@@ -987,6 +1566,48 @@ export function isPlayerInCampaign(campaignId: ID, userId: ID): boolean;
 // Character associations
 export function getCampaignCharacters(campaignId: ID, userId?: ID): Character[];
 export function getCharacterCountByCampaign(campaignId: ID): number;
+
+// Advancement settings
+export function getCampaignAdvancementSettings(campaignId: ID): CampaignAdvancementSettings | null;
+export function updateCampaignAdvancementSettings(campaignId: ID, settings: Partial<CampaignAdvancementSettings>): CampaignAdvancementSettings;
+```
+
+**Functions needed in `/lib/storage/sessions.ts`:**
+
+```typescript
+// Session management
+export function createSession(session: CampaignSession): CampaignSession;
+export function getSessionById(campaignId: ID, sessionId: ID): CampaignSession | null;
+export function updateSession(campaignId: ID, sessionId: ID, updates: Partial<CampaignSession>): CampaignSession;
+export function getCampaignSessions(campaignId: ID, options?: { status?: string; limit?: number }): CampaignSession[];
+
+// Session completion and rewards
+export function markSessionComplete(campaignId: ID, sessionId: ID, data: SessionCompleteData): CampaignSession;
+export function distributeSessionRewards(campaignId: ID, sessionId: ID, karma: number, nuyen: number, characterIds: ID[]): KarmaTransaction[];
+```
+
+**Functions needed in `/lib/storage/activity.ts`:**
+
+```typescript
+// Activity feed
+export function logActivity(activity: Omit<CampaignActivityEvent, "id" | "timestamp">): CampaignActivityEvent;
+export function getCampaignActivity(campaignId: ID, options?: ActivityQueryOptions): CampaignActivityEvent[];
+export function getRecentActivity(campaignId: ID, limit?: number): CampaignActivityEvent[];
+```
+
+**Functions needed in `/lib/storage/notifications.ts`:**
+
+```typescript
+// Notification management
+export function createNotification(notification: Omit<CampaignNotification, "id" | "createdAt">): CampaignNotification;
+export function getUserNotifications(userId: ID, options?: NotificationQueryOptions): CampaignNotification[];
+export function getUnreadCount(userId: ID, campaignId?: ID): number;
+export function markNotificationRead(notificationId: ID): CampaignNotification;
+export function markAllNotificationsRead(userId: ID, campaignId?: ID): number;
+export function dismissNotification(notificationId: ID): void;
+
+// Bulk notification creation (for session reminders, etc.)
+export function notifyCampaignPlayers(campaignId: ID, notification: Omit<CampaignNotification, "id" | "userId" | "createdAt">): CampaignNotification[];
 ```
 
 ---
@@ -1219,6 +1840,50 @@ app/api/campaigns/
 - [ ] Campaign-specific dice roller
 - [x] Character approval workflow (GM approves characters) *(Phase 3 complete)*
 
+### Advancement & Rewards (Phase 4)
+
+- [ ] **Session Rewards**
+  - [ ] GM can mark sessions as complete
+  - [ ] GM can distribute karma to session participants
+  - [ ] GM can distribute nuyen to session participants
+  - [ ] Session rewards linked to karma transaction history
+  - [ ] SessionRewardDialog component implemented
+
+- [ ] **Campaign Advancement Settings**
+  - [ ] GM can configure training time rules
+  - [ ] GM can set advancement types requiring approval
+  - [ ] GM can restrict certain advancement types
+  - [ ] GM can set karma cost modifiers
+  - [ ] GM can configure rating caps
+  - [ ] CampaignAdvancementSettingsForm component implemented
+
+- [ ] **Advancement Approval Workflow**
+  - [ ] GM can view pending advancement approvals
+  - [ ] GM can approve/reject advancements
+  - [ ] Players notified of approval decisions
+  - [ ] AdvancementApprovalQueue component implemented
+
+- [ ] **Campaign Advancement Log**
+  - [ ] GM can view all character advancements
+  - [ ] Filter by character, type, status
+  - [ ] Export advancement history
+
+### Activity & Notifications (Phase 4)
+
+- [ ] **Activity Feed**
+  - [ ] Campaign activity logged automatically
+  - [ ] Activity feed displayed on campaign overview
+  - [ ] Filter by activity type
+  - [ ] CampaignActivityFeed component implemented
+
+- [ ] **Notification System**
+  - [ ] Notifications created for key events
+  - [ ] NotificationBell in header with unread count
+  - [ ] NotificationList page for all notifications
+  - [ ] Mark as read functionality
+  - [ ] Session reminder notifications
+  - [ ] Advancement approval notifications
+
 ---
 
 ## Security Considerations
@@ -1294,6 +1959,7 @@ app/api/campaigns/
 
 ## Related Documentation
 
+- **Character Advancement:** `/docs/specifications/character_advancement_specification.md` - Karma costs, advancement validation, campaign integration
 - **Architecture:** `/docs/architecture/architecture-overview.md`
 - **Character Creation:** `/docs/architecture/character_creation_framework.md`
 - **Ruleset System:** `/docs/architecture/ruleset_architecture_and_source_material_system.md`
@@ -1301,6 +1967,7 @@ app/api/campaigns/
 - **Rules Reference:** `/docs/rules/reference.md` (Campaign Configuration section)
 - **NPCs/Grunts:** `/docs/specifications/npcs_grunts_specification.md`
 - **Locations:** `/docs/specifications/locations_specification.md`
+- **Gameplay Actions:** `/docs/specifications/gameplay_actions_specification.md` - Karma award/spend actions
 
 ---
 
