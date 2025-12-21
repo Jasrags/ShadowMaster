@@ -208,3 +208,17 @@ export type {
   LocationTemplateFilters,
 } from "./location";
 
+// Rating system types
+export type {
+  RatingSemanticType,
+  RatingConfig,
+  ScalingType,
+  RatingScalingConfig,
+  CatalogItemRatingSpec,
+  OwnedItemRating,
+  RatingCalculationResult,
+  RatingValidationResult,
+  RatingValidationContext,
+  RatingDisplayOptions,
+} from "./ratings";
+
