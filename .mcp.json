@@ -1,0 +1,45 @@
+{
+  "mcpServers": {
+    "filesystem": {
+      "type": "stdio",
+      "command": "npx",
+      "args": [
+        "-y",
+        "@modelcontextprotocol/server-filesystem",
+        "/Users/jrags/Code/Jasrags/shadow-master"
+      ]
+    },
+    "git": {
+      "type": "stdio",
+      "command": "/Users/jrags/.local/bin/uvx",
+      "args": [
+        "mcp-server-git",
+        "--repository",
+        "/Users/jrags/Code/Jasrags/shadow-master"
+      ]
+    },
+    "memory": {
+      "type": "stdio",
+      "command": "npx",
+      "args": [
+        "-y",
+        "@modelcontextprotocol/server-memory"
+      ]
+    },
+    "sequentialthinking": {
+      "type": "stdio",
+      "command": "npx",
+      "args": [
+        "-y",
+        "@modelcontextprotocol/server-sequential-thinking"
+      ]
+    },
+    "time": {
+      "type": "stdio",
+      "command": "/Users/jrags/.local/bin/uvx",
+      "args": [
+        "mcp-server-time"
+      ]
+    }
+  }
+}
