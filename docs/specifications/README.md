@@ -58,6 +58,7 @@ mindmap
       Character Creation
       Character Sheet
       Character Advancement
+      Qualities
       Cyberware & Bioware
       Weapon Modifications
     Campaign Management
@@ -96,6 +97,7 @@ mindmap
 | [Character Creation & Management](character_creation_and_management_specification.md) | Wizard-based character creation with priority system | **Partial** | RulesetSystem, StorageLayer |
 | [Character Sheet](character_sheet_specification.md) | Character viewing and editing interface | **Implemented** | CharacterCreation |
 | [Character Advancement](character_advancement_specification.md) | Post-creation karma spending for progression | **Partial** | RulesetSystem, CampaignSystem |
+| [Qualities](qualities_specification.md) | Character traits, effects, and dynamic state management | **Partial** | RulesetSystem, CharacterCreation |
 | [Cyberware & Bioware](cyberware_bioware_specification.md) | Augmentation selection and essence management | **Partial** | RulesetSystem, CharacterCreation |
 | [Weapon Modifications](weapon_modifications_and_mount_points_specification.md) | Mount points and modification validation | **Planned** | RulesetSystem, GearStep |
 
@@ -147,7 +149,7 @@ mindmap
 pie showData
     title Specification Status Distribution
     "Implemented" : 8
-    "Partial" : 4
+    "Partial" : 5
     "Planned" : 5
     "Draft" : 1
 ```
@@ -168,7 +170,8 @@ pie showData
 | Feature | What's Done | What Remains |
 |---------|-------------|--------------|
 | Character Creation | Priority wizard, 16 creation steps, draft auto-save | Validation engine, karma point-buy method |
-| Character Advancement | Attributes, skills, edge advancement; karma ledger; API complete | Qualities, spells, initiation; GM approval UI |
+| Character Advancement | Attributes, skills, edge advancement; karma ledger; API complete | Spells, initiation; GM approval UI |
+| Qualities | Core system, validation, karma accounting, effects engine, dynamic state, API | Quality selection UI, advancement UI, full effects catalog |
 | Campaign Support | Campaign CRUD, player roster, sessions, notes | Reward distribution UI, full advancement integration |
 | Cyberware/Bioware | Basic selection in GearStep | Enhanced essence tracking, grade selection UI |
 
@@ -201,6 +204,7 @@ flowchart TD
 
     subgraph Character
         CC[CharacterCreation]
+        QS[QualitiesSystem]
         CS[CharacterSheet]
         CA[CharacterAdvancement]
     end
@@ -212,8 +216,12 @@ flowchart TD
 
     RS --> CC
     ST --> CC
+    RS --> QS
+    CC --> QS
+    QS --> CS
     CC --> CS
     CS --> CA
+    QS --> CA
     CA --> GA
     DR --> GA
     RS --> CA
@@ -222,6 +230,7 @@ flowchart TD
     style ST fill:#90EE90
     style AU fill:#90EE90
     style CC fill:#FFD700
+    style QS fill:#FFD700
     style CS fill:#90EE90
     style CA fill:#FFD700
     style GA fill:#FFB6C1
@@ -319,11 +328,13 @@ flowchart LR
     subgraph Implemented
         L[Locations]
         ADV_API[Advancement API]
+        QS_API[Qualities API]
     end
 
     subgraph "Must Build Next"
         N[NPCs]
         GM_UI[GM Approval UI]
+        QS_UI[Qualities UI]
     end
 
     subgraph "Then Build"
@@ -338,11 +349,14 @@ flowchart LR
     N --> E
     E --> GA2
     ADV_API --> GM_UI
+    QS_API --> QS_UI
 
     style L fill:#90EE90
     style ADV_API fill:#90EE90
+    style QS_API fill:#90EE90
     style N fill:#FFB6C1
     style GM_UI fill:#FFB6C1
+    style QS_UI fill:#FFB6C1
     style E fill:#FFB6C1
     style GA2 fill:#FFB6C1
 ```
@@ -360,9 +374,9 @@ flowchart LR
 
 | Implied By | Missing Spec |
 |------------|--------------|
-| Character Advancement spec mentions "qualities_specification.md" | Qualities-specific specification not found |
-| MCP memory shows QualitiesSystem | No dedicated qualities specification exists |
 | Cyberware spec references enhancements | No cyberware enhancement specification |
+| Character creation mentions contacts step | No contacts specification |
+| Character creation mentions vehicles step | No vehicles specification |
 
 ### Status Inconsistencies Found
 
@@ -374,10 +388,10 @@ flowchart LR
 
 ### Underspecified Areas
 
-1. **Quality Effects**: How do qualities modify character calculations? Referenced but not detailed.
-2. **Training Time**: Optional rule mentioned in advancement, no UI design.
-3. **Cross-Campaign Characters**: Rules unclear if character can exist in multiple campaigns.
-4. **Ruleset Version Migration**: What happens when ruleset updates break character data?
+1. **Training Time**: Optional rule mentioned in advancement, no UI design.
+2. **Cross-Campaign Characters**: Rules unclear if character can exist in multiple campaigns.
+3. **Ruleset Version Migration**: What happens when ruleset updates break character data?
+4. **Contact Management**: How contacts are created, used, and advanced during play.
 
 ### Potential Redundancy
 
@@ -391,12 +405,12 @@ flowchart LR
 ### High Priority (Unblock Current Work)
 
 1. **Implement GM Approval UI**: Backend complete, frontend is the only blocker
-2. **Add Qualities Specification**: QualitiesSystem exists in code but lacks spec
+2. **Quality Selection UI**: Build creation step and advancement UI for qualities
 3. **Update Campaign Support Status**: Implementation exists, spec doesn't reflect this
 
 ### Medium Priority (Complete Partial Features)
 
-4. **Advancement Phase 2**: Quality acquisition/buyoff (spec defined, not implemented)
+4. **Quality Effects Catalog**: Add effects to all qualities in ruleset data
 5. **Advancement Phase 3**: Magic/Resonance advancement (initiation, spells)
 6. **Cyberware Enhancements**: Enhanced selection UI with grades
 
@@ -409,7 +423,7 @@ flowchart LR
 ### Documentation Improvements
 
 10. **Consolidate Ruleset Architecture Docs**: Merge or cross-reference the two ruleset architecture documents
-11. **Add Qualities Spec**: Document the implemented QualitiesSystem
+11. **Add Contacts Specification**: Document contact management system
 12. **Resolve Status Tracking**: Ensure spec file status matches actual implementation
 
 ---
