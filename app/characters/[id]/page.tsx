@@ -4,7 +4,6 @@ import { useEffect, useState, use, useMemo } from "react";
 import { Link, Button, Modal, ModalOverlay, Dialog, Heading } from "react-aria-components";
 import type {
   Character,
-  QualitySelection,
   Weapon,
   ArmorItem,
   AdeptPower,
@@ -24,17 +23,16 @@ import {
   useSpells,
   useMetatypes,
   useSkills,
-  useQualities,
   type SkillData,
   type SpellData,
   type SpellsCatalogData,
-  type QualityData
 } from "@/lib/rules";
 import {
   calculateLimit,
 } from "@/lib/rules/qualities";
 import { DownloadIcon, X } from "lucide-react";
 import { THEMES, DEFAULT_THEME, type Theme, type ThemeId } from "@/lib/themes";
+import { QualitiesSection } from "./components/QualitiesSection";
 
 // =============================================================================
 // ICONS
@@ -361,7 +359,7 @@ function Section({ title, icon, children, className = "", theme }: SectionProps)
           <h3 className={t.components.section.title}>
             {title}
           </h3>
-          <div className={`flex-1 h-px ml-2 ${t.id === 'modern-card' ? 'bg-stone-200 dark:bg-stone-800' : 'bg-gradient-to-r from-emerald-500/20 to-transparent'}`} />
+          <div className={`flex-1 h-px ml-2 ${t.id === 'modern-card' ? 'bg-stone-200 dark:bg-stone-800' : 'bg-linear-to-r from-emerald-500/20 to-transparent'}`} />
         </div>
         <div className="p-4">{children}</div>
       </div>
@@ -531,119 +529,7 @@ function KnowledgeAndLanguages({ character, onSelect, theme }: KnowledgeAndLangu
   );
 }
 
-interface QualitiesSectionProps {
-  character: Character;
-  theme?: Theme;
-}
 
-function QualitiesSection({ character, theme }: QualitiesSectionProps) {
-  const { positive: positiveData, negative: negativeData } = useQualities();
-
-  const renderQualityList = (selections: QualitySelection[], isPositive: boolean) => {
-    if (!selections || selections.length === 0) return null;
-
-    return (
-      <div className="space-y-2">
-        <span className="text-[10px] font-mono text-muted-foreground uppercase tracking-widest block ml-1">
-          {isPositive ? 'Positive Qualities' : 'Negative Qualities'}
-        </span>
-        <div className="space-y-1.5 px-0.5">
-          {selections.map((selection) => {
-            // Support both new qualityId and deprecated id field for backward compatibility
-            const id = typeof selection === 'string' 
-              ? selection 
-              : (selection.qualityId || selection.id || '');
-            const data = (isPositive
-              ? positiveData.find((q: QualityData) => q.id === id)
-              : negativeData.find((q: QualityData) => q.id === id)) as QualityData | undefined;
-
-            const name = data?.name || (id ? id.replace(/-/g, ' ') : 'Unknown Quality');
-
-            // Use structured data first, then fall back to creationState metadata
-            const rawSelection = typeof selection === 'string' ? {} as Partial<QualitySelection> : selection;
-            const creationState = character.metadata?.creationState;
-            const selections = creationState && typeof creationState === 'object' && 'selections' in creationState 
-              ? creationState.selections as Record<string, unknown>
-              : undefined;
-            const qualityLevels = selections && typeof selections === 'object' && 'qualityLevels' in selections
-              ? selections.qualityLevels as Record<string, number | undefined> | undefined
-              : undefined;
-            const qualitySpecifications = selections && typeof selections === 'object' && 'qualitySpecifications' in selections
-              ? selections.qualitySpecifications as Record<string, string | undefined> | undefined
-              : undefined;
-            const level = rawSelection.rating ?? qualityLevels?.[id];
-            const spec = rawSelection.specification ?? qualitySpecifications?.[id];
-
-            const extraParts: string[] = [];
-
-            if (level !== undefined && level !== null) {
-              if (data?.levels) {
-                const levelInfo = data.levels.find((l: { level: number; name?: string }) => l.level === level);
-                if (levelInfo) {
-                  extraParts.push(levelInfo.name);
-                } else {
-                  extraParts.push(`Rating ${level}`);
-                }
-              } else {
-                extraParts.push(`Rating ${level}`);
-              }
-            }
-
-            if (spec) {
-              extraParts.push(spec);
-            }
-
-            if (character.sinnerQuality && id === 'sinner') {
-              // Special case for SINner quality which often has a type
-              extraParts.push(character.sinnerQuality.charAt(0).toUpperCase() + character.sinnerQuality.slice(1));
-            }
-
-            // Fallback to notes if nothing else
-            if (extraParts.length === 0 && character.qualityNotes?.[id]) {
-              extraParts.push(character.qualityNotes[id]);
-            }
-
-            const extra = extraParts.join(", ");
-
-            return (
-              <div
-                key={id}
-                className={`flex items-center justify-between py-2 px-3 bg-muted/30 rounded border-l-2 transition-all ${isPositive ? 'border-emerald-500/30' : 'border-red-500/30'
-                  } hover:bg-muted/50 group`}
-              >
-                <span className="text-xs font-medium text-foreground/90 group-hover:text-foreground">
-                  {name}
-                </span>
-                {extra && (
-                  <span className="text-[10px] font-mono text-amber-500 dark:text-amber-400 font-bold px-2 py-0.5 bg-background/50 rounded-sm">
-                    {extra}
-                  </span>
-                )}
-              </div>
-            );
-          })}
-        </div>
-      </div>
-    );
-  };
-
-  if (!character.positiveQualities?.length && !character.negativeQualities?.length) {
-    return (
-      <Section theme={theme} title="Qualities">
-        <p className="text-sm text-zinc-500 italic px-1">No qualities selected</p>
-      </Section>
-    );
-  }
-
-  return (
-    <Section theme={theme} title="Qualities">
-      <div className="space-y-6">
-        {renderQualityList(character.positiveQualities, true)}
-        {renderQualityList(character.negativeQualities, false)}
-      </div>
-    </Section>
-  );
-}
 
 // =============================================================================
 // GEAR ITEM COMPONENT
@@ -926,7 +812,7 @@ function SpellCard({ spellId, spellsCatalog, onSelect, theme }: SpellCardProps) 
             </div>
           </div>
         </div>
-        <div className="text-right flex-shrink-0">
+        <div className="text-right shrink-0">
           <div className="text-[10px] text-muted-foreground uppercase font-mono leading-none mb-1">Drain</div>
           <div className="text-sm font-mono text-violet-400 font-bold leading-none">{spell.drain}</div>
         </div>
@@ -966,7 +852,7 @@ function AdeptPowerCard({ power, theme }: AdeptPowerCardProps) {
             </p>
           )}
         </div>
-        <div className="text-right flex-shrink-0">
+        <div className="text-right shrink-0">
           <div className="text-[10px] text-muted-foreground uppercase font-mono leading-none mb-1">Cost</div>
           <div className="text-sm font-mono text-amber-500 dark:text-amber-400 font-bold leading-none">{power.powerPointCost} PP</div>
         </div>
@@ -1011,7 +897,7 @@ function AugmentationCard({ item, theme }: { item: CyberwareItem | BiowareItem, 
             </div>
           )}
         </div>
-        <div className="text-right flex-shrink-0">
+        <div className="text-right shrink-0">
           <div className="text-[10px] text-muted-foreground uppercase font-mono leading-none mb-1">Essence</div>
           <div className="text-sm font-mono text-foreground/80 font-bold leading-none">{item.essenceCost.toFixed(2)}</div>
         </div>
@@ -1139,9 +1025,22 @@ function CharacterSheet({
   const ruleset = useMergedRuleset();
 
   // Theme State
-  const [currentThemeId, setCurrentThemeId] = useState<ThemeId>(
-    (character.uiPreferences?.theme as ThemeId) || DEFAULT_THEME
-  );
+  const [currentThemeId, setCurrentThemeId] = useState<ThemeId>(() => {
+    // Check internal preferences first
+    if (character.uiPreferences?.theme && THEMES[character.uiPreferences.theme as ThemeId]) {
+      return character.uiPreferences.theme as ThemeId;
+    }
+    
+    // Check localStorage fallback (client-side only)
+    if (typeof window !== 'undefined') {
+      const saved = localStorage.getItem(`character-theme-${character.id}`);
+      if (saved && THEMES[saved as ThemeId]) {
+        return saved as ThemeId;
+      }
+    }
+    
+    return DEFAULT_THEME;
+  });
 
   const theme = THEMES[currentThemeId] || THEMES[DEFAULT_THEME];
 
@@ -1159,17 +1058,6 @@ function CharacterSheet({
     // We can use localStorage as a fallback if we want client-side persistence only
     localStorage.setItem(`character-theme-${character.id}`, id);
   };
-
-  // Load from local storage on mount if not in character
-  useEffect(() => {
-    if (!character.uiPreferences?.theme) {
-      const saved = localStorage.getItem(`character-theme-${character.id}`);
-      if (saved && THEMES[saved as ThemeId] && saved !== currentThemeId) {
-        // eslint-disable-next-line react-hooks/set-state-in-effect
-        setCurrentThemeId(saved as ThemeId);
-      }
-    }
-  }, [character.id, character.uiPreferences, currentThemeId]);
 
   // Calculate derived values with quality effects (must be called before any early returns)
   const physicalMonitorMax = Math.ceil((character.attributes?.body || 1) / 2) + 8;

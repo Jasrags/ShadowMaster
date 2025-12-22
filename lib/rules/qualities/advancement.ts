@@ -157,6 +157,7 @@ export function acquireQuality(
     acquisitionDate: options.acquisitionDate || new Date().toISOString(),
     originalKarma: validation.cost, // Store the cost paid (2× rate)
     notes: options.notes,
+    gmApproved: options.gmApproved,
     active: true,
   };
 

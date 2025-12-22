@@ -4466,7 +4466,18 @@
             "id": "analytical-mind",
             "name": "Analytical Mind",
             "karmaCost": 5,
-            "summary": "+2 dice to Logic tests involving pattern analysis."
+            "summary": "+2 dice to Logic tests involving pattern analysis.",
+            "effects": [
+              {
+                "id": "analytical-mind-logic-bonus",
+                "type": "dice-pool-modifier",
+                "trigger": "attribute-test",
+                "target": { "attribute": "logic" },
+                "value": 2,
+                "condition": { "customCondition": "pattern-analysis" },
+                "description": "+2 dice to Logic tests involving pattern analysis, evidence, or clues."
+              }
+            ]
           },
           {
             "id": "aptitude",
@@ -4478,6 +4489,16 @@
             "statModifiers": {
               "skillMaxBonus": 1
             },
+            "effects": [
+              {
+                "id": "aptitude-skill-max",
+                "type": "attribute-maximum",
+                "trigger": "always",
+                "target": { "skill": "specification" },
+                "value": 1,
+                "description": "Raise the maximum for one chosen skill by 1."
+              }
+            ],
             "limit": 1
           },
           {
@@ -4503,7 +4524,17 @@
             "id": "catlike",
             "name": "Catlike",
             "karmaCost": 7,
-            "summary": "+2 dice to Sneaking tests."
+            "summary": "+2 dice to Sneaking tests.",
+            "effects": [
+              {
+                "id": "catlike-sneaking-bonus",
+                "type": "dice-pool-modifier",
+                "trigger": "skill-test",
+                "target": { "skill": "sneaking" },
+                "value": 2,
+                "description": "+2 dice to Sneaking tests."
+              }
+            ]
           },
           {
             "id": "codeslinger",
@@ -4537,6 +4568,16 @@
               "Charisma",
               "Magic",
               "Resonance"
+            ],
+            "effects": [
+              {
+                "id": "exceptional-attribute-max",
+                "type": "attribute-maximum",
+                "trigger": "always",
+                "target": { "attribute": "specification" },
+                "value": 1,
+                "description": "Raise the natural maximum for one chosen attribute by 1."
+              }
             ]
           },
           {
@@ -4617,7 +4658,17 @@
                 "karma": 21
               }
             ],
-            "summary": "Ignore 1 wound modifier per rating."
+            "summary": "Ignore 1 wound modifier per rating.",
+            "effects": [
+              {
+                "id": "high-pain-tolerance-wound-bonus",
+                "type": "wound-modifier",
+                "trigger": "always",
+                "target": { "stat": "wound-threshold" },
+                "value": "rating",
+                "description": "Ignore 1 point of wound modifiers per rating."
+              }
+            ]
           },
           {
             "id": "home-ground",
@@ -4755,7 +4806,17 @@
             "id": "quick-healer",
             "name": "Quick Healer",
             "karmaCost": 3,
-            "summary": "+2 dice to all Healing tests."
+            "summary": "+2 dice to all Healing tests.",
+            "effects": [
+              {
+                "id": "quick-healer-bonus",
+                "type": "dice-pool-modifier",
+                "trigger": "healing",
+                "target": { "affectsOthers": false },
+                "value": 2,
+                "description": "+2 dice to all Healing tests made by or on the character."
+              }
+            ]
           },
           {
             "id": "resistance-pathogens-toxins",

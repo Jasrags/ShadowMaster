@@ -28,6 +28,7 @@ export function QualitiesAdvancement({ character, onCharacterUpdate }: Qualities
   const [rating, setRating] = useState<number | undefined>(undefined);
   const [specification, setSpecification] = useState("");
   const [notes, setNotes] = useState("");
+  const [gmApproved, setGmApproved] = useState(true);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
@@ -54,21 +55,28 @@ export function QualitiesAdvancement({ character, onCharacterUpdate }: Qualities
     return all.map((q) => q.qualityId || q.id).filter(Boolean) as string[];
   }, [character]);
 
-  // Get available qualities (not already taken, or can be taken multiple times)
-  const availableQualities = useMemo(() => {
+  // Get available qualities (for acquisition) or existing qualities (for buy-off)
+  const displayQualities = useMemo(() => {
     if (!ruleset) return [];
 
-    return filteredQualities.filter((quality) => {
-      // Check if already taken
-      const hasQuality = characterQualityIds.includes(quality.id);
-      if (!hasQuality) return true;
+    if (activeTab === "positive") {
+      return filteredQualities.filter((quality) => {
+        // Check if already taken
+        const hasQuality = characterQualityIds.includes(quality.id);
+        if (!hasQuality) return true;
 
-      // Check limit
-      const limit = quality.limit || 1;
-      const currentCount = characterQualityIds.filter((id) => id === quality.id).length;
-      return currentCount < limit;
-    });
-  }, [filteredQualities, characterQualityIds, ruleset]);
+        // Check limit
+        const limit = quality.limit || 1;
+        const currentCount = characterQualityIds.filter((id) => id === quality.id).length;
+        return currentCount < limit;
+      });
+    } else {
+      // For buy-off, only show negative qualities the character actually has
+      return filteredQualities.filter((quality) => {
+        return characterQualityIds.includes(quality.id);
+      });
+    }
+  }, [filteredQualities, characterQualityIds, ruleset, activeTab]);
 
   // Handle acquire quality
   const handleAcquireClick = useCallback((qualityData: QualityData) => {
@@ -76,13 +84,14 @@ export function QualitiesAdvancement({ character, onCharacterUpdate }: Qualities
     setRating(qualityData.maxRating ? 1 : undefined);
     setSpecification("");
     setNotes("");
+    setGmApproved(true); // Reset GM Approved state
     setErrorMessage(null);
     setIsAcquireModalOpen(true);
   }, []);
 
   // Handle remove quality (buy off negative quality)
   // Note: This function is defined for future use when buy-off functionality is fully implemented
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+   
   const handleRemoveClick = useCallback((qualityId: string) => {
     const allQualities = [
       ...(character.positiveQualities || []),
@@ -140,9 +149,10 @@ export function QualitiesAdvancement({ character, onCharacterUpdate }: Qualities
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           qualityId: selectedQuality.id,
-          rating,
+          rating: rating || undefined,
           specification: specification || undefined,
           notes: notes || undefined,
+          gmApproved: gmApproved,
         }),
       });
 
@@ -164,7 +174,7 @@ export function QualitiesAdvancement({ character, onCharacterUpdate }: Qualities
     } finally {
       setIsSubmitting(false);
     }
-  }, [character, selectedQuality, ruleset, rating, specification, notes, onCharacterUpdate]);
+  }, [selectedQuality, ruleset, character, rating, specification, notes, gmApproved, onCharacterUpdate]);
 
   // Submit remove quality
   const handleRemoveSubmit = useCallback(async () => {
@@ -291,24 +301,28 @@ export function QualitiesAdvancement({ character, onCharacterUpdate }: Qualities
         </TextField>
       </div>
 
-      {/* Quality List */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-        {availableQualities.map((qualityData) => {
+        {displayQualities.map((qualityData) => {
           // Convert QualityData to Quality for cost calculation
           const quality = ruleset ? getQualityDefinition(ruleset, qualityData.id) : null;
           if (!quality) return null;
           
-          const cost = calculatePostCreationCost(quality);
+          const cost = activeTab === "positive" 
+            ? calculatePostCreationCost(quality)
+            : calculateBuyOffCost(quality, character.negativeQualities?.find(q => (q.qualityId || q.id) === qualityData.id)?.originalKarma);
+            
           const canAfford = character.karmaCurrent >= cost;
 
           return (
             <div
               key={qualityData.id}
-              className="p-4 bg-zinc-800 rounded-lg border border-zinc-700 hover:border-zinc-600 transition-colors"
+              className={`p-4 bg-zinc-800 rounded-lg border border-zinc-700 hover:border-zinc-600 transition-colors ${
+                activeTab === "negative" ? "border-red-900/30" : "border-blue-900/30"
+              }`}
             >
               <div className="flex items-start justify-between mb-2">
                 <h3 className="font-semibold text-zinc-100">{qualityData.name}</h3>
-                <span className="text-sm text-zinc-400">
+                <span className={`text-sm ${activeTab === "positive" ? "text-blue-400" : "text-red-400"}`}>
                   {cost} karma (2×)
                 </span>
               </div>
@@ -316,16 +330,25 @@ export function QualitiesAdvancement({ character, onCharacterUpdate }: Qualities
                 {qualityData.summary}
               </p>
               <Button
-                onPress={() => handleAcquireClick(qualityData)}
+                onPress={() => activeTab === "positive" ? handleAcquireClick(qualityData) : handleRemoveClick(qualityData.id)}
                 isDisabled={!canAfford}
                 className={`w-full px-4 py-2 rounded-lg font-medium transition-colors ${
-                  canAfford
-                    ? "bg-blue-600 hover:bg-blue-700 text-white"
-                    : "bg-zinc-700 text-zinc-500 cursor-not-allowed"
+                  activeTab === "positive"
+                    ? canAfford ? "bg-blue-600 hover:bg-blue-700 text-white" : "bg-zinc-700 text-zinc-500 cursor-not-allowed"
+                    : canAfford ? "bg-red-600 hover:bg-red-700 text-white" : "bg-zinc-700 text-zinc-500 cursor-not-allowed"
                 }`}
               >
-                <Plus className="inline w-4 h-4 mr-2" />
-                Acquire
+                {activeTab === "positive" ? (
+                  <>
+                    <Plus className="inline w-4 h-4 mr-2" />
+                    Acquire
+                  </>
+                ) : (
+                  <>
+                    <X className="inline w-4 h-4 mr-2" />
+                    Buy Off
+                  </>
+                )}
               </Button>
             </div>
           );
@@ -398,6 +421,22 @@ export function QualitiesAdvancement({ character, onCharacterUpdate }: Qualities
                         className="w-full px-4 py-2 bg-zinc-800 border border-zinc-700 rounded-lg text-zinc-100"
                         rows={3}
                       />
+                    </div>
+
+                    <div className="flex items-center gap-2 py-2">
+                      <input
+                        type="checkbox"
+                        id="gmApproved"
+                        checked={gmApproved}
+                        onChange={(e) => setGmApproved(e.target.checked)}
+                        className="w-4 h-4 rounded border-zinc-700 bg-zinc-800 text-emerald-500 focus:ring-emerald-500"
+                      />
+                      <label htmlFor="gmApproved" className="text-sm font-medium text-zinc-300 cursor-pointer">
+                        GM Approved
+                      </label>
+                      <span className="text-[10px] text-zinc-500 ml-auto">
+                        Flag this as approved by your GM
+                      </span>
                     </div>
 
                     <div className="p-4 bg-zinc-800 rounded-lg">
