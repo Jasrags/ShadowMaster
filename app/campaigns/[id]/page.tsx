@@ -14,7 +14,7 @@ import {
     Copy,
     Check
 } from "lucide-react";
-import CampaignTabs from "./components/CampaignTabs";
+import CampaignTabs, { type CampaignTabId } from "./components/CampaignTabs";
 import CampaignOverviewTab from "./components/CampaignOverviewTab";
 import CampaignCharactersTab from "./components/CampaignCharactersTab";
 import CampaignNotesTab from "./components/CampaignNotesTab";
@@ -22,6 +22,7 @@ import CampaignRosterTab from "./components/CampaignRosterTab";
 import CampaignPostsTab from "./components/CampaignPostsTab";
 import CampaignCalendarTab from "./components/CampaignCalendarTab";
 import CampaignLocationsTab from "./components/CampaignLocationsTab";
+import CampaignAdvancementsTab from "./components/CampaignAdvancementsTab";
 
 interface CampaignDetailProps {
     params: Promise<{ id: string }>;
@@ -51,7 +52,8 @@ export default function CampaignDetailPage({ params }: CampaignDetailProps) {
     const [books, setBooks] = useState<Book[]>([]);
     const [creationMethods, setCreationMethods] = useState<CreationMethod[]>([]);
     const [copiedCode, setCopiedCode] = useState(false);
-    const [activeTab, setActiveTab] = useState<"overview" | "characters" | "notes" | "roster" | "locations" | "posts" | "calendar">("overview");
+    const [activeTab, setActiveTab] = useState<CampaignTabId>("overview");
+    const [pendingApprovalsCount, setPendingApprovalsCount] = useState(0);
 
     useEffect(() => {
         async function fetchCampaign() {
@@ -89,6 +91,31 @@ export default function CampaignDetailPage({ params }: CampaignDetailProps) {
 
         fetchCampaign();
     }, [id]);
+
+    // Fetch pending approvals count for GMs
+    useEffect(() => {
+        async function fetchPendingCount() {
+            try {
+                const res = await fetch(`/api/campaigns/${id}/advancements/pending`);
+                const data = await res.json();
+                if (data.success) {
+                    setPendingApprovalsCount(data.count || 0);
+                }
+            } catch (error) {
+                // Badge will show 0 but error is logged
+                console.error("Failed to fetch pending approvals count:", error);
+            }
+        }
+
+        if (userRole === "gm") {
+            fetchPendingCount();
+        }
+    }, [userRole, id]);
+
+    // Callback for when an approval is processed
+    const handleApprovalProcessed = () => {
+        setPendingApprovalsCount((prev) => Math.max(0, prev - 1));
+    };
 
     const handleLeaveCampaign = async () => {
         if (!confirm("Are you sure you want to leave this campaign?")) return;
@@ -236,6 +263,7 @@ export default function CampaignDetailPage({ params }: CampaignDetailProps) {
                 activeTab={activeTab}
                 onTabChange={setActiveTab}
                 isGM={userRole === "gm"}
+                pendingApprovalsCount={pendingApprovalsCount}
             />
 
             {/* Tab Content */}
@@ -281,6 +309,12 @@ export default function CampaignDetailPage({ params }: CampaignDetailProps) {
                     <CampaignRosterTab
                         campaign={campaign}
                         onCampaignUpdate={handleCampaignUpdate}
+                    />
+                )}
+                {activeTab === "approvals" && userRole === "gm" && (
+                    <CampaignAdvancementsTab
+                        campaign={campaign}
+                        onApprovalProcessed={handleApprovalProcessed}
                     />
                 )}
             </div>
