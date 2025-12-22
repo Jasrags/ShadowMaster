@@ -12,15 +12,21 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ### Essential Commands
 - `pnpm dev` - Start development server (http://localhost:3000)
+- `pnpm dev:all` - Start dev server with type-check and lint watch
 - `pnpm build` - Create production build
 - `pnpm start` - Run production server
 - `pnpm lint` - Run ESLint
+- `pnpm type-check` - Run TypeScript type checking
+- `pnpm test` - Run unit tests (Vitest)
+- `pnpm test:watch` - Run tests in watch mode
+- `pnpm test:e2e` - Run E2E tests (Playwright)
 
 ### Development Workflow
 1. Install dependencies: `pnpm install`
-2. Start dev server: `pnpm dev`
+2. Start dev server: `pnpm dev` (or `pnpm dev:all` for full checks)
 3. Create test user via `/signup` in browser
 4. Test character creation at `/characters/create`
+5. Run tests: `pnpm test`
 
 ## Architecture Overview
 
@@ -41,21 +47,30 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 ```
 /app                    # Next.js App Router pages and API routes
   /api                  # API route handlers
+    /characters/[characterId]/advancement  # Advancement API endpoints
   /characters           # Character management pages
     /create             # Character creation wizard
+    /[id]               # Character sheet view/edit
+    /[id]/advancement   # Character advancement UI
+  /campaigns            # Campaign management pages
   /users                # User management (admin)
   /signin, /signup      # Authentication pages
 /lib                    # Core business logic
   /types                # TypeScript type definitions
   /storage              # File-based data persistence layer
   /rules                # Ruleset loading and merging system
+    /advancement        # Karma advancement logic (attributes, skills, edge)
+    /qualities          # Quality effects and validation
   /auth                 # Authentication and session management
 /components             # Shared React components
 /data                   # JSON file storage (acts as database)
   /users                # User records
   /characters           # Character records (organized by userId)
+  /campaigns            # Campaign records
   /editions             # Edition metadata and ruleset data
 /docs                   # Architecture documentation
+/__tests__              # Test files (Vitest)
+/e2e                    # E2E tests (Playwright)
 ```
 
 ## Core Architecture Patterns
@@ -120,7 +135,39 @@ EditionSelector
   → Redirect to character sheet
 ```
 
-### 3. Data Management Layers
+### 3. Character Advancement System
+
+Post-creation karma spending for character progression.
+
+**Key Concepts:**
+- **Advancement Types**: Attributes, skills, specializations, edge
+- **Karma Costs**: Calculated based on current rating and advancement type
+- **Training Time**: Optional downtime tracking for advancement
+- **GM Approval**: Workflow for campaign-linked characters
+- **Validation**: Ensures advancements follow edition rules
+
+**Critical Files:**
+- `/lib/rules/advancement/` - Core advancement logic
+  - `costs.ts` - Karma cost calculations
+  - `attributes.ts` - Attribute advancement
+  - `skills.ts` - Skill advancement
+  - `edge.ts` - Edge advancement
+  - `training.ts` - Training time calculations
+  - `validation.ts` - Rule validation
+- `/app/api/characters/[characterId]/advancement/` - API endpoints
+- `/app/characters/[id]/advancement/` - UI components
+
+**Advancement Flow:**
+```
+User requests advancement
+  → Validate against rules (karma available, max ratings, etc.)
+  → Calculate karma cost
+  → Apply advancement to character
+  → Record in advancement history
+  → (If campaign-linked) Submit for GM approval
+```
+
+### 4. Data Management Layers
 
 **Authentication State** (`/lib/auth/AuthProvider.tsx`):
 - React Context managing user session globally
@@ -294,7 +341,31 @@ Wrapped in `/app/providers.tsx` and applied in `/app/layout.tsx`:
 
 ## Testing Approach
 
-**Current Status:** No automated tests yet (planned for future)
+**Test Infrastructure:**
+- **Vitest** - Unit and integration tests
+- **Playwright** - E2E browser tests
+- **Testing Library** - React component testing
+
+**Test Locations:**
+```
+/__tests__/                           # Root level tests
+/lib/auth/__tests__/                  # Auth unit tests
+/lib/storage/__tests__/               # Storage layer tests
+/lib/rules/__tests__/                 # Rules engine tests
+/lib/rules/advancement/__tests__/     # Advancement logic tests
+/lib/rules/qualities/__tests__/       # Quality system tests
+/app/api/**/__tests__/                # API route tests
+/e2e/                                 # Playwright E2E tests
+```
+
+**Running Tests:**
+```bash
+pnpm test              # Run all unit tests
+pnpm test:watch        # Watch mode
+pnpm test:ci           # CI mode (no watch)
+pnpm test:e2e          # Run Playwright E2E tests
+pnpm test:e2e:ui       # E2E with visual UI
+```
 
 **Manual Testing:**
 1. Create test user via `/signup`
@@ -320,17 +391,74 @@ Comprehensive architecture docs in `/docs/`:
 
 **Known Technical Debt:**
 1. **File-based storage** - Plan database migration (PostgreSQL/MongoDB recommended)
-2. **No validation engine** - Character rule validation is basic (in roadmap)
-3. **Limited error handling** - Some API routes need better error recovery
-4. **No tests** - Add unit/integration test layer
-5. **Session security** - Consider JWT/OAuth for production scale
-6. **SR5 only** - Data structures ready for other editions, implementation pending
+2. **Limited error handling** - Some API routes need better error recovery
+3. **Session security** - Consider JWT/OAuth for production scale
+4. **SR5 only** - Data structures ready for other editions, implementation pending
+5. **No concurrent write protection** - File storage needs locking for production
 
 ## Key Files to Understand First
 
 1. `/lib/types/index.ts` - All data structures
 2. `/lib/rules/loader.ts` + `merge.ts` - Ruleset system core
-3. `/lib/storage/base.ts` - Storage abstraction
-4. `/app/characters/create/components/CreationWizard.tsx` - Character creation orchestrator
-5. `/lib/auth/AuthProvider.tsx` - Authentication context
-6. `/docs/architecture-overview.md` - System overview
+3. `/lib/rules/advancement/` - Karma advancement system
+4. `/lib/storage/base.ts` - Storage abstraction
+5. `/app/characters/create/components/CreationWizard.tsx` - Character creation orchestrator
+6. `/lib/auth/AuthProvider.tsx` - Authentication context
+7. `/lib/rules/RulesetContext.tsx` - Ruleset hooks and context
+8. `/docs/architecture/` - Architecture documentation
+
+## MCP Servers
+
+This project has MCP servers configured in `.mcp.json` for enhanced workflow:
+
+### Available Servers
+
+| Server | Purpose | When to Use |
+|--------|---------|-------------|
+| **memory** | Persistent knowledge graph | Store/recall architectural decisions, patterns, known issues |
+| **git** | Git operations | Commits, diffs, branches, history viewing |
+| **filesystem** | File operations on project | Read/write any project files |
+| **sequentialthinking** | Structured problem-solving | Complex debugging, architecture decisions, multi-step analysis |
+| **time** | Timezone utilities | Timestamps (rarely needed) |
+
+### Memory Server Usage
+
+The memory server maintains project knowledge across sessions. Use it to:
+
+**Query existing knowledge:**
+```
+mcp__memory__search_nodes("ruleset")     # Find ruleset architecture info
+mcp__memory__search_nodes("technical")   # Find known technical debt
+mcp__memory__open_nodes(["KeyFiles"])    # Get key file locations
+```
+
+**Store new knowledge:**
+```
+mcp__memory__create_entities([...])      # Add new architectural concepts
+mcp__memory__add_observations([...])     # Add details to existing entities
+mcp__memory__create_relations([...])     # Link concepts together
+```
+
+**When to update memory:**
+- After making significant architectural decisions
+- When discovering important patterns or gotchas
+- After resolving tricky bugs (document the solution)
+- When adding new major features
+
+### Sequential Thinking Usage
+
+Use `mcp__sequentialthinking__sequentialthinking` for:
+- Debugging complex ruleset merge issues
+- Planning multi-step refactors
+- Working through character creation edge cases
+- Designing new edition support
+- Any problem requiring step-by-step reasoning with revision
+
+### Git Server Usage
+
+Prefer MCP git tools over bash for cleaner integration:
+- `mcp__git__git_status` - Check working tree
+- `mcp__git__git_diff` - View changes
+- `mcp__git__git_log` - View history
+- `mcp__git__git_commit` - Create commits
+- `mcp__git__git_branch` - List branches
