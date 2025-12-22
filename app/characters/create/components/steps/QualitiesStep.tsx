@@ -3,7 +3,7 @@
 import { useMemo, useCallback, useState } from "react";
 import { useQualities, useMentorSpirits, useRuleset } from "@/lib/rules";
 import type { CreationState } from "@/lib/types";
-import { QualityData } from "@/lib/rules/loader";
+import type { QualityData } from "@/lib/rules/loader-types";
 import { buildCharacterFromCreationState } from "@/lib/rules/qualities/creation-helper";
 import { QualityCard } from "../QualityCard";
 import { QualityDetailModal } from "../QualityDetailModal";

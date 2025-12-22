@@ -3,7 +3,7 @@
 import { useMagicPaths, usePriorityTable, useTraditions, useMentorSpirits, useQualities, useSpirits } from "@/lib/rules";
 import type { TraditionData } from "@/lib/rules";
 import type { CreationState } from "@/lib/types";
-import type { QualityData } from "@/lib/rules/loader";
+import type { QualityData } from "@/lib/rules/loader-types";
 
 // Aspected mage can choose ONE of these skill groups
 const ASPECTED_MAGE_GROUPS = [

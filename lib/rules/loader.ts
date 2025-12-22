@@ -3,6 +3,15 @@
  *
  * Loads edition definitions and book payloads, preparing them
  * for the merge engine to produce a final MergedRuleset.
+ *
+ * NOTE: Type definitions have been moved to ./loader-types.ts to avoid
+ * pulling server-only storage code into client bundles.
+ * Client components MUST import types from ./loader-types.ts directly.
+ * This module (loader.ts) should only be imported in API routes and server components.
+ *
+ * IMPORTANT: This file does NOT re-export types to prevent Turbopack from
+ * analyzing this file when types are imported. All type imports must go through
+ * ./loader-types.ts directly.
  */
 
 import type {
@@ -12,10 +21,8 @@ import type {
   BookPayload,
   RuleModuleType,
   CreationMethod,
-  SpiritType,
-  SpiritPower,
-  CatalogItemRatingSpec,
 } from "../types";
+import type { LoadedRuleset, LoadedBook, LoadResult, RulesetLoadConfig } from "./loader-types";
 import {
   getEdition,
   getAllEditions,
@@ -24,57 +31,6 @@ import {
   getCreationMethod,
   getAllCreationMethods,
 } from "../storage/editions";
-
-// =============================================================================
-// TYPES
-// =============================================================================
-
-/**
- * Configuration for loading a ruleset
- */
-export interface RulesetLoadConfig {
-  editionCode: EditionCode;
-
-  /**
-   * Specific book IDs to include. If empty/undefined, all books are loaded.
-   */
-  bookIds?: ID[];
-
-  /**
-   * Whether to include the core rulebook (always true by default)
-   */
-  includeCore?: boolean;
-}
-
-/**
- * A loaded ruleset before merging - contains all the raw data
- * from the edition and books, organized for the merge engine.
- */
-export interface LoadedRuleset {
-  edition: Edition;
-  books: LoadedBook[];
-  creationMethods: CreationMethod[];
-}
-
-/**
- * A loaded book with its payload parsed and ready
- */
-export interface LoadedBook {
-  id: ID;
-  title: string;
-  isCore: boolean;
-  payload: BookPayload;
-  loadOrder: number;
-}
-
-/**
- * Result of loading a ruleset
- */
-export interface LoadResult {
-  success: boolean;
-  ruleset?: LoadedRuleset;
-  error?: string;
-}
 
 // =============================================================================
 // LOADER FUNCTIONS
@@ -276,18 +232,7 @@ export function getAvailableModuleTypes(ruleset: LoadedRuleset): RuleModuleType[
 // CONVENIENCE LOADERS FOR SPECIFIC DATA
 // =============================================================================
 
-/**
- * Metatype data structure from the metatypes module
- */
-export interface MetatypeData {
-  id: string;
-  name: string;
-  baseMetatype: string | null;
-  description?: string;
-  attributes: Record<string, { min: number; max: number } | { base: number }>;
-  racialTraits: string[];
-  priorityAvailability?: Record<string, { specialAttributePoints: number }>;
-}
+import type { MetatypeData } from "./loader-types";
 
 /**
  * Load metatypes from a ruleset
@@ -297,61 +242,18 @@ export function extractMetatypes(ruleset: LoadedRuleset): MetatypeData[] {
   return ruleModule?.metatypes || [];
 }
 
-/**
- * Skill data structure
- */
-export interface SkillData {
-  id: string;
-  name: string;
-  linkedAttribute: string;
-  group: string | null;
-  canDefault: boolean;
-  category: string;
-  requiresMagic?: boolean;
-  requiresResonance?: boolean;
-}
-
-/**
- * Skill group data structure
- */
-export interface SkillGroupData {
-  id: string;
-  name: string;
-  skills: string[];
-}
-
-/**
- * Knowledge skill category data structure
- */
-export interface KnowledgeCategoryData {
-  id: string;
-  name: string;
-  linkedAttribute: string;
-}
-
-/**
- * Skill creation limits data structure
- */
-export interface SkillCreationLimitsData {
-  maxSkillRating: number;
-  maxSkillRatingWithAptitude: number;
-  freeKnowledgePoints: string; // Formula like "(LOG + INT) × 2"
-  nativeLanguageRating: number;
-}
+import type {
+  SkillData,
+  SkillGroupData,
+  KnowledgeCategoryData,
+  SkillCreationLimitsData,
+  ExampleKnowledgeSkillData,
+  ExampleLanguageData,
+} from "./loader-types";
 
 /**
  * Load skills from a ruleset
  */
-export interface ExampleKnowledgeSkillData {
-  name: string;
-  category: "academic" | "interests" | "professional" | "street";
-}
-
-export interface ExampleLanguageData {
-  name: string;
-  region?: string;
-}
-
 export function extractSkills(ruleset: LoadedRuleset): {
   activeSkills: SkillData[];
   skillGroups: SkillGroupData[];
@@ -384,39 +286,7 @@ export function extractSkills(ruleset: LoadedRuleset): {
   };
 }
 
-/**
- * Quality data structure
- *
- * This interface matches the Quality type from the spec but is kept
- * separate for backward compatibility with existing code.
- * @see Quality in @/lib/types/qualities for the complete type definition
- */
-export interface QualityData {
-  id: string;
-  name: string;
-  karmaCost?: number;
-  karmaBonus?: number;
-  summary: string;
-  description?: string;
-  perRating?: boolean;
-  maxRating?: number;
-  requiresMagic?: boolean;
-  isRacial?: boolean;
-  levels?: Array<{ level: number; name: string; karma: number; effects?: unknown[] }>;
-  statModifiers?: Record<string, number | boolean>;
-  requiresSpecification?: boolean;
-  specificationLabel?: string;
-  /** Source of specification options - e.g., "mentorSpirits" to pull from mentorSpirits data */
-  specificationSource?: string;
-  specificationOptions?: string[];
-  limit?: number;
-  tags?: string[];
-  prerequisites?: unknown; // Will be QualityPrerequisites when fully implemented
-  incompatibilities?: string[];
-  effects?: unknown[]; // Will be QualityEffect[] when fully implemented
-  source?: { book: string; page: number };
-  dynamicState?: string; // Will be DynamicStateType when fully implemented
-}
+import type { QualityData } from "./loader-types";
 
 /**
  * Load qualities from a ruleset
@@ -436,14 +306,7 @@ export function extractQualities(ruleset: LoadedRuleset): {
   };
 }
 
-/**
- * Priority table data structure
- */
-export interface PriorityTableData {
-  levels: string[];
-  categories: Array<{ id: string; name: string; description?: string }>;
-  table: Record<string, Record<string, unknown>>;
-}
+import type { PriorityTableData } from "./loader-types";
 
 /**
  * Load priority table from a ruleset
@@ -452,20 +315,7 @@ export function extractPriorityTable(ruleset: LoadedRuleset): PriorityTableData 
   return extractModule<PriorityTableData>(ruleset, "priorities");
 }
 
-/**
- * Magic path data structure
- */
-export interface MagicPathData {
-  id: string;
-  name: string;
-  description?: string;
-  hasMagic: boolean;
-  hasResonance: boolean;
-  canAstralProject?: boolean;
-  canCastSpells?: boolean;
-  canSummonSpirits?: boolean;
-  hasAdeptPowers?: boolean;
-}
+import type { MagicPathData } from "./loader-types";
 
 /**
  * Load magic paths from a ruleset
@@ -475,31 +325,11 @@ export function extractMagicPaths(ruleset: LoadedRuleset): MagicPathData[] {
   return ruleModule?.paths || [];
 }
 
-/**
- * Lifestyle data structure
- */
-export interface LifestyleData {
-  id: string;
-  name: string;
-  monthlyCost: number;
-  startingNuyen: string;
-}
-
-export interface LifestyleSubscriptionCatalogItem {
-  id: string;
-  name: string;
-  monthlyCost?: number;
-  yearlyCost?: number;
-  costPerRating?: boolean;
-  minRating?: number;
-  maxRating?: number;
-  category?: string;
-  description?: string;
-}
-
-export interface LifestyleSubscriptionsCatalogData {
-  subscriptions: LifestyleSubscriptionCatalogItem[];
-}
+import type {
+  LifestyleData,
+  LifestyleSubscriptionCatalogItem,
+  LifestyleSubscriptionsCatalogData,
+} from "./loader-types";
 
 /**
  * Load lifestyles from a ruleset
@@ -529,114 +359,14 @@ export function extractLifestyleSubscriptions(ruleset: LoadedRuleset): Lifestyle
 // GEAR DATA TYPES AND LOADERS
 // =============================================================================
 
-/**
- * Base gear item data structure
- */
-export interface GearItemData {
-  id: string;
-  name: string;
-  category: string;
-  subcategory?: string;
-  cost: number;
-  availability: number;
-  restricted?: boolean;
-  forbidden?: boolean;
-  rating?: number;
-  description?: string;
-
-  /**
-   * Unified rating specification (preferred over legacy properties)
-   * @see CatalogItemRatingSpec
-   */
-  ratingSpec?: CatalogItemRatingSpec;
-
-  /**
-   * @deprecated Use ratingSpec.rating.hasRating instead
-   */
-  hasRating?: boolean;
-  /**
-   * @deprecated Use ratingSpec.rating.maxRating instead
-   */
-  maxRating?: number;
-  /**
-   * @deprecated Use ratingSpec.costScaling.perRating instead
-   */
-  costPerRating?: boolean;
-  capacity?: number;
-  /**
-   * @deprecated Use ratingSpec.capacityCostScaling.perRating instead
-   */
-  capacityPerRating?: boolean;
-}
-
-/**
- * Weapon data structure (extends GearItemData)
- */
-export interface WeaponData extends GearItemData {
-  damage: string;
-  ap: number;
-  reach?: number;
-  accuracy?: number;
-  mode?: string[];
-  rc?: number;
-  ammo?: number;
-  blast?: string;
-}
-
-/**
- * Armor data structure (extends GearItemData)
- */
-export interface ArmorData extends GearItemData {
-  armorRating: number;
-}
-
-/**
- * Commlink data structure (extends GearItemData)
- */
-export interface CommlinkData extends GearItemData {
-  deviceRating: number;
-}
-
-/**
- * Cyberdeck data structure (extends GearItemData)
- */
-export interface CyberdeckData extends GearItemData {
-  deviceRating: number;
-  attributes: {
-    attack: number;
-    sleaze: number;
-    dataProcessing: number;
-    firewall: number;
-  };
-  programs: number;
-}
-
-/**
- * Gear catalog data structure
- */
-export interface GearCatalogData {
-  categories: Array<{ id: string; name: string }>;
-  weapons: {
-    melee: WeaponData[];
-    pistols: WeaponData[];
-    smgs: WeaponData[];
-    rifles: WeaponData[];
-    shotguns: WeaponData[];
-    sniperRifles: WeaponData[];
-    throwingWeapons: WeaponData[];
-    grenades: WeaponData[];
-  };
-  armor: ArmorData[];
-  commlinks: CommlinkData[];
-  cyberdecks: CyberdeckData[];
-  electronics: GearItemData[];
-  tools: GearItemData[];
-  survival: GearItemData[];
-  medical: GearItemData[];
-  security: GearItemData[];
-  miscellaneous: GearItemData[];
-  ammunition: GearItemData[];
-}
+import type {
+  GearItemData,
+  WeaponData,
+  ArmorData,
+  CommlinkData,
+  CyberdeckData,
+  GearCatalogData,
+} from "./loader-types";
 
 /**
  * Load gear catalog from a ruleset
@@ -650,74 +380,13 @@ export function extractGear(ruleset: LoadedRuleset): GearCatalogData | null {
 // SPELL AND COMPLEX FORM DATA TYPES AND LOADERS
 // =============================================================================
 
-/**
- * Spell data structure
- */
-export interface SpellData {
-  id: string;
-  name: string;
-  category: "combat" | "detection" | "health" | "illusion" | "manipulation";
-  type: "mana" | "physical";
-  range: string;
-  duration: string;
-  drain: string;
-  damage?: string;
-  description?: string;
-}
-
-/**
- * Complex form data structure
- */
-export interface ComplexFormData {
-  id: string;
-  name: string;
-  target: string;
-  duration: string;
-  fading: string;
-  description?: string;
-}
-
-/**
- * Sprite type data structure for technomancers
- */
-export interface SpriteTypeData {
-  id: string;
-  name: string;
-  description: string;
-  attributes: {
-    attack: string;
-    sleaze: string;
-    dataProcessing: string;
-    firewall: string;
-  };
-  initiative: {
-    formula: string;
-    dice: number;
-  };
-  resonance: string;
-  skills: string[];
-  powers: string[];
-}
-
-/**
- * Sprite power data structure
- */
-export interface SpritePowerData {
-  id: string;
-  name: string;
-  description: string;
-}
-
-/**
- * Spells catalog data structure
- */
-export interface SpellsCatalogData {
-  combat: SpellData[];
-  detection: SpellData[];
-  health: SpellData[];
-  illusion: SpellData[];
-  manipulation: SpellData[];
-}
+import type {
+  SpellData,
+  ComplexFormData,
+  SpriteTypeData,
+  SpritePowerData,
+  SpellsCatalogData,
+} from "./loader-types";
 
 /**
  * Load spells from a ruleset
@@ -755,165 +424,15 @@ export function extractSpritePowers(ruleset: LoadedRuleset): SpritePowerData[] {
 // CYBERWARE AND BIOWARE DATA TYPES AND LOADERS
 // =============================================================================
 
-import type { CyberwareCategory, BiowareCategory } from "../types";
-
-/**
- * Cyberware grade data structure (from ruleset)
- */
-export interface CyberwareGradeData {
-  id: string;
-  name: string;
-  essenceMultiplier: number;
-  costMultiplier: number;
-  availabilityModifier: number;
-}
-
-/**
- * Cyberware catalog item data structure (from ruleset)
- */
-export interface CyberwareCatalogItemData {
-  id: string;
-  name: string;
-  category: CyberwareCategory;
-  essenceCost: number;
-  cost: number;
-  availability: number;
-  restricted?: boolean;
-  forbidden?: boolean;
-
-  /**
-   * Unified rating specification (preferred over legacy properties)
-   * @see CatalogItemRatingSpec
-   */
-  ratingSpec?: CatalogItemRatingSpec;
-
-  /**
-   * @deprecated Use ratingSpec.rating.hasRating instead
-   */
-  hasRating?: boolean;
-  /**
-   * @deprecated Use ratingSpec.rating.maxRating instead
-   */
-  maxRating?: number;
-  /**
-   * @deprecated Use ratingSpec.essenceScaling.perRating instead
-   */
-  essencePerRating?: boolean;
-  /**
-   * @deprecated Use ratingSpec.costScaling.perRating instead
-   */
-  costPerRating?: boolean;
-  capacity?: number;
-  capacityCost?: number;
-  /**
-   * @deprecated Use ratingSpec.capacityCostScaling.perRating instead
-   */
-  capacityPerRating?: boolean;
-  attributeBonuses?: Record<string, number>;
-  /**
-   * @deprecated Use ratingSpec.attributeBonusScaling instead
-   */
-  attributeBonusesPerRating?: Record<string, number>;
-  maxAttributeBonus?: number;
-  initiativeDiceBonus?: number;
-  /**
-   * @deprecated Consider using ratingSpec.attributeBonusScaling if applicable
-   */
-  initiativeDiceBonusPerRating?: number;
-  description?: string;
-  wirelessBonus?: string;
-  page?: number;
-  source?: string;
-  parentType?: string;
-  requirements?: string[];
-}
-
-/**
- * Augmentation rules data structure
- */
-export interface AugmentationRulesData {
-  maxEssence: number;
-  maxAttributeBonus: number;
-  maxAvailabilityAtCreation: number;
-  trackEssenceHoles: boolean;
-  magicReductionFormula: "roundUp" | "roundDown" | "exact";
-}
-
-/**
- * Cyberware catalog data structure
- */
-export interface CyberwareCatalogData {
-  rules: AugmentationRulesData;
-  grades: CyberwareGradeData[];
-  catalog: CyberwareCatalogItemData[];
-}
-
-/**
- * Bioware grade data structure (from ruleset)
- */
-export interface BiowareGradeData {
-  id: string;
-  name: string;
-  essenceMultiplier: number;
-  costMultiplier: number;
-  availabilityModifier: number;
-}
-
-/**
- * Bioware catalog item data structure (from ruleset)
- */
-export interface BiowareCatalogItemData {
-  id: string;
-  name: string;
-  category: BiowareCategory;
-  essenceCost: number;
-  cost: number;
-  availability: number;
-  restricted?: boolean;
-  forbidden?: boolean;
-
-  /**
-   * Unified rating specification (preferred over legacy properties)
-   * @see CatalogItemRatingSpec
-   */
-  ratingSpec?: CatalogItemRatingSpec;
-
-  /**
-   * @deprecated Use ratingSpec.rating.hasRating instead
-   */
-  hasRating?: boolean;
-  /**
-   * @deprecated Use ratingSpec.rating.maxRating instead
-   */
-  maxRating?: number;
-  /**
-   * @deprecated Use ratingSpec.essenceScaling.perRating instead
-   */
-  essencePerRating?: boolean;
-  /**
-   * @deprecated Use ratingSpec.costScaling.perRating instead
-   */
-  costPerRating?: boolean;
-  attributeBonuses?: Record<string, number>;
-  /**
-   * @deprecated Use ratingSpec.attributeBonusScaling instead
-   */
-  attributeBonusesPerRating?: Record<string, number>;
-  maxAttributeBonus?: number;
-  initiativeDiceBonus?: number;
-  description?: string;
-  page?: number;
-  source?: string;
-  requirements?: string[];
-}
-
-/**
- * Bioware catalog data structure
- */
-export interface BiowareCatalogData {
-  grades: BiowareGradeData[];
-  catalog: BiowareCatalogItemData[];
-}
+import type {
+  CyberwareGradeData,
+  CyberwareCatalogItemData,
+  AugmentationRulesData,
+  CyberwareCatalogData,
+  BiowareGradeData,
+  BiowareCatalogItemData,
+  BiowareCatalogData,
+} from "./loader-types";
 
 /**
  * Load cyberware catalog from a ruleset
@@ -982,26 +501,7 @@ export function extractContactTemplates(ruleset: LoadedRuleset): ContactTemplate
 // ADEPT POWER DATA TYPES AND LOADERS
 // =============================================================================
 
-/**
- * Adept power catalog item from ruleset data
- */
-export interface AdeptPowerCatalogItem {
-  id: string;
-  name: string;
-  cost: number | null;
-  costType: "fixed" | "perLevel" | "table";
-  maxLevel?: number;
-  activation?: "free" | "simple" | "complex" | "interrupt";
-  description: string;
-  requiresSkill?: boolean;
-  validSkills?: string[];
-  requiresAttribute?: boolean;
-  validAttributes?: string[];
-  requiresLimit?: boolean;
-  validLimits?: string[];
-  levels?: Array<{ level: number; cost: number; bonus: string }>;
-  variants?: Array<{ id: string; name: string; bonus?: string }>;
-}
+import type { AdeptPowerCatalogItem } from "./loader-types";
 
 /**
  * Load adept powers from a ruleset
@@ -1015,38 +515,7 @@ export function extractAdeptPowers(ruleset: LoadedRuleset): AdeptPowerCatalogIte
 // TRADITION DATA TYPES AND LOADERS
 // =============================================================================
 
-/**
- * Spirit type mapping for a tradition
- */
-export interface TraditionSpiritTypes {
-  combat: string;
-  detection: string;
-  health: string;
-  illusion: string;
-  manipulation: string;
-}
-
-/**
- * Drain variant for traditions with conditional drain attributes
- */
-export interface DrainVariant {
-  condition: string;
-  alternateAttributes: [string, string];
-}
-
-/**
- * Tradition data structure from ruleset
- */
-export interface TraditionData {
-  id: string;
-  name: string;
-  drainAttributes: [string, string];
-  spiritTypes: TraditionSpiritTypes;
-  description: string;
-  source?: string;
-  isPossessionTradition?: boolean;
-  drainVariant?: DrainVariant;
-}
+import type { TraditionData, TraditionSpiritTypes, DrainVariant } from "./loader-types";
 
 /**
  * Load traditions from a ruleset
@@ -1060,27 +529,7 @@ export function extractTraditions(ruleset: LoadedRuleset): TraditionData[] {
 // MENTOR SPIRIT DATA TYPES AND LOADERS
 // =============================================================================
 
-/**
- * Mentor spirit advantages by character type
- */
-export interface MentorSpiritAdvantages {
-  all: string;
-  magician?: string;
-  adept?: string;
-}
-
-/**
- * Mentor spirit data structure from ruleset
- */
-export interface MentorSpiritData {
-  id: string;
-  name: string;
-  description: string;
-  karmaCost: number;
-  advantages: MentorSpiritAdvantages;
-  disadvantage: string;
-  source?: string;
-}
+import type { MentorSpiritData, MentorSpiritAdvantages } from "./loader-types";
 
 /**
  * Load mentor spirits from a ruleset
@@ -1094,56 +543,7 @@ export function extractMentorSpirits(ruleset: LoadedRuleset): MentorSpiritData[]
 // RITUAL DATA TYPES AND LOADERS
 // =============================================================================
 
-/**
- * Ritual keyword data structure
- */
-export interface RitualKeywordData {
-  id: string;
-  name: string;
-  description: string;
-}
-
-/**
- * Minion stats for rituals that create minions (Watcher, Homunculus)
- */
-export interface MinionStatsData {
-  attributes: {
-    body?: string | number | null;
-    agility?: string | number | null;
-    reaction?: string | number | null;
-    strength?: string | number | null;
-    willpower?: string | number | null;
-    logic?: string | number | null;
-    intuition?: string | number | null;
-    charisma?: string | number | null;
-  };
-  initiative?: string;
-  astralInitiative?: string;
-  movement?: string;
-  skills: string[];
-  powers: string[];
-  notes?: string;
-}
-
-/**
- * Ritual data structure from ruleset
- */
-export interface RitualData {
-  id: string;
-  name: string;
-  keywords: string[];
-  /** For spell rituals, which spell category it works with */
-  spellCategory?: "combat" | "detection" | "health" | "illusion" | "manipulation";
-  description: string;
-  duration: string;
-  /** Whether this ritual can be made permanent with karma */
-  canBePermanent?: boolean;
-  /** Karma cost formula to make permanent (e.g., "Force") */
-  permanentKarmaCost?: string;
-  /** Stats for minion rituals (Watcher, Homunculus) */
-  minionStats?: MinionStatsData;
-  source?: string;
-}
+import type { RitualData, RitualKeywordData, MinionStatsData } from "./loader-types";
 
 /**
  * Load rituals from a ruleset
@@ -1165,137 +565,17 @@ export function extractRitualKeywords(ruleset: LoadedRuleset): RitualKeywordData
 // VEHICLE, DRONE, RCC, AND AUTOSOFT DATA TYPES AND LOADERS
 // =============================================================================
 
-/**
- * Vehicle category metadata
- */
-export interface VehicleCategoryData {
-  id: string;
-  name: string;
-  description?: string;
-}
-
-/**
- * Drone size category metadata
- */
-export interface DroneSizeData {
-  id: string;
-  name: string;
-  bodyRange: string;
-  description?: string;
-}
-
-/**
- * Handling rating - can be single value or on-road/off-road pair
- */
-export type HandlingRatingData = number | { onRoad: number; offRoad: number };
-
-/**
- * Vehicle catalog item from ruleset data
- */
-export interface VehicleCatalogItemData {
-  id: string;
-  name: string;
-  category: string;
-  handling: HandlingRatingData;
-  speed: number;
-  acceleration: number;
-  body: number;
-  armor: number;
-  pilot: number;
-  sensor: number;
-  seats?: number;
-  deviceRating?: number;
-  cost: number;
-  availability: number;
-  restricted?: boolean;
-  forbidden?: boolean;
-  description?: string;
-  page?: number;
-  source?: string;
-}
-
-/**
- * Drone weapon mount configuration
- */
-export interface DroneWeaponMountsData {
-  standard?: number;
-  heavy?: number;
-}
-
-/**
- * Drone catalog item from ruleset data
- */
-export interface DroneCatalogItemData {
-  id: string;
-  name: string;
-  size: string;
-  droneType: string;
-  handling: number;
-  speed: number;
-  acceleration: number;
-  body: number;
-  armor: number;
-  pilot: number;
-  sensor: number;
-  canFly?: boolean;
-  isAquatic?: boolean;
-  weaponMounts?: DroneWeaponMountsData;
-  cost: number;
-  availability: number;
-  restricted?: boolean;
-  forbidden?: boolean;
-  description?: string;
-  page?: number;
-  source?: string;
-}
-
-/**
- * RCC (Rigger Command Console) catalog item from ruleset data
- */
-export interface RCCCatalogItemData {
-  id: string;
-  name: string;
-  deviceRating: number;
-  dataProcessing: number;
-  firewall: number;
-  cost: number;
-  availability: number;
-  restricted?: boolean;
-  description?: string;
-  page?: number;
-  source?: string;
-}
-
-/**
- * Autosoft catalog item from ruleset data
- */
-export interface AutosoftCatalogItemData {
-  id: string;
-  name: string;
-  category: string;
-  maxRating: number;
-  costPerRating: number;
-  availabilityPerRating: number;
-  requiresTarget?: boolean;
-  targetType?: "weapon" | "vehicle";
-  description?: string;
-  page?: number;
-  source?: string;
-}
-
-/**
- * Complete vehicles module data from ruleset
- */
-export interface VehiclesCatalogData {
-  categories: VehicleCategoryData[];
-  droneSizes: DroneSizeData[];
-  groundcraft: VehicleCatalogItemData[];
-  watercraft: VehicleCatalogItemData[];
-  aircraft: VehicleCatalogItemData[];
-  drones: DroneCatalogItemData[];
-  rccs: RCCCatalogItemData[];
-  autosofts: AutosoftCatalogItemData[];
-}
+import type {
+  VehicleCategoryData,
+  DroneSizeData,
+  HandlingRatingData,
+  VehicleCatalogItemData,
+  DroneWeaponMountsData,
+  DroneCatalogItemData,
+  RCCCatalogItemData,
+  AutosoftCatalogItemData,
+  VehiclesCatalogData,
+} from "./loader-types";
 
 /**
  * Load vehicles catalog from a ruleset
@@ -1379,34 +659,7 @@ export function extractVehiclesCatalog(ruleset: LoadedRuleset): VehiclesCatalogD
 // PROGRAM DATA EXTRACTORS
 // =============================================================================
 
-/**
- * Program catalog item data returned from loader
- */
-export interface ProgramCatalogItemData {
-  id: string;
-  name: string;
-  category: "common" | "hacking" | "agent";
-  cost: number;
-  availability: number;
-  restricted?: boolean;
-  forbidden?: boolean;
-  minRating?: number;
-  maxRating?: number;
-  costPerRating?: number;
-  description?: string;
-  effects?: string;
-  page?: number;
-  source?: string;
-}
-
-/**
- * Programs module data from ruleset
- */
-export interface ProgramsCatalogData {
-  common: ProgramCatalogItemData[];
-  hacking: ProgramCatalogItemData[];
-  agents: ProgramCatalogItemData[];
-}
+import type { ProgramCatalogItemData, ProgramsCatalogData } from "./loader-types";
 
 /**
  * Load all programs from a ruleset
@@ -1473,22 +726,7 @@ export function extractProgramsCatalog(ruleset: LoadedRuleset): ProgramsCatalogD
 // FOCI DATA TYPES AND LOADERS
 // =============================================================================
 
-/**
- * Focus catalog item data structure
- */
-export interface FocusCatalogItemData {
-  id: string;
-  name: string;
-  type: string;
-  costMultiplier: number;
-  bondingKarmaMultiplier: number;
-  availability: number;
-  restricted?: boolean;
-  forbidden?: boolean;
-  description?: string;
-  page?: number;
-  source?: string;
-}
+import type { FocusCatalogItemData } from "./loader-types";
 
 /**
  * Load foci from a ruleset
@@ -1502,23 +740,7 @@ export function extractFoci(ruleset: LoadedRuleset): FocusCatalogItemData[] {
 // SPIRIT DATA TYPES AND LOADERS
 // =============================================================================
 
-/**
- * Spirit type data structure
- */
-export interface SpiritTypeData {
-  type: SpiritType;
-  name: string;
-  basePowers: SpiritPower[];
-  weaknesses?: string[];
-}
-
-/**
- * Spirits catalog data structure
- */
-export interface SpiritsCatalogData {
-  spiritTypes: SpiritTypeData[];
-  optionalPowers: SpiritPower[];
-}
+import type { SpiritTypeData, SpiritsCatalogData } from "./loader-types";
 
 /**
  * Load spirits from a ruleset
@@ -1532,218 +754,13 @@ export function extractSpirits(ruleset: LoadedRuleset): SpiritsCatalogData | nul
 // GEAR MODIFICATION DATA TYPES AND LOADERS
 // =============================================================================
 
-/**
- * Weapon modification catalog item data structure
- */
-export interface WeaponModificationCatalogItemData {
-  id: string;
-  name: string;
-  /** Mount point required (undefined means no mount needed) */
-  mount?: "top" | "under" | "side" | "barrel" | "stock" | "internal";
-  /** Weapon types this mod is compatible with */
-  compatibleWeapons?: string[];
-  /** Weapon types this mod is NOT compatible with */
-  incompatibleWeapons?: string[];
-  /** Minimum weapon size */
-  minimumWeaponSize?: string;
-  /** Base cost in nuyen */
-  cost?: number;
-  /** Whether cost is a multiplier of weapon cost */
-  costMultiplier?: number;
-
-  /**
-   * Unified rating specification (preferred over legacy properties)
-   * @see CatalogItemRatingSpec
-   */
-  ratingSpec?: CatalogItemRatingSpec;
-
-  /**
-   * Whether the mod has a rating
-   * @deprecated Use ratingSpec.rating.hasRating instead
-   */
-  hasRating?: boolean;
-  /**
-   * Maximum rating if applicable
-   * @deprecated Use ratingSpec.rating.maxRating instead
-   */
-  maxRating?: number;
-  /**
-   * Whether cost scales with rating
-   * @deprecated Use ratingSpec.costScaling.perRating instead
-   */
-  costPerRating?: boolean;
-  /** Base availability */
-  availability: number;
-  /** Whether availability is Restricted */
-  restricted?: boolean;
-  /** Whether availability is Forbidden */
-  forbidden?: boolean;
-  /** Recoil compensation provided */
-  recoilCompensation?: number;
-  /** Accuracy modifier */
-  accuracyModifier?: number;
-  /** Concealability modifier */
-  concealabilityModifier?: number;
-  /** Description */
-  description?: string;
-  /** Wireless bonus description */
-  wirelessBonus?: string;
-  /** Page reference */
-  page?: number;
-  /** Source book */
-  source?: string;
-}
-
-/**
- * Armor modification catalog item data structure
- */
-export interface ArmorModificationCatalogItemData {
-  id: string;
-  name: string;
-  /** Capacity cost */
-  capacityCost: number;
-
-  /**
-   * Unified rating specification (preferred over legacy properties)
-   * @see CatalogItemRatingSpec
-   */
-  ratingSpec?: CatalogItemRatingSpec;
-
-  /**
-   * Whether capacity cost scales with rating
-   * @deprecated Use ratingSpec.capacityCostScaling.perRating instead
-   */
-  capacityPerRating?: boolean;
-  /** Whether this uses no capacity (bracketed in rulebook) */
-  noCapacityCost?: boolean;
-  /**
-   * Whether the mod has a rating
-   * @deprecated Use ratingSpec.rating.hasRating instead
-   */
-  hasRating?: boolean;
-  /**
-   * Maximum rating if applicable
-   * @deprecated Use ratingSpec.rating.maxRating instead
-   */
-  maxRating?: number;
-  /** Base cost in nuyen */
-  cost: number;
-  /**
-   * Whether cost scales with rating
-   * @deprecated Use ratingSpec.costScaling.perRating instead
-   */
-  costPerRating?: boolean;
-  /** Whether cost is a multiplier of armor cost */
-  costMultiplier?: number;
-  /** Base availability */
-  availability: number;
-  /** Availability modifier (adds to armor's base) */
-  availabilityModifier?: number;
-  /** Whether availability is Restricted */
-  restricted?: boolean;
-  /** Whether availability is Forbidden */
-  forbidden?: boolean;
-  /** Armor bonus provided */
-  armorBonus?: number;
-  /** Requirements (e.g., "full body armor", "helmet") */
-  requirements?: string[];
-  /** Description */
-  description?: string;
-  /** Wireless bonus description */
-  wirelessBonus?: string;
-  /** Page reference */
-  page?: number;
-  /** Source book */
-  source?: string;
-}
-
-/**
- * Cyberware modification catalog item data structure
- */
-export interface CyberwareModificationCatalogItemData {
-  id: string;
-  name: string;
-  /** Capacity cost */
-  capacityCost: number;
-  /** Whether capacity cost scales with rating */
-  capacityPerRating?: boolean;
-  /** Whether this uses no capacity (bracketed in rulebook) */
-  noCapacityCost?: boolean;
-  /** Whether the mod has a rating */
-  hasRating?: boolean;
-  /** Maximum rating if applicable */
-  maxRating?: number;
-  /** Base cost in nuyen */
-  cost: number;
-  /** Whether cost scales with rating */
-  costPerRating?: boolean;
-  /** Base availability */
-  availability: number;
-  /** Whether availability is Restricted */
-  restricted?: boolean;
-  /** Whether availability is Forbidden */
-  forbidden?: boolean;
-  /** Applicable cyberware categories/subcategories */
-  applicableCategories?: string[];
-  /** Parent type (e.g., "cyberlimb" for cyberlimb enhancements) */
-  parentType?: string;
-  /** Attribute bonuses provided */
-  attributeBonuses?: Record<string, number>;
-  /** Attribute bonuses per rating */
-  attributeBonusesPerRating?: Record<string, number>;
-  /** Requirements */
-  requirements?: string[];
-  /** Description */
-  description?: string;
-  /** Page reference */
-  page?: number;
-  /** Source book */
-  source?: string;
-}
-
-/**
- * Gear modification catalog item data structure
- */
-export interface GearModificationCatalogItemData {
-  id: string;
-  name: string;
-  /** Capacity cost */
-  capacityCost: number;
-  /** Whether capacity cost scales with rating */
-  capacityPerRating?: boolean;
-  /** Whether the mod has a rating */
-  hasRating?: boolean;
-  /** Maximum rating if applicable */
-  maxRating?: number;
-  /** Base cost in nuyen */
-  cost: number;
-  /** Whether cost scales with rating */
-  costPerRating?: boolean;
-  /** Base availability */
-  availability: number;
-  /** Whether availability is Restricted */
-  restricted?: boolean;
-  /** Whether availability is Forbidden */
-  forbidden?: boolean;
-  /** Applicable gear categories/subcategories (e.g., "audio") */
-  applicableCategories?: string[];
-  /** Description */
-  description?: string;
-  /** Page reference */
-  page?: number;
-  /** Source book */
-  source?: string;
-}
-
-/**
- * Complete modifications catalog data structure
- */
-export interface ModificationsCatalogData {
-  weaponMods: WeaponModificationCatalogItemData[];
-  armorMods: ArmorModificationCatalogItemData[];
-  cyberwareMods?: CyberwareModificationCatalogItemData[];
-  gearMods?: GearModificationCatalogItemData[];
-}
+import type {
+  WeaponModificationCatalogItemData,
+  ArmorModificationCatalogItemData,
+  CyberwareModificationCatalogItemData,
+  GearModificationCatalogItemData,
+  ModificationsCatalogData,
+} from "./loader-types";
 
 /**
  * Load weapon modifications from a ruleset

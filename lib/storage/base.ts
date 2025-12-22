@@ -3,6 +3,8 @@
  *
  * Provides common patterns for reading/writing JSON files with
  * atomic writes and directory management.
+ *
+ * This module is server-only and should never be imported in client components.
  */
 
 import { promises as fs } from "fs";

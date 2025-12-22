@@ -20,6 +20,10 @@ import type {
   CharacterStatus,
   EditionCode,
   QualitySelection,
+  AdvancementRecord,
+  TrainingPeriod,
+  AdvancementType,
+  TrainingStatus,
 } from "../types";
 import {
   ensureDirectory,
@@ -485,5 +489,287 @@ export async function retireCharacter(userId: ID, characterId: ID): Promise<Char
  */
 export async function killCharacter(userId: ID, characterId: ID): Promise<Character> {
   return updateCharacter(userId, characterId, { status: "deceased" });
+}
+
+// =============================================================================
+// ADVANCEMENT STORAGE FUNCTIONS
+// =============================================================================
+
+/**
+ * Add an advancement record and optionally a training period to a character
+ *
+ * This is a convenience function that persists the results from advancement
+ * logic functions (e.g., advanceAttribute, advanceSkill).
+ *
+ * @param userId - Character owner ID
+ * @param characterId - Character ID
+ * @param advancementRecord - Advancement record to add
+ * @param trainingPeriod - Optional training period to add
+ * @param karmaSpent - Karma amount spent (for updating karmaCurrent)
+ * @returns Updated character
+ */
+export async function addAdvancementRecord(
+  userId: ID,
+  characterId: ID,
+  advancementRecord: AdvancementRecord,
+  trainingPeriod?: TrainingPeriod,
+  karmaSpent?: number
+): Promise<Character> {
+  const character = await getCharacter(userId, characterId);
+  if (!character) {
+    throw new Error(`Character with ID ${characterId} not found`);
+  }
+
+  // Build updates
+  const updates: Partial<Character> = {
+    advancementHistory: [
+      ...(character.advancementHistory || []),
+      advancementRecord,
+    ],
+  };
+
+  // Add training period if provided
+  if (trainingPeriod) {
+    updates.activeTraining = [
+      ...(character.activeTraining || []),
+      trainingPeriod,
+    ];
+  }
+
+  // Update karma if provided
+  if (karmaSpent !== undefined) {
+    updates.karmaCurrent = character.karmaCurrent - karmaSpent;
+  }
+
+  return updateCharacter(userId, characterId, updates);
+}
+
+/**
+ * Update a training period in a character's activeTraining array
+ *
+ * This is used when training status changes (completion, interruption, resumption).
+ *
+ * @param userId - Character owner ID
+ * @param characterId - Character ID
+ * @param trainingPeriodId - ID of the training period to update
+ * @param updates - Partial training period updates
+ * @returns Updated character
+ */
+export async function updateTrainingPeriod(
+  userId: ID,
+  characterId: ID,
+  trainingPeriodId: ID,
+  updates: Partial<TrainingPeriod>
+): Promise<Character> {
+  const character = await getCharacter(userId, characterId);
+  if (!character) {
+    throw new Error(`Character with ID ${characterId} not found`);
+  }
+
+  const trainingPeriod = character.activeTraining?.find(
+    (t) => t.id === trainingPeriodId
+  );
+
+  if (!trainingPeriod) {
+    throw new Error(`Training period ${trainingPeriodId} not found`);
+  }
+
+  const updatedTrainingPeriod: TrainingPeriod = {
+    ...trainingPeriod,
+    ...updates,
+  };
+
+  const updatedActiveTraining = character.activeTraining?.map((t) =>
+    t.id === trainingPeriodId ? updatedTrainingPeriod : t
+  ) || [updatedTrainingPeriod];
+
+  return updateCharacter(userId, characterId, {
+    activeTraining: updatedActiveTraining,
+  });
+}
+
+/**
+ * Update an advancement record in a character's advancementHistory
+ *
+ * Advancement records are typically immutable, but this function allows
+ * updating status fields (e.g., trainingStatus, completedAt, gmApproved).
+ *
+ * @param userId - Character owner ID
+ * @param characterId - Character ID
+ * @param advancementRecordId - ID of the advancement record to update
+ * @param updates - Partial advancement record updates
+ * @returns Updated character
+ */
+export async function updateAdvancementRecord(
+  userId: ID,
+  characterId: ID,
+  advancementRecordId: ID,
+  updates: Partial<AdvancementRecord>
+): Promise<Character> {
+  const character = await getCharacter(userId, characterId);
+  if (!character) {
+    throw new Error(`Character with ID ${characterId} not found`);
+  }
+
+  const advancementRecord = character.advancementHistory?.find(
+    (a) => a.id === advancementRecordId
+  );
+
+  if (!advancementRecord) {
+    throw new Error(`Advancement record ${advancementRecordId} not found`);
+  }
+
+  const updatedAdvancementRecord: AdvancementRecord = {
+    ...advancementRecord,
+    ...updates,
+  };
+
+  const updatedHistory = character.advancementHistory?.map((a) =>
+    a.id === advancementRecordId ? updatedAdvancementRecord : a
+  ) || [updatedAdvancementRecord];
+
+  return updateCharacter(userId, characterId, {
+    advancementHistory: updatedHistory,
+  });
+}
+
+/**
+ * Remove a training period from activeTraining (e.g., when training completes)
+ *
+ * @param userId - Character owner ID
+ * @param characterId - Character ID
+ * @param trainingPeriodId - ID of the training period to remove
+ * @returns Updated character
+ */
+export async function removeTrainingPeriod(
+  userId: ID,
+  characterId: ID,
+  trainingPeriodId: ID
+): Promise<Character> {
+  const character = await getCharacter(userId, characterId);
+  if (!character) {
+    throw new Error(`Character with ID ${characterId} not found`);
+  }
+
+  const updatedActiveTraining = character.activeTraining?.filter(
+    (t) => t.id !== trainingPeriodId
+  ) || [];
+
+  return updateCharacter(userId, characterId, {
+    activeTraining: updatedActiveTraining,
+  });
+}
+
+/**
+ * Get advancement history for a character with optional filtering
+ *
+ * @param character - Character to query
+ * @param filters - Optional filters
+ * @returns Filtered advancement records
+ */
+export function getAdvancementHistory(
+  character: Character,
+  filters?: {
+    type?: AdvancementType;
+    targetId?: string;
+    trainingStatus?: TrainingStatus;
+    downtimePeriodId?: ID;
+    campaignSessionId?: ID;
+    gmApproved?: boolean;
+  }
+): AdvancementRecord[] {
+  let history = character.advancementHistory || [];
+
+  if (filters) {
+    if (filters.type) {
+      history = history.filter((a) => a.type === filters.type);
+    }
+    if (filters.targetId) {
+      history = history.filter((a) => a.targetId === filters.targetId);
+    }
+    if (filters.trainingStatus) {
+      history = history.filter((a) => a.trainingStatus === filters.trainingStatus);
+    }
+    if (filters.downtimePeriodId) {
+      history = history.filter((a) => a.downtimePeriodId === filters.downtimePeriodId);
+    }
+    if (filters.campaignSessionId) {
+      history = history.filter((a) => a.campaignSessionId === filters.campaignSessionId);
+    }
+    if (filters.gmApproved !== undefined) {
+      history = history.filter((a) => a.gmApproved === filters.gmApproved);
+    }
+  }
+
+  return history;
+}
+
+/**
+ * Get active training periods for a character with optional filtering
+ *
+ * @param character - Character to query
+ * @param filters - Optional filters
+ * @returns Filtered active training periods
+ */
+export function getActiveTrainingPeriods(
+  character: Character,
+  filters?: {
+    type?: AdvancementType;
+    targetId?: string;
+    status?: TrainingStatus;
+    downtimePeriodId?: ID;
+  }
+): TrainingPeriod[] {
+  let training = character.activeTraining || [];
+
+  // Filter by status (only pending, in-progress, or interrupted are "active")
+  training = training.filter(
+    (t) => t.status === "pending" || t.status === "in-progress" || t.status === "interrupted"
+  );
+
+  if (filters) {
+    if (filters.type) {
+      training = training.filter((t) => t.type === filters.type);
+    }
+    if (filters.targetId) {
+      training = training.filter((t) => t.targetId === filters.targetId);
+    }
+    if (filters.status) {
+      training = training.filter((t) => t.status === filters.status);
+    }
+    if (filters.downtimePeriodId) {
+      training = training.filter((t) => t.downtimePeriodId === filters.downtimePeriodId);
+    }
+  }
+
+  return training;
+}
+
+/**
+ * Get a specific training period by ID
+ *
+ * @param character - Character to query
+ * @param trainingPeriodId - Training period ID
+ * @returns Training period or null if not found
+ */
+export function getTrainingPeriodById(
+  character: Character,
+  trainingPeriodId: ID
+): TrainingPeriod | null {
+  return character.activeTraining?.find((t) => t.id === trainingPeriodId) || null;
+}
+
+/**
+ * Get a specific advancement record by ID
+ *
+ * @param character - Character to query
+ * @param advancementRecordId - Advancement record ID
+ * @returns Advancement record or null if not found
+ */
+export function getAdvancementRecordById(
+  character: Character,
+  advancementRecordId: ID
+): AdvancementRecord | null {
+  return character.advancementHistory?.find((a) => a.id === advancementRecordId) || null;
 }
 

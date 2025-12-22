@@ -15,6 +15,7 @@ type SortOrder = "asc" | "desc";
 export default function UserTable({ initialUsers }: UserTableProps) {
   const [users, setUsers] = useState<PublicUser[]>(initialUsers);
   const [search, setSearch] = useState("");
+  const [debouncedSearch, setDebouncedSearch] = useState("");
   const [page, setPage] = useState(1);
   const [limit] = useState(20);
   const [sortBy, setSortBy] = useState<SortColumn>("createdAt");
@@ -24,13 +25,23 @@ export default function UserTable({ initialUsers }: UserTableProps) {
   const [editingUser, setEditingUser] = useState<PublicUser | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
 
+  // Debounce search input
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setDebouncedSearch(search);
+      setPage(1); // Reset to first page when search changes
+    }, 300); // 300ms debounce delay
+
+    return () => clearTimeout(timer);
+  }, [search]);
+
   // Fetch users from API
   const fetchUsers = useCallback(async () => {
     setLoading(true);
     setError(null);
     try {
       const params = new URLSearchParams({
-        search,
+        search: debouncedSearch,
         page: page.toString(),
         limit: limit.toString(),
         sortBy,
@@ -49,13 +60,13 @@ export default function UserTable({ initialUsers }: UserTableProps) {
     } finally {
       setLoading(false);
     }
-  }, [search, page, limit, sortBy, sortOrder]);
+  }, [debouncedSearch, page, limit, sortBy, sortOrder]);
 
   // Load users when filters change
   useEffect(() => {
     fetchUsers();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [search, page, limit, sortBy, sortOrder]);
+  }, [debouncedSearch, page, limit, sortBy, sortOrder]);
 
   // Handle edit start
   const handleEditStart = (user: PublicUser) => {
@@ -170,7 +181,7 @@ export default function UserTable({ initialUsers }: UserTableProps) {
             value={search}
             onChange={(e) => {
               setSearch(e.target.value);
-              setPage(1); // Reset to first page when searching
+              // Page reset is handled by debounce effect
             }}
             className="w-full rounded-md border border-zinc-300 bg-white px-3 py-2 text-black placeholder-zinc-500 focus:outline-none focus:ring-2 focus:ring-zinc-500 focus:ring-offset-2 dark:border-zinc-700 dark:bg-zinc-800 dark:text-zinc-50 dark:placeholder-zinc-400 dark:focus:ring-zinc-600"
             placeholder="Search by email or username..."

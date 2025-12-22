@@ -471,6 +471,30 @@ export async function getCampaignEvents(campaignId: string): Promise<CampaignEve
 }
 
 /**
+ * Get downtime events from a campaign
+ */
+export async function getDowntimeEvents(campaignId: string): Promise<CampaignEvent[]> {
+    const events = await getCampaignEvents(campaignId);
+    return events
+        .filter((event) => event.type === "downtime")
+        .sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime());
+}
+
+/**
+ * Get a specific downtime event by ID
+ */
+export async function getDowntimeEventById(
+    campaignId: string,
+    downtimeId: string
+): Promise<CampaignEvent | null> {
+    const events = await getCampaignEvents(campaignId);
+    const downtime = events.find(
+        (event) => event.type === "downtime" && event.id === downtimeId
+    );
+    return downtime || null;
+}
+
+/**
  * Create a campaign event
  */
 export async function createCampaignEvent(
