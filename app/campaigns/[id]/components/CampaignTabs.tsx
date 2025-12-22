@@ -1,12 +1,15 @@
 "use client";
 
+export type CampaignTabId = "overview" | "characters" | "notes" | "roster" | "locations" | "posts" | "calendar" | "approvals";
+
 interface CampaignTabsProps {
-    activeTab: "overview" | "characters" | "notes" | "roster" | "locations" | "posts" | "calendar";
-    onTabChange: (tab: "overview" | "characters" | "notes" | "roster" | "locations" | "posts" | "calendar") => void;
+    activeTab: CampaignTabId;
+    onTabChange: (tab: CampaignTabId) => void;
     isGM: boolean;
+    pendingApprovalsCount?: number;
 }
 
-export default function CampaignTabs({ activeTab, onTabChange, isGM }: CampaignTabsProps) {
+export default function CampaignTabs({ activeTab, onTabChange, isGM, pendingApprovalsCount = 0 }: CampaignTabsProps) {
 
     const tabs = [
         { id: "overview" as const, label: "Overview" },
@@ -15,8 +18,8 @@ export default function CampaignTabs({ activeTab, onTabChange, isGM }: CampaignT
         { id: "characters" as const, label: "Characters" },
         { id: "locations" as const, label: "Locations" },
         { id: "notes" as const, label: "Notes" },
-
         ...(isGM ? [{ id: "roster" as const, label: "Roster" }] : []),
+        ...(isGM ? [{ id: "approvals" as const, label: "Approvals", badge: pendingApprovalsCount }] : []),
     ];
 
     return (
@@ -26,13 +29,18 @@ export default function CampaignTabs({ activeTab, onTabChange, isGM }: CampaignT
                     <button
                         key={tab.id}
                         onClick={() => onTabChange(tab.id)}
-                        className={`whitespace-nowrap border-b-2 py-4 px-1 text-sm font-medium transition-colors ${activeTab === tab.id
+                        className={`whitespace-nowrap border-b-2 py-4 px-1 text-sm font-medium transition-colors flex items-center gap-2 ${activeTab === tab.id
                             ? "border-indigo-500 text-indigo-600 dark:border-indigo-400 dark:text-indigo-400"
                             : "border-transparent text-zinc-500 hover:border-zinc-300 hover:text-zinc-700 dark:text-zinc-400 dark:hover:border-zinc-700 dark:hover:text-zinc-300"
                             }`}
                         aria-current={activeTab === tab.id ? "page" : undefined}
                     >
                         {tab.label}
+                        {"badge" in tab && tab.badge !== undefined && tab.badge > 0 && (
+                            <span className="inline-flex items-center justify-center rounded-full bg-red-500 text-white text-xs font-bold min-w-[1.25rem] h-5 px-1.5">
+                                {tab.badge > 99 ? "99+" : tab.badge}
+                            </span>
+                        )}
                     </button>
                 ))}
             </nav>
