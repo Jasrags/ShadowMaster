@@ -116,7 +116,7 @@ mindmap
 |---------------|---------|--------|--------------|
 | [Dice Roller](dice_roller_specification.md) | Dice pool rolling with glitch detection and Edge | **Implemented** | None |
 | [Gameplay Actions](gameplay_actions_specification.md) | Combat, magic, and matrix action resolution | **Planned** | RulesetSystem, DiceRoller |
-| [GM Approval UI](gm_approval_ui_implementation.md) | Frontend for GM advancement approval workflow | **Planned** | AdvancementSystem (backend complete) |
+| [GM Approval UI](gm_approval_ui_implementation.md) | Frontend for GM advancement approval workflow | **Implemented** | AdvancementSystem |
 
 ### User Interface
 
@@ -148,9 +148,9 @@ mindmap
 ```mermaid
 pie showData
     title Specification Status Distribution
-    "Implemented" : 8
+    "Implemented" : 9
     "Partial" : 5
-    "Planned" : 5
+    "Planned" : 4
     "Draft" : 1
 ```
 
@@ -164,13 +164,14 @@ pie showData
 - **Character Sheet**: Full viewing capabilities
 - **Locations**: Hierarchical location management with templates
 - **Ruleset Architecture**: Edition loading, book merging, module system
+- **GM Approval UI**: Campaign tab for GMs to approve/reject character advancements
 
 ### Partially Complete
 
 | Feature | What's Done | What Remains |
 |---------|-------------|--------------|
 | Character Creation | Priority wizard, 16 creation steps, draft auto-save | Validation engine, karma point-buy method |
-| Character Advancement | Attributes, skills, edge advancement; karma ledger; API complete | Spells, initiation; GM approval UI |
+| Character Advancement | Attributes, skills, edge advancement; karma ledger; API complete; GM approval UI | Spells, initiation |
 | Qualities | Core system, validation, karma accounting, effects engine, dynamic state, API | Quality selection UI, advancement UI, full effects catalog |
 | Campaign Support | Campaign CRUD, player roster, sessions, notes | Reward distribution UI, full advancement integration |
 | Cyberware/Bioware | Basic selection in GearStep | Enhanced essence tracking, grade selection UI |
@@ -184,9 +185,8 @@ pie showData
 
 ### Known Blockers
 
-1. **GM Approval UI**: Backend API complete, blocked on frontend implementation
-2. **Gameplay Actions**: Requires Encounter system as foundation
-3. **System Synchronization**: Draft status, needs architectural review
+1. **Gameplay Actions**: Requires Encounter system as foundation
+2. **System Synchronization**: Draft status, needs architectural review
 
 ---
 
