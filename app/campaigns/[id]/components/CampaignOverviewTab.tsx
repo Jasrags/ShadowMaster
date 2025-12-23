@@ -1,3 +1,4 @@
+import Image from "next/image";
 import type { Campaign, Book, CreationMethod } from "@/lib/types";
 import { BookOpen, Zap, Shield, Clock } from "lucide-react";
 import { CampaignActivityFeed } from "./CampaignActivityFeed";
@@ -40,10 +41,12 @@ export default function CampaignOverviewTab({
             {/* Hero Image Section */}
             {campaign.imageUrl && (
                 <div className="relative h-64 w-full overflow-hidden rounded-xl border border-zinc-200 shadow-lg dark:border-zinc-800">
-                    <img
+                    <Image
                         src={campaign.imageUrl}
                         alt={campaign.title}
-                        className="h-full w-full object-cover"
+                        fill
+                        className="object-cover"
+                        unoptimized
                         onError={(e) => (e.currentTarget.style.display = "none")}
                     />
                     <div className="absolute inset-x-0 bottom-0 bg-linear-to-t from-black/80 to-transparent p-6">
