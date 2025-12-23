@@ -7,8 +7,10 @@ import {
 } from "@/lib/storage/campaigns";
 import type {
     UpdateCampaignRequest,
-    CampaignResponse
+    CampaignResponse,
+    Campaign
 } from "@/lib/types";
+import type { CampaignAdvancementSettings } from "@/lib/types/campaign";
 
 /**
  * GET /api/campaigns/[id] - Get campaign details
@@ -131,8 +133,33 @@ export async function PUT(
             );
         }
 
+        if (body.advancementSettings) {
+            const settings = body.advancementSettings;
+            if (
+                (settings.attributeKarmaMultiplier !== undefined && settings.attributeKarmaMultiplier < 1) ||
+                (settings.skillKarmaMultiplier !== undefined && settings.skillKarmaMultiplier < 1) ||
+                (settings.skillGroupKarmaMultiplier !== undefined && settings.skillGroupKarmaMultiplier < 1)
+            ) {
+                return NextResponse.json(
+                    { success: false, error: "Karma multipliers must be at least 1" },
+                    { status: 400 }
+                );
+            }
+        }
+
+        // Merge advancement settings if present
+        const { advancementSettings, ...restBody } = body;
+        const updateData: Partial<Campaign> = { ...restBody };
+        
+        if (advancementSettings && campaign.advancementSettings) {
+            updateData.advancementSettings = {
+                ...campaign.advancementSettings,
+                ...advancementSettings
+            } as CampaignAdvancementSettings;
+        }
+
         // Update campaign
-        const updatedCampaign = await updateCampaign(id, body);
+        const updatedCampaign = await updateCampaign(id, updateData);
 
         return NextResponse.json({
             success: true,

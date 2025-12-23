@@ -24,6 +24,47 @@ export type GameplayLevel = "street" | "experienced" | "prime-runner";
 export type CampaignStatus = "active" | "paused" | "archived" | "completed";
 
 /**
+ * Configuration for character advancement in a campaign
+ */
+export interface CampaignAdvancementSettings {
+    /** Multiplier for training times (default: 1.0) */
+    trainingTimeMultiplier: number;
+    
+    /** Karma multiplier for attribute advancement (new rating x multiplier, default: 5) */
+    attributeKarmaMultiplier: number;
+    
+    /** Karma multiplier for active skill advancement (new rating x multiplier, default: 2) */
+    skillKarmaMultiplier: number;
+    
+    /** Karma multiplier for skill group advancement (new rating x multiplier, default: 5) */
+    skillGroupKarmaMultiplier: number;
+    
+    /** Karma multiplier for knowledge/language skill advancement (new rating x multiplier, default: 1) */
+    knowledgeSkillKarmaMultiplier: number;
+    
+    /** Fixed karma cost for specializations (default: 7) */
+    specializationKarmaCost: number;
+    
+    /** Fixed karma cost for spells/rituals (default: 5) */
+    spellKarmaCost: number;
+    
+    /** Fixed karma cost for complex forms (default: 4) */
+    complexFormKarmaCost: number;
+
+    /** Maximum rating for physical/mental attributes (default: 10) */
+    attributeRatingCap: number;
+
+    /** Maximum rating for active skills (default: 13) */
+    skillRatingCap: number;
+
+    /** Whether training time requirement is skipped (default: false) */
+    allowInstantAdvancement: boolean;
+
+    /** Whether GM approval is required for all advancements (default: true) */
+    requireApproval: boolean;
+}
+
+/**
  * A Shadowrun campaign managed by a GM
  */
 export interface Campaign {
@@ -63,6 +104,9 @@ export interface Campaign {
 
     /** House rules (freeform text or structured JSON) */
     houseRules?: string | Record<string, unknown>;
+
+    /** Advancement and training rules for this campaign */
+    advancementSettings: CampaignAdvancementSettings;
 
     // -------------------------------------------------------------------------
     // Roster & Access
@@ -264,6 +308,7 @@ export interface CreateCampaignRequest {
     startDate?: ISODateString;
     endDate?: ISODateString;
     tags?: string[];
+    advancementSettings?: Partial<CampaignAdvancementSettings>;
 }
 
 /**
@@ -284,6 +329,7 @@ export interface UpdateCampaignRequest {
     startDate?: ISODateString;
     endDate?: ISODateString;
     tags?: string[];
+    advancementSettings?: Partial<CampaignAdvancementSettings>;
 }
 
 /**

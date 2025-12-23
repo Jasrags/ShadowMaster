@@ -5,6 +5,7 @@
  */
 
 import type { Character, MergedRuleset, AdvancementType, CampaignEvent } from "@/lib/types";
+import type { CampaignAdvancementSettings } from "@/lib/types/campaign";
 import { calculateAdvancementCost } from "./costs";
 import { validateDowntimeLimits } from "./downtime";
 
@@ -83,14 +84,21 @@ function getMetatypeAttributeLimits(
 export function getAttributeMaximum(
   character: Character,
   attributeId: string,
-  ruleset: MergedRuleset
+  ruleset: MergedRuleset,
+  settings?: CampaignAdvancementSettings
 ): number {
   const limits = getMetatypeAttributeLimits(character.metatype, ruleset);
-  if (!limits || !limits[attributeId]) {
-    // Default to 6 if no limits found
-    return 6;
+  let max = 6;
+  if (limits && limits[attributeId]) {
+    max = limits[attributeId].max;
   }
-  return limits[attributeId].max;
+
+  // Apply campaign-specific cap if defined
+  if (settings?.attributeRatingCap !== undefined) {
+    max = Math.min(max, settings.attributeRatingCap);
+  }
+
+  return max;
 }
 
 /**
@@ -109,8 +117,11 @@ export function validateAttributeAdvancement(
   attributeId: string,
   newRating: number,
   ruleset: MergedRuleset,
-  downtimePeriodId?: string,
-  campaignEvents?: CampaignEvent[]
+  options: {
+    downtimePeriodId?: string,
+    campaignEvents?: CampaignEvent[],
+    settings?: CampaignAdvancementSettings
+  } = {}
 ): AdvancementValidationResult {
   const errors: Array<{ message: string; field?: string }> = [];
 
@@ -126,7 +137,7 @@ export function validateAttributeAdvancement(
   }
 
   // Validate rating is within metatype limits
-  const maxRating = getAttributeMaximum(character, attributeId, ruleset);
+  const maxRating = getAttributeMaximum(character, attributeId, ruleset, options.settings);
   if (newRating > maxRating) {
     errors.push({
       message: `Rating ${newRating} exceeds maximum for this metatype (${maxRating})`,
@@ -143,10 +154,10 @@ export function validateAttributeAdvancement(
   }
 
   // Validate downtime limits if downtime period is provided
-  if (downtimePeriodId && campaignEvents) {
+  if (options.downtimePeriodId && options.campaignEvents) {
     const downtimeLimitCheck = validateDowntimeLimits(
       character,
-      downtimePeriodId,
+      options.downtimePeriodId,
       "attribute"
     );
     if (!downtimeLimitCheck.valid) {
@@ -158,7 +169,7 @@ export function validateAttributeAdvancement(
   }
 
   // Calculate cost and validate karma
-  const cost = calculateAdvancementCost("attribute", newRating);
+  const cost = calculateAdvancementCost("attribute", newRating, options.settings);
   const karmaCheck = validateKarmaAvailability(character, cost);
   if (!karmaCheck.valid) {
     errors.push({
@@ -188,7 +199,8 @@ export function validateAttributeAdvancement(
 export function getSkillMaximum(
   character: Character,
   skillId: string,
-  _ruleset: MergedRuleset
+  _ruleset: MergedRuleset,
+  settings?: CampaignAdvancementSettings
 ): number {
   void _ruleset; // Parameter kept for interface compatibility
   // Check if character has Aptitude quality for this skill
@@ -207,7 +219,14 @@ export function getSkillMaximum(
   });
 
   // During advancement (post-creation), max is 12 (13 with Aptitude)
-  return hasAptitude ? 13 : 12;
+  let max = hasAptitude ? 13 : 12;
+
+  // Apply campaign-specific cap if defined
+  if (settings?.skillRatingCap !== undefined) {
+    max = Math.min(max, settings.skillRatingCap);
+  }
+
+  return max;
 }
 
 /**
@@ -226,8 +245,11 @@ export function validateSkillAdvancement(
   skillId: string,
   newRating: number,
   ruleset: MergedRuleset,
-  downtimePeriodId?: string,
-  campaignEvents?: CampaignEvent[]
+  options: {
+    downtimePeriodId?: string,
+    campaignEvents?: CampaignEvent[],
+    settings?: CampaignAdvancementSettings
+  } = {}
 ): AdvancementValidationResult {
   const errors: Array<{ message: string; field?: string }> = [];
 
@@ -243,7 +265,7 @@ export function validateSkillAdvancement(
   }
 
   // Validate rating is within maximum limits
-  const maxRating = getSkillMaximum(character, skillId, ruleset);
+  const maxRating = getSkillMaximum(character, skillId, ruleset, options.settings);
   if (newRating > maxRating) {
     errors.push({
       message: `Rating ${newRating} exceeds maximum for skills (${maxRating})`,
@@ -260,10 +282,10 @@ export function validateSkillAdvancement(
   }
 
   // Validate downtime limits if downtime period is provided
-  if (downtimePeriodId && campaignEvents) {
+  if (options.downtimePeriodId && options.campaignEvents) {
     const downtimeLimitCheck = validateDowntimeLimits(
       character,
-      downtimePeriodId,
+      options.downtimePeriodId,
       "skill"
     );
     if (!downtimeLimitCheck.valid) {
@@ -275,7 +297,7 @@ export function validateSkillAdvancement(
   }
 
   // Calculate cost and validate karma
-  const cost = calculateAdvancementCost("skill", newRating);
+  const cost = calculateAdvancementCost("skill", newRating, options.settings);
   const karmaCheck = validateKarmaAvailability(character, cost);
   if (!karmaCheck.valid) {
     errors.push({
@@ -302,7 +324,8 @@ export function validateSkillAdvancement(
 export function validateSpecializationAdvancement(
   character: Character,
   skillId: string,
-  _ruleset: MergedRuleset
+  _ruleset: MergedRuleset,
+  settings?: CampaignAdvancementSettings
 ): AdvancementValidationResult {
   void _ruleset; // Parameter kept for interface compatibility
   const errors: Array<{ message: string; field?: string }> = [];
@@ -319,7 +342,7 @@ export function validateSpecializationAdvancement(
   }
 
   // Calculate cost and validate karma
-  const cost = calculateAdvancementCost("specialization");
+  const cost = calculateAdvancementCost("specialization", undefined, settings);
   const karmaCheck = validateKarmaAvailability(character, cost);
   if (!karmaCheck.valid) {
     errors.push({

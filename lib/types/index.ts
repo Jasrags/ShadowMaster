@@ -215,6 +215,8 @@ export type {
   SessionRewardData,
 } from "./campaign";
 
+export type { CampaignAdvancementSettings } from "./campaign";
+
 // Location types
 export type {
   LocationType,

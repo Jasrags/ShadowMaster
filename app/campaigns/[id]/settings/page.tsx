@@ -3,7 +3,9 @@
 import { useState, useEffect, use } from "react";
 import { useRouter } from "next/navigation";
 import type { Campaign, Book, CreationMethod, GameplayLevel, CampaignVisibility, CampaignStatus } from "@/lib/types";
+import type { CampaignAdvancementSettings } from "@/lib/types/campaign";
 import { ArrowLeft, Loader2, Save, AlertTriangle, Trash2, Archive, Download, LayoutTemplate, Tag } from "lucide-react";
+import AdvancementSettingsForm from "./components/AdvancementSettingsForm";
 
 interface SettingsPageProps {
     params: Promise<{ id: string }>;
@@ -51,6 +53,7 @@ export default function CampaignSettingsPage({ params }: SettingsPageProps) {
     const [endDate, setEndDate] = useState("");
     const [tags, setTags] = useState<string[]>([]);
     const [tagInput, setTagInput] = useState("");
+    const [advancementSettings, setAdvancementSettings] = useState<CampaignAdvancementSettings | null>(null);
 
     // Template state
     const [showTemplateDialog, setShowTemplateDialog] = useState(false);
@@ -95,6 +98,9 @@ export default function CampaignSettingsPage({ params }: SettingsPageProps) {
                 setStartDate(c.startDate ? c.startDate.split("T")[0] : "");
                 setEndDate(c.endDate ? c.endDate.split("T")[0] : "");
                 setTags(c.tags || []);
+                if (c.advancementSettings) {
+                    setAdvancementSettings(c.advancementSettings);
+                }
 
                 // Fetch edition data
                 const editionRes = await fetch(`/api/editions/${c.editionCode}`);
@@ -135,6 +141,7 @@ export default function CampaignSettingsPage({ params }: SettingsPageProps) {
                     startDate: startDate ? new Date(startDate).toISOString() : undefined,
                     endDate: endDate ? new Date(endDate).toISOString() : undefined,
                     tags: tags.length > 0 ? tags : undefined,
+                    advancementSettings: advancementSettings || undefined,
                 }),
             });
 
@@ -463,6 +470,19 @@ export default function CampaignSettingsPage({ params }: SettingsPageProps) {
                         </div>
                     </div>
                 </section>
+
+                {/* Advancement Settings */}
+                {advancementSettings && (
+                    <section className="rounded-lg border border-zinc-200 bg-white p-6 dark:border-zinc-800 dark:bg-black">
+                        <h2 className="mb-4 text-lg font-semibold text-zinc-900 dark:text-zinc-50">
+                            Advancement Settings
+                        </h2>
+                        <AdvancementSettingsForm
+                            settings={advancementSettings}
+                            onChange={setAdvancementSettings}
+                        />
+                    </section>
+                )}
 
 
 
