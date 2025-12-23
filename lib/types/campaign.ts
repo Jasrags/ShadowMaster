@@ -183,14 +183,35 @@ export interface CampaignSession {
     durationMinutes?: number;
     /** Session status */
     status: "scheduled" | "completed" | "cancelled";
-    /** Players who attended/will attend */
+    /** Users (players) who attended/will attend */
     attendeeIds: ID[];
-    /** Session notes (GM-only) */
+    /** Characters that participated (for reward distribution) */
+    participantCharacterIds?: ID[];
+    /** Session recap/summary (visible to all) */
+    recap?: string;
+    /** Internal GM-only session notes */
+    gmSessionNotes?: string;
+    /** Public session notes/recap (Legacy: use recap instead) */
     notes?: string;
-    /** Karma awarded this session */
+    /** Whether rewards have been distributed for this session */
+    rewardsDistributed?: boolean;
+    /** Karma awarded this session per participant */
     karmaAwarded?: number;
+    /** Nuyen awarded this session per participant */
+    nuyenAwarded?: number;
     createdAt: ISODateString;
     updatedAt: ISODateString;
+}
+
+/**
+ * Data for distributing session rewards
+ */
+export interface SessionRewardData {
+    participantCharacterIds: ID[];
+    karmaAward: number;
+    nuyenAward: number;
+    recap?: string;
+    distributeRewards: boolean;
 }
 
 /**

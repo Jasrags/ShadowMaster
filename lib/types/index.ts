@@ -212,6 +212,7 @@ export type {
   CampaignPost,
   CampaignEvent,
   CampaignTemplate,
+  SessionRewardData,
 } from "./campaign";
 
 // Location types
