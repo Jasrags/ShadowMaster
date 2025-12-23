@@ -286,6 +286,96 @@ export interface CampaignEvent {
     updatedAt: ISODateString;
 }
 
+/**
+ * Activity types for the campaign feed
+ */
+export type CampaignActivityType =
+    | "player_joined"
+    | "player_left"
+    | "character_created"
+    | "character_approved"
+    | "character_rejected"
+    | "character_retired"
+    | "session_scheduled"
+    | "session_completed"
+    | "karma_awarded"
+    | "advancement_approved"
+    | "advancement_rejected"
+    | "post_created"
+    | "campaign_updated"
+    | "location_added";
+
+/**
+ * Campaign activity feed entry
+ */
+export interface CampaignActivityEvent {
+    id: ID;
+    campaignId: ID;
+    type: CampaignActivityType;
+
+    /** User who triggered the activity */
+    actorId: ID;
+
+    /** Target of the activity (character, player, session, etc.) */
+    targetId?: ID;
+    targetType?: "character" | "player" | "session" | "post" | "location" | "campaign";
+    targetName?: string;
+
+    /** Human-readable description */
+    description: string;
+
+    /** Additional metadata */
+    metadata?: Record<string, unknown>;
+
+    timestamp: ISODateString;
+}
+
+/**
+ * Notification types
+ */
+export type NotificationType =
+    | "campaign_invite"
+    | "campaign_join_request"
+    | "session_reminder"
+    | "session_cancelled"
+    | "character_approval_requested"
+    | "character_approved"
+    | "character_rejected"
+    | "advancement_approval_requested"
+    | "advancement_approved"
+    | "advancement_rejected"
+    | "karma_awarded"
+    | "post_created"
+    | "mentioned";
+
+/**
+ * User notification
+ */
+export interface CampaignNotification {
+    id: ID;
+    userId: ID;
+    campaignId: ID;
+    type: NotificationType;
+
+    /** Notification title */
+    title: string;
+
+    /** Notification message */
+    message: string;
+
+    /** Link to relevant page */
+    actionUrl?: string;
+
+    /** Whether the notification has been read */
+    read: boolean;
+
+    /** Whether the notification has been dismissed */
+    dismissed: boolean;
+
+    createdAt: ISODateString;
+    readAt?: ISODateString;
+}
+
 // -----------------------------------------------------------------------------
 // API Request/Response Types
 // -----------------------------------------------------------------------------

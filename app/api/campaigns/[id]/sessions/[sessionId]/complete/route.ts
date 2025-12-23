@@ -90,6 +90,52 @@ export async function PUT(
             sessions: updatedSessions,
         });
 
+        // Log activity and notify participants asynchronously
+        try {
+            const { logActivity } = await import("@/lib/storage/activity");
+            const { createNotification } = await import("@/lib/storage/notifications");
+            
+            // Log session completion
+            await logActivity({
+                campaignId,
+                type: "session_completed",
+                actorId: userId,
+                targetId: sessionId,
+                targetType: "session",
+                targetName: updatedSession.title,
+                description: `Session "${updatedSession.title}" was completed.`,
+            });
+
+            if (distributeRewards && (karmaAward > 0 || nuyenAward > 0)) {
+                await logActivity({
+                    campaignId,
+                    type: "karma_awarded",
+                    actorId: userId,
+                    targetId: sessionId,
+                    targetType: "session",
+                    targetName: updatedSession.title,
+                    description: `Rewards distributed for session "${updatedSession.title}": ${karmaAward} Karma, ${nuyenAward}¥.`,
+                });
+
+                // Notify all participants
+                for (const charId of participantCharacterIds) {
+                    const character = await getCharacterById(charId);
+                    if (character) {
+                        await createNotification({
+                            userId: character.ownerId,
+                            campaignId,
+                            type: "karma_awarded",
+                            title: "Session Rewards Distributed",
+                            message: `You received ${karmaAward} Karma and ${nuyenAward}¥ for your participation in "${updatedSession.title}" with ${character.name}.`,
+                            actionUrl: `/characters/${character.id}`,
+                        });
+                    }
+                }
+            }
+        } catch (activityError) {
+            console.error("Failed to log session rewards activity:", activityError);
+        }
+
         return NextResponse.json({
             success: true,
             campaign: updatedCampaign,

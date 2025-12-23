@@ -6,6 +6,7 @@
 
 import { v4 as uuidv4 } from "uuid";
 import type { Character, MergedRuleset, AdvancementRecord, TrainingPeriod, CampaignEvent } from "@/lib/types";
+import type { CampaignAdvancementSettings } from "@/lib/types/campaign";
 import { calculateAdvancementTrainingTime } from "./training";
 import { validateSkillAdvancement } from "./validation";
 
@@ -20,6 +21,7 @@ export interface AdvanceSkillOptions {
   timeModifier?: number; // Percentage modifier (e.g., +50 for Dependents quality)
   notes?: string;
   campaignEvents?: CampaignEvent[]; // For downtime limit validation
+  settings?: CampaignAdvancementSettings;
 }
 
 /**
@@ -86,8 +88,11 @@ export function advanceSkill(
     skillId,
     newRating,
     ruleset,
-    options.downtimePeriodId,
-    options.campaignEvents
+    {
+      downtimePeriodId: options.downtimePeriodId,
+      campaignEvents: options.campaignEvents,
+      settings: options.settings
+    }
   );
   if (!validation.valid) {
     throw new Error(

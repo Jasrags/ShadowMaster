@@ -161,6 +161,23 @@ export async function PUT(
         // Update campaign
         const updatedCampaign = await updateCampaign(id, updateData);
 
+        // Log activity asynchronously
+        try {
+            const { logActivity } = await import("@/lib/storage/activity");
+            
+            await logActivity({
+                campaignId: id,
+                type: "campaign_updated",
+                actorId: userId,
+                targetId: id,
+                targetType: "campaign",
+                targetName: updatedCampaign.title,
+                description: `Campaign settings were updated by the GM.`,
+            });
+        } catch (activityError) {
+            console.error("Failed to log campaign update activity:", activityError);
+        }
+
         return NextResponse.json({
             success: true,
             campaign: updatedCampaign,

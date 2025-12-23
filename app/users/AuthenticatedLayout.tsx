@@ -3,6 +3,7 @@
 import { Link, Button, Menu, MenuTrigger, MenuItem, Popover } from "react-aria-components";
 import { useAuth } from "@/lib/auth/AuthProvider";
 import { useState, useEffect } from "react";
+import { NotificationBell } from "@/components/NotificationBell";
 
 interface AuthenticatedLayoutProps {
   children: React.ReactNode;
@@ -115,14 +116,7 @@ export default function AuthenticatedLayout({ children, currentPath = "/" }: Aut
           </div>
           <div className="flex items-center gap-3">
             {/* Notifications */}
-            <Button
-              className="flex h-10 w-10 items-center justify-center rounded-md text-zinc-600 transition-colors hover:bg-zinc-100 focus:outline-none focus:ring-2 focus:ring-zinc-500 focus:ring-offset-2 dark:text-zinc-400 dark:hover:bg-zinc-900 dark:focus:ring-zinc-400"
-              aria-label="Notifications"
-            >
-              <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" />
-              </svg>
-            </Button>
+            <NotificationBell />
             {/* Settings */}
             <Button
               className="flex h-10 w-10 items-center justify-center rounded-md text-zinc-600 transition-colors hover:bg-zinc-100 focus:outline-none focus:ring-2 focus:ring-zinc-500 focus:ring-offset-2 dark:text-zinc-400 dark:hover:bg-zinc-900 dark:focus:ring-zinc-400"
@@ -218,7 +212,7 @@ export default function AuthenticatedLayout({ children, currentPath = "/" }: Aut
                         }`}
                       title={isCollapsed ? item.label : "Coming soon"}
                     >
-                      <Icon className="h-5 w-5 flex-shrink-0" />
+                      <Icon className="h-5 w-5 shrink-0" />
                       {!isCollapsed && (
                         <>
                           <span className="truncate">{item.label}</span>
@@ -241,7 +235,7 @@ export default function AuthenticatedLayout({ children, currentPath = "/" }: Aut
                         : "text-zinc-600 hover:bg-zinc-100 hover:text-black dark:text-zinc-400 dark:hover:bg-zinc-900 dark:hover:text-zinc-50"
                       }`}
                   >
-                    <Icon className="h-5 w-5 flex-shrink-0" />
+                    <Icon className="h-5 w-5 shrink-0" />
                     {!isCollapsed && (
                       <>
                         <span className="truncate">{item.label}</span>

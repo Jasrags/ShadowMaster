@@ -6,7 +6,8 @@
  */
 
 import { v4 as uuidv4 } from "uuid";
-import type { Character, MergedRuleset, AdvancementRecord, CampaignEvent } from "@/lib/types";
+import type { Character, MergedRuleset, AdvancementRecord } from "@/lib/types";
+import type { CampaignAdvancementSettings } from "@/lib/types/campaign";
 import { calculateEdgeCost } from "./costs";
 
 /**
@@ -16,6 +17,7 @@ export interface AdvanceEdgeOptions {
   campaignSessionId?: string;
   gmApproved?: boolean;
   notes?: string;
+  settings?: CampaignAdvancementSettings;
 }
 
 /**
@@ -31,11 +33,13 @@ export interface AdvanceEdgeResult {
  *
  * @param character - Character to validate
  * @param newRating - Target Edge rating
+ * @param settings - Campaign advancement settings
  * @returns Validation result
  */
 function validateEdgeAdvancement(
   character: Character,
-  newRating: number
+  newRating: number,
+  settings?: CampaignAdvancementSettings
 ): { valid: boolean; errors: Array<{ message: string; field?: string }>; cost?: number } {
   const errors: Array<{ message: string; field?: string }> = [];
   const currentRating = character.specialAttributes?.edge || 0;
@@ -69,7 +73,7 @@ function validateEdgeAdvancement(
   // Calculate cost and validate karma
   let cost: number | undefined;
   try {
-    cost = calculateEdgeCost(newRating);
+    cost = calculateEdgeCost(newRating, settings);
     if (character.karmaCurrent < cost) {
       errors.push({
         message: `Not enough karma. Need ${cost}, have ${character.karmaCurrent}`,
@@ -114,7 +118,7 @@ export function advanceEdge(
   void ruleset; // Reserved for future ruleset-based validation
 
   // Validate advancement
-  const validation = validateEdgeAdvancement(character, newRating);
+  const validation = validateEdgeAdvancement(character, newRating, options.settings);
   if (!validation.valid) {
     throw new Error(
       `Cannot advance Edge: ${validation.errors.map((e) => e.message).join(", ")}`

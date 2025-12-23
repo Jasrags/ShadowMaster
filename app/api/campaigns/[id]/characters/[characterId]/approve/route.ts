@@ -74,6 +74,54 @@ export async function POST(
             approvalFeedback: feedback || undefined,
         });
 
+        // Log activity and notify player asynchronously
+        try {
+            const { logActivity } = await import("@/lib/storage/activity");
+            const { createNotification } = await import("@/lib/storage/notifications");
+            
+            if (action === "approve") {
+                await logActivity({
+                    campaignId: id,
+                    type: "character_approved",
+                    actorId: userId,
+                    targetId: characterId,
+                    targetType: "character",
+                    targetName: character.name,
+                    description: `Character "${character.name}" was approved for the campaign.`,
+                });
+                
+                await createNotification({
+                    userId: character.ownerId,
+                    campaignId: id,
+                    type: "character_approved",
+                    title: "Character Approved",
+                    message: `Your character "${character.name}" has been approved for "${campaign.title}".`,
+                    actionUrl: `/characters/${characterId}`,
+                });
+            } else {
+                await logActivity({
+                    campaignId: id,
+                    type: "character_rejected",
+                    actorId: userId,
+                    targetId: characterId,
+                    targetType: "character",
+                    targetName: character.name,
+                    description: `Character "${character.name}" was not approved for the campaign.`,
+                });
+
+                await createNotification({
+                    userId: character.ownerId,
+                    campaignId: id,
+                    type: "character_rejected",
+                    title: "Character Rejected",
+                    message: `Your character "${character.name}" was not approved for "${campaign.title}". Feedback: ${feedback || "No feedback provided."}`,
+                    actionUrl: `/characters/${characterId}`,
+                });
+            }
+        } catch (activityError) {
+            console.error("Failed to log character approval activity:", activityError);
+        }
+
         return NextResponse.json({
             success: true,
             character: updatedCharacter,

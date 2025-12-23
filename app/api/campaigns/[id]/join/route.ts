@@ -82,6 +82,38 @@ export async function POST(
         // Add player to campaign
         const updatedCampaign = await addPlayerToCampaign(campaign.id, userId);
 
+        // Log activity and notify GM asynchronously (don't block response)
+        try {
+            const { getUserById } = await import("@/lib/storage/users");
+            const { logActivity } = await import("@/lib/storage/activity");
+            const { createNotification } = await import("@/lib/storage/notifications");
+            
+            const user = await getUserById(userId);
+            
+            // Log to campaign feed
+            await logActivity({
+                campaignId: campaign.id,
+                type: "player_joined",
+                actorId: userId,
+                targetId: userId,
+                targetType: "player",
+                targetName: user?.username || "A player",
+                description: `${user?.username || "A player"} joined the campaign.`,
+            });
+
+            // Notify GM
+            await createNotification({
+                userId: campaign.gmId,
+                campaignId: campaign.id,
+                type: "mentioned", // Using mentioned as a placeholder for join alert if specific type not handled in UI yet
+                title: "New Player",
+                message: `${user?.username || "A player"} has joined your campaign "${campaign.title}".`,
+                actionUrl: `/campaigns/${campaign.id}?tab=roster`,
+            });
+        } catch (activityError) {
+            console.error("Failed to log join activity:", activityError);
+        }
+
         return NextResponse.json({
             success: true,
             campaign: updatedCampaign,

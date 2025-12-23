@@ -1,5 +1,6 @@
 import type { Campaign, Book, CreationMethod } from "@/lib/types";
-import { BookOpen, Zap, Shield } from "lucide-react";
+import { BookOpen, Zap, Shield, Clock } from "lucide-react";
+import { CampaignActivityFeed } from "./CampaignActivityFeed";
 
 interface CampaignOverviewTabProps {
     campaign: Campaign;
@@ -29,121 +30,136 @@ export default function CampaignOverviewTab({ campaign, books, creationMethods }
     const levelInfo = gameplayLevelDetails[campaign.gameplayLevel];
 
     return (
-        <div className="space-y-6">
-            {/* Description */}
-            {campaign.description && (
-                <section>
-                    <h3 className="mb-2 text-sm font-medium text-zinc-500 dark:text-zinc-400">
-                        About this Campaign
-                    </h3>
-                    <p className="text-zinc-700 dark:text-zinc-300">{campaign.description}</p>
-                </section>
-            )}
-
-            {/* Ruleset Summary */}
-            <section className="rounded-lg border border-zinc-200 bg-zinc-50 p-4 dark:border-zinc-800 dark:bg-zinc-900">
-                <h3 className="mb-4 flex items-center gap-2 text-lg font-semibold text-zinc-900 dark:text-zinc-50">
-                    <Shield className="h-5 w-5 text-indigo-500" />
-                    Ruleset Configuration
-                </h3>
-                <div className="grid gap-4 sm:grid-cols-2">
-                    {/* Edition */}
-                    <div>
-                        <p className="text-sm font-medium text-zinc-500 dark:text-zinc-400">Edition</p>
-                        <p className="text-lg font-semibold text-zinc-900 dark:text-zinc-50">
-                            {campaign.editionCode.toUpperCase()}
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+            {/* Left Column: Details & Rules */}
+            <div className="lg:col-span-2 space-y-8">
+                {/* Description */}
+                {campaign.description && (
+                    <section>
+                        <h3 className="mb-2 text-sm font-medium text-zinc-500 dark:text-zinc-400 uppercase tracking-wider">
+                            About this Campaign
+                        </h3>
+                        <p className="text-zinc-700 dark:text-zinc-300 leading-relaxed text-lg italic border-l-4 border-indigo-500 pl-4">
+                            {campaign.description}
                         </p>
-                    </div>
-                    {/* Gameplay Level */}
-                    <div>
-                        <p className="text-sm font-medium text-zinc-500 dark:text-zinc-400">Gameplay Level</p>
-                        <div className="flex items-center gap-2">
-                            <span className="text-2xl">{levelInfo.icon}</span>
-                            <div>
-                                <p className="font-semibold text-zinc-900 dark:text-zinc-50">{levelInfo.label}</p>
-                                <p className="text-xs text-zinc-500 dark:text-zinc-400">{levelInfo.description}</p>
+                    </section>
+                )}
+
+                {/* Ruleset Summary */}
+                <section className="rounded-xl border border-zinc-200 bg-zinc-50/50 p-6 dark:border-zinc-800 dark:bg-zinc-900/50 backdrop-blur-sm">
+                    <h3 className="mb-6 flex items-center gap-2 text-lg font-bold text-zinc-900 dark:text-zinc-50 underline decoration-indigo-500/30 underline-offset-8">
+                        <Shield className="h-5 w-5 text-indigo-500" />
+                        Campaign Ruleset
+                    </h3>
+                    <div className="grid gap-6 sm:grid-cols-2">
+                        {/* Edition */}
+                        <div className="p-4 rounded-lg bg-white dark:bg-black border border-zinc-200 dark:border-zinc-800 shadow-sm">
+                            <p className="text-xs font-bold text-zinc-400 dark:text-zinc-500 uppercase tracking-widest mb-1">Edition</p>
+                            <p className="text-2xl font-black text-transparent bg-clip-text bg-linear-to-r from-indigo-500 to-purple-500">
+                                {campaign.editionCode.toUpperCase()}
+                            </p>
+                        </div>
+                        {/* Gameplay Level */}
+                        <div className="p-4 rounded-lg bg-white dark:bg-black border border-zinc-200 dark:border-zinc-800 shadow-sm">
+                            <p className="text-xs font-bold text-zinc-400 dark:text-zinc-500 uppercase tracking-widest mb-1">Gameplay Level</p>
+                            <div className="flex items-center gap-3">
+                                <span className="text-3xl">{levelInfo.icon}</span>
+                                <div>
+                                    <p className="font-bold text-zinc-900 dark:text-zinc-50">{levelInfo.label}</p>
+                                    <p className="text-xs text-zinc-500 dark:text-zinc-400 font-medium">{levelInfo.description}</p>
+                                </div>
                             </div>
                         </div>
                     </div>
-                </div>
-            </section>
+                </section>
 
-            {/* Enabled Books */}
-            <section>
-                <h3 className="mb-3 flex items-center gap-2 text-lg font-semibold text-zinc-900 dark:text-zinc-50">
-                    <BookOpen className="h-5 w-5 text-indigo-500" />
-                    Enabled Books ({books.length})
-                </h3>
-                {books.length > 0 ? (
-                    <div className="grid gap-2 sm:grid-cols-2">
-                        {books.map((book) => (
-                            <div
-                                key={book.id}
-                                className="flex items-center gap-2 rounded-md border border-zinc-200 bg-white p-3 dark:border-zinc-800 dark:bg-black"
-                            >
-                                <BookOpen className="h-4 w-4 flex-shrink-0 text-zinc-400" />
-                                <span className="text-sm text-zinc-700 dark:text-zinc-300">{book.title}</span>
-                                {book.isCore && (
-                                    <span className="ml-auto rounded bg-indigo-100 px-1.5 py-0.5 text-xs font-medium text-indigo-700 dark:bg-indigo-900/30 dark:text-indigo-400">
-                                        Core
-                                    </span>
-                                )}
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mt-8">
+                    {/* Enabled Books */}
+                    <section>
+                        <h3 className="mb-4 flex items-center gap-2 text-lg font-bold text-zinc-900 dark:text-zinc-50 underline decoration-indigo-500/30 underline-offset-8">
+                            <BookOpen className="h-5 w-5 text-indigo-500" />
+                            Sourcebooks ({books.length})
+                        </h3>
+                        {books.length > 0 ? (
+                            <div className="space-y-2 max-h-60 overflow-y-auto pr-2 custom-scrollbar">
+                                {books.map((book) => (
+                                    <div
+                                        key={book.id}
+                                        className="flex items-center gap-3 rounded-lg border border-zinc-200 bg-white p-3 dark:border-zinc-800 dark:bg-black hover:border-indigo-500/50 transition-colors shadow-sm"
+                                    >
+                                        <BookOpen className="h-4 w-4 shrink-0 text-zinc-400" />
+                                        <span className="text-sm font-medium text-zinc-700 dark:text-zinc-300">{book.title}</span>
+                                        {book.isCore && (
+                                            <span className="ml-auto rounded-full bg-indigo-100 px-2 py-0.5 text-[10px] font-black uppercase text-indigo-700 dark:bg-indigo-900/30 dark:text-indigo-400">
+                                                Core
+                                            </span>
+                                        )}
+                                    </div>
+                                ))}
                             </div>
-                        ))}
-                    </div>
-                ) : (
-                    <p className="text-sm text-zinc-500">No books enabled.</p>
-                )}
-            </section>
+                        ) : (
+                            <p className="text-sm text-zinc-500 italic">No books enabled.</p>
+                        )}
+                    </section>
 
-            {/* Creation Methods */}
-            <section>
-                <h3 className="mb-3 flex items-center gap-2 text-lg font-semibold text-zinc-900 dark:text-zinc-50">
-                    <Zap className="h-5 w-5 text-indigo-500" />
-                    Allowed Creation Methods ({creationMethods.length})
-                </h3>
-                {creationMethods.length > 0 ? (
-                    <div className="space-y-2">
-                        {creationMethods.map((method) => (
-                            <div
-                                key={method.id}
-                                className="rounded-md border border-zinc-200 bg-white p-3 dark:border-zinc-800 dark:bg-black"
-                            >
-                                <p className="font-medium text-zinc-900 dark:text-zinc-50">{method.name}</p>
-                                {method.description && (
-                                    <p className="mt-1 text-xs text-zinc-500 dark:text-zinc-400">
-                                        {method.description}
-                                    </p>
-                                )}
+                    {/* Creation Methods */}
+                    <section>
+                        <h3 className="mb-4 flex items-center gap-2 text-lg font-bold text-zinc-900 dark:text-zinc-50 underline decoration-indigo-500/30 underline-offset-8">
+                            <Zap className="h-5 w-5 text-indigo-500" />
+                            Creation Rules ({creationMethods.length})
+                        </h3>
+                        {creationMethods.length > 0 ? (
+                            <div className="space-y-3">
+                                {creationMethods.map((method) => (
+                                    <div
+                                        key={method.id}
+                                        className="rounded-lg border border-zinc-200 bg-white p-4 dark:border-zinc-800 dark:bg-black shadow-sm"
+                                    >
+                                        <p className="font-bold text-zinc-900 dark:text-zinc-50">{method.name}</p>
+                                        {method.description && (
+                                            <p className="mt-1 text-xs text-zinc-500 dark:text-zinc-400 leading-relaxed font-medium">
+                                                {method.description}
+                                            </p>
+                                        )}
+                                    </div>
+                                ))}
                             </div>
-                        ))}
-                    </div>
-                ) : (
-                    <p className="text-sm text-zinc-500">No creation methods specified.</p>
-                )}
-            </section>
+                        ) : (
+                            <p className="text-sm text-zinc-500 italic">No creation methods specified.</p>
+                        )}
+                    </section>
+                </div>
+            </div>
 
-            {/* Campaign Stats */}
-            <section className="grid gap-4 sm:grid-cols-3">
-                <div className="rounded-md border border-zinc-200 bg-white p-4 text-center dark:border-zinc-800 dark:bg-black">
-                    <p className="text-2xl font-bold text-zinc-900 dark:text-zinc-50">
-                        {campaign.playerIds.length}
-                    </p>
-                    <p className="text-sm text-zinc-500 dark:text-zinc-400">Players</p>
-                </div>
-                <div className="rounded-md border border-zinc-200 bg-white p-4 text-center dark:border-zinc-800 dark:bg-black">
-                    <p className="text-2xl font-bold text-zinc-900 dark:text-zinc-50">
-                        {campaign.maxPlayers ?? "∞"}
-                    </p>
-                    <p className="text-sm text-zinc-500 dark:text-zinc-400">Max Players</p>
-                </div>
-                <div className="rounded-md border border-zinc-200 bg-white p-4 text-center dark:border-zinc-800 dark:bg-black">
-                    <p className="text-2xl font-bold capitalize text-zinc-900 dark:text-zinc-50">
-                        {campaign.visibility}
-                    </p>
-                    <p className="text-sm text-zinc-500 dark:text-zinc-400">Visibility</p>
-                </div>
-            </section>
+            {/* Right Column: Activity & Stats */}
+            <div className="space-y-8">
+                {/* Campaign Stats */}
+                <section className="grid grid-cols-2 gap-4">
+                    <div className="rounded-xl border border-zinc-200 bg-white p-4 text-center dark:border-zinc-800 dark:bg-black shadow-sm group hover:border-indigo-500/50 transition-colors">
+                        <p className="text-3xl font-black text-zinc-900 dark:text-zinc-50 group-hover:text-indigo-500 transition-colors">
+                            {campaign.playerIds.length}
+                        </p>
+                        <p className="text-xs font-bold text-zinc-400 dark:text-zinc-500 uppercase tracking-widest">Players</p>
+                    </div>
+                    <div className="rounded-xl border border-zinc-200 bg-white p-4 text-center dark:border-zinc-800 dark:bg-black shadow-sm group hover:border-indigo-500/50 transition-colors">
+                        <p className="text-3xl font-black text-zinc-900 dark:text-zinc-50 group-hover:text-indigo-500 transition-colors">
+                            {campaign.maxPlayers ?? "∞"}
+                        </p>
+                        <p className="text-xs font-bold text-zinc-400 dark:text-zinc-500 uppercase tracking-widest text-nowrap">Max Capacity</p>
+                    </div>
+                </section>
+
+                {/* Activity Feed */}
+                <section className="rounded-xl border border-zinc-200 bg-white p-6 dark:border-zinc-800 dark:bg-zinc-900/40 shadow-sm backdrop-blur-sm h-full max-h-[600px] flex flex-col">
+                    <h3 className="mb-6 flex items-center gap-2 text-lg font-bold text-zinc-900 dark:text-zinc-50">
+                        <Clock className="h-5 w-5 text-indigo-500" />
+                        Live Feed
+                    </h3>
+                    <div className="overflow-y-auto pr-2 custom-scrollbar flex-1">
+                        <CampaignActivityFeed campaignId={campaign.id} />
+                    </div>
+                </section>
+            </div>
         </div>
     );
 }
