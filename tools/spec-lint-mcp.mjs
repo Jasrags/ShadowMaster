@@ -7,15 +7,14 @@
  * - Enforce immutability rules for specification documents
  * - Detect progress/status leakage inside specs
  *
- * This server is intentionally simple and deterministic.
+ * This server implements the Model Context Protocol (MCP).
  */
-
 
 import fs from "fs";
 import path from "path";
 import readline from "readline";
 
-const SPEC_DIRS = ["spec", "specs", "documentation", "docs/specs"];
+const SPEC_DIRS = ["spec", "specs", "documentation", "docs/specs", "docs/specifications"];
 const SPEC_EXTENSIONS = [".md", ".markdown"];
 
 /**
@@ -81,11 +80,12 @@ function lintFile(filePath) {
 }
 
 /**
- * MCP stdio protocol (very lightweight)
+ * MCP stdio protocol implementation
  */
 const rl = readline.createInterface({
   input: process.stdin,
-  output: process.stdout
+  output: process.stdout,
+  terminal: false
 });
 
 rl.on("line", (input) => {
@@ -96,26 +96,103 @@ rl.on("line", (input) => {
     return;
   }
 
-  if (request.method !== "lintSpecs") {
-    process.stdout.write(JSON.stringify({
-      error: "Unsupported method"
-    }) + "\n");
-    return;
+  const { method, params, id } = request;
+
+  switch (method) {
+    case "initialize":
+      process.stdout.write(JSON.stringify({
+        jsonrpc: "2.0",
+        id,
+        result: {
+          protocolVersion: "2024-11-05",
+          capabilities: {
+            tools: {}
+          },
+          serverInfo: {
+            name: "spec-lint",
+            version: "0.1.0"
+          }
+        }
+      }) + "\n");
+      break;
+
+    case "notifications/initialized":
+      // Client has acknowledged the connection
+      break;
+
+    case "tools/list":
+      process.stdout.write(JSON.stringify({
+        jsonrpc: "2.0",
+        id,
+        result: {
+          tools: [
+            {
+              name: "lint_specs",
+              description: "Scan specification documents for progress leakage and immutability violations",
+              inputSchema: {
+                type: "object",
+                properties: {
+                  rootDir: {
+                    type: "string",
+                    description: "Root directory to scan (default: current directory)"
+                  }
+                }
+              }
+            }
+          ]
+        }
+      }) + "\n");
+      break;
+
+    case "tools/call":
+      if (params.name === "lint_specs") {
+        const rootDir = params.arguments?.rootDir || process.cwd();
+        const specFiles = findSpecFiles(rootDir);
+
+        let findings = [];
+        for (const file of specFiles) {
+          findings = findings.concat(lintFile(file));
+        }
+
+        process.stdout.write(JSON.stringify({
+          jsonrpc: "2.0",
+          id,
+          result: {
+            content: [
+              {
+                type: "text",
+                text: JSON.stringify({
+                  checkedFiles: specFiles.length,
+                  violations: findings,
+                  violationCount: findings.length
+                }, null, 2)
+              }
+            ]
+          }
+        }) + "\n");
+      } else {
+        process.stdout.write(JSON.stringify({
+          jsonrpc: "2.0",
+          id,
+          error: {
+            code: -32601,
+            message: "Tool not found"
+          }
+        }) + "\n");
+      }
+      break;
+
+    default:
+      if (id !== undefined) {
+        process.stdout.write(JSON.stringify({
+          jsonrpc: "2.0",
+          id,
+          error: {
+            code: -32601,
+            message: "Method not found"
+          }
+        }) + "\n");
+      }
+      break;
   }
-
-  const rootDir = request.params?.rootDir || process.cwd();
-  const specFiles = findSpecFiles(rootDir);
-
-  let findings = [];
-  for (const file of specFiles) {
-    findings = findings.concat(lintFile(file));
-  }
-
-  process.stdout.write(JSON.stringify({
-    result: {
-      checkedFiles: specFiles.length,
-      violations: findings,
-      violationCount: findings.length
-    }
-  }) + "\n");
 });
