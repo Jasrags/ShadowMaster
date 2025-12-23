@@ -1,6 +1,6 @@
 # Campaign Support Specification
 
-**Last Updated:** 2025-01-27
+**Last Updated:** 2025-12-23
 **Status:** Specification
 **Category:** UI/UX, Campaign Management, Ruleset Control, Character Advancement
 **Affected Editions:** All editions (campaign controls ruleset selection)
@@ -13,6 +13,7 @@
 Campaign support enables Game Masters (GMs) to create and manage Shadowrun campaigns with centralized ruleset control. A campaign defines the rules environment for a group of players, controlling which edition, books, creation methods, and optional rules are available. Players can join campaigns and create characters that conform to the campaign's ruleset constraints.
 
 **Key Features:**
+
 - GM creates campaigns with edition and book selection
 - Campaign controls which creation methods are allowed
 - Campaign defines gameplay level (Street, Experienced, Prime Runner)
@@ -116,39 +117,44 @@ This feature is critical for multiplayer Shadowrun sessions where the GM needs t
 ### Routes
 
 #### Campaign List Page
+
 - **Path:** `/app/campaigns/page.tsx`
 - **Layout:** Uses `AuthenticatedLayout` (inherits sidebar navigation)
 - **Authentication:** Required (protected route)
 - **Description:** Lists all campaigns the user is involved in (as GM or player)
 
 #### Campaign Discovery Page
+
 - **Path:** `/app/campaigns/discover/page.tsx`
 - **Layout:** Uses `AuthenticatedLayout`
 - **Authentication:** Required (protected route)
 - **Description:** "Broker" interface for finding public campaigns with search and filtering.
 
 #### Campaign Detail Page
+
 - **Path:** `/app/campaigns/[id]/page.tsx`
 - **Layout:** Uses `AuthenticatedLayout`
 - **Authentication:** Required (protected route)
 - **Description:** Shows campaign details, roster, characters, settings
 - **Tabs:**
-    - `overview`: Dashboard, announcements, stats
-    - `posts`: Bulletin Board
-    - `calendar`: Schedule & Events (Sessions)
-    - `characters`: Character list
-    - `locations`: Map & POI management
-    - `roster`: Player list (GM only)
-    - `notes`: Campaign notes
-    - `settings`: GM configuration
+  - `overview`: Dashboard, announcements, stats
+  - `posts`: Bulletin Board
+  - `calendar`: Schedule & Events (Sessions)
+  - `characters`: Character list
+  - `locations`: Map & POI management
+  - `roster`: Player list (GM only)
+  - `notes`: Campaign notes
+  - `settings`: GM configuration
 
 #### Campaign Creation Page
+
 - **Path:** `/app/campaigns/create/page.tsx`
 - **Layout:** Uses `AuthenticatedLayout`
 - **Authentication:** Required (protected route)
 - **Description:** Wizard/form for creating a new campaign
 
 #### Campaign Settings Page
+
 - **Path:** `/app/campaigns/[id]/settings/page.tsx`
 - **Layout:** Uses `AuthenticatedLayout`
 - **Authentication:** Required (protected route, GM-only)
@@ -238,14 +244,10 @@ export interface Campaign {
   enabledOptionalRules?: string[];
 
   /** House rules (freeform text or structured JSON) */
-  houseRules?: string | Record<string, unknown>;
+  house_rules?: string | Record<string, unknown>;
 
-  // -------------------------------------------------------------------------
-  // Advancement Configuration (see character_advancement_specification.md)
-  // -------------------------------------------------------------------------
-
-  /** Advancement settings for this campaign */
-  advancementSettings?: CampaignAdvancementSettings;
+  /** Advancement and training rules for this campaign */
+  advancementSettings: CampaignAdvancementSettings;
 
   // -------------------------------------------------------------------------
   // Roster & Access
@@ -430,6 +432,7 @@ export type CampaignActivityType =
   | "player_left"
   | "character_created"
   | "character_approved"
+  | "character_rejected"
   | "character_retired"
   | "session_scheduled"
   | "session_completed"
@@ -453,7 +456,13 @@ export interface CampaignActivityEvent {
 
   /** Target of the activity (character, player, session, etc.) */
   targetId?: ID;
-  targetType?: "character" | "player" | "session" | "post" | "location";
+  targetType?:
+    | "character"
+    | "player"
+    | "session"
+    | "post"
+    | "location"
+    | "campaign";
   targetName?: string;
 
   /** Human-readable description */
@@ -521,6 +530,7 @@ export interface CampaignNotification {
 **Location:** `/app/campaigns/page.tsx`
 
 **Responsibilities:**
+
 - Fetch and display user's campaigns (as GM and player)
 - Filter campaigns by status
 - Search campaigns
@@ -528,6 +538,7 @@ export interface CampaignNotification {
 - Join campaign by code
 
 **State:**
+
 - `campaigns: Campaign[]` - All user's campaigns
 - `filterStatus: CampaignStatus | "all"` - Current filter
 - `searchQuery: string` - Search input
@@ -545,6 +556,7 @@ export interface CampaignNotification {
 **Description:** Individual campaign display card in list view.
 
 **Features:**
+
 - Campaign title and description preview
 - Edition badge
 - Gameplay level badge
@@ -556,6 +568,7 @@ export interface CampaignNotification {
 - Campaign image (if available)
 
 **Props:**
+
 ```typescript
 interface CampaignCardProps {
   campaign: Campaign;
@@ -574,12 +587,14 @@ interface CampaignCardProps {
 **Location:** `/app/campaigns/[id]/page.tsx`
 
 **Responsibilities:**
+
 - Fetch and display campaign details
 - Render appropriate tab content
 - Handle user actions (join, leave, create character)
 - Check user permissions (GM vs player)
 
 **State:**
+
 - `campaign: Campaign | null` - Campaign data
 - `activeTab: CampaignTab` - Currently active tab
 - `characters: Character[]` - Campaign characters
@@ -598,6 +613,7 @@ interface CampaignCardProps {
 **Description:** Campaign header with title, metadata, and actions.
 
 **Features:**
+
 - Campaign title and description
 - Edition badge
 - Gameplay level indicator
@@ -610,6 +626,7 @@ interface CampaignCardProps {
   - Non-member: Join Campaign (if public/invite)
 
 **Props:**
+
 ```typescript
 interface CampaignHeaderProps {
   campaign: Campaign;
@@ -631,12 +648,14 @@ interface CampaignHeaderProps {
 **Description:** Tab navigation for campaign detail sections.
 
 **Tabs:**
+
 - **Overview** - Campaign info, ruleset summary, enabled books
 - **Characters** - All characters in campaign (GM sees all, players see own)
 - **Roster** - Player list with their characters (GM-only management)
 - **Settings** - Campaign configuration (GM-only)
 
 **Props:**
+
 ```typescript
 interface CampaignTabsProps {
   activeTab: CampaignTab;
@@ -654,6 +673,7 @@ interface CampaignTabsProps {
 **Description:** Overview of campaign configuration and ruleset.
 
 **Sections:**
+
 - **Dashboard Header:**
   - Quick stats (sessions played, next session date)
   - Campaign image covering
@@ -670,6 +690,7 @@ interface CampaignTabsProps {
   - Membership changes
 
 **Props:**
+
 ```typescript
 interface CampaignOverviewTabProps {
   campaign: Campaign;
@@ -689,6 +710,7 @@ interface CampaignOverviewTabProps {
 **Description:** Consolidated interface for scheduling sessions and managing campaign events. Replaces redundant "Sessions" tab.
 
 **Features:**
+
 - Monthly/Weekly view of sessions and events
 - Create "Session" events with duration and notes
 - Create general events (deadlines, downtime)
@@ -696,6 +718,7 @@ interface CampaignOverviewTabProps {
 - Event history
 
 **Props:**
+
 ```typescript
 interface CampaignCalendarTabProps {
   campaign: Campaign;
@@ -712,12 +735,14 @@ interface CampaignCalendarTabProps {
 **Description:** Integrated locations management within the campaign view.
 
 **Features:**
+
 - Grid/List/Tree view of locations
 - Filter by type (Safe House, Corporate, etc.)
 - Create/Edit locations
 - Import/Export locations
 
 **Props:**
+
 ```typescript
 interface CampaignLocationsTabProps {
   campaign: Campaign;
@@ -738,6 +763,7 @@ interface CampaignLocationsTabProps {
 **Description:** List of characters in the campaign.
 
 **Features:**
+
 - Character cards/list view
 - Filter by player
 - Search characters
@@ -747,6 +773,7 @@ interface CampaignLocationsTabProps {
 - Character status indicators (active, retired, deceased)
 
 **Props:**
+
 ```typescript
 interface CampaignCharactersTabProps {
   campaign: Campaign;
@@ -766,6 +793,7 @@ interface CampaignCharactersTabProps {
 **Description:** Player roster management (GM-only).
 
 **Features:**
+
 - Player list with avatars
 - Characters per player
 - Player status (active, invited, left)
@@ -775,6 +803,7 @@ interface CampaignCharactersTabProps {
 - Invite code display and regeneration
 
 **Props:**
+
 ```typescript
 interface CampaignRosterTabProps {
   campaign: Campaign;
@@ -795,6 +824,7 @@ interface CampaignRosterTabProps {
 **Description:** Campaign configuration (GM-only).
 
 **Sections:**
+
 - **General Settings:**
   - Basic Info: Title, Description, Image Upload
   - Status: Active/Paused/Completed
@@ -814,6 +844,7 @@ interface CampaignRosterTabProps {
   - Archive/Delete Campaign
 
 **Props:**
+
 ```typescript
 interface CampaignSettingsTabProps {
   campaign: Campaign;
@@ -836,6 +867,7 @@ interface CampaignSettingsTabProps {
 **Description:** Step-by-step wizard for creating a new campaign.
 
 **Steps:**
+
 1. **Basic Info** - Title, description, image
 2. **Edition Selection** - Choose Shadowrun edition
 3. **Ruleset Configuration** - Select books, creation methods, gameplay level
@@ -844,11 +876,13 @@ interface CampaignSettingsTabProps {
 6. **Review** - Review all settings and create
 
 **State:**
+
 - `currentStep: number` - Current wizard step
 - `formData: Partial<Campaign>` - Accumulated form data
 - `validationErrors: Record<string, string>` - Form validation errors
 
 **Props:**
+
 ```typescript
 interface CreateCampaignWizardProps {
   onComplete: (campaign: Campaign) => void;
@@ -865,6 +899,7 @@ interface CreateCampaignWizardProps {
 **Description:** GM dialog for marking sessions complete and distributing rewards.
 
 **Features:**
+
 - Session selection (from recent sessions)
 - Participant character checklist
 - Karma amount input with SR5 suggested values
@@ -874,6 +909,7 @@ interface CreateCampaignWizardProps {
 - Bulk distribution execution
 
 **Props:**
+
 ```typescript
 interface SessionRewardDialogProps {
   campaign: Campaign;
@@ -900,6 +936,7 @@ interface SessionRewardData {
 **Description:** Real-time activity feed showing campaign events.
 
 **Features:**
+
 - Chronological list of activities
 - Activity type icons
 - Actor and target links
@@ -909,6 +946,7 @@ interface SessionRewardData {
 - Auto-refresh option
 
 **Props:**
+
 ```typescript
 interface CampaignActivityFeedProps {
   campaignId: ID;
@@ -927,6 +965,7 @@ interface CampaignActivityFeedProps {
 **Description:** Header notification indicator with dropdown.
 
 **Features:**
+
 - Unread count badge
 - Dropdown with recent notifications
 - Mark as read on click
@@ -935,6 +974,7 @@ interface CampaignActivityFeedProps {
 - Real-time updates (polling or websockets)
 
 **Props:**
+
 ```typescript
 interface NotificationBellProps {
   userId: ID;
@@ -950,6 +990,7 @@ interface NotificationBellProps {
 **Description:** Full notifications page/panel.
 
 **Features:**
+
 - All notifications with pagination
 - Filter by campaign
 - Filter by read/unread
@@ -958,6 +999,7 @@ interface NotificationBellProps {
 - Click to navigate to relevant page
 
 **Props:**
+
 ```typescript
 interface NotificationListProps {
   userId: ID;
@@ -975,6 +1017,7 @@ interface NotificationListProps {
 **Description:** GM queue for pending character advancement approvals.
 
 **Features:**
+
 - List of pending advancements
 - Character and player info
 - Advancement details (type, cost, before/after)
@@ -984,6 +1027,7 @@ interface NotificationListProps {
 - Filter by character or type
 
 **Props:**
+
 ```typescript
 interface AdvancementApprovalQueueProps {
   campaignId: ID;
@@ -1001,6 +1045,7 @@ interface AdvancementApprovalQueueProps {
 **Description:** Form for configuring campaign advancement rules.
 
 **Features:**
+
 - Training time toggle
 - Trainer modifier slider
 - Approval requirements checklist (by advancement type)
@@ -1011,6 +1056,7 @@ interface AdvancementApprovalQueueProps {
 - House rules text area
 
 **Props:**
+
 ```typescript
 interface CampaignAdvancementSettingsFormProps {
   settings: CampaignAdvancementSettings;
@@ -1030,11 +1076,13 @@ interface CampaignAdvancementSettingsFormProps {
 **Purpose:** List all campaigns the user is involved in (as GM or player)
 
 **Query Parameters:**
+
 - `status?: CampaignStatus` - Filter by status
 - `role?: "gm" | "player"` - Filter by user's role
 - `search?: string` - Search campaigns by title/description
 
 **Response:**
+
 ```typescript
 {
   success: boolean;
@@ -1052,6 +1100,7 @@ interface CampaignAdvancementSettingsFormProps {
 **Purpose:** Get detailed campaign information
 
 **Response:**
+
 ```typescript
 {
   success: boolean;
@@ -1070,6 +1119,7 @@ interface CampaignAdvancementSettingsFormProps {
 **Purpose:** Create a new campaign
 
 **Request:**
+
 ```typescript
 {
   title: string;
@@ -1086,6 +1136,7 @@ interface CampaignAdvancementSettingsFormProps {
 ```
 
 **Response:**
+
 ```typescript
 {
   success: boolean;
@@ -1097,6 +1148,7 @@ interface CampaignAdvancementSettingsFormProps {
 **Implementation:** New endpoint - create campaign, set `gmId` to current user, generate `inviteCode` if needed
 
 **Validation:**
+
 - Title required (3-100 characters)
 - Edition code must be valid
 - At least one enabled book (core rulebook)
@@ -1110,6 +1162,7 @@ interface CampaignAdvancementSettingsFormProps {
 **Purpose:** Update campaign settings (GM-only)
 
 **Request:**
+
 ```typescript
 {
   title?: string;
@@ -1126,6 +1179,7 @@ interface CampaignAdvancementSettingsFormProps {
 ```
 
 **Response:**
+
 ```typescript
 {
   success: boolean;
@@ -1137,6 +1191,7 @@ interface CampaignAdvancementSettingsFormProps {
 **Implementation:** New endpoint - verify user is GM, update allowed fields
 
 **Restrictions:**
+
 - `editionId` and `editionCode` are immutable after creation
 - Cannot change edition once campaign has characters
 
@@ -1149,6 +1204,7 @@ interface CampaignAdvancementSettingsFormProps {
 **Request:** None (campaign ID from route)
 
 **Response:**
+
 ```typescript
 {
   success: boolean;
@@ -1167,6 +1223,7 @@ interface CampaignAdvancementSettingsFormProps {
 **Purpose:** Join a campaign (by invite code or public join)
 
 **Request:**
+
 ```typescript
 {
   inviteCode?: string; // Required if campaign is invite-only
@@ -1174,6 +1231,7 @@ interface CampaignAdvancementSettingsFormProps {
 ```
 
 **Response:**
+
 ```typescript
 {
   success: boolean;
@@ -1193,6 +1251,7 @@ interface CampaignAdvancementSettingsFormProps {
 **Request:** None
 
 **Response:**
+
 ```typescript
 {
   success: boolean;
@@ -1209,6 +1268,7 @@ interface CampaignAdvancementSettingsFormProps {
 **Purpose:** Invite a player to the campaign (GM-only)
 
 **Request:**
+
 ```typescript
 {
   email: string; // User email to invite
@@ -1216,6 +1276,7 @@ interface CampaignAdvancementSettingsFormProps {
 ```
 
 **Response:**
+
 ```typescript
 {
   success: boolean;
@@ -1235,6 +1296,7 @@ interface CampaignAdvancementSettingsFormProps {
 **Request:** None
 
 **Response:**
+
 ```typescript
 {
   success: boolean;
@@ -1251,9 +1313,11 @@ interface CampaignAdvancementSettingsFormProps {
 **Purpose:** Get all characters in a campaign
 
 **Query Parameters:**
+
 - `playerId?: ID` - Filter by player (for players, only their characters)
 
 **Response:**
+
 ```typescript
 {
   success: boolean;
@@ -1271,6 +1335,7 @@ interface CampaignAdvancementSettingsFormProps {
 **Purpose:** List public campaigns (for discovery/broker)
 
 **Query Parameters:**
+
 - `editionCode?: EditionCode` - Filter by edition
 - `search?: string` - Search by title/description
 - `tags?: string[]` - Filter by tags
@@ -1279,6 +1344,7 @@ interface CampaignAdvancementSettingsFormProps {
 - `offset?: number` - Pagination offset
 
 **Response:**
+
 ```typescript
 {
   success: boolean;
@@ -1297,6 +1363,7 @@ interface CampaignAdvancementSettingsFormProps {
 **Purpose:** Manage campaign bulletin board posts
 
 **Endpoints:**
+
 - `GET`: List posts (pagination)
 - `POST`: Create new post (GM only)
 
@@ -1307,6 +1374,7 @@ interface CampaignAdvancementSettingsFormProps {
 **Purpose:** Manage campaign calendar events
 
 **Endpoints:**
+
 - `GET`: List events (date range)
 - `POST`: Create new event (GM only)
 
@@ -1317,6 +1385,7 @@ interface CampaignAdvancementSettingsFormProps {
 **Purpose:** Mark a session as complete and optionally distribute rewards
 
 **Request:**
+
 ```typescript
 {
   participantCharacterIds: ID[];    // Characters who participated
@@ -1328,6 +1397,7 @@ interface CampaignAdvancementSettingsFormProps {
 ```
 
 **Response:**
+
 ```typescript
 {
   success: boolean;
@@ -1346,6 +1416,7 @@ interface CampaignAdvancementSettingsFormProps {
 **Purpose:** Bulk award karma to campaign characters (GM only)
 
 **Request:**
+
 ```typescript
 {
   characterIds: ID[];        // Characters to award (empty = all active)
@@ -1357,6 +1428,7 @@ interface CampaignAdvancementSettingsFormProps {
 ```
 
 **Response:**
+
 ```typescript
 {
   success: boolean;
@@ -1374,6 +1446,7 @@ interface CampaignAdvancementSettingsFormProps {
 **Purpose:** Get campaign advancement log (GM only)
 
 **Query Parameters:**
+
 - `status?: "pending" | "approved" | "completed"` - Filter by status
 - `characterId?: ID` - Filter by character
 - `type?: AdvancementType` - Filter by type
@@ -1381,6 +1454,7 @@ interface CampaignAdvancementSettingsFormProps {
 - `offset?: number` - Pagination
 
 **Response:**
+
 ```typescript
 {
   success: boolean;
@@ -1398,6 +1472,7 @@ interface CampaignAdvancementSettingsFormProps {
 **Purpose:** Approve or reject a pending advancement (GM only)
 
 **Request:**
+
 ```typescript
 {
   action: "approve" | "reject";
@@ -1406,6 +1481,7 @@ interface CampaignAdvancementSettingsFormProps {
 ```
 
 **Response:**
+
 ```typescript
 {
   success: boolean;
@@ -1421,6 +1497,7 @@ interface CampaignAdvancementSettingsFormProps {
 **Purpose:** Update campaign advancement settings (GM only)
 
 **Request:**
+
 ```typescript
 {
   settings: Partial<CampaignAdvancementSettings>;
@@ -1428,6 +1505,7 @@ interface CampaignAdvancementSettingsFormProps {
 ```
 
 **Response:**
+
 ```typescript
 {
   success: boolean;
@@ -1443,12 +1521,14 @@ interface CampaignAdvancementSettingsFormProps {
 **Purpose:** Get campaign activity feed
 
 **Query Parameters:**
+
 - `limit?: number` - Number of events (default 50)
 - `offset?: number` - Pagination offset
 - `type?: CampaignActivityType` - Filter by type
 - `since?: ISODateString` - Events after this date
 
 **Response:**
+
 ```typescript
 {
   success: boolean;
@@ -1465,12 +1545,14 @@ interface CampaignAdvancementSettingsFormProps {
 **Purpose:** Get user's notifications across all campaigns
 
 **Query Parameters:**
+
 - `campaignId?: ID` - Filter by campaign
 - `unreadOnly?: boolean` - Only unread notifications
 - `limit?: number` - Pagination
 - `offset?: number` - Pagination
 
 **Response:**
+
 ```typescript
 {
   success: boolean;
@@ -1488,6 +1570,7 @@ interface CampaignAdvancementSettingsFormProps {
 **Purpose:** Mark notification as read or dismissed
 
 **Request:**
+
 ```typescript
 {
   read?: boolean;
@@ -1496,6 +1579,7 @@ interface CampaignAdvancementSettingsFormProps {
 ```
 
 **Response:**
+
 ```typescript
 {
   success: boolean;
@@ -1511,6 +1595,7 @@ interface CampaignAdvancementSettingsFormProps {
 **Purpose:** Mark all notifications as read
 
 **Request:**
+
 ```typescript
 {
   campaignId?: ID;  // Optional: only for specific campaign
@@ -1518,6 +1603,7 @@ interface CampaignAdvancementSettingsFormProps {
 ```
 
 **Response:**
+
 ```typescript
 {
   success: boolean;
@@ -1531,6 +1617,7 @@ interface CampaignAdvancementSettingsFormProps {
 ### Storage Layer
 
 **File Structure:**
+
 ```
 data/
 ├── campaigns/
@@ -1550,7 +1637,10 @@ data/
 // CRUD operations
 export function createCampaign(campaign: Campaign): Campaign;
 export function getCampaignById(campaignId: ID): Campaign | null;
-export function updateCampaign(campaignId: ID, updates: Partial<Campaign>): Campaign;
+export function updateCampaign(
+  campaignId: ID,
+  updates: Partial<Campaign>
+): Campaign;
 export function deleteCampaign(campaignId: ID): void;
 
 // Query operations
@@ -1568,8 +1658,13 @@ export function getCampaignCharacters(campaignId: ID, userId?: ID): Character[];
 export function getCharacterCountByCampaign(campaignId: ID): number;
 
 // Advancement settings
-export function getCampaignAdvancementSettings(campaignId: ID): CampaignAdvancementSettings | null;
-export function updateCampaignAdvancementSettings(campaignId: ID, settings: Partial<CampaignAdvancementSettings>): CampaignAdvancementSettings;
+export function getCampaignAdvancementSettings(
+  campaignId: ID
+): CampaignAdvancementSettings | null;
+export function updateCampaignAdvancementSettings(
+  campaignId: ID,
+  settings: Partial<CampaignAdvancementSettings>
+): CampaignAdvancementSettings;
 ```
 
 **Functions needed in `/lib/storage/sessions.ts`:**
@@ -1577,37 +1672,73 @@ export function updateCampaignAdvancementSettings(campaignId: ID, settings: Part
 ```typescript
 // Session management
 export function createSession(session: CampaignSession): CampaignSession;
-export function getSessionById(campaignId: ID, sessionId: ID): CampaignSession | null;
-export function updateSession(campaignId: ID, sessionId: ID, updates: Partial<CampaignSession>): CampaignSession;
-export function getCampaignSessions(campaignId: ID, options?: { status?: string; limit?: number }): CampaignSession[];
+export function getSessionById(
+  campaignId: ID,
+  sessionId: ID
+): CampaignSession | null;
+export function updateSession(
+  campaignId: ID,
+  sessionId: ID,
+  updates: Partial<CampaignSession>
+): CampaignSession;
+export function getCampaignSessions(
+  campaignId: ID,
+  options?: { status?: string; limit?: number }
+): CampaignSession[];
 
 // Session completion and rewards
-export function markSessionComplete(campaignId: ID, sessionId: ID, data: SessionCompleteData): CampaignSession;
-export function distributeSessionRewards(campaignId: ID, sessionId: ID, karma: number, nuyen: number, characterIds: ID[]): KarmaTransaction[];
+export function markSessionComplete(
+  campaignId: ID,
+  sessionId: ID,
+  data: SessionCompleteData
+): CampaignSession;
+export function distributeSessionRewards(
+  campaignId: ID,
+  sessionId: ID,
+  karma: number,
+  nuyen: number,
+  characterIds: ID[]
+): KarmaTransaction[];
 ```
 
 **Functions needed in `/lib/storage/activity.ts`:**
 
 ```typescript
 // Activity feed
-export function logActivity(activity: Omit<CampaignActivityEvent, "id" | "timestamp">): CampaignActivityEvent;
-export function getCampaignActivity(campaignId: ID, options?: ActivityQueryOptions): CampaignActivityEvent[];
-export function getRecentActivity(campaignId: ID, limit?: number): CampaignActivityEvent[];
+export function logActivity(
+  activity: Omit<CampaignActivityEvent, "id" | "timestamp">
+): CampaignActivityEvent;
+export function getCampaignActivity(
+  campaignId: ID,
+  options?: ActivityQueryOptions
+): CampaignActivityEvent[];
+export function getRecentActivity(
+  campaignId: ID,
+  limit?: number
+): CampaignActivityEvent[];
 ```
 
 **Functions needed in `/lib/storage/notifications.ts`:**
 
 ```typescript
 // Notification management
-export function createNotification(notification: Omit<CampaignNotification, "id" | "createdAt">): CampaignNotification;
-export function getUserNotifications(userId: ID, options?: NotificationQueryOptions): CampaignNotification[];
+export function createNotification(
+  notification: Omit<CampaignNotification, "id" | "createdAt">
+): CampaignNotification;
+export function getUserNotifications(
+  userId: ID,
+  options?: NotificationQueryOptions
+): CampaignNotification[];
 export function getUnreadCount(userId: ID, campaignId?: ID): number;
 export function markNotificationRead(notificationId: ID): CampaignNotification;
 export function markAllNotificationsRead(userId: ID, campaignId?: ID): number;
 export function dismissNotification(notificationId: ID): void;
 
 // Bulk notification creation (for session reminders, etc.)
-export function notifyCampaignPlayers(campaignId: ID, notification: Omit<CampaignNotification, "id" | "userId" | "createdAt">): CampaignNotification[];
+export function notifyCampaignPlayers(
+  campaignId: ID,
+  notification: Omit<CampaignNotification, "id" | "userId" | "createdAt">
+): CampaignNotification[];
 ```
 
 ---
@@ -1650,12 +1781,14 @@ export function notifyCampaignPlayers(campaignId: ID, notification: Omit<Campaig
 ### User Flow - Joining a Campaign
 
 **Public Campaign:**
+
 1. User browses public campaigns
 2. User clicks "Join" on a campaign
 3. User is added to campaign
 4. User is redirected to campaign detail page
 
 **Invite-Only Campaign:**
+
 1. User receives invite code or link
 2. User navigates to campaign join page with code
 3. User enters invite code (if not in link)
@@ -1741,6 +1874,7 @@ app/api/campaigns/
 ### Dependencies
 
 - **Existing:**
+
   - `@/lib/types` - Type definitions (extend with Campaign types)
   - `@/lib/storage` - Storage layer (add campaigns.ts)
   - `@/lib/auth` - Authentication utilities
@@ -1761,6 +1895,7 @@ app/api/campaigns/
 ### Character Creation Integration
 
 **Update Character Creation Wizard:**
+
 - Accept `campaignId` query parameter
 - Load campaign ruleset configuration
 - Filter edition/books/methods based on campaign
@@ -1768,6 +1903,7 @@ app/api/campaigns/
 - Set `campaignId` on created character
 
 **Files to modify:**
+
 - `/app/characters/create/page.tsx` - Accept campaignId param
 - `/app/characters/create/components/EditionSelector.tsx` - Pre-select campaign edition
 - `/app/characters/create/components/CreationWizard.tsx` - Apply campaign constraints
@@ -1775,6 +1911,7 @@ app/api/campaigns/
 ### Validation Rules
 
 **Campaign Creation:**
+
 - Title: 3-100 characters, required
 - Edition: Must be valid edition code
 - Enabled books: Must include core rulebook
@@ -1782,12 +1919,14 @@ app/api/campaigns/
 - Gameplay level: Must be valid level
 
 **Campaign Updates:**
+
 - Edition cannot be changed if campaign has characters
 - Cannot remove required creation methods if characters use them
 - Cannot remove core rulebook
 - Max players must be >= current player count
 
 **Character Creation (with campaign):**
+
 - Character edition must match campaign edition
 - Character must use allowed creation method
 - Character must only use enabled books
@@ -1818,6 +1957,7 @@ app/api/campaigns/
 ### Enhanced Features (Phase 3+)
 
 - [x] **Campaign Management**
+
   - [ ] GM can upload campaign image/logo
   - [ ] GM can set start and end dates for campaign
   - [x] GM can export campaign data to JSON
@@ -1825,39 +1965,44 @@ app/api/campaigns/
   - [ ] Campaign statistics dashboard implemented
 
 - [ ] **Discovery & Social**
+
   - [ ] Public campaign "Broker" page implemented
   - [ ] Players can search campaigns by tag, edition, and level
   - [ ] Campaign tags system operational
 
 - [x] **Campaign Tools**
+
   - [x] Bulletin Board/Announcements system
   - [x] Calendar system for scheduling sessions
   - [ ] ICS export for calendar events
   - [x] Locations tab integration
 
-- [x] Campaign notes and journal entries *(Phase 3 complete)*
-- [x] Session tracking and scheduling *(Phase 3 complete)*
+- [x] Campaign notes and journal entries _(Phase 3 complete)_
+- [x] Session tracking and scheduling _(Phase 3 complete)_
 - [ ] Campaign-specific dice roller
-- [x] Character approval workflow (GM approves characters) *(Phase 3 complete)*
+- [x] Character approval workflow (GM approves characters) _(Phase 3 complete)_
 
 ### Advancement & Rewards (Phase 4)
 
-- [ ] **Session Rewards**
-  - [ ] GM can mark sessions as complete
-  - [ ] GM can distribute karma to session participants
-  - [ ] GM can distribute nuyen to session participants
-  - [ ] Session rewards linked to karma transaction history
-  - [ ] SessionRewardDialog component implemented
+- [x] **Session Rewards**
 
-- [ ] **Campaign Advancement Settings**
-  - [ ] GM can configure training time rules
-  - [ ] GM can set advancement types requiring approval
-  - [ ] GM can restrict certain advancement types
-  - [ ] GM can set karma cost modifiers
-  - [ ] GM can configure rating caps
-  - [ ] CampaignAdvancementSettingsForm component implemented
+  - [x] GM can mark sessions as complete
+  - [x] GM can distribute karma to session participants
+  - [x] GM can distribute nuyen to session participants
+  - [x] Session rewards linked to karma transaction history
+  - [x] SessionRewardDialog component implemented
+
+- [x] **Campaign Advancement Settings**
+
+  - [x] GM can configure training time rules
+  - [x] GM can set advancement types requiring approval
+  - [x] GM can restrict certain advancement types
+  - [x] GM can set karma cost modifiers
+  - [x] GM can configure rating caps
+  - [x] CampaignAdvancementSettingsForm component implemented
 
 - [ ] **Advancement Approval Workflow**
+
   - [ ] GM can view pending advancement approvals
   - [ ] GM can approve/reject advancements
   - [ ] Players notified of approval decisions
@@ -1870,19 +2015,20 @@ app/api/campaigns/
 
 ### Activity & Notifications (Phase 4)
 
-- [ ] **Activity Feed**
-  - [ ] Campaign activity logged automatically
-  - [ ] Activity feed displayed on campaign overview
-  - [ ] Filter by activity type
-  - [ ] CampaignActivityFeed component implemented
+- [x] **Activity Feed**
 
-- [ ] **Notification System**
-  - [ ] Notifications created for key events
-  - [ ] NotificationBell in header with unread count
+  - [x] Campaign activity logged automatically
+  - [x] Activity feed displayed on campaign overview
+  - [x] Filter by activity type
+  - [x] CampaignActivityFeed component implemented
+
+- [x] **Notification System**
+  - [x] Notifications created for key events
+  - [x] NotificationBell in header with unread count
   - [ ] NotificationList page for all notifications
-  - [ ] Mark as read functionality
-  - [ ] Session reminder notifications
-  - [ ] Advancement approval notifications
+  - [x] Mark as read functionality
+  - [ ] Session reminder notifications (Backend implemented, no worker yet)
+  - [x] Advancement approval notifications
 
 ---
 
@@ -1916,14 +2062,14 @@ app/api/campaigns/
 
 ## Future Enhancements
 
-### Phase 2: Advanced Campaign Features *(COMPLETED)*
+### Phase 2: Advanced Campaign Features _(COMPLETED)_
 
 - [x] Campaign detail page refactored with tabbed interface
 - [x] Campaign characters API and tab
 - [x] Campaign roster management (remove player, regenerate code)
 - [x] Character creation integration with campaigns
 
-### Phase 3: Campaign Management Features *(COMPLETED)*
+### Phase 3: Campaign Management Features _(COMPLETED)_
 
 - [x] Campaign notes and journal system
 - [x] Session tracking and scheduling (Consolidated into Calendar)
@@ -1931,12 +2077,9 @@ app/api/campaigns/
 - [x] Bulletin Board (Posts)
 - [x] Locations Integration
 
-### Phase 3: Multi-Campaign Management
-
 - Campaign tags and categories
 - Campaign search and discovery
 - Campaign recommendations
-- Campaign activity feed
 - Campaign comparison tools
 
 ### Phase 4: Campaign Content
@@ -1974,30 +2117,39 @@ app/api/campaigns/
 ## Open Questions
 
 1. **Edition Immutability:** Should campaigns allow edition changes if no characters exist yet?
+
    - **Recommendation:** Allow edition change only if campaign has zero characters
 
 2. **Character Association:** What happens to characters when a player leaves a campaign?
+
    - **Recommendation:** Characters remain associated with campaign but player loses access (or allow GM to transfer ownership)
 
 3. **Campaign Deletion:** Should deleting a campaign delete associated characters?
+
    - **Recommendation:** No - unlink characters from campaign (set `campaignId` to null) but preserve characters
 
 4. **Invite Code Expiration:** Should invite codes expire after a certain time?
+
    - **Recommendation:** Phase 2 feature - start with permanent codes, add expiration later
 
 5. **Max Players Enforcement:** What happens if max players is set lower than current player count?
+
    - **Recommendation:** Prevent reducing max players below current count, or require removing players first
 
 6. **Character Validation:** Should system validate existing characters when campaign rules change?
+
    - **Recommendation:** Phase 2 feature - start with validation only at character creation, add validation checks later
 
 7. **House Rules Format:** Should house rules be freeform text or structured JSON?
+
    - **Recommendation:** Start with freeform text, add structured format in Phase 2 for automation
 
 8. **Campaign Visibility:** Should "public" campaigns be searchable by anyone or require login?
+
    - **Recommendation:** Require login for discovery, but allow unauthenticated users to see public campaign details if they have link
 
 9. **Gameplay Level Changes:** Can GM change gameplay level after campaign has characters?
+
    - **Recommendation:** Allow with warning that it may affect character validity, add validation checks
 
 10. **Multiple Campaigns per Character:** Can a character belong to multiple campaigns?
@@ -2010,6 +2162,7 @@ app/api/campaigns/
 **Priority:** High  
 **Estimated Effort:** 7-10 days  
 **Dependencies:**
+
 - Campaign type definitions
 - Campaign storage layer
 - Campaign API endpoints
@@ -2030,4 +2183,3 @@ This feature is critical for multiplayer Shadowrun sessions and enables the GM c
 - Consider adding campaign analytics to understand usage patterns (future)
 - Integration with identity/lifestyle system (future): Campaigns could track SIN and lifestyle management across characters
 - Integration with gameplay features (future): Campaigns could track combat sessions, karma awards, and game events
-
