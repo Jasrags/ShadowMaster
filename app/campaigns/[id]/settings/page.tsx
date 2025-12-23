@@ -53,6 +53,7 @@ export default function CampaignSettingsPage({ params }: SettingsPageProps) {
     const [endDate, setEndDate] = useState("");
     const [tags, setTags] = useState<string[]>([]);
     const [tagInput, setTagInput] = useState("");
+    const [gmNotes, setGmNotes] = useState("");
     const [advancementSettings, setAdvancementSettings] = useState<CampaignAdvancementSettings | null>(null);
 
     // Template state
@@ -98,6 +99,7 @@ export default function CampaignSettingsPage({ params }: SettingsPageProps) {
                 setStartDate(c.startDate ? c.startDate.split("T")[0] : "");
                 setEndDate(c.endDate ? c.endDate.split("T")[0] : "");
                 setTags(c.tags || []);
+                setGmNotes(c.gmNotes || "");
                 if (c.advancementSettings) {
                     setAdvancementSettings(c.advancementSettings);
                 }
@@ -141,6 +143,7 @@ export default function CampaignSettingsPage({ params }: SettingsPageProps) {
                     startDate: startDate ? new Date(startDate).toISOString() : undefined,
                     endDate: endDate ? new Date(endDate).toISOString() : undefined,
                     tags: tags.length > 0 ? tags : undefined,
+                    gmNotes: gmNotes || undefined,
                     advancementSettings: advancementSettings || undefined,
                 }),
             });
@@ -369,6 +372,22 @@ export default function CampaignSettingsPage({ params }: SettingsPageProps) {
                                 onChange={(e) => setDescription(e.target.value)}
                                 rows={3}
                                 className="mt-1 block w-full rounded-md border border-zinc-300 px-3 py-2 focus:border-indigo-500 focus:ring-indigo-500 dark:border-zinc-700 dark:bg-black dark:text-white"
+                            />
+                        </div>
+                        <div>
+                            <label htmlFor="gmNotes" className="block text-sm font-medium text-amber-700 dark:text-amber-400">
+                                GM Eyes Only (Private Notes)
+                            </label>
+                            <p className="mb-1 text-xs text-amber-600/70 dark:text-amber-500/70">
+                                These notes are only visible to you.
+                            </p>
+                            <textarea
+                                id="gmNotes"
+                                value={gmNotes}
+                                onChange={(e) => setGmNotes(e.target.value)}
+                                rows={4}
+                                className="mt-1 block w-full rounded-md border border-amber-200 bg-amber-50/30 px-3 py-2 focus:border-amber-500 focus:ring-amber-500 dark:border-amber-900/50 dark:bg-black dark:text-white"
+                                placeholder="Plot secrets, NPC agendas, etc."
                             />
                         </div>
                         <div>

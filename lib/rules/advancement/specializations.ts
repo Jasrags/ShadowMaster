@@ -125,6 +125,7 @@ export function advanceSpecialization(
   const trainingTime = calculateAdvancementTrainingTime("specialization", undefined, {
     instructorBonus: options.instructorBonus,
     timeModifier: options.timeModifier,
+    settings: options.settings,
   });
 
   const advancementRecord: AdvancementRecord = {

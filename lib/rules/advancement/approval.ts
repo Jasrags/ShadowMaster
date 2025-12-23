@@ -5,6 +5,7 @@
  */
 
 import type { Character, AdvancementRecord, Campaign } from "@/lib/types";
+import type { CampaignAdvancementSettings } from "@/lib/types/campaign";
 
 /**
  * Result of GM approval action
@@ -124,14 +125,23 @@ export function isCampaignGM(campaign: Campaign, userId: string): boolean {
 /**
  * Check if a character requires GM approval for advancements
  *
- * This checks if the character is in a campaign and if the campaign
- * requires GM approval (could be a campaign setting in the future).
- * For now, all campaign characters require GM approval.
- *
  * @param character - Character to check
+ * @param settings - Campaign advancement settings
  * @returns True if character requires GM approval
  */
-export function requiresGMApproval(character: Character): boolean {
-  return !!character.campaignId;
+export function requiresGMApproval(
+  character: Character,
+  settings?: CampaignAdvancementSettings
+): boolean {
+  if (!character.campaignId) {
+    return false;
+  }
+  
+  // If settings are not provided, default to true for safety in campaigns
+  if (!settings) {
+    return true;
+  }
+  
+  return settings.requireApproval;
 }
 

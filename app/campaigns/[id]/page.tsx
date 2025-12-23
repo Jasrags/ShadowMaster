@@ -15,7 +15,7 @@ import {
     Check
 } from "lucide-react";
 import CampaignTabs, { type CampaignTabId } from "./components/CampaignTabs";
-import CampaignOverviewTab from "./components/CampaignOverviewTab";
+import CampaignOverviewTab, { type CampaignOverviewTabProps } from "./components/CampaignOverviewTab";
 import CampaignCharactersTab from "./components/CampaignCharactersTab";
 import CampaignNotesTab from "./components/CampaignNotesTab";
 import CampaignRosterTab from "./components/CampaignRosterTab";
@@ -54,6 +54,7 @@ export default function CampaignDetailPage({ params }: CampaignDetailProps) {
     const [copiedCode, setCopiedCode] = useState(false);
     const [activeTab, setActiveTab] = useState<CampaignTabId>("overview");
     const [pendingApprovalsCount, setPendingApprovalsCount] = useState(0);
+    const [joining, setJoining] = useState(false);
 
     useEffect(() => {
         async function fetchCampaign() {
@@ -146,6 +147,30 @@ export default function CampaignDetailPage({ params }: CampaignDetailProps) {
 
     const handleCampaignUpdate = (updatedCampaign: Campaign) => {
         setCampaign(updatedCampaign);
+    };
+
+    const handleJoinCampaign = async () => {
+        setJoining(true);
+        setError(null);
+        try {
+            const res = await fetch(`/api/campaigns/${id}/join`, {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({}),
+            });
+            const data = await res.json();
+
+            if (data.success) {
+                setCampaign(data.campaign);
+                setUserRole(data.userRole);
+            } else {
+                setError(data.error || "Failed to join campaign");
+            }
+        } catch {
+            setError("An error occurred while joining");
+        } finally {
+            setJoining(false);
+        }
     };
 
     if (loading) {
@@ -254,6 +279,16 @@ export default function CampaignDetailPage({ params }: CampaignDetailProps) {
                                 Leave
                             </button>
                         )}
+                        {userRole === null && campaign.visibility === "public" && (
+                            <button
+                                onClick={handleJoinCampaign}
+                                disabled={joining}
+                                className="inline-flex items-center gap-2 rounded-md bg-indigo-600 px-6 py-2 text-sm font-bold text-white shadow-lg hover:bg-indigo-700 disabled:opacity-50"
+                            >
+                                {joining ? <Loader2 className="h-4 w-4 animate-spin" /> : <Users className="h-4 w-4" />}
+                                Join Campaign
+                            </button>
+                        )}
                     </div>
                 </div>
             </div>
@@ -262,7 +297,7 @@ export default function CampaignDetailPage({ params }: CampaignDetailProps) {
             <CampaignTabs
                 activeTab={activeTab}
                 onTabChange={setActiveTab}
-                isGM={userRole === "gm"}
+                userRole={userRole}
                 pendingApprovalsCount={pendingApprovalsCount}
             />
 
@@ -273,6 +308,7 @@ export default function CampaignDetailPage({ params }: CampaignDetailProps) {
                         campaign={campaign}
                         books={books}
                         creationMethods={creationMethods}
+                        isGM={userRole === "gm"}
                     />
                 )}
                 {activeTab === "posts" && (

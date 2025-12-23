@@ -125,6 +125,7 @@ export function advanceSkill(
   const trainingTime = calculateAdvancementTrainingTime("skill", newRating, {
     instructorBonus: options.instructorBonus,
     timeModifier: options.timeModifier,
+    settings: options.settings,
   });
 
   const skillName = getSkillDisplayName(skillId, ruleset);

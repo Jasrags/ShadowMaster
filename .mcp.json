@@ -1,5 +1,10 @@
 {
   "mcpServers": {
+    "next-devtools": {
+      "type": "stdio",
+      "command": "npx",
+      "args": ["-y", "next-devtools-mcp@latest"]
+    },
     "filesystem": {
       "type": "stdio",
       "command": "npx",
