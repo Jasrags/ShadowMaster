@@ -3,7 +3,9 @@
 import React, { useState } from "react";
 import { useQualities } from "@/lib/rules";
 import type { Character, QualitySelection, QualityEffect } from "@/lib/types";
-import type { Theme } from "@/lib/themes";
+import { Theme, THEMES, DEFAULT_THEME } from "@/lib/themes";
+import { Section } from "./Section";
+import { ShieldCheck, ShieldAlert } from "lucide-react";
 import type { QualityData } from "@/lib/rules/loader-types";
 import { Info, Clock, AlertCircle, Settings2 } from "lucide-react";
 import { DynamicStateModal } from "./DynamicStateModal";
@@ -14,7 +16,8 @@ interface QualitiesSectionProps {
   onUpdate?: (updatedCharacter: Character) => void;
 }
 
-export function QualitiesSection({ character, onUpdate }: QualitiesSectionProps) {
+export function QualitiesSection({ character, theme, onUpdate }: QualitiesSectionProps) {
+  const t = theme || THEMES[DEFAULT_THEME];
   const { positive: positiveData, negative: negativeData } = useQualities();
   const [activeSelection, setActiveSelection] = useState<QualitySelection | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -24,9 +27,12 @@ export function QualitiesSection({ character, onUpdate }: QualitiesSectionProps)
 
     return (
       <div className="space-y-4">
-        <span className="text-[10px] font-mono text-muted-foreground uppercase tracking-widest block ml-1">
-          {isPositive ? 'Positive Qualities' : 'Negative Qualities'}
-        </span>
+        <div className="flex items-center gap-2 px-1">
+          <div className={`h-1.5 w-1.5 rounded-full ${isPositive ? 'bg-emerald-500' : 'bg-red-500'}`} />
+          <span className={`text-[10px] font-bold uppercase tracking-widest ${t.id === 'modern-card' ? 'text-zinc-500' : 'text-muted-foreground'}`}>
+            {isPositive ? 'Positive Qualities' : 'Negative Qualities'}
+          </span>
+        </div>
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 px-0.5">
           {selections.map((selection) => {
             const id = typeof selection === 'string' 
@@ -77,14 +83,14 @@ export function QualitiesSection({ character, onUpdate }: QualitiesSectionProps)
 
             const extra = extraParts.join(", ");
 
-            // Effects visualization
-
             return (
               <div
                 key={id}
-                className={`group relative flex flex-col p-3 bg-muted/30 rounded border-l-2 transition-all ${
-                  isPositive ? 'border-emerald-500/30' : 'border-red-500/30'
-                } hover:bg-muted/50`}
+                className={`group relative flex flex-col p-3 transition-all ${t.components.card.wrapper} ${t.components.card.hover} ${
+                  isPositive 
+                    ? (t.id === 'modern-card' ? 'border-l-green-500/50' : 'border-emerald-500/30') 
+                    : (t.id === 'modern-card' ? 'border-l-red-500/50' : 'border-red-500/30')
+                }`}
               >
                 <div className="flex items-center justify-between mb-1">
                   <div className="flex items-center gap-2">
@@ -194,9 +200,13 @@ export function QualitiesSection({ character, onUpdate }: QualitiesSectionProps)
   }
 
   return (
-    <div className="space-y-8">
-      {renderQualityList(character.positiveQualities || [], true)}
-      {renderQualityList(character.negativeQualities || [], false)}
+    <>
+      <Section theme={t} title="Qualities" icon={<ShieldCheck className="w-4 h-4 text-emerald-500" />}>
+        <div className="space-y-8">
+          {renderQualityList(character.positiveQualities || [], true)}
+          {renderQualityList(character.negativeQualities || [], false)}
+        </div>
+      </Section>
 
       {activeSelection && (
         <DynamicStateModal
@@ -209,6 +219,6 @@ export function QualitiesSection({ character, onUpdate }: QualitiesSectionProps)
           }}
         />
       )}
-    </div>
+    </>
   );
 }
