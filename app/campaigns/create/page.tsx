@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
-import type { Edition, Book, CreationMethod, GameplayLevel, CampaignVisibility } from "@/lib/types";
+import type { Edition, Book, CreationMethod, GameplayLevel, CampaignVisibility, CampaignTemplate } from "@/lib/types";
 import { ArrowLeft, Loader2 } from "lucide-react";
 
 export default function CreateCampaignPage() {
@@ -26,23 +26,61 @@ export default function CreateCampaignPage() {
     const [creationMethods, setCreationMethods] = useState<CreationMethod[]>([]);
     const [loadingEditions, setLoadingEditions] = useState(true);
 
-    // Fetch editions on mount
+    // Template state
+    const [templates, setTemplates] = useState<CampaignTemplate[]>([]);
+    const [loadingTemplates, setLoadingTemplates] = useState(true);
+    const [selectedTemplateId, setSelectedTemplateId] = useState("");
+
+    // Fetch editions and templates on mount
     useEffect(() => {
-        async function fetchEditions() {
+        async function fetchData() {
             try {
-                const res = await fetch("/api/editions");
-                const data = await res.json();
-                if (data.success) {
-                    setEditions(data.editions || []);
+                const [editionsRes, templatesRes] = await Promise.all([
+                    fetch("/api/editions"),
+                    fetch("/api/campaigns/templates")
+                ]);
+
+                const editionsData = await editionsRes.json();
+                const templatesData = await templatesRes.json();
+
+                if (editionsData.success) {
+                    setEditions(editionsData.editions || []);
                 }
-            } catch {
-                console.error("Failed to load editions");
+                if (templatesData.success) {
+                    setTemplates(templatesData.templates || []);
+                }
+            } catch (error) {
+                console.error("Failed to load initial data:", error);
             } finally {
                 setLoadingEditions(false);
+                setLoadingTemplates(false);
             }
         }
-        fetchEditions();
+        fetchData();
     }, []);
+
+    // Handle template selection
+    const handleTemplateChange = (templateId: string) => {
+        setSelectedTemplateId(templateId);
+        const template = templates.find(t => t.id === templateId);
+        if (template) {
+            setTitle(template.name);
+            setDescription(template.description || "");
+            setEditionCode(template.editionCode);
+            setEnabledBookIds(template.enabledBookIds);
+            setEnabledCreationMethodIds(template.enabledCreationMethodIds);
+            setGameplayLevel(template.gameplayLevel);
+            // Optionally set visibility or other fields
+        } else if (templateId === "") {
+            // Reset if deselected
+            setTitle("");
+            setDescription("");
+            setEditionCode("");
+            setEnabledBookIds([]);
+            setEnabledCreationMethodIds([]);
+            setGameplayLevel("experienced");
+        }
+    };
 
     // Fetch books and creation methods when edition changes
     useEffect(() => {
@@ -151,6 +189,32 @@ export default function CreateCampaignPage() {
                 )}
 
                 <form onSubmit={handleSubmit} className="mt-6 space-y-6">
+                    {/* Template Selection */}
+                    {templates.length > 0 && (
+                        <div className="rounded-md border border-indigo-100 bg-indigo-50/50 p-4 dark:border-indigo-900/30 dark:bg-indigo-900/10">
+                            <label htmlFor="template" className="block text-sm font-medium text-indigo-900 dark:text-indigo-400">
+                                Start from Template (Optional)
+                            </label>
+                            <p className="mb-2 text-xs text-indigo-700/70 dark:text-indigo-400/70">
+                                Pre-fill this form with a saved campaign configuration.
+                            </p>
+                            <select
+                                id="template"
+                                value={selectedTemplateId}
+                                onChange={(e) => handleTemplateChange(e.target.value)}
+                                className="mt-1 block w-full rounded-md border border-indigo-200 px-3 py-2 text-sm focus:border-indigo-500 focus:ring-indigo-500 dark:border-indigo-800 dark:bg-black dark:text-white"
+                                disabled={loadingTemplates}
+                            >
+                                <option value="">No Template (Clean Start)</option>
+                                {templates.map((template) => (
+                                    <option key={template.id} value={template.id}>
+                                        {template.name} ({template.editionCode.toUpperCase()})
+                                    </option>
+                                ))}
+                            </select>
+                        </div>
+                    )}
+
                     {/* Title */}
                     <div>
                         <label htmlFor="title" className="block text-sm font-medium text-zinc-700 dark:text-zinc-300">

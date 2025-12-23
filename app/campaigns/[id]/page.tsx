@@ -15,7 +15,7 @@ import {
     Check
 } from "lucide-react";
 import CampaignTabs, { type CampaignTabId } from "./components/CampaignTabs";
-import CampaignOverviewTab from "./components/CampaignOverviewTab";
+import CampaignOverviewTab, { type CampaignOverviewTabProps } from "./components/CampaignOverviewTab";
 import CampaignCharactersTab from "./components/CampaignCharactersTab";
 import CampaignNotesTab from "./components/CampaignNotesTab";
 import CampaignRosterTab from "./components/CampaignRosterTab";
@@ -308,6 +308,7 @@ export default function CampaignDetailPage({ params }: CampaignDetailProps) {
                         campaign={campaign}
                         books={books}
                         creationMethods={creationMethods}
+                        isGM={userRole === "gm"}
                     />
                 )}
                 {activeTab === "posts" && (

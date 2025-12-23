@@ -2,10 +2,11 @@ import type { Campaign, Book, CreationMethod } from "@/lib/types";
 import { BookOpen, Zap, Shield, Clock } from "lucide-react";
 import { CampaignActivityFeed } from "./CampaignActivityFeed";
 
-interface CampaignOverviewTabProps {
+export interface CampaignOverviewTabProps {
     campaign: Campaign;
     books: Book[];
     creationMethods: CreationMethod[];
+    isGM?: boolean;
 }
 
 const gameplayLevelDetails = {
@@ -26,11 +27,34 @@ const gameplayLevelDetails = {
     },
 };
 
-export default function CampaignOverviewTab({ campaign, books, creationMethods }: CampaignOverviewTabProps) {
+export default function CampaignOverviewTab({ 
+    campaign, 
+    books, 
+    creationMethods, 
+    isGM = false 
+}: CampaignOverviewTabProps) {
     const levelInfo = gameplayLevelDetails[campaign.gameplayLevel];
 
     return (
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+        <div className="space-y-8">
+            {/* Hero Image Section */}
+            {campaign.imageUrl && (
+                <div className="relative h-64 w-full overflow-hidden rounded-xl border border-zinc-200 shadow-lg dark:border-zinc-800">
+                    <img
+                        src={campaign.imageUrl}
+                        alt={campaign.title}
+                        className="h-full w-full object-cover"
+                        onError={(e) => (e.currentTarget.style.display = "none")}
+                    />
+                    <div className="absolute inset-x-0 bottom-0 bg-linear-to-t from-black/80 to-transparent p-6">
+                        <h2 className="text-3xl font-black text-white drop-shadow-md">
+                            {campaign.title}
+                        </h2>
+                    </div>
+                </div>
+            )}
+
+            <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
             {/* Left Column: Details & Rules */}
             <div className="lg:col-span-2 space-y-8">
                 {/* Description */}
@@ -129,10 +153,60 @@ export default function CampaignOverviewTab({ campaign, books, creationMethods }
                         )}
                     </section>
                 </div>
+
+                {/* GM Notes Section */}
+                {isGM && campaign.gmNotes && (
+                    <section className="mt-8 rounded-xl border border-amber-200 bg-amber-50/50 p-6 dark:border-amber-900/50 dark:bg-amber-900/20 backdrop-blur-sm">
+                        <h3 className="mb-4 flex items-center gap-2 text-lg font-bold text-amber-900 dark:text-amber-400 underline decoration-amber-500/30 underline-offset-8 text-nowrap">
+                            <Shield className="h-5 w-5" />
+                            GM Eyes Only
+                        </h3>
+                        <p className="text-zinc-700 dark:text-zinc-300 leading-relaxed whitespace-pre-wrap">
+                            {campaign.gmNotes}
+                        </p>
+                    </section>
+                )}
             </div>
 
             {/* Right Column: Activity & Stats */}
             <div className="space-y-8">
+                {/* Campaign Metadata */}
+                <section className="rounded-xl border border-zinc-200 bg-zinc-50/30 p-6 dark:border-zinc-800 dark:bg-zinc-900/30 backdrop-blur-sm">
+                    <h3 className="mb-4 text-xs font-bold text-zinc-400 dark:text-zinc-500 uppercase tracking-widest">
+                        Campaign Details
+                    </h3>
+                    <div className="space-y-4">
+                        {(campaign.startDate || campaign.endDate) && (
+                            <div className="flex items-center gap-3">
+                                <Clock className="h-4 w-4 text-indigo-500" />
+                                <div className="text-sm">
+                                    <p className="font-bold text-zinc-900 dark:text-zinc-50">Timeline</p>
+                                    <p className="text-zinc-500 dark:text-zinc-400">
+                                        {campaign.startDate ? new Date(campaign.startDate).toLocaleDateString() : "???"} 
+                                        {" - "}
+                                        {campaign.endDate ? new Date(campaign.endDate).toLocaleDateString() : "Ongoing"}
+                                    </p>
+                                </div>
+                            </div>
+                        )}
+                        {campaign.tags && campaign.tags.length > 0 && (
+                            <div className="flex items-start gap-3">
+                                <Zap className="h-4 w-4 text-indigo-500 mt-1" />
+                                <div className="text-sm">
+                                    <p className="font-bold text-zinc-900 dark:text-zinc-50">Tags</p>
+                                    <div className="mt-1 flex flex-wrap gap-2">
+                                        {campaign.tags.map(tag => (
+                                            <span key={tag} className="inline-flex items-center rounded-md bg-white border border-zinc-200 px-2 py-0.5 text-xs font-medium text-zinc-800 dark:bg-black dark:border-zinc-800 dark:text-zinc-300">
+                                                #{tag}
+                                            </span>
+                                        ))}
+                                    </div>
+                                </div>
+                            </div>
+                        )}
+                    </div>
+                </section>
+
                 {/* Campaign Stats */}
                 <section className="grid grid-cols-2 gap-4">
                     <div className="rounded-xl border border-zinc-200 bg-white p-4 text-center dark:border-zinc-800 dark:bg-black shadow-sm group hover:border-indigo-500/50 transition-colors">
@@ -150,7 +224,7 @@ export default function CampaignOverviewTab({ campaign, books, creationMethods }
                 </section>
 
                 {/* Activity Feed */}
-                <section className="rounded-xl border border-zinc-200 bg-white p-6 dark:border-zinc-800 dark:bg-zinc-900/40 shadow-sm backdrop-blur-sm h-full max-h-[600px] flex flex-col">
+                <section className="rounded-xl border border-zinc-200 bg-white p-6 dark:border-zinc-800 dark:bg-zinc-900/40 shadow-sm backdrop-blur-sm h-full max-h-[600px] flex flex-col min-h-[400px]">
                     <h3 className="mb-6 flex items-center gap-2 text-lg font-bold text-zinc-900 dark:text-zinc-50">
                         <Clock className="h-5 w-5 text-indigo-500" />
                         Live Feed
@@ -160,6 +234,7 @@ export default function CampaignOverviewTab({ campaign, books, creationMethods }
                     </div>
                 </section>
             </div>
+        </div>
         </div>
     );
 }
