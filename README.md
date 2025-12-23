@@ -1,14 +1,60 @@
 # Shadow Master
 
-A Shadowrun 5th Edition character creation and management application built with Next.js.
+**Shadow Master** is a comprehensive character management system for the Shadowrun tabletop RPG, designed to support all editions (1E-6E plus Anarchy). The application provides multi-edition character creation with edition-specific rules, a flexible ruleset system supporting sourcebooks and errata, and a robust character lifecycle management.
 
-![CI](https://github.com/jasrags/shadow-master/actions/workflows/ci.yml/badge.svg)
+Currently, the project is in its **MVP phase**, focusing on **Shadowrun 5th Edition** Priority-based character creation.
 
-## Getting Started
+---
+
+## 🚀 Core Features
+
+### Implemented Systems
+
+- **Modular Ruleset System**: Data-driven ruleset loading and merging algorithm supporting multiple books and editions.
+- **Character Creation Framework**: Step-driven wizard (SR5 Priority) with persistent draft states.
+- **Dynamic Character Sheet**: Responsive UI with theme-aware sections, automated derived stats, and dice-roller integration.
+- **Character Advancement**: Full karma-based progression with GM approval workflows.
+- **Campaign Management**: Integrated campaign support including calendar management, locations, and member tracking.
+- **Secure Authentication**: Session-based auth with role-based access control (User, GM, Admin).
+
+### Planned Features
+
+- **NPC / Grunt System**: Rapid NPC generation and team management.
+- **Combat Tracker**: Real-time initiative and turn tracking for encounters.
+- **Inventory & Gear Management**: Detailed tracking of items, ammo, and modifications.
+- **System Synchronization**: Protocol for managing data drift between characters and updated rulebooks.
+
+---
+
+## 🏗️ High-Level Architecture
+
+Shadow Master follows a modern, performance-oriented stack designed for atomic data integrity:
+
+- **Frontend**: [Next.js](https://nextjs.org/) (App Router) with [React 19](https://react.dev/) and [Tailwind CSS 4](https://tailwindcss.com/).
+- **UI Components**: [React Aria Components](https://react-spectrum.adobe.com/react-aria/index.html) for first-class accessibility and headless logic.
+- **Persistence**: Atomic file-based storage using JSON for all user, character, and ruleset data.
+- **Rules Engine**: A custom merging algorithm that processes edition metadata and sourcebook payloads into a unified runtime context.
+
+---
+
+## 📊 Project Status
+
+For a detailed breakdown of subsystem statuses, current blockers, and development priorities, please refer to:
+👉 **[PROJECT_STATE.md](PROJECT_STATE.md)**
+
+---
+
+## 🛠️ Getting Started
 
 ### Local Development
 
-First, run the development server:
+First, install dependencies:
+
+```bash
+pnpm install
+```
+
+Start the development server:
 
 ```bash
 pnpm dev
@@ -16,13 +62,7 @@ pnpm dev
 
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
-
 ### Docker Deployment
-
-This project includes full Docker support for containerized deployment.
-
-#### Quick Start with Docker
 
 ```bash
 # Build the Docker image
@@ -35,58 +75,20 @@ docker run -p 3000:3000 shadow-master
 docker-compose up
 ```
 
-#### Comprehensive Guides
+For more details, see our **[Portainer Setup Guide](docs/deployment/portainer-setup.md)** or the **[CI/CD Pipeline documentation](docs/deployment/cicd-guide.md)**.
 
-- **[Local Docker Testing](docs/deployment/local-docker-testing.md)** - Build and test Docker containers locally
-- **[Portainer Deployment](docs/deployment/portainer-setup.md)** - Deploy using Portainer
-- **[CI/CD Pipeline](docs/deployment/cicd-guide.md)** - GitHub Actions automated builds and deployment
+---
 
-## CI/CD Pipeline
+## 📂 Project Structure
 
-This project uses GitHub Actions for continuous integration and deployment:
+- `/app` - Application routes, pages, and API handlers.
+- `/components` - Shared React UI components and layouts.
+- `/lib` - Core business logic, storage layers, and ruleset engines.
+- `/data` - Static and persistent JSON storage for rulesets and user entities.
+- `/docs` - Comprehensive technical specifications and architectural guides.
 
-- **CI**: Automated linting and build verification on every push/PR
-- **Docker Build**: Multi-platform image builds (AMD64/ARM64) published to GitHub Container Registry
-- **CD**: Manual deployment workflows with environment selection
+---
 
-### Docker Images
-
-Pre-built images are available at:
-```
-ghcr.io/jasrags/shadow-master:latest
-```
-
-See the [CI/CD Guide](docs/deployment/cicd-guide.md) for detailed usage instructions.
-
-## Environment Variables
-
-Copy `.env.example` to `.env.local` and configure as needed:
-
-```bash
-cp .env.example .env.local
-```
-
-See `.env.example` for available configuration options.
-
-## Project Structure
-
-- `/app` - Next.js application routes and pages
-- `/components` - React components
-- `/lib` - Utility functions and helpers
-- `/data` - Game data (rulesets, equipment, etc.)
-- `/docs` - Project documentation
-
-## Learn More
-
-To learn more about Next.js, check out the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs)
-- [Learn Next.js](https://nextjs.org/learn)
-
-## Contributing
-
-See [CONTRIBUTING.md](CONTRIBUTING.md) for contribution guidelines.
-
-## License
+## ⚖️ License
 
 See [LICENSE](LICENSE) for license information.
