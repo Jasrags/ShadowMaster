@@ -1,6 +1,6 @@
 # Specifications Overview
 
-**Last Updated:** 2025-12-21
+**Last Updated:** 2025-12-22
 
 ---
 
@@ -83,61 +83,61 @@ mindmap
 
 ### Status Legend
 
-| Status | Meaning |
-|--------|---------|
-| **Implemented** | Core features complete and in production |
-| **Partial** | Some features implemented, others pending |
-| **Planned** | Designed but not yet implemented |
-| **Draft** | Under active design, not ready for implementation |
+| Status          | Meaning                                           |
+| --------------- | ------------------------------------------------- |
+| **Implemented** | Core features complete and in production          |
+| **Partial**     | Some features implemented, others pending         |
+| **Planned**     | Designed but not yet implemented                  |
+| **Draft**       | Under active design, not ready for implementation |
 
 ### Core Functionality
 
-| Specification | Summary | Status | Dependencies |
-|---------------|---------|--------|--------------|
-| [Character Creation & Management](character_creation_and_management_specification.md) | Wizard-based character creation with priority system | **Partial** | RulesetSystem, StorageLayer |
-| [Character Sheet](character_sheet_specification.md) | Character viewing and editing interface | **Implemented** | CharacterCreation |
-| [Character Advancement](character_advancement_specification.md) | Post-creation karma spending for progression | **Partial** | RulesetSystem, CampaignSystem |
-| [Qualities](qualities_specification.md) | Character traits, effects, and dynamic state management | **Partial** | RulesetSystem, CharacterCreation |
-| [Cyberware & Bioware](cyberware_bioware_specification.md) | Augmentation selection and essence management | **Partial** | RulesetSystem, CharacterCreation |
-| [Weapon Modifications](weapon_modifications_and_mount_points_specification.md) | Mount points and modification validation | **Planned** | RulesetSystem, GearStep |
+| Specification                                                                         | Summary                                                 | Status          | Dependencies                     |
+| ------------------------------------------------------------------------------------- | ------------------------------------------------------- | --------------- | -------------------------------- |
+| [Character Creation & Management](character_creation_and_management_specification.md) | Wizard-based character creation with priority system    | **Partial**     | RulesetSystem, StorageLayer      |
+| [Character Sheet](character_sheet_specification.md)                                   | Character viewing and editing interface                 | **Implemented** | CharacterCreation                |
+| [Character Advancement](character_advancement_specification.md)                       | Post-creation karma spending for progression            | **Partial**     | RulesetSystem, CampaignSystem    |
+| [Qualities](qualities_specification.md)                                               | Character traits, effects, and dynamic state management | **Implemented** | RulesetSystem, CharacterCreation |
+| [Cyberware & Bioware](cyberware_bioware_specification.md)                             | Augmentation selection and essence management           | **Partial**     | RulesetSystem, CharacterCreation |
+| [Weapon Modifications](weapon_modifications_and_mount_points_specification.md)        | Mount points and modification validation                | **Planned**     | RulesetSystem, GearStep          |
 
 ### Campaign Management
 
-| Specification | Summary | Status | Dependencies |
-|---------------|---------|--------|--------------|
-| [Campaign Support](campaign_support_specification.md) | GM campaign creation, player management, ruleset control | **Partial** | RulesetSystem, AuthSystem |
-| [Locations](locations_specification.md) | Hierarchical location management for world-building | **Implemented** | CampaignSystem |
-| [NPCs & Grunts](npcs_grunts_specification.md) | NPC creation and grunt team management | **Planned** | CampaignSystem, RulesetSystem |
-| [Encounter](encounter_specification.md) | Combat/encounter management with initiative tracking | **Planned** | CampaignSystem, NPCs |
+| Specification                                         | Summary                                                  | Status          | Dependencies                  |
+| ----------------------------------------------------- | -------------------------------------------------------- | --------------- | ----------------------------- |
+| [Campaign Support](campaign_support_specification.md) | GM campaign creation, player management, ruleset control | **Partial**     | RulesetSystem, AuthSystem     |
+| [Locations](locations_specification.md)               | Hierarchical location management for world-building      | **Implemented** | CampaignSystem                |
+| [NPCs & Grunts](npcs_grunts_specification.md)         | NPC creation and grunt team management                   | **Planned**     | CampaignSystem, RulesetSystem |
+| [Encounter](encounter_specification.md)               | Combat/encounter management with initiative tracking     | **Planned**     | CampaignSystem, NPCs          |
 
 ### Gameplay Systems
 
-| Specification | Summary | Status | Dependencies |
-|---------------|---------|--------|--------------|
-| [Dice Roller](dice_roller_specification.md) | Dice pool rolling with glitch detection and Edge | **Implemented** | None |
-| [Gameplay Actions](gameplay_actions_specification.md) | Combat, magic, and matrix action resolution | **Planned** | RulesetSystem, DiceRoller |
-| [GM Approval UI](gm_approval_ui_implementation.md) | Frontend for GM advancement approval workflow | **Implemented** | AdvancementSystem |
+| Specification                                         | Summary                                          | Status          | Dependencies              |
+| ----------------------------------------------------- | ------------------------------------------------ | --------------- | ------------------------- |
+| [Dice Roller](dice_roller_specification.md)           | Dice pool rolling with glitch detection and Edge | **Implemented** | None                      |
+| [Gameplay Actions](gameplay_actions_specification.md) | Combat, magic, and matrix action resolution      | **Planned**     | RulesetSystem, DiceRoller |
+| [GM Approval UI](gm_approval_ui_implementation.md)    | Frontend for GM advancement approval workflow    | **Implemented** | AdvancementSystem         |
 
 ### User Interface
 
-| Specification | Summary | Status | Dependencies |
-|---------------|---------|--------|--------------|
+| Specification                                   | Summary                                | Status          | Dependencies  |
+| ----------------------------------------------- | -------------------------------------- | --------------- | ------------- |
 | [Rulesets Page](rulesets_page_specification.md) | Edition and ruleset browsing interface | **Implemented** | RulesetSystem |
-| [Settings Page](settings_page_specification.md) | User preferences and account settings | **Implemented** | AuthSystem |
+| [Settings Page](settings_page_specification.md) | User preferences and account settings  | **Implemented** | AuthSystem    |
 
 ### Security & Administration
 
-| Specification | Summary | Status | Dependencies |
-|---------------|---------|--------|--------------|
-| [Authentication](authentication_specification.md) | User signup, signin, session management | **Implemented** | StorageLayer |
-| [User Management](user_management_specification.md) | Admin user administration interface | **Implemented** | AuthSystem |
+| Specification                                       | Summary                                 | Status          | Dependencies |
+| --------------------------------------------------- | --------------------------------------- | --------------- | ------------ |
+| [Authentication](authentication_specification.md)   | User signup, signin, session management | **Implemented** | StorageLayer |
+| [User Management](user_management_specification.md) | Admin user administration interface     | **Implemented** | AuthSystem   |
 
 ### System Architecture
 
-| Specification | Summary | Status | Dependencies |
-|---------------|---------|--------|--------------|
-| [Ruleset Architecture](ruleset_architecture_and_source_material_system.md) | Edition/book loading and merge system | **Implemented** | StorageLayer |
-| [System Synchronization](system_synchronization_specification.md) | Character-ruleset drift management | **Draft** | RulesetSystem |
+| Specification                                                              | Summary                               | Status          | Dependencies  |
+| -------------------------------------------------------------------------- | ------------------------------------- | --------------- | ------------- |
+| [Ruleset Architecture](ruleset_architecture_and_source_material_system.md) | Edition/book loading and merge system | **Implemented** | StorageLayer  |
+| [System Synchronization](system_synchronization_specification.md)          | Character-ruleset drift management    | **Draft**       | RulesetSystem |
 
 ---
 
@@ -148,8 +148,8 @@ mindmap
 ```mermaid
 pie showData
     title Specification Status Distribution
-    "Implemented" : 9
-    "Partial" : 5
+    "Implemented" : 10
+    "Partial" : 4
     "Planned" : 4
     "Draft" : 1
 ```
@@ -165,16 +165,16 @@ pie showData
 - **Locations**: Hierarchical location management with templates
 - **Ruleset Architecture**: Edition loading, book merging, module system
 - **GM Approval UI**: Campaign tab for GMs to approve/reject character advancements
+- **Qualities**: Comprehensive trait system with dynamic state tracking (Addiction, Allergy) and character sheet integration
 
 ### Partially Complete
 
-| Feature | What's Done | What Remains |
-|---------|-------------|--------------|
-| Character Creation | Priority wizard, 16 creation steps, draft auto-save | Validation engine, karma point-buy method |
-| Character Advancement | Attributes, skills, edge advancement; karma ledger; API complete; GM approval UI | Spells, initiation |
-| Qualities | Core system, validation, karma accounting, effects engine, dynamic state, API | Quality selection UI, advancement UI, full effects catalog |
-| Campaign Support | Campaign CRUD, player roster, sessions, notes | Reward distribution UI, full advancement integration |
-| Cyberware/Bioware | Basic selection in GearStep | Enhanced essence tracking, grade selection UI |
+| Feature               | What's Done                                                                                             | What Remains                                         |
+| --------------------- | ------------------------------------------------------------------------------------------------------- | ---------------------------------------------------- |
+| Character Creation    | Priority wizard, 16 creation steps, draft auto-save                                                     | Validation engine, karma point-buy method            |
+| Character Advancement | Attributes, skills, edge advancement; karma ledger; API complete; GM approval UI; Qualities integration | Spells, initiation                                   |
+| Campaign Support      | Campaign CRUD, player roster, sessions, notes                                                           | Reward distribution UI, full advancement integration |
+| Cyberware/Bioware     | Basic selection in GearStep                                                                             | Enhanced essence tracking, grade selection UI        |
 
 ### Not Yet Started
 
@@ -314,12 +314,12 @@ flowchart LR
     style KC fill:#FFD93D
 ```
 
-| If This Changes... | These Are Affected |
-|--------------------|-------------------|
-| RulesetSystem merge logic | All creation steps, validation, advancement costs |
-| Character type definitions | Sheet, advancement, campaign roster, encounters |
-| Campaign data model | Locations, NPCs, encounters, advancement approval |
-| Karma cost formulas | Advancement validation, campaign reward calculations |
+| If This Changes...         | These Are Affected                                   |
+| -------------------------- | ---------------------------------------------------- |
+| RulesetSystem merge logic  | All creation steps, validation, advancement costs    |
+| Character type definitions | Sheet, advancement, campaign roster, encounters      |
+| Campaign data model        | Locations, NPCs, encounters, advancement approval    |
+| Karma cost formulas        | Advancement validation, campaign reward calculations |
 
 ### Sequencing Requirements
 
@@ -372,19 +372,19 @@ flowchart LR
 
 ### Missing Specifications
 
-| Implied By | Missing Spec |
-|------------|--------------|
-| Cyberware spec references enhancements | No cyberware enhancement specification |
-| Character creation mentions contacts step | No contacts specification |
-| Character creation mentions vehicles step | No vehicles specification |
+| Implied By                                | Missing Spec                           |
+| ----------------------------------------- | -------------------------------------- |
+| Cyberware spec references enhancements    | No cyberware enhancement specification |
+| Character creation mentions contacts step | No contacts specification              |
+| Character creation mentions vehicles step | No vehicles specification              |
 
 ### Status Inconsistencies Found
 
-| Specification | README Said | File Says | Actual State (MCP) |
-|---------------|-------------|-----------|-------------------|
-| Character Advancement | Not listed | Specification | **Partial** (API + UI implemented) |
-| Locations | Not implemented | Implemented | **Implemented** |
-| Campaign Support | Not implemented | Specification | **Partial** (CRUD exists) |
+| Specification         | README Said     | File Says     | Actual State (MCP)                 |
+| --------------------- | --------------- | ------------- | ---------------------------------- |
+| Character Advancement | Not listed      | Specification | **Partial** (API + UI implemented) |
+| Locations             | Not implemented | Implemented   | **Implemented**                    |
+| Campaign Support      | Not implemented | Specification | **Partial** (CRUD exists)          |
 
 ### Underspecified Areas
 
@@ -404,15 +404,10 @@ flowchart LR
 
 ### High Priority (Unblock Current Work)
 
-1. **Implement GM Approval UI**: Backend complete, frontend is the only blocker
-2. **Quality Selection UI**: Build creation step and advancement UI for qualities
-3. **Update Campaign Support Status**: Implementation exists, spec doesn't reflect this
-
-### Medium Priority (Complete Partial Features)
-
-4. **Quality Effects Catalog**: Add effects to all qualities in ruleset data
-5. **Advancement Phase 3**: Magic/Resonance advancement (initiation, spells)
-6. **Cyberware Enhancements**: Enhanced selection UI with grades
+1. **Update Campaign Support Status**: Implementation exists, spec doesn't reflect this
+2. **Quality Effects Catalog**: Add mechanical effects to all remaining core qualities
+3. **Advancement Phase 3**: Magic/Resonance advancement (initiation, spells)
+4. **Cyberware Enhancements**: Enhanced selection UI with grades
 
 ### Lower Priority (New Features)
 
@@ -455,4 +450,4 @@ When specification status changes:
 
 ---
 
-*This document is maintained as the authoritative index of specifications. Source of truth for implementation status is the MCP memory knowledge graph.*
+_This document is maintained as the authoritative index of specifications. Source of truth for implementation status is the MCP memory knowledge graph._

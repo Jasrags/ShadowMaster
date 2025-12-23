@@ -1,7 +1,7 @@
 # Qualities System Specification
 
-**Status:** Partial (Core system implemented, UI enhancements pending)
-**Last Updated:** 2025-12-21
+**Status:** Complete (Core system, UI, and Dynamic State management implemented)
+**Last Updated:** 2025-12-22
 **Category:** Core Functionality, Character System
 **Dependencies:** RulesetSystem, CharacterCreation, AdvancementSystem
 
@@ -457,7 +457,7 @@ Returns character with `positiveQualities` and `negativeQualities` arrays.
 
 ### Character Sheet - Qualities Section
 
-**Location:** `app/characters/[id]/components/QualitiesSection.tsx` (Planned)
+**Location:** `app/characters/[id]/components/QualitiesSection.tsx`
 
 **Features:**
 
@@ -468,7 +468,7 @@ Returns character with `positiveQualities` and `negativeQualities` arrays.
 
 ### Advancement - Quality Acquisition
 
-**Location:** `app/characters/[id]/advancement/components/QualityAdvancement.tsx` (Planned)
+**Location:** `app/characters/[id]/advancement/qualities.tsx`
 
 **Features:**
 
@@ -501,11 +501,13 @@ Returns character with `positiveQualities` and `negativeQualities` arrays.
 - [x] Quality advancement UI (`QualitiesAdvancement.tsx`)
 - [x] Test coverage for core modules
 
+- [x] Dynamic state management UI (Addiction, Allergy tracking)
+- [x] GM approval workflow for quality acquisition
+
 ### Pending
 
-- [/] Full catalog of SR5 qualities with effects (Enrichment in progress)
-- [ ] Dynamic state management UI (Addiction, Allergy tracking)
-- [ ] GM approval workflow for quality acquisition
+- [/] Full catalog of SR5 qualities with effects (Ongoing data enrichment)
+- [ ] Timeline view of dynamic state events
 
 ---
 
@@ -561,4 +563,4 @@ The qualities system has comprehensive test coverage:
 
 ---
 
-_This specification documents the implemented QualitiesSystem. All core business logic is complete; UI components are pending._
+_This specification documents the implemented QualitiesSystem. All core business logic and UI components are complete._

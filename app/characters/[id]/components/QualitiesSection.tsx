@@ -5,7 +5,7 @@ import { useQualities } from "@/lib/rules";
 import type { Character, QualitySelection, QualityEffect } from "@/lib/types";
 import { Theme, THEMES, DEFAULT_THEME } from "@/lib/themes";
 import { Section } from "./Section";
-import { ShieldCheck, ShieldAlert } from "lucide-react";
+import { ShieldCheck } from "lucide-react";
 import type { QualityData } from "@/lib/rules/loader-types";
 import { Info, Clock, AlertCircle, Settings2 } from "lucide-react";
 import { DynamicStateModal } from "./DynamicStateModal";
