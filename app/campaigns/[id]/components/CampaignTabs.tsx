@@ -5,22 +5,26 @@ export type CampaignTabId = "overview" | "characters" | "notes" | "roster" | "lo
 interface CampaignTabsProps {
     activeTab: CampaignTabId;
     onTabChange: (tab: CampaignTabId) => void;
-    isGM: boolean;
+    userRole: "gm" | "player" | null;
     pendingApprovalsCount?: number;
 }
 
-export default function CampaignTabs({ activeTab, onTabChange, isGM, pendingApprovalsCount = 0 }: CampaignTabsProps) {
+export default function CampaignTabs({ activeTab, onTabChange, userRole, pendingApprovalsCount = 0 }: CampaignTabsProps) {
+    const isGM = userRole === "gm";
+    const isMember = userRole !== null;
 
-    const tabs = [
-        { id: "overview" as const, label: "Overview" },
-        { id: "posts" as const, label: "Bulletin Board" },
-        { id: "calendar" as const, label: "Calendar" },
-        { id: "characters" as const, label: "Characters" },
-        { id: "locations" as const, label: "Locations" },
-        { id: "notes" as const, label: "Notes" },
-        ...(isGM ? [{ id: "roster" as const, label: "Roster" }] : []),
-        ...(isGM ? [{ id: "approvals" as const, label: "Approvals", badge: pendingApprovalsCount }] : []),
+    const allTabs = [
+        { id: "overview" as const, label: "Overview", public: true },
+        { id: "posts" as const, label: "Bulletin Board", public: false },
+        { id: "calendar" as const, label: "Calendar", public: false },
+        { id: "characters" as const, label: "Characters", public: false },
+        { id: "locations" as const, label: "Locations", public: false },
+        { id: "notes" as const, label: "Notes", public: false },
+        ...(isGM ? [{ id: "roster" as const, label: "Roster", public: false }] : []),
+        ...(isGM ? [{ id: "approvals" as const, label: "Approvals", badge: pendingApprovalsCount, public: false }] : []),
     ];
+
+    const tabs = allTabs.filter(tab => tab.public || isMember);
 
     return (
         <div className="border-b border-zinc-200 dark:border-zinc-800">
@@ -37,7 +41,7 @@ export default function CampaignTabs({ activeTab, onTabChange, isGM, pendingAppr
                     >
                         {tab.label}
                         {"badge" in tab && tab.badge !== undefined && tab.badge > 0 && (
-                            <span className="inline-flex items-center justify-center rounded-full bg-red-500 text-white text-xs font-bold min-w-[1.25rem] h-5 px-1.5">
+                            <span className="inline-flex items-center justify-center rounded-full bg-red-500 text-white text-xs font-bold min-w-5 h-5 px-1.5">
                                 {tab.badge > 99 ? "99+" : tab.badge}
                             </span>
                         )}

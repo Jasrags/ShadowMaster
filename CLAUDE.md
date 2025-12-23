@@ -1,6 +1,6 @@
 # CLAUDE.md
 
-This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
+This file provides guidance to Claude Code (claude.ai/code) and Cursor IDE when working with code in this repository.
 
 ## Project Overview
 
@@ -409,7 +409,7 @@ Comprehensive architecture docs in `/docs/`:
 
 ## MCP Servers
 
-This project has MCP servers configured in `.mcp.json` for enhanced workflow:
+This project has MCP servers configured for Cursor IDE. The configuration is located at `~/.cursor/mcp.json` (global Cursor config) and mirrored in the workspace `.mcp.json` file for reference:
 
 ### Available Servers
 
