@@ -1,19 +1,23 @@
 "use client";
 
-import React from "react";
+import React, { useState } from "react";
 import { useQualities } from "@/lib/rules";
 import type { Character, QualitySelection, QualityEffect } from "@/lib/types";
 import type { Theme } from "@/lib/themes";
 import type { QualityData } from "@/lib/rules/loader-types";
-import { Info, Clock, AlertCircle } from "lucide-react";
+import { Info, Clock, AlertCircle, Settings2 } from "lucide-react";
+import { DynamicStateModal } from "./DynamicStateModal";
 
 interface QualitiesSectionProps {
   character: Character;
   theme?: Theme;
+  onUpdate?: (updatedCharacter: Character) => void;
 }
 
-export function QualitiesSection({ character }: QualitiesSectionProps) {
+export function QualitiesSection({ character, onUpdate }: QualitiesSectionProps) {
   const { positive: positiveData, negative: negativeData } = useQualities();
+  const [activeSelection, setActiveSelection] = useState<QualitySelection | null>(null);
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   const renderQualityList = (selections: QualitySelection[], isPositive: boolean) => {
     if (!selections || selections.length === 0) return null;
@@ -157,6 +161,20 @@ export function QualitiesSection({ character }: QualitiesSectionProps) {
                     <Info className="w-3 h-3 text-muted-foreground" />
                   </div>
                 )}
+
+                {rawSelection.dynamicState && (
+                  <button
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      setActiveSelection(rawSelection as QualitySelection);
+                      setIsModalOpen(true);
+                    }}
+                    className="absolute right-2 bottom-2 p-1.5 rounded bg-muted/50 hover:bg-amber-500/20 hover:text-amber-500 text-muted-foreground transition-all opacity-0 group-hover:opacity-100"
+                    title="Manage Dynamic State"
+                  >
+                    <Settings2 className="w-3.5 h-3.5" />
+                  </button>
+                )}
               </div>
             );
           })}
@@ -179,6 +197,18 @@ export function QualitiesSection({ character }: QualitiesSectionProps) {
     <div className="space-y-8">
       {renderQualityList(character.positiveQualities || [], true)}
       {renderQualityList(character.negativeQualities || [], false)}
+
+      {activeSelection && (
+        <DynamicStateModal
+          character={character}
+          selection={activeSelection}
+          isOpen={isModalOpen}
+          onOpenChange={setIsModalOpen}
+          onUpdate={(updated) => {
+            onUpdate?.(updated);
+          }}
+        />
+      )}
     </div>
   );
 }

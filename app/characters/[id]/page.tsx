@@ -1002,6 +1002,7 @@ function ThemeSelector({ currentTheme, onSelect }: { currentTheme: ThemeId, onSe
 
 function CharacterSheet({
   character,
+  setCharacter,
   showDiceRoller,
   setShowDiceRoller,
   targetPool,
@@ -1016,6 +1017,7 @@ function CharacterSheet({
   setTargetPool: (pool: number) => void;
   poolContext: string | undefined;
   setPoolContext: (context: string | undefined) => void;
+  setCharacter: (character: Character) => void;
 }) {
   const { loadRuleset } = useRuleset();
   const { ready, loading: rulesetLoading } = useRulesetStatus();
@@ -1529,7 +1531,11 @@ function CharacterSheet({
             ) : null}
 
             {/* Qualities */}
-            <QualitiesSection character={character} theme={theme} />
+            <QualitiesSection 
+              character={character} 
+              theme={theme} 
+              onUpdate={(updated) => setCharacter(updated)}
+            />
 
             {/* General Gear */}
             <Section theme={theme} title="General Gear">
@@ -1702,6 +1708,7 @@ export default function CharacterPage({ params }: CharacterPageProps) {
     <RulesetProvider>
       <CharacterSheet
         character={character}
+        setCharacter={setCharacter}
         showDiceRoller={showDiceRoller}
         setShowDiceRoller={setShowDiceRoller}
         targetPool={targetPool}
