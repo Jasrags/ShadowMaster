@@ -124,6 +124,7 @@ export function advanceAttribute(
   const trainingTime = calculateAdvancementTrainingTime("attribute", newRating, {
     instructorBonus: options.instructorBonus,
     timeModifier: options.timeModifier,
+    settings: options.settings,
   });
 
   const advancementRecord: AdvancementRecord = {

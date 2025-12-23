@@ -8,6 +8,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { getSession } from "@/lib/auth/session";
 import { getUserById } from "@/lib/storage/users";
 import { getCharacter, addAdvancementRecord } from "@/lib/storage/characters";
+import { getCampaignById } from "@/lib/storage/campaigns";
 import { loadAndMergeRuleset } from "@/lib/rules/merge";
 import { advanceEdge, type AdvanceEdgeOptions } from "@/lib/rules/advancement/edge";
 import { requiresGMApproval } from "@/lib/rules/advancement/approval";
@@ -82,8 +83,18 @@ export async function POST(
       );
     }
 
+    // Load campaign and settings if character is in a campaign
+    let campaign;
+    if (character.campaignId) {
+      try {
+        campaign = await getCampaignById(character.campaignId);
+      } catch (error) {
+        console.warn("Failed to load campaign for settings:", error);
+      }
+    }
+
     // Enforce GM approval requirement for campaign characters
-    const needsApproval = requiresGMApproval(character);
+    const needsApproval = requiresGMApproval(character, campaign?.advancementSettings);
     if (needsApproval && gmApproved) {
       // Players cannot self-approve - only GM can approve via approval endpoint
       return NextResponse.json(
@@ -97,6 +108,7 @@ export async function POST(
       campaignSessionId,
       gmApproved: needsApproval ? false : gmApproved, // Force false if approval required
       notes,
+      settings: campaign?.advancementSettings,
     };
 
     // Advance Edge

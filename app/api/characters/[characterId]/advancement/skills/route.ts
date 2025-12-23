@@ -8,7 +8,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { getSession } from "@/lib/auth/session";
 import { getUserById } from "@/lib/storage/users";
 import { getCharacter, addAdvancementRecord } from "@/lib/storage/characters";
-import { getCampaignEvents } from "@/lib/storage/campaigns";
+import { getCampaignEvents, getCampaignById } from "@/lib/storage/campaigns";
 import { loadAndMergeRuleset } from "@/lib/rules/merge";
 import { advanceSkill, type AdvanceSkillOptions } from "@/lib/rules/advancement/skills";
 import { requiresGMApproval } from "@/lib/rules/advancement/approval";
@@ -94,6 +94,16 @@ export async function POST(
       );
     }
 
+    // Load campaign and settings if character is in a campaign
+    let campaign;
+    if (character.campaignId) {
+      try {
+        campaign = await getCampaignById(character.campaignId);
+      } catch (error) {
+        console.warn("Failed to load campaign for settings:", error);
+      }
+    }
+
     // Load campaign events if character is in a campaign and downtime period is specified
     let campaignEvents;
     if (character.campaignId && downtimePeriodId) {
@@ -106,7 +116,7 @@ export async function POST(
     }
 
     // Enforce GM approval requirement for campaign characters
-    const needsApproval = requiresGMApproval(character);
+    const needsApproval = requiresGMApproval(character, campaign?.advancementSettings);
     if (needsApproval && gmApproved) {
       // Players cannot self-approve - only GM can approve via approval endpoint
       return NextResponse.json(
@@ -124,6 +134,7 @@ export async function POST(
       timeModifier,
       notes,
       campaignEvents,
+      settings: campaign?.advancementSettings,
     };
 
     // Advance skill
