@@ -11,3 +11,15 @@ export type ISODateString = string;
 /** Generic metadata object for extensibility */
 export type Metadata = Record<string, unknown>;
 
+/**
+ * Magical or resonance path for a character
+ */
+export type MagicalPath =
+  | "mundane"
+  | "full-mage"
+  | "aspected-mage"
+  | "mystic-adept"
+  | "adept"
+  | "technomancer"
+  | "explorer";
+

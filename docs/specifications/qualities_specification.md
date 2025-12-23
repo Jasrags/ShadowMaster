@@ -1,7 +1,7 @@
 # Qualities System Specification
 
-**Status:** Partial (Core system implemented, UI enhancements pending)
-**Last Updated:** 2025-12-21
+**Status:** Complete (Core system, UI, and Dynamic State management implemented)
+**Last Updated:** 2025-12-22
 **Category:** Core Functionality, Character System
 **Dependencies:** RulesetSystem, CharacterCreation, AdvancementSystem
 
@@ -53,25 +53,25 @@ The Qualities system manages positive and negative character traits that provide
 
 ```typescript
 interface Quality {
-  id: string;                      // Unique identifier (e.g., "high-pain-tolerance")
-  name: string;                    // Display name
-  type: "positive" | "negative";   // Quality category
-  karmaCost?: number;              // Karma spent to acquire (positive)
-  karmaBonus?: number;             // Karma gained when taken (negative)
-  summary: string;                 // Short description (1-2 sentences)
-  description?: string;            // Extended text with full mechanics
-  source?: SourceReference;        // Book and page reference
-  tags?: string[];                 // Categorization tags
-  prerequisites?: QualityPrerequisites;  // Requirements to take
-  incompatibilities?: string[];    // Quality IDs that cannot coexist
-  levels?: QualityLevel[];         // For per-rating qualities
-  maxRating?: number;              // Maximum rating if per-rating
-  limit?: number;                  // How many times quality can be taken (default: 1)
+  id: string; // Unique identifier (e.g., "high-pain-tolerance")
+  name: string; // Display name
+  type: "positive" | "negative"; // Quality category
+  karmaCost?: number; // Karma spent to acquire (positive)
+  karmaBonus?: number; // Karma gained when taken (negative)
+  summary: string; // Short description (1-2 sentences)
+  description?: string; // Extended text with full mechanics
+  source?: SourceReference; // Book and page reference
+  tags?: string[]; // Categorization tags
+  prerequisites?: QualityPrerequisites; // Requirements to take
+  incompatibilities?: string[]; // Quality IDs that cannot coexist
+  levels?: QualityLevel[]; // For per-rating qualities
+  maxRating?: number; // Maximum rating if per-rating
+  limit?: number; // How many times quality can be taken (default: 1)
   requiresSpecification?: boolean; // Whether player must specify details
-  specificationLabel?: string;     // Label for specification input
-  specificationSource?: string;    // Catalog to pull options from
+  specificationLabel?: string; // Label for specification input
+  specificationSource?: string; // Catalog to pull options from
   specificationOptions?: string[]; // Fixed list of valid options
-  effects?: QualityEffect[];       // Gameplay effects
+  effects?: QualityEffect[]; // Gameplay effects
   dynamicState?: DynamicStateType; // For qualities with changing state
 }
 ```
@@ -80,26 +80,26 @@ interface Quality {
 
 ```typescript
 interface QualitySelection {
-  qualityId: string;               // References catalog Quality.id
-  rating?: number;                 // Chosen rating for per-rating qualities
-  specification?: string;          // Player-specified detail
-  specificationId?: string;        // ID when specification references catalog
-  source: AcquisitionSource;       // How/when quality was acquired
+  qualityId: string; // References catalog Quality.id
+  rating?: number; // Chosen rating for per-rating qualities
+  specification?: string; // Player-specified detail
+  specificationId?: string; // ID when specification references catalog
+  source: AcquisitionSource; // How/when quality was acquired
   acquisitionDate?: ISODateString; // When quality was acquired
-  originalKarma?: number;          // Original karma value (for buy-off)
-  variant?: string;                // For qualities with variants
-  notes?: string;                  // Player/GM annotations
-  active?: boolean;                // Whether quality is currently active
+  originalKarma?: number; // Original karma value (for buy-off)
+  variant?: string; // For qualities with variants
+  notes?: string; // Player/GM annotations
+  active?: boolean; // Whether quality is currently active
   dynamicState?: QualityDynamicState; // Current state for dynamic qualities
 }
 
 type AcquisitionSource =
-  | "creation"      // During character creation
-  | "advancement"   // Purchased with Karma post-creation
-  | "story"         // Granted by GM during gameplay
-  | "racial"        // Innate from metatype
-  | "initiation"    // From magical initiation
-  | "submersion";   // From technomancer submersion
+  | "creation" // During character creation
+  | "advancement" // Purchased with Karma post-creation
+  | "story" // Granted by GM during gameplay
+  | "racial" // Innate from metatype
+  | "initiation" // From magical initiation
+  | "submersion"; // From technomancer submersion
 ```
 
 ### Quality Prerequisites
@@ -107,16 +107,16 @@ type AcquisitionSource =
 ```typescript
 interface QualityPrerequisites {
   attributes?: Record<string, { min?: number; max?: number }>;
-  magicalPaths?: MagicalPath[];           // Must be one of these
-  magicalPathsExcluded?: MagicalPath[];   // Cannot be any of these
-  metatypes?: string[];                   // Must be one of these
-  metatypesExcluded?: string[];           // Cannot be any of these
-  requiredQualities?: string[];           // Must have all of these
-  requiredAnyQualities?: string[];        // Must have at least one
+  magicalPaths?: MagicalPath[]; // Must be one of these
+  magicalPathsExcluded?: MagicalPath[]; // Cannot be any of these
+  metatypes?: string[]; // Must be one of these
+  metatypesExcluded?: string[]; // Cannot be any of these
+  requiredQualities?: string[]; // Must have all of these
+  requiredAnyQualities?: string[]; // Must have at least one
   skills?: Record<string, { min?: number }>;
-  hasMagic?: boolean;                     // Must have Magic attribute
-  hasResonance?: boolean;                 // Must have Resonance attribute
-  customValidator?: string;               // Custom validation function
+  hasMagic?: boolean; // Must have Magic attribute
+  hasResonance?: boolean; // Must have Resonance attribute
+  customValidator?: string; // Custom validation function
 }
 ```
 
@@ -124,13 +124,13 @@ interface QualityPrerequisites {
 
 ```typescript
 interface QualityEffect {
-  id: string;              // Unique effect identifier
-  type: EffectType;        // Category of effect
-  trigger: EffectTrigger;  // When effect applies
-  target: EffectTarget;    // What the effect modifies
-  value: number | string;  // Modifier value or formula
+  id: string; // Unique effect identifier
+  type: EffectType; // Category of effect
+  trigger: EffectTrigger; // When effect applies
+  target: EffectTarget; // What the effect modifies
+  value: number | string; // Modifier value or formula
   condition?: EffectCondition; // Optional conditions
-  description?: string;    // Human-readable description
+  description?: string; // Human-readable description
 }
 
 type EffectType =
@@ -189,7 +189,7 @@ interface AddictionState {
   nextCravingCheck: ISODateString;
   cravingActive: boolean;
   withdrawalActive: boolean;
-  withdrawalPenalty: number;  // 0-6 dice penalty
+  withdrawalPenalty: number; // 0-6 dice penalty
   daysClean: number;
   recoveryAttempts: number;
 }
@@ -213,8 +213,8 @@ interface DependentState {
   tier: 1 | 2 | 3;
   currentStatus: "safe" | "needs-attention" | "in-danger" | "missing";
   lastCheckedIn: ISODateString;
-  lifestyleCostModifier: number;  // +10%, +20%, +30%
-  timeCommitmentHours: number;    // per week
+  lifestyleCostModifier: number; // +10%, +20%, +30%
+  timeCommitmentHours: number; // per week
 }
 
 // Code of Honor State
@@ -237,12 +237,12 @@ interface CodeOfHonorState {
 
 ### Karma Limits (SR5)
 
-| Rule | Value | Enforcement |
-|------|-------|-------------|
-| Maximum positive quality Karma | 25 | Hard limit at creation |
-| Maximum negative quality Karma bonus | 25 | Hard limit at creation |
-| Post-creation acquisition cost | 2× | Automatically calculated |
-| Post-creation buy-off cost | 2× | Automatically calculated |
+| Rule                                 | Value | Enforcement              |
+| ------------------------------------ | ----- | ------------------------ |
+| Maximum positive quality Karma       | 25    | Hard limit at creation   |
+| Maximum negative quality Karma bonus | 25    | Hard limit at creation   |
+| Post-creation acquisition cost       | 2×    | Automatically calculated |
+| Post-creation buy-off cost           | 2×    | Automatically calculated |
 
 ### Prerequisite Validation
 
@@ -259,18 +259,21 @@ Prerequisites are checked in this order:
 ### Dynamic State Rules
 
 #### Addiction
+
 - Craving checks occur based on severity (weekly → twice daily)
 - Failed craving test triggers withdrawal if dose not taken
 - Withdrawal applies dice penalties (up to -6)
 - Recovery requires extended abstinence and successful tests
 
 #### Allergy
+
 - Exposure triggers effects based on severity
 - Mild/Moderate: Dice penalties
 - Severe/Extreme: Physical damage over time
 - Effects end when exposure ends
 
 #### Dependents
+
 - Lifestyle cost modifier scales with tier (+10/20/30%)
 - Time commitment affects downtime activities
 - Status can change during gameplay
@@ -290,6 +293,7 @@ Returns character with `positiveQualities` and `negativeQualities` arrays.
 **Endpoint:** `POST /api/characters/[characterId]/qualities`
 
 **Request Body:**
+
 ```typescript
 {
   qualityId: string;
@@ -304,6 +308,7 @@ Returns character with `positiveQualities` and `negativeQualities` arrays.
 ```
 
 **Response:**
+
 ```typescript
 {
   success: boolean;
@@ -315,6 +320,7 @@ Returns character with `positiveQualities` and `negativeQualities` arrays.
 ```
 
 **Validation:**
+
 - Character must not be in draft status
 - Quality must exist in ruleset
 - Prerequisites must be met
@@ -326,6 +332,7 @@ Returns character with `positiveQualities` and `negativeQualities` arrays.
 **Endpoint:** `DELETE /api/characters/[characterId]/qualities/[qualityId]`
 
 **Request Body:**
+
 ```typescript
 {
   reason?: string;
@@ -333,6 +340,7 @@ Returns character with `positiveQualities` and `negativeQualities` arrays.
 ```
 
 **Response:**
+
 ```typescript
 {
   success: boolean;
@@ -343,6 +351,7 @@ Returns character with `positiveQualities` and `negativeQualities` arrays.
 ```
 
 **Validation:**
+
 - Only negative qualities can be bought off
 - Character must have sufficient Karma (2× original bonus)
 
@@ -353,6 +362,7 @@ Returns character with `positiveQualities` and `negativeQualities` arrays.
 **Request Body:** Partial dynamic state update
 
 **Response:**
+
 ```typescript
 {
   success: boolean;
@@ -367,66 +377,66 @@ Returns character with `positiveQualities` and `negativeQualities` arrays.
 
 ### Validation Module (`/lib/rules/qualities/validation.ts`)
 
-| Function | Purpose |
-|----------|---------|
-| `validatePrerequisites()` | Check all prerequisites for a quality |
-| `checkIncompatibilities()` | Check for conflicting qualities |
-| `canTakeQuality()` | Combined validation (prerequisites + incompatibilities + limits) |
-| `validateQualitySelection()` | Validate selection structure (rating, specification) |
-| `validateAllQualities()` | Validate all qualities on a character |
+| Function                     | Purpose                                                          |
+| ---------------------------- | ---------------------------------------------------------------- |
+| `validatePrerequisites()`    | Check all prerequisites for a quality                            |
+| `checkIncompatibilities()`   | Check for conflicting qualities                                  |
+| `canTakeQuality()`           | Combined validation (prerequisites + incompatibilities + limits) |
+| `validateQualitySelection()` | Validate selection structure (rating, specification)             |
+| `validateAllQualities()`     | Validate all qualities on a character                            |
 
 ### Karma Module (`/lib/rules/qualities/karma.ts`)
 
-| Function | Purpose |
-|----------|---------|
-| `calculateQualityCost()` | Calculate Karma cost for quality at rating |
-| `calculatePositiveQualityKarma()` | Sum of positive quality Karma spent |
-| `calculateNegativeQualityKarma()` | Sum of negative quality Karma gained |
-| `getAvailableKarma()` | Calculate remaining Karma |
-| `validateKarmaLimits()` | Enforce 25 Karma limits |
+| Function                          | Purpose                                    |
+| --------------------------------- | ------------------------------------------ |
+| `calculateQualityCost()`          | Calculate Karma cost for quality at rating |
+| `calculatePositiveQualityKarma()` | Sum of positive quality Karma spent        |
+| `calculateNegativeQualityKarma()` | Sum of negative quality Karma gained       |
+| `getAvailableKarma()`             | Calculate remaining Karma                  |
+| `validateKarmaLimits()`           | Enforce 25 Karma limits                    |
 
 ### Advancement Module (`/lib/rules/qualities/advancement.ts`)
 
-| Function | Purpose |
-|----------|---------|
-| `validateQualityAcquisition()` | Validate post-creation acquisition |
-| `acquireQuality()` | Acquire quality and update character |
-| `validateQualityRemoval()` | Validate quality buy-off |
-| `removeQuality()` | Remove quality and update character |
-| `calculatePostCreationCost()` | Calculate 2× acquisition cost |
-| `calculateBuyOffCost()` | Calculate 2× buy-off cost |
+| Function                       | Purpose                              |
+| ------------------------------ | ------------------------------------ |
+| `validateQualityAcquisition()` | Validate post-creation acquisition   |
+| `acquireQuality()`             | Acquire quality and update character |
+| `validateQualityRemoval()`     | Validate quality buy-off             |
+| `removeQuality()`              | Remove quality and update character  |
+| `calculatePostCreationCost()`  | Calculate 2× acquisition cost        |
+| `calculateBuyOffCost()`        | Calculate 2× buy-off cost            |
 
 ### Effects Module (`/lib/rules/qualities/effects.ts`)
 
-| Function | Purpose |
-|----------|---------|
+| Function                    | Purpose                                             |
+| --------------------------- | --------------------------------------------------- |
 | `resolveTemplateVariable()` | Resolve `{{rating}}`, `{{specification}}` in values |
-| `resolveEffectValue()` | Calculate numeric effect value |
-| `matchesTrigger()` | Check if effect trigger matches context |
-| `matchesCondition()` | Check if effect condition matches context |
-| `shouldApplyEffect()` | Combined trigger + condition check |
-| `getActiveEffects()` | Get all applicable effects for character |
+| `resolveEffectValue()`      | Calculate numeric effect value                      |
+| `matchesTrigger()`          | Check if effect trigger matches context             |
+| `matchesCondition()`        | Check if effect condition matches context           |
+| `shouldApplyEffect()`       | Combined trigger + condition check                  |
+| `getActiveEffects()`        | Get all applicable effects for character            |
 
 ### Gameplay Integration (`/lib/rules/qualities/gameplay-integration.ts`)
 
-| Function | Purpose |
-|----------|---------|
-| `calculateWoundModifier()` | Apply wound modifier effects |
-| `calculateSkillDicePool()` | Apply dice pool modifiers |
-| `calculateLimit()` | Apply limit modifiers |
-| `calculateLifestyleCost()` | Apply lifestyle cost modifiers |
-| `calculateHealingDicePool()` | Apply healing modifiers |
-| `calculateAttributeValue()` | Apply attribute modifiers |
+| Function                      | Purpose                           |
+| ----------------------------- | --------------------------------- |
+| `calculateWoundModifier()`    | Apply wound modifier effects      |
+| `calculateSkillDicePool()`    | Apply dice pool modifiers         |
+| `calculateLimit()`            | Apply limit modifiers             |
+| `calculateLifestyleCost()`    | Apply lifestyle cost modifiers    |
+| `calculateHealingDicePool()`  | Apply healing modifiers           |
+| `calculateAttributeValue()`   | Apply attribute modifiers         |
 | `calculateAttributeMaximum()` | Apply attribute maximum modifiers |
 
 ### Dynamic State Module (`/lib/rules/qualities/dynamic-state.ts`)
 
-| Function | Purpose |
-|----------|---------|
-| `initializeDynamicState()` | Create initial state for dynamic quality |
-| `updateDynamicState()` | Update state and return modified character |
-| `getDynamicState()` | Get current state for a quality |
-| `validateDynamicState()` | Validate state consistency |
+| Function                   | Purpose                                    |
+| -------------------------- | ------------------------------------------ |
+| `initializeDynamicState()` | Create initial state for dynamic quality   |
+| `updateDynamicState()`     | Update state and return modified character |
+| `getDynamicState()`        | Get current state for a quality            |
+| `validateDynamicState()`   | Validate state consistency                 |
 
 ---
 
@@ -437,6 +447,7 @@ Returns character with `positiveQualities` and `negativeQualities` arrays.
 **Location:** `app/characters/create/components/steps/QualitiesStep.tsx` (Planned)
 
 **Features:**
+
 - Tabbed interface: Positive | Negative
 - Quality list with search/filter
 - Karma cost display
@@ -446,9 +457,10 @@ Returns character with `positiveQualities` and `negativeQualities` arrays.
 
 ### Character Sheet - Qualities Section
 
-**Location:** `app/characters/[id]/components/QualitiesSection.tsx` (Planned)
+**Location:** `app/characters/[id]/components/QualitiesSection.tsx`
 
 **Features:**
+
 - List of positive and negative qualities
 - Rating and specification display
 - Effect summary tooltips
@@ -456,9 +468,10 @@ Returns character with `positiveQualities` and `negativeQualities` arrays.
 
 ### Advancement - Quality Acquisition
 
-**Location:** `app/characters/[id]/advancement/components/QualityAdvancement.tsx` (Planned)
+**Location:** `app/characters/[id]/advancement/qualities.tsx`
 
 **Features:**
+
 - Browse available qualities
 - Show 2× cost warning
 - Prerequisite validation
@@ -483,16 +496,18 @@ Returns character with `positiveQualities` and `negativeQualities` arrays.
 - [x] Gameplay integration functions
 - [x] Dynamic state management (Addiction, Allergy, Dependents)
 - [x] API endpoints for quality CRUD
+- [x] Character creation qualities step (`QualitiesStep.tsx`)
+- [x] Character sheet qualities section (`QualitiesSection.tsx`)
+- [x] Quality advancement UI (`QualitiesAdvancement.tsx`)
 - [x] Test coverage for core modules
+
+- [x] Dynamic state management UI (Addiction, Allergy tracking)
+- [x] GM approval workflow for quality acquisition
 
 ### Pending
 
-- [ ] Quality selection UI in character creation
-- [ ] Quality section on character sheet
-- [ ] Quality advancement UI
-- [ ] Dynamic state management UI
-- [ ] GM approval workflow for quality acquisition
-- [ ] Full catalog of SR5 qualities with effects
+- [/] Full catalog of SR5 qualities with effects (Ongoing data enrichment)
+- [ ] Timeline view of dynamic state events
 
 ---
 
@@ -500,15 +515,15 @@ Returns character with `positiveQualities` and `negativeQualities` arrays.
 
 The qualities system has comprehensive test coverage:
 
-| Test File | Coverage |
-|-----------|----------|
-| `validation.test.ts` | Prerequisites, incompatibilities, selection validation |
-| `karma.test.ts` | Cost calculations, limits |
-| `advancement.test.ts` | Acquisition, removal, validation |
-| `effects.test.ts` | Template resolution, trigger matching, condition matching |
-| `dynamic-state.test.ts` | State initialization, updates, validation |
-| `dynamic-state/addiction.test.ts` | Addiction-specific mechanics |
-| `dynamic-state/allergy.test.ts` | Allergy-specific mechanics |
+| Test File                         | Coverage                                                  |
+| --------------------------------- | --------------------------------------------------------- |
+| `validation.test.ts`              | Prerequisites, incompatibilities, selection validation    |
+| `karma.test.ts`                   | Cost calculations, limits                                 |
+| `advancement.test.ts`             | Acquisition, removal, validation                          |
+| `effects.test.ts`                 | Template resolution, trigger matching, condition matching |
+| `dynamic-state.test.ts`           | State initialization, updates, validation                 |
+| `dynamic-state/addiction.test.ts` | Addiction-specific mechanics                              |
+| `dynamic-state/allergy.test.ts`   | Allergy-specific mechanics                                |
 
 ---
 
@@ -548,4 +563,4 @@ The qualities system has comprehensive test coverage:
 
 ---
 
-*This specification documents the implemented QualitiesSystem. All core business logic is complete; UI components are pending.*
+_This specification documents the implemented QualitiesSystem. All core business logic and UI components are complete._

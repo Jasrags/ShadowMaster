@@ -5,8 +5,7 @@
  * character selections, prerequisites, effects, and dynamic state management.
  */
 
-import type { ISODateString } from "./core";
-import type { MagicalPath } from "./character";
+import type { ISODateString, MagicalPath } from "./core";
 
 // =============================================================================
 // QUALITY CATALOG TYPES
@@ -218,6 +217,8 @@ export type AcquisitionSource =
  * Selection of a quality on a character
  */
 export interface QualitySelection {
+  /** @deprecated Use qualityId instead */
+  id?: string;
   qualityId: string; // References catalog Quality.id
   rating?: number; // Chosen rating for per-rating qualities
   specification?: string; // Player-specified detail (e.g., skill name)
@@ -228,6 +229,7 @@ export interface QualitySelection {
   variant?: string; // For qualities with variants (e.g., Addiction severity)
   notes?: string; // Player/GM annotations
   active?: boolean; // Whether quality is currently active (default: true)
+  gmApproved?: boolean; // Whether acquisition has been approved by GM
   dynamicState?: QualityDynamicState; // Current state for dynamic qualities
 }
 

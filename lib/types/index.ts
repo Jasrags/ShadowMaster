@@ -5,7 +5,7 @@
  */
 
 // Core types
-export type { ID, ISODateString, Metadata } from "./core";
+export type { ID, ISODateString, Metadata, MagicalPath } from "./core";
 
   // Edition and ruleset types
 export type {
@@ -44,11 +44,9 @@ export type {
 
 // Character types
 export type {
-  MagicalPath,
   CharacterStatus,
   CharacterApprovalStatus,
   Character,
-  QualitySelection,
   KnowledgeSkill,
   LanguageSkill,
   SkillSource,
@@ -97,7 +95,7 @@ export type {
 
 // Quality types (additional types not re-exported from edition)
 export type {
-  QualitySelection as QualitySelectionType,
+  QualitySelection,
   EffectType,
   EffectTrigger,
   EffectTarget,
