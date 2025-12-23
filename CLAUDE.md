@@ -11,6 +11,7 @@ This file provides guidance to Claude Code (claude.ai/code) and Cursor IDE when 
 ## Development Commands
 
 ### Essential Commands
+
 - `pnpm dev` - Start development server (http://localhost:3000)
 - `pnpm dev:all` - Start dev server with type-check and lint watch
 - `pnpm build` - Create production build
@@ -22,6 +23,7 @@ This file provides guidance to Claude Code (claude.ai/code) and Cursor IDE when 
 - `pnpm test:e2e` - Run E2E tests (Playwright)
 
 ### Development Workflow
+
 1. Install dependencies: `pnpm install`
 2. Start dev server: `pnpm dev` (or `pnpm dev:all` for full checks)
 3. Create test user via `/signup` in browser
@@ -31,6 +33,7 @@ This file provides guidance to Claude Code (claude.ai/code) and Cursor IDE when 
 ## Architecture Overview
 
 ### Tech Stack
+
 - **Next.js 16.0.7** with App Router (file-based routing, React Server Components)
 - **React 19.2.0** with React Aria Components for accessibility
 - **TypeScript 5** with strict mode enabled
@@ -40,6 +43,7 @@ This file provides guidance to Claude Code (claude.ai/code) and Cursor IDE when 
 - **Cookie-based sessions** (httpOnly, 7-day expiration)
 
 ### Path Aliases
+
 - `@/*` maps to project root (e.g., `import { Character } from "@/lib/types"`)
 
 ### Key Directories
@@ -80,6 +84,7 @@ This file provides guidance to Claude Code (claude.ai/code) and Cursor IDE when 
 The ruleset architecture is the heart of the application. It allows supporting multiple Shadowrun editions without code duplication.
 
 **Key Concepts:**
+
 - **Edition**: Top-level ruleset container (e.g., `sr5`, `sr6`)
 - **Book**: Physical/digital publication with rules (core rulebook, sourcebooks)
 - **BookPayload**: JSON file containing rule modules for a book
@@ -88,12 +93,14 @@ The ruleset architecture is the heart of the application. It allows supporting m
 - **MergedRuleset**: Final immutable ruleset after merging all books
 
 **Critical Files:**
+
 - `/lib/rules/loader.ts` - Loads edition metadata and book payloads
 - `/lib/rules/merge.ts` - Merges books using merge strategies
 - `/lib/types/edition.ts` - Type definitions for edition system
 - `/data/editions/{editionCode}/` - Edition data files
 
 **Ruleset Loading Flow:**
+
 ```
 loadRuleset(editionCode)
   → Load edition.json
@@ -104,6 +111,7 @@ loadRuleset(editionCode)
 ```
 
 **To add a new edition or sourcebook:**
+
 1. Create `/data/editions/{editionCode}/` directory
 2. Add `edition.json` with metadata
 3. Add `core-rulebook.json` with base rules
@@ -115,17 +123,20 @@ loadRuleset(editionCode)
 Wizard-based, step-driven, budget-constrained character creation.
 
 **Key Concepts:**
+
 - **CreationMethod**: Defines creation steps, budgets, and constraints
 - **CreationState**: Tracks wizard progress, selections, and budgets
 - **Step Types**: `select`, `priority`, `allocate`, `choose`, `purchase`, `info`, `validate`
 - **Draft Auto-save**: Persists state to localStorage on every change
 
 **Critical Files:**
+
 - `/app/characters/create/components/CreationWizard.tsx` - Main orchestrator
 - `/app/characters/create/components/steps/` - Individual step components
 - `/lib/types/creation.ts` - Creation method and state types
 
 **Character Creation Flow:**
+
 ```
 EditionSelector
   → RulesetProvider.loadRuleset()
@@ -140,6 +151,7 @@ EditionSelector
 Post-creation karma spending for character progression.
 
 **Key Concepts:**
+
 - **Advancement Types**: Attributes, skills, specializations, edge
 - **Karma Costs**: Calculated based on current rating and advancement type
 - **Training Time**: Optional downtime tracking for advancement
@@ -147,6 +159,7 @@ Post-creation karma spending for character progression.
 - **Validation**: Ensures advancements follow edition rules
 
 **Critical Files:**
+
 - `/lib/rules/advancement/` - Core advancement logic
   - `costs.ts` - Karma cost calculations
   - `attributes.ts` - Attribute advancement
@@ -158,6 +171,7 @@ Post-creation karma spending for character progression.
 - `/app/characters/[id]/advancement/` - UI components
 
 **Advancement Flow:**
+
 ```
 User requests advancement
   → Validate against rules (karma available, max ratings, etc.)
@@ -170,16 +184,19 @@ User requests advancement
 ### 4. Data Management Layers
 
 **Authentication State** (`/lib/auth/AuthProvider.tsx`):
+
 - React Context managing user session globally
 - Provides `useAuth()` hook for components
 - Session stored in httpOnly cookie
 
 **Ruleset State** (`/lib/rules/RulesetContext.tsx`):
+
 - React Context caching loaded ruleset
 - Provides hooks: `useRuleset()`, `useMetatypes()`, `useSkills()`, etc.
 - Fetches from `/api/rulesets/[editionCode]`
 
 **Local Storage**:
+
 - Character creation wizard auto-saves drafts
 - Draft recovery on page reload
 
@@ -188,12 +205,14 @@ User requests advancement
 **Design:** JSON files on disk with atomic writes (temp file + rename pattern)
 
 **Storage Layer** (`/lib/storage/`):
+
 - `base.ts` - Core utilities: `readJsonFile()`, `writeJsonFile()`, `ensureDirectory()`
 - `users.ts` - User CRUD operations
 - `characters.ts` - Character CRUD + specialized operations (damage, karma, etc.)
 - `editions.ts` - Edition and ruleset loading
 
 **Storage Structure:**
+
 ```
 /data
 ├── /users/{userId}.json
@@ -209,6 +228,7 @@ User requests advancement
 ### 5. API Route Patterns
 
 All API routes follow this pattern:
+
 1. Extract session from cookie via `getSession()`
 2. Validate user exists via `getUserById()`
 3. Return 401 if unauthenticated
@@ -216,27 +236,29 @@ All API routes follow this pattern:
 5. Return JSON response
 
 **Example:**
+
 ```typescript
 // /app/api/characters/route.ts
 export async function GET(request: NextRequest) {
-  const session = await getSession()
+  const session = await getSession();
   if (!session?.userId) {
-    return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
+    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
 
-  const user = getUserById(session.userId)
+  const user = getUserById(session.userId);
   if (!user) {
-    return NextResponse.json({ error: 'User not found' }, { status: 404 })
+    return NextResponse.json({ error: "User not found" }, { status: 404 });
   }
 
-  const characters = getUserCharacters(session.userId)
-  return NextResponse.json({ characters })
+  const characters = getUserCharacters(session.userId);
+  return NextResponse.json({ characters });
 }
 ```
 
 ## Critical Code Flows
 
 ### User Authentication
+
 ```
 /signin page
   → POST /api/auth/signin
@@ -249,6 +271,7 @@ export async function GET(request: NextRequest) {
 **Files:** `/app/signin/page.tsx`, `/app/api/auth/signin/route.ts`, `/lib/auth/session.ts`, `/lib/auth/password.ts`
 
 ### Ruleset Loading and Merging
+
 ```
 Client: loadRuleset("sr5")
   → GET /api/rulesets/sr5
@@ -262,6 +285,7 @@ Client: loadRuleset("sr5")
 **Files:** `/lib/rules/loader.ts`, `/lib/rules/merge.ts`, `/app/api/rulesets/[editionCode]/route.ts`
 
 ### Character Creation
+
 ```
 /characters/create
   → EditionSelector picks edition
@@ -279,6 +303,7 @@ Client: loadRuleset("sr5")
 ## Type System
 
 All domain entities have TypeScript interfaces in `/lib/types/`:
+
 - `User`, `Character`, `Edition`, `Book`, `CreationMethod`
 - Extensive sub-types for character components (skills, qualities, gear, etc.)
 - Single export point: `/lib/types/index.ts`
@@ -288,23 +313,28 @@ All domain entities have TypeScript interfaces in `/lib/types/`:
 ## Component Patterns
 
 ### Server vs Client Components
+
 - **Server Components** (default): Pages that don't need interactivity
 - **Client Components** (`"use client"`): Interactive components, forms, wizards
 
 ### Custom Hooks for Logic Reuse
+
 - `useAuth()` - Access current user + auth functions
 - `useRuleset()` - Access loaded ruleset
 - `useMetatypes()`, `useSkills()`, `usePriorityTable()` - Extract specific data
 - `useRulesetStatus()` - Get loading/error state
 
 ### Context Providers
+
 Wrapped in `/app/providers.tsx` and applied in `/app/layout.tsx`:
+
 - `AuthProvider` - User session management
 - `RulesetProvider` - Loaded ruleset caching (nested in pages that need it)
 
 ## Development Guidelines
 
 ### File Operations
+
 - Never use bash commands for file operations
 - Always use TypeScript storage layer: `readJsonFile()`, `writeJsonFile()`
 - Atomic writes are automatic (temp file + rename pattern)
@@ -312,6 +342,7 @@ Wrapped in `/app/providers.tsx` and applied in `/app/layout.tsx`:
 ### Adding New Features
 
 **New API Endpoint:**
+
 1. Create `/app/api/{path}/route.ts`
 2. Export HTTP method handlers (GET, POST, PUT, DELETE)
 3. Follow authentication pattern (getSession → validate user)
@@ -319,12 +350,14 @@ Wrapped in `/app/providers.tsx` and applied in `/app/layout.tsx`:
 5. Return JSON responses
 
 **New Character Creation Step:**
+
 1. Define step in ruleset JSON (`core-rulebook.json`)
 2. Create step component in `/app/characters/create/components/steps/`
 3. Import and map in `CreationWizard.tsx`
 4. Update `CreationState` type if needed
 
 **New Ruleset Module:**
+
 1. Define module type in `/lib/types/edition.ts`
 2. Add module to book payload in `/data/editions/{editionCode}/`
 3. Update merge logic in `/lib/rules/merge.ts` if special handling needed
@@ -342,11 +375,13 @@ Wrapped in `/app/providers.tsx` and applied in `/app/layout.tsx`:
 ## Testing Approach
 
 **Test Infrastructure:**
+
 - **Vitest** - Unit and integration tests
 - **Playwright** - E2E browser tests
 - **Testing Library** - React component testing
 
 **Test Locations:**
+
 ```
 /__tests__/                           # Root level tests
 /lib/auth/__tests__/                  # Auth unit tests
@@ -359,6 +394,7 @@ Wrapped in `/app/providers.tsx` and applied in `/app/layout.tsx`:
 ```
 
 **Running Tests:**
+
 ```bash
 pnpm test              # Run all unit tests
 pnpm test:watch        # Watch mode
@@ -368,6 +404,7 @@ pnpm test:e2e:ui       # E2E with visual UI
 ```
 
 **Manual Testing:**
+
 1. Create test user via `/signup`
 2. Test character creation wizard end-to-end
 3. Check `/data` directory for persisted JSON
@@ -377,6 +414,7 @@ pnpm test:e2e:ui       # E2E with visual UI
 ## Documentation
 
 Comprehensive architecture docs in `/docs/`:
+
 - `architecture-overview.md` - Tech stack and design principles
 - `character_creation_framework.md` - Creation method design
 - `edition_support_and_ruleset_architecture.md` - Ruleset system details
@@ -390,6 +428,7 @@ Comprehensive architecture docs in `/docs/`:
 ## Future Migration Notes
 
 **Known Technical Debt:**
+
 1. **File-based storage** - Plan database migration (PostgreSQL/MongoDB recommended)
 2. **Limited error handling** - Some API routes need better error recovery
 3. **Session security** - Consider JWT/OAuth for production scale
@@ -409,23 +448,26 @@ Comprehensive architecture docs in `/docs/`:
 
 ## MCP Servers
 
-This project has MCP servers configured for Cursor IDE. The configuration is located at `~/.cursor/mcp.json` (global Cursor config) and mirrored in the workspace `.mcp.json` file for reference:
+This project has MCP servers configured for Cursor IDE. The configuration is located at `~/.cursor/mcp.json` (global Cursor config) and mirrored in the workspace `.mcp.json` file. These tools form the **AI Project Management Additions** to assist with automated linting, state tracking, and development.
 
 ### Available Servers
 
-| Server | Purpose | When to Use |
-|--------|---------|-------------|
-| **memory** | Persistent knowledge graph | Store/recall architectural decisions, patterns, known issues |
-| **git** | Git operations | Commits, diffs, branches, history viewing |
-| **filesystem** | File operations on project | Read/write any project files |
-| **sequentialthinking** | Structured problem-solving | Complex debugging, architecture decisions, multi-step analysis |
-| **time** | Timezone utilities | Timestamps (rarely needed) |
+| Server                 | Purpose                    | When to Use                                                  |
+| ---------------------- | -------------------------- | ------------------------------------------------------------ |
+| **spec-lint**          | Enforce spec immutability  | Automatically run to ensure no progress leaks into specs     |
+| **next-devtools**      | Next.js inspection         | Debugging React components and Next.js state                 |
+| **memory**             | Persistent knowledge graph | Store/recall architectural decisions, patterns, known issues |
+| **git**                | Git operations             | Commits, diffs, branches, history viewing                    |
+| **filesystem**         | File operations            | Read/write project files                                     |
+| **sequentialthinking** | Structured reasoning       | Complex debugging, architecture decisions                    |
+| **time**               | Timezone utilities         | Timestamps (rarely needed)                                   |
 
 ### Memory Server Usage
 
 The memory server maintains project knowledge across sessions. Use it to:
 
 **Query existing knowledge:**
+
 ```
 mcp__memory__search_nodes("ruleset")     # Find ruleset architecture info
 mcp__memory__search_nodes("technical")   # Find known technical debt
@@ -433,6 +475,7 @@ mcp__memory__open_nodes(["KeyFiles"])    # Get key file locations
 ```
 
 **Store new knowledge:**
+
 ```
 mcp__memory__create_entities([...])      # Add new architectural concepts
 mcp__memory__add_observations([...])     # Add details to existing entities
@@ -440,6 +483,7 @@ mcp__memory__create_relations([...])     # Link concepts together
 ```
 
 **When to update memory:**
+
 - After making significant architectural decisions
 - When discovering important patterns or gotchas
 - After resolving tricky bugs (document the solution)
@@ -448,6 +492,7 @@ mcp__memory__create_relations([...])     # Link concepts together
 ### Sequential Thinking Usage
 
 Use `mcp__sequentialthinking__sequentialthinking` for:
+
 - Debugging complex ruleset merge issues
 - Planning multi-step refactors
 - Working through character creation edge cases
@@ -457,6 +502,7 @@ Use `mcp__sequentialthinking__sequentialthinking` for:
 ### Git Server Usage
 
 Prefer MCP git tools over bash for cleaner integration:
+
 - `mcp__git__git_status` - Check working tree
 - `mcp__git__git_diff` - View changes
 - `mcp__git__git_log` - View history
