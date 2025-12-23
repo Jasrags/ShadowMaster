@@ -2,12 +2,16 @@
 
 import { useState } from "react";
 import type { Campaign, CampaignEvent } from "@/lib/types";
-import { Plus, Clock } from "lucide-react";
+import { Plus, Clock, Trophy, CheckCircle2 } from "lucide-react";
+import SessionRewardDialog from "./SessionRewardDialog";
+import type { CampaignSession } from "@/lib/types";
 
 interface CampaignCalendarTabProps {
     campaign: Campaign;
     userRole: "gm" | "player";
 }
+
+type DisplayItem = (CampaignEvent | (CampaignSession & { displayTitle: string; date: string; type: "session" }));
 
 export default function CampaignCalendarTab({ campaign, userRole }: CampaignCalendarTabProps) {
     const [events, setEvents] = useState<CampaignEvent[]>(campaign.events || []);
@@ -20,6 +24,26 @@ export default function CampaignCalendarTab({ campaign, userRole }: CampaignCale
     const [time, setTime] = useState("");
     const [type, setType] = useState<"session" | "deadline" | "downtime" | "other">("session");
     const [submitting, setSubmitting] = useState(false);
+
+    // Reward Dialog State
+    const [selectedSession, setSelectedSession] = useState<CampaignSession | null>(null);
+    const [isRewardDialogOpen, setIsRewardDialogOpen] = useState(false);
+
+    const handleCompleteSession = (session: CampaignSession) => {
+        setSelectedSession(session);
+        setIsRewardDialogOpen(true);
+    };
+
+    const handleRewardSuccess = () => {
+        // Since the parent CampaignDetailPage handles the campaign state, 
+        // we should ideally have a refresh mechanism. 
+        // For now, reload is the existing pattern in this component.
+        window.location.reload();
+    };
+
+    const isSession = (item: DisplayItem): item is (CampaignSession & { displayTitle: string; date: string; type: "session" }) => {
+        return item.type === "session";
+    };
 
     const handleCreateEvent = async (e: React.FormEvent) => {
         e.preventDefault();
@@ -86,15 +110,13 @@ export default function CampaignCalendarTab({ campaign, userRole }: CampaignCale
 
     // Merge events and sessions for display
     const sessions = (campaign.sessions || []).map((session, index) => ({
-        id: session.id,
-        title: `Session ${index + 1}: ${session.title || "Untitled"}`,
-        description: session.notes,
+        ...session,
+        displayTitle: `Session ${index + 1}: ${session.title || "Untitled"}`,
         date: session.scheduledAt,
         type: "session" as const,
-        createdBy: "system"
     }));
 
-    const allItems = [...events, ...sessions].sort((a, b) =>
+    const allItems: DisplayItem[] = [...events, ...sessions].sort((a, b) =>
         new Date(a.date).getTime() - new Date(b.date).getTime()
     );
 
@@ -236,20 +258,55 @@ export default function CampaignCalendarTab({ campaign, userRole }: CampaignCale
                                     <div className="flex-1">
                                         <div className="flex items-center justify-between">
                                             <h5 className="font-semibold text-zinc-900 dark:text-zinc-100">
-                                                {event.title}
+                                                {isSession(event) ? event.displayTitle : event.title}
                                             </h5>
-                                            <span className="rounded-full bg-zinc-100 px-2 py-0.5 text-xs font-medium text-zinc-600 dark:bg-zinc-800 dark:text-zinc-400 capitalize">
-                                                {event.type}
+                                            <span className={`rounded-full px-2 py-0.5 text-xs font-medium capitalize ${
+                                                isSession(event) && event.status === "completed"
+                                                    ? "bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400"
+                                                    : "bg-zinc-100 text-zinc-600 dark:bg-zinc-800 dark:text-zinc-400"
+                                            }`}>
+                                                {isSession(event) && event.status === "completed" ? "Completed" : event.type}
                                             </span>
                                         </div>
-                                        <div className="mt-1 flex items-center gap-2 text-sm text-zinc-500 dark:text-zinc-400">
-                                            <Clock className="h-4 w-4" />
-                                            {new Date(event.date).toLocaleTimeString(undefined, { hour: '2-digit', minute: '2-digit' })}
+                                        <div className="mt-1 flex items-center justify-between">
+                                            <div className="flex items-center gap-2 text-sm text-zinc-500 dark:text-zinc-400">
+                                                <Clock className="h-4 w-4" />
+                                                {new Date(event.date).toLocaleTimeString(undefined, { hour: '2-digit', minute: '2-digit' })}
+                                            </div>
+                                            {userRole === "gm" && isSession(event) && event.status !== "completed" && (
+                                                <button
+                                                    onClick={() => handleCompleteSession(event)}
+                                                    className="inline-flex items-center gap-1.5 text-xs font-semibold text-indigo-600 hover:text-indigo-700 dark:text-indigo-400 dark:hover:text-indigo-300"
+                                                >
+                                                    <Trophy className="h-3.5 w-3.5" />
+                                                    Complete & Award
+                                                </button>
+                                            )}
                                         </div>
-                                        {event.description && (
+                                        {"description" in event && event.description && (
                                             <p className="mt-2 text-sm text-zinc-600 dark:text-zinc-300">
                                                 {event.description}
                                             </p>
+                                        )}
+                                        {isSession(event) && event.recap && (
+                                            <div className="mt-3 rounded-md bg-zinc-50 p-3 dark:bg-zinc-900/50">
+                                                <p className="text-xs font-semibold uppercase tracking-wider text-zinc-400 dark:text-zinc-500">Recap</p>
+                                                <p className="mt-1 text-sm text-zinc-600 dark:text-zinc-300 line-clamp-3">
+                                                    {event.recap}
+                                                </p>
+                                            </div>
+                                        )}
+                                        {isSession(event) && event.status === "completed" && (
+                                            <div className="mt-3 flex items-center gap-4 border-t border-zinc-100 pt-3 dark:border-zinc-800">
+                                                <div className="flex items-center gap-1.5 text-xs font-medium text-amber-600">
+                                                    <Trophy className="h-3.5 w-3.5" />
+                                                    {event.karmaAwarded || 0} Karma
+                                                </div>
+                                                <div className="flex items-center gap-1.5 text-xs font-medium text-emerald-600">
+                                                    <CheckCircle2 className="h-3.5 w-3.5" />
+                                                    Rewards Distributed
+                                                </div>
+                                            </div>
                                         )}
                                     </div>
                                 </div>
@@ -280,6 +337,17 @@ export default function CampaignCalendarTab({ campaign, userRole }: CampaignCale
                     </div>
                 )}
             </div>
+
+            {/* Reward Dialog */}
+            {selectedSession && (
+                <SessionRewardDialog
+                    isOpen={isRewardDialogOpen}
+                    onClose={() => setIsRewardDialogOpen(false)}
+                    campaign={campaign}
+                    session={selectedSession}
+                    onSuccess={handleRewardSuccess}
+                />
+            )}
         </div>
     );
 }

@@ -6,6 +6,7 @@
  */
 
 import type { AdvancementType } from "@/lib/types";
+import type { CampaignAdvancementSettings } from "@/lib/types/campaign";
 
 /**
  * Calculate karma cost to advance an attribute
@@ -14,11 +15,12 @@ import type { AdvancementType } from "@/lib/types";
  * @param newRating - The target rating (after advancement)
  * @returns Karma cost
  */
-export function calculateAttributeCost(newRating: number): number {
+export function calculateAttributeCost(newRating: number, settings?: CampaignAdvancementSettings): number {
   if (newRating < 1) {
     throw new Error("Attribute rating must be at least 1");
   }
-  return newRating * 5;
+  const multiplier = settings?.attributeKarmaMultiplier ?? 5;
+  return newRating * multiplier;
 }
 
 /**
@@ -28,11 +30,12 @@ export function calculateAttributeCost(newRating: number): number {
  * @param newRating - The target rating (after advancement)
  * @returns Karma cost
  */
-export function calculateActiveSkillCost(newRating: number): number {
+export function calculateActiveSkillCost(newRating: number, settings?: CampaignAdvancementSettings): number {
   if (newRating < 1) {
     throw new Error("Skill rating must be at least 1");
   }
-  return newRating * 2;
+  const multiplier = settings?.skillKarmaMultiplier ?? 2;
+  return newRating * multiplier;
 }
 
 /**
@@ -42,11 +45,12 @@ export function calculateActiveSkillCost(newRating: number): number {
  * @param newRating - The target rating (after advancement)
  * @returns Karma cost
  */
-export function calculateKnowledgeSkillCost(newRating: number): number {
+export function calculateKnowledgeSkillCost(newRating: number, settings?: CampaignAdvancementSettings): number {
   if (newRating < 1) {
     throw new Error("Skill rating must be at least 1");
   }
-  return newRating * 1;
+  const multiplier = settings?.knowledgeSkillKarmaMultiplier ?? 1;
+  return newRating * multiplier;
 }
 
 /**
@@ -56,11 +60,12 @@ export function calculateKnowledgeSkillCost(newRating: number): number {
  * @param newRating - The target rating (after advancement)
  * @returns Karma cost
  */
-export function calculateSkillGroupCost(newRating: number): number {
+export function calculateSkillGroupCost(newRating: number, settings?: CampaignAdvancementSettings): number {
   if (newRating < 1) {
     throw new Error("Skill group rating must be at least 1");
   }
-  return newRating * 5;
+  const multiplier = settings?.skillGroupKarmaMultiplier ?? 5;
+  return newRating * multiplier;
 }
 
 /**
@@ -69,8 +74,8 @@ export function calculateSkillGroupCost(newRating: number): number {
  *
  * @returns Karma cost (always 7)
  */
-export function calculateSpecializationCost(): number {
-  return 7;
+export function calculateSpecializationCost(settings?: CampaignAdvancementSettings): number {
+  return settings?.specializationKarmaCost ?? 7;
 }
 
 /**
@@ -80,11 +85,12 @@ export function calculateSpecializationCost(): number {
  * @param newRating - The target rating (after advancement)
  * @returns Karma cost
  */
-export function calculateEdgeCost(newRating: number): number {
+export function calculateEdgeCost(newRating: number, settings?: CampaignAdvancementSettings): number {
   if (newRating < 1) {
     throw new Error("Edge rating must be at least 1");
   }
-  return newRating * 5;
+  const multiplier = settings?.attributeKarmaMultiplier ?? 5;
+  return newRating * multiplier;
 }
 
 /**
@@ -103,8 +109,8 @@ export function calculateNewKnowledgeSkillCost(): number {
  *
  * @returns Karma cost (always 5)
  */
-export function calculateSpellCost(): number {
-  return 5;
+export function calculateSpellCost(settings?: CampaignAdvancementSettings): number {
+  return settings?.spellKarmaCost ?? 5;
 }
 
 /**
@@ -113,8 +119,8 @@ export function calculateSpellCost(): number {
  *
  * @returns Karma cost (always 4)
  */
-export function calculateComplexFormCost(): number {
-  return 4;
+export function calculateComplexFormCost(settings?: CampaignAdvancementSettings): number {
+  return settings?.complexFormKarmaCost ?? 4;
 }
 
 /**
@@ -126,7 +132,8 @@ export function calculateComplexFormCost(): number {
  */
 export function calculateAdvancementCost(
   type: AdvancementType,
-  newRating?: number
+  newRating?: number,
+  settings?: CampaignAdvancementSettings
 ): number {
   switch (type) {
     case "attribute":
@@ -134,36 +141,36 @@ export function calculateAdvancementCost(
       if (newRating === undefined) {
         throw new Error("Rating required for attribute/edge advancement");
       }
-      return calculateAttributeCost(newRating);
+      return calculateAttributeCost(newRating, settings);
 
     case "skill":
       if (newRating === undefined) {
         throw new Error("Rating required for skill advancement");
       }
-      return calculateActiveSkillCost(newRating);
+      return calculateActiveSkillCost(newRating, settings);
 
     case "skillGroup":
       if (newRating === undefined) {
         throw new Error("Rating required for skill group advancement");
       }
-      return calculateSkillGroupCost(newRating);
+      return calculateSkillGroupCost(newRating, settings);
 
     case "knowledgeSkill":
     case "languageSkill":
       if (newRating === undefined) {
         throw new Error("Rating required for knowledge/language skill advancement");
       }
-      return calculateKnowledgeSkillCost(newRating);
+      return calculateKnowledgeSkillCost(newRating, settings);
 
     case "specialization":
-      return calculateSpecializationCost();
+      return calculateSpecializationCost(settings);
 
     case "spell":
     case "ritual":
-      return calculateSpellCost();
+      return calculateSpellCost(settings);
 
     case "complexForm":
-      return calculateComplexFormCost();
+      return calculateComplexFormCost(settings);
 
     case "focus":
       // Focus bonding cost varies by type - this is a placeholder

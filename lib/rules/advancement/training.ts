@@ -6,6 +6,7 @@
  */
 
 import type { AdvancementType } from "@/lib/types";
+import type { CampaignAdvancementSettings } from "@/lib/types/campaign";
 
 /**
  * Calculate training time in days for an attribute advancement
@@ -130,9 +131,19 @@ export function calculateFinalTrainingTime(
   options: {
     instructorBonus?: boolean;
     timeModifier?: number; // Percentage modifier
+    settings?: CampaignAdvancementSettings;
   } = {}
 ): number {
+  if (options.settings?.allowInstantAdvancement) {
+    return 0;
+  }
+
   let finalTime = baseTime;
+
+  // Apply training time multiplier from campaign settings
+  if (options.settings?.trainingTimeMultiplier !== undefined) {
+    finalTime = finalTime * options.settings.trainingTimeMultiplier;
+  }
 
   // Apply instructor bonus first (25% reduction, round down)
   if (options.instructorBonus) {
@@ -161,6 +172,7 @@ export function calculateAdvancementTrainingTime(
   options: {
     instructorBonus?: boolean;
     timeModifier?: number;
+    settings?: CampaignAdvancementSettings;
   } = {}
 ): number {
   let baseTime: number;

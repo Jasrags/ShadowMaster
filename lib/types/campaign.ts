@@ -24,6 +24,47 @@ export type GameplayLevel = "street" | "experienced" | "prime-runner";
 export type CampaignStatus = "active" | "paused" | "archived" | "completed";
 
 /**
+ * Configuration for character advancement in a campaign
+ */
+export interface CampaignAdvancementSettings {
+    /** Multiplier for training times (default: 1.0) */
+    trainingTimeMultiplier: number;
+    
+    /** Karma multiplier for attribute advancement (new rating x multiplier, default: 5) */
+    attributeKarmaMultiplier: number;
+    
+    /** Karma multiplier for active skill advancement (new rating x multiplier, default: 2) */
+    skillKarmaMultiplier: number;
+    
+    /** Karma multiplier for skill group advancement (new rating x multiplier, default: 5) */
+    skillGroupKarmaMultiplier: number;
+    
+    /** Karma multiplier for knowledge/language skill advancement (new rating x multiplier, default: 1) */
+    knowledgeSkillKarmaMultiplier: number;
+    
+    /** Fixed karma cost for specializations (default: 7) */
+    specializationKarmaCost: number;
+    
+    /** Fixed karma cost for spells/rituals (default: 5) */
+    spellKarmaCost: number;
+    
+    /** Fixed karma cost for complex forms (default: 4) */
+    complexFormKarmaCost: number;
+
+    /** Maximum rating for physical/mental attributes (default: 10) */
+    attributeRatingCap: number;
+
+    /** Maximum rating for active skills (default: 13) */
+    skillRatingCap: number;
+
+    /** Whether training time requirement is skipped (default: false) */
+    allowInstantAdvancement: boolean;
+
+    /** Whether GM approval is required for all advancements (default: true) */
+    requireApproval: boolean;
+}
+
+/**
  * A Shadowrun campaign managed by a GM
  */
 export interface Campaign {
@@ -63,6 +104,9 @@ export interface Campaign {
 
     /** House rules (freeform text or structured JSON) */
     houseRules?: string | Record<string, unknown>;
+
+    /** Advancement and training rules for this campaign */
+    advancementSettings: CampaignAdvancementSettings;
 
     // -------------------------------------------------------------------------
     // Roster & Access
@@ -183,14 +227,35 @@ export interface CampaignSession {
     durationMinutes?: number;
     /** Session status */
     status: "scheduled" | "completed" | "cancelled";
-    /** Players who attended/will attend */
+    /** Users (players) who attended/will attend */
     attendeeIds: ID[];
-    /** Session notes (GM-only) */
+    /** Characters that participated (for reward distribution) */
+    participantCharacterIds?: ID[];
+    /** Session recap/summary (visible to all) */
+    recap?: string;
+    /** Internal GM-only session notes */
+    gmSessionNotes?: string;
+    /** Public session notes/recap (Legacy: use recap instead) */
     notes?: string;
-    /** Karma awarded this session */
+    /** Whether rewards have been distributed for this session */
+    rewardsDistributed?: boolean;
+    /** Karma awarded this session per participant */
     karmaAwarded?: number;
+    /** Nuyen awarded this session per participant */
+    nuyenAwarded?: number;
     createdAt: ISODateString;
     updatedAt: ISODateString;
+}
+
+/**
+ * Data for distributing session rewards
+ */
+export interface SessionRewardData {
+    participantCharacterIds: ID[];
+    karmaAward: number;
+    nuyenAward: number;
+    recap?: string;
+    distributeRewards: boolean;
 }
 
 /**
@@ -221,6 +286,96 @@ export interface CampaignEvent {
     updatedAt: ISODateString;
 }
 
+/**
+ * Activity types for the campaign feed
+ */
+export type CampaignActivityType =
+    | "player_joined"
+    | "player_left"
+    | "character_created"
+    | "character_approved"
+    | "character_rejected"
+    | "character_retired"
+    | "session_scheduled"
+    | "session_completed"
+    | "karma_awarded"
+    | "advancement_approved"
+    | "advancement_rejected"
+    | "post_created"
+    | "campaign_updated"
+    | "location_added";
+
+/**
+ * Campaign activity feed entry
+ */
+export interface CampaignActivityEvent {
+    id: ID;
+    campaignId: ID;
+    type: CampaignActivityType;
+
+    /** User who triggered the activity */
+    actorId: ID;
+
+    /** Target of the activity (character, player, session, etc.) */
+    targetId?: ID;
+    targetType?: "character" | "player" | "session" | "post" | "location" | "campaign";
+    targetName?: string;
+
+    /** Human-readable description */
+    description: string;
+
+    /** Additional metadata */
+    metadata?: Record<string, unknown>;
+
+    timestamp: ISODateString;
+}
+
+/**
+ * Notification types
+ */
+export type NotificationType =
+    | "campaign_invite"
+    | "campaign_join_request"
+    | "session_reminder"
+    | "session_cancelled"
+    | "character_approval_requested"
+    | "character_approved"
+    | "character_rejected"
+    | "advancement_approval_requested"
+    | "advancement_approved"
+    | "advancement_rejected"
+    | "karma_awarded"
+    | "post_created"
+    | "mentioned";
+
+/**
+ * User notification
+ */
+export interface CampaignNotification {
+    id: ID;
+    userId: ID;
+    campaignId: ID;
+    type: NotificationType;
+
+    /** Notification title */
+    title: string;
+
+    /** Notification message */
+    message: string;
+
+    /** Link to relevant page */
+    actionUrl?: string;
+
+    /** Whether the notification has been read */
+    read: boolean;
+
+    /** Whether the notification has been dismissed */
+    dismissed: boolean;
+
+    createdAt: ISODateString;
+    readAt?: ISODateString;
+}
+
 // -----------------------------------------------------------------------------
 // API Request/Response Types
 // -----------------------------------------------------------------------------
@@ -243,6 +398,7 @@ export interface CreateCampaignRequest {
     startDate?: ISODateString;
     endDate?: ISODateString;
     tags?: string[];
+    advancementSettings?: Partial<CampaignAdvancementSettings>;
 }
 
 /**
@@ -263,6 +419,7 @@ export interface UpdateCampaignRequest {
     startDate?: ISODateString;
     endDate?: ISODateString;
     tags?: string[];
+    advancementSettings?: Partial<CampaignAdvancementSettings>;
 }
 
 /**

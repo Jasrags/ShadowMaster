@@ -178,6 +178,39 @@ export async function POST(
         // Create location
         const location = await createLocation(campaignId, body);
 
+        // Log activity and notify players asynchronously
+        try {
+            const { logActivity } = await import("@/lib/storage/activity");
+            const { createNotification } = await import("@/lib/storage/notifications");
+            
+            // Only log if visible to players
+            if (location.visibility !== "gm-only") {
+                await logActivity({
+                    campaignId,
+                    type: "location_added",
+                    actorId: userId,
+                    targetId: location.id,
+                    targetType: "location",
+                    targetName: location.name,
+                    description: `New location added: "${location.name}".`,
+                });
+                
+                // Notify players
+                for (const playerId of campaign.playerIds) {
+                    await createNotification({
+                        userId: playerId,
+                        campaignId: campaignId,
+                        type: "mentioned", // Placeholder for location highlight
+                        title: "New Location Discovered",
+                        message: `A new location "${location.name}" has been added to the campaign.`,
+                        actionUrl: `/campaigns/${campaignId}?tab=locations`,
+                    });
+                }
+            }
+        } catch (activityError) {
+            console.error("Failed to log location activity:", activityError);
+        }
+
         return NextResponse.json({
             success: true,
             location,

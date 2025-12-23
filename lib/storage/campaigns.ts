@@ -8,6 +8,7 @@ import { promises as fs } from "fs";
 import path from "path";
 import { v4 as uuidv4 } from "uuid";
 import type { Campaign, CampaignTemplate, CreateCampaignRequest, ID, CampaignPost, CampaignEvent } from "../types";
+import type { CampaignAdvancementSettings } from "../types/campaign";
 import { getEdition } from "./editions";
 
 const DATA_DIR = path.join(process.cwd(), "data", "campaigns");
@@ -42,13 +43,40 @@ function generateInviteCode(): string {
 }
 
 /**
+ * Default advancement settings for a new campaign
+ */
+export function getDefaultAdvancementSettings(): CampaignAdvancementSettings {
+    return {
+        trainingTimeMultiplier: 1.0,
+        attributeKarmaMultiplier: 5,
+        skillKarmaMultiplier: 2,
+        skillGroupKarmaMultiplier: 5,
+        knowledgeSkillKarmaMultiplier: 1,
+        specializationKarmaCost: 7,
+        spellKarmaCost: 5,
+        complexFormKarmaCost: 4,
+        attributeRatingCap: 10,
+        skillRatingCap: 13,
+        allowInstantAdvancement: false,
+        requireApproval: true,
+    };
+}
+
+/**
  * Get campaign by ID
  */
 export async function getCampaignById(campaignId: string): Promise<Campaign | null> {
     try {
         const filePath = getCampaignFilePath(campaignId);
         const fileContent = await fs.readFile(filePath, "utf-8");
-        return JSON.parse(fileContent) as Campaign;
+        const campaign = JSON.parse(fileContent) as Campaign;
+
+        // Populate default settings for older campaigns
+        if (!campaign.advancementSettings) {
+            campaign.advancementSettings = getDefaultAdvancementSettings();
+        }
+
+        return campaign;
     } catch (error) {
         if ((error as NodeJS.ErrnoException).code === "ENOENT") {
             return null;
@@ -211,6 +239,10 @@ export async function createCampaign(
         startDate: data.startDate,
         endDate: data.endDate,
         tags: data.tags,
+        advancementSettings: {
+            ...getDefaultAdvancementSettings(),
+            ...(data.advancementSettings || {}),
+        },
     };
 
     // Atomic write

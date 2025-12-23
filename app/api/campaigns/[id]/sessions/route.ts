@@ -119,6 +119,36 @@ export async function POST(
             sessions: [...existingSessions, newSession],
         });
 
+        // Log activity and notify players asynchronously
+        try {
+            const { logActivity } = await import("@/lib/storage/activity");
+            const { createNotification } = await import("@/lib/storage/notifications");
+            
+            await logActivity({
+                campaignId: id,
+                type: "session_scheduled",
+                actorId: userId,
+                targetId: newSession.id,
+                targetType: "session",
+                targetName: newSession.title,
+                description: `New session "${newSession.title}" scheduled for ${new Date(newSession.scheduledAt).toLocaleDateString()} at ${new Date(newSession.scheduledAt).toLocaleTimeString()}.`,
+            });
+            
+            // Notify all players
+            for (const playerId of campaign.playerIds) {
+                await createNotification({
+                    userId: playerId,
+                    campaignId: id,
+                    type: "session_reminder",
+                    title: "New Session Scheduled",
+                    message: `A new session "${newSession.title}" has been scheduled for ${new Date(newSession.scheduledAt).toLocaleString()}.`,
+                    actionUrl: `/campaigns/${id}?tab=calendar`,
+                });
+            }
+        } catch (activityError) {
+            console.error("Failed to log session scheduling activity:", activityError);
+        }
+
         return NextResponse.json({
             success: true,
             session: newSession,

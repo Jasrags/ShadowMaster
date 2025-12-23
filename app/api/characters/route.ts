@@ -111,6 +111,39 @@ export async function POST(request: NextRequest) {
       campaignId // Pass campaign ID if provided
     );
 
+    // Log activity and notify GM asynchronously if campaignId is present
+    if (campaignId) {
+        try {
+            const { logActivity } = await import("@/lib/storage/activity");
+            const { createNotification } = await import("@/lib/storage/notifications");
+            const { getCampaignById } = await import("@/lib/storage/campaigns");
+            
+            await logActivity({
+                campaignId: campaignId,
+                type: "character_created",
+                actorId: userId,
+                targetId: draft.id,
+                targetType: "character",
+                targetName: draft.name || "A new character",
+                description: `${user.username} created a character for the campaign: "${draft.name || 'Unnamed'}".`,
+            });
+            
+            const campaign = await getCampaignById(campaignId);
+            if (campaign) {
+                await createNotification({
+                    userId: campaign.gmId,
+                    campaignId: campaignId,
+                    type: "character_approval_requested",
+                    title: "New Character",
+                    message: `${user.username} created a new character "${draft.name || 'Unnamed'}" for your campaign "${campaign.title}".`,
+                    actionUrl: `/campaigns/${campaignId}?tab=approvals`,
+                });
+            }
+        } catch (activityError) {
+            console.error("Failed to log character creation activity:", activityError);
+        }
+    }
+
     return NextResponse.json({
       success: true,
       character: draft,

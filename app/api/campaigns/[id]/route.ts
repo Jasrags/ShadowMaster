@@ -7,8 +7,10 @@ import {
 } from "@/lib/storage/campaigns";
 import type {
     UpdateCampaignRequest,
-    CampaignResponse
+    CampaignResponse,
+    Campaign
 } from "@/lib/types";
+import type { CampaignAdvancementSettings } from "@/lib/types/campaign";
 
 /**
  * GET /api/campaigns/[id] - Get campaign details
@@ -131,8 +133,50 @@ export async function PUT(
             );
         }
 
+        if (body.advancementSettings) {
+            const settings = body.advancementSettings;
+            if (
+                (settings.attributeKarmaMultiplier !== undefined && settings.attributeKarmaMultiplier < 1) ||
+                (settings.skillKarmaMultiplier !== undefined && settings.skillKarmaMultiplier < 1) ||
+                (settings.skillGroupKarmaMultiplier !== undefined && settings.skillGroupKarmaMultiplier < 1)
+            ) {
+                return NextResponse.json(
+                    { success: false, error: "Karma multipliers must be at least 1" },
+                    { status: 400 }
+                );
+            }
+        }
+
+        // Merge advancement settings if present
+        const { advancementSettings, ...restBody } = body;
+        const updateData: Partial<Campaign> = { ...restBody };
+        
+        if (advancementSettings && campaign.advancementSettings) {
+            updateData.advancementSettings = {
+                ...campaign.advancementSettings,
+                ...advancementSettings
+            } as CampaignAdvancementSettings;
+        }
+
         // Update campaign
-        const updatedCampaign = await updateCampaign(id, body);
+        const updatedCampaign = await updateCampaign(id, updateData);
+
+        // Log activity asynchronously
+        try {
+            const { logActivity } = await import("@/lib/storage/activity");
+            
+            await logActivity({
+                campaignId: id,
+                type: "campaign_updated",
+                actorId: userId,
+                targetId: id,
+                targetType: "campaign",
+                targetName: updatedCampaign.title,
+                description: `Campaign settings were updated by the GM.`,
+            });
+        } catch (activityError) {
+            console.error("Failed to log campaign update activity:", activityError);
+        }
 
         return NextResponse.json({
             success: true,

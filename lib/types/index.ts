@@ -212,7 +212,14 @@ export type {
   CampaignPost,
   CampaignEvent,
   CampaignTemplate,
+  SessionRewardData,
+  CampaignActivityType,
+  CampaignActivityEvent,
+  NotificationType,
+  CampaignNotification,
 } from "./campaign";
+
+export type { CampaignAdvancementSettings } from "./campaign";
 
 // Location types
 export type {

@@ -46,6 +46,36 @@ export async function POST(
 
         await removePlayerFromCampaign(id, userId);
 
+        // Log activity and notify GM asynchronously
+        try {
+            const { getUserById } = await import("@/lib/storage/users");
+            const { logActivity } = await import("@/lib/storage/activity");
+            const { createNotification } = await import("@/lib/storage/notifications");
+            
+            const user = await getUserById(userId);
+            
+            await logActivity({
+                campaignId: id,
+                type: "player_left",
+                actorId: userId,
+                targetId: userId,
+                targetType: "player",
+                targetName: user?.username || "A player",
+                description: `${user?.username || "A player"} left the campaign.`,
+            });
+
+            await createNotification({
+                userId: campaign.gmId,
+                campaignId: id,
+                type: "mentioned",
+                title: "Player Left",
+                message: `${user?.username || "A player"} has left your campaign "${campaign.title}".`,
+                actionUrl: `/campaigns/${id}?tab=roster`,
+            });
+        } catch (activityError) {
+            console.error("Failed to log leave activity:", activityError);
+        }
+
         return NextResponse.json({
             success: true,
         });

@@ -7,6 +7,7 @@
 
 import { v4 as uuidv4 } from "uuid";
 import type { Character, MergedRuleset, AdvancementRecord, TrainingPeriod, CampaignEvent } from "@/lib/types";
+import type { CampaignAdvancementSettings } from "@/lib/types/campaign";
 import { calculateAdvancementTrainingTime } from "./training";
 import { validateSpecializationAdvancement } from "./validation";
 
@@ -21,6 +22,7 @@ export interface AdvanceSpecializationOptions {
   timeModifier?: number; // Percentage modifier (e.g., +50 for Dependents quality)
   notes?: string;
   campaignEvents?: CampaignEvent[]; // For downtime limit validation
+  settings?: CampaignAdvancementSettings;
 }
 
 /**
@@ -81,7 +83,8 @@ export function advanceSpecialization(
   const validation = validateSpecializationAdvancement(
     character,
     skillId,
-    ruleset
+    ruleset,
+    options.settings
   );
   if (!validation.valid) {
     throw new Error(

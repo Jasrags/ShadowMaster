@@ -57,6 +57,40 @@ export async function POST(
             authorId: userId
         });
 
+        // Log activity and notify members asynchronously
+        try {
+            const { logActivity } = await import("@/lib/storage/activity");
+            const { createNotification } = await import("@/lib/storage/notifications");
+            const { getUserById } = await import("@/lib/storage/users");
+            
+            const author = await getUserById(userId);
+            
+            await logActivity({
+                campaignId: id,
+                type: "post_created",
+                actorId: userId,
+                targetId: post.id,
+                targetType: "post",
+                targetName: post.title,
+                description: `${author?.username || "A member"} created a new post: "${post.title}".`,
+            });
+            
+            // Notify all other members
+            const allMembersExceptAuthor = [campaign.gmId, ...campaign.playerIds].filter(m => m !== userId);
+            for (const memberId of allMembersExceptAuthor) {
+                await createNotification({
+                    userId: memberId,
+                    campaignId: id,
+                    type: "post_created",
+                    title: "New Bulletin Board Post",
+                    message: `${author?.username || "A member"} posted: "${post.title}".`,
+                    actionUrl: `/campaigns/${id}?tab=bulletin`,
+                });
+            }
+        } catch (activityError) {
+            console.error("Failed to log post activity:", activityError);
+        }
+
         return NextResponse.json({ success: true, post });
     } catch (error) {
         console.error("Create post error:", error);
