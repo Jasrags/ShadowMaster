@@ -2,10 +2,15 @@
  * API Route: GET /api/editions/[editionCode]
  * 
  * Returns edition data with optional book loading.
+ * 
+ * Query params:
+ *   - bookIds: Comma-separated list of book IDs to load
+ *   - include: Optional includes (e.g., "summary" for content summary)
  */
 
 import { NextRequest, NextResponse } from "next/server";
-import { getEdition, getBook, getAllBooks, getAllCreationMethods } from "@/lib/storage/editions";
+import { getEdition, getBook, getAllBooks, getAllCreationMethods, getEditionContentSummary } from "@/lib/storage/editions";
+import type { EditionCode } from "@/lib/types";
 
 export async function GET(
   request: NextRequest,
@@ -15,9 +20,10 @@ export async function GET(
     const { editionCode } = await params;
     const { searchParams } = new URL(request.url);
     const bookIds = searchParams.get("bookIds")?.split(",").filter(Boolean);
+    const include = searchParams.get("include")?.split(",") || [];
 
     // Load edition
-    const edition = await getEdition(editionCode as "sr5" | "sr6" | "sr4a" | "sr4" | "sr3" | "sr2" | "sr1" | "anarchy");
+    const edition = await getEdition(editionCode as EditionCode);
     if (!edition) {
       return NextResponse.json(
         { success: false, error: `Edition not found: ${editionCode}` },
@@ -29,22 +35,31 @@ export async function GET(
     let books;
     if (bookIds && bookIds.length > 0) {
       books = await Promise.all(
-        bookIds.map((id) => getBook(editionCode as "sr5" | "sr6" | "sr4a" | "sr4" | "sr3" | "sr2" | "sr1" | "anarchy", id))
+        bookIds.map((id) => getBook(editionCode as EditionCode, id))
       );
       books = books.filter(Boolean);
     } else {
-      books = await getAllBooks(editionCode as "sr5" | "sr6" | "sr4a" | "sr4" | "sr3" | "sr2" | "sr1" | "anarchy");
+      books = await getAllBooks(editionCode as EditionCode);
     }
 
     // Load creation methods
-    const creationMethods = await getAllCreationMethods(editionCode as "sr5" | "sr6" | "sr4a" | "sr4" | "sr3" | "sr2" | "sr1" | "anarchy");
+    const creationMethods = await getAllCreationMethods(editionCode as EditionCode);
 
-    return NextResponse.json({
+    // Build response
+    const response: Record<string, unknown> = {
       success: true,
       edition,
       books,
       creationMethods,
-    });
+    };
+
+    // Optionally include content summary
+    if (include.includes("summary")) {
+      const contentSummary = await getEditionContentSummary(editionCode as EditionCode);
+      response.contentSummary = contentSummary;
+    }
+
+    return NextResponse.json(response);
   } catch (error) {
     console.error("Failed to load edition:", error);
     return NextResponse.json(

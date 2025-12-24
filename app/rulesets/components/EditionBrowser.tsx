@@ -1,6 +1,7 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useCallback } from "react";
+import { useSearchParams, useRouter } from "next/navigation";
 import { Edition, EditionCode } from "@/lib/types";
 import EditionCard from "./EditionCard";
 import EditionDetailView from "./EditionDetailView";
@@ -10,15 +11,34 @@ interface EditionBrowserProps {
 }
 
 export default function EditionBrowser({ editions }: EditionBrowserProps) {
-    const [selectedEditionCode, setSelectedEditionCode] = useState<EditionCode | null>(null);
+    const searchParams = useSearchParams();
+    const router = useRouter();
+    
+    // Initialize from URL param - only on first render
+    const getInitialEdition = useCallback((): EditionCode | null => {
+        const editionParam = searchParams.get("edition");
+        if (editionParam && editions.some(e => e.shortCode === editionParam)) {
+            return editionParam as EditionCode;
+        }
+        return null;
+    }, [searchParams, editions]);
+    
+    const [selectedEditionCode, setSelectedEditionCode] = useState<EditionCode | null>(getInitialEdition);
 
     const handleSelectEdition = (code: EditionCode) => {
         setSelectedEditionCode(code);
-        // Optional: Update URL without navigation, or could be handled by a router push if we wanted deep linking for the drawer state
+        // Update URL without navigation for deep linking support
+        const url = new URL(window.location.href);
+        url.searchParams.set("edition", code);
+        router.replace(url.pathname + url.search, { scroll: false });
     };
 
     const handleCloseDetail = () => {
         setSelectedEditionCode(null);
+        // Remove edition param from URL
+        const url = new URL(window.location.href);
+        url.searchParams.delete("edition");
+        router.replace(url.pathname + url.search, { scroll: false });
     };
 
     return (
@@ -30,6 +50,7 @@ export default function EditionBrowser({ editions }: EditionBrowserProps) {
                             key={edition.shortCode}
                             edition={edition}
                             onSelect={handleSelectEdition}
+                            isSelected={edition.shortCode === selectedEditionCode}
                         />
                     ))}
                 </div>
