@@ -7,8 +7,11 @@
 import { promises as fs } from "fs";
 import path from "path";
 import { v4 as uuidv4 } from "uuid";
-import type { Campaign, CampaignTemplate, CreateCampaignRequest, ID, CampaignPost, CampaignEvent } from "../types";
-import type { CampaignAdvancementSettings } from "../types/campaign";
+import type { ID } from "../types";
+import type { Campaign, CampaignTemplate, CreateCampaignRequest, CampaignPost, CampaignEvent, CampaignAdvancementSettings } from "../types/campaign";
+import { validateCharacterCampaignCompliance } from "../rules/campaign-validation";
+import type { ValidationResult } from "../rules/validation";
+import { getAllCharacters, updateCharacter } from "./characters";
 import { getEdition } from "./editions";
 
 const DATA_DIR = path.join(process.cwd(), "data", "campaigns");
@@ -287,6 +290,13 @@ export async function updateCampaign(
         updatedAt: new Date().toISOString(),
     };
 
+    // Check if ruleset-affecting settings have changed
+    const rulesetChanged = 
+        (updates.enabledBookIds && JSON.stringify(updates.enabledBookIds) !== JSON.stringify(campaign.enabledBookIds)) ||
+        (updates.enabledCreationMethodIds && JSON.stringify(updates.enabledCreationMethodIds) !== JSON.stringify(campaign.enabledCreationMethodIds)) ||
+        (updates.advancementSettings && JSON.stringify(updates.advancementSettings) !== JSON.stringify(campaign.advancementSettings)) ||
+        (updates.gameplayLevel && updates.gameplayLevel !== campaign.gameplayLevel);
+
     // Atomic write
     const filePath = getCampaignFilePath(campaignId);
     const tempFilePath = `${filePath}.tmp`;
@@ -294,6 +304,13 @@ export async function updateCampaign(
     try {
         await fs.writeFile(tempFilePath, JSON.stringify(updatedCampaign, null, 2), "utf-8");
         await fs.rename(tempFilePath, filePath);
+
+        // If ruleset changed, trigger character validation in background
+        if (rulesetChanged) {
+            triggerCampaignCharacterValidation(updatedCampaign.id).catch(err => {
+                console.error(`Error in background validation for campaign ${campaignId}:`, err);
+            });
+        }
     } catch (error) {
         try {
             await fs.unlink(tempFilePath);
@@ -483,6 +500,7 @@ export async function createCampaignPost(
     const newPost: CampaignPost = {
         id: uuidv4(),
         ...postData,
+        playerVisible: postData.playerVisible,
         createdAt: now,
         updatedAt: now,
     };
@@ -540,6 +558,7 @@ export async function createCampaignEvent(
     const newEvent: CampaignEvent = {
         id: uuidv4(),
         ...eventData,
+        playerVisible: eventData.playerVisible,
         createdAt: now,
         updatedAt: now,
     };
@@ -550,4 +569,37 @@ export async function createCampaignEvent(
 
     await updateCampaign(campaignId, { events: updatedEvents });
     return newEvent;
+}
+
+/**
+ * Validates all characters in a campaign and updates their compliance status
+ */
+export async function triggerCampaignCharacterValidation(campaignId: string): Promise<ValidationResult[]> {
+    const campaign = await getCampaignById(campaignId);
+    if (!campaign) throw new Error("Campaign not found");
+    
+    const allCharacters = await getAllCharacters();
+    const campaignCharacters = allCharacters.filter(c => c.campaignId === campaignId);
+    const results = [];
+    
+    for (const char of campaignCharacters) {
+        const validationResult = validateCharacterCampaignCompliance(char, campaign);
+        results.push(validationResult);
+        
+        // Update character with compliance status
+        const complianceStatus = validationResult.valid ? "compliant" : "non-compliant";
+        const complianceErrors = validationResult.errors.map(e => e.message);
+
+        await updateCharacter(char.ownerId, char.id, {
+            metadata: {
+                ...(char.metadata || {}),
+                campaignCompliance: {
+                    status: complianceStatus,
+                    errors: complianceErrors,
+                    validatedAt: new Date().toISOString(),
+                }
+            }
+        });
+    }
+    return results;
 }

@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getSession } from "@/lib/auth/session";
-import { getCampaignById, updateCampaign } from "@/lib/storage/campaigns";
+import { updateCampaign } from "@/lib/storage/campaigns";
+import { authorizeCampaign } from "@/lib/auth/campaign";
 import type { CampaignSession } from "@/lib/types";
 import { v4 as uuidv4 } from "uuid";
 
@@ -21,28 +22,14 @@ export async function GET(
         }
 
         const { id } = await params;
-        const campaign = await getCampaignById(id);
+        const { authorized, campaign, error, status } = await authorizeCampaign(id, userId, { requireMember: true });
 
-        if (!campaign) {
-            return NextResponse.json(
-                { success: false, error: "Campaign not found" },
-                { status: 404 }
-            );
-        }
-
-        // Check access
-        const isGM = campaign.gmId === userId;
-        const isPlayer = campaign.playerIds.includes(userId);
-
-        if (!isGM && !isPlayer) {
-            return NextResponse.json(
-                { success: false, error: "Access denied" },
-                { status: 403 }
-            );
+        if (!authorized) {
+            return NextResponse.json({ success: false, error }, { status });
         }
 
         // All members can see sessions
-        const sessions = campaign.sessions || [];
+        const sessions = campaign!.sessions || [];
 
         return NextResponse.json({
             success: true,
@@ -74,21 +61,10 @@ export async function POST(
         }
 
         const { id } = await params;
-        const campaign = await getCampaignById(id);
+        const { authorized, campaign, error, status } = await authorizeCampaign(id, userId, { requireGM: true });
 
-        if (!campaign) {
-            return NextResponse.json(
-                { success: false, error: "Campaign not found" },
-                { status: 404 }
-            );
-        }
-
-        // Only GM can create sessions
-        if (campaign.gmId !== userId) {
-            return NextResponse.json(
-                { success: false, error: "Only the GM can create sessions" },
-                { status: 403 }
-            );
+        if (!authorized) {
+            return NextResponse.json({ success: false, error }, { status });
         }
 
         const body = await request.json();
@@ -108,13 +84,13 @@ export async function POST(
             scheduledAt,
             durationMinutes: durationMinutes || 180, // Default 3 hours
             status: "scheduled",
-            attendeeIds: attendeeIds || campaign.playerIds,
+            attendeeIds: attendeeIds || campaign!.playerIds,
             notes,
             createdAt: now,
             updatedAt: now,
         };
 
-        const existingSessions = campaign.sessions || [];
+        const existingSessions = campaign!.sessions || [];
         await updateCampaign(id, {
             sessions: [...existingSessions, newSession],
         });
@@ -135,7 +111,7 @@ export async function POST(
             });
             
             // Notify all players
-            for (const playerId of campaign.playerIds) {
+            for (const playerId of campaign!.playerIds) {
                 await createNotification({
                     userId: playerId,
                     campaignId: id,

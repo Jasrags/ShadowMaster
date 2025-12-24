@@ -52,19 +52,21 @@ import { VehiclesStep } from "./steps/VehiclesStep";
 import { ProgramsStep } from "./steps/ProgramsStep";
 import { IdentitiesStep } from "./steps/IdentitiesStep";
 import { ReviewStep } from "./steps/ReviewStep";
+import type { Campaign } from "@/lib/types/campaign";
 
 interface CreationWizardProps {
   characterId?: ID;
   initialState?: CreationState;
   campaignId?: string;
+  campaign?: Campaign | null;
   onCancel: () => void;
   onComplete: (characterId: ID) => void;
 }
 
 
 
-export function CreationWizard({ onCancel, onComplete, characterId: initialCharacterId, initialState, campaignId }: CreationWizardProps) {
-  const { ruleset, editionCode } = useRuleset();
+export function CreationWizard({ onCancel, onComplete, characterId: initialCharacterId, initialState, campaignId, campaign }: CreationWizardProps) {
+  const { ruleset, editionCode, creationMethods: allCreationMethods } = useRuleset();
   const creationMethod = useCreationMethod();
   const priorityTable = usePriorityTable();
   const metatypes = useMetatypes();
@@ -72,11 +74,20 @@ export function CreationWizard({ onCancel, onComplete, characterId: initialChara
   const availableLifestyles = useLifestyles();
   const spellsCatalog = useSpells();
 
+  // Filter creation methods based on campaign
+  const creationMethods = useMemo(() => {
+    if (!campaign?.enabledCreationMethodIds || campaign.enabledCreationMethodIds.length === 0) {
+      return allCreationMethods;
+    }
+    return allCreationMethods.filter(m => campaign.enabledCreationMethodIds.includes(m.id));
+  }, [allCreationMethods, campaign]);
+
   // Initial creation state
   function createInitialState(): CreationState {
+    const defaultMethodId = creationMethods[0]?.id || "priority";
     return {
       characterId: crypto.randomUUID(),
-      creationMethodId: "priority",
+      creationMethodId: defaultMethodId as ID,
       currentStep: 0,
       completedSteps: [],
       budgets: {},
@@ -1498,7 +1509,7 @@ export function CreationWizard({ onCancel, onComplete, characterId: initialChara
 
       <div className="flex flex-1 flex-col overflow-hidden relative">
         {/* Header */}
-        <div className="flex flex-shrink-0 items-center justify-between border-b border-zinc-200 bg-white px-6 py-4 dark:border-zinc-800 dark:bg-zinc-950/50">
+        <div className="flex shrink-0 items-center justify-between border-b border-zinc-200 bg-white px-6 py-4 dark:border-zinc-800 dark:bg-zinc-950/50">
           <div className="flex items-center justify-between">
             <div>
               <h2 className="text-lg font-semibold text-zinc-900 dark:text-zinc-50">

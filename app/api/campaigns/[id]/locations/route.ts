@@ -1,10 +1,10 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getSession } from "@/lib/auth/session";
-import { getCampaignById } from "@/lib/storage/campaigns";
 import {
     getLocationsByCampaign,
     createLocation,
 } from "@/lib/storage/locations";
+import { authorizeCampaign } from "@/lib/auth/campaign";
 import type {
     CreateLocationRequest,
     LocationsListResponse,
@@ -30,25 +30,13 @@ export async function GET(
         }
 
         const { id: campaignId } = await params;
+        const { authorized, role, error, status } = await authorizeCampaign(campaignId, userId, { requireMember: true });
 
-        // Verify campaign exists and user has access
-        const campaign = await getCampaignById(campaignId);
-        if (!campaign) {
-            return NextResponse.json(
-                { success: false, locations: [], error: "Campaign not found" },
-                { status: 404 }
-            );
+        if (!authorized) {
+            return NextResponse.json({ success: false, locations: [], error }, { status });
         }
 
-        const isGM = campaign.gmId === userId;
-        const isPlayer = campaign.playerIds.includes(userId);
-
-        if (!isGM && !isPlayer) {
-            return NextResponse.json(
-                { success: false, locations: [], error: "Access denied" },
-                { status: 403 }
-            );
-        }
+        const isGM = role === "gm";
 
         // Get query parameters for filtering
         const searchParams = request.nextUrl.searchParams;
@@ -108,21 +96,10 @@ export async function POST(
         }
 
         const { id: campaignId } = await params;
+        const { authorized, campaign, error, status } = await authorizeCampaign(campaignId, userId, { requireGM: true });
 
-        // Verify campaign exists and user is GM
-        const campaign = await getCampaignById(campaignId);
-        if (!campaign) {
-            return NextResponse.json(
-                { success: false, error: "Campaign not found" },
-                { status: 404 }
-            );
-        }
-
-        if (campaign.gmId !== userId) {
-            return NextResponse.json(
-                { success: false, error: "Only the GM can create locations" },
-                { status: 403 }
-            );
+        if (!authorized) {
+            return NextResponse.json({ success: false, error }, { status });
         }
 
         const body: CreateLocationRequest = await request.json();
@@ -196,7 +173,7 @@ export async function POST(
                 });
                 
                 // Notify players
-                for (const playerId of campaign.playerIds) {
+                for (const playerId of campaign!.playerIds) {
                     await createNotification({
                         userId: playerId,
                         campaignId: campaignId,
