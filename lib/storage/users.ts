@@ -3,6 +3,8 @@ import path from "path";
 import { v4 as uuidv4 } from "uuid";
 import type { User, UserRole } from "../types/user";
 
+export type NewUserData = Omit<User, "id" | "createdAt" | "lastLogin" | "characters" | "failedLoginAttempts" | "lockoutUntil" | "sessionVersion">;
+
 const DATA_DIR = path.join(process.cwd(), "data", "users");
 
 /**
@@ -36,7 +38,8 @@ export async function getUserById(userId: string): Promise<User | null> {
     const user = JSON.parse(fileContent) as User;
     // Normalize role to array for backward compatibility
     user.role = normalizeUserRole(user.role);
-    return user;
+    // Ensure security fields have defaults
+    return normalizeUserDefaults(user);
   } catch (error) {
     if ((error as NodeJS.ErrnoException).code === "ENOENT") {
       return null;
@@ -76,7 +79,6 @@ export async function getUserByUsername(username: string): Promise<User | null> 
     throw error;
   }
 }
-
 /**
  * Normalize user role to always be an array (for backward compatibility)
  */
@@ -85,6 +87,18 @@ function normalizeUserRole(role: UserRole | UserRole[]): UserRole[] {
     return role;
   }
   return [role];
+}
+
+/**
+ * Ensure user has default values for security fields (for backward compatibility)
+ */
+function normalizeUserDefaults(user: User): User {
+  return {
+    ...user,
+    failedLoginAttempts: user.failedLoginAttempts ?? 0,
+    lockoutUntil: user.lockoutUntil ?? null,
+    sessionVersion: user.sessionVersion ?? 1,
+  };
 }
 
 /**
@@ -104,7 +118,7 @@ export async function getAllUsers(): Promise<User[]> {
         const user = JSON.parse(fileContent) as User;
         // Normalize role to array for backward compatibility
         user.role = normalizeUserRole(user.role);
-        users.push(user);
+        users.push(normalizeUserDefaults(user));
       } catch (error) {
         // Skip invalid files
         console.error(`Error reading user file ${file}:`, error);
@@ -132,7 +146,7 @@ async function isFirstUser(): Promise<boolean> {
  * Create a new user
  */
 export async function createUser(
-  userData: Omit<User, "id" | "createdAt" | "lastLogin" | "characters">
+  userData: NewUserData
 ): Promise<User> {
   await ensureDataDirectory();
 
@@ -146,6 +160,10 @@ export async function createUser(
     createdAt: new Date().toISOString(),
     lastLogin: null,
     characters: [],
+    // Initialize security fields
+    failedLoginAttempts: 0,
+    lockoutUntil: null,
+    sessionVersion: 1,
   };
 
   // Atomic write: write to temp file, then rename
@@ -224,5 +242,52 @@ export async function deleteUser(userId: string): Promise<void> {
     }
     // File doesn't exist, which is fine
   }
+}
+
+/**
+ * Increment failed login attempts and set lockout if threshold reached
+ */
+export async function incrementFailedAttempts(userId: string): Promise<User> {
+  const LOCKOUT_THRESHOLD = 5;
+  const LOCKOUT_DURATION_MINS = 15;
+
+  const user = await getUserById(userId);
+  if (!user) throw new Error("User not found");
+
+  const newAttempts = (user.failedLoginAttempts || 0) + 1;
+  let lockoutUntil = user.lockoutUntil;
+
+  if (newAttempts >= LOCKOUT_THRESHOLD) {
+    const unlockTime = new Date();
+    unlockTime.setMinutes(unlockTime.getMinutes() + LOCKOUT_DURATION_MINS);
+    lockoutUntil = unlockTime.toISOString();
+  }
+
+  return updateUser(userId, {
+    failedLoginAttempts: newAttempts,
+    lockoutUntil,
+  });
+}
+
+/**
+ * Reset failed login attempts and clear lockout
+ */
+export async function resetFailedAttempts(userId: string): Promise<User> {
+  return updateUser(userId, {
+    failedLoginAttempts: 0,
+    lockoutUntil: null,
+  });
+}
+
+/**
+ * Increment session version to invalidate all active sessions
+ */
+export async function incrementSessionVersion(userId: string): Promise<User> {
+  const user = await getUserById(userId);
+  if (!user) throw new Error("User not found");
+
+  return updateUser(userId, {
+    sessionVersion: (user.sessionVersion || 0) + 1,
+  });
 }
 

@@ -106,6 +106,9 @@ export async function PUT(
       createdAt: updatedUser.createdAt,
       lastLogin: updatedUser.lastLogin,
       characters: updatedUser.characters,
+      failedLoginAttempts: updatedUser.failedLoginAttempts,
+      lockoutUntil: updatedUser.lockoutUntil,
+      sessionVersion: updatedUser.sessionVersion,
     };
 
     return NextResponse.json({

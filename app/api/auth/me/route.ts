@@ -33,6 +33,9 @@ export async function GET(): Promise<NextResponse<AuthResponse>> {
         createdAt: user.createdAt,
         lastLogin: user.lastLogin,
         characters: user.characters,
+        failedLoginAttempts: user.failedLoginAttempts,
+        lockoutUntil: user.lockoutUntil,
+        sessionVersion: user.sessionVersion,
       },
     });
   } catch (error) {

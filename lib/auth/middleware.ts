@@ -25,6 +25,9 @@ export async function getCurrentUser(): Promise<PublicUser | null> {
     createdAt: user.createdAt,
     lastLogin: user.lastLogin,
     characters: user.characters,
+    failedLoginAttempts: user.failedLoginAttempts,
+    lockoutUntil: user.lockoutUntil,
+    sessionVersion: user.sessionVersion,
   };
 }
 

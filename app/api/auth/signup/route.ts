@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { createUser, getUserByEmail } from "@/lib/storage/users";
+import { createUser, getUserByEmail, type NewUserData } from "@/lib/storage/users";
 import { hashPassword } from "@/lib/auth/password";
 import { createSession } from "@/lib/auth/session";
 import { isValidEmail, isStrongPassword, getPasswordStrengthError } from "@/lib/auth/validation";
@@ -48,12 +48,14 @@ export async function POST(request: NextRequest): Promise<NextResponse<AuthRespo
     const passwordHash = await hashPassword(password);
 
     // Create user
-    const user = await createUser({
+    const userData: NewUserData = {
       email: email.toLowerCase().trim(),
       username: username.trim(),
       passwordHash,
-      role: ["user"], // Will be overridden by createUser if first user
-    });
+      role: ["user"],
+    };
+
+    const user = await createUser(userData);
 
     // Create session
     const response = NextResponse.json({
@@ -66,6 +68,9 @@ export async function POST(request: NextRequest): Promise<NextResponse<AuthRespo
         createdAt: user.createdAt,
         lastLogin: user.lastLogin,
         characters: user.characters,
+        failedLoginAttempts: user.failedLoginAttempts,
+        lockoutUntil: user.lockoutUntil,
+        sessionVersion: user.sessionVersion,
       },
     });
 

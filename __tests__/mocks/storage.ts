@@ -97,6 +97,9 @@ export function createMockUser(overrides?: Partial<User>): User {
     createdAt: new Date().toISOString(),
     lastLogin: null,
     characters: [],
+    failedLoginAttempts: 0,
+    lockoutUntil: null,
+    sessionVersion: 1,
     ...overrides,
   };
 }

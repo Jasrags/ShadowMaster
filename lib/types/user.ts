@@ -9,6 +9,10 @@ export interface User {
   createdAt: string; // ISO 8601 date string
   lastLogin: string | null; // ISO 8601 date string or null
   characters: string[]; // Array of character IDs
+  // Security fields
+  failedLoginAttempts: number;
+  lockoutUntil: string | null; // ISO 8601 date string or null
+  sessionVersion: number;
 }
 
 export interface SignupRequest {
