@@ -138,3 +138,15 @@ export async function listSubdirectories(dirPath: string): Promise<string[]> {
   }
 }
 
+/**
+ * Delete a directory recursively
+ */
+export async function deleteDirectory(dirPath: string): Promise<boolean> {
+  try {
+    await fs.rm(dirPath, { recursive: true, force: true });
+    return true;
+  } catch {
+    return false;
+  }
+}
+

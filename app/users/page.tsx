@@ -31,6 +31,7 @@ export default async function UsersPage() {
       failedLoginAttempts: user.failedLoginAttempts,
       lockoutUntil: user.lockoutUntil,
       sessionVersion: user.sessionVersion,
+      preferences: user.preferences,
     }));
   } catch {
     // If data fetching fails, redirect to home

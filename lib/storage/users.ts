@@ -3,7 +3,7 @@ import path from "path";
 import { v4 as uuidv4 } from "uuid";
 import type { User, UserRole } from "../types/user";
 
-export type NewUserData = Omit<User, "id" | "createdAt" | "lastLogin" | "characters" | "failedLoginAttempts" | "lockoutUntil" | "sessionVersion">;
+export type NewUserData = Omit<User, "id" | "createdAt" | "lastLogin" | "characters" | "failedLoginAttempts" | "lockoutUntil" | "sessionVersion" | "preferences">;
 
 const DATA_DIR = path.join(process.cwd(), "data", "users");
 
@@ -95,6 +95,10 @@ function normalizeUserRole(role: UserRole | UserRole[]): UserRole[] {
 function normalizeUserDefaults(user: User): User {
   return {
     ...user,
+    preferences: user.preferences ?? {
+      theme: "system",
+      navigationCollapsed: false,
+    },
     failedLoginAttempts: user.failedLoginAttempts ?? 0,
     lockoutUntil: user.lockoutUntil ?? null,
     sessionVersion: user.sessionVersion ?? 1,
@@ -157,6 +161,10 @@ export async function createUser(
     id: uuidv4(),
     ...userData,
     role,
+    preferences: {
+      theme: "system",
+      navigationCollapsed: false,
+    },
     createdAt: new Date().toISOString(),
     lastLogin: null,
     characters: [],
@@ -231,6 +239,14 @@ export async function deleteUser(userId: string): Promise<void> {
   const user = await getUserById(userId);
   if (!user) {
     throw new Error(`User with ID ${userId} not found`);
+  }
+
+  // Delete all characters owned by the user first (Requirement 4.3)
+  try {
+    const { deleteUserCharacters } = await import("./characters");
+    await deleteUserCharacters(userId);
+  } catch (error) {
+    console.error(`Error deleting characters for user ${userId}:`, error);
   }
 
   const filePath = getUserFilePath(userId);

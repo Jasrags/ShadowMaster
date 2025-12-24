@@ -1,11 +1,18 @@
 export type UserRole = "user" | "administrator" | "gamemaster";
 
+export interface UserSettings {
+  theme: "light" | "dark" | "system";
+  navigationCollapsed: boolean;
+  defaultEdition?: string;
+}
+
 export interface User {
   id: string;
   email: string;
   username: string;
   passwordHash: string;
   role: UserRole[]; // Array of roles - users can have multiple roles
+  preferences: UserSettings;
   createdAt: string; // ISO 8601 date string
   lastLogin: string | null; // ISO 8601 date string or null
   characters: string[]; // Array of character IDs
@@ -63,4 +70,3 @@ export interface DeleteUserResponse {
   success: boolean;
   error?: string;
 }
-

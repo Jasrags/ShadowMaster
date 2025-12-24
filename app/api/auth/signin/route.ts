@@ -96,6 +96,7 @@ export async function POST(request: NextRequest): Promise<NextResponse<AuthRespo
         failedLoginAttempts: 0,
         lockoutUntil: null,
         sessionVersion: user.sessionVersion,
+        preferences: user.preferences,
       },
     });
 

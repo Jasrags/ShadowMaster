@@ -297,6 +297,15 @@ export async function deleteCharacter(userId: ID, characterId: ID): Promise<bool
   return deleteFile(filePath);
 }
 
+/**
+ * Delete all characters for a user
+ */
+export async function deleteUserCharacters(userId: ID): Promise<boolean> {
+  const { deleteDirectory } = await import("./base");
+  const userDir = getUserCharactersDir(userId);
+  return deleteDirectory(userDir);
+}
+
 // =============================================================================
 // SPECIALIZED UPDATES
 // =============================================================================

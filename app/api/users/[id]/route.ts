@@ -109,6 +109,7 @@ export async function PUT(
       failedLoginAttempts: updatedUser.failedLoginAttempts,
       lockoutUntil: updatedUser.lockoutUntil,
       sessionVersion: updatedUser.sessionVersion,
+      preferences: updatedUser.preferences,
     };
 
     return NextResponse.json({
