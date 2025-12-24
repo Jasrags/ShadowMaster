@@ -9,7 +9,7 @@ import { describe, it, expect, beforeEach, afterEach } from 'vitest';
 import { promises as fs } from 'fs';
 import path from 'path';
 import { v4 as uuidv4 } from 'uuid';
-import type { Character, AdvancementRecord, TrainingPeriod } from '@/lib/types';
+import type { AdvancementRecord, TrainingPeriod } from '@/lib/types';
 import {
   createCharacterDraft,
   getCharacter,

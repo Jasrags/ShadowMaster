@@ -506,6 +506,7 @@ describe('Quality Effects Resolution', () => {
         condition: {
           environment: ['dim-light'],
         },
+        value: 1,
       };
 
       const context: TestContext = {
@@ -522,6 +523,7 @@ describe('Quality Effects Resolution', () => {
         type: 'dice-pool-modifier',
         trigger: 'skill-test',
         target: { skill: 'firearms' },
+        value: 1,
       };
 
       const context: TestContext = {
@@ -540,6 +542,7 @@ describe('Quality Effects Resolution', () => {
         condition: {
           environment: ['dim-light'],
         },
+        value: 1,
       };
 
       const context: TestContext = {

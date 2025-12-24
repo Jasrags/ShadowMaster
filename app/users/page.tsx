@@ -28,6 +28,9 @@ export default async function UsersPage() {
       createdAt: user.createdAt,
       lastLogin: user.lastLogin,
       characters: user.characters,
+      failedLoginAttempts: user.failedLoginAttempts,
+      lockoutUntil: user.lockoutUntil,
+      sessionVersion: user.sessionVersion,
     }));
   } catch {
     // If data fetching fails, redirect to home

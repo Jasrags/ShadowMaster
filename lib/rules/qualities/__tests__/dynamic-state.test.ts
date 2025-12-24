@@ -205,7 +205,7 @@ describe('Dynamic Quality State Management', () => {
         negativeQualities: [
           {
             ...selection,
-            dynamicState: initialState!,
+            dynamicState: initialState as import("@/lib/types").QualityDynamicState,
           },
         ],
       });
@@ -331,7 +331,7 @@ describe('Dynamic Quality State Management', () => {
           source: 'creation',
           variant: 'moderate',
           specification: 'Cram',
-        }),
+        }) || undefined,
       };
 
       characterWithAddiction = createMockCharacter({
@@ -394,7 +394,7 @@ describe('Dynamic Quality State Management', () => {
           variant: 'severe',
           specification: 'Pollens',
           specificationId: 'common',
-        }),
+        }) || undefined,
       };
 
       characterWithAllergy = createMockCharacter({
@@ -461,7 +461,7 @@ describe('Dynamic Quality State Management', () => {
           rating: 2,
           specification: 'John Doe',
           specificationId: 'child',
-        }),
+        }) || undefined,
       };
 
       characterWithDependent = createMockCharacter({
@@ -513,7 +513,7 @@ describe('Dynamic Quality State Management', () => {
           source: 'creation',
           rating: 1,
           specification: 'Dependent 1',
-        }),
+        }) || undefined,
       };
 
       const selection2: QualitySelection = {
@@ -526,7 +526,7 @@ describe('Dynamic Quality State Management', () => {
           source: 'creation',
           rating: 2,
           specification: 'Dependent 2',
-        }),
+        }) || undefined,
       };
 
       const characterWithMultiple = createMockCharacter({

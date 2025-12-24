@@ -16,8 +16,7 @@ import * as advancementModule from '@/lib/rules/advancement';
 import * as completionModule from '@/lib/rules/advancement/completion';
 
 import type { Character, TrainingPeriod, AdvancementRecord } from '@/lib/types';
-import { createMockCharacter } from '@/__tests__/mocks/storage';
-import { v4 as uuidv4 } from 'uuid';
+import { createMockCharacter, createMockUser } from '@/__tests__/mocks/storage';
 
 // Mock dependencies
 vi.mock('@/lib/auth/session');
@@ -57,16 +56,11 @@ describe('GET /api/characters/[characterId]/training', () => {
     });
 
     vi.mocked(sessionModule.getSession).mockResolvedValue(userId);
-    vi.mocked(userStorageModule.getUserById).mockResolvedValue({
+    vi.mocked(userStorageModule.getUserById).mockResolvedValue(createMockUser({
       id: userId,
       email: 'test@example.com',
       username: 'testuser',
-      passwordHash: 'hash',
-      role: ['user'],
-      createdAt: new Date().toISOString(),
-      lastLogin: null,
-      characters: [],
-    });
+    }));
     vi.mocked(characterStorageModule.getCharacter).mockResolvedValue(mockCharacter);
   });
 
@@ -209,16 +203,11 @@ describe('POST /api/characters/[characterId]/training/[trainingId]', () => {
     });
 
     vi.mocked(sessionModule.getSession).mockResolvedValue(userId);
-    vi.mocked(userStorageModule.getUserById).mockResolvedValue({
+    vi.mocked(userStorageModule.getUserById).mockResolvedValue(createMockUser({
       id: userId,
       email: 'test@example.com',
       username: 'testuser',
-      passwordHash: 'hash',
-      role: ['user'],
-      createdAt: new Date().toISOString(),
-      lastLogin: null,
-      characters: [],
-    });
+    }));
     vi.mocked(characterStorageModule.getCharacter).mockResolvedValue(mockCharacter);
   });
 

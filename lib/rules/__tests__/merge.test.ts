@@ -7,7 +7,7 @@
 import { describe, it, expect } from 'vitest';
 import { mergeRules, produceMergedRuleset, getModule, hasModule, getModuleTypes } from '../merge';
 import type { MergeStrategy } from '@/lib/types';
-import type { LoadedRuleset } from '../loader';
+import type { LoadedRuleset } from '../loader-types';
 
 describe('mergeRules', () => {
   describe('replace strategy', () => {
@@ -220,7 +220,9 @@ describe('mergeRules', () => {
       const result = mergeRules(base, override, 'remove');
       
       expect(result.items).toHaveLength(1);
-      expect(result.items[0]).toEqual({ id: '1', value: 'a' });
+       
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      expect((result.items as any)[0]).toEqual({ id: '1', value: 'a' });
     });
 
     it('should remove array items by string ID', () => {
@@ -285,7 +287,8 @@ describe('mergeRules', () => {
           }
         }
       };
-      const result = mergeRules(base, override, 'merge');
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      const result = mergeRules(base, override, 'merge') as any;
       
       expect(result.level1.level2.level3).toEqual({
         value: 'deep',
@@ -307,7 +310,9 @@ describe('mergeRules', () => {
           'new-primitive'
         ]
       };
-      const result = mergeRules(base, override, 'merge');
+       
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      const result = mergeRules(base, override, 'merge') as any;
       
       // Arrays with mixed types (not all items have IDs) will append, not merge by ID
       // isArrayWithIds requires ALL items to have IDs
@@ -330,6 +335,8 @@ describe('mergeRules', () => {
       expect(result.nested).not.toBe(base.nested);
       
       // Modifying result should not affect base
+       
+       
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       (result.nested as any).c = 3;
       expect(base.nested).not.toHaveProperty('c');
@@ -367,6 +374,7 @@ describe('produceMergedRuleset', () => {
           isCore: true,
           loadOrder: 1,
           payload: {
+            meta: { bookId: 'test', title: 'test', edition: 'sr5' as import("@/lib/types").EditionCode, version: '1', category: 'core' as import("@/lib/types").BookCategory },
             modules: {
               metatypes: {
                 payload: {
@@ -419,6 +427,7 @@ describe('produceMergedRuleset', () => {
           isCore: true,
           loadOrder: 1,
           payload: {
+            meta: { bookId: 'test', title: 'test', edition: 'sr5' as import("@/lib/types").EditionCode, version: '1', category: 'core' as import("@/lib/types").BookCategory },
             modules: {
               metatypes: {
                 payload: {
@@ -434,6 +443,7 @@ describe('produceMergedRuleset', () => {
           isCore: false,
           loadOrder: 2,
           payload: {
+            meta: { bookId: 'test', title: 'test', edition: 'sr5' as import("@/lib/types").EditionCode, version: '1', category: 'core' as import("@/lib/types").BookCategory },
             modules: {
               metatypes: {
                 payload: {
@@ -453,6 +463,7 @@ describe('produceMergedRuleset', () => {
     expect(result.ruleset).toBeDefined();
     
     // Both metatypes should be present
+     
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const metatypes = result.ruleset?.modules.metatypes as any;
     expect(metatypes.human).toBeDefined();
@@ -477,6 +488,7 @@ describe('produceMergedRuleset', () => {
           isCore: true,
           loadOrder: 1,
           payload: {
+            meta: { bookId: 'test', title: 'test', edition: 'sr5' as import("@/lib/types").EditionCode, version: '1', category: 'core' as import("@/lib/types").BookCategory },
             modules: {
               skills: {
                 payload: {
@@ -492,6 +504,7 @@ describe('produceMergedRuleset', () => {
           isCore: false,
           loadOrder: 2,
           payload: {
+            meta: { bookId: 'test', title: 'test', edition: 'sr5' as import("@/lib/types").EditionCode, version: '1', category: 'core' as import("@/lib/types").BookCategory },
             modules: {
               skills: {
                 mergeStrategy: 'merge',
@@ -540,6 +553,7 @@ describe('produceMergedRuleset', () => {
           isCore: true,
           loadOrder: 1,
           payload: {
+            meta: { bookId: 'test', title: 'test', edition: 'sr5' as import("@/lib/types").EditionCode, version: '1', category: 'core' as import("@/lib/types").BookCategory },
             modules: {
               skills: {
                 payload: {
@@ -556,6 +570,7 @@ describe('produceMergedRuleset', () => {
           isCore: false,
           loadOrder: 2,
           payload: {
+            meta: { bookId: 'test', title: 'test', edition: 'sr5' as import("@/lib/types").EditionCode, version: '1', category: 'core' as import("@/lib/types").BookCategory },
             modules: {
               skills: {
                 mergeStrategy: 'replace',
@@ -599,21 +614,23 @@ describe('produceMergedRuleset', () => {
           title: 'Book 3',
           isCore: false,
           loadOrder: 3,
-          payload: { modules: {} },
+           
+          payload: { meta: { bookId: 'test', title: 'test', edition: 'sr5' as import("@/lib/types").EditionCode, version: '1', category: 'core' as import("@/lib/types").BookCategory }, modules: {} },
         },
         {
           id: 'book1',
           title: 'Book 1',
           isCore: true,
           loadOrder: 1,
-          payload: { modules: {} },
+          payload: { meta: { bookId: 'test', title: 'test', edition: 'sr5' as import("@/lib/types").EditionCode, version: '1', category: 'core' as import("@/lib/types").BookCategory }, modules: {} },
         },
         {
           id: 'book2',
           title: 'Book 2',
           isCore: false,
           loadOrder: 2,
-          payload: { modules: {} },
+           
+          payload: { meta: { bookId: 'test', title: 'test', edition: 'sr5' as import("@/lib/types").EditionCode, version: '1', category: 'core' as import("@/lib/types").BookCategory }, modules: {} },
         },
       ],
       creationMethods: [],
@@ -642,7 +659,7 @@ describe('produceMergedRuleset', () => {
           title: 'Core Rulebook',
           isCore: true,
           loadOrder: 1,
-          payload: { modules: {} },
+          payload: { meta: { bookId: 'test', title: 'test', edition: 'sr5' as import("@/lib/types").EditionCode, version: '1', category: 'core' as import("@/lib/types").BookCategory }, modules: {} },
         },
       ],
       creationMethods: [],
@@ -673,6 +690,7 @@ describe('produceMergedRuleset', () => {
           isCore: true,
           loadOrder: 1,
           payload: {
+            meta: { bookId: 'test', title: 'test', edition: 'sr5' as import("@/lib/types").EditionCode, version: '1', category: 'core' as import("@/lib/types").BookCategory },
             modules: {
               metatypes: {
                 payload: {
@@ -697,6 +715,7 @@ describe('produceMergedRuleset', () => {
     
     // Attempting to modify should throw in strict mode
     expect(() => {
+       
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       (result.ruleset as any).newProperty = 'test';
     }).toThrow(); // Object.freeze() throws when trying to add properties
@@ -721,6 +740,7 @@ describe('produceMergedRuleset', () => {
           isCore: true,
           loadOrder: 1,
           payload: {
+            meta: { bookId: 'test', title: 'test', edition: 'sr5' as import("@/lib/types").EditionCode, version: '1', category: 'core' as import("@/lib/types").BookCategory },
             modules: {
               metatypes: {
                 // eslint-disable-next-line @typescript-eslint/no-explicit-any

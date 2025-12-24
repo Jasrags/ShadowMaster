@@ -19,7 +19,7 @@ describe('GET /api/rulesets/[editionCode]', () => {
   const mockMergedRuleset = {
     snapshotId: 'test-snapshot-id',
     editionId: 'sr5',
-    editionCode: 'sr5',
+    editionCode: 'sr5' as import("@/lib/types").EditionCode,
     bookIds: ['core-rulebook'],
     modules: {
       metatypes: {
@@ -36,7 +36,7 @@ describe('GET /api/rulesets/[editionCode]', () => {
     edition: {
       id: 'sr5',
       name: 'Shadowrun 5th Edition',
-      shortCode: 'sr5',
+      shortCode: 'sr5' as import("@/lib/types").EditionCode,
       releaseYear: 2013,
       bookIds: ['core-rulebook'],
       creationMethodIds: ['priority'],
@@ -49,10 +49,16 @@ describe('GET /api/rulesets/[editionCode]', () => {
         isCore: true,
         loadOrder: 0,
         payload: {
-          meta: { title: 'Core Rulebook', category: 'core' },
+          meta: { 
+            bookId: 'core-rulebook',
+            title: 'Core Rulebook', 
+            edition: 'sr5' as import("@/lib/types").EditionCode,
+            version: '1.0',
+            category: 'core' as import("@/lib/types").BookCategory
+          },
           modules: {
             metatypes: {
-              payload: { human: { id: 'human', name: 'Human' } },
+              payload: { human: { meta: { bookId: 'test', title: 'test', edition: 'sr5' as import("@/lib/types").EditionCode, version: '1', category: 'core' as import("@/lib/types").BookCategory }, modules: {}, id: 'human', name: 'Human' } },
             },
           },
         },
@@ -63,19 +69,76 @@ describe('GET /api/rulesets/[editionCode]', () => {
         id: 'priority',
         name: 'Priority',
         editionId: 'sr5',
+        editionCode: 'sr5' as import("@/lib/types").EditionCode,
+        type: 'priority' as import("@/lib/types").CreationMethodType,
+        version: '1.0',
+        steps: [],
+        budgets: [],
+        constraints: [],
+        createdAt: new Date().toISOString()
       },
     ],
   };
 
   const mockExtractedData = {
-    metatypes: [{ id: 'human', name: 'Human' }],
-    skills: { firearms: { id: 'firearms', name: 'Firearms' } },
+    metatypes: [
+      { 
+        id: 'human', 
+        name: 'Human', 
+        baseMetatype: null, 
+        attributes: {
+          body: { min: 1, max: 6 },
+          agility: { min: 1, max: 6 },
+          reaction: { min: 1, max: 6 },
+          strength: { min: 1, max: 6 },
+          willpower: { min: 1, max: 6 },
+          logic: { min: 1, max: 6 },
+          intuition: { min: 1, max: 6 },
+          charisma: { min: 1, max: 6 },
+          edge: { min: 2, max: 7 }
+        },
+        racialTraits: [] 
+      }
+    ],
+    skills: { 
+      activeSkills: [
+        { 
+          id: 'firearms', 
+          name: 'Firearms', 
+          linkedAttribute: 'agility', 
+          group: 'firearms', 
+          canDefault: true, 
+          category: 'combat' 
+        }
+      ],
+      skillGroups: [],
+      knowledgeCategories: [],
+      creationLimits: {
+        maxSkillRating: 6,
+        maxSkillRatingWithAptitude: 7,
+        freeKnowledgePoints: "(LOG + INT) * 2",
+        nativeLanguageRating: 4
+      },
+      exampleKnowledgeSkills: [],
+      exampleLanguages: []
+    },
     qualities: { positive: [], negative: [] },
+    augmentationRules: {
+      maxEssence: 6,
+      maxAttributeBonus: 4,
+      maxAvailabilityAtCreation: 12,
+      trackEssenceHoles: true,
+      magicReductionFormula: 'roundUp' as const
+    },
+    contactTemplates: [],
+    adeptPowers: [],
+     
     priorityTable: {
       levels: ['A', 'B', 'C', 'D', 'E'],
       categories: [{ id: 'metatype', name: 'Metatype' }],
-      table: { A: { metatype: 'human', attributes: 24 } },
-    },
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      table: { A: { metatype: 'human', attributes: 24 } } as any,
+    } as any, // eslint-disable-line @typescript-eslint/no-explicit-any
     magicPaths: [],
     lifestyles: [],
     lifestyleModifiers: {},
@@ -86,9 +149,6 @@ describe('GET /api/rulesets/[editionCode]', () => {
     spritePowers: [],
     cyberware: null,
     bioware: null,
-    augmentationRules: {},
-    contactTemplates: [],
-    adeptPowers: [],
   };
 
   beforeEach(() => {
@@ -130,7 +190,7 @@ describe('GET /api/rulesets/[editionCode]', () => {
 
     const request = new NextRequest('http://localhost:3000/api/rulesets/sr5');
     const response = await GET(request, {
-      params: Promise.resolve({ editionCode: 'sr5' }),
+      params: Promise.resolve({ editionCode: 'sr5' as import("@/lib/types").EditionCode }),
     });
     const data = await response.json();
 
@@ -163,7 +223,8 @@ describe('GET /api/rulesets/[editionCode]', () => {
     });
     // Mock all extract functions
     vi.mocked(loaderModule.extractMetatypes).mockReturnValue([]);
-    vi.mocked(loaderModule.extractSkills).mockReturnValue({});
+     
+    vi.mocked(loaderModule.extractSkills).mockReturnValue(mockExtractedData.skills as any); // eslint-disable-line @typescript-eslint/no-explicit-any
     vi.mocked(loaderModule.extractQualities).mockReturnValue({ positive: [], negative: [] });
     vi.mocked(loaderModule.extractPriorityTable).mockReturnValue(null);
     vi.mocked(loaderModule.extractMagicPaths).mockReturnValue([]);
@@ -176,7 +237,10 @@ describe('GET /api/rulesets/[editionCode]', () => {
     vi.mocked(loaderModule.extractSpritePowers).mockReturnValue([]);
     vi.mocked(loaderModule.extractCyberware).mockReturnValue(null);
     vi.mocked(loaderModule.extractBioware).mockReturnValue(null);
-    vi.mocked(loaderModule.extractAugmentationRules).mockReturnValue({});
+     
+    vi.mocked(loaderModule.extractAugmentationRules).mockReturnValue(
+      mockExtractedData.augmentationRules as any // eslint-disable-line @typescript-eslint/no-explicit-any
+    );
     vi.mocked(loaderModule.extractContactTemplates).mockReturnValue([]);
     vi.mocked(loaderModule.extractAdeptPowers).mockReturnValue([]);
 
@@ -184,7 +248,7 @@ describe('GET /api/rulesets/[editionCode]', () => {
       'http://localhost:3000/api/rulesets/sr5?bookIds=core-rulebook,sourcebook'
     );
     const response = await GET(request, {
-      params: Promise.resolve({ editionCode: 'sr5' }),
+      params: Promise.resolve({ editionCode: 'sr5' as import("@/lib/types").EditionCode }),
     });
     const data = await response.json();
 
@@ -225,7 +289,7 @@ describe('GET /api/rulesets/[editionCode]', () => {
 
     const request = new NextRequest('http://localhost:3000/api/rulesets/sr5');
     const response = await GET(request, {
-      params: Promise.resolve({ editionCode: 'sr5' }),
+      params: Promise.resolve({ editionCode: 'sr5' as import("@/lib/types").EditionCode }),
     });
     const data = await response.json();
 
@@ -242,7 +306,7 @@ describe('GET /api/rulesets/[editionCode]', () => {
 
     const request = new NextRequest('http://localhost:3000/api/rulesets/sr5');
     const response = await GET(request, {
-      params: Promise.resolve({ editionCode: 'sr5' }),
+      params: Promise.resolve({ editionCode: 'sr5' as import("@/lib/types").EditionCode }),
     });
     const data = await response.json();
 
@@ -262,7 +326,7 @@ describe('GET /api/rulesets/[editionCode]', () => {
     });
     // Mock all extract functions
     vi.mocked(loaderModule.extractMetatypes).mockReturnValue([]);
-    vi.mocked(loaderModule.extractSkills).mockReturnValue({});
+    vi.mocked(loaderModule.extractSkills).mockReturnValue(mockExtractedData.skills as any); // eslint-disable-line @typescript-eslint/no-explicit-any
     vi.mocked(loaderModule.extractQualities).mockReturnValue({ positive: [], negative: [] });
     vi.mocked(loaderModule.extractPriorityTable).mockReturnValue(null);
     vi.mocked(loaderModule.extractMagicPaths).mockReturnValue([]);
@@ -275,13 +339,15 @@ describe('GET /api/rulesets/[editionCode]', () => {
     vi.mocked(loaderModule.extractSpritePowers).mockReturnValue([]);
     vi.mocked(loaderModule.extractCyberware).mockReturnValue(null);
     vi.mocked(loaderModule.extractBioware).mockReturnValue(null);
-    vi.mocked(loaderModule.extractAugmentationRules).mockReturnValue({});
+    vi.mocked(loaderModule.extractAugmentationRules).mockReturnValue(
+      mockExtractedData.augmentationRules as any // eslint-disable-line @typescript-eslint/no-explicit-any
+    );
     vi.mocked(loaderModule.extractContactTemplates).mockReturnValue([]);
     vi.mocked(loaderModule.extractAdeptPowers).mockReturnValue([]);
 
     const request = new NextRequest('http://localhost:3000/api/rulesets/sr5?bookIds=');
     const response = await GET(request, {
-      params: Promise.resolve({ editionCode: 'sr5' }),
+      params: Promise.resolve({ editionCode: 'sr5' as import("@/lib/types").EditionCode }),
     });
     const data = await response.json();
 
@@ -301,7 +367,7 @@ describe('GET /api/rulesets/[editionCode]', () => {
 
     const request = new NextRequest('http://localhost:3000/api/rulesets/sr5');
     const response = await GET(request, {
-      params: Promise.resolve({ editionCode: 'sr5' }),
+      params: Promise.resolve({ editionCode: 'sr5' as import("@/lib/types").EditionCode }),
     });
     const data = await response.json();
 

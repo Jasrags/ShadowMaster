@@ -28,6 +28,9 @@ export async function GET(request: NextRequest) {
       createdAt: user.createdAt,
       lastLogin: user.lastLogin,
       characters: user.characters,
+      failedLoginAttempts: user.failedLoginAttempts,
+      lockoutUntil: user.lockoutUntil,
+      sessionVersion: user.sessionVersion,
     }));
 
     // Apply search filter

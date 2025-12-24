@@ -459,9 +459,7 @@ describe('Quality Advancement', () => {
         },
       });
 
-      const result = removeQuality(characterWithQuality, 'negative-quality', rulesetWithQuality, {
-        reason: 'Story development',
-      });
+      const result = removeQuality(characterWithQuality, 'negative-quality', rulesetWithQuality, 'Story development');
 
       expect(result.updatedCharacter.negativeQualities?.length).toBe(0);
       expect(result.cost).toBe(10); // 2× original bonus

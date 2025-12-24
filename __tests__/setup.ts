@@ -28,16 +28,37 @@ vi.mock('next/navigation', () => ({
 vi.mock('next/server', () => ({
   NextRequest: class MockNextRequest {
     url: string;
-    constructor(url: string) {
+    method: string;
+    headers: Headers;
+    body: string | undefined;
+    
+    constructor(url: string, init?: { method?: string; headers?: HeadersInit; body?: string }) {
       this.url = url;
+      this.method = init?.method || 'GET';
+      this.headers = new Headers(init?.headers);
+      this.body = init?.body;
+    }
+
+    async json() {
+      if (this.body) {
+        return JSON.parse(this.body);
+      }
+      return null;
     }
   },
   NextResponse: {
-    json: vi.fn((data, init) => ({
-      json: () => Promise.resolve(data),
-      status: init?.status || 200,
-      headers: new Headers(),
-    })),
+    json: vi.fn((data: unknown, init?: { status?: number; headers?: HeadersInit }) => {
+      const headers = new Headers(init?.headers);
+      return {
+        json: () => Promise.resolve(data),
+        status: init?.status || 200,
+        headers,
+        cookies: {
+          set: vi.fn(),
+          delete: vi.fn(),
+        },
+      };
+    }),
   },
 }));
 

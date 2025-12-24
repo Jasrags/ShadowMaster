@@ -1,10 +1,12 @@
-
 import { NextRequest, NextResponse } from "next/server";
-import { getSession } from "@/lib/auth/session";
-import { getUserById, updateUser } from "@/lib/storage/users";
+import { getSession, clearSession } from "@/lib/auth/session";
+import { getUserById, updateUser, incrementSessionVersion } from "@/lib/storage/users";
 import { verifyPassword, hashPassword } from "@/lib/auth/password";
+import { AuditLogger } from "@/lib/security/audit-logger";
 
 export async function POST(request: NextRequest) {
+    const ip = request.headers.get("x-forwarded-for") || "unknown";
+    
     try {
         const userId = await getSession();
         if (!userId) {
@@ -29,14 +31,23 @@ export async function POST(request: NextRequest) {
         // Verify current password
         const isValid = await verifyPassword(currentPassword, user.passwordHash);
         if (!isValid) {
+            await AuditLogger.log({ event: "signin.failure", userId, ip, metadata: { context: "password_change", reason: "invalid_current_password" } });
             return NextResponse.json({ error: "Incorrect current password" }, { status: 400 });
         }
 
-        // Update password
+        // Update password and increment session version to revoke all existing sessions
         const hashedPassword = await hashPassword(newPassword);
         await updateUser(userId, { passwordHash: hashedPassword });
+        await incrementSessionVersion(userId);
 
-        return NextResponse.json({ success: true });
+        await AuditLogger.log({ event: "password.change", userId, ip });
+
+        const response = NextResponse.json({ success: true });
+        
+        // Optional: clear the current session so the user must re-login
+        clearSession(response);
+
+        return response;
     } catch (error) {
         console.error("Failed to change password:", error);
         return NextResponse.json({ error: "Internal Server Error" }, { status: 500 });

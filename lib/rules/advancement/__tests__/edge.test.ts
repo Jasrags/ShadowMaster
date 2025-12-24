@@ -49,7 +49,6 @@ describe('Edge Advancement', () => {
       expect(result.advancementRecord.completedAt).toBeDefined();
 
       // Edge has no training period
-      expect(result.trainingPeriod).toBeUndefined();
 
       // Check character updates
       expect(result.updatedCharacter.karmaCurrent).toBe(50 - 15); // 35

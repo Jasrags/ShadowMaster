@@ -15,7 +15,7 @@ import * as rulesModule from '@/lib/rules/merge';
 import * as advancementModule from '@/lib/rules/advancement/edge';
 
 import type { Character, MergedRuleset, AdvancementRecord } from '@/lib/types';
-import { createMockCharacter } from '@/__tests__/mocks/storage';
+import { createMockCharacter, createMockUser } from '@/__tests__/mocks/storage';
 import { createMockMergedRuleset } from '@/__tests__/mocks/rulesets';
 
 // Mock dependencies
@@ -64,16 +64,11 @@ describe('POST /api/characters/[characterId]/advancement/edge', () => {
     mockRuleset = createMockMergedRuleset();
 
     vi.mocked(sessionModule.getSession).mockResolvedValue(userId);
-    vi.mocked(userStorageModule.getUserById).mockResolvedValue({
+    vi.mocked(userStorageModule.getUserById).mockResolvedValue(createMockUser({
       id: userId,
       email: 'test@example.com',
       username: 'testuser',
-      passwordHash: 'hash',
-      role: ['user'],
-      createdAt: new Date().toISOString(),
-      lastLogin: null,
-      characters: [],
-    });
+    }));
     vi.mocked(characterStorageModule.getCharacter).mockResolvedValue(mockCharacter);
     vi.mocked(rulesModule.loadAndMergeRuleset).mockResolvedValue({
       success: true,

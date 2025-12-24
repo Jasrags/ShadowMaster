@@ -252,18 +252,18 @@ describe('Quality Validation', () => {
         karmaCost: 5,
         summary: 'Mage only',
         prerequisites: {
-          magicalPaths: ['mage'],
+          magicalPaths: ['full-mage'],
         },
       };
 
       // Mundane should fail
       const result1 = validatePrerequisites(quality, character, ruleset);
       expect(result1.allowed).toBe(false);
-      expect(result1.reason).toContain('Requires magical path: mage');
+      expect(result1.reason).toContain('Requires magical path: full-mage');
 
       // Mage should pass
       const mageCharacter = createMockCharacter({
-        magicalPath: 'mage',
+        magicalPath: 'full-mage',
         specialAttributes: {
           edge: 1,
           essence: 6,

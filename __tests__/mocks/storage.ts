@@ -5,7 +5,7 @@
  * for testing without touching the actual file system.
  */
 
-import type { Character, User } from '@/lib/types';
+import type { Character, User, Campaign } from '@/lib/types';
 
 /**
  * Mock file system storage
@@ -97,6 +97,9 @@ export function createMockUser(overrides?: Partial<User>): User {
     createdAt: new Date().toISOString(),
     lastLogin: null,
     characters: [],
+    failedLoginAttempts: 0,
+    lockoutUntil: null,
+    sessionVersion: 1,
     ...overrides,
   };
 }
@@ -141,4 +144,41 @@ export function createMockCharacter(overrides?: Partial<Character>): Character {
     ...overrides,
   };
 }
+
+/**
+ * Helper to create mock campaign data
+ */
+export function createMockCampaign(overrides?: Partial<Campaign>): Campaign {
+  return {
+    id: 'test-campaign-id',
+    gmId: 'test-gm-id',
+    title: 'Test Campaign',
+    status: 'active',
+    editionId: 'test-edition-id',
+    editionCode: 'sr5',
+    enabledBookIds: ['sr5-core'],
+    enabledCreationMethodIds: ['priority'],
+    gameplayLevel: 'experienced',
+    playerIds: [],
+    visibility: 'private',
+    advancementSettings: {
+      trainingTimeMultiplier: 1.0,
+      attributeKarmaMultiplier: 5,
+      skillKarmaMultiplier: 2,
+      skillGroupKarmaMultiplier: 5,
+      knowledgeSkillKarmaMultiplier: 1,
+      specializationKarmaCost: 7,
+      spellKarmaCost: 5,
+      complexFormKarmaCost: 4,
+      attributeRatingCap: 10,
+      skillRatingCap: 13,
+      allowInstantAdvancement: false,
+      requireApproval: true,
+    },
+    createdAt: new Date().toISOString(),
+    updatedAt: new Date().toISOString(),
+    ...overrides,
+  };
+}
+
 

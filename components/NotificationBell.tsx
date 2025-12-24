@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect, useState, useRef } from "react";
+import React, { useEffect, useState, useRef, useCallback } from "react";
 import { 
     Button, 
     MenuTrigger, 
@@ -23,16 +23,25 @@ import {
 } from "lucide-react";
 import { CampaignNotification, NotificationType } from "@/lib/types/campaign";
 import Link from "next/link";
+import { useAuth } from "@/lib/auth/AuthProvider";
 
 export function NotificationBell() {
     const [notifications, setNotifications] = useState<CampaignNotification[]>([]);
     const [unreadCount, setUnreadCount] = useState(0);
     const [loading, setLoading] = useState(true);
     const pollingInterval = useRef<NodeJS.Timeout | null>(null);
+    const { signOut } = useAuth();
 
-    const fetchNotifications = async () => {
+    const fetchNotifications = useCallback(async () => {
         try {
             const response = await fetch("/api/notifications");
+            
+            if (response.status === 401) {
+                // Session is invalid, sign out to sync state
+                await signOut();
+                return;
+            }
+
             const data = await response.json();
             if (data.success) {
                 setNotifications(data.notifications);
@@ -43,7 +52,7 @@ export function NotificationBell() {
         } finally {
             setLoading(false);
         }
-    };
+    }, [signOut]);
 
     useEffect(() => {
         fetchNotifications();
@@ -52,7 +61,7 @@ export function NotificationBell() {
         return () => {
             if (pollingInterval.current) clearInterval(pollingInterval.current);
         };
-    }, []);
+    }, [fetchNotifications]);
 
     const markAsRead = async (id: string) => {
         try {
