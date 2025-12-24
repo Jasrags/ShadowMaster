@@ -257,6 +257,18 @@ export type {
   ResolvedEffect,
 } from "./gameplay";
 
+// Audit types
+export type {
+  AuditAction,
+  ActorRole,
+  AuditActor,
+  RulesetSnapshot,
+  StateTransitionDetails,
+  AuditEntry,
+  CreateAuditEntryParams,
+  AuditQueryOptions,
+} from "./audit";
+
 // Discovery types (for ruleset browsing)
 export type {
   ContentCategory,

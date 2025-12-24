@@ -10,6 +10,7 @@ import type { ID, ISODateString, Metadata, MagicalPath } from "./core";
 import type { EditionCode, FocusType, SpiritType } from "./edition";
 import type { CharacterProgram } from "./programs";
 import type { QualitySelection } from "./qualities";
+import type { AuditEntry } from "./audit";
 
 // =============================================================================
 // CHARACTER CORE
@@ -400,6 +401,16 @@ export interface Character {
   uiPreferences?: {
     theme?: string;
   };
+
+  // -------------------------------------------------------------------------
+  // Audit Trail
+  // -------------------------------------------------------------------------
+
+  /**
+   * Immutable audit log of all state changes and significant actions.
+   * Entries are append-only and never modified or deleted.
+   */
+  auditLog?: AuditEntry[];
 }
 
 // =============================================================================
