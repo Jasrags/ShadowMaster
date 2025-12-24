@@ -107,3 +107,19 @@ Atomic JSON writes to disk.
 ## Documentation
 
 Refer to `/docs/` for detailed architecture, roadmap, and gap analysis.
+
+## MCP Servers
+
+This project has MCP servers configured in the workspace `.mcp.json` file. These tools form the **AI Project Management Additions** to assist with automated linting, state tracking, and development.
+
+### Available Servers
+
+| Server                 | Purpose                    | When to Use                                                  |
+| ---------------------- | -------------------------- | ------------------------------------------------------------ |
+| **spec-lint**          | Enforce spec immutability  | Automatically run to ensure no progress leaks into specs     |
+| **next-devtools**      | Next.js inspection         | Debugging React components and Next.js state                 |
+| **memory**             | Persistent knowledge graph | Store/recall architectural decisions, patterns, known issues |
+| **git**                | Git operations             | Commits, diffs, branches, history viewing                    |
+| **filesystem**         | File operations            | Read/write project files                                     |
+| **sequentialthinking** | Structured reasoning       | Complex debugging, architecture decisions                    |
+| **time**               | Timezone utilities         | Timestamps (rarely needed)                                   |

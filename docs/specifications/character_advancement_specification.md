@@ -1,3 +1,6 @@
+> [!NOTE]
+> This implementation guide is governed by the [Capability (character.advancement.md)](file:///Users/jrags/Code/Jasrags/shadow-master/docs/capabilities/character.advancement.md).
+
 # Character Advancement Specification
 
 **Last Updated:** 2025-01-27
@@ -27,57 +30,6 @@ Character advancement is the post-creation system for improving characters using
 
 ---
 
-## User Stories
-
-### Primary Use Cases (Players)
-
-1. **As a player**, I want to spend karma to improve my character's attributes so they become more capable.
-
-2. **As a player**, I want to increase my skill ratings so I can succeed at more difficult tests.
-
-3. **As a player**, I want to learn new skills and specializations to expand my character's abilities.
-
-4. **As a player**, I want to acquire new positive qualities to gain new advantages.
-
-5. **As a player**, I want to buy off negative qualities that no longer fit my character's story.
-
-6. **As a player**, I want to learn new spells, rituals, and complex forms to expand my magical/resonance repertoire.
-
-7. **As a player**, I want to initiate/submerge to gain access to metamagics and echoes.
-
-8. **As a player**, I want to see my karma balance and advancement history at a glance.
-
-9. **As a player**, I want to understand what advancements are available and their costs before committing.
-
-10. **As a player**, I want to track how my character has grown since creation.
-
-### Primary Use Cases (GMs)
-
-11. **As a GM**, I want to award karma to characters after runs and sessions.
-
-12. **As a GM**, I want to award karma to all campaign characters at once after a session.
-
-13. **As a GM**, I want to review and approve significant character advancements (initiation, new qualities).
-
-14. **As a GM**, I want to configure house rules for advancement costs in my campaign.
-
-15. **As a GM**, I want to see an advancement log for all characters in my campaign.
-
-16. **As a GM**, I want to enforce training time requirements if my campaign uses them.
-
-17. **As a GM**, I want to restrict certain advancements in my campaign (e.g., no awakening after creation).
-
-### System Use Cases
-
-18. **As the system**, I need to validate all advancement requests against karma availability.
-
-19. **As the system**, I need to enforce prerequisites for advancements.
-
-20. **As the system**, I need to calculate derived stats after advancement.
-
-21. **As the system**, I need to maintain a complete audit trail of all advancements.
-
----
 
 ## Advancement Rules (SR5)
 
@@ -1229,54 +1181,6 @@ export function awardKarmaToCampaign(campaignId: ID, amount: number, description
 
 ---
 
-## Acceptance Criteria
-
-### MVP Features
-
-- [ ] Attribute advancement with karma cost calculation
-- [ ] Active skill advancement with karma cost calculation
-- [ ] Knowledge/language skill advancement
-- [ ] New specialization acquisition
-- [ ] Karma ledger with transaction history
-- [ ] Karma summary display on character sheet
-- [ ] Basic advancement validation (karma, prerequisites)
-- [ ] Advancement history tracking
-- [ ] GM karma award action
-
-### Phase 2: Quality Advancement
-
-- [ ] Post-creation positive quality acquisition (2× cost)
-- [ ] Negative quality buy-off (2× bonus)
-- [ ] Quality prerequisite validation
-- [ ] GM approval workflow for qualities
-
-### Phase 3: Magic/Resonance Advancement
-
-- [ ] New spell/ritual acquisition
-- [ ] Complex form acquisition
-- [ ] Initiation/submersion with ordeal options
-- [ ] Metamagic/echo selection
-- [ ] Adept power point acquisition
-- [ ] Magic/Resonance attribute advancement
-
-### Phase 4: Campaign Integration
-
-- [ ] Campaign advancement settings
-- [ ] Session-based karma awards
-- [ ] Campaign advancement log
-- [ ] Bulk karma distribution
-- [ ] Training time rules
-- [ ] House rule cost modifiers
-
-### Phase 5: Advanced Features
-
-- [ ] Advancement planning/wishlists
-- [ ] Advancement recommendations
-- [ ] Character build comparison tools
-- [ ] Advancement milestone tracking
-- [ ] Export advancement history
-
----
 
 ## Security Considerations
 

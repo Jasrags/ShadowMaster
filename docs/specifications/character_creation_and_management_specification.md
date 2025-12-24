@@ -1,3 +1,6 @@
+> [!NOTE]
+> This implementation guide is governed by the [Capability (character.management.md)](file:///Users/jrags/Code/Jasrags/shadow-master/docs/capabilities/character.management.md).
+
 # Character Creation and Management Specification
 
 **Last Updated:** 2025-01-27  
@@ -25,63 +28,6 @@ Character creation and management is the core functionality of Shadow Master, en
 
 ---
 
-## User Stories
-
-### Character Creation
-
-1. **As a user**, I want to create a new character by selecting an edition and following a step-by-step wizard.
-
-2. **As a user**, I want my character creation progress to be auto-saved so I don't lose my work.
-
-3. **As a user**, I want to see real-time validation and budget tracking during character creation.
-
-4. **As a user**, I want to be able to go back and change previous steps if I made a mistake.
-
-5. **As a user**, I want to see which steps I've completed and which are remaining.
-
-6. **As a user**, I want to cancel character creation at any time.
-
-7. **As a user**, I want to resume editing a draft character later.
-
-8. **As a user**, I want the wizard to enforce the rules of my selected creation method (Priority, Point Buy, etc.).
-
-### Character Management
-
-9. **As a user**, I want to view a list of all my characters with key information at a glance.
-
-10. **As a user**, I want to filter my characters by status (active, draft, retired, deceased).
-
-11. **As a user**, I want to search my characters by name, metatype, or magical path.
-
-12. **As a user**, I want to view a detailed character sheet for any of my characters.
-
-13. **As a user**, I want to delete characters I no longer need.
-
-14. **As a user**, I want to see character statistics (karma, nuyen, essence) in the character list.
-
-15. **As a user**, I want to switch between grid and list view for my character list.
-
-16. **As a user**, I want to sort my characters by various criteria (name, karma, date created/updated).
-
-### Character Editing
-
-17. **As a user**, I want to resume editing a draft character to complete creation.
-
-18. **As a user**, I want to see validation errors when editing a draft character.
-
-19. **As a user**, I want changes to be saved automatically as I edit.
-
-### Character Display
-
-20. **As a user**, I want to view a comprehensive character sheet with all character information.
-
-21. **As a user**, I want to see derived stats (limits, initiative) calculated automatically.
-
-22. **As a user**, I want to see condition monitors (physical and stun damage).
-
-23. **As a user**, I want to access a dice roller from the character sheet.
-
----
 
 ## Page Structure
 
@@ -907,40 +853,6 @@ app/api/characters/
 
 ---
 
-## Acceptance Criteria
-
-### MVP (Current Implementation)
-
-- [x] User can select edition and start character creation
-- [x] Wizard guides user through all creation steps
-- [x] Real-time validation and budget tracking
-- [x] Auto-save functionality for drafts
-- [x] Character list with filtering and search
-- [x] Character sheet view with comprehensive information
-- [x] Draft character editing (resume creation)
-- [x] Character deletion
-- [x] Status management (draft, active, retired, deceased)
-- [x] Responsive design (mobile, tablet, desktop)
-- [x] Dark mode support
-- [x] Accessibility: keyboard navigation, screen reader support
-
-### Enhanced Features (Future)
-
-- [ ] Character duplication/cloning
-- [ ] Character export/import (JSON)
-- [ ] Character versioning/history
-- [ ] Bulk character operations
-- [ ] Character templates
-- [ ] Advanced filtering (by metatype, magical path, edition)
-- [ ] Character statistics/analytics
-- [ ] Character comparison view
-- [ ] Print-friendly character sheet
-- [ ] Character sharing (with permissions)
-- [ ] Character notes and journal entries
-- [ ] Character images/avatars
-- [ ] Advanced search (full-text search across all fields)
-
----
 
 ## Related Documentation
 

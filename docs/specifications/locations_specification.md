@@ -1,3 +1,6 @@
+> [!NOTE]
+> This implementation guide is governed by the [Capability (campaign.location-governance.md)](file:///Users/jrags/Code/Jasrags/shadow-master/docs/capabilities/campaign.location-governance.md).
+
 # Locations Specification
 
 **Last Updated:** 2025-12-17  
@@ -25,55 +28,6 @@ This document specifies the implementation requirements for supporting **Locatio
 
 ---
 
-## User Stories
-
-### Primary Use Cases (GM)
-
-1. **As a GM**, I want to create locations for my campaign world.
-
-2. **As a GM**, I want to organize locations by type (physical, Matrix, astral, etc.).
-
-3. **As a GM**, I want to add rich descriptions, images, and notes to locations.
-
-4. **As a GM**, I want to link locations to NPCs, encounters, and sessions.
-
-5. **As a GM**, I want to create location hierarchies (districts within cities, rooms within buildings).
-
-6. **As a GM**, I want to mark certain location content as GM-only (hidden from players).
-
-7. **As a GM**, I want to search and filter locations by type, tags, or name.
-
-8. **As a GM**, I want to reuse location templates across campaigns.
-
-9. **As a GM**, I want to track which locations have been visited or referenced in sessions.
-
-10. **As a GM**, I want to add location-specific rules or modifiers (security ratings, matrix hosts, etc.).
-
-### Primary Use Cases (Player)
-
-11. **As a player**, I want to view locations that have been shared by the GM.
-
-12. **As a player**, I want to see location descriptions and images.
-
-13. **As a player**, I want to understand location relationships and connections.
-
-14. **As a player**, I want to reference locations in character notes or journals.
-
-### Secondary Use Cases
-
-15. **As a GM**, I want to export/import locations between campaigns.
-
-16. **As a GM**, I want to create location maps or diagrams.
-
-17. **As a GM**, I want to track location history (when visited, by whom, what happened).
-
-18. **As a GM**, I want to assign location-specific NPCs or grunt teams.
-
-19. **As a GM**, I want to create location templates from existing locations.
-
-20. **As a GM**, I want to link locations to campaign notes and journal entries.
-
----
 
 ## Page Structure
 
@@ -1225,42 +1179,6 @@ app/api/locations/
 
 ---
 
-## Acceptance Criteria
-
-### MVP (Minimum Viable Product)
-
-- [x] GM can create locations with name, type, description
-- [x] GM can set location visibility (GM-only or players)
-- [x] GM can add physical properties (address, coordinates, district, city)
-- [x] GM can create location hierarchies (parent/child)
-- [x] GM can add GM-only notes and content (Basic `gmNotes` supported; structured `gmOnlyContent` for hidden links deferred to Phase 2)
-- [x] GM can link NPCs, grunt teams, and encounters to locations
-- [x] GM can search and filter locations by type, tags, visibility
-- [x] Players can view locations shared by GM
-- [x] System tracks location visits (Aggregate stats implemented; detailed timeline deferred)
-- [x] All forms have proper validation
-- [x] Success and error messages display appropriately
-- [x] Page is responsive (mobile, tablet, desktop)
-- [x] Dark mode support
-- [x] Accessibility: keyboard navigation, screen reader support
-
-### Enhanced Features (Future)
-
-- [x] Location templates (create from template, save as template)
-- [ ] Image galleries and map integration (Basic URL fields implemented in MVP)
-- [ ] Matrix host and astral properties support (Fields implemented in MVP; deeper integration future)
-- [ ] Location-specific modifiers and rules
-- [ ] Visual location hierarchy tree
-- [ ] Location connection diagrams
-- [ ] Export/import locations between campaigns
-- [ ] Location history timeline (Detailed chronological log)
-- [ ] Location statistics and analytics
-- [ ] Integration with campaign notes and sessions
-- [ ] Location search with full-text search
-- [ ] Location tags and categorization (Basic tagging implemented in MVP)
-- [ ] Public location template library
-
----
 
 ## Security Considerations
 

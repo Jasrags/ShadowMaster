@@ -17,5 +17,6 @@ Rules:
 - This is historical documentation
 - Do NOT propose changes
 - Do NOT mark future plans as commitments
+- Save the file to `docs/prompts/project_status/milestone_snapshots/`
 
 Name the file using the milestone name and date.

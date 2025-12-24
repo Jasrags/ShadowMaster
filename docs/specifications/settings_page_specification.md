@@ -1,3 +1,6 @@
+> [!NOTE]
+> This implementation guide is governed by the [Capability (TBD)](file:///Users/jrags/Code/Jasrags/shadow-master/docs/capabilities/TBD).
+
 # Settings Page Specification
 
 **Last Updated:** 2025-12-17  
@@ -22,27 +25,6 @@ This page is accessible from the main navigation sidebar and is currently marked
 
 ---
 
-## User Stories
-
-### Primary Use Cases
-
-1. **As a user**, I want to update my email address when it changes.
-
-2. **As a user**, I want to change my password for security reasons.
-
-3. **As a user**, I want to control whether the application uses dark mode or light mode.
-
-4. **As a user**, I want to export my character data as a backup.
-
-5. **As a user**, I want to import character data from a backup or another system.
-
-6. **As a user**, I want to view my account information and activity history.
-
-7. **As a user**, I want to delete my account and all associated data.
-
-8. **As a user**, I want to manage my notification preferences (future).
-
----
 
 ## Page Structure
 
@@ -538,35 +520,6 @@ app/settings/
 
 ---
 
-## Acceptance Criteria
-
-### MVP (Minimum Viable Product)
-
-- [x] Page displays all settings sections
-- [x] Account section allows updating email and username
-- [x] Security section allows changing password
-- [x] Preferences section allows theme selection (light/dark/system)
-- [x] Data management section allows exporting characters as JSON
-- [x] Privacy section displays account deletion option
-- [x] All forms have proper validation
-- [x] Success and error messages display appropriately
-- [x] Page is responsive (mobile, tablet, desktop)
-- [x] Dark mode support
-- [x] Accessibility: keyboard navigation, screen reader support
-
-### Enhanced Features (Future)
-
-- [ ] Import characters from JSON
-- [ ] Active sessions management
-- [ ] Two-factor authentication
-- [ ] Notification preferences
-- [ ] Language selection
-- [ ] Server-side preference sync
-- [ ] Account activity log
-- [ ] Data retention and privacy policy pages
-- [ ] Export full account backup (all data)
-
----
 
 ## Security Considerations
 

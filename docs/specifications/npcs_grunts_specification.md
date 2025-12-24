@@ -1,3 +1,6 @@
+> [!NOTE]
+> This implementation guide is governed by the [Capability (campaign.npc-governance.md)](file:///Users/jrags/Code/Jasrags/shadow-master/docs/capabilities/campaign.npc-governance.md).
+
 # NPCs (Grunts) Specification
 
 **Last Updated:** 2025-01-27  
@@ -25,47 +28,6 @@ This document specifies the implementation requirements for supporting Non-Playe
 
 ---
 
-## User Stories
-
-### Primary Use Cases (GM)
-
-1. **As a GM**, I want to create grunt teams for my campaign encounters.
-
-2. **As a GM**, I want to select from pre-built grunt templates based on Professional Rating (0-6).
-
-3. **As a GM**, I want to customize grunt team statistics (attributes, skills, gear).
-
-4. **As a GM**, I want to add optional lieutenants and specialists to grunt teams.
-
-5. **As a GM**, I want to track grunt team condition (damage, casualties, morale) during combat.
-
-6. **As a GM**, I want to apply damage to individual grunts or groups of grunts.
-
-7. **As a GM**, I want to manage Group Edge pool for grunt teams.
-
-8. **As a GM**, I want to roll initiative for grunt teams (group or individual).
-
-9. **As a GM**, I want to enable simplified "mowing them down" rules for faster combat.
-
-10. **As a GM**, I want to link grunt teams to specific encounters or campaigns.
-
-### Primary Use Cases (Player)
-
-11. **As a player**, I want to see grunt teams in combat encounters (read-only view).
-
-12. **As a player**, I want to understand grunt team capabilities (Professional Rating, stats).
-
-### Secondary Use Cases
-
-13. **As a GM**, I want to save custom grunt team templates for reuse.
-
-14. **As a GM**, I want to export/import grunt teams between campaigns.
-
-15. **As a GM**, I want to track grunt team statistics across multiple encounters.
-
-16. **As a GM**, I want to apply bulk damage to multiple grunts simultaneously.
-
----
 
 ## Page Structure
 
@@ -1093,44 +1055,6 @@ export function applySimplifiedRules(
 
 ---
 
-## Acceptance Criteria
-
-### MVP (Minimum Viable Product)
-
-- [ ] GM can create grunt teams with Professional Rating 0-6
-- [ ] GM can select from pre-built grunt templates
-- [ ] GM can customize grunt team statistics (attributes, skills, gear)
-- [ ] GM can add optional lieutenants and specialists
-- [ ] GM can track grunt team condition (damage, casualties)
-- [ ] GM can apply damage to individual grunts
-- [ ] GM can manage Group Edge pool
-- [ ] GM can roll initiative for grunt teams
-- [ ] System calculates condition monitor size correctly
-- [ ] System tracks morale thresholds based on Professional Rating
-- [ ] System determines grunt death/stun status correctly
-- [ ] Grunt teams are linked to campaigns
-- [ ] All forms have proper validation
-- [ ] Success and error messages display appropriately
-- [ ] Page is responsive (mobile, tablet, desktop)
-- [ ] Dark mode support
-- [ ] Accessibility: keyboard navigation, screen reader support
-
-### Enhanced Features (Future)
-
-- [ ] Bulk damage application to multiple grunts
-- [ ] Simplified "mowing them down" rules toggle
-- [ ] Save/load custom grunt team templates
-- [ ] Export/import grunt teams between campaigns
-- [ ] Grunt team statistics tracking across encounters
-- [ ] Integration with encounter system
-- [ ] Visual condition monitor component
-- [ ] Initiative tracker with turn order
-- [ ] Group Edge spending interface
-- [ ] Lieutenant Leadership boost functionality
-- [ ] Individual initiative for augmented specialists
-- [ ] Grunt team duplication/cloning
-
----
 
 ## Security Considerations
 

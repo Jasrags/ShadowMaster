@@ -1,3 +1,6 @@
+> [!NOTE]
+> This implementation guide is governed by the [Capability (ruleset.discovery.md)](file:///Users/jrags/Code/Jasrags/shadow-master/docs/capabilities/ruleset.discovery.md).
+
 # Rulesets Page Specification
 
 **Last Updated:** 2025-01-27  
@@ -22,21 +25,6 @@ This page is accessible from the main navigation sidebar.
 
 ---
 
-## User Stories
-
-### Primary Use Cases
-
-1. **As a new player**, I want to browse available editions to understand which one I should use for character creation.
-
-2. **As an experienced player**, I want to see what books and sourcebooks are available for my preferred edition.
-
-3. **As a GM**, I want to review the ruleset content available for an edition to plan my campaign.
-
-4. **As a player**, I want to explore the skills, metatypes, and gear available in an edition before starting character creation.
-
-5. **As a user**, I want to understand the differences between editions to make an informed choice.
-
----
 
 ## Implementation Record (MVP - 2025-01-27)
 
@@ -412,33 +400,6 @@ app/rulesets/
 
 ---
 
-## Acceptance Criteria
-
-### MVP (Minimum Viable Product)
-
-- [x] Page displays all available editions in a grid/list view
-- [x] Each edition card shows: name, year, description, availability status
-- [x] Clicking an edition opens a detail view
-- [x] Detail view shows: edition metadata, books list, creation methods
-- [x] "Create Character" button navigates to character creation with edition pre-selected
-- [x] Page is responsive (mobile, tablet, desktop)
-- [x] Dark mode support
-- [x] Loading states for async data
-- [x] Error handling for failed API calls
-- [x] Accessibility: keyboard navigation, screen reader support
-
-### Enhanced Features (Future)
-
-- [ ] Content preview tabs with actual ruleset data
-- [ ] Search/filter editions
-- [ ] Edition comparison view
-- [ ] Book detail expansion (show rule modules)
-- [ ] Export ruleset summary as PDF
-- [ ] Favorite/bookmark editions
-- [ ] Recent editions history
-- [ ] Edition statistics dashboard
-
----
 
 ## Future Enhancements
 
