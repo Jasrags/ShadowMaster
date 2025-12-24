@@ -1,0 +1,53 @@
+[
+  {
+    "id": "f9e7e7f2-06c8-4de4-9a0a-0a2a16fed02c",
+    "characterId": "char-789",
+    "violationType": "content_access",
+    "severity": "error",
+    "timestamp": "2025-12-24T21:20:14.330Z"
+  },
+  {
+    "id": "1a2b401f-8c79-489d-8cb1-f55168d57547",
+    "characterId": "test-char-1766611214336",
+    "violationType": "creation",
+    "severity": "error",
+    "timestamp": "2025-12-24T21:20:14.336Z"
+  },
+  {
+    "id": "fedfee34-32c3-4769-a11d-5bbfd8dc8b2d",
+    "characterId": "test-char-1766611214336",
+    "violationType": "advancement",
+    "severity": "error",
+    "timestamp": "2025-12-24T21:20:14.338Z"
+  },
+  {
+    "id": "c159b35f-e9a2-4568-852a-0d1f3c284a6e",
+    "characterId": "test-char-1766611214340",
+    "violationType": "creation",
+    "severity": "error",
+    "timestamp": "2025-12-24T21:20:14.340Z"
+  },
+  {
+    "id": "606683cb-059c-4c7e-8245-7fdc04a6ad5c",
+    "characterId": "test-char-1766611214340",
+    "violationType": "advancement",
+    "severity": "error",
+    "timestamp": "2025-12-24T21:20:14.341Z"
+  },
+  {
+    "id": "ea10bc62-33a5-4464-b28b-d4d57bccea34",
+    "characterId": "char-val-test",
+    "campaignId": "campaign-123",
+    "violationType": "edition_mismatch",
+    "severity": "error",
+    "timestamp": "2025-12-24T21:20:14.343Z"
+  },
+  {
+    "id": "f7210b53-cddf-4169-a6ff-c2e49e6e04e5",
+    "characterId": "char-val-test",
+    "campaignId": "campaign-123",
+    "violationType": "edition_mismatch",
+    "severity": "error",
+    "timestamp": "2025-12-24T21:20:14.347Z"
+  }
+]

@@ -117,6 +117,35 @@ export async function PUT(
             }
         }
 
+        // Edition Transition Guard
+        // Satisfies Ruleset Integrity: "A campaign MUST NOT transition between
+        // different game editions once initialized."
+        // @see docs/capabilities/ruleset.integrity.md
+        if (
+            (body as Record<string, unknown>).editionCode !== undefined &&
+            (body as Record<string, unknown>).editionCode !== campaign!.editionCode
+        ) {
+            return NextResponse.json(
+                {
+                    success: false,
+                    error: "Edition cannot be changed after campaign initialization. Create a new campaign for a different edition."
+                },
+                { status: 400 }
+            );
+        }
+        if (
+            (body as Record<string, unknown>).editionId !== undefined &&
+            (body as Record<string, unknown>).editionId !== campaign!.editionId
+        ) {
+            return NextResponse.json(
+                {
+                    success: false,
+                    error: "Edition cannot be changed after campaign initialization. Create a new campaign for a different edition."
+                },
+                { status: 400 }
+            );
+        }
+
         // Merge advancement settings if present
         const { advancementSettings, ...restBody } = body;
         const updateData: Partial<Campaign> = { ...restBody };
