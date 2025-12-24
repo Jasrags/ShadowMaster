@@ -58,6 +58,14 @@ export interface Edition {
   /** Default creation method for new characters */
   defaultCreationMethodId?: ID;
 
+  // Discovery metadata (optional, for enhanced browsing)
+  /** Game philosophy/design approach abstract */
+  philosophy?: string;
+  /** Key mechanical features of this edition */
+  mechanicalHighlights?: string[];
+  /** Types of content supported */
+  supportedContentTypes?: BookCategory[];
+
   createdAt: ISODateString;
   updatedAt?: ISODateString;
 }

@@ -257,3 +257,15 @@ export type {
   ResolvedEffect,
 } from "./gameplay";
 
+// Discovery types (for ruleset browsing)
+export type {
+  ContentCategory,
+  ContentSummary,
+  BookSummary,
+  EditionDiscoveryMetadata,
+  CreationMethodSummary,
+  ContentPreviewItem,
+  ContentPreviewResponse,
+  EditionDiscoveryResponse,
+} from "./discovery";
+

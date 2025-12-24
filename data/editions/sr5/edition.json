@@ -12,6 +12,15 @@
     "priority"
   ],
   "defaultCreationMethodId": "priority",
+  "philosophy": "Fifth Edition brings a streamlined approach to the classic Shadowrun experience, balancing narrative freedom with structured mechanical resolution. The Priority system provides clear trade-offs during character creation, while Limits ensure no single attribute dominates dice rolls.",
+  "mechanicalHighlights": [
+    "Priority-based character creation with clear trade-offs",
+    "Limits system (Physical, Mental, Social) constraining maximum hits",
+    "Wireless Matrix with Grid Overwatch Division (GOD)",
+    "Essence-based magic/resonance interaction for augmented awakened",
+    "Streamlined initiative with variable action economy"
+  ],
+  "supportedContentTypes": ["core", "sourcebook", "adventure"],
   "createdAt": "2025-01-01T00:00:00.000Z",
   "updatedAt": "2025-01-01T00:00:00.000Z"
 }

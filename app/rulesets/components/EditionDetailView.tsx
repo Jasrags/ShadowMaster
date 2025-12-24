@@ -1,8 +1,9 @@
 import { useState, useEffect } from "react";
 import { Edition, EditionCode, Book, CreationMethod } from "@/lib/types";
-import { X, ArrowRight, Loader2, BookOpen, UserPlus } from "lucide-react";
+import { X, ArrowRight, Loader2, BookOpen, UserPlus, Layers } from "lucide-react";
 import BookCard from "./BookCard";
 import CreationMethodCard from "./CreationMethodCard";
+import ContentPreview from "./ContentPreview";
 
 interface EditionDetailViewProps {
     editionCode: EditionCode;
@@ -18,7 +19,7 @@ export default function EditionDetailView({ editionCode, onClose }: EditionDetai
         creationMethods: CreationMethod[];
     } | null>(null);
 
-    const [activeTab, setActiveTab] = useState<"overview" | "books" | "methods">("overview");
+    const [activeTab, setActiveTab] = useState<"overview" | "content" | "books" | "methods">("overview");
 
     useEffect(() => {
         async function fetchData() {
@@ -95,11 +96,10 @@ export default function EditionDetailView({ editionCode, onClose }: EditionDetai
                     </a>
                 </div>
 
-                {/* Tabs */}
-                <div className="flex border-b border-border">
+                <div className="flex border-b border-border overflow-x-auto">
                     <button
                         onClick={() => setActiveTab("overview")}
-                        className={`px-4 py-2 border-b-2 font-medium text-sm transition-colors ${activeTab === "overview"
+                        className={`px-4 py-2 border-b-2 font-medium text-sm transition-colors whitespace-nowrap ${activeTab === "overview"
                             ? "border-primary text-primary"
                             : "border-transparent text-muted-foreground hover:text-foreground"
                             }`}
@@ -107,8 +107,20 @@ export default function EditionDetailView({ editionCode, onClose }: EditionDetai
                         Overview
                     </button>
                     <button
+                        onClick={() => setActiveTab("content")}
+                        className={`px-4 py-2 border-b-2 font-medium text-sm transition-colors whitespace-nowrap ${activeTab === "content"
+                            ? "border-primary text-primary"
+                            : "border-transparent text-muted-foreground hover:text-foreground"
+                            }`}
+                    >
+                        <span className="flex items-center gap-1.5">
+                            <Layers className="w-4 h-4" />
+                            Content
+                        </span>
+                    </button>
+                    <button
                         onClick={() => setActiveTab("books")}
-                        className={`px-4 py-2 border-b-2 font-medium text-sm transition-colors ${activeTab === "books"
+                        className={`px-4 py-2 border-b-2 font-medium text-sm transition-colors whitespace-nowrap ${activeTab === "books"
                             ? "border-primary text-primary"
                             : "border-transparent text-muted-foreground hover:text-foreground"
                             }`}
@@ -117,7 +129,7 @@ export default function EditionDetailView({ editionCode, onClose }: EditionDetai
                     </button>
                     <button
                         onClick={() => setActiveTab("methods")}
-                        className={`px-4 py-2 border-b-2 font-medium text-sm transition-colors ${activeTab === "methods"
+                        className={`px-4 py-2 border-b-2 font-medium text-sm transition-colors whitespace-nowrap ${activeTab === "methods"
                             ? "border-primary text-primary"
                             : "border-transparent text-muted-foreground hover:text-foreground"
                             }`}
@@ -153,6 +165,12 @@ export default function EditionDetailView({ editionCode, onClose }: EditionDetai
                                     <p className="text-2xl font-bold">{creationMethods?.length || 0}</p>
                                 </div>
                             </div>
+                        </div>
+                    )}
+
+                    {activeTab === "content" && (
+                        <div className="animate-in fade-in zoom-in-95 duration-200">
+                            <ContentPreview editionCode={edition.shortCode} />
                         </div>
                     )}
 

@@ -4,13 +4,18 @@ import { Book, Layers, ArrowRight } from "lucide-react";
 interface EditionCardProps {
     edition: Edition;
     onSelect: (code: EditionCode) => void;
+    isSelected?: boolean;
 }
 
-export default function EditionCard({ edition, onSelect }: EditionCardProps) {
+export default function EditionCard({ edition, onSelect, isSelected }: EditionCardProps) {
     return (
         <div
             onClick={() => onSelect(edition.shortCode)}
-            className="group relative overflow-hidden rounded-xl border border-border bg-card hover:border-primary/50 transition-all duration-300 cursor-pointer hover:shadow-lg"
+            className={`group relative overflow-hidden rounded-xl border bg-card transition-all duration-300 cursor-pointer hover:shadow-lg ${
+                isSelected 
+                    ? "border-primary shadow-lg ring-2 ring-primary/20" 
+                    : "border-border hover:border-primary/50"
+            }`}
         >
             <div className="p-6">
                 <div className="flex justify-between items-start mb-4">

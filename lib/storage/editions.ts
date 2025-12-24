@@ -245,3 +245,176 @@ export async function getDefaultCreationMethod(
   return getCreationMethod(editionCode, edition.defaultCreationMethodId);
 }
 
+// =============================================================================
+// DISCOVERY OPERATIONS (Content Summarization)
+// =============================================================================
+
+import type {
+  ContentSummary,
+  ContentCategory,
+  BookSummary,
+} from "../types/discovery";
+
+/**
+ * Get a content summary for an edition
+ * Provides counts of metatypes, skills, qualities, etc.
+ */
+export async function getEditionContentSummary(
+  editionCode: EditionCode
+): Promise<ContentSummary | null> {
+  const edition = await getEdition(editionCode);
+  if (!edition) return null;
+
+  const payloads = await getAllBookPayloads(editionCode);
+  
+  // Aggregate counts across all books
+  let metatypeCount = 0;
+  let skillCount = 0;
+  let qualityCount = 0;
+  let spellCount = 0;
+  let gearCount = 0;
+  let augmentationCount = 0;
+  let vehicleCount = 0;
+  
+  const categoryCounts: Record<string, number> = {};
+
+  for (const payload of payloads) {
+    const modules = payload.modules || {};
+
+    // Count metatypes
+    const metatypesPayload = modules.metatypes?.payload as { metatypes?: unknown[] } | undefined;
+    if (metatypesPayload?.metatypes) {
+      metatypeCount += metatypesPayload.metatypes.length;
+      categoryCounts["metatypes"] = (categoryCounts["metatypes"] || 0) + metatypesPayload.metatypes.length;
+    }
+
+    // Count skills
+    const skillsPayload = modules.skills?.payload as { activeSkills?: unknown[] } | undefined;
+    if (skillsPayload?.activeSkills) {
+      skillCount += skillsPayload.activeSkills.length;
+      categoryCounts["skills"] = (categoryCounts["skills"] || 0) + skillsPayload.activeSkills.length;
+    }
+
+    // Count qualities
+    const qualitiesPayload = modules.qualities?.payload as { positive?: unknown[]; negative?: unknown[] } | undefined;
+    if (qualitiesPayload) {
+      const positiveCount = qualitiesPayload.positive?.length || 0;
+      const negativeCount = qualitiesPayload.negative?.length || 0;
+      qualityCount += positiveCount + negativeCount;
+      categoryCounts["qualities"] = (categoryCounts["qualities"] || 0) + positiveCount + negativeCount;
+    }
+
+    // Count spells
+    const magicPayload = modules.magic?.payload as { spells?: unknown[] } | undefined;
+    if (magicPayload?.spells) {
+      spellCount += magicPayload.spells.length;
+      categoryCounts["spells"] = (categoryCounts["spells"] || 0) + magicPayload.spells.length;
+    }
+
+    // Count gear
+    const gearPayload = modules.gear?.payload as { 
+      weapons?: unknown[]; 
+      armor?: unknown[]; 
+      electronics?: unknown[];
+      miscellaneous?: unknown[];
+    } | undefined;
+    if (gearPayload) {
+      const weaponCount = gearPayload.weapons?.length || 0;
+      const armorCount = gearPayload.armor?.length || 0;
+      const electronicsCount = gearPayload.electronics?.length || 0;
+      const miscCount = gearPayload.miscellaneous?.length || 0;
+      gearCount += weaponCount + armorCount + electronicsCount + miscCount;
+      categoryCounts["gear"] = (categoryCounts["gear"] || 0) + weaponCount + armorCount + electronicsCount + miscCount;
+    }
+
+    // Count augmentations (cyberware + bioware)
+    const cyberwarePayload = modules.cyberware?.payload as { items?: unknown[] } | undefined;
+    const biowarePayload = modules.bioware?.payload as { items?: unknown[] } | undefined;
+    const cyberCount = cyberwarePayload?.items?.length || 0;
+    const bioCount = biowarePayload?.items?.length || 0;
+    augmentationCount += cyberCount + bioCount;
+    if (cyberCount > 0 || bioCount > 0) {
+      categoryCounts["augmentations"] = (categoryCounts["augmentations"] || 0) + cyberCount + bioCount;
+    }
+
+    // Count vehicles
+    const vehiclesPayload = modules.vehicles?.payload as { vehicles?: unknown[]; drones?: unknown[] } | undefined;
+    if (vehiclesPayload) {
+      const vCount = vehiclesPayload.vehicles?.length || 0;
+      const dCount = vehiclesPayload.drones?.length || 0;
+      vehicleCount += vCount + dCount;
+      categoryCounts["vehicles"] = (categoryCounts["vehicles"] || 0) + vCount + dCount;
+    }
+  }
+
+  // Build category list
+  const categories: ContentCategory[] = Object.entries(categoryCounts).map(([id, count]) => ({
+    id,
+    name: id.charAt(0).toUpperCase() + id.slice(1),
+    itemCount: count,
+  }));
+
+  return {
+    editionCode,
+    metatypeCount,
+    skillCount,
+    qualityCount,
+    spellCount,
+    gearCount,
+    augmentationCount,
+    vehicleCount,
+    categories,
+    generatedAt: new Date().toISOString(),
+  };
+}
+
+/**
+ * Get a summary of a specific book's content contributions
+ */
+export async function getBookSummary(
+  editionCode: EditionCode,
+  bookId: string
+): Promise<BookSummary | null> {
+  const payload = await getBookPayload(editionCode, bookId);
+  if (!payload) return null;
+
+  const modules = payload.modules || {};
+  const contributions: ContentCategory[] = [];
+
+  // Count contributions per module type
+  const moduleTypes: Array<{ key: string; name: string; countPath: string[] }> = [
+    { key: "metatypes", name: "Metatypes", countPath: ["metatypes"] },
+    { key: "skills", name: "Skills", countPath: ["activeSkills"] },
+    { key: "qualities", name: "Qualities", countPath: ["positive", "negative"] },
+    { key: "gear", name: "Gear", countPath: ["weapons", "armor", "electronics"] },
+    { key: "magic", name: "Magic", countPath: ["spells", "paths"] },
+    { key: "cyberware", name: "Cyberware", countPath: ["items"] },
+    { key: "bioware", name: "Bioware", countPath: ["items"] },
+    { key: "vehicles", name: "Vehicles", countPath: ["vehicles", "drones"] },
+  ];
+
+  for (const { key, name, countPath } of moduleTypes) {
+    const modulePayload = modules[key as keyof typeof modules]?.payload as Record<string, unknown[]> | undefined;
+    if (modulePayload) {
+      let count = 0;
+      for (const path of countPath) {
+        const items = modulePayload[path];
+        if (Array.isArray(items)) {
+          count += items.length;
+        }
+      }
+      if (count > 0) {
+        contributions.push({ id: key, name, itemCount: count });
+      }
+    }
+  }
+
+  return {
+    id: payload.meta.bookId,
+    title: payload.meta.title,
+    category: payload.meta.category,
+    role: payload.meta.category === "core" ? "Core rules foundation" : "Content expansion",
+    contentContributions: contributions,
+  };
+}
+
