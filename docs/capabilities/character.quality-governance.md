@@ -2,7 +2,7 @@
 
 ## Purpose
 
-The Quality Governance capability manages the definition, selection, and mechanical application of character traits that provide unique benefits or drawbacks. It ensures that all qualities are validated against ruleset-defined prerequisites, maintains accurate Karma accounting throughout the character lifecycle, and governs the progression of dynamic quality states.
+The Quality Governance capability ensures the definition, selection, and mechanical application of character traits that provide unique benefits or drawbacks. It provides validation of all qualities against ruleset-defined prerequisites, maintains accurate Karma accounting throughout the character lifecycle, and guarantees the stable progression of dynamic quality states.
 
 ## Guarantees
 

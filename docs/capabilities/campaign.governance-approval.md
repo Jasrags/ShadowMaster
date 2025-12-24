@@ -2,7 +2,7 @@
 
 ## Purpose
 
-The Governance Approval capability manages the review and authorization of character advancement events within a campaign context. It ensures that all progression-related state changes are subjected to campaign authority oversight, providing a verifiable audit trail of approvals, rejections, and associated justifications.
+The Governance Approval capability ensures the integrity of character advancement through the review and authorization of progression events within a campaign context. It provides a verifiable audit trail of approvals, rejections, and associated justifications, guaranteeing that all progression-related state changes are subjected to campaign authority oversight.
 
 ## Guarantees
 

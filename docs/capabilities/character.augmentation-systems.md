@@ -2,7 +2,7 @@
 
 ## Purpose
 
-The Augmentation Systems capability governs the physical and mental enhancement of character entities through technological and biological modification. It maintains the integrity of the character's metaphysical state (Essence) while providing a governed framework for the installation, modification, and lifecycle management of cybernetic and biological upgrades.
+The Augmentation Systems capability ensures the physical and mental enhancement of character entities through technological and biological modification. It maintains the integrity of the character's metaphysical state (Essence) while providing a stable framework for the installation, modification, and lifecycle management of cybernetic and biological upgrades.
 
 ## Guarantees
 

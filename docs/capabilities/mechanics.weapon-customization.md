@@ -2,7 +2,7 @@
 
 ## Purpose
 
-The Weapon Customization capability manages the modification and augmentation of tactical equipment within the game environment. It ensures that weapon modifications follow strict mount point constraints, correctly handles integrated "built-in" features, and maintains the mechanical integrity of gear attributes based on ruleset-defined compatibility and occupancy limits.
+The Weapon Customization capability ensures the integrity of tactical equipment through the systematic modification and augmentation of gear. It provides strict adherence to mount point constraints, correctly handles integrated "built-in" features, and maintains the mechanical stability of gear attributes based on ruleset-defined compatibility and occupancy limits.
 
 ## Guarantees
 

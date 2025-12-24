@@ -2,7 +2,7 @@
 
 ## Purpose
 
-The Ruleset Integrity capability ensures that all game mechanics, entity attributes, and operational logic are derived from a verifiable, sandboxed, and edition-specific data foundation. It governs the isolation, aggregation, and validation of source material bundles, ensuring that a campaign's mechanical state remains strictly consistent with its designated ruleset version and active content expansions.
+The Ruleset Integrity capability ensures that all game mechanics, entity attributes, and operational logic are derived from a verifiable, sandboxed, and edition-specific data foundation. It provides isolation, aggregation, and validation of source material bundles, guaranteeing that a campaign's mechanical state remains strictly consistent with its designated ruleset version and active content expansions.
 
 ## Guarantees
 

@@ -2,7 +2,7 @@
 
 ## Purpose
 
-The Action Economy and Execution capability governs the systematic allocation and resolution of character interactions within the game environment. It maintains a strict and verifiable framework for action costs, validation, and state modification, ensuring that all participant attempts are compliant with the underlying ruleset and entity attributes.
+The Action Economy and Execution capability ensures the systematic allocation and resolution of character interactions within the game environment. It provides a stable and verifiable framework for action costs, validation, and state modification, ensuring that all participant attempts are compliant with the underlying ruleset and entity attributes.
 
 ## Guarantees
 

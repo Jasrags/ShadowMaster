@@ -2,7 +2,7 @@
 
 ## Purpose
 
-The NPC Governance capability manages the lifecycle and operational integrity of non-player entities within the game environment. It provides a structured framework for both complex individual NPCs and simplified grunt groups, ensuring that all antagonistic or neutral entities are governed by ruleset-compliant attributes, specialized collective behaviors, and auditable state transitions.
+The NPC Governance capability ensures the lifecycle and operational integrity of non-player entities within the game environment. It provides a stable framework for both complex individual NPCs and simplified grunt groups, guaranteeing that all antagonistic or neutral entities follow ruleset-compliant attributes, specialized collective behaviors, and auditable state transitions.
 
 ## Guarantees
 

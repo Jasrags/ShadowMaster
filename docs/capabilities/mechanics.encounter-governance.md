@@ -2,7 +2,7 @@
 
 ## Purpose
 
-The Encounter Governance capability ensures the systematic coordination of multiple participant entities within a structured gameplay event. It maintains a stable and verifiable state for turn-based interactions, including initiative ordering, action economy tracking, and the enforcement of environmental and situational effects.
+The Encounter Governance capability ensures the systematic coordination of multiple participant entities within a structured gameplay event. It provides a stable and verifiable state for turn-based interactions, including initiative ordering, action economy tracking, and the enforcement of environmental and situational effects.
 
 ## Guarantees
 

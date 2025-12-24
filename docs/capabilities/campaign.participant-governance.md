@@ -2,7 +2,7 @@
 
 ## Purpose
 
-The Participant Governance capability provides administrative control over all participant identities and access permissions within the system. It ensures that role-based access control (RBAC) is strictly enforced, maintains the security of account state transitions, and manages the lifecycle of participant records to protect system-wide operational integrity.
+The Participant Governance capability provides administrative control over all participant identities and access permissions within the system. It ensures the strict enforcement of role-based access control (RBAC), maintains the security of account state transitions, and guarantees the systematic management of participant records to protect system-wide operational integrity.
 
 ## Guarantees
 

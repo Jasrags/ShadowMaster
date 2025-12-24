@@ -2,7 +2,7 @@
 
 ## Purpose
 
-The Action Resolution capability governs the probabilistic determination of character actions. It ensures the consistent application of ruleset probability models to character state and situational modifiers, providing verifiable and auditable outcomes for all participant-initiated tests.
+The Action Resolution capability ensures the probabilistic determination of character actions. It provides a consistent application of ruleset probability models to character state and situational modifiers, guaranteeing verifiable and auditable outcomes for all participant-initiated tests.
 
 ## Guarantees
 
