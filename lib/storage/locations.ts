@@ -16,6 +16,7 @@ import type {
     CreateLocationTemplateRequest,
     LocationTemplateFilters,
     ID,
+    LocationConnection,
 } from "../types";
 
 /**
@@ -41,6 +42,31 @@ async function ensureLocationsDirectory(campaignId: string): Promise<void> {
 
 function getLocationFilePath(campaignId: string, locationId: string): string {
     return path.join(getLocationsDir(campaignId), `${locationId}.json`);
+}
+
+/**
+ * Get the connections directory for a campaign
+ */
+function getConnectionsDir(campaignId: string): string {
+    return path.join(process.cwd(), "data", "campaigns", campaignId, "connections");
+}
+
+/**
+ * Ensures the connections directory exists for a campaign
+ */
+async function ensureConnectionsDirectory(campaignId: string): Promise<void> {
+    const connectionsDir = getConnectionsDir(campaignId);
+    try {
+        await fs.mkdir(connectionsDir, { recursive: true });
+    } catch (error) {
+        if ((error as NodeJS.ErrnoException).code !== "EEXIST") {
+            throw error;
+        }
+    }
+}
+
+function getConnectionFilePath(campaignId: string, connectionId: string): string {
+    return path.join(getConnectionsDir(campaignId), `${connectionId}.json`);
 }
 
 /**
@@ -786,4 +812,82 @@ export async function importLocations(
     }
 
     return newLocations;
+}
+
+// -----------------------------------------------------------------------------
+// Connection Operations
+// -----------------------------------------------------------------------------
+
+/**
+ * Create a connection between locations
+ */
+export async function createLocationConnection(
+    campaignId: string,
+    data: Omit<LocationConnection, "id">
+): Promise<LocationConnection> {
+    await ensureConnectionsDirectory(campaignId);
+    
+    const connection: LocationConnection = {
+        ...data,
+        id: uuidv4(),
+    };
+
+    const filePath = getConnectionFilePath(campaignId, connection.id);
+    await fs.writeFile(filePath, JSON.stringify(connection, null, 2), "utf-8");
+
+    return connection;
+}
+
+/**
+ * Get all connections for a campaign or specific location
+ */
+export async function getLocationConnections(
+    campaignId: string,
+    locationId?: string
+): Promise<LocationConnection[]> {
+    try {
+        await ensureConnectionsDirectory(campaignId);
+        const connectionsDir = getConnectionsDir(campaignId);
+        const files = await fs.readdir(connectionsDir);
+        const jsonFiles = files.filter((file) => file.endsWith(".json"));
+
+        const connections: LocationConnection[] = [];
+        for (const file of jsonFiles) {
+            try {
+                const filePath = path.join(connectionsDir, file);
+                const fileContent = await fs.readFile(filePath, "utf-8");
+                const connection = JSON.parse(fileContent) as LocationConnection;
+                
+                if (!locationId || connection.fromLocationId === locationId || connection.toLocationId === locationId) {
+                    connections.push(connection);
+                }
+            } catch (error) {
+                console.error(`Error reading connection file ${file}:`, error);
+            }
+        }
+
+        return connections;
+    } catch (error) {
+        if ((error as NodeJS.ErrnoException).code === "ENOENT") {
+            return [];
+        }
+        throw error;
+    }
+}
+
+/**
+ * Delete a location connection
+ */
+export async function deleteLocationConnection(
+    campaignId: string,
+    connectionId: string
+): Promise<void> {
+    const filePath = getConnectionFilePath(campaignId, connectionId);
+    try {
+        await fs.unlink(filePath);
+    } catch (error) {
+        if ((error as NodeJS.ErrnoException).code !== "ENOENT") {
+            throw error;
+        }
+    }
 }
