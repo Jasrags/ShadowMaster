@@ -12,6 +12,7 @@ import * as storageModule from '@/lib/storage/users';
 import * as passwordModule from '@/lib/auth/password';
 import * as sessionModule from '@/lib/auth/session';
 import * as validationModule from '@/lib/auth/validation';
+import type { User } from '@/lib/types/user';
 
 // Mock dependencies
 vi.mock('@/lib/storage/users');
@@ -36,7 +37,7 @@ function createMockRequest(url: string, body?: unknown, method = 'GET'): NextReq
 }
 
 describe('POST /api/auth/signup', () => {
-  const mockNewUser = {
+  const mockNewUser: User = {
     id: 'new-user-id',
     email: 'newuser@example.com',
     username: 'newuser',
@@ -45,6 +46,9 @@ describe('POST /api/auth/signup', () => {
     createdAt: new Date().toISOString(),
     lastLogin: null,
     characters: [],
+    failedLoginAttempts: 0,
+    lockoutUntil: null,
+    sessionVersion: 1,
   };
 
   beforeEach(() => {
@@ -217,7 +221,7 @@ describe('POST /api/auth/signup', () => {
       password: 'ValidPass123!',
     };
 
-    const existingUser = {
+    const existingUser: User = {
       id: 'existing-user-id',
       email: 'existing@example.com',
       username: 'existinguser',
@@ -226,6 +230,9 @@ describe('POST /api/auth/signup', () => {
       createdAt: new Date().toISOString(),
       lastLogin: null,
       characters: [],
+      failedLoginAttempts: 0,
+      lockoutUntil: null,
+      sessionVersion: 1,
     };
 
     vi.mocked(validationModule.isValidEmail).mockReturnValue(true);

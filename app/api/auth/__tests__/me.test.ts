@@ -9,13 +9,14 @@ import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { GET } from '../me/route';
 import * as sessionModule from '@/lib/auth/session';
 import * as storageModule from '@/lib/storage/users';
+import type { User } from '@/lib/types/user';
 
 // Mock dependencies
 vi.mock('@/lib/auth/session');
 vi.mock('@/lib/storage/users');
 
 describe('GET /api/auth/me', () => {
-  const mockUser = {
+  const mockUser: User = {
     id: 'test-user-id',
     email: 'test@example.com',
     username: 'testuser',
@@ -24,6 +25,9 @@ describe('GET /api/auth/me', () => {
     createdAt: new Date().toISOString(),
     lastLogin: new Date().toISOString(),
     characters: ['char-1', 'char-2'],
+    failedLoginAttempts: 0,
+    lockoutUntil: null,
+    sessionVersion: 1,
   };
 
   beforeEach(() => {

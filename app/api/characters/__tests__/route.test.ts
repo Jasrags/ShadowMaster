@@ -45,6 +45,9 @@ describe('GET /api/characters', () => {
     createdAt: new Date().toISOString(),
     lastLogin: null,
     characters: [],
+    failedLoginAttempts: 0,
+    lockoutUntil: null,
+    sessionVersion: 1,
   };
 
   const mockCharacters: Character[] = [
@@ -325,6 +328,9 @@ describe('POST /api/characters', () => {
     createdAt: new Date().toISOString(),
     lastLogin: null,
     characters: [],
+    failedLoginAttempts: 0,
+    lockoutUntil: null,
+    sessionVersion: 1,
   };
 
   const mockDraft: CharacterDraft = {

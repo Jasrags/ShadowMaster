@@ -15,7 +15,7 @@ import * as campaignStorageModule from '@/lib/storage/campaigns';
 import * as approvalModule from '@/lib/rules/advancement/approval';
 
 import type { Character, Campaign, AdvancementRecord } from '@/lib/types';
-import { createMockCharacter } from '@/__tests__/mocks/storage';
+import { createMockCharacter, createMockUser, createMockCampaign } from '@/__tests__/mocks/storage';
 
 // Mock dependencies
 vi.mock('@/lib/auth/session');
@@ -76,30 +76,21 @@ describe('POST /api/characters/[characterId]/advancement/[recordId]/approve', ()
       advancementHistory: [mockAdvancementRecord],
     });
 
-    mockCampaign = {
+    mockCampaign = createMockCampaign({
       id: campaignId,
       gmId: gmUserId,
-      name: 'Test Campaign',
+      title: 'Test Campaign',
       editionCode: 'sr5',
       description: 'Test',
       createdAt: new Date().toISOString(),
-      players: [],
-      characters: [],
-      events: [],
-      posts: [],
-    };
+    });
 
     vi.mocked(sessionModule.getSession).mockResolvedValue(gmUserId);
-    vi.mocked(userStorageModule.getUserById).mockResolvedValue({
+    vi.mocked(userStorageModule.getUserById).mockResolvedValue(createMockUser({
       id: gmUserId,
       email: 'gm@example.com',
       username: 'gm',
-      passwordHash: 'hash',
-      role: ['user'],
-      createdAt: new Date().toISOString(),
-      lastLogin: null,
-      characters: [],
-    });
+    }));
     vi.mocked(characterStorageModule.getCharacter).mockResolvedValue(null); // GM accessing as non-owner
     vi.mocked(characterStorageModule.getCharacterById).mockResolvedValue(mockCharacter);
     vi.mocked(campaignStorageModule.getCampaignById).mockResolvedValue(mockCampaign);

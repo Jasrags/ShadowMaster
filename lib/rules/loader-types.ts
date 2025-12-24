@@ -16,7 +16,6 @@ import type {
   CatalogItemRatingSpec,
   CyberwareCategory,
   BiowareCategory,
-  ContactTemplateData,
 } from "../types";
 
 // =============================================================================
@@ -547,9 +546,11 @@ export interface BiowareGradeData {
   availabilityModifier: number;
 }
 
+
 /**
  * Bioware catalog item data structure (from ruleset)
  */
+ 
 export interface BiowareCatalogItemData {
   id: string;
   name: string;
@@ -644,25 +645,27 @@ export interface TraditionSpiritTypes {
 }
 
 /**
- * Drain variant for traditions with conditional drain attributes
- */
-export interface DrainVariant {
-  condition: string;
-  alternateAttributes: [string, string];
-}
-
-/**
  * Tradition data structure from ruleset
  */
 export interface TraditionData {
   id: string;
   name: string;
   drainAttributes: [string, string];
+   
   spiritTypes: TraditionSpiritTypes;
   description: string;
   source?: string;
   isPossessionTradition?: boolean;
+   
   drainVariant?: DrainVariant;
+}
+
+/**
+ * Drain variant for traditions with conditional drain attributes
+ */
+export interface DrainVariant {
+  condition: string;
+  alternateAttributes: [string, string];
 }
 
 // =============================================================================
@@ -705,6 +708,26 @@ export interface RitualKeywordData {
 }
 
 /**
+ * Ritual data structure from ruleset
+ */
+export interface RitualData {
+  id: string;
+  name: string;
+  keywords: string[];
+  /** For spell rituals, which spell category it works with */
+  spellCategory?: "combat" | "detection" | "health" | "illusion" | "manipulation";
+  description: string;
+  duration: string;
+  /** Whether this ritual can be made permanent with karma */
+  canBePermanent?: boolean;
+  /** Karma cost formula to make permanent (e.g., "Force") */
+  permanentKarmaCost?: string;
+  /** Stats for minion rituals (Watcher, Homunculus) */
+  minionStats?: MinionStatsData;
+  source?: string;
+}
+
+/**
  * Minion stats for rituals that create minions (Watcher, Homunculus)
  */
 export interface MinionStatsData {
@@ -724,26 +747,6 @@ export interface MinionStatsData {
   skills: string[];
   powers: string[];
   notes?: string;
-}
-
-/**
- * Ritual data structure from ruleset
- */
-export interface RitualData {
-  id: string;
-  name: string;
-  keywords: string[];
-  /** For spell rituals, which spell category it works with */
-  spellCategory?: "combat" | "detection" | "health" | "illusion" | "manipulation";
-  description: string;
-  duration: string;
-  /** Whether this ritual can be made permanent with karma */
-  canBePermanent?: boolean;
-  /** Karma cost formula to make permanent (e.g., "Force") */
-  permanentKarmaCost?: string;
-  /** Stats for minion rituals (Watcher, Homunculus) */
-  minionStats?: MinionStatsData;
-  source?: string;
 }
 
 // =============================================================================
@@ -772,6 +775,7 @@ export interface DroneSizeData {
 /**
  * Handling rating - can be single value or on-road/off-road pair
  */
+ 
 export type HandlingRatingData = number | { onRoad: number; offRoad: number };
 
 /**
@@ -802,6 +806,7 @@ export interface VehicleCatalogItemData {
 /**
  * Drone weapon mount configuration
  */
+ 
 export interface DroneWeaponMountsData {
   standard?: number;
   heavy?: number;
@@ -943,6 +948,7 @@ export interface FocusCatalogItemData {
 /**
  * Spirit type data structure
  */
+ 
 export interface SpiritTypeData {
   type: SpiritType;
   name: string;

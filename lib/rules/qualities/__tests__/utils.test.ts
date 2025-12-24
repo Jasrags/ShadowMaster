@@ -306,7 +306,7 @@ describe('Quality Utility Functions', () => {
           },
           {
             source: 'creation',
-          } as Partial<QualitySelection>,
+          } as unknown as QualitySelection,
         ],
       });
 

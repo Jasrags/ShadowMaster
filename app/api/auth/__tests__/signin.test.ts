@@ -13,6 +13,7 @@ import * as passwordModule from '@/lib/auth/password';
 import * as sessionModule from '@/lib/auth/session';
 import { RateLimiter } from '@/lib/security/rate-limit';
 import { AuditLogger } from '@/lib/security/audit-logger';
+import type { User } from '@/lib/types/user';
 
 // Mock dependencies
 vi.mock('@/lib/storage/users');
@@ -43,7 +44,7 @@ function createMockRequest(url: string, body?: unknown, method = 'GET'): NextReq
 }
 
 describe('POST /api/auth/signin', () => {
-  const mockUser = {
+  const mockUser: User = {
     id: 'test-user-id',
     email: 'test@example.com',
     username: 'testuser',
