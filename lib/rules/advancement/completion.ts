@@ -5,6 +5,7 @@
  */
 
 import type { Character, TrainingPeriod, AdvancementRecord } from "@/lib/types";
+import { applyAdvancement } from "./apply";
 
 /**
  * Result of training completion
@@ -66,6 +67,15 @@ export function completeTraining(
     );
   }
 
+  // Requirement 9: Restrict final execution until approval
+  const campaignRequired = !!character.campaignId; // Simplification: all campaign characters require approval if enabled
+  // We'll rely on the records gmApproved flag which should be set correctly at initiation
+  if (campaignRequired && !advancementRecord.gmApproved) {
+    // Note: This check might need to be more nuanced if some advancements don't require approval
+    // But per requirements, unapproved advancements are restricted from final execution.
+    throw new Error(`Advancement ${advancementRecord.id} requires GM approval before it can be completed.`);
+  }
+
   const now = new Date().toISOString();
 
   // Update the training period to completed
@@ -82,42 +92,10 @@ export function completeTraining(
     completedAt: now,
   };
 
-  // Update character stats based on advancement type
-  const updatedCharacter: Character = {
-    ...character,
-  };
-
-  // Update the appropriate stat (attribute or skill)
-  if (advancementRecord.type === "attribute") {
-    updatedCharacter.attributes = {
-      ...character.attributes,
-      [advancementRecord.targetId]: advancementRecord.newValue,
-    };
-  } else if (advancementRecord.type === "skill") {
-    updatedCharacter.skills = {
-      ...character.skills,
-      [advancementRecord.targetId]: advancementRecord.newValue,
-    };
-  } else if (advancementRecord.type === "specialization") {
-    // Extract specialization name from notes (format: "Specialization: {name}")
-    const specializationMatch = advancementRecord.notes?.match(/^Specialization:\s*(.+)$/);
-    if (specializationMatch) {
-      const specializationName = specializationMatch[1].trim();
-      const skillId = advancementRecord.targetId;
-      const existingSpecializations = character.skillSpecializations?.[skillId] || [];
-      
-      // Add specialization if not already present
-      if (!existingSpecializations.includes(specializationName)) {
-        updatedCharacter.skillSpecializations = {
-          ...character.skillSpecializations,
-          [skillId]: [...existingSpecializations, specializationName],
-        };
-      }
-    }
-  } else {
-    // Other advancement types (skill groups, etc.) will be handled later
-    // For now, we just complete the training without stat updates
-  }
+  // Update character stats using shared helper (defined in approval.ts but we can import it or move it)
+  // For now, I'll use the same logic or import the helper if I move it to a better place.
+  // Update character stats using shared helper
+  const updatedCharacter = applyAdvancement(character, completedAdvancementRecord);
 
   // Update advancement history (replace the record with the completed version)
   updatedCharacter.advancementHistory = character.advancementHistory?.map((a) =>

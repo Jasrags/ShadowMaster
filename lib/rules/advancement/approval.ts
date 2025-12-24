@@ -6,6 +6,7 @@
 
 import type { Character, AdvancementRecord, Campaign } from "@/lib/types";
 import type { CampaignAdvancementSettings } from "@/lib/types/campaign";
+import { applyAdvancement } from "./apply";
 
 /**
  * Result of GM approval action
@@ -21,7 +22,7 @@ export interface ApproveAdvancementResult {
  * @param character - Character with the advancement
  * @param advancementRecordId - ID of the advancement record to approve
  * @param gmId - GM user ID who is approving
- * @returns Updated character with advancement approved
+ * @returns Updated character and record
  */
 export function approveAdvancement(
   character: Character,
@@ -40,6 +41,11 @@ export function approveAdvancement(
     throw new Error(`Advancement record ${advancementRecordId} is already approved`);
   }
 
+  // Self-approval restriction (Requirement 25)
+  if (character.ownerId === gmId) {
+    throw new Error("Self-approval restriction: GMs cannot approve their own character advancements.");
+  }
+
   const now = new Date().toISOString();
 
   const updatedAdvancementRecord: AdvancementRecord = {
@@ -49,12 +55,17 @@ export function approveAdvancement(
     gmApprovedAt: now,
   };
 
-  const updatedCharacter: Character = {
+  let updatedCharacter: Character = {
     ...character,
     advancementHistory: character.advancementHistory?.map((a) =>
       a.id === advancementRecordId ? updatedAdvancementRecord : a
     ) || [updatedAdvancementRecord],
   };
+
+  // Requirement 20: propagate mechanical changes IF training is already completed
+  if (updatedAdvancementRecord.trainingStatus === "completed") {
+    updatedCharacter = applyAdvancement(updatedCharacter, updatedAdvancementRecord);
+  }
 
   return {
     updatedCharacter,
@@ -65,22 +76,22 @@ export function approveAdvancement(
 /**
  * Reject an advancement record (GM only)
  *
- * Note: This doesn't actually remove the advancement - it marks it as rejected.
- * In practice, rejections might require a different workflow (e.g., deleting the advancement).
- * For now, we'll just mark it as not approved.
- *
  * @param character - Character with the advancement
  * @param advancementRecordId - ID of the advancement record to reject
  * @param gmId - GM user ID who is rejecting
- * @param reason - Optional reason for rejection
+ * @param reason - Mandatory reason for rejection
  * @returns Updated character
  */
 export function rejectAdvancement(
   character: Character,
   advancementRecordId: string,
   gmId: string,
-  reason?: string
+  reason: string
 ): ApproveAdvancementResult {
+  if (!reason || reason.trim().length === 0) {
+    throw new Error("Rejection reason is mandatory.");
+  }
+
   const advancementRecord = character.advancementHistory?.find(
     (a) => a.id === advancementRecordId
   );
@@ -89,13 +100,21 @@ export function rejectAdvancement(
     throw new Error(`Advancement record ${advancementRecordId} not found`);
   }
 
-  // For now, we'll just keep it as not approved
-  // In a full implementation, we might want to add a rejection status
-  // or remove the advancement entirely
+  // Self-approval restriction also applies to rejection for consistency
+  if (character.ownerId === gmId) {
+    throw new Error("Self-governance restriction: GMs cannot reject their own character advancements.");
+  }
+
+  const now = new Date().toISOString();
+
+  // Requirement 30: Captured mandatory justification text
   const updatedAdvancementRecord: AdvancementRecord = {
     ...advancementRecord,
     gmApproved: false,
-    notes: reason ? `${advancementRecord.notes || ""}\nRejected: ${reason}`.trim() : advancementRecord.notes,
+    rejectionReason: reason,
+    gmApprovedBy: gmId,
+    gmApprovedAt: now,
+    notes: `${advancementRecord.notes || ""}\n[REJECTED] ${reason}`.trim(),
   };
 
   const updatedCharacter: Character = {
@@ -104,6 +123,18 @@ export function rejectAdvancement(
       a.id === advancementRecordId ? updatedAdvancementRecord : a
     ) || [updatedAdvancementRecord],
   };
+
+  // Requirement 36: Automatically restore character resources (Karma)
+  if (advancementRecord.karmaCost > 0) {
+    updatedCharacter.karmaCurrent += advancementRecord.karmaCost;
+  }
+
+  // If there was a training period, it should be removed or marked as rejected
+  if (advancementRecord.trainingPeriodId) {
+    updatedCharacter.activeTraining = updatedCharacter.activeTraining?.filter(
+      (t) => t.id !== advancementRecord.trainingPeriodId
+    );
+  }
 
   return {
     updatedCharacter,

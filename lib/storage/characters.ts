@@ -694,6 +694,7 @@ export function getAdvancementHistory(
     downtimePeriodId?: ID;
     campaignSessionId?: ID;
     gmApproved?: boolean;
+    rejected?: boolean;
   }
 ): AdvancementRecord[] {
   let history = character.advancementHistory || [];
@@ -715,7 +716,17 @@ export function getAdvancementHistory(
       history = history.filter((a) => a.campaignSessionId === filters.campaignSessionId);
     }
     if (filters.gmApproved !== undefined) {
-      history = history.filter((a) => a.gmApproved === filters.gmApproved);
+      if (filters.gmApproved === false) {
+        // Distinguish between Pending and Rejected if needed
+        // For now, if gmApproved is false, it could be pending OR rejected.
+        history = history.filter((a) => a.gmApproved === false);
+      } else {
+        history = history.filter((a) => a.gmApproved === true);
+      }
+    }
+    // New: Explicit filter for rejected records
+    if (filters.rejected !== undefined) {
+      history = history.filter((a) => !!a.rejectionReason === filters.rejected);
     }
   }
 

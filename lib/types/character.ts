@@ -90,6 +90,7 @@ export interface AdvancementRecord {
   gmApproved: boolean; // Whether GM has approved (for campaign characters)
   gmApprovedBy?: ID; // GM user ID who approved
   gmApprovedAt?: ISODateString; // When GM approved
+  rejectionReason?: string; // Reason for rejection (mandatory if rejected)
   notes?: string; // Optional notes about the advancement
   createdAt: ISODateString; // When advancement was initiated
   completedAt?: ISODateString; // When advancement was completed (training finished)
