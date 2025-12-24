@@ -35,14 +35,22 @@ export async function POST(
 
     const { characterId, recordId } = await params;
 
-    // Parse body for rejection reason (optional)
-    let reason: string | undefined;
+    // Parse body for rejection reason
+    let reason: string;
     try {
       const body = await request.json();
       reason = body.reason;
+      if (!reason || reason.trim().length === 0) {
+        return NextResponse.json(
+          { success: false, error: "Rejection reason is mandatory" },
+          { status: 400 }
+        );
+      }
     } catch {
-      // No body provided, reason is optional
-      reason = undefined;
+      return NextResponse.json(
+        { success: false, error: "Rejection reason is mandatory" },
+        { status: 400 }
+      );
     }
 
     // Get character (allow GM to access any character in their campaign)
