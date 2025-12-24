@@ -1,3 +1,6 @@
+> [!NOTE]
+> This implementation guide is governed by the [Capability (mechanics.encounter-governance.md)](file:///Users/jrags/Code/Jasrags/shadow-master/docs/capabilities/mechanics.encounter-governance.md).
+
 # Encounter Specification
 
 **Last Updated:** 2025-01-27
@@ -31,63 +34,6 @@ The Encounter system provides GMs with tools to plan, run, and track combat and 
 
 ---
 
-## User Stories
-
-### Primary Use Cases (GM)
-
-1. **As a GM**, I want to create encounters for my campaign sessions.
-
-2. **As a GM**, I want to add player characters and NPC grunt teams to an encounter.
-
-3. **As a GM**, I want to roll initiative for all participants at once.
-
-4. **As a GM**, I want to see a combined initiative order with PCs and NPCs.
-
-5. **As a GM**, I want to track whose turn it is and advance through combat rounds.
-
-6. **As a GM**, I want to apply damage to any participant from the initiative tracker.
-
-7. **As a GM**, I want to track action economy (Free, Simple, Complex actions).
-
-8. **As a GM**, I want to add or remove participants mid-encounter.
-
-9. **As a GM**, I want to link encounters to campaign locations.
-
-10. **As a GM**, I want to see a difficulty assessment based on encounter composition.
-
-11. **As a GM**, I want suggested karma rewards based on encounter difficulty.
-
-12. **As a GM**, I want to save encounter templates for reuse.
-
-13. **As a GM**, I want to view a combat log of all actions taken.
-
-14. **As a GM**, I want to end an encounter and distribute rewards.
-
-### Primary Use Cases (Player)
-
-15. **As a player**, I want to see the initiative order during combat.
-
-16. **As a player**, I want to see when it's my character's turn.
-
-17. **As a player**, I want to see enemy statblocks (GM-controlled visibility).
-
-18. **As a player**, I want to track my character's condition during combat.
-
-19. **As a player**, I want to see a summary of the encounter after it ends.
-
-### Secondary Use Cases
-
-20. **As a GM**, I want to pause and resume encounters across sessions.
-
-21. **As a GM**, I want to clone an encounter for similar situations.
-
-22. **As a GM**, I want to export encounter data for backup.
-
-23. **As a GM**, I want to run multiple concurrent encounters.
-
-24. **As a GM**, I want to track environmental effects (background count, visibility, etc.).
-
----
 
 ## Page Structure
 
@@ -1407,44 +1353,6 @@ Base Karma = Difficulty Tier Base
 
 ---
 
-## Acceptance Criteria
-
-### MVP (Minimum Viable Product)
-
-- [ ] GM can create encounters with PCs and NPCs
-- [ ] GM can roll initiative for all participants
-- [ ] Initiative tracker displays sorted turn order
-- [ ] GM can advance through turns and rounds
-- [ ] GM can apply damage to participants
-- [ ] Condition monitors update correctly
-- [ ] Participants marked defeated when monitors fill
-- [ ] Combat log records major events
-- [ ] GM can end encounter
-- [ ] Basic difficulty calculation works
-- [ ] Suggested karma displayed after encounter
-
-### Enhanced Features (Phase 2)
-
-- [ ] Multiple initiative passes per round
-- [ ] Seize initiative with Edge
-- [ ] Environmental modifiers affect combat
-- [ ] Status conditions with mechanical effects
-- [ ] Action economy tracking (Free/Simple/Complex)
-- [ ] Encounter templates (save/load)
-- [ ] Player view of combat tracker
-- [ ] Real-time updates for all participants
-
-### Advanced Features (Phase 3)
-
-- [ ] Dice roller integration
-- [ ] Automated attack/defense rolls
-- [ ] Spell casting integration
-- [ ] Matrix combat support
-- [ ] Astral combat support
-- [ ] Vehicle combat support
-- [ ] Export encounter to PDF/print
-
----
 
 ## Security Considerations
 

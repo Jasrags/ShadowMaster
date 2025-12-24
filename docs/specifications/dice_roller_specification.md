@@ -1,3 +1,6 @@
+> [!NOTE]
+> This implementation guide is governed by the [Capability (mechanics.action-resolution.md)](file:///Users/jrags/Code/Jasrags/shadow-master/docs/capabilities/mechanics.action-resolution.md).
+
 # Dice Roller Specification
 
 **Last Updated:** 2025-01-27  
@@ -27,94 +30,7 @@ The Dice Roller is a core gameplay component that enables players to perform Sha
 
 ---
 
-## User Stories
 
-### Primary Use Cases (Players)
-
-1. **As a player**, I want to roll a dice pool for skill tests so I can resolve character actions.
-
-2. **As a player**, I want to see which dice rolled hits (5-6) so I can quickly count successes.
-
-3. **As a player**, I want to see when I roll a glitch or critical glitch so I know when complications occur.
-
-4. **As a player**, I want to adjust my dice pool size easily so I can account for modifiers and situational changes.
-
-5. **As a player**, I want to see my recent roll history so I can reference previous results.
-
-6. **As a player**, I want to use Edge to reroll non-hits so I can improve my results when I have Edge available.
-
-7. **As a player**, I want the dice roller to automatically calculate my pool from character attributes and skills so I don't have to manually calculate it.
-
-8. **As a player**, I want visual feedback when rolling so the experience feels engaging.
-
-### Gameplay Use Cases
-
-9. **As a player**, I want to see individual die values so I can verify the roll results.
-
-10. **As a player**, I want dice sorted with hits first so I can quickly assess success.
-
-11. **As a player**, I want clear visual distinction between hits, misses, and ones so I can understand the roll at a glance.
-
-12. **As a player**, I want the system to correctly identify glitches (more than half dice are 1s) so complications are properly flagged.
-
-13. **As a player**, I want the system to correctly identify critical glitches (glitch with zero hits) so severe failures are properly flagged.
-
-14. **As a player**, I want Edge rerolls to only reroll non-hits so I don't lose successful dice.
-
-### Integration Use Cases
-
-15. **As a character sheet**, I want to integrate the dice roller so players can roll directly from their character data.
-
-16. **As a combat system**, I want to use the dice roller for attack and defense rolls so combat resolution is consistent.
-
-17. **As a skill test system**, I want to use the dice roller for skill checks so all tests use the same mechanics.
-
----
-
-## Acceptance Criteria
-
-### MVP (Phase 1) - Core Dice Mechanics
-
-**Functionality:**
-- [x] **Pool Management:** Support dice pools from 1 to 50 dice.
-- [x] **Adjust Controls:** Easy increment/decrement buttons and direct text input for pool size.
-- [x] **Presets:** Quick selection buttons for common pool sizes (4, 8, 12, 16, 20).
-- [x] **Rolling:** Generate random results (1-6) for each die in the pool.
-- [x] **Calculating:** Automatically count "Hits" (5s and 6s) and "Ones".
-- [x] **Glitch Detection:** Correctly identify a Glitch (> 50% ones).
-- [x] **Critical Glitch:** Correctly identify a Critical Glitch (Glitch + 0 Hits).
-- [x] **Sorting:** Display results sorted by Hits (successes first) then descending value.
-- [x] **Edge Reroll:** Button to "Spend Edge" appearing only when applicable (non-hits available).
-   - [x] **Logic:** Reroll only non-hits (1-4), preserve original hits (5-6).
-   - [x] **Recalculation:** Correctly new hits/glitches after reroll.
-
-**Display & UX:**
-- [x] **Visual Dice:** Render custom die faces with pips (dots) rather than just numbers.
-- [x] **Feedback:** Animated rolling effect (bounce/spin) before settling.
-- [x] **Color Coding:** Distinct colors for Hits (Green), Ones (Red), and Glitch Warnings (Amber/Red).
-- [x] **Responsiveness:** Layout adapts to available width (wrapping dice).
-- [x] **Compact Mode:** Ability to render a smaller version for tight UI spaces.
-- [x] **History:** Display a list of recent previous rolls with timestamps.
-
-### Future Phases (Backlog)
-
-**Phase 2 - Advanced Integration:**
-- [x] **Context Awareness:** Automatically set pool size based on Character context (e.g. clicking "Pistols" skill sets pool).
-- [x] **Modifiers UI:** Interface to add simple modifiers (+/- dice) separate from base pool.
-- [ ] **Test Types:** Dedicated modes for "Opposed Tests" (roll vs X hits).
-- [ ] **Extended Tests:** Tracking cumulative hits over multiple rolls.
-
-**Phase 3 - Advanced Edge Actions:**
-- [ ] **Push the Limit:** "Exploding" 6s logic (Rule of Six).
-- [ ] **Second Chance:** Reroll all failures (distinct from current implementation if rules differ).
-- [ ] **Pre-Edging:** Add Edge attribute to pool before rolling.
-
-**Phase 4 - Polish & customization:**
-- [ ] **3D Physics:** Implement 3D canvas based dice rolling for premium feel.
-- [ ] **Theming:** Allow users to choose dice colors/skins.
-- [ ] **Sound:** Optional sound effects for rolling.
-
----
 
 ## Shadowrun 5e Dice Mechanics
 

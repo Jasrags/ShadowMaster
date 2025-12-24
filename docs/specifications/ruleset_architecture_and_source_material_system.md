@@ -1,3 +1,6 @@
+> [!NOTE]
+> This implementation guide is governed by the [Capability (TBD)](file:///Users/jrags/Code/Jasrags/shadow-master/docs/capabilities/TBD).
+
 # **Ruleset Architecture & Source Material System (Expanded Requirements)**
 
 ## **1. Ruleset Isolation & Edition-Specific Data**

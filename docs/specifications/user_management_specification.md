@@ -1,3 +1,6 @@
+> [!NOTE]
+> This implementation guide is governed by the [Capability (security.account-governance.md)](file:///Users/jrags/Code/Jasrags/shadow-master/docs/capabilities/security.account-governance.md).
+
 # User Management Specification
 
 **Last Updated:** 2025-01-27  
@@ -26,39 +29,6 @@ User management provides administrators with the ability to view, edit, and mana
 
 ---
 
-## User Stories
-
-### Primary Use Cases (Administrators)
-
-1. **As an administrator**, I want to view all users in the system so I can see who has accounts.
-
-2. **As an administrator**, I want to search for users by email or username to quickly find specific accounts.
-
-3. **As an administrator**, I want to sort users by email, username, role, or creation date to organize the list.
-
-4. **As an administrator**, I want to edit a user's email or username to correct errors or update information.
-
-5. **As an administrator**, I want to change a user's role(s) to grant appropriate permissions (user, gamemaster, administrator).
-
-6. **As an administrator**, I want to delete user accounts that are no longer needed.
-
-7. **As an administrator**, I want the system to prevent me from removing the last administrator so the system remains manageable.
-
-8. **As an administrator**, I want to see when users were created and last logged in to monitor account activity.
-
-9. **As an administrator**, I want pagination in the user list to handle large numbers of users efficiently.
-
-### Security Use Cases
-
-10. **As a non-administrator**, I want to be denied access to user management so I cannot modify other users' accounts.
-
-11. **As the system**, I need to prevent deletion of the last administrator to maintain system accessibility.
-
-12. **As the system**, I need to validate that users always have at least one role.
-
-13. **As the system**, I need to validate email and username formats when updating user information.
-
----
 
 ## Page Structure
 
@@ -588,44 +558,6 @@ app/api/users/
 
 ---
 
-## Acceptance Criteria
-
-### MVP (Current Implementation)
-
-- [x] Page requires administrator role (redirects if not admin)
-- [x] User table displays all users with key information
-- [x] Search functionality (by email or username)
-- [x] Sortable columns (email, username, role, created date)
-- [x] Pagination (20 users per page)
-- [x] Edit user modal with form validation
-- [x] Update user email, username, and roles
-- [x] Delete user with confirmation
-- [x] Safety validation: cannot remove admin role from last admin
-- [x] Safety validation: cannot delete last administrator
-- [x] Role validation: users must have at least one role
-- [x] Email and username format validation
-- [x] Loading states for async operations
-- [x] Error handling and display
-- [x] Responsive design (mobile, tablet, desktop)
-- [x] Dark mode support
-- [x] Accessibility: keyboard navigation, screen reader support
-
-### Enhanced Features (Future)
-
-- [ ] Bulk user operations (bulk role assignment, bulk delete)
-- [ ] Advanced filtering (by role, date range, character count)
-- [ ] User activity statistics (last login, character count, etc.)
-- [ ] Export user list (CSV, JSON)
-- [ ] User import (bulk user creation)
-- [ ] Password reset functionality (admin-initiated)
-- [ ] User activation/deactivation (soft delete)
-- [ ] User notes/comments (admin annotations)
-- [ ] Audit log of user management actions
-- [ ] Character count display in user table
-- [ ] Quick role assignment (one-click role toggles)
-- [ ] User detail view (expanded user information)
-
----
 
 ## Security Checklist
 

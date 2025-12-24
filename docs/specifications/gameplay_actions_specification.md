@@ -1,3 +1,6 @@
+> [!NOTE]
+> This implementation guide is governed by the [Capability (mechanics.action-execution.md)](file:///Users/jrags/Code/Jasrags/shadow-master/docs/capabilities/mechanics.action-execution.md).
+
 # Gameplay Actions Specification
 
 **Last Updated:** 2025-01-27  
@@ -25,51 +28,6 @@ Gameplay actions are the fundamental building blocks of Shadowrun 5th Edition ga
 
 ---
 
-## User Stories
-
-### Primary Use Cases (Players)
-
-1. **As a player**, I want to perform combat actions (attack, defend, move) so I can engage in combat encounters.
-
-2. **As a player**, I want to perform skill tests so I can overcome challenges and obstacles.
-
-3. **As a player**, I want to cast spells so I can use magical abilities.
-
-4. **As a player**, I want to perform matrix actions so I can hack systems and manipulate data.
-
-5. **As a player**, I want to apply damage and healing to my character so I can track my condition during gameplay.
-
-6. **As a player**, I want to spend and earn karma so I can track character advancement.
-
-7. **As a player**, I want the system to validate that I have enough actions available so I can't perform invalid actions.
-
-8. **As a player**, I want to see what actions are available to me based on my character's state so I can make informed decisions.
-
-### Gameplay Use Cases
-
-9. **As a player**, I want to know the action cost (Free, Simple, Complex) for each action so I can plan my turn.
-
-10. **As a player**, I want to perform multiple actions in a turn according to action economy rules so I can maximize my effectiveness.
-
-11. **As a player**, I want to use interrupt actions (Block, Dodge, Full Defense) so I can defend outside my turn.
-
-12. **As a player**, I want to see modifiers applied to my action dice pools so I understand my chances of success.
-
-13. **As a player**, I want actions to automatically calculate dice pools from my character data so I don't have to manually calculate them.
-
-14. **As a player**, I want to see action history so I can review what happened during combat or gameplay.
-
-### Integration Use Cases
-
-15. **As a combat system**, I want to track action economy for each character so I can enforce turn structure.
-
-16. **As a character sheet**, I want to display available actions based on character state so players know their options.
-
-17. **As a dice roller**, I want to receive action requests with calculated pools so I can roll appropriate tests.
-
-18. **As a GM**, I want to override action results when needed so I can handle edge cases and narrative needs.
-
----
 
 ## Action Economy
 

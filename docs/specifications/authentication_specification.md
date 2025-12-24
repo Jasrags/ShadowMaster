@@ -1,3 +1,6 @@
+> [!NOTE]
+> This implementation guide is governed by the [Capability (security.account-security.md)](file:///Users/jrags/Code/Jasrags/shadow-master/docs/capabilities/security.account-security.md).
+
 # Authentication Specification (Login & Registration)
 
 **Last Updated:** 2025-01-27  
@@ -872,50 +875,6 @@ lib/
 
 ---
 
-## Acceptance Criteria
-
-### MVP (Current Implementation)
-
-- [x] User can create account with email, username, and password
-- [x] Password strength validation (8+ chars, complexity)
-- [x] Email format validation
-- [x] Username length validation (3-50 characters)
-- [x] User can sign in with email and password
-- [x] "Remember me" checkbox (UI implemented, duration fixed)
-- [x] User is automatically signed in after registration
-- [x] User can sign out
-- [x] Session managed via httpOnly cookies
-- [x] Secure cookie flags in production
-- [x] Generic error messages for invalid credentials
-- [x] Client-side and server-side validation
-- [x] Forms are accessible (labels, ARIA attributes)
-- [x] Dark mode support
-- [x] Responsive design
-
-### Security Enhancements (Recommended)
-
-- [ ] Rate limiting on sign-in endpoint (prevent brute force)
-- [ ] Rate limiting on sign-up endpoint (prevent spam)
-- [ ] Account lockout after failed attempts
-- [ ] Login history tracking
-- [ ] Session token rotation
-- [ ] Session invalidation on password change
-- [ ] Enhanced logging for security events
-
-### Future Enhancements
-
-- [ ] Email verification on registration
-- [ ] Password reset functionality
-- [ ] Two-factor authentication (2FA)
-- [ ] Password strength meter (visual indicator)
-- [ ] Show/hide password toggle
-- [ ] "Forgot password" link and flow
-- [ ] Social login (OAuth) options
-- [ ] Username availability check (AJAX)
-- [ ] Account recovery options
-- [ ] Security notifications (new device, etc.)
-
----
 
 ## Related Documentation
 

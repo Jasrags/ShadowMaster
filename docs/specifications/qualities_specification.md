@@ -1,3 +1,6 @@
+> [!NOTE]
+> This implementation guide is governed by the [Capability (character.quality-governance.md)](file:///Users/jrags/Code/Jasrags/shadow-master/docs/capabilities/character.quality-governance.md).
+
 # Qualities System Specification
 
 **Status:** Complete (Core system, UI, and Dynamic State management implemented)
@@ -22,30 +25,6 @@ The Qualities system manages positive and negative character traits that provide
 
 ---
 
-## User Stories
-
-### Character Creation
-
-1. **As a player**, I want to browse available positive and negative qualities so I can customize my character.
-2. **As a player**, I want to see karma costs and summaries for each quality to make informed choices.
-3. **As a player**, I want the system to enforce the 25 Karma limit for positive and negative qualities.
-4. **As a player**, I want to see which qualities I cannot take due to prerequisites or incompatibilities.
-5. **As a player**, I want to specify details for qualities that require them (skill, attribute, allergen, etc.).
-
-### Character Advancement
-
-6. **As a player**, I want to acquire new positive qualities post-creation by spending 2× Karma.
-7. **As a player**, I want to buy off negative qualities by spending 2× the original Karma bonus.
-8. **As a GM**, I want to approve quality acquisitions that require narrative justification.
-9. **As a player**, I want to see my current qualities and their effects on my character sheet.
-
-### Gameplay Integration
-
-10. **As a player**, I want quality effects to automatically apply to my dice pools and limits.
-11. **As a player**, I want to track dynamic state for qualities like Addiction and Allergy.
-12. **As a GM**, I want to update character dynamic state during gameplay (exposure, doses, etc.).
-
----
 
 ## Data Models
 
