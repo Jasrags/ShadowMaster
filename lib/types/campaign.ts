@@ -102,6 +102,19 @@ export interface Campaign {
     /** Optional rules enabled (e.g., "wireless bonuses", "alternate init") */
     enabledOptionalRules?: string[];
 
+    /**
+     * Structured optional rules configuration (GM-controlled).
+     * Takes precedence over enabledOptionalRules when present.
+     *
+     * @see docs/capabilities/ruleset.integrity.md
+     */
+    optionalRules?: {
+        /** IDs of rules explicitly enabled (overrides defaultEnabled: false) */
+        enabledRuleIds: string[];
+        /** IDs of rules explicitly disabled (overrides defaultEnabled: true) */
+        disabledRuleIds: string[];
+    };
+
     /** House rules (freeform text or structured JSON) */
     houseRules?: string | Record<string, unknown>;
 

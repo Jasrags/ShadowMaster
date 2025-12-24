@@ -97,6 +97,37 @@ export function validateCharacterCampaignCompliance(
         }
     }
 
+    // 5. Optional Rules Compliance
+    // Satisfies: "Any attempt to use content or mechanics from a disabled
+    // or incompatible bundle MUST be rejected."
+    // @see docs/capabilities/ruleset.integrity.md
+    if (campaign.optionalRules) {
+        const { disabledRuleIds } = campaign.optionalRules;
+        
+        // Check if character uses content that requires disabled optional rules
+        // This is a foundational check - specific content validation would be
+        // implemented by the content modules (qualities, gear, etc.) checking
+        // their requiredOptionalRuleId against the campaign's active rules.
+        
+        // For now, we validate that character metadata doesn't reference
+        // any explicitly disabled rules
+        const characterOptionalRules = (character as { optionalRuleIds?: string[] }).optionalRuleIds;
+        if (characterOptionalRules && characterOptionalRules.length > 0) {
+            const violatingRules = characterOptionalRules.filter(
+                (ruleId) => disabledRuleIds.includes(ruleId)
+            );
+            
+            if (violatingRules.length > 0) {
+                errors.push({
+                    constraintId: "campaign-optional-rule-violation",
+                    field: "optionalRuleIds",
+                    message: `Character uses optional rules disabled in this campaign: ${violatingRules.join(", ")}`,
+                    severity: "error",
+                });
+            }
+        }
+    }
+
     return {
         valid: errors.length === 0,
         errors,
