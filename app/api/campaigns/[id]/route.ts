@@ -1,10 +1,10 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getSession } from "@/lib/auth/session";
 import {
-    getCampaignById,
     updateCampaign,
     deleteCampaign
 } from "@/lib/storage/campaigns";
+import { authorizeCampaign } from "@/lib/auth/campaign";
 import type {
     UpdateCampaignRequest,
     CampaignResponse,
@@ -29,36 +29,17 @@ export async function GET(
         }
 
         const { id } = await params;
-        const campaign = await getCampaignById(id);
+        const { authorized, campaign, role: userRole, error, status } = await authorizeCampaign(id, userId, { allowPublic: true });
 
-        if (!campaign) {
-            return NextResponse.json(
-                { success: false, error: "Campaign not found" },
-                { status: 404 }
-            );
-        }
-
-        // Determine user's role
-        let userRole: "gm" | "player" | null = null;
-        if (campaign.gmId === userId) {
-            userRole = "gm";
-        } else if (campaign.playerIds.includes(userId)) {
-            userRole = "player";
-        }
-
-        // Check access for private campaigns
-        if (campaign.visibility === "private" && userRole === null) {
-            return NextResponse.json(
-                { success: false, error: "Access denied" },
-                { status: 403 }
-            );
+        if (!authorized) {
+            return NextResponse.json({ success: false, error }, { status });
         }
 
         return NextResponse.json({
             success: true,
-            campaign,
+            campaign: campaign!,
             userRole,
-        });
+        } as CampaignResponse);
     } catch (error) {
         console.error("Get campaign error:", error);
         return NextResponse.json(
@@ -85,21 +66,10 @@ export async function PUT(
         }
 
         const { id } = await params;
-        const campaign = await getCampaignById(id);
+        const { authorized, campaign, error, status } = await authorizeCampaign(id, userId, { requireGM: true });
 
-        if (!campaign) {
-            return NextResponse.json(
-                { success: false, error: "Campaign not found" },
-                { status: 404 }
-            );
-        }
-
-        // Only GM can update
-        if (campaign.gmId !== userId) {
-            return NextResponse.json(
-                { success: false, error: "Only the GM can update this campaign" },
-                { status: 403 }
-            );
+        if (!authorized) {
+            return NextResponse.json({ success: false, error }, { status });
         }
 
         const body: UpdateCampaignRequest = await request.json();
@@ -126,7 +96,7 @@ export async function PUT(
             );
         }
 
-        if (body.maxPlayers !== undefined && body.maxPlayers < campaign.playerIds.length) {
+        if (body.maxPlayers !== undefined && body.maxPlayers < campaign!.playerIds.length) {
             return NextResponse.json(
                 { success: false, error: "Max players cannot be less than current player count" },
                 { status: 400 }
@@ -151,9 +121,9 @@ export async function PUT(
         const { advancementSettings, ...restBody } = body;
         const updateData: Partial<Campaign> = { ...restBody };
         
-        if (advancementSettings && campaign.advancementSettings) {
+        if (advancementSettings && campaign!.advancementSettings) {
             updateData.advancementSettings = {
-                ...campaign.advancementSettings,
+                ...campaign!.advancementSettings,
                 ...advancementSettings
             } as CampaignAdvancementSettings;
         }
@@ -210,21 +180,10 @@ export async function DELETE(
         }
 
         const { id } = await params;
-        const campaign = await getCampaignById(id);
+        const { authorized, campaign, error, status } = await authorizeCampaign(id, userId, { requireGM: true });
 
-        if (!campaign) {
-            return NextResponse.json(
-                { success: false, error: "Campaign not found" },
-                { status: 404 }
-            );
-        }
-
-        // Only GM can delete
-        if (campaign.gmId !== userId) {
-            return NextResponse.json(
-                { success: false, error: "Only the GM can delete this campaign" },
-                { status: 403 }
-            );
+        if (!authorized) {
+            return NextResponse.json({ success: false, error }, { status });
         }
 
         await deleteCampaign(id);

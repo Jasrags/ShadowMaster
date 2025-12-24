@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getSession } from "@/lib/auth/session";
-import { getCampaignById, updateCampaign } from "@/lib/storage/campaigns";
+import { updateCampaign } from "@/lib/storage/campaigns";
+import { authorizeCampaign } from "@/lib/auth/campaign";
 import type { CampaignNote } from "@/lib/types";
 import { v4 as uuidv4 } from "uuid";
 
@@ -21,29 +22,15 @@ export async function GET(
         }
 
         const { id } = await params;
-        const campaign = await getCampaignById(id);
+        const { authorized, campaign, role, error, status } = await authorizeCampaign(id, userId, { requireMember: true });
 
-        if (!campaign) {
-            return NextResponse.json(
-                { success: false, error: "Campaign not found" },
-                { status: 404 }
-            );
-        }
-
-        // Check access
-        const isGM = campaign.gmId === userId;
-        const isPlayer = campaign.playerIds.includes(userId);
-
-        if (!isGM && !isPlayer) {
-            return NextResponse.json(
-                { success: false, error: "Access denied" },
-                { status: 403 }
-            );
+        if (!authorized) {
+            return NextResponse.json({ success: false, error }, { status });
         }
 
         // Filter notes based on role
-        let notes = campaign.notes || [];
-        if (!isGM) {
+        let notes = campaign!.notes || [];
+        if (role !== "gm") {
             // Players only see player-visible notes
             notes = notes.filter((note) => note.playerVisible);
         }
@@ -78,21 +65,10 @@ export async function POST(
         }
 
         const { id } = await params;
-        const campaign = await getCampaignById(id);
+        const { authorized, campaign, error, status } = await authorizeCampaign(id, userId, { requireGM: true });
 
-        if (!campaign) {
-            return NextResponse.json(
-                { success: false, error: "Campaign not found" },
-                { status: 404 }
-            );
-        }
-
-        // Only GM can create notes
-        if (campaign.gmId !== userId) {
-            return NextResponse.json(
-                { success: false, error: "Only the GM can create notes" },
-                { status: 403 }
-            );
+        if (!authorized) {
+            return NextResponse.json({ success: false, error }, { status });
         }
 
         const body = await request.json();
@@ -117,7 +93,7 @@ export async function POST(
             updatedAt: now,
         };
 
-        const existingNotes = campaign.notes || [];
+        const existingNotes = campaign!.notes || [];
         await updateCampaign(id, {
             notes: [...existingNotes, newNote],
         });

@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getCampaignPosts, createCampaignPost, getCampaignById } from "@/lib/storage/campaigns";
+import type { CampaignPost } from "@/lib/types";
 import { getSession } from "@/lib/auth/session";
 
 export async function GET(
@@ -7,10 +8,35 @@ export async function GET(
     { params }: { params: Promise<{ id: string }> }
 ) {
     try {
+        const userId = await getSession();
+        if (!userId) {
+            return NextResponse.json({ success: false, error: "Authentication required" }, { status: 401 });
+        }
+
         const { id } = await params;
-        const posts = await getCampaignPosts(id);
+        const campaign = await getCampaignById(id);
+        if (!campaign) {
+            return NextResponse.json({ success: false, error: "Campaign not found" }, { status: 404 });
+        }
+
+        // Check access
+        const isGM = campaign.gmId === userId;
+        const isPlayer = campaign.playerIds.includes(userId);
+
+        if (!isGM && !isPlayer) {
+            return NextResponse.json({ success: false, error: "Access denied" }, { status: 403 });
+        }
+
+        let posts: CampaignPost[] = await getCampaignPosts(id);
+
+        // Filter for players
+        if (!isGM) {
+            posts = posts.filter(post => post.playerVisible);
+        }
+
         return NextResponse.json({ success: true, posts });
-    } catch {
+    } catch (error) {
+        console.error("Get posts error:", error);
         return NextResponse.json(
             { success: false, error: "Failed to fetch posts" },
             { status: 500 }
@@ -54,6 +80,7 @@ export async function POST(
             content: body.content,
             type: body.type,
             isPinned: body.isPinned || false,
+            playerVisible: body.playerVisible ?? true,
             authorId: userId
         });
 

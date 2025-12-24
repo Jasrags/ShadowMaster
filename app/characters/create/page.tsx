@@ -24,7 +24,7 @@ function CreateCharacterContent({ campaignId, campaign }: CreateCharacterContent
   // Auto-load ruleset if campaign is provided
   useEffect(() => {
     if (campaign?.editionCode && !ready && !loading) {
-      loadRuleset(campaign.editionCode);
+      loadRuleset(campaign.editionCode, campaign.enabledBookIds);
     }
   }, [campaign, ready, loading, loadRuleset]);
 
@@ -93,6 +93,7 @@ function CreateCharacterContent({ campaignId, campaign }: CreateCharacterContent
     return (
       <CreationWizard
         campaignId={campaignId}
+        campaign={campaign}
         onCancel={() => {
           if (campaignId) {
             router.push(`/campaigns/${campaignId}`);

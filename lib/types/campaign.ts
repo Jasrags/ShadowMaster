@@ -270,6 +270,8 @@ export interface CampaignPost {
     updatedAt: ISODateString;
     isPinned: boolean;
     type: "announcement" | "rumor" | "general";
+    /** Whether players can view this post */
+    playerVisible?: boolean;
 }
 
 /**
@@ -281,6 +283,8 @@ export interface CampaignEvent {
     description?: string;
     date: ISODateString;
     type: "session" | "deadline" | "downtime" | "other";
+    /** Whether players can view this event */
+    playerVisible?: boolean;
     createdBy: ID;
     createdAt: ISODateString;
     updatedAt: ISODateString;

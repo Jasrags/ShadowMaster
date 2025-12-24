@@ -1,5 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
-import { getCampaignEvents, createCampaignEvent, getCampaignById } from "@/lib/storage/campaigns";
+import { getCampaignEvents, createCampaignEvent } from "@/lib/storage/campaigns";
+import type { CampaignEvent } from "@/lib/types";
+import { authorizeCampaign } from "@/lib/auth/campaign";
 import { getSession } from "@/lib/auth/session";
 
 export async function GET(
@@ -7,10 +9,28 @@ export async function GET(
     { params }: { params: Promise<{ id: string }> }
 ) {
     try {
+        const userId = await getSession();
+        if (!userId) {
+            return NextResponse.json({ success: false, error: "Authentication required" }, { status: 401 });
+        }
+
         const { id } = await params;
-        const events = await getCampaignEvents(id);
+        const { authorized, role, error, status } = await authorizeCampaign(id, userId, { requireMember: true });
+
+        if (!authorized) {
+            return NextResponse.json({ success: false, error }, { status });
+        }
+
+        let events: CampaignEvent[] = await getCampaignEvents(id);
+
+        // Filter for players
+        if (role !== "gm") {
+            events = events.filter(event => event.playerVisible);
+        }
+
         return NextResponse.json({ success: true, events });
-    } catch {
+    } catch (error) {
+        console.error("Get events error:", error);
         return NextResponse.json(
             { success: false, error: "Failed to fetch events" },
             { status: 500 }
@@ -29,13 +49,10 @@ export async function POST(
         }
 
         const { id } = await params;
-        const campaign = await getCampaignById(id);
-        if (!campaign) {
-            return NextResponse.json({ success: false, error: "Campaign not found" }, { status: 404 });
-        }
+        const { authorized, error, status } = await authorizeCampaign(id, userId, { requireGM: true });
 
-        if (campaign.gmId !== userId) {
-            return NextResponse.json({ success: false, error: "Only GM can create events" }, { status: 403 });
+        if (!authorized) {
+            return NextResponse.json({ success: false, error }, { status });
         }
 
         const body = await request.json();
@@ -49,6 +66,7 @@ export async function POST(
             description: body.description,
             date: body.date,
             type: body.type,
+            playerVisible: body.playerVisible ?? true,
             createdBy: userId
         });
 

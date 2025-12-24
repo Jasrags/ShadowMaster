@@ -15,6 +15,7 @@ import type {
   ValidationError,
   ConstraintType,
   RatingValidationContext,
+  Campaign,
 } from "../types";
 import { getModule } from "./merge";
 import {
@@ -54,6 +55,7 @@ export interface ValidationContext {
   ruleset: MergedRuleset;
   creationMethod?: CreationMethod;
   creationState?: CreationState;
+  campaign?: Campaign;
 }
 
 /**
@@ -311,6 +313,8 @@ function validateAttributeLimit(
 
   if (!metatype) return null;
 
+  const attributeCap = context.campaign?.advancementSettings?.attributeRatingCap;
+
   // Check "only one attribute at max" constraint
   if (params.maxAtMax !== undefined) {
     let atMaxCount = 0;
@@ -334,11 +338,12 @@ function validateAttributeLimit(
   // Check specific attribute max value
   if (params.attributeId && params.maxValue !== undefined) {
     const value = character.attributes?.[params.attributeId] || 0;
-    if (value > params.maxValue) {
+    const finalMax = attributeCap !== undefined ? Math.min(params.maxValue, attributeCap) : params.maxValue;
+    if (value > finalMax) {
       return {
         constraintId: constraint.id,
         field: params.attributeId,
-        message: constraint.errorMessage || `${params.attributeId} cannot exceed ${params.maxValue}`,
+        message: constraint.errorMessage || `${params.attributeId} cannot exceed ${finalMax}`,
         severity: constraint.severity,
       };
     }
@@ -361,7 +366,12 @@ function validateSkillLimit(
   };
 
   const hasAptitude = character.positiveQualities?.some(q => (q.qualityId || q.id) === "aptitude");
-  const maxRating = hasAptitude ? (params.maxWithAptitude || 7) : (params.max || 6);
+  const campaignSkillCap = context.campaign?.advancementSettings?.skillRatingCap;
+  let maxRating = hasAptitude ? (params.maxWithAptitude || 7) : (params.max || 6);
+
+  if (campaignSkillCap !== undefined) {
+    maxRating = Math.min(maxRating, campaignSkillCap);
+  }
 
   for (const [skillId, rating] of Object.entries(character.skills || {})) {
     if (rating > maxRating) {
