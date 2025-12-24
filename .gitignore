@@ -51,6 +51,7 @@ next-env.d.ts
 /data/users
 /data/characters
 /data/campaigns
+/data/activity
 /data/security
 .cursor/
 .claude/

@@ -303,7 +303,8 @@ export type CampaignActivityType =
     | "advancement_rejected"
     | "post_created"
     | "campaign_updated"
-    | "location_added";
+    | "location_added"
+    | "location_updated";
 
 /**
  * Campaign activity feed entry

@@ -181,6 +181,21 @@ export async function PUT(
             );
         }
 
+        if (body.astralProperties) {
+            if (body.astralProperties.manaLevel && !["low", "normal", "high", "very-high"].includes(body.astralProperties.manaLevel)) {
+                return NextResponse.json(
+                    { success: false, error: "Invalid mana level" },
+                    { status: 400 }
+                );
+            }
+            if (body.astralProperties.backgroundCount !== undefined && (body.astralProperties.backgroundCount < 0 || body.astralProperties.backgroundCount > 20)) {
+                return NextResponse.json(
+                    { success: false, error: "Background count must be between 0 and 20" },
+                    { status: 400 }
+                );
+            }
+        }
+
         if (body.coordinates) {
             if (
                 body.coordinates.latitude < -90 ||
@@ -200,6 +215,35 @@ export async function PUT(
             locationId,
             body
         );
+
+        // Log significant changes
+        try {
+            const { logActivity } = await import("@/lib/storage/activity");
+            
+            if (body.visibility && body.visibility !== foundLocation.visibility) {
+                await logActivity({
+                    campaignId: foundCampaign.id,
+                    type: "location_updated",
+                    actorId: userId,
+                    targetId: locationId,
+                    targetType: "location",
+                    targetName: foundLocation.name,
+                    description: `Visibility changed from ${foundLocation.visibility} to ${body.visibility}.`,
+                });
+            } else if (body.securityRating !== undefined && body.securityRating !== foundLocation.securityRating) {
+                await logActivity({
+                    campaignId: foundCampaign.id,
+                    type: "location_updated",
+                    actorId: userId,
+                    targetId: locationId,
+                    targetType: "location",
+                    targetName: foundLocation.name,
+                    description: `Security Rating changed from ${foundLocation.securityRating ?? 'N/A'} to ${body.securityRating}.`,
+                });
+            }
+        } catch (e) {
+            console.error("Failed to log location update activity", e);
+        }
 
         return NextResponse.json({
             success: true,
