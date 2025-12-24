@@ -131,8 +131,11 @@ AI-first development relies on consistent application of the "Capabilities and D
 
 ### Document Generation
 
-- [Generate Capability Doc](file:///Users/jrags/Code/Jasrags/shadow-master/docs/capabilities/prompts/1_prompt-generate-cabability-doc.md): Use this when you have a feature specification and need to extract the stable system guarantees into a new capability document.
-- [Generate ADR](file:///Users/jrags/Code/Jasrags/shadow-master/docs/capabilities/prompts/2_prompt-generate-adr.md): Use this to capture the "why" behind an architectural choice, ensuring the decision is documented separately from the capability itself.
+- [1. Generate Capability Doc](file:///Users/jrags/Code/Jasrags/shadow-master/docs/capabilities/prompts/1_prompt-generate-cabability-doc.md): Use this when you have a feature specification and need to extract the stable system guarantees into a new capability document.
+- [2. Generate ADR](file:///Users/jrags/Code/Jasrags/shadow-master/docs/capabilities/prompts/2_prompt-generate-adr.md): Use this to capture the "why" behind an architectural choice, ensuring the decision is documented separately from the capability itself.
+- [3. Generate Implementation Plan](file:///Users/jrags/Code/Jasrags/shadow-master/docs/capabilities/prompts/3_prompt-generate-implementation-plan.md): Use this to transition from Capability guarantees to a technical blueprint.
+- [4. Execute Implementation Plan](file:///Users/jrags/Code/Jasrags/shadow-master/docs/capabilities/prompts/4_prompt-execute-implementation-plan.md): Use this to generate code diffs that are anchored to the implementation plan and system constraints.
+- [5. Generate Walkthrough](file:///Users/jrags/Code/Jasrags/shadow-master/docs/capabilities/prompts/5_prompt-generate-walkthrough.md): Use this to audit code against capabilities and document proof of work.
 
 ---
 

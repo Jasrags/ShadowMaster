@@ -1,32 +1,27 @@
-You are acting as an AI architecture contributor in an AI-first codebase.
+You are acting as an AI architecture contributor.
 
 Goal:
-Convert the provided rationale or tradeoff into an Architecture Decision Record (ADR) that documents _why_ a specific architectural decision was made.
+Convert the following rationale, tradeoff, or architectural choice from a specification or feature proposal into a formal Architecture Decision Record (ADR).
 
 Instructions:
 
-1. Generate an ADR using the following structure:
+1. Structure the ADR using the following sections:
 
-   - Title (format: ADR-XXX.<capability-or-domain>: <short decision name>)
-   - Decision
-   - Context
-   - Consequences
-   - Alternatives Considered
+   - **Title:** Concise, descriptive name of the decision
+   - **Decision:** Clearly state the chosen approach or solution
+   - **Context:** Describe the background, constraints, and motivating factors
+   - **Consequences:** Explain the results, risks, and tradeoffs of this decision
+   - **Alternatives Considered:** List other options that were considered and why they were not chosen
 
-2. The ADR MUST:
+2. Guidelines:
+   - Focus on **why** the decision was made, not how it is implemented
+   - Be **concise and declarative**
+   - Remain **implementation-agnostic**
+   - Ensure the ADR references any related capabilities
+   - Produce content ready for `docs/decisions/<adr-name>.md`
 
-   - Explain why the decision was made
-   - Describe the problem or tension that required a decision
-   - Be declarative and implementation-agnostic
-   - Reflect a completed or accepted decision
-   - Use stable, high-level domain or capability naming in the title
+Input:
+[Insert rationale, tradeoff, or specification excerpt here]
 
-3. The ADR MUST NOT:
-
-   - Describe implementation steps or technical details
-   - Include progress tracking, checklists, or timelines
-   - Restate capability guarantees
-   - Reference specific code, APIs, or libraries
-
-4. If multiple capabilities are affected:
-   - Choo
+Output:
+A fully-formed ADR ready for documentation.
