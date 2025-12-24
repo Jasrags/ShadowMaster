@@ -11,18 +11,27 @@ import { NextRequest } from 'next/server';
 import * as storageModule from '@/lib/storage/users';
 import * as passwordModule from '@/lib/auth/password';
 import * as sessionModule from '@/lib/auth/session';
+import { RateLimiter } from '@/lib/security/rate-limit';
+import { AuditLogger } from '@/lib/security/audit-logger';
 
 // Mock dependencies
 vi.mock('@/lib/storage/users');
 vi.mock('@/lib/auth/password');
 vi.mock('@/lib/auth/session');
+vi.mock('@/lib/security/rate-limit');
+vi.mock('@/lib/security/audit-logger');
 
 // Helper to create a NextRequest with JSON body
 function createMockRequest(url: string, body?: unknown, method = 'GET'): NextRequest {
+  const headers = new Headers();
+  if (body) {
+    headers.set('Content-Type', 'application/json');
+  }
+
   const request = new NextRequest(url, {
     method,
     body: body ? JSON.stringify(body) : undefined,
-    headers: body ? { 'Content-Type': 'application/json' } : undefined,
+    headers,
   });
   
   // Mock json() method if body is provided
@@ -43,10 +52,21 @@ describe('POST /api/auth/signin', () => {
     createdAt: new Date().toISOString(),
     lastLogin: null,
     characters: [],
+    failedLoginAttempts: 0,
+    lockoutUntil: null,
+    sessionVersion: 1,
   };
 
   beforeEach(() => {
     vi.clearAllMocks();
+    
+    // Default mocks for security modules
+    const mockLimiter = {
+      isRateLimited: vi.fn().mockReturnValue(false),
+      reset: vi.fn(),
+    };
+    vi.spyOn(RateLimiter, 'get').mockReturnValue(mockLimiter as unknown as RateLimiter);
+    vi.spyOn(AuditLogger, 'log').mockResolvedValue(undefined);
   });
 
   it('should sign in successfully with valid credentials', async () => {
@@ -93,7 +113,8 @@ describe('POST /api/auth/signin', () => {
     );
     expect(sessionModule.createSession).toHaveBeenCalledWith(
       mockUser.id,
-      expect.any(Object)
+      expect.any(Object),
+      1
     );
   });
 
