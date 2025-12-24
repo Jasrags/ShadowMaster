@@ -56,6 +56,10 @@ describe('POST /api/auth/signin', () => {
     failedLoginAttempts: 0,
     lockoutUntil: null,
     sessionVersion: 1,
+    preferences: {
+      theme: "system",
+      navigationCollapsed: false,
+    },
   };
 
   beforeEach(() => {

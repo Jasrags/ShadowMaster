@@ -36,7 +36,7 @@ function createMockRequest(url: string, body?: unknown, method = 'GET'): NextReq
 }
 
 describe('GET /api/characters', () => {
-  const mockUser = {
+  const mockUser: import('@/lib/types/user').User = {
     id: 'test-user-id',
     email: 'test@example.com',
     username: 'testuser',
@@ -48,6 +48,10 @@ describe('GET /api/characters', () => {
     failedLoginAttempts: 0,
     lockoutUntil: null,
     sessionVersion: 1,
+    preferences: {
+      theme: "system",
+      navigationCollapsed: false,
+    },
   };
 
   const mockCharacters: Character[] = [
@@ -319,7 +323,7 @@ describe('GET /api/characters', () => {
 });
 
 describe('POST /api/characters', () => {
-  const mockUser = {
+  const mockUser: import('@/lib/types/user').User = {
     id: 'test-user-id',
     email: 'test@example.com',
     username: 'testuser',
@@ -331,6 +335,10 @@ describe('POST /api/characters', () => {
     failedLoginAttempts: 0,
     lockoutUntil: null,
     sessionVersion: 1,
+    preferences: {
+      theme: "system",
+      navigationCollapsed: false,
+    },
   };
 
   const mockDraft: CharacterDraft = {

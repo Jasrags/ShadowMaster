@@ -52,6 +52,10 @@ describe('Session Management', () => {
     failedLoginAttempts: 0,
     lockoutUntil: null,
     sessionVersion: 1,
+    preferences: {
+      theme: "system",
+      navigationCollapsed: false,
+    },
   };
 
   const mockCookieStore = {

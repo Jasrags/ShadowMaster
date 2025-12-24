@@ -71,6 +71,7 @@ export async function POST(request: NextRequest): Promise<NextResponse<AuthRespo
         failedLoginAttempts: user.failedLoginAttempts,
         lockoutUntil: user.lockoutUntil,
         sessionVersion: user.sessionVersion,
+        preferences: user.preferences,
       },
     });
 

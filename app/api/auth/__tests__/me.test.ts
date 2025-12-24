@@ -28,6 +28,10 @@ describe('GET /api/auth/me', () => {
     failedLoginAttempts: 0,
     lockoutUntil: null,
     sessionVersion: 1,
+    preferences: {
+      theme: "system",
+      navigationCollapsed: false,
+    },
   };
 
   beforeEach(() => {

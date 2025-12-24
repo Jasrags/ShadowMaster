@@ -151,19 +151,8 @@ export type {
   ValidationError,
 } from "./creation";
 
-// User types (existing)
-export type {
-  UserRole,
-  User,
-  SignupRequest,
-  SigninRequest,
-  AuthResponse,
-  PublicUser,
-  UpdateUserRequest,
-  UpdateUserResponse,
-  UsersListResponse,
-  DeleteUserResponse,
-} from "./user";
+// User types
+export * from "./user";
 
 // Vehicle & Drone catalog types (for ruleset data)
 export type {

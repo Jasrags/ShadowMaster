@@ -19,8 +19,8 @@ export default function SettingsPage() {
 
     // API Handlers
     const handleUpdateAccount = async (updates: { email?: string; username?: string }) => {
-        const response = await fetch("/api/settings/account", {
-            method: "PUT",
+        const response = await fetch("/api/account/profile", {
+            method: "PATCH",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify(updates),
         });
@@ -32,7 +32,7 @@ export default function SettingsPage() {
     };
 
     const handleChangePassword = async (current: string, newPass: string) => {
-        const response = await fetch("/api/settings/password", {
+        const response = await fetch("/api/account/security/password", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({ currentPassword: current, newPassword: newPass }),
@@ -44,24 +44,24 @@ export default function SettingsPage() {
         }
     };
 
-
-
     const handleExport = async () => {
-        // Trigger file download by navigating to the export URL
-        window.location.href = "/api/settings/export";
+        // Trigger file download
+        window.location.href = "/api/account/export";
     };
 
-    const handleDeleteAccount = async () => {
-        const response = await fetch("/api/settings/account", {
-            method: "DELETE",
+    const handleDeleteAccount = async (password: string) => {
+        const response = await fetch("/api/account/delete", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ password }),
         });
 
         if (!response.ok) {
             const data = await response.json();
-            throw new Error(data.error || "Failed to delete account");
+            throw new Error(data.error || data.message || "Failed to delete account");
         }
 
-        // Redirect to home/login after deletion
+        // Redirect to signin after deletion
         window.location.href = "/signin";
     };
 

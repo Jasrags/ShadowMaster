@@ -49,6 +49,10 @@ describe('POST /api/auth/signup', () => {
     failedLoginAttempts: 0,
     lockoutUntil: null,
     sessionVersion: 1,
+    preferences: {
+      theme: "system",
+      navigationCollapsed: false,
+    },
   };
 
   beforeEach(() => {
@@ -233,6 +237,10 @@ describe('POST /api/auth/signup', () => {
       failedLoginAttempts: 0,
       lockoutUntil: null,
       sessionVersion: 1,
+      preferences: {
+        theme: "system",
+        navigationCollapsed: false,
+      },
     };
 
     vi.mocked(validationModule.isValidEmail).mockReturnValue(true);

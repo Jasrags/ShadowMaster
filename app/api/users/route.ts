@@ -31,6 +31,7 @@ export async function GET(request: NextRequest) {
       failedLoginAttempts: user.failedLoginAttempts,
       lockoutUntil: user.lockoutUntil,
       sessionVersion: user.sessionVersion,
+      preferences: user.preferences,
     }));
 
     // Apply search filter

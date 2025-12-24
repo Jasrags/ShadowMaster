@@ -36,6 +36,7 @@ export async function GET(): Promise<NextResponse<AuthResponse>> {
         failedLoginAttempts: user.failedLoginAttempts,
         lockoutUntil: user.lockoutUntil,
         sessionVersion: user.sessionVersion,
+        preferences: user.preferences,
       },
     });
   } catch (error) {
