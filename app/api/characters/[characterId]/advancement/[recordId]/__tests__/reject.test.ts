@@ -136,45 +136,25 @@ describe('POST /api/characters/[characterId]/advancement/[recordId]/reject', () 
     expect(characterStorageModule.updateCharacter).toHaveBeenCalled();
   });
 
-  it('should successfully reject an advancement without reason', async () => {
-    const rejectedRecord: AdvancementRecord = {
-      ...mockAdvancementRecord,
-    };
-
-    const updatedCharacter: Character = {
-      ...mockCharacter,
-      advancementHistory: [rejectedRecord],
-    };
-
-    vi.mocked(approvalModule.rejectAdvancement).mockReturnValue({
-      updatedCharacter,
-      updatedAdvancementRecord: rejectedRecord,
-    });
-
-    vi.mocked(characterStorageModule.updateCharacter).mockResolvedValue(updatedCharacter);
-
+  it('should return 400 if rejection reason is missing', async () => {
     const request = createMockRequest(`/api/characters/${characterId}/advancement/${recordId}/reject`);
 
     const response = await POST(request, {
       params: Promise.resolve({ characterId, recordId }),
     });
 
-    expect(response.status).toBe(200);
+    expect(response.status).toBe(400);
     const data = await response.json();
-    expect(data.success).toBe(true);
-
-    expect(approvalModule.rejectAdvancement).toHaveBeenCalledWith(
-      mockCharacter,
-      recordId,
-      gmUserId,
-      undefined
-    );
+    expect(data.success).toBe(false);
+    expect(data.error).toBe('Rejection reason is mandatory');
   });
 
   it('should return 401 if user is not authenticated', async () => {
     vi.mocked(sessionModule.getSession).mockResolvedValue(null);
 
-    const request = createMockRequest(`/api/characters/${characterId}/advancement/${recordId}/reject`);
+    const request = createMockRequest(`/api/characters/${characterId}/advancement/${recordId}/reject`, {
+      reason: 'Unauthorized attempt'
+    });
 
     const response = await POST(request, {
       params: Promise.resolve({ characterId, recordId }),
@@ -189,7 +169,9 @@ describe('POST /api/characters/[characterId]/advancement/[recordId]/reject', () 
   it('should return 404 if character is not found', async () => {
     vi.mocked(characterStorageModule.getCharacterById).mockResolvedValue(null);
 
-    const request = createMockRequest(`/api/characters/${characterId}/advancement/${recordId}/reject`);
+    const request = createMockRequest(`/api/characters/${characterId}/advancement/${recordId}/reject`, {
+      reason: 'Character gone'
+    });
 
     const response = await POST(request, {
       params: Promise.resolve({ characterId, recordId }),
@@ -208,7 +190,9 @@ describe('POST /api/characters/[characterId]/advancement/[recordId]/reject', () 
     };
     vi.mocked(characterStorageModule.getCharacterById).mockResolvedValue(nonCampaignCharacter);
 
-    const request = createMockRequest(`/api/characters/${characterId}/advancement/${recordId}/reject`);
+    const request = createMockRequest(`/api/characters/${characterId}/advancement/${recordId}/reject`, {
+      reason: 'Not in campaign'
+    });
 
     const response = await POST(request, {
       params: Promise.resolve({ characterId, recordId }),
@@ -223,7 +207,9 @@ describe('POST /api/characters/[characterId]/advancement/[recordId]/reject', () 
   it('should return 403 if user is not the GM', async () => {
     vi.mocked(approvalModule.isCampaignGM).mockReturnValue(false);
 
-    const request = createMockRequest(`/api/characters/${characterId}/advancement/${recordId}/reject`);
+    const request = createMockRequest(`/api/characters/${characterId}/advancement/${recordId}/reject`, {
+      reason: 'Not GM'
+    });
 
     const response = await POST(request, {
       params: Promise.resolve({ characterId, recordId }),
@@ -240,7 +226,9 @@ describe('POST /api/characters/[characterId]/advancement/[recordId]/reject', () 
       throw new Error('Advancement record advancement-record-id not found');
     });
 
-    const request = createMockRequest(`/api/characters/${characterId}/advancement/${recordId}/reject`);
+    const request = createMockRequest(`/api/characters/${characterId}/advancement/${recordId}/reject`, {
+      reason: 'Record missing'
+    });
 
     const response = await POST(request, {
       params: Promise.resolve({ characterId, recordId }),
