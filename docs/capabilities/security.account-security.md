@@ -2,7 +2,7 @@
 
 ## Purpose
 
-The Account Security capability ensures the persistent integrity of user accounts and authentication sessions. It maintains a secure state where accounts are protected against unauthorized access attempts and sessions remain strictly controlled by the system's security policies.
+The Account Security capability ensures the persistent integrity of user accounts and authentication sessions. It guarantees a secure state where accounts are protected against unauthorized access attempts and sessions remain strictly controlled by the system's security policies.
 
 ## Guarantees
 

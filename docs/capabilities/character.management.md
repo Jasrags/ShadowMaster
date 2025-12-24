@@ -2,7 +2,7 @@
 
 ## Purpose
 
-The Character Creation and Management capability ensures the systematic lifecycle management of character entities. It maintains a stable and governed environment where characters are initialized, refined, and maintained according to edition-specific rules and participant-defined states.
+The Character Creation and Management capability guarantees the systematic lifecycle integrity of character entities. It ensures a stable and governed state where characters are initialized, refined, and maintained according to edition-specific rules and participant-defined states.
 
 ## Guarantees
 

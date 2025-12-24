@@ -2,7 +2,7 @@
 
 ## Purpose
 
-The Account Governance capability ensures the integrity of identity, preferences, and data portability for individual participants. It maintains a secure state for account-specific metadata, provides a stable framework for user-controlled security transitions, and guarantees the systematic lifecycle management of participant data through precise export, import, and deletion protocols.
+The Account Governance capability guarantees the integrity of identity, preferences, and data portability for individual participants. It ensures a secure state for account-specific metadata, provides a stable framework for user-controlled security transitions, and guarantees the systematic lifecycle integrity of participant data through precise export, import, and deletion protocols.
 
 ## Guarantees
 

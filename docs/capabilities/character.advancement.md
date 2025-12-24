@@ -2,7 +2,7 @@
 
 ## Purpose
 
-The Character Advancement capability ensures the persistent and verifiable growth of character entities. It maintains a stable progression state where character development is governed by ruleset-defined costs, campaign-specific limitations, and authoritative oversight, ensuring that all improvement records are immutable and valid relative to the character's history.
+The Character Advancement capability guarantees the persistent and verifiable growth of character entities. It maintains a stable progression state where character development is governed by ruleset-defined costs, campaign-specific limitations, and authoritative oversight, ensuring that all improvement records are immutable and valid relative to the character's history.
 
 ## Guarantees
 

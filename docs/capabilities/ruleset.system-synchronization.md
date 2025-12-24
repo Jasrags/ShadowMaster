@@ -2,7 +2,7 @@
 
 ## Purpose
 
-The System Synchronization capability ensures the integrity and evolution of character data relative to its authoritative ruleset source. It provides a structured protocol for detecting "drift" between character snapshots and rulebook updates, guaranteeing mechanical stability during gameplay while allowing for the controlled and verifiable propagation of descriptive, mechanical, and structural changes.
+The System Synchronization capability guarantees the integrity and stable evolution of character data relative to its authoritative ruleset source. It ensures a structured protocol for detecting "drift" between character snapshots and rulebook updates, guaranteeing mechanical stability during gameplay while allowing for the controlled and verifiable propagation of descriptive, mechanical, and structural changes.
 
 ## Guarantees
 

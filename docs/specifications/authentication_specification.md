@@ -12,6 +12,7 @@
 Authentication is the foundation of user security and access control in Shadow Master. This specification defines the requirements, implementation details, and security best practices for user registration (signup) and login (signin) functionality. The system uses email/password authentication with secure session management via httpOnly cookies.
 
 **Key Features:**
+
 - User registration with email, username, and password
 - Secure password hashing using bcrypt
 - Email and password validation
@@ -24,20 +25,6 @@ Authentication is the foundation of user security and access control in Shadow M
 **Current Status:** Basic authentication is implemented. This specification documents current implementation and defines enhancements for improved security.
 
 ---
-
-## User Stories
-
-### Primary Use Cases
-
-1. **As a new user**, I want to create an account with my email, username, and password so I can access the application.
-
-2. **As a user**, I want to sign in with my email and password to access my account and characters.
-
-3. **As a user**, I want to be automatically signed in after registration so I don't have to sign in separately.
-
-4. **As a user**, I want to choose "Remember me" when signing in so I stay signed in longer.
-
-5. **As a user**, I want to sign out of my account securely.
 
 6. **As a user**, I want clear error messages when authentication fails so I know what went wrong.
 
@@ -62,18 +49,21 @@ Authentication is the foundation of user security and access control in Shadow M
 ### Routes
 
 #### Sign Up Page
+
 - **Path:** `/app/signup/page.tsx`
 - **Layout:** Standalone (no authentication required)
 - **Authentication:** Not required (public route)
 - **Description:** Registration form for new users
 
 #### Sign In Page
+
 - **Path:** `/app/signin/page.tsx`
 - **Layout:** Standalone (no authentication required)
 - **Authentication:** Not required (public route)
 - **Description:** Login form for existing users
 
 #### Sign Out
+
 - **Path:** `/app/api/auth/signout` (API route)
 - **Description:** Clears session and redirects to sign-in page
 
@@ -86,6 +76,7 @@ Authentication is the foundation of user security and access control in Shadow M
 **Location:** `/app/signup/page.tsx`
 
 **Responsibilities:**
+
 - Display registration form
 - Validate user input (client-side)
 - Handle form submission
@@ -94,6 +85,7 @@ Authentication is the foundation of user security and access control in Shadow M
 - Redirect after successful registration
 
 **State:**
+
 - `email: string` - User email
 - `username: string` - Username
 - `password: string` - Password
@@ -103,6 +95,7 @@ Authentication is the foundation of user security and access control in Shadow M
 - `isLoading: boolean` - Loading state during submission
 
 **Form Fields:**
+
 - **Email** (required, email format)
 - **Username** (required, 3-50 characters)
 - **Password** (required, strong password requirements)
@@ -117,6 +110,7 @@ Authentication is the foundation of user security and access control in Shadow M
 **Location:** `/app/signin/page.tsx`
 
 **Responsibilities:**
+
 - Display login form
 - Validate user input (client-side)
 - Handle form submission
@@ -126,6 +120,7 @@ Authentication is the foundation of user security and access control in Shadow M
 - Redirect after successful sign-in
 
 **State:**
+
 - `email: string` - User email
 - `password: string` - User password
 - `rememberMe: boolean` - Remember me checkbox state
@@ -134,6 +129,7 @@ Authentication is the foundation of user security and access control in Shadow M
 - `isLoading: boolean` - Loading state during submission
 
 **Form Fields:**
+
 - **Email** (required, email format)
 - **Password** (required)
 - **Remember Me** (optional checkbox)
@@ -151,6 +147,7 @@ Authentication is the foundation of user security and access control in Shadow M
 **Purpose:** Create a new user account
 
 **Request:**
+
 ```typescript
 {
   email: string;
@@ -160,6 +157,7 @@ Authentication is the foundation of user security and access control in Shadow M
 ```
 
 **Response:**
+
 ```typescript
 {
   success: boolean;
@@ -169,17 +167,20 @@ Authentication is the foundation of user security and access control in Shadow M
 ```
 
 **Status Codes:**
+
 - `200` - Success (user created and signed in)
 - `400` - Bad request (validation errors)
 - `409` - Conflict (email already exists)
 - `500` - Server error
 
 **Validation:**
+
 - Email: Required, valid email format, normalized to lowercase
 - Username: Required, 3-50 characters, trimmed
 - Password: Required, meets strength requirements (see Password Requirements below)
 
 **Security:**
+
 - Password is hashed using bcrypt before storage
 - Email is normalized (lowercase, trimmed)
 - Username is trimmed
@@ -194,6 +195,7 @@ Authentication is the foundation of user security and access control in Shadow M
 **Purpose:** Authenticate user and create session
 
 **Request:**
+
 ```typescript
 {
   email: string;
@@ -203,6 +205,7 @@ Authentication is the foundation of user security and access control in Shadow M
 ```
 
 **Response:**
+
 ```typescript
 {
   success: boolean;
@@ -212,12 +215,14 @@ Authentication is the foundation of user security and access control in Shadow M
 ```
 
 **Status Codes:**
+
 - `200` - Success (user authenticated, session created)
 - `400` - Bad request (missing fields)
 - `401` - Unauthorized (invalid credentials)
 - `500` - Server error
 
 **Security:**
+
 - Password verification uses constant-time comparison (bcrypt.compare)
 - Generic error message for invalid credentials ("Invalid email or password")
 - Updates lastLogin timestamp on successful sign-in
@@ -233,6 +238,7 @@ Authentication is the foundation of user security and access control in Shadow M
 **Request:** None (uses session cookie)
 
 **Response:**
+
 ```typescript
 {
   success: boolean;
@@ -241,6 +247,7 @@ Authentication is the foundation of user security and access control in Shadow M
 ```
 
 **Security:**
+
 - Clears session cookie
 - No validation needed (idempotent operation)
 
@@ -253,6 +260,7 @@ Authentication is the foundation of user security and access control in Shadow M
 **Request:** None (uses session cookie)
 
 **Response:**
+
 ```typescript
 {
   success: boolean;
@@ -262,6 +270,7 @@ Authentication is the foundation of user security and access control in Shadow M
 ```
 
 **Security:**
+
 - Requires valid session cookie
 - Returns user data (excluding password hash)
 - Used by AuthProvider to check authentication status
@@ -271,18 +280,21 @@ Authentication is the foundation of user security and access control in Shadow M
 ### Password Requirements
 
 **Current Requirements:**
+
 - Minimum 8 characters
 - At least one uppercase letter (A-Z)
 - At least one lowercase letter (a-z)
 - At least one number (0-9)
-- At least one special character (!@#$%^&*()_+-=[]{};':"\\|,.<>/?)
+- At least one special character (!@#$%^&\*()\_+-=[]{};':"\\|,.<>/?)
 
 **Validation:**
+
 - Client-side validation provides immediate feedback
 - Server-side validation is mandatory (never trust client)
 - Password strength checked before hashing
 
 **Hashing:**
+
 - Algorithm: bcrypt
 - Salt rounds: 12 (configurable via `SALT_ROUNDS` constant)
 - Storage: Only hash is stored, password is never stored in plaintext
@@ -292,6 +304,7 @@ Authentication is the foundation of user security and access control in Shadow M
 ### Session Management
 
 **Session Cookie Configuration:**
+
 - **Name:** `session` (configurable via `SESSION_COOKIE_NAME`)
 - **Value:** User ID (string)
 - **httpOnly:** `true` (prevents JavaScript access, protects against XSS)
@@ -301,12 +314,14 @@ Authentication is the foundation of user security and access control in Shadow M
 - **expires:** 7 days from creation (configurable via `SESSION_DURATION_DAYS`)
 
 **Session Flow:**
+
 1. User signs in → Server creates session cookie with user ID
 2. Subsequent requests → Server reads user ID from cookie
 3. User signs out → Server deletes session cookie
 4. Cookie expires → User must sign in again
 
 **Future Enhancements:**
+
 - Session tokens instead of user IDs (for better security)
 - Session rotation on privilege escalation
 - Session invalidation on password change
@@ -322,12 +337,14 @@ Authentication is the foundation of user security and access control in Shadow M
 #### Password Hashing
 
 **Current Implementation:**
+
 - ✅ Uses bcrypt for password hashing
 - ✅ Salt rounds set to 12 (adequate for current needs)
 - ✅ Passwords never stored in plaintext
 - ✅ Passwords never logged or exposed in error messages
 
 **Best Practices Applied:**
+
 - Use bcrypt or Argon2 for password hashing (bcrypt is implemented)
 - Use sufficient salt rounds (12 rounds is good, consider 13-15 for increased security)
 - Never store passwords in plaintext
@@ -335,6 +352,7 @@ Authentication is the foundation of user security and access control in Shadow M
 - Hash passwords server-side only (client sends plaintext over HTTPS)
 
 **Recommendations:**
+
 - Consider increasing salt rounds to 13-15 for enhanced security
 - Monitor bcrypt performance impact (higher rounds = slower but more secure)
 - Consider Argon2 as alternative (future) for memory-hard hashing
@@ -344,12 +362,14 @@ Authentication is the foundation of user security and access control in Shadow M
 #### Password Validation
 
 **Current Implementation:**
+
 - ✅ Minimum length requirement (8 characters)
 - ✅ Complexity requirements (uppercase, lowercase, number, special character)
 - ✅ Client-side and server-side validation
 - ✅ Clear error messages for missing requirements
 
 **Best Practices Applied:**
+
 - Enforce minimum password length (8+ characters recommended)
 - Require password complexity (mixed case, numbers, symbols)
 - Validate on both client and server
@@ -357,6 +377,7 @@ Authentication is the foundation of user security and access control in Shadow M
 - Consider using a password strength meter (future enhancement)
 
 **Recommendations:**
+
 - Add password strength meter UI component (visual feedback)
 - Consider using zxcvbn library for realistic strength estimation
 - Warn users about common weak passwords (e.g., "Password123!")
@@ -367,12 +388,14 @@ Authentication is the foundation of user security and access control in Shadow M
 #### Password Storage
 
 **Best Practices:**
+
 - ✅ Password hash stored separately from user data
 - ✅ Hash cannot be reverse-engineered to original password
 - ✅ Hash includes salt (bcrypt handles this automatically)
 - ✅ Use cryptographically secure random salts (bcrypt handles this)
 
 **Recommendations:**
+
 - Never store password hints or recovery questions with answers
 - If implementing password reset, use secure tokens (not predictable values)
 - Consider password history to prevent reuse (future)
@@ -384,18 +407,21 @@ Authentication is the foundation of user security and access control in Shadow M
 #### Credential Validation
 
 **Current Implementation:**
+
 - ✅ Email format validation (client and server)
 - ✅ Generic error messages ("Invalid email or password")
 - ✅ Constant-time password comparison (bcrypt.compare)
 - ✅ Email normalization (lowercase, trimmed)
 
 **Best Practices Applied:**
+
 - Use generic error messages to prevent user enumeration
 - Use constant-time comparison for password verification
 - Normalize email addresses (lowercase, trim whitespace)
 - Validate all inputs (email format, password strength)
 
 **Recommendations:**
+
 - Add rate limiting to prevent brute force attacks (see Rate Limiting section)
 - Consider adding CAPTCHA after failed attempts (future)
 - Log authentication attempts (for security monitoring, future)
@@ -406,12 +432,14 @@ Authentication is the foundation of user security and access control in Shadow M
 #### Session Security
 
 **Current Implementation:**
+
 - ✅ httpOnly cookies (prevents XSS access)
 - ✅ Secure flag in production (HTTPS only)
 - ✅ SameSite attribute (CSRF protection)
 - ✅ Session expiration (7 days)
 
 **Best Practices Applied:**
+
 - Use httpOnly cookies to prevent JavaScript access (XSS protection)
 - Use Secure flag in production (HTTPS only transmission)
 - Use SameSite attribute (CSRF protection)
@@ -419,6 +447,7 @@ Authentication is the foundation of user security and access control in Shadow M
 - Store minimal data in cookies (user ID only)
 
 **Recommendations:**
+
 - Consider using session tokens instead of user IDs (prevents session fixation)
 - Implement session rotation (change token on privilege change)
 - Add session invalidation on password change
@@ -430,11 +459,13 @@ Authentication is the foundation of user security and access control in Shadow M
 #### Session Management
 
 **Best Practices:**
+
 - ✅ Clear session on sign-out
 - ✅ Validate session on every protected request
 - ✅ Handle expired sessions gracefully
 
 **Recommendations:**
+
 - Implement session store (database/Redis) instead of cookie-only (future)
 - Track active sessions per user (future)
 - Allow users to view and revoke sessions (future)
@@ -447,17 +478,20 @@ Authentication is the foundation of user security and access control in Shadow M
 #### Email Validation
 
 **Current Implementation:**
+
 - ✅ Format validation using regex
 - ✅ Normalization (lowercase, trimmed)
 - ✅ Server-side validation required
 
 **Best Practices:**
+
 - Validate email format (regex is acceptable for basic validation)
 - Normalize email addresses (lowercase, trim)
 - Validate on both client and server
 - Consider using library like `validator.js` for more robust validation (future)
 
 **Recommendations:**
+
 - Consider email verification (send confirmation email, future)
 - Handle internationalized email addresses (IDN support, future)
 - Prevent email enumeration (current generic error message helps)
@@ -467,17 +501,20 @@ Authentication is the foundation of user security and access control in Shadow M
 #### Username Validation
 
 **Current Implementation:**
+
 - ✅ Length validation (3-50 characters)
 - ✅ Trimming whitespace
 - ✅ Server-side validation required
 
 **Best Practices:**
+
 - Enforce reasonable length limits
 - Trim whitespace
 - Consider allowed characters (currently allows any characters, future: restrict if needed)
 - Check for username uniqueness
 
 **Recommendations:**
+
 - Consider restricting username characters (alphanumeric + underscore/hyphen only)
 - Prevent reserved usernames (admin, root, etc.)
 - Consider username case-insensitivity
@@ -488,12 +525,14 @@ Authentication is the foundation of user security and access control in Shadow M
 #### Password Validation
 
 **Best Practices:**
+
 - ✅ Length requirement (8+ characters)
 - ✅ Complexity requirements
 - ✅ Server-side validation mandatory
 - ✅ Clear error messages
 
 **Recommendations:**
+
 - Never restrict password maximum length (within reason, e.g., 128 characters)
 - Allow Unicode characters in passwords
 - Provide password strength meter for user feedback
@@ -517,12 +556,15 @@ Implement rate limiting to prevent brute force attacks:
 - **Recovery:** Automatic unlock after time window expires
 
 **Implementation Options:**
+
 1. **In-memory store** (simple, single-server only)
+
    - Use Map with email → attempt count + timestamp
    - Clear expired entries periodically
    - Works for single-server deployments
 
 2. **Redis** (recommended for production)
+
    - Store attempt counts with TTL
    - Works across multiple servers
    - Better performance and scalability
@@ -549,11 +591,13 @@ Implement rate limiting to prevent brute force attacks:
 ### 5. Error Handling
 
 **Current Implementation:**
+
 - ✅ Generic error messages for invalid credentials
 - ✅ Specific error messages for validation failures
 - ✅ Server errors logged, not exposed to client
 
 **Best Practices Applied:**
+
 - Use generic error messages for authentication failures (prevents user enumeration)
 - Provide specific error messages for validation failures (helps users fix input)
 - Log errors server-side for debugging
@@ -562,12 +606,14 @@ Implement rate limiting to prevent brute force attacks:
 **Error Message Guidelines:**
 
 ✅ **Good (Current):**
+
 - "Invalid email or password" (doesn't reveal which is wrong)
 - "Email is required"
 - "Password must be at least 8 characters"
 - "User with this email already exists"
 
 ❌ **Bad (Avoid):**
+
 - "Email not found" (reveals email exists)
 - "Incorrect password" (reveals email exists)
 - "Database connection failed" (exposes internal details)
@@ -578,16 +624,19 @@ Implement rate limiting to prevent brute force attacks:
 ### 6. HTTPS and Transport Security
 
 **Current Implementation:**
+
 - ✅ Secure cookie flag set in production
 - ✅ SameSite attribute for CSRF protection
 
 **Best Practices:**
+
 - Always use HTTPS in production (enforced via Secure cookie flag)
 - Use secure cookies (Secure flag)
 - Implement HSTS headers (future: Next.js config)
 - Validate SSL/TLS certificate (browser handles this)
 
 **Recommendations:**
+
 - Add HSTS headers in Next.js configuration
 - Consider certificate pinning for mobile apps (if applicable, future)
 - Use secure redirects (HTTP → HTTPS)
@@ -597,14 +646,17 @@ Implement rate limiting to prevent brute force attacks:
 ### 7. CSRF Protection
 
 **Current Implementation:**
+
 - ✅ SameSite cookie attribute set to "lax"
 - ✅ Uses POST for state-changing operations
 
 **Best Practices Applied:**
+
 - SameSite="lax" prevents CSRF for same-site requests
 - POST requests for state changes (not GET)
 
 **Recommendations:**
+
 - Consider SameSite="strict" for enhanced security (may break some flows)
 - Consider CSRF tokens for additional protection (Next.js built-in, future)
 - Verify Origin/Referer headers for sensitive operations (future)
@@ -614,16 +666,19 @@ Implement rate limiting to prevent brute force attacks:
 ### 8. XSS Protection
 
 **Current Implementation:**
+
 - ✅ httpOnly cookies (prevents XSS cookie theft)
 - ✅ React (built-in XSS protection via JSX escaping)
 - ✅ Input validation and sanitization
 
 **Best Practices Applied:**
+
 - httpOnly cookies prevent JavaScript access to session cookies
 - React automatically escapes content in JSX
 - Validate and sanitize all user inputs
 
 **Recommendations:**
+
 - Never use `dangerouslySetInnerHTML` with user content
 - Use Content Security Policy (CSP) headers (future)
 - Sanitize user inputs before display (React handles this, but be careful with user-generated HTML)
@@ -635,33 +690,39 @@ Implement rate limiting to prevent brute force attacks:
 **Recommended Enhancements:**
 
 #### Email Verification
+
 - Send verification email on registration
 - Require verification before account activation
 - Verify email changes with confirmation email
 
 #### Password Reset
+
 - Secure password reset flow with time-limited tokens
 - Tokens stored as hashes (like passwords)
 - Tokens expire after 1 hour
 - Invalidate token after use
 
 #### Two-Factor Authentication (2FA)
+
 - Optional 2FA using TOTP (Time-based One-Time Password)
 - Backup codes for recovery
 - Support for authenticator apps (Google Authenticator, Authy, etc.)
 
 #### Account Lockout
+
 - Lock account after 5 failed sign-in attempts
 - Lock duration: 15 minutes (or increasing)
 - Admin unlock capability
 - Email notification on lockout
 
 #### Login History
+
 - Track sign-in attempts (IP, timestamp, success/failure)
 - Display recent logins to user
 - Alert on suspicious activity (new device, location)
 
 #### Security Questions
+
 - ⚠️ **Not Recommended:** Security questions are generally weak
 - If implemented, store answers as hashes (like passwords)
 - Better: Use 2FA instead
@@ -675,6 +736,7 @@ Implement rate limiting to prevent brute force attacks:
 **Recommendations:**
 
 #### Authentication Event Logging
+
 - Log successful sign-ins (timestamp, IP, user ID)
 - Log failed sign-in attempts (timestamp, IP, email, reason)
 - Log sign-ups (timestamp, IP, user ID)
@@ -683,16 +745,19 @@ Implement rate limiting to prevent brute force attacks:
 - Log account lockouts (timestamp, IP, email, reason)
 
 #### Security Monitoring
+
 - Monitor for brute force patterns (multiple failed attempts)
 - Alert on unusual activity (rapid sign-ups, many failed logins)
 - Track authentication metrics (success rate, average response time)
 
 **Log Format:**
+
 ```
 [timestamp] [level] [event] [user_id] [ip] [details]
 ```
 
 **Example:**
+
 ```
 2025-01-27T10:30:00Z INFO SIGNIN_SUCCESS user-123 192.168.1.1 {}
 2025-01-27T10:30:05Z WARN SIGNIN_FAILED null 192.168.1.1 {"email": "test@example.com", "reason": "invalid_password"}
@@ -703,11 +768,13 @@ Implement rate limiting to prevent brute force attacks:
 ### 11. Data Privacy and Compliance
 
 **Best Practices:**
+
 - ✅ Passwords not logged or exposed
 - ✅ Minimal data in session cookies (user ID only)
 - ✅ User data only accessible to authenticated users
 
 **Recommendations:**
+
 - Implement data retention policies (GDPR compliance, future)
 - Provide data export functionality (GDPR right to data portability, future)
 - Implement account deletion with data cleanup (GDPR right to be forgotten, future)
@@ -780,6 +847,7 @@ lib/
 ### Dependencies
 
 - **Existing:**
+
   - `bcryptjs` - Password hashing
   - `next/server` - API routes, cookies
   - `react-aria-components` - Accessible UI components
@@ -862,30 +930,39 @@ lib/
 ## Open Questions
 
 1. **Rate Limiting Implementation:** Should we use in-memory store (simple) or Redis (scalable)?
+
    - **Recommendation:** Start with in-memory for MVP, migrate to Redis when scaling
 
 2. **Session Duration:** Should "Remember me" extend session duration beyond 7 days?
+
    - **Recommendation:** Yes - 7 days normal, 30 days with "Remember me" (future enhancement)
 
 3. **Email Verification:** Should we require email verification before account activation?
+
    - **Recommendation:** Phase 2 feature - start without, add later for enhanced security
 
 4. **Password Reset:** What's the priority for password reset functionality?
+
    - **Recommendation:** High priority - users will need this, implement in Phase 2
 
 5. **Account Lockout:** Should we implement account lockout after failed attempts?
+
    - **Recommendation:** Yes, high priority security feature - implement with rate limiting
 
 6. **2FA:** When should we implement two-factor authentication?
+
    - **Recommendation:** Phase 3 - after core features are stable, for enhanced security
 
 7. **Session Management:** Should we move to session tokens instead of user IDs?
+
    - **Recommendation:** Phase 2 - improves security, allows session revocation
 
 8. **Logging:** What level of authentication event logging is needed?
+
    - **Recommendation:** Log all authentication events (sign-in, sign-up, failures) for security monitoring
 
 9. **Password Strength:** Should we add a visual password strength meter?
+
    - **Recommendation:** Yes, improves UX - implement in Phase 2
 
 10. **Social Login:** Should we support OAuth providers (Google, etc.)?
@@ -902,26 +979,31 @@ lib/
 **Recommended Next Steps (Priority Order):**
 
 1. **Rate Limiting** (Critical Security)
+
    - Implement rate limiting on sign-in endpoint
    - Implement rate limiting on sign-up endpoint
    - Estimated effort: 2-3 days
 
 2. **Account Lockout** (High Security)
+
    - Lock account after 5 failed attempts
    - Implement unlock mechanism
    - Estimated effort: 1-2 days
 
 3. **Password Reset** (High UX)
+
    - Implement password reset flow
    - Secure token generation and validation
    - Estimated effort: 3-4 days
 
 4. **Enhanced Logging** (Medium Security)
+
    - Log authentication events
    - Implement security monitoring
    - Estimated effort: 2-3 days
 
 5. **Email Verification** (Medium Security)
+
    - Send verification email
    - Require verification before activation
    - Estimated effort: 3-4 days
@@ -938,6 +1020,7 @@ lib/
 Use this checklist when reviewing authentication security:
 
 ### Password Security
+
 - [x] Passwords hashed with bcrypt (12+ rounds)
 - [x] Passwords never stored in plaintext
 - [x] Passwords never logged
@@ -945,6 +1028,7 @@ Use this checklist when reviewing authentication security:
 - [ ] Password history (prevent reuse, future)
 
 ### Authentication Security
+
 - [x] Generic error messages (no user enumeration)
 - [x] Constant-time password comparison
 - [ ] Rate limiting implemented
@@ -952,6 +1036,7 @@ Use this checklist when reviewing authentication security:
 - [ ] Login history tracked
 
 ### Session Security
+
 - [x] httpOnly cookies
 - [x] Secure flag in production
 - [x] SameSite attribute
@@ -960,22 +1045,26 @@ Use this checklist when reviewing authentication security:
 - [ ] Session rotation
 
 ### Input Validation
+
 - [x] Email validation (client + server)
 - [x] Username validation (client + server)
 - [x] Password validation (client + server)
 - [x] Input sanitization
 
 ### Transport Security
+
 - [x] Secure cookies in production
 - [ ] HSTS headers
 - [x] HTTPS required in production
 
 ### Error Handling
+
 - [x] Generic auth errors
 - [x] Specific validation errors
 - [x] No sensitive data in errors
 
 ### Logging and Monitoring
+
 - [ ] Authentication events logged
 - [ ] Security monitoring implemented
 - [ ] Failed attempt tracking
@@ -990,4 +1079,3 @@ Use this checklist when reviewing authentication security:
 - Consider security audits before major releases
 - Keep dependencies (bcryptjs) updated for security patches
 - Monitor authentication metrics (success rate, response time) for anomalies
-
