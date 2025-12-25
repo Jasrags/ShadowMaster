@@ -10,8 +10,31 @@ import {
   ListBox,
   ListBoxItem,
 } from "react-aria-components";
-import type { PublicUser, UpdateUserRequest, UserRole } from "@/lib/types/user";
+import type { PublicUser, UpdateUserRequest, UserRole, AccountStatus } from "@/lib/types/user";
 import { isValidEmail, isValidUsername } from "@/lib/auth/validation";
+
+function StatusBadge({ status }: { status: AccountStatus }) {
+  switch (status) {
+    case "active":
+      return (
+        <span className="inline-flex items-center rounded-full bg-green-100 px-2.5 py-0.5 text-xs font-medium text-green-800 dark:bg-green-900/30 dark:text-green-400">
+          Active
+        </span>
+      );
+    case "suspended":
+      return (
+        <span className="inline-flex items-center rounded-full bg-yellow-100 px-2.5 py-0.5 text-xs font-medium text-yellow-800 dark:bg-yellow-900/30 dark:text-yellow-400">
+          Suspended
+        </span>
+      );
+    case "locked":
+      return (
+        <span className="inline-flex items-center rounded-full bg-red-100 px-2.5 py-0.5 text-xs font-medium text-red-800 dark:bg-red-900/30 dark:text-red-400">
+          Locked
+        </span>
+      );
+  }
+}
 
 interface UserEditModalProps {
   user: PublicUser;
@@ -181,6 +204,36 @@ export default function UserEditModal({
                   {errors.role && (
                     <p className="text-sm text-red-600 dark:text-red-400">{errors.role}</p>
                   )}
+                </div>
+
+                {/* Account Status Section */}
+                <div className="border-t border-zinc-200 pt-4 dark:border-zinc-800">
+                  <h3 className="text-sm font-semibold text-zinc-900 dark:text-zinc-50 mb-3">
+                    Account Status
+                  </h3>
+                  <div className="space-y-2">
+                    <div className="flex items-center gap-2">
+                      <span className="text-sm font-medium text-zinc-700 dark:text-zinc-300">Status:</span>
+                      <StatusBadge status={user.accountStatus} />
+                    </div>
+                    {user.statusChangedAt && (
+                      <div className="text-sm">
+                        <span className="font-medium text-zinc-700 dark:text-zinc-300">Changed: </span>
+                        <span className="text-zinc-600 dark:text-zinc-400">
+                          {new Date(user.statusChangedAt).toLocaleString()}
+                        </span>
+                      </div>
+                    )}
+                    {user.statusReason && (
+                      <div className="text-sm">
+                        <span className="font-medium text-zinc-700 dark:text-zinc-300">Reason: </span>
+                        <span className="text-zinc-600 dark:text-zinc-400">{user.statusReason}</span>
+                      </div>
+                    )}
+                    <p className="text-xs text-zinc-500 dark:text-zinc-500 mt-2">
+                      Use the table actions menu to suspend or reactivate this account.
+                    </p>
+                  </div>
                 </div>
 
                 {/* Read-only fields */}
