@@ -37,6 +37,7 @@ import { QualitiesSection } from "./components/QualitiesSection";
 import { Section } from "./components/Section";
 import { InteractiveConditionMonitor } from "./components/InteractiveConditionMonitor";
 import { CombatQuickReference } from "./components/CombatQuickReference";
+import { useCharacterSheetPreferences } from "./hooks/useCharacterSheetPreferences";
 
 // =============================================================================
 // ICONS
@@ -912,24 +913,14 @@ function CharacterSheet({
   // Get ruleset for quality effect calculations (must be called before any early returns)
   const ruleset = useMergedRuleset();
 
-  // Theme State
-  const [currentThemeId, setCurrentThemeId] = useState<ThemeId>(() => {
-    // Check internal preferences first
-    if (character.uiPreferences?.theme && THEMES[character.uiPreferences.theme as ThemeId]) {
-      return character.uiPreferences.theme as ThemeId;
-    }
-    
-    // Check localStorage fallback (client-side only)
-    if (typeof window !== 'undefined') {
-      const saved = localStorage.getItem(`character-theme-${character.id}`);
-      if (saved && THEMES[saved as ThemeId]) {
-        return saved as ThemeId;
-      }
-    }
-    
-    return DEFAULT_THEME;
-  });
+  // Theme State - use preferences hook for persistence
+  const {
+    preferences: sheetPrefs,
+    updatePreference: updateSheetPref,
+    isLoading: prefsLoading,
+  } = useCharacterSheetPreferences(character.id);
 
+  const currentThemeId = sheetPrefs.theme;
   const theme = THEMES[currentThemeId] || THEMES[DEFAULT_THEME];
 
   useEffect(() => {
@@ -938,14 +929,17 @@ function CharacterSheet({
     }
   }, [character.editionCode, loadRuleset]);
 
-  // Persist theme choice (mock persistence for now, ideally would partial update character)
+  // Persist theme choice
   const handleThemeChange = (id: ThemeId) => {
-    setCurrentThemeId(id);
-    // In a real app we would save this to the server
-    // For now we rely on the parent updating the character or local state
-    // We can use localStorage as a fallback if we want client-side persistence only
-    localStorage.setItem(`character-theme-${character.id}`, id);
+    updateSheetPref("theme", id);
   };
+
+  // Handler for dice roller toggle that persists preference
+  const handleToggleDiceRoller = useCallback(() => {
+    const newValue = !showDiceRoller;
+    setShowDiceRoller(newValue);
+    updateSheetPref("diceRollerVisible", newValue);
+  }, [showDiceRoller, setShowDiceRoller, updateSheetPref]);
 
   // Calculate derived values with quality effects (must be called before any early returns)
   const physicalMonitorMax = Math.ceil((character.attributes?.body || 1) / 2) + 8;
@@ -1083,7 +1077,7 @@ function CharacterSheet({
           </Button>
           <Button
             className="p-2 text-muted-foreground hover:text-foreground transition-colors"
-            onPress={() => setShowDiceRoller(!showDiceRoller)}
+            onPress={handleToggleDiceRoller}
           >
             <DiceIcon className={`w-6 h-6 ${showDiceRoller ? theme.colors.accent : ""}`} />
           </Button>
