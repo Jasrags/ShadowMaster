@@ -1,0 +1,97 @@
+{
+  "id": "pr4-htr-team",
+  "editionCode": "sr5",
+  "professionalRating": 4,
+  "name": "High Threat Response",
+  "description": "Corporate HTR teams, Knight Errant tactical units, or special forces veterans. Highly trained and well-equipped.",
+  "category": "military",
+  "baseGrunts": {
+    "attributes": {
+      "body": 5,
+      "agility": 5,
+      "reaction": 5,
+      "strength": 4,
+      "willpower": 4,
+      "logic": 3,
+      "intuition": 5,
+      "charisma": 3
+    },
+    "essence": 5.5,
+    "skills": {
+      "Pistols": 5,
+      "Automatics": 5,
+      "Longarms": 4,
+      "Heavy Weapons": 3,
+      "Throwing Weapons": 3,
+      "Unarmed Combat": 4,
+      "Perception": 5,
+      "Sneaking": 4,
+      "Running": 4,
+      "Gymnastics": 3,
+      "First Aid": 3,
+      "Demolitions": 2
+    },
+    "cyberware": [
+      {
+        "name": "Wired Reflexes (Rating 1)",
+        "grade": "standard"
+      },
+      {
+        "name": "Smartlink",
+        "grade": "standard"
+      }
+    ],
+    "weapons": [
+      {
+        "name": "Ares Alpha",
+        "damage": "11P",
+        "type": "ranged",
+        "category": "assault-rifle"
+      },
+      {
+        "name": "Ares Predator V (Smartgun)",
+        "damage": "8P",
+        "type": "ranged",
+        "category": "heavy-pistol"
+      }
+    ],
+    "armor": [
+      {
+        "name": "Full Body Armor",
+        "rating": 15
+      },
+      {
+        "name": "Ballistic Helmet",
+        "rating": 3
+      }
+    ],
+    "gear": [
+      {
+        "name": "Commlink (Fairlight Caliban)",
+        "category": "electronics"
+      },
+      {
+        "name": "Medkit (Rating 6)",
+        "category": "medical"
+      },
+      {
+        "name": "Frag Grenade x2",
+        "category": "weapons"
+      },
+      {
+        "name": "Smoke Grenade x2",
+        "category": "weapons"
+      }
+    ],
+    "conditionMonitorSize": 11
+  },
+  "defaultOptions": {
+    "useGroupInitiative": false,
+    "useSimplifiedRules": false
+  },
+  "moraleTier": {
+    "breakThreshold": 60,
+    "rallyCost": 1,
+    "canRally": true
+  }
+}

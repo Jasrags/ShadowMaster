@@ -1,0 +1,80 @@
+{
+  "id": "pr3-corp-security",
+  "editionCode": "sr5",
+  "professionalRating": 3,
+  "name": "Corporate Security",
+  "description": "AAA megacorp security, Lone Star patrol officers, or experienced mercenaries. Professional training and equipment.",
+  "category": "security",
+  "baseGrunts": {
+    "attributes": {
+      "body": 4,
+      "agility": 4,
+      "reaction": 4,
+      "strength": 4,
+      "willpower": 3,
+      "logic": 3,
+      "intuition": 4,
+      "charisma": 3
+    },
+    "essence": 6,
+    "skills": {
+      "Pistols": 4,
+      "Automatics": 4,
+      "Longarms": 3,
+      "Unarmed Combat": 3,
+      "Perception": 4,
+      "Sneaking": 3,
+      "Running": 3,
+      "Gymnastics": 2,
+      "First Aid": 2
+    },
+    "weapons": [
+      {
+        "name": "Ares Predator V",
+        "damage": "8P",
+        "type": "ranged",
+        "category": "heavy-pistol"
+      },
+      {
+        "name": "FN P93 Praetor",
+        "damage": "6P",
+        "type": "ranged",
+        "category": "smg"
+      }
+    ],
+    "armor": [
+      {
+        "name": "Armor Jacket",
+        "rating": 12
+      },
+      {
+        "name": "Helmet",
+        "rating": 2
+      }
+    ],
+    "gear": [
+      {
+        "name": "Commlink (Transys Avalon)",
+        "category": "electronics"
+      },
+      {
+        "name": "Medkit (Rating 3)",
+        "category": "medical"
+      },
+      {
+        "name": "Flashbang Grenade x2",
+        "category": "weapons"
+      }
+    ],
+    "conditionMonitorSize": 10
+  },
+  "defaultOptions": {
+    "useGroupInitiative": true,
+    "useSimplifiedRules": false
+  },
+  "moraleTier": {
+    "breakThreshold": 50,
+    "rallyCost": 1,
+    "canRally": true
+  }
+}

@@ -1,0 +1,126 @@
+{
+  "id": "pr6-dragon-guard",
+  "editionCode": "sr5",
+  "professionalRating": 6,
+  "name": "Dragon Guard",
+  "description": "Bodyguards to great dragons, immortal elf special operations, or legendary mercenary units. The absolute pinnacle of mortal combatants.",
+  "category": "military",
+  "baseGrunts": {
+    "attributes": {
+      "body": 6,
+      "agility": 7,
+      "reaction": 7,
+      "strength": 6,
+      "willpower": 6,
+      "logic": 5,
+      "intuition": 6,
+      "charisma": 4
+    },
+    "essence": 2.5,
+    "skills": {
+      "Pistols": 6,
+      "Automatics": 6,
+      "Longarms": 6,
+      "Heavy Weapons": 5,
+      "Throwing Weapons": 5,
+      "Blades": 6,
+      "Unarmed Combat": 6,
+      "Perception": 6,
+      "Sneaking": 6,
+      "Running": 6,
+      "Gymnastics": 5,
+      "First Aid": 5,
+      "Demolitions": 4,
+      "Pilot Ground Craft": 4,
+      "Pilot Aircraft": 3
+    },
+    "cyberware": [
+      {
+        "name": "Wired Reflexes (Rating 3)",
+        "grade": "deltaware"
+      },
+      {
+        "name": "Smartlink",
+        "grade": "deltaware"
+      },
+      {
+        "name": "Cybereyes (Rating 4)",
+        "grade": "deltaware"
+      },
+      {
+        "name": "Muscle Toner (Rating 4)",
+        "grade": "deltaware"
+      },
+      {
+        "name": "Bone Lacing (Titanium)",
+        "grade": "deltaware"
+      },
+      {
+        "name": "Platelet Factories",
+        "grade": "deltaware"
+      }
+    ],
+    "weapons": [
+      {
+        "name": "Ares HVAR (Smartgun)",
+        "damage": "10P",
+        "type": "ranged",
+        "category": "assault-rifle"
+      },
+      {
+        "name": "Ares Viper Slivergun (Smartgun)",
+        "damage": "9P(f)",
+        "type": "ranged",
+        "category": "machine-pistol"
+      },
+      {
+        "name": "Monofilament Sword",
+        "damage": "12P",
+        "type": "melee",
+        "category": "blade"
+      }
+    ],
+    "armor": [
+      {
+        "name": "Milspec Armor",
+        "rating": 20
+      },
+      {
+        "name": "Full Helmet",
+        "rating": 4
+      }
+    ],
+    "gear": [
+      {
+        "name": "Commlink (Fairlight Excalibur)",
+        "category": "electronics"
+      },
+      {
+        "name": "Medkit (Rating 6)",
+        "category": "medical"
+      },
+      {
+        "name": "Anti-Vehicle Grenade x2",
+        "category": "weapons"
+      },
+      {
+        "name": "Neurostun Gas Grenade x2",
+        "category": "weapons"
+      },
+      {
+        "name": "Rappelling Kit",
+        "category": "tools"
+      }
+    ],
+    "conditionMonitorSize": 12
+  },
+  "defaultOptions": {
+    "useGroupInitiative": false,
+    "useSimplifiedRules": false
+  },
+  "moraleTier": {
+    "breakThreshold": 90,
+    "rallyCost": 1,
+    "canRally": true
+  }
+}

@@ -1,0 +1,69 @@
+{
+  "id": "pr2-security-guards",
+  "editionCode": "sr5",
+  "professionalRating": 2,
+  "name": "Security Guards",
+  "description": "Corporate security, private security contractors, or experienced gang veterans. Basic training and discipline.",
+  "category": "security",
+  "baseGrunts": {
+    "attributes": {
+      "body": 3,
+      "agility": 3,
+      "reaction": 4,
+      "strength": 3,
+      "willpower": 3,
+      "logic": 3,
+      "intuition": 3,
+      "charisma": 2
+    },
+    "essence": 6,
+    "skills": {
+      "Pistols": 3,
+      "Automatics": 2,
+      "Clubs": 2,
+      "Perception": 3,
+      "Running": 2,
+      "Sneaking": 2
+    },
+    "weapons": [
+      {
+        "name": "Ares Predator V",
+        "damage": "8P",
+        "type": "ranged",
+        "category": "heavy-pistol"
+      },
+      {
+        "name": "Stun Baton",
+        "damage": "9S(e)",
+        "type": "melee",
+        "category": "club"
+      }
+    ],
+    "armor": [
+      {
+        "name": "Armor Vest",
+        "rating": 9
+      }
+    ],
+    "gear": [
+      {
+        "name": "Commlink (Sony Emperor)",
+        "category": "electronics"
+      },
+      {
+        "name": "Flashlight",
+        "category": "tools"
+      }
+    ],
+    "conditionMonitorSize": 10
+  },
+  "defaultOptions": {
+    "useGroupInitiative": true,
+    "useSimplifiedRules": false
+  },
+  "moraleTier": {
+    "breakThreshold": 40,
+    "rallyCost": 2,
+    "canRally": true
+  }
+}

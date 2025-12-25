@@ -1,0 +1,65 @@
+{
+  "id": "pr1-gang-members",
+  "editionCode": "sr5",
+  "professionalRating": 1,
+  "name": "Gang Members",
+  "description": "Low-level gangers, mall security, or new recruits. Minimal training but some street experience.",
+  "category": "gang",
+  "baseGrunts": {
+    "attributes": {
+      "body": 3,
+      "agility": 3,
+      "reaction": 3,
+      "strength": 3,
+      "willpower": 2,
+      "logic": 2,
+      "intuition": 3,
+      "charisma": 2
+    },
+    "essence": 6,
+    "skills": {
+      "Pistols": 2,
+      "Automatics": 1,
+      "Blades": 2,
+      "Intimidation": 2,
+      "Perception": 1,
+      "Running": 1
+    },
+    "weapons": [
+      {
+        "name": "Streetline Special",
+        "damage": "6P",
+        "type": "ranged",
+        "category": "holdout-pistol"
+      },
+      {
+        "name": "Combat Knife",
+        "damage": "5P",
+        "type": "melee",
+        "category": "blade"
+      }
+    ],
+    "armor": [
+      {
+        "name": "Leather Jacket",
+        "rating": 4
+      }
+    ],
+    "gear": [
+      {
+        "name": "Commlink (Meta Link)",
+        "category": "electronics"
+      }
+    ],
+    "conditionMonitorSize": 10
+  },
+  "defaultOptions": {
+    "useGroupInitiative": true,
+    "useSimplifiedRules": true
+  },
+  "moraleTier": {
+    "breakThreshold": 33,
+    "rallyCost": 2,
+    "canRally": true
+  }
+}
