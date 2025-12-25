@@ -7,7 +7,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getSession } from "@/lib/auth/session";
 import { getUserById } from "@/lib/storage/users";
-import { getCharacter, addAdvancementRecord } from "@/lib/storage/characters";
+import { getCharacter } from "@/lib/storage/characters";
 import { getCampaignEvents, getCampaignById } from "@/lib/storage/campaigns";
 import { loadAndMergeRuleset } from "@/lib/rules/merge";
 import { advanceAttribute, type AdvanceAttributeOptions } from "@/lib/rules/advancement/attributes";
@@ -147,14 +147,9 @@ export async function POST(
         options
       );
 
-      // Persist advancement record and training period using storage helper
-      const updatedCharacter = await addAdvancementRecord(
-        userId,
-        characterId,
-        result.advancementRecord,
-        result.trainingPeriod,
-        result.advancementRecord.karmaCost
-      );
+      // Persist the fully updated character state from the ledger
+      const { saveCharacter } = await import("@/lib/storage/characters");
+      const updatedCharacter = await saveCharacter(result.updatedCharacter);
 
       return NextResponse.json({
         success: true,

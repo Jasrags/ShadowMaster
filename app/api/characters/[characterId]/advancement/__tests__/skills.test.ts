@@ -132,7 +132,7 @@ describe('POST /api/characters/[characterId]/advancement/skills', () => {
     };
 
     vi.mocked(advancementModule.advanceSkill).mockReturnValue(mockAdvancementResult);
-    vi.mocked(characterStorageModule.addAdvancementRecord).mockResolvedValue({
+    vi.mocked(characterStorageModule.saveCharacter).mockResolvedValue({
       ...mockCharacter,
       karmaCurrent: 42,
       advancementHistory: [mockAdvancementResult.advancementRecord],
@@ -317,7 +317,7 @@ describe('POST /api/characters/[characterId]/advancement/skills', () => {
     };
 
     vi.mocked(advancementModule.advanceSkill).mockReturnValue(mockAdvancementResult);
-    vi.mocked(characterStorageModule.addAdvancementRecord).mockResolvedValue({
+    vi.mocked(characterStorageModule.saveCharacter).mockResolvedValue({
       ...mockCharacter,
       karmaCurrent: 42,
       advancementHistory: [mockAdvancementResult.advancementRecord],

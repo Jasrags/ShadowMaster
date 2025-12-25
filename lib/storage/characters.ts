@@ -678,6 +678,39 @@ export async function killCharacter(userId: ID, characterId: ID): Promise<Charac
  * @param karmaSpent - Karma amount spent (for updating karmaCurrent)
  * @returns Updated character
  */
+/**
+ * Save a complete character object to storage
+ *
+ * This is used for operations that perform full functional updates (like the advancement ledger).
+ *
+ * @param character - Full character object to save
+ * @returns Saved character
+ */
+export async function saveCharacter(character: Character): Promise<Character> {
+  const filePath = getCharacterFilePath(character.ownerId, character.id);
+  
+  const updatedCharacter: Character = {
+    ...character,
+    updatedAt: new Date().toISOString(),
+  };
+
+  await writeJsonFile(filePath, updatedCharacter);
+  return updatedCharacter;
+}
+
+/**
+ * Add an advancement record and optionally a training period to a character
+ *
+ * This is a convenience function that persists the results from advancement
+ * logic functions (e.g., advanceAttribute, advanceSkill).
+ *
+ * @param userId - Character owner ID
+ * @param characterId - Character ID
+ * @param advancementRecord - Advancement record to add
+ * @param trainingPeriod - Optional training period to add
+ * @param karmaSpent - Karma amount spent (for updating karmaCurrent)
+ * @returns Updated character
+ */
 export async function addAdvancementRecord(
   userId: ID,
   characterId: ID,
@@ -707,6 +740,8 @@ export async function addAdvancementRecord(
   }
 
   // Update karma if provided
+  // Note: If karma was already spent in the passed advancementRecord, 
+  // this might be redundant if not careful. For legacy compatibility, we keep it.
   if (karmaSpent !== undefined) {
     updates.karmaCurrent = character.karmaCurrent - karmaSpent;
   }
