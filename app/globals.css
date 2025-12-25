@@ -89,7 +89,12 @@ body {
   bottom: 0;
   right: 0;
   background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.05) 50%),
-    linear-gradient(90deg, rgba(255, 0, 0, 0.01), rgba(0, 255, 0, 0.005), rgba(0, 0, 255, 0.01));
+    linear-gradient(
+      90deg,
+      rgba(255, 0, 0, 0.01),
+      rgba(0, 255, 0, 0.005),
+      rgba(0, 0, 255, 0.01)
+    );
   z-index: 2;
   background-size: 100% 4px, 3px 100%;
   pointer-events: none;
@@ -98,4 +103,242 @@ body {
 
 .dark .scanlines::before {
   opacity: 0.3;
+}
+
+/* =============================================================================
+   PRINT STYLES FOR CHARACTER SHEETS
+   ============================================================================= */
+
+@media print {
+  /* Reset colors for print */
+  :root {
+    --background: #ffffff;
+    --foreground: #000000;
+    --card: #ffffff;
+    --card-foreground: #000000;
+    --muted: #f5f5f5;
+    --muted-foreground: #666666;
+    --border: #cccccc;
+  }
+
+  /* Hide non-essential elements */
+  .print-hidden,
+  nav,
+  header,
+  footer,
+  .dice-roller,
+  .theme-toggle,
+  .back-button,
+  .edit-button,
+  button:not(.print-visible),
+  [role="dialog"],
+  [role="tooltip"] {
+    display: none !important;
+  }
+
+  /* Reset backgrounds */
+  body,
+  .dark {
+    background: white !important;
+    color: black !important;
+  }
+
+  /* Page layout */
+  @page {
+    size: A4;
+    margin: 1cm;
+  }
+
+  /* Character sheet container */
+  .character-sheet {
+    width: 100% !important;
+    max-width: none !important;
+    padding: 0 !important;
+    margin: 0 !important;
+  }
+
+  /* Grid layout for print - 3 column */
+  .character-sheet-grid {
+    display: grid !important;
+    grid-template-columns: 1fr 1fr 1fr !important;
+    gap: 0.5cm !important;
+  }
+
+  /* Section styling for print */
+  .section {
+    border: 1px solid #ccc !important;
+    padding: 0.3cm !important;
+    break-inside: avoid;
+    page-break-inside: avoid;
+    background: white !important;
+  }
+
+  .section-title {
+    font-size: 10pt !important;
+    font-weight: bold !important;
+    border-bottom: 1px solid #000 !important;
+    padding-bottom: 0.2cm !important;
+    margin-bottom: 0.2cm !important;
+  }
+
+  /* Condition monitors - ensure boxes print clearly */
+  .condition-monitor-box {
+    border: 2px solid #000 !important;
+    width: 0.5cm !important;
+    height: 0.5cm !important;
+  }
+
+  .condition-monitor-box.filled {
+    background: #000 !important;
+  }
+
+  /* Skills table */
+  .skills-table {
+    font-size: 8pt !important;
+    width: 100% !important;
+  }
+
+  .skills-table th,
+  .skills-table td {
+    padding: 1pt 2pt !important;
+    border: 0.5pt solid #ccc !important;
+  }
+
+  /* Combat pools */
+  .combat-pool {
+    font-size: 9pt !important;
+    padding: 0.2cm !important;
+    border: 1px solid #999 !important;
+    margin-bottom: 0.2cm !important;
+  }
+
+  /* Attributes */
+  .attribute-block {
+    font-size: 9pt !important;
+    padding: 0.15cm !important;
+    border: 1px solid #ccc !important;
+  }
+
+  /* Force page breaks before major sections */
+  .page-break-before {
+    page-break-before: always;
+  }
+
+  /* Ensure text is readable */
+  * {
+    color-adjust: exact !important;
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+  }
+
+  /* Header info - character name prominent */
+  .character-header {
+    text-align: center !important;
+    border-bottom: 2px solid #000 !important;
+    padding-bottom: 0.3cm !important;
+    margin-bottom: 0.5cm !important;
+  }
+
+  .character-name {
+    font-size: 18pt !important;
+    font-weight: bold !important;
+  }
+
+  .character-meta {
+    font-size: 10pt !important;
+    color: #333 !important;
+  }
+
+  /* Gear and inventory - compact */
+  .gear-list {
+    font-size: 8pt !important;
+    columns: 2;
+    column-gap: 0.3cm;
+  }
+
+  .gear-item {
+    break-inside: avoid;
+    page-break-inside: avoid;
+    margin-bottom: 0.1cm !important;
+  }
+
+  /* Links - remove decorations */
+  a {
+    color: #000 !important;
+    text-decoration: none !important;
+  }
+
+  /* Dice pool values - bold for easy reading */
+  .dice-pool-value {
+    font-weight: bold !important;
+    font-size: 11pt !important;
+  }
+}
+
+/* =============================================================================
+   MOBILE RESPONSIVENESS
+   ============================================================================= */
+
+/* Mobile breakpoint */
+@media (max-width: 768px) {
+  /* Stack the 3-column grid into single column */
+  .character-sheet-grid {
+    grid-template-columns: 1fr !important;
+    gap: 1rem !important;
+  }
+
+  /* Make sections collapsible-friendly */
+  .section {
+    margin-bottom: 0.5rem;
+  }
+
+  /* Touch-friendly targets */
+  .condition-monitor-box,
+  button,
+  .clickable {
+    min-width: 44px;
+    min-height: 44px;
+  }
+
+  /* Responsive font sizing */
+  .section-title {
+    font-size: 0.875rem;
+  }
+
+  /* Skills table - horizontal scroll */
+  .skills-table-container {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  /* Combat section - stack pools */
+  .combat-pool-grid {
+    grid-template-columns: 1fr !important;
+  }
+
+  /* Condition monitors - make boxes bigger for touch */
+  .condition-monitor-box {
+    width: 2rem;
+    height: 2rem;
+  }
+}
+
+/* Tablet breakpoint */
+@media (min-width: 769px) and (max-width: 1024px) {
+  .character-sheet-grid {
+    grid-template-columns: 1fr 1fr !important;
+  }
+}
+
+/* Print button styling */
+.print-button {
+  @apply flex items-center gap-2 px-4 py-2 bg-zinc-100 dark:bg-zinc-800 
+         text-zinc-700 dark:text-zinc-300 rounded-lg hover:bg-zinc-200 
+         dark:hover:bg-zinc-700 transition-colors;
+}
+
+@media print {
+  .print-button {
+    display: none !important;
+  }
 }

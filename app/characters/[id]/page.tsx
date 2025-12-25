@@ -66,6 +66,14 @@ function DiceIcon({ className }: { className?: string }) {
   );
 }
 
+function PrinterIcon({ className }: { className?: string }) {
+  return (
+    <svg className={className} fill="none" viewBox="0 0 24 24" stroke="currentColor">
+      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z" />
+    </svg>
+  );
+}
+
 
 
 
@@ -1035,13 +1043,13 @@ function CharacterSheet({
   };
 
   return (
-    <div className={`min-h-screen transition-colors duration-300 ${theme.colors.background} p-4 sm:p-6 lg:p-8`}>
+    <div className={`character-sheet min-h-screen transition-colors duration-300 ${theme.colors.background} p-4 sm:p-6 lg:p-8`}>
       <div className="space-y-6 max-w-7xl mx-auto">
         {/* Navigation Header */}
-        <div className="flex items-center justify-between">
+        <div className="flex items-center justify-between print-hidden">
           <Link
             href="/characters"
-            className="inline-flex items-center gap-2 text-sm text-muted-foreground hover:text-emerald-400 transition-colors"
+            className="inline-flex items-center gap-2 text-sm text-muted-foreground hover:text-emerald-400 transition-colors back-button"
           >
             <ArrowLeftIcon className="w-4 h-4" />
             Back to Characters
@@ -1064,8 +1072,15 @@ function CharacterSheet({
         </div>
 
         {/* Actions Bar */}
-        <div className="flex items-center justify-end gap-2 mb-4">
+        <div className="flex items-center justify-end gap-2 mb-4 print-hidden">
           <ThemeSelector currentTheme={currentThemeId} onSelect={handleThemeChange} />
+          <Button
+            className="p-2 text-muted-foreground hover:text-foreground transition-colors"
+            onPress={() => window.print()}
+            aria-label="Print character sheet"
+          >
+            <PrinterIcon className="w-5 h-5" />
+          </Button>
           <Button
             className="p-2 text-muted-foreground hover:text-foreground transition-colors"
             onPress={() => setShowDiceRoller(!showDiceRoller)}
@@ -1083,22 +1098,22 @@ function CharacterSheet({
         </div>
 
         {/* Character Header Card */}
-        <div className={`relative overflow-hidden ${theme.components.section.wrapper} p-6`}>
+        <div className={`character-header relative overflow-hidden ${theme.components.section.wrapper} p-6`}>
           {/* Background Elements - Theme dependent */}
           {theme.id === 'neon-rain' ? (
             <>
-              <div className="absolute top-0 right-0 w-64 h-64 bg-emerald-500/5 blur-3xl rounded-full pointer-events-none" />
-              <div className="absolute bottom-0 left-0 w-64 h-64 bg-blue-500/5 blur-3xl rounded-full pointer-events-none" />
-              <div className="absolute inset-0 bg-[url('/grid-pattern.svg')] opacity-[0.02]" />
+              <div className="absolute top-0 right-0 w-64 h-64 bg-emerald-500/5 blur-3xl rounded-full pointer-events-none print-hidden" />
+              <div className="absolute bottom-0 left-0 w-64 h-64 bg-blue-500/5 blur-3xl rounded-full pointer-events-none print-hidden" />
+              <div className="absolute inset-0 bg-[url('/grid-pattern.svg')] opacity-[0.02] print-hidden" />
             </>
           ) : (
-            <div className="absolute top-0 right-0 w-64 h-64 bg-stone-200/20 dark:bg-stone-800/20 blur-3xl rounded-full pointer-events-none" />
+            <div className="absolute top-0 right-0 w-64 h-64 bg-stone-200/20 dark:bg-stone-800/20 blur-3xl rounded-full pointer-events-none print-hidden" />
           )}
 
           <div className="relative flex flex-col md:flex-row md:items-start justify-between gap-6">
             <div className="space-y-2">
               <div className="flex items-center gap-3">
-                <h1 className={`text-3xl md:text-4xl ${theme.fonts.heading} ${theme.colors.heading}`}>
+                <h1 className={`character-name text-3xl md:text-4xl ${theme.fonts.heading} ${theme.colors.heading}`}>
                   {character.name}
                 </h1>
                 <span className={`px-2 py-0.5 text-xs font-mono uppercase tracking-wider rounded border ${character.status === "active" ? theme.components.badge.positive :
@@ -1195,7 +1210,7 @@ function CharacterSheet({
         </div>
 
         {/* Main Content Grid */}
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        <div className="character-sheet-grid grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {/* Left Column - Attributes & Condition */}
           <div className="space-y-6">
             {/* Attributes */}
