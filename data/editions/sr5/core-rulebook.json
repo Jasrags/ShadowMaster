@@ -12692,6 +12692,585 @@
           }
         ]
       }
+    },
+    "contactArchetypes": {
+      "mergeStrategy": "replace",
+      "payload": {
+        "archetypes": [
+          {
+            "id": "fixer",
+            "name": "Fixer",
+            "description": "A shadow broker who connects runners with jobs, gear, and information. The essential contact for any runner.",
+            "suggestedConnection": [3, 6],
+            "suggestedLoyalty": [1, 4],
+            "commonServices": ["job-referral", "equipment-procurement", "introduction", "information-basic"],
+            "riskProfile": "medium",
+            "typicalCosts": {
+              "job-referral": 0,
+              "equipment-procurement": 500,
+              "introduction": 200,
+              "information-basic": 100
+            },
+            "commonLocations": ["Seattle", "Hong Kong", "Berlin"],
+            "commonOrganizations": []
+          },
+          {
+            "id": "street-doc",
+            "name": "Street Doc",
+            "description": "An underground medical professional who provides healing, augmentation, and asks no questions.",
+            "suggestedConnection": [2, 4],
+            "suggestedLoyalty": [1, 3],
+            "commonServices": ["medical-treatment", "augmentation-installation", "toxin-screening", "cyberware-maintenance"],
+            "riskProfile": "low",
+            "typicalCosts": {
+              "medical-treatment": 200,
+              "augmentation-installation": 1000,
+              "toxin-screening": 100,
+              "cyberware-maintenance": 300
+            },
+            "commonLocations": ["Barrens", "Redmond", "Puyallup"],
+            "commonOrganizations": []
+          },
+          {
+            "id": "talismonger",
+            "name": "Talismonger",
+            "description": "A dealer in magical supplies, foci, reagents, and enchanted goods.",
+            "suggestedConnection": [2, 5],
+            "suggestedLoyalty": [1, 3],
+            "commonServices": ["reagent-supply", "focus-procurement", "magical-goods", "enchanting-services"],
+            "riskProfile": "low",
+            "typicalCosts": {
+              "reagent-supply": 50,
+              "focus-procurement": 2000,
+              "magical-goods": 500,
+              "enchanting-services": 1000
+            },
+            "commonLocations": ["Seattle", "Tir Tairngire"],
+            "commonOrganizations": []
+          },
+          {
+            "id": "mr-johnson",
+            "name": "Mr. Johnson",
+            "description": "A corporate agent who hires runners for deniable operations. High-paying but demanding.",
+            "suggestedConnection": [4, 8],
+            "suggestedLoyalty": [1, 2],
+            "commonServices": ["job-offer", "corporate-access", "extraction-target", "insider-information"],
+            "riskProfile": "high",
+            "typicalCosts": {
+              "job-offer": 0,
+              "corporate-access": 2000,
+              "insider-information": 1000
+            },
+            "commonLocations": ["Downtown Seattle", "Corporate Arcologies"],
+            "commonOrganizations": ["Ares", "Aztechnology", "Renraku", "Saeder-Krupp"]
+          },
+          {
+            "id": "gang-leader",
+            "name": "Gang Leader",
+            "description": "A street gang boss who provides muscle, territory access, and street-level intelligence.",
+            "suggestedConnection": [2, 5],
+            "suggestedLoyalty": [1, 4],
+            "commonServices": ["muscle-for-hire", "territory-passage", "street-intel", "safe-house"],
+            "riskProfile": "medium",
+            "typicalCosts": {
+              "muscle-for-hire": 500,
+              "territory-passage": 100,
+              "street-intel": 50,
+              "safe-house": 300
+            },
+            "commonLocations": ["Barrens", "Redmond", "Puyallup"],
+            "commonOrganizations": ["Halloweeners", "Crimson Crush", "First Nations"]
+          },
+          {
+            "id": "fence",
+            "name": "Fence",
+            "description": "A specialist in buying and selling stolen goods, no questions asked.",
+            "suggestedConnection": [2, 5],
+            "suggestedLoyalty": [1, 3],
+            "commonServices": ["buy-stolen-goods", "sell-equipment", "find-specific-item", "appraisal"],
+            "riskProfile": "medium",
+            "typicalCosts": {
+              "buy-stolen-goods": 0,
+              "find-specific-item": 200,
+              "appraisal": 50
+            },
+            "commonLocations": ["Seattle", "Tacoma"],
+            "commonOrganizations": []
+          },
+          {
+            "id": "armorer",
+            "name": "Armorer",
+            "description": "A weapons dealer and modifier who can supply or customize combat gear.",
+            "suggestedConnection": [2, 5],
+            "suggestedLoyalty": [1, 3],
+            "commonServices": ["weapon-procurement", "weapon-modification", "ammunition-supply", "armor-customization"],
+            "riskProfile": "medium",
+            "typicalCosts": {
+              "weapon-procurement": 500,
+              "weapon-modification": 300,
+              "ammunition-supply": 100,
+              "armor-customization": 400
+            },
+            "commonLocations": ["Seattle", "Tacoma"],
+            "commonOrganizations": []
+          },
+          {
+            "id": "id-manufacturer",
+            "name": "ID Manufacturer",
+            "description": "A forger who creates fake SINs, licenses, and identity documents.",
+            "suggestedConnection": [3, 6],
+            "suggestedLoyalty": [1, 3],
+            "commonServices": ["fake-sin", "fake-license", "identity-scrub", "document-forgery"],
+            "riskProfile": "high",
+            "typicalCosts": {
+              "fake-sin": 2500,
+              "fake-license": 200,
+              "identity-scrub": 1000,
+              "document-forgery": 500
+            },
+            "commonLocations": ["Seattle", "Hong Kong"],
+            "commonOrganizations": []
+          },
+          {
+            "id": "bartender",
+            "name": "Bartender",
+            "description": "A social hub who hears everything and knows everyone in their neighborhood.",
+            "suggestedConnection": [1, 3],
+            "suggestedLoyalty": [1, 4],
+            "commonServices": ["rumors", "introduction", "meeting-place", "message-drop"],
+            "riskProfile": "low",
+            "typicalCosts": {
+              "rumors": 20,
+              "introduction": 50,
+              "meeting-place": 0,
+              "message-drop": 10
+            },
+            "commonLocations": ["Seattle"],
+            "commonOrganizations": []
+          },
+          {
+            "id": "corporate-contact",
+            "name": "Corporate Contact",
+            "description": "An insider at a megacorporation who provides access and information.",
+            "suggestedConnection": [3, 7],
+            "suggestedLoyalty": [1, 3],
+            "commonServices": ["insider-access", "corporate-intel", "security-schedule", "personnel-files"],
+            "riskProfile": "high",
+            "typicalCosts": {
+              "insider-access": 1000,
+              "corporate-intel": 500,
+              "security-schedule": 800,
+              "personnel-files": 300
+            },
+            "commonLocations": ["Downtown Seattle", "Corporate Arcologies"],
+            "commonOrganizations": ["Ares", "Aztechnology", "Renraku", "Saeder-Krupp", "Shiawase"]
+          },
+          {
+            "id": "law-enforcement",
+            "name": "Law Enforcement",
+            "description": "A cop or security officer who provides warnings, favors, and information.",
+            "suggestedConnection": [2, 5],
+            "suggestedLoyalty": [1, 3],
+            "commonServices": ["investigation-warning", "case-files", "evidence-handling", "patrol-schedules"],
+            "riskProfile": "high",
+            "typicalCosts": {
+              "investigation-warning": 500,
+              "case-files": 400,
+              "evidence-handling": 1000,
+              "patrol-schedules": 200
+            },
+            "commonLocations": ["Seattle"],
+            "commonOrganizations": ["Lone Star", "Knight Errant"]
+          },
+          {
+            "id": "media-contact",
+            "name": "Media Contact",
+            "description": "A journalist or media personality who can spread or suppress stories.",
+            "suggestedConnection": [2, 5],
+            "suggestedLoyalty": [1, 3],
+            "commonServices": ["story-plant", "story-suppress", "investigation", "public-records"],
+            "riskProfile": "medium",
+            "typicalCosts": {
+              "story-plant": 500,
+              "story-suppress": 1000,
+              "investigation": 300,
+              "public-records": 100
+            },
+            "commonLocations": ["Seattle", "Los Angeles"],
+            "commonOrganizations": ["KSAF", "NewsNet"]
+          },
+          {
+            "id": "academic",
+            "name": "Academic",
+            "description": "A professor or researcher who provides analysis, translation, and obscure knowledge.",
+            "suggestedConnection": [2, 4],
+            "suggestedLoyalty": [1, 3],
+            "commonServices": ["research", "translation", "artifact-analysis", "historical-records"],
+            "riskProfile": "low",
+            "typicalCosts": {
+              "research": 200,
+              "translation": 100,
+              "artifact-analysis": 500,
+              "historical-records": 150
+            },
+            "commonLocations": ["Seattle"],
+            "commonOrganizations": ["University of Washington", "MIT&T"]
+          },
+          {
+            "id": "decker",
+            "name": "Decker",
+            "description": "A matrix specialist who provides hacking services and digital intelligence.",
+            "suggestedConnection": [2, 5],
+            "suggestedLoyalty": [1, 3],
+            "commonServices": ["matrix-search", "file-retrieval", "host-mapping", "icon-creation"],
+            "riskProfile": "medium",
+            "typicalCosts": {
+              "matrix-search": 100,
+              "file-retrieval": 500,
+              "host-mapping": 300,
+              "icon-creation": 200
+            },
+            "commonLocations": ["Matrix"],
+            "commonOrganizations": []
+          },
+          {
+            "id": "rigger",
+            "name": "Rigger",
+            "description": "A vehicle specialist who provides transportation, drones, and mechanical expertise.",
+            "suggestedConnection": [2, 4],
+            "suggestedLoyalty": [1, 3],
+            "commonServices": ["transportation", "drone-loan", "vehicle-modification", "smuggling"],
+            "riskProfile": "medium",
+            "typicalCosts": {
+              "transportation": 100,
+              "drone-loan": 500,
+              "vehicle-modification": 800,
+              "smuggling": 1000
+            },
+            "commonLocations": ["Seattle", "Tacoma"],
+            "commonOrganizations": []
+          }
+        ]
+      }
+    },
+    "favorServices": {
+      "mergeStrategy": "replace",
+      "payload": {
+        "services": [
+          {
+            "id": "information-basic",
+            "name": "Basic Information",
+            "description": "General information about a topic, person, or place that the contact might know.",
+            "minimumConnection": 1,
+            "minimumLoyalty": 1,
+            "favorCost": 1,
+            "nuyenCost": 0,
+            "riskLevel": "trivial",
+            "burnRiskOnFailure": false,
+            "opposedTest": false,
+            "threshold": 1,
+            "typicalTime": "1 hour",
+            "canRush": true,
+            "rushCostMultiplier": 2
+          },
+          {
+            "id": "information-detailed",
+            "name": "Detailed Information",
+            "description": "Specific, detailed information requiring research or insider knowledge.",
+            "minimumConnection": 2,
+            "minimumLoyalty": 2,
+            "favorCost": 2,
+            "nuyenCost": "connection * 100",
+            "riskLevel": "low",
+            "burnRiskOnFailure": false,
+            "opposedTest": false,
+            "threshold": 2,
+            "typicalTime": "4 hours",
+            "canRush": true,
+            "rushCostMultiplier": 3
+          },
+          {
+            "id": "information-restricted",
+            "name": "Restricted Information",
+            "description": "Classified or dangerous information that could put the contact at risk.",
+            "minimumConnection": 3,
+            "minimumLoyalty": 3,
+            "favorCost": 3,
+            "nuyenCost": "connection * 500",
+            "riskLevel": "medium",
+            "burnRiskOnFailure": true,
+            "burnThreshold": 1,
+            "opposedTest": false,
+            "threshold": 3,
+            "typicalTime": "1 day",
+            "canRush": true,
+            "rushCostMultiplier": 4
+          },
+          {
+            "id": "introduction-casual",
+            "name": "Casual Introduction",
+            "description": "An introduction to someone in the contact's network, no strings attached.",
+            "minimumConnection": 2,
+            "minimumLoyalty": 2,
+            "favorCost": 1,
+            "nuyenCost": 100,
+            "riskLevel": "trivial",
+            "burnRiskOnFailure": false,
+            "opposedTest": false,
+            "typicalTime": "1 day",
+            "canRush": true,
+            "rushCostMultiplier": 2
+          },
+          {
+            "id": "introduction-vouched",
+            "name": "Vouched Introduction",
+            "description": "An introduction with the contact vouching for you, putting their reputation on the line.",
+            "minimumConnection": 3,
+            "minimumLoyalty": 4,
+            "favorCost": 3,
+            "nuyenCost": 500,
+            "riskLevel": "medium",
+            "burnRiskOnFailure": true,
+            "burnThreshold": 2,
+            "opposedTest": false,
+            "typicalTime": "2 days",
+            "canRush": true,
+            "rushCostMultiplier": 3
+          },
+          {
+            "id": "equipment-common",
+            "name": "Common Equipment",
+            "description": "Procurement of commonly available gear at fair prices.",
+            "minimumConnection": 1,
+            "minimumLoyalty": 1,
+            "favorCost": 0,
+            "nuyenCost": 50,
+            "riskLevel": "trivial",
+            "burnRiskOnFailure": false,
+            "opposedTest": false,
+            "typicalTime": "1 day",
+            "canRush": true,
+            "rushCostMultiplier": 2
+          },
+          {
+            "id": "equipment-restricted",
+            "name": "Restricted Equipment",
+            "description": "Procurement of restricted or hard-to-find gear.",
+            "minimumConnection": 3,
+            "minimumLoyalty": 2,
+            "favorCost": 1,
+            "nuyenCost": "connection * 200",
+            "riskLevel": "low",
+            "burnRiskOnFailure": false,
+            "opposedTest": false,
+            "threshold": 2,
+            "typicalTime": "3 days",
+            "canRush": true,
+            "rushCostMultiplier": 3
+          },
+          {
+            "id": "equipment-forbidden",
+            "name": "Forbidden Equipment",
+            "description": "Procurement of illegal or military-grade gear.",
+            "minimumConnection": 4,
+            "minimumLoyalty": 3,
+            "favorCost": 2,
+            "nuyenCost": "connection * 500",
+            "riskLevel": "high",
+            "burnRiskOnFailure": true,
+            "burnThreshold": 1,
+            "opposedTest": false,
+            "threshold": 3,
+            "typicalTime": "1 week",
+            "canRush": true,
+            "rushCostMultiplier": 4
+          },
+          {
+            "id": "safe-house",
+            "name": "Safe House",
+            "description": "Temporary shelter in a secure location.",
+            "minimumConnection": 2,
+            "minimumLoyalty": 2,
+            "favorCost": 1,
+            "nuyenCost": 200,
+            "riskLevel": "low",
+            "burnRiskOnFailure": false,
+            "opposedTest": false,
+            "typicalTime": "4 hours",
+            "canRush": true,
+            "rushCostMultiplier": 2
+          },
+          {
+            "id": "medical-basic",
+            "name": "Basic Medical Care",
+            "description": "First aid and stabilization of injuries.",
+            "minimumConnection": 1,
+            "minimumLoyalty": 1,
+            "favorCost": 0,
+            "nuyenCost": 100,
+            "riskLevel": "trivial",
+            "burnRiskOnFailure": false,
+            "opposedTest": false,
+            "typicalTime": "1 hour",
+            "canRush": false,
+            "archetypeIds": ["street-doc"]
+          },
+          {
+            "id": "medical-surgery",
+            "name": "Surgery",
+            "description": "Surgical treatment of serious injuries or augmentation installation.",
+            "minimumConnection": 2,
+            "minimumLoyalty": 2,
+            "favorCost": 1,
+            "nuyenCost": "connection * 500",
+            "riskLevel": "low",
+            "burnRiskOnFailure": false,
+            "opposedTest": false,
+            "threshold": 2,
+            "typicalTime": "1 day",
+            "canRush": false,
+            "archetypeIds": ["street-doc"]
+          },
+          {
+            "id": "job-referral",
+            "name": "Job Referral",
+            "description": "Information about potential shadowrun jobs.",
+            "minimumConnection": 2,
+            "minimumLoyalty": 1,
+            "favorCost": 0,
+            "nuyenCost": 0,
+            "riskLevel": "trivial",
+            "burnRiskOnFailure": false,
+            "opposedTest": false,
+            "typicalTime": "1 day",
+            "canRush": false,
+            "archetypeIds": ["fixer", "mr-johnson"]
+          },
+          {
+            "id": "cover-story",
+            "name": "Cover Story Support",
+            "description": "The contact vouches for your cover identity if questioned.",
+            "minimumConnection": 2,
+            "minimumLoyalty": 3,
+            "favorCost": 2,
+            "nuyenCost": 300,
+            "riskLevel": "medium",
+            "burnRiskOnFailure": true,
+            "burnThreshold": 2,
+            "opposedTest": true,
+            "typicalTime": "Immediate",
+            "canRush": false
+          },
+          {
+            "id": "transportation",
+            "name": "Transportation",
+            "description": "Transportation to a destination, discretion guaranteed.",
+            "minimumConnection": 1,
+            "minimumLoyalty": 1,
+            "favorCost": 0,
+            "nuyenCost": 100,
+            "riskLevel": "trivial",
+            "burnRiskOnFailure": false,
+            "opposedTest": false,
+            "typicalTime": "Immediate",
+            "canRush": true,
+            "rushCostMultiplier": 2,
+            "archetypeIds": ["rigger"]
+          },
+          {
+            "id": "smuggling",
+            "name": "Smuggling",
+            "description": "Transportation of goods or people across borders or checkpoints.",
+            "minimumConnection": 3,
+            "minimumLoyalty": 2,
+            "favorCost": 2,
+            "nuyenCost": "connection * 300",
+            "riskLevel": "high",
+            "burnRiskOnFailure": true,
+            "burnThreshold": 1,
+            "opposedTest": false,
+            "threshold": 3,
+            "typicalTime": "1 day",
+            "canRush": true,
+            "rushCostMultiplier": 3,
+            "archetypeIds": ["rigger", "fixer"]
+          },
+          {
+            "id": "muscle-hire",
+            "name": "Muscle for Hire",
+            "description": "Temporary muscle for protection or intimidation.",
+            "minimumConnection": 2,
+            "minimumLoyalty": 2,
+            "favorCost": 1,
+            "nuyenCost": "connection * 200",
+            "riskLevel": "medium",
+            "burnRiskOnFailure": false,
+            "opposedTest": false,
+            "typicalTime": "4 hours",
+            "canRush": true,
+            "rushCostMultiplier": 2,
+            "archetypeIds": ["gang-leader", "fixer"]
+          },
+          {
+            "id": "fake-sin",
+            "name": "Fake SIN",
+            "description": "Creation or renewal of a fake System Identification Number.",
+            "minimumConnection": 3,
+            "minimumLoyalty": 2,
+            "favorCost": 2,
+            "nuyenCost": 2500,
+            "riskLevel": "high",
+            "burnRiskOnFailure": true,
+            "burnThreshold": 1,
+            "opposedTest": false,
+            "threshold": 3,
+            "typicalTime": "1 week",
+            "canRush": true,
+            "rushCostMultiplier": 3,
+            "archetypeIds": ["id-manufacturer"]
+          }
+        ]
+      }
+    },
+    "socialModifiers": {
+      "mergeStrategy": "replace",
+      "payload": {
+        "attitudeModifiers": [
+          { "attitude": "friendly", "modifier": 2, "description": "Target is well-disposed toward you" },
+          { "attitude": "neutral", "modifier": 0, "description": "Target has no strong feelings" },
+          { "attitude": "suspicious", "modifier": -1, "description": "Target is wary of you" },
+          { "attitude": "prejudiced", "modifier": -2, "description": "Target has prejudice against you" },
+          { "attitude": "hostile", "modifier": -3, "description": "Target actively dislikes you" },
+          { "attitude": "enemy", "modifier": -5, "description": "Target considers you an enemy" }
+        ],
+        "resultModifiers": [
+          { "result": "advantageous", "modifier": 1, "description": "Request benefits the target" },
+          { "result": "neutral", "modifier": 0, "description": "Request has no impact on target" },
+          { "result": "disadvantageous", "modifier": -2, "description": "Request harms target's interests" },
+          { "result": "dangerous", "modifier": -4, "description": "Request puts target at risk" }
+        ],
+        "reputationModifiers": [
+          { "type": "streetCred", "perPoint": 1, "max": 3, "description": "+1 per 3 Street Cred" },
+          { "type": "notoriety", "perPoint": -1, "max": -3, "description": "-1 per 3 Notoriety" },
+          { "type": "publicAwareness", "perPoint": 0, "description": "May prevent contact from helping" }
+        ],
+        "loyaltyEffects": [
+          { "loyalty": 1, "description": "Contact will only help for pay, may betray you" },
+          { "loyalty": 2, "description": "Contact will help for reasonable compensation" },
+          { "loyalty": 3, "description": "Contact considers you a friend" },
+          { "loyalty": 4, "description": "Contact will take risks for you" },
+          { "loyalty": 5, "description": "Contact will put themselves in danger for you" },
+          { "loyalty": 6, "description": "Contact would die for you" }
+        ],
+        "connectionEffects": [
+          { "connection": 1, "description": "Limited resources and influence" },
+          { "connection": 2, "description": "Some useful connections" },
+          { "connection": 3, "description": "Well-connected in their field" },
+          { "connection": 4, "description": "Significant resources and reach" },
+          { "connection": 5, "description": "Major player in their domain" },
+          { "connection": 6, "description": "Top tier influence and resources" }
+        ]
+      }
     }
   }
 }
