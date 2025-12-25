@@ -321,7 +321,14 @@ export type CampaignActivityType =
     | "post_created"
     | "campaign_updated"
     | "location_added"
-    | "location_updated";
+    | "location_updated"
+    // Grunt team activities
+    | "grunt_team_created"
+    | "grunt_team_updated"
+    | "grunt_team_deleted"
+    | "grunt_casualties"
+    | "grunt_morale_break"
+    | "grunt_morale_rally";
 
 /**
  * Campaign activity feed entry
@@ -336,7 +343,7 @@ export interface CampaignActivityEvent {
 
     /** Target of the activity (character, player, session, etc.) */
     targetId?: ID;
-    targetType?: "character" | "player" | "session" | "post" | "location" | "campaign";
+    targetType?: "character" | "player" | "session" | "post" | "location" | "campaign" | "grunt_team";
     targetName?: string;
 
     /** Human-readable description */

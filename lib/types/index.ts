@@ -287,3 +287,50 @@ export type {
   EditionDiscoveryResponse,
 } from "./discovery";
 
+// NPC/Grunt types
+export type {
+  // Core grunt types
+  GruntAttributes,
+  GruntStats,
+  LieutenantStats,
+  GruntSpecialist,
+  GruntTeamState,
+  GruntTeamOptions,
+  GruntVisibility,
+  GruntTeam,
+  ProfessionalRating,
+  // Combat tracking types
+  MoraleState,
+  IndividualGrunt,
+  IndividualGrunts,
+  SimplifiedGruntsRules,
+  DamageType,
+  DamageResult,
+  // Template types
+  MoraleTier,
+  GruntTemplate,
+  GruntTemplateCategory,
+  // API types
+  CreateGruntTeamRequest,
+  UpdateGruntTeamRequest,
+  ApplyDamageRequest,
+  BulkDamageRequest,
+  SpendEdgeRequest,
+  RollInitiativeRequest,
+  GruntTeamResponse,
+  GruntTeamsListResponse,
+  GruntTeamDetailResponse,
+  DamageResponse,
+  BulkDamageResponse,
+  InitiativeResponse,
+  GruntTemplatesResponse,
+  // Activity types
+  GruntActivityType,
+} from "./grunts";
+
+// Grunt constants
+export {
+  PROFESSIONAL_RATING_DESCRIPTIONS,
+  DEFAULT_MORALE_TIERS,
+} from "./grunts";
+

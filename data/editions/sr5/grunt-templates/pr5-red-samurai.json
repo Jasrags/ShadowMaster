@@ -1,0 +1,113 @@
+{
+  "id": "pr5-red-samurai",
+  "editionCode": "sr5",
+  "professionalRating": 5,
+  "name": "Red Samurai",
+  "description": "Renraku Red Samurai, Tir Ghosts, or elite corporate assets. Among the best trained and equipped forces in the world.",
+  "category": "military",
+  "baseGrunts": {
+    "attributes": {
+      "body": 5,
+      "agility": 6,
+      "reaction": 6,
+      "strength": 5,
+      "willpower": 5,
+      "logic": 4,
+      "intuition": 5,
+      "charisma": 3
+    },
+    "essence": 4,
+    "skills": {
+      "Pistols": 6,
+      "Automatics": 6,
+      "Longarms": 5,
+      "Heavy Weapons": 4,
+      "Throwing Weapons": 4,
+      "Blades": 5,
+      "Unarmed Combat": 5,
+      "Perception": 6,
+      "Sneaking": 5,
+      "Running": 5,
+      "Gymnastics": 4,
+      "First Aid": 4,
+      "Demolitions": 3,
+      "Pilot Ground Craft": 3
+    },
+    "cyberware": [
+      {
+        "name": "Wired Reflexes (Rating 2)",
+        "grade": "alphaware"
+      },
+      {
+        "name": "Smartlink",
+        "grade": "alphaware"
+      },
+      {
+        "name": "Cybereyes (Rating 3)",
+        "grade": "alphaware"
+      },
+      {
+        "name": "Muscle Toner (Rating 2)",
+        "grade": "alphaware"
+      }
+    ],
+    "weapons": [
+      {
+        "name": "Ares Alpha (Smartgun)",
+        "damage": "11P",
+        "type": "ranged",
+        "category": "assault-rifle"
+      },
+      {
+        "name": "Ares Predator V (Smartgun)",
+        "damage": "8P",
+        "type": "ranged",
+        "category": "heavy-pistol"
+      },
+      {
+        "name": "Katana",
+        "damage": "9P",
+        "type": "melee",
+        "category": "blade"
+      }
+    ],
+    "armor": [
+      {
+        "name": "Red Samurai Armor",
+        "rating": 18
+      },
+      {
+        "name": "Ballistic Helmet",
+        "rating": 3
+      }
+    ],
+    "gear": [
+      {
+        "name": "Commlink (Fairlight Excalibur)",
+        "category": "electronics"
+      },
+      {
+        "name": "Medkit (Rating 6)",
+        "category": "medical"
+      },
+      {
+        "name": "HE Grenade x2",
+        "category": "weapons"
+      },
+      {
+        "name": "Neurostun Gas Grenade x2",
+        "category": "weapons"
+      }
+    ],
+    "conditionMonitorSize": 11
+  },
+  "defaultOptions": {
+    "useGroupInitiative": false,
+    "useSimplifiedRules": false
+  },
+  "moraleTier": {
+    "breakThreshold": 75,
+    "rallyCost": 1,
+    "canRally": true
+  }
+}

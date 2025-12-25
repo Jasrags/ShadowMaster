@@ -1,0 +1,56 @@
+{
+  "id": "pr0-street-rabble",
+  "editionCode": "sr5",
+  "professionalRating": 0,
+  "name": "Street Rabble",
+  "description": "Untrained civilians, desperate gangers, or panicked bystanders. Break at first sign of real resistance.",
+  "category": "gang",
+  "baseGrunts": {
+    "attributes": {
+      "body": 2,
+      "agility": 2,
+      "reaction": 2,
+      "strength": 2,
+      "willpower": 2,
+      "logic": 2,
+      "intuition": 2,
+      "charisma": 2
+    },
+    "essence": 6,
+    "skills": {
+      "Pistols": 1,
+      "Clubs": 1
+    },
+    "weapons": [
+      {
+        "name": "Hold-Out Pistol",
+        "damage": "6P",
+        "type": "ranged",
+        "category": "holdout-pistol"
+      },
+      {
+        "name": "Club",
+        "damage": "4P",
+        "type": "melee",
+        "category": "club"
+      }
+    ],
+    "armor": [
+      {
+        "name": "Street Clothes",
+        "rating": 0
+      }
+    ],
+    "gear": [],
+    "conditionMonitorSize": 9
+  },
+  "defaultOptions": {
+    "useGroupInitiative": true,
+    "useSimplifiedRules": true
+  },
+  "moraleTier": {
+    "breakThreshold": 25,
+    "rallyCost": 0,
+    "canRally": false
+  }
+}
