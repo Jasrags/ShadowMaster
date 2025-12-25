@@ -39,7 +39,10 @@ export type AuditAction =
   | "campaign_left"
   | "approval_requested"
   | "approval_granted"
-  | "approval_rejected";
+  | "approval_rejected"
+  // Damage/Healing actions
+  | "damage_applied"
+  | "damage_healed";
 
 // =============================================================================
 // ACTOR TYPES

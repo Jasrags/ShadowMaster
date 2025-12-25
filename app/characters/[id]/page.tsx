@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState, use, useMemo } from "react";
+import { useEffect, useState, use, useMemo, useCallback } from "react";
 import { Link, Button, Modal, ModalOverlay, Dialog, Heading } from "react-aria-components";
 import type {
   Character,
@@ -29,11 +29,13 @@ import {
 } from "@/lib/rules";
 import {
   calculateLimit,
+  calculateWoundModifier,
 } from "@/lib/rules/qualities";
 import { DownloadIcon, X } from "lucide-react";
 import { THEMES, DEFAULT_THEME, type Theme, type ThemeId } from "@/lib/themes";
 import { QualitiesSection } from "./components/QualitiesSection";
 import { Section } from "./components/Section";
+import { InteractiveConditionMonitor } from "./components/InteractiveConditionMonitor";
 
 // =============================================================================
 // ICONS
@@ -117,100 +119,9 @@ function getAttributeBonus(character: Character, attrId: string): Array<{ source
 
 
 // =============================================================================
-// CONDITION MONITOR COMPONENT
+// NOTE: ConditionMonitor component has been replaced by InteractiveConditionMonitor
+// located in ./components/InteractiveConditionMonitor.tsx
 // =============================================================================
-
-interface ConditionMonitorProps {
-  label: string;
-  maxBoxes: number;
-  filledBoxes: number;
-  color: "physical" | "stun" | "overflow";
-  theme?: Theme;
-}
-
-function ConditionMonitor({ label, maxBoxes, filledBoxes, color, theme }: ConditionMonitorProps) {
-  const t = theme || THEMES[DEFAULT_THEME];
-
-  const colorClasses = {
-    physical: {
-      filled: "bg-red-500 border-red-400 shadow-red-500/50",
-      empty: t.id === 'modern-card' ? "border-red-200 bg-red-50" : "border-red-900/50 bg-red-950/30",
-      text: "text-red-500 dark:text-red-400",
-    },
-    stun: {
-      filled: "bg-amber-500 border-amber-400 shadow-amber-500/50",
-      empty: t.id === 'modern-card' ? "border-amber-200 bg-amber-50" : "border-amber-900/50 bg-amber-950/30",
-      text: "text-amber-600 dark:text-amber-400",
-    },
-    overflow: {
-      filled: "bg-zinc-500 border-zinc-400 shadow-zinc-500/50",
-      empty: t.id === 'modern-card' ? "border-zinc-200 bg-zinc-50" : "border-zinc-800 bg-zinc-900/50",
-      text: "text-zinc-500 dark:text-zinc-400",
-    },
-  };
-  const colors = colorClasses[color];
-
-  const isStandard = color === "physical" || color === "stun";
-  let content;
-
-  if (isStandard) {
-    const rows = [];
-    for (let i = 0; i < maxBoxes; i += 3) {
-      const boxesInRow = [];
-      for (let j = 0; j < 3; j++) {
-        const boxIndex = i + j;
-        if (boxIndex >= maxBoxes) break;
-        const isFilled = boxIndex < filledBoxes;
-        boxesInRow.push(
-          <div
-            key={boxIndex}
-            className={`h-5 w-5 border-2 transition-all ${isFilled ? `${colors.filled} shadow-sm` : colors.empty
-              } ${t.id === 'modern-card' ? 'rounded-sm' : ''}`}
-            style={t.id === 'neon-rain' ? { clipPath: "polygon(15% 0, 100% 0, 100% 85%, 85% 100%, 0 100%, 0 15%)" } : undefined}
-          />
-        );
-      }
-      const penalty = Math.floor((i + 3) / 3);
-      rows.push(
-        <div key={i} className="flex items-center gap-1.5">
-          <div className="flex gap-1">{boxesInRow}</div>
-          <span className="text-[9px] font-bold text-muted-foreground/40 tabular-nums w-4">
-            -{penalty}
-          </span>
-        </div>
-      );
-    }
-    content = <div className="flex flex-col gap-2">{rows}</div>;
-  } else {
-    const boxes = [];
-    for (let i = 0; i < maxBoxes; i++) {
-      const isFilled = i < filledBoxes;
-      boxes.push(
-        <div
-          key={i}
-          className={`h-5 w-5 border-2 transition-all ${isFilled ? `${colors.filled} shadow-sm` : colors.empty
-            } ${t.id === 'modern-card' ? 'rounded-sm' : ''}`}
-          style={t.id === 'neon-rain' ? { clipPath: "polygon(15% 0, 100% 0, 100% 85%, 85% 100%, 0 100%, 0 15%)" } : undefined}
-        />
-      );
-    }
-    content = <div className="flex flex-wrap gap-2 items-start">{boxes}</div>;
-  }
-
-  return (
-    <div className={`p-2 rounded hover:bg-muted/30 transition-colors group ${t.id === 'modern-card' ? 'bg-stone-50 dark:bg-stone-900 border border-stone-200 dark:border-stone-800' : ''}`}>
-      <div className="flex items-center gap-2 mb-2 pb-1.5 border-b border-border/10">
-        <span className={`text-[10px] ${t.fonts.mono} font-bold uppercase tracking-wider text-muted-foreground group-hover:${colors.text} transition-colors`}>
-          {label}
-        </span>
-        <span className={`text-[10px] ${t.fonts.mono} font-bold text-muted-foreground/40 tabular-nums`}>
-          [{filledBoxes}/{maxBoxes}]
-        </span>
-      </div>
-      {content}
-    </div>
-  );
-}
 
 // =============================================================================
 // ATTRIBUTE BLOCK COMPONENT
@@ -1031,6 +942,32 @@ function CharacterSheet({
   const physicalMonitorMax = Math.ceil((character.attributes?.body || 1) / 2) + 8;
   const stunMonitorMax = Math.ceil((character.attributes?.willpower || 1) / 2) + 8;
   
+  // Calculate wound modifier (tracks both physical and stun damage)
+  const woundModifier = useMemo(() => {
+    if (ruleset) {
+      const physicalMod = calculateWoundModifier(character, ruleset, "physical");
+      const stunMod = calculateWoundModifier(character, ruleset, "stun");
+      return physicalMod + stunMod;
+    }
+    // Fallback to base calculation: -1 per 3 boxes on either track
+    const physicalDamage = character.condition?.physicalDamage || 0;
+    const stunDamage = character.condition?.stunDamage || 0;
+    return -Math.floor(physicalDamage / 3) - Math.floor(stunDamage / 3);
+  }, [character, ruleset]);
+
+  // Handler for when damage is applied via interactive monitors
+  const handleDamageApplied = useCallback((type: "physical" | "stun" | "overflow", newValue: number) => {
+    // Update local character state to reflect new damage
+    setCharacter({
+      ...character,
+      condition: {
+        ...character.condition,
+        [type === "physical" ? "physicalDamage" : type === "stun" ? "stunDamage" : "overflowDamage"]: newValue,
+      },
+    });
+  }, [character, setCharacter]);
+
+  
   // Calculate limits with quality modifiers if ruleset is available
   const physicalLimit = useMemo(() => {
     if (ruleset) {
@@ -1298,28 +1235,45 @@ function CharacterSheet({
             {/* Condition Monitors */}
             <Section theme={theme} title="Condition">
               <div className="space-y-6">
+                {/* Wound Modifier Banner */}
+                {woundModifier !== 0 && (
+                  <div className={`p-2 rounded text-center ${
+                    theme.id === 'modern-card' 
+                      ? 'bg-amber-50 border border-amber-200 text-amber-700' 
+                      : 'bg-amber-500/10 border border-amber-500/30 text-amber-400'
+                  }`}>
+                    <span className="text-xs font-mono uppercase">Total Wound Modifier: </span>
+                    <span className="font-bold">{woundModifier}</span>
+                  </div>
+                )}
                 <div className="grid grid-cols-2 gap-4">
-                  <ConditionMonitor
+                  <InteractiveConditionMonitor
+                    characterId={character.id}
+                    type="physical"
+                    current={character.condition?.physicalDamage ?? 0}
+                    max={physicalMonitorMax}
                     theme={theme}
-                    label="Physical"
-                    maxBoxes={physicalMonitorMax}
-                    filledBoxes={character.condition?.physicalDamage ?? 0}
-                    color="physical"
+                    readonly={character.status !== "draft" && character.status !== "active"}
+                    onDamageApplied={(newValue) => handleDamageApplied("physical", newValue)}
                   />
-                  <ConditionMonitor
+                  <InteractiveConditionMonitor
+                    characterId={character.id}
+                    type="stun"
+                    current={character.condition?.stunDamage ?? 0}
+                    max={stunMonitorMax}
                     theme={theme}
-                    label="Stun"
-                    maxBoxes={stunMonitorMax}
-                    filledBoxes={character.condition?.stunDamage ?? 0}
-                    color="stun"
+                    readonly={character.status !== "draft" && character.status !== "active"}
+                    onDamageApplied={(newValue) => handleDamageApplied("stun", newValue)}
                   />
                 </div>
-                <ConditionMonitor
+                <InteractiveConditionMonitor
+                  characterId={character.id}
+                  type="overflow"
+                  current={character.condition?.overflowDamage ?? 0}
+                  max={character.attributes?.body || 3}
                   theme={theme}
-                  label="Overflow"
-                  maxBoxes={character.attributes?.body || 3}
-                  filledBoxes={character.condition?.overflowDamage ?? 0}
-                  color="overflow"
+                  readonly={character.status !== "draft" && character.status !== "active"}
+                  onDamageApplied={(newValue) => handleDamageApplied("overflow", newValue)}
                 />
               </div>
             </Section>
