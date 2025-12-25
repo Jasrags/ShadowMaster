@@ -1,0 +1,8 @@
+#!/usr/bin/env sh
+. "$(dirname -- "$0")/_/husky.sh"
+
+# Run knip check before pushing
+# This is non-blocking but will show warnings
+# To make it blocking, remove the || true and adjust --max-issues
+pnpm knip --max-issues 100 || echo "⚠️  Knip found issues. Run 'pnpm knip' to see details or 'pnpm knip:fix' to auto-fix."
+
