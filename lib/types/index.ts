@@ -334,3 +334,49 @@ export {
   DEFAULT_MORALE_TIERS,
 } from "./grunts";
 
+// Contact and Social Governance types
+export type {
+  // Core contact types
+  ContactStatus,
+  ContactGroup,
+  ContactVisibility,
+  SocialContact,
+  ContactArchetype,
+  // Favor ledger types
+  FavorTransactionType,
+  FavorRiskLevel,
+  FavorTransaction,
+  FavorLedger,
+  // Social capital types
+  SocialCapital,
+  SocialActionType,
+  SocialModifier,
+  SocialAction,
+  // Favor cost table types
+  FavorCostTable,
+  FavorServiceDefinition,
+  // API types
+  CreateContactRequest,
+  UpdateContactRequest,
+  ContactStateChangeRequest,
+  CallFavorRequest,
+  CreateFavorTransactionRequest,
+  NetworkingActionRequest,
+  ContactResponse,
+  ContactsListResponse,
+  FavorLedgerResponse,
+  SocialCapitalResponse,
+  CallFavorResponse,
+  NetworkingActionResponse,
+  // Activity types
+  SocialActivityType,
+  // Filter types
+  ContactFilters,
+} from "./contacts";
+
+// Contact visibility defaults
+export {
+  DEFAULT_CONTACT_VISIBILITY,
+  GM_CONTACT_VISIBILITY,
+} from "./contacts";
+
