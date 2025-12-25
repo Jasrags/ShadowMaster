@@ -7,7 +7,7 @@
  */
 
 import type { Character, Campaign, ValidationError } from "../types";
-import type { ValidationResult } from "./validation";
+import type { ValidationResult } from "./constraint-validation";
 
 /**
  * Validates that a character is compliant with a campaign's ruleset configuration.

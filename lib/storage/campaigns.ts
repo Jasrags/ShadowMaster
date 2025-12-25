@@ -10,7 +10,7 @@ import { v4 as uuidv4 } from "uuid";
 import type { ID } from "../types";
 import type { Campaign, CampaignTemplate, CreateCampaignRequest, CampaignPost, CampaignEvent, CampaignAdvancementSettings } from "../types/campaign";
 import { validateCharacterCampaignCompliance } from "../rules/campaign-validation";
-import type { ValidationResult } from "../rules/validation";
+import type { ValidationResult } from "../rules/constraint-validation";
 import { getAllCharacters, updateCharacter } from "./characters";
 import { getEdition } from "./editions";
 
