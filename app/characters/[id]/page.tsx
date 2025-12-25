@@ -75,6 +75,14 @@ function PrinterIcon({ className }: { className?: string }) {
   );
 }
 
+function TrendingUpIcon({ className }: { className?: string }) {
+  return (
+    <svg className={className} fill="none" viewBox="0 0 24 24" stroke="currentColor">
+      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6" />
+    </svg>
+  );
+}
+
 
 
 
@@ -1081,6 +1089,15 @@ function CharacterSheet({
           >
             <DiceIcon className={`w-6 h-6 ${showDiceRoller ? theme.colors.accent : ""}`} />
           </Button>
+          {character.status === "active" && (
+            <Link
+              href={`/characters/${character.id}/advancement`}
+              className="p-2 text-muted-foreground hover:text-emerald-400 transition-colors"
+              aria-label="Character Advancement"
+            >
+              <TrendingUpIcon className="w-5 h-5" />
+            </Link>
+          )}
           {(character.status === "draft") && (
             <Link
               href={`/characters/${character.id}/edit`}
@@ -1133,10 +1150,14 @@ function CharacterSheet({
 
             {/* Quick Stats */}
             <div className={`grid grid-cols-2 sm:grid-cols-4 gap-3 ${theme.fonts.mono}`}>
-              <div className={`p-3 rounded border ${theme.colors.card} ${theme.colors.border} flex flex-col items-center min-w-[80px]`}>
-                <span className="text-xs text-muted-foreground uppercase tracking-wider">Karma</span>
+              <Link
+                href={`/characters/${character.id}/advancement`}
+                className={`p-3 rounded border ${theme.colors.card} ${theme.colors.border} flex flex-col items-center min-w-[80px] cursor-pointer hover:border-emerald-500/50 transition-colors group`}
+              >
+                <span className="text-xs text-muted-foreground uppercase tracking-wider group-hover:text-emerald-400 transition-colors">Karma</span>
                 <span className={`text-xl font-bold ${theme.colors.accent}`}>{character.karmaCurrent}</span>
-              </div>
+                <span className="text-[10px] text-muted-foreground">of {character.karmaTotal} earned</span>
+              </Link>
               <div className={`p-3 rounded border ${theme.colors.card} ${theme.colors.border} flex flex-col items-center min-w-[80px]`}>
                 <span className="text-xs text-muted-foreground uppercase tracking-wider">Nuyen</span>
                 <span className={`text-xl font-bold ${theme.colors.heading}`}>¥{character.nuyen.toLocaleString()}</span>
