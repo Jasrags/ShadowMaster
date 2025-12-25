@@ -1,6 +1,7 @@
 import Image from "next/image";
+import Link from "next/link";
 import type { Campaign, Book, CreationMethod } from "@/lib/types";
-import { BookOpen, Zap, Shield, Clock } from "lucide-react";
+import { BookOpen, Zap, Shield, Clock, Users, MapPin, Swords } from "lucide-react";
 import { CampaignActivityFeed } from "./CampaignActivityFeed";
 
 export interface CampaignOverviewTabProps {
@@ -167,6 +168,42 @@ export default function CampaignOverviewTab({
                         <p className="text-zinc-700 dark:text-zinc-300 leading-relaxed whitespace-pre-wrap">
                             {campaign.gmNotes}
                         </p>
+                    </section>
+                )}
+
+                {/* GM Quick Actions */}
+                {isGM && (
+                    <section className="mt-8 rounded-xl border border-indigo-200 bg-indigo-50/50 p-6 dark:border-indigo-900/50 dark:bg-indigo-900/20 backdrop-blur-sm">
+                        <h3 className="mb-4 flex items-center gap-2 text-lg font-bold text-indigo-900 dark:text-indigo-400 underline decoration-indigo-500/30 underline-offset-8 text-nowrap">
+                            <Swords className="h-5 w-5" />
+                            GM Tools
+                        </h3>
+                        <div className="grid gap-3 sm:grid-cols-2">
+                            <Link
+                                href={`/campaigns/${campaign.id}/locations`}
+                                className="flex items-center gap-3 rounded-lg border border-zinc-200 bg-white p-4 dark:border-zinc-800 dark:bg-black hover:border-indigo-500/50 transition-colors shadow-sm group"
+                            >
+                                <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-green-100 dark:bg-green-900/30 group-hover:bg-green-200 dark:group-hover:bg-green-900/50 transition-colors">
+                                    <MapPin className="h-5 w-5 text-green-600 dark:text-green-400" />
+                                </div>
+                                <div>
+                                    <p className="font-bold text-zinc-900 dark:text-zinc-50">Locations</p>
+                                    <p className="text-xs text-zinc-500 dark:text-zinc-400">Manage campaign locations</p>
+                                </div>
+                            </Link>
+                            <Link
+                                href={`/campaigns/${campaign.id}/grunt-teams`}
+                                className="flex items-center gap-3 rounded-lg border border-zinc-200 bg-white p-4 dark:border-zinc-800 dark:bg-black hover:border-indigo-500/50 transition-colors shadow-sm group"
+                            >
+                                <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-red-100 dark:bg-red-900/30 group-hover:bg-red-200 dark:group-hover:bg-red-900/50 transition-colors">
+                                    <Users className="h-5 w-5 text-red-600 dark:text-red-400" />
+                                </div>
+                                <div>
+                                    <p className="font-bold text-zinc-900 dark:text-zinc-50">Grunt Teams</p>
+                                    <p className="text-xs text-zinc-500 dark:text-zinc-400">Manage NPC grunt squads</p>
+                                </div>
+                            </Link>
+                        </div>
                     </section>
                 )}
             </div>
