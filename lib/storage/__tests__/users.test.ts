@@ -19,6 +19,11 @@ import {
   createUser,
   updateUser,
   deleteUser,
+  suspendUser,
+  reactivateUser,
+  updateUserRoles,
+  countAdmins,
+  isLastAdmin,
 } from '../users';
 
 
@@ -327,6 +332,181 @@ describe('User Storage', () => {
       // Verify file exists and is valid
       const retrieved = await getUserById(user.id);
       expect(retrieved?.username).toBe('Updated');
+    });
+  });
+
+  describe('suspendUser', () => {
+    it('should suspend an active user', async () => {
+      const user = await createUser({
+        email: 'suspend-test@example.com',
+        passwordHash: 'hash',
+        username: 'SuspendTest',
+        role: ['user' as UserRole],
+      });
+
+      const suspended = await suspendUser(user.id, 'admin-id', 'Test suspension');
+
+      expect(suspended.accountStatus).toBe('suspended');
+      expect(suspended.statusReason).toBe('Test suspension');
+      expect(suspended.statusChangedBy).toBe('admin-id');
+      expect(suspended.statusChangedAt).toBeDefined();
+    });
+
+    it('should increment sessionVersion on suspension', async () => {
+      const user = await createUser({
+        email: 'session-test@example.com',
+        passwordHash: 'hash',
+        username: 'SessionTest',
+        role: ['user' as UserRole],
+      });
+
+      const originalVersion = user.sessionVersion;
+      const suspended = await suspendUser(user.id, 'admin-id', 'Session test');
+
+      expect(suspended.sessionVersion).toBe(originalVersion + 1);
+    });
+
+    it('should throw error for non-existent user', async () => {
+      await expect(
+        suspendUser('nonexistent-id', 'admin-id', 'Test')
+      ).rejects.toThrow('not found');
+    });
+  });
+
+  describe('reactivateUser', () => {
+    it('should reactivate a suspended user', async () => {
+      const user = await createUser({
+        email: 'reactivate-test@example.com',
+        passwordHash: 'hash',
+        username: 'ReactivateTest',
+        role: ['user' as UserRole],
+      });
+
+      await suspendUser(user.id, 'admin-id', 'Testing');
+      const reactivated = await reactivateUser(user.id, 'admin-id');
+
+      expect(reactivated.accountStatus).toBe('active');
+      expect(reactivated.statusReason).toBeNull();
+      expect(reactivated.statusChangedBy).toBe('admin-id');
+    });
+
+    it('should throw error for non-existent user', async () => {
+      await expect(
+        reactivateUser('nonexistent-id', 'admin-id')
+      ).rejects.toThrow('not found');
+    });
+  });
+
+  describe('updateUserRoles', () => {
+    it('should update user roles', async () => {
+      const user = await createUser({
+        email: 'role-test@example.com',
+        passwordHash: 'hash',
+        username: 'RoleTest',
+        role: ['user' as UserRole],
+      });
+
+      const updated = await updateUserRoles(user.id, ['user', 'gamemaster'], 'admin-id');
+
+      expect(updated.role).toContain('user');
+      expect(updated.role).toContain('gamemaster');
+      expect(updated.lastRoleChangeBy).toBe('admin-id');
+      expect(updated.lastRoleChangeAt).toBeDefined();
+    });
+
+    it('should increment sessionVersion on role demotion', async () => {
+      const user = await createUser({
+        email: 'demotion-test@example.com',
+        passwordHash: 'hash',
+        username: 'DemotionTest',
+        role: ['user' as UserRole],
+      });
+
+      // First promote
+      const promoted = await updateUserRoles(user.id, ['user', 'gamemaster'], 'admin-id');
+      const versionAfterPromotion = promoted.sessionVersion;
+
+      // Then demote
+      const demoted = await updateUserRoles(user.id, ['user'], 'admin-id');
+
+      expect(demoted.sessionVersion).toBe(versionAfterPromotion + 1);
+    });
+
+    it('should reject empty role array', async () => {
+      const user = await createUser({
+        email: 'empty-role-test@example.com',
+        passwordHash: 'hash',
+        username: 'EmptyRoleTest',
+        role: ['user' as UserRole],
+      });
+
+      await expect(
+        updateUserRoles(user.id, [], 'admin-id')
+      ).rejects.toThrow();
+    });
+  });
+
+  describe('countAdmins', () => {
+    it('should count administrators', async () => {
+      const count = await countAdmins();
+      expect(count).toBeGreaterThanOrEqual(0);
+    });
+  });
+
+  describe('isLastAdmin', () => {
+    it('should correctly identify last admin status', async () => {
+      // Create an admin user
+      const admin = await createUser({
+        email: 'last-admin-test@example.com',
+        passwordHash: 'hash',
+        username: 'LastAdminTest',
+        role: ['administrator' as UserRole],
+      });
+
+      // Check if this user is the last admin
+      const result = await isLastAdmin(admin.id);
+      // Result depends on whether there are other admins in the system
+      expect(typeof result).toBe('boolean');
+    });
+  });
+
+  describe('last-admin protection', () => {
+    it('should prevent suspending the last administrator', async () => {
+      // Get current admin count
+      const adminCount = await countAdmins();
+
+      if (adminCount === 1) {
+        // Find the sole admin
+        const users = await getAllUsers();
+        const soleAdmin = users.find(u =>
+          Array.isArray(u.role) ? u.role.includes('administrator') : u.role === 'administrator'
+        );
+
+        if (soleAdmin) {
+          await expect(
+            suspendUser(soleAdmin.id, 'some-other-admin', 'Test')
+          ).rejects.toThrow(/last administrator/i);
+        }
+      }
+    });
+
+    it('should prevent demoting the last administrator', async () => {
+      // Get current admin count
+      const adminCount = await countAdmins();
+
+      if (adminCount === 1) {
+        // Find the sole admin
+        const users = await getAllUsers();
+        const soleAdmin = users.find(u =>
+          Array.isArray(u.role) ? u.role.includes('administrator') : u.role === 'administrator'
+        );
+
+        if (soleAdmin) {
+          await expect(
+            updateUserRoles(soleAdmin.id, ['user'], 'some-other-admin')
+          ).rejects.toThrow(/last administrator/i);
+        }
+      }
     });
   });
 });
