@@ -5,10 +5,18 @@
  */
 
 import { v4 as uuidv4 } from "uuid";
-import type { Character, MergedRuleset, AdvancementRecord, TrainingPeriod, CampaignEvent } from "@/lib/types";
+import type {
+  Character,
+  MergedRuleset,
+  AdvancementRecord,
+  TrainingPeriod,
+  CampaignEvent,
+} from "@/lib/types";
 import type { CampaignAdvancementSettings } from "@/lib/types/campaign";
+import type { AdvancementRulesData } from "@/lib/rules/loader-types";
 import { calculateAdvancementTrainingTime } from "./training";
 import { validateAttributeAdvancement } from "./validation";
+import { spendKarma } from "./ledger";
 
 /**
  * Attribute display name mapping
@@ -81,6 +89,9 @@ export function advanceAttribute(
   ruleset: MergedRuleset,
   options: AdvanceAttributeOptions = {}
 ): AdvanceAttributeResult {
+  // Extract advancement rules from ruleset
+  const advancementRules = ruleset.modules.advancement as unknown as AdvancementRulesData;
+
   // Validate advancement (including downtime limits if applicable)
   const validation = validateAttributeAdvancement(
     character,
@@ -90,7 +101,8 @@ export function advanceAttribute(
     {
       downtimePeriodId: options.downtimePeriodId,
       campaignEvents: options.campaignEvents,
-      settings: options.settings
+      settings: options.settings,
+      ruleset: advancementRules,
     }
   );
   if (!validation.valid) {
@@ -99,52 +111,41 @@ export function advanceAttribute(
     );
   }
 
-  if (!validation.cost) {
+  const cost = validation.cost;
+  if (cost === undefined) {
     throw new Error("Cost calculation failed");
   }
-
-  const cost = validation.cost;
   const currentRating = character.attributes[attributeId] || 0;
 
-  // Check karma availability
-  if (character.karmaCurrent < cost) {
-    throw new Error(
-      `Not enough karma. Need ${cost}, have ${character.karmaCurrent}`
-    );
-  }
-
-  // Spend karma immediately
-  const karmaAfterSpending = character.karmaCurrent - cost;
-
-  // Create advancement record
-  const advancementRecordId = uuidv4();
-  const now = new Date().toISOString();
-
-  // Calculate training time (attribute training: new rating × 1 week)
+  // Calculate training time
   const trainingTime = calculateAdvancementTrainingTime("attribute", newRating, {
     instructorBonus: options.instructorBonus,
     timeModifier: options.timeModifier,
     settings: options.settings,
+    ruleset: advancementRules,
   });
 
-  const advancementRecord: AdvancementRecord = {
-    id: advancementRecordId,
-    type: "attribute",
-    targetId: attributeId,
-    targetName: getAttributeDisplayName(attributeId),
-    previousValue: currentRating,
-    newValue: newRating,
-    karmaCost: cost,
-    karmaSpentAt: now,
-    trainingRequired: true,
-    trainingStatus: trainingTime > 0 ? "pending" : "completed",
-    downtimePeriodId: options.downtimePeriodId,
-    campaignSessionId: options.campaignSessionId,
-    gmApproved: options.gmApproved || false,
-    notes: options.notes,
-    createdAt: now,
-    ...(trainingTime === 0 ? { completedAt: now } : {}),
-  };
+  // Use ledger to spend karma and create record
+  const { updatedCharacter: characterWithKarmaSpent, record: advancementRecord } = spendKarma(
+    character,
+    "attribute",
+    attributeId,
+    getAttributeDisplayName(attributeId),
+    cost,
+    currentRating,
+    newRating,
+    {
+      notes: options.notes,
+      campaignSessionId: options.campaignSessionId,
+      downtimePeriodId: options.downtimePeriodId,
+      trainingRequired: true,
+      trainingStatus: trainingTime > 0 ? "pending" : "completed",
+      gmApproved: options.gmApproved,
+    }
+  );
+
+  const advancementRecordId = advancementRecord.id;
+  const now = advancementRecord.createdAt;
 
   // Create training period if training is required
   let trainingPeriod: TrainingPeriod | undefined;
@@ -176,15 +177,10 @@ export function advanceAttribute(
   // Update character (karma spent, advancement record added, training period added)
   // NOTE: Character attribute is NOT updated yet - that happens when training completes
   const updatedCharacter: Character = {
-    ...character,
-    karmaCurrent: karmaAfterSpending,
-    advancementHistory: [
-      ...(character.advancementHistory || []),
-      advancementRecord,
-    ],
+    ...characterWithKarmaSpent,
     activeTraining: trainingPeriod
-      ? [...(character.activeTraining || []), trainingPeriod]
-      : character.activeTraining || [],
+      ? [...(characterWithKarmaSpent.activeTraining || []), trainingPeriod]
+      : characterWithKarmaSpent.activeTraining || [],
   };
 
   return {

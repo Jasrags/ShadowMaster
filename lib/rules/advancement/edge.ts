@@ -5,10 +5,11 @@
  * Edge advancement has no training time (no downtime required).
  */
 
-import { v4 as uuidv4 } from "uuid";
 import type { Character, MergedRuleset, AdvancementRecord } from "@/lib/types";
 import type { CampaignAdvancementSettings } from "@/lib/types/campaign";
-import { calculateEdgeCost } from "./costs";
+import type { AdvancementRulesData } from "@/lib/rules/loader-types";
+import { validateAttributeAdvancement } from "./validation";
+import { spendKarma } from "./ledger";
 
 /**
  * Options for advancing Edge
@@ -26,72 +27,6 @@ export interface AdvanceEdgeOptions {
 export interface AdvanceEdgeResult {
   advancementRecord: AdvancementRecord;
   updatedCharacter: Character;
-}
-
-/**
- * Validate Edge advancement
- *
- * @param character - Character to validate
- * @param newRating - Target Edge rating
- * @param settings - Campaign advancement settings
- * @returns Validation result
- */
-function validateEdgeAdvancement(
-  character: Character,
-  newRating: number,
-  settings?: CampaignAdvancementSettings
-): { valid: boolean; errors: Array<{ message: string; field?: string }>; cost?: number } {
-  const errors: Array<{ message: string; field?: string }> = [];
-  const currentRating = character.specialAttributes?.edge || 0;
-
-  // Validate rating is at least 1
-  if (newRating < 1) {
-    errors.push({
-      message: "Edge rating must be at least 1",
-      field: "rating",
-    });
-  }
-
-  // Validate rating is higher than current
-  if (newRating <= currentRating) {
-    errors.push({
-      message: `New Edge rating must be higher than current rating (current: ${currentRating})`,
-      field: "rating",
-    });
-  }
-
-  // Validate maximum Edge rating (typically 6, humans can have 7)
-  // For now, we'll use a default max of 7 (can be enhanced with ruleset-based validation later)
-  const maxEdge = 7;
-  if (newRating > maxEdge) {
-    errors.push({
-      message: `Edge rating cannot exceed ${maxEdge}`,
-      field: "rating",
-    });
-  }
-
-  // Calculate cost and validate karma
-  let cost: number | undefined;
-  try {
-    cost = calculateEdgeCost(newRating, settings);
-    if (character.karmaCurrent < cost) {
-      errors.push({
-        message: `Not enough karma. Need ${cost}, have ${character.karmaCurrent}`,
-        field: "karma",
-      });
-    }
-  } catch (error) {
-    errors.push({
-      message: error instanceof Error ? error.message : "Cost calculation failed",
-      field: "cost",
-    });
-  }
-
-  return {
-    valid: errors.length === 0,
-    errors,
-    cost,
-  };
 }
 
 /**
@@ -115,67 +50,57 @@ export function advanceEdge(
   ruleset: MergedRuleset,
   options: AdvanceEdgeOptions = {}
 ): AdvanceEdgeResult {
-  void ruleset; // Reserved for future ruleset-based validation
+  // Extract advancement rules
+  const advancementRules = ruleset.modules.advancement as unknown as AdvancementRulesData;
 
   // Validate advancement
-  const validation = validateEdgeAdvancement(character, newRating, options.settings);
+  const validation = validateAttributeAdvancement(
+    character,
+    "edge",
+    newRating,
+    ruleset,
+    {
+      settings: options.settings,
+      ruleset: advancementRules,
+    }
+  );
   if (!validation.valid) {
     throw new Error(
       `Cannot advance Edge: ${validation.errors.map((e) => e.message).join(", ")}`
     );
   }
 
-  if (!validation.cost) {
+  const cost = validation.cost;
+  if (cost === undefined) {
     throw new Error("Cost calculation failed");
   }
-
-  const cost = validation.cost;
   const currentRating = character.specialAttributes?.edge || 0;
 
-  // Check karma availability
-  if (character.karmaCurrent < cost) {
-    throw new Error(
-      `Not enough karma. Need ${cost}, have ${character.karmaCurrent}`
-    );
-  }
-
-  // Spend karma immediately
-  const karmaAfterSpending = character.karmaCurrent - cost;
-
-  // Create advancement record
-  const advancementRecordId = uuidv4();
-  const now = new Date().toISOString();
-
-  const advancementRecord: AdvancementRecord = {
-    id: advancementRecordId,
-    type: "edge",
-    targetId: "edge",
-    targetName: "Edge",
-    previousValue: currentRating,
-    newValue: newRating,
-    karmaCost: cost,
-    karmaSpentAt: now,
-    trainingRequired: false, // Edge has no training time
-    trainingStatus: "completed", // Immediately completed
-    campaignSessionId: options.campaignSessionId,
-    gmApproved: options.gmApproved || false,
-    notes: options.notes,
-    createdAt: now,
-    completedAt: now, // Completed immediately
-  };
+  // Use ledger to spend karma
+  const { updatedCharacter: characterWithKarmaSpent, record: advancementRecord } = spendKarma(
+    character,
+    "edge",
+    "edge",
+    "Edge",
+    cost,
+    currentRating,
+    newRating,
+    {
+      notes: options.notes,
+      campaignSessionId: options.campaignSessionId,
+      gmApproved: options.gmApproved,
+      trainingRequired: false,
+      trainingStatus: "completed",
+    }
+  );
 
   // Update character (karma spent, advancement record added, Edge updated immediately)
   const updatedCharacter: Character = {
-    ...character,
-    karmaCurrent: karmaAfterSpending,
+    ...characterWithKarmaSpent,
     specialAttributes: {
-      ...character.specialAttributes,
+      ...characterWithKarmaSpent.specialAttributes,
       edge: newRating,
     },
-    advancementHistory: [
-      ...(character.advancementHistory || []),
-      advancementRecord,
-    ],
   };
 
   return {

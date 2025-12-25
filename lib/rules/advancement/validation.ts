@@ -6,6 +6,7 @@
 
 import type { Character, MergedRuleset, AdvancementType, CampaignEvent } from "@/lib/types";
 import type { CampaignAdvancementSettings } from "@/lib/types/campaign";
+import type { AdvancementRulesData } from "@/lib/rules/loader-types";
 import { calculateAdvancementCost } from "./costs";
 import { validateDowntimeLimits } from "./downtime";
 
@@ -74,18 +75,22 @@ function getMetatypeAttributeLimits(
 }
 
 /**
- * Get maximum attribute rating for a character based on metatype limits
+ * Get maximum attribute rating for a character based on metatype limits and ruleset caps
  *
  * @param character - Character to check
  * @param attributeId - Attribute ID (e.g., "bod", "agi")
  * @param ruleset - Merged ruleset
+ * @param options - Optional settings and ruleset defaults
  * @returns Maximum rating allowed
  */
 export function getAttributeMaximum(
   character: Character,
   attributeId: string,
   ruleset: MergedRuleset,
-  settings?: CampaignAdvancementSettings
+  options: {
+    settings?: CampaignAdvancementSettings;
+    ruleset?: AdvancementRulesData;
+  } = {}
 ): number {
   const limits = getMetatypeAttributeLimits(character.metatype, ruleset);
   let max = 6;
@@ -93,9 +98,14 @@ export function getAttributeMaximum(
     max = limits[attributeId].max;
   }
 
+  // Apply ruleset-wide cap if defined
+  if (options.ruleset?.attributeRatingCap !== undefined) {
+    max = Math.min(max, options.ruleset.attributeRatingCap);
+  }
+
   // Apply campaign-specific cap if defined
-  if (settings?.attributeRatingCap !== undefined) {
-    max = Math.min(max, settings.attributeRatingCap);
+  if (options.settings?.attributeRatingCap !== undefined) {
+    max = Math.min(max, options.settings.attributeRatingCap);
   }
 
   return max;
@@ -118,9 +128,10 @@ export function validateAttributeAdvancement(
   newRating: number,
   ruleset: MergedRuleset,
   options: {
-    downtimePeriodId?: string,
-    campaignEvents?: CampaignEvent[],
-    settings?: CampaignAdvancementSettings
+    downtimePeriodId?: string;
+    campaignEvents?: CampaignEvent[];
+    settings?: CampaignAdvancementSettings;
+    ruleset?: AdvancementRulesData;
   } = {}
 ): AdvancementValidationResult {
   const errors: Array<{ message: string; field?: string }> = [];
@@ -137,7 +148,10 @@ export function validateAttributeAdvancement(
   }
 
   // Validate rating is within metatype limits
-  const maxRating = getAttributeMaximum(character, attributeId, ruleset, options.settings);
+  const maxRating = getAttributeMaximum(character, attributeId, ruleset, {
+    settings: options.settings,
+    ruleset: options.ruleset,
+  });
   if (newRating > maxRating) {
     errors.push({
       message: `Rating ${newRating} exceeds maximum for this metatype (${maxRating})`,
@@ -169,7 +183,12 @@ export function validateAttributeAdvancement(
   }
 
   // Calculate cost and validate karma
-  const cost = calculateAdvancementCost("attribute", newRating, options.settings);
+  const cost = calculateAdvancementCost(
+    "attribute",
+    newRating,
+    options.settings,
+    options.ruleset
+  );
   const karmaCheck = validateKarmaAvailability(character, cost);
   if (!karmaCheck.valid) {
     errors.push({
@@ -200,7 +219,10 @@ export function getSkillMaximum(
   character: Character,
   skillId: string,
   _ruleset: MergedRuleset,
-  settings?: CampaignAdvancementSettings
+  options: {
+    settings?: CampaignAdvancementSettings;
+    ruleset?: AdvancementRulesData;
+  } = {}
 ): number {
   void _ruleset; // Parameter kept for interface compatibility
   // Check if character has Aptitude quality for this skill
@@ -221,9 +243,14 @@ export function getSkillMaximum(
   // During advancement (post-creation), max is 12 (13 with Aptitude)
   let max = hasAptitude ? 13 : 12;
 
+  // Apply ruleset-wide cap if defined
+  if (options.ruleset?.skillRatingCap !== undefined) {
+    max = Math.min(max, options.ruleset.skillRatingCap);
+  }
+
   // Apply campaign-specific cap if defined
-  if (settings?.skillRatingCap !== undefined) {
-    max = Math.min(max, settings.skillRatingCap);
+  if (options.settings?.skillRatingCap !== undefined) {
+    max = Math.min(max, options.settings.skillRatingCap);
   }
 
   return max;
@@ -246,9 +273,10 @@ export function validateSkillAdvancement(
   newRating: number,
   ruleset: MergedRuleset,
   options: {
-    downtimePeriodId?: string,
-    campaignEvents?: CampaignEvent[],
-    settings?: CampaignAdvancementSettings
+    downtimePeriodId?: string;
+    campaignEvents?: CampaignEvent[];
+    settings?: CampaignAdvancementSettings;
+    ruleset?: AdvancementRulesData;
   } = {}
 ): AdvancementValidationResult {
   const errors: Array<{ message: string; field?: string }> = [];
@@ -265,7 +293,10 @@ export function validateSkillAdvancement(
   }
 
   // Validate rating is within maximum limits
-  const maxRating = getSkillMaximum(character, skillId, ruleset, options.settings);
+  const maxRating = getSkillMaximum(character, skillId, ruleset, {
+    settings: options.settings,
+    ruleset: options.ruleset,
+  });
   if (newRating > maxRating) {
     errors.push({
       message: `Rating ${newRating} exceeds maximum for skills (${maxRating})`,
@@ -297,7 +328,12 @@ export function validateSkillAdvancement(
   }
 
   // Calculate cost and validate karma
-  const cost = calculateAdvancementCost("skill", newRating, options.settings);
+  const cost = calculateAdvancementCost(
+    "skill",
+    newRating,
+    options.settings,
+    options.ruleset
+  );
   const karmaCheck = validateKarmaAvailability(character, cost);
   if (!karmaCheck.valid) {
     errors.push({
@@ -325,7 +361,10 @@ export function validateSpecializationAdvancement(
   character: Character,
   skillId: string,
   _ruleset: MergedRuleset,
-  settings?: CampaignAdvancementSettings
+  options: {
+    settings?: CampaignAdvancementSettings;
+    ruleset?: AdvancementRulesData;
+  } = {}
 ): AdvancementValidationResult {
   void _ruleset; // Parameter kept for interface compatibility
   const errors: Array<{ message: string; field?: string }> = [];
@@ -342,7 +381,12 @@ export function validateSpecializationAdvancement(
   }
 
   // Calculate cost and validate karma
-  const cost = calculateAdvancementCost("specialization", undefined, settings);
+  const cost = calculateAdvancementCost(
+    "specialization",
+    undefined,
+    options.settings,
+    options.ruleset
+  );
   const karmaCheck = validateKarmaAvailability(character, cost);
   if (!karmaCheck.valid) {
     errors.push({
@@ -387,7 +431,11 @@ export function validateCharacterNotDraft(
 export function validateAdvancement(
   character: Character,
   type: AdvancementType,
-  cost: number
+  cost: number,
+  _options: {
+    ruleset?: AdvancementRulesData;
+    settings?: CampaignAdvancementSettings;
+  } = {}
 ): AdvancementValidationResult {
   const errors: Array<{ message: string; field?: string }> = [];
 

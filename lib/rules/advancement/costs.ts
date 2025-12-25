@@ -7,97 +7,139 @@
 
 import type { AdvancementType } from "@/lib/types";
 import type { CampaignAdvancementSettings } from "@/lib/types/campaign";
+import type { AdvancementRulesData } from "@/lib/rules/loader-types";
 
 /**
  * Calculate karma cost to advance an attribute
- * Cost: new rating × 5
+ * Cost: new rating × multiplier
  *
  * @param newRating - The target rating (after advancement)
+ * @param settings - Optional campaign settings (overrides ruleset)
+ * @param ruleset - Optional ruleset defaults
  * @returns Karma cost
  */
-export function calculateAttributeCost(newRating: number, settings?: CampaignAdvancementSettings): number {
+export function calculateAttributeCost(
+  newRating: number,
+  settings?: CampaignAdvancementSettings,
+  ruleset?: AdvancementRulesData
+): number {
   if (newRating < 1) {
     throw new Error("Attribute rating must be at least 1");
   }
-  const multiplier = settings?.attributeKarmaMultiplier ?? 5;
+  const multiplier =
+    settings?.attributeKarmaMultiplier ?? ruleset?.attributeKarmaMultiplier ?? 5;
   return newRating * multiplier;
 }
 
 /**
  * Calculate karma cost to advance an active skill
- * Cost: new rating × 2
+ * Cost: new rating × multiplier
  *
  * @param newRating - The target rating (after advancement)
+ * @param settings - Optional campaign settings (overrides ruleset)
+ * @param ruleset - Optional ruleset defaults
  * @returns Karma cost
  */
-export function calculateActiveSkillCost(newRating: number, settings?: CampaignAdvancementSettings): number {
+export function calculateActiveSkillCost(
+  newRating: number,
+  settings?: CampaignAdvancementSettings,
+  ruleset?: AdvancementRulesData
+): number {
   if (newRating < 1) {
     throw new Error("Skill rating must be at least 1");
   }
-  const multiplier = settings?.skillKarmaMultiplier ?? 2;
+  const multiplier =
+    settings?.skillKarmaMultiplier ?? ruleset?.skillKarmaMultiplier ?? 2;
   return newRating * multiplier;
 }
 
 /**
  * Calculate karma cost to advance a knowledge or language skill
- * Cost: new rating × 1
+ * Cost: new rating × multiplier
  *
  * @param newRating - The target rating (after advancement)
+ * @param settings - Optional campaign settings (overrides ruleset)
+ * @param ruleset - Optional ruleset defaults
  * @returns Karma cost
  */
-export function calculateKnowledgeSkillCost(newRating: number, settings?: CampaignAdvancementSettings): number {
+export function calculateKnowledgeSkillCost(
+  newRating: number,
+  settings?: CampaignAdvancementSettings,
+  ruleset?: AdvancementRulesData
+): number {
   if (newRating < 1) {
     throw new Error("Skill rating must be at least 1");
   }
-  const multiplier = settings?.knowledgeSkillKarmaMultiplier ?? 1;
+  const multiplier =
+    settings?.knowledgeSkillKarmaMultiplier ??
+    ruleset?.knowledgeSkillKarmaMultiplier ??
+    1;
   return newRating * multiplier;
 }
 
 /**
  * Calculate karma cost to advance a skill group
- * Cost: new rating × 5
+ * Cost: new rating × multiplier
  *
  * @param newRating - The target rating (after advancement)
+ * @param settings - Optional campaign settings (overrides ruleset)
+ * @param ruleset - Optional ruleset defaults
  * @returns Karma cost
  */
-export function calculateSkillGroupCost(newRating: number, settings?: CampaignAdvancementSettings): number {
+export function calculateSkillGroupCost(
+  newRating: number,
+  settings?: CampaignAdvancementSettings,
+  ruleset?: AdvancementRulesData
+): number {
   if (newRating < 1) {
     throw new Error("Skill group rating must be at least 1");
   }
-  const multiplier = settings?.skillGroupKarmaMultiplier ?? 5;
+  const multiplier =
+    settings?.skillGroupKarmaMultiplier ?? ruleset?.skillGroupKarmaMultiplier ?? 5;
   return newRating * multiplier;
 }
 
 /**
  * Calculate karma cost for a specialization
- * Cost: 7 karma (fixed)
  *
- * @returns Karma cost (always 7)
+ * @param settings - Optional campaign settings (overrides ruleset)
+ * @param ruleset - Optional ruleset defaults
+ * @returns Karma cost
  */
-export function calculateSpecializationCost(settings?: CampaignAdvancementSettings): number {
-  return settings?.specializationKarmaCost ?? 7;
+export function calculateSpecializationCost(
+  settings?: CampaignAdvancementSettings,
+  ruleset?: AdvancementRulesData
+): number {
+  return settings?.specializationKarmaCost ?? ruleset?.specializationKarmaCost ?? 7;
 }
 
 /**
  * Calculate karma cost to advance Edge
- * Cost: new rating × 5 (same as attributes, but no downtime required)
+ * Cost: new rating × multiplier
  *
  * @param newRating - The target rating (after advancement)
+ * @param settings - Optional campaign settings (overrides ruleset)
+ * @param ruleset - Optional ruleset defaults
  * @returns Karma cost
  */
-export function calculateEdgeCost(newRating: number, settings?: CampaignAdvancementSettings): number {
+export function calculateEdgeCost(
+  newRating: number,
+  settings?: CampaignAdvancementSettings,
+  ruleset?: AdvancementRulesData
+): number {
   if (newRating < 1) {
     throw new Error("Edge rating must be at least 1");
   }
-  const multiplier = settings?.attributeKarmaMultiplier ?? 5;
+  const multiplier =
+    settings?.attributeKarmaMultiplier ?? ruleset?.attributeKarmaMultiplier ?? 5;
   return newRating * multiplier;
 }
 
 /**
  * Calculate karma cost for a new knowledge or language skill
- * Cost: 1 karma (fixed)
+ * Cost: 1 karma (fixed in SR5, but could be configurable)
  *
- * @returns Karma cost (always 1)
+ * @returns Karma cost
  */
 export function calculateNewKnowledgeSkillCost(): number {
   return 1;
@@ -105,22 +147,30 @@ export function calculateNewKnowledgeSkillCost(): number {
 
 /**
  * Calculate karma cost for learning a new spell, ritual, or preparation
- * Cost: 5 karma (fixed)
  *
- * @returns Karma cost (always 5)
+ * @param settings - Optional campaign settings (overrides ruleset)
+ * @param ruleset - Optional ruleset defaults
+ * @returns Karma cost
  */
-export function calculateSpellCost(settings?: CampaignAdvancementSettings): number {
-  return settings?.spellKarmaCost ?? 5;
+export function calculateSpellCost(
+  settings?: CampaignAdvancementSettings,
+  ruleset?: AdvancementRulesData
+): number {
+  return settings?.spellKarmaCost ?? ruleset?.spellKarmaCost ?? 5;
 }
 
 /**
  * Calculate karma cost for learning a new complex form
- * Cost: 4 karma (fixed)
  *
- * @returns Karma cost (always 4)
+ * @param settings - Optional campaign settings (overrides ruleset)
+ * @param ruleset - Optional ruleset defaults
+ * @returns Karma cost
  */
-export function calculateComplexFormCost(settings?: CampaignAdvancementSettings): number {
-  return settings?.complexFormKarmaCost ?? 4;
+export function calculateComplexFormCost(
+  settings?: CampaignAdvancementSettings,
+  ruleset?: AdvancementRulesData
+): number {
+  return settings?.complexFormKarmaCost ?? ruleset?.complexFormKarmaCost ?? 4;
 }
 
 /**
@@ -128,12 +178,15 @@ export function calculateComplexFormCost(settings?: CampaignAdvancementSettings)
  *
  * @param type - Type of advancement
  * @param newRating - New rating/value (for rated advancements)
+ * @param settings - Optional campaign settings (overrides ruleset)
+ * @param ruleset - Optional ruleset defaults
  * @returns Karma cost
  */
 export function calculateAdvancementCost(
   type: AdvancementType,
   newRating?: number,
-  settings?: CampaignAdvancementSettings
+  settings?: CampaignAdvancementSettings,
+  ruleset?: AdvancementRulesData
 ): number {
   switch (type) {
     case "attribute":
@@ -141,7 +194,7 @@ export function calculateAdvancementCost(
       if (newRating === undefined) {
         throw new Error("Rating required for attribute/edge advancement");
       }
-      return calculateAttributeCost(newRating, settings);
+      return calculateAttributeCost(newRating, settings, ruleset);
 
     case "skill":
       if (newRating === undefined) {

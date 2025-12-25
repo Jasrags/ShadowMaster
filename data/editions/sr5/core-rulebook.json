@@ -9,6 +9,22 @@
     "releaseYear": 2013
   },
   "modules": {
+    "advancement": {
+      "mergeStrategy": "replace",
+      "payload": {
+        "trainingTimeMultiplier": 1.0,
+        "attributeKarmaMultiplier": 5,
+        "skillKarmaMultiplier": 2,
+        "skillGroupKarmaMultiplier": 5,
+        "knowledgeSkillKarmaMultiplier": 1,
+        "specializationKarmaCost": 7,
+        "spellKarmaCost": 5,
+        "complexFormKarmaCost": 4,
+        "attributeRatingCap": 10,
+        "skillRatingCap": 13,
+        "allowInstantAdvancement": false
+      }
+    },
     "contactTemplates": {
       "mergeStrategy": "replace",
       "payload": {
