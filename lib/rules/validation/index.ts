@@ -1,0 +1,40 @@
+/**
+ * Character Validation Module
+ *
+ * Exports comprehensive character validation for creation and finalization.
+ * Re-exports from the existing validation module for backwards compatibility.
+ */
+
+// New validation types
+export type {
+  ValidationMode,
+  ValidationSeverity,
+  ValidationIssue,
+  StepCompleteness,
+  BudgetCompleteness,
+  CharacterValidationResult,
+  CharacterValidationContext,
+  CharacterValidator,
+  ValidatorDefinition,
+} from "./types";
+
+// New validation functions
+export {
+  validateCharacter,
+  validateForFinalization,
+  isCharacterValid,
+} from "./character-validator";
+
+// Re-export from constraint validation module for backwards compatibility
+export {
+  type ValidationResult,
+  type ValidationContext,
+  validateConstraint,
+  validateAllConstraints,
+  validateCharacter as validateCharacterLegacy,
+  validateStep,
+  calculateRemainingBudget,
+  validateBudgetsComplete,
+  getMetatypeAttributeLimits,
+  isAttributeWithinLimits,
+} from "../constraint-validation";

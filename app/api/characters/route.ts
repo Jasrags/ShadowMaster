@@ -1,20 +1,41 @@
 /**
  * API Route: /api/characters
- * 
- * GET - List characters for the authenticated user
+ *
+ * GET - List characters for the authenticated user with multi-criteria search
  * POST - Create a new character draft
+ *
+ * Satisfies:
+ * - Requirement: "Character entities MUST be discoverable and retrievable
+ *   through multi-criteria searching, filtering, and sorting"
+ * - Requirement: "Character data MUST be accessible in multiple presentation formats"
  */
 
 import { NextRequest, NextResponse } from "next/server";
 import { getSession } from "@/lib/auth/session";
 import { getUserById } from "@/lib/storage/users";
 import {
-  getUserCharacters,
   createCharacterDraft,
-  getCharactersByStatus,
+  searchCharacters,
+  type CharacterSearchOptions,
 } from "@/lib/storage/characters";
-import type { CharacterStatus, EditionCode } from "@/lib/types";
+import type { CharacterStatus, EditionCode, MagicalPath } from "@/lib/types";
 
+/**
+ * GET /api/characters
+ *
+ * Query Parameters:
+ * - status: Filter by status (comma-separated for multiple)
+ * - edition: Filter by edition code (comma-separated for multiple)
+ * - campaignId: Filter by campaign
+ * - metatype: Filter by metatype (case-insensitive contains)
+ * - magicalPath: Filter by magical path
+ * - search: Full-text search on name, metatype, magical path
+ * - sortBy: Sort field (name, updatedAt, createdAt, karmaCurrent)
+ * - sortOrder: Sort order (asc, desc)
+ * - limit: Number of results (default: 20, max: 100)
+ * - offset: Pagination offset
+ * - format: Response format (summary, full)
+ */
 export async function GET(request: NextRequest) {
   try {
     // Check authentication
@@ -36,30 +57,85 @@ export async function GET(request: NextRequest) {
 
     // Parse query params
     const { searchParams } = new URL(request.url);
-    const status = searchParams.get("status") as CharacterStatus | null;
-    const edition = searchParams.get("edition");
 
-    // Get characters
-    let characters = status
-      ? await getCharactersByStatus(user.id, status)
-      : await getUserCharacters(user.id);
+    // Build search options
+    const searchOptions: CharacterSearchOptions = {
+      userId: user.id,
+    };
 
-    // Filter by edition if specified
-    if (edition) {
-      characters = characters.filter((c) => c.editionCode === edition);
+    // Filters
+    const statusParam = searchParams.get("status");
+    const editionParam = searchParams.get("edition");
+    const campaignId = searchParams.get("campaignId");
+    const metatype = searchParams.get("metatype");
+    const magicalPath = searchParams.get("magicalPath") as MagicalPath | null;
+    const searchText = searchParams.get("search");
+
+    if (statusParam || editionParam || campaignId || metatype || magicalPath || searchText) {
+      searchOptions.filters = {};
+
+      if (statusParam) {
+        searchOptions.filters.status = statusParam.split(",") as CharacterStatus[];
+      }
+      if (editionParam) {
+        searchOptions.filters.edition = editionParam.split(",") as EditionCode[];
+      }
+      if (campaignId) {
+        searchOptions.filters.campaignId = campaignId;
+      }
+      if (metatype) {
+        searchOptions.filters.metatype = metatype;
+      }
+      if (magicalPath) {
+        searchOptions.filters.magicalPath = magicalPath;
+      }
+      if (searchText) {
+        searchOptions.filters.search = searchText;
+      }
     }
 
-    // Sort by updated date, most recent first
-    characters.sort((a, b) => {
-      const dateA = new Date(a.updatedAt || a.createdAt);
-      const dateB = new Date(b.updatedAt || b.createdAt);
-      return dateB.getTime() - dateA.getTime();
-    });
+    // Sorting
+    const sortBy = searchParams.get("sortBy") as
+      | "name"
+      | "updatedAt"
+      | "createdAt"
+      | "karmaCurrent"
+      | null;
+    const sortOrder = searchParams.get("sortOrder") as "asc" | "desc" | null;
+
+    if (sortBy || sortOrder) {
+      searchOptions.sort = {
+        field: sortBy || "updatedAt",
+        order: sortOrder || "desc",
+      };
+    }
+
+    // Pagination
+    const limitParam = searchParams.get("limit");
+    const offsetParam = searchParams.get("offset");
+
+    if (limitParam || offsetParam) {
+      const limit = Math.min(parseInt(limitParam || "20", 10), 100); // Max 100
+      const offset = parseInt(offsetParam || "0", 10);
+      searchOptions.pagination = { limit, offset };
+    }
+
+    // Format
+    const format = searchParams.get("format") as "summary" | "full" | null;
+    if (format) {
+      searchOptions.format = format;
+    }
+
+    // Execute search
+    const result = await searchCharacters(searchOptions);
 
     return NextResponse.json({
       success: true,
-      characters,
-      count: characters.length,
+      characters: result.characters,
+      total: result.total,
+      hasMore: result.hasMore,
+      limit: result.limit,
+      offset: result.offset,
     });
   } catch (error) {
     console.error("Failed to get characters:", error);

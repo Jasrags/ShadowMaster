@@ -53,6 +53,8 @@ next-env.d.ts
 /data/campaigns
 /data/activity
 /data/security
+/docs/capabilities/plans
 .cursor/
 .claude/
-seattle-locations.jsondata/editions/sr5/core-rulebook.json.backup
+seattle-locations.json
+/data/editions/sr5/core-rulebook.json.backup

@@ -1,9 +1,12 @@
 /**
  * API Route: /api/characters/[characterId]
- * 
+ *
  * GET - Get a specific character
- * PATCH - Update a character
+ * PATCH - Update a character (draft only, status changes not allowed)
  * DELETE - Delete a character
+ *
+ * Uses authorization module for permission checks.
+ * Status changes must go through dedicated endpoints (finalize, retire, etc.)
  */
 
 import { NextRequest, NextResponse } from "next/server";
@@ -13,6 +16,11 @@ import {
   updateCharacter,
   deleteCharacter,
 } from "@/lib/storage/characters";
+import {
+  authorizeOwnerAccess,
+  type CharacterPermission,
+} from "@/lib/auth/character-authorization";
+import { createAuditEntry, appendAuditEntry } from "@/lib/rules/character/state-machine";
 
 export async function GET(
   request: NextRequest,
@@ -30,18 +38,24 @@ export async function GET(
 
     const { characterId } = await params;
 
-    // Get character
-    const character = await getCharacter(userId, characterId);
-    if (!character) {
+    // Authorize view access
+    const authResult = await authorizeOwnerAccess(
+      userId,
+      userId,
+      characterId,
+      "view"
+    );
+
+    if (!authResult.authorized) {
       return NextResponse.json(
-        { success: false, error: "Character not found" },
-        { status: 404 }
+        { success: false, error: authResult.error },
+        { status: authResult.status }
       );
     }
 
     return NextResponse.json({
       success: true,
-      character,
+      character: authResult.character,
     });
   } catch (error) {
     console.error("Failed to get character:", error);
@@ -68,53 +82,80 @@ export async function PATCH(
 
     const { characterId } = await params;
 
-    // Check character exists and belongs to user
-    const existing = await getCharacter(userId, characterId);
-    if (!existing) {
+    // Authorize edit access
+    const authResult = await authorizeOwnerAccess(
+      userId,
+      userId,
+      characterId,
+      "edit"
+    );
+
+    if (!authResult.authorized) {
       return NextResponse.json(
-        { success: false, error: "Character not found" },
-        { status: 404 }
+        { success: false, error: authResult.error },
+        { status: authResult.status }
       );
     }
+
+    const existing = authResult.character!;
 
     // Parse body
     const updates = await request.json();
 
-    // Prevent changing certain fields
-    delete updates.id;
-    delete updates.ownerId;
+    // Prevent changing protected fields
     delete updates.id;
     delete updates.ownerId;
     delete updates.createdAt;
+    delete updates.auditLog; // Audit log is append-only
+
+    // CRITICAL: Prevent direct status changes via PATCH
+    // Status changes must go through state machine (finalize, retire, etc.)
+    if (updates.status && updates.status !== existing.status) {
+      return NextResponse.json(
+        {
+          success: false,
+          error:
+            "Status changes not allowed via PATCH. Use dedicated endpoints: /finalize, /retire, etc.",
+        },
+        { status: 400 }
+      );
+    }
+    delete updates.status;
 
     // Validate creationState if present
     if (updates.metadata?.creationState) {
       const state = updates.metadata.creationState;
-      
+
       // Ensure characterId matches
       if (state.characterId && state.characterId !== characterId) {
         return NextResponse.json(
-          { success: false, error: "Validation failed: characterId mismatch in creationState" },
+          {
+            success: false,
+            error: "Validation failed: characterId mismatch in creationState",
+          },
           { status: 400 }
         );
       }
-      
-      // Ensure we are not overwriting creation state for a finalized character
-      // (Unless we decide to allow it, but generally we shouldn't)
-      if (existing.status !== 'draft' && existing.status !== 'active') { // allow active for now if re-editing is ever a thing, but spec focuses on draft
-         // actually spec says "Character Status Changed (Draft -> Active) ... Don't allow creation wizard to load"
-         // Logic here: if character is NOT draft, maybe block writing creationState?
-         // But for now let's just warn or allow. The important part is validating the state object structure briefly.
-      }
-      
-      if (existing.status !== 'draft') {
-         // Optionally block updates to creationState if not a draft
-         // return NextResponse.json({ success: false, error: "Cannot update creation state of non-draft character" }, { status: 400 });
-      }
+    }
+
+    // Track if this is a significant update that should be audited
+    const shouldAudit = updates.name && updates.name !== existing.name;
+    let characterToSave = { ...existing, ...updates };
+
+    if (shouldAudit) {
+      const auditEntry = createAuditEntry({
+        action: "name_changed",
+        actor: { userId, role: authResult.role },
+        details: {
+          previousName: existing.name,
+          newName: updates.name,
+        },
+      });
+      characterToSave = appendAuditEntry(characterToSave, auditEntry);
     }
 
     // Update character
-    const character = await updateCharacter(userId, characterId, updates);
+    const character = await updateCharacter(userId, characterId, characterToSave);
 
     return NextResponse.json({
       success: true,
@@ -145,12 +186,18 @@ export async function DELETE(
 
     const { characterId } = await params;
 
-    // Check character exists and belongs to user
-    const existing = await getCharacter(userId, characterId);
-    if (!existing) {
+    // Authorize delete access
+    const authResult = await authorizeOwnerAccess(
+      userId,
+      userId,
+      characterId,
+      "delete"
+    );
+
+    if (!authResult.authorized) {
       return NextResponse.json(
-        { success: false, error: "Character not found" },
-        { status: 404 }
+        { success: false, error: authResult.error },
+        { status: authResult.status }
       );
     }
 
@@ -169,4 +216,3 @@ export async function DELETE(
     );
   }
 }
-
