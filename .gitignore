@@ -48,6 +48,7 @@ next-env.d.ts
 .eslintcache
 
 # user data (characters, users) - NOT edition rulesets
+/data/audit
 /data/users
 /data/characters
 /data/campaigns
