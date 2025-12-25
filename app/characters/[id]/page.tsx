@@ -36,6 +36,7 @@ import { THEMES, DEFAULT_THEME, type Theme, type ThemeId } from "@/lib/themes";
 import { QualitiesSection } from "./components/QualitiesSection";
 import { Section } from "./components/Section";
 import { InteractiveConditionMonitor } from "./components/InteractiveConditionMonitor";
+import { CombatQuickReference } from "./components/CombatQuickReference";
 
 // =============================================================================
 // ICONS
@@ -1276,6 +1277,21 @@ function CharacterSheet({
                   onDamageApplied={(newValue) => handleDamageApplied("overflow", newValue)}
                 />
               </div>
+            </Section>
+
+            {/* Combat Quick Reference */}
+            <Section theme={theme} title="Combat">
+              <CombatQuickReference
+                character={character}
+                woundModifier={woundModifier}
+                physicalLimit={physicalLimit}
+                theme={theme}
+                onPoolSelect={(pool, context) => {
+                  setTargetPool(pool);
+                  setPoolContext(context);
+                  setShowDiceRoller(true);
+                }}
+              />
             </Section>
           </div>
 
