@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState, use, useMemo } from "react";
+import { useEffect, useState, use, useMemo, useCallback } from "react";
 import { Link, Button, Modal, ModalOverlay, Dialog, Heading } from "react-aria-components";
 import type {
   Character,
@@ -29,11 +29,15 @@ import {
 } from "@/lib/rules";
 import {
   calculateLimit,
+  calculateWoundModifier,
 } from "@/lib/rules/qualities";
 import { DownloadIcon, X } from "lucide-react";
 import { THEMES, DEFAULT_THEME, type Theme, type ThemeId } from "@/lib/themes";
 import { QualitiesSection } from "./components/QualitiesSection";
 import { Section } from "./components/Section";
+import { InteractiveConditionMonitor } from "./components/InteractiveConditionMonitor";
+import { CombatQuickReference } from "./components/CombatQuickReference";
+import { useCharacterSheetPreferences } from "./hooks/useCharacterSheetPreferences";
 
 // =============================================================================
 // ICONS
@@ -59,6 +63,22 @@ function DiceIcon({ className }: { className?: string }) {
   return (
     <svg className={className} viewBox="0 0 24 24" fill="currentColor">
       <path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zM7.5 18c-.83 0-1.5-.67-1.5-1.5S6.67 15 7.5 15s1.5.67 1.5 1.5S8.33 18 7.5 18zm0-9C6.67 9 6 8.33 6 7.5S6.67 6 7.5 6 9 6.67 9 7.5 8.33 9 7.5 9zm4.5 4.5c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5zm4.5 4.5c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5zm0-9c-.83 0-1.5-.67-1.5-1.5S15.67 6 16.5 6s1.5.67 1.5 1.5S17.33 9 16.5 9z" />
+    </svg>
+  );
+}
+
+function PrinterIcon({ className }: { className?: string }) {
+  return (
+    <svg className={className} fill="none" viewBox="0 0 24 24" stroke="currentColor">
+      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z" />
+    </svg>
+  );
+}
+
+function TrendingUpIcon({ className }: { className?: string }) {
+  return (
+    <svg className={className} fill="none" viewBox="0 0 24 24" stroke="currentColor">
+      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6" />
     </svg>
   );
 }
@@ -117,100 +137,9 @@ function getAttributeBonus(character: Character, attrId: string): Array<{ source
 
 
 // =============================================================================
-// CONDITION MONITOR COMPONENT
+// NOTE: ConditionMonitor component has been replaced by InteractiveConditionMonitor
+// located in ./components/InteractiveConditionMonitor.tsx
 // =============================================================================
-
-interface ConditionMonitorProps {
-  label: string;
-  maxBoxes: number;
-  filledBoxes: number;
-  color: "physical" | "stun" | "overflow";
-  theme?: Theme;
-}
-
-function ConditionMonitor({ label, maxBoxes, filledBoxes, color, theme }: ConditionMonitorProps) {
-  const t = theme || THEMES[DEFAULT_THEME];
-
-  const colorClasses = {
-    physical: {
-      filled: "bg-red-500 border-red-400 shadow-red-500/50",
-      empty: t.id === 'modern-card' ? "border-red-200 bg-red-50" : "border-red-900/50 bg-red-950/30",
-      text: "text-red-500 dark:text-red-400",
-    },
-    stun: {
-      filled: "bg-amber-500 border-amber-400 shadow-amber-500/50",
-      empty: t.id === 'modern-card' ? "border-amber-200 bg-amber-50" : "border-amber-900/50 bg-amber-950/30",
-      text: "text-amber-600 dark:text-amber-400",
-    },
-    overflow: {
-      filled: "bg-zinc-500 border-zinc-400 shadow-zinc-500/50",
-      empty: t.id === 'modern-card' ? "border-zinc-200 bg-zinc-50" : "border-zinc-800 bg-zinc-900/50",
-      text: "text-zinc-500 dark:text-zinc-400",
-    },
-  };
-  const colors = colorClasses[color];
-
-  const isStandard = color === "physical" || color === "stun";
-  let content;
-
-  if (isStandard) {
-    const rows = [];
-    for (let i = 0; i < maxBoxes; i += 3) {
-      const boxesInRow = [];
-      for (let j = 0; j < 3; j++) {
-        const boxIndex = i + j;
-        if (boxIndex >= maxBoxes) break;
-        const isFilled = boxIndex < filledBoxes;
-        boxesInRow.push(
-          <div
-            key={boxIndex}
-            className={`h-5 w-5 border-2 transition-all ${isFilled ? `${colors.filled} shadow-sm` : colors.empty
-              } ${t.id === 'modern-card' ? 'rounded-sm' : ''}`}
-            style={t.id === 'neon-rain' ? { clipPath: "polygon(15% 0, 100% 0, 100% 85%, 85% 100%, 0 100%, 0 15%)" } : undefined}
-          />
-        );
-      }
-      const penalty = Math.floor((i + 3) / 3);
-      rows.push(
-        <div key={i} className="flex items-center gap-1.5">
-          <div className="flex gap-1">{boxesInRow}</div>
-          <span className="text-[9px] font-bold text-muted-foreground/40 tabular-nums w-4">
-            -{penalty}
-          </span>
-        </div>
-      );
-    }
-    content = <div className="flex flex-col gap-2">{rows}</div>;
-  } else {
-    const boxes = [];
-    for (let i = 0; i < maxBoxes; i++) {
-      const isFilled = i < filledBoxes;
-      boxes.push(
-        <div
-          key={i}
-          className={`h-5 w-5 border-2 transition-all ${isFilled ? `${colors.filled} shadow-sm` : colors.empty
-            } ${t.id === 'modern-card' ? 'rounded-sm' : ''}`}
-          style={t.id === 'neon-rain' ? { clipPath: "polygon(15% 0, 100% 0, 100% 85%, 85% 100%, 0 100%, 0 15%)" } : undefined}
-        />
-      );
-    }
-    content = <div className="flex flex-wrap gap-2 items-start">{boxes}</div>;
-  }
-
-  return (
-    <div className={`p-2 rounded hover:bg-muted/30 transition-colors group ${t.id === 'modern-card' ? 'bg-stone-50 dark:bg-stone-900 border border-stone-200 dark:border-stone-800' : ''}`}>
-      <div className="flex items-center gap-2 mb-2 pb-1.5 border-b border-border/10">
-        <span className={`text-[10px] ${t.fonts.mono} font-bold uppercase tracking-wider text-muted-foreground group-hover:${colors.text} transition-colors`}>
-          {label}
-        </span>
-        <span className={`text-[10px] ${t.fonts.mono} font-bold text-muted-foreground/40 tabular-nums`}>
-          [{filledBoxes}/{maxBoxes}]
-        </span>
-      </div>
-      {content}
-    </div>
-  );
-}
 
 // =============================================================================
 // ATTRIBUTE BLOCK COMPONENT
@@ -992,24 +921,14 @@ function CharacterSheet({
   // Get ruleset for quality effect calculations (must be called before any early returns)
   const ruleset = useMergedRuleset();
 
-  // Theme State
-  const [currentThemeId, setCurrentThemeId] = useState<ThemeId>(() => {
-    // Check internal preferences first
-    if (character.uiPreferences?.theme && THEMES[character.uiPreferences.theme as ThemeId]) {
-      return character.uiPreferences.theme as ThemeId;
-    }
-    
-    // Check localStorage fallback (client-side only)
-    if (typeof window !== 'undefined') {
-      const saved = localStorage.getItem(`character-theme-${character.id}`);
-      if (saved && THEMES[saved as ThemeId]) {
-        return saved as ThemeId;
-      }
-    }
-    
-    return DEFAULT_THEME;
-  });
+  // Theme State - use preferences hook for persistence
+  const {
+    preferences: sheetPrefs,
+    updatePreference: updateSheetPref,
+    isLoading: prefsLoading,
+  } = useCharacterSheetPreferences(character.id);
 
+  const currentThemeId = sheetPrefs.theme;
   const theme = THEMES[currentThemeId] || THEMES[DEFAULT_THEME];
 
   useEffect(() => {
@@ -1018,18 +937,47 @@ function CharacterSheet({
     }
   }, [character.editionCode, loadRuleset]);
 
-  // Persist theme choice (mock persistence for now, ideally would partial update character)
+  // Persist theme choice
   const handleThemeChange = (id: ThemeId) => {
-    setCurrentThemeId(id);
-    // In a real app we would save this to the server
-    // For now we rely on the parent updating the character or local state
-    // We can use localStorage as a fallback if we want client-side persistence only
-    localStorage.setItem(`character-theme-${character.id}`, id);
+    updateSheetPref("theme", id);
   };
+
+  // Handler for dice roller toggle that persists preference
+  const handleToggleDiceRoller = useCallback(() => {
+    const newValue = !showDiceRoller;
+    setShowDiceRoller(newValue);
+    updateSheetPref("diceRollerVisible", newValue);
+  }, [showDiceRoller, setShowDiceRoller, updateSheetPref]);
 
   // Calculate derived values with quality effects (must be called before any early returns)
   const physicalMonitorMax = Math.ceil((character.attributes?.body || 1) / 2) + 8;
   const stunMonitorMax = Math.ceil((character.attributes?.willpower || 1) / 2) + 8;
+  
+  // Calculate wound modifier (tracks both physical and stun damage)
+  const woundModifier = useMemo(() => {
+    if (ruleset) {
+      const physicalMod = calculateWoundModifier(character, ruleset, "physical");
+      const stunMod = calculateWoundModifier(character, ruleset, "stun");
+      return physicalMod + stunMod;
+    }
+    // Fallback to base calculation: -1 per 3 boxes on either track
+    const physicalDamage = character.condition?.physicalDamage || 0;
+    const stunDamage = character.condition?.stunDamage || 0;
+    return -Math.floor(physicalDamage / 3) - Math.floor(stunDamage / 3);
+  }, [character, ruleset]);
+
+  // Handler for when damage is applied via interactive monitors
+  const handleDamageApplied = useCallback((type: "physical" | "stun" | "overflow", newValue: number) => {
+    // Update local character state to reflect new damage
+    setCharacter({
+      ...character,
+      condition: {
+        ...character.condition,
+        [type === "physical" ? "physicalDamage" : type === "stun" ? "stunDamage" : "overflowDamage"]: newValue,
+      },
+    });
+  }, [character, setCharacter]);
+
   
   // Calculate limits with quality modifiers if ruleset is available
   const physicalLimit = useMemo(() => {
@@ -1097,13 +1045,13 @@ function CharacterSheet({
   };
 
   return (
-    <div className={`min-h-screen transition-colors duration-300 ${theme.colors.background} p-4 sm:p-6 lg:p-8`}>
+    <div className={`character-sheet min-h-screen transition-colors duration-300 ${theme.colors.background} p-4 sm:p-6 lg:p-8`}>
       <div className="space-y-6 max-w-7xl mx-auto">
         {/* Navigation Header */}
-        <div className="flex items-center justify-between">
+        <div className="flex items-center justify-between print-hidden">
           <Link
             href="/characters"
-            className="inline-flex items-center gap-2 text-sm text-muted-foreground hover:text-emerald-400 transition-colors"
+            className="inline-flex items-center gap-2 text-sm text-muted-foreground hover:text-emerald-400 transition-colors back-button"
           >
             <ArrowLeftIcon className="w-4 h-4" />
             Back to Characters
@@ -1126,14 +1074,30 @@ function CharacterSheet({
         </div>
 
         {/* Actions Bar */}
-        <div className="flex items-center justify-end gap-2 mb-4">
+        <div className="flex items-center justify-end gap-2 mb-4 print-hidden">
           <ThemeSelector currentTheme={currentThemeId} onSelect={handleThemeChange} />
           <Button
             className="p-2 text-muted-foreground hover:text-foreground transition-colors"
-            onPress={() => setShowDiceRoller(!showDiceRoller)}
+            onPress={() => window.print()}
+            aria-label="Print character sheet"
+          >
+            <PrinterIcon className="w-5 h-5" />
+          </Button>
+          <Button
+            className="p-2 text-muted-foreground hover:text-foreground transition-colors"
+            onPress={handleToggleDiceRoller}
           >
             <DiceIcon className={`w-6 h-6 ${showDiceRoller ? theme.colors.accent : ""}`} />
           </Button>
+          {character.status === "active" && (
+            <Link
+              href={`/characters/${character.id}/advancement`}
+              className="p-2 text-muted-foreground hover:text-emerald-400 transition-colors"
+              aria-label="Character Advancement"
+            >
+              <TrendingUpIcon className="w-5 h-5" />
+            </Link>
+          )}
           {(character.status === "draft") && (
             <Link
               href={`/characters/${character.id}/edit`}
@@ -1145,22 +1109,22 @@ function CharacterSheet({
         </div>
 
         {/* Character Header Card */}
-        <div className={`relative overflow-hidden ${theme.components.section.wrapper} p-6`}>
+        <div className={`character-header relative overflow-hidden ${theme.components.section.wrapper} p-6`}>
           {/* Background Elements - Theme dependent */}
           {theme.id === 'neon-rain' ? (
             <>
-              <div className="absolute top-0 right-0 w-64 h-64 bg-emerald-500/5 blur-3xl rounded-full pointer-events-none" />
-              <div className="absolute bottom-0 left-0 w-64 h-64 bg-blue-500/5 blur-3xl rounded-full pointer-events-none" />
-              <div className="absolute inset-0 bg-[url('/grid-pattern.svg')] opacity-[0.02]" />
+              <div className="absolute top-0 right-0 w-64 h-64 bg-emerald-500/5 blur-3xl rounded-full pointer-events-none print-hidden" />
+              <div className="absolute bottom-0 left-0 w-64 h-64 bg-blue-500/5 blur-3xl rounded-full pointer-events-none print-hidden" />
+              <div className="absolute inset-0 bg-[url('/grid-pattern.svg')] opacity-[0.02] print-hidden" />
             </>
           ) : (
-            <div className="absolute top-0 right-0 w-64 h-64 bg-stone-200/20 dark:bg-stone-800/20 blur-3xl rounded-full pointer-events-none" />
+            <div className="absolute top-0 right-0 w-64 h-64 bg-stone-200/20 dark:bg-stone-800/20 blur-3xl rounded-full pointer-events-none print-hidden" />
           )}
 
           <div className="relative flex flex-col md:flex-row md:items-start justify-between gap-6">
             <div className="space-y-2">
               <div className="flex items-center gap-3">
-                <h1 className={`text-3xl md:text-4xl ${theme.fonts.heading} ${theme.colors.heading}`}>
+                <h1 className={`character-name text-3xl md:text-4xl ${theme.fonts.heading} ${theme.colors.heading}`}>
                   {character.name}
                 </h1>
                 <span className={`px-2 py-0.5 text-xs font-mono uppercase tracking-wider rounded border ${character.status === "active" ? theme.components.badge.positive :
@@ -1186,10 +1150,14 @@ function CharacterSheet({
 
             {/* Quick Stats */}
             <div className={`grid grid-cols-2 sm:grid-cols-4 gap-3 ${theme.fonts.mono}`}>
-              <div className={`p-3 rounded border ${theme.colors.card} ${theme.colors.border} flex flex-col items-center min-w-[80px]`}>
-                <span className="text-xs text-muted-foreground uppercase tracking-wider">Karma</span>
+              <Link
+                href={`/characters/${character.id}/advancement`}
+                className={`p-3 rounded border ${theme.colors.card} ${theme.colors.border} flex flex-col items-center min-w-[80px] cursor-pointer hover:border-emerald-500/50 transition-colors group`}
+              >
+                <span className="text-xs text-muted-foreground uppercase tracking-wider group-hover:text-emerald-400 transition-colors">Karma</span>
                 <span className={`text-xl font-bold ${theme.colors.accent}`}>{character.karmaCurrent}</span>
-              </div>
+                <span className="text-[10px] text-muted-foreground">of {character.karmaTotal} earned</span>
+              </Link>
               <div className={`p-3 rounded border ${theme.colors.card} ${theme.colors.border} flex flex-col items-center min-w-[80px]`}>
                 <span className="text-xs text-muted-foreground uppercase tracking-wider">Nuyen</span>
                 <span className={`text-xl font-bold ${theme.colors.heading}`}>¥{character.nuyen.toLocaleString()}</span>
@@ -1257,7 +1225,7 @@ function CharacterSheet({
         </div>
 
         {/* Main Content Grid */}
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        <div className="character-sheet-grid grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {/* Left Column - Attributes & Condition */}
           <div className="space-y-6">
             {/* Attributes */}
@@ -1298,30 +1266,62 @@ function CharacterSheet({
             {/* Condition Monitors */}
             <Section theme={theme} title="Condition">
               <div className="space-y-6">
+                {/* Wound Modifier Banner */}
+                {woundModifier !== 0 && (
+                  <div className={`p-2 rounded text-center ${
+                    theme.id === 'modern-card' 
+                      ? 'bg-amber-50 border border-amber-200 text-amber-700' 
+                      : 'bg-amber-500/10 border border-amber-500/30 text-amber-400'
+                  }`}>
+                    <span className="text-xs font-mono uppercase">Total Wound Modifier: </span>
+                    <span className="font-bold">{woundModifier}</span>
+                  </div>
+                )}
                 <div className="grid grid-cols-2 gap-4">
-                  <ConditionMonitor
+                  <InteractiveConditionMonitor
+                    characterId={character.id}
+                    type="physical"
+                    current={character.condition?.physicalDamage ?? 0}
+                    max={physicalMonitorMax}
                     theme={theme}
-                    label="Physical"
-                    maxBoxes={physicalMonitorMax}
-                    filledBoxes={character.condition?.physicalDamage ?? 0}
-                    color="physical"
+                    readonly={character.status !== "draft" && character.status !== "active"}
+                    onDamageApplied={(newValue) => handleDamageApplied("physical", newValue)}
                   />
-                  <ConditionMonitor
+                  <InteractiveConditionMonitor
+                    characterId={character.id}
+                    type="stun"
+                    current={character.condition?.stunDamage ?? 0}
+                    max={stunMonitorMax}
                     theme={theme}
-                    label="Stun"
-                    maxBoxes={stunMonitorMax}
-                    filledBoxes={character.condition?.stunDamage ?? 0}
-                    color="stun"
+                    readonly={character.status !== "draft" && character.status !== "active"}
+                    onDamageApplied={(newValue) => handleDamageApplied("stun", newValue)}
                   />
                 </div>
-                <ConditionMonitor
+                <InteractiveConditionMonitor
+                  characterId={character.id}
+                  type="overflow"
+                  current={character.condition?.overflowDamage ?? 0}
+                  max={character.attributes?.body || 3}
                   theme={theme}
-                  label="Overflow"
-                  maxBoxes={character.attributes?.body || 3}
-                  filledBoxes={character.condition?.overflowDamage ?? 0}
-                  color="overflow"
+                  readonly={character.status !== "draft" && character.status !== "active"}
+                  onDamageApplied={(newValue) => handleDamageApplied("overflow", newValue)}
                 />
               </div>
+            </Section>
+
+            {/* Combat Quick Reference */}
+            <Section theme={theme} title="Combat">
+              <CombatQuickReference
+                character={character}
+                woundModifier={woundModifier}
+                physicalLimit={physicalLimit}
+                theme={theme}
+                onPoolSelect={(pool, context) => {
+                  setTargetPool(pool);
+                  setPoolContext(context);
+                  setShowDiceRoller(true);
+                }}
+              />
             </Section>
           </div>
 
