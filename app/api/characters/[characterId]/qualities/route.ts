@@ -7,7 +7,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getSession } from "@/lib/auth/session";
 import { getUserById } from "@/lib/storage/users";
-import { getCharacter, updateCharacter } from "@/lib/storage/characters";
+import { getCharacter, updateCharacterWithAudit } from "@/lib/storage/characters";
 import { loadAndMergeRuleset } from "@/lib/rules/merge";
 import { acquireQuality, type AcquireQualityOptions } from "@/lib/rules/qualities/advancement";
 
@@ -100,17 +100,33 @@ export async function POST(
     try {
       const result = acquireQuality(character, qualityId, mergeResult.ruleset, options);
 
-      // Update character
-      const updatedCharacter = await updateCharacter(userId, characterId, {
-        positiveQualities: result.updatedCharacter.positiveQualities,
-        negativeQualities: result.updatedCharacter.negativeQualities,
-        karmaCurrent: result.updatedCharacter.karmaCurrent,
-      });
+      // Update character with audit trail
+      const updatedCharacter = await updateCharacterWithAudit(
+        userId,
+        characterId,
+        {
+          positiveQualities: result.updatedCharacter.positiveQualities,
+          negativeQualities: result.updatedCharacter.negativeQualities,
+          karmaCurrent: result.updatedCharacter.karmaCurrent,
+          advancementHistory: result.updatedCharacter.advancementHistory,
+        },
+        {
+          action: "updated",
+          actor: { userId, role: "owner" }, // Simplified role for now
+          details: {
+            qualityId,
+            action: "acquire_quality",
+            cost: result.cost,
+          },
+          note: notes,
+        }
+      );
 
       return NextResponse.json({
         success: true,
         character: updatedCharacter,
         quality: result.selection,
+        advancementRecord: result.advancementRecord,
         cost: result.cost,
       });
     } catch (error) {

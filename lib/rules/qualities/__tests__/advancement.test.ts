@@ -261,6 +261,13 @@ describe('Quality Advancement', () => {
       expect(result.selection.originalKarma).toBe(10); // 2× cost
       expect(result.cost).toBe(10);
       expect(result.updatedCharacter.positiveQualities?.length).toBe(1);
+      expect(result.updatedCharacter.advancementHistory?.length).toBe(1);
+      const historyRecord = result.updatedCharacter.advancementHistory?.[0];
+      expect(historyRecord?.type).toBe('quality');
+      expect(historyRecord?.targetId).toBe('test-quality');
+      expect(historyRecord?.karmaCost).toBe(10);
+      expect(historyRecord?.trainingRequired).toBe(false);
+      expect(historyRecord?.trainingStatus).toBe('completed');
     });
 
     it('should throw error when validation fails', () => {
@@ -463,6 +470,12 @@ describe('Quality Advancement', () => {
 
       expect(result.updatedCharacter.negativeQualities?.length).toBe(0);
       expect(result.cost).toBe(10); // 2× original bonus
+      expect(result.updatedCharacter.advancementHistory?.length).toBe(1);
+      const historyRecord = result.updatedCharacter.advancementHistory?.[0];
+      expect(historyRecord?.type).toBe('quality');
+      expect(historyRecord?.targetName).toContain('Negative Quality');
+      expect(historyRecord?.targetName).toContain('(Removed)');
+      expect(historyRecord?.karmaCost).toBe(10);
     });
 
     it('should throw error when validation fails', () => {
