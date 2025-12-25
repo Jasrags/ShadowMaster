@@ -257,6 +257,7 @@ export interface ContactArchetype {
  */
 export type FavorTransactionType =
   | "favor_called"       // Character called in a favor from contact
+  | "favor_failed"       // Character attempted to call favor but failed
   | "favor_granted"      // Contact performed a service for character
   | "favor_owed"         // Contact did something that created debt for character
   | "favor_repaid"       // Character repaid a favor to contact
@@ -265,6 +266,7 @@ export type FavorTransactionType =
   | "contact_burned"     // Contact relationship was destroyed
   | "contact_acquired"   // New contact was added
   | "contact_reactivated"// Burned/inactive contact was restored
+  | "status_change"      // Contact status changed (missing, deceased, etc.)
   | "gift"               // Gift given to contact (nuyen/items)
   | "betrayal"           // Contact betrayed character or vice versa
   | "reputation_effect"; // Street cred/notoriety affected relationship
@@ -747,6 +749,12 @@ export interface UpdateContactRequest {
   notes?: string;
   gmNotes?: string;
   visibility?: Partial<ContactVisibility>;
+  // Additional fields for state updates
+  connection?: number;
+  loyalty?: number;
+  status?: ContactStatus;
+  favorBalance?: number;
+  lastContactedAt?: ISODateString;
 }
 
 /**
