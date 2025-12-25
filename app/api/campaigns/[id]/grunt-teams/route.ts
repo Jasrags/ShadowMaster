@@ -141,6 +141,14 @@ export async function POST(
       body.professionalRating = template.professionalRating;
     }
 
+    // Ensure baseGrunts is provided (either directly or via template)
+    if (!body.baseGrunts) {
+      return NextResponse.json(
+        { success: false, error: "Either baseGrunts or templateId must be provided" },
+        { status: 400 }
+      );
+    }
+
     // Validate team configuration (add temporary IDs for validation)
     const validationData = {
       ...body,

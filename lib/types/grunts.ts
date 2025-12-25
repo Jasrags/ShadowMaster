@@ -508,12 +508,17 @@ export const DEFAULT_MORALE_TIERS: Record<ProfessionalRating, MoraleTier> = {
 
 /**
  * Request to create a new grunt team
+ *
+ * @remarks
+ * Either `baseGrunts` or `templateId` must be provided.
+ * If `templateId` is provided, `baseGrunts` will be populated from the template.
  */
 export interface CreateGruntTeamRequest {
   name: string;
   description?: string;
   professionalRating: ProfessionalRating;
-  baseGrunts: GruntStats;
+  /** Base grunt statistics. Optional if templateId is provided. */
+  baseGrunts?: GruntStats;
   initialSize: number;
   lieutenant?: LieutenantStats;
   specialists?: Omit<GruntSpecialist, "id">[];

@@ -100,7 +100,7 @@ export async function createGruntTeam(
     professionalRating: request.professionalRating,
     groupEdge: request.professionalRating, // Edge pool = PR
     groupEdgeMax: request.professionalRating,
-    baseGrunts: request.baseGrunts,
+    baseGrunts: request.baseGrunts!, // API ensures this is populated
     initialSize: request.initialSize,
     lieutenant: request.lieutenant,
     specialists,
