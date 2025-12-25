@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { getSession } from "@/lib/auth/session";
 import { getUserById } from "@/lib/storage/users";
+import { toPublicUser } from "@/lib/auth/middleware";
 import type { AuthResponse } from "@/lib/types/user";
 
 export async function GET(): Promise<NextResponse<AuthResponse>> {
@@ -25,19 +26,7 @@ export async function GET(): Promise<NextResponse<AuthResponse>> {
 
     return NextResponse.json({
       success: true,
-      user: {
-        id: user.id,
-        email: user.email,
-        username: user.username,
-        role: user.role,
-        createdAt: user.createdAt,
-        lastLogin: user.lastLogin,
-        characters: user.characters,
-        failedLoginAttempts: user.failedLoginAttempts,
-        lockoutUntil: user.lockoutUntil,
-        sessionVersion: user.sessionVersion,
-        preferences: user.preferences,
-      },
+      user: toPublicUser(user),
     });
   } catch (error) {
     console.error("Get current user error:", error);

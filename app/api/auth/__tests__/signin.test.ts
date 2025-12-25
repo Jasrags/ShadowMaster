@@ -60,6 +60,12 @@ describe('POST /api/auth/signin', () => {
       theme: "system",
       navigationCollapsed: false,
     },
+    accountStatus: 'active',
+    statusChangedAt: null,
+    statusChangedBy: null,
+    statusReason: null,
+    lastRoleChangeAt: null,
+    lastRoleChangeBy: null,
   };
 
   beforeEach(() => {

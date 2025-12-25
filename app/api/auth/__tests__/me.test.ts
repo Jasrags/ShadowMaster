@@ -32,6 +32,12 @@ describe('GET /api/auth/me', () => {
       theme: "system",
       navigationCollapsed: false,
     },
+    accountStatus: 'active',
+    statusChangedAt: null,
+    statusChangedBy: null,
+    statusReason: null,
+    lastRoleChangeAt: null,
+    lastRoleChangeBy: null,
   };
 
   beforeEach(() => {

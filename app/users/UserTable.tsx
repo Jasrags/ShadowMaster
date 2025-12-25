@@ -2,8 +2,9 @@
 
 import { useState, useEffect, useCallback } from "react";
 import { Button, MenuTrigger, Menu, MenuItem, Popover } from "react-aria-components";
-import type { PublicUser, UpdateUserRequest, UserRole } from "@/lib/types/user";
+import type { PublicUser, UpdateUserRequest, UserRole, AccountStatus } from "@/lib/types/user";
 import UserEditModal from "./UserEditModal";
+import UserAuditModal from "./UserAuditModal";
 
 interface UserTableProps {
   initialUsers: PublicUser[];
@@ -24,6 +25,8 @@ export default function UserTable({ initialUsers }: UserTableProps) {
   const [error, setError] = useState<string | null>(null);
   const [editingUser, setEditingUser] = useState<PublicUser | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [auditUser, setAuditUser] = useState<PublicUser | null>(null);
+  const [isAuditModalOpen, setIsAuditModalOpen] = useState(false);
 
   // Debounce search input
   useEffect(() => {
@@ -170,6 +173,96 @@ export default function UserTable({ initialUsers }: UserTableProps) {
     return roles.map((r) => r.charAt(0).toUpperCase() + r.slice(1)).join(", ");
   };
 
+  // Format status with color
+  const getStatusBadge = (status: AccountStatus) => {
+    switch (status) {
+      case "active":
+        return (
+          <span className="inline-flex items-center rounded-full bg-green-100 px-2.5 py-0.5 text-xs font-medium text-green-800 dark:bg-green-900/30 dark:text-green-400">
+            Active
+          </span>
+        );
+      case "suspended":
+        return (
+          <span className="inline-flex items-center rounded-full bg-yellow-100 px-2.5 py-0.5 text-xs font-medium text-yellow-800 dark:bg-yellow-900/30 dark:text-yellow-400">
+            Suspended
+          </span>
+        );
+      case "locked":
+        return (
+          <span className="inline-flex items-center rounded-full bg-red-100 px-2.5 py-0.5 text-xs font-medium text-red-800 dark:bg-red-900/30 dark:text-red-400">
+            Locked
+          </span>
+        );
+      default:
+        return (
+          <span className="inline-flex items-center rounded-full bg-zinc-100 px-2.5 py-0.5 text-xs font-medium text-zinc-800 dark:bg-zinc-800 dark:text-zinc-400">
+            Unknown
+          </span>
+        );
+    }
+  };
+
+  // Handle suspend user
+  const handleSuspend = async (user: PublicUser) => {
+    const reason = prompt("Enter suspension reason:");
+    if (!reason) return;
+
+    setLoading(true);
+    setError(null);
+
+    try {
+      const response = await fetch(`/api/users/${user.id}/suspend`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ reason }),
+      });
+
+      const data = await response.json();
+
+      if (data.success) {
+        await fetchUsers();
+      } else {
+        setError(data.error || "Failed to suspend user");
+      }
+    } catch {
+      setError("An error occurred while suspending user");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  // Handle reactivate user
+  const handleReactivate = async (user: PublicUser) => {
+    if (!confirm(`Are you sure you want to reactivate ${user.username}?`)) return;
+
+    setLoading(true);
+    setError(null);
+
+    try {
+      const response = await fetch(`/api/users/${user.id}/suspend`, {
+        method: "DELETE",
+      });
+
+      const data = await response.json();
+
+      if (data.success) {
+        await fetchUsers();
+      } else {
+        setError(data.error || "Failed to reactivate user");
+      }
+    } catch {
+      setError("An error occurred while reactivating user");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  // Handle view audit log
+  const handleViewAudit = (user: PublicUser) => {
+    setAuditUser(user);
+    setIsAuditModalOpen(true);
+  };
 
   return (
     <div className="space-y-4">
@@ -229,6 +322,9 @@ export default function UserTable({ initialUsers }: UserTableProps) {
                 </button>
               </th>
               <th className="px-4 py-3 text-left text-sm font-semibold text-black dark:text-zinc-50">
+                Status
+              </th>
+              <th className="px-4 py-3 text-left text-sm font-semibold text-black dark:text-zinc-50">
                 <button
                   onClick={() => handleSort("createdAt")}
                   className="flex items-center gap-1 hover:text-zinc-700 dark:hover:text-zinc-300"
@@ -268,13 +364,13 @@ export default function UserTable({ initialUsers }: UserTableProps) {
           <tbody>
             {loading && users.length === 0 ? (
               <tr>
-                <td colSpan={6} className="px-4 py-8 text-center text-sm text-zinc-600 dark:text-zinc-400">
+                <td colSpan={7} className="px-4 py-8 text-center text-sm text-zinc-600 dark:text-zinc-400">
                   Loading users...
                 </td>
               </tr>
             ) : users.length === 0 ? (
               <tr>
-                <td colSpan={6} className="px-4 py-8 text-center text-sm text-zinc-600 dark:text-zinc-400">
+                <td colSpan={7} className="px-4 py-8 text-center text-sm text-zinc-600 dark:text-zinc-400">
                   No users found
                 </td>
               </tr>
@@ -289,6 +385,9 @@ export default function UserTable({ initialUsers }: UserTableProps) {
                   </td>
                   <td className="px-4 py-3">
                     <span className="text-sm text-zinc-900 dark:text-zinc-50">{formatRole(user.role)}</span>
+                  </td>
+                  <td className="px-4 py-3">
+                    {getStatusBadge(user.accountStatus)}
                   </td>
                   <td className="px-4 py-3">
                     <span className="text-sm text-zinc-600 dark:text-zinc-400">{formatDate(user.createdAt)}</span>
@@ -324,6 +423,12 @@ export default function UserTable({ initialUsers }: UserTableProps) {
                             onAction={(key) => {
                               if (key === "edit") {
                                 handleEditStart(user);
+                              } else if (key === "suspend") {
+                                handleSuspend(user);
+                              } else if (key === "reactivate") {
+                                handleReactivate(user);
+                              } else if (key === "audit") {
+                                handleViewAudit(user);
                               } else if (key === "delete") {
                                 handleDelete(user.id);
                               }
@@ -335,6 +440,27 @@ export default function UserTable({ initialUsers }: UserTableProps) {
                               className="rounded-md px-3 py-2 text-sm text-zinc-900 outline-none focus:bg-zinc-100 dark:text-zinc-50 dark:focus:bg-zinc-800"
                             >
                               Edit
+                            </MenuItem>
+                            {user.accountStatus === "active" ? (
+                              <MenuItem
+                                id="suspend"
+                                className="rounded-md px-3 py-2 text-sm text-yellow-600 outline-none focus:bg-zinc-100 dark:text-yellow-400 dark:focus:bg-zinc-800"
+                              >
+                                Suspend
+                              </MenuItem>
+                            ) : (
+                              <MenuItem
+                                id="reactivate"
+                                className="rounded-md px-3 py-2 text-sm text-green-600 outline-none focus:bg-zinc-100 dark:text-green-400 dark:focus:bg-zinc-800"
+                              >
+                                Reactivate
+                              </MenuItem>
+                            )}
+                            <MenuItem
+                              id="audit"
+                              className="rounded-md px-3 py-2 text-sm text-zinc-900 outline-none focus:bg-zinc-100 dark:text-zinc-50 dark:focus:bg-zinc-800"
+                            >
+                              View Audit Log
                             </MenuItem>
                             <MenuItem
                               id="delete"
@@ -387,6 +513,18 @@ export default function UserTable({ initialUsers }: UserTableProps) {
           onClose={handleModalClose}
           onSave={handleSave}
           isLoading={loading}
+        />
+      )}
+
+      {/* Audit Log Modal */}
+      {auditUser && (
+        <UserAuditModal
+          user={auditUser}
+          isOpen={isAuditModalOpen}
+          onClose={() => {
+            setIsAuditModalOpen(false);
+            setAuditUser(null);
+          }}
         />
       )}
     </div>
