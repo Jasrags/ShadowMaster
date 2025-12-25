@@ -42,6 +42,11 @@ export function applyAdvancement(
         };
       }
     }
+  } else if (record.type === "edge") {
+    updatedCharacter.specialAttributes = {
+      ...character.specialAttributes,
+      edge: record.newValue,
+    };
   }
   // Add more types as they are implemented
 

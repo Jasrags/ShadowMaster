@@ -359,14 +359,7 @@ export function extractLifestyleSubscriptions(ruleset: LoadedRuleset): Lifestyle
 // GEAR DATA TYPES AND LOADERS
 // =============================================================================
 
-import type {
-  GearItemData,
-  WeaponData,
-  ArmorData,
-  CommlinkData,
-  CyberdeckData,
-  GearCatalogData,
-} from "./loader-types";
+import type { GearCatalogData } from "./loader-types";
 
 /**
  * Load gear catalog from a ruleset
@@ -381,7 +374,6 @@ export function extractGear(ruleset: LoadedRuleset): GearCatalogData | null {
 // =============================================================================
 
 import type {
-  SpellData,
   ComplexFormData,
   SpriteTypeData,
   SpritePowerData,
@@ -425,12 +417,8 @@ export function extractSpritePowers(ruleset: LoadedRuleset): SpritePowerData[] {
 // =============================================================================
 
 import type {
-  CyberwareGradeData,
-  CyberwareCatalogItemData,
   AugmentationRulesData,
   CyberwareCatalogData,
-  BiowareGradeData,
-  BiowareCatalogItemData,
   BiowareCatalogData,
 } from "./loader-types";
 
@@ -515,7 +503,7 @@ export function extractAdeptPowers(ruleset: LoadedRuleset): AdeptPowerCatalogIte
 // TRADITION DATA TYPES AND LOADERS
 // =============================================================================
 
-import type { TraditionData, TraditionSpiritTypes, DrainVariant } from "./loader-types";
+import type { TraditionData } from "./loader-types";
 
 /**
  * Load traditions from a ruleset
@@ -529,7 +517,7 @@ export function extractTraditions(ruleset: LoadedRuleset): TraditionData[] {
 // MENTOR SPIRIT DATA TYPES AND LOADERS
 // =============================================================================
 
-import type { MentorSpiritData, MentorSpiritAdvantages } from "./loader-types";
+import type { MentorSpiritData } from "./loader-types";
 
 /**
  * Load mentor spirits from a ruleset
@@ -543,7 +531,7 @@ export function extractMentorSpirits(ruleset: LoadedRuleset): MentorSpiritData[]
 // RITUAL DATA TYPES AND LOADERS
 // =============================================================================
 
-import type { RitualData, RitualKeywordData, MinionStatsData } from "./loader-types";
+import type { RitualData, RitualKeywordData } from "./loader-types";
 
 /**
  * Load rituals from a ruleset
@@ -568,9 +556,7 @@ export function extractRitualKeywords(ruleset: LoadedRuleset): RitualKeywordData
 import type {
   VehicleCategoryData,
   DroneSizeData,
-  HandlingRatingData,
   VehicleCatalogItemData,
-  DroneWeaponMountsData,
   DroneCatalogItemData,
   RCCCatalogItemData,
   AutosoftCatalogItemData,
@@ -740,7 +726,7 @@ export function extractFoci(ruleset: LoadedRuleset): FocusCatalogItemData[] {
 // SPIRIT DATA TYPES AND LOADERS
 // =============================================================================
 
-import type { SpiritTypeData, SpiritsCatalogData } from "./loader-types";
+import type { SpiritsCatalogData } from "./loader-types";
 
 /**
  * Load spirits from a ruleset
@@ -799,4 +785,31 @@ export function extractGearModifications(ruleset: LoadedRuleset): GearModificati
  */
 export function extractModifications(ruleset: LoadedRuleset): ModificationsCatalogData | null {
   return extractModule<ModificationsCatalogData>(ruleset, "modifications");
+}
+
+// =============================================================================
+// ADVANCEMENT DATA EXTRACTORS
+// =============================================================================
+
+import type { AdvancementRulesData } from "./loader-types";
+
+/**
+ * Load advancement rules from a ruleset
+ */
+export function extractAdvancement(ruleset: LoadedRuleset): AdvancementRulesData {
+  const ruleModule = extractModule<AdvancementRulesData>(ruleset, "advancement");
+
+  return (
+    ruleModule || {
+      trainingTimeMultiplier: 1.0,
+      attributeKarmaMultiplier: 5,
+      skillKarmaMultiplier: 2,
+      skillGroupKarmaMultiplier: 5,
+      knowledgeSkillKarmaMultiplier: 1,
+      specializationKarmaCost: 7,
+      spellKarmaCost: 5,
+      complexFormKarmaCost: 4,
+      allowInstantAdvancement: false,
+    }
+  );
 }

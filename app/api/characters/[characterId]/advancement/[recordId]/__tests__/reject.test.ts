@@ -112,7 +112,7 @@ describe('POST /api/characters/[characterId]/advancement/[recordId]/reject', () 
       updatedAdvancementRecord: rejectedRecord,
     });
 
-    vi.mocked(characterStorageModule.updateCharacter).mockResolvedValue(updatedCharacter);
+    vi.mocked(characterStorageModule.saveCharacter).mockResolvedValue(updatedCharacter);
 
     const request = createMockRequest(`/api/characters/${characterId}/advancement/${recordId}/reject`, {
       reason: 'Rating too high for current story arc',
@@ -133,7 +133,7 @@ describe('POST /api/characters/[characterId]/advancement/[recordId]/reject', () 
       gmUserId,
       'Rating too high for current story arc'
     );
-    expect(characterStorageModule.updateCharacter).toHaveBeenCalled();
+    expect(characterStorageModule.saveCharacter).toHaveBeenCalled();
   });
 
   it('should return 400 if rejection reason is missing', async () => {

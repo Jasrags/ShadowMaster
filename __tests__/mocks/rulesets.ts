@@ -47,37 +47,51 @@ export function createMockBook(overrides?: Partial<Book>): Book {
  * Minimal merged ruleset for testing
  */
 export function createMockMergedRuleset(overrides?: Partial<MergedRuleset>): MergedRuleset {
-  return {
+  const defaultRuleset: MergedRuleset = {
     snapshotId: 'test-snapshot-id',
     editionId: 'sr5',
     editionCode: 'sr5',
     bookIds: ['core-rulebook'],
     modules: {
       metatypes: {
-        human: {
-          id: 'human',
-          name: 'Human',
-          attributes: {
-            body: { min: 1, max: 6 },
-            agility: { min: 1, max: 6 },
-            reaction: { min: 1, max: 6 },
-            strength: { min: 1, max: 6 },
-            willpower: { min: 1, max: 6 },
-            logic: { min: 1, max: 6 },
-            intuition: { min: 1, max: 6 },
-            charisma: { min: 1, max: 6 },
+        metatypes: [
+          {
+            id: 'human',
+            name: 'Human',
+            attributes: {
+              body: { min: 1, max: 6 },
+              agility: { min: 1, max: 6 },
+              reaction: { min: 1, max: 6 },
+              strength: { min: 1, max: 6 },
+              willpower: { min: 1, max: 6 },
+              logic: { min: 1, max: 6 },
+              intuition: { min: 1, max: 6 },
+              charisma: { min: 1, max: 6 },
+              edge: { min: 2, max: 7 },
+              essence: { base: 6 },
+            },
+            racialTraits: [],
           },
-        },
-      },
+        ],
+      } as unknown as Record<string, unknown>,
       skills: {
-        'firearms': {
-          id: 'firearms',
-          name: 'Firearms',
-          linkedAttribute: 'agility',
-          group: 'combat',
-          canDefault: true,
-        },
-      },
+        activeSkills: [
+          {
+            id: 'firearms',
+            name: 'Firearms',
+            linkedAttribute: 'agility',
+            category: 'combat',
+            canDefault: true,
+          },
+        ],
+        skillGroups: [
+          {
+            id: 'acting',
+            name: 'Acting',
+            skills: ['con', 'impersonation', 'performance'],
+          },
+        ],
+      } as unknown as Record<string, unknown>,
       priorities: {
         levels: ['A', 'B', 'C', 'D', 'E'],
         categories: [
@@ -94,10 +108,23 @@ export function createMockMergedRuleset(overrides?: Partial<MergedRuleset>): Mer
           D: { metatype: 'human', attributes: 14, skills: 22, magic: 'mundane', resources: 50000 },
           E: { metatype: 'human', attributes: 12, skills: 18, magic: 'mundane', resources: 6000 },
         },
-      },
+      } as unknown as Record<string, unknown>,
     },
     createdAt: new Date().toISOString(),
-    ...overrides,
   };
+
+  // Merge overrides
+  if (overrides) {
+    return {
+      ...defaultRuleset,
+      ...overrides,
+      modules: {
+        ...defaultRuleset.modules,
+        ...overrides.modules,
+      },
+    };
+  }
+
+  return defaultRuleset;
 }
 

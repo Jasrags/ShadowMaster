@@ -7,7 +7,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getSession } from "@/lib/auth/session";
 import { getUserById } from "@/lib/storage/users";
-import { getCharacter, addAdvancementRecord } from "@/lib/storage/characters";
+import { getCharacter } from "@/lib/storage/characters";
 import { getCampaignById } from "@/lib/storage/campaigns";
 import { loadAndMergeRuleset } from "@/lib/rules/merge";
 import { advanceEdge, type AdvanceEdgeOptions } from "@/lib/rules/advancement/edge";
@@ -120,27 +120,13 @@ export async function POST(
         options
       );
 
-      // Persist advancement record (no training period for Edge)
-      const updatedCharacter = await addAdvancementRecord(
-        userId,
-        characterId,
-        result.advancementRecord,
-        undefined, // No training period for Edge
-        result.advancementRecord.karmaCost
-      );
-
-      // Edge is updated immediately (no training), so we need to update the character's Edge value
-      const { updateCharacter } = await import("@/lib/storage/characters");
-      const finalCharacter = await updateCharacter(userId, characterId, {
-        specialAttributes: {
-          ...updatedCharacter.specialAttributes,
-          edge: newRating,
-        },
-      });
+      // Persist the fully updated character state from the ledger
+      const { saveCharacter } = await import("@/lib/storage/characters");
+      const updatedCharacter = await saveCharacter(result.updatedCharacter);
 
       return NextResponse.json({
         success: true,
-        character: finalCharacter,
+        character: updatedCharacter,
         advancementRecord: result.advancementRecord,
         cost: result.advancementRecord.karmaCost,
       });

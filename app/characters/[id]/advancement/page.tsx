@@ -22,12 +22,32 @@ function AdvancementContent({ character, characterId }: AdvancementContentProps)
   const { loadRuleset, ruleset } = useRuleset();
   const [currentCharacter, setCurrentCharacter] = useState<Character>(character);
   const [activeTab, setActiveTab] = useState<AdvancementTab>("attributes");
+  const [isGM, setIsGM] = useState(false);
 
   useEffect(() => {
     if (character.editionCode) {
       loadRuleset(character.editionCode);
     }
   }, [character.editionCode, loadRuleset]);
+
+  // Determine GM status if in a campaign
+  useEffect(() => {
+    async function checkGMStatus() {
+      if (!currentCharacter.campaignId) return;
+      
+      try {
+        const response = await fetch(`/api/campaigns/${currentCharacter.campaignId}`);
+        const data = await response.json();
+        if (data.success && data.userRole === "gm") {
+          setIsGM(true);
+        }
+      } catch (err) {
+        console.error("Failed to check GM status:", err);
+      }
+    }
+    
+    checkGMStatus();
+  }, [currentCharacter.campaignId]);
 
   const handleCharacterUpdate = async (updatedCharacter: Character) => {
     setCurrentCharacter(updatedCharacter);
@@ -130,7 +150,11 @@ function AdvancementContent({ character, characterId }: AdvancementContentProps)
           />
         )}
         {activeTab === "history" && (
-          <HistoryTab character={currentCharacter} />
+          <HistoryTab 
+            character={currentCharacter} 
+            isGM={isGM}
+            onCharacterUpdate={handleCharacterUpdate}
+          />
         )}
       </div>
     </div>

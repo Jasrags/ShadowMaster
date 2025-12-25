@@ -7,7 +7,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getSession } from "@/lib/auth/session";
 import { getUserById } from "@/lib/storage/users";
-import { getCharacter, updateCharacter } from "@/lib/storage/characters";
+import { getCharacter } from "@/lib/storage/characters";
 import { getCampaignById } from "@/lib/storage/campaigns";
 import { approveAdvancement, isCampaignGM, requiresGMApproval } from "@/lib/rules/advancement/approval";
 
@@ -73,13 +73,8 @@ export async function POST(
 
       // Use the character found by ID
       const result = approveAdvancement(characterById, recordId, userId);
-      const updatedCharacter = await updateCharacter(
-        characterById.ownerId,
-        characterId,
-        {
-          advancementHistory: result.updatedCharacter.advancementHistory,
-        }
-      );
+      const { saveCharacter } = await import("@/lib/storage/characters");
+      const updatedCharacter = await saveCharacter(result.updatedCharacter);
 
       return NextResponse.json({
         success: true,
@@ -121,9 +116,8 @@ export async function POST(
 
     // Approve the advancement
     const result = approveAdvancement(character, recordId, userId);
-    const updatedCharacter = await updateCharacter(userId, characterId, {
-      advancementHistory: result.updatedCharacter.advancementHistory,
-    });
+    const { saveCharacter } = await import("@/lib/storage/characters");
+    const updatedCharacter = await saveCharacter(result.updatedCharacter);
 
     return NextResponse.json({
       success: true,

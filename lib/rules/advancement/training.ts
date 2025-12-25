@@ -7,6 +7,7 @@
 
 import type { AdvancementType } from "@/lib/types";
 import type { CampaignAdvancementSettings } from "@/lib/types/campaign";
+import type { AdvancementRulesData } from "@/lib/rules/loader-types";
 
 /**
  * Calculate training time in days for an attribute advancement
@@ -25,7 +26,7 @@ export function calculateAttributeTrainingTime(newRating: number): number {
 
 /**
  * Calculate training time in days for an active skill advancement
- * Time varies by rating:
+ * Time varies by rating (SR5 standard):
  * - Ratings 1-4: new rating × 1 day
  * - Ratings 5-8: new rating × 1 week (7 days)
  * - Ratings 9-13: new rating × 2 weeks (14 days)
@@ -132,18 +133,27 @@ export function calculateFinalTrainingTime(
     instructorBonus?: boolean;
     timeModifier?: number; // Percentage modifier
     settings?: CampaignAdvancementSettings;
+    ruleset?: AdvancementRulesData;
   } = {}
 ): number {
-  if (options.settings?.allowInstantAdvancement) {
+  const allowInstant =
+    options.settings?.allowInstantAdvancement ??
+    options.ruleset?.allowInstantAdvancement ??
+    false;
+
+  if (allowInstant) {
     return 0;
   }
 
   let finalTime = baseTime;
 
-  // Apply training time multiplier from campaign settings
-  if (options.settings?.trainingTimeMultiplier !== undefined) {
-    finalTime = finalTime * options.settings.trainingTimeMultiplier;
-  }
+  // Apply training time multiplier
+  const multiplier =
+    options.settings?.trainingTimeMultiplier ??
+    options.ruleset?.trainingTimeMultiplier ??
+    1.0;
+
+  finalTime = finalTime * multiplier;
 
   // Apply instructor bonus first (25% reduction, round down)
   if (options.instructorBonus) {
@@ -173,6 +183,7 @@ export function calculateAdvancementTrainingTime(
     instructorBonus?: boolean;
     timeModifier?: number;
     settings?: CampaignAdvancementSettings;
+    ruleset?: AdvancementRulesData;
   } = {}
 ): number {
   let baseTime: number;

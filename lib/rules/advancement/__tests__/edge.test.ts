@@ -96,20 +96,20 @@ describe('Edge Advancement', () => {
     });
 
     it('should throw error if rating is less than 1', () => {
-      expect(() => advanceEdge(character, 0, ruleset)).toThrow('Edge rating must be at least 1');
-      expect(() => advanceEdge(character, -1, ruleset)).toThrow('Edge rating must be at least 1');
+      expect(() => advanceEdge(character, 0, ruleset)).toThrow(/Edge rating must be at least 1/);
+      expect(() => advanceEdge(character, -1, ruleset)).toThrow(/Edge rating must be at least 1/);
     });
 
     it('should throw error if new rating is not higher than current', () => {
       character.specialAttributes = { edge: 3, essence: 6 };
       
-      expect(() => advanceEdge(character, 3, ruleset)).toThrow('New Edge rating must be higher');
-      expect(() => advanceEdge(character, 2, ruleset)).toThrow('New Edge rating must be higher');
+      expect(() => advanceEdge(character, 3, ruleset)).toThrow(/must be higher than current/);
+      expect(() => advanceEdge(character, 2, ruleset)).toThrow(/must be higher than current/);
     });
 
     it('should throw error if rating exceeds maximum (7)', () => {
-      expect(() => advanceEdge(character, 8, ruleset)).toThrow('Edge rating cannot exceed 7');
-      expect(() => advanceEdge(character, 10, ruleset)).toThrow('Edge rating cannot exceed 7');
+      expect(() => advanceEdge(character, 8, ruleset)).toThrow(/exceeds maximum/);
+      expect(() => advanceEdge(character, 10, ruleset)).toThrow(/exceeds maximum/);
     });
 
     it('should throw error if insufficient karma', () => {

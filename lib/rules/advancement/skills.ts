@@ -5,10 +5,18 @@
  */
 
 import { v4 as uuidv4 } from "uuid";
-import type { Character, MergedRuleset, AdvancementRecord, TrainingPeriod, CampaignEvent } from "@/lib/types";
+import type {
+  Character,
+  MergedRuleset,
+  AdvancementRecord,
+  TrainingPeriod,
+  CampaignEvent,
+} from "@/lib/types";
 import type { CampaignAdvancementSettings } from "@/lib/types/campaign";
+import type { AdvancementRulesData } from "@/lib/rules/loader-types";
 import { calculateAdvancementTrainingTime } from "./training";
 import { validateSkillAdvancement } from "./validation";
+import { spendKarma } from "./ledger";
 
 /**
  * Options for advancing a skill
@@ -82,72 +90,59 @@ export function advanceSkill(
   ruleset: MergedRuleset,
   options: AdvanceSkillOptions = {}
 ): AdvanceSkillResult {
+  // Extract advancement rules
+  const advancementRules = ruleset.modules.advancement as unknown as AdvancementRulesData;
+
   // Validate advancement (including downtime limits if applicable)
-  const validation = validateSkillAdvancement(
-    character,
-    skillId,
-    newRating,
-    ruleset,
-    {
-      downtimePeriodId: options.downtimePeriodId,
-      campaignEvents: options.campaignEvents,
-      settings: options.settings
-    }
-  );
+  const validation = validateSkillAdvancement(character, skillId, newRating, ruleset, {
+    downtimePeriodId: options.downtimePeriodId,
+    campaignEvents: options.campaignEvents,
+    settings: options.settings,
+    ruleset: advancementRules,
+  });
   if (!validation.valid) {
     throw new Error(
       `Cannot advance skill: ${validation.errors.map((e) => e.message).join(", ")}`
     );
   }
 
-  if (!validation.cost) {
+  const cost = validation.cost;
+  if (cost === undefined) {
     throw new Error("Cost calculation failed");
   }
-
-  const cost = validation.cost;
   const currentRating = character.skills[skillId] || 0;
 
-  // Check karma availability
-  if (character.karmaCurrent < cost) {
-    throw new Error(
-      `Not enough karma. Need ${cost}, have ${character.karmaCurrent}`
-    );
-  }
-
-  // Spend karma immediately
-  const karmaAfterSpending = character.karmaCurrent - cost;
-
-  // Create advancement record
-  const advancementRecordId = uuidv4();
-  const now = new Date().toISOString();
-
-  // Calculate training time (skill training varies by rating)
+  // Calculate training time
   const trainingTime = calculateAdvancementTrainingTime("skill", newRating, {
     instructorBonus: options.instructorBonus,
     timeModifier: options.timeModifier,
     settings: options.settings,
+    ruleset: advancementRules,
   });
 
   const skillName = getSkillDisplayName(skillId, ruleset);
 
-  const advancementRecord: AdvancementRecord = {
-    id: advancementRecordId,
-    type: "skill",
-    targetId: skillId,
-    targetName: skillName,
-    previousValue: currentRating,
-    newValue: newRating,
-    karmaCost: cost,
-    karmaSpentAt: now,
-    trainingRequired: true,
-    trainingStatus: trainingTime > 0 ? "pending" : "completed",
-    downtimePeriodId: options.downtimePeriodId,
-    campaignSessionId: options.campaignSessionId,
-    gmApproved: options.gmApproved || false,
-    notes: options.notes,
-    createdAt: now,
-    ...(trainingTime === 0 ? { completedAt: now } : {}),
-  };
+  // Use ledger to spend karma
+  const { updatedCharacter: characterWithKarmaSpent, record: advancementRecord } = spendKarma(
+    character,
+    "skill",
+    skillId,
+    skillName,
+    cost,
+    currentRating,
+    newRating,
+    {
+      notes: options.notes,
+      campaignSessionId: options.campaignSessionId,
+      downtimePeriodId: options.downtimePeriodId,
+      trainingRequired: true,
+      trainingStatus: trainingTime > 0 ? "pending" : "completed",
+      gmApproved: options.gmApproved,
+    }
+  );
+
+  const advancementRecordId = advancementRecord.id;
+  const now = advancementRecord.createdAt;
 
   // Create training period if training is required
   let trainingPeriod: TrainingPeriod | undefined;
@@ -179,15 +174,10 @@ export function advanceSkill(
   // Update character (karma spent, advancement record added, training period added)
   // NOTE: Character skill is NOT updated yet - that happens when training completes
   const updatedCharacter: Character = {
-    ...character,
-    karmaCurrent: karmaAfterSpending,
-    advancementHistory: [
-      ...(character.advancementHistory || []),
-      advancementRecord,
-    ],
+    ...characterWithKarmaSpent,
     activeTraining: trainingPeriod
-      ? [...(character.activeTraining || []), trainingPeriod]
-      : character.activeTraining || [],
+      ? [...(characterWithKarmaSpent.activeTraining || []), trainingPeriod]
+      : characterWithKarmaSpent.activeTraining || [],
   };
 
   return {

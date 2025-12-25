@@ -1181,3 +1181,23 @@ export interface ModificationsCatalogData {
   gearMods?: GearModificationCatalogItemData[];
 }
 
+// =============================================================================
+// ADVANCEMENT DATA TYPES
+// =============================================================================
+
+/**
+ * Advancement rules data structure
+ */
+export interface AdvancementRulesData {
+  trainingTimeMultiplier: number;
+  attributeKarmaMultiplier: number;
+  skillKarmaMultiplier: number;
+  skillGroupKarmaMultiplier: number;
+  knowledgeSkillKarmaMultiplier: number;
+  specializationKarmaCost: number;
+  spellKarmaCost: number;
+  complexFormKarmaCost: number;
+  attributeRatingCap?: number;
+  skillRatingCap?: number;
+  allowInstantAdvancement: boolean;
+}

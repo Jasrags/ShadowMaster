@@ -150,6 +150,45 @@ export type RuleModuleType =
   | "limits"; // Limit calculations (SR5-specific)
 
 /**
+ * Rules governing character advancement post-creation.
+ * These values serve as the edition-standard defaults.
+ */
+export interface AdvancementRules {
+  /** Multiplier for training times (default: 1.0) */
+  trainingTimeMultiplier: number;
+
+  /** Karma multiplier for attribute advancement (new rating x multiplier, default: 5) */
+  attributeKarmaMultiplier: number;
+
+  /** Karma multiplier for active skill advancement (new rating x multiplier, default: 2) */
+  skillKarmaMultiplier: number;
+
+  /** Karma multiplier for skill group advancement (new rating x multiplier, default: 5) */
+  skillGroupKarmaMultiplier: number;
+
+  /** Karma multiplier for knowledge/language skill advancement (new rating x multiplier, default: 1) */
+  knowledgeSkillKarmaMultiplier: number;
+
+  /** Fixed karma cost for specializations (default: 7) */
+  specializationKarmaCost: number;
+
+  /** Fixed karma cost for spells/rituals (default: 5) */
+  spellKarmaCost: number;
+
+  /** Fixed karma cost for complex forms (default: 4) */
+  complexFormKarmaCost: number;
+
+  /** Maximum rating for physical/mental attributes (default: 10) */
+  attributeRatingCap?: number;
+
+  /** Maximum rating for active skills (default: 13) */
+  skillRatingCap?: number;
+
+  /** Whether training time requirement is skipped (default: false) */
+  allowInstantAdvancement: boolean;
+}
+
+/**
  * A RuleModule encapsulates a specific domain of rules
  * (e.g., all skills, all combat rules) for an edition.
  *

@@ -1,9 +1,9 @@
 "use client";
 
 import { useState, useCallback } from "react";
-import { Button, Dialog, Heading, Modal, ModalOverlay } from "react-aria-components";
+import { Button, Dialog, Heading, Modal, ModalOverlay, TextField } from "react-aria-components";
 import type { Character, MergedRuleset } from "@/lib/types";
-import { validateAttributeAdvancement, getAttributeMaximum, calculateAttributeCost } from "@/lib/rules/advancement";
+import { validateAttributeAdvancement, getAttributeMaximum, calculateAttributeCost, calculateEdgeCost } from "@/lib/rules/advancement";
 import { X, ArrowUp } from "lucide-react";
 
 interface AttributesTabProps {
@@ -21,6 +21,7 @@ const ATTRIBUTE_NAMES: Record<string, string> = {
   logic: "Logic",
   intuition: "Intuition",
   charisma: "Charisma",
+  edge: "Edge",
 };
 
 const PHYSICAL_ATTRIBUTES = ["body", "agility", "reaction", "strength"];
@@ -29,6 +30,7 @@ const MENTAL_ATTRIBUTES = ["willpower", "logic", "intuition", "charisma"];
 export function AttributesTab({ character, ruleset, onCharacterUpdate }: AttributesTabProps) {
   const [selectedAttribute, setSelectedAttribute] = useState<string | null>(null);
   const [newRating, setNewRating] = useState<number | undefined>(undefined);
+  const [notes, setNotes] = useState("");
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
@@ -37,12 +39,15 @@ export function AttributesTab({ character, ruleset, onCharacterUpdate }: Attribu
   // Handle advance click
   const handleAdvanceClick = useCallback(
     (attrId: string) => {
-      const currentRating = character.attributes[attrId] || 0;
+      const currentRating = attrId === 'edge' 
+        ? (character.specialAttributes?.edge || 1)
+        : (character.attributes[attrId] || 0);
       const maxRating = getAttributeMaximum(character, attrId, ruleset);
       const nextRating = Math.min(currentRating + 1, maxRating);
       
       setSelectedAttribute(attrId);
       setNewRating(nextRating);
+      setNotes("");
       setErrorMessage(null);
       setIsModalOpen(true);
     },
@@ -71,13 +76,18 @@ export function AttributesTab({ character, ruleset, onCharacterUpdate }: Attribu
         return;
       }
 
-      // Call API
-      const response = await fetch(`/api/characters/${character.id}/advancement/attributes`, {
+      // Call API (handle edge specially if needed, but our API uses /attributes for standard and we might need /edge for edge)
+      const endpoint = selectedAttribute === 'edge' 
+        ? `/api/characters/${character.id}/advancement/edge`
+        : `/api/characters/${character.id}/advancement/attributes`;
+
+      const response = await fetch(endpoint, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          attributeId: selectedAttribute,
+          attributeId: selectedAttribute !== 'edge' ? selectedAttribute : undefined,
           newRating,
+          notes,
         }),
       });
 
@@ -92,20 +102,23 @@ export function AttributesTab({ character, ruleset, onCharacterUpdate }: Attribu
       setIsModalOpen(false);
       setSelectedAttribute(null);
       setNewRating(undefined);
+      setNotes("");
     } catch (err) {
       setErrorMessage(err instanceof Error ? err.message : "Failed to advance attribute");
     } finally {
       setIsSubmitting(false);
     }
-  }, [character, selectedAttribute, newRating, ruleset, onCharacterUpdate]);
+  }, [character, selectedAttribute, newRating, notes, ruleset, onCharacterUpdate]);
 
   // Render attribute row
   const renderAttribute = (attrId: string) => {
-    const currentRating = character.attributes[attrId] || 0;
+    const currentRating = attrId === 'edge'
+      ? (character.specialAttributes?.edge || 1)
+      : (character.attributes[attrId] || 0);
     const maxRating = getAttributeMaximum(character, attrId, ruleset);
     const canAdvance = currentRating < maxRating;
     const nextRating = currentRating + 1;
-    const cost = canAdvance ? calculateAttributeCost(nextRating) : 0;
+    const cost = canAdvance ? (attrId === 'edge' ? calculateEdgeCost(nextRating) : calculateAttributeCost(nextRating)) : 0;
     const canAfford = character.karmaCurrent >= cost;
 
     return (
@@ -184,6 +197,16 @@ export function AttributesTab({ character, ruleset, onCharacterUpdate }: Attribu
         </div>
       </div>
 
+      {/* Special Attributes */}
+      <div>
+        <h3 className="text-sm font-semibold text-zinc-300 mb-3 uppercase tracking-wider">
+          Special Attributes
+        </h3>
+        <div className="space-y-3">
+          {renderAttribute('edge')}
+        </div>
+      </div>
+
       {/* Advance Modal */}
       <ModalOverlay
         isOpen={isModalOpen}
@@ -222,13 +245,15 @@ export function AttributesTab({ character, ruleset, onCharacterUpdate }: Attribu
                       <div className="flex items-center gap-4">
                         <span className="text-zinc-400">
                           Current: <span className="font-bold text-zinc-100">
-                            {character.attributes[selectedAttribute] || 0}
+                            {selectedAttribute === 'edge' 
+                              ? (character.specialAttributes?.edge || 1)
+                              : (character.attributes[selectedAttribute] || 0)}
                           </span>
                         </span>
                         <ArrowUp className="h-4 w-4 text-zinc-500" />
                         <span className="text-zinc-400">
                           New: <span className="font-bold text-emerald-400">
-                            {newRating || character.attributes[selectedAttribute] || 0}
+                            {newRating}
                           </span>
                         </span>
                       </div>
@@ -238,12 +263,12 @@ export function AttributesTab({ character, ruleset, onCharacterUpdate }: Attribu
                       <div className="flex justify-between text-sm">
                         <span className="text-zinc-400">Karma Cost:</span>
                         <span className="font-bold text-amber-400">
-                          {newRating ? calculateAttributeCost(newRating) : 0}
+                          {newRating ? (selectedAttribute === 'edge' ? calculateEdgeCost(newRating) : calculateAttributeCost(newRating)) : 0}
                         </span>
                       </div>
                       <div className="flex justify-between text-sm mt-1">
                         <span className="text-zinc-400">Available:</span>
-                        <span className={character.karmaCurrent >= (newRating ? calculateAttributeCost(newRating) : 0)
+                        <span className={character.karmaCurrent >= (newRating ? (selectedAttribute === 'edge' ? calculateEdgeCost(newRating) : calculateAttributeCost(newRating)) : 0)
                           ? "text-emerald-400"
                           : "text-red-400"
                         }>
@@ -251,6 +276,22 @@ export function AttributesTab({ character, ruleset, onCharacterUpdate }: Attribu
                         </span>
                       </div>
                     </div>
+
+                    <TextField
+                      value={notes}
+                      onChange={setNotes}
+                      className="space-y-2"
+                    >
+                      <label className="block text-sm font-medium text-zinc-300">
+                        Notes (Optional)
+                      </label>
+                      <textarea
+                        value={notes}
+                        onChange={(e) => setNotes(e.target.value)}
+                        placeholder="Why are you advancing this attribute?"
+                        className="w-full px-3 py-2 bg-zinc-800 border border-zinc-700 rounded text-zinc-100 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500 min-h-[80px]"
+                      />
+                    </TextField>
 
                     <div className="flex gap-3 pt-4">
                       <Button
@@ -261,7 +302,7 @@ export function AttributesTab({ character, ruleset, onCharacterUpdate }: Attribu
                       </Button>
                       <Button
                         onPress={handleSubmit}
-                        isDisabled={isSubmitting || !newRating || character.karmaCurrent < (newRating ? calculateAttributeCost(newRating) : 0)}
+                        isDisabled={isSubmitting || !newRating || character.karmaCurrent < (newRating ? (selectedAttribute === 'edge' ? calculateEdgeCost(newRating) : calculateAttributeCost(newRating)) : 0)}
                         className="flex-1 px-4 py-2 bg-emerald-600 hover:bg-emerald-500 disabled:bg-zinc-700 disabled:text-zinc-500 text-white rounded transition-colors"
                       >
                         {isSubmitting ? "Advancing..." : "Advance Attribute"}

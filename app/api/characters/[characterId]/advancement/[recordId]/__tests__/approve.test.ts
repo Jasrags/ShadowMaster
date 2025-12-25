@@ -116,7 +116,7 @@ describe('POST /api/characters/[characterId]/advancement/[recordId]/approve', ()
       updatedAdvancementRecord: approvedRecord,
     });
 
-    vi.mocked(characterStorageModule.updateCharacter).mockResolvedValue(updatedCharacter);
+    vi.mocked(characterStorageModule.saveCharacter).mockResolvedValue(updatedCharacter);
 
     const request = createMockRequest(`/api/characters/${characterId}/advancement/${recordId}/approve`);
 
@@ -136,7 +136,7 @@ describe('POST /api/characters/[characterId]/advancement/[recordId]/approve', ()
       recordId,
       gmUserId
     );
-    expect(characterStorageModule.updateCharacter).toHaveBeenCalled();
+    expect(characterStorageModule.saveCharacter).toHaveBeenCalled();
   });
 
   it('should return 401 if user is not authenticated', async () => {
@@ -258,7 +258,7 @@ describe('POST /api/characters/[characterId]/advancement/[recordId]/approve', ()
       updatedAdvancementRecord: approvedRecord,
     });
 
-    vi.mocked(characterStorageModule.updateCharacter).mockResolvedValue(updatedCharacter);
+    vi.mocked(characterStorageModule.saveCharacter).mockResolvedValue(updatedCharacter);
 
     const request = createMockRequest(`/api/characters/${characterId}/advancement/${recordId}/approve`);
 

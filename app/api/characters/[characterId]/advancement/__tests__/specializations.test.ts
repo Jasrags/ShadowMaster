@@ -132,7 +132,7 @@ describe('POST /api/characters/[characterId]/advancement/specializations', () =>
       updatedCharacter,
     });
 
-    vi.mocked(characterStorageModule.addAdvancementRecord).mockResolvedValue(updatedCharacter);
+    vi.mocked(characterStorageModule.saveCharacter).mockResolvedValue(updatedCharacter);
 
     const request = createMockRequest(`/api/characters/${characterId}/advancement/specializations`, {
       skillId: 'pistols',
@@ -162,7 +162,7 @@ describe('POST /api/characters/[characterId]/advancement/specializations', () =>
         notes: undefined,
       })
     );
-    expect(characterStorageModule.addAdvancementRecord).toHaveBeenCalled();
+    expect(characterStorageModule.saveCharacter).toHaveBeenCalled();
   });
 
   it('should return 401 if user is not authenticated', async () => {
@@ -375,7 +375,7 @@ describe('POST /api/characters/[characterId]/advancement/specializations', () =>
       updatedCharacter,
     });
 
-    vi.mocked(characterStorageModule.addAdvancementRecord).mockResolvedValue(updatedCharacter);
+    vi.mocked(characterStorageModule.saveCharacter).mockResolvedValue(updatedCharacter);
 
     const request = createMockRequest(`/api/characters/${characterId}/advancement/specializations`, {
       skillId: 'pistols',
