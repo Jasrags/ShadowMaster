@@ -26,6 +26,8 @@ import type {
   TrainingStatus,
   MagicalPath,
 } from "../types";
+import type { AuditAction, AuditActor, AuditEntry } from "../types/audit";
+import { createAuditEntry } from "../rules/character/state-machine";
 
 // =============================================================================
 // SEARCH TYPES
@@ -319,6 +321,89 @@ export async function updateCharacter(
     ...updates,
     id: character.id, // Ensure ID cannot be changed
     ownerId: character.ownerId, // Ensure owner cannot be changed
+    updatedAt: new Date().toISOString(),
+  };
+
+  const filePath = getCharacterFilePath(userId, characterId);
+  await writeJsonFile(filePath, updatedCharacter);
+
+  return updatedCharacter;
+}
+
+// =============================================================================
+// AUDIT-AWARE OPERATIONS
+// =============================================================================
+
+/**
+ * Context for audit-aware updates
+ */
+export interface AuditUpdateContext {
+  action: AuditAction;
+  actor: AuditActor;
+  details?: Record<string, unknown>;
+  note?: string;
+}
+
+/**
+ * Update a character with audit trail
+ *
+ * Use this for operations that should be tracked in the audit log,
+ * such as name changes or other significant modifications.
+ *
+ * Satisfies:
+ * - Guarantee: "All character state modifications MUST be persistent and recoverable"
+ */
+export async function updateCharacterWithAudit(
+  userId: ID,
+  characterId: ID,
+  updates: Partial<Character>,
+  auditContext: AuditUpdateContext
+): Promise<Character> {
+  const character = await getCharacter(userId, characterId);
+  if (!character) {
+    throw new Error(`Character with ID ${characterId} not found`);
+  }
+
+  // Create audit entry
+  const auditEntry: AuditEntry = createAuditEntry({
+    action: auditContext.action,
+    actor: auditContext.actor,
+    details: auditContext.details,
+    note: auditContext.note,
+  });
+
+  // Apply updates with audit entry
+  const updatedCharacter: Character = {
+    ...character,
+    ...updates,
+    id: character.id, // Ensure ID cannot be changed
+    ownerId: character.ownerId, // Ensure owner cannot be changed
+    auditLog: [...(character.auditLog || []), auditEntry],
+    updatedAt: new Date().toISOString(),
+  };
+
+  const filePath = getCharacterFilePath(userId, characterId);
+  await writeJsonFile(filePath, updatedCharacter);
+
+  return updatedCharacter;
+}
+
+/**
+ * Add an audit entry to a character without other changes
+ */
+export async function addAuditEntry(
+  userId: ID,
+  characterId: ID,
+  entry: AuditEntry
+): Promise<Character> {
+  const character = await getCharacter(userId, characterId);
+  if (!character) {
+    throw new Error(`Character with ID ${characterId} not found`);
+  }
+
+  const updatedCharacter: Character = {
+    ...character,
+    auditLog: [...(character.auditLog || []), entry],
     updatedAt: new Date().toISOString(),
   };
 
