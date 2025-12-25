@@ -7,7 +7,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getSession } from "@/lib/auth/session";
 import { getUserById } from "@/lib/storage/users";
-import { getCharacter, updateCharacter } from "@/lib/storage/characters";
+import { getCharacter, updateCharacterWithAudit } from "@/lib/storage/characters";
 import { loadAndMergeRuleset } from "@/lib/rules/merge";
 import { removeQuality } from "@/lib/rules/qualities/advancement";
 
@@ -78,16 +78,32 @@ export async function DELETE(
     try {
       const result = removeQuality(character, qualityId, mergeResult.ruleset, reason);
 
-      // Update character
-      const updatedCharacter = await updateCharacter(userId, characterId, {
-        positiveQualities: result.updatedCharacter.positiveQualities,
-        negativeQualities: result.updatedCharacter.negativeQualities,
-        karmaCurrent: result.updatedCharacter.karmaCurrent,
-      });
+      // Update character with audit trail
+      const updatedCharacter = await updateCharacterWithAudit(
+        userId,
+        characterId,
+        {
+          positiveQualities: result.updatedCharacter.positiveQualities,
+          negativeQualities: result.updatedCharacter.negativeQualities,
+          karmaCurrent: result.updatedCharacter.karmaCurrent,
+          advancementHistory: result.updatedCharacter.advancementHistory,
+        },
+        {
+          action: "updated",
+          actor: { userId, role: "owner" },
+          details: {
+            qualityId,
+            action: "remove_quality",
+            cost: result.cost,
+          },
+          note: reason,
+        }
+      );
 
       return NextResponse.json({
         success: true,
         character: updatedCharacter,
+        advancementRecord: result.advancementRecord,
         cost: result.cost,
       });
     } catch (error) {

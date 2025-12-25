@@ -45,7 +45,7 @@ export function DynamicStateModal({
       const response = await fetch(
         `/api/characters/${character.id}/qualities/${selection.qualityId}/state`,
         {
-          method: "POST",
+          method: "PATCH",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ updates }),
         }

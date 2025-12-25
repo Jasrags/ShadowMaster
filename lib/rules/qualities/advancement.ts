@@ -1,12 +1,5 @@
-/**
- * Post-creation quality advancement
- *
- * Functions for acquiring and removing qualities after character creation.
- * Post-creation quality acquisition costs 2× the normal karma cost.
- * Buying off negative qualities costs 2× the original karma bonus.
- */
-
-import type { Character, QualitySelection, MergedRuleset } from "@/lib/types";
+import { v4 as uuidv4 } from "uuid";
+import type { Character, QualitySelection, MergedRuleset, AdvancementRecord } from "@/lib/types";
 import type { Quality } from "@/lib/types";
 import { getQualityDefinition } from "./utils";
 import { canTakeQuality, validateQualitySelection } from "./validation";
@@ -120,6 +113,8 @@ export function acquireQuality(
   selection: QualitySelection;
   cost: number;
   updatedCharacter: Character;
+  quality: Quality;
+  advancementRecord: AdvancementRecord;
 } {
   // Validate acquisition
   const validation = validateQualityAcquisition(character, qualityId, ruleset, options);
@@ -169,11 +164,33 @@ export function acquireQuality(
     }
   }
 
+  // Create advancement record
+  const now = new Date().toISOString();
+  const advancementRecord: AdvancementRecord = {
+    id: uuidv4(),
+    type: "quality",
+    targetId: quality.id,
+    targetName: quality.name,
+    newValue: selection.rating || 1,
+    karmaCost: validation.cost,
+    karmaSpentAt: now,
+    trainingRequired: false,
+    trainingStatus: "completed",
+    gmApproved: options.gmApproved || false,
+    notes: options.notes,
+    createdAt: now,
+    completedAt: now,
+  };
+
   // Add to appropriate quality list
   const updatedCharacter: Character = {
     ...character,
     karmaCurrent: character.karmaCurrent - validation.cost,
-    karmaTotal: character.karmaTotal, // Don't change total karma (it's already earned)
+    karmaTotal: character.karmaTotal,
+    advancementHistory: [
+      ...(character.advancementHistory || []),
+      advancementRecord,
+    ],
   };
 
   if (quality.type === "positive") {
@@ -192,6 +209,8 @@ export function acquireQuality(
     selection,
     cost: validation.cost,
     updatedCharacter,
+    quality,
+    advancementRecord,
   };
 }
 
@@ -298,6 +317,8 @@ export function removeQuality(
 ): {
   cost: number;
   updatedCharacter: Character;
+  quality: Quality;
+  advancementRecord: AdvancementRecord;
 } {
   void _reason; // Parameter kept for interface compatibility
   // Validate removal
@@ -325,10 +346,32 @@ export function removeQuality(
     throw new Error(`Quality '${qualityId}' not found`);
   }
 
+  // Create advancement record for removal
+  const now = new Date().toISOString();
+  const advancementRecord: AdvancementRecord = {
+    id: uuidv4(),
+    type: "quality",
+    targetId: quality.id,
+    targetName: `${quality.name} (Removed)`,
+    newValue: 0,
+    karmaCost: validation.cost,
+    karmaSpentAt: now,
+    trainingRequired: false,
+    trainingStatus: "completed",
+    gmApproved: true, // Buy-off is usually approved if karma is spent
+    notes: _reason,
+    createdAt: now,
+    completedAt: now,
+  };
+
   // Find and remove the quality selection
   const updatedCharacter: Character = {
     ...character,
     karmaCurrent: character.karmaCurrent - validation.cost,
+    advancementHistory: [
+      ...(character.advancementHistory || []),
+      advancementRecord,
+    ],
   };
 
   if (quality.type === "positive") {
@@ -348,6 +391,8 @@ export function removeQuality(
   return {
     cost: validation.cost,
     updatedCharacter,
+    quality,
+    advancementRecord,
   };
 }
 
