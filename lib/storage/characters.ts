@@ -24,7 +24,65 @@ import type {
   TrainingPeriod,
   AdvancementType,
   TrainingStatus,
+  MagicalPath,
 } from "../types";
+
+// =============================================================================
+// SEARCH TYPES
+// =============================================================================
+
+/**
+ * Search options for character queries
+ */
+export interface CharacterSearchOptions {
+  userId: ID;
+  filters?: {
+    status?: CharacterStatus[];
+    edition?: EditionCode[];
+    campaignId?: ID;
+    metatype?: string;
+    magicalPath?: MagicalPath;
+    search?: string; // Full-text search on name, metatype, magical path
+  };
+  sort?: {
+    field: "name" | "updatedAt" | "createdAt" | "karmaCurrent";
+    order: "asc" | "desc";
+  };
+  pagination?: {
+    limit: number;
+    offset: number;
+  };
+  format?: "summary" | "full";
+}
+
+/**
+ * Result of a character search
+ */
+export interface CharacterSearchResult<T = Character> {
+  characters: T[];
+  total: number;
+  hasMore: boolean;
+  limit: number;
+  offset: number;
+}
+
+/**
+ * Summarized character data for list views
+ */
+export interface CharacterSummary {
+  id: ID;
+  ownerId: ID;
+  name: string;
+  metatype?: string;
+  magicalPath?: MagicalPath;
+  status: CharacterStatus;
+  editionCode: EditionCode;
+  campaignId?: ID;
+  karmaCurrent: number;
+  karmaTotal: number;
+  createdAt: string;
+  updatedAt?: string;
+}
 import {
   ensureDirectory,
   readJsonFile,
@@ -809,5 +867,160 @@ export function getAdvancementRecordById(
   advancementRecordId: ID
 ): AdvancementRecord | null {
   return character.advancementHistory?.find((a) => a.id === advancementRecordId) || null;
+}
+
+// =============================================================================
+// SEARCH AND DISCOVERY
+// =============================================================================
+
+/**
+ * Convert a full character to a summary for list views
+ *
+ * @param character - Full character object
+ * @returns Character summary with minimal fields
+ */
+export function toCharacterSummary(character: Character): CharacterSummary {
+  return {
+    id: character.id,
+    ownerId: character.ownerId,
+    name: character.name,
+    metatype: character.metatype,
+    magicalPath: character.magicalPath,
+    status: character.status,
+    editionCode: character.editionCode,
+    campaignId: character.campaignId,
+    karmaCurrent: character.karmaCurrent,
+    karmaTotal: character.karmaTotal,
+    createdAt: character.createdAt,
+    updatedAt: character.updatedAt,
+  };
+}
+
+/**
+ * Search characters with filtering, sorting, and pagination
+ *
+ * Satisfies:
+ * - Requirement: "Character entities MUST be discoverable and retrievable
+ *   through multi-criteria searching, filtering, and sorting"
+ *
+ * @param options - Search options including filters, sort, and pagination
+ * @returns Search result with characters and metadata
+ */
+export async function searchCharacters(
+  options: CharacterSearchOptions
+): Promise<CharacterSearchResult<Character | CharacterSummary>> {
+  const { userId, filters, sort, pagination, format } = options;
+
+  // Get all user characters
+  let characters = await getUserCharacters(userId);
+
+  // Apply filters
+  if (filters) {
+    // Status filter (array)
+    if (filters.status && filters.status.length > 0) {
+      characters = characters.filter((c) =>
+        filters.status!.includes(c.status)
+      );
+    }
+
+    // Edition filter (array)
+    if (filters.edition && filters.edition.length > 0) {
+      characters = characters.filter((c) =>
+        filters.edition!.includes(c.editionCode)
+      );
+    }
+
+    // Campaign filter
+    if (filters.campaignId) {
+      characters = characters.filter((c) => c.campaignId === filters.campaignId);
+    }
+
+    // Metatype filter (case-insensitive contains)
+    if (filters.metatype) {
+      const metatypeLower = filters.metatype.toLowerCase();
+      characters = characters.filter(
+        (c) => c.metatype?.toLowerCase().includes(metatypeLower)
+      );
+    }
+
+    // Magical path filter
+    if (filters.magicalPath) {
+      characters = characters.filter((c) => c.magicalPath === filters.magicalPath);
+    }
+
+    // Full-text search (name, metatype, magical path)
+    if (filters.search) {
+      const searchLower = filters.search.toLowerCase();
+      characters = characters.filter((c) => {
+        const nameMatch = c.name?.toLowerCase().includes(searchLower);
+        const metatypeMatch = c.metatype?.toLowerCase().includes(searchLower);
+        const pathMatch = c.magicalPath?.toLowerCase().includes(searchLower);
+        return nameMatch || metatypeMatch || pathMatch;
+      });
+    }
+  }
+
+  // Get total before pagination
+  const total = characters.length;
+
+  // Apply sorting
+  const sortField = sort?.field || "updatedAt";
+  const sortOrder = sort?.order || "desc";
+
+  characters.sort((a, b) => {
+    let valueA: string | number | undefined;
+    let valueB: string | number | undefined;
+
+    switch (sortField) {
+      case "name":
+        valueA = a.name?.toLowerCase() || "";
+        valueB = b.name?.toLowerCase() || "";
+        break;
+      case "createdAt":
+        valueA = a.createdAt;
+        valueB = b.createdAt;
+        break;
+      case "updatedAt":
+        valueA = a.updatedAt || a.createdAt;
+        valueB = b.updatedAt || b.createdAt;
+        break;
+      case "karmaCurrent":
+        valueA = a.karmaCurrent;
+        valueB = b.karmaCurrent;
+        break;
+    }
+
+    if (valueA === undefined) return sortOrder === "asc" ? -1 : 1;
+    if (valueB === undefined) return sortOrder === "asc" ? 1 : -1;
+
+    if (valueA < valueB) return sortOrder === "asc" ? -1 : 1;
+    if (valueA > valueB) return sortOrder === "asc" ? 1 : -1;
+    return 0;
+  });
+
+  // Apply pagination
+  const limit = pagination?.limit ?? 20;
+  const offset = pagination?.offset ?? 0;
+  const paginatedCharacters = characters.slice(offset, offset + limit);
+  const hasMore = offset + paginatedCharacters.length < total;
+
+  // Return summary or full format
+  if (format === "summary") {
+    return {
+      characters: paginatedCharacters.map(toCharacterSummary),
+      total,
+      hasMore,
+      limit,
+      offset,
+    };
+  }
+
+  return {
+    characters: paginatedCharacters,
+    total,
+    hasMore,
+    limit,
+    offset,
+  };
 }
 

@@ -1,8 +1,8 @@
 /**
  * Tests for /api/characters endpoint
- * 
+ *
  * Tests character listing (GET) and creation (POST) including
- * authentication, filtering, and error handling.
+ * authentication, filtering, sorting, pagination, and error handling.
  */
 
 import { describe, it, expect, vi, beforeEach } from 'vitest';
@@ -13,6 +13,7 @@ import * as userStorageModule from '@/lib/storage/users';
 import * as characterStorageModule from '@/lib/storage/characters';
 
 import type { Character, CharacterDraft, UserRole } from "@/lib/types";
+import type { CharacterSearchResult } from "@/lib/storage/characters";
 
 // Mock dependencies
 vi.mock('@/lib/auth/session');
@@ -118,9 +119,17 @@ describe('GET /api/characters', () => {
   });
 
   it('should return user characters when authenticated', async () => {
+    const searchResult: CharacterSearchResult = {
+      characters: mockCharacters,
+      total: 2,
+      hasMore: false,
+      limit: 20,
+      offset: 0,
+    };
+
     vi.mocked(sessionModule.getSession).mockResolvedValue('test-user-id');
     vi.mocked(userStorageModule.getUserById).mockResolvedValue(mockUser);
-    vi.mocked(characterStorageModule.getUserCharacters).mockResolvedValue(mockCharacters);
+    vi.mocked(characterStorageModule.searchCharacters).mockResolvedValue(searchResult);
 
     const request = createMockRequest('http://localhost:3000/api/characters');
     const response = await GET(request);
@@ -129,16 +138,26 @@ describe('GET /api/characters', () => {
     expect(response.status).toBe(200);
     expect(data.success).toBe(true);
     expect(data.characters).toEqual(mockCharacters);
-    expect(data.count).toBe(2);
-    expect(characterStorageModule.getUserCharacters).toHaveBeenCalledWith('test-user-id');
+    expect(data.total).toBe(2);
+    expect(data.hasMore).toBe(false);
+    expect(characterStorageModule.searchCharacters).toHaveBeenCalledWith(
+      expect.objectContaining({ userId: 'test-user-id' })
+    );
   });
 
   it('should filter characters by status when status query param provided', async () => {
     const draftCharacters = [mockCharacters[0]];
+    const searchResult: CharacterSearchResult = {
+      characters: draftCharacters,
+      total: 1,
+      hasMore: false,
+      limit: 20,
+      offset: 0,
+    };
 
     vi.mocked(sessionModule.getSession).mockResolvedValue('test-user-id');
     vi.mocked(userStorageModule.getUserById).mockResolvedValue(mockUser);
-    vi.mocked(characterStorageModule.getCharactersByStatus).mockResolvedValue(draftCharacters);
+    vi.mocked(characterStorageModule.searchCharacters).mockResolvedValue(searchResult);
 
     const request = createMockRequest('http://localhost:3000/api/characters?status=draft');
     const response = await GET(request);
@@ -147,19 +166,28 @@ describe('GET /api/characters', () => {
     expect(response.status).toBe(200);
     expect(data.success).toBe(true);
     expect(data.characters).toEqual(draftCharacters);
-    expect(data.count).toBe(1);
-    expect(characterStorageModule.getCharactersByStatus).toHaveBeenCalledWith(
-      'test-user-id',
-      'draft'
+    expect(data.total).toBe(1);
+    expect(characterStorageModule.searchCharacters).toHaveBeenCalledWith(
+      expect.objectContaining({
+        userId: 'test-user-id',
+        filters: expect.objectContaining({ status: ['draft'] }),
+      })
     );
   });
 
   it('should filter characters by edition when edition query param provided', async () => {
     const sr5Characters = mockCharacters.filter((c) => c.editionCode === 'sr5');
+    const searchResult: CharacterSearchResult = {
+      characters: sr5Characters,
+      total: 2,
+      hasMore: false,
+      limit: 20,
+      offset: 0,
+    };
 
     vi.mocked(sessionModule.getSession).mockResolvedValue('test-user-id');
     vi.mocked(userStorageModule.getUserById).mockResolvedValue(mockUser);
-    vi.mocked(characterStorageModule.getUserCharacters).mockResolvedValue(mockCharacters);
+    vi.mocked(characterStorageModule.searchCharacters).mockResolvedValue(searchResult);
 
     const request = createMockRequest('http://localhost:3000/api/characters?edition=sr5');
     const response = await GET(request);
@@ -168,22 +196,32 @@ describe('GET /api/characters', () => {
     expect(response.status).toBe(200);
     expect(data.success).toBe(true);
     expect(data.characters).toEqual(sr5Characters);
-    expect(data.count).toBe(2);
+    expect(data.total).toBe(2);
+    expect(characterStorageModule.searchCharacters).toHaveBeenCalledWith(
+      expect.objectContaining({
+        userId: 'test-user-id',
+        filters: expect.objectContaining({ edition: ['sr5'] }),
+      })
+    );
   });
 
   it('should filter by both status and edition', async () => {
-    // getCharactersByStatus returns only draft characters
     const draftCharacter = {
       ...mockCharacters[0],
       status: 'draft' as const,
     };
     const draftCharacters = [draftCharacter];
-    // Then edition filter is applied
-    draftCharacters.filter((c) => c.editionCode === 'sr5');
+    const searchResult: CharacterSearchResult = {
+      characters: draftCharacters,
+      total: 1,
+      hasMore: false,
+      limit: 20,
+      offset: 0,
+    };
 
     vi.mocked(sessionModule.getSession).mockResolvedValue('test-user-id');
     vi.mocked(userStorageModule.getUserById).mockResolvedValue(mockUser);
-    vi.mocked(characterStorageModule.getCharactersByStatus).mockResolvedValue(draftCharacters);
+    vi.mocked(characterStorageModule.searchCharacters).mockResolvedValue(searchResult);
 
     const request = createMockRequest('http://localhost:3000/api/characters?status=draft&edition=sr5');
     const response = await GET(request);
@@ -194,39 +232,20 @@ describe('GET /api/characters', () => {
     expect(data.characters).toHaveLength(1);
     expect(data.characters[0].status).toBe('draft');
     expect(data.characters[0].editionCode).toBe('sr5');
+    expect(characterStorageModule.searchCharacters).toHaveBeenCalledWith(
+      expect.objectContaining({
+        userId: 'test-user-id',
+        filters: expect.objectContaining({
+          status: ['draft'],
+          edition: ['sr5'],
+        }),
+      })
+    );
   });
 
   it('should sort characters by updated date (most recent first)', async () => {
-    // Create characters with different dates - char-2 should be first (most recent)
-    const unsortedCharacters: Character[] = [
-      {
-        id: 'char-1',
-        ownerId: 'test-user-id',
-        name: 'Character 1',
-        metatype: 'human',
-        editionId: 'sr5',
-        editionCode: 'sr5',
-        creationMethodId: 'priority',
-        attachedBookIds: [],
-        status: 'draft',
-        attributes: { bod: 3, agi: 3, rea: 3, str: 3, cha: 3, int: 3, log: 3, wil: 3 },
-        specialAttributes: { edge: 2, essence: 6, magic: 0, resonance: 0 },
-        skills: {},
-        positiveQualities: [],
-        negativeQualities: [],
-        magicalPath: 'mundane',
-        nuyen: 0,
-        startingNuyen: 0,
-        gear: [],
-        contacts: [],
-        derivedStats: { physicalLimit: 4, mentalLimit: 4, socialLimit: 4, initiative: 6 },
-        condition: { physicalDamage: 0, stunDamage: 0 },
-        karmaTotal: 0,
-        karmaCurrent: 0,
-        karmaSpentAtCreation: 0,
-        createdAt: new Date('2024-01-01').toISOString(),
-        updatedAt: new Date('2024-01-01').toISOString(),
-      },
+    // Characters are returned already sorted by the search function
+    const sortedCharacters: Character[] = [
       {
         id: 'char-2',
         ownerId: 'test-user-id',
@@ -255,11 +274,46 @@ describe('GET /api/characters', () => {
         createdAt: new Date('2024-01-03').toISOString(),
         updatedAt: new Date('2024-01-05').toISOString(), // More recent
       },
+      {
+        id: 'char-1',
+        ownerId: 'test-user-id',
+        name: 'Character 1',
+        metatype: 'human',
+        editionId: 'sr5',
+        editionCode: 'sr5',
+        creationMethodId: 'priority',
+        attachedBookIds: [],
+        status: 'draft',
+        attributes: { bod: 3, agi: 3, rea: 3, str: 3, cha: 3, int: 3, log: 3, wil: 3 },
+        specialAttributes: { edge: 2, essence: 6, magic: 0, resonance: 0 },
+        skills: {},
+        positiveQualities: [],
+        negativeQualities: [],
+        magicalPath: 'mundane',
+        nuyen: 0,
+        startingNuyen: 0,
+        gear: [],
+        contacts: [],
+        derivedStats: { physicalLimit: 4, mentalLimit: 4, socialLimit: 4, initiative: 6 },
+        condition: { physicalDamage: 0, stunDamage: 0 },
+        karmaTotal: 0,
+        karmaCurrent: 0,
+        karmaSpentAtCreation: 0,
+        createdAt: new Date('2024-01-01').toISOString(),
+        updatedAt: new Date('2024-01-01').toISOString(),
+      },
     ];
+    const searchResult: CharacterSearchResult = {
+      characters: sortedCharacters,
+      total: 2,
+      hasMore: false,
+      limit: 20,
+      offset: 0,
+    };
 
     vi.mocked(sessionModule.getSession).mockResolvedValue('test-user-id');
     vi.mocked(userStorageModule.getUserById).mockResolvedValue(mockUser);
-    vi.mocked(characterStorageModule.getUserCharacters).mockResolvedValue(unsortedCharacters);
+    vi.mocked(characterStorageModule.searchCharacters).mockResolvedValue(searchResult);
 
     const request = createMockRequest('http://localhost:3000/api/characters');
     const response = await GET(request);
@@ -283,7 +337,7 @@ describe('GET /api/characters', () => {
     expect(response.status).toBe(401);
     expect(data.success).toBe(false);
     expect(data.error).toBe('Unauthorized');
-    expect(characterStorageModule.getUserCharacters).not.toHaveBeenCalled();
+    expect(characterStorageModule.searchCharacters).not.toHaveBeenCalled();
   });
 
   it('should return 404 when user not found', async () => {
@@ -305,7 +359,7 @@ describe('GET /api/characters', () => {
 
     vi.mocked(sessionModule.getSession).mockResolvedValue('test-user-id');
     vi.mocked(userStorageModule.getUserById).mockResolvedValue(mockUser);
-    vi.mocked(characterStorageModule.getUserCharacters).mockRejectedValue(
+    vi.mocked(characterStorageModule.searchCharacters).mockRejectedValue(
       new Error('Database error')
     );
 
