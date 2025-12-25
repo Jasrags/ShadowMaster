@@ -146,3 +146,93 @@ export interface AuditQueryOptions {
   /** Sort order (default: descending by timestamp) */
   order?: "asc" | "desc";
 }
+
+// =============================================================================
+// USER AUDIT TYPES (Participant Governance)
+// =============================================================================
+
+/**
+ * All auditable actions on user accounts
+ */
+export type UserAuditAction =
+  | "user_created"
+  | "user_role_granted"
+  | "user_role_revoked"
+  | "user_email_changed"
+  | "user_username_changed"
+  | "user_suspended"
+  | "user_reactivated"
+  | "user_deleted"
+  | "user_lockout_triggered"
+  | "user_lockout_cleared";
+
+/**
+ * Actor who performed a user management action
+ */
+export interface UserAuditActor {
+  userId: ID;
+  role: "admin" | "system";
+}
+
+/**
+ * Immutable record of a single auditable action on a user account
+ */
+export interface UserAuditEntry {
+  /** Unique identifier for this audit entry */
+  id: ID;
+
+  /** When the action occurred */
+  timestamp: ISODateString;
+
+  /** Type of action performed */
+  action: UserAuditAction;
+
+  /** Who performed the action */
+  actor: UserAuditActor;
+
+  /** The user account affected by this action */
+  targetUserId: ID;
+
+  /** Details about the change */
+  details: {
+    /** Value before the change */
+    previousValue?: unknown;
+    /** Value after the change */
+    newValue?: unknown;
+    /** Reason for the action (e.g., suspension reason) */
+    reason?: string;
+    /** Additional context */
+    [key: string]: unknown;
+  };
+}
+
+/**
+ * Parameters for creating a user audit entry
+ */
+export interface CreateUserAuditEntryParams {
+  action: UserAuditAction;
+  actor: UserAuditActor;
+  targetUserId: ID;
+  details?: UserAuditEntry["details"];
+}
+
+/**
+ * Query options for retrieving user audit entries
+ */
+export interface UserAuditQueryOptions {
+  /** Filter by action types */
+  actions?: UserAuditAction[];
+  /** Filter by actor */
+  actorId?: ID;
+  /** Filter by target user */
+  targetUserId?: ID;
+  /** Filter by date range */
+  fromDate?: ISODateString;
+  toDate?: ISODateString;
+  /** Pagination offset */
+  offset?: number;
+  /** Limit number of results */
+  limit?: number;
+  /** Sort order (default: descending by timestamp) */
+  order?: "asc" | "desc";
+}

@@ -104,6 +104,13 @@ export function createMockUser(overrides?: Partial<User>): User {
       theme: 'system',
       navigationCollapsed: false,
     },
+    // Governance fields
+    accountStatus: 'active',
+    statusChangedAt: null,
+    statusChangedBy: null,
+    statusReason: null,
+    lastRoleChangeAt: null,
+    lastRoleChangeBy: null,
     ...overrides,
   };
 }

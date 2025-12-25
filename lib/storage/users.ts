@@ -1,9 +1,9 @@
 import { promises as fs } from "fs";
 import path from "path";
 import { v4 as uuidv4 } from "uuid";
-import type { User, UserRole } from "../types/user";
+import type { User, UserRole, AccountStatus } from "../types/user";
 
-export type NewUserData = Omit<User, "id" | "createdAt" | "lastLogin" | "characters" | "failedLoginAttempts" | "lockoutUntil" | "sessionVersion" | "preferences">;
+export type NewUserData = Omit<User, "id" | "createdAt" | "lastLogin" | "characters" | "failedLoginAttempts" | "lockoutUntil" | "sessionVersion" | "preferences" | "accountStatus" | "statusChangedAt" | "statusChangedBy" | "statusReason" | "lastRoleChangeAt" | "lastRoleChangeBy">;
 
 const DATA_DIR = path.join(process.cwd(), "data", "users");
 
@@ -90,7 +90,7 @@ function normalizeUserRole(role: UserRole | UserRole[]): UserRole[] {
 }
 
 /**
- * Ensure user has default values for security fields (for backward compatibility)
+ * Ensure user has default values for security and governance fields (for backward compatibility)
  */
 function normalizeUserDefaults(user: User): User {
   return {
@@ -102,6 +102,13 @@ function normalizeUserDefaults(user: User): User {
     failedLoginAttempts: user.failedLoginAttempts ?? 0,
     lockoutUntil: user.lockoutUntil ?? null,
     sessionVersion: user.sessionVersion ?? 1,
+    // Governance fields (participant governance capability)
+    accountStatus: user.accountStatus ?? "active",
+    statusChangedAt: user.statusChangedAt ?? null,
+    statusChangedBy: user.statusChangedBy ?? null,
+    statusReason: user.statusReason ?? null,
+    lastRoleChangeAt: user.lastRoleChangeAt ?? null,
+    lastRoleChangeBy: user.lastRoleChangeBy ?? null,
   };
 }
 
@@ -172,6 +179,13 @@ export async function createUser(
     failedLoginAttempts: 0,
     lockoutUntil: null,
     sessionVersion: 1,
+    // Initialize governance fields
+    accountStatus: "active",
+    statusChangedAt: null,
+    statusChangedBy: null,
+    statusReason: null,
+    lastRoleChangeAt: null,
+    lastRoleChangeBy: null,
   };
 
   // Atomic write: write to temp file, then rename
@@ -305,5 +319,262 @@ export async function incrementSessionVersion(userId: string): Promise<User> {
   return updateUser(userId, {
     sessionVersion: (user.sessionVersion || 0) + 1,
   });
+}
+
+// =============================================================================
+// PARTICIPANT GOVERNANCE FUNCTIONS
+// =============================================================================
+
+/**
+ * Count the number of administrators in the system
+ */
+export async function countAdmins(): Promise<number> {
+  const users = await getAllUsers();
+  return users.filter((u) => u.role.includes("administrator")).length;
+}
+
+/**
+ * Check if a user is the last administrator
+ */
+export async function isLastAdmin(userId: string): Promise<boolean> {
+  const user = await getUserById(userId);
+  if (!user || !user.role.includes("administrator")) {
+    return false;
+  }
+  const adminCount = await countAdmins();
+  return adminCount === 1;
+}
+
+/**
+ * Suspend a user account
+ *
+ * @param userId - The user to suspend
+ * @param actorId - The admin performing the suspension
+ * @param reason - The reason for suspension
+ * @throws Error if user is the last administrator
+ */
+export async function suspendUser(
+  userId: string,
+  actorId: string,
+  reason: string
+): Promise<User> {
+  const user = await getUserById(userId);
+  if (!user) throw new Error("User not found");
+
+  // Prevent suspending the last administrator
+  if (await isLastAdmin(userId)) {
+    throw new Error("Cannot suspend the last administrator");
+  }
+
+  const now = new Date().toISOString();
+
+  // Update user status and invalidate sessions
+  const updatedUser = await updateUser(userId, {
+    accountStatus: "suspended" as AccountStatus,
+    statusChangedAt: now,
+    statusChangedBy: actorId,
+    statusReason: reason,
+    sessionVersion: (user.sessionVersion || 0) + 1, // Force logout
+  });
+
+  // Create audit entry
+  const { createUserAuditEntry } = await import("./user-audit");
+  await createUserAuditEntry({
+    action: "user_suspended",
+    actor: { userId: actorId, role: "admin" },
+    targetUserId: userId,
+    details: {
+      previousValue: user.accountStatus,
+      newValue: "suspended",
+      reason,
+    },
+  });
+
+  return updatedUser;
+}
+
+/**
+ * Reactivate a suspended user account
+ *
+ * @param userId - The user to reactivate
+ * @param actorId - The admin performing the reactivation
+ */
+export async function reactivateUser(
+  userId: string,
+  actorId: string
+): Promise<User> {
+  const user = await getUserById(userId);
+  if (!user) throw new Error("User not found");
+
+  if (user.accountStatus === "active") {
+    throw new Error("User is already active");
+  }
+
+  const now = new Date().toISOString();
+  const previousStatus = user.accountStatus;
+
+  const updatedUser = await updateUser(userId, {
+    accountStatus: "active" as AccountStatus,
+    statusChangedAt: now,
+    statusChangedBy: actorId,
+    statusReason: null,
+  });
+
+  // Create audit entry
+  const { createUserAuditEntry } = await import("./user-audit");
+  await createUserAuditEntry({
+    action: "user_reactivated",
+    actor: { userId: actorId, role: "admin" },
+    targetUserId: userId,
+    details: {
+      previousValue: previousStatus,
+      newValue: "active",
+    },
+  });
+
+  return updatedUser;
+}
+
+/**
+ * Update user roles with audit logging
+ *
+ * @param userId - The user to update
+ * @param newRoles - The new set of roles
+ * @param actorId - The admin performing the change
+ * @throws Error if would leave user with no roles or demote last admin
+ */
+export async function updateUserRoles(
+  userId: string,
+  newRoles: UserRole[],
+  actorId: string
+): Promise<User> {
+  const user = await getUserById(userId);
+  if (!user) throw new Error("User not found");
+
+  // Validate roles array is not empty
+  if (!newRoles || newRoles.length === 0) {
+    throw new Error("User must have at least one role");
+  }
+
+  const previousRoles = [...user.role];
+  const hadAdmin = previousRoles.includes("administrator");
+  const hasAdmin = newRoles.includes("administrator");
+
+  // Prevent demoting the last administrator
+  if (hadAdmin && !hasAdmin && (await isLastAdmin(userId))) {
+    throw new Error("Cannot remove administrator role from the last administrator");
+  }
+
+  const now = new Date().toISOString();
+
+  // Determine if this is a demotion (lost admin or gm role)
+  const isDemotion =
+    (hadAdmin && !hasAdmin) ||
+    (previousRoles.includes("gamemaster") && !newRoles.includes("gamemaster"));
+
+  const updatedUser = await updateUser(userId, {
+    role: newRoles,
+    lastRoleChangeAt: now,
+    lastRoleChangeBy: actorId,
+    // Force session invalidation on demotion for immediate propagation
+    ...(isDemotion && { sessionVersion: (user.sessionVersion || 0) + 1 }),
+  });
+
+  // Create audit entries for role changes
+  const { createUserAuditEntry } = await import("./user-audit");
+
+  // Log granted roles
+  const grantedRoles = newRoles.filter((r) => !previousRoles.includes(r));
+  for (const role of grantedRoles) {
+    await createUserAuditEntry({
+      action: "user_role_granted",
+      actor: { userId: actorId, role: "admin" },
+      targetUserId: userId,
+      details: {
+        newValue: role,
+        allRoles: newRoles,
+      },
+    });
+  }
+
+  // Log revoked roles
+  const revokedRoles = previousRoles.filter((r) => !newRoles.includes(r));
+  for (const role of revokedRoles) {
+    await createUserAuditEntry({
+      action: "user_role_revoked",
+      actor: { userId: actorId, role: "admin" },
+      targetUserId: userId,
+      details: {
+        previousValue: role,
+        allRoles: newRoles,
+      },
+    });
+  }
+
+  return updatedUser;
+}
+
+/**
+ * Update user email with audit logging
+ */
+export async function updateUserEmail(
+  userId: string,
+  newEmail: string,
+  actorId: string
+): Promise<User> {
+  const user = await getUserById(userId);
+  if (!user) throw new Error("User not found");
+
+  const previousEmail = user.email;
+
+  const updatedUser = await updateUser(userId, {
+    email: newEmail,
+  });
+
+  // Create audit entry
+  const { createUserAuditEntry } = await import("./user-audit");
+  await createUserAuditEntry({
+    action: "user_email_changed",
+    actor: { userId: actorId, role: "admin" },
+    targetUserId: userId,
+    details: {
+      previousValue: previousEmail,
+      newValue: newEmail,
+    },
+  });
+
+  return updatedUser;
+}
+
+/**
+ * Update username with audit logging
+ */
+export async function updateUsername(
+  userId: string,
+  newUsername: string,
+  actorId: string
+): Promise<User> {
+  const user = await getUserById(userId);
+  if (!user) throw new Error("User not found");
+
+  const previousUsername = user.username;
+
+  const updatedUser = await updateUser(userId, {
+    username: newUsername,
+  });
+
+  // Create audit entry
+  const { createUserAuditEntry } = await import("./user-audit");
+  await createUserAuditEntry({
+    action: "user_username_changed",
+    actor: { userId: actorId, role: "admin" },
+    targetUserId: userId,
+    details: {
+      previousValue: previousUsername,
+      newValue: newUsername,
+    },
+  });
+
+  return updatedUser;
 }
 

@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { getUserByEmail, updateUser, incrementFailedAttempts, resetFailedAttempts } from "@/lib/storage/users";
 import { verifyPassword } from "@/lib/auth/password";
 import { createSession } from "@/lib/auth/session";
+import { toPublicUser } from "@/lib/auth/middleware";
 import { RateLimiter } from "@/lib/security/rate-limit";
 import { AuditLogger } from "@/lib/security/audit-logger";
 import type { SigninRequest, AuthResponse } from "@/lib/types/user";
@@ -77,7 +78,7 @@ export async function POST(request: NextRequest): Promise<NextResponse<AuthRespo
 
     // 5. Success - Reset attempts and create session
     await resetFailedAttempts(user.id);
-    await updateUser(user.id, {
+    const updatedUser = await updateUser(user.id, {
       lastLogin: new Date().toISOString(),
     });
 
@@ -85,22 +86,10 @@ export async function POST(request: NextRequest): Promise<NextResponse<AuthRespo
 
     const response = NextResponse.json({
       success: true,
-      user: {
-        id: user.id,
-        email: user.email,
-        username: user.username,
-        role: user.role,
-        createdAt: user.createdAt,
-        lastLogin: new Date().toISOString(),
-        characters: user.characters,
-        failedLoginAttempts: 0,
-        lockoutUntil: null,
-        sessionVersion: user.sessionVersion,
-        preferences: user.preferences,
-      },
+      user: toPublicUser(updatedUser),
     });
 
-    createSession(user.id, response, user.sessionVersion);
+    createSession(user.id, response, updatedUser.sessionVersion);
 
     return response;
   } catch (error) {

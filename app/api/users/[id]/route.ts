@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { requireAdmin } from "@/lib/auth/middleware";
+import { requireAdmin, toPublicUser } from "@/lib/auth/middleware";
 import { getUserById, updateUser, getAllUsers, deleteUser } from "@/lib/storage/users";
 import { isValidEmail, isValidUsername } from "@/lib/auth/validation";
 import type { UpdateUserRequest, UpdateUserResponse, DeleteUserResponse, UserRole } from "@/lib/types/user";
@@ -97,24 +97,9 @@ export async function PUT(
     // Update user
     const updatedUser = await updateUser(id, updates);
 
-    // Return user without passwordHash
-    const publicUser = {
-      id: updatedUser.id,
-      email: updatedUser.email,
-      username: updatedUser.username,
-      role: updatedUser.role,
-      createdAt: updatedUser.createdAt,
-      lastLogin: updatedUser.lastLogin,
-      characters: updatedUser.characters,
-      failedLoginAttempts: updatedUser.failedLoginAttempts,
-      lockoutUntil: updatedUser.lockoutUntil,
-      sessionVersion: updatedUser.sessionVersion,
-      preferences: updatedUser.preferences,
-    };
-
     return NextResponse.json({
       success: true,
-      user: publicUser,
+      user: toPublicUser(updatedUser),
     });
   } catch (error) {
     const errorMessage = error instanceof Error ? error.message : "An error occurred";

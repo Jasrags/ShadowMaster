@@ -53,6 +53,12 @@ describe('POST /api/auth/signup', () => {
       theme: "system",
       navigationCollapsed: false,
     },
+    accountStatus: 'active',
+    statusChangedAt: null,
+    statusChangedBy: null,
+    statusReason: null,
+    lastRoleChangeAt: null,
+    lastRoleChangeBy: null,
   };
 
   beforeEach(() => {
@@ -241,6 +247,12 @@ describe('POST /api/auth/signup', () => {
         theme: "system",
         navigationCollapsed: false,
       },
+      accountStatus: 'active',
+      statusChangedAt: null,
+      statusChangedBy: null,
+      statusReason: null,
+      lastRoleChangeAt: null,
+      lastRoleChangeBy: null,
     };
 
     vi.mocked(validationModule.isValidEmail).mockReturnValue(true);

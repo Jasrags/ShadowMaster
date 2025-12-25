@@ -267,6 +267,12 @@ export type {
   AuditEntry,
   CreateAuditEntryParams,
   AuditQueryOptions,
+  // User audit types (Participant Governance)
+  UserAuditAction,
+  UserAuditActor,
+  UserAuditEntry,
+  CreateUserAuditEntryParams,
+  UserAuditQueryOptions,
 } from "./audit";
 
 // Discovery types (for ruleset browsing)

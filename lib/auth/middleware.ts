@@ -1,6 +1,15 @@
 import { getSession } from "./session";
 import { getUserById } from "../storage/users";
-import type { PublicUser } from "../types/user";
+import type { User, PublicUser } from "../types/user";
+
+/**
+ * Convert a User to PublicUser by stripping sensitive fields
+ */
+export function toPublicUser(user: User): PublicUser {
+  // Destructure to remove passwordHash, spread the rest
+  const { passwordHash: _, ...publicUser } = user;
+  return publicUser;
+}
 
 /**
  * Get the current authenticated user from the session
@@ -17,19 +26,7 @@ export async function getCurrentUser(): Promise<PublicUser | null> {
     return null;
   }
 
-  return {
-    id: user.id,
-    email: user.email,
-    username: user.username,
-    role: user.role,
-    createdAt: user.createdAt,
-    lastLogin: user.lastLogin,
-    characters: user.characters,
-    failedLoginAttempts: user.failedLoginAttempts,
-    lockoutUntil: user.lockoutUntil,
-    sessionVersion: user.sessionVersion,
-    preferences: user.preferences,
-  };
+  return toPublicUser(user);
 }
 
 /**

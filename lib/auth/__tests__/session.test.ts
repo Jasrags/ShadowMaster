@@ -56,6 +56,12 @@ describe('Session Management', () => {
       theme: "system",
       navigationCollapsed: false,
     },
+    accountStatus: 'active',
+    statusChangedAt: null,
+    statusChangedBy: null,
+    statusReason: null,
+    lastRoleChangeAt: null,
+    lastRoleChangeBy: null,
   };
 
   const mockCookieStore = {

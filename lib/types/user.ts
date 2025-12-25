@@ -1,5 +1,13 @@
 export type UserRole = "user" | "administrator" | "gamemaster";
 
+/**
+ * Account status for participant governance
+ * - active: Normal operational state
+ * - suspended: Administratively disabled (can be reactivated)
+ * - locked: Automatically locked due to failed login attempts
+ */
+export type AccountStatus = "active" | "suspended" | "locked";
+
 export interface UserSettings {
   theme: "light" | "dark" | "system";
   navigationCollapsed: boolean;
@@ -20,6 +28,13 @@ export interface User {
   failedLoginAttempts: number;
   lockoutUntil: string | null; // ISO 8601 date string or null
   sessionVersion: number;
+  // Account status and governance fields
+  accountStatus: AccountStatus;
+  statusChangedAt: string | null; // ISO 8601 date string
+  statusChangedBy: string | null; // User ID of admin who changed status
+  statusReason: string | null; // Reason for status change (e.g., suspension reason)
+  lastRoleChangeAt: string | null; // ISO 8601 date string
+  lastRoleChangeBy: string | null; // User ID of admin who changed roles
 }
 
 export interface SignupRequest {
@@ -68,5 +83,24 @@ export interface UsersListResponse {
 
 export interface DeleteUserResponse {
   success: boolean;
+  error?: string;
+}
+
+// Participant Governance types
+
+export interface SuspendUserRequest {
+  reason: string;
+}
+
+export interface SuspendUserResponse {
+  success: boolean;
+  user?: PublicUser;
+  error?: string;
+}
+
+export interface UserAuditLogResponse {
+  success: boolean;
+  entries?: import("./audit").UserAuditEntry[];
+  total?: number;
   error?: string;
 }

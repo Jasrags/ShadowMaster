@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { createUser, getUserByEmail, type NewUserData } from "@/lib/storage/users";
 import { hashPassword } from "@/lib/auth/password";
 import { createSession } from "@/lib/auth/session";
+import { toPublicUser } from "@/lib/auth/middleware";
 import { isValidEmail, isStrongPassword, getPasswordStrengthError } from "@/lib/auth/validation";
 import type { SignupRequest, AuthResponse } from "@/lib/types/user";
 
@@ -60,19 +61,7 @@ export async function POST(request: NextRequest): Promise<NextResponse<AuthRespo
     // Create session
     const response = NextResponse.json({
       success: true,
-      user: {
-        id: user.id,
-        email: user.email,
-        username: user.username,
-        role: user.role,
-        createdAt: user.createdAt,
-        lastLogin: user.lastLogin,
-        characters: user.characters,
-        failedLoginAttempts: user.failedLoginAttempts,
-        lockoutUntil: user.lockoutUntil,
-        sessionVersion: user.sessionVersion,
-        preferences: user.preferences,
-      },
+      user: toPublicUser(user),
     });
 
     createSession(user.id, response);

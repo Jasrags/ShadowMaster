@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { requireAdmin } from "@/lib/auth/middleware";
+import { requireAdmin, toPublicUser } from "@/lib/auth/middleware";
 import { getAllUsers } from "@/lib/storage/users";
 import type { PublicUser } from "@/lib/types/user";
 
@@ -19,20 +19,8 @@ export async function GET(request: NextRequest) {
     // Get all users
     const allUsers = await getAllUsers();
 
-    // Filter users (remove passwordHash)
-    let filteredUsers: PublicUser[] = allUsers.map((user) => ({
-      id: user.id,
-      email: user.email,
-      username: user.username,
-      role: user.role,
-      createdAt: user.createdAt,
-      lastLogin: user.lastLogin,
-      characters: user.characters,
-      failedLoginAttempts: user.failedLoginAttempts,
-      lockoutUntil: user.lockoutUntil,
-      sessionVersion: user.sessionVersion,
-      preferences: user.preferences,
-    }));
+    // Convert to public users (remove passwordHash)
+    let filteredUsers: PublicUser[] = allUsers.map(toPublicUser);
 
     // Apply search filter
     if (search) {
