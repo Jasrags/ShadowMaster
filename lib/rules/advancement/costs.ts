@@ -190,11 +190,16 @@ export function calculateAdvancementCost(
 ): number {
   switch (type) {
     case "attribute":
-    case "edge":
       if (newRating === undefined) {
         throw new Error("Rating required for attribute/edge advancement");
       }
       return calculateAttributeCost(newRating, settings, ruleset);
+
+    case "edge":
+      if (newRating === undefined) {
+        throw new Error("Rating required for attribute/edge advancement");
+      }
+      return calculateEdgeCost(newRating, settings, ruleset);
 
     case "skill":
       if (newRating === undefined) {

@@ -137,7 +137,16 @@ export function validateAttributeAdvancement(
   const errors: Array<{ message: string; field?: string }> = [];
 
   // Get current rating
-  const currentRating = character.attributes[attributeId] || 0;
+  let currentRating = character.attributes[attributeId] || 0;
+  
+  // Check special attributes if not in regular attributes
+  if (attributeId === "edge") {
+    currentRating = character.specialAttributes?.edge || 0;
+  } else if (attributeId === "magic") {
+    currentRating = character.specialAttributes?.magic || 0;
+  } else if (attributeId === "resonance") {
+    currentRating = character.specialAttributes?.resonance || 0;
+  }
 
   // Validate new rating is higher than current
   if (newRating <= currentRating) {
@@ -183,8 +192,9 @@ export function validateAttributeAdvancement(
   }
 
   // Calculate cost and validate karma
+  const advancementType = attributeId === "edge" ? "edge" : "attribute";
   const cost = calculateAdvancementCost(
-    "attribute",
+    advancementType,
     newRating,
     options.settings,
     options.ruleset
@@ -431,11 +441,7 @@ export function validateCharacterNotDraft(
 export function validateAdvancement(
   character: Character,
   type: AdvancementType,
-  cost: number,
-  _options: {
-    ruleset?: AdvancementRulesData;
-    settings?: CampaignAdvancementSettings;
-  } = {}
+  cost: number
 ): AdvancementValidationResult {
   const errors: Array<{ message: string; field?: string }> = [];
 
