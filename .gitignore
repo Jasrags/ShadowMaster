@@ -54,7 +54,6 @@ next-env.d.ts
 /data/campaigns
 /data/activity
 /data/security
-/docs/capabilities/plans
 .cursor/
 .claude/
 seattle-locations.json

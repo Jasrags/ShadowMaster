@@ -6,6 +6,7 @@
   "scripts": {
     "dev": "next dev",
     "dev:all": "concurrently \"pnpm dev\" \"pnpm type-check:watch\" \"pnpm lint:watch\"",
+    "dev:full": "concurrently \"pnpm dev\" \"pnpm type-check:watch\" \"pnpm lint:watch\" \"pnpm knip:watch\"",
     "build": "next build",
     "start": "next start",
     "lint": "eslint . --cache --cache-location .eslintcache",
@@ -17,6 +18,14 @@
     "test:ci": "vitest run",
     "test:e2e": "playwright test",
     "test:e2e:ui": "playwright test --ui",
+    "check": "pnpm lint && pnpm type-check && pnpm knip",
+    "check:ci": "pnpm lint && pnpm type-check && pnpm test:ci && pnpm knip:ci",
+    "knip": "knip",
+    "knip:report": "knip",
+    "knip:production": "knip --production",
+    "knip:fix": "knip --fix",
+    "knip:watch": "knip --watch",
+    "knip:ci": "knip --max-issues 0",
     "prepare": "husky"
   },
   "lint-staged": {
@@ -35,6 +44,7 @@
     "uuid": "^13.0.0"
   },
   "devDependencies": {
+    "@knip/mcp": "^0.0.9",
     "@modelcontextprotocol/server-filesystem": "^2025.12.18",
     "@modelcontextprotocol/server-memory": "^2025.11.25",
     "@modelcontextprotocol/server-sequential-thinking": "^2025.12.18",
@@ -55,6 +65,7 @@
     "eslint-config-next": "16.0.7",
     "husky": "^9.0.0",
     "jsdom": "^27.3.0",
+    "knip": "^5.77.1",
     "lint-staged": "^15.0.0",
     "next-devtools-mcp": "^0.3.7",
     "nodemon": "^3.1.11",

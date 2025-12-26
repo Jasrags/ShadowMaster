@@ -141,6 +141,8 @@ export type RuleModuleType =
   | "lifestyle" // Lifestyle costs and features
   | "contacts" // Contact rules and costs
   | "contactTemplates" // Pre-defined contact templates
+  | "contactArchetypes" // Contact archetype definitions
+  | "favorServices" // Favor services and cost tables
   | "adeptPowers" // Adept magical abilities
   | "foci" // Magical foci catalog
   | "spirits" // Spirit types and powers

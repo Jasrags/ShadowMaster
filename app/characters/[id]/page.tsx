@@ -83,6 +83,14 @@ function TrendingUpIcon({ className }: { className?: string }) {
   );
 }
 
+function UsersIcon({ className }: { className?: string }) {
+  return (
+    <svg className={className} fill="none" viewBox="0 0 24 24" stroke="currentColor">
+      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" />
+    </svg>
+  );
+}
+
 
 
 
@@ -1090,13 +1098,22 @@ function CharacterSheet({
             <DiceIcon className={`w-6 h-6 ${showDiceRoller ? theme.colors.accent : ""}`} />
           </Button>
           {character.status === "active" && (
-            <Link
-              href={`/characters/${character.id}/advancement`}
-              className="p-2 text-muted-foreground hover:text-emerald-400 transition-colors"
-              aria-label="Character Advancement"
-            >
-              <TrendingUpIcon className="w-5 h-5" />
-            </Link>
+            <>
+              <Link
+                href={`/characters/${character.id}/contacts`}
+                className="p-2 text-muted-foreground hover:text-emerald-400 transition-colors"
+                aria-label="Contact Network"
+              >
+                <UsersIcon className="w-5 h-5" />
+              </Link>
+              <Link
+                href={`/characters/${character.id}/advancement`}
+                className="p-2 text-muted-foreground hover:text-emerald-400 transition-colors"
+                aria-label="Character Advancement"
+              >
+                <TrendingUpIcon className="w-5 h-5" />
+              </Link>
+            </>
           )}
           {(character.status === "draft") && (
             <Link
@@ -1518,11 +1535,22 @@ function CharacterSheet({
 
             {/* Contacts */}
             <Section theme={theme} title="Contacts">
+              <div className="flex items-center justify-between mb-3">
+                <span className="text-xs text-muted-foreground">
+                  {character.contacts?.length || 0} contacts in network
+                </span>
+                <Link
+                  href={`/characters/${character.id}/contacts`}
+                  className={`text-xs ${theme.colors.accent} hover:underline`}
+                >
+                  Manage Contacts →
+                </Link>
+              </div>
               {!character.contacts || character.contacts.length === 0 ? (
                 <p className="text-sm text-zinc-500 italic">No contacts established</p>
               ) : (
                 <div className="space-y-2">
-                  {character.contacts.map((contact, index) => (
+                  {character.contacts.slice(0, 5).map((contact, index) => (
                     <div
                       key={`contact-${index}`}
                       className="p-3 bg-muted/50 rounded border-l-2 border-primary/40 hover:bg-muted/80 transition-colors"
@@ -1543,6 +1571,14 @@ function CharacterSheet({
                       </div>
                     </div>
                   ))}
+                  {character.contacts.length > 5 && (
+                    <Link
+                      href={`/characters/${character.id}/contacts`}
+                      className="block text-center text-xs text-muted-foreground hover:text-foreground py-2"
+                    >
+                      +{character.contacts.length - 5} more contacts...
+                    </Link>
+                  )}
                 </div>
               )}
             </Section>
