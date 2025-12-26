@@ -13340,6 +13340,952 @@
           { "connection": 6, "description": "Top tier influence and resources" }
         ]
       }
+    },
+    "actions": {
+      "mergeStrategy": "replace",
+      "payload": {
+        "combat": [
+          {
+            "id": "fire-weapon-ss",
+            "name": "Fire Weapon (SS)",
+            "description": "Fire a weapon in Single-Shot mode. One shot, one Simple Action.",
+            "type": "simple",
+            "domain": "combat",
+            "subcategory": "ranged",
+            "cost": {
+              "actionType": "simple",
+              "resourceCosts": [
+                { "type": "ammunition", "amount": 1, "description": "Consumes 1 round" }
+              ]
+            },
+            "prerequisites": [
+              { "type": "equipment_ready", "requirement": "ranged_weapon", "description": "Must have a readied ranged weapon" },
+              { "type": "resource", "requirement": "ammunition", "minimumValue": 1, "description": "Must have ammunition" }
+            ],
+            "modifiers": [],
+            "rollConfig": {
+              "skill": "automatics",
+              "skillOptions": ["automatics", "longarms", "pistols", "heavy_weapons", "exotic_ranged_weapon"],
+              "attribute": "agility",
+              "limitType": "weapon_accuracy"
+            },
+            "opposedBy": {
+              "canBeOpposed": true,
+              "defaultDefenseAttribute": "reaction",
+              "defaultDefenseSkill": "intuition",
+              "allowFullDefense": true,
+              "availableInterrupts": ["dodge", "hit-the-dirt"]
+            },
+            "effects": [
+              {
+                "type": "damage",
+                "targetType": "target",
+                "damageType": "physical",
+                "calculation": {
+                  "formula": "weapon_damage + net_hits",
+                  "addNetHits": true
+                },
+                "description": "Deal weapon damage plus net hits"
+              }
+            ],
+            "tags": ["attack", "ranged", "firearm"],
+            "source": { "book": "SR5 Core", "page": 163 }
+          },
+          {
+            "id": "fire-weapon-sa",
+            "name": "Fire Weapon (SA)",
+            "description": "Fire a weapon in Semi-Automatic mode. Fire up to 2 shots with recoil penalty.",
+            "type": "simple",
+            "domain": "combat",
+            "subcategory": "ranged",
+            "cost": {
+              "actionType": "simple",
+              "resourceCosts": [
+                { "type": "ammunition", "amount": 2, "description": "Consumes up to 2 rounds" }
+              ]
+            },
+            "prerequisites": [
+              { "type": "equipment_ready", "requirement": "ranged_weapon", "description": "Must have a readied ranged weapon" },
+              { "type": "equipment", "requirement": "firing_mode_sa", "description": "Weapon must support SA mode" },
+              { "type": "resource", "requirement": "ammunition", "minimumValue": 1, "description": "Must have ammunition" }
+            ],
+            "modifiers": [
+              { "source": "recoil", "value": -1, "description": "Recoil penalty for second shot", "condition": "firing_second_shot" }
+            ],
+            "rollConfig": {
+              "skill": "automatics",
+              "skillOptions": ["automatics", "longarms", "pistols"],
+              "attribute": "agility",
+              "limitType": "weapon_accuracy"
+            },
+            "opposedBy": {
+              "canBeOpposed": true,
+              "defaultDefenseAttribute": "reaction",
+              "defaultDefenseSkill": "intuition",
+              "allowFullDefense": true,
+              "availableInterrupts": ["dodge", "hit-the-dirt"]
+            },
+            "effects": [
+              {
+                "type": "damage",
+                "targetType": "target",
+                "damageType": "physical",
+                "calculation": {
+                  "formula": "weapon_damage + net_hits",
+                  "addNetHits": true
+                },
+                "description": "Deal weapon damage plus net hits"
+              }
+            ],
+            "tags": ["attack", "ranged", "firearm", "semi-auto"],
+            "source": { "book": "SR5 Core", "page": 163 }
+          },
+          {
+            "id": "fire-weapon-bf",
+            "name": "Fire Weapon (BF)",
+            "description": "Fire a weapon in Burst Fire mode. Fire 3 rounds, add +2 to attack, defender gets -2 to defense.",
+            "type": "simple",
+            "domain": "combat",
+            "subcategory": "ranged",
+            "cost": {
+              "actionType": "simple",
+              "resourceCosts": [
+                { "type": "ammunition", "amount": 3, "description": "Consumes 3 rounds" }
+              ]
+            },
+            "prerequisites": [
+              { "type": "equipment_ready", "requirement": "ranged_weapon", "description": "Must have a readied ranged weapon" },
+              { "type": "equipment", "requirement": "firing_mode_bf", "description": "Weapon must support BF mode" },
+              { "type": "resource", "requirement": "ammunition", "minimumValue": 3, "description": "Must have at least 3 rounds" }
+            ],
+            "modifiers": [
+              { "source": "burst_fire", "value": 2, "description": "Burst fire attack bonus" }
+            ],
+            "rollConfig": {
+              "skill": "automatics",
+              "skillOptions": ["automatics", "longarms"],
+              "attribute": "agility",
+              "limitType": "weapon_accuracy"
+            },
+            "opposedBy": {
+              "canBeOpposed": true,
+              "defaultDefenseAttribute": "reaction",
+              "defaultDefenseSkill": "intuition",
+              "allowFullDefense": true,
+              "availableInterrupts": ["dodge", "hit-the-dirt"]
+            },
+            "effects": [
+              {
+                "type": "damage",
+                "targetType": "target",
+                "damageType": "physical",
+                "calculation": {
+                  "formula": "weapon_damage + net_hits",
+                  "addNetHits": true
+                },
+                "description": "Deal weapon damage plus net hits"
+              }
+            ],
+            "tags": ["attack", "ranged", "firearm", "burst"],
+            "source": { "book": "SR5 Core", "page": 163 }
+          },
+          {
+            "id": "fire-weapon-fa",
+            "name": "Fire Weapon (FA)",
+            "description": "Fire a weapon in Full-Auto mode. Fire 6-10 rounds, complex action with significant bonuses.",
+            "type": "complex",
+            "domain": "combat",
+            "subcategory": "ranged",
+            "cost": {
+              "actionType": "complex",
+              "resourceCosts": [
+                { "type": "ammunition", "amount": 10, "description": "Consumes 6-10 rounds" }
+              ]
+            },
+            "prerequisites": [
+              { "type": "equipment_ready", "requirement": "ranged_weapon", "description": "Must have a readied ranged weapon" },
+              { "type": "equipment", "requirement": "firing_mode_fa", "description": "Weapon must support FA mode" },
+              { "type": "resource", "requirement": "ammunition", "minimumValue": 6, "description": "Must have at least 6 rounds" }
+            ],
+            "modifiers": [
+              { "source": "full_auto", "value": 5, "description": "Full-auto attack bonus (narrow burst)" },
+              { "source": "full_auto_wide", "value": 9, "description": "Full-auto attack bonus (wide burst)", "condition": "wide_burst" }
+            ],
+            "rollConfig": {
+              "skill": "automatics",
+              "attribute": "agility",
+              "limitType": "weapon_accuracy"
+            },
+            "opposedBy": {
+              "canBeOpposed": true,
+              "defaultDefenseAttribute": "reaction",
+              "defaultDefenseSkill": "intuition",
+              "allowFullDefense": true,
+              "availableInterrupts": ["dodge", "hit-the-dirt"]
+            },
+            "effects": [
+              {
+                "type": "damage",
+                "targetType": "target",
+                "damageType": "physical",
+                "calculation": {
+                  "formula": "weapon_damage + net_hits",
+                  "addNetHits": true
+                },
+                "description": "Deal weapon damage plus net hits"
+              }
+            ],
+            "tags": ["attack", "ranged", "firearm", "full-auto", "suppressive"],
+            "source": { "book": "SR5 Core", "page": 163 }
+          },
+          {
+            "id": "melee-attack",
+            "name": "Melee Attack",
+            "description": "Attack a target in melee combat with a weapon or unarmed strike.",
+            "type": "complex",
+            "domain": "combat",
+            "subcategory": "melee",
+            "cost": {
+              "actionType": "complex"
+            },
+            "prerequisites": [
+              { "type": "target", "requirement": "melee_range", "description": "Target must be within melee range" }
+            ],
+            "modifiers": [
+              { "source": "reach", "value": 0, "description": "Weapon reach modifier vs opponent's reach" }
+            ],
+            "rollConfig": {
+              "skill": "unarmed_combat",
+              "skillOptions": ["unarmed_combat", "blades", "clubs", "exotic_melee_weapon"],
+              "attribute": "agility",
+              "limitType": "physical"
+            },
+            "opposedBy": {
+              "canBeOpposed": true,
+              "defaultDefenseAttribute": "reaction",
+              "defaultDefenseSkill": "intuition",
+              "allowFullDefense": true,
+              "allowBlockParry": true,
+              "availableInterrupts": ["block", "parry", "dodge"]
+            },
+            "effects": [
+              {
+                "type": "damage",
+                "targetType": "target",
+                "damageType": "physical",
+                "calculation": {
+                  "formula": "weapon_damage + net_hits",
+                  "attribute": "strength",
+                  "addNetHits": true
+                },
+                "description": "Deal weapon damage (or STR for unarmed) plus net hits"
+              }
+            ],
+            "tags": ["attack", "melee"],
+            "source": { "book": "SR5 Core", "page": 163 }
+          },
+          {
+            "id": "throw-weapon",
+            "name": "Throw Weapon",
+            "description": "Throw a melee weapon or throwing weapon at a target.",
+            "type": "simple",
+            "domain": "combat",
+            "subcategory": "ranged",
+            "cost": {
+              "actionType": "simple"
+            },
+            "prerequisites": [
+              { "type": "equipment_ready", "requirement": "throwing_weapon", "description": "Must have a throwing weapon ready" }
+            ],
+            "modifiers": [],
+            "rollConfig": {
+              "skill": "throwing_weapons",
+              "attribute": "agility",
+              "limitType": "physical"
+            },
+            "opposedBy": {
+              "canBeOpposed": true,
+              "defaultDefenseAttribute": "reaction",
+              "defaultDefenseSkill": "intuition",
+              "allowFullDefense": true,
+              "availableInterrupts": ["dodge"]
+            },
+            "effects": [
+              {
+                "type": "damage",
+                "targetType": "target",
+                "damageType": "physical",
+                "calculation": {
+                  "formula": "weapon_damage + net_hits",
+                  "attribute": "strength",
+                  "addNetHits": true
+                },
+                "description": "Deal weapon damage plus STR and net hits"
+              }
+            ],
+            "tags": ["attack", "ranged", "thrown"],
+            "source": { "book": "SR5 Core", "page": 163 }
+          },
+          {
+            "id": "ready-weapon",
+            "name": "Ready/Draw Weapon",
+            "description": "Draw a weapon from a holster, sheath, or storage, making it ready to use.",
+            "type": "simple",
+            "domain": "combat",
+            "subcategory": "tactical",
+            "cost": {
+              "actionType": "simple"
+            },
+            "prerequisites": [
+              { "type": "equipment", "requirement": "weapon", "description": "Must have a weapon to ready" }
+            ],
+            "modifiers": [],
+            "effects": [
+              {
+                "type": "state_change",
+                "targetType": "self",
+                "calculation": {},
+                "description": "Weapon becomes readied"
+              }
+            ],
+            "tags": ["preparation", "weapon"],
+            "source": { "book": "SR5 Core", "page": 163 }
+          },
+          {
+            "id": "take-aim",
+            "name": "Take Aim",
+            "description": "Take aim at a target for +1 dice to your next attack (max +3, or Willpower with scope).",
+            "type": "simple",
+            "domain": "combat",
+            "subcategory": "tactical",
+            "cost": {
+              "actionType": "simple"
+            },
+            "prerequisites": [
+              { "type": "equipment_ready", "requirement": "ranged_weapon", "description": "Must have a readied ranged weapon" },
+              { "type": "target", "requirement": "visible_target", "description": "Must have a visible target" }
+            ],
+            "modifiers": [],
+            "effects": [
+              {
+                "type": "pool_modifier",
+                "targetType": "self",
+                "calculation": {
+                  "baseValue": 1,
+                  "maximum": 3
+                },
+                "description": "+1 dice to next attack (max +3, or Willpower with scope)"
+              }
+            ],
+            "tags": ["preparation", "ranged", "bonus"],
+            "source": { "book": "SR5 Core", "page": 163 }
+          },
+          {
+            "id": "take-cover",
+            "name": "Take Cover",
+            "description": "Move to available cover, gaining defense bonuses against ranged attacks.",
+            "type": "simple",
+            "domain": "combat",
+            "subcategory": "defense",
+            "cost": {
+              "actionType": "simple"
+            },
+            "prerequisites": [
+              { "type": "state", "requirement": "cover_available", "description": "Cover must be available nearby" }
+            ],
+            "modifiers": [],
+            "effects": [
+              {
+                "type": "pool_modifier",
+                "targetType": "self",
+                "calculation": {
+                  "baseValue": 2,
+                  "minimum": 2,
+                  "maximum": 4
+                },
+                "description": "+2 to +4 defense against ranged attacks depending on cover quality"
+              }
+            ],
+            "tags": ["defense", "cover", "movement"],
+            "source": { "book": "SR5 Core", "page": 163 }
+          },
+          {
+            "id": "insert-clip",
+            "name": "Insert Clip",
+            "description": "Insert a fresh clip or magazine into a weapon.",
+            "type": "simple",
+            "domain": "combat",
+            "subcategory": "tactical",
+            "cost": {
+              "actionType": "simple"
+            },
+            "prerequisites": [
+              { "type": "equipment_ready", "requirement": "ranged_weapon", "description": "Must have a readied ranged weapon" },
+              { "type": "equipment", "requirement": "ammunition_clip", "description": "Must have a spare clip" },
+              { "type": "state", "requirement": "clip_removed", "description": "Current clip must be removed" }
+            ],
+            "modifiers": [],
+            "effects": [
+              {
+                "type": "resource_modify",
+                "targetType": "self",
+                "calculation": {
+                  "formula": "clip_capacity"
+                },
+                "description": "Weapon is reloaded with fresh ammunition"
+              }
+            ],
+            "tags": ["reload", "weapon"],
+            "source": { "book": "SR5 Core", "page": 163 }
+          },
+          {
+            "id": "remove-clip",
+            "name": "Remove Clip",
+            "description": "Remove the current clip or magazine from a weapon.",
+            "type": "simple",
+            "domain": "combat",
+            "subcategory": "tactical",
+            "cost": {
+              "actionType": "simple"
+            },
+            "prerequisites": [
+              { "type": "equipment_ready", "requirement": "ranged_weapon", "description": "Must have a readied ranged weapon" }
+            ],
+            "modifiers": [],
+            "effects": [
+              {
+                "type": "state_change",
+                "targetType": "self",
+                "calculation": {},
+                "description": "Clip is removed from weapon"
+              }
+            ],
+            "tags": ["reload", "weapon"],
+            "source": { "book": "SR5 Core", "page": 163 }
+          },
+          {
+            "id": "quick-draw",
+            "name": "Quick Draw",
+            "description": "Attempt to draw a weapon and attack in one fluid motion. Opposed by opponent's reaction.",
+            "type": "simple",
+            "domain": "combat",
+            "subcategory": "tactical",
+            "cost": {
+              "actionType": "simple"
+            },
+            "prerequisites": [
+              { "type": "skill_rating", "requirement": "quick_draw", "minimumValue": 1, "description": "Must have Quick Draw skill" },
+              { "type": "equipment", "requirement": "holstered_weapon", "description": "Must have a holstered weapon" }
+            ],
+            "modifiers": [],
+            "rollConfig": {
+              "skill": "reaction",
+              "attribute": "intuition",
+              "limitType": "physical"
+            },
+            "opposedBy": {
+              "canBeOpposed": true,
+              "defaultDefenseAttribute": "reaction",
+              "defaultDefenseSkill": "intuition"
+            },
+            "effects": [
+              {
+                "type": "state_change",
+                "targetType": "self",
+                "calculation": {},
+                "description": "Weapon is drawn and an attack can be made immediately"
+              }
+            ],
+            "tags": ["attack", "weapon", "speed"],
+            "source": { "book": "SR5 Core", "page": 163 }
+          },
+          {
+            "id": "observe-in-detail",
+            "name": "Observe in Detail",
+            "description": "Make a Perception test to notice specific details about your surroundings.",
+            "type": "simple",
+            "domain": "combat",
+            "subcategory": "tactical",
+            "cost": {
+              "actionType": "simple"
+            },
+            "prerequisites": [],
+            "modifiers": [],
+            "rollConfig": {
+              "skill": "perception",
+              "attribute": "intuition",
+              "limitType": "mental"
+            },
+            "effects": [
+              {
+                "type": "state_change",
+                "targetType": "self",
+                "calculation": {},
+                "description": "Gain detailed information based on hits"
+              }
+            ],
+            "tags": ["perception", "awareness"],
+            "source": { "book": "SR5 Core", "page": 163 }
+          },
+          {
+            "id": "sprint",
+            "name": "Sprint",
+            "description": "Run at full speed, adding Sprinting hits to your movement rate.",
+            "type": "complex",
+            "domain": "combat",
+            "subcategory": "movement",
+            "cost": {
+              "actionType": "complex"
+            },
+            "prerequisites": [
+              { "type": "state", "requirement": "can_move", "description": "Must be able to move" }
+            ],
+            "modifiers": [],
+            "rollConfig": {
+              "skill": "running",
+              "attribute": "strength",
+              "limitType": "physical"
+            },
+            "effects": [
+              {
+                "type": "movement",
+                "targetType": "self",
+                "calculation": {
+                  "formula": "base_run + (hits * 2)",
+                  "addNetHits": true,
+                  "netHitsMultiplier": 2
+                },
+                "description": "Move base Run rate plus 2m per hit"
+              }
+            ],
+            "tags": ["movement", "run"],
+            "source": { "book": "SR5 Core", "page": 163 }
+          },
+          {
+            "id": "call-shot",
+            "name": "Call a Shot",
+            "description": "Declare a specific target location for your next attack with various penalties and effects.",
+            "type": "free",
+            "domain": "combat",
+            "subcategory": "tactical",
+            "cost": {
+              "actionType": "free"
+            },
+            "prerequisites": [],
+            "modifiers": [
+              { "source": "called_shot", "value": -4, "description": "Called shot penalty (varies by location)" }
+            ],
+            "effects": [
+              {
+                "type": "state_change",
+                "targetType": "self",
+                "calculation": {},
+                "description": "Next attack targets a specific location"
+              }
+            ],
+            "tags": ["attack", "modifier", "tactical"],
+            "source": { "book": "SR5 Core", "page": 163 }
+          },
+          {
+            "id": "drop-object",
+            "name": "Drop Object",
+            "description": "Drop an item you are currently holding.",
+            "type": "free",
+            "domain": "combat",
+            "subcategory": "tactical",
+            "cost": {
+              "actionType": "free"
+            },
+            "prerequisites": [
+              { "type": "state", "requirement": "holding_object", "description": "Must be holding an object" }
+            ],
+            "modifiers": [],
+            "effects": [
+              {
+                "type": "state_change",
+                "targetType": "self",
+                "calculation": {},
+                "description": "Object is dropped and no longer held"
+              }
+            ],
+            "tags": ["item", "quick"],
+            "source": { "book": "SR5 Core", "page": 163 }
+          },
+          {
+            "id": "drop-prone",
+            "name": "Drop Prone",
+            "description": "Drop to the ground, gaining benefits against ranged attacks but penalties to melee defense.",
+            "type": "free",
+            "domain": "combat",
+            "subcategory": "defense",
+            "cost": {
+              "actionType": "free"
+            },
+            "prerequisites": [
+              { "type": "state", "requirement": "standing", "description": "Must be standing" }
+            ],
+            "modifiers": [],
+            "effects": [
+              {
+                "type": "condition",
+                "targetType": "self",
+                "conditionId": "prone",
+                "calculation": {},
+                "description": "Character becomes prone"
+              }
+            ],
+            "tags": ["defense", "position", "quick"],
+            "source": { "book": "SR5 Core", "page": 163 }
+          },
+          {
+            "id": "run",
+            "name": "Run",
+            "description": "Move at running pace (4x Walk rate) as a Free Action.",
+            "type": "free",
+            "domain": "combat",
+            "subcategory": "movement",
+            "cost": {
+              "actionType": "free"
+            },
+            "prerequisites": [
+              { "type": "state", "requirement": "can_move", "description": "Must be able to move" }
+            ],
+            "modifiers": [],
+            "effects": [
+              {
+                "type": "movement",
+                "targetType": "self",
+                "calculation": {
+                  "formula": "agility * 4"
+                },
+                "description": "Move at running pace"
+              }
+            ],
+            "tags": ["movement"],
+            "source": { "book": "SR5 Core", "page": 163 }
+          },
+          {
+            "id": "speak",
+            "name": "Speak/Text/Transmit Phrase",
+            "description": "Speak a short phrase, send a text, or transmit a brief message.",
+            "type": "free",
+            "domain": "combat",
+            "subcategory": "tactical",
+            "cost": {
+              "actionType": "free"
+            },
+            "prerequisites": [],
+            "modifiers": [],
+            "effects": [],
+            "tags": ["communication"],
+            "source": { "book": "SR5 Core", "page": 163 }
+          },
+          {
+            "id": "multiple-attacks",
+            "name": "Multiple Attacks",
+            "description": "Declare intention to split dice pool for multiple attacks this action phase.",
+            "type": "free",
+            "domain": "combat",
+            "subcategory": "tactical",
+            "cost": {
+              "actionType": "free"
+            },
+            "prerequisites": [],
+            "modifiers": [],
+            "effects": [
+              {
+                "type": "state_change",
+                "targetType": "self",
+                "calculation": {},
+                "description": "Dice pool will be split among multiple attacks"
+              }
+            ],
+            "tags": ["attack", "modifier"],
+            "source": { "book": "SR5 Core", "page": 163 }
+          },
+          {
+            "id": "dodge",
+            "name": "Dodge",
+            "description": "Add your Gymnastics skill to your defense test against a single attack.",
+            "type": "interrupt",
+            "domain": "combat",
+            "subcategory": "defense",
+            "cost": {
+              "actionType": "interrupt",
+              "initiativeCost": 5
+            },
+            "prerequisites": [
+              { "type": "state", "requirement": "can_move", "description": "Must be able to move" }
+            ],
+            "modifiers": [],
+            "rollConfig": {
+              "skill": "gymnastics",
+              "attribute": "reaction",
+              "limitType": "physical"
+            },
+            "effects": [
+              {
+                "type": "pool_modifier",
+                "targetType": "self",
+                "calculation": {
+                  "formula": "gymnastics_rating"
+                },
+                "description": "Add Gymnastics rating to defense pool"
+              }
+            ],
+            "tags": ["defense", "interrupt", "reaction"],
+            "source": { "book": "SR5 Core", "page": 163 }
+          },
+          {
+            "id": "block",
+            "name": "Block",
+            "description": "Use Unarmed Combat skill to add to defense against a melee attack.",
+            "type": "interrupt",
+            "domain": "combat",
+            "subcategory": "defense",
+            "cost": {
+              "actionType": "interrupt",
+              "initiativeCost": 5
+            },
+            "prerequisites": [
+              { "type": "state", "requirement": "aware_of_attack", "description": "Must be aware of the attack" }
+            ],
+            "modifiers": [],
+            "rollConfig": {
+              "skill": "unarmed_combat",
+              "attribute": "reaction",
+              "limitType": "physical"
+            },
+            "effects": [
+              {
+                "type": "pool_modifier",
+                "targetType": "self",
+                "calculation": {
+                  "formula": "unarmed_combat_rating"
+                },
+                "description": "Add Unarmed Combat rating to defense pool"
+              }
+            ],
+            "tags": ["defense", "interrupt", "melee"],
+            "source": { "book": "SR5 Core", "page": 163 }
+          },
+          {
+            "id": "parry",
+            "name": "Parry",
+            "description": "Use your melee weapon skill to add to defense against a melee attack.",
+            "type": "interrupt",
+            "domain": "combat",
+            "subcategory": "defense",
+            "cost": {
+              "actionType": "interrupt",
+              "initiativeCost": 5
+            },
+            "prerequisites": [
+              { "type": "equipment_ready", "requirement": "melee_weapon", "description": "Must have a readied melee weapon" },
+              { "type": "state", "requirement": "aware_of_attack", "description": "Must be aware of the attack" }
+            ],
+            "modifiers": [],
+            "rollConfig": {
+              "skill": "blades",
+              "skillOptions": ["blades", "clubs", "exotic_melee_weapon"],
+              "attribute": "reaction",
+              "limitType": "physical"
+            },
+            "effects": [
+              {
+                "type": "pool_modifier",
+                "targetType": "self",
+                "calculation": {
+                  "formula": "weapon_skill_rating"
+                },
+                "description": "Add weapon skill rating to defense pool"
+              }
+            ],
+            "tags": ["defense", "interrupt", "melee"],
+            "source": { "book": "SR5 Core", "page": 163 }
+          },
+          {
+            "id": "full-defense",
+            "name": "Full Defense",
+            "description": "Add Willpower to all defense tests until your next action.",
+            "type": "interrupt",
+            "domain": "combat",
+            "subcategory": "defense",
+            "cost": {
+              "actionType": "interrupt",
+              "initiativeCost": 10
+            },
+            "prerequisites": [],
+            "modifiers": [],
+            "effects": [
+              {
+                "type": "pool_modifier",
+                "targetType": "self",
+                "calculation": {
+                  "formula": "willpower"
+                },
+                "duration": 1,
+                "description": "Add Willpower to all defense tests until your next action"
+              }
+            ],
+            "tags": ["defense", "interrupt", "ongoing"],
+            "source": { "book": "SR5 Core", "page": 163 }
+          },
+          {
+            "id": "hit-the-dirt",
+            "name": "Hit the Dirt",
+            "description": "Drop prone and add Willpower to defense against a ranged attack.",
+            "type": "interrupt",
+            "domain": "combat",
+            "subcategory": "defense",
+            "cost": {
+              "actionType": "interrupt",
+              "initiativeCost": 5
+            },
+            "prerequisites": [
+              { "type": "state", "requirement": "standing", "description": "Must be standing" },
+              { "type": "state", "requirement": "can_move", "description": "Must be able to move" }
+            ],
+            "modifiers": [],
+            "effects": [
+              {
+                "type": "condition",
+                "targetType": "self",
+                "conditionId": "prone",
+                "calculation": {},
+                "description": "Character becomes prone"
+              },
+              {
+                "type": "pool_modifier",
+                "targetType": "self",
+                "calculation": {
+                  "formula": "willpower"
+                },
+                "description": "Add Willpower to defense against this attack"
+              }
+            ],
+            "tags": ["defense", "interrupt", "ranged", "position"],
+            "source": { "book": "SR5 Core", "page": 163 }
+          },
+          {
+            "id": "intercept",
+            "name": "Intercept",
+            "description": "Move to block an opponent trying to move past you, preventing their movement.",
+            "type": "interrupt",
+            "domain": "combat",
+            "subcategory": "tactical",
+            "cost": {
+              "actionType": "interrupt",
+              "initiativeCost": 5
+            },
+            "prerequisites": [
+              { "type": "state", "requirement": "can_move", "description": "Must be able to move" }
+            ],
+            "modifiers": [],
+            "rollConfig": {
+              "skill": "running",
+              "skillOptions": ["running", "gymnastics"],
+              "attribute": "reaction",
+              "limitType": "physical"
+            },
+            "opposedBy": {
+              "canBeOpposed": true,
+              "defaultDefenseAttribute": "reaction",
+              "defaultDefenseSkill": "running"
+            },
+            "effects": [
+              {
+                "type": "state_change",
+                "targetType": "target",
+                "calculation": {},
+                "description": "Target's movement is stopped"
+              }
+            ],
+            "tags": ["movement", "interrupt", "blocking"],
+            "source": { "book": "SR5 Core", "page": 163 }
+          }
+        ],
+        "general": [
+          {
+            "id": "perception-test",
+            "name": "Perception Test",
+            "description": "Make a general Perception test to notice something in your environment.",
+            "type": "simple",
+            "domain": "general",
+            "subcategory": "perception",
+            "cost": {
+              "actionType": "simple"
+            },
+            "prerequisites": [],
+            "modifiers": [],
+            "rollConfig": {
+              "skill": "perception",
+              "attribute": "intuition",
+              "limitType": "mental"
+            },
+            "effects": [],
+            "tags": ["perception", "awareness"],
+            "source": { "book": "SR5 Core", "page": 135 }
+          },
+          {
+            "id": "use-simple-device",
+            "name": "Use Simple Device",
+            "description": "Use a simple device like a button, switch, or trigger.",
+            "type": "simple",
+            "domain": "general",
+            "subcategory": "technical",
+            "cost": {
+              "actionType": "simple"
+            },
+            "prerequisites": [],
+            "modifiers": [],
+            "effects": [],
+            "tags": ["device", "interaction"],
+            "source": { "book": "SR5 Core", "page": 163 }
+          },
+          {
+            "id": "use-skill",
+            "name": "Use Skill",
+            "description": "Use any skill that requires a Complex Action to perform.",
+            "type": "complex",
+            "domain": "general",
+            "subcategory": "physical",
+            "cost": {
+              "actionType": "complex"
+            },
+            "prerequisites": [],
+            "modifiers": [],
+            "rollConfig": {
+              "skillOptions": ["*"],
+              "attributeOptions": ["*"],
+              "limitType": "varies"
+            },
+            "effects": [],
+            "tags": ["skill", "general"],
+            "source": { "book": "SR5 Core", "page": 163 }
+          },
+          {
+            "id": "pick-up-object",
+            "name": "Pick Up / Put Down Object",
+            "description": "Pick up an object from the ground or put one down.",
+            "type": "simple",
+            "domain": "general",
+            "subcategory": "physical",
+            "cost": {
+              "actionType": "simple"
+            },
+            "prerequisites": [],
+            "modifiers": [],
+            "effects": [],
+            "tags": ["item", "interaction"],
+            "source": { "book": "SR5 Core", "page": 163 }
+          }
+        ],
+        "magic": [],
+        "matrix": [],
+        "social": [],
+        "vehicle": []
+      }
     }
   }
 }
