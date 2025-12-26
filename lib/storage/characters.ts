@@ -576,6 +576,98 @@ export async function healCharacter(
 }
 
 /**
+ * Get current Edge points for a character
+ */
+export function getCurrentEdge(character: Character): number {
+  // Check condition.edgeCurrent first (runtime tracking)
+  if (character.condition?.edgeCurrent !== undefined) {
+    return character.condition.edgeCurrent;
+  }
+  // Fall back to Edge attribute (full Edge)
+  return character.attributes?.edge ?? 0;
+}
+
+/**
+ * Get maximum Edge points for a character
+ */
+export function getMaxEdge(character: Character): number {
+  return character.attributes?.edge ?? 0;
+}
+
+/**
+ * Spend Edge points
+ */
+export async function spendEdge(
+  userId: ID,
+  characterId: ID,
+  amount: number
+): Promise<Character> {
+  const character = await getCharacter(userId, characterId);
+  if (!character) {
+    throw new Error(`Character with ID ${characterId} not found`);
+  }
+
+  const currentEdge = getCurrentEdge(character);
+  if (currentEdge < amount) {
+    throw new Error(`Not enough Edge. Have: ${currentEdge}, Need: ${amount}`);
+  }
+
+  return updateCharacter(userId, characterId, {
+    condition: {
+      ...character.condition,
+      edgeCurrent: currentEdge - amount,
+    },
+  });
+}
+
+/**
+ * Restore Edge points
+ */
+export async function restoreEdge(
+  userId: ID,
+  characterId: ID,
+  amount: number
+): Promise<Character> {
+  const character = await getCharacter(userId, characterId);
+  if (!character) {
+    throw new Error(`Character with ID ${characterId} not found`);
+  }
+
+  const currentEdge = getCurrentEdge(character);
+  const maxEdge = getMaxEdge(character);
+  const newEdge = Math.min(maxEdge, currentEdge + amount);
+
+  return updateCharacter(userId, characterId, {
+    condition: {
+      ...character.condition,
+      edgeCurrent: newEdge,
+    },
+  });
+}
+
+/**
+ * Fully restore Edge to maximum
+ */
+export async function restoreFullEdge(
+  userId: ID,
+  characterId: ID
+): Promise<Character> {
+  const character = await getCharacter(userId, characterId);
+  if (!character) {
+    throw new Error(`Character with ID ${characterId} not found`);
+  }
+
+  const maxEdge = getMaxEdge(character);
+
+  return updateCharacter(userId, characterId, {
+    condition: {
+      ...character.condition,
+      edgeCurrent: maxEdge,
+    },
+  });
+}
+
+/**
  * Spend karma
  */
 export async function spendKarma(
