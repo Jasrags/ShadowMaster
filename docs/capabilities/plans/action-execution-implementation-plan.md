@@ -10,25 +10,23 @@ Implement a complete Action Economy and Execution system that enforces consisten
 
 ---
 
-## User Review Required
+## Architectural Decisions (Approved)
 
-### Critical Architectural Decisions Needed
+The following architectural decisions have been reviewed and approved:
 
-1. **Combat Session Model**: Should combat sessions be stored server-side (persistent) or client-side (ephemeral with server validation)?
-   - **Recommendation**: Server-side for multiplayer campaign support
-   - **Impact**: Requires new storage layer and real-time sync consideration
+| Decision | Approved Choice | Rationale |
+|----------|-----------------|-----------|
+| **Combat Session Model** | Server-side (persistent) | Enables multiplayer campaign support |
+| **Action Economy Enforcement** | Server-enforced with client-side preview | Ensures rule integrity while providing good UX |
+| **Opposed Test Resolution** | Async for real-time, sync for solo/GM | Flexibility for different play modes |
+| **Magic/Matrix Scope** | Deferred to Phase 2 | Focus on physical combat first, reduces initial scope |
 
-2. **Action Economy Enforcement**: Should action economy be strictly enforced by the server or advisory (client-side warnings)?
-   - **Recommendation**: Server-enforced with client-side preview
-   - **Impact**: All action APIs must validate against turn state
+### Implementation Implications
 
-3. **Opposed Test Resolution**: Should opposed tests be resolved synchronously (both pools submitted together) or asynchronously (defender responds to attacker)?
-   - **Recommendation**: Asynchronous for real-time play, synchronous for solo/GM-controlled
-   - **Impact**: Affects API design and UI flow
-
-4. **Magic/Matrix Scope**: Should Phase 1 include magic and matrix execution domains or defer to Phase 2?
-   - **Recommendation**: Defer magic/matrix to Phase 2, focus on physical combat first
-   - **Impact**: Reduces initial scope significantly
+1. **Server-side Combat Sessions**: Requires `/lib/storage/combat.ts` with full CRUD operations
+2. **Server Enforcement**: All action APIs must validate against turn state before execution
+3. **Dual Opposed Test Modes**: API must support both sync and async resolution patterns
+4. **Phase 2 Scope**: Magic and Matrix execution domains will be added after Phase 1 completion
 
 ---
 
