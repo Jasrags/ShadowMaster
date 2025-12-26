@@ -804,6 +804,24 @@ export async function searchCampaignContacts(
 // =============================================================================
 
 /**
+ * Generate a deterministic ID for legacy contacts
+ * Uses a simple hash of characterId + contact name to create stable IDs
+ */
+function generateDeterministicId(characterId: string | undefined, name: string): string {
+  const input = `${characterId || ""}:${name}`;
+  // Simple hash function for deterministic ID generation
+  let hash = 0;
+  for (let i = 0; i < input.length; i++) {
+    const char = input.charCodeAt(i);
+    hash = ((hash << 5) - hash) + char;
+    hash = hash & hash; // Convert to 32bit integer
+  }
+  // Format as UUID-like string for consistency
+  const hex = Math.abs(hash).toString(16).padStart(8, "0");
+  return `legacy-${hex}-${name.toLowerCase().replace(/[^a-z0-9]/g, "").slice(0, 8)}`;
+}
+
+/**
  * Ensure a contact has all SocialContact fields
  * Handles conversion from legacy Contact type
  */
@@ -820,7 +838,8 @@ function ensureSocialContact(
   const legacyContact = contact as Contact;
 
   return {
-    id: uuidv4(), // Generate new ID for legacy contacts
+    // Generate deterministic ID so the same contact gets the same ID every time
+    id: generateDeterministicId(characterId, legacyContact.name),
     characterId,
     name: legacyContact.name,
     connection: legacyContact.connection,
