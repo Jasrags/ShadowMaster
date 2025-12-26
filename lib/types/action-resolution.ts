@@ -25,6 +25,8 @@ export interface DiceResult {
   wasRerolled?: boolean;
   /** Original value before reroll (if rerolled) */
   originalValue?: number;
+  /** Whether this die exploded (6 that was rerolled in Push the Limit) */
+  isExploded?: boolean;
 }
 
 // =============================================================================
@@ -35,6 +37,9 @@ export interface DiceResult {
  * Source of a pool modifier
  */
 export type PoolModifierSource =
+  | "attribute"
+  | "skill"
+  | "specialization"
   | "wound"
   | "situational"
   | "equipment"
@@ -119,6 +124,10 @@ export interface ActionContext {
   threshold?: number;
   /** Whether this was an opposed test */
   isOpposed?: boolean;
+  /** Description of what was attempted */
+  description?: string;
+  /** Target of the action (if applicable) */
+  targetName?: string;
   /** Notes about the action */
   notes?: string;
   /** Tags for categorization */
