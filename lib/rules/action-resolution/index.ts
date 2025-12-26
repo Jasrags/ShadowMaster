@@ -58,3 +58,16 @@ export {
   canRestoreEdge,
   type EdgeActionResult,
 } from "./edge-actions";
+
+// React Hooks (client-side only)
+export {
+  useActionResolver,
+  useEdge,
+  usePoolBuilder,
+  useActionHistory,
+  type UseActionResolverOptions,
+  type UseActionResolverReturn,
+  type UseEdgeReturn,
+  type UsePoolBuilderReturn,
+  type UseActionHistoryReturn,
+} from "./hooks";
