@@ -597,5 +597,4 @@ export function EdgeRerollButton({ result, edgeAvailable, onReroll }: EdgeReroll
   );
 }
 
-export default DiceRoller;
 

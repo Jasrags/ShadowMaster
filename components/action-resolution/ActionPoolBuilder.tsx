@@ -689,5 +689,3 @@ export function ActionPoolBuilder({
     </div>
   );
 }
-
-export default ActionPoolBuilder;

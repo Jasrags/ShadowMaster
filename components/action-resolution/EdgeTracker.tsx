@@ -213,5 +213,3 @@ export function EdgeTracker({
     </div>
   );
 }
-
-export default EdgeTracker;

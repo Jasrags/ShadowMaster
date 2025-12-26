@@ -318,5 +318,3 @@ export function ActionPanel({
     </div>
   );
 }
-
-export default ActionPanel;

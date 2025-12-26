@@ -518,5 +518,3 @@ export function ActionHistory({
     </div>
   );
 }
-
-export default ActionHistory;

@@ -238,4 +238,3 @@ export function DicePoolDisplay({
   );
 }
 
-export default DicePoolDisplay;

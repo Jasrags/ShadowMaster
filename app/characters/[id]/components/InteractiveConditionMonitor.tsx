@@ -366,4 +366,3 @@ export function InteractiveConditionMonitor({
   );
 }
 
-export default InteractiveConditionMonitor;
