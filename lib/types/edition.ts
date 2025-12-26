@@ -149,7 +149,9 @@ export type RuleModuleType =
   | "priorities" // Priority table for creation (SR5)
   | "creationMethods" // Available character creation methods
   | "advancement" // Karma advancement rules
-  | "limits"; // Limit calculations (SR5-specific)
+  | "limits" // Limit calculations (SR5-specific)
+  | "diceRules" // Dice mechanics (hit thresholds, glitch rules, Edge actions)
+  | "socialModifiers"; // Social test modifiers
 
 /**
  * Rules governing character advancement post-creation.

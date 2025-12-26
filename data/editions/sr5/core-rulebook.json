@@ -25,6 +25,75 @@
         "allowInstantAdvancement": false
       }
     },
+    "diceRules": {
+      "mergeStrategy": "replace",
+      "payload": {
+        "hitThreshold": 5,
+        "glitchThreshold": 0.5,
+        "criticalGlitchRequiresZeroHits": true,
+        "allowExplodingSixes": false,
+        "maxDicePool": 50,
+        "minDicePool": 1,
+        "edgeActions": {
+          "push_the_limit": {
+            "name": "Push the Limit",
+            "description": "Add Edge to your dice pool, roll, and any 6s explode (reroll and add). Ignore limits for this test.",
+            "cost": 1,
+            "preRoll": true,
+            "postRoll": false,
+            "addsDice": true,
+            "explodingSixes": true
+          },
+          "second_chance": {
+            "name": "Second Chance",
+            "description": "Reroll all dice that did not score a hit. Keep your original hits.",
+            "cost": 1,
+            "preRoll": false,
+            "postRoll": true,
+            "allowsReroll": true
+          },
+          "seize_the_initiative": {
+            "name": "Seize the Initiative",
+            "description": "Go first in an Initiative Pass, regardless of your Initiative Score.",
+            "cost": 1,
+            "preRoll": false,
+            "postRoll": false
+          },
+          "blitz": {
+            "name": "Blitz",
+            "description": "Roll 5d6 for Initiative instead of your normal dice.",
+            "cost": 1,
+            "preRoll": true,
+            "postRoll": false,
+            "addsDice": true
+          },
+          "close_call": {
+            "name": "Close Call",
+            "description": "Negate the effects of a glitch or critical glitch.",
+            "cost": 1,
+            "preRoll": false,
+            "postRoll": true
+          },
+          "dead_mans_trigger": {
+            "name": "Dead Man's Trigger",
+            "description": "When incapacitated, immediately take a Free Action.",
+            "cost": 1,
+            "preRoll": false,
+            "postRoll": false
+          }
+        },
+        "woundModifiers": {
+          "boxesPerPenalty": 3,
+          "maxPenalty": -4,
+          "description": "For every 3 boxes of damage (Physical or Stun), you take a cumulative -1 wound modifier to all tests."
+        },
+        "limitsDescription": {
+          "physical": "Strength + Body + Reaction, divided by 3, round up",
+          "mental": "Logic + Intuition + Willpower, divided by 3, round up",
+          "social": "Charisma + Willpower + Essence, divided by 3, round up"
+        }
+      }
+    },
     "contactTemplates": {
       "mergeStrategy": "replace",
       "payload": {

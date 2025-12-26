@@ -371,4 +371,3 @@ export function CombatQuickReference({
   );
 }
 
-export default CombatQuickReference;

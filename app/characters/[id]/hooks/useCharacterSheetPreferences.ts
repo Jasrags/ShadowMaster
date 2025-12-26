@@ -148,4 +148,3 @@ export function useCharacterSheetPreferences(
   };
 }
 
-export default useCharacterSheetPreferences;

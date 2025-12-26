@@ -37,6 +37,7 @@ import { QualitiesSection } from "./components/QualitiesSection";
 import { Section } from "./components/Section";
 import { InteractiveConditionMonitor } from "./components/InteractiveConditionMonitor";
 import { CombatQuickReference } from "./components/CombatQuickReference";
+import { ActionPanel } from "./components/ActionPanel";
 import { useCharacterSheetPreferences } from "./hooks/useCharacterSheetPreferences";
 
 // =============================================================================
@@ -939,6 +940,9 @@ function CharacterSheet({
   const currentThemeId = sheetPrefs.theme;
   const theme = THEMES[currentThemeId] || THEMES[DEFAULT_THEME];
 
+  // ActionPanel state
+  const [actionPanelExpanded, setActionPanelExpanded] = useState(true);
+
   useEffect(() => {
     if (character.editionCode) {
       loadRuleset(character.editionCode);
@@ -1340,6 +1344,23 @@ function CharacterSheet({
                 }}
               />
             </Section>
+
+            {/* Action Panel - Edge and Quick Rolls */}
+            <ActionPanel
+              character={character}
+              woundModifier={woundModifier}
+              physicalLimit={physicalLimit}
+              mentalLimit={mentalLimit}
+              socialLimit={socialLimit}
+              isExpanded={actionPanelExpanded}
+              onToggleExpand={() => setActionPanelExpanded(!actionPanelExpanded)}
+              onOpenDiceRoller={(pool, context) => {
+                setTargetPool(pool);
+                setPoolContext(context);
+                setShowDiceRoller(true);
+              }}
+              theme={theme}
+            />
           </div>
 
           {/* Middle Column - Skills & Powers */}

@@ -380,3 +380,34 @@ export {
   GM_CONTACT_VISIBILITY,
 } from "./contacts";
 
+// Action Resolution types
+export type {
+  // Dice result types
+  DiceResult,
+  // Pool configuration types
+  PoolModifierSource,
+  PoolModifier,
+  ActionPool,
+  PoolBuildOptions,
+  // Action result types
+  ActionContext,
+  ActionResult,
+  // Edge action types
+  EdgeActionType,
+  EdgeActionConfig,
+  // Edition dice rules
+  EditionDiceRules,
+  // Action history types
+  ActionHistory,
+  ActionHistoryStats,
+  // API types
+  RollActionRequest,
+  RerollActionRequest,
+  EdgeRequest,
+  ActionResultResponse,
+  ActionHistoryResponse,
+  EdgeResponse,
+  // Activity types
+  ActionActivityType,
+} from "./action-resolution";
+
