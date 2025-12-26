@@ -351,6 +351,8 @@ export interface Character {
     physicalDamage: number;
     stunDamage: number;
     overflowDamage?: number;
+    /** Current Edge points available (defaults to edge attribute if undefined) */
+    edgeCurrent?: number;
   };
 
   // -------------------------------------------------------------------------
