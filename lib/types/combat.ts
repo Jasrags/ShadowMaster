@@ -65,6 +65,8 @@ export interface CombatSession {
   campaignId?: ID;
   /** User who created/owns the session */
   ownerId: ID;
+  /** Edition code for rules lookup */
+  editionCode: string;
   /** Display name for the combat */
   name?: string;
   /** All participants in this combat */

@@ -56,6 +56,7 @@ function createMockCombatSession(
   return {
     id: 'test-session',
     ownerId: 'test-user',
+    editionCode: 'sr5',
     participants: [],
     initiativeOrder: [],
     currentTurn: 0,
