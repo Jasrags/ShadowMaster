@@ -97,6 +97,7 @@ export function QuickCombatControls({
     endTurn,
     delayTurn,
     leaveSession,
+    joinSession,
   } = useCombatSession();
 
   // Local state
@@ -170,19 +171,21 @@ export function QuickCombatControls({
         body: JSON.stringify({ action: "phase", phase: "action" }),
       });
 
+      // Step 5: Join the session in the context (this will fetch and set state)
+      const joined = await joinSession(sessionId);
+      if (!joined) {
+        throw new Error("Failed to join combat session");
+      }
+
       // Notify parent of state change
       onCombatStateChange?.(true);
-
-      // Force a page reload to pick up the new session
-      // This is a temporary solution until we have proper state management
-      window.location.reload();
     } catch (err) {
       const message = err instanceof Error ? err.message : "Failed to start combat";
       setLocalError(message);
     } finally {
       setIsStarting(false);
     }
-  }, [character, editionCode, onCombatStateChange]);
+  }, [character, editionCode, onCombatStateChange, joinSession]);
 
   // End the current combat session
   const endQuickCombat = useCallback(async () => {
