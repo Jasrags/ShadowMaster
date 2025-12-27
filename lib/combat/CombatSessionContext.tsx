@@ -57,6 +57,8 @@ export interface CombatSessionActions {
   endTurn: () => Promise<boolean>;
   /** Use interrupt action */
   useInterrupt: (actionId: string, targetId?: string) => Promise<boolean>;
+  /** Find and load an active session for this character */
+  findActiveSession: () => Promise<string | null>;
 }
 
 export interface CombatSessionContextValue extends CombatSessionState, CombatSessionActions {}
@@ -392,6 +394,33 @@ export function CombatSessionProvider({
     [session, participant]
   );
 
+  // Find an active session for this character
+  const findActiveSession = useCallback(async (): Promise<string | null> => {
+    try {
+      // Fetch active combat sessions for the current user
+      const response = await fetch("/api/combat?status=active&limit=20");
+      const data = await response.json();
+
+      if (!data.success || !data.sessions) {
+        return null;
+      }
+
+      // Find a session where this character is a participant
+      for (const sess of data.sessions) {
+        const isParticipant = sess.participants?.some(
+          (p: { entityId: string }) => p.entityId === characterId
+        );
+        if (isParticipant) {
+          return sess.id;
+        }
+      }
+
+      return null;
+    } catch {
+      return null;
+    }
+  }, [characterId]);
+
   // Load initial session
   useEffect(() => {
     if (initialSessionId) {
@@ -426,6 +455,7 @@ export function CombatSessionProvider({
       delayTurn,
       endTurn,
       useInterrupt,
+      findActiveSession,
     }),
     [
       session,
@@ -441,6 +471,7 @@ export function CombatSessionProvider({
       delayTurn,
       endTurn,
       useInterrupt,
+      findActiveSession,
     ]
   );
 
@@ -477,6 +508,7 @@ export function useCombatSession(): CombatSessionContextValue {
       delayTurn: async () => false,
       endTurn: async () => false,
       useInterrupt: async () => false,
+      findActiveSession: async () => null,
     };
   }
 

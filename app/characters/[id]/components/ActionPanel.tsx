@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useMemo, useState } from "react";
+import React, { useMemo, useState, useCallback } from "react";
 import { Button } from "react-aria-components";
 import {
   Dice1,
@@ -72,9 +72,13 @@ interface CombatActionButtonProps {
   icon: React.ReactNode;
   pool: number;
   context: string;
+  actionId: string;
   actionType: "free" | "simple" | "complex" | "interrupt";
   onClick: (pool: number, context: string) => void;
+  onExecuteAction?: (actionId: string) => Promise<void>;
   isAvailable: boolean;
+  isInCombat: boolean;
+  isLoading?: boolean;
   theme: Theme;
 }
 
@@ -83,9 +87,13 @@ function CombatActionButton({
   icon,
   pool,
   context,
+  actionId,
   actionType,
   onClick,
+  onExecuteAction,
   isAvailable,
+  isInCombat,
+  isLoading,
   theme,
 }: CombatActionButtonProps) {
   const typeColors = {
@@ -102,10 +110,19 @@ function CombatActionButton({
     interrupt: "Int",
   };
 
+  const handlePress = async () => {
+    // If in combat, execute the action through combat session
+    if (isInCombat && onExecuteAction) {
+      await onExecuteAction(actionId);
+    }
+    // Always open dice roller
+    onClick(pool, context);
+  };
+
   return (
     <Button
-      onPress={() => onClick(pool, context)}
-      isDisabled={!isAvailable}
+      onPress={handlePress}
+      isDisabled={!isAvailable || isLoading}
       className={`
         flex items-center gap-2 w-full
         px-3 py-2 rounded border
@@ -136,8 +153,14 @@ export function ActionPanel({
   theme,
 }: ActionPanelProps) {
   // Combat session context
-  const { isInCombat, isMyTurn } = useCombatSession();
+  const { isInCombat, isMyTurn, executeAction, isLoading: combatLoading } = useCombatSession();
   const actionEconomy = useActionEconomy();
+
+  // Execute a combat action
+  const handleExecuteAction = useCallback(async (actionId: string) => {
+    if (!isInCombat) return;
+    await executeAction(actionId);
+  }, [isInCombat, executeAction]);
 
   // Tab state for switching between Quick Rolls and Combat Actions
   const [activeTab, setActiveTab] = useState<"quick" | "combat">("quick");
@@ -528,9 +551,13 @@ export function ActionPanel({
                     icon={<HandMetal className="w-4 h-4" />}
                     pool={combatPools.meleeAttack + woundModifier}
                     context="Melee Attack (AGI + Combat Skill)"
+                    actionId="melee-attack"
                     actionType="complex"
                     onClick={onOpenDiceRoller}
+                    onExecuteAction={handleExecuteAction}
                     isAvailable={canUseAction("complex")}
+                    isInCombat={isInCombat}
+                    isLoading={combatLoading}
                     theme={theme}
                   />
                   <CombatActionButton
@@ -538,9 +565,13 @@ export function ActionPanel({
                     icon={<Target className="w-4 h-4" />}
                     pool={combatPools.rangedAttack + woundModifier}
                     context="Ranged Attack (AGI + Firearms)"
+                    actionId="ranged-attack"
                     actionType="simple"
                     onClick={onOpenDiceRoller}
+                    onExecuteAction={handleExecuteAction}
                     isAvailable={canUseAction("simple")}
+                    isInCombat={isInCombat}
+                    isLoading={combatLoading}
                     theme={theme}
                   />
                   <CombatActionButton
@@ -548,9 +579,13 @@ export function ActionPanel({
                     icon={<Eye className="w-4 h-4" />}
                     pool={0}
                     context="Take Aim (+1 to next attack)"
+                    actionId="take-aim"
                     actionType="simple"
                     onClick={onOpenDiceRoller}
+                    onExecuteAction={handleExecuteAction}
                     isAvailable={canUseAction("simple")}
+                    isInCombat={isInCombat}
+                    isLoading={combatLoading}
                     theme={theme}
                   />
                 </div>
@@ -567,9 +602,13 @@ export function ActionPanel({
                     icon={<Move className="w-4 h-4" />}
                     pool={combatPools.dodge + woundModifier}
                     context="Dodge (REA + INT + Gymnastics)"
+                    actionId="dodge"
                     actionType="interrupt"
                     onClick={onOpenDiceRoller}
+                    onExecuteAction={handleExecuteAction}
                     isAvailable={canUseAction("interrupt")}
+                    isInCombat={isInCombat}
+                    isLoading={combatLoading}
                     theme={theme}
                   />
                   <CombatActionButton
@@ -577,9 +616,13 @@ export function ActionPanel({
                     icon={<Shield className="w-4 h-4" />}
                     pool={combatPools.block + woundModifier}
                     context="Block (REA + Unarmed Combat)"
+                    actionId="block"
                     actionType="interrupt"
                     onClick={onOpenDiceRoller}
+                    onExecuteAction={handleExecuteAction}
                     isAvailable={canUseAction("interrupt")}
+                    isInCombat={isInCombat}
+                    isLoading={combatLoading}
                     theme={theme}
                   />
                   <CombatActionButton
@@ -587,9 +630,13 @@ export function ActionPanel({
                     icon={<Shield className="w-4 h-4" />}
                     pool={combatPools.fullDefense + woundModifier}
                     context="Full Defense (REA + INT + WIL)"
+                    actionId="full-defense"
                     actionType="complex"
                     onClick={onOpenDiceRoller}
+                    onExecuteAction={handleExecuteAction}
                     isAvailable={canUseAction("complex")}
+                    isInCombat={isInCombat}
+                    isLoading={combatLoading}
                     theme={theme}
                   />
                 </div>
@@ -606,9 +653,13 @@ export function ActionPanel({
                     icon={<Shield className="w-4 h-4" />}
                     pool={combatPools.soak}
                     context="Soak (BOD + Armor)"
+                    actionId="soak"
                     actionType="free"
                     onClick={onOpenDiceRoller}
+                    onExecuteAction={handleExecuteAction}
                     isAvailable={true}
+                    isInCombat={isInCombat}
+                    isLoading={combatLoading}
                     theme={theme}
                   />
                 </div>
