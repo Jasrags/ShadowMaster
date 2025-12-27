@@ -444,6 +444,163 @@ export function calculateWoundModifier(conditionMonitor: ConditionMonitorState):
 
 ---
 
+#### 5.3 Quick Combat Mode (Extension)
+
+**Status:** Pending Implementation
+
+This extension completes the action execution loop for solo play, enabling full verification of the action economy system from the character sheet without requiring multiplayer infrastructure.
+
+**Rationale:** The original Phase 5 provided combat "awareness" (showing combat state) but not combat "execution" (actually running combat). This extension bridges that gap for single-player testing and solo play scenarios.
+
+##### 5.3.1 Combat Session Controls
+
+**File:** `/app/characters/[id]/components/QuickCombatControls.tsx` (NEW)
+
+```typescript
+interface QuickCombatControlsProps {
+  characterId: string;
+  theme: Theme;
+  onCombatStart: (session: CombatSession) => void;
+  onCombatEnd: () => void;
+}
+```
+
+Features:
+- "Start Combat" button creates solo combat session via API
+- Character auto-added as participant with rolled initiative
+- "End Combat" button closes session and clears state
+- Combat round/turn display
+- Action economy tracker (remaining actions this turn)
+- "End Turn" / "New Round" controls
+
+---
+
+##### 5.3.2 Action Execution Integration
+
+**File:** `/app/characters/[id]/components/ActionPanel.tsx` (MODIFY)
+
+Modify existing combat action buttons to:
+- Execute actions through `/api/combat/[sessionId]/actions` when in combat
+- Consume action economy (simple/complex/free/interrupt)
+- Display action results (hits, damage, effects)
+- Refresh character state after action resolution
+- Disable buttons when action type exhausted
+
+```typescript
+// Enhanced action button flow
+const handleCombatAction = async (actionType: ActionType, pool: number) => {
+  if (!combatSession) {
+    // Not in combat - just open dice roller (current behavior)
+    onOpenDiceRoller(pool, context);
+    return;
+  }
+
+  // In combat - execute through API
+  const result = await executeAction({
+    sessionId: combatSession.id,
+    participantId: participant.id,
+    actionId: actionType,
+    pool,
+  });
+
+  // Show result and refresh state
+  showActionResult(result);
+  refreshCharacter();
+  refreshCombatSession();
+};
+```
+
+---
+
+##### 5.3.3 Target Selection
+
+**File:** `/app/characters/[id]/components/TargetSelector.tsx` (NEW)
+
+For actions requiring a target (attacks, some spells):
+- Modal or dropdown to select target
+- Quick "Self" option for self-targeted actions
+- "Environment/Object" option for non-creature targets
+- NPC quick-add for solo testing (name + stats)
+
+---
+
+##### 5.3.4 Action Result Display
+
+**File:** `/app/characters/[id]/components/ActionResultToast.tsx` (NEW)
+
+Display action results as toast notifications:
+- Roll results (dice, hits, glitches)
+- Damage dealt/resisted
+- Condition changes
+- Edge spent/gained
+- Action economy updated
+
+---
+
+##### 5.3.5 Solo NPC Management
+
+**File:** `/app/characters/[id]/components/QuickNPCPanel.tsx` (NEW)
+
+Simple NPC management for solo combat testing:
+- Add NPCs to combat session with basic stats
+- NPC condition monitors
+- Quick NPC templates (Ganger, Security Guard, etc.)
+- Remove/incapacitate NPCs
+
+---
+
+##### 5.3.6 API Endpoints (if needed)
+
+**File:** `/app/api/combat/quick-start/route.ts` (NEW)
+
+Convenience endpoint for quick combat:
+```typescript
+// POST: Create solo combat session with character
+// Automatically rolls initiative and sets up turn order
+{
+  characterId: string;
+  npcs?: QuickNPC[];  // Optional NPCs to add
+}
+```
+
+---
+
+##### Implementation Order
+
+```
+5.3.1 QuickCombatControls     - Start/end combat, turn management
+5.3.2 ActionPanel integration - Wire buttons to execute actions
+5.3.3 TargetSelector          - Target selection for attacks
+5.3.4 ActionResultToast       - Display action outcomes
+5.3.5 QuickNPCPanel           - Add opponents for testing
+5.3.6 API convenience         - Quick-start endpoint
+```
+
+---
+
+##### Success Criteria
+
+After this extension, the Manual Verification Checklist items should be completable:
+- [ ] Execute simple/complex actions with economy enforcement
+- [ ] Verify action rejection when economy exhausted
+- [ ] See wound modifiers applied to pools
+- [ ] Execute attacks and see damage applied
+- [ ] View complete action audit trail
+
+---
+
+##### Future: Multiplayer
+
+This Quick Combat mode provides the solo execution loop. Full multiplayer combat is planned as separate capabilities:
+- `campaign.live-sessions` - Real-time infrastructure
+- `campaign.gm-combat-tools` - GM controls
+- `mechanics.multiplayer-combat` - Cross-player interactions
+- `campaign.session-chat` - Communication layer
+
+See `/docs/capabilities/TODO.md` for details.
+
+---
+
 ## Verification Plan
 
 ### Automated Tests
@@ -551,30 +708,43 @@ export function calculateWoundModifier(conditionMonitor: ConditionMonitorState):
 ## Implementation Order
 
 ```
-Phase 1: Action Economy Core (2 weeks estimated)
+Phase 1: Action Economy Core ✅ COMPLETE
 ├── 1.1 Combat Session Types
 ├── 1.2 Action Definition Types
 ├── 1.3 Combat Session Storage
 ├── 1.4 Action Validator
 └── 1.5 Action Executor
 
-Phase 2: Combat Execution Domain (2 weeks estimated)
+Phase 2: Combat Execution Domain ✅ COMPLETE
 ├── 2.1 Combat Action Definitions (data)
 ├── 2.2 Weapon Integration
 └── 2.3 Damage Application
 
-Phase 3: API Layer (1 week estimated)
+Phase 3: API Layer ✅ COMPLETE
 ├── 3.1 Combat Session API
 └── 3.2 Action Execution API
 
-Phase 4: UI Components (2 weeks estimated)
+Phase 4: UI Components ✅ COMPLETE
 ├── 4.1 Combat Tracker
 ├── 4.2 Action Selector
 └── 4.3 Opposed Test Resolver
 
-Phase 5: Integration (1 week estimated)
-├── 5.1 Character Sheet Integration
-└── 5.2 Condition Monitor Component
+Phase 5: Integration ✅ COMPLETE (5.1-5.2)
+├── 5.1 Character Sheet Integration ✅
+├── 5.2 Condition Monitor Component ✅
+└── 5.3 Quick Combat Mode (Extension) ⏳ PENDING
+    ├── 5.3.1 QuickCombatControls
+    ├── 5.3.2 ActionPanel integration
+    ├── 5.3.3 TargetSelector
+    ├── 5.3.4 ActionResultToast
+    ├── 5.3.5 QuickNPCPanel
+    └── 5.3.6 API convenience endpoint
+
+Future: Multiplayer Capabilities (Separate Work)
+├── campaign.live-sessions
+├── campaign.gm-combat-tools
+├── mechanics.multiplayer-combat
+└── campaign.session-chat
 ```
 
 ---
