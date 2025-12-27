@@ -38,7 +38,9 @@ import { Section } from "./components/Section";
 import { InteractiveConditionMonitor } from "./components/InteractiveConditionMonitor";
 import { CombatQuickReference } from "./components/CombatQuickReference";
 import { ActionPanel } from "./components/ActionPanel";
+import { QuickCombatControls } from "./components/QuickCombatControls";
 import { useCharacterSheetPreferences } from "./hooks/useCharacterSheetPreferences";
+import { CombatSessionProvider } from "@/lib/combat";
 
 // =============================================================================
 // ICONS
@@ -1361,6 +1363,13 @@ function CharacterSheet({
               }}
               theme={theme}
             />
+
+            {/* Quick Combat Controls */}
+            <QuickCombatControls
+              character={character}
+              editionCode={character.editionCode}
+              theme={theme}
+            />
           </div>
 
           {/* Middle Column - Skills & Powers */}
@@ -1729,16 +1738,18 @@ export default function CharacterPage({ params }: CharacterPageProps) {
 
   return (
     <RulesetProvider>
-      <CharacterSheet
-        character={character}
-        setCharacter={setCharacter}
-        showDiceRoller={showDiceRoller}
-        setShowDiceRoller={setShowDiceRoller}
-        targetPool={targetPool}
-        setTargetPool={setTargetPool}
-        poolContext={poolContext}
-        setPoolContext={setPoolContext}
-      />
+      <CombatSessionProvider characterId={character.id} pollInterval={5000}>
+        <CharacterSheet
+          character={character}
+          setCharacter={setCharacter}
+          showDiceRoller={showDiceRoller}
+          setShowDiceRoller={setShowDiceRoller}
+          targetPool={targetPool}
+          setTargetPool={setTargetPool}
+          poolContext={poolContext}
+          setPoolContext={setPoolContext}
+        />
+      </CombatSessionProvider>
     </RulesetProvider>
   );
 }

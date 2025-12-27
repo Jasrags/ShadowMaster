@@ -59,6 +59,34 @@ export {
   type EdgeActionResult,
 } from "./edge-actions";
 
+// Action Validator
+export {
+  ValidationErrorCodes,
+  ValidationWarningCodes,
+  validateCharacterState,
+  validateActionEconomy,
+  validatePrerequisites,
+  validateCombatContext,
+  calculateStateModifiers,
+  validateActionEligibility,
+  validateActionCost,
+  validateAction,
+  getActionBlockers,
+  canPerformAction,
+  type ValidationSeverity,
+  type ValidationError,
+  type ValidationWarning,
+  type ValidationResult,
+} from "./action-validator";
+
+// Action Executor
+export {
+  consumeAction,
+  type ExecutionRequest,
+  type ExecutionResult,
+  type RerollRequest,
+} from "./action-executor";
+
 // React Hooks (client-side only)
 export {
   useActionResolver,

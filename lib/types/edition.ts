@@ -151,7 +151,8 @@ export type RuleModuleType =
   | "advancement" // Karma advancement rules
   | "limits" // Limit calculations (SR5-specific)
   | "diceRules" // Dice mechanics (hit thresholds, glitch rules, Edge actions)
-  | "socialModifiers"; // Social test modifiers
+  | "socialModifiers" // Social test modifiers
+  | "actions"; // Action definitions for combat and other activities
 
 /**
  * Rules governing character advancement post-creation.
