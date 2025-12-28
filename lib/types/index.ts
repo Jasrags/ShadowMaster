@@ -486,3 +486,27 @@ export type {
   GetActionDetailsResponse,
 } from "./action-definitions";
 
+// Magic system types
+export type {
+  // State types
+  MagicState,
+  SustainedSpell,
+  BoundSpiritState,
+  SpiritTask,
+  ActiveFocus,
+  // Drain types
+  DrainAction,
+  DrainResult,
+  DrainBreakdown,
+  DrainModifier,
+  // Essence-Magic link
+  EssenceMagicState,
+  // Validation types
+  TraditionValidationResult,
+  SpellValidationResult,
+  MagicValidationError,
+  MagicValidationWarning,
+  // Spell categories
+  SpellCategory,
+  SpellType,
+} from "./magic";
