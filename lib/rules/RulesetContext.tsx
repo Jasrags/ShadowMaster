@@ -1466,6 +1466,76 @@ export function useRitualKeywords(): RitualKeywordData[] {
 }
 
 // =============================================================================
+// MAGIC ITEM LOOKUP HOOKS
+// =============================================================================
+
+/**
+ * Hook to get a specific spell by ID
+ */
+export function useSpell(spellId: string): SpellData | null {
+  const spells = useSpells();
+
+  return useMemo(() => {
+    if (!spells) return null;
+
+    // Search through all categories
+    const allSpells = [
+      ...spells.combat,
+      ...spells.detection,
+      ...spells.health,
+      ...spells.illusion,
+      ...spells.manipulation,
+    ];
+
+    return allSpells.find((s) => s.id === spellId) ?? null;
+  }, [spells, spellId]);
+}
+
+/**
+ * Hook to get a specific adept power by ID
+ */
+export function useAdeptPower(powerId: string): AdeptPowerCatalogItem | null {
+  const powers = useAdeptPowers();
+
+  return useMemo(() => {
+    return powers.find((p) => p.id === powerId) ?? null;
+  }, [powers, powerId]);
+}
+
+/**
+ * Hook to get a specific ritual by ID
+ */
+export function useRitual(ritualId: string): RitualData | null {
+  const rituals = useRituals();
+
+  return useMemo(() => {
+    return rituals.find((r) => r.id === ritualId) ?? null;
+  }, [rituals, ritualId]);
+}
+
+/**
+ * Hook to get a specific mentor spirit by ID
+ */
+export function useMentorSpirit(mentorId: string): MentorSpiritData | null {
+  const mentorSpirits = useMentorSpirits();
+
+  return useMemo(() => {
+    return mentorSpirits.find((m) => m.id === mentorId) ?? null;
+  }, [mentorSpirits, mentorId]);
+}
+
+/**
+ * Hook to get a specific tradition by ID
+ */
+export function useTradition(traditionId: string): TraditionData | null {
+  const traditions = useTraditions();
+
+  return useMemo(() => {
+    return traditions.find((t) => t.id === traditionId) ?? null;
+  }, [traditions, traditionId]);
+}
+
+// =============================================================================
 // VEHICLE, DRONE, RCC, AND AUTOSOFT HOOKS
 // =============================================================================
 
