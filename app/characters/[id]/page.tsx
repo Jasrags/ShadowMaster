@@ -38,7 +38,10 @@ import { Section } from "./components/Section";
 import { InteractiveConditionMonitor } from "./components/InteractiveConditionMonitor";
 import { CombatQuickReference } from "./components/CombatQuickReference";
 import { ActionPanel } from "./components/ActionPanel";
+import { QuickCombatControls } from "./components/QuickCombatControls";
+import { QuickNPCPanel } from "./components/QuickNPCPanel";
 import { useCharacterSheetPreferences } from "./hooks/useCharacterSheetPreferences";
+import { CombatSessionProvider } from "@/lib/combat";
 
 // =============================================================================
 // ICONS
@@ -319,7 +322,9 @@ function SkillList({ character, onSelect, theme }: SkillListProps) {
               dicePool += (baseAttr + augTotal);
             }
 
-            const specs = specializations[skillId] || [];
+            const rawSpecs = specializations[skillId];
+            // Handle both string and array formats for specializations
+            const specs = rawSpecs ? (Array.isArray(rawSpecs) ? rawSpecs : [rawSpecs]) : [];
             const specDisplay = specs.length > 0 ? specs.join(", ") : "__________";
 
             return (
@@ -803,7 +808,7 @@ function AugmentationCard({ item, theme }: { item: CyberwareItem | BiowareItem, 
         </div>
         <div className="text-right shrink-0">
           <div className="text-[10px] text-muted-foreground uppercase font-mono leading-none mb-1">Essence</div>
-          <div className="text-sm font-mono text-foreground/80 font-bold leading-none">{item.essenceCost.toFixed(2)}</div>
+          <div className="text-sm font-mono text-foreground/80 font-bold leading-none">{(item.essenceCost ?? 0).toFixed(2)}</div>
         </div>
       </div>
     </div>
@@ -1159,7 +1164,7 @@ function CharacterSheet({
               <div className={`flex flex-wrap items-center gap-x-4 gap-y-2 text-sm ${theme.fonts.mono} ${theme.colors.muted}`}>
                 <span>{character.metatype}</span>
                 <span>•</span>
-                <span className="capitalize">{character.magicalPath.replace("-", " ")}</span>
+                <span className="capitalize">{(character.magicalPath || "mundane").replace("-", " ")}</span>
                 {character.editionCode && (
                   <>
                     <span>•</span>
@@ -1211,7 +1216,7 @@ function CharacterSheet({
           >
             <Modal
               className={({ isEntering, isExiting }) => `
-                w-full max-w-lg overflow-hidden rounded-xl border border-zinc-700 bg-zinc-900 shadow-2xl
+                w-full max-w-lg overflow-hidden rounded-xl border ${theme.colors.border} ${theme.colors.card} shadow-2xl
                 ${isEntering ? 'animate-in zoom-in-95 duration-300' : ''}
                 ${isExiting ? 'animate-out zoom-out-95 duration-200' : ''}
               `}
@@ -1219,13 +1224,13 @@ function CharacterSheet({
               <Dialog className="outline-none">
                 {({ close }) => (
                   <div className="flex flex-col">
-                    <div className="flex items-center justify-between p-4 border-b border-zinc-800">
+                    <div className={`flex items-center justify-between p-4 border-b ${theme.colors.border}`}>
                       <Heading slot="title" className={`text-lg font-bold ${theme.colors.heading}`}>
                         Dice Roller
                       </Heading>
                       <Button
                         onPress={close}
-                        className="p-2 rounded-full hover:bg-zinc-800 text-muted-foreground hover:text-foreground transition-colors"
+                        className="p-2 rounded-full hover:bg-muted text-muted-foreground hover:text-foreground transition-colors"
                       >
                         <X className="w-5 h-5" />
                       </Button>
@@ -1359,6 +1364,18 @@ function CharacterSheet({
                 setPoolContext(context);
                 setShowDiceRoller(true);
               }}
+              theme={theme}
+            />
+
+            {/* Quick Combat Controls */}
+            <QuickCombatControls
+              character={character}
+              editionCode={character.editionCode}
+              theme={theme}
+            />
+
+            {/* Quick NPC Panel - Add opponents for testing */}
+            <QuickNPCPanel
               theme={theme}
             />
           </div>
@@ -1729,16 +1746,18 @@ export default function CharacterPage({ params }: CharacterPageProps) {
 
   return (
     <RulesetProvider>
-      <CharacterSheet
-        character={character}
-        setCharacter={setCharacter}
-        showDiceRoller={showDiceRoller}
-        setShowDiceRoller={setShowDiceRoller}
-        targetPool={targetPool}
-        setTargetPool={setTargetPool}
-        poolContext={poolContext}
-        setPoolContext={setPoolContext}
-      />
+      <CombatSessionProvider characterId={character.id} pollInterval={5000}>
+        <CharacterSheet
+          character={character}
+          setCharacter={setCharacter}
+          showDiceRoller={showDiceRoller}
+          setShowDiceRoller={setShowDiceRoller}
+          targetPool={targetPool}
+          setTargetPool={setTargetPool}
+          poolContext={poolContext}
+          setPoolContext={setPoolContext}
+        />
+      </CombatSessionProvider>
     </RulesetProvider>
   );
 }

@@ -114,12 +114,60 @@ This project has MCP servers configured in the workspace `.mcp.json` file. These
 
 ### Available Servers
 
-| Server                 | Purpose                    | When to Use                                                  |
-| ---------------------- | -------------------------- | ------------------------------------------------------------ |
-| **spec-lint**          | Enforce spec immutability  | Automatically run to ensure no progress leaks into specs     |
-| **next-devtools**      | Next.js inspection         | Debugging React components and Next.js state                 |
-| **memory**             | Persistent knowledge graph | Store/recall architectural decisions, patterns, known issues |
-| **git**                | Git operations             | Commits, diffs, branches, history viewing                    |
-| **filesystem**         | File operations            | Read/write project files                                     |
-| **sequentialthinking** | Structured reasoning       | Complex debugging, architecture decisions                    |
-| **time**               | Timezone utilities         | Timestamps (rarely needed)                                   |
+| Server                 | Purpose                      | When to Use                                                  |
+| ---------------------- | ---------------------------- | ------------------------------------------------------------ |
+| **context7**           | Library documentation lookup | Query up-to-date docs for libraries/frameworks (React, Next.js, etc.) |
+| **knip**               | Dead code detection          | Find unused exports, dependencies, and files in the codebase |
+| **spec-lint**          | Enforce spec immutability    | Automatically run to ensure no progress leaks into specs     |
+| **next-devtools**      | Next.js inspection           | Debugging React components and Next.js state                 |
+| **memory**             | Persistent knowledge graph   | Store/recall architectural decisions, patterns, known issues |
+| **git**                | Git operations               | Commits, diffs, branches, history viewing                    |
+| **filesystem**         | File operations              | Read/write project files                                     |
+| **sequentialthinking** | Structured reasoning         | Complex debugging, architecture decisions                    |
+| **time**               | Timezone utilities           | Timestamps (rarely needed)                                   |
+
+### Context7 Usage
+
+Use Context7 to fetch up-to-date documentation for libraries and frameworks:
+
+- `resolve-library-id` - Find the library ID for a package name
+- `get-library-docs` - Fetch documentation for a specific library and topic
+
+Best for checking current API signatures, understanding library patterns, and verifying framework best practices.
+
+### Knip Usage
+
+Use Knip to detect dead code and unused dependencies:
+
+- `run_knip` - Run knip analysis on the codebase
+- `get_knip_docs` - Get knip documentation for configuration help
+
+Best for finding unused exports before refactoring, identifying dead code after feature removal, and cleaning up unused dependencies.
+
+### Memory Server Usage
+
+The memory server maintains project knowledge across sessions:
+
+- `search_nodes` - Find existing knowledge by query
+- `create_entities` - Store new architectural concepts
+- `add_observations` - Add details to existing entities
+- `create_relations` - Link concepts together
+
+### Git Server Usage
+
+Use MCP git tools for version control operations:
+
+- `git_status` - Check working tree status
+- `git_diff` - View changes
+- `git_log` - View commit history
+- `git_commit` - Create commits
+- `git_branch` - List branches
+
+### Sequential Thinking Usage
+
+Use for complex reasoning tasks:
+
+- Debugging complex ruleset merge issues
+- Planning multi-step refactors
+- Working through character creation edge cases
+- Designing new edition support

@@ -411,3 +411,78 @@ export type {
   ActionActivityType,
 } from "./action-resolution";
 
+// Combat session types
+export type {
+  // Session types
+  CombatSessionStatus,
+  CombatPhase,
+  EnvironmentConditions,
+  EnvironmentModifier,
+  CombatSession,
+  // Participant types
+  ParticipantStatus,
+  ParticipantType,
+  CombatParticipant,
+  ActiveCondition,
+  // Action economy types
+  ActionType,
+  ActionAllocation,
+  PendingInterrupt,
+  // Initiative types
+  InitiativeRoll,
+  InitiativePass,
+  // Opposed test types
+  OpposedTestMode,
+  OpposedTestState,
+  OpposedTest,
+  // API types
+  CreateCombatSessionRequest,
+  CreateParticipantRequest,
+  UpdateCombatSessionRequest,
+  CombatInitiativeRequest,
+  ExecuteActionRequest,
+  ActionModifierInput,
+  CombatSessionResponse,
+  CombatSessionsListResponse,
+  InitiativeRollResponse,
+  ActionExecutionResponse,
+  StateChange,
+  // Activity types
+  CombatActivityType,
+} from "./combat";
+
+// Combat constants
+export { DEFAULT_ACTION_ALLOCATION } from "./combat";
+
+// Action definition types
+export type {
+  // Domain types
+  ExecutionDomain,
+  ActionSubcategory,
+  // Cost types
+  ResourceType,
+  ResourceCost,
+  ActionCost,
+  // Prerequisite types
+  PrerequisiteType,
+  ActionPrerequisite,
+  // Effect types
+  ActionEffectType,
+  EffectTargetType,
+  EffectCalculation,
+  ActionEffect,
+  // Opposed test types
+  OpposedTestConfig,
+  // Action definition types
+  ActionModifier,
+  ActionDefinition,
+  ActionCatalog,
+  ActionFilters,
+  ActionSummary,
+  // API types
+  GetAvailableActionsRequest,
+  GetAvailableActionsResponse,
+  GetActionDetailsRequest,
+  GetActionDetailsResponse,
+} from "./action-definitions";
+

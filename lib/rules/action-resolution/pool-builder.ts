@@ -33,7 +33,14 @@ export function calculateWoundModifier(
   const boxesPerPenalty = rules.woundModifiers?.boxesPerPenalty ?? 3;
   const maxPenalty = rules.woundModifiers?.maxPenalty ?? -4;
 
-  const penalty = -Math.floor(totalDamage / boxesPerPenalty);
+  const penaltyLevel = Math.floor(totalDamage / boxesPerPenalty);
+
+  // No penalty if damage is below threshold (avoid -0)
+  if (penaltyLevel === 0) {
+    return 0;
+  }
+
+  const penalty = -penaltyLevel;
 
   // Clamp to max penalty (which is negative)
   return Math.max(penalty, maxPenalty);

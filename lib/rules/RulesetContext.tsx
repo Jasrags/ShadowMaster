@@ -24,8 +24,8 @@ import type {
   WeaponMountType,
   CatalogItemRatingSpec,
 } from "../types";
-import type { QualityData, AdeptPowerCatalogItem, TraditionData, MentorSpiritData, TraditionSpiritTypes, MentorSpiritAdvantages, RitualData, RitualKeywordData, MinionStatsData, VehicleCategoryData, DroneSizeData, VehicleCatalogItemData, DroneCatalogItemData, RCCCatalogItemData, AutosoftCatalogItemData, HandlingRatingData, DroneWeaponMountsData, ProgramCatalogItemData, ProgramsCatalogData, FocusCatalogItemData, SpiritsCatalogData, ModificationsCatalogData, WeaponModificationCatalogItemData, ArmorModificationCatalogItemData, CyberwareModificationCatalogItemData, GearModificationCatalogItemData, LifestyleSubscriptionCatalogItem } from "./loader-types";
-export type { QualityData, TraditionData, MentorSpiritData, TraditionSpiritTypes, MentorSpiritAdvantages, RitualData, RitualKeywordData, MinionStatsData, VehicleCategoryData, DroneSizeData, VehicleCatalogItemData, DroneCatalogItemData, RCCCatalogItemData, AutosoftCatalogItemData, HandlingRatingData, DroneWeaponMountsData, ProgramCatalogItemData, ProgramsCatalogData, FocusCatalogItemData, SpiritsCatalogData, ModificationsCatalogData, WeaponModificationCatalogItemData, ArmorModificationCatalogItemData, CyberwareModificationCatalogItemData, GearModificationCatalogItemData, LifestyleSubscriptionCatalogItem };
+import type { QualityData, AdeptPowerCatalogItem, TraditionData, MentorSpiritData, TraditionSpiritTypes, MentorSpiritAdvantages, RitualData, RitualKeywordData, MinionStatsData, VehicleCategoryData, DroneSizeData, VehicleCatalogItemData, DroneCatalogItemData, RCCCatalogItemData, AutosoftCatalogItemData, HandlingRatingData, DroneWeaponMountsData, ProgramCatalogItemData, ProgramsCatalogData, FocusCatalogItemData, SpiritsCatalogData, ModificationsCatalogData, WeaponModificationCatalogItemData, ArmorModificationCatalogItemData, CyberwareModificationCatalogItemData, GearModificationCatalogItemData, LifestyleSubscriptionCatalogItem, ActionsCatalogData } from "./loader-types";
+export type { QualityData, TraditionData, MentorSpiritData, TraditionSpiritTypes, MentorSpiritAdvantages, RitualData, RitualKeywordData, MinionStatsData, VehicleCategoryData, DroneSizeData, VehicleCatalogItemData, DroneCatalogItemData, RCCCatalogItemData, AutosoftCatalogItemData, HandlingRatingData, DroneWeaponMountsData, ProgramCatalogItemData, ProgramsCatalogData, FocusCatalogItemData, SpiritsCatalogData, ModificationsCatalogData, WeaponModificationCatalogItemData, ArmorModificationCatalogItemData, CyberwareModificationCatalogItemData, GearModificationCatalogItemData, LifestyleSubscriptionCatalogItem, ActionsCatalogData };
 
 // =============================================================================
 // TYPES
@@ -489,6 +489,7 @@ export interface RulesetData {
   programs: ProgramsCatalogData | null;
   foci: FocusCatalogItemData[];
   spirits: SpiritsCatalogData | null;
+  actions: ActionsCatalogData | null;
 }
 
 /**
@@ -551,6 +552,7 @@ const defaultData: RulesetData = {
   programs: null,
   foci: [],
   spirits: null,
+  actions: null,
 };
 
 const defaultState: RulesetContextState = {
@@ -643,6 +645,7 @@ export function RulesetProvider({
             programs: extractedData.programs || null,
             foci: extractedData.foci || [],
             spirits: extractedData.spirits || null,
+            actions: extractedData.actions || null,
           }
           : defaultData;
 
@@ -1821,4 +1824,113 @@ export function useFoci(): FocusCatalogItemData[] {
 export function useSpirits(): SpiritsCatalogData | null {
   const { data } = useRuleset();
   return data.spirits;
+}
+
+// =============================================================================
+// ACTION HOOKS
+// =============================================================================
+
+import type { ActionDefinition, Character } from "../types";
+import { validatePrerequisites } from "./action-resolution/action-validator";
+
+/**
+ * Hook to get the actions catalog
+ */
+export function useActions(): ActionsCatalogData | null {
+  const { data } = useRuleset();
+  return data.actions;
+}
+
+/**
+ * Hook to get all actions as a flat array
+ */
+export function useAllActions(): ActionDefinition[] {
+  const { data } = useRuleset();
+
+  return useMemo(() => {
+    if (!data.actions) return [];
+
+    return [
+      ...data.actions.combat,
+      ...data.actions.general,
+      ...data.actions.magic,
+      ...data.actions.matrix,
+      ...data.actions.social,
+      ...data.actions.vehicle,
+    ];
+  }, [data.actions]);
+}
+
+/**
+ * Hook to get actions by domain
+ */
+export function useActionsByDomain(domain: "combat" | "general" | "magic" | "matrix" | "social" | "vehicle"): ActionDefinition[] {
+  const { data } = useRuleset();
+
+  return useMemo(() => {
+    if (!data.actions) return [];
+    return data.actions[domain] || [];
+  }, [data.actions, domain]);
+}
+
+/**
+ * Result of action availability check
+ */
+export interface ActionAvailabilityResult {
+  action: ActionDefinition;
+  available: boolean;
+  reasons: string[];
+}
+
+/**
+ * Hook to get available actions for a character
+ * Filters actions based on prerequisites and returns availability status
+ */
+export function useAvailableActions(
+  character: Character | null,
+  options?: {
+    domain?: "combat" | "general" | "magic" | "matrix" | "social" | "vehicle";
+  }
+): {
+  available: ActionAvailabilityResult[];
+  unavailable: ActionAvailabilityResult[];
+  all: ActionAvailabilityResult[];
+} {
+  const { data } = useRuleset();
+
+  return useMemo(() => {
+    if (!data.actions || !character) {
+      return { available: [], unavailable: [], all: [] };
+    }
+
+    // Get actions to check based on domain filter
+    let actionsToCheck: ActionDefinition[];
+    if (options?.domain) {
+      actionsToCheck = data.actions[options.domain] || [];
+    } else {
+      actionsToCheck = [
+        ...data.actions.combat,
+        ...data.actions.general,
+        ...data.actions.magic,
+        ...data.actions.matrix,
+        ...data.actions.social,
+        ...data.actions.vehicle,
+      ];
+    }
+
+    // Check availability for each action
+    const results: ActionAvailabilityResult[] = actionsToCheck.map((action) => {
+      const validationResult = validatePrerequisites(character, action.prerequisites);
+      return {
+        action,
+        available: validationResult.valid,
+        reasons: validationResult.errors.map((e) => e.message),
+      };
+    });
+
+    const available = results.filter((r) => r.available);
+    const unavailable = results.filter((r) => !r.available);
+
+    return { available, unavailable, all: results };
+  }, [data.actions, character, options?.domain]);
 }

@@ -813,3 +813,56 @@ export function extractAdvancement(ruleset: LoadedRuleset): AdvancementRulesData
     }
   );
 }
+
+// =============================================================================
+// ACTION DATA EXTRACTORS
+// =============================================================================
+
+import type { ActionDefinition } from "../types";
+
+/**
+ * Actions catalog organized by domain
+ */
+export interface ActionsCatalogData {
+  combat: ActionDefinition[];
+  general: ActionDefinition[];
+  magic: ActionDefinition[];
+  matrix: ActionDefinition[];
+  social: ActionDefinition[];
+  vehicle: ActionDefinition[];
+}
+
+/**
+ * Extract actions from a ruleset
+ */
+export function extractActions(ruleset: LoadedRuleset): ActionsCatalogData | null {
+  const ruleModule = extractModule<ActionsCatalogData>(ruleset, "actions");
+
+  if (!ruleModule) return null;
+
+  return {
+    combat: ruleModule.combat || [],
+    general: ruleModule.general || [],
+    magic: ruleModule.magic || [],
+    matrix: ruleModule.matrix || [],
+    social: ruleModule.social || [],
+    vehicle: ruleModule.vehicle || [],
+  };
+}
+
+/**
+ * Extract all actions as a flat array
+ */
+export function extractAllActions(ruleset: LoadedRuleset): ActionDefinition[] {
+  const catalog = extractActions(ruleset);
+  if (!catalog) return [];
+
+  return [
+    ...catalog.combat,
+    ...catalog.general,
+    ...catalog.magic,
+    ...catalog.matrix,
+    ...catalog.social,
+    ...catalog.vehicle,
+  ];
+}

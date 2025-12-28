@@ -448,19 +448,53 @@ Comprehensive architecture docs in `/docs/`:
 
 ## MCP Servers
 
-This project has MCP servers configured for Cursor IDE. The configuration is located at `~/.cursor/mcp.json` (global Cursor config) and mirrored in the workspace `.mcp.json` file. These tools form the **AI Project Management Additions** to assist with automated linting, state tracking, and development.
+This project has MCP servers configured in the workspace `.mcp.json` file. These tools form the **AI Project Management Additions** to assist with automated linting, state tracking, and development.
 
 ### Available Servers
 
-| Server                 | Purpose                    | When to Use                                                  |
-| ---------------------- | -------------------------- | ------------------------------------------------------------ |
-| **spec-lint**          | Enforce spec immutability  | Automatically run to ensure no progress leaks into specs     |
-| **next-devtools**      | Next.js inspection         | Debugging React components and Next.js state                 |
-| **memory**             | Persistent knowledge graph | Store/recall architectural decisions, patterns, known issues |
-| **git**                | Git operations             | Commits, diffs, branches, history viewing                    |
-| **filesystem**         | File operations            | Read/write project files                                     |
-| **sequentialthinking** | Structured reasoning       | Complex debugging, architecture decisions                    |
-| **time**               | Timezone utilities         | Timestamps (rarely needed)                                   |
+| Server                 | Purpose                      | When to Use                                                  |
+| ---------------------- | ---------------------------- | ------------------------------------------------------------ |
+| **context7**           | Library documentation lookup | Query up-to-date docs for libraries/frameworks (React, Next.js, etc.) |
+| **knip**               | Dead code detection          | Find unused exports, dependencies, and files in the codebase |
+| **spec-lint**          | Enforce spec immutability    | Automatically run to ensure no progress leaks into specs     |
+| **next-devtools**      | Next.js inspection           | Debugging React components and Next.js state                 |
+| **memory**             | Persistent knowledge graph   | Store/recall architectural decisions, patterns, known issues |
+| **git**                | Git operations               | Commits, diffs, branches, history viewing                    |
+| **filesystem**         | File operations              | Read/write project files                                     |
+| **sequentialthinking** | Structured reasoning         | Complex debugging, architecture decisions                    |
+| **time**               | Timezone utilities           | Timestamps (rarely needed)                                   |
+
+### Context7 Usage
+
+Use Context7 to fetch up-to-date documentation for libraries and frameworks:
+
+```
+# Get documentation for a library
+resolve-library-id: "react"
+get-library-docs: { libraryId: "/react/react", topic: "hooks" }
+```
+
+Best for:
+- Checking current API signatures
+- Understanding library-specific patterns
+- Verifying framework best practices
+
+### Knip Usage
+
+Use Knip to detect dead code and unused dependencies:
+
+```
+# Run knip analysis
+run_knip: { cwd: "/path/to/project" }
+
+# Get knip documentation
+get_knip_docs: { topic: "configuration" }
+```
+
+Best for:
+- Finding unused exports before refactoring
+- Identifying dead code after feature removal
+- Cleaning up unused dependencies
 
 ### Memory Server Usage
 

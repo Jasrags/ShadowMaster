@@ -1,0 +1,93 @@
+{
+  "name": "Quick Combat - Bob",
+  "ownerId": "b93e21d4-0d8e-44e8-98f0-d4d7a2942e91",
+  "editionCode": "sr5",
+  "status": "active",
+  "round": 1,
+  "currentTurn": 0,
+  "currentPhase": "action",
+  "participants": [
+    {
+      "type": "character",
+      "entityId": "267caf0f-67b3-43d0-976b-b80f8cd25436",
+      "name": "Bob",
+      "initiativeScore": 11,
+      "initiativeDice": [
+        4
+      ],
+      "actionsRemaining": {
+        "free": 999,
+        "simple": 2,
+        "complex": 1,
+        "interrupt": true
+      },
+      "interruptsPending": [],
+      "status": "active",
+      "controlledBy": "b93e21d4-0d8e-44e8-98f0-d4d7a2942e91",
+      "isGMControlled": false,
+      "woundModifier": -1,
+      "conditions": [],
+      "id": "a08388ed-d51d-4103-a5c4-b9715e7c4495"
+    },
+    {
+      "type": "grunt",
+      "entityId": "quick-npc-security-guard-1766902691381",
+      "name": "Security Guard",
+      "initiativeScore": 13,
+      "initiativeDice": [
+        5
+      ],
+      "actionsRemaining": {
+        "free": 999,
+        "simple": 2,
+        "complex": 1,
+        "interrupt": true
+      },
+      "interruptsPending": [],
+      "status": "active",
+      "controlledBy": "b93e21d4-0d8e-44e8-98f0-d4d7a2942e91",
+      "isGMControlled": true,
+      "woundModifier": 0,
+      "conditions": [],
+      "id": "2933049d-5b78-4a0e-ba1d-3d9957d5966c"
+    },
+    {
+      "type": "grunt",
+      "entityId": "quick-npc-security-guard-1766902693964",
+      "name": "Security Guard",
+      "initiativeScore": 14,
+      "initiativeDice": [
+        6
+      ],
+      "actionsRemaining": {
+        "free": 999,
+        "simple": 2,
+        "complex": 1,
+        "interrupt": true
+      },
+      "interruptsPending": [],
+      "status": "active",
+      "controlledBy": "b93e21d4-0d8e-44e8-98f0-d4d7a2942e91",
+      "isGMControlled": true,
+      "woundModifier": 0,
+      "conditions": [],
+      "id": "1cf93073-1766-44bf-ad45-f5d1233b428c"
+    }
+  ],
+  "initiativeOrder": [
+    "1cf93073-1766-44bf-ad45-f5d1233b428c",
+    "2933049d-5b78-4a0e-ba1d-3d9957d5966c",
+    "a08388ed-d51d-4103-a5c4-b9715e7c4495"
+  ],
+  "environment": {
+    "lighting": "normal",
+    "weather": "clear",
+    "terrain": "urban",
+    "visibility": 100,
+    "backgroundCount": 0,
+    "noise": 0
+  },
+  "id": "b1037e26-ad84-4063-a6f2-71a37e309f2b",
+  "createdAt": "2025-12-28T06:18:05.167Z",
+  "updatedAt": "2025-12-28T06:18:13.985Z"
+}

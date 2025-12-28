@@ -45,6 +45,7 @@
   },
   "devDependencies": {
     "@knip/mcp": "^0.0.9",
+    "@modelcontextprotocol/sdk": "^1.25.1",
     "@modelcontextprotocol/server-filesystem": "^2025.12.18",
     "@modelcontextprotocol/server-memory": "^2025.11.25",
     "@modelcontextprotocol/server-sequential-thinking": "^2025.12.18",

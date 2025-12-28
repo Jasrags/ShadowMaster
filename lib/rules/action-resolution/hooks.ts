@@ -19,12 +19,14 @@ import type {
   ActionHistoryStats,
   PoolModifier,
 } from "@/lib/types";
+// Import directly from specific files to avoid pulling in server-only code
+// (action-executor.ts imports storage layer which uses Node.js 'fs')
 import {
   buildActionPool,
   calculateWoundModifier,
   calculateLimit,
-  DEFAULT_DICE_RULES,
-} from "./index";
+} from "./pool-builder";
+import { DEFAULT_DICE_RULES } from "./dice-engine";
 
 // =============================================================================
 // useActionResolver Hook
