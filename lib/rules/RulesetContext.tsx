@@ -1932,5 +1932,5 @@ export function useAvailableActions(
     const unavailable = results.filter((r) => !r.available);
 
     return { available, unavailable, all: results };
-  }, [data.actions, character, options?.domain]);
+  }, [data.actions, character, options]);
 }
