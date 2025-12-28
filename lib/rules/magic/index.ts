@@ -31,3 +31,29 @@ export {
   getAllSpells,
   getAllAdeptPowers,
 } from "./spell-validator";
+
+// Drain calculation
+export {
+  calculateDrain,
+  calculateDrainResistance,
+  parseDrainFormula,
+  getDrainType,
+  calculateDrainPreview,
+  formatDrainSummary,
+  type DrainCalculationInput,
+} from "./drain-calculator";
+
+// Drain application
+export {
+  applyDrain,
+  checkBurnoutRisk,
+  wouldIncapacitate,
+  createDrainSession,
+  recordDrainEvent,
+  getDrainSessionSummary,
+  estimateResistanceHits,
+  formatDamageCondition,
+  type DrainApplicationResult,
+  type DrainHistoryEntry,
+  type DrainSession,
+} from "./drain-application";
