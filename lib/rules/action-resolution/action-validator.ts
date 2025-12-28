@@ -382,15 +382,103 @@ function validateSinglePrerequisite(
       break;
 
     case "equipment":
-      // Check if character has the equipment type
-      // This is simplified - would need to check gear, weapons, etc.
-      hasMet = character.gear?.some((g) => g.name === requirement || g.category === requirement) ?? false;
+      // Check if character has the required equipment type
+      // Ranged weapon subcategories from catalog
+      const rangedSubcategories = [
+        "light-pistol", "heavy-pistol", "hold-out", "machine-pistol",
+        "smg", "assault-rifle", "rifle", "sniper-rifle", "shotgun",
+        "machine-gun", "cannon", "launcher"
+      ];
+      switch (requirement) {
+        case "ranged_weapon":
+          // Check for firearms or ranged weapons by subcategory
+          hasMet = character.weapons?.some((w) => {
+            const subcat = (w.subcategory || "").toLowerCase();
+            return rangedSubcategories.includes(subcat);
+          }) ?? false;
+          break;
+        case "melee_weapon":
+          // Check for melee weapons by subcategory
+          hasMet = character.weapons?.some((w) => {
+            const subcat = (w.subcategory || "").toLowerCase();
+            return subcat === "melee";
+          }) ?? false;
+          break;
+        case "throwing_weapon":
+          // Check for throwing weapons by subcategory
+          hasMet = character.weapons?.some((w) => {
+            const subcat = (w.subcategory || "").toLowerCase();
+            return subcat === "throwingweapons" || subcat === "throwing-weapons" || subcat === "grenades";
+          }) ?? false;
+          break;
+        case "weapon":
+          // Check for any weapon
+          hasMet = (character.weapons?.length ?? 0) > 0;
+          break;
+        case "matrix_device":
+          // Check for cyberdeck, commlink, or technomancer
+          hasMet =
+            (character.gear?.some((g) => {
+              const cat = (g.category || "").toLowerCase();
+              return cat === "cyberdeck" || cat === "commlink" || cat === "deck";
+            }) ?? false) ||
+            character.magicalPath === "technomancer";
+          break;
+        case "firing_mode_sa":
+        case "firing_mode_bf":
+        case "firing_mode_fa":
+          // Check if any weapon supports the firing mode
+          const mode = requirement.replace("firing_mode_", "").toUpperCase();
+          hasMet = character.weapons?.some((w) => {
+            const modes = w.mode || [];
+            return Array.isArray(modes) ? modes.includes(mode) : false;
+          }) ?? false;
+          break;
+        case "ammunition_clip":
+        case "holstered_weapon":
+          // These require more detailed state tracking
+          hasMet = (character.weapons?.length ?? 0) > 0;
+          break;
+        default:
+          // Fallback: check gear by name or category
+          hasMet =
+            (character.gear?.some((g) => g.name === requirement || g.category === requirement) ?? false) ||
+            (character.weapons?.some((w) => w.name === requirement || w.category === requirement) ?? false);
+      }
       break;
 
     case "equipment_ready":
       // Check if equipment is ready/drawn
-      // This would need additional state tracking
-      hasMet = true; // Simplified for now
+      // For now, assume equipment is ready if character has it
+      // Ranged weapon subcategories from catalog
+      const readyRangedSubcategories = [
+        "light-pistol", "heavy-pistol", "hold-out", "machine-pistol",
+        "smg", "assault-rifle", "rifle", "sniper-rifle", "shotgun",
+        "machine-gun", "cannon", "launcher"
+      ];
+      switch (requirement) {
+        case "ranged_weapon":
+          hasMet = character.weapons?.some((w) => {
+            const subcat = (w.subcategory || "").toLowerCase();
+            return readyRangedSubcategories.includes(subcat);
+          }) ?? false;
+          break;
+        case "melee_weapon":
+          hasMet = character.weapons?.some((w) => {
+            const subcat = (w.subcategory || "").toLowerCase();
+            return subcat === "melee";
+          }) ?? false;
+          break;
+        case "throwing_weapon":
+          hasMet = character.weapons?.some((w) => {
+            const subcat = (w.subcategory || "").toLowerCase();
+            return subcat === "throwingweapons" || subcat === "throwing-weapons" || subcat === "grenades";
+          }) ?? false;
+          break;
+        default:
+          hasMet = (character.weapons?.length ?? 0) > 0 ||
+            (character.gear?.some((g) => g.name === requirement || g.category === requirement) ?? false);
+      }
       break;
 
     case "state":
@@ -420,11 +508,32 @@ function validateSinglePrerequisite(
       break;
 
     case "magic":
-      hasMet = (character.attributes?.magic ?? 0) > 0;
+      // Check if character is awakened (has magic attribute)
+      // For 'awakened' requirement, just check magic > 0
+      // For specific traditions, check magicalPath
+      const magicAttr = character.attributes?.magic ?? 0;
+      const magicalPath = character.magicalPath || "";
+      if (requirement === "awakened") {
+        hasMet = magicAttr > 0;
+      } else if (requirement === "spellcaster") {
+        hasMet =
+          magicAttr > 0 &&
+          ["full-mage", "aspected-mage", "mystic-adept"].includes(magicalPath);
+      } else {
+        // Default: check magic > 0 and valid magical path
+        hasMet =
+          magicAttr > 0 &&
+          ["full-mage", "aspected-mage", "mystic-adept", "adept"].includes(
+            magicalPath
+          );
+      }
       break;
 
     case "technomancer":
-      hasMet = (character.attributes?.resonance ?? 0) > 0;
+      // Check if character is a technomancer
+      hasMet =
+        (character.attributes?.resonance ?? 0) > 0 &&
+        character.magicalPath === "technomancer";
       break;
 
     case "vehicle":

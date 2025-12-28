@@ -236,17 +236,13 @@ export function CombatQuickReference({
       {/* Initiative & Armor Row */}
       <div className="grid grid-cols-2 gap-3">
         <div
-          className={`p-3 rounded border text-center ${
-            t.id === "modern-card"
-              ? "bg-stone-50 dark:bg-stone-900 border-stone-200 dark:border-stone-800"
-              : "bg-zinc-900/50 border-zinc-800"
-          }`}
+          className={`p-3 rounded border text-center ${t.colors.card} ${t.colors.border}`}
         >
           <span className={`block text-xs ${t.fonts.mono} text-muted-foreground uppercase mb-1`}>
             Initiative
           </span>
           <span className={`text-xl font-bold ${t.fonts.mono} ${
-            woundModifier < 0 ? "text-amber-400" : "text-emerald-400"
+            woundModifier < 0 ? "text-amber-400" : t.colors.accent
           }`}>
             {effectiveInit}+{combatData.initiative.dice}d6
           </span>
@@ -258,16 +254,12 @@ export function CombatQuickReference({
         </div>
 
         <div
-          className={`p-3 rounded border text-center ${
-            t.id === "modern-card"
-              ? "bg-stone-50 dark:bg-stone-900 border-stone-200 dark:border-stone-800"
-              : "bg-zinc-900/50 border-zinc-800"
-          }`}
+          className={`p-3 rounded border text-center ${t.colors.card} ${t.colors.border}`}
         >
           <span className={`block text-xs ${t.fonts.mono} text-muted-foreground uppercase mb-1`}>
             Armor
           </span>
-          <span className={`text-xl font-bold ${t.fonts.mono} text-zinc-300`}>
+          <span className={`text-xl font-bold ${t.fonts.mono} ${t.colors.heading}`}>
             {combatData.armor}
           </span>
         </div>
@@ -349,17 +341,13 @@ export function CombatQuickReference({
               key={idx}
               type="button"
               onClick={() => onPoolSelect?.(pool.pool + woundModifier, pool.context)}
-              className={`p-2 rounded border text-center transition-colors hover:border-emerald-500/50 ${
-                t.id === "modern-card"
-                  ? "bg-stone-50 dark:bg-stone-900 border-stone-200 dark:border-stone-800"
-                  : "bg-zinc-900/50 border-zinc-800 hover:bg-zinc-800/50"
-              }`}
+              className={`p-2 rounded border text-center transition-colors hover:border-emerald-500/50 ${t.colors.card} ${t.colors.border}`}
             >
               <span className={`block text-[10px] ${t.fonts.mono} text-muted-foreground uppercase mb-0.5 truncate`}>
                 {pool.label}
               </span>
               <span className={`text-sm font-bold ${t.fonts.mono} ${
-                woundModifier < 0 ? "text-amber-400" : "text-emerald-400"
+                woundModifier < 0 ? "text-amber-400" : t.colors.accent
               }`}>
                 {pool.pool + woundModifier}
               </span>

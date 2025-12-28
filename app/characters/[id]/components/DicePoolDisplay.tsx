@@ -104,11 +104,7 @@ export function DicePoolDisplay({
       >
         <span
           className={`font-bold tabular-nums ${
-            woundModifier < 0
-              ? "text-amber-400"
-              : t.id === "modern-card"
-                ? "text-indigo-500"
-                : "text-emerald-400"
+            woundModifier < 0 ? "text-amber-400" : t.colors.accent
           }`}
         >
           {effectivePool}
@@ -134,31 +130,19 @@ export function DicePoolDisplay({
       className={`
         p-3 rounded border transition-all
         ${onClick ? "cursor-pointer hover:border-emerald-500/50" : ""}
-        ${
-          t.id === "modern-card"
-            ? "bg-stone-50 dark:bg-stone-900 border-stone-200 dark:border-stone-800"
-            : "bg-zinc-900/50 border-zinc-800 hover:bg-zinc-800/50"
-        }
+        ${t.colors.card} ${t.colors.border}
       `}
     >
       {/* Header */}
       <div className="flex items-center justify-between mb-2">
-        <span
-          className={`text-sm font-medium ${
-            t.id === "modern-card" ? "text-foreground" : "text-foreground/90"
-          }`}
-        >
+        <span className="text-sm font-medium text-foreground">
           {label}
         </span>
         <div className="flex items-center gap-2">
           {/* Final Pool */}
           <span
             className={`text-xl font-bold ${t.fonts.mono} tabular-nums ${
-              woundModifier < 0
-                ? "text-amber-400"
-                : t.id === "modern-card"
-                  ? "text-indigo-600"
-                  : "text-emerald-400"
+              woundModifier < 0 ? "text-amber-400" : t.colors.accent
             }`}
           >
             {effectivePool}

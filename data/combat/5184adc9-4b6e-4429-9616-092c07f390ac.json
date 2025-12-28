@@ -1,0 +1,70 @@
+{
+  "name": "Quick Combat - Bob",
+  "ownerId": "b93e21d4-0d8e-44e8-98f0-d4d7a2942e91",
+  "editionCode": "sr5",
+  "status": "active",
+  "round": 1,
+  "currentTurn": 0,
+  "currentPhase": "action",
+  "participants": [
+    {
+      "type": "character",
+      "entityId": "267caf0f-67b3-43d0-976b-b80f8cd25436",
+      "name": "Bob",
+      "initiativeScore": 8,
+      "initiativeDice": [
+        1
+      ],
+      "actionsRemaining": {
+        "free": 999,
+        "simple": 2,
+        "complex": 1,
+        "interrupt": false
+      },
+      "interruptsPending": [],
+      "status": "active",
+      "controlledBy": "b93e21d4-0d8e-44e8-98f0-d4d7a2942e91",
+      "isGMControlled": false,
+      "woundModifier": -1,
+      "conditions": [],
+      "id": "425432af-0901-41a9-8680-78a573908d09"
+    },
+    {
+      "type": "grunt",
+      "entityId": "quick-npc-security-guard-1766936636705",
+      "name": "Security Guard",
+      "initiativeScore": 11,
+      "initiativeDice": [
+        3
+      ],
+      "actionsRemaining": {
+        "free": 999,
+        "simple": 2,
+        "complex": 1,
+        "interrupt": true
+      },
+      "interruptsPending": [],
+      "status": "active",
+      "controlledBy": "b93e21d4-0d8e-44e8-98f0-d4d7a2942e91",
+      "isGMControlled": true,
+      "woundModifier": 0,
+      "conditions": [],
+      "id": "28e8771b-bdec-4f4d-a1f5-e3b8f2b61895"
+    }
+  ],
+  "initiativeOrder": [
+    "28e8771b-bdec-4f4d-a1f5-e3b8f2b61895",
+    "425432af-0901-41a9-8680-78a573908d09"
+  ],
+  "environment": {
+    "lighting": "normal",
+    "weather": "clear",
+    "terrain": "urban",
+    "visibility": 100,
+    "backgroundCount": 0,
+    "noise": 0
+  },
+  "id": "5184adc9-4b6e-4429-9616-092c07f390ac",
+  "createdAt": "2025-12-28T15:43:53.068Z",
+  "updatedAt": "2025-12-28T15:45:00.914Z"
+}

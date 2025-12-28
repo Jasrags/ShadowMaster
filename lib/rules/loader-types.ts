@@ -16,6 +16,7 @@ import type {
   CatalogItemRatingSpec,
   CyberwareCategory,
   BiowareCategory,
+  ActionDefinition,
 } from "../types";
 
 // =============================================================================
@@ -1200,4 +1201,20 @@ export interface AdvancementRulesData {
   attributeRatingCap?: number;
   skillRatingCap?: number;
   allowInstantAdvancement: boolean;
+}
+
+// =============================================================================
+// ACTION DATA TYPES
+// =============================================================================
+
+/**
+ * Actions catalog organized by domain
+ */
+export interface ActionsCatalogData {
+  combat: ActionDefinition[];
+  general: ActionDefinition[];
+  magic: ActionDefinition[];
+  matrix: ActionDefinition[];
+  social: ActionDefinition[];
+  vehicle: ActionDefinition[];
 }

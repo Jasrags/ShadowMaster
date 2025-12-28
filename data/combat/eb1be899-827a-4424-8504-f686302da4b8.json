@@ -1,0 +1,47 @@
+{
+  "name": "Quick Combat - Bob",
+  "ownerId": "b93e21d4-0d8e-44e8-98f0-d4d7a2942e91",
+  "editionCode": "sr5",
+  "status": "active",
+  "round": 1,
+  "currentTurn": 0,
+  "currentPhase": "action",
+  "participants": [
+    {
+      "type": "character",
+      "entityId": "267caf0f-67b3-43d0-976b-b80f8cd25436",
+      "name": "Bob",
+      "initiativeScore": 13,
+      "initiativeDice": [
+        6
+      ],
+      "actionsRemaining": {
+        "free": 999,
+        "simple": 2,
+        "complex": 1,
+        "interrupt": true
+      },
+      "interruptsPending": [],
+      "status": "active",
+      "controlledBy": "b93e21d4-0d8e-44e8-98f0-d4d7a2942e91",
+      "isGMControlled": false,
+      "woundModifier": -1,
+      "conditions": [],
+      "id": "643c6512-011d-415c-87d3-ab5eb40a2afe"
+    }
+  ],
+  "initiativeOrder": [
+    "643c6512-011d-415c-87d3-ab5eb40a2afe"
+  ],
+  "environment": {
+    "lighting": "normal",
+    "weather": "clear",
+    "terrain": "urban",
+    "visibility": 100,
+    "backgroundCount": 0,
+    "noise": 0
+  },
+  "id": "eb1be899-827a-4424-8504-f686302da4b8",
+  "createdAt": "2025-12-27T17:01:08.414Z",
+  "updatedAt": "2025-12-27T17:01:08.473Z"
+}
