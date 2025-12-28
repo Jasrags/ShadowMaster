@@ -13,10 +13,21 @@ import {
   Move,
   Eye,
   HandMetal,
+  AlertCircle,
+  ArrowLeft,
+  Check,
+  Lock,
+  Crosshair,
+  Wand2,
+  Monitor,
+  MessageSquare,
+  Car,
 } from "lucide-react";
 import { useEdge } from "@/lib/rules/action-resolution/hooks";
 import { useCombatSession, useActionEconomy } from "@/lib/combat";
-import type { Character } from "@/lib/types";
+import { useAvailableActions, type ActionAvailabilityResult } from "@/lib/rules/RulesetContext";
+import { TargetSelector } from "./TargetSelector";
+import type { Character, ActionDefinition } from "@/lib/types";
 import type { Theme } from "@/lib/themes";
 
 interface ActionPanelProps {
@@ -81,6 +92,51 @@ interface CombatActionButtonProps {
   isLoading?: boolean;
   theme: Theme;
 }
+
+/**
+ * Get appropriate icon for an action based on its subcategory
+ */
+function getActionIcon(action: ActionDefinition): React.ReactNode {
+  const subcategory = action.subcategory || "";
+  const domain = action.domain;
+
+  // Check by subcategory first
+  switch (subcategory) {
+    case "ranged":
+      return <Target className="w-4 h-4" />;
+    case "melee":
+      return <HandMetal className="w-4 h-4" />;
+    case "defense":
+      return <Shield className="w-4 h-4" />;
+    case "movement":
+      return <Move className="w-4 h-4" />;
+    case "perception":
+      return <Eye className="w-4 h-4" />;
+    default:
+      break;
+  }
+
+  // Fall back to domain
+  switch (domain) {
+    case "combat":
+      return <Swords className="w-4 h-4" />;
+    case "magic":
+      return <Wand2 className="w-4 h-4" />;
+    case "matrix":
+      return <Monitor className="w-4 h-4" />;
+    case "social":
+      return <MessageSquare className="w-4 h-4" />;
+    case "vehicle":
+      return <Car className="w-4 h-4" />;
+    default:
+      return <Dice1 className="w-4 h-4" />;
+  }
+}
+
+/**
+ * Multi-step action flow stages
+ */
+type ActionFlowStep = "select" | "target" | "confirm";
 
 function CombatActionButton({
   label,
@@ -156,6 +212,45 @@ export function ActionPanel({
   const { isInCombat, isMyTurn, executeAction, isLoading: combatLoading } = useCombatSession();
   const actionEconomy = useActionEconomy();
 
+  // Get available actions for this character (combat domain only for now)
+  const { available: availableActions, unavailable: unavailableActions, all: allActions } = useAvailableActions(
+    character,
+    { domain: "combat" }
+  );
+
+  // Multi-step action flow state
+  const [flowStep, setFlowStep] = useState<ActionFlowStep>("select");
+  const [selectedAction, setSelectedAction] = useState<ActionDefinition | null>(null);
+  const [selectedTargetId, setSelectedTargetId] = useState<string | null>(null);
+  const [selectedTargetName, setSelectedTargetName] = useState<string | null>(null);
+
+  // Reset flow back to select step
+  const resetFlow = useCallback(() => {
+    setFlowStep("select");
+    setSelectedAction(null);
+    setSelectedTargetId(null);
+    setSelectedTargetName(null);
+  }, []);
+
+  // Handle action selection
+  const handleSelectAction = useCallback((action: ActionDefinition) => {
+    setSelectedAction(action);
+    // Check if this is an attack action that needs a target
+    const needsTarget = action.subcategory === "ranged" || action.subcategory === "melee";
+    if (needsTarget && isInCombat) {
+      setFlowStep("target");
+    } else {
+      setFlowStep("confirm");
+    }
+  }, [isInCombat]);
+
+  // Handle target selection
+  const handleTargetSelect = useCallback((targetId: string, targetName: string) => {
+    setSelectedTargetId(targetId);
+    setSelectedTargetName(targetName);
+    setFlowStep("confirm");
+  }, []);
+
   // Execute a combat action
   const handleExecuteAction = useCallback(async (actionId: string) => {
     if (!isInCombat) return;
@@ -164,6 +259,33 @@ export function ActionPanel({
 
   // Tab state for switching between Quick Rolls and Combat Actions
   const [activeTab, setActiveTab] = useState<"quick" | "combat">("quick");
+
+  // Calculate dice pool for an action based on its rollConfig
+  const calculateActionPool = useCallback((action: ActionDefinition): number => {
+    const attrs = character.attributes || {};
+    const skills = character.skills || {};
+
+    if (!action.rollConfig) return 0;
+
+    let pool = 0;
+
+    // Add attribute
+    if (action.rollConfig.attribute) {
+      const attrKey = action.rollConfig.attribute.toLowerCase();
+      pool += attrs[attrKey] || 0;
+    }
+
+    // Add skill
+    if (action.rollConfig.skill) {
+      const skillKey = action.rollConfig.skill.toLowerCase().replace(/ /g, "-");
+      pool += skills[skillKey] || 0;
+    }
+
+    // Apply wound modifier
+    pool += woundModifier;
+
+    return Math.max(0, pool);
+  }, [character.attributes, character.skills, woundModifier]);
 
   // Use Edge hook for real-time Edge management
   const {
@@ -540,130 +662,328 @@ export function ActionPanel({
                 </div>
               )}
 
-              {/* Attack Actions */}
-              <div className="space-y-2">
-                <div className={`text-xs uppercase ${theme.fonts.mono} ${theme.colors.muted}`}>
-                  Attack Actions
-                </div>
-                <div className="space-y-1">
-                  <CombatActionButton
-                    label="Melee Attack"
-                    icon={<HandMetal className="w-4 h-4" />}
-                    pool={combatPools.meleeAttack + woundModifier}
-                    context="Melee Attack (AGI + Combat Skill)"
-                    actionId="melee-attack"
-                    actionType="complex"
-                    onClick={onOpenDiceRoller}
-                    onExecuteAction={handleExecuteAction}
-                    isAvailable={canUseAction("complex")}
-                    isInCombat={isInCombat}
-                    isLoading={combatLoading}
-                    theme={theme}
-                  />
-                  <CombatActionButton
-                    label="Ranged Attack"
-                    icon={<Target className="w-4 h-4" />}
-                    pool={combatPools.rangedAttack + woundModifier}
-                    context="Ranged Attack (AGI + Firearms)"
-                    actionId="ranged-attack"
-                    actionType="simple"
-                    onClick={onOpenDiceRoller}
-                    onExecuteAction={handleExecuteAction}
-                    isAvailable={canUseAction("simple")}
-                    isInCombat={isInCombat}
-                    isLoading={combatLoading}
-                    theme={theme}
-                  />
-                  <CombatActionButton
-                    label="Take Aim"
-                    icon={<Eye className="w-4 h-4" />}
-                    pool={0}
-                    context="Take Aim (+1 to next attack)"
-                    actionId="take-aim"
-                    actionType="simple"
-                    onClick={onOpenDiceRoller}
-                    onExecuteAction={handleExecuteAction}
-                    isAvailable={canUseAction("simple")}
-                    isInCombat={isInCombat}
-                    isLoading={combatLoading}
-                    theme={theme}
-                  />
-                </div>
-              </div>
+              {/* Multi-step Flow UI */}
+              {flowStep === "select" && (
+                <>
+                  {/* Available Actions */}
+                  {availableActions.length > 0 && (
+                    <div className="space-y-2">
+                      <div className={`text-xs uppercase ${theme.fonts.mono} ${theme.colors.muted}`}>
+                        Available Actions
+                      </div>
+                      <div className="space-y-1">
+                        {availableActions.map((result) => {
+                          const action = result.action;
+                          const pool = calculateActionPool(action);
+                          const actionType = action.type as "free" | "simple" | "complex" | "interrupt";
+                          const canUse = canUseAction(actionType);
 
-              {/* Defense Actions */}
-              <div className="space-y-2">
-                <div className={`text-xs uppercase ${theme.fonts.mono} ${theme.colors.muted}`}>
-                  Defense Actions
-                </div>
-                <div className="space-y-1">
-                  <CombatActionButton
-                    label="Dodge"
-                    icon={<Move className="w-4 h-4" />}
-                    pool={combatPools.dodge + woundModifier}
-                    context="Dodge (REA + INT + Gymnastics)"
-                    actionId="dodge"
-                    actionType="interrupt"
-                    onClick={onOpenDiceRoller}
-                    onExecuteAction={handleExecuteAction}
-                    isAvailable={canUseAction("interrupt")}
-                    isInCombat={isInCombat}
-                    isLoading={combatLoading}
-                    theme={theme}
-                  />
-                  <CombatActionButton
-                    label="Block"
-                    icon={<Shield className="w-4 h-4" />}
-                    pool={combatPools.block + woundModifier}
-                    context="Block (REA + Unarmed Combat)"
-                    actionId="block"
-                    actionType="interrupt"
-                    onClick={onOpenDiceRoller}
-                    onExecuteAction={handleExecuteAction}
-                    isAvailable={canUseAction("interrupt")}
-                    isInCombat={isInCombat}
-                    isLoading={combatLoading}
-                    theme={theme}
-                  />
-                  <CombatActionButton
-                    label="Full Defense"
-                    icon={<Shield className="w-4 h-4" />}
-                    pool={combatPools.fullDefense + woundModifier}
-                    context="Full Defense (REA + INT + WIL)"
-                    actionId="full-defense"
-                    actionType="complex"
-                    onClick={onOpenDiceRoller}
-                    onExecuteAction={handleExecuteAction}
-                    isAvailable={canUseAction("complex")}
-                    isInCombat={isInCombat}
-                    isLoading={combatLoading}
-                    theme={theme}
-                  />
-                </div>
-              </div>
+                          return (
+                            <CombatActionButton
+                              key={action.id}
+                              label={action.name}
+                              icon={getActionIcon(action)}
+                              pool={pool}
+                              context={action.description}
+                              actionId={action.id}
+                              actionType={actionType}
+                              onClick={() => {
+                                handleSelectAction(action);
+                              }}
+                              onExecuteAction={handleExecuteAction}
+                              isAvailable={canUse}
+                              isInCombat={isInCombat}
+                              isLoading={combatLoading}
+                              theme={theme}
+                            />
+                          );
+                        })}
+                      </div>
+                    </div>
+                  )}
 
-              {/* Resistance */}
-              <div className="space-y-2">
-                <div className={`text-xs uppercase ${theme.fonts.mono} ${theme.colors.muted}`}>
-                  Resistance
-                </div>
-                <div className="space-y-1">
-                  <CombatActionButton
-                    label="Soak Damage"
-                    icon={<Shield className="w-4 h-4" />}
-                    pool={combatPools.soak}
-                    context="Soak (BOD + Armor)"
-                    actionId="soak"
-                    actionType="free"
-                    onClick={onOpenDiceRoller}
-                    onExecuteAction={handleExecuteAction}
-                    isAvailable={true}
-                    isInCombat={isInCombat}
-                    isLoading={combatLoading}
+                  {/* Unavailable Actions (grayed out with reasons) */}
+                  {unavailableActions.length > 0 && (
+                    <div className="space-y-2">
+                      <div className={`text-xs uppercase ${theme.fonts.mono} ${theme.colors.muted} flex items-center gap-2`}>
+                        <Lock className="w-3 h-3" />
+                        Unavailable Actions
+                      </div>
+                      <div className="space-y-1">
+                        {unavailableActions.map((result) => {
+                          const action = result.action;
+                          const actionType = action.type as "free" | "simple" | "complex" | "interrupt";
+                          const typeColors: Record<string, string> = {
+                            free: "border-emerald-500/20",
+                            simple: "border-blue-500/20",
+                            complex: "border-purple-500/20",
+                            interrupt: "border-amber-500/20",
+                          };
+                          const typeLabels: Record<string, string> = {
+                            free: "F",
+                            simple: "S",
+                            complex: "C",
+                            interrupt: "Int",
+                          };
+
+                          return (
+                            <div
+                              key={action.id}
+                              className={`
+                                flex items-center gap-2 w-full
+                                px-3 py-2 rounded border
+                                bg-muted/30 ${typeColors[actionType]}
+                                opacity-50 cursor-not-allowed
+                                text-sm
+                              `}
+                              title={result.reasons.join(", ")}
+                            >
+                              <span className="w-5 h-5 flex items-center justify-center text-muted-foreground">
+                                {getActionIcon(action)}
+                              </span>
+                              <span className="flex-1 text-left font-medium text-muted-foreground">
+                                {action.name}
+                              </span>
+                              <span className={`text-[10px] ${theme.fonts.mono} px-1.5 py-0.5 rounded bg-background/50 text-muted-foreground`}>
+                                {typeLabels[actionType]}
+                              </span>
+                              <AlertCircle className="w-4 h-4 text-amber-500" />
+                            </div>
+                          );
+                        })}
+                      </div>
+                      <div className={`text-[10px] ${theme.colors.muted} italic`}>
+                        Hover over an action to see requirements
+                      </div>
+                    </div>
+                  )}
+
+                  {/* Fallback: Show legacy hardcoded actions if no actions loaded */}
+                  {allActions.length === 0 && (
+                    <>
+                      {/* Attack Actions */}
+                      <div className="space-y-2">
+                        <div className={`text-xs uppercase ${theme.fonts.mono} ${theme.colors.muted}`}>
+                          Attack Actions
+                        </div>
+                        <div className="space-y-1">
+                          <CombatActionButton
+                            label="Melee Attack"
+                            icon={<HandMetal className="w-4 h-4" />}
+                            pool={combatPools.meleeAttack + woundModifier}
+                            context="Melee Attack (AGI + Combat Skill)"
+                            actionId="melee-attack"
+                            actionType="complex"
+                            onClick={onOpenDiceRoller}
+                            onExecuteAction={handleExecuteAction}
+                            isAvailable={canUseAction("complex")}
+                            isInCombat={isInCombat}
+                            isLoading={combatLoading}
+                            theme={theme}
+                          />
+                          <CombatActionButton
+                            label="Ranged Attack"
+                            icon={<Target className="w-4 h-4" />}
+                            pool={combatPools.rangedAttack + woundModifier}
+                            context="Ranged Attack (AGI + Firearms)"
+                            actionId="ranged-attack"
+                            actionType="simple"
+                            onClick={onOpenDiceRoller}
+                            onExecuteAction={handleExecuteAction}
+                            isAvailable={canUseAction("simple")}
+                            isInCombat={isInCombat}
+                            isLoading={combatLoading}
+                            theme={theme}
+                          />
+                        </div>
+                      </div>
+
+                      {/* Defense Actions */}
+                      <div className="space-y-2">
+                        <div className={`text-xs uppercase ${theme.fonts.mono} ${theme.colors.muted}`}>
+                          Defense Actions
+                        </div>
+                        <div className="space-y-1">
+                          <CombatActionButton
+                            label="Dodge"
+                            icon={<Move className="w-4 h-4" />}
+                            pool={combatPools.dodge + woundModifier}
+                            context="Dodge (REA + INT + Gymnastics)"
+                            actionId="dodge"
+                            actionType="interrupt"
+                            onClick={onOpenDiceRoller}
+                            onExecuteAction={handleExecuteAction}
+                            isAvailable={canUseAction("interrupt")}
+                            isInCombat={isInCombat}
+                            isLoading={combatLoading}
+                            theme={theme}
+                          />
+                          <CombatActionButton
+                            label="Block"
+                            icon={<Shield className="w-4 h-4" />}
+                            pool={combatPools.block + woundModifier}
+                            context="Block (REA + Unarmed Combat)"
+                            actionId="block"
+                            actionType="interrupt"
+                            onClick={onOpenDiceRoller}
+                            onExecuteAction={handleExecuteAction}
+                            isAvailable={canUseAction("interrupt")}
+                            isInCombat={isInCombat}
+                            isLoading={combatLoading}
+                            theme={theme}
+                          />
+                        </div>
+                      </div>
+
+                      {/* Resistance */}
+                      <div className="space-y-2">
+                        <div className={`text-xs uppercase ${theme.fonts.mono} ${theme.colors.muted}`}>
+                          Resistance
+                        </div>
+                        <div className="space-y-1">
+                          <CombatActionButton
+                            label="Soak Damage"
+                            icon={<Shield className="w-4 h-4" />}
+                            pool={combatPools.soak}
+                            context="Soak (BOD + Armor)"
+                            actionId="soak"
+                            actionType="free"
+                            onClick={onOpenDiceRoller}
+                            onExecuteAction={handleExecuteAction}
+                            isAvailable={true}
+                            isInCombat={isInCombat}
+                            isLoading={combatLoading}
+                            theme={theme}
+                          />
+                        </div>
+                      </div>
+                    </>
+                  )}
+                </>
+              )}
+
+              {/* Target Selection Step */}
+              {flowStep === "target" && selectedAction && (
+                <div className="space-y-3">
+                  <div className="flex items-center gap-2">
+                    <Button
+                      onPress={resetFlow}
+                      className="p-1.5 rounded hover:bg-muted transition-colors"
+                    >
+                      <ArrowLeft className="w-4 h-4" />
+                    </Button>
+                    <span className={`text-sm font-medium ${theme.colors.heading}`}>
+                      Select Target for {selectedAction.name}
+                    </span>
+                  </div>
+
+                  {/* Target Selector */}
+                  <TargetSelector
+                    characterId={character.id}
                     theme={theme}
+                    onTargetSelect={handleTargetSelect}
+                    variant="inline"
+                    selectedTargetId={selectedTargetId}
                   />
+
+                  {/* Skip target button for actions that don't strictly require it */}
+                  <Button
+                    onPress={() => setFlowStep("confirm")}
+                    className={`
+                      w-full flex items-center justify-center gap-2
+                      px-3 py-2 rounded text-sm
+                      ${theme.components.card.wrapper} ${theme.components.card.border}
+                      ${theme.colors.muted} hover:text-foreground
+                      transition-colors
+                    `}
+                  >
+                    Skip (no target)
+                  </Button>
                 </div>
-              </div>
+              )}
+
+              {/* Confirm Step */}
+              {flowStep === "confirm" && selectedAction && (
+                <div className="space-y-3">
+                  <div className="flex items-center gap-2">
+                    <Button
+                      onPress={() => {
+                        const needsTarget = selectedAction.subcategory === "ranged" || selectedAction.subcategory === "melee";
+                        if (needsTarget && isInCombat) {
+                          setFlowStep("target");
+                        } else {
+                          resetFlow();
+                        }
+                      }}
+                      className="p-1.5 rounded hover:bg-muted transition-colors"
+                    >
+                      <ArrowLeft className="w-4 h-4" />
+                    </Button>
+                    <span className={`text-sm font-medium ${theme.colors.heading}`}>
+                      Confirm Action
+                    </span>
+                  </div>
+
+                  {/* Action Summary */}
+                  <div className={`p-3 rounded ${theme.components.card.wrapper} ${theme.components.card.border}`}>
+                    <div className="flex items-center gap-3 mb-3">
+                      <div className="w-10 h-10 rounded-full bg-muted flex items-center justify-center">
+                        {getActionIcon(selectedAction)}
+                      </div>
+                      <div>
+                        <div className={`font-medium ${theme.colors.heading}`}>
+                          {selectedAction.name}
+                        </div>
+                        <div className={`text-xs ${theme.colors.muted}`}>
+                          {selectedAction.description}
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* Target Display */}
+                    {selectedTargetName && (
+                      <div className="flex items-center gap-2 mb-3 p-2 rounded bg-amber-500/10 border border-amber-500/30">
+                        <Target className="w-4 h-4 text-amber-500" />
+                        <span className="text-sm text-amber-500">
+                          Target: {selectedTargetName}
+                        </span>
+                      </div>
+                    )}
+
+                    {/* Dice Pool Preview */}
+                    <div className="flex items-center justify-between p-2 rounded bg-muted/30">
+                      <span className={`text-sm ${theme.colors.muted}`}>Dice Pool:</span>
+                      <span className={`font-bold ${theme.fonts.mono} ${theme.colors.accent}`}>
+                        {calculateActionPool(selectedAction)}d6
+                      </span>
+                    </div>
+                  </div>
+
+                  {/* Execute Button */}
+                  <Button
+                    onPress={async () => {
+                      const pool = calculateActionPool(selectedAction);
+                      if (isInCombat) {
+                        await handleExecuteAction(selectedAction.id);
+                      }
+                      onOpenDiceRoller(pool, `${selectedAction.name}${selectedTargetName ? ` vs ${selectedTargetName}` : ""}`);
+                      resetFlow();
+                    }}
+                    isDisabled={combatLoading}
+                    className={`
+                      w-full flex items-center justify-center gap-2
+                      px-4 py-3 rounded font-medium
+                      bg-emerald-500 text-white
+                      hover:bg-emerald-600
+                      disabled:opacity-50 disabled:cursor-not-allowed
+                      transition-colors
+                    `}
+                  >
+                    <Check className="w-4 h-4" />
+                    Roll {calculateActionPool(selectedAction)}d6
+                  </Button>
+                </div>
+              )}
             </div>
           )}
 

@@ -57,7 +57,7 @@ export function CombatTrackerModal({
     >
       <Modal
         className={({ isEntering, isExiting }) => `
-          overflow-hidden rounded-xl border border-zinc-700 bg-zinc-900 shadow-2xl
+          overflow-hidden rounded-xl border ${theme.colors.border} ${theme.colors.card} shadow-2xl
           ${isFullscreen ? "w-full h-full max-w-none max-h-none" : "w-full max-w-4xl max-h-[85vh]"}
           ${isEntering ? "animate-in zoom-in-95 duration-300" : ""}
           ${isExiting ? "animate-out zoom-out-95 duration-200" : ""}
@@ -67,7 +67,7 @@ export function CombatTrackerModal({
           {({ close }) => (
             <>
               {/* Header */}
-              <div className="flex items-center justify-between p-4 border-b border-zinc-800">
+              <div className={`flex items-center justify-between p-4 border-b ${theme.colors.border}`}>
                 <div className="flex items-center gap-3">
                   <Heading slot="title" className={`text-lg font-bold ${theme.colors.heading}`}>
                     Combat Tracker
@@ -93,7 +93,7 @@ export function CombatTrackerModal({
                   </Button>
                   <Button
                     onPress={() => setIsFullscreen(!isFullscreen)}
-                    className="p-2 rounded-full hover:bg-zinc-800 text-muted-foreground hover:text-foreground transition-colors"
+                    className="p-2 rounded-full hover:bg-muted text-muted-foreground hover:text-foreground transition-colors"
                     aria-label={isFullscreen ? "Exit fullscreen" : "Fullscreen"}
                   >
                     {isFullscreen ? (
@@ -104,7 +104,7 @@ export function CombatTrackerModal({
                   </Button>
                   <Button
                     onPress={close}
-                    className="p-2 rounded-full hover:bg-zinc-800 text-muted-foreground hover:text-foreground transition-colors"
+                    className="p-2 rounded-full hover:bg-muted text-muted-foreground hover:text-foreground transition-colors"
                   >
                     <X className="w-5 h-5" />
                   </Button>
