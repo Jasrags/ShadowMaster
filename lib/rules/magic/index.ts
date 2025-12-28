@@ -57,3 +57,16 @@ export {
   type DrainHistoryEntry,
   type DrainSession,
 } from "./drain-application";
+
+// Essence-Magic integration
+export {
+  calculateEffectiveMagic,
+  canStillUseMagic,
+  validateEssenceForTradition,
+  getEssenceMagicState,
+  previewAugmentationMagicImpact,
+  validateAugmentationForMagic,
+  formatEssenceMagicState,
+  getMagicDegradationSummary,
+  type AugmentationMagicValidation,
+} from "./essence-magic-link";
