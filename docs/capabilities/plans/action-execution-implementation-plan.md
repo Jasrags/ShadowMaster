@@ -14,12 +14,12 @@ Implement a complete Action Economy and Execution system that enforces consisten
 
 The following architectural decisions have been reviewed and approved:
 
-| Decision | Approved Choice | Rationale |
-|----------|-----------------|-----------|
-| **Combat Session Model** | Server-side (persistent) | Enables multiplayer campaign support |
-| **Action Economy Enforcement** | Server-enforced with client-side preview | Ensures rule integrity while providing good UX |
-| **Opposed Test Resolution** | Async for real-time, sync for solo/GM | Flexibility for different play modes |
-| **Magic/Matrix Scope** | Deferred to Phase 2 | Focus on physical combat first, reduces initial scope |
+| Decision                       | Approved Choice                          | Rationale                                             |
+| ------------------------------ | ---------------------------------------- | ----------------------------------------------------- |
+| **Combat Session Model**       | Server-side (persistent)                 | Enables multiplayer campaign support                  |
+| **Action Economy Enforcement** | Server-enforced with client-side preview | Ensures rule integrity while providing good UX        |
+| **Opposed Test Resolution**    | Async for real-time, sync for solo/GM    | Flexibility for different play modes                  |
+| **Magic/Matrix Scope**         | Deferred to Phase 2                      | Focus on physical combat first, reduces initial scope |
 
 ### Implementation Implications
 
@@ -47,7 +47,7 @@ interface CombatSession {
   currentTurn: number;
   currentPhase: CombatPhase;
   round: number;
-  status: 'active' | 'paused' | 'completed';
+  status: "active" | "paused" | "completed";
   environment: EnvironmentConditions;
   createdAt: string;
   updatedAt: string;
@@ -63,17 +63,18 @@ interface CombatParticipant {
 }
 
 interface ActionAllocation {
-  free: number;      // Typically unlimited
-  simple: number;    // 2 per turn (or 1 complex)
-  complex: number;   // 1 per turn (uses both simple)
+  free: number; // Typically unlimited
+  simple: number; // 2 per turn (or 1 complex)
+  complex: number; // 1 per turn (uses both simple)
   interrupt: boolean; // Available if not used
 }
 
-type CombatPhase = 'initiative' | 'action' | 'resolution';
-type ParticipantStatus = 'active' | 'delayed' | 'out';
+type CombatPhase = "initiative" | "action" | "resolution";
+type ParticipantStatus = "active" | "delayed" | "out";
 ```
 
 **Satisfies:**
+
 - Guarantee: "enforce a consistent action economy (Free, Simple, Complex, Interrupt)"
 - Requirement: "track and restrict the available action pool for a participant"
 
@@ -96,29 +97,30 @@ interface ActionDefinition {
   effects: ActionEffect[];
 }
 
-type ActionType = 'free' | 'simple' | 'complex' | 'interrupt';
-type ExecutionDomain = 'combat' | 'magic' | 'matrix' | 'social' | 'general';
+type ActionType = "free" | "simple" | "complex" | "interrupt";
+type ExecutionDomain = "combat" | "magic" | "matrix" | "social" | "general";
 
 interface ActionCost {
   actionType: ActionType;
-  initiativeCost?: number;  // For interrupts
+  initiativeCost?: number; // For interrupts
   resourceCost?: ResourceCost[];
 }
 
 interface ActionPrerequisite {
-  type: 'skill' | 'attribute' | 'equipment' | 'state' | 'resource';
+  type: "skill" | "attribute" | "equipment" | "state" | "resource";
   requirement: string;
   minimumValue?: number;
 }
 
 interface ActionEffect {
-  type: 'damage' | 'heal' | 'condition' | 'resource' | 'state';
-  target: 'self' | 'target' | 'area';
+  type: "damage" | "heal" | "condition" | "resource" | "state";
+  target: "self" | "target" | "area";
   calculation: EffectCalculation;
 }
 ```
 
 **Satisfies:**
+
 - Requirement: "Actions MUST have authoritative costs in terms of time or resources"
 - Requirement: "Interrupt actions MUST be available at the cost of predefined initiative penalties"
 
@@ -130,15 +132,30 @@ interface ActionEffect {
 
 ```typescript
 // CRUD operations for combat sessions
-export function createCombatSession(session: Omit<CombatSession, 'id' | 'createdAt' | 'updatedAt'>): CombatSession;
+export function createCombatSession(
+  session: Omit<CombatSession, "id" | "createdAt" | "updatedAt">
+): CombatSession;
 export function getCombatSession(sessionId: string): CombatSession | null;
-export function updateCombatSession(sessionId: string, updates: Partial<CombatSession>): CombatSession;
+export function updateCombatSession(
+  sessionId: string,
+  updates: Partial<CombatSession>
+): CombatSession;
 export function deleteCombatSession(sessionId: string): boolean;
 
 // Participant management
-export function addParticipant(sessionId: string, participant: CombatParticipant): CombatSession;
-export function removeParticipant(sessionId: string, participantId: string): CombatSession;
-export function updateParticipantActions(sessionId: string, participantId: string, actions: ActionAllocation): CombatSession;
+export function addParticipant(
+  sessionId: string,
+  participant: CombatParticipant
+): CombatSession;
+export function removeParticipant(
+  sessionId: string,
+  participantId: string
+): CombatSession;
+export function updateParticipantActions(
+  sessionId: string,
+  participantId: string,
+  actions: ActionAllocation
+): CombatSession;
 
 // Turn management
 export function advanceTurn(sessionId: string): CombatSession;
@@ -146,6 +163,7 @@ export function advanceRound(sessionId: string): CombatSession;
 ```
 
 **Satisfies:**
+
 - Guarantee: "maintain a persistent and auditable history of all action attempts"
 
 ---
@@ -159,7 +177,7 @@ interface ValidationResult {
   valid: boolean;
   errors: ValidationError[];
   warnings: ValidationWarning[];
-  modifiedPool?: ActionPool;  // Pool after applying state modifiers
+  modifiedPool?: ActionPool; // Pool after applying state modifiers
 }
 
 interface ValidationError {
@@ -192,6 +210,7 @@ export function calculateStateModifiers(
 ```
 
 **Satisfies:**
+
 - Guarantee: "Every action execution MUST involve a real-time validity check"
 - Requirement: "pre-calculate action-specific resolution pools based on entity's attributes"
 - Requirement: "Actions MUST be restricted to those compatible with character's state"
@@ -223,18 +242,24 @@ interface ExecutionResult {
 
 interface StateChange {
   entityId: string;
-  entityType: 'character' | 'npc' | 'device';
+  entityType: "character" | "npc" | "device";
   field: string;
   previousValue: unknown;
   newValue: unknown;
 }
 
 // Core execution
-export function executeAction(request: ExecutionRequest): Promise<ExecutionResult>;
+export function executeAction(
+  request: ExecutionRequest
+): Promise<ExecutionResult>;
 
 // Domain-specific executors
-export function executeCombatAction(request: ExecutionRequest): Promise<ExecutionResult>;
-export function executeGeneralAction(request: ExecutionRequest): Promise<ExecutionResult>;
+export function executeCombatAction(
+  request: ExecutionRequest
+): Promise<ExecutionResult>;
+export function executeGeneralAction(
+  request: ExecutionRequest
+): Promise<ExecutionResult>;
 
 // Result application
 export function applyStateChanges(changes: StateChange[]): Promise<void>;
@@ -242,6 +267,7 @@ export function rollbackStateChanges(changes: StateChange[]): Promise<void>;
 ```
 
 **Satisfies:**
+
 - Guarantee: "Results MUST be automatically propagated to character's records"
 - Constraint: "Resource expenditures MUST NOT cause invalid or negative threshold"
 - Constraint: "Action execution MUST be restricted to authorized participants"
@@ -255,12 +281,14 @@ export function rollbackStateChanges(changes: StateChange[]): Promise<void>;
 **File:** `/data/editions/sr5/actions/combat-actions.json` (NEW)
 
 Define all combat actions from `/docs/data_tables/combat/combat_actions.md`:
+
 - Free Actions: Call Shot, Change Device Mode, Drop Object, etc.
 - Simple Actions: Fire Weapon (SA/SS/BF), Ready Weapon, Take Aim, etc.
 - Complex Actions: Fire Weapon (FA), Melee Attack, Sprint, etc.
 - Interrupt Actions: Block, Dodge, Full Defense, etc.
 
 **Satisfies:**
+
 - Requirement: "Combat execution MUST support multi-mode weapon interactions"
 
 ---
@@ -288,13 +316,29 @@ interface WeaponAttackResult {
   recoilPenalty: number;
 }
 
-export function calculateAttackPool(character: Character, weapon: Weapon, request: WeaponAttackRequest): ActionPool;
-export function calculateDefensePool(defender: Character, attackType: AttackType): ActionPool;
-export function calculateDamage(weapon: Weapon, netHits: number, calledShot?: CalledShotType): DamageResult;
-export function applyRecoil(weapon: Weapon, firingMode: FiringMode, previousShots: number): number;
+export function calculateAttackPool(
+  character: Character,
+  weapon: Weapon,
+  request: WeaponAttackRequest
+): ActionPool;
+export function calculateDefensePool(
+  defender: Character,
+  attackType: AttackType
+): ActionPool;
+export function calculateDamage(
+  weapon: Weapon,
+  netHits: number,
+  calledShot?: CalledShotType
+): DamageResult;
+export function applyRecoil(
+  weapon: Weapon,
+  firingMode: FiringMode,
+  previousShots: number
+): number;
 ```
 
 **Satisfies:**
+
 - Requirement: "Combat execution MUST support ammunition management and movement-based modifiers"
 
 ---
@@ -306,7 +350,7 @@ export function applyRecoil(weapon: Weapon, firingMode: FiringMode, previousShot
 ```typescript
 interface DamageApplication {
   targetId: string;
-  damageType: 'physical' | 'stun';
+  damageType: "physical" | "stun";
   damageValue: number;
   armorPenetration: number;
 }
@@ -320,12 +364,22 @@ interface DamageResult {
   overflow: number;
 }
 
-export function calculateResistance(character: Character, damage: DamageApplication): ActionPool;
-export function applyDamage(character: Character, damage: DamageApplication, resistanceHits: number): DamageResult;
-export function calculateWoundModifier(conditionMonitor: ConditionMonitorState): number;
+export function calculateResistance(
+  character: Character,
+  damage: DamageApplication
+): ActionPool;
+export function applyDamage(
+  character: Character,
+  damage: DamageApplication,
+  resistanceHits: number
+): DamageResult;
+export function calculateWoundModifier(
+  conditionMonitor: ConditionMonitorState
+): number;
 ```
 
 **Satisfies:**
+
 - Requirement: "Lifecycle execution MUST facilitate precise application of damage and healing"
 - Requirement: "Changes to operational state MUST automatically apply persistent modifiers"
 
@@ -380,6 +434,7 @@ export function calculateWoundModifier(conditionMonitor: ConditionMonitorState):
 ```
 
 **Satisfies:**
+
 - Requirement: "Participants MUST receive immediate verification of action costs, eligibility, and resulting state changes"
 
 ---
@@ -466,6 +521,7 @@ interface QuickCombatControlsProps {
 ```
 
 Features:
+
 - "Start Combat" button creates solo combat session via API
 - Character auto-added as participant with rolled initiative
 - "End Combat" button closes session and clears state
@@ -480,6 +536,7 @@ Features:
 **File:** `/app/characters/[id]/components/ActionPanel.tsx` (MODIFY)
 
 Modify existing combat action buttons to:
+
 - Execute actions through `/api/combat/[sessionId]/actions` when in combat
 - Consume action economy (simple/complex/free/interrupt)
 - Display action results (hits, damage, effects)
@@ -517,6 +574,7 @@ const handleCombatAction = async (actionType: ActionType, pool: number) => {
 **File:** `/app/characters/[id]/components/TargetSelector.tsx` (NEW)
 
 For actions requiring a target (attacks, some spells):
+
 - Modal or dropdown to select target
 - Quick "Self" option for self-targeted actions
 - "Environment/Object" option for non-creature targets
@@ -529,6 +587,7 @@ For actions requiring a target (attacks, some spells):
 **File:** `/app/characters/[id]/components/ActionResultToast.tsx` (NEW)
 
 Display action results as toast notifications:
+
 - Roll results (dice, hits, glitches)
 - Damage dealt/resisted
 - Condition changes
@@ -542,6 +601,7 @@ Display action results as toast notifications:
 **File:** `/app/characters/[id]/components/QuickNPCPanel.tsx` (NEW)
 
 Simple NPC management for solo combat testing:
+
 - Add NPCs to combat session with basic stats
 - NPC condition monitors
 - Quick NPC templates (Ganger, Security Guard, etc.)
@@ -554,6 +614,7 @@ Simple NPC management for solo combat testing:
 **File:** `/app/api/combat/quick-start/route.ts` (NEW)
 
 Convenience endpoint for quick combat:
+
 ```typescript
 // POST: Create solo combat session with character
 // Automatically rolls initiative and sets up turn order
@@ -581,6 +642,7 @@ Convenience endpoint for quick combat:
 ##### Success Criteria
 
 After this extension, the Manual Verification Checklist items should be completable:
+
 - [ ] Execute simple/complex actions with economy enforcement
 - [ ] Verify action rejection when economy exhausted
 - [ ] See wound modifiers applied to pools
@@ -592,6 +654,7 @@ After this extension, the Manual Verification Checklist items should be completa
 ##### Future: Multiplayer
 
 This Quick Combat mode provides the solo execution loop. Full multiplayer combat is planned as separate capabilities:
+
 - `campaign.live-sessions` - Real-time infrastructure
 - `campaign.gm-combat-tools` - GM controls
 - `mechanics.multiplayer-combat` - Cross-player interactions
@@ -609,40 +672,40 @@ See `/docs/capabilities/TODO.md` for details.
 
 **File:** `/lib/rules/action-resolution/__tests__/action-validator.test.ts`
 
-| Test Case | Capability Reference |
-|-----------|---------------------|
+| Test Case                                      | Capability Reference                                    |
+| ---------------------------------------------- | ------------------------------------------------------- |
 | Validates action with sufficient action points | Requirement: "track and restrict available action pool" |
-| Rejects action when action economy exhausted | Requirement: "track and restrict available action pool" |
-| Applies wound modifiers to pool calculation | Requirement: "pre-calculate resolution pools" |
-| Validates equipment prerequisites | Requirement: "actions restricted to compatible state" |
-| Rejects actions in invalid character state | Constraint: "derived from current verifiable state" |
+| Rejects action when action economy exhausted   | Requirement: "track and restrict available action pool" |
+| Applies wound modifiers to pool calculation    | Requirement: "pre-calculate resolution pools"           |
+| Validates equipment prerequisites              | Requirement: "actions restricted to compatible state"   |
+| Rejects actions in invalid character state     | Constraint: "derived from current verifiable state"     |
 
 **File:** `/lib/rules/action-resolution/__tests__/action-executor.test.ts`
 
-| Test Case | Capability Reference |
-|-----------|---------------------|
-| Executes action and updates character state | Guarantee: "results propagated to character records" |
-| Prevents negative resource thresholds | Constraint: "MUST NOT cause invalid/negative threshold" |
-| Records action in audit history | Guarantee: "persistent and auditable history" |
-| Rollback on partial failure | Constraint: "resource expenditures MUST NOT cause invalid state" |
+| Test Case                                   | Capability Reference                                             |
+| ------------------------------------------- | ---------------------------------------------------------------- |
+| Executes action and updates character state | Guarantee: "results propagated to character records"             |
+| Prevents negative resource thresholds       | Constraint: "MUST NOT cause invalid/negative threshold"          |
+| Records action in audit history             | Guarantee: "persistent and auditable history"                    |
+| Rollback on partial failure                 | Constraint: "resource expenditures MUST NOT cause invalid state" |
 
 **File:** `/lib/rules/action-resolution/__tests__/combat-actions.test.ts`
 
-| Test Case | Capability Reference |
-|-----------|---------------------|
-| Simple action uses correct action economy | Guarantee: "consistent action economy" |
-| Complex action consumes both simple actions | Guarantee: "consistent action economy" |
+| Test Case                                   | Capability Reference                           |
+| ------------------------------------------- | ---------------------------------------------- |
+| Simple action uses correct action economy   | Guarantee: "consistent action economy"         |
+| Complex action consumes both simple actions | Guarantee: "consistent action economy"         |
 | Interrupt action applies initiative penalty | Requirement: "predefined initiative penalties" |
-| Free actions unlimited per turn | Guarantee: "consistent action economy" |
+| Free actions unlimited per turn             | Guarantee: "consistent action economy"         |
 
 **File:** `/lib/rules/action-resolution/__tests__/damage-handler.test.ts`
 
-| Test Case | Capability Reference |
-|-----------|---------------------|
-| Damage correctly applied to condition monitor | Requirement: "precise application of damage" |
-| Armor reduces damage appropriately | Requirement: "precise application of damage" |
-| Wound modifiers update after damage | Requirement: "automatically apply persistent modifiers" |
-| Overflow calculated when condition monitor full | Requirement: "precise application of damage" |
+| Test Case                                       | Capability Reference                                    |
+| ----------------------------------------------- | ------------------------------------------------------- |
+| Damage correctly applied to condition monitor   | Requirement: "precise application of damage"            |
+| Armor reduces damage appropriately              | Requirement: "precise application of damage"            |
+| Wound modifiers update after damage             | Requirement: "automatically apply persistent modifiers" |
+| Overflow calculated when condition monitor full | Requirement: "precise application of damage"            |
 
 ---
 
@@ -650,12 +713,12 @@ See `/docs/capabilities/TODO.md` for details.
 
 **File:** `/lib/rules/action-resolution/__tests__/combat-flow.integration.test.ts`
 
-| Test Case | Capability Reference |
-|-----------|---------------------|
-| Full combat round with multiple participants | Guarantee: "consistent action economy" |
-| Initiative order respected across turns | Requirement: "initiative system" |
-| Action history persisted and queryable | Guarantee: "auditable history" |
-| Edge actions correctly modify resolution | Requirement: "Edge-based modifications" |
+| Test Case                                    | Capability Reference                    |
+| -------------------------------------------- | --------------------------------------- |
+| Full combat round with multiple participants | Guarantee: "consistent action economy"  |
+| Initiative order respected across turns      | Requirement: "initiative system"        |
+| Action history persisted and queryable       | Guarantee: "auditable history"          |
+| Edge actions correctly modify resolution     | Requirement: "Edge-based modifications" |
 
 ---
 
@@ -663,35 +726,39 @@ See `/docs/capabilities/TODO.md` for details.
 
 **File:** `/e2e/combat-session.spec.ts`
 
-| Test Case | Capability Reference |
-|-----------|---------------------|
-| Create combat session with multiple characters | Full system integration |
-| Execute attack action and verify damage applied | Guarantee: "results propagated" |
+| Test Case                                          | Capability Reference               |
+| -------------------------------------------------- | ---------------------------------- |
+| Create combat session with multiple characters     | Full system integration            |
+| Execute attack action and verify damage applied    | Guarantee: "results propagated"    |
 | Use interrupt action and verify initiative penalty | Requirement: "interrupt penalties" |
-| Verify action history UI displays correctly | Guarantee: "auditable history" |
+| Verify action history UI displays correctly        | Guarantee: "auditable history"     |
 
 ---
 
 ### Manual Verification Checklist
 
 1. **Action Economy Enforcement**
+
    - [ ] Create character with 2 simple actions
    - [ ] Execute 2 simple actions
    - [ ] Verify 3rd simple action is rejected
    - [ ] Verify 1 complex action consumes both simple actions
 
 2. **State Validation**
+
    - [ ] Apply wound to character
    - [ ] Verify dice pool reduced by wound modifier
    - [ ] Verify modifier displayed in UI
 
 3. **Damage Application**
+
    - [ ] Execute attack action
    - [ ] Verify damage recorded on target
    - [ ] Verify condition monitor updated
    - [ ] Verify wound modifier updated if applicable
 
 4. **Audit Trail**
+
    - [ ] Execute multiple actions
    - [ ] View action history
    - [ ] Verify all actions recorded with timestamps
@@ -732,7 +799,7 @@ Phase 4: UI Components ✅ COMPLETE
 Phase 5: Integration ✅ COMPLETE (5.1-5.2)
 ├── 5.1 Character Sheet Integration ✅
 ├── 5.2 Condition Monitor Component ✅
-└── 5.3 Quick Combat Mode (Extension) ⏳ PENDING
+└── 5.3 Quick Combat Mode (Extension) ✅ COMPLETE
     ├── 5.3.1 QuickCombatControls
     ├── 5.3.2 ActionPanel integration
     ├── 5.3.3 TargetSelector
@@ -767,18 +834,18 @@ Future: Multiplayer Capabilities (Separate Work)
 - **ADR-002**: API authentication pattern (applies to all new endpoints)
 - **ADR-003**: Ruleset context pattern (action definitions loaded via ruleset)
 
-*Note: ADRs to be created if not existing*
+_Note: ADRs to be created if not existing_
 
 ---
 
 ## Risk Assessment
 
-| Risk | Mitigation |
-|------|------------|
-| Combat sessions may become stale | Implement session timeout/cleanup |
-| Action economy complexity | Start with basic economy, add interrupt later |
+| Risk                                  | Mitigation                                        |
+| ------------------------------------- | ------------------------------------------------- |
+| Combat sessions may become stale      | Implement session timeout/cleanup                 |
+| Action economy complexity             | Start with basic economy, add interrupt later     |
 | Performance with large action history | Pagination and cleanup (existing 1000 item limit) |
-| State synchronization in multiplayer | Defer real-time sync to future phase |
+| State synchronization in multiplayer  | Defer real-time sync to future phase              |
 
 ---
 

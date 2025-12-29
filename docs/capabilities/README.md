@@ -198,10 +198,10 @@ This folder is authoritative. Treat changes with care.
 | Capability           | Status         | Document                                                                                                                                        |
 | -------------------- | -------------- | ----------------------------------------------------------------------------------------------------------------------------------------------- |
 | Action Resolution    | ✅ Implemented | [mechanics.action-resolution.md](file:///Users/jrags/Code/Jasrags/shadow-master/docs/capabilities/mechanics.action-resolution.md)               |
-| Action Execution     | 🚧 In Progress | [mechanics.action-execution.md](file:///Users/jrags/Code/Jasrags/shadow-master/docs/capabilities/mechanics.action-execution.md)                 |
+| Action Execution     | ✅ Implemented | [mechanics.action-execution.md](file:///Users/jrags/Code/Jasrags/shadow-master/docs/capabilities/mechanics.action-execution.md)                 |
 | Encounter Governance | ✅ Implemented | [mechanics.encounter-governance.md](file:///Users/jrags/Code/Jasrags/shadow-master/docs/capabilities/mechanics.encounter-governance.md)         |
 | Weapon Customization | ✅ Implemented | [mechanics.weapon-customization.md](file:///Users/jrags/Code/Jasrags/shadow-master/docs/capabilities/mechanics.weapon-customization.md)         |
-| Magic Mastery        | 🚧 In Progress | [mechanics.magic-mastery.md](file:///Users/jrags/Code/Jasrags/shadow-master/docs/capabilities/mechanics.magic-mastery.md)                       |
+| Magic Mastery        | ✅ Implemented | [mechanics.magic-mastery.md](file:///Users/jrags/Code/Jasrags/shadow-master/docs/capabilities/mechanics.magic-mastery.md)                       |
 | Matrix Operations    | 🚧 In Progress | [mechanics.matrix-operations.md](file:///Users/jrags/Code/Jasrags/shadow-master/docs/capabilities/mechanics.matrix-operations.md)               |
 | Rigging Control      | 🚧 In Progress | [mechanics.rigging-control.md](file:///Users/jrags/Code/Jasrags/shadow-master/docs/capabilities/mechanics.rigging-control.md)                   |
 | Multiplayer Combat   | 📝 Draft       | [draft-mechanics.multiplayer-combat.md](file:///Users/jrags/Code/Jasrags/shadow-master/docs/capabilities/draft-mechanics.multiplayer-combat.md) |
@@ -292,11 +292,11 @@ _Enable group play and GM oversight._
 
 _Interactive gameplay mechanics._
 
-| Capability                     | Status         |
-| ------------------------------ | -------------- |
-| mechanics.action-resolution    | ✅ Complete    |
-| mechanics.action-execution     | 🚧 In Progress |
-| mechanics.encounter-governance | ✅ Complete    |
+| Capability                     | Status      |
+| ------------------------------ | ----------- |
+| mechanics.action-resolution    | ✅ Complete |
+| mechanics.action-execution     | ✅ Complete |
+| mechanics.encounter-governance | ✅ Complete |
 
 ---
 
@@ -306,7 +306,7 @@ _Deep-dives into Shadowrun sub-systems._
 
 | Capability                     | Status      |
 | ------------------------------ | ----------- |
-| mechanics.magic-mastery        | ⏳ Pending  |
+| mechanics.magic-mastery        | ✅ Complete |
 | mechanics.matrix-operations    | ⏳ Pending  |
 | mechanics.rigging-control      | ⏳ Pending  |
 | mechanics.weapon-customization | ✅ Complete |
@@ -415,12 +415,12 @@ flowchart TB
 
     subgraph Phase4["Phase 4: Actions 🚧"]
         mech_resolution["mechanics.action-resolution ✅"]
-        mech_execution["mechanics.action-execution 🚧"]
+        mech_execution["mechanics.action-execution ✅"]
         mech_encounter["mechanics.encounter-governance ✅"]
     end
 
     subgraph Phase5["Phase 5: Specialized"]
-        mech_magic["mechanics.magic-mastery ⏳"]
+        mech_magic["mechanics.magic-mastery ✅"]
         mech_matrix["mechanics.matrix-operations ⏳"]
         mech_rigging["mechanics.rigging-control ⏳"]
         mech_weapon["mechanics.weapon-customization ✅"]
@@ -492,9 +492,8 @@ flowchart TB
     classDef pending fill:#6b7280,stroke:#4b5563,color:#fff
     classDef draft fill:#3b82f6,stroke:#2563eb,color:#fff
 
-    class sec_security,sec_governance,rule_discovery,rule_integrity,char_mgmt,char_sheet,char_quality,char_advance,camp_mgmt,camp_participant,camp_location,camp_npc,camp_approval,camp_social,mech_resolution,mech_encounter,mech_weapon complete
-    class mech_execution inProgress
-    class mech_magic,mech_matrix,mech_rigging,char_augment,rule_sync pending
+    class sec_security,sec_governance,rule_discovery,rule_integrity,char_mgmt,char_sheet,char_quality,char_advance,camp_mgmt,camp_participant,camp_location,camp_npc,camp_approval,camp_social,mech_resolution,mech_encounter,mech_weapon,mech_execution,mech_magic complete
+    class mech_matrix,mech_rigging,char_augment,rule_sync pending
     class camp_live,camp_chat,camp_gm,mech_multi,camp_async,camp_vtt,vtt_import,vtt_display,infra_notify,infra_flags draft
 ```
 

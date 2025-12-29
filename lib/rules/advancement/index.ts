@@ -107,3 +107,17 @@ export {
   type ApproveAdvancementResult,
 } from "./approval";
 
+// Magic advancement
+export {
+  calculateSpellLearningCost,
+  validateSpellAdvancement,
+  calculateInitiationKarmaCost,
+  validateInitiationAdvancement,
+  calculateAdeptPowerKarmaCost,
+  validateAdeptPowerAdvancement,
+  calculateRitualLearningCost,
+  validateRitualAdvancement,
+  getAvailableMetamagics,
+  type MagicAdvancementValidationResult,
+  type AdeptPowerAdvancement,
+} from "./magic-advancement";

@@ -258,6 +258,12 @@ export interface Character {
 
   /** For technomancers: stream */
   stream?: string;
+  
+  /** Initiation grade */
+  initiateGrade?: number;
+
+  /** Metamagics known (IDs) */
+  metamagics?: string[];
 
   /** Spells known (spell IDs) */
   spells?: string[];
@@ -270,6 +276,12 @@ export interface Character {
 
   /** Spirits/sprites bound or registered */
   spirits?: BoundSpirit[];
+
+  /** Spells currently sustained by the character */
+  sustainedSpells?: Array<{ spellId: string; hits: number; force: number }>;
+
+  /** Foci currently bonded and active */
+  activeFoci?: Array<{ id: string; type: string; rating: number }>;
 
   // -------------------------------------------------------------------------
   // Gear & Resources

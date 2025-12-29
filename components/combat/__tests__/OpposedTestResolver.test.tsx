@@ -3,7 +3,7 @@
  */
 
 import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
-import { render, screen, fireEvent, waitFor, act } from "@testing-library/react";
+import { render, screen, fireEvent, act } from "@testing-library/react";
 import { OpposedTestResolver } from "../OpposedTestResolver";
 
 // Mock timers for animation testing
@@ -215,7 +215,12 @@ describe("OpposedTestResolver", () => {
         />
       );
 
-      // Should immediately start rolling
+      // Advance timers to trigger requestAnimationFrame callback
+      await act(async () => {
+        vi.advanceTimersByTime(16); // One frame (~16ms)
+      });
+
+      // Should now be in rolling state
       expect(screen.getByText("Rolling...")).toBeInTheDocument();
 
       // Fast forward through animation
