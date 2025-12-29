@@ -304,13 +304,13 @@ _Interactive gameplay mechanics._
 
 _Deep-dives into Shadowrun sub-systems._
 
-| Capability                     | Status      |
-| ------------------------------ | ----------- |
-| mechanics.magic-mastery        | ⏳ Pending  |
-| mechanics.matrix-operations    | ⏳ Pending  |
-| mechanics.rigging-control      | ⏳ Pending  |
-| mechanics.weapon-customization | ✅ Complete |
-| character.augmentation-systems | ⏳ Pending  |
+| Capability                     | Status           |
+| ------------------------------ | ---------------- |
+| mechanics.magic-mastery        | 🚧 Near Complete |
+| mechanics.matrix-operations    | ⏳ Pending       |
+| mechanics.rigging-control      | ⏳ Pending       |
+| mechanics.weapon-customization | ✅ Complete      |
+| character.augmentation-systems | ⏳ Pending       |
 
 ---
 
@@ -420,7 +420,7 @@ flowchart TB
     end
 
     subgraph Phase5["Phase 5: Specialized"]
-        mech_magic["mechanics.magic-mastery ⏳"]
+        mech_magic["mechanics.magic-mastery 🚧"]
         mech_matrix["mechanics.matrix-operations ⏳"]
         mech_rigging["mechanics.rigging-control ⏳"]
         mech_weapon["mechanics.weapon-customization ✅"]
@@ -493,7 +493,8 @@ flowchart TB
     classDef draft fill:#3b82f6,stroke:#2563eb,color:#fff
 
     class sec_security,sec_governance,rule_discovery,rule_integrity,char_mgmt,char_sheet,char_quality,char_advance,camp_mgmt,camp_participant,camp_location,camp_npc,camp_approval,camp_social,mech_resolution,mech_encounter,mech_weapon,mech_execution complete
-    class mech_magic,mech_matrix,mech_rigging,char_augment,rule_sync pending
+    class mech_matrix,mech_rigging,char_augment,rule_sync pending
+    class mech_magic inProgress
     class camp_live,camp_chat,camp_gm,mech_multi,camp_async,camp_vtt,vtt_import,vtt_display,infra_notify,infra_flags draft
 ```
 
