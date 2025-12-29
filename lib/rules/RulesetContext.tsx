@@ -2004,3 +2004,128 @@ export function useAvailableActions(
     return { available, unavailable, all: results };
   }, [data.actions, character, options]);
 }
+
+// =============================================================================
+// MATRIX EQUIPMENT HOOKS
+// =============================================================================
+
+/**
+ * Hook to get cyberdecks from the gear catalog
+ */
+export function useCyberdecks(options?: {
+  maxAvailability?: number;
+  excludeForbidden?: boolean;
+  excludeRestricted?: boolean;
+  minDeviceRating?: number;
+}): CyberdeckData[] {
+  const { data } = useRuleset();
+
+  return useMemo(() => {
+    if (!data.gear?.cyberdecks) return [];
+
+    let filtered = [...data.gear.cyberdecks];
+
+    if (options?.maxAvailability !== undefined) {
+      filtered = filtered.filter(
+        (item) => item.availability <= options.maxAvailability!
+      );
+    }
+
+    if (options?.excludeForbidden) {
+      filtered = filtered.filter((item) => !item.forbidden);
+    }
+
+    if (options?.excludeRestricted) {
+      filtered = filtered.filter((item) => !item.restricted);
+    }
+
+    if (options?.minDeviceRating !== undefined) {
+      filtered = filtered.filter(
+        (item) => item.deviceRating >= options.minDeviceRating!
+      );
+    }
+
+    return filtered.sort((a, b) => a.name.localeCompare(b.name));
+  }, [data.gear, options]);
+}
+
+/**
+ * Hook to get a specific cyberdeck by ID
+ */
+export function useCyberdeck(deckId: string): CyberdeckData | null {
+  const cyberdecks = useCyberdecks();
+
+  return useMemo(() => {
+    return cyberdecks.find((d) => d.id === deckId) ?? null;
+  }, [cyberdecks, deckId]);
+}
+
+/**
+ * Hook to get commlinks from the gear catalog
+ */
+export function useCommlinks(options?: {
+  maxAvailability?: number;
+  excludeForbidden?: boolean;
+  excludeRestricted?: boolean;
+  minDeviceRating?: number;
+}): CommlinkData[] {
+  const { data } = useRuleset();
+
+  return useMemo(() => {
+    if (!data.gear?.commlinks) return [];
+
+    let filtered = [...data.gear.commlinks];
+
+    if (options?.maxAvailability !== undefined) {
+      filtered = filtered.filter(
+        (item) => item.availability <= options.maxAvailability!
+      );
+    }
+
+    if (options?.excludeForbidden) {
+      filtered = filtered.filter((item) => !item.forbidden);
+    }
+
+    if (options?.excludeRestricted) {
+      filtered = filtered.filter((item) => !item.restricted);
+    }
+
+    if (options?.minDeviceRating !== undefined) {
+      filtered = filtered.filter(
+        (item) => item.deviceRating >= options.minDeviceRating!
+      );
+    }
+
+    return filtered.sort((a, b) => a.name.localeCompare(b.name));
+  }, [data.gear, options]);
+}
+
+/**
+ * Hook to get a specific commlink by ID
+ */
+export function useCommlink(commlinkId: string): CommlinkData | null {
+  const commlinks = useCommlinks();
+
+  return useMemo(() => {
+    return commlinks.find((c) => c.id === commlinkId) ?? null;
+  }, [commlinks, commlinkId]);
+}
+
+/**
+ * Hook to get matrix action definitions
+ * Convenience wrapper around useActionsByDomain("matrix")
+ */
+export function useMatrixActions(): ActionDefinition[] {
+  return useActionsByDomain("matrix");
+}
+
+/**
+ * Hook to get a specific program by ID
+ */
+export function useProgram(programId: string): ProgramCatalogItemData | null {
+  const programs = usePrograms();
+
+  return useMemo(() => {
+    return programs.find((p) => p.id === programId) ?? null;
+  }, [programs, programId]);
+}

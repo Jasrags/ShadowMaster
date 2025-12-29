@@ -11,6 +11,7 @@ import type { EditionCode, FocusType, SpiritType } from "./edition";
 import type { CharacterProgram } from "./programs";
 import type { QualitySelection } from "./qualities";
 import type { AuditEntry } from "./audit";
+import type { CharacterCyberdeck, CharacterCommlink } from "./matrix";
 
 // =============================================================================
 // CHARACTER CORE
@@ -336,6 +337,15 @@ export interface Character {
 
   /** Matrix programs owned (for cyberdecks/commlinks) */
   programs?: CharacterProgram[];
+
+  /** Cyberdecks owned */
+  cyberdecks?: CharacterCyberdeck[];
+
+  /** Commlinks owned */
+  commlinks?: CharacterCommlink[];
+
+  /** Active matrix device ID (reference to cyberdecks or commlinks) */
+  activeMatrixDeviceId?: string;
 
   /** Magical foci owned */
   foci?: FocusItem[];
