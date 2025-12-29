@@ -3,7 +3,9 @@
 import { useState, useCallback } from "react";
 import { Button, Dialog, Heading, Modal, ModalOverlay, TextField } from "react-aria-components";
 import type { Character, MergedRuleset } from "@/lib/types";
-import { validateAttributeAdvancement, getAttributeMaximum, calculateAttributeCost, calculateEdgeCost } from "@/lib/rules/advancement";
+// Import directly from specific files to avoid pulling in server-side magic-advancement code
+import { validateAttributeAdvancement, getAttributeMaximum } from "@/lib/rules/advancement/validation";
+import { calculateAttributeCost, calculateEdgeCost } from "@/lib/rules/advancement/costs";
 import { X, ArrowUp } from "lucide-react";
 
 interface AttributesTabProps {

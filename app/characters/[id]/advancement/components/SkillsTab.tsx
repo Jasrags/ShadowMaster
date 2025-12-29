@@ -4,7 +4,9 @@ import { useState, useMemo, useCallback } from "react";
 import { Button, Dialog, Heading, Modal, ModalOverlay, TextField } from "react-aria-components";
 import type { Character, MergedRuleset } from "@/lib/types";
 import { useSkills } from "@/lib/rules";
-import { validateSkillAdvancement, getSkillMaximum, calculateActiveSkillCost, calculateSpecializationCost, validateSpecializationAdvancement } from "@/lib/rules/advancement";
+// Import directly from specific files to avoid pulling in server-side magic-advancement code
+import { validateSkillAdvancement, getSkillMaximum, validateSpecializationAdvancement } from "@/lib/rules/advancement/validation";
+import { calculateActiveSkillCost, calculateSpecializationCost } from "@/lib/rules/advancement/costs";
 import { X, ArrowUp, Search, Plus } from "lucide-react";
 
 interface SkillsTabProps {
