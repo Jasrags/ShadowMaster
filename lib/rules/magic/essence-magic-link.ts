@@ -8,7 +8,7 @@
 
 import type { Character } from "@/lib/types/character";
 import type { EssenceMagicState } from "@/lib/types/magic";
-import type { AugmentationRulesData, TraditionData } from "../loader-types";
+import type { AugmentationRulesData } from "../loader-types";
 
 // =============================================================================
 // CONSTANTS
@@ -103,8 +103,7 @@ export function canStillUseMagic(character: Partial<Character>): boolean {
  * @returns True if essence supports the tradition
  */
 export function validateEssenceForTradition(
-  character: Partial<Character>,
-  _tradition: TraditionData
+  character: Partial<Character>
 ): boolean {
   const currentEssence = character.specialAttributes?.essence ?? DEFAULT_MAX_ESSENCE;
 

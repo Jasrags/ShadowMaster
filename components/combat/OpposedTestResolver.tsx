@@ -511,7 +511,11 @@ export function OpposedTestResolver({
   // Auto-roll on mount if requested
   useEffect(() => {
     if (autoRoll && phase === "ready") {
-      executeRolls();
+      // Use requestAnimationFrame to defer setState outside the effect's synchronous execution
+      const frameId = requestAnimationFrame(() => {
+        executeRolls();
+      });
+      return () => cancelAnimationFrame(frameId);
     }
   }, [autoRoll, phase, executeRolls]);
 

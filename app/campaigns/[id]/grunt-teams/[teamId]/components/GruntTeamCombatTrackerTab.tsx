@@ -454,7 +454,7 @@ export function GruntTeamCombatTrackerTab({
       {!individualGrunts && isGM && (
         <div className="rounded-lg border border-dashed border-zinc-300 dark:border-zinc-700 p-8 text-center">
           <p className="text-zinc-500 dark:text-zinc-400">
-            Individual grunt tracking is not initialized. Click "Refresh" to
+            Individual grunt tracking is not initialized. Click &ldquo;Refresh&rdquo; to
             load combat tracking state.
           </p>
         </div>

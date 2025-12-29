@@ -473,7 +473,7 @@ export default function CreateGruntTeamPage() {
                   Add Lieutenant
                 </h3>
                 <p className="text-sm text-zinc-600 dark:text-zinc-400">
-                  A lieutenant provides leadership bonuses and can boost the team's Professional Rating.
+                  A lieutenant provides leadership bonuses and can boost the team&apos;s Professional Rating.
                 </p>
               </div>
               <label className="relative inline-flex items-center cursor-pointer">

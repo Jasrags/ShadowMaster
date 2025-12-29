@@ -14,7 +14,7 @@ import {
   getMagicDegradationSummary,
 } from "../essence-magic-link";
 import type { Character } from "@/lib/types/character";
-import type { AugmentationRulesData, TraditionData } from "../../loader-types";
+import type { AugmentationRulesData } from "../../loader-types";
 
 // =============================================================================
 // TEST FIXTURES
@@ -38,21 +38,7 @@ function createMockCharacter(
   };
 }
 
-function createMockTradition(): TraditionData {
-  return {
-    id: "hermetic",
-    name: "Hermetic",
-    drainAttributes: ["LOG", "WIL"],
-    spiritTypes: {
-      combat: "fire",
-      detection: "air",
-      health: "man",
-      illusion: "water",
-      manipulation: "earth",
-    },
-    description: "Test tradition",
-  };
-}
+
 
 function createMockRules(
   formula: "roundUp" | "roundDown" | "exact" = "roundUp"
@@ -144,25 +130,23 @@ describe("canStillUseMagic", () => {
 // =============================================================================
 
 describe("validateEssenceForTradition", () => {
-  const tradition = createMockTradition();
-
   it("should return true for essence > 0", () => {
     const character = createMockCharacter();
-    expect(validateEssenceForTradition(character, tradition)).toBe(true);
+    expect(validateEssenceForTradition(character)).toBe(true);
   });
 
   it("should return false for essence <= 0", () => {
     const character = createMockCharacter({
       specialAttributes: { edge: 3, essence: 0, magic: 0, resonance: 0 },
     });
-    expect(validateEssenceForTradition(character, tradition)).toBe(false);
+    expect(validateEssenceForTradition(character)).toBe(false);
   });
 
   it("should return true for low but positive essence", () => {
     const character = createMockCharacter({
       specialAttributes: { edge: 3, essence: 0.5, magic: 1, resonance: 0 },
     });
-    expect(validateEssenceForTradition(character, tradition)).toBe(true);
+    expect(validateEssenceForTradition(character)).toBe(true);
   });
 });
 
