@@ -510,3 +510,59 @@ export type {
   SpellCategory,
   SpellType,
 } from "./magic";
+
+// Matrix operations types
+export type {
+  // Connection types
+  MatrixMode,
+  MatrixDeviceType,
+  // Attribute configuration
+  CyberdeckAttributeConfig,
+  // Persona
+  MatrixPersona,
+  // Programs
+  ProgramEffectType,
+  ProgramEffect,
+  LoadedProgram,
+  // Marks
+  MarkTargetType,
+  MatrixMark,
+  // Overwatch
+  OverwatchEvent,
+  OverwatchSession,
+  // Host
+  HostAuthLevel,
+  // Matrix state
+  MatrixState,
+  // Convergence
+  ICSpawnData,
+  ConvergenceResult,
+  // Actions
+  MatrixActionCategory,
+  MatrixActionLegality,
+  MatrixAction,
+  // Validation
+  MatrixValidationError,
+  MatrixValidationWarning,
+  // Character equipment
+  CharacterCyberdeck,
+  CharacterCommlink,
+  // Catalog types
+  CyberdeckCatalogItem,
+  CommlinkCatalogItem,
+  MatrixActionsModule,
+  // API types
+  UpdateMatrixStateRequest,
+  MatrixEquipmentResponse,
+  ValidateMatrixConfigRequest,
+  ValidateMatrixConfigResponse,
+  RecordOverwatchRequest,
+  OverwatchResponse,
+} from "./matrix";
+
+// Matrix constants
+export {
+  OVERWATCH_THRESHOLD,
+  MAX_MARKS,
+  MATRIX_CONDITION_BASE,
+} from "./matrix";
