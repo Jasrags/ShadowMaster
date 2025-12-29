@@ -566,3 +566,59 @@ export {
   MAX_MARKS,
   MATRIX_CONDITION_BASE,
 } from "./matrix";
+
+// Rigging control types
+export type {
+  // Control modes
+  ControlMode,
+  RiggerVRMode,
+  DroneCommandType,
+  // VCR
+  VehicleControlRig,
+  // RCC configuration
+  RCCConfiguration,
+  RunningAutosoft,
+  // Drone network
+  DroneNetwork,
+  SlavedDrone,
+  InstalledAutosoft,
+  SharedAutosoft,
+  // Jumped-in state
+  JumpedInState,
+  // Session state
+  RiggingState,
+  // Vehicle state
+  ActiveVehicleState,
+  VehicleModifierEffect,
+  // Noise calculation
+  DistanceBand,
+  TerrainModifier,
+  NoiseCalculation,
+  // Test types
+  VehicleTestType,
+  VehicleActionType,
+  // Validation
+  RiggingValidationError,
+  RiggingValidationWarning,
+  // API types
+  StartRiggingSessionRequest,
+  UpdateRiggingStateRequest,
+  RiggingEquipmentResponse,
+  JumpInRequest,
+  JumpInResponse,
+  ValidateVehicleActionRequest,
+  ValidateVehicleActionResponse,
+  SlaveDroneRequest,
+  SlaveDroneResponse,
+  BiofeedbackResult,
+  DumpshockResult,
+} from "./rigging";
+
+// Rigging constants
+export {
+  DRONE_SLAVE_LIMIT_MULTIPLIER,
+  JUMPED_IN_INITIATIVE_BONUS,
+  JUMPED_IN_HOTSIM_INITIATIVE_BONUS,
+  VEHICLE_CONDITION_BASE,
+  DUMPSHOCK_DAMAGE,
+} from "./rigging";
