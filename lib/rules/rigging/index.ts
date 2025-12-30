@@ -116,3 +116,46 @@ export {
   type DamageApplicationResult,
   type RepairResult,
 } from "./drone-condition";
+
+// Jumped-In Manager
+export {
+  validateJumpIn,
+  jumpIn,
+  jumpOut,
+  calculateJumpedInInitiative,
+  getInitiativeDice,
+  isJumpedIn,
+  getJumpedInTarget,
+  getCurrentVRMode,
+  getJumpedInControlBonus,
+  isBodyVulnerable,
+  getJumpedInDuration,
+  switchVRMode,
+  isHotSim,
+  isColdSim,
+  type JumpInResult,
+  type JumpOutResult,
+  type InitiativeResult,
+} from "./jumped-in-manager";
+
+// Biofeedback Handler
+export {
+  getBiofeedbackDamageType,
+  getCurrentBiofeedbackType,
+  calculateBiofeedbackFromVehicleDamage,
+  calculateDumpshockDamage,
+  applyBiofeedbackDamage,
+  trackBiofeedbackDamage,
+  handleForcedEjection,
+  createDumpshockResult,
+  calculateBiofeedbackResistancePool,
+  reduceBiofeedbackDamage,
+  getTotalBiofeedbackDamage,
+  isBiofeedbackDangerous,
+  getBiofeedbackWarningLevel,
+  shouldWarnAboutHotSim,
+  getHotSimRiskDescription,
+  getColdSimBenefitsDescription,
+  type BiofeedbackDamageResult,
+  type ForcedEjectionResult,
+} from "./biofeedback-handler";
