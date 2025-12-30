@@ -203,7 +203,7 @@ This folder is authoritative. Treat changes with care.
 | Weapon Customization | ✅ Implemented | [mechanics.weapon-customization.md](file:///Users/jrags/Code/Jasrags/shadow-master/docs/capabilities/mechanics.weapon-customization.md)         |
 | Magic Mastery        | ✅ Implemented | [mechanics.magic-mastery.md](file:///Users/jrags/Code/Jasrags/shadow-master/docs/capabilities/mechanics.magic-mastery.md)                       |
 | Matrix Operations    | ✅ Implemented | [mechanics.matrix-operations.md](file:///Users/jrags/Code/Jasrags/shadow-master/docs/capabilities/mechanics.matrix-operations.md)               |
-| Rigging Control      | 🚧 In Progress | [mechanics.rigging-control.md](file:///Users/jrags/Code/Jasrags/shadow-master/docs/capabilities/mechanics.rigging-control.md)                   |
+| Rigging Control      | ✅ Implemented | [mechanics.rigging-control.md](file:///Users/jrags/Code/Jasrags/shadow-master/docs/capabilities/mechanics.rigging-control.md)                   |
 | Multiplayer Combat   | 📝 Draft       | [draft-mechanics.multiplayer-combat.md](file:///Users/jrags/Code/Jasrags/shadow-master/docs/capabilities/draft-mechanics.multiplayer-combat.md) |
 
 ---
@@ -308,7 +308,7 @@ _Deep-dives into Shadowrun sub-systems._
 | ------------------------------ | ----------- |
 | mechanics.magic-mastery        | ✅ Complete |
 | mechanics.matrix-operations    | ✅ Complete |
-| mechanics.rigging-control      | ⏳ Pending  |
+| mechanics.rigging-control      | ✅ Complete |
 | mechanics.weapon-customization | ✅ Complete |
 | character.augmentation-systems | ⏳ Pending  |
 
@@ -422,7 +422,7 @@ flowchart TB
     subgraph Phase5["Phase 5: Specialized"]
         mech_magic["mechanics.magic-mastery ✅"]
         mech_matrix["mechanics.matrix-operations ✅"]
-        mech_rigging["mechanics.rigging-control ⏳"]
+        mech_rigging["mechanics.rigging-control ✅"]
         mech_weapon["mechanics.weapon-customization ✅"]
         char_augment["character.augmentation-systems ⏳"]
     end
@@ -492,8 +492,8 @@ flowchart TB
     classDef pending fill:#6b7280,stroke:#4b5563,color:#fff
     classDef draft fill:#3b82f6,stroke:#2563eb,color:#fff
 
-    class sec_security,sec_governance,rule_discovery,rule_integrity,char_mgmt,char_sheet,char_quality,char_advance,camp_mgmt,camp_participant,camp_location,camp_npc,camp_approval,camp_social,mech_resolution,mech_encounter,mech_weapon,mech_execution,mech_magic,mech_matrix complete
-    class mech_rigging,char_augment,rule_sync pending
+    class sec_security,sec_governance,rule_discovery,rule_integrity,char_mgmt,char_sheet,char_quality,char_advance,camp_mgmt,camp_participant,camp_location,camp_npc,camp_approval,camp_social,mech_resolution,mech_encounter,mech_weapon,mech_execution,mech_magic,mech_matrix,mech_rigging complete
+    class char_augment,rule_sync pending
     class camp_live,camp_chat,camp_gm,mech_multi,camp_async,camp_vtt,vtt_import,vtt_display,infra_notify,infra_flags draft
 ```
 
