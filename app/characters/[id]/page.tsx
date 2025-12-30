@@ -1241,6 +1241,8 @@ function CharacterSheet({
                         contextLabel={poolContext || "Quick Roll"}
                         compact={false}
                         showHistory={true}
+                        characterId={character.id}
+                        persistRolls={true}
                       />
                     </div>
                   </div>

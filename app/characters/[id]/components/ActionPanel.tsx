@@ -670,7 +670,7 @@ export function ActionPanel({
                       <span className={`px-2 py-0.5 rounded text-xs font-bold ${theme.fonts.mono} ${
                         actionEconomy.free > 0 ? "bg-emerald-500/20 text-emerald-500" : "bg-muted text-muted-foreground"
                       }`}>
-                        {actionEconomy.free}
+                        {actionEconomy.free >= 999 ? "∞" : actionEconomy.free}
                       </span>
                     </div>
                     <div className="flex items-center gap-1" title="Simple Actions">

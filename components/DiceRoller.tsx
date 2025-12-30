@@ -204,6 +204,10 @@ export interface DiceRollerProps {
   label?: string;
   /** Label for the current operation (e.g. "Pistols Roll") */
   contextLabel?: string;
+  /** Character ID for persisting rolls to the server */
+  characterId?: string;
+  /** Whether to persist rolls to the server (requires characterId) */
+  persistRolls?: boolean;
 }
 
 export function DiceRoller({
@@ -216,12 +220,15 @@ export function DiceRoller({
   compact = false,
   label = "Dice Pool",
   contextLabel,
+  characterId,
+  persistRolls = false,
 }: DiceRollerProps) {
   const [basePoolSize, setBasePoolSize] = useState(initialPool);
   const [modifier, setModifier] = useState(0);
   const [isRolling, setIsRolling] = useState(false);
   const [currentResult, setCurrentResult] = useState<RollResult | null>(null);
   const [history, setHistory] = useState<RollResult[]>([]);
+  const [persistError, setPersistError] = useState<string | null>(null);
 
   // Calculate total pool
   const totalPoolSize = Math.max(minPool, Math.min(maxPool, basePoolSize + modifier));
@@ -235,55 +242,115 @@ export function DiceRoller({
   }, [initialPool]);
 
   // Roll dice
-  const rollDice = useCallback(() => {
+  const rollDice = useCallback(async () => {
     setIsRolling(true);
+    setPersistError(null);
 
-    // Small delay for animation effect
-    setTimeout(() => {
-      const dice: DiceResult[] = [];
-      let hits = 0;
-      let ones = 0;
+    // If persisting to server, use the API
+    if (persistRolls && characterId) {
+      try {
+        const response = await fetch(`/api/characters/${characterId}/actions`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            pool: {
+              basePool: totalPoolSize,
+              modifiers: modifier !== 0 ? [{ source: "modifier", value: modifier }] : [],
+              totalDice: totalPoolSize,
+            },
+            context: contextLabel ? { actionType: contextLabel } : undefined,
+          }),
+        });
 
-      for (let i = 0; i < totalPoolSize; i++) {
-        const value = Math.floor(Math.random() * 6) + 1;
-        const isHit = value >= 5;
-        const isOne = value === 1;
+        const data = await response.json();
 
-        if (isHit) hits++;
-        if (isOne) ones++;
+        if (!data.success) {
+          throw new Error(data.error || "Roll failed");
+        }
 
-        dice.push({ value, isHit, isOne });
+        // Convert API result to RollResult format
+        const apiResult = data.result;
+        const dice: DiceResult[] = apiResult.dice.map((value: number) => ({
+          value,
+          isHit: value >= 5,
+          isOne: value === 1,
+        }));
+
+        // Sort dice: hits first, then by value descending
+        dice.sort((a, b) => {
+          if (a.isHit && !b.isHit) return -1;
+          if (!a.isHit && b.isHit) return 1;
+          if (a.isOne && !b.isOne) return 1;
+          if (!a.isOne && b.isOne) return -1;
+          return b.value - a.value;
+        });
+
+        const result: RollResult = {
+          dice,
+          hits: apiResult.hits,
+          ones: apiResult.ones,
+          isGlitch: apiResult.isGlitch,
+          isCriticalGlitch: apiResult.isCriticalGlitch,
+          poolSize: totalPoolSize,
+          timestamp: Date.now(),
+        };
+
+        setCurrentResult(result);
+        setHistory((prev) => [result, ...prev].slice(0, maxHistory));
+        setIsRolling(false);
+        onRoll?.(result);
+      } catch (err) {
+        setPersistError(err instanceof Error ? err.message : "Roll failed");
+        setIsRolling(false);
       }
+    } else {
+      // Client-side only rolling with animation delay
+      setTimeout(() => {
+        const dice: DiceResult[] = [];
+        let hits = 0;
+        let ones = 0;
 
-      // Sort dice: hits first, then by value descending
-      dice.sort((a, b) => {
-        if (a.isHit && !b.isHit) return -1;
-        if (!a.isHit && b.isHit) return 1;
-        if (a.isOne && !b.isOne) return 1;
-        if (!a.isOne && b.isOne) return -1;
-        return b.value - a.value;
-      });
+        for (let i = 0; i < totalPoolSize; i++) {
+          const value = Math.floor(Math.random() * 6) + 1;
+          const isHit = value >= 5;
+          const isOne = value === 1;
 
-      // Check for glitch (more 1s than half the dice pool)
-      const isGlitch = ones > totalPoolSize / 2;
-      const isCriticalGlitch = isGlitch && hits === 0;
+          if (isHit) hits++;
+          if (isOne) ones++;
 
-      const result: RollResult = {
-        dice,
-        hits,
-        ones,
-        isGlitch,
-        isCriticalGlitch,
-        poolSize: totalPoolSize,
-        timestamp: Date.now(),
-      };
+          dice.push({ value, isHit, isOne });
+        }
 
-      setCurrentResult(result);
-      setHistory((prev) => [result, ...prev].slice(0, maxHistory));
-      setIsRolling(false);
-      onRoll?.(result);
-    }, 300);
-  }, [totalPoolSize, maxHistory, onRoll]);
+        // Sort dice: hits first, then by value descending
+        dice.sort((a, b) => {
+          if (a.isHit && !b.isHit) return -1;
+          if (!a.isHit && b.isHit) return 1;
+          if (a.isOne && !b.isOne) return 1;
+          if (!a.isOne && b.isOne) return -1;
+          return b.value - a.value;
+        });
+
+        // Check for glitch (more 1s than half the dice pool)
+        const isGlitch = ones > totalPoolSize / 2;
+        const isCriticalGlitch = isGlitch && hits === 0;
+
+        const result: RollResult = {
+          dice,
+          hits,
+          ones,
+          isGlitch,
+          isCriticalGlitch,
+          poolSize: totalPoolSize,
+          timestamp: Date.now(),
+        };
+
+        setCurrentResult(result);
+        setHistory((prev) => [result, ...prev].slice(0, maxHistory));
+        setIsRolling(false);
+        onRoll?.(result);
+      }, 300);
+    }
+  }, [totalPoolSize, maxHistory, onRoll, persistRolls, characterId, modifier, contextLabel]);
 
   // Handle base pool size change
   const handleBasePoolChange = (delta: number) => {
@@ -421,6 +488,13 @@ export function DiceRoller({
           </span>
         )}
       </Button>
+
+      {/* Error Display */}
+      {persistError && (
+        <div className="p-3 rounded-lg bg-red-500/10 border border-red-500/30 text-red-400 text-sm">
+          {persistError}
+        </div>
+      )}
 
       {/* Current Result */}
       {currentResult && (
