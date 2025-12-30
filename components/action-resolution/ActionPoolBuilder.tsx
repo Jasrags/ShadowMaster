@@ -81,15 +81,15 @@ function ModifierInput({
 
   return (
     <div className="flex items-center justify-between">
-      <span className={`text-zinc-400 ${s.text}`}>{label}</span>
+      <span className={`text-muted-foreground ${s.text}`}>{label}</span>
       <div className="flex items-center gap-1">
         <Button
           onPress={() => onChange(Math.max(min, value - 1))}
           isDisabled={value <= min}
           className={`
             ${s.button} rounded flex items-center justify-center
-            bg-zinc-800 border border-zinc-700 text-zinc-400
-            hover:bg-zinc-700 hover:text-zinc-300
+            bg-muted border border-border text-muted-foreground
+            hover:bg-muted/80 hover:text-foreground
             disabled:opacity-50 disabled:cursor-not-allowed
             transition-colors
           `}
@@ -99,7 +99,7 @@ function ModifierInput({
         <span
           className={`
             w-10 text-center font-mono font-bold
-            ${value > 0 ? "text-emerald-400" : value < 0 ? "text-rose-400" : "text-zinc-400"}
+            ${value > 0 ? "text-emerald-500 dark:text-emerald-400" : value < 0 ? "text-rose-500 dark:text-rose-400" : "text-muted-foreground"}
             ${s.text}
           `}
         >
@@ -110,8 +110,8 @@ function ModifierInput({
           isDisabled={value >= max}
           className={`
             ${s.button} rounded flex items-center justify-center
-            bg-zinc-800 border border-zinc-700 text-zinc-400
-            hover:bg-zinc-700 hover:text-zinc-300
+            bg-muted border border-border text-muted-foreground
+            hover:bg-muted/80 hover:text-foreground
             disabled:opacity-50 disabled:cursor-not-allowed
             transition-colors
           `}
@@ -325,24 +325,24 @@ export function ActionPoolBuilder({
   };
 
   return (
-    <div className={`rounded-lg border border-zinc-700 bg-zinc-900/50 ${s.padding}`}>
+    <div className={`rounded-lg border border-border bg-card/50 ${s.padding}`}>
       {/* Header */}
       <div className="flex items-center gap-2 mb-4">
-        <Dice1 className="w-5 h-5 text-violet-400" />
-        <span className={`font-medium text-zinc-200 ${s.text}`}>Build Dice Pool</span>
+        <Dice1 className="w-5 h-5 text-violet-500 dark:text-violet-400" />
+        <span className={`font-medium text-foreground ${s.text}`}>Build Dice Pool</span>
       </div>
 
       {/* Attribute + Skill Selection */}
       <div className="grid grid-cols-2 gap-3 mb-4">
         <div>
-          <label className={`block text-zinc-500 ${s.text} mb-1`}>Attribute</label>
+          <label className={`block text-muted-foreground ${s.text} mb-1`}>Attribute</label>
           <select
             value={selectedAttribute}
             onChange={(e) => setSelectedAttribute(e.target.value)}
             className={`
-              w-full bg-zinc-800 border border-zinc-700 rounded
-              text-zinc-300 ${s.input} ${s.text}
-              focus:outline-none focus:border-violet-500
+              w-full bg-muted border border-border rounded
+              text-foreground ${s.input} ${s.text}
+              focus:outline-none focus:border-primary
             `}
           >
             <option value="">Select...</option>
@@ -355,7 +355,7 @@ export function ActionPoolBuilder({
         </div>
 
         <div>
-          <label className={`block text-zinc-500 ${s.text} mb-1`}>Skill</label>
+          <label className={`block text-muted-foreground ${s.text} mb-1`}>Skill</label>
           <select
             value={selectedSkill}
             onChange={(e) => {
@@ -363,9 +363,9 @@ export function ActionPoolBuilder({
               setSelectedSpecialization("");
             }}
             className={`
-              w-full bg-zinc-800 border border-zinc-700 rounded
-              text-zinc-300 ${s.input} ${s.text}
-              focus:outline-none focus:border-violet-500
+              w-full bg-muted border border-border rounded
+              text-foreground ${s.input} ${s.text}
+              focus:outline-none focus:border-primary
             `}
           >
             <option value="">Select...</option>
@@ -381,14 +381,14 @@ export function ActionPoolBuilder({
       {/* Specialization */}
       {specializations.length > 0 && (
         <div className="mb-4">
-          <label className={`block text-zinc-500 ${s.text} mb-1`}>Specialization (+2)</label>
+          <label className={`block text-muted-foreground ${s.text} mb-1`}>Specialization (+2)</label>
           <select
             value={selectedSpecialization}
             onChange={(e) => setSelectedSpecialization(e.target.value)}
             className={`
-              w-full bg-zinc-800 border border-zinc-700 rounded
-              text-zinc-300 ${s.input} ${s.text}
-              focus:outline-none focus:border-violet-500
+              w-full bg-muted border border-border rounded
+              text-foreground ${s.input} ${s.text}
+              focus:outline-none focus:border-primary
             `}
           >
             <option value="">None</option>
@@ -404,7 +404,7 @@ export function ActionPoolBuilder({
       {/* Limit Selection */}
       {limits && (
         <div className="mb-4">
-          <label className={`block text-zinc-500 ${s.text} mb-1`}>Limit</label>
+          <label className={`block text-muted-foreground ${s.text} mb-1`}>Limit</label>
           <div className="flex gap-2">
             {(["physical", "mental", "social", "none"] as const).map((limitType) => (
               <Button
@@ -415,8 +415,8 @@ export function ActionPoolBuilder({
                   px-2 py-1.5 rounded ${s.text}
                   ${
                     selectedLimit === limitType
-                      ? "bg-violet-500/20 text-violet-400 border border-violet-500/30"
-                      : "bg-zinc-800 text-zinc-400 border border-zinc-700 hover:bg-zinc-700"
+                      ? "bg-violet-500/20 text-violet-500 dark:text-violet-400 border border-violet-500/30"
+                      : "bg-muted text-muted-foreground border border-border hover:bg-muted/80"
                   }
                   transition-colors
                 `}
@@ -438,14 +438,14 @@ export function ActionPoolBuilder({
             onClick={() => setShowModifiers(!showModifiers)}
             className={`
               w-full flex items-center justify-between
-              px-3 py-2 rounded bg-zinc-800/50 border border-zinc-700
-              text-zinc-400 hover:text-zinc-300 transition-colors ${s.text}
+              px-3 py-2 rounded bg-muted/50 border border-border
+              text-muted-foreground hover:text-foreground transition-colors ${s.text}
             `}
           >
             <span>Modifiers</span>
             <div className="flex items-center gap-2">
               {(situationalMod !== 0 || equipmentMod !== 0 || customMod !== 0) && (
-                <span className="text-violet-400">Modified</span>
+                <span className="text-violet-500 dark:text-violet-400">Modified</span>
               )}
               {showModifiers ? (
                 <ChevronUp className="w-4 h-4" />
@@ -456,9 +456,9 @@ export function ActionPoolBuilder({
           </button>
 
           {showModifiers && (
-            <div className="mt-2 space-y-2 p-3 rounded bg-zinc-800/30 border border-zinc-700">
+            <div className="mt-2 space-y-2 p-3 rounded bg-muted/30 border border-border">
               {woundModifier !== 0 && (
-                <div className="flex items-center justify-between text-rose-400">
+                <div className="flex items-center justify-between text-rose-500 dark:text-rose-400">
                   <span className={s.text}>Wound Modifier</span>
                   <span className="font-mono">{woundModifier}</span>
                 </div>
@@ -493,8 +493,8 @@ export function ActionPoolBuilder({
             onClick={() => setShowContext(!showContext)}
             className={`
               w-full flex items-center justify-between
-              px-3 py-2 rounded bg-zinc-800/50 border border-zinc-700
-              text-zinc-400 hover:text-zinc-300 transition-colors ${s.text}
+              px-3 py-2 rounded bg-muted/50 border border-border
+              text-muted-foreground hover:text-foreground transition-colors ${s.text}
             `}
           >
             <span>Context</span>
@@ -506,46 +506,46 @@ export function ActionPoolBuilder({
           </button>
 
           {showContext && (
-            <div className="mt-2 space-y-3 p-3 rounded bg-zinc-800/30 border border-zinc-700">
+            <div className="mt-2 space-y-3 p-3 rounded bg-muted/30 border border-border">
               <div>
-                <label className={`block text-zinc-500 ${s.text} mb-1`}>Action Type</label>
+                <label className={`block text-muted-foreground ${s.text} mb-1`}>Action Type</label>
                 <input
                   type="text"
                   value={actionType}
                   onChange={(e) => setActionType(e.target.value)}
                   placeholder="e.g., Attack, Perception, Spellcasting"
                   className={`
-                    w-full bg-zinc-800 border border-zinc-700 rounded
-                    text-zinc-300 ${s.input} ${s.text}
-                    focus:outline-none focus:border-violet-500
+                    w-full bg-muted border border-border rounded
+                    text-foreground ${s.input} ${s.text}
+                    focus:outline-none focus:border-primary
                   `}
                 />
               </div>
               <div>
-                <label className={`block text-zinc-500 ${s.text} mb-1`}>Target</label>
+                <label className={`block text-muted-foreground ${s.text} mb-1`}>Target</label>
                 <input
                   type="text"
                   value={targetName}
                   onChange={(e) => setTargetName(e.target.value)}
                   placeholder="Target name (optional)"
                   className={`
-                    w-full bg-zinc-800 border border-zinc-700 rounded
-                    text-zinc-300 ${s.input} ${s.text}
-                    focus:outline-none focus:border-violet-500
+                    w-full bg-muted border border-border rounded
+                    text-foreground ${s.input} ${s.text}
+                    focus:outline-none focus:border-primary
                   `}
                 />
               </div>
               <div>
-                <label className={`block text-zinc-500 ${s.text} mb-1`}>Description</label>
+                <label className={`block text-muted-foreground ${s.text} mb-1`}>Description</label>
                 <textarea
                   value={description}
                   onChange={(e) => setDescription(e.target.value)}
                   placeholder="What are you doing?"
                   rows={2}
                   className={`
-                    w-full bg-zinc-800 border border-zinc-700 rounded
-                    text-zinc-300 ${s.input} ${s.text}
-                    focus:outline-none focus:border-violet-500 resize-none
+                    w-full bg-muted border border-border rounded
+                    text-foreground ${s.input} ${s.text}
+                    focus:outline-none focus:border-primary resize-none
                   `}
                 />
               </div>
@@ -555,31 +555,31 @@ export function ActionPoolBuilder({
       )}
 
       {/* Pool Summary */}
-      <div className="mb-4 p-3 rounded bg-zinc-800/50 border border-zinc-700">
+      <div className="mb-4 p-3 rounded bg-muted/50 border border-border">
         <div className="flex items-center justify-between mb-2">
-          <span className={`text-zinc-400 ${s.text}`}>Total Dice Pool</span>
-          <span className="font-mono font-bold text-2xl text-violet-400">
+          <span className={`text-muted-foreground ${s.text}`}>Total Dice Pool</span>
+          <span className="font-mono font-bold text-2xl text-violet-500 dark:text-violet-400">
             {pool.totalDice}d6
           </span>
         </div>
         {pool.limit && (
           <div className="flex items-center justify-between">
-            <span className={`text-zinc-500 ${s.text}`}>Limit</span>
-            <span className="font-mono text-zinc-400">{pool.limit} hits max</span>
+            <span className={`text-muted-foreground ${s.text}`}>Limit</span>
+            <span className="font-mono text-muted-foreground">{pool.limit} hits max</span>
           </div>
         )}
         {pool.modifiers.length > 0 && (
-          <div className="mt-2 pt-2 border-t border-zinc-700 space-y-1">
+          <div className="mt-2 pt-2 border-t border-border space-y-1">
             {pool.modifiers.map((mod, index) => (
               <div key={index} className={`flex justify-between ${s.text}`}>
-                <span className="text-zinc-500">{mod.description}</span>
+                <span className="text-muted-foreground">{mod.description}</span>
                 <span
                   className={
                     mod.value > 0
-                      ? "text-emerald-400"
+                      ? "text-emerald-500 dark:text-emerald-400"
                       : mod.value < 0
-                        ? "text-rose-400"
-                        : "text-zinc-400"
+                        ? "text-rose-500 dark:text-rose-400"
+                        : "text-muted-foreground"
                   }
                 >
                   {mod.value > 0 ? "+" : ""}
@@ -595,8 +595,8 @@ export function ActionPoolBuilder({
       {canUseEdge && (
         <div className="mb-4">
           <div className="flex items-center gap-2 mb-2">
-            <Zap className="w-4 h-4 text-rose-400" />
-            <span className={`text-zinc-400 ${s.text}`}>
+            <Zap className="w-4 h-4 text-rose-500 dark:text-rose-400" />
+            <span className={`text-muted-foreground ${s.text}`}>
               Edge Actions ({currentEdge}/{maxEdge})
             </span>
           </div>
@@ -608,8 +608,8 @@ export function ActionPoolBuilder({
                 px-2 py-1.5 rounded ${s.text}
                 ${
                   edgeAction === "push_the_limit"
-                    ? "bg-rose-500/20 text-rose-400 border border-rose-500/30"
-                    : "bg-zinc-800 text-zinc-400 border border-zinc-700 hover:bg-zinc-700"
+                    ? "bg-rose-500/20 text-rose-500 dark:text-rose-400 border border-rose-500/30"
+                    : "bg-muted text-muted-foreground border border-border hover:bg-muted/80"
                 }
                 transition-colors
               `}
@@ -624,8 +624,8 @@ export function ActionPoolBuilder({
                 px-2 py-1.5 rounded ${s.text}
                 ${
                   edgeAction === "blitz"
-                    ? "bg-rose-500/20 text-rose-400 border border-rose-500/30"
-                    : "bg-zinc-800 text-zinc-400 border border-zinc-700 hover:bg-zinc-700"
+                    ? "bg-rose-500/20 text-rose-500 dark:text-rose-400 border border-rose-500/30"
+                    : "bg-muted text-muted-foreground border border-border hover:bg-muted/80"
                 }
                 transition-colors
               `}
@@ -635,7 +635,7 @@ export function ActionPoolBuilder({
             </Button>
           </div>
           {edgeAction && (
-            <p className={`mt-2 text-zinc-500 ${s.text}`}>
+            <p className={`mt-2 text-muted-foreground ${s.text}`}>
               {edgeAction === "push_the_limit" && (
                 <>Add Edge to pool, no limit, exploding 6s</>
               )}
@@ -650,8 +650,8 @@ export function ActionPoolBuilder({
       {/* Warnings */}
       {pool.totalDice === 0 && (selectedAttribute || selectedSkill) && (
         <div className="mb-4 flex items-start gap-2 p-2 rounded bg-amber-500/10 border border-amber-500/20">
-          <AlertCircle className="w-4 h-4 text-amber-400 mt-0.5 flex-shrink-0" />
-          <p className={`text-amber-400 ${s.text}`}>
+          <AlertCircle className="w-4 h-4 text-amber-500 dark:text-amber-400 mt-0.5 flex-shrink-0" />
+          <p className={`text-amber-500 dark:text-amber-400 ${s.text}`}>
             Your dice pool is 0. Check your modifiers.
           </p>
         </div>
@@ -667,7 +667,7 @@ export function ActionPoolBuilder({
           ${
             canRoll
               ? "bg-violet-600 hover:bg-violet-500 text-white"
-              : "bg-zinc-800 text-zinc-500 cursor-not-allowed"
+              : "bg-muted text-muted-foreground cursor-not-allowed"
           }
           transition-colors
         `}

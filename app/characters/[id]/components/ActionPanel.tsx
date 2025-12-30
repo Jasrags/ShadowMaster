@@ -22,9 +22,15 @@ import {
   Monitor,
   MessageSquare,
   Car,
+  History,
+  Sliders,
 } from "lucide-react";
-import { useEdge } from "@/lib/rules/action-resolution/hooks";
+import { useEdge, useActionResolver, useActionHistory } from "@/lib/rules/action-resolution/hooks";
 import { useCombatSession, useActionEconomy } from "@/lib/combat";
+import { ActionPoolBuilder } from "@/components/action-resolution/ActionPoolBuilder";
+import { EdgeTracker } from "@/components/action-resolution/EdgeTracker";
+import { ActionHistory } from "@/components/action-resolution/ActionHistory";
+import type { ActionPool, EdgeActionType, ActionContext } from "@/lib/types";
 import { useAvailableActions, type ActionAvailabilityResult } from "@/lib/rules/RulesetContext";
 import { TargetSelector } from "./TargetSelector";
 import type { Character, ActionDefinition } from "@/lib/types";
@@ -257,8 +263,69 @@ export function ActionPanel({
     await executeAction(actionId);
   }, [isInCombat, executeAction]);
 
-  // Tab state for switching between Quick Rolls and Combat Actions
-  const [activeTab, setActiveTab] = useState<"quick" | "combat">("quick");
+  // Tab state for switching between Quick Rolls, Combat Actions, Advanced, and History
+  const [activeTab, setActiveTab] = useState<"quick" | "combat" | "advanced" | "history">("quick");
+
+  // Action resolver for server-side roll persistence
+  const {
+    roll: executeRoll,
+    currentResult,
+    history: rollHistory,
+    isRolling,
+    clearResult,
+  } = useActionResolver({
+    characterId: character.id,
+    persistRolls: true,
+  });
+
+  // Action history hook for loading more actions
+  const {
+    actions: persistedActions,
+    isLoading: historyLoading,
+    hasMore: hasMoreHistory,
+    loadMore: loadMoreHistory,
+  } = useActionHistory(character.id);
+
+  // Combine local and persisted history
+  const combinedHistory = useMemo(() => {
+    const local = rollHistory || [];
+    const persisted = persistedActions || [];
+    // Merge and deduplicate by ID
+    const all = [...local];
+    persisted.forEach(p => {
+      if (!all.find(a => a.id === p.id)) {
+        all.push(p);
+      }
+    });
+    return all.sort((a, b) => new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime());
+  }, [rollHistory, persistedActions]);
+
+  // Handle roll from ActionPoolBuilder
+  const handleAdvancedRoll = useCallback(async (config: {
+    pool: ActionPool;
+    edgeAction?: EdgeActionType;
+    context?: ActionContext;
+  }) => {
+    const result = await executeRoll(config.pool, config.context, config.edgeAction);
+    if (result) {
+      // Open dice roller with the result
+      onOpenDiceRoller(result.pool.totalDice, config.context?.actionType || "Advanced Roll");
+    }
+  }, [executeRoll, onOpenDiceRoller]);
+
+  // Transform skills for ActionPoolBuilder
+  const skillsForBuilder = useMemo(() => {
+    const result: Record<string, { rating: number; specializations?: string[] }> = {};
+    const skills = character.skills || {};
+    const specs = character.skillSpecializations || {};
+
+    for (const [skillId, rating] of Object.entries(skills)) {
+      const rawSpecs = specs[skillId];
+      const specArray = rawSpecs ? (Array.isArray(rawSpecs) ? rawSpecs : [rawSpecs]) : undefined;
+      result[skillId] = { rating, specializations: specArray };
+    }
+    return result;
+  }, [character.skills, character.skillSpecializations]);
 
   // Calculate dice pool for an action based on its rollConfig
   const calculateActionPool = useCallback((action: ActionDefinition): number => {
@@ -430,81 +497,17 @@ export function ActionPanel({
       {/* Expanded Content */}
       {isExpanded && (
         <div className={`p-4 space-y-4 border-t ${theme.colors.border}`}>
-          {/* Edge Tracker */}
-          <div className={`p-3 rounded ${theme.components.card.wrapper} ${theme.components.card.border}`}>
-            <div className="flex items-center gap-2 mb-3">
-              <Zap className="w-4 h-4 text-rose-500 dark:text-rose-400" />
-              <span className={`text-xs uppercase ${theme.fonts.mono} ${theme.colors.muted}`}>
-                Edge
-              </span>
-            </div>
-
-            {/* Edge Pips */}
-            <div className="flex items-center gap-1.5 mb-3">
-              {Array.from({ length: edgeMaximum }).map((_, i) => (
-                <div
-                  key={i}
-                  className={`
-                    w-4 h-4 rounded-full border-2 transition-all duration-200
-                    ${i < edgeCurrent
-                      ? "bg-rose-500 border-rose-400 shadow-lg shadow-rose-500/30"
-                      : `bg-muted ${theme.colors.border}`
-                    }
-                  `}
-                />
-              ))}
-              <span className={`ml-2 ${theme.fonts.mono} font-bold text-rose-500 dark:text-rose-400`}>
-                {edgeCurrent}/{edgeMaximum}
-              </span>
-            </div>
-
-            {/* Edge Controls */}
-            <div className="flex items-center gap-2">
-              <Button
-                onPress={() => spendEdge(1)}
-                isDisabled={edgeCurrent <= 0 || edgeLoading}
-                className={`
-                  flex-1 flex items-center justify-center gap-1.5
-                  px-3 py-1.5 rounded text-sm
-                  bg-rose-500/20 text-rose-500 dark:text-rose-400 border border-rose-500/30
-                  hover:bg-rose-500/30
-                  disabled:opacity-50 disabled:cursor-not-allowed
-                  transition-colors
-                `}
-              >
-                Spend
-              </Button>
-              <Button
-                onPress={() => restoreEdge(1)}
-                isDisabled={edgeCurrent >= edgeMaximum || edgeLoading}
-                className={`
-                  flex-1 flex items-center justify-center gap-1.5
-                  px-3 py-1.5 rounded text-sm
-                  bg-emerald-500/20 text-emerald-500 dark:text-emerald-400 border border-emerald-500/30
-                  hover:bg-emerald-500/30
-                  disabled:opacity-50 disabled:cursor-not-allowed
-                  transition-colors
-                `}
-              >
-                Restore
-              </Button>
-              <Button
-                onPress={() => restoreFullEdge()}
-                isDisabled={edgeCurrent >= edgeMaximum || edgeLoading}
-                className={`
-                  px-3 py-1.5 rounded text-sm
-                  ${theme.components.card.wrapper} ${theme.components.card.border}
-                  ${theme.colors.muted}
-                  hover:opacity-80
-                  disabled:opacity-50 disabled:cursor-not-allowed
-                  transition-colors
-                `}
-                aria-label="Restore all Edge"
-              >
-                Full
-              </Button>
-            </div>
-          </div>
+          {/* Edge Tracker - Using standalone EdgeTracker component */}
+          <EdgeTracker
+            current={edgeCurrent}
+            maximum={edgeMaximum}
+            isLoading={edgeLoading}
+            onSpend={spendEdge}
+            onRestore={restoreEdge}
+            onRestoreFull={restoreFullEdge}
+            showControls={true}
+            size="md"
+          />
 
           {/* Limits */}
           <div className={`grid grid-cols-3 gap-2 p-3 rounded ${theme.components.card.wrapper} ${theme.components.card.border}`}>
@@ -539,20 +542,20 @@ export function ActionPanel({
             <button
               onClick={() => setActiveTab("quick")}
               className={`
-                flex-1 flex items-center justify-center gap-2 px-3 py-1.5 rounded-md text-sm font-medium transition-colors
+                flex-1 flex items-center justify-center gap-1 px-2 py-1.5 rounded-md text-xs font-medium transition-colors
                 ${activeTab === "quick"
                   ? `${theme.colors.accent} bg-background shadow-sm`
                   : `${theme.colors.muted} hover:text-foreground`
                 }
               `}
             >
-              <Dice1 className="w-4 h-4" />
-              Quick Rolls
+              <Dice1 className="w-3 h-3" />
+              Quick
             </button>
             <button
               onClick={() => setActiveTab("combat")}
               className={`
-                flex-1 flex items-center justify-center gap-2 px-3 py-1.5 rounded-md text-sm font-medium transition-colors
+                flex-1 flex items-center justify-center gap-1 px-2 py-1.5 rounded-md text-xs font-medium transition-colors
                 ${activeTab === "combat"
                   ? `${theme.colors.accent} bg-background shadow-sm`
                   : `${theme.colors.muted} hover:text-foreground`
@@ -560,10 +563,41 @@ export function ActionPanel({
                 ${isInCombat ? "ring-1 ring-amber-500/50" : ""}
               `}
             >
-              <Swords className={`w-4 h-4 ${isInCombat ? "text-amber-500" : ""}`} />
+              <Swords className={`w-3 h-3 ${isInCombat ? "text-amber-500" : ""}`} />
               Combat
               {isInCombat && (
-                <span className="w-2 h-2 rounded-full bg-amber-500 animate-pulse" />
+                <span className="w-1.5 h-1.5 rounded-full bg-amber-500 animate-pulse" />
+              )}
+            </button>
+            <button
+              onClick={() => setActiveTab("advanced")}
+              className={`
+                flex-1 flex items-center justify-center gap-1 px-2 py-1.5 rounded-md text-xs font-medium transition-colors
+                ${activeTab === "advanced"
+                  ? `${theme.colors.accent} bg-background shadow-sm`
+                  : `${theme.colors.muted} hover:text-foreground`
+                }
+              `}
+            >
+              <Sliders className="w-3 h-3" />
+              Advanced
+            </button>
+            <button
+              onClick={() => setActiveTab("history")}
+              className={`
+                flex-1 flex items-center justify-center gap-1 px-2 py-1.5 rounded-md text-xs font-medium transition-colors
+                ${activeTab === "history"
+                  ? `${theme.colors.accent} bg-background shadow-sm`
+                  : `${theme.colors.muted} hover:text-foreground`
+                }
+              `}
+            >
+              <History className="w-3 h-3" />
+              History
+              {combinedHistory.length > 0 && (
+                <span className={`text-[10px] ${theme.fonts.mono} px-1 rounded bg-muted`}>
+                  {combinedHistory.length}
+                </span>
               )}
             </button>
           </div>
@@ -636,7 +670,7 @@ export function ActionPanel({
                       <span className={`px-2 py-0.5 rounded text-xs font-bold ${theme.fonts.mono} ${
                         actionEconomy.free > 0 ? "bg-emerald-500/20 text-emerald-500" : "bg-muted text-muted-foreground"
                       }`}>
-                        {actionEconomy.free}
+                        {actionEconomy.free >= 999 ? "∞" : actionEconomy.free}
                       </span>
                     </div>
                     <div className="flex items-center gap-1" title="Simple Actions">
@@ -984,6 +1018,47 @@ export function ActionPanel({
                   </Button>
                 </div>
               )}
+            </div>
+          )}
+
+          {/* Advanced Tab - ActionPoolBuilder */}
+          {activeTab === "advanced" && (
+            <div className="space-y-4">
+              <ActionPoolBuilder
+                attributes={character.attributes || {}}
+                skills={skillsForBuilder}
+                woundModifier={woundModifier}
+                limits={{
+                  physical: physicalLimit,
+                  mental: mentalLimit,
+                  social: socialLimit,
+                }}
+                currentEdge={edgeCurrent}
+                maxEdge={edgeMaximum}
+                isLoading={isRolling}
+                onRoll={handleAdvancedRoll}
+                size="sm"
+                showAdvanced={true}
+              />
+            </div>
+          )}
+
+          {/* History Tab - ActionHistory */}
+          {activeTab === "history" && (
+            <div className="space-y-4">
+              <ActionHistory
+                actions={combinedHistory}
+                isLoading={historyLoading}
+                hasMore={hasMoreHistory}
+                onLoadMore={loadMoreHistory}
+                showReroll={edgeCurrent > 0}
+                onReroll={(action) => {
+                  // Re-roll using Second Chance edge action
+                  executeRoll(action.pool, action.context, "second_chance");
+                }}
+                maxVisible={5}
+                size="sm"
+              />
             </div>
           )}
 

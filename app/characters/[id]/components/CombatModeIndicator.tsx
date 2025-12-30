@@ -161,7 +161,7 @@ export function CombatModeIndicator({
                     }
                   `}
                 >
-                  {actionEconomy.free}
+                  {actionEconomy.free >= 999 ? "∞" : actionEconomy.free}
                 </span>
               </div>
 

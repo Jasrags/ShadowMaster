@@ -79,7 +79,7 @@ export function EdgeTracker({
             ${
               isFilled
                 ? "bg-rose-500 border-rose-400 shadow-lg shadow-rose-500/30"
-                : "bg-zinc-800 border-zinc-600"
+                : "bg-muted border-border"
             }
           `}
         />
@@ -91,8 +91,8 @@ export function EdgeTracker({
   if (compact) {
     return (
       <div className="flex items-center gap-2">
-        <Zap className={`${s.icon} text-rose-400`} />
-        <span className={`font-mono font-bold text-rose-400 ${s.text}`}>
+        <Zap className={`${s.icon} text-rose-500 dark:text-rose-400`} />
+        <span className={`font-mono font-bold text-rose-500 dark:text-rose-400 ${s.text}`}>
           {current}/{maximum}
         </span>
         {showControls && (
@@ -102,8 +102,8 @@ export function EdgeTracker({
               isDisabled={!canSpend}
               className={`
                 ${s.button} rounded flex items-center justify-center
-                bg-zinc-800 border border-zinc-700 text-zinc-300
-                hover:bg-zinc-700 hover:border-zinc-600
+                bg-muted border border-border text-foreground
+                hover:bg-muted/80
                 disabled:opacity-50 disabled:cursor-not-allowed
                 transition-colors
               `}
@@ -115,8 +115,8 @@ export function EdgeTracker({
               isDisabled={!canRestore}
               className={`
                 ${s.button} rounded flex items-center justify-center
-                bg-zinc-800 border border-zinc-700 text-zinc-300
-                hover:bg-zinc-700 hover:border-zinc-600
+                bg-muted border border-border text-foreground
+                hover:bg-muted/80
                 disabled:opacity-50 disabled:cursor-not-allowed
                 transition-colors
               `}
@@ -132,19 +132,19 @@ export function EdgeTracker({
   return (
     <div
       className={`
-        rounded-lg border border-zinc-700 bg-zinc-900/50
-        ${s.container}
+        rounded-lg border border-border bg-card/50
+        ${s.container} relative
       `}
     >
       {/* Header */}
       <div className="flex items-center justify-between mb-3">
         <div className="flex items-center gap-2">
-          <Zap className={`${s.icon} text-rose-400`} />
-          <span className={`font-mono text-zinc-400 uppercase ${s.text}`}>
+          <Zap className={`${s.icon} text-rose-500 dark:text-rose-400`} />
+          <span className={`font-mono text-muted-foreground uppercase ${s.text}`}>
             Edge
           </span>
         </div>
-        <span className={`font-mono font-bold text-rose-400 ${s.text}`}>
+        <span className={`font-mono font-bold text-rose-500 dark:text-rose-400 ${s.text}`}>
           {current} / {maximum}
         </span>
       </div>
@@ -161,7 +161,7 @@ export function EdgeTracker({
             className={`
               flex-1 flex items-center justify-center gap-1.5
               px-3 py-1.5 rounded
-              bg-rose-500/20 text-rose-400 border border-rose-500/30
+              bg-rose-500/20 text-rose-500 dark:text-rose-400 border border-rose-500/30
               hover:bg-rose-500/30
               disabled:opacity-50 disabled:cursor-not-allowed
               transition-colors ${s.text}
@@ -176,7 +176,7 @@ export function EdgeTracker({
             className={`
               flex-1 flex items-center justify-center gap-1.5
               px-3 py-1.5 rounded
-              bg-emerald-500/20 text-emerald-400 border border-emerald-500/30
+              bg-emerald-500/20 text-emerald-500 dark:text-emerald-400 border border-emerald-500/30
               hover:bg-emerald-500/30
               disabled:opacity-50 disabled:cursor-not-allowed
               transition-colors ${s.text}
@@ -191,8 +191,8 @@ export function EdgeTracker({
               isDisabled={current >= maximum || isLoading}
               className={`
                 ${s.button} rounded flex items-center justify-center
-                bg-zinc-800 border border-zinc-700 text-zinc-400
-                hover:bg-zinc-700 hover:text-zinc-300
+                bg-muted border border-border text-muted-foreground
+                hover:bg-muted/80 hover:text-foreground
                 disabled:opacity-50 disabled:cursor-not-allowed
                 transition-colors
               `}
@@ -206,7 +206,7 @@ export function EdgeTracker({
 
       {/* Loading indicator */}
       {isLoading && (
-        <div className="absolute inset-0 bg-zinc-900/50 rounded-lg flex items-center justify-center">
+        <div className="absolute inset-0 bg-background/50 rounded-lg flex items-center justify-center">
           <div className="w-5 h-5 border-2 border-rose-500 border-t-transparent rounded-full animate-spin" />
         </div>
       )}
