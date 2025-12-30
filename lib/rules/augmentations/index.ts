@@ -173,3 +173,30 @@ export {
   type WirelessBonus,
   type AugmentationBonuses,
 } from "./management";
+
+// React hooks for UI integration
+export {
+  // Main hooks
+  useCharacterAugmentations,
+  useInstallAugmentation,
+  useRemoveAugmentation,
+  useUpgradeAugmentation,
+  useValidateAugmentation,
+  useAugmentationDetails,
+  // Computed hooks
+  useAugmentationBonuses,
+  useInitiativeDiceBonus,
+  useCyberwareWithCapacity,
+  useRemainingCapacity,
+  // Types
+  type EssenceSummary,
+  type AugmentationsState,
+  type InstallAugmentationRequest,
+  type InstallAugmentationResult,
+  type RemoveAugmentationResult,
+  type UpgradeAugmentationResult,
+  type ValidationMessage,
+  type ValidationProjection,
+  type ValidateAugmentationResult,
+  type MutationState,
+} from "./hooks";
