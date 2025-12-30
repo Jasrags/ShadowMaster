@@ -270,11 +270,14 @@ export function DiceRoller({
 
         // Convert API result to RollResult format
         const apiResult = data.result;
-        const dice: DiceResult[] = apiResult.dice.map((value: number) => ({
-          value,
-          isHit: value >= 5,
-          isOne: value === 1,
-        }));
+        // API returns DiceResult[] - convert to our local format and sort
+        const dice: DiceResult[] = (apiResult.dice as Array<{ value: number; isHit?: boolean; isOne?: boolean } | number>).map((d) => {
+          // Handle both object format (from API) and number format
+          if (typeof d === "number") {
+            return { value: d, isHit: d >= 5, isOne: d === 1 };
+          }
+          return { value: d.value, isHit: d.value >= 5, isOne: d.value === 1 };
+        });
 
         // Sort dice: hits first, then by value descending
         dice.sort((a, b) => {
