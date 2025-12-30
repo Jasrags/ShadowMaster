@@ -70,10 +70,10 @@ function DiceDisplay({
             ${sizeClasses[size]} rounded flex items-center justify-center font-mono font-bold
             ${
               die.isHit
-                ? "bg-emerald-500/20 text-emerald-400 border border-emerald-500/30"
+                ? "bg-emerald-500/20 text-emerald-500 dark:text-emerald-400 border border-emerald-500/30"
                 : die.value === 1
-                  ? "bg-rose-500/20 text-rose-400 border border-rose-500/30"
-                  : "bg-zinc-800 text-zinc-400 border border-zinc-700"
+                  ? "bg-rose-500/20 text-rose-500 dark:text-rose-400 border border-rose-500/30"
+                  : "bg-muted text-muted-foreground border border-border"
             }
             ${die.isExploded ? "ring-1 ring-amber-400" : ""}
             ${die.wasRerolled ? "opacity-50 line-through" : ""}
@@ -133,10 +133,10 @@ function ActionEntry({
         rounded-lg border transition-colors
         ${
           action.isCriticalGlitch
-            ? "border-rose-500/50 bg-rose-950/30"
+            ? "border-rose-500/50 bg-rose-950/30 dark:bg-rose-950/30"
             : action.isGlitch
-              ? "border-amber-500/50 bg-amber-950/30"
-              : "border-zinc-700 bg-zinc-900/50"
+              ? "border-amber-500/50 bg-amber-950/30 dark:bg-amber-950/30"
+              : "border-border bg-card/50"
         }
       `}
     >
@@ -145,7 +145,7 @@ function ActionEntry({
         onClick={onToggle}
         className={`
           w-full ${s.padding} flex items-center justify-between
-          hover:bg-zinc-800/50 transition-colors rounded-lg
+          hover:bg-muted/50 transition-colors rounded-lg
         `}
       >
         <div className="flex items-center gap-3">
@@ -155,12 +155,12 @@ function ActionEntry({
               w-10 h-10 rounded-lg flex items-center justify-center font-mono font-bold text-lg
               ${
                 action.isCriticalGlitch
-                  ? "bg-rose-500/20 text-rose-400"
+                  ? "bg-rose-500/20 text-rose-500 dark:text-rose-400"
                   : action.isGlitch
-                    ? "bg-amber-500/20 text-amber-400"
+                    ? "bg-amber-500/20 text-amber-500 dark:text-amber-400"
                     : action.hits > 0
-                      ? "bg-emerald-500/20 text-emerald-400"
-                      : "bg-zinc-800 text-zinc-400"
+                      ? "bg-emerald-500/20 text-emerald-500 dark:text-emerald-400"
+                      : "bg-muted text-muted-foreground"
               }
             `}
           >
@@ -169,15 +169,15 @@ function ActionEntry({
 
           {/* Action info */}
           <div className="text-left">
-            <div className={`font-medium text-zinc-200 ${s.text}`}>
+            <div className={`font-medium text-foreground ${s.text}`}>
               {action.context?.actionType || "Action"}{" "}
               {action.context?.skillUsed && (
-                <span className="text-zinc-500">
+                <span className="text-muted-foreground">
                   ({action.context.skillUsed})
                 </span>
               )}
             </div>
-            <div className={`text-zinc-500 ${s.text}`}>
+            <div className={`text-muted-foreground ${s.text}`}>
               {action.pool.totalDice}d6
               {action.pool.limit && ` (limit ${action.pool.limit})`}
             </div>
@@ -188,13 +188,13 @@ function ActionEntry({
           {/* Status badges */}
           <div className="flex items-center gap-2">
             {action.edgeAction && (
-              <span className="flex items-center gap-1 px-2 py-0.5 rounded bg-rose-500/20 text-rose-400 text-xs">
+              <span className="flex items-center gap-1 px-2 py-0.5 rounded bg-rose-500/20 text-rose-500 dark:text-rose-400 text-xs">
                 <Zap className="w-3 h-3" />
                 {action.edgeAction.replace("_", " ")}
               </span>
             )}
             {action.rerollCount > 0 && (
-              <span className="flex items-center gap-1 px-2 py-0.5 rounded bg-blue-500/20 text-blue-400 text-xs">
+              <span className="flex items-center gap-1 px-2 py-0.5 rounded bg-blue-500/20 text-blue-500 dark:text-blue-400 text-xs">
                 <RefreshCw className="w-3 h-3" />
                 Rerolled
               </span>
@@ -205,8 +205,8 @@ function ActionEntry({
                   flex items-center gap-1 px-2 py-0.5 rounded text-xs
                   ${
                     action.isCriticalGlitch
-                      ? "bg-rose-500/20 text-rose-400"
-                      : "bg-amber-500/20 text-amber-400"
+                      ? "bg-rose-500/20 text-rose-500 dark:text-rose-400"
+                      : "bg-amber-500/20 text-amber-500 dark:text-amber-400"
                   }
                 `}
               >
@@ -221,57 +221,57 @@ function ActionEntry({
           </div>
 
           {/* Timestamp */}
-          <div className={`text-zinc-500 ${s.text} flex items-center gap-1`}>
+          <div className={`text-muted-foreground ${s.text} flex items-center gap-1`}>
             <Calendar className="w-3 h-3" />
             {formattedDate} {formattedTime}
           </div>
 
           {/* Expand toggle */}
           {isExpanded ? (
-            <ChevronUp className="w-4 h-4 text-zinc-500" />
+            <ChevronUp className="w-4 h-4 text-muted-foreground" />
           ) : (
-            <ChevronDown className="w-4 h-4 text-zinc-500" />
+            <ChevronDown className="w-4 h-4 text-muted-foreground" />
           )}
         </div>
       </button>
 
       {/* Expanded details */}
       {isExpanded && (
-        <div className={`${s.padding} pt-0 border-t border-zinc-800`}>
+        <div className={`${s.padding} pt-0 border-t border-border`}>
           {/* Dice display */}
           <div className="mb-3">
-            <div className={`text-zinc-500 ${s.text} mb-2`}>Dice Rolled</div>
+            <div className={`text-muted-foreground ${s.text} mb-2`}>Dice Rolled</div>
             <DiceDisplay dice={action.dice} size={size} />
           </div>
 
           {/* Stats grid */}
           <div className="grid grid-cols-4 gap-3 mb-3">
-            <div className="bg-zinc-800/50 rounded p-2">
-              <div className={`text-zinc-500 ${s.text}`}>Hits</div>
-              <div className="font-mono font-bold text-emerald-400">
+            <div className="bg-muted/50 rounded p-2">
+              <div className={`text-muted-foreground ${s.text}`}>Hits</div>
+              <div className="font-mono font-bold text-emerald-500 dark:text-emerald-400">
                 {action.hits}
                 {action.rawHits !== action.hits && (
-                  <span className="text-zinc-500 text-sm">
+                  <span className="text-muted-foreground text-sm">
                     ({action.rawHits})
                   </span>
                 )}
               </div>
             </div>
-            <div className="bg-zinc-800/50 rounded p-2">
-              <div className={`text-zinc-500 ${s.text}`}>Ones</div>
-              <div className="font-mono font-bold text-rose-400">
+            <div className="bg-muted/50 rounded p-2">
+              <div className={`text-muted-foreground ${s.text}`}>Ones</div>
+              <div className="font-mono font-bold text-rose-500 dark:text-rose-400">
                 {action.ones}
               </div>
             </div>
-            <div className="bg-zinc-800/50 rounded p-2">
-              <div className={`text-zinc-500 ${s.text}`}>Pool</div>
-              <div className="font-mono font-bold text-zinc-300">
+            <div className="bg-muted/50 rounded p-2">
+              <div className={`text-muted-foreground ${s.text}`}>Pool</div>
+              <div className="font-mono font-bold text-foreground">
                 {action.pool.basePool}
               </div>
             </div>
-            <div className="bg-zinc-800/50 rounded p-2">
-              <div className={`text-zinc-500 ${s.text}`}>Edge Spent</div>
-              <div className="font-mono font-bold text-rose-400">
+            <div className="bg-muted/50 rounded p-2">
+              <div className={`text-muted-foreground ${s.text}`}>Edge Spent</div>
+              <div className="font-mono font-bold text-rose-500 dark:text-rose-400">
                 {action.edgeSpent}
               </div>
             </div>
@@ -280,18 +280,18 @@ function ActionEntry({
           {/* Pool breakdown */}
           {action.pool.modifiers.length > 0 && (
             <div className="mb-3">
-              <div className={`text-zinc-500 ${s.text} mb-2`}>
+              <div className={`text-muted-foreground ${s.text} mb-2`}>
                 Pool Breakdown
               </div>
               <div className="space-y-1">
-                <div className="flex justify-between text-zinc-300">
+                <div className="flex justify-between text-foreground">
                   <span>Base Pool</span>
                   <span className="font-mono">{action.pool.basePool}</span>
                 </div>
                 {action.pool.modifiers.map((mod, index) => (
                   <div
                     key={index}
-                    className={`flex justify-between ${mod.value >= 0 ? "text-emerald-400" : "text-rose-400"}`}
+                    className={`flex justify-between ${mod.value >= 0 ? "text-emerald-500 dark:text-emerald-400" : "text-rose-500 dark:text-rose-400"}`}
                   >
                     <span>{mod.description}</span>
                     <span className="font-mono">
@@ -300,7 +300,7 @@ function ActionEntry({
                     </span>
                   </div>
                 ))}
-                <div className="flex justify-between text-zinc-200 font-medium border-t border-zinc-700 pt-1">
+                <div className="flex justify-between text-foreground font-medium border-t border-border pt-1">
                   <span>Total</span>
                   <span className="font-mono">{action.pool.totalDice}</span>
                 </div>
@@ -311,8 +311,8 @@ function ActionEntry({
           {/* Context info */}
           {action.context && (
             <div className="mb-3">
-              <div className={`text-zinc-500 ${s.text} mb-2`}>Context</div>
-              <div className="space-y-1 text-zinc-400">
+              <div className={`text-muted-foreground ${s.text} mb-2`}>Context</div>
+              <div className="space-y-1 text-muted-foreground">
                 {action.context.targetName && (
                   <div className="flex items-center gap-2">
                     <Target className="w-3 h-3" />
@@ -333,7 +333,7 @@ function ActionEntry({
               className={`
                 w-full flex items-center justify-center gap-2
                 px-3 py-2 rounded
-                bg-rose-500/20 text-rose-400 border border-rose-500/30
+                bg-rose-500/20 text-rose-500 dark:text-rose-400 border border-rose-500/30
                 hover:bg-rose-500/30
                 transition-colors ${s.text}
               `}
@@ -410,12 +410,12 @@ export function ActionHistory({
     return (
       <div
         className={`
-          rounded-lg border border-zinc-700 bg-zinc-900/50
+          rounded-lg border border-border bg-card/50
           ${s.padding} text-center
         `}
       >
-        <History className="w-8 h-8 text-zinc-600 mx-auto mb-2" />
-        <p className={`text-zinc-500 ${s.text}`}>No action history yet</p>
+        <History className="w-8 h-8 text-muted-foreground mx-auto mb-2" />
+        <p className={`text-muted-foreground ${s.text}`}>No action history yet</p>
       </div>
     );
   }
@@ -425,25 +425,25 @@ export function ActionHistory({
       {/* Header with filter */}
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-2">
-          <History className="w-5 h-5 text-zinc-400" />
-          <span className={`font-medium text-zinc-300 ${s.text}`}>
+          <History className="w-5 h-5 text-muted-foreground" />
+          <span className={`font-medium text-foreground ${s.text}`}>
             Action History
           </span>
-          <span className="text-zinc-500">({actions.length})</span>
+          <span className="text-muted-foreground">({actions.length})</span>
         </div>
 
         {actionTypes.length > 1 && onFilterChange && (
           <div className="flex items-center gap-2">
-            <Filter className="w-4 h-4 text-zinc-500" />
+            <Filter className="w-4 h-4 text-muted-foreground" />
             <select
               value={filterType || ""}
               onChange={(e) =>
                 onFilterChange(e.target.value || undefined)
               }
               className={`
-                bg-zinc-800 border border-zinc-700 rounded px-2 py-1
-                text-zinc-300 ${s.text}
-                focus:outline-none focus:border-zinc-600
+                bg-muted border border-border rounded px-2 py-1
+                text-foreground ${s.text}
+                focus:outline-none focus:border-primary
               `}
             >
               <option value="">All Types</option>
@@ -481,8 +481,8 @@ export function ActionHistory({
           className={`
             w-full flex items-center justify-center gap-2
             px-3 py-2 rounded
-            bg-zinc-800 text-zinc-400 border border-zinc-700
-            hover:bg-zinc-700 hover:text-zinc-300
+            bg-muted text-muted-foreground border border-border
+            hover:bg-muted/80 hover:text-foreground
             transition-colors ${s.text}
           `}
         >
@@ -499,14 +499,14 @@ export function ActionHistory({
           className={`
             w-full flex items-center justify-center gap-2
             px-3 py-2 rounded
-            bg-zinc-800 text-zinc-400 border border-zinc-700
-            hover:bg-zinc-700 hover:text-zinc-300
+            bg-muted text-muted-foreground border border-border
+            hover:bg-muted/80 hover:text-foreground
             disabled:opacity-50 disabled:cursor-not-allowed
             transition-colors ${s.text}
           `}
         >
           {isLoading ? (
-            <div className="w-4 h-4 border-2 border-zinc-500 border-t-transparent rounded-full animate-spin" />
+            <div className="w-4 h-4 border-2 border-muted-foreground border-t-transparent rounded-full animate-spin" />
           ) : (
             <>
               <History className="w-4 h-4" />
