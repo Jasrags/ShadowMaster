@@ -137,6 +137,27 @@ AI-first development relies on consistent application of the "Capabilities and D
 - [4. Execute Implementation Plan](file:///Users/jrags/Code/Jasrags/shadow-master/docs/capabilities/prompts/4_prompt-execute-implementation-plan.md): Use this to generate code diffs that are anchored to the implementation plan and system constraints.
 - [5. Generate Walkthrough](file:///Users/jrags/Code/Jasrags/shadow-master/docs/capabilities/prompts/5_prompt-generate-walkthrough.md): Use this to audit code against capabilities and document proof of work.
 
+### Walkthroughs
+
+Walkthroughs are proof-of-work documents that audit existing implementations against their capability guarantees. They map specific code locations to requirements and document compliance.
+
+**Location:** `/docs/capabilities/walkthroughs/`
+
+| Capability | Walkthrough |
+| ---------- | ----------- |
+| character.advancement | [walkthrough](file:///Users/jrags/Code/Jasrags/shadow-master/docs/capabilities/walkthroughs/character.advancement_walkthrough.md) |
+| character.quality-governance | [walkthrough](file:///Users/jrags/Code/Jasrags/shadow-master/docs/capabilities/walkthroughs/character.quality-governance_walkthrough.md) |
+| campaign.management | [walkthrough](file:///Users/jrags/Code/Jasrags/shadow-master/docs/capabilities/walkthroughs/campaign.management_walkthrough.md) |
+| campaign.participant-governance | [walkthrough](file:///Users/jrags/Code/Jasrags/shadow-master/docs/capabilities/walkthroughs/campaign.participant-governance_walkthrough.md) |
+| campaign.location-governance | [walkthrough](file:///Users/jrags/Code/Jasrags/shadow-master/docs/capabilities/walkthroughs/campaign.location-governance_walkthrough.md) |
+| campaign.governance-approval | [walkthrough](file:///Users/jrags/Code/Jasrags/shadow-master/docs/capabilities/walkthroughs/campaign.governance-approval_walkthrough.md) |
+| mechanics.encounter-governance | [walkthrough](file:///Users/jrags/Code/Jasrags/shadow-master/docs/capabilities/walkthroughs/mechanics.encounter-governance_walkthrough.md) |
+| mechanics.weapon-customization | [walkthrough](file:///Users/jrags/Code/Jasrags/shadow-master/docs/capabilities/walkthroughs/mechanics.weapon-customization_walkthrough.md) |
+| ruleset.discovery | [walkthrough](file:///Users/jrags/Code/Jasrags/shadow-master/docs/capabilities/walkthroughs/ruleset.discovery_walkthrough.md) |
+| ruleset.integrity | [walkthrough](file:///Users/jrags/Code/Jasrags/shadow-master/docs/capabilities/walkthroughs/ruleset.integrity_walkthrough.md) |
+| security.account-security | [walkthrough](file:///Users/jrags/Code/Jasrags/shadow-master/docs/capabilities/walkthroughs/security.account-security_walkthrough.md) |
+| security.account-governance | [walkthrough](file:///Users/jrags/Code/Jasrags/shadow-master/docs/capabilities/walkthroughs/security.account-governance_walkthrough.md) |
+
 ---
 
 ## Audience
@@ -171,7 +192,7 @@ This folder is authoritative. Treat changes with care.
 | Character Advancement | ✅ Implemented | [character.advancement.md](file:///Users/jrags/Code/Jasrags/shadow-master/docs/capabilities/character.advancement.md)                   |
 | Character Sheet       | ✅ Implemented | [character.sheet.md](file:///Users/jrags/Code/Jasrags/shadow-master/docs/capabilities/character.sheet.md)                               |
 | Quality Governance    | ✅ Implemented | [character.quality-governance.md](file:///Users/jrags/Code/Jasrags/shadow-master/docs/capabilities/character.quality-governance.md)     |
-| Augmentation Systems  | 🚧 In Progress | [character.augmentation-systems.md](file:///Users/jrags/Code/Jasrags/shadow-master/docs/capabilities/character.augmentation-systems.md) |
+| Augmentation Systems  | ✅ Implemented | [character.augmentation-systems.md](file:///Users/jrags/Code/Jasrags/shadow-master/docs/capabilities/character.augmentation-systems.md) |
 
 ---
 
@@ -310,7 +331,7 @@ _Deep-dives into Shadowrun sub-systems._
 | mechanics.matrix-operations    | ✅ Complete |
 | mechanics.rigging-control      | ✅ Complete |
 | mechanics.weapon-customization | ✅ Complete |
-| character.augmentation-systems | ⏳ Pending  |
+| character.augmentation-systems | ✅ Complete |
 
 ---
 
@@ -424,7 +445,7 @@ flowchart TB
         mech_matrix["mechanics.matrix-operations ✅"]
         mech_rigging["mechanics.rigging-control ✅"]
         mech_weapon["mechanics.weapon-customization ✅"]
-        char_augment["character.augmentation-systems ⏳"]
+        char_augment["character.augmentation-systems ✅"]
     end
 
     subgraph Phase6["Phase 6: Sync"]
@@ -492,8 +513,8 @@ flowchart TB
     classDef pending fill:#6b7280,stroke:#4b5563,color:#fff
     classDef draft fill:#3b82f6,stroke:#2563eb,color:#fff
 
-    class sec_security,sec_governance,rule_discovery,rule_integrity,char_mgmt,char_sheet,char_quality,char_advance,camp_mgmt,camp_participant,camp_location,camp_npc,camp_approval,camp_social,mech_resolution,mech_encounter,mech_weapon,mech_execution,mech_magic,mech_matrix,mech_rigging complete
-    class char_augment,rule_sync pending
+    class sec_security,sec_governance,rule_discovery,rule_integrity,char_mgmt,char_sheet,char_quality,char_advance,camp_mgmt,camp_participant,camp_location,camp_npc,camp_approval,camp_social,mech_resolution,mech_encounter,mech_weapon,mech_execution,mech_magic,mech_matrix,mech_rigging,char_augment complete
+    class rule_sync pending
     class camp_live,camp_chat,camp_gm,mech_multi,camp_async,camp_vtt,vtt_import,vtt_display,infra_notify,infra_flags draft
 ```
 
