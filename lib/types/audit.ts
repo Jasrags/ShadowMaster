@@ -44,7 +44,11 @@ export type AuditAction =
   | "damage_applied"
   | "damage_healed"
   // Gear modification actions
-  | "gear_modified";
+  | "gear_modified"
+  // Augmentation actions
+  | "augmentation_installed"
+  | "augmentation_removed"
+  | "augmentation_upgraded";
 
 // =============================================================================
 // ACTOR TYPES
