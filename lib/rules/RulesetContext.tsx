@@ -1221,6 +1221,208 @@ export function useBiowareGrades(): BiowareGradeData[] {
   return data.bioware?.grades || [];
 }
 
+/**
+ * Hook to get just the cyberware catalog items array
+ * Simpler alternative to useCyberware() when you just need the list
+ */
+export function useCyberwareCatalog(options?: {
+  maxAvailability?: number;
+  excludeForbidden?: boolean;
+  excludeRestricted?: boolean;
+}): CyberwareCatalogItemData[] {
+  const { data } = useRuleset();
+
+  return useMemo(() => {
+    if (!data.cyberware?.catalog) return [];
+
+    let filtered = [...data.cyberware.catalog];
+
+    if (options?.maxAvailability !== undefined) {
+      filtered = filtered.filter(
+        (item) => item.availability <= options.maxAvailability!
+      );
+    }
+
+    if (options?.excludeForbidden) {
+      filtered = filtered.filter((item) => !item.forbidden);
+    }
+
+    if (options?.excludeRestricted) {
+      filtered = filtered.filter((item) => !item.restricted);
+    }
+
+    return filtered;
+  }, [data.cyberware, options]);
+}
+
+/**
+ * Hook to get just the bioware catalog items array
+ * Simpler alternative to useBioware() when you just need the list
+ */
+export function useBiowareCatalog(options?: {
+  maxAvailability?: number;
+  excludeForbidden?: boolean;
+  excludeRestricted?: boolean;
+}): BiowareCatalogItemData[] {
+  const { data } = useRuleset();
+
+  return useMemo(() => {
+    if (!data.bioware?.catalog) return [];
+
+    let filtered = [...data.bioware.catalog];
+
+    if (options?.maxAvailability !== undefined) {
+      filtered = filtered.filter(
+        (item) => item.availability <= options.maxAvailability!
+      );
+    }
+
+    if (options?.excludeForbidden) {
+      filtered = filtered.filter((item) => !item.forbidden);
+    }
+
+    if (options?.excludeRestricted) {
+      filtered = filtered.filter((item) => !item.restricted);
+    }
+
+    return filtered;
+  }, [data.bioware, options]);
+}
+
+/**
+ * Hook to get cyberware filtered by category
+ */
+export function useCyberwareByCategory(
+  category: string,
+  options?: {
+    maxAvailability?: number;
+    excludeForbidden?: boolean;
+    excludeRestricted?: boolean;
+  }
+): CyberwareCatalogItemData[] {
+  const { data } = useRuleset();
+
+  return useMemo(() => {
+    if (!data.cyberware?.catalog) return [];
+
+    let filtered = data.cyberware.catalog.filter(
+      (item) => item.category === category
+    );
+
+    if (options?.maxAvailability !== undefined) {
+      filtered = filtered.filter(
+        (item) => item.availability <= options.maxAvailability!
+      );
+    }
+
+    if (options?.excludeForbidden) {
+      filtered = filtered.filter((item) => !item.forbidden);
+    }
+
+    if (options?.excludeRestricted) {
+      filtered = filtered.filter((item) => !item.restricted);
+    }
+
+    return filtered;
+  }, [data.cyberware, category, options]);
+}
+
+/**
+ * Hook to get bioware filtered by category
+ */
+export function useBiowareByCategory(
+  category: string,
+  options?: {
+    maxAvailability?: number;
+    excludeForbidden?: boolean;
+    excludeRestricted?: boolean;
+  }
+): BiowareCatalogItemData[] {
+  const { data } = useRuleset();
+
+  return useMemo(() => {
+    if (!data.bioware?.catalog) return [];
+
+    let filtered = data.bioware.catalog.filter(
+      (item) => item.category === category
+    );
+
+    if (options?.maxAvailability !== undefined) {
+      filtered = filtered.filter(
+        (item) => item.availability <= options.maxAvailability!
+      );
+    }
+
+    if (options?.excludeForbidden) {
+      filtered = filtered.filter((item) => !item.forbidden);
+    }
+
+    if (options?.excludeRestricted) {
+      filtered = filtered.filter((item) => !item.restricted);
+    }
+
+    return filtered;
+  }, [data.bioware, category, options]);
+}
+
+/**
+ * Hook to get available cyberware categories from the catalog
+ */
+export function useCyberwareCategories(): string[] {
+  const { data } = useRuleset();
+
+  return useMemo(() => {
+    if (!data.cyberware?.catalog) return [];
+
+    const categories = new Set<string>();
+    for (const item of data.cyberware.catalog) {
+      categories.add(item.category);
+    }
+
+    return Array.from(categories).sort();
+  }, [data.cyberware]);
+}
+
+/**
+ * Hook to get available bioware categories from the catalog
+ */
+export function useBiowareCategories(): string[] {
+  const { data } = useRuleset();
+
+  return useMemo(() => {
+    if (!data.bioware?.catalog) return [];
+
+    const categories = new Set<string>();
+    for (const item of data.bioware.catalog) {
+      categories.add(item.category);
+    }
+
+    return Array.from(categories).sort();
+  }, [data.bioware]);
+}
+
+/**
+ * Hook to get a specific cyberware item by ID
+ */
+export function useCyberwareItem(itemId: string): CyberwareCatalogItemData | null {
+  const catalog = useCyberwareCatalog();
+
+  return useMemo(() => {
+    return catalog.find((item) => item.id === itemId) ?? null;
+  }, [catalog, itemId]);
+}
+
+/**
+ * Hook to get a specific bioware item by ID
+ */
+export function useBiowareItem(itemId: string): BiowareCatalogItemData | null {
+  const catalog = useBiowareCatalog();
+
+  return useMemo(() => {
+    return catalog.find((item) => item.id === itemId) ?? null;
+  }, [catalog, itemId]);
+}
+
 // =============================================================================
 // ESSENCE CALCULATION UTILITIES
 // =============================================================================

@@ -119,6 +119,22 @@ When encountering a design constraint, ask:
 
 ---
 
+## ADR Index
+
+| # | ADR | Domain | Summary |
+|---|-----|--------|---------|
+| 001 | [Account Security Defense](./001-security.account-security-defense.md) | Security | Multi-layered defense: lockouts, rate limiting, session revocation, audit logging |
+| 002 | [Multi-Edition Sandbox](./002-ruleset.multi-edition-sandbox.md) | Ruleset | Strict data/logic isolation between Shadowrun editions |
+| 003 | [Rule Merging Strategies](./003-ruleset.rule-merging-strategies.md) | Ruleset | Deterministic merge/replace/append/remove strategies for books |
+| 004 | [Hybrid Snapshot Model](./004-ruleset.hybrid-snapshot-model.md) | Ruleset | Live/Snapshot/Delta layers for character-ruleset synchronization |
+| 005 | [Modular Step Wizard](./005-character.modular-step-wizard.md) | Character | Data-driven, ruleset-defined character creation wizard |
+| 006 | [File-Based Persistence](./006-storage.file-based-persistence.md) | Storage | JSON files with atomic writes; recognized as MVP-only |
+| 007 | [Character Authorization Model](./007-security.character-authorization-model.md) | Security | Context-aware multi-role authorization (owner, GM, player, admin) |
+| 008 | [Cookie-Based Sessions](./008-security.cookie-based-sessions.md) | Security | httpOnly cookies with session versioning for instant revocation |
+| 009 | [Append-Only Ledger Pattern](./009-storage.append-only-ledger-pattern.md) | Storage | Immutable transaction logs for karma, favors, actions, audits |
+
+---
+
 ## Prompts and Automation
 
 AI-first development relies on consistent application of the "Capabilities and Decisions" model. The following prompts are available to help maintain and extend this documentation:
