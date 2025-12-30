@@ -610,6 +610,10 @@ export interface WeaponModificationCatalogItem {
   name: string;
   /** Mount point required (undefined means no mount needed) */
   mount?: WeaponMountType;
+  /** Additional mount points occupied (for multi-slot accessories like bipods) */
+  occupiedMounts?: WeaponMountType[];
+  /** If true, this mod is built into specific weapons and cannot be removed */
+  isBuiltIn?: boolean;
   /** Weapon types this mod is compatible with */
   compatibleWeapons?: string[];
   /** Weapon types this mod is NOT compatible with */
@@ -663,6 +667,33 @@ export interface WeaponModificationCatalogItem {
   /** Source book reference */
   source?: string;
 }
+
+/**
+ * Weapon size categories for compatibility checking
+ */
+export type WeaponSizeCategory =
+  | "holdout"
+  | "light-pistol"
+  | "heavy-pistol"
+  | "smg"
+  | "rifle"
+  | "heavy";
+
+/**
+ * Mount point configuration for a weapon subcategory
+ */
+export interface WeaponSubcategoryMountConfig {
+  /** Available mount points for this subcategory */
+  availableMounts: WeaponMountType[];
+  /** Size category for compatibility checking */
+  size?: WeaponSizeCategory;
+}
+
+/**
+ * Registry mapping weapon subcategories to their mount point configurations.
+ * This is the authoritative source for mount point availability per weapon type.
+ */
+export type WeaponSubcategoryMountRegistry = Record<string, WeaponSubcategoryMountConfig>;
 
 /**
  * Armor modification catalog item in ruleset data

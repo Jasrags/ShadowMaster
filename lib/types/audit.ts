@@ -42,7 +42,9 @@ export type AuditAction =
   | "approval_rejected"
   // Damage/Healing actions
   | "damage_applied"
-  | "damage_healed";
+  | "damage_healed"
+  // Gear modification actions
+  | "gear_modified";
 
 // =============================================================================
 // ACTOR TYPES

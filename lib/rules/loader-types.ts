@@ -311,6 +311,10 @@ export interface WeaponData extends GearItemData {
   rc?: number;
   ammo?: number;
   blast?: string;
+  /** Built-in modification IDs applied automatically when weapon is selected */
+  builtInMods?: string[];
+  /** Available mount points for this specific weapon (overrides subcategory defaults) */
+  availableMounts?: Array<"top" | "under" | "side" | "barrel" | "stock" | "internal">;
 }
 
 /**
@@ -977,6 +981,10 @@ export interface WeaponModificationCatalogItemData {
   name: string;
   /** Mount point required (undefined means no mount needed) */
   mount?: "top" | "under" | "side" | "barrel" | "stock" | "internal";
+  /** Additional mount points occupied (for multi-slot accessories like bipods) */
+  occupiedMounts?: Array<"top" | "under" | "side" | "barrel" | "stock" | "internal">;
+  /** If true, this mod is built into specific weapons and cannot be removed */
+  isBuiltIn?: boolean;
   /** Weapon types this mod is compatible with */
   compatibleWeapons?: string[];
   /** Weapon types this mod is NOT compatible with */
