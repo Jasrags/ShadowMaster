@@ -147,3 +147,29 @@ export {
   type CyberlimbValidationResult,
   type CyberlimbItem,
 } from "./cyberlimb";
+
+// Augmentation management
+export {
+  // Installation
+  installCyberware,
+  installBioware,
+  // Removal
+  removeCyberware,
+  removeBioware,
+  // Grade upgrades
+  upgradeAugmentationGrade,
+  // Wireless bonus management
+  toggleGlobalWirelessBonus,
+  getWirelessBonusState,
+  aggregateActiveWirelessBonuses,
+  // Derived stats integration
+  aggregateAugmentationBonuses,
+  // Types
+  type InstallResult,
+  type OperationError,
+  type RemovalResult,
+  type UpgradeResult,
+  type WirelessBonusAggregate,
+  type WirelessBonus,
+  type AugmentationBonuses,
+} from "./management";

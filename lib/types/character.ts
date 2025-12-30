@@ -323,6 +323,14 @@ export interface Character {
   /** Bioware installed (edition-dependent) */
   bioware?: BiowareItem[];
 
+  /**
+   * Global wireless bonus toggle
+   * When enabled, all wireless bonuses from augmentations apply
+   * When disabled, augmentations still function but without wireless bonuses
+   * Default: true (enabled)
+   */
+  wirelessBonusesEnabled?: boolean;
+
   /** Vehicles owned */
   vehicles?: Vehicle[];
 
