@@ -159,3 +159,37 @@ export {
   type BiofeedbackDamageResult,
   type ForcedEjectionResult,
 } from "./biofeedback-handler";
+
+// Action Validator
+export {
+  requiresJumpedIn,
+  canPerformRemotely,
+  getTestTypeForAction,
+  getSkillForAction,
+  getAutosoftCategoriesForAction,
+  validateVehicleAction,
+  getControlModeBonus,
+  getApplicableAutosofts,
+  canPerformRiggingActions as canPerformRiggingActionsFromValidator,
+  validateDroneCommand,
+  getLimitTypeForTest,
+  getControlModeDescription,
+  getActionTypeDescription,
+  type ActionBonus,
+  type VehicleActionValidation,
+} from "./action-validator";
+
+// Dice Pool Calculator
+export {
+  calculateVehicleLimit,
+  calculateVehicleDicePool,
+  calculateDroneDicePool,
+  applyControlModeBonus,
+  applySensorBonus,
+  formatDicePoolResult,
+  getPoolSummary,
+  getEffectivePool,
+  estimateSuccessChance,
+  type DicePoolComponent,
+  type VehicleDicePoolResult,
+} from "./dice-pool-calculator";
