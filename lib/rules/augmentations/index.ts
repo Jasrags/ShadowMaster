@@ -93,3 +93,57 @@ export {
   type EssenceHoleUpdateResult,
   type EssenceMagicSummary,
 } from "./essence-hole";
+
+// Validation engine
+export {
+  // Constants
+  DEFAULT_AUGMENTATION_RULES,
+  // Main validation
+  validateAugmentationInstall,
+  canInstallAugmentation,
+  getValidationErrorSummary,
+  // Individual validators
+  validateAvailabilityConstraint,
+  validateAttributeBonusLimit,
+  validateMutualExclusion,
+  aggregateAttributeBonuses,
+  // Types
+  type AugmentationValidationErrorCode,
+  type AugmentationValidationWarningCode,
+  type AugmentationValidationError,
+  type AugmentationValidationWarning,
+  type AugmentationValidationResult,
+  type ValidationContext,
+  type SimpleValidationResult,
+} from "./validation";
+
+// Cyberlimb management
+export {
+  // Identification
+  isCyberlimb,
+  // Capacity calculations
+  getBaseCyberlimbCapacity,
+  calculateCyberlimbCapacity,
+  calculateEnhancementCapacityUsed,
+  calculateCustomizationCapacityCost,
+  calculateUsedCapacity,
+  // Enhancement management
+  validateEnhancementFits,
+  addEnhancementToLimb,
+  removeEnhancementFromLimb,
+  // Attribute customization
+  getCyberlimbCustomizationLimits,
+  validateCyberlimbCustomization,
+  setCyberlimbAttribute,
+  getCyberlimbEffectiveAttributes,
+  // Averaging
+  calculateCyberlimbAverageAttribute,
+  // Creation
+  createCyberlimb,
+  getCyberlimbSummary,
+  // Types
+  type CyberlimbCustomization,
+  type CyberlimbCapacityBreakdown,
+  type CyberlimbValidationResult,
+  type CyberlimbItem,
+} from "./cyberlimb";
