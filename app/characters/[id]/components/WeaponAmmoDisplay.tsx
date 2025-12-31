@@ -13,7 +13,8 @@
  * @see Capability: character.inventory-management
  */
 
-import { useState, useMemo } from "react";
+import { useState, useMemo, useRef, useEffect } from "react";
+import { createPortal } from "react-dom";
 import { Crosshair, RotateCcw, Package, ChevronDown, AlertCircle } from "lucide-react";
 import type { Weapon } from "@/lib/types";
 import type { WeaponAmmoState, MagazineItem, AmmunitionItem } from "@/lib/types/gear-state";
@@ -57,7 +58,7 @@ function getAmmoState(weapon: Weapon): WeaponAmmoState {
 }
 
 function getAmmoBarColor(current: number, max: number): string {
-  if (max === 0) return "bg-zinc-600";
+  if (max === 0) return "bg-muted";
   const percentage = (current / max) * 100;
   if (percentage <= 0) return "bg-red-500";
   if (percentage <= 25) return "bg-orange-500";
@@ -110,6 +111,63 @@ export function WeaponAmmoDisplay({
 }: WeaponAmmoDisplayProps) {
   const [showReloadMenu, setShowReloadMenu] = useState(false);
   const [showMagazineMenu, setShowMagazineMenu] = useState(false);
+  const [reloadMenuPosition, setReloadMenuPosition] = useState({ top: 0, left: 0, width: 0 });
+  const [magazineMenuPosition, setMagazineMenuPosition] = useState({ top: 0, left: 0, width: 0 });
+  const reloadButtonRef = useRef<HTMLButtonElement>(null);
+  const magazineButtonRef = useRef<HTMLButtonElement>(null);
+
+  // Update reload menu position when showing
+  // Note: Using position:fixed, so coordinates are relative to viewport (no scroll offset needed)
+  useEffect(() => {
+    if (showReloadMenu && reloadButtonRef.current) {
+      const rect = reloadButtonRef.current.getBoundingClientRect();
+      setReloadMenuPosition({
+        top: rect.bottom + 4,
+        left: rect.left,
+        width: Math.max(rect.width, 150),
+      });
+    }
+  }, [showReloadMenu]);
+
+  // Update magazine menu position when showing
+  // Note: Using position:fixed, so coordinates are relative to viewport (no scroll offset needed)
+  useEffect(() => {
+    if (showMagazineMenu && magazineButtonRef.current) {
+      const rect = magazineButtonRef.current.getBoundingClientRect();
+      setMagazineMenuPosition({
+        top: rect.bottom + 4, // Just below the button
+        left: rect.right - 192, // 192px = w-48, align to right edge
+        width: 192,
+      });
+    }
+  }, [showMagazineMenu]);
+
+  // Close menus when clicking outside
+  useEffect(() => {
+    if (!showReloadMenu && !showMagazineMenu) return;
+
+    const handleClickOutside = (e: MouseEvent) => {
+      const target = e.target as Node;
+      const isInsideReloadButton = reloadButtonRef.current?.contains(target);
+      const isInsideMagazineButton = magazineButtonRef.current?.contains(target);
+      const isInsidePortalMenu = (e.target as HTMLElement).closest?.('.fixed.z-\\[9999\\]');
+
+      if (!isInsideReloadButton && !isInsideMagazineButton && !isInsidePortalMenu) {
+        setShowReloadMenu(false);
+        setShowMagazineMenu(false);
+      }
+    };
+
+    // Use setTimeout to avoid the click that opened the menu from immediately closing it
+    const timeoutId = setTimeout(() => {
+      document.addEventListener("mousedown", handleClickOutside);
+    }, 0);
+
+    return () => {
+      clearTimeout(timeoutId);
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [showReloadMenu, showMagazineMenu]);
 
   const ammoState = getAmmoState(weapon);
   const { currentRounds, magazineCapacity, loadedAmmoTypeId } = ammoState;
@@ -141,14 +199,14 @@ export function WeaponAmmoDisplay({
   if (compact) {
     return (
       <div className="flex items-center gap-2">
-        <Crosshair className="w-3 h-3 text-zinc-500" />
-        <div className="flex-1 h-1.5 bg-zinc-800 rounded-full overflow-hidden">
+        <Crosshair className="w-3 h-3 text-muted-foreground" />
+        <div className="flex-1 h-1.5 bg-muted rounded-full overflow-hidden">
           <div
             className={`h-full transition-all duration-300 ${getAmmoBarColor(currentRounds, magazineCapacity)}`}
             style={{ width: `${ammoPercentage}%` }}
           />
         </div>
-        <span className={`text-xs font-mono ${isEmpty ? "text-red-400" : "text-zinc-400"}`}>
+        <span className={`text-xs font-mono ${isEmpty ? "text-red-400" : "text-muted-foreground"}`}>
           {currentRounds}/{magazineCapacity}
         </span>
         {modifiers && (
@@ -162,22 +220,22 @@ export function WeaponAmmoDisplay({
   }
 
   return (
-    <div className="p-3 rounded-lg border border-zinc-800 bg-zinc-900/50">
+    <div className="p-3 rounded-lg border border-border bg-card/50">
       {/* Header */}
       <div className="flex items-center justify-between mb-2">
         <div className="flex items-center gap-2">
           <Crosshair className="w-4 h-4 text-amber-500" />
-          <span className="text-sm font-medium text-zinc-300">Ammunition</span>
+          <span className="text-sm font-medium text-foreground">Ammunition</span>
         </div>
         <div className="flex items-center gap-2">
-          <span className={`text-sm font-mono ${isEmpty ? "text-red-400" : "text-zinc-300"}`}>
+          <span className={`text-sm font-mono ${isEmpty ? "text-red-400" : "text-foreground"}`}>
             {currentRounds} / {magazineCapacity}
           </span>
         </div>
       </div>
 
       {/* Ammo bar */}
-      <div className="relative h-2 bg-zinc-800 rounded-full overflow-hidden mb-2">
+      <div className="relative h-2 bg-muted rounded-full overflow-hidden mb-2">
         <div
           className={`h-full transition-all duration-300 ${getAmmoBarColor(currentRounds, magazineCapacity)}`}
           style={{ width: `${ammoPercentage}%` }}
@@ -186,7 +244,7 @@ export function WeaponAmmoDisplay({
 
       {/* Loaded ammo type and modifiers */}
       <div className="flex items-center justify-between text-xs mb-3">
-        <span className="text-zinc-500">
+        <span className="text-muted-foreground">
           {getAmmoTypeLabel(loadedAmmoTypeId, availableAmmo)}
         </span>
         {modifiers && (
@@ -213,13 +271,17 @@ export function WeaponAmmoDisplay({
       <div className="flex gap-2">
         {/* Reload button */}
         {onReload && compatibleAmmo.length > 0 && (
-          <div className="relative flex-1">
+          <div className="flex-1">
             <button
-              onClick={() => setShowReloadMenu(!showReloadMenu)}
+              ref={reloadButtonRef}
+              onClick={(e) => {
+                e.stopPropagation();
+                setShowReloadMenu(!showReloadMenu);
+              }}
               disabled={disabled || isFull}
               className={`w-full flex items-center justify-center gap-2 px-3 py-1.5 rounded text-xs font-medium transition-colors ${
                 disabled || isFull
-                  ? "bg-zinc-800 text-zinc-600 cursor-not-allowed"
+                  ? "bg-muted text-muted-foreground cursor-not-allowed"
                   : "bg-emerald-500/20 text-emerald-400 hover:bg-emerald-500/30 border border-emerald-500/30"
               }`}
             >
@@ -228,9 +290,17 @@ export function WeaponAmmoDisplay({
               <ChevronDown className="w-3 h-3" />
             </button>
 
-            {/* Reload menu */}
-            {showReloadMenu && (
-              <div className="absolute z-50 left-0 right-0 top-full mt-1 p-1 rounded-lg bg-zinc-900 border border-zinc-700 shadow-lg">
+            {/* Reload menu - rendered via portal to avoid overflow clipping */}
+            {/* Only render portal when position is calculated (width > 0) */}
+            {showReloadMenu && typeof document !== "undefined" && reloadMenuPosition.width > 0 && createPortal(
+              <div
+                className="fixed z-[9999] p-1 rounded-lg bg-zinc-900 border border-zinc-700 shadow-xl"
+                style={{
+                  top: reloadMenuPosition.top,
+                  left: reloadMenuPosition.left,
+                  minWidth: reloadMenuPosition.width,
+                }}
+              >
                 {compatibleAmmo.map(ammo => (
                   <button
                     key={ammo.id}
@@ -241,8 +311,8 @@ export function WeaponAmmoDisplay({
                     className="w-full flex items-center justify-between px-2 py-1.5 rounded text-left hover:bg-zinc-800 transition-colors"
                   >
                     <div>
-                      <div className="text-xs text-zinc-300">{ammo.name}</div>
-                      <div className="text-[10px] text-zinc-500">
+                      <div className="text-xs text-zinc-100">{ammo.name}</div>
+                      <div className="text-[10px] text-zinc-400">
                         {ammo.quantity} rounds
                         {ammo.damageModifier !== 0 && ` | ${ammo.damageModifier > 0 ? "+" : ""}${ammo.damageModifier} DV`}
                         {ammo.apModifier !== 0 && ` | ${ammo.apModifier > 0 ? "+" : ""}${ammo.apModifier} AP`}
@@ -250,31 +320,39 @@ export function WeaponAmmoDisplay({
                     </div>
                   </button>
                 ))}
-              </div>
+              </div>,
+              document.body
             )}
           </div>
         )}
 
         {/* Magazine swap button */}
         {onSwapMagazine && hasSpares && (
-          <div className="relative">
+          <div>
             <button
+              ref={magazineButtonRef}
               onClick={() => setShowMagazineMenu(!showMagazineMenu)}
               disabled={disabled}
               className={`flex items-center gap-2 px-3 py-1.5 rounded text-xs font-medium transition-colors ${
                 disabled
-                  ? "bg-zinc-800 text-zinc-600 cursor-not-allowed"
-                  : "bg-zinc-700/50 text-zinc-400 hover:bg-zinc-700 border border-zinc-600/30"
+                  ? "bg-muted text-muted-foreground cursor-not-allowed"
+                  : "bg-muted/50 text-muted-foreground hover:bg-muted border border-border"
               }`}
             >
               <Package className="w-3 h-3" />
               Swap
-              <span className="text-[10px] text-zinc-500">({spareMagazines.length})</span>
+              <span className="text-[10px] text-muted-foreground">({spareMagazines.length})</span>
             </button>
 
-            {/* Magazine menu */}
-            {showMagazineMenu && (
-              <div className="absolute z-50 right-0 top-full mt-1 w-48 p-1 rounded-lg bg-zinc-900 border border-zinc-700 shadow-lg">
+            {/* Magazine menu - rendered via portal to avoid overflow clipping */}
+            {showMagazineMenu && typeof document !== "undefined" && magazineMenuPosition.width > 0 && createPortal(
+              <div
+                className="fixed z-[9999] w-48 p-1 rounded-lg bg-zinc-900 border border-zinc-700 shadow-xl"
+                style={{
+                  top: magazineMenuPosition.top,
+                  left: magazineMenuPosition.left,
+                }}
+              >
                 {spareMagazines.map(mag => (
                   <button
                     key={mag.id}
@@ -284,15 +362,16 @@ export function WeaponAmmoDisplay({
                     }}
                     className="w-full flex items-center justify-between px-2 py-1.5 rounded text-left hover:bg-zinc-800 transition-colors"
                   >
-                    <div className="text-xs text-zinc-300">
+                    <div className="text-xs text-zinc-100">
                       {mag.name || "Spare Magazine"}
                     </div>
-                    <div className="text-xs text-zinc-500">
+                    <div className="text-xs text-zinc-400">
                       {mag.currentRounds}/{mag.capacity}
                     </div>
                   </button>
                 ))}
-              </div>
+              </div>,
+              document.body
             )}
           </div>
         )}
@@ -304,8 +383,8 @@ export function WeaponAmmoDisplay({
             disabled={disabled}
             className={`px-3 py-1.5 rounded text-xs font-medium transition-colors ${
               disabled
-                ? "bg-zinc-800 text-zinc-600 cursor-not-allowed"
-                : "bg-zinc-700/50 text-zinc-400 hover:bg-zinc-700 border border-zinc-600/30"
+                ? "bg-muted text-muted-foreground cursor-not-allowed"
+                : "bg-muted/50 text-muted-foreground hover:bg-muted border border-border"
             }`}
           >
             Unload
@@ -315,7 +394,7 @@ export function WeaponAmmoDisplay({
 
       {/* No compatible ammo warning */}
       {onReload && compatibleAmmo.length === 0 && (
-        <p className="text-[10px] text-zinc-500 mt-2">
+        <p className="text-[10px] text-muted-foreground mt-2">
           No compatible ammunition in inventory
         </p>
       )}

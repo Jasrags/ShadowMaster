@@ -93,7 +93,7 @@ export const THEMES: Record<ThemeId, Theme> = {
         },
         components: {
             section: {
-                wrapper: "bg-white dark:bg-stone-900 rounded-xl shadow-sm border border-stone-200 dark:border-stone-800 overflow-hidden",
+                wrapper: "bg-white dark:bg-stone-900 rounded-xl shadow-sm border border-stone-200 dark:border-stone-800",
                 header: "border-b border-stone-100 dark:border-stone-800 bg-stone-50/50 dark:bg-stone-900/50",
                 title: "text-indigo-600 dark:text-indigo-400 font-bold uppercase tracking-wide text-sm",
                 cornerAccent: false,

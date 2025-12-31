@@ -80,9 +80,9 @@ function getReadinessColor(readiness: EquipmentReadiness): string {
     case "worn":
       return "text-blue-400 bg-blue-500/10 border-blue-500/30";
     case "stored":
-      return "text-zinc-400 bg-zinc-500/10 border-zinc-500/30";
+      return "text-muted-foreground bg-muted/30 border-border";
     default:
-      return "text-zinc-400";
+      return "text-muted-foreground";
   }
 }
 
@@ -127,7 +127,7 @@ function ReadinessMenu({ currentState, validStates, onSelect, disabled }: Readin
       </button>
 
       {isOpen && (
-        <div className="absolute z-50 right-0 top-full mt-1 w-28 p-1 rounded-lg bg-zinc-900 border border-zinc-700 shadow-lg">
+        <div className="absolute z-50 right-0 top-full mt-1 w-28 p-1 rounded-lg bg-card border border-border shadow-lg">
           {validStates.map(state => (
             <button
               key={state}
@@ -138,8 +138,8 @@ function ReadinessMenu({ currentState, validStates, onSelect, disabled }: Readin
               disabled={state === currentState}
               className={`w-full px-2 py-1 rounded text-left text-xs transition-colors ${
                 state === currentState
-                  ? "bg-zinc-800 text-zinc-500"
-                  : "hover:bg-zinc-800 text-zinc-300"
+                  ? "bg-muted text-muted-foreground"
+                  : "hover:bg-muted text-foreground"
               }`}
             >
               {getReadinessLabel(state)}
@@ -176,20 +176,21 @@ function WeaponRow({
 }: WeaponRowProps) {
   const [expanded, setExpanded] = useState(false);
   const state = weapon.state || { readiness: "holstered" as EquipmentReadiness, wirelessEnabled: true };
-  const hasAmmo = (weapon.ammoCapacity ?? 0) > 0;
+  // Check for ammo capacity in new ammoState format or legacy ammoCapacity field
+  const hasAmmo = (weapon.ammoState?.magazineCapacity ?? weapon.ammoCapacity ?? 0) > 0;
 
   return (
-    <div className="border border-zinc-800 rounded-lg">
+    <div className={`border border-border rounded-lg bg-card ${expanded ? "relative z-10" : ""}`}>
       {/* Main row */}
       <div
-        className={`flex items-center gap-3 p-3 ${hasAmmo ? "cursor-pointer hover:bg-zinc-800/50" : ""}`}
+        className={`flex items-center gap-3 p-3 ${hasAmmo ? "cursor-pointer hover:bg-muted/50" : ""}`}
         onClick={() => hasAmmo && setExpanded(!expanded)}
       >
         <Sword className="w-4 h-4 text-amber-500 shrink-0" />
 
         <div className="flex-1 min-w-0">
-          <div className="font-medium text-sm text-zinc-200 truncate">{weapon.name}</div>
-          <div className="flex items-center gap-2 text-xs text-zinc-500">
+          <div className="font-medium text-sm text-foreground truncate">{weapon.name}</div>
+          <div className="flex items-center gap-2 text-xs text-muted-foreground">
             <span>{weapon.damage}</span>
             <span>AP {weapon.ap}</span>
             {hasAmmo && (
@@ -222,14 +223,14 @@ function WeaponRow({
           )}
 
           {hasAmmo && (
-            <ChevronDown className={`w-4 h-4 text-zinc-500 transition-transform ${expanded ? "rotate-180" : ""}`} />
+            <ChevronDown className={`w-4 h-4 text-muted-foreground transition-transform ${expanded ? "rotate-180" : ""}`} />
           )}
         </div>
       </div>
 
       {/* Expanded ammo section */}
       {expanded && hasAmmo && (
-        <div className="px-3 pb-3 pt-0 border-t border-zinc-800">
+        <div className="px-3 pb-3 pt-0 border-t border-border">
           <WeaponAmmoDisplay
             weapon={weapon}
             availableAmmo={availableAmmo}
@@ -262,12 +263,12 @@ function ArmorRow({
   const state = armor.state || { readiness: armor.equipped ? "worn" as EquipmentReadiness : "stored" as EquipmentReadiness, wirelessEnabled: true };
 
   return (
-    <div className="flex items-center gap-3 p-3 border border-zinc-800 rounded-lg">
+    <div className="flex items-center gap-3 p-3 border border-border rounded-lg">
       <Shield className="w-4 h-4 text-blue-500 shrink-0" />
 
       <div className="flex-1 min-w-0">
-        <div className="font-medium text-sm text-zinc-200 truncate">{armor.name}</div>
-        <div className="flex items-center gap-2 text-xs text-zinc-500">
+        <div className="font-medium text-sm text-foreground truncate">{armor.name}</div>
+        <div className="flex items-center gap-2 text-xs text-muted-foreground">
           <span>Rating {armor.armorRating}</span>
           {armor.capacity && armor.capacity > 0 && (
             <span>Capacity {armor.capacity}</span>
@@ -306,17 +307,17 @@ interface GearRowProps {
 
 function GearRow({ gear }: GearRowProps) {
   return (
-    <div className="flex items-center gap-3 p-3 border border-zinc-800 rounded-lg">
-      <Package className="w-4 h-4 text-zinc-500 shrink-0" />
+    <div className="flex items-center gap-3 p-3 border border-border rounded-lg">
+      <Package className="w-4 h-4 text-muted-foreground shrink-0" />
 
       <div className="flex-1 min-w-0">
-        <div className="font-medium text-sm text-zinc-200 truncate">{gear.name}</div>
-        <div className="text-xs text-zinc-500">
+        <div className="font-medium text-sm text-foreground truncate">{gear.name}</div>
+        <div className="text-xs text-muted-foreground">
           {gear.quantity && gear.quantity > 1 ? `×${gear.quantity}` : ""}
         </div>
       </div>
 
-      <div className="text-xs text-zinc-500">
+      <div className="text-xs text-muted-foreground">
         {gear.cost ? `¥${gear.cost.toLocaleString()}` : ""}
       </div>
     </div>
@@ -329,12 +330,12 @@ interface AmmoRowProps {
 
 function AmmoRow({ ammo }: AmmoRowProps) {
   return (
-    <div className="flex items-center gap-3 p-3 border border-zinc-800 rounded-lg">
+    <div className="flex items-center gap-3 p-3 border border-border rounded-lg">
       <Crosshair className="w-4 h-4 text-amber-500 shrink-0" />
 
       <div className="flex-1 min-w-0">
-        <div className="font-medium text-sm text-zinc-200 truncate">{ammo.name}</div>
-        <div className="flex items-center gap-2 text-xs text-zinc-500">
+        <div className="font-medium text-sm text-foreground truncate">{ammo.name}</div>
+        <div className="flex items-center gap-2 text-xs text-muted-foreground">
           <span>{ammo.caliber}</span>
           {ammo.damageModifier !== 0 && (
             <span className={ammo.damageModifier > 0 ? "text-emerald-400" : "text-red-400"}>
@@ -349,7 +350,7 @@ function AmmoRow({ ammo }: AmmoRowProps) {
         </div>
       </div>
 
-      <div className="text-sm font-mono text-zinc-300">
+      <div className="text-sm font-mono text-foreground">
         {ammo.quantity}
       </div>
     </div>
@@ -437,29 +438,138 @@ export function InventoryPanel({
     });
   }, [character, globalWireless, onUpdate]);
 
-  // Reload handler (stub - would call API)
+  // Reload handler - calls API and updates character
   const handleReload = useCallback(
-    (weaponId: string, ammoItemId: string) => {
-      console.log("Reload weapon", weaponId, "with ammo", ammoItemId);
-      // Would call POST /api/characters/{id}/weapons/{weaponId}/ammo
+    async (weaponId: string, ammoItemId: string) => {
+      if (!character.id || !onUpdate) return;
+
+      try {
+        const response = await fetch(
+          `/api/characters/${character.id}/weapons/${weaponId}/ammo`,
+          {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ ammoItemId }),
+          }
+        );
+
+        const result = await response.json();
+
+        if (result.success && result.weapon) {
+          // Update the weapon in local state
+          const updatedWeapons = character.weapons?.map((w) =>
+            w.id === weaponId ? result.weapon : w
+          );
+
+          // Update ammunition quantities
+          const updatedAmmunition = character.ammunition?.map((a) =>
+            a.id === ammoItemId
+              ? { ...a, quantity: result.remainingAmmo ?? a.quantity }
+              : a
+          ).filter((a) => a.quantity > 0);
+
+          onUpdate({
+            ...character,
+            weapons: updatedWeapons,
+            ammunition: updatedAmmunition,
+          });
+        } else {
+          console.error("Failed to reload:", result.error);
+        }
+      } catch (error) {
+        console.error("Failed to reload weapon:", error);
+      }
     },
-    []
+    [character, onUpdate]
   );
 
+  // Unload handler - calls API and updates character
   const handleUnload = useCallback(
-    (weaponId: string) => {
-      console.log("Unload weapon", weaponId);
-      // Would call DELETE /api/characters/{id}/weapons/{weaponId}/ammo
+    async (weaponId: string) => {
+      if (!character.id || !onUpdate) return;
+
+      try {
+        const response = await fetch(
+          `/api/characters/${character.id}/weapons/${weaponId}/ammo`,
+          { method: "DELETE" }
+        );
+
+        const result = await response.json();
+
+        if (result.success) {
+          // Update the weapon to show empty
+          const updatedWeapons = character.weapons?.map((w) =>
+            w.id === weaponId
+              ? {
+                  ...w,
+                  ammoState: {
+                    ...w.ammoState,
+                    currentRounds: 0,
+                    loadedAmmoTypeId: null,
+                    magazineCapacity: w.ammoState?.magazineCapacity ?? w.ammoCapacity ?? 0,
+                  },
+                }
+              : w
+          );
+
+          // Add returned ammo to inventory
+          const updatedAmmunition = [...(character.ammunition || [])];
+          if (result.returnedAmmo && result.roundsUnloaded > 0) {
+            const existingIndex = updatedAmmunition.findIndex(
+              (a) => a.catalogId === result.returnedAmmo.catalogId
+            );
+            if (existingIndex !== -1) {
+              updatedAmmunition[existingIndex] = result.returnedAmmo;
+            } else {
+              updatedAmmunition.push(result.returnedAmmo);
+            }
+          }
+
+          onUpdate({
+            ...character,
+            weapons: updatedWeapons,
+            ammunition: updatedAmmunition,
+          });
+        } else {
+          console.error("Failed to unload:", result.error);
+        }
+      } catch (error) {
+        console.error("Failed to unload weapon:", error);
+      }
     },
-    []
+    [character, onUpdate]
   );
 
+  // Swap magazine handler - calls API and updates character
   const handleSwapMagazine = useCallback(
-    (weaponId: string, magazineId: string) => {
-      console.log("Swap magazine", weaponId, magazineId);
-      // Would call PATCH /api/characters/{id}/weapons/{weaponId}/ammo
+    async (weaponId: string, magazineId: string) => {
+      if (!character.id || !onUpdate) return;
+
+      try {
+        const response = await fetch(
+          `/api/characters/${character.id}/weapons/${weaponId}/ammo`,
+          {
+            method: "PATCH",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ magazineId }),
+          }
+        );
+
+        const result = await response.json();
+
+        if (result.success) {
+          // Refetch character data to get updated state
+          // For now, just log success - a proper implementation would refetch
+          console.log("Magazine swapped successfully");
+          // Could trigger a refetch here via a callback prop
+        } else {
+          console.error("Failed to swap magazine:", result.error);
+        }
+      } catch (error) {
+        console.error("Failed to swap magazine:", error);
+      }
     },
-    []
+    [character, onUpdate]
   );
 
   // Tab counts
@@ -481,17 +591,17 @@ export function InventoryPanel({
         <EncumbranceBar encumbrance={encumbrance} showDetails />
 
         {/* Global wireless toggle */}
-        <div className="flex items-center justify-between p-2 rounded-lg border border-zinc-800 bg-zinc-900/50">
+        <div className={`flex items-center justify-between p-2 rounded-lg border ${t.colors.card} ${t.colors.border}`}>
           <div className="flex items-center gap-2">
             {globalWireless ? (
               <Wifi className="w-4 h-4 text-cyan-400" />
             ) : (
-              <WifiOff className="w-4 h-4 text-zinc-500" />
+              <WifiOff className="w-4 h-4 text-muted-foreground" />
             )}
-            <span className={`text-sm ${globalWireless ? "text-cyan-400" : "text-zinc-500"}`}>
+            <span className={`text-sm ${globalWireless ? "text-cyan-400" : "text-muted-foreground"}`}>
               Global Wireless
             </span>
-            <span className="text-xs text-zinc-600">
+            <span className="text-xs text-muted-foreground/70">
               ({equipmentSummary.wirelessEnabled} enabled, {equipmentSummary.wirelessDisabled} disabled)
             </span>
           </div>
@@ -499,7 +609,7 @@ export function InventoryPanel({
             <button
               onClick={handleGlobalWirelessToggle}
               className={`relative w-10 h-5 rounded-full transition-colors ${
-                globalWireless ? "bg-cyan-500" : "bg-zinc-700"
+                globalWireless ? "bg-cyan-500" : "bg-muted"
               }`}
             >
               <span
@@ -512,7 +622,7 @@ export function InventoryPanel({
         </div>
 
         {/* Tabs */}
-        <div className="flex gap-1 border-b border-zinc-800 overflow-x-auto">
+        <div className="flex gap-1 border-b border-border overflow-x-auto">
           {(["weapons", "armor", "gear", "ammo"] as InventoryTab[]).map(tab => (
             <button
               key={tab}
@@ -520,7 +630,7 @@ export function InventoryPanel({
               className={`flex items-center gap-1.5 px-3 py-2 text-sm transition-colors border-b-2 -mb-px whitespace-nowrap ${
                 activeTab === tab
                   ? "border-amber-500 text-amber-400"
-                  : "border-transparent text-zinc-500 hover:text-zinc-400"
+                  : "border-transparent text-muted-foreground hover:text-foreground"
               }`}
             >
               {tab === "weapons" && <Sword className="w-4 h-4" />}
@@ -528,7 +638,7 @@ export function InventoryPanel({
               {tab === "gear" && <Package className="w-4 h-4" />}
               {tab === "ammo" && <Crosshair className="w-4 h-4" />}
               <span className="capitalize">{tab}</span>
-              <span className="text-xs text-zinc-600">({tabCounts[tab]})</span>
+              <span className="text-xs text-muted-foreground/70">({tabCounts[tab]})</span>
             </button>
           ))}
         </div>
@@ -537,7 +647,7 @@ export function InventoryPanel({
         <div className="space-y-2">
           {activeTab === "weapons" && (
             weapons.length === 0 ? (
-              <p className="text-sm text-zinc-500 text-center py-4">No weapons</p>
+              <p className="text-sm text-muted-foreground text-center py-4">No weapons</p>
             ) : (
               weapons.map(weapon => (
                 <WeaponRow
@@ -558,7 +668,7 @@ export function InventoryPanel({
 
           {activeTab === "armor" && (
             armor.length === 0 ? (
-              <p className="text-sm text-zinc-500 text-center py-4">No armor</p>
+              <p className="text-sm text-muted-foreground text-center py-4">No armor</p>
             ) : (
               armor.map(item => (
                 <ArmorRow
@@ -575,7 +685,7 @@ export function InventoryPanel({
 
           {activeTab === "gear" && (
             gear.length === 0 ? (
-              <p className="text-sm text-zinc-500 text-center py-4">No gear</p>
+              <p className="text-sm text-muted-foreground text-center py-4">No gear</p>
             ) : (
               gear.map(item => (
                 <GearRow
@@ -588,7 +698,7 @@ export function InventoryPanel({
 
           {activeTab === "ammo" && (
             ammunition.length === 0 ? (
-              <p className="text-sm text-zinc-500 text-center py-4">No ammunition</p>
+              <p className="text-sm text-muted-foreground text-center py-4">No ammunition</p>
             ) : (
               ammunition.map(item => (
                 <AmmoRow
@@ -601,7 +711,7 @@ export function InventoryPanel({
         </div>
 
         {/* Summary footer */}
-        <div className="flex items-center justify-between pt-3 border-t border-zinc-800 text-xs text-zinc-500">
+        <div className="flex items-center justify-between pt-3 border-t border-border text-xs text-muted-foreground">
           <div className="flex items-center gap-4">
             <span>
               <span className="text-amber-400">{weapons.length}</span> weapons
@@ -610,7 +720,7 @@ export function InventoryPanel({
               <span className="text-blue-400">{armor.length}</span> armor
             </span>
             <span>
-              <span className="text-zinc-400">{gear.length}</span> gear
+              <span className="text-muted-foreground">{gear.length}</span> gear
             </span>
           </div>
           <div>

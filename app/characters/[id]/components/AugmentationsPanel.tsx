@@ -188,9 +188,9 @@ export function AugmentationsPanel({
         title="Augmentations"
         icon={<Cpu className="w-4 h-4 text-cyan-500" />}
       >
-        <div className="p-4 rounded border border-zinc-800 bg-zinc-900/30 text-center">
-          <p className="text-sm text-zinc-500">No augmentations installed.</p>
-          <p className="text-xs text-zinc-600 mt-1">
+        <div className={`p-4 rounded border text-center ${t.colors.card} ${t.colors.border}`}>
+          <p className="text-sm text-muted-foreground">No augmentations installed.</p>
+          <p className="text-xs text-muted-foreground/70 mt-1">
             Essence: {formatEssence(currentEssence)} / {maxEssence}
           </p>
         </div>
@@ -206,7 +206,7 @@ export function AugmentationsPanel({
     >
       <div className="space-y-4">
         {/* Essence Summary */}
-        <div className="p-3 rounded-lg border border-zinc-800 bg-zinc-900/50">
+        <div className={`p-3 rounded-lg border ${t.colors.card} ${t.colors.border}`}>
           <EssenceDisplay
             currentEssence={currentEssence}
             maxEssence={maxEssence}
@@ -221,7 +221,7 @@ export function AugmentationsPanel({
 
           {/* Attribute Bonuses Summary */}
           {(Object.keys(attributeBonuses).length > 0 || initiativeDiceBonus > 0) && (
-            <div className="flex flex-wrap gap-1.5 mt-3 pt-3 border-t border-zinc-800">
+            <div className="flex flex-wrap gap-1.5 mt-3 pt-3 border-t border-border">
               {Object.entries(attributeBonuses).map(([attr, bonus]) => (
                 <span
                   key={attr}
@@ -239,21 +239,21 @@ export function AugmentationsPanel({
           )}
 
           {/* Wireless Toggle */}
-          <div className="flex items-center justify-between mt-3 pt-3 border-t border-zinc-800">
+          <div className="flex items-center justify-between mt-3 pt-3 border-t border-border">
             <div className="flex items-center gap-2 text-xs">
               {wirelessEnabled ? (
                 <Wifi className="w-4 h-4 text-cyan-400" />
               ) : (
-                <WifiOff className="w-4 h-4 text-zinc-500" />
+                <WifiOff className="w-4 h-4 text-muted-foreground" />
               )}
-              <span className={wirelessEnabled ? "text-cyan-400" : "text-zinc-500"}>
+              <span className={wirelessEnabled ? "text-cyan-400" : "text-muted-foreground"}>
                 Wireless Bonuses
               </span>
             </div>
             <button
               onClick={handleWirelessToggle}
               className={`relative w-10 h-5 rounded-full transition-colors ${
-                wirelessEnabled ? "bg-cyan-500" : "bg-zinc-700"
+                wirelessEnabled ? "bg-cyan-500" : "bg-muted"
               }`}
             >
               <span
@@ -266,30 +266,30 @@ export function AugmentationsPanel({
         </div>
 
         {/* Type Tabs */}
-        <div className="flex gap-2 border-b border-zinc-800">
+        <div className="flex gap-2 border-b border-border">
           <button
             onClick={() => setActiveTab("cyberware")}
             className={`flex items-center gap-1.5 px-3 py-2 text-sm transition-colors border-b-2 -mb-px ${
               activeTab === "cyberware"
                 ? "border-cyan-500 text-cyan-400"
-                : "border-transparent text-zinc-500 hover:text-zinc-400"
+                : "border-transparent text-muted-foreground hover:text-foreground"
             }`}
           >
             <Cpu className="w-4 h-4" />
             Cyberware
-            <span className="text-xs text-zinc-600">({cyberware.length})</span>
+            <span className="text-xs text-muted-foreground/70">({cyberware.length})</span>
           </button>
           <button
             onClick={() => setActiveTab("bioware")}
             className={`flex items-center gap-1.5 px-3 py-2 text-sm transition-colors border-b-2 -mb-px ${
               activeTab === "bioware"
                 ? "border-emerald-500 text-emerald-400"
-                : "border-transparent text-zinc-500 hover:text-zinc-400"
+                : "border-transparent text-muted-foreground hover:text-foreground"
             }`}
           >
             <Heart className="w-4 h-4" />
             Bioware
-            <span className="text-xs text-zinc-600">({bioware.length})</span>
+            <span className="text-xs text-muted-foreground/70">({bioware.length})</span>
           </button>
         </div>
 
@@ -297,7 +297,7 @@ export function AugmentationsPanel({
         <div className="space-y-3">
           {activeTab === "cyberware" ? (
             cyberware.length === 0 ? (
-              <p className="text-sm text-zinc-500 text-center py-4">No cyberware installed</p>
+              <p className="text-sm text-muted-foreground text-center py-4">No cyberware installed</p>
             ) : (
               cyberware.map((item) => (
                 <AugmentationCard
@@ -320,7 +320,7 @@ export function AugmentationsPanel({
               ))
             )
           ) : bioware.length === 0 ? (
-            <p className="text-sm text-zinc-500 text-center py-4">No bioware installed</p>
+            <p className="text-sm text-muted-foreground text-center py-4">No bioware installed</p>
           ) : (
             bioware.map((item) => (
               <AugmentationCard
@@ -345,7 +345,7 @@ export function AugmentationsPanel({
         </div>
 
         {/* Summary Footer */}
-        <div className="flex items-center justify-between pt-3 border-t border-zinc-800 text-xs text-zinc-500">
+        <div className="flex items-center justify-between pt-3 border-t border-border text-xs text-muted-foreground">
           <div className="flex items-center gap-4">
             <span>
               <span className="text-cyan-400">{cyberware.length}</span> cyberware
