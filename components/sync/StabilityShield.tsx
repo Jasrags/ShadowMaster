@@ -115,13 +115,14 @@ export function StabilityShield({
 }: StabilityShieldProps) {
   const [showWizard, setShowWizard] = useState(false);
 
-  // Use pre-computed status if available, otherwise fetch from API
-  const fetchedShield = useStabilityShield(characterId);
-
   // Derive status from props if provided (faster, no API call)
-  const derivedStatus = syncStatus !== undefined || legalityStatus !== undefined
+  const hasDerivedStatus = syncStatus !== undefined || legalityStatus !== undefined;
+  const derivedStatus = hasDerivedStatus
     ? deriveShieldStatus(syncStatus, legalityStatus)
     : null;
+
+  // Only fetch from API if we don't have derived status
+  const fetchedShield = useStabilityShield(characterId, hasDerivedStatus);
 
   const shield = derivedStatus || fetchedShield;
   const isLoading = !derivedStatus && fetchedShield.isLoading;

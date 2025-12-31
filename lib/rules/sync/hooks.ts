@@ -148,17 +148,27 @@ export function useSyncStatus(characterId: ID): SyncStatusResult {
  * Hook to get stability shield status for a character
  *
  * @param characterId - The character ID
+ * @param skip - If true, skip the API call (use when status is derived from props)
  * @returns Stability shield status
  */
-export function useStabilityShield(characterId: ID): StabilityShield & { isLoading: boolean } {
+export function useStabilityShield(
+  characterId: ID,
+  skip = false
+): StabilityShield & { isLoading: boolean } {
   const [shield, setShield] = useState<StabilityShield>({
     status: "green",
     label: "Loading...",
     tooltip: "Checking character status",
   });
-  const [isLoading, setIsLoading] = useState(true);
+  const [isLoading, setIsLoading] = useState(!skip);
 
   useEffect(() => {
+    // Skip API call if requested
+    if (skip) {
+      setIsLoading(false);
+      return;
+    }
+
     async function fetchShield() {
       setIsLoading(true);
       try {
@@ -181,7 +191,7 @@ export function useStabilityShield(characterId: ID): StabilityShield & { isLoadi
     }
 
     fetchShield();
-  }, [characterId]);
+  }, [characterId, skip]);
 
   return { ...shield, isLoading };
 }
