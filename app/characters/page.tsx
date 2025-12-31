@@ -155,7 +155,12 @@ function CharacterCard({ character, onDelete, viewMode = "grid", isAdminMode = f
                 <h3 className="font-bold text-foreground truncate group-hover:text-emerald-500 transition-colors">
                   {character.name || "Unnamed Runner"}
                 </h3>
-                <StabilityShield characterId={character.id} size="sm" />
+                <StabilityShield
+                  characterId={character.id}
+                  size="sm"
+                  syncStatus={character.syncStatus}
+                  legalityStatus={character.legalityStatus}
+                />
                 <div className="shrink-0">
                   <StatusBadge status={character.status} />
                 </div>
@@ -256,7 +261,12 @@ function CharacterCard({ character, onDelete, viewMode = "grid", isAdminMode = f
                 <h3 className="font-bold text-lg text-foreground truncate group-hover:text-emerald-500 transition-colors">
                   {character.name || "Unnamed Runner"}
                 </h3>
-                <StabilityShield characterId={character.id} size="sm" />
+                <StabilityShield
+                  characterId={character.id}
+                  size="sm"
+                  syncStatus={character.syncStatus}
+                  legalityStatus={character.legalityStatus}
+                />
               </div>
               <div className="flex items-center gap-2 mt-1">
                 <span className="text-sm text-muted-foreground capitalize">

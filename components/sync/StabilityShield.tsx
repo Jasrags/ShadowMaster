@@ -13,12 +13,16 @@
  * @see docs/capabilities/ruleset.system-synchronization.md
  */
 
+import { useState } from "react";
 import { useStabilityShield } from "@/lib/rules/sync/hooks";
-import type { ID } from "@/lib/types";
+import { MigrationWizard } from "./MigrationWizard";
+import type { ID, SyncStatus, LegalityStatus } from "@/lib/types";
 
 // =============================================================================
 // TYPES
 // =============================================================================
+
+type ShieldColor = "green" | "yellow" | "red";
 
 interface StabilityShieldProps {
   /** Character ID to check */
@@ -29,6 +33,71 @@ interface StabilityShieldProps {
   showTooltip?: boolean;
   /** Additional CSS classes */
   className?: string;
+  /** Pre-computed sync status (avoids API call if provided) */
+  syncStatus?: SyncStatus;
+  /** Pre-computed legality status (avoids API call if provided) */
+  legalityStatus?: LegalityStatus;
+  /** Whether clicking opens the migration wizard */
+  interactive?: boolean;
+}
+
+/**
+ * Derive shield color from sync/legality status
+ */
+function deriveShieldStatus(
+  syncStatus?: SyncStatus,
+  legalityStatus?: LegalityStatus
+): { status: ShieldColor; label: string; tooltip: string; actionRequired?: string } {
+  // Red states - require action
+  if (syncStatus === "invalid" || legalityStatus === "invalid") {
+    return {
+      status: "red",
+      label: "Invalid",
+      tooltip: "Character has validation errors",
+      actionRequired: "Review and fix issues",
+    };
+  }
+
+  if (syncStatus === "migrating") {
+    return {
+      status: "yellow",
+      label: "Migrating",
+      tooltip: "Migration in progress",
+    };
+  }
+
+  if (syncStatus === "outdated") {
+    return {
+      status: "yellow",
+      label: "Update Available",
+      tooltip: "Ruleset updates are available",
+      actionRequired: "Click to review updates",
+    };
+  }
+
+  if (legalityStatus === "legacy") {
+    return {
+      status: "yellow",
+      label: "Legacy",
+      tooltip: "Using older ruleset version",
+      actionRequired: "Click to sync with current rules",
+    };
+  }
+
+  if (legalityStatus === "draft") {
+    return {
+      status: "yellow",
+      label: "Draft",
+      tooltip: "Character is still in draft",
+    };
+  }
+
+  // Green - all good
+  return {
+    status: "green",
+    label: "Rules Legal",
+    tooltip: "Fully synchronized with current ruleset",
+  };
 }
 
 // =============================================================================
@@ -40,8 +109,22 @@ export function StabilityShield({
   size = "md",
   showTooltip = true,
   className = "",
+  syncStatus,
+  legalityStatus,
+  interactive = true,
 }: StabilityShieldProps) {
-  const shield = useStabilityShield(characterId);
+  const [showWizard, setShowWizard] = useState(false);
+
+  // Use pre-computed status if available, otherwise fetch from API
+  const fetchedShield = useStabilityShield(characterId);
+
+  // Derive status from props if provided (faster, no API call)
+  const derivedStatus = syncStatus !== undefined || legalityStatus !== undefined
+    ? deriveShieldStatus(syncStatus, legalityStatus)
+    : null;
+
+  const shield = derivedStatus || fetchedShield;
+  const isLoading = !derivedStatus && fetchedShield.isLoading;
 
   // Size classes
   const sizeClasses = {
@@ -64,7 +147,14 @@ export function StabilityShield({
     red: "bg-red-500/10",
   };
 
-  if (shield.isLoading) {
+  // Hover classes for interactive shields
+  const hoverClasses = {
+    green: "hover:bg-green-500/20",
+    yellow: "hover:bg-yellow-500/20",
+    red: "hover:bg-red-500/20",
+  };
+
+  if (isLoading) {
     return (
       <div
         className={`${sizeClasses[size]} ${className} animate-pulse rounded-full bg-gray-200 dark:bg-gray-700`}
@@ -73,61 +163,89 @@ export function StabilityShield({
     );
   }
 
-  return (
-    <div className={`relative inline-flex group ${className}`}>
-      {/* Shield Icon */}
-      <div
-        className={`
-          ${sizeClasses[size]}
-          ${colorClasses[shield.status]}
-          ${bgClasses[shield.status]}
-          rounded-full
-          flex items-center justify-center
-          transition-colors duration-200
-        `}
-        aria-label={shield.label}
-      >
-        <ShieldIcon className="w-3/4 h-3/4" status={shield.status} />
-      </div>
+  const hasAction = shield.status !== "green" && interactive;
 
-      {/* Tooltip */}
-      {showTooltip && (
-        <div
+  const handleClick = (e: React.MouseEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    if (hasAction) {
+      setShowWizard(true);
+    }
+  };
+
+  return (
+    <>
+      <div className={`relative inline-flex group ${className}`}>
+        {/* Shield Icon */}
+        <button
+          type="button"
+          onClick={handleClick}
+          disabled={!hasAction}
           className={`
-            absolute z-50
-            left-1/2 -translate-x-1/2
-            bottom-full mb-2
-            px-3 py-2
-            bg-gray-900 dark:bg-gray-100
-            text-white dark:text-gray-900
-            text-xs font-medium
-            rounded-lg shadow-lg
-            whitespace-nowrap
-            opacity-0 invisible
-            group-hover:opacity-100 group-hover:visible
-            transition-all duration-200
-            pointer-events-none
+            ${sizeClasses[size]}
+            ${colorClasses[shield.status]}
+            ${bgClasses[shield.status]}
+            ${hasAction ? hoverClasses[shield.status] : ""}
+            ${hasAction ? "cursor-pointer" : "cursor-default"}
+            rounded-full
+            flex items-center justify-center
+            transition-colors duration-200
+            focus:outline-none focus:ring-2 focus:ring-offset-1
+            ${hasAction ? "focus:ring-current" : ""}
           `}
+          aria-label={shield.label}
+          title={hasAction ? "Click to review" : shield.label}
         >
-          <div className="font-semibold">{shield.label}</div>
-          <div className="text-gray-300 dark:text-gray-600">{shield.tooltip}</div>
-          {shield.actionRequired && (
-            <div className="mt-1 text-yellow-300 dark:text-yellow-600">
-              {shield.actionRequired}
-            </div>
-          )}
-          {/* Tooltip arrow */}
+          <ShieldIcon className="w-3/4 h-3/4" status={shield.status} />
+        </button>
+
+        {/* Tooltip */}
+        {showTooltip && (
           <div
             className={`
-              absolute left-1/2 -translate-x-1/2
-              top-full
-              border-4 border-transparent
-              border-t-gray-900 dark:border-t-gray-100
+              absolute z-50
+              left-1/2 -translate-x-1/2
+              bottom-full mb-2
+              px-3 py-2
+              bg-gray-900 dark:bg-gray-100
+              text-white dark:text-gray-900
+              text-xs font-medium
+              rounded-lg shadow-lg
+              whitespace-nowrap
+              opacity-0 invisible
+              group-hover:opacity-100 group-hover:visible
+              transition-all duration-200
+              pointer-events-none
             `}
-          />
-        </div>
+          >
+            <div className="font-semibold">{shield.label}</div>
+            <div className="text-gray-300 dark:text-gray-600">{shield.tooltip}</div>
+            {shield.actionRequired && (
+              <div className="mt-1 text-yellow-300 dark:text-yellow-600">
+                {shield.actionRequired}
+              </div>
+            )}
+            {/* Tooltip arrow */}
+            <div
+              className={`
+                absolute left-1/2 -translate-x-1/2
+                top-full
+                border-4 border-transparent
+                border-t-gray-900 dark:border-t-gray-100
+              `}
+            />
+          </div>
+        )}
+      </div>
+
+      {/* Migration Wizard Modal */}
+      {showWizard && (
+        <MigrationWizard
+          characterId={characterId}
+          onClose={() => setShowWizard(false)}
+        />
       )}
-    </div>
+    </>
   );
 }
 
@@ -137,7 +255,7 @@ export function StabilityShield({
 
 interface ShieldIconProps {
   className?: string;
-  status: "green" | "yellow" | "red";
+  status: ShieldColor;
 }
 
 function ShieldIcon({ className = "", status }: ShieldIconProps) {
@@ -202,7 +320,7 @@ function ShieldIcon({ className = "", status }: ShieldIconProps) {
 
 interface CompactShieldProps {
   /** Shield status */
-  status: "green" | "yellow" | "red";
+  status: ShieldColor;
   /** Label to show */
   label: string;
   /** Additional CSS classes */
