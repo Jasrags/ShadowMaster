@@ -12,7 +12,7 @@
 
 import { NextRequest, NextResponse } from "next/server";
 import { getSession } from "@/lib/auth/session";
-import { getCharacterById } from "@/lib/storage/characters";
+import { getCharacter } from "@/lib/storage/characters";
 import { analyzeCharacterDrift } from "@/lib/rules/sync/drift-analyzer";
 import { getLegalityShield, getQuickSyncStatus, getQuickLegalityStatus } from "@/lib/rules/sync/legality-validator";
 import { generateMigrationPlan } from "@/lib/rules/sync/migration-engine";
@@ -45,20 +45,12 @@ export async function GET(
 
     const { characterId } = await params;
 
-    // Get character
-    const character = await getCharacterById(characterId);
+    // Get character (fast path using userId)
+    const character = await getCharacter(userId, characterId);
     if (!character) {
       return NextResponse.json(
         { error: "Character not found" },
         { status: 404 }
-      );
-    }
-
-    // Verify ownership
-    if (character.ownerId !== userId) {
-      return NextResponse.json(
-        { error: "Forbidden" },
-        { status: 403 }
       );
     }
 
@@ -110,20 +102,12 @@ export async function POST(
 
     const { characterId } = await params;
 
-    // Get character
-    const character = await getCharacterById(characterId);
+    // Get character (fast path using userId)
+    const character = await getCharacter(userId, characterId);
     if (!character) {
       return NextResponse.json(
         { error: "Character not found" },
         { status: 404 }
-      );
-    }
-
-    // Verify ownership
-    if (character.ownerId !== userId) {
-      return NextResponse.json(
-        { error: "Forbidden" },
-        { status: 403 }
       );
     }
 
