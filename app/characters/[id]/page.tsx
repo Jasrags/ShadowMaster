@@ -15,6 +15,8 @@ import type {
 } from "@/lib/types";
 
 import { DiceRoller } from "@/components";
+import { useAuth } from "@/lib/auth/AuthProvider";
+import AdminActionsPanel from "../components/AdminActionsPanel";
 import {
   RulesetProvider,
   useRuleset,
@@ -918,6 +920,8 @@ function CharacterSheet({
   setTargetPool,
   poolContext,
   setPoolContext,
+  isAdmin,
+  onRefresh,
 }: {
   character: Character;
   showDiceRoller: boolean;
@@ -927,6 +931,8 @@ function CharacterSheet({
   poolContext: string | undefined;
   setPoolContext: (context: string | undefined) => void;
   setCharacter: (character: Character) => void;
+  isAdmin: boolean;
+  onRefresh: () => void;
 }) {
   const { loadRuleset } = useRuleset();
   const { ready, loading: rulesetLoading } = useRulesetStatus();
@@ -1133,6 +1139,16 @@ function CharacterSheet({
             </Link>
           )}
         </div>
+
+        {/* Admin Actions Panel - only visible to admins */}
+        {isAdmin && (
+          <AdminActionsPanel
+            character={character}
+            isAdmin={isAdmin}
+            theme={theme}
+            onStatusChange={onRefresh}
+          />
+        )}
 
         {/* Character Header Card */}
         <div className={`character-header relative overflow-hidden ${theme.components.section.wrapper} p-6`}>
@@ -1406,10 +1422,13 @@ function CharacterSheet({
                     <div>
                       <span className="text-xs font-mono text-violet-500 uppercase mb-2 block">Spells</span>
                       <div className="space-y-3">
-                        {character.spells.map((spellId) => (
+                        {character.spells.map((spellEntry, idx) => {
+                          // Handle both string IDs and legacy object format
+                          const spellId = typeof spellEntry === 'string' ? spellEntry : (spellEntry as { id: string }).id;
+                          return (
                           <SpellCard
                             theme={theme}
-                            key={spellId}
+                            key={spellId || idx}
                             spellId={spellId}
                             spellsCatalog={spellsCatalog}
                             onSelect={(pool, label) => {
@@ -1418,7 +1437,7 @@ function CharacterSheet({
                               setShowDiceRoller(true);
                             }}
                           />
-                        ))}
+                        )})}
                       </div>
                     </div>
                   )}
@@ -1683,6 +1702,7 @@ interface CharacterPageProps {
 
 export default function CharacterPage({ params }: CharacterPageProps) {
   const resolvedParams = use(params);
+  const { user } = useAuth();
   const [character, setCharacter] = useState<Character | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -1690,26 +1710,40 @@ export default function CharacterPage({ params }: CharacterPageProps) {
   const [targetPool, setTargetPool] = useState(6);
   const [poolContext, setPoolContext] = useState<string | undefined>(undefined);
 
-  useEffect(() => {
-    async function fetchCharacter() {
-      try {
-        const response = await fetch(`/api/characters/${resolvedParams.id}`);
-        const data = await response.json();
+  // Check if user is admin
+  const isAdmin = user?.role?.includes("administrator") ?? false;
 
-        if (!data.success) {
-          throw new Error(data.error || "Failed to load character");
-        }
+  const fetchCharacter = useCallback(async () => {
+    try {
+      const response = await fetch(`/api/characters/${resolvedParams.id}`);
+      const data = await response.json();
 
-        setCharacter(data.character);
-      } catch (err) {
-        setError(err instanceof Error ? err.message : "An error occurred");
-      } finally {
-        setLoading(false);
+      if (!data.success) {
+        throw new Error(data.error || "Failed to load character");
       }
-    }
 
-    fetchCharacter();
+      setCharacter(data.character);
+      return data.character;
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "An error occurred");
+      return null;
+    } finally {
+      setLoading(false);
+    }
   }, [resolvedParams.id]);
+
+  // Handle status change - redirect to edit page if reverted to draft
+  const handleStatusChange = useCallback(async () => {
+    const updatedCharacter = await fetchCharacter();
+    if (updatedCharacter?.status === "draft") {
+      // Redirect to edit page for draft characters
+      window.location.href = `/characters/${resolvedParams.id}/edit`;
+    }
+  }, [fetchCharacter, resolvedParams.id]);
+
+  useEffect(() => {
+    fetchCharacter();
+  }, [fetchCharacter]);
 
   if (loading) {
     return (
@@ -1758,6 +1792,8 @@ export default function CharacterPage({ params }: CharacterPageProps) {
           setTargetPool={setTargetPool}
           poolContext={poolContext}
           setPoolContext={setPoolContext}
+          isAdmin={isAdmin}
+          onRefresh={handleStatusChange}
         />
       </CombatSessionProvider>
     </RulesetProvider>
