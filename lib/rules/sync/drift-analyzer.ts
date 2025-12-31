@@ -61,7 +61,9 @@ export async function analyzeCharacterDrift(
   // This allows early exit before loading any large snapshot files
   const currentVersionRef = await getCurrentSnapshotFn(character.editionCode);
   if (!currentVersionRef) {
-    throw new Error(`No current ruleset snapshot for edition: ${character.editionCode}`);
+    // No snapshots exist yet for this edition - return empty report
+    // This is expected for characters created before the snapshot system
+    return createEmptyDriftReportNoBaseline(character);
   }
 
   // EARLY EXIT: If character is already on the current snapshot, no drift possible
@@ -72,7 +74,9 @@ export async function analyzeCharacterDrift(
   // Only load full snapshots if we need to compare them
   const characterSnapshot = await getRulesetSnapshotFn(character.rulesetSnapshotId);
   if (!characterSnapshot) {
-    throw new Error(`Character ruleset snapshot not found: ${character.rulesetSnapshotId}`);
+    // Character's snapshot doesn't exist - return empty report
+    // This is expected for characters created before the snapshot system
+    return createEmptyDriftReportNoBaseline(character);
   }
 
   const currentRuleset = await getRulesetSnapshotFn(currentVersionRef.snapshotId);
@@ -603,6 +607,33 @@ function createEmptyDriftReport(
     generatedAt: new Date().toISOString(),
     currentVersion: characterVersionRef,
     targetVersion: currentVersionRef,
+    overallSeverity: "none",
+    changes: [],
+    recommendations: [],
+  };
+}
+
+/**
+ * Create an empty drift report when no baseline snapshot exists
+ *
+ * Used for characters created before the snapshot system was implemented,
+ * or when no snapshots have been captured for an edition yet.
+ */
+function createEmptyDriftReportNoBaseline(character: Character): DriftReport {
+  const characterVersionRef = character.rulesetVersion || {
+    editionCode: character.editionCode,
+    editionVersion: "1.0.0",
+    bookVersions: {},
+    snapshotId: character.rulesetSnapshotId,
+    createdAt: character.createdAt,
+  };
+
+  return {
+    id: uuidv4(),
+    characterId: character.id,
+    generatedAt: new Date().toISOString(),
+    currentVersion: characterVersionRef,
+    targetVersion: characterVersionRef, // Same as current since no baseline exists
     overallSeverity: "none",
     changes: [],
     recommendations: [],
