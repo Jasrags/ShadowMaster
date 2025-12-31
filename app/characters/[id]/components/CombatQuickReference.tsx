@@ -15,6 +15,8 @@ import { useMemo } from "react";
 import { THEMES, DEFAULT_THEME, type Theme } from "@/lib/themes";
 import type { Character, Weapon, ArmorItem } from "@/lib/types";
 import { DicePoolDisplay, type PoolModifier } from "./DicePoolDisplay";
+import { Wifi } from "lucide-react";
+import { calculateWirelessBonuses, isGlobalWirelessEnabled } from "@/lib/rules/wireless";
 
 // =============================================================================
 // TYPES
@@ -60,10 +62,27 @@ function calculateDodgePool(character: Character): number {
   return defensePool + gymnastics;
 }
 
-function calculateInitiative(character: Character): { base: number; dice: number } {
+function calculateInitiative(character: Character): { base: number; dice: number; wirelessBonus: number; wirelessDice: number } {
   const reaction = getAttributeValue(character, "reaction");
   const intuition = getAttributeValue(character, "intuition");
-  return { base: reaction + intuition, dice: 1 };
+
+  // Get wireless bonuses if enabled
+  const globalWireless = isGlobalWirelessEnabled(character);
+  let wirelessBonus = 0;
+  let wirelessDice = 0;
+
+  if (globalWireless) {
+    const bonuses = calculateWirelessBonuses(character);
+    wirelessBonus = bonuses.initiative;
+    wirelessDice = bonuses.initiativeDice;
+  }
+
+  return {
+    base: reaction + intuition,
+    dice: 1,
+    wirelessBonus,
+    wirelessDice,
+  };
 }
 
 function getTotalArmor(character: Character): number {
@@ -229,7 +248,9 @@ export function CombatQuickReference({
     };
   }, [character, physicalLimit]);
 
-  const effectiveInit = combatData.initiative.base + woundModifier;
+  const effectiveInit = combatData.initiative.base + combatData.initiative.wirelessBonus + woundModifier;
+  const totalInitDice = combatData.initiative.dice + combatData.initiative.wirelessDice;
+  const hasWirelessBonus = combatData.initiative.wirelessBonus > 0 || combatData.initiative.wirelessDice > 0;
 
   return (
     <div className="space-y-4">
@@ -238,18 +259,35 @@ export function CombatQuickReference({
         <div
           className={`p-3 rounded border text-center ${t.colors.card} ${t.colors.border}`}
         >
-          <span className={`block text-xs ${t.fonts.mono} text-muted-foreground uppercase mb-1`}>
+          <span className={`flex items-center justify-center gap-1 text-xs ${t.fonts.mono} text-muted-foreground uppercase mb-1`}>
             Initiative
+            {hasWirelessBonus && (
+              <span title="Wireless bonus active"><Wifi className="w-3 h-3 text-cyan-400" /></span>
+            )}
           </span>
           <span className={`text-xl font-bold ${t.fonts.mono} ${
-            woundModifier < 0 ? "text-amber-400" : t.colors.accent
+            woundModifier < 0 ? "text-amber-400" : hasWirelessBonus ? "text-cyan-400" : t.colors.accent
           }`}>
-            {effectiveInit}+{combatData.initiative.dice}d6
+            {effectiveInit}+{totalInitDice}d6
           </span>
-          {woundModifier < 0 && (
-            <span className="block text-[10px] text-red-400 mt-1">
-              ({woundModifier} wound)
-            </span>
+          {(woundModifier < 0 || hasWirelessBonus) && (
+            <div className="flex items-center justify-center gap-2 mt-1">
+              {woundModifier < 0 && (
+                <span className="text-[10px] text-red-400">
+                  ({woundModifier} wound)
+                </span>
+              )}
+              {combatData.initiative.wirelessBonus > 0 && (
+                <span className="text-[10px] text-cyan-400">
+                  (+{combatData.initiative.wirelessBonus} wireless)
+                </span>
+              )}
+              {combatData.initiative.wirelessDice > 0 && (
+                <span className="text-[10px] text-cyan-400">
+                  (+{combatData.initiative.wirelessDice}d6)
+                </span>
+              )}
+            </div>
           )}
         </div>
 
