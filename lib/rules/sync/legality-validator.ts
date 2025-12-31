@@ -111,11 +111,23 @@ export async function validateRulesLegality(
   const violations: LegalityViolation[] = [];
   const recommendations: string[] = [];
 
+  // If character has no snapshot ID, they predate the snapshot system
+  // This is not an error - they're simply not enrolled in ruleset tracking
+  if (!character.rulesetSnapshotId) {
+    return {
+      isLegal: true,
+      status: character.status === "draft" ? "draft" : "rules-legal",
+      violations: [],
+      recommendations: [],
+    };
+  }
+
   // Check if snapshot exists (use cache if available)
   const snapshot = cache
     ? await cache.getRulesetSnapshot(character.rulesetSnapshotId)
     : await getRulesetSnapshot(character.rulesetSnapshotId);
   if (!snapshot) {
+    // Snapshot ID exists but file is missing - this IS an error
     violations.push({
       id: "missing-snapshot",
       type: "missing_snapshot",
