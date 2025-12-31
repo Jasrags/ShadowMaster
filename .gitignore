@@ -59,3 +59,4 @@ next-env.d.ts
 .claude/
 seattle-locations.json
 /data/editions/sr5/core-rulebook.json.backup
+.pommel/

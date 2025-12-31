@@ -18,6 +18,7 @@ import type {
   SourceReference,
   DynamicStateType,
 } from "./qualities";
+import type { WirelessEffect } from "./wireless-effects";
 
 // =============================================================================
 // EDITION
@@ -387,8 +388,14 @@ export interface CyberwareCatalogItem {
   initiativeDiceBonusPerRating?: number;
   /** Description */
   description?: string;
-  /** Wireless bonus description */
+  /** Wireless bonus description (human-readable) */
   wirelessBonus?: string;
+  /**
+   * Structured wireless effects for mechanical calculation.
+   * @see WirelessEffect
+   * @see ADR-010 Inventory State Management
+   */
+  wirelessEffects?: WirelessEffect[];
   /** Page reference in source material */
   page?: number;
   /** Source book reference */
@@ -454,6 +461,14 @@ export interface BiowareCatalogItem {
   maxAttributeBonus?: number;
   /** Description */
   description?: string;
+  /** Wireless bonus description (human-readable) */
+  wirelessBonus?: string;
+  /**
+   * Structured wireless effects for mechanical calculation.
+   * @see WirelessEffect
+   * @see ADR-010 Inventory State Management
+   */
+  wirelessEffects?: WirelessEffect[];
   /** Page reference in source material */
   page?: number;
   /** Source book reference */

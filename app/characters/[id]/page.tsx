@@ -42,6 +42,7 @@ import { CombatQuickReference } from "./components/CombatQuickReference";
 import { ActionPanel } from "./components/ActionPanel";
 import { QuickCombatControls } from "./components/QuickCombatControls";
 import { QuickNPCPanel } from "./components/QuickNPCPanel";
+import { InventoryPanel } from "./components/InventoryPanel";
 import { useCharacterSheetPreferences } from "./hooks/useCharacterSheetPreferences";
 import { CombatSessionProvider } from "@/lib/combat";
 import { StabilityShield } from "@/components/sync";
@@ -1580,10 +1581,18 @@ function CharacterSheet({
               </Section>
             ) : null}
 
+            {/* Inventory Management Panel */}
+            <InventoryPanel
+              character={character}
+              theme={theme}
+              onUpdate={(updated) => setCharacter(updated)}
+              showActions={character.status === "active"}
+            />
+
             {/* Qualities */}
-            <QualitiesSection 
-              character={character} 
-              theme={theme} 
+            <QualitiesSection
+              character={character}
+              theme={theme}
               onUpdate={(updated) => setCharacter(updated)}
             />
 

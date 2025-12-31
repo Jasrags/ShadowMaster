@@ -48,6 +48,8 @@ export type PoolModifierSource =
   | "sustaining"
   | "edge"
   | "limit"
+  | "encumbrance"
+  | "wireless"
   | "other";
 
 /**

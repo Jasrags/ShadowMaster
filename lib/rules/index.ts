@@ -63,3 +63,28 @@ export type {
   SpriteTypeData,
   SpritePowerData,
 } from "./RulesetContext";
+
+// Gameplay utilities - Client-safe
+export {
+  // Rating calculations
+  getEffectiveRating,
+  getRatingDiceBonus,
+  getItemDiceBonus,
+  getRatingThreshold,
+  getEffectiveThreshold,
+  getPerceptionBonus,
+  getDefenseBonus,
+  getAttackBonus,
+  // Armor calculations (SR5 stacking rules)
+  calculateArmorTotal,
+  getTotalArmorValue,
+  // Wound modifiers
+  calculateWoundModifier,
+} from "./gameplay";
+
+export type {
+  EffectiveRatingContext,
+  RatingBonusType,
+  TestThresholdType,
+  ArmorCalculationResult,
+} from "./gameplay";

@@ -132,6 +132,7 @@ When encountering a design constraint, ask:
 | 007 | [Character Authorization Model](./007-security.character-authorization-model.md) | Security | Context-aware multi-role authorization (owner, GM, player, admin) |
 | 008 | [Cookie-Based Sessions](./008-security.cookie-based-sessions.md) | Security | httpOnly cookies with session versioning for instant revocation |
 | 009 | [Append-Only Ledger Pattern](./009-storage.append-only-ledger-pattern.md) | Storage | Immutable transaction logs for karma, favors, actions, audits |
+| 010 | [Inventory State Management](./010-gear.inventory-state-management.md) | Gear | Unified gear state model: equipment readiness, per-item wireless, device condition, magazines |
 
 ---
 

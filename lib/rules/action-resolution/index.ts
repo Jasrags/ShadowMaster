@@ -41,6 +41,20 @@ export {
   buildResistancePool,
   buildSpellcastingPool,
   buildPerceptionPool,
+  // Encumbrance integration
+  createEncumbranceModifier,
+  calculateEncumbrance,
+  type EncumbranceState,
+  // Wireless bonus integration
+  createWirelessModifiers,
+  createCombinedWirelessModifier,
+  type WirelessContext,
+  type ActiveWirelessBonuses,
+  // Enhanced pool builders
+  buildEnhancedActionPool,
+  buildEnhancedAttackPool,
+  buildEnhancedDefensePool,
+  type EnhancedPoolBuildOptions,
 } from "./pool-builder";
 
 // Edge Actions

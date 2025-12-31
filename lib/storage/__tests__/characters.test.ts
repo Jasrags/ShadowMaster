@@ -486,7 +486,7 @@ describe('Character Storage', () => {
       expect(all.find(c => c.id === char2.id)).toBeDefined();
       expect(all.find(c => c.id === char1.id)?.name).toBe('User1');
       expect(all.find(c => c.id === char2.id)?.name).toBe('User2');
-    });
+    }, 10000); // File I/O across multiple user directories can be slow
   });
 });
 

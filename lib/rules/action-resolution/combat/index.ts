@@ -73,3 +73,36 @@ export {
   canAct,
   getStatusDescription,
 } from "./damage-handler";
+
+// Ammunition management (ADR-010)
+export {
+  // Types
+  type LoadWeaponResult,
+  type UnloadWeaponResult,
+  type SwapMagazineResult,
+  type FireResult,
+  type AmmoDamageModifiers,
+  // Constants
+  AMMO_CONSUMPTION as AMMO_CONSUMPTION_NEW,
+  DEFAULT_MAGAZINE_CAPACITY,
+  // State helpers
+  getWeaponAmmoState,
+  updateWeaponAmmoState,
+  weaponUsesAmmo,
+  // Loading/unloading
+  loadWeapon,
+  unloadWeapon,
+  // Magazine management
+  swapMagazine,
+  createEmptyMagazine,
+  loadMagazine,
+  // Firing
+  canFire,
+  consumeAmmunition,
+  // Damage modifiers
+  getAmmoDamageModifiers,
+  getEffectiveWeaponDamage,
+  // Utility
+  getAmmoDisplayString,
+  needsReload,
+} from "./ammunition-manager";

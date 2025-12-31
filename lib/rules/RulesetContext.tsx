@@ -142,6 +142,11 @@ export interface GearItemData {
    * @deprecated Use ratingSpec.capacityCostScaling.perRating instead
    */
   capacityPerRating?: boolean;
+  /**
+   * Weight in kilograms for encumbrance calculation.
+   * @see ADR-010 Inventory State Management
+   */
+  weight?: number;
 }
 
 export interface WeaponData extends GearItemData {

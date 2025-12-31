@@ -12,7 +12,16 @@ import type {
   PoolBuildOptions,
   EditionDiceRules,
 } from "@/lib/types";
+import type {
+  EncumbranceState,
+} from "@/lib/types/gear-state";
+import type {
+  EffectConditionType,
+  ActiveWirelessBonuses,
+} from "@/lib/types/wireless-effects";
 import { DEFAULT_DICE_RULES } from "./dice-engine";
+import { calculateEncumbrance } from "../encumbrance/calculator";
+import { calculateContextualWirelessBonuses } from "../wireless/bonus-calculator";
 
 // =============================================================================
 // WOUND MODIFIER CALCULATION
@@ -157,9 +166,9 @@ export function getSkillRating(
  * Check if character has a specialization for a skill
  */
 export function hasSpecialization(
-  character: Character,
-  skillName: string,
-  specialization: string
+  _character: Character,
+  _skillName: string,
+  _specialization: string
 ): boolean {
   // Specializations would typically be stored in character data
   // This is a placeholder - implement based on actual data structure
@@ -437,6 +446,244 @@ export function buildPerceptionPool(
       limit: mentalLimit,
       limitSource: "Mental Limit",
       situationalModifiers,
+    },
+    rules
+  );
+}
+
+// =============================================================================
+// ENCUMBRANCE MODIFIERS
+// =============================================================================
+
+/**
+ * Calculate encumbrance modifier for a character.
+ * Returns null if character is not encumbered.
+ */
+export function createEncumbranceModifier(
+  character: Character
+): PoolModifier | null {
+  const encumbrance = calculateEncumbrance(character);
+
+  if (encumbrance.overweightPenalty < 0) {
+    return {
+      source: "encumbrance",
+      value: encumbrance.overweightPenalty,
+      description: `Encumbered (${encumbrance.currentWeight.toFixed(1)}/${encumbrance.maxCapacity.toFixed(1)} kg)`,
+    };
+  }
+
+  return null;
+}
+
+/**
+ * Get full encumbrance information for display.
+ */
+export { calculateEncumbrance };
+export type { EncumbranceState };
+
+// =============================================================================
+// WIRELESS BONUS MODIFIERS
+// =============================================================================
+
+/**
+ * Context type for wireless bonus calculation.
+ * Maps to EffectConditionType from wireless-effects.
+ */
+export type WirelessContext = {
+  testType: EffectConditionType | "attack" | "defense" | "perception";
+};
+
+/**
+ * Get the appropriate EffectConditionType for a WirelessContext.
+ */
+function mapTestTypeToCondition(testType: WirelessContext["testType"]): EffectConditionType {
+  switch (testType) {
+    case "attack":
+      return "ranged_attack"; // Default attack type
+    case "defense":
+      return "defense";
+    case "perception":
+      return "perception_test";
+    default:
+      return testType as EffectConditionType;
+  }
+}
+
+/**
+ * Create pool modifiers from active wireless bonuses.
+ *
+ * @param character - Character to analyze
+ * @param context - What type of action is being performed
+ * @returns Array of modifiers (may be empty if no bonuses apply)
+ */
+export function createWirelessModifiers(
+  character: Character,
+  context: WirelessContext
+): PoolModifier[] {
+  const conditionType = mapTestTypeToCondition(context.testType);
+  const bonuses = calculateContextualWirelessBonuses(character, conditionType);
+  const modifiers: PoolModifier[] = [];
+
+  // Extract relevant bonuses based on test type
+  if (context.testType === "attack" || context.testType === "ranged_attack" || context.testType === "melee_attack") {
+    if (bonuses.attackPool > 0) {
+      modifiers.push({
+        source: "wireless",
+        value: bonuses.attackPool,
+        description: "Wireless attack bonus",
+      });
+    }
+    if (bonuses.recoil > 0) {
+      modifiers.push({
+        source: "wireless",
+        value: bonuses.recoil,
+        description: "Wireless recoil compensation",
+      });
+    }
+  }
+
+  if (context.testType === "defense") {
+    if (bonuses.defensePool > 0) {
+      modifiers.push({
+        source: "wireless",
+        value: bonuses.defensePool,
+        description: "Wireless defense bonus",
+      });
+    }
+  }
+
+  // Check for initiative bonuses (always relevant)
+  if (bonuses.initiative > 0) {
+    modifiers.push({
+      source: "wireless",
+      value: bonuses.initiative,
+      description: "Wireless initiative bonus",
+    });
+  }
+
+  return modifiers;
+}
+
+/**
+ * Get a single combined wireless modifier for display simplicity.
+ * Returns null if no wireless bonuses apply.
+ */
+export function createCombinedWirelessModifier(
+  character: Character,
+  context: WirelessContext
+): PoolModifier | null {
+  const modifiers = createWirelessModifiers(character, context);
+
+  if (modifiers.length === 0) {
+    return null;
+  }
+
+  const totalValue = modifiers.reduce((sum, m) => sum + m.value, 0);
+  const sources = modifiers.map((m) => m.description).join(", ");
+
+  return {
+    source: "wireless",
+    value: totalValue,
+    description: `Wireless bonuses: ${sources}`,
+  };
+}
+
+// Re-export types for convenience
+export type { ActiveWirelessBonuses };
+
+// =============================================================================
+// ENHANCED POOL BUILDING
+// =============================================================================
+
+/**
+ * Extended options for building pools with inventory state integration.
+ */
+export interface EnhancedPoolBuildOptions extends PoolBuildOptions {
+  /** Include encumbrance penalty if applicable */
+  includeEncumbrance?: boolean;
+  /** Wireless context for bonus calculation */
+  wirelessContext?: WirelessContext;
+}
+
+/**
+ * Build an action pool with full inventory state integration.
+ *
+ * This enhanced version includes:
+ * - Encumbrance penalties (if enabled)
+ * - Wireless bonuses (if context provided)
+ * - Standard wound modifiers
+ * - Situational modifiers
+ */
+export function buildEnhancedActionPool(
+  character: Character,
+  options: EnhancedPoolBuildOptions,
+  rules: EditionDiceRules = DEFAULT_DICE_RULES
+): ActionPool {
+  // Start with base pool
+  let pool = buildActionPool(character, options, rules);
+
+  // Add encumbrance penalty if applicable
+  if (options.includeEncumbrance !== false) {
+    const encumbranceMod = createEncumbranceModifier(character);
+    if (encumbranceMod) {
+      pool = addModifiersToPool(pool, encumbranceMod);
+    }
+  }
+
+  // Add wireless bonuses if context provided
+  if (options.wirelessContext) {
+    const wirelessMods = createWirelessModifiers(character, options.wirelessContext);
+    if (wirelessMods.length > 0) {
+      pool = addModifiersToPool(pool, ...wirelessMods);
+    }
+  }
+
+  return pool;
+}
+
+/**
+ * Build an enhanced attack pool with smartgun/wireless bonuses.
+ */
+export function buildEnhancedAttackPool(
+  character: Character,
+  skill: string,
+  weaponAccuracy?: number,
+  situationalModifiers?: PoolModifier[],
+  rules: EditionDiceRules = DEFAULT_DICE_RULES
+): ActionPool {
+  return buildEnhancedActionPool(
+    character,
+    {
+      attribute: "agility",
+      skill,
+      limit: weaponAccuracy,
+      limitSource: "Weapon Accuracy",
+      situationalModifiers,
+      includeEncumbrance: true,
+      wirelessContext: { testType: "attack" },
+    },
+    rules
+  );
+}
+
+/**
+ * Build an enhanced defense pool.
+ */
+export function buildEnhancedDefensePool(
+  character: Character,
+  situationalModifiers?: PoolModifier[],
+  rules: EditionDiceRules = DEFAULT_DICE_RULES
+): ActionPool {
+  const reaction = getAttributeValue(character, "reaction");
+  const intuition = getAttributeValue(character, "intuition");
+
+  return buildEnhancedActionPool(
+    character,
+    {
+      manualPool: reaction + intuition,
+      situationalModifiers,
+      includeEncumbrance: true,
+      wirelessContext: { testType: "defense" },
     },
     rules
   );
