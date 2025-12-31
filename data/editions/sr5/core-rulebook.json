@@ -5489,7 +5489,8 @@
               "damage": "(STR+2)S",
               "ap": 0,
               "reach": 1,
-              "accuracy": 4
+              "accuracy": 4,
+              "weight": 0.5
             },
             {
               "id": "combat-knife",
@@ -5501,7 +5502,8 @@
               "damage": "(STR+1)P",
               "ap": -1,
               "reach": 0,
-              "accuracy": 6
+              "accuracy": 6,
+              "weight": 0.25
             },
             {
               "id": "combat-axe",
@@ -5551,7 +5553,8 @@
               "damage": "(STR+3)P",
               "ap": -3,
               "reach": 1,
-              "accuracy": 7
+              "accuracy": 7,
+              "weight": 1.2
             },
             {
               "id": "knife",
@@ -5732,6 +5735,7 @@
               "rc": 0,
               "ammo": 15,
               "accuracy": 5,
+              "weight": 1.3,
               "builtInModifications": [
                 {
                   "modificationId": "smartgun-internal",
@@ -6249,6 +6253,7 @@
               "rc": 2,
               "ammo": 42,
               "accuracy": 5,
+              "weight": 3.8,
               "builtInModifications": [
                 {
                   "modificationId": "smartgun-internal",
@@ -6891,6 +6896,7 @@
             "cost": 1000,
             "availability": 2,
             "armorRating": 12,
+            "weight": 3,
             "description": "Standard street armor for runners."
           },
           {
@@ -6900,6 +6906,7 @@
             "cost": 500,
             "availability": 4,
             "armorRating": 9,
+            "weight": 2.5,
             "description": "Concealable armored vest."
           },
           {
@@ -6938,6 +6945,7 @@
             "availability": 14,
             "restricted": true,
             "armorRating": 15,
+            "weight": 10,
             "description": "Complete body coverage with helmet."
           },
           {
@@ -8763,6 +8771,9 @@
             "restricted": true,
             "description": "VCR for controlling vehicles and drones. +1 to vehicle tests.",
             "wirelessBonus": "Noise reduction equal to rating.",
+            "wirelessEffects": [
+              { "type": "noise_reduction", "modifier": 1 }
+            ],
             "attributeBonuses": {
               "vehicleControl": 1
             },
@@ -8778,6 +8789,9 @@
             "restricted": true,
             "description": "Advanced VCR. +2 to vehicle tests.",
             "wirelessBonus": "Noise reduction equal to rating.",
+            "wirelessEffects": [
+              { "type": "noise_reduction", "modifier": 2 }
+            ],
             "attributeBonuses": {
               "vehicleControl": 2
             },
@@ -8793,6 +8807,9 @@
             "restricted": true,
             "description": "Military-grade VCR. +3 to vehicle tests.",
             "wirelessBonus": "Noise reduction equal to rating.",
+            "wirelessEffects": [
+              { "type": "noise_reduction", "modifier": 3 }
+            ],
             "attributeBonuses": {
               "vehicleControl": 3
             },
@@ -9620,6 +9637,10 @@
             "availability": 8,
             "restricted": true,
             "description": "+1 REA.",
+            "wirelessBonus": "+1 Reaction (included in rating 2 and 3).",
+            "wirelessEffects": [
+              { "type": "attribute", "attribute": "reaction", "modifier": 1 }
+            ],
             "attributeBonuses": {
               "reaction": 1
             },
@@ -9634,6 +9655,10 @@
             "availability": 12,
             "restricted": true,
             "description": "+2 REA.",
+            "wirelessBonus": "+1 Reaction (included in rating 3).",
+            "wirelessEffects": [
+              { "type": "attribute", "attribute": "reaction", "modifier": 1 }
+            ],
             "attributeBonuses": {
               "reaction": 2
             },
@@ -9648,6 +9673,10 @@
             "availability": 14,
             "restricted": true,
             "description": "+3 REA.",
+            "wirelessBonus": "+1 Reaction.",
+            "wirelessEffects": [
+              { "type": "attribute", "attribute": "reaction", "modifier": 1 }
+            ],
             "attributeBonuses": {
               "reaction": 3
             },
@@ -9753,6 +9782,10 @@
             "availability": 8,
             "restricted": true,
             "description": "+1 REA, +1D6 Initiative.",
+            "wirelessBonus": "+1 Initiative.",
+            "wirelessEffects": [
+              { "type": "initiative", "modifier": 1 }
+            ],
             "attributeBonuses": {
               "reaction": 1
             },
@@ -9768,6 +9801,10 @@
             "availability": 12,
             "restricted": true,
             "description": "+2 REA, +2D6 Initiative.",
+            "wirelessBonus": "+1 Initiative.",
+            "wirelessEffects": [
+              { "type": "initiative", "modifier": 1 }
+            ],
             "attributeBonuses": {
               "reaction": 2
             },
@@ -9783,6 +9820,10 @@
             "availability": 20,
             "restricted": true,
             "description": "+3 REA, +3D6 Initiative.",
+            "wirelessBonus": "+1 Initiative.",
+            "wirelessEffects": [
+              { "type": "initiative", "modifier": 1 }
+            ],
             "attributeBonuses": {
               "reaction": 3
             },
@@ -10308,6 +10349,10 @@
             "availability": 12,
             "restricted": true,
             "description": "+1 AGI.",
+            "wirelessBonus": "+1 Agility (included in higher ratings).",
+            "wirelessEffects": [
+              { "type": "attribute", "attribute": "agility", "modifier": 1 }
+            ],
             "attributeBonuses": {
               "agility": 1
             },
@@ -10322,6 +10367,10 @@
             "availability": 14,
             "restricted": true,
             "description": "+2 AGI.",
+            "wirelessBonus": "+1 Agility (included in higher ratings).",
+            "wirelessEffects": [
+              { "type": "attribute", "attribute": "agility", "modifier": 1 }
+            ],
             "attributeBonuses": {
               "agility": 2
             },
@@ -10336,6 +10385,10 @@
             "availability": 16,
             "restricted": true,
             "description": "+3 AGI.",
+            "wirelessBonus": "+1 Agility (included in rating 4).",
+            "wirelessEffects": [
+              { "type": "attribute", "attribute": "agility", "modifier": 1 }
+            ],
             "attributeBonuses": {
               "agility": 3
             },
@@ -10350,6 +10403,10 @@
             "availability": 18,
             "restricted": true,
             "description": "+4 AGI.",
+            "wirelessBonus": "+1 Agility.",
+            "wirelessEffects": [
+              { "type": "attribute", "attribute": "agility", "modifier": 1 }
+            ],
             "attributeBonuses": {
               "agility": 4
             },
