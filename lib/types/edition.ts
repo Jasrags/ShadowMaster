@@ -45,7 +45,12 @@ export interface Edition {
   id: ID;
   name: string; // "Shadowrun 5th Edition"
   shortCode: EditionCode;
-  version?: string; // e.g., "1.0" for internal versioning
+  /**
+   * Internal version string for this edition's ruleset data (semver format).
+   * Used for drift detection and synchronization tracking.
+   * @required for System Synchronization capability
+   */
+  version: string; // e.g., "1.0.0" for internal versioning
   description?: string;
   releaseYear: number;
 
@@ -96,6 +101,13 @@ export interface Book {
   publisher?: string; // "Catalyst Game Labs"
   releaseYear?: number;
   isbn?: string;
+
+  /**
+   * Internal version string for this book's ruleset data (semver format).
+   * Used for drift detection and synchronization tracking.
+   * @required for System Synchronization capability
+   */
+  version: string; // e.g., "1.0.0"
 
   /** Whether this is the core rulebook for the edition */
   isCore: boolean;

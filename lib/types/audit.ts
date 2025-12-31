@@ -48,7 +48,14 @@ export type AuditAction =
   // Augmentation actions
   | "augmentation_installed"
   | "augmentation_removed"
-  | "augmentation_upgraded";
+  | "augmentation_upgraded"
+  // Sync/Migration actions
+  | "drift_detected"
+  | "migration_started"
+  | "migration_completed"
+  | "migration_rolled_back"
+  | "legality_changed"
+  | "manual_resync";
 
 // =============================================================================
 // ACTOR TYPES

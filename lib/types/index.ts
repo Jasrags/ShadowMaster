@@ -7,6 +7,47 @@
 // Core types
 export type { ID, ISODateString, Metadata, MagicalPath } from "./core";
 
+// Synchronization types
+export type {
+  DataLayerType,
+  DriftSeverity,
+  SyncStatus,
+  LegalityStatus,
+  RulesetVersionRef,
+  DriftReport,
+  DriftChange,
+  DriftChangeType,
+  AffectedItem,
+  CharacterUsageContext,
+  MigrationRecommendation,
+  MigrationStrategy,
+  MigrationOption,
+  MigrationPlan,
+  MigrationStep,
+  MigrationAction,
+  MigrationResult,
+  AppliedMigration,
+  MechanicalSnapshot,
+  MetatypeSnapshot,
+  AttributeDefinitionSnapshot,
+  AttributeSnapshot,
+  SkillDefinitionSnapshot,
+  SkillSnapshot,
+  QualityDefinitionSnapshot,
+  QualitySnapshot,
+  DeltaOverrides,
+  TemporaryModifier,
+  SyncAuditEntry,
+  SyncEventType,
+  AppliedChange,
+  SyncAuditActor,
+  StabilityShield,
+  LegalityValidationResult,
+  LegalityIssue,
+  EncounterEligibility,
+  MigrationValidationResult,
+} from "./synchronization";
+
   // Edition and ruleset types
 export type {
   EditionCode,

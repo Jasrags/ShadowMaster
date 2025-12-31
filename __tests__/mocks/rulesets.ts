@@ -35,6 +35,7 @@ export function createMockBook(overrides?: Partial<Book>): Book {
     id: 'core-rulebook',
     editionId: 'sr5',
     title: 'Core Rulebook',
+    version: '1.0.0',
     isCore: true,
     categories: ['core'],
     payloadRef: 'data/editions/sr5/core-rulebook.json',

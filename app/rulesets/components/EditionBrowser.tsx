@@ -58,7 +58,7 @@ export default function EditionBrowser({ editions }: EditionBrowserProps) {
 
             {/* Side Panel for Detail View */}
             <div
-                className={`fixed inset-y-0 right-0 w-full sm:w-[400px] xl:w-[500px] transform transition-transform duration-300 ease-in-out z-40 shadow-2xl ${selectedEditionCode ? "translate-x-0" : "translate-x-full"
+                className={`fixed top-16 bottom-0 right-0 w-full sm:w-[400px] xl:w-[500px] transform transition-transform duration-300 ease-in-out z-40 shadow-2xl ${selectedEditionCode ? "translate-x-0" : "translate-x-full"
                     }`}
             >
                 {selectedEditionCode && (
@@ -72,7 +72,7 @@ export default function EditionBrowser({ editions }: EditionBrowserProps) {
             {/* Overlay for mobile/tablet when sidebar is open */}
             {selectedEditionCode && (
                 <div
-                    className="fixed inset-0 bg-background/80 backdrop-blur-sm z-30 lg:hidden"
+                    className="fixed top-16 inset-x-0 bottom-0 bg-background/80 backdrop-blur-sm z-30 lg:hidden"
                     onClick={handleCloseDetail}
                 />
             )}

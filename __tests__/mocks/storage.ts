@@ -125,6 +125,7 @@ export function createMockCharacter(overrides?: Partial<Character>): Character {
     editionId: 'test-edition-id',
     editionCode: 'sr5',
     creationMethodId: 'test-creation-method-id',
+    rulesetSnapshotId: 'test-snapshot-id',
     attachedBookIds: [],
     name: 'Test Character',
     metatype: 'Human',

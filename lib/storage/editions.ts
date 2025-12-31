@@ -129,6 +129,7 @@ export async function getAllBooks(editionCode: EditionCode): Promise<Book[]> {
         id: bookPayload.meta.bookId,
         editionId: edition.id,
         title: bookPayload.meta.title,
+        version: bookPayload.meta.version || "1.0.0",
         isCore: bookPayload.meta.category === "core",
         categories: [bookPayload.meta.category],
         payloadRef: path.join(editionDir, `${bookId}.json`),
