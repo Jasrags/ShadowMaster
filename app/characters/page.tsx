@@ -456,6 +456,9 @@ export default function CharactersPage() {
 
   useEffect(() => {
     async function fetchCharacters() {
+      setLoading(true);
+      setError(null);
+
       try {
         const url = isAdminMode
           ? `/api/characters?admin=true${ownerFilter ? `&ownerId=${ownerFilter}` : ""}`
