@@ -704,6 +704,12 @@ export interface GearItem {
   modifications?: InstalledGearMod[];
   notes?: string;
   metadata?: Metadata;
+  /**
+   * Weight in kilograms for encumbrance calculation.
+   * Copied from catalog during acquisition.
+   * @see ADR-010 Inventory State Management
+   */
+  weight?: number;
 }
 
 /**
