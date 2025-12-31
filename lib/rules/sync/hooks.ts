@@ -113,7 +113,7 @@ export function useSyncStatus(characterId: ID): SyncStatusResult {
     setError(undefined);
 
     try {
-      const response = await fetch(`/api/characters/${characterId}/sync/status`);
+      const response = await fetch(`/api/characters/${characterId}/sync`);
       if (!response.ok) {
         throw new Error("Failed to fetch sync status");
       }
@@ -202,7 +202,7 @@ export function useDriftAnalysis(characterId: ID): DriftAnalysisResult {
     setError(undefined);
 
     try {
-      const response = await fetch(`/api/characters/${characterId}/sync/analyze`, {
+      const response = await fetch(`/api/characters/${characterId}/sync`, {
         method: "POST",
       });
 
@@ -329,7 +329,7 @@ export function useMigrationWizard(characterId: ID): MigrationWizardResult {
   useEffect(() => {
     async function loadReport() {
       try {
-        const response = await fetch(`/api/characters/${characterId}/sync/analyze`, {
+        const response = await fetch(`/api/characters/${characterId}/sync`, {
           method: "POST",
         });
 
