@@ -19,6 +19,7 @@ import type {
 } from "@/lib/types";
 import { analyzeCharacterDrift, classifyDriftSeverity } from "./drift-analyzer";
 import { getRulesetSnapshot } from "@/lib/storage/ruleset-snapshots";
+import type { SnapshotCache } from "@/lib/storage/snapshot-cache";
 
 // =============================================================================
 // TYPES
@@ -104,13 +105,16 @@ export interface EncounterEligibility {
  * @returns Validation result with violations
  */
 export async function validateRulesLegality(
-  character: Character
+  character: Character,
+  cache?: SnapshotCache
 ): Promise<LegalityValidationResult> {
   const violations: LegalityViolation[] = [];
   const recommendations: string[] = [];
 
-  // Check if snapshot exists
-  const snapshot = await getRulesetSnapshot(character.rulesetSnapshotId);
+  // Check if snapshot exists (use cache if available)
+  const snapshot = cache
+    ? await cache.getRulesetSnapshot(character.rulesetSnapshotId)
+    : await getRulesetSnapshot(character.rulesetSnapshotId);
   if (!snapshot) {
     violations.push({
       id: "missing-snapshot",
@@ -162,7 +166,7 @@ export async function validateRulesLegality(
   // Check for drift
   let driftReport: DriftReport | undefined;
   try {
-    driftReport = await analyzeCharacterDrift(character);
+    driftReport = await analyzeCharacterDrift(character, cache);
     if (driftReport.changes.length > 0) {
       violations.push({
         id: "drift-detected",
@@ -214,7 +218,8 @@ export async function validateRulesLegality(
  * @returns Eligibility result
  */
 export async function canParticipateInEncounter(
-  character: Character
+  character: Character,
+  cache?: SnapshotCache
 ): Promise<EncounterEligibility> {
   const blockers: string[] = [];
   const warnings: string[] = [];
@@ -242,7 +247,7 @@ export async function canParticipateInEncounter(
   }
 
   // Validate rules legality
-  const validation = await validateRulesLegality(character);
+  const validation = await validateRulesLegality(character, cache);
 
   // Errors block participation
   for (const violation of validation.violations) {
@@ -276,7 +281,8 @@ export async function canParticipateInEncounter(
  * @returns Shield status for UI
  */
 export async function getLegalityShield(
-  character: Character
+  character: Character,
+  cache?: SnapshotCache
 ): Promise<StabilityShield> {
   // Quick checks for obvious states
   if (character.status === "draft") {
@@ -326,7 +332,7 @@ export async function getLegalityShield(
 
   // Validate legality
   try {
-    const validation = await validateRulesLegality(character);
+    const validation = await validateRulesLegality(character, cache);
 
     if (!validation.isLegal) {
       return {

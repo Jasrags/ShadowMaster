@@ -27,6 +27,7 @@ import type {
   MigrationStrategy,
 } from "@/lib/types";
 import { getRulesetSnapshot, getCurrentSnapshot } from "@/lib/storage/ruleset-snapshots";
+import type { SnapshotCache } from "@/lib/storage/snapshot-cache";
 
 // =============================================================================
 // MAIN DRIFT ANALYSIS
@@ -39,33 +40,44 @@ import { getRulesetSnapshot, getCurrentSnapshot } from "@/lib/storage/ruleset-sn
  * and the current ruleset version.
  *
  * @param character - The character to analyze
+ * @param cache - Optional request-scoped cache to avoid redundant disk reads
  * @returns A drift report detailing all changes
  */
 export async function analyzeCharacterDrift(
-  character: Character
+  character: Character,
+  cache?: SnapshotCache
 ): Promise<DriftReport> {
   const changes: DriftChange[] = [];
 
-  // Get the character's locked ruleset snapshot
-  const characterSnapshot = await getRulesetSnapshot(character.rulesetSnapshotId);
-  if (!characterSnapshot) {
-    throw new Error(`Character ruleset snapshot not found: ${character.rulesetSnapshotId}`);
-  }
+  // Use cache methods if available, otherwise fall back to direct functions
+  const getCurrentSnapshotFn = cache
+    ? (code: string) => cache.getCurrentSnapshot(code as Parameters<typeof getCurrentSnapshot>[0])
+    : getCurrentSnapshot;
+  const getRulesetSnapshotFn = cache
+    ? (id: string) => cache.getRulesetSnapshot(id)
+    : getRulesetSnapshot;
 
-  // Get the current ruleset snapshot for this edition
-  const currentVersionRef = await getCurrentSnapshot(character.editionCode);
+  // OPTIMIZATION: Get current version ref first (just metadata, not full snapshot)
+  // This allows early exit before loading any large snapshot files
+  const currentVersionRef = await getCurrentSnapshotFn(character.editionCode);
   if (!currentVersionRef) {
     throw new Error(`No current ruleset snapshot for edition: ${character.editionCode}`);
   }
 
-  const currentRuleset = await getRulesetSnapshot(currentVersionRef.snapshotId);
-  if (!currentRuleset) {
-    throw new Error(`Current ruleset snapshot not found: ${currentVersionRef.snapshotId}`);
-  }
-
-  // If snapshots are the same, no drift
+  // EARLY EXIT: If character is already on the current snapshot, no drift possible
   if (character.rulesetSnapshotId === currentVersionRef.snapshotId) {
     return createEmptyDriftReport(character, currentVersionRef);
+  }
+
+  // Only load full snapshots if we need to compare them
+  const characterSnapshot = await getRulesetSnapshotFn(character.rulesetSnapshotId);
+  if (!characterSnapshot) {
+    throw new Error(`Character ruleset snapshot not found: ${character.rulesetSnapshotId}`);
+  }
+
+  const currentRuleset = await getRulesetSnapshotFn(currentVersionRef.snapshotId);
+  if (!currentRuleset) {
+    throw new Error(`Current ruleset snapshot not found: ${currentVersionRef.snapshotId}`);
   }
 
   // Analyze drift in each module if character has a mechanical snapshot

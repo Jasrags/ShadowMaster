@@ -11,6 +11,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { getSession } from "@/lib/auth/session";
 import { getCharacterById } from "@/lib/storage/characters";
 import { getLegalityShield } from "@/lib/rules/sync/legality-validator";
+import { SnapshotCache } from "@/lib/storage/snapshot-cache";
 
 interface RouteParams {
   params: Promise<{
@@ -56,8 +57,11 @@ export async function GET(
       );
     }
 
+    // Create request-scoped cache to avoid redundant disk reads
+    const cache = new SnapshotCache();
+
     // Get shield status
-    const shield = await getLegalityShield(character);
+    const shield = await getLegalityShield(character, cache);
 
     return NextResponse.json(shield);
   } catch (error) {

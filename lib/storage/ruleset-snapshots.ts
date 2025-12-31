@@ -41,6 +41,50 @@ import { produceMergedRuleset } from "../rules/merge";
 import type { RulesetLoadConfig } from "../rules/loader-types";
 
 const SNAPSHOTS_DIR = path.join(process.cwd(), "data", "ruleset-snapshots");
+const CURRENT_SNAPSHOTS_INDEX = path.join(SNAPSHOTS_DIR, "_current-snapshots.json");
+
+/**
+ * Index file storing the current snapshot for each edition
+ * This avoids expensive directory scans to find the most recent snapshot
+ */
+type CurrentSnapshotsIndex = Partial<Record<EditionCode, RulesetVersionRef>>;
+
+/**
+ * Update the current snapshots index with a new snapshot
+ * Called after creating a new snapshot to keep the index up to date
+ */
+async function updateCurrentSnapshotIndex(
+  editionCode: EditionCode,
+  versionRef: RulesetVersionRef
+): Promise<void> {
+  await ensureDirectory(SNAPSHOTS_DIR);
+
+  let index: CurrentSnapshotsIndex = {};
+
+  // Read existing index if it exists
+  if (await fileExists(CURRENT_SNAPSHOTS_INDEX)) {
+    const existing = await readJsonFile<CurrentSnapshotsIndex>(CURRENT_SNAPSHOTS_INDEX);
+    if (existing) {
+      index = existing;
+    }
+  }
+
+  // Update the index for this edition
+  index[editionCode] = versionRef;
+
+  // Write updated index
+  await writeJsonFile(CURRENT_SNAPSHOTS_INDEX, index);
+}
+
+/**
+ * Get the current snapshots index (for fast lookups)
+ */
+async function readCurrentSnapshotIndex(): Promise<CurrentSnapshotsIndex | null> {
+  if (!(await fileExists(CURRENT_SNAPSHOTS_INDEX))) {
+    return null;
+  }
+  return readJsonFile<CurrentSnapshotsIndex>(CURRENT_SNAPSHOTS_INDEX);
+}
 
 /**
  * Stored snapshot file format
@@ -130,12 +174,52 @@ export async function captureRulesetSnapshot(
   const filePath = path.join(SNAPSHOTS_DIR, `${snapshotId}.json`);
   await writeJsonFile(filePath, storedSnapshot);
 
+  // Update the current snapshot index for fast lookups
+  await updateCurrentSnapshotIndex(editionCode, versionRef);
+
   return versionRef;
 }
 
 // =============================================================================
 // SNAPSHOT RETRIEVAL
 // =============================================================================
+
+/**
+ * Result of reading a complete snapshot with both ruleset and version ref
+ */
+export interface SnapshotWithVersionRef {
+  ruleset: MergedRuleset;
+  versionRef: RulesetVersionRef;
+}
+
+/**
+ * Get both ruleset and version ref from a snapshot in a single read
+ *
+ * OPTIMIZATION: This avoids reading the same file twice when both
+ * the ruleset and version ref are needed.
+ *
+ * @param snapshotId - The snapshot ID to retrieve
+ * @returns The ruleset and version ref, or null if not found
+ */
+export async function getSnapshotWithVersionRef(
+  snapshotId: ID
+): Promise<SnapshotWithVersionRef | null> {
+  const filePath = path.join(SNAPSHOTS_DIR, `${snapshotId}.json`);
+
+  if (!(await fileExists(filePath))) {
+    return null;
+  }
+
+  const stored = await readJsonFile<StoredSnapshot>(filePath);
+  if (!stored?.ruleset || !stored?.versionRef) {
+    return null;
+  }
+
+  return {
+    ruleset: stored.ruleset,
+    versionRef: stored.versionRef,
+  };
+}
 
 /**
  * Get a ruleset snapshot by its ID
@@ -184,6 +268,13 @@ export async function getSnapshotVersionRef(
 export async function getCurrentSnapshot(
   editionCode: EditionCode
 ): Promise<RulesetVersionRef | null> {
+  // OPTIMIZATION: Try the index first (single file read vs directory scan)
+  const index = await readCurrentSnapshotIndex();
+  if (index && index[editionCode]) {
+    return index[editionCode];
+  }
+
+  // Fallback: scan all snapshots (needed for legacy data or first run)
   const snapshots = await listAllSnapshots(editionCode);
 
   if (snapshots.length === 0) {
@@ -195,7 +286,12 @@ export async function getCurrentSnapshot(
     (a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
   );
 
-  return snapshots[0];
+  const currentSnapshot = snapshots[0];
+
+  // Update the index for next time
+  await updateCurrentSnapshotIndex(editionCode, currentSnapshot);
+
+  return currentSnapshot;
 }
 
 /**

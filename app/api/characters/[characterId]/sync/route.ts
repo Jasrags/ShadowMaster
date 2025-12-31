@@ -16,6 +16,7 @@ import { getCharacterById } from "@/lib/storage/characters";
 import { analyzeCharacterDrift } from "@/lib/rules/sync/drift-analyzer";
 import { getLegalityShield, getQuickSyncStatus, getQuickLegalityStatus } from "@/lib/rules/sync/legality-validator";
 import { generateMigrationPlan } from "@/lib/rules/sync/migration-engine";
+import { SnapshotCache } from "@/lib/storage/snapshot-cache";
 
 interface RouteParams {
   params: Promise<{
@@ -65,8 +66,11 @@ export async function GET(
     const syncStatus = getQuickSyncStatus(character);
     const legalityStatus = getQuickLegalityStatus(character);
 
+    // Create request-scoped cache to avoid redundant disk reads
+    const cache = new SnapshotCache();
+
     // Get shield for UI
-    const shield = await getLegalityShield(character);
+    const shield = await getLegalityShield(character, cache);
 
     return NextResponse.json({
       syncStatus,
@@ -123,8 +127,11 @@ export async function POST(
       );
     }
 
+    // Create request-scoped cache to avoid redundant disk reads
+    const cache = new SnapshotCache();
+
     // Analyze drift
-    const report = await analyzeCharacterDrift(character);
+    const report = await analyzeCharacterDrift(character, cache);
 
     // Generate migration plan
     const plan = generateMigrationPlan(report);
