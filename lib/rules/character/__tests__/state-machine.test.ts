@@ -32,6 +32,7 @@ function createMockCharacter(overrides: Partial<Character> = {}): Character {
     editionId: "sr5",
     editionCode: "sr5",
     creationMethodId: "priority",
+    rulesetSnapshotId: "test-snapshot-id",
     attachedBookIds: ["sr5-core"],
     name: "Test Runner",
     metatype: "Human",

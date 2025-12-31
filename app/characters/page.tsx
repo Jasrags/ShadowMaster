@@ -5,6 +5,7 @@ import { Link } from "react-aria-components";
 import type { Character } from "@/lib/types";
 import { useAuth } from "@/lib/auth/AuthProvider";
 import { CharacterImportDialog } from "./components/CharacterImportDialog";
+import { StabilityShield } from "@/components/sync";
 
 // Extended character type with owner info for admin mode
 interface CharacterWithOwner extends Character {
@@ -154,6 +155,7 @@ function CharacterCard({ character, onDelete, viewMode = "grid", isAdminMode = f
                 <h3 className="font-bold text-foreground truncate group-hover:text-emerald-500 transition-colors">
                   {character.name || "Unnamed Runner"}
                 </h3>
+                <StabilityShield characterId={character.id} size="sm" />
                 <div className="shrink-0">
                   <StatusBadge status={character.status} />
                 </div>
@@ -250,9 +252,12 @@ function CharacterCard({ character, onDelete, viewMode = "grid", isAdminMode = f
           {/* Header */}
           <div className="flex items-start justify-between mb-4">
             <div className="flex-1 min-w-0">
-              <h3 className="font-bold text-lg text-foreground truncate group-hover:text-emerald-500 transition-colors">
-                {character.name || "Unnamed Runner"}
-              </h3>
+              <div className="flex items-center gap-2">
+                <h3 className="font-bold text-lg text-foreground truncate group-hover:text-emerald-500 transition-colors">
+                  {character.name || "Unnamed Runner"}
+                </h3>
+                <StabilityShield characterId={character.id} size="sm" />
+              </div>
               <div className="flex items-center gap-2 mt-1">
                 <span className="text-sm text-muted-foreground capitalize">
                   {character.metatype || "Unknown"}

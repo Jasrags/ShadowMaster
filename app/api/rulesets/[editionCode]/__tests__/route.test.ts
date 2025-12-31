@@ -37,6 +37,7 @@ describe('GET /api/rulesets/[editionCode]', () => {
       id: 'sr5',
       name: 'Shadowrun 5th Edition',
       shortCode: 'sr5' as import("@/lib/types").EditionCode,
+      version: '1.0.0',
       releaseYear: 2013,
       bookIds: ['core-rulebook'],
       creationMethodIds: ['priority'],

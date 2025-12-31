@@ -39,6 +39,7 @@ describe("campaign-validation", () => {
         editionId: "ed-5",
         editionCode: "sr5",
         creationMethodId: "priority",
+        rulesetSnapshotId: "test-snapshot-id",
         attachedBookIds: ["core"],
         name: "Test Runner",
         metatype: "Human",

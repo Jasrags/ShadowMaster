@@ -41,6 +41,7 @@ function createTestCharacter(options: {
     editionId: "sr5",
     editionCode: "sr5",
     creationMethodId: "priority",
+    rulesetSnapshotId: "test-snapshot-id",
     attachedBookIds: ["core"],
     name: "Test Rigger",
     metatype: "Human",

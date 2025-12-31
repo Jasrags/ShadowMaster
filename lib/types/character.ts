@@ -12,6 +12,13 @@ import type { CharacterProgram } from "./programs";
 import type { QualitySelection } from "./qualities";
 import type { AuditEntry } from "./audit";
 import type { CharacterCyberdeck, CharacterCommlink } from "./matrix";
+import type {
+  SyncStatus,
+  LegalityStatus,
+  RulesetVersionRef,
+  MechanicalSnapshot,
+  DeltaOverrides,
+} from "./synchronization";
 
 // =============================================================================
 // CHARACTER CORE
@@ -142,11 +149,63 @@ export interface Character {
    * Reference to the merged ruleset snapshot used during creation.
    * This ensures the character can always be validated against
    * the same rules they were created with.
+   * @required - Must be set during character finalization
    */
-  rulesetSnapshotId?: ID;
+  rulesetSnapshotId: ID;
+
+  /**
+   * Full version tracking for the ruleset this character is locked to.
+   * Includes edition version and all book versions for precise drift detection.
+   */
+  rulesetVersion?: RulesetVersionRef;
 
   /** Books enabled when this character was created */
   attachedBookIds: ID[];
+
+  // -------------------------------------------------------------------------
+  // Synchronization State
+  // -------------------------------------------------------------------------
+
+  /**
+   * Current synchronization status relative to the ruleset.
+   * @default "synchronized" for newly created characters
+   */
+  syncStatus?: SyncStatus;
+
+  /**
+   * Rules compliance status for gameplay eligibility.
+   * Invalid characters cannot participate in encounters.
+   * @default "rules-legal" for newly created characters
+   */
+  legalityStatus?: LegalityStatus;
+
+  /**
+   * When drift was last evaluated against current ruleset.
+   */
+  lastSyncCheck?: ISODateString;
+
+  /**
+   * When the character was last synchronized to a new ruleset version.
+   */
+  lastSyncAt?: ISODateString;
+
+  /**
+   * Reference to pending DriftReport if migration is required.
+   */
+  pendingMigration?: ID;
+
+  /**
+   * Snapshot of mechanical rule values captured at creation.
+   * Protected from ruleset changes until explicit synchronization.
+   * @see ADR-004 (Hybrid Snapshot Model)
+   */
+  mechanicalSnapshot?: MechanicalSnapshot;
+
+  /**
+   * Character-specific data that persists across synchronizations.
+   * Never affected by ruleset changes.
+   */
+  deltaOverrides?: DeltaOverrides;
 
   // -------------------------------------------------------------------------
   // Basic Info
@@ -1019,6 +1078,7 @@ export interface FocusItem {
 /**
  * Partial character used during the creation process.
  * Fields are optional until finalized.
+ * Note: rulesetSnapshotId is optional during draft but required when finalized.
  */
 export type CharacterDraft = Partial<Character> & {
   id: ID;
@@ -1028,6 +1088,8 @@ export type CharacterDraft = Partial<Character> & {
   creationMethodId: ID;
   status: "draft";
   createdAt: ISODateString;
+  /** Optional during draft, required when character is finalized */
+  rulesetSnapshotId?: ID;
 };
 
 // =============================================================================

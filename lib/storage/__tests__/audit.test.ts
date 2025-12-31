@@ -24,6 +24,7 @@ function createMockCharacterWithAudit(entries: AuditEntry[]): Character {
     editionId: "sr5",
     editionCode: "sr5",
     creationMethodId: "priority",
+    rulesetSnapshotId: "test-snapshot-id",
     attachedBookIds: [],
     status: "active",
     attributes: { bod: 3, agi: 3, rea: 3, str: 3, cha: 3, int: 3, log: 3, wil: 3 },

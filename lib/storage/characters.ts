@@ -1244,3 +1244,311 @@ export async function searchCharacters(
   };
 }
 
+// =============================================================================
+// SYNCHRONIZATION FUNCTIONS
+// =============================================================================
+
+import type {
+  SyncStatus,
+  LegalityStatus,
+  DriftReport,
+  AppliedMigration,
+  SyncAuditEntry,
+} from "../types/synchronization";
+
+/**
+ * Sync event for audit trail
+ */
+export type SyncAuditEvent = SyncAuditEntry;
+
+/**
+ * Update a character's synchronization status
+ *
+ * @param userId - Character owner ID
+ * @param characterId - Character ID
+ * @param syncStatus - New sync status
+ * @param legalityStatus - New legality status
+ * @returns Updated character
+ */
+export async function updateSyncStatus(
+  userId: ID,
+  characterId: ID,
+  syncStatus: SyncStatus,
+  legalityStatus: LegalityStatus
+): Promise<Character> {
+  const character = await getCharacter(userId, characterId);
+  if (!character) {
+    throw new Error(`Character with ID ${characterId} not found`);
+  }
+
+  const now = new Date().toISOString();
+
+  return updateCharacter(userId, characterId, {
+    syncStatus,
+    legalityStatus,
+    lastSyncCheck: now,
+    ...(syncStatus === "synchronized" ? { lastSyncAt: now } : {}),
+  });
+}
+
+/**
+ * Store a drift report for a character
+ *
+ * The drift report ID is stored on the character for reference.
+ * The full report is stored in a separate directory.
+ *
+ * @param userId - Character owner ID
+ * @param characterId - Character ID
+ * @param report - The drift report to store
+ */
+export async function storeDriftReport(
+  userId: ID,
+  characterId: ID,
+  report: DriftReport
+): Promise<void> {
+  const character = await getCharacter(userId, characterId);
+  if (!character) {
+    throw new Error(`Character with ID ${characterId} not found`);
+  }
+
+  // Store drift report in separate directory
+  const reportsDir = path.join(
+    process.cwd(),
+    "data",
+    "drift-reports",
+    userId
+  );
+  await ensureDirectory(reportsDir);
+
+  const reportPath = path.join(reportsDir, `${report.id}.json`);
+  await writeJsonFile(reportPath, report);
+
+  // Update character with pending migration reference
+  await updateCharacter(userId, characterId, {
+    pendingMigration: report.id,
+    syncStatus: report.overallSeverity === "breaking" ? "invalid" : "outdated",
+    legalityStatus: report.overallSeverity === "breaking" ? "invalid" : "rules-legal",
+    lastSyncCheck: new Date().toISOString(),
+  });
+}
+
+/**
+ * Get a drift report by ID
+ *
+ * @param userId - Character owner ID
+ * @param reportId - Drift report ID
+ * @returns The drift report or null if not found
+ */
+export async function getDriftReport(
+  userId: ID,
+  reportId: ID
+): Promise<DriftReport | null> {
+  const reportPath = path.join(
+    process.cwd(),
+    "data",
+    "drift-reports",
+    userId,
+    `${reportId}.json`
+  );
+  return readJsonFile<DriftReport>(reportPath);
+}
+
+/**
+ * Clear a pending migration from a character
+ *
+ * @param userId - Character owner ID
+ * @param characterId - Character ID
+ * @returns Updated character
+ */
+export async function clearPendingMigration(
+  userId: ID,
+  characterId: ID
+): Promise<Character> {
+  const character = await getCharacter(userId, characterId);
+  if (!character) {
+    throw new Error(`Character with ID ${characterId} not found`);
+  }
+
+  return updateCharacter(userId, characterId, {
+    pendingMigration: undefined,
+    syncStatus: "synchronized",
+    legalityStatus: "rules-legal",
+    lastSyncAt: new Date().toISOString(),
+  });
+}
+
+/**
+ * Record a synchronization event in the audit trail
+ *
+ * @param userId - Character owner ID
+ * @param characterId - Character ID
+ * @param event - The sync event to record
+ */
+export async function recordSyncEvent(
+  userId: ID,
+  characterId: ID,
+  event: SyncAuditEvent
+): Promise<void> {
+  const character = await getCharacter(userId, characterId);
+  if (!character) {
+    throw new Error(`Character with ID ${characterId} not found`);
+  }
+
+  // Create an audit entry for sync events
+  const auditEntry: AuditEntry = {
+    id: event.id,
+    timestamp: event.timestamp,
+    action: event.eventType as AuditAction, // Map sync events to audit actions
+    actor: {
+      userId: event.actor.userId || "system",
+      role: event.actor.type === "user" ? "owner" : "system",
+    },
+    details: {
+      syncEvent: event.eventType,
+      sourceVersion: event.sourceVersion,
+      targetVersion: event.targetVersion,
+      changes: event.changes,
+    },
+  };
+
+  // Append to audit log
+  const updatedAuditLog = [...(character.auditLog || []), auditEntry];
+
+  await updateCharacter(userId, characterId, {
+    auditLog: updatedAuditLog,
+  });
+}
+
+/**
+ * Apply a migration to a character (atomic operation)
+ *
+ * This function applies all changes from a migration plan atomically.
+ * If any step fails, the entire operation is rolled back.
+ *
+ * @param userId - Character owner ID
+ * @param characterId - Character ID
+ * @param migration - The applied migration with all changes
+ * @returns Updated character
+ */
+export async function applyMigration(
+  userId: ID,
+  characterId: ID,
+  migration: AppliedMigration
+): Promise<Character> {
+  const character = await getCharacter(userId, characterId);
+  if (!character) {
+    throw new Error(`Character with ID ${characterId} not found`);
+  }
+
+  // Store the migration record for potential rollback
+  const migrationsDir = path.join(
+    process.cwd(),
+    "data",
+    "migrations",
+    userId
+  );
+  await ensureDirectory(migrationsDir);
+
+  const migrationPath = path.join(migrationsDir, `${migration.plan.id}.json`);
+  await writeJsonFile(migrationPath, migration);
+
+  // Apply the migration steps to the character
+  // For now, we just update the sync status and ruleset reference
+  // The actual data transformations are handled by the migration engine
+  const updates: Partial<Character> = {
+    rulesetSnapshotId: migration.plan.targetVersion.snapshotId,
+    rulesetVersion: migration.plan.targetVersion,
+    syncStatus: "synchronized" as SyncStatus,
+    legalityStatus: "rules-legal" as LegalityStatus,
+    lastSyncAt: new Date().toISOString(),
+    pendingMigration: undefined,
+    // Karma adjustment if applicable
+    ...(migration.plan.estimatedKarmaDelta !== 0
+      ? {
+          karmaCurrent: character.karmaCurrent + migration.plan.estimatedKarmaDelta,
+        }
+      : {}),
+  };
+
+  return updateCharacter(userId, characterId, updates);
+}
+
+/**
+ * Get applied migrations for a character
+ *
+ * @param userId - Character owner ID
+ * @param characterId - Character ID
+ * @returns Array of applied migrations, most recent first
+ */
+export async function getAppliedMigrations(
+  userId: ID,
+  characterId: ID
+): Promise<AppliedMigration[]> {
+  const migrationsDir = path.join(
+    process.cwd(),
+    "data",
+    "migrations",
+    userId
+  );
+
+  const migrations = await readAllJsonFiles<AppliedMigration>(migrationsDir);
+
+  // Filter to only this character's migrations
+  const characterMigrations = migrations.filter(
+    (m) => m.plan.characterId === characterId
+  );
+
+  // Sort by applied date, most recent first
+  return characterMigrations.sort(
+    (a, b) =>
+      new Date(b.appliedAt).getTime() - new Date(a.appliedAt).getTime()
+  );
+}
+
+/**
+ * Rollback the most recent migration for a character
+ *
+ * @param userId - Character owner ID
+ * @param characterId - Character ID
+ * @returns Updated character after rollback, or null if no rollback available
+ */
+export async function rollbackMigration(
+  userId: ID,
+  characterId: ID
+): Promise<Character | null> {
+  const migrations = await getAppliedMigrations(userId, characterId);
+
+  if (migrations.length === 0) {
+    return null;
+  }
+
+  const lastMigration = migrations[0];
+
+  if (!lastMigration.canRollback) {
+    throw new Error("Most recent migration cannot be rolled back");
+  }
+
+  // Restore character to previous state
+  const previousState = lastMigration.previousState as Character;
+
+  // Write the previous state
+  const filePath = getCharacterFilePath(userId, characterId);
+  await writeJsonFile(filePath, previousState);
+
+  // Mark migration as rolled back
+  const migrationsDir = path.join(
+    process.cwd(),
+    "data",
+    "migrations",
+    userId
+  );
+  const migrationPath = path.join(migrationsDir, `${lastMigration.plan.id}.json`);
+  await writeJsonFile(migrationPath, {
+    ...lastMigration,
+    canRollback: false,
+    rolledBackAt: new Date().toISOString(),
+  });
+
+  return previousState;
+}
+

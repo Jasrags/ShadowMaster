@@ -63,7 +63,7 @@
       "type": "stdio",
       "command": "node",
       "args": [
-        "./node_modules/@knip/mcp/src/server.js"
+        "./node_modules/@knip/mcp/src/cli.js"
       ]
     }
   }
