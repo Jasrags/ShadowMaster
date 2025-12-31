@@ -19,6 +19,14 @@ import type {
   MechanicalSnapshot,
   DeltaOverrides,
 } from "./synchronization";
+import type {
+  GearState,
+  WeaponAmmoState,
+  MagazineItem,
+  AmmunitionItem,
+  EncumbranceState,
+} from "./gear-state";
+import type { WirelessEffect } from "./wireless-effects";
 
 // =============================================================================
 // CHARACTER CORE
@@ -418,6 +426,22 @@ export interface Character {
   foci?: FocusItem[];
 
   // -------------------------------------------------------------------------
+  // Ammunition & Encumbrance (ADR-010)
+  // -------------------------------------------------------------------------
+
+  /**
+   * Ammunition inventory (boxes of ammo, not loaded in weapons).
+   * Ammo is consumed when loading weapons.
+   */
+  ammunition?: AmmunitionItem[];
+
+  /**
+   * Calculated encumbrance state.
+   * Updated when carried gear changes.
+   */
+  encumbrance?: EncumbranceState;
+
+  // -------------------------------------------------------------------------
   // Contacts
   // -------------------------------------------------------------------------
 
@@ -736,30 +760,83 @@ export interface Weapon extends GearItem {
   ap: number; // Armor penetration
   mode: string[]; // "SS", "SA", "BF", "FA"
   recoil?: number;
-  ammoType?: string;
-  ammoCapacity?: number;
-  currentAmmo?: number;
   reach?: number; // For melee weapons
   accuracy?: number; // Base accuracy
-  /** New: Required for compatibility check */
+  /** Required for compatibility check */
   subcategory: string;
   /** Installed modifications on this weapon */
   modifications?: InstalledWeaponMod[];
   /** Track which mounts are occupied */
   occupiedMounts?: WeaponMount[];
+
+  // -------------------------------------------------------------------------
+  // Inventory State (ADR-010)
+  // -------------------------------------------------------------------------
+
+  /**
+   * Equipment state: readiness, wireless, condition
+   * @see GearState
+   */
+  state?: GearState;
+
+  /**
+   * Current ammunition state for ranged weapons
+   * Tracks loaded ammo type and round count
+   */
+  ammoState?: WeaponAmmoState;
+
+  /**
+   * Spare magazines carried for this weapon
+   * Each magazine can hold different ammo types
+   */
+  spareMagazines?: MagazineItem[];
+
+  // -------------------------------------------------------------------------
+  // Legacy fields (deprecated, use ammoState instead)
+  // -------------------------------------------------------------------------
+
+  /**
+   * @deprecated Use ammoState.loadedAmmoTypeId instead
+   */
+  ammoType?: string;
+
+  /**
+   * @deprecated Use ammoState.magazineCapacity instead
+   */
+  ammoCapacity?: number;
+
+  /**
+   * @deprecated Use ammoState.currentRounds instead
+   */
+  currentAmmo?: number;
 }
 
 export interface ArmorItem extends GearItem {
   /** Reference to catalog armor ID */
   catalogId?: string;
   armorRating: number;
-  equipped: boolean;
   /** Total capacity for modifications (equals armor rating) */
   capacity?: number;
   /** Capacity currently used by modifications */
   capacityUsed?: number;
   /** Installed modifications on this armor */
   modifications?: InstalledArmorMod[];
+
+  // -------------------------------------------------------------------------
+  // Inventory State (ADR-010)
+  // -------------------------------------------------------------------------
+
+  /**
+   * Equipment state: readiness (worn/stored), wireless
+   * @see GearState
+   */
+  state?: GearState;
+
+  /**
+   * @deprecated Use state.readiness === 'worn' instead
+   * Kept for backward compatibility during migration
+   */
+  equipped: boolean;
 }
 
 // =============================================================================
@@ -884,10 +961,28 @@ export interface CyberwareItem {
   initiativeDiceBonus?: number;
   /** Other special effects/notes */
   notes?: string;
-  /** Wireless bonus description */
+  /** Wireless bonus description (human-readable) */
   wirelessBonus?: string;
   /** Child items (for modular cyberware) */
   enhancements?: CyberwareItem[];
+
+  // -------------------------------------------------------------------------
+  // Inventory State (ADR-010)
+  // -------------------------------------------------------------------------
+
+  /**
+   * Whether wireless is enabled for this augmentation.
+   * When disabled, wirelessEffects do not apply.
+   * @default true
+   */
+  wirelessEnabled?: boolean;
+
+  /**
+   * Structured wireless effects for mechanical calculation.
+   * Copied from catalog during installation.
+   * @see WirelessEffect
+   */
+  wirelessEffects?: WirelessEffect[];
 }
 
 /**

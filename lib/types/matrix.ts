@@ -8,6 +8,7 @@
  */
 
 import type { ID, ISODateString } from "./core";
+import type { DeviceCondition, GearState } from "./gear-state";
 
 // =============================================================================
 // MATRIX CONSTANTS
@@ -502,6 +503,22 @@ export interface CharacterCyberdeck {
 
   /** Player notes */
   notes?: string;
+
+  // -------------------------------------------------------------------------
+  // Inventory State (ADR-010)
+  // -------------------------------------------------------------------------
+
+  /**
+   * Equipment state: readiness, wireless
+   */
+  state?: GearState;
+
+  /**
+   * Device condition for Matrix damage tracking.
+   * Bricked devices cannot be used until repaired.
+   * @default "functional"
+   */
+  condition?: DeviceCondition;
 }
 
 /**
@@ -539,6 +556,22 @@ export interface CharacterCommlink {
 
   /** Player notes */
   notes?: string;
+
+  // -------------------------------------------------------------------------
+  // Inventory State (ADR-010)
+  // -------------------------------------------------------------------------
+
+  /**
+   * Equipment state: readiness, wireless
+   */
+  state?: GearState;
+
+  /**
+   * Device condition for Matrix damage tracking.
+   * Bricked devices cannot be used until repaired.
+   * @default "functional"
+   */
+  condition?: DeviceCondition;
 }
 
 // =============================================================================

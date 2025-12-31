@@ -663,3 +663,51 @@ export {
   VEHICLE_CONDITION_BASE,
   DUMPSHOCK_DAMAGE,
 } from "./rigging";
+
+// Gear State types (ADR-010: Inventory State Management)
+export type {
+  EquipmentReadiness,
+  DeviceCondition,
+  MatrixCapableDevice,
+  GearState,
+  AmmunitionCaliber,
+  AmmunitionType,
+  WeaponAmmoState,
+  MagazineItem,
+  AmmunitionItem,
+  EncumbranceState,
+  TransitionActionCost,
+  StateTransitionResult,
+} from "./gear-state";
+
+// Gear State constants and functions
+export {
+  VALID_READINESS_STATES,
+  STATE_TRANSITION_COSTS,
+  DEFAULT_GEAR_STATE,
+  DEFAULT_STATE_BY_CATEGORY,
+  AMMO_CONSUMPTION_BY_MODE,
+  calculateEncumbrancePenalty,
+  isValidTransition,
+  getTransitionCost,
+} from "./gear-state";
+
+// Wireless Effect types (ADR-010)
+export type {
+  WirelessEffectType,
+  AttributeKey,
+  LimitKey,
+  EffectConditionType,
+  WirelessEffect,
+  WirelessBonusData,
+  ActiveWirelessBonuses,
+} from "./wireless-effects";
+
+// Wireless Effect constants and functions
+export {
+  EMPTY_WIRELESS_BONUSES,
+  COMMON_WIRELESS_EFFECTS,
+  effectAppliesInContext,
+  mergeWirelessBonuses,
+  applyWirelessEffect,
+} from "./wireless-effects";
