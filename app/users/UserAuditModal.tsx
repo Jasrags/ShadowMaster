@@ -58,6 +58,7 @@ export default function UserAuditModal({ user, isOpen, onClose }: UserAuditModal
       user_deleted: "Account Deleted",
       user_lockout_triggered: "Account Locked",
       user_lockout_cleared: "Lockout Cleared",
+      admin_character_status_changed: "Character Status Changed",
     };
     return actionLabels[action] || action;
   };

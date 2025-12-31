@@ -896,8 +896,11 @@ export function useWeaponModifications(options?: {
  * (SR5 Core Rules)
  */
 export function getAvailableMountsForWeaponType(
-  subcategory: string
+  subcategory: string | undefined
 ): WeaponMountType[] {
+  // Guard against undefined or empty subcategory
+  if (!subcategory) return [];
+
   const sub = subcategory.toLowerCase();
 
   // Hold-outs: no mounts

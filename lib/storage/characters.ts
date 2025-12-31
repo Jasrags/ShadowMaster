@@ -37,7 +37,7 @@ import { createAuditEntry } from "../rules/character/state-machine";
  * Search options for character queries
  */
 export interface CharacterSearchOptions {
-  userId: ID;
+  userId?: ID; // Optional - if not provided, searches ALL characters (admin mode)
   filters?: {
     status?: CharacterStatus[];
     edition?: EditionCode[];
@@ -45,6 +45,7 @@ export interface CharacterSearchOptions {
     metatype?: string;
     magicalPath?: MagicalPath;
     search?: string; // Full-text search on name, metatype, magical path
+    ownerId?: ID; // Filter by owner (admin mode only)
   };
   sort?: {
     field: "name" | "updatedAt" | "createdAt" | "karmaCurrent";
@@ -583,15 +584,15 @@ export function getCurrentEdge(character: Character): number {
   if (character.condition?.edgeCurrent !== undefined) {
     return character.condition.edgeCurrent;
   }
-  // Fall back to Edge attribute (full Edge)
-  return character.attributes?.edge ?? 0;
+  // Fall back to Edge special attribute (full Edge)
+  return character.specialAttributes?.edge ?? 0;
 }
 
 /**
  * Get maximum Edge points for a character
  */
 export function getMaxEdge(character: Character): number {
-  return character.attributes?.edge ?? 0;
+  return character.specialAttributes?.edge ?? 0;
 }
 
 /**
@@ -1123,8 +1124,10 @@ export async function searchCharacters(
 ): Promise<CharacterSearchResult<Character | CharacterSummary>> {
   const { userId, filters, sort, pagination, format } = options;
 
-  // Get all user characters
-  let characters = await getUserCharacters(userId);
+  // Get characters - either for a specific user or all users (admin mode)
+  let characters = userId
+    ? await getUserCharacters(userId)
+    : await getAllCharacters();
 
   // Apply filters
   if (filters) {
@@ -1169,6 +1172,11 @@ export async function searchCharacters(
         const pathMatch = c.magicalPath?.toLowerCase().includes(searchLower);
         return nameMatch || metatypeMatch || pathMatch;
       });
+    }
+
+    // Owner filter (admin mode only)
+    if (filters.ownerId) {
+      characters = characters.filter((c) => c.ownerId === filters.ownerId);
     }
   }
 

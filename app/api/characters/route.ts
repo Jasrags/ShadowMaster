@@ -2,6 +2,7 @@
  * API Route: /api/characters
  *
  * GET - List characters for the authenticated user with multi-criteria search
+ *       Supports admin mode to view ALL characters across all users
  * POST - Create a new character draft
  *
  * Satisfies:
@@ -12,18 +13,27 @@
 
 import { NextRequest, NextResponse } from "next/server";
 import { getSession } from "@/lib/auth/session";
-import { getUserById } from "@/lib/storage/users";
+import { getUserById, getAllUsers } from "@/lib/storage/users";
 import {
   createCharacterDraft,
   searchCharacters,
   type CharacterSearchOptions,
 } from "@/lib/storage/characters";
-import type { CharacterStatus, EditionCode, MagicalPath } from "@/lib/types";
+import type { Character, CharacterStatus, EditionCode, MagicalPath } from "@/lib/types";
+
+/**
+ * Character with owner username for admin view
+ */
+interface CharacterWithOwner extends Character {
+  ownerUsername?: string;
+}
 
 /**
  * GET /api/characters
  *
  * Query Parameters:
+ * - admin: Set to "true" to view ALL characters (admin only)
+ * - ownerId: Filter by owner ID (admin mode only)
  * - status: Filter by status (comma-separated for multiple)
  * - edition: Filter by edition code (comma-separated for multiple)
  * - campaignId: Filter by campaign
@@ -58,9 +68,22 @@ export async function GET(request: NextRequest) {
     // Parse query params
     const { searchParams } = new URL(request.url);
 
+    // Check for admin mode
+    const isAdminMode = searchParams.get("admin") === "true";
+    const isAdmin = user.role.includes("administrator");
+
+    // Admin mode requires admin role
+    if (isAdminMode && !isAdmin) {
+      return NextResponse.json(
+        { success: false, error: "Administrator access required" },
+        { status: 403 }
+      );
+    }
+
     // Build search options
+    // In admin mode, don't filter by userId (get all characters)
     const searchOptions: CharacterSearchOptions = {
-      userId: user.id,
+      userId: isAdminMode ? undefined : user.id,
     };
 
     // Filters
@@ -70,8 +93,9 @@ export async function GET(request: NextRequest) {
     const metatype = searchParams.get("metatype");
     const magicalPath = searchParams.get("magicalPath") as MagicalPath | null;
     const searchText = searchParams.get("search");
+    const ownerIdParam = searchParams.get("ownerId"); // Admin mode only
 
-    if (statusParam || editionParam || campaignId || metatype || magicalPath || searchText) {
+    if (statusParam || editionParam || campaignId || metatype || magicalPath || searchText || ownerIdParam) {
       searchOptions.filters = {};
 
       if (statusParam) {
@@ -91,6 +115,10 @@ export async function GET(request: NextRequest) {
       }
       if (searchText) {
         searchOptions.filters.search = searchText;
+      }
+      // Owner filter (admin mode only)
+      if (ownerIdParam && isAdminMode) {
+        searchOptions.filters.ownerId = ownerIdParam;
       }
     }
 
@@ -129,13 +157,39 @@ export async function GET(request: NextRequest) {
     // Execute search
     const result = await searchCharacters(searchOptions);
 
+    // In admin mode, enrich characters with owner usernames
+    let characters = result.characters;
+    let ownerMap: Map<string, string> | undefined;
+
+    if (isAdminMode) {
+      // Build a map of ownerId -> username for efficiency
+      const ownerIds = [...new Set(result.characters.map((c) => c.ownerId))];
+      ownerMap = new Map<string, string>();
+
+      for (const ownerId of ownerIds) {
+        const owner = await getUserById(ownerId);
+        ownerMap.set(ownerId, owner?.username || "Unknown");
+      }
+
+      // Enrich characters with owner username
+      characters = result.characters.map((c) => ({
+        ...c,
+        ownerUsername: ownerMap!.get(c.ownerId) || "Unknown",
+      })) as CharacterWithOwner[];
+    }
+
     return NextResponse.json({
       success: true,
-      characters: result.characters,
+      characters,
       total: result.total,
       hasMore: result.hasMore,
       limit: result.limit,
       offset: result.offset,
+      isAdminMode,
+      // Include unique owners for filter dropdown (admin mode only)
+      ...(isAdminMode && ownerMap ? {
+        owners: Array.from(ownerMap.entries()).map(([id, username]) => ({ id, username })),
+      } : {}),
     });
   } catch (error) {
     console.error("Failed to get characters:", error);

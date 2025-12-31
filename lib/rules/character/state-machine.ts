@@ -119,6 +119,51 @@ export const VALID_TRANSITIONS: StateTransition[] = [
     allowedRoles: ["gm", "admin"],
     description: "Resurrect deceased character (GM only)",
   },
+
+  // =============================================================================
+  // ADMIN-ONLY BACKWARD TRANSITIONS
+  // These allow administrators to revert character status for corrections
+  // =============================================================================
+
+  // Active → Draft: Admin can revert to draft for major corrections
+  {
+    from: "active",
+    to: "draft",
+    allowedRoles: ["admin"],
+    description: "Revert active character to draft for editing (admin only)",
+  },
+
+  // Retired → Draft: Admin can revert to draft
+  {
+    from: "retired",
+    to: "draft",
+    allowedRoles: ["admin"],
+    description: "Revert retired character to draft for editing (admin only)",
+  },
+
+  // Deceased → Draft: Admin can revert to draft
+  {
+    from: "deceased",
+    to: "draft",
+    allowedRoles: ["admin"],
+    description: "Revert deceased character to draft for editing (admin only)",
+  },
+
+  // Retired → Deceased: Admin can mark retired as deceased
+  {
+    from: "retired",
+    to: "deceased",
+    allowedRoles: ["admin"],
+    description: "Mark retired character as deceased (admin only)",
+  },
+
+  // Deceased → Retired: Admin can mark deceased as retired instead
+  {
+    from: "deceased",
+    to: "retired",
+    allowedRoles: ["admin"],
+    description: "Change deceased character to retired (admin only)",
+  },
 ];
 
 // =============================================================================
@@ -389,12 +434,17 @@ export async function executeTransition(
 function getAuditActionForTransition(
   from: CharacterStatus,
   to: CharacterStatus
-): "finalized" | "retired" | "reactivated" | "deceased" {
+): "finalized" | "retired" | "reactivated" | "deceased" | "updated" {
+  // Forward transitions
   if (from === "draft" && to === "active") return "finalized";
   if (to === "retired") return "retired";
   if (to === "deceased") return "deceased";
   if (to === "active" && (from === "retired" || from === "deceased")) return "reactivated";
-  return "finalized"; // Fallback
+
+  // Backward transitions (admin only) - use "updated" as it represents a status correction
+  if (to === "draft") return "updated";
+
+  return "updated"; // Fallback for any other transitions
 }
 
 /**

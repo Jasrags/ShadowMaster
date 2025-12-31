@@ -181,7 +181,8 @@ export function ModificationModal({
       // Check minimum weapon size
       if (mod.minimumWeaponSize) {
         const weapon = item as Weapon;
-        const sub = weapon.subcategory.toLowerCase();
+        const sub = (weapon.subcategory || "").toLowerCase();
+        if (!sub) return true; // Allow if subcategory unknown
         const sizeOrder = ["holdout", "light-pistol", "heavy-pistol", "smg", "rifle", "heavy"];
         const modSizeIndex = sizeOrder.indexOf(mod.minimumWeaponSize);
 
@@ -202,7 +203,8 @@ export function ModificationModal({
       // Check explicit compatibility lists
       if (mod.compatibleWeapons && mod.compatibleWeapons.length > 0) {
         const weapon = item as Weapon;
-        const sub = weapon.subcategory.toLowerCase();
+        const sub = (weapon.subcategory || "").toLowerCase();
+        if (!sub) return true; // Allow if subcategory unknown
         // Check both direct subcategory match and specific item ID match
         if (!mod.compatibleWeapons.some(comp =>
           comp.toLowerCase() === sub ||
@@ -215,7 +217,8 @@ export function ModificationModal({
 
       if (mod.incompatibleWeapons && mod.incompatibleWeapons.length > 0) {
         const weapon = item as Weapon;
-        const sub = weapon.subcategory.toLowerCase();
+        const sub = (weapon.subcategory || "").toLowerCase();
+        if (!sub) return true; // Allow if subcategory unknown
         if (mod.incompatibleWeapons.some(incomp =>
           incomp.toLowerCase() === sub || incomp === weapon.catalogId
         )) {

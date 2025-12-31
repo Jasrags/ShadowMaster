@@ -170,7 +170,9 @@ export type UserAuditAction =
   | "user_reactivated"
   | "user_deleted"
   | "user_lockout_triggered"
-  | "user_lockout_cleared";
+  | "user_lockout_cleared"
+  // Admin character actions
+  | "admin_character_status_changed";
 
 /**
  * Actor who performed a user management action

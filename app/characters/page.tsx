@@ -3,7 +3,13 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-aria-components";
 import type { Character } from "@/lib/types";
+import { useAuth } from "@/lib/auth/AuthProvider";
 import { CharacterImportDialog } from "./components/CharacterImportDialog";
+
+// Extended character type with owner info for admin mode
+interface CharacterWithOwner extends Character {
+  ownerUsername?: string;
+}
 
 // =============================================================================
 // ICONS
@@ -65,6 +71,14 @@ function UploadIcon({ className }: { className?: string }) {
   );
 }
 
+function ShieldIcon({ className }: { className?: string }) {
+  return (
+    <svg className={className} fill="none" viewBox="0 0 24 24" stroke="currentColor">
+      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
+    </svg>
+  );
+}
+
 // =============================================================================
 // STATUS BADGE COMPONENT
 // =============================================================================
@@ -93,12 +107,13 @@ type SortOption = "updated" | "name" | "karma" | "created";
 type ViewMode = "grid" | "list";
 
 interface CharacterCardProps {
-  character: Character;
+  character: CharacterWithOwner;
   onDelete: (id: string) => void;
   viewMode?: ViewMode;
+  isAdminMode?: boolean;
 }
 
-function CharacterCard({ character, onDelete, viewMode = "grid" }: CharacterCardProps) {
+function CharacterCard({ character, onDelete, viewMode = "grid", isAdminMode = false }: CharacterCardProps) {
   const [isDeleting, setIsDeleting] = useState(false);
 
   const handleDelete = async (e: React.MouseEvent) => {
@@ -159,6 +174,14 @@ function CharacterCard({ character, onDelete, viewMode = "grid" }: CharacterCard
                 <span className="text-xs font-mono text-muted-foreground uppercase">
                   {character.editionCode}
                 </span>
+                {isAdminMode && character.ownerUsername && (
+                  <>
+                    <span className="text-muted-foreground">•</span>
+                    <span className="text-xs text-amber-500 dark:text-amber-400">
+                      Owner: {character.ownerUsername}
+                    </span>
+                  </>
+                )}
               </div>
             </div>
 
@@ -273,6 +296,15 @@ function CharacterCard({ character, onDelete, viewMode = "grid" }: CharacterCard
               <span className="w-1.5 h-1.5 rounded-full bg-violet-500" />
               <span className="text-xs text-violet-500 dark:text-violet-400 capitalize">
                 {character.magicalPath.replace(/-/g, " ")}
+              </span>
+            </div>
+          )}
+
+          {/* Owner info in admin mode */}
+          {isAdminMode && character.ownerUsername && (
+            <div className="flex items-center gap-2 mb-4 px-2 py-1 bg-amber-500/10 border border-amber-500/20 rounded">
+              <span className="text-xs text-amber-600 dark:text-amber-400">
+                Owner: <span className="font-medium">{character.ownerUsername}</span>
               </span>
             </div>
           )}
@@ -403,7 +435,8 @@ function FilterTabs({ activeFilter, onFilterChange, counts }: FilterTabsProps) {
 // =============================================================================
 
 export default function CharactersPage() {
-  const [characters, setCharacters] = useState<Character[]>([]);
+  const { user } = useAuth();
+  const [characters, setCharacters] = useState<CharacterWithOwner[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [activeFilter, setActiveFilter] = useState("all");
@@ -413,10 +446,24 @@ export default function CharactersPage() {
   const [isImporting, setIsImporting] = useState(false);
   const [showImportDialog, setShowImportDialog] = useState(false);
 
+  // Admin mode state
+  const [isAdminMode, setIsAdminMode] = useState(false);
+  const [owners, setOwners] = useState<Array<{ id: string; username: string }>>([]);
+  const [ownerFilter, setOwnerFilter] = useState<string>("");
+
+  // Check if user is admin
+  const isAdmin = user?.role?.includes("administrator") ?? false;
+
   useEffect(() => {
     async function fetchCharacters() {
+      setLoading(true);
+      setError(null);
+
       try {
-        const response = await fetch("/api/characters");
+        const url = isAdminMode
+          ? `/api/characters?admin=true${ownerFilter ? `&ownerId=${ownerFilter}` : ""}`
+          : "/api/characters";
+        const response = await fetch(url);
         const data = await response.json();
 
         if (!data.success) {
@@ -424,6 +471,11 @@ export default function CharactersPage() {
         }
 
         setCharacters(data.characters || []);
+
+        // Store owners for filter dropdown (admin mode only)
+        if (data.owners) {
+          setOwners(data.owners);
+        }
       } catch (err) {
         setError(err instanceof Error ? err.message : "An error occurred");
       } finally {
@@ -432,7 +484,14 @@ export default function CharactersPage() {
     }
 
     fetchCharacters();
-  }, []);
+  }, [isAdminMode, ownerFilter]);
+
+  // Reset owner filter when exiting admin mode
+  useEffect(() => {
+    if (!isAdminMode) {
+      setOwnerFilter("");
+    }
+  }, [isAdminMode]);
 
   const handleDelete = (id: string) => {
     setCharacters((prev) => prev.filter((c) => c.id !== id));
@@ -518,14 +577,36 @@ export default function CharactersPage() {
       {/* Header */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
-          <h1 className="text-2xl font-bold text-foreground">
-            Characters
-          </h1>
+          <div className="flex items-center gap-3">
+            <h1 className="text-2xl font-bold text-foreground">
+              Characters
+            </h1>
+            {isAdminMode && (
+              <span className="px-2 py-0.5 text-xs font-medium bg-amber-500/20 text-amber-600 dark:text-amber-400 border border-amber-500/30 rounded">
+                Admin Mode
+              </span>
+            )}
+          </div>
           <p className="mt-1 text-sm text-muted-foreground">
-            Manage your Shadowrun characters
+            {isAdminMode ? "Viewing all characters across all users" : "Manage your Shadowrun characters"}
           </p>
         </div>
         <div className="flex items-center gap-2">
+          {/* Admin Mode Toggle - only shown to admins */}
+          {isAdmin && (
+            <button
+              onClick={() => setIsAdminMode(!isAdminMode)}
+              className={`inline-flex items-center justify-center gap-2 rounded-lg border px-4 py-2 text-sm font-medium transition-colors ${
+                isAdminMode
+                  ? "border-amber-500/30 bg-amber-500/10 text-amber-600 dark:text-amber-400 hover:bg-amber-500/20"
+                  : "border-border bg-card text-muted-foreground hover:bg-muted hover:text-foreground"
+              }`}
+              title={isAdminMode ? "Exit admin mode" : "Enter admin mode to view all characters"}
+            >
+              <ShieldIcon className="h-4 w-4" />
+              {isAdminMode ? "Exit Admin" : "Admin View"}
+            </button>
+          )}
           <button
             onClick={() => setShowImportDialog(true)}
             className="inline-flex items-center justify-center gap-2 rounded-lg border border-border bg-card px-4 py-2 text-sm font-medium text-foreground transition-colors hover:bg-muted focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2"
@@ -625,6 +706,22 @@ export default function CharactersPage() {
                     )}
                   </div>
 
+                  {/* Owner Filter (Admin Mode) */}
+                  {isAdminMode && owners.length > 0 && (
+                    <select
+                      value={ownerFilter}
+                      onChange={(e) => setOwnerFilter(e.target.value)}
+                      className="px-3 py-2 text-sm bg-background border border-amber-500/30 rounded-lg text-foreground focus:border-amber-500 focus:ring-1 focus:ring-amber-500 focus:outline-none cursor-pointer"
+                    >
+                      <option value="">All Owners</option>
+                      {owners.map((owner) => (
+                        <option key={owner.id} value={owner.id}>
+                          {owner.username}
+                        </option>
+                      ))}
+                    </select>
+                  )}
+
                   {/* Sort */}
                   <select
                     value={sortBy}
@@ -673,6 +770,7 @@ export default function CharactersPage() {
                       character={character}
                       onDelete={handleDelete}
                       viewMode="grid"
+                      isAdminMode={isAdminMode}
                     />
                   ))}
                 </div>
@@ -684,6 +782,7 @@ export default function CharactersPage() {
                       character={character}
                       onDelete={handleDelete}
                       viewMode="list"
+                      isAdminMode={isAdminMode}
                     />
                   ))}
                 </div>
