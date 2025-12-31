@@ -126,7 +126,7 @@ describe('Password Hashing', () => {
       ]);
 
       expect(results.every(r => r === true)).toBe(true);
-    });
+    }, 15000); // bcrypt with 12 salt rounds is intentionally slow
   });
 });
 
