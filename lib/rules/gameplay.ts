@@ -216,6 +216,134 @@ export function getAttackBonus(
 }
 
 // =============================================================================
+// ARMOR CALCULATIONS (SR5 Core p.169-170)
+// =============================================================================
+
+/**
+ * Result of armor calculation including encumbrance penalties
+ */
+export interface ArmorCalculationResult {
+  /** Total armor value for damage resistance tests */
+  totalArmor: number;
+  /** Highest base armor piece rating */
+  baseArmor: number;
+  /** Total accessory bonus (before Strength cap) */
+  rawAccessoryBonus: number;
+  /** Accessory bonus after Strength cap */
+  effectiveAccessoryBonus: number;
+  /** Amount by which accessory bonus exceeds Strength (if any) */
+  excessOverStrength: number;
+  /** Agility penalty from encumbrance (-1 per 2 full points over Strength) */
+  agilityPenalty: number;
+  /** Reaction penalty from encumbrance (-1 per 2 full points over Strength) */
+  reactionPenalty: number;
+  /** Whether character is encumbered */
+  isEncumbered: boolean;
+  /** Base armor item name (for display) */
+  baseArmorName?: string;
+  /** Names of worn accessories */
+  accessoryNames: string[];
+}
+
+/**
+ * Minimal armor item interface for calculation
+ */
+interface ArmorItemInput {
+  armorRating: number;
+  armorModifier?: boolean;
+  name?: string;
+  state?: { readiness?: string };
+  equipped?: boolean;
+}
+
+/**
+ * Check if an armor item is currently worn
+ */
+function isArmorWorn(item: ArmorItemInput): boolean {
+  // Check new state system first
+  if (item.state?.readiness) {
+    return item.state.readiness === 'worn';
+  }
+  // Fall back to legacy equipped field
+  return item.equipped === true;
+}
+
+/**
+ * Calculate total armor with SR5 stacking rules
+ *
+ * Rules (SR5 Core p.169-170):
+ * - Only the highest base armor piece applies
+ * - Armor accessories (armorModifier: true) add to the total
+ * - Accessory bonus is capped at the character's Strength attribute
+ * - For every 2 full points the accessory bonus exceeds Strength,
+ *   the character suffers -1 to Agility and Reaction
+ *
+ * @param armorItems - Array of armor items (worn and stored)
+ * @param strength - Character's Strength attribute
+ * @returns Detailed armor calculation result
+ */
+export function calculateArmorTotal(
+  armorItems: ArmorItemInput[],
+  strength: number
+): ArmorCalculationResult {
+  // Filter to only worn armor
+  const wornArmor = armorItems.filter(isArmorWorn);
+
+  // Separate base armor from accessories
+  const baseArmorPieces = wornArmor.filter(a => !a.armorModifier);
+  const accessories = wornArmor.filter(a => a.armorModifier === true);
+
+  // Find highest base armor
+  let baseArmor = 0;
+  let baseArmorName: string | undefined;
+  for (const piece of baseArmorPieces) {
+    if (piece.armorRating > baseArmor) {
+      baseArmor = piece.armorRating;
+      baseArmorName = piece.name;
+    }
+  }
+
+  // Sum accessory bonuses
+  const rawAccessoryBonus = accessories.reduce(
+    (sum, acc) => sum + (acc.armorRating || 0),
+    0
+  );
+  const accessoryNames = accessories
+    .map(a => a.name)
+    .filter((n): n is string => !!n);
+
+  // Cap accessory bonus at Strength
+  const effectiveAccessoryBonus = Math.min(rawAccessoryBonus, strength);
+
+  // Calculate encumbrance
+  const excessOverStrength = Math.max(0, rawAccessoryBonus - strength);
+  const encumbrancePenalty = Math.floor(excessOverStrength / 2);
+
+  return {
+    totalArmor: baseArmor + effectiveAccessoryBonus,
+    baseArmor,
+    rawAccessoryBonus,
+    effectiveAccessoryBonus,
+    excessOverStrength,
+    agilityPenalty: -encumbrancePenalty,
+    reactionPenalty: -encumbrancePenalty,
+    isEncumbered: encumbrancePenalty > 0,
+    baseArmorName,
+    accessoryNames,
+  };
+}
+
+/**
+ * Quick helper to get just the total armor value
+ */
+export function getTotalArmorValue(
+  armorItems: ArmorItemInput[],
+  strength: number
+): number {
+  return calculateArmorTotal(armorItems, strength).totalArmor;
+}
+
+// =============================================================================
 // WOUND MODIFIERS
 // =============================================================================
 

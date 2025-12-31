@@ -15,8 +15,9 @@ import { useMemo } from "react";
 import { THEMES, DEFAULT_THEME, type Theme } from "@/lib/themes";
 import type { Character, Weapon, ArmorItem } from "@/lib/types";
 import { DicePoolDisplay, type PoolModifier } from "./DicePoolDisplay";
-import { Wifi } from "lucide-react";
+import { Wifi, AlertTriangle } from "lucide-react";
 import { calculateWirelessBonuses, isGlobalWirelessEnabled } from "@/lib/rules/wireless";
+import { calculateArmorTotal, type ArmorCalculationResult } from "@/lib/rules/gameplay";
 
 // =============================================================================
 // TYPES
@@ -36,6 +37,8 @@ interface CombatPool {
   modifiers: PoolModifier[];
   limit?: { value: number; type: "physical" | "mental" | "social" | "weapon" | "other" };
   context: string;
+  /** Whether this pool has an active wireless bonus */
+  hasWirelessBonus?: boolean;
 }
 
 // =============================================================================
@@ -85,22 +88,74 @@ function calculateInitiative(character: Character): { base: number; dice: number
   };
 }
 
-function getTotalArmor(character: Character): number {
-  const armor = character.gear?.filter((g): g is ArmorItem => 
+/**
+ * Get all armor items from character (both gear array and armor array)
+ */
+function getArmorItems(character: Character): ArmorItem[] {
+  const gearArmor = character.gear?.filter((g): g is ArmorItem =>
     g.category === "armor"
   ) || [];
-  
-  // Get highest base armor value (typically worn armor)
-  const wornArmor = armor.reduce((max, item) => {
-    const rating = item.armorRating || 0;
-    return rating > max ? rating : max;
-  }, 0);
-  
-  return wornArmor;
+  const separateArmor = character.armor || [];
+  return [...gearArmor, ...separateArmor];
+}
+
+/**
+ * Calculate armor with SR5 stacking rules
+ * - Highest base armor applies
+ * - Accessories (armorModifier: true) add to base
+ * - Accessory bonus capped at Strength
+ * - Encumbrance penalty if accessory bonus exceeds Strength
+ */
+function getArmorCalculation(character: Character): ArmorCalculationResult {
+  const armorItems = getArmorItems(character);
+  const strength = character.attributes?.strength || 1;
+  return calculateArmorTotal(armorItems, strength);
+}
+
+/**
+ * Check if a weapon has a smartgun system installed
+ */
+function hasSmartgunMod(weapon: Weapon): boolean {
+  if (!weapon.modifications) return false;
+  return weapon.modifications.some((mod) => {
+    // Support both catalogId (correct) and legacy modificationId field
+    const modId = mod.catalogId || (mod as { modificationId?: string }).modificationId;
+    return modId === "smartgun-internal" || modId === "smartgun-external";
+  });
+}
+
+/**
+ * Check if smartgun wireless bonus applies to this weapon
+ * - Global wireless must be enabled
+ * - Weapon must not be stored
+ * - Weapon's wireless must be enabled
+ * - Weapon must have smartgun mod installed
+ * - Weapon must be ranged (not melee)
+ */
+function hasSmartgunWirelessBonus(character: Character, weapon: Weapon): boolean {
+  // Global wireless must be on
+  if (!isGlobalWirelessEnabled(character)) return false;
+
+  // Weapon must be available (not stored)
+  if (weapon.state?.readiness === "stored") return false;
+
+  // Per-weapon wireless must be on (default true if not set)
+  if (weapon.state?.wirelessEnabled === false) return false;
+
+  // Must have smartgun mod
+  if (!hasSmartgunMod(weapon)) return false;
+
+  // Must be a ranged weapon (smartgun doesn't help melee)
+  const subcategory = weapon.subcategory?.toLowerCase() || "";
+  if (subcategory.includes("melee") || subcategory.includes("blade") || subcategory.includes("club")) {
+    return false;
+  }
+
+  return true;
 }
 
 function getWeaponPools(character: Character, physicalLimit: number): CombatPool[] {
-  const weapons = (character.gear?.filter((g): g is Weapon => 
+  const weapons = (character.gear?.filter((g): g is Weapon =>
     g.category === "weapons"
   ) || []).slice(0, 3); // Limit to top 3 weapons
 
@@ -109,8 +164,9 @@ function getWeaponPools(character: Character, physicalLimit: number): CombatPool
     let skillId = "automatics";
     const attrId = "agility";
     const subcategory = weapon.subcategory?.toLowerCase() || "";
-    
-    if (subcategory.includes("melee") || subcategory.includes("blade")) {
+    const isMelee = subcategory.includes("melee") || subcategory.includes("blade") || subcategory.includes("club");
+
+    if (isMelee) {
       skillId = "blades";
     } else if (subcategory.includes("pistol")) {
       skillId = "pistols";
@@ -120,12 +176,20 @@ function getWeaponPools(character: Character, physicalLimit: number): CombatPool
 
     const attr = getAttributeValue(character, attrId);
     const skill = getSkillRating(character, skillId);
-    const pool = attr + skill;
+
+    // Check for smartgun wireless bonus (+2 dice pool for ranged attacks)
+    const smartgunBonus = hasSmartgunWirelessBonus(character, weapon) ? 2 : 0;
+    const pool = attr + skill + smartgunBonus;
 
     const modifiers: PoolModifier[] = [
       { label: "Agility", value: attr, type: "attribute" },
       { label: skillId.charAt(0).toUpperCase() + skillId.slice(1), value: skill, type: "skill" },
     ];
+
+    // Add smartgun bonus to modifiers if active
+    if (smartgunBonus > 0) {
+      modifiers.push({ label: "Smartgun", value: smartgunBonus, type: "gear" });
+    }
 
     // Weapon accuracy as limit
     const accuracy = weapon.accuracy || physicalLimit;
@@ -136,6 +200,7 @@ function getWeaponPools(character: Character, physicalLimit: number): CombatPool
       modifiers,
       limit: { value: accuracy, type: "weapon" as const },
       context: `${weapon.name} Attack`,
+      hasWirelessBonus: smartgunBonus > 0,
     };
   });
 }
@@ -158,7 +223,8 @@ export function CombatQuickReference({
     const reaction = getAttributeValue(character, "reaction");
     const intuition = getAttributeValue(character, "intuition");
     const body = getAttributeValue(character, "body");
-    const armor = getTotalArmor(character);
+    const armorCalc = getArmorCalculation(character);
+    const armor = armorCalc.totalArmor;
     const initiative = calculateInitiative(character);
 
     // Defense pool
@@ -238,6 +304,7 @@ export function CombatQuickReference({
     return {
       initiative,
       armor,
+      armorCalc,
       defensePool,
       fullDefensePool,
       soakPool,
@@ -294,12 +361,31 @@ export function CombatQuickReference({
         <div
           className={`p-3 rounded border text-center ${t.colors.card} ${t.colors.border}`}
         >
-          <span className={`block text-xs ${t.fonts.mono} text-muted-foreground uppercase mb-1`}>
+          <span className={`flex items-center justify-center gap-1 text-xs ${t.fonts.mono} text-muted-foreground uppercase mb-1`}>
             Armor
+            {combatData.armorCalc.isEncumbered && (
+              <span title="Encumbrance penalty active">
+                <AlertTriangle className="w-3 h-3 text-amber-400" />
+              </span>
+            )}
           </span>
-          <span className={`text-xl font-bold ${t.fonts.mono} ${t.colors.heading}`}>
+          <span className={`text-xl font-bold ${t.fonts.mono} ${
+            combatData.armorCalc.isEncumbered ? "text-amber-400" : t.colors.heading
+          }`}>
             {combatData.armor}
           </span>
+          {/* Show armor breakdown if accessories are worn */}
+          {combatData.armorCalc.effectiveAccessoryBonus > 0 && (
+            <div className="text-[10px] text-muted-foreground mt-1">
+              {combatData.armorCalc.baseArmor} + {combatData.armorCalc.effectiveAccessoryBonus}
+            </div>
+          )}
+          {/* Show encumbrance warning */}
+          {combatData.armorCalc.isEncumbered && (
+            <div className="text-[10px] text-amber-400 mt-1">
+              {combatData.armorCalc.agilityPenalty} AGI/REA
+            </div>
+          )}
         </div>
       </div>
 
@@ -358,6 +444,7 @@ export function CombatQuickReference({
                 woundModifier={woundModifier}
                 limit={weapon.limit}
                 theme={theme}
+                hasWirelessBonus={weapon.hasWirelessBonus}
                 onClick={() => onPoolSelect?.(
                   Math.max(0, weapon.pool + woundModifier),
                   weapon.context

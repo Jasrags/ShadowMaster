@@ -61,19 +61,29 @@ export interface BatchMigrationResult {
  * Returns true if any gear items are missing the new state fields.
  */
 export function needsGearStateMigration(character: Character): boolean {
-  // Check weapons
-  const weapons = (character.gear?.filter(
+  // Check weapons in gear array
+  const weaponsInGear = (character.gear?.filter(
     (g): g is Weapon => g.category === "weapons"
   ) ?? []);
-  if (weapons.some((w) => !w.state)) {
+  if (weaponsInGear.some((w) => !w.state)) {
     return true;
   }
 
-  // Check armor
-  const armor = (character.gear?.filter(
+  // Check armor in gear array
+  const armorInGear = (character.gear?.filter(
     (g): g is ArmorItem => g.category === "armor"
   ) ?? []);
-  if (armor.some((a) => !a.state)) {
+  if (armorInGear.some((a) => !a.state)) {
+    return true;
+  }
+
+  // Check separate weapons array (legacy format)
+  if (character.weapons?.some((w) => !w.state)) {
+    return true;
+  }
+
+  // Check separate armor array (legacy format)
+  if (character.armor?.some((a) => !a.state)) {
     return true;
   }
 
@@ -161,7 +171,7 @@ export function migrateCharacterGearState(
   // Create a deep copy to avoid mutating original
   const migrated: Character = JSON.parse(JSON.stringify(character));
 
-  // Migrate weapons
+  // Migrate weapons in gear array
   if (migrated.gear) {
     migrated.gear = migrated.gear.map((item) => {
       if (item.category === "weapons") {
@@ -216,6 +226,63 @@ export function migrateCharacterGearState(
       }
 
       return item;
+    });
+  }
+
+  // Migrate separate weapons array (some characters store weapons separately)
+  if (migrated.weapons) {
+    migrated.weapons = migrated.weapons.map((weapon) => {
+      if (!weapon.state) {
+        const newState = createWeaponState(weapon);
+        changes.push({
+          type: "weapon",
+          itemId: weapon.id || weapon.catalogId,
+          itemName: weapon.name,
+          field: "state",
+          oldValue: undefined,
+          newValue: newState,
+        });
+        weapon.state = newState;
+      }
+
+      // Add ammo state if needed - check both ammoCapacity and ammo fields
+      const capacity = weapon.ammoCapacity || (weapon as unknown as { ammo?: number }).ammo;
+      if (!weapon.ammoState && capacity) {
+        const weaponWithCapacity = { ...weapon, ammoCapacity: capacity };
+        const newAmmoState = createWeaponAmmoState(weaponWithCapacity);
+        if (newAmmoState) {
+          changes.push({
+            type: "weapon",
+            itemId: weapon.id || weapon.catalogId,
+            itemName: weapon.name,
+            field: "ammoState",
+            oldValue: undefined,
+            newValue: newAmmoState,
+          });
+          weapon.ammoState = newAmmoState;
+        }
+      }
+
+      return weapon;
+    });
+  }
+
+  // Migrate separate armor array (some characters store armor separately)
+  if (migrated.armor) {
+    migrated.armor = migrated.armor.map((armorItem) => {
+      if (!armorItem.state) {
+        const newState = createArmorState(armorItem);
+        changes.push({
+          type: "armor",
+          itemId: armorItem.id || armorItem.catalogId,
+          itemName: armorItem.name,
+          field: "state",
+          oldValue: undefined,
+          newValue: newState,
+        });
+        armorItem.state = newState;
+      }
+      return armorItem;
     });
   }
 

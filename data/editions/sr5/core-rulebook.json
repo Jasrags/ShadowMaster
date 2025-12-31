@@ -6964,6 +6964,7 @@
             "cost": 100,
             "availability": 2,
             "armorRating": 2,
+            "armorModifier": true,
             "description": "Standard protective helmet."
           },
           {

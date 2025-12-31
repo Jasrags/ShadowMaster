@@ -13,6 +13,7 @@
 
 import { useMemo } from "react";
 import { THEMES, DEFAULT_THEME, type Theme } from "@/lib/themes";
+import { Wifi } from "lucide-react";
 
 // =============================================================================
 // TYPES
@@ -38,6 +39,8 @@ export interface DicePoolDisplayProps {
   theme?: Theme;
   onClick?: () => void;
   compact?: boolean; // Minimal display for tables
+  /** Show wireless bonus indicator (e.g., for smartgun) */
+  hasWirelessBonus?: boolean;
 }
 
 // =============================================================================
@@ -76,6 +79,7 @@ export function DicePoolDisplay({
   theme,
   onClick,
   compact = false,
+  hasWirelessBonus = false,
 }: DicePoolDisplayProps) {
   const t = theme || THEMES[DEFAULT_THEME];
 
@@ -135,8 +139,13 @@ export function DicePoolDisplay({
     >
       {/* Header */}
       <div className="flex items-center justify-between mb-2">
-        <span className="text-sm font-medium text-foreground">
+        <span className="flex items-center gap-1.5 text-sm font-medium text-foreground">
           {label}
+          {hasWirelessBonus && (
+            <span title="Wireless bonus active">
+              <Wifi className="w-3.5 h-3.5 text-cyan-400" />
+            </span>
+          )}
         </span>
         <div className="flex items-center gap-2">
           {/* Final Pool */}

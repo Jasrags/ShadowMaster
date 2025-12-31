@@ -147,7 +147,7 @@ function CharacterCard({ character, onDelete, viewMode = "grid", isAdminMode = f
         href={character.status === "draft" ? `/characters/${character.id}/edit` : `/characters/${character.id}`}
         className="group relative block"
       >
-        <div className="relative overflow-hidden rounded-lg border border-border bg-card transition-all duration-200 hover:border-emerald-500/50 hover:bg-muted/50">
+        <div className="relative rounded-lg border border-border bg-card transition-all duration-200 hover:border-emerald-500/50 hover:bg-muted/50">
           <div className="flex items-center gap-4 p-4">
             {/* Name & Metatype */}
             <div className="flex-1 min-w-0">
@@ -239,9 +239,9 @@ function CharacterCard({ character, onDelete, viewMode = "grid", isAdminMode = f
       href={character.status === "draft" ? `/characters/${character.id}/edit` : `/characters/${character.id}`}
       className="group relative block"
     >
-      <div className="relative overflow-hidden rounded-lg border border-border bg-card transition-all duration-300 hover:border-emerald-500/50 hover:shadow-lg hover:shadow-emerald-500/5">
+      <div className="relative rounded-lg border border-border bg-card transition-all duration-300 hover:border-emerald-500/50 hover:shadow-lg hover:shadow-emerald-500/5">
         {/* Background pattern */}
-        <div className="absolute inset-0 opacity-5 group-hover:opacity-10 transition-opacity">
+        <div className="absolute inset-0 opacity-5 group-hover:opacity-10 transition-opacity overflow-hidden rounded-lg">
           <div
             className="absolute inset-0"
             style={{

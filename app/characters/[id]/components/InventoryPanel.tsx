@@ -127,7 +127,7 @@ function ReadinessMenu({ currentState, validStates, onSelect, disabled }: Readin
       </button>
 
       {isOpen && (
-        <div className="absolute z-50 left-0 top-full mt-1 w-28 p-1 rounded-lg bg-zinc-900 border border-zinc-700 shadow-lg">
+        <div className="absolute z-50 right-0 top-full mt-1 w-28 p-1 rounded-lg bg-zinc-900 border border-zinc-700 shadow-lg">
           {validStates.map(state => (
             <button
               key={state}
@@ -179,7 +179,7 @@ function WeaponRow({
   const hasAmmo = (weapon.ammoCapacity ?? 0) > 0;
 
   return (
-    <div className="border border-zinc-800 rounded-lg overflow-hidden">
+    <div className="border border-zinc-800 rounded-lg">
       {/* Main row */}
       <div
         className={`flex items-center gap-3 p-3 ${hasAmmo ? "cursor-pointer hover:bg-zinc-800/50" : ""}`}

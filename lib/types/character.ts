@@ -821,6 +821,12 @@ export interface ArmorItem extends GearItem {
   /** Reference to catalog armor ID */
   catalogId?: string;
   armorRating: number;
+  /**
+   * True if this is an armor accessory (helmet, shield, etc.)
+   * Accessories add to base armor instead of replacing it
+   * Their bonus is capped at the character's Strength attribute
+   */
+  armorModifier?: boolean;
   /** Total capacity for modifications (equals armor rating) */
   capacity?: number;
   /** Capacity currently used by modifications */

@@ -153,11 +153,10 @@ export function collectWeaponModEffects(
     // Check for smartgun system in modifications
     if (weapon.modifications) {
       for (const mod of weapon.modifications) {
+        // Support both catalogId (correct) and legacy modificationId field
+        const modId = mod.catalogId || (mod as { modificationId?: string }).modificationId;
         // Smartgun system provides +2 attack pool when wireless
-        if (
-          mod.catalogId === "smartgun-internal" ||
-          mod.catalogId === "smartgun-external"
-        ) {
+        if (modId === "smartgun-internal" || modId === "smartgun-external") {
           effects.push({
             type: "attack_pool",
             modifier: 2,
