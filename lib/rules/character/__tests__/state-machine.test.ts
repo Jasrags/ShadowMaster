@@ -247,9 +247,19 @@ describe("isValidTransition", () => {
   });
 
   it("should return false for invalid transitions", () => {
+    // Draft can only go to active (not directly to retired or deceased)
     expect(isValidTransition("draft", "retired")).toBe(false);
     expect(isValidTransition("draft", "deceased")).toBe(false);
-    expect(isValidTransition("retired", "deceased")).toBe(false);
+  });
+
+  it("should return true for admin-only backward transitions", () => {
+    // Admin can revert any status to draft
+    expect(isValidTransition("active", "draft")).toBe(true);
+    expect(isValidTransition("retired", "draft")).toBe(true);
+    expect(isValidTransition("deceased", "draft")).toBe(true);
+    // Admin can transition between retired and deceased
+    expect(isValidTransition("retired", "deceased")).toBe(true);
+    expect(isValidTransition("deceased", "retired")).toBe(true);
   });
 });
 
