@@ -1170,7 +1170,13 @@ function CharacterSheet({
                 <h1 className={`character-name text-3xl md:text-4xl ${theme.fonts.heading} ${theme.colors.heading}`}>
                   {character.name}
                 </h1>
-                <StabilityShield characterId={character.id} size="md" showTooltip />
+                <StabilityShield
+                  characterId={character.id}
+                  size="md"
+                  showTooltip
+                  syncStatus={character.syncStatus}
+                  legalityStatus={character.legalityStatus}
+                />
                 <span className={`px-2 py-0.5 text-xs font-mono uppercase tracking-wider rounded border ${character.status === "active" ? theme.components.badge.positive :
                   character.status === "draft" ? theme.components.badge.neutral :
                     theme.components.badge.neutral
