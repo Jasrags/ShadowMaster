@@ -157,12 +157,12 @@ export async function POST(
 
     const { characterId, weaponId } = await params;
 
-    // Authorize edit access
+    // Authorize access (view permission - owners always have this for gameplay actions)
     const authResult = await authorizeOwnerAccess(
       userId,
       userId,
       characterId,
-      "edit"
+      "view"
     );
 
     if (!authResult.authorized) {
@@ -271,12 +271,12 @@ export async function DELETE(
 
     const { characterId, weaponId } = await params;
 
-    // Authorize edit access
+    // Authorize access (view permission - owners always have this for gameplay actions)
     const authResult = await authorizeOwnerAccess(
       userId,
       userId,
       characterId,
-      "edit"
+      "view"
     );
 
     if (!authResult.authorized) {
@@ -374,12 +374,12 @@ export async function PATCH(
 
     const { characterId, weaponId } = await params;
 
-    // Authorize edit access
+    // Authorize access (view permission - owners always have this for gameplay actions)
     const authResult = await authorizeOwnerAccess(
       userId,
       userId,
       characterId,
-      "edit"
+      "view"
     );
 
     if (!authResult.authorized) {

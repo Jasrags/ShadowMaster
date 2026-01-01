@@ -125,9 +125,9 @@ export function WirelessIndicator({
   // Icon color based on state
   const getIconColor = () => {
     if (isDeviceBroken) return "text-red-500";
-    if (!globalEnabled) return "text-zinc-600";
+    if (!globalEnabled) return "text-muted-foreground";
     if (isEffectivelyEnabled) return "text-cyan-400";
-    return "text-zinc-500";
+    return "text-muted-foreground";
   };
 
   // Render icon based on state
@@ -160,7 +160,7 @@ export function WirelessIndicator({
           className={`p-1 rounded transition-colors ${
             disabled || isDeviceBroken
               ? "cursor-not-allowed opacity-50"
-              : "hover:bg-zinc-800"
+              : "hover:bg-muted"
           }`}
           title={
             isDeviceBroken
@@ -175,7 +175,7 @@ export function WirelessIndicator({
 
         {/* Tooltip */}
         {showTooltip && hasBonuses && isEffectivelyEnabled && (
-          <div className="absolute z-50 left-full ml-2 top-1/2 -translate-y-1/2 w-48 p-2 rounded-lg bg-zinc-900 border border-cyan-500/30 shadow-lg">
+          <div className="absolute z-50 left-full ml-2 top-1/2 -translate-y-1/2 w-48 p-2 rounded-lg bg-popover border border-cyan-500/30 shadow-lg">
             <div className="flex items-center gap-1 text-xs text-cyan-400 font-medium mb-1">
               <Zap className="w-3 h-3" />
               Wireless Bonus
@@ -183,13 +183,13 @@ export function WirelessIndicator({
             {effects && effects.length > 0 ? (
               <div className="space-y-0.5">
                 {effects.map((effect, i) => (
-                  <div key={i} className="text-xs text-zinc-300">
+                  <div key={i} className="text-xs text-foreground">
                     {formatEffect(effect)}
                   </div>
                 ))}
               </div>
             ) : (
-              <p className="text-xs text-zinc-400">{bonusDescription}</p>
+              <p className="text-xs text-muted-foreground">{bonusDescription}</p>
             )}
           </div>
         )}
@@ -212,10 +212,10 @@ export function WirelessIndicator({
           disabled={disabled || isDeviceBroken || !globalEnabled}
           className={`relative rounded-full transition-colors ${toggleSizes[size]} ${
             disabled || isDeviceBroken || !globalEnabled
-              ? "bg-zinc-800 cursor-not-allowed"
+              ? "bg-muted cursor-not-allowed"
               : isEffectivelyEnabled
               ? "bg-cyan-500"
-              : "bg-zinc-700 hover:bg-zinc-600"
+              : "bg-muted hover:bg-muted/80"
           }`}
           title={
             !globalEnabled
@@ -252,7 +252,7 @@ export function WirelessIndicator({
 
       {/* Bonus tooltip */}
       {showTooltip && hasBonuses && isEffectivelyEnabled && (
-        <div className="absolute z-50 left-0 top-full mt-1 w-48 p-2 rounded-lg bg-zinc-900 border border-cyan-500/30 shadow-lg">
+        <div className="absolute z-50 left-0 top-full mt-1 w-48 p-2 rounded-lg bg-popover border border-cyan-500/30 shadow-lg">
           <div className="flex items-center gap-1 text-xs text-cyan-400 font-medium mb-1">
             <Zap className="w-3 h-3" />
             Active Bonus
@@ -260,13 +260,13 @@ export function WirelessIndicator({
           {effects && effects.length > 0 ? (
             <div className="space-y-0.5">
               {effects.map((effect, i) => (
-                <div key={i} className="text-xs text-zinc-300">
+                <div key={i} className="text-xs text-foreground">
                   {formatEffect(effect)}
                 </div>
               ))}
             </div>
           ) : (
-            <p className="text-xs text-zinc-400">{bonusDescription}</p>
+            <p className="text-xs text-muted-foreground">{bonusDescription}</p>
           )}
         </div>
       )}

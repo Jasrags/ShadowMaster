@@ -137,7 +137,7 @@ export function CombatTrackerModal({
 
               {/* Footer Actions */}
               {participant && (
-                <div className="flex items-center justify-between p-4 border-t border-zinc-800">
+                <div className="flex items-center justify-between p-4 border-t border-border">
                   <div className={`text-sm ${theme.colors.muted}`}>
                     Playing as: <span className={theme.colors.heading}>{participant.name}</span>
                   </div>
