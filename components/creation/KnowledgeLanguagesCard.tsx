@@ -791,10 +791,20 @@ export function KnowledgeLanguagesCard({
     [languages, state.selections, updateState]
   );
 
-  // Check if character already has a native language
-  const hasNativeLanguage = useMemo(() => {
-    return languages.some((l) => l.isNative);
+  // Check if character has Bilingual quality (allows 2 native languages)
+  const hasBilingualQuality = useMemo(() => {
+    const qualities = (state.selections.qualities || []) as Array<{ qualityId: string }>;
+    return qualities.some((q) => q.qualityId === "bilingual");
+  }, [state.selections.qualities]);
+
+  // Count native languages and check if max reached
+  const nativeLanguageCount = useMemo(() => {
+    return languages.filter((l) => l.isNative).length;
   }, [languages]);
+
+  // Max native languages: 2 if Bilingual, 1 otherwise
+  const maxNativeLanguages = hasBilingualQuality ? 2 : 1;
+  const hasMaxNativeLanguages = nativeLanguageCount >= maxNativeLanguages;
 
   // Handle knowledge skill rating change
   const handleKnowledgeRatingChange = useCallback(
@@ -1002,7 +1012,7 @@ export function KnowledgeLanguagesCard({
         onClose={() => setShowAddLanguage(false)}
         onAdd={handleAddLanguage}
         existingLanguages={languages.map((l) => l.name)}
-        hasNativeLanguage={hasNativeLanguage}
+        hasNativeLanguage={hasMaxNativeLanguages}
         pointsRemaining={knowledgePointsRemaining}
       />
 
