@@ -2928,301 +2928,333 @@ Uses header + [Add] button + modal pattern.
 ## Identities & SINs Component
 
 Manages the character's System Identification Numbers (legal and fake),
-attached licenses, associated lifestyles, and street name.
+attached licenses, and associated lifestyles.
 
-**Street Name:** The alias used in the shadows
-**Real SIN:** From negative quality (SINner) - cannot be changed
-**Fake SINs:** Purchased with nuyen, Rating 1-6
-**Licenses:** Attached to SINs, Rating 1-6, must match SIN rating or lower
-**Lifestyles:** Associated with a SIN, monthly cost prepaid
+**Key Rules (SR5):**
+- **Fake SINs:** Rating 1-4 only, cost = Rating × 2,500¥
+- **Fake Licenses:** Rating 1-4 only, cost = Rating × 200¥
+- **Real SIN:** From SINner negative quality (National, Criminal, Corporate Limited, Corporate Born)
+- **Real Licenses:** No rating, tied to real SIN
+- **Licenses must match SIN type:** Fake licenses for fake SIN, real licenses for real SIN
+- **Lifestyles:** Can be associated with an identity, monthly or permanent (100× monthly cost)
 
-### Standard State (Multiple Identities)
+### Identity Card - Populated State
+
+Shows a fully configured identity with SIN, licenses, and lifestyle.
 
 ```
 ┌─────────────────────────────────────────────────────────────────────────────┐
-│ IDENTITIES & SINs                                                            │
-├─────────────────────────────────────────────────────────────────────────────┤
 │                                                                             │
+│  Jimmy Smith                                        [Edit]     [Remove]     │
+│                                                      gray        red        │
+│  ┌──────────────────────┐                                                   │
+│  │ Fake SIN (Rating 4)  │  ← Blue/purple pill badge                         │
+│  └──────────────────────┘                                                   │
+│                                                                             │
+│  Licenses (2)                                          [+ Add License]      │
+│                                                           blue button       │
 │  ┌───────────────────────────────────────────────────────────────────────┐  │
-│  │  STREET NAME                                                          │  │
-│  │  ┌─────────────────────────────────────────────────────────────────┐  │  │
-│  │  │ Ghost                                                           │  │  │
-│  │  └─────────────────────────────────────────────────────────────────┘  │  │
-│  │  The name you're known by in the shadows                              │  │
+│  │  Pistol (Rating 4)                                   Edit   Remove    │  │
+│  │                                                      blue    red      │  │
+│  └───────────────────────────────────────────────────────────────────────┘  │
+│  ┌───────────────────────────────────────────────────────────────────────┐  │
+│  │  Conceal Carry (Rating 4)                            Edit   Remove    │  │
 │  └───────────────────────────────────────────────────────────────────────┘  │
 │                                                                             │
-│  PRIMARY IDENTITY                                                           │
+│  Associated Lifestyle                                  [Edit Lifestyle]     │
+│                                                           blue button       │
 │  ┌───────────────────────────────────────────────────────────────────────┐  │
-│  │  ★ John Smith                                          REAL SIN       │  │
-│  │  SINner (National) — UCAS                              From Quality   │  │
-│  │                                                                       │  │
-│  │  LIFESTYLE                                                            │  │
-│  │  ┌─────────────────────────────────────────────────────────────────┐  │  │
-│  │  │  Medium Lifestyle                                    3 months   │  │  │
-│  │  │  Comfortable apartment in Bellevue                              │  │  │
-│  │  │  5,000¥/month                               Total: 15,000¥      │  │  │
-│  │  │                                                       [Change]  │  │  │
-│  │  └─────────────────────────────────────────────────────────────────┘  │  │
-│  │                                                                       │  │
-│  │  This identity is tied to your SINner quality and cannot be removed.  │  │
+│  │  Medium                                                      Remove   │  │
+│  │  Monthly: ¥5,000                                              red     │  │
 │  └───────────────────────────────────────────────────────────────────────┘  │
-│                                                                             │
-│  FAKE IDENTITIES                                                  [+ Add]  │
-│  ┌───────────────────────────────────────────────────────────────────────┐  │
-│  │  "Marcus Cole"                                         Rating 4       │  │
-│  │  Fake SIN                                              10,000¥        │  │
-│  │                                                                       │  │
-│  │  LICENSES (max Rating 4)                              [+ Add License] │  │
-│  │  ├─ Concealed Carry Permit                    Rating 4      800¥     │  │
-│  │  ├─ Driver's License                          Rating 4      800¥     │  │
-│  │  └─ Restricted Cyberware                      Rating 4      800¥     │  │
-│  │                                                                       │  │
-│  │  LIFESTYLE                                                            │  │
-│  │  ┌─────────────────────────────────────────────────────────────────┐  │  │
-│  │  │  Low Lifestyle                                       1 month    │  │  │
-│  │  │  Rundown apartment in Redmond                                   │  │  │
-│  │  │  2,000¥/month                                Total: 2,000¥      │  │  │
-│  │  │                                                       [Change]  │  │  │
-│  │  └─────────────────────────────────────────────────────────────────┘  │  │
-│  │                                                                       │  │
-│  │  Identity Total: 14,400¥                                  [Remove]    │  │
-│  └───────────────────────────────────────────────────────────────────────┘  │
-│                                                                             │
-│  ┌───────────────────────────────────────────────────────────────────────┐  │
-│  │  "Sarah Walker"                                        Rating 2       │  │
-│  │  Fake SIN                                               2,500¥        │  │
-│  │                                                                       │  │
-│  │  LICENSES (max Rating 2)                              [+ Add License] │  │
-│  │  └─ (none)                                                            │  │
-│  │                                                                       │  │
-│  │  LIFESTYLE                                                            │  │
-│  │  └─ (none) — This identity has no associated lifestyle               │  │
-│  │                                                                       │  │
-│  │  Identity Total: 2,500¥                                   [Remove]    │  │
-│  └───────────────────────────────────────────────────────────────────────┘  │
-│                                                                             │
-│  ─────────────────────────────────────────────────────────────────────────  │
-│  IDENTITY SUMMARY                                                           │
-│                                                                             │
-│  Fake SINs:           12,500¥  (Rating 4 + Rating 2)                       │
-│  Licenses:             2,400¥  (3 × Rating 4)                              │
-│  Lifestyles:          17,000¥  (Medium 3mo + Low 1mo)                      │
-│                      ──────────                                             │
-│  Total:               31,900¥                                               │
 │                                                                             │
 └─────────────────────────────────────────────────────────────────────────────┘
 ```
 
-### Add Fake SIN Modal
+### Identity Card - Empty State
+
+Shows an identity with no licenses or lifestyle yet.
 
 ```
 ┌─────────────────────────────────────────────────────────────────────────────┐
-│ ADD FAKE SIN                                                            [X] │
-├─────────────────────────────────────────────────────────────────────────────┤
 │                                                                             │
-│  A fake SIN gives you a usable identity in the Matrix and meatspace.        │
-│  Higher ratings are harder to detect when scanned.                          │
+│  Tom                                                [Edit]     [Remove]     │
 │                                                                             │
-│  ┌───────────────────────────────────────────────────────────────────────┐  │
-│  │  Identity Name *                                                      │  │
-│  │  ┌─────────────────────────────────────────────────────────────────┐  │  │
-│  │  │ Marcus Cole                                                     │  │  │
-│  │  └─────────────────────────────────────────────────────────────────┘  │  │
-│  │  The name on this fake SIN                                            │  │
-│  └───────────────────────────────────────────────────────────────────────┘  │
+│  ┌──────────────────────┐                                                   │
+│  │ Fake SIN (Rating 1)  │                                                   │
+│  └──────────────────────┘                                                   │
 │                                                                             │
-│  ┌───────────────────────────────────────────────────────────────────────┐  │
-│  │  Issuing Authority                                                    │  │
-│  │  ┌─────────────────────────────────────────────────────────────────┐  │  │
-│  │  │ UCAS                                                         ▾  │  │  │
-│  │  └─────────────────────────────────────────────────────────────────┘  │  │
-│  │  UCAS, CAS, Tír Tairngire, NAN, Aztlan, Japan, etc.                  │  │
-│  └───────────────────────────────────────────────────────────────────────┘  │
+│  Licenses                                              [+ Add License]      │
 │                                                                             │
-│  ┌───────────────────────────────────────────────────────────────────────┐  │
-│  │  SIN RATING                                                           │  │
-│  │                                                                       │  │
-│  │   Rating 1      Rating 2      Rating 3      Rating 4      Rating 5   │  │
-│  │   2,500¥        5,000¥        7,500¥       [10,000¥]      12,500¥   │  │
-│  │   Tissue        Decent        Good          High         Premium    │  │
-│  │   paper         fake          quality       quality      quality    │  │
-│  │                                                                       │  │
-│  │   Rating 6                                                            │  │
-│  │   15,000¥                                                             │  │
-│  │   Near-perfect                                                        │  │
-│  │                                                                       │  │
-│  │  Higher rating = harder to detect. Licenses can't exceed SIN rating. │  │
-│  └───────────────────────────────────────────────────────────────────────┘  │
+│  No licenses added yet. Click "Add License" to add a license to this        │
+│  identity.                                                                  │
 │                                                                             │
-├─────────────────────────────────────────────────────────────────────────────┤
-│  Cost: 10,000¥                                                              │
-│                                              [Cancel]       [Create Identity]│
+│  Associated Lifestyle                                  [+ Add Lifestyle]    │
+│                                                                             │
+│  No lifestyle associated yet. Click "Add Lifestyle" to create or select     │
+│  a lifestyle for this identity.                                             │
+│                                                                             │
 └─────────────────────────────────────────────────────────────────────────────┘
 ```
 
-### Add License Modal
+### Identity Card - Real SIN (SINner Quality)
+
+Shows an identity with a real SIN from the SINner negative quality.
 
 ```
 ┌─────────────────────────────────────────────────────────────────────────────┐
-│ ADD LICENSE                                                             [X] │
-├─────────────────────────────────────────────────────────────────────────────┤
 │                                                                             │
-│  Adding license to: "Marcus Cole" (Rating 4 SIN)                            │
-│  License rating cannot exceed SIN rating (max: 4)                           │
+│  John Smith                                         [Edit]     [Remove]     │
 │                                                                             │
-│  ┌───────────────────────────────────────────────────────────────────────┐  │
-│  │  LICENSE TYPE                                                         │  │
-│  │                                                                       │  │
-│  │  [Search licenses...]                                                 │  │
-│  │                                                                       │  │
-│  │  ─ WEAPONS ───────────────────────────────────────────────────────── │  │
-│  │  □  Concealed Carry Permit                                           │  │
-│  │  □  Firearms License                                                  │  │
-│  │  □  Automatic Weapons Permit                                          │  │
-│  │  □  Heavy Weapons Permit                                              │  │
-│  │  □  Explosives License                                                │  │
-│  │                                                                       │  │
-│  │  ─ CYBERWARE ─────────────────────────────────────────────────────── │  │
-│  │  ☑  Restricted Cyberware License                                     │  │
-│  │  □  Augmentation License (general)                                    │  │
-│  │                                                                       │  │
-│  │  ─ MAGIC ─────────────────────────────────────────────────────────── │  │
-│  │  □  Mage License                                                      │  │
-│  │  □  Summoning License                                                 │  │
-│  │  □  Restricted Spellcasting                                           │  │
-│  │                                                                       │  │
-│  │  ─ MATRIX ────────────────────────────────────────────────────────── │  │
-│  │  □  Decker License                                                    │  │
-│  │  □  Cyberdeck Permit                                                  │  │
-│  │                                                                       │  │
-│  │  ─ VEHICLES ──────────────────────────────────────────────────────── │  │
-│  │  □  Driver's License                                                  │  │
-│  │  □  Pilot's License                                                   │  │
-│  │  □  Drone Operator Permit                                             │  │
-│  │  □  Rigger License                                                    │  │
-│  │                                                                       │  │
-│  │  ─ OTHER ─────────────────────────────────────────────────────────── │  │
-│  │  □  Private Investigator License                                      │  │
-│  │  □  Bounty Hunter License                                             │  │
-│  │  □  Bodyguard License                                                 │  │
-│  │  □  Medical License                                                   │  │
-│  │                                                                       │  │
-│  └───────────────────────────────────────────────────────────────────────┘  │
+│  ┌─────────────────────────────────┐                                        │
+│  │ Real SIN (National)            │  ← Green/emerald pill badge             │
+│  └─────────────────────────────────┘                                        │
+│                                                                             │
+│  Licenses                                              [+ Add License]      │
 │                                                                             │
 │  ┌───────────────────────────────────────────────────────────────────────┐  │
-│  │  LICENSE RATING                           Max: 4 (SIN rating)         │  │
-│  │                                                                       │  │
-│  │   Rating 1      Rating 2      Rating 3     [Rating 4]                │  │
-│  │     200¥          400¥          600¥         800¥                    │  │
-│  │                                                                       │  │
-│  │  ⚠ Rating 5-6 unavailable — would exceed SIN rating                  │  │
+│  │  Driver's License                                    Edit   Remove    │  │
+│  │  (no rating - real license)                                           │  │
 │  └───────────────────────────────────────────────────────────────────────┘  │
 │                                                                             │
-├─────────────────────────────────────────────────────────────────────────────┤
-│  Selected: Restricted Cyberware License (Rating 4)               800¥      │
-│                                              [Cancel]        [Add License]  │
-└─────────────────────────────────────────────────────────────────────────────┘
-```
-
-### Add/Change Lifestyle Modal
-
-```
-┌─────────────────────────────────────────────────────────────────────────────┐
-│ SET LIFESTYLE                                                           [X] │
-├─────────────────────────────────────────────────────────────────────────────┤
-│                                                                             │
-│  Lifestyle for: "Marcus Cole" identity                                      │
-│                                                                             │
-│  ┌───────────────────────────────────────────────────────────────────────┐  │
-│  │  LIFESTYLE LEVEL                                                      │  │
-│  │                                                                       │  │
-│  │  ┌─────────────────────────────────────────────────────────────────┐  │  │
-│  │  │                                                                 │  │  │
-│  │  │  ○  Street                                            Free      │  │  │
-│  │  │     You live on the streets, in abandoned buildings, or         │  │  │
-│  │  │     wherever you can find shelter. No permanent address.        │  │  │
-│  │  │                                                                 │  │  │
-│  │  │  ○  Squatter                                       500¥/month   │  │  │
-│  │  │     Abandoned building, shared squat, or coffin motel.          │  │  │
-│  │  │     Basic utilities sometimes. No Matrix access.                │  │  │
-│  │  │                                                                 │  │  │
-│  │  │  ●  Low                                          2,000¥/month   │  │  │
-│  │  │     Small apartment in a rough neighborhood. Basic utilities    │  │  │
-│  │  │     and spotty Matrix. Shared bathroom sometimes.               │  │  │
-│  │  │                                                                 │  │  │
-│  │  │  ○  Medium                                       5,000¥/month   │  │  │
-│  │  │     Comfortable apartment or small house. Good neighborhood,    │  │  │
-│  │  │     reliable utilities and Matrix. Middle class.                │  │  │
-│  │  │                                                                 │  │  │
-│  │  │  ○  High                                        10,000¥/month   │  │  │
-│  │  │     Upscale condo or nice house. Premium location, excellent    │  │  │
-│  │  │     security, high-speed Matrix. Upper class.                   │  │  │
-│  │  │                                                                 │  │  │
-│  │  │  ○  Luxury                                     100,000¥/month   │  │  │
-│  │  │     Penthouse, mansion, or estate. The best of everything.      │  │  │
-│  │  │     Full staff, top security, every amenity.                    │  │  │
-│  │  │                                                                 │  │  │
-│  │  └─────────────────────────────────────────────────────────────────┘  │  │
-│  └───────────────────────────────────────────────────────────────────────┘  │
-│                                                                             │
-│  ┌───────────────────────────────────────────────────────────────────────┐  │
-│  │  DURATION (Prepaid)                                                   │  │
-│  │                                                                       │  │
-│  │  [1 month ▾]                                                          │  │
-│  │                                                                       │  │
-│  │  1 month, 2 months, 3 months, 6 months, 12 months                     │  │
-│  │  Prepaying locks in the lifestyle for that duration.                  │  │
-│  └───────────────────────────────────────────────────────────────────────┘  │
-│                                                                             │
-│  ┌───────────────────────────────────────────────────────────────────────┐  │
-│  │  Location (optional)                                                  │  │
-│  │  ┌─────────────────────────────────────────────────────────────────┐  │  │
-│  │  │ Apartment in Redmond Barrens, near the Stuffer Shack            │  │  │
-│  │  └─────────────────────────────────────────────────────────────────┘  │  │
-│  └───────────────────────────────────────────────────────────────────────┘  │
-│                                                                             │
-├─────────────────────────────────────────────────────────────────────────────┤
-│  Low Lifestyle × 1 month                                         2,000¥    │
-│                                              [Cancel]       [Set Lifestyle] │
-└─────────────────────────────────────────────────────────────────────────────┘
-```
-
-### SINless Character (No Real SIN)
-
-```
-┌─────────────────────────────────────────────────────────────────────────────┐
-│ IDENTITIES & SINs                                                            │
-├─────────────────────────────────────────────────────────────────────────────┤
-│                                                                             │
-│  ┌───────────────────────────────────────────────────────────────────────┐  │
-│  │  STREET NAME                                                          │  │
-│  │  ┌─────────────────────────────────────────────────────────────────┐  │  │
-│  │  │ Razor                                                           │  │  │
-│  │  └─────────────────────────────────────────────────────────────────┘  │  │
-│  └───────────────────────────────────────────────────────────────────────┘  │
-│                                                                             │
-│  PRIMARY IDENTITY                                                           │
-│  ┌───────────────────────────────────────────────────────────────────────┐  │
-│  │                                                                       │  │
-│  │  SINless                                                  No Record  │  │
-│  │                                                                       │  │
-│  │  You have no official identity in any nation's databases.             │  │
-│  │  You don't exist as far as the system is concerned.                   │  │
-│  │                                                                       │  │
-│  │  ⚠ Without a SIN (real or fake), you cannot:                         │  │
-│  │    • Hold legal employment                                            │  │
-│  │    • Own property legally                                             │  │
-│  │    • Access many Matrix services                                      │  │
-│  │    • Travel through checkpoints easily                                │  │
-│  │                                                                       │  │
-│  │  Consider purchasing a Fake SIN to operate in society.                │  │
-│  │                                                                       │  │
-│  └───────────────────────────────────────────────────────────────────────┘  │
-│                                                                             │
-│  FAKE IDENTITIES                                                  [+ Add]  │
+│  Associated Lifestyle                                  [+ Add Lifestyle]    │
 │  ...                                                                        │
+│                                                                             │
 └─────────────────────────────────────────────────────────────────────────────┘
 ```
+
+### New Identity Modal
+
+Modal for creating a new identity with SIN type selection.
+
+```
+┌─────────────────────────────────────────────────────────────────────────────┐
+│                                                                             │
+│  New Identity                                                               │
+│                                                                             │
+│  Identity Name                                                              │
+│  ┌─────────────────────────────────────────────────────────────────────┐    │
+│  │ e.g., John Smith, Jane Doe                                          │    │
+│  └─────────────────────────────────────────────────────────────────────┘    │
+│                                                                             │
+│  SIN Type                                                                   │
+│                                                                             │
+│  ┌─────────────────────────────────────────────────────────────────────┐    │
+│  │ ┌─────────────────────────────────────────────────────────────────┐ │    │
+│  │ │                                                                 │ │    │
+│  │ │  Fake SIN                                    ← Selected (blue   │ │    │
+│  │ │  Purchased as gear (Rating 1-4)                 border)         │ │    │
+│  │ │                                                                 │ │    │
+│  │ └─────────────────────────────────────────────────────────────────┘ │    │
+│  │                                                                     │    │
+│  │ ┌─────────────────────────────────────────────────────────────────┐ │    │
+│  │ │                                                                 │ │    │
+│  │ │  Real SIN  (Requires SINner quality)  ← amber/yellow text       │ │    │
+│  │ │  From SINner quality                                            │ │    │
+│  │ │                                                                 │ │    │
+│  │ └─────────────────────────────────────────────────────────────────┘ │    │
+│  └─────────────────────────────────────────────────────────────────────┘    │
+│                                                                             │
+│  ┌─────────────────────────────────────────────────────────────────────┐    │
+│  │  Fake SIN Rating                                                    │    │
+│  │                                                                     │    │
+│  │  ┌─────────────────────────────────────────────────────────┐        │    │
+│  │  │ Rating 1                                              ▾ │        │    │
+│  │  └─────────────────────────────────────────────────────────┘        │    │
+│  │                                                                     │    │
+│  │  ⚠ No fake SINs found in gear. Make sure to purchase a fake SIN    │    │
+│  │    in the Gear step first.                        ← amber warning   │    │
+│  └─────────────────────────────────────────────────────────────────────┘    │
+│                                                                             │
+│                                                   [Cancel]  [Save Identity] │
+│                                                    gray       blue          │
+│                                                                             │
+└─────────────────────────────────────────────────────────────────────────────┘
+```
+
+**Conditional Display:**
+- "Fake SIN Rating" section only shows when "Fake SIN" is selected
+- Warning about gear only shows if no fake SINs purchased in Gear step
+- "Real SIN" option is disabled/grayed if character doesn't have SINner quality
+- If Real SIN selected, show the SINner quality type (National, Criminal, etc.)
+
+### New License Modal
+
+Modal for adding a license to an identity.
+
+```
+┌─────────────────────────────────────────────────────────────────────────────┐
+│                                                                             │
+│  New License                                                                │
+│                                                                             │
+│  License Name/Type                                                          │
+│  ┌─────────────────────────────────────────────────────────────────────┐    │
+│  │ e.g., Firearms License, Driver's License                            │    │
+│  └─────────────────────────────────────────────────────────────────────┘    │
+│                                                                             │
+│  Common license types:                                                      │
+│  ┌──────────────────┐ ┌────────────────────┐ ┌─────────────────┐            │
+│  │ Firearms License │ │ Magic User License │ │ Driver's License│            │
+│  └──────────────────┘ └────────────────────┘ └─────────────────┘            │
+│  ┌──────────────────┐ ┌───────────────────────────────┐                     │
+│  │Vehicle Registr.. │ │ Restricted Augmentation Lic.. │                     │
+│  └──────────────────┘ └───────────────────────────────┘                     │
+│  ┌──────────────────┐ ┌────────────────────────────┐                        │
+│  │ Security License │ │ Private Investigator Lic.. │                        │
+│  └──────────────────┘ └────────────────────────────┘                        │
+│  ┌──────────────────────┐ ┌───────────────────┐ ┌────────────────┐          │
+│  │ Bounty Hunter License│ │ Bodyguard License │ │Academic License│          │
+│  └──────────────────────┘ └───────────────────┘ └────────────────┘          │
+│  ┌───────────────┐                                                          │
+│  │ Media License │  ← Clickable chip/tag buttons                            │
+│  └───────────────┘                                                          │
+│                                                                             │
+│  License Type                                                               │
+│  ┌─────────────────────────────────────────────────────────────────────┐    │
+│  │ Fake License (matches fake SIN)                                     │    │
+│  └─────────────────────────────────────────────────────────────────────┘    │
+│  License type automatically matches the identity's SIN type.                │
+│                                                                             │
+│  License Rating                                                             │
+│  ┌─────────────────────────────────────────────────────────────────────┐    │
+│  │ Rating 1                                                          ▾ │    │
+│  └─────────────────────────────────────────────────────────────────────┘    │
+│  Fake licenses must have a rating between 1-4. Higher ratings are more      │
+│  expensive but harder to detect.                                            │
+│                                                                             │
+│  Notes (Optional)                                                           │
+│  ┌─────────────────────────────────────────────────────────────────────┐    │
+│  │ Additional notes about this license...                              │    │
+│  └─────────────────────────────────────────────────────────────────────┘    │
+│                                                                             │
+│                                                   [Cancel]  [Save License]  │
+│                                                                             │
+└─────────────────────────────────────────────────────────────────────────────┘
+```
+
+**Conditional Display:**
+- License Rating dropdown only shows for fake licenses (real licenses have no rating)
+- Rating options are 1-4 only
+- License Type field is read-only, auto-set based on identity's SIN type
+
+### New Lifestyle Modal
+
+Modal for associating a lifestyle with an identity.
+
+```
+┌─────────────────────────────────────────────────────────────────────────────┐
+│                                                                             │
+│  New Lifestyle                                                              │
+│                                                                             │
+│  Lifestyle Type *                                                           │
+│  ┌─────────────────────────────────────────────────────────────────────┐    │
+│  │ Select a lifestyle...                                             ▾ │    │
+│  └─────────────────────────────────────────────────────────────────────┘    │
+│                                                                             │
+│  Options: Street (Free), Squatter (500¥), Low (2,000¥), Medium (5,000¥),    │
+│           High (10,000¥), Luxury (100,000¥)                                 │
+│                                                                             │
+│  Location (Optional)                                                        │
+│  ┌─────────────────────────────────────────────────────────────────────┐    │
+│  │ e.g., Downtown Seattle, Redmond Barrens                             │    │
+│  └─────────────────────────────────────────────────────────────────────┘    │
+│                                                                             │
+│  Modifications                                             [+ Add Modification]│
+│                                                                             │
+│  No modifications added. Click "Add Modification" to add lifestyle          │
+│  modifications.                                                             │
+│                                                                             │
+│  Subscriptions                                             [+ Add Subscription]│
+│                                                                             │
+│  No subscriptions added. Click "Add Subscription" to add services like      │
+│  DocWagon contracts.                                                        │
+│                                                                             │
+│  Custom Expenses (¥/month)              Custom Income (¥/month)             │
+│  ┌─────────────────────────┐            ┌─────────────────────────┐         │
+│  │ 0                     ▲▼│            │ 0                     ▲▼│         │
+│  └─────────────────────────┘            └─────────────────────────┘         │
+│                                                                             │
+│  Notes (Optional)                                                           │
+│  ┌─────────────────────────────────────────────────────────────────────┐    │
+│  │ Additional notes about this lifestyle...                            │    │
+│  └─────────────────────────────────────────────────────────────────────┘    │
+│                                                                             │
+│                                                   [Cancel]  [Save Lifestyle]│
+│                                                                             │
+└─────────────────────────────────────────────────────────────────────────────┘
+```
+
+**Lifestyle Modifications:**
+When "+ Add Modification" is clicked, show options like:
+- Special Work Area (+1,000¥/month)
+- Extra Secure (+20%)
+- Obscure/Difficult to Find (+10%)
+- Cramped (-10%)
+- Dangerous Area (-20%)
+- Permanent Lifestyle (one-time cost = 100× monthly)
+
+### IdentitiesCard - Sheet-Driven Creation Mode
+
+Compact card view for the sheet-driven creation layout.
+
+```
+┌─────────────────────────────────────────────────────────────────────────────┐
+│ IDENTITIES & SINs                          1 identity • ¥10,800      ✓     │
+├─────────────────────────────────────────────────────────────────────────────┤
+│                                                                             │
+│  ┌───────────────────────────────────────────────────────────────────────┐  │
+│  │  SINs & Licenses Cost:                                    ¥10,800    │  │
+│  └───────────────────────────────────────────────────────────────────────┘  │
+│                                                                             │
+│  ┌───────────────────────────────────────────────────────────────────────┐  │
+│  │  Jimmy Smith                        Fake R4           [Edit] [Remove] │  │
+│  │                                     blue badge                        │  │
+│  │  ├─ 📄 Pistol (R4)                                              [×]  │  │
+│  │  └─ 📄 Conceal Carry (R4)                                       [×]  │  │
+│  │                                                                       │  │
+│  │  [+ Add License]                                                      │  │
+│  └───────────────────────────────────────────────────────────────────────┘  │
+│                                                                             │
+│  ┌ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ┐  │
+│  │                      [+ Add Identity]                                 │  │
+│  └ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ┘  │
+│                                                                             │
+│  Every runner needs at least one identity with a SIN.                       │
+│                                                                             │
+└─────────────────────────────────────────────────────────────────────────────┘
+```
+
+### SINner Quality Warning State
+
+When character has SINner quality but no real SIN identity created:
+
+```
+┌─────────────────────────────────────────────────────────────────────────────┐
+│ IDENTITIES & SINs                          0 identities              ⚠     │
+├─────────────────────────────────────────────────────────────────────────────┤
+│                                                                             │
+│  ┌───────────────────────────────────────────────────────────────────────┐  │
+│  │  ⚠ SINner quality requires at least one identity with a real SIN     │  │
+│  │    (National).                                          amber banner  │  │
+│  └───────────────────────────────────────────────────────────────────────┘  │
+│                                                                             │
+│  ┌ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ┐  │
+│  │                      [+ Add Identity]                                 │  │
+│  └ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ┘  │
+│                                                                             │
+└─────────────────────────────────────────────────────────────────────────────┘
+```
+
+### Cost Reference
+
+| Item | Cost Formula |
+|------|--------------|
+| Fake SIN | Rating × 2,500¥ |
+| Fake License | Rating × 200¥ |
+| Real SIN | Free (from SINner quality karma cost) |
+| Real License | Free (no rating) |
+| Lifestyle (monthly) | Base cost per type |
+| Lifestyle (permanent) | 100 × monthly cost |
 
 ---
 
