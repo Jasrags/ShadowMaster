@@ -666,6 +666,7 @@ export interface Lifestyle {
   customExpenses?: number; // Custom monthly expenses
   customIncome?: number; // Custom monthly income
   notes?: string;
+  associatedIdentityId?: ID; // Identity this lifestyle is associated with (for sheet-driven creation)
 }
 
 /**

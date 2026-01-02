@@ -47,7 +47,7 @@ interface IdentitiesCardProps {
   updateState: (updates: Partial<CreationState>) => void;
 }
 
-type ModalType = "identity" | "license" | "lifestyle" | null;
+type ModalType = "identity" | "license" | "lifestyle" | "edit-identity" | "edit-license" | "edit-lifestyle" | null;
 
 interface NewIdentityState {
   name: string;
@@ -168,6 +168,8 @@ function NewIdentityModal({
   hasSINnerQuality,
   sinnerQualityLevel,
   nuyenRemaining,
+  initialData,
+  isEditMode,
 }: {
   isOpen: boolean;
   onClose: () => void;
@@ -175,12 +177,30 @@ function NewIdentityModal({
   hasSINnerQuality: boolean;
   sinnerQualityLevel: SinnerQuality | null;
   nuyenRemaining: number;
+  initialData?: NewIdentityState;
+  isEditMode?: boolean;
 }) {
-  const [formState, setFormState] = useState<NewIdentityState>({
-    name: "",
-    sinType: "fake",
-    sinRating: 1,
-  });
+  const [formState, setFormState] = useState<NewIdentityState>(
+    initialData || {
+      name: "",
+      sinType: "fake",
+      sinRating: 1,
+    }
+  );
+
+  // Reset form when modal opens with initialData (for edit mode)
+  const resetFormOnOpen = useCallback(() => {
+    if (isOpen && initialData) {
+      setFormState(initialData);
+    } else if (isOpen && !initialData) {
+      setFormState({ name: "", sinType: "fake", sinRating: 1 });
+    }
+  }, [isOpen, initialData]);
+
+  // Use effect to reset form when modal opens
+  useMemo(() => {
+    resetFormOnOpen();
+  }, [resetFormOnOpen]);
 
   const cost = formState.sinType === "fake" ? formState.sinRating * SIN_COST_PER_RATING : 0;
   const canAfford = formState.sinType === "real" || cost <= nuyenRemaining;
@@ -200,7 +220,7 @@ function NewIdentityModal({
   };
 
   return (
-    <Modal isOpen={isOpen} onClose={handleClose} title="New Identity">
+    <Modal isOpen={isOpen} onClose={handleClose} title={isEditMode ? "Edit Identity" : "New Identity"}>
       <div className="space-y-5">
         {/* Identity Name */}
         <div>
@@ -327,7 +347,7 @@ function NewIdentityModal({
                 : "cursor-not-allowed bg-zinc-200 text-zinc-400 dark:bg-zinc-700 dark:text-zinc-500"
             }`}
           >
-            Save Identity
+            {isEditMode ? "Save Changes" : "Save Identity"}
           </button>
         </div>
       </div>
@@ -344,18 +364,38 @@ function NewLicenseModal({
   onSave,
   sinType,
   nuyenRemaining,
+  initialData,
+  isEditMode,
 }: {
   isOpen: boolean;
   onClose: () => void;
   onSave: (license: NewLicenseState) => void;
   sinType: "fake" | "real";
   nuyenRemaining: number;
+  initialData?: NewLicenseState;
+  isEditMode?: boolean;
 }) {
-  const [formState, setFormState] = useState<NewLicenseState>({
-    name: "",
-    rating: 1,
-    notes: "",
-  });
+  const [formState, setFormState] = useState<NewLicenseState>(
+    initialData || {
+      name: "",
+      rating: 1,
+      notes: "",
+    }
+  );
+
+  // Reset form when modal opens with initialData (for edit mode)
+  const resetFormOnOpen = useCallback(() => {
+    if (isOpen && initialData) {
+      setFormState(initialData);
+    } else if (isOpen && !initialData) {
+      setFormState({ name: "", rating: 1, notes: "" });
+    }
+  }, [isOpen, initialData]);
+
+  // Use effect to reset form when modal opens
+  useMemo(() => {
+    resetFormOnOpen();
+  }, [resetFormOnOpen]);
 
   const cost = sinType === "fake" ? formState.rating * LICENSE_COST_PER_RATING : 0;
   const canAfford = sinType === "real" || cost <= nuyenRemaining;
@@ -379,7 +419,7 @@ function NewLicenseModal({
   };
 
   return (
-    <Modal isOpen={isOpen} onClose={handleClose} title="New License">
+    <Modal isOpen={isOpen} onClose={handleClose} title={isEditMode ? "Edit License" : "New License"}>
       <div className="space-y-5">
         {/* License Name */}
         <div>
@@ -488,7 +528,7 @@ function NewLicenseModal({
                 : "cursor-not-allowed bg-zinc-200 text-zinc-400 dark:bg-zinc-700 dark:text-zinc-500"
             }`}
           >
-            Save License
+            {isEditMode ? "Save Changes" : "Save License"}
           </button>
         </div>
       </div>
@@ -504,13 +544,17 @@ function NewLifestyleModal({
   onClose,
   onSave,
   nuyenRemaining,
+  initialData,
+  isEditMode,
 }: {
   isOpen: boolean;
   onClose: () => void;
   onSave: (lifestyle: NewLifestyleState) => void;
   nuyenRemaining: number;
+  initialData?: NewLifestyleState;
+  isEditMode?: boolean;
 }) {
-  const [formState, setFormState] = useState<NewLifestyleState>({
+  const defaultFormState: NewLifestyleState = {
     type: "",
     location: "",
     customExpenses: 0,
@@ -518,7 +562,26 @@ function NewLifestyleModal({
     notes: "",
     modifications: [],
     subscriptions: [],
-  });
+  };
+
+  const [formState, setFormState] = useState<NewLifestyleState>(
+    initialData || defaultFormState
+  );
+
+  // Reset form when modal opens with initialData (for edit mode)
+  const resetFormOnOpen = useCallback(() => {
+    if (isOpen && initialData) {
+      setFormState(initialData);
+    } else if (isOpen && !initialData) {
+      setFormState(defaultFormState);
+    }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isOpen, initialData]);
+
+  // Use effect to reset form when modal opens
+  useMemo(() => {
+    resetFormOnOpen();
+  }, [resetFormOnOpen]);
 
   const selectedLifestyle = LIFESTYLE_TYPES.find((l) => l.id === formState.type);
 
@@ -598,7 +661,7 @@ function NewLifestyleModal({
   };
 
   return (
-    <Modal isOpen={isOpen} onClose={handleClose} title="New Lifestyle">
+    <Modal isOpen={isOpen} onClose={handleClose} title={isEditMode ? "Edit Lifestyle" : "New Lifestyle"}>
       <div className="space-y-5">
         {/* Lifestyle Type */}
         <div>
@@ -836,7 +899,7 @@ function NewLifestyleModal({
                 : "cursor-not-allowed bg-zinc-200 text-zinc-400 dark:bg-zinc-700 dark:text-zinc-500"
             }`}
           >
-            Save Lifestyle
+            {isEditMode ? "Save Changes" : "Save Lifestyle"}
           </button>
         </div>
       </div>
@@ -868,14 +931,12 @@ function IdentityCard({
   onEditLicense: (licenseIndex: number) => void;
   onRemoveLicense: (licenseIndex: number) => void;
   onAddLifestyle: () => void;
-  onEditLifestyle: () => void;
-  onRemoveLifestyle: () => void;
+  onEditLifestyle: (lifestyleId: string) => void;
+  onRemoveLifestyle: (lifestyleId: string) => void;
 }) {
-  const associatedLifestyle = lifestyles.find(
-    (l) => l.id === identity.associatedLifestyleId
-  );
-  const lifestyleType = LIFESTYLE_TYPES.find(
-    (lt) => lt.id === associatedLifestyle?.type
+  // Get all lifestyles associated with this identity
+  const associatedLifestyles = lifestyles.filter(
+    (l) => l.id === identity.associatedLifestyleId || l.associatedIdentityId === identity.id
   );
 
   return (
@@ -968,52 +1029,66 @@ function IdentityCard({
           )}
         </div>
 
-        {/* Associated Lifestyle Section */}
+        {/* Associated Lifestyles Section */}
         <div>
           <div className="mb-2 flex items-center justify-between">
             <span className="text-sm font-medium text-zinc-700 dark:text-zinc-300">
-              Associated Lifestyle
+              Lifestyles{associatedLifestyles.length ? ` (${associatedLifestyles.length})` : ""}
             </span>
-            {associatedLifestyle ? (
-              <button
-                onClick={onEditLifestyle}
-                className="rounded px-2.5 py-1 text-xs font-medium text-white bg-blue-600 hover:bg-blue-700"
-              >
-                Edit Lifestyle
-              </button>
-            ) : (
-              <button
-                onClick={onAddLifestyle}
-                className="rounded px-2.5 py-1 text-xs font-medium text-white bg-blue-600 hover:bg-blue-700"
-              >
-                + Add Lifestyle
-              </button>
-            )}
+            <button
+              onClick={onAddLifestyle}
+              className="rounded px-2.5 py-1 text-xs font-medium text-white bg-blue-600 hover:bg-blue-700"
+            >
+              + Add Lifestyle
+            </button>
           </div>
 
-          {associatedLifestyle ? (
-            <div className="flex items-center justify-between rounded-lg bg-zinc-50 px-3 py-2 dark:bg-zinc-700/50">
-              <div className="flex items-center gap-2">
-                <Home className="h-3.5 w-3.5 text-zinc-400" />
-                <div>
-                  <span className="text-sm font-medium text-zinc-700 dark:text-zinc-300">
-                    {lifestyleType?.name || associatedLifestyle.type}
-                  </span>
-                  <span className="ml-2 text-xs text-zinc-500 dark:text-zinc-400">
-                    Monthly: ¥{associatedLifestyle.monthlyCost.toLocaleString()}
-                  </span>
-                </div>
-              </div>
-              <button
-                onClick={onRemoveLifestyle}
-                className="text-xs text-red-600 hover:text-red-700 dark:text-red-400"
-              >
-                Remove
-              </button>
+          {associatedLifestyles.length > 0 ? (
+            <div className="space-y-1.5">
+              {associatedLifestyles.map((lifestyle) => {
+                const lifestyleType = LIFESTYLE_TYPES.find((lt) => lt.id === lifestyle.type);
+                return (
+                  <div
+                    key={lifestyle.id}
+                    className="flex items-center justify-between rounded-lg bg-zinc-50 px-3 py-2 dark:bg-zinc-700/50"
+                  >
+                    <div className="flex items-center gap-2">
+                      <Home className="h-3.5 w-3.5 text-zinc-400" />
+                      <div>
+                        <span className="text-sm font-medium text-zinc-700 dark:text-zinc-300">
+                          {lifestyleType?.name || lifestyle.type}
+                        </span>
+                        {lifestyle.location && (
+                          <span className="ml-1 text-xs text-zinc-500 dark:text-zinc-400">
+                            ({lifestyle.location})
+                          </span>
+                        )}
+                        <span className="ml-2 text-xs text-zinc-500 dark:text-zinc-400">
+                          ¥{lifestyle.monthlyCost.toLocaleString()}/mo
+                        </span>
+                      </div>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <button
+                        onClick={() => onEditLifestyle(lifestyle.id!)}
+                        className="text-xs text-blue-600 hover:text-blue-700 dark:text-blue-400"
+                      >
+                        Edit
+                      </button>
+                      <button
+                        onClick={() => onRemoveLifestyle(lifestyle.id!)}
+                        className="text-xs text-red-600 hover:text-red-700 dark:text-red-400"
+                      >
+                        Remove
+                      </button>
+                    </div>
+                  </div>
+                );
+              })}
             </div>
           ) : (
             <p className="text-xs text-zinc-500 dark:text-zinc-400">
-              No lifestyle associated yet. Click &quot;Add Lifestyle&quot; to create or select a lifestyle for this identity.
+              No lifestyles added yet. Click &quot;+ Add Lifestyle&quot; to add a lifestyle for this identity.
             </p>
           )}
         </div>
@@ -1032,7 +1107,8 @@ export function IdentitiesCard({ state, updateState }: IdentitiesCardProps) {
   // Modal state
   const [activeModal, setActiveModal] = useState<ModalType>(null);
   const [editingIdentityIndex, setEditingIdentityIndex] = useState<number | null>(null);
-  // TODO: Add editingLicenseIndex state when edit license modal is implemented
+  const [editingLicenseIndex, setEditingLicenseIndex] = useState<number | null>(null);
+  const [editingLifestyleId, setEditingLifestyleId] = useState<string | null>(null);
 
   // Get identities and lifestyles from state
   const identities = useMemo(() => {
@@ -1190,6 +1266,8 @@ export function IdentitiesCard({ state, updateState }: IdentitiesCardProps) {
       const lifestyleType = LIFESTYLE_TYPES.find((l) => l.id === lifestyleData.type);
       if (!lifestyleType) return;
 
+      const identity = identities[identityIndex];
+
       const lifestyle: Lifestyle = {
         id: `lifestyle-${Date.now()}`,
         type: lifestyleData.type,
@@ -1201,22 +1279,16 @@ export function IdentitiesCard({ state, updateState }: IdentitiesCardProps) {
         notes: lifestyleData.notes || undefined,
         modifications: lifestyleData.modifications.length > 0 ? lifestyleData.modifications : undefined,
         subscriptions: lifestyleData.subscriptions.length > 0 ? lifestyleData.subscriptions : undefined,
+        // Associate with the identity
+        associatedIdentityId: identity.id,
       };
 
       // Add lifestyle to lifestyles array
       const updatedLifestyles = [...lifestyles, lifestyle];
 
-      // Associate with identity
-      const updatedIdentities = [...identities];
-      updatedIdentities[identityIndex] = {
-        ...updatedIdentities[identityIndex],
-        associatedLifestyleId: lifestyle.id,
-      };
-
       updateState({
         selections: {
           ...state.selections,
-          identities: updatedIdentities,
           lifestyles: updatedLifestyles,
         },
       });
@@ -1224,49 +1296,161 @@ export function IdentitiesCard({ state, updateState }: IdentitiesCardProps) {
     [identities, lifestyles, state.selections, updateState]
   );
 
-  const handleRemoveLifestyle = useCallback(
-    (identityIndex: number) => {
-      const identity = identities[identityIndex];
-      const lifestyleId = identity.associatedLifestyleId;
-
+  const handleRemoveLifestyleById = useCallback(
+    (lifestyleId: string) => {
       // Remove lifestyle from lifestyles array
       const updatedLifestyles = lifestyles.filter((l) => l.id !== lifestyleId);
 
-      // Remove association from identity
+      updateState({
+        selections: {
+          ...state.selections,
+          lifestyles: updatedLifestyles,
+        },
+      });
+    },
+    [lifestyles, state.selections, updateState]
+  );
+
+  // Edit handlers
+  const handleEditIdentity = useCallback(
+    (identityIndex: number, identityData: NewIdentityState) => {
+      const oldIdentity = identities[identityIndex];
+      const sin: SIN =
+        identityData.sinType === "fake"
+          ? { type: "fake", rating: identityData.sinRating }
+          : { type: "real", sinnerQuality: sinnerQualityLevel || SinnerQualityEnum.National };
+
       const updatedIdentities = [...identities];
       updatedIdentities[identityIndex] = {
-        ...identity,
-        associatedLifestyleId: undefined,
+        ...oldIdentity,
+        name: identityData.name.trim(),
+        sin,
       };
 
       updateState({
         selections: {
           ...state.selections,
           identities: updatedIdentities,
+        },
+      });
+    },
+    [identities, state.selections, updateState, sinnerQualityLevel]
+  );
+
+  const handleEditLicense = useCallback(
+    (identityIndex: number, licenseIndex: number, licenseData: NewLicenseState) => {
+      const identity = identities[identityIndex];
+      const licenseType = identity.sin.type === "fake" ? "fake" : "real";
+      const oldLicense = identity.licenses[licenseIndex];
+
+      const updatedLicense: License = {
+        ...oldLicense,
+        type: licenseType,
+        name: licenseData.name.trim(),
+        rating: licenseType === "fake" ? licenseData.rating : undefined,
+        notes: licenseData.notes || undefined,
+      };
+
+      const updatedIdentities = [...identities];
+      const updatedLicenses = [...identity.licenses];
+      updatedLicenses[licenseIndex] = updatedLicense;
+      updatedIdentities[identityIndex] = {
+        ...identity,
+        licenses: updatedLicenses,
+      };
+
+      updateState({
+        selections: {
+          ...state.selections,
+          identities: updatedIdentities,
+        },
+      });
+    },
+    [identities, state.selections, updateState]
+  );
+
+  const handleEditLifestyle = useCallback(
+    (lifestyleId: string, lifestyleData: NewLifestyleState) => {
+      const lifestyleType = LIFESTYLE_TYPES.find((l) => l.id === lifestyleData.type);
+      if (!lifestyleType) return;
+
+      const lifestyleIndex = lifestyles.findIndex((l) => l.id === lifestyleId);
+      if (lifestyleIndex === -1) return;
+
+      const oldLifestyle = lifestyles[lifestyleIndex];
+      const updatedLifestyle: Lifestyle = {
+        ...oldLifestyle, // Preserves id and associatedIdentityId
+        type: lifestyleData.type,
+        monthlyCost: lifestyleType.monthlyCost,
+        location: lifestyleData.location || undefined,
+        customExpenses: lifestyleData.customExpenses || undefined,
+        customIncome: lifestyleData.customIncome || undefined,
+        notes: lifestyleData.notes || undefined,
+        modifications: lifestyleData.modifications.length > 0 ? lifestyleData.modifications : undefined,
+        subscriptions: lifestyleData.subscriptions.length > 0 ? lifestyleData.subscriptions : undefined,
+      };
+
+      const updatedLifestyles = [...lifestyles];
+      updatedLifestyles[lifestyleIndex] = updatedLifestyle;
+
+      updateState({
+        selections: {
+          ...state.selections,
           lifestyles: updatedLifestyles,
         },
       });
     },
-    [identities, lifestyles, state.selections, updateState]
+    [lifestyles, state.selections, updateState]
   );
 
   // Modal handlers
   const openAddIdentityModal = () => setActiveModal("identity");
   const openAddLicenseModal = (identityIndex: number) => {
     setEditingIdentityIndex(identityIndex);
+    setEditingLicenseIndex(null);
     setActiveModal("license");
   };
   const openAddLifestyleModal = (identityIndex: number) => {
     setEditingIdentityIndex(identityIndex);
+    setEditingLifestyleId(null);
     setActiveModal("lifestyle");
   };
+
+  // Edit modal handlers
+  const openEditIdentityModal = (identityIndex: number) => {
+    setEditingIdentityIndex(identityIndex);
+    setActiveModal("edit-identity");
+  };
+  const openEditLicenseModal = (identityIndex: number, licenseIndex: number) => {
+    setEditingIdentityIndex(identityIndex);
+    setEditingLicenseIndex(licenseIndex);
+    setActiveModal("edit-license");
+  };
+  const openEditLifestyleModal = (identityIndex: number, lifestyleId: string) => {
+    setEditingIdentityIndex(identityIndex);
+    setEditingLifestyleId(lifestyleId);
+    setActiveModal("edit-lifestyle");
+  };
+
   const closeModal = () => {
     setActiveModal(null);
     setEditingIdentityIndex(null);
+    setEditingLicenseIndex(null);
+    setEditingLifestyleId(null);
   };
 
   // Get current identity for modal context
   const currentIdentity = editingIdentityIndex !== null ? identities[editingIdentityIndex] : null;
+
+  // Get current license for edit modal
+  const currentLicense = editingIdentityIndex !== null && editingLicenseIndex !== null
+    ? identities[editingIdentityIndex]?.licenses?.[editingLicenseIndex]
+    : null;
+
+  // Get current lifestyle for edit modal
+  const currentLifestyle = editingLifestyleId
+    ? lifestyles.find((l) => l.id === editingLifestyleId)
+    : null;
 
   return (
     <>
@@ -1307,14 +1491,14 @@ export function IdentitiesCard({ state, updateState }: IdentitiesCardProps) {
                   key={identity.id || index}
                   identity={identity}
                   lifestyles={lifestyles}
-                  onEdit={() => {/* TODO: Edit identity modal */}}
+                  onEdit={() => openEditIdentityModal(index)}
                   onRemove={() => handleRemoveIdentity(index)}
                   onAddLicense={() => openAddLicenseModal(index)}
-                  onEditLicense={() => {/* TODO: Edit license modal */}}
+                  onEditLicense={(licenseIndex) => openEditLicenseModal(index, licenseIndex)}
                   onRemoveLicense={(licenseIndex) => handleRemoveLicense(index, licenseIndex)}
                   onAddLifestyle={() => openAddLifestyleModal(index)}
-                  onEditLifestyle={() => {/* TODO: Edit lifestyle modal */}}
-                  onRemoveLifestyle={() => handleRemoveLifestyle(index)}
+                  onEditLifestyle={(lifestyleId) => openEditLifestyleModal(index, lifestyleId)}
+                  onRemoveLifestyle={(lifestyleId) => handleRemoveLifestyleById(lifestyleId)}
                 />
               ))}
             </div>
@@ -1339,6 +1523,7 @@ export function IdentitiesCard({ state, updateState }: IdentitiesCardProps) {
       </CreationCard>
 
       {/* Modals */}
+      {/* Add Identity Modal */}
       <NewIdentityModal
         isOpen={activeModal === "identity"}
         onClose={closeModal}
@@ -1348,8 +1533,30 @@ export function IdentitiesCard({ state, updateState }: IdentitiesCardProps) {
         nuyenRemaining={nuyenRemaining}
       />
 
+      {/* Edit Identity Modal */}
+      {currentIdentity && editingIdentityIndex !== null && (
+        <NewIdentityModal
+          isOpen={activeModal === "edit-identity"}
+          onClose={closeModal}
+          onSave={(identityData) => {
+            handleEditIdentity(editingIdentityIndex, identityData);
+            closeModal();
+          }}
+          hasSINnerQuality={hasSINnerQuality}
+          sinnerQualityLevel={sinnerQualityLevel}
+          nuyenRemaining={nuyenRemaining}
+          isEditMode
+          initialData={{
+            name: currentIdentity.name,
+            sinType: currentIdentity.sin.type,
+            sinRating: currentIdentity.sin.type === "fake" ? currentIdentity.sin.rating || 1 : 1,
+          }}
+        />
+      )}
+
       {currentIdentity && (
         <>
+          {/* Add License Modal */}
           <NewLicenseModal
             isOpen={activeModal === "license"}
             onClose={closeModal}
@@ -1358,12 +1565,56 @@ export function IdentitiesCard({ state, updateState }: IdentitiesCardProps) {
             nuyenRemaining={nuyenRemaining}
           />
 
+          {/* Edit License Modal */}
+          {currentLicense && editingLicenseIndex !== null && (
+            <NewLicenseModal
+              isOpen={activeModal === "edit-license"}
+              onClose={closeModal}
+              onSave={(licenseData) => {
+                handleEditLicense(editingIdentityIndex!, editingLicenseIndex, licenseData);
+                closeModal();
+              }}
+              sinType={currentIdentity.sin.type}
+              nuyenRemaining={nuyenRemaining}
+              isEditMode
+              initialData={{
+                name: currentLicense.name,
+                rating: currentLicense.rating || 1,
+                notes: currentLicense.notes || "",
+              }}
+            />
+          )}
+
+          {/* Add Lifestyle Modal */}
           <NewLifestyleModal
             isOpen={activeModal === "lifestyle"}
             onClose={closeModal}
             onSave={(lifestyle) => handleAddLifestyle(editingIdentityIndex!, lifestyle)}
             nuyenRemaining={nuyenRemaining}
           />
+
+          {/* Edit Lifestyle Modal */}
+          {currentLifestyle && editingLifestyleId && (
+            <NewLifestyleModal
+              isOpen={activeModal === "edit-lifestyle"}
+              onClose={closeModal}
+              onSave={(lifestyleData) => {
+                handleEditLifestyle(editingLifestyleId, lifestyleData);
+                closeModal();
+              }}
+              nuyenRemaining={nuyenRemaining}
+              isEditMode
+              initialData={{
+                type: currentLifestyle.type,
+                location: currentLifestyle.location || "",
+                customExpenses: currentLifestyle.customExpenses || 0,
+                customIncome: currentLifestyle.customIncome || 0,
+                notes: currentLifestyle.notes || "",
+                modifications: currentLifestyle.modifications || [],
+                subscriptions: currentLifestyle.subscriptions || [],
+              }}
+            />
+          )}
         </>
       )}
     </>
