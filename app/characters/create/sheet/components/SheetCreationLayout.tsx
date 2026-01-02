@@ -28,7 +28,7 @@ import {
   Save,
 } from "lucide-react";
 
-// Phase 2, 3 & 4 Components
+// Phase 2, 3, 4 & 5 Components
 import {
   PrioritySelectionCard,
   MetatypeCard,
@@ -43,6 +43,9 @@ import {
   GearCard,
   AugmentationsCard,
   VehiclesCard,
+  ContactsCard,
+  IdentitiesCard,
+  CharacterInfoCard,
 } from "@/components/creation";
 
 // =============================================================================
@@ -396,11 +399,7 @@ export function SheetCreationLayout({
         />
 
         {/* Contacts - Phase 5 */}
-        <PlaceholderCard
-          title="Contacts"
-          description="Create contacts with Connection and Loyalty"
-          status="pending"
-        />
+        <ContactsCard state={creationState} updateState={updateState} />
 
         {/* Gear - Phase 4 */}
         <GearCard state={creationState} updateState={updateState} />
@@ -412,18 +411,10 @@ export function SheetCreationLayout({
         <VehiclesCard state={creationState} updateState={updateState} />
 
         {/* Identities - Phase 5 */}
-        <PlaceholderCard
-          title="Identities & SINs"
-          description="Create fake SINs, licenses, and lifestyles"
-          status="pending"
-        />
+        <IdentitiesCard state={creationState} updateState={updateState} />
 
         {/* Character Info - Phase 5 */}
-        <PlaceholderCard
-          title="Character Info"
-          description="Add background, description, and personality"
-          status="pending"
-        />
+        <CharacterInfoCard state={creationState} updateState={updateState} />
       </div>
     </div>
   );

@@ -17,5 +17,10 @@ export { GearCard } from "./GearCard";
 export { AugmentationsCard } from "./AugmentationsCard";
 export { VehiclesCard } from "./VehiclesCard";
 
+// Phase 5: Social & Identity Components
+export { ContactsCard } from "./ContactsCard";
+export { IdentitiesCard } from "./IdentitiesCard";
+export { CharacterInfoCard } from "./CharacterInfoCard";
+
 // Shared components
 export * from "./shared";
