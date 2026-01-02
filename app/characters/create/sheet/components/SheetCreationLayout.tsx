@@ -186,7 +186,9 @@ function BudgetSummaryCard() {
                       : "bg-blue-500"
                   }`}
                   style={{
-                    width: `${Math.min(100, Math.max(0, ((budget.total - budget.remaining) / budget.total) * 100))}%`,
+                    width: budget.total > 0
+                      ? `${Math.min(100, Math.max(0, ((budget.total - budget.remaining) / budget.total) * 100))}%`
+                      : "0%",
                   }}
                 />
               </div>
