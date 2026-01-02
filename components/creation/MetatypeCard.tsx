@@ -156,12 +156,12 @@ export function MetatypeCard({ state, updateState }: MetatypeCardProps) {
                     </div>
 
                     {/* Compact attribute preview */}
-                    <div className="mt-1 flex gap-1 text-[10px] text-zinc-500 dark:text-zinc-400">
+                    <div className="mt-1 flex flex-wrap gap-x-2 gap-y-0.5 text-[10px] text-zinc-500 dark:text-zinc-400">
                       {["body", "agility", "strength", "charisma"].map((attr) => {
                         const limits = metatype.attributes[attr];
                         if (!limits || !("min" in limits)) return null;
                         return (
-                          <span key={attr} className="uppercase">
+                          <span key={attr} className="uppercase whitespace-nowrap">
                             {attr.slice(0, 3)}:{limits.min}/{limits.max}
                           </span>
                         );
