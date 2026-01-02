@@ -3,6 +3,7 @@ export { PrioritySelectionCard } from "./PrioritySelectionCard";
 export { MetatypeCard } from "./MetatypeCard";
 export { AttributesCard } from "./AttributesCard";
 export { SkillsCard } from "./SkillsCard";
+export { KnowledgeLanguagesCard } from "./KnowledgeLanguagesCard";
 export { QualitiesCard } from "./QualitiesCard";
 
 // Phase 3: Magic & Resonance Components

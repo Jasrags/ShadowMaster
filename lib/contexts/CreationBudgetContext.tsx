@@ -55,6 +55,7 @@ export type BudgetId =
   | "special-attribute-points"
   | "skill-points"
   | "skill-group-points"
+  | "knowledge-points"
   | "contact-points"
   | "spell-slots"
   | "power-points";
@@ -204,6 +205,15 @@ function calculateBudgetTotals(
     displayFormat: "number",
   };
 
+  // Knowledge points = (INT + LOG) × 2 (calculated from attributes)
+  const intuition = attributes?.intuition || 1;
+  const logic = attributes?.logic || 1;
+  totals["knowledge-points"] = {
+    total: (intuition + logic) * 2,
+    label: "Knowledge Points",
+    displayFormat: "number",
+  };
+
   // Spell slots from magic priority (if magician/mystic adept)
   const magicPriority = priorities.magic;
   const magicPath = selections["magical-path"] as string;
@@ -247,6 +257,7 @@ function extractSpentValues(
     "special-attribute-points-spent": "special-attribute-points",
     "skill-points-spent": "skill-points",
     "skill-group-points-spent": "skill-group-points",
+    "knowledge-points-spent": "knowledge-points",
     "nuyen-spent": "nuyen",
     "contact-points-spent": "contact-points",
     "spell-slots-spent": "spell-slots",

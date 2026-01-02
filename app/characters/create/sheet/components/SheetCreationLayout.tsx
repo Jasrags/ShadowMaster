@@ -34,6 +34,7 @@ import {
   MetatypeCard,
   AttributesCard,
   SkillsCard,
+  KnowledgeLanguagesCard,
   QualitiesCard,
   MagicPathCard,
   SpellsCard,
@@ -390,12 +391,8 @@ export function SheetCreationLayout({
         {/* Skills - Phase 2 */}
         <SkillsCard state={creationState} updateState={updateState} />
 
-        {/* Knowledge & Languages - Phase 2 (placeholder - needs expansion) */}
-        <PlaceholderCard
-          title="Knowledge & Languages"
-          description="Add knowledge skills and languages"
-          status="pending"
-        />
+        {/* Knowledge & Languages - Phase 2 */}
+        <KnowledgeLanguagesCard state={creationState} updateState={updateState} />
 
         {/* Contacts - Phase 5 */}
         <ContactsCard state={creationState} updateState={updateState} />
