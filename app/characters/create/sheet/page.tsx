@@ -116,11 +116,13 @@ function SheetCreationContent({ campaignId, campaign, existingCharacter }: Sheet
       setIsSaving(true);
       try {
         if (characterId) {
-          // Update existing draft
+          // Update existing draft - include name so it syncs with characterName
+          const characterName = (creationState.selections.characterName as string) || undefined;
           await fetch(`/api/characters/${characterId}`, {
             method: "PATCH",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({
+              ...(characterName && { name: characterName }),
               metadata: {
                 creationState,
                 creationMode: "sheet",
@@ -145,10 +147,12 @@ function SheetCreationContent({ campaignId, campaign, existingCharacter }: Sheet
             setCharacterId(data.character.id);
             updateState({ characterId: data.character.id });
             // Save the creation state to the new character
+            const newCharacterName = (creationState.selections.characterName as string) || undefined;
             await fetch(`/api/characters/${data.character.id}`, {
               method: "PATCH",
               headers: { "Content-Type": "application/json" },
               body: JSON.stringify({
+                ...(newCharacterName && { name: newCharacterName }),
                 metadata: {
                   creationState: {
                     ...creationState,
