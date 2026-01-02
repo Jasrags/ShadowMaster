@@ -12054,6 +12054,18 @@
                 "errorMessage": "Skill rating cannot exceed 6 at creation (7 with Aptitude)."
               },
               {
+                "id": "special-attribute-init",
+                "type": "special-attribute-init",
+                "description": "Edge starts at metatype value. Magic/Resonance start at priority value (0 for mundane).",
+                "severity": "error",
+                "params": {
+                  "validateEdge": true,
+                  "validateMagic": true,
+                  "validateResonance": true
+                },
+                "errorMessage": "Special attributes must meet minimum requirements."
+              },
+              {
                 "id": "gear-availability",
                 "type": "custom",
                 "description": "Gear availability cannot exceed 12 at creation.",
