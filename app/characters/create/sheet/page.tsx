@@ -55,7 +55,7 @@ function SheetCreationContent({ campaignId, campaign, existingCharacter }: Sheet
     (existingCharacter?.editionCode as EditionCode) || campaign?.editionCode || null
   );
   const { loading, error, ready } = useRulesetStatus();
-  const { loadRuleset, editionCode } = useRuleset();
+  const { loadRuleset, editionCode, ruleset } = useRuleset();
   const priorityTable = usePriorityTable();
 
   // Creation state management - initialize from existing character if provided
@@ -133,19 +133,31 @@ function SheetCreationContent({ campaignId, campaign, existingCharacter }: Sheet
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({
+              editionId: ruleset?.editionId || "sr5",
               editionCode: editionCode || selectedEdition,
+              creationMethodId: creationState.creationMethodId,
+              name: (creationState.selections.characterName as string) || "Unnamed Runner",
               campaignId,
-              status: "draft",
-              metadata: {
-                creationState,
-                creationMode: "sheet",
-              },
             }),
           });
           const data = await res.json();
           if (data.success && data.character?.id) {
             setCharacterId(data.character.id);
             updateState({ characterId: data.character.id });
+            // Save the creation state to the new character
+            await fetch(`/api/characters/${data.character.id}`, {
+              method: "PATCH",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify({
+                metadata: {
+                  creationState: {
+                    ...creationState,
+                    characterId: data.character.id,
+                  },
+                  creationMode: "sheet",
+                },
+              }),
+            });
           }
         }
         setLastSaved(new Date());
@@ -157,7 +169,7 @@ function SheetCreationContent({ campaignId, campaign, existingCharacter }: Sheet
     }, 1000); // 1 second debounce
 
     return () => clearTimeout(saveTimeout);
-  }, [creationState, characterId, editionCode, selectedEdition, campaignId, updateState]);
+  }, [creationState, characterId, editionCode, selectedEdition, campaignId, updateState, ruleset]);
 
   // Handle character finalization
   const handleFinalize = useCallback(async () => {
