@@ -793,9 +793,12 @@ export function KnowledgeLanguagesCard({
 
   // Check if character has Bilingual quality (allows 2 native languages)
   const hasBilingualQuality = useMemo(() => {
-    const qualities = (state.selections.qualities || []) as Array<{ qualityId: string }>;
-    return qualities.some((q) => q.qualityId === "bilingual");
-  }, [state.selections.qualities]);
+    // Qualities are stored separately as positiveQualities and negativeQualities
+    // Bilingual is a positive quality
+    const positiveQualities = state.selections.positiveQualities as Array<{ id: string }> | undefined;
+    if (!positiveQualities) return false;
+    return positiveQualities.some((q) => q.id === "bilingual");
+  }, [state.selections.positiveQualities]);
 
   // Count native languages and check if max reached
   const nativeLanguageCount = useMemo(() => {
