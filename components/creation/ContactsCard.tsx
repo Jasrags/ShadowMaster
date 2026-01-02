@@ -445,8 +445,8 @@ export function ContactsCard({ state, updateState }: ContactsCardProps) {
         },
         budgets: {
           ...state.budgets,
-          "contact-karma-spent": newTotalContactKarmaSpent,
-          "contact-karma-total": freeContactKarma,
+          // Sync with CreationBudgetContext which reads "contact-points-spent"
+          "contact-points-spent": newTotalContactKarmaSpent,
           "karma-spent-contacts": newGeneralKarmaSpentOnContacts,
         },
       });
@@ -489,8 +489,8 @@ export function ContactsCard({ state, updateState }: ContactsCardProps) {
         },
         budgets: {
           ...state.budgets,
-          "contact-karma-spent": newTotalContactKarmaSpent,
-          "contact-karma-total": freeContactKarma,
+          // Sync with CreationBudgetContext which reads "contact-points-spent"
+          "contact-points-spent": newTotalContactKarmaSpent,
           "karma-spent-contacts": newGeneralKarmaSpentOnContacts,
         },
       });
@@ -529,8 +529,8 @@ export function ContactsCard({ state, updateState }: ContactsCardProps) {
         },
         budgets: {
           ...state.budgets,
-          "contact-karma-spent": newTotalContactKarmaSpent,
-          "contact-karma-total": freeContactKarma,
+          // Sync with CreationBudgetContext which reads "contact-points-spent"
+          "contact-points-spent": newTotalContactKarmaSpent,
           "karma-spent-contacts": newGeneralKarmaSpentOnContacts,
         },
       });

@@ -15,6 +15,7 @@
 
 import { useMemo, useCallback, useState } from "react";
 import type { CreationState, KnowledgeSkill, LanguageSkill } from "@/lib/types";
+import { useSkills } from "@/lib/rules";
 import { CreationCard } from "./shared";
 import {
   Minus,
@@ -314,142 +315,168 @@ function KnowledgeSkillRow({
 // ADD LANGUAGE MODAL
 // =============================================================================
 
+interface AddLanguageModalProps {
+  isOpen: boolean;
+  onClose: () => void;
+  onAdd: (name: string, rating: number, isNative: boolean) => void;
+  existingLanguages: string[];
+  hasNativeLanguage: boolean;
+  pointsRemaining: number;
+}
+
 function AddLanguageModal({
   isOpen,
   onClose,
   onAdd,
   existingLanguages,
-}: {
-  isOpen: boolean;
-  onClose: () => void;
-  onAdd: (name: string, rating: number) => void;
-  existingLanguages: string[];
-}) {
+  hasNativeLanguage,
+  pointsRemaining,
+}: AddLanguageModalProps) {
   const [name, setName] = useState("");
-  const [rating, setRating] = useState(1);
-  const [showCustom, setShowCustom] = useState(false);
+  const { exampleLanguages } = useSkills();
 
-  const availableLanguages = COMMON_LANGUAGES.filter(
-    (lang) => !existingLanguages.includes(lang)
-  );
+  // Filter out already-added languages
+  const availableExamples = useMemo(() => {
+    if (!exampleLanguages) return [];
+    return exampleLanguages.filter(
+      (lang) => !existingLanguages.includes(lang.name)
+    );
+  }, [exampleLanguages, existingLanguages]);
 
-  const handleAdd = () => {
+  const handleSelectFromDropdown = (langName: string) => {
+    setName(langName);
+  };
+
+  const handleAddAsNative = () => {
     if (name.trim()) {
-      onAdd(name.trim(), rating);
+      onAdd(name.trim(), 0, true);
       setName("");
-      setRating(1);
-      setShowCustom(false);
       onClose();
     }
   };
 
-  const handleSelectLanguage = (lang: string) => {
-    setName(lang);
-    setShowCustom(false);
+  const handleAdd = () => {
+    if (name.trim() && pointsRemaining > 0) {
+      onAdd(name.trim(), 1, false);
+      setName("");
+      onClose();
+    }
+  };
+
+  const handleClose = () => {
+    setName("");
+    onClose();
   };
 
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50">
-      <div className="w-full max-w-md rounded-lg bg-white p-6 shadow-xl dark:bg-zinc-900">
-        <div className="flex items-center justify-between">
-          <h3 className="text-lg font-semibold text-zinc-900 dark:text-zinc-100">
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4">
+      <div className="flex max-h-[85vh] w-full max-w-md flex-col overflow-hidden rounded-lg bg-white shadow-xl dark:bg-zinc-900">
+        {/* Header */}
+        <div className="flex shrink-0 items-center justify-between border-b border-zinc-200 px-4 py-3 dark:border-zinc-700">
+          <h3 className="text-lg font-semibold text-sky-700 dark:text-sky-400">
             Add Language
           </h3>
           <button
-            onClick={onClose}
-            className="text-zinc-400 hover:text-zinc-600 dark:hover:text-zinc-300"
+            onClick={handleClose}
+            className="rounded p-1 text-zinc-400 hover:bg-zinc-100 hover:text-zinc-600 dark:hover:bg-zinc-800 dark:hover:text-zinc-300"
           >
             <X className="h-5 w-5" />
           </button>
         </div>
 
-        <div className="mt-4 space-y-4">
-          {!showCustom ? (
-            <>
-              <div className="max-h-48 space-y-1 overflow-y-auto">
-                {availableLanguages.map((lang) => (
-                  <button
-                    key={lang}
-                    onClick={() => handleSelectLanguage(lang)}
-                    className={`w-full rounded-lg px-3 py-2 text-left text-sm transition-colors ${
-                      name === lang
-                        ? "bg-emerald-100 text-emerald-800 dark:bg-emerald-900/50 dark:text-emerald-300"
-                        : "hover:bg-zinc-100 dark:hover:bg-zinc-800"
-                    }`}
-                  >
-                    {lang}
-                  </button>
-                ))}
+        {/* Content */}
+        <div className="min-h-0 flex-1 overflow-y-auto p-4">
+          <div className="space-y-4">
+            {/* Quick select dropdown */}
+            {availableExamples.length > 0 && (
+              <div>
+                <select
+                  className="w-full rounded-lg border border-sky-300 bg-white px-3 py-2.5 text-sm focus:border-sky-500 focus:outline-none focus:ring-1 focus:ring-sky-500 dark:border-sky-600 dark:bg-zinc-800 dark:text-zinc-100"
+                  defaultValue=""
+                  onChange={(e) => {
+                    if (e.target.value) {
+                      handleSelectFromDropdown(e.target.value);
+                    }
+                    e.target.value = "";
+                  }}
+                >
+                  <option value="" disabled>
+                    Quick select from examples...
+                  </option>
+                  {availableExamples.map((lang) => (
+                    <option key={lang.name} value={lang.name}>
+                      {lang.name}
+                      {lang.region ? ` (${lang.region})` : ""}
+                    </option>
+                  ))}
+                </select>
               </div>
-              <button
-                onClick={() => setShowCustom(true)}
-                className="text-sm text-emerald-600 hover:text-emerald-700 dark:text-emerald-400"
-              >
-                + Enter custom language
-              </button>
-            </>
-          ) : (
-            <div>
-              <label className="block text-sm font-medium text-zinc-700 dark:text-zinc-300">
-                Language Name
-              </label>
+            )}
+
+            {/* Custom input with buttons */}
+            <div className="flex flex-col gap-3 sm:flex-row">
               <input
                 type="text"
+                placeholder="Or type custom language..."
                 value={name}
                 onChange={(e) => setName(e.target.value)}
-                placeholder="e.g., Mandarin"
-                className="mt-1 w-full rounded-lg border border-zinc-300 px-3 py-2 text-sm focus:border-emerald-500 focus:outline-none focus:ring-1 focus:ring-emerald-500 dark:border-zinc-600 dark:bg-zinc-800 dark:text-zinc-100"
+                className="flex-1 rounded-lg border border-zinc-300 bg-white px-3 py-2.5 text-sm focus:border-sky-500 focus:outline-none focus:ring-1 focus:ring-sky-500 dark:border-zinc-600 dark:bg-zinc-800 dark:text-zinc-100"
               />
               <button
-                onClick={() => setShowCustom(false)}
-                className="mt-2 text-sm text-zinc-500 hover:text-zinc-700 dark:hover:text-zinc-300"
+                onClick={handleAddAsNative}
+                disabled={!name.trim() || hasNativeLanguage}
+                className={`whitespace-nowrap rounded-lg px-4 py-2 text-sm font-medium transition-colors ${
+                  name.trim() && !hasNativeLanguage
+                    ? "bg-purple-600 text-white hover:bg-purple-700"
+                    : "cursor-not-allowed bg-zinc-200 text-zinc-400 dark:bg-zinc-700"
+                }`}
               >
-                ← Back to list
+                Add as Native
+              </button>
+              <button
+                onClick={handleAdd}
+                disabled={!name.trim() || pointsRemaining <= 0}
+                className={`rounded-lg px-4 py-2 text-sm font-medium transition-colors ${
+                  name.trim() && pointsRemaining > 0
+                    ? "bg-sky-600 text-white hover:bg-sky-700"
+                    : "cursor-not-allowed bg-zinc-200 text-zinc-400 dark:bg-zinc-700"
+                }`}
+              >
+                Add
               </button>
             </div>
-          )}
 
-          {name && (
-            <div>
-              <label className="block text-sm font-medium text-zinc-700 dark:text-zinc-300">
-                Starting Rating
-              </label>
-              <div className="mt-1 flex items-center gap-2">
-                <input
-                  type="range"
-                  min="1"
-                  max="6"
-                  value={rating}
-                  onChange={(e) => setRating(parseInt(e.target.value))}
-                  className="flex-1"
-                />
-                <span className="w-8 text-center text-lg font-bold text-zinc-900 dark:text-zinc-100">
-                  {rating}
-                </span>
-              </div>
+            {/* Info text */}
+            <div className="text-xs text-zinc-500 dark:text-zinc-400">
+              {!hasNativeLanguage ? (
+                <p>
+                  <span className="font-medium text-purple-600 dark:text-purple-400">
+                    Native language
+                  </span>{" "}
+                  is free and has no rating. Other languages cost 1 point per
+                  rating.
+                </p>
+              ) : (
+                <p>
+                  Languages cost 1 knowledge point per rating level.{" "}
+                  <span className="font-medium">
+                    {pointsRemaining} points remaining.
+                  </span>
+                </p>
+              )}
             </div>
-          )}
+          </div>
         </div>
 
-        <div className="mt-6 flex justify-end gap-3">
+        {/* Footer */}
+        <div className="flex shrink-0 justify-end border-t border-zinc-200 px-4 py-3 dark:border-zinc-700">
           <button
-            onClick={onClose}
-            className="rounded-lg px-4 py-2 text-sm text-zinc-600 hover:bg-zinc-100 dark:text-zinc-400 dark:hover:bg-zinc-800"
+            onClick={handleClose}
+            className="rounded-lg border border-zinc-300 px-4 py-2 text-sm font-medium text-zinc-700 transition-colors hover:bg-zinc-50 dark:border-zinc-600 dark:text-zinc-300 dark:hover:bg-zinc-800"
           >
             Cancel
-          </button>
-          <button
-            onClick={handleAdd}
-            disabled={!name.trim()}
-            className={`rounded-lg px-4 py-2 text-sm font-medium ${
-              name.trim()
-                ? "bg-emerald-600 text-white hover:bg-emerald-700"
-                : "cursor-not-allowed bg-zinc-200 text-zinc-400 dark:bg-zinc-700 dark:text-zinc-500"
-            }`}
-          >
-            Add Language
           </button>
         </div>
       </div>
@@ -461,121 +488,188 @@ function AddLanguageModal({
 // ADD KNOWLEDGE SKILL MODAL
 // =============================================================================
 
+interface AddKnowledgeSkillModalProps {
+  isOpen: boolean;
+  onClose: () => void;
+  onAdd: (name: string, category: KnowledgeCategory, rating: number) => void;
+  pointsRemaining: number;
+}
+
 function AddKnowledgeSkillModal({
   isOpen,
   onClose,
   onAdd,
-}: {
-  isOpen: boolean;
-  onClose: () => void;
-  onAdd: (name: string, category: KnowledgeCategory, rating: number) => void;
-}) {
+  pointsRemaining,
+}: AddKnowledgeSkillModalProps) {
   const [name, setName] = useState("");
-  const [category, setCategory] = useState<KnowledgeCategory>("street");
-  const [rating, setRating] = useState(1);
+  const [category, setCategory] = useState<KnowledgeCategory>("academic");
+  const { exampleKnowledgeSkills, knowledgeCategories } = useSkills();
+
+  const handleSelectFromDropdown = (skillName: string) => {
+    const selected = exampleKnowledgeSkills?.find((s) => s.name === skillName);
+    if (selected) {
+      setName(selected.name);
+      setCategory(selected.category as KnowledgeCategory);
+    }
+  };
 
   const handleAdd = () => {
-    if (name.trim()) {
-      onAdd(name.trim(), category, rating);
+    if (name.trim() && pointsRemaining > 0) {
+      onAdd(name.trim(), category, 1);
       setName("");
-      setCategory("street");
-      setRating(1);
+      setCategory("academic");
       onClose();
     }
   };
 
+  const handleClose = () => {
+    setName("");
+    setCategory("academic");
+    onClose();
+  };
+
   if (!isOpen) return null;
 
+  // Use ruleset categories if available, otherwise fallback
+  const categoryOptions = knowledgeCategories?.length > 0
+    ? knowledgeCategories
+    : [
+        { id: "academic", name: "Academic" },
+        { id: "interests", name: "Interests" },
+        { id: "professional", name: "Professional" },
+        { id: "street", name: "Street" },
+      ];
+
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50">
-      <div className="w-full max-w-md rounded-lg bg-white p-6 shadow-xl dark:bg-zinc-900">
-        <div className="flex items-center justify-between">
-          <h3 className="text-lg font-semibold text-zinc-900 dark:text-zinc-100">
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4">
+      <div className="flex max-h-[85vh] w-full max-w-md flex-col overflow-hidden rounded-lg bg-white shadow-xl dark:bg-zinc-900">
+        {/* Header */}
+        <div className="flex shrink-0 items-center justify-between border-b border-zinc-200 px-4 py-3 dark:border-zinc-700">
+          <h3 className="text-lg font-semibold text-amber-700 dark:text-amber-400">
             Add Knowledge Skill
           </h3>
           <button
-            onClick={onClose}
-            className="text-zinc-400 hover:text-zinc-600 dark:hover:text-zinc-300"
+            onClick={handleClose}
+            className="rounded p-1 text-zinc-400 hover:bg-zinc-100 hover:text-zinc-600 dark:hover:bg-zinc-800 dark:hover:text-zinc-300"
           >
             <X className="h-5 w-5" />
           </button>
         </div>
 
-        <div className="mt-4 space-y-4">
-          <div>
-            <label className="block text-sm font-medium text-zinc-700 dark:text-zinc-300">
-              Skill Name
-            </label>
-            <input
-              type="text"
-              value={name}
-              onChange={(e) => setName(e.target.value)}
-              placeholder="e.g., Seattle Gangs"
-              className="mt-1 w-full rounded-lg border border-zinc-300 px-3 py-2 text-sm focus:border-emerald-500 focus:outline-none focus:ring-1 focus:ring-emerald-500 dark:border-zinc-600 dark:bg-zinc-800 dark:text-zinc-100"
-            />
-          </div>
-
-          <div>
-            <label className="block text-sm font-medium text-zinc-700 dark:text-zinc-300">
-              Category
-            </label>
-            <div className="mt-1 grid grid-cols-2 gap-2">
-              {(Object.keys(CATEGORY_LABELS) as KnowledgeCategory[]).map((cat) => (
-                <button
-                  key={cat}
-                  onClick={() => setCategory(cat)}
-                  className={`rounded-lg px-3 py-2 text-left text-sm transition-colors ${
-                    category === cat
-                      ? "bg-emerald-100 text-emerald-800 dark:bg-emerald-900/50 dark:text-emerald-300"
-                      : "bg-zinc-100 hover:bg-zinc-200 dark:bg-zinc-800 dark:hover:bg-zinc-700"
-                  }`}
+        {/* Content */}
+        <div className="min-h-0 flex-1 overflow-y-auto p-4">
+          <div className="space-y-4">
+            {/* Quick select dropdown */}
+            {exampleKnowledgeSkills && exampleKnowledgeSkills.length > 0 && (
+              <div>
+                <select
+                  className="w-full rounded-lg border border-amber-300 bg-white px-3 py-2.5 text-sm focus:border-amber-500 focus:outline-none focus:ring-1 focus:ring-amber-500 dark:border-amber-600 dark:bg-zinc-800 dark:text-zinc-100"
+                  defaultValue=""
+                  disabled={pointsRemaining <= 0}
+                  onChange={(e) => {
+                    if (e.target.value) {
+                      handleSelectFromDropdown(e.target.value);
+                    }
+                    e.target.value = "";
+                  }}
                 >
-                  <div className="font-medium">{CATEGORY_LABELS[cat]}</div>
-                  <div className="text-[10px] text-zinc-500 dark:text-zinc-400">
-                    {CATEGORY_DESCRIPTIONS[cat]}
-                  </div>
-                </button>
-              ))}
-            </div>
-          </div>
+                  <option value="" disabled>
+                    Quick add from examples...
+                  </option>
+                  <optgroup label="Academic">
+                    {exampleKnowledgeSkills
+                      .filter((s) => s.category === "academic")
+                      .map((skill) => (
+                        <option key={skill.name} value={skill.name}>
+                          {skill.name}
+                        </option>
+                      ))}
+                  </optgroup>
+                  <optgroup label="Interests">
+                    {exampleKnowledgeSkills
+                      .filter((s) => s.category === "interests")
+                      .map((skill) => (
+                        <option key={skill.name} value={skill.name}>
+                          {skill.name}
+                        </option>
+                      ))}
+                  </optgroup>
+                  <optgroup label="Professional">
+                    {exampleKnowledgeSkills
+                      .filter((s) => s.category === "professional")
+                      .map((skill) => (
+                        <option key={skill.name} value={skill.name}>
+                          {skill.name}
+                        </option>
+                      ))}
+                  </optgroup>
+                  <optgroup label="Street">
+                    {exampleKnowledgeSkills
+                      .filter((s) => s.category === "street")
+                      .map((skill) => (
+                        <option key={skill.name} value={skill.name}>
+                          {skill.name}
+                        </option>
+                      ))}
+                  </optgroup>
+                </select>
+              </div>
+            )}
 
-          <div>
-            <label className="block text-sm font-medium text-zinc-700 dark:text-zinc-300">
-              Starting Rating
-            </label>
-            <div className="mt-1 flex items-center gap-2">
+            {/* Custom input with category and add button */}
+            <div className="flex flex-col gap-3 sm:flex-row">
               <input
-                type="range"
-                min="1"
-                max="6"
-                value={rating}
-                onChange={(e) => setRating(parseInt(e.target.value))}
-                className="flex-1"
+                type="text"
+                placeholder="Or type custom skill name..."
+                value={name}
+                onChange={(e) => setName(e.target.value)}
+                className="flex-1 rounded-lg border border-zinc-300 bg-white px-3 py-2.5 text-sm focus:border-amber-500 focus:outline-none focus:ring-1 focus:ring-amber-500 dark:border-zinc-600 dark:bg-zinc-800 dark:text-zinc-100"
               />
-              <span className="w-8 text-center text-lg font-bold text-zinc-900 dark:text-zinc-100">
-                {rating}
-              </span>
+              <select
+                value={category}
+                onChange={(e) =>
+                  setCategory(e.target.value as KnowledgeCategory)
+                }
+                className="rounded-lg border border-zinc-300 bg-white px-3 py-2.5 text-sm focus:border-amber-500 focus:outline-none focus:ring-1 focus:ring-amber-500 dark:border-zinc-600 dark:bg-zinc-800 dark:text-zinc-100"
+              >
+                {categoryOptions.map((cat) => (
+                  <option key={cat.id} value={cat.id}>
+                    {cat.name}
+                  </option>
+                ))}
+              </select>
+              <button
+                onClick={handleAdd}
+                disabled={!name.trim() || pointsRemaining <= 0}
+                className={`rounded-lg px-4 py-2 text-sm font-medium transition-colors ${
+                  name.trim() && pointsRemaining > 0
+                    ? "bg-amber-600 text-white hover:bg-amber-700"
+                    : "cursor-not-allowed bg-zinc-200 text-zinc-400 dark:bg-zinc-700"
+                }`}
+              >
+                Add
+              </button>
+            </div>
+
+            {/* Info text */}
+            <div className="text-xs text-zinc-500 dark:text-zinc-400">
+              <p>
+                Knowledge skills cost 1 point per rating level.{" "}
+                <span className="font-medium">
+                  {pointsRemaining} points remaining.
+                </span>
+              </p>
             </div>
           </div>
         </div>
 
-        <div className="mt-6 flex justify-end gap-3">
+        {/* Footer */}
+        <div className="flex shrink-0 justify-end border-t border-zinc-200 px-4 py-3 dark:border-zinc-700">
           <button
-            onClick={onClose}
-            className="rounded-lg px-4 py-2 text-sm text-zinc-600 hover:bg-zinc-100 dark:text-zinc-400 dark:hover:bg-zinc-800"
+            onClick={handleClose}
+            className="rounded-lg border border-zinc-300 px-4 py-2 text-sm font-medium text-zinc-700 transition-colors hover:bg-zinc-50 dark:border-zinc-600 dark:text-zinc-300 dark:hover:bg-zinc-800"
           >
             Cancel
-          </button>
-          <button
-            onClick={handleAdd}
-            disabled={!name.trim()}
-            className={`rounded-lg px-4 py-2 text-sm font-medium ${
-              name.trim()
-                ? "bg-emerald-600 text-white hover:bg-emerald-700"
-                : "cursor-not-allowed bg-zinc-200 text-zinc-400 dark:bg-zinc-700 dark:text-zinc-500"
-            }`}
-          >
-            Add Skill
           </button>
         </div>
       </div>
@@ -681,11 +775,11 @@ export function KnowledgeLanguagesCard({
 
   // Handle add language
   const handleAddLanguage = useCallback(
-    (name: string, rating: number) => {
+    (name: string, rating: number, isNative: boolean) => {
       const newLanguage: LanguageSkill = {
         name,
-        rating,
-        isNative: false,
+        rating: isNative ? 0 : rating, // Native languages have no rating
+        isNative,
       };
       updateState({
         selections: {
@@ -696,6 +790,11 @@ export function KnowledgeLanguagesCard({
     },
     [languages, state.selections, updateState]
   );
+
+  // Check if character already has a native language
+  const hasNativeLanguage = useMemo(() => {
+    return languages.some((l) => l.isNative);
+  }, [languages]);
 
   // Handle knowledge skill rating change
   const handleKnowledgeRatingChange = useCallback(
@@ -903,12 +1002,15 @@ export function KnowledgeLanguagesCard({
         onClose={() => setShowAddLanguage(false)}
         onAdd={handleAddLanguage}
         existingLanguages={languages.map((l) => l.name)}
+        hasNativeLanguage={hasNativeLanguage}
+        pointsRemaining={knowledgePointsRemaining}
       />
 
       <AddKnowledgeSkillModal
         isOpen={showAddKnowledge}
         onClose={() => setShowAddKnowledge(false)}
         onAdd={handleAddKnowledge}
+        pointsRemaining={knowledgePointsRemaining}
       />
     </CreationCard>
   );
