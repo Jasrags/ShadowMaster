@@ -3,99 +3,302 @@
 /**
  * PrioritySelectionCard
  *
- * Compact card for priority assignment in sheet-driven creation.
- * Shows all 5 categories with priority level selectors.
- * Swaps priorities when assigning a level already in use.
+ * Drag-and-drop priority assignment for sheet-driven creation.
+ * Shows all 5 categories in a reorderable list with priority letters A-E.
  *
  * Features:
- * - Compact inline priority grid
- * - Shows derived budgets for each priority
- * - Validation state indicator
- * - Reuses logic from PriorityStep.tsx
+ * - Drag-and-drop reordering (priority swaps automatically)
+ * - Shows derived budgets for each priority level
+ * - Status indicator for each category
+ * - Default order: A-Metatype, B-Attributes, C-Magic, D-Skills, E-Resources
+ *
+ * UI Mock Reference: docs/prompts/design/character-sheet-creation-mode.md
  */
 
-import { useMemo, useCallback } from "react";
+import { useMemo, useCallback, useEffect, useState } from "react";
 import { usePriorityTable } from "@/lib/rules";
 import type { CreationState } from "@/lib/types";
 import { CreationCard } from "./shared";
-import { Check, ChevronDown } from "lucide-react";
+import {
+  GripVertical,
+  Check,
+  Circle,
+  AlertTriangle,
+  ChevronUp,
+  ChevronDown,
+} from "lucide-react";
+
+// =============================================================================
+// CONSTANTS
+// =============================================================================
 
 const PRIORITY_LEVELS = ["A", "B", "C", "D", "E"] as const;
 type PriorityLevel = (typeof PRIORITY_LEVELS)[number];
 
-const PRIORITY_CATEGORIES = [
-  { id: "metatype", label: "Metatype", shortLabel: "Meta" },
-  { id: "attributes", label: "Attributes", shortLabel: "Attr" },
-  { id: "magic", label: "Magic/Resonance", shortLabel: "Magic" },
-  { id: "skills", label: "Skills", shortLabel: "Skills" },
-  { id: "resources", label: "Resources", shortLabel: "Nuyen" },
+// Categories in their default order (A-E)
+const DEFAULT_PRIORITY_ORDER = [
+  "metatype",
+  "attributes",
+  "magic",
+  "skills",
+  "resources",
 ] as const;
+
+const CATEGORY_CONFIG: Record<
+  string,
+  { label: string; displayName: string; needsSelection: boolean }
+> = {
+  metatype: {
+    label: "METATYPE",
+    displayName: "Metatype",
+    needsSelection: true,
+  },
+  attributes: {
+    label: "ATTRIBUTES",
+    displayName: "Attributes",
+    needsSelection: false,
+  },
+  magic: {
+    label: "MAGIC / RESONANCE",
+    displayName: "Magic/Resonance",
+    needsSelection: true,
+  },
+  skills: {
+    label: "SKILLS",
+    displayName: "Skills",
+    needsSelection: false,
+  },
+  resources: {
+    label: "RESOURCES",
+    displayName: "Resources",
+    needsSelection: false,
+  },
+};
+
+// =============================================================================
+// TYPES
+// =============================================================================
 
 interface PrioritySelectionCardProps {
   state: CreationState;
   updateState: (updates: Partial<CreationState>) => void;
 }
 
+interface CategoryRowProps {
+  category: string;
+  priorityLevel: PriorityLevel;
+  isComplete: boolean;
+  hasConflict: boolean;
+  description: string;
+  onMoveUp: () => void;
+  onMoveDown: () => void;
+  canMoveUp: boolean;
+  canMoveDown: boolean;
+  onDragStart: (e: React.DragEvent, category: string) => void;
+  onDragOver: (e: React.DragEvent) => void;
+  onDrop: (e: React.DragEvent, category: string) => void;
+}
+
+// =============================================================================
+// CATEGORY ROW COMPONENT
+// =============================================================================
+
+function CategoryRow({
+  category,
+  priorityLevel,
+  isComplete,
+  hasConflict,
+  description,
+  onMoveUp,
+  onMoveDown,
+  canMoveUp,
+  canMoveDown,
+  onDragStart,
+  onDragOver,
+  onDrop,
+}: CategoryRowProps) {
+  const config = CATEGORY_CONFIG[category];
+
+  // Determine status
+  const status = hasConflict ? "conflict" : isComplete ? "complete" : "pending";
+
+  const statusIcon = {
+    complete: <Check className="h-4 w-4 text-emerald-500" />,
+    pending: <Circle className="h-4 w-4 text-zinc-400" />,
+    conflict: <AlertTriangle className="h-4 w-4 text-amber-500" />,
+  };
+
+  const statusText = {
+    complete: "Complete",
+    pending: "Selection needed",
+    conflict: "Conflict",
+  };
+
+  const borderColor = {
+    complete: "border-emerald-200 dark:border-emerald-800",
+    pending: "border-zinc-200 dark:border-zinc-700",
+    conflict: "border-amber-200 dark:border-amber-800",
+  };
+
+  return (
+    <div
+      draggable
+      onDragStart={(e) => onDragStart(e, category)}
+      onDragOver={onDragOver}
+      onDrop={(e) => onDrop(e, category)}
+      className={`group relative rounded-lg border-2 bg-white p-3 transition-all hover:shadow-md dark:bg-zinc-900 ${borderColor[status]}`}
+    >
+      {/* Priority Letter Badge */}
+      <div className="absolute -left-3 top-1/2 -translate-y-1/2 rounded bg-zinc-800 px-2 py-1 text-xs font-bold text-white dark:bg-zinc-200 dark:text-zinc-900">
+        {priorityLevel}
+      </div>
+
+      <div className="flex items-center gap-3 pl-4">
+        {/* Drag Handle */}
+        <div className="cursor-grab text-zinc-400 hover:text-zinc-600 active:cursor-grabbing dark:text-zinc-500 dark:hover:text-zinc-300">
+          <GripVertical className="h-5 w-5" />
+        </div>
+
+        {/* Category Info */}
+        <div className="flex-1 min-w-0">
+          <div className="flex items-center gap-2">
+            <span className="text-sm font-semibold text-zinc-900 dark:text-zinc-100">
+              {config.label}
+            </span>
+          </div>
+          <p className="mt-0.5 text-xs text-zinc-500 dark:text-zinc-400 truncate">
+            {description}
+          </p>
+        </div>
+
+        {/* Status */}
+        <div className="flex items-center gap-1.5 text-xs">
+          {statusIcon[status]}
+          <span
+            className={`hidden sm:inline ${
+              status === "complete"
+                ? "text-emerald-600 dark:text-emerald-400"
+                : status === "conflict"
+                ? "text-amber-600 dark:text-amber-400"
+                : "text-zinc-500 dark:text-zinc-400"
+            }`}
+          >
+            {statusText[status]}
+          </span>
+        </div>
+
+        {/* Move Buttons (visible on hover/focus) */}
+        <div className="flex flex-col opacity-0 transition-opacity group-hover:opacity-100 focus-within:opacity-100">
+          <button
+            type="button"
+            onClick={onMoveUp}
+            disabled={!canMoveUp}
+            className="rounded p-0.5 text-zinc-400 hover:bg-zinc-100 hover:text-zinc-600 disabled:opacity-30 disabled:cursor-not-allowed dark:hover:bg-zinc-800 dark:hover:text-zinc-300"
+            title="Move up"
+          >
+            <ChevronUp className="h-4 w-4" />
+          </button>
+          <button
+            type="button"
+            onClick={onMoveDown}
+            disabled={!canMoveDown}
+            className="rounded p-0.5 text-zinc-400 hover:bg-zinc-100 hover:text-zinc-600 disabled:opacity-30 disabled:cursor-not-allowed dark:hover:bg-zinc-800 dark:hover:text-zinc-300"
+            title="Move down"
+          >
+            <ChevronDown className="h-4 w-4" />
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+// =============================================================================
+// MAIN COMPONENT
+// =============================================================================
+
 export function PrioritySelectionCard({
   state,
   updateState,
 }: PrioritySelectionCardProps) {
   const priorityTable = usePriorityTable();
-  const priorities = useMemo(() => state.priorities || {}, [state.priorities]);
+  const [draggedCategory, setDraggedCategory] = useState<string | null>(null);
 
-  // Count how many priorities are set
-  const prioritiesSet = Object.keys(priorities).length;
-  const isComplete = prioritiesSet === 5;
+  // Initialize priorities from state or use defaults
+  const priorities = useMemo(() => {
+    return state.priorities || {};
+  }, [state.priorities]);
 
-  // Get validation status
-  const validationStatus = useMemo(() => {
-    if (isComplete) return "valid";
-    if (prioritiesSet > 0) return "warning";
-    return "pending";
-  }, [isComplete, prioritiesSet]);
+  // Set default priorities if none exist
+  useEffect(() => {
+    if (Object.keys(priorities).length === 0) {
+      const defaultPriorities: Record<string, string> = {};
+      DEFAULT_PRIORITY_ORDER.forEach((category, index) => {
+        defaultPriorities[category] = PRIORITY_LEVELS[index];
+      });
+      updateState({ priorities: defaultPriorities });
+    }
+  }, [priorities, updateState]);
 
-  // Check if a priority level is already assigned
-  const getLevelCategory = useCallback(
-    (level: string): string | null => {
-      const entry = Object.entries(priorities).find(([, l]) => l === level);
-      return entry ? entry[0] : null;
-    },
-    [priorities]
-  );
+  // Get ordered list of categories based on their priority levels
+  const orderedCategories = useMemo((): string[] => {
+    if (Object.keys(priorities).length === 0) {
+      return [...DEFAULT_PRIORITY_ORDER];
+    }
 
-  // Get the priority level for a category
+    // Sort categories by their priority level (A, B, C, D, E)
+    return [...DEFAULT_PRIORITY_ORDER].sort((a, b) => {
+      const levelA = priorities[a] || "E";
+      const levelB = priorities[b] || "E";
+      return PRIORITY_LEVELS.indexOf(levelA as PriorityLevel) -
+        PRIORITY_LEVELS.indexOf(levelB as PriorityLevel);
+    });
+  }, [priorities]);
+
+  // Check if all priorities are set
+  const isComplete = Object.keys(priorities).length === 5;
+
+  // Get priority level for a category
   const getCategoryLevel = useCallback(
-    (category: string): PriorityLevel | null => {
-      return (priorities[category] as PriorityLevel) || null;
+    (category: string): PriorityLevel => {
+      return (priorities[category] as PriorityLevel) || "E";
     },
     [priorities]
   );
 
-  // Handle priority selection - swap if level already assigned
-  const handlePrioritySelect = useCallback(
-    (category: string, level: string) => {
-      const existingCategory = getLevelCategory(level);
-      const newPriorities = { ...priorities };
+  // Check if a category needs selection (metatype, magic path)
+  const isCategoryComplete = useCallback(
+    (category: string): boolean => {
+      const config = CATEGORY_CONFIG[category];
+      if (!config.needsSelection) return true;
 
-      if (existingCategory && existingCategory !== category) {
-        // Swap: give the existing category the current category's level
-        const currentLevel = priorities[category];
-        if (currentLevel) {
-          newPriorities[existingCategory] = currentLevel;
-        } else {
-          delete newPriorities[existingCategory];
-        }
+      if (category === "metatype") {
+        return !!state.selections.metatype;
       }
-
-      newPriorities[category] = level;
-      updateState({ priorities: newPriorities });
+      if (category === "magic") {
+        // Magic is "complete" if either a path is selected OR priority is E (mundane)
+        const level = getCategoryLevel("magic");
+        if (level === "E") return true; // Mundane at E
+        return !!state.selections["magical-path"];
+      }
+      return true;
     },
-    [priorities, getLevelCategory, updateState]
+    [state.selections, getCategoryLevel]
   );
 
-  // Get preview text for a priority level in a category
-  const getPreviewText = useCallback(
-    (category: string, level: string): string => {
+  // Check for conflicts (e.g., metatype not available at priority)
+  const hasConflict = useCallback(
+    (_category: string): boolean => {
+      // TODO: Implement conflict detection for metatype/magic priority requirements
+      return false;
+    },
+    []
+  );
+
+  // Get description for a category at its current priority
+  const getDescription = useCallback(
+    (category: string): string => {
+      const level = getCategoryLevel(category);
       if (!priorityTable?.table[level]) return "";
       const data = priorityTable.table[level];
 
@@ -106,152 +309,178 @@ export function PrioritySelectionCard({
             specialAttributePoints: Record<string, number>;
           };
           if (!metatypeData?.available) return "";
-          // Show first few metatypes
           const count = metatypeData.available.length;
-          if (count <= 3) return metatypeData.available.join(", ");
-          return `${metatypeData.available.slice(0, 2).join(", ")}... +${count - 2}`;
+          const metatypes =
+            count <= 3
+              ? metatypeData.available.join(", ")
+              : `${count} metatypes available`;
+
+          // Get special attribute points for the selected metatype or show range
+          const sapValues = Object.values(metatypeData.specialAttributePoints || {});
+          const sapRange =
+            sapValues.length > 0
+              ? sapValues.every((v) => v === sapValues[0])
+                ? `${sapValues[0]} special attribute points`
+                : `${Math.min(...sapValues)}-${Math.max(...sapValues)} special attribute points`
+              : "";
+
+          return `${metatypes}${sapRange ? ` • ${sapRange}` : ""}`;
         }
         case "attributes":
-          return `${data.attributes} pts`;
+          return `${data.attributes} points to distribute`;
         case "magic": {
-          const magicData = data.magic as { options: Array<{ path: string }> };
-          if (!magicData?.options?.length) return "Mundane";
-          return magicData.options.map((o) => o.path).slice(0, 2).join(", ");
+          const magicData = data.magic as {
+            options: Array<{ path: string; magicRating?: number; resonance?: number }>;
+          };
+          if (!magicData?.options?.length) return "Mundane only";
+          const paths = magicData.options.map((o) => o.path);
+          const rating = magicData.options[0]?.magicRating || magicData.options[0]?.resonance;
+          const pathsStr = paths.length <= 2 ? paths.join(", ") : `${paths.length} paths`;
+          return rating ? `${pathsStr} • Magic/Resonance ${rating}` : pathsStr;
         }
         case "skills": {
           const skillData = data.skills as {
             skillPoints: number;
             skillGroupPoints: number;
           };
-          return `${skillData?.skillPoints || 0}/${skillData?.skillGroupPoints || 0}`;
+          return `${skillData?.skillPoints || 0} skill points • ${skillData?.skillGroupPoints || 0} skill group points`;
         }
         case "resources":
-          return `${((data.resources as number) || 0).toLocaleString()}¥`;
+          return `${((data.resources as number) || 0).toLocaleString()}¥ starting nuyen`;
         default:
           return "";
       }
     },
-    [priorityTable]
+    [priorityTable, getCategoryLevel]
   );
 
-  // Render dropdown for a category
-  const renderCategorySelect = (category: { id: string; label: string; shortLabel: string }) => {
-    const currentLevel = getCategoryLevel(category.id);
-    const previewText = currentLevel
-      ? getPreviewText(category.id, currentLevel)
-      : "Select...";
-
-    return (
-      <div key={category.id} className="flex items-center gap-2">
-        <span className="w-20 shrink-0 text-sm font-medium text-zinc-700 dark:text-zinc-300">
-          {category.shortLabel}
-        </span>
-        <div className="relative flex-1">
-          <select
-            value={currentLevel || ""}
-            onChange={(e) => handlePrioritySelect(category.id, e.target.value)}
-            className={`w-full appearance-none rounded-lg border px-3 py-2 pr-8 text-sm transition-colors ${
-              currentLevel
-                ? "border-emerald-300 bg-emerald-50 text-emerald-900 dark:border-emerald-700 dark:bg-emerald-900/30 dark:text-emerald-100"
-                : "border-zinc-200 bg-white text-zinc-600 dark:border-zinc-700 dark:bg-zinc-800 dark:text-zinc-400"
-            }`}
-          >
-            <option value="">Select priority...</option>
-            {PRIORITY_LEVELS.map((level) => {
-              const usedBy = getLevelCategory(level);
-              const isUsedElsewhere = usedBy && usedBy !== category.id;
-              const preview = getPreviewText(category.id, level);
-              return (
-                <option key={level} value={level}>
-                  {level}: {preview}
-                  {isUsedElsewhere ? ` (swap with ${usedBy})` : ""}
-                </option>
-              );
-            })}
-          </select>
-          <ChevronDown className="pointer-events-none absolute right-2 top-1/2 h-4 w-4 -translate-y-1/2 text-zinc-400" />
-        </div>
-        {currentLevel && (
-          <span className="hidden w-32 text-xs text-zinc-500 sm:block">
-            {previewText}
-          </span>
-        )}
-      </div>
-    );
-  };
-
-  // Get derived budgets summary
-  const budgetsSummary = useMemo(() => {
-    if (!priorityTable || !isComplete) return null;
-
-    const attrPriority = priorities.attributes;
-    const skillPriority = priorities.skills;
-    const resourcePriority = priorities.resources;
-
-    const budgets: Array<{ label: string; value: string }> = [];
-
-    if (attrPriority && priorityTable.table[attrPriority]) {
-      budgets.push({
-        label: "Attributes",
-        value: `${priorityTable.table[attrPriority].attributes} pts`,
+  // Swap two categories' priority levels
+  const swapPriorities = useCallback(
+    (category1: string, category2: string) => {
+      const level1 = priorities[category1];
+      const level2 = priorities[category2];
+      updateState({
+        priorities: {
+          ...priorities,
+          [category1]: level2,
+          [category2]: level1,
+        },
       });
-    }
+    },
+    [priorities, updateState]
+  );
 
-    if (skillPriority && priorityTable.table[skillPriority]) {
-      const skillData = priorityTable.table[skillPriority].skills as {
-        skillPoints: number;
-        skillGroupPoints: number;
-      };
-      budgets.push({
-        label: "Skills",
-        value: `${skillData.skillPoints}/${skillData.skillGroupPoints}`,
-      });
-    }
+  // Move a category up in the list
+  const moveUp = useCallback(
+    (category: string) => {
+      const currentIndex = orderedCategories.indexOf(category);
+      if (currentIndex <= 0) return;
+      const targetCategory = orderedCategories[currentIndex - 1];
+      swapPriorities(category, targetCategory);
+    },
+    [orderedCategories, swapPriorities]
+  );
 
-    if (resourcePriority && priorityTable.table[resourcePriority]) {
-      const nuyen = priorityTable.table[resourcePriority].resources as number;
-      budgets.push({
-        label: "Nuyen",
-        value: `${nuyen.toLocaleString()}¥`,
-      });
-    }
+  // Move a category down in the list
+  const moveDown = useCallback(
+    (category: string) => {
+      const currentIndex = orderedCategories.indexOf(category);
+      if (currentIndex >= orderedCategories.length - 1) return;
+      const targetCategory = orderedCategories[currentIndex + 1];
+      swapPriorities(category, targetCategory);
+    },
+    [orderedCategories, swapPriorities]
+  );
 
-    return budgets;
-  }, [priorityTable, priorities, isComplete]);
+  // Drag and drop handlers
+  const handleDragStart = useCallback(
+    (e: React.DragEvent, category: string) => {
+      setDraggedCategory(category);
+      e.dataTransfer.effectAllowed = "move";
+    },
+    []
+  );
+
+  const handleDragOver = useCallback((e: React.DragEvent) => {
+    e.preventDefault();
+    e.dataTransfer.dropEffect = "move";
+  }, []);
+
+  const handleDrop = useCallback(
+    (e: React.DragEvent, targetCategory: string) => {
+      e.preventDefault();
+      if (draggedCategory && draggedCategory !== targetCategory) {
+        swapPriorities(draggedCategory, targetCategory);
+      }
+      setDraggedCategory(null);
+    },
+    [draggedCategory, swapPriorities]
+  );
+
+  // Determine validation status
+  const validationStatus = useMemo(() => {
+    // Check for conflicts
+    const hasAnyConflict = orderedCategories.some(hasConflict);
+    if (hasAnyConflict) return "error";
+
+    // Check if all selections are complete
+    const allComplete = orderedCategories.every(isCategoryComplete);
+    if (allComplete) return "valid";
+
+    return "warning";
+  }, [orderedCategories, hasConflict, isCategoryComplete]);
+
+  // Count incomplete selections
+  const incompleteCount = useMemo(() => {
+    return orderedCategories.filter((c) => !isCategoryComplete(c)).length;
+  }, [orderedCategories, isCategoryComplete]);
 
   return (
     <CreationCard
       title="Priorities"
-      description="Assign A-E to each category (higher = better)"
+      description={
+        isComplete
+          ? incompleteCount === 0
+            ? "All priorities set"
+            : `${incompleteCount} selection${incompleteCount !== 1 ? "s" : ""} needed`
+          : "Drag to reorder"
+      }
       status={validationStatus}
-      warningCount={isComplete ? 0 : 5 - prioritiesSet}
     >
-      <div className="space-y-3">
-        {PRIORITY_CATEGORIES.map(renderCategorySelect)}
+      <div className="space-y-2">
+        {/* Header */}
+        <div className="flex items-center justify-between text-xs text-zinc-500 dark:text-zinc-400">
+          <span>Drag to reorder priorities</span>
+          <span className="flex items-center gap-1">
+            <GripVertical className="h-3 w-3" />
+          </span>
+        </div>
 
-        {/* Summary when complete */}
-        {isComplete && budgetsSummary && (
-          <div className="mt-4 rounded-lg bg-emerald-50 p-3 dark:bg-emerald-900/20">
-            <div className="flex items-center gap-2 text-sm font-medium text-emerald-700 dark:text-emerald-300">
-              <Check className="h-4 w-4" />
-              Priorities Set
-            </div>
-            <div className="mt-2 flex flex-wrap gap-x-4 gap-y-1 text-xs text-emerald-600 dark:text-emerald-400">
-              {budgetsSummary.map((b) => (
-                <span key={b.label}>
-                  {b.label}: <strong>{b.value}</strong>
-                </span>
-              ))}
-            </div>
-          </div>
-        )}
+        {/* Priority Rows */}
+        <div className="space-y-2">
+          {orderedCategories.map((category, index) => (
+            <CategoryRow
+              key={category}
+              category={category}
+              priorityLevel={getCategoryLevel(category)}
+              isComplete={isCategoryComplete(category)}
+              hasConflict={hasConflict(category)}
+              description={getDescription(category)}
+              onMoveUp={() => moveUp(category)}
+              onMoveDown={() => moveDown(category)}
+              canMoveUp={index > 0}
+              canMoveDown={index < orderedCategories.length - 1}
+              onDragStart={handleDragStart}
+              onDragOver={handleDragOver}
+              onDrop={handleDrop}
+            />
+          ))}
+        </div>
 
-        {/* Help text when incomplete */}
-        {!isComplete && (
-          <p className="text-xs text-zinc-500 dark:text-zinc-400">
-            {prioritiesSet === 0
-              ? "Each priority level (A-E) can only be used once."
-              : `${5 - prioritiesSet} more ${5 - prioritiesSet === 1 ? "priority" : "priorities"} to assign.`}
+        {/* Help text */}
+        {incompleteCount > 0 && (
+          <p className="pt-2 text-xs text-zinc-500 dark:text-zinc-400">
+            Select metatype and magic path in their respective sections below.
           </p>
         )}
       </div>
