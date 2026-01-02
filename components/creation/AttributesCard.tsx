@@ -3,37 +3,48 @@
 /**
  * AttributesCard
  *
- * Compact card for attribute allocation in sheet-driven creation.
- * Shows 8 core attributes with +/- controls and metatype limits.
+ * Card for attribute allocation in sheet-driven creation.
+ * Matches UI mocks from docs/prompts/design/character-sheet-creation-mode.md
  *
  * Features:
- * - 8-attribute grid with +/- controls
- * - Points remaining display
- * - Metatype min/max enforcement
- * - Derived stats preview
+ * - 8 core attributes with +/- controls
+ * - Points remaining display with progress bar
+ * - Metatype min/max enforcement with MAX badge
+ * - Attribute descriptions
+ * - Karma conversion warning when over budget
  */
 
 import { useMemo, useCallback } from "react";
-import { useMetatypes } from "@/lib/rules";
+import { useMetatypes, usePriorityTable } from "@/lib/rules";
 import type { CreationState } from "@/lib/types";
 import { useCreationBudgets } from "@/lib/contexts";
-import { CreationCard, BudgetIndicator } from "./shared";
-import { Lock, Minus, Plus } from "lucide-react";
+import { CreationCard } from "./shared";
+import { Lock, Minus, Plus, AlertTriangle } from "lucide-react";
 
-// Physical and mental attributes in SR5
+// =============================================================================
+// CONSTANTS
+// =============================================================================
+
+// Physical and mental attributes with descriptions (SR5)
 const PHYSICAL_ATTRIBUTES = [
-  { id: "body", name: "Body", abbr: "BOD" },
-  { id: "agility", name: "Agility", abbr: "AGI" },
-  { id: "reaction", name: "Reaction", abbr: "REA" },
-  { id: "strength", name: "Strength", abbr: "STR" },
+  { id: "body", name: "Body", abbr: "BOD", description: "Physical health and resistance to damage" },
+  { id: "agility", name: "Agility", abbr: "AGI", description: "Coordination and fine motor skills" },
+  { id: "reaction", name: "Reaction", abbr: "REA", description: "Response time and reflexes" },
+  { id: "strength", name: "Strength", abbr: "STR", description: "Raw physical power" },
 ] as const;
 
 const MENTAL_ATTRIBUTES = [
-  { id: "willpower", name: "Willpower", abbr: "WIL" },
-  { id: "logic", name: "Logic", abbr: "LOG" },
-  { id: "intuition", name: "Intuition", abbr: "INT" },
-  { id: "charisma", name: "Charisma", abbr: "CHA" },
+  { id: "willpower", name: "Willpower", abbr: "WIL", description: "Mental fortitude and resistance to magic" },
+  { id: "logic", name: "Logic", abbr: "LOG", description: "Problem solving and analytical thinking" },
+  { id: "intuition", name: "Intuition", abbr: "INT", description: "Gut feelings and situational awareness" },
+  { id: "charisma", name: "Charisma", abbr: "CHA", description: "Social influence and personal magnetism" },
 ] as const;
+
+const KARMA_PER_ATTRIBUTE_POINT = 5;
+
+// =============================================================================
+// TYPES
+// =============================================================================
 
 type AttributeId =
   | (typeof PHYSICAL_ATTRIBUTES)[number]["id"]
@@ -49,12 +60,196 @@ interface AttributesCardProps {
   updateState: (updates: Partial<CreationState>) => void;
 }
 
+// =============================================================================
+// PROGRESS BAR COMPONENT
+// =============================================================================
+
+function BudgetProgressBar({
+  label,
+  description,
+  spent,
+  total,
+  source,
+  isOver,
+  karmaRequired,
+}: {
+  label: string;
+  description: string;
+  spent: number;
+  total: number;
+  source: string;
+  isOver: boolean;
+  karmaRequired?: number;
+}) {
+  const remaining = total - spent;
+  const percentage = Math.min(100, (spent / total) * 100);
+
+  return (
+    <div className={`rounded-lg border p-3 ${
+      isOver
+        ? "border-amber-200 bg-amber-50 dark:border-amber-800 dark:bg-amber-900/20"
+        : "border-zinc-200 bg-zinc-50 dark:border-zinc-700 dark:bg-zinc-800/50"
+    }`}>
+      <div className="flex items-center justify-between">
+        <div className="text-sm font-medium text-zinc-900 dark:text-zinc-100">
+          {label}
+        </div>
+        <div className={`text-lg font-bold ${
+          isOver
+            ? "text-amber-600 dark:text-amber-400"
+            : remaining === 0
+              ? "text-emerald-600 dark:text-emerald-400"
+              : "text-zinc-900 dark:text-zinc-100"
+        }`}>
+          {isOver ? remaining : remaining}
+        </div>
+      </div>
+
+      <div className="mt-1 text-xs text-zinc-500 dark:text-zinc-400">
+        {description}
+      </div>
+
+      <div className="mt-1 text-xs text-zinc-500 dark:text-zinc-400">
+        {source}
+        <span className="float-right">
+          of {total} remaining
+        </span>
+      </div>
+
+      {/* Progress bar */}
+      <div className="mt-2 h-2 overflow-hidden rounded-full bg-zinc-200 dark:bg-zinc-700">
+        <div
+          className={`h-full rounded-full transition-all ${
+            isOver
+              ? "bg-amber-500"
+              : remaining === 0
+                ? "bg-emerald-500"
+                : "bg-blue-500"
+          }`}
+          style={{ width: `${percentage}%` }}
+        />
+      </div>
+
+      {/* Over budget warning */}
+      {isOver && karmaRequired && (
+        <div className="mt-2 flex items-center gap-1.5 text-xs text-amber-600 dark:text-amber-400">
+          <AlertTriangle className="h-3.5 w-3.5" />
+          <span>
+            {Math.abs(remaining)} points over budget → {karmaRequired} karma ({KARMA_PER_ATTRIBUTE_POINT} karma per point)
+          </span>
+        </div>
+      )}
+    </div>
+  );
+}
+
+// =============================================================================
+// ATTRIBUTE ROW COMPONENT
+// =============================================================================
+
+function AttributeRow({
+  name,
+  abbr,
+  description,
+  value,
+  min,
+  max,
+  canIncrease,
+  canDecrease,
+  onIncrease,
+  onDecrease,
+}: {
+  name: string;
+  abbr: string;
+  description: string;
+  value: number;
+  min: number;
+  max: number;
+  canIncrease: boolean;
+  canDecrease: boolean;
+  onIncrease: () => void;
+  onDecrease: () => void;
+}) {
+  const isAtMax = value >= max;
+
+  return (
+    <div className="rounded-lg border border-zinc-200 bg-white p-3 dark:border-zinc-700 dark:bg-zinc-900">
+      {/* Header row */}
+      <div className="flex items-center justify-between">
+        <div className="flex items-center gap-2">
+          <span className="text-sm font-semibold text-zinc-900 dark:text-zinc-100">
+            {name}
+          </span>
+          <span className="text-xs font-medium text-zinc-500 dark:text-zinc-400">
+            {abbr}
+          </span>
+        </div>
+
+        <div className="flex items-center gap-2">
+          {isAtMax && (
+            <span className="rounded bg-emerald-100 px-1.5 py-0.5 text-[10px] font-medium text-emerald-700 dark:bg-emerald-900/50 dark:text-emerald-300">
+              MAX
+            </span>
+          )}
+          <span className="text-xs text-zinc-500 dark:text-zinc-400">
+            Range {min}–{max}
+          </span>
+        </div>
+      </div>
+
+      {/* Description */}
+      <div className="mt-1 text-xs text-zinc-500 dark:text-zinc-400">
+        {description}
+      </div>
+
+      {/* Controls */}
+      <div className="mt-2 flex items-center justify-end gap-2">
+        <button
+          onClick={onDecrease}
+          disabled={!canDecrease}
+          className={`flex h-7 w-7 items-center justify-center rounded transition-colors ${
+            canDecrease
+              ? "bg-zinc-200 text-zinc-700 hover:bg-zinc-300 dark:bg-zinc-700 dark:text-zinc-200 dark:hover:bg-zinc-600"
+              : "cursor-not-allowed bg-zinc-100 text-zinc-300 dark:bg-zinc-800 dark:text-zinc-600"
+          }`}
+          title={canDecrease ? "Decrease" : `At minimum (${min})`}
+        >
+          <Minus className="h-4 w-4" />
+        </button>
+
+        <div className="flex h-8 w-10 items-center justify-center rounded bg-zinc-100 text-base font-bold text-zinc-900 dark:bg-zinc-800 dark:text-zinc-100">
+          {value}
+        </div>
+
+        <button
+          onClick={onIncrease}
+          disabled={!canIncrease}
+          className={`flex h-7 w-7 items-center justify-center rounded transition-colors ${
+            canIncrease
+              ? "bg-emerald-500 text-white hover:bg-emerald-600"
+              : "cursor-not-allowed bg-zinc-100 text-zinc-300 dark:bg-zinc-800 dark:text-zinc-600"
+          }`}
+          title={canIncrease ? "Increase" : isAtMax ? `At maximum (${max})` : "No points available"}
+        >
+          <Plus className="h-4 w-4" />
+        </button>
+      </div>
+    </div>
+  );
+}
+
+// =============================================================================
+// MAIN COMPONENT
+// =============================================================================
+
 export function AttributesCard({ state, updateState }: AttributesCardProps) {
   const metatypes = useMetatypes();
+  const priorityTable = usePriorityTable();
   const { getBudget } = useCreationBudgets();
   const attributeBudget = getBudget("attribute-points");
 
   const selectedMetatype = state.selections.metatype as string;
+  const attributePriority = state.priorities?.attributes;
   const attributePoints = attributeBudget?.total || 0;
 
   // Get metatype data for attribute limits
@@ -105,6 +300,8 @@ export function AttributesCard({ state, updateState }: AttributesCardProps) {
   }, [getAttributeValue, getAttributeLimits]);
 
   const pointsRemaining = attributePoints - pointsSpent;
+  const isOverBudget = pointsRemaining < 0;
+  const karmaRequired = isOverBudget ? Math.abs(pointsRemaining) * KARMA_PER_ATTRIBUTE_POINT : 0;
 
   // Handle attribute change
   const handleAttributeChange = useCallback(
@@ -115,9 +312,6 @@ export function AttributesCard({ state, updateState }: AttributesCardProps) {
 
       // Check bounds
       if (newValue < limits.min || newValue > limits.max) return;
-
-      // Check if we have enough points for increase
-      if (delta > 0 && pointsRemaining < delta) return;
 
       const newAttributes = {
         ...attributes,
@@ -148,7 +342,6 @@ export function AttributesCard({ state, updateState }: AttributesCardProps) {
       attributes,
       getAttributeValue,
       getAttributeLimits,
-      pointsRemaining,
       state.selections,
       state.budgets,
       attributePoints,
@@ -158,79 +351,109 @@ export function AttributesCard({ state, updateState }: AttributesCardProps) {
 
   // Get validation status
   const validationStatus = useMemo(() => {
+    if (!attributePriority) return "pending";
     if (!selectedMetatype) return "pending";
+    if (isOverBudget) return "warning";
     if (pointsRemaining === 0) return "valid";
     if (pointsSpent > 0) return "warning";
     return "pending";
-  }, [selectedMetatype, pointsRemaining, pointsSpent]);
+  }, [attributePriority, selectedMetatype, isOverBudget, pointsRemaining, pointsSpent]);
 
-  // Render attribute row
-  const renderAttribute = (attr: { id: AttributeId; name: string; abbr: string }) => {
+  // Get priority source description
+  const prioritySource = useMemo(() => {
+    if (!attributePriority || !priorityTable?.table[attributePriority]) {
+      return "";
+    }
+    return `${attributePoints} points from Priority ${attributePriority}`;
+  }, [attributePriority, attributePoints, priorityTable]);
+
+  // Render an attribute row
+  const renderAttribute = (attr: {
+    id: AttributeId;
+    name: string;
+    abbr: string;
+    description: string;
+  }) => {
     const limits = getAttributeLimits(attr.id);
     const value = getAttributeValue(attr.id);
-    const canIncrease = value < limits.max && pointsRemaining > 0;
+    // Allow increase even if over budget (karma conversion) - just check max
+    const canIncrease = value < limits.max;
     const canDecrease = value > limits.min;
 
     return (
-      <div
+      <AttributeRow
         key={attr.id}
-        className="flex items-center justify-between rounded-lg bg-zinc-50 px-3 py-2 dark:bg-zinc-800/50"
-      >
-        <div className="flex items-center gap-2">
-          <span className="w-8 text-xs font-medium text-zinc-500 dark:text-zinc-400">
-            {attr.abbr}
-          </span>
-          <span className="text-xs text-zinc-400">
-            ({limits.min}-{limits.max})
-          </span>
-        </div>
-
-        <div className="flex items-center gap-1">
-          <button
-            onClick={() => handleAttributeChange(attr.id, -1)}
-            disabled={!canDecrease}
-            className={`flex h-6 w-6 items-center justify-center rounded transition-colors ${
-              canDecrease
-                ? "bg-zinc-200 text-zinc-700 hover:bg-zinc-300 dark:bg-zinc-700 dark:text-zinc-200 dark:hover:bg-zinc-600"
-                : "cursor-not-allowed bg-zinc-100 text-zinc-300 dark:bg-zinc-800 dark:text-zinc-600"
-            }`}
-          >
-            <Minus className="h-3 w-3" />
-          </button>
-
-          <div className="flex h-7 w-8 items-center justify-center rounded bg-white text-sm font-bold text-zinc-900 dark:bg-zinc-900 dark:text-zinc-100">
-            {value}
-          </div>
-
-          <button
-            onClick={() => handleAttributeChange(attr.id, 1)}
-            disabled={!canIncrease}
-            className={`flex h-6 w-6 items-center justify-center rounded transition-colors ${
-              canIncrease
-                ? "bg-emerald-500 text-white hover:bg-emerald-600"
-                : "cursor-not-allowed bg-zinc-100 text-zinc-300 dark:bg-zinc-800 dark:text-zinc-600"
-            }`}
-          >
-            <Plus className="h-3 w-3" />
-          </button>
-        </div>
-      </div>
+        name={attr.name}
+        abbr={attr.abbr}
+        description={attr.description}
+        value={value}
+        min={limits.min}
+        max={limits.max}
+        canIncrease={canIncrease}
+        canDecrease={canDecrease}
+        onIncrease={() => handleAttributeChange(attr.id, 1)}
+        onDecrease={() => handleAttributeChange(attr.id, -1)}
+      />
     );
   };
 
-  // If no metatype selected, show message
+  // If no priority selected, show locked state
+  if (!attributePriority) {
+    return (
+      <CreationCard
+        title="Attributes"
+        description="Awaiting priority"
+        status="pending"
+      >
+        <div className="space-y-3">
+          <div className="rounded-lg border border-zinc-200 bg-zinc-50 p-3 dark:border-zinc-700 dark:bg-zinc-800/50">
+            <div className="flex items-center justify-between">
+              <div className="text-sm font-medium text-zinc-500 dark:text-zinc-400">
+                Attribute Points
+              </div>
+              <div className="text-lg font-bold text-zinc-400">—</div>
+            </div>
+            <div className="mt-1 text-xs text-zinc-500 dark:text-zinc-400">
+              Distribute points among your physical and mental attributes
+            </div>
+            <div className="mt-1 text-xs text-zinc-500 dark:text-zinc-400">
+              Set attribute priority to unlock
+            </div>
+            <div className="mt-2 h-2 rounded-full bg-zinc-200 dark:bg-zinc-700" />
+          </div>
+
+          <p className="text-sm text-zinc-500 dark:text-zinc-400">
+            Attributes locked until priorities are configured.
+          </p>
+        </div>
+      </CreationCard>
+    );
+  }
+
+  // If no metatype selected, show notice
   if (!selectedMetatype) {
     return (
       <CreationCard
         title="Attributes"
-        description="Allocate your attribute points"
+        description="Awaiting metatype"
         status="pending"
       >
-        <div className="flex items-center gap-2 rounded-lg border-2 border-dashed border-zinc-200 p-4 text-center dark:border-zinc-700">
-          <Lock className="h-5 w-5 text-zinc-400" />
-          <p className="text-sm text-zinc-500 dark:text-zinc-400">
-            Select a metatype first to see attribute limits
-          </p>
+        <div className="space-y-3">
+          <BudgetProgressBar
+            label="Attribute Points"
+            description="Distribute points among your physical and mental attributes"
+            spent={0}
+            total={attributePoints}
+            source={prioritySource}
+            isOver={false}
+          />
+
+          <div className="flex items-center gap-2 rounded-lg border border-blue-200 bg-blue-50 p-3 dark:border-blue-800 dark:bg-blue-900/20">
+            <Lock className="h-4 w-4 text-blue-500" />
+            <p className="text-sm text-blue-700 dark:text-blue-300">
+              Select a metatype to see adjusted attribute ranges
+            </p>
+          </div>
         </div>
       </CreationCard>
     );
@@ -239,24 +462,33 @@ export function AttributesCard({ state, updateState }: AttributesCardProps) {
   return (
     <CreationCard
       title="Attributes"
-      description={metatypeData?.name ? `${metatypeData.name} limits` : "Allocate points"}
+      description={
+        pointsRemaining === 0
+          ? "All points allocated"
+          : isOverBudget
+            ? `${Math.abs(pointsRemaining)} points over budget`
+            : `${pointsRemaining} of ${attributePoints} points remaining`
+      }
       status={validationStatus}
-      warningCount={pointsRemaining > 0 ? 1 : 0}
     >
       <div className="space-y-4">
         {/* Points budget */}
-        <BudgetIndicator
+        <BudgetProgressBar
           label="Attribute Points"
-          remaining={pointsRemaining}
+          description="Distribute points among your physical and mental attributes"
+          spent={pointsSpent}
           total={attributePoints}
+          source={prioritySource}
+          isOver={isOverBudget}
+          karmaRequired={karmaRequired}
         />
 
         {/* Physical attributes */}
         <div>
           <h4 className="mb-2 text-xs font-semibold uppercase tracking-wider text-zinc-500 dark:text-zinc-400">
-            Physical
+            Physical Attributes
           </h4>
-          <div className="grid gap-2 sm:grid-cols-2">
+          <div className="space-y-2">
             {PHYSICAL_ATTRIBUTES.map(renderAttribute)}
           </div>
         </div>
@@ -264,58 +496,10 @@ export function AttributesCard({ state, updateState }: AttributesCardProps) {
         {/* Mental attributes */}
         <div>
           <h4 className="mb-2 text-xs font-semibold uppercase tracking-wider text-zinc-500 dark:text-zinc-400">
-            Mental
+            Mental Attributes
           </h4>
-          <div className="grid gap-2 sm:grid-cols-2">
+          <div className="space-y-2">
             {MENTAL_ATTRIBUTES.map(renderAttribute)}
-          </div>
-        </div>
-
-        {/* Quick stats preview */}
-        <div className="rounded-lg border border-zinc-200 bg-zinc-50 p-3 dark:border-zinc-700 dark:bg-zinc-800/50">
-          <h4 className="text-xs font-semibold text-zinc-500 dark:text-zinc-400">
-            Quick Preview
-          </h4>
-          <div className="mt-2 grid grid-cols-2 gap-2 text-xs">
-            <div>
-              <span className="text-zinc-500">Physical Limit:</span>
-              <span className="ml-1 font-medium text-zinc-900 dark:text-zinc-100">
-                {Math.ceil(
-                  (getAttributeValue("strength") * 2 +
-                    getAttributeValue("body") +
-                    getAttributeValue("reaction")) /
-                    3
-                )}
-              </span>
-            </div>
-            <div>
-              <span className="text-zinc-500">Mental Limit:</span>
-              <span className="ml-1 font-medium text-zinc-900 dark:text-zinc-100">
-                {Math.ceil(
-                  (getAttributeValue("logic") * 2 +
-                    getAttributeValue("intuition") +
-                    getAttributeValue("willpower")) /
-                    3
-                )}
-              </span>
-            </div>
-            <div>
-              <span className="text-zinc-500">Social Limit:</span>
-              <span className="ml-1 font-medium text-zinc-900 dark:text-zinc-100">
-                {Math.ceil(
-                  (getAttributeValue("charisma") * 2 +
-                    getAttributeValue("willpower") +
-                    1) / // Assuming essence is 6, essence/2 rounded up = 3
-                    3
-                )}
-              </span>
-            </div>
-            <div>
-              <span className="text-zinc-500">Initiative:</span>
-              <span className="ml-1 font-medium text-zinc-900 dark:text-zinc-100">
-                {getAttributeValue("reaction") + getAttributeValue("intuition")} + 1d6
-              </span>
-            </div>
           </div>
         </div>
       </div>

@@ -3,14 +3,15 @@
 /**
  * QualitiesCard
  *
- * Compact card for quality selection in sheet-driven creation.
- * Shows positive and negative qualities with karma tracking.
+ * Card for quality selection in sheet-driven creation.
+ * Matches UI mocks from docs/prompts/design/character-sheet-creation-mode.md
  *
  * Features:
- * - Positive/negative quality lists
- * - Karma balance display
- * - Incompatibility warnings
- * - Quality search and filtering
+ * - Dual budget progress bars (Positive costs / Negative gains)
+ * - Tabbed selection with search
+ * - Quality cards with descriptions
+ * - Karma balance summary
+ * - Over-limit warnings
  */
 
 import { useMemo, useCallback, useState } from "react";
@@ -18,8 +19,12 @@ import { useQualities } from "@/lib/rules";
 import type { CreationState } from "@/lib/types";
 import type { QualityData } from "@/lib/rules/loader-types";
 import { useCreationBudgets } from "@/lib/contexts";
-import { CreationCard, BudgetIndicator } from "./shared";
-import { Check, Search, Plus as PlusIcon, Minus as MinusIcon, X } from "lucide-react";
+import { CreationCard } from "./shared";
+import { Check, Search, AlertTriangle, X } from "lucide-react";
+
+// =============================================================================
+// CONSTANTS
+// =============================================================================
 
 const MAX_POSITIVE_KARMA = 25;
 const MAX_NEGATIVE_KARMA = 25;
@@ -28,6 +33,169 @@ interface QualitiesCardProps {
   state: CreationState;
   updateState: (updates: Partial<CreationState>) => void;
 }
+
+// =============================================================================
+// BUDGET PROGRESS BAR COMPONENT
+// =============================================================================
+
+function QualityBudgetBar({
+  label,
+  description,
+  used,
+  max,
+  isOver,
+  isPositive,
+}: {
+  label: string;
+  description: string;
+  used: number;
+  max: number;
+  isOver: boolean;
+  isPositive: boolean;
+}) {
+  const remaining = max - used;
+  const percentage = max > 0 ? Math.min(100, (used / max) * 100) : 0;
+
+  return (
+    <div className={`rounded-lg border p-3 ${
+      isOver
+        ? "border-red-200 bg-red-50 dark:border-red-800 dark:bg-red-900/20"
+        : "border-zinc-200 bg-zinc-50 dark:border-zinc-700 dark:bg-zinc-800/50"
+    }`}>
+      <div className="flex items-center justify-between">
+        <div className="text-sm font-medium text-zinc-900 dark:text-zinc-100">
+          {label}
+        </div>
+        <div className={`text-lg font-bold ${
+          isOver
+            ? "text-red-600 dark:text-red-400"
+            : remaining === 0
+              ? "text-emerald-600 dark:text-emerald-400"
+              : isPositive
+                ? "text-blue-600 dark:text-blue-400"
+                : "text-amber-600 dark:text-amber-400"
+        }`}>
+          {used}
+        </div>
+      </div>
+
+      <div className="mt-1 text-xs text-zinc-500 dark:text-zinc-400">
+        {description}
+      </div>
+
+      <div className="mt-1 text-xs text-zinc-500 dark:text-zinc-400">
+        <span className="float-right">of {max} max</span>
+      </div>
+
+      {/* Progress bar */}
+      <div className="mt-2 h-2 overflow-hidden rounded-full bg-zinc-200 dark:bg-zinc-700">
+        <div
+          className={`h-full rounded-full transition-all ${
+            isOver
+              ? "bg-red-500"
+              : remaining === 0
+                ? "bg-emerald-500"
+                : isPositive
+                  ? "bg-blue-500"
+                  : "bg-amber-500"
+          }`}
+          style={{ width: `${percentage}%` }}
+        />
+      </div>
+
+      {/* Over budget warning */}
+      {isOver && (
+        <div className="mt-2 flex items-center gap-1.5 text-xs text-red-600 dark:text-red-400">
+          <AlertTriangle className="h-3.5 w-3.5" />
+          <span>{Math.abs(remaining)} karma over limit</span>
+        </div>
+      )}
+    </div>
+  );
+}
+
+// =============================================================================
+// QUALITY ROW COMPONENT
+// =============================================================================
+
+function QualityRow({
+  quality,
+  isSelected,
+  isPositive,
+  cost,
+  canAdd,
+  onToggle,
+}: {
+  quality: QualityData;
+  isSelected: boolean;
+  isPositive: boolean;
+  cost: number;
+  canAdd: boolean;
+  onToggle: () => void;
+}) {
+  return (
+    <button
+      onClick={onToggle}
+      disabled={!isSelected && !canAdd}
+      className={`w-full rounded-lg border p-3 text-left transition-all ${
+        isSelected
+          ? isPositive
+            ? "border-blue-300 bg-blue-50 dark:border-blue-700 dark:bg-blue-900/30"
+            : "border-amber-300 bg-amber-50 dark:border-amber-700 dark:bg-amber-900/30"
+          : canAdd
+          ? "border-zinc-200 bg-white hover:border-zinc-300 hover:bg-zinc-50 dark:border-zinc-700 dark:bg-zinc-900 dark:hover:border-zinc-600"
+          : "cursor-not-allowed border-zinc-200 bg-zinc-50 opacity-50 dark:border-zinc-700 dark:bg-zinc-900"
+      }`}
+    >
+      {/* Header row */}
+      <div className="flex items-center justify-between">
+        <div className="flex items-center gap-2">
+          {/* Checkbox */}
+          <div
+            className={`flex h-5 w-5 shrink-0 items-center justify-center rounded border-2 transition-colors ${
+              isSelected
+                ? isPositive
+                  ? "border-blue-500 bg-blue-500 text-white"
+                  : "border-amber-500 bg-amber-500 text-white"
+                : "border-zinc-300 dark:border-zinc-600"
+            }`}
+          >
+            {isSelected && <Check className="h-3 w-3" />}
+          </div>
+
+          <span className="text-sm font-medium text-zinc-900 dark:text-zinc-100">
+            {quality.name}
+          </span>
+
+          {quality.levels && quality.levels.length > 0 && (
+            <span className="rounded bg-zinc-200 px-1.5 py-0.5 text-[10px] text-zinc-600 dark:bg-zinc-700 dark:text-zinc-400">
+              levels
+            </span>
+          )}
+        </div>
+
+        <span className={`text-sm font-medium ${
+          isPositive
+            ? "text-blue-600 dark:text-blue-400"
+            : "text-amber-600 dark:text-amber-400"
+        }`}>
+          {isPositive ? `${cost} karma` : `+${cost} karma`}
+        </span>
+      </div>
+
+      {/* Description */}
+      {quality.description && (
+        <p className="mt-1 pl-7 text-xs text-zinc-500 dark:text-zinc-400 line-clamp-2">
+          {quality.description}
+        </p>
+      )}
+    </button>
+  );
+}
+
+// =============================================================================
+// MAIN COMPONENT
+// =============================================================================
 
 export function QualitiesCard({ state, updateState }: QualitiesCardProps) {
   const { positive: positiveQualities, negative: negativeQualities } = useQualities();
@@ -81,7 +249,9 @@ export function QualitiesCard({ state, updateState }: QualitiesCardProps) {
   }, [selectedNegative, negativeQualities, getQualityCost]);
 
   const startingKarma = karmaBudget?.total || 25;
-  const karmaRemaining = startingKarma + negativeKarmaGained - positiveKarmaSpent;
+  const karmaBalance = startingKarma + negativeKarmaGained - positiveKarmaSpent;
+  const isPositiveOver = positiveKarmaSpent > MAX_POSITIVE_KARMA;
+  const isNegativeOver = negativeKarmaGained > MAX_NEGATIVE_KARMA;
 
   // Filter qualities
   const filterQualities = useCallback(
@@ -120,15 +290,13 @@ export function QualitiesCard({ state, updateState }: QualitiesCardProps) {
       const newLevels = { ...qualityLevels };
 
       if (isSelected) {
-        // Remove quality
         newSelected = newSelected.filter((id) => id !== qualityId);
         delete newLevels[qualityId];
       } else {
-        // Check karma limits
         const cost = getQualityCost(quality, qualityId);
         if (isPositive) {
           if (positiveKarmaSpent + cost > MAX_POSITIVE_KARMA) return;
-          if (karmaRemaining < cost) return;
+          if (karmaBalance < cost) return;
         } else {
           if (negativeKarmaGained + cost > MAX_NEGATIVE_KARMA) return;
         }
@@ -138,7 +306,6 @@ export function QualitiesCard({ state, updateState }: QualitiesCardProps) {
         }
       }
 
-      // Calculate new budgets
       const newPosSpent = isPositive
         ? newSelected.reduce((sum, id) => {
             const q = positiveQualities.find((x) => x.id === id);
@@ -155,15 +322,13 @@ export function QualitiesCard({ state, updateState }: QualitiesCardProps) {
           }, 0)
         : negativeKarmaGained;
 
-      const newSelections = {
-        ...state.selections,
-        positiveQualities: isPositive ? newSelected : selectedPositive,
-        negativeQualities: isPositive ? selectedNegative : newSelected,
-        qualityLevels: newLevels,
-      };
-
       updateState({
-        selections: newSelections,
+        selections: {
+          ...state.selections,
+          positiveQualities: isPositive ? newSelected : selectedPositive,
+          negativeQualities: isPositive ? selectedNegative : newSelected,
+          qualityLevels: newLevels,
+        },
         budgets: {
           ...state.budgets,
           "karma-spent-positive": isPositive ? newPosSpent : positiveKarmaSpent,
@@ -180,7 +345,7 @@ export function QualitiesCard({ state, updateState }: QualitiesCardProps) {
       getQualityCost,
       positiveKarmaSpent,
       negativeKarmaGained,
-      karmaRemaining,
+      karmaBalance,
       state.selections,
       state.budgets,
       updateState,
@@ -189,103 +354,40 @@ export function QualitiesCard({ state, updateState }: QualitiesCardProps) {
 
   // Get validation status
   const validationStatus = useMemo(() => {
-    if (positiveKarmaSpent > MAX_POSITIVE_KARMA || negativeKarmaGained > MAX_NEGATIVE_KARMA) {
-      return "error";
-    }
-    if (selectedPositive.length > 0 || selectedNegative.length > 0) {
-      return "valid";
-    }
+    if (isPositiveOver || isNegativeOver) return "error";
+    if (selectedPositive.length > 0 || selectedNegative.length > 0) return "valid";
     return "pending";
-  }, [positiveKarmaSpent, negativeKarmaGained, selectedPositive, selectedNegative]);
-
-  // Render quality item
-  const renderQuality = (quality: QualityData, isPositive: boolean) => {
-    const isSelected = isPositive
-      ? selectedPositive.includes(quality.id)
-      : selectedNegative.includes(quality.id);
-    const cost = getQualityCost(quality, quality.id);
-
-    // Check if can be added
-    const canAdd = isPositive
-      ? positiveKarmaSpent + cost <= MAX_POSITIVE_KARMA && karmaRemaining >= cost
-      : negativeKarmaGained + cost <= MAX_NEGATIVE_KARMA;
-
-    return (
-      <button
-        key={quality.id}
-        onClick={() => toggleQuality(quality.id, isPositive)}
-        disabled={!isSelected && !canAdd}
-        className={`flex w-full items-center justify-between rounded-lg px-3 py-2 text-left transition-all ${
-          isSelected
-            ? isPositive
-              ? "bg-blue-50 ring-1 ring-blue-300 dark:bg-blue-900/30 dark:ring-blue-700"
-              : "bg-red-50 ring-1 ring-red-300 dark:bg-red-900/30 dark:ring-red-700"
-            : canAdd
-            ? "bg-zinc-50 hover:bg-zinc-100 dark:bg-zinc-800/50 dark:hover:bg-zinc-800"
-            : "cursor-not-allowed bg-zinc-50 opacity-50 dark:bg-zinc-800/50"
-        }`}
-      >
-        <div className="flex items-center gap-2">
-          <div
-            className={`flex h-5 w-5 shrink-0 items-center justify-center rounded border-2 transition-colors ${
-              isSelected
-                ? isPositive
-                  ? "border-blue-500 bg-blue-500 text-white"
-                  : "border-red-500 bg-red-500 text-white"
-                : "border-zinc-300 dark:border-zinc-600"
-            }`}
-          >
-            {isSelected && <Check className="h-3 w-3" />}
-          </div>
-          <div>
-            <span className="text-sm text-zinc-900 dark:text-zinc-100">{quality.name}</span>
-            {quality.levels && quality.levels.length > 0 && (
-              <span className="ml-1 text-xs text-zinc-400">(levels)</span>
-            )}
-          </div>
-        </div>
-        <span
-          className={`text-xs font-medium ${
-            isPositive
-              ? "text-blue-600 dark:text-blue-400"
-              : "text-red-600 dark:text-red-400"
-          }`}
-        >
-          {isPositive ? `-${cost}` : `+${cost}`} karma
-        </span>
-      </button>
-    );
-  };
+  }, [isPositiveOver, isNegativeOver, selectedPositive, selectedNegative]);
 
   return (
     <CreationCard
       title="Qualities"
-      description="Select positive and negative traits"
+      description={
+        selectedPositive.length + selectedNegative.length > 0
+          ? `${selectedPositive.length} positive, ${selectedNegative.length} negative`
+          : "Optional traits"
+      }
       status={validationStatus}
     >
       <div className="space-y-4">
-        {/* Karma summary */}
-        <div className="grid gap-2 sm:grid-cols-3">
-          <BudgetIndicator
-            label="Karma"
-            remaining={karmaRemaining}
-            total={startingKarma + negativeKarmaGained}
-            compact
+        {/* Budget indicators */}
+        <div className="grid gap-2 sm:grid-cols-2">
+          <QualityBudgetBar
+            label="Positive Qualities"
+            description="Cost karma to acquire"
+            used={positiveKarmaSpent}
+            max={MAX_POSITIVE_KARMA}
+            isOver={isPositiveOver}
+            isPositive={true}
           />
-          <div className="flex items-center gap-1 text-xs">
-            <PlusIcon className="h-3 w-3 text-blue-500" />
-            <span className="text-zinc-500">Positive:</span>
-            <span className="font-medium text-blue-600 dark:text-blue-400">
-              {positiveKarmaSpent}/{MAX_POSITIVE_KARMA}
-            </span>
-          </div>
-          <div className="flex items-center gap-1 text-xs">
-            <MinusIcon className="h-3 w-3 text-red-500" />
-            <span className="text-zinc-500">Negative:</span>
-            <span className="font-medium text-red-600 dark:text-red-400">
-              {negativeKarmaGained}/{MAX_NEGATIVE_KARMA}
-            </span>
-          </div>
+          <QualityBudgetBar
+            label="Negative Qualities"
+            description="Grant karma when taken"
+            used={negativeKarmaGained}
+            max={MAX_NEGATIVE_KARMA}
+            isOver={isNegativeOver}
+            isPositive={false}
+          />
         </div>
 
         {/* Search */}
@@ -316,7 +418,7 @@ export function QualitiesCard({ state, updateState }: QualitiesCardProps) {
             onClick={() => setActiveTab("negative")}
             className={`flex-1 rounded-md px-3 py-1.5 text-sm font-medium transition-colors ${
               activeTab === "negative"
-                ? "bg-white text-red-600 shadow dark:bg-zinc-700 dark:text-red-400"
+                ? "bg-white text-amber-600 shadow dark:bg-zinc-700 dark:text-amber-400"
                 : "text-zinc-600 hover:text-zinc-900 dark:text-zinc-400 dark:hover:text-zinc-200"
             }`}
           >
@@ -325,54 +427,100 @@ export function QualitiesCard({ state, updateState }: QualitiesCardProps) {
         </div>
 
         {/* Quality list */}
-        <div className="max-h-64 space-y-1 overflow-y-auto">
+        <div className="max-h-64 space-y-2 overflow-y-auto">
           {activeTab === "positive"
-            ? filteredPositive.map((q) => renderQuality(q, true))
-            : filteredNegative.map((q) => renderQuality(q, false))}
+            ? filteredPositive.map((quality) => {
+                const isSelected = selectedPositive.includes(quality.id);
+                const cost = getQualityCost(quality, quality.id);
+                const canAdd = positiveKarmaSpent + cost <= MAX_POSITIVE_KARMA && karmaBalance >= cost;
+
+                return (
+                  <QualityRow
+                    key={quality.id}
+                    quality={quality}
+                    isSelected={isSelected}
+                    isPositive={true}
+                    cost={cost}
+                    canAdd={canAdd}
+                    onToggle={() => toggleQuality(quality.id, true)}
+                  />
+                );
+              })
+            : filteredNegative.map((quality) => {
+                const isSelected = selectedNegative.includes(quality.id);
+                const cost = getQualityCost(quality, quality.id);
+                const canAdd = negativeKarmaGained + cost <= MAX_NEGATIVE_KARMA;
+
+                return (
+                  <QualityRow
+                    key={quality.id}
+                    quality={quality}
+                    isSelected={isSelected}
+                    isPositive={false}
+                    cost={cost}
+                    canAdd={canAdd}
+                    onToggle={() => toggleQuality(quality.id, false)}
+                  />
+                );
+              })}
+        </div>
+
+        {/* Karma balance summary */}
+        <div className="rounded-lg bg-zinc-100 p-3 text-center dark:bg-zinc-800">
+          <div className="text-xs text-zinc-500 dark:text-zinc-400">Karma Balance</div>
+          <div className="mt-1 text-sm text-zinc-700 dark:text-zinc-300">
+            {startingKarma} (starting) − {positiveKarmaSpent} (positive) + {negativeKarmaGained} (negative) ={" "}
+            <span className={`font-bold ${karmaBalance >= 0 ? "text-emerald-600 dark:text-emerald-400" : "text-red-600 dark:text-red-400"}`}>
+              {karmaBalance} karma
+            </span>
+          </div>
         </div>
 
         {/* Selected qualities summary */}
         {(selectedPositive.length > 0 || selectedNegative.length > 0) && (
-          <div className="rounded-lg bg-zinc-50 p-3 dark:bg-zinc-800/50">
-            <h4 className="text-xs font-semibold text-zinc-500 dark:text-zinc-400">
-              Selected Qualities
-            </h4>
-            <div className="mt-2 flex flex-wrap gap-1">
-              {selectedPositive.map((id) => {
-                const q = positiveQualities.find((x) => x.id === id);
-                return q ? (
-                  <span
-                    key={id}
-                    className="inline-flex items-center gap-1 rounded bg-blue-100 px-2 py-0.5 text-xs text-blue-700 dark:bg-blue-900/50 dark:text-blue-300"
-                  >
-                    {q.name}
-                    <button
-                      onClick={() => toggleQuality(id, true)}
-                      className="hover:text-blue-900 dark:hover:text-blue-100"
+          <div className="space-y-2">
+            {selectedPositive.length > 0 && (
+              <div className="flex flex-wrap gap-1">
+                {selectedPositive.map((id) => {
+                  const q = positiveQualities.find((x) => x.id === id);
+                  return q ? (
+                    <span
+                      key={id}
+                      className="inline-flex items-center gap-1 rounded bg-blue-100 px-2 py-0.5 text-xs text-blue-700 dark:bg-blue-900/50 dark:text-blue-300"
                     >
-                      <X className="h-3 w-3" />
-                    </button>
-                  </span>
-                ) : null;
-              })}
-              {selectedNegative.map((id) => {
-                const q = negativeQualities.find((x) => x.id === id);
-                return q ? (
-                  <span
-                    key={id}
-                    className="inline-flex items-center gap-1 rounded bg-red-100 px-2 py-0.5 text-xs text-red-700 dark:bg-red-900/50 dark:text-red-300"
-                  >
-                    {q.name}
-                    <button
-                      onClick={() => toggleQuality(id, false)}
-                      className="hover:text-red-900 dark:hover:text-red-100"
+                      {q.name}
+                      <button
+                        onClick={() => toggleQuality(id, true)}
+                        className="hover:text-blue-900 dark:hover:text-blue-100"
+                      >
+                        <X className="h-3 w-3" />
+                      </button>
+                    </span>
+                  ) : null;
+                })}
+              </div>
+            )}
+            {selectedNegative.length > 0 && (
+              <div className="flex flex-wrap gap-1">
+                {selectedNegative.map((id) => {
+                  const q = negativeQualities.find((x) => x.id === id);
+                  return q ? (
+                    <span
+                      key={id}
+                      className="inline-flex items-center gap-1 rounded bg-amber-100 px-2 py-0.5 text-xs text-amber-700 dark:bg-amber-900/50 dark:text-amber-300"
                     >
-                      <X className="h-3 w-3" />
-                    </button>
-                  </span>
-                ) : null;
-              })}
-            </div>
+                      {q.name}
+                      <button
+                        onClick={() => toggleQuality(id, false)}
+                        className="hover:text-amber-900 dark:hover:text-amber-100"
+                      >
+                        <X className="h-3 w-3" />
+                      </button>
+                    </span>
+                  ) : null;
+                })}
+              </div>
+            )}
           </div>
         )}
       </div>

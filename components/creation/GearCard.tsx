@@ -3,15 +3,16 @@
 /**
  * GearCard
  *
- * Compact card for gear purchasing in sheet-driven creation.
- * Handles weapons, armor, and general equipment.
+ * Card for gear purchasing in sheet-driven creation.
+ * Matches UI mocks from docs/prompts/design/character-sheet-creation-mode.md
  *
  * Features:
+ * - Progress bar for nuyen budget
  * - Category tabs (weapons, armor, gear, foci)
  * - Search and filter
- * - Nuyen budget tracking
  * - Karma-to-nuyen conversion
- * - Shopping cart display
+ * - Shopping cart with item display
+ * - Modal-style gear selection
  */
 
 import { useMemo, useCallback, useState } from "react";
@@ -27,8 +28,8 @@ import type { FocusCatalogItemData } from "@/lib/rules/loader-types";
 import type { CreationState, GearItem, Weapon, ArmorItem } from "@/lib/types";
 import type { FocusItem } from "@/lib/types/character";
 import { useCreationBudgets } from "@/lib/contexts";
-import { CreationCard, BudgetIndicator } from "./shared";
-import { Lock, Search, X, Plus, Minus, ShoppingCart, Sword, Shield, Backpack, Gem } from "lucide-react";
+import { CreationCard } from "./shared";
+import { Lock, Search, X, Plus, Minus, ShoppingCart, Sword, Shield, Backpack, Gem, AlertTriangle } from "lucide-react";
 
 // =============================================================================
 // CONSTANTS
@@ -97,6 +98,171 @@ function getAllWeapons(catalog: GearCatalogData | null): WeaponData[] {
 interface GearCardProps {
   state: CreationState;
   updateState: (updates: Partial<CreationState>) => void;
+}
+
+// =============================================================================
+// BUDGET PROGRESS BAR COMPONENT
+// =============================================================================
+
+function BudgetProgressBar({
+  label,
+  description,
+  spent,
+  total,
+  source,
+  isOver,
+}: {
+  label: string;
+  description: string;
+  spent: number;
+  total: number;
+  source: string;
+  isOver: boolean;
+}) {
+  const remaining = total - spent;
+  const percentage = Math.min(100, (spent / total) * 100);
+
+  return (
+    <div className={`rounded-lg border p-3 ${
+      isOver
+        ? "border-red-200 bg-red-50 dark:border-red-800 dark:bg-red-900/20"
+        : "border-zinc-200 bg-zinc-50 dark:border-zinc-700 dark:bg-zinc-800/50"
+    }`}>
+      <div className="flex items-center justify-between">
+        <div className="text-sm font-medium text-zinc-900 dark:text-zinc-100">
+          {label}
+        </div>
+        <div className={`text-lg font-bold ${
+          isOver
+            ? "text-red-600 dark:text-red-400"
+            : remaining === 0
+              ? "text-emerald-600 dark:text-emerald-400"
+              : "text-zinc-900 dark:text-zinc-100"
+        }`}>
+          {formatCurrency(remaining)}¥
+        </div>
+      </div>
+
+      <div className="mt-1 text-xs text-zinc-500 dark:text-zinc-400">
+        {description}
+      </div>
+
+      <div className="mt-1 text-xs text-zinc-500 dark:text-zinc-400">
+        {source}
+        <span className="float-right">
+          of {formatCurrency(total)}¥ remaining
+        </span>
+      </div>
+
+      {/* Progress bar */}
+      <div className="mt-2 h-2 overflow-hidden rounded-full bg-zinc-200 dark:bg-zinc-700">
+        <div
+          className={`h-full rounded-full transition-all ${
+            isOver
+              ? "bg-red-500"
+              : remaining === 0
+                ? "bg-emerald-500"
+                : "bg-amber-500"
+          }`}
+          style={{ width: `${percentage}%` }}
+        />
+      </div>
+
+      {/* Over budget warning */}
+      {isOver && (
+        <div className="mt-2 flex items-center gap-1.5 text-xs text-red-600 dark:text-red-400">
+          <AlertTriangle className="h-3.5 w-3.5" />
+          <span>
+            {formatCurrency(Math.abs(remaining))}¥ over budget
+          </span>
+        </div>
+      )}
+    </div>
+  );
+}
+
+// =============================================================================
+// GEAR ITEM ROW COMPONENT
+// =============================================================================
+
+function GearItemRow({
+  name,
+  stats,
+  cost,
+  availability,
+  canAfford,
+  onAdd,
+}: {
+  name: string;
+  stats?: React.ReactNode;
+  cost: number;
+  availability: string;
+  canAfford: boolean;
+  onAdd: () => void;
+}) {
+  return (
+    <button
+      onClick={onAdd}
+      disabled={!canAfford}
+      className={`flex w-full items-center justify-between rounded-lg border p-3 text-left transition-all ${
+        canAfford
+          ? "border-zinc-200 bg-white hover:border-emerald-300 hover:bg-emerald-50 dark:border-zinc-700 dark:bg-zinc-900 dark:hover:border-emerald-700 dark:hover:bg-emerald-900/20"
+          : "cursor-not-allowed border-zinc-200 bg-zinc-100 opacity-50 dark:border-zinc-700 dark:bg-zinc-800"
+      }`}
+    >
+      <div className="flex-1 min-w-0">
+        <div className="font-medium text-zinc-900 dark:text-zinc-100">
+          {name}
+        </div>
+        <div className="mt-0.5 flex flex-wrap gap-2 text-xs text-zinc-500 dark:text-zinc-400">
+          {stats}
+          <span>Avail: {availability}</span>
+        </div>
+      </div>
+      <div className="ml-3 flex flex-col items-end gap-1">
+        <span className="text-sm font-medium text-zinc-900 dark:text-zinc-100">
+          {formatCurrency(cost)}¥
+        </span>
+        {canAfford && (
+          <span className="flex items-center gap-1 text-xs text-emerald-600 dark:text-emerald-400">
+            <Plus className="h-3 w-3" />
+            Add
+          </span>
+        )}
+      </div>
+    </button>
+  );
+}
+
+// =============================================================================
+// CART ITEM ROW COMPONENT
+// =============================================================================
+
+function CartItemRow({
+  name,
+  cost,
+  onRemove,
+}: {
+  name: string;
+  cost: number;
+  onRemove: () => void;
+}) {
+  return (
+    <div className="flex items-center justify-between py-1.5">
+      <span className="truncate text-sm text-zinc-700 dark:text-zinc-300">
+        {name}
+      </span>
+      <div className="flex items-center gap-2">
+        <span className="text-xs text-zinc-500">{formatCurrency(cost)}¥</span>
+        <button
+          onClick={onRemove}
+          className="rounded p-0.5 text-zinc-400 hover:bg-red-100 hover:text-red-600 dark:hover:bg-red-900/30 dark:hover:text-red-400"
+        >
+          <X className="h-3.5 w-3.5" />
+        </button>
+      </div>
+    </div>
+  );
 }
 
 // =============================================================================
@@ -171,9 +337,17 @@ export function GearCard({ state, updateState }: GearCardProps) {
   const lifestyleSpent = (state.budgets?.["nuyen-spent-lifestyle"] as number) || 0;
   const totalSpent = weaponsSpent + armorSpent + gearSpent + fociSpent + augmentationSpent + lifestyleSpent;
   const remaining = totalNuyen - totalSpent;
+  const isOverBudget = remaining < 0;
 
   // Total item count
   const totalItems = selectedWeapons.length + selectedArmor.length + selectedGear.length + selectedFoci.length;
+
+  // Priority source
+  const prioritySource = useMemo(() => {
+    const resourcePriority = state.priorities?.resources;
+    if (!resourcePriority) return "";
+    return `${formatCurrency(baseNuyen)}¥ from Priority ${resourcePriority}${convertedNuyen > 0 ? ` + ${formatCurrency(convertedNuyen)}¥ from karma` : ""}`;
+  }, [state.priorities?.resources, baseNuyen, convertedNuyen]);
 
   // Handle karma conversion
   const handleKarmaConversion = useCallback(
@@ -318,10 +492,9 @@ export function GearCard({ state, updateState }: GearCardProps) {
     [remaining, selectedGear, state.selections, updateState]
   );
 
-  // Add focus - calculate cost from multipliers
+  // Add focus
   const addFocus = useCallback(
     (focus: FocusCatalogItemData) => {
-      // For foci, cost = force × costMultiplier, we'll use force 1 by default
       const force = 1;
       const cost = force * focus.costMultiplier;
       const bondingCost = force * focus.bondingKarmaMultiplier;
@@ -401,21 +574,23 @@ export function GearCard({ state, updateState }: GearCardProps) {
 
   // Validation status
   const validationStatus = useMemo(() => {
-    if (remaining < 0) return "error";
+    if (isOverBudget) return "error";
     if (totalItems > 0) return "valid";
     return "pending";
-  }, [remaining, totalItems]);
+  }, [isOverBudget, totalItems]);
 
   // Check prerequisites
   const hasPriorities = state.priorities?.metatype && state.priorities?.resources;
   if (!hasPriorities) {
     return (
       <CreationCard title="Gear" description="Purchase equipment" status="pending">
-        <div className="flex items-center gap-2 rounded-lg border-2 border-dashed border-zinc-200 p-4 text-center dark:border-zinc-700">
-          <Lock className="h-5 w-5 text-zinc-400" />
-          <p className="text-sm text-zinc-500 dark:text-zinc-400">
-            Set priorities first
-          </p>
+        <div className="space-y-3">
+          <div className="flex items-center gap-2 rounded-lg border-2 border-dashed border-zinc-200 p-4 dark:border-zinc-700">
+            <Lock className="h-5 w-5 text-zinc-400" />
+            <p className="text-sm text-zinc-500 dark:text-zinc-400">
+              Set priorities first
+            </p>
+          </div>
         </div>
       </CreationCard>
     );
@@ -429,7 +604,11 @@ export function GearCard({ state, updateState }: GearCardProps) {
       headerAction={
         <button
           onClick={() => setShowCart(!showCart)}
-          className="flex items-center gap-1 rounded-lg bg-zinc-100 px-2 py-1 text-xs transition-colors hover:bg-zinc-200 dark:bg-zinc-800 dark:hover:bg-zinc-700"
+          className={`flex items-center gap-1.5 rounded-lg px-2.5 py-1.5 text-xs font-medium transition-colors ${
+            showCart
+              ? "bg-emerald-100 text-emerald-700 dark:bg-emerald-900/40 dark:text-emerald-300"
+              : "bg-zinc-100 text-zinc-600 hover:bg-zinc-200 dark:bg-zinc-800 dark:text-zinc-400 dark:hover:bg-zinc-700"
+          }`}
         >
           <ShoppingCart className="h-3.5 w-3.5" />
           {totalItems}
@@ -437,107 +616,107 @@ export function GearCard({ state, updateState }: GearCardProps) {
       }
     >
       <div className="space-y-4">
-        {/* Budget indicator */}
-        <BudgetIndicator
-          label="Nuyen"
-          remaining={remaining}
+        {/* Nuyen Budget */}
+        <BudgetProgressBar
+          label="Nuyen Budget"
+          description="Purchase weapons, armor, gear, and other equipment"
+          spent={totalSpent}
           total={totalNuyen}
-          displayFormat="currency"
-          compact
+          source={prioritySource}
+          isOver={isOverBudget}
         />
 
         {/* Karma conversion */}
-        <div className="flex items-center justify-between rounded-lg bg-zinc-50 p-2 dark:bg-zinc-800/50">
-          <span className="text-xs text-zinc-600 dark:text-zinc-400">
-            Karma → Nuyen ({KARMA_TO_NUYEN_RATE}¥ each)
-          </span>
-          <div className="flex items-center gap-1">
-            <button
-              onClick={() => handleKarmaConversion(-1)}
-              disabled={karmaConversion <= 0}
-              className={`flex h-5 w-5 items-center justify-center rounded text-xs ${
-                karmaConversion > 0
-                  ? "bg-zinc-200 text-zinc-700 hover:bg-zinc-300 dark:bg-zinc-700 dark:text-zinc-200"
-                  : "cursor-not-allowed bg-zinc-100 text-zinc-300 dark:bg-zinc-800 dark:text-zinc-600"
-              }`}
-            >
-              <Minus className="h-3 w-3" />
-            </button>
-            <span className="w-6 text-center text-sm font-medium">{karmaConversion}</span>
-            <button
-              onClick={() => handleKarmaConversion(1)}
-              disabled={karmaConversion >= MAX_KARMA_CONVERSION || karmaRemaining <= 0}
-              className={`flex h-5 w-5 items-center justify-center rounded text-xs ${
-                karmaConversion < MAX_KARMA_CONVERSION && karmaRemaining > 0
-                  ? "bg-amber-500 text-white hover:bg-amber-600"
-                  : "cursor-not-allowed bg-zinc-100 text-zinc-300 dark:bg-zinc-800 dark:text-zinc-600"
-              }`}
-            >
-              <Plus className="h-3 w-3" />
-            </button>
-            <span className="ml-1 text-xs text-zinc-500">
-              (+{formatCurrency(convertedNuyen)}¥)
-            </span>
+        <div className="rounded-lg border border-amber-200 bg-amber-50 p-3 dark:border-amber-800 dark:bg-amber-900/20">
+          <div className="flex items-center justify-between">
+            <div>
+              <div className="text-sm font-medium text-amber-800 dark:text-amber-200">
+                Karma → Nuyen
+              </div>
+              <div className="text-xs text-amber-600 dark:text-amber-400">
+                {formatCurrency(KARMA_TO_NUYEN_RATE)}¥ per karma (max {MAX_KARMA_CONVERSION})
+              </div>
+            </div>
+            <div className="flex items-center gap-2">
+              <button
+                onClick={() => handleKarmaConversion(-1)}
+                disabled={karmaConversion <= 0}
+                className={`flex h-7 w-7 items-center justify-center rounded transition-colors ${
+                  karmaConversion > 0
+                    ? "bg-amber-100 text-amber-700 hover:bg-amber-200 dark:bg-amber-900/40 dark:text-amber-300"
+                    : "cursor-not-allowed bg-zinc-100 text-zinc-300 dark:bg-zinc-800 dark:text-zinc-600"
+                }`}
+              >
+                <Minus className="h-4 w-4" />
+              </button>
+              <div className="flex h-8 w-10 items-center justify-center rounded bg-white text-base font-bold text-amber-700 dark:bg-zinc-800 dark:text-amber-300">
+                {karmaConversion}
+              </div>
+              <button
+                onClick={() => handleKarmaConversion(1)}
+                disabled={karmaConversion >= MAX_KARMA_CONVERSION || karmaRemaining <= 0}
+                className={`flex h-7 w-7 items-center justify-center rounded transition-colors ${
+                  karmaConversion < MAX_KARMA_CONVERSION && karmaRemaining > 0
+                    ? "bg-amber-500 text-white hover:bg-amber-600"
+                    : "cursor-not-allowed bg-zinc-100 text-zinc-300 dark:bg-zinc-800 dark:text-zinc-600"
+                }`}
+              >
+                <Plus className="h-4 w-4" />
+              </button>
+            </div>
           </div>
+          {convertedNuyen > 0 && (
+            <div className="mt-2 text-xs text-amber-600 dark:text-amber-400">
+              +{formatCurrency(convertedNuyen)}¥ from {karmaConversion} karma
+            </div>
+          )}
         </div>
 
-        {/* Shopping cart (collapsible) */}
+        {/* Shopping cart */}
         {showCart && totalItems > 0 && (
-          <div className="space-y-2 rounded-lg border border-zinc-200 bg-zinc-50 p-3 dark:border-zinc-700 dark:bg-zinc-800/50">
-            <h4 className="text-xs font-semibold text-zinc-500 dark:text-zinc-400">
-              Cart ({totalItems} items)
-            </h4>
-            <div className="max-h-32 space-y-1 overflow-y-auto text-xs">
+          <div className="rounded-lg border border-zinc-200 bg-zinc-50 p-3 dark:border-zinc-700 dark:bg-zinc-800/50">
+            <div className="flex items-center justify-between mb-2">
+              <h4 className="text-xs font-semibold uppercase tracking-wider text-zinc-500 dark:text-zinc-400">
+                Shopping Cart ({totalItems})
+              </h4>
+              <span className="text-xs text-zinc-500">
+                {formatCurrency(weaponsSpent + armorSpent + gearSpent + fociSpent)}¥
+              </span>
+            </div>
+
+            <div className="max-h-40 overflow-y-auto divide-y divide-zinc-200 dark:divide-zinc-700">
               {selectedWeapons.map((w) => (
-                <div key={w.id} className="flex items-center justify-between">
-                  <span className="truncate">{w.name}</span>
-                  <div className="flex items-center gap-2">
-                    <span className="text-zinc-500">{formatCurrency(w.cost)}¥</span>
-                    <button onClick={() => w.id && removeWeapon(w.id)} className="text-red-500 hover:text-red-700">
-                      <X className="h-3 w-3" />
-                    </button>
-                  </div>
-                </div>
+                <CartItemRow
+                  key={w.id}
+                  name={w.name}
+                  cost={w.cost}
+                  onRemove={() => w.id && removeWeapon(w.id)}
+                />
               ))}
               {selectedArmor.map((a) => (
-                <div key={a.id} className="flex items-center justify-between">
-                  <span className="truncate">{a.name}</span>
-                  <div className="flex items-center gap-2">
-                    <span className="text-zinc-500">{formatCurrency(a.cost)}¥</span>
-                    <button onClick={() => a.id && removeArmor(a.id)} className="text-red-500 hover:text-red-700">
-                      <X className="h-3 w-3" />
-                    </button>
-                  </div>
-                </div>
+                <CartItemRow
+                  key={a.id}
+                  name={a.name}
+                  cost={a.cost}
+                  onRemove={() => a.id && removeArmor(a.id)}
+                />
               ))}
               {selectedGear.map((g) => (
-                <div key={g.id} className="flex items-center justify-between">
-                  <span className="truncate">{g.name}</span>
-                  <div className="flex items-center gap-2">
-                    <span className="text-zinc-500">{formatCurrency(g.cost)}¥</span>
-                    <button onClick={() => g.id && removeGear(g.id)} className="text-red-500 hover:text-red-700">
-                      <X className="h-3 w-3" />
-                    </button>
-                  </div>
-                </div>
+                <CartItemRow
+                  key={g.id}
+                  name={g.name}
+                  cost={g.cost}
+                  onRemove={() => g.id && removeGear(g.id)}
+                />
               ))}
               {selectedFoci.map((f) => (
-                <div key={f.id} className="flex items-center justify-between">
-                  <span className="truncate">{f.name}</span>
-                  <div className="flex items-center gap-2">
-                    <span className="text-zinc-500">{formatCurrency(f.cost)}¥</span>
-                    <button onClick={() => f.id && removeFocus(f.id)} className="text-red-500 hover:text-red-700">
-                      <X className="h-3 w-3" />
-                    </button>
-                  </div>
-                </div>
+                <CartItemRow
+                  key={f.id}
+                  name={f.name}
+                  cost={f.cost}
+                  onRemove={() => f.id && removeFocus(f.id)}
+                />
               ))}
-            </div>
-            <div className="border-t border-zinc-200 pt-2 dark:border-zinc-700">
-              <div className="flex justify-between text-xs font-medium">
-                <span>Total Spent:</span>
-                <span>{formatCurrency(weaponsSpent + armorSpent + gearSpent + fociSpent)}¥</span>
-              </div>
             </div>
           </div>
         )}
@@ -549,6 +728,12 @@ export function GearCard({ state, updateState }: GearCardProps) {
             if (tab.id === "foci" && !isMagical) return null;
 
             const Icon = tab.icon;
+            const count =
+              tab.id === "weapons" ? selectedWeapons.length :
+              tab.id === "armor" ? selectedArmor.length :
+              tab.id === "gear" ? selectedGear.length :
+              tab.id === "foci" ? selectedFoci.length : 0;
+
             return (
               <button
                 key={tab.id}
@@ -556,14 +741,25 @@ export function GearCard({ state, updateState }: GearCardProps) {
                   setActiveTab(tab.id);
                   setSearchQuery("");
                 }}
-                className={`flex flex-1 items-center justify-center gap-1 rounded-lg px-2 py-1.5 text-xs font-medium transition-colors ${
+                className={`flex flex-1 items-center justify-center gap-1.5 rounded-lg px-2 py-2 text-xs font-medium transition-colors ${
                   activeTab === tab.id
-                    ? "bg-emerald-500 text-white"
-                    : "bg-zinc-100 text-zinc-600 hover:bg-zinc-200 dark:bg-zinc-800 dark:text-zinc-400"
+                    ? "bg-amber-500 text-white"
+                    : count > 0
+                      ? "bg-amber-100 text-amber-700 dark:bg-amber-900/40 dark:text-amber-300"
+                      : "bg-zinc-100 text-zinc-600 hover:bg-zinc-200 dark:bg-zinc-800 dark:text-zinc-400"
                 }`}
               >
                 <Icon className="h-3.5 w-3.5" />
-                {tab.label}
+                <span>{tab.label}</span>
+                {count > 0 && (
+                  <span className={`ml-0.5 rounded-full px-1.5 py-0.5 text-[10px] ${
+                    activeTab === tab.id
+                      ? "bg-white/20"
+                      : "bg-amber-200/50 dark:bg-amber-800/50"
+                  }`}>
+                    {count}
+                  </span>
+                )}
               </button>
             );
           })}
@@ -571,155 +767,105 @@ export function GearCard({ state, updateState }: GearCardProps) {
 
         {/* Search */}
         <div className="relative">
-          <Search className="absolute left-2.5 top-1/2 h-4 w-4 -translate-y-1/2 text-zinc-400" />
+          <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-zinc-400" />
           <input
             type="text"
             placeholder={`Search ${activeTab}...`}
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            className="w-full rounded-lg border border-zinc-200 bg-white py-1.5 pl-8 pr-3 text-sm text-zinc-900 placeholder-zinc-400 focus:border-emerald-500 focus:outline-none focus:ring-1 focus:ring-emerald-500 dark:border-zinc-700 dark:bg-zinc-800 dark:text-zinc-100"
+            className="w-full rounded-lg border border-zinc-200 bg-white py-2 pl-10 pr-4 text-sm text-zinc-900 placeholder-zinc-400 focus:border-amber-500 focus:outline-none focus:ring-1 focus:ring-amber-500 dark:border-zinc-700 dark:bg-zinc-800 dark:text-zinc-100"
           />
         </div>
 
         {/* Item list */}
-        <div className="max-h-48 space-y-1 overflow-y-auto">
+        <div className="max-h-64 space-y-2 overflow-y-auto">
           {/* Weapons Tab */}
           {activeTab === "weapons" &&
-            filteredWeapons.map((weapon) => {
-              const canAfford = weapon.cost <= remaining;
-              return (
-                <button
-                  key={weapon.id}
-                  onClick={() => canAfford && addWeapon(weapon)}
-                  disabled={!canAfford}
-                  className={`flex w-full items-center justify-between rounded-lg px-3 py-2 text-left transition-all ${
-                    canAfford
-                      ? "bg-zinc-50 hover:bg-zinc-100 dark:bg-zinc-800/50 dark:hover:bg-zinc-800"
-                      : "cursor-not-allowed bg-zinc-50 opacity-50 dark:bg-zinc-800/50"
-                  }`}
-                >
-                  <div>
-                    <span className="text-sm text-zinc-900 dark:text-zinc-100">{weapon.name}</span>
-                    <div className="flex gap-2 text-[10px] text-zinc-500 dark:text-zinc-400">
-                      <span>DMG: {weapon.damage}</span>
-                      <span>AP: {weapon.ap}</span>
-                      <span>Avail: {getAvailabilityDisplay(weapon.availability, weapon.restricted, weapon.forbidden)}</span>
-                    </div>
-                  </div>
-                  <span className="text-xs font-medium text-zinc-600 dark:text-zinc-400">
-                    {formatCurrency(weapon.cost)}¥
-                  </span>
-                </button>
-              );
-            })}
+            filteredWeapons.map((weapon) => (
+              <GearItemRow
+                key={weapon.id}
+                name={weapon.name}
+                stats={
+                  <>
+                    <span>DMG: {weapon.damage}</span>
+                    <span>AP: {weapon.ap}</span>
+                  </>
+                }
+                cost={weapon.cost}
+                availability={getAvailabilityDisplay(weapon.availability, weapon.restricted, weapon.forbidden)}
+                canAfford={weapon.cost <= remaining}
+                onAdd={() => addWeapon(weapon)}
+              />
+            ))}
 
           {/* Armor Tab */}
           {activeTab === "armor" &&
-            filteredArmor.map((armor) => {
-              const canAfford = armor.cost <= remaining;
-              return (
-                <button
-                  key={armor.id}
-                  onClick={() => canAfford && addArmor(armor)}
-                  disabled={!canAfford}
-                  className={`flex w-full items-center justify-between rounded-lg px-3 py-2 text-left transition-all ${
-                    canAfford
-                      ? "bg-zinc-50 hover:bg-zinc-100 dark:bg-zinc-800/50 dark:hover:bg-zinc-800"
-                      : "cursor-not-allowed bg-zinc-50 opacity-50 dark:bg-zinc-800/50"
-                  }`}
-                >
-                  <div>
-                    <span className="text-sm text-zinc-900 dark:text-zinc-100">{armor.name}</span>
-                    <div className="flex gap-2 text-[10px] text-zinc-500 dark:text-zinc-400">
-                      <span>Rating: {armor.armorRating}</span>
-                      <span>Avail: {getAvailabilityDisplay(armor.availability, armor.restricted, armor.forbidden)}</span>
-                    </div>
-                  </div>
-                  <span className="text-xs font-medium text-zinc-600 dark:text-zinc-400">
-                    {formatCurrency(armor.cost)}¥
-                  </span>
-                </button>
-              );
-            })}
+            filteredArmor.map((armor) => (
+              <GearItemRow
+                key={armor.id}
+                name={armor.name}
+                stats={<span>Rating: {armor.armorRating}</span>}
+                cost={armor.cost}
+                availability={getAvailabilityDisplay(armor.availability, armor.restricted, armor.forbidden)}
+                canAfford={armor.cost <= remaining}
+                onAdd={() => addArmor(armor)}
+              />
+            ))}
 
           {/* Gear Tab */}
           {activeTab === "gear" &&
-            filteredGear.map((gear) => {
-              const canAfford = gear.cost <= remaining;
-              return (
-                <button
-                  key={gear.id}
-                  onClick={() => canAfford && addGear(gear)}
-                  disabled={!canAfford}
-                  className={`flex w-full items-center justify-between rounded-lg px-3 py-2 text-left transition-all ${
-                    canAfford
-                      ? "bg-zinc-50 hover:bg-zinc-100 dark:bg-zinc-800/50 dark:hover:bg-zinc-800"
-                      : "cursor-not-allowed bg-zinc-50 opacity-50 dark:bg-zinc-800/50"
-                  }`}
-                >
-                  <div>
-                    <span className="text-sm text-zinc-900 dark:text-zinc-100">{gear.name}</span>
-                    <div className="flex gap-2 text-[10px] text-zinc-500 dark:text-zinc-400">
-                      <span>{gear.category}</span>
-                      <span>Avail: {getAvailabilityDisplay(gear.availability, gear.restricted, gear.forbidden)}</span>
-                    </div>
-                  </div>
-                  <span className="text-xs font-medium text-zinc-600 dark:text-zinc-400">
-                    {formatCurrency(gear.cost)}¥
-                  </span>
-                </button>
-              );
-            })}
+            filteredGear.map((gear) => (
+              <GearItemRow
+                key={gear.id}
+                name={gear.name}
+                stats={<span>{gear.category}</span>}
+                cost={gear.cost}
+                availability={getAvailabilityDisplay(gear.availability, gear.restricted, gear.forbidden)}
+                canAfford={gear.cost <= remaining}
+                onAdd={() => addGear(gear)}
+              />
+            ))}
 
           {/* Foci Tab */}
           {activeTab === "foci" &&
             filteredFoci.map((focus) => {
-              const focusCost = focus.costMultiplier; // Force 1
-              const canAfford = focusCost <= remaining;
+              const focusCost = focus.costMultiplier;
               return (
-                <button
+                <GearItemRow
                   key={focus.id}
-                  onClick={() => canAfford && addFocus(focus)}
-                  disabled={!canAfford}
-                  className={`flex w-full items-center justify-between rounded-lg px-3 py-2 text-left transition-all ${
-                    canAfford
-                      ? "bg-zinc-50 hover:bg-zinc-100 dark:bg-zinc-800/50 dark:hover:bg-zinc-800"
-                      : "cursor-not-allowed bg-zinc-50 opacity-50 dark:bg-zinc-800/50"
-                  }`}
-                >
-                  <div>
-                    <span className="text-sm text-zinc-900 dark:text-zinc-100">{focus.name}</span>
-                    <div className="flex gap-2 text-[10px] text-zinc-500 dark:text-zinc-400">
+                  name={focus.name}
+                  stats={
+                    <>
                       <span>Force 1</span>
                       <span>Bond: {focus.bondingKarmaMultiplier} karma</span>
-                      <span>Avail: {getAvailabilityDisplay(focus.availability || 0, focus.restricted, focus.forbidden)}</span>
-                    </div>
-                  </div>
-                  <span className="text-xs font-medium text-zinc-600 dark:text-zinc-400">
-                    {formatCurrency(focusCost)}¥
-                  </span>
-                </button>
+                    </>
+                  }
+                  cost={focusCost}
+                  availability={getAvailabilityDisplay(focus.availability || 0, focus.restricted, focus.forbidden)}
+                  canAfford={focusCost <= remaining}
+                  onAdd={() => addFocus(focus)}
+                />
               );
             })}
 
           {/* Empty states */}
           {activeTab === "weapons" && filteredWeapons.length === 0 && (
-            <div className="py-4 text-center text-sm text-zinc-500 dark:text-zinc-400">
+            <div className="py-8 text-center text-sm text-zinc-500 dark:text-zinc-400">
               No weapons found
             </div>
           )}
           {activeTab === "armor" && filteredArmor.length === 0 && (
-            <div className="py-4 text-center text-sm text-zinc-500 dark:text-zinc-400">
+            <div className="py-8 text-center text-sm text-zinc-500 dark:text-zinc-400">
               No armor found
             </div>
           )}
           {activeTab === "gear" && filteredGear.length === 0 && (
-            <div className="py-4 text-center text-sm text-zinc-500 dark:text-zinc-400">
+            <div className="py-8 text-center text-sm text-zinc-500 dark:text-zinc-400">
               No gear found
             </div>
           )}
           {activeTab === "foci" && filteredFoci.length === 0 && (
-            <div className="py-4 text-center text-sm text-zinc-500 dark:text-zinc-400">
+            <div className="py-8 text-center text-sm text-zinc-500 dark:text-zinc-400">
               {isMagical ? "No foci found" : "Foci require a magical tradition"}
             </div>
           )}

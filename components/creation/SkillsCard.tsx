@@ -3,22 +3,28 @@
 /**
  * SkillsCard
  *
- * Compact card for skill allocation in sheet-driven creation.
- * Supports active skills, skill groups, and specializations.
+ * Card for skill allocation in sheet-driven creation.
+ * Matches UI mocks from docs/prompts/design/character-sheet-creation-mode.md
  *
  * Features:
- * - Skill list with rating selectors
- * - Skill group section
- * - Specialization management
- * - Points remaining display (skill points + group points)
+ * - Dual budget progress bars (Skill Points + Group Points)
+ * - Skills grouped by category with section headers
+ * - Skill rows with linked attribute and group info
+ * - MAX badge when at maximum rating
+ * - Specialization support
+ * - Karma conversion for over-budget
  */
 
 import { useMemo, useCallback, useState } from "react";
 import { useSkills } from "@/lib/rules";
 import type { CreationState } from "@/lib/types";
 import { useCreationBudgets } from "@/lib/contexts";
-import { CreationCard, BudgetIndicator } from "./shared";
-import { Lock, Minus, Plus, Search, ChevronDown, ChevronRight, Star } from "lucide-react";
+import { CreationCard } from "./shared";
+import { Lock, Minus, Plus, Search, ChevronDown, ChevronRight, Star, AlertTriangle } from "lucide-react";
+
+// =============================================================================
+// CONSTANTS
+// =============================================================================
 
 type SkillCategory = "combat" | "physical" | "social" | "technical" | "vehicle" | "magical" | "resonance";
 
@@ -32,12 +38,218 @@ const CATEGORY_LABELS: Record<SkillCategory, string> = {
   resonance: "Resonance",
 };
 
+const CATEGORY_ORDER: SkillCategory[] = ["combat", "physical", "social", "technical", "vehicle", "magical", "resonance"];
+
 const MAX_SKILL_RATING = 6;
+const KARMA_PER_SKILL_POINT = 2;
 
 interface SkillsCardProps {
   state: CreationState;
   updateState: (updates: Partial<CreationState>) => void;
 }
+
+// =============================================================================
+// BUDGET PROGRESS BAR COMPONENT
+// =============================================================================
+
+function BudgetProgressBar({
+  label,
+  description,
+  spent,
+  total,
+  isOver,
+  karmaPerPoint,
+  compact = false,
+}: {
+  label: string;
+  description: string;
+  spent: number;
+  total: number;
+  isOver: boolean;
+  karmaPerPoint?: number;
+  compact?: boolean;
+}) {
+  const remaining = total - spent;
+  const percentage = total > 0 ? Math.min(100, (spent / total) * 100) : 0;
+
+  if (total === 0) {
+    return (
+      <div className="rounded-lg border border-zinc-200 bg-zinc-50 p-3 dark:border-zinc-700 dark:bg-zinc-800/50">
+        <div className="text-sm font-medium text-zinc-500 dark:text-zinc-400">
+          {label}
+        </div>
+        <div className="mt-1 text-xs text-zinc-400 dark:text-zinc-500">
+          No points available
+        </div>
+      </div>
+    );
+  }
+
+  return (
+    <div className={`rounded-lg border p-3 ${
+      isOver
+        ? "border-amber-200 bg-amber-50 dark:border-amber-800 dark:bg-amber-900/20"
+        : "border-zinc-200 bg-zinc-50 dark:border-zinc-700 dark:bg-zinc-800/50"
+    }`}>
+      <div className="flex items-center justify-between">
+        <div className="text-sm font-medium text-zinc-900 dark:text-zinc-100">
+          {label}
+        </div>
+        <div className={`text-lg font-bold ${
+          isOver
+            ? "text-amber-600 dark:text-amber-400"
+            : remaining === 0
+              ? "text-emerald-600 dark:text-emerald-400"
+              : "text-zinc-900 dark:text-zinc-100"
+        }`}>
+          {remaining}
+        </div>
+      </div>
+
+      {!compact && (
+        <div className="mt-1 text-xs text-zinc-500 dark:text-zinc-400">
+          {description}
+        </div>
+      )}
+
+      <div className="mt-1 text-xs text-zinc-500 dark:text-zinc-400">
+        <span className="float-right">of {total}</span>
+      </div>
+
+      {/* Progress bar */}
+      <div className="mt-2 h-2 overflow-hidden rounded-full bg-zinc-200 dark:bg-zinc-700">
+        <div
+          className={`h-full rounded-full transition-all ${
+            isOver
+              ? "bg-amber-500"
+              : remaining === 0
+                ? "bg-emerald-500"
+                : "bg-blue-500"
+          }`}
+          style={{ width: `${percentage}%` }}
+        />
+      </div>
+
+      {/* Over budget warning */}
+      {isOver && karmaPerPoint && (
+        <div className="mt-2 flex items-center gap-1.5 text-xs text-amber-600 dark:text-amber-400">
+          <AlertTriangle className="h-3.5 w-3.5" />
+          <span>
+            {Math.abs(remaining)} over → {Math.abs(remaining) * karmaPerPoint} karma
+          </span>
+        </div>
+      )}
+    </div>
+  );
+}
+
+// =============================================================================
+// SKILL ROW COMPONENT
+// =============================================================================
+
+function SkillRow({
+  name,
+  linkedAttribute,
+  groupName,
+  rating,
+  hasSpec,
+  isFreeSkill,
+  freeRating,
+  isAtMax,
+  canIncrease,
+  canDecrease,
+  onIncrease,
+  onDecrease,
+}: {
+  name: string;
+  linkedAttribute: string;
+  groupName?: string;
+  rating: number;
+  hasSpec: boolean;
+  isFreeSkill: boolean;
+  freeRating?: number;
+  isAtMax: boolean;
+  canIncrease: boolean;
+  canDecrease: boolean;
+  onIncrease: () => void;
+  onDecrease: () => void;
+}) {
+  return (
+    <div className="rounded-lg border border-zinc-200 bg-white p-3 dark:border-zinc-700 dark:bg-zinc-900">
+      {/* Header row */}
+      <div className="flex items-center justify-between">
+        <div className="flex items-center gap-2">
+          <span className="text-sm font-semibold text-zinc-900 dark:text-zinc-100">
+            {name}
+          </span>
+          <span className="text-xs font-medium text-zinc-500 dark:text-zinc-400">
+            {linkedAttribute}
+          </span>
+          {hasSpec && (
+            <span title="Has specialization">
+              <Star className="h-3.5 w-3.5 text-amber-500" />
+            </span>
+          )}
+        </div>
+
+        <div className="flex items-center gap-2">
+          {isFreeSkill && freeRating && (
+            <span className="rounded bg-purple-100 px-1.5 py-0.5 text-[10px] font-medium text-purple-700 dark:bg-purple-900/50 dark:text-purple-300">
+              Free {freeRating}
+            </span>
+          )}
+          {isAtMax && (
+            <span className="rounded bg-emerald-100 px-1.5 py-0.5 text-[10px] font-medium text-emerald-700 dark:bg-emerald-900/50 dark:text-emerald-300">
+              MAX
+            </span>
+          )}
+        </div>
+      </div>
+
+      {/* Group info */}
+      {groupName && (
+        <div className="mt-1 text-xs text-zinc-500 dark:text-zinc-400">
+          Group: {groupName}
+        </div>
+      )}
+
+      {/* Controls */}
+      <div className="mt-2 flex items-center justify-end gap-2">
+        <button
+          onClick={onDecrease}
+          disabled={!canDecrease}
+          className={`flex h-7 w-7 items-center justify-center rounded transition-colors ${
+            canDecrease
+              ? "bg-zinc-200 text-zinc-700 hover:bg-zinc-300 dark:bg-zinc-700 dark:text-zinc-200 dark:hover:bg-zinc-600"
+              : "cursor-not-allowed bg-zinc-100 text-zinc-300 dark:bg-zinc-800 dark:text-zinc-600"
+          }`}
+        >
+          <Minus className="h-4 w-4" />
+        </button>
+
+        <div className="flex h-8 w-10 items-center justify-center rounded bg-zinc-100 text-base font-bold text-zinc-900 dark:bg-zinc-800 dark:text-zinc-100">
+          {rating}
+        </div>
+
+        <button
+          onClick={onIncrease}
+          disabled={!canIncrease}
+          className={`flex h-7 w-7 items-center justify-center rounded transition-colors ${
+            canIncrease
+              ? "bg-emerald-500 text-white hover:bg-emerald-600"
+              : "cursor-not-allowed bg-zinc-100 text-zinc-300 dark:bg-zinc-800 dark:text-zinc-600"
+          }`}
+        >
+          <Plus className="h-4 w-4" />
+        </button>
+      </div>
+    </div>
+  );
+}
+
+// =============================================================================
+// MAIN COMPONENT
+// =============================================================================
 
 export function SkillsCard({ state, updateState }: SkillsCardProps) {
   const { activeSkills, skillGroups } = useSkills();
@@ -51,6 +263,7 @@ export function SkillsCard({ state, updateState }: SkillsCardProps) {
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedCategory, setSelectedCategory] = useState<SkillCategory | "all">("all");
   const [expandedGroups, setExpandedGroups] = useState<Set<string>>(new Set());
+  const [showGroups, setShowGroups] = useState(true);
 
   // Get character's magical path
   const magicPath = state.selections["magical-path"] as string | undefined;
@@ -85,10 +298,12 @@ export function SkillsCard({ state, updateState }: SkillsCardProps) {
 
   const skillPointsRemaining = skillPoints - skillPointsSpent;
   const groupPointsRemaining = skillGroupPoints - groupPointsSpent;
+  const isSkillsOverBudget = skillPointsRemaining < 0;
+  const isGroupsOverBudget = groupPointsRemaining < 0;
 
   // Filter skills based on magic/resonance access and search
   const filteredSkills = useMemo(() => {
-    const filtered = activeSkills.filter((skill) => {
+    return activeSkills.filter((skill) => {
       // Filter by magic/resonance requirements
       if (skill.requiresMagic && !hasMagic) return false;
       if (skill.requiresResonance && !hasResonance) return false;
@@ -103,19 +318,36 @@ export function SkillsCard({ state, updateState }: SkillsCardProps) {
 
       return true;
     });
-
-    return filtered;
   }, [activeSkills, hasMagic, hasResonance, selectedCategory, searchQuery]);
+
+  // Group skills by category
+  const skillsByCategory = useMemo(() => {
+    const grouped: Record<string, typeof filteredSkills> = {};
+    filteredSkills.forEach((skill) => {
+      const cat = skill.category || "other";
+      if (!grouped[cat]) grouped[cat] = [];
+      grouped[cat].push(skill);
+    });
+    return grouped;
+  }, [filteredSkills]);
 
   // Filter skill groups
   const filteredGroups = useMemo(() => {
     return skillGroups.filter((group) => {
-      // Filter magical/resonance skill groups
       if (["sorcery", "conjuring", "enchanting"].includes(group.id) && !hasMagic) return false;
       if (group.id === "tasking" && !hasResonance) return false;
       return true;
     });
   }, [skillGroups, hasMagic, hasResonance]);
+
+  // Get group name for a skill
+  const getSkillGroupName = useCallback(
+    (skillId: string): string | undefined => {
+      const group = skillGroups.find((g) => g.skills.includes(skillId));
+      return group?.name;
+    },
+    [skillGroups]
+  );
 
   // Handle skill rating change
   const handleSkillChange = useCallback(
@@ -123,14 +355,11 @@ export function SkillsCard({ state, updateState }: SkillsCardProps) {
       const currentRating = skills[skillId] || 0;
       const newRating = currentRating + delta;
 
-      // Validate
       if (newRating < 0 || newRating > MAX_SKILL_RATING) return;
-      if (delta > 0 && skillPointsRemaining < delta) return;
 
       const newSkills = { ...skills };
       if (newRating === 0) {
         delete newSkills[skillId];
-        // Also remove specialization if skill is removed
         const newSpecs = { ...specializations };
         delete newSpecs[skillId];
         updateState({
@@ -141,7 +370,7 @@ export function SkillsCard({ state, updateState }: SkillsCardProps) {
           },
           budgets: {
             ...state.budgets,
-            "skill-points-spent": skillPointsSpent + delta - (newSpecs[skillId] ? 1 : 0),
+            "skill-points-spent": skillPointsSpent + delta - (specializations[skillId] ? 1 : 0),
           },
         });
       } else {
@@ -158,7 +387,7 @@ export function SkillsCard({ state, updateState }: SkillsCardProps) {
         });
       }
     },
-    [skills, specializations, skillPointsRemaining, skillPointsSpent, state.selections, state.budgets, updateState]
+    [skills, specializations, skillPointsSpent, state.selections, state.budgets, updateState]
   );
 
   // Handle skill group rating change
@@ -168,7 +397,6 @@ export function SkillsCard({ state, updateState }: SkillsCardProps) {
       const newRating = currentRating + delta;
 
       if (newRating < 0 || newRating > MAX_SKILL_RATING) return;
-      if (delta > 0 && groupPointsRemaining < delta) return;
 
       const newGroups = { ...groups };
       if (newRating === 0) {
@@ -188,7 +416,7 @@ export function SkillsCard({ state, updateState }: SkillsCardProps) {
         },
       });
     },
-    [groups, groupPointsRemaining, groupPointsSpent, state.selections, state.budgets, updateState]
+    [groups, groupPointsSpent, state.selections, state.budgets, updateState]
   );
 
   // Toggle group expansion
@@ -204,21 +432,37 @@ export function SkillsCard({ state, updateState }: SkillsCardProps) {
 
   // Get validation status
   const validationStatus = useMemo(() => {
+    if (isSkillsOverBudget || isGroupsOverBudget) return "warning";
     if (skillPointsRemaining === 0 && groupPointsRemaining === 0) return "valid";
     if (skillPointsSpent > 0 || groupPointsSpent > 0) return "warning";
     return "pending";
-  }, [skillPointsRemaining, groupPointsRemaining, skillPointsSpent, groupPointsSpent]);
+  }, [isSkillsOverBudget, isGroupsOverBudget, skillPointsRemaining, groupPointsRemaining, skillPointsSpent, groupPointsSpent]);
 
   // Check if priority is set
   const hasPriority = !!state.priorities?.skills;
 
   if (!hasPriority) {
     return (
-      <CreationCard title="Skills" description="Allocate skill points" status="pending">
-        <div className="flex items-center gap-2 rounded-lg border-2 border-dashed border-zinc-200 p-4 text-center dark:border-zinc-700">
-          <Lock className="h-5 w-5 text-zinc-400" />
+      <CreationCard title="Skills" description="Awaiting priority" status="pending">
+        <div className="space-y-3">
+          <div className="grid gap-2 sm:grid-cols-2">
+            <div className="rounded-lg border border-zinc-200 bg-zinc-50 p-3 dark:border-zinc-700 dark:bg-zinc-800/50">
+              <div className="text-sm font-medium text-zinc-500 dark:text-zinc-400">
+                Skill Points
+              </div>
+              <div className="mt-1 text-xs text-zinc-400">Set skills priority to unlock</div>
+              <div className="mt-2 h-2 rounded-full bg-zinc-200 dark:bg-zinc-700" />
+            </div>
+            <div className="rounded-lg border border-zinc-200 bg-zinc-50 p-3 dark:border-zinc-700 dark:bg-zinc-800/50">
+              <div className="text-sm font-medium text-zinc-500 dark:text-zinc-400">
+                Skill Group Points
+              </div>
+              <div className="mt-1 text-xs text-zinc-400">For skill groups</div>
+              <div className="mt-2 h-2 rounded-full bg-zinc-200 dark:bg-zinc-700" />
+            </div>
+          </div>
           <p className="text-sm text-zinc-500 dark:text-zinc-400">
-            Set Skills priority first
+            Skills locked until priorities are configured.
           </p>
         </div>
       </CreationCard>
@@ -228,26 +472,32 @@ export function SkillsCard({ state, updateState }: SkillsCardProps) {
   return (
     <CreationCard
       title="Skills"
-      description={`${filteredSkills.length} skills available`}
+      description={
+        skillPointsRemaining === 0 && groupPointsRemaining === 0
+          ? "All points allocated"
+          : `${skillPointsRemaining} skill pts, ${groupPointsRemaining} group pts remaining`
+      }
       status={validationStatus}
     >
       <div className="space-y-4">
         {/* Budget indicators */}
         <div className="grid gap-2 sm:grid-cols-2">
-          <BudgetIndicator
+          <BudgetProgressBar
             label="Skill Points"
-            remaining={skillPointsRemaining}
+            description="For individual skills"
+            spent={skillPointsSpent}
             total={skillPoints}
-            compact
+            isOver={isSkillsOverBudget}
+            karmaPerPoint={KARMA_PER_SKILL_POINT}
           />
-          {skillGroupPoints > 0 && (
-            <BudgetIndicator
-              label="Group Points"
-              remaining={groupPointsRemaining}
-              total={skillGroupPoints}
-              compact
-            />
-          )}
+          <BudgetProgressBar
+            label="Skill Group Points"
+            description="For skill groups"
+            spent={groupPointsSpent}
+            total={skillGroupPoints}
+            isOver={isGroupsOverBudget}
+            karmaPerPoint={KARMA_PER_SKILL_POINT}
+          />
         </div>
 
         {/* Search and filter */}
@@ -279,144 +529,141 @@ export function SkillsCard({ state, updateState }: SkillsCardProps) {
         {/* Skill Groups */}
         {skillGroupPoints > 0 && filteredGroups.length > 0 && (
           <div>
-            <h4 className="mb-2 text-xs font-semibold uppercase tracking-wider text-zinc-500 dark:text-zinc-400">
+            <button
+              onClick={() => setShowGroups(!showGroups)}
+              className="mb-2 flex items-center gap-1 text-xs font-semibold uppercase tracking-wider text-zinc-500 hover:text-zinc-700 dark:text-zinc-400 dark:hover:text-zinc-300"
+            >
+              {showGroups ? <ChevronDown className="h-3 w-3" /> : <ChevronRight className="h-3 w-3" />}
               Skill Groups
-            </h4>
-            <div className="space-y-1">
-              {filteredGroups.map((group) => {
-                const rating = groups[group.id] || 0;
-                const isExpanded = expandedGroups.has(group.id);
+            </button>
 
-                return (
-                  <div key={group.id}>
-                    <div className="flex items-center justify-between rounded-lg bg-zinc-50 px-3 py-2 dark:bg-zinc-800/50">
-                      <button
-                        onClick={() => toggleGroupExpand(group.id)}
-                        className="flex items-center gap-2 text-left"
-                      >
-                        {isExpanded ? (
-                          <ChevronDown className="h-3 w-3 text-zinc-400" />
-                        ) : (
-                          <ChevronRight className="h-3 w-3 text-zinc-400" />
-                        )}
-                        <span className="text-sm font-medium text-zinc-900 dark:text-zinc-100">
-                          {group.name}
-                        </span>
-                      </button>
+            {showGroups && (
+              <div className="space-y-2 text-sm">
+                <p className="text-xs text-zinc-500 dark:text-zinc-400">
+                  Increase all skills in a group at once. Cannot have individual ratings.
+                </p>
+                {filteredGroups.map((group) => {
+                  const rating = groups[group.id] || 0;
+                  const isExpanded = expandedGroups.has(group.id);
+                  const isAtMax = rating >= MAX_SKILL_RATING;
+                  const canIncrease = rating < MAX_SKILL_RATING;
+                  const canDecrease = rating > 0;
 
-                      <div className="flex items-center gap-1">
+                  return (
+                    <div key={group.id} className="rounded-lg border border-zinc-200 bg-white p-3 dark:border-zinc-700 dark:bg-zinc-900">
+                      <div className="flex items-center justify-between">
                         <button
-                          onClick={() => handleGroupChange(group.id, -1)}
-                          disabled={rating === 0}
-                          className={`flex h-5 w-5 items-center justify-center rounded text-xs transition-colors ${
-                            rating > 0
-                              ? "bg-zinc-200 text-zinc-700 hover:bg-zinc-300 dark:bg-zinc-700 dark:text-zinc-200"
-                              : "cursor-not-allowed bg-zinc-100 text-zinc-300 dark:bg-zinc-800 dark:text-zinc-600"
-                          }`}
+                          onClick={() => toggleGroupExpand(group.id)}
+                          className="flex items-center gap-2 text-left"
                         >
-                          <Minus className="h-3 w-3" />
+                          {isExpanded ? (
+                            <ChevronDown className="h-4 w-4 text-zinc-400" />
+                          ) : (
+                            <ChevronRight className="h-4 w-4 text-zinc-400" />
+                          )}
+                          <span className="font-semibold text-zinc-900 dark:text-zinc-100">
+                            {group.name}
+                          </span>
                         </button>
-                        <div className="w-6 text-center text-sm font-bold text-zinc-900 dark:text-zinc-100">
-                          {rating}
+
+                        <div className="flex items-center gap-2">
+                          {isAtMax && (
+                            <span className="rounded bg-emerald-100 px-1.5 py-0.5 text-[10px] font-medium text-emerald-700 dark:bg-emerald-900/50 dark:text-emerald-300">
+                              MAX
+                            </span>
+                          )}
+                          <button
+                            onClick={() => handleGroupChange(group.id, -1)}
+                            disabled={!canDecrease}
+                            className={`flex h-7 w-7 items-center justify-center rounded transition-colors ${
+                              canDecrease
+                                ? "bg-zinc-200 text-zinc-700 hover:bg-zinc-300 dark:bg-zinc-700 dark:text-zinc-200"
+                                : "cursor-not-allowed bg-zinc-100 text-zinc-300 dark:bg-zinc-800 dark:text-zinc-600"
+                            }`}
+                          >
+                            <Minus className="h-4 w-4" />
+                          </button>
+                          <div className="flex h-8 w-10 items-center justify-center rounded bg-zinc-100 text-base font-bold text-zinc-900 dark:bg-zinc-800 dark:text-zinc-100">
+                            {rating}
+                          </div>
+                          <button
+                            onClick={() => handleGroupChange(group.id, 1)}
+                            disabled={!canIncrease || groupPointsRemaining <= 0}
+                            className={`flex h-7 w-7 items-center justify-center rounded transition-colors ${
+                              canIncrease && groupPointsRemaining > 0
+                                ? "bg-emerald-500 text-white hover:bg-emerald-600"
+                                : "cursor-not-allowed bg-zinc-100 text-zinc-300 dark:bg-zinc-800 dark:text-zinc-600"
+                            }`}
+                          >
+                            <Plus className="h-4 w-4" />
+                          </button>
                         </div>
-                        <button
-                          onClick={() => handleGroupChange(group.id, 1)}
-                          disabled={rating >= MAX_SKILL_RATING || groupPointsRemaining === 0}
-                          className={`flex h-5 w-5 items-center justify-center rounded text-xs transition-colors ${
-                            rating < MAX_SKILL_RATING && groupPointsRemaining > 0
-                              ? "bg-emerald-500 text-white hover:bg-emerald-600"
-                              : "cursor-not-allowed bg-zinc-100 text-zinc-300 dark:bg-zinc-800 dark:text-zinc-600"
-                          }`}
-                        >
-                          <Plus className="h-3 w-3" />
-                        </button>
                       </div>
-                    </div>
 
-                    {isExpanded && (
-                      <div className="ml-5 mt-1 space-y-0.5 border-l-2 border-zinc-200 pl-3 dark:border-zinc-700">
-                        {group.skills.map((skillId) => {
-                          const skill = activeSkills.find((s) => s.id === skillId);
-                          return skill ? (
-                            <div
-                              key={skillId}
-                              className="flex items-center justify-between py-1 text-xs text-zinc-600 dark:text-zinc-400"
-                            >
-                              <span>{skill.name}</span>
-                              <span className="text-zinc-400">{rating}</span>
-                            </div>
-                          ) : null;
-                        })}
-                      </div>
-                    )}
-                  </div>
-                );
-              })}
-            </div>
+                      {isExpanded && (
+                        <div className="mt-2 border-t border-zinc-100 pt-2 dark:border-zinc-800">
+                          <div className="text-xs text-zinc-500 dark:text-zinc-400">
+                            Skills: {group.skills.map((s) => {
+                              const skill = activeSkills.find((sk) => sk.id === s);
+                              return skill?.name;
+                            }).filter(Boolean).join(", ")}
+                          </div>
+                        </div>
+                      )}
+                    </div>
+                  );
+                })}
+              </div>
+            )}
           </div>
         )}
 
-        {/* Individual Skills */}
-        <div>
-          <h4 className="mb-2 text-xs font-semibold uppercase tracking-wider text-zinc-500 dark:text-zinc-400">
-            Active Skills ({filteredSkills.length})
+        {/* Individual Skills by Category */}
+        <div className="space-y-4">
+          <h4 className="text-xs font-semibold uppercase tracking-wider text-zinc-500 dark:text-zinc-400">
+            Active Skills
           </h4>
-          <div className="max-h-64 space-y-1 overflow-y-auto">
-            {filteredSkills.map((skill) => {
-              const rating = skills[skill.id] || 0;
-              const hasSpec = !!specializations[skill.id];
 
-              return (
-                <div
-                  key={skill.id}
-                  className="flex items-center justify-between rounded bg-zinc-50 px-2 py-1.5 dark:bg-zinc-800/50"
-                >
-                  <div className="flex items-center gap-1.5">
-                    <span className="text-sm text-zinc-900 dark:text-zinc-100">
-                      {skill.name}
-                    </span>
-                    {hasSpec && (
-                      <span title="Has specialization">
-                        <Star className="h-3 w-3 text-amber-500" />
-                      </span>
-                    )}
-                  </div>
-
-                  <div className="flex items-center gap-1">
-                    <button
-                      onClick={() => handleSkillChange(skill.id, -1)}
-                      disabled={rating === 0}
-                      className={`flex h-5 w-5 items-center justify-center rounded text-xs transition-colors ${
-                        rating > 0
-                          ? "bg-zinc-200 text-zinc-700 hover:bg-zinc-300 dark:bg-zinc-700 dark:text-zinc-200"
-                          : "cursor-not-allowed bg-zinc-100 text-zinc-300 dark:bg-zinc-800 dark:text-zinc-600"
-                      }`}
-                    >
-                      <Minus className="h-3 w-3" />
-                    </button>
-                    <div className="w-6 text-center text-sm font-bold text-zinc-900 dark:text-zinc-100">
-                      {rating}
-                    </div>
-                    <button
-                      onClick={() => handleSkillChange(skill.id, 1)}
-                      disabled={rating >= MAX_SKILL_RATING || skillPointsRemaining === 0}
-                      className={`flex h-5 w-5 items-center justify-center rounded text-xs transition-colors ${
-                        rating < MAX_SKILL_RATING && skillPointsRemaining > 0
-                          ? "bg-emerald-500 text-white hover:bg-emerald-600"
-                          : "cursor-not-allowed bg-zinc-100 text-zinc-300 dark:bg-zinc-800 dark:text-zinc-600"
-                      }`}
-                    >
-                      <Plus className="h-3 w-3" />
-                    </button>
-                  </div>
+          <div className="max-h-96 space-y-4 overflow-y-auto">
+            {CATEGORY_ORDER.filter((cat) => skillsByCategory[cat]?.length > 0).map((category) => (
+              <div key={category}>
+                <div className="mb-2 border-b border-zinc-200 pb-1 text-xs font-semibold uppercase tracking-wider text-zinc-600 dark:border-zinc-700 dark:text-zinc-400">
+                  {CATEGORY_LABELS[category]}
                 </div>
-              );
-            })}
+                <div className="space-y-2">
+                  {skillsByCategory[category].map((skill) => {
+                    const rating = skills[skill.id] || 0;
+                    const hasSpec = !!specializations[skill.id];
+                    const groupName = getSkillGroupName(skill.id);
+                    const isAtMax = rating >= MAX_SKILL_RATING;
+                    const canIncrease = rating < MAX_SKILL_RATING;
+                    const canDecrease = rating > 0;
+
+                    return (
+                      <SkillRow
+                        key={skill.id}
+                        name={skill.name}
+                        linkedAttribute={skill.linkedAttribute?.toUpperCase().slice(0, 3) || ""}
+                        groupName={groupName}
+                        rating={rating}
+                        hasSpec={hasSpec}
+                        isFreeSkill={false}
+                        isAtMax={isAtMax}
+                        canIncrease={canIncrease}
+                        canDecrease={canDecrease}
+                        onIncrease={() => handleSkillChange(skill.id, 1)}
+                        onDecrease={() => handleSkillChange(skill.id, -1)}
+                      />
+                    );
+                  })}
+                </div>
+              </div>
+            ))}
           </div>
         </div>
 
-        {/* Summary of selected skills */}
-        {Object.keys(skills).length > 0 && (
+        {/* Summary */}
+        {(Object.keys(skills).length > 0 || Object.keys(groups).length > 0) && (
           <div className="rounded-lg bg-emerald-50 p-3 dark:bg-emerald-900/20">
             <span className="text-xs font-medium text-emerald-700 dark:text-emerald-300">
               {Object.keys(skills).length} skill{Object.keys(skills).length !== 1 ? "s" : ""} selected

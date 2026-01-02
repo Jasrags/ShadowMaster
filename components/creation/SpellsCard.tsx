@@ -3,15 +3,16 @@
 /**
  * SpellsCard
  *
- * Compact card for spell selection in sheet-driven creation.
- * Shows spell list with categories, free spells, and karma costs.
+ * Card for spell selection in sheet-driven creation.
+ * Matches UI mocks from docs/prompts/design/character-sheet-creation-mode.md
  *
  * Features:
- * - Spell list with categories
- * - Free spells from priority
- * - Karma cost for additional spells
- * - Category limits (Magic × 2 per category)
- * - Search and filter
+ * - Progress bar for free spells budget
+ * - Karma spend indicator for extra spells
+ * - Category tabs with spell counts
+ * - Modal-style spell selection with search
+ * - Spell rows grouped by category
+ * - Remove button for selected spells
  */
 
 import { useMemo, useCallback, useState } from "react";
@@ -19,8 +20,12 @@ import { useSpells, usePriorityTable } from "@/lib/rules";
 import type { CreationState } from "@/lib/types";
 import type { SpellData } from "@/lib/rules";
 import { useCreationBudgets } from "@/lib/contexts";
-import { CreationCard, BudgetIndicator } from "./shared";
-import { Lock, Check, Search, X } from "lucide-react";
+import { CreationCard } from "./shared";
+import { Lock, Check, Search, X, Plus, AlertTriangle, Sparkles } from "lucide-react";
+
+// =============================================================================
+// CONSTANTS
+// =============================================================================
 
 const SPELL_KARMA_COST = 5;
 
@@ -37,10 +42,208 @@ const SPELL_CATEGORIES: { id: SpellCategory; name: string }[] = [
 // Paths that can have spells
 const SPELL_PATHS = ["magician", "mystic-adept", "aspected-mage"];
 
+// =============================================================================
+// TYPES
+// =============================================================================
+
 interface SpellsCardProps {
   state: CreationState;
   updateState: (updates: Partial<CreationState>) => void;
 }
+
+// =============================================================================
+// BUDGET PROGRESS BAR COMPONENT
+// =============================================================================
+
+function BudgetProgressBar({
+  label,
+  description,
+  spent,
+  total,
+  source,
+  isOver,
+  karmaRequired,
+}: {
+  label: string;
+  description: string;
+  spent: number;
+  total: number;
+  source: string;
+  isOver: boolean;
+  karmaRequired?: number;
+}) {
+  const remaining = total - spent;
+  const percentage = Math.min(100, (spent / total) * 100);
+
+  return (
+    <div className={`rounded-lg border p-3 ${
+      isOver
+        ? "border-amber-200 bg-amber-50 dark:border-amber-800 dark:bg-amber-900/20"
+        : "border-zinc-200 bg-zinc-50 dark:border-zinc-700 dark:bg-zinc-800/50"
+    }`}>
+      <div className="flex items-center justify-between">
+        <div className="text-sm font-medium text-zinc-900 dark:text-zinc-100">
+          {label}
+        </div>
+        <div className={`text-lg font-bold ${
+          isOver
+            ? "text-amber-600 dark:text-amber-400"
+            : remaining === 0
+              ? "text-emerald-600 dark:text-emerald-400"
+              : "text-zinc-900 dark:text-zinc-100"
+        }`}>
+          {remaining}
+        </div>
+      </div>
+
+      <div className="mt-1 text-xs text-zinc-500 dark:text-zinc-400">
+        {description}
+      </div>
+
+      <div className="mt-1 text-xs text-zinc-500 dark:text-zinc-400">
+        {source}
+        <span className="float-right">
+          of {total} remaining
+        </span>
+      </div>
+
+      {/* Progress bar */}
+      <div className="mt-2 h-2 overflow-hidden rounded-full bg-zinc-200 dark:bg-zinc-700">
+        <div
+          className={`h-full rounded-full transition-all ${
+            isOver
+              ? "bg-amber-500"
+              : remaining === 0
+                ? "bg-emerald-500"
+                : "bg-blue-500"
+          }`}
+          style={{ width: `${percentage}%` }}
+        />
+      </div>
+
+      {/* Over budget warning */}
+      {isOver && karmaRequired && (
+        <div className="mt-2 flex items-center gap-1.5 text-xs text-amber-600 dark:text-amber-400">
+          <AlertTriangle className="h-3.5 w-3.5" />
+          <span>
+            {Math.abs(remaining)} spells over free limit → {karmaRequired} karma ({SPELL_KARMA_COST} karma per spell)
+          </span>
+        </div>
+      )}
+    </div>
+  );
+}
+
+// =============================================================================
+// SPELL ROW COMPONENT
+// =============================================================================
+
+function SpellRow({
+  spell,
+  isSelected,
+  canSelect,
+  isFree,
+  onToggle,
+  onRemove,
+  showRemove,
+}: {
+  spell: SpellData;
+  isSelected: boolean;
+  canSelect: boolean;
+  isFree: boolean;
+  onToggle: () => void;
+  onRemove?: () => void;
+  showRemove: boolean;
+}) {
+  return (
+    <div
+      className={`rounded-lg border p-3 transition-all ${
+        isSelected
+          ? "border-emerald-200 bg-emerald-50 dark:border-emerald-800 dark:bg-emerald-900/20"
+          : canSelect
+            ? "border-zinc-200 bg-white hover:border-zinc-300 dark:border-zinc-700 dark:bg-zinc-900 dark:hover:border-zinc-600"
+            : "cursor-not-allowed border-zinc-200 bg-zinc-100 opacity-50 dark:border-zinc-700 dark:bg-zinc-800"
+      }`}
+    >
+      <div className="flex items-start gap-3">
+        {/* Checkbox */}
+        <button
+          onClick={onToggle}
+          disabled={!canSelect && !isSelected}
+          className={`mt-0.5 flex h-5 w-5 shrink-0 items-center justify-center rounded border-2 transition-colors ${
+            isSelected
+              ? "border-emerald-500 bg-emerald-500 text-white"
+              : canSelect
+                ? "border-zinc-300 hover:border-emerald-400 dark:border-zinc-600"
+                : "border-zinc-200 dark:border-zinc-700"
+          }`}
+        >
+          {isSelected && <Check className="h-3 w-3" />}
+        </button>
+
+        {/* Spell info */}
+        <div className="flex-1 min-w-0">
+          <div className="flex items-center gap-2">
+            <span className="font-medium text-zinc-900 dark:text-zinc-100">
+              {spell.name}
+            </span>
+
+            {/* Badges */}
+            <span className={`rounded px-1.5 py-0.5 text-[10px] font-medium uppercase ${
+              spell.type === "mana"
+                ? "bg-blue-100 text-blue-700 dark:bg-blue-900/50 dark:text-blue-300"
+                : "bg-amber-100 text-amber-700 dark:bg-amber-900/50 dark:text-amber-300"
+            }`}>
+              {spell.type}
+            </span>
+
+            {isFree && isSelected && (
+              <span className="rounded bg-emerald-100 px-1.5 py-0.5 text-[10px] font-medium text-emerald-700 dark:bg-emerald-900/50 dark:text-emerald-300">
+                FREE
+              </span>
+            )}
+
+            {!isFree && isSelected && (
+              <span className="rounded bg-amber-100 px-1.5 py-0.5 text-[10px] font-medium text-amber-700 dark:bg-amber-900/50 dark:text-amber-300">
+                {SPELL_KARMA_COST} KARMA
+              </span>
+            )}
+          </div>
+
+          {/* Spell stats */}
+          <div className="mt-1 flex flex-wrap gap-2 text-xs text-zinc-500 dark:text-zinc-400">
+            <span>Type: {spell.type === "mana" ? "M" : "P"}</span>
+            <span>Range: {spell.range}</span>
+            {spell.damage && <span>Damage: {spell.damage}</span>}
+            <span>Duration: {spell.duration?.charAt(0).toUpperCase() || "I"}</span>
+            <span>Drain: {spell.drain}</span>
+          </div>
+
+          {/* Description */}
+          {spell.description && (
+            <div className="mt-1 text-xs text-zinc-500 dark:text-zinc-400 line-clamp-2">
+              {spell.description}
+            </div>
+          )}
+        </div>
+
+        {/* Remove button */}
+        {showRemove && isSelected && (
+          <button
+            onClick={onRemove}
+            className="shrink-0 rounded p-1 text-zinc-400 hover:bg-red-100 hover:text-red-600 dark:hover:bg-red-900/30 dark:hover:text-red-400"
+          >
+            <X className="h-4 w-4" />
+          </button>
+        )}
+      </div>
+    </div>
+  );
+}
+
+// =============================================================================
+// MAIN COMPONENT
+// =============================================================================
 
 export function SpellsCard({ state, updateState }: SpellsCardProps) {
   const spellsCatalog = useSpells();
@@ -50,6 +253,7 @@ export function SpellsCard({ state, updateState }: SpellsCardProps) {
 
   const [searchQuery, setSearchQuery] = useState("");
   const [activeCategory, setActiveCategory] = useState<SpellCategory | "all">("all");
+  const [showAddModal, setShowAddModal] = useState(false);
 
   // Get selected magical path
   const magicalPath = (state.selections["magical-path"] as string) || "mundane";
@@ -57,11 +261,10 @@ export function SpellsCard({ state, updateState }: SpellsCardProps) {
 
   // For aspected mages, check if they have sorcery
   const aspectedGroup = state.selections["aspected-mage-group"] as string | undefined;
-  const isSorceryAspected = magicalPath === "aspected-mage" && aspectedGroup === "sorcery";
   const isBlockedAspected = magicalPath === "aspected-mage" && aspectedGroup && aspectedGroup !== "sorcery";
 
   // Get magic priority and free spell count
-  const { freeSpells, magicRating } = useMemo(() => {
+  const { freeSpells } = useMemo(() => {
     const magicPriority = state.priorities?.magic;
     if (!magicPriority || !priorityTable?.table[magicPriority]) {
       return { freeSpells: 0, magicRating: 0 };
@@ -81,9 +284,6 @@ export function SpellsCard({ state, updateState }: SpellsCardProps) {
       magicRating: option?.magicRating || 0,
     };
   }, [state.priorities?.magic, priorityTable, magicalPath]);
-
-  // Max spells per category = Magic × 2
-  const maxPerCategory = magicRating * 2;
 
   // Get current selections
   const selectedSpells = useMemo(
@@ -126,12 +326,6 @@ export function SpellsCard({ state, updateState }: SpellsCardProps) {
     return counts;
   }, [selectedSpells, allSpells]);
 
-  // Check if category at limit
-  const isCategoryAtLimit = useCallback(
-    (category: SpellCategory) => spellsPerCategory[category] >= maxPerCategory,
-    [spellsPerCategory, maxPerCategory]
-  );
-
   // Filter spells
   const filteredSpells = useMemo(() => {
     let spells = allSpells;
@@ -152,19 +346,31 @@ export function SpellsCard({ state, updateState }: SpellsCardProps) {
     return spells;
   }, [allSpells, activeCategory, searchQuery]);
 
+  // Get selected spell objects grouped by category
+  const selectedSpellsGrouped = useMemo(() => {
+    const groups: Record<string, SpellData[]> = {};
+
+    selectedSpells.forEach((spellId) => {
+      const spell = allSpells.find((s) => s.id === spellId);
+      if (spell) {
+        const cat = spell.category || "other";
+        if (!groups[cat]) groups[cat] = [];
+        groups[cat].push(spell);
+      }
+    });
+
+    return groups;
+  }, [selectedSpells, allSpells]);
+
   // Toggle spell selection
   const toggleSpell = useCallback(
     (spellId: string) => {
       const isSelected = selectedSpells.includes(spellId);
-      const spell = allSpells.find((s) => s.id === spellId);
       let newSpells: string[];
 
       if (isSelected) {
         newSpells = selectedSpells.filter((id) => id !== spellId);
       } else {
-        // Check category limit
-        if (spell && isCategoryAtLimit(spell.category as SpellCategory)) return;
-
         // Check cost
         const willBeFree = selectedSpells.length < freeSpells;
         if (!willBeFree && karmaRemaining < SPELL_KARMA_COST) return;
@@ -189,10 +395,8 @@ export function SpellsCard({ state, updateState }: SpellsCardProps) {
     },
     [
       selectedSpells,
-      allSpells,
       freeSpells,
       karmaRemaining,
-      isCategoryAtLimit,
       state.selections,
       state.budgets,
       updateState,
@@ -222,23 +426,39 @@ export function SpellsCard({ state, updateState }: SpellsCardProps) {
 
   const spellsBeyondFree = Math.max(0, selectedSpells.length - freeSpells);
   const karmaSpentOnSpells = spellsBeyondFree * SPELL_KARMA_COST;
+  const freeRemaining = Math.max(0, freeSpells - selectedSpells.length);
+  const isOverFree = selectedSpells.length > freeSpells;
 
   // Validation status
   const validationStatus = useMemo(() => {
     if (!canHaveSpells || isBlockedAspected) return "pending";
-    if (selectedSpells.length > 0) return "valid";
+    if (selectedSpells.length >= freeSpells) return "valid";
+    if (selectedSpells.length > 0) return "warning";
     if (freeSpells > 0) return "warning";
     return "pending";
   }, [canHaveSpells, isBlockedAspected, selectedSpells.length, freeSpells]);
 
+  // Magic priority source
+  const prioritySource = useMemo(() => {
+    const magicPriority = state.priorities?.magic;
+    if (!magicPriority) return "";
+    const pathName = magicalPath.charAt(0).toUpperCase() + magicalPath.slice(1).replace("-", " ");
+    return `From Magic Priority ${magicPriority} (${pathName})`;
+  }, [state.priorities?.magic, magicalPath]);
+
   // Check if path supports spells
   if (!canHaveSpells) {
     return (
-      <CreationCard title="Spells" description="Select spells" status="pending">
-        <div className="flex items-center gap-2 rounded-lg border-2 border-dashed border-zinc-200 p-4 text-center dark:border-zinc-700">
-          <Lock className="h-5 w-5 text-zinc-400" />
-          <p className="text-sm text-zinc-500 dark:text-zinc-400">
-            Select a magical path first
+      <CreationCard title="Spells" description="Not available" status="pending">
+        <div className="space-y-3">
+          <div className="flex items-center gap-2 rounded-lg border-2 border-dashed border-zinc-200 p-4 dark:border-zinc-700">
+            <Lock className="h-5 w-5 text-zinc-400" />
+            <p className="text-sm text-zinc-500 dark:text-zinc-400">
+              No spells available — Mundane character
+            </p>
+          </div>
+          <p className="text-xs text-zinc-500 dark:text-zinc-400">
+            Change your Magic/Resonance path to unlock spells.
           </p>
         </div>
       </CreationCard>
@@ -249,9 +469,29 @@ export function SpellsCard({ state, updateState }: SpellsCardProps) {
   if (isBlockedAspected) {
     return (
       <CreationCard title="Spells" description="Not available" status="pending">
-        <div className="rounded-lg bg-amber-50 p-4 dark:bg-amber-900/20">
+        <div className="rounded-lg border border-amber-200 bg-amber-50 p-4 dark:border-amber-800 dark:bg-amber-900/20">
           <p className="text-sm text-amber-700 dark:text-amber-300">
+            No spells available — {aspectedGroup} Aspected Mage
+          </p>
+          <p className="mt-1 text-xs text-amber-600 dark:text-amber-400">
             As a {aspectedGroup} aspected mage, you cannot learn spells.
+          </p>
+        </div>
+      </CreationCard>
+    );
+  }
+
+  // Adept check
+  if (magicalPath === "adept") {
+    return (
+      <CreationCard title="Spells" description="Not available" status="pending">
+        <div className="rounded-lg border border-zinc-200 bg-zinc-50 p-4 dark:border-zinc-700 dark:bg-zinc-800/50">
+          <p className="text-sm text-zinc-600 dark:text-zinc-400">
+            No spells available — Adept
+          </p>
+          <p className="mt-1 text-xs text-zinc-500 dark:text-zinc-400">
+            Adepts channel magic through their bodies as Adept Powers, not spells.
+            See the Adept Powers section to allocate your Power Points.
           </p>
         </div>
       </CreationCard>
@@ -261,157 +501,245 @@ export function SpellsCard({ state, updateState }: SpellsCardProps) {
   return (
     <CreationCard
       title="Spells"
-      description={`${selectedSpells.length}/${freeSpells} free spells${spellsBeyondFree > 0 ? ` (+${spellsBeyondFree} karma)` : ""}`}
+      description={
+        selectedSpells.length === 0
+          ? `${freeSpells} free spells available`
+          : freeRemaining > 0
+            ? `${selectedSpells.length}/${freeSpells} free spells`
+            : isOverFree
+              ? `${selectedSpells.length} spells (+${karmaSpentOnSpells} karma)`
+              : "All free spells used"
+      }
       status={validationStatus}
     >
       <div className="space-y-4">
-        {/* Budget indicators */}
-        <div className="grid gap-2 sm:grid-cols-2">
-          <BudgetIndicator
-            label="Free Spells"
-            remaining={Math.max(0, freeSpells - selectedSpells.length)}
-            total={freeSpells}
-            compact
-          />
-          {spellsBeyondFree > 0 && (
-            <div className="flex items-center gap-1 text-xs">
-              <span className="text-zinc-500">Karma spent:</span>
-              <span className="font-medium text-amber-600 dark:text-amber-400">
-                {karmaSpentOnSpells}
-              </span>
-            </div>
-          )}
-        </div>
+        {/* Free Spells Budget */}
+        <BudgetProgressBar
+          label="Free Spells"
+          description="Spells from your Magic priority"
+          spent={Math.min(selectedSpells.length, freeSpells)}
+          total={freeSpells}
+          source={prioritySource}
+          isOver={isOverFree}
+          karmaRequired={isOverFree ? karmaSpentOnSpells : undefined}
+        />
 
-        {/* Category limits */}
+        {/* Karma spend indicator */}
+        {karmaSpentOnSpells > 0 && (
+          <div className="rounded-lg border border-amber-200 bg-amber-50 p-3 dark:border-amber-800 dark:bg-amber-900/20">
+            <div className="flex items-center justify-between">
+              <div className="text-sm font-medium text-amber-800 dark:text-amber-200">
+                Spells via Karma
+              </div>
+              <div className="text-sm font-bold text-amber-600 dark:text-amber-400">
+                {karmaSpentOnSpells} karma
+              </div>
+            </div>
+            <div className="mt-1 text-xs text-amber-600 dark:text-amber-400">
+              {spellsBeyondFree} additional spell{spellsBeyondFree !== 1 ? "s" : ""} at {SPELL_KARMA_COST} karma each
+            </div>
+          </div>
+        )}
+
+        {/* Category tabs */}
         <div className="flex flex-wrap gap-1">
+          <button
+            onClick={() => setActiveCategory("all")}
+            className={`rounded px-2 py-1 text-xs font-medium transition-colors ${
+              activeCategory === "all"
+                ? "bg-zinc-800 text-white dark:bg-zinc-200 dark:text-zinc-900"
+                : "bg-zinc-100 text-zinc-600 hover:bg-zinc-200 dark:bg-zinc-800 dark:text-zinc-400"
+            }`}
+          >
+            All
+          </button>
           {SPELL_CATEGORIES.map((cat) => {
             const count = spellsPerCategory[cat.id];
-            const isAtLimit = count >= maxPerCategory;
             return (
               <button
                 key={cat.id}
-                onClick={() => setActiveCategory(activeCategory === cat.id ? "all" : cat.id)}
+                onClick={() => setActiveCategory(cat.id)}
                 className={`rounded px-2 py-1 text-xs font-medium transition-colors ${
                   activeCategory === cat.id
                     ? "bg-emerald-600 text-white"
-                    : isAtLimit
-                    ? "bg-red-100 text-red-700 dark:bg-red-900/40 dark:text-red-300"
                     : count > 0
-                    ? "bg-amber-100 text-amber-700 dark:bg-amber-900/40 dark:text-amber-300"
-                    : "bg-zinc-100 text-zinc-600 dark:bg-zinc-700 dark:text-zinc-400"
+                      ? "bg-emerald-100 text-emerald-700 dark:bg-emerald-900/40 dark:text-emerald-300"
+                      : "bg-zinc-100 text-zinc-600 hover:bg-zinc-200 dark:bg-zinc-800 dark:text-zinc-400"
                 }`}
               >
-                {cat.name}: {count}/{maxPerCategory}
+                {cat.name} {count > 0 && `(${count})`}
               </button>
             );
           })}
         </div>
 
-        {/* Search */}
-        <div className="relative">
-          <Search className="absolute left-2.5 top-1/2 h-4 w-4 -translate-y-1/2 text-zinc-400" />
-          <input
-            type="text"
-            placeholder="Search spells..."
-            value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
-            className="w-full rounded-lg border border-zinc-200 bg-white py-1.5 pl-8 pr-3 text-sm text-zinc-900 placeholder-zinc-400 focus:border-emerald-500 focus:outline-none focus:ring-1 focus:ring-emerald-500 dark:border-zinc-700 dark:bg-zinc-800 dark:text-zinc-100"
-          />
-        </div>
+        {/* Add button */}
+        <button
+          onClick={() => setShowAddModal(true)}
+          className="flex w-full items-center justify-center gap-2 rounded-lg border-2 border-dashed border-zinc-300 bg-zinc-50 py-3 text-sm font-medium text-zinc-600 transition-colors hover:border-emerald-400 hover:bg-emerald-50 hover:text-emerald-700 dark:border-zinc-600 dark:bg-zinc-800/50 dark:text-zinc-400 dark:hover:border-emerald-600 dark:hover:bg-emerald-900/20 dark:hover:text-emerald-400"
+        >
+          <Plus className="h-4 w-4" />
+          Add Spell
+        </button>
 
-        {/* Spell list */}
-        <div className="max-h-64 space-y-1 overflow-y-auto">
-          {filteredSpells.map((spell) => {
-            const isSelected = selectedSpells.includes(spell.id);
-            const categoryAtLimit = isCategoryAtLimit(spell.category as SpellCategory);
-            const willBeFree = selectedSpells.length < freeSpells;
-            const canSelect =
-              isSelected ||
-              (!categoryAtLimit && (willBeFree || karmaRemaining >= SPELL_KARMA_COST));
-
-            return (
-              <button
-                key={spell.id}
-                onClick={() => canSelect && toggleSpell(spell.id)}
-                disabled={!canSelect}
-                className={`flex w-full items-center justify-between rounded-lg px-3 py-2 text-left transition-all ${
-                  isSelected
-                    ? "bg-emerald-50 ring-1 ring-emerald-300 dark:bg-emerald-900/30 dark:ring-emerald-700"
-                    : canSelect
-                    ? "bg-zinc-50 hover:bg-zinc-100 dark:bg-zinc-800/50 dark:hover:bg-zinc-800"
-                    : "cursor-not-allowed bg-zinc-50 opacity-50 dark:bg-zinc-800/50"
-                }`}
-              >
-                <div className="flex items-center gap-2">
-                  <div
-                    className={`flex h-5 w-5 shrink-0 items-center justify-center rounded border-2 transition-colors ${
-                      isSelected
-                        ? "border-emerald-500 bg-emerald-500 text-white"
-                        : "border-zinc-300 dark:border-zinc-600"
-                    }`}
-                  >
-                    {isSelected && <Check className="h-3 w-3" />}
-                  </div>
-                  <div>
-                    <span className="text-sm text-zinc-900 dark:text-zinc-100">{spell.name}</span>
-                    <div className="flex gap-1 text-[10px] uppercase">
-                      <span
-                        className={`rounded px-1 py-0.5 ${
-                          spell.type === "mana"
-                            ? "bg-blue-100 text-blue-600 dark:bg-blue-900/40 dark:text-blue-400"
-                            : "bg-amber-100 text-amber-600 dark:bg-amber-900/40 dark:text-amber-400"
-                        }`}
-                      >
-                        {spell.type}
-                      </span>
-                      <span className="rounded bg-zinc-100 px-1 py-0.5 text-zinc-500 dark:bg-zinc-700 dark:text-zinc-400">
-                        {spell.category}
-                      </span>
-                    </div>
-                  </div>
-                </div>
-                <span className="text-xs text-zinc-500 dark:text-zinc-400">
-                  {spell.drain}
-                </span>
-              </button>
-            );
-          })}
-
-          {filteredSpells.length === 0 && (
-            <div className="py-4 text-center text-sm text-zinc-500 dark:text-zinc-400">
-              No spells found
-            </div>
-          )}
-        </div>
-
-        {/* Selected spells summary */}
+        {/* Selected spells grouped by category */}
         {selectedSpells.length > 0 && (
-          <div className="rounded-lg bg-zinc-50 p-3 dark:bg-zinc-800/50">
-            <h4 className="text-xs font-semibold text-zinc-500 dark:text-zinc-400">
-              Selected Spells ({selectedSpells.length})
-            </h4>
-            <div className="mt-2 flex flex-wrap gap-1">
-              {selectedSpells.map((id) => {
-                const spell = allSpells.find((s) => s.id === id);
-                return spell ? (
-                  <span
-                    key={id}
-                    className="inline-flex items-center gap-1 rounded bg-emerald-100 px-2 py-0.5 text-xs text-emerald-700 dark:bg-emerald-900/50 dark:text-emerald-300"
-                  >
-                    {spell.name}
-                    <button
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        removeSpell(id);
-                      }}
-                      className="hover:text-emerald-900 dark:hover:text-emerald-100"
-                    >
-                      <X className="h-3 w-3" />
-                    </button>
-                  </span>
-                ) : null;
-              })}
+          <div className="space-y-4">
+            <div className="flex items-center justify-between">
+              <h4 className="text-xs font-semibold uppercase tracking-wider text-zinc-500 dark:text-zinc-400">
+                Selected Spells ({selectedSpells.length})
+              </h4>
+            </div>
+
+            {Object.entries(selectedSpellsGrouped).map(([category, spells]) => (
+              <div key={category}>
+                <h5 className="mb-2 text-xs font-medium uppercase text-zinc-400 dark:text-zinc-500">
+                  {category}
+                </h5>
+                <div className="space-y-2">
+                  {spells.map((spell) => {
+                    const spellIndex = selectedSpells.indexOf(spell.id);
+                    const isFree = spellIndex < freeSpells;
+
+                    return (
+                      <SpellRow
+                        key={spell.id}
+                        spell={spell}
+                        isSelected={true}
+                        canSelect={true}
+                        isFree={isFree}
+                        onToggle={() => removeSpell(spell.id)}
+                        onRemove={() => removeSpell(spell.id)}
+                        showRemove={true}
+                      />
+                    );
+                  })}
+                </div>
+              </div>
+            ))}
+          </div>
+        )}
+
+        {/* Summary footer */}
+        {selectedSpells.length > 0 && (
+          <div className="flex items-center justify-between rounded-lg bg-zinc-100 px-3 py-2 dark:bg-zinc-800">
+            <span className="text-sm text-zinc-600 dark:text-zinc-400">
+              {selectedSpells.length} spell{selectedSpells.length !== 1 ? "s" : ""} selected
+            </span>
+            <span className="text-sm font-medium text-zinc-900 dark:text-zinc-100">
+              {freeRemaining > 0 ? `${freeRemaining} free remaining` :
+               isOverFree ? `${karmaSpentOnSpells} karma spent` : "All free spells used"}
+            </span>
+          </div>
+        )}
+
+        {/* Add Spell Modal */}
+        {showAddModal && (
+          <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
+            {/* Backdrop */}
+            <div
+              className="absolute inset-0 bg-black/50 backdrop-blur-sm"
+              onClick={() => setShowAddModal(false)}
+            />
+
+            {/* Modal */}
+            <div className="relative max-h-[85vh] w-full max-w-2xl overflow-hidden rounded-xl bg-white shadow-2xl dark:bg-zinc-900">
+              {/* Header */}
+              <div className="flex items-center justify-between border-b border-zinc-200 px-6 py-4 dark:border-zinc-700">
+                <div className="flex items-center gap-2">
+                  <Sparkles className="h-5 w-5 text-emerald-500" />
+                  <h2 className="text-lg font-semibold text-zinc-900 dark:text-zinc-100">
+                    ADD SPELL
+                  </h2>
+                </div>
+                <button
+                  onClick={() => setShowAddModal(false)}
+                  className="rounded-lg p-2 text-zinc-400 hover:bg-zinc-100 hover:text-zinc-600 dark:hover:bg-zinc-800 dark:hover:text-zinc-300"
+                >
+                  <X className="h-5 w-5" />
+                </button>
+              </div>
+
+              {/* Budget info */}
+              <div className="border-b border-zinc-100 bg-zinc-50 px-6 py-3 dark:border-zinc-800 dark:bg-zinc-800/50">
+                <p className="text-sm text-zinc-600 dark:text-zinc-400">
+                  {freeRemaining > 0 ? (
+                    <>
+                      <span className="font-medium text-emerald-600 dark:text-emerald-400">
+                        {freeRemaining} free spell{freeRemaining !== 1 ? "s" : ""} remaining
+                      </span>
+                      <span className="mx-2">•</span>
+                      Additional spells: {SPELL_KARMA_COST} karma each
+                    </>
+                  ) : (
+                    <>
+                      All free spells used
+                      <span className="mx-2">•</span>
+                      <span className="text-amber-600 dark:text-amber-400">
+                        Additional spells: {SPELL_KARMA_COST} karma each
+                      </span>
+                    </>
+                  )}
+                </p>
+              </div>
+
+              {/* Search */}
+              <div className="border-b border-zinc-100 px-6 py-3 dark:border-zinc-800">
+                <div className="relative">
+                  <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-zinc-400" />
+                  <input
+                    type="text"
+                    placeholder="Search spells..."
+                    value={searchQuery}
+                    onChange={(e) => setSearchQuery(e.target.value)}
+                    className="w-full rounded-lg border border-zinc-200 bg-white py-2 pl-10 pr-4 text-sm text-zinc-900 placeholder-zinc-400 focus:border-emerald-500 focus:outline-none focus:ring-1 focus:ring-emerald-500 dark:border-zinc-700 dark:bg-zinc-800 dark:text-zinc-100"
+                  />
+                </div>
+              </div>
+
+              {/* Spell list */}
+              <div className="max-h-[50vh] overflow-y-auto p-4">
+                <div className="space-y-2">
+                  {filteredSpells.map((spell) => {
+                    const isSelected = selectedSpells.includes(spell.id);
+                    const willBeFree = selectedSpells.length < freeSpells;
+                    const canSelect = isSelected || willBeFree || karmaRemaining >= SPELL_KARMA_COST;
+                    const spellIndex = selectedSpells.indexOf(spell.id);
+                    const isFree = isSelected && spellIndex < freeSpells;
+
+                    return (
+                      <SpellRow
+                        key={spell.id}
+                        spell={spell}
+                        isSelected={isSelected}
+                        canSelect={canSelect}
+                        isFree={isFree || (!isSelected && willBeFree)}
+                        onToggle={() => toggleSpell(spell.id)}
+                        showRemove={false}
+                      />
+                    );
+                  })}
+
+                  {filteredSpells.length === 0 && (
+                    <div className="py-8 text-center text-sm text-zinc-500 dark:text-zinc-400">
+                      No spells found matching your search
+                    </div>
+                  )}
+                </div>
+              </div>
+
+              {/* Footer */}
+              <div className="flex items-center justify-between border-t border-zinc-200 px-6 py-4 dark:border-zinc-700">
+                <span className="text-sm text-zinc-600 dark:text-zinc-400">
+                  {selectedSpells.length} spell{selectedSpells.length !== 1 ? "s" : ""} selected
+                </span>
+                <button
+                  onClick={() => setShowAddModal(false)}
+                  className="rounded-lg bg-emerald-600 px-4 py-2 text-sm font-medium text-white hover:bg-emerald-700"
+                >
+                  Done
+                </button>
+              </div>
             </div>
           </div>
         )}
