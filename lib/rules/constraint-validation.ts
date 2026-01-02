@@ -27,6 +27,9 @@ import {
   validateAllQualities,
   validateKarmaLimits,
 } from "./qualities";
+import {
+  validateAllGear,
+} from "./gear/validation";
 import type {
   GearCatalogData,
   CyberwareCatalogData,
@@ -263,6 +266,21 @@ function validateEquipmentRatingsInternal(
         severity: "error",
       });
     }
+  }
+
+  // Validate all gear availability and device ratings (SR5 creation restrictions)
+  // - Maximum Availability at creation: 12
+  // - Maximum Device Rating at creation: 6
+  // - Restricted items not allowed at creation without GM approval
+  // - Forbidden items never allowed at creation
+  const gearValidation = validateAllGear(character);
+  for (const gearError of gearValidation.errors) {
+    errors.push({
+      constraintId: `gear-${gearError.code.toLowerCase().replace(/_/g, "-")}`,
+      field: `${gearError.itemType}.${gearError.itemName}`,
+      message: gearError.message,
+      severity: "error",
+    });
   }
 
   return errors;
