@@ -3,15 +3,17 @@
 /**
  * MagicPathCard
  *
- * Compact card for magic/resonance path selection in sheet-driven creation.
- * Supports path selection, tradition, aspected mage groups, and mentor spirits.
+ * Modal-based magic/resonance path selection for sheet-driven creation.
+ * Matches UI mocks from docs/prompts/design/character-sheet-creation-mode.md
  *
  * Features:
- * - Path selection (Magician, Adept, Mystic Adept, Aspected, Technomancer, Mundane)
- * - Tradition selection (for magicians)
+ * - Modal-based path selection (per UI mocks)
+ * - Auto-selection for Priority E (Mundane only)
+ * - Grouped paths: AWAKENED, EMERGED, MUNDANE
+ * - Selected state with tree formatting (├─ └─)
+ * - Tradition selection for applicable paths
  * - Aspected mage skill group selection
  * - Mentor spirit selection (optional quality)
- * - Magic/Resonance rating display
  */
 
 import { useMemo, useCallback, useState } from "react";
@@ -25,7 +27,11 @@ import {
 import type { CreationState } from "@/lib/types";
 import type { QualityData } from "@/lib/rules/loader-types";
 import { CreationCard } from "./shared";
-import { Lock, Check, ChevronDown, Sparkles, Zap, User } from "lucide-react";
+import { Lock, Check, X, ChevronRight, ChevronDown, Sparkles, Zap, User } from "lucide-react";
+
+// =============================================================================
+// CONSTANTS
+// =============================================================================
 
 // Aspected mage can choose ONE of these skill groups
 const ASPECTED_MAGE_GROUPS = [
@@ -58,12 +64,69 @@ const MENTOR_SPIRIT_PATHS = ["magician", "mystic-adept", "aspected-mage", "adept
 const MENTOR_SPIRIT_QUALITY_ID = "mentor-spirit";
 const MENTOR_SPIRIT_KARMA_COST = 5;
 
+// Path descriptions and features for the modal
+const PATH_INFO: Record<string, { description: string; features: string[] }> = {
+  magician: {
+    description: "Full spellcaster with summoning and enchanting",
+    features: ["5 free spells", "Requires tradition selection", "All magical skills available"],
+  },
+  "mystic-adept": {
+    description: "Blend of adept powers and spellcasting",
+    features: ["Split Magic between powers and spells", "Requires tradition", "No counterspelling"],
+  },
+  adept: {
+    description: "Physical magic channeled through the body",
+    features: ["Power Points = Magic Rating", "No spells", "No tradition needed"],
+  },
+  "aspected-mage": {
+    description: "Specialist in one magical discipline only",
+    features: ["Choose: Sorcery, Conjuring, or Enchanting", "Requires tradition"],
+  },
+  technomancer: {
+    description: "Living interface with the Matrix",
+    features: ["Complex forms", "Compile sprites", "Living Persona"],
+  },
+  mundane: {
+    description: "Focus your build on physical, technical, or social strengths",
+    features: ["No essence concerns for cyberware/bioware", "Street Samurai, Rigger, Decker, Face archetypes"],
+  },
+};
+
+// Awakened paths (magic-based)
+const AWAKENED_PATHS = ["magician", "mystic-adept", "adept", "aspected-mage"];
+
+// Emerged paths (resonance-based)
+const EMERGED_PATHS = ["technomancer"];
+
+// =============================================================================
+// TYPES
+// =============================================================================
+
 interface MagicPathCardProps {
   state: CreationState;
   updateState: (updates: Partial<CreationState>) => void;
 }
 
-// Helper to calculate karma spent on positive qualities
+interface PathOption {
+  path: string;
+  magicRating?: number;
+  resonanceRating?: number;
+}
+
+interface MagicPathModalProps {
+  isOpen: boolean;
+  onClose: () => void;
+  onConfirm: (pathId: string) => void;
+  availableOptions: PathOption[];
+  priorityLevel: string;
+  currentSelection: string | null;
+  magicPaths: Array<{ id: string; name: string; hasResonance?: boolean }>;
+}
+
+// =============================================================================
+// HELPER FUNCTIONS
+// =============================================================================
+
 function calculatePositiveKarmaSpent(
   selectedQualities: string[],
   qualitiesData: QualityData[],
@@ -82,6 +145,259 @@ function calculatePositiveKarmaSpent(
   }, 0);
 }
 
+// =============================================================================
+// PATH SELECTION MODAL
+// =============================================================================
+
+function MagicPathModal({
+  isOpen,
+  onClose,
+  onConfirm,
+  availableOptions,
+  priorityLevel,
+  currentSelection,
+  magicPaths,
+}: MagicPathModalProps) {
+  const [selectedId, setSelectedId] = useState<string | null>(currentSelection);
+
+  // Reset selection when modal closes
+  const handleClose = useCallback(() => {
+    setSelectedId(currentSelection);
+    onClose();
+  }, [currentSelection, onClose]);
+
+  const handleConfirm = useCallback(() => {
+    if (selectedId) {
+      onConfirm(selectedId);
+      onClose();
+    }
+  }, [selectedId, onConfirm, onClose]);
+
+  // Group available paths
+  const groupedPaths = useMemo(() => {
+    const awakened: PathOption[] = [];
+    const emerged: PathOption[] = [];
+
+    availableOptions.forEach((opt) => {
+      if (AWAKENED_PATHS.includes(opt.path)) {
+        awakened.push(opt);
+      } else if (EMERGED_PATHS.includes(opt.path)) {
+        emerged.push(opt);
+      }
+    });
+
+    return { awakened, emerged };
+  }, [availableOptions]);
+
+  if (!isOpen) return null;
+
+  const renderPathOption = (option: PathOption, isResonance: boolean) => {
+    const pathInfo = magicPaths.find((p) => p.id === option.path);
+    if (!pathInfo) return null;
+
+    const info = PATH_INFO[option.path];
+    const isSelected = selectedId === option.path;
+    const rating = option.magicRating || option.resonanceRating || 0;
+
+    return (
+      <button
+        key={option.path}
+        onClick={() => setSelectedId(option.path)}
+        className={`w-full rounded-lg border-2 p-4 text-left transition-all ${
+          isSelected
+            ? isResonance
+              ? "border-cyan-500 bg-cyan-50 dark:border-cyan-500 dark:bg-cyan-900/20"
+              : "border-purple-500 bg-purple-50 dark:border-purple-500 dark:bg-purple-900/20"
+            : "border-zinc-200 bg-white hover:border-zinc-300 hover:bg-zinc-50 dark:border-zinc-700 dark:bg-zinc-800 dark:hover:border-zinc-600 dark:hover:bg-zinc-800/80"
+        }`}
+      >
+        {/* Header row */}
+        <div className="flex items-center gap-3">
+          {/* Radio indicator */}
+          <div
+            className={`flex h-5 w-5 shrink-0 items-center justify-center rounded-full border-2 transition-colors ${
+              isSelected
+                ? isResonance
+                  ? "border-cyan-500 bg-cyan-500 text-white"
+                  : "border-purple-500 bg-purple-500 text-white"
+                : "border-zinc-300 dark:border-zinc-600"
+            }`}
+          >
+            {isSelected && <Check className="h-3 w-3" />}
+          </div>
+
+          <span
+            className={`text-base font-semibold uppercase ${
+              isSelected
+                ? isResonance
+                  ? "text-cyan-900 dark:text-cyan-100"
+                  : "text-purple-900 dark:text-purple-100"
+                : "text-zinc-900 dark:text-zinc-100"
+            }`}
+          >
+            {pathInfo.name}
+          </span>
+
+          {/* Rating badge */}
+          <span
+            className={`ml-auto rounded px-2 py-0.5 text-xs font-medium ${
+              isResonance
+                ? "bg-cyan-100 text-cyan-700 dark:bg-cyan-900/50 dark:text-cyan-300"
+                : "bg-purple-100 text-purple-700 dark:bg-purple-900/50 dark:text-purple-300"
+            }`}
+          >
+            {isResonance ? "Resonance" : "Magic"} {rating}
+          </span>
+        </div>
+
+        {/* Description */}
+        {info && (
+          <>
+            <p className="mt-2 pl-8 text-sm text-zinc-600 dark:text-zinc-400">
+              {info.description}
+            </p>
+            <p className="mt-1 pl-8 text-xs text-zinc-500 dark:text-zinc-500">
+              {info.features.join(" • ")}
+            </p>
+          </>
+        )}
+      </button>
+    );
+  };
+
+  return (
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
+      {/* Backdrop */}
+      <div
+        className="absolute inset-0 bg-black/50 backdrop-blur-sm"
+        onClick={handleClose}
+      />
+
+      {/* Modal */}
+      <div className="relative max-h-[90vh] w-full max-w-2xl overflow-hidden rounded-xl bg-white shadow-2xl dark:bg-zinc-900">
+        {/* Header */}
+        <div className="flex items-center justify-between border-b border-zinc-200 px-6 py-4 dark:border-zinc-700">
+          <h2 className="text-lg font-semibold text-zinc-900 dark:text-zinc-100">
+            SELECT MAGICAL PATH
+          </h2>
+          <button
+            onClick={handleClose}
+            className="rounded-lg p-2 text-zinc-400 hover:bg-zinc-100 hover:text-zinc-600 dark:hover:bg-zinc-800 dark:hover:text-zinc-300"
+          >
+            <X className="h-5 w-5" />
+          </button>
+        </div>
+
+        {/* Priority info */}
+        <div className="border-b border-zinc-100 bg-zinc-50 px-6 py-3 dark:border-zinc-800 dark:bg-zinc-800/50">
+          <p className="text-sm text-zinc-600 dark:text-zinc-400">
+            Available at Priority {priorityLevel}
+          </p>
+        </div>
+
+        {/* Path list */}
+        <div className="max-h-[60vh] overflow-y-auto p-4">
+          <div className="space-y-4">
+            {/* AWAKENED section */}
+            {groupedPaths.awakened.length > 0 && (
+              <div>
+                <div className="mb-2 flex items-center gap-2">
+                  <Sparkles className="h-4 w-4 text-purple-500" />
+                  <span className="text-xs font-semibold uppercase tracking-wider text-purple-600 dark:text-purple-400">
+                    Awakened
+                  </span>
+                </div>
+                <div className="space-y-2">
+                  {groupedPaths.awakened.map((opt) => renderPathOption(opt, false))}
+                </div>
+              </div>
+            )}
+
+            {/* EMERGED section */}
+            {groupedPaths.emerged.length > 0 && (
+              <div>
+                <div className="mb-2 flex items-center gap-2">
+                  <Zap className="h-4 w-4 text-cyan-500" />
+                  <span className="text-xs font-semibold uppercase tracking-wider text-cyan-600 dark:text-cyan-400">
+                    Emerged
+                  </span>
+                </div>
+                <div className="space-y-2">
+                  {groupedPaths.emerged.map((opt) => renderPathOption(opt, true))}
+                </div>
+              </div>
+            )}
+
+            {/* MUNDANE section */}
+            <div>
+              <div className="mb-2 flex items-center gap-2">
+                <User className="h-4 w-4 text-zinc-500" />
+                <span className="text-xs font-semibold uppercase tracking-wider text-zinc-600 dark:text-zinc-400">
+                  Mundane
+                </span>
+              </div>
+              <button
+                onClick={() => setSelectedId("mundane")}
+                className={`w-full rounded-lg border-2 p-4 text-left transition-all ${
+                  selectedId === "mundane"
+                    ? "border-emerald-500 bg-emerald-50 dark:border-emerald-500 dark:bg-emerald-900/20"
+                    : "border-zinc-200 bg-white hover:border-zinc-300 hover:bg-zinc-50 dark:border-zinc-700 dark:bg-zinc-800 dark:hover:border-zinc-600 dark:hover:bg-zinc-800/80"
+                }`}
+              >
+                <div className="flex items-center gap-3">
+                  <div
+                    className={`flex h-5 w-5 shrink-0 items-center justify-center rounded-full border-2 transition-colors ${
+                      selectedId === "mundane"
+                        ? "border-emerald-500 bg-emerald-500 text-white"
+                        : "border-zinc-300 dark:border-zinc-600"
+                    }`}
+                  >
+                    {selectedId === "mundane" && <Check className="h-3 w-3" />}
+                  </div>
+                  <span
+                    className={`text-base font-semibold uppercase ${
+                      selectedId === "mundane"
+                        ? "text-emerald-900 dark:text-emerald-100"
+                        : "text-zinc-900 dark:text-zinc-100"
+                    }`}
+                  >
+                    No Magical Abilities
+                  </span>
+                </div>
+                <p className="mt-2 pl-8 text-sm text-zinc-600 dark:text-zinc-400">
+                  {PATH_INFO.mundane.description}
+                </p>
+                <p className="mt-1 pl-8 text-xs text-zinc-500 dark:text-zinc-500">
+                  {PATH_INFO.mundane.features.join(" • ")}
+                </p>
+              </button>
+            </div>
+          </div>
+        </div>
+
+        {/* Footer */}
+        <div className="flex items-center justify-end gap-3 border-t border-zinc-200 px-6 py-4 dark:border-zinc-700">
+          <button
+            onClick={handleConfirm}
+            disabled={!selectedId}
+            className={`rounded-lg px-4 py-2 text-sm font-medium transition-colors ${
+              selectedId
+                ? "bg-emerald-600 text-white hover:bg-emerald-700"
+                : "cursor-not-allowed bg-zinc-200 text-zinc-400 dark:bg-zinc-700 dark:text-zinc-500"
+            }`}
+          >
+            Confirm
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+// =============================================================================
+// MAIN COMPONENT
+// =============================================================================
+
 export function MagicPathCard({ state, updateState }: MagicPathCardProps) {
   const magicPaths = useMagicPaths();
   const priorityTable = usePriorityTable();
@@ -89,6 +405,7 @@ export function MagicPathCard({ state, updateState }: MagicPathCardProps) {
   const mentorSpirits = useMentorSpirits();
   const { positive: positiveQualitiesData } = useQualities();
 
+  const [isModalOpen, setIsModalOpen] = useState(false);
   const [showTraditions, setShowTraditions] = useState(false);
   const [showMentors, setShowMentors] = useState(false);
 
@@ -132,6 +449,15 @@ export function MagicPathCard({ state, updateState }: MagicPathCardProps) {
     const option = availableOptions.find((o) => o.path === selectedPath);
     return option?.magicRating || option?.resonanceRating || 0;
   }, [selectedPath, availableOptions]);
+
+  // Get selected path data
+  const selectedPathData = useMemo(() => {
+    if (!selectedPath) return null;
+    if (selectedPath === "mundane") {
+      return { id: "mundane", name: "Mundane", hasResonance: false };
+    }
+    return magicPaths.find((p) => p.id === selectedPath);
+  }, [selectedPath, magicPaths]);
 
   // Handle path selection
   const handleSelect = useCallback(
@@ -266,7 +592,7 @@ export function MagicPathCard({ state, updateState }: MagicPathCardProps) {
   // Validation status
   const validationStatus = useMemo(() => {
     if (!magicPriority) return "pending";
-    if (!selectedPath) return "pending";
+    if (!selectedPath) return "warning";
     if (selectedPath === "aspected-mage" && !selectedAspectedGroup) return "warning";
     if (canSelectTradition && !selectedTradition) return "warning";
     return "valid";
@@ -286,7 +612,7 @@ export function MagicPathCard({ state, updateState }: MagicPathCardProps) {
     );
   }
 
-  // Mundane only
+  // Mundane only (Priority E)
   const isMundaneOnly = availableOptions.length === 0;
   if (isMundaneOnly) {
     return (
@@ -295,262 +621,306 @@ export function MagicPathCard({ state, updateState }: MagicPathCardProps) {
         description={`Priority ${magicPriority} - Mundane`}
         status="valid"
       >
-        <div className="rounded-lg bg-zinc-50 p-4 dark:bg-zinc-800/50">
-          <div className="flex items-center gap-3">
-            <div className="flex h-10 w-10 items-center justify-center rounded-full bg-zinc-100 dark:bg-zinc-700">
-              <User className="h-5 w-5 text-zinc-500" />
-            </div>
-            <div>
-              <h3 className="font-medium text-zinc-900 dark:text-zinc-100">Mundane</h3>
-              <p className="text-xs text-zinc-500 dark:text-zinc-400">
-                No magical or resonance abilities
-              </p>
-            </div>
+        <div className="space-y-3">
+          {/* Auto-selected Mundane */}
+          <div className="flex items-center justify-between rounded-lg border-2 border-emerald-200 bg-emerald-50 px-4 py-3 dark:border-emerald-800 dark:bg-emerald-900/20">
+            <span className="font-semibold uppercase text-emerald-900 dark:text-emerald-100">
+              Mundane
+            </span>
+            <span className="text-sm text-emerald-600 dark:text-emerald-400">
+              (auto)
+            </span>
           </div>
+
+          {/* Info text */}
+          <p className="text-sm text-zinc-500 dark:text-zinc-400">
+            No magical or resonance abilities available at Priority E.
+            Move Magic/Resonance to a higher priority for awakened options.
+          </p>
         </div>
       </CreationCard>
     );
   }
 
+  // Get path info for selected state
+  const pathInfo = selectedPath ? PATH_INFO[selectedPath] : null;
+  const isResonancePath = selectedPathData?.hasResonance;
+
   return (
-    <CreationCard
-      title="Magic / Resonance"
-      description={selectedPath ? `${magicPaths.find((p) => p.id === selectedPath)?.name || selectedPath}${pathRating > 0 ? ` (${pathRating})` : ""}` : "Select path"}
-      status={validationStatus}
-    >
-      <div className="space-y-4">
-        {/* Path Selection */}
-        <div className="grid grid-cols-2 gap-2 sm:grid-cols-3">
-          {/* Mundane option */}
-          <button
-            onClick={() => handleSelect("mundane")}
-            className={`relative rounded-lg border-2 p-3 text-left transition-all ${
-              selectedPath === "mundane"
-                ? "border-emerald-500 bg-emerald-50 dark:border-emerald-500 dark:bg-emerald-900/20"
-                : "border-zinc-200 bg-white hover:border-zinc-300 dark:border-zinc-700 dark:bg-zinc-800 dark:hover:border-zinc-600"
-            }`}
-          >
-            {selectedPath === "mundane" && (
-              <div className="absolute right-2 top-2">
-                <Check className="h-4 w-4 text-emerald-500" />
-              </div>
-            )}
-            <User className="mb-1 h-4 w-4 text-zinc-500" />
-            <div className="text-sm font-medium text-zinc-900 dark:text-zinc-100">Mundane</div>
-          </button>
-
-          {/* Magic/Resonance paths */}
-          {availableOptions.map((option) => {
-            const pathInfo = magicPaths.find((p) => p.id === option.path);
-            if (!pathInfo) return null;
-
-            const isSelected = selectedPath === option.path;
-            const rating = option.magicRating || option.resonanceRating || 0;
-            const isResonance = pathInfo.hasResonance;
-
-            return (
+    <>
+      <CreationCard
+        title="Magic / Resonance"
+        description={
+          selectedPathData
+            ? `${selectedPathData.name}${pathRating > 0 ? ` • ${isResonancePath ? "RES" : "MAG"} ${pathRating}` : ""}`
+            : `Priority ${magicPriority} - ${availableOptions.length + 1} options`
+        }
+        status={validationStatus}
+      >
+        <div className="space-y-3">
+          {/* Selection trigger / Selected display */}
+          {selectedPathData ? (
+            // Selected state
+            <div className="space-y-3">
+              {/* Selected path button */}
               <button
-                key={option.path}
-                onClick={() => handleSelect(option.path)}
-                className={`relative rounded-lg border-2 p-3 text-left transition-all ${
-                  isSelected
-                    ? isResonance
-                      ? "border-cyan-500 bg-cyan-50 dark:border-cyan-500 dark:bg-cyan-900/20"
-                      : "border-purple-500 bg-purple-50 dark:border-purple-500 dark:bg-purple-900/20"
-                    : "border-zinc-200 bg-white hover:border-zinc-300 dark:border-zinc-700 dark:bg-zinc-800 dark:hover:border-zinc-600"
+                onClick={() => setIsModalOpen(true)}
+                className={`flex w-full items-center justify-between rounded-lg border-2 px-4 py-3 text-left transition-colors ${
+                  selectedPath === "mundane"
+                    ? "border-emerald-200 bg-emerald-50 hover:border-emerald-300 hover:bg-emerald-100 dark:border-emerald-800 dark:bg-emerald-900/20 dark:hover:border-emerald-700 dark:hover:bg-emerald-900/30"
+                    : isResonancePath
+                    ? "border-cyan-200 bg-cyan-50 hover:border-cyan-300 hover:bg-cyan-100 dark:border-cyan-800 dark:bg-cyan-900/20 dark:hover:border-cyan-700 dark:hover:bg-cyan-900/30"
+                    : "border-purple-200 bg-purple-50 hover:border-purple-300 hover:bg-purple-100 dark:border-purple-800 dark:bg-purple-900/20 dark:hover:border-purple-700 dark:hover:bg-purple-900/30"
                 }`}
               >
-                {isSelected && (
-                  <div className="absolute right-2 top-2">
-                    <Check className={`h-4 w-4 ${isResonance ? "text-cyan-500" : "text-purple-500"}`} />
-                  </div>
-                )}
-                {isResonance ? (
-                  <Zap className="mb-1 h-4 w-4 text-cyan-500" />
-                ) : (
-                  <Sparkles className="mb-1 h-4 w-4 text-purple-500" />
-                )}
-                <div className="text-sm font-medium text-zinc-900 dark:text-zinc-100">
-                  {pathInfo.name}
-                </div>
-                <div className="text-xs text-zinc-500 dark:text-zinc-400">
-                  {isResonance ? "RES" : "MAG"} {rating}
-                </div>
+                <span
+                  className={`font-semibold uppercase ${
+                    selectedPath === "mundane"
+                      ? "text-emerald-900 dark:text-emerald-100"
+                      : isResonancePath
+                      ? "text-cyan-900 dark:text-cyan-100"
+                      : "text-purple-900 dark:text-purple-100"
+                  }`}
+                >
+                  {selectedPathData.name}
+                </span>
+                <span
+                  className={`text-sm ${
+                    selectedPath === "mundane"
+                      ? "text-emerald-600 dark:text-emerald-400"
+                      : isResonancePath
+                      ? "text-cyan-600 dark:text-cyan-400"
+                      : "text-purple-600 dark:text-purple-400"
+                  }`}
+                >
+                  Change
+                </span>
               </button>
-            );
-          })}
-        </div>
 
-        {/* Aspected Mage Skill Group */}
-        {selectedPath === "aspected-mage" && (
-          <div className="space-y-2">
-            <div className="text-xs font-medium text-amber-600 dark:text-amber-400">
-              Choose magical focus (required)
-            </div>
-            <div className="grid grid-cols-3 gap-2">
-              {ASPECTED_MAGE_GROUPS.map((group) => (
-                <button
-                  key={group.id}
-                  onClick={() => handleAspectedGroupSelect(group.id)}
-                  className={`rounded-lg border-2 p-2 text-center transition-all ${
-                    selectedAspectedGroup === group.id
-                      ? "border-amber-500 bg-amber-50 dark:border-amber-500 dark:bg-amber-900/20"
-                      : "border-zinc-200 bg-white hover:border-zinc-300 dark:border-zinc-700 dark:bg-zinc-800"
-                  }`}
-                >
-                  <div className="text-sm font-medium text-zinc-900 dark:text-zinc-100">
-                    {group.name}
-                  </div>
-                  <div className="text-[10px] text-zinc-500 dark:text-zinc-400">
-                    {group.description}
-                  </div>
-                </button>
-              ))}
-            </div>
-          </div>
-        )}
-
-        {/* Tradition Selection */}
-        {canSelectTradition && traditions.length > 0 && (
-          <div className="space-y-2">
-            <button
-              onClick={() => setShowTraditions(!showTraditions)}
-              className="flex w-full items-center justify-between rounded-lg border border-purple-200 bg-purple-50 px-3 py-2 text-left dark:border-purple-800 dark:bg-purple-900/20"
-            >
-              <div>
-                <div className="text-xs font-medium text-purple-600 dark:text-purple-400">
-                  Tradition
+              {/* Path stats */}
+              {selectedPath !== "mundane" && pathRating > 0 && (
+                <div className="text-sm text-zinc-600 dark:text-zinc-400">
+                  <span className="font-medium text-zinc-900 dark:text-zinc-100">
+                    {isResonancePath ? "Resonance" : "Magic"} Rating:
+                  </span>{" "}
+                  {pathRating}
+                  {selectedPath === "adept" && (
+                    <span className="ml-3">
+                      <span className="font-medium text-zinc-900 dark:text-zinc-100">
+                        Power Points:
+                      </span>{" "}
+                      {pathRating}.0 PP
+                    </span>
+                  )}
                 </div>
-                <div className="text-sm text-purple-900 dark:text-purple-100">
-                  {selectedTraditionData?.name || "Select tradition..."}
-                </div>
-              </div>
-              <ChevronDown
-                className={`h-4 w-4 text-purple-500 transition-transform ${
-                  showTraditions ? "rotate-180" : ""
-                }`}
-              />
-            </button>
+              )}
 
-            {showTraditions && (
-              <div className="max-h-48 space-y-1 overflow-y-auto rounded-lg border border-zinc-200 bg-white p-2 dark:border-zinc-700 dark:bg-zinc-800">
-                {traditions.map((tradition) => (
+              {/* Abilities with tree formatting */}
+              {pathInfo && (
+                <div className="text-sm">
+                  <span className="font-medium text-zinc-900 dark:text-zinc-100">
+                    {selectedPath === "mundane" ? "Build Focus" : "Abilities"}
+                  </span>
+                  <ul className="mt-1 space-y-0.5">
+                    {pathInfo.features.map((feature, index) => (
+                      <li
+                        key={index}
+                        className="flex items-start gap-2 text-zinc-600 dark:text-zinc-400"
+                      >
+                        <span className="text-zinc-400">
+                          {index === pathInfo.features.length - 1 ? "└─" : "├─"}
+                        </span>
+                        {feature}
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              )}
+
+              {/* Aspected Mage Skill Group */}
+              {selectedPath === "aspected-mage" && (
+                <div className="space-y-2">
+                  <div className="text-xs font-medium text-amber-600 dark:text-amber-400">
+                    Choose magical focus (required)
+                  </div>
+                  <div className="grid grid-cols-3 gap-2">
+                    {ASPECTED_MAGE_GROUPS.map((group) => (
+                      <button
+                        key={group.id}
+                        onClick={() => handleAspectedGroupSelect(group.id)}
+                        className={`rounded-lg border-2 p-2 text-center transition-all ${
+                          selectedAspectedGroup === group.id
+                            ? "border-amber-500 bg-amber-50 dark:border-amber-500 dark:bg-amber-900/20"
+                            : "border-zinc-200 bg-white hover:border-zinc-300 dark:border-zinc-700 dark:bg-zinc-800"
+                        }`}
+                      >
+                        <div className="text-sm font-medium text-zinc-900 dark:text-zinc-100">
+                          {group.name}
+                        </div>
+                        <div className="text-[10px] text-zinc-500 dark:text-zinc-400">
+                          {group.description}
+                        </div>
+                      </button>
+                    ))}
+                  </div>
+                </div>
+              )}
+
+              {/* Tradition Selection */}
+              {canSelectTradition && traditions.length > 0 && (
+                <div className="space-y-2">
                   <button
-                    key={tradition.id}
-                    onClick={() => handleTraditionSelect(tradition.id)}
-                    className={`w-full rounded-lg px-3 py-2 text-left transition-colors ${
-                      selectedTradition === tradition.id
-                        ? "bg-purple-100 dark:bg-purple-900/30"
-                        : "hover:bg-zinc-50 dark:hover:bg-zinc-700"
-                    }`}
+                    onClick={() => setShowTraditions(!showTraditions)}
+                    className="flex w-full items-center justify-between rounded-lg border border-purple-200 bg-purple-50 px-3 py-2 text-left dark:border-purple-800 dark:bg-purple-900/20"
                   >
-                    <div className="text-sm font-medium text-zinc-900 dark:text-zinc-100">
-                      {tradition.name}
+                    <div>
+                      <div className="text-xs font-medium text-purple-600 dark:text-purple-400">
+                        Tradition {!selectedTradition && "(required)"}
+                      </div>
+                      <div className="text-sm text-purple-900 dark:text-purple-100">
+                        {selectedTraditionData?.name || "Select tradition..."}
+                      </div>
                     </div>
-                    <div className="text-xs text-zinc-500 dark:text-zinc-400">
-                      Drain: {tradition.drainAttributes.join(" + ")}
-                    </div>
-                  </button>
-                ))}
-              </div>
-            )}
-          </div>
-        )}
-
-        {/* Mentor Spirit Selection (Optional) */}
-        {canSelectMentorSpirit && mentorSpirits.length > 0 && (
-          <div className="space-y-2">
-            <button
-              onClick={() => setShowMentors(!showMentors)}
-              className="flex w-full items-center justify-between rounded-lg border border-indigo-200 bg-indigo-50 px-3 py-2 text-left dark:border-indigo-800 dark:bg-indigo-900/20"
-            >
-              <div>
-                <div className="flex items-center gap-2">
-                  <span className="text-xs font-medium text-indigo-600 dark:text-indigo-400">
-                    Mentor Spirit
-                  </span>
-                  <span className="rounded bg-indigo-100 px-1 py-0.5 text-[10px] text-indigo-600 dark:bg-indigo-900 dark:text-indigo-400">
-                    Optional • 5 Karma
-                  </span>
-                </div>
-                <div className="text-sm text-indigo-900 dark:text-indigo-100">
-                  {selectedMentorData?.name || "None"}
-                </div>
-              </div>
-              <ChevronDown
-                className={`h-4 w-4 text-indigo-500 transition-transform ${
-                  showMentors ? "rotate-180" : ""
-                }`}
-              />
-            </button>
-
-            {showMentors && (
-              <div className="max-h-48 space-y-1 overflow-y-auto rounded-lg border border-zinc-200 bg-white p-2 dark:border-zinc-700 dark:bg-zinc-800">
-                <button
-                  onClick={() => handleMentorSpiritSelect(null)}
-                  className={`w-full rounded-lg px-3 py-2 text-left transition-colors ${
-                    !selectedMentorSpiritId
-                      ? "bg-indigo-100 dark:bg-indigo-900/30"
-                      : "hover:bg-zinc-50 dark:hover:bg-zinc-700"
-                  }`}
-                >
-                  <div className="text-sm font-medium text-zinc-900 dark:text-zinc-100">
-                    No Mentor Spirit
-                  </div>
-                </button>
-                {mentorSpirits.map((mentor) => {
-                  const isSelected = selectedMentorSpiritId === mentor.id;
-                  const canSelect = isSelected || canAffordMentorSpirit;
-                  return (
-                    <button
-                      key={mentor.id}
-                      onClick={() => canSelect && handleMentorSpiritSelect(mentor.id)}
-                      disabled={!canSelect}
-                      className={`w-full rounded-lg px-3 py-2 text-left transition-colors ${
-                        isSelected
-                          ? "bg-indigo-100 dark:bg-indigo-900/30"
-                          : canSelect
-                          ? "hover:bg-zinc-50 dark:hover:bg-zinc-700"
-                          : "cursor-not-allowed opacity-50"
+                    <ChevronDown
+                      className={`h-4 w-4 text-purple-500 transition-transform ${
+                        showTraditions ? "rotate-180" : ""
                       }`}
-                    >
-                      <div className="text-sm font-medium text-zinc-900 dark:text-zinc-100">
-                        {mentor.name}
-                      </div>
-                      <div className="text-xs text-zinc-500 dark:text-zinc-400 line-clamp-1">
-                        {mentor.description}
-                      </div>
-                    </button>
-                  );
-                })}
-              </div>
-            )}
-          </div>
-        )}
+                    />
+                  </button>
 
-        {/* Summary */}
-        {selectedPath && selectedPath !== "mundane" && (
-          <div className="rounded-lg bg-zinc-50 p-3 text-xs dark:bg-zinc-800/50">
-            <div className="flex flex-wrap gap-x-4 gap-y-1">
-              {pathRating > 0 && (
-                <span className="text-zinc-600 dark:text-zinc-400">
-                  {magicPaths.find((p) => p.id === selectedPath)?.hasResonance ? "Resonance" : "Magic"}: <strong className="text-zinc-900 dark:text-zinc-100">{pathRating}</strong>
-                </span>
+                  {showTraditions && (
+                    <div className="max-h-48 space-y-1 overflow-y-auto rounded-lg border border-zinc-200 bg-white p-2 dark:border-zinc-700 dark:bg-zinc-800">
+                      {traditions.map((tradition) => (
+                        <button
+                          key={tradition.id}
+                          onClick={() => handleTraditionSelect(tradition.id)}
+                          className={`w-full rounded-lg px-3 py-2 text-left transition-colors ${
+                            selectedTradition === tradition.id
+                              ? "bg-purple-100 dark:bg-purple-900/30"
+                              : "hover:bg-zinc-50 dark:hover:bg-zinc-700"
+                          }`}
+                        >
+                          <div className="text-sm font-medium text-zinc-900 dark:text-zinc-100">
+                            {tradition.name}
+                          </div>
+                          <div className="text-xs text-zinc-500 dark:text-zinc-400">
+                            Drain: {tradition.drainAttributes.join(" + ")}
+                          </div>
+                        </button>
+                      ))}
+                    </div>
+                  )}
+                </div>
               )}
-              {selectedTraditionData && (
-                <span className="text-zinc-600 dark:text-zinc-400">
-                  Tradition: <strong className="text-zinc-900 dark:text-zinc-100">{selectedTraditionData.name}</strong>
-                </span>
-              )}
-              {selectedMentorData && (
-                <span className="text-zinc-600 dark:text-zinc-400">
-                  Mentor: <strong className="text-zinc-900 dark:text-zinc-100">{selectedMentorData.name}</strong>
-                </span>
+
+              {/* Mentor Spirit Selection (Optional) */}
+              {canSelectMentorSpirit && mentorSpirits.length > 0 && (
+                <div className="space-y-2">
+                  <button
+                    onClick={() => setShowMentors(!showMentors)}
+                    className="flex w-full items-center justify-between rounded-lg border border-indigo-200 bg-indigo-50 px-3 py-2 text-left dark:border-indigo-800 dark:bg-indigo-900/20"
+                  >
+                    <div>
+                      <div className="flex items-center gap-2">
+                        <span className="text-xs font-medium text-indigo-600 dark:text-indigo-400">
+                          Mentor Spirit
+                        </span>
+                        <span className="rounded bg-indigo-100 px-1 py-0.5 text-[10px] text-indigo-600 dark:bg-indigo-900 dark:text-indigo-400">
+                          Optional • 5 Karma
+                        </span>
+                      </div>
+                      <div className="text-sm text-indigo-900 dark:text-indigo-100">
+                        {selectedMentorData?.name || "None"}
+                      </div>
+                    </div>
+                    <ChevronDown
+                      className={`h-4 w-4 text-indigo-500 transition-transform ${
+                        showMentors ? "rotate-180" : ""
+                      }`}
+                    />
+                  </button>
+
+                  {showMentors && (
+                    <div className="max-h-48 space-y-1 overflow-y-auto rounded-lg border border-zinc-200 bg-white p-2 dark:border-zinc-700 dark:bg-zinc-800">
+                      <button
+                        onClick={() => handleMentorSpiritSelect(null)}
+                        className={`w-full rounded-lg px-3 py-2 text-left transition-colors ${
+                          !selectedMentorSpiritId
+                            ? "bg-indigo-100 dark:bg-indigo-900/30"
+                            : "hover:bg-zinc-50 dark:hover:bg-zinc-700"
+                        }`}
+                      >
+                        <div className="text-sm font-medium text-zinc-900 dark:text-zinc-100">
+                          No Mentor Spirit
+                        </div>
+                      </button>
+                      {mentorSpirits.map((mentor) => {
+                        const isSelected = selectedMentorSpiritId === mentor.id;
+                        const canSelect = isSelected || canAffordMentorSpirit;
+                        return (
+                          <button
+                            key={mentor.id}
+                            onClick={() => canSelect && handleMentorSpiritSelect(mentor.id)}
+                            disabled={!canSelect}
+                            className={`w-full rounded-lg px-3 py-2 text-left transition-colors ${
+                              isSelected
+                                ? "bg-indigo-100 dark:bg-indigo-900/30"
+                                : canSelect
+                                ? "hover:bg-zinc-50 dark:hover:bg-zinc-700"
+                                : "cursor-not-allowed opacity-50"
+                            }`}
+                          >
+                            <div className="text-sm font-medium text-zinc-900 dark:text-zinc-100">
+                              {mentor.name}
+                            </div>
+                            <div className="line-clamp-1 text-xs text-zinc-500 dark:text-zinc-400">
+                              {mentor.description}
+                            </div>
+                          </button>
+                        );
+                      })}
+                    </div>
+                  )}
+                </div>
               )}
             </div>
-          </div>
-        )}
-      </div>
-    </CreationCard>
+          ) : (
+            // No selection state
+            <div className="space-y-3">
+              <button
+                onClick={() => setIsModalOpen(true)}
+                className="flex w-full items-center justify-between rounded-lg border-2 border-dashed border-zinc-300 bg-zinc-50 px-4 py-3 text-left transition-colors hover:border-zinc-400 hover:bg-zinc-100 dark:border-zinc-600 dark:bg-zinc-800 dark:hover:border-zinc-500 dark:hover:bg-zinc-700"
+              >
+                <span className="text-zinc-500 dark:text-zinc-400">
+                  Choose path...
+                </span>
+                <span className="flex items-center gap-1 text-sm font-medium text-zinc-600 dark:text-zinc-300">
+                  Select
+                  <ChevronRight className="h-4 w-4" />
+                </span>
+              </button>
+
+              {/* Warning if opened modal but closed without selection */}
+              {validationStatus === "warning" && (
+                <p className="text-xs text-amber-600 dark:text-amber-400">
+                  ⚠ A magical path must be selected to continue
+                </p>
+              )}
+            </div>
+          )}
+        </div>
+      </CreationCard>
+
+      {/* Selection Modal */}
+      <MagicPathModal
+        isOpen={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
+        onConfirm={handleSelect}
+        availableOptions={availableOptions}
+        priorityLevel={magicPriority}
+        currentSelection={selectedPath || null}
+        magicPaths={magicPaths}
+      />
+    </>
   );
 }
