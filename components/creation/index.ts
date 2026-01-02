@@ -22,5 +22,8 @@ export { ContactsCard } from "./ContactsCard";
 export { IdentitiesCard } from "./IdentitiesCard";
 export { CharacterInfoCard } from "./CharacterInfoCard";
 
+// Phase 6: Summary & Finalization Components
+export { DerivedStatsCard } from "./DerivedStatsCard";
+
 // Shared components
 export * from "./shared";

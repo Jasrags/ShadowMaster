@@ -28,7 +28,7 @@ import {
   Save,
 } from "lucide-react";
 
-// Phase 2, 3, 4 & 5 Components
+// Phase 2, 3, 4, 5 & 6 Components
 import {
   PrioritySelectionCard,
   MetatypeCard,
@@ -46,6 +46,7 @@ import {
   ContactsCard,
   IdentitiesCard,
   CharacterInfoCard,
+  DerivedStatsCard,
 } from "@/components/creation";
 
 // =============================================================================
@@ -359,12 +360,8 @@ export function SheetCreationLayout({
         {/* Special Attributes - Phase 3 */}
         <SpecialAttributesCard state={creationState} updateState={updateState} />
 
-        {/* Derived Stats - Display only */}
-        <PlaceholderCard
-          title="Derived Stats"
-          description="Initiative, Limits, Condition Monitors (calculated automatically)"
-          status="pending"
-        />
+        {/* Derived Stats - Phase 6 */}
+        <DerivedStatsCard state={creationState} updateState={updateState} />
 
         {/* Spells - Phase 3 (conditional) */}
         {isMagical && (
