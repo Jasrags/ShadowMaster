@@ -28,7 +28,7 @@ import {
   Save,
 } from "lucide-react";
 
-// Phase 2 & 3 Components
+// Phase 2, 3 & 4 Components
 import {
   PrioritySelectionCard,
   MetatypeCard,
@@ -40,6 +40,9 @@ import {
   AdeptPowersCard,
   ComplexFormsCard,
   SpecialAttributesCard,
+  GearCard,
+  AugmentationsCard,
+  VehiclesCard,
 } from "@/components/creation";
 
 // =============================================================================
@@ -400,25 +403,13 @@ export function SheetCreationLayout({
         />
 
         {/* Gear - Phase 4 */}
-        <PlaceholderCard
-          title="Gear"
-          description="Purchase weapons, armor, electronics, and other equipment"
-          status="pending"
-        />
+        <GearCard state={creationState} updateState={updateState} />
 
         {/* Augmentations - Phase 4 */}
-        <PlaceholderCard
-          title="Augmentations"
-          description="Install cyberware and bioware"
-          status="pending"
-        />
+        <AugmentationsCard state={creationState} updateState={updateState} />
 
-        {/* Vehicles & Drones - Phase 4 (conditional for riggers) */}
-        <PlaceholderCard
-          title="Vehicles & Drones"
-          description="Purchase vehicles, drones, and rigger gear"
-          status="pending"
-        />
+        {/* Vehicles & Drones - Phase 4 */}
+        <VehiclesCard state={creationState} updateState={updateState} />
 
         {/* Identities - Phase 5 */}
         <PlaceholderCard

@@ -12,5 +12,10 @@ export { AdeptPowersCard } from "./AdeptPowersCard";
 export { ComplexFormsCard } from "./ComplexFormsCard";
 export { SpecialAttributesCard } from "./SpecialAttributesCard";
 
+// Phase 4: Resources & Gear Components
+export { GearCard } from "./GearCard";
+export { AugmentationsCard } from "./AugmentationsCard";
+export { VehiclesCard } from "./VehiclesCard";
+
 // Shared components
 export * from "./shared";
