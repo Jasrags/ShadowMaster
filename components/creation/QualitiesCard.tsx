@@ -371,10 +371,10 @@ function QualitySelectionModal({
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50">
-      <div className="max-h-[90vh] w-full max-w-2xl overflow-hidden rounded-lg bg-white shadow-xl dark:bg-zinc-900">
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4">
+      <div className="flex max-h-[85vh] w-full max-w-2xl flex-col overflow-hidden rounded-lg bg-white shadow-xl dark:bg-zinc-900">
         {/* Header */}
-        <div className="flex items-center justify-between border-b border-zinc-200 px-6 py-4 dark:border-zinc-700">
+        <div className="flex shrink-0 items-center justify-between border-b border-zinc-200 px-6 py-4 dark:border-zinc-700">
           <h3 className="text-lg font-semibold text-zinc-900 dark:text-zinc-100">
             Add {isPositive ? "Positive" : "Negative"} Quality
           </h3>
@@ -387,7 +387,7 @@ function QualitySelectionModal({
         </div>
 
         {/* Search and budget info */}
-        <div className="border-b border-zinc-200 px-6 py-4 dark:border-zinc-700">
+        <div className="shrink-0 border-b border-zinc-200 px-6 py-4 dark:border-zinc-700">
           <div className="relative mb-3">
             <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-zinc-400" />
             <input
@@ -404,8 +404,8 @@ function QualitySelectionModal({
           </p>
         </div>
 
-        {/* Quality list */}
-        <div className="max-h-[50vh] overflow-y-auto px-6 py-4">
+        {/* Quality list - scrollable */}
+        <div className="min-h-0 flex-1 overflow-y-auto px-6 py-4">
           {QUALITY_CATEGORIES.filter((cat) => qualitiesByCategory[cat].length > 0).map(
             (category) => (
               <div key={category} className="mb-4">
@@ -491,7 +491,7 @@ function QualitySelectionModal({
 
         {/* Specification/Level selection (if needed) */}
         {selectedQuality && (selectedQuality.requiresSpecification || selectedQuality.levels) && (
-          <div className="border-t border-zinc-200 px-6 py-4 dark:border-zinc-700">
+          <div className="shrink-0 border-t border-zinc-200 px-6 py-4 dark:border-zinc-700">
             {selectedQuality.requiresSpecification && (
               <div className="mb-3">
                 <label className="mb-1 block text-sm font-medium text-zinc-700 dark:text-zinc-300">
@@ -566,7 +566,7 @@ function QualitySelectionModal({
         )}
 
         {/* Footer */}
-        <div className="flex items-center justify-between border-t border-zinc-200 px-6 py-4 dark:border-zinc-700">
+        <div className="flex shrink-0 items-center justify-between border-t border-zinc-200 px-6 py-4 dark:border-zinc-700">
           <div className="text-sm text-zinc-600 dark:text-zinc-400">
             {selectedQuality ? (
               <>
