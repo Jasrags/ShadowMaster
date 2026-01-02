@@ -116,6 +116,68 @@ function PlaceholderCard({
 // BUDGET SUMMARY CARD
 // =============================================================================
 
+/**
+ * Determines the status and color for a budget bar.
+ *
+ * Status bar behavior:
+ * - Starts at 0/total (empty bar)
+ * - Green bar grows as points are spent
+ * - Fully spent (remaining = 0): Green, shows complete
+ * - Overspent (remaining < 0): Red, shows error
+ * - Unspent points that will be lost: Amber/warning
+ */
+function getBudgetStatus(
+  budget: { spent: number; total: number; remaining: number },
+  budgetId: string
+): {
+  barColor: string;
+  textColor: string;
+  status: "normal" | "complete" | "warning" | "error";
+} {
+  // Overspent = error (red)
+  if (budget.remaining < 0) {
+    return {
+      barColor: "bg-red-500",
+      textColor: "text-red-600 dark:text-red-400",
+      status: "error",
+    };
+  }
+
+  // Fully spent = complete (green)
+  if (budget.remaining === 0 && budget.total > 0) {
+    return {
+      barColor: "bg-emerald-500",
+      textColor: "text-emerald-600 dark:text-emerald-400",
+      status: "complete",
+    };
+  }
+
+  // Some budgets give warnings when points remain unspent
+  // (points that don't carry over to gameplay)
+  const noCarryoverBudgets = [
+    "attribute-points",
+    "skill-points",
+    "skill-group-points",
+    "special-attribute-points",
+  ];
+
+  if (noCarryoverBudgets.includes(budgetId) && budget.remaining > 0 && budget.spent > 0) {
+    // Has started spending but not finished - show as in-progress (blue)
+    return {
+      barColor: "bg-blue-500",
+      textColor: "text-zinc-900 dark:text-zinc-100",
+      status: "normal",
+    };
+  }
+
+  // Normal progress (blue)
+  return {
+    barColor: "bg-blue-500",
+    textColor: "text-zinc-900 dark:text-zinc-100",
+    status: "normal",
+  };
+}
+
 function BudgetSummaryCard() {
   const { budgets, isValid, errors, warnings } = useCreationBudgets();
 
@@ -153,48 +215,40 @@ function BudgetSummaryCard() {
             Set priorities to see available budgets
           </p>
         ) : (
-          budgetList.map((budget) => (
-            <div key={budget.id}>
-              <div className="flex items-center justify-between text-sm">
-                <span className="text-zinc-600 dark:text-zinc-400">
-                  {budget.label}
-                </span>
-                <span
-                  className={`font-medium ${
-                    budget.remaining < 0
-                      ? "text-red-600 dark:text-red-400"
-                      : budget.remaining === 0
-                      ? "text-emerald-600 dark:text-emerald-400"
-                      : "text-zinc-900 dark:text-zinc-100"
-                  }`}
-                >
-                  {budget.displayFormat === "currency"
-                    ? `${budget.remaining.toLocaleString()}¥`
-                    : budget.remaining}
-                  <span className="text-zinc-400"> / {budget.displayFormat === "currency"
-                    ? `${budget.total.toLocaleString()}¥`
-                    : budget.total}</span>
-                </span>
+          budgetList.map((budget) => {
+            const { barColor, textColor } = getBudgetStatus(budget, budget.id);
+            const percentSpent = budget.total > 0
+              ? Math.min(100, Math.max(0, (budget.spent / budget.total) * 100))
+              : 0;
+
+            return (
+              <div key={budget.id}>
+                <div className="flex items-center justify-between text-sm">
+                  <span className="text-zinc-600 dark:text-zinc-400">
+                    {budget.label}
+                  </span>
+                  <span className={`font-medium ${textColor}`}>
+                    {budget.displayFormat === "currency"
+                      ? `${budget.spent.toLocaleString()}¥`
+                      : budget.spent}
+                    <span className="text-zinc-400">
+                      {" / "}
+                      {budget.displayFormat === "currency"
+                        ? `${budget.total.toLocaleString()}¥`
+                        : budget.total}
+                    </span>
+                  </span>
+                </div>
+                {/* Progress bar - grows as points are spent */}
+                <div className="mt-1 h-1.5 overflow-hidden rounded-full bg-zinc-100 dark:bg-zinc-800">
+                  <div
+                    className={`h-full transition-all ${barColor}`}
+                    style={{ width: `${percentSpent}%` }}
+                  />
+                </div>
               </div>
-              {/* Progress bar */}
-              <div className="mt-1 h-1.5 overflow-hidden rounded-full bg-zinc-100 dark:bg-zinc-800">
-                <div
-                  className={`h-full transition-all ${
-                    budget.remaining < 0
-                      ? "bg-red-500"
-                      : budget.remaining === 0
-                      ? "bg-emerald-500"
-                      : "bg-blue-500"
-                  }`}
-                  style={{
-                    width: budget.total > 0
-                      ? `${Math.min(100, Math.max(0, ((budget.total - budget.remaining) / budget.total) * 100))}%`
-                      : "0%",
-                  }}
-                />
-              </div>
-            </div>
-          ))
+            );
+          })
         )}
       </div>
 
