@@ -5,5 +5,12 @@ export { AttributesCard } from "./AttributesCard";
 export { SkillsCard } from "./SkillsCard";
 export { QualitiesCard } from "./QualitiesCard";
 
+// Phase 3: Magic & Resonance Components
+export { MagicPathCard } from "./MagicPathCard";
+export { SpellsCard } from "./SpellsCard";
+export { AdeptPowersCard } from "./AdeptPowersCard";
+export { ComplexFormsCard } from "./ComplexFormsCard";
+export { SpecialAttributesCard } from "./SpecialAttributesCard";
+
 // Shared components
 export * from "./shared";

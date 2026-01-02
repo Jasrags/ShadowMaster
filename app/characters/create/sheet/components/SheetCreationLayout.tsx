@@ -28,13 +28,18 @@ import {
   Save,
 } from "lucide-react";
 
-// Phase 2 Components
+// Phase 2 & 3 Components
 import {
   PrioritySelectionCard,
   MetatypeCard,
   AttributesCard,
   SkillsCard,
   QualitiesCard,
+  MagicPathCard,
+  SpellsCard,
+  AdeptPowersCard,
+  ComplexFormsCard,
+  SpecialAttributesCard,
 } from "@/components/creation";
 
 // =============================================================================
@@ -320,11 +325,7 @@ export function SheetCreationLayout({
         <MetatypeCard state={creationState} updateState={updateState} />
 
         {/* Magic Path - Phase 3 */}
-        <PlaceholderCard
-          title="Magic / Resonance"
-          description="Select magical tradition, adept path, or technomancer"
-          status={magicPath ? "complete" : "pending"}
-        />
+        <MagicPathCard state={creationState} updateState={updateState} />
 
         {/* Budget Summary */}
         <BudgetSummaryCard />
@@ -349,12 +350,8 @@ export function SheetCreationLayout({
         {/* Attributes - Phase 2 */}
         <AttributesCard state={creationState} updateState={updateState} />
 
-        {/* Special Attributes - Phase 2 (placeholder for now, needs Phase 3 magic integration) */}
-        <PlaceholderCard
-          title="Special Attributes"
-          description="Allocate Edge, Magic, or Resonance"
-          status="pending"
-        />
+        {/* Special Attributes - Phase 3 */}
+        <SpecialAttributesCard state={creationState} updateState={updateState} />
 
         {/* Derived Stats - Display only */}
         <PlaceholderCard
@@ -365,36 +362,17 @@ export function SheetCreationLayout({
 
         {/* Spells - Phase 3 (conditional) */}
         {isMagical && (
-          <PlaceholderCard
-            title="Spells"
-            description="Select spells from your tradition"
-            status="pending"
-          />
+          <SpellsCard state={creationState} updateState={updateState} />
         )}
 
         {/* Adept Powers - Phase 3 (conditional) */}
         {isAdept && (
-          <PlaceholderCard
-            title="Adept Powers"
-            description="Select powers using power points"
-            status="pending"
-          />
+          <AdeptPowersCard state={creationState} updateState={updateState} />
         )}
 
         {/* Complex Forms - Phase 3 (conditional) */}
         {isTechnomancer && (
-          <>
-            <PlaceholderCard
-              title="Complex Forms"
-              description="Select technomancer complex forms"
-              status="pending"
-            />
-            <PlaceholderCard
-              title="Living Persona"
-              description="Your Matrix stats (calculated from mental attributes)"
-              status="pending"
-            />
-          </>
+          <ComplexFormsCard state={creationState} updateState={updateState} />
         )}
       </div>
 
