@@ -46,31 +46,36 @@ function createInitialCreationState(): CreationState {
 interface SheetCreationContentProps {
   campaignId?: string;
   campaign?: Campaign | null;
+  existingCharacter?: { id: string; editionCode: string; creationState?: CreationState } | null;
 }
 
-function SheetCreationContent({ campaignId, campaign }: SheetCreationContentProps) {
+function SheetCreationContent({ campaignId, campaign, existingCharacter }: SheetCreationContentProps) {
   const router = useRouter();
   const [selectedEdition, setSelectedEdition] = useState<EditionCode | null>(
-    campaign?.editionCode || null
+    (existingCharacter?.editionCode as EditionCode) || campaign?.editionCode || null
   );
   const { loading, error, ready } = useRulesetStatus();
   const { loadRuleset, editionCode } = useRuleset();
   const priorityTable = usePriorityTable();
 
-  // Creation state management
-  const [creationState, setCreationState] = useState<CreationState>(
-    createInitialCreationState
-  );
-  const [characterId, setCharacterId] = useState<ID | null>(null);
+  // Creation state management - initialize from existing character if provided
+  const [creationState, setCreationState] = useState<CreationState>(() => {
+    if (existingCharacter?.creationState) {
+      return existingCharacter.creationState;
+    }
+    return createInitialCreationState();
+  });
+  const [characterId, setCharacterId] = useState<ID | null>(existingCharacter?.id || null);
   const [isSaving, setIsSaving] = useState(false);
   const [lastSaved, setLastSaved] = useState<Date | null>(null);
 
-  // Auto-load ruleset if campaign is provided
+  // Auto-load ruleset if campaign or existing character is provided
   useEffect(() => {
-    if (campaign?.editionCode && !ready && !loading) {
-      loadRuleset(campaign.editionCode, campaign.enabledBookIds);
+    const edition = existingCharacter?.editionCode || campaign?.editionCode;
+    if (edition && !ready && !loading) {
+      loadRuleset(edition as EditionCode, campaign?.enabledBookIds);
     }
-  }, [campaign, ready, loading, loadRuleset]);
+  }, [existingCharacter, campaign, ready, loading, loadRuleset]);
 
   // Handle edition selection
   const handleEditionSelect = async (edition: EditionCode) => {
@@ -260,34 +265,51 @@ function SheetCreationContent({ campaignId, campaign }: SheetCreationContentProp
 export default function SheetCreationPage() {
   const searchParams = useSearchParams();
   const campaignId = searchParams.get("campaignId") || undefined;
+  const existingCharacterId = searchParams.get("characterId") || undefined;
   const [campaign, setCampaign] = useState<Campaign | null>(null);
-  const [loadingCampaign, setLoadingCampaign] = useState(!!campaignId);
+  const [existingCharacter, setExistingCharacter] = useState<{ id: string; editionCode: string; creationState?: CreationState } | null>(null);
+  const [loading, setLoading] = useState(!!campaignId || !!existingCharacterId);
 
-  // Load campaign if campaignId is provided
+  // Load campaign and/or existing character if IDs are provided
   useEffect(() => {
-    if (!campaignId) {
-      setLoadingCampaign(false);
-      return;
-    }
-
-    async function loadCampaign() {
+    async function loadData() {
       try {
-        const res = await fetch(`/api/campaigns/${campaignId}`);
-        const data = await res.json();
-        if (data.success) {
-          setCampaign(data.campaign);
+        // Load campaign if campaignId provided
+        if (campaignId) {
+          const res = await fetch(`/api/campaigns/${campaignId}`);
+          const data = await res.json();
+          if (data.success) {
+            setCampaign(data.campaign);
+          }
+        }
+
+        // Load existing character if characterId provided
+        if (existingCharacterId) {
+          const res = await fetch(`/api/characters/${existingCharacterId}`);
+          const data = await res.json();
+          if (data.success && data.character) {
+            setExistingCharacter({
+              id: data.character.id,
+              editionCode: data.character.editionCode,
+              creationState: data.character.metadata?.creationState as CreationState | undefined,
+            });
+          }
         }
       } catch (e) {
-        console.error("Failed to load campaign", e);
+        console.error("Failed to load data", e);
       } finally {
-        setLoadingCampaign(false);
+        setLoading(false);
       }
     }
 
-    loadCampaign();
-  }, [campaignId]);
+    if (campaignId || existingCharacterId) {
+      loadData();
+    } else {
+      setLoading(false);
+    }
+  }, [campaignId, existingCharacterId]);
 
-  if (loadingCampaign) {
+  if (loading) {
     return (
       <div className="flex min-h-[400px] items-center justify-center">
         <Loader2 className="h-8 w-8 animate-spin text-zinc-400" />
@@ -322,7 +344,17 @@ export default function SheetCreationPage() {
           <div className="flex items-center gap-3">
             {/* Mode switcher - link to wizard mode */}
             <Link
-              href={campaignId ? `/characters/create?campaignId=${campaignId}` : "/characters/create"}
+              href={(() => {
+                // If we have an existing character, go to the edit page
+                if (existingCharacterId) {
+                  return `/characters/${existingCharacterId}/edit`;
+                }
+                // Otherwise go to create with optional campaignId
+                const params = new URLSearchParams();
+                if (campaignId) params.set("campaignId", campaignId);
+                const queryString = params.toString();
+                return `/characters/create${queryString ? `?${queryString}` : ""}`;
+              })()}
               className="flex items-center gap-1.5 rounded-lg border border-zinc-200 px-3 py-1.5 text-xs font-medium text-zinc-600 transition-colors hover:bg-zinc-100 dark:border-zinc-700 dark:text-zinc-400 dark:hover:bg-zinc-800"
             >
               <Wand2 className="h-3.5 w-3.5" />
@@ -335,7 +367,11 @@ export default function SheetCreationPage() {
       {/* Content wrapped in RulesetProvider */}
       <main className="mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8">
         <RulesetProvider>
-          <SheetCreationContent campaignId={campaignId} campaign={campaign} />
+          <SheetCreationContent
+            campaignId={campaignId}
+            campaign={campaign}
+            existingCharacter={existingCharacter}
+          />
         </RulesetProvider>
       </main>
     </div>

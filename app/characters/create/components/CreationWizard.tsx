@@ -1534,7 +1534,13 @@ export function CreationWizard({ onCancel, onComplete, characterId: initialChara
             </div>
             {/* Mode switcher - link to sheet mode */}
             <Link
-              href={campaignId ? `/characters/create/sheet?campaignId=${campaignId}` : "/characters/create/sheet"}
+              href={(() => {
+                const params = new URLSearchParams();
+                if (characterId) params.set("characterId", characterId);
+                if (campaignId) params.set("campaignId", campaignId);
+                const queryString = params.toString();
+                return `/characters/create/sheet${queryString ? `?${queryString}` : ""}`;
+              })()}
               className="flex items-center gap-1.5 rounded-lg border border-zinc-200 px-3 py-1.5 text-xs font-medium text-zinc-600 transition-colors hover:bg-zinc-100 dark:border-zinc-700 dark:text-zinc-400 dark:hover:bg-zinc-800"
             >
               <LayoutGrid className="h-3.5 w-3.5" />
