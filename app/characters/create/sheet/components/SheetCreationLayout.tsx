@@ -6,7 +6,7 @@
  * Three-column responsive layout for sheet-driven character creation.
  * Organizes creation components into logical groups:
  *
- * Column 1 (Foundation): Priority, Karma Summary, Qualities
+ * Column 1 (Foundation): Priority, Metatype, Qualities
  * Column 2 (Stats): Attributes, Special Attributes, Magic/Resonance
  * Column 3 (Abilities): Skills, Knowledge, Gear
  *
@@ -28,6 +28,15 @@ import {
   Save,
 } from "lucide-react";
 
+// Phase 2 Components
+import {
+  PrioritySelectionCard,
+  MetatypeCard,
+  AttributesCard,
+  SkillsCard,
+  QualitiesCard,
+} from "@/components/creation";
+
 // =============================================================================
 // TYPES
 // =============================================================================
@@ -48,7 +57,7 @@ interface SheetCreationLayoutProps {
 
 /**
  * Temporary placeholder card for sections not yet implemented.
- * Will be replaced with actual creation components in Phase 2-6.
+ * Will be replaced with actual creation components in Phase 3-6.
  */
 function PlaceholderCard({
   title,
@@ -283,7 +292,7 @@ function ValidationSummary({
 
 export function SheetCreationLayout({
   creationState,
-  updateState: _updateState, // Used in Phase 2+
+  updateState,
   onFinalize,
   isSaving,
   lastSaved,
@@ -291,8 +300,6 @@ export function SheetCreationLayout({
   campaign: _campaign, // Used in Phase 5+
 }: SheetCreationLayoutProps) {
   // Determine what sections are available based on selections
-  const hasPriorities = Object.keys(creationState.priorities || {}).length === 5;
-  const hasMetatype = !!creationState.selections.metatype;
   const magicPath = creationState.selections["magical-path"] as string | undefined;
   const isMagical = ["magician", "mystic-adept", "aspected-mage"].includes(magicPath || "");
   const isAdept = ["adept", "mystic-adept"].includes(magicPath || "");
@@ -307,18 +314,10 @@ export function SheetCreationLayout({
         </h2>
 
         {/* Priority Selection - Phase 2 */}
-        <PlaceholderCard
-          title="Priority Selection"
-          description="Assign A-E priorities to Metatype, Attributes, Magic, Skills, Resources"
-          status={hasPriorities ? "complete" : "pending"}
-        />
+        <PrioritySelectionCard state={creationState} updateState={updateState} />
 
         {/* Metatype Selection - Phase 2 */}
-        <PlaceholderCard
-          title="Metatype"
-          description="Choose your metatype: Human, Elf, Dwarf, Ork, Troll"
-          status={hasMetatype ? "complete" : hasPriorities ? "pending" : "pending"}
-        />
+        <MetatypeCard state={creationState} updateState={updateState} />
 
         {/* Magic Path - Phase 3 */}
         <PlaceholderCard
@@ -331,11 +330,7 @@ export function SheetCreationLayout({
         <BudgetSummaryCard />
 
         {/* Qualities - Phase 2 */}
-        <PlaceholderCard
-          title="Qualities"
-          description="Select positive and negative qualities"
-          status="pending"
-        />
+        <QualitiesCard state={creationState} updateState={updateState} />
 
         {/* Finalize */}
         <ValidationSummary
@@ -352,13 +347,9 @@ export function SheetCreationLayout({
         </h2>
 
         {/* Attributes - Phase 2 */}
-        <PlaceholderCard
-          title="Attributes"
-          description="Allocate points to Body, Agility, Reaction, Strength, Willpower, Logic, Intuition, Charisma"
-          status="pending"
-        />
+        <AttributesCard state={creationState} updateState={updateState} />
 
-        {/* Special Attributes - Phase 2 */}
+        {/* Special Attributes - Phase 2 (placeholder for now, needs Phase 3 magic integration) */}
         <PlaceholderCard
           title="Special Attributes"
           description="Allocate Edge, Magic, or Resonance"
@@ -414,13 +405,9 @@ export function SheetCreationLayout({
         </h2>
 
         {/* Skills - Phase 2 */}
-        <PlaceholderCard
-          title="Skills"
-          description="Allocate skill points and skill group points"
-          status="pending"
-        />
+        <SkillsCard state={creationState} updateState={updateState} />
 
-        {/* Knowledge & Languages - Phase 2 */}
+        {/* Knowledge & Languages - Phase 2 (placeholder - needs expansion) */}
         <PlaceholderCard
           title="Knowledge & Languages"
           description="Add knowledge skills and languages"
