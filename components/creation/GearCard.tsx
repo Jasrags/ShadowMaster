@@ -235,6 +235,105 @@ function GearItemRow({
 }
 
 // =============================================================================
+// RATED GEAR ITEM ROW COMPONENT
+// =============================================================================
+
+function RatedGearItemRow({
+  name,
+  category,
+  minRating,
+  maxRating,
+  baseCost,
+  baseAvailability,
+  restricted,
+  forbidden,
+  remaining,
+  onAdd,
+}: {
+  name: string;
+  category: string;
+  minRating: number;
+  maxRating: number;
+  baseCost: number;
+  baseAvailability: number;
+  restricted?: boolean;
+  forbidden?: boolean;
+  remaining: number;
+  onAdd: (rating: number) => void;
+}) {
+  const [selectedRating, setSelectedRating] = useState(minRating);
+
+  const cost = baseCost * selectedRating;
+  const availability = baseAvailability * selectedRating;
+  const canAfford = cost <= remaining && availability <= MAX_AVAILABILITY;
+
+  return (
+    <div className="rounded-lg border border-zinc-200 bg-white p-3 dark:border-zinc-700 dark:bg-zinc-900">
+      <div className="flex items-center justify-between">
+        <div className="flex-1 min-w-0">
+          <div className="font-medium text-zinc-900 dark:text-zinc-100">
+            {name}
+          </div>
+          <div className="mt-0.5 flex flex-wrap gap-2 text-xs text-zinc-500 dark:text-zinc-400">
+            <span>{category}</span>
+            <span>Avail: {getAvailabilityDisplay(availability, restricted, forbidden)}</span>
+          </div>
+        </div>
+        <div className="ml-3 text-right">
+          <span className="text-sm font-medium text-zinc-900 dark:text-zinc-100">
+            {formatCurrency(cost)}¥
+          </span>
+        </div>
+      </div>
+
+      {/* Rating selector */}
+      <div className="mt-2 flex items-center justify-between">
+        <div className="flex items-center gap-2">
+          <span className="text-xs text-zinc-500 dark:text-zinc-400">Rating:</span>
+          <button
+            onClick={() => setSelectedRating(Math.max(minRating, selectedRating - 1))}
+            disabled={selectedRating <= minRating}
+            className={`flex h-6 w-6 items-center justify-center rounded transition-colors ${
+              selectedRating > minRating
+                ? "bg-zinc-200 text-zinc-700 hover:bg-zinc-300 dark:bg-zinc-700 dark:text-zinc-200"
+                : "cursor-not-allowed bg-zinc-100 text-zinc-300 dark:bg-zinc-800 dark:text-zinc-600"
+            }`}
+          >
+            <Minus className="h-3 w-3" />
+          </button>
+          <div className="flex h-6 w-8 items-center justify-center rounded bg-zinc-100 text-sm font-bold text-zinc-900 dark:bg-zinc-800 dark:text-zinc-100">
+            {selectedRating}
+          </div>
+          <button
+            onClick={() => setSelectedRating(Math.min(maxRating, selectedRating + 1))}
+            disabled={selectedRating >= maxRating}
+            className={`flex h-6 w-6 items-center justify-center rounded transition-colors ${
+              selectedRating < maxRating
+                ? "bg-zinc-200 text-zinc-700 hover:bg-zinc-300 dark:bg-zinc-700 dark:text-zinc-200"
+                : "cursor-not-allowed bg-zinc-100 text-zinc-300 dark:bg-zinc-800 dark:text-zinc-600"
+            }`}
+          >
+            <Plus className="h-3 w-3" />
+          </button>
+        </div>
+        <button
+          onClick={() => onAdd(selectedRating)}
+          disabled={!canAfford}
+          className={`flex items-center gap-1 rounded px-2 py-1 text-xs font-medium transition-colors ${
+            canAfford
+              ? "bg-emerald-500 text-white hover:bg-emerald-600"
+              : "cursor-not-allowed bg-zinc-100 text-zinc-300 dark:bg-zinc-800 dark:text-zinc-600"
+          }`}
+        >
+          <Plus className="h-3 w-3" />
+          Add
+        </button>
+      </div>
+    </div>
+  );
+}
+
+// =============================================================================
 // CART ITEM ROW COMPONENT
 // =============================================================================
 
@@ -466,19 +565,32 @@ export function GearCard({ state, updateState }: GearCardProps) {
     [remaining, selectedArmor, state.selections, updateState]
   );
 
-  // Add gear
+  // Add gear (with optional rating for rated items)
   const addGear = useCallback(
-    (gear: GearItemData) => {
-      if (gear.cost > remaining) return;
+    (gear: GearItemData, selectedRating?: number) => {
+      // Calculate cost based on rating if item has rating
+      const rating = selectedRating || gear.rating || 1;
+      const baseCost = gear.ratingSpec?.costScaling?.baseValue || gear.cost;
+      const cost = gear.hasRating && gear.ratingSpec?.costScaling?.perRating
+        ? baseCost * rating
+        : gear.cost;
+
+      if (cost > remaining) return;
+
+      // Calculate availability based on rating
+      const baseAvail = gear.ratingSpec?.availabilityScaling?.baseValue || gear.availability;
+      const availability = gear.hasRating && gear.ratingSpec?.availabilityScaling?.perRating
+        ? baseAvail * rating
+        : gear.availability;
 
       const newGear: GearItem = {
         id: `${gear.id}-${Date.now()}`,
-        name: gear.name,
+        name: gear.hasRating ? `${gear.name} (Rating ${rating})` : gear.name,
         category: gear.category,
-        cost: gear.cost,
-        availability: gear.availability,
+        cost,
+        availability,
         quantity: 1,
-        rating: gear.rating,
+        rating: gear.hasRating ? rating : gear.rating,
         modifications: [],
       };
 
@@ -814,17 +926,43 @@ export function GearCard({ state, updateState }: GearCardProps) {
 
           {/* Gear Tab */}
           {activeTab === "gear" &&
-            filteredGear.map((gear) => (
-              <GearItemRow
-                key={gear.id}
-                name={gear.name}
-                stats={<span>{gear.category}</span>}
-                cost={gear.cost}
-                availability={getAvailabilityDisplay(gear.availability, gear.restricted, gear.forbidden)}
-                canAfford={gear.cost <= remaining}
-                onAdd={() => addGear(gear)}
-              />
-            ))}
+            filteredGear.map((gear) => {
+              // Use rated row for items with hasRating
+              if (gear.hasRating && gear.ratingSpec) {
+                const minRating = gear.ratingSpec.rating?.minRating || 1;
+                const maxRating = gear.ratingSpec.rating?.maxRating || gear.maxRating || 6;
+                const baseCost = gear.ratingSpec.costScaling?.baseValue || gear.cost;
+                const baseAvail = gear.ratingSpec.availabilityScaling?.baseValue || gear.availability;
+
+                return (
+                  <RatedGearItemRow
+                    key={gear.id}
+                    name={gear.name}
+                    category={gear.category}
+                    minRating={minRating}
+                    maxRating={maxRating}
+                    baseCost={baseCost}
+                    baseAvailability={baseAvail}
+                    restricted={gear.restricted}
+                    forbidden={gear.forbidden}
+                    remaining={remaining}
+                    onAdd={(rating) => addGear(gear, rating)}
+                  />
+                );
+              }
+
+              return (
+                <GearItemRow
+                  key={gear.id}
+                  name={gear.name}
+                  stats={<span>{gear.category}</span>}
+                  cost={gear.cost}
+                  availability={getAvailabilityDisplay(gear.availability, gear.restricted, gear.forbidden)}
+                  canAfford={gear.cost <= remaining}
+                  onAdd={() => addGear(gear)}
+                />
+              );
+            })}
 
           {/* Foci Tab */}
           {activeTab === "foci" &&

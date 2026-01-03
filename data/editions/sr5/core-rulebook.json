@@ -7205,11 +7205,28 @@
             "id": "area-jammer",
             "name": "Area Jammer",
             "category": "electronics",
-            "cost": 1000,
-            "availability": 8,
-            "restricted": true,
-            "rating": 6,
-            "description": "Jams wireless signals in an area (Rating 1-6)."
+            "cost": 200,
+            "availability": 3,
+            "forbidden": true,
+            "hasRating": true,
+            "maxRating": 6,
+            "costPerRating": true,
+            "ratingSpec": {
+              "rating": {
+                "hasRating": true,
+                "minRating": 1,
+                "maxRating": 6
+              },
+              "costScaling": {
+                "baseValue": 200,
+                "perRating": true
+              },
+              "availabilityScaling": {
+                "baseValue": 3,
+                "perRating": true
+              }
+            },
+            "description": "Jams wireless signals in an area. Generates noise equal to its rating. Rating reduced by 1 per 5m from center."
           },
           {
             "id": "binoculars",
