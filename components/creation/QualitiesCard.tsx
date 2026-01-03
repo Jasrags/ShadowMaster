@@ -204,10 +204,15 @@ function SelectedQualityCard({
   cost: number;
   onRemove: () => void;
 }) {
+  // Get level name if quality has named levels
+  const levelName = selection.level && quality.levels
+    ? quality.levels.find((l) => l.level === selection.level)?.name
+    : null;
+
   const displayName = selection.specification
     ? `${quality.name} (${selection.specification})`
     : selection.level
-    ? `${quality.name} (Rating ${selection.level})`
+    ? `${quality.name} (${levelName || `Rating ${selection.level}`})`
     : quality.name;
 
   return (
@@ -528,38 +533,69 @@ function QualitySelectionModal({
             {selectedQuality.levels && (
               <div>
                 <label className="mb-1 block text-sm font-medium text-zinc-700 dark:text-zinc-300">
-                  Rating
+                  {/* Use "Severity" for qualities with named levels, "Rating" otherwise */}
+                  {selectedQuality.levels[0]?.name ? "Option" : "Rating"}
                 </label>
-                <div className="flex gap-2">
-                  {selectedQuality.levels.map((level) => {
-                    const levelCost = Math.abs(level.karma);
-                    const canAffordLevel = isPositive
-                      ? usedKarma + levelCost <= maxKarma && karmaBalance >= levelCost
-                      : usedKarma + levelCost <= maxKarma;
+                {/* Use dropdown for qualities with named levels or many levels */}
+                {selectedQuality.levels[0]?.name || selectedQuality.levels.length > 4 ? (
+                  <div className="relative">
+                    <select
+                      value={selectedLevel}
+                      onChange={(e) => setSelectedLevel(parseInt(e.target.value))}
+                      className="w-full appearance-none rounded-lg border border-zinc-300 py-2 pl-3 pr-10 text-sm focus:border-emerald-500 focus:outline-none focus:ring-1 focus:ring-emerald-500 dark:border-zinc-600 dark:bg-zinc-800 dark:text-zinc-100"
+                    >
+                      {selectedQuality.levels.map((level) => {
+                        const levelCost = Math.abs(level.karma);
+                        const canAffordLevel = isPositive
+                          ? usedKarma + levelCost <= maxKarma && karmaBalance >= levelCost
+                          : usedKarma + levelCost <= maxKarma;
 
-                    return (
-                      <button
-                        key={level.level}
-                        onClick={() => setSelectedLevel(level.level)}
-                        disabled={!canAffordLevel}
-                        className={`flex-1 rounded-lg border px-3 py-2 text-center transition-colors ${
-                          selectedLevel === level.level
-                            ? isPositive
-                              ? "border-blue-400 bg-blue-100 text-blue-700 dark:border-blue-600 dark:bg-blue-900/50 dark:text-blue-300"
-                              : "border-amber-400 bg-amber-100 text-amber-700 dark:border-amber-600 dark:bg-amber-900/50 dark:text-amber-300"
-                            : canAffordLevel
-                            ? "border-zinc-200 hover:border-zinc-300 dark:border-zinc-700 dark:hover:border-zinc-600"
-                            : "cursor-not-allowed border-zinc-200 opacity-50 dark:border-zinc-700"
-                        }`}
-                      >
-                        <div className="text-sm font-medium">{level.level}</div>
-                        <div className="text-xs text-zinc-500 dark:text-zinc-400">
-                          {isPositive ? `${levelCost}` : `+${levelCost}`} karma
-                        </div>
-                      </button>
-                    );
-                  })}
-                </div>
+                        return (
+                          <option
+                            key={level.level}
+                            value={level.level}
+                            disabled={!canAffordLevel}
+                          >
+                            {level.name || `Rating ${level.level}`} ({isPositive ? levelCost : `+${levelCost}`} karma)
+                            {!canAffordLevel ? " - cannot afford" : ""}
+                          </option>
+                        );
+                      })}
+                    </select>
+                    <ChevronDown className="pointer-events-none absolute right-3 top-1/2 h-4 w-4 -translate-y-1/2 text-zinc-400" />
+                  </div>
+                ) : (
+                  <div className="flex gap-2">
+                    {selectedQuality.levels.map((level) => {
+                      const levelCost = Math.abs(level.karma);
+                      const canAffordLevel = isPositive
+                        ? usedKarma + levelCost <= maxKarma && karmaBalance >= levelCost
+                        : usedKarma + levelCost <= maxKarma;
+
+                      return (
+                        <button
+                          key={level.level}
+                          onClick={() => setSelectedLevel(level.level)}
+                          disabled={!canAffordLevel}
+                          className={`flex-1 rounded-lg border px-3 py-2 text-center transition-colors ${
+                            selectedLevel === level.level
+                              ? isPositive
+                                ? "border-blue-400 bg-blue-100 text-blue-700 dark:border-blue-600 dark:bg-blue-900/50 dark:text-blue-300"
+                                : "border-amber-400 bg-amber-100 text-amber-700 dark:border-amber-600 dark:bg-amber-900/50 dark:text-amber-300"
+                              : canAffordLevel
+                              ? "border-zinc-200 hover:border-zinc-300 dark:border-zinc-700 dark:hover:border-zinc-600"
+                              : "cursor-not-allowed border-zinc-200 opacity-50 dark:border-zinc-700"
+                          }`}
+                        >
+                          <div className="text-sm font-medium">{level.level}</div>
+                          <div className="text-xs text-zinc-500 dark:text-zinc-400">
+                            {isPositive ? `${levelCost}` : `+${levelCost}`} karma
+                          </div>
+                        </button>
+                      );
+                    })}
+                  </div>
+                )}
               </div>
             )}
           </div>
