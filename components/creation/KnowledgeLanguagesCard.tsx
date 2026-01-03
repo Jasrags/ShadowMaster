@@ -993,13 +993,14 @@ export function KnowledgeLanguagesCard({
         {(languages.length > 0 || knowledgeSkills.length > 0) && (
           <div className="rounded-lg bg-emerald-50 p-3 dark:bg-emerald-900/20">
             <span className="text-xs font-medium text-emerald-700 dark:text-emerald-300">
-              {languages.filter((l) => !l.isNative).length > 0 &&
-                `${languages.filter((l) => !l.isNative).length} language${
-                  languages.filter((l) => !l.isNative).length !== 1 ? "s" : ""
-                }`}
-              {languages.filter((l) => !l.isNative).length > 0 &&
-                knowledgeSkills.length > 0 &&
-                ", "}
+              {languages.length > 0 &&
+                `${languages.length} language${languages.length !== 1 ? "s" : ""}`}
+              {nativeLanguageCount > 0 && (
+                <span className="text-emerald-600 dark:text-emerald-400">
+                  {" "}({nativeLanguageCount} native)
+                </span>
+              )}
+              {languages.length > 0 && knowledgeSkills.length > 0 && ", "}
               {knowledgeSkills.length > 0 &&
                 `${knowledgeSkills.length} knowledge skill${
                   knowledgeSkills.length !== 1 ? "s" : ""
