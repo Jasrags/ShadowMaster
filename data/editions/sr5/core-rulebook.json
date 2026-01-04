@@ -5500,7 +5500,7 @@
               "subcategory": "melee",
               "cost": 30,
               "availability": 0,
-              "damage": "(STR+2)S",
+              "damage": "(STR+3)P",
               "ap": 0,
               "reach": 1,
               "accuracy": 4,
@@ -5513,8 +5513,8 @@
               "subcategory": "melee",
               "cost": 300,
               "availability": 4,
-              "damage": "(STR+1)P",
-              "ap": -1,
+              "damage": "(STR+2)P",
+              "ap": -3,
               "reach": 0,
               "accuracy": 6,
               "weight": 0.25
@@ -5539,7 +5539,7 @@
               "subcategory": "melee",
               "cost": 100,
               "availability": 4,
-              "damage": "(STR+1)P",
+              "damage": "(STR+2)P",
               "ap": 0,
               "reach": 1,
               "accuracy": 5
@@ -5670,7 +5670,7 @@
               "subcategory": "melee",
               "cost": 100,
               "availability": 0,
-              "damage": "(STR+1)P",
+              "damage": "(STR+2)P",
               "ap": -1,
               "reach": 0,
               "accuracy": 5
@@ -6596,23 +6596,6 @@
               "legality": "forbidden"
             },
             {
-              "id": "cavalier-arms-crockett-elf",
-              "name": "Cavalier Arms Crockett ELF",
-              "category": "weapons",
-              "subcategory": "sniper-rifle",
-              "cost": 10300,
-              "availability": 12,
-              "damage": "12P",
-              "ap": -3,
-              "mode": [
-                "SA"
-              ],
-              "rc": 0,
-              "ammo": 6,
-              "accuracy": 6,
-              "legality": "forbidden"
-            },
-            {
               "id": "ranger-arms-sm-5",
               "name": "Ranger Arms SM-5",
               "category": "weapons",
@@ -6714,18 +6697,6 @@
               "legality": "restricted"
             },
             {
-              "id": "flash-bang",
-              "name": "Flash-bang",
-              "category": "weapons",
-              "subcategory": "grenades",
-              "damage": "10S",
-              "cost": 100,
-              "ap": -4,
-              "blast": "10m Radius",
-              "availability": 6,
-              "legality": "restricted"
-            },
-            {
               "id": "flash-pak",
               "name": "Flash-pak",
               "category": "weapons",
@@ -6734,18 +6705,6 @@
               "cost": 125,
               "blast": "Special",
               "availability": 4
-            },
-            {
-              "id": "fragmentation",
-              "name": "Fragmentation",
-              "category": "weapons",
-              "subcategory": "grenades",
-              "damage": "18P (f)",
-              "cost": 100,
-              "ap": 5,
-              "blast": "-1/m",
-              "availability": 11,
-              "legality": "forbidden"
             },
             {
               "id": "fragmentation-grenade",
@@ -6806,18 +6765,6 @@
               "legality": "forbidden"
             },
             {
-              "id": "high-explosive",
-              "name": "High explosive",
-              "category": "weapons",
-              "subcategory": "grenades",
-              "damage": "16P",
-              "cost": 100,
-              "ap": -2,
-              "blast": "-2/m",
-              "availability": 11,
-              "legality": "forbidden"
-            },
-            {
               "id": "high-explosive-rocket",
               "name": "High-explosive Rocket",
               "category": "weapons",
@@ -6828,17 +6775,6 @@
               "blast": "-2/m",
               "availability": 18,
               "legality": "forbidden"
-            },
-            {
-              "id": "smoke",
-              "name": "Smoke",
-              "category": "weapons",
-              "subcategory": "grenades",
-              "damage": "—",
-              "cost": 40,
-              "blast": "10m Radius",
-              "availability": 4,
-              "legality": "restricted"
             },
             {
               "id": "smoke-grenade",
@@ -6862,17 +6798,6 @@
               "damage": "-",
               "ap": 0,
               "blast": "10m radius",
-              "legality": "restricted"
-            },
-            {
-              "id": "thermal-smoke",
-              "name": "Thermal smoke",
-              "category": "weapons",
-              "subcategory": "grenades",
-              "damage": "—",
-              "cost": 60,
-              "blast": "10m Radius",
-              "availability": 6,
               "legality": "restricted"
             }
           ]
