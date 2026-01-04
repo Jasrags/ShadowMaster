@@ -12,7 +12,7 @@
     "advancement": {
       "mergeStrategy": "replace",
       "payload": {
-        "trainingTimeMultiplier": 1.0,
+        "trainingTimeMultiplier": 1,
         "attributeKarmaMultiplier": 5,
         "skillKarmaMultiplier": 2,
         "skillGroupKarmaMultiplier": 5,
@@ -4557,9 +4557,13 @@
                 "id": "analytical-mind-logic-bonus",
                 "type": "dice-pool-modifier",
                 "trigger": "attribute-test",
-                "target": { "attribute": "logic" },
+                "target": {
+                  "attribute": "logic"
+                },
                 "value": 2,
-                "condition": { "customCondition": "pattern-analysis" },
+                "condition": {
+                  "customCondition": "pattern-analysis"
+                },
                 "description": "+2 dice to Logic tests involving pattern analysis, evidence, or clues."
               }
             ]
@@ -4579,7 +4583,9 @@
                 "id": "aptitude-skill-max",
                 "type": "attribute-maximum",
                 "trigger": "always",
-                "target": { "skill": "specification" },
+                "target": {
+                  "skill": "specification"
+                },
                 "value": 1,
                 "description": "Raise the maximum for one chosen skill by 1."
               }
@@ -4615,7 +4621,9 @@
                 "id": "catlike-sneaking-bonus",
                 "type": "dice-pool-modifier",
                 "trigger": "skill-test",
-                "target": { "skill": "sneaking" },
+                "target": {
+                  "skill": "sneaking"
+                },
                 "value": 2,
                 "description": "+2 dice to Sneaking tests."
               }
@@ -4659,7 +4667,9 @@
                 "id": "exceptional-attribute-max",
                 "type": "attribute-maximum",
                 "trigger": "always",
-                "target": { "attribute": "specification" },
+                "target": {
+                  "attribute": "specification"
+                },
                 "value": 1,
                 "description": "Raise the natural maximum for one chosen attribute by 1."
               }
@@ -4749,7 +4759,9 @@
                 "id": "high-pain-tolerance-wound-bonus",
                 "type": "wound-modifier",
                 "trigger": "always",
-                "target": { "stat": "wound-threshold" },
+                "target": {
+                  "stat": "wound-threshold"
+                },
                 "value": "rating",
                 "description": "Ignore 1 point of wound modifiers per rating."
               }
@@ -4897,7 +4909,9 @@
                 "id": "quick-healer-bonus",
                 "type": "dice-pool-modifier",
                 "trigger": "healing",
-                "target": { "affectsOthers": false },
+                "target": {
+                  "affectsOthers": false
+                },
                 "value": 2,
                 "description": "+2 dice to all Healing tests made by or on the character."
               }
@@ -5515,8 +5529,8 @@
               "damage": "(STR+5)P",
               "ap": -4,
               "availability": 12,
-              "restricted": true,
-              "cost": 4000
+              "cost": 4000,
+              "legality": "restricted"
             },
             {
               "id": "extendable-baton",
@@ -5539,8 +5553,8 @@
               "damage": "(STR+2)P",
               "ap": -2,
               "availability": 7,
-              "restricted": true,
-              "cost": 200
+              "cost": 200,
+              "legality": "restricted"
             },
             {
               "id": "katana",
@@ -5549,12 +5563,12 @@
               "subcategory": "melee",
               "cost": 1000,
               "availability": 9,
-              "restricted": true,
               "damage": "(STR+3)P",
               "ap": -3,
               "reach": 1,
               "accuracy": 7,
-              "weight": 1.2
+              "weight": 1.2,
+              "legality": "restricted"
             },
             {
               "id": "knife",
@@ -5574,8 +5588,8 @@
               "subcategory": "melee",
               "damage": "(STR+1)P",
               "availability": 2,
-              "restricted": true,
-              "cost": 100
+              "cost": 100,
+              "legality": "restricted"
             },
             {
               "id": "monofilament-whip",
@@ -5586,8 +5600,8 @@
               "damage": "12P",
               "ap": -8,
               "availability": 12,
-              "forbidden": true,
-              "cost": 10000
+              "cost": 10000,
+              "legality": "forbidden"
             },
             {
               "id": "pole-arm",
@@ -5599,8 +5613,8 @@
               "damage": "(STR+3)P",
               "ap": -2,
               "availability": 6,
-              "restricted": true,
-              "cost": 1000
+              "cost": 1000,
+              "legality": "restricted"
             },
             {
               "id": "sap",
@@ -5619,11 +5633,11 @@
               "subcategory": "melee",
               "cost": 550,
               "availability": 6,
-              "restricted": true,
               "damage": "8S(e)",
               "ap": -5,
               "reach": 0,
-              "accuracy": 0
+              "accuracy": 0,
+              "legality": "restricted"
             },
             {
               "id": "staff",
@@ -5643,11 +5657,11 @@
               "subcategory": "melee",
               "cost": 750,
               "availability": 6,
-              "restricted": true,
               "damage": "9S(e)",
               "ap": -5,
               "reach": 1,
-              "accuracy": 4
+              "accuracy": 4,
+              "legality": "restricted"
             },
             {
               "id": "survival-knife",
@@ -5668,11 +5682,11 @@
               "subcategory": "melee",
               "cost": 500,
               "availability": 5,
-              "restricted": true,
               "damage": "(STR+3)P",
               "ap": -2,
               "reach": 1,
-              "accuracy": 6
+              "accuracy": 6,
+              "legality": "restricted"
             },
             {
               "id": "telescoping-staff",
@@ -5700,8 +5714,8 @@
               "rc": 0,
               "ammo": 16,
               "availability": 3,
-              "restricted": true,
-              "cost": 200
+              "cost": 200,
+              "legality": "restricted"
             },
             {
               "id": "ares-light-fire-75",
@@ -5716,8 +5730,8 @@
               "rc": 0,
               "ammo": 16,
               "availability": 6,
-              "forbidden": true,
-              "cost": 1250
+              "cost": 1250,
+              "legality": "forbidden"
             },
             {
               "id": "ares-predator-v",
@@ -5726,7 +5740,6 @@
               "subcategory": "heavy-pistol",
               "cost": 725,
               "availability": 5,
-              "restricted": true,
               "damage": "8P",
               "ap": -1,
               "mode": [
@@ -5741,7 +5754,8 @@
                   "modificationId": "smartgun-internal",
                   "mount": "internal"
                 }
-              ]
+              ],
+              "legality": "restricted"
             },
             {
               "id": "ares-s-iii-super-squirt",
@@ -5756,8 +5770,8 @@
               "rc": 0,
               "ammo": 20,
               "availability": 7,
-              "restricted": true,
-              "cost": 950
+              "cost": 950,
+              "legality": "restricted"
             },
             {
               "id": "ares-viper-slivergun",
@@ -5774,8 +5788,8 @@
               "rc": 0,
               "ammo": 30,
               "availability": 8,
-              "forbidden": true,
-              "cost": 380
+              "cost": 380,
+              "legality": "forbidden"
             },
             {
               "id": "beretta-201t",
@@ -5791,8 +5805,8 @@
               "rc": 1,
               "ammo": 21,
               "availability": 7,
-              "restricted": true,
-              "cost": 210
+              "cost": 210,
+              "legality": "restricted"
             },
             {
               "id": "browning-ultra-power",
@@ -5808,14 +5822,14 @@
               "rc": 0,
               "ammo": 10,
               "availability": 4,
-              "restricted": true,
               "cost": 640,
               "builtInModifications": [
                 {
                   "modificationId": "laser-sight",
                   "mount": "top"
                 }
-              ]
+              ],
+              "legality": "restricted"
             },
             {
               "id": "colt-america-l36",
@@ -5824,7 +5838,6 @@
               "subcategory": "light-pistol",
               "cost": 320,
               "availability": 4,
-              "restricted": true,
               "damage": "7P",
               "ap": 0,
               "mode": [
@@ -5832,7 +5845,8 @@
               ],
               "rc": 0,
               "ammo": 11,
-              "accuracy": 7
+              "accuracy": 7,
+              "legality": "restricted"
             },
             {
               "id": "colt-government-2066",
@@ -5848,8 +5862,8 @@
               "rc": 0,
               "ammo": 14,
               "availability": 7,
-              "restricted": true,
-              "cost": 425
+              "cost": 425,
+              "legality": "restricted"
             },
             {
               "id": "defiance-ex-shocker",
@@ -5879,8 +5893,8 @@
               ],
               "rc": 0,
               "availability": 11,
-              "restricted": true,
-              "cost": 5000
+              "cost": 5000,
+              "legality": "restricted"
             },
             {
               "id": "fichetti-security-600",
@@ -5889,7 +5903,6 @@
               "subcategory": "light-pistol",
               "cost": 350,
               "availability": 6,
-              "restricted": true,
               "damage": "7P",
               "ap": 0,
               "mode": [
@@ -5897,7 +5910,8 @@
               ],
               "rc": 1,
               "ammo": 30,
-              "accuracy": 6
+              "accuracy": 6,
+              "legality": "restricted"
             },
             {
               "id": "fichetti-tiffani-needler",
@@ -5913,8 +5927,8 @@
               "rc": 0,
               "ammo": 4,
               "availability": 5,
-              "restricted": true,
-              "cost": 1000
+              "cost": 1000,
+              "legality": "restricted"
             },
             {
               "id": "parashield-dart-pistol",
@@ -5929,8 +5943,8 @@
               "rc": 0,
               "ammo": 5,
               "availability": 4,
-              "restricted": true,
-              "cost": 600
+              "cost": 600,
+              "legality": "restricted"
             },
             {
               "id": "parashield-dart-rifle",
@@ -5945,8 +5959,8 @@
               "rc": 0,
               "ammo": 6,
               "availability": 6,
-              "restricted": true,
-              "cost": 1200
+              "cost": 1200,
+              "legality": "restricted"
             },
             {
               "id": "remington-roomsweeper",
@@ -5955,7 +5969,6 @@
               "subcategory": "heavy-pistol",
               "cost": 250,
               "availability": 6,
-              "restricted": true,
               "damage": "9P(f)",
               "ap": -1,
               "mode": [
@@ -5963,7 +5976,8 @@
               ],
               "rc": 0,
               "ammo": 8,
-              "accuracy": 4
+              "accuracy": 4,
+              "legality": "restricted"
             },
             {
               "id": "ruger-super-warhawk",
@@ -5972,7 +5986,6 @@
               "subcategory": "heavy-pistol",
               "cost": 400,
               "availability": 4,
-              "restricted": true,
               "damage": "9P",
               "ap": -2,
               "mode": [
@@ -5980,7 +5993,8 @@
               ],
               "rc": 0,
               "ammo": 6,
-              "accuracy": 5
+              "accuracy": 5,
+              "legality": "restricted"
             },
             {
               "id": "streetline-special",
@@ -5989,7 +6003,6 @@
               "subcategory": "hold-out",
               "cost": 120,
               "availability": 4,
-              "restricted": true,
               "damage": "6P",
               "ap": 0,
               "mode": [
@@ -5997,7 +6010,8 @@
               ],
               "rc": 0,
               "ammo": 6,
-              "accuracy": 4
+              "accuracy": 4,
+              "legality": "restricted"
             },
             {
               "id": "taurus-omni-6",
@@ -6014,8 +6028,8 @@
               "rc": 0,
               "ammo": 6,
               "availability": 3,
-              "restricted": true,
-              "cost": 300
+              "cost": 300,
+              "legality": "restricted"
             },
             {
               "id": "walther-palm-pistol",
@@ -6031,8 +6045,8 @@
               "rc": 0,
               "ammo": 2,
               "availability": 4,
-              "restricted": true,
-              "cost": 180
+              "cost": 180,
+              "legality": "restricted"
             },
             {
               "id": "yamaha-pulsar",
@@ -6059,7 +6073,6 @@
               "subcategory": "machine-pistol",
               "cost": 830,
               "availability": 9,
-              "restricted": true,
               "damage": "7P",
               "ap": 0,
               "mode": [
@@ -6068,7 +6081,8 @@
               ],
               "rc": 2,
               "ammo": 40,
-              "accuracy": 5
+              "accuracy": 5,
+              "legality": "restricted"
             },
             {
               "id": "ceska-black-scorpion",
@@ -6084,8 +6098,8 @@
               "rc": 1,
               "ammo": 35,
               "availability": 6,
-              "restricted": true,
-              "cost": 270
+              "cost": 270,
+              "legality": "restricted"
             },
             {
               "id": "colt-cobra-tz-120",
@@ -6102,8 +6116,8 @@
               "rc": 2,
               "ammo": 32,
               "availability": 5,
-              "restricted": true,
-              "cost": 660
+              "cost": 660,
+              "legality": "restricted"
             },
             {
               "id": "fn-p93-praetor",
@@ -6120,8 +6134,8 @@
               "rc": 1,
               "ammo": 50,
               "availability": 11,
-              "forbidden": true,
-              "cost": 900
+              "cost": 900,
+              "legality": "forbidden"
             },
             {
               "id": "hk-227",
@@ -6130,7 +6144,6 @@
               "subcategory": "smg",
               "cost": 730,
               "availability": 8,
-              "restricted": true,
               "damage": "7P",
               "ap": 0,
               "mode": [
@@ -6140,7 +6153,8 @@
               ],
               "rc": 0,
               "ammo": 28,
-              "accuracy": 5
+              "accuracy": 5,
+              "legality": "restricted"
             },
             {
               "id": "ingram-smartgun-x",
@@ -6149,7 +6163,6 @@
               "subcategory": "smg",
               "cost": 800,
               "availability": 6,
-              "restricted": true,
               "damage": "8P",
               "ap": 0,
               "mode": [
@@ -6158,7 +6171,8 @@
               ],
               "rc": 2,
               "ammo": 32,
-              "accuracy": 4
+              "accuracy": 4,
+              "legality": "restricted"
             },
             {
               "id": "scm-70",
@@ -6167,7 +6181,6 @@
               "subcategory": "smg",
               "cost": 875,
               "availability": 6,
-              "restricted": true,
               "damage": "8P",
               "ap": 0,
               "mode": [
@@ -6176,7 +6189,8 @@
               ],
               "rc": 0,
               "ammo": 30,
-              "accuracy": 5
+              "accuracy": 5,
+              "legality": "restricted"
             },
             {
               "id": "steyr-tmp",
@@ -6193,8 +6207,8 @@
               "rc": 0,
               "ammo": 30,
               "availability": 8,
-              "restricted": true,
-              "cost": 350
+              "cost": 350,
+              "legality": "restricted"
             },
             {
               "id": "uzi-iv",
@@ -6203,7 +6217,6 @@
               "subcategory": "smg",
               "cost": 450,
               "availability": 4,
-              "restricted": true,
               "damage": "7P",
               "ap": 0,
               "mode": [
@@ -6212,7 +6225,8 @@
               ],
               "rc": 1,
               "ammo": 24,
-              "accuracy": 4
+              "accuracy": 4,
+              "legality": "restricted"
             }
           ],
           "rifles": [
@@ -6223,7 +6237,6 @@
               "subcategory": "assault-rifle",
               "cost": 950,
               "availability": 4,
-              "restricted": true,
               "damage": "10P",
               "ap": -2,
               "mode": [
@@ -6233,7 +6246,8 @@
               ],
               "rc": 0,
               "ammo": 38,
-              "accuracy": 5
+              "accuracy": 5,
+              "legality": "restricted"
             },
             {
               "id": "ares-alpha",
@@ -6242,7 +6256,6 @@
               "subcategory": "assault-rifle",
               "cost": 2650,
               "availability": 11,
-              "forbidden": true,
               "damage": "11P",
               "ap": -2,
               "mode": [
@@ -6263,7 +6276,8 @@
                   "modificationId": "gas-vent-system",
                   "mount": "barrel"
                 }
-              ]
+              ],
+              "legality": "forbidden"
             },
             {
               "id": "ares-antioch-2",
@@ -6278,8 +6292,8 @@
               "rc": 0,
               "ammo": 8,
               "availability": 8,
-              "forbidden": true,
-              "cost": 3200
+              "cost": 3200,
+              "legality": "forbidden"
             },
             {
               "id": "armtech-mgl-12",
@@ -6294,8 +6308,8 @@
               "rc": 0,
               "ammo": 12,
               "availability": 10,
-              "forbidden": true,
-              "cost": 5000
+              "cost": 5000,
+              "legality": "forbidden"
             },
             {
               "id": "aztechnology-striker",
@@ -6310,8 +6324,8 @@
               "rc": 0,
               "ammo": 1,
               "availability": 10,
-              "forbidden": true,
-              "cost": 1200
+              "cost": 1200,
+              "legality": "forbidden"
             },
             {
               "id": "colt-m23",
@@ -6320,7 +6334,6 @@
               "subcategory": "assault-rifle",
               "cost": 550,
               "availability": 4,
-              "restricted": true,
               "damage": "9P",
               "ap": -2,
               "mode": [
@@ -6330,7 +6343,8 @@
               ],
               "rc": 0,
               "ammo": 40,
-              "accuracy": 4
+              "accuracy": 4,
+              "legality": "restricted"
             },
             {
               "id": "fn-har",
@@ -6339,7 +6353,6 @@
               "subcategory": "assault-rifle",
               "cost": 1500,
               "availability": 8,
-              "restricted": true,
               "damage": "10P",
               "ap": -2,
               "mode": [
@@ -6349,7 +6362,8 @@
               ],
               "rc": 2,
               "ammo": 35,
-              "accuracy": 5
+              "accuracy": 5,
+              "legality": "restricted"
             },
             {
               "id": "ingram-valiant",
@@ -6366,8 +6380,8 @@
               "rc": 2,
               "ammo": 50,
               "availability": 12,
-              "forbidden": true,
-              "cost": 5800
+              "cost": 5800,
+              "legality": "forbidden"
             },
             {
               "id": "krime-cannon",
@@ -6383,8 +6397,8 @@
               "rc": 1,
               "ammo": 6,
               "availability": 20,
-              "forbidden": true,
-              "cost": 21000
+              "cost": 21000,
+              "legality": "forbidden"
             },
             {
               "id": "onotari-interceptor",
@@ -6399,8 +6413,8 @@
               "rc": 0,
               "ammo": 2,
               "availability": 18,
-              "forbidden": true,
-              "cost": 14000
+              "cost": 14000,
+              "legality": "forbidden"
             },
             {
               "id": "panther-xxl",
@@ -6416,8 +6430,8 @@
               "rc": 0,
               "ammo": 15,
               "availability": 20,
-              "forbidden": true,
-              "cost": 43000
+              "cost": 43000,
+              "legality": "forbidden"
             },
             {
               "id": "rpk-hmg",
@@ -6433,8 +6447,8 @@
               "rc": 6,
               "ammo": 50,
               "availability": 16,
-              "forbidden": true,
-              "cost": 16300
+              "cost": 16300,
+              "legality": "forbidden"
             },
             {
               "id": "stoner-ares-m202",
@@ -6450,8 +6464,8 @@
               "rc": 0,
               "ammo": 50,
               "availability": 12,
-              "forbidden": true,
-              "cost": 7000
+              "cost": 7000,
+              "legality": "forbidden"
             },
             {
               "id": "yamaha-raiden",
@@ -6460,7 +6474,6 @@
               "subcategory": "assault-rifle",
               "cost": 2600,
               "availability": 14,
-              "forbidden": true,
               "damage": "11P",
               "ap": -2,
               "mode": [
@@ -6470,7 +6483,8 @@
               ],
               "rc": 6,
               "ammo": 60,
-              "accuracy": 6
+              "accuracy": 6,
+              "legality": "forbidden"
             }
           ],
           "shotguns": [
@@ -6481,7 +6495,6 @@
               "subcategory": "shotgun",
               "cost": 450,
               "availability": 4,
-              "restricted": true,
               "damage": "10P",
               "ap": -1,
               "mode": [
@@ -6490,7 +6503,8 @@
               ],
               "rc": 0,
               "ammo": 5,
-              "accuracy": 4
+              "accuracy": 4,
+              "legality": "restricted"
             },
             {
               "id": "enfield-as-7",
@@ -6499,7 +6513,6 @@
               "subcategory": "shotgun",
               "cost": 1100,
               "availability": 12,
-              "forbidden": true,
               "damage": "13P",
               "ap": -1,
               "mode": [
@@ -6508,7 +6521,8 @@
               ],
               "rc": 0,
               "ammo": 10,
-              "accuracy": 4
+              "accuracy": 4,
+              "legality": "forbidden"
             },
             {
               "id": "mossberg-am-cmdt",
@@ -6517,7 +6531,6 @@
               "subcategory": "shotgun",
               "cost": 1000,
               "availability": 7,
-              "restricted": true,
               "damage": "10P",
               "ap": -1,
               "mode": [
@@ -6525,7 +6538,8 @@
               ],
               "rc": 0,
               "ammo": 8,
-              "accuracy": 5
+              "accuracy": 5,
+              "legality": "restricted"
             },
             {
               "id": "pjss-model-55",
@@ -6541,8 +6555,8 @@
               "rc": 1,
               "ammo": 2,
               "availability": 9,
-              "restricted": true,
-              "cost": 1000
+              "cost": 1000,
+              "legality": "restricted"
             }
           ],
           "sniperRifles": [
@@ -6553,7 +6567,6 @@
               "subcategory": "sniper-rifle",
               "cost": 17500,
               "availability": 10,
-              "forbidden": true,
               "damage": "13P",
               "ap": -4,
               "mode": [
@@ -6561,7 +6574,8 @@
               ],
               "rc": 0,
               "ammo": 14,
-              "accuracy": 7
+              "accuracy": 7,
+              "legality": "forbidden"
             },
             {
               "id": "cavalier-arms-crockett-ebr",
@@ -6578,8 +6592,8 @@
               "rc": 1,
               "ammo": 20,
               "availability": 12,
-              "forbidden": true,
-              "cost": 10300
+              "cost": 10300,
+              "legality": "forbidden"
             },
             {
               "id": "cavalier-arms-crockett-elf",
@@ -6588,7 +6602,6 @@
               "subcategory": "sniper-rifle",
               "cost": 10300,
               "availability": 12,
-              "forbidden": true,
               "damage": "12P",
               "ap": -3,
               "mode": [
@@ -6596,7 +6609,8 @@
               ],
               "rc": 0,
               "ammo": 6,
-              "accuracy": 6
+              "accuracy": 6,
+              "legality": "forbidden"
             },
             {
               "id": "ranger-arms-sm-5",
@@ -6605,7 +6619,6 @@
               "subcategory": "sniper-rifle",
               "cost": 28000,
               "availability": 16,
-              "forbidden": true,
               "damage": "14P",
               "ap": -5,
               "mode": [
@@ -6613,7 +6626,8 @@
               ],
               "rc": 0,
               "ammo": 15,
-              "accuracy": 8
+              "accuracy": 8,
+              "legality": "forbidden"
             },
             {
               "id": "remington-950",
@@ -6622,7 +6636,6 @@
               "subcategory": "sniper-rifle",
               "cost": 2100,
               "availability": 4,
-              "restricted": true,
               "damage": "12P",
               "ap": -4,
               "mode": [
@@ -6630,7 +6643,8 @@
               ],
               "rc": 0,
               "ammo": 5,
-              "accuracy": 7
+              "accuracy": 7,
+              "legality": "restricted"
             },
             {
               "id": "ruger-100",
@@ -6646,8 +6660,8 @@
               "rc": 1,
               "ammo": 8,
               "availability": 4,
-              "restricted": true,
-              "cost": 1300
+              "cost": 1300,
+              "legality": "restricted"
             }
           ],
           "throwingWeapons": [
@@ -6685,7 +6699,7 @@
               "ap": -4,
               "blast": "-4/m",
               "availability": 18,
-              "forbidden": true
+              "legality": "forbidden"
             },
             {
               "id": "flash-bang-grenade",
@@ -6694,10 +6708,10 @@
               "subcategory": "grenades",
               "cost": 100,
               "availability": 6,
-              "restricted": true,
               "damage": "10S",
               "ap": -4,
-              "blast": "10m radius"
+              "blast": "10m radius",
+              "legality": "restricted"
             },
             {
               "id": "flash-bang",
@@ -6709,7 +6723,7 @@
               "ap": -4,
               "blast": "10m Radius",
               "availability": 6,
-              "restricted": true
+              "legality": "restricted"
             },
             {
               "id": "flash-pak",
@@ -6731,7 +6745,7 @@
               "ap": 5,
               "blast": "-1/m",
               "availability": 11,
-              "forbidden": true
+              "legality": "forbidden"
             },
             {
               "id": "fragmentation-grenade",
@@ -6740,10 +6754,10 @@
               "subcategory": "grenades",
               "cost": 100,
               "availability": 11,
-              "forbidden": true,
               "damage": "18P(f)",
               "ap": 2,
-              "blast": "-1/m"
+              "blast": "-1/m",
+              "legality": "forbidden"
             },
             {
               "id": "fragmentation-rocket",
@@ -6755,7 +6769,7 @@
               "ap": 5,
               "blast": "-1/m",
               "availability": 12,
-              "forbidden": true
+              "legality": "forbidden"
             },
             {
               "id": "gas",
@@ -6774,10 +6788,10 @@
               "subcategory": "grenades",
               "cost": 40,
               "availability": 4,
-              "restricted": true,
               "damage": "Nausea",
               "ap": 0,
-              "blast": "10m radius"
+              "blast": "10m radius",
+              "legality": "restricted"
             },
             {
               "id": "high-explosive-grenade",
@@ -6786,10 +6800,10 @@
               "subcategory": "grenades",
               "cost": 100,
               "availability": 11,
-              "forbidden": true,
               "damage": "16P",
               "ap": -2,
-              "blast": "-2/m"
+              "blast": "-2/m",
+              "legality": "forbidden"
             },
             {
               "id": "high-explosive",
@@ -6801,7 +6815,7 @@
               "ap": -2,
               "blast": "-2/m",
               "availability": 11,
-              "forbidden": true
+              "legality": "forbidden"
             },
             {
               "id": "high-explosive-rocket",
@@ -6813,7 +6827,7 @@
               "ap": -2,
               "blast": "-2/m",
               "availability": 18,
-              "forbidden": true
+              "legality": "forbidden"
             },
             {
               "id": "smoke",
@@ -6824,7 +6838,7 @@
               "cost": 40,
               "blast": "10m Radius",
               "availability": 4,
-              "restricted": true
+              "legality": "restricted"
             },
             {
               "id": "smoke-grenade",
@@ -6833,10 +6847,10 @@
               "subcategory": "grenades",
               "cost": 40,
               "availability": 4,
-              "restricted": true,
               "damage": "-",
               "ap": 0,
-              "blast": "10m radius"
+              "blast": "10m radius",
+              "legality": "restricted"
             },
             {
               "id": "thermal-smoke-grenade",
@@ -6845,10 +6859,10 @@
               "subcategory": "grenades",
               "cost": 60,
               "availability": 6,
-              "restricted": true,
               "damage": "-",
               "ap": 0,
-              "blast": "10m radius"
+              "blast": "10m radius",
+              "legality": "restricted"
             },
             {
               "id": "thermal-smoke",
@@ -6859,7 +6873,7 @@
               "cost": 60,
               "blast": "10m Radius",
               "availability": 6,
-              "restricted": true
+              "legality": "restricted"
             }
           ]
         },
@@ -6917,7 +6931,7 @@
             "armorModifier": true,
             "cost": 1200,
             "availability": 12,
-            "restricted": true
+            "legality": "restricted"
           },
           {
             "id": "chameleon-suit",
@@ -6925,9 +6939,9 @@
             "category": "armor",
             "cost": 1700,
             "availability": 10,
-            "restricted": true,
             "armorRating": 9,
-            "description": "Thermoptic camouflage suit with ruthenium coating."
+            "description": "Thermoptic camouflage suit with ruthenium coating.",
+            "legality": "restricted"
           },
           {
             "id": "clothing",
@@ -6943,10 +6957,10 @@
             "category": "armor",
             "cost": 2000,
             "availability": 14,
-            "restricted": true,
             "armorRating": 15,
             "weight": 10,
-            "description": "Complete body coverage with helmet."
+            "description": "Complete body coverage with helmet.",
+            "legality": "restricted"
           },
           {
             "id": "full-helmet",
@@ -6984,7 +6998,7 @@
             "armorModifier": true,
             "cost": 1500,
             "availability": 10,
-            "restricted": true
+            "legality": "restricted"
           },
           {
             "id": "securetech-ppe",
@@ -7207,7 +7221,6 @@
             "category": "electronics",
             "cost": 200,
             "availability": 3,
-            "forbidden": true,
             "hasRating": true,
             "maxRating": 6,
             "costPerRating": true,
@@ -7226,7 +7239,8 @@
                 "perRating": true
               }
             },
-            "description": "Jams wireless signals in an area. Generates noise equal to its rating. Rating reduced by 1 per 5m from center."
+            "description": "Jams wireless signals in an area. Generates noise equal to its rating. Rating reduced by 1 per 5m from center.",
+            "legality": "forbidden"
           },
           {
             "id": "binoculars",
@@ -7264,10 +7278,29 @@
             "id": "bug-scanner",
             "name": "Bug Scanner",
             "category": "electronics",
-            "cost": 400,
-            "availability": 6,
-            "rating": 6,
-            "description": "Detects surveillance devices (Rating 1-6)."
+            "cost": 100,
+            "availability": 1,
+            "hasRating": true,
+            "maxRating": 6,
+            "costPerRating": true,
+            "description": "Detects surveillance devices (Rating 1-6).",
+            "ratingSpec": {
+              "rating": {
+                "hasRating": true,
+                "minRating": 1,
+                "maxRating": 6
+              },
+              "costScaling": {
+                "baseValue": 100,
+                "perRating": true
+              },
+              "availabilityScaling": {
+                "baseValue": 1,
+                "perRating": true,
+                "suffix": "R"
+              }
+            },
+            "legality": "restricted"
           },
           {
             "id": "camera",
@@ -7306,11 +7339,29 @@
             "id": "directional-jammer",
             "name": "Directional Jammer",
             "category": "electronics",
-            "cost": 800,
-            "availability": 8,
-            "restricted": true,
-            "rating": 6,
-            "description": "Jams wireless signals in a cone (Rating 1-6)."
+            "cost": 200,
+            "availability": 2,
+            "hasRating": true,
+            "maxRating": 6,
+            "costPerRating": true,
+            "description": "Jams wireless signals in a cone (Rating 1-6).",
+            "ratingSpec": {
+              "rating": {
+                "hasRating": true,
+                "minRating": 1,
+                "maxRating": 6
+              },
+              "costScaling": {
+                "baseValue": 200,
+                "perRating": true
+              },
+              "availabilityScaling": {
+                "baseValue": 2,
+                "perRating": true,
+                "suffix": "F"
+              }
+            },
+            "legality": "forbidden"
           },
           {
             "id": "directional-mic",
@@ -7396,7 +7447,6 @@
             "category": "electronics",
             "cost": 100,
             "availability": 6,
-            "restricted": true,
             "hasRating": true,
             "maxRating": 6,
             "costPerRating": true,
@@ -7415,7 +7465,8 @@
                 "baseValue": 6,
                 "perRating": false
               }
-            }
+            },
+            "legality": "restricted"
           },
           {
             "id": "micro-camera",
@@ -7458,7 +7509,6 @@
             "hasRating": true,
             "maxRating": 4,
             "costPerRating": true,
-            "restricted": true,
             "ratingSpec": {
               "rating": {
                 "hasRating": true,
@@ -7473,7 +7523,8 @@
                 "baseValue": 12,
                 "perRating": false
               }
-            }
+            },
+            "legality": "restricted"
           },
           {
             "id": "omni-directional-mic",
@@ -7517,13 +7568,58 @@
             "description": "Destroys RFID tags."
           },
           {
+            "id": "headjammer",
+            "name": "Headjammer",
+            "category": "electronics",
+            "cost": 150,
+            "availability": 1,
+            "hasRating": true,
+            "maxRating": 6,
+            "costPerRating": true,
+            "description": "Personal wireless jammer worn on the head (Rating 1-6).",
+            "ratingSpec": {
+              "rating": {
+                "hasRating": true,
+                "minRating": 1,
+                "maxRating": 6
+              },
+              "costScaling": {
+                "baseValue": 150,
+                "perRating": true
+              },
+              "availabilityScaling": {
+                "baseValue": 1,
+                "perRating": true,
+                "suffix": "R"
+              }
+            },
+            "legality": "restricted"
+          },
+          {
             "id": "white-noise-generator",
             "name": "White Noise Generator",
             "category": "electronics",
-            "cost": 150,
-            "availability": 4,
-            "rating": 6,
-            "description": "Prevents audio surveillance (Rating 1-6)."
+            "cost": 50,
+            "availability": 1,
+            "hasRating": true,
+            "maxRating": 6,
+            "costPerRating": true,
+            "description": "Prevents audio surveillance (Rating 1-6).",
+            "ratingSpec": {
+              "rating": {
+                "hasRating": true,
+                "minRating": 1,
+                "maxRating": 6
+              },
+              "costScaling": {
+                "baseValue": 50,
+                "perRating": true
+              },
+              "availabilityScaling": {
+                "baseValue": 1,
+                "perRating": true
+              }
+            }
           }
         ],
         "tools": [
@@ -7533,8 +7629,8 @@
             "category": "tools",
             "cost": 250,
             "availability": 4,
-            "restricted": true,
-            "description": "Tools for bypassing mechanical locks."
+            "description": "Tools for bypassing mechanical locks.",
+            "legality": "restricted"
           },
           {
             "id": "autopicker",
@@ -7542,29 +7638,83 @@
             "category": "tools",
             "cost": 500,
             "availability": 8,
-            "restricted": true,
-            "rating": 6,
-            "description": "Electronic lockpick (Rating 1-6)."
+            "hasRating": true,
+            "maxRating": 6,
+            "costPerRating": true,
+            "description": "Electronic lockpick (Rating 1-6).",
+            "ratingSpec": {
+              "rating": {
+                "hasRating": true,
+                "minRating": 1,
+                "maxRating": 6
+              },
+              "costScaling": {
+                "baseValue": 500,
+                "perRating": true
+              },
+              "availabilityScaling": {
+                "baseValue": 8,
+                "perRating": false,
+                "suffix": "R"
+              }
+            },
+            "legality": "restricted"
           },
           {
             "id": "sequencer",
             "name": "Sequencer",
             "category": "tools",
-            "cost": 500,
-            "availability": 8,
-            "restricted": true,
-            "rating": 6,
-            "description": "Bypasses electronic maglock keypads (Rating 1-6)."
+            "cost": 250,
+            "availability": 3,
+            "hasRating": true,
+            "maxRating": 6,
+            "costPerRating": true,
+            "description": "Bypasses electronic maglock keypads (Rating 1-6).",
+            "ratingSpec": {
+              "rating": {
+                "hasRating": true,
+                "minRating": 1,
+                "maxRating": 6
+              },
+              "costScaling": {
+                "baseValue": 250,
+                "perRating": true
+              },
+              "availabilityScaling": {
+                "baseValue": 3,
+                "perRating": true,
+                "suffix": "F"
+              }
+            },
+            "legality": "forbidden"
           },
           {
             "id": "maglock-passkey",
             "name": "Maglock Passkey",
             "category": "tools",
             "cost": 2000,
-            "availability": 12,
-            "restricted": true,
-            "rating": 4,
-            "description": "Universal electronic lock key (Rating 1-4)."
+            "availability": 3,
+            "hasRating": true,
+            "maxRating": 4,
+            "costPerRating": true,
+            "description": "Universal electronic lock key (Rating 1-4).",
+            "ratingSpec": {
+              "rating": {
+                "hasRating": true,
+                "minRating": 1,
+                "maxRating": 4
+              },
+              "costScaling": {
+                "baseValue": 2000,
+                "perRating": true
+              },
+              "availabilityScaling": {
+                "baseValue": 3,
+                "perRating": true,
+                "suffix": "F"
+              }
+            },
+            "legality": "forbidden"
           },
           {
             "id": "cellular-glove-molder",
@@ -7572,8 +7722,27 @@
             "category": "tools",
             "cost": 500,
             "availability": 12,
-            "forbidden": true,
-            "description": "Creates fake fingerprints from scans."
+            "hasRating": true,
+            "maxRating": 4,
+            "costPerRating": true,
+            "description": "Creates fake fingerprints from scans (Rating 1-4).",
+            "ratingSpec": {
+              "rating": {
+                "hasRating": true,
+                "minRating": 1,
+                "maxRating": 4
+              },
+              "costScaling": {
+                "baseValue": 500,
+                "perRating": true
+              },
+              "availabilityScaling": {
+                "baseValue": 12,
+                "perRating": false,
+                "suffix": "F"
+              }
+            },
+            "legality": "forbidden"
           },
           {
             "id": "keycard-copier",
@@ -7581,9 +7750,27 @@
             "category": "tools",
             "cost": 600,
             "availability": 8,
-            "restricted": true,
-            "rating": 6,
-            "description": "Copies electronic keycards (Rating 1-6)."
+            "hasRating": true,
+            "maxRating": 6,
+            "costPerRating": true,
+            "description": "Copies electronic keycards (Rating 1-6).",
+            "ratingSpec": {
+              "rating": {
+                "hasRating": true,
+                "minRating": 1,
+                "maxRating": 6
+              },
+              "costScaling": {
+                "baseValue": 600,
+                "perRating": true
+              },
+              "availabilityScaling": {
+                "baseValue": 8,
+                "perRating": false,
+                "suffix": "F"
+              }
+            },
+            "legality": "forbidden"
           },
           {
             "id": "hardware-toolkit",
@@ -7599,8 +7786,8 @@
             "category": "tools",
             "cost": 500,
             "availability": 8,
-            "restricted": true,
-            "description": "Weapon maintenance and modification tools."
+            "description": "Weapon maintenance and modification tools.",
+            "legality": "restricted"
           },
           {
             "id": "disguise-kit",
@@ -7616,17 +7803,34 @@
             "category": "tools",
             "cost": 1000,
             "availability": 8,
-            "restricted": true,
-            "description": "Document and credential forgery tools."
+            "description": "Document and credential forgery tools.",
+            "legality": "restricted"
           },
           {
             "id": "medkit",
             "name": "Medkit",
             "category": "tools",
-            "cost": 500,
-            "availability": 3,
-            "rating": 6,
-            "description": "Portable medical supplies (Rating 1-6)."
+            "cost": 250,
+            "availability": 1,
+            "hasRating": true,
+            "maxRating": 6,
+            "costPerRating": true,
+            "description": "Portable medical supplies (Rating 1-6).",
+            "ratingSpec": {
+              "rating": {
+                "hasRating": true,
+                "minRating": 1,
+                "maxRating": 6
+              },
+              "costScaling": {
+                "baseValue": 250,
+                "perRating": true
+              },
+              "availabilityScaling": {
+                "baseValue": 1,
+                "perRating": true
+              }
+            }
           }
         ],
         "survival": [
@@ -7634,10 +7838,27 @@
             "id": "chemsuit",
             "name": "Chemsuit",
             "category": "survival",
-            "cost": 600,
-            "availability": 6,
-            "rating": 6,
-            "description": "Protection from chemical hazards (Rating 1-6)."
+            "cost": 150,
+            "availability": 2,
+            "hasRating": true,
+            "maxRating": 6,
+            "costPerRating": true,
+            "description": "Protection from chemical hazards (Rating 1-6).",
+            "ratingSpec": {
+              "rating": {
+                "hasRating": true,
+                "minRating": 1,
+                "maxRating": 6
+              },
+              "costScaling": {
+                "baseValue": 150,
+                "perRating": true
+              },
+              "availabilityScaling": {
+                "baseValue": 2,
+                "perRating": true
+              }
+            }
           },
           {
             "id": "climbing-gear",
@@ -7677,8 +7898,8 @@
             "category": "survival",
             "cost": 500,
             "availability": 8,
-            "restricted": true,
-            "description": "Pneumatic grapple launcher."
+            "description": "Pneumatic grapple launcher.",
+            "legality": "restricted"
           },
           {
             "id": "microwire",
@@ -7710,8 +7931,25 @@
             "category": "survival",
             "cost": 50,
             "availability": 0,
-            "rating": 6,
-            "description": "Air filtration mask (Rating 1-6)."
+            "hasRating": true,
+            "maxRating": 6,
+            "costPerRating": true,
+            "description": "Air filtration mask (Rating 1-6).",
+            "ratingSpec": {
+              "rating": {
+                "hasRating": true,
+                "minRating": 1,
+                "maxRating": 6
+              },
+              "costScaling": {
+                "baseValue": 50,
+                "perRating": true
+              },
+              "availabilityScaling": {
+                "baseValue": 0,
+                "perRating": false
+              }
+            }
           },
           {
             "id": "gas-mask",
@@ -7727,38 +7965,107 @@
             "id": "stim-patch",
             "name": "Stim Patch",
             "category": "medical",
-            "cost": 25,
-            "availability": 6,
-            "restricted": true,
-            "rating": 6,
-            "description": "Combats fatigue and injury effects (Rating 1-6)."
+            "cost": 50,
+            "availability": 1,
+            "hasRating": true,
+            "maxRating": 6,
+            "costPerRating": true,
+            "description": "Combats fatigue and injury effects (Rating 1-6).",
+            "ratingSpec": {
+              "rating": {
+                "hasRating": true,
+                "minRating": 1,
+                "maxRating": 6
+              },
+              "costScaling": {
+                "baseValue": 50,
+                "perRating": true
+              },
+              "availabilityScaling": {
+                "baseValue": 1,
+                "perRating": true
+              }
+            },
+            "legality": "restricted"
           },
           {
             "id": "tranq-patch",
             "name": "Tranq Patch",
             "category": "medical",
-            "cost": 75,
-            "availability": 6,
-            "restricted": true,
-            "rating": 10,
-            "description": "Sedative patch (Rating 1-10)."
+            "cost": 25,
+            "availability": 2,
+            "hasRating": true,
+            "maxRating": 10,
+            "costPerRating": true,
+            "description": "Sedative patch (Rating 1-10).",
+            "ratingSpec": {
+              "rating": {
+                "hasRating": true,
+                "minRating": 1,
+                "maxRating": 10
+              },
+              "costScaling": {
+                "baseValue": 25,
+                "perRating": true
+              },
+              "availabilityScaling": {
+                "baseValue": 2,
+                "perRating": true
+              }
+            },
+            "legality": "restricted"
           },
           {
             "id": "trauma-patch",
             "name": "Trauma Patch",
             "category": "medical",
-            "cost": 500,
-            "availability": 6,
-            "description": "Emergency stabilization patch."
+            "cost": 20,
+            "availability": 2,
+            "hasRating": true,
+            "maxRating": 6,
+            "costPerRating": true,
+            "description": "Emergency stabilization patch (Rating 1-6).",
+            "ratingSpec": {
+              "rating": {
+                "hasRating": true,
+                "minRating": 1,
+                "maxRating": 6
+              },
+              "costScaling": {
+                "baseValue": 20,
+                "perRating": true
+              },
+              "availabilityScaling": {
+                "baseValue": 2,
+                "perRating": true
+              }
+            }
           },
           {
             "id": "antidote-patch",
             "name": "Antidote Patch",
             "category": "medical",
             "cost": 50,
-            "availability": 4,
-            "rating": 6,
-            "description": "Counteracts toxins (Rating 1-6)."
+            "availability": 1,
+            "hasRating": true,
+            "maxRating": 6,
+            "costPerRating": true,
+            "description": "Counteracts toxins (Rating 1-6).",
+            "ratingSpec": {
+              "rating": {
+                "hasRating": true,
+                "minRating": 1,
+                "maxRating": 6
+              },
+              "costScaling": {
+                "baseValue": 50,
+                "perRating": true
+              },
+              "availabilityScaling": {
+                "baseValue": 1,
+                "perRating": true
+              }
+            }
           },
           {
             "id": "slap-patch",
@@ -7772,11 +8079,28 @@
             "id": "chem-patch",
             "name": "Chem Patch",
             "category": "medical",
-            "cost": 200,
-            "availability": 4,
-            "restricted": true,
-            "rating": 6,
-            "description": "Drug delivery patch (Rating 1-6)."
+            "cost": 50,
+            "availability": 1,
+            "hasRating": true,
+            "maxRating": 6,
+            "costPerRating": true,
+            "description": "Drug delivery patch (Rating 1-6).",
+            "ratingSpec": {
+              "rating": {
+                "hasRating": true,
+                "minRating": 1,
+                "maxRating": 6
+              },
+              "costScaling": {
+                "baseValue": 50,
+                "perRating": true
+              },
+              "availabilityScaling": {
+                "baseValue": 1,
+                "perRating": true
+              }
+            },
+            "legality": "restricted"
           },
           {
             "id": "biomonitor",
@@ -7789,13 +8113,82 @@
         ],
         "security": [
           {
+            "id": "key-lock",
+            "name": "Key/Combination Lock",
+            "category": "security",
+            "cost": 10,
+            "availability": 1,
+            "hasRating": true,
+            "maxRating": 6,
+            "costPerRating": true,
+            "description": "Mechanical key or combination lock (Rating 1-6).",
+            "ratingSpec": {
+              "rating": {
+                "hasRating": true,
+                "minRating": 1,
+                "maxRating": 6
+              },
+              "costScaling": {
+                "baseValue": 10,
+                "perRating": true
+              },
+              "availabilityScaling": {
+                "baseValue": 1,
+                "perRating": true
+              }
+            }
+          },
+          {
             "id": "maglock",
             "name": "Maglock",
             "category": "security",
-            "cost": 200,
-            "availability": 2,
-            "rating": 6,
-            "description": "Electronic lock (Rating 1-6)."
+            "cost": 100,
+            "availability": 1,
+            "hasRating": true,
+            "maxRating": 6,
+            "costPerRating": true,
+            "description": "Electronic lock (Rating 1-6).",
+            "ratingSpec": {
+              "rating": {
+                "hasRating": true,
+                "minRating": 1,
+                "maxRating": 6
+              },
+              "costScaling": {
+                "baseValue": 100,
+                "perRating": true
+              },
+              "availabilityScaling": {
+                "baseValue": 1,
+                "perRating": true
+              }
+            }
+          },
+          {
+            "id": "anti-tamper-circuits",
+            "name": "Anti-Tamper Circuits",
+            "category": "security",
+            "cost": 250,
+            "availability": 1,
+            "hasRating": true,
+            "maxRating": 4,
+            "costPerRating": true,
+            "description": "Maglock add-on that triggers alarms if tampered with (Rating 1-4).",
+            "ratingSpec": {
+              "rating": {
+                "hasRating": true,
+                "minRating": 1,
+                "maxRating": 4
+              },
+              "costScaling": {
+                "baseValue": 250,
+                "perRating": true
+              },
+              "availabilityScaling": {
+                "baseValue": 1,
+                "perRating": true
+              }
+            }
           },
           {
             "id": "restraint-plastic",
@@ -7811,17 +8204,34 @@
             "category": "security",
             "cost": 50,
             "availability": 2,
-            "restricted": true,
-            "description": "Standard handcuffs."
+            "description": "Standard handcuffs.",
+            "legality": "restricted"
           },
           {
             "id": "motion-sensor",
             "name": "Motion Sensor",
             "category": "security",
             "cost": 100,
-            "availability": 4,
-            "rating": 6,
-            "description": "Detects movement (Rating 1-6)."
+            "availability": 6,
+            "hasRating": true,
+            "maxRating": 6,
+            "costPerRating": true,
+            "description": "Detects movement (Rating 1-6).",
+            "ratingSpec": {
+              "rating": {
+                "hasRating": true,
+                "minRating": 1,
+                "maxRating": 6
+              },
+              "costScaling": {
+                "baseValue": 100,
+                "perRating": true
+              },
+              "availabilityScaling": {
+                "baseValue": 6,
+                "perRating": false
+              }
+            }
           },
           {
             "id": "pressure-mat",
@@ -7863,7 +8273,6 @@
             "category": "miscellaneous",
             "cost": 2500,
             "availability": 3,
-            "forbidden": true,
             "hasRating": true,
             "maxRating": 6,
             "costPerRating": true,
@@ -7882,7 +8291,8 @@
                 "baseValue": 3,
                 "perRating": false
               }
-            }
+            },
+            "legality": "forbidden"
           },
           {
             "id": "fake-license",
@@ -7890,7 +8300,6 @@
             "category": "miscellaneous",
             "cost": 200,
             "availability": 3,
-            "forbidden": true,
             "hasRating": true,
             "maxRating": 6,
             "costPerRating": true,
@@ -7909,7 +8318,8 @@
                 "baseValue": 3,
                 "perRating": false
               }
-            }
+            },
+            "legality": "forbidden"
           },
           {
             "id": "contacts-imagelink",
@@ -8010,7 +8420,7 @@
             "quantity": 10,
             "apModifier": -4,
             "availability": 12,
-            "forbidden": true
+            "legality": "forbidden"
           },
           {
             "id": "ammo-apds",
@@ -8018,8 +8428,8 @@
             "category": "ammunition",
             "cost": 120,
             "availability": 12,
-            "forbidden": true,
-            "description": "Armor-Piercing Discarding Sabot (-4 AP)."
+            "description": "Armor-Piercing Discarding Sabot (-4 AP).",
+            "legality": "forbidden"
           },
           {
             "id": "assault-cannon",
@@ -8029,7 +8439,7 @@
             "cost": 400,
             "quantity": 10,
             "availability": 12,
-            "forbidden": true
+            "legality": "forbidden"
           },
           {
             "id": "ammo-explosive",
@@ -8037,8 +8447,8 @@
             "category": "ammunition",
             "cost": 80,
             "availability": 9,
-            "forbidden": true,
-            "description": "Explosive rounds (+1 DV, -1 AP)."
+            "description": "Explosive rounds (+1 DV, -1 AP).",
+            "legality": "forbidden"
           },
           {
             "id": "explosive-rounds",
@@ -8050,7 +8460,7 @@
             "damageModifier": "+1",
             "apModifier": -1,
             "availability": 9,
-            "forbidden": true
+            "legality": "forbidden"
           },
           {
             "id": "ammo-flechette",
@@ -8058,8 +8468,8 @@
             "category": "ammunition",
             "cost": 65,
             "availability": 6,
-            "restricted": true,
-            "description": "Flechette rounds (+2 DV vs unarmored, +5 AP)."
+            "description": "Flechette rounds (+2 DV vs unarmored, +5 AP).",
+            "legality": "restricted"
           },
           {
             "id": "flechette-rounds",
@@ -8071,7 +8481,7 @@
             "damageModifier": "+2",
             "apModifier": 5,
             "availability": 6,
-            "restricted": true
+            "legality": "restricted"
           },
           {
             "id": "ammo-gel",
@@ -8091,7 +8501,7 @@
             "damageModifier": "+0S",
             "apModifier": 1,
             "availability": 2,
-            "restricted": true
+            "legality": "restricted"
           },
           {
             "id": "hollow-points",
@@ -8103,7 +8513,7 @@
             "damageModifier": "+1",
             "apModifier": 2,
             "availability": 4,
-            "forbidden": true
+            "legality": "forbidden"
           },
           {
             "id": "injection-darts",
@@ -8113,7 +8523,7 @@
             "cost": 75,
             "quantity": 10,
             "availability": 4,
-            "restricted": true
+            "legality": "restricted"
           },
           {
             "id": "ammo-regular",
@@ -8121,8 +8531,8 @@
             "category": "ammunition",
             "cost": 20,
             "availability": 2,
-            "restricted": true,
-            "description": "Standard ammunition."
+            "description": "Standard ammunition.",
+            "legality": "restricted"
           },
           {
             "id": "regular-ammo",
@@ -8132,7 +8542,7 @@
             "cost": 20,
             "quantity": 10,
             "availability": 2,
-            "restricted": true
+            "legality": "restricted"
           },
           {
             "id": "stick-n-shock",
@@ -8144,7 +8554,7 @@
             "damageModifier": "-2S (e)",
             "apModifier": -5,
             "availability": 6,
-            "restricted": true
+            "legality": "restricted"
           },
           {
             "id": "ammo-stick-n-shock",
@@ -8152,8 +8562,8 @@
             "category": "ammunition",
             "cost": 80,
             "availability": 6,
-            "restricted": true,
-            "description": "Electrical rounds (-5 DV(e), -5 AP)."
+            "description": "Electrical rounds (-5 DV(e), -5 AP).",
+            "legality": "restricted"
           },
           {
             "id": "taser-dart",
@@ -8172,7 +8582,7 @@
             "cost": 60,
             "quantity": 10,
             "availability": 6,
-            "restricted": true
+            "legality": "restricted"
           },
           {
             "id": "ammo-tracer",
@@ -8180,8 +8590,8 @@
             "category": "ammunition",
             "cost": 25,
             "availability": 6,
-            "restricted": true,
-            "description": "Visible tracers for aimed fire."
+            "description": "Visible tracers for aimed fire.",
+            "legality": "restricted"
           }
         ]
       }
@@ -8194,7 +8604,6 @@
             "id": "airburst-link",
             "name": "Airburst Link",
             "availability": 6,
-            "restricted": true,
             "cost": 600,
             "description": "Reduces scatter distance for launched grenades by 2m per net hit instead of 1m.",
             "compatibleWeapons": [
@@ -8202,7 +8611,8 @@
               "rocket-launcher"
             ],
             "page": 432,
-            "source": "Core"
+            "source": "Core",
+            "legality": "restricted"
           },
           {
             "id": "bipod",
@@ -8239,7 +8649,6 @@
             "hasRating": true,
             "maxRating": 3,
             "availability": 3,
-            "restricted": true,
             "cost": 200,
             "costPerRating": true,
             "description": "Provides Recoil Compensation equal to its rating. Cannot be removed once installed.",
@@ -8262,7 +8671,8 @@
                 "baseValue": 3,
                 "perRating": false
               }
-            }
+            },
+            "legality": "restricted"
           },
           {
             "id": "gyro-mount",
@@ -8280,7 +8690,6 @@
             "id": "hidden-arm-slide",
             "name": "Hidden Arm Slide",
             "availability": 4,
-            "restricted": true,
             "cost": 350,
             "concealabilityModifier": -1,
             "description": "Forearm slide for quick-drawing small weapons. Threshold for quick draw is 2.",
@@ -8290,7 +8699,8 @@
               "taser"
             ],
             "page": 432,
-            "source": "Core"
+            "source": "Core",
+            "legality": "restricted"
           },
           {
             "id": "imaging-scope",
@@ -8356,7 +8766,6 @@
             "name": "Silencer/Suppressor",
             "mount": "barrel",
             "availability": 9,
-            "forbidden": true,
             "cost": 500,
             "description": "Reduces sound and flash of weapon discharge. -4 dice pool modifier on Perception Tests to notice or locate firer. Cannot be used with revolvers or shotguns.",
             "incompatibleWeapons": [
@@ -8364,43 +8773,44 @@
               "shotgun"
             ],
             "page": 433,
-            "source": "Core"
+            "source": "Core",
+            "legality": "forbidden"
           },
           {
             "id": "smart-firing-platform",
             "name": "Smart Firing Platform",
             "mount": "under",
             "availability": 12,
-            "forbidden": true,
             "cost": 2500,
             "recoilCompensation": 5,
             "description": "Non-mobile robotic tripod with Pilot 3 and Targeting autosoft 3. Provides 5 points of Recoil Compensation.",
             "page": 433,
-            "source": "Core"
+            "source": "Core",
+            "legality": "forbidden"
           },
           {
             "id": "smartgun-internal",
             "name": "Smartgun System, Internal",
             "mount": "internal",
             "availability": 2,
-            "restricted": true,
             "costMultiplier": 2,
             "accuracyModifier": 2,
             "description": "Internal smartgun system. Increases Accuracy by 2 when used with smartlink.",
             "page": 433,
-            "source": "Core"
+            "source": "Core",
+            "legality": "restricted"
           },
           {
             "id": "smartgun-external",
             "name": "Smartgun System, External",
             "mount": "top",
             "availability": 4,
-            "restricted": true,
             "cost": 200,
             "accuracyModifier": 2,
             "description": "External smartgun system. Increases Accuracy by 2 when used with smartlink.",
             "page": 433,
-            "source": "Core"
+            "source": "Core",
+            "legality": "restricted"
           },
           {
             "id": "spare-clip",
@@ -8475,7 +8885,6 @@
             "name": "Chemical Seal",
             "capacityCost": 6,
             "availability": 12,
-            "restricted": true,
             "cost": 3000,
             "description": "Airtight environmental control providing complete protection against contact and inhalation vector chemicals. Requires full body armor with helmet.",
             "requirements": [
@@ -8483,7 +8892,8 @@
               "helmet"
             ],
             "page": 437,
-            "source": "Core"
+            "source": "Core",
+            "legality": "restricted"
           },
           {
             "id": "fire-resistance",
@@ -8589,11 +8999,11 @@
             "name": "Shock Frills",
             "capacityCost": 2,
             "availability": 6,
-            "restricted": true,
             "cost": 250,
             "description": "Electrically charged strips that inflict Electricity damage to anyone touching you. 10 charges, recharges 1 per 10 seconds when plugged in.",
             "page": 438,
-            "source": "Core"
+            "source": "Core",
+            "legality": "restricted"
           },
           {
             "id": "thermal-damping",
@@ -8603,7 +9013,6 @@
             "capacityCost": 1,
             "capacityPerRating": true,
             "availability": 10,
-            "restricted": true,
             "cost": 500,
             "costPerRating": true,
             "description": "Reduces thermal signature. Adds rating to limit on Sneaking tests against thermographic vision or thermal sensors.",
@@ -8627,7 +9036,8 @@
                 "baseValue": 1,
                 "perRating": true
               }
-            }
+            },
+            "legality": "restricted"
           }
         ],
         "gearMods": [
@@ -8786,16 +9196,19 @@
             "essenceCost": 1,
             "cost": 43000,
             "availability": 5,
-            "restricted": true,
             "description": "VCR for controlling vehicles and drones. +1 to vehicle tests.",
             "wirelessBonus": "Noise reduction equal to rating.",
             "wirelessEffects": [
-              { "type": "noise_reduction", "modifier": 1 }
+              {
+                "type": "noise_reduction",
+                "modifier": 1
+              }
             ],
             "attributeBonuses": {
               "vehicleControl": 1
             },
-            "page": 452
+            "page": 452,
+            "legality": "restricted"
           },
           {
             "id": "control-rig-2",
@@ -8804,16 +9217,19 @@
             "essenceCost": 2,
             "cost": 97000,
             "availability": 10,
-            "restricted": true,
             "description": "Advanced VCR. +2 to vehicle tests.",
             "wirelessBonus": "Noise reduction equal to rating.",
             "wirelessEffects": [
-              { "type": "noise_reduction", "modifier": 2 }
+              {
+                "type": "noise_reduction",
+                "modifier": 2
+              }
             ],
             "attributeBonuses": {
               "vehicleControl": 2
             },
-            "page": 452
+            "page": 452,
+            "legality": "restricted"
           },
           {
             "id": "control-rig-3",
@@ -8822,16 +9238,19 @@
             "essenceCost": 3,
             "cost": 208000,
             "availability": 15,
-            "restricted": true,
             "description": "Military-grade VCR. +3 to vehicle tests.",
             "wirelessBonus": "Noise reduction equal to rating.",
             "wirelessEffects": [
-              { "type": "noise_reduction", "modifier": 3 }
+              {
+                "type": "noise_reduction",
+                "modifier": 3
+              }
             ],
             "attributeBonuses": {
               "vehicleControl": 3
             },
-            "page": 452
+            "page": 452,
+            "legality": "restricted"
           },
           {
             "id": "cortex-bomb",
@@ -8840,9 +9259,9 @@
             "essenceCost": 0.2,
             "cost": 10000,
             "availability": 16,
-            "forbidden": true,
             "description": "Cranial explosive for security/control. Kink model causes disabling pain.",
-            "page": 452
+            "page": 452,
+            "legality": "forbidden"
           },
           {
             "id": "cortex-bomb-micro",
@@ -8851,9 +9270,9 @@
             "essenceCost": 0.2,
             "cost": 25000,
             "availability": 16,
-            "forbidden": true,
             "description": "Smaller cranial explosive. 3P damage, -3 AP.",
-            "page": 452
+            "page": 452,
+            "legality": "forbidden"
           },
           {
             "id": "cortex-bomb-area",
@@ -8862,9 +9281,9 @@
             "essenceCost": 0.2,
             "cost": 40000,
             "availability": 20,
-            "forbidden": true,
             "description": "Cranial explosive with area effect. 15P, -6 AP, -1/m.",
-            "page": 452
+            "page": 452,
+            "legality": "forbidden"
           },
           {
             "id": "cranial-bomb",
@@ -8873,9 +9292,9 @@
             "essenceCost": 0,
             "cost": 5000,
             "availability": 12,
-            "forbidden": true,
             "description": "External cranial explosive device.",
-            "page": 453
+            "page": 453,
+            "legality": "forbidden"
           },
           {
             "id": "olfactory-booster",
@@ -9103,10 +9522,10 @@
             "essenceCost": 0.1,
             "cost": 4000,
             "availability": 8,
-            "restricted": true,
             "capacityCost": 3,
             "description": "+2 accuracy with smartgun systems.",
-            "page": 454
+            "page": 454,
+            "legality": "restricted"
           },
           {
             "id": "eye-thermographic-vision",
@@ -9175,7 +9594,6 @@
             "essenceCost": 0.1,
             "cost": 20000,
             "availability": 16,
-            "forbidden": true,
             "hasRating": true,
             "maxRating": 6,
             "costPerRating": true,
@@ -9204,7 +9622,8 @@
                 "baseValue": 1,
                 "perRating": false
               }
-            }
+            },
+            "legality": "forbidden"
           },
           {
             "id": "cyberears-1",
@@ -9370,12 +9789,12 @@
             "essenceCost": 0.5,
             "cost": 8000,
             "availability": 8,
-            "restricted": true,
             "description": "+1 Body for damage resistance. Unarmed DV +1.",
             "attributeBonuses": {
               "bodyArmor": 1
             },
-            "page": 456
+            "page": 456,
+            "legality": "restricted"
           },
           {
             "id": "bone-lacing-aluminum",
@@ -9384,12 +9803,12 @@
             "essenceCost": 1,
             "cost": 18000,
             "availability": 12,
-            "restricted": true,
             "description": "+2 Body for damage resistance. Unarmed DV +2.",
             "attributeBonuses": {
               "bodyArmor": 2
             },
-            "page": 456
+            "page": 456,
+            "legality": "restricted"
           },
           {
             "id": "bone-lacing-titanium",
@@ -9398,12 +9817,12 @@
             "essenceCost": 1.5,
             "cost": 40000,
             "availability": 16,
-            "restricted": true,
             "description": "+3 Body for damage resistance. Unarmed DV +3.",
             "attributeBonuses": {
               "bodyArmor": 3
             },
-            "page": 456
+            "page": 456,
+            "legality": "restricted"
           },
           {
             "id": "dermal-plating-1",
@@ -9412,12 +9831,12 @@
             "essenceCost": 0.5,
             "cost": 6000,
             "availability": 8,
-            "restricted": true,
             "description": "+1 armor bonus.",
             "attributeBonuses": {
               "armor": 1
             },
-            "page": 456
+            "page": 456,
+            "legality": "restricted"
           },
           {
             "id": "dermal-plating-2",
@@ -9426,12 +9845,12 @@
             "essenceCost": 1,
             "cost": 12000,
             "availability": 12,
-            "restricted": true,
             "description": "+2 armor bonus.",
             "attributeBonuses": {
               "armor": 2
             },
-            "page": 456
+            "page": 456,
+            "legality": "restricted"
           },
           {
             "id": "dermal-plating-3",
@@ -9440,12 +9859,12 @@
             "essenceCost": 1.5,
             "cost": 20000,
             "availability": 14,
-            "restricted": true,
             "description": "+3 armor bonus.",
             "attributeBonuses": {
               "armor": 3
             },
-            "page": 456
+            "page": 456,
+            "legality": "restricted"
           },
           {
             "id": "dermal-plating-4",
@@ -9454,12 +9873,12 @@
             "essenceCost": 2,
             "cost": 30000,
             "availability": 16,
-            "restricted": true,
             "description": "+4 armor bonus.",
             "attributeBonuses": {
               "armor": 4
             },
-            "page": 456
+            "page": 456,
+            "legality": "restricted"
           },
           {
             "id": "dermal-plating-5",
@@ -9468,12 +9887,12 @@
             "essenceCost": 2.5,
             "cost": 50000,
             "availability": 18,
-            "restricted": true,
             "description": "+5 armor bonus.",
             "attributeBonuses": {
               "armor": 5
             },
-            "page": 456
+            "page": 456,
+            "legality": "restricted"
           },
           {
             "id": "dermal-plating-6",
@@ -9482,12 +9901,12 @@
             "essenceCost": 3,
             "cost": 75000,
             "availability": 20,
-            "restricted": true,
             "description": "+6 armor bonus.",
             "attributeBonuses": {
               "armor": 6
             },
-            "page": 456
+            "page": 456,
+            "legality": "restricted"
           },
           {
             "id": "fingertip-compartment",
@@ -9506,9 +9925,9 @@
             "essenceCost": 0.5,
             "cost": 5000,
             "availability": 8,
-            "restricted": true,
             "description": "Implanted grapple launcher.",
-            "page": 456
+            "page": 456,
+            "legality": "restricted"
           },
           {
             "id": "internal-air-tank",
@@ -9527,13 +9946,13 @@
             "essenceCost": 1,
             "cost": 25000,
             "availability": 11,
-            "restricted": true,
             "description": "+1 STR and AGI.",
             "attributeBonuses": {
               "strength": 1,
               "agility": 1
             },
-            "page": 456
+            "page": 456,
+            "legality": "restricted"
           },
           {
             "id": "muscle-replacement-2",
@@ -9542,13 +9961,13 @@
             "essenceCost": 2,
             "cost": 50000,
             "availability": 13,
-            "restricted": true,
             "description": "+2 STR and AGI.",
             "attributeBonuses": {
               "strength": 2,
               "agility": 2
             },
-            "page": 456
+            "page": 456,
+            "legality": "restricted"
           },
           {
             "id": "muscle-replacement-3",
@@ -9557,13 +9976,13 @@
             "essenceCost": 3,
             "cost": 80000,
             "availability": 15,
-            "restricted": true,
             "description": "+3 STR and AGI.",
             "attributeBonuses": {
               "strength": 3,
               "agility": 3
             },
-            "page": 456
+            "page": 456,
+            "legality": "restricted"
           },
           {
             "id": "muscle-replacement-4",
@@ -9572,13 +9991,13 @@
             "essenceCost": 4,
             "cost": 120000,
             "availability": 17,
-            "restricted": true,
             "description": "+4 STR and AGI.",
             "attributeBonuses": {
               "strength": 4,
               "agility": 4
             },
-            "page": 456
+            "page": 456,
+            "legality": "restricted"
           },
           {
             "id": "orthoskin-1",
@@ -9587,12 +10006,12 @@
             "essenceCost": 0.25,
             "cost": 6000,
             "availability": 8,
-            "restricted": true,
             "description": "+1 armor (compatible with bone lacing).",
             "attributeBonuses": {
               "armor": 1
             },
-            "page": 457
+            "page": 457,
+            "legality": "restricted"
           },
           {
             "id": "orthoskin-2",
@@ -9601,12 +10020,12 @@
             "essenceCost": 0.5,
             "cost": 12000,
             "availability": 12,
-            "restricted": true,
             "description": "+2 armor (compatible with bone lacing).",
             "attributeBonuses": {
               "armor": 2
             },
-            "page": 457
+            "page": 457,
+            "legality": "restricted"
           },
           {
             "id": "orthoskin-3",
@@ -9615,12 +10034,12 @@
             "essenceCost": 0.75,
             "cost": 20000,
             "availability": 14,
-            "restricted": true,
             "description": "+3 armor (compatible with bone lacing).",
             "attributeBonuses": {
               "armor": 3
             },
-            "page": 457
+            "page": 457,
+            "legality": "restricted"
           },
           {
             "id": "orthoskin-4",
@@ -9629,12 +10048,12 @@
             "essenceCost": 1,
             "cost": 30000,
             "availability": 16,
-            "restricted": true,
             "description": "+4 armor (compatible with bone lacing).",
             "attributeBonuses": {
               "armor": 4
             },
-            "page": 457
+            "page": 457,
+            "legality": "restricted"
           },
           {
             "id": "platelet-factories",
@@ -9653,16 +10072,20 @@
             "essenceCost": 0.3,
             "cost": 13000,
             "availability": 8,
-            "restricted": true,
             "description": "+1 REA.",
             "wirelessBonus": "+1 Reaction (included in rating 2 and 3).",
             "wirelessEffects": [
-              { "type": "attribute", "attribute": "reaction", "modifier": 1 }
+              {
+                "type": "attribute",
+                "attribute": "reaction",
+                "modifier": 1
+              }
             ],
             "attributeBonuses": {
               "reaction": 1
             },
-            "page": 457
+            "page": 457,
+            "legality": "restricted"
           },
           {
             "id": "reaction-enhancers-2",
@@ -9671,16 +10094,20 @@
             "essenceCost": 0.6,
             "cost": 26000,
             "availability": 12,
-            "restricted": true,
             "description": "+2 REA.",
             "wirelessBonus": "+1 Reaction (included in rating 3).",
             "wirelessEffects": [
-              { "type": "attribute", "attribute": "reaction", "modifier": 1 }
+              {
+                "type": "attribute",
+                "attribute": "reaction",
+                "modifier": 1
+              }
             ],
             "attributeBonuses": {
               "reaction": 2
             },
-            "page": 457
+            "page": 457,
+            "legality": "restricted"
           },
           {
             "id": "reaction-enhancers-3",
@@ -9689,16 +10116,20 @@
             "essenceCost": 0.9,
             "cost": 39000,
             "availability": 14,
-            "restricted": true,
             "description": "+3 REA.",
             "wirelessBonus": "+1 Reaction.",
             "wirelessEffects": [
-              { "type": "attribute", "attribute": "reaction", "modifier": 1 }
+              {
+                "type": "attribute",
+                "attribute": "reaction",
+                "modifier": 1
+              }
             ],
             "attributeBonuses": {
               "reaction": 3
             },
-            "page": 457
+            "page": 457,
+            "legality": "restricted"
           },
           {
             "id": "skillwires",
@@ -9707,7 +10138,6 @@
             "essenceCost": 0.1,
             "cost": 20000,
             "availability": 8,
-            "restricted": true,
             "hasRating": true,
             "maxRating": 6,
             "essencePerRating": true,
@@ -9732,7 +10162,8 @@
                 "baseValue": 0.1,
                 "perRating": true
               }
-            }
+            },
+            "legality": "restricted"
           },
           {
             "id": "smuggling-compartment",
@@ -9751,7 +10182,6 @@
             "essenceCost": 0.7,
             "cost": 140000,
             "availability": 20,
-            "forbidden": true,
             "description": "+1 to all physical attributes (BOD, AGI, REA, STR).",
             "attributeBonuses": {
               "body": 1,
@@ -9759,7 +10189,8 @@
               "reaction": 1,
               "strength": 1
             },
-            "page": 457
+            "page": 457,
+            "legality": "forbidden"
           },
           {
             "id": "synthacardium-1",
@@ -9798,17 +10229,20 @@
             "essenceCost": 2,
             "cost": 39000,
             "availability": 8,
-            "restricted": true,
             "description": "+1 REA, +1D6 Initiative.",
             "wirelessBonus": "+1 Initiative.",
             "wirelessEffects": [
-              { "type": "initiative", "modifier": 1 }
+              {
+                "type": "initiative",
+                "modifier": 1
+              }
             ],
             "attributeBonuses": {
               "reaction": 1
             },
             "initiativeDiceBonus": 1,
-            "page": 457
+            "page": 457,
+            "legality": "restricted"
           },
           {
             "id": "wired-reflexes-2",
@@ -9817,17 +10251,20 @@
             "essenceCost": 3,
             "cost": 149000,
             "availability": 12,
-            "restricted": true,
             "description": "+2 REA, +2D6 Initiative.",
             "wirelessBonus": "+1 Initiative.",
             "wirelessEffects": [
-              { "type": "initiative", "modifier": 1 }
+              {
+                "type": "initiative",
+                "modifier": 1
+              }
             ],
             "attributeBonuses": {
               "reaction": 2
             },
             "initiativeDiceBonus": 2,
-            "page": 457
+            "page": 457,
+            "legality": "restricted"
           },
           {
             "id": "wired-reflexes-3",
@@ -9836,17 +10273,20 @@
             "essenceCost": 5,
             "cost": 217000,
             "availability": 20,
-            "restricted": true,
             "description": "+3 REA, +3D6 Initiative.",
             "wirelessBonus": "+1 Initiative.",
             "wirelessEffects": [
-              { "type": "initiative", "modifier": 1 }
+              {
+                "type": "initiative",
+                "modifier": 1
+              }
             ],
             "attributeBonuses": {
               "reaction": 3
             },
             "initiativeDiceBonus": 3,
-            "page": 457
+            "page": 457,
+            "legality": "restricted"
           },
           {
             "id": "cyberlimb-arm",
@@ -9965,7 +10405,6 @@
             "essenceCost": 0,
             "cost": 3000,
             "availability": 8,
-            "restricted": true,
             "capacityCost": 1,
             "hasRating": true,
             "maxRating": 3,
@@ -9996,7 +10435,8 @@
                 "baseValue": 1,
                 "perRating": true
               }
-            }
+            },
+            "legality": "restricted"
           },
           {
             "id": "cyberlimb-strength",
@@ -10005,7 +10445,6 @@
             "essenceCost": 0,
             "cost": 3000,
             "availability": 8,
-            "restricted": true,
             "capacityCost": 1,
             "hasRating": true,
             "maxRating": 3,
@@ -10036,7 +10475,8 @@
                 "baseValue": 1,
                 "perRating": true
               }
-            }
+            },
+            "legality": "restricted"
           },
           {
             "id": "cyberlimb-armor",
@@ -10045,7 +10485,6 @@
             "essenceCost": 0,
             "cost": 3000,
             "availability": 8,
-            "restricted": true,
             "capacityCost": 1,
             "hasRating": true,
             "maxRating": 3,
@@ -10076,7 +10515,8 @@
                 "baseValue": 1,
                 "perRating": true
               }
-            }
+            },
+            "legality": "restricted"
           },
           {
             "id": "cyberlimb-gyromount",
@@ -10085,11 +10525,11 @@
             "essenceCost": 0,
             "cost": 6000,
             "availability": 12,
-            "restricted": true,
             "capacityCost": 8,
             "parentType": "cyberlimb",
             "description": "Arm-mounted weapon stabilization system. Negates recoil penalties.",
-            "page": 458
+            "page": 458,
+            "legality": "restricted"
           },
           {
             "id": "cyberlimb-holster",
@@ -10098,11 +10538,11 @@
             "essenceCost": 0,
             "cost": 2000,
             "availability": 6,
-            "restricted": true,
             "capacityCost": 2,
             "parentType": "cyberlimb",
             "description": "Concealed weapon compartment in limb.",
-            "page": 458
+            "page": 458,
+            "legality": "restricted"
           },
           {
             "id": "cyberlimb-slide",
@@ -10111,11 +10551,11 @@
             "essenceCost": 0,
             "cost": 3000,
             "availability": 8,
-            "restricted": true,
             "capacityCost": 4,
             "parentType": "cyberlimb",
             "description": "Auto-deploying weapon mechanism.",
-            "page": 459
+            "page": 459,
+            "legality": "restricted"
           },
           {
             "id": "hand-blade",
@@ -10124,9 +10564,9 @@
             "essenceCost": 0.25,
             "cost": 2500,
             "availability": 8,
-            "restricted": true,
             "description": "Retractable blade in forearm. Reach 0, DV (STR+2)P, AP -2.",
-            "page": 459
+            "page": 459,
+            "legality": "restricted"
           },
           {
             "id": "hand-razors",
@@ -10135,9 +10575,9 @@
             "essenceCost": 0.2,
             "cost": 1250,
             "availability": 6,
-            "restricted": true,
             "description": "Retractable finger blades. Reach 0, DV (STR+1)P, AP -3.",
-            "page": 459
+            "page": 459,
+            "legality": "restricted"
           },
           {
             "id": "spur",
@@ -10146,9 +10586,9 @@
             "essenceCost": 0.3,
             "cost": 5000,
             "availability": 10,
-            "restricted": true,
             "description": "Wrist-mounted blade. Reach 0, DV (STR+3)P, AP -2.",
-            "page": 459
+            "page": 459,
+            "legality": "restricted"
           },
           {
             "id": "shock-hand",
@@ -10157,9 +10597,9 @@
             "essenceCost": 0.25,
             "cost": 5000,
             "availability": 8,
-            "restricted": true,
             "description": "Electrified hand. DV 8S(e), AP -5.",
-            "page": 459
+            "page": 459,
+            "legality": "restricted"
           },
           {
             "id": "cyber-holster",
@@ -10168,9 +10608,9 @@
             "essenceCost": 0.2,
             "cost": 2000,
             "availability": 8,
-            "restricted": true,
             "description": "Concealed weapon compartment.",
-            "page": 459
+            "page": 459,
+            "legality": "restricted"
           }
         ]
       }
@@ -10216,9 +10656,9 @@
             "essenceCost": 0.75,
             "cost": 55000,
             "availability": 16,
-            "forbidden": true,
             "description": "+1 BOD, AGI, REA, STR when activated. Costs Edge.",
-            "page": 459
+            "page": 459,
+            "legality": "forbidden"
           },
           {
             "id": "adrenaline-pump-2",
@@ -10227,9 +10667,9 @@
             "essenceCost": 1.25,
             "cost": 110000,
             "availability": 18,
-            "forbidden": true,
             "description": "+2 BOD, AGI, REA, STR when activated. Costs Edge.",
-            "page": 459
+            "page": 459,
+            "legality": "forbidden"
           },
           {
             "id": "adrenaline-pump-3",
@@ -10238,9 +10678,9 @@
             "essenceCost": 1.75,
             "cost": 165000,
             "availability": 20,
-            "forbidden": true,
             "description": "+3 BOD, AGI, REA, STR when activated. Costs Edge.",
-            "page": 459
+            "page": 459,
+            "legality": "forbidden"
           },
           {
             "id": "cat-eyes",
@@ -10309,12 +10749,12 @@
             "essenceCost": 0.2,
             "cost": 31000,
             "availability": 12,
-            "restricted": true,
             "description": "+1 STR.",
             "attributeBonuses": {
               "strength": 1
             },
-            "page": 460
+            "page": 460,
+            "legality": "restricted"
           },
           {
             "id": "muscle-augmentation-2",
@@ -10323,12 +10763,12 @@
             "essenceCost": 0.4,
             "cost": 62000,
             "availability": 14,
-            "restricted": true,
             "description": "+2 STR.",
             "attributeBonuses": {
               "strength": 2
             },
-            "page": 460
+            "page": 460,
+            "legality": "restricted"
           },
           {
             "id": "muscle-augmentation-3",
@@ -10337,12 +10777,12 @@
             "essenceCost": 0.6,
             "cost": 93000,
             "availability": 16,
-            "restricted": true,
             "description": "+3 STR.",
             "attributeBonuses": {
               "strength": 3
             },
-            "page": 460
+            "page": 460,
+            "legality": "restricted"
           },
           {
             "id": "muscle-augmentation-4",
@@ -10351,12 +10791,12 @@
             "essenceCost": 0.8,
             "cost": 124000,
             "availability": 18,
-            "restricted": true,
             "description": "+4 STR.",
             "attributeBonuses": {
               "strength": 4
             },
-            "page": 460
+            "page": 460,
+            "legality": "restricted"
           },
           {
             "id": "muscle-toner-1",
@@ -10365,16 +10805,20 @@
             "essenceCost": 0.2,
             "cost": 32000,
             "availability": 12,
-            "restricted": true,
             "description": "+1 AGI.",
             "wirelessBonus": "+1 Agility (included in higher ratings).",
             "wirelessEffects": [
-              { "type": "attribute", "attribute": "agility", "modifier": 1 }
+              {
+                "type": "attribute",
+                "attribute": "agility",
+                "modifier": 1
+              }
             ],
             "attributeBonuses": {
               "agility": 1
             },
-            "page": 460
+            "page": 460,
+            "legality": "restricted"
           },
           {
             "id": "muscle-toner-2",
@@ -10383,16 +10827,20 @@
             "essenceCost": 0.4,
             "cost": 64000,
             "availability": 14,
-            "restricted": true,
             "description": "+2 AGI.",
             "wirelessBonus": "+1 Agility (included in higher ratings).",
             "wirelessEffects": [
-              { "type": "attribute", "attribute": "agility", "modifier": 1 }
+              {
+                "type": "attribute",
+                "attribute": "agility",
+                "modifier": 1
+              }
             ],
             "attributeBonuses": {
               "agility": 2
             },
-            "page": 460
+            "page": 460,
+            "legality": "restricted"
           },
           {
             "id": "muscle-toner-3",
@@ -10401,16 +10849,20 @@
             "essenceCost": 0.6,
             "cost": 96000,
             "availability": 16,
-            "restricted": true,
             "description": "+3 AGI.",
             "wirelessBonus": "+1 Agility (included in rating 4).",
             "wirelessEffects": [
-              { "type": "attribute", "attribute": "agility", "modifier": 1 }
+              {
+                "type": "attribute",
+                "attribute": "agility",
+                "modifier": 1
+              }
             ],
             "attributeBonuses": {
               "agility": 3
             },
-            "page": 460
+            "page": 460,
+            "legality": "restricted"
           },
           {
             "id": "muscle-toner-4",
@@ -10419,16 +10871,20 @@
             "essenceCost": 0.8,
             "cost": 128000,
             "availability": 18,
-            "restricted": true,
             "description": "+4 AGI.",
             "wirelessBonus": "+1 Agility.",
             "wirelessEffects": [
-              { "type": "attribute", "attribute": "agility", "modifier": 1 }
+              {
+                "type": "attribute",
+                "attribute": "agility",
+                "modifier": 1
+              }
             ],
             "attributeBonuses": {
               "agility": 4
             },
-            "page": 460
+            "page": 460,
+            "legality": "restricted"
           },
           {
             "id": "nephritic-screen-1",
@@ -10497,12 +10953,12 @@
             "essenceCost": 0.25,
             "cost": 6500,
             "availability": 8,
-            "restricted": true,
             "description": "+1 armor (compatible with bone lacing).",
             "attributeBonuses": {
               "armor": 1
             },
-            "page": 460
+            "page": 460,
+            "legality": "restricted"
           },
           {
             "id": "orthoskin-bio-2",
@@ -10511,12 +10967,12 @@
             "essenceCost": 0.5,
             "cost": 13000,
             "availability": 12,
-            "restricted": true,
             "description": "+2 armor.",
             "attributeBonuses": {
               "armor": 2
             },
-            "page": 460
+            "page": 460,
+            "legality": "restricted"
           },
           {
             "id": "orthoskin-bio-3",
@@ -10525,12 +10981,12 @@
             "essenceCost": 0.75,
             "cost": 22000,
             "availability": 14,
-            "restricted": true,
             "description": "+3 armor.",
             "attributeBonuses": {
               "armor": 3
             },
-            "page": 460
+            "page": 460,
+            "legality": "restricted"
           },
           {
             "id": "orthoskin-bio-4",
@@ -10539,12 +10995,12 @@
             "essenceCost": 1,
             "cost": 33000,
             "availability": 16,
-            "restricted": true,
             "description": "+4 armor.",
             "attributeBonuses": {
               "armor": 4
             },
-            "page": 460
+            "page": 460,
+            "legality": "restricted"
           },
           {
             "id": "pathogenic-defense-1",
@@ -10643,7 +11099,6 @@
             "essenceCost": 1.4,
             "cost": 150000,
             "availability": 20,
-            "forbidden": true,
             "description": "+1 to all physical attributes (BOD, AGI, REA, STR).",
             "attributeBonuses": {
               "body": 1,
@@ -10651,7 +11106,8 @@
               "reaction": 1,
               "strength": 1
             },
-            "page": 461
+            "page": 461,
+            "legality": "forbidden"
           },
           {
             "id": "symbiotes-1",
@@ -10919,9 +11375,9 @@
             "essenceCost": 0.3,
             "cost": 48000,
             "availability": 18,
-            "forbidden": true,
             "description": "Ignore all wound modifiers. Requires Willpower (3) to activate.",
-            "page": 461
+            "page": 461,
+            "legality": "forbidden"
           },
           {
             "id": "sleep-regulator",
@@ -10940,13 +11396,13 @@
             "essenceCost": 0.5,
             "cost": 95000,
             "availability": 12,
-            "restricted": true,
             "description": "+1 REA, +1D6 Initiative. Incompatible with wired reflexes.",
             "attributeBonuses": {
               "reaction": 1
             },
             "initiativeDiceBonus": 1,
-            "page": 462
+            "page": 462,
+            "legality": "restricted"
           },
           {
             "id": "synaptic-booster-2",
@@ -10955,13 +11411,13 @@
             "essenceCost": 1,
             "cost": 190000,
             "availability": 14,
-            "restricted": true,
             "description": "+2 REA, +2D6 Initiative. Incompatible with wired reflexes.",
             "attributeBonuses": {
               "reaction": 2
             },
             "initiativeDiceBonus": 2,
-            "page": 462
+            "page": 462,
+            "legality": "restricted"
           },
           {
             "id": "synaptic-booster-3",
@@ -10970,13 +11426,13 @@
             "essenceCost": 1.5,
             "cost": 285000,
             "availability": 18,
-            "restricted": true,
             "description": "+3 REA, +3D6 Initiative. Incompatible with wired reflexes.",
             "attributeBonuses": {
               "reaction": 3
             },
             "initiativeDiceBonus": 3,
-            "page": 462
+            "page": 462,
+            "legality": "restricted"
           }
         ]
       }
@@ -11318,8 +11774,8 @@
             "seats": 2,
             "cost": 110000,
             "availability": 10,
-            "restricted": true,
-            "page": 463
+            "page": 463,
+            "legality": "restricted"
           }
         ],
         "aircraft": [
@@ -11353,8 +11809,8 @@
             "seats": 2,
             "cost": 105000,
             "availability": 8,
-            "restricted": true,
-            "page": 463
+            "page": 463,
+            "legality": "restricted"
           },
           {
             "id": "ares-dragon",
@@ -11370,8 +11826,8 @@
             "seats": 12,
             "cost": 600000,
             "availability": 18,
-            "forbidden": true,
-            "page": 463
+            "page": 463,
+            "legality": "forbidden"
           },
           {
             "id": "northrup-wasp",
@@ -11419,8 +11875,8 @@
             "seats": 4,
             "cost": 225000,
             "availability": 12,
-            "restricted": true,
-            "page": 464
+            "page": 464,
+            "legality": "restricted"
           }
         ],
         "drones": [
@@ -11495,9 +11951,9 @@
             },
             "cost": 5000,
             "availability": 4,
-            "restricted": true,
             "description": "Popular aerial drone with weapon mount",
-            "page": 466
+            "page": 466,
+            "legality": "restricted"
           },
           {
             "id": "cyberspace-designs-crawler",
@@ -11533,9 +11989,9 @@
             },
             "cost": 10500,
             "availability": 8,
-            "restricted": true,
             "description": "Anthroform combat drone with sword arms",
-            "page": 465
+            "page": 465,
+            "legality": "restricted"
           },
           {
             "id": "gm-nissan-doberman",
@@ -11554,9 +12010,9 @@
             },
             "cost": 5000,
             "availability": 4,
-            "restricted": true,
             "description": "Four-legged combat patrol drone",
-            "page": 465
+            "page": 465,
+            "legality": "restricted"
           },
           {
             "id": "mct-roto-drone",
@@ -11576,9 +12032,9 @@
             },
             "cost": 4500,
             "availability": 6,
-            "restricted": true,
             "description": "Stationary gun turret platform",
-            "page": 466
+            "page": 466,
+            "legality": "restricted"
           },
           {
             "id": "cyberspace-designs-dalmatian",
@@ -11618,9 +12074,9 @@
             },
             "cost": 25000,
             "availability": 10,
-            "restricted": true,
             "description": "Heavy combat drone with turret-mounted weaponry",
-            "page": 466
+            "page": 466,
+            "legality": "restricted"
           },
           {
             "id": "horizon-cuu-drone",
@@ -11693,9 +12149,9 @@
             "firewall": 4,
             "cost": 72000,
             "availability": 12,
-            "restricted": true,
             "description": "Military-spec rigger command console",
-            "page": 441
+            "page": 441,
+            "legality": "restricted"
           },
           {
             "id": "ares-transport",
@@ -11716,9 +12172,9 @@
             "firewall": 5,
             "cost": 215000,
             "availability": 14,
-            "restricted": true,
             "description": "The ultimate RCC for serious riggers",
-            "page": 441
+            "page": 441,
+            "legality": "restricted"
           }
         ],
         "autosofts": [
@@ -12197,11 +12653,11 @@
             "category": "hacking",
             "cost": 250,
             "availability": 6,
-            "restricted": true,
             "description": "Provides additional Matrix defense.",
             "effects": "+2 dice pool modifier to resist Matrix damage",
             "page": 245,
-            "source": "SR5"
+            "source": "SR5",
+            "legality": "restricted"
           },
           {
             "id": "baby-monitor",
@@ -12209,11 +12665,11 @@
             "category": "hacking",
             "cost": 250,
             "availability": 6,
-            "restricted": true,
             "description": "Monitors your overwatch score.",
             "effects": "Always know your current Overwatch Score",
             "page": 245,
-            "source": "SR5"
+            "source": "SR5",
+            "legality": "restricted"
           },
           {
             "id": "biofeedback",
@@ -12221,11 +12677,11 @@
             "category": "hacking",
             "cost": 250,
             "availability": 12,
-            "forbidden": true,
             "description": "Converts Matrix damage into physical damage.",
             "effects": "Data Spike deals Physical damage to biofeedback-vulnerable targets",
             "page": 245,
-            "source": "SR5"
+            "source": "SR5",
+            "legality": "forbidden"
           },
           {
             "id": "biofeedback-filter",
@@ -12233,11 +12689,11 @@
             "category": "hacking",
             "cost": 250,
             "availability": 6,
-            "restricted": true,
             "description": "Protects against biofeedback attacks.",
             "effects": "+2 dice pool modifier to resist biofeedback damage",
             "page": 245,
-            "source": "SR5"
+            "source": "SR5",
+            "legality": "restricted"
           },
           {
             "id": "blackout",
@@ -12245,11 +12701,11 @@
             "category": "hacking",
             "cost": 250,
             "availability": 12,
-            "forbidden": true,
             "description": "Non-lethal biofeedback attack.",
             "effects": "Data Spike deals Stun damage to biofeedback-vulnerable targets",
             "page": 245,
-            "source": "SR5"
+            "source": "SR5",
+            "legality": "forbidden"
           },
           {
             "id": "decryption",
@@ -12257,11 +12713,11 @@
             "category": "hacking",
             "cost": 250,
             "availability": 6,
-            "restricted": true,
             "description": "Helps you break encryption.",
             "effects": "+1 to Attack rating when using Crack File",
             "page": 245,
-            "source": "SR5"
+            "source": "SR5",
+            "legality": "restricted"
           },
           {
             "id": "defuse",
@@ -12269,11 +12725,11 @@
             "category": "hacking",
             "cost": 250,
             "availability": 6,
-            "restricted": true,
             "description": "Helps you disarm data bombs.",
             "effects": "+4 dice pool modifier to Disarm Data Bomb actions",
             "page": 245,
-            "source": "SR5"
+            "source": "SR5",
+            "legality": "restricted"
           },
           {
             "id": "demolition",
@@ -12281,11 +12737,11 @@
             "category": "hacking",
             "cost": 250,
             "availability": 6,
-            "restricted": true,
             "description": "Helps you plant data bombs.",
             "effects": "+1 to the rating of any Data Bombs you set",
             "page": 245,
-            "source": "SR5"
+            "source": "SR5",
+            "legality": "restricted"
           },
           {
             "id": "exploit",
@@ -12293,11 +12749,11 @@
             "category": "hacking",
             "cost": 250,
             "availability": 6,
-            "restricted": true,
             "description": "Helps you gain unauthorized access.",
             "effects": "+2 dice pool modifier to Hack on the Fly actions",
             "page": 245,
-            "source": "SR5"
+            "source": "SR5",
+            "legality": "restricted"
           },
           {
             "id": "fork",
@@ -12305,11 +12761,11 @@
             "category": "hacking",
             "cost": 250,
             "availability": 6,
-            "restricted": true,
             "description": "Allows you to attack two targets at once.",
             "effects": "Perform a single Matrix action against two targets, splitting dice pool",
             "page": 245,
-            "source": "SR5"
+            "source": "SR5",
+            "legality": "restricted"
           },
           {
             "id": "guard",
@@ -12317,11 +12773,11 @@
             "category": "hacking",
             "cost": 250,
             "availability": 6,
-            "restricted": true,
             "description": "Protects your persona and files.",
             "effects": "Reduce extra damage from marks by 1 DV per mark",
             "page": 246,
-            "source": "SR5"
+            "source": "SR5",
+            "legality": "restricted"
           },
           {
             "id": "hammer",
@@ -12329,11 +12785,11 @@
             "category": "hacking",
             "cost": 250,
             "availability": 6,
-            "restricted": true,
             "description": "Increases your attack power.",
             "effects": "+2 DV on Data Spike attacks",
             "page": 246,
-            "source": "SR5"
+            "source": "SR5",
+            "legality": "restricted"
           },
           {
             "id": "lockdown",
@@ -12341,11 +12797,11 @@
             "category": "hacking",
             "cost": 250,
             "availability": 8,
-            "restricted": true,
             "description": "Prevents link-locking from being broken.",
             "effects": "Target of successful Crash Program cannot jack out until reboot",
             "page": 246,
-            "source": "SR5"
+            "source": "SR5",
+            "legality": "restricted"
           },
           {
             "id": "mugger",
@@ -12353,11 +12809,11 @@
             "category": "hacking",
             "cost": 250,
             "availability": 8,
-            "restricted": true,
             "description": "Strips away target's defense programs.",
             "effects": "Successful Brute Force disables one defensive program on target",
             "page": 246,
-            "source": "SR5"
+            "source": "SR5",
+            "legality": "restricted"
           },
           {
             "id": "shell",
@@ -12365,11 +12821,11 @@
             "category": "hacking",
             "cost": 250,
             "availability": 6,
-            "restricted": true,
             "description": "Hardens your persona against damage.",
             "effects": "+1 to Firewall when resisting Matrix damage",
             "page": 246,
-            "source": "SR5"
+            "source": "SR5",
+            "legality": "restricted"
           },
           {
             "id": "sneak",
@@ -12377,11 +12833,11 @@
             "category": "hacking",
             "cost": 250,
             "availability": 6,
-            "restricted": true,
             "description": "Helps you avoid detection.",
             "effects": "+2 dice pool modifier to Hide actions",
             "page": 246,
-            "source": "SR5"
+            "source": "SR5",
+            "legality": "restricted"
           },
           {
             "id": "stealth",
@@ -12389,11 +12845,11 @@
             "category": "hacking",
             "cost": 250,
             "availability": 6,
-            "restricted": true,
             "description": "Reduces your Overwatch Score accumulation.",
             "effects": "Overwatch Score increases 1 point slower",
             "page": 246,
-            "source": "SR5"
+            "source": "SR5",
+            "legality": "restricted"
           },
           {
             "id": "track",
@@ -12401,11 +12857,11 @@
             "category": "hacking",
             "cost": 250,
             "availability": 6,
-            "restricted": true,
             "description": "Helps you locate targets in the Matrix.",
             "effects": "+2 dice pool modifier to Trace Icon actions",
             "page": 246,
-            "source": "SR5"
+            "source": "SR5",
+            "legality": "restricted"
           },
           {
             "id": "wrapper",
@@ -12413,11 +12869,11 @@
             "category": "hacking",
             "cost": 250,
             "availability": 6,
-            "restricted": true,
             "description": "Disguises your icons in the Matrix.",
             "effects": "Change the look of icons to appear as something else",
             "page": 246,
-            "source": "SR5"
+            "source": "SR5",
+            "legality": "restricted"
           }
         ],
         "agents": [
@@ -12459,10 +12915,10 @@
             "costMultiplier": 7000,
             "bondingKarmaMultiplier": 3,
             "availability": 0,
-            "restricted": true,
             "description": "A weapon that has been enchanted to serve as a focus. Adds its Force rating to the wielder's Magic attribute for the purposes of weapon skill tests. The bonding cost is (3 + weapon's Reach) × Force in Karma.",
             "page": 318,
-            "source": "SR5"
+            "source": "SR5",
+            "legality": "restricted"
           },
           {
             "id": "power-focus",
@@ -12471,10 +12927,10 @@
             "costMultiplier": 18000,
             "bondingKarmaMultiplier": 8,
             "availability": 0,
-            "restricted": true,
             "description": "Increases the wielder's Magic attribute by its Force rating. This is the most powerful and expensive type of focus.",
             "page": 318,
-            "source": "SR5"
+            "source": "SR5",
+            "legality": "restricted"
           },
           {
             "id": "spell-focus",
@@ -12483,10 +12939,10 @@
             "costMultiplier": 4000,
             "bondingKarmaMultiplier": 4,
             "availability": 0,
-            "restricted": true,
             "description": "Adds its Force rating as a dice pool modifier to Spellcasting tests for a specific spell. Must be bonded to a single spell.",
             "page": 318,
-            "source": "SR5"
+            "source": "SR5",
+            "legality": "restricted"
           },
           {
             "id": "spirit-focus",
@@ -12495,10 +12951,10 @@
             "costMultiplier": 4000,
             "bondingKarmaMultiplier": 4,
             "availability": 0,
-            "restricted": true,
             "description": "Adds its Force rating as a dice pool modifier to Summoning tests for a specific spirit type.",
             "page": 318,
-            "source": "SR5"
+            "source": "SR5",
+            "legality": "restricted"
           },
           {
             "id": "enchanting-focus",
@@ -12507,10 +12963,10 @@
             "costMultiplier": 5000,
             "bondingKarmaMultiplier": 3,
             "availability": 0,
-            "restricted": true,
             "description": "Adds its Force rating as a dice pool modifier to Enchanting tests.",
             "page": 318,
-            "source": "SR5"
+            "source": "SR5",
+            "legality": "restricted"
           },
           {
             "id": "metamagic-focus",
@@ -12519,10 +12975,10 @@
             "costMultiplier": 9000,
             "bondingKarmaMultiplier": 5,
             "availability": 0,
-            "restricted": true,
             "description": "Adds its Force rating as a dice pool modifier when using specific metamagic techniques.",
             "page": 318,
-            "source": "SR5"
+            "source": "SR5",
+            "legality": "restricted"
           },
           {
             "id": "qi-focus",
@@ -12531,10 +12987,10 @@
             "costMultiplier": 3000,
             "bondingKarmaMultiplier": 2,
             "availability": 0,
-            "restricted": true,
             "description": "Adds its Force rating as a dice pool modifier to specific Adept Power tests. Only usable by adepts.",
             "page": 318,
-            "source": "SR5"
+            "source": "SR5",
+            "legality": "restricted"
           }
         ]
       }
@@ -12857,9 +13313,20 @@
             "id": "fixer",
             "name": "Fixer",
             "description": "A shadow broker who connects runners with jobs, gear, and information. The essential contact for any runner.",
-            "suggestedConnection": [3, 6],
-            "suggestedLoyalty": [1, 4],
-            "commonServices": ["job-referral", "equipment-procurement", "introduction", "information-basic"],
+            "suggestedConnection": [
+              3,
+              6
+            ],
+            "suggestedLoyalty": [
+              1,
+              4
+            ],
+            "commonServices": [
+              "job-referral",
+              "equipment-procurement",
+              "introduction",
+              "information-basic"
+            ],
             "riskProfile": "medium",
             "typicalCosts": {
               "job-referral": 0,
@@ -12867,16 +13334,31 @@
               "introduction": 200,
               "information-basic": 100
             },
-            "commonLocations": ["Seattle", "Hong Kong", "Berlin"],
+            "commonLocations": [
+              "Seattle",
+              "Hong Kong",
+              "Berlin"
+            ],
             "commonOrganizations": []
           },
           {
             "id": "street-doc",
             "name": "Street Doc",
             "description": "An underground medical professional who provides healing, augmentation, and asks no questions.",
-            "suggestedConnection": [2, 4],
-            "suggestedLoyalty": [1, 3],
-            "commonServices": ["medical-treatment", "augmentation-installation", "toxin-screening", "cyberware-maintenance"],
+            "suggestedConnection": [
+              2,
+              4
+            ],
+            "suggestedLoyalty": [
+              1,
+              3
+            ],
+            "commonServices": [
+              "medical-treatment",
+              "augmentation-installation",
+              "toxin-screening",
+              "cyberware-maintenance"
+            ],
             "riskProfile": "low",
             "typicalCosts": {
               "medical-treatment": 200,
@@ -12884,16 +13366,31 @@
               "toxin-screening": 100,
               "cyberware-maintenance": 300
             },
-            "commonLocations": ["Barrens", "Redmond", "Puyallup"],
+            "commonLocations": [
+              "Barrens",
+              "Redmond",
+              "Puyallup"
+            ],
             "commonOrganizations": []
           },
           {
             "id": "talismonger",
             "name": "Talismonger",
             "description": "A dealer in magical supplies, foci, reagents, and enchanted goods.",
-            "suggestedConnection": [2, 5],
-            "suggestedLoyalty": [1, 3],
-            "commonServices": ["reagent-supply", "focus-procurement", "magical-goods", "enchanting-services"],
+            "suggestedConnection": [
+              2,
+              5
+            ],
+            "suggestedLoyalty": [
+              1,
+              3
+            ],
+            "commonServices": [
+              "reagent-supply",
+              "focus-procurement",
+              "magical-goods",
+              "enchanting-services"
+            ],
             "riskProfile": "low",
             "typicalCosts": {
               "reagent-supply": 50,
@@ -12901,32 +13398,65 @@
               "magical-goods": 500,
               "enchanting-services": 1000
             },
-            "commonLocations": ["Seattle", "Tir Tairngire"],
+            "commonLocations": [
+              "Seattle",
+              "Tir Tairngire"
+            ],
             "commonOrganizations": []
           },
           {
             "id": "mr-johnson",
             "name": "Mr. Johnson",
             "description": "A corporate agent who hires runners for deniable operations. High-paying but demanding.",
-            "suggestedConnection": [4, 8],
-            "suggestedLoyalty": [1, 2],
-            "commonServices": ["job-offer", "corporate-access", "extraction-target", "insider-information"],
+            "suggestedConnection": [
+              4,
+              8
+            ],
+            "suggestedLoyalty": [
+              1,
+              2
+            ],
+            "commonServices": [
+              "job-offer",
+              "corporate-access",
+              "extraction-target",
+              "insider-information"
+            ],
             "riskProfile": "high",
             "typicalCosts": {
               "job-offer": 0,
               "corporate-access": 2000,
               "insider-information": 1000
             },
-            "commonLocations": ["Downtown Seattle", "Corporate Arcologies"],
-            "commonOrganizations": ["Ares", "Aztechnology", "Renraku", "Saeder-Krupp"]
+            "commonLocations": [
+              "Downtown Seattle",
+              "Corporate Arcologies"
+            ],
+            "commonOrganizations": [
+              "Ares",
+              "Aztechnology",
+              "Renraku",
+              "Saeder-Krupp"
+            ]
           },
           {
             "id": "gang-leader",
             "name": "Gang Leader",
             "description": "A street gang boss who provides muscle, territory access, and street-level intelligence.",
-            "suggestedConnection": [2, 5],
-            "suggestedLoyalty": [1, 4],
-            "commonServices": ["muscle-for-hire", "territory-passage", "street-intel", "safe-house"],
+            "suggestedConnection": [
+              2,
+              5
+            ],
+            "suggestedLoyalty": [
+              1,
+              4
+            ],
+            "commonServices": [
+              "muscle-for-hire",
+              "territory-passage",
+              "street-intel",
+              "safe-house"
+            ],
             "riskProfile": "medium",
             "typicalCosts": {
               "muscle-for-hire": 500,
@@ -12934,32 +13464,65 @@
               "street-intel": 50,
               "safe-house": 300
             },
-            "commonLocations": ["Barrens", "Redmond", "Puyallup"],
-            "commonOrganizations": ["Halloweeners", "Crimson Crush", "First Nations"]
+            "commonLocations": [
+              "Barrens",
+              "Redmond",
+              "Puyallup"
+            ],
+            "commonOrganizations": [
+              "Halloweeners",
+              "Crimson Crush",
+              "First Nations"
+            ]
           },
           {
             "id": "fence",
             "name": "Fence",
             "description": "A specialist in buying and selling stolen goods, no questions asked.",
-            "suggestedConnection": [2, 5],
-            "suggestedLoyalty": [1, 3],
-            "commonServices": ["buy-stolen-goods", "sell-equipment", "find-specific-item", "appraisal"],
+            "suggestedConnection": [
+              2,
+              5
+            ],
+            "suggestedLoyalty": [
+              1,
+              3
+            ],
+            "commonServices": [
+              "buy-stolen-goods",
+              "sell-equipment",
+              "find-specific-item",
+              "appraisal"
+            ],
             "riskProfile": "medium",
             "typicalCosts": {
               "buy-stolen-goods": 0,
               "find-specific-item": 200,
               "appraisal": 50
             },
-            "commonLocations": ["Seattle", "Tacoma"],
+            "commonLocations": [
+              "Seattle",
+              "Tacoma"
+            ],
             "commonOrganizations": []
           },
           {
             "id": "armorer",
             "name": "Armorer",
             "description": "A weapons dealer and modifier who can supply or customize combat gear.",
-            "suggestedConnection": [2, 5],
-            "suggestedLoyalty": [1, 3],
-            "commonServices": ["weapon-procurement", "weapon-modification", "ammunition-supply", "armor-customization"],
+            "suggestedConnection": [
+              2,
+              5
+            ],
+            "suggestedLoyalty": [
+              1,
+              3
+            ],
+            "commonServices": [
+              "weapon-procurement",
+              "weapon-modification",
+              "ammunition-supply",
+              "armor-customization"
+            ],
             "riskProfile": "medium",
             "typicalCosts": {
               "weapon-procurement": 500,
@@ -12967,16 +13530,30 @@
               "ammunition-supply": 100,
               "armor-customization": 400
             },
-            "commonLocations": ["Seattle", "Tacoma"],
+            "commonLocations": [
+              "Seattle",
+              "Tacoma"
+            ],
             "commonOrganizations": []
           },
           {
             "id": "id-manufacturer",
             "name": "ID Manufacturer",
             "description": "A forger who creates fake SINs, licenses, and identity documents.",
-            "suggestedConnection": [3, 6],
-            "suggestedLoyalty": [1, 3],
-            "commonServices": ["fake-sin", "fake-license", "identity-scrub", "document-forgery"],
+            "suggestedConnection": [
+              3,
+              6
+            ],
+            "suggestedLoyalty": [
+              1,
+              3
+            ],
+            "commonServices": [
+              "fake-sin",
+              "fake-license",
+              "identity-scrub",
+              "document-forgery"
+            ],
             "riskProfile": "high",
             "typicalCosts": {
               "fake-sin": 2500,
@@ -12984,16 +13561,30 @@
               "identity-scrub": 1000,
               "document-forgery": 500
             },
-            "commonLocations": ["Seattle", "Hong Kong"],
+            "commonLocations": [
+              "Seattle",
+              "Hong Kong"
+            ],
             "commonOrganizations": []
           },
           {
             "id": "bartender",
             "name": "Bartender",
             "description": "A social hub who hears everything and knows everyone in their neighborhood.",
-            "suggestedConnection": [1, 3],
-            "suggestedLoyalty": [1, 4],
-            "commonServices": ["rumors", "introduction", "meeting-place", "message-drop"],
+            "suggestedConnection": [
+              1,
+              3
+            ],
+            "suggestedLoyalty": [
+              1,
+              4
+            ],
+            "commonServices": [
+              "rumors",
+              "introduction",
+              "meeting-place",
+              "message-drop"
+            ],
             "riskProfile": "low",
             "typicalCosts": {
               "rumors": 20,
@@ -13001,16 +13592,29 @@
               "meeting-place": 0,
               "message-drop": 10
             },
-            "commonLocations": ["Seattle"],
+            "commonLocations": [
+              "Seattle"
+            ],
             "commonOrganizations": []
           },
           {
             "id": "corporate-contact",
             "name": "Corporate Contact",
             "description": "An insider at a megacorporation who provides access and information.",
-            "suggestedConnection": [3, 7],
-            "suggestedLoyalty": [1, 3],
-            "commonServices": ["insider-access", "corporate-intel", "security-schedule", "personnel-files"],
+            "suggestedConnection": [
+              3,
+              7
+            ],
+            "suggestedLoyalty": [
+              1,
+              3
+            ],
+            "commonServices": [
+              "insider-access",
+              "corporate-intel",
+              "security-schedule",
+              "personnel-files"
+            ],
             "riskProfile": "high",
             "typicalCosts": {
               "insider-access": 1000,
@@ -13018,16 +13622,36 @@
               "security-schedule": 800,
               "personnel-files": 300
             },
-            "commonLocations": ["Downtown Seattle", "Corporate Arcologies"],
-            "commonOrganizations": ["Ares", "Aztechnology", "Renraku", "Saeder-Krupp", "Shiawase"]
+            "commonLocations": [
+              "Downtown Seattle",
+              "Corporate Arcologies"
+            ],
+            "commonOrganizations": [
+              "Ares",
+              "Aztechnology",
+              "Renraku",
+              "Saeder-Krupp",
+              "Shiawase"
+            ]
           },
           {
             "id": "law-enforcement",
             "name": "Law Enforcement",
             "description": "A cop or security officer who provides warnings, favors, and information.",
-            "suggestedConnection": [2, 5],
-            "suggestedLoyalty": [1, 3],
-            "commonServices": ["investigation-warning", "case-files", "evidence-handling", "patrol-schedules"],
+            "suggestedConnection": [
+              2,
+              5
+            ],
+            "suggestedLoyalty": [
+              1,
+              3
+            ],
+            "commonServices": [
+              "investigation-warning",
+              "case-files",
+              "evidence-handling",
+              "patrol-schedules"
+            ],
             "riskProfile": "high",
             "typicalCosts": {
               "investigation-warning": 500,
@@ -13035,16 +13659,32 @@
               "evidence-handling": 1000,
               "patrol-schedules": 200
             },
-            "commonLocations": ["Seattle"],
-            "commonOrganizations": ["Lone Star", "Knight Errant"]
+            "commonLocations": [
+              "Seattle"
+            ],
+            "commonOrganizations": [
+              "Lone Star",
+              "Knight Errant"
+            ]
           },
           {
             "id": "media-contact",
             "name": "Media Contact",
             "description": "A journalist or media personality who can spread or suppress stories.",
-            "suggestedConnection": [2, 5],
-            "suggestedLoyalty": [1, 3],
-            "commonServices": ["story-plant", "story-suppress", "investigation", "public-records"],
+            "suggestedConnection": [
+              2,
+              5
+            ],
+            "suggestedLoyalty": [
+              1,
+              3
+            ],
+            "commonServices": [
+              "story-plant",
+              "story-suppress",
+              "investigation",
+              "public-records"
+            ],
             "riskProfile": "medium",
             "typicalCosts": {
               "story-plant": 500,
@@ -13052,16 +13692,33 @@
               "investigation": 300,
               "public-records": 100
             },
-            "commonLocations": ["Seattle", "Los Angeles"],
-            "commonOrganizations": ["KSAF", "NewsNet"]
+            "commonLocations": [
+              "Seattle",
+              "Los Angeles"
+            ],
+            "commonOrganizations": [
+              "KSAF",
+              "NewsNet"
+            ]
           },
           {
             "id": "academic",
             "name": "Academic",
             "description": "A professor or researcher who provides analysis, translation, and obscure knowledge.",
-            "suggestedConnection": [2, 4],
-            "suggestedLoyalty": [1, 3],
-            "commonServices": ["research", "translation", "artifact-analysis", "historical-records"],
+            "suggestedConnection": [
+              2,
+              4
+            ],
+            "suggestedLoyalty": [
+              1,
+              3
+            ],
+            "commonServices": [
+              "research",
+              "translation",
+              "artifact-analysis",
+              "historical-records"
+            ],
             "riskProfile": "low",
             "typicalCosts": {
               "research": 200,
@@ -13069,16 +13726,32 @@
               "artifact-analysis": 500,
               "historical-records": 150
             },
-            "commonLocations": ["Seattle"],
-            "commonOrganizations": ["University of Washington", "MIT&T"]
+            "commonLocations": [
+              "Seattle"
+            ],
+            "commonOrganizations": [
+              "University of Washington",
+              "MIT&T"
+            ]
           },
           {
             "id": "decker",
             "name": "Decker",
             "description": "A matrix specialist who provides hacking services and digital intelligence.",
-            "suggestedConnection": [2, 5],
-            "suggestedLoyalty": [1, 3],
-            "commonServices": ["matrix-search", "file-retrieval", "host-mapping", "icon-creation"],
+            "suggestedConnection": [
+              2,
+              5
+            ],
+            "suggestedLoyalty": [
+              1,
+              3
+            ],
+            "commonServices": [
+              "matrix-search",
+              "file-retrieval",
+              "host-mapping",
+              "icon-creation"
+            ],
             "riskProfile": "medium",
             "typicalCosts": {
               "matrix-search": 100,
@@ -13086,16 +13759,29 @@
               "host-mapping": 300,
               "icon-creation": 200
             },
-            "commonLocations": ["Matrix"],
+            "commonLocations": [
+              "Matrix"
+            ],
             "commonOrganizations": []
           },
           {
             "id": "rigger",
             "name": "Rigger",
             "description": "A vehicle specialist who provides transportation, drones, and mechanical expertise.",
-            "suggestedConnection": [2, 4],
-            "suggestedLoyalty": [1, 3],
-            "commonServices": ["transportation", "drone-loan", "vehicle-modification", "smuggling"],
+            "suggestedConnection": [
+              2,
+              4
+            ],
+            "suggestedLoyalty": [
+              1,
+              3
+            ],
+            "commonServices": [
+              "transportation",
+              "drone-loan",
+              "vehicle-modification",
+              "smuggling"
+            ],
             "riskProfile": "medium",
             "typicalCosts": {
               "transportation": 100,
@@ -13103,7 +13789,10 @@
               "vehicle-modification": 800,
               "smuggling": 1000
             },
-            "commonLocations": ["Seattle", "Tacoma"],
+            "commonLocations": [
+              "Seattle",
+              "Tacoma"
+            ],
             "commonOrganizations": []
           }
         ]
@@ -13269,7 +13958,9 @@
             "opposedTest": false,
             "typicalTime": "1 hour",
             "canRush": false,
-            "archetypeIds": ["street-doc"]
+            "archetypeIds": [
+              "street-doc"
+            ]
           },
           {
             "id": "medical-surgery",
@@ -13285,7 +13976,9 @@
             "threshold": 2,
             "typicalTime": "1 day",
             "canRush": false,
-            "archetypeIds": ["street-doc"]
+            "archetypeIds": [
+              "street-doc"
+            ]
           },
           {
             "id": "job-referral",
@@ -13300,7 +13993,10 @@
             "opposedTest": false,
             "typicalTime": "1 day",
             "canRush": false,
-            "archetypeIds": ["fixer", "mr-johnson"]
+            "archetypeIds": [
+              "fixer",
+              "mr-johnson"
+            ]
           },
           {
             "id": "cover-story",
@@ -13331,7 +14027,9 @@
             "typicalTime": "Immediate",
             "canRush": true,
             "rushCostMultiplier": 2,
-            "archetypeIds": ["rigger"]
+            "archetypeIds": [
+              "rigger"
+            ]
           },
           {
             "id": "smuggling",
@@ -13349,7 +14047,10 @@
             "typicalTime": "1 day",
             "canRush": true,
             "rushCostMultiplier": 3,
-            "archetypeIds": ["rigger", "fixer"]
+            "archetypeIds": [
+              "rigger",
+              "fixer"
+            ]
           },
           {
             "id": "muscle-hire",
@@ -13365,7 +14066,10 @@
             "typicalTime": "4 hours",
             "canRush": true,
             "rushCostMultiplier": 2,
-            "archetypeIds": ["gang-leader", "fixer"]
+            "archetypeIds": [
+              "gang-leader",
+              "fixer"
+            ]
           },
           {
             "id": "fake-sin",
@@ -13383,7 +14087,9 @@
             "typicalTime": "1 week",
             "canRush": true,
             "rushCostMultiplier": 3,
-            "archetypeIds": ["id-manufacturer"]
+            "archetypeIds": [
+              "id-manufacturer"
+            ]
           }
         ]
       }
@@ -13392,39 +14098,129 @@
       "mergeStrategy": "replace",
       "payload": {
         "attitudeModifiers": [
-          { "attitude": "friendly", "modifier": 2, "description": "Target is well-disposed toward you" },
-          { "attitude": "neutral", "modifier": 0, "description": "Target has no strong feelings" },
-          { "attitude": "suspicious", "modifier": -1, "description": "Target is wary of you" },
-          { "attitude": "prejudiced", "modifier": -2, "description": "Target has prejudice against you" },
-          { "attitude": "hostile", "modifier": -3, "description": "Target actively dislikes you" },
-          { "attitude": "enemy", "modifier": -5, "description": "Target considers you an enemy" }
+          {
+            "attitude": "friendly",
+            "modifier": 2,
+            "description": "Target is well-disposed toward you"
+          },
+          {
+            "attitude": "neutral",
+            "modifier": 0,
+            "description": "Target has no strong feelings"
+          },
+          {
+            "attitude": "suspicious",
+            "modifier": -1,
+            "description": "Target is wary of you"
+          },
+          {
+            "attitude": "prejudiced",
+            "modifier": -2,
+            "description": "Target has prejudice against you"
+          },
+          {
+            "attitude": "hostile",
+            "modifier": -3,
+            "description": "Target actively dislikes you"
+          },
+          {
+            "attitude": "enemy",
+            "modifier": -5,
+            "description": "Target considers you an enemy"
+          }
         ],
         "resultModifiers": [
-          { "result": "advantageous", "modifier": 1, "description": "Request benefits the target" },
-          { "result": "neutral", "modifier": 0, "description": "Request has no impact on target" },
-          { "result": "disadvantageous", "modifier": -2, "description": "Request harms target's interests" },
-          { "result": "dangerous", "modifier": -4, "description": "Request puts target at risk" }
+          {
+            "result": "advantageous",
+            "modifier": 1,
+            "description": "Request benefits the target"
+          },
+          {
+            "result": "neutral",
+            "modifier": 0,
+            "description": "Request has no impact on target"
+          },
+          {
+            "result": "disadvantageous",
+            "modifier": -2,
+            "description": "Request harms target's interests"
+          },
+          {
+            "result": "dangerous",
+            "modifier": -4,
+            "description": "Request puts target at risk"
+          }
         ],
         "reputationModifiers": [
-          { "type": "streetCred", "perPoint": 1, "max": 3, "description": "+1 per 3 Street Cred" },
-          { "type": "notoriety", "perPoint": -1, "max": -3, "description": "-1 per 3 Notoriety" },
-          { "type": "publicAwareness", "perPoint": 0, "description": "May prevent contact from helping" }
+          {
+            "type": "streetCred",
+            "perPoint": 1,
+            "max": 3,
+            "description": "+1 per 3 Street Cred"
+          },
+          {
+            "type": "notoriety",
+            "perPoint": -1,
+            "max": -3,
+            "description": "-1 per 3 Notoriety"
+          },
+          {
+            "type": "publicAwareness",
+            "perPoint": 0,
+            "description": "May prevent contact from helping"
+          }
         ],
         "loyaltyEffects": [
-          { "loyalty": 1, "description": "Contact will only help for pay, may betray you" },
-          { "loyalty": 2, "description": "Contact will help for reasonable compensation" },
-          { "loyalty": 3, "description": "Contact considers you a friend" },
-          { "loyalty": 4, "description": "Contact will take risks for you" },
-          { "loyalty": 5, "description": "Contact will put themselves in danger for you" },
-          { "loyalty": 6, "description": "Contact would die for you" }
+          {
+            "loyalty": 1,
+            "description": "Contact will only help for pay, may betray you"
+          },
+          {
+            "loyalty": 2,
+            "description": "Contact will help for reasonable compensation"
+          },
+          {
+            "loyalty": 3,
+            "description": "Contact considers you a friend"
+          },
+          {
+            "loyalty": 4,
+            "description": "Contact will take risks for you"
+          },
+          {
+            "loyalty": 5,
+            "description": "Contact will put themselves in danger for you"
+          },
+          {
+            "loyalty": 6,
+            "description": "Contact would die for you"
+          }
         ],
         "connectionEffects": [
-          { "connection": 1, "description": "Limited resources and influence" },
-          { "connection": 2, "description": "Some useful connections" },
-          { "connection": 3, "description": "Well-connected in their field" },
-          { "connection": 4, "description": "Significant resources and reach" },
-          { "connection": 5, "description": "Major player in their domain" },
-          { "connection": 6, "description": "Top tier influence and resources" }
+          {
+            "connection": 1,
+            "description": "Limited resources and influence"
+          },
+          {
+            "connection": 2,
+            "description": "Some useful connections"
+          },
+          {
+            "connection": 3,
+            "description": "Well-connected in their field"
+          },
+          {
+            "connection": 4,
+            "description": "Significant resources and reach"
+          },
+          {
+            "connection": 5,
+            "description": "Major player in their domain"
+          },
+          {
+            "connection": 6,
+            "description": "Top tier influence and resources"
+          }
         ]
       }
     },
@@ -13442,17 +14238,36 @@
             "cost": {
               "actionType": "simple",
               "resourceCosts": [
-                { "type": "ammunition", "amount": 1, "description": "Consumes 1 round" }
+                {
+                  "type": "ammunition",
+                  "amount": 1,
+                  "description": "Consumes 1 round"
+                }
               ]
             },
             "prerequisites": [
-              { "type": "equipment_ready", "requirement": "ranged_weapon", "description": "Must have a readied ranged weapon" },
-              { "type": "resource", "requirement": "ammunition", "minimumValue": 1, "description": "Must have ammunition" }
+              {
+                "type": "equipment_ready",
+                "requirement": "ranged_weapon",
+                "description": "Must have a readied ranged weapon"
+              },
+              {
+                "type": "resource",
+                "requirement": "ammunition",
+                "minimumValue": 1,
+                "description": "Must have ammunition"
+              }
             ],
             "modifiers": [],
             "rollConfig": {
               "skill": "automatics",
-              "skillOptions": ["automatics", "longarms", "pistols", "heavy_weapons", "exotic_ranged_weapon"],
+              "skillOptions": [
+                "automatics",
+                "longarms",
+                "pistols",
+                "heavy_weapons",
+                "exotic_ranged_weapon"
+              ],
               "attribute": "agility",
               "limitType": "weapon_accuracy"
             },
@@ -13461,7 +14276,10 @@
               "defaultDefenseAttribute": "reaction",
               "defaultDefenseSkill": "intuition",
               "allowFullDefense": true,
-              "availableInterrupts": ["dodge", "hit-the-dirt"]
+              "availableInterrupts": [
+                "dodge",
+                "hit-the-dirt"
+              ]
             },
             "effects": [
               {
@@ -13475,8 +14293,15 @@
                 "description": "Deal weapon damage plus net hits"
               }
             ],
-            "tags": ["attack", "ranged", "firearm"],
-            "source": { "book": "SR5 Core", "page": 163 }
+            "tags": [
+              "attack",
+              "ranged",
+              "firearm"
+            ],
+            "source": {
+              "book": "SR5 Core",
+              "page": 163
+            }
           },
           {
             "id": "fire-weapon-sa",
@@ -13488,20 +14313,46 @@
             "cost": {
               "actionType": "simple",
               "resourceCosts": [
-                { "type": "ammunition", "amount": 2, "description": "Consumes up to 2 rounds" }
+                {
+                  "type": "ammunition",
+                  "amount": 2,
+                  "description": "Consumes up to 2 rounds"
+                }
               ]
             },
             "prerequisites": [
-              { "type": "equipment_ready", "requirement": "ranged_weapon", "description": "Must have a readied ranged weapon" },
-              { "type": "equipment", "requirement": "firing_mode_sa", "description": "Weapon must support SA mode" },
-              { "type": "resource", "requirement": "ammunition", "minimumValue": 1, "description": "Must have ammunition" }
+              {
+                "type": "equipment_ready",
+                "requirement": "ranged_weapon",
+                "description": "Must have a readied ranged weapon"
+              },
+              {
+                "type": "equipment",
+                "requirement": "firing_mode_sa",
+                "description": "Weapon must support SA mode"
+              },
+              {
+                "type": "resource",
+                "requirement": "ammunition",
+                "minimumValue": 1,
+                "description": "Must have ammunition"
+              }
             ],
             "modifiers": [
-              { "source": "recoil", "value": -1, "description": "Recoil penalty for second shot", "condition": "firing_second_shot" }
+              {
+                "source": "recoil",
+                "value": -1,
+                "description": "Recoil penalty for second shot",
+                "condition": "firing_second_shot"
+              }
             ],
             "rollConfig": {
               "skill": "automatics",
-              "skillOptions": ["automatics", "longarms", "pistols"],
+              "skillOptions": [
+                "automatics",
+                "longarms",
+                "pistols"
+              ],
               "attribute": "agility",
               "limitType": "weapon_accuracy"
             },
@@ -13510,7 +14361,10 @@
               "defaultDefenseAttribute": "reaction",
               "defaultDefenseSkill": "intuition",
               "allowFullDefense": true,
-              "availableInterrupts": ["dodge", "hit-the-dirt"]
+              "availableInterrupts": [
+                "dodge",
+                "hit-the-dirt"
+              ]
             },
             "effects": [
               {
@@ -13524,8 +14378,16 @@
                 "description": "Deal weapon damage plus net hits"
               }
             ],
-            "tags": ["attack", "ranged", "firearm", "semi-auto"],
-            "source": { "book": "SR5 Core", "page": 163 }
+            "tags": [
+              "attack",
+              "ranged",
+              "firearm",
+              "semi-auto"
+            ],
+            "source": {
+              "book": "SR5 Core",
+              "page": 163
+            }
           },
           {
             "id": "fire-weapon-bf",
@@ -13537,20 +14399,44 @@
             "cost": {
               "actionType": "simple",
               "resourceCosts": [
-                { "type": "ammunition", "amount": 3, "description": "Consumes 3 rounds" }
+                {
+                  "type": "ammunition",
+                  "amount": 3,
+                  "description": "Consumes 3 rounds"
+                }
               ]
             },
             "prerequisites": [
-              { "type": "equipment_ready", "requirement": "ranged_weapon", "description": "Must have a readied ranged weapon" },
-              { "type": "equipment", "requirement": "firing_mode_bf", "description": "Weapon must support BF mode" },
-              { "type": "resource", "requirement": "ammunition", "minimumValue": 3, "description": "Must have at least 3 rounds" }
+              {
+                "type": "equipment_ready",
+                "requirement": "ranged_weapon",
+                "description": "Must have a readied ranged weapon"
+              },
+              {
+                "type": "equipment",
+                "requirement": "firing_mode_bf",
+                "description": "Weapon must support BF mode"
+              },
+              {
+                "type": "resource",
+                "requirement": "ammunition",
+                "minimumValue": 3,
+                "description": "Must have at least 3 rounds"
+              }
             ],
             "modifiers": [
-              { "source": "burst_fire", "value": 2, "description": "Burst fire attack bonus" }
+              {
+                "source": "burst_fire",
+                "value": 2,
+                "description": "Burst fire attack bonus"
+              }
             ],
             "rollConfig": {
               "skill": "automatics",
-              "skillOptions": ["automatics", "longarms"],
+              "skillOptions": [
+                "automatics",
+                "longarms"
+              ],
               "attribute": "agility",
               "limitType": "weapon_accuracy"
             },
@@ -13559,7 +14445,10 @@
               "defaultDefenseAttribute": "reaction",
               "defaultDefenseSkill": "intuition",
               "allowFullDefense": true,
-              "availableInterrupts": ["dodge", "hit-the-dirt"]
+              "availableInterrupts": [
+                "dodge",
+                "hit-the-dirt"
+              ]
             },
             "effects": [
               {
@@ -13573,8 +14462,16 @@
                 "description": "Deal weapon damage plus net hits"
               }
             ],
-            "tags": ["attack", "ranged", "firearm", "burst"],
-            "source": { "book": "SR5 Core", "page": 163 }
+            "tags": [
+              "attack",
+              "ranged",
+              "firearm",
+              "burst"
+            ],
+            "source": {
+              "book": "SR5 Core",
+              "page": 163
+            }
           },
           {
             "id": "fire-weapon-fa",
@@ -13586,17 +14483,43 @@
             "cost": {
               "actionType": "complex",
               "resourceCosts": [
-                { "type": "ammunition", "amount": 10, "description": "Consumes 6-10 rounds" }
+                {
+                  "type": "ammunition",
+                  "amount": 10,
+                  "description": "Consumes 6-10 rounds"
+                }
               ]
             },
             "prerequisites": [
-              { "type": "equipment_ready", "requirement": "ranged_weapon", "description": "Must have a readied ranged weapon" },
-              { "type": "equipment", "requirement": "firing_mode_fa", "description": "Weapon must support FA mode" },
-              { "type": "resource", "requirement": "ammunition", "minimumValue": 6, "description": "Must have at least 6 rounds" }
+              {
+                "type": "equipment_ready",
+                "requirement": "ranged_weapon",
+                "description": "Must have a readied ranged weapon"
+              },
+              {
+                "type": "equipment",
+                "requirement": "firing_mode_fa",
+                "description": "Weapon must support FA mode"
+              },
+              {
+                "type": "resource",
+                "requirement": "ammunition",
+                "minimumValue": 6,
+                "description": "Must have at least 6 rounds"
+              }
             ],
             "modifiers": [
-              { "source": "full_auto", "value": 5, "description": "Full-auto attack bonus (narrow burst)" },
-              { "source": "full_auto_wide", "value": 9, "description": "Full-auto attack bonus (wide burst)", "condition": "wide_burst" }
+              {
+                "source": "full_auto",
+                "value": 5,
+                "description": "Full-auto attack bonus (narrow burst)"
+              },
+              {
+                "source": "full_auto_wide",
+                "value": 9,
+                "description": "Full-auto attack bonus (wide burst)",
+                "condition": "wide_burst"
+              }
             ],
             "rollConfig": {
               "skill": "automatics",
@@ -13608,7 +14531,10 @@
               "defaultDefenseAttribute": "reaction",
               "defaultDefenseSkill": "intuition",
               "allowFullDefense": true,
-              "availableInterrupts": ["dodge", "hit-the-dirt"]
+              "availableInterrupts": [
+                "dodge",
+                "hit-the-dirt"
+              ]
             },
             "effects": [
               {
@@ -13622,8 +14548,17 @@
                 "description": "Deal weapon damage plus net hits"
               }
             ],
-            "tags": ["attack", "ranged", "firearm", "full-auto", "suppressive"],
-            "source": { "book": "SR5 Core", "page": 163 }
+            "tags": [
+              "attack",
+              "ranged",
+              "firearm",
+              "full-auto",
+              "suppressive"
+            ],
+            "source": {
+              "book": "SR5 Core",
+              "page": 163
+            }
           },
           {
             "id": "melee-attack",
@@ -13636,14 +14571,27 @@
               "actionType": "complex"
             },
             "prerequisites": [
-              { "type": "target", "requirement": "melee_range", "description": "Target must be within melee range" }
+              {
+                "type": "target",
+                "requirement": "melee_range",
+                "description": "Target must be within melee range"
+              }
             ],
             "modifiers": [
-              { "source": "reach", "value": 0, "description": "Weapon reach modifier vs opponent's reach" }
+              {
+                "source": "reach",
+                "value": 0,
+                "description": "Weapon reach modifier vs opponent's reach"
+              }
             ],
             "rollConfig": {
               "skill": "unarmed_combat",
-              "skillOptions": ["unarmed_combat", "blades", "clubs", "exotic_melee_weapon"],
+              "skillOptions": [
+                "unarmed_combat",
+                "blades",
+                "clubs",
+                "exotic_melee_weapon"
+              ],
               "attribute": "agility",
               "limitType": "physical"
             },
@@ -13653,7 +14601,11 @@
               "defaultDefenseSkill": "intuition",
               "allowFullDefense": true,
               "allowBlockParry": true,
-              "availableInterrupts": ["block", "parry", "dodge"]
+              "availableInterrupts": [
+                "block",
+                "parry",
+                "dodge"
+              ]
             },
             "effects": [
               {
@@ -13668,8 +14620,14 @@
                 "description": "Deal weapon damage (or STR for unarmed) plus net hits"
               }
             ],
-            "tags": ["attack", "melee"],
-            "source": { "book": "SR5 Core", "page": 163 }
+            "tags": [
+              "attack",
+              "melee"
+            ],
+            "source": {
+              "book": "SR5 Core",
+              "page": 163
+            }
           },
           {
             "id": "throw-weapon",
@@ -13682,7 +14640,11 @@
               "actionType": "simple"
             },
             "prerequisites": [
-              { "type": "equipment_ready", "requirement": "throwing_weapon", "description": "Must have a throwing weapon ready" }
+              {
+                "type": "equipment_ready",
+                "requirement": "throwing_weapon",
+                "description": "Must have a throwing weapon ready"
+              }
             ],
             "modifiers": [],
             "rollConfig": {
@@ -13695,7 +14657,9 @@
               "defaultDefenseAttribute": "reaction",
               "defaultDefenseSkill": "intuition",
               "allowFullDefense": true,
-              "availableInterrupts": ["dodge"]
+              "availableInterrupts": [
+                "dodge"
+              ]
             },
             "effects": [
               {
@@ -13710,8 +14674,15 @@
                 "description": "Deal weapon damage plus STR and net hits"
               }
             ],
-            "tags": ["attack", "ranged", "thrown"],
-            "source": { "book": "SR5 Core", "page": 163 }
+            "tags": [
+              "attack",
+              "ranged",
+              "thrown"
+            ],
+            "source": {
+              "book": "SR5 Core",
+              "page": 163
+            }
           },
           {
             "id": "ready-weapon",
@@ -13724,7 +14695,11 @@
               "actionType": "simple"
             },
             "prerequisites": [
-              { "type": "equipment", "requirement": "weapon", "description": "Must have a weapon to ready" }
+              {
+                "type": "equipment",
+                "requirement": "weapon",
+                "description": "Must have a weapon to ready"
+              }
             ],
             "modifiers": [],
             "effects": [
@@ -13735,8 +14710,14 @@
                 "description": "Weapon becomes readied"
               }
             ],
-            "tags": ["preparation", "weapon"],
-            "source": { "book": "SR5 Core", "page": 163 }
+            "tags": [
+              "preparation",
+              "weapon"
+            ],
+            "source": {
+              "book": "SR5 Core",
+              "page": 163
+            }
           },
           {
             "id": "take-aim",
@@ -13749,8 +14730,16 @@
               "actionType": "simple"
             },
             "prerequisites": [
-              { "type": "equipment_ready", "requirement": "ranged_weapon", "description": "Must have a readied ranged weapon" },
-              { "type": "target", "requirement": "visible_target", "description": "Must have a visible target" }
+              {
+                "type": "equipment_ready",
+                "requirement": "ranged_weapon",
+                "description": "Must have a readied ranged weapon"
+              },
+              {
+                "type": "target",
+                "requirement": "visible_target",
+                "description": "Must have a visible target"
+              }
             ],
             "modifiers": [],
             "effects": [
@@ -13764,8 +14753,15 @@
                 "description": "+1 dice to next attack (max +3, or Willpower with scope)"
               }
             ],
-            "tags": ["preparation", "ranged", "bonus"],
-            "source": { "book": "SR5 Core", "page": 163 }
+            "tags": [
+              "preparation",
+              "ranged",
+              "bonus"
+            ],
+            "source": {
+              "book": "SR5 Core",
+              "page": 163
+            }
           },
           {
             "id": "take-cover",
@@ -13778,7 +14774,11 @@
               "actionType": "simple"
             },
             "prerequisites": [
-              { "type": "state", "requirement": "cover_available", "description": "Cover must be available nearby" }
+              {
+                "type": "state",
+                "requirement": "cover_available",
+                "description": "Cover must be available nearby"
+              }
             ],
             "modifiers": [],
             "effects": [
@@ -13793,8 +14793,15 @@
                 "description": "+2 to +4 defense against ranged attacks depending on cover quality"
               }
             ],
-            "tags": ["defense", "cover", "movement"],
-            "source": { "book": "SR5 Core", "page": 163 }
+            "tags": [
+              "defense",
+              "cover",
+              "movement"
+            ],
+            "source": {
+              "book": "SR5 Core",
+              "page": 163
+            }
           },
           {
             "id": "insert-clip",
@@ -13807,9 +14814,21 @@
               "actionType": "simple"
             },
             "prerequisites": [
-              { "type": "equipment_ready", "requirement": "ranged_weapon", "description": "Must have a readied ranged weapon" },
-              { "type": "equipment", "requirement": "ammunition_clip", "description": "Must have a spare clip" },
-              { "type": "state", "requirement": "clip_removed", "description": "Current clip must be removed" }
+              {
+                "type": "equipment_ready",
+                "requirement": "ranged_weapon",
+                "description": "Must have a readied ranged weapon"
+              },
+              {
+                "type": "equipment",
+                "requirement": "ammunition_clip",
+                "description": "Must have a spare clip"
+              },
+              {
+                "type": "state",
+                "requirement": "clip_removed",
+                "description": "Current clip must be removed"
+              }
             ],
             "modifiers": [],
             "effects": [
@@ -13822,8 +14841,14 @@
                 "description": "Weapon is reloaded with fresh ammunition"
               }
             ],
-            "tags": ["reload", "weapon"],
-            "source": { "book": "SR5 Core", "page": 163 }
+            "tags": [
+              "reload",
+              "weapon"
+            ],
+            "source": {
+              "book": "SR5 Core",
+              "page": 163
+            }
           },
           {
             "id": "remove-clip",
@@ -13836,7 +14861,11 @@
               "actionType": "simple"
             },
             "prerequisites": [
-              { "type": "equipment_ready", "requirement": "ranged_weapon", "description": "Must have a readied ranged weapon" }
+              {
+                "type": "equipment_ready",
+                "requirement": "ranged_weapon",
+                "description": "Must have a readied ranged weapon"
+              }
             ],
             "modifiers": [],
             "effects": [
@@ -13847,8 +14876,14 @@
                 "description": "Clip is removed from weapon"
               }
             ],
-            "tags": ["reload", "weapon"],
-            "source": { "book": "SR5 Core", "page": 163 }
+            "tags": [
+              "reload",
+              "weapon"
+            ],
+            "source": {
+              "book": "SR5 Core",
+              "page": 163
+            }
           },
           {
             "id": "quick-draw",
@@ -13861,8 +14896,17 @@
               "actionType": "simple"
             },
             "prerequisites": [
-              { "type": "skill_rating", "requirement": "quick_draw", "minimumValue": 1, "description": "Must have Quick Draw skill" },
-              { "type": "equipment", "requirement": "holstered_weapon", "description": "Must have a holstered weapon" }
+              {
+                "type": "skill_rating",
+                "requirement": "quick_draw",
+                "minimumValue": 1,
+                "description": "Must have Quick Draw skill"
+              },
+              {
+                "type": "equipment",
+                "requirement": "holstered_weapon",
+                "description": "Must have a holstered weapon"
+              }
             ],
             "modifiers": [],
             "rollConfig": {
@@ -13883,8 +14927,15 @@
                 "description": "Weapon is drawn and an attack can be made immediately"
               }
             ],
-            "tags": ["attack", "weapon", "speed"],
-            "source": { "book": "SR5 Core", "page": 163 }
+            "tags": [
+              "attack",
+              "weapon",
+              "speed"
+            ],
+            "source": {
+              "book": "SR5 Core",
+              "page": 163
+            }
           },
           {
             "id": "observe-in-detail",
@@ -13911,8 +14962,14 @@
                 "description": "Gain detailed information based on hits"
               }
             ],
-            "tags": ["perception", "awareness"],
-            "source": { "book": "SR5 Core", "page": 163 }
+            "tags": [
+              "perception",
+              "awareness"
+            ],
+            "source": {
+              "book": "SR5 Core",
+              "page": 163
+            }
           },
           {
             "id": "sprint",
@@ -13925,7 +14982,11 @@
               "actionType": "complex"
             },
             "prerequisites": [
-              { "type": "state", "requirement": "can_move", "description": "Must be able to move" }
+              {
+                "type": "state",
+                "requirement": "can_move",
+                "description": "Must be able to move"
+              }
             ],
             "modifiers": [],
             "rollConfig": {
@@ -13945,8 +15006,14 @@
                 "description": "Move base Run rate plus 2m per hit"
               }
             ],
-            "tags": ["movement", "run"],
-            "source": { "book": "SR5 Core", "page": 163 }
+            "tags": [
+              "movement",
+              "run"
+            ],
+            "source": {
+              "book": "SR5 Core",
+              "page": 163
+            }
           },
           {
             "id": "call-shot",
@@ -13960,7 +15027,11 @@
             },
             "prerequisites": [],
             "modifiers": [
-              { "source": "called_shot", "value": -4, "description": "Called shot penalty (varies by location)" }
+              {
+                "source": "called_shot",
+                "value": -4,
+                "description": "Called shot penalty (varies by location)"
+              }
             ],
             "effects": [
               {
@@ -13970,8 +15041,15 @@
                 "description": "Next attack targets a specific location"
               }
             ],
-            "tags": ["attack", "modifier", "tactical"],
-            "source": { "book": "SR5 Core", "page": 163 }
+            "tags": [
+              "attack",
+              "modifier",
+              "tactical"
+            ],
+            "source": {
+              "book": "SR5 Core",
+              "page": 163
+            }
           },
           {
             "id": "drop-object",
@@ -13984,7 +15062,11 @@
               "actionType": "free"
             },
             "prerequisites": [
-              { "type": "state", "requirement": "holding_object", "description": "Must be holding an object" }
+              {
+                "type": "state",
+                "requirement": "holding_object",
+                "description": "Must be holding an object"
+              }
             ],
             "modifiers": [],
             "effects": [
@@ -13995,8 +15077,14 @@
                 "description": "Object is dropped and no longer held"
               }
             ],
-            "tags": ["item", "quick"],
-            "source": { "book": "SR5 Core", "page": 163 }
+            "tags": [
+              "item",
+              "quick"
+            ],
+            "source": {
+              "book": "SR5 Core",
+              "page": 163
+            }
           },
           {
             "id": "drop-prone",
@@ -14009,7 +15097,11 @@
               "actionType": "free"
             },
             "prerequisites": [
-              { "type": "state", "requirement": "standing", "description": "Must be standing" }
+              {
+                "type": "state",
+                "requirement": "standing",
+                "description": "Must be standing"
+              }
             ],
             "modifiers": [],
             "effects": [
@@ -14021,8 +15113,15 @@
                 "description": "Character becomes prone"
               }
             ],
-            "tags": ["defense", "position", "quick"],
-            "source": { "book": "SR5 Core", "page": 163 }
+            "tags": [
+              "defense",
+              "position",
+              "quick"
+            ],
+            "source": {
+              "book": "SR5 Core",
+              "page": 163
+            }
           },
           {
             "id": "run",
@@ -14035,7 +15134,11 @@
               "actionType": "free"
             },
             "prerequisites": [
-              { "type": "state", "requirement": "can_move", "description": "Must be able to move" }
+              {
+                "type": "state",
+                "requirement": "can_move",
+                "description": "Must be able to move"
+              }
             ],
             "modifiers": [],
             "effects": [
@@ -14048,8 +15151,13 @@
                 "description": "Move at running pace"
               }
             ],
-            "tags": ["movement"],
-            "source": { "book": "SR5 Core", "page": 163 }
+            "tags": [
+              "movement"
+            ],
+            "source": {
+              "book": "SR5 Core",
+              "page": 163
+            }
           },
           {
             "id": "speak",
@@ -14064,8 +15172,13 @@
             "prerequisites": [],
             "modifiers": [],
             "effects": [],
-            "tags": ["communication"],
-            "source": { "book": "SR5 Core", "page": 163 }
+            "tags": [
+              "communication"
+            ],
+            "source": {
+              "book": "SR5 Core",
+              "page": 163
+            }
           },
           {
             "id": "multiple-attacks",
@@ -14087,8 +15200,14 @@
                 "description": "Dice pool will be split among multiple attacks"
               }
             ],
-            "tags": ["attack", "modifier"],
-            "source": { "book": "SR5 Core", "page": 163 }
+            "tags": [
+              "attack",
+              "modifier"
+            ],
+            "source": {
+              "book": "SR5 Core",
+              "page": 163
+            }
           },
           {
             "id": "dodge",
@@ -14102,7 +15221,11 @@
               "initiativeCost": 5
             },
             "prerequisites": [
-              { "type": "state", "requirement": "can_move", "description": "Must be able to move" }
+              {
+                "type": "state",
+                "requirement": "can_move",
+                "description": "Must be able to move"
+              }
             ],
             "modifiers": [],
             "rollConfig": {
@@ -14120,8 +15243,15 @@
                 "description": "Add Gymnastics rating to defense pool"
               }
             ],
-            "tags": ["defense", "interrupt", "reaction"],
-            "source": { "book": "SR5 Core", "page": 163 }
+            "tags": [
+              "defense",
+              "interrupt",
+              "reaction"
+            ],
+            "source": {
+              "book": "SR5 Core",
+              "page": 163
+            }
           },
           {
             "id": "block",
@@ -14135,7 +15265,11 @@
               "initiativeCost": 5
             },
             "prerequisites": [
-              { "type": "state", "requirement": "aware_of_attack", "description": "Must be aware of the attack" }
+              {
+                "type": "state",
+                "requirement": "aware_of_attack",
+                "description": "Must be aware of the attack"
+              }
             ],
             "modifiers": [],
             "rollConfig": {
@@ -14153,8 +15287,15 @@
                 "description": "Add Unarmed Combat rating to defense pool"
               }
             ],
-            "tags": ["defense", "interrupt", "melee"],
-            "source": { "book": "SR5 Core", "page": 163 }
+            "tags": [
+              "defense",
+              "interrupt",
+              "melee"
+            ],
+            "source": {
+              "book": "SR5 Core",
+              "page": 163
+            }
           },
           {
             "id": "parry",
@@ -14168,13 +15309,25 @@
               "initiativeCost": 5
             },
             "prerequisites": [
-              { "type": "equipment_ready", "requirement": "melee_weapon", "description": "Must have a readied melee weapon" },
-              { "type": "state", "requirement": "aware_of_attack", "description": "Must be aware of the attack" }
+              {
+                "type": "equipment_ready",
+                "requirement": "melee_weapon",
+                "description": "Must have a readied melee weapon"
+              },
+              {
+                "type": "state",
+                "requirement": "aware_of_attack",
+                "description": "Must be aware of the attack"
+              }
             ],
             "modifiers": [],
             "rollConfig": {
               "skill": "blades",
-              "skillOptions": ["blades", "clubs", "exotic_melee_weapon"],
+              "skillOptions": [
+                "blades",
+                "clubs",
+                "exotic_melee_weapon"
+              ],
               "attribute": "reaction",
               "limitType": "physical"
             },
@@ -14188,8 +15341,15 @@
                 "description": "Add weapon skill rating to defense pool"
               }
             ],
-            "tags": ["defense", "interrupt", "melee"],
-            "source": { "book": "SR5 Core", "page": 163 }
+            "tags": [
+              "defense",
+              "interrupt",
+              "melee"
+            ],
+            "source": {
+              "book": "SR5 Core",
+              "page": 163
+            }
           },
           {
             "id": "full-defense",
@@ -14215,8 +15375,15 @@
                 "description": "Add Willpower to all defense tests until your next action"
               }
             ],
-            "tags": ["defense", "interrupt", "ongoing"],
-            "source": { "book": "SR5 Core", "page": 163 }
+            "tags": [
+              "defense",
+              "interrupt",
+              "ongoing"
+            ],
+            "source": {
+              "book": "SR5 Core",
+              "page": 163
+            }
           },
           {
             "id": "hit-the-dirt",
@@ -14230,8 +15397,16 @@
               "initiativeCost": 5
             },
             "prerequisites": [
-              { "type": "state", "requirement": "standing", "description": "Must be standing" },
-              { "type": "state", "requirement": "can_move", "description": "Must be able to move" }
+              {
+                "type": "state",
+                "requirement": "standing",
+                "description": "Must be standing"
+              },
+              {
+                "type": "state",
+                "requirement": "can_move",
+                "description": "Must be able to move"
+              }
             ],
             "modifiers": [],
             "effects": [
@@ -14251,8 +15426,16 @@
                 "description": "Add Willpower to defense against this attack"
               }
             ],
-            "tags": ["defense", "interrupt", "ranged", "position"],
-            "source": { "book": "SR5 Core", "page": 163 }
+            "tags": [
+              "defense",
+              "interrupt",
+              "ranged",
+              "position"
+            ],
+            "source": {
+              "book": "SR5 Core",
+              "page": 163
+            }
           },
           {
             "id": "intercept",
@@ -14266,12 +15449,19 @@
               "initiativeCost": 5
             },
             "prerequisites": [
-              { "type": "state", "requirement": "can_move", "description": "Must be able to move" }
+              {
+                "type": "state",
+                "requirement": "can_move",
+                "description": "Must be able to move"
+              }
             ],
             "modifiers": [],
             "rollConfig": {
               "skill": "running",
-              "skillOptions": ["running", "gymnastics"],
+              "skillOptions": [
+                "running",
+                "gymnastics"
+              ],
               "attribute": "reaction",
               "limitType": "physical"
             },
@@ -14288,8 +15478,15 @@
                 "description": "Target's movement is stopped"
               }
             ],
-            "tags": ["movement", "interrupt", "blocking"],
-            "source": { "book": "SR5 Core", "page": 163 }
+            "tags": [
+              "movement",
+              "interrupt",
+              "blocking"
+            ],
+            "source": {
+              "book": "SR5 Core",
+              "page": 163
+            }
           }
         ],
         "general": [
@@ -14311,8 +15508,14 @@
               "limitType": "mental"
             },
             "effects": [],
-            "tags": ["perception", "awareness"],
-            "source": { "book": "SR5 Core", "page": 135 }
+            "tags": [
+              "perception",
+              "awareness"
+            ],
+            "source": {
+              "book": "SR5 Core",
+              "page": 135
+            }
           },
           {
             "id": "use-simple-device",
@@ -14327,8 +15530,14 @@
             "prerequisites": [],
             "modifiers": [],
             "effects": [],
-            "tags": ["device", "interaction"],
-            "source": { "book": "SR5 Core", "page": 163 }
+            "tags": [
+              "device",
+              "interaction"
+            ],
+            "source": {
+              "book": "SR5 Core",
+              "page": 163
+            }
           },
           {
             "id": "use-skill",
@@ -14343,13 +15552,23 @@
             "prerequisites": [],
             "modifiers": [],
             "rollConfig": {
-              "skillOptions": ["*"],
-              "attributeOptions": ["*"],
+              "skillOptions": [
+                "*"
+              ],
+              "attributeOptions": [
+                "*"
+              ],
               "limitType": "varies"
             },
             "effects": [],
-            "tags": ["skill", "general"],
-            "source": { "book": "SR5 Core", "page": 163 }
+            "tags": [
+              "skill",
+              "general"
+            ],
+            "source": {
+              "book": "SR5 Core",
+              "page": 163
+            }
           },
           {
             "id": "pick-up-object",
@@ -14364,8 +15583,14 @@
             "prerequisites": [],
             "modifiers": [],
             "effects": [],
-            "tags": ["item", "interaction"],
-            "source": { "book": "SR5 Core", "page": 163 }
+            "tags": [
+              "item",
+              "interaction"
+            ],
+            "source": {
+              "book": "SR5 Core",
+              "page": 163
+            }
           }
         ],
         "magic": [],

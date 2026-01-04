@@ -7,7 +7,7 @@
  * Based on SR5 Core Rulebook Chapter 10: The Matrix
  */
 
-import type { ID, ISODateString } from "./core";
+import type { ID, ISODateString, ItemLegality } from "./core";
 import type { DeviceCondition, GearState } from "./gear-state";
 
 // =============================================================================
@@ -495,11 +495,8 @@ export interface CharacterCyberdeck {
   /** Availability rating */
   availability: number;
 
-  /** Whether item is restricted */
-  restricted?: boolean;
-
-  /** Whether item is forbidden */
-  forbidden?: boolean;
+  /** Legality status: "restricted" (R) or "forbidden" (F) */
+  legality?: ItemLegality;
 
   /** Player notes */
   notes?: string;
@@ -600,11 +597,8 @@ export interface CyberdeckCatalogItem {
   /** Availability rating */
   availability: number;
 
-  /** Whether item is restricted */
-  restricted?: boolean;
-
-  /** Whether item is forbidden */
-  forbidden?: boolean;
+  /** Legality status: "restricted" (R) or "forbidden" (F) */
+  legality?: ItemLegality;
 
   /** Description */
   description?: string;
@@ -632,11 +626,8 @@ export interface CommlinkCatalogItem {
   /** Availability rating */
   availability: number;
 
-  /** Whether item is restricted */
-  restricted?: boolean;
-
-  /** Whether item is forbidden */
-  forbidden?: boolean;
+  /** Legality status: "restricted" (R) or "forbidden" (F) */
+  legality?: ItemLegality;
 
   /** Description */
   description?: string;

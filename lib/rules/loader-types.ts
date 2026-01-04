@@ -17,6 +17,7 @@ import type {
   CyberwareCategory,
   BiowareCategory,
   ActionDefinition,
+  ItemLegality,
 } from "../types";
 
 // =============================================================================
@@ -269,8 +270,7 @@ export interface GearItemData {
   subcategory?: string;
   cost: number;
   availability: number;
-  restricted?: boolean;
-  forbidden?: boolean;
+  legality?: ItemLegality;
   rating?: number;
   description?: string;
 
@@ -470,8 +470,7 @@ export interface CyberwareCatalogItemData {
   essenceCost: number;
   cost: number;
   availability: number;
-  restricted?: boolean;
-  forbidden?: boolean;
+  legality?: ItemLegality;
 
   /**
    * Unified rating specification (preferred over legacy properties)
@@ -563,8 +562,7 @@ export interface BiowareCatalogItemData {
   essenceCost: number;
   cost: number;
   availability: number;
-  restricted?: boolean;
-  forbidden?: boolean;
+  legality?: ItemLegality;
 
   /**
    * Unified rating specification (preferred over legacy properties)
@@ -801,8 +799,7 @@ export interface VehicleCatalogItemData {
   deviceRating?: number;
   cost: number;
   availability: number;
-  restricted?: boolean;
-  forbidden?: boolean;
+  legality?: ItemLegality;
   description?: string;
   page?: number;
   source?: string;
@@ -837,8 +834,7 @@ export interface DroneCatalogItemData {
   weaponMounts?: DroneWeaponMountsData;
   cost: number;
   availability: number;
-  restricted?: boolean;
-  forbidden?: boolean;
+  legality?: ItemLegality;
   description?: string;
   page?: number;
   source?: string;
@@ -855,7 +851,7 @@ export interface RCCCatalogItemData {
   firewall: number;
   cost: number;
   availability: number;
-  restricted?: boolean;
+  legality?: ItemLegality;
   description?: string;
   page?: number;
   source?: string;
@@ -905,8 +901,7 @@ export interface ProgramCatalogItemData {
   category: "common" | "hacking" | "agent";
   cost: number;
   availability: number;
-  restricted?: boolean;
-  forbidden?: boolean;
+  legality?: ItemLegality;
   minRating?: number;
   maxRating?: number;
   costPerRating?: number;
@@ -939,8 +934,7 @@ export interface FocusCatalogItemData {
   costMultiplier: number;
   bondingKarmaMultiplier: number;
   availability: number;
-  restricted?: boolean;
-  forbidden?: boolean;
+  legality?: ItemLegality;
   description?: string;
   page?: number;
   source?: string;
@@ -1019,10 +1013,8 @@ export interface WeaponModificationCatalogItemData {
   costPerRating?: boolean;
   /** Base availability */
   availability: number;
-  /** Whether availability is Restricted */
-  restricted?: boolean;
-  /** Whether availability is Forbidden */
-  forbidden?: boolean;
+  /** Item legality (restricted or forbidden) */
+  legality?: ItemLegality;
   /** Recoil compensation provided */
   recoilCompensation?: number;
   /** Accuracy modifier */
@@ -1084,10 +1076,8 @@ export interface ArmorModificationCatalogItemData {
   availability: number;
   /** Availability modifier (adds to armor's base) */
   availabilityModifier?: number;
-  /** Whether availability is Restricted */
-  restricted?: boolean;
-  /** Whether availability is Forbidden */
-  forbidden?: boolean;
+  /** Item legality (restricted or forbidden) */
+  legality?: ItemLegality;
   /** Armor bonus provided */
   armorBonus?: number;
   /** Requirements (e.g., "full body armor", "helmet") */
@@ -1124,10 +1114,8 @@ export interface CyberwareModificationCatalogItemData {
   costPerRating?: boolean;
   /** Base availability */
   availability: number;
-  /** Whether availability is Restricted */
-  restricted?: boolean;
-  /** Whether availability is Forbidden */
-  forbidden?: boolean;
+  /** Item legality (restricted or forbidden) */
+  legality?: ItemLegality;
   /** Applicable cyberware categories/subcategories */
   applicableCategories?: string[];
   /** Parent type (e.g., "cyberlimb" for cyberlimb enhancements) */
@@ -1166,10 +1154,8 @@ export interface GearModificationCatalogItemData {
   costPerRating?: boolean;
   /** Base availability */
   availability: number;
-  /** Whether availability is Restricted */
-  restricted?: boolean;
-  /** Whether availability is Forbidden */
-  forbidden?: boolean;
+  /** Item legality (restricted or forbidden) */
+  legality?: ItemLegality;
   /** Applicable gear categories/subcategories (e.g., "audio") */
   applicableCategories?: string[];
   /** Description */

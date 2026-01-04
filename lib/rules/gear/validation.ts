@@ -21,7 +21,8 @@ import type {
   InstalledWeaponMod,
   InstalledArmorMod,
   InstalledGearMod,
-} from "@/lib/types/character";
+  ItemLegality,
+} from "@/lib/types";
 import type {
   CharacterCyberdeck,
   CharacterCommlink,
@@ -260,8 +261,7 @@ function validateCyberdecks(
         deck.name,
         "cyberdeck",
         context,
-        deck.restricted,
-        deck.forbidden
+        deck.legality
       );
       if (availResult) errors.push(availResult);
     }
@@ -330,7 +330,7 @@ function validateRCCs(
         rcc.name,
         "rcc",
         context,
-        rcc.restricted
+        rcc.legality
       );
       if (availResult) errors.push(availResult);
     }
@@ -368,8 +368,7 @@ function validateInstalledMods(
       mod.name,
       parentName,
       context,
-      mod.restricted,
-      mod.forbidden
+      mod.legality
     );
     if (availResult) errors.push(availResult);
   }
@@ -393,8 +392,7 @@ function validateWeaponMods(
       mod.name,
       parentName,
       context,
-      mod.restricted,
-      mod.forbidden
+      mod.legality
     );
     if (availResult) errors.push(availResult);
   }
@@ -418,8 +416,7 @@ function validateArmorMods(
       mod.name,
       parentName,
       context,
-      mod.restricted,
-      mod.forbidden
+      mod.legality
     );
     if (availResult) errors.push(availResult);
   }
@@ -439,11 +436,10 @@ function validateAvailability(
   itemName: string,
   itemType: GearValidationError["itemType"],
   context: GearValidationContext,
-  restricted?: boolean,
-  forbidden?: boolean
+  legality?: ItemLegality
 ): GearValidationError | null {
   // Check forbidden first (most restrictive)
-  if (forbidden && !context.allowForbidden) {
+  if (legality === "forbidden" && !context.allowForbidden) {
     return {
       code: "AVAILABILITY_FORBIDDEN",
       message: `${itemName} is forbidden and cannot be purchased during character creation.`,
@@ -455,7 +451,7 @@ function validateAvailability(
   }
 
   // Check restricted at creation
-  if (restricted && context.lifecycleStage === "creation" && !context.allowRestricted) {
+  if (legality === "restricted" && context.lifecycleStage === "creation" && !context.allowRestricted) {
     return {
       code: "AVAILABILITY_RESTRICTED",
       message: `${itemName} is restricted (R) and cannot be purchased during character creation without GM approval.`,
@@ -492,11 +488,10 @@ function validateModAvailability(
   modName: string,
   parentName: string,
   context: GearValidationContext,
-  restricted?: boolean,
-  forbidden?: boolean
+  legality?: ItemLegality
 ): GearValidationError | null {
   // Check forbidden first
-  if (forbidden && !context.allowForbidden) {
+  if (legality === "forbidden" && !context.allowForbidden) {
     return {
       code: "MOD_FORBIDDEN",
       message: `${modName} on ${parentName} is forbidden and cannot be purchased during character creation.`,
@@ -508,7 +503,7 @@ function validateModAvailability(
   }
 
   // Check restricted at creation
-  if (restricted && context.lifecycleStage === "creation" && !context.allowRestricted) {
+  if (legality === "restricted" && context.lifecycleStage === "creation" && !context.allowRestricted) {
     return {
       code: "MOD_RESTRICTED",
       message: `${modName} on ${parentName} is restricted (R) and cannot be purchased during character creation without GM approval.`,

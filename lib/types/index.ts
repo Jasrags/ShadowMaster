@@ -5,7 +5,7 @@
  */
 
 // Core types
-export type { ID, ISODateString, Metadata, MagicalPath } from "./core";
+export type { ID, ISODateString, Metadata, MagicalPath, ItemLegality } from "./core";
 
 // Synchronization types
 export type {

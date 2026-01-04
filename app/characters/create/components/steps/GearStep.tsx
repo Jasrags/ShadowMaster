@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useMemo, useCallback } from "react";
-import type { CreationState, GearItem, Weapon, ArmorItem, InstalledWeaponMod, InstalledArmorMod, InstalledGearMod, CyberwareItem, BiowareItem, WeaponMount } from "@/lib/types";
+import type { CreationState, GearItem, Weapon, ArmorItem, InstalledWeaponMod, InstalledArmorMod, InstalledGearMod, CyberwareItem, BiowareItem, WeaponMount, ItemLegality } from "@/lib/types";
 import type { FocusItem } from "@/lib/types/character";
 import type { FocusType } from "@/lib/types/edition";
 import {
@@ -117,24 +117,23 @@ function formatEssence(value: number): string {
 
 function getAvailabilityDisplay(item: GearItemData): string {
   let display = String(item.availability);
-  if (item.restricted) display += "R";
-  if (item.forbidden) display += "F";
+  if (item.legality === "restricted") display += "R";
+  if (item.legality === "forbidden") display += "F";
   return display;
 }
 
 function getAugmentationAvailabilityDisplay(
   availability: number,
-  restricted?: boolean,
-  forbidden?: boolean
+  legality?: ItemLegality
 ): string {
   let display = String(availability);
-  if (restricted) display += "R";
-  if (forbidden) display += "F";
+  if (legality === "restricted") display += "R";
+  if (legality === "forbidden") display += "F";
   return display;
 }
 
 function isItemAvailable(item: GearItemData): boolean {
-  return item.availability <= MAX_AVAILABILITY && !item.forbidden;
+  return item.availability <= MAX_AVAILABILITY;
 }
 
 export function GearStep({ state, updateState, budgetValues }: StepProps) {
@@ -309,8 +308,7 @@ export function GearStep({ state, updateState, budgetValues }: StepProps) {
               mount: builtIn.mount || modData.mount,
               cost: 0,
               availability: modData.availability,
-              restricted: modData.restricted,
-              forbidden: modData.forbidden,
+              legality: modData.legality,
               isBuiltIn: true,
               capacityUsed: 0, // Weapon mods use mount points, not capacity
             });
@@ -686,9 +684,9 @@ export function GearStep({ state, updateState, budgetValues }: StepProps) {
       essenceCost: number,
       availability: number,
       newBonuses?: Record<string, number>,
-      forbidden?: boolean
+      legality?: ItemLegality
     ): { allowed: boolean; reason?: string } => {
-      if (forbidden) {
+      if (legality === "forbidden") {
         return { allowed: false, reason: "Forbidden items not allowed at creation" };
       }
       if (availability > augmentationRules.maxAvailabilityAtCreation) {
@@ -753,7 +751,7 @@ export function GearStep({ state, updateState, budgetValues }: StepProps) {
         }
       }
 
-      const check = canAddAugmentation(cost, essenceCost, availability, itemBonuses, item.forbidden);
+      const check = canAddAugmentation(cost, essenceCost, availability, itemBonuses, item.legality);
       if (!check.allowed) return;
 
       const newItem: CyberwareItem = {
@@ -767,8 +765,7 @@ export function GearStep({ state, updateState, budgetValues }: StepProps) {
         rating,
         cost,
         availability,
-        restricted: item.restricted,
-        forbidden: item.forbidden,
+        legality: item.legality,
         attributeBonuses: itemBonuses,
         initiativeDiceBonus: item.initiativeDiceBonus,
         capacity: item.capacity,
@@ -820,7 +817,7 @@ export function GearStep({ state, updateState, budgetValues }: StepProps) {
         }
       }
 
-      const check = canAddAugmentation(cost, essenceCost, availability, itemBonuses, item.forbidden);
+      const check = canAddAugmentation(cost, essenceCost, availability, itemBonuses, item.legality);
       if (!check.allowed) return;
 
       const newItem: BiowareItem = {
@@ -834,8 +831,7 @@ export function GearStep({ state, updateState, budgetValues }: StepProps) {
         rating,
         cost,
         availability,
-        restricted: item.restricted,
-        forbidden: item.forbidden,
+        legality: item.legality,
         attributeBonuses: itemBonuses,
       };
 
@@ -948,8 +944,7 @@ export function GearStep({ state, updateState, budgetValues }: StepProps) {
         rating,
         cost: enhancementCost,
         availability,
-        restricted: enhancement.restricted,
-        forbidden: enhancement.forbidden,
+        legality: enhancement.legality,
         attributeBonuses: enhancement.attributeBonusesPerRating && rating
           ? Object.fromEntries(
             Object.entries(enhancement.attributeBonusesPerRating).map(([attr, bonus]) => [
@@ -1059,7 +1054,7 @@ export function GearStep({ state, updateState, budgetValues }: StepProps) {
       karmaToBond,
       cost,
       availability,
-      restricted: focusCatalogItem.restricted,
+      legality: focusCatalogItem.legality,
     };
 
     const updatedFoci = [...selectedFoci, newFocus];
@@ -1263,7 +1258,7 @@ export function GearStep({ state, updateState, budgetValues }: StepProps) {
         );
         return (
           adjustedAvail <= augmentationRules.maxAvailabilityAtCreation &&
-          !item.forbidden
+          item.legality !== "forbidden"
         );
       });
     }
@@ -1314,7 +1309,7 @@ export function GearStep({ state, updateState, budgetValues }: StepProps) {
         );
         return (
           adjustedAvail <= augmentationRules.maxAvailabilityAtCreation &&
-          !item.forbidden
+          item.legality !== "forbidden"
         );
       });
     }
@@ -1662,7 +1657,7 @@ export function GearStep({ state, updateState, budgetValues }: StepProps) {
                         item.costPerRating
                       );
                       const availability = calculateCyberwareAvailability(item.availability, grade, cyberwareGrades);
-                      const check = canAddAugmentation(cost, essenceCost, availability, item.attributeBonuses, item.forbidden);
+                      const check = canAddAugmentation(cost, essenceCost, availability, item.attributeBonuses, item.legality);
 
                       return (
                         <tr
@@ -1694,8 +1689,8 @@ export function GearStep({ state, updateState, budgetValues }: StepProps) {
                           </td>
                           <td className="px-3 py-2 text-right">¥{formatCurrency(cost)}</td>
                           <td className="px-3 py-2 text-center">
-                            <span className={item.restricted ? "text-amber-600 dark:text-amber-400" : item.forbidden ? "text-red-600 dark:text-red-400" : ""}>
-                              {getAugmentationAvailabilityDisplay(availability, item.restricted, item.forbidden)}
+                            <span className={item.legality === "restricted" ? "text-amber-600 dark:text-amber-400" : item.legality === "forbidden" ? "text-red-600 dark:text-red-400" : ""}>
+                              {getAugmentationAvailabilityDisplay(availability, item.legality)}
                             </span>
                           </td>
                           <td className="px-3 py-2">
@@ -1742,7 +1737,7 @@ export function GearStep({ state, updateState, budgetValues }: StepProps) {
                         item.costPerRating
                       );
                       const availability = calculateBiowareAvailability(item.availability, grade, biowareGrades);
-                      const check = canAddAugmentation(cost, essenceCost, availability, item.attributeBonuses, item.forbidden);
+                      const check = canAddAugmentation(cost, essenceCost, availability, item.attributeBonuses, item.legality);
 
                       return (
                         <tr
@@ -1769,8 +1764,8 @@ export function GearStep({ state, updateState, budgetValues }: StepProps) {
                           </td>
                           <td className="px-3 py-2 text-right">¥{formatCurrency(cost)}</td>
                           <td className="px-3 py-2 text-center">
-                            <span className={item.restricted ? "text-amber-600 dark:text-amber-400" : item.forbidden ? "text-red-600 dark:text-red-400" : ""}>
-                              {getAugmentationAvailabilityDisplay(availability, item.restricted, item.forbidden)}
+                            <span className={item.legality === "restricted" ? "text-amber-600 dark:text-amber-400" : item.legality === "forbidden" ? "text-red-600 dark:text-red-400" : ""}>
+                              {getAugmentationAvailabilityDisplay(availability, item.legality)}
                             </span>
                           </td>
                           <td className="px-3 py-2">
@@ -2206,9 +2201,9 @@ export function GearStep({ state, updateState, budgetValues }: StepProps) {
                       <td className="px-3 py-2 text-right">¥{formatCurrency(item.cost)}</td>
                       <td className="px-3 py-2 text-center">
                         <span
-                          className={`${item.restricted
+                          className={`${item.legality === "restricted"
                             ? "text-amber-600 dark:text-amber-400"
-                            : item.forbidden
+                            : item.legality === "forbidden"
                               ? "text-red-600 dark:text-red-400"
                               : ""
                             }`}

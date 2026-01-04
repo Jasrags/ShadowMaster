@@ -8,7 +8,7 @@
  * @see Capability: character.inventory-management
  */
 
-import type { ID } from "./core";
+import type { ID, ItemLegality } from "./core";
 
 // =============================================================================
 // EQUIPMENT READINESS
@@ -247,11 +247,8 @@ export interface AmmunitionItem {
   /** Availability rating */
   availability: number;
 
-  /** Restricted (R) status */
-  restricted?: boolean;
-
-  /** Forbidden (F) status */
-  forbidden?: boolean;
+  /** Legality status: "restricted" (R) or "forbidden" (F) */
+  legality?: ItemLegality;
 }
 
 /**

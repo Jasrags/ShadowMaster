@@ -25,7 +25,7 @@ import {
   type GearCatalogData,
 } from "@/lib/rules/RulesetContext";
 import type { FocusCatalogItemData } from "@/lib/rules/loader-types";
-import type { CreationState, GearItem, Weapon, ArmorItem } from "@/lib/types";
+import type { CreationState, GearItem, Weapon, ArmorItem, ItemLegality } from "@/lib/types";
 import type { FocusItem } from "@/lib/types/character";
 import { useCreationBudgets } from "@/lib/contexts";
 import { CreationCard } from "./shared";
@@ -62,17 +62,16 @@ function formatCurrency(value: number): string {
 
 function getAvailabilityDisplay(
   availability: number,
-  restricted?: boolean,
-  forbidden?: boolean
+  legality?: ItemLegality
 ): string {
   let display = String(availability);
-  if (restricted) display += "R";
-  if (forbidden) display += "F";
+  if (legality === "restricted") display += "R";
+  if (legality === "forbidden") display += "F";
   return display;
 }
 
-function isItemAvailable(availability: number, forbidden?: boolean): boolean {
-  return availability <= MAX_AVAILABILITY && !forbidden;
+function isItemAvailable(availability: number): boolean {
+  return availability <= MAX_AVAILABILITY;
 }
 
 // Extract all weapons from catalog into flat array
@@ -245,8 +244,7 @@ function RatedGearItemRow({
   maxRating,
   baseCost,
   baseAvailability,
-  restricted,
-  forbidden,
+  legality,
   remaining,
   onAdd,
 }: {
@@ -256,8 +254,7 @@ function RatedGearItemRow({
   maxRating: number;
   baseCost: number;
   baseAvailability: number;
-  restricted?: boolean;
-  forbidden?: boolean;
+  legality?: ItemLegality;
   remaining: number;
   onAdd: (rating: number) => void;
 }) {
@@ -276,7 +273,7 @@ function RatedGearItemRow({
           </div>
           <div className="mt-0.5 flex flex-wrap gap-2 text-xs text-zinc-500 dark:text-zinc-400">
             <span>{category}</span>
-            <span>Avail: {getAvailabilityDisplay(availability, restricted, forbidden)}</span>
+            <span>Avail: {getAvailabilityDisplay(availability, legality)}</span>
           </div>
         </div>
         <div className="ml-3 text-right">
@@ -472,7 +469,7 @@ export function GearCard({ state, updateState }: GearCardProps) {
       const query = searchQuery.toLowerCase();
       items = items.filter((w) => w.name.toLowerCase().includes(query));
     }
-    return items.filter((w) => isItemAvailable(w.availability, w.forbidden)).slice(0, 20);
+    return items.filter((w) => isItemAvailable(w.availability)).slice(0, 20);
   }, [allWeapons, searchQuery]);
 
   const filteredArmor = useMemo(() => {
@@ -481,7 +478,7 @@ export function GearCard({ state, updateState }: GearCardProps) {
       const query = searchQuery.toLowerCase();
       items = items.filter((a) => a.name.toLowerCase().includes(query));
     }
-    return items.filter((a) => isItemAvailable(a.availability, a.forbidden)).slice(0, 20);
+    return items.filter((a) => isItemAvailable(a.availability)).slice(0, 20);
   }, [allArmor, searchQuery]);
 
   const filteredGear = useMemo(() => {
@@ -490,7 +487,7 @@ export function GearCard({ state, updateState }: GearCardProps) {
       const query = searchQuery.toLowerCase();
       items = items.filter((g) => g.name.toLowerCase().includes(query));
     }
-    return items.filter((g) => isItemAvailable(g.availability, g.forbidden)).slice(0, 20);
+    return items.filter((g) => isItemAvailable(g.availability)).slice(0, 20);
   }, [allGear, searchQuery]);
 
   const filteredFoci = useMemo(() => {
@@ -500,7 +497,7 @@ export function GearCard({ state, updateState }: GearCardProps) {
       const query = searchQuery.toLowerCase();
       items = items.filter((f) => f.name.toLowerCase().includes(query));
     }
-    return items.filter((f) => isItemAvailable(f.availability || 0, f.forbidden)).slice(0, 20);
+    return items.filter((f) => isItemAvailable(f.availability || 0)).slice(0, 20);
   }, [fociCatalog, searchQuery, isMagical]);
 
   // Add weapon
@@ -904,7 +901,7 @@ export function GearCard({ state, updateState }: GearCardProps) {
                   </>
                 }
                 cost={weapon.cost}
-                availability={getAvailabilityDisplay(weapon.availability, weapon.restricted, weapon.forbidden)}
+                availability={getAvailabilityDisplay(weapon.availability, weapon.legality)}
                 canAfford={weapon.cost <= remaining}
                 onAdd={() => addWeapon(weapon)}
               />
@@ -918,7 +915,7 @@ export function GearCard({ state, updateState }: GearCardProps) {
                 name={armor.name}
                 stats={<span>Rating: {armor.armorRating}</span>}
                 cost={armor.cost}
-                availability={getAvailabilityDisplay(armor.availability, armor.restricted, armor.forbidden)}
+                availability={getAvailabilityDisplay(armor.availability, armor.legality)}
                 canAfford={armor.cost <= remaining}
                 onAdd={() => addArmor(armor)}
               />
@@ -943,8 +940,7 @@ export function GearCard({ state, updateState }: GearCardProps) {
                     maxRating={maxRating}
                     baseCost={baseCost}
                     baseAvailability={baseAvail}
-                    restricted={gear.restricted}
-                    forbidden={gear.forbidden}
+                    legality={gear.legality}
                     remaining={remaining}
                     onAdd={(rating) => addGear(gear, rating)}
                   />
@@ -957,7 +953,7 @@ export function GearCard({ state, updateState }: GearCardProps) {
                   name={gear.name}
                   stats={<span>{gear.category}</span>}
                   cost={gear.cost}
-                  availability={getAvailabilityDisplay(gear.availability, gear.restricted, gear.forbidden)}
+                  availability={getAvailabilityDisplay(gear.availability, gear.legality)}
                   canAfford={gear.cost <= remaining}
                   onAdd={() => addGear(gear)}
                 />
@@ -979,7 +975,7 @@ export function GearCard({ state, updateState }: GearCardProps) {
                     </>
                   }
                   cost={focusCost}
-                  availability={getAvailabilityDisplay(focus.availability || 0, focus.restricted, focus.forbidden)}
+                  availability={getAvailabilityDisplay(focus.availability || 0, focus.legality)}
                   canAfford={focusCost <= remaining}
                   onAdd={() => addFocus(focus)}
                 />

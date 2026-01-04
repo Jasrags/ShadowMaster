@@ -6,7 +6,7 @@
  * book-based rule extensions and overrides.
  */
 
-import type { ID, ISODateString, Metadata } from "./core";
+import type { ID, ISODateString, Metadata, ItemLegality } from "./core";
 import type { CyberwareCategory, BiowareCategory } from "./character";
 import type { CatalogItemRatingSpec } from "./ratings";
 import type {
@@ -357,10 +357,8 @@ export interface CyberwareCatalogItem {
   costPerRating?: boolean;
   /** Base availability */
   availability: number;
-  /** Whether availability is Restricted */
-  restricted?: boolean;
-  /** Whether availability is Forbidden */
-  forbidden?: boolean;
+  /** Legality status: "restricted" (R) or "forbidden" (F) */
+  legality?: ItemLegality;
   /** Capacity this item provides (for cyberlimbs) */
   capacity?: number;
   /** Capacity slots this item requires (for enhancements) */
@@ -446,10 +444,8 @@ export interface BiowareCatalogItem {
   costPerRating?: boolean;
   /** Base availability */
   availability: number;
-  /** Whether availability is Restricted */
-  restricted?: boolean;
-  /** Whether availability is Forbidden */
-  forbidden?: boolean;
+  /** Legality status: "restricted" (R) or "forbidden" (F) */
+  legality?: ItemLegality;
   /** Attribute bonuses provided */
   attributeBonuses?: Record<string, number>;
   /**
@@ -546,9 +542,8 @@ export interface FocusCatalogItem {
   bondingKarmaMultiplier: number;
   /** Base availability */
   availability: number;
-  /** Whether availability is Restricted (R) or Forbidden (F) */
-  restricted?: boolean;
-  forbidden?: boolean;
+  /** Legality status: "restricted" (R) or "forbidden" (F) */
+  legality?: ItemLegality;
   /** Description */
   description?: string;
   /** Page reference in source material */
@@ -675,10 +670,8 @@ export interface WeaponModificationCatalogItem {
   costPerRating?: boolean;
   /** Base availability */
   availability: number;
-  /** Whether availability is Restricted */
-  restricted?: boolean;
-  /** Whether availability is Forbidden */
-  forbidden?: boolean;
+  /** Legality status: "restricted" (R) or "forbidden" (F) */
+  legality?: ItemLegality;
   /** Recoil compensation provided */
   recoilCompensation?: number;
   /** Accuracy modifier */
@@ -768,10 +761,8 @@ export interface ArmorModificationCatalogItem {
   availability: number;
   /** Availability modifier (adds to armor's base) */
   availabilityModifier?: number;
-  /** Whether availability is Restricted */
-  restricted?: boolean;
-  /** Whether availability is Forbidden */
-  forbidden?: boolean;
+  /** Legality status: "restricted" (R) or "forbidden" (F) */
+  legality?: ItemLegality;
   /** Armor bonus provided */
   armorBonus?: number;
   /** Requirements (e.g., "full body armor", "helmet") */

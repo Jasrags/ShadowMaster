@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useMemo, useCallback } from "react";
-import type { CreationState, CharacterDrone, CharacterRCC, CharacterAutosoft } from "@/lib/types";
+import type { CreationState, CharacterDrone, CharacterRCC, CharacterAutosoft, ItemLegality } from "@/lib/types";
 import {
   useVehicles,
   useVehicleCategories,
@@ -32,8 +32,7 @@ interface OwnedVehicle {
   category: string;
   cost: number;
   availability: number;
-  restricted?: boolean;
-  forbidden?: boolean;
+  legality?: ItemLegality;
 }
 
 type VehicleTab = "vehicles" | "drones" | "rccs" | "autosofts";
@@ -50,15 +49,15 @@ function formatCurrency(value: number): string {
   }).format(value);
 }
 
-function getAvailabilityDisplay(availability: number, restricted?: boolean, forbidden?: boolean): string {
+function getAvailabilityDisplay(availability: number, legality?: ItemLegality): string {
   let display = String(availability);
-  if (restricted) display += "R";
-  if (forbidden) display += "F";
+  if (legality === "restricted") display += "R";
+  if (legality === "forbidden") display += "F";
   return display;
 }
 
-function isItemAvailable(availability: number, forbidden?: boolean): boolean {
-  return availability <= MAX_AVAILABILITY && !forbidden;
+function isItemAvailable(availability: number): boolean {
+  return availability <= MAX_AVAILABILITY;
 }
 
 // Counter for generating unique IDs
@@ -151,7 +150,7 @@ export function VehiclesStep({ state, updateState, budgetValues }: StepProps) {
 
     // Filter by availability
     if (!showUnavailable) {
-      items = items.filter((v) => isItemAvailable(v.availability, v.forbidden));
+      items = items.filter((v) => isItemAvailable(v.availability));
     }
 
     return items.sort((a, b) => a.name.localeCompare(b.name));
@@ -174,7 +173,7 @@ export function VehiclesStep({ state, updateState, budgetValues }: StepProps) {
 
     // Filter by availability
     if (!showUnavailable) {
-      items = items.filter((d) => isItemAvailable(d.availability, d.forbidden));
+      items = items.filter((d) => isItemAvailable(d.availability));
     }
 
     return items.sort((a, b) => a.name.localeCompare(b.name));
@@ -192,7 +191,7 @@ export function VehiclesStep({ state, updateState, budgetValues }: StepProps) {
 
     // Filter by availability
     if (!showUnavailable) {
-      items = items.filter((r) => isItemAvailable(r.availability, false));
+      items = items.filter((r) => isItemAvailable(r.availability));
     }
 
     return items.sort((a, b) => a.deviceRating - b.deviceRating);
@@ -207,8 +206,7 @@ export function VehiclesStep({ state, updateState, budgetValues }: StepProps) {
       category: vehicle.category,
       cost: vehicle.cost,
       availability: vehicle.availability,
-      restricted: vehicle.restricted,
-      forbidden: vehicle.forbidden,
+      legality: vehicle.legality,
     };
 
     updateState({
@@ -245,8 +243,7 @@ export function VehiclesStep({ state, updateState, budgetValues }: StepProps) {
       sensor: drone.sensor,
       cost: drone.cost,
       availability: drone.availability,
-      restricted: drone.restricted,
-      forbidden: drone.forbidden,
+      legality: drone.legality,
     };
 
     updateState({
@@ -278,7 +275,7 @@ export function VehiclesStep({ state, updateState, budgetValues }: StepProps) {
       firewall: rcc.firewall,
       cost: rcc.cost,
       availability: rcc.availability,
-      restricted: rcc.restricted,
+      legality: rcc.legality,
     };
 
     updateState({
@@ -493,7 +490,7 @@ export function VehiclesStep({ state, updateState, budgetValues }: StepProps) {
               </thead>
               <tbody className="divide-y divide-zinc-100 dark:divide-zinc-700">
                 {filteredVehicles.map((vehicle) => {
-                  const available = isItemAvailable(vehicle.availability, vehicle.forbidden);
+                  const available = isItemAvailable(vehicle.availability);
                   const canAfford = vehicle.cost <= remaining;
 
                   return (
@@ -517,14 +514,14 @@ export function VehiclesStep({ state, updateState, budgetValues }: StepProps) {
                       <td className="px-3 py-2 text-right">¥{formatCurrency(vehicle.cost)}</td>
                       <td className="px-3 py-2 text-center">
                         <span
-                          className={`${vehicle.restricted
+                          className={`${vehicle.legality === "restricted"
                               ? "text-amber-600 dark:text-amber-400"
-                              : vehicle.forbidden
+                              : vehicle.legality === "forbidden"
                                 ? "text-red-600 dark:text-red-400"
                                 : ""
                             }`}
                         >
-                          {getAvailabilityDisplay(vehicle.availability, vehicle.restricted, vehicle.forbidden)}
+                          {getAvailabilityDisplay(vehicle.availability, vehicle.legality)}
                         </span>
                       </td>
                       <td className="px-3 py-2 text-center">
@@ -616,7 +613,7 @@ export function VehiclesStep({ state, updateState, budgetValues }: StepProps) {
               </thead>
               <tbody className="divide-y divide-zinc-100 dark:divide-zinc-700">
                 {filteredDrones.map((drone) => {
-                  const available = isItemAvailable(drone.availability, drone.forbidden);
+                  const available = isItemAvailable(drone.availability);
                   const canAfford = drone.cost <= remaining;
 
                   return (
@@ -642,14 +639,14 @@ export function VehiclesStep({ state, updateState, budgetValues }: StepProps) {
                       <td className="px-3 py-2 text-right">¥{formatCurrency(drone.cost)}</td>
                       <td className="px-3 py-2 text-center">
                         <span
-                          className={`${drone.restricted
+                          className={`${drone.legality === "restricted"
                               ? "text-amber-600 dark:text-amber-400"
-                              : drone.forbidden
+                              : drone.legality === "forbidden"
                                 ? "text-red-600 dark:text-red-400"
                                 : ""
                             }`}
                         >
-                          {getAvailabilityDisplay(drone.availability, drone.restricted, drone.forbidden)}
+                          {getAvailabilityDisplay(drone.availability, drone.legality)}
                         </span>
                       </td>
                       <td className="px-3 py-2 text-center">
@@ -722,7 +719,7 @@ export function VehiclesStep({ state, updateState, budgetValues }: StepProps) {
               </thead>
               <tbody className="divide-y divide-zinc-100 dark:divide-zinc-700">
                 {filteredRCCs.map((rcc) => {
-                  const available = isItemAvailable(rcc.availability, false);
+                  const available = isItemAvailable(rcc.availability);
                   const canAfford = rcc.cost <= remaining;
 
                   return (
@@ -744,8 +741,8 @@ export function VehiclesStep({ state, updateState, budgetValues }: StepProps) {
                       </td>
                       <td className="px-3 py-2 text-right">¥{formatCurrency(rcc.cost)}</td>
                       <td className="px-3 py-2 text-center">
-                        <span className={rcc.restricted ? "text-amber-600 dark:text-amber-400" : ""}>
-                          {getAvailabilityDisplay(rcc.availability, rcc.restricted, false)}
+                        <span className={rcc.legality === "restricted" ? "text-amber-600 dark:text-amber-400" : rcc.legality === "forbidden" ? "text-red-600 dark:text-red-400" : ""}>
+                          {getAvailabilityDisplay(rcc.availability, rcc.legality)}
                         </span>
                       </td>
                       <td className="px-3 py-2 text-center">
@@ -821,7 +818,7 @@ export function VehiclesStep({ state, updateState, budgetValues }: StepProps) {
                   const rating = autosoftRating[autosoft.id] || 1;
                   const cost = calculateAutosoftCost(autosoft.costPerRating, rating);
                   const availability = calculateAutosoftAvailability(autosoft.availabilityPerRating, rating);
-                  const available = isItemAvailable(availability, false);
+                  const available = isItemAvailable(availability);
                   const canAfford = cost <= remaining;
 
                   return (

@@ -445,7 +445,7 @@ describe("validateAllGear - Restricted Items", () => {
           loadedPrograms: [],
           cost: 100000,
           availability: 8,
-          restricted: true,
+          legality: "restricted",
         },
       ],
     });
@@ -471,7 +471,7 @@ describe("validateAllGear - Forbidden Items", () => {
           loadedPrograms: [],
           cost: 500000,
           availability: 10,
-          forbidden: true,
+          legality: "forbidden",
         },
       ],
     });
@@ -511,7 +511,7 @@ describe("validateAllGear - Multiple Issues", () => {
               availability: 16,
               cost: 2000,
               capacityUsed: 1,
-              forbidden: true,
+              legality: "forbidden",
             },
           ],
         },

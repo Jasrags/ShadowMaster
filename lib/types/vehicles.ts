@@ -7,7 +7,7 @@
  * use the simpler interfaces in character.ts
  */
 
-import type { ID } from "./core";
+import type { ID, ItemLegality } from "./core";
 
 // =============================================================================
 // VEHICLE TYPES
@@ -74,11 +74,8 @@ export interface Vehicle {
   /** Availability rating */
   availability: number;
 
-  /** Restricted item flag */
-  restricted?: boolean;
-
-  /** Forbidden/illegal item flag */
-  forbidden?: boolean;
+  /** Legality status: "restricted" (R) or "forbidden" (F) */
+  legality?: ItemLegality;
 
   /** Description */
   description?: string;
@@ -181,8 +178,8 @@ export interface RCC {
   /** Availability rating */
   availability: number;
 
-  /** Restricted item flag */
-  restricted?: boolean;
+  /** Legality status: "restricted" (R) or "forbidden" (F) */
+  legality?: ItemLegality;
 
   /** Description */
   description?: string;
@@ -289,11 +286,8 @@ export interface VehicleModification {
   /** Availability */
   availability: number;
 
-  /** Restricted flag */
-  restricted?: boolean;
-
-  /** Forbidden flag */
-  forbidden?: boolean;
+  /** Legality status: "restricted" (R) or "forbidden" (F) */
+  legality?: ItemLegality;
 
   /** Effect description */
   effect: string;

@@ -28,7 +28,7 @@ import {
   type RCCCatalogItemData,
   type AutosoftCatalogItemData,
 } from "@/lib/rules/RulesetContext";
-import type { CreationState, CharacterDrone, CharacterRCC, CharacterAutosoft } from "@/lib/types";
+import type { CreationState, CharacterDrone, CharacterRCC, CharacterAutosoft, ItemLegality } from "@/lib/types";
 import { useCreationBudgets } from "@/lib/contexts";
 import { CreationCard, BudgetIndicator } from "./shared";
 import { Lock, Search, X, Car, Bot, Wifi, Code } from "lucide-react";
@@ -48,7 +48,7 @@ interface OwnedVehicle {
   category: string;
   cost: number;
   availability: number;
-  restricted?: boolean;
+  legality?: ItemLegality;
 }
 
 // =============================================================================
@@ -65,17 +65,16 @@ function formatCurrency(value: number): string {
 
 function getAvailabilityDisplay(
   availability: number,
-  restricted?: boolean,
-  forbidden?: boolean
+  legality?: ItemLegality
 ): string {
   let display = String(availability);
-  if (restricted) display += "R";
-  if (forbidden) display += "F";
+  if (legality === "restricted") display += "R";
+  if (legality === "forbidden") display += "F";
   return display;
 }
 
-function isItemAvailable(availability: number, forbidden?: boolean): boolean {
-  return availability <= MAX_AVAILABILITY && !forbidden;
+function isItemAvailable(availability: number): boolean {
+  return availability <= MAX_AVAILABILITY;
 }
 
 let idCounter = 0;
@@ -170,7 +169,7 @@ export function VehiclesCard({ state, updateState }: VehiclesCardProps) {
       const query = searchQuery.toLowerCase();
       items = items.filter((v) => v.name.toLowerCase().includes(query));
     }
-    return items.filter((v) => isItemAvailable(v.availability, v.forbidden)).slice(0, 15);
+    return items.filter((v) => isItemAvailable(v.availability)).slice(0, 15);
   }, [vehicles, searchQuery]);
 
   const filteredDrones = useMemo(() => {
@@ -182,7 +181,7 @@ export function VehiclesCard({ state, updateState }: VehiclesCardProps) {
       const query = searchQuery.toLowerCase();
       items = items.filter((d) => d.name.toLowerCase().includes(query));
     }
-    return items.filter((d) => isItemAvailable(d.availability, d.forbidden)).slice(0, 15);
+    return items.filter((d) => isItemAvailable(d.availability)).slice(0, 15);
   }, [drones, droneSizeFilter, searchQuery]);
 
   const filteredRCCs = useMemo(() => {
@@ -191,7 +190,7 @@ export function VehiclesCard({ state, updateState }: VehiclesCardProps) {
       const query = searchQuery.toLowerCase();
       items = items.filter((r) => r.name.toLowerCase().includes(query));
     }
-    return items.filter((r) => isItemAvailable(r.availability, false)).slice(0, 15);
+    return items.filter((r) => isItemAvailable(r.availability)).slice(0, 15);
   }, [rccs, searchQuery]);
 
   // Add vehicle
@@ -206,7 +205,7 @@ export function VehiclesCard({ state, updateState }: VehiclesCardProps) {
         category: vehicle.category,
         cost: vehicle.cost,
         availability: vehicle.availability,
-        restricted: vehicle.restricted,
+        legality: vehicle.legality,
       };
 
       updateState({
@@ -238,8 +237,7 @@ export function VehiclesCard({ state, updateState }: VehiclesCardProps) {
         sensor: drone.sensor,
         cost: drone.cost,
         availability: drone.availability,
-        restricted: drone.restricted,
-        forbidden: drone.forbidden,
+        legality: drone.legality,
       };
 
       updateState({
@@ -266,7 +264,7 @@ export function VehiclesCard({ state, updateState }: VehiclesCardProps) {
         firewall: rcc.firewall,
         cost: rcc.cost,
         availability: rcc.availability,
-        restricted: rcc.restricted,
+        legality: rcc.legality,
       };
 
       updateState({

@@ -31,7 +31,7 @@ import {
   type CyberwareCatalogItemData,
   type BiowareCatalogItemData,
 } from "@/lib/rules/RulesetContext";
-import type { CreationState, CyberwareItem, BiowareItem, CyberwareGrade, BiowareGrade } from "@/lib/types";
+import type { CreationState, CyberwareItem, BiowareItem, CyberwareGrade, BiowareGrade, ItemLegality } from "@/lib/types";
 import { useCreationBudgets } from "@/lib/contexts";
 import { CreationCard, BudgetIndicator } from "./shared";
 import { Lock, Search, X, AlertTriangle, Cpu, Heart } from "lucide-react";
@@ -70,12 +70,11 @@ function formatEssence(value: number): string {
 
 function getAvailabilityDisplay(
   availability: number,
-  restricted?: boolean,
-  forbidden?: boolean
+  legality?: ItemLegality
 ): string {
   let display = String(availability);
-  if (restricted) display += "R";
-  if (forbidden) display += "F";
+  if (legality === "restricted") display += "R";
+  if (legality === "forbidden") display += "F";
   return display;
 }
 
@@ -205,7 +204,7 @@ export function AugmentationsCard({ state, updateState }: AugmentationsCardProps
       );
     }
     // Filter by availability
-    items = items.filter((item) => item.availability <= MAX_AVAILABILITY && !item.forbidden);
+    items = items.filter((item) => item.availability <= MAX_AVAILABILITY && item.legality !== "forbidden");
     return items.slice(0, 20);
   }, [cyberwareCatalog, searchQuery]);
 
@@ -220,7 +219,7 @@ export function AugmentationsCard({ state, updateState }: AugmentationsCardProps
           item.description?.toLowerCase().includes(query)
       );
     }
-    items = items.filter((item) => item.availability <= MAX_AVAILABILITY && !item.forbidden);
+    items = items.filter((item) => item.availability <= MAX_AVAILABILITY && item.legality !== "forbidden");
     return items.slice(0, 20);
   }, [biowareCatalog, searchQuery]);
 
@@ -522,7 +521,7 @@ export function AugmentationsCard({ state, updateState }: AugmentationsCardProps
                     <div className="flex gap-2 text-[10px] text-zinc-500 dark:text-zinc-400">
                       <span className="text-cyan-600 dark:text-cyan-400">{formatEssence(essenceCost)} ESS</span>
                       <span>{formatCurrency(cost)}¥</span>
-                      <span>Avail: {getAvailabilityDisplay(availability, item.restricted, item.forbidden)}</span>
+                      <span>Avail: {getAvailabilityDisplay(availability, item.legality)}</span>
                     </div>
                   </div>
                 </button>
@@ -560,7 +559,7 @@ export function AugmentationsCard({ state, updateState }: AugmentationsCardProps
                     <div className="flex gap-2 text-[10px] text-zinc-500 dark:text-zinc-400">
                       <span className="text-pink-600 dark:text-pink-400">{formatEssence(essenceCost)} ESS</span>
                       <span>{formatCurrency(cost)}¥</span>
-                      <span>Avail: {getAvailabilityDisplay(availability, item.restricted, item.forbidden)}</span>
+                      <span>Avail: {getAvailabilityDisplay(availability, item.legality)}</span>
                     </div>
                   </div>
                 </button>

@@ -6,7 +6,7 @@
  * and store a reference to the ruleset snapshot used during creation.
  */
 
-import type { ID, ISODateString, Metadata, MagicalPath } from "./core";
+import type { ID, ISODateString, Metadata, MagicalPath, ItemLegality } from "./core";
 import type { EditionCode, FocusType, SpiritType } from "./edition";
 import type { CharacterProgram } from "./programs";
 import type { QualitySelection } from "./qualities";
@@ -684,8 +684,8 @@ export interface InstalledGearMod {
   cost: number;
   /** Actual availability of this mod */
   availability: number;
-  restricted?: boolean;
-  forbidden?: boolean;
+  /** Legality status: "restricted" (R) or "forbidden" (F) */
+  legality?: ItemLegality;
 }
 
 export interface GearItem {
@@ -733,8 +733,8 @@ export interface InstalledWeaponMod {
   cost: number;
   /** Actual availability of this mod */
   availability: number;
-  restricted?: boolean;
-  forbidden?: boolean;
+  /** Legality status: "restricted" (R) or "forbidden" (F) */
+  legality?: ItemLegality;
   /** New: Flags built-in mods that cannot be removed */
   isBuiltIn?: boolean;
   /** Capacity/Slots used by this mod */
@@ -756,8 +756,8 @@ export interface InstalledArmorMod {
   cost: number;
   /** Actual availability of this mod */
   availability: number;
-  restricted?: boolean;
-  forbidden?: boolean;
+  /** Legality status: "restricted" (R) or "forbidden" (F) */
+  legality?: ItemLegality;
 }
 
 export interface Weapon extends GearItem {
@@ -965,9 +965,8 @@ export interface CyberwareItem {
   cost: number;
   /** Availability rating */
   availability: number;
-  /** Whether availability is Restricted (R) or Forbidden (F) */
-  restricted?: boolean;
-  forbidden?: boolean;
+  /** Legality status: "restricted" (R) or "forbidden" (F) */
+  legality?: ItemLegality;
   /** Attribute bonuses provided by this cyberware */
   attributeBonuses?: Record<string, number>;
   /** Initiative dice bonuses */
@@ -1019,9 +1018,8 @@ export interface BiowareItem {
   cost: number;
   /** Availability rating */
   availability: number;
-  /** Whether availability is Restricted (R) or Forbidden (F) */
-  restricted?: boolean;
-  forbidden?: boolean;
+  /** Legality status: "restricted" (R) or "forbidden" (F) */
+  legality?: ItemLegality;
   /** Attribute bonuses provided by this bioware */
   attributeBonuses?: Record<string, number>;
   /** Other special effects/notes */
@@ -1096,8 +1094,8 @@ export interface CharacterDrone {
   cost: number;
   /** Availability rating */
   availability: number;
-  restricted?: boolean;
-  forbidden?: boolean;
+  /** Legality status: "restricted" (R) or "forbidden" (F) */
+  legality?: ItemLegality;
   /** Installed autosofts */
   installedAutosofts?: string[];
   /** Notes */
@@ -1124,7 +1122,8 @@ export interface CharacterRCC {
   cost: number;
   /** Availability rating */
   availability: number;
-  restricted?: boolean;
+  /** Legality status: "restricted" (R) or "forbidden" (F) */
+  legality?: ItemLegality;
   /** Currently running autosofts (shared to all slaved drones) */
   runningAutosofts?: string[];
   /** Notes */
@@ -1172,9 +1171,8 @@ export interface FocusItem {
   cost: number;
   /** Availability rating */
   availability: number;
-  /** Whether availability is Restricted (R) or Forbidden (F) */
-  restricted?: boolean;
-  forbidden?: boolean;
+  /** Legality status: "restricted" (R) or "forbidden" (F) */
+  legality?: ItemLegality;
   /** Notes */
   notes?: string;
 }
