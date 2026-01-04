@@ -1,0 +1,3563 @@
+{
+  "timestamp": "2026-01-04T23:44:57.842Z",
+  "config": {
+    "edition": "sr5",
+    "sources": [
+      "Core"
+    ],
+    "categories": [],
+    "outputDir": "/Users/jrags/Code/Jasrags/shadow-master/docs/capabilities/plans/verification-reports",
+    "reportOnly": true
+  },
+  "summary": {
+    "totalCategories": 15,
+    "totalFindings": 408,
+    "byPriority": {
+      "1": 38,
+      "2": 15,
+      "4": 355
+    },
+    "byType": {
+      "invalid_source": 355,
+      "data_mismatch": 15,
+      "missing": 38
+    }
+  },
+  "findings": [
+    {
+      "type": "invalid_source",
+      "priority": 4,
+      "category": "weapons.melee",
+      "item": "Knucks",
+      "details": "Item \"knucks\" not found in reference files for sources: Core",
+      "recommendation": "Verify source of \"knucks\" - may need removal or move to sourcebook"
+    },
+    {
+      "type": "invalid_source",
+      "priority": 4,
+      "category": "weapons.melee",
+      "item": "Monofilament whip",
+      "details": "Item \"monofilament-whip\" not found in reference files for sources: Core",
+      "recommendation": "Verify source of \"monofilament-whip\" - may need removal or move to sourcebook"
+    },
+    {
+      "type": "invalid_source",
+      "priority": 4,
+      "category": "weapons.melee",
+      "item": "Shock Gloves",
+      "details": "Item \"shock-gloves\" not found in reference files for sources: Core",
+      "recommendation": "Verify source of \"shock-gloves\" - may need removal or move to sourcebook"
+    },
+    {
+      "type": "data_mismatch",
+      "priority": 2,
+      "category": "weapons.pistols.holdout",
+      "item": "Fichetti Tiffani Needler",
+      "details": "Field \"availability\" mismatch",
+      "expected": 6,
+      "actual": 5,
+      "recommendation": "Update fichetti-tiffani-needler.availability from 5 to 6"
+    },
+    {
+      "type": "invalid_source",
+      "priority": 4,
+      "category": "weapons.pistols.holdout",
+      "item": "Ares Light Fire 70",
+      "details": "Item \"ares-light-fire-70\" not found in reference files for sources: Core",
+      "recommendation": "Verify source of \"ares-light-fire-70\" - may need removal or move to sourcebook"
+    },
+    {
+      "type": "invalid_source",
+      "priority": 4,
+      "category": "weapons.pistols.holdout",
+      "item": "Ares Light Fire 75",
+      "details": "Item \"ares-light-fire-75\" not found in reference files for sources: Core",
+      "recommendation": "Verify source of \"ares-light-fire-75\" - may need removal or move to sourcebook"
+    },
+    {
+      "type": "invalid_source",
+      "priority": 4,
+      "category": "weapons.pistols.holdout",
+      "item": "Ares Predator V",
+      "details": "Item \"ares-predator-v\" not found in reference files for sources: Core",
+      "recommendation": "Verify source of \"ares-predator-v\" - may need removal or move to sourcebook"
+    },
+    {
+      "type": "invalid_source",
+      "priority": 4,
+      "category": "weapons.pistols.holdout",
+      "item": "Ares S-III Super Squirt",
+      "details": "Item \"ares-s-iii-super-squirt\" not found in reference files for sources: Core",
+      "recommendation": "Verify source of \"ares-s-iii-super-squirt\" - may need removal or move to sourcebook"
+    },
+    {
+      "type": "invalid_source",
+      "priority": 4,
+      "category": "weapons.pistols.holdout",
+      "item": "Ares Viper Slivergun",
+      "details": "Item \"ares-viper-slivergun\" not found in reference files for sources: Core",
+      "recommendation": "Verify source of \"ares-viper-slivergun\" - may need removal or move to sourcebook"
+    },
+    {
+      "type": "invalid_source",
+      "priority": 4,
+      "category": "weapons.pistols.holdout",
+      "item": "Beretta 201T",
+      "details": "Item \"beretta-201t\" not found in reference files for sources: Core",
+      "recommendation": "Verify source of \"beretta-201t\" - may need removal or move to sourcebook"
+    },
+    {
+      "type": "invalid_source",
+      "priority": 4,
+      "category": "weapons.pistols.holdout",
+      "item": "Browning Ultra-Power",
+      "details": "Item \"browning-ultra-power\" not found in reference files for sources: Core",
+      "recommendation": "Verify source of \"browning-ultra-power\" - may need removal or move to sourcebook"
+    },
+    {
+      "type": "invalid_source",
+      "priority": 4,
+      "category": "weapons.pistols.holdout",
+      "item": "Colt America L36",
+      "details": "Item \"colt-america-l36\" not found in reference files for sources: Core",
+      "recommendation": "Verify source of \"colt-america-l36\" - may need removal or move to sourcebook"
+    },
+    {
+      "type": "invalid_source",
+      "priority": 4,
+      "category": "weapons.pistols.holdout",
+      "item": "Colt Government 2066",
+      "details": "Item \"colt-government-2066\" not found in reference files for sources: Core",
+      "recommendation": "Verify source of \"colt-government-2066\" - may need removal or move to sourcebook"
+    },
+    {
+      "type": "invalid_source",
+      "priority": 4,
+      "category": "weapons.pistols.holdout",
+      "item": "Defiance EX Shocker",
+      "details": "Item \"defiance-ex-shocker\" not found in reference files for sources: Core",
+      "recommendation": "Verify source of \"defiance-ex-shocker\" - may need removal or move to sourcebook"
+    },
+    {
+      "type": "invalid_source",
+      "priority": 4,
+      "category": "weapons.pistols.holdout",
+      "item": "Fichetti Pain Inducer",
+      "details": "Item \"fichetti-pain-inducer\" not found in reference files for sources: Core",
+      "recommendation": "Verify source of \"fichetti-pain-inducer\" - may need removal or move to sourcebook"
+    },
+    {
+      "type": "invalid_source",
+      "priority": 4,
+      "category": "weapons.pistols.holdout",
+      "item": "Fichetti Security 600",
+      "details": "Item \"fichetti-security-600\" not found in reference files for sources: Core",
+      "recommendation": "Verify source of \"fichetti-security-600\" - may need removal or move to sourcebook"
+    },
+    {
+      "type": "invalid_source",
+      "priority": 4,
+      "category": "weapons.pistols.holdout",
+      "item": "Parashield Dart Pistol",
+      "details": "Item \"parashield-dart-pistol\" not found in reference files for sources: Core",
+      "recommendation": "Verify source of \"parashield-dart-pistol\" - may need removal or move to sourcebook"
+    },
+    {
+      "type": "invalid_source",
+      "priority": 4,
+      "category": "weapons.pistols.holdout",
+      "item": "Parashield Dart Rifle",
+      "details": "Item \"parashield-dart-rifle\" not found in reference files for sources: Core",
+      "recommendation": "Verify source of \"parashield-dart-rifle\" - may need removal or move to sourcebook"
+    },
+    {
+      "type": "invalid_source",
+      "priority": 4,
+      "category": "weapons.pistols.holdout",
+      "item": "Remington Roomsweeper",
+      "details": "Item \"remington-roomsweeper\" not found in reference files for sources: Core",
+      "recommendation": "Verify source of \"remington-roomsweeper\" - may need removal or move to sourcebook"
+    },
+    {
+      "type": "invalid_source",
+      "priority": 4,
+      "category": "weapons.pistols.holdout",
+      "item": "Ruger Super Warhawk",
+      "details": "Item \"ruger-super-warhawk\" not found in reference files for sources: Core",
+      "recommendation": "Verify source of \"ruger-super-warhawk\" - may need removal or move to sourcebook"
+    },
+    {
+      "type": "invalid_source",
+      "priority": 4,
+      "category": "weapons.pistols.holdout",
+      "item": "Taurus Omni-6",
+      "details": "Item \"taurus-omni-6\" not found in reference files for sources: Core",
+      "recommendation": "Verify source of \"taurus-omni-6\" - may need removal or move to sourcebook"
+    },
+    {
+      "type": "invalid_source",
+      "priority": 4,
+      "category": "weapons.pistols.holdout",
+      "item": "Yamaha Pulsar",
+      "details": "Item \"yamaha-pulsar\" not found in reference files for sources: Core",
+      "recommendation": "Verify source of \"yamaha-pulsar\" - may need removal or move to sourcebook"
+    },
+    {
+      "type": "data_mismatch",
+      "priority": 2,
+      "category": "weapons.pistols.light",
+      "item": "Ares Light Fire 70",
+      "details": "Field \"damage\" mismatch",
+      "expected": 8,
+      "actual": "6P",
+      "recommendation": "Update ares-light-fire-70.damage from 6P to 8"
+    },
+    {
+      "type": "data_mismatch",
+      "priority": 2,
+      "category": "weapons.pistols.light",
+      "item": "Beretta 201T",
+      "details": "Field \"rc\" mismatch",
+      "expected": "– (1)",
+      "actual": 1,
+      "recommendation": "Update beretta-201t.rc from 1 to – (1)"
+    },
+    {
+      "type": "data_mismatch",
+      "priority": 2,
+      "category": "weapons.pistols.light",
+      "item": "Fichetti Security 600",
+      "details": "Field \"rc\" mismatch",
+      "expected": "– (1)",
+      "actual": 1,
+      "recommendation": "Update fichetti-security-600.rc from 1 to – (1)"
+    },
+    {
+      "type": "missing",
+      "priority": 1,
+      "category": "weapons.pistols.light",
+      "item": "Taurus Omni-6, light pistol rounds",
+      "details": "Item from Core not found in JSON",
+      "expected": {
+        "weapon": "Taurus Omni-6, light pistol rounds",
+        "acc": 5,
+        "dv": 6,
+        "ap": "–",
+        "modes": "SA",
+        "rc": "–",
+        "ammo": 6,
+        "avail": 3,
+        "cost": 300,
+        "source": "Core"
+      },
+      "recommendation": "Add \"Taurus Omni-6, light pistol rounds\" to modules.gear.payload.weapons.pistols"
+    },
+    {
+      "type": "missing",
+      "priority": 1,
+      "category": "weapons.pistols.light",
+      "item": "Taurus Omni-6, heavy pistol rounds",
+      "details": "Item from Core not found in JSON",
+      "expected": {
+        "weapon": "Taurus Omni-6, heavy pistol rounds",
+        "acc": 5,
+        "dv": 7,
+        "ap": -1,
+        "modes": "SS",
+        "rc": "–",
+        "ammo": 6,
+        "avail": 3,
+        "cost": 300,
+        "source": "Core"
+      },
+      "recommendation": "Add \"Taurus Omni-6, heavy pistol rounds\" to modules.gear.payload.weapons.pistols"
+    },
+    {
+      "type": "invalid_source",
+      "priority": 4,
+      "category": "weapons.pistols.light",
+      "item": "Ares Predator V",
+      "details": "Item \"ares-predator-v\" not found in reference files for sources: Core",
+      "recommendation": "Verify source of \"ares-predator-v\" - may need removal or move to sourcebook"
+    },
+    {
+      "type": "invalid_source",
+      "priority": 4,
+      "category": "weapons.pistols.light",
+      "item": "Ares S-III Super Squirt",
+      "details": "Item \"ares-s-iii-super-squirt\" not found in reference files for sources: Core",
+      "recommendation": "Verify source of \"ares-s-iii-super-squirt\" - may need removal or move to sourcebook"
+    },
+    {
+      "type": "invalid_source",
+      "priority": 4,
+      "category": "weapons.pistols.light",
+      "item": "Ares Viper Slivergun",
+      "details": "Item \"ares-viper-slivergun\" not found in reference files for sources: Core",
+      "recommendation": "Verify source of \"ares-viper-slivergun\" - may need removal or move to sourcebook"
+    },
+    {
+      "type": "invalid_source",
+      "priority": 4,
+      "category": "weapons.pistols.light",
+      "item": "Browning Ultra-Power",
+      "details": "Item \"browning-ultra-power\" not found in reference files for sources: Core",
+      "recommendation": "Verify source of \"browning-ultra-power\" - may need removal or move to sourcebook"
+    },
+    {
+      "type": "invalid_source",
+      "priority": 4,
+      "category": "weapons.pistols.light",
+      "item": "Colt Government 2066",
+      "details": "Item \"colt-government-2066\" not found in reference files for sources: Core",
+      "recommendation": "Verify source of \"colt-government-2066\" - may need removal or move to sourcebook"
+    },
+    {
+      "type": "invalid_source",
+      "priority": 4,
+      "category": "weapons.pistols.light",
+      "item": "Defiance EX Shocker",
+      "details": "Item \"defiance-ex-shocker\" not found in reference files for sources: Core",
+      "recommendation": "Verify source of \"defiance-ex-shocker\" - may need removal or move to sourcebook"
+    },
+    {
+      "type": "invalid_source",
+      "priority": 4,
+      "category": "weapons.pistols.light",
+      "item": "Fichetti Pain Inducer",
+      "details": "Item \"fichetti-pain-inducer\" not found in reference files for sources: Core",
+      "recommendation": "Verify source of \"fichetti-pain-inducer\" - may need removal or move to sourcebook"
+    },
+    {
+      "type": "invalid_source",
+      "priority": 4,
+      "category": "weapons.pistols.light",
+      "item": "Fichetti Tiffani Needler",
+      "details": "Item \"fichetti-tiffani-needler\" not found in reference files for sources: Core",
+      "recommendation": "Verify source of \"fichetti-tiffani-needler\" - may need removal or move to sourcebook"
+    },
+    {
+      "type": "invalid_source",
+      "priority": 4,
+      "category": "weapons.pistols.light",
+      "item": "Parashield Dart Pistol",
+      "details": "Item \"parashield-dart-pistol\" not found in reference files for sources: Core",
+      "recommendation": "Verify source of \"parashield-dart-pistol\" - may need removal or move to sourcebook"
+    },
+    {
+      "type": "invalid_source",
+      "priority": 4,
+      "category": "weapons.pistols.light",
+      "item": "Parashield Dart Rifle",
+      "details": "Item \"parashield-dart-rifle\" not found in reference files for sources: Core",
+      "recommendation": "Verify source of \"parashield-dart-rifle\" - may need removal or move to sourcebook"
+    },
+    {
+      "type": "invalid_source",
+      "priority": 4,
+      "category": "weapons.pistols.light",
+      "item": "Remington Roomsweeper",
+      "details": "Item \"remington-roomsweeper\" not found in reference files for sources: Core",
+      "recommendation": "Verify source of \"remington-roomsweeper\" - may need removal or move to sourcebook"
+    },
+    {
+      "type": "invalid_source",
+      "priority": 4,
+      "category": "weapons.pistols.light",
+      "item": "Ruger Super Warhawk",
+      "details": "Item \"ruger-super-warhawk\" not found in reference files for sources: Core",
+      "recommendation": "Verify source of \"ruger-super-warhawk\" - may need removal or move to sourcebook"
+    },
+    {
+      "type": "invalid_source",
+      "priority": 4,
+      "category": "weapons.pistols.light",
+      "item": "Streetline Special",
+      "details": "Item \"streetline-special\" not found in reference files for sources: Core",
+      "recommendation": "Verify source of \"streetline-special\" - may need removal or move to sourcebook"
+    },
+    {
+      "type": "invalid_source",
+      "priority": 4,
+      "category": "weapons.pistols.light",
+      "item": "Taurus Omni-6",
+      "details": "Item \"taurus-omni-6\" not found in reference files for sources: Core",
+      "recommendation": "Verify source of \"taurus-omni-6\" - may need removal or move to sourcebook"
+    },
+    {
+      "type": "invalid_source",
+      "priority": 4,
+      "category": "weapons.pistols.light",
+      "item": "Walther Palm Pistol",
+      "details": "Item \"walther-palm-pistol\" not found in reference files for sources: Core",
+      "recommendation": "Verify source of \"walther-palm-pistol\" - may need removal or move to sourcebook"
+    },
+    {
+      "type": "invalid_source",
+      "priority": 4,
+      "category": "weapons.pistols.light",
+      "item": "Yamaha Pulsar",
+      "details": "Item \"yamaha-pulsar\" not found in reference files for sources: Core",
+      "recommendation": "Verify source of \"yamaha-pulsar\" - may need removal or move to sourcebook"
+    },
+    {
+      "type": "missing",
+      "priority": 1,
+      "category": "weapons.pistols.heavy",
+      "item": "Ares Viper Silvergun",
+      "details": "Item from Core not found in JSON",
+      "expected": {
+        "weapon": "Ares Viper Silvergun",
+        "acc": 4,
+        "dv": 9,
+        "ap": 4,
+        "modes": "SA/BF",
+        "rc": "–",
+        "ammo": 30,
+        "avail": 8,
+        "cost": 380,
+        "source": "Core"
+      },
+      "recommendation": "Add \"Ares Viper Silvergun\" to modules.gear.payload.weapons.pistols"
+    },
+    {
+      "type": "data_mismatch",
+      "priority": 2,
+      "category": "weapons.pistols.heavy",
+      "item": "Remington Roomsweeper",
+      "details": "Field \"damage\" mismatch",
+      "expected": 7,
+      "actual": "9P(f)",
+      "recommendation": "Update remington-roomsweeper.damage from 9P(f) to 7"
+    },
+    {
+      "type": "invalid_source",
+      "priority": 4,
+      "category": "weapons.pistols.heavy",
+      "item": "Ares Light Fire 70",
+      "details": "Item \"ares-light-fire-70\" not found in reference files for sources: Core",
+      "recommendation": "Verify source of \"ares-light-fire-70\" - may need removal or move to sourcebook"
+    },
+    {
+      "type": "invalid_source",
+      "priority": 4,
+      "category": "weapons.pistols.heavy",
+      "item": "Ares Light Fire 75",
+      "details": "Item \"ares-light-fire-75\" not found in reference files for sources: Core",
+      "recommendation": "Verify source of \"ares-light-fire-75\" - may need removal or move to sourcebook"
+    },
+    {
+      "type": "invalid_source",
+      "priority": 4,
+      "category": "weapons.pistols.heavy",
+      "item": "Ares S-III Super Squirt",
+      "details": "Item \"ares-s-iii-super-squirt\" not found in reference files for sources: Core",
+      "recommendation": "Verify source of \"ares-s-iii-super-squirt\" - may need removal or move to sourcebook"
+    },
+    {
+      "type": "invalid_source",
+      "priority": 4,
+      "category": "weapons.pistols.heavy",
+      "item": "Ares Viper Slivergun",
+      "details": "Item \"ares-viper-slivergun\" not found in reference files for sources: Core",
+      "recommendation": "Verify source of \"ares-viper-slivergun\" - may need removal or move to sourcebook"
+    },
+    {
+      "type": "invalid_source",
+      "priority": 4,
+      "category": "weapons.pistols.heavy",
+      "item": "Beretta 201T",
+      "details": "Item \"beretta-201t\" not found in reference files for sources: Core",
+      "recommendation": "Verify source of \"beretta-201t\" - may need removal or move to sourcebook"
+    },
+    {
+      "type": "invalid_source",
+      "priority": 4,
+      "category": "weapons.pistols.heavy",
+      "item": "Colt America L36",
+      "details": "Item \"colt-america-l36\" not found in reference files for sources: Core",
+      "recommendation": "Verify source of \"colt-america-l36\" - may need removal or move to sourcebook"
+    },
+    {
+      "type": "invalid_source",
+      "priority": 4,
+      "category": "weapons.pistols.heavy",
+      "item": "Defiance EX Shocker",
+      "details": "Item \"defiance-ex-shocker\" not found in reference files for sources: Core",
+      "recommendation": "Verify source of \"defiance-ex-shocker\" - may need removal or move to sourcebook"
+    },
+    {
+      "type": "invalid_source",
+      "priority": 4,
+      "category": "weapons.pistols.heavy",
+      "item": "Fichetti Pain Inducer",
+      "details": "Item \"fichetti-pain-inducer\" not found in reference files for sources: Core",
+      "recommendation": "Verify source of \"fichetti-pain-inducer\" - may need removal or move to sourcebook"
+    },
+    {
+      "type": "invalid_source",
+      "priority": 4,
+      "category": "weapons.pistols.heavy",
+      "item": "Fichetti Security 600",
+      "details": "Item \"fichetti-security-600\" not found in reference files for sources: Core",
+      "recommendation": "Verify source of \"fichetti-security-600\" - may need removal or move to sourcebook"
+    },
+    {
+      "type": "invalid_source",
+      "priority": 4,
+      "category": "weapons.pistols.heavy",
+      "item": "Fichetti Tiffani Needler",
+      "details": "Item \"fichetti-tiffani-needler\" not found in reference files for sources: Core",
+      "recommendation": "Verify source of \"fichetti-tiffani-needler\" - may need removal or move to sourcebook"
+    },
+    {
+      "type": "invalid_source",
+      "priority": 4,
+      "category": "weapons.pistols.heavy",
+      "item": "Parashield Dart Pistol",
+      "details": "Item \"parashield-dart-pistol\" not found in reference files for sources: Core",
+      "recommendation": "Verify source of \"parashield-dart-pistol\" - may need removal or move to sourcebook"
+    },
+    {
+      "type": "invalid_source",
+      "priority": 4,
+      "category": "weapons.pistols.heavy",
+      "item": "Parashield Dart Rifle",
+      "details": "Item \"parashield-dart-rifle\" not found in reference files for sources: Core",
+      "recommendation": "Verify source of \"parashield-dart-rifle\" - may need removal or move to sourcebook"
+    },
+    {
+      "type": "invalid_source",
+      "priority": 4,
+      "category": "weapons.pistols.heavy",
+      "item": "Streetline Special",
+      "details": "Item \"streetline-special\" not found in reference files for sources: Core",
+      "recommendation": "Verify source of \"streetline-special\" - may need removal or move to sourcebook"
+    },
+    {
+      "type": "invalid_source",
+      "priority": 4,
+      "category": "weapons.pistols.heavy",
+      "item": "Taurus Omni-6",
+      "details": "Item \"taurus-omni-6\" not found in reference files for sources: Core",
+      "recommendation": "Verify source of \"taurus-omni-6\" - may need removal or move to sourcebook"
+    },
+    {
+      "type": "invalid_source",
+      "priority": 4,
+      "category": "weapons.pistols.heavy",
+      "item": "Walther Palm Pistol",
+      "details": "Item \"walther-palm-pistol\" not found in reference files for sources: Core",
+      "recommendation": "Verify source of \"walther-palm-pistol\" - may need removal or move to sourcebook"
+    },
+    {
+      "type": "invalid_source",
+      "priority": 4,
+      "category": "weapons.pistols.heavy",
+      "item": "Yamaha Pulsar",
+      "details": "Item \"yamaha-pulsar\" not found in reference files for sources: Core",
+      "recommendation": "Verify source of \"yamaha-pulsar\" - may need removal or move to sourcebook"
+    },
+    {
+      "type": "missing",
+      "priority": 1,
+      "category": "weapons.pistols.machine",
+      "item": "Ares Crusader II",
+      "details": "Item from Core not found in JSON",
+      "expected": {
+        "weapon": "Ares Crusader II",
+        "acc": 5,
+        "dv": 7,
+        "ap": "–",
+        "modes": "SA/BF",
+        "rc": 2,
+        "ammo": 40,
+        "avail": 9,
+        "cost": 830,
+        "source": "Core"
+      },
+      "recommendation": "Add \"Ares Crusader II\" to modules.gear.payload.weapons.pistols"
+    },
+    {
+      "type": "missing",
+      "priority": 1,
+      "category": "weapons.pistols.machine",
+      "item": "Ceska Black Scorpion",
+      "details": "Item from Core not found in JSON",
+      "expected": {
+        "weapon": "Ceska Black Scorpion",
+        "acc": 5,
+        "dv": 6,
+        "ap": "–",
+        "modes": "SA/BF",
+        "rc": "– (1)",
+        "ammo": 35,
+        "avail": 6,
+        "cost": 270,
+        "source": "Core"
+      },
+      "recommendation": "Add \"Ceska Black Scorpion\" to modules.gear.payload.weapons.pistols"
+    },
+    {
+      "type": "missing",
+      "priority": 1,
+      "category": "weapons.pistols.machine",
+      "item": "Steyr TMP",
+      "details": "Item from Core not found in JSON",
+      "expected": {
+        "weapon": "Steyr TMP",
+        "acc": 4,
+        "dv": 7,
+        "ap": "–",
+        "modes": "SA/BF/FA",
+        "rc": "–",
+        "ammo": 30,
+        "avail": 8,
+        "cost": 350,
+        "source": "Core"
+      },
+      "recommendation": "Add \"Steyr TMP\" to modules.gear.payload.weapons.pistols"
+    },
+    {
+      "type": "invalid_source",
+      "priority": 4,
+      "category": "weapons.pistols.machine",
+      "item": "Ares Light Fire 70",
+      "details": "Item \"ares-light-fire-70\" not found in reference files for sources: Core",
+      "recommendation": "Verify source of \"ares-light-fire-70\" - may need removal or move to sourcebook"
+    },
+    {
+      "type": "invalid_source",
+      "priority": 4,
+      "category": "weapons.pistols.machine",
+      "item": "Ares Light Fire 75",
+      "details": "Item \"ares-light-fire-75\" not found in reference files for sources: Core",
+      "recommendation": "Verify source of \"ares-light-fire-75\" - may need removal or move to sourcebook"
+    },
+    {
+      "type": "invalid_source",
+      "priority": 4,
+      "category": "weapons.pistols.machine",
+      "item": "Ares Predator V",
+      "details": "Item \"ares-predator-v\" not found in reference files for sources: Core",
+      "recommendation": "Verify source of \"ares-predator-v\" - may need removal or move to sourcebook"
+    },
+    {
+      "type": "invalid_source",
+      "priority": 4,
+      "category": "weapons.pistols.machine",
+      "item": "Ares S-III Super Squirt",
+      "details": "Item \"ares-s-iii-super-squirt\" not found in reference files for sources: Core",
+      "recommendation": "Verify source of \"ares-s-iii-super-squirt\" - may need removal or move to sourcebook"
+    },
+    {
+      "type": "invalid_source",
+      "priority": 4,
+      "category": "weapons.pistols.machine",
+      "item": "Ares Viper Slivergun",
+      "details": "Item \"ares-viper-slivergun\" not found in reference files for sources: Core",
+      "recommendation": "Verify source of \"ares-viper-slivergun\" - may need removal or move to sourcebook"
+    },
+    {
+      "type": "invalid_source",
+      "priority": 4,
+      "category": "weapons.pistols.machine",
+      "item": "Beretta 201T",
+      "details": "Item \"beretta-201t\" not found in reference files for sources: Core",
+      "recommendation": "Verify source of \"beretta-201t\" - may need removal or move to sourcebook"
+    },
+    {
+      "type": "invalid_source",
+      "priority": 4,
+      "category": "weapons.pistols.machine",
+      "item": "Browning Ultra-Power",
+      "details": "Item \"browning-ultra-power\" not found in reference files for sources: Core",
+      "recommendation": "Verify source of \"browning-ultra-power\" - may need removal or move to sourcebook"
+    },
+    {
+      "type": "invalid_source",
+      "priority": 4,
+      "category": "weapons.pistols.machine",
+      "item": "Colt America L36",
+      "details": "Item \"colt-america-l36\" not found in reference files for sources: Core",
+      "recommendation": "Verify source of \"colt-america-l36\" - may need removal or move to sourcebook"
+    },
+    {
+      "type": "invalid_source",
+      "priority": 4,
+      "category": "weapons.pistols.machine",
+      "item": "Colt Government 2066",
+      "details": "Item \"colt-government-2066\" not found in reference files for sources: Core",
+      "recommendation": "Verify source of \"colt-government-2066\" - may need removal or move to sourcebook"
+    },
+    {
+      "type": "invalid_source",
+      "priority": 4,
+      "category": "weapons.pistols.machine",
+      "item": "Defiance EX Shocker",
+      "details": "Item \"defiance-ex-shocker\" not found in reference files for sources: Core",
+      "recommendation": "Verify source of \"defiance-ex-shocker\" - may need removal or move to sourcebook"
+    },
+    {
+      "type": "invalid_source",
+      "priority": 4,
+      "category": "weapons.pistols.machine",
+      "item": "Fichetti Pain Inducer",
+      "details": "Item \"fichetti-pain-inducer\" not found in reference files for sources: Core",
+      "recommendation": "Verify source of \"fichetti-pain-inducer\" - may need removal or move to sourcebook"
+    },
+    {
+      "type": "invalid_source",
+      "priority": 4,
+      "category": "weapons.pistols.machine",
+      "item": "Fichetti Security 600",
+      "details": "Item \"fichetti-security-600\" not found in reference files for sources: Core",
+      "recommendation": "Verify source of \"fichetti-security-600\" - may need removal or move to sourcebook"
+    },
+    {
+      "type": "invalid_source",
+      "priority": 4,
+      "category": "weapons.pistols.machine",
+      "item": "Fichetti Tiffani Needler",
+      "details": "Item \"fichetti-tiffani-needler\" not found in reference files for sources: Core",
+      "recommendation": "Verify source of \"fichetti-tiffani-needler\" - may need removal or move to sourcebook"
+    },
+    {
+      "type": "invalid_source",
+      "priority": 4,
+      "category": "weapons.pistols.machine",
+      "item": "Parashield Dart Pistol",
+      "details": "Item \"parashield-dart-pistol\" not found in reference files for sources: Core",
+      "recommendation": "Verify source of \"parashield-dart-pistol\" - may need removal or move to sourcebook"
+    },
+    {
+      "type": "invalid_source",
+      "priority": 4,
+      "category": "weapons.pistols.machine",
+      "item": "Parashield Dart Rifle",
+      "details": "Item \"parashield-dart-rifle\" not found in reference files for sources: Core",
+      "recommendation": "Verify source of \"parashield-dart-rifle\" - may need removal or move to sourcebook"
+    },
+    {
+      "type": "invalid_source",
+      "priority": 4,
+      "category": "weapons.pistols.machine",
+      "item": "Remington Roomsweeper",
+      "details": "Item \"remington-roomsweeper\" not found in reference files for sources: Core",
+      "recommendation": "Verify source of \"remington-roomsweeper\" - may need removal or move to sourcebook"
+    },
+    {
+      "type": "invalid_source",
+      "priority": 4,
+      "category": "weapons.pistols.machine",
+      "item": "Ruger Super Warhawk",
+      "details": "Item \"ruger-super-warhawk\" not found in reference files for sources: Core",
+      "recommendation": "Verify source of \"ruger-super-warhawk\" - may need removal or move to sourcebook"
+    },
+    {
+      "type": "invalid_source",
+      "priority": 4,
+      "category": "weapons.pistols.machine",
+      "item": "Streetline Special",
+      "details": "Item \"streetline-special\" not found in reference files for sources: Core",
+      "recommendation": "Verify source of \"streetline-special\" - may need removal or move to sourcebook"
+    },
+    {
+      "type": "invalid_source",
+      "priority": 4,
+      "category": "weapons.pistols.machine",
+      "item": "Taurus Omni-6",
+      "details": "Item \"taurus-omni-6\" not found in reference files for sources: Core",
+      "recommendation": "Verify source of \"taurus-omni-6\" - may need removal or move to sourcebook"
+    },
+    {
+      "type": "invalid_source",
+      "priority": 4,
+      "category": "weapons.pistols.machine",
+      "item": "Walther Palm Pistol",
+      "details": "Item \"walther-palm-pistol\" not found in reference files for sources: Core",
+      "recommendation": "Verify source of \"walther-palm-pistol\" - may need removal or move to sourcebook"
+    },
+    {
+      "type": "invalid_source",
+      "priority": 4,
+      "category": "weapons.pistols.machine",
+      "item": "Yamaha Pulsar",
+      "details": "Item \"yamaha-pulsar\" not found in reference files for sources: Core",
+      "recommendation": "Verify source of \"yamaha-pulsar\" - may need removal or move to sourcebook"
+    },
+    {
+      "type": "data_mismatch",
+      "priority": 2,
+      "category": "weapons.smgs",
+      "item": "HK-227",
+      "details": "Field \"rc\" mismatch",
+      "expected": "– (1)",
+      "actual": 0,
+      "recommendation": "Update hk-227.rc from 0 to – (1)"
+    },
+    {
+      "type": "data_mismatch",
+      "priority": 2,
+      "category": "weapons.smgs",
+      "item": "SCK Model 100",
+      "details": "Field \"rc\" mismatch",
+      "expected": "– (1)",
+      "actual": 0,
+      "recommendation": "Update scm-70.rc from 0 to – (1)"
+    },
+    {
+      "type": "data_mismatch",
+      "priority": 2,
+      "category": "weapons.smgs",
+      "item": "Uzi IV",
+      "details": "Field \"rc\" mismatch",
+      "expected": "– (1)",
+      "actual": 1,
+      "recommendation": "Update uzi-iv.rc from 1 to – (1)"
+    },
+    {
+      "type": "invalid_source",
+      "priority": 4,
+      "category": "weapons.smgs",
+      "item": "Ares Crusader II",
+      "details": "Item \"ares-crusader-ii\" not found in reference files for sources: Core",
+      "recommendation": "Verify source of \"ares-crusader-ii\" - may need removal or move to sourcebook"
+    },
+    {
+      "type": "invalid_source",
+      "priority": 4,
+      "category": "weapons.smgs",
+      "item": "Ceska Black Scorpion",
+      "details": "Item \"ceska-black-scorpion\" not found in reference files for sources: Core",
+      "recommendation": "Verify source of \"ceska-black-scorpion\" - may need removal or move to sourcebook"
+    },
+    {
+      "type": "invalid_source",
+      "priority": 4,
+      "category": "weapons.smgs",
+      "item": "Steyr TMP",
+      "details": "Item \"steyr-tmp\" not found in reference files for sources: Core",
+      "recommendation": "Verify source of \"steyr-tmp\" - may need removal or move to sourcebook"
+    },
+    {
+      "type": "data_mismatch",
+      "priority": 2,
+      "category": "weapons.rifles.assault",
+      "item": "AK-97",
+      "details": "Field \"accuracy\" mismatch",
+      "expected": 4,
+      "actual": 5,
+      "recommendation": "Update ak-97.accuracy from 5 to 4"
+    },
+    {
+      "type": "data_mismatch",
+      "priority": 2,
+      "category": "weapons.rifles.assault",
+      "item": "Yamaha Raiden",
+      "details": "Field \"rc\" mismatch",
+      "expected": 2,
+      "actual": 6,
+      "recommendation": "Update yamaha-raiden.rc from 6 to 2"
+    },
+    {
+      "type": "invalid_source",
+      "priority": 4,
+      "category": "weapons.rifles.assault",
+      "item": "Ares Antioch-2",
+      "details": "Item \"ares-antioch-2\" not found in reference files for sources: Core",
+      "recommendation": "Verify source of \"ares-antioch-2\" - may need removal or move to sourcebook"
+    },
+    {
+      "type": "invalid_source",
+      "priority": 4,
+      "category": "weapons.rifles.assault",
+      "item": "ArmTech MGL-12",
+      "details": "Item \"armtech-mgl-12\" not found in reference files for sources: Core",
+      "recommendation": "Verify source of \"armtech-mgl-12\" - may need removal or move to sourcebook"
+    },
+    {
+      "type": "invalid_source",
+      "priority": 4,
+      "category": "weapons.rifles.assault",
+      "item": "Aztechnology Striker",
+      "details": "Item \"aztechnology-striker\" not found in reference files for sources: Core",
+      "recommendation": "Verify source of \"aztechnology-striker\" - may need removal or move to sourcebook"
+    },
+    {
+      "type": "invalid_source",
+      "priority": 4,
+      "category": "weapons.rifles.assault",
+      "item": "Ingram Valiant",
+      "details": "Item \"ingram-valiant\" not found in reference files for sources: Core",
+      "recommendation": "Verify source of \"ingram-valiant\" - may need removal or move to sourcebook"
+    },
+    {
+      "type": "invalid_source",
+      "priority": 4,
+      "category": "weapons.rifles.assault",
+      "item": "Krime Cannon",
+      "details": "Item \"krime-cannon\" not found in reference files for sources: Core",
+      "recommendation": "Verify source of \"krime-cannon\" - may need removal or move to sourcebook"
+    },
+    {
+      "type": "invalid_source",
+      "priority": 4,
+      "category": "weapons.rifles.assault",
+      "item": "Onotari Interceptor",
+      "details": "Item \"onotari-interceptor\" not found in reference files for sources: Core",
+      "recommendation": "Verify source of \"onotari-interceptor\" - may need removal or move to sourcebook"
+    },
+    {
+      "type": "invalid_source",
+      "priority": 4,
+      "category": "weapons.rifles.assault",
+      "item": "Panther XXL",
+      "details": "Item \"panther-xxl\" not found in reference files for sources: Core",
+      "recommendation": "Verify source of \"panther-xxl\" - may need removal or move to sourcebook"
+    },
+    {
+      "type": "invalid_source",
+      "priority": 4,
+      "category": "weapons.rifles.assault",
+      "item": "RPK HMG",
+      "details": "Item \"rpk-hmg\" not found in reference files for sources: Core",
+      "recommendation": "Verify source of \"rpk-hmg\" - may need removal or move to sourcebook"
+    },
+    {
+      "type": "invalid_source",
+      "priority": 4,
+      "category": "weapons.rifles.assault",
+      "item": "Stoner-Ares M202",
+      "details": "Item \"stoner-ares-m202\" not found in reference files for sources: Core",
+      "recommendation": "Verify source of \"stoner-ares-m202\" - may need removal or move to sourcebook"
+    },
+    {
+      "type": "data_mismatch",
+      "priority": 2,
+      "category": "weapons.sniperRifles",
+      "item": "Ares Desert Strike",
+      "details": "Field \"rc\" mismatch",
+      "expected": "– (1)",
+      "actual": 0,
+      "recommendation": "Update ares-desert-strike.rc from 0 to – (1)"
+    },
+    {
+      "type": "data_mismatch",
+      "priority": 2,
+      "category": "weapons.sniperRifles",
+      "item": "Cavalier Arms Crockett EBR",
+      "details": "Field \"rc\" mismatch",
+      "expected": "– (1)",
+      "actual": 1,
+      "recommendation": "Update cavalier-arms-crockett-ebr.rc from 1 to – (1)"
+    },
+    {
+      "type": "data_mismatch",
+      "priority": 2,
+      "category": "weapons.sniperRifles",
+      "item": "Ranger Arms SM-5",
+      "details": "Field \"rc\" mismatch",
+      "expected": "– (1)",
+      "actual": 0,
+      "recommendation": "Update ranger-arms-sm-5.rc from 0 to – (1)"
+    },
+    {
+      "type": "data_mismatch",
+      "priority": 2,
+      "category": "weapons.sniperRifles",
+      "item": "Ruger 100",
+      "details": "Field \"rc\" mismatch",
+      "expected": "– (1)",
+      "actual": 1,
+      "recommendation": "Update ruger-100.rc from 1 to – (1)"
+    },
+    {
+      "type": "missing",
+      "priority": 1,
+      "category": "weapons.shotguns",
+      "item": "Defiance T-250, short-barreled",
+      "details": "Item from Core not found in JSON",
+      "expected": {
+        "weapon": "Defiance T-250, short-barreled",
+        "acc": 4,
+        "dv": 9,
+        "ap": -1,
+        "modes": "SS/SA",
+        "rc": "–",
+        "ammo": 5,
+        "avail": 4,
+        "cost": 450,
+        "source": "Core"
+      },
+      "recommendation": "Add \"Defiance T-250, short-barreled\" to modules.gear.payload.weapons.shotguns"
+    },
+    {
+      "type": "data_mismatch",
+      "priority": 2,
+      "category": "weapons.shotguns",
+      "item": "PJSS Model 55",
+      "details": "Field \"rc\" mismatch",
+      "expected": "– (1)",
+      "actual": 1,
+      "recommendation": "Update pjss-model-55.rc from 1 to – (1)"
+    },
+    {
+      "type": "invalid_source",
+      "priority": 4,
+      "category": "weapons.shotguns",
+      "item": "Mossberg AM-CMDT",
+      "details": "Item \"mossberg-am-cmdt\" not found in reference files for sources: Core",
+      "recommendation": "Verify source of \"mossberg-am-cmdt\" - may need removal or move to sourcebook"
+    },
+    {
+      "type": "invalid_source",
+      "priority": 4,
+      "category": "modifications.weaponMods",
+      "item": "Airburst Link",
+      "details": "Item \"airburst-link\" not found in reference files for sources: Core",
+      "recommendation": "Verify source of \"airburst-link\" - may need removal or move to sourcebook"
+    },
+    {
+      "type": "invalid_source",
+      "priority": 4,
+      "category": "modifications.weaponMods",
+      "item": "Bipod",
+      "details": "Item \"bipod\" not found in reference files for sources: Core",
+      "recommendation": "Verify source of \"bipod\" - may need removal or move to sourcebook"
+    },
+    {
+      "type": "invalid_source",
+      "priority": 4,
+      "category": "modifications.weaponMods",
+      "item": "Concealable Holster",
+      "details": "Item \"concealable-holster\" not found in reference files for sources: Core",
+      "recommendation": "Verify source of \"concealable-holster\" - may need removal or move to sourcebook"
+    },
+    {
+      "type": "invalid_source",
+      "priority": 4,
+      "category": "modifications.weaponMods",
+      "item": "Gas-Vent System",
+      "details": "Item \"gas-vent-system\" not found in reference files for sources: Core",
+      "recommendation": "Verify source of \"gas-vent-system\" - may need removal or move to sourcebook"
+    },
+    {
+      "type": "invalid_source",
+      "priority": 4,
+      "category": "modifications.weaponMods",
+      "item": "Gyro Mount",
+      "details": "Item \"gyro-mount\" not found in reference files for sources: Core",
+      "recommendation": "Verify source of \"gyro-mount\" - may need removal or move to sourcebook"
+    },
+    {
+      "type": "invalid_source",
+      "priority": 4,
+      "category": "modifications.weaponMods",
+      "item": "Hidden Arm Slide",
+      "details": "Item \"hidden-arm-slide\" not found in reference files for sources: Core",
+      "recommendation": "Verify source of \"hidden-arm-slide\" - may need removal or move to sourcebook"
+    },
+    {
+      "type": "invalid_source",
+      "priority": 4,
+      "category": "modifications.weaponMods",
+      "item": "Imaging Scope",
+      "details": "Item \"imaging-scope\" not found in reference files for sources: Core",
+      "recommendation": "Verify source of \"imaging-scope\" - may need removal or move to sourcebook"
+    },
+    {
+      "type": "invalid_source",
+      "priority": 4,
+      "category": "modifications.weaponMods",
+      "item": "Laser Sight",
+      "details": "Item \"laser-sight\" not found in reference files for sources: Core",
+      "recommendation": "Verify source of \"laser-sight\" - may need removal or move to sourcebook"
+    },
+    {
+      "type": "invalid_source",
+      "priority": 4,
+      "category": "modifications.weaponMods",
+      "item": "Periscope",
+      "details": "Item \"periscope\" not found in reference files for sources: Core",
+      "recommendation": "Verify source of \"periscope\" - may need removal or move to sourcebook"
+    },
+    {
+      "type": "invalid_source",
+      "priority": 4,
+      "category": "modifications.weaponMods",
+      "item": "Quick-Draw Holster",
+      "details": "Item \"quick-draw-holster\" not found in reference files for sources: Core",
+      "recommendation": "Verify source of \"quick-draw-holster\" - may need removal or move to sourcebook"
+    },
+    {
+      "type": "invalid_source",
+      "priority": 4,
+      "category": "modifications.weaponMods",
+      "item": "Shock Pad",
+      "details": "Item \"shock-pad\" not found in reference files for sources: Core",
+      "recommendation": "Verify source of \"shock-pad\" - may need removal or move to sourcebook"
+    },
+    {
+      "type": "invalid_source",
+      "priority": 4,
+      "category": "modifications.weaponMods",
+      "item": "Silencer/Suppressor",
+      "details": "Item \"silencer-suppressor\" not found in reference files for sources: Core",
+      "recommendation": "Verify source of \"silencer-suppressor\" - may need removal or move to sourcebook"
+    },
+    {
+      "type": "invalid_source",
+      "priority": 4,
+      "category": "modifications.weaponMods",
+      "item": "Smart Firing Platform",
+      "details": "Item \"smart-firing-platform\" not found in reference files for sources: Core",
+      "recommendation": "Verify source of \"smart-firing-platform\" - may need removal or move to sourcebook"
+    },
+    {
+      "type": "invalid_source",
+      "priority": 4,
+      "category": "modifications.weaponMods",
+      "item": "Smartgun System, Internal",
+      "details": "Item \"smartgun-internal\" not found in reference files for sources: Core",
+      "recommendation": "Verify source of \"smartgun-internal\" - may need removal or move to sourcebook"
+    },
+    {
+      "type": "invalid_source",
+      "priority": 4,
+      "category": "modifications.weaponMods",
+      "item": "Smartgun System, External",
+      "details": "Item \"smartgun-external\" not found in reference files for sources: Core",
+      "recommendation": "Verify source of \"smartgun-external\" - may need removal or move to sourcebook"
+    },
+    {
+      "type": "invalid_source",
+      "priority": 4,
+      "category": "modifications.weaponMods",
+      "item": "Spare Clip",
+      "details": "Item \"spare-clip\" not found in reference files for sources: Core",
+      "recommendation": "Verify source of \"spare-clip\" - may need removal or move to sourcebook"
+    },
+    {
+      "type": "invalid_source",
+      "priority": 4,
+      "category": "modifications.weaponMods",
+      "item": "Speed Loader",
+      "details": "Item \"speed-loader\" not found in reference files for sources: Core",
+      "recommendation": "Verify source of \"speed-loader\" - may need removal or move to sourcebook"
+    },
+    {
+      "type": "invalid_source",
+      "priority": 4,
+      "category": "modifications.weaponMods",
+      "item": "Tripod",
+      "details": "Item \"tripod\" not found in reference files for sources: Core",
+      "recommendation": "Verify source of \"tripod\" - may need removal or move to sourcebook"
+    },
+    {
+      "type": "missing",
+      "priority": 1,
+      "category": "cyberware",
+      "item": "+1",
+      "details": "Item from Core not found in JSON",
+      "expected": {
+        "body boost": 1,
+        "armor": 1,
+        "unarmed damage": "(STR + 1)P"
+      },
+      "recommendation": "Add \"+1\" to modules.cyberware.payload.catalog"
+    },
+    {
+      "type": "missing",
+      "priority": 1,
+      "category": "cyberware",
+      "item": "+2",
+      "details": "Item from Core not found in JSON",
+      "expected": {
+        "body boost": 2,
+        "armor": 2,
+        "unarmed damage": "(STR + 2)P"
+      },
+      "recommendation": "Add \"+2\" to modules.cyberware.payload.catalog"
+    },
+    {
+      "type": "missing",
+      "priority": 1,
+      "category": "cyberware",
+      "item": "+3",
+      "details": "Item from Core not found in JSON",
+      "expected": {
+        "body boost": 3,
+        "armor": 3,
+        "unarmed damage": "(STR + 3)P"
+      },
+      "recommendation": "Add \"+3\" to modules.cyberware.payload.catalog"
+    },
+    {
+      "type": "invalid_source",
+      "priority": 4,
+      "category": "cyberware",
+      "item": "Datajack",
+      "details": "Item \"datajack\" not found in reference files for sources: Core",
+      "recommendation": "Verify source of \"datajack\" - may need removal or move to sourcebook"
+    },
+    {
+      "type": "invalid_source",
+      "priority": 4,
+      "category": "cyberware",
+      "item": "Commlink (Implanted)",
+      "details": "Item \"commlink-implant\" not found in reference files for sources: Core",
+      "recommendation": "Verify source of \"commlink-implant\" - may need removal or move to sourcebook"
+    },
+    {
+      "type": "invalid_source",
+      "priority": 4,
+      "category": "cyberware",
+      "item": "Control Rig (Rating 1)",
+      "details": "Item \"control-rig-1\" not found in reference files for sources: Core",
+      "recommendation": "Verify source of \"control-rig-1\" - may need removal or move to sourcebook"
+    },
+    {
+      "type": "invalid_source",
+      "priority": 4,
+      "category": "cyberware",
+      "item": "Control Rig (Rating 2)",
+      "details": "Item \"control-rig-2\" not found in reference files for sources: Core",
+      "recommendation": "Verify source of \"control-rig-2\" - may need removal or move to sourcebook"
+    },
+    {
+      "type": "invalid_source",
+      "priority": 4,
+      "category": "cyberware",
+      "item": "Control Rig (Rating 3)",
+      "details": "Item \"control-rig-3\" not found in reference files for sources: Core",
+      "recommendation": "Verify source of \"control-rig-3\" - may need removal or move to sourcebook"
+    },
+    {
+      "type": "invalid_source",
+      "priority": 4,
+      "category": "cyberware",
+      "item": "Cortex Bomb (Kink)",
+      "details": "Item \"cortex-bomb\" not found in reference files for sources: Core",
+      "recommendation": "Verify source of \"cortex-bomb\" - may need removal or move to sourcebook"
+    },
+    {
+      "type": "invalid_source",
+      "priority": 4,
+      "category": "cyberware",
+      "item": "Cortex Bomb (Micro)",
+      "details": "Item \"cortex-bomb-micro\" not found in reference files for sources: Core",
+      "recommendation": "Verify source of \"cortex-bomb-micro\" - may need removal or move to sourcebook"
+    },
+    {
+      "type": "invalid_source",
+      "priority": 4,
+      "category": "cyberware",
+      "item": "Cortex Bomb (Area)",
+      "details": "Item \"cortex-bomb-area\" not found in reference files for sources: Core",
+      "recommendation": "Verify source of \"cortex-bomb-area\" - may need removal or move to sourcebook"
+    },
+    {
+      "type": "invalid_source",
+      "priority": 4,
+      "category": "cyberware",
+      "item": "Olfactory Booster",
+      "details": "Item \"olfactory-booster\" not found in reference files for sources: Core",
+      "recommendation": "Verify source of \"olfactory-booster\" - may need removal or move to sourcebook"
+    },
+    {
+      "type": "invalid_source",
+      "priority": 4,
+      "category": "cyberware",
+      "item": "Taste Booster",
+      "details": "Item \"taste-booster\" not found in reference files for sources: Core",
+      "recommendation": "Verify source of \"taste-booster\" - may need removal or move to sourcebook"
+    },
+    {
+      "type": "invalid_source",
+      "priority": 4,
+      "category": "cyberware",
+      "item": "Tooth Compartment",
+      "details": "Item \"tooth-compartment\" not found in reference files for sources: Core",
+      "recommendation": "Verify source of \"tooth-compartment\" - may need removal or move to sourcebook"
+    },
+    {
+      "type": "invalid_source",
+      "priority": 4,
+      "category": "cyberware",
+      "item": "Ultrasound Sensor",
+      "details": "Item \"ultrasound-sensor\" not found in reference files for sources: Core",
+      "recommendation": "Verify source of \"ultrasound-sensor\" - may need removal or move to sourcebook"
+    },
+    {
+      "type": "invalid_source",
+      "priority": 4,
+      "category": "cyberware",
+      "item": "Voice Modulator",
+      "details": "Item \"voice-modulator\" not found in reference files for sources: Core",
+      "recommendation": "Verify source of \"voice-modulator\" - may need removal or move to sourcebook"
+    },
+    {
+      "type": "invalid_source",
+      "priority": 4,
+      "category": "cyberware",
+      "item": "Skilljack",
+      "details": "Item \"skilljack\" not found in reference files for sources: Core",
+      "recommendation": "Verify source of \"skilljack\" - may need removal or move to sourcebook"
+    },
+    {
+      "type": "invalid_source",
+      "priority": 4,
+      "category": "cyberware",
+      "item": "Simrig",
+      "details": "Item \"simrig\" not found in reference files for sources: Core",
+      "recommendation": "Verify source of \"simrig\" - may need removal or move to sourcebook"
+    },
+    {
+      "type": "invalid_source",
+      "priority": 4,
+      "category": "cyberware",
+      "item": "Data Lock",
+      "details": "Item \"data-lock\" not found in reference files for sources: Core",
+      "recommendation": "Verify source of \"data-lock\" - may need removal or move to sourcebook"
+    },
+    {
+      "type": "invalid_source",
+      "priority": 4,
+      "category": "cyberware",
+      "item": "Cyberdeck (Implanted)",
+      "details": "Item \"cyberdeck-implant\" not found in reference files for sources: Core",
+      "recommendation": "Verify source of \"cyberdeck-implant\" - may need removal or move to sourcebook"
+    },
+    {
+      "type": "invalid_source",
+      "priority": 4,
+      "category": "cyberware",
+      "item": "Cybereyes (Rating 1)",
+      "details": "Item \"cybereyes-1\" not found in reference files for sources: Core",
+      "recommendation": "Verify source of \"cybereyes-1\" - may need removal or move to sourcebook"
+    },
+    {
+      "type": "invalid_source",
+      "priority": 4,
+      "category": "cyberware",
+      "item": "Cybereyes (Rating 2)",
+      "details": "Item \"cybereyes-2\" not found in reference files for sources: Core",
+      "recommendation": "Verify source of \"cybereyes-2\" - may need removal or move to sourcebook"
+    },
+    {
+      "type": "invalid_source",
+      "priority": 4,
+      "category": "cyberware",
+      "item": "Cybereyes (Rating 3)",
+      "details": "Item \"cybereyes-3\" not found in reference files for sources: Core",
+      "recommendation": "Verify source of \"cybereyes-3\" - may need removal or move to sourcebook"
+    },
+    {
+      "type": "invalid_source",
+      "priority": 4,
+      "category": "cyberware",
+      "item": "Cybereyes (Rating 4)",
+      "details": "Item \"cybereyes-4\" not found in reference files for sources: Core",
+      "recommendation": "Verify source of \"cybereyes-4\" - may need removal or move to sourcebook"
+    },
+    {
+      "type": "invalid_source",
+      "priority": 4,
+      "category": "cyberware",
+      "item": "Flare Compensation",
+      "details": "Item \"eye-flare-compensation\" not found in reference files for sources: Core",
+      "recommendation": "Verify source of \"eye-flare-compensation\" - may need removal or move to sourcebook"
+    },
+    {
+      "type": "invalid_source",
+      "priority": 4,
+      "category": "cyberware",
+      "item": "Image Link",
+      "details": "Item \"eye-image-link\" not found in reference files for sources: Core",
+      "recommendation": "Verify source of \"eye-image-link\" - may need removal or move to sourcebook"
+    },
+    {
+      "type": "invalid_source",
+      "priority": 4,
+      "category": "cyberware",
+      "item": "Low-Light Vision",
+      "details": "Item \"eye-low-light-vision\" not found in reference files for sources: Core",
+      "recommendation": "Verify source of \"eye-low-light-vision\" - may need removal or move to sourcebook"
+    },
+    {
+      "type": "invalid_source",
+      "priority": 4,
+      "category": "cyberware",
+      "item": "Smartlink",
+      "details": "Item \"eye-smartlink\" not found in reference files for sources: Core",
+      "recommendation": "Verify source of \"eye-smartlink\" - may need removal or move to sourcebook"
+    },
+    {
+      "type": "invalid_source",
+      "priority": 4,
+      "category": "cyberware",
+      "item": "Thermographic Vision",
+      "details": "Item \"eye-thermographic-vision\" not found in reference files for sources: Core",
+      "recommendation": "Verify source of \"eye-thermographic-vision\" - may need removal or move to sourcebook"
+    },
+    {
+      "type": "invalid_source",
+      "priority": 4,
+      "category": "cyberware",
+      "item": "Vision Enhancement",
+      "details": "Item \"eye-vision-enhancement\" not found in reference files for sources: Core",
+      "recommendation": "Verify source of \"eye-vision-enhancement\" - may need removal or move to sourcebook"
+    },
+    {
+      "type": "invalid_source",
+      "priority": 4,
+      "category": "cyberware",
+      "item": "Vision Magnification",
+      "details": "Item \"eye-vision-magnification\" not found in reference files for sources: Core",
+      "recommendation": "Verify source of \"eye-vision-magnification\" - may need removal or move to sourcebook"
+    },
+    {
+      "type": "invalid_source",
+      "priority": 4,
+      "category": "cyberware",
+      "item": "Retinal Duplication",
+      "details": "Item \"retinal-duplication\" not found in reference files for sources: Core",
+      "recommendation": "Verify source of \"retinal-duplication\" - may need removal or move to sourcebook"
+    },
+    {
+      "type": "invalid_source",
+      "priority": 4,
+      "category": "cyberware",
+      "item": "Cyberears (Rating 1)",
+      "details": "Item \"cyberears-1\" not found in reference files for sources: Core",
+      "recommendation": "Verify source of \"cyberears-1\" - may need removal or move to sourcebook"
+    },
+    {
+      "type": "invalid_source",
+      "priority": 4,
+      "category": "cyberware",
+      "item": "Cyberears (Rating 2)",
+      "details": "Item \"cyberears-2\" not found in reference files for sources: Core",
+      "recommendation": "Verify source of \"cyberears-2\" - may need removal or move to sourcebook"
+    },
+    {
+      "type": "invalid_source",
+      "priority": 4,
+      "category": "cyberware",
+      "item": "Cyberears (Rating 3)",
+      "details": "Item \"cyberears-3\" not found in reference files for sources: Core",
+      "recommendation": "Verify source of \"cyberears-3\" - may need removal or move to sourcebook"
+    },
+    {
+      "type": "invalid_source",
+      "priority": 4,
+      "category": "cyberware",
+      "item": "Cyberears (Rating 4)",
+      "details": "Item \"cyberears-4\" not found in reference files for sources: Core",
+      "recommendation": "Verify source of \"cyberears-4\" - may need removal or move to sourcebook"
+    },
+    {
+      "type": "invalid_source",
+      "priority": 4,
+      "category": "cyberware",
+      "item": "Audio Enhancement",
+      "details": "Item \"ear-audio-enhancement\" not found in reference files for sources: Core",
+      "recommendation": "Verify source of \"ear-audio-enhancement\" - may need removal or move to sourcebook"
+    },
+    {
+      "type": "invalid_source",
+      "priority": 4,
+      "category": "cyberware",
+      "item": "Balance Augmenter",
+      "details": "Item \"ear-balance-augmenter\" not found in reference files for sources: Core",
+      "recommendation": "Verify source of \"ear-balance-augmenter\" - may need removal or move to sourcebook"
+    },
+    {
+      "type": "invalid_source",
+      "priority": 4,
+      "category": "cyberware",
+      "item": "Damper",
+      "details": "Item \"ear-damper\" not found in reference files for sources: Core",
+      "recommendation": "Verify source of \"ear-damper\" - may need removal or move to sourcebook"
+    },
+    {
+      "type": "invalid_source",
+      "priority": 4,
+      "category": "cyberware",
+      "item": "Select Sound Filter",
+      "details": "Item \"ear-select-sound-filter\" not found in reference files for sources: Core",
+      "recommendation": "Verify source of \"ear-select-sound-filter\" - may need removal or move to sourcebook"
+    },
+    {
+      "type": "invalid_source",
+      "priority": 4,
+      "category": "cyberware",
+      "item": "Spatial Recognizer",
+      "details": "Item \"ear-spatial-recognizer\" not found in reference files for sources: Core",
+      "recommendation": "Verify source of \"ear-spatial-recognizer\" - may need removal or move to sourcebook"
+    },
+    {
+      "type": "invalid_source",
+      "priority": 4,
+      "category": "cyberware",
+      "item": "Bone Lacing (Plastic)",
+      "details": "Item \"bone-lacing-plastic\" not found in reference files for sources: Core",
+      "recommendation": "Verify source of \"bone-lacing-plastic\" - may need removal or move to sourcebook"
+    },
+    {
+      "type": "invalid_source",
+      "priority": 4,
+      "category": "cyberware",
+      "item": "Bone Lacing (Aluminum)",
+      "details": "Item \"bone-lacing-aluminum\" not found in reference files for sources: Core",
+      "recommendation": "Verify source of \"bone-lacing-aluminum\" - may need removal or move to sourcebook"
+    },
+    {
+      "type": "invalid_source",
+      "priority": 4,
+      "category": "cyberware",
+      "item": "Bone Lacing (Titanium)",
+      "details": "Item \"bone-lacing-titanium\" not found in reference files for sources: Core",
+      "recommendation": "Verify source of \"bone-lacing-titanium\" - may need removal or move to sourcebook"
+    },
+    {
+      "type": "invalid_source",
+      "priority": 4,
+      "category": "cyberware",
+      "item": "Dermal Plating (Rating 1)",
+      "details": "Item \"dermal-plating-1\" not found in reference files for sources: Core",
+      "recommendation": "Verify source of \"dermal-plating-1\" - may need removal or move to sourcebook"
+    },
+    {
+      "type": "invalid_source",
+      "priority": 4,
+      "category": "cyberware",
+      "item": "Dermal Plating (Rating 2)",
+      "details": "Item \"dermal-plating-2\" not found in reference files for sources: Core",
+      "recommendation": "Verify source of \"dermal-plating-2\" - may need removal or move to sourcebook"
+    },
+    {
+      "type": "invalid_source",
+      "priority": 4,
+      "category": "cyberware",
+      "item": "Dermal Plating (Rating 3)",
+      "details": "Item \"dermal-plating-3\" not found in reference files for sources: Core",
+      "recommendation": "Verify source of \"dermal-plating-3\" - may need removal or move to sourcebook"
+    },
+    {
+      "type": "invalid_source",
+      "priority": 4,
+      "category": "cyberware",
+      "item": "Dermal Plating (Rating 4)",
+      "details": "Item \"dermal-plating-4\" not found in reference files for sources: Core",
+      "recommendation": "Verify source of \"dermal-plating-4\" - may need removal or move to sourcebook"
+    },
+    {
+      "type": "invalid_source",
+      "priority": 4,
+      "category": "cyberware",
+      "item": "Dermal Plating (Rating 5)",
+      "details": "Item \"dermal-plating-5\" not found in reference files for sources: Core",
+      "recommendation": "Verify source of \"dermal-plating-5\" - may need removal or move to sourcebook"
+    },
+    {
+      "type": "invalid_source",
+      "priority": 4,
+      "category": "cyberware",
+      "item": "Dermal Plating (Rating 6)",
+      "details": "Item \"dermal-plating-6\" not found in reference files for sources: Core",
+      "recommendation": "Verify source of \"dermal-plating-6\" - may need removal or move to sourcebook"
+    },
+    {
+      "type": "invalid_source",
+      "priority": 4,
+      "category": "cyberware",
+      "item": "Fingertip Compartment",
+      "details": "Item \"fingertip-compartment\" not found in reference files for sources: Core",
+      "recommendation": "Verify source of \"fingertip-compartment\" - may need removal or move to sourcebook"
+    },
+    {
+      "type": "invalid_source",
+      "priority": 4,
+      "category": "cyberware",
+      "item": "Grapple Gun (Implant)",
+      "details": "Item \"grapple-gun-implant\" not found in reference files for sources: Core",
+      "recommendation": "Verify source of \"grapple-gun-implant\" - may need removal or move to sourcebook"
+    },
+    {
+      "type": "invalid_source",
+      "priority": 4,
+      "category": "cyberware",
+      "item": "Internal Air Tank (Rating 1)",
+      "details": "Item \"internal-air-tank-1\" not found in reference files for sources: Core",
+      "recommendation": "Verify source of \"internal-air-tank-1\" - may need removal or move to sourcebook"
+    },
+    {
+      "type": "invalid_source",
+      "priority": 4,
+      "category": "cyberware",
+      "item": "Internal Air Tank (Rating 2)",
+      "details": "Item \"internal-air-tank-2\" not found in reference files for sources: Core",
+      "recommendation": "Verify source of \"internal-air-tank-2\" - may need removal or move to sourcebook"
+    },
+    {
+      "type": "invalid_source",
+      "priority": 4,
+      "category": "cyberware",
+      "item": "Internal Air Tank (Rating 3)",
+      "details": "Item \"internal-air-tank-3\" not found in reference files for sources: Core",
+      "recommendation": "Verify source of \"internal-air-tank-3\" - may need removal or move to sourcebook"
+    },
+    {
+      "type": "invalid_source",
+      "priority": 4,
+      "category": "cyberware",
+      "item": "Muscle Replacement (Rating 1)",
+      "details": "Item \"muscle-replacement-1\" not found in reference files for sources: Core",
+      "recommendation": "Verify source of \"muscle-replacement-1\" - may need removal or move to sourcebook"
+    },
+    {
+      "type": "invalid_source",
+      "priority": 4,
+      "category": "cyberware",
+      "item": "Muscle Replacement (Rating 2)",
+      "details": "Item \"muscle-replacement-2\" not found in reference files for sources: Core",
+      "recommendation": "Verify source of \"muscle-replacement-2\" - may need removal or move to sourcebook"
+    },
+    {
+      "type": "invalid_source",
+      "priority": 4,
+      "category": "cyberware",
+      "item": "Muscle Replacement (Rating 3)",
+      "details": "Item \"muscle-replacement-3\" not found in reference files for sources: Core",
+      "recommendation": "Verify source of \"muscle-replacement-3\" - may need removal or move to sourcebook"
+    },
+    {
+      "type": "invalid_source",
+      "priority": 4,
+      "category": "cyberware",
+      "item": "Muscle Replacement (Rating 4)",
+      "details": "Item \"muscle-replacement-4\" not found in reference files for sources: Core",
+      "recommendation": "Verify source of \"muscle-replacement-4\" - may need removal or move to sourcebook"
+    },
+    {
+      "type": "invalid_source",
+      "priority": 4,
+      "category": "cyberware",
+      "item": "Orthoskin (Rating 1)",
+      "details": "Item \"orthoskin-1\" not found in reference files for sources: Core",
+      "recommendation": "Verify source of \"orthoskin-1\" - may need removal or move to sourcebook"
+    },
+    {
+      "type": "invalid_source",
+      "priority": 4,
+      "category": "cyberware",
+      "item": "Orthoskin (Rating 2)",
+      "details": "Item \"orthoskin-2\" not found in reference files for sources: Core",
+      "recommendation": "Verify source of \"orthoskin-2\" - may need removal or move to sourcebook"
+    },
+    {
+      "type": "invalid_source",
+      "priority": 4,
+      "category": "cyberware",
+      "item": "Orthoskin (Rating 3)",
+      "details": "Item \"orthoskin-3\" not found in reference files for sources: Core",
+      "recommendation": "Verify source of \"orthoskin-3\" - may need removal or move to sourcebook"
+    },
+    {
+      "type": "invalid_source",
+      "priority": 4,
+      "category": "cyberware",
+      "item": "Orthoskin (Rating 4)",
+      "details": "Item \"orthoskin-4\" not found in reference files for sources: Core",
+      "recommendation": "Verify source of \"orthoskin-4\" - may need removal or move to sourcebook"
+    },
+    {
+      "type": "invalid_source",
+      "priority": 4,
+      "category": "cyberware",
+      "item": "Platelet Factories",
+      "details": "Item \"platelet-factories\" not found in reference files for sources: Core",
+      "recommendation": "Verify source of \"platelet-factories\" - may need removal or move to sourcebook"
+    },
+    {
+      "type": "invalid_source",
+      "priority": 4,
+      "category": "cyberware",
+      "item": "Reaction Enhancers (Rating 1)",
+      "details": "Item \"reaction-enhancers-1\" not found in reference files for sources: Core",
+      "recommendation": "Verify source of \"reaction-enhancers-1\" - may need removal or move to sourcebook"
+    },
+    {
+      "type": "invalid_source",
+      "priority": 4,
+      "category": "cyberware",
+      "item": "Reaction Enhancers (Rating 2)",
+      "details": "Item \"reaction-enhancers-2\" not found in reference files for sources: Core",
+      "recommendation": "Verify source of \"reaction-enhancers-2\" - may need removal or move to sourcebook"
+    },
+    {
+      "type": "invalid_source",
+      "priority": 4,
+      "category": "cyberware",
+      "item": "Reaction Enhancers (Rating 3)",
+      "details": "Item \"reaction-enhancers-3\" not found in reference files for sources: Core",
+      "recommendation": "Verify source of \"reaction-enhancers-3\" - may need removal or move to sourcebook"
+    },
+    {
+      "type": "invalid_source",
+      "priority": 4,
+      "category": "cyberware",
+      "item": "Skillwires",
+      "details": "Item \"skillwires\" not found in reference files for sources: Core",
+      "recommendation": "Verify source of \"skillwires\" - may need removal or move to sourcebook"
+    },
+    {
+      "type": "invalid_source",
+      "priority": 4,
+      "category": "cyberware",
+      "item": "Smuggling Compartment",
+      "details": "Item \"smuggling-compartment\" not found in reference files for sources: Core",
+      "recommendation": "Verify source of \"smuggling-compartment\" - may need removal or move to sourcebook"
+    },
+    {
+      "type": "invalid_source",
+      "priority": 4,
+      "category": "cyberware",
+      "item": "Suprathyroid Gland",
+      "details": "Item \"suprathyroid-gland\" not found in reference files for sources: Core",
+      "recommendation": "Verify source of \"suprathyroid-gland\" - may need removal or move to sourcebook"
+    },
+    {
+      "type": "invalid_source",
+      "priority": 4,
+      "category": "cyberware",
+      "item": "Synthacardium (Rating 1)",
+      "details": "Item \"synthacardium-1\" not found in reference files for sources: Core",
+      "recommendation": "Verify source of \"synthacardium-1\" - may need removal or move to sourcebook"
+    },
+    {
+      "type": "invalid_source",
+      "priority": 4,
+      "category": "cyberware",
+      "item": "Synthacardium (Rating 2)",
+      "details": "Item \"synthacardium-2\" not found in reference files for sources: Core",
+      "recommendation": "Verify source of \"synthacardium-2\" - may need removal or move to sourcebook"
+    },
+    {
+      "type": "invalid_source",
+      "priority": 4,
+      "category": "cyberware",
+      "item": "Synthacardium (Rating 3)",
+      "details": "Item \"synthacardium-3\" not found in reference files for sources: Core",
+      "recommendation": "Verify source of \"synthacardium-3\" - may need removal or move to sourcebook"
+    },
+    {
+      "type": "invalid_source",
+      "priority": 4,
+      "category": "cyberware",
+      "item": "Wired Reflexes (Rating 1)",
+      "details": "Item \"wired-reflexes-1\" not found in reference files for sources: Core",
+      "recommendation": "Verify source of \"wired-reflexes-1\" - may need removal or move to sourcebook"
+    },
+    {
+      "type": "invalid_source",
+      "priority": 4,
+      "category": "cyberware",
+      "item": "Wired Reflexes (Rating 2)",
+      "details": "Item \"wired-reflexes-2\" not found in reference files for sources: Core",
+      "recommendation": "Verify source of \"wired-reflexes-2\" - may need removal or move to sourcebook"
+    },
+    {
+      "type": "invalid_source",
+      "priority": 4,
+      "category": "cyberware",
+      "item": "Wired Reflexes (Rating 3)",
+      "details": "Item \"wired-reflexes-3\" not found in reference files for sources: Core",
+      "recommendation": "Verify source of \"wired-reflexes-3\" - may need removal or move to sourcebook"
+    },
+    {
+      "type": "invalid_source",
+      "priority": 4,
+      "category": "cyberware",
+      "item": "Obvious Cyberarm",
+      "details": "Item \"cyberlimb-arm\" not found in reference files for sources: Core",
+      "recommendation": "Verify source of \"cyberlimb-arm\" - may need removal or move to sourcebook"
+    },
+    {
+      "type": "invalid_source",
+      "priority": 4,
+      "category": "cyberware",
+      "item": "Synthetic Cyberarm",
+      "details": "Item \"cyberlimb-arm-synthetic\" not found in reference files for sources: Core",
+      "recommendation": "Verify source of \"cyberlimb-arm-synthetic\" - may need removal or move to sourcebook"
+    },
+    {
+      "type": "invalid_source",
+      "priority": 4,
+      "category": "cyberware",
+      "item": "Obvious Cyberleg",
+      "details": "Item \"cyberlimb-leg\" not found in reference files for sources: Core",
+      "recommendation": "Verify source of \"cyberlimb-leg\" - may need removal or move to sourcebook"
+    },
+    {
+      "type": "invalid_source",
+      "priority": 4,
+      "category": "cyberware",
+      "item": "Synthetic Cyberleg",
+      "details": "Item \"cyberlimb-leg-synthetic\" not found in reference files for sources: Core",
+      "recommendation": "Verify source of \"cyberlimb-leg-synthetic\" - may need removal or move to sourcebook"
+    },
+    {
+      "type": "invalid_source",
+      "priority": 4,
+      "category": "cyberware",
+      "item": "Obvious Cybertorso",
+      "details": "Item \"cyberlimb-torso\" not found in reference files for sources: Core",
+      "recommendation": "Verify source of \"cyberlimb-torso\" - may need removal or move to sourcebook"
+    },
+    {
+      "type": "invalid_source",
+      "priority": 4,
+      "category": "cyberware",
+      "item": "Obvious Cyberskull",
+      "details": "Item \"cyberlimb-skull\" not found in reference files for sources: Core",
+      "recommendation": "Verify source of \"cyberlimb-skull\" - may need removal or move to sourcebook"
+    },
+    {
+      "type": "invalid_source",
+      "priority": 4,
+      "category": "cyberware",
+      "item": "Obvious Cyberhand",
+      "details": "Item \"cyberlimb-hand\" not found in reference files for sources: Core",
+      "recommendation": "Verify source of \"cyberlimb-hand\" - may need removal or move to sourcebook"
+    },
+    {
+      "type": "invalid_source",
+      "priority": 4,
+      "category": "cyberware",
+      "item": "Obvious Cyberfoot",
+      "details": "Item \"cyberlimb-foot\" not found in reference files for sources: Core",
+      "recommendation": "Verify source of \"cyberlimb-foot\" - may need removal or move to sourcebook"
+    },
+    {
+      "type": "invalid_source",
+      "priority": 4,
+      "category": "cyberware",
+      "item": "Obvious Lower Cyberarm",
+      "details": "Item \"cyberlimb-lower-arm\" not found in reference files for sources: Core",
+      "recommendation": "Verify source of \"cyberlimb-lower-arm\" - may need removal or move to sourcebook"
+    },
+    {
+      "type": "invalid_source",
+      "priority": 4,
+      "category": "cyberware",
+      "item": "Obvious Lower Cyberleg",
+      "details": "Item \"cyberlimb-lower-leg\" not found in reference files for sources: Core",
+      "recommendation": "Verify source of \"cyberlimb-lower-leg\" - may need removal or move to sourcebook"
+    },
+    {
+      "type": "invalid_source",
+      "priority": 4,
+      "category": "cyberware",
+      "item": "Cyberlimb Agility Enhancement",
+      "details": "Item \"cyberlimb-agility\" not found in reference files for sources: Core",
+      "recommendation": "Verify source of \"cyberlimb-agility\" - may need removal or move to sourcebook"
+    },
+    {
+      "type": "invalid_source",
+      "priority": 4,
+      "category": "cyberware",
+      "item": "Cyberlimb Strength Enhancement",
+      "details": "Item \"cyberlimb-strength\" not found in reference files for sources: Core",
+      "recommendation": "Verify source of \"cyberlimb-strength\" - may need removal or move to sourcebook"
+    },
+    {
+      "type": "invalid_source",
+      "priority": 4,
+      "category": "cyberware",
+      "item": "Cyberlimb Armor",
+      "details": "Item \"cyberlimb-armor\" not found in reference files for sources: Core",
+      "recommendation": "Verify source of \"cyberlimb-armor\" - may need removal or move to sourcebook"
+    },
+    {
+      "type": "invalid_source",
+      "priority": 4,
+      "category": "cyberware",
+      "item": "Gyromount",
+      "details": "Item \"cyberlimb-gyromount\" not found in reference files for sources: Core",
+      "recommendation": "Verify source of \"cyberlimb-gyromount\" - may need removal or move to sourcebook"
+    },
+    {
+      "type": "invalid_source",
+      "priority": 4,
+      "category": "cyberware",
+      "item": "Cyberlimb Holster",
+      "details": "Item \"cyberlimb-holster\" not found in reference files for sources: Core",
+      "recommendation": "Verify source of \"cyberlimb-holster\" - may need removal or move to sourcebook"
+    },
+    {
+      "type": "invalid_source",
+      "priority": 4,
+      "category": "cyberware",
+      "item": "Cyberlimb Slide",
+      "details": "Item \"cyberlimb-slide\" not found in reference files for sources: Core",
+      "recommendation": "Verify source of \"cyberlimb-slide\" - may need removal or move to sourcebook"
+    },
+    {
+      "type": "invalid_source",
+      "priority": 4,
+      "category": "cyberware",
+      "item": "Hand Blade",
+      "details": "Item \"hand-blade\" not found in reference files for sources: Core",
+      "recommendation": "Verify source of \"hand-blade\" - may need removal or move to sourcebook"
+    },
+    {
+      "type": "invalid_source",
+      "priority": 4,
+      "category": "cyberware",
+      "item": "Hand Razors",
+      "details": "Item \"hand-razors\" not found in reference files for sources: Core",
+      "recommendation": "Verify source of \"hand-razors\" - may need removal or move to sourcebook"
+    },
+    {
+      "type": "invalid_source",
+      "priority": 4,
+      "category": "cyberware",
+      "item": "Spur",
+      "details": "Item \"spur\" not found in reference files for sources: Core",
+      "recommendation": "Verify source of \"spur\" - may need removal or move to sourcebook"
+    },
+    {
+      "type": "invalid_source",
+      "priority": 4,
+      "category": "cyberware",
+      "item": "Shock Hand",
+      "details": "Item \"shock-hand\" not found in reference files for sources: Core",
+      "recommendation": "Verify source of \"shock-hand\" - may need removal or move to sourcebook"
+    },
+    {
+      "type": "invalid_source",
+      "priority": 4,
+      "category": "cyberware",
+      "item": "Implant Weapon (Hold-Out Pistol)",
+      "details": "Item \"implant-weapon-holdout\" not found in reference files for sources: Core",
+      "recommendation": "Verify source of \"implant-weapon-holdout\" - may need removal or move to sourcebook"
+    },
+    {
+      "type": "invalid_source",
+      "priority": 4,
+      "category": "cyberware",
+      "item": "Implant Weapon (Light Pistol)",
+      "details": "Item \"implant-weapon-light-pistol\" not found in reference files for sources: Core",
+      "recommendation": "Verify source of \"implant-weapon-light-pistol\" - may need removal or move to sourcebook"
+    },
+    {
+      "type": "invalid_source",
+      "priority": 4,
+      "category": "cyberware",
+      "item": "Implant Weapon (Machine Pistol)",
+      "details": "Item \"implant-weapon-machine-pistol\" not found in reference files for sources: Core",
+      "recommendation": "Verify source of \"implant-weapon-machine-pistol\" - may need removal or move to sourcebook"
+    },
+    {
+      "type": "invalid_source",
+      "priority": 4,
+      "category": "cyberware",
+      "item": "Implant Weapon (Heavy Pistol)",
+      "details": "Item \"implant-weapon-heavy-pistol\" not found in reference files for sources: Core",
+      "recommendation": "Verify source of \"implant-weapon-heavy-pistol\" - may need removal or move to sourcebook"
+    },
+    {
+      "type": "invalid_source",
+      "priority": 4,
+      "category": "cyberware",
+      "item": "Implant Weapon (Submachine Gun)",
+      "details": "Item \"implant-weapon-smg\" not found in reference files for sources: Core",
+      "recommendation": "Verify source of \"implant-weapon-smg\" - may need removal or move to sourcebook"
+    },
+    {
+      "type": "invalid_source",
+      "priority": 4,
+      "category": "cyberware",
+      "item": "Implant Weapon (Shotgun)",
+      "details": "Item \"implant-weapon-shotgun\" not found in reference files for sources: Core",
+      "recommendation": "Verify source of \"implant-weapon-shotgun\" - may need removal or move to sourcebook"
+    },
+    {
+      "type": "invalid_source",
+      "priority": 4,
+      "category": "cyberware",
+      "item": "Implant Weapon (Grenade Launcher)",
+      "details": "Item \"implant-weapon-grenade-launcher\" not found in reference files for sources: Core",
+      "recommendation": "Verify source of \"implant-weapon-grenade-launcher\" - may need removal or move to sourcebook"
+    },
+    {
+      "type": "invalid_source",
+      "priority": 4,
+      "category": "cyberware",
+      "item": "External Clip Port",
+      "details": "Item \"implant-weapon-external-clip\" not found in reference files for sources: Core",
+      "recommendation": "Verify source of \"implant-weapon-external-clip\" - may need removal or move to sourcebook"
+    },
+    {
+      "type": "invalid_source",
+      "priority": 4,
+      "category": "cyberware",
+      "item": "Laser Sight (Implant)",
+      "details": "Item \"implant-weapon-laser-sight\" not found in reference files for sources: Core",
+      "recommendation": "Verify source of \"implant-weapon-laser-sight\" - may need removal or move to sourcebook"
+    },
+    {
+      "type": "invalid_source",
+      "priority": 4,
+      "category": "cyberware",
+      "item": "Silencer/Suppressor (Implant)",
+      "details": "Item \"implant-weapon-silencer\" not found in reference files for sources: Core",
+      "recommendation": "Verify source of \"implant-weapon-silencer\" - may need removal or move to sourcebook"
+    },
+    {
+      "type": "invalid_source",
+      "priority": 4,
+      "category": "cyberware",
+      "item": "Cyber Holster",
+      "details": "Item \"cyber-holster\" not found in reference files for sources: Core",
+      "recommendation": "Verify source of \"cyber-holster\" - may need removal or move to sourcebook"
+    },
+    {
+      "type": "invalid_source",
+      "priority": 4,
+      "category": "bioware",
+      "item": "Adrenaline Pump (Rating 1)",
+      "details": "Item \"adrenaline-pump-1\" not found in reference files for sources: Core",
+      "recommendation": "Verify source of \"adrenaline-pump-1\" - may need removal or move to sourcebook"
+    },
+    {
+      "type": "invalid_source",
+      "priority": 4,
+      "category": "bioware",
+      "item": "Adrenaline Pump (Rating 2)",
+      "details": "Item \"adrenaline-pump-2\" not found in reference files for sources: Core",
+      "recommendation": "Verify source of \"adrenaline-pump-2\" - may need removal or move to sourcebook"
+    },
+    {
+      "type": "invalid_source",
+      "priority": 4,
+      "category": "bioware",
+      "item": "Adrenaline Pump (Rating 3)",
+      "details": "Item \"adrenaline-pump-3\" not found in reference files for sources: Core",
+      "recommendation": "Verify source of \"adrenaline-pump-3\" - may need removal or move to sourcebook"
+    },
+    {
+      "type": "invalid_source",
+      "priority": 4,
+      "category": "bioware",
+      "item": "Cat's Eyes",
+      "details": "Item \"cat-eyes\" not found in reference files for sources: Core",
+      "recommendation": "Verify source of \"cat-eyes\" - may need removal or move to sourcebook"
+    },
+    {
+      "type": "invalid_source",
+      "priority": 4,
+      "category": "bioware",
+      "item": "Enhanced Articulation",
+      "details": "Item \"enhanced-articulation\" not found in reference files for sources: Core",
+      "recommendation": "Verify source of \"enhanced-articulation\" - may need removal or move to sourcebook"
+    },
+    {
+      "type": "invalid_source",
+      "priority": 4,
+      "category": "bioware",
+      "item": "Muscle Augmentation (Rating 1)",
+      "details": "Item \"muscle-augmentation-1\" not found in reference files for sources: Core",
+      "recommendation": "Verify source of \"muscle-augmentation-1\" - may need removal or move to sourcebook"
+    },
+    {
+      "type": "invalid_source",
+      "priority": 4,
+      "category": "bioware",
+      "item": "Muscle Augmentation (Rating 2)",
+      "details": "Item \"muscle-augmentation-2\" not found in reference files for sources: Core",
+      "recommendation": "Verify source of \"muscle-augmentation-2\" - may need removal or move to sourcebook"
+    },
+    {
+      "type": "invalid_source",
+      "priority": 4,
+      "category": "bioware",
+      "item": "Muscle Augmentation (Rating 3)",
+      "details": "Item \"muscle-augmentation-3\" not found in reference files for sources: Core",
+      "recommendation": "Verify source of \"muscle-augmentation-3\" - may need removal or move to sourcebook"
+    },
+    {
+      "type": "invalid_source",
+      "priority": 4,
+      "category": "bioware",
+      "item": "Muscle Augmentation (Rating 4)",
+      "details": "Item \"muscle-augmentation-4\" not found in reference files for sources: Core",
+      "recommendation": "Verify source of \"muscle-augmentation-4\" - may need removal or move to sourcebook"
+    },
+    {
+      "type": "invalid_source",
+      "priority": 4,
+      "category": "bioware",
+      "item": "Muscle Toner (Rating 1)",
+      "details": "Item \"muscle-toner-1\" not found in reference files for sources: Core",
+      "recommendation": "Verify source of \"muscle-toner-1\" - may need removal or move to sourcebook"
+    },
+    {
+      "type": "invalid_source",
+      "priority": 4,
+      "category": "bioware",
+      "item": "Muscle Toner (Rating 2)",
+      "details": "Item \"muscle-toner-2\" not found in reference files for sources: Core",
+      "recommendation": "Verify source of \"muscle-toner-2\" - may need removal or move to sourcebook"
+    },
+    {
+      "type": "invalid_source",
+      "priority": 4,
+      "category": "bioware",
+      "item": "Muscle Toner (Rating 3)",
+      "details": "Item \"muscle-toner-3\" not found in reference files for sources: Core",
+      "recommendation": "Verify source of \"muscle-toner-3\" - may need removal or move to sourcebook"
+    },
+    {
+      "type": "invalid_source",
+      "priority": 4,
+      "category": "bioware",
+      "item": "Muscle Toner (Rating 4)",
+      "details": "Item \"muscle-toner-4\" not found in reference files for sources: Core",
+      "recommendation": "Verify source of \"muscle-toner-4\" - may need removal or move to sourcebook"
+    },
+    {
+      "type": "invalid_source",
+      "priority": 4,
+      "category": "bioware",
+      "item": "Orthoskin (Bioware, Rating 1)",
+      "details": "Item \"orthoskin-bio-1\" not found in reference files for sources: Core",
+      "recommendation": "Verify source of \"orthoskin-bio-1\" - may need removal or move to sourcebook"
+    },
+    {
+      "type": "invalid_source",
+      "priority": 4,
+      "category": "bioware",
+      "item": "Orthoskin (Bioware, Rating 2)",
+      "details": "Item \"orthoskin-bio-2\" not found in reference files for sources: Core",
+      "recommendation": "Verify source of \"orthoskin-bio-2\" - may need removal or move to sourcebook"
+    },
+    {
+      "type": "invalid_source",
+      "priority": 4,
+      "category": "bioware",
+      "item": "Orthoskin (Bioware, Rating 3)",
+      "details": "Item \"orthoskin-bio-3\" not found in reference files for sources: Core",
+      "recommendation": "Verify source of \"orthoskin-bio-3\" - may need removal or move to sourcebook"
+    },
+    {
+      "type": "invalid_source",
+      "priority": 4,
+      "category": "bioware",
+      "item": "Orthoskin (Bioware, Rating 4)",
+      "details": "Item \"orthoskin-bio-4\" not found in reference files for sources: Core",
+      "recommendation": "Verify source of \"orthoskin-bio-4\" - may need removal or move to sourcebook"
+    },
+    {
+      "type": "invalid_source",
+      "priority": 4,
+      "category": "bioware",
+      "item": "Pathogenic Defense (Rating 1)",
+      "details": "Item \"pathogenic-defense-1\" not found in reference files for sources: Core",
+      "recommendation": "Verify source of \"pathogenic-defense-1\" - may need removal or move to sourcebook"
+    },
+    {
+      "type": "invalid_source",
+      "priority": 4,
+      "category": "bioware",
+      "item": "Pathogenic Defense (Rating 2)",
+      "details": "Item \"pathogenic-defense-2\" not found in reference files for sources: Core",
+      "recommendation": "Verify source of \"pathogenic-defense-2\" - may need removal or move to sourcebook"
+    },
+    {
+      "type": "invalid_source",
+      "priority": 4,
+      "category": "bioware",
+      "item": "Pathogenic Defense (Rating 3)",
+      "details": "Item \"pathogenic-defense-3\" not found in reference files for sources: Core",
+      "recommendation": "Verify source of \"pathogenic-defense-3\" - may need removal or move to sourcebook"
+    },
+    {
+      "type": "invalid_source",
+      "priority": 4,
+      "category": "bioware",
+      "item": "Pathogenic Defense (Rating 4)",
+      "details": "Item \"pathogenic-defense-4\" not found in reference files for sources: Core",
+      "recommendation": "Verify source of \"pathogenic-defense-4\" - may need removal or move to sourcebook"
+    },
+    {
+      "type": "invalid_source",
+      "priority": 4,
+      "category": "bioware",
+      "item": "Pathogenic Defense (Rating 5)",
+      "details": "Item \"pathogenic-defense-5\" not found in reference files for sources: Core",
+      "recommendation": "Verify source of \"pathogenic-defense-5\" - may need removal or move to sourcebook"
+    },
+    {
+      "type": "invalid_source",
+      "priority": 4,
+      "category": "bioware",
+      "item": "Pathogenic Defense (Rating 6)",
+      "details": "Item \"pathogenic-defense-6\" not found in reference files for sources: Core",
+      "recommendation": "Verify source of \"pathogenic-defense-6\" - may need removal or move to sourcebook"
+    },
+    {
+      "type": "invalid_source",
+      "priority": 4,
+      "category": "bioware",
+      "item": "Platelet Factories (Bioware)",
+      "details": "Item \"platelet-factories-bio\" not found in reference files for sources: Core",
+      "recommendation": "Verify source of \"platelet-factories-bio\" - may need removal or move to sourcebook"
+    },
+    {
+      "type": "invalid_source",
+      "priority": 4,
+      "category": "bioware",
+      "item": "Reflex Recorder",
+      "details": "Item \"reflex-recorder\" not found in reference files for sources: Core",
+      "recommendation": "Verify source of \"reflex-recorder\" - may need removal or move to sourcebook"
+    },
+    {
+      "type": "invalid_source",
+      "priority": 4,
+      "category": "bioware",
+      "item": "Skin Pocket",
+      "details": "Item \"skin-pocket\" not found in reference files for sources: Core",
+      "recommendation": "Verify source of \"skin-pocket\" - may need removal or move to sourcebook"
+    },
+    {
+      "type": "invalid_source",
+      "priority": 4,
+      "category": "bioware",
+      "item": "Suprathyroid Gland",
+      "details": "Item \"suprathyroid-gland-bio\" not found in reference files for sources: Core",
+      "recommendation": "Verify source of \"suprathyroid-gland-bio\" - may need removal or move to sourcebook"
+    },
+    {
+      "type": "invalid_source",
+      "priority": 4,
+      "category": "bioware",
+      "item": "Symbiotes (Rating 1)",
+      "details": "Item \"symbiotes-1\" not found in reference files for sources: Core",
+      "recommendation": "Verify source of \"symbiotes-1\" - may need removal or move to sourcebook"
+    },
+    {
+      "type": "invalid_source",
+      "priority": 4,
+      "category": "bioware",
+      "item": "Symbiotes (Rating 2)",
+      "details": "Item \"symbiotes-2\" not found in reference files for sources: Core",
+      "recommendation": "Verify source of \"symbiotes-2\" - may need removal or move to sourcebook"
+    },
+    {
+      "type": "invalid_source",
+      "priority": 4,
+      "category": "bioware",
+      "item": "Symbiotes (Rating 3)",
+      "details": "Item \"symbiotes-3\" not found in reference files for sources: Core",
+      "recommendation": "Verify source of \"symbiotes-3\" - may need removal or move to sourcebook"
+    },
+    {
+      "type": "invalid_source",
+      "priority": 4,
+      "category": "bioware",
+      "item": "Symbiotes (Rating 4)",
+      "details": "Item \"symbiotes-4\" not found in reference files for sources: Core",
+      "recommendation": "Verify source of \"symbiotes-4\" - may need removal or move to sourcebook"
+    },
+    {
+      "type": "invalid_source",
+      "priority": 4,
+      "category": "bioware",
+      "item": "Synthacardium (Bioware, Rating 1)",
+      "details": "Item \"synthacardium-bio-1\" not found in reference files for sources: Core",
+      "recommendation": "Verify source of \"synthacardium-bio-1\" - may need removal or move to sourcebook"
+    },
+    {
+      "type": "invalid_source",
+      "priority": 4,
+      "category": "bioware",
+      "item": "Synthacardium (Bioware, Rating 2)",
+      "details": "Item \"synthacardium-bio-2\" not found in reference files for sources: Core",
+      "recommendation": "Verify source of \"synthacardium-bio-2\" - may need removal or move to sourcebook"
+    },
+    {
+      "type": "invalid_source",
+      "priority": 4,
+      "category": "bioware",
+      "item": "Synthacardium (Bioware, Rating 3)",
+      "details": "Item \"synthacardium-bio-3\" not found in reference files for sources: Core",
+      "recommendation": "Verify source of \"synthacardium-bio-3\" - may need removal or move to sourcebook"
+    },
+    {
+      "type": "invalid_source",
+      "priority": 4,
+      "category": "bioware",
+      "item": "Tracheal Filter (Rating 1)",
+      "details": "Item \"tracheal-filter-1\" not found in reference files for sources: Core",
+      "recommendation": "Verify source of \"tracheal-filter-1\" - may need removal or move to sourcebook"
+    },
+    {
+      "type": "invalid_source",
+      "priority": 4,
+      "category": "bioware",
+      "item": "Tracheal Filter (Rating 2)",
+      "details": "Item \"tracheal-filter-2\" not found in reference files for sources: Core",
+      "recommendation": "Verify source of \"tracheal-filter-2\" - may need removal or move to sourcebook"
+    },
+    {
+      "type": "invalid_source",
+      "priority": 4,
+      "category": "bioware",
+      "item": "Tracheal Filter (Rating 3)",
+      "details": "Item \"tracheal-filter-3\" not found in reference files for sources: Core",
+      "recommendation": "Verify source of \"tracheal-filter-3\" - may need removal or move to sourcebook"
+    },
+    {
+      "type": "invalid_source",
+      "priority": 4,
+      "category": "bioware",
+      "item": "Tracheal Filter (Rating 4)",
+      "details": "Item \"tracheal-filter-4\" not found in reference files for sources: Core",
+      "recommendation": "Verify source of \"tracheal-filter-4\" - may need removal or move to sourcebook"
+    },
+    {
+      "type": "invalid_source",
+      "priority": 4,
+      "category": "bioware",
+      "item": "Tracheal Filter (Rating 5)",
+      "details": "Item \"tracheal-filter-5\" not found in reference files for sources: Core",
+      "recommendation": "Verify source of \"tracheal-filter-5\" - may need removal or move to sourcebook"
+    },
+    {
+      "type": "invalid_source",
+      "priority": 4,
+      "category": "bioware",
+      "item": "Tracheal Filter (Rating 6)",
+      "details": "Item \"tracheal-filter-6\" not found in reference files for sources: Core",
+      "recommendation": "Verify source of \"tracheal-filter-6\" - may need removal or move to sourcebook"
+    },
+    {
+      "type": "invalid_source",
+      "priority": 4,
+      "category": "bioware",
+      "item": "Tailored Pheromones (Rating 1)",
+      "details": "Item \"tailored-pheromones-1\" not found in reference files for sources: Core",
+      "recommendation": "Verify source of \"tailored-pheromones-1\" - may need removal or move to sourcebook"
+    },
+    {
+      "type": "invalid_source",
+      "priority": 4,
+      "category": "bioware",
+      "item": "Tailored Pheromones (Rating 2)",
+      "details": "Item \"tailored-pheromones-2\" not found in reference files for sources: Core",
+      "recommendation": "Verify source of \"tailored-pheromones-2\" - may need removal or move to sourcebook"
+    },
+    {
+      "type": "invalid_source",
+      "priority": 4,
+      "category": "bioware",
+      "item": "Tailored Pheromones (Rating 3)",
+      "details": "Item \"tailored-pheromones-3\" not found in reference files for sources: Core",
+      "recommendation": "Verify source of \"tailored-pheromones-3\" - may need removal or move to sourcebook"
+    },
+    {
+      "type": "invalid_source",
+      "priority": 4,
+      "category": "bioware",
+      "item": "Bone Density Augmentation (Rating 1)",
+      "details": "Item \"bone-density-augmentation-1\" not found in reference files for sources: Core",
+      "recommendation": "Verify source of \"bone-density-augmentation-1\" - may need removal or move to sourcebook"
+    },
+    {
+      "type": "invalid_source",
+      "priority": 4,
+      "category": "bioware",
+      "item": "Bone Density Augmentation (Rating 2)",
+      "details": "Item \"bone-density-augmentation-2\" not found in reference files for sources: Core",
+      "recommendation": "Verify source of \"bone-density-augmentation-2\" - may need removal or move to sourcebook"
+    },
+    {
+      "type": "invalid_source",
+      "priority": 4,
+      "category": "bioware",
+      "item": "Bone Density Augmentation (Rating 3)",
+      "details": "Item \"bone-density-augmentation-3\" not found in reference files for sources: Core",
+      "recommendation": "Verify source of \"bone-density-augmentation-3\" - may need removal or move to sourcebook"
+    },
+    {
+      "type": "invalid_source",
+      "priority": 4,
+      "category": "bioware",
+      "item": "Bone Density Augmentation (Rating 4)",
+      "details": "Item \"bone-density-augmentation-4\" not found in reference files for sources: Core",
+      "recommendation": "Verify source of \"bone-density-augmentation-4\" - may need removal or move to sourcebook"
+    },
+    {
+      "type": "invalid_source",
+      "priority": 4,
+      "category": "bioware",
+      "item": "Toxin Extractor (Rating 1)",
+      "details": "Item \"toxin-extractor-1\" not found in reference files for sources: Core",
+      "recommendation": "Verify source of \"toxin-extractor-1\" - may need removal or move to sourcebook"
+    },
+    {
+      "type": "invalid_source",
+      "priority": 4,
+      "category": "bioware",
+      "item": "Toxin Extractor (Rating 2)",
+      "details": "Item \"toxin-extractor-2\" not found in reference files for sources: Core",
+      "recommendation": "Verify source of \"toxin-extractor-2\" - may need removal or move to sourcebook"
+    },
+    {
+      "type": "invalid_source",
+      "priority": 4,
+      "category": "bioware",
+      "item": "Toxin Extractor (Rating 3)",
+      "details": "Item \"toxin-extractor-3\" not found in reference files for sources: Core",
+      "recommendation": "Verify source of \"toxin-extractor-3\" - may need removal or move to sourcebook"
+    },
+    {
+      "type": "invalid_source",
+      "priority": 4,
+      "category": "bioware",
+      "item": "Toxin Extractor (Rating 4)",
+      "details": "Item \"toxin-extractor-4\" not found in reference files for sources: Core",
+      "recommendation": "Verify source of \"toxin-extractor-4\" - may need removal or move to sourcebook"
+    },
+    {
+      "type": "invalid_source",
+      "priority": 4,
+      "category": "bioware",
+      "item": "Toxin Extractor (Rating 5)",
+      "details": "Item \"toxin-extractor-5\" not found in reference files for sources: Core",
+      "recommendation": "Verify source of \"toxin-extractor-5\" - may need removal or move to sourcebook"
+    },
+    {
+      "type": "invalid_source",
+      "priority": 4,
+      "category": "bioware",
+      "item": "Toxin Extractor (Rating 6)",
+      "details": "Item \"toxin-extractor-6\" not found in reference files for sources: Core",
+      "recommendation": "Verify source of \"toxin-extractor-6\" - may need removal or move to sourcebook"
+    },
+    {
+      "type": "invalid_source",
+      "priority": 4,
+      "category": "bioware",
+      "item": "Cerebral Booster (Rating 1)",
+      "details": "Item \"cerebral-booster-1\" not found in reference files for sources: Core",
+      "recommendation": "Verify source of \"cerebral-booster-1\" - may need removal or move to sourcebook"
+    },
+    {
+      "type": "invalid_source",
+      "priority": 4,
+      "category": "bioware",
+      "item": "Cerebral Booster (Rating 2)",
+      "details": "Item \"cerebral-booster-2\" not found in reference files for sources: Core",
+      "recommendation": "Verify source of \"cerebral-booster-2\" - may need removal or move to sourcebook"
+    },
+    {
+      "type": "invalid_source",
+      "priority": 4,
+      "category": "bioware",
+      "item": "Cerebral Booster (Rating 3)",
+      "details": "Item \"cerebral-booster-3\" not found in reference files for sources: Core",
+      "recommendation": "Verify source of \"cerebral-booster-3\" - may need removal or move to sourcebook"
+    },
+    {
+      "type": "invalid_source",
+      "priority": 4,
+      "category": "bioware",
+      "item": "Damage Compensators (Rating 1)",
+      "details": "Item \"damage-compensators-1\" not found in reference files for sources: Core",
+      "recommendation": "Verify source of \"damage-compensators-1\" - may need removal or move to sourcebook"
+    },
+    {
+      "type": "invalid_source",
+      "priority": 4,
+      "category": "bioware",
+      "item": "Damage Compensators (Rating 2)",
+      "details": "Item \"damage-compensators-2\" not found in reference files for sources: Core",
+      "recommendation": "Verify source of \"damage-compensators-2\" - may need removal or move to sourcebook"
+    },
+    {
+      "type": "invalid_source",
+      "priority": 4,
+      "category": "bioware",
+      "item": "Damage Compensators (Rating 3)",
+      "details": "Item \"damage-compensators-3\" not found in reference files for sources: Core",
+      "recommendation": "Verify source of \"damage-compensators-3\" - may need removal or move to sourcebook"
+    },
+    {
+      "type": "invalid_source",
+      "priority": 4,
+      "category": "bioware",
+      "item": "Damage Compensators (Rating 4)",
+      "details": "Item \"damage-compensators-4\" not found in reference files for sources: Core",
+      "recommendation": "Verify source of \"damage-compensators-4\" - may need removal or move to sourcebook"
+    },
+    {
+      "type": "invalid_source",
+      "priority": 4,
+      "category": "bioware",
+      "item": "Damage Compensators (Rating 5)",
+      "details": "Item \"damage-compensators-5\" not found in reference files for sources: Core",
+      "recommendation": "Verify source of \"damage-compensators-5\" - may need removal or move to sourcebook"
+    },
+    {
+      "type": "invalid_source",
+      "priority": 4,
+      "category": "bioware",
+      "item": "Damage Compensators (Rating 6)",
+      "details": "Item \"damage-compensators-6\" not found in reference files for sources: Core",
+      "recommendation": "Verify source of \"damage-compensators-6\" - may need removal or move to sourcebook"
+    },
+    {
+      "type": "invalid_source",
+      "priority": 4,
+      "category": "bioware",
+      "item": "Mnemonic Enhancer (Rating 1)",
+      "details": "Item \"mnemonic-enhancer-1\" not found in reference files for sources: Core",
+      "recommendation": "Verify source of \"mnemonic-enhancer-1\" - may need removal or move to sourcebook"
+    },
+    {
+      "type": "invalid_source",
+      "priority": 4,
+      "category": "bioware",
+      "item": "Mnemonic Enhancer (Rating 2)",
+      "details": "Item \"mnemonic-enhancer-2\" not found in reference files for sources: Core",
+      "recommendation": "Verify source of \"mnemonic-enhancer-2\" - may need removal or move to sourcebook"
+    },
+    {
+      "type": "invalid_source",
+      "priority": 4,
+      "category": "bioware",
+      "item": "Mnemonic Enhancer (Rating 3)",
+      "details": "Item \"mnemonic-enhancer-3\" not found in reference files for sources: Core",
+      "recommendation": "Verify source of \"mnemonic-enhancer-3\" - may need removal or move to sourcebook"
+    },
+    {
+      "type": "invalid_source",
+      "priority": 4,
+      "category": "bioware",
+      "item": "Pain Editor",
+      "details": "Item \"pain-editor\" not found in reference files for sources: Core",
+      "recommendation": "Verify source of \"pain-editor\" - may need removal or move to sourcebook"
+    },
+    {
+      "type": "invalid_source",
+      "priority": 4,
+      "category": "bioware",
+      "item": "Sleep Regulator",
+      "details": "Item \"sleep-regulator\" not found in reference files for sources: Core",
+      "recommendation": "Verify source of \"sleep-regulator\" - may need removal or move to sourcebook"
+    },
+    {
+      "type": "invalid_source",
+      "priority": 4,
+      "category": "bioware",
+      "item": "Synaptic Booster (Rating 1)",
+      "details": "Item \"synaptic-booster-1\" not found in reference files for sources: Core",
+      "recommendation": "Verify source of \"synaptic-booster-1\" - may need removal or move to sourcebook"
+    },
+    {
+      "type": "invalid_source",
+      "priority": 4,
+      "category": "bioware",
+      "item": "Synaptic Booster (Rating 2)",
+      "details": "Item \"synaptic-booster-2\" not found in reference files for sources: Core",
+      "recommendation": "Verify source of \"synaptic-booster-2\" - may need removal or move to sourcebook"
+    },
+    {
+      "type": "invalid_source",
+      "priority": 4,
+      "category": "bioware",
+      "item": "Synaptic Booster (Rating 3)",
+      "details": "Item \"synaptic-booster-3\" not found in reference files for sources: Core",
+      "recommendation": "Verify source of \"synaptic-booster-3\" - may need removal or move to sourcebook"
+    },
+    {
+      "type": "missing",
+      "priority": 1,
+      "category": "armor",
+      "item": "-",
+      "details": "Item from Core not found in JSON",
+      "expected": {
+        "armor": "-",
+        "capacity": "-",
+        "avail": "-",
+        "cost": 20,
+        "source": "Core"
+      },
+      "recommendation": "Add \"-\" to modules.gear.payload.armor"
+    },
+    {
+      "type": "missing",
+      "priority": 1,
+      "category": "armor",
+      "item": "-",
+      "details": "Item from Core not found in JSON",
+      "expected": {
+        "armor": "-",
+        "capacity": "-",
+        "avail": 2,
+        "cost": 500,
+        "source": "Core"
+      },
+      "recommendation": "Add \"-\" to modules.gear.payload.armor"
+    },
+    {
+      "type": "missing",
+      "priority": 1,
+      "category": "armor",
+      "item": "-",
+      "details": "Item from Core not found in JSON",
+      "expected": {
+        "armor": "-",
+        "capacity": "-",
+        "avail": 8,
+        "cost": 500,
+        "source": "Core"
+      },
+      "recommendation": "Add \"-\" to modules.gear.payload.armor"
+    },
+    {
+      "type": "missing",
+      "priority": 1,
+      "category": "armor",
+      "item": "Features Increase Social Limit by 2 Wireless Bonus +1 dice pool bonus to Social Tests",
+      "details": "Item from Core not found in JSON",
+      "expected": {
+        "armor": "Features Increase Social Limit by 2 Wireless Bonus +1 dice pool bonus to Social Tests",
+        "capacity": "Looking forward, expect next year’s designs to host amix of Native American and old American styles as theOlympics, held in Seattle, will be the place to highlightfashion in ’76. Plan 9 Armanté has always been a leader in the armored fashionfield in terms of quality product, but while they manage tobe aces in that category, their lines have absolutely zerointerchangeability. You obviously cannot mix fashionsfrom different years, as they change radically, but evenmixing pieces from the same year is a challenge. The cutsand styles of their pieces look terrible if mixed. Thorn Taking a look back, we can see that Armanté lookedto Sub-Saharan Africa to influence their ’74 line, likelydue to a heavy push on the Kilimanjaro Mass Driver—aproject that still hasn’t been fully brought online, I mightadd. I actually thought Armanté was taking a seriousfashion forward leap in ’73 when they came back onthe scene with a totally retro/post-apocalypse-chic lookpulled from the styles of 1920s America blended withsomething out of an episode of Dark Futures. Bull Dark Futures! I love that show. The “What If?” take onsome of the recent major world events is awesome. Slamm-0!"
+      },
+      "recommendation": "Add \"Features Increase Social Limit by 2 Wireless Bonus +1 dice pool bonus to Social Tests\" to modules.gear.payload.armor"
+    },
+    {
+      "type": "missing",
+      "priority": 1,
+      "category": "armor",
+      "item": "Features Increase Social Limit by 2 Wireless Bonus +1 dice pool bonus to Social Tests",
+      "details": "Item from Core not found in JSON",
+      "expected": {
+        "armor": "Features Increase Social Limit by 2 Wireless Bonus +1 dice pool bonus to Social Tests",
+        "capacity": "Looking forward, expect next year’s designs to host amix of Native American and old American styles as theOlympics, held in Seattle, will be the place to highlightfashion in ’76. Plan 9 Armanté has always been a leader in the armored fashionfield in terms of quality product, but while they manage tobe aces in that category, their lines have absolutely zerointerchangeability. You obviously cannot mix fashionsfrom different years, as they change radically, but evenmixing pieces from the same year is a challenge. The cutsand styles of their pieces look terrible if mixed. Thorn Taking a look back, we can see that Armanté lookedto Sub-Saharan Africa to influence their ’74 line, likelydue to a heavy push on the Kilimanjaro Mass Driver—aproject that still hasn’t been fully brought online, I mightadd. I actually thought Armanté was taking a seriousfashion forward leap in ’73 when they came back onthe scene with a totally retro/post-apocalypse-chic lookpulled from the styles of 1920s America blended withsomething out of an episode of Dark Futures. Bull Dark Futures! I love that show. The “What If?” take onsome of the recent major world events is awesome. Slamm-0!"
+      },
+      "recommendation": "Add \"Features Increase Social Limit by 2 Wireless Bonus +1 dice pool bonus to Social Tests\" to modules.gear.payload.armor"
+    },
+    {
+      "type": "missing",
+      "priority": 1,
+      "category": "armor",
+      "item": "Features Custom Fit, Newest Model, increase Social Limit by 1 Wireless Bonus Increase Social Limit by 2",
+      "details": "Item from Core not found in JSON",
+      "expected": {
+        "armor": "Features Custom Fit, Newest Model, increase Social Limit by 1 Wireless Bonus Increase Social Limit by 2",
+        "capacity": "That means the newer suits have better protection, but the older outfits, which you may be able to find in Armand’s Lightly Worn section, will still blend in visually. Thorn"
+      },
+      "recommendation": "Add \"Features Custom Fit, Newest Model, increase Social Limit by 1 Wireless Bonus Increase Social Limit by 2\" to modules.gear.payload.armor"
+    },
+    {
+      "type": "missing",
+      "priority": 1,
+      "category": "armor",
+      "item": "Features Custom Fit Newest Model increase Social Limit by 2",
+      "details": "Item from Core not found in JSON",
+      "expected": {
+        "armor": "Features Custom Fit Newest Model increase Social Limit by 2",
+        "capacity": "Truth is, no runner needs to buy this line, unless you need to slip into a secure meeting where everyone in the corp is wearing Heritage. This line has become a security feature at a lot of corporate functions in order to limit extractions as anyone present has to be wearing a very expensive outfit. Thorn Wait, Thorn, are you posting from a cell somewhere? Netcat It’s always good to know someone on the inside. But I hope to not be here long. Thorn What you say helps explain why Lightly Worn Heritage pieces would be tough to find. Mika"
+      },
+      "recommendation": "Add \"Features Custom Fit Newest Model increase Social Limit by 2\" to modules.gear.payload.armor"
+    },
+    {
+      "type": "missing",
+      "priority": 1,
+      "category": "armor",
+      "item": "Features Custom Fit increase Social Limit by 1 Wireless Bonus Illuminating (+1,500¥ for IR and contacts)",
+      "details": "Item from Core not found in JSON",
+      "expected": {
+        "armor": "Features Custom Fit increase Social Limit by 1 Wireless Bonus Illuminating (+1,500¥ for IR and contacts)",
+        "capacity": "This line mainly exists to give you a way to stay armored while blending at high-society functions. The fact that these dresses, as well as the shirts, coat cuffs, and coat lapels, glow makes them extremely contradictory to the idea of SHADOWrunning. Bull Sometimes those in the shadows must step into the light to pull someone down into our darkness. Man-of-Many-Names That was surprisingly clear for you. Perhaps even a little too obvious. Slamm-0!"
+      },
+      "recommendation": "Add \"Features Custom Fit increase Social Limit by 1 Wireless Bonus Illuminating (+1,500¥ for IR and contacts)\" to modules.gear.payload.armor"
+    },
+    {
+      "type": "missing",
+      "priority": 1,
+      "category": "armor",
+      "item": "Features Custom Fit (Stack) Newest Model Ruthenium Polymer Coating 4",
+      "details": "Item from Core not found in JSON",
+      "expected": {
+        "armor": "Features Custom Fit (Stack) Newest Model Ruthenium Polymer Coating 4",
+        "capacity": "Story time. I was making an extraction from a beach of an exec’s wife. She was there sunbathing with two of her girlfriends, string bikinis all around. I walked up, flashed my palm pistol, and then asked Mrs. Exec to come quietly. All of a sudden the girlfriend on the right is naked. Poof, bikini is gone. The distraction was enough for the other girlfriend to kick up a footfull of sand in my face. The brawl started after that, and I was not happy to discover that both of her “girlfriends” were wearing Second Skin. Kane Never seen boobies before, Kane-o? Slamm-0! Plenty, including your mother’s. Kane"
+      },
+      "recommendation": "Add \"Features Custom Fit (Stack) Newest Model Ruthenium Polymer Coating 4\" to modules.gear.payload.armor"
+    },
+    {
+      "type": "missing",
+      "priority": 1,
+      "category": "armor",
+      "item": "Features Custom Protection (6) Holster Gear Access Wireless Bonus +1 dice pool bonus to Survival Tests in Custom Protection terrain.",
+      "details": "Item from Core not found in JSON",
+      "expected": {
+        "armor": "Features Custom Protection (6) Holster Gear Access Wireless Bonus +1 dice pool bonus to Survival Tests in Custom Protection terrain.",
+        "capacity": "Beware the camo/environmental match-ups on the Lightly Worn versions of these. Not everyone buys them and uses them for the same things. Usually they match up, but sometimes you have winter camo with fireproofing instead of cold insulation. When you buy it new, you get to be the one who makes those calls. Hard Exit"
+      },
+      "recommendation": "Add \"Features Custom Protection (6) Holster Gear Access Wireless Bonus +1 dice pool bonus to Survival Tests in Custom Protection terrain.\" to modules.gear.payload.armor"
+    },
+    {
+      "type": "missing",
+      "priority": 1,
+      "category": "armor",
+      "item": "Features Increase Social Limit by 1 (when wearing clothing suited to a particular corporate environment) Gear Access Wireless Bonus +1 dice pool bonus to Social Tests when worn within the appropriate corp.",
+      "details": "Item from Core not found in JSON",
+      "expected": {
+        "armor": "Features Increase Social Limit by 1 (when wearing clothing suited to a particular corporate environment) Gear Access Wireless Bonus +1 dice pool bonus to Social Tests when worn within the appropriate corp.",
+        "capacity": "Or things that look like the right equipment. These outfits are great for getting past guards without firing a shot and then putting your gun together on the back end to get out when the trouble starts. Ma’fan"
+      },
+      "recommendation": "Add \"Features Increase Social Limit by 1 (when wearing clothing suited to a particular corporate environment) Gear Access Wireless Bonus +1 dice pool bonus to Social Tests when worn within the appropriate corp.\" to modules.gear.payload.armor"
+    },
+    {
+      "type": "missing",
+      "priority": 1,
+      "category": "armor",
+      "item": "Features Custom Fit Custom Protection (6) Holster Gear Access Wireless Bonus +1 dice pool bonus to Survival Tests (when in terrain addressed with Custom Protection).",
+      "details": "Item from Core not found in JSON",
+      "expected": {
+        "armor": "Features Custom Fit Custom Protection (6) Holster Gear Access Wireless Bonus +1 dice pool bonus to Survival Tests (when in terrain addressed with Custom Protection).",
+        "capacity": "This is not the line to wear in the hub of any urban sprawl, but out in the barrens, or in some of our less civilized sprawls around the world, these clothes can fit in just fine. Stone"
+      },
+      "recommendation": "Add \"Features Custom Fit Custom Protection (6) Holster Gear Access Wireless Bonus +1 dice pool bonus to Survival Tests (when in terrain addressed with Custom Protection).\" to modules.gear.payload.armor"
+    },
+    {
+      "type": "missing",
+      "priority": 1,
+      "category": "armor",
+      "item": "Features Increase Social Limit (Elite +1, +600¥; Platinum +2, +1,100¥; Diamond +3, +2,400¥)",
+      "details": "Item from Core not found in JSON",
+      "expected": {
+        "armor": "Features Increase Social Limit (Elite +1, +600¥; Platinum +2, +1,100¥; Diamond +3, +2,400¥)",
+        "capacity": "Not fashionable at all, but it blends in around almost every place in any ‘plex. Sunshine The three upper lines look almost the same as the basic line, with the main differences being on the inside tags, monograms, and price tags. If you want to blend in working out at the Ares Executive gym, you’ll need those upper-line touches. If you don’t think management types notice that sort of thing, you haven’t met enough management types. Sticks Just so everyone is up to speed, this line no longer has the Restraint Melter option after a few dozen of the units malfunctioned and burned through their wearer’s wrists. Pistons That was one of the most effective covert ops I’ve ever seen pulled off. The units that “malfunctioned” had all been tampered with at manufacturing sites all over the globe. Ares started their own back-end investigation, but cut it off before they found who was responsible. It wasn’t worth the loss to the bottom line. Just goes to show, if you do your job right, you really can stay in the shadows. Hanibelle"
+      },
+      "recommendation": "Add \"Features Increase Social Limit (Elite +1, +600¥; Platinum +2, +1,100¥; Diamond +3, +2,400¥)\" to modules.gear.payload.armor"
+    },
+    {
+      "type": "missing",
+      "priority": 1,
+      "category": "armor",
+      "item": "+3",
+      "details": "Item from Core not found in JSON",
+      "expected": {
+        "armor": 3,
+        "capacity": 6,
+        "avail": "-",
+        "cost": 500,
+        "source": "Core"
+      },
+      "recommendation": "Add \"+3\" to modules.gear.payload.armor"
+    },
+    {
+      "type": "missing",
+      "priority": 1,
+      "category": "armor",
+      "item": "-",
+      "details": "Item from Core not found in JSON",
+      "expected": {
+        "armor": "-",
+        "capacity": "-",
+        "avail": 6,
+        "cost": 6000,
+        "source": "Core"
+      },
+      "recommendation": "Add \"-\" to modules.gear.payload.armor"
+    },
+    {
+      "type": "missing",
+      "priority": 1,
+      "category": "armor",
+      "item": "-",
+      "details": "Item from Core not found in JSON",
+      "expected": {
+        "armor": "-",
+        "capacity": "-",
+        "avail": 3,
+        "cost": 1000,
+        "source": "Core"
+      },
+      "recommendation": "Add \"-\" to modules.gear.payload.armor"
+    },
+    {
+      "type": "missing",
+      "priority": 1,
+      "category": "armor",
+      "item": "+2",
+      "details": "Item from Core not found in JSON",
+      "expected": {
+        "armor": 2,
+        "capacity": 2,
+        "avail": "-",
+        "cost": 100,
+        "source": "Core"
+      },
+      "recommendation": "Add \"+2\" to modules.gear.payload.armor"
+    },
+    {
+      "type": "missing",
+      "priority": 1,
+      "category": "armor",
+      "item": "+2",
+      "details": "Item from Core not found in JSON",
+      "expected": {
+        "armor": 2,
+        "capacity": 6,
+        "avail": "-",
+        "cost": 100,
+        "source": "Core"
+      },
+      "recommendation": "Add \"+2\" to modules.gear.payload.armor"
+    },
+    {
+      "type": "missing",
+      "priority": 1,
+      "category": "armor",
+      "item": "+6",
+      "details": "Item from Core not found in JSON",
+      "expected": {
+        "armor": 6,
+        "capacity": 6,
+        "avail": 12,
+        "cost": 1200,
+        "source": "Core"
+      },
+      "recommendation": "Add \"+6\" to modules.gear.payload.armor"
+    },
+    {
+      "type": "missing",
+      "priority": 1,
+      "category": "armor",
+      "item": "+6",
+      "details": "Item from Core not found in JSON",
+      "expected": {
+        "armor": 6,
+        "capacity": 6,
+        "avail": 10,
+        "cost": 1500,
+        "source": "Core"
+      },
+      "recommendation": "Add \"+6\" to modules.gear.payload.armor"
+    },
+    {
+      "type": "missing",
+      "priority": 1,
+      "category": "armor",
+      "item": "Features Custom Fit, Concealability (–6)",
+      "details": "Item from Core not found in JSON",
+      "expected": {
+        "armor": "Features Custom Fit, Concealability (–6)",
+        "capacity": "I had a really nice set of this stored from my last female turn, but I have to get it adjusted. You wouldn’t think a few millimeters of fur would make a difference, but it does. Plan 9 So you’re back to male again? Turbo Bunny Yep. Still adjusting to all the itchiness from the hair. Plan 9 And the chorus of voices in your head? Turbo Bunny Sing in sweet harmony. Plan 9"
+      },
+      "recommendation": "Add \"Features Custom Fit, Concealability (–6)\" to modules.gear.payload.armor"
+    },
+    {
+      "type": "missing",
+      "priority": 1,
+      "category": "armor",
+      "item": "Features Increase Social Limit by 2 in emergency situations, Fire Resistance 8, Restrictive Wireless Bonus +1 dice pool bonus to Social Tests to calm or pacify an individual at the site of an emergency.",
+      "details": "Item from Core not found in JSON",
+      "expected": {
+        "armor": "Features Increase Social Limit by 2 in emergency situations, Fire Resistance 8, Restrictive Wireless Bonus +1 dice pool bonus to Social Tests to calm or pacify an individual at the site of an emergency.",
+        "capacity": "This is the armor for the creative runner looking for access to a site where emergency personnel are milling about. It’s not just about running into active fires—you can use this anywhere firefighters can go, once the alarm has been pulled. Combine it with the right credentials and you’re one false alarm away from access to almost anywhere. Thorn"
+      },
+      "recommendation": "Add \"Features Increase Social Limit by 2 in emergency situations, Fire Resistance 8, Restrictive Wireless Bonus +1 dice pool bonus to Social Tests to calm or pacify an individual at the site of an emergency.\" to modules.gear.payload.armor"
+    },
+    {
+      "type": "missing",
+      "priority": 1,
+      "category": "armor",
+      "item": "Features Padded, Increase Social Limit by 1 for Intimidation Tests, Restrictive Wireless Bonus Increase Social Limit by 2 for Intimidation Tests",
+      "details": "Item from Core not found in JSON",
+      "expected": {
+        "armor": "Features Padded, Increase Social Limit by 1 for Intimidation Tests, Restrictive Wireless Bonus Increase Social Limit by 2 for Intimidation Tests",
+        "capacity": "Armand’s right that it’s mostly about intimidation, but it’s still great protection. The stuff is so fluffy it’s hard to tell the man from the armor. It’s certainly not the best to wear in most social situations (if only because every time you turn around you’ll knock over all the drinks), but it has its place in the world. Picador"
+      },
+      "recommendation": "Add \"Features Padded, Increase Social Limit by 1 for Intimidation Tests, Restrictive Wireless Bonus Increase Social Limit by 2 for Intimidation Tests\" to modules.gear.payload.armor"
+    },
+    {
+      "type": "missing",
+      "priority": 1,
+      "category": "armor",
+      "item": "Features Gear Access, Increase Social Limit by 2 for Intimidation Tests and reduce it by 1 for all other Social Tests with the general public Wireless Bonus Increase Social Limit by 3 for Intimidation Tests",
+      "details": "Item from Core not found in JSON",
+      "expected": {
+        "armor": "Features Gear Access, Increase Social Limit by 2 for Intimidation Tests and reduce it by 1 for all other Social Tests with the general public Wireless Bonus Increase Social Limit by 3 for Intimidation Tests",
+        "capacity": "Close to the protective value of security armor but not quite, this stuff really shows its value in how easy it is to organize your tac gear. Stone"
+      },
+      "recommendation": "Add \"Features Gear Access, Increase Social Limit by 2 for Intimidation Tests and reduce it by 1 for all other Social Tests with the general public Wireless Bonus Increase Social Limit by 3 for Intimidation Tests\" to modules.gear.payload.armor"
+    },
+    {
+      "type": "missing",
+      "priority": 1,
+      "category": "armor",
+      "item": "Features Decrease Social Limit by 1 when worn, Concealability (–6), Restrictive",
+      "details": "Item from Core not found in JSON",
+      "expected": {
+        "armor": "Features Decrease Social Limit by 1 when worn, Concealability (–6), Restrictive",
+        "capacity": "It’s a handy backup and rarely gets a second glance lying around the doss or even thrown over a shoulder on a stroll in the heart of the sprawl. Sticks My biggest issue with this piece is how embarrassing you look when you throw it on. Deranged squatters in the Barrens look better than people wearing this shapeless mess. /dev/grrl Luckily it’s intended to save your hide, not get you best dressed at the corp ball. Sticks"
+      },
+      "recommendation": "Add \"Features Decrease Social Limit by 1 when worn, Concealability (–6), Restrictive\" to modules.gear.payload.armor"
+    },
+    {
+      "type": "missing",
+      "priority": 1,
+      "category": "armor",
+      "item": "Features Custom Fit, Padded, increase Social Limit by 1 when dealing with gang members, decrease Social Limit by 1 when dealing with the general public.",
+      "details": "Item from Core not found in JSON",
+      "expected": {
+        "armor": "Features Custom Fit, Padded, increase Social Limit by 1 when dealing with gang members, decrease Social Limit by 1 when dealing with the general public.",
+        "capacity": "Who would order more than eight pieces? /dev/grrl Anyone looking to give cheap protection to a large group of people for relatively cheap without drawing law enforcement’s attention. So, gangs. Some of those ganger leathers are actually this stuff. There’s added protection, and while it’s cheaper than some forms of armor it’s a hell of a lot more expensive than a simple leather jacket. Spending that money tells your members and other people who know your gang that you’re on the rise. 2XL"
+      },
+      "recommendation": "Add \"Features Custom Fit, Padded, increase Social Limit by 1 when dealing with gang members, decrease Social Limit by 1 when dealing with the general public.\" to modules.gear.payload.armor"
+    },
+    {
+      "type": "missing",
+      "priority": 1,
+      "category": "armor",
+      "item": "Features Flashpak (10 charges; recharges 1 charge every 10 seconds when connected to a power source. Requires a Complex Action to activate). Wireless Bonus Setting off the Flashpak is a Simple Action.",
+      "details": "Item from Core not found in JSON",
+      "expected": {
+        "armor": "Features Flashpak (10 charges; recharges 1 charge every 10 seconds when connected to a power source. Requires a Complex Action to activate). Wireless Bonus Setting off the Flashpak is a Simple Action.",
+        "capacity": "Not exactly a necessity, but it’s good to be aware of these pieces when you’re looking at the sec-team stomping in to break up your latest frag up. Just keep an eye out for the ocular device, usually located in the middle of the shield, that sets off the flashing. Identifying it is the first step to stopping it or avoiding it. DangerSensei Every time I stop in to see Sparks, a ganger pal of mine with the Tesla Armageddon, I get a chuckle at these things leaned all over the place. And gang scuffles are quite the sight as those guys turn it into a strobe rave and zap everything in sight. 2XL"
+      },
+      "recommendation": "Add \"Features Flashpak (10 charges; recharges 1 charge every 10 seconds when connected to a power source. Requires a Complex Action to activate). Wireless Bonus Setting off the Flashpak is a Simple Action.\" to modules.gear.payload.armor"
+    },
+    {
+      "type": "missing",
+      "priority": 1,
+      "category": "armor",
+      "item": "Features Biomonitor, Custom Fit, Holster Special Rules Characters shot while wearing Murder Armor may use an Interrupt Action (–5 Initiative Score) to play dead with an opposed Charisma + Performance [Social] vs. Intuition + Perception [Mental] Test. Use of this armor imposes a –4 dice pool penalty on the observer. Success means the observer ignores the character assuming they are down, and so they get no Defense Test against the character’s next attack. Gorepak replacement requires a Logic + Armorer [Mental] (4, 1 hour) Extended Test.",
+      "details": "Item from Core not found in JSON",
+      "expected": {
+        "armor": "Features Biomonitor, Custom Fit, Holster Special Rules Characters shot while wearing Murder Armor may use an Interrupt Action (–5 Initiative Score) to play dead with an opposed Charisma + Performance [Social] vs. Intuition + Perception [Mental] Test. Use of this armor imposes a –4 dice pool penalty on the observer. Success means the observer ignores the character assuming they are down, and so they get no Defense Test against the character’s next attack. Gorepak replacement requires a Logic + Armorer [Mental] (4, 1 hour) Extended Test.",
+        "capacity": "The twisted mind behind this stuff is a genius. Now mind you, it doesn’t work against real pros who put a bullet through the brainpan to make sure no one is left to come after them. It is great against gangers though, and even average corpsec officers who see a lot of blood and automatically think that means a kill. Thorn"
+      },
+      "recommendation": "Add \"Features Biomonitor, Custom Fit, Holster Special Rules Characters shot while wearing Murder Armor may use an Interrupt Action (–5 Initiative Score) to play dead with an opposed Charisma + Performance [Social] vs. Intuition + Perception [Mental] Test. Use of this armor imposes a –4 dice pool penalty on the observer. Success means the observer ignores the character assuming they are down, and so they get no Defense Test against the character’s next attack. Gorepak replacement requires a Logic + Armorer [Mental] (4, 1 hour) Extended Test.\" to modules.gear.payload.armor"
+    },
+    {
+      "type": "invalid_source",
+      "priority": 4,
+      "category": "armor",
+      "item": "(Synth)Leather",
+      "details": "Item \"synth-leather\" not found in reference files for sources: Core",
+      "recommendation": "Verify source of \"synth-leather\" - may need removal or move to sourcebook"
+    },
+    {
+      "type": "invalid_source",
+      "priority": 4,
+      "category": "armor",
+      "item": "Actioneer Business Clothes",
+      "details": "Item \"actioneer-business-clothes\" not found in reference files for sources: Core",
+      "recommendation": "Verify source of \"actioneer-business-clothes\" - may need removal or move to sourcebook"
+    },
+    {
+      "type": "invalid_source",
+      "priority": 4,
+      "category": "armor",
+      "item": "Armor Clothing",
+      "details": "Item \"armor-clothing\" not found in reference files for sources: Core",
+      "recommendation": "Verify source of \"armor-clothing\" - may need removal or move to sourcebook"
+    },
+    {
+      "type": "invalid_source",
+      "priority": 4,
+      "category": "armor",
+      "item": "Armor Jacket",
+      "details": "Item \"armor-jacket\" not found in reference files for sources: Core",
+      "recommendation": "Verify source of \"armor-jacket\" - may need removal or move to sourcebook"
+    },
+    {
+      "type": "invalid_source",
+      "priority": 4,
+      "category": "armor",
+      "item": "Armor Vest",
+      "details": "Item \"armor-vest\" not found in reference files for sources: Core",
+      "recommendation": "Verify source of \"armor-vest\" - may need removal or move to sourcebook"
+    },
+    {
+      "type": "invalid_source",
+      "priority": 4,
+      "category": "armor",
+      "item": "Ballistic shield",
+      "details": "Item \"ballistic-shield\" not found in reference files for sources: Core",
+      "recommendation": "Verify source of \"ballistic-shield\" - may need removal or move to sourcebook"
+    },
+    {
+      "type": "invalid_source",
+      "priority": 4,
+      "category": "armor",
+      "item": "Chameleon Suit",
+      "details": "Item \"chameleon-suit\" not found in reference files for sources: Core",
+      "recommendation": "Verify source of \"chameleon-suit\" - may need removal or move to sourcebook"
+    },
+    {
+      "type": "invalid_source",
+      "priority": 4,
+      "category": "armor",
+      "item": "Clothing",
+      "details": "Item \"clothing\" not found in reference files for sources: Core",
+      "recommendation": "Verify source of \"clothing\" - may need removal or move to sourcebook"
+    },
+    {
+      "type": "invalid_source",
+      "priority": 4,
+      "category": "armor",
+      "item": "Full Body Armor",
+      "details": "Item \"full-body-armor\" not found in reference files for sources: Core",
+      "recommendation": "Verify source of \"full-body-armor\" - may need removal or move to sourcebook"
+    },
+    {
+      "type": "invalid_source",
+      "priority": 4,
+      "category": "armor",
+      "item": "Full Helmet",
+      "details": "Item \"full-helmet\" not found in reference files for sources: Core",
+      "recommendation": "Verify source of \"full-helmet\" - may need removal or move to sourcebook"
+    },
+    {
+      "type": "invalid_source",
+      "priority": 4,
+      "category": "armor",
+      "item": "Helmet",
+      "details": "Item \"helmet\" not found in reference files for sources: Core",
+      "recommendation": "Verify source of \"helmet\" - may need removal or move to sourcebook"
+    },
+    {
+      "type": "invalid_source",
+      "priority": 4,
+      "category": "armor",
+      "item": "Lined Coat",
+      "details": "Item \"lined-coat\" not found in reference files for sources: Core",
+      "recommendation": "Verify source of \"lined-coat\" - may need removal or move to sourcebook"
+    },
+    {
+      "type": "invalid_source",
+      "priority": 4,
+      "category": "armor",
+      "item": "Riot shield",
+      "details": "Item \"riot-shield\" not found in reference files for sources: Core",
+      "recommendation": "Verify source of \"riot-shield\" - may need removal or move to sourcebook"
+    },
+    {
+      "type": "invalid_source",
+      "priority": 4,
+      "category": "armor",
+      "item": "SecureTech PPE",
+      "details": "Item \"securetech-ppe\" not found in reference files for sources: Core",
+      "recommendation": "Verify source of \"securetech-ppe\" - may need removal or move to sourcebook"
+    },
+    {
+      "type": "invalid_source",
+      "priority": 4,
+      "category": "armor",
+      "item": "Urban Explorer Jumpsuit",
+      "details": "Item \"urban-explorer-jumpsuit\" not found in reference files for sources: Core",
+      "recommendation": "Verify source of \"urban-explorer-jumpsuit\" - may need removal or move to sourcebook"
+    },
+    {
+      "type": "invalid_source",
+      "priority": 4,
+      "category": "qualities.positive",
+      "item": "Ambidextrous",
+      "details": "Item \"ambidextrous\" not found in reference files for sources: Core",
+      "recommendation": "Verify source of \"ambidextrous\" - may need removal or move to sourcebook"
+    },
+    {
+      "type": "invalid_source",
+      "priority": 4,
+      "category": "qualities.positive",
+      "item": "Analytical Mind",
+      "details": "Item \"analytical-mind\" not found in reference files for sources: Core",
+      "recommendation": "Verify source of \"analytical-mind\" - may need removal or move to sourcebook"
+    },
+    {
+      "type": "invalid_source",
+      "priority": 4,
+      "category": "qualities.positive",
+      "item": "Aptitude",
+      "details": "Item \"aptitude\" not found in reference files for sources: Core",
+      "recommendation": "Verify source of \"aptitude\" - may need removal or move to sourcebook"
+    },
+    {
+      "type": "invalid_source",
+      "priority": 4,
+      "category": "qualities.positive",
+      "item": "Astral Chameleon",
+      "details": "Item \"astral-chameleon\" not found in reference files for sources: Core",
+      "recommendation": "Verify source of \"astral-chameleon\" - may need removal or move to sourcebook"
+    },
+    {
+      "type": "invalid_source",
+      "priority": 4,
+      "category": "qualities.positive",
+      "item": "Bilingual",
+      "details": "Item \"bilingual\" not found in reference files for sources: Core",
+      "recommendation": "Verify source of \"bilingual\" - may need removal or move to sourcebook"
+    },
+    {
+      "type": "invalid_source",
+      "priority": 4,
+      "category": "qualities.positive",
+      "item": "Blandness",
+      "details": "Item \"blandness\" not found in reference files for sources: Core",
+      "recommendation": "Verify source of \"blandness\" - may need removal or move to sourcebook"
+    },
+    {
+      "type": "invalid_source",
+      "priority": 4,
+      "category": "qualities.positive",
+      "item": "Catlike",
+      "details": "Item \"catlike\" not found in reference files for sources: Core",
+      "recommendation": "Verify source of \"catlike\" - may need removal or move to sourcebook"
+    },
+    {
+      "type": "invalid_source",
+      "priority": 4,
+      "category": "qualities.positive",
+      "item": "Codeslinger",
+      "details": "Item \"codeslinger\" not found in reference files for sources: Core",
+      "recommendation": "Verify source of \"codeslinger\" - may need removal or move to sourcebook"
+    },
+    {
+      "type": "invalid_source",
+      "priority": 4,
+      "category": "qualities.positive",
+      "item": "Double-Jointed",
+      "details": "Item \"double-jointed\" not found in reference files for sources: Core",
+      "recommendation": "Verify source of \"double-jointed\" - may need removal or move to sourcebook"
+    },
+    {
+      "type": "invalid_source",
+      "priority": 4,
+      "category": "qualities.positive",
+      "item": "Exceptional Attribute",
+      "details": "Item \"exceptional-attribute\" not found in reference files for sources: Core",
+      "recommendation": "Verify source of \"exceptional-attribute\" - may need removal or move to sourcebook"
+    },
+    {
+      "type": "invalid_source",
+      "priority": 4,
+      "category": "qualities.positive",
+      "item": "First Impression",
+      "details": "Item \"first-impression\" not found in reference files for sources: Core",
+      "recommendation": "Verify source of \"first-impression\" - may need removal or move to sourcebook"
+    },
+    {
+      "type": "invalid_source",
+      "priority": 4,
+      "category": "qualities.positive",
+      "item": "Focused Concentration",
+      "details": "Item \"focused-concentration\" not found in reference files for sources: Core",
+      "recommendation": "Verify source of \"focused-concentration\" - may need removal or move to sourcebook"
+    },
+    {
+      "type": "invalid_source",
+      "priority": 4,
+      "category": "qualities.positive",
+      "item": "Gearhead",
+      "details": "Item \"gearhead\" not found in reference files for sources: Core",
+      "recommendation": "Verify source of \"gearhead\" - may need removal or move to sourcebook"
+    },
+    {
+      "type": "invalid_source",
+      "priority": 4,
+      "category": "qualities.positive",
+      "item": "Guts",
+      "details": "Item \"guts\" not found in reference files for sources: Core",
+      "recommendation": "Verify source of \"guts\" - may need removal or move to sourcebook"
+    },
+    {
+      "type": "invalid_source",
+      "priority": 4,
+      "category": "qualities.positive",
+      "item": "High Pain Tolerance",
+      "details": "Item \"high-pain-tolerance\" not found in reference files for sources: Core",
+      "recommendation": "Verify source of \"high-pain-tolerance\" - may need removal or move to sourcebook"
+    },
+    {
+      "type": "invalid_source",
+      "priority": 4,
+      "category": "qualities.positive",
+      "item": "Home Ground",
+      "details": "Item \"home-ground\" not found in reference files for sources: Core",
+      "recommendation": "Verify source of \"home-ground\" - may need removal or move to sourcebook"
+    },
+    {
+      "type": "invalid_source",
+      "priority": 4,
+      "category": "qualities.positive",
+      "item": "Human-Looking",
+      "details": "Item \"human-looking\" not found in reference files for sources: Core",
+      "recommendation": "Verify source of \"human-looking\" - may need removal or move to sourcebook"
+    },
+    {
+      "type": "invalid_source",
+      "priority": 4,
+      "category": "qualities.positive",
+      "item": "Indomitable",
+      "details": "Item \"indomitable\" not found in reference files for sources: Core",
+      "recommendation": "Verify source of \"indomitable\" - may need removal or move to sourcebook"
+    },
+    {
+      "type": "invalid_source",
+      "priority": 4,
+      "category": "qualities.positive",
+      "item": "Juryrigger",
+      "details": "Item \"juryrigger\" not found in reference files for sources: Core",
+      "recommendation": "Verify source of \"juryrigger\" - may need removal or move to sourcebook"
+    },
+    {
+      "type": "invalid_source",
+      "priority": 4,
+      "category": "qualities.positive",
+      "item": "Low-Light Vision",
+      "details": "Item \"low-light-vision\" not found in reference files for sources: Core",
+      "recommendation": "Verify source of \"low-light-vision\" - may need removal or move to sourcebook"
+    },
+    {
+      "type": "invalid_source",
+      "priority": 4,
+      "category": "qualities.positive",
+      "item": "Lucky",
+      "details": "Item \"lucky\" not found in reference files for sources: Core",
+      "recommendation": "Verify source of \"lucky\" - may need removal or move to sourcebook"
+    },
+    {
+      "type": "invalid_source",
+      "priority": 4,
+      "category": "qualities.positive",
+      "item": "Magical Resistance",
+      "details": "Item \"magical-resistance\" not found in reference files for sources: Core",
+      "recommendation": "Verify source of \"magical-resistance\" - may need removal or move to sourcebook"
+    },
+    {
+      "type": "invalid_source",
+      "priority": 4,
+      "category": "qualities.positive",
+      "item": "Mentor Spirit",
+      "details": "Item \"mentor-spirit\" not found in reference files for sources: Core",
+      "recommendation": "Verify source of \"mentor-spirit\" - may need removal or move to sourcebook"
+    },
+    {
+      "type": "invalid_source",
+      "priority": 4,
+      "category": "qualities.positive",
+      "item": "Natural Athlete",
+      "details": "Item \"natural-athlete\" not found in reference files for sources: Core",
+      "recommendation": "Verify source of \"natural-athlete\" - may need removal or move to sourcebook"
+    },
+    {
+      "type": "invalid_source",
+      "priority": 4,
+      "category": "qualities.positive",
+      "item": "Natural Hardening",
+      "details": "Item \"natural-hardening\" not found in reference files for sources: Core",
+      "recommendation": "Verify source of \"natural-hardening\" - may need removal or move to sourcebook"
+    },
+    {
+      "type": "invalid_source",
+      "priority": 4,
+      "category": "qualities.positive",
+      "item": "Natural Immunity",
+      "details": "Item \"natural-immunity\" not found in reference files for sources: Core",
+      "recommendation": "Verify source of \"natural-immunity\" - may need removal or move to sourcebook"
+    },
+    {
+      "type": "invalid_source",
+      "priority": 4,
+      "category": "qualities.positive",
+      "item": "Photographic Memory",
+      "details": "Item \"photographic-memory\" not found in reference files for sources: Core",
+      "recommendation": "Verify source of \"photographic-memory\" - may need removal or move to sourcebook"
+    },
+    {
+      "type": "invalid_source",
+      "priority": 4,
+      "category": "qualities.positive",
+      "item": "Quick Healer",
+      "details": "Item \"quick-healer\" not found in reference files for sources: Core",
+      "recommendation": "Verify source of \"quick-healer\" - may need removal or move to sourcebook"
+    },
+    {
+      "type": "invalid_source",
+      "priority": 4,
+      "category": "qualities.positive",
+      "item": "Resistance to Pathogens/Toxins",
+      "details": "Item \"resistance-pathogens-toxins\" not found in reference files for sources: Core",
+      "recommendation": "Verify source of \"resistance-pathogens-toxins\" - may need removal or move to sourcebook"
+    },
+    {
+      "type": "invalid_source",
+      "priority": 4,
+      "category": "qualities.positive",
+      "item": "Spirit Affinity",
+      "details": "Item \"spirit-affinity\" not found in reference files for sources: Core",
+      "recommendation": "Verify source of \"spirit-affinity\" - may need removal or move to sourcebook"
+    },
+    {
+      "type": "invalid_source",
+      "priority": 4,
+      "category": "qualities.positive",
+      "item": "Thermographic Vision",
+      "details": "Item \"thermographic-vision\" not found in reference files for sources: Core",
+      "recommendation": "Verify source of \"thermographic-vision\" - may need removal or move to sourcebook"
+    },
+    {
+      "type": "invalid_source",
+      "priority": 4,
+      "category": "qualities.positive",
+      "item": "Toughness",
+      "details": "Item \"toughness\" not found in reference files for sources: Core",
+      "recommendation": "Verify source of \"toughness\" - may need removal or move to sourcebook"
+    },
+    {
+      "type": "invalid_source",
+      "priority": 4,
+      "category": "qualities.positive",
+      "item": "Will to Live",
+      "details": "Item \"will-to-live\" not found in reference files for sources: Core",
+      "recommendation": "Verify source of \"will-to-live\" - may need removal or move to sourcebook"
+    },
+    {
+      "type": "invalid_source",
+      "priority": 4,
+      "category": "qualities.negative",
+      "item": "Addiction",
+      "details": "Item \"addiction\" not found in reference files for sources: Core",
+      "recommendation": "Verify source of \"addiction\" - may need removal or move to sourcebook"
+    },
+    {
+      "type": "invalid_source",
+      "priority": 4,
+      "category": "qualities.negative",
+      "item": "Allergy",
+      "details": "Item \"allergy\" not found in reference files for sources: Core",
+      "recommendation": "Verify source of \"allergy\" - may need removal or move to sourcebook"
+    },
+    {
+      "type": "invalid_source",
+      "priority": 4,
+      "category": "qualities.negative",
+      "item": "Astral Beacon",
+      "details": "Item \"astral-beacon\" not found in reference files for sources: Core",
+      "recommendation": "Verify source of \"astral-beacon\" - may need removal or move to sourcebook"
+    },
+    {
+      "type": "invalid_source",
+      "priority": 4,
+      "category": "qualities.negative",
+      "item": "Bad Luck",
+      "details": "Item \"bad-luck\" not found in reference files for sources: Core",
+      "recommendation": "Verify source of \"bad-luck\" - may need removal or move to sourcebook"
+    },
+    {
+      "type": "invalid_source",
+      "priority": 4,
+      "category": "qualities.negative",
+      "item": "Bad Rep",
+      "details": "Item \"bad-rep\" not found in reference files for sources: Core",
+      "recommendation": "Verify source of \"bad-rep\" - may need removal or move to sourcebook"
+    },
+    {
+      "type": "invalid_source",
+      "priority": 4,
+      "category": "qualities.negative",
+      "item": "Code of Honor",
+      "details": "Item \"code-of-honor\" not found in reference files for sources: Core",
+      "recommendation": "Verify source of \"code-of-honor\" - may need removal or move to sourcebook"
+    },
+    {
+      "type": "invalid_source",
+      "priority": 4,
+      "category": "qualities.negative",
+      "item": "Codeblock",
+      "details": "Item \"codeblock\" not found in reference files for sources: Core",
+      "recommendation": "Verify source of \"codeblock\" - may need removal or move to sourcebook"
+    },
+    {
+      "type": "invalid_source",
+      "priority": 4,
+      "category": "qualities.negative",
+      "item": "Combat Paralysis",
+      "details": "Item \"combat-paralysis\" not found in reference files for sources: Core",
+      "recommendation": "Verify source of \"combat-paralysis\" - may need removal or move to sourcebook"
+    },
+    {
+      "type": "invalid_source",
+      "priority": 4,
+      "category": "qualities.negative",
+      "item": "Dependents",
+      "details": "Item \"dependents\" not found in reference files for sources: Core",
+      "recommendation": "Verify source of \"dependents\" - may need removal or move to sourcebook"
+    },
+    {
+      "type": "invalid_source",
+      "priority": 4,
+      "category": "qualities.negative",
+      "item": "Distinctive Style",
+      "details": "Item \"distinctive-style\" not found in reference files for sources: Core",
+      "recommendation": "Verify source of \"distinctive-style\" - may need removal or move to sourcebook"
+    },
+    {
+      "type": "invalid_source",
+      "priority": 4,
+      "category": "qualities.negative",
+      "item": "Elf Poser",
+      "details": "Item \"elf-poser\" not found in reference files for sources: Core",
+      "recommendation": "Verify source of \"elf-poser\" - may need removal or move to sourcebook"
+    },
+    {
+      "type": "invalid_source",
+      "priority": 4,
+      "category": "qualities.negative",
+      "item": "Gremlins",
+      "details": "Item \"gremlins\" not found in reference files for sources: Core",
+      "recommendation": "Verify source of \"gremlins\" - may need removal or move to sourcebook"
+    },
+    {
+      "type": "invalid_source",
+      "priority": 4,
+      "category": "qualities.negative",
+      "item": "Incompetent",
+      "details": "Item \"incompetent\" not found in reference files for sources: Core",
+      "recommendation": "Verify source of \"incompetent\" - may need removal or move to sourcebook"
+    },
+    {
+      "type": "invalid_source",
+      "priority": 4,
+      "category": "qualities.negative",
+      "item": "Insomnia",
+      "details": "Item \"insomnia\" not found in reference files for sources: Core",
+      "recommendation": "Verify source of \"insomnia\" - may need removal or move to sourcebook"
+    },
+    {
+      "type": "invalid_source",
+      "priority": 4,
+      "category": "qualities.negative",
+      "item": "Loss of Confidence",
+      "details": "Item \"loss-of-confidence\" not found in reference files for sources: Core",
+      "recommendation": "Verify source of \"loss-of-confidence\" - may need removal or move to sourcebook"
+    },
+    {
+      "type": "invalid_source",
+      "priority": 4,
+      "category": "qualities.negative",
+      "item": "Low Pain Tolerance",
+      "details": "Item \"low-pain-tolerance\" not found in reference files for sources: Core",
+      "recommendation": "Verify source of \"low-pain-tolerance\" - may need removal or move to sourcebook"
+    },
+    {
+      "type": "invalid_source",
+      "priority": 4,
+      "category": "qualities.negative",
+      "item": "Ork Poser",
+      "details": "Item \"ork-poser\" not found in reference files for sources: Core",
+      "recommendation": "Verify source of \"ork-poser\" - may need removal or move to sourcebook"
+    },
+    {
+      "type": "invalid_source",
+      "priority": 4,
+      "category": "qualities.negative",
+      "item": "Prejudiced",
+      "details": "Item \"prejudiced\" not found in reference files for sources: Core",
+      "recommendation": "Verify source of \"prejudiced\" - may need removal or move to sourcebook"
+    },
+    {
+      "type": "invalid_source",
+      "priority": 4,
+      "category": "qualities.negative",
+      "item": "Scorched",
+      "details": "Item \"scorched\" not found in reference files for sources: Core",
+      "recommendation": "Verify source of \"scorched\" - may need removal or move to sourcebook"
+    },
+    {
+      "type": "invalid_source",
+      "priority": 4,
+      "category": "qualities.negative",
+      "item": "Sensitive System",
+      "details": "Item \"sensitive-system\" not found in reference files for sources: Core",
+      "recommendation": "Verify source of \"sensitive-system\" - may need removal or move to sourcebook"
+    },
+    {
+      "type": "invalid_source",
+      "priority": 4,
+      "category": "qualities.negative",
+      "item": "Simsense Vertigo",
+      "details": "Item \"simsense-vertigo\" not found in reference files for sources: Core",
+      "recommendation": "Verify source of \"simsense-vertigo\" - may need removal or move to sourcebook"
+    },
+    {
+      "type": "invalid_source",
+      "priority": 4,
+      "category": "qualities.negative",
+      "item": "SINner",
+      "details": "Item \"sinner\" not found in reference files for sources: Core",
+      "recommendation": "Verify source of \"sinner\" - may need removal or move to sourcebook"
+    },
+    {
+      "type": "invalid_source",
+      "priority": 4,
+      "category": "qualities.negative",
+      "item": "Social Stress",
+      "details": "Item \"social-stress\" not found in reference files for sources: Core",
+      "recommendation": "Verify source of \"social-stress\" - may need removal or move to sourcebook"
+    },
+    {
+      "type": "invalid_source",
+      "priority": 4,
+      "category": "qualities.negative",
+      "item": "Spirit Bane",
+      "details": "Item \"spirit-bane\" not found in reference files for sources: Core",
+      "recommendation": "Verify source of \"spirit-bane\" - may need removal or move to sourcebook"
+    },
+    {
+      "type": "invalid_source",
+      "priority": 4,
+      "category": "qualities.negative",
+      "item": "Uncouth",
+      "details": "Item \"uncouth\" not found in reference files for sources: Core",
+      "recommendation": "Verify source of \"uncouth\" - may need removal or move to sourcebook"
+    },
+    {
+      "type": "invalid_source",
+      "priority": 4,
+      "category": "qualities.negative",
+      "item": "Uneducated",
+      "details": "Item \"uneducated\" not found in reference files for sources: Core",
+      "recommendation": "Verify source of \"uneducated\" - may need removal or move to sourcebook"
+    },
+    {
+      "type": "invalid_source",
+      "priority": 4,
+      "category": "qualities.negative",
+      "item": "Unsteady Hands",
+      "details": "Item \"unsteady-hands\" not found in reference files for sources: Core",
+      "recommendation": "Verify source of \"unsteady-hands\" - may need removal or move to sourcebook"
+    },
+    {
+      "type": "invalid_source",
+      "priority": 4,
+      "category": "qualities.negative",
+      "item": "Weak Immune System",
+      "details": "Item \"weak-immune-system\" not found in reference files for sources: Core",
+      "recommendation": "Verify source of \"weak-immune-system\" - may need removal or move to sourcebook"
+    }
+  ]
+}
