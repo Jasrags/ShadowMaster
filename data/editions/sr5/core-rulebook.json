@@ -9289,17 +9289,6 @@
             "legality": "forbidden"
           },
           {
-            "id": "cranial-bomb",
-            "name": "Cranial Bomb",
-            "category": "headware",
-            "essenceCost": 0,
-            "cost": 5000,
-            "availability": 12,
-            "description": "External cranial explosive device.",
-            "page": 453,
-            "legality": "forbidden"
-          },
-          {
             "id": "olfactory-booster",
             "name": "Olfactory Booster",
             "category": "headware",
@@ -10022,13 +10011,36 @@
             "legality": "restricted"
           },
           {
-            "id": "internal-air-tank",
-            "name": "Internal Air Tank",
+            "id": "internal-air-tank-1",
+            "name": "Internal Air Tank (Rating 1)",
             "category": "bodyware",
             "essenceCost": 0.25,
-            "cost": 8000,
-            "availability": 8,
+            "cost": 4500,
+            "availability": 1,
+            "capacityCost": 3,
+            "description": "1 hour of internal oxygen supply.",
+            "page": 456
+          },
+          {
+            "id": "internal-air-tank-2",
+            "name": "Internal Air Tank (Rating 2)",
+            "category": "bodyware",
+            "essenceCost": 0.25,
+            "cost": 9000,
+            "availability": 2,
+            "capacityCost": 3,
             "description": "2 hours of internal oxygen supply.",
+            "page": 456
+          },
+          {
+            "id": "internal-air-tank-3",
+            "name": "Internal Air Tank (Rating 3)",
+            "category": "bodyware",
+            "essenceCost": 0.25,
+            "cost": 13500,
+            "availability": 3,
+            "capacityCost": 3,
+            "description": "3 hours of internal oxygen supply.",
             "page": 456
           },
           {
