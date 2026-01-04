@@ -9256,9 +9256,10 @@
             "id": "cortex-bomb",
             "name": "Cortex Bomb (Kink)",
             "category": "headware",
-            "essenceCost": 0.2,
+            "essenceCost": 0,
             "cost": 10000,
-            "availability": 16,
+            "availability": 12,
+            "capacityCost": 1,
             "description": "Cranial explosive for security/control. Kink model causes disabling pain.",
             "page": 452,
             "legality": "forbidden"
@@ -9267,9 +9268,10 @@
             "id": "cortex-bomb-micro",
             "name": "Cortex Bomb (Micro)",
             "category": "headware",
-            "essenceCost": 0.2,
+            "essenceCost": 0,
             "cost": 25000,
             "availability": 16,
+            "capacityCost": 2,
             "description": "Smaller cranial explosive. 3P damage, -3 AP.",
             "page": 452,
             "legality": "forbidden"
@@ -9278,9 +9280,10 @@
             "id": "cortex-bomb-area",
             "name": "Cortex Bomb (Area)",
             "category": "headware",
-            "essenceCost": 0.2,
+            "essenceCost": 0,
             "cost": 40000,
             "availability": 20,
+            "capacityCost": 3,
             "description": "Cranial explosive with area effect. 15P, -6 AP, -1/m.",
             "page": 452,
             "legality": "forbidden"
@@ -9433,6 +9436,95 @@
                 "perRating": false
               }
             }
+          },
+          {
+            "id": "skilljack",
+            "name": "Skilljack",
+            "category": "headware",
+            "essenceCost": 0.1,
+            "cost": 20000,
+            "availability": 2,
+            "hasRating": true,
+            "maxRating": 6,
+            "essencePerRating": true,
+            "costPerRating": true,
+            "description": "Interprets knowsofts and linguasofts. Can run activesofts with skillwires.",
+            "wirelessBonus": "Increases total skill rating limit to Rating x 3.",
+            "page": 452,
+            "ratingSpec": {
+              "rating": {
+                "hasRating": true,
+                "minRating": 1,
+                "maxRating": 6
+              },
+              "costScaling": {
+                "baseValue": 20000,
+                "perRating": true
+              },
+              "availabilityScaling": {
+                "baseValue": 2,
+                "perRating": true
+              },
+              "essenceScaling": {
+                "baseValue": 0.1,
+                "perRating": true
+              }
+            }
+          },
+          {
+            "id": "simrig",
+            "name": "Simrig",
+            "category": "headware",
+            "essenceCost": 0.2,
+            "cost": 4000,
+            "availability": 12,
+            "description": "Records sensory data for simsense playback or sale.",
+            "page": 452,
+            "legality": "restricted"
+          },
+          {
+            "id": "data-lock",
+            "name": "Data Lock",
+            "category": "headware",
+            "essenceCost": 0.1,
+            "cost": 1000,
+            "availability": 2,
+            "hasRating": true,
+            "maxRating": 12,
+            "costPerRating": true,
+            "description": "Turns bearer into a walking data safe. Device Rating equal to implant rating.",
+            "page": 452,
+            "ratingSpec": {
+              "rating": {
+                "hasRating": true,
+                "minRating": 1,
+                "maxRating": 12
+              },
+              "costScaling": {
+                "baseValue": 1000,
+                "perRating": true
+              },
+              "availabilityScaling": {
+                "baseValue": 2,
+                "perRating": true
+              },
+              "essenceScaling": {
+                "baseValue": 0.1,
+                "perRating": false
+              }
+            }
+          },
+          {
+            "id": "cyberdeck-implant",
+            "name": "Cyberdeck (Implanted)",
+            "category": "headware",
+            "essenceCost": 0.4,
+            "cost": 5000,
+            "availability": 5,
+            "capacityCost": 4,
+            "description": "Implanted cyberdeck. Cost is in addition to the deck itself.",
+            "page": 452,
+            "legality": "restricted"
           },
           {
             "id": "cybereyes-1",
@@ -9815,7 +9907,7 @@
             "name": "Bone Lacing (Titanium)",
             "category": "bodyware",
             "essenceCost": 1.5,
-            "cost": 40000,
+            "cost": 30000,
             "availability": 16,
             "description": "+3 Body for damage resistance. Unarmed DV +3.",
             "attributeBonuses": {
@@ -10602,6 +10694,126 @@
             "legality": "restricted"
           },
           {
+            "id": "implant-weapon-holdout",
+            "name": "Implant Weapon (Hold-Out Pistol)",
+            "category": "cybernetic-weapon",
+            "essenceCost": 0.25,
+            "cost": 2000,
+            "availability": 4,
+            "capacityCost": 2,
+            "description": "Concealed hold-out pistol. Cost is in addition to the weapon itself.",
+            "page": 458,
+            "legality": "restricted"
+          },
+          {
+            "id": "implant-weapon-light-pistol",
+            "name": "Implant Weapon (Light Pistol)",
+            "category": "cybernetic-weapon",
+            "essenceCost": 0.25,
+            "cost": 2500,
+            "availability": 6,
+            "capacityCost": 3,
+            "description": "Concealed light pistol. Cost is in addition to the weapon itself.",
+            "page": 458,
+            "legality": "restricted"
+          },
+          {
+            "id": "implant-weapon-machine-pistol",
+            "name": "Implant Weapon (Machine Pistol)",
+            "category": "cybernetic-weapon",
+            "essenceCost": 0.5,
+            "cost": 3000,
+            "availability": 8,
+            "description": "Concealed machine pistol. Cost is in addition to the weapon itself.",
+            "page": 458,
+            "legality": "restricted"
+          },
+          {
+            "id": "implant-weapon-heavy-pistol",
+            "name": "Implant Weapon (Heavy Pistol)",
+            "category": "cybernetic-weapon",
+            "essenceCost": 0.5,
+            "cost": 4000,
+            "availability": 8,
+            "capacityCost": 5,
+            "description": "Concealed heavy pistol. Cost is in addition to the weapon itself.",
+            "page": 458,
+            "legality": "restricted"
+          },
+          {
+            "id": "implant-weapon-smg",
+            "name": "Implant Weapon (Submachine Gun)",
+            "category": "cybernetic-weapon",
+            "essenceCost": 0.75,
+            "cost": 6000,
+            "availability": 12,
+            "description": "Concealed submachine gun. Cost is in addition to the weapon itself.",
+            "page": 458,
+            "legality": "restricted"
+          },
+          {
+            "id": "implant-weapon-shotgun",
+            "name": "Implant Weapon (Shotgun)",
+            "category": "cybernetic-weapon",
+            "essenceCost": 1.25,
+            "cost": 7500,
+            "availability": 14,
+            "capacityCost": 8,
+            "description": "Concealed shotgun. Cost is in addition to the weapon itself.",
+            "page": 458,
+            "legality": "restricted"
+          },
+          {
+            "id": "implant-weapon-grenade-launcher",
+            "name": "Implant Weapon (Grenade Launcher)",
+            "category": "cybernetic-weapon",
+            "essenceCost": 0.5,
+            "cost": 8000,
+            "availability": 18,
+            "capacityCost": 6,
+            "description": "Concealed grenade launcher. Cost is in addition to the weapon itself.",
+            "page": 458,
+            "legality": "forbidden"
+          },
+          {
+            "id": "implant-weapon-external-clip",
+            "name": "External Clip Port",
+            "category": "cybernetic-weapon-accessory",
+            "essenceCost": 0,
+            "cost": 500,
+            "availability": 4,
+            "capacityCost": 1,
+            "parentType": "implant-weapon",
+            "description": "External ammunition port for implant weapons.",
+            "page": 458,
+            "legality": "restricted"
+          },
+          {
+            "id": "implant-weapon-laser-sight",
+            "name": "Laser Sight (Implant)",
+            "category": "cybernetic-weapon-accessory",
+            "essenceCost": 0,
+            "cost": 750,
+            "availability": 2,
+            "capacityCost": 1,
+            "parentType": "implant-weapon",
+            "description": "Integrated laser sight for implant weapons.",
+            "page": 458
+          },
+          {
+            "id": "implant-weapon-silencer",
+            "name": "Silencer/Suppressor (Implant)",
+            "category": "cybernetic-weapon-accessory",
+            "essenceCost": 0,
+            "cost": 750,
+            "availability": 6,
+            "capacityCost": 1,
+            "parentType": "implant-weapon",
+            "description": "Integrated silencer for implant weapons.",
+            "page": 458,
+            "legality": "restricted"
+          },
+          {
             "id": "cyber-holster",
             "name": "Cyber Holster",
             "category": "bodyware",
@@ -10693,16 +10905,6 @@
             "page": 460
           },
           {
-            "id": "digestive-expansion",
-            "name": "Digestive Expansion",
-            "category": "basic",
-            "essenceCost": 0.1,
-            "cost": 3500,
-            "availability": 4,
-            "description": "Digest previously inedible materials.",
-            "page": 460
-          },
-          {
             "id": "enhanced-articulation",
             "name": "Enhanced Articulation",
             "category": "basic",
@@ -10710,36 +10912,6 @@
             "cost": 24000,
             "availability": 12,
             "description": "+1 to Escape Artist tests and Physical Limit.",
-            "page": 460
-          },
-          {
-            "id": "extended-volume-1",
-            "name": "Extended Volume (Level 1)",
-            "category": "basic",
-            "essenceCost": 0.1,
-            "cost": 4000,
-            "availability": 6,
-            "description": "+1 to Social tests involving voice.",
-            "page": 460
-          },
-          {
-            "id": "extended-volume-2",
-            "name": "Extended Volume (Level 2)",
-            "category": "basic",
-            "essenceCost": 0.2,
-            "cost": 8000,
-            "availability": 8,
-            "description": "+2 to Social tests involving voice.",
-            "page": 460
-          },
-          {
-            "id": "extended-volume-3",
-            "name": "Extended Volume (Level 3)",
-            "category": "basic",
-            "essenceCost": 0.3,
-            "cost": 12000,
-            "availability": 10,
-            "description": "+3 to Social tests involving voice.",
             "page": 460
           },
           {
@@ -10885,66 +11057,6 @@
             },
             "page": 460,
             "legality": "restricted"
-          },
-          {
-            "id": "nephritic-screen-1",
-            "name": "Nephritic Screen (Rating 1)",
-            "category": "basic",
-            "essenceCost": 0.2,
-            "cost": 5000,
-            "availability": 6,
-            "description": "+1 dice to resist toxins.",
-            "page": 460
-          },
-          {
-            "id": "nephritic-screen-2",
-            "name": "Nephritic Screen (Rating 2)",
-            "category": "basic",
-            "essenceCost": 0.25,
-            "cost": 10000,
-            "availability": 8,
-            "description": "+2 dice to resist toxins.",
-            "page": 460
-          },
-          {
-            "id": "nephritic-screen-3",
-            "name": "Nephritic Screen (Rating 3)",
-            "category": "basic",
-            "essenceCost": 0.3,
-            "cost": 15000,
-            "availability": 10,
-            "description": "+3 dice to resist toxins.",
-            "page": 460
-          },
-          {
-            "id": "nephritic-screen-4",
-            "name": "Nephritic Screen (Rating 4)",
-            "category": "basic",
-            "essenceCost": 0.35,
-            "cost": 20000,
-            "availability": 12,
-            "description": "+4 dice to resist toxins.",
-            "page": 460
-          },
-          {
-            "id": "nephritic-screen-5",
-            "name": "Nephritic Screen (Rating 5)",
-            "category": "basic",
-            "essenceCost": 0.4,
-            "cost": 25000,
-            "availability": 14,
-            "description": "+5 dice to resist toxins.",
-            "page": 460
-          },
-          {
-            "id": "nephritic-screen-6",
-            "name": "Nephritic Screen (Rating 6)",
-            "category": "basic",
-            "essenceCost": 0.45,
-            "cost": 30000,
-            "availability": 16,
-            "description": "+6 dice to resist toxins.",
-            "page": 460
           },
           {
             "id": "orthoskin-bio-1",
@@ -11240,7 +11352,158 @@
             "page": 461
           },
           {
-            "id": "cerebellum-booster-1",
+            "id": "tailored-pheromones-1",
+            "name": "Tailored Pheromones (Rating 1)",
+            "category": "basic",
+            "essenceCost": 0.2,
+            "cost": 31000,
+            "availability": 4,
+            "description": "+1 to Acting and Influence skill tests. +1 Social Limit.",
+            "attributeBonuses": {
+              "socialLimit": 1
+            },
+            "page": 460,
+            "legality": "restricted"
+          },
+          {
+            "id": "tailored-pheromones-2",
+            "name": "Tailored Pheromones (Rating 2)",
+            "category": "basic",
+            "essenceCost": 0.4,
+            "cost": 62000,
+            "availability": 8,
+            "description": "+2 to Acting and Influence skill tests. +2 Social Limit.",
+            "attributeBonuses": {
+              "socialLimit": 2
+            },
+            "page": 460,
+            "legality": "restricted"
+          },
+          {
+            "id": "tailored-pheromones-3",
+            "name": "Tailored Pheromones (Rating 3)",
+            "category": "basic",
+            "essenceCost": 0.6,
+            "cost": 93000,
+            "availability": 12,
+            "description": "+3 to Acting and Influence skill tests. +3 Social Limit.",
+            "attributeBonuses": {
+              "socialLimit": 3
+            },
+            "page": 460,
+            "legality": "restricted"
+          },
+          {
+            "id": "bone-density-augmentation-1",
+            "name": "Bone Density Augmentation (Rating 1)",
+            "category": "basic",
+            "essenceCost": 0.3,
+            "cost": 5000,
+            "availability": 4,
+            "description": "Unarmed damage becomes (STR)P. Incompatible with bone lacing.",
+            "page": 459
+          },
+          {
+            "id": "bone-density-augmentation-2",
+            "name": "Bone Density Augmentation (Rating 2)",
+            "category": "basic",
+            "essenceCost": 0.6,
+            "cost": 10000,
+            "availability": 8,
+            "description": "+1 Body for damage resistance. Unarmed (STR+1)P. Incompatible with bone lacing.",
+            "attributeBonuses": {
+              "bodyArmor": 1
+            },
+            "page": 459
+          },
+          {
+            "id": "bone-density-augmentation-3",
+            "name": "Bone Density Augmentation (Rating 3)",
+            "category": "basic",
+            "essenceCost": 0.9,
+            "cost": 15000,
+            "availability": 12,
+            "description": "+2 Body for damage resistance. Unarmed (STR+2)P. Incompatible with bone lacing.",
+            "attributeBonuses": {
+              "bodyArmor": 2
+            },
+            "page": 459
+          },
+          {
+            "id": "bone-density-augmentation-4",
+            "name": "Bone Density Augmentation (Rating 4)",
+            "category": "basic",
+            "essenceCost": 1.2,
+            "cost": 20000,
+            "availability": 16,
+            "description": "+3 Body for damage resistance. Unarmed (STR+3)P. Incompatible with bone lacing.",
+            "attributeBonuses": {
+              "bodyArmor": 3
+            },
+            "page": 459
+          },
+          {
+            "id": "toxin-extractor-1",
+            "name": "Toxin Extractor (Rating 1)",
+            "category": "basic",
+            "essenceCost": 0.2,
+            "cost": 4800,
+            "availability": 3,
+            "description": "+1 dice to Toxin Resistance tests.",
+            "page": 461
+          },
+          {
+            "id": "toxin-extractor-2",
+            "name": "Toxin Extractor (Rating 2)",
+            "category": "basic",
+            "essenceCost": 0.4,
+            "cost": 9600,
+            "availability": 6,
+            "description": "+2 dice to Toxin Resistance tests.",
+            "page": 461
+          },
+          {
+            "id": "toxin-extractor-3",
+            "name": "Toxin Extractor (Rating 3)",
+            "category": "basic",
+            "essenceCost": 0.6,
+            "cost": 14400,
+            "availability": 9,
+            "description": "+3 dice to Toxin Resistance tests.",
+            "page": 461
+          },
+          {
+            "id": "toxin-extractor-4",
+            "name": "Toxin Extractor (Rating 4)",
+            "category": "basic",
+            "essenceCost": 0.8,
+            "cost": 19200,
+            "availability": 12,
+            "description": "+4 dice to Toxin Resistance tests.",
+            "page": 461
+          },
+          {
+            "id": "toxin-extractor-5",
+            "name": "Toxin Extractor (Rating 5)",
+            "category": "basic",
+            "essenceCost": 1.0,
+            "cost": 24000,
+            "availability": 15,
+            "description": "+5 dice to Toxin Resistance tests.",
+            "page": 461
+          },
+          {
+            "id": "toxin-extractor-6",
+            "name": "Toxin Extractor (Rating 6)",
+            "category": "basic",
+            "essenceCost": 1.2,
+            "cost": 28800,
+            "availability": 18,
+            "description": "+6 dice to Toxin Resistance tests.",
+            "page": 461
+          },
+          {
+            "id": "cerebral-booster-1",
             "name": "Cerebral Booster (Rating 1)",
             "category": "cultured",
             "essenceCost": 0.2,
@@ -11253,7 +11516,7 @@
             "page": 461
           },
           {
-            "id": "cerebellum-booster-2",
+            "id": "cerebral-booster-2",
             "name": "Cerebral Booster (Rating 2)",
             "category": "cultured",
             "essenceCost": 0.4,
@@ -11266,7 +11529,7 @@
             "page": 461
           },
           {
-            "id": "cerebellum-booster-3",
+            "id": "cerebral-booster-3",
             "name": "Cerebral Booster (Rating 3)",
             "category": "cultured",
             "essenceCost": 0.6,
