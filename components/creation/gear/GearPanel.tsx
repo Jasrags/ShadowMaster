@@ -14,12 +14,17 @@
  */
 
 import { useMemo, useCallback, useState } from "react";
-import { useGear, type GearItemData } from "@/lib/rules/RulesetContext";
+import {
+  useGear,
+  type GearItemData,
+  type GearModificationCatalogItemData,
+} from "@/lib/rules/RulesetContext";
 import type { CreationState, GearItem } from "@/lib/types";
 import { useCreationBudgets } from "@/lib/contexts";
 import { CreationCard } from "../shared";
 import { GearRow } from "./GearRow";
 import { GearPurchaseModal } from "./GearPurchaseModal";
+import { GearModificationModal } from "./GearModificationModal";
 import { Lock, Plus, Backpack, Minus } from "lucide-react";
 
 // =============================================================================
@@ -185,11 +190,18 @@ export function GearPanel({ state, updateState }: GearPanelProps) {
   const karmaBudget = getBudget("karma");
 
   const [isPurchaseModalOpen, setIsPurchaseModalOpen] = useState(false);
+  const [modifyingGearId, setModifyingGearId] = useState<string | null>(null);
 
   // Get selected gear from state
   const selectedGear = useMemo(
     () => (state.selections?.gear || []) as GearItem[],
     [state.selections?.gear]
+  );
+
+  // Find gear being modified
+  const modifyingGear = useMemo(
+    () => selectedGear.find((g) => g.id === modifyingGearId) || null,
+    [selectedGear, modifyingGearId]
   );
 
   // Karma-to-nuyen conversion
@@ -347,6 +359,88 @@ export function GearPanel({ state, updateState }: GearPanelProps) {
     [selectedGear, state.selections, updateState]
   );
 
+  // Open mod modal for a gear item
+  const handleAddMod = useCallback((gearId: string) => {
+    setModifyingGearId(gearId);
+  }, []);
+
+  // Remove a mod from gear
+  const handleRemoveMod = useCallback(
+    (gearId: string, modIndex: number) => {
+      const updatedGear = selectedGear.map((g) => {
+        if (g.id !== gearId) return g;
+        const mods = [...(g.modifications || [])];
+        const removedMod = mods[modIndex];
+        mods.splice(modIndex, 1);
+        return {
+          ...g,
+          modifications: mods,
+          capacityUsed: (g.capacityUsed || 0) - (removedMod?.capacityUsed || 0),
+        };
+      });
+
+      updateState({
+        selections: {
+          ...state.selections,
+          gear: updatedGear,
+        },
+      });
+    },
+    [selectedGear, state.selections, updateState]
+  );
+
+  // Install a mod on gear
+  const handleInstallMod = useCallback(
+    (mod: GearModificationCatalogItemData, rating?: number) => {
+      if (!modifyingGear) return;
+
+      const effectiveRating = rating || 1;
+      const capacityCost = mod.capacityPerRating
+        ? (mod.capacityCost || 1) * effectiveRating
+        : mod.capacityCost || 1;
+
+      // Check capacity
+      const capacityRemaining =
+        (modifyingGear.capacity || 0) - (modifyingGear.capacityUsed || 0);
+      if (capacityCost > capacityRemaining) return;
+
+      // Calculate cost
+      let cost = mod.cost;
+      if (mod.costPerRating && rating) {
+        cost = mod.cost * effectiveRating;
+      }
+
+      // Check budget
+      if (cost > remaining) return;
+
+      const installedMod = {
+        id: mod.id,
+        name: mod.hasRating ? `${mod.name} (Rating ${effectiveRating})` : mod.name,
+        rating: mod.hasRating ? effectiveRating : undefined,
+        cost,
+        capacityUsed: capacityCost,
+        availability: mod.availability || 0,
+      };
+
+      const updatedGear = selectedGear.map((g) => {
+        if (g.id !== modifyingGear.id) return g;
+        return {
+          ...g,
+          modifications: [...(g.modifications || []), installedMod],
+          capacityUsed: (g.capacityUsed || 0) + capacityCost,
+        };
+      });
+
+      updateState({
+        selections: {
+          ...state.selections,
+          gear: updatedGear,
+        },
+      });
+    },
+    [modifyingGear, remaining, selectedGear, state.selections, updateState]
+  );
+
   // Validation status
   const validationStatus = useMemo(() => {
     if (isOverBudget) return "error";
@@ -413,7 +507,13 @@ export function GearPanel({ state, updateState }: GearPanelProps) {
           {selectedGear.length > 0 ? (
             <div className="space-y-2">
               {selectedGear.map((gear) => (
-                <GearRow key={gear.id} gear={gear} onRemove={removeGear} />
+                <GearRow
+                  key={gear.id}
+                  gear={gear}
+                  onRemove={removeGear}
+                  onAddMod={handleAddMod}
+                  onRemoveMod={handleRemoveMod}
+                />
               ))}
             </div>
           ) : (
@@ -451,6 +551,17 @@ export function GearPanel({ state, updateState }: GearPanelProps) {
         remaining={remaining}
         onPurchase={addGear}
       />
+
+      {/* Modification Modal */}
+      {modifyingGear && (
+        <GearModificationModal
+          isOpen={!!modifyingGearId}
+          onClose={() => setModifyingGearId(null)}
+          gear={modifyingGear}
+          remaining={remaining}
+          onInstall={handleInstallMod}
+        />
+      )}
     </>
   );
 }
