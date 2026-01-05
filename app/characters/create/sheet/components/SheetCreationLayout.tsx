@@ -384,6 +384,9 @@ export function SheetCreationLayout({
           Foundation
         </h2>
 
+        {/* Character Info - Phase 5 */}
+        <CharacterInfoCard state={creationState} updateState={updateState} />
+
         {/* Priority Selection - Phase 2 */}
         <PrioritySelectionCard state={creationState} updateState={updateState} />
 
@@ -396,8 +399,8 @@ export function SheetCreationLayout({
         {/* Budget Summary */}
         <BudgetSummaryCard />
 
-        {/* Qualities - Phase 2 */}
-        <QualitiesCard state={creationState} updateState={updateState} />
+        {/* Derived Stats - Phase 6 */}
+        <DerivedStatsCard state={creationState} updateState={updateState} />
 
         {/* Finalize */}
         <ValidationSummary
@@ -416,11 +419,14 @@ export function SheetCreationLayout({
         {/* Attributes - Phase 2 */}
         <AttributesCard state={creationState} updateState={updateState} />
 
+        {/* Skills - Phase 2 */}
+        <SkillsCard state={creationState} updateState={updateState} />
+
+        {/* Qualities - Phase 2 */}
+        <QualitiesCard state={creationState} updateState={updateState} />
+
         {/* Special Attributes - Phase 3 */}
         <SpecialAttributesCard state={creationState} updateState={updateState} />
-
-        {/* Derived Stats - Phase 6 */}
-        <DerivedStatsCard state={creationState} updateState={updateState} />
 
         {/* Spells - Phase 3 (conditional) */}
         {isMagical && (
@@ -443,9 +449,6 @@ export function SheetCreationLayout({
         <h2 className="text-sm font-semibold uppercase tracking-wider text-zinc-500 dark:text-zinc-400">
           Skills & Gear
         </h2>
-
-        {/* Skills - Phase 2 */}
-        <SkillsCard state={creationState} updateState={updateState} />
 
         {/* Knowledge & Languages - Phase 2 */}
         <KnowledgeLanguagesCard state={creationState} updateState={updateState} />
@@ -470,9 +473,6 @@ export function SheetCreationLayout({
 
         {/* Identities - Phase 5 */}
         <IdentitiesCard state={creationState} updateState={updateState} />
-
-        {/* Character Info - Phase 5 */}
-        <CharacterInfoCard state={creationState} updateState={updateState} />
       </div>
     </div>
   );
