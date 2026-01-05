@@ -5723,6 +5723,7 @@
               "category": "weapons",
               "subcategory": "light-pistol",
               "accuracy": 6,
+              "accuracySmartgun": 8,
               "damage": "6P",
               "mode": [
                 "SA"
@@ -5748,6 +5749,7 @@
               "rc": 0,
               "ammo": 15,
               "accuracy": 5,
+              "accuracySmartgun": 7,
               "weight": 1.3,
               "builtInModifications": [
                 {
@@ -5802,7 +5804,8 @@
                 "SA",
                 "BF"
               ],
-              "rc": 1,
+              "rc": 0,
+              "rcMax": 1,
               "ammo": 21,
               "availability": 7,
               "cost": 210,
@@ -5814,6 +5817,7 @@
               "category": "weapons",
               "subcategory": "heavy-pistol",
               "accuracy": 5,
+              "accuracySmartgun": 6,
               "damage": "8P",
               "ap": -1,
               "mode": [
@@ -5908,9 +5912,11 @@
               "mode": [
                 "SA"
               ],
-              "rc": 1,
+              "rc": 0,
+              "rcMax": 1,
               "ammo": 30,
               "accuracy": 6,
+              "accuracySmartgun": 7,
               "legality": "restricted"
             },
             {
@@ -5969,7 +5975,7 @@
               "subcategory": "heavy-pistol",
               "cost": 250,
               "availability": 6,
-              "damage": "9P(f)",
+              "damage": "7P",
               "ap": -1,
               "mode": [
                 "SA"
@@ -6019,6 +6025,7 @@
               "category": "weapons",
               "subcategory": "heavy-pistol",
               "accuracy": 5,
+              "accuracySmartgun": 6,
               "damage": "6P/7P",
               "ap": 0,
               "mode": [
@@ -6082,6 +6089,7 @@
               "rc": 2,
               "ammo": 40,
               "accuracy": 5,
+              "accuracySmartgun": 7,
               "legality": "restricted"
             },
             {
@@ -6095,7 +6103,8 @@
                 "SA",
                 "BF"
               ],
-              "rc": 1,
+              "rc": 0,
+              "rcMax": 1,
               "ammo": 35,
               "availability": 6,
               "cost": 270,
@@ -6107,6 +6116,7 @@
               "category": "weapons",
               "subcategory": "smg",
               "accuracy": 4,
+              "accuracySmartgun": 5,
               "damage": "7P",
               "mode": [
                 "SA",
@@ -6114,6 +6124,7 @@
                 "FA"
               ],
               "rc": 2,
+              "rcMax": 3,
               "ammo": 32,
               "availability": 5,
               "cost": 660,
@@ -6132,6 +6143,7 @@
                 "FA"
               ],
               "rc": 1,
+              "rcMax": 2,
               "ammo": 50,
               "availability": 11,
               "cost": 900,
@@ -6152,8 +6164,10 @@
                 "FA"
               ],
               "rc": 0,
+              "rcMax": 1,
               "ammo": 28,
               "accuracy": 5,
+              "accuracySmartgun": 7,
               "legality": "restricted"
             },
             {
@@ -6166,16 +6180,17 @@
               "damage": "8P",
               "ap": 0,
               "mode": [
-                "SA",
-                "BF"
+                "BF",
+                "FA"
               ],
               "rc": 2,
               "ammo": 32,
               "accuracy": 4,
+              "accuracySmartgun": 6,
               "legality": "restricted"
             },
             {
-              "id": "scm-70",
+              "id": "sck-model-100",
               "name": "SCK Model 100",
               "category": "weapons",
               "subcategory": "smg",
@@ -6188,8 +6203,10 @@
                 "BF"
               ],
               "rc": 0,
+              "rcMax": 1,
               "ammo": 30,
               "accuracy": 5,
+              "accuracySmartgun": 7,
               "legality": "restricted"
             },
             {
@@ -6220,12 +6237,13 @@
               "damage": "7P",
               "ap": 0,
               "mode": [
-                "SA",
                 "BF"
               ],
-              "rc": 1,
+              "rc": 0,
+              "rcMax": 1,
               "ammo": 24,
               "accuracy": 4,
+              "accuracySmartgun": 5,
               "legality": "restricted"
             }
           ],
@@ -6266,6 +6284,7 @@
               "rc": 2,
               "ammo": 42,
               "accuracy": 5,
+              "accuracySmartgun": 7,
               "weight": 3.8,
               "builtInModifications": [
                 {
@@ -6285,6 +6304,7 @@
               "category": "weapons",
               "subcategory": "launcher",
               "accuracy": 4,
+              "accuracySmartgun": 6,
               "damage": "Grenade",
               "mode": [
                 "SS"
@@ -6363,6 +6383,7 @@
               "rc": 2,
               "ammo": 35,
               "accuracy": 5,
+              "accuracySmartgun": 6,
               "legality": "restricted"
             },
             {
@@ -6371,6 +6392,7 @@
               "category": "weapons",
               "subcategory": "machine-gun",
               "accuracy": 5,
+              "accuracySmartgun": 6,
               "damage": "9P",
               "ap": -2,
               "mode": [
@@ -6378,6 +6400,7 @@
                 "FA"
               ],
               "rc": 2,
+              "rcMax": 3,
               "ammo": 50,
               "availability": 12,
               "cost": 5800,
@@ -6394,7 +6417,8 @@
               "mode": [
                 "SA"
               ],
-              "rc": 1,
+              "rc": 0,
+              "rcMax": 1,
               "ammo": 6,
               "availability": 20,
               "cost": 21000,
@@ -6406,6 +6430,7 @@
               "category": "weapons",
               "subcategory": "launcher",
               "accuracy": 4,
+              "accuracySmartgun": 6,
               "damage": "Missile",
               "mode": [
                 "SS"
@@ -6422,6 +6447,7 @@
               "category": "weapons",
               "subcategory": "cannon",
               "accuracy": 5,
+              "accuracySmartgun": 7,
               "damage": "17P",
               "ap": -6,
               "mode": [
@@ -6444,7 +6470,8 @@
               "mode": [
                 "FA"
               ],
-              "rc": 6,
+              "rc": 0,
+              "rcMax": 6,
               "ammo": 50,
               "availability": 16,
               "cost": 16300,
@@ -6477,13 +6504,13 @@
               "damage": "11P",
               "ap": -2,
               "mode": [
-                "SA",
                 "BF",
                 "FA"
               ],
-              "rc": 6,
+              "rc": 1,
               "ammo": 60,
               "accuracy": 6,
+              "accuracySmartgun": 8,
               "legality": "forbidden"
             }
           ],
@@ -6521,25 +6548,11 @@
               ],
               "rc": 0,
               "ammo": 10,
+              "ammoAlt": 24,
+              "ammoAltType": "drum",
               "accuracy": 4,
+              "accuracySmartgun": 5,
               "legality": "forbidden"
-            },
-            {
-              "id": "mossberg-am-cmdt",
-              "name": "Mossberg AM-CMDT",
-              "category": "weapons",
-              "subcategory": "shotgun",
-              "cost": 1000,
-              "availability": 7,
-              "damage": "10P",
-              "ap": -1,
-              "mode": [
-                "SA"
-              ],
-              "rc": 0,
-              "ammo": 8,
-              "accuracy": 5,
-              "legality": "restricted"
             },
             {
               "id": "pjss-model-55",
@@ -6552,7 +6565,8 @@
               "mode": [
                 "SS"
               ],
-              "rc": 1,
+              "rc": 0,
+              "rcMax": 1,
               "ammo": 2,
               "availability": 9,
               "cost": 1000,
@@ -6573,6 +6587,7 @@
                 "SA"
               ],
               "rc": 0,
+              "rcMax": 1,
               "ammo": 14,
               "accuracy": 7,
               "legality": "forbidden"
@@ -6589,7 +6604,8 @@
                 "SA",
                 "BF"
               ],
-              "rc": 1,
+              "rc": 0,
+              "rcMax": 1,
               "ammo": 20,
               "availability": 12,
               "cost": 10300,
@@ -6608,6 +6624,7 @@
                 "SA"
               ],
               "rc": 0,
+              "rcMax": 1,
               "ammo": 15,
               "accuracy": 8,
               "legality": "forbidden"
@@ -6640,7 +6657,8 @@
               "mode": [
                 "SA"
               ],
-              "rc": 1,
+              "rc": 0,
+              "rcMax": 1,
               "ammo": 8,
               "availability": 4,
               "cost": 1300,
