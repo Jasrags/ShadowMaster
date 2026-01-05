@@ -41,7 +41,7 @@ import {
   AdeptPowersCard,
   ComplexFormsCard,
   SpecialAttributesCard,
-  GearCard,
+  GearPanel,
   WeaponsPanel,
   ArmorPanel,
   AugmentationsCard,
@@ -454,7 +454,7 @@ export function SheetCreationLayout({
         <ContactsCard state={creationState} updateState={updateState} />
 
         {/* Gear - Phase 4 */}
-        <GearCard state={creationState} updateState={updateState} />
+        <GearPanel state={creationState} updateState={updateState} />
 
         {/* Weapons - Phase 4 (New) */}
         <WeaponsPanel state={creationState} updateState={updateState} />

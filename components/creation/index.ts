@@ -15,6 +15,7 @@ export { SpecialAttributesCard } from "./SpecialAttributesCard";
 
 // Phase 4: Resources & Gear Components
 export { GearCard } from "./GearCard";
+export { GearPanel } from "./gear";
 export { WeaponsPanel } from "./WeaponsPanel";
 export { ArmorPanel } from "./armor";
 export { AugmentationsCard } from "./AugmentationsCard";
