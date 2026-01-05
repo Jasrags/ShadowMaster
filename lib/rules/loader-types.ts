@@ -98,12 +98,14 @@ export interface MetatypeData {
 export interface SkillData {
   id: string;
   name: string;
+  description?: string;
   linkedAttribute: string;
   group: string | null;
   canDefault: boolean;
   category: string;
   requiresMagic?: boolean;
   requiresResonance?: boolean;
+  suggestedSpecializations?: string[];
 }
 
 /**
