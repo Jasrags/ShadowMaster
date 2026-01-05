@@ -40,6 +40,7 @@ import {
   SpellsCard,
   AdeptPowersCard,
   ComplexFormsCard,
+  FociCard,
   GearPanel,
   WeaponsPanel,
   ArmorPanel,
@@ -432,6 +433,11 @@ export function SheetCreationLayout({
         {/* Adept Powers - Phase 3 (conditional) */}
         {isAdept && (
           <AdeptPowersCard state={creationState} updateState={updateState} />
+        )}
+
+        {/* Foci - Phase 3 (conditional) */}
+        {isMagical && (
+          <FociCard state={creationState} updateState={updateState} />
         )}
 
         {/* Complex Forms - Phase 3 (conditional) */}
