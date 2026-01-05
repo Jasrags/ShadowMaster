@@ -40,7 +40,6 @@ import {
   SpellsCard,
   AdeptPowersCard,
   ComplexFormsCard,
-  SpecialAttributesCard,
   GearPanel,
   WeaponsPanel,
   ArmorPanel,
@@ -424,9 +423,6 @@ export function SheetCreationLayout({
 
         {/* Qualities - Phase 2 */}
         <QualitiesCard state={creationState} updateState={updateState} />
-
-        {/* Special Attributes - Phase 3 */}
-        <SpecialAttributesCard state={creationState} updateState={updateState} />
 
         {/* Spells - Phase 3 (conditional) */}
         {isMagical && (
