@@ -6977,6 +6977,99 @@
             "cost": 100,
             "availability": 0,
             "parentArmor": "urban-explorer-jumpsuit"
+          },
+          {
+            "id": "full-body-armor-chemical-seal",
+            "name": "Full Body Armor Chemical Seal",
+            "category": "armor",
+            "armorRating": 0,
+            "cost": 6000,
+            "availability": 6,
+            "parentArmor": "full-body-armor",
+            "description": "Hermetically seals the suit against chemical and biological agents."
+          },
+          {
+            "id": "full-body-armor-environmental-adaptation",
+            "name": "Full Body Armor Environmental Adaptation",
+            "category": "armor",
+            "armorRating": 0,
+            "cost": 1000,
+            "availability": 3,
+            "parentArmor": "full-body-armor",
+            "description": "Adapts the suit to extreme environmental conditions."
+          }
+        ],
+        "armorModifications": [
+          {
+            "id": "chemical-protection",
+            "name": "Chemical Protection",
+            "category": "armorModification",
+            "capacityCost": "[Rating]",
+            "ratingSpec": { "min": 1, "max": 6 },
+            "availability": 6,
+            "costPerRating": 250,
+            "description": "Provides protection against contact-vector chemical attacks."
+          },
+          {
+            "id": "chemical-seal",
+            "name": "Chemical Seal",
+            "category": "armorModification",
+            "capacityCost": 6,
+            "availability": 12,
+            "legality": "restricted",
+            "cost": 3000,
+            "description": "Completely seals the armor against chemical and biological agents."
+          },
+          {
+            "id": "fire-resistance",
+            "name": "Fire Resistance",
+            "category": "armorModification",
+            "capacityCost": "[Rating]",
+            "ratingSpec": { "min": 1, "max": 6 },
+            "availability": 6,
+            "costPerRating": 250,
+            "description": "Provides protection against fire and heat damage."
+          },
+          {
+            "id": "insulation",
+            "name": "Insulation",
+            "category": "armorModification",
+            "capacityCost": "[Rating]",
+            "ratingSpec": { "min": 1, "max": 6 },
+            "availability": 6,
+            "costPerRating": 250,
+            "description": "Provides protection against cold damage."
+          },
+          {
+            "id": "nonconductivity",
+            "name": "Nonconductivity",
+            "category": "armorModification",
+            "capacityCost": "[Rating]",
+            "ratingSpec": { "min": 1, "max": 6 },
+            "availability": 6,
+            "costPerRating": 250,
+            "description": "Provides protection against electrical damage."
+          },
+          {
+            "id": "shock-frills",
+            "name": "Shock Frills",
+            "category": "armorModification",
+            "capacityCost": 2,
+            "availability": 6,
+            "legality": "restricted",
+            "cost": 250,
+            "description": "Delivers an electrical shock to anyone who touches the wearer."
+          },
+          {
+            "id": "thermal-damping",
+            "name": "Thermal Damping",
+            "category": "armorModification",
+            "capacityCost": "[Rating]",
+            "ratingSpec": { "min": 1, "max": 6 },
+            "availability": 10,
+            "legality": "restricted",
+            "costPerRating": 500,
+            "description": "Masks the wearer's thermal signature from thermographic vision."
           }
         ],
         "commlinks": [
