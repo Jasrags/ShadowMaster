@@ -760,6 +760,31 @@ export interface InstalledArmorMod {
   legality?: ItemLegality;
 }
 
+/**
+ * Ammunition purchased during character creation
+ * Tracks a box of ammo with type, quantity, cost, and modifiers
+ */
+export interface PurchasedAmmunitionItem {
+  /** Reference to catalog ammunition ID */
+  catalogId: string;
+  /** Display name */
+  name: string;
+  /** Number of boxes purchased */
+  quantity: number;
+  /** Cost per box */
+  cost: number;
+  /** Rounds per box */
+  roundsPerBox?: number;
+  /** Damage modifier (e.g., "+1", "-2S (e)") */
+  damageModifier?: string;
+  /** AP modifier (e.g., -4 for APDS) */
+  apModifier?: number;
+  /** Availability rating */
+  availability: number;
+  /** Legality status: "restricted" (R) or "forbidden" (F) */
+  legality?: ItemLegality;
+}
+
 export interface Weapon extends GearItem {
   /** Reference to catalog weapon ID */
   catalogId?: string;
@@ -798,6 +823,12 @@ export interface Weapon extends GearItem {
    */
   spareMagazines?: MagazineItem[];
 
+  /**
+   * Ammunition purchased for this weapon during character creation.
+   * Tracks boxes of ammo with type, quantity, cost, and modifiers.
+   */
+  purchasedAmmunition?: PurchasedAmmunitionItem[];
+
   // -------------------------------------------------------------------------
   // Legacy fields (deprecated, use ammoState instead)
   // -------------------------------------------------------------------------
@@ -834,6 +865,8 @@ export interface ArmorItem extends GearItem {
   capacityUsed?: number;
   /** Installed modifications on this armor */
   modifications?: InstalledArmorMod[];
+  /** Legality status: "restricted" (R) or "forbidden" (F) */
+  legality?: ItemLegality;
 
   // -------------------------------------------------------------------------
   // Inventory State (ADR-010)

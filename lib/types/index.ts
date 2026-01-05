@@ -108,6 +108,7 @@ export type {
   InstalledWeaponMod,
   InstalledArmorMod,
   InstalledGearMod,
+  PurchasedAmmunitionItem,
   CyberwareGrade,
   CyberwareCategory,
   CyberwareItem,

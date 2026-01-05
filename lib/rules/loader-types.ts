@@ -322,6 +322,12 @@ export interface WeaponData extends GearItemData {
  */
 export interface ArmorData extends GearItemData {
   armorRating: number;
+  /** True if this is an armor accessory (helmet, shield, etc.) */
+  armorModifier?: boolean;
+  /** Capacity for modifications (equals armor rating if not specified) */
+  capacity?: number;
+  /** Weight in kilograms */
+  weight?: number;
 }
 
 /**

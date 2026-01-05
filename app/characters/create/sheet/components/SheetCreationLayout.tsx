@@ -42,6 +42,8 @@ import {
   ComplexFormsCard,
   SpecialAttributesCard,
   GearCard,
+  WeaponsPanel,
+  ArmorPanel,
   AugmentationsCard,
   VehiclesCard,
   ContactsCard,
@@ -453,6 +455,12 @@ export function SheetCreationLayout({
 
         {/* Gear - Phase 4 */}
         <GearCard state={creationState} updateState={updateState} />
+
+        {/* Weapons - Phase 4 (New) */}
+        <WeaponsPanel state={creationState} updateState={updateState} />
+
+        {/* Armor - Phase 4 (New) */}
+        <ArmorPanel state={creationState} updateState={updateState} />
 
         {/* Augmentations - Phase 4 */}
         <AugmentationsCard state={creationState} updateState={updateState} />
