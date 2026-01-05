@@ -11,6 +11,7 @@ export { MagicPathCard } from "./MagicPathCard";
 export { SpellsCard } from "./SpellsCard";
 export { AdeptPowersCard } from "./AdeptPowersCard";
 export { ComplexFormsCard } from "./ComplexFormsCard";
+export { FociCard } from "./foci";
 
 // Phase 4: Resources & Gear Components
 export { GearCard } from "./GearCard";
