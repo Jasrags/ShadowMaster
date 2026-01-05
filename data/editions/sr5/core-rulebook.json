@@ -6903,6 +6903,26 @@
             "availability": 0
           },
           {
+            "id": "electrochromic-modification",
+            "name": "Electrochromic Modification",
+            "category": "armor",
+            "armorRating": 0,
+            "cost": 500,
+            "availability": 2,
+            "parentArmor": "clothing",
+            "description": "Color-changing fabric that can display patterns, images, or blend with surroundings."
+          },
+          {
+            "id": "feedback-clothing",
+            "name": "Feedback Clothing",
+            "category": "armor",
+            "armorRating": 0,
+            "cost": 500,
+            "availability": 8,
+            "parentArmor": "clothing",
+            "description": "Clothing with haptic feedback for simsense and VR experiences."
+          },
+          {
             "id": "full-body-armor",
             "name": "Full Body Armor",
             "category": "armor",
