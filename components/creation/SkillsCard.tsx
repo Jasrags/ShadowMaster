@@ -279,26 +279,33 @@ function IndividualSkillCard({
 
   return (
     <div className="rounded-lg border border-zinc-200 bg-white p-3 dark:border-zinc-700 dark:bg-zinc-900">
-      <div className="flex items-center justify-between">
-        <div className="flex items-center gap-2">
-          <BookOpen className="h-4 w-4 text-blue-500" />
-          <span className="font-medium text-zinc-900 dark:text-zinc-100">
-            {skillName}
-          </span>
-          <span className="text-xs text-zinc-500 dark:text-zinc-400">
-            {linkedAttribute.toUpperCase().slice(0, 3)}
-          </span>
-          {groupName && (
-            <span className="text-xs text-zinc-400">({groupName})</span>
-          )}
-          {hasSpecs && (
-            <span title="Has specializations">
-              <Star className="h-3.5 w-3.5 text-amber-500" />
+      {/* Main row: skill info left, controls right */}
+      <div className="flex items-center gap-3">
+        {/* Skill info - flexible width */}
+        <div className="min-w-0 flex-1">
+          <div className="flex items-center gap-1.5">
+            <BookOpen className="h-4 w-4 shrink-0 text-blue-500" />
+            <span className="truncate font-medium text-zinc-900 dark:text-zinc-100">
+              {skillName}
             </span>
+            <span className="shrink-0 text-xs text-zinc-500 dark:text-zinc-400">
+              {linkedAttribute.toUpperCase().slice(0, 3)}
+            </span>
+            {hasSpecs && (
+              <span title="Has specializations" className="shrink-0">
+                <Star className="h-3.5 w-3.5 text-amber-500" />
+              </span>
+            )}
+          </div>
+          {groupName && (
+            <div className="mt-0.5 truncate text-xs text-zinc-400">
+              {groupName}
+            </div>
           )}
         </div>
 
-        <div className="flex items-center gap-2">
+        {/* Controls - fixed width, never wrap */}
+        <div className="flex shrink-0 items-center gap-1.5">
           {isAtMax && (
             <span className="rounded bg-emerald-100 px-1.5 py-0.5 text-[10px] font-medium text-emerald-700 dark:bg-emerald-900/50 dark:text-emerald-300">
               MAX
@@ -331,16 +338,16 @@ function IndividualSkillCard({
           </button>
           <button
             onClick={onRemove}
-            className="ml-1 rounded p-1 text-zinc-400 hover:bg-zinc-200 hover:text-zinc-600 dark:hover:bg-zinc-700 dark:hover:text-zinc-300"
+            className="rounded p-1 text-zinc-400 hover:bg-zinc-200 hover:text-zinc-600 dark:hover:bg-zinc-700 dark:hover:text-zinc-300"
           >
             <X className="h-4 w-4" />
           </button>
         </div>
       </div>
 
-      {/* Specializations */}
+      {/* Specializations - separate row */}
       {hasSpecs && (
-        <div className="mt-2 flex flex-wrap gap-1">
+        <div className="mt-2 flex flex-wrap gap-1 border-t border-zinc-100 pt-2 dark:border-zinc-800">
           {specializations.map((spec) => (
             <span
               key={spec}
