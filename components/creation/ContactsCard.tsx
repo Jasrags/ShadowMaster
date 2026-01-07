@@ -604,7 +604,7 @@ export function ContactsCard({ state, updateState }: ContactsCardProps) {
     <>
       <CreationCard
         title="Contacts"
-        description={`${freeContactKarmaRemaining}/${freeContactKarma} free karma • ${contacts.length} contact${contacts.length !== 1 ? "s" : ""}`}
+        description={`${contacts.length} contact${contacts.length !== 1 ? "s" : ""}`}
         status={
           contacts.length > 0
             ? "valid"
@@ -614,37 +614,60 @@ export function ContactsCard({ state, updateState }: ContactsCardProps) {
         }
       >
         <div className="space-y-3">
-          {/* Budget Display */}
+          {/* Budget Display - unified format */}
           <div className="rounded-md bg-indigo-50 p-3 dark:bg-indigo-900/20">
             <div className="flex items-center justify-between text-sm">
               <span className="text-indigo-700 dark:text-indigo-300">
-                Free Contact Karma (CHA {charisma} × 3)
+                Contact Points (CHA {charisma} × 3)
               </span>
               <span
                 className={`font-medium ${
-                  freeContactKarmaRemaining >= 0
-                    ? "text-indigo-700 dark:text-indigo-300"
-                    : "text-amber-600 dark:text-amber-400"
+                  freeContactKarmaRemaining < 0
+                    ? "text-red-600 dark:text-red-400"
+                    : freeContactKarmaRemaining === 0
+                      ? "text-emerald-600 dark:text-emerald-400"
+                      : "text-indigo-700 dark:text-indigo-300"
                 }`}
               >
-                {freeContactKarmaRemaining} / {freeContactKarma}
+                {freeContactKarmaSpent} spent
+                <span className="text-indigo-400 dark:text-indigo-500"> • </span>
+                {Math.max(0, freeContactKarmaRemaining)} left
+                {totalContactKarmaSpent > freeContactKarma && (
+                  <span className="text-amber-600 dark:text-amber-400">
+                    {" "}(+{generalKarmaSpentOnContacts})
+                  </span>
+                )}
               </span>
             </div>
-            <div className="mt-1.5 h-1.5 overflow-hidden rounded-full bg-indigo-200 dark:bg-indigo-800">
+            <div className="relative mt-1.5 h-1.5 overflow-hidden rounded-full bg-indigo-200 dark:bg-indigo-800">
               <div
-                className="h-full rounded-full bg-indigo-500 transition-all"
+                className={`h-full rounded-full transition-all ${
+                  freeContactKarmaRemaining === 0 && generalKarmaSpentOnContacts === 0
+                    ? "bg-emerald-500"
+                    : "bg-indigo-500"
+                }`}
                 style={{
                   width: `${
                     freeContactKarma > 0
-                      ? (freeContactKarmaSpent / freeContactKarma) * 100
+                      ? Math.min(100, (freeContactKarmaSpent / freeContactKarma) * 100)
                       : 0
                   }%`,
                 }}
               />
+              {/* Overflow indicator when using general karma */}
+              {generalKarmaSpentOnContacts > 0 && (
+                <div
+                  className="absolute right-0 top-0 h-full bg-amber-500"
+                  style={{
+                    width: `${Math.min(30, (generalKarmaSpentOnContacts / freeContactKarma) * 100)}%`,
+                    backgroundImage: "repeating-linear-gradient(45deg, transparent, transparent 2px, rgba(0,0,0,0.15) 2px, rgba(0,0,0,0.15) 4px)",
+                  }}
+                />
+              )}
             </div>
             {generalKarmaSpentOnContacts > 0 && (
-              <div className="mt-2 text-xs text-indigo-600 dark:text-indigo-400">
-                + {generalKarmaSpentOnContacts} from general karma
+              <div className="mt-1 text-xs text-blue-600 dark:text-blue-400">
+                +{generalKarmaSpentOnContacts} from general karma
               </div>
             )}
           </div>

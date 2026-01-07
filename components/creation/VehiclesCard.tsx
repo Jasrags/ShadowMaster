@@ -502,11 +502,12 @@ export function VehiclesCard({ state, updateState }: VehiclesCardProps) {
       <div className="space-y-4">
         {/* Budget indicator */}
         <BudgetIndicator
-          label="Nuyen Remaining"
-          remaining={remaining}
+          label="Nuyen"
+          spent={totalNuyen - remaining}
           total={totalNuyen}
           displayFormat="currency"
           compact
+          note={karmaConversion > 0 ? `+${(karmaConversion * 2000).toLocaleString()}¥ from karma` : undefined}
         />
 
         {/* Category tabs */}

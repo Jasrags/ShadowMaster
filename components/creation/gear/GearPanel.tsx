@@ -68,13 +68,16 @@ function BudgetDisplay({
   total,
   remaining,
   isOver,
+  karmaConversion = 0,
 }: {
   spent: number;
   total: number;
   remaining: number;
   isOver: boolean;
+  karmaConversion?: number;
 }) {
   const percentage = Math.min(100, (spent / total) * 100);
+  const isComplete = remaining === 0 && !isOver;
 
   return (
     <div
@@ -85,18 +88,19 @@ function BudgetDisplay({
       }`}
     >
       <div className="flex items-center justify-between text-sm">
-        <span className="text-zinc-600 dark:text-zinc-400">Gear Budget</span>
+        <span className="text-zinc-600 dark:text-zinc-400">Nuyen</span>
         <span
-          className={`font-bold ${
+          className={`font-medium ${
             isOver
               ? "text-red-600 dark:text-red-400"
-              : remaining === 0
+              : isComplete
                 ? "text-emerald-600 dark:text-emerald-400"
                 : "text-zinc-900 dark:text-zinc-100"
           }`}
         >
-          {formatCurrency(remaining)}¥
-          <span className="font-normal text-zinc-400"> remaining</span>
+          {formatCurrency(spent)}¥ spent
+          <span className="text-zinc-400"> • </span>
+          {formatCurrency(Math.max(0, remaining))}¥ left
         </span>
       </div>
 
@@ -106,13 +110,20 @@ function BudgetDisplay({
           className={`h-full rounded-full transition-all ${
             isOver
               ? "bg-red-500"
-              : remaining === 0
+              : isComplete
                 ? "bg-emerald-500"
-                : "bg-amber-500"
+                : "bg-blue-500"
           }`}
           style={{ width: `${percentage}%` }}
         />
       </div>
+
+      {/* Note for karma conversion */}
+      {karmaConversion > 0 && (
+        <div className="mt-1 text-xs text-blue-600 dark:text-blue-400">
+          +{formatCurrency(karmaConversion * KARMA_TO_NUYEN_RATE)}¥ from karma
+        </div>
+      )}
     </div>
   );
 }
@@ -609,6 +620,7 @@ export function GearPanel({ state, updateState }: GearPanelProps) {
             total={totalNuyen}
             remaining={remaining}
             isOver={isOverBudget}
+            karmaConversion={karmaConversion}
           />
 
           {/* Karma Conversion */}

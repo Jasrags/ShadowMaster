@@ -1,4 +1,4 @@
-export { BudgetIndicator } from "./BudgetIndicator";
+export { BudgetIndicator, LegacyBudgetIndicator } from "./BudgetIndicator";
 export { CreationCard } from "./CreationCard";
 export { ValidationBadge } from "./ValidationBadge";
 export { KarmaConversionModal } from "./KarmaConversionModal";

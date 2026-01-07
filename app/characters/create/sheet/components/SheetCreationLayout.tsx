@@ -120,68 +120,29 @@ function PlaceholderCard({
 
 /**
  * Determines the status and color for a budget bar.
- *
- * Status bar behavior:
- * - Starts at 0/total (empty bar)
- * - Green bar grows as points are spent
- * - Fully spent (remaining = 0): Green, shows complete
- * - Overspent (remaining < 0): Red, shows error
- * - Unspent points that will be lost: Amber/warning
  */
-function getBudgetStatus(
-  budget: { spent: number; total: number; remaining: number },
-  budgetId: string
-): {
-  barColor: string;
-  textColor: string;
-  status: "normal" | "complete" | "warning" | "error";
-} {
-  // Overspent = error (red)
-  if (budget.remaining < 0) {
-    return {
-      barColor: "bg-red-500",
-      textColor: "text-red-600 dark:text-red-400",
-      status: "error",
-    };
-  }
-
-  // Fully spent = complete (green)
-  if (budget.remaining === 0 && budget.total > 0) {
-    return {
-      barColor: "bg-emerald-500",
-      textColor: "text-emerald-600 dark:text-emerald-400",
-      status: "complete",
-    };
-  }
-
-  // Some budgets give warnings when points remain unspent
-  // (points that don't carry over to gameplay)
-  const noCarryoverBudgets = [
-    "attribute-points",
-    "skill-points",
-    "skill-group-points",
-    "special-attribute-points",
-  ];
-
-  if (noCarryoverBudgets.includes(budgetId) && budget.remaining > 0 && budget.spent > 0) {
-    // Has started spending but not finished - show as in-progress (blue)
-    return {
-      barColor: "bg-blue-500",
-      textColor: "text-zinc-900 dark:text-zinc-100",
-      status: "normal",
-    };
-  }
-
-  // Normal progress (blue)
-  return {
-    barColor: "bg-blue-500",
-    textColor: "text-zinc-900 dark:text-zinc-100",
-    status: "normal",
-  };
+function getBudgetBarColor(budget: { spent: number; total: number; remaining: number }): string {
+  if (budget.remaining < 0) return "bg-red-500";
+  if (budget.remaining === 0 && budget.total > 0) return "bg-emerald-500";
+  return "bg-blue-500";
 }
 
-function BudgetSummaryCard() {
+function getBudgetTextColor(budget: { spent: number; total: number; remaining: number }): string {
+  if (budget.remaining < 0) return "text-red-600 dark:text-red-400";
+  if (budget.remaining === 0 && budget.total > 0) return "text-emerald-600 dark:text-emerald-400";
+  return "text-zinc-900 dark:text-zinc-100";
+}
+
+interface BudgetSummaryCardProps {
+  creationState: CreationState;
+}
+
+function BudgetSummaryCard({ creationState }: BudgetSummaryCardProps) {
   const { budgets, isValid, errors, warnings } = useCreationBudgets();
+
+  // Extract conversion/overflow values from creation state for contextual notes
+  const karmaSpentGear = (creationState.budgets?.["karma-spent-gear"] as number) || 0;
+  const karmaSpentContacts = (creationState.budgets?.["karma-spent-contacts"] as number) || 0;
 
   const budgetList = useMemo(
     () =>
@@ -191,6 +152,57 @@ function BudgetSummaryCard() {
       })),
     [budgets]
   );
+
+  // Generate contextual notes for each budget
+  const getNote = (budgetId: string): { text: string; style: "info" | "warning" | "error" } | null => {
+    switch (budgetId) {
+      case "karma":
+        // Show breakdown if karma is being used for gear or contacts
+        if (karmaSpentGear > 0 && karmaSpentContacts > 0) {
+          return {
+            text: `${karmaSpentGear} for nuyen, ${karmaSpentContacts} for contacts`,
+            style: "info",
+          };
+        }
+        if (karmaSpentGear > 0) {
+          return { text: `${karmaSpentGear} converted to ${(karmaSpentGear * 2000).toLocaleString()}¥`, style: "info" };
+        }
+        if (karmaSpentContacts > 0) {
+          return { text: `${karmaSpentContacts} for extra contacts`, style: "info" };
+        }
+        return null;
+
+      case "nuyen":
+        // Show if nuyen was augmented by karma conversion
+        if (karmaSpentGear > 0) {
+          return {
+            text: `+${(karmaSpentGear * 2000).toLocaleString()}¥ from karma`,
+            style: "info",
+          };
+        }
+        return null;
+
+      case "contact-points":
+        // Show if contacts overflowed to general karma
+        if (karmaSpentContacts > 0) {
+          return {
+            text: `+${karmaSpentContacts} from general karma`,
+            style: "info",
+          };
+        }
+        return null;
+
+      default:
+        return null;
+    }
+  };
+
+  const formatValue = (value: number, format?: string) => {
+    if (format === "currency") {
+      return `${value.toLocaleString()}¥`;
+    }
+    return value.toString();
+  };
 
   return (
     <div className="rounded-lg border border-zinc-200 bg-white p-4 dark:border-zinc-700 dark:bg-zinc-900">
@@ -218,36 +230,63 @@ function BudgetSummaryCard() {
           </p>
         ) : (
           budgetList.map((budget) => {
-            const { barColor, textColor } = getBudgetStatus(budget, budget.id);
+            const barColor = getBudgetBarColor(budget);
+            const textColor = getBudgetTextColor(budget);
             const percentSpent = budget.total > 0
               ? Math.min(100, Math.max(0, (budget.spent / budget.total) * 100))
               : 0;
+            const note = getNote(budget.id);
+            const hasOverflow = budget.spent > budget.total;
 
             return (
               <div key={budget.id}>
+                {/* Label and values: "X spent • Y left" */}
                 <div className="flex items-center justify-between text-sm">
                   <span className="text-zinc-600 dark:text-zinc-400">
                     {budget.label}
                   </span>
                   <span className={`font-medium ${textColor}`}>
-                    {budget.displayFormat === "currency"
-                      ? `${budget.spent.toLocaleString()}¥`
-                      : budget.spent}
-                    <span className="text-zinc-400">
-                      {" / "}
-                      {budget.displayFormat === "currency"
-                        ? `${budget.total.toLocaleString()}¥`
-                        : budget.total}
-                    </span>
+                    {formatValue(budget.spent, budget.displayFormat)} spent
+                    <span className="text-zinc-400"> • </span>
+                    {formatValue(Math.max(0, budget.remaining), budget.displayFormat)} left
+                    {hasOverflow && (
+                      <span className="text-red-500">
+                        {" "}(+{formatValue(budget.spent - budget.total, budget.displayFormat)})
+                      </span>
+                    )}
                   </span>
                 </div>
-                {/* Progress bar - grows as points are spent */}
-                <div className="mt-1 h-1.5 overflow-hidden rounded-full bg-zinc-100 dark:bg-zinc-800">
+
+                {/* Progress bar */}
+                <div className="relative mt-1 h-1.5 overflow-hidden rounded-full bg-zinc-100 dark:bg-zinc-800">
                   <div
                     className={`h-full transition-all ${barColor}`}
                     style={{ width: `${percentSpent}%` }}
                   />
+                  {/* Overflow indicator */}
+                  {hasOverflow && (
+                    <div
+                      className="absolute right-0 top-0 h-full bg-red-500"
+                      style={{
+                        width: `${Math.min(30, ((budget.spent - budget.total) / budget.total) * 100)}%`,
+                        backgroundImage: "repeating-linear-gradient(45deg, transparent, transparent 2px, rgba(0,0,0,0.2) 2px, rgba(0,0,0,0.2) 4px)",
+                      }}
+                    />
+                  )}
                 </div>
+
+                {/* Contextual note */}
+                {note && (
+                  <div className={`mt-0.5 text-xs ${
+                    note.style === "warning"
+                      ? "text-amber-600 dark:text-amber-400"
+                      : note.style === "error"
+                        ? "text-red-600 dark:text-red-400"
+                        : "text-blue-600 dark:text-blue-400"
+                  }`}>
+                    {note.text}
+                  </div>
+                )}
               </div>
             );
           })
@@ -397,7 +436,7 @@ export function SheetCreationLayout({
         <MagicPathCard state={creationState} updateState={updateState} />
 
         {/* Budget Summary */}
-        <BudgetSummaryCard />
+        <BudgetSummaryCard creationState={creationState} />
 
         {/* Derived Stats - Phase 6 */}
         <DerivedStatsCard state={creationState} updateState={updateState} />
