@@ -43,7 +43,7 @@ function formatWeight(kg: number): string {
 function getStatusColor(encumbrance: EncumbranceState): {
   bar: string;
   text: string;
-  bg: string;
+  border: string;
 } {
   const { currentWeight, maxCapacity } = encumbrance;
   const percentage = (currentWeight / maxCapacity) * 100;
@@ -53,7 +53,7 @@ function getStatusColor(encumbrance: EncumbranceState): {
     return {
       bar: "bg-red-500",
       text: "text-red-400",
-      bg: "bg-red-500/10",
+      border: "border-l-red-500",
     };
   }
   if (percentage > 75) {
@@ -61,14 +61,14 @@ function getStatusColor(encumbrance: EncumbranceState): {
     return {
       bar: "bg-yellow-500",
       text: "text-yellow-400",
-      bg: "bg-yellow-500/10",
+      border: "border-l-yellow-500",
     };
   }
   // Good - green/emerald
   return {
     bar: "bg-emerald-500",
     text: "text-emerald-400",
-    bg: "bg-emerald-500/10",
+    border: "border-l-emerald-500",
   };
 }
 
@@ -115,7 +115,7 @@ export function EncumbranceBar({
   }
 
   return (
-    <div className={`p-3 rounded-lg border border-zinc-800 ${colors.bg}`}>
+    <div className={`p-3 rounded-lg border border-zinc-800 border-l-2 ${colors.border} bg-zinc-900`}>
       <div className="flex items-center justify-between mb-2">
         <div className="flex items-center gap-2">
           <Weight className={`w-4 h-4 ${colors.text}`} />
