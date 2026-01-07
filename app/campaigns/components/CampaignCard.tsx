@@ -24,7 +24,7 @@ export default function CampaignCard({ campaign, userRole, onView }: CampaignCar
     return (
         <div
             onClick={() => onView(campaign.id)}
-            className="group cursor-pointer overflow-hidden rounded-lg border border-zinc-200 bg-white transition-all hover:border-zinc-300 hover:shadow-lg dark:border-zinc-800 dark:bg-black dark:hover:border-zinc-700"
+            className="group cursor-pointer overflow-hidden rounded-lg border border-zinc-200 bg-zinc-50 transition-all hover:border-zinc-300 hover:shadow-lg dark:border-zinc-800 dark:bg-zinc-950 dark:hover:border-zinc-700"
         >
             {campaign.imageUrl && (
                 <div className="h-32 w-full overflow-hidden bg-zinc-100 dark:bg-zinc-900">
@@ -67,7 +67,7 @@ export default function CampaignCard({ campaign, userRole, onView }: CampaignCar
                                     </span>
                                 ))}
                                 {campaign.tags.length > 3 && (
-                                    <span className="text-xs text-zinc-500">+{campaign.tags.length - 3}</span>
+                                    <span className="text-xs text-zinc-500">+<span className="font-mono">{campaign.tags.length - 3}</span></span>
                                 )}
                             </div>
                         )}
@@ -85,7 +85,7 @@ export default function CampaignCard({ campaign, userRole, onView }: CampaignCar
                     </div>
                     <div className="flex items-center gap-1">
                         <Users className="h-4 w-4" />
-                        <span>{campaign.playerIds.length} players</span>
+                        <span><span className="font-mono">{campaign.playerIds.length}</span> players</span>
                     </div>
                     <div className="flex items-center gap-1">
                         <span className="rounded bg-zinc-100 px-2 py-0.5 text-xs dark:bg-zinc-800">
