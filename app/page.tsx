@@ -9,7 +9,7 @@ export default function Home() {
 
   if (isLoading) {
     return (
-      <div className="flex min-h-screen items-center justify-center bg-zinc-50 font-sans dark:bg-black">
+      <div className="flex min-h-screen items-center justify-center bg-zinc-50 font-sans dark:bg-zinc-950">
         <main className="flex min-h-screen w-full flex-col items-center justify-center">
           <p className="text-lg text-zinc-600 dark:text-zinc-400">Loading...</p>
         </main>
@@ -24,20 +24,20 @@ export default function Home() {
 
   // Show unauthenticated homepage
   return (
-    <div className="flex min-h-screen flex-col bg-zinc-50 font-sans dark:bg-black">
+    <div className="flex min-h-screen flex-col bg-zinc-50 font-sans dark:bg-zinc-950">
       {/* Header */}
-      <header className="sticky top-0 z-50 w-full border-b border-zinc-200 bg-white/80 backdrop-blur-sm dark:border-zinc-800 dark:bg-black/80">
+      <header className="sticky top-0 z-50 w-full border-b border-zinc-200 bg-zinc-50/80 backdrop-blur-sm dark:border-zinc-800 dark:bg-zinc-950/80">
         <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8">
           <Link
             href="/"
-            className="text-xl font-semibold text-black transition-colors hover:text-zinc-700 dark:text-zinc-50 dark:hover:text-zinc-300"
+            className="text-xl font-semibold text-zinc-900 transition-colors hover:text-zinc-700 dark:text-zinc-50 dark:hover:text-zinc-300"
           >
             Shadow Master
           </Link>
           <div className="flex items-center gap-3">
             <Link
               href="/signin"
-              className="flex h-10 items-center justify-center rounded-md border border-solid border-black/[.08] px-4 text-sm font-medium text-black transition-colors hover:border-transparent hover:bg-black/[.04] focus:outline-none focus:ring-2 focus:ring-zinc-500 focus:ring-offset-2 dark:border-white/[.145] dark:text-zinc-50 dark:hover:bg-[#1a1a1a] dark:focus:ring-zinc-400"
+              className="flex h-10 items-center justify-center rounded-md border border-solid border-black/[.08] px-4 text-sm font-medium text-zinc-900 transition-colors hover:border-transparent hover:bg-black/[.04] focus:outline-none focus:ring-2 focus:ring-zinc-500 focus:ring-offset-2 dark:border-white/[.145] dark:text-zinc-50 dark:hover:bg-[#1a1a1a] dark:focus:ring-zinc-400"
             >
               Sign In
             </Link>
@@ -56,7 +56,7 @@ export default function Home() {
         {/* Hero Section */}
         <section className="mx-auto max-w-7xl px-4 py-16 sm:px-6 sm:py-24 lg:px-8">
           <div className="mx-auto max-w-3xl text-center">
-            <h1 className="text-4xl font-semibold tracking-tight text-black dark:text-zinc-50 sm:text-5xl md:text-6xl">
+            <h1 className="text-4xl font-semibold tracking-tight text-zinc-900 dark:text-zinc-50 sm:text-5xl md:text-6xl">
               Welcome to Shadow Master
             </h1>
             <p className="mt-6 text-lg leading-8 text-zinc-600 dark:text-zinc-400 sm:text-xl">
@@ -74,7 +74,7 @@ export default function Home() {
               </Link>
               <Link
                 href="#features"
-                className="flex h-12 min-w-[140px] items-center justify-center rounded-full border border-solid border-black/[.08] px-6 text-base font-medium text-black transition-colors hover:border-transparent hover:bg-black/[.04] focus:outline-none focus:ring-2 focus:ring-zinc-500 focus:ring-offset-2 dark:border-white/[.145] dark:text-zinc-50 dark:hover:bg-[#1a1a1a] dark:focus:ring-zinc-400"
+                className="flex h-12 min-w-[140px] items-center justify-center rounded-full border border-solid border-black/[.08] px-6 text-base font-medium text-zinc-900 transition-colors hover:border-transparent hover:bg-black/[.04] focus:outline-none focus:ring-2 focus:ring-zinc-500 focus:ring-offset-2 dark:border-white/[.145] dark:text-zinc-50 dark:hover:bg-[#1a1a1a] dark:focus:ring-zinc-400"
               >
                 Learn More
               </Link>
@@ -85,13 +85,13 @@ export default function Home() {
         {/* Features Section */}
         <section id="features" className="mx-auto max-w-7xl px-4 py-16 sm:px-6 lg:px-8 lg:py-24">
           <div className="mx-auto max-w-3xl text-center">
-            <h2 className="text-3xl font-semibold tracking-tight text-black dark:text-zinc-50 sm:text-4xl">
+            <h2 className="text-3xl font-semibold tracking-tight text-zinc-900 dark:text-zinc-50 sm:text-4xl">
               Features
             </h2>
           </div>
           <div className="mx-auto mt-16 grid max-w-5xl gap-8 sm:grid-cols-2 lg:grid-cols-3">
             {/* Feature Card 1: Character Management */}
-            <div className="group rounded-lg border border-zinc-200 bg-white p-8 transition-all hover:border-zinc-300 hover:shadow-lg dark:border-zinc-800 dark:bg-black dark:hover:border-zinc-700">
+            <div className="group rounded-lg border border-zinc-200 bg-zinc-50 p-8 transition-all hover:border-zinc-300 hover:shadow-lg dark:border-zinc-800 dark:bg-zinc-950 dark:hover:border-zinc-700">
               <div className="mb-4 flex h-16 w-16 items-center justify-center rounded-lg bg-zinc-100 dark:bg-zinc-900">
                 <svg
                   className="h-8 w-8 text-zinc-600 dark:text-zinc-400"
@@ -108,7 +108,7 @@ export default function Home() {
                   />
                 </svg>
               </div>
-              <h3 className="text-xl font-semibold text-black dark:text-zinc-50">
+              <h3 className="text-xl font-semibold text-zinc-900 dark:text-zinc-50">
                 Character Management
               </h3>
               <p className="mt-4 text-base leading-7 text-zinc-600 dark:text-zinc-400">
@@ -117,7 +117,7 @@ export default function Home() {
             </div>
 
             {/* Feature Card 2: Multi-Edition Support */}
-            <div className="group rounded-lg border border-zinc-200 bg-white p-8 transition-all hover:border-zinc-300 hover:shadow-lg dark:border-zinc-800 dark:bg-black dark:hover:border-zinc-700">
+            <div className="group rounded-lg border border-zinc-200 bg-zinc-50 p-8 transition-all hover:border-zinc-300 hover:shadow-lg dark:border-zinc-800 dark:bg-zinc-950 dark:hover:border-zinc-700">
               <div className="mb-4 flex h-16 w-16 items-center justify-center rounded-lg bg-zinc-100 dark:bg-zinc-900">
                 <svg
                   className="h-8 w-8 text-zinc-600 dark:text-zinc-400"
@@ -134,7 +134,7 @@ export default function Home() {
                   />
                 </svg>
               </div>
-              <h3 className="text-xl font-semibold text-black dark:text-zinc-50">
+              <h3 className="text-xl font-semibold text-zinc-900 dark:text-zinc-50">
                 Multi-Edition Support
               </h3>
               <p className="mt-4 text-base leading-7 text-zinc-600 dark:text-zinc-400">
@@ -143,7 +143,7 @@ export default function Home() {
             </div>
 
             {/* Feature Card 3: Flexible Rulesets */}
-            <div className="group rounded-lg border border-zinc-200 bg-white p-8 transition-all hover:border-zinc-300 hover:shadow-lg dark:border-zinc-800 dark:bg-black dark:hover:border-zinc-700 sm:col-span-2 lg:col-span-1">
+            <div className="group rounded-lg border border-zinc-200 bg-zinc-50 p-8 transition-all hover:border-zinc-300 hover:shadow-lg dark:border-zinc-800 dark:bg-zinc-950 dark:hover:border-zinc-700 sm:col-span-2 lg:col-span-1">
               <div className="mb-4 flex h-16 w-16 items-center justify-center rounded-lg bg-zinc-100 dark:bg-zinc-900">
                 <svg
                   className="h-8 w-8 text-zinc-600 dark:text-zinc-400"
@@ -166,7 +166,7 @@ export default function Home() {
                   />
                 </svg>
               </div>
-              <h3 className="text-xl font-semibold text-black dark:text-zinc-50">
+              <h3 className="text-xl font-semibold text-zinc-900 dark:text-zinc-50">
                 Flexible Rulesets
               </h3>
               <p className="mt-4 text-base leading-7 text-zinc-600 dark:text-zinc-400">
@@ -179,7 +179,7 @@ export default function Home() {
         {/* Call-to-Action Section */}
         <section className="mx-auto max-w-7xl px-4 py-16 sm:px-6 lg:px-8 lg:py-24">
           <div className="mx-auto max-w-3xl text-center">
-            <h2 className="text-3xl font-semibold tracking-tight text-black dark:text-zinc-50 sm:text-4xl">
+            <h2 className="text-3xl font-semibold tracking-tight text-zinc-900 dark:text-zinc-50 sm:text-4xl">
               Ready to create your first character?
             </h2>
             <div className="mt-10 flex flex-col items-center justify-center gap-4 sm:flex-row">
@@ -191,7 +191,7 @@ export default function Home() {
               </Link>
               <Link
                 href="/signin"
-                className="flex h-12 min-w-[160px] items-center justify-center rounded-full border border-solid border-black/[.08] px-8 text-base font-medium text-black transition-colors hover:border-transparent hover:bg-black/[.04] focus:outline-none focus:ring-2 focus:ring-zinc-500 focus:ring-offset-2 dark:border-white/[.145] dark:text-zinc-50 dark:hover:bg-[#1a1a1a] dark:focus:ring-zinc-400"
+                className="flex h-12 min-w-[160px] items-center justify-center rounded-full border border-solid border-black/[.08] px-8 text-base font-medium text-zinc-900 transition-colors hover:border-transparent hover:bg-black/[.04] focus:outline-none focus:ring-2 focus:ring-zinc-500 focus:ring-offset-2 dark:border-white/[.145] dark:text-zinc-50 dark:hover:bg-[#1a1a1a] dark:focus:ring-zinc-400"
               >
                 Sign In
               </Link>
@@ -204,7 +204,7 @@ export default function Home() {
       </main>
 
       {/* Footer */}
-      <footer className="border-t border-zinc-200 bg-white dark:border-zinc-800 dark:bg-black">
+      <footer className="border-t border-zinc-200 bg-zinc-50 dark:border-zinc-800 dark:bg-zinc-950">
         <div className="mx-auto max-w-7xl px-4 py-12 sm:px-6 lg:px-8">
           <div className="flex flex-col items-center justify-between gap-4 sm:flex-row">
             <nav className="flex flex-wrap items-center justify-center gap-6 text-sm">
@@ -255,7 +255,7 @@ function AuthenticatedHomepage({ user }: { user: { username: string; email: stri
     <AuthenticatedLayout>
       {/* Welcome Section */}
       <section className="mb-8">
-        <h1 className="text-3xl font-semibold tracking-tight text-black dark:text-zinc-50 sm:text-4xl">
+        <h1 className="text-3xl font-semibold tracking-tight text-zinc-900 dark:text-zinc-50 sm:text-4xl">
           Welcome back, {user.username}!
         </h1>
         <div className="mt-4 flex flex-wrap items-center gap-4 text-sm text-zinc-600 dark:text-zinc-400">
@@ -275,31 +275,31 @@ function AuthenticatedHomepage({ user }: { user: { username: string; email: stri
 
       {/* Quick Actions / Dashboard */}
       <section className="mb-8">
-        <h2 className="mb-4 text-xl font-semibold text-black dark:text-zinc-50">Quick Actions</h2>
+        <h2 className="mb-4 text-xl font-semibold text-zinc-900 dark:text-zinc-50">Quick Actions</h2>
         <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
           <Link
             href="/characters/create/sheet"
-            className="flex flex-col items-center justify-center rounded-lg border border-zinc-200 bg-white p-6 text-center transition-all hover:border-zinc-300 hover:shadow-md focus:outline-none focus:ring-2 focus:ring-zinc-500 focus:ring-offset-2 dark:border-zinc-800 dark:bg-black dark:hover:border-zinc-700 dark:focus:ring-zinc-400"
+            className="flex flex-col items-center justify-center rounded-lg border border-zinc-200 bg-zinc-50 p-6 text-center transition-all hover:border-zinc-300 hover:shadow-md focus:outline-none focus:ring-2 focus:ring-zinc-500 focus:ring-offset-2 dark:border-zinc-800 dark:bg-zinc-950 dark:hover:border-zinc-700 dark:focus:ring-zinc-400"
           >
             <svg className="mb-2 h-8 w-8 text-zinc-600 dark:text-zinc-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
             </svg>
-            <span className="text-sm font-medium text-black dark:text-zinc-50">Create New Character</span>
+            <span className="text-sm font-medium text-zinc-900 dark:text-zinc-50">Create New Character</span>
           </Link>
           <Link
             href="/characters"
-            className="flex flex-col items-center justify-center rounded-lg border border-zinc-200 bg-white p-6 text-center transition-all hover:border-zinc-300 hover:shadow-md focus:outline-none focus:ring-2 focus:ring-zinc-500 focus:ring-offset-2 dark:border-zinc-800 dark:bg-black dark:hover:border-zinc-700 dark:focus:ring-zinc-400"
+            className="flex flex-col items-center justify-center rounded-lg border border-zinc-200 bg-zinc-50 p-6 text-center transition-all hover:border-zinc-300 hover:shadow-md focus:outline-none focus:ring-2 focus:ring-zinc-500 focus:ring-offset-2 dark:border-zinc-800 dark:bg-zinc-950 dark:hover:border-zinc-700 dark:focus:ring-zinc-400"
           >
             <UserIcon className="mb-2 h-8 w-8 text-zinc-600 dark:text-zinc-400" />
-            <span className="text-sm font-medium text-black dark:text-zinc-50">Browse Characters</span>
+            <span className="text-sm font-medium text-zinc-900 dark:text-zinc-50">Browse Characters</span>
           </Link>
           {/* Rulesets */}
           <Link
             href="/rulesets"
-            className="flex flex-col items-center justify-center rounded-lg border border-zinc-200 bg-white p-6 text-center transition-all hover:border-zinc-300 hover:shadow-md focus:outline-none focus:ring-2 focus:ring-zinc-500 focus:ring-offset-2 dark:border-zinc-800 dark:bg-black dark:hover:border-zinc-700 dark:focus:ring-zinc-400"
+            className="flex flex-col items-center justify-center rounded-lg border border-zinc-200 bg-zinc-50 p-6 text-center transition-all hover:border-zinc-300 hover:shadow-md focus:outline-none focus:ring-2 focus:ring-zinc-500 focus:ring-offset-2 dark:border-zinc-800 dark:bg-zinc-950 dark:hover:border-zinc-700 dark:focus:ring-zinc-400"
           >
             <BookIcon className="mb-2 h-8 w-8 text-zinc-600 dark:text-zinc-400" />
-            <span className="text-sm font-medium text-black dark:text-zinc-50">View Rulesets</span>
+            <span className="text-sm font-medium text-zinc-900 dark:text-zinc-50">View Rulesets</span>
           </Link>
           {/* Recent Activity - Coming Soon */}
           <div
@@ -319,9 +319,9 @@ function AuthenticatedHomepage({ user }: { user: { username: string; email: stri
 
       {/* Character List / Overview */}
       <section>
-        <h2 className="mb-4 text-xl font-semibold text-black dark:text-zinc-50">Your Characters</h2>
+        <h2 className="mb-4 text-xl font-semibold text-zinc-900 dark:text-zinc-50">Your Characters</h2>
         {/* Empty State */}
-        <div className="rounded-lg border border-zinc-200 bg-white p-12 text-center dark:border-zinc-800 dark:bg-black">
+        <div className="rounded-lg border border-zinc-200 bg-zinc-50 p-12 text-center dark:border-zinc-800 dark:bg-zinc-950">
           <svg
             className="mx-auto h-12 w-12 text-zinc-400 dark:text-zinc-600"
             fill="none"
@@ -336,7 +336,7 @@ function AuthenticatedHomepage({ user }: { user: { username: string; email: stri
               d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
             />
           </svg>
-          <h3 className="mt-4 text-lg font-medium text-black dark:text-zinc-50">No characters yet</h3>
+          <h3 className="mt-4 text-lg font-medium text-zinc-900 dark:text-zinc-50">No characters yet</h3>
           <p className="mt-2 text-sm text-zinc-600 dark:text-zinc-400">
             Get started by creating your first Shadowrun character.
           </p>
