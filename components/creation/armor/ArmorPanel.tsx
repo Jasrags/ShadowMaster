@@ -21,7 +21,11 @@ import {
 } from "@/lib/rules/RulesetContext";
 import type { CreationState, ArmorItem } from "@/lib/types";
 import { useCreationBudgets } from "@/lib/contexts";
-import { CreationCard } from "../shared";
+import {
+  CreationCard,
+  KarmaConversionModal,
+  useKarmaConversionPrompt,
+} from "../shared";
 import { ArmorRow } from "./ArmorRow";
 import { ArmorPurchaseModal } from "./ArmorPurchaseModal";
 import { ArmorModificationModal } from "./ArmorModificationModal";
@@ -124,6 +128,7 @@ export function ArmorPanel({ state, updateState }: ArmorPanelProps) {
   const gearCatalog = useGear();
   const { getBudget } = useCreationBudgets();
   const nuyenBudget = getBudget("nuyen");
+  const karmaBudget = getBudget("karma");
 
   const [isPurchaseModalOpen, setIsPurchaseModalOpen] = useState(false);
   const [modifyingArmorId, setModifyingArmorId] = useState<string | null>(null);
@@ -180,11 +185,31 @@ export function ArmorPanel({ state, updateState }: ArmorPanelProps) {
   const remaining = totalNuyen - totalSpent;
   const isOverBudget = remaining < 0;
 
-  // Add armor
-  const addArmor = useCallback(
-    (armorData: ArmorData) => {
-      if (armorData.cost > remaining) return;
+  // Karma conversion hook
+  const karmaRemaining = karmaBudget?.remaining ?? 0;
 
+  const handleKarmaConvert = useCallback(
+    (newTotalConversion: number) => {
+      updateState({
+        budgets: {
+          ...state.budgets,
+          "karma-spent-gear": newTotalConversion,
+        },
+      });
+    },
+    [state.budgets, updateState]
+  );
+
+  const karmaConversionPrompt = useKarmaConversionPrompt({
+    remaining,
+    karmaRemaining,
+    currentConversion: karmaConversion,
+    onConvert: handleKarmaConvert,
+  });
+
+  // Add armor (actual implementation)
+  const actuallyAddArmor = useCallback(
+    (armorData: ArmorData) => {
       const newArmor: ArmorItem = {
         id: `${armorData.id}-${Date.now()}`,
         catalogId: armorData.id,
@@ -213,7 +238,30 @@ export function ArmorPanel({ state, updateState }: ArmorPanelProps) {
       // Close modal after purchase
       setIsPurchaseModalOpen(false);
     },
-    [remaining, selectedArmor, state.selections, updateState]
+    [selectedArmor, state.selections, updateState]
+  );
+
+  // Add armor (with karma conversion prompt if needed)
+  const addArmor = useCallback(
+    (armorData: ArmorData) => {
+      // Check if already affordable
+      if (armorData.cost <= remaining) {
+        actuallyAddArmor(armorData);
+        return;
+      }
+
+      // Check if karma conversion could help
+      const conversionInfo = karmaConversionPrompt.checkPurchase(armorData.cost);
+      if (conversionInfo?.canConvert) {
+        karmaConversionPrompt.promptConversion(armorData.name, armorData.cost, () => {
+          actuallyAddArmor(armorData);
+        });
+        return;
+      }
+
+      // Can't afford even with max karma conversion - do nothing
+    },
+    [remaining, actuallyAddArmor, karmaConversionPrompt]
   );
 
   // Remove armor
@@ -274,8 +322,8 @@ export function ArmorPanel({ state, updateState }: ArmorPanelProps) {
     [selectedArmor, state.selections, updateState]
   );
 
-  // Install a modification on armor
-  const handleInstallMod = useCallback(
+  // Install a modification on armor (actual implementation)
+  const actuallyInstallMod = useCallback(
     (mod: ArmorModificationCatalogItemData, rating?: number) => {
       if (!modifyingArmorId) return;
 
@@ -306,9 +354,6 @@ export function ArmorPanel({ state, updateState }: ArmorPanelProps) {
       const totalCapacity = armor.capacity ?? armor.armorRating;
       const usedCapacity = armor.capacityUsed ?? 0;
       if (capacityCost > totalCapacity - usedCapacity) return;
-
-      // Check budget
-      if (modCost > remaining) return;
 
       // Calculate availability
       let modAvailability = mod.availability || 0;
@@ -348,7 +393,61 @@ export function ArmorPanel({ state, updateState }: ArmorPanelProps) {
       // Close modal
       setModifyingArmorId(null);
     },
-    [modifyingArmorId, selectedArmor, remaining, state.selections, updateState]
+    [modifyingArmorId, selectedArmor, state.selections, updateState]
+  );
+
+  // Install a modification (with karma conversion prompt if needed)
+  const handleInstallMod = useCallback(
+    (mod: ArmorModificationCatalogItemData, rating?: number) => {
+      if (!modifyingArmorId) return;
+
+      const armorIndex = selectedArmor.findIndex((a) => a.id === modifyingArmorId);
+      if (armorIndex === -1) return;
+
+      const armor = selectedArmor[armorIndex];
+
+      // Calculate capacity cost for validation
+      let capacityCost = mod.capacityCost || 0;
+      if (mod.noCapacityCost) {
+        capacityCost = 0;
+      } else if (mod.ratingSpec?.capacityCostScaling?.perRating && rating) {
+        capacityCost = (mod.ratingSpec.capacityCostScaling.baseValue || mod.capacityCost || 0) * rating;
+      } else if (mod.capacityPerRating && rating) {
+        capacityCost = (mod.capacityCost || 0) * rating;
+      }
+
+      // Check capacity first (this is a hard limit, not fixable by karma)
+      const totalCapacity = armor.capacity ?? armor.armorRating;
+      const usedCapacity = armor.capacityUsed ?? 0;
+      if (capacityCost > totalCapacity - usedCapacity) return;
+
+      // Calculate cost
+      let modCost = mod.cost || 0;
+      if (mod.ratingSpec?.costScaling?.perRating && rating) {
+        modCost = (mod.ratingSpec.costScaling.baseValue || mod.cost || 0) * rating;
+      } else if (mod.costPerRating && rating) {
+        modCost = (mod.cost || 0) * rating;
+      }
+
+      // Check if already affordable
+      if (modCost <= remaining) {
+        actuallyInstallMod(mod, rating);
+        return;
+      }
+
+      // Check if karma conversion could help
+      const conversionInfo = karmaConversionPrompt.checkPurchase(modCost);
+      if (conversionInfo?.canConvert) {
+        const modName = rating ? `${mod.name} (Rating ${rating})` : mod.name;
+        karmaConversionPrompt.promptConversion(modName, modCost, () => {
+          actuallyInstallMod(mod, rating);
+        });
+        return;
+      }
+
+      // Can't afford even with max karma conversion - do nothing
+    },
+    [modifyingArmorId, selectedArmor, remaining, actuallyInstallMod, karmaConversionPrompt]
   );
 
   // Validation status
@@ -460,6 +559,20 @@ export function ArmorPanel({ state, updateState }: ArmorPanelProps) {
           onInstall={handleInstallMod}
         />
       )}
+
+      {/* Karma Conversion Modal */}
+      <KarmaConversionModal
+        isOpen={karmaConversionPrompt.modalState.isOpen}
+        onClose={karmaConversionPrompt.closeModal}
+        onConfirm={karmaConversionPrompt.confirmConversion}
+        itemName={karmaConversionPrompt.modalState.itemName}
+        itemCost={karmaConversionPrompt.modalState.itemCost}
+        currentRemaining={karmaConversionPrompt.currentRemaining}
+        karmaToConvert={karmaConversionPrompt.modalState.karmaToConvert}
+        karmaAvailable={karmaConversionPrompt.karmaAvailable}
+        currentKarmaConversion={karmaConversionPrompt.currentKarmaConversion}
+        maxKarmaConversion={karmaConversionPrompt.maxKarmaConversion}
+      />
     </>
   );
 }

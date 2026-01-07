@@ -24,7 +24,12 @@ import {
 import type { CreationState, Weapon, InstalledWeaponMod, WeaponMount, PurchasedAmmunitionItem } from "@/lib/types";
 import type { GearItemData } from "@/lib/rules/RulesetContext";
 import { useCreationBudgets } from "@/lib/contexts";
-import { CreationCard } from "./shared";
+import {
+  CreationCard,
+  KarmaConversionModal,
+  useKarmaConversionPrompt,
+  MAX_KARMA_CONVERSION,
+} from "./shared";
 import { WeaponRow, WeaponPurchaseModal, WeaponModificationModal, AmmunitionModal } from "./weapons";
 import { Lock, Plus, Sword } from "lucide-react";
 
@@ -134,6 +139,7 @@ export function WeaponsPanel({ state, updateState }: WeaponsPanelProps) {
   const gearCatalog = useGear();
   const { getBudget } = useCreationBudgets();
   const nuyenBudget = getBudget("nuyen");
+  const karmaBudget = getBudget("karma");
 
   const [isPurchaseModalOpen, setIsPurchaseModalOpen] = useState(false);
   const [modifyingWeaponId, setModifyingWeaponId] = useState<string | null>(null);
@@ -182,11 +188,31 @@ export function WeaponsPanel({ state, updateState }: WeaponsPanelProps) {
   const remaining = totalNuyen - totalSpent;
   const isOverBudget = remaining < 0;
 
-  // Add weapon
-  const addWeapon = useCallback(
-    (weapon: WeaponData) => {
-      if (weapon.cost > remaining) return;
+  // Karma conversion hook
+  const karmaRemaining = karmaBudget?.remaining ?? 0;
 
+  const handleKarmaConvert = useCallback(
+    (newTotalConversion: number) => {
+      updateState({
+        budgets: {
+          ...state.budgets,
+          "karma-spent-gear": newTotalConversion,
+        },
+      });
+    },
+    [state.budgets, updateState]
+  );
+
+  const karmaConversionPrompt = useKarmaConversionPrompt({
+    remaining,
+    karmaRemaining,
+    currentConversion: karmaConversion,
+    onConvert: handleKarmaConvert,
+  });
+
+  // Add weapon (actual implementation - called after affordability check)
+  const actuallyAddWeapon = useCallback(
+    (weapon: WeaponData) => {
       const newWeapon: Weapon = {
         id: `${weapon.id}-${Date.now()}`,
         catalogId: weapon.id,
@@ -216,7 +242,30 @@ export function WeaponsPanel({ state, updateState }: WeaponsPanelProps) {
       // Close modal after purchase
       setIsPurchaseModalOpen(false);
     },
-    [remaining, selectedWeapons, state.selections, updateState]
+    [selectedWeapons, state.selections, updateState]
+  );
+
+  // Add weapon (with karma conversion prompt if needed)
+  const addWeapon = useCallback(
+    (weapon: WeaponData) => {
+      // Check if already affordable
+      if (weapon.cost <= remaining) {
+        actuallyAddWeapon(weapon);
+        return;
+      }
+
+      // Check if karma conversion could help
+      const conversionInfo = karmaConversionPrompt.checkPurchase(weapon.cost);
+      if (conversionInfo?.canConvert) {
+        karmaConversionPrompt.promptConversion(weapon.name, weapon.cost, () => {
+          actuallyAddWeapon(weapon);
+        });
+        return;
+      }
+
+      // Can't afford even with max karma conversion - do nothing
+    },
+    [remaining, actuallyAddWeapon, karmaConversionPrompt]
   );
 
   // Remove weapon
@@ -243,8 +292,8 @@ export function WeaponsPanel({ state, updateState }: WeaponsPanelProps) {
     setModifyingWeaponId(weaponId);
   }, []);
 
-  // Install a modification on a weapon
-  const handleInstallMod = useCallback(
+  // Install a modification on a weapon (actual implementation)
+  const actuallyInstallMod = useCallback(
     (mod: WeaponModificationCatalogItemData, rating?: number) => {
       if (!modifyingWeaponId) return;
 
@@ -312,6 +361,45 @@ export function WeaponsPanel({ state, updateState }: WeaponsPanelProps) {
     [modifyingWeaponId, selectedWeapons, state.selections, updateState]
   );
 
+  // Install a modification (with karma conversion prompt if needed)
+  const handleInstallMod = useCallback(
+    (mod: WeaponModificationCatalogItemData, rating?: number) => {
+      if (!modifyingWeaponId) return;
+
+      const weaponIndex = selectedWeapons.findIndex((w) => w.id === modifyingWeaponId);
+      if (weaponIndex === -1) return;
+
+      const weapon = selectedWeapons[weaponIndex];
+
+      // Calculate cost for the mod
+      let cost = mod.cost || 0;
+      if (mod.costMultiplier) {
+        cost = Math.round(weapon.cost * mod.costMultiplier);
+      } else if (rating && (mod.costPerRating || mod.ratingSpec?.costScaling?.perRating)) {
+        cost = (mod.ratingSpec?.costScaling?.baseValue || mod.cost || 0) * rating;
+      }
+
+      // Check if already affordable
+      if (cost <= remaining) {
+        actuallyInstallMod(mod, rating);
+        return;
+      }
+
+      // Check if karma conversion could help
+      const conversionInfo = karmaConversionPrompt.checkPurchase(cost);
+      if (conversionInfo?.canConvert) {
+        const modName = rating ? `${mod.name} (Rating ${rating})` : mod.name;
+        karmaConversionPrompt.promptConversion(modName, cost, () => {
+          actuallyInstallMod(mod, rating);
+        });
+        return;
+      }
+
+      // Can't afford even with max karma conversion - do nothing
+    },
+    [modifyingWeaponId, selectedWeapons, remaining, actuallyInstallMod, karmaConversionPrompt]
+  );
+
   // Remove a modification from a weapon
   const handleRemoveMod = useCallback(
     (weaponId: string, modIndex: number) => {
@@ -366,8 +454,8 @@ export function WeaponsPanel({ state, updateState }: WeaponsPanelProps) {
     setAmmoWeaponId(weaponId);
   }, []);
 
-  // Purchase ammunition for a weapon
-  const handlePurchaseAmmo = useCallback(
+  // Purchase ammunition for a weapon (actual implementation)
+  const actuallyPurchaseAmmo = useCallback(
     (ammo: GearItemData, quantity: number) => {
       if (!ammoWeaponId) return;
 
@@ -409,6 +497,32 @@ export function WeaponsPanel({ state, updateState }: WeaponsPanelProps) {
       setAmmoWeaponId(null);
     },
     [ammoWeaponId, selectedWeapons, state.selections, updateState]
+  );
+
+  // Purchase ammunition (with karma conversion prompt if needed)
+  const handlePurchaseAmmo = useCallback(
+    (ammo: GearItemData, quantity: number) => {
+      const totalCost = ammo.cost * quantity;
+
+      // Check if already affordable
+      if (totalCost <= remaining) {
+        actuallyPurchaseAmmo(ammo, quantity);
+        return;
+      }
+
+      // Check if karma conversion could help
+      const conversionInfo = karmaConversionPrompt.checkPurchase(totalCost);
+      if (conversionInfo?.canConvert) {
+        const ammoName = quantity > 1 ? `${ammo.name} (x${quantity})` : ammo.name;
+        karmaConversionPrompt.promptConversion(ammoName, totalCost, () => {
+          actuallyPurchaseAmmo(ammo, quantity);
+        });
+        return;
+      }
+
+      // Can't afford even with max karma conversion - do nothing
+    },
+    [remaining, actuallyPurchaseAmmo, karmaConversionPrompt]
   );
 
   // Remove ammunition from a weapon
@@ -562,6 +676,20 @@ export function WeaponsPanel({ state, updateState }: WeaponsPanelProps) {
           onPurchase={handlePurchaseAmmo}
         />
       )}
+
+      {/* Karma Conversion Modal */}
+      <KarmaConversionModal
+        isOpen={karmaConversionPrompt.modalState.isOpen}
+        onClose={karmaConversionPrompt.closeModal}
+        onConfirm={karmaConversionPrompt.confirmConversion}
+        itemName={karmaConversionPrompt.modalState.itemName}
+        itemCost={karmaConversionPrompt.modalState.itemCost}
+        currentRemaining={karmaConversionPrompt.currentRemaining}
+        karmaToConvert={karmaConversionPrompt.modalState.karmaToConvert}
+        karmaAvailable={karmaConversionPrompt.karmaAvailable}
+        currentKarmaConversion={karmaConversionPrompt.currentKarmaConversion}
+        maxKarmaConversion={karmaConversionPrompt.maxKarmaConversion}
+      />
     </>
   );
 }

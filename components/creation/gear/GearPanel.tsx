@@ -21,7 +21,11 @@ import {
 } from "@/lib/rules/RulesetContext";
 import type { CreationState, GearItem } from "@/lib/types";
 import { useCreationBudgets } from "@/lib/contexts";
-import { CreationCard } from "../shared";
+import {
+  CreationCard,
+  KarmaConversionModal,
+  useKarmaConversionPrompt,
+} from "../shared";
 import { GearRow } from "./GearRow";
 import { GearPurchaseModal } from "./GearPurchaseModal";
 import { GearModificationModal } from "./GearModificationModal";
@@ -271,7 +275,7 @@ export function GearPanel({ state, updateState }: GearPanelProps) {
   const remaining = totalNuyen - totalSpent;
   const isOverBudget = remaining < 0;
 
-  // Handle karma conversion
+  // Handle karma conversion (manual +/- buttons)
   const handleKarmaConversion = useCallback(
     (delta: number) => {
       const newConversion = Math.max(
@@ -291,10 +295,52 @@ export function GearPanel({ state, updateState }: GearPanelProps) {
     [karmaConversion, karmaRemaining, state.budgets, updateState]
   );
 
-  // Add gear
-  const addGear = useCallback(
+  // Karma conversion hook for purchase prompts
+  const handleKarmaConvert = useCallback(
+    (newTotalConversion: number) => {
+      updateState({
+        budgets: {
+          ...state.budgets,
+          "karma-spent-gear": newTotalConversion,
+        },
+      });
+    },
+    [state.budgets, updateState]
+  );
+
+  const karmaConversionPrompt = useKarmaConversionPrompt({
+    remaining,
+    karmaRemaining,
+    currentConversion: karmaConversion,
+    onConvert: handleKarmaConvert,
+  });
+
+  // Calculate gear cost based on rating
+  const calculateGearCost = useCallback(
     (gearData: GearItemData, rating?: number) => {
-      // Calculate cost based on rating if item has rating
+      const hasRatingFlag =
+        gearData.hasRating || gearData.ratingSpec?.rating?.hasRating;
+      const effectiveRating = rating || 1;
+      let cost = gearData.cost;
+
+      if (hasRatingFlag) {
+        if (gearData.ratingSpec?.costScaling?.perRating) {
+          cost =
+            (gearData.ratingSpec.costScaling.baseValue || gearData.cost) *
+            effectiveRating;
+        } else if (gearData.costPerRating) {
+          cost = gearData.cost * effectiveRating;
+        }
+      }
+
+      return cost;
+    },
+    []
+  );
+
+  // Add gear (actual implementation)
+  const actuallyAddGear = useCallback(
+    (gearData: GearItemData, rating?: number) => {
       const hasRatingFlag =
         gearData.hasRating || gearData.ratingSpec?.rating?.hasRating;
       const effectiveRating = rating || 1;
@@ -316,8 +362,6 @@ export function GearPanel({ state, updateState }: GearPanelProps) {
               gearData.availability) * effectiveRating;
         }
       }
-
-      if (cost > remaining) return;
 
       const newGear: GearItem = {
         id: `${gearData.id}-${Date.now()}`,
@@ -343,7 +387,38 @@ export function GearPanel({ state, updateState }: GearPanelProps) {
 
       // Don't close modal - allow multiple purchases
     },
-    [remaining, selectedGear, state.selections, updateState]
+    [selectedGear, state.selections, updateState]
+  );
+
+  // Add gear (with karma conversion prompt if needed)
+  const addGear = useCallback(
+    (gearData: GearItemData, rating?: number) => {
+      const cost = calculateGearCost(gearData, rating);
+
+      // Check if already affordable
+      if (cost <= remaining) {
+        actuallyAddGear(gearData, rating);
+        return;
+      }
+
+      // Check if karma conversion could help
+      const conversionInfo = karmaConversionPrompt.checkPurchase(cost);
+      if (conversionInfo?.canConvert) {
+        const hasRatingFlag =
+          gearData.hasRating || gearData.ratingSpec?.rating?.hasRating;
+        const effectiveRating = rating || 1;
+        const itemName = hasRatingFlag
+          ? `${gearData.name} (Rating ${effectiveRating})`
+          : gearData.name;
+        karmaConversionPrompt.promptConversion(itemName, cost, () => {
+          actuallyAddGear(gearData, rating);
+        });
+        return;
+      }
+
+      // Can't afford even with max karma conversion - do nothing
+    },
+    [remaining, calculateGearCost, actuallyAddGear, karmaConversionPrompt]
   );
 
   // Remove gear
@@ -389,8 +464,8 @@ export function GearPanel({ state, updateState }: GearPanelProps) {
     [selectedGear, state.selections, updateState]
   );
 
-  // Install a mod on gear
-  const handleInstallMod = useCallback(
+  // Install a mod on gear (actual implementation)
+  const actuallyInstallMod = useCallback(
     (mod: GearModificationCatalogItemData, rating?: number) => {
       if (!modifyingGear) return;
 
@@ -409,9 +484,6 @@ export function GearPanel({ state, updateState }: GearPanelProps) {
       if (mod.costPerRating && rating) {
         cost = mod.cost * effectiveRating;
       }
-
-      // Check budget
-      if (cost > remaining) return;
 
       const installedMod = {
         id: mod.id,
@@ -438,7 +510,51 @@ export function GearPanel({ state, updateState }: GearPanelProps) {
         },
       });
     },
-    [modifyingGear, remaining, selectedGear, state.selections, updateState]
+    [modifyingGear, selectedGear, state.selections, updateState]
+  );
+
+  // Install a mod (with karma conversion prompt if needed)
+  const handleInstallMod = useCallback(
+    (mod: GearModificationCatalogItemData, rating?: number) => {
+      if (!modifyingGear) return;
+
+      const effectiveRating = rating || 1;
+      const capacityCost = mod.capacityPerRating
+        ? (mod.capacityCost || 1) * effectiveRating
+        : mod.capacityCost || 1;
+
+      // Check capacity first (this is a hard limit, not fixable by karma)
+      const capacityRemaining =
+        (modifyingGear.capacity || 0) - (modifyingGear.capacityUsed || 0);
+      if (capacityCost > capacityRemaining) return;
+
+      // Calculate cost
+      let cost = mod.cost;
+      if (mod.costPerRating && rating) {
+        cost = mod.cost * effectiveRating;
+      }
+
+      // Check if already affordable
+      if (cost <= remaining) {
+        actuallyInstallMod(mod, rating);
+        return;
+      }
+
+      // Check if karma conversion could help
+      const conversionInfo = karmaConversionPrompt.checkPurchase(cost);
+      if (conversionInfo?.canConvert) {
+        const modName = mod.hasRating
+          ? `${mod.name} (Rating ${effectiveRating})`
+          : mod.name;
+        karmaConversionPrompt.promptConversion(modName, cost, () => {
+          actuallyInstallMod(mod, rating);
+        });
+        return;
+      }
+
+      // Can't afford even with max karma conversion - do nothing
+    },
+    [modifyingGear, remaining, actuallyInstallMod, karmaConversionPrompt]
   );
 
   // Validation status
@@ -562,6 +678,20 @@ export function GearPanel({ state, updateState }: GearPanelProps) {
           onInstall={handleInstallMod}
         />
       )}
+
+      {/* Karma Conversion Modal */}
+      <KarmaConversionModal
+        isOpen={karmaConversionPrompt.modalState.isOpen}
+        onClose={karmaConversionPrompt.closeModal}
+        onConfirm={karmaConversionPrompt.confirmConversion}
+        itemName={karmaConversionPrompt.modalState.itemName}
+        itemCost={karmaConversionPrompt.modalState.itemCost}
+        currentRemaining={karmaConversionPrompt.currentRemaining}
+        karmaToConvert={karmaConversionPrompt.modalState.karmaToConvert}
+        karmaAvailable={karmaConversionPrompt.karmaAvailable}
+        currentKarmaConversion={karmaConversionPrompt.currentKarmaConversion}
+        maxKarmaConversion={karmaConversionPrompt.maxKarmaConversion}
+      />
     </>
   );
 }
