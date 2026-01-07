@@ -77,10 +77,10 @@ export default function SignupPage() {
 
 
   return (
-    <div className="flex min-h-screen items-center justify-center bg-zinc-50 font-sans dark:bg-black">
+    <div className="flex min-h-screen items-center justify-center bg-zinc-50 font-sans dark:bg-zinc-950">
       <main className="w-full max-w-md px-6 py-12">
-        <div className="rounded-lg bg-white p-8 shadow-lg dark:bg-zinc-900">
-          <h1 className="mb-6 text-3xl font-semibold text-black dark:text-zinc-50">
+        <div className="rounded-lg bg-zinc-50 p-8 shadow-lg dark:bg-zinc-900">
+          <h1 className="mb-6 text-3xl font-semibold text-zinc-900 dark:text-zinc-50">
             Create Account
           </h1>
 
@@ -104,9 +104,9 @@ export default function SignupPage() {
                 required
                 aria-invalid={!!validationErrors.email}
                 aria-describedby={validationErrors.email ? "email-error" : undefined}
-                className={`w-full rounded-md border px-3 py-2 text-black placeholder-zinc-500 focus:outline-none focus:ring-2 focus:ring-zinc-500 focus:ring-offset-2 dark:bg-zinc-800 dark:text-zinc-50 dark:placeholder-zinc-400 dark:focus:ring-zinc-600 ${validationErrors.email
+                className={`w-full rounded-md border px-3 py-2 text-zinc-900 placeholder-zinc-500 focus:outline-none focus:ring-2 focus:ring-zinc-500 focus:ring-offset-2 dark:bg-zinc-800 dark:text-zinc-50 dark:placeholder-zinc-400 dark:focus:ring-zinc-600 ${validationErrors.email
                     ? "border-red-500 dark:border-red-500"
-                    : "border-zinc-300 dark:border-zinc-700"
+                    : "border-zinc-200 dark:border-zinc-700"
                   }`}
                 placeholder="you@example.com"
               />
@@ -130,9 +130,9 @@ export default function SignupPage() {
                 required
                 aria-invalid={!!validationErrors.username}
                 aria-describedby={validationErrors.username ? "username-error" : undefined}
-                className={`w-full rounded-md border px-3 py-2 text-black placeholder-zinc-500 focus:outline-none focus:ring-2 focus:ring-zinc-500 focus:ring-offset-2 dark:bg-zinc-800 dark:text-zinc-50 dark:placeholder-zinc-400 dark:focus:ring-zinc-600 ${validationErrors.username
+                className={`w-full rounded-md border px-3 py-2 text-zinc-900 placeholder-zinc-500 focus:outline-none focus:ring-2 focus:ring-zinc-500 focus:ring-offset-2 dark:bg-zinc-800 dark:text-zinc-50 dark:placeholder-zinc-400 dark:focus:ring-zinc-600 ${validationErrors.username
                     ? "border-red-500 dark:border-red-500"
-                    : "border-zinc-300 dark:border-zinc-700"
+                    : "border-zinc-200 dark:border-zinc-700"
                   }`}
                 placeholder="username"
               />
@@ -156,9 +156,9 @@ export default function SignupPage() {
                 required
                 aria-invalid={!!validationErrors.password}
                 aria-describedby={validationErrors.password ? "password-error" : undefined}
-                className={`w-full rounded-md border px-3 py-2 text-black placeholder-zinc-500 focus:outline-none focus:ring-2 focus:ring-zinc-500 focus:ring-offset-2 dark:bg-zinc-800 dark:text-zinc-50 dark:placeholder-zinc-400 dark:focus:ring-zinc-600 ${validationErrors.password
+                className={`w-full rounded-md border px-3 py-2 text-zinc-900 placeholder-zinc-500 focus:outline-none focus:ring-2 focus:ring-zinc-500 focus:ring-offset-2 dark:bg-zinc-800 dark:text-zinc-50 dark:placeholder-zinc-400 dark:focus:ring-zinc-600 ${validationErrors.password
                     ? "border-red-500 dark:border-red-500"
-                    : "border-zinc-300 dark:border-zinc-700"
+                    : "border-zinc-200 dark:border-zinc-700"
                   }`}
                 placeholder="••••••••"
               />
@@ -182,9 +182,9 @@ export default function SignupPage() {
                 required
                 aria-invalid={!!validationErrors.confirmPassword}
                 aria-describedby={validationErrors.confirmPassword ? "confirmPassword-error" : undefined}
-                className={`w-full rounded-md border px-3 py-2 text-black placeholder-zinc-500 focus:outline-none focus:ring-2 focus:ring-zinc-500 focus:ring-offset-2 dark:bg-zinc-800 dark:text-zinc-50 dark:placeholder-zinc-400 dark:focus:ring-zinc-600 ${validationErrors.confirmPassword
+                className={`w-full rounded-md border px-3 py-2 text-zinc-900 placeholder-zinc-500 focus:outline-none focus:ring-2 focus:ring-zinc-500 focus:ring-offset-2 dark:bg-zinc-800 dark:text-zinc-50 dark:placeholder-zinc-400 dark:focus:ring-zinc-600 ${validationErrors.confirmPassword
                     ? "border-red-500 dark:border-red-500"
-                    : "border-zinc-300 dark:border-zinc-700"
+                    : "border-zinc-200 dark:border-zinc-700"
                   }`}
                 placeholder="••••••••"
               />
