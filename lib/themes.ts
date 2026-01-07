@@ -79,7 +79,7 @@ export const THEMES: Record<ThemeId, Theme> = {
         name: "Modern Card",
         colors: {
             background: "bg-stone-50 dark:bg-stone-950",
-            card: "bg-white dark:bg-stone-900 shadow-sm",
+            card: "bg-stone-50 dark:bg-stone-900 shadow-sm",
             border: "border-stone-200 dark:border-stone-800",
             accent: "text-indigo-600 dark:text-indigo-400",
             accentBg: "bg-indigo-600 dark:bg-indigo-500",
@@ -93,7 +93,7 @@ export const THEMES: Record<ThemeId, Theme> = {
         },
         components: {
             section: {
-                wrapper: "bg-white dark:bg-stone-900 rounded-xl shadow-sm border border-stone-200 dark:border-stone-800",
+                wrapper: "bg-stone-50 dark:bg-stone-900 rounded-xl shadow-sm border border-stone-200 dark:border-stone-800",
                 header: "border-b border-stone-100 dark:border-stone-800 bg-stone-50/50 dark:bg-stone-900/50",
                 title: "text-indigo-600 dark:text-indigo-400 font-bold uppercase tracking-wide text-sm",
                 cornerAccent: false,
