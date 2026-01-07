@@ -1327,7 +1327,7 @@ function CharacterSheet({
                       : 'bg-amber-500/10 border border-amber-500/30 text-amber-400'
                   }`}>
                     <span className="text-xs font-mono uppercase">Total Wound Modifier: </span>
-                    <span className="font-bold">{woundModifier}</span>
+                    <span className="font-mono font-bold">{woundModifier}</span>
                   </div>
                 )}
                 <div className="grid grid-cols-2 gap-4">
