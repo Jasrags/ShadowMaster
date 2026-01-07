@@ -276,7 +276,7 @@ export default function UserTable({ initialUsers }: UserTableProps) {
               setSearch(e.target.value);
               // Page reset is handled by debounce effect
             }}
-            className="w-full rounded-md border border-zinc-300 bg-white px-3 py-2 text-black placeholder-zinc-500 focus:outline-none focus:ring-2 focus:ring-zinc-500 focus:ring-offset-2 dark:border-zinc-700 dark:bg-zinc-800 dark:text-zinc-50 dark:placeholder-zinc-400 dark:focus:ring-zinc-600"
+            className="w-full rounded-md border border-zinc-200 bg-zinc-50 px-3 py-2 text-zinc-900 placeholder-zinc-500 focus:outline-none focus:ring-2 focus:ring-zinc-500 focus:ring-offset-2 dark:border-zinc-700 dark:bg-zinc-800 dark:text-zinc-50 dark:placeholder-zinc-400 dark:focus:ring-zinc-600"
             placeholder="Search by email or username..."
           />
         </div>
@@ -290,11 +290,11 @@ export default function UserTable({ initialUsers }: UserTableProps) {
       )}
 
       {/* Table */}
-      <div className="overflow-x-auto rounded-lg border border-zinc-200 bg-white dark:border-zinc-800 dark:bg-black">
+      <div className="overflow-x-auto rounded-lg border border-zinc-200 bg-zinc-50 dark:border-zinc-800 dark:bg-zinc-950">
         <table className="w-full" aria-label="User management table">
           <thead>
             <tr className="border-b border-zinc-200 dark:border-zinc-800">
-              <th className="px-4 py-3 text-left text-sm font-semibold text-black dark:text-zinc-50">
+              <th className="px-4 py-3 text-left text-sm font-semibold text-zinc-900 dark:text-zinc-50">
                 <button
                   onClick={() => handleSort("email")}
                   className="flex items-center gap-1 hover:text-zinc-700 dark:hover:text-zinc-300"
@@ -303,7 +303,7 @@ export default function UserTable({ initialUsers }: UserTableProps) {
                   {sortBy === "email" && (sortOrder === "asc" ? "↑" : "↓")}
                 </button>
               </th>
-              <th className="px-4 py-3 text-left text-sm font-semibold text-black dark:text-zinc-50">
+              <th className="px-4 py-3 text-left text-sm font-semibold text-zinc-900 dark:text-zinc-50">
                 <button
                   onClick={() => handleSort("username")}
                   className="flex items-center gap-1 hover:text-zinc-700 dark:hover:text-zinc-300"
@@ -312,7 +312,7 @@ export default function UserTable({ initialUsers }: UserTableProps) {
                   {sortBy === "username" && (sortOrder === "asc" ? "↑" : "↓")}
                 </button>
               </th>
-              <th className="px-4 py-3 text-left text-sm font-semibold text-black dark:text-zinc-50">
+              <th className="px-4 py-3 text-left text-sm font-semibold text-zinc-900 dark:text-zinc-50">
                 <button
                   onClick={() => handleSort("role")}
                   className="flex items-center gap-1 hover:text-zinc-700 dark:hover:text-zinc-300"
@@ -321,10 +321,10 @@ export default function UserTable({ initialUsers }: UserTableProps) {
                   {sortBy === "role" && (sortOrder === "asc" ? "↑" : "↓")}
                 </button>
               </th>
-              <th className="px-4 py-3 text-left text-sm font-semibold text-black dark:text-zinc-50">
+              <th className="px-4 py-3 text-left text-sm font-semibold text-zinc-900 dark:text-zinc-50">
                 Status
               </th>
-              <th className="px-4 py-3 text-left text-sm font-semibold text-black dark:text-zinc-50">
+              <th className="px-4 py-3 text-left text-sm font-semibold text-zinc-900 dark:text-zinc-50">
                 <button
                   onClick={() => handleSort("createdAt")}
                   className="flex items-center gap-1 hover:text-zinc-700 dark:hover:text-zinc-300"
@@ -333,10 +333,10 @@ export default function UserTable({ initialUsers }: UserTableProps) {
                   {sortBy === "createdAt" && (sortOrder === "asc" ? "↑" : "↓")}
                 </button>
               </th>
-              <th className="px-4 py-3 text-left text-sm font-semibold text-black dark:text-zinc-50">
+              <th className="px-4 py-3 text-left text-sm font-semibold text-zinc-900 dark:text-zinc-50">
                 Last Login
               </th>
-              <th className="px-4 py-3 text-right text-sm font-semibold text-black dark:text-zinc-50">
+              <th className="px-4 py-3 text-right text-sm font-semibold text-zinc-900 dark:text-zinc-50">
                 <span className="sr-only">Actions</span>
                 <svg
                   className="ml-auto h-5 w-5 text-zinc-600 dark:text-zinc-400"
@@ -401,7 +401,7 @@ export default function UserTable({ initialUsers }: UserTableProps) {
                         <Button
                           isDisabled={loading}
                           aria-label="User actions"
-                          className="flex h-8 w-8 items-center justify-center rounded-md border border-zinc-300 bg-white text-zinc-600 transition-colors hover:bg-zinc-100 focus:outline-none focus:ring-2 focus:ring-zinc-500 focus:ring-offset-2 disabled:opacity-50 dark:border-zinc-700 dark:bg-zinc-800 dark:text-zinc-400 dark:hover:bg-zinc-900 dark:focus:ring-zinc-400"
+                          className="flex h-8 w-8 items-center justify-center rounded-md border border-zinc-200 bg-white text-zinc-600 transition-colors hover:bg-zinc-100 focus:outline-none focus:ring-2 focus:ring-zinc-500 focus:ring-offset-2 disabled:opacity-50 dark:border-zinc-700 dark:bg-zinc-800 dark:text-zinc-400 dark:hover:bg-zinc-900 dark:focus:ring-zinc-400"
                         >
                           <svg
                             className="h-5 w-5"
@@ -484,20 +484,20 @@ export default function UserTable({ initialUsers }: UserTableProps) {
       {users.length > 0 && (
         <div className="flex items-center justify-between">
           <div className="text-sm text-zinc-600 dark:text-zinc-400">
-            Page {page}
+            Page <span className="font-mono">{page}</span>
           </div>
           <div className="flex gap-2">
             <Button
               onPress={() => setPage((p) => Math.max(1, p - 1))}
               isDisabled={page === 1 || loading}
-              className="rounded-md border border-zinc-300 bg-white px-3 py-1 text-sm font-medium text-zinc-900 transition-colors hover:bg-zinc-100 focus:outline-none focus:ring-2 focus:ring-zinc-500 focus:ring-offset-2 disabled:opacity-50 dark:border-zinc-700 dark:bg-zinc-800 dark:text-zinc-50 dark:hover:bg-zinc-900 dark:focus:ring-zinc-400"
+              className="rounded-md border border-zinc-200 bg-white px-3 py-1 text-sm font-medium text-zinc-900 transition-colors hover:bg-zinc-100 focus:outline-none focus:ring-2 focus:ring-zinc-500 focus:ring-offset-2 disabled:opacity-50 dark:border-zinc-700 dark:bg-zinc-800 dark:text-zinc-50 dark:hover:bg-zinc-900 dark:focus:ring-zinc-400"
             >
               Previous
             </Button>
             <Button
               onPress={() => setPage((p) => p + 1)}
               isDisabled={users.length < limit || loading}
-              className="rounded-md border border-zinc-300 bg-white px-3 py-1 text-sm font-medium text-zinc-900 transition-colors hover:bg-zinc-100 focus:outline-none focus:ring-2 focus:ring-zinc-500 focus:ring-offset-2 disabled:opacity-50 dark:border-zinc-700 dark:bg-zinc-800 dark:text-zinc-50 dark:hover:bg-zinc-900 dark:focus:ring-zinc-400"
+              className="rounded-md border border-zinc-200 bg-white px-3 py-1 text-sm font-medium text-zinc-900 transition-colors hover:bg-zinc-100 focus:outline-none focus:ring-2 focus:ring-zinc-500 focus:ring-offset-2 disabled:opacity-50 dark:border-zinc-700 dark:bg-zinc-800 dark:text-zinc-50 dark:hover:bg-zinc-900 dark:focus:ring-zinc-400"
             >
               Next
             </Button>
