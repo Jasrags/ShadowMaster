@@ -200,9 +200,21 @@ export function AugmentationModal({
     }
 
     // Filter by availability (exclude forbidden)
-    items = items.filter(
-      (item) => item.availability <= maxAvailability && item.legality !== "forbidden"
-    );
+    // For unified ratings, check minimum rating's availability
+    items = items.filter((item) => {
+      if (item.legality === "forbidden") return false;
+
+      // For unified ratings items, check the minimum rating's availability
+      if (hasUnifiedRatings(item)) {
+        const minRating = item.minRating ?? 1;
+        const ratingValue = getRatingTableValue(item, minRating);
+        const minAvailability = ratingValue?.availability ?? 0;
+        return minAvailability <= maxAvailability;
+      }
+
+      // Legacy items - check top-level availability
+      return (item.availability ?? 0) <= maxAvailability;
+    });
 
     return items;
   }, [isCyberware, cyberwareCatalog, biowareCatalog, category, searchQuery, maxAvailability]);

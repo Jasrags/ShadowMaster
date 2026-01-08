@@ -453,9 +453,116 @@ interface ComplexFormCatalogItem {
 
 ---
 
-## Rating Spec (Unified Pattern)
+## Unified Ratings Tables (PREFERRED)
 
-For items with ratings, prefer the `ratingSpec` object over legacy properties:
+For items with ratings, use **unified ratings tables** - explicit per-rating values that match how source books print data:
+
+```typescript
+interface UnifiedRatingConfig {
+  hasRating: true;            // Must be true to enable ratings
+  minRating?: number;         // Default: 1
+  maxRating: number;          // Maximum rating allowed
+  ratings: Record<number, {   // Explicit values for each rating
+    cost?: number;            // Nuyen cost at this rating
+    availability?: number;    // Availability at this rating
+    availabilitySuffix?: "R" | "F";
+    essenceCost?: number;     // Essence cost (cyberware/bioware)
+    capacity?: number;        // Capacity provided (cyberlimbs, cybereyes)
+    capacityCost?: number;    // Capacity consumed (enhancements)
+    karmaCost?: number;       // Karma cost (qualities)
+    powerPointCost?: number;  // Power point cost (adept powers)
+    effects?: {               // Mechanical effects at this rating
+      attributeBonuses?: Record<string, number>;
+      initiativeDice?: number;
+      initiativeScore?: number;
+      limitBonus?: number;
+      armorBonus?: number;
+    };
+  }>;
+}
+```
+
+### Example - Cybereyes (different capacity per rating):
+```json
+{
+  "id": "cybereyes",
+  "name": "Cybereyes",
+  "category": "eyeware",
+  "hasRating": true,
+  "minRating": 1,
+  "maxRating": 4,
+  "ratings": {
+    "1": { "cost": 4000, "availability": 3, "essenceCost": 0.2, "capacity": 4 },
+    "2": { "cost": 6000, "availability": 6, "essenceCost": 0.3, "capacity": 8 },
+    "3": { "cost": 10000, "availability": 9, "essenceCost": 0.4, "capacity": 12 },
+    "4": { "cost": 14000, "availability": 12, "essenceCost": 0.5, "capacity": 16 }
+  },
+  "description": "Replacement eyes with customizable enhancements."
+}
+```
+
+### Example - Wired Reflexes (non-linear essence/cost):
+```json
+{
+  "id": "wired-reflexes",
+  "name": "Wired Reflexes",
+  "category": "nervous-system",
+  "hasRating": true,
+  "minRating": 1,
+  "maxRating": 3,
+  "ratings": {
+    "1": {
+      "cost": 39000, "availability": 8, "essenceCost": 2,
+      "effects": { "initiativeDice": 1, "initiativeScore": 1 }
+    },
+    "2": {
+      "cost": 149000, "availability": 12, "essenceCost": 3,
+      "effects": { "initiativeDice": 2, "initiativeScore": 2 }
+    },
+    "3": {
+      "cost": 217000, "availability": 20, "essenceCost": 5,
+      "effects": { "initiativeDice": 3, "initiativeScore": 3 }
+    }
+  },
+  "legality": "restricted",
+  "description": "Hardwired reflexes for faster reaction time.",
+  "wirelessBonus": "+1 Initiative Die while wireless enabled."
+}
+```
+
+### Example - Quality with Levels (Toughness):
+```json
+{
+  "id": "toughness",
+  "name": "Toughness",
+  "type": "positive",
+  "category": "physical",
+  "hasRating": true,
+  "minRating": 1,
+  "maxRating": 4,
+  "ratings": {
+    "1": { "karmaCost": 9 },
+    "2": { "karmaCost": 18 },
+    "3": { "karmaCost": 27 },
+    "4": { "karmaCost": 36 }
+  },
+  "summary": "+1 to Physical damage resistance tests per level."
+}
+```
+
+### Why Unified Ratings Tables?
+
+1. **Matches source books** - Books print tables, not formulas
+2. **Non-linear scaling** - Many items don't follow simple formulas
+3. **Easier to audit** - Direct comparison with source material
+4. **Single code path** - No special cases for different scaling types
+5. **Complete data** - All rating-dependent values in one place
+
+---
+
+## Rating Spec (LEGACY FALLBACK)
+
+The `ratingSpec` format is still supported for backward compatibility, but **unified ratings tables are preferred** for new data:
 
 ```typescript
 interface CatalogItemRatingSpec {
@@ -480,18 +587,7 @@ interface CatalogItemRatingSpec {
 }
 ```
 
-Example - Wired Reflexes (different costs per rating):
-```json
-{
-  "ratingSpec": {
-    "rating": { "hasRating": true, "minRating": 1, "maxRating": 3 },
-    "essenceScaling": { "values": [2, 3, 5] },
-    "costScaling": { "values": [39000, 149000, 217000] }
-  }
-}
-```
-
-Example - Muscle Replacement (linear scaling):
+Legacy Example - Muscle Replacement (linear scaling):
 ```json
 {
   "ratingSpec": {
@@ -515,9 +611,13 @@ When creating new items, verify:
 4. **Availability is reasonable** (typically 0-20, rarely higher)
 5. **Costs are positive numbers** in appropriate ranges
 6. **Legality is only set when restricted/forbidden** (omit for legal items)
-7. **Rating specs are consistent** (if hasRating, maxRating must be set)
+7. **Rating specs are consistent**:
+   - For rated items, prefer **unified ratings tables** over `ratingSpec`
+   - If `hasRating: true`, must have `maxRating` and `ratings` table
+   - Each rating in table should have appropriate cost/availability/essence values
 8. **Page references are accurate** (if provided)
 9. **Descriptions are concise** but informative
+10. **Unified ratings tables match source book** values exactly
 
 ---
 
