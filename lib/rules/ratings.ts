@@ -14,7 +14,11 @@ import type {
   RatingValidationContext,
   RatingDisplayOptions,
   RatingSemanticType,
+  RatingTable,
+  RatingTableValue,
+  UnifiedRatingConfig,
 } from '../types/ratings';
+import { hasUnifiedRatings, getRatingTableValue, getAvailableRatings } from '../types/ratings';
 
 // =============================================================================
 // CORE CALCULATION FUNCTIONS
@@ -401,5 +405,293 @@ export function getRatingOptions(
       error: validation.error,
     };
   });
+}
+
+// =============================================================================
+// UNIFIED RATINGS TABLE UTILITIES
+// =============================================================================
+
+// Re-export type guard and utilities from types for convenience
+export { hasUnifiedRatings, getRatingTableValue, getAvailableRatings };
+
+/**
+ * Unified type for any rated item (supports both legacy and unified formats)
+ */
+export type RatedItem = {
+  hasRating?: boolean;
+  minRating?: number;
+  maxRating?: number;
+  ratings?: RatingTable;
+  ratingSpec?: CatalogItemRatingSpec;
+  // Base values for non-rated items
+  cost?: number;
+  availability?: number;
+  essenceCost?: number;
+  capacity?: number;
+  capacityCost?: number;
+};
+
+/**
+ * Get cost at a specific rating for any rated item
+ * Works with both unified ratings tables and legacy ratingSpec
+ */
+export function getItemCostAtRating(item: RatedItem, rating: number): number {
+  // Check for unified ratings table first (preferred)
+  if (hasUnifiedRatings(item)) {
+    const ratingValue = getRatingTableValue(item, rating);
+    return ratingValue?.cost ?? 0;
+  }
+
+  // Fall back to legacy ratingSpec calculation
+  if (item.ratingSpec?.costScaling) {
+    return calculateRatedValue(item.ratingSpec.costScaling, rating);
+  }
+
+  // Fall back to base cost
+  return item.cost ?? 0;
+}
+
+/**
+ * Get essence cost at a specific rating for any rated item
+ */
+export function getItemEssenceAtRating(item: RatedItem, rating: number): number | undefined {
+  // Check for unified ratings table first
+  if (hasUnifiedRatings(item)) {
+    const ratingValue = getRatingTableValue(item, rating);
+    return ratingValue?.essenceCost;
+  }
+
+  // Fall back to legacy ratingSpec calculation
+  if (item.ratingSpec?.essenceScaling) {
+    return calculateRatedValue(item.ratingSpec.essenceScaling, rating);
+  }
+
+  // Fall back to base essence cost
+  return item.essenceCost;
+}
+
+/**
+ * Get availability at a specific rating for any rated item
+ */
+export function getItemAvailabilityAtRating(
+  item: RatedItem,
+  rating: number
+): { value: number; suffix?: "R" | "F" } {
+  // Check for unified ratings table first
+  if (hasUnifiedRatings(item)) {
+    const ratingValue = getRatingTableValue(item, rating);
+    return {
+      value: ratingValue?.availability ?? 0,
+      suffix: ratingValue?.availabilitySuffix,
+    };
+  }
+
+  // Fall back to legacy ratingSpec calculation
+  if (item.ratingSpec?.availabilityScaling) {
+    return {
+      value: calculateRatedValue(item.ratingSpec.availabilityScaling, rating),
+    };
+  }
+
+  // Fall back to base availability
+  return { value: item.availability ?? 0 };
+}
+
+/**
+ * Get capacity at a specific rating for any rated item
+ */
+export function getItemCapacityAtRating(item: RatedItem, rating: number): number | undefined {
+  // Check for unified ratings table first
+  if (hasUnifiedRatings(item)) {
+    const ratingValue = getRatingTableValue(item, rating);
+    return ratingValue?.capacity;
+  }
+
+  // Fall back to legacy ratingSpec calculation
+  if (item.ratingSpec?.capacityScaling) {
+    return calculateRatedValue(item.ratingSpec.capacityScaling, rating);
+  }
+
+  // Fall back to base capacity
+  return item.capacity;
+}
+
+/**
+ * Get capacity cost at a specific rating for any rated item
+ */
+export function getItemCapacityCostAtRating(item: RatedItem, rating: number): number | undefined {
+  // Check for unified ratings table first
+  if (hasUnifiedRatings(item)) {
+    const ratingValue = getRatingTableValue(item, rating);
+    return ratingValue?.capacityCost;
+  }
+
+  // Fall back to legacy ratingSpec calculation
+  if (item.ratingSpec?.capacityCostScaling) {
+    return calculateRatedValue(item.ratingSpec.capacityCostScaling, rating);
+  }
+
+  // Fall back to base capacity cost
+  return item.capacityCost;
+}
+
+/**
+ * Get power point cost at a specific rating (adept powers)
+ */
+export function getItemPowerPointCostAtRating(item: RatedItem & { powerPointCost?: number }, rating: number): number | undefined {
+  // Check for unified ratings table first
+  if (hasUnifiedRatings(item)) {
+    const ratingValue = getRatingTableValue(item, rating);
+    return ratingValue?.powerPointCost;
+  }
+
+  // Fall back to base power point cost
+  return (item as { powerPointCost?: number }).powerPointCost;
+}
+
+/**
+ * Get karma cost at a specific rating (qualities, foci)
+ */
+export function getItemKarmaCostAtRating(item: RatedItem, rating: number): number | undefined {
+  // Check for unified ratings table first
+  if (hasUnifiedRatings(item)) {
+    const ratingValue = getRatingTableValue(item, rating);
+    return ratingValue?.karmaCost;
+  }
+
+  // Fall back to legacy ratingSpec calculation
+  if (item.ratingSpec?.karmaScaling) {
+    return calculateRatedValue(item.ratingSpec.karmaScaling, rating);
+  }
+
+  return undefined;
+}
+
+/**
+ * Check if a rating is valid for an item
+ */
+export function isRatingValid(item: RatedItem, rating: number): boolean {
+  if (!item.hasRating) {
+    return false;
+  }
+
+  const min = item.minRating ?? 1;
+  const max = item.maxRating ?? 1;
+
+  if (rating < min || rating > max) {
+    return false;
+  }
+
+  // For unified tables, also check that the rating exists in the table
+  if (item.ratings) {
+    return item.ratings[rating] !== undefined;
+  }
+
+  return true;
+}
+
+/**
+ * Get all rating values for a unified rated item
+ */
+export function getAllRatingValues(item: RatedItem): Array<{ rating: number; values: RatingTableValue }> {
+  if (!hasUnifiedRatings(item)) {
+    return [];
+  }
+
+  const ratings = getAvailableRatings(item);
+  return ratings.map(rating => ({
+    rating,
+    values: getRatingTableValue(item, rating)!,
+  }));
+}
+
+/**
+ * Get complete calculation result for any rated item at a rating
+ * Works with both unified and legacy formats
+ */
+export function getRatedItemValuesUnified(
+  item: RatedItem,
+  rating: number
+): RatingCalculationResult {
+  // For unified ratings, build result from table
+  if (hasUnifiedRatings(item)) {
+    const ratingValue = getRatingTableValue(item, rating);
+    if (!ratingValue) {
+      return { rating, cost: 0, availability: 0 };
+    }
+
+    return {
+      rating,
+      cost: ratingValue.cost,
+      availability: ratingValue.availability,
+      essence: ratingValue.essenceCost,
+      capacity: ratingValue.capacity,
+      capacityCost: ratingValue.capacityCost,
+      karmaCost: ratingValue.karmaCost,
+      attributeBonuses: ratingValue.effects?.attributeBonuses,
+    };
+  }
+
+  // Fall back to legacy calculation
+  if (item.ratingSpec) {
+    return calculateRatedItemValues(item.ratingSpec, rating);
+  }
+
+  // Non-rated item
+  return {
+    rating,
+    cost: item.cost ?? 0,
+    availability: item.availability ?? 0,
+    essence: item.essenceCost,
+    capacity: item.capacity,
+    capacityCost: item.capacityCost,
+  };
+}
+
+/**
+ * Get rating options with values for UI display
+ * Works with both unified and legacy formats
+ */
+export function getRatingOptionsUnified(
+  item: RatedItem,
+  context?: RatingValidationContext
+): Array<{
+  rating: number;
+  values: RatingCalculationResult;
+  valid: boolean;
+  error?: string;
+}> {
+  if (!item.hasRating) {
+    return [];
+  }
+
+  const min = item.minRating ?? 1;
+  const max = item.maxRating ?? 1;
+  const options: Array<{
+    rating: number;
+    values: RatingCalculationResult;
+    valid: boolean;
+    error?: string;
+  }> = [];
+
+  for (let rating = min; rating <= max; rating++) {
+    if (!isRatingValid(item, rating)) {
+      continue;
+    }
+
+    const values = getRatedItemValuesUnified(item, rating);
+    let valid = true;
+    let error: string | undefined;
+
+    // Check availability constraint
+    if (context?.maxAvailability !== undefined && values.availability > context.maxAvailability) {
+      valid = false;
+      error = `Availability ${values.availability} exceeds maximum ${context.maxAvailability}`;
+    }
+
+    options.push({ rating, values, valid, error });
+  }
+
+  return options;
 }
 
