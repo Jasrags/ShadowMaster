@@ -215,14 +215,14 @@ describe("validateAvailabilityConstraint", () => {
   describe("at character creation", () => {
     it("allows availability at or below max", () => {
       const result = validateAvailabilityConstraint(
-        12, "standard", false, false, "creation", 12
+        12, "standard", undefined, "creation", 12
       );
       expect(result.valid).toBe(true);
     });
 
     it("blocks availability above max", () => {
       const result = validateAvailabilityConstraint(
-        13, "standard", false, false, "creation", 12
+        13, "standard", undefined, "creation", 12
       );
       expect(result.valid).toBe(false);
       expect(result.error?.code).toBe("AVAILABILITY_EXCEEDED");
@@ -231,7 +231,7 @@ describe("validateAvailabilityConstraint", () => {
     it("accounts for grade availability modifier", () => {
       // Alpha adds +2, so 11 + 2 = 13 > 12
       const result = validateAvailabilityConstraint(
-        11, "alpha", false, false, "creation", 12
+        11, "alpha", undefined, "creation", 12
       );
       expect(result.valid).toBe(false);
       expect(result.error?.code).toBe("AVAILABILITY_EXCEEDED");
@@ -239,7 +239,7 @@ describe("validateAvailabilityConstraint", () => {
 
     it("blocks restricted items without override", () => {
       const result = validateAvailabilityConstraint(
-        8, "standard", true, false, "creation", 12
+        8, "standard", "restricted", "creation", 12
       );
       expect(result.valid).toBe(false);
       expect(result.error?.code).toBe("AVAILABILITY_RESTRICTED");
@@ -247,14 +247,14 @@ describe("validateAvailabilityConstraint", () => {
 
     it("allows restricted items with override", () => {
       const result = validateAvailabilityConstraint(
-        8, "standard", true, false, "creation", 12, true, false
+        8, "standard", "restricted", "creation", 12, true, false
       );
       expect(result.valid).toBe(true);
     });
 
     it("blocks forbidden items", () => {
       const result = validateAvailabilityConstraint(
-        8, "standard", false, true, "creation", 12
+        8, "standard", "forbidden", "creation", 12
       );
       expect(result.valid).toBe(false);
       expect(result.error?.code).toBe("AVAILABILITY_FORBIDDEN");
@@ -262,7 +262,7 @@ describe("validateAvailabilityConstraint", () => {
 
     it("allows forbidden items with override", () => {
       const result = validateAvailabilityConstraint(
-        8, "standard", false, true, "creation", 12, false, true
+        8, "standard", "forbidden", "creation", 12, false, true
       );
       expect(result.valid).toBe(true);
     });
@@ -271,21 +271,21 @@ describe("validateAvailabilityConstraint", () => {
   describe("in active play", () => {
     it("allows any availability during active play", () => {
       const result = validateAvailabilityConstraint(
-        20, "standard", false, false, "active", 12
+        20, "standard", undefined, "active", 12
       );
       expect(result.valid).toBe(true);
     });
 
     it("allows restricted items during active play", () => {
       const result = validateAvailabilityConstraint(
-        8, "standard", true, false, "active", 12
+        8, "standard", "restricted", "active", 12
       );
       expect(result.valid).toBe(true);
     });
 
     it("still blocks forbidden items during active play", () => {
       const result = validateAvailabilityConstraint(
-        8, "standard", false, true, "active", 12
+        8, "standard", "forbidden", "active", 12
       );
       expect(result.valid).toBe(false);
       expect(result.error?.code).toBe("AVAILABILITY_FORBIDDEN");

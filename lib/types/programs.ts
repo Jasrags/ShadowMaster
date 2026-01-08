@@ -7,7 +7,7 @@
  * Based on SR5 Core Rulebook Chapter 10: The Matrix
  */
 
-import type { ID } from "./core";
+import type { ID, ItemLegality } from "./core";
 
 // =============================================================================
 // PROGRAM CATEGORIES
@@ -39,11 +39,8 @@ export interface ProgramCatalogItem {
   /** Availability rating */
   availability: number;
 
-  /** Whether item is restricted (R) */
-  restricted?: boolean;
-
-  /** Whether item is forbidden (F) */
-  forbidden?: boolean;
+  /** Legality status: "restricted" (R) or "forbidden" (F) */
+  legality?: ItemLegality;
 
   /** For agent programs, the rating range */
   minRating?: number;

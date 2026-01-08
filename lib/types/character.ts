@@ -6,7 +6,7 @@
  * and store a reference to the ruleset snapshot used during creation.
  */
 
-import type { ID, ISODateString, Metadata, MagicalPath } from "./core";
+import type { ID, ISODateString, Metadata, MagicalPath, ItemLegality } from "./core";
 import type { EditionCode, FocusType, SpiritType } from "./edition";
 import type { CharacterProgram } from "./programs";
 import type { QualitySelection } from "./qualities";
@@ -666,6 +666,7 @@ export interface Lifestyle {
   customExpenses?: number; // Custom monthly expenses
   customIncome?: number; // Custom monthly income
   notes?: string;
+  associatedIdentityId?: ID; // Identity this lifestyle is associated with (for sheet-driven creation)
 }
 
 /**
@@ -683,8 +684,8 @@ export interface InstalledGearMod {
   cost: number;
   /** Actual availability of this mod */
   availability: number;
-  restricted?: boolean;
-  forbidden?: boolean;
+  /** Legality status: "restricted" (R) or "forbidden" (F) */
+  legality?: ItemLegality;
 }
 
 export interface GearItem {
@@ -732,8 +733,8 @@ export interface InstalledWeaponMod {
   cost: number;
   /** Actual availability of this mod */
   availability: number;
-  restricted?: boolean;
-  forbidden?: boolean;
+  /** Legality status: "restricted" (R) or "forbidden" (F) */
+  legality?: ItemLegality;
   /** New: Flags built-in mods that cannot be removed */
   isBuiltIn?: boolean;
   /** Capacity/Slots used by this mod */
@@ -755,8 +756,33 @@ export interface InstalledArmorMod {
   cost: number;
   /** Actual availability of this mod */
   availability: number;
-  restricted?: boolean;
-  forbidden?: boolean;
+  /** Legality status: "restricted" (R) or "forbidden" (F) */
+  legality?: ItemLegality;
+}
+
+/**
+ * Ammunition purchased during character creation
+ * Tracks a box of ammo with type, quantity, cost, and modifiers
+ */
+export interface PurchasedAmmunitionItem {
+  /** Reference to catalog ammunition ID */
+  catalogId: string;
+  /** Display name */
+  name: string;
+  /** Number of boxes purchased */
+  quantity: number;
+  /** Cost per box */
+  cost: number;
+  /** Rounds per box */
+  roundsPerBox?: number;
+  /** Damage modifier (e.g., "+1", "-2S (e)") */
+  damageModifier?: string;
+  /** AP modifier (e.g., -4 for APDS) */
+  apModifier?: number;
+  /** Availability rating */
+  availability: number;
+  /** Legality status: "restricted" (R) or "forbidden" (F) */
+  legality?: ItemLegality;
 }
 
 export interface Weapon extends GearItem {
@@ -797,6 +823,12 @@ export interface Weapon extends GearItem {
    */
   spareMagazines?: MagazineItem[];
 
+  /**
+   * Ammunition purchased for this weapon during character creation.
+   * Tracks boxes of ammo with type, quantity, cost, and modifiers.
+   */
+  purchasedAmmunition?: PurchasedAmmunitionItem[];
+
   // -------------------------------------------------------------------------
   // Legacy fields (deprecated, use ammoState instead)
   // -------------------------------------------------------------------------
@@ -833,6 +865,8 @@ export interface ArmorItem extends GearItem {
   capacityUsed?: number;
   /** Installed modifications on this armor */
   modifications?: InstalledArmorMod[];
+  /** Legality status: "restricted" (R) or "forbidden" (F) */
+  legality?: ItemLegality;
 
   // -------------------------------------------------------------------------
   // Inventory State (ADR-010)
@@ -964,9 +998,8 @@ export interface CyberwareItem {
   cost: number;
   /** Availability rating */
   availability: number;
-  /** Whether availability is Restricted (R) or Forbidden (F) */
-  restricted?: boolean;
-  forbidden?: boolean;
+  /** Legality status: "restricted" (R) or "forbidden" (F) */
+  legality?: ItemLegality;
   /** Attribute bonuses provided by this cyberware */
   attributeBonuses?: Record<string, number>;
   /** Initiative dice bonuses */
@@ -1018,9 +1051,8 @@ export interface BiowareItem {
   cost: number;
   /** Availability rating */
   availability: number;
-  /** Whether availability is Restricted (R) or Forbidden (F) */
-  restricted?: boolean;
-  forbidden?: boolean;
+  /** Legality status: "restricted" (R) or "forbidden" (F) */
+  legality?: ItemLegality;
   /** Attribute bonuses provided by this bioware */
   attributeBonuses?: Record<string, number>;
   /** Other special effects/notes */
@@ -1095,8 +1127,8 @@ export interface CharacterDrone {
   cost: number;
   /** Availability rating */
   availability: number;
-  restricted?: boolean;
-  forbidden?: boolean;
+  /** Legality status: "restricted" (R) or "forbidden" (F) */
+  legality?: ItemLegality;
   /** Installed autosofts */
   installedAutosofts?: string[];
   /** Notes */
@@ -1123,7 +1155,8 @@ export interface CharacterRCC {
   cost: number;
   /** Availability rating */
   availability: number;
-  restricted?: boolean;
+  /** Legality status: "restricted" (R) or "forbidden" (F) */
+  legality?: ItemLegality;
   /** Currently running autosofts (shared to all slaved drones) */
   runningAutosofts?: string[];
   /** Notes */
@@ -1171,9 +1204,8 @@ export interface FocusItem {
   cost: number;
   /** Availability rating */
   availability: number;
-  /** Whether availability is Restricted (R) or Forbidden (F) */
-  restricted?: boolean;
-  forbidden?: boolean;
+  /** Legality status: "restricted" (R) or "forbidden" (F) */
+  legality?: ItemLegality;
   /** Notes */
   notes?: string;
 }

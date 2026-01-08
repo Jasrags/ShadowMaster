@@ -63,7 +63,7 @@ export function LifestyleSubscriptionSelector({
 
   return (
     <DialogTrigger isOpen={isOpen} onOpenChange={setIsOpen}>
-      <Button className="text-xs text-blue-600 hover:text-blue-800 dark:text-blue-400 dark:hover:text-blue-300">
+      <Button className="rounded px-2.5 py-1 text-xs font-medium text-white bg-blue-600 hover:bg-blue-700">
         + Add Subscription
       </Button>
       <Modal className="fixed inset-0 z-50 flex items-center justify-center bg-black/50">

@@ -186,8 +186,8 @@ export function AugmentationCard({
         {/* Availability */}
         <span className="text-zinc-400">
           <span className="text-zinc-500">Avail:</span> {item.availability}
-          {item.restricted && "R"}
-          {item.forbidden && "F"}
+          {item.legality === "restricted" && "R"}
+          {item.legality === "forbidden" && "F"}
         </span>
 
         {/* Capacity for cyberlimbs */}

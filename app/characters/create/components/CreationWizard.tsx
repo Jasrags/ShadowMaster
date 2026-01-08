@@ -2,6 +2,8 @@
 
 import { useState, useMemo, useCallback, useEffect } from "react";
 import { Button } from "react-aria-components";
+import Link from "next/link";
+import { LayoutGrid } from "lucide-react";
 import {
   useRuleset,
   useCreationMethod,
@@ -1510,17 +1512,17 @@ export function CreationWizard({ onCancel, onComplete, characterId: initialChara
       <div className="flex flex-1 flex-col overflow-hidden relative">
         {/* Header */}
         <div className="flex shrink-0 items-center justify-between border-b border-zinc-200 bg-white px-6 py-4 dark:border-zinc-800 dark:bg-zinc-950/50">
-          <div className="flex items-center justify-between">
-            <div>
-              <h2 className="text-lg font-semibold text-zinc-900 dark:text-zinc-50">
-                {currentStep?.title || "Loading..."}
-              </h2>
-              {currentStep?.description && (
-                <p className="mt-1 text-sm text-zinc-600 dark:text-zinc-400">
-                  {currentStep.description}
-                </p>
-              )}
-            </div>
+          <div>
+            <h2 className="text-lg font-semibold text-zinc-900 dark:text-zinc-50">
+              {currentStep?.title || "Loading..."}
+            </h2>
+            {currentStep?.description && (
+              <p className="mt-1 text-sm text-zinc-600 dark:text-zinc-400">
+                {currentStep.description}
+              </p>
+            )}
+          </div>
+          <div className="flex items-center gap-4">
             <div className="flex items-center gap-2 text-sm text-zinc-500">
               <span className="font-medium text-emerald-600 dark:text-emerald-400">
                 {editionCode?.toUpperCase()}
@@ -1530,6 +1532,20 @@ export function CreationWizard({ onCancel, onComplete, characterId: initialChara
                 Step {state.currentStep + 1} of {steps.length}
               </span>
             </div>
+            {/* Mode switcher - link to sheet mode */}
+            <Link
+              href={(() => {
+                const params = new URLSearchParams();
+                if (characterId) params.set("characterId", characterId);
+                if (campaignId) params.set("campaignId", campaignId);
+                const queryString = params.toString();
+                return `/characters/create/sheet${queryString ? `?${queryString}` : ""}`;
+              })()}
+              className="flex items-center gap-1.5 rounded-lg border border-zinc-200 px-3 py-1.5 text-xs font-medium text-zinc-600 transition-colors hover:bg-zinc-100 dark:border-zinc-700 dark:text-zinc-400 dark:hover:bg-zinc-800"
+            >
+              <LayoutGrid className="h-3.5 w-3.5" />
+              Switch to Sheet
+            </Link>
           </div>
         </div>
 

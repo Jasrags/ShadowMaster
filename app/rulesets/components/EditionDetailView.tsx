@@ -88,7 +88,7 @@ export default function EditionDetailView({ editionCode, onClose }: EditionDetai
                 {/* Actions */}
                 <div className="flex flex-col gap-3">
                     <a
-                        href={`/characters/create?edition=${edition.shortCode}`}
+                        href={`/characters/create/sheet?edition=${edition.shortCode}`}
                         className="w-full py-3 px-4 bg-primary text-primary-foreground font-semibold rounded-lg text-center hover:bg-primary/90 transition-colors flex items-center justify-center gap-2"
                     >
                         Create Character
@@ -192,7 +192,7 @@ export default function EditionDetailView({ editionCode, onClose }: EditionDetai
                                     key={method.id}
                                     method={method}
                                     isDefault={method.id === edition.defaultCreationMethodId}
-                                    onSelect={() => window.location.href = `/characters/create?edition=${edition.shortCode}`}
+                                    onSelect={() => window.location.href = `/characters/create/sheet?edition=${edition.shortCode}`}
                                 />
                             ))}
                             {(!creationMethods || creationMethods.length === 0) && (

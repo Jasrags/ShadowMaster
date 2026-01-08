@@ -66,7 +66,7 @@ const MOCK_MOD_CATALOG: Record<string, WeaponModificationCatalogItem> = {
     mount: "internal",
     cost: 200,
     availability: 4,
-    restricted: true,
+    legality: "restricted",
     accuracyModifier: 2,
     description: "Provides targeting assistance via DNI or image link.",
   },
@@ -76,7 +76,7 @@ const MOCK_MOD_CATALOG: Record<string, WeaponModificationCatalogItem> = {
     mount: "barrel",
     cost: 500,
     availability: 9,
-    restricted: true,
+    legality: "restricted",
     description: "Reduces sound signature of weapon fire.",
   },
   "laser-sight": {

@@ -12,7 +12,7 @@
  */
 
 import { useState, useMemo, useCallback } from "react";
-import type { CreationState, CyberwareItem, BiowareItem, CyberwareGrade, BiowareGrade } from "@/lib/types";
+import type { CreationState, CyberwareItem, BiowareItem, CyberwareGrade, BiowareGrade, ItemLegality } from "@/lib/types";
 import {
   useCyberware,
   useBioware,
@@ -103,12 +103,11 @@ function formatEssence(value: number): string {
 
 function getAvailabilityDisplay(
   availability: number,
-  restricted?: boolean,
-  forbidden?: boolean
+  legality?: ItemLegality
 ): string {
   let display = String(availability);
-  if (restricted) display += "R";
-  if (forbidden) display += "F";
+  if (legality === "restricted") display += "R";
+  if (legality === "forbidden") display += "F";
   return display;
 }
 
@@ -267,9 +266,9 @@ export function AugmentationsStep({ state, updateState, budgetValues }: StepProp
       essenceCost: number,
       availability: number,
       itemBonuses: Record<string, number> | undefined,
-      forbidden?: boolean
+      legality?: ItemLegality
     ): { allowed: boolean; reason?: string } => {
-      if (forbidden) {
+      if (legality === "forbidden") {
         return { allowed: false, reason: "Forbidden at character creation" };
       }
       if (availability > augmentationRules.maxAvailabilityAtCreation) {
@@ -313,7 +312,7 @@ export function AugmentationsStep({ state, updateState, budgetValues }: StepProp
       const cost = calculateCyberwareCost(item.cost, grade, cyberwareGrades, rating);
       const availability = calculateCyberwareAvailability(item.availability, grade, cyberwareGrades);
 
-      const check = canAddAugmentation(cost, essenceCost, availability, item.attributeBonuses, item.forbidden);
+      const check = canAddAugmentation(cost, essenceCost, availability, item.attributeBonuses, item.legality);
       if (!check.allowed) {
         return;
       }
@@ -360,7 +359,7 @@ export function AugmentationsStep({ state, updateState, budgetValues }: StepProp
       const cost = calculateBiowareCost(item.cost, grade, biowareGrades, rating);
       const availability = calculateBiowareAvailability(item.availability, grade, biowareGrades);
 
-      const check = canAddAugmentation(cost, essenceCost, availability, item.attributeBonuses, item.forbidden);
+      const check = canAddAugmentation(cost, essenceCost, availability, item.attributeBonuses, item.legality);
       if (!check.allowed) {
         return;
       }
@@ -684,7 +683,7 @@ export function AugmentationsStep({ state, updateState, budgetValues }: StepProp
             <p className="augmentations-step__catalog-empty">No items found</p>
           ) : (
             catalogItems.slice(0, 20).map((item) => {
-              const isAvailable = item.availability <= MAX_AVAILABILITY && !item.forbidden;
+              const isAvailable = item.availability <= MAX_AVAILABILITY && item.legality !== "forbidden";
 
               // Calculate costs with current grade
               let essenceCost: number, cost: number, availability: number;
@@ -722,7 +721,7 @@ export function AugmentationsStep({ state, updateState, budgetValues }: StepProp
                 );
               }
 
-              const check = canAddAugmentation(cost, essenceCost, availability, item.attributeBonuses, item.forbidden);
+              const check = canAddAugmentation(cost, essenceCost, availability, item.attributeBonuses, item.legality);
 
               return (
                 <div
@@ -732,7 +731,7 @@ export function AugmentationsStep({ state, updateState, budgetValues }: StepProp
                   <div className="augmentations-step__catalog-item-header">
                     <span className="augmentations-step__catalog-item-name">{item.name}</span>
                     <span className="augmentations-step__catalog-item-avail">
-                      {getAvailabilityDisplay(availability, item.restricted, item.forbidden)}
+                      {getAvailabilityDisplay(availability, item.legality)}
                     </span>
                   </div>
                   <div className="augmentations-step__catalog-item-stats">
