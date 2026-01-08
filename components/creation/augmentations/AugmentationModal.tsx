@@ -12,7 +12,7 @@
  * - Magic/Resonance loss warning for awakened characters
  */
 
-import { useMemo, useState, useCallback } from "react";
+import { useMemo, useState, useCallback, useEffect } from "react";
 import {
   useCyberware,
   useBioware,
@@ -28,7 +28,9 @@ import {
   type BiowareCatalogItemData,
 } from "@/lib/rules/RulesetContext";
 import type { CyberwareGrade, BiowareGrade, ItemLegality } from "@/lib/types";
+import { hasUnifiedRatings, getRatingTableValue } from "@/lib/types/ratings";
 import { X, Search, Cpu, Heart, AlertTriangle, Zap, Plus } from "lucide-react";
+import { RatingSelector } from "../shared";
 
 // =============================================================================
 // CONSTANTS
@@ -151,6 +153,7 @@ export function AugmentationModal({
   const [grade, setGrade] = useState<CyberwareGrade | BiowareGrade>("standard");
   const [category, setCategory] = useState("all");
   const [searchQuery, setSearchQuery] = useState("");
+  const [selectedRating, setSelectedRating] = useState<number>(1);
 
   const isCyberware = augmentationType === "cyberware";
   const categories = isCyberware ? CYBERWARE_CATEGORIES : BIOWARE_CATEGORIES;
@@ -162,6 +165,7 @@ export function AugmentationModal({
     setGrade("standard");
     setCategory("all");
     setSearchQuery("");
+    setSelectedRating(1);
   }, []);
 
   // Available grades based on type
@@ -203,56 +207,100 @@ export function AugmentationModal({
     return items;
   }, [isCyberware, cyberwareCatalog, biowareCatalog, category, searchQuery, maxAvailability]);
 
-  // Selected item with calculated values
-  const selectedItem = useMemo(() => {
+  // Get the raw catalog item (for checking hasRating)
+  const rawSelectedItem = useMemo(() => {
     if (!selectedItemId) return null;
-
     const catalog = isCyberware ? cyberwareCatalog?.catalog : biowareCatalog?.catalog;
-    const item = catalog?.find((i) => i.id === selectedItemId);
-    if (!item) return null;
+    return catalog?.find((i) => i.id === selectedItemId) ?? null;
+  }, [selectedItemId, isCyberware, cyberwareCatalog, biowareCatalog]);
 
+  // Reset rating when item changes
+  useEffect(() => {
+    if (rawSelectedItem && hasUnifiedRatings(rawSelectedItem)) {
+      setSelectedRating(rawSelectedItem.minRating ?? 1);
+    } else {
+      setSelectedRating(1);
+    }
+  }, [rawSelectedItem]);
+
+  // Selected item with calculated values (including rating-based values)
+  const selectedItem = useMemo(() => {
+    if (!rawSelectedItem) return null;
+
+    let baseEssenceCost: number;
+    let baseCost: number;
+    let baseAvailability: number;
+    let capacity: number | undefined;
+
+    // Check if item uses unified ratings table
+    if (hasUnifiedRatings(rawSelectedItem)) {
+      const ratingValue = getRatingTableValue(rawSelectedItem, selectedRating);
+      if (!ratingValue) {
+        // Fall back to first available rating
+        const firstRating = rawSelectedItem.minRating ?? 1;
+        const firstValue = getRatingTableValue(rawSelectedItem, firstRating);
+        baseEssenceCost = firstValue?.essenceCost ?? 0;
+        baseCost = firstValue?.cost ?? 0;
+        baseAvailability = firstValue?.availability ?? 0;
+        capacity = firstValue?.capacity;
+      } else {
+        baseEssenceCost = ratingValue.essenceCost ?? 0;
+        baseCost = ratingValue.cost;
+        baseAvailability = ratingValue.availability;
+        capacity = ratingValue.capacity;
+      }
+    } else {
+      // Legacy item without unified ratings
+      baseEssenceCost = rawSelectedItem.essenceCost ?? 0;
+      baseCost = rawSelectedItem.cost ?? 0;
+      baseAvailability = rawSelectedItem.availability ?? 0;
+      capacity = isCyberware ? (rawSelectedItem as CyberwareCatalogItemData).capacity : undefined;
+    }
+
+    // Apply grade modifiers
     let essenceCost: number;
     let cost: number;
     let availability: number;
 
     if (isCyberware) {
       essenceCost = calculateCyberwareEssenceCost(
-        item.essenceCost,
+        baseEssenceCost,
         grade as CyberwareGrade,
         cyberwareGrades
       );
-      cost = calculateCyberwareCost(item.cost, grade as CyberwareGrade, cyberwareGrades);
+      cost = calculateCyberwareCost(baseCost, grade as CyberwareGrade, cyberwareGrades);
       availability = calculateCyberwareAvailability(
-        item.availability,
+        baseAvailability,
         grade as CyberwareGrade,
         cyberwareGrades
       );
     } else {
       essenceCost = calculateBiowareEssenceCost(
-        item.essenceCost,
+        baseEssenceCost,
         grade as BiowareGrade,
         biowareGrades
       );
-      cost = calculateBiowareCost(item.cost, grade as BiowareGrade, biowareGrades);
+      cost = calculateBiowareCost(baseCost, grade as BiowareGrade, biowareGrades);
       availability = calculateBiowareAvailability(
-        item.availability,
+        baseAvailability,
         grade as BiowareGrade,
         biowareGrades
       );
     }
 
     return {
-      ...item,
+      ...rawSelectedItem,
       essenceCost,
       cost,
       availability,
+      capacity,
+      baseEssenceCost,
     };
   }, [
-    selectedItemId,
+    rawSelectedItem,
+    selectedRating,
     grade,
     isCyberware,
-    cyberwareCatalog,
-    biowareCatalog,
     cyberwareGrades,
     biowareGrades,
   ]);
@@ -275,32 +323,33 @@ export function AugmentationModal({
 
   // Handle add
   const handleAdd = useCallback(() => {
-    if (!selectedItem || !canAdd) return;
+    if (!selectedItem || !canAdd || !rawSelectedItem) return;
 
-    const catalogItem = isCyberware
-      ? (cyberwareCatalog?.catalog.find((i) => i.id === selectedItemId) as CyberwareCatalogItemData)
-      : (biowareCatalog?.catalog.find((i) => i.id === selectedItemId) as BiowareCatalogItemData);
-
-    if (!catalogItem) return;
+    // Build the display name - include rating if rated item
+    const isRatedItem = hasUnifiedRatings(rawSelectedItem);
+    const displayName = isRatedItem
+      ? `${rawSelectedItem.name} (Rating ${selectedRating})`
+      : rawSelectedItem.name;
 
     const selection: AugmentationSelection = {
       type: augmentationType,
-      catalogId: catalogItem.id,
-      name: catalogItem.name,
-      category: catalogItem.category,
+      catalogId: rawSelectedItem.id,
+      name: displayName,
+      category: rawSelectedItem.category,
       grade,
-      baseEssenceCost: catalogItem.essenceCost,
+      baseEssenceCost: selectedItem.baseEssenceCost,
       essenceCost: selectedItem.essenceCost,
       cost: selectedItem.cost,
       availability: selectedItem.availability,
-      legality: catalogItem.legality,
-      capacity: isCyberware ? (catalogItem as CyberwareCatalogItemData).capacity : undefined,
-      attributeBonuses: catalogItem.attributeBonuses,
+      legality: rawSelectedItem.legality,
+      capacity: selectedItem.capacity,
+      rating: isRatedItem ? selectedRating : undefined,
+      attributeBonuses: rawSelectedItem.attributeBonuses,
       initiativeDiceBonus: isCyberware
-        ? (catalogItem as CyberwareCatalogItemData).initiativeDiceBonus
+        ? (rawSelectedItem as CyberwareCatalogItemData).initiativeDiceBonus
         : undefined,
       wirelessBonus: isCyberware
-        ? (catalogItem as CyberwareCatalogItemData).wirelessBonus
+        ? (rawSelectedItem as CyberwareCatalogItemData).wirelessBonus
         : undefined,
     };
 
@@ -309,11 +358,10 @@ export function AugmentationModal({
     onClose();
   }, [
     selectedItem,
+    rawSelectedItem,
     canAdd,
     isCyberware,
-    cyberwareCatalog,
-    biowareCatalog,
-    selectedItemId,
+    selectedRating,
     augmentationType,
     grade,
     onAdd,
@@ -420,41 +468,59 @@ export function AugmentationModal({
                 <div className="space-y-1">
                   {filteredItems.map((item) => {
                     const isSelected = selectedItemId === item.id;
+                    const isRatedItem = hasUnifiedRatings(item);
 
-                    // Calculate display values
+                    // Get base values - for rated items, show minimum rating values
+                    let baseEssence: number;
+                    let baseCost: number;
+                    let baseAvail: number;
+
+                    if (isRatedItem) {
+                      const minRating = item.minRating ?? 1;
+                      const ratingValue = getRatingTableValue(item, minRating);
+                      baseEssence = ratingValue?.essenceCost ?? 0;
+                      baseCost = ratingValue?.cost ?? 0;
+                      baseAvail = ratingValue?.availability ?? 0;
+                    } else {
+                      baseEssence = item.essenceCost ?? 0;
+                      baseCost = item.cost ?? 0;
+                      baseAvail = item.availability ?? 0;
+                    }
+
+                    // Calculate display values with grade modifiers
                     let displayEssence: number;
                     let displayCost: number;
                     let displayAvail: number;
 
                     if (isCyberware) {
                       displayEssence = calculateCyberwareEssenceCost(
-                        item.essenceCost,
+                        baseEssence,
                         grade as CyberwareGrade,
                         cyberwareGrades
                       );
                       displayCost = calculateCyberwareCost(
-                        item.cost,
+                        baseCost,
                         grade as CyberwareGrade,
                         cyberwareGrades
                       );
                       displayAvail = calculateCyberwareAvailability(
-                        item.availability,
+                        baseAvail,
                         grade as CyberwareGrade,
                         cyberwareGrades
                       );
                     } else {
                       displayEssence = calculateBiowareEssenceCost(
-                        item.essenceCost,
+                        baseEssence,
                         grade as BiowareGrade,
                         biowareGrades
                       );
                       displayCost = calculateBiowareCost(
-                        item.cost,
+                        baseCost,
                         grade as BiowareGrade,
                         biowareGrades
                       );
                       displayAvail = calculateBiowareAvailability(
-                        item.availability,
+                        baseAvail,
                         grade as BiowareGrade,
                         biowareGrades
                       );
@@ -482,6 +548,11 @@ export function AugmentationModal({
                         <div className="min-w-0 flex-1">
                           <span className="block truncate text-sm font-medium text-zinc-900 dark:text-zinc-100">
                             {item.name}
+                            {isRatedItem && (
+                              <span className="ml-1 text-xs font-normal text-zinc-500 dark:text-zinc-400">
+                                (R{item.minRating}-{item.maxRating})
+                              </span>
+                            )}
                           </span>
                           <div className="mt-0.5 flex flex-wrap gap-x-2 gap-y-0.5 text-[10px] text-zinc-500 dark:text-zinc-400">
                             <span
@@ -491,10 +562,10 @@ export function AugmentationModal({
                                   : "text-pink-600 dark:text-pink-400"
                               }
                             >
-                              {formatEssence(displayEssence)} ESS
+                              {formatEssence(displayEssence)}{isRatedItem ? "+" : ""} ESS
                             </span>
-                            <span>{formatCurrency(displayCost)}¥</span>
-                            <span>Avail {getAvailabilityDisplay(displayAvail, item.legality)}</span>
+                            <span>{formatCurrency(displayCost)}{isRatedItem ? "+" : ""}¥</span>
+                            <span>Avail {getAvailabilityDisplay(displayAvail, item.legality)}{isRatedItem ? "+" : ""}</span>
                           </div>
                         </div>
                       </button>
@@ -519,6 +590,21 @@ export function AugmentationModal({
                     <p className="mt-2 text-sm text-zinc-600 dark:text-zinc-400">
                       {selectedItem.description}
                     </p>
+                  )}
+
+                  {/* Rating Selector for rated items */}
+                  {rawSelectedItem && hasUnifiedRatings(rawSelectedItem) && (
+                    <div className="mt-4">
+                      <RatingSelector
+                        item={rawSelectedItem}
+                        selectedRating={selectedRating}
+                        onRatingChange={setSelectedRating}
+                        maxAvailability={maxAvailability}
+                        showCostPreview={false}
+                        showEssencePreview={false}
+                        label="Rating"
+                      />
+                    </div>
                   )}
 
                   {/* Stats Grid */}
