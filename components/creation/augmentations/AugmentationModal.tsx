@@ -85,6 +85,7 @@ export interface AugmentationSelection {
   attributeBonuses?: Record<string, number>;
   initiativeDiceBonus?: number;
   wirelessBonus?: string;
+  armorBonus?: number;
 }
 
 interface AugmentationModalProps {
@@ -343,6 +344,13 @@ export function AugmentationModal({
       ? `${rawSelectedItem.name} (Rating ${selectedRating})`
       : rawSelectedItem.name;
 
+    // Extract effects from rating table if applicable
+    let armorBonus: number | undefined;
+    if (isRatedItem) {
+      const ratingValue = getRatingTableValue(rawSelectedItem, selectedRating);
+      armorBonus = ratingValue?.effects?.armorBonus;
+    }
+
     const selection: AugmentationSelection = {
       type: augmentationType,
       catalogId: rawSelectedItem.id,
@@ -363,6 +371,7 @@ export function AugmentationModal({
       wirelessBonus: isCyberware
         ? (rawSelectedItem as CyberwareCatalogItemData).wirelessBonus
         : undefined,
+      armorBonus,
     };
 
     onAdd(selection);
