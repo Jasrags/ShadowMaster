@@ -15,6 +15,7 @@ import {
   type GearCatalogData,
 } from "@/lib/rules/RulesetContext";
 import type { ItemLegality } from "@/lib/types";
+import { hasUnifiedRatings, getRatingTableValue } from "@/lib/types/ratings";
 import { X, Search, Minus, Plus, AlertTriangle } from "lucide-react";
 
 // =============================================================================
@@ -95,26 +96,57 @@ function getGearByCategory(
  * Calculate cost for a gear item, optionally with rating
  */
 function getGearCost(gear: GearItemData, rating?: number): number {
+  // Unified ratings - look up from table
+  if (hasUnifiedRatings(gear)) {
+    const r = rating ?? gear.minRating ?? 1;
+    const ratingValue = getRatingTableValue(gear, r);
+    return ratingValue?.cost ?? 0;
+  }
+
+  // Legacy ratingSpec
   if (gear.ratingSpec?.costScaling?.perRating && rating) {
     return (gear.ratingSpec.costScaling.baseValue || gear.cost) * rating;
   }
   if (gear.costPerRating && rating) {
     return gear.cost * rating;
   }
-  return gear.cost;
+  return gear.cost ?? 0;
 }
 
 /**
  * Calculate availability for a gear item, optionally with rating
  */
 function getGearAvailability(gear: GearItemData, rating?: number): number {
+  // Unified ratings - look up from table
+  if (hasUnifiedRatings(gear)) {
+    const r = rating ?? gear.minRating ?? 1;
+    const ratingValue = getRatingTableValue(gear, r);
+    return ratingValue?.availability ?? 0;
+  }
+
+  // Legacy ratingSpec
   if (gear.ratingSpec?.availabilityScaling?.perRating && rating) {
     return (
       (gear.ratingSpec.availabilityScaling.baseValue || gear.availability) *
       rating
     );
   }
-  return gear.availability;
+  return gear.availability ?? 0;
+}
+
+/**
+ * Get minimum availability for filtering (availability at minimum rating)
+ */
+function getMinimumAvailability(gear: GearItemData): number {
+  // Unified ratings - get availability at minimum rating
+  if (hasUnifiedRatings(gear)) {
+    const minRating = gear.minRating ?? 1;
+    const ratingValue = getRatingTableValue(gear, minRating);
+    return ratingValue?.availability ?? 0;
+  }
+
+  // Legacy - use base availability
+  return gear.availability ?? 0;
 }
 
 /**
@@ -132,6 +164,16 @@ function getRatingBounds(gear: GearItemData): {
   max: number;
   hasRating: boolean;
 } {
+  // Unified ratings
+  if (hasUnifiedRatings(gear)) {
+    return {
+      min: gear.minRating ?? 1,
+      max: gear.maxRating ?? 6,
+      hasRating: true,
+    };
+  }
+
+  // Legacy ratingSpec
   if (gear.ratingSpec?.rating?.hasRating) {
     return {
       min: gear.ratingSpec.rating.minRating || 1,
@@ -253,31 +295,31 @@ export function GearPurchaseModal({
     if (!gearCatalog) return {};
     return {
       all: getAllGear(gearCatalog).filter(
-        (g) => g.availability <= MAX_AVAILABILITY
+        (g) => getMinimumAvailability(g) <= MAX_AVAILABILITY
       ).length,
       electronics: gearCatalog.electronics.filter(
-        (g) => g.availability <= MAX_AVAILABILITY
+        (g) => getMinimumAvailability(g) <= MAX_AVAILABILITY
       ).length,
-      tools: gearCatalog.tools.filter((g) => g.availability <= MAX_AVAILABILITY)
+      tools: gearCatalog.tools.filter((g) => getMinimumAvailability(g) <= MAX_AVAILABILITY)
         .length,
       survival: gearCatalog.survival.filter(
-        (g) => g.availability <= MAX_AVAILABILITY
+        (g) => getMinimumAvailability(g) <= MAX_AVAILABILITY
       ).length,
       medical: gearCatalog.medical.filter(
-        (g) => g.availability <= MAX_AVAILABILITY
+        (g) => getMinimumAvailability(g) <= MAX_AVAILABILITY
       ).length,
       security: gearCatalog.security.filter(
-        (g) => g.availability <= MAX_AVAILABILITY
+        (g) => getMinimumAvailability(g) <= MAX_AVAILABILITY
       ).length,
       miscellaneous: gearCatalog.miscellaneous.filter(
-        (g) => g.availability <= MAX_AVAILABILITY
+        (g) => getMinimumAvailability(g) <= MAX_AVAILABILITY
       ).length,
     };
   }, [gearCatalog]);
 
   // Filter by search and availability
   const filteredGear = useMemo(() => {
-    let items = categoryGear.filter((g) => g.availability <= MAX_AVAILABILITY);
+    let items = categoryGear.filter((g) => getMinimumAvailability(g) <= MAX_AVAILABILITY);
 
     if (searchQuery) {
       const query = searchQuery.toLowerCase();

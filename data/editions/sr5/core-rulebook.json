@@ -10034,41 +10034,45 @@
               "1": {
                 "cost": 6000,
                 "availability": 8,
-                "essenceCost": 0.5
+                "essenceCost": 0.5,
+                "effects": { "armorBonus": 1 }
               },
               "2": {
                 "cost": 12000,
                 "availability": 12,
-                "essenceCost": 1
+                "essenceCost": 1,
+                "effects": { "armorBonus": 2 }
               },
               "3": {
                 "cost": 20000,
                 "availability": 14,
-                "essenceCost": 1.5
+                "essenceCost": 1.5,
+                "effects": { "armorBonus": 3 }
               },
               "4": {
                 "cost": 30000,
                 "availability": 16,
-                "essenceCost": 2
+                "essenceCost": 2,
+                "effects": { "armorBonus": 4 }
               },
               "5": {
                 "cost": 50000,
                 "availability": 18,
-                "essenceCost": 2.5
+                "essenceCost": 2.5,
+                "effects": { "armorBonus": 5 }
               },
               "6": {
                 "cost": 75000,
                 "availability": 20,
-                "essenceCost": 3
+                "essenceCost": 3,
+                "effects": { "armorBonus": 6 }
               }
             },
             "category": "bodyware",
-            "description": "+1 armor bonus.",
+            "description": "Bonus Armor equal to Rating (cumulative with worn armor, no Encumbrance). Cannot be combined with orthoskin or other skin augmentations that provide armor.",
             "page": 456,
-            "attributeBonuses": {
-              "armor": 1
-            },
-            "legality": "restricted"
+            "legality": "restricted",
+            "incompatibleWith": ["orthoskin"]
           },
           {
             "id": "internal-air-tank",
@@ -10138,42 +10142,6 @@
             "legality": "restricted"
           },
           {
-            "id": "orthoskin",
-            "name": "Orthoskin",
-            "hasRating": true,
-            "minRating": 1,
-            "maxRating": 4,
-            "ratings": {
-              "1": {
-                "cost": 6000,
-                "availability": 8,
-                "essenceCost": 0.25
-              },
-              "2": {
-                "cost": 12000,
-                "availability": 12,
-                "essenceCost": 0.5
-              },
-              "3": {
-                "cost": 20000,
-                "availability": 14,
-                "essenceCost": 0.75
-              },
-              "4": {
-                "cost": 30000,
-                "availability": 16,
-                "essenceCost": 1
-              }
-            },
-            "category": "bodyware",
-            "description": "+1 armor (compatible with bone lacing).",
-            "page": 457,
-            "attributeBonuses": {
-              "armor": 1
-            },
-            "legality": "restricted"
-          },
-          {
             "id": "reaction-enhancers",
             "name": "Reaction Enhancers",
             "hasRating": true,
@@ -10211,33 +10179,6 @@
               "reaction": 1
             },
             "legality": "restricted"
-          },
-          {
-            "id": "synthacardium",
-            "name": "Synthacardium",
-            "hasRating": true,
-            "minRating": 1,
-            "maxRating": 3,
-            "ratings": {
-              "1": {
-                "cost": 8000,
-                "availability": 8,
-                "essenceCost": 0.1
-              },
-              "2": {
-                "cost": 16000,
-                "availability": 12,
-                "essenceCost": 0.2
-              },
-              "3": {
-                "cost": 24000,
-                "availability": 14,
-                "essenceCost": 0.3
-              }
-            },
-            "category": "bodyware",
-            "description": "+1 to Cardiovascular tests (running, swimming, etc.).",
-            "page": 457
           },
           {
             "id": "wired-reflexes",
@@ -10878,16 +10819,6 @@
             "legality": "restricted"
           },
           {
-            "id": "platelet-factories",
-            "name": "Platelet Factories",
-            "category": "bodyware",
-            "essenceCost": 0.2,
-            "cost": 17000,
-            "availability": 12,
-            "description": "+1 die to resist bleeding. Reduces Overflow threshold penalty.",
-            "page": 457
-          },
-          {
             "id": "skillwires",
             "name": "Skillwires",
             "category": "bodyware",
@@ -10930,23 +10861,6 @@
             "availability": 6,
             "description": "Shielded compartment for smuggling items.",
             "page": 457
-          },
-          {
-            "id": "suprathyroid-gland",
-            "name": "Suprathyroid Gland",
-            "category": "bodyware",
-            "essenceCost": 0.7,
-            "cost": 140000,
-            "availability": 20,
-            "description": "+1 to all physical attributes (BOD, AGI, REA, STR).",
-            "attributeBonuses": {
-              "body": 1,
-              "agility": 1,
-              "reaction": 1,
-              "strength": 1
-            },
-            "page": 457,
-            "legality": "forbidden"
           },
           {
             "id": "cyberlimb-arm",
@@ -11910,64 +11824,46 @@
             "page": 460
           },
           {
-            "id": "orthoskin-bio-1",
-            "name": "Orthoskin (Bioware, Rating 1)",
+            "id": "orthoskin",
+            "name": "Orthoskin",
             "category": "basic",
-            "essenceCost": 0.25,
-            "cost": 6500,
-            "availability": 8,
-            "description": "+1 armor (compatible with bone lacing).",
-            "attributeBonuses": {
-              "armor": 1
+            "hasRating": true,
+            "minRating": 1,
+            "maxRating": 4,
+            "ratings": {
+              "1": {
+                "cost": 6500,
+                "availability": 8,
+                "essenceCost": 0.25,
+                "effects": { "armorBonus": 1 }
+              },
+              "2": {
+                "cost": 13000,
+                "availability": 12,
+                "essenceCost": 0.5,
+                "effects": { "armorBonus": 2 }
+              },
+              "3": {
+                "cost": 22000,
+                "availability": 14,
+                "essenceCost": 0.75,
+                "effects": { "armorBonus": 3 }
+              },
+              "4": {
+                "cost": 33000,
+                "availability": 16,
+                "essenceCost": 1,
+                "effects": { "armorBonus": 4 }
+              }
             },
+            "description": "Bonus Armor equal to Rating (compatible with bone lacing). Cannot be combined with dermal plating or other skin augmentations that provide armor.",
             "page": 460,
-            "legality": "restricted"
+            "legality": "restricted",
+            "incompatibleWith": ["dermal-plating"]
           },
           {
-            "id": "orthoskin-bio-2",
-            "name": "Orthoskin (Bioware, Rating 2)",
-            "category": "basic",
-            "essenceCost": 0.5,
-            "cost": 13000,
-            "availability": 12,
-            "description": "+2 armor.",
-            "attributeBonuses": {
-              "armor": 2
-            },
-            "page": 460,
-            "legality": "restricted"
-          },
-          {
-            "id": "orthoskin-bio-3",
-            "name": "Orthoskin (Bioware, Rating 3)",
-            "category": "basic",
-            "essenceCost": 0.75,
-            "cost": 22000,
-            "availability": 14,
-            "description": "+3 armor.",
-            "attributeBonuses": {
-              "armor": 3
-            },
-            "page": 460,
-            "legality": "restricted"
-          },
-          {
-            "id": "orthoskin-bio-4",
-            "name": "Orthoskin (Bioware, Rating 4)",
-            "category": "basic",
-            "essenceCost": 1,
-            "cost": 33000,
-            "availability": 16,
-            "description": "+4 armor.",
-            "attributeBonuses": {
-              "armor": 4
-            },
-            "page": 460,
-            "legality": "restricted"
-          },
-          {
-            "id": "platelet-factories-bio",
-            "name": "Platelet Factories (Bioware)",
+            "id": "platelet-factories",
+            "name": "Platelet Factories",
             "category": "basic",
             "essenceCost": 0.2,
             "cost": 17500,
@@ -11996,7 +11892,7 @@
             "page": 461
           },
           {
-            "id": "suprathyroid-gland-bio",
+            "id": "suprathyroid-gland",
             "name": "Suprathyroid Gland",
             "category": "basic",
             "essenceCost": 1.4,
@@ -12013,33 +11909,33 @@
             "legality": "forbidden"
           },
           {
-            "id": "synthacardium-bio-1",
-            "name": "Synthacardium (Bioware, Rating 1)",
+            "id": "synthacardium",
+            "name": "Synthacardium",
             "category": "basic",
-            "essenceCost": 0.1,
-            "cost": 8500,
-            "availability": 8,
-            "description": "+1 to Cardiovascular tests.",
-            "page": 461
-          },
-          {
-            "id": "synthacardium-bio-2",
-            "name": "Synthacardium (Bioware, Rating 2)",
-            "category": "basic",
-            "essenceCost": 0.2,
-            "cost": 17000,
-            "availability": 12,
-            "description": "+2 to Cardiovascular tests.",
-            "page": 461
-          },
-          {
-            "id": "synthacardium-bio-3",
-            "name": "Synthacardium (Bioware, Rating 3)",
-            "category": "basic",
-            "essenceCost": 0.3,
-            "cost": 25500,
-            "availability": 14,
-            "description": "+3 to Cardiovascular tests.",
+            "hasRating": true,
+            "minRating": 1,
+            "maxRating": 3,
+            "ratings": {
+              "1": {
+                "cost": 8500,
+                "availability": 8,
+                "essenceCost": 0.1,
+                "effects": { "dicePoolModifier": 1 }
+              },
+              "2": {
+                "cost": 17000,
+                "availability": 12,
+                "essenceCost": 0.2,
+                "effects": { "dicePoolModifier": 2 }
+              },
+              "3": {
+                "cost": 25500,
+                "availability": 14,
+                "essenceCost": 0.3,
+                "effects": { "dicePoolModifier": 3 }
+              }
+            },
+            "description": "+Rating dice to Cardiovascular tests (fatigue, holding breath, etc.).",
             "page": 461
           },
           {

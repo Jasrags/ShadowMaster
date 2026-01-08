@@ -14,6 +14,7 @@
 import { useMemo, useState, useCallback } from "react";
 import { useCyberware } from "@/lib/rules/RulesetContext";
 import type { CyberwareItem, ItemLegality } from "@/lib/types";
+import { hasUnifiedRatings, getRatingTableValue } from "@/lib/types/ratings";
 import { X, Search, Plus, Minus, Zap } from "lucide-react";
 
 // =============================================================================
@@ -131,8 +132,18 @@ export function CyberwareEnhancementModal({
       }
 
       // Filter by availability and legality
-      if (item.availability > maxAvailability) return false;
       if (item.legality === "forbidden") return false;
+
+      // For unified ratings items, check the minimum rating's availability
+      if (hasUnifiedRatings(item)) {
+        const minRating = item.minRating ?? 1;
+        const ratingValue = getRatingTableValue(item, minRating);
+        const minAvailability = ratingValue?.availability ?? 0;
+        return minAvailability <= maxAvailability;
+      }
+
+      // Legacy items - check top-level availability
+      if ((item.availability ?? 0) > maxAvailability) return false;
 
       return true;
     });
