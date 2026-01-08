@@ -23,7 +23,6 @@ import type {
   ContactTemplateData,
   WeaponMountType,
   CatalogItemRatingSpec,
-  ItemLegality,
 } from "../types";
 import type { QualityData, AdeptPowerCatalogItem, TraditionData, MentorSpiritData, TraditionSpiritTypes, MentorSpiritAdvantages, RitualData, RitualKeywordData, MinionStatsData, VehicleCategoryData, DroneSizeData, VehicleCatalogItemData, DroneCatalogItemData, RCCCatalogItemData, AutosoftCatalogItemData, HandlingRatingData, DroneWeaponMountsData, ProgramCatalogItemData, ProgramsCatalogData, FocusCatalogItemData, SpiritsCatalogData, ModificationsCatalogData, WeaponModificationCatalogItemData, ArmorModificationCatalogItemData, CyberwareModificationCatalogItemData, GearModificationCatalogItemData, LifestyleSubscriptionCatalogItem, ActionsCatalogData } from "./loader-types";
 export type { QualityData, TraditionData, MentorSpiritData, TraditionSpiritTypes, MentorSpiritAdvantages, RitualData, RitualKeywordData, MinionStatsData, VehicleCategoryData, DroneSizeData, VehicleCatalogItemData, DroneCatalogItemData, RCCCatalogItemData, AutosoftCatalogItemData, HandlingRatingData, DroneWeaponMountsData, ProgramCatalogItemData, ProgramsCatalogData, FocusCatalogItemData, SpiritsCatalogData, ModificationsCatalogData, WeaponModificationCatalogItemData, ArmorModificationCatalogItemData, CyberwareModificationCatalogItemData, GearModificationCatalogItemData, LifestyleSubscriptionCatalogItem, ActionsCatalogData };
@@ -46,7 +45,6 @@ export interface MetatypeData {
 export interface SkillData {
   id: string;
   name: string;
-  description?: string;
   linkedAttribute: string;
   group?: string | null;
   canDefault?: boolean;
@@ -116,7 +114,8 @@ export interface GearItemData {
   subcategory?: string;
   cost: number;
   availability: number;
-  legality?: ItemLegality;
+  restricted?: boolean;
+  forbidden?: boolean;
   rating?: number;
   description?: string;
 
@@ -168,12 +167,6 @@ export interface WeaponData extends GearItemData {
 
 export interface ArmorData extends GearItemData {
   armorRating: number;
-  /** True if this is an armor accessory (helmet, shield, etc.) */
-  armorModifier?: boolean;
-  /** Capacity for modifications (equals armor rating if not specified) */
-  capacity?: number;
-  /** Weight in kilograms */
-  weight?: number;
 }
 
 export interface CommlinkData extends GearItemData {
@@ -284,7 +277,8 @@ export interface CyberwareCatalogItemData {
   essenceCost: number;
   cost: number;
   availability: number;
-  legality?: ItemLegality;
+  restricted?: boolean;
+  forbidden?: boolean;
 
   /**
    * Unified rating specification (preferred over legacy properties)
@@ -354,7 +348,8 @@ export interface BiowareCatalogItemData {
   essenceCost: number;
   cost: number;
   availability: number;
-  legality?: ItemLegality;
+  restricted?: boolean;
+  forbidden?: boolean;
 
   /**
    * Unified rating specification (preferred over legacy properties)
@@ -884,11 +879,11 @@ export function useWeaponModifications(options?: {
     }
 
     if (options?.excludeForbidden) {
-      filtered = filtered.filter((item) => item.legality !== "forbidden");
+      filtered = filtered.filter((item) => !item.forbidden);
     }
 
     if (options?.excludeRestricted) {
-      filtered = filtered.filter((item) => item.legality !== "restricted");
+      filtered = filtered.filter((item) => !item.restricted);
     }
 
     if (options?.mountType) {
@@ -956,11 +951,11 @@ export function useArmorModifications(options?: {
     }
 
     if (options?.excludeForbidden) {
-      filtered = filtered.filter((item) => item.legality !== "forbidden");
+      filtered = filtered.filter((item) => !item.forbidden);
     }
 
     if (options?.excludeRestricted) {
-      filtered = filtered.filter((item) => item.legality !== "restricted");
+      filtered = filtered.filter((item) => !item.restricted);
     }
 
     if (options?.maxCapacityCost !== undefined) {
@@ -997,11 +992,11 @@ export function useGearModifications(options?: {
     }
 
     if (options?.excludeForbidden) {
-      filtered = filtered.filter((item) => item.legality !== "forbidden");
+      filtered = filtered.filter((item) => !item.forbidden);
     }
 
     if (options?.excludeRestricted) {
-      filtered = filtered.filter((item) => item.legality !== "restricted");
+      filtered = filtered.filter((item) => !item.restricted);
     }
 
     if (options?.category) {
@@ -1041,11 +1036,11 @@ export function useCyberwareModifications(options?: {
     }
 
     if (options?.excludeForbidden) {
-      filtered = filtered.filter((item) => item.legality !== "forbidden");
+      filtered = filtered.filter((item) => !item.forbidden);
     }
 
     if (options?.excludeRestricted) {
-      filtered = filtered.filter((item) => item.legality !== "restricted");
+      filtered = filtered.filter((item) => !item.restricted);
     }
 
     if (options?.maxCapacityCost !== undefined) {
@@ -1153,11 +1148,11 @@ export function useCyberware(options?: {
     }
 
     if (options?.excludeForbidden) {
-      filteredCatalog = filteredCatalog.filter((item) => item.legality !== "forbidden");
+      filteredCatalog = filteredCatalog.filter((item) => !item.forbidden);
     }
 
     if (options?.excludeRestricted) {
-      filteredCatalog = filteredCatalog.filter((item) => item.legality !== "restricted");
+      filteredCatalog = filteredCatalog.filter((item) => !item.restricted);
     }
 
     return {
@@ -1196,11 +1191,11 @@ export function useBioware(options?: {
     }
 
     if (options?.excludeForbidden) {
-      filteredCatalog = filteredCatalog.filter((item) => item.legality !== "forbidden");
+      filteredCatalog = filteredCatalog.filter((item) => !item.forbidden);
     }
 
     if (options?.excludeRestricted) {
-      filteredCatalog = filteredCatalog.filter((item) => item.legality !== "restricted");
+      filteredCatalog = filteredCatalog.filter((item) => !item.restricted);
     }
 
     return {
@@ -1257,11 +1252,11 @@ export function useCyberwareCatalog(options?: {
     }
 
     if (options?.excludeForbidden) {
-      filtered = filtered.filter((item) => item.legality !== "forbidden");
+      filtered = filtered.filter((item) => !item.forbidden);
     }
 
     if (options?.excludeRestricted) {
-      filtered = filtered.filter((item) => item.legality !== "restricted");
+      filtered = filtered.filter((item) => !item.restricted);
     }
 
     return filtered;
@@ -1291,11 +1286,11 @@ export function useBiowareCatalog(options?: {
     }
 
     if (options?.excludeForbidden) {
-      filtered = filtered.filter((item) => item.legality !== "forbidden");
+      filtered = filtered.filter((item) => !item.forbidden);
     }
 
     if (options?.excludeRestricted) {
-      filtered = filtered.filter((item) => item.legality !== "restricted");
+      filtered = filtered.filter((item) => !item.restricted);
     }
 
     return filtered;
@@ -1329,11 +1324,11 @@ export function useCyberwareByCategory(
     }
 
     if (options?.excludeForbidden) {
-      filtered = filtered.filter((item) => item.legality !== "forbidden");
+      filtered = filtered.filter((item) => !item.forbidden);
     }
 
     if (options?.excludeRestricted) {
-      filtered = filtered.filter((item) => item.legality !== "restricted");
+      filtered = filtered.filter((item) => !item.restricted);
     }
 
     return filtered;
@@ -1367,11 +1362,11 @@ export function useBiowareByCategory(
     }
 
     if (options?.excludeForbidden) {
-      filtered = filtered.filter((item) => item.legality !== "forbidden");
+      filtered = filtered.filter((item) => !item.forbidden);
     }
 
     if (options?.excludeRestricted) {
-      filtered = filtered.filter((item) => item.legality !== "restricted");
+      filtered = filtered.filter((item) => !item.restricted);
     }
 
     return filtered;
@@ -1599,9 +1594,10 @@ export function calculateMagicLoss(
 export function canAddAugmentation(
   availability: number,
   maxAvailability: number,
-  legality?: ItemLegality
+  restricted?: boolean,
+  forbidden?: boolean
 ): { allowed: boolean; reason?: string } {
-  if (legality === "forbidden") {
+  if (forbidden) {
     return { allowed: false, reason: "Forbidden items not allowed at creation" };
   }
   if (availability > maxAvailability) {
@@ -1794,11 +1790,11 @@ export function useVehicles(options?: {
     }
 
     if (options?.excludeForbidden) {
-      allVehicles = allVehicles.filter((item) => item.legality !== "forbidden");
+      allVehicles = allVehicles.filter((item) => !item.forbidden);
     }
 
     if (options?.excludeRestricted) {
-      allVehicles = allVehicles.filter((item) => item.legality !== "restricted");
+      allVehicles = allVehicles.filter((item) => !item.restricted);
     }
 
     return allVehicles;
@@ -1862,11 +1858,11 @@ export function useDrones(options?: {
     }
 
     if (options?.excludeForbidden) {
-      result = result.filter((drone) => drone.legality !== "forbidden");
+      result = result.filter((drone) => !drone.forbidden);
     }
 
     if (options?.excludeRestricted) {
-      result = result.filter((drone) => drone.legality !== "restricted");
+      result = result.filter((drone) => !drone.restricted);
     }
 
     return result;
@@ -1910,7 +1906,7 @@ export function useRCCs(options?: {
     }
 
     if (options?.excludeRestricted) {
-      result = result.filter((rcc) => rcc.legality !== "restricted");
+      result = result.filter((rcc) => !rcc.restricted);
     }
 
     return result;
@@ -2025,11 +2021,11 @@ export function usePrograms(options?: {
     }
 
     if (options?.excludeForbidden) {
-      allPrograms = allPrograms.filter((item) => item.legality !== "forbidden");
+      allPrograms = allPrograms.filter((item) => !item.forbidden);
     }
 
     if (options?.excludeRestricted) {
-      allPrograms = allPrograms.filter((item) => item.legality !== "restricted");
+      allPrograms = allPrograms.filter((item) => !item.restricted);
     }
 
     return allPrograms.sort((a, b) => a.name.localeCompare(b.name));
@@ -2246,11 +2242,11 @@ export function useCyberdecks(options?: {
     }
 
     if (options?.excludeForbidden) {
-      filtered = filtered.filter((item) => item.legality !== "forbidden");
+      filtered = filtered.filter((item) => !item.forbidden);
     }
 
     if (options?.excludeRestricted) {
-      filtered = filtered.filter((item) => item.legality !== "restricted");
+      filtered = filtered.filter((item) => !item.restricted);
     }
 
     if (options?.minDeviceRating !== undefined) {
@@ -2297,11 +2293,11 @@ export function useCommlinks(options?: {
     }
 
     if (options?.excludeForbidden) {
-      filtered = filtered.filter((item) => item.legality !== "forbidden");
+      filtered = filtered.filter((item) => !item.forbidden);
     }
 
     if (options?.excludeRestricted) {
-      filtered = filtered.filter((item) => item.legality !== "restricted");
+      filtered = filtered.filter((item) => !item.restricted);
     }
 
     if (options?.minDeviceRating !== undefined) {

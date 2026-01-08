@@ -361,7 +361,7 @@ function EmptyState() {
       </p>
       <div className="mt-6">
         <Link
-          href="/characters/create/sheet"
+          href="/characters/create"
           className="inline-flex items-center gap-2 rounded-lg bg-primary px-4 py-2 text-sm font-medium text-primary-foreground transition-colors hover:bg-primary/90 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 dark:focus:ring-offset-background"
         >
           <PlusIcon className="h-4 w-4" />
@@ -631,7 +631,7 @@ export default function CharactersPage() {
           </button>
 
           <Link
-            href="/characters/create/sheet"
+            href="/characters/create"
             className="inline-flex items-center justify-center gap-2 rounded-lg bg-emerald-600 px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-emerald-700 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:ring-offset-2 focus:ring-offset-black"
           >
             <PlusIcon className="h-4 w-4" />

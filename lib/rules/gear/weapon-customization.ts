@@ -303,7 +303,8 @@ export function applyBuiltInModifications(
       rating: undefined,
       cost: 0, // Built-in mods have no cost
       availability: mod.availability,
-      legality: mod.legality,
+      restricted: mod.restricted,
+      forbidden: mod.forbidden,
       isBuiltIn: true,
       capacityUsed: 0,
     };
@@ -415,7 +416,8 @@ export function installModification(
     rating: options.rating,
     cost: options.cost ?? mod.cost,
     availability: mod.availability,
-    legality: mod.legality,
+    restricted: mod.restricted,
+    forbidden: mod.forbidden,
     isBuiltIn: false,
     capacityUsed: 0, // TODO: Calculate from mod if applicable
   };

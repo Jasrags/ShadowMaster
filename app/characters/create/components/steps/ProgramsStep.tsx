@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useMemo, useCallback } from "react";
-import type { CreationState, CharacterProgram, ItemLegality } from "@/lib/types";
+import type { CreationState, CharacterProgram } from "@/lib/types";
 import {
   useProgramsByCategory,
   calculateAgentCost,
@@ -35,16 +35,17 @@ function formatCurrency(value: number): string {
 
 function getAvailabilityDisplay(
   availability: number,
-  legality?: ItemLegality
+  restricted?: boolean,
+  forbidden?: boolean
 ): string {
   let display = String(availability);
-  if (legality === "restricted") display += "R";
-  if (legality === "forbidden") display += "F";
+  if (restricted) display += "R";
+  if (forbidden) display += "F";
   return display;
 }
 
-function isItemAvailable(availability: number): boolean {
-  return availability <= MAX_AVAILABILITY;
+function isItemAvailable(availability: number, forbidden?: boolean): boolean {
+  return availability <= MAX_AVAILABILITY && !forbidden;
 }
 
 export function ProgramsStep({ state, updateState, budgetValues }: StepProps) {
@@ -100,7 +101,7 @@ export function ProgramsStep({ state, updateState, budgetValues }: StepProps) {
     }
 
     if (!showUnavailable) {
-      items = items.filter((item) => isItemAvailable(item.availability));
+      items = items.filter((item) => isItemAvailable(item.availability, item.forbidden));
     }
 
     return items.sort((a, b) => a.name.localeCompare(b.name));
@@ -120,7 +121,7 @@ export function ProgramsStep({ state, updateState, budgetValues }: StepProps) {
     }
 
     if (!showUnavailable) {
-      items = items.filter((item) => isItemAvailable(item.availability));
+      items = items.filter((item) => isItemAvailable(item.availability, item.forbidden));
     }
 
     return items.sort((a, b) => a.name.localeCompare(b.name));
@@ -308,7 +309,7 @@ export function ProgramsStep({ state, updateState, budgetValues }: StepProps) {
               const displayAvailability = isAgent
                 ? calculateAgentAvailability(rating)
                 : program.availability;
-              const available = isItemAvailable(displayAvailability);
+              const available = isItemAvailable(displayAvailability, program.forbidden);
               const canAfford = displayCost <= remaining;
               const isOwned = isProgramOwned(program.id);
 
@@ -356,14 +357,14 @@ export function ProgramsStep({ state, updateState, budgetValues }: StepProps) {
                   <td className="px-3 py-2 text-right">¥{formatCurrency(displayCost)}</td>
                   <td className="px-3 py-2 text-center">
                     <span
-                      className={`${program.legality === "restricted"
+                      className={`${program.restricted
                           ? "text-amber-600 dark:text-amber-400"
-                          : program.legality === "forbidden"
+                          : program.forbidden
                             ? "text-red-600 dark:text-red-400"
                             : ""
                         }`}
                     >
-                      {getAvailabilityDisplay(displayAvailability, program.legality)}
+                      {getAvailabilityDisplay(displayAvailability, program.restricted, program.forbidden)}
                     </span>
                   </td>
                   <td className="px-3 py-2 text-center">

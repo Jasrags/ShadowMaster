@@ -45,7 +45,7 @@ export default function CampaignCharactersTab({ campaign, isGM }: CampaignCharac
     );
 
     const handleCreateCharacter = () => {
-        router.push(`/characters/create/sheet?campaignId=${campaign.id}`);
+        router.push(`/characters/create?campaignId=${campaign.id}`);
     };
 
     if (loading) {

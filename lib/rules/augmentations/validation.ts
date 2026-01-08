@@ -10,7 +10,7 @@
  * @satisfies Constraints: max limits, availability, mutual exclusivity
  */
 
-import type { Character, CyberwareItem, BiowareItem, CyberwareGrade, BiowareGrade, ItemLegality } from "@/lib/types";
+import type { Character, CyberwareItem, BiowareItem, CyberwareGrade, BiowareGrade } from "@/lib/types/character";
 import type { CyberwareCatalogItem, BiowareCatalogItem, AugmentationRules } from "@/lib/types/edition";
 import {
   calculateCyberwareEssence,
@@ -163,7 +163,8 @@ export function validateAugmentationInstall(
   const availResult = validateAvailabilityConstraint(
     augmentation.availability,
     grade,
-    augmentation.legality,
+    augmentation.restricted ?? false,
+    augmentation.forbidden ?? false,
     context.lifecycleStage,
     context.rules.maxAvailabilityAtCreation,
     context.allowRestricted,
@@ -306,7 +307,8 @@ function validateEssenceForInstall(
 export function validateAvailabilityConstraint(
   baseAvailability: number,
   grade: CyberwareGrade | BiowareGrade,
-  legality: ItemLegality | undefined,
+  restricted: boolean,
+  forbidden: boolean,
   lifecycleStage: "creation" | "active",
   maxAtCreation: number = 12,
   allowRestricted?: boolean,
@@ -317,7 +319,7 @@ export function validateAvailabilityConstraint(
   const finalAvailability = applyGradeToAvailability(baseAvailability, grade, isCyberware);
 
   // Check forbidden first
-  if (legality === "forbidden" && !allowForbidden) {
+  if (forbidden && !allowForbidden) {
     return {
       valid: false,
       error: {
@@ -330,7 +332,7 @@ export function validateAvailabilityConstraint(
   }
 
   // Check restricted at creation (unless explicitly allowed)
-  if (legality === "restricted" && lifecycleStage === "creation" && !allowRestricted) {
+  if (restricted && lifecycleStage === "creation" && !allowRestricted) {
     return {
       valid: false,
       error: {

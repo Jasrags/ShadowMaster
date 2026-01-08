@@ -26,7 +26,6 @@
     "knip:fix": "knip --fix",
     "knip:watch": "knip --watch",
     "knip:ci": "knip --max-issues 0",
-    "verify-data": "pnpm dlx tsx scripts/verify-data.ts",
     "prepare": "husky"
   },
   "lint-staged": {

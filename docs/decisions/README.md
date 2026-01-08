@@ -133,7 +133,6 @@ When encountering a design constraint, ask:
 | 008 | [Cookie-Based Sessions](./008-security.cookie-based-sessions.md) | Security | httpOnly cookies with session versioning for instant revocation |
 | 009 | [Append-Only Ledger Pattern](./009-storage.append-only-ledger-pattern.md) | Storage | Immutable transaction logs for karma, favors, actions, audits |
 | 010 | [Inventory State Management](./010-gear.inventory-state-management.md) | Gear | Unified gear state model: equipment readiness, per-item wireless, device condition, magazines |
-| 011 | [Sheet-Driven Creation](./011-character.sheet-driven-creation.md) | Character | Character creation on the sheet interface; extends ADR-005 wizard approach |
 
 ---
 

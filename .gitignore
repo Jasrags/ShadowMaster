@@ -57,7 +57,6 @@ next-env.d.ts
 /data/combat
 .cursor/
 .claude/
-!.claude/skills/
 seattle-locations.json
 /data/editions/sr5/core-rulebook.json.backup
 .pommel/

@@ -23,11 +23,3 @@ export type MagicalPath =
   | "technomancer"
   | "explorer";
 
-/**
- * Item legality status for availability
- * - "restricted": Requires license, marked with "R" suffix
- * - "forbidden": Illegal, marked with "F" suffix
- * - undefined: Legal, no suffix
- */
-export type ItemLegality = "restricted" | "forbidden";
-

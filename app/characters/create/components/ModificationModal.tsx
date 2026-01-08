@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useMemo } from "react";
-import type { Weapon, ArmorItem, GearItem, InstalledWeaponMod, InstalledArmorMod, InstalledGearMod, WeaponMount, ItemLegality } from "@/lib/types";
+import type { Weapon, ArmorItem, GearItem, InstalledWeaponMod, InstalledArmorMod, InstalledGearMod, WeaponMount } from "@/lib/types";
 import {
   useWeaponModifications,
   useArmorModifications,
@@ -35,11 +35,12 @@ function formatCurrency(value: number): string {
 
 function getAvailabilityDisplay(
   availability: number,
-  legality?: ItemLegality
+  restricted?: boolean,
+  forbidden?: boolean
 ): string {
   let display = String(availability);
-  if (legality === "restricted") display += "R";
-  if (legality === "forbidden") display += "F";
+  if (restricted) display += "R";
+  if (forbidden) display += "F";
   return display;
 }
 
@@ -344,7 +345,8 @@ export function ModificationModal({
       rating,
       cost,
       availability: mod.availability * (rating || 1),
-      legality: mod.legality,
+      restricted: mod.restricted,
+      forbidden: mod.forbidden,
       capacityUsed: 0, // Weapon mods use mount points, not capacity
     };
 
@@ -367,7 +369,8 @@ export function ModificationModal({
       capacityUsed,
       cost,
       availability: mod.availability * (rating || 1),
-      legality: mod.legality,
+      restricted: mod.restricted,
+      forbidden: mod.forbidden,
     };
 
     onInstallArmorMod(installedMod);
@@ -389,7 +392,8 @@ export function ModificationModal({
       capacityUsed,
       cost,
       availability: mod.availability, // Gear mods valid at creation are usually flat avail
-      legality: mod.legality,
+      restricted: mod.restricted,
+      forbidden: mod.forbidden,
     };
 
     onInstallGearMod(installedMod);
@@ -534,7 +538,7 @@ export function ModificationModal({
                               {mod.mount.toUpperCase()}
                             </span>
                           )}
-                          {mod.legality === "restricted" && (
+                          {mod.restricted && (
                             <span className="rounded bg-amber-100 px-1.5 py-0.5 text-[10px] font-medium text-amber-700 dark:bg-amber-900/50 dark:text-amber-300">
                               R
                             </span>
@@ -544,7 +548,7 @@ export function ModificationModal({
                           {mod.description}
                         </p>
                         <div className="mt-1 flex items-center gap-3 text-xs text-zinc-500 dark:text-zinc-400">
-                          <span>Avail: {getAvailabilityDisplay(mod.availability * (effectiveRating || 1), mod.legality)}</span>
+                          <span>Avail: {getAvailabilityDisplay(mod.availability * (effectiveRating || 1), mod.restricted, mod.forbidden)}</span>
                           {mod.recoilCompensation && <span>RC: +{mod.recoilCompensation}</span>}
                           {mod.accuracyModifier && <span>Acc: +{mod.accuracyModifier}</span>}
                         </div>
@@ -591,7 +595,7 @@ export function ModificationModal({
                           <span className="rounded bg-blue-100 px-1.5 py-0.5 text-[10px] font-medium text-blue-700 dark:bg-blue-900/50 dark:text-blue-300">
                             {capacity} Cap
                           </span>
-                          {mod.legality === "restricted" && (
+                          {mod.restricted && (
                             <span className="rounded bg-amber-100 px-1.5 py-0.5 text-[10px] font-medium text-amber-700 dark:bg-amber-900/50 dark:text-amber-300">
                               R
                             </span>
@@ -601,7 +605,7 @@ export function ModificationModal({
                           {mod.description}
                         </p>
                         <div className="mt-1 flex items-center gap-3 text-xs text-zinc-500 dark:text-zinc-400">
-                          <span>Avail: {getAvailabilityDisplay(mod.availability * (effectiveRating || 1), mod.legality)}</span>
+                          <span>Avail: {getAvailabilityDisplay(mod.availability * (effectiveRating || 1), mod.restricted, mod.forbidden)}</span>
                           {mod.armorBonus && <span>Armor: +{mod.armorBonus}</span>}
                         </div>
                       </div>
@@ -647,7 +651,7 @@ export function ModificationModal({
                           <span className="rounded bg-blue-100 px-1.5 py-0.5 text-[10px] font-medium text-blue-700 dark:bg-blue-900/50 dark:text-blue-300">
                             {capacity} Cap
                           </span>
-                          {mod.legality === "restricted" && (
+                          {mod.restricted && (
                             <span className="rounded bg-amber-100 px-1.5 py-0.5 text-[10px] font-medium text-amber-700 dark:bg-amber-900/50 dark:text-amber-300">
                               R
                             </span>
@@ -657,7 +661,7 @@ export function ModificationModal({
                           {mod.description}
                         </p>
                         <div className="mt-1 flex items-center gap-3 text-xs text-zinc-500 dark:text-zinc-400">
-                          <span>Avail: {getAvailabilityDisplay(mod.availability, mod.legality)}</span>
+                          <span>Avail: {getAvailabilityDisplay(mod.availability, mod.restricted, mod.forbidden)}</span>
                         </div>
                       </div>
                       <div className="ml-4 flex items-center gap-3">

@@ -12,7 +12,7 @@
  */
 
 import { useState, useMemo, useCallback } from "react";
-import type { CyberwareGrade, BiowareGrade, CyberwareItem, BiowareItem, ItemLegality } from "@/lib/types";
+import type { CyberwareGrade, BiowareGrade, CyberwareItem, BiowareItem } from "@/lib/types";
 import {
   useCyberware,
   useBioware,
@@ -118,11 +118,12 @@ function formatEssence(value: number): string {
 
 function getAvailabilityDisplay(
   availability: number,
-  legality?: ItemLegality
+  restricted?: boolean,
+  forbidden?: boolean
 ): string {
   let display = String(availability);
-  if (legality === "restricted") display += "R";
-  if (legality === "forbidden") display += "F";
+  if (restricted) display += "R";
+  if (forbidden) display += "F";
   return display;
 }
 
@@ -287,7 +288,7 @@ export function AugmentationModal({
     }
 
     // Check forbidden
-    if (selectedItem.legality === "forbidden") {
+    if (selectedItem.forbidden) {
       errors.push("This item is forbidden at character creation");
     }
 
@@ -482,7 +483,7 @@ export function AugmentationModal({
               ) : (
                 catalogItems.map((item) => {
                   const isAvailable =
-                    item.availability <= MAX_AVAILABILITY && item.legality !== "forbidden";
+                    item.availability <= MAX_AVAILABILITY && !item.forbidden;
                   return (
                     <div
                       key={item.id}
@@ -492,7 +493,7 @@ export function AugmentationModal({
                       <div className="augmentation-modal__item-header">
                         <span className="augmentation-modal__item-name">{item.name}</span>
                         <span className="augmentation-modal__item-avail">
-                          {getAvailabilityDisplay(item.availability, item.legality)}
+                          {getAvailabilityDisplay(item.availability, item.restricted, item.forbidden)}
                         </span>
                       </div>
                       <div className="augmentation-modal__item-stats">
@@ -607,7 +608,8 @@ export function AugmentationModal({
                         <span>
                           {getAvailabilityDisplay(
                             selectedItemCosts.availability,
-                            selectedItem.legality
+                            selectedItem.restricted,
+                            selectedItem.forbidden
                           )}
                         </span>
                       </div>

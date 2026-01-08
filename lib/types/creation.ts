@@ -279,7 +279,6 @@ export type ConstraintType =
   | "required-combination" // Must have X if you have Y
   | "essence-minimum" // Essence cannot drop below value
   | "equipment-rating" // Equipment ratings must be valid
-  | "special-attribute-init" // Edge/Magic/Resonance starting values
   | "custom"; // Custom validation function name
 
 /**
