@@ -245,8 +245,8 @@ export function AugmentationModal({
         capacity = firstValue?.capacity;
       } else {
         baseEssenceCost = ratingValue.essenceCost ?? 0;
-        baseCost = ratingValue.cost;
-        baseAvailability = ratingValue.availability;
+        baseCost = ratingValue.cost ?? 0;
+        baseAvailability = ratingValue.availability ?? 0;
         capacity = ratingValue.capacity;
       }
     } else {

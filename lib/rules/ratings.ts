@@ -622,8 +622,8 @@ export function getRatedItemValuesUnified(
 
     return {
       rating,
-      cost: ratingValue.cost,
-      availability: ratingValue.availability,
+      cost: ratingValue.cost ?? 0,
+      availability: ratingValue.availability ?? 0,
       essence: ratingValue.essenceCost,
       capacity: ratingValue.capacity,
       capacityCost: ratingValue.capacityCost,

@@ -27,10 +27,10 @@
  */
 export interface RatingTableValue {
   /** Cost in nuyen at this rating */
-  cost: number;
+  cost?: number;
 
   /** Base availability at this rating */
-  availability: number;
+  availability?: number;
 
   /** Availability suffix: "R" (Restricted) or "F" (Forbidden) */
   availabilitySuffix?: "R" | "F";
@@ -133,13 +133,21 @@ export function hasUnifiedRatings(item: unknown): item is UnifiedRatingConfig {
 
 /**
  * Get the value for a specific rating from a unified ratings table.
- * Returns undefined if the rating is not valid for this item.
+ * Returns undefined if the rating is not valid for this item or if
+ * the item doesn't have a unified ratings table.
  */
 export function getRatingTableValue(
-  item: UnifiedRatingConfig,
+  item: Partial<UnifiedRatingConfig>,
   rating: number
 ): RatingTableValue | undefined {
-  if (rating < item.minRating || rating > item.maxRating) {
+  // Check if ratings table exists
+  if (!item.ratings) {
+    return undefined;
+  }
+  // Check bounds
+  const minRating = item.minRating ?? 1;
+  const maxRating = item.maxRating ?? 6;
+  if (rating < minRating || rating > maxRating) {
     return undefined;
   }
   return item.ratings[rating];
@@ -147,11 +155,27 @@ export function getRatingTableValue(
 
 /**
  * Get all available ratings for an item.
+ * For unified ratings, returns the ratings that exist in the table.
+ * For legacy items, returns range from minRating to maxRating.
  */
-export function getAvailableRatings(item: UnifiedRatingConfig): number[] {
+export function getAvailableRatings(item: Partial<UnifiedRatingConfig>): number[] {
+  const minRating = item.minRating ?? 1;
+  const maxRating = item.maxRating ?? 6;
   const ratings: number[] = [];
-  for (let r = item.minRating; r <= item.maxRating; r++) {
-    if (item.ratings[r]) {
+
+  // If unified ratings table exists, return ratings that are in the table
+  if (item.ratings) {
+    for (let r = minRating; r <= maxRating; r++) {
+      if (item.ratings[r]) {
+        ratings.push(r);
+      }
+    }
+    return ratings;
+  }
+
+  // For legacy items, return range from minRating to maxRating
+  if (item.hasRating) {
+    for (let r = minRating; r <= maxRating; r++) {
       ratings.push(r);
     }
   }
