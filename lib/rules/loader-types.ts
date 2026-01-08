@@ -14,6 +14,7 @@ import type {
   SpiritType,
   SpiritPower,
   CatalogItemRatingSpec,
+  RatingTable,
   CyberwareCategory,
   BiowareCategory,
   ActionDefinition,
@@ -275,28 +276,50 @@ export interface GearItemData {
   legality?: ItemLegality;
   rating?: number;
   description?: string;
+  capacity?: number;
+
+  // -------------------------------------------------------------------------
+  // UNIFIED RATINGS TABLE (Preferred Approach)
+  // -------------------------------------------------------------------------
 
   /**
-   * Unified rating specification (preferred over legacy properties)
+   * Whether this item has selectable ratings.
+   * When true with ratings table, use ratings[rating] for all values.
+   */
+  hasRating?: boolean;
+
+  /** Minimum rating (defaults to 1) */
+  minRating?: number;
+
+  /** Maximum rating */
+  maxRating?: number;
+
+  /**
+   * Unified ratings table with explicit per-rating values.
+   * PREFERRED over ratingSpec for new data.
+   * When present, this takes precedence over computed values.
+   * @see docs/plans/unified-ratings-tables-migration.md
+   */
+  ratings?: RatingTable;
+
+  // -------------------------------------------------------------------------
+  // LEGACY: Formula-Based Scaling (Deprecated)
+  // -------------------------------------------------------------------------
+
+  /**
+   * Formula-based rating specification
+   * @deprecated Use ratings table instead for explicit per-rating values
    * @see CatalogItemRatingSpec
    */
   ratingSpec?: CatalogItemRatingSpec;
 
   /**
-   * @deprecated Use ratingSpec.rating.hasRating instead
-   */
-  hasRating?: boolean;
-  /**
-   * @deprecated Use ratingSpec.rating.maxRating instead
-   */
-  maxRating?: number;
-  /**
-   * @deprecated Use ratingSpec.costScaling.perRating instead
+   * @deprecated Use ratings table or ratingSpec.costScaling.perRating instead
    */
   costPerRating?: boolean;
-  capacity?: number;
+
   /**
-   * @deprecated Use ratingSpec.capacityCostScaling.perRating instead
+   * @deprecated Use ratings table or ratingSpec.capacityCostScaling.perRating instead
    */
   capacityPerRating?: boolean;
 }
@@ -479,52 +502,77 @@ export interface CyberwareCatalogItemData {
   cost: number;
   availability: number;
   legality?: ItemLegality;
-
-  /**
-   * Unified rating specification (preferred over legacy properties)
-   * @see CatalogItemRatingSpec
-   */
-  ratingSpec?: CatalogItemRatingSpec;
-
-  /**
-   * @deprecated Use ratingSpec.rating.hasRating instead
-   */
-  hasRating?: boolean;
-  /**
-   * @deprecated Use ratingSpec.rating.maxRating instead
-   */
-  maxRating?: number;
-  /**
-   * @deprecated Use ratingSpec.essenceScaling.perRating instead
-   */
-  essencePerRating?: boolean;
-  /**
-   * @deprecated Use ratingSpec.costScaling.perRating instead
-   */
-  costPerRating?: boolean;
   capacity?: number;
   capacityCost?: number;
-  /**
-   * @deprecated Use ratingSpec.capacityCostScaling.perRating instead
-   */
-  capacityPerRating?: boolean;
   attributeBonuses?: Record<string, number>;
-  /**
-   * @deprecated Use ratingSpec.attributeBonusScaling instead
-   */
-  attributeBonusesPerRating?: Record<string, number>;
   maxAttributeBonus?: number;
   initiativeDiceBonus?: number;
-  /**
-   * @deprecated Consider using ratingSpec.attributeBonusScaling if applicable
-   */
-  initiativeDiceBonusPerRating?: number;
   description?: string;
   wirelessBonus?: string;
   page?: number;
   source?: string;
   parentType?: string;
   requirements?: string[];
+
+  // -------------------------------------------------------------------------
+  // UNIFIED RATINGS TABLE (Preferred Approach)
+  // -------------------------------------------------------------------------
+
+  /**
+   * Whether this item has selectable ratings.
+   * When true with ratings table, use ratings[rating] for all values.
+   */
+  hasRating?: boolean;
+
+  /** Minimum rating (defaults to 1) */
+  minRating?: number;
+
+  /** Maximum rating */
+  maxRating?: number;
+
+  /**
+   * Unified ratings table with explicit per-rating values.
+   * PREFERRED over ratingSpec for new data.
+   * When present, this takes precedence over computed values.
+   * @see docs/plans/unified-ratings-tables-migration.md
+   */
+  ratings?: RatingTable;
+
+  // -------------------------------------------------------------------------
+  // LEGACY: Formula-Based Scaling (Deprecated)
+  // -------------------------------------------------------------------------
+
+  /**
+   * Formula-based rating specification
+   * @deprecated Use ratings table instead for explicit per-rating values
+   * @see CatalogItemRatingSpec
+   */
+  ratingSpec?: CatalogItemRatingSpec;
+
+  /**
+   * @deprecated Use ratings table or ratingSpec.essenceScaling.perRating instead
+   */
+  essencePerRating?: boolean;
+
+  /**
+   * @deprecated Use ratings table or ratingSpec.costScaling.perRating instead
+   */
+  costPerRating?: boolean;
+
+  /**
+   * @deprecated Use ratings table or ratingSpec.capacityCostScaling.perRating instead
+   */
+  capacityPerRating?: boolean;
+
+  /**
+   * @deprecated Use ratings table or ratingSpec.attributeBonusScaling instead
+   */
+  attributeBonusesPerRating?: Record<string, number>;
+
+  /**
+   * @deprecated Consider using ratings table instead
+   */
+  initiativeDiceBonusPerRating?: number;
 }
 
 /**
@@ -562,7 +610,6 @@ export interface BiowareGradeData {
 /**
  * Bioware catalog item data structure (from ruleset)
  */
- 
 export interface BiowareCatalogItemData {
   id: string;
   name: string;
@@ -571,40 +618,63 @@ export interface BiowareCatalogItemData {
   cost: number;
   availability: number;
   legality?: ItemLegality;
-
-  /**
-   * Unified rating specification (preferred over legacy properties)
-   * @see CatalogItemRatingSpec
-   */
-  ratingSpec?: CatalogItemRatingSpec;
-
-  /**
-   * @deprecated Use ratingSpec.rating.hasRating instead
-   */
-  hasRating?: boolean;
-  /**
-   * @deprecated Use ratingSpec.rating.maxRating instead
-   */
-  maxRating?: number;
-  /**
-   * @deprecated Use ratingSpec.essenceScaling.perRating instead
-   */
-  essencePerRating?: boolean;
-  /**
-   * @deprecated Use ratingSpec.costScaling.perRating instead
-   */
-  costPerRating?: boolean;
   attributeBonuses?: Record<string, number>;
-  /**
-   * @deprecated Use ratingSpec.attributeBonusScaling instead
-   */
-  attributeBonusesPerRating?: Record<string, number>;
   maxAttributeBonus?: number;
   initiativeDiceBonus?: number;
   description?: string;
   page?: number;
   source?: string;
   requirements?: string[];
+
+  // -------------------------------------------------------------------------
+  // UNIFIED RATINGS TABLE (Preferred Approach)
+  // -------------------------------------------------------------------------
+
+  /**
+   * Whether this item has selectable ratings.
+   * When true with ratings table, use ratings[rating] for all values.
+   */
+  hasRating?: boolean;
+
+  /** Minimum rating (defaults to 1) */
+  minRating?: number;
+
+  /** Maximum rating */
+  maxRating?: number;
+
+  /**
+   * Unified ratings table with explicit per-rating values.
+   * PREFERRED over ratingSpec for new data.
+   * When present, this takes precedence over computed values.
+   * @see docs/plans/unified-ratings-tables-migration.md
+   */
+  ratings?: RatingTable;
+
+  // -------------------------------------------------------------------------
+  // LEGACY: Formula-Based Scaling (Deprecated)
+  // -------------------------------------------------------------------------
+
+  /**
+   * Formula-based rating specification
+   * @deprecated Use ratings table instead for explicit per-rating values
+   * @see CatalogItemRatingSpec
+   */
+  ratingSpec?: CatalogItemRatingSpec;
+
+  /**
+   * @deprecated Use ratings table or ratingSpec.essenceScaling.perRating instead
+   */
+  essencePerRating?: boolean;
+
+  /**
+   * @deprecated Use ratings table or ratingSpec.costScaling.perRating instead
+   */
+  costPerRating?: boolean;
+
+  /**
+   * @deprecated Use ratings table or ratingSpec.attributeBonusScaling instead
+   */
+  attributeBonusesPerRating?: Record<string, number>;
 }
 
 /**
@@ -625,9 +695,10 @@ export interface BiowareCatalogData {
 export interface AdeptPowerCatalogItem {
   id: string;
   name: string;
+  /** Base power point cost (used when costType is "fixed") */
   cost: number | null;
+  /** How the power point cost is determined */
   costType: "fixed" | "perLevel" | "table";
-  maxLevel?: number;
   activation?: "free" | "simple" | "complex" | "interrupt";
   description: string;
   requiresSkill?: boolean;
@@ -636,8 +707,46 @@ export interface AdeptPowerCatalogItem {
   validAttributes?: string[];
   requiresLimit?: boolean;
   validLimits?: string[];
-  levels?: Array<{ level: number; cost: number; bonus: string }>;
   variants?: Array<{ id: string; name: string; bonus?: string }>;
+
+  // -------------------------------------------------------------------------
+  // UNIFIED RATINGS TABLE (Preferred Approach)
+  // -------------------------------------------------------------------------
+
+  /**
+   * Whether this power has selectable levels/ratings.
+   */
+  hasRating?: boolean;
+
+  /** Minimum level (defaults to 1) */
+  minRating?: number;
+
+  /** Maximum level */
+  maxRating?: number;
+
+  /**
+   * Unified ratings table with explicit per-level values.
+   * PREFERRED over levels array for new data.
+   * When present, this takes precedence over computed values.
+   * @see docs/plans/unified-ratings-tables-migration.md
+   */
+  ratings?: RatingTable;
+
+  // -------------------------------------------------------------------------
+  // LEGACY: Level Array (Deprecated)
+  // -------------------------------------------------------------------------
+
+  /**
+   * Maximum level if applicable
+   * @deprecated Use maxRating instead
+   */
+  maxLevel?: number;
+
+  /**
+   * Level-specific data array
+   * @deprecated Use ratings table instead for explicit per-level values
+   */
+  levels?: Array<{ level: number; cost: number; bonus: string }>;
 }
 
 // =============================================================================

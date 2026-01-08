@@ -6,6 +6,7 @@
  */
 
 import type { ISODateString, MagicalPath } from "./core";
+import type { RatingTable } from "./ratings";
 
 // =============================================================================
 // QUALITY CATALOG TYPES
@@ -74,8 +75,16 @@ export interface Quality {
   tags?: string[]; // Categorization tags
   prerequisites?: QualityPrerequisites; // Requirements to take this quality
   incompatibilities?: string[]; // Quality IDs that cannot coexist
-  levels?: QualityLevel[]; // For per-rating qualities
+  // UNIFIED RATINGS TABLE (Preferred Approach)
+  // Use ratings for explicit per-level karma costs and effects
+  hasRating?: boolean; // Whether this quality has selectable levels
+  minRating?: number; // Minimum rating (defaults to 1)
   maxRating?: number; // Maximum rating if per-rating
+  ratings?: RatingTable; // Explicit values for each rating level
+
+  // LEGACY: Array-Based Levels (Deprecated)
+  // Keep for backward compatibility during migration
+  levels?: QualityLevel[]; // For per-rating qualities
   limit?: number; // How many times quality can be taken (default: 1)
   requiresSpecification?: boolean; // Whether player must specify details
   specificationLabel?: string; // Label for specification input

@@ -274,6 +274,12 @@ export type {
 
 // Rating system types
 export type {
+  // Unified ratings table types (preferred)
+  RatingTableValue,
+  RatingEffects,
+  RatingTable,
+  UnifiedRatingConfig,
+  // Legacy formula-based types
   RatingSemanticType,
   RatingConfig,
   ScalingType,
@@ -284,6 +290,13 @@ export type {
   RatingValidationResult,
   RatingValidationContext,
   RatingDisplayOptions,
+} from "./ratings";
+
+// Rating system utility functions
+export {
+  hasUnifiedRatings,
+  getRatingTableValue,
+  getAvailableRatings,
 } from "./ratings";
 
 // Gameplay context types
