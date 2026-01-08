@@ -478,6 +478,55 @@ Update functions:
 
 ---
 
+### Phase 8: Update Edition Data Author Skill
+
+#### 8.1 Update Data Format Documentation
+**Directory:** `/.claude/skills/edition-data-author/`
+
+Update the edition data author skill to document the new unified ratings table format:
+
+1. **Update schema examples** to show `ratings` field instead of separate entries
+2. **Add migration guidance** for converting legacy data
+3. **Document RatingTableValue structure** with all fields
+4. **Update examples** for cyberware, bioware, gear, qualities, and adept powers
+
+#### 8.2 Example Updates
+
+**Before (Duplicate Entries):**
+```json
+{
+  "id": "cybereyes-1",
+  "name": "Cybereyes (Rating 1)",
+  "essenceCost": 0.2,
+  "cost": 4000
+}
+```
+
+**After (Unified Ratings):**
+```json
+{
+  "id": "cybereyes",
+  "name": "Cybereyes",
+  "hasRating": true,
+  "minRating": 1,
+  "maxRating": 4,
+  "ratings": {
+    "1": { "cost": 4000, "availability": 3, "essenceCost": 0.2, "capacity": 4 },
+    "2": { "cost": 6000, "availability": 6, "essenceCost": 0.3, "capacity": 8 }
+  }
+}
+```
+
+#### 8.3 Files to Update
+
+| File | Changes |
+|------|---------|
+| `/.claude/skills/edition-data-author/*.md` | Update data format documentation |
+| Schema examples | Add ratings table examples |
+| Validation rules | Update to check for unified format |
+
+---
+
 ## Verification Plan
 
 ### Automated Verification
@@ -533,6 +582,8 @@ Phase 5 (UI Components)
 Phase 6 (Character Model)
     ↓
 Phase 7 (Testing)
+    ↓
+Phase 8 (Skill Update)
 ```
 
 **Critical Path:** Types → Migration Script → Data Migration → Ruleset Updates
