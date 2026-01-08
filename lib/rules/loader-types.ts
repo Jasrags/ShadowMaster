@@ -172,9 +172,33 @@ export interface QualityData {
   summary: string;
   description?: string;
   perRating?: boolean;
-  maxRating?: number;
   requiresMagic?: boolean;
   isRacial?: boolean;
+
+  // -------------------------------------------------------------------------
+  // UNIFIED RATINGS TABLE (Preferred Approach)
+  // -------------------------------------------------------------------------
+
+  /** Whether this quality has selectable levels */
+  hasRating?: boolean;
+
+  /** Minimum rating (defaults to 1) */
+  minRating?: number;
+
+  /** Maximum rating */
+  maxRating?: number;
+
+  /**
+   * Unified ratings table with explicit per-rating values (karma cost, effects).
+   * PREFERRED over levels array for new data.
+   */
+  ratings?: import("@/lib/types/ratings").RatingTable;
+
+  // -------------------------------------------------------------------------
+  // LEGACY: Array-Based Levels (Deprecated)
+  // -------------------------------------------------------------------------
+
+  /** @deprecated Use ratings table instead */
   levels?: Array<{ level: number; name: string; karma: number; effects?: unknown[] }>;
   statModifiers?: Record<string, number | boolean>;
   requiresSpecification?: boolean;

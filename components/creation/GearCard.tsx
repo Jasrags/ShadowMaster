@@ -27,8 +27,10 @@ import {
 import type { FocusCatalogItemData } from "@/lib/rules/loader-types";
 import type { CreationState, GearItem, Weapon, ArmorItem, ItemLegality } from "@/lib/types";
 import type { FocusItem } from "@/lib/types/character";
+import { hasUnifiedRatings, getRatingTableValue } from "@/lib/types/ratings";
 import { useCreationBudgets } from "@/lib/contexts";
-import { CreationCard } from "./shared";
+import { CreationCard, RatingSelector } from "./shared";
+import { getRatedItemValuesUnified, type RatedItem } from "@/lib/rules/ratings";
 import { Lock, Search, X, Plus, Minus, ShoppingCart, Sword, Shield, Backpack, Gem, AlertTriangle } from "lucide-react";
 
 // =============================================================================
@@ -234,34 +236,47 @@ function GearItemRow({
 }
 
 // =============================================================================
-// RATED GEAR ITEM ROW COMPONENT
+// RATED GEAR ITEM ROW COMPONENT (supports unified ratings tables)
 // =============================================================================
 
 function RatedGearItemRow({
-  name,
-  category,
-  minRating,
-  maxRating,
-  baseCost,
-  baseAvailability,
+  item,
   legality,
   remaining,
   onAdd,
 }: {
-  name: string;
-  category: string;
-  minRating: number;
-  maxRating: number;
-  baseCost: number;
-  baseAvailability: number;
+  item: GearItemData;
   legality?: ItemLegality;
   remaining: number;
   onAdd: (rating: number) => void;
 }) {
+  const minRating = item.minRating ?? item.ratingSpec?.rating?.minRating ?? 1;
+  const maxRating = item.maxRating ?? item.ratingSpec?.rating?.maxRating ?? 6;
   const [selectedRating, setSelectedRating] = useState(minRating);
 
-  const cost = baseCost * selectedRating;
-  const availability = baseAvailability * selectedRating;
+  // Calculate cost and availability based on rating
+  // Use unified ratings table if available, otherwise fall back to legacy formula
+  const { cost, availability } = useMemo(() => {
+    if (hasUnifiedRatings(item)) {
+      const values = getRatedItemValuesUnified(item as RatedItem, selectedRating);
+      return {
+        cost: values.cost,
+        availability: values.availability,
+      };
+    }
+
+    // Legacy formula-based calculation
+    const baseCost = item.ratingSpec?.costScaling?.baseValue ?? item.cost;
+    const baseAvail = item.ratingSpec?.availabilityScaling?.baseValue ?? item.availability;
+    const costPerRating = item.ratingSpec?.costScaling?.perRating ?? 1;
+    const availPerRating = item.ratingSpec?.availabilityScaling?.perRating ?? 1;
+
+    return {
+      cost: baseCost * (costPerRating ? selectedRating : 1),
+      availability: baseAvail * (availPerRating ? selectedRating : 1),
+    };
+  }, [item, selectedRating]);
+
   const canAfford = cost <= remaining && availability <= MAX_AVAILABILITY;
 
   return (
@@ -269,10 +284,11 @@ function RatedGearItemRow({
       <div className="flex items-center justify-between">
         <div className="flex-1 min-w-0">
           <div className="font-medium text-zinc-900 dark:text-zinc-100">
-            {name}
+            {item.name}
+            <span className="ml-1.5 text-xs text-zinc-500">(R{minRating}-{maxRating})</span>
           </div>
           <div className="mt-0.5 flex flex-wrap gap-2 text-xs text-zinc-500 dark:text-zinc-400">
-            <span>{category}</span>
+            <span>{item.category}</span>
             <span>Avail: {getAvailabilityDisplay(availability, legality)}</span>
           </div>
         </div>
@@ -565,29 +581,41 @@ export function GearCard({ state, updateState }: GearCardProps) {
   // Add gear (with optional rating for rated items)
   const addGear = useCallback(
     (gear: GearItemData, selectedRating?: number) => {
-      // Calculate cost based on rating if item has rating
-      const rating = selectedRating || gear.rating || 1;
-      const baseCost = gear.ratingSpec?.costScaling?.baseValue || gear.cost;
-      const cost = gear.hasRating && gear.ratingSpec?.costScaling?.perRating
-        ? baseCost * rating
-        : gear.cost;
+      // Determine if item has rating support
+      const isRated = gear.hasRating === true;
+      const rating = isRated ? (selectedRating ?? gear.minRating ?? 1) : (gear.rating ?? 1);
+
+      // Calculate cost and availability based on rating
+      // Use unified ratings table if available, otherwise fall back to legacy formula
+      let cost: number;
+      let availability: number;
+
+      if (hasUnifiedRatings(gear)) {
+        const values = getRatedItemValuesUnified(gear as RatedItem, rating);
+        cost = values.cost;
+        availability = values.availability;
+      } else if (isRated && gear.ratingSpec) {
+        // Legacy formula-based calculation
+        const baseCost = gear.ratingSpec.costScaling?.baseValue ?? gear.cost;
+        const baseAvail = gear.ratingSpec.availabilityScaling?.baseValue ?? gear.availability;
+        cost = baseCost * rating;
+        availability = baseAvail * rating;
+      } else {
+        // Non-rated item
+        cost = gear.cost;
+        availability = gear.availability;
+      }
 
       if (cost > remaining) return;
 
-      // Calculate availability based on rating
-      const baseAvail = gear.ratingSpec?.availabilityScaling?.baseValue || gear.availability;
-      const availability = gear.hasRating && gear.ratingSpec?.availabilityScaling?.perRating
-        ? baseAvail * rating
-        : gear.availability;
-
       const newGear: GearItem = {
         id: `${gear.id}-${Date.now()}`,
-        name: gear.hasRating ? `${gear.name} (Rating ${rating})` : gear.name,
+        name: isRated ? `${gear.name} (Rating ${rating})` : gear.name,
         category: gear.category,
         cost,
         availability,
         quantity: 1,
-        rating: gear.hasRating ? rating : gear.rating,
+        rating: isRated ? rating : gear.rating,
         modifications: [],
       };
 
@@ -924,22 +952,12 @@ export function GearCard({ state, updateState }: GearCardProps) {
           {/* Gear Tab */}
           {activeTab === "gear" &&
             filteredGear.map((gear) => {
-              // Use rated row for items with hasRating
-              if (gear.hasRating && gear.ratingSpec) {
-                const minRating = gear.ratingSpec.rating?.minRating || 1;
-                const maxRating = gear.ratingSpec.rating?.maxRating || gear.maxRating || 6;
-                const baseCost = gear.ratingSpec.costScaling?.baseValue || gear.cost;
-                const baseAvail = gear.ratingSpec.availabilityScaling?.baseValue || gear.availability;
-
+              // Use rated row for items with hasRating (unified or legacy)
+              if (gear.hasRating === true) {
                 return (
                   <RatedGearItemRow
                     key={gear.id}
-                    name={gear.name}
-                    category={gear.category}
-                    minRating={minRating}
-                    maxRating={maxRating}
-                    baseCost={baseCost}
-                    baseAvailability={baseAvail}
+                    item={gear}
                     legality={gear.legality}
                     remaining={remaining}
                     onAdd={(rating) => addGear(gear, rating)}
