@@ -15,6 +15,7 @@
 import { useMemo } from "react";
 import { Weight, AlertTriangle } from "lucide-react";
 import type { EncumbranceState } from "@/lib/types/gear-state";
+import { Theme, THEMES, DEFAULT_THEME } from "@/lib/themes";
 
 // =============================================================================
 // TYPES
@@ -27,6 +28,8 @@ interface EncumbranceBarProps {
   showDetails?: boolean;
   /** Compact mode for inline display */
   compact?: boolean;
+  /** Theme for styling */
+  theme?: Theme;
 }
 
 // =============================================================================
@@ -43,7 +46,7 @@ function formatWeight(kg: number): string {
 function getStatusColor(encumbrance: EncumbranceState): {
   bar: string;
   text: string;
-  bg: string;
+  border: string;
 } {
   const { currentWeight, maxCapacity } = encumbrance;
   const percentage = (currentWeight / maxCapacity) * 100;
@@ -52,23 +55,23 @@ function getStatusColor(encumbrance: EncumbranceState): {
     // Encumbered - red
     return {
       bar: "bg-red-500",
-      text: "text-red-400",
-      bg: "bg-red-500/10",
+      text: "text-red-600 dark:text-red-400",
+      border: "border-l-red-500",
     };
   }
   if (percentage > 75) {
-    // Warning - yellow
+    // Warning - yellow/amber
     return {
-      bar: "bg-yellow-500",
-      text: "text-yellow-400",
-      bg: "bg-yellow-500/10",
+      bar: "bg-amber-500",
+      text: "text-amber-600 dark:text-amber-400",
+      border: "border-l-amber-500",
     };
   }
   // Good - green/emerald
   return {
     bar: "bg-emerald-500",
-    text: "text-emerald-400",
-    bg: "bg-emerald-500/10",
+    text: "text-emerald-600 dark:text-emerald-400",
+    border: "border-l-emerald-500",
   };
 }
 
@@ -80,7 +83,9 @@ export function EncumbranceBar({
   encumbrance,
   showDetails = false,
   compact = false,
+  theme,
 }: EncumbranceBarProps) {
+  const t = theme || THEMES[DEFAULT_THEME];
   const { currentWeight, maxCapacity, overweightPenalty, isEncumbered } = encumbrance;
 
   const percentage = useMemo(() => {
@@ -98,7 +103,7 @@ export function EncumbranceBar({
     return (
       <div className="flex items-center gap-2">
         <Weight className={`w-3 h-3 ${colors.text}`} />
-        <div className="flex-1 h-1.5 bg-zinc-800 rounded-full overflow-hidden">
+        <div className="flex-1 h-1.5 bg-stone-200 dark:bg-zinc-800 rounded-full overflow-hidden">
           <div
             className={`h-full ${colors.bar} transition-all duration-300`}
             style={{ width: `${percentage}%` }}
@@ -108,25 +113,25 @@ export function EncumbranceBar({
           {formatWeight(currentWeight)}
         </span>
         {isEncumbered && (
-          <span className="text-xs text-red-400 font-mono">-{overweightPenalty}</span>
+          <span className="text-xs text-red-600 dark:text-red-400 font-mono">-{overweightPenalty}</span>
         )}
       </div>
     );
   }
 
   return (
-    <div className={`p-3 rounded-lg border border-zinc-800 ${colors.bg}`}>
+    <div className={`p-3 rounded-lg border ${t.colors.border} border-l-2 ${colors.border} ${t.colors.card}`}>
       <div className="flex items-center justify-between mb-2">
         <div className="flex items-center gap-2">
           <Weight className={`w-4 h-4 ${colors.text}`} />
-          <span className="text-sm font-medium text-zinc-300">Encumbrance</span>
+          <span className="text-sm font-medium text-stone-600 dark:text-zinc-300">Encumbrance</span>
         </div>
         <div className="flex items-center gap-2">
           <span className={`text-sm font-mono ${colors.text}`}>
             {formatWeight(currentWeight)} / {formatWeight(maxCapacity)}
           </span>
           {isEncumbered && (
-            <span className="flex items-center gap-1 text-xs text-red-400 font-medium">
+            <span className="flex items-center gap-1 text-xs text-red-600 dark:text-red-400 font-medium">
               <AlertTriangle className="w-3 h-3" />
               -{overweightPenalty} pool
             </span>
@@ -135,7 +140,7 @@ export function EncumbranceBar({
       </div>
 
       {/* Progress bar */}
-      <div className="relative h-2 bg-zinc-800 rounded-full overflow-hidden">
+      <div className="relative h-2 bg-stone-200 dark:bg-zinc-800 rounded-full overflow-hidden">
         {/* Main fill */}
         <div
           className={`absolute left-0 top-0 h-full ${colors.bar} transition-all duration-300`}
@@ -152,7 +157,7 @@ export function EncumbranceBar({
 
       {/* Capacity markers */}
       {showDetails && (
-        <div className="flex justify-between mt-1 text-[10px] text-zinc-600">
+        <div className="flex justify-between mt-1 text-[10px] text-stone-400 dark:text-zinc-600">
           <span>0</span>
           <span>{formatWeight(maxCapacity * 0.5)}</span>
           <span>{formatWeight(maxCapacity)}</span>
@@ -161,8 +166,8 @@ export function EncumbranceBar({
 
       {/* Encumbered warning */}
       {isEncumbered && showDetails && (
-        <div className="mt-2 p-2 rounded bg-red-500/10 border border-red-500/20">
-          <p className="text-xs text-red-400">
+        <div className="mt-2 p-2 rounded bg-red-100 dark:bg-red-500/10 border border-red-200 dark:border-red-500/20">
+          <p className="text-xs text-red-600 dark:text-red-400">
             Carrying {formatWeight(currentWeight - maxCapacity)} over capacity.
             All physical dice pools suffer a -{overweightPenalty} penalty.
           </p>

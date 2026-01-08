@@ -55,7 +55,9 @@ export function ValidationBadge({
       >
         <AlertTriangle className="h-3.5 w-3.5" />
         <span>
-          {warningCount} warning{warningCount !== 1 ? "s" : ""}
+          {warningCount > 0
+            ? `${warningCount} warning${warningCount !== 1 ? "s" : ""}`
+            : "In progress"}
         </span>
       </span>
     );

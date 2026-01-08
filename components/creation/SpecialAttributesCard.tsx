@@ -301,7 +301,7 @@ export function SpecialAttributesCard({ state, updateState }: SpecialAttributesC
         {/* Budget indicator */}
         <BudgetIndicator
           label="Special Attr Points"
-          remaining={pointsRemaining}
+          spent={specialAttributePoints - pointsRemaining}
           total={specialAttributePoints}
           compact
         />

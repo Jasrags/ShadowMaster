@@ -24,7 +24,12 @@ import {
 import type { CreationState, Weapon, InstalledWeaponMod, WeaponMount, PurchasedAmmunitionItem } from "@/lib/types";
 import type { GearItemData } from "@/lib/rules/RulesetContext";
 import { useCreationBudgets } from "@/lib/contexts";
-import { CreationCard } from "./shared";
+import {
+  CreationCard,
+  KarmaConversionModal,
+  useKarmaConversionPrompt,
+  MAX_KARMA_CONVERSION,
+} from "./shared";
 import { WeaponRow, WeaponPurchaseModal, WeaponModificationModal, AmmunitionModal } from "./weapons";
 import { Lock, Plus, Sword } from "lucide-react";
 
@@ -81,13 +86,16 @@ function BudgetDisplay({
   total,
   remaining,
   isOver,
+  karmaConversion = 0,
 }: {
   spent: number;
   total: number;
   remaining: number;
   isOver: boolean;
+  karmaConversion?: number;
 }) {
   const percentage = Math.min(100, (spent / total) * 100);
+  const isComplete = remaining === 0 && !isOver;
 
   return (
     <div className={`rounded-lg border p-3 ${
@@ -96,16 +104,17 @@ function BudgetDisplay({
         : "border-zinc-200 bg-zinc-50 dark:border-zinc-700 dark:bg-zinc-800/50"
     }`}>
       <div className="flex items-center justify-between text-sm">
-        <span className="text-zinc-600 dark:text-zinc-400">Weapons Budget</span>
-        <span className={`font-bold ${
+        <span className="text-zinc-600 dark:text-zinc-400">Nuyen</span>
+        <span className={`font-medium ${
           isOver
             ? "text-red-600 dark:text-red-400"
-            : remaining === 0
+            : isComplete
               ? "text-emerald-600 dark:text-emerald-400"
               : "text-zinc-900 dark:text-zinc-100"
         }`}>
-          {formatCurrency(remaining)}¥
-          <span className="font-normal text-zinc-400"> remaining</span>
+          {formatCurrency(spent)}¥ spent
+          <span className="text-zinc-400"> • </span>
+          {formatCurrency(Math.max(0, remaining))}¥ left
         </span>
       </div>
 
@@ -115,13 +124,20 @@ function BudgetDisplay({
           className={`h-full rounded-full transition-all ${
             isOver
               ? "bg-red-500"
-              : remaining === 0
+              : isComplete
                 ? "bg-emerald-500"
-                : "bg-amber-500"
+                : "bg-blue-500"
           }`}
           style={{ width: `${percentage}%` }}
         />
       </div>
+
+      {/* Note for karma conversion */}
+      {karmaConversion > 0 && (
+        <div className="mt-1 text-xs text-blue-600 dark:text-blue-400">
+          +{formatCurrency(karmaConversion * KARMA_TO_NUYEN_RATE)}¥ from karma
+        </div>
+      )}
     </div>
   );
 }
@@ -134,6 +150,7 @@ export function WeaponsPanel({ state, updateState }: WeaponsPanelProps) {
   const gearCatalog = useGear();
   const { getBudget } = useCreationBudgets();
   const nuyenBudget = getBudget("nuyen");
+  const karmaBudget = getBudget("karma");
 
   const [isPurchaseModalOpen, setIsPurchaseModalOpen] = useState(false);
   const [modifyingWeaponId, setModifyingWeaponId] = useState<string | null>(null);
@@ -182,11 +199,31 @@ export function WeaponsPanel({ state, updateState }: WeaponsPanelProps) {
   const remaining = totalNuyen - totalSpent;
   const isOverBudget = remaining < 0;
 
-  // Add weapon
-  const addWeapon = useCallback(
-    (weapon: WeaponData) => {
-      if (weapon.cost > remaining) return;
+  // Karma conversion hook
+  const karmaRemaining = karmaBudget?.remaining ?? 0;
 
+  const handleKarmaConvert = useCallback(
+    (newTotalConversion: number) => {
+      updateState({
+        budgets: {
+          ...state.budgets,
+          "karma-spent-gear": newTotalConversion,
+        },
+      });
+    },
+    [state.budgets, updateState]
+  );
+
+  const karmaConversionPrompt = useKarmaConversionPrompt({
+    remaining,
+    karmaRemaining,
+    currentConversion: karmaConversion,
+    onConvert: handleKarmaConvert,
+  });
+
+  // Add weapon (actual implementation - called after affordability check)
+  const actuallyAddWeapon = useCallback(
+    (weapon: WeaponData) => {
       const newWeapon: Weapon = {
         id: `${weapon.id}-${Date.now()}`,
         catalogId: weapon.id,
@@ -216,7 +253,30 @@ export function WeaponsPanel({ state, updateState }: WeaponsPanelProps) {
       // Close modal after purchase
       setIsPurchaseModalOpen(false);
     },
-    [remaining, selectedWeapons, state.selections, updateState]
+    [selectedWeapons, state.selections, updateState]
+  );
+
+  // Add weapon (with karma conversion prompt if needed)
+  const addWeapon = useCallback(
+    (weapon: WeaponData) => {
+      // Check if already affordable
+      if (weapon.cost <= remaining) {
+        actuallyAddWeapon(weapon);
+        return;
+      }
+
+      // Check if karma conversion could help
+      const conversionInfo = karmaConversionPrompt.checkPurchase(weapon.cost);
+      if (conversionInfo?.canConvert) {
+        karmaConversionPrompt.promptConversion(weapon.name, weapon.cost, () => {
+          actuallyAddWeapon(weapon);
+        });
+        return;
+      }
+
+      // Can't afford even with max karma conversion - do nothing
+    },
+    [remaining, actuallyAddWeapon, karmaConversionPrompt]
   );
 
   // Remove weapon
@@ -243,8 +303,8 @@ export function WeaponsPanel({ state, updateState }: WeaponsPanelProps) {
     setModifyingWeaponId(weaponId);
   }, []);
 
-  // Install a modification on a weapon
-  const handleInstallMod = useCallback(
+  // Install a modification on a weapon (actual implementation)
+  const actuallyInstallMod = useCallback(
     (mod: WeaponModificationCatalogItemData, rating?: number) => {
       if (!modifyingWeaponId) return;
 
@@ -312,6 +372,45 @@ export function WeaponsPanel({ state, updateState }: WeaponsPanelProps) {
     [modifyingWeaponId, selectedWeapons, state.selections, updateState]
   );
 
+  // Install a modification (with karma conversion prompt if needed)
+  const handleInstallMod = useCallback(
+    (mod: WeaponModificationCatalogItemData, rating?: number) => {
+      if (!modifyingWeaponId) return;
+
+      const weaponIndex = selectedWeapons.findIndex((w) => w.id === modifyingWeaponId);
+      if (weaponIndex === -1) return;
+
+      const weapon = selectedWeapons[weaponIndex];
+
+      // Calculate cost for the mod
+      let cost = mod.cost || 0;
+      if (mod.costMultiplier) {
+        cost = Math.round(weapon.cost * mod.costMultiplier);
+      } else if (rating && (mod.costPerRating || mod.ratingSpec?.costScaling?.perRating)) {
+        cost = (mod.ratingSpec?.costScaling?.baseValue || mod.cost || 0) * rating;
+      }
+
+      // Check if already affordable
+      if (cost <= remaining) {
+        actuallyInstallMod(mod, rating);
+        return;
+      }
+
+      // Check if karma conversion could help
+      const conversionInfo = karmaConversionPrompt.checkPurchase(cost);
+      if (conversionInfo?.canConvert) {
+        const modName = rating ? `${mod.name} (Rating ${rating})` : mod.name;
+        karmaConversionPrompt.promptConversion(modName, cost, () => {
+          actuallyInstallMod(mod, rating);
+        });
+        return;
+      }
+
+      // Can't afford even with max karma conversion - do nothing
+    },
+    [modifyingWeaponId, selectedWeapons, remaining, actuallyInstallMod, karmaConversionPrompt]
+  );
+
   // Remove a modification from a weapon
   const handleRemoveMod = useCallback(
     (weaponId: string, modIndex: number) => {
@@ -366,8 +465,8 @@ export function WeaponsPanel({ state, updateState }: WeaponsPanelProps) {
     setAmmoWeaponId(weaponId);
   }, []);
 
-  // Purchase ammunition for a weapon
-  const handlePurchaseAmmo = useCallback(
+  // Purchase ammunition for a weapon (actual implementation)
+  const actuallyPurchaseAmmo = useCallback(
     (ammo: GearItemData, quantity: number) => {
       if (!ammoWeaponId) return;
 
@@ -409,6 +508,32 @@ export function WeaponsPanel({ state, updateState }: WeaponsPanelProps) {
       setAmmoWeaponId(null);
     },
     [ammoWeaponId, selectedWeapons, state.selections, updateState]
+  );
+
+  // Purchase ammunition (with karma conversion prompt if needed)
+  const handlePurchaseAmmo = useCallback(
+    (ammo: GearItemData, quantity: number) => {
+      const totalCost = ammo.cost * quantity;
+
+      // Check if already affordable
+      if (totalCost <= remaining) {
+        actuallyPurchaseAmmo(ammo, quantity);
+        return;
+      }
+
+      // Check if karma conversion could help
+      const conversionInfo = karmaConversionPrompt.checkPurchase(totalCost);
+      if (conversionInfo?.canConvert) {
+        const ammoName = quantity > 1 ? `${ammo.name} (x${quantity})` : ammo.name;
+        karmaConversionPrompt.promptConversion(ammoName, totalCost, () => {
+          actuallyPurchaseAmmo(ammo, quantity);
+        });
+        return;
+      }
+
+      // Can't afford even with max karma conversion - do nothing
+    },
+    [remaining, actuallyPurchaseAmmo, karmaConversionPrompt]
   );
 
   // Remove ammunition from a weapon
@@ -487,6 +612,7 @@ export function WeaponsPanel({ state, updateState }: WeaponsPanelProps) {
             total={totalNuyen}
             remaining={remaining}
             isOver={isOverBudget}
+            karmaConversion={karmaConversion}
           />
 
           {/* Weapon List */}
@@ -562,6 +688,20 @@ export function WeaponsPanel({ state, updateState }: WeaponsPanelProps) {
           onPurchase={handlePurchaseAmmo}
         />
       )}
+
+      {/* Karma Conversion Modal */}
+      <KarmaConversionModal
+        isOpen={karmaConversionPrompt.modalState.isOpen}
+        onClose={karmaConversionPrompt.closeModal}
+        onConfirm={karmaConversionPrompt.confirmConversion}
+        itemName={karmaConversionPrompt.modalState.itemName}
+        itemCost={karmaConversionPrompt.modalState.itemCost}
+        currentRemaining={karmaConversionPrompt.currentRemaining}
+        karmaToConvert={karmaConversionPrompt.modalState.karmaToConvert}
+        karmaAvailable={karmaConversionPrompt.karmaAvailable}
+        currentKarmaConversion={karmaConversionPrompt.currentKarmaConversion}
+        maxKarmaConversion={karmaConversionPrompt.maxKarmaConversion}
+      />
     </>
   );
 }

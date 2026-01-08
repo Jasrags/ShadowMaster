@@ -30,7 +30,7 @@ export default async function UsersPage() {
   return (
     <AuthenticatedLayout currentPath="/users">
       <div className="mb-8">
-        <h1 className="text-3xl font-semibold tracking-tight text-black dark:text-zinc-50 sm:text-4xl">
+        <h1 className="text-3xl font-semibold tracking-tight text-zinc-900 dark:text-zinc-50 sm:text-4xl">
           User Management
         </h1>
         <p className="mt-2 text-sm text-zinc-600 dark:text-zinc-400">

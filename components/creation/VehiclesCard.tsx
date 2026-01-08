@@ -30,7 +30,12 @@ import {
 } from "@/lib/rules/RulesetContext";
 import type { CreationState, CharacterDrone, CharacterRCC, CharacterAutosoft, ItemLegality } from "@/lib/types";
 import { useCreationBudgets } from "@/lib/contexts";
-import { CreationCard, BudgetIndicator } from "./shared";
+import {
+  CreationCard,
+  BudgetIndicator,
+  KarmaConversionModal,
+  useKarmaConversionPrompt,
+} from "./shared";
 import { Lock, Search, X, Car, Bot, Wifi, Code } from "lucide-react";
 
 // =============================================================================
@@ -103,6 +108,7 @@ export function VehiclesCard({ state, updateState }: VehiclesCardProps) {
   const droneSizes = useDroneSizes();
   const { getBudget } = useCreationBudgets();
   const nuyenBudget = getBudget("nuyen");
+  const karmaBudget = getBudget("karma");
 
   const [activeTab, setActiveTab] = useState<VehicleTab>("vehicles");
   const [searchQuery, setSearchQuery] = useState("");
@@ -162,6 +168,28 @@ export function VehiclesCard({ state, updateState }: VehiclesCardProps) {
 
   const totalItems = selectedVehicles.length + selectedDrones.length + selectedRCCs.length + selectedAutosofts.length;
 
+  // Karma conversion hook for purchase prompts
+  const karmaRemaining = karmaBudget?.remaining ?? 0;
+
+  const handleKarmaConvert = useCallback(
+    (newTotalConversion: number) => {
+      updateState({
+        budgets: {
+          ...state.budgets,
+          "karma-spent-gear": newTotalConversion,
+        },
+      });
+    },
+    [state.budgets, updateState]
+  );
+
+  const karmaConversionPrompt = useKarmaConversionPrompt({
+    remaining,
+    karmaRemaining,
+    currentConversion: karmaConversion,
+    onConvert: handleKarmaConvert,
+  });
+
   // Filter items
   const filteredVehicles = useMemo(() => {
     let items = [...vehicles];
@@ -193,11 +221,9 @@ export function VehiclesCard({ state, updateState }: VehiclesCardProps) {
     return items.filter((r) => isItemAvailable(r.availability)).slice(0, 15);
   }, [rccs, searchQuery]);
 
-  // Add vehicle
-  const addVehicle = useCallback(
+  // Add vehicle (actual implementation)
+  const actuallyAddVehicle = useCallback(
     (vehicle: VehicleCatalogItemData) => {
-      if (vehicle.cost > remaining) return;
-
       const newVehicle: OwnedVehicle = {
         id: generateId("vehicle"),
         catalogId: vehicle.id,
@@ -215,14 +241,35 @@ export function VehiclesCard({ state, updateState }: VehiclesCardProps) {
         },
       });
     },
-    [remaining, selectedVehicles, state.selections, updateState]
+    [selectedVehicles, state.selections, updateState]
   );
 
-  // Add drone
-  const addDrone = useCallback(
-    (drone: DroneCatalogItemData) => {
-      if (drone.cost > remaining) return;
+  // Add vehicle (with karma conversion prompt if needed)
+  const addVehicle = useCallback(
+    (vehicle: VehicleCatalogItemData) => {
+      // Check if already affordable
+      if (vehicle.cost <= remaining) {
+        actuallyAddVehicle(vehicle);
+        return;
+      }
 
+      // Check if karma conversion could help
+      const conversionInfo = karmaConversionPrompt.checkPurchase(vehicle.cost);
+      if (conversionInfo?.canConvert) {
+        karmaConversionPrompt.promptConversion(vehicle.name, vehicle.cost, () => {
+          actuallyAddVehicle(vehicle);
+        });
+        return;
+      }
+
+      // Can't afford even with max karma conversion - do nothing
+    },
+    [remaining, actuallyAddVehicle, karmaConversionPrompt]
+  );
+
+  // Add drone (actual implementation)
+  const actuallyAddDrone = useCallback(
+    (drone: DroneCatalogItemData) => {
       const newDrone: CharacterDrone = {
         id: generateId("drone"),
         catalogId: drone.id,
@@ -247,14 +294,35 @@ export function VehiclesCard({ state, updateState }: VehiclesCardProps) {
         },
       });
     },
-    [remaining, selectedDrones, state.selections, updateState]
+    [selectedDrones, state.selections, updateState]
   );
 
-  // Add RCC
-  const addRCC = useCallback(
-    (rcc: RCCCatalogItemData) => {
-      if (rcc.cost > remaining) return;
+  // Add drone (with karma conversion prompt if needed)
+  const addDrone = useCallback(
+    (drone: DroneCatalogItemData) => {
+      // Check if already affordable
+      if (drone.cost <= remaining) {
+        actuallyAddDrone(drone);
+        return;
+      }
 
+      // Check if karma conversion could help
+      const conversionInfo = karmaConversionPrompt.checkPurchase(drone.cost);
+      if (conversionInfo?.canConvert) {
+        karmaConversionPrompt.promptConversion(drone.name, drone.cost, () => {
+          actuallyAddDrone(drone);
+        });
+        return;
+      }
+
+      // Can't afford even with max karma conversion - do nothing
+    },
+    [remaining, actuallyAddDrone, karmaConversionPrompt]
+  );
+
+  // Add RCC (actual implementation)
+  const actuallyAddRCC = useCallback(
+    (rcc: RCCCatalogItemData) => {
       const newRCC: CharacterRCC = {
         id: generateId("rcc"),
         catalogId: rcc.id,
@@ -274,18 +342,35 @@ export function VehiclesCard({ state, updateState }: VehiclesCardProps) {
         },
       });
     },
-    [remaining, selectedRCCs, state.selections, updateState]
+    [selectedRCCs, state.selections, updateState]
   );
 
-  // Add autosoft
-  const addAutosoft = useCallback(
-    (autosoft: AutosoftCatalogItemData) => {
-      const rating = autosoftRatings[autosoft.id] || 1;
-      const cost = calculateAutosoftCost(autosoft.costPerRating, rating);
-      const availability = calculateAutosoftAvailability(autosoft.availabilityPerRating, rating);
+  // Add RCC (with karma conversion prompt if needed)
+  const addRCC = useCallback(
+    (rcc: RCCCatalogItemData) => {
+      // Check if already affordable
+      if (rcc.cost <= remaining) {
+        actuallyAddRCC(rcc);
+        return;
+      }
 
-      if (cost > remaining || availability > MAX_AVAILABILITY) return;
+      // Check if karma conversion could help
+      const conversionInfo = karmaConversionPrompt.checkPurchase(rcc.cost);
+      if (conversionInfo?.canConvert) {
+        karmaConversionPrompt.promptConversion(rcc.name, rcc.cost, () => {
+          actuallyAddRCC(rcc);
+        });
+        return;
+      }
 
+      // Can't afford even with max karma conversion - do nothing
+    },
+    [remaining, actuallyAddRCC, karmaConversionPrompt]
+  );
+
+  // Add autosoft (actual implementation)
+  const actuallyAddAutosoft = useCallback(
+    (autosoft: AutosoftCatalogItemData, rating: number, cost: number, availability: number) => {
       const newAutosoft: CharacterAutosoft = {
         id: generateId("autosoft"),
         catalogId: autosoft.id,
@@ -303,7 +388,37 @@ export function VehiclesCard({ state, updateState }: VehiclesCardProps) {
         },
       });
     },
-    [remaining, selectedAutosofts, autosoftRatings, state.selections, updateState]
+    [selectedAutosofts, state.selections, updateState]
+  );
+
+  // Add autosoft (with karma conversion prompt if needed)
+  const addAutosoft = useCallback(
+    (autosoft: AutosoftCatalogItemData) => {
+      const rating = autosoftRatings[autosoft.id] || 1;
+      const cost = calculateAutosoftCost(autosoft.costPerRating, rating);
+      const availability = calculateAutosoftAvailability(autosoft.availabilityPerRating, rating);
+
+      // Availability check (can't bypass with karma)
+      if (availability > MAX_AVAILABILITY) return;
+
+      // Check if already affordable
+      if (cost <= remaining) {
+        actuallyAddAutosoft(autosoft, rating, cost, availability);
+        return;
+      }
+
+      // Check if karma conversion could help
+      const conversionInfo = karmaConversionPrompt.checkPurchase(cost);
+      if (conversionInfo?.canConvert) {
+        karmaConversionPrompt.promptConversion(`${autosoft.name} R${rating}`, cost, () => {
+          actuallyAddAutosoft(autosoft, rating, cost, availability);
+        });
+        return;
+      }
+
+      // Can't afford even with max karma conversion - do nothing
+    },
+    [remaining, autosoftRatings, actuallyAddAutosoft, karmaConversionPrompt]
   );
 
   // Remove items
@@ -378,6 +493,7 @@ export function VehiclesCard({ state, updateState }: VehiclesCardProps) {
   }
 
   return (
+    <>
     <CreationCard
       title="Vehicles & Drones"
       description={`${totalItems} items • ${formatCurrency(vehiclesSpent)}¥`}
@@ -386,11 +502,12 @@ export function VehiclesCard({ state, updateState }: VehiclesCardProps) {
       <div className="space-y-4">
         {/* Budget indicator */}
         <BudgetIndicator
-          label="Nuyen Remaining"
-          remaining={remaining}
+          label="Nuyen"
+          spent={totalNuyen - remaining}
           total={totalNuyen}
           displayFormat="currency"
           compact
+          note={karmaConversion > 0 ? `+${(karmaConversion * 2000).toLocaleString()}¥ from karma` : undefined}
         />
 
         {/* Category tabs */}
@@ -703,5 +820,22 @@ export function VehiclesCard({ state, updateState }: VehiclesCardProps) {
         </p>
       </div>
     </CreationCard>
+
+    {/* Karma Conversion Modal */}
+    {karmaConversionPrompt.modalState && (
+      <KarmaConversionModal
+        isOpen={karmaConversionPrompt.modalState.isOpen}
+        onClose={karmaConversionPrompt.closeModal}
+        onConfirm={karmaConversionPrompt.confirmConversion}
+        itemName={karmaConversionPrompt.modalState.itemName}
+        itemCost={karmaConversionPrompt.modalState.itemCost}
+        currentRemaining={remaining}
+        karmaToConvert={karmaConversionPrompt.modalState.karmaToConvert}
+        karmaAvailable={karmaRemaining}
+        currentKarmaConversion={karmaConversion}
+        maxKarmaConversion={10}
+      />
+    )}
+  </>
   );
 }

@@ -1299,19 +1299,19 @@ function CharacterSheet({
               <div className="grid grid-cols-2 gap-4">
                 <div className="text-center p-3 bg-muted/30 rounded">
                   <span className="block text-xs font-mono text-muted-foreground uppercase">Physical</span>
-                  <span className="text-xl font-bold text-red-500">{physicalLimit}</span>
+                  <span className="text-xl font-mono font-bold text-red-500">{physicalLimit}</span>
                 </div>
                 <div className="text-center p-3 bg-muted/30 rounded">
                   <span className="block text-xs font-mono text-muted-foreground uppercase">Mental</span>
-                  <span className="text-xl font-bold text-blue-400">{mentalLimit}</span>
+                  <span className="text-xl font-mono font-bold text-blue-400">{mentalLimit}</span>
                 </div>
                 <div className="text-center p-3 bg-muted/30 rounded">
                   <span className="block text-xs font-mono text-muted-foreground uppercase">Social</span>
-                  <span className="text-xl font-bold text-pink-400">{socialLimit}</span>
+                  <span className="text-xl font-mono font-bold text-pink-400">{socialLimit}</span>
                 </div>
                 <div className="text-center p-3 bg-muted/30 rounded">
                   <span className="block text-xs font-mono text-muted-foreground uppercase">Initiative</span>
-                  <span className="text-xl font-bold text-emerald-400">{initiative}+1d6</span>
+                  <span className="text-xl font-mono font-bold text-emerald-400">{initiative}+1d6</span>
                 </div>
               </div>
             </Section>
@@ -1327,7 +1327,7 @@ function CharacterSheet({
                       : 'bg-amber-500/10 border border-amber-500/30 text-amber-400'
                   }`}>
                     <span className="text-xs font-mono uppercase">Total Wound Modifier: </span>
-                    <span className="font-bold">{woundModifier}</span>
+                    <span className="font-mono font-bold">{woundModifier}</span>
                   </div>
                 )}
                 <div className="grid grid-cols-2 gap-4">

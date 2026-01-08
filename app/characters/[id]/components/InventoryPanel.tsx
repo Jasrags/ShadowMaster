@@ -588,7 +588,7 @@ export function InventoryPanel({
     >
       <div className="space-y-4">
         {/* Encumbrance bar */}
-        <EncumbranceBar encumbrance={encumbrance} showDetails />
+        <EncumbranceBar encumbrance={encumbrance} showDetails theme={t} />
 
         {/* Global wireless toggle */}
         <div className={`flex items-center justify-between p-2 rounded-lg border ${t.colors.card} ${t.colors.border}`}>

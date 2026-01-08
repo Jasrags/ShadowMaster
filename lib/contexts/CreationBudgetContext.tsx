@@ -278,6 +278,7 @@ function extractSpentValues(
   const karmaSpentPowers = (stateBudgets["karma-spent-power-points"] as number) || 0;
   const karmaSpentAttributes = (stateBudgets["karma-spent-attributes"] as number) || 0;
   const karmaSpentSkills = (stateBudgets["karma-spent-skills"] as number) || 0;
+  const karmaSpentContacts = (stateBudgets["karma-spent-contacts"] as number) || 0;
 
   // Net karma spent = positive qualities + other spends - negative qualities gained
   spent["karma"] =
@@ -286,7 +287,8 @@ function extractSpentValues(
     karmaSpentSpells +
     karmaSpentPowers +
     karmaSpentAttributes +
-    karmaSpentSkills -
+    karmaSpentSkills +
+    karmaSpentContacts -
     karmaGainedNegative;
 
   return spent;

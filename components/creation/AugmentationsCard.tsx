@@ -21,7 +21,11 @@ import {
 } from "@/lib/rules/RulesetContext";
 import type { CreationState, CyberwareItem, BiowareItem } from "@/lib/types";
 import { useCreationBudgets } from "@/lib/contexts";
-import { CreationCard } from "./shared";
+import {
+  CreationCard,
+  KarmaConversionModal,
+  useKarmaConversionPrompt,
+} from "./shared";
 import {
   AugmentationModal,
   CyberwareEnhancementModal,
@@ -209,6 +213,7 @@ export function AugmentationsCard({ state, updateState }: AugmentationsCardProps
   const augmentationRules = useAugmentationRules();
   const { getBudget } = useCreationBudgets();
   const nuyenBudget = getBudget("nuyen");
+  const karmaBudget = getBudget("karma");
 
   const [isAugModalOpen, setIsAugModalOpen] = useState(false);
   const [augModalType, setAugModalType] = useState<AugmentationType>("cyberware");
@@ -263,6 +268,28 @@ export function AugmentationsCard({ state, updateState }: AugmentationsCardProps
   const totalSpent = gearSpent + cyberwareSpent + biowareSpent + lifestyleSpent;
   const remainingNuyen = totalNuyen - totalSpent;
 
+  // Karma conversion hook for purchase prompts
+  const karmaRemaining = karmaBudget?.remaining ?? 0;
+
+  const handleKarmaConvert = useCallback(
+    (newTotalConversion: number) => {
+      updateState({
+        budgets: {
+          ...state.budgets,
+          "karma-spent-gear": newTotalConversion,
+        },
+      });
+    },
+    [state.budgets, updateState]
+  );
+
+  const karmaConversionPrompt = useKarmaConversionPrompt({
+    remaining: remainingNuyen,
+    karmaRemaining,
+    currentConversion: karmaConversion,
+    onConvert: handleKarmaConvert,
+  });
+
   // Calculate essence
   const maxEssence = augmentationRules.maxEssence;
   const cyberwareEssence = selectedCyberware.reduce((sum, item) => sum + item.essenceCost, 0);
@@ -304,8 +331,8 @@ export function AugmentationsCard({ state, updateState }: AugmentationsCardProps
     setIsAugModalOpen(true);
   }, []);
 
-  // Add augmentation
-  const handleAddAugmentation = useCallback(
+  // Add augmentation (actual implementation)
+  const actuallyAddAugmentation = useCallback(
     (selection: AugmentationSelection) => {
       const newItem =
         selection.type === "cyberware"
@@ -360,6 +387,29 @@ export function AugmentationsCard({ state, updateState }: AugmentationsCardProps
     [selectedCyberware, selectedBioware, state.selections, updateState]
   );
 
+  // Add augmentation (with karma conversion prompt if needed)
+  const handleAddAugmentation = useCallback(
+    (selection: AugmentationSelection) => {
+      // Check if already affordable
+      if (selection.cost <= remainingNuyen) {
+        actuallyAddAugmentation(selection);
+        return;
+      }
+
+      // Check if karma conversion could help
+      const conversionInfo = karmaConversionPrompt.checkPurchase(selection.cost);
+      if (conversionInfo?.canConvert) {
+        karmaConversionPrompt.promptConversion(selection.name, selection.cost, () => {
+          actuallyAddAugmentation(selection);
+        });
+        return;
+      }
+
+      // Can't afford even with max karma conversion - do nothing
+    },
+    [remainingNuyen, actuallyAddAugmentation, karmaConversionPrompt]
+  );
+
   // Remove cyberware
   const removeCyberware = useCallback(
     (id: string) => {
@@ -386,8 +436,8 @@ export function AugmentationsCard({ state, updateState }: AugmentationsCardProps
     [selectedBioware, state.selections, updateState]
   );
 
-  // Add enhancement to cyberware
-  const handleAddEnhancement = useCallback(
+  // Add enhancement to cyberware (actual implementation)
+  const actuallyAddEnhancement = useCallback(
     (enhancement: CyberwareEnhancementSelection) => {
       if (!enhancementModalCyberware) return;
 
@@ -424,6 +474,31 @@ export function AugmentationsCard({ state, updateState }: AugmentationsCardProps
       setEnhancementModalCyberware(null);
     },
     [enhancementModalCyberware, selectedCyberware, state.selections, updateState]
+  );
+
+  // Add enhancement to cyberware (with karma conversion prompt if needed)
+  const handleAddEnhancement = useCallback(
+    (enhancement: CyberwareEnhancementSelection) => {
+      if (!enhancementModalCyberware) return;
+
+      // Check if already affordable
+      if (enhancement.cost <= remainingNuyen) {
+        actuallyAddEnhancement(enhancement);
+        return;
+      }
+
+      // Check if karma conversion could help
+      const conversionInfo = karmaConversionPrompt.checkPurchase(enhancement.cost);
+      if (conversionInfo?.canConvert) {
+        karmaConversionPrompt.promptConversion(enhancement.name, enhancement.cost, () => {
+          actuallyAddEnhancement(enhancement);
+        });
+        return;
+      }
+
+      // Can't afford even with max karma conversion - do nothing
+    },
+    [enhancementModalCyberware, remainingNuyen, actuallyAddEnhancement, karmaConversionPrompt]
   );
 
   // Get remaining capacity for enhancement modal
@@ -628,6 +703,22 @@ export function AugmentationsCard({ state, updateState }: AugmentationsCardProps
           parentCyberware={enhancementModalCyberware}
           remainingCapacity={enhancementRemainingCapacity}
           remainingNuyen={remainingNuyen}
+        />
+      )}
+
+      {/* Karma Conversion Modal */}
+      {karmaConversionPrompt.modalState && (
+        <KarmaConversionModal
+          isOpen={karmaConversionPrompt.modalState.isOpen}
+          onClose={karmaConversionPrompt.closeModal}
+          onConfirm={karmaConversionPrompt.confirmConversion}
+          itemName={karmaConversionPrompt.modalState.itemName}
+          itemCost={karmaConversionPrompt.modalState.itemCost}
+          currentRemaining={remainingNuyen}
+          karmaToConvert={karmaConversionPrompt.modalState.karmaToConvert}
+          karmaAvailable={karmaRemaining}
+          currentKarmaConversion={karmaConversion}
+          maxKarmaConversion={10}
         />
       )}
     </>

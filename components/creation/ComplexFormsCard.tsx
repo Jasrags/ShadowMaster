@@ -194,7 +194,7 @@ export function ComplexFormsCard({ state, updateState }: ComplexFormsCardProps) 
         <div className="grid gap-2 sm:grid-cols-2">
           <BudgetIndicator
             label="Free Forms"
-            remaining={Math.max(0, freeForms - selectedForms.length)}
+            spent={Math.min(selectedForms.length, freeForms)}
             total={freeForms}
             compact
           />
