@@ -1740,36 +1740,36 @@ export function SkillsStep({ state, updateState, budgetValues }: StepProps) {
   const renderLanguageSkillsTab = () => (
     <>
       {/* Points indicator */}
-      <div className="rounded-lg bg-sky-50 p-4 dark:bg-sky-900/20">
+      <div className="rounded-lg bg-amber-50 p-4 dark:bg-amber-900/20">
         <div className="flex items-center justify-between">
           <div>
-            <div className="text-sm font-medium text-sky-800 dark:text-sky-200">Knowledge Points</div>
-            <div className="text-xs text-sky-600 dark:text-sky-400">
+            <div className="text-sm font-medium text-amber-800 dark:text-amber-200">Knowledge Points</div>
+            <div className="text-xs text-amber-600 dark:text-amber-400">
               Shared with Knowledge Skills
             </div>
           </div>
           <div className="text-right">
-            <div className="text-2xl font-bold text-sky-700 dark:text-sky-300">{knowledgePointsRemaining}</div>
-            <div className="text-xs text-sky-600 dark:text-sky-400">of {freeKnowledgePoints} remaining</div>
+            <div className="text-2xl font-bold text-amber-700 dark:text-amber-300">{knowledgePointsRemaining}</div>
+            <div className="text-xs text-amber-600 dark:text-amber-400">of {freeKnowledgePoints} remaining</div>
           </div>
         </div>
-        <div className="mt-2 h-1.5 overflow-hidden rounded-full bg-sky-200 dark:bg-sky-800">
+        <div className="mt-2 h-1.5 overflow-hidden rounded-full bg-amber-200 dark:bg-amber-800">
           <div
-            className="h-full rounded-full bg-sky-500 transition-all duration-300"
+            className="h-full rounded-full bg-amber-500 transition-all duration-300"
             style={{ width: `${freeKnowledgePoints > 0 ? (knowledgePointsSpent / freeKnowledgePoints) * 100 : 0}%` }}
           />
         </div>
       </div>
 
       {/* Native language note */}
-      <div className="rounded-lg border border-sky-200 bg-sky-50 p-4 dark:border-sky-800 dark:bg-sky-900/20">
+      <div className="rounded-lg border border-amber-200 bg-amber-50 p-4 dark:border-amber-800 dark:bg-amber-900/20">
         <div className="flex items-start gap-3">
-          <svg className="h-5 w-5 flex-shrink-0 text-sky-600 dark:text-sky-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <svg className="h-5 w-5 flex-shrink-0 text-amber-600 dark:text-amber-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
           </svg>
-          <div className="text-sm text-sky-800 dark:text-sky-200">
+          <div className="text-sm text-amber-800 dark:text-amber-200">
             <p className="font-medium">Native Language</p>
-            <p className="mt-1 text-sky-600 dark:text-sky-400">
+            <p className="mt-1 text-amber-600 dark:text-amber-400">
               Every character gets one native language at rating {creationLimits.nativeLanguageRating} for free.
               {hasBilingual && (
                 <> Characters with the <strong>Bilingual</strong> quality can have a second native language for free.</>
@@ -1788,7 +1788,7 @@ export function SkillsStep({ state, updateState, budgetValues }: StepProps) {
           {exampleLanguages && exampleLanguages.length > 0 && (
             <div className="flex items-center gap-2">
               <select
-                className="flex-1 rounded-lg border border-zinc-300 bg-white px-3 py-2 text-sm focus:border-sky-500 focus:outline-none focus:ring-1 focus:ring-sky-500 dark:border-zinc-600 dark:bg-zinc-800 dark:text-zinc-100"
+                className="flex-1 rounded-lg border border-zinc-300 bg-white px-3 py-2 text-sm focus:border-amber-500 focus:outline-none focus:ring-1 focus:ring-amber-500 dark:border-zinc-600 dark:bg-zinc-800 dark:text-zinc-100"
                 defaultValue=""
                 onChange={(e) => {
                   if (e.target.value) {
@@ -1813,13 +1813,13 @@ export function SkillsStep({ state, updateState, budgetValues }: StepProps) {
               placeholder="Or type custom language..."
               value={newLanguage}
               onChange={(e) => setNewLanguage(e.target.value)}
-              className="flex-1 rounded-lg border border-zinc-300 bg-white px-3 py-2 text-sm focus:border-sky-500 focus:outline-none focus:ring-1 focus:ring-sky-500 dark:border-zinc-600 dark:bg-zinc-800 dark:text-zinc-100"
+              className="flex-1 rounded-lg border border-zinc-300 bg-white px-3 py-2 text-sm focus:border-amber-500 focus:outline-none focus:ring-1 focus:ring-amber-500 dark:border-zinc-600 dark:bg-zinc-800 dark:text-zinc-100"
             />
             <button
               onClick={() => handleAddLanguage(true)}
               disabled={!newLanguage.trim() || hasMaxNativeLanguages}
               className={`rounded-lg px-4 py-2 text-sm font-medium transition-colors ${newLanguage.trim() && !hasMaxNativeLanguages
-                ? "bg-sky-600 text-white hover:bg-sky-700"
+                ? "bg-zinc-600 text-white hover:bg-zinc-700"
                 : "cursor-not-allowed bg-zinc-200 text-zinc-400 dark:bg-zinc-700"
                 }`}
             >
@@ -1829,7 +1829,7 @@ export function SkillsStep({ state, updateState, budgetValues }: StepProps) {
               onClick={() => handleAddLanguage(false)}
               disabled={!newLanguage.trim() || knowledgePointsRemaining <= 0}
               className={`rounded-lg px-4 py-2 text-sm font-medium transition-colors ${newLanguage.trim() && knowledgePointsRemaining > 0
-                ? "bg-sky-500 text-white hover:bg-sky-600"
+                ? "bg-amber-500 text-white hover:bg-amber-600"
                 : "cursor-not-allowed bg-zinc-200 text-zinc-400 dark:bg-zinc-700"
                 }`}
             >
@@ -1862,15 +1862,15 @@ export function SkillsStep({ state, updateState, budgetValues }: StepProps) {
               <div
                 key={`${lang.name}-${index}`}
                 className={`flex items-center gap-3 rounded-lg border p-3 ${lang.isNative
-                  ? "border-sky-300 bg-sky-100 dark:border-sky-700 dark:bg-sky-900/30"
-                  : "border-sky-200 bg-sky-50 dark:border-sky-800 dark:bg-sky-900/20"
+                  ? "border-amber-300 bg-amber-100 dark:border-amber-700 dark:bg-amber-900/30"
+                  : "border-amber-200 bg-amber-50 dark:border-amber-800 dark:bg-amber-900/20"
                   }`}
               >
                 <div className="flex-1 min-w-0">
                   <div className="flex items-center gap-2">
                     <span className="font-medium text-zinc-900 dark:text-zinc-50 truncate">{lang.name}</span>
                     {lang.isNative && (
-                      <span className="flex-shrink-0 rounded bg-sky-200 px-1.5 py-0.5 text-xs font-medium text-sky-800 dark:bg-sky-800 dark:text-sky-200">
+                      <span className="flex-shrink-0 rounded bg-amber-200 px-1.5 py-0.5 text-xs font-medium text-amber-800 dark:bg-amber-800 dark:text-amber-200">
                         Native
                       </span>
                     )}
@@ -1879,7 +1879,7 @@ export function SkillsStep({ state, updateState, budgetValues }: StepProps) {
 
                 <div className="flex items-center gap-1">
                   {lang.isNative ? (
-                    <div className="flex h-8 w-10 items-center justify-center rounded bg-sky-600 text-sm font-bold text-white">
+                    <div className="flex h-8 w-10 items-center justify-center rounded bg-amber-600 text-sm font-bold text-white">
                       N
                     </div>
                   ) : (
@@ -1897,7 +1897,7 @@ export function SkillsStep({ state, updateState, budgetValues }: StepProps) {
                         </svg>
                       </button>
 
-                      <div className="flex h-8 w-10 items-center justify-center rounded bg-sky-500 text-sm font-bold text-white">
+                      <div className="flex h-8 w-10 items-center justify-center rounded bg-amber-500 text-sm font-bold text-white">
                         {lang.rating}
                       </div>
 
@@ -1905,7 +1905,7 @@ export function SkillsStep({ state, updateState, budgetValues }: StepProps) {
                         onClick={() => handleLanguageChange(index, lang.rating + 1)}
                         disabled={lang.rating >= MAX_SKILL_RATING || knowledgePointsRemaining <= 0}
                         className={`flex h-7 w-7 items-center justify-center rounded transition-colors ${lang.rating < MAX_SKILL_RATING && knowledgePointsRemaining > 0
-                          ? "bg-sky-500 text-white hover:bg-sky-600"
+                          ? "bg-amber-500 text-white hover:bg-amber-600"
                           : "cursor-not-allowed bg-zinc-100 text-zinc-300 dark:bg-zinc-800 dark:text-zinc-600"
                           }`}
                       >
@@ -1971,13 +1971,13 @@ export function SkillsStep({ state, updateState, budgetValues }: StepProps) {
           <button
             onClick={() => setActiveTab("language")}
             className={`whitespace-nowrap border-b-2 py-4 px-1 text-sm font-medium transition-colors ${activeTab === "language"
-              ? "border-sky-500 text-sky-600 dark:text-sky-400"
+              ? "border-amber-500 text-amber-600 dark:text-amber-400"
               : "border-transparent text-zinc-500 hover:border-zinc-300 hover:text-zinc-700 dark:text-zinc-400 dark:hover:text-zinc-300"
               }`}
           >
             Languages
             <span className={`ml-2 rounded-full px-2 py-0.5 text-xs ${activeTab === "language"
-              ? "bg-sky-100 text-sky-700 dark:bg-sky-900/50 dark:text-sky-300"
+              ? "bg-amber-100 text-amber-700 dark:bg-amber-900/50 dark:text-amber-300"
               : "bg-zinc-100 text-zinc-600 dark:bg-zinc-800 dark:text-zinc-400"
               }`}>
               {languages.length}
