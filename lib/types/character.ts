@@ -1004,6 +1004,8 @@ export interface CyberwareItem {
   attributeBonuses?: Record<string, number>;
   /** Initiative dice bonuses */
   initiativeDiceBonus?: number;
+  /** Armor bonus provided by this cyberware (e.g., dermal plating) */
+  armorBonus?: number;
   /** Other special effects/notes */
   notes?: string;
   /** Wireless bonus description (human-readable) */
@@ -1055,6 +1057,8 @@ export interface BiowareItem {
   legality?: ItemLegality;
   /** Attribute bonuses provided by this bioware */
   attributeBonuses?: Record<string, number>;
+  /** Armor bonus provided by this bioware (e.g., orthoskin) */
+  armorBonus?: number;
   /** Other special effects/notes */
   notes?: string;
 }

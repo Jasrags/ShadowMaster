@@ -120,20 +120,39 @@ export interface GearItemData {
   rating?: number;
   description?: string;
 
+  // -------------------------------------------------------------------------
+  // UNIFIED RATINGS TABLE (Preferred Approach)
+  // -------------------------------------------------------------------------
+
   /**
-   * Unified rating specification (preferred over legacy properties)
+   * Whether this item has selectable ratings.
+   * When true with ratings table, use ratings[rating] for all values.
+   */
+  hasRating?: boolean;
+
+  /** Minimum rating (defaults to 1) */
+  minRating?: number;
+
+  /** Maximum rating */
+  maxRating?: number;
+
+  /**
+   * Unified ratings table with explicit per-rating values.
+   * PREFERRED over ratingSpec for new data.
+   */
+  ratings?: import("@/lib/types/ratings").RatingTable;
+
+  // -------------------------------------------------------------------------
+  // LEGACY RATING SPECIFICATION (Deprecated)
+  // -------------------------------------------------------------------------
+
+  /**
+   * Legacy rating specification (use unified ratings table instead)
+   * @deprecated Use ratings table instead
    * @see CatalogItemRatingSpec
    */
   ratingSpec?: CatalogItemRatingSpec;
 
-  /**
-   * @deprecated Use ratingSpec.rating.hasRating instead
-   */
-  hasRating?: boolean;
-  /**
-   * @deprecated Use ratingSpec.rating.maxRating instead
-   */
-  maxRating?: number;
   /**
    * @deprecated Use ratingSpec.costScaling.perRating instead
    */

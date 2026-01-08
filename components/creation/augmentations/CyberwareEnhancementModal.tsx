@@ -9,12 +9,14 @@
  * - Rating selection for rated enhancements
  * - Capacity tracking
  * - Cost preview
+ * - Cart/queue for multi-select (add multiple enhancements before closing)
  */
 
 import { useMemo, useState, useCallback } from "react";
 import { useCyberware } from "@/lib/rules/RulesetContext";
 import type { CyberwareItem, ItemLegality } from "@/lib/types";
-import { X, Search, Plus, Minus, Zap } from "lucide-react";
+import { hasUnifiedRatings, getRatingTableValue } from "@/lib/types/ratings";
+import { X, Search, Plus, Minus, Zap, ShoppingCart } from "lucide-react";
 
 // =============================================================================
 // CONSTANTS
@@ -53,7 +55,7 @@ export interface CyberwareEnhancementSelection {
 interface CyberwareEnhancementModalProps {
   isOpen: boolean;
   onClose: () => void;
-  onAdd: (enhancement: CyberwareEnhancementSelection) => void;
+  onAdd: (enhancements: CyberwareEnhancementSelection[]) => void;
   parentCyberware: CyberwareItem;
   remainingCapacity: number;
   remainingNuyen: number;
@@ -100,12 +102,29 @@ export function CyberwareEnhancementModal({
   const [selectedItemId, setSelectedItemId] = useState<string | null>(null);
   const [rating, setRating] = useState(1);
   const [searchQuery, setSearchQuery] = useState("");
+  const [cart, setCart] = useState<CyberwareEnhancementSelection[]>([]);
+
+  // Calculate cart totals
+  const cartTotals = useMemo(() => {
+    return cart.reduce(
+      (acc, item) => ({
+        capacity: acc.capacity + item.capacityCost,
+        cost: acc.cost + item.cost,
+      }),
+      { capacity: 0, cost: 0 }
+    );
+  }, [cart]);
+
+  // Remaining after cart items
+  const effectiveRemainingCapacity = remainingCapacity - cartTotals.capacity;
+  const effectiveRemainingNuyen = remainingNuyen - cartTotals.cost;
 
   // Reset state
   const resetState = useCallback(() => {
     setSelectedItemId(null);
     setRating(1);
     setSearchQuery("");
+    setCart([]);
   }, []);
 
   // Get enhancement mapping for parent category
@@ -131,8 +150,18 @@ export function CyberwareEnhancementModal({
       }
 
       // Filter by availability and legality
-      if (item.availability > maxAvailability) return false;
       if (item.legality === "forbidden") return false;
+
+      // For unified ratings items, check the minimum rating's availability
+      if (hasUnifiedRatings(item)) {
+        const minRating = item.minRating ?? 1;
+        const ratingValue = getRatingTableValue(item, minRating);
+        const minAvailability = ratingValue?.availability ?? 0;
+        return minAvailability <= maxAvailability;
+      }
+
+      // Legacy items - check top-level availability
+      if ((item.availability ?? 0) > maxAvailability) return false;
 
       return true;
     });
@@ -181,15 +210,15 @@ export function CyberwareEnhancementModal({
     return { capacityCost, cost, availability };
   }, [selectedItem, rating]);
 
-  // Validation checks
-  const canAfford = calculatedCosts ? calculatedCosts.cost <= remainingNuyen : true;
-  const fitsCapacity = calculatedCosts ? calculatedCosts.capacityCost <= remainingCapacity : true;
+  // Validation checks (against effective remaining after cart)
+  const canAfford = calculatedCosts ? calculatedCosts.cost <= effectiveRemainingNuyen : true;
+  const fitsCapacity = calculatedCosts ? calculatedCosts.capacityCost <= effectiveRemainingCapacity : true;
   const meetsAvailability = calculatedCosts ? calculatedCosts.availability <= maxAvailability : true;
-  const canAdd = selectedItem && canAfford && fitsCapacity && meetsAvailability;
+  const canAddToCart = selectedItem && canAfford && fitsCapacity && meetsAvailability;
 
-  // Handle add
-  const handleAdd = useCallback(() => {
-    if (!selectedItem || !calculatedCosts || !canAdd) return;
+  // Add to cart
+  const handleAddToCart = useCallback(() => {
+    if (!selectedItem || !calculatedCosts || !canAddToCart) return;
 
     const enhancement: CyberwareEnhancementSelection = {
       catalogId: selectedItem.id,
@@ -203,10 +232,23 @@ export function CyberwareEnhancementModal({
       description: selectedItem.description,
     };
 
-    onAdd(enhancement);
+    setCart((prev) => [...prev, enhancement]);
+    setSelectedItemId(null);
+    setRating(1);
+  }, [selectedItem, calculatedCosts, canAddToCart, rating]);
+
+  // Remove from cart
+  const handleRemoveFromCart = useCallback((index: number) => {
+    setCart((prev) => prev.filter((_, i) => i !== index));
+  }, []);
+
+  // Install all items in cart
+  const handleInstallAll = useCallback(() => {
+    if (cart.length === 0) return;
+    onAdd(cart);
     resetState();
     onClose();
-  }, [selectedItem, calculatedCosts, canAdd, rating, onAdd, resetState, onClose]);
+  }, [cart, onAdd, resetState, onClose]);
 
   // Handle close
   const handleClose = useCallback(() => {
@@ -218,15 +260,22 @@ export function CyberwareEnhancementModal({
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4">
-      <div className="flex h-[70vh] w-full max-w-3xl flex-col overflow-hidden rounded-xl bg-white shadow-2xl dark:bg-zinc-900">
+      <div className="flex h-[85vh] w-full max-w-4xl flex-col overflow-hidden rounded-xl bg-white shadow-2xl dark:bg-zinc-900">
         {/* Header */}
         <div className="flex items-center justify-between border-b border-zinc-200 px-6 py-4 dark:border-zinc-700">
           <div>
             <h2 className="text-lg font-semibold text-zinc-900 dark:text-zinc-100">
-              Add Enhancement
+              Add Enhancements
             </h2>
             <p className="text-sm text-zinc-500 dark:text-zinc-400">
-              {parentCyberware.name} - {remainingCapacity} capacity remaining
+              {parentCyberware.name} —{" "}
+              <span className={effectiveRemainingCapacity < remainingCapacity ? "text-cyan-600 dark:text-cyan-400" : ""}>
+                {effectiveRemainingCapacity}
+              </span>
+              {effectiveRemainingCapacity < remainingCapacity && (
+                <span className="text-zinc-400"> (was {remainingCapacity})</span>
+              )}{" "}
+              capacity remaining
             </p>
           </div>
           <button
@@ -269,7 +318,10 @@ export function CyberwareEnhancementModal({
                     const itemCapacity = item.capacityPerRating
                       ? baseCapacity * 1 // Base capacity for display (rating 1)
                       : baseCapacity;
-                    const fits = itemCapacity <= remainingCapacity;
+                    const fits = itemCapacity <= effectiveRemainingCapacity;
+
+                    // Check if already in cart
+                    const inCartCount = cart.filter((c) => c.catalogId === item.id).length;
 
                     return (
                       <button
@@ -288,9 +340,16 @@ export function CyberwareEnhancementModal({
                         }`}
                       >
                         <div className="min-w-0 flex-1">
-                          <span className="block truncate text-sm font-medium text-zinc-900 dark:text-zinc-100">
-                            {item.name}
-                          </span>
+                          <div className="flex items-center gap-2">
+                            <span className="block truncate text-sm font-medium text-zinc-900 dark:text-zinc-100">
+                              {item.name}
+                            </span>
+                            {inCartCount > 0 && (
+                              <span className="shrink-0 rounded-full bg-cyan-500 px-1.5 py-0.5 text-[10px] font-medium text-white">
+                                {inCartCount} in cart
+                              </span>
+                            )}
+                          </div>
                           <div className="mt-0.5 flex flex-wrap gap-x-2 gap-y-0.5 text-[10px] text-zinc-500 dark:text-zinc-400">
                             <span className="text-blue-600 dark:text-blue-400">
                               [{item.capacityCost}
@@ -409,19 +468,19 @@ export function CyberwareEnhancementModal({
                   <div className="mt-4 flex items-center gap-2 rounded-lg bg-blue-50 px-3 py-2 dark:bg-blue-900/20">
                     <Zap className="h-4 w-4 text-blue-500" />
                     <span className="text-xs text-blue-700 dark:text-blue-300">
-                      Remaining capacity after install: {remainingCapacity - calculatedCosts.capacityCost}
+                      Capacity after adding: {effectiveRemainingCapacity - calculatedCosts.capacityCost}
                     </span>
                   </div>
 
                   {/* Validation errors */}
                   {!fitsCapacity && (
                     <div className="mt-3 rounded-lg bg-red-50 p-2 text-xs text-red-700 dark:bg-red-900/20 dark:text-red-300">
-                      Not enough capacity ({remainingCapacity} remaining)
+                      Not enough capacity ({effectiveRemainingCapacity} remaining)
                     </div>
                   )}
                   {!canAfford && (
                     <div className="mt-3 rounded-lg bg-red-50 p-2 text-xs text-red-700 dark:bg-red-900/20 dark:text-red-300">
-                      Not enough nuyen ({formatCurrency(remainingNuyen)}¥ remaining)
+                      Not enough nuyen ({formatCurrency(effectiveRemainingNuyen)}¥ remaining)
                     </div>
                   )}
                   {!meetsAvailability && (
@@ -431,19 +490,19 @@ export function CyberwareEnhancementModal({
                   )}
                 </div>
 
-                {/* Add Button */}
+                {/* Add to Cart Button */}
                 <div className="border-t border-zinc-200 p-4 dark:border-zinc-700">
                   <button
-                    onClick={handleAdd}
-                    disabled={!canAdd}
+                    onClick={handleAddToCart}
+                    disabled={!canAddToCart}
                     className={`flex w-full items-center justify-center gap-2 rounded-lg px-4 py-2.5 text-sm font-medium transition-colors ${
-                      canAdd
+                      canAddToCart
                         ? "bg-cyan-500 text-white hover:bg-cyan-600"
                         : "cursor-not-allowed bg-zinc-100 text-zinc-400 dark:bg-zinc-800 dark:text-zinc-500"
                     }`}
                   >
                     <Plus className="h-4 w-4" />
-                    Install Enhancement
+                    Add to Cart
                   </button>
                 </div>
               </>
@@ -457,6 +516,87 @@ export function CyberwareEnhancementModal({
                 </div>
               </div>
             )}
+          </div>
+        </div>
+
+        {/* Cart Section */}
+        <div className="border-t border-zinc-200 bg-zinc-50 dark:border-zinc-700 dark:bg-zinc-800/50">
+          <div className="px-6 py-3">
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-2">
+                <ShoppingCart className="h-4 w-4 text-zinc-500 dark:text-zinc-400" />
+                <span className="text-sm font-medium text-zinc-700 dark:text-zinc-300">
+                  Cart ({cart.length})
+                </span>
+                {cart.length > 0 && (
+                  <span className="text-xs text-zinc-500 dark:text-zinc-400">
+                    — [{cartTotals.capacity}] capacity, {formatCurrency(cartTotals.cost)}¥
+                  </span>
+                )}
+              </div>
+              {cart.length > 0 && (
+                <button
+                  onClick={() => setCart([])}
+                  className="text-xs text-zinc-500 hover:text-red-600 dark:text-zinc-400 dark:hover:text-red-400"
+                >
+                  Clear all
+                </button>
+              )}
+            </div>
+
+            {/* Cart Items */}
+            {cart.length > 0 && (
+              <div className="mt-2 flex flex-wrap gap-2">
+                {cart.map((item, index) => (
+                  <div
+                    key={`${item.catalogId}-${index}`}
+                    className="flex items-center gap-1.5 rounded-full bg-white px-3 py-1.5 shadow-sm dark:bg-zinc-700"
+                  >
+                    <span className="text-xs font-medium text-zinc-700 dark:text-zinc-200">
+                      {item.name}
+                      {item.rating && ` R${item.rating}`}
+                    </span>
+                    <span className="text-[10px] text-blue-600 dark:text-blue-400">
+                      [{item.capacityCost}]
+                    </span>
+                    <button
+                      onClick={() => handleRemoveFromCart(index)}
+                      className="ml-0.5 rounded-full p-0.5 text-zinc-400 hover:bg-red-100 hover:text-red-600 dark:hover:bg-red-900/30 dark:hover:text-red-400"
+                    >
+                      <X className="h-3 w-3" />
+                    </button>
+                  </div>
+                ))}
+              </div>
+            )}
+
+            {cart.length === 0 && (
+              <p className="mt-1 text-xs italic text-zinc-400 dark:text-zinc-500">
+                Add enhancements to the cart, then install all at once
+              </p>
+            )}
+          </div>
+
+          {/* Install All Button */}
+          <div className="flex gap-3 border-t border-zinc-200 px-6 py-4 dark:border-zinc-700">
+            <button
+              onClick={handleClose}
+              className="flex-1 rounded-lg border border-zinc-300 px-4 py-2.5 text-sm font-medium text-zinc-700 transition-colors hover:bg-zinc-100 dark:border-zinc-600 dark:text-zinc-300 dark:hover:bg-zinc-700"
+            >
+              Cancel
+            </button>
+            <button
+              onClick={handleInstallAll}
+              disabled={cart.length === 0}
+              className={`flex flex-1 items-center justify-center gap-2 rounded-lg px-4 py-2.5 text-sm font-medium transition-colors ${
+                cart.length > 0
+                  ? "bg-emerald-500 text-white hover:bg-emerald-600"
+                  : "cursor-not-allowed bg-zinc-100 text-zinc-400 dark:bg-zinc-800 dark:text-zinc-500"
+              }`}
+            >
+              <Zap className="h-4 w-4" />
+              Install {cart.length > 0 ? `All (${cart.length})` : ""}
+            </button>
           </div>
         </div>
       </div>

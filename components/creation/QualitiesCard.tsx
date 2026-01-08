@@ -19,6 +19,7 @@ import { useMemo, useCallback, useState } from "react";
 import { useQualities } from "@/lib/rules";
 import type { CreationState } from "@/lib/types";
 import type { QualityData } from "@/lib/rules/loader-types";
+import { hasUnifiedRatings, getRatingTableValue, getAvailableRatings } from "@/lib/types/ratings";
 import { useCreationBudgets } from "@/lib/contexts";
 import { CreationCard } from "./shared";
 import { Plus, Search, AlertTriangle, X, Check, ChevronDown } from "lucide-react";
@@ -204,7 +205,8 @@ function SelectedQualityCard({
   cost: number;
   onRemove: () => void;
 }) {
-  // Get level name if quality has named levels
+  // Get level name if quality has named levels (legacy format only)
+  // Unified ratings don't have named levels, just numeric ratings
   const levelName = selection.level && quality.levels
     ? quality.levels.find((l) => l.level === selection.level)?.name
     : null;
@@ -323,12 +325,56 @@ function QualitySelectionModal({
   const remainingKarma = maxKarma - usedKarma;
 
   // Get cost for a quality at a specific level
+  // Supports unified ratings table (preferred) and legacy levels array
   const getQualityCost = (quality: QualityData, level?: number): number => {
+    // Check unified ratings table first
+    if (hasUnifiedRatings(quality)) {
+      const ratingValue = getRatingTableValue(quality, level || 1);
+      if (ratingValue?.karmaCost !== undefined) {
+        return Math.abs(ratingValue.karmaCost);
+      }
+    }
+
+    // Fall back to legacy levels array
     if (quality.levels && quality.levels.length > 0) {
       const levelData = quality.levels.find((l) => l.level === (level || 1));
       return levelData ? Math.abs(levelData.karma) : quality.karmaCost || 0;
     }
+
     return quality.karmaCost || quality.karmaBonus || 0;
+  };
+
+  // Check if quality has levels (unified or legacy)
+  const hasLevels = (quality: QualityData): boolean => {
+    if (hasUnifiedRatings(quality)) return true;
+    return !!(quality.levels && quality.levels.length > 0);
+  };
+
+  // Get available levels for a quality (unified or legacy)
+  const getQualityLevels = (quality: QualityData): Array<{ level: number; name?: string; karma: number }> => {
+    // Check unified ratings first
+    if (hasUnifiedRatings(quality)) {
+      const ratings = getAvailableRatings(quality);
+      return ratings.map((rating) => {
+        const ratingValue = getRatingTableValue(quality, rating);
+        return {
+          level: rating,
+          name: undefined, // Unified ratings don't have named levels
+          karma: ratingValue?.karmaCost ?? 0,
+        };
+      });
+    }
+
+    // Fall back to legacy levels
+    if (quality.levels && quality.levels.length > 0) {
+      return quality.levels.map((l) => ({
+        level: l.level,
+        name: l.name,
+        karma: l.karma,
+      }));
+    }
+
+    return [];
   };
 
   const handleSelectQuality = (qualityId: string) => {
@@ -338,7 +384,7 @@ function QualitySelectionModal({
     setSelectedLevel(1);
 
     // If no specification or levels needed, we can add immediately
-    if (quality && !quality.requiresSpecification && !quality.levels) {
+    if (quality && !quality.requiresSpecification && !hasLevels(quality)) {
       // Will add on confirm
     }
   };
@@ -352,7 +398,7 @@ function QualitySelectionModal({
     onAdd(
       selectedQuality.id,
       specification || undefined,
-      selectedQuality.levels ? selectedLevel : undefined
+      hasLevels(selectedQuality) ? selectedLevel : undefined
     );
     setSelectedQualityId(null);
     setSpecification("");
@@ -456,7 +502,7 @@ function QualitySelectionModal({
                             <span className="text-sm font-medium text-zinc-900 dark:text-zinc-100">
                               {quality.name}
                             </span>
-                            {quality.levels && (
+                            {hasLevels(quality) && (
                               <span className="rounded bg-zinc-200 px-1.5 py-0.5 text-[10px] text-zinc-600 dark:bg-zinc-700 dark:text-zinc-400">
                                 levels
                               </span>
@@ -495,7 +541,7 @@ function QualitySelectionModal({
         </div>
 
         {/* Specification/Level selection (if needed) */}
-        {selectedQuality && (selectedQuality.requiresSpecification || selectedQuality.levels) && (
+        {selectedQuality && (selectedQuality.requiresSpecification || hasLevels(selectedQuality)) && (
           <div className="shrink-0 border-t border-zinc-200 px-6 py-4 dark:border-zinc-700">
             {selectedQuality.requiresSpecification && (
               <div className="mb-3">
@@ -530,74 +576,79 @@ function QualitySelectionModal({
               </div>
             )}
 
-            {selectedQuality.levels && (
-              <div>
-                <label className="mb-1 block text-sm font-medium text-zinc-700 dark:text-zinc-300">
-                  {/* Use "Severity" for qualities with named levels, "Rating" otherwise */}
-                  {selectedQuality.levels[0]?.name ? "Option" : "Rating"}
-                </label>
-                {/* Use dropdown for qualities with named levels or many levels */}
-                {selectedQuality.levels[0]?.name || selectedQuality.levels.length > 4 ? (
-                  <div className="relative">
-                    <select
-                      value={selectedLevel}
-                      onChange={(e) => setSelectedLevel(parseInt(e.target.value))}
-                      className="w-full appearance-none rounded-lg border border-zinc-300 py-2 pl-3 pr-10 text-sm focus:border-emerald-500 focus:outline-none focus:ring-1 focus:ring-emerald-500 dark:border-zinc-600 dark:bg-zinc-800 dark:text-zinc-100"
-                    >
-                      {selectedQuality.levels.map((level) => {
+            {hasLevels(selectedQuality) && (() => {
+              const levels = getQualityLevels(selectedQuality);
+              const hasNamedLevels = levels.some((l) => l.name);
+
+              return (
+                <div>
+                  <label className="mb-1 block text-sm font-medium text-zinc-700 dark:text-zinc-300">
+                    {/* Use "Option" for qualities with named levels, "Rating" otherwise */}
+                    {hasNamedLevels ? "Option" : "Rating"}
+                  </label>
+                  {/* Use dropdown for qualities with named levels or many levels */}
+                  {hasNamedLevels || levels.length > 4 ? (
+                    <div className="relative">
+                      <select
+                        value={selectedLevel}
+                        onChange={(e) => setSelectedLevel(parseInt(e.target.value))}
+                        className="w-full appearance-none rounded-lg border border-zinc-300 py-2 pl-3 pr-10 text-sm focus:border-emerald-500 focus:outline-none focus:ring-1 focus:ring-emerald-500 dark:border-zinc-600 dark:bg-zinc-800 dark:text-zinc-100"
+                      >
+                        {levels.map((level) => {
+                          const levelCost = Math.abs(level.karma);
+                          const canAffordLevel = isPositive
+                            ? usedKarma + levelCost <= maxKarma && karmaBalance >= levelCost
+                            : usedKarma + levelCost <= maxKarma;
+
+                          return (
+                            <option
+                              key={level.level}
+                              value={level.level}
+                              disabled={!canAffordLevel}
+                            >
+                              {level.name || `Rating ${level.level}`} ({isPositive ? levelCost : `+${levelCost}`} karma)
+                              {!canAffordLevel ? " - cannot afford" : ""}
+                            </option>
+                          );
+                        })}
+                      </select>
+                      <ChevronDown className="pointer-events-none absolute right-3 top-1/2 h-4 w-4 -translate-y-1/2 text-zinc-400" />
+                    </div>
+                  ) : (
+                    <div className="flex gap-2">
+                      {levels.map((level) => {
                         const levelCost = Math.abs(level.karma);
                         const canAffordLevel = isPositive
                           ? usedKarma + levelCost <= maxKarma && karmaBalance >= levelCost
                           : usedKarma + levelCost <= maxKarma;
 
                         return (
-                          <option
+                          <button
                             key={level.level}
-                            value={level.level}
+                            onClick={() => setSelectedLevel(level.level)}
                             disabled={!canAffordLevel}
+                            className={`flex-1 rounded-lg border px-3 py-2 text-center transition-colors ${
+                              selectedLevel === level.level
+                                ? isPositive
+                                  ? "border-blue-400 bg-blue-100 text-blue-700 dark:border-blue-600 dark:bg-blue-900/50 dark:text-blue-300"
+                                  : "border-amber-400 bg-amber-100 text-amber-700 dark:border-amber-600 dark:bg-amber-900/50 dark:text-amber-300"
+                                : canAffordLevel
+                                ? "border-zinc-200 hover:border-zinc-300 dark:border-zinc-700 dark:hover:border-zinc-600"
+                                : "cursor-not-allowed border-zinc-200 opacity-50 dark:border-zinc-700"
+                            }`}
                           >
-                            {level.name || `Rating ${level.level}`} ({isPositive ? levelCost : `+${levelCost}`} karma)
-                            {!canAffordLevel ? " - cannot afford" : ""}
-                          </option>
+                            <div className="text-sm font-medium">{level.level}</div>
+                            <div className="text-xs text-zinc-500 dark:text-zinc-400">
+                              {isPositive ? `${levelCost}` : `+${levelCost}`} karma
+                            </div>
+                          </button>
                         );
                       })}
-                    </select>
-                    <ChevronDown className="pointer-events-none absolute right-3 top-1/2 h-4 w-4 -translate-y-1/2 text-zinc-400" />
-                  </div>
-                ) : (
-                  <div className="flex gap-2">
-                    {selectedQuality.levels.map((level) => {
-                      const levelCost = Math.abs(level.karma);
-                      const canAffordLevel = isPositive
-                        ? usedKarma + levelCost <= maxKarma && karmaBalance >= levelCost
-                        : usedKarma + levelCost <= maxKarma;
-
-                      return (
-                        <button
-                          key={level.level}
-                          onClick={() => setSelectedLevel(level.level)}
-                          disabled={!canAffordLevel}
-                          className={`flex-1 rounded-lg border px-3 py-2 text-center transition-colors ${
-                            selectedLevel === level.level
-                              ? isPositive
-                                ? "border-blue-400 bg-blue-100 text-blue-700 dark:border-blue-600 dark:bg-blue-900/50 dark:text-blue-300"
-                                : "border-amber-400 bg-amber-100 text-amber-700 dark:border-amber-600 dark:bg-amber-900/50 dark:text-amber-300"
-                              : canAffordLevel
-                              ? "border-zinc-200 hover:border-zinc-300 dark:border-zinc-700 dark:hover:border-zinc-600"
-                              : "cursor-not-allowed border-zinc-200 opacity-50 dark:border-zinc-700"
-                          }`}
-                        >
-                          <div className="text-sm font-medium">{level.level}</div>
-                          <div className="text-xs text-zinc-500 dark:text-zinc-400">
-                            {isPositive ? `${levelCost}` : `+${levelCost}`} karma
-                          </div>
-                        </button>
-                      );
-                    })}
-                  </div>
-                )}
-              </div>
-            )}
+                    </div>
+                  )}
+                </div>
+              );
+            })()}
           </div>
         )}
 
@@ -671,15 +722,26 @@ export function QualitiesCard({ state, updateState }: QualitiesCardProps) {
   }, [state.selections.negativeQualities]);
 
   // Get cost of a quality selection
+  // Supports unified ratings table (preferred) and legacy levels array
   const getSelectionCost = useCallback(
     (selection: SelectedQuality, qualityList: QualityData[]) => {
       const quality = qualityList.find((q) => q.id === selection.id);
       if (!quality) return 0;
 
+      // Check unified ratings table first
+      if (hasUnifiedRatings(quality) && selection.level) {
+        const ratingValue = getRatingTableValue(quality, selection.level);
+        if (ratingValue?.karmaCost !== undefined) {
+          return Math.abs(ratingValue.karmaCost);
+        }
+      }
+
+      // Fall back to legacy levels array
       if (quality.levels && selection.level) {
         const levelData = quality.levels.find((l) => l.level === selection.level);
         return levelData ? Math.abs(levelData.karma) : quality.karmaCost || 0;
       }
+
       return quality.karmaCost || quality.karmaBonus || 0;
     },
     []

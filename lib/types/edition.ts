@@ -8,7 +8,7 @@
 
 import type { ID, ISODateString, Metadata, ItemLegality } from "./core";
 import type { CyberwareCategory, BiowareCategory } from "./character";
-import type { CatalogItemRatingSpec } from "./ratings";
+import type { CatalogItemRatingSpec, RatingTable } from "./ratings";
 import type {
   Quality,
   QualityCatalog,
@@ -324,28 +324,47 @@ export interface CyberwareCatalogItem {
   id: string;
   name: string;
   category: CyberwareCategory;
-  /** Base essence cost (modified by grade) */
+  /** Base essence cost (modified by grade) - used when ratings table not present */
   essenceCost: number;
 
+  // -------------------------------------------------------------------------
+  // UNIFIED RATINGS TABLE (Preferred Approach)
+  // -------------------------------------------------------------------------
+
   /**
-   * Unified rating specification (preferred over legacy properties)
+   * Whether this item has selectable ratings.
+   * When true with ratings table, use ratings[rating] for all values.
+   */
+  hasRating?: boolean;
+
+  /** Minimum rating (defaults to 1) */
+  minRating?: number;
+
+  /** Maximum rating */
+  maxRating?: number;
+
+  /**
+   * Unified ratings table with explicit per-rating values.
+   * PREFERRED over ratingSpec for new data.
+   * When present, this takes precedence over computed values.
+   * @see docs/plans/unified-ratings-tables-migration.md
+   */
+  ratings?: RatingTable;
+
+  // -------------------------------------------------------------------------
+  // LEGACY: Formula-Based Scaling (Deprecated)
+  // -------------------------------------------------------------------------
+
+  /**
+   * Formula-based rating specification
+   * @deprecated Use ratings table instead for explicit per-rating values
    * @see CatalogItemRatingSpec
    */
   ratingSpec?: CatalogItemRatingSpec;
 
   /**
-   * Whether the item has a rating (1-6 typically)
-   * @deprecated Use ratingSpec.rating.hasRating instead
-   */
-  hasRating?: boolean;
-  /**
-   * Maximum rating if applicable
-   * @deprecated Use ratingSpec.rating.maxRating instead
-   */
-  maxRating?: number;
-  /**
    * Whether essence cost scales with rating
-   * @deprecated Use ratingSpec.essenceScaling.perRating instead
+   * @deprecated Use ratings table or ratingSpec.essenceScaling.perRating instead
    */
   essencePerRating?: boolean;
   /** Base cost in nuyen (modified by grade) */
@@ -411,25 +430,43 @@ export interface BiowareCatalogItem {
   id: string;
   name: string;
   category: BiowareCategory;
-  /** Base essence cost (modified by grade) */
+  /** Base essence cost (modified by grade) - used when ratings table not present */
   essenceCost: number;
 
+  // -------------------------------------------------------------------------
+  // UNIFIED RATINGS TABLE (Preferred Approach)
+  // -------------------------------------------------------------------------
+
   /**
-   * Unified rating specification (preferred over legacy properties)
+   * Whether this item has selectable ratings.
+   * When true with ratings table, use ratings[rating] for all values.
+   */
+  hasRating?: boolean;
+
+  /** Minimum rating (defaults to 1) */
+  minRating?: number;
+
+  /** Maximum rating */
+  maxRating?: number;
+
+  /**
+   * Unified ratings table with explicit per-rating values.
+   * PREFERRED over ratingSpec for new data.
+   * When present, this takes precedence over computed values.
+   * @see docs/plans/unified-ratings-tables-migration.md
+   */
+  ratings?: RatingTable;
+
+  // -------------------------------------------------------------------------
+  // LEGACY: Formula-Based Scaling (Deprecated)
+  // -------------------------------------------------------------------------
+
+  /**
+   * Formula-based rating specification
+   * @deprecated Use ratings table instead for explicit per-rating values
    * @see CatalogItemRatingSpec
    */
   ratingSpec?: CatalogItemRatingSpec;
-
-  /**
-   * Whether the item has a rating
-   * @deprecated Use ratingSpec.rating.hasRating instead
-   */
-  hasRating?: boolean;
-  /**
-   * Maximum rating if applicable
-   * @deprecated Use ratingSpec.rating.maxRating instead
-   */
-  maxRating?: number;
   /**
    * Whether essence cost scales with rating
    * @deprecated Use ratingSpec.essenceScaling.perRating instead

@@ -794,3 +794,316 @@ describe('getRatingOptions', () => {
   });
 });
 
+// =============================================================================
+// UNIFIED RATINGS TABLE FUNCTIONS
+// =============================================================================
+
+import {
+  hasUnifiedRatings,
+  getRatingTableValue,
+  getAvailableRatings,
+  getRatedItemValuesUnified,
+  getRatingOptionsUnified,
+  isRatingValid,
+} from '../ratings';
+import type { RatingTable } from '@/lib/types/ratings';
+
+describe('hasUnifiedRatings', () => {
+  it('should return true for item with ratings table', () => {
+    const item = {
+      hasRating: true as const,
+      minRating: 1,
+      maxRating: 4,
+      ratings: {
+        1: { cost: 1000 },
+        2: { cost: 2000 },
+        3: { cost: 3000 },
+        4: { cost: 4000 },
+      } as RatingTable,
+    };
+
+    expect(hasUnifiedRatings(item)).toBe(true);
+  });
+
+  it('should return false for item without ratings table', () => {
+    const item = {
+      hasRating: true as const,
+      maxRating: 4,
+    };
+
+    expect(hasUnifiedRatings(item)).toBe(false);
+  });
+
+  it('should return false for item with hasRating false', () => {
+    const item = {
+      hasRating: false as const,
+      ratings: {
+        1: { cost: 1000 },
+      } as RatingTable,
+    };
+
+    expect(hasUnifiedRatings(item)).toBe(false);
+  });
+
+  it('should return false for item without hasRating', () => {
+    const item = {
+      ratings: {
+        1: { cost: 1000 },
+      } as RatingTable,
+    };
+
+    expect(hasUnifiedRatings(item)).toBe(false);
+  });
+});
+
+describe('getRatingTableValue', () => {
+  const item = {
+    hasRating: true as const,
+    minRating: 1,
+    maxRating: 4,
+    ratings: {
+      1: { cost: 4000, availability: 3, essenceCost: 0.2, capacity: 4 },
+      2: { cost: 6000, availability: 6, essenceCost: 0.3, capacity: 8 },
+      3: { cost: 10000, availability: 9, essenceCost: 0.4, capacity: 12 },
+      4: { cost: 14000, availability: 12, essenceCost: 0.5, capacity: 16 },
+    } as RatingTable,
+  };
+
+  it('should return values for valid rating', () => {
+    const value = getRatingTableValue(item, 2);
+    expect(value).toEqual({
+      cost: 6000,
+      availability: 6,
+      essenceCost: 0.3,
+      capacity: 8,
+    });
+  });
+
+  it('should return undefined for rating not in table', () => {
+    const value = getRatingTableValue(item, 5);
+    expect(value).toBeUndefined();
+  });
+
+  it('should return undefined for item without ratings table', () => {
+    const itemNoRatings = { hasRating: true as const, maxRating: 4 };
+    const value = getRatingTableValue(itemNoRatings, 2);
+    expect(value).toBeUndefined();
+  });
+});
+
+describe('getAvailableRatings', () => {
+  it('should return array of ratings from unified table', () => {
+    const item = {
+      hasRating: true as const,
+      minRating: 1,
+      maxRating: 4,
+      ratings: {
+        1: { cost: 1000 },
+        2: { cost: 2000 },
+        3: { cost: 3000 },
+        4: { cost: 4000 },
+      } as RatingTable,
+    };
+
+    const ratings = getAvailableRatings(item);
+    expect(ratings).toEqual([1, 2, 3, 4]);
+  });
+
+  it('should return ratings in numeric order', () => {
+    const item = {
+      hasRating: true as const,
+      minRating: 1,
+      maxRating: 4,
+      ratings: {
+        3: { cost: 3000 },
+        1: { cost: 1000 },
+        4: { cost: 4000 },
+        2: { cost: 2000 },
+      } as RatingTable,
+    };
+
+    const ratings = getAvailableRatings(item);
+    expect(ratings).toEqual([1, 2, 3, 4]);
+  });
+
+  it('should return range from min to max for items without unified ratings', () => {
+    const item = {
+      hasRating: true as const,
+      minRating: 2,
+      maxRating: 5,
+    };
+
+    const ratings = getAvailableRatings(item);
+    expect(ratings).toEqual([2, 3, 4, 5]);
+  });
+
+  it('should default minRating to 1', () => {
+    const item = {
+      hasRating: true as const,
+      maxRating: 3,
+    };
+
+    const ratings = getAvailableRatings(item);
+    expect(ratings).toEqual([1, 2, 3]);
+  });
+});
+
+describe('getRatedItemValuesUnified', () => {
+  it('should return values from unified ratings table', () => {
+    const item = {
+      hasRating: true as const,
+      minRating: 1,
+      maxRating: 3,
+      ratings: {
+        1: { cost: 4000, availability: 3, essenceCost: 0.2 },
+        2: { cost: 6000, availability: 6, essenceCost: 0.3 },
+        3: { cost: 10000, availability: 9, essenceCost: 0.4 },
+      } as RatingTable,
+    };
+
+    const values = getRatedItemValuesUnified(item, 2);
+    expect(values.rating).toBe(2);
+    expect(values.cost).toBe(6000);
+    expect(values.availability).toBe(6);
+    expect(values.essence).toBe(0.3);
+  });
+
+  it('should fall back to legacy ratingSpec when no unified ratings', () => {
+    const item = {
+      hasRating: true as const,
+      maxRating: 6,
+      ratingSpec: {
+        rating: { hasRating: true, maxRating: 6 },
+        costScaling: { baseValue: 2500, perRating: true },
+        availabilityScaling: { baseValue: 3, perRating: true },
+      },
+    };
+
+    const values = getRatedItemValuesUnified(item, 3);
+    expect(values.rating).toBe(3);
+    expect(values.cost).toBe(7500); // 2500 * 3
+    expect(values.availability).toBe(9); // 3 * 3
+  });
+
+  it('should use base values for items without rating support', () => {
+    const item = {
+      cost: 500,
+      availability: 4,
+    };
+
+    const values = getRatedItemValuesUnified(item, 1);
+    expect(values.cost).toBe(500);
+    expect(values.availability).toBe(4);
+  });
+});
+
+describe('isRatingValid', () => {
+  it('should return true for valid rating in unified table', () => {
+    const item = {
+      hasRating: true as const,
+      minRating: 1,
+      maxRating: 4,
+      ratings: {
+        1: { cost: 1000 },
+        2: { cost: 2000 },
+        3: { cost: 3000 },
+        4: { cost: 4000 },
+      } as RatingTable,
+    };
+
+    expect(isRatingValid(item, 2)).toBe(true);
+    expect(isRatingValid(item, 4)).toBe(true);
+  });
+
+  it('should return false for rating not in unified table', () => {
+    const item = {
+      hasRating: true as const,
+      minRating: 1,
+      maxRating: 4,
+      ratings: {
+        1: { cost: 1000 },
+        2: { cost: 2000 },
+        3: { cost: 3000 },
+        4: { cost: 4000 },
+      } as RatingTable,
+    };
+
+    expect(isRatingValid(item, 5)).toBe(false);
+    expect(isRatingValid(item, 0)).toBe(false);
+  });
+
+  it('should validate against min/max for legacy items', () => {
+    const item = {
+      hasRating: true as const,
+      minRating: 2,
+      maxRating: 5,
+    };
+
+    expect(isRatingValid(item, 2)).toBe(true);
+    expect(isRatingValid(item, 5)).toBe(true);
+    expect(isRatingValid(item, 1)).toBe(false);
+    expect(isRatingValid(item, 6)).toBe(false);
+  });
+});
+
+describe('getRatingOptionsUnified', () => {
+  it('should return options from unified ratings table', () => {
+    const item = {
+      hasRating: true as const,
+      minRating: 1,
+      maxRating: 3,
+      ratings: {
+        1: { cost: 4000, availability: 3, essenceCost: 0.2 },
+        2: { cost: 6000, availability: 6, essenceCost: 0.3 },
+        3: { cost: 10000, availability: 9, essenceCost: 0.4 },
+      } as RatingTable,
+    };
+
+    const options = getRatingOptionsUnified(item);
+    expect(options).toHaveLength(3);
+    expect(options[0].rating).toBe(1);
+    expect(options[0].values.cost).toBe(4000);
+    expect(options[0].valid).toBe(true);
+    expect(options[2].rating).toBe(3);
+    expect(options[2].values.cost).toBe(10000);
+  });
+
+  it('should mark options as invalid when availability exceeds limit', () => {
+    const item = {
+      hasRating: true as const,
+      minRating: 1,
+      maxRating: 4,
+      ratings: {
+        1: { cost: 4000, availability: 3 },
+        2: { cost: 6000, availability: 6 },
+        3: { cost: 10000, availability: 9 },
+        4: { cost: 14000, availability: 15 }, // Over limit
+      } as RatingTable,
+    };
+
+    const options = getRatingOptionsUnified(item, { maxAvailability: 12 });
+    expect(options[2].valid).toBe(true); // avail 9
+    expect(options[3].valid).toBe(false); // avail 15
+    expect(options[3].error).toContain('exceeds');
+  });
+
+  it('should fall back to legacy format options', () => {
+    const item = {
+      hasRating: true as const,
+      minRating: 1,
+      maxRating: 3,
+      ratingSpec: {
+        rating: { hasRating: true, minRating: 1, maxRating: 3 },
+        costScaling: { baseValue: 1000, perRating: true },
+      },
+    };
+
+    const options = getRatingOptionsUnified(item);
+    expect(options).toHaveLength(3);
+    expect(options[0].rating).toBe(1);
+    expect(options[0].values.cost).toBe(1000);
+    expect(options[2].rating).toBe(3);
+    expect(options[2].values.cost).toBe(3000);
+  });
+});
+

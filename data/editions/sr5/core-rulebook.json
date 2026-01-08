@@ -227,26 +227,44 @@
           {
             "id": "adrenaline-boost",
             "name": "Adrenaline Boost",
-            "cost": 0.25,
-            "costType": "perLevel",
-            "maxLevel": 4,
             "activation": "free",
-            "description": "+2 Initiative Score per level for the current Combat Turn. Take Drain equal to levels at beginning of next turn."
+            "description": "+2 Initiative Score per level for the current Combat Turn. Take Drain equal to levels at beginning of next turn.",
+            "hasRating": true,
+            "minRating": 1,
+            "maxRating": 4,
+            "ratings": {
+              "1": {
+                "cost": 0,
+                "availability": 0,
+                "powerPointCost": 0.25
+              },
+              "2": {
+                "cost": 0,
+                "availability": 0,
+                "powerPointCost": 0.5
+              },
+              "3": {
+                "cost": 0,
+                "availability": 0,
+                "powerPointCost": 0.75
+              },
+              "4": {
+                "cost": 0,
+                "availability": 0,
+                "powerPointCost": 1
+              }
+            }
           },
           {
             "id": "astral-perception",
             "name": "Astral Perception",
-            "cost": 1,
-            "costType": "fixed",
             "activation": "simple",
-            "description": "See into the astral plane. Dual-natured while active, can attack astral forms."
+            "description": "See into the astral plane. Dual-natured while active, can attack astral forms.",
+            "powerPointCost": 1
           },
           {
             "id": "attribute-boost",
             "name": "Attribute Boost",
-            "cost": 0.25,
-            "costType": "perLevel",
-            "maxLevel": 4,
             "activation": "simple",
             "requiresAttribute": true,
             "validAttributes": [
@@ -255,21 +273,76 @@
               "reaction",
               "strength"
             ],
-            "description": "Boost a Physical Attribute. Make Magic + Rating Test; each hit boosts attribute by 1. Lasts 2x hits Combat Turns. Drain equal to level afterward."
+            "description": "Boost a Physical Attribute. Make Magic + Rating Test; each hit boosts attribute by 1. Lasts 2x hits Combat Turns. Drain equal to level afterward.",
+            "hasRating": true,
+            "minRating": 1,
+            "maxRating": 4,
+            "ratings": {
+              "1": {
+                "cost": 0,
+                "availability": 0,
+                "powerPointCost": 0.25
+              },
+              "2": {
+                "cost": 0,
+                "availability": 0,
+                "powerPointCost": 0.5
+              },
+              "3": {
+                "cost": 0,
+                "availability": 0,
+                "powerPointCost": 0.75
+              },
+              "4": {
+                "cost": 0,
+                "availability": 0,
+                "powerPointCost": 1
+              }
+            }
           },
           {
             "id": "combat-sense",
             "name": "Combat Sense",
-            "cost": 0.5,
-            "costType": "perLevel",
-            "maxLevel": 6,
-            "description": "+1 defense pool per level against ranged/melee attacks. Always get Perception Test before surprise."
+            "description": "+1 defense pool per level against ranged/melee attacks. Always get Perception Test before surprise.",
+            "hasRating": true,
+            "minRating": 1,
+            "maxRating": 6,
+            "ratings": {
+              "1": {
+                "cost": 0,
+                "availability": 0,
+                "powerPointCost": 0.5
+              },
+              "2": {
+                "cost": 0,
+                "availability": 0,
+                "powerPointCost": 1
+              },
+              "3": {
+                "cost": 0,
+                "availability": 0,
+                "powerPointCost": 1.5
+              },
+              "4": {
+                "cost": 0,
+                "availability": 0,
+                "powerPointCost": 2
+              },
+              "5": {
+                "cost": 0,
+                "availability": 0,
+                "powerPointCost": 2.5
+              },
+              "6": {
+                "cost": 0,
+                "availability": 0,
+                "powerPointCost": 3
+              }
+            }
           },
           {
             "id": "critical-strike",
             "name": "Critical Strike",
-            "cost": 0.5,
-            "costType": "fixed",
             "requiresSkill": true,
             "validSkills": [
               "unarmed-combat",
@@ -277,29 +350,92 @@
               "blades",
               "astral-combat"
             ],
-            "description": "+1 DV with the selected melee skill. May purchase multiple times for different skills."
+            "description": "+1 DV with the selected melee skill. May purchase multiple times for different skills.",
+            "powerPointCost": 0.5
           },
           {
             "id": "danger-sense",
             "name": "Danger Sense",
-            "cost": 0.25,
-            "costType": "perLevel",
-            "maxLevel": 6,
-            "description": "+1 die per level on Surprise Tests."
+            "description": "+1 die per level on Surprise Tests.",
+            "hasRating": true,
+            "minRating": 1,
+            "maxRating": 6,
+            "ratings": {
+              "1": {
+                "cost": 0,
+                "availability": 0,
+                "powerPointCost": 0.25
+              },
+              "2": {
+                "cost": 0,
+                "availability": 0,
+                "powerPointCost": 0.5
+              },
+              "3": {
+                "cost": 0,
+                "availability": 0,
+                "powerPointCost": 0.75
+              },
+              "4": {
+                "cost": 0,
+                "availability": 0,
+                "powerPointCost": 1
+              },
+              "5": {
+                "cost": 0,
+                "availability": 0,
+                "powerPointCost": 1.25
+              },
+              "6": {
+                "cost": 0,
+                "availability": 0,
+                "powerPointCost": 1.5
+              }
+            }
           },
           {
             "id": "enhanced-perception",
             "name": "Enhanced Perception",
-            "cost": 0.5,
-            "costType": "perLevel",
-            "maxLevel": 6,
-            "description": "+1 die per level to all Perception and Assensing Tests."
+            "description": "+1 die per level to all Perception and Assensing Tests.",
+            "hasRating": true,
+            "minRating": 1,
+            "maxRating": 6,
+            "ratings": {
+              "1": {
+                "cost": 0,
+                "availability": 0,
+                "powerPointCost": 0.5
+              },
+              "2": {
+                "cost": 0,
+                "availability": 0,
+                "powerPointCost": 1
+              },
+              "3": {
+                "cost": 0,
+                "availability": 0,
+                "powerPointCost": 1.5
+              },
+              "4": {
+                "cost": 0,
+                "availability": 0,
+                "powerPointCost": 2
+              },
+              "5": {
+                "cost": 0,
+                "availability": 0,
+                "powerPointCost": 2.5
+              },
+              "6": {
+                "cost": 0,
+                "availability": 0,
+                "powerPointCost": 3
+              }
+            }
           },
           {
             "id": "enhanced-accuracy",
             "name": "Enhanced Accuracy",
-            "cost": 0.25,
-            "costType": "fixed",
             "requiresSkill": true,
             "validSkills": [
               "pistols",
@@ -311,23 +447,53 @@
               "throwing-weapons",
               "archery"
             ],
-            "description": "+1 Accuracy with the selected Combat Skill. Cannot use with Unarmed Combat."
+            "description": "+1 Accuracy with the selected Combat Skill. Cannot use with Unarmed Combat.",
+            "powerPointCost": 0.25
           },
           {
             "id": "improved-ability",
             "name": "Improved Ability",
-            "cost": 0.5,
-            "costType": "perLevel",
-            "maxLevel": 6,
             "requiresSkill": true,
-            "description": "+1 skill rating per level. Max improvement = current skill × 1.5 (round up). Must know the skill."
+            "description": "+1 skill rating per level. Max improvement = current skill × 1.5 (round up). Must know the skill.",
+            "hasRating": true,
+            "minRating": 1,
+            "maxRating": 6,
+            "ratings": {
+              "1": {
+                "cost": 0,
+                "availability": 0,
+                "powerPointCost": 0.5
+              },
+              "2": {
+                "cost": 0,
+                "availability": 0,
+                "powerPointCost": 1
+              },
+              "3": {
+                "cost": 0,
+                "availability": 0,
+                "powerPointCost": 1.5
+              },
+              "4": {
+                "cost": 0,
+                "availability": 0,
+                "powerPointCost": 2
+              },
+              "5": {
+                "cost": 0,
+                "availability": 0,
+                "powerPointCost": 2.5
+              },
+              "6": {
+                "cost": 0,
+                "availability": 0,
+                "powerPointCost": 3
+              }
+            }
           },
           {
             "id": "improved-physical-attribute",
             "name": "Improved Physical Attribute",
-            "cost": 1,
-            "costType": "perLevel",
-            "maxLevel": 4,
             "requiresAttribute": true,
             "validAttributes": [
               "body",
@@ -335,28 +501,62 @@
               "reaction",
               "strength"
             ],
-            "description": "Permanently increase a Physical Attribute by 1 per level, up to augmented maximum."
+            "description": "Permanently increase a Physical Attribute by 1 per level, up to augmented maximum.",
+            "hasRating": true,
+            "minRating": 1,
+            "maxRating": 4,
+            "ratings": {
+              "1": {
+                "cost": 0,
+                "availability": 0,
+                "powerPointCost": 1
+              },
+              "2": {
+                "cost": 0,
+                "availability": 0,
+                "powerPointCost": 2
+              },
+              "3": {
+                "cost": 0,
+                "availability": 0,
+                "powerPointCost": 3
+              },
+              "4": {
+                "cost": 0,
+                "availability": 0,
+                "powerPointCost": 4
+              }
+            }
           },
           {
             "id": "improved-potential",
             "name": "Improved Potential",
-            "cost": 0.5,
-            "costType": "perLevel",
-            "maxLevel": 2,
             "requiresLimit": true,
             "validLimits": [
               "physical",
               "mental",
               "social"
             ],
-            "description": "Raise one inherent limit by 1 per level. May purchase once per limit."
+            "description": "Raise one inherent limit by 1 per level. May purchase once per limit.",
+            "hasRating": true,
+            "minRating": 1,
+            "maxRating": 2,
+            "ratings": {
+              "1": {
+                "cost": 0,
+                "availability": 0,
+                "powerPointCost": 0.5
+              },
+              "2": {
+                "cost": 0,
+                "availability": 0,
+                "powerPointCost": 1
+              }
+            }
           },
           {
             "id": "improved-reflexes",
             "name": "Improved Reflexes",
-            "cost": null,
-            "costType": "table",
-            "maxLevel": 3,
             "levels": [
               {
                 "level": 1,
@@ -379,8 +579,6 @@
           {
             "id": "improved-sense",
             "name": "Improved Sense",
-            "cost": 0.25,
-            "costType": "fixed",
             "variants": [
               {
                 "id": "low-light-vision",
@@ -409,103 +607,314 @@
                 "name": "Human Scale"
               }
             ],
-            "description": "Gain a sensory enhancement not normal for your metatype."
+            "description": "Gain a sensory enhancement not normal for your metatype.",
+            "powerPointCost": 0.25
           },
           {
             "id": "killing-hands",
             "name": "Killing Hands",
-            "cost": 0.5,
-            "costType": "fixed",
             "activation": "free",
-            "description": "Unarmed attacks may cause Physical damage. Attacks are magical and bypass Immunity to Normal Weapons."
+            "description": "Unarmed attacks may cause Physical damage. Attacks are magical and bypass Immunity to Normal Weapons.",
+            "powerPointCost": 0.5
           },
           {
             "id": "kinesics",
             "name": "Kinesics",
-            "cost": 0.25,
-            "costType": "perLevel",
-            "maxLevel": 4,
-            "description": "+1 per level to resist Social Tests and tests to read emotions (Judge Intentions, assensing, etc.)."
+            "description": "+1 per level to resist Social Tests and tests to read emotions (Judge Intentions, assensing, etc.).",
+            "hasRating": true,
+            "minRating": 1,
+            "maxRating": 4,
+            "ratings": {
+              "1": {
+                "cost": 0,
+                "availability": 0,
+                "powerPointCost": 0.25
+              },
+              "2": {
+                "cost": 0,
+                "availability": 0,
+                "powerPointCost": 0.5
+              },
+              "3": {
+                "cost": 0,
+                "availability": 0,
+                "powerPointCost": 0.75
+              },
+              "4": {
+                "cost": 0,
+                "availability": 0,
+                "powerPointCost": 1
+              }
+            }
           },
           {
             "id": "light-body",
             "name": "Light Body",
-            "cost": 0.25,
-            "costType": "perLevel",
-            "maxLevel": 4,
-            "description": "Add level to Agility for jump distance. +1 die per level to Gymnastics for jumps. Reduce fall damage by level meters."
+            "description": "Add level to Agility for jump distance. +1 die per level to Gymnastics for jumps. Reduce fall damage by level meters.",
+            "hasRating": true,
+            "minRating": 1,
+            "maxRating": 4,
+            "ratings": {
+              "1": {
+                "cost": 0,
+                "availability": 0,
+                "powerPointCost": 0.25
+              },
+              "2": {
+                "cost": 0,
+                "availability": 0,
+                "powerPointCost": 0.5
+              },
+              "3": {
+                "cost": 0,
+                "availability": 0,
+                "powerPointCost": 0.75
+              },
+              "4": {
+                "cost": 0,
+                "availability": 0,
+                "powerPointCost": 1
+              }
+            }
           },
           {
             "id": "missile-parry",
             "name": "Missile Parry",
-            "cost": 0.25,
-            "costType": "perLevel",
-            "maxLevel": 4,
             "activation": "interrupt",
-            "description": "+1 defense die per level vs slow projectiles (arrows, knives, grenades). Net hits = catch missile."
+            "description": "+1 defense die per level vs slow projectiles (arrows, knives, grenades). Net hits = catch missile.",
+            "hasRating": true,
+            "minRating": 1,
+            "maxRating": 4,
+            "ratings": {
+              "1": {
+                "cost": 0,
+                "availability": 0,
+                "powerPointCost": 0.25
+              },
+              "2": {
+                "cost": 0,
+                "availability": 0,
+                "powerPointCost": 0.5
+              },
+              "3": {
+                "cost": 0,
+                "availability": 0,
+                "powerPointCost": 0.75
+              },
+              "4": {
+                "cost": 0,
+                "availability": 0,
+                "powerPointCost": 1
+              }
+            }
           },
           {
             "id": "mystic-armor",
             "name": "Mystic Armor",
-            "cost": 0.5,
-            "costType": "perLevel",
-            "maxLevel": 6,
-            "description": "+1 Armor per level. Stacks with other armor, no encumbrance. Protects in astral combat."
+            "description": "+1 Armor per level. Stacks with other armor, no encumbrance. Protects in astral combat.",
+            "hasRating": true,
+            "minRating": 1,
+            "maxRating": 6,
+            "ratings": {
+              "1": {
+                "cost": 0,
+                "availability": 0,
+                "powerPointCost": 0.5
+              },
+              "2": {
+                "cost": 0,
+                "availability": 0,
+                "powerPointCost": 1
+              },
+              "3": {
+                "cost": 0,
+                "availability": 0,
+                "powerPointCost": 1.5
+              },
+              "4": {
+                "cost": 0,
+                "availability": 0,
+                "powerPointCost": 2
+              },
+              "5": {
+                "cost": 0,
+                "availability": 0,
+                "powerPointCost": 2.5
+              },
+              "6": {
+                "cost": 0,
+                "availability": 0,
+                "powerPointCost": 3
+              }
+            }
           },
           {
             "id": "natural-immunity",
             "name": "Natural Immunity",
-            "cost": 0.25,
-            "costType": "perLevel",
-            "maxLevel": 4,
-            "description": "+1 die per level to resist toxins and disease."
+            "description": "+1 die per level to resist toxins and disease.",
+            "hasRating": true,
+            "minRating": 1,
+            "maxRating": 4,
+            "ratings": {
+              "1": {
+                "cost": 0,
+                "availability": 0,
+                "powerPointCost": 0.25
+              },
+              "2": {
+                "cost": 0,
+                "availability": 0,
+                "powerPointCost": 0.5
+              },
+              "3": {
+                "cost": 0,
+                "availability": 0,
+                "powerPointCost": 0.75
+              },
+              "4": {
+                "cost": 0,
+                "availability": 0,
+                "powerPointCost": 1
+              }
+            }
           },
           {
             "id": "pain-resistance",
             "name": "Pain Resistance",
-            "cost": 0.5,
-            "costType": "perLevel",
-            "maxLevel": 4,
-            "description": "Wound modifiers start 1 box later per level. +2 dice per level to resist torture/pain."
+            "description": "Wound modifiers start 1 box later per level. +2 dice per level to resist torture/pain.",
+            "hasRating": true,
+            "minRating": 1,
+            "maxRating": 4,
+            "ratings": {
+              "1": {
+                "cost": 0,
+                "availability": 0,
+                "powerPointCost": 0.5
+              },
+              "2": {
+                "cost": 0,
+                "availability": 0,
+                "powerPointCost": 1
+              },
+              "3": {
+                "cost": 0,
+                "availability": 0,
+                "powerPointCost": 1.5
+              },
+              "4": {
+                "cost": 0,
+                "availability": 0,
+                "powerPointCost": 2
+              }
+            }
           },
           {
             "id": "rapid-healing",
             "name": "Rapid Healing",
-            "cost": 0.5,
-            "costType": "perLevel",
-            "maxLevel": 4,
-            "description": "You recover from damage more quickly, magically healing yourself over periods of time. Add +1 die per level to your Body for Healing Tests. Also add +1 die per level to any tests made to heal you through magical or mundane means (such as a Heal spell or the First Aid skill), whether the attempt is made by you or another character."
+            "description": "You recover from damage more quickly, magically healing yourself over periods of time. Add +1 die per level to your Body for Healing Tests. Also add +1 die per level to any tests made to heal you through magical or mundane means (such as a Heal spell or the First Aid skill), whether the attempt is made by you or another character.",
+            "hasRating": true,
+            "minRating": 1,
+            "maxRating": 4,
+            "ratings": {
+              "1": {
+                "cost": 0,
+                "availability": 0,
+                "powerPointCost": 0.5
+              },
+              "2": {
+                "cost": 0,
+                "availability": 0,
+                "powerPointCost": 1
+              },
+              "3": {
+                "cost": 0,
+                "availability": 0,
+                "powerPointCost": 1.5
+              },
+              "4": {
+                "cost": 0,
+                "availability": 0,
+                "powerPointCost": 2
+              }
+            }
           },
           {
             "id": "spell-resistance",
             "name": "Spell Resistance",
-            "cost": 0.5,
-            "costType": "perLevel",
-            "maxLevel": 6,
-            "description": "+1 die per level to resist spells, rituals, preparations, and Innate Spell critter powers."
+            "description": "+1 die per level to resist spells, rituals, preparations, and Innate Spell critter powers.",
+            "hasRating": true,
+            "minRating": 1,
+            "maxRating": 6,
+            "ratings": {
+              "1": {
+                "cost": 0,
+                "availability": 0,
+                "powerPointCost": 0.5
+              },
+              "2": {
+                "cost": 0,
+                "availability": 0,
+                "powerPointCost": 1
+              },
+              "3": {
+                "cost": 0,
+                "availability": 0,
+                "powerPointCost": 1.5
+              },
+              "4": {
+                "cost": 0,
+                "availability": 0,
+                "powerPointCost": 2
+              },
+              "5": {
+                "cost": 0,
+                "availability": 0,
+                "powerPointCost": 2.5
+              },
+              "6": {
+                "cost": 0,
+                "availability": 0,
+                "powerPointCost": 3
+              }
+            }
           },
           {
             "id": "traceless-walk",
             "name": "Traceless Walk",
-            "cost": 1,
-            "costType": "fixed",
-            "description": "Leave no visible traces. -4 hearing Perception to detect. Don't trip pressure/vibration sensors. -2 to Track Tests."
+            "description": "Leave no visible traces. -4 hearing Perception to detect. Don't trip pressure/vibration sensors. -2 to Track Tests.",
+            "powerPointCost": 1
           },
           {
             "id": "voice-control",
             "name": "Voice Control",
-            "cost": 0.5,
-            "costType": "perLevel",
-            "maxLevel": 3,
-            "description": "Control voice pitch, tone, volume. +level to Impersonation. +level to Social limit."
+            "description": "Control voice pitch, tone, volume. +level to Impersonation. +level to Social limit.",
+            "hasRating": true,
+            "minRating": 1,
+            "maxRating": 3,
+            "ratings": {
+              "1": {
+                "cost": 0,
+                "availability": 0,
+                "powerPointCost": 0.5
+              },
+              "2": {
+                "cost": 0,
+                "availability": 0,
+                "powerPointCost": 1
+              },
+              "3": {
+                "cost": 0,
+                "availability": 0,
+                "powerPointCost": 1.5
+              }
+            }
           },
           {
             "id": "wall-running",
             "name": "Wall Running",
-            "cost": 0.5,
-            "costType": "fixed",
             "activation": "simple",
-            "description": "Run up vertical surfaces. Running + Strength [Magic] Test = meters climbed per action."
+            "description": "Run up vertical surfaces. Running + Strength [Magic] Test = meters climbed per action.",
+            "powerPointCost": 0.5
           }
         ]
       }
@@ -4684,41 +5093,43 @@
           {
             "id": "focused-concentration",
             "name": "Focused Concentration",
-            "karmaCost": 4,
-            "levels": [
-              {
-                "level": 1,
-                "name": "Rating 1",
-                "karma": 4
-              },
-              {
-                "level": 2,
-                "name": "Rating 2",
-                "karma": 8
-              },
-              {
-                "level": 3,
-                "name": "Rating 3",
-                "karma": 12
-              },
-              {
-                "level": 4,
-                "name": "Rating 4",
-                "karma": 16
-              },
-              {
-                "level": 5,
-                "name": "Rating 5",
-                "karma": 20
-              },
-              {
-                "level": 6,
-                "name": "Rating 6",
-                "karma": 24
-              }
-            ],
             "summary": "Sustain one spell/complex form equal to rating without penalty.",
-            "requiresMagic": true
+            "requiresMagic": true,
+            "hasRating": true,
+            "minRating": 1,
+            "maxRating": 6,
+            "ratings": {
+              "1": {
+                "cost": 0,
+                "availability": 0,
+                "karmaCost": 4
+              },
+              "2": {
+                "cost": 0,
+                "availability": 0,
+                "karmaCost": 8
+              },
+              "3": {
+                "cost": 0,
+                "availability": 0,
+                "karmaCost": 12
+              },
+              "4": {
+                "cost": 0,
+                "availability": 0,
+                "karmaCost": 16
+              },
+              "5": {
+                "cost": 0,
+                "availability": 0,
+                "karmaCost": 20
+              },
+              "6": {
+                "cost": 0,
+                "availability": 0,
+                "karmaCost": 24
+              }
+            }
           },
           {
             "id": "gearhead",
@@ -4735,24 +5146,6 @@
           {
             "id": "high-pain-tolerance",
             "name": "High Pain Tolerance",
-            "karmaCost": 7,
-            "levels": [
-              {
-                "level": 1,
-                "name": "Rating 1",
-                "karma": 7
-              },
-              {
-                "level": 2,
-                "name": "Rating 2",
-                "karma": 14
-              },
-              {
-                "level": 3,
-                "name": "Rating 3",
-                "karma": 21
-              }
-            ],
             "summary": "Ignore 1 wound modifier per rating.",
             "effects": [
               {
@@ -4765,7 +5158,27 @@
                 "value": "rating",
                 "description": "Ignore 1 point of wound modifiers per rating."
               }
-            ]
+            ],
+            "hasRating": true,
+            "minRating": 1,
+            "maxRating": 3,
+            "ratings": {
+              "1": {
+                "cost": 0,
+                "availability": 0,
+                "karmaCost": 7
+              },
+              "2": {
+                "cost": 0,
+                "availability": 0,
+                "karmaCost": 14
+              },
+              "3": {
+                "cost": 0,
+                "availability": 0,
+                "karmaCost": 21
+              }
+            }
           },
           {
             "id": "home-ground",
@@ -4784,25 +5197,27 @@
           {
             "id": "indomitable",
             "name": "Indomitable",
-            "karmaCost": 8,
-            "levels": [
-              {
-                "level": 1,
-                "name": "Level 1",
-                "karma": 8
+            "summary": "+1 to Inherent Limits per level (Mental, Physical, or Social).",
+            "hasRating": true,
+            "minRating": 1,
+            "maxRating": 3,
+            "ratings": {
+              "1": {
+                "cost": 0,
+                "availability": 0,
+                "karmaCost": 8
               },
-              {
-                "level": 2,
-                "name": "Level 2",
-                "karma": 16
+              "2": {
+                "cost": 0,
+                "availability": 0,
+                "karmaCost": 16
               },
-              {
-                "level": 3,
-                "name": "Level 3",
-                "karma": 24
+              "3": {
+                "cost": 0,
+                "availability": 0,
+                "karmaCost": 24
               }
-            ],
-            "summary": "+1 to Inherent Limits per level (Mental, Physical, or Social)."
+            }
           },
           {
             "id": "juryrigger",
@@ -4826,30 +5241,32 @@
           {
             "id": "magical-resistance",
             "name": "Magical Resistance",
-            "karmaCost": 6,
-            "levels": [
-              {
-                "level": 1,
-                "name": "Rating 1",
-                "karma": 6
+            "summary": "+1 die to Spell Resistance Tests per rating. Cannot be turned off.",
+            "hasRating": true,
+            "minRating": 1,
+            "maxRating": 4,
+            "ratings": {
+              "1": {
+                "cost": 0,
+                "availability": 0,
+                "karmaCost": 6
               },
-              {
-                "level": 2,
-                "name": "Rating 2",
-                "karma": 12
+              "2": {
+                "cost": 0,
+                "availability": 0,
+                "karmaCost": 12
               },
-              {
-                "level": 3,
-                "name": "Rating 3",
-                "karma": 18
+              "3": {
+                "cost": 0,
+                "availability": 0,
+                "karmaCost": 18
               },
-              {
-                "level": 4,
-                "name": "Rating 4",
-                "karma": 24
+              "4": {
+                "cost": 0,
+                "availability": 0,
+                "karmaCost": 24
               }
-            ],
-            "summary": "+1 die to Spell Resistance Tests per rating. Cannot be turned off."
+            }
           },
           {
             "id": "mentor-spirit",
@@ -4876,22 +5293,24 @@
           {
             "id": "natural-immunity",
             "name": "Natural Immunity",
-            "karmaCost": 4,
-            "levels": [
-              {
-                "level": 1,
-                "name": "Natural",
-                "karma": 4
-              },
-              {
-                "level": 2,
-                "name": "Synthetic",
-                "karma": 10
-              }
-            ],
             "summary": "Immunity to one specific disease or toxin.",
             "requiresSpecification": true,
-            "specificationLabel": "Disease/Toxin"
+            "specificationLabel": "Disease/Toxin",
+            "hasRating": true,
+            "minRating": 1,
+            "maxRating": 2,
+            "ratings": {
+              "1": {
+                "cost": 0,
+                "availability": 0,
+                "karmaCost": 4
+              },
+              "2": {
+                "cost": 0,
+                "availability": 0,
+                "karmaCost": 10
+              }
+            }
           },
           {
             "id": "photographic-memory",
@@ -4920,20 +5339,22 @@
           {
             "id": "resistance-pathogens-toxins",
             "name": "Resistance to Pathogens/Toxins",
-            "karmaCost": 4,
-            "levels": [
-              {
-                "level": 1,
-                "name": "One",
-                "karma": 4
+            "summary": "+1 dice pool modifier to Resistance Tests.",
+            "hasRating": true,
+            "minRating": 1,
+            "maxRating": 2,
+            "ratings": {
+              "1": {
+                "cost": 0,
+                "availability": 0,
+                "karmaCost": 4
               },
-              {
-                "level": 2,
-                "name": "Both",
-                "karma": 8
+              "2": {
+                "cost": 0,
+                "availability": 0,
+                "karmaCost": 8
               }
-            ],
-            "summary": "+1 dice pool modifier to Resistance Tests."
+            }
           },
           {
             "id": "spirit-affinity",
@@ -4959,25 +5380,27 @@
           {
             "id": "will-to-live",
             "name": "Will to Live",
-            "karmaCost": 3,
-            "levels": [
-              {
-                "level": 1,
-                "name": "Rating 1",
-                "karma": 3
+            "summary": "+1 Overflow box per rating.",
+            "hasRating": true,
+            "minRating": 1,
+            "maxRating": 3,
+            "ratings": {
+              "1": {
+                "cost": 0,
+                "availability": 0,
+                "karmaCost": 3
               },
-              {
-                "level": 2,
-                "name": "Rating 2",
-                "karma": 6
+              "2": {
+                "cost": 0,
+                "availability": 0,
+                "karmaCost": 6
               },
-              {
-                "level": 3,
-                "name": "Rating 3",
-                "karma": 9
+              "3": {
+                "cost": 0,
+                "availability": 0,
+                "karmaCost": 9
               }
-            ],
-            "summary": "+1 Overflow box per rating."
+            }
           }
         ],
         "negative": [
@@ -4988,28 +5411,31 @@
             "summary": "Physical or physiological dependence on a substance.",
             "requiresSpecification": true,
             "specificationLabel": "Substance",
-            "levels": [
-              {
-                "level": 1,
-                "name": "Mild",
-                "karma": 4
+            "hasRating": true,
+            "minRating": 1,
+            "maxRating": 4,
+            "ratings": {
+              "1": {
+                "cost": 0,
+                "availability": 0,
+                "karmaCost": 4
               },
-              {
-                "level": 2,
-                "name": "Moderate",
-                "karma": 9
+              "2": {
+                "cost": 0,
+                "availability": 0,
+                "karmaCost": 9
               },
-              {
-                "level": 3,
-                "name": "Severe",
-                "karma": 20
+              "3": {
+                "cost": 0,
+                "availability": 0,
+                "karmaCost": 20
               },
-              {
-                "level": 4,
-                "name": "Burnout",
-                "karma": 25
+              "4": {
+                "cost": 0,
+                "availability": 0,
+                "karmaCost": 25
               }
-            ]
+            }
           },
           {
             "id": "allergy",
@@ -5018,48 +5444,51 @@
             "summary": "Allergenic reaction to a substance or condition.",
             "requiresSpecification": true,
             "specificationLabel": "Allergen",
-            "levels": [
-              {
-                "level": 1,
-                "name": "Uncommon, Mild",
-                "karma": 5
+            "hasRating": true,
+            "minRating": 1,
+            "maxRating": 8,
+            "ratings": {
+              "1": {
+                "cost": 0,
+                "availability": 0,
+                "karmaCost": 5
               },
-              {
-                "level": 2,
-                "name": "Common, Mild",
-                "karma": 10
+              "2": {
+                "cost": 0,
+                "availability": 0,
+                "karmaCost": 10
               },
-              {
-                "level": 3,
-                "name": "Uncommon, Moderate",
-                "karma": 10
+              "3": {
+                "cost": 0,
+                "availability": 0,
+                "karmaCost": 10
               },
-              {
-                "level": 4,
-                "name": "Common, Moderate",
-                "karma": 15
+              "4": {
+                "cost": 0,
+                "availability": 0,
+                "karmaCost": 15
               },
-              {
-                "level": 5,
-                "name": "Uncommon, Severe",
-                "karma": 15
+              "5": {
+                "cost": 0,
+                "availability": 0,
+                "karmaCost": 15
               },
-              {
-                "level": 6,
-                "name": "Common, Severe",
-                "karma": 20
+              "6": {
+                "cost": 0,
+                "availability": 0,
+                "karmaCost": 20
               },
-              {
-                "level": 7,
-                "name": "Uncommon, Extreme",
-                "karma": 20
+              "7": {
+                "cost": 0,
+                "availability": 0,
+                "karmaCost": 20
               },
-              {
-                "level": 8,
-                "name": "Common, Extreme",
-                "karma": 25
+              "8": {
+                "cost": 0,
+                "availability": 0,
+                "karmaCost": 25
               }
-            ]
+            }
           },
           {
             "id": "astral-beacon",
@@ -5107,23 +5536,26 @@
             "name": "Dependents",
             "karmaBonus": 3,
             "summary": "Loved ones require time/resources. Increases lifestyle cost.",
-            "levels": [
-              {
-                "level": 1,
-                "name": "Low (10%)",
-                "karma": 3
+            "hasRating": true,
+            "minRating": 1,
+            "maxRating": 3,
+            "ratings": {
+              "1": {
+                "cost": 0,
+                "availability": 0,
+                "karmaCost": 3
               },
-              {
-                "level": 2,
-                "name": "Medium (20%)",
-                "karma": 6
+              "2": {
+                "cost": 0,
+                "availability": 0,
+                "karmaCost": 6
               },
-              {
-                "level": 3,
-                "name": "High (30%)",
-                "karma": 9
+              "3": {
+                "cost": 0,
+                "availability": 0,
+                "karmaCost": 9
               }
-            ]
+            }
           },
           {
             "id": "distinctive-style",
@@ -5143,29 +5575,32 @@
             "id": "gremlins",
             "name": "Gremlins",
             "karmaBonus": 4,
-            "levels": [
-              {
-                "level": 1,
-                "name": "Rating 1",
-                "karma": 4
+            "summary": "Tech malfunctions more around you.",
+            "hasRating": true,
+            "minRating": 1,
+            "maxRating": 4,
+            "ratings": {
+              "1": {
+                "cost": 0,
+                "availability": 0,
+                "karmaCost": 4
               },
-              {
-                "level": 2,
-                "name": "Rating 2",
-                "karma": 8
+              "2": {
+                "cost": 0,
+                "availability": 0,
+                "karmaCost": 8
               },
-              {
-                "level": 3,
-                "name": "Rating 3",
-                "karma": 12
+              "3": {
+                "cost": 0,
+                "availability": 0,
+                "karmaCost": 12
               },
-              {
-                "level": 4,
-                "name": "Rating 4",
-                "karma": 16
+              "4": {
+                "cost": 0,
+                "availability": 0,
+                "karmaCost": 16
               }
-            ],
-            "summary": "Tech malfunctions more around you."
+            }
           },
           {
             "id": "incompetent",
@@ -5179,19 +5614,22 @@
             "id": "insomnia",
             "name": "Insomnia",
             "karmaBonus": 10,
-            "levels": [
-              {
-                "level": 1,
-                "name": "Basic",
-                "karma": 10
+            "summary": "May double Stun recovery time. Severe causes chronic fatigue.",
+            "hasRating": true,
+            "minRating": 1,
+            "maxRating": 2,
+            "ratings": {
+              "1": {
+                "cost": 0,
+                "availability": 0,
+                "karmaCost": 10
               },
-              {
-                "level": 2,
-                "name": "Severe",
-                "karma": 15
+              "2": {
+                "cost": 0,
+                "availability": 0,
+                "karmaCost": 15
               }
-            ],
-            "summary": "May double Stun recovery time. Severe causes chronic fatigue."
+            }
           },
           {
             "id": "loss-of-confidence",
@@ -5217,41 +5655,44 @@
             "id": "prejudiced",
             "name": "Prejudiced",
             "karmaBonus": 3,
-            "levels": [
-              {
-                "level": 1,
-                "name": "Biased (Common)",
-                "karma": 3
-              },
-              {
-                "level": 2,
-                "name": "Biased (Specific)",
-                "karma": 5
-              },
-              {
-                "level": 3,
-                "name": "Outspoken (Common)",
-                "karma": 5
-              },
-              {
-                "level": 4,
-                "name": "Outspoken (Specific)",
-                "karma": 7
-              },
-              {
-                "level": 5,
-                "name": "Radical (Common)",
-                "karma": 8
-              },
-              {
-                "level": 6,
-                "name": "Radical (Specific)",
-                "karma": 10
-              }
-            ],
             "summary": "Bias against specific group. Social penalties.",
             "requiresSpecification": true,
-            "specificationLabel": "Target Group"
+            "specificationLabel": "Target Group",
+            "hasRating": true,
+            "minRating": 1,
+            "maxRating": 6,
+            "ratings": {
+              "1": {
+                "cost": 0,
+                "availability": 0,
+                "karmaCost": 3
+              },
+              "2": {
+                "cost": 0,
+                "availability": 0,
+                "karmaCost": 5
+              },
+              "3": {
+                "cost": 0,
+                "availability": 0,
+                "karmaCost": 5
+              },
+              "4": {
+                "cost": 0,
+                "availability": 0,
+                "karmaCost": 7
+              },
+              "5": {
+                "cost": 0,
+                "availability": 0,
+                "karmaCost": 8
+              },
+              "6": {
+                "cost": 0,
+                "availability": 0,
+                "karmaCost": 10
+              }
+            }
           },
           {
             "id": "scorched",
@@ -5277,29 +5718,32 @@
             "id": "sinner",
             "name": "SINner",
             "karmaBonus": 5,
-            "levels": [
-              {
-                "level": 1,
-                "name": "National",
-                "karma": 5
+            "summary": "Legal status and tax obligations.",
+            "hasRating": true,
+            "minRating": 1,
+            "maxRating": 4,
+            "ratings": {
+              "1": {
+                "cost": 0,
+                "availability": 0,
+                "karmaCost": 5
               },
-              {
-                "level": 2,
-                "name": "Criminal",
-                "karma": 10
+              "2": {
+                "cost": 0,
+                "availability": 0,
+                "karmaCost": 10
               },
-              {
-                "level": 3,
-                "name": "Corporate Limited",
-                "karma": 15
+              "3": {
+                "cost": 0,
+                "availability": 0,
+                "karmaCost": 15
               },
-              {
-                "level": 4,
-                "name": "Corporate Born",
-                "karma": 25
+              "4": {
+                "cost": 0,
+                "availability": 0,
+                "karmaCost": 25
               }
-            ],
-            "summary": "Legal status and tax obligations."
+            }
           },
           {
             "id": "social-stress",
@@ -7025,9 +7469,7 @@
             "name": "Chemical Protection",
             "category": "armorModification",
             "capacityCost": "[Rating]",
-            "ratingSpec": { "min": 1, "max": 6 },
             "availability": 6,
-            "costPerRating": 250,
             "description": "Provides protection against contact-vector chemical attacks."
           },
           {
@@ -7045,9 +7487,7 @@
             "name": "Fire Resistance",
             "category": "armorModification",
             "capacityCost": "[Rating]",
-            "ratingSpec": { "min": 1, "max": 6 },
             "availability": 6,
-            "costPerRating": 250,
             "description": "Provides protection against fire and heat damage."
           },
           {
@@ -7055,9 +7495,7 @@
             "name": "Insulation",
             "category": "armorModification",
             "capacityCost": "[Rating]",
-            "ratingSpec": { "min": 1, "max": 6 },
             "availability": 6,
-            "costPerRating": 250,
             "description": "Provides protection against cold damage."
           },
           {
@@ -7065,9 +7503,7 @@
             "name": "Nonconductivity",
             "category": "armorModification",
             "capacityCost": "[Rating]",
-            "ratingSpec": { "min": 1, "max": 6 },
             "availability": 6,
-            "costPerRating": 250,
             "description": "Provides protection against electrical damage."
           },
           {
@@ -7085,10 +7521,8 @@
             "name": "Thermal Damping",
             "category": "armorModification",
             "capacityCost": "[Rating]",
-            "ratingSpec": { "min": 1, "max": 6 },
             "availability": 10,
             "legality": "restricted",
-            "costPerRating": 500,
             "description": "Masks the wearer's thermal signature from thermographic vision."
           }
         ],
@@ -7292,51 +7726,57 @@
             "id": "area-jammer",
             "name": "Area Jammer",
             "category": "electronics",
-            "cost": 200,
-            "availability": 3,
             "hasRating": true,
             "maxRating": 6,
-            "costPerRating": true,
-            "ratingSpec": {
-              "rating": {
-                "hasRating": true,
-                "minRating": 1,
-                "maxRating": 6
-              },
-              "costScaling": {
-                "baseValue": 200,
-                "perRating": true
-              },
-              "availabilityScaling": {
-                "baseValue": 3,
-                "perRating": true
-              }
-            },
             "description": "Jams wireless signals in an area. Generates noise equal to its rating. Rating reduced by 1 per 5m from center.",
-            "legality": "forbidden"
+            "legality": "forbidden",
+            "minRating": 1,
+            "ratings": {
+              "1": {
+                "cost": 200,
+                "availability": 3
+              },
+              "2": {
+                "cost": 400,
+                "availability": 6
+              },
+              "3": {
+                "cost": 600,
+                "availability": 9
+              },
+              "4": {
+                "cost": 800,
+                "availability": 12
+              },
+              "5": {
+                "cost": 1000,
+                "availability": 15
+              },
+              "6": {
+                "cost": 1200,
+                "availability": 18
+              }
+            }
           },
           {
             "id": "binoculars",
             "name": "Binoculars",
             "category": "electronics",
-            "cost": 50,
-            "availability": 0,
             "hasRating": true,
             "maxRating": 3,
-            "costPerRating": true,
-            "ratingSpec": {
-              "rating": {
-                "hasRating": true,
-                "minRating": 1,
-                "maxRating": 3
+            "minRating": 1,
+            "ratings": {
+              "1": {
+                "cost": 50,
+                "availability": 0
               },
-              "costScaling": {
-                "baseValue": 50,
-                "perRating": true
+              "2": {
+                "cost": 100,
+                "availability": 0
               },
-              "availabilityScaling": {
-                "baseValue": 0,
-                "perRating": false
+              "3": {
+                "cost": 150,
+                "availability": 0
               }
             }
           },
@@ -7351,52 +7791,69 @@
             "id": "bug-scanner",
             "name": "Bug Scanner",
             "category": "electronics",
-            "cost": 100,
-            "availability": 1,
             "hasRating": true,
             "maxRating": 6,
-            "costPerRating": true,
             "description": "Detects surveillance devices (Rating 1-6).",
-            "ratingSpec": {
-              "rating": {
-                "hasRating": true,
-                "minRating": 1,
-                "maxRating": 6
+            "legality": "restricted",
+            "minRating": 1,
+            "ratings": {
+              "1": {
+                "cost": 100,
+                "availability": 1
               },
-              "costScaling": {
-                "baseValue": 100,
-                "perRating": true
+              "2": {
+                "cost": 200,
+                "availability": 2
               },
-              "availabilityScaling": {
-                "baseValue": 1,
-                "perRating": true,
-                "suffix": "R"
+              "3": {
+                "cost": 300,
+                "availability": 3
+              },
+              "4": {
+                "cost": 400,
+                "availability": 4
+              },
+              "5": {
+                "cost": 500,
+                "availability": 5
+              },
+              "6": {
+                "cost": 600,
+                "availability": 6
               }
-            },
-            "legality": "restricted"
+            }
           },
           {
             "id": "camera",
             "name": "Camera",
             "category": "electronics",
-            "cost": 100,
-            "availability": 0,
             "hasRating": true,
             "maxRating": 6,
-            "costPerRating": true,
-            "ratingSpec": {
-              "rating": {
-                "hasRating": true,
-                "minRating": 1,
-                "maxRating": 6
+            "minRating": 1,
+            "ratings": {
+              "1": {
+                "cost": 100,
+                "availability": 0
               },
-              "costScaling": {
-                "baseValue": 100,
-                "perRating": true
+              "2": {
+                "cost": 200,
+                "availability": 0
               },
-              "availabilityScaling": {
-                "baseValue": 0,
-                "perRating": false
+              "3": {
+                "cost": 300,
+                "availability": 0
+              },
+              "4": {
+                "cost": 400,
+                "availability": 0
+              },
+              "5": {
+                "cost": 500,
+                "availability": 0
+              },
+              "6": {
+                "cost": 600,
+                "availability": 0
               }
             }
           },
@@ -7412,52 +7869,69 @@
             "id": "directional-jammer",
             "name": "Directional Jammer",
             "category": "electronics",
-            "cost": 200,
-            "availability": 2,
             "hasRating": true,
             "maxRating": 6,
-            "costPerRating": true,
             "description": "Jams wireless signals in a cone (Rating 1-6).",
-            "ratingSpec": {
-              "rating": {
-                "hasRating": true,
-                "minRating": 1,
-                "maxRating": 6
+            "legality": "forbidden",
+            "minRating": 1,
+            "ratings": {
+              "1": {
+                "cost": 200,
+                "availability": 2
               },
-              "costScaling": {
-                "baseValue": 200,
-                "perRating": true
+              "2": {
+                "cost": 400,
+                "availability": 4
               },
-              "availabilityScaling": {
-                "baseValue": 2,
-                "perRating": true,
-                "suffix": "F"
+              "3": {
+                "cost": 600,
+                "availability": 6
+              },
+              "4": {
+                "cost": 800,
+                "availability": 8
+              },
+              "5": {
+                "cost": 1000,
+                "availability": 10
+              },
+              "6": {
+                "cost": 1200,
+                "availability": 12
               }
-            },
-            "legality": "forbidden"
+            }
           },
           {
             "id": "directional-mic",
             "name": "Directional mic",
             "category": "electronics",
-            "cost": 50,
-            "availability": 4,
             "hasRating": true,
             "maxRating": 6,
-            "costPerRating": true,
-            "ratingSpec": {
-              "rating": {
-                "hasRating": true,
-                "minRating": 1,
-                "maxRating": 6
+            "minRating": 1,
+            "ratings": {
+              "1": {
+                "cost": 50,
+                "availability": 4
               },
-              "costScaling": {
-                "baseValue": 50,
-                "perRating": true
+              "2": {
+                "cost": 100,
+                "availability": 4
               },
-              "availabilityScaling": {
-                "baseValue": 4,
-                "perRating": false
+              "3": {
+                "cost": 150,
+                "availability": 4
+              },
+              "4": {
+                "cost": 200,
+                "availability": 4
+              },
+              "5": {
+                "cost": 250,
+                "availability": 4
+              },
+              "6": {
+                "cost": 300,
+                "availability": 4
               }
             }
           },
@@ -7465,24 +7939,33 @@
             "id": "goggles",
             "name": "Goggles",
             "category": "electronics",
-            "cost": 50,
-            "availability": 0,
             "hasRating": true,
             "maxRating": 6,
-            "costPerRating": true,
-            "ratingSpec": {
-              "rating": {
-                "hasRating": true,
-                "minRating": 1,
-                "maxRating": 6
+            "minRating": 1,
+            "ratings": {
+              "1": {
+                "cost": 50,
+                "availability": 0
               },
-              "costScaling": {
-                "baseValue": 50,
-                "perRating": true
+              "2": {
+                "cost": 100,
+                "availability": 0
               },
-              "availabilityScaling": {
-                "baseValue": 0,
-                "perRating": false
+              "3": {
+                "cost": 150,
+                "availability": 0
+              },
+              "4": {
+                "cost": 200,
+                "availability": 0
+              },
+              "5": {
+                "cost": 250,
+                "availability": 0
+              },
+              "6": {
+                "cost": 300,
+                "availability": 0
               }
             }
           },
@@ -7490,27 +7973,36 @@
             "id": "headphones",
             "name": "Headphones",
             "category": "audio-devices",
-            "cost": 50,
-            "availability": 0,
             "hasRating": true,
             "maxRating": 6,
-            "costPerRating": true,
             "capacity": 1,
             "capacityPerRating": true,
             "description": "Over-ear audio device.",
-            "ratingSpec": {
-              "rating": {
-                "hasRating": true,
-                "minRating": 1,
-                "maxRating": 6
+            "minRating": 1,
+            "ratings": {
+              "1": {
+                "cost": 50,
+                "availability": 0
               },
-              "costScaling": {
-                "baseValue": 50,
-                "perRating": true
+              "2": {
+                "cost": 100,
+                "availability": 0
               },
-              "availabilityScaling": {
-                "baseValue": 0,
-                "perRating": false
+              "3": {
+                "cost": 150,
+                "availability": 0
+              },
+              "4": {
+                "cost": 200,
+                "availability": 0
+              },
+              "5": {
+                "cost": 250,
+                "availability": 0
+              },
+              "6": {
+                "cost": 300,
+                "availability": 0
               }
             }
           },
@@ -7518,50 +8010,49 @@
             "id": "laser-microphone",
             "name": "Laser Microphone",
             "category": "electronics",
-            "cost": 100,
-            "availability": 6,
             "hasRating": true,
             "maxRating": 6,
-            "costPerRating": true,
             "description": "Long-range audio surveillance (Capacity 1-6).",
-            "ratingSpec": {
-              "rating": {
-                "hasRating": true,
-                "minRating": 1,
-                "maxRating": 6
+            "legality": "restricted",
+            "minRating": 1,
+            "ratings": {
+              "1": {
+                "cost": 100,
+                "availability": 6
               },
-              "costScaling": {
-                "baseValue": 100,
-                "perRating": true
+              "2": {
+                "cost": 200,
+                "availability": 6
               },
-              "availabilityScaling": {
-                "baseValue": 6,
-                "perRating": false
+              "3": {
+                "cost": 300,
+                "availability": 6
+              },
+              "4": {
+                "cost": 400,
+                "availability": 6
+              },
+              "5": {
+                "cost": 500,
+                "availability": 6
+              },
+              "6": {
+                "cost": 600,
+                "availability": 6
               }
-            },
-            "legality": "restricted"
+            }
           },
           {
             "id": "micro-camera",
             "name": "Micro-Camera",
             "category": "electronics",
-            "cost": 100,
-            "availability": 0,
             "hasRating": true,
             "maxRating": 1,
-            "ratingSpec": {
-              "rating": {
-                "hasRating": true,
-                "minRating": 1,
-                "maxRating": 1
-              },
-              "costScaling": {
-                "baseValue": 100,
-                "perRating": false
-              },
-              "availabilityScaling": {
-                "baseValue": 0,
-                "perRating": false
+            "minRating": 1,
+            "ratings": {
+              "1": {
+                "cost": 100,
+                "availability": 0
               }
             }
           },
@@ -7577,50 +8068,60 @@
             "id": "monocle",
             "name": "Monocle",
             "category": "electronics",
-            "cost": 3000,
-            "availability": 12,
             "hasRating": true,
             "maxRating": 4,
-            "costPerRating": true,
-            "ratingSpec": {
-              "rating": {
-                "hasRating": true,
-                "minRating": 1,
-                "maxRating": 4
+            "legality": "restricted",
+            "minRating": 1,
+            "ratings": {
+              "1": {
+                "cost": 3000,
+                "availability": 12
               },
-              "costScaling": {
-                "baseValue": 3000,
-                "perRating": true
+              "2": {
+                "cost": 6000,
+                "availability": 12
               },
-              "availabilityScaling": {
-                "baseValue": 12,
-                "perRating": false
+              "3": {
+                "cost": 9000,
+                "availability": 12
+              },
+              "4": {
+                "cost": 12000,
+                "availability": 12
               }
-            },
-            "legality": "restricted"
+            }
           },
           {
             "id": "omni-directional-mic",
             "name": "Omni-directional mic",
             "category": "electronics",
-            "cost": 50,
-            "availability": 0,
             "hasRating": true,
             "maxRating": 6,
-            "costPerRating": true,
-            "ratingSpec": {
-              "rating": {
-                "hasRating": true,
-                "minRating": 1,
-                "maxRating": 6
+            "minRating": 1,
+            "ratings": {
+              "1": {
+                "cost": 50,
+                "availability": 0
               },
-              "costScaling": {
-                "baseValue": 50,
-                "perRating": true
+              "2": {
+                "cost": 100,
+                "availability": 0
               },
-              "availabilityScaling": {
-                "baseValue": 0,
-                "perRating": false
+              "3": {
+                "cost": 150,
+                "availability": 0
+              },
+              "4": {
+                "cost": 200,
+                "availability": 0
+              },
+              "5": {
+                "cost": 250,
+                "availability": 0
+              },
+              "6": {
+                "cost": 300,
+                "availability": 0
               }
             }
           },
@@ -7644,53 +8145,70 @@
             "id": "headjammer",
             "name": "Headjammer",
             "category": "electronics",
-            "cost": 150,
-            "availability": 1,
             "hasRating": true,
             "maxRating": 6,
-            "costPerRating": true,
             "description": "Personal wireless jammer worn on the head (Rating 1-6).",
-            "ratingSpec": {
-              "rating": {
-                "hasRating": true,
-                "minRating": 1,
-                "maxRating": 6
+            "legality": "restricted",
+            "minRating": 1,
+            "ratings": {
+              "1": {
+                "cost": 150,
+                "availability": 1
               },
-              "costScaling": {
-                "baseValue": 150,
-                "perRating": true
+              "2": {
+                "cost": 300,
+                "availability": 2
               },
-              "availabilityScaling": {
-                "baseValue": 1,
-                "perRating": true,
-                "suffix": "R"
+              "3": {
+                "cost": 450,
+                "availability": 3
+              },
+              "4": {
+                "cost": 600,
+                "availability": 4
+              },
+              "5": {
+                "cost": 750,
+                "availability": 5
+              },
+              "6": {
+                "cost": 900,
+                "availability": 6
               }
-            },
-            "legality": "restricted"
+            }
           },
           {
             "id": "white-noise-generator",
             "name": "White Noise Generator",
             "category": "electronics",
-            "cost": 50,
-            "availability": 1,
             "hasRating": true,
             "maxRating": 6,
-            "costPerRating": true,
             "description": "Prevents audio surveillance (Rating 1-6).",
-            "ratingSpec": {
-              "rating": {
-                "hasRating": true,
-                "minRating": 1,
-                "maxRating": 6
+            "minRating": 1,
+            "ratings": {
+              "1": {
+                "cost": 50,
+                "availability": 1
               },
-              "costScaling": {
-                "baseValue": 50,
-                "perRating": true
+              "2": {
+                "cost": 100,
+                "availability": 2
               },
-              "availabilityScaling": {
-                "baseValue": 1,
-                "perRating": true
+              "3": {
+                "cost": 150,
+                "availability": 3
+              },
+              "4": {
+                "cost": 200,
+                "availability": 4
+              },
+              "5": {
+                "cost": 250,
+                "availability": 5
+              },
+              "6": {
+                "cost": 300,
+                "availability": 6
               }
             }
           }
@@ -7709,141 +8227,165 @@
             "id": "autopicker",
             "name": "Autopicker",
             "category": "tools",
-            "cost": 500,
-            "availability": 8,
             "hasRating": true,
             "maxRating": 6,
-            "costPerRating": true,
             "description": "Electronic lockpick (Rating 1-6).",
-            "ratingSpec": {
-              "rating": {
-                "hasRating": true,
-                "minRating": 1,
-                "maxRating": 6
+            "legality": "restricted",
+            "minRating": 1,
+            "ratings": {
+              "1": {
+                "cost": 500,
+                "availability": 8
               },
-              "costScaling": {
-                "baseValue": 500,
-                "perRating": true
+              "2": {
+                "cost": 1000,
+                "availability": 8
               },
-              "availabilityScaling": {
-                "baseValue": 8,
-                "perRating": false,
-                "suffix": "R"
+              "3": {
+                "cost": 1500,
+                "availability": 8
+              },
+              "4": {
+                "cost": 2000,
+                "availability": 8
+              },
+              "5": {
+                "cost": 2500,
+                "availability": 8
+              },
+              "6": {
+                "cost": 3000,
+                "availability": 8
               }
-            },
-            "legality": "restricted"
+            }
           },
           {
             "id": "sequencer",
             "name": "Sequencer",
             "category": "tools",
-            "cost": 250,
-            "availability": 3,
             "hasRating": true,
             "maxRating": 6,
-            "costPerRating": true,
             "description": "Bypasses electronic maglock keypads (Rating 1-6).",
-            "ratingSpec": {
-              "rating": {
-                "hasRating": true,
-                "minRating": 1,
-                "maxRating": 6
+            "legality": "forbidden",
+            "minRating": 1,
+            "ratings": {
+              "1": {
+                "cost": 250,
+                "availability": 3
               },
-              "costScaling": {
-                "baseValue": 250,
-                "perRating": true
+              "2": {
+                "cost": 500,
+                "availability": 6
               },
-              "availabilityScaling": {
-                "baseValue": 3,
-                "perRating": true,
-                "suffix": "F"
+              "3": {
+                "cost": 750,
+                "availability": 9
+              },
+              "4": {
+                "cost": 1000,
+                "availability": 12
+              },
+              "5": {
+                "cost": 1250,
+                "availability": 15
+              },
+              "6": {
+                "cost": 1500,
+                "availability": 18
               }
-            },
-            "legality": "forbidden"
+            }
           },
           {
             "id": "maglock-passkey",
             "name": "Maglock Passkey",
             "category": "tools",
-            "cost": 2000,
-            "availability": 3,
             "hasRating": true,
             "maxRating": 4,
-            "costPerRating": true,
             "description": "Universal electronic lock key (Rating 1-4).",
-            "ratingSpec": {
-              "rating": {
-                "hasRating": true,
-                "minRating": 1,
-                "maxRating": 4
+            "legality": "forbidden",
+            "minRating": 1,
+            "ratings": {
+              "1": {
+                "cost": 2000,
+                "availability": 3
               },
-              "costScaling": {
-                "baseValue": 2000,
-                "perRating": true
+              "2": {
+                "cost": 4000,
+                "availability": 6
               },
-              "availabilityScaling": {
-                "baseValue": 3,
-                "perRating": true,
-                "suffix": "F"
+              "3": {
+                "cost": 6000,
+                "availability": 9
+              },
+              "4": {
+                "cost": 8000,
+                "availability": 12
               }
-            },
-            "legality": "forbidden"
+            }
           },
           {
             "id": "cellular-glove-molder",
             "name": "Cellular Glove Molder",
             "category": "tools",
-            "cost": 500,
-            "availability": 12,
             "hasRating": true,
             "maxRating": 4,
-            "costPerRating": true,
             "description": "Creates fake fingerprints from scans (Rating 1-4).",
-            "ratingSpec": {
-              "rating": {
-                "hasRating": true,
-                "minRating": 1,
-                "maxRating": 4
+            "legality": "forbidden",
+            "minRating": 1,
+            "ratings": {
+              "1": {
+                "cost": 500,
+                "availability": 12
               },
-              "costScaling": {
-                "baseValue": 500,
-                "perRating": true
+              "2": {
+                "cost": 1000,
+                "availability": 12
               },
-              "availabilityScaling": {
-                "baseValue": 12,
-                "perRating": false,
-                "suffix": "F"
+              "3": {
+                "cost": 1500,
+                "availability": 12
+              },
+              "4": {
+                "cost": 2000,
+                "availability": 12
               }
-            },
-            "legality": "forbidden"
+            }
           },
           {
             "id": "keycard-copier",
             "name": "Keycard Copier",
             "category": "tools",
-            "cost": 600,
-            "availability": 8,
             "hasRating": true,
             "maxRating": 6,
-            "costPerRating": true,
             "description": "Copies electronic keycards (Rating 1-6).",
-            "ratingSpec": {
-              "rating": {
-                "hasRating": true,
-                "minRating": 1,
-                "maxRating": 6
+            "legality": "forbidden",
+            "minRating": 1,
+            "ratings": {
+              "1": {
+                "cost": 600,
+                "availability": 8
               },
-              "costScaling": {
-                "baseValue": 600,
-                "perRating": true
+              "2": {
+                "cost": 1200,
+                "availability": 8
               },
-              "availabilityScaling": {
-                "baseValue": 8,
-                "perRating": false,
-                "suffix": "F"
+              "3": {
+                "cost": 1800,
+                "availability": 8
+              },
+              "4": {
+                "cost": 2400,
+                "availability": 8
+              },
+              "5": {
+                "cost": 3000,
+                "availability": 8
+              },
+              "6": {
+                "cost": 3600,
+                "availability": 8
               }
-            },
-            "legality": "forbidden"
+            }
           },
           {
             "id": "hardware-toolkit",
@@ -7883,25 +8425,34 @@
             "id": "medkit",
             "name": "Medkit",
             "category": "tools",
-            "cost": 250,
-            "availability": 1,
             "hasRating": true,
             "maxRating": 6,
-            "costPerRating": true,
             "description": "Portable medical supplies (Rating 1-6).",
-            "ratingSpec": {
-              "rating": {
-                "hasRating": true,
-                "minRating": 1,
-                "maxRating": 6
+            "minRating": 1,
+            "ratings": {
+              "1": {
+                "cost": 250,
+                "availability": 1
               },
-              "costScaling": {
-                "baseValue": 250,
-                "perRating": true
+              "2": {
+                "cost": 500,
+                "availability": 2
               },
-              "availabilityScaling": {
-                "baseValue": 1,
-                "perRating": true
+              "3": {
+                "cost": 750,
+                "availability": 3
+              },
+              "4": {
+                "cost": 1000,
+                "availability": 4
+              },
+              "5": {
+                "cost": 1250,
+                "availability": 5
+              },
+              "6": {
+                "cost": 1500,
+                "availability": 6
               }
             }
           }
@@ -7911,25 +8462,34 @@
             "id": "chemsuit",
             "name": "Chemsuit",
             "category": "survival",
-            "cost": 150,
-            "availability": 2,
             "hasRating": true,
             "maxRating": 6,
-            "costPerRating": true,
             "description": "Protection from chemical hazards (Rating 1-6).",
-            "ratingSpec": {
-              "rating": {
-                "hasRating": true,
-                "minRating": 1,
-                "maxRating": 6
+            "minRating": 1,
+            "ratings": {
+              "1": {
+                "cost": 150,
+                "availability": 2
               },
-              "costScaling": {
-                "baseValue": 150,
-                "perRating": true
+              "2": {
+                "cost": 300,
+                "availability": 4
               },
-              "availabilityScaling": {
-                "baseValue": 2,
-                "perRating": true
+              "3": {
+                "cost": 450,
+                "availability": 6
+              },
+              "4": {
+                "cost": 600,
+                "availability": 8
+              },
+              "5": {
+                "cost": 750,
+                "availability": 10
+              },
+              "6": {
+                "cost": 900,
+                "availability": 12
               }
             }
           },
@@ -8002,25 +8562,34 @@
             "id": "respirator",
             "name": "Respirator",
             "category": "survival",
-            "cost": 50,
-            "availability": 0,
             "hasRating": true,
             "maxRating": 6,
-            "costPerRating": true,
             "description": "Air filtration mask (Rating 1-6).",
-            "ratingSpec": {
-              "rating": {
-                "hasRating": true,
-                "minRating": 1,
-                "maxRating": 6
+            "minRating": 1,
+            "ratings": {
+              "1": {
+                "cost": 50,
+                "availability": 0
               },
-              "costScaling": {
-                "baseValue": 50,
-                "perRating": true
+              "2": {
+                "cost": 100,
+                "availability": 0
               },
-              "availabilityScaling": {
-                "baseValue": 0,
-                "perRating": false
+              "3": {
+                "cost": 150,
+                "availability": 0
+              },
+              "4": {
+                "cost": 200,
+                "availability": 0
+              },
+              "5": {
+                "cost": 250,
+                "availability": 0
+              },
+              "6": {
+                "cost": 300,
+                "availability": 0
               }
             }
           },
@@ -8038,79 +8607,122 @@
             "id": "stim-patch",
             "name": "Stim Patch",
             "category": "medical",
-            "cost": 50,
-            "availability": 1,
             "hasRating": true,
             "maxRating": 6,
-            "costPerRating": true,
             "description": "Combats fatigue and injury effects (Rating 1-6).",
-            "ratingSpec": {
-              "rating": {
-                "hasRating": true,
-                "minRating": 1,
-                "maxRating": 6
+            "legality": "restricted",
+            "minRating": 1,
+            "ratings": {
+              "1": {
+                "cost": 50,
+                "availability": 1
               },
-              "costScaling": {
-                "baseValue": 50,
-                "perRating": true
+              "2": {
+                "cost": 100,
+                "availability": 2
               },
-              "availabilityScaling": {
-                "baseValue": 1,
-                "perRating": true
+              "3": {
+                "cost": 150,
+                "availability": 3
+              },
+              "4": {
+                "cost": 200,
+                "availability": 4
+              },
+              "5": {
+                "cost": 250,
+                "availability": 5
+              },
+              "6": {
+                "cost": 300,
+                "availability": 6
               }
-            },
-            "legality": "restricted"
+            }
           },
           {
             "id": "tranq-patch",
             "name": "Tranq Patch",
             "category": "medical",
-            "cost": 25,
-            "availability": 2,
             "hasRating": true,
             "maxRating": 10,
-            "costPerRating": true,
             "description": "Sedative patch (Rating 1-10).",
-            "ratingSpec": {
-              "rating": {
-                "hasRating": true,
-                "minRating": 1,
-                "maxRating": 10
+            "legality": "restricted",
+            "minRating": 1,
+            "ratings": {
+              "1": {
+                "cost": 25,
+                "availability": 2
               },
-              "costScaling": {
-                "baseValue": 25,
-                "perRating": true
+              "2": {
+                "cost": 50,
+                "availability": 4
               },
-              "availabilityScaling": {
-                "baseValue": 2,
-                "perRating": true
+              "3": {
+                "cost": 75,
+                "availability": 6
+              },
+              "4": {
+                "cost": 100,
+                "availability": 8
+              },
+              "5": {
+                "cost": 125,
+                "availability": 10
+              },
+              "6": {
+                "cost": 150,
+                "availability": 12
+              },
+              "7": {
+                "cost": 175,
+                "availability": 14
+              },
+              "8": {
+                "cost": 200,
+                "availability": 16
+              },
+              "9": {
+                "cost": 225,
+                "availability": 18
+              },
+              "10": {
+                "cost": 250,
+                "availability": 20
               }
-            },
-            "legality": "restricted"
+            }
           },
           {
             "id": "trauma-patch",
             "name": "Trauma Patch",
             "category": "medical",
-            "cost": 20,
-            "availability": 2,
             "hasRating": true,
             "maxRating": 6,
-            "costPerRating": true,
             "description": "Emergency stabilization patch (Rating 1-6).",
-            "ratingSpec": {
-              "rating": {
-                "hasRating": true,
-                "minRating": 1,
-                "maxRating": 6
+            "minRating": 1,
+            "ratings": {
+              "1": {
+                "cost": 20,
+                "availability": 2
               },
-              "costScaling": {
-                "baseValue": 20,
-                "perRating": true
+              "2": {
+                "cost": 40,
+                "availability": 4
               },
-              "availabilityScaling": {
-                "baseValue": 2,
-                "perRating": true
+              "3": {
+                "cost": 60,
+                "availability": 6
+              },
+              "4": {
+                "cost": 80,
+                "availability": 8
+              },
+              "5": {
+                "cost": 100,
+                "availability": 10
+              },
+              "6": {
+                "cost": 120,
+                "availability": 12
               }
             }
           },
@@ -8118,25 +8730,34 @@
             "id": "antidote-patch",
             "name": "Antidote Patch",
             "category": "medical",
-            "cost": 50,
-            "availability": 1,
             "hasRating": true,
             "maxRating": 6,
-            "costPerRating": true,
             "description": "Counteracts toxins (Rating 1-6).",
-            "ratingSpec": {
-              "rating": {
-                "hasRating": true,
-                "minRating": 1,
-                "maxRating": 6
+            "minRating": 1,
+            "ratings": {
+              "1": {
+                "cost": 50,
+                "availability": 1
               },
-              "costScaling": {
-                "baseValue": 50,
-                "perRating": true
+              "2": {
+                "cost": 100,
+                "availability": 2
               },
-              "availabilityScaling": {
-                "baseValue": 1,
-                "perRating": true
+              "3": {
+                "cost": 150,
+                "availability": 3
+              },
+              "4": {
+                "cost": 200,
+                "availability": 4
+              },
+              "5": {
+                "cost": 250,
+                "availability": 5
+              },
+              "6": {
+                "cost": 300,
+                "availability": 6
               }
             }
           },
@@ -8152,28 +8773,37 @@
             "id": "chem-patch",
             "name": "Chem Patch",
             "category": "medical",
-            "cost": 50,
-            "availability": 1,
             "hasRating": true,
             "maxRating": 6,
-            "costPerRating": true,
             "description": "Drug delivery patch (Rating 1-6).",
-            "ratingSpec": {
-              "rating": {
-                "hasRating": true,
-                "minRating": 1,
-                "maxRating": 6
+            "legality": "restricted",
+            "minRating": 1,
+            "ratings": {
+              "1": {
+                "cost": 50,
+                "availability": 1
               },
-              "costScaling": {
-                "baseValue": 50,
-                "perRating": true
+              "2": {
+                "cost": 100,
+                "availability": 2
               },
-              "availabilityScaling": {
-                "baseValue": 1,
-                "perRating": true
+              "3": {
+                "cost": 150,
+                "availability": 3
+              },
+              "4": {
+                "cost": 200,
+                "availability": 4
+              },
+              "5": {
+                "cost": 250,
+                "availability": 5
+              },
+              "6": {
+                "cost": 300,
+                "availability": 6
               }
-            },
-            "legality": "restricted"
+            }
           },
           {
             "id": "biomonitor",
@@ -8189,25 +8819,34 @@
             "id": "key-lock",
             "name": "Key/Combination Lock",
             "category": "security",
-            "cost": 10,
-            "availability": 1,
             "hasRating": true,
             "maxRating": 6,
-            "costPerRating": true,
             "description": "Mechanical key or combination lock (Rating 1-6).",
-            "ratingSpec": {
-              "rating": {
-                "hasRating": true,
-                "minRating": 1,
-                "maxRating": 6
+            "minRating": 1,
+            "ratings": {
+              "1": {
+                "cost": 10,
+                "availability": 1
               },
-              "costScaling": {
-                "baseValue": 10,
-                "perRating": true
+              "2": {
+                "cost": 20,
+                "availability": 2
               },
-              "availabilityScaling": {
-                "baseValue": 1,
-                "perRating": true
+              "3": {
+                "cost": 30,
+                "availability": 3
+              },
+              "4": {
+                "cost": 40,
+                "availability": 4
+              },
+              "5": {
+                "cost": 50,
+                "availability": 5
+              },
+              "6": {
+                "cost": 60,
+                "availability": 6
               }
             }
           },
@@ -8215,25 +8854,34 @@
             "id": "maglock",
             "name": "Maglock",
             "category": "security",
-            "cost": 100,
-            "availability": 1,
             "hasRating": true,
             "maxRating": 6,
-            "costPerRating": true,
             "description": "Electronic lock (Rating 1-6).",
-            "ratingSpec": {
-              "rating": {
-                "hasRating": true,
-                "minRating": 1,
-                "maxRating": 6
+            "minRating": 1,
+            "ratings": {
+              "1": {
+                "cost": 100,
+                "availability": 1
               },
-              "costScaling": {
-                "baseValue": 100,
-                "perRating": true
+              "2": {
+                "cost": 200,
+                "availability": 2
               },
-              "availabilityScaling": {
-                "baseValue": 1,
-                "perRating": true
+              "3": {
+                "cost": 300,
+                "availability": 3
+              },
+              "4": {
+                "cost": 400,
+                "availability": 4
+              },
+              "5": {
+                "cost": 500,
+                "availability": 5
+              },
+              "6": {
+                "cost": 600,
+                "availability": 6
               }
             }
           },
@@ -8241,25 +8889,26 @@
             "id": "anti-tamper-circuits",
             "name": "Anti-Tamper Circuits",
             "category": "security",
-            "cost": 250,
-            "availability": 1,
             "hasRating": true,
             "maxRating": 4,
-            "costPerRating": true,
             "description": "Maglock add-on that triggers alarms if tampered with (Rating 1-4).",
-            "ratingSpec": {
-              "rating": {
-                "hasRating": true,
-                "minRating": 1,
-                "maxRating": 4
+            "minRating": 1,
+            "ratings": {
+              "1": {
+                "cost": 250,
+                "availability": 1
               },
-              "costScaling": {
-                "baseValue": 250,
-                "perRating": true
+              "2": {
+                "cost": 500,
+                "availability": 2
               },
-              "availabilityScaling": {
-                "baseValue": 1,
-                "perRating": true
+              "3": {
+                "cost": 750,
+                "availability": 3
+              },
+              "4": {
+                "cost": 1000,
+                "availability": 4
               }
             }
           },
@@ -8284,25 +8933,34 @@
             "id": "motion-sensor",
             "name": "Motion Sensor",
             "category": "security",
-            "cost": 100,
-            "availability": 6,
             "hasRating": true,
             "maxRating": 6,
-            "costPerRating": true,
             "description": "Detects movement (Rating 1-6).",
-            "ratingSpec": {
-              "rating": {
-                "hasRating": true,
-                "minRating": 1,
-                "maxRating": 6
+            "minRating": 1,
+            "ratings": {
+              "1": {
+                "cost": 100,
+                "availability": 6
               },
-              "costScaling": {
-                "baseValue": 100,
-                "perRating": true
+              "2": {
+                "cost": 200,
+                "availability": 6
               },
-              "availabilityScaling": {
-                "baseValue": 6,
-                "perRating": false
+              "3": {
+                "cost": 300,
+                "availability": 6
+              },
+              "4": {
+                "cost": 400,
+                "availability": 6
+              },
+              "5": {
+                "cost": 500,
+                "availability": 6
+              },
+              "6": {
+                "cost": 600,
+                "availability": 6
               }
             }
           },
@@ -8344,79 +9002,94 @@
             "id": "fake-sin",
             "name": "Fake SIN",
             "category": "miscellaneous",
-            "cost": 2500,
-            "availability": 3,
             "hasRating": true,
             "maxRating": 6,
-            "costPerRating": true,
             "description": "Forged identity (Rating 1-6).",
-            "ratingSpec": {
-              "rating": {
-                "hasRating": true,
-                "minRating": 1,
-                "maxRating": 6
+            "legality": "forbidden",
+            "minRating": 1,
+            "ratings": {
+              "1": {
+                "cost": 2500,
+                "availability": 3
               },
-              "costScaling": {
-                "baseValue": 2500,
-                "perRating": true
+              "2": {
+                "cost": 5000,
+                "availability": 3
               },
-              "availabilityScaling": {
-                "baseValue": 3,
-                "perRating": false
+              "3": {
+                "cost": 7500,
+                "availability": 3
+              },
+              "4": {
+                "cost": 10000,
+                "availability": 3
+              },
+              "5": {
+                "cost": 12500,
+                "availability": 3
+              },
+              "6": {
+                "cost": 15000,
+                "availability": 3
               }
-            },
-            "legality": "forbidden"
+            }
           },
           {
             "id": "fake-license",
             "name": "Fake License",
             "category": "miscellaneous",
-            "cost": 200,
-            "availability": 3,
             "hasRating": true,
             "maxRating": 6,
-            "costPerRating": true,
             "description": "Forged permit or license (Rating 1-6).",
-            "ratingSpec": {
-              "rating": {
-                "hasRating": true,
-                "minRating": 1,
-                "maxRating": 6
+            "legality": "forbidden",
+            "minRating": 1,
+            "ratings": {
+              "1": {
+                "cost": 200,
+                "availability": 3
               },
-              "costScaling": {
-                "baseValue": 200,
-                "perRating": true
+              "2": {
+                "cost": 400,
+                "availability": 3
               },
-              "availabilityScaling": {
-                "baseValue": 3,
-                "perRating": false
+              "3": {
+                "cost": 600,
+                "availability": 3
+              },
+              "4": {
+                "cost": 800,
+                "availability": 3
+              },
+              "5": {
+                "cost": 1000,
+                "availability": 3
+              },
+              "6": {
+                "cost": 1200,
+                "availability": 3
               }
-            },
-            "legality": "forbidden"
+            }
           },
           {
             "id": "contacts-imagelink",
             "name": "Contacts w/ Image Link",
             "category": "miscellaneous",
-            "cost": 200,
-            "availability": 3,
             "description": "AR-enabled contact lenses.",
             "hasRating": true,
             "maxRating": 3,
-            "costPerRating": true,
-            "ratingSpec": {
-              "rating": {
-                "hasRating": true,
-                "minRating": 1,
-                "maxRating": 3
+            "minRating": 1,
+            "ratings": {
+              "1": {
+                "cost": 200,
+                "availability": 3
               },
-              "costScaling": {
-                "baseValue": 200,
-                "perRating": true
+              "2": {
+                "cost": 400,
+                "availability": 3
               },
-              "availabilityScaling": {
-                "baseValue": 3,
-                "perRating": false
+              "3": {
+                "cost": 600,
+                "availability": 3
               }
             }
           },
@@ -8424,25 +9097,26 @@
             "id": "glasses-imagelink",
             "name": "Glasses w/ Image Link",
             "category": "miscellaneous",
-            "cost": 100,
-            "availability": 2,
             "description": "AR-enabled glasses.",
             "hasRating": true,
             "maxRating": 4,
-            "costPerRating": true,
-            "ratingSpec": {
-              "rating": {
-                "hasRating": true,
-                "minRating": 1,
-                "maxRating": 4
+            "minRating": 1,
+            "ratings": {
+              "1": {
+                "cost": 100,
+                "availability": 2
               },
-              "costScaling": {
-                "baseValue": 100,
-                "perRating": true
+              "2": {
+                "cost": 200,
+                "availability": 2
               },
-              "availabilityScaling": {
-                "baseValue": 2,
-                "perRating": false
+              "3": {
+                "cost": 300,
+                "availability": 2
+              },
+              "4": {
+                "cost": 400,
+                "availability": 2
               }
             }
           },
@@ -8450,27 +9124,24 @@
             "id": "ear-buds",
             "name": "Ear Buds",
             "category": "audio-devices",
-            "cost": 50,
-            "availability": 0,
             "hasRating": true,
             "maxRating": 3,
-            "costPerRating": true,
             "capacity": 1,
             "capacityPerRating": true,
             "description": "Small audio device fitting into the ear.",
-            "ratingSpec": {
-              "rating": {
-                "hasRating": true,
-                "minRating": 1,
-                "maxRating": 3
+            "minRating": 1,
+            "ratings": {
+              "1": {
+                "cost": 50,
+                "availability": 0
               },
-              "costScaling": {
-                "baseValue": 50,
-                "perRating": true
+              "2": {
+                "cost": 100,
+                "availability": 0
               },
-              "availabilityScaling": {
-                "baseValue": 0,
-                "perRating": false
+              "3": {
+                "cost": 150,
+                "availability": 0
               }
             }
           },
@@ -9242,6 +9913,313 @@
         ],
         "catalog": [
           {
+            "id": "control-rig",
+            "name": "Control Rig",
+            "hasRating": true,
+            "minRating": 1,
+            "maxRating": 3,
+            "ratings": {
+              "1": {
+                "cost": 43000,
+                "availability": 5,
+                "essenceCost": 1
+              },
+              "2": {
+                "cost": 97000,
+                "availability": 10,
+                "essenceCost": 2
+              },
+              "3": {
+                "cost": 208000,
+                "availability": 15,
+                "essenceCost": 3
+              }
+            },
+            "category": "headware",
+            "description": "VCR for controlling vehicles and drones. +1 to vehicle tests.",
+            "wirelessBonus": "Noise reduction equal to rating.",
+            "page": 452,
+            "wirelessEffects": [
+              {
+                "type": "noise_reduction",
+                "modifier": 1
+              }
+            ],
+            "attributeBonuses": {
+              "vehicleControl": 1
+            },
+            "legality": "restricted"
+          },
+          {
+            "id": "cybereyes",
+            "name": "Cybereyes",
+            "hasRating": true,
+            "minRating": 1,
+            "maxRating": 4,
+            "ratings": {
+              "1": {
+                "cost": 4000,
+                "availability": 3,
+                "essenceCost": 0.2,
+                "capacity": 4
+              },
+              "2": {
+                "cost": 6000,
+                "availability": 6,
+                "essenceCost": 0.3,
+                "capacity": 8
+              },
+              "3": {
+                "cost": 10000,
+                "availability": 9,
+                "essenceCost": 0.4,
+                "capacity": 12
+              },
+              "4": {
+                "cost": 14000,
+                "availability": 12,
+                "essenceCost": 0.5,
+                "capacity": 16
+              }
+            },
+            "category": "eyeware",
+            "description": "Replacement eyes with 4 capacity for upgrades.",
+            "wirelessBonus": "When wirelessly enabled, gives +1 limit to Perception tests.",
+            "page": 453
+          },
+          {
+            "id": "cyberears",
+            "name": "Cyberears",
+            "hasRating": true,
+            "minRating": 1,
+            "maxRating": 4,
+            "ratings": {
+              "1": {
+                "cost": 3000,
+                "availability": 3,
+                "essenceCost": 0.2,
+                "capacity": 4
+              },
+              "2": {
+                "cost": 4500,
+                "availability": 6,
+                "essenceCost": 0.3,
+                "capacity": 8
+              },
+              "3": {
+                "cost": 7500,
+                "availability": 9,
+                "essenceCost": 0.4,
+                "capacity": 12
+              },
+              "4": {
+                "cost": 11000,
+                "availability": 12,
+                "essenceCost": 0.5,
+                "capacity": 16
+              }
+            },
+            "category": "earware",
+            "description": "Replacement ears with 4 capacity.",
+            "wirelessBonus": "+1 limit to audio Perception tests.",
+            "page": 454
+          },
+          {
+            "id": "dermal-plating",
+            "name": "Dermal Plating",
+            "hasRating": true,
+            "minRating": 1,
+            "maxRating": 6,
+            "ratings": {
+              "1": {
+                "cost": 6000,
+                "availability": 8,
+                "essenceCost": 0.5,
+                "effects": { "armorBonus": 1 }
+              },
+              "2": {
+                "cost": 12000,
+                "availability": 12,
+                "essenceCost": 1,
+                "effects": { "armorBonus": 2 }
+              },
+              "3": {
+                "cost": 20000,
+                "availability": 14,
+                "essenceCost": 1.5,
+                "effects": { "armorBonus": 3 }
+              },
+              "4": {
+                "cost": 30000,
+                "availability": 16,
+                "essenceCost": 2,
+                "effects": { "armorBonus": 4 }
+              },
+              "5": {
+                "cost": 50000,
+                "availability": 18,
+                "essenceCost": 2.5,
+                "effects": { "armorBonus": 5 }
+              },
+              "6": {
+                "cost": 75000,
+                "availability": 20,
+                "essenceCost": 3,
+                "effects": { "armorBonus": 6 }
+              }
+            },
+            "category": "bodyware",
+            "description": "Bonus Armor equal to Rating (cumulative with worn armor, no Encumbrance). Cannot be combined with orthoskin or other skin augmentations that provide armor.",
+            "page": 456,
+            "legality": "restricted",
+            "incompatibleWith": ["orthoskin"]
+          },
+          {
+            "id": "internal-air-tank",
+            "name": "Internal Air Tank",
+            "hasRating": true,
+            "minRating": 1,
+            "maxRating": 3,
+            "ratings": {
+              "1": {
+                "cost": 4500,
+                "availability": 1,
+                "essenceCost": 0.25,
+                "capacityCost": 3
+              },
+              "2": {
+                "cost": 9000,
+                "availability": 2,
+                "essenceCost": 0.25,
+                "capacityCost": 3
+              },
+              "3": {
+                "cost": 13500,
+                "availability": 3,
+                "essenceCost": 0.25,
+                "capacityCost": 3
+              }
+            },
+            "category": "bodyware",
+            "description": "1 hour of internal oxygen supply.",
+            "page": 456
+          },
+          {
+            "id": "muscle-replacement",
+            "name": "Muscle Replacement",
+            "hasRating": true,
+            "minRating": 1,
+            "maxRating": 4,
+            "ratings": {
+              "1": {
+                "cost": 25000,
+                "availability": 11,
+                "essenceCost": 1
+              },
+              "2": {
+                "cost": 50000,
+                "availability": 13,
+                "essenceCost": 2
+              },
+              "3": {
+                "cost": 80000,
+                "availability": 15,
+                "essenceCost": 3
+              },
+              "4": {
+                "cost": 120000,
+                "availability": 17,
+                "essenceCost": 4
+              }
+            },
+            "category": "bodyware",
+            "description": "+1 STR and AGI.",
+            "page": 456,
+            "attributeBonuses": {
+              "strength": 1,
+              "agility": 1
+            },
+            "legality": "restricted"
+          },
+          {
+            "id": "reaction-enhancers",
+            "name": "Reaction Enhancers",
+            "hasRating": true,
+            "minRating": 1,
+            "maxRating": 3,
+            "ratings": {
+              "1": {
+                "cost": 13000,
+                "availability": 8,
+                "essenceCost": 0.3
+              },
+              "2": {
+                "cost": 26000,
+                "availability": 12,
+                "essenceCost": 0.6
+              },
+              "3": {
+                "cost": 39000,
+                "availability": 14,
+                "essenceCost": 0.9
+              }
+            },
+            "category": "bodyware",
+            "description": "+1 REA.",
+            "wirelessBonus": "+1 Reaction (included in rating 2 and 3).",
+            "page": 457,
+            "wirelessEffects": [
+              {
+                "type": "attribute",
+                "attribute": "reaction",
+                "modifier": 1
+              }
+            ],
+            "attributeBonuses": {
+              "reaction": 1
+            },
+            "legality": "restricted"
+          },
+          {
+            "id": "wired-reflexes",
+            "name": "Wired Reflexes",
+            "hasRating": true,
+            "minRating": 1,
+            "maxRating": 3,
+            "ratings": {
+              "1": {
+                "cost": 39000,
+                "availability": 8,
+                "essenceCost": 2
+              },
+              "2": {
+                "cost": 149000,
+                "availability": 12,
+                "essenceCost": 3
+              },
+              "3": {
+                "cost": 217000,
+                "availability": 20,
+                "essenceCost": 5
+              }
+            },
+            "category": "bodyware",
+            "description": "+1 REA, +1D6 Initiative.",
+            "wirelessBonus": "+1 Initiative.",
+            "page": 457,
+            "wirelessEffects": [
+              {
+                "type": "initiative",
+                "modifier": 1
+              }
+            ],
+            "attributeBonuses": {
+              "reaction": 1
+            },
+            "initiativeDiceBonus": 1,
+            "legality": "restricted"
+          },
+          {
             "id": "datajack",
             "name": "Datajack",
             "category": "headware",
@@ -9261,69 +10239,6 @@
             "availability": 4,
             "description": "Implanted commlink with subvocal microphone.",
             "page": 452
-          },
-          {
-            "id": "control-rig-1",
-            "name": "Control Rig (Rating 1)",
-            "category": "headware",
-            "essenceCost": 1,
-            "cost": 43000,
-            "availability": 5,
-            "description": "VCR for controlling vehicles and drones. +1 to vehicle tests.",
-            "wirelessBonus": "Noise reduction equal to rating.",
-            "wirelessEffects": [
-              {
-                "type": "noise_reduction",
-                "modifier": 1
-              }
-            ],
-            "attributeBonuses": {
-              "vehicleControl": 1
-            },
-            "page": 452,
-            "legality": "restricted"
-          },
-          {
-            "id": "control-rig-2",
-            "name": "Control Rig (Rating 2)",
-            "category": "headware",
-            "essenceCost": 2,
-            "cost": 97000,
-            "availability": 10,
-            "description": "Advanced VCR. +2 to vehicle tests.",
-            "wirelessBonus": "Noise reduction equal to rating.",
-            "wirelessEffects": [
-              {
-                "type": "noise_reduction",
-                "modifier": 2
-              }
-            ],
-            "attributeBonuses": {
-              "vehicleControl": 2
-            },
-            "page": 452,
-            "legality": "restricted"
-          },
-          {
-            "id": "control-rig-3",
-            "name": "Control Rig (Rating 3)",
-            "category": "headware",
-            "essenceCost": 3,
-            "cost": 208000,
-            "availability": 15,
-            "description": "Military-grade VCR. +3 to vehicle tests.",
-            "wirelessBonus": "Noise reduction equal to rating.",
-            "wirelessEffects": [
-              {
-                "type": "noise_reduction",
-                "modifier": 3
-              }
-            ],
-            "attributeBonuses": {
-              "vehicleControl": 3
-            },
-            "page": 452,
-            "legality": "restricted"
           },
           {
             "id": "cortex-bomb",
@@ -9589,54 +10504,6 @@
             "legality": "restricted"
           },
           {
-            "id": "cybereyes-1",
-            "name": "Cybereyes (Rating 1)",
-            "category": "eyeware",
-            "essenceCost": 0.2,
-            "cost": 4000,
-            "availability": 3,
-            "capacity": 4,
-            "description": "Replacement eyes with 4 capacity for upgrades.",
-            "wirelessBonus": "When wirelessly enabled, gives +1 limit to Perception tests.",
-            "page": 453
-          },
-          {
-            "id": "cybereyes-2",
-            "name": "Cybereyes (Rating 2)",
-            "category": "eyeware",
-            "essenceCost": 0.3,
-            "cost": 6000,
-            "availability": 6,
-            "capacity": 8,
-            "description": "Enhanced cybereyes with 8 capacity.",
-            "wirelessBonus": "When wirelessly enabled, gives +2 limit to Perception tests.",
-            "page": 453
-          },
-          {
-            "id": "cybereyes-3",
-            "name": "Cybereyes (Rating 3)",
-            "category": "eyeware",
-            "essenceCost": 0.4,
-            "cost": 10000,
-            "availability": 9,
-            "capacity": 12,
-            "description": "Advanced cybereyes with 12 capacity.",
-            "wirelessBonus": "When wirelessly enabled, gives +3 limit to Perception tests.",
-            "page": 453
-          },
-          {
-            "id": "cybereyes-4",
-            "name": "Cybereyes (Rating 4)",
-            "category": "eyeware",
-            "essenceCost": 0.5,
-            "cost": 14000,
-            "availability": 12,
-            "capacity": 16,
-            "description": "Top-tier cybereyes with 16 capacity.",
-            "wirelessBonus": "When wirelessly enabled, gives +4 limit to Perception tests.",
-            "page": 453
-          },
-          {
             "id": "eye-flare-compensation",
             "name": "Flare Compensation",
             "category": "eyeware",
@@ -9778,54 +10645,6 @@
               }
             },
             "legality": "forbidden"
-          },
-          {
-            "id": "cyberears-1",
-            "name": "Cyberears (Rating 1)",
-            "category": "earware",
-            "essenceCost": 0.2,
-            "cost": 3000,
-            "availability": 3,
-            "capacity": 4,
-            "description": "Replacement ears with 4 capacity.",
-            "wirelessBonus": "+1 limit to audio Perception tests.",
-            "page": 454
-          },
-          {
-            "id": "cyberears-2",
-            "name": "Cyberears (Rating 2)",
-            "category": "earware",
-            "essenceCost": 0.3,
-            "cost": 4500,
-            "availability": 6,
-            "capacity": 8,
-            "description": "Enhanced cyberears with 8 capacity.",
-            "wirelessBonus": "+2 limit to audio Perception tests.",
-            "page": 454
-          },
-          {
-            "id": "cyberears-3",
-            "name": "Cyberears (Rating 3)",
-            "category": "earware",
-            "essenceCost": 0.4,
-            "cost": 7500,
-            "availability": 9,
-            "capacity": 12,
-            "description": "Advanced cyberears with 12 capacity.",
-            "wirelessBonus": "+3 limit to audio Perception tests.",
-            "page": 454
-          },
-          {
-            "id": "cyberears-4",
-            "name": "Cyberears (Rating 4)",
-            "category": "earware",
-            "essenceCost": 0.5,
-            "cost": 11000,
-            "availability": 12,
-            "capacity": 16,
-            "description": "Top-tier cyberears with 16 capacity.",
-            "wirelessBonus": "+4 limit to audio Perception tests.",
-            "page": 454
           },
           {
             "id": "ear-audio-enhancement",
@@ -9979,90 +10798,6 @@
             "legality": "restricted"
           },
           {
-            "id": "dermal-plating-1",
-            "name": "Dermal Plating (Rating 1)",
-            "category": "bodyware",
-            "essenceCost": 0.5,
-            "cost": 6000,
-            "availability": 8,
-            "description": "+1 armor bonus.",
-            "attributeBonuses": {
-              "armor": 1
-            },
-            "page": 456,
-            "legality": "restricted"
-          },
-          {
-            "id": "dermal-plating-2",
-            "name": "Dermal Plating (Rating 2)",
-            "category": "bodyware",
-            "essenceCost": 1,
-            "cost": 12000,
-            "availability": 12,
-            "description": "+2 armor bonus.",
-            "attributeBonuses": {
-              "armor": 2
-            },
-            "page": 456,
-            "legality": "restricted"
-          },
-          {
-            "id": "dermal-plating-3",
-            "name": "Dermal Plating (Rating 3)",
-            "category": "bodyware",
-            "essenceCost": 1.5,
-            "cost": 20000,
-            "availability": 14,
-            "description": "+3 armor bonus.",
-            "attributeBonuses": {
-              "armor": 3
-            },
-            "page": 456,
-            "legality": "restricted"
-          },
-          {
-            "id": "dermal-plating-4",
-            "name": "Dermal Plating (Rating 4)",
-            "category": "bodyware",
-            "essenceCost": 2,
-            "cost": 30000,
-            "availability": 16,
-            "description": "+4 armor bonus.",
-            "attributeBonuses": {
-              "armor": 4
-            },
-            "page": 456,
-            "legality": "restricted"
-          },
-          {
-            "id": "dermal-plating-5",
-            "name": "Dermal Plating (Rating 5)",
-            "category": "bodyware",
-            "essenceCost": 2.5,
-            "cost": 50000,
-            "availability": 18,
-            "description": "+5 armor bonus.",
-            "attributeBonuses": {
-              "armor": 5
-            },
-            "page": 456,
-            "legality": "restricted"
-          },
-          {
-            "id": "dermal-plating-6",
-            "name": "Dermal Plating (Rating 6)",
-            "category": "bodyware",
-            "essenceCost": 3,
-            "cost": 75000,
-            "availability": 20,
-            "description": "+6 armor bonus.",
-            "attributeBonuses": {
-              "armor": 6
-            },
-            "page": 456,
-            "legality": "restricted"
-          },
-          {
             "id": "fingertip-compartment",
             "name": "Fingertip Compartment",
             "category": "bodyware",
@@ -10081,231 +10816,6 @@
             "availability": 8,
             "description": "Implanted grapple launcher.",
             "page": 456,
-            "legality": "restricted"
-          },
-          {
-            "id": "internal-air-tank-1",
-            "name": "Internal Air Tank (Rating 1)",
-            "category": "bodyware",
-            "essenceCost": 0.25,
-            "cost": 4500,
-            "availability": 1,
-            "capacityCost": 3,
-            "description": "1 hour of internal oxygen supply.",
-            "page": 456
-          },
-          {
-            "id": "internal-air-tank-2",
-            "name": "Internal Air Tank (Rating 2)",
-            "category": "bodyware",
-            "essenceCost": 0.25,
-            "cost": 9000,
-            "availability": 2,
-            "capacityCost": 3,
-            "description": "2 hours of internal oxygen supply.",
-            "page": 456
-          },
-          {
-            "id": "internal-air-tank-3",
-            "name": "Internal Air Tank (Rating 3)",
-            "category": "bodyware",
-            "essenceCost": 0.25,
-            "cost": 13500,
-            "availability": 3,
-            "capacityCost": 3,
-            "description": "3 hours of internal oxygen supply.",
-            "page": 456
-          },
-          {
-            "id": "muscle-replacement-1",
-            "name": "Muscle Replacement (Rating 1)",
-            "category": "bodyware",
-            "essenceCost": 1,
-            "cost": 25000,
-            "availability": 11,
-            "description": "+1 STR and AGI.",
-            "attributeBonuses": {
-              "strength": 1,
-              "agility": 1
-            },
-            "page": 456,
-            "legality": "restricted"
-          },
-          {
-            "id": "muscle-replacement-2",
-            "name": "Muscle Replacement (Rating 2)",
-            "category": "bodyware",
-            "essenceCost": 2,
-            "cost": 50000,
-            "availability": 13,
-            "description": "+2 STR and AGI.",
-            "attributeBonuses": {
-              "strength": 2,
-              "agility": 2
-            },
-            "page": 456,
-            "legality": "restricted"
-          },
-          {
-            "id": "muscle-replacement-3",
-            "name": "Muscle Replacement (Rating 3)",
-            "category": "bodyware",
-            "essenceCost": 3,
-            "cost": 80000,
-            "availability": 15,
-            "description": "+3 STR and AGI.",
-            "attributeBonuses": {
-              "strength": 3,
-              "agility": 3
-            },
-            "page": 456,
-            "legality": "restricted"
-          },
-          {
-            "id": "muscle-replacement-4",
-            "name": "Muscle Replacement (Rating 4)",
-            "category": "bodyware",
-            "essenceCost": 4,
-            "cost": 120000,
-            "availability": 17,
-            "description": "+4 STR and AGI.",
-            "attributeBonuses": {
-              "strength": 4,
-              "agility": 4
-            },
-            "page": 456,
-            "legality": "restricted"
-          },
-          {
-            "id": "orthoskin-1",
-            "name": "Orthoskin (Rating 1)",
-            "category": "bodyware",
-            "essenceCost": 0.25,
-            "cost": 6000,
-            "availability": 8,
-            "description": "+1 armor (compatible with bone lacing).",
-            "attributeBonuses": {
-              "armor": 1
-            },
-            "page": 457,
-            "legality": "restricted"
-          },
-          {
-            "id": "orthoskin-2",
-            "name": "Orthoskin (Rating 2)",
-            "category": "bodyware",
-            "essenceCost": 0.5,
-            "cost": 12000,
-            "availability": 12,
-            "description": "+2 armor (compatible with bone lacing).",
-            "attributeBonuses": {
-              "armor": 2
-            },
-            "page": 457,
-            "legality": "restricted"
-          },
-          {
-            "id": "orthoskin-3",
-            "name": "Orthoskin (Rating 3)",
-            "category": "bodyware",
-            "essenceCost": 0.75,
-            "cost": 20000,
-            "availability": 14,
-            "description": "+3 armor (compatible with bone lacing).",
-            "attributeBonuses": {
-              "armor": 3
-            },
-            "page": 457,
-            "legality": "restricted"
-          },
-          {
-            "id": "orthoskin-4",
-            "name": "Orthoskin (Rating 4)",
-            "category": "bodyware",
-            "essenceCost": 1,
-            "cost": 30000,
-            "availability": 16,
-            "description": "+4 armor (compatible with bone lacing).",
-            "attributeBonuses": {
-              "armor": 4
-            },
-            "page": 457,
-            "legality": "restricted"
-          },
-          {
-            "id": "platelet-factories",
-            "name": "Platelet Factories",
-            "category": "bodyware",
-            "essenceCost": 0.2,
-            "cost": 17000,
-            "availability": 12,
-            "description": "+1 die to resist bleeding. Reduces Overflow threshold penalty.",
-            "page": 457
-          },
-          {
-            "id": "reaction-enhancers-1",
-            "name": "Reaction Enhancers (Rating 1)",
-            "category": "bodyware",
-            "essenceCost": 0.3,
-            "cost": 13000,
-            "availability": 8,
-            "description": "+1 REA.",
-            "wirelessBonus": "+1 Reaction (included in rating 2 and 3).",
-            "wirelessEffects": [
-              {
-                "type": "attribute",
-                "attribute": "reaction",
-                "modifier": 1
-              }
-            ],
-            "attributeBonuses": {
-              "reaction": 1
-            },
-            "page": 457,
-            "legality": "restricted"
-          },
-          {
-            "id": "reaction-enhancers-2",
-            "name": "Reaction Enhancers (Rating 2)",
-            "category": "bodyware",
-            "essenceCost": 0.6,
-            "cost": 26000,
-            "availability": 12,
-            "description": "+2 REA.",
-            "wirelessBonus": "+1 Reaction (included in rating 3).",
-            "wirelessEffects": [
-              {
-                "type": "attribute",
-                "attribute": "reaction",
-                "modifier": 1
-              }
-            ],
-            "attributeBonuses": {
-              "reaction": 2
-            },
-            "page": 457,
-            "legality": "restricted"
-          },
-          {
-            "id": "reaction-enhancers-3",
-            "name": "Reaction Enhancers (Rating 3)",
-            "category": "bodyware",
-            "essenceCost": 0.9,
-            "cost": 39000,
-            "availability": 14,
-            "description": "+3 REA.",
-            "wirelessBonus": "+1 Reaction.",
-            "wirelessEffects": [
-              {
-                "type": "attribute",
-                "attribute": "reaction",
-                "modifier": 1
-              }
-            ],
-            "attributeBonuses": {
-              "reaction": 3
-            },
-            "page": 457,
             "legality": "restricted"
           },
           {
@@ -10351,119 +10861,6 @@
             "availability": 6,
             "description": "Shielded compartment for smuggling items.",
             "page": 457
-          },
-          {
-            "id": "suprathyroid-gland",
-            "name": "Suprathyroid Gland",
-            "category": "bodyware",
-            "essenceCost": 0.7,
-            "cost": 140000,
-            "availability": 20,
-            "description": "+1 to all physical attributes (BOD, AGI, REA, STR).",
-            "attributeBonuses": {
-              "body": 1,
-              "agility": 1,
-              "reaction": 1,
-              "strength": 1
-            },
-            "page": 457,
-            "legality": "forbidden"
-          },
-          {
-            "id": "synthacardium-1",
-            "name": "Synthacardium (Rating 1)",
-            "category": "bodyware",
-            "essenceCost": 0.1,
-            "cost": 8000,
-            "availability": 8,
-            "description": "+1 to Cardiovascular tests (running, swimming, etc.).",
-            "page": 457
-          },
-          {
-            "id": "synthacardium-2",
-            "name": "Synthacardium (Rating 2)",
-            "category": "bodyware",
-            "essenceCost": 0.2,
-            "cost": 16000,
-            "availability": 12,
-            "description": "+2 to Cardiovascular tests.",
-            "page": 457
-          },
-          {
-            "id": "synthacardium-3",
-            "name": "Synthacardium (Rating 3)",
-            "category": "bodyware",
-            "essenceCost": 0.3,
-            "cost": 24000,
-            "availability": 14,
-            "description": "+3 to Cardiovascular tests.",
-            "page": 457
-          },
-          {
-            "id": "wired-reflexes-1",
-            "name": "Wired Reflexes (Rating 1)",
-            "category": "bodyware",
-            "essenceCost": 2,
-            "cost": 39000,
-            "availability": 8,
-            "description": "+1 REA, +1D6 Initiative.",
-            "wirelessBonus": "+1 Initiative.",
-            "wirelessEffects": [
-              {
-                "type": "initiative",
-                "modifier": 1
-              }
-            ],
-            "attributeBonuses": {
-              "reaction": 1
-            },
-            "initiativeDiceBonus": 1,
-            "page": 457,
-            "legality": "restricted"
-          },
-          {
-            "id": "wired-reflexes-2",
-            "name": "Wired Reflexes (Rating 2)",
-            "category": "bodyware",
-            "essenceCost": 3,
-            "cost": 149000,
-            "availability": 12,
-            "description": "+2 REA, +2D6 Initiative.",
-            "wirelessBonus": "+1 Initiative.",
-            "wirelessEffects": [
-              {
-                "type": "initiative",
-                "modifier": 1
-              }
-            ],
-            "attributeBonuses": {
-              "reaction": 2
-            },
-            "initiativeDiceBonus": 2,
-            "page": 457,
-            "legality": "restricted"
-          },
-          {
-            "id": "wired-reflexes-3",
-            "name": "Wired Reflexes (Rating 3)",
-            "category": "bodyware",
-            "essenceCost": 5,
-            "cost": 217000,
-            "availability": 20,
-            "description": "+3 REA, +3D6 Initiative.",
-            "wirelessBonus": "+1 Initiative.",
-            "wirelessEffects": [
-              {
-                "type": "initiative",
-                "modifier": 1
-              }
-            ],
-            "attributeBonuses": {
-              "reaction": 3
-            },
-            "initiativeDiceBonus": 3,
-            "page": 457,
-            "legality": "restricted"
           },
           {
             "id": "cyberlimb-arm",
@@ -10947,37 +11344,464 @@
         ],
         "catalog": [
           {
-            "id": "adrenaline-pump-1",
-            "name": "Adrenaline Pump (Rating 1)",
+            "id": "adrenaline-pump",
+            "name": "Adrenaline Pump",
+            "hasRating": true,
+            "minRating": 1,
+            "maxRating": 3,
+            "ratings": {
+              "1": {
+                "cost": 55000,
+                "availability": 16,
+                "essenceCost": 0.75
+              },
+              "2": {
+                "cost": 110000,
+                "availability": 18,
+                "essenceCost": 1.25
+              },
+              "3": {
+                "cost": 165000,
+                "availability": 20,
+                "essenceCost": 1.75
+              }
+            },
             "category": "basic",
-            "essenceCost": 0.75,
-            "cost": 55000,
-            "availability": 16,
             "description": "+1 BOD, AGI, REA, STR when activated. Costs Edge.",
             "page": 459,
             "legality": "forbidden"
           },
           {
-            "id": "adrenaline-pump-2",
-            "name": "Adrenaline Pump (Rating 2)",
+            "id": "muscle-augmentation",
+            "name": "Muscle Augmentation",
+            "hasRating": true,
+            "minRating": 1,
+            "maxRating": 4,
+            "ratings": {
+              "1": {
+                "cost": 31000,
+                "availability": 12,
+                "essenceCost": 0.2
+              },
+              "2": {
+                "cost": 62000,
+                "availability": 14,
+                "essenceCost": 0.4
+              },
+              "3": {
+                "cost": 93000,
+                "availability": 16,
+                "essenceCost": 0.6
+              },
+              "4": {
+                "cost": 124000,
+                "availability": 18,
+                "essenceCost": 0.8
+              }
+            },
             "category": "basic",
-            "essenceCost": 1.25,
-            "cost": 110000,
-            "availability": 18,
-            "description": "+2 BOD, AGI, REA, STR when activated. Costs Edge.",
-            "page": 459,
-            "legality": "forbidden"
+            "description": "+1 STR.",
+            "page": 460,
+            "attributeBonuses": {
+              "strength": 1
+            },
+            "legality": "restricted"
           },
           {
-            "id": "adrenaline-pump-3",
-            "name": "Adrenaline Pump (Rating 3)",
+            "id": "muscle-toner",
+            "name": "Muscle Toner",
+            "hasRating": true,
+            "minRating": 1,
+            "maxRating": 4,
+            "ratings": {
+              "1": {
+                "cost": 32000,
+                "availability": 12,
+                "essenceCost": 0.2
+              },
+              "2": {
+                "cost": 64000,
+                "availability": 14,
+                "essenceCost": 0.4
+              },
+              "3": {
+                "cost": 96000,
+                "availability": 16,
+                "essenceCost": 0.6
+              },
+              "4": {
+                "cost": 128000,
+                "availability": 18,
+                "essenceCost": 0.8
+              }
+            },
             "category": "basic",
-            "essenceCost": 1.75,
-            "cost": 165000,
-            "availability": 20,
-            "description": "+3 BOD, AGI, REA, STR when activated. Costs Edge.",
-            "page": 459,
-            "legality": "forbidden"
+            "description": "+1 AGI.",
+            "wirelessBonus": "+1 Agility (included in higher ratings).",
+            "page": 460,
+            "wirelessEffects": [
+              {
+                "type": "attribute",
+                "attribute": "agility",
+                "modifier": 1
+              }
+            ],
+            "attributeBonuses": {
+              "agility": 1
+            },
+            "legality": "restricted"
+          },
+          {
+            "id": "pathogenic-defense",
+            "name": "Pathogenic Defense",
+            "hasRating": true,
+            "minRating": 1,
+            "maxRating": 6,
+            "ratings": {
+              "1": {
+                "cost": 4500,
+                "availability": 6,
+                "essenceCost": 0.1
+              },
+              "2": {
+                "cost": 9000,
+                "availability": 8,
+                "essenceCost": 0.15
+              },
+              "3": {
+                "cost": 13500,
+                "availability": 10,
+                "essenceCost": 0.2
+              },
+              "4": {
+                "cost": 18000,
+                "availability": 12,
+                "essenceCost": 0.25
+              },
+              "5": {
+                "cost": 22500,
+                "availability": 14,
+                "essenceCost": 0.3
+              },
+              "6": {
+                "cost": 27000,
+                "availability": 16,
+                "essenceCost": 0.35
+              }
+            },
+            "category": "basic",
+            "description": "+1 dice vs. pathogens and disease.",
+            "page": 460
+          },
+          {
+            "id": "symbiotes",
+            "name": "Symbiotes",
+            "hasRating": true,
+            "minRating": 1,
+            "maxRating": 4,
+            "ratings": {
+              "1": {
+                "cost": 7500,
+                "availability": 8,
+                "essenceCost": 0.2
+              },
+              "2": {
+                "cost": 15000,
+                "availability": 10,
+                "essenceCost": 0.3
+              },
+              "3": {
+                "cost": 22500,
+                "availability": 12,
+                "essenceCost": 0.4
+              },
+              "4": {
+                "cost": 30000,
+                "availability": 14,
+                "essenceCost": 0.5
+              }
+            },
+            "category": "basic",
+            "description": "Enhanced healing. Heal +1 box/day.",
+            "page": 461
+          },
+          {
+            "id": "tracheal-filter",
+            "name": "Tracheal Filter",
+            "hasRating": true,
+            "minRating": 1,
+            "maxRating": 6,
+            "ratings": {
+              "1": {
+                "cost": 4500,
+                "availability": 4,
+                "essenceCost": 0.1
+              },
+              "2": {
+                "cost": 9000,
+                "availability": 6,
+                "essenceCost": 0.15
+              },
+              "3": {
+                "cost": 13500,
+                "availability": 8,
+                "essenceCost": 0.2
+              },
+              "4": {
+                "cost": 18000,
+                "availability": 10,
+                "essenceCost": 0.25
+              },
+              "5": {
+                "cost": 22500,
+                "availability": 12,
+                "essenceCost": 0.3
+              },
+              "6": {
+                "cost": 27000,
+                "availability": 14,
+                "essenceCost": 0.35
+              }
+            },
+            "category": "basic",
+            "description": "+1 dice vs. inhaled toxins.",
+            "page": 461
+          },
+          {
+            "id": "tailored-pheromones",
+            "name": "Tailored Pheromones",
+            "hasRating": true,
+            "minRating": 1,
+            "maxRating": 3,
+            "ratings": {
+              "1": {
+                "cost": 31000,
+                "availability": 4,
+                "essenceCost": 0.2
+              },
+              "2": {
+                "cost": 62000,
+                "availability": 8,
+                "essenceCost": 0.4
+              },
+              "3": {
+                "cost": 93000,
+                "availability": 12,
+                "essenceCost": 0.6
+              }
+            },
+            "category": "basic",
+            "description": "+1 to Acting and Influence skill tests. +1 Social Limit.",
+            "page": 460,
+            "attributeBonuses": {
+              "socialLimit": 1
+            },
+            "legality": "restricted"
+          },
+          {
+            "id": "bone-density-augmentation",
+            "name": "Bone Density Augmentation",
+            "hasRating": true,
+            "minRating": 1,
+            "maxRating": 4,
+            "ratings": {
+              "1": {
+                "cost": 5000,
+                "availability": 4,
+                "essenceCost": 0.3
+              },
+              "2": {
+                "cost": 10000,
+                "availability": 8,
+                "essenceCost": 0.6
+              },
+              "3": {
+                "cost": 15000,
+                "availability": 12,
+                "essenceCost": 0.9
+              },
+              "4": {
+                "cost": 20000,
+                "availability": 16,
+                "essenceCost": 1.2
+              }
+            },
+            "category": "basic",
+            "description": "Unarmed damage becomes (STR)P. Incompatible with bone lacing.",
+            "page": 459
+          },
+          {
+            "id": "toxin-extractor",
+            "name": "Toxin Extractor",
+            "hasRating": true,
+            "minRating": 1,
+            "maxRating": 6,
+            "ratings": {
+              "1": {
+                "cost": 4800,
+                "availability": 3,
+                "essenceCost": 0.2
+              },
+              "2": {
+                "cost": 9600,
+                "availability": 6,
+                "essenceCost": 0.4
+              },
+              "3": {
+                "cost": 14400,
+                "availability": 9,
+                "essenceCost": 0.6
+              },
+              "4": {
+                "cost": 19200,
+                "availability": 12,
+                "essenceCost": 0.8
+              },
+              "5": {
+                "cost": 24000,
+                "availability": 15,
+                "essenceCost": 1
+              },
+              "6": {
+                "cost": 28800,
+                "availability": 18,
+                "essenceCost": 1.2
+              }
+            },
+            "category": "basic",
+            "description": "+1 dice to Toxin Resistance tests.",
+            "page": 461
+          },
+          {
+            "id": "cerebral-booster",
+            "name": "Cerebral Booster",
+            "hasRating": true,
+            "minRating": 1,
+            "maxRating": 3,
+            "ratings": {
+              "1": {
+                "cost": 31500,
+                "availability": 12,
+                "essenceCost": 0.2
+              },
+              "2": {
+                "cost": 63000,
+                "availability": 14,
+                "essenceCost": 0.4
+              },
+              "3": {
+                "cost": 94500,
+                "availability": 16,
+                "essenceCost": 0.6
+              }
+            },
+            "category": "cultured",
+            "description": "+1 LOG.",
+            "page": 461,
+            "attributeBonuses": {
+              "logic": 1
+            }
+          },
+          {
+            "id": "damage-compensators",
+            "name": "Damage Compensators",
+            "hasRating": true,
+            "minRating": 1,
+            "maxRating": 6,
+            "ratings": {
+              "1": {
+                "cost": 6500,
+                "availability": 8,
+                "essenceCost": 0.1
+              },
+              "2": {
+                "cost": 13000,
+                "availability": 10,
+                "essenceCost": 0.15
+              },
+              "3": {
+                "cost": 19500,
+                "availability": 12,
+                "essenceCost": 0.2
+              },
+              "4": {
+                "cost": 26000,
+                "availability": 14,
+                "essenceCost": 0.25
+              },
+              "5": {
+                "cost": 32500,
+                "availability": 16,
+                "essenceCost": 0.3
+              },
+              "6": {
+                "cost": 39000,
+                "availability": 18,
+                "essenceCost": 0.35
+              }
+            },
+            "category": "cultured",
+            "description": "Ignore 1 wound modifier.",
+            "page": 461
+          },
+          {
+            "id": "mnemonic-enhancer",
+            "name": "Mnemonic Enhancer",
+            "hasRating": true,
+            "minRating": 1,
+            "maxRating": 3,
+            "ratings": {
+              "1": {
+                "cost": 9000,
+                "availability": 12,
+                "essenceCost": 0.1
+              },
+              "2": {
+                "cost": 18000,
+                "availability": 14,
+                "essenceCost": 0.2
+              },
+              "3": {
+                "cost": 27000,
+                "availability": 16,
+                "essenceCost": 0.3
+              }
+            },
+            "category": "cultured",
+            "description": "+1 to memory tests. +1 to Knowledge skill maximums.",
+            "page": 461
+          },
+          {
+            "id": "synaptic-booster",
+            "name": "Synaptic Booster",
+            "hasRating": true,
+            "minRating": 1,
+            "maxRating": 3,
+            "ratings": {
+              "1": {
+                "cost": 95000,
+                "availability": 12,
+                "essenceCost": 0.5
+              },
+              "2": {
+                "cost": 190000,
+                "availability": 14,
+                "essenceCost": 1
+              },
+              "3": {
+                "cost": 285000,
+                "availability": 18,
+                "essenceCost": 1.5
+              }
+            },
+            "category": "cultured",
+            "description": "+1 REA, +1D6 Initiative. Incompatible with wired reflexes.",
+            "page": 462,
+            "attributeBonuses": {
+              "reaction": 1
+            },
+            "initiativeDiceBonus": 1,
+            "legality": "restricted"
           },
           {
             "id": "cat-eyes",
@@ -11000,268 +11824,46 @@
             "page": 460
           },
           {
-            "id": "muscle-augmentation-1",
-            "name": "Muscle Augmentation (Rating 1)",
+            "id": "orthoskin",
+            "name": "Orthoskin",
             "category": "basic",
-            "essenceCost": 0.2,
-            "cost": 31000,
-            "availability": 12,
-            "description": "+1 STR.",
-            "attributeBonuses": {
-              "strength": 1
-            },
-            "page": 460,
-            "legality": "restricted"
-          },
-          {
-            "id": "muscle-augmentation-2",
-            "name": "Muscle Augmentation (Rating 2)",
-            "category": "basic",
-            "essenceCost": 0.4,
-            "cost": 62000,
-            "availability": 14,
-            "description": "+2 STR.",
-            "attributeBonuses": {
-              "strength": 2
-            },
-            "page": 460,
-            "legality": "restricted"
-          },
-          {
-            "id": "muscle-augmentation-3",
-            "name": "Muscle Augmentation (Rating 3)",
-            "category": "basic",
-            "essenceCost": 0.6,
-            "cost": 93000,
-            "availability": 16,
-            "description": "+3 STR.",
-            "attributeBonuses": {
-              "strength": 3
-            },
-            "page": 460,
-            "legality": "restricted"
-          },
-          {
-            "id": "muscle-augmentation-4",
-            "name": "Muscle Augmentation (Rating 4)",
-            "category": "basic",
-            "essenceCost": 0.8,
-            "cost": 124000,
-            "availability": 18,
-            "description": "+4 STR.",
-            "attributeBonuses": {
-              "strength": 4
-            },
-            "page": 460,
-            "legality": "restricted"
-          },
-          {
-            "id": "muscle-toner-1",
-            "name": "Muscle Toner (Rating 1)",
-            "category": "basic",
-            "essenceCost": 0.2,
-            "cost": 32000,
-            "availability": 12,
-            "description": "+1 AGI.",
-            "wirelessBonus": "+1 Agility (included in higher ratings).",
-            "wirelessEffects": [
-              {
-                "type": "attribute",
-                "attribute": "agility",
-                "modifier": 1
+            "hasRating": true,
+            "minRating": 1,
+            "maxRating": 4,
+            "ratings": {
+              "1": {
+                "cost": 6500,
+                "availability": 8,
+                "essenceCost": 0.25,
+                "effects": { "armorBonus": 1 }
+              },
+              "2": {
+                "cost": 13000,
+                "availability": 12,
+                "essenceCost": 0.5,
+                "effects": { "armorBonus": 2 }
+              },
+              "3": {
+                "cost": 22000,
+                "availability": 14,
+                "essenceCost": 0.75,
+                "effects": { "armorBonus": 3 }
+              },
+              "4": {
+                "cost": 33000,
+                "availability": 16,
+                "essenceCost": 1,
+                "effects": { "armorBonus": 4 }
               }
-            ],
-            "attributeBonuses": {
-              "agility": 1
             },
+            "description": "Bonus Armor equal to Rating (compatible with bone lacing). Cannot be combined with dermal plating or other skin augmentations that provide armor.",
             "page": 460,
-            "legality": "restricted"
+            "legality": "restricted",
+            "incompatibleWith": ["dermal-plating"]
           },
           {
-            "id": "muscle-toner-2",
-            "name": "Muscle Toner (Rating 2)",
-            "category": "basic",
-            "essenceCost": 0.4,
-            "cost": 64000,
-            "availability": 14,
-            "description": "+2 AGI.",
-            "wirelessBonus": "+1 Agility (included in higher ratings).",
-            "wirelessEffects": [
-              {
-                "type": "attribute",
-                "attribute": "agility",
-                "modifier": 1
-              }
-            ],
-            "attributeBonuses": {
-              "agility": 2
-            },
-            "page": 460,
-            "legality": "restricted"
-          },
-          {
-            "id": "muscle-toner-3",
-            "name": "Muscle Toner (Rating 3)",
-            "category": "basic",
-            "essenceCost": 0.6,
-            "cost": 96000,
-            "availability": 16,
-            "description": "+3 AGI.",
-            "wirelessBonus": "+1 Agility (included in rating 4).",
-            "wirelessEffects": [
-              {
-                "type": "attribute",
-                "attribute": "agility",
-                "modifier": 1
-              }
-            ],
-            "attributeBonuses": {
-              "agility": 3
-            },
-            "page": 460,
-            "legality": "restricted"
-          },
-          {
-            "id": "muscle-toner-4",
-            "name": "Muscle Toner (Rating 4)",
-            "category": "basic",
-            "essenceCost": 0.8,
-            "cost": 128000,
-            "availability": 18,
-            "description": "+4 AGI.",
-            "wirelessBonus": "+1 Agility.",
-            "wirelessEffects": [
-              {
-                "type": "attribute",
-                "attribute": "agility",
-                "modifier": 1
-              }
-            ],
-            "attributeBonuses": {
-              "agility": 4
-            },
-            "page": 460,
-            "legality": "restricted"
-          },
-          {
-            "id": "orthoskin-bio-1",
-            "name": "Orthoskin (Bioware, Rating 1)",
-            "category": "basic",
-            "essenceCost": 0.25,
-            "cost": 6500,
-            "availability": 8,
-            "description": "+1 armor (compatible with bone lacing).",
-            "attributeBonuses": {
-              "armor": 1
-            },
-            "page": 460,
-            "legality": "restricted"
-          },
-          {
-            "id": "orthoskin-bio-2",
-            "name": "Orthoskin (Bioware, Rating 2)",
-            "category": "basic",
-            "essenceCost": 0.5,
-            "cost": 13000,
-            "availability": 12,
-            "description": "+2 armor.",
-            "attributeBonuses": {
-              "armor": 2
-            },
-            "page": 460,
-            "legality": "restricted"
-          },
-          {
-            "id": "orthoskin-bio-3",
-            "name": "Orthoskin (Bioware, Rating 3)",
-            "category": "basic",
-            "essenceCost": 0.75,
-            "cost": 22000,
-            "availability": 14,
-            "description": "+3 armor.",
-            "attributeBonuses": {
-              "armor": 3
-            },
-            "page": 460,
-            "legality": "restricted"
-          },
-          {
-            "id": "orthoskin-bio-4",
-            "name": "Orthoskin (Bioware, Rating 4)",
-            "category": "basic",
-            "essenceCost": 1,
-            "cost": 33000,
-            "availability": 16,
-            "description": "+4 armor.",
-            "attributeBonuses": {
-              "armor": 4
-            },
-            "page": 460,
-            "legality": "restricted"
-          },
-          {
-            "id": "pathogenic-defense-1",
-            "name": "Pathogenic Defense (Rating 1)",
-            "category": "basic",
-            "essenceCost": 0.1,
-            "cost": 4500,
-            "availability": 6,
-            "description": "+1 dice vs. pathogens and disease.",
-            "page": 460
-          },
-          {
-            "id": "pathogenic-defense-2",
-            "name": "Pathogenic Defense (Rating 2)",
-            "category": "basic",
-            "essenceCost": 0.15,
-            "cost": 9000,
-            "availability": 8,
-            "description": "+2 dice vs. pathogens and disease.",
-            "page": 460
-          },
-          {
-            "id": "pathogenic-defense-3",
-            "name": "Pathogenic Defense (Rating 3)",
-            "category": "basic",
-            "essenceCost": 0.2,
-            "cost": 13500,
-            "availability": 10,
-            "description": "+3 dice vs. pathogens and disease.",
-            "page": 460
-          },
-          {
-            "id": "pathogenic-defense-4",
-            "name": "Pathogenic Defense (Rating 4)",
-            "category": "basic",
-            "essenceCost": 0.25,
-            "cost": 18000,
-            "availability": 12,
-            "description": "+4 dice vs. pathogens and disease.",
-            "page": 460
-          },
-          {
-            "id": "pathogenic-defense-5",
-            "name": "Pathogenic Defense (Rating 5)",
-            "category": "basic",
-            "essenceCost": 0.3,
-            "cost": 22500,
-            "availability": 14,
-            "description": "+5 dice vs. pathogens and disease.",
-            "page": 460
-          },
-          {
-            "id": "pathogenic-defense-6",
-            "name": "Pathogenic Defense (Rating 6)",
-            "category": "basic",
-            "essenceCost": 0.35,
-            "cost": 27000,
-            "availability": 16,
-            "description": "+6 dice vs. pathogens and disease.",
-            "page": 460
-          },
-          {
-            "id": "platelet-factories-bio",
-            "name": "Platelet Factories (Bioware)",
+            "id": "platelet-factories",
+            "name": "Platelet Factories",
             "category": "basic",
             "essenceCost": 0.2,
             "cost": 17500,
@@ -11290,7 +11892,7 @@
             "page": 461
           },
           {
-            "id": "suprathyroid-gland-bio",
+            "id": "suprathyroid-gland",
             "name": "Suprathyroid Gland",
             "category": "basic",
             "essenceCost": 1.4,
@@ -11307,413 +11909,33 @@
             "legality": "forbidden"
           },
           {
-            "id": "symbiotes-1",
-            "name": "Symbiotes (Rating 1)",
+            "id": "synthacardium",
+            "name": "Synthacardium",
             "category": "basic",
-            "essenceCost": 0.2,
-            "cost": 7500,
-            "availability": 8,
-            "description": "Enhanced healing. Heal +1 box/day.",
-            "page": 461
-          },
-          {
-            "id": "symbiotes-2",
-            "name": "Symbiotes (Rating 2)",
-            "category": "basic",
-            "essenceCost": 0.3,
-            "cost": 15000,
-            "availability": 10,
-            "description": "Enhanced healing. Heal +2 boxes/day.",
-            "page": 461
-          },
-          {
-            "id": "symbiotes-3",
-            "name": "Symbiotes (Rating 3)",
-            "category": "basic",
-            "essenceCost": 0.4,
-            "cost": 22500,
-            "availability": 12,
-            "description": "Enhanced healing. Heal +3 boxes/day.",
-            "page": 461
-          },
-          {
-            "id": "symbiotes-4",
-            "name": "Symbiotes (Rating 4)",
-            "category": "basic",
-            "essenceCost": 0.5,
-            "cost": 30000,
-            "availability": 14,
-            "description": "Enhanced healing. Heal +4 boxes/day.",
-            "page": 461
-          },
-          {
-            "id": "synthacardium-bio-1",
-            "name": "Synthacardium (Bioware, Rating 1)",
-            "category": "basic",
-            "essenceCost": 0.1,
-            "cost": 8500,
-            "availability": 8,
-            "description": "+1 to Cardiovascular tests.",
-            "page": 461
-          },
-          {
-            "id": "synthacardium-bio-2",
-            "name": "Synthacardium (Bioware, Rating 2)",
-            "category": "basic",
-            "essenceCost": 0.2,
-            "cost": 17000,
-            "availability": 12,
-            "description": "+2 to Cardiovascular tests.",
-            "page": 461
-          },
-          {
-            "id": "synthacardium-bio-3",
-            "name": "Synthacardium (Bioware, Rating 3)",
-            "category": "basic",
-            "essenceCost": 0.3,
-            "cost": 25500,
-            "availability": 14,
-            "description": "+3 to Cardiovascular tests.",
-            "page": 461
-          },
-          {
-            "id": "tracheal-filter-1",
-            "name": "Tracheal Filter (Rating 1)",
-            "category": "basic",
-            "essenceCost": 0.1,
-            "cost": 4500,
-            "availability": 4,
-            "description": "+1 dice vs. inhaled toxins.",
-            "page": 461
-          },
-          {
-            "id": "tracheal-filter-2",
-            "name": "Tracheal Filter (Rating 2)",
-            "category": "basic",
-            "essenceCost": 0.15,
-            "cost": 9000,
-            "availability": 6,
-            "description": "+2 dice vs. inhaled toxins.",
-            "page": 461
-          },
-          {
-            "id": "tracheal-filter-3",
-            "name": "Tracheal Filter (Rating 3)",
-            "category": "basic",
-            "essenceCost": 0.2,
-            "cost": 13500,
-            "availability": 8,
-            "description": "+3 dice vs. inhaled toxins.",
-            "page": 461
-          },
-          {
-            "id": "tracheal-filter-4",
-            "name": "Tracheal Filter (Rating 4)",
-            "category": "basic",
-            "essenceCost": 0.25,
-            "cost": 18000,
-            "availability": 10,
-            "description": "+4 dice vs. inhaled toxins.",
-            "page": 461
-          },
-          {
-            "id": "tracheal-filter-5",
-            "name": "Tracheal Filter (Rating 5)",
-            "category": "basic",
-            "essenceCost": 0.3,
-            "cost": 22500,
-            "availability": 12,
-            "description": "+5 dice vs. inhaled toxins.",
-            "page": 461
-          },
-          {
-            "id": "tracheal-filter-6",
-            "name": "Tracheal Filter (Rating 6)",
-            "category": "basic",
-            "essenceCost": 0.35,
-            "cost": 27000,
-            "availability": 14,
-            "description": "+6 dice vs. inhaled toxins.",
-            "page": 461
-          },
-          {
-            "id": "tailored-pheromones-1",
-            "name": "Tailored Pheromones (Rating 1)",
-            "category": "basic",
-            "essenceCost": 0.2,
-            "cost": 31000,
-            "availability": 4,
-            "description": "+1 to Acting and Influence skill tests. +1 Social Limit.",
-            "attributeBonuses": {
-              "socialLimit": 1
+            "hasRating": true,
+            "minRating": 1,
+            "maxRating": 3,
+            "ratings": {
+              "1": {
+                "cost": 8500,
+                "availability": 8,
+                "essenceCost": 0.1,
+                "effects": { "dicePoolModifier": 1 }
+              },
+              "2": {
+                "cost": 17000,
+                "availability": 12,
+                "essenceCost": 0.2,
+                "effects": { "dicePoolModifier": 2 }
+              },
+              "3": {
+                "cost": 25500,
+                "availability": 14,
+                "essenceCost": 0.3,
+                "effects": { "dicePoolModifier": 3 }
+              }
             },
-            "page": 460,
-            "legality": "restricted"
-          },
-          {
-            "id": "tailored-pheromones-2",
-            "name": "Tailored Pheromones (Rating 2)",
-            "category": "basic",
-            "essenceCost": 0.4,
-            "cost": 62000,
-            "availability": 8,
-            "description": "+2 to Acting and Influence skill tests. +2 Social Limit.",
-            "attributeBonuses": {
-              "socialLimit": 2
-            },
-            "page": 460,
-            "legality": "restricted"
-          },
-          {
-            "id": "tailored-pheromones-3",
-            "name": "Tailored Pheromones (Rating 3)",
-            "category": "basic",
-            "essenceCost": 0.6,
-            "cost": 93000,
-            "availability": 12,
-            "description": "+3 to Acting and Influence skill tests. +3 Social Limit.",
-            "attributeBonuses": {
-              "socialLimit": 3
-            },
-            "page": 460,
-            "legality": "restricted"
-          },
-          {
-            "id": "bone-density-augmentation-1",
-            "name": "Bone Density Augmentation (Rating 1)",
-            "category": "basic",
-            "essenceCost": 0.3,
-            "cost": 5000,
-            "availability": 4,
-            "description": "Unarmed damage becomes (STR)P. Incompatible with bone lacing.",
-            "page": 459
-          },
-          {
-            "id": "bone-density-augmentation-2",
-            "name": "Bone Density Augmentation (Rating 2)",
-            "category": "basic",
-            "essenceCost": 0.6,
-            "cost": 10000,
-            "availability": 8,
-            "description": "+1 Body for damage resistance. Unarmed (STR+1)P. Incompatible with bone lacing.",
-            "attributeBonuses": {
-              "bodyArmor": 1
-            },
-            "page": 459
-          },
-          {
-            "id": "bone-density-augmentation-3",
-            "name": "Bone Density Augmentation (Rating 3)",
-            "category": "basic",
-            "essenceCost": 0.9,
-            "cost": 15000,
-            "availability": 12,
-            "description": "+2 Body for damage resistance. Unarmed (STR+2)P. Incompatible with bone lacing.",
-            "attributeBonuses": {
-              "bodyArmor": 2
-            },
-            "page": 459
-          },
-          {
-            "id": "bone-density-augmentation-4",
-            "name": "Bone Density Augmentation (Rating 4)",
-            "category": "basic",
-            "essenceCost": 1.2,
-            "cost": 20000,
-            "availability": 16,
-            "description": "+3 Body for damage resistance. Unarmed (STR+3)P. Incompatible with bone lacing.",
-            "attributeBonuses": {
-              "bodyArmor": 3
-            },
-            "page": 459
-          },
-          {
-            "id": "toxin-extractor-1",
-            "name": "Toxin Extractor (Rating 1)",
-            "category": "basic",
-            "essenceCost": 0.2,
-            "cost": 4800,
-            "availability": 3,
-            "description": "+1 dice to Toxin Resistance tests.",
-            "page": 461
-          },
-          {
-            "id": "toxin-extractor-2",
-            "name": "Toxin Extractor (Rating 2)",
-            "category": "basic",
-            "essenceCost": 0.4,
-            "cost": 9600,
-            "availability": 6,
-            "description": "+2 dice to Toxin Resistance tests.",
-            "page": 461
-          },
-          {
-            "id": "toxin-extractor-3",
-            "name": "Toxin Extractor (Rating 3)",
-            "category": "basic",
-            "essenceCost": 0.6,
-            "cost": 14400,
-            "availability": 9,
-            "description": "+3 dice to Toxin Resistance tests.",
-            "page": 461
-          },
-          {
-            "id": "toxin-extractor-4",
-            "name": "Toxin Extractor (Rating 4)",
-            "category": "basic",
-            "essenceCost": 0.8,
-            "cost": 19200,
-            "availability": 12,
-            "description": "+4 dice to Toxin Resistance tests.",
-            "page": 461
-          },
-          {
-            "id": "toxin-extractor-5",
-            "name": "Toxin Extractor (Rating 5)",
-            "category": "basic",
-            "essenceCost": 1.0,
-            "cost": 24000,
-            "availability": 15,
-            "description": "+5 dice to Toxin Resistance tests.",
-            "page": 461
-          },
-          {
-            "id": "toxin-extractor-6",
-            "name": "Toxin Extractor (Rating 6)",
-            "category": "basic",
-            "essenceCost": 1.2,
-            "cost": 28800,
-            "availability": 18,
-            "description": "+6 dice to Toxin Resistance tests.",
-            "page": 461
-          },
-          {
-            "id": "cerebral-booster-1",
-            "name": "Cerebral Booster (Rating 1)",
-            "category": "cultured",
-            "essenceCost": 0.2,
-            "cost": 31500,
-            "availability": 12,
-            "description": "+1 LOG.",
-            "attributeBonuses": {
-              "logic": 1
-            },
-            "page": 461
-          },
-          {
-            "id": "cerebral-booster-2",
-            "name": "Cerebral Booster (Rating 2)",
-            "category": "cultured",
-            "essenceCost": 0.4,
-            "cost": 63000,
-            "availability": 14,
-            "description": "+2 LOG.",
-            "attributeBonuses": {
-              "logic": 2
-            },
-            "page": 461
-          },
-          {
-            "id": "cerebral-booster-3",
-            "name": "Cerebral Booster (Rating 3)",
-            "category": "cultured",
-            "essenceCost": 0.6,
-            "cost": 94500,
-            "availability": 16,
-            "description": "+3 LOG.",
-            "attributeBonuses": {
-              "logic": 3
-            },
-            "page": 461
-          },
-          {
-            "id": "damage-compensators-1",
-            "name": "Damage Compensators (Rating 1)",
-            "category": "cultured",
-            "essenceCost": 0.1,
-            "cost": 6500,
-            "availability": 8,
-            "description": "Ignore 1 wound modifier.",
-            "page": 461
-          },
-          {
-            "id": "damage-compensators-2",
-            "name": "Damage Compensators (Rating 2)",
-            "category": "cultured",
-            "essenceCost": 0.15,
-            "cost": 13000,
-            "availability": 10,
-            "description": "Ignore 2 wound modifiers.",
-            "page": 461
-          },
-          {
-            "id": "damage-compensators-3",
-            "name": "Damage Compensators (Rating 3)",
-            "category": "cultured",
-            "essenceCost": 0.2,
-            "cost": 19500,
-            "availability": 12,
-            "description": "Ignore 3 wound modifiers.",
-            "page": 461
-          },
-          {
-            "id": "damage-compensators-4",
-            "name": "Damage Compensators (Rating 4)",
-            "category": "cultured",
-            "essenceCost": 0.25,
-            "cost": 26000,
-            "availability": 14,
-            "description": "Ignore 4 wound modifiers.",
-            "page": 461
-          },
-          {
-            "id": "damage-compensators-5",
-            "name": "Damage Compensators (Rating 5)",
-            "category": "cultured",
-            "essenceCost": 0.3,
-            "cost": 32500,
-            "availability": 16,
-            "description": "Ignore 5 wound modifiers.",
-            "page": 461
-          },
-          {
-            "id": "damage-compensators-6",
-            "name": "Damage Compensators (Rating 6)",
-            "category": "cultured",
-            "essenceCost": 0.35,
-            "cost": 39000,
-            "availability": 18,
-            "description": "Ignore 6 wound modifiers.",
-            "page": 461
-          },
-          {
-            "id": "mnemonic-enhancer-1",
-            "name": "Mnemonic Enhancer (Rating 1)",
-            "category": "cultured",
-            "essenceCost": 0.1,
-            "cost": 9000,
-            "availability": 12,
-            "description": "+1 to memory tests. +1 to Knowledge skill maximums.",
-            "page": 461
-          },
-          {
-            "id": "mnemonic-enhancer-2",
-            "name": "Mnemonic Enhancer (Rating 2)",
-            "category": "cultured",
-            "essenceCost": 0.2,
-            "cost": 18000,
-            "availability": 14,
-            "description": "+2 to memory tests. +2 to Knowledge skill maximums.",
-            "page": 461
-          },
-          {
-            "id": "mnemonic-enhancer-3",
-            "name": "Mnemonic Enhancer (Rating 3)",
-            "category": "cultured",
-            "essenceCost": 0.3,
-            "cost": 27000,
-            "availability": 16,
-            "description": "+3 to memory tests. +3 to Knowledge skill maximums.",
+            "description": "+Rating dice to Cardiovascular tests (fatigue, holding breath, etc.).",
             "page": 461
           },
           {
@@ -11736,51 +11958,6 @@
             "availability": 6,
             "description": "Only need 3 hours of sleep per day.",
             "page": 461
-          },
-          {
-            "id": "synaptic-booster-1",
-            "name": "Synaptic Booster (Rating 1)",
-            "category": "cultured",
-            "essenceCost": 0.5,
-            "cost": 95000,
-            "availability": 12,
-            "description": "+1 REA, +1D6 Initiative. Incompatible with wired reflexes.",
-            "attributeBonuses": {
-              "reaction": 1
-            },
-            "initiativeDiceBonus": 1,
-            "page": 462,
-            "legality": "restricted"
-          },
-          {
-            "id": "synaptic-booster-2",
-            "name": "Synaptic Booster (Rating 2)",
-            "category": "cultured",
-            "essenceCost": 1,
-            "cost": 190000,
-            "availability": 14,
-            "description": "+2 REA, +2D6 Initiative. Incompatible with wired reflexes.",
-            "attributeBonuses": {
-              "reaction": 2
-            },
-            "initiativeDiceBonus": 2,
-            "page": 462,
-            "legality": "restricted"
-          },
-          {
-            "id": "synaptic-booster-3",
-            "name": "Synaptic Booster (Rating 3)",
-            "category": "cultured",
-            "essenceCost": 1.5,
-            "cost": 285000,
-            "availability": 18,
-            "description": "+3 REA, +3D6 Initiative. Incompatible with wired reflexes.",
-            "attributeBonuses": {
-              "reaction": 3
-            },
-            "initiativeDiceBonus": 3,
-            "page": 462,
-            "legality": "restricted"
           }
         ]
       }
