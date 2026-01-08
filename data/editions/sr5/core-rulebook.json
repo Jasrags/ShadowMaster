@@ -10869,9 +10869,14 @@
             "essenceCost": 1,
             "cost": 15000,
             "availability": 4,
-            "capacity": 10,
+            "capacity": 15,
+            "limbType": "full-arm",
+            "appearance": "obvious",
+            "baseStrength": 3,
+            "baseAgility": 3,
+            "physicalCMBonus": 1,
             "description": "Full cybernetic arm. Base stats: AGI 3, STR 3.",
-            "page": 458
+            "page": 456
           },
           {
             "id": "cyberlimb-arm-synthetic",
@@ -10880,9 +10885,14 @@
             "essenceCost": 1,
             "cost": 20000,
             "availability": 4,
-            "capacity": 5,
+            "capacity": 8,
+            "limbType": "full-arm",
+            "appearance": "synthetic",
+            "baseStrength": 3,
+            "baseAgility": 3,
+            "physicalCMBonus": 1,
             "description": "Realistic-looking cyberarm. Base stats: AGI 3, STR 3.",
-            "page": 458
+            "page": 456
           },
           {
             "id": "cyberlimb-leg",
@@ -10891,9 +10901,14 @@
             "essenceCost": 1,
             "cost": 15000,
             "availability": 4,
-            "capacity": 12,
+            "capacity": 20,
+            "limbType": "full-leg",
+            "appearance": "obvious",
+            "baseStrength": 3,
+            "baseAgility": 3,
+            "physicalCMBonus": 1,
             "description": "Full cybernetic leg. Base stats: AGI 3, STR 3.",
-            "page": 458
+            "page": 456
           },
           {
             "id": "cyberlimb-leg-synthetic",
@@ -10902,9 +10917,14 @@
             "essenceCost": 1,
             "cost": 20000,
             "availability": 4,
-            "capacity": 6,
+            "capacity": 10,
+            "limbType": "full-leg",
+            "appearance": "synthetic",
+            "baseStrength": 3,
+            "baseAgility": 3,
+            "physicalCMBonus": 1,
             "description": "Realistic-looking cyberleg. Base stats: AGI 3, STR 3.",
-            "page": 458
+            "page": 456
           },
           {
             "id": "cyberlimb-torso",
@@ -10912,10 +10932,15 @@
             "category": "cyberlimb",
             "essenceCost": 1.5,
             "cost": 20000,
-            "availability": 6,
+            "availability": 12,
             "capacity": 10,
-            "description": "Cybernetic torso section.",
-            "page": 458
+            "limbType": "torso",
+            "appearance": "obvious",
+            "baseStrength": 3,
+            "baseAgility": 3,
+            "physicalCMBonus": 1,
+            "description": "Cybernetic torso shell. Does not replace organs.",
+            "page": 456
           },
           {
             "id": "cyberlimb-skull",
@@ -10923,10 +10948,15 @@
             "category": "cyberlimb",
             "essenceCost": 0.75,
             "cost": 10000,
-            "availability": 4,
+            "availability": 16,
             "capacity": 4,
-            "description": "Cybernetic skull housing.",
-            "page": 458
+            "limbType": "skull",
+            "appearance": "obvious",
+            "baseStrength": 3,
+            "baseAgility": 3,
+            "physicalCMBonus": 1,
+            "description": "Cybernetic skull shell. Does not replace brain.",
+            "page": 456
           },
           {
             "id": "cyberlimb-hand",
@@ -10935,9 +10965,14 @@
             "essenceCost": 0.25,
             "cost": 5000,
             "availability": 2,
-            "capacity": 2,
-            "description": "Replacement hand. Base stats: AGI 3, STR 3.",
-            "page": 458
+            "capacity": 4,
+            "limbType": "hand",
+            "appearance": "obvious",
+            "baseStrength": 3,
+            "baseAgility": 3,
+            "physicalCMBonus": 0,
+            "description": "Replacement hand. Base stats: AGI 3, STR 3. Attributes only apply to tests directly involving the hand.",
+            "page": 456
           },
           {
             "id": "cyberlimb-foot",
@@ -10946,9 +10981,14 @@
             "essenceCost": 0.25,
             "cost": 5000,
             "availability": 2,
-            "capacity": 2,
-            "description": "Replacement foot. Base stats: AGI 3, STR 3.",
-            "page": 458
+            "capacity": 4,
+            "limbType": "foot",
+            "appearance": "obvious",
+            "baseStrength": 3,
+            "baseAgility": 3,
+            "physicalCMBonus": 0,
+            "description": "Replacement foot. Base stats: AGI 3, STR 3. Attributes only apply to tests directly involving the foot.",
+            "page": 456
           },
           {
             "id": "cyberlimb-lower-arm",
@@ -10957,9 +10997,14 @@
             "essenceCost": 0.45,
             "cost": 10000,
             "availability": 4,
-            "capacity": 5,
-            "description": "Forearm replacement.",
-            "page": 458
+            "capacity": 10,
+            "limbType": "lower-arm",
+            "appearance": "obvious",
+            "baseStrength": 3,
+            "baseAgility": 3,
+            "physicalCMBonus": 0.5,
+            "description": "Forearm replacement (includes hand). Base stats: AGI 3, STR 3.",
+            "page": 456
           },
           {
             "id": "cyberlimb-lower-leg",
@@ -10968,25 +11013,31 @@
             "essenceCost": 0.45,
             "cost": 10000,
             "availability": 4,
-            "capacity": 6,
-            "description": "Lower leg replacement.",
-            "page": 458
+            "capacity": 12,
+            "limbType": "lower-leg",
+            "appearance": "obvious",
+            "baseStrength": 3,
+            "baseAgility": 3,
+            "physicalCMBonus": 0.5,
+            "description": "Lower leg replacement (includes foot). Base stats: AGI 3, STR 3.",
+            "page": 456
           },
           {
             "id": "cyberlimb-agility",
             "name": "Cyberlimb Agility Enhancement",
             "category": "cyberlimb-enhancement",
             "essenceCost": 0,
-            "cost": 3000,
-            "availability": 8,
+            "cost": 6500,
+            "availability": 3,
             "capacityCost": 1,
             "hasRating": true,
             "maxRating": 3,
             "costPerRating": true,
             "capacityPerRating": true,
             "parentType": "cyberlimb",
-            "description": "+Rating to limb AGI (max +3 over base).",
-            "page": 458,
+            "enhancementType": "agility",
+            "description": "+Rating to limb AGI (max +3 over base). One enhancement per type per limb.",
+            "page": 457,
             "ratingSpec": {
               "rating": {
                 "hasRating": true,
@@ -10994,12 +11045,12 @@
                 "maxRating": 3
               },
               "costScaling": {
-                "baseValue": 3000,
+                "baseValue": 6500,
                 "perRating": true
               },
               "availabilityScaling": {
-                "baseValue": 8,
-                "perRating": false
+                "baseValue": 3,
+                "perRating": true
               },
               "essenceScaling": {
                 "baseValue": 0,
@@ -11017,16 +11068,17 @@
             "name": "Cyberlimb Strength Enhancement",
             "category": "cyberlimb-enhancement",
             "essenceCost": 0,
-            "cost": 3000,
-            "availability": 8,
+            "cost": 6500,
+            "availability": 3,
             "capacityCost": 1,
             "hasRating": true,
             "maxRating": 3,
             "costPerRating": true,
             "capacityPerRating": true,
             "parentType": "cyberlimb",
-            "description": "+Rating to limb STR (max +3 over base).",
-            "page": 458,
+            "enhancementType": "strength",
+            "description": "+Rating to limb STR (max +3 over base). One enhancement per type per limb.",
+            "page": 457,
             "ratingSpec": {
               "rating": {
                 "hasRating": true,
@@ -11034,12 +11086,12 @@
                 "maxRating": 3
               },
               "costScaling": {
-                "baseValue": 3000,
+                "baseValue": 6500,
                 "perRating": true
               },
               "availabilityScaling": {
-                "baseValue": 8,
-                "perRating": false
+                "baseValue": 3,
+                "perRating": true
               },
               "essenceScaling": {
                 "baseValue": 0,
@@ -11054,19 +11106,20 @@
           },
           {
             "id": "cyberlimb-armor",
-            "name": "Cyberlimb Armor",
+            "name": "Cyberlimb Armor Enhancement",
             "category": "cyberlimb-enhancement",
             "essenceCost": 0,
             "cost": 3000,
-            "availability": 8,
+            "availability": 5,
             "capacityCost": 1,
             "hasRating": true,
             "maxRating": 3,
             "costPerRating": true,
             "capacityPerRating": true,
             "parentType": "cyberlimb",
-            "description": "+Rating armor for limb.",
-            "page": 458,
+            "enhancementType": "armor",
+            "description": "+Rating armor bonus, cumulative with worn armor, no encumbrance. One enhancement per type per limb.",
+            "page": 457,
             "ratingSpec": {
               "rating": {
                 "hasRating": true,
@@ -11078,8 +11131,8 @@
                 "perRating": true
               },
               "availabilityScaling": {
-                "baseValue": 8,
-                "perRating": false
+                "baseValue": 5,
+                "perRating": true
               },
               "essenceScaling": {
                 "baseValue": 0,
@@ -11089,47 +11142,231 @@
                 "baseValue": 1,
                 "perRating": true
               }
-            },
-            "legality": "restricted"
+            }
           },
           {
             "id": "cyberlimb-gyromount",
-            "name": "Gyromount",
+            "name": "Cyberarm Gyromount",
             "category": "cyberlimb-accessory",
             "essenceCost": 0,
             "cost": 6000,
             "availability": 12,
             "capacityCost": 8,
             "parentType": "cyberlimb",
-            "description": "Arm-mounted weapon stabilization system. Negates recoil penalties.",
-            "page": 458,
-            "legality": "restricted"
+            "compatibleLimbs": ["full-arm", "lower-arm"],
+            "description": "Arm-mounted weapon stabilization system. Rating 3 recoil compensation. Activating or deactivating is a Simple Action.",
+            "wirelessBonus": "Activating or deactivating the system is a Free Action.",
+            "wirelessEffects": [
+              {
+                "type": "action_economy",
+                "action": "toggle_gyromount",
+                "from": "simple",
+                "to": "free"
+              }
+            ],
+            "page": 457,
+            "legality": "forbidden"
           },
           {
             "id": "cyberlimb-holster",
-            "name": "Cyberlimb Holster",
+            "name": "Cyber Holster",
             "category": "cyberlimb-accessory",
             "essenceCost": 0,
             "cost": 2000,
-            "availability": 6,
-            "capacityCost": 2,
+            "availability": 8,
+            "capacityCost": 5,
             "parentType": "cyberlimb",
-            "description": "Concealed weapon compartment in limb.",
-            "page": 458,
+            "compatibleLimbs": ["full-arm", "lower-arm", "full-leg", "lower-leg", "torso"],
+            "description": "Concealed holster for taser or pistol-sized weapons. Inserting or retrieving a weapon takes one Simple Action. Can also be used as a smuggling compartment.",
+            "wirelessBonus": "Readying a weapon from the holster is a Free Action.",
+            "wirelessEffects": [
+              {
+                "type": "action_economy",
+                "action": "ready_from_holster",
+                "from": "simple",
+                "to": "free"
+              }
+            ],
+            "page": 457,
             "legality": "restricted"
           },
           {
             "id": "cyberlimb-slide",
-            "name": "Cyberlimb Slide",
+            "name": "Cyberarm Slide",
             "category": "cyberlimb-accessory",
             "essenceCost": 0,
             "cost": 3000,
-            "availability": 8,
-            "capacityCost": 4,
+            "availability": 12,
+            "capacityCost": 3,
             "parentType": "cyberlimb",
-            "description": "Auto-deploying weapon mechanism.",
-            "page": 459,
+            "compatibleLimbs": ["full-arm", "lower-arm"],
+            "description": "Integral hidden arm-slide for hold-out, taser, or light pistol. Ready weapon as a Free Action.",
+            "page": 457,
             "legality": "restricted"
+          },
+          {
+            "id": "cyberlimb-hydraulic-jacks",
+            "name": "Hydraulic Jacks",
+            "category": "cyberlimb-accessory",
+            "essenceCost": 0,
+            "cost": 2500,
+            "availability": 9,
+            "capacityCost": 1,
+            "hasRating": true,
+            "maxRating": 6,
+            "costPerRating": true,
+            "capacityPerRating": true,
+            "parentType": "cyberlimb",
+            "compatibleLimbs": ["full-leg", "lower-leg"],
+            "requiresPair": true,
+            "pairLocation": "legs",
+            "description": "Requires identical Rating in both cyberlegs. Each Rating adds +1 to Physical limit for jumping/sprinting, +20% to jump distance, and reduces falling distance by 2m for damage calculation.",
+            "wirelessBonus": "+1 dice pool bonus to jumping, sprinting, or lifting tests with legs.",
+            "wirelessEffects": [
+              {
+                "type": "dice_pool",
+                "skills": ["jumping", "sprinting", "lifting"],
+                "modifier": 1
+              }
+            ],
+            "page": 457,
+            "ratingSpec": {
+              "rating": {
+                "hasRating": true,
+                "minRating": 1,
+                "maxRating": 6
+              },
+              "costScaling": {
+                "baseValue": 2500,
+                "perRating": true
+              },
+              "availabilityScaling": {
+                "baseValue": 9,
+                "perRating": false
+              },
+              "capacityCostScaling": {
+                "baseValue": 1,
+                "perRating": true
+              }
+            }
+          },
+          {
+            "id": "cyberlimb-large-smuggling-compartment",
+            "name": "Large Smuggling Compartment",
+            "category": "cyberlimb-accessory",
+            "essenceCost": 0,
+            "cost": 8000,
+            "availability": 6,
+            "capacityCost": 5,
+            "parentType": "cyberlimb",
+            "compatibleLimbs": ["full-arm", "full-leg", "torso"],
+            "description": "Larger shielded compartment for smuggling. Can hold a heavy pistol or small SMG. Getting something out or putting something in takes a Complex Action.",
+            "wirelessBonus": "Getting something out or putting something in takes a Simple Action.",
+            "wirelessEffects": [
+              {
+                "type": "action_economy",
+                "action": "access_compartment",
+                "from": "complex",
+                "to": "simple"
+              }
+            ],
+            "page": 457
+          },
+          {
+            "id": "cyberlimb-hand-synthetic",
+            "name": "Synthetic Cyberhand",
+            "category": "cyberlimb",
+            "essenceCost": 0.25,
+            "cost": 6000,
+            "availability": 2,
+            "capacity": 2,
+            "limbType": "hand",
+            "appearance": "synthetic",
+            "baseStrength": 3,
+            "baseAgility": 3,
+            "physicalCMBonus": 0,
+            "description": "Realistic-looking replacement hand. Base stats: AGI 3, STR 3. Attributes only apply to tests directly involving the hand.",
+            "page": 456
+          },
+          {
+            "id": "cyberlimb-foot-synthetic",
+            "name": "Synthetic Cyberfoot",
+            "category": "cyberlimb",
+            "essenceCost": 0.25,
+            "cost": 6000,
+            "availability": 2,
+            "capacity": 2,
+            "limbType": "foot",
+            "appearance": "synthetic",
+            "baseStrength": 3,
+            "baseAgility": 3,
+            "physicalCMBonus": 0,
+            "description": "Realistic-looking replacement foot. Base stats: AGI 3, STR 3. Attributes only apply to tests directly involving the foot.",
+            "page": 456
+          },
+          {
+            "id": "cyberlimb-lower-arm-synthetic",
+            "name": "Synthetic Lower Cyberarm",
+            "category": "cyberlimb",
+            "essenceCost": 0.45,
+            "cost": 12000,
+            "availability": 4,
+            "capacity": 5,
+            "limbType": "lower-arm",
+            "appearance": "synthetic",
+            "baseStrength": 3,
+            "baseAgility": 3,
+            "physicalCMBonus": 0.5,
+            "description": "Realistic-looking forearm replacement (includes hand). Base stats: AGI 3, STR 3.",
+            "page": 456
+          },
+          {
+            "id": "cyberlimb-lower-leg-synthetic",
+            "name": "Synthetic Lower Cyberleg",
+            "category": "cyberlimb",
+            "essenceCost": 0.45,
+            "cost": 12000,
+            "availability": 4,
+            "capacity": 6,
+            "limbType": "lower-leg",
+            "appearance": "synthetic",
+            "baseStrength": 3,
+            "baseAgility": 3,
+            "physicalCMBonus": 0.5,
+            "description": "Realistic-looking lower leg replacement (includes foot). Base stats: AGI 3, STR 3.",
+            "page": 456
+          },
+          {
+            "id": "cyberlimb-torso-synthetic",
+            "name": "Synthetic Cybertorso",
+            "category": "cyberlimb",
+            "essenceCost": 1.5,
+            "cost": 25000,
+            "availability": 12,
+            "capacity": 5,
+            "limbType": "torso",
+            "appearance": "synthetic",
+            "baseStrength": 3,
+            "baseAgility": 3,
+            "physicalCMBonus": 1,
+            "description": "Realistic-looking cybernetic torso shell. Does not replace organs.",
+            "page": 456
+          },
+          {
+            "id": "cyberlimb-skull-synthetic",
+            "name": "Synthetic Cyberskull",
+            "category": "cyberlimb",
+            "essenceCost": 0.75,
+            "cost": 15000,
+            "availability": 16,
+            "capacity": 2,
+            "limbType": "skull",
+            "appearance": "synthetic",
+            "baseStrength": 3,
+            "baseAgility": 3,
+            "physicalCMBonus": 1,
+            "description": "Realistic-looking cybernetic skull shell. Does not replace brain.",
+            "page": 456
           },
           {
             "id": "hand-blade",

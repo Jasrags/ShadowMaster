@@ -49,6 +49,14 @@ export type AuditAction =
   | "augmentation_installed"
   | "augmentation_removed"
   | "augmentation_upgraded"
+  // Cyberlimb actions
+  | "cyberlimb_installed"
+  | "cyberlimb_removed"
+  | "cyberlimb_wireless_toggled"
+  | "cyberlimb_enhancement_added"
+  | "cyberlimb_enhancement_removed"
+  | "cyberlimb_accessory_added"
+  | "cyberlimb_accessory_removed"
   // Sync/Migration actions
   | "drift_detected"
   | "migration_started"
