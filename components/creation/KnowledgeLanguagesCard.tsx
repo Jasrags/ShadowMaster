@@ -66,6 +66,14 @@ const COMMON_LANGUAGES = [
 
 const MAX_SKILL_RATING = 6;
 
+// Abbreviated category labels for compact display
+const CATEGORY_ABBREVS: Record<KnowledgeCategory, string> = {
+  academic: "Acad",
+  interests: "Int",
+  professional: "Prof",
+  street: "Str",
+};
+
 interface KnowledgeLanguagesCardProps {
   state: CreationState;
   updateState: (updates: Partial<CreationState>) => void;
@@ -147,7 +155,7 @@ function BudgetProgressBar({
 }
 
 // =============================================================================
-// LANGUAGE ROW COMPONENT
+// LANGUAGE ROW COMPONENT (Compact single-row layout)
 // =============================================================================
 
 function LanguageRow({
@@ -165,78 +173,75 @@ function LanguageRow({
 
   return (
     <div className="rounded-lg border border-zinc-200 bg-white p-3 dark:border-zinc-700 dark:bg-zinc-900">
-      <div className="flex items-center justify-between">
-        <div className="flex items-center gap-2">
-          <Languages className="h-4 w-4 text-zinc-400" />
-          <span className="text-sm font-semibold text-zinc-900 dark:text-zinc-100">
-            {language.name}
-          </span>
-          {isNative && (
-            <span className="rounded bg-purple-100 px-1.5 py-0.5 text-[10px] font-medium text-purple-700 dark:bg-purple-900/50 dark:text-purple-300">
-              Native
+      <div className="flex items-center gap-3">
+        {/* Language info - flexible width */}
+        <div className="min-w-0 flex-1">
+          <div className="flex items-center gap-1.5">
+            <Languages className="h-4 w-4 shrink-0 text-emerald-500" />
+            <span
+              className="truncate font-medium text-zinc-900 dark:text-zinc-100"
+              title={language.name}
+            >
+              {language.name}
             </span>
-          )}
+            {isNative && (
+              <span className="shrink-0 rounded bg-purple-100 px-1.5 py-0.5 text-[10px] font-medium text-purple-700 dark:bg-purple-900/50 dark:text-purple-300">
+                Native
+              </span>
+            )}
+          </div>
         </div>
 
-        {!isNative && (
-          <button
-            onClick={onRemove}
-            className="text-zinc-400 hover:text-red-500 dark:hover:text-red-400"
-            title="Remove language"
-          >
-            <X className="h-4 w-4" />
-          </button>
-        )}
-      </div>
-
-      <div className="mt-1 text-xs text-zinc-500 dark:text-zinc-400">
-        {isNative ? "Native language (free)" : "Learned language"}
-      </div>
-
-      {/* Rating controls */}
-      <div className="mt-2 flex items-center justify-end gap-2">
-        {isNative ? (
-          <div className="flex h-8 w-10 items-center justify-center rounded bg-purple-100 text-base font-bold text-purple-700 dark:bg-purple-900/50 dark:text-purple-300">
-            N
-          </div>
-        ) : (
-          <>
-            <button
-              onClick={() => onRatingChange(-1)}
-              disabled={!canDecrease}
-              className={`flex h-7 w-7 items-center justify-center rounded transition-colors ${
-                canDecrease
-                  ? "bg-zinc-200 text-zinc-700 hover:bg-zinc-300 dark:bg-zinc-700 dark:text-zinc-200 dark:hover:bg-zinc-600"
-                  : "cursor-not-allowed bg-zinc-100 text-zinc-300 dark:bg-zinc-800 dark:text-zinc-600"
-              }`}
-            >
-              <Minus className="h-4 w-4" />
-            </button>
-
-            <div className="flex h-8 w-10 items-center justify-center rounded bg-zinc-100 text-base font-bold text-zinc-900 dark:bg-zinc-800 dark:text-zinc-100">
-              {language.rating}
+        {/* Controls - fixed width, never wrap */}
+        <div className="flex shrink-0 items-center gap-1.5">
+          {isNative ? (
+            <div className="flex h-8 w-10 items-center justify-center rounded bg-purple-100 text-base font-bold text-purple-700 dark:bg-purple-900/50 dark:text-purple-300">
+              N
             </div>
-
-            <button
-              onClick={() => onRatingChange(1)}
-              disabled={!canIncrease}
-              className={`flex h-7 w-7 items-center justify-center rounded transition-colors ${
-                canIncrease
-                  ? "bg-emerald-500 text-white hover:bg-emerald-600"
-                  : "cursor-not-allowed bg-zinc-100 text-zinc-300 dark:bg-zinc-800 dark:text-zinc-600"
-              }`}
-            >
-              <Plus className="h-4 w-4" />
-            </button>
-          </>
-        )}
+          ) : (
+            <>
+              <button
+                onClick={() => onRatingChange(-1)}
+                disabled={!canDecrease}
+                className={`flex h-7 w-7 items-center justify-center rounded transition-colors ${
+                  canDecrease
+                    ? "bg-zinc-200 text-zinc-700 hover:bg-zinc-300 dark:bg-zinc-700 dark:text-zinc-200"
+                    : "cursor-not-allowed bg-zinc-100 text-zinc-300 dark:bg-zinc-800 dark:text-zinc-600"
+                }`}
+              >
+                <Minus className="h-4 w-4" />
+              </button>
+              <div className="flex h-8 w-10 items-center justify-center rounded bg-zinc-100 text-base font-bold text-zinc-900 dark:bg-zinc-800 dark:text-zinc-100">
+                {language.rating}
+              </div>
+              <button
+                onClick={() => onRatingChange(1)}
+                disabled={!canIncrease}
+                className={`flex h-7 w-7 items-center justify-center rounded transition-colors ${
+                  canIncrease
+                    ? "bg-emerald-500 text-white hover:bg-emerald-600"
+                    : "cursor-not-allowed bg-zinc-100 text-zinc-300 dark:bg-zinc-800 dark:text-zinc-600"
+                }`}
+              >
+                <Plus className="h-4 w-4" />
+              </button>
+              <button
+                onClick={onRemove}
+                className="rounded p-1 text-zinc-400 hover:bg-zinc-200 hover:text-zinc-600 dark:hover:bg-zinc-700 dark:hover:text-zinc-300"
+                title="Remove language"
+              >
+                <X className="h-4 w-4" />
+              </button>
+            </>
+          )}
+        </div>
       </div>
     </div>
   );
 }
 
 // =============================================================================
-// KNOWLEDGE SKILL ROW COMPONENT
+// KNOWLEDGE SKILL ROW COMPONENT (Compact single-row layout)
 // =============================================================================
 
 function KnowledgeSkillRow({
@@ -250,62 +255,70 @@ function KnowledgeSkillRow({
 }) {
   const canIncrease = skill.rating < MAX_SKILL_RATING;
   const canDecrease = skill.rating > 1;
+  const isAtMax = skill.rating >= MAX_SKILL_RATING;
 
   return (
     <div className="rounded-lg border border-zinc-200 bg-white p-3 dark:border-zinc-700 dark:bg-zinc-900">
-      <div className="flex items-center justify-between">
-        <div className="flex items-center gap-2">
-          <Book className="h-4 w-4 text-zinc-400" />
-          <span className="text-sm font-semibold text-zinc-900 dark:text-zinc-100">
-            {skill.name}
-          </span>
-          <span className="rounded bg-zinc-100 px-1.5 py-0.5 text-[10px] font-medium text-zinc-600 dark:bg-zinc-800 dark:text-zinc-400">
-            {CATEGORY_LABELS[skill.category]}
-          </span>
+      <div className="flex items-center gap-3">
+        {/* Skill info - flexible width */}
+        <div className="min-w-0 flex-1">
+          <div className="flex items-center gap-1.5">
+            <Book className="h-4 w-4 shrink-0 text-amber-500" />
+            <span
+              className="truncate font-medium text-zinc-900 dark:text-zinc-100"
+              title={skill.name}
+            >
+              {skill.name}
+            </span>
+            <span
+              className="shrink-0 text-xs text-zinc-500 dark:text-zinc-400"
+              title={CATEGORY_LABELS[skill.category]}
+            >
+              {CATEGORY_ABBREVS[skill.category]}
+            </span>
+          </div>
         </div>
 
-        <button
-          onClick={onRemove}
-          className="text-zinc-400 hover:text-red-500 dark:hover:text-red-400"
-          title="Remove skill"
-        >
-          <X className="h-4 w-4" />
-        </button>
-      </div>
-
-      <div className="mt-1 text-xs text-zinc-500 dark:text-zinc-400">
-        Knowledge skill
-      </div>
-
-      {/* Rating controls */}
-      <div className="mt-2 flex items-center justify-end gap-2">
-        <button
-          onClick={() => onRatingChange(-1)}
-          disabled={!canDecrease}
-          className={`flex h-7 w-7 items-center justify-center rounded transition-colors ${
-            canDecrease
-              ? "bg-zinc-200 text-zinc-700 hover:bg-zinc-300 dark:bg-zinc-700 dark:text-zinc-200 dark:hover:bg-zinc-600"
-              : "cursor-not-allowed bg-zinc-100 text-zinc-300 dark:bg-zinc-800 dark:text-zinc-600"
-          }`}
-        >
-          <Minus className="h-4 w-4" />
-        </button>
-
-        <div className="flex h-8 w-10 items-center justify-center rounded bg-zinc-100 text-base font-bold text-zinc-900 dark:bg-zinc-800 dark:text-zinc-100">
-          {skill.rating}
+        {/* Controls - fixed width, never wrap */}
+        <div className="flex shrink-0 items-center gap-1.5">
+          {isAtMax && (
+            <span className="rounded bg-emerald-100 px-1.5 py-0.5 text-[10px] font-medium text-emerald-700 dark:bg-emerald-900/50 dark:text-emerald-300">
+              MAX
+            </span>
+          )}
+          <button
+            onClick={() => onRatingChange(-1)}
+            disabled={!canDecrease}
+            className={`flex h-7 w-7 items-center justify-center rounded transition-colors ${
+              canDecrease
+                ? "bg-zinc-200 text-zinc-700 hover:bg-zinc-300 dark:bg-zinc-700 dark:text-zinc-200"
+                : "cursor-not-allowed bg-zinc-100 text-zinc-300 dark:bg-zinc-800 dark:text-zinc-600"
+            }`}
+          >
+            <Minus className="h-4 w-4" />
+          </button>
+          <div className="flex h-8 w-10 items-center justify-center rounded bg-zinc-100 text-base font-bold text-zinc-900 dark:bg-zinc-800 dark:text-zinc-100">
+            {skill.rating}
+          </div>
+          <button
+            onClick={() => onRatingChange(1)}
+            disabled={!canIncrease}
+            className={`flex h-7 w-7 items-center justify-center rounded transition-colors ${
+              canIncrease
+                ? "bg-amber-500 text-white hover:bg-amber-600"
+                : "cursor-not-allowed bg-zinc-100 text-zinc-300 dark:bg-zinc-800 dark:text-zinc-600"
+            }`}
+          >
+            <Plus className="h-4 w-4" />
+          </button>
+          <button
+            onClick={onRemove}
+            className="rounded p-1 text-zinc-400 hover:bg-zinc-200 hover:text-zinc-600 dark:hover:bg-zinc-700 dark:hover:text-zinc-300"
+            title="Remove skill"
+          >
+            <X className="h-4 w-4" />
+          </button>
         </div>
-
-        <button
-          onClick={() => onRatingChange(1)}
-          disabled={!canIncrease}
-          className={`flex h-7 w-7 items-center justify-center rounded transition-colors ${
-            canIncrease
-              ? "bg-emerald-500 text-white hover:bg-emerald-600"
-              : "cursor-not-allowed bg-zinc-100 text-zinc-300 dark:bg-zinc-800 dark:text-zinc-600"
-          }`}
-        >
-          <Plus className="h-4 w-4" />
-        </button>
       </div>
     </div>
   );
@@ -725,20 +738,6 @@ export function KnowledgeLanguagesCard({
   const knowledgePointsRemaining = knowledgePointsTotal - knowledgePointsSpent;
   const isOverBudget = knowledgePointsRemaining < 0;
 
-  // Group knowledge skills by category
-  const skillsByCategory = useMemo(() => {
-    const grouped: Record<KnowledgeCategory, KnowledgeSkill[]> = {
-      street: [],
-      professional: [],
-      academic: [],
-      interests: [],
-    };
-    knowledgeSkills.forEach((skill) => {
-      grouped[skill.category].push(skill);
-    });
-    return grouped;
-  }, [knowledgeSkills]);
-
   // Handle language rating change
   const handleLanguageRatingChange = useCallback(
     (index: number, delta: number) => {
@@ -946,47 +945,28 @@ export function KnowledgeLanguagesCard({
             </h4>
           </div>
 
-          <div className="space-y-3">
+          <div className="space-y-2">
             {knowledgeSkills.length === 0 ? (
               <p className="text-sm text-zinc-500 dark:text-zinc-400">
                 No knowledge skills added.
               </p>
             ) : (
-              (Object.keys(CATEGORY_LABELS) as KnowledgeCategory[]).map(
-                (category) =>
-                  skillsByCategory[category].length > 0 && (
-                    <div key={category}>
-                      <div className="mb-1 text-[10px] font-semibold uppercase tracking-wider text-zinc-400 dark:text-zinc-500">
-                        {CATEGORY_LABELS[category]}
-                      </div>
-                      <div className="space-y-2">
-                        {skillsByCategory[category].map((skill, idx) => {
-                          const globalIndex = knowledgeSkills.findIndex(
-                            (s) => s === skill
-                          );
-                          return (
-                            <KnowledgeSkillRow
-                              key={`${skill.name}-${idx}`}
-                              skill={skill}
-                              onRatingChange={(delta) =>
-                                handleKnowledgeRatingChange(globalIndex, delta)
-                              }
-                              onRemove={() =>
-                                handleRemoveKnowledge(globalIndex)
-                              }
-                            />
-                          );
-                        })}
-                      </div>
-                    </div>
-                  )
-              )
+              knowledgeSkills.map((skill, index) => (
+                <KnowledgeSkillRow
+                  key={`${skill.name}-${index}`}
+                  skill={skill}
+                  onRatingChange={(delta) =>
+                    handleKnowledgeRatingChange(index, delta)
+                  }
+                  onRemove={() => handleRemoveKnowledge(index)}
+                />
+              ))
             )}
           </div>
 
           <button
             onClick={() => setShowAddKnowledge(true)}
-            className="mt-2 flex items-center gap-1 text-sm text-emerald-600 hover:text-emerald-700 dark:text-emerald-400 dark:hover:text-emerald-300"
+            className="mt-2 flex items-center gap-1 text-sm text-amber-600 hover:text-amber-700 dark:text-amber-400 dark:hover:text-amber-300"
           >
             <Plus className="h-4 w-4" />
             Add Knowledge Skill

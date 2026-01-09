@@ -537,6 +537,8 @@ export interface CyberwareCatalogItemData {
   source?: string;
   parentType?: string;
   requirements?: string[];
+  /** Compatible cyberlimb types for accessories (e.g., ["full-arm", "lower-arm"]) */
+  compatibleLimbs?: string[];
 
   // -------------------------------------------------------------------------
   // UNIFIED RATINGS TABLE (Preferred Approach)

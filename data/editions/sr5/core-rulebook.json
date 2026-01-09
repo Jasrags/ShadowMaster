@@ -5608,7 +5608,8 @@
             "karmaBonus": 5,
             "summary": "Cannot use one skill group.",
             "requiresSpecification": true,
-            "specificationLabel": "Skill Group"
+            "specificationLabel": "Skill Group",
+            "specificationSource": "skillGroups"
           },
           {
             "id": "insomnia",

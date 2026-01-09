@@ -11,3 +11,5 @@ export {
   type InstalledCyberlimb,
 } from "./AugmentationModal";
 export { CyberwareEnhancementModal, type CyberwareEnhancementSelection } from "./CyberwareEnhancementModal";
+export { CyberlimbAccessoryModal, type CyberlimbAccessorySelection } from "./CyberlimbAccessoryModal";
+export { CyberlimbWeaponModal, type CyberlimbWeaponSelection } from "./CyberlimbWeaponModal";

@@ -12,7 +12,7 @@
 
 import { useMemo, useState, useCallback } from "react";
 import { useSkills } from "@/lib/rules";
-import { X, Search, Plus, Minus, Check, Users } from "lucide-react";
+import { X, Search, Plus, Minus, Check, Users, AlertTriangle } from "lucide-react";
 
 // =============================================================================
 // CONSTANTS
@@ -33,6 +33,7 @@ interface SkillGroupModalProps {
   hasMagic: boolean;
   hasResonance: boolean;
   remainingGroupPoints: number;
+  incompetentGroupId?: string; // Skill group the character is incompetent in
 }
 
 // =============================================================================
@@ -48,6 +49,7 @@ export function SkillGroupModal({
   hasMagic,
   hasResonance,
   remainingGroupPoints,
+  incompetentGroupId,
 }: SkillGroupModalProps) {
   const { skillGroups, activeSkills } = useSkills();
 
@@ -161,18 +163,22 @@ export function SkillGroupModal({
             {filteredGroups.map((group) => {
               const isSelected = selectedGroupId === group.id;
               const isAlreadyAdded = existingGroupIds.includes(group.id);
+              const isIncompetent = group.id === incompetentGroupId;
+              const isDisabled = isAlreadyAdded || isIncompetent;
 
               return (
                 <button
                   key={group.id}
-                  onClick={() => !isAlreadyAdded && setSelectedGroupId(group.id)}
-                  disabled={isAlreadyAdded}
+                  onClick={() => !isDisabled && setSelectedGroupId(group.id)}
+                  disabled={isDisabled}
                   className={`flex w-full items-center justify-between px-4 py-3 text-left transition-colors ${
                     isSelected
                       ? "bg-blue-50 text-blue-700 dark:bg-blue-900/30 dark:text-blue-300"
-                      : isAlreadyAdded
-                        ? "cursor-not-allowed bg-zinc-50 text-zinc-400 dark:bg-zinc-800/50 dark:text-zinc-500"
-                        : "text-zinc-700 hover:bg-zinc-50 dark:text-zinc-300 dark:hover:bg-zinc-800/50"
+                      : isIncompetent
+                        ? "cursor-not-allowed bg-red-50 text-red-400 dark:bg-red-900/20 dark:text-red-500"
+                        : isAlreadyAdded
+                          ? "cursor-not-allowed bg-zinc-50 text-zinc-400 dark:bg-zinc-800/50 dark:text-zinc-500"
+                          : "text-zinc-700 hover:bg-zinc-50 dark:text-zinc-300 dark:hover:bg-zinc-800/50"
                   }`}
                 >
                   <div>
@@ -183,7 +189,15 @@ export function SkillGroupModal({
                       {group.skills.length} skills
                     </div>
                   </div>
-                  {isAlreadyAdded && <Check className="h-4 w-4 text-emerald-500" />}
+                  <div className="flex items-center gap-1">
+                    {isAlreadyAdded && <Check className="h-4 w-4 text-emerald-500" />}
+                    {isIncompetent && (
+                      <span className="flex items-center gap-0.5 text-[10px] text-red-500">
+                        <AlertTriangle className="h-3 w-3" />
+                        incompetent
+                      </span>
+                    )}
+                  </div>
                 </button>
               );
             })}

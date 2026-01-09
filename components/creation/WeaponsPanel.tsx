@@ -28,7 +28,6 @@ import {
   CreationCard,
   KarmaConversionModal,
   useKarmaConversionPrompt,
-  MAX_KARMA_CONVERSION,
 } from "./shared";
 import { WeaponRow, WeaponPurchaseModal, WeaponModificationModal, AmmunitionModal } from "./weapons";
 import { Lock, Plus, Sword } from "lucide-react";
@@ -75,71 +74,6 @@ function getWeaponsCatalog(catalog: GearCatalogData | null) {
 interface WeaponsPanelProps {
   state: CreationState;
   updateState: (updates: Partial<CreationState>) => void;
-}
-
-// =============================================================================
-// BUDGET DISPLAY COMPONENT
-// =============================================================================
-
-function BudgetDisplay({
-  spent,
-  total,
-  remaining,
-  isOver,
-  karmaConversion = 0,
-}: {
-  spent: number;
-  total: number;
-  remaining: number;
-  isOver: boolean;
-  karmaConversion?: number;
-}) {
-  const percentage = Math.min(100, (spent / total) * 100);
-  const isComplete = remaining === 0 && !isOver;
-
-  return (
-    <div className={`rounded-lg border p-3 ${
-      isOver
-        ? "border-red-200 bg-red-50 dark:border-red-800 dark:bg-red-900/20"
-        : "border-zinc-200 bg-zinc-50 dark:border-zinc-700 dark:bg-zinc-800/50"
-    }`}>
-      <div className="flex items-center justify-between text-sm">
-        <span className="text-zinc-600 dark:text-zinc-400">Nuyen</span>
-        <span className={`font-medium ${
-          isOver
-            ? "text-red-600 dark:text-red-400"
-            : isComplete
-              ? "text-emerald-600 dark:text-emerald-400"
-              : "text-zinc-900 dark:text-zinc-100"
-        }`}>
-          {formatCurrency(spent)}¥ spent
-          <span className="text-zinc-400"> • </span>
-          {formatCurrency(Math.max(0, remaining))}¥ left
-        </span>
-      </div>
-
-      {/* Progress bar */}
-      <div className="mt-2 h-1.5 overflow-hidden rounded-full bg-zinc-200 dark:bg-zinc-700">
-        <div
-          className={`h-full rounded-full transition-all ${
-            isOver
-              ? "bg-red-500"
-              : isComplete
-                ? "bg-emerald-500"
-                : "bg-blue-500"
-          }`}
-          style={{ width: `${percentage}%` }}
-        />
-      </div>
-
-      {/* Note for karma conversion */}
-      {karmaConversion > 0 && (
-        <div className="mt-1 text-xs text-blue-600 dark:text-blue-400">
-          +{formatCurrency(karmaConversion * KARMA_TO_NUYEN_RATE)}¥ from karma
-        </div>
-      )}
-    </div>
-  );
 }
 
 // =============================================================================
@@ -593,7 +527,6 @@ export function WeaponsPanel({ state, updateState }: WeaponsPanelProps) {
     <>
       <CreationCard
         title="Weapons"
-        description={`${selectedWeapons.length} weapon${selectedWeapons.length !== 1 ? "s" : ""}`}
         status={validationStatus}
         headerAction={
           <button
@@ -605,16 +538,7 @@ export function WeaponsPanel({ state, updateState }: WeaponsPanelProps) {
           </button>
         }
       >
-        <div className="space-y-4">
-          {/* Budget Display */}
-          <BudgetDisplay
-            spent={weaponsSpent}
-            total={totalNuyen}
-            remaining={remaining}
-            isOver={isOverBudget}
-            karmaConversion={karmaConversion}
-          />
-
+        <div className="space-y-3">
           {/* Weapon List */}
           {selectedWeapons.length > 0 ? (
             <div className="space-y-2">
@@ -646,11 +570,13 @@ export function WeaponsPanel({ state, updateState }: WeaponsPanelProps) {
             </div>
           )}
 
-          {/* Weapon Spent Summary */}
+          {/* Summary */}
           {selectedWeapons.length > 0 && (
-            <div className="flex items-center justify-between text-sm text-zinc-500 dark:text-zinc-400 pt-2 border-t border-zinc-100 dark:border-zinc-800">
-              <span>Total spent on weapons</span>
-              <span className="font-medium text-zinc-900 dark:text-zinc-100">
+            <div className="flex items-center justify-between rounded-lg bg-zinc-50 px-3 py-2 dark:bg-zinc-800/50">
+              <span className="text-xs text-zinc-500 dark:text-zinc-400">
+                Total: {selectedWeapons.length} weapon{selectedWeapons.length !== 1 ? "s" : ""}
+              </span>
+              <span className="text-xs font-bold text-zinc-900 dark:text-zinc-100">
                 {formatCurrency(weaponsSpent)}¥
               </span>
             </div>

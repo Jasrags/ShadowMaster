@@ -16,9 +16,9 @@
  */
 
 import { useMemo, useCallback, useState } from "react";
-import { useQualities } from "@/lib/rules";
+import { useQualities, useSkills } from "@/lib/rules";
 import type { CreationState } from "@/lib/types";
-import type { QualityData } from "@/lib/rules/loader-types";
+import type { QualityData, SkillGroupData } from "@/lib/rules/loader-types";
 import { hasUnifiedRatings, getRatingTableValue, getAvailableRatings } from "@/lib/types/ratings";
 import { useCreationBudgets } from "@/lib/contexts";
 import { CreationCard } from "./shared";
@@ -278,6 +278,9 @@ function QualitySelectionModal({
   maxKarma,
   karmaBalance,
   onAdd,
+  skillGroups,
+  existingSkillIds,
+  existingSkillGroupIds,
 }: {
   isOpen: boolean;
   onClose: () => void;
@@ -288,6 +291,9 @@ function QualitySelectionModal({
   maxKarma: number;
   karmaBalance: number;
   onAdd: (qualityId: string, specification?: string, level?: number) => void;
+  skillGroups: SkillGroupData[];
+  existingSkillIds: string[]; // Skills currently selected by the user
+  existingSkillGroupIds: string[]; // Skill groups currently selected by the user
 }) {
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedQualityId, setSelectedQualityId] = useState<string | null>(null);
@@ -323,6 +329,35 @@ function QualitySelectionModal({
   }, [filteredQualities]);
 
   const remainingKarma = maxKarma - usedKarma;
+
+  // Check for conflicts when selecting Incompetent quality with a skill group
+  const incompetentConflictInfo = useMemo(() => {
+    if (!selectedQuality || selectedQuality.id !== "incompetent" || !specification) {
+      return null;
+    }
+
+    // Find skills in the selected group
+    const selectedGroup = skillGroups.find((g) => g.id === specification);
+    if (!selectedGroup) return null;
+
+    const skillsInGroup = new Set(selectedGroup.skills);
+
+    // Check if user has the skill group selected
+    const hasGroupSelected = existingSkillGroupIds.includes(specification);
+
+    // Check if user has any individual skills from the group
+    const conflictingSkills = existingSkillIds.filter((skillId) => skillsInGroup.has(skillId));
+
+    if (hasGroupSelected || conflictingSkills.length > 0) {
+      return {
+        groupName: selectedGroup.name,
+        hasGroupSelected,
+        conflictingSkillCount: conflictingSkills.length,
+      };
+    }
+
+    return null;
+  }, [selectedQuality, specification, skillGroups, existingSkillIds, existingSkillGroupIds]);
 
   // Get cost for a quality at a specific level
   // Supports unified ratings table (preferred) and legacy levels array
@@ -549,6 +584,7 @@ function QualitySelectionModal({
                   {selectedQuality.specificationLabel || "Specification"}
                 </label>
                 {selectedQuality.specificationOptions ? (
+                  // Static options from quality definition
                   <div className="relative">
                     <select
                       value={specification}
@@ -564,7 +600,51 @@ function QualitySelectionModal({
                     </select>
                     <ChevronDown className="pointer-events-none absolute right-3 top-1/2 h-4 w-4 -translate-y-1/2 text-zinc-400" />
                   </div>
+                ) : selectedQuality.specificationSource === "skillGroups" ? (
+                  // Dynamic options from skill groups
+                  <>
+                    <div className="relative">
+                      <select
+                        value={specification}
+                        onChange={(e) => setSpecification(e.target.value)}
+                        className="w-full appearance-none rounded-lg border border-zinc-300 py-2 pl-3 pr-10 text-sm focus:border-emerald-500 focus:outline-none focus:ring-1 focus:ring-emerald-500 dark:border-zinc-600 dark:bg-zinc-800 dark:text-zinc-100"
+                      >
+                        <option value="">Select {selectedQuality.specificationLabel}...</option>
+                        {skillGroups.map((group) => (
+                          <option key={group.id} value={group.id}>
+                            {group.name}
+                          </option>
+                        ))}
+                      </select>
+                      <ChevronDown className="pointer-events-none absolute right-3 top-1/2 h-4 w-4 -translate-y-1/2 text-zinc-400" />
+                    </div>
+                    {/* Warning for Incompetent quality conflicting with existing skills */}
+                    {incompetentConflictInfo && (
+                      <div className="mt-2 flex items-start gap-2 rounded-lg border border-amber-200 bg-amber-50 p-3 dark:border-amber-800 dark:bg-amber-900/20">
+                        <AlertTriangle className="mt-0.5 h-4 w-4 flex-shrink-0 text-amber-600 dark:text-amber-400" />
+                        <div className="text-sm text-amber-700 dark:text-amber-300">
+                          <strong>Warning:</strong> You have skills from the{" "}
+                          <strong>{incompetentConflictInfo.groupName}</strong> group selected.
+                          {incompetentConflictInfo.hasGroupSelected && (
+                            <span> You have the entire skill group selected.</span>
+                          )}
+                          {incompetentConflictInfo.conflictingSkillCount > 0 && (
+                            <span>
+                              {" "}
+                              You have {incompetentConflictInfo.conflictingSkillCount} individual skill
+                              {incompetentConflictInfo.conflictingSkillCount !== 1 ? "s" : ""} from this
+                              group.
+                            </span>
+                          )}
+                          <div className="mt-1 text-xs">
+                            These skills will need to be removed if you add this quality.
+                          </div>
+                        </div>
+                      </div>
+                    )}
+                  </>
                 ) : (
+                  // Free-form text input
                   <input
                     type="text"
                     value={specification}
@@ -654,14 +734,22 @@ function QualitySelectionModal({
 
         {/* Footer */}
         <div className="flex shrink-0 items-center justify-between border-t border-zinc-200 px-6 py-4 dark:border-zinc-700">
-          <div className="text-sm text-zinc-600 dark:text-zinc-400">
+          <div className="text-sm">
             {selectedQuality ? (
-              <>
-                Selected: {selectedQuality.name} (
-                {isPositive ? `${selectedCost} karma` : `+${selectedCost} karma`})
-              </>
+              <div className="space-y-1">
+                <div className="text-zinc-600 dark:text-zinc-400">
+                  Selected: {selectedQuality.name} (
+                  {isPositive ? `${selectedCost} karma` : `+${selectedCost} karma`})
+                </div>
+                {/* Show validation error when specification is required but missing */}
+                {selectedQuality.requiresSpecification && !specification && (
+                  <div className="text-xs text-amber-600 dark:text-amber-400">
+                    ⚠ Please enter a {selectedQuality.specificationLabel?.toLowerCase() || "specification"} above
+                  </div>
+                )}
+              </div>
             ) : (
-              "Select a quality to add"
+              <span className="text-zinc-600 dark:text-zinc-400">Select a quality to add</span>
             )}
           </div>
           <div className="flex gap-3">
@@ -695,11 +783,25 @@ function QualitySelectionModal({
 
 export function QualitiesCard({ state, updateState }: QualitiesCardProps) {
   const { positive: positiveQualities, negative: negativeQualities } = useQualities();
+  const { skillGroups } = useSkills();
   const { getBudget } = useCreationBudgets();
   const karmaBudget = getBudget("karma");
 
   const [showPositiveModal, setShowPositiveModal] = useState(false);
   const [showNegativeModal, setShowNegativeModal] = useState(false);
+
+  // Get existing skill and skill group selections for cross-validation
+  const existingSkillIds = useMemo(() => {
+    const skills = state.selections.skills;
+    if (!skills || typeof skills !== "object") return [];
+    return Object.keys(skills as Record<string, number>);
+  }, [state.selections.skills]);
+
+  const existingSkillGroupIds = useMemo(() => {
+    const groups = state.selections.skillGroups;
+    if (!groups || typeof groups !== "object") return [];
+    return Object.keys(groups as Record<string, number>);
+  }, [state.selections.skillGroups]);
 
   // Get selected qualities from state (now stored with specifications/levels)
   const selectedPositive = useMemo(() => {
@@ -984,6 +1086,9 @@ export function QualitiesCard({ state, updateState }: QualitiesCardProps) {
         maxKarma={MAX_POSITIVE_KARMA}
         karmaBalance={karmaBalance}
         onAdd={(id, spec, level) => handleAddQuality(id, true, spec, level)}
+        skillGroups={skillGroups}
+        existingSkillIds={existingSkillIds}
+        existingSkillGroupIds={existingSkillGroupIds}
       />
 
       <QualitySelectionModal
@@ -996,6 +1101,9 @@ export function QualitiesCard({ state, updateState }: QualitiesCardProps) {
         maxKarma={MAX_NEGATIVE_KARMA}
         karmaBalance={karmaBalance}
         onAdd={(id, spec, level) => handleAddQuality(id, false, spec, level)}
+        skillGroups={skillGroups}
+        existingSkillIds={existingSkillIds}
+        existingSkillGroupIds={existingSkillGroupIds}
       />
     </CreationCard>
   );

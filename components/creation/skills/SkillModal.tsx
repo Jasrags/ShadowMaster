@@ -49,6 +49,7 @@ interface SkillModalProps {
   hasMagic: boolean;
   hasResonance: boolean;
   remainingPoints: number;
+  incompetentGroupId?: string; // Skill group the character is incompetent in
 }
 
 // =============================================================================
@@ -65,6 +66,7 @@ export function SkillModal({
   hasMagic,
   hasResonance,
   remainingPoints,
+  incompetentGroupId,
 }: SkillModalProps) {
   const { activeSkills } = useSkills();
 
@@ -96,6 +98,20 @@ export function SkillModal({
     });
     return inGroup;
   }, [existingGroupIds, skillGroups]);
+
+  // Get skills in the incompetent group (character cannot use these)
+  const incompetentSkills = useMemo(() => {
+    if (!incompetentGroupId) return new Set<string>();
+    const group = skillGroups.find((g) => g.id === incompetentGroupId);
+    return group ? new Set(group.skills) : new Set<string>();
+  }, [incompetentGroupId, skillGroups]);
+
+  // Get incompetent group name for display
+  const incompetentGroupName = useMemo(() => {
+    if (!incompetentGroupId) return null;
+    const group = skillGroups.find((g) => g.id === incompetentGroupId);
+    return group?.name || null;
+  }, [incompetentGroupId, skillGroups]);
 
   // Filter available skills
   const filteredSkills = useMemo(() => {
@@ -248,6 +264,16 @@ export function SkillModal({
               </button>
             ))}
           </div>
+
+          {/* Incompetent Group Warning */}
+          {incompetentGroupName && (
+            <div className="mt-3 flex items-center gap-2 rounded-lg bg-red-50 px-3 py-2 text-sm text-red-700 dark:bg-red-900/20 dark:text-red-300">
+              <AlertTriangle className="h-4 w-4 flex-shrink-0" />
+              <span>
+                <strong>Incompetent:</strong> Skills in the {incompetentGroupName} group are unavailable.
+              </span>
+            </div>
+          )}
         </div>
 
         {/* Content - Split Pane */}
@@ -263,18 +289,22 @@ export function SkillModal({
                   const isSelected = selectedSkillId === skill.id;
                   const isAlreadyAdded = existingSkillIds.includes(skill.id);
                   const isInGroup = skillsInGroups.has(skill.id);
+                  const isIncompetent = incompetentSkills.has(skill.id);
+                  const isDisabled = isAlreadyAdded || isIncompetent;
 
                   return (
                     <button
                       key={skill.id}
-                      onClick={() => !isAlreadyAdded && setSelectedSkillId(skill.id)}
-                      disabled={isAlreadyAdded}
+                      onClick={() => !isDisabled && setSelectedSkillId(skill.id)}
+                      disabled={isDisabled}
                       className={`flex w-full items-center justify-between px-4 py-2 text-left text-sm transition-colors ${
                         isSelected
                           ? "bg-blue-50 text-blue-700 dark:bg-blue-900/30 dark:text-blue-300"
-                          : isAlreadyAdded
-                            ? "cursor-not-allowed bg-zinc-50 text-zinc-400 dark:bg-zinc-800/50 dark:text-zinc-500"
-                            : "text-zinc-700 hover:bg-zinc-50 dark:text-zinc-300 dark:hover:bg-zinc-800/50"
+                          : isIncompetent
+                            ? "cursor-not-allowed bg-red-50 text-red-400 dark:bg-red-900/20 dark:text-red-500"
+                            : isAlreadyAdded
+                              ? "cursor-not-allowed bg-zinc-50 text-zinc-400 dark:bg-zinc-800/50 dark:text-zinc-500"
+                              : "text-zinc-700 hover:bg-zinc-50 dark:text-zinc-300 dark:hover:bg-zinc-800/50"
                       }`}
                     >
                       <div className="flex items-center gap-2">
@@ -289,7 +319,13 @@ export function SkillModal({
                         {isAlreadyAdded && (
                           <Check className="h-4 w-4 text-emerald-500" />
                         )}
-                        {isInGroup && !isAlreadyAdded && (
+                        {isIncompetent && (
+                          <span className="flex items-center gap-0.5 text-[10px] text-red-500">
+                            <AlertTriangle className="h-3 w-3" />
+                            incompetent
+                          </span>
+                        )}
+                        {isInGroup && !isAlreadyAdded && !isIncompetent && (
                           <span className="text-[10px] text-amber-500">in group</span>
                         )}
                       </div>

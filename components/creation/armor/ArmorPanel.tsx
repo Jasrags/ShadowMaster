@@ -67,71 +67,6 @@ interface ArmorPanelProps {
 }
 
 // =============================================================================
-// BUDGET DISPLAY COMPONENT
-// =============================================================================
-
-function BudgetDisplay({
-  spent,
-  total,
-  remaining,
-  isOver,
-  karmaConversion = 0,
-}: {
-  spent: number;
-  total: number;
-  remaining: number;
-  isOver: boolean;
-  karmaConversion?: number;
-}) {
-  const percentage = Math.min(100, (spent / total) * 100);
-  const isComplete = remaining === 0 && !isOver;
-
-  return (
-    <div className={`rounded-lg border p-3 ${
-      isOver
-        ? "border-red-200 bg-red-50 dark:border-red-800 dark:bg-red-900/20"
-        : "border-zinc-200 bg-zinc-50 dark:border-zinc-700 dark:bg-zinc-800/50"
-    }`}>
-      <div className="flex items-center justify-between text-sm">
-        <span className="text-zinc-600 dark:text-zinc-400">Nuyen</span>
-        <span className={`font-medium ${
-          isOver
-            ? "text-red-600 dark:text-red-400"
-            : isComplete
-              ? "text-emerald-600 dark:text-emerald-400"
-              : "text-zinc-900 dark:text-zinc-100"
-        }`}>
-          {formatCurrency(spent)}¥ spent
-          <span className="text-zinc-400"> • </span>
-          {formatCurrency(Math.max(0, remaining))}¥ left
-        </span>
-      </div>
-
-      {/* Progress bar */}
-      <div className="mt-2 h-1.5 overflow-hidden rounded-full bg-zinc-200 dark:bg-zinc-700">
-        <div
-          className={`h-full rounded-full transition-all ${
-            isOver
-              ? "bg-red-500"
-              : isComplete
-                ? "bg-emerald-500"
-                : "bg-blue-500"
-          }`}
-          style={{ width: `${percentage}%` }}
-        />
-      </div>
-
-      {/* Note for karma conversion */}
-      {karmaConversion > 0 && (
-        <div className="mt-1 text-xs text-blue-600 dark:text-blue-400">
-          +{formatCurrency(karmaConversion * KARMA_TO_NUYEN_RATE)}¥ from karma
-        </div>
-      )}
-    </div>
-  );
-}
-
-// =============================================================================
 // COMPONENT
 // =============================================================================
 
@@ -489,7 +424,6 @@ export function ArmorPanel({ state, updateState }: ArmorPanelProps) {
     <>
       <CreationCard
         title="Armor"
-        description={`${selectedArmor.length} item${selectedArmor.length !== 1 ? "s" : ""}`}
         status={validationStatus}
         headerAction={
           <button
@@ -501,16 +435,7 @@ export function ArmorPanel({ state, updateState }: ArmorPanelProps) {
           </button>
         }
       >
-        <div className="space-y-4">
-          {/* Budget Display */}
-          <BudgetDisplay
-            spent={armorSpent}
-            total={totalNuyen}
-            remaining={remaining}
-            isOver={isOverBudget}
-            karmaConversion={karmaConversion}
-          />
-
+        <div className="space-y-3">
           {/* Armor List */}
           {selectedArmor.length > 0 ? (
             <div className="space-y-2">
@@ -540,11 +465,13 @@ export function ArmorPanel({ state, updateState }: ArmorPanelProps) {
             </div>
           )}
 
-          {/* Armor Spent Summary */}
+          {/* Summary */}
           {selectedArmor.length > 0 && (
-            <div className="flex items-center justify-between text-sm text-zinc-500 dark:text-zinc-400 pt-2 border-t border-zinc-100 dark:border-zinc-800">
-              <span>Total spent on armor</span>
-              <span className="font-medium text-zinc-900 dark:text-zinc-100">
+            <div className="flex items-center justify-between rounded-lg bg-zinc-50 px-3 py-2 dark:bg-zinc-800/50">
+              <span className="text-xs text-zinc-500 dark:text-zinc-400">
+                Total: {selectedArmor.length} item{selectedArmor.length !== 1 ? "s" : ""}
+              </span>
+              <span className="text-xs font-bold text-zinc-900 dark:text-zinc-100">
                 {formatCurrency(armorSpent)}¥
               </span>
             </div>

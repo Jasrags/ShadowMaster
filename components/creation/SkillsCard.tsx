@@ -391,6 +391,26 @@ export function SkillsCard({ state, updateState }: SkillsCardProps) {
     ["magician", "aspected-mage", "mystic-adept", "adept"].includes(magicPath);
   const hasResonance = magicPath === "technomancer";
 
+  // Get incompetent group ID from negative qualities
+  const incompetentGroupId = useMemo(() => {
+    const negativeQualities = (state.selections.negativeQualities || []) as Array<{
+      id?: string;
+      qualityId: string;
+      specification?: string;
+    }>;
+    const incompetentQuality = negativeQualities.find(
+      (q) => q.qualityId === "incompetent" || q.id === "incompetent"
+    );
+    return incompetentQuality?.specification || undefined;
+  }, [state.selections.negativeQualities]);
+
+  // Get skills in the incompetent group (for conflict detection)
+  const incompetentSkills = useMemo(() => {
+    if (!incompetentGroupId) return new Set<string>();
+    const group = skillGroups.find((g) => g.id === incompetentGroupId);
+    return group ? new Set(group.skills) : new Set<string>();
+  }, [incompetentGroupId, skillGroups]);
+
   // Get current skill values from state
   const skills = useMemo(() => {
     return (state.selections.skills || {}) as Record<string, number>;
@@ -618,13 +638,42 @@ export function SkillsCard({ state, updateState }: SkillsCardProps) {
     [skillGroups]
   );
 
+  // Detect conflicts between existing skills/groups and incompetent quality
+  const incompetentConflicts = useMemo(() => {
+    const conflicts: { skillIds: string[]; groupId: string | null } = {
+      skillIds: [],
+      groupId: null,
+    };
+
+    if (!incompetentGroupId) return conflicts;
+
+    // Check if the incompetent group is selected as a skill group
+    if (groups[incompetentGroupId]) {
+      conflicts.groupId = incompetentGroupId;
+    }
+
+    // Check if any individual skills from the incompetent group are selected
+    Object.keys(skills).forEach((skillId) => {
+      if (incompetentSkills.has(skillId)) {
+        conflicts.skillIds.push(skillId);
+      }
+    });
+
+    return conflicts;
+  }, [incompetentGroupId, incompetentSkills, skills, groups]);
+
+  const hasIncompetentConflicts =
+    incompetentConflicts.skillIds.length > 0 || incompetentConflicts.groupId !== null;
+
   // Get validation status
   const validationStatus = useMemo(() => {
+    if (hasIncompetentConflicts) return "warning";
     if (isSkillsOverBudget || isGroupsOverBudget) return "warning";
     if (skillPointsRemaining === 0 && groupPointsRemaining === 0) return "valid";
     if (skillPointsSpent > 0 || groupPointsSpent > 0) return "warning";
     return "pending";
   }, [
+    hasIncompetentConflicts,
     isSkillsOverBudget,
     isGroupsOverBudget,
     skillPointsRemaining,
@@ -712,6 +761,37 @@ export function SkillsCard({ state, updateState }: SkillsCardProps) {
               }
             />
           </div>
+
+          {/* Incompetent quality conflict warning */}
+          {hasIncompetentConflicts && (
+            <div className="rounded-lg border border-red-200 bg-red-50 p-3 dark:border-red-800 dark:bg-red-900/20">
+              <div className="flex items-start gap-2">
+                <AlertTriangle className="mt-0.5 h-4 w-4 flex-shrink-0 text-red-600 dark:text-red-400" />
+                <div className="text-sm text-red-700 dark:text-red-300">
+                  <strong>Incompetent Conflict:</strong> You have the Incompetent (
+                  {skillGroups.find((g) => g.id === incompetentGroupId)?.name}) quality
+                  but have selected skills from this group.
+                  {incompetentConflicts.groupId && (
+                    <div className="mt-1">
+                      • Remove the{" "}
+                      <strong>
+                        {skillGroups.find((g) => g.id === incompetentConflicts.groupId)?.name}
+                      </strong>{" "}
+                      skill group
+                    </div>
+                  )}
+                  {incompetentConflicts.skillIds.length > 0 && (
+                    <div className="mt-1">
+                      • Remove individual skill{incompetentConflicts.skillIds.length !== 1 ? "s" : ""}:{" "}
+                      {incompetentConflicts.skillIds
+                        .map((id) => getSkillData(id)?.name || id)
+                        .join(", ")}
+                    </div>
+                  )}
+                </div>
+              </div>
+            </div>
+          )}
 
           {/* Specialization karma cost */}
           {totalSpecializations > 0 && (
@@ -871,6 +951,7 @@ export function SkillsCard({ state, updateState }: SkillsCardProps) {
         hasMagic={!!hasMagic}
         hasResonance={!!hasResonance}
         remainingPoints={skillPointsRemaining}
+        incompetentGroupId={incompetentGroupId}
       />
 
       <SkillGroupModal
@@ -882,6 +963,7 @@ export function SkillsCard({ state, updateState }: SkillsCardProps) {
         hasMagic={!!hasMagic}
         hasResonance={!!hasResonance}
         remainingGroupPoints={groupPointsRemaining}
+        incompetentGroupId={incompetentGroupId}
       />
     </>
   );

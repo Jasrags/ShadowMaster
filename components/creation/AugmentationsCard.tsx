@@ -29,16 +29,22 @@ import {
 import {
   AugmentationModal,
   CyberwareEnhancementModal,
+  CyberlimbAccessoryModal,
+  CyberlimbWeaponModal,
   type AugmentationSelection,
   type AugmentationType,
   type CyberwareEnhancementSelection,
+  type CyberlimbAccessorySelection,
+  type CyberlimbWeaponSelection,
   type InstalledCyberlimb,
 } from "./augmentations";
 import {
   type CyberlimbLocation,
   type CyberlimbType,
+  type CyberlimbItem,
   LOCATION_SIDE,
   wouldReplaceExisting,
+  isCyberlimb,
 } from "@/lib/types/cyberlimb";
 import {
   Lock,
@@ -51,6 +57,9 @@ import {
   ChevronDown,
   ChevronRight,
   Shield,
+  Crosshair,
+  Settings,
+  Wrench,
 } from "lucide-react";
 
 // =============================================================================
@@ -130,82 +139,59 @@ function AugmentationItem({
     <div className="rounded-lg border border-zinc-200 bg-white dark:border-zinc-700 dark:bg-zinc-900">
       {/* Collapsed Header */}
       <div className="flex w-full items-center gap-2 p-3">
-        {/* Expand/Collapse Button (only for items with capacity, enhancements, or bonuses) */}
+        {/* Expand/Collapse Button - spacer for non-expandable items maintains alignment */}
         {(hasCapacity || enhancementCount > 0 || (item.attributeBonuses && Object.keys(item.attributeBonuses).length > 0) || item.armorBonus) ? (
           <button
             onClick={() => setIsExpanded(!isExpanded)}
-            className="flex flex-1 items-center gap-2 text-left"
+            className="shrink-0 text-zinc-400"
           >
-            {/* Expand/Collapse Icon */}
-            <div className="text-zinc-400">
-              {isExpanded ? (
-                <ChevronDown className="h-4 w-4" />
-              ) : (
-                <ChevronRight className="h-4 w-4" />
-              )}
-            </div>
-
-            {/* Type badge */}
-            <div
-              className={`flex h-6 w-6 shrink-0 items-center justify-center rounded ${
-                isCyberware
-                  ? "bg-cyan-100 text-cyan-600 dark:bg-cyan-900/50 dark:text-cyan-400"
-                  : "bg-pink-100 text-pink-600 dark:bg-pink-900/50 dark:text-pink-400"
-              }`}
-            >
-              {isCyberware ? <Cpu className="h-3.5 w-3.5" /> : <Heart className="h-3.5 w-3.5" />}
-            </div>
-
-            {/* Name, grade, and quick stats */}
-            <div className="min-w-0 flex-1">
-              <div className="flex items-center gap-1.5 flex-wrap">
-                <span className="truncate text-sm font-medium text-zinc-900 dark:text-zinc-100">
-                  {displayName}
-                </span>
-                <span className="shrink-0 rounded bg-zinc-100 px-1 py-0.5 text-[10px] font-medium text-zinc-500 dark:bg-zinc-800 dark:text-zinc-400">
-                  {GRADE_DISPLAY[item.grade]}
-                </span>
-                {enhancementCount > 0 && (
-                  <span className="shrink-0 rounded bg-blue-100 px-1 py-0.5 text-[10px] font-medium text-blue-600 dark:bg-blue-900/40 dark:text-blue-300">
-                    {enhancementCount} mod{enhancementCount !== 1 ? "s" : ""}
-                  </span>
-                )}
-              </div>
-              {hasCapacity && (
-                <div className="mt-0.5 flex items-center gap-1 text-xs text-zinc-500 dark:text-zinc-400">
-                  <Zap className="h-3 w-3" />
-                  <span>Cap {cyberItem.capacityUsed || 0}/{cyberItem.capacity}</span>
-                </div>
-              )}
-            </div>
+            {isExpanded ? (
+              <ChevronDown className="h-4 w-4" />
+            ) : (
+              <ChevronRight className="h-4 w-4" />
+            )}
           </button>
         ) : (
-          /* Non-expandable items */
-          <div className="flex flex-1 items-center gap-2">
-            {/* Type badge */}
-            <div
-              className={`flex h-6 w-6 shrink-0 items-center justify-center rounded ${
-                isCyberware
-                  ? "bg-cyan-100 text-cyan-600 dark:bg-cyan-900/50 dark:text-cyan-400"
-                  : "bg-pink-100 text-pink-600 dark:bg-pink-900/50 dark:text-pink-400"
-              }`}
-            >
-              {isCyberware ? <Cpu className="h-3.5 w-3.5" /> : <Heart className="h-3.5 w-3.5" />}
-            </div>
-
-            {/* Name and grade */}
-            <div className="min-w-0 flex-1">
-              <div className="flex items-center gap-1.5">
-                <span className="truncate text-sm font-medium text-zinc-900 dark:text-zinc-100">
-                  {displayName}
-                </span>
-                <span className="shrink-0 rounded bg-zinc-100 px-1 py-0.5 text-[10px] font-medium text-zinc-500 dark:bg-zinc-800 dark:text-zinc-400">
-                  {GRADE_DISPLAY[item.grade]}
-                </span>
-              </div>
-            </div>
-          </div>
+          /* Spacer for non-expandable items to maintain alignment */
+          <div className="w-4 shrink-0" />
         )}
+
+        {/* Type badge */}
+        <div
+          className={`flex h-6 w-6 shrink-0 items-center justify-center rounded ${
+            isCyberware
+              ? "bg-cyan-100 text-cyan-600 dark:bg-cyan-900/50 dark:text-cyan-400"
+              : "bg-pink-100 text-pink-600 dark:bg-pink-900/50 dark:text-pink-400"
+          }`}
+        >
+          {isCyberware ? <Cpu className="h-3.5 w-3.5" /> : <Heart className="h-3.5 w-3.5" />}
+        </div>
+
+        {/* Name, grade, and quick stats */}
+        <div className="min-w-0 flex-1">
+          <div className="flex items-baseline gap-1.5">
+            <span
+              className="truncate text-sm font-medium text-zinc-900 dark:text-zinc-100"
+              title={displayName}
+            >
+              {displayName}
+            </span>
+            <span className="shrink-0 rounded bg-zinc-100 px-1 py-0.5 text-[10px] font-medium text-zinc-500 dark:bg-zinc-800 dark:text-zinc-400">
+              {GRADE_DISPLAY[item.grade]}
+            </span>
+            {enhancementCount > 0 && (
+              <span className="shrink-0 rounded bg-blue-100 px-1 py-0.5 text-[10px] font-medium text-blue-600 dark:bg-blue-900/40 dark:text-blue-300">
+                {enhancementCount} mod{enhancementCount !== 1 ? "s" : ""}
+              </span>
+            )}
+          </div>
+          {hasCapacity && (
+            <div className="mt-0.5 flex items-center gap-1 text-xs text-zinc-500 dark:text-zinc-400">
+              <Zap className="h-3 w-3" />
+              <span>Cap {cyberItem.capacityUsed || 0}/{cyberItem.capacity}</span>
+            </div>
+          )}
+        </div>
 
         {/* Essence and cost */}
         <div className="shrink-0 text-right">
@@ -232,7 +218,7 @@ function AugmentationItem({
 
       {/* Collapsed preview: bonuses shown inline */}
       {!isExpanded && ((item.attributeBonuses && Object.keys(item.attributeBonuses).length > 0) || item.armorBonus) && (
-        <div className="flex flex-wrap gap-1 border-t border-zinc-100 px-3 pb-2 pt-2 dark:border-zinc-800">
+        <div className="flex flex-wrap gap-1.5 border-t border-zinc-100 px-3 py-2 dark:border-zinc-800">
           {item.armorBonus && (
             <span className="flex items-center gap-1 rounded bg-amber-100 px-1.5 py-0.5 text-[10px] font-medium text-amber-700 dark:bg-amber-900/50 dark:text-amber-300">
               <Shield className="h-3 w-3" />
@@ -252,7 +238,7 @@ function AugmentationItem({
 
       {/* Collapsed preview: enhancements shown as tags */}
       {!isExpanded && hasCapacity && cyberItem.enhancements && cyberItem.enhancements.length > 0 && (
-        <div className="flex flex-wrap gap-1 border-t border-zinc-100 px-3 pb-2 pt-2 dark:border-zinc-800">
+        <div className="flex flex-wrap gap-1.5 border-t border-zinc-100 px-3 py-2 dark:border-zinc-800">
           {cyberItem.enhancements.map((enh, idx) => (
             <span
               key={`${enh.catalogId}-${idx}`}
@@ -389,6 +375,415 @@ function AugmentationItem({
 }
 
 // =============================================================================
+// CYBERLIMB AUGMENTATION ITEM COMPONENT
+// =============================================================================
+
+function CyberlimbAugmentationItem({
+  item,
+  onRemove,
+  onAddEnhancement,
+  onRemoveEnhancement,
+  onAddAccessory,
+  onRemoveAccessory,
+  onAddWeapon,
+  onRemoveWeapon,
+}: {
+  item: CyberlimbItem;
+  onRemove: () => void;
+  onAddEnhancement?: () => void;
+  onRemoveEnhancement?: (enhancementIndex: number) => void;
+  onAddAccessory?: () => void;
+  onRemoveAccessory?: (accessoryIndex: number) => void;
+  onAddWeapon?: () => void;
+  onRemoveWeapon?: (weaponIndex: number) => void;
+}) {
+  const [isExpanded, setIsExpanded] = useState(false);
+
+  // Calculate derived values - handle missing base values gracefully
+  // Cyberlimbs have base 3 STR/AGI by SR5 rules
+  // Formula: base (3) + custom (default 0) + enhancement rating
+  const baseStr = item.baseStrength ?? 3;
+  const baseAgi = item.baseAgility ?? 3;
+  const customStr = item.customStrength ?? 0;
+  const customAgi = item.customAgility ?? 0;
+
+  // Find enhancement bonuses from the enhancements array
+  const strEnhancement = item.enhancements?.find((e) => e.enhancementType === "strength");
+  const agiEnhancement = item.enhancements?.find((e) => e.enhancementType === "agility");
+  const armorEnhancement = item.enhancements?.find((e) => e.enhancementType === "armor");
+
+  const effectiveStr = baseStr + customStr + (strEnhancement?.rating ?? 0);
+  const effectiveAgi = baseAgi + customAgi + (agiEnhancement?.rating ?? 0);
+  const armorBonus = armorEnhancement?.rating ?? 0;
+  const remainingCapacity = (item.baseCapacity || item.capacity || 0) - (item.capacityUsed || 0);
+  const totalCapacity = item.baseCapacity || item.capacity || 0;
+
+  // Count mods
+  const enhancementCount = item.enhancements?.length || 0;
+  const accessoryCount = item.accessories?.length || 0;
+  const weaponCount = item.weapons?.length || 0;
+  const totalMods = enhancementCount + accessoryCount + weaponCount;
+
+  // Format location display
+  const locationDisplay = useMemo(() => {
+    const loc = item.location.replace(/-/g, " ");
+    return loc.charAt(0).toUpperCase() + loc.slice(1);
+  }, [item.location]);
+
+  return (
+    <div className="rounded-lg border border-zinc-200 bg-white dark:border-zinc-700 dark:bg-zinc-900">
+      {/* Collapsed Header */}
+      <div className="flex w-full items-center gap-2 p-3">
+        {/* Expand/Collapse Button */}
+        <button
+          onClick={() => setIsExpanded(!isExpanded)}
+          className="shrink-0 text-zinc-400"
+        >
+          {isExpanded ? (
+            <ChevronDown className="h-4 w-4" />
+          ) : (
+            <ChevronRight className="h-4 w-4" />
+          )}
+        </button>
+
+        {/* Cyberlimb badge */}
+        <div className="flex h-6 w-6 shrink-0 items-center justify-center rounded bg-cyan-100 text-cyan-600 dark:bg-cyan-900/50 dark:text-cyan-400">
+          <Cpu className="h-3.5 w-3.5" />
+        </div>
+
+        {/* Name, location, and stats */}
+        <div className="min-w-0 flex-1">
+          <div className="flex items-baseline gap-1.5">
+            <span
+              className="truncate text-sm font-medium text-zinc-900 dark:text-zinc-100"
+              title={item.name}
+            >
+              {item.name}
+            </span>
+            <span className="shrink-0 rounded bg-zinc-100 px-1 py-0.5 text-[10px] font-medium text-zinc-500 dark:bg-zinc-800 dark:text-zinc-400">
+              {GRADE_DISPLAY[item.grade]}
+            </span>
+            {totalMods > 0 && (
+              <span className="shrink-0 rounded bg-blue-100 px-1 py-0.5 text-[10px] font-medium text-blue-600 dark:bg-blue-900/40 dark:text-blue-300">
+                {totalMods} mod{totalMods !== 1 ? "s" : ""}
+              </span>
+            )}
+          </div>
+          <div className="mt-0.5 text-[10px] text-zinc-500 dark:text-zinc-400">
+            {locationDisplay} • {item.appearance === "synthetic" ? "Synthetic" : "Obvious"}
+          </div>
+        </div>
+
+        {/* Essence and cost */}
+        <div className="shrink-0 text-right">
+          <div className="text-xs font-medium text-cyan-600 dark:text-cyan-400">
+            {formatEssence(item.essenceCost)} ESS
+          </div>
+          <div className="text-[10px] text-zinc-400">{formatCurrency(item.cost)}¥</div>
+        </div>
+
+        {/* Remove button */}
+        <button
+          onClick={onRemove}
+          className="shrink-0 rounded p-1 text-zinc-400 hover:bg-red-100 hover:text-red-600 dark:hover:bg-red-900/30 dark:hover:text-red-400"
+        >
+          <X className="h-4 w-4" />
+        </button>
+      </div>
+
+      {/* Collapsed preview: Limb attributes as inline stats */}
+      {!isExpanded && (
+        <div className="flex items-center gap-3 border-t border-zinc-100 px-3 py-2 dark:border-zinc-800">
+          {/* Limb Attributes */}
+          <div className="flex items-center gap-2">
+            <span className="font-mono text-xs font-semibold text-emerald-600 dark:text-emerald-400">
+              STR {effectiveStr}
+            </span>
+            <span className="text-zinc-300 dark:text-zinc-600">|</span>
+            <span className="font-mono text-xs font-semibold text-emerald-600 dark:text-emerald-400">
+              AGI {effectiveAgi}
+            </span>
+            {armorBonus > 0 && (
+              <>
+                <span className="text-zinc-300 dark:text-zinc-600">|</span>
+                <span className="flex items-center gap-1 font-mono text-xs font-semibold text-amber-600 dark:text-amber-400">
+                  <Shield className="h-3 w-3" />
+                  +{armorBonus}
+                </span>
+              </>
+            )}
+          </div>
+          <div className="flex-1" />
+          {/* Capacity indicator */}
+          <div className="flex items-center gap-1 text-xs text-zinc-500 dark:text-zinc-400">
+            <Zap className="h-3 w-3" />
+            <span className="font-mono">{item.capacityUsed || 0}/{totalCapacity}</span>
+          </div>
+        </div>
+      )}
+
+      {/* Expanded Detail View */}
+      {isExpanded && (
+        <div className="border-t border-zinc-100 dark:border-zinc-800">
+          <div className="space-y-4 p-3">
+            {/* LIMB ATTRIBUTES Section */}
+            <div className="rounded-lg bg-zinc-50 p-3 dark:bg-zinc-800/50">
+              <div className="mb-2 text-[10px] font-semibold uppercase tracking-wider text-zinc-500 dark:text-zinc-400">
+                Limb Attributes
+              </div>
+              <div className="flex items-center gap-4">
+                <div className="text-center">
+                  <div className="font-mono text-lg font-bold text-emerald-600 dark:text-emerald-400">
+                    {effectiveStr}
+                  </div>
+                  <div className="text-[10px] uppercase tracking-wide text-zinc-500 dark:text-zinc-400">
+                    STR
+                  </div>
+                </div>
+                <div className="text-center">
+                  <div className="font-mono text-lg font-bold text-emerald-600 dark:text-emerald-400">
+                    {effectiveAgi}
+                  </div>
+                  <div className="text-[10px] uppercase tracking-wide text-zinc-500 dark:text-zinc-400">
+                    AGI
+                  </div>
+                </div>
+                <div className="text-center">
+                  <div className="font-mono text-lg font-bold text-amber-600 dark:text-amber-400">
+                    {armorBonus > 0 ? `+${armorBonus}` : "—"}
+                  </div>
+                  <div className="text-[10px] uppercase tracking-wide text-zinc-500 dark:text-zinc-400">
+                    Armor
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* ENHANCEMENTS Section */}
+            <div>
+              <div className="mb-1.5 flex items-center justify-between">
+                <div className="flex items-center gap-1.5">
+                  <Settings className="h-3 w-3 text-emerald-500" />
+                  <span className="text-[10px] font-semibold uppercase tracking-wider text-zinc-500 dark:text-zinc-400">
+                    Enhancements
+                  </span>
+                  <span className="rounded bg-emerald-100 px-1 py-0.5 text-[9px] font-medium text-emerald-700 dark:bg-emerald-900/50 dark:text-emerald-300">
+                    {enhancementCount}
+                  </span>
+                </div>
+                {remainingCapacity > 0 && onAddEnhancement && (
+                  <button
+                    onClick={onAddEnhancement}
+                    className="flex items-center gap-1 text-[10px] font-medium text-sky-600 hover:text-sky-700 dark:text-sky-400 dark:hover:text-sky-300"
+                  >
+                    <Plus className="h-3 w-3" />
+                    Add
+                  </button>
+                )}
+              </div>
+              {item.enhancements && item.enhancements.length > 0 ? (
+                <div className="space-y-1">
+                  {item.enhancements.map((enh, idx) => (
+                    <div
+                      key={`${enh.catalogId}-${idx}`}
+                      className="flex items-center justify-between rounded bg-zinc-50 px-2 py-1.5 text-sm dark:bg-zinc-800"
+                    >
+                      <div className="flex items-center gap-2">
+                        <span className="text-zinc-700 dark:text-zinc-300">
+                          {enh.name}
+                        </span>
+                        <span className="rounded bg-emerald-100 px-1 py-0.5 text-[9px] font-mono text-emerald-700 dark:bg-emerald-900/40 dark:text-emerald-300">
+                          +{enh.rating}
+                        </span>
+                        <span className="text-[10px] text-zinc-400">
+                          [{enh.capacityUsed}]
+                        </span>
+                      </div>
+                      <div className="flex items-center gap-2">
+                        <span className="font-mono text-[10px] text-zinc-500">
+                          {formatCurrency(enh.cost)}¥
+                        </span>
+                        {onRemoveEnhancement && (
+                          <button
+                            onClick={() => onRemoveEnhancement(idx)}
+                            className="rounded p-0.5 text-zinc-400 hover:bg-red-100 hover:text-red-600 dark:hover:bg-red-900/30 dark:hover:text-red-400"
+                          >
+                            <X className="h-3 w-3" />
+                          </button>
+                        )}
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              ) : (
+                <p className="text-xs italic text-zinc-400 dark:text-zinc-500">
+                  No enhancements installed
+                </p>
+              )}
+            </div>
+
+            {/* ACCESSORIES Section */}
+            <div>
+              <div className="mb-1.5 flex items-center justify-between">
+                <div className="flex items-center gap-1.5">
+                  <Wrench className="h-3 w-3 text-sky-500" />
+                  <span className="text-[10px] font-semibold uppercase tracking-wider text-zinc-500 dark:text-zinc-400">
+                    Accessories
+                  </span>
+                  <span className="rounded bg-sky-100 px-1 py-0.5 text-[9px] font-medium text-sky-700 dark:bg-sky-900/50 dark:text-sky-300">
+                    {accessoryCount}
+                  </span>
+                </div>
+                {remainingCapacity > 0 && onAddAccessory && (
+                  <button
+                    onClick={onAddAccessory}
+                    className="flex items-center gap-1 text-[10px] font-medium text-sky-600 hover:text-sky-700 dark:text-sky-400 dark:hover:text-sky-300"
+                  >
+                    <Plus className="h-3 w-3" />
+                    Add
+                  </button>
+                )}
+              </div>
+              {item.accessories && item.accessories.length > 0 ? (
+                <div className="space-y-1">
+                  {item.accessories.map((acc, idx) => (
+                    <div
+                      key={`${acc.catalogId}-${idx}`}
+                      className="flex items-center justify-between rounded bg-zinc-50 px-2 py-1.5 text-sm dark:bg-zinc-800"
+                    >
+                      <div className="flex items-center gap-2">
+                        <span className="text-zinc-700 dark:text-zinc-300">
+                          {acc.name}
+                        </span>
+                        {acc.rating && (
+                          <span className="rounded bg-sky-100 px-1 py-0.5 text-[9px] font-mono text-sky-700 dark:bg-sky-900/40 dark:text-sky-300">
+                            R{acc.rating}
+                          </span>
+                        )}
+                        <span className="text-[10px] text-zinc-400">
+                          [{acc.capacityUsed}]
+                        </span>
+                      </div>
+                      <div className="flex items-center gap-2">
+                        <span className="font-mono text-[10px] text-zinc-500">
+                          {formatCurrency(acc.cost)}¥
+                        </span>
+                        {onRemoveAccessory && (
+                          <button
+                            onClick={() => onRemoveAccessory(idx)}
+                            className="rounded p-0.5 text-zinc-400 hover:bg-red-100 hover:text-red-600 dark:hover:bg-red-900/30 dark:hover:text-red-400"
+                          >
+                            <X className="h-3 w-3" />
+                          </button>
+                        )}
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              ) : (
+                <p className="text-xs italic text-zinc-400 dark:text-zinc-500">
+                  No accessories installed
+                </p>
+              )}
+            </div>
+
+            {/* WEAPONS Section */}
+            <div>
+              <div className="mb-1.5 flex items-center justify-between">
+                <div className="flex items-center gap-1.5">
+                  <Crosshair className="h-3 w-3 text-red-500" />
+                  <span className="text-[10px] font-semibold uppercase tracking-wider text-zinc-500 dark:text-zinc-400">
+                    Implant Weapons
+                  </span>
+                  <span className="rounded bg-red-100 px-1 py-0.5 text-[9px] font-medium text-red-700 dark:bg-red-900/50 dark:text-red-300">
+                    {weaponCount}
+                  </span>
+                </div>
+                {remainingCapacity > 0 && onAddWeapon && (
+                  <button
+                    onClick={onAddWeapon}
+                    className="flex items-center gap-1 text-[10px] font-medium text-sky-600 hover:text-sky-700 dark:text-sky-400 dark:hover:text-sky-300"
+                  >
+                    <Plus className="h-3 w-3" />
+                    Add
+                  </button>
+                )}
+              </div>
+              {item.weapons && item.weapons.length > 0 ? (
+                <div className="space-y-1">
+                  {item.weapons.map((wpn, idx) => (
+                    <div
+                      key={`${wpn.catalogId}-${idx}`}
+                      className="flex items-center justify-between rounded bg-zinc-50 px-2 py-1.5 text-sm dark:bg-zinc-800"
+                    >
+                      <div className="flex items-center gap-2">
+                        <span className="text-zinc-700 dark:text-zinc-300">
+                          {wpn.name}
+                        </span>
+                        <span className="rounded bg-red-100 px-1 py-0.5 text-[9px] font-mono text-red-700 dark:bg-red-900/40 dark:text-red-300">
+                          {wpn.damage} / {wpn.ap}AP
+                        </span>
+                        <span className="text-[10px] text-zinc-400">
+                          [{wpn.capacityUsed}]
+                        </span>
+                      </div>
+                      <div className="flex items-center gap-2">
+                        <span className="font-mono text-[10px] text-zinc-500">
+                          {formatCurrency(wpn.cost)}¥
+                        </span>
+                        {onRemoveWeapon && (
+                          <button
+                            onClick={() => onRemoveWeapon(idx)}
+                            className="rounded p-0.5 text-zinc-400 hover:bg-red-100 hover:text-red-600 dark:hover:bg-red-900/30 dark:hover:text-red-400"
+                          >
+                            <X className="h-3 w-3" />
+                          </button>
+                        )}
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              ) : (
+                <p className="text-xs italic text-zinc-400 dark:text-zinc-500">
+                  No implant weapons installed
+                </p>
+              )}
+            </div>
+
+            {/* Capacity Bar */}
+            <div className="rounded-lg bg-zinc-50 p-2.5 dark:bg-zinc-800/50">
+              <div className="mb-1.5 flex items-center justify-between text-xs">
+                <span className="font-medium text-zinc-700 dark:text-zinc-300">
+                  Modification Capacity
+                </span>
+                <span className="font-mono text-zinc-500 dark:text-zinc-400">
+                  {item.capacityUsed || 0} / {totalCapacity}
+                </span>
+              </div>
+              <div className="h-1.5 overflow-hidden rounded-full bg-zinc-200 dark:bg-zinc-700">
+                <div
+                  className={`h-full rounded-full transition-all ${
+                    remainingCapacity === 0
+                      ? "bg-amber-500"
+                      : "bg-cyan-500"
+                  }`}
+                  style={{
+                    width: `${Math.min(100, ((item.capacityUsed || 0) / totalCapacity) * 100)}%`,
+                  }}
+                />
+              </div>
+              <div className="mt-1 text-[10px] text-zinc-500 dark:text-zinc-400">
+                {remainingCapacity} capacity remaining
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+    </div>
+  );
+}
+
+// =============================================================================
 // MAIN COMPONENT
 // =============================================================================
 
@@ -403,6 +798,8 @@ export function AugmentationsCard({ state, updateState }: AugmentationsCardProps
   const [enhancementModalCyberware, setEnhancementModalCyberware] = useState<CyberwareItem | null>(
     null
   );
+  const [accessoryModalCyberlimb, setAccessoryModalCyberlimb] = useState<CyberlimbItem | null>(null);
+  const [weaponModalCyberlimb, setWeaponModalCyberlimb] = useState<CyberlimbItem | null>(null);
 
   // Get selections from state
   const selectedCyberware = useMemo(
@@ -780,6 +1177,217 @@ export function AugmentationsCard({ state, updateState }: AugmentationsCardProps
     );
   }, [enhancementModalCyberware]);
 
+  // Get remaining capacity for accessory modal
+  const accessoryRemainingCapacity = useMemo(() => {
+    if (!accessoryModalCyberlimb) return 0;
+    return (
+      (accessoryModalCyberlimb.capacity || 0) - (accessoryModalCyberlimb.capacityUsed || 0)
+    );
+  }, [accessoryModalCyberlimb]);
+
+  // Get remaining capacity for weapon modal
+  const weaponRemainingCapacity = useMemo(() => {
+    if (!weaponModalCyberlimb) return 0;
+    return (
+      (weaponModalCyberlimb.capacity || 0) - (weaponModalCyberlimb.capacityUsed || 0)
+    );
+  }, [weaponModalCyberlimb]);
+
+  // Add accessories to cyberlimb (actual implementation - handles batch)
+  const actuallyAddAccessories = useCallback(
+    (accessories: CyberlimbAccessorySelection[]) => {
+      if (!accessoryModalCyberlimb || accessories.length === 0) return;
+
+      const updatedCyberware = selectedCyberware.map((item) => {
+        if (item.id !== accessoryModalCyberlimb.id || !isCyberlimb(item)) return item;
+
+        // Build all new accessories
+        const newAccessories = accessories.map((accessory) => ({
+          id: `acc-${Date.now()}-${Math.random().toString(36).slice(2, 9)}`,
+          catalogId: accessory.catalogId,
+          name: accessory.name,
+          capacityUsed: accessory.capacityCost,
+          rating: accessory.rating,
+        }));
+
+        // Calculate total capacity used
+        const totalCapacityCost = accessories.reduce((sum, a) => sum + a.capacityCost, 0);
+
+        return {
+          ...item,
+          capacityUsed: (item.capacityUsed || 0) + totalCapacityCost,
+          accessories: [...(item.accessories || []), ...newAccessories],
+        };
+      });
+
+      updateState({
+        selections: {
+          ...state.selections,
+          cyberware: updatedCyberware,
+        },
+      });
+
+      setAccessoryModalCyberlimb(null);
+    },
+    [accessoryModalCyberlimb, selectedCyberware, state.selections, updateState]
+  );
+
+  // Add accessories to cyberlimb (with karma conversion prompt if needed)
+  const handleAddAccessories = useCallback(
+    (accessories: CyberlimbAccessorySelection[]) => {
+      if (!accessoryModalCyberlimb || accessories.length === 0) return;
+
+      // Calculate total cost
+      const totalCost = accessories.reduce((sum, a) => sum + a.cost, 0);
+
+      // Check if already affordable
+      if (totalCost <= remainingNuyen) {
+        actuallyAddAccessories(accessories);
+        return;
+      }
+
+      // Check if karma conversion could help
+      const conversionInfo = karmaConversionPrompt.checkPurchase(totalCost);
+      if (conversionInfo?.canConvert) {
+        const itemNames = accessories.map((a) => a.name).join(", ");
+        karmaConversionPrompt.promptConversion(itemNames, totalCost, () => {
+          actuallyAddAccessories(accessories);
+        });
+        return;
+      }
+
+      // Can't afford even with max karma conversion - do nothing
+    },
+    [accessoryModalCyberlimb, remainingNuyen, actuallyAddAccessories, karmaConversionPrompt]
+  );
+
+  // Add weapons to cyberlimb (actual implementation - handles batch)
+  const actuallyAddWeapons = useCallback(
+    (weapons: CyberlimbWeaponSelection[]) => {
+      if (!weaponModalCyberlimb || weapons.length === 0) return;
+
+      const updatedCyberware = selectedCyberware.map((item) => {
+        if (item.id !== weaponModalCyberlimb.id || !isCyberlimb(item)) return item;
+
+        // Build all new weapons
+        const newWeapons = weapons.map((weapon) => ({
+          id: `wpn-${Date.now()}-${Math.random().toString(36).slice(2, 9)}`,
+          catalogId: weapon.catalogId,
+          name: weapon.name,
+          capacityUsed: weapon.capacityCost,
+          essenceCost: 0,
+          cost: weapon.cost,
+          availability: weapon.availability,
+          legality: weapon.legality,
+          damage: weapon.damage || "",
+          ap: weapon.ap || 0,
+        }));
+
+        // Calculate total capacity used
+        const totalCapacityCost = weapons.reduce((sum, w) => sum + w.capacityCost, 0);
+
+        return {
+          ...item,
+          capacityUsed: (item.capacityUsed || 0) + totalCapacityCost,
+          weapons: [...(item.weapons || []), ...newWeapons],
+        };
+      });
+
+      updateState({
+        selections: {
+          ...state.selections,
+          cyberware: updatedCyberware,
+        },
+      });
+
+      setWeaponModalCyberlimb(null);
+    },
+    [weaponModalCyberlimb, selectedCyberware, state.selections, updateState]
+  );
+
+  // Add weapons to cyberlimb (with karma conversion prompt if needed)
+  const handleAddWeapons = useCallback(
+    (weapons: CyberlimbWeaponSelection[]) => {
+      if (!weaponModalCyberlimb || weapons.length === 0) return;
+
+      // Calculate total cost
+      const totalCost = weapons.reduce((sum, w) => sum + w.cost, 0);
+
+      // Check if already affordable
+      if (totalCost <= remainingNuyen) {
+        actuallyAddWeapons(weapons);
+        return;
+      }
+
+      // Check if karma conversion could help
+      const conversionInfo = karmaConversionPrompt.checkPurchase(totalCost);
+      if (conversionInfo?.canConvert) {
+        const itemNames = weapons.map((w) => w.name).join(", ");
+        karmaConversionPrompt.promptConversion(itemNames, totalCost, () => {
+          actuallyAddWeapons(weapons);
+        });
+        return;
+      }
+
+      // Can't afford even with max karma conversion - do nothing
+    },
+    [weaponModalCyberlimb, remainingNuyen, actuallyAddWeapons, karmaConversionPrompt]
+  );
+
+  // Remove accessory from cyberlimb
+  const removeAccessory = useCallback(
+    (cyberlimbId: string, accessoryIndex: number) => {
+      const updatedCyberware = selectedCyberware.map((item) => {
+        if (item.id !== cyberlimbId || !isCyberlimb(item)) return item;
+        if (!item.accessories || item.accessories.length <= accessoryIndex) return item;
+
+        const removedAccessory = item.accessories[accessoryIndex];
+        const capacityToRestore = removedAccessory.capacityUsed || 0;
+
+        return {
+          ...item,
+          capacityUsed: Math.max(0, (item.capacityUsed || 0) - capacityToRestore),
+          accessories: item.accessories.filter((_, i) => i !== accessoryIndex),
+        };
+      });
+
+      updateState({
+        selections: {
+          ...state.selections,
+          cyberware: updatedCyberware,
+        },
+      });
+    },
+    [selectedCyberware, state.selections, updateState]
+  );
+
+  // Remove weapon from cyberlimb
+  const removeWeapon = useCallback(
+    (cyberlimbId: string, weaponIndex: number) => {
+      const updatedCyberware = selectedCyberware.map((item) => {
+        if (item.id !== cyberlimbId || !isCyberlimb(item)) return item;
+        if (!item.weapons || item.weapons.length <= weaponIndex) return item;
+
+        const removedWeapon = item.weapons[weaponIndex];
+        const capacityToRestore = removedWeapon.capacityUsed || 0;
+
+        return {
+          ...item,
+          capacityUsed: Math.max(0, (item.capacityUsed || 0) - capacityToRestore),
+          weapons: item.weapons.filter((_, i) => i !== weaponIndex),
+        };
+      });
+
+      updateState({
+        selections: {
+          ...state.selections,
+          cyberware: updatedCyberware,
+        },
+      });
+    },
+    [selectedCyberware, state.selections, updateState]
+  );
+
   // Validation status
   const validationStatus = useMemo(() => {
     if (remainingEssence < 0) return "error";
@@ -821,7 +1429,6 @@ export function AugmentationsCard({ state, updateState }: AugmentationsCardProps
     <>
       <CreationCard
         title="Augmentations"
-        description={`${formatEssence(remainingEssence)} / ${maxEssence} Essence`}
         status={validationStatus}
       >
         <div className="space-y-4">
@@ -903,24 +1510,44 @@ export function AugmentationsCard({ state, updateState }: AugmentationsCardProps
           {/* Unified augmentation list */}
           {totalAugmentations > 0 && (
             <div className="space-y-2">
-              {selectedCyberware.map((item) => (
-                <AugmentationItem
-                  key={item.id}
-                  item={item}
-                  type="cyberware"
-                  onRemove={() => item.id && removeCyberware(item.id)}
-                  onAddEnhancement={
-                    item.capacity && item.capacity > 0
-                      ? () => setEnhancementModalCyberware(item)
-                      : undefined
-                  }
-                  onRemoveEnhancement={
-                    item.id && item.capacity && item.capacity > 0
-                      ? (idx) => removeEnhancement(item.id!, idx)
-                      : undefined
-                  }
-                />
-              ))}
+              {selectedCyberware.map((item) => {
+                // Check if this is a cyberlimb using the type guard
+                if (isCyberlimb(item)) {
+                  return (
+                    <CyberlimbAugmentationItem
+                      key={item.id}
+                      item={item}
+                      onRemove={() => item.id && removeCyberware(item.id)}
+                      onAddEnhancement={() => setEnhancementModalCyberware(item)}
+                      onRemoveEnhancement={(idx) => removeEnhancement(item.id!, idx)}
+                      onAddAccessory={() => setAccessoryModalCyberlimb(item)}
+                      onRemoveAccessory={(idx) => removeAccessory(item.id!, idx)}
+                      onAddWeapon={() => setWeaponModalCyberlimb(item)}
+                      onRemoveWeapon={(idx) => removeWeapon(item.id!, idx)}
+                    />
+                  );
+                }
+
+                // Regular cyberware
+                return (
+                  <AugmentationItem
+                    key={item.id}
+                    item={item}
+                    type="cyberware"
+                    onRemove={() => item.id && removeCyberware(item.id)}
+                    onAddEnhancement={
+                      item.capacity && item.capacity > 0
+                        ? () => setEnhancementModalCyberware(item)
+                        : undefined
+                    }
+                    onRemoveEnhancement={
+                      item.id && item.capacity && item.capacity > 0
+                        ? (idx) => removeEnhancement(item.id!, idx)
+                        : undefined
+                    }
+                  />
+                );
+              })}
               {selectedBioware.map((item) => (
                 <AugmentationItem
                   key={item.id}
@@ -979,6 +1606,30 @@ export function AugmentationsCard({ state, updateState }: AugmentationsCardProps
           onAdd={handleAddEnhancements}
           parentCyberware={enhancementModalCyberware}
           remainingCapacity={enhancementRemainingCapacity}
+          remainingNuyen={remainingNuyen}
+        />
+      )}
+
+      {/* Cyberlimb Accessory Modal */}
+      {accessoryModalCyberlimb && (
+        <CyberlimbAccessoryModal
+          isOpen={!!accessoryModalCyberlimb}
+          onClose={() => setAccessoryModalCyberlimb(null)}
+          onAdd={handleAddAccessories}
+          parentCyberlimb={accessoryModalCyberlimb}
+          remainingCapacity={accessoryRemainingCapacity}
+          remainingNuyen={remainingNuyen}
+        />
+      )}
+
+      {/* Cyberlimb Weapon Modal */}
+      {weaponModalCyberlimb && (
+        <CyberlimbWeaponModal
+          isOpen={!!weaponModalCyberlimb}
+          onClose={() => setWeaponModalCyberlimb(null)}
+          onAdd={handleAddWeapons}
+          parentCyberlimb={weaponModalCyberlimb}
+          remainingCapacity={weaponRemainingCapacity}
           remainingNuyen={remainingNuyen}
         />
       )}
