@@ -256,9 +256,6 @@ function extractSpentValues(
   const spentMappings: Record<string, string> = {
     "attribute-points-spent": "attribute-points",
     "special-attribute-points-spent": "special-attribute-points",
-    "skill-points-spent": "skill-points",
-    "skill-group-points-spent": "skill-group-points",
-    "knowledge-points-spent": "knowledge-points",
     "contact-points-spent": "contact-points",
     "spell-slots-spent": "spell-slots",
     "power-points-spent": "power-points",
@@ -269,6 +266,21 @@ function extractSpentValues(
       spent[budgetId] = stateBudgets[stateKey] as number;
     }
   }
+
+  // Calculate skill points spent from selections
+  const skills = (selections.skills || {}) as Record<string, number>;
+  spent["skill-points"] = Object.values(skills).reduce((sum, rating) => sum + rating, 0);
+
+  // Calculate skill group points spent from selections
+  const skillGroups = (selections.skillGroups || {}) as Record<string, number>;
+  spent["skill-group-points"] = Object.values(skillGroups).reduce((sum, rating) => sum + rating, 0);
+
+  // Calculate knowledge points spent from selections (languages + knowledge skills)
+  const languages = (selections.languages || []) as Array<{ rating: number }>;
+  const knowledgeSkills = (selections.knowledgeSkills || []) as Array<{ rating: number }>;
+  const languagePointsSpent = languages.reduce((sum, lang) => sum + (lang.rating || 0), 0);
+  const knowledgePointsSpent = knowledgeSkills.reduce((sum, skill) => sum + (skill.rating || 0), 0);
+  spent["knowledge-points"] = languagePointsSpent + knowledgePointsSpent;
 
   // Nuyen is special - calculate from all spending categories in selections
   const gear = (selections.gear || []) as Array<{
