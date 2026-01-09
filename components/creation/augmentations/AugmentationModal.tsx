@@ -27,9 +27,19 @@ import {
   type CyberwareCatalogItemData,
   type BiowareCatalogItemData,
 } from "@/lib/rules/RulesetContext";
-import type { CyberwareGrade, BiowareGrade, ItemLegality } from "@/lib/types";
+import type { CyberwareGrade, BiowareGrade, ItemLegality, CyberwareItem } from "@/lib/types";
+import {
+  type CyberlimbLocation,
+  type CyberlimbType,
+  type CyberlimbAppearance,
+  LIMB_TYPE_LOCATIONS,
+  LOCATION_SIDE,
+  LOCATION_LIMB_TYPE,
+  wouldReplaceExisting,
+  isBlockedByExisting,
+} from "@/lib/types/cyberlimb";
 import { hasUnifiedRatings, getRatingTableValue } from "@/lib/types/ratings";
-import { X, Search, Cpu, Heart, AlertTriangle, Zap, Plus } from "lucide-react";
+import { X, Search, Cpu, Heart, AlertTriangle, Zap, Plus, Ban } from "lucide-react";
 import { RatingSelector } from "../shared";
 
 // =============================================================================
@@ -86,6 +96,20 @@ export interface AugmentationSelection {
   initiativeDiceBonus?: number;
   wirelessBonus?: string;
   armorBonus?: number;
+  // Cyberlimb-specific fields
+  location?: CyberlimbLocation;
+  limbType?: CyberlimbType;
+  appearance?: CyberlimbAppearance;
+  baseStrength?: number;
+  baseAgility?: number;
+}
+
+/** Simplified cyberlimb info for conflict checking */
+export interface InstalledCyberlimb {
+  id: string;
+  name: string;
+  location: CyberlimbLocation;
+  limbType: CyberlimbType;
 }
 
 interface AugmentationModalProps {
@@ -100,6 +124,8 @@ interface AugmentationModalProps {
   isTechnomancer?: boolean;
   currentMagic?: number;
   currentResonance?: number;
+  /** Installed cyberlimbs for conflict checking */
+  installedCyberlimbs?: InstalledCyberlimb[];
 }
 
 // =============================================================================
@@ -128,6 +154,68 @@ function getAvailabilityDisplay(
   return display;
 }
 
+/** Human-readable location labels */
+const LOCATION_LABELS: Record<CyberlimbLocation, string> = {
+  "left-arm": "Left Arm",
+  "right-arm": "Right Arm",
+  "left-leg": "Left Leg",
+  "right-leg": "Right Leg",
+  "left-hand": "Left Hand",
+  "right-hand": "Right Hand",
+  "left-foot": "Left Foot",
+  "right-foot": "Right Foot",
+  "left-lower-arm": "Left Lower Arm",
+  "right-lower-arm": "Right Lower Arm",
+  "left-lower-leg": "Left Lower Leg",
+  "right-lower-leg": "Right Lower Leg",
+  torso: "Torso",
+  skull: "Skull",
+};
+
+/** Get conflict status for a location */
+function getLocationConflict(
+  location: CyberlimbLocation,
+  limbType: CyberlimbType,
+  installedCyberlimbs: InstalledCyberlimb[]
+): { type: "blocked" | "replaces" | "none"; by?: InstalledCyberlimb; replaces?: InstalledCyberlimb[] } {
+  const side = LOCATION_SIDE[location];
+
+  // Check each installed cyberlimb on the same side
+  for (const installed of installedCyberlimbs) {
+    const installedSide = LOCATION_SIDE[installed.location];
+    if (installedSide !== side) continue;
+
+    // Check if this location is blocked by an existing larger limb
+    if (isBlockedByExisting(limbType, installed.limbType)) {
+      return { type: "blocked", by: installed };
+    }
+  }
+
+  // Check what would be replaced
+  const wouldReplace: InstalledCyberlimb[] = [];
+  for (const installed of installedCyberlimbs) {
+    const installedSide = LOCATION_SIDE[installed.location];
+    if (installedSide !== side) continue;
+
+    // Same location = direct replacement
+    if (installed.location === location) {
+      wouldReplace.push(installed);
+      continue;
+    }
+
+    // Check hierarchy replacement
+    if (wouldReplaceExisting(limbType, installed.limbType)) {
+      wouldReplace.push(installed);
+    }
+  }
+
+  if (wouldReplace.length > 0) {
+    return { type: "replaces", replaces: wouldReplace };
+  }
+
+  return { type: "none" };
+}
+
 // =============================================================================
 // COMPONENT
 // =============================================================================
@@ -144,6 +232,7 @@ export function AugmentationModal({
   isTechnomancer,
   currentMagic = 0,
   currentResonance = 0,
+  installedCyberlimbs = [],
 }: AugmentationModalProps) {
   const cyberwareCatalog = useCyberware({ excludeForbidden: false });
   const biowareCatalog = useBioware({ excludeForbidden: false });
@@ -155,6 +244,7 @@ export function AugmentationModal({
   const [category, setCategory] = useState("all");
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedRating, setSelectedRating] = useState<number>(1);
+  const [selectedLocation, setSelectedLocation] = useState<CyberlimbLocation | null>(null);
 
   const isCyberware = augmentationType === "cyberware";
   const categories = isCyberware ? CYBERWARE_CATEGORIES : BIOWARE_CATEGORIES;
@@ -167,6 +257,7 @@ export function AugmentationModal({
     setCategory("all");
     setSearchQuery("");
     setSelectedRating(1);
+    setSelectedLocation(null);
   }, []);
 
   // Available grades based on type
@@ -235,6 +326,42 @@ export function AugmentationModal({
       setSelectedRating(1);
     }
   }, [rawSelectedItem]);
+
+  // Check if selected item is a cyberlimb
+  const isCyberlimb = useMemo(() => {
+    if (!rawSelectedItem) return false;
+    return rawSelectedItem.category === "cyberlimb" && "limbType" in rawSelectedItem;
+  }, [rawSelectedItem]);
+
+  // Get the limb type of the selected cyberlimb
+  const selectedLimbType = useMemo((): CyberlimbType | null => {
+    if (!isCyberlimb || !rawSelectedItem) return null;
+    return (rawSelectedItem as CyberwareCatalogItemData & { limbType?: CyberlimbType }).limbType ?? null;
+  }, [isCyberlimb, rawSelectedItem]);
+
+  // Get valid locations for the selected cyberlimb
+  const validLocations = useMemo((): CyberlimbLocation[] => {
+    if (!selectedLimbType) return [];
+    return LIMB_TYPE_LOCATIONS[selectedLimbType] || [];
+  }, [selectedLimbType]);
+
+  // Reset location when item changes or when switching to non-cyberlimb
+  useEffect(() => {
+    if (!isCyberlimb) {
+      setSelectedLocation(null);
+    } else if (selectedLocation && !validLocations.includes(selectedLocation)) {
+      // Reset if current location is not valid for new limb type
+      setSelectedLocation(null);
+    }
+  }, [isCyberlimb, validLocations, selectedLocation]);
+
+  // Get conflict status for the selected location
+  const locationConflict = useMemo(() => {
+    if (!selectedLocation || !selectedLimbType) {
+      return { type: "none" as const };
+    }
+    return getLocationConflict(selectedLocation, selectedLimbType, installedCyberlimbs);
+  }, [selectedLocation, selectedLimbType, installedCyberlimbs]);
 
   // Selected item with calculated values (including rating-based values)
   const selectedItem = useMemo(() => {
@@ -332,7 +459,9 @@ export function AugmentationModal({
   const canAfford = selectedItem ? selectedItem.cost <= remainingNuyen : true;
   const hasEssence = selectedItem ? selectedItem.essenceCost <= remainingEssence : true;
   const meetsAvailability = selectedItem ? selectedItem.availability <= maxAvailability : true;
-  const canAdd = selectedItem && canAfford && hasEssence && meetsAvailability;
+  const hasRequiredLocation = isCyberlimb ? selectedLocation !== null : true;
+  const isNotBlocked = locationConflict.type !== "blocked";
+  const canAdd = selectedItem && canAfford && hasEssence && meetsAvailability && hasRequiredLocation && isNotBlocked;
 
   // Handle add
   const handleAdd = useCallback(() => {
@@ -351,10 +480,26 @@ export function AugmentationModal({
       armorBonus = ratingValue?.effects?.armorBonus;
     }
 
+    // Extract cyberlimb-specific fields
+    const cyberlimbData = isCyberlimb
+      ? (rawSelectedItem as CyberwareCatalogItemData & {
+          limbType?: CyberlimbType;
+          appearance?: CyberlimbAppearance;
+          baseStrength?: number;
+          baseAgility?: number;
+        })
+      : null;
+
+    // Build display name with location for cyberlimbs
+    let finalDisplayName = displayName;
+    if (isCyberlimb && selectedLocation) {
+      finalDisplayName = `${displayName} (${LOCATION_LABELS[selectedLocation]})`;
+    }
+
     const selection: AugmentationSelection = {
       type: augmentationType,
       catalogId: rawSelectedItem.id,
-      name: displayName,
+      name: finalDisplayName,
       category: rawSelectedItem.category,
       grade,
       baseEssenceCost: selectedItem.baseEssenceCost,
@@ -372,6 +517,12 @@ export function AugmentationModal({
         ? (rawSelectedItem as CyberwareCatalogItemData).wirelessBonus
         : undefined,
       armorBonus,
+      // Cyberlimb-specific fields
+      location: isCyberlimb ? selectedLocation ?? undefined : undefined,
+      limbType: cyberlimbData?.limbType,
+      appearance: cyberlimbData?.appearance,
+      baseStrength: cyberlimbData?.baseStrength,
+      baseAgility: cyberlimbData?.baseAgility,
     };
 
     onAdd(selection);
@@ -382,7 +533,9 @@ export function AugmentationModal({
     rawSelectedItem,
     canAdd,
     isCyberware,
+    isCyberlimb,
     selectedRating,
+    selectedLocation,
     augmentationType,
     grade,
     onAdd,
@@ -625,6 +778,71 @@ export function AugmentationModal({
                         showEssencePreview={false}
                         label="Rating"
                       />
+                    </div>
+                  )}
+
+                  {/* Location Selector for cyberlimbs */}
+                  {isCyberlimb && validLocations.length > 0 && (
+                    <div className="mt-4">
+                      <h4 className="text-xs font-medium text-zinc-500 dark:text-zinc-400">
+                        Installation Location <span className="text-red-500">*</span>
+                      </h4>
+                      <div className="mt-2 grid grid-cols-2 gap-2">
+                        {validLocations.map((location) => {
+                          const conflict = getLocationConflict(location, selectedLimbType!, installedCyberlimbs);
+                          const isSelected = selectedLocation === location;
+                          const isBlocked = conflict.type === "blocked";
+                          const willReplace = conflict.type === "replaces";
+
+                          return (
+                            <button
+                              key={location}
+                              onClick={() => !isBlocked && setSelectedLocation(location)}
+                              disabled={isBlocked}
+                              className={`relative flex items-center justify-between rounded-lg border px-3 py-2 text-sm transition-colors ${
+                                isSelected
+                                  ? "border-cyan-500 bg-cyan-50 text-cyan-700 dark:border-cyan-400 dark:bg-cyan-900/30 dark:text-cyan-300"
+                                  : isBlocked
+                                    ? "cursor-not-allowed border-zinc-200 bg-zinc-100 text-zinc-400 dark:border-zinc-700 dark:bg-zinc-800 dark:text-zinc-500"
+                                    : willReplace
+                                      ? "border-amber-300 bg-amber-50 text-amber-700 hover:border-amber-400 dark:border-amber-600 dark:bg-amber-900/20 dark:text-amber-300"
+                                      : "border-zinc-200 text-zinc-700 hover:border-zinc-300 hover:bg-zinc-50 dark:border-zinc-700 dark:text-zinc-300 dark:hover:border-zinc-600 dark:hover:bg-zinc-800"
+                              }`}
+                            >
+                              <span>{LOCATION_LABELS[location]}</span>
+                              {isBlocked && (
+                                <Ban className="h-4 w-4 text-zinc-400" />
+                              )}
+                              {willReplace && !isSelected && (
+                                <AlertTriangle className="h-4 w-4 text-amber-500" />
+                              )}
+                            </button>
+                          );
+                        })}
+                      </div>
+
+                      {/* Conflict Messages */}
+                      {locationConflict.type === "blocked" && locationConflict.by && (
+                        <div className="mt-2 flex items-start gap-2 rounded-lg bg-red-50 p-2 text-xs dark:bg-red-900/20">
+                          <Ban className="mt-0.5 h-3.5 w-3.5 shrink-0 text-red-500" />
+                          <span className="text-red-700 dark:text-red-300">
+                            Blocked by existing {locationConflict.by.name}. Remove it first to install here.
+                          </span>
+                        </div>
+                      )}
+                      {locationConflict.type === "replaces" && locationConflict.replaces && (
+                        <div className="mt-2 flex items-start gap-2 rounded-lg bg-amber-50 p-2 text-xs dark:bg-amber-900/20">
+                          <AlertTriangle className="mt-0.5 h-3.5 w-3.5 shrink-0 text-amber-500" />
+                          <span className="text-amber-700 dark:text-amber-300">
+                            Will replace: {locationConflict.replaces.map(l => l.name).join(", ")}
+                          </span>
+                        </div>
+                      )}
+                      {!selectedLocation && (
+                        <p className="mt-2 text-xs text-red-500">
+                          Please select where to install this cyberlimb
+                        </p>
+                      )}
                     </div>
                   )}
 

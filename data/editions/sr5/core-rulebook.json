@@ -10032,38 +10032,38 @@
             "maxRating": 6,
             "ratings": {
               "1": {
-                "cost": 6000,
-                "availability": 8,
+                "cost": 3000,
+                "availability": 4,
                 "essenceCost": 0.5,
                 "effects": { "armorBonus": 1 }
               },
               "2": {
-                "cost": 12000,
-                "availability": 12,
+                "cost": 6000,
+                "availability": 8,
                 "essenceCost": 1,
                 "effects": { "armorBonus": 2 }
               },
               "3": {
-                "cost": 20000,
-                "availability": 14,
+                "cost": 9000,
+                "availability": 12,
                 "essenceCost": 1.5,
                 "effects": { "armorBonus": 3 }
               },
               "4": {
-                "cost": 30000,
+                "cost": 12000,
                 "availability": 16,
                 "essenceCost": 2,
                 "effects": { "armorBonus": 4 }
               },
               "5": {
-                "cost": 50000,
-                "availability": 18,
+                "cost": 15000,
+                "availability": 20,
                 "essenceCost": 2.5,
                 "effects": { "armorBonus": 5 }
               },
               "6": {
-                "cost": 75000,
-                "availability": 20,
+                "cost": 18000,
+                "availability": 24,
                 "essenceCost": 3,
                 "effects": { "armorBonus": 6 }
               }
@@ -10110,36 +10110,34 @@
             "hasRating": true,
             "minRating": 1,
             "maxRating": 4,
-            "ratings": {
-              "1": {
-                "cost": 25000,
-                "availability": 11,
-                "essenceCost": 1
+            "category": "bodyware",
+            "description": "+Rating STR and AGI. Cannot be combined with muscle augmentation or muscle toner bioware.",
+            "page": 456,
+            "legality": "restricted",
+            "incompatibleWith": ["muscle-augmentation", "muscle-toner"],
+            "ratingSpec": {
+              "rating": {
+                "hasRating": true,
+                "minRating": 1,
+                "maxRating": 4
               },
-              "2": {
-                "cost": 50000,
-                "availability": 13,
-                "essenceCost": 2
+              "costScaling": {
+                "baseValue": 25000,
+                "perRating": true
               },
-              "3": {
-                "cost": 80000,
-                "availability": 15,
-                "essenceCost": 3
+              "availabilityScaling": {
+                "baseValue": 5,
+                "perRating": true
               },
-              "4": {
-                "cost": 120000,
-                "availability": 17,
-                "essenceCost": 4
+              "essenceScaling": {
+                "baseValue": 1,
+                "perRating": true
               }
             },
-            "category": "bodyware",
-            "description": "+1 STR and AGI.",
-            "page": 456,
-            "attributeBonuses": {
+            "attributeBonusPerRating": {
               "strength": 1,
               "agility": 1
-            },
-            "legality": "restricted"
+            }
           },
           {
             "id": "reaction-enhancers",
@@ -10147,38 +10145,34 @@
             "hasRating": true,
             "minRating": 1,
             "maxRating": 3,
-            "ratings": {
-              "1": {
-                "cost": 13000,
-                "availability": 8,
-                "essenceCost": 0.3
-              },
-              "2": {
-                "cost": 26000,
-                "availability": 12,
-                "essenceCost": 0.6
-              },
-              "3": {
-                "cost": 39000,
-                "availability": 14,
-                "essenceCost": 0.9
-              }
-            },
             "category": "bodyware",
-            "description": "+1 REA.",
-            "wirelessBonus": "+1 Reaction (included in rating 2 and 3).",
+            "description": "+Rating REA (adjust Initiative and Physical limit accordingly). Incompatible with wired reflexes and other Reaction enhancements.",
+            "wirelessBonus": "Compatible with wireless wired reflexes; total Reaction bonus from both can exceed +4 if both have wireless active.",
             "page": 457,
-            "wirelessEffects": [
-              {
-                "type": "attribute",
-                "attribute": "reaction",
-                "modifier": 1
+            "legality": "restricted",
+            "incompatibleWith": ["wired-reflexes"],
+            "ratingSpec": {
+              "rating": {
+                "hasRating": true,
+                "minRating": 1,
+                "maxRating": 3
+              },
+              "costScaling": {
+                "baseValue": 13000,
+                "perRating": true
+              },
+              "availabilityScaling": {
+                "baseValue": 5,
+                "perRating": true
+              },
+              "essenceScaling": {
+                "baseValue": 0.3,
+                "perRating": true
               }
-            ],
-            "attributeBonuses": {
-              "reaction": 1
             },
-            "legality": "restricted"
+            "attributeBonusPerRating": {
+              "reaction": 1
+            }
           },
           {
             "id": "wired-reflexes",
@@ -10225,9 +10219,9 @@
             "category": "headware",
             "essenceCost": 0.1,
             "cost": 1000,
-            "availability": 4,
+            "availability": 2,
             "description": "Standard neural interface for DNI. Allows connection to electronic devices.",
-            "wirelessBonus": "Can switch between devices and maintain multiple connections without physical contact.",
+            "wirelessBonus": "Can switch between devices and maintain multiple connections without physical contact. Rating 1 noise reduction.",
             "page": 452
           },
           {
@@ -10314,8 +10308,8 @@
             "category": "headware",
             "essenceCost": 0.2,
             "cost": 3000,
-            "availability": 4,
             "hasRating": true,
+            "minRating": 1,
             "maxRating": 6,
             "costPerRating": true,
             "description": "Enhanced taste sensitivity. +Rating to taste analysis tests.",
@@ -10331,8 +10325,8 @@
                 "perRating": true
               },
               "availabilityScaling": {
-                "baseValue": 4,
-                "perRating": false
+                "baseValue": 3,
+                "perRating": true
               },
               "essenceScaling": {
                 "baseValue": 0.2,
@@ -10388,12 +10382,13 @@
             "category": "headware",
             "essenceCost": 0.2,
             "cost": 5000,
-            "availability": 6,
             "hasRating": true,
+            "minRating": 1,
             "maxRating": 6,
             "costPerRating": true,
             "description": "Modify vocal patterns. +Rating to vocal impersonation.",
             "page": 453,
+            "legality": "forbidden",
             "ratingSpec": {
               "rating": {
                 "hasRating": true,
@@ -10405,8 +10400,8 @@
                 "perRating": true
               },
               "availabilityScaling": {
-                "baseValue": 6,
-                "perRating": false
+                "baseValue": 3,
+                "perRating": true
               },
               "essenceScaling": {
                 "baseValue": 0.2,
@@ -10540,11 +10535,11 @@
             "id": "eye-smartlink",
             "name": "Smartlink",
             "category": "eyeware",
-            "essenceCost": 0.1,
+            "essenceCost": 0.2,
             "cost": 4000,
             "availability": 8,
             "capacityCost": 3,
-            "description": "+2 accuracy with smartgun systems.",
+            "description": "+2 accuracy with smartgun systems. Implanted version is more effective than external.",
             "page": 454,
             "legality": "restricted"
           },
@@ -10553,8 +10548,8 @@
             "name": "Thermographic Vision",
             "category": "eyeware",
             "essenceCost": 0.1,
-            "cost": 2500,
-            "availability": 6,
+            "cost": 1500,
+            "availability": 4,
             "capacityCost": 2,
             "description": "Infrared vision to see heat signatures.",
             "page": 454
@@ -10565,8 +10560,8 @@
             "category": "eyeware",
             "essenceCost": 0.1,
             "cost": 4000,
-            "availability": 8,
             "hasRating": true,
+            "minRating": 1,
             "maxRating": 3,
             "costPerRating": true,
             "capacityCost": 1,
@@ -10584,8 +10579,8 @@
                 "perRating": true
               },
               "availabilityScaling": {
-                "baseValue": 8,
-                "perRating": false
+                "baseValue": 3,
+                "perRating": true
               },
               "essenceScaling": {
                 "baseValue": 0.1,
@@ -10606,6 +10601,17 @@
             "availability": 4,
             "capacityCost": 2,
             "description": "Electronic magnification up to 50x.",
+            "page": 454
+          },
+          {
+            "id": "ocular-drone",
+            "name": "Ocular Drone",
+            "category": "eyeware",
+            "essenceCost": 0,
+            "cost": 6000,
+            "availability": 6,
+            "capacityCost": 6,
+            "description": "Spyball drone placed in ocular cavity. Functions as normal cybereye with all enhancements until removed and controlled as Horizon Flying Eye. -3 dice pool to all tasks when removed. If both eyes are drones, you are blind while they operate apart from you.",
             "page": 454
           },
           {
@@ -10652,8 +10658,8 @@
             "category": "earware",
             "essenceCost": 0.1,
             "cost": 4000,
-            "availability": 8,
             "hasRating": true,
+            "minRating": 1,
             "maxRating": 3,
             "costPerRating": true,
             "capacityCost": 1,
@@ -10671,8 +10677,8 @@
                 "perRating": true
               },
               "availabilityScaling": {
-                "baseValue": 8,
-                "perRating": false
+                "baseValue": 3,
+                "perRating": true
               },
               "essenceScaling": {
                 "baseValue": 0.1,
@@ -10690,9 +10696,9 @@
             "category": "earware",
             "essenceCost": 0.1,
             "cost": 8000,
-            "availability": 10,
+            "availability": 8,
             "capacityCost": 4,
-            "description": "+2 dice to tests involving balance.",
+            "description": "+1 dice to tests involving balance (climbing, narrow platforms, landing after jumps).",
             "page": 455
           },
           {
@@ -10701,9 +10707,9 @@
             "category": "earware",
             "essenceCost": 0.1,
             "cost": 2250,
-            "availability": 4,
+            "availability": 6,
             "capacityCost": 1,
-            "description": "Protection from loud noises. Negates audio-based attacks.",
+            "description": "Protection from loud noises. +2 dice pool to resist sonic attacks including flashbangs.",
             "page": 455
           },
           {
@@ -10712,13 +10718,13 @@
             "category": "earware",
             "essenceCost": 0.1,
             "cost": 3500,
-            "availability": 10,
             "hasRating": true,
+            "minRating": 1,
             "maxRating": 6,
             "costPerRating": true,
             "capacityCost": 1,
             "capacityPerRating": true,
-            "description": "Filter specific sounds from environment.",
+            "description": "Filter specific sounds from environment. Max Rating 6 (vs Rating 3 for external version).",
             "page": 455,
             "ratingSpec": {
               "rating": {
@@ -10731,8 +10737,8 @@
                 "perRating": true
               },
               "availabilityScaling": {
-                "baseValue": 10,
-                "perRating": false
+                "baseValue": 3,
+                "perRating": true
               },
               "essenceScaling": {
                 "baseValue": 0.1,
@@ -10822,15 +10828,16 @@
             "id": "skillwires",
             "name": "Skillwires",
             "category": "bodyware",
-            "essenceCost": 0.1,
-            "cost": 20000,
-            "availability": 8,
             "hasRating": true,
+            "minRating": 1,
             "maxRating": 6,
             "essencePerRating": true,
             "costPerRating": true,
-            "description": "Use skillsofts up to rating.",
-            "page": 457,
+            "description": "Use activesofts up to rating (requires skilljack). Incompatible with reflex recorder bioware.",
+            "wirelessBonus": "+1 to relevant inherent Limit (Physical, Mental, or Social) for skills used through skillwires.",
+            "page": 455,
+            "legality": "restricted",
+            "incompatibleWith": ["reflex-recorder"],
             "ratingSpec": {
               "rating": {
                 "hasRating": true,
@@ -10842,15 +10849,14 @@
                 "perRating": true
               },
               "availabilityScaling": {
-                "baseValue": 8,
-                "perRating": false
+                "baseValue": 4,
+                "perRating": true
               },
               "essenceScaling": {
                 "baseValue": 0.1,
                 "perRating": true
               }
-            },
-            "legality": "restricted"
+            }
           },
           {
             "id": "smuggling-compartment",
@@ -11371,35 +11377,38 @@
           {
             "id": "hand-blade",
             "name": "Hand Blade",
-            "category": "hand-blade",
+            "category": "cybernetic-weapon",
             "essenceCost": 0.25,
             "cost": 2500,
-            "availability": 8,
-            "description": "Retractable blade in forearm. Reach 0, DV (STR+2)P, AP -2.",
+            "availability": 10,
+            "capacityCost": 2,
+            "description": "Retractable blade in forearm. Reach 0, DV (STR+2)P, AP -2. Uses Unarmed Combat skill.",
             "page": 459,
-            "legality": "restricted"
+            "legality": "forbidden"
           },
           {
             "id": "hand-razors",
             "name": "Hand Razors",
-            "category": "hand-razor",
+            "category": "cybernetic-weapon",
             "essenceCost": 0.2,
             "cost": 1250,
-            "availability": 6,
-            "description": "Retractable finger blades. Reach 0, DV (STR+1)P, AP -3.",
+            "availability": 8,
+            "capacityCost": 2,
+            "description": "Retractable finger blades. Reach 0, DV (STR+1)P, AP -3. Uses Unarmed Combat skill.",
             "page": 459,
-            "legality": "restricted"
+            "legality": "forbidden"
           },
           {
             "id": "spur",
             "name": "Spur",
-            "category": "spur",
+            "category": "cybernetic-weapon",
             "essenceCost": 0.3,
             "cost": 5000,
-            "availability": 10,
-            "description": "Wrist-mounted blade. Reach 0, DV (STR+3)P, AP -2.",
+            "availability": 12,
+            "capacityCost": 3,
+            "description": "Wrist-mounted retractable blade. Reach 0, DV (STR+3)P, AP -2. Uses Unarmed Combat skill.",
             "page": 459,
-            "legality": "restricted"
+            "legality": "forbidden"
           },
           {
             "id": "shock-hand",
@@ -11416,11 +11425,11 @@
             "id": "implant-weapon-holdout",
             "name": "Implant Weapon (Hold-Out Pistol)",
             "category": "cybernetic-weapon",
-            "essenceCost": 0.25,
+            "essenceCost": 0.1,
             "cost": 2000,
-            "availability": 4,
+            "availability": 8,
             "capacityCost": 2,
-            "description": "Concealed hold-out pistol. Cost is in addition to the weapon itself.",
+            "description": "Concealed hold-out pistol with internal magazine. Pre-equipped with smartgun system.",
             "page": 458,
             "legality": "restricted"
           },
@@ -11429,10 +11438,10 @@
             "name": "Implant Weapon (Light Pistol)",
             "category": "cybernetic-weapon",
             "essenceCost": 0.25,
-            "cost": 2500,
-            "availability": 6,
-            "capacityCost": 3,
-            "description": "Concealed light pistol. Cost is in addition to the weapon itself.",
+            "cost": 3900,
+            "availability": 10,
+            "capacityCost": 4,
+            "description": "Concealed light pistol with internal magazine. Pre-equipped with smartgun system.",
             "page": 458,
             "legality": "restricted"
           },
@@ -11452,10 +11461,10 @@
             "name": "Implant Weapon (Heavy Pistol)",
             "category": "cybernetic-weapon",
             "essenceCost": 0.5,
-            "cost": 4000,
-            "availability": 8,
-            "capacityCost": 5,
-            "description": "Concealed heavy pistol. Cost is in addition to the weapon itself.",
+            "cost": 4300,
+            "availability": 12,
+            "capacityCost": 6,
+            "description": "Concealed heavy pistol with internal magazine. Pre-equipped with smartgun system.",
             "page": 458,
             "legality": "restricted"
           },
@@ -11463,10 +11472,11 @@
             "id": "implant-weapon-smg",
             "name": "Implant Weapon (Submachine Gun)",
             "category": "cybernetic-weapon",
-            "essenceCost": 0.75,
-            "cost": 6000,
+            "essenceCost": 1.0,
+            "cost": 4800,
             "availability": 12,
-            "description": "Concealed submachine gun. Cost is in addition to the weapon itself.",
+            "capacityCost": 8,
+            "description": "Concealed submachine gun with internal magazine. Pre-equipped with smartgun system.",
             "page": 458,
             "legality": "restricted"
           },
@@ -11475,10 +11485,10 @@
             "name": "Implant Weapon (Shotgun)",
             "category": "cybernetic-weapon",
             "essenceCost": 1.25,
-            "cost": 7500,
-            "availability": 14,
-            "capacityCost": 8,
-            "description": "Concealed shotgun. Cost is in addition to the weapon itself.",
+            "cost": 8500,
+            "availability": 12,
+            "capacityCost": 10,
+            "description": "Concealed shotgun with internal magazine. Pre-equipped with smartgun system.",
             "page": 458,
             "legality": "restricted"
           },
@@ -11486,11 +11496,11 @@
             "id": "implant-weapon-grenade-launcher",
             "name": "Implant Weapon (Grenade Launcher)",
             "category": "cybernetic-weapon",
-            "essenceCost": 0.5,
-            "cost": 8000,
-            "availability": 18,
-            "capacityCost": 6,
-            "description": "Concealed grenade launcher. Cost is in addition to the weapon itself.",
+            "essenceCost": 1.5,
+            "cost": 30000,
+            "availability": 20,
+            "capacityCost": 15,
+            "description": "Concealed grenade launcher. Pre-equipped with smartgun system.",
             "page": 458,
             "legality": "forbidden"
           },
@@ -13130,6 +13140,18 @@
                   "type": "allocate",
                   "target": "contacts",
                   "budgetId": "contact-karma"
+                }
+              },
+              {
+                "id": "augmentations",
+                "title": "Augmentations",
+                "type": "purchase",
+                "description": "Install cyberware and bioware. Essence loss affects Magic rating.",
+                "payload": {
+                  "type": "purchase",
+                  "target": "augmentations",
+                  "budgetId": "nuyen",
+                  "availabilityLimit": 12
                 }
               },
               {
