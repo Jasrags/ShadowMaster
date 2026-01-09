@@ -35,7 +35,7 @@ import {
   KarmaConversionModal,
   useKarmaConversionPrompt,
 } from "./shared";
-import { Lock, Search, X, Car, Bot, Wifi, Code, Info } from "lucide-react";
+import { Lock, Search, X, Car, Bot, Wifi, Code, Info, Plus } from "lucide-react";
 
 // =============================================================================
 // CONSTANTS
@@ -762,17 +762,28 @@ export function VehiclesCard({ state, updateState }: VehiclesCardProps) {
         </div>
 
         {/* VEHICLES Section */}
-        {selectedVehicles.length > 0 && (
-          <div>
-            <div className="mb-2 flex items-center gap-2">
+        <div>
+          <div className="mb-2 flex items-center justify-between">
+            <div className="flex items-center gap-2">
               <Car className="h-3.5 w-3.5 text-blue-500" />
               <span className="text-xs font-semibold uppercase tracking-wider text-zinc-500 dark:text-zinc-400">
                 Vehicles
               </span>
-              <span className="rounded-full bg-blue-100 px-1.5 py-0.5 text-[10px] font-medium text-blue-700 dark:bg-blue-900/50 dark:text-blue-300">
-                {selectedVehicles.length}
-              </span>
+              {selectedVehicles.length > 0 && (
+                <span className="rounded-full bg-blue-100 px-1.5 py-0.5 text-[10px] font-medium text-blue-700 dark:bg-blue-900/50 dark:text-blue-300">
+                  {selectedVehicles.length}
+                </span>
+              )}
             </div>
+            <button
+              onClick={() => setActiveTab("vehicles")}
+              className="flex items-center gap-1 rounded-lg bg-amber-500 px-2 py-1 text-xs font-medium text-white transition-colors hover:bg-amber-600"
+            >
+              <Plus className="h-3 w-3" />
+              Add
+            </button>
+          </div>
+          {selectedVehicles.length > 0 ? (
             <div className="rounded-lg border border-zinc-200 p-2 dark:border-zinc-700">
               {selectedVehicles.map((v, index) => (
                 <div key={v.id}>
@@ -794,21 +805,36 @@ export function VehiclesCard({ state, updateState }: VehiclesCardProps) {
                 </div>
               ))}
             </div>
-          </div>
-        )}
+          ) : (
+            <div className="rounded-lg border-2 border-dashed border-zinc-200 p-3 text-center dark:border-zinc-700">
+              <p className="text-xs text-zinc-400 dark:text-zinc-500">No vehicles purchased</p>
+            </div>
+          )}
+        </div>
 
         {/* DRONES Section */}
-        {selectedDrones.length > 0 && (
-          <div>
-            <div className="mb-2 flex items-center gap-2">
+        <div>
+          <div className="mb-2 flex items-center justify-between">
+            <div className="flex items-center gap-2">
               <Bot className="h-3.5 w-3.5 text-green-500" />
               <span className="text-xs font-semibold uppercase tracking-wider text-zinc-500 dark:text-zinc-400">
                 Drones
               </span>
-              <span className="rounded-full bg-green-100 px-1.5 py-0.5 text-[10px] font-medium text-green-700 dark:bg-green-900/50 dark:text-green-300">
-                {selectedDrones.length}
-              </span>
+              {selectedDrones.length > 0 && (
+                <span className="rounded-full bg-green-100 px-1.5 py-0.5 text-[10px] font-medium text-green-700 dark:bg-green-900/50 dark:text-green-300">
+                  {selectedDrones.length}
+                </span>
+              )}
             </div>
+            <button
+              onClick={() => setActiveTab("drones")}
+              className="flex items-center gap-1 rounded-lg bg-amber-500 px-2 py-1 text-xs font-medium text-white transition-colors hover:bg-amber-600"
+            >
+              <Plus className="h-3 w-3" />
+              Add
+            </button>
+          </div>
+          {selectedDrones.length > 0 ? (
             <div className="rounded-lg border border-zinc-200 p-2 dark:border-zinc-700">
               {selectedDrones.map((d, index) => (
                 <div key={d.id}>
@@ -830,21 +856,36 @@ export function VehiclesCard({ state, updateState }: VehiclesCardProps) {
                 </div>
               ))}
             </div>
-          </div>
-        )}
+          ) : (
+            <div className="rounded-lg border-2 border-dashed border-zinc-200 p-3 text-center dark:border-zinc-700">
+              <p className="text-xs text-zinc-400 dark:text-zinc-500">No drones purchased</p>
+            </div>
+          )}
+        </div>
 
         {/* RCCS Section */}
-        {selectedRCCs.length > 0 && (
-          <div>
-            <div className="mb-2 flex items-center gap-2">
+        <div>
+          <div className="mb-2 flex items-center justify-between">
+            <div className="flex items-center gap-2">
               <Wifi className="h-3.5 w-3.5 text-purple-500" />
               <span className="text-xs font-semibold uppercase tracking-wider text-zinc-500 dark:text-zinc-400">
                 RCCs
               </span>
-              <span className="rounded-full bg-purple-100 px-1.5 py-0.5 text-[10px] font-medium text-purple-700 dark:bg-purple-900/50 dark:text-purple-300">
-                {selectedRCCs.length}
-              </span>
+              {selectedRCCs.length > 0 && (
+                <span className="rounded-full bg-purple-100 px-1.5 py-0.5 text-[10px] font-medium text-purple-700 dark:bg-purple-900/50 dark:text-purple-300">
+                  {selectedRCCs.length}
+                </span>
+              )}
             </div>
+            <button
+              onClick={() => setActiveTab("rccs")}
+              className="flex items-center gap-1 rounded-lg bg-amber-500 px-2 py-1 text-xs font-medium text-white transition-colors hover:bg-amber-600"
+            >
+              <Plus className="h-3 w-3" />
+              Add
+            </button>
+          </div>
+          {selectedRCCs.length > 0 ? (
             <div className="rounded-lg border border-zinc-200 p-2 dark:border-zinc-700">
               {selectedRCCs.map((r, index) => (
                 <div key={r.id}>
@@ -866,21 +907,36 @@ export function VehiclesCard({ state, updateState }: VehiclesCardProps) {
                 </div>
               ))}
             </div>
-          </div>
-        )}
+          ) : (
+            <div className="rounded-lg border-2 border-dashed border-zinc-200 p-3 text-center dark:border-zinc-700">
+              <p className="text-xs text-zinc-400 dark:text-zinc-500">No RCCs purchased</p>
+            </div>
+          )}
+        </div>
 
         {/* AUTOSOFTS Section */}
-        {selectedAutosofts.length > 0 && (
-          <div>
-            <div className="mb-2 flex items-center gap-2">
+        <div>
+          <div className="mb-2 flex items-center justify-between">
+            <div className="flex items-center gap-2">
               <Code className="h-3.5 w-3.5 text-cyan-500" />
               <span className="text-xs font-semibold uppercase tracking-wider text-zinc-500 dark:text-zinc-400">
                 Autosofts
               </span>
-              <span className="rounded-full bg-cyan-100 px-1.5 py-0.5 text-[10px] font-medium text-cyan-700 dark:bg-cyan-900/50 dark:text-cyan-300">
-                {selectedAutosofts.length}
-              </span>
+              {selectedAutosofts.length > 0 && (
+                <span className="rounded-full bg-cyan-100 px-1.5 py-0.5 text-[10px] font-medium text-cyan-700 dark:bg-cyan-900/50 dark:text-cyan-300">
+                  {selectedAutosofts.length}
+                </span>
+              )}
             </div>
+            <button
+              onClick={() => setActiveTab("autosofts")}
+              className="flex items-center gap-1 rounded-lg bg-amber-500 px-2 py-1 text-xs font-medium text-white transition-colors hover:bg-amber-600"
+            >
+              <Plus className="h-3 w-3" />
+              Add
+            </button>
+          </div>
+          {selectedAutosofts.length > 0 ? (
             <div className="rounded-lg border border-zinc-200 p-2 dark:border-zinc-700">
               {selectedAutosofts.map((a, index) => (
                 <div key={a.id}>
@@ -904,8 +960,12 @@ export function VehiclesCard({ state, updateState }: VehiclesCardProps) {
                 </div>
               ))}
             </div>
-          </div>
-        )}
+          ) : (
+            <div className="rounded-lg border-2 border-dashed border-zinc-200 p-3 text-center dark:border-zinc-700">
+              <p className="text-xs text-zinc-400 dark:text-zinc-500">No autosofts purchased</p>
+            </div>
+          )}
+        </div>
 
         {/* Summary - ContactsCard pattern */}
         {totalItems > 0 && (
