@@ -1078,6 +1078,13 @@ export interface BiowareItem {
   attributeBonuses?: Record<string, number>;
   /** Armor bonus provided by this bioware (e.g., orthoskin) */
   armorBonus?: number;
+  /** Initiative dice bonus (e.g., Synaptic Booster) */
+  initiativeDiceBonus?: number;
+  /**
+   * Target skill ID for skill-linked bioware (e.g., Reflex Recorder).
+   * The bioware provides a bonus to this specific skill.
+   */
+  targetSkill?: string;
   /** Other special effects/notes */
   notes?: string;
 }

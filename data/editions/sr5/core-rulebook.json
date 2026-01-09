@@ -12035,27 +12035,35 @@
             "ratings": {
               "1": {
                 "cost": 95000,
-                "availability": 12,
-                "essenceCost": 0.5
+                "availability": 6,
+                "essenceCost": 0.5,
+                "effects": {
+                  "attributeBonuses": { "reaction": 1 },
+                  "initiativeDice": 1
+                }
               },
               "2": {
                 "cost": 190000,
-                "availability": 14,
-                "essenceCost": 1
+                "availability": 12,
+                "essenceCost": 1,
+                "effects": {
+                  "attributeBonuses": { "reaction": 2 },
+                  "initiativeDice": 2
+                }
               },
               "3": {
                 "cost": 285000,
                 "availability": 18,
-                "essenceCost": 1.5
+                "essenceCost": 1.5,
+                "effects": {
+                  "attributeBonuses": { "reaction": 3 },
+                  "initiativeDice": 3
+                }
               }
             },
             "category": "cultured",
-            "description": "+1 REA, +1D6 Initiative. Incompatible with wired reflexes.",
+            "description": "Broadened and replicated spinal nerve cells allow faster reaction time. Provides +1 Reaction and +1D6 Initiative per rating. Cannot be combined with any other Reaction or Initiative enhancement.",
             "page": 462,
-            "attributeBonuses": {
-              "reaction": 1
-            },
-            "initiativeDiceBonus": 1,
             "legality": "restricted",
             "incompatibleWith": ["wired-reflexes", "reaction-enhancers"]
           },
@@ -12134,9 +12142,12 @@
             "essenceCost": 0.1,
             "cost": 14000,
             "availability": 10,
-            "description": "+1 die to skill linked to implant.",
+            "description": "Adds +1 to rating of a specific skill linked to a Physical attribute. Multiple recorders may be taken for different skills, but not for the same skill.",
             "page": 461,
-            "incompatibleWith": ["skillwires"]
+            "incompatibleWith": ["skillwires"],
+            "requiresSkillTarget": true,
+            "skillAttributeFilter": ["agility", "body", "reaction", "strength"],
+            "skillBonus": 1
           },
           {
             "id": "skin-pocket",

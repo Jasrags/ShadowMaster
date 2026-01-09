@@ -9,6 +9,7 @@ export {
   type AugmentationType,
   type AugmentationSelection,
   type InstalledCyberlimb,
+  type InstalledSkillLinkedBioware,
 } from "./AugmentationModal";
 export { CyberwareEnhancementModal, type CyberwareEnhancementSelection } from "./CyberwareEnhancementModal";
 export { CyberlimbAccessoryModal, type CyberlimbAccessorySelection } from "./CyberlimbAccessoryModal";

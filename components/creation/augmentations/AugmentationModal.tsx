@@ -18,6 +18,7 @@ import {
   useBioware,
   useCyberwareGrades,
   useBiowareGrades,
+  useSkills,
   calculateCyberwareEssenceCost,
   calculateCyberwareCost,
   calculateCyberwareAvailability,
@@ -102,6 +103,8 @@ export interface AugmentationSelection {
   appearance?: CyberlimbAppearance;
   baseStrength?: number;
   baseAgility?: number;
+  // Skill-linked bioware fields
+  targetSkill?: string;
 }
 
 /** Simplified cyberlimb info for conflict checking */
@@ -110,6 +113,12 @@ export interface InstalledCyberlimb {
   name: string;
   location: CyberlimbLocation;
   limbType: CyberlimbType;
+}
+
+/** Installed skill-linked bioware for duplicate checking */
+export interface InstalledSkillLinkedBioware {
+  catalogId: string;
+  targetSkill: string;
 }
 
 interface AugmentationModalProps {
@@ -126,6 +135,8 @@ interface AugmentationModalProps {
   currentResonance?: number;
   /** Installed cyberlimbs for conflict checking */
   installedCyberlimbs?: InstalledCyberlimb[];
+  /** Installed skill-linked bioware for duplicate skill checking */
+  installedSkillLinkedBioware?: InstalledSkillLinkedBioware[];
 }
 
 // =============================================================================
@@ -233,11 +244,13 @@ export function AugmentationModal({
   currentMagic = 0,
   currentResonance = 0,
   installedCyberlimbs = [],
+  installedSkillLinkedBioware = [],
 }: AugmentationModalProps) {
   const cyberwareCatalog = useCyberware({ excludeForbidden: false });
   const biowareCatalog = useBioware({ excludeForbidden: false });
   const cyberwareGrades = useCyberwareGrades();
   const biowareGrades = useBiowareGrades();
+  const { activeSkills } = useSkills();
 
   const [selectedItemId, setSelectedItemId] = useState<string | null>(null);
   const [grade, setGrade] = useState<CyberwareGrade | BiowareGrade>("standard");
@@ -245,6 +258,7 @@ export function AugmentationModal({
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedRating, setSelectedRating] = useState<number>(1);
   const [selectedLocation, setSelectedLocation] = useState<CyberlimbLocation | null>(null);
+  const [selectedSkill, setSelectedSkill] = useState<string | null>(null);
 
   const isCyberware = augmentationType === "cyberware";
   const categories = isCyberware ? CYBERWARE_CATEGORIES : BIOWARE_CATEGORIES;
@@ -258,6 +272,7 @@ export function AugmentationModal({
     setSearchQuery("");
     setSelectedRating(1);
     setSelectedLocation(null);
+    setSelectedSkill(null);
   }, []);
 
   // Available grades based on type
@@ -363,6 +378,51 @@ export function AugmentationModal({
     return getLocationConflict(selectedLocation, selectedLimbType, installedCyberlimbs);
   }, [selectedLocation, selectedLimbType, installedCyberlimbs]);
 
+  // Check if selected bioware requires skill selection
+  const requiresSkillSelection = useMemo(() => {
+    if (!rawSelectedItem || isCyberware) return false;
+    return (rawSelectedItem as BiowareCatalogItemData).requiresSkillTarget === true;
+  }, [rawSelectedItem, isCyberware]);
+
+  // Get skills already taken by this specific bioware type
+  const takenSkillsForBioware = useMemo(() => {
+    if (!rawSelectedItem) return new Set<string>();
+    return new Set(
+      installedSkillLinkedBioware
+        .filter((b) => b.catalogId === rawSelectedItem.id)
+        .map((b) => b.targetSkill)
+    );
+  }, [rawSelectedItem, installedSkillLinkedBioware]);
+
+  // Get valid skills filtered by attribute filter (excludes already-taken skills)
+  const filteredSkills = useMemo(() => {
+    if (!requiresSkillSelection || !rawSelectedItem) return [];
+    const biowareItem = rawSelectedItem as BiowareCatalogItemData;
+    const attributeFilter = biowareItem.skillAttributeFilter ?? [];
+
+    let skills = activeSkills;
+
+    // Filter by linked attribute if specified
+    if (attributeFilter.length > 0) {
+      skills = skills.filter((skill) =>
+        attributeFilter.includes(skill.linkedAttribute.toLowerCase())
+      );
+    }
+
+    // Exclude skills already taken by the same bioware type
+    // (e.g., can't have two Reflex Recorders for Pistols)
+    skills = skills.filter((skill) => !takenSkillsForBioware.has(skill.id));
+
+    return skills;
+  }, [requiresSkillSelection, rawSelectedItem, activeSkills, takenSkillsForBioware]);
+
+  // Reset skill when item changes or when switching to non-skill-linked bioware
+  useEffect(() => {
+    if (!requiresSkillSelection) {
+      setSelectedSkill(null);
+    }
+  }, [requiresSkillSelection]);
+
   // Selected item with calculated values (including rating-based values)
   const selectedItem = useMemo(() => {
     if (!rawSelectedItem) return null;
@@ -371,6 +431,8 @@ export function AugmentationModal({
     let baseCost: number;
     let baseAvailability: number;
     let capacity: number | undefined;
+    let attributeBonuses: Record<string, number> | undefined;
+    let initiativeDiceBonus: number | undefined;
 
     // Check if item uses unified ratings table
     if (hasUnifiedRatings(rawSelectedItem)) {
@@ -383,11 +445,16 @@ export function AugmentationModal({
         baseCost = firstValue?.cost ?? 0;
         baseAvailability = firstValue?.availability ?? 0;
         capacity = firstValue?.capacity;
+        attributeBonuses = firstValue?.effects?.attributeBonuses ?? rawSelectedItem.attributeBonuses;
+        initiativeDiceBonus = firstValue?.effects?.initiativeDice ?? (isCyberware ? (rawSelectedItem as CyberwareCatalogItemData).initiativeDiceBonus : undefined);
       } else {
         baseEssenceCost = ratingValue.essenceCost ?? 0;
         baseCost = ratingValue.cost ?? 0;
         baseAvailability = ratingValue.availability ?? 0;
         capacity = ratingValue.capacity;
+        // Extract rating-specific effects, fall back to top-level values
+        attributeBonuses = ratingValue.effects?.attributeBonuses ?? rawSelectedItem.attributeBonuses;
+        initiativeDiceBonus = ratingValue.effects?.initiativeDice ?? (isCyberware ? (rawSelectedItem as CyberwareCatalogItemData).initiativeDiceBonus : undefined);
       }
     } else {
       // Legacy item without unified ratings
@@ -395,6 +462,8 @@ export function AugmentationModal({
       baseCost = rawSelectedItem.cost ?? 0;
       baseAvailability = rawSelectedItem.availability ?? 0;
       capacity = isCyberware ? (rawSelectedItem as CyberwareCatalogItemData).capacity : undefined;
+      attributeBonuses = rawSelectedItem.attributeBonuses;
+      initiativeDiceBonus = isCyberware ? (rawSelectedItem as CyberwareCatalogItemData).initiativeDiceBonus : undefined;
     }
 
     // Apply grade modifiers
@@ -435,6 +504,8 @@ export function AugmentationModal({
       availability,
       capacity,
       baseEssenceCost,
+      attributeBonuses,
+      initiativeDiceBonus,
     };
   }, [
     rawSelectedItem,
@@ -460,8 +531,9 @@ export function AugmentationModal({
   const hasEssence = selectedItem ? selectedItem.essenceCost <= remainingEssence : true;
   const meetsAvailability = selectedItem ? selectedItem.availability <= maxAvailability : true;
   const hasRequiredLocation = isCyberlimb ? selectedLocation !== null : true;
+  const hasRequiredSkill = requiresSkillSelection ? selectedSkill !== null : true;
   const isNotBlocked = locationConflict.type !== "blocked";
-  const canAdd = selectedItem && canAfford && hasEssence && meetsAvailability && hasRequiredLocation && isNotBlocked;
+  const canAdd = selectedItem && canAfford && hasEssence && meetsAvailability && hasRequiredLocation && hasRequiredSkill && isNotBlocked;
 
   // Handle add
   const handleAdd = useCallback(() => {
@@ -475,9 +547,18 @@ export function AugmentationModal({
 
     // Extract effects from rating table if applicable
     let armorBonus: number | undefined;
+    let attributeBonuses: Record<string, number> | undefined;
+    let initiativeDiceBonus: number | undefined;
     if (isRatedItem) {
       const ratingValue = getRatingTableValue(rawSelectedItem, selectedRating);
       armorBonus = ratingValue?.effects?.armorBonus;
+      // Use rating-specific effects if available, otherwise fall back to top-level
+      attributeBonuses = ratingValue?.effects?.attributeBonuses ?? rawSelectedItem.attributeBonuses;
+      initiativeDiceBonus = ratingValue?.effects?.initiativeDice ?? (isCyberware ? (rawSelectedItem as CyberwareCatalogItemData).initiativeDiceBonus : undefined);
+    } else {
+      // Non-rated items use top-level values
+      attributeBonuses = rawSelectedItem.attributeBonuses;
+      initiativeDiceBonus = isCyberware ? (rawSelectedItem as CyberwareCatalogItemData).initiativeDiceBonus : undefined;
     }
 
     // Extract cyberlimb-specific fields
@@ -490,10 +571,16 @@ export function AugmentationModal({
         })
       : null;
 
-    // Build display name with location for cyberlimbs
+    // Build display name with location for cyberlimbs or skill for skill-linked bioware
     let finalDisplayName = displayName;
     if (isCyberlimb && selectedLocation) {
       finalDisplayName = `${displayName} (${LOCATION_LABELS[selectedLocation]})`;
+    } else if (requiresSkillSelection && selectedSkill) {
+      // Add skill name to display for skill-linked bioware
+      const skillData = activeSkills.find((s) => s.id === selectedSkill);
+      if (skillData) {
+        finalDisplayName = `${displayName} (${skillData.name})`;
+      }
     }
 
     const selection: AugmentationSelection = {
@@ -509,10 +596,8 @@ export function AugmentationModal({
       legality: rawSelectedItem.legality,
       capacity: selectedItem.capacity,
       rating: isRatedItem ? selectedRating : undefined,
-      attributeBonuses: rawSelectedItem.attributeBonuses,
-      initiativeDiceBonus: isCyberware
-        ? (rawSelectedItem as CyberwareCatalogItemData).initiativeDiceBonus
-        : undefined,
+      attributeBonuses,
+      initiativeDiceBonus,
       wirelessBonus: isCyberware
         ? (rawSelectedItem as CyberwareCatalogItemData).wirelessBonus
         : undefined,
@@ -523,6 +608,8 @@ export function AugmentationModal({
       appearance: cyberlimbData?.appearance,
       baseStrength: cyberlimbData?.baseStrength,
       baseAgility: cyberlimbData?.baseAgility,
+      // Skill-linked bioware fields
+      targetSkill: requiresSkillSelection ? selectedSkill ?? undefined : undefined,
     };
 
     onAdd(selection);
@@ -536,6 +623,9 @@ export function AugmentationModal({
     isCyberlimb,
     selectedRating,
     selectedLocation,
+    requiresSkillSelection,
+    selectedSkill,
+    activeSkills,
     augmentationType,
     grade,
     onAdd,
@@ -846,6 +936,35 @@ export function AugmentationModal({
                     </div>
                   )}
 
+                  {/* Skill Selector for skill-linked bioware (e.g., Reflex Recorder) */}
+                  {requiresSkillSelection && filteredSkills.length > 0 && (
+                    <div className="mt-4">
+                      <h4 className="text-xs font-medium text-zinc-500 dark:text-zinc-400">
+                        Target Skill <span className="text-red-500">*</span>
+                      </h4>
+                      <p className="mt-1 text-xs text-zinc-400 dark:text-zinc-500">
+                        Select the skill this bioware will enhance
+                      </p>
+                      <select
+                        value={selectedSkill ?? ""}
+                        onChange={(e) => setSelectedSkill(e.target.value || null)}
+                        className="mt-2 w-full rounded-lg border border-zinc-200 bg-white px-3 py-2 text-sm text-zinc-900 focus:border-pink-500 focus:outline-none focus:ring-1 focus:ring-pink-500 dark:border-zinc-700 dark:bg-zinc-800 dark:text-zinc-100"
+                      >
+                        <option value="">Select a skill...</option>
+                        {filteredSkills.map((skill) => (
+                          <option key={skill.id} value={skill.id}>
+                            {skill.name} ({skill.linkedAttribute})
+                          </option>
+                        ))}
+                      </select>
+                      {!selectedSkill && (
+                        <p className="mt-2 text-xs text-red-500">
+                          Please select a target skill for this bioware
+                        </p>
+                      )}
+                    </div>
+                  )}
+
                   {/* Stats Grid */}
                   <div className="mt-4 grid grid-cols-3 gap-3">
                     <div className="rounded-lg bg-zinc-50 p-3 text-center dark:bg-zinc-800">
@@ -899,25 +1018,29 @@ export function AugmentationModal({
                     </div>
                   )}
 
-                  {/* Attribute bonuses */}
-                  {selectedItem.attributeBonuses &&
-                    Object.keys(selectedItem.attributeBonuses).length > 0 && (
-                      <div className="mt-3">
-                        <h4 className="text-xs font-medium text-zinc-500 dark:text-zinc-400">
-                          Attribute Bonuses
-                        </h4>
-                        <div className="mt-1 flex flex-wrap gap-1">
-                          {Object.entries(selectedItem.attributeBonuses).map(([attr, bonus]) => (
-                            <span
-                              key={attr}
-                              className="rounded bg-emerald-100 px-2 py-0.5 text-xs font-medium text-emerald-700 dark:bg-emerald-900/50 dark:text-emerald-300"
-                            >
-                              {attr}: +{bonus}
-                            </span>
-                          ))}
-                        </div>
+                  {/* Attribute bonuses and Initiative dice */}
+                  {((selectedItem.attributeBonuses && Object.keys(selectedItem.attributeBonuses).length > 0) || selectedItem.initiativeDiceBonus) && (
+                    <div className="mt-3">
+                      <h4 className="text-xs font-medium text-zinc-500 dark:text-zinc-400">
+                        Bonuses
+                      </h4>
+                      <div className="mt-1 flex flex-wrap gap-1">
+                        {selectedItem.attributeBonuses && Object.entries(selectedItem.attributeBonuses).map(([attr, bonus]) => (
+                          <span
+                            key={attr}
+                            className="rounded bg-emerald-100 px-2 py-0.5 text-xs font-medium text-emerald-700 dark:bg-emerald-900/50 dark:text-emerald-300"
+                          >
+                            {attr}: +{bonus}
+                          </span>
+                        ))}
+                        {selectedItem.initiativeDiceBonus && (
+                          <span className="rounded bg-purple-100 px-2 py-0.5 text-xs font-medium text-purple-700 dark:bg-purple-900/50 dark:text-purple-300">
+                            +{selectedItem.initiativeDiceBonus}D6 Initiative
+                          </span>
+                        )}
                       </div>
-                    )}
+                    </div>
+                  )}
 
                   {/* Wireless bonus */}
                   {isCyberware && (selectedItem as CyberwareCatalogItemData).wirelessBonus && (

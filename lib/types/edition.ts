@@ -421,6 +421,11 @@ export interface CyberwareCatalogItem {
   parentType?: string;
   /** Special requirements or notes */
   requirements?: string[];
+  /**
+   * List of augmentation IDs that are incompatible with this cyberware.
+   * e.g., Skillwires is incompatible with Reflex Recorder bioware.
+   */
+  incompatibleWith?: string[];
 }
 
 /**
@@ -508,6 +513,36 @@ export interface BiowareCatalogItem {
   source?: string;
   /** Special requirements or notes */
   requirements?: string[];
+
+  // -------------------------------------------------------------------------
+  // COMPATIBILITY & SKILL-LINKED BIOWARE
+  // -------------------------------------------------------------------------
+
+  /**
+   * List of augmentation IDs that are incompatible with this bioware.
+   * e.g., Reflex Recorder is incompatible with Skillwires.
+   */
+  incompatibleWith?: string[];
+
+  /**
+   * Whether this bioware requires selecting a target skill.
+   * When true, user must choose a skill during purchase.
+   * The bioware then provides its bonus to that specific skill.
+   */
+  requiresSkillTarget?: boolean;
+
+  /**
+   * Filter for which skill attributes are valid targets.
+   * Only skills with a linkedAttribute in this list can be selected.
+   * e.g., ["agility", "body", "reaction", "strength"] for Physical skills
+   */
+  skillAttributeFilter?: string[];
+
+  /**
+   * Bonus to apply to the target skill rating.
+   * Defaults to 1 if not specified (e.g., Reflex Recorder gives +1).
+   */
+  skillBonus?: number;
 }
 
 /**

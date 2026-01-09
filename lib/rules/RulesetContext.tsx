@@ -352,6 +352,8 @@ export interface CyberwareCatalogItemData {
   requirements?: string[];
   /** Compatible cyberlimb types for accessories (e.g., ["full-arm", "lower-arm"]) */
   compatibleLimbs?: string[];
+  /** List of augmentation IDs incompatible with this cyberware */
+  incompatibleWith?: string[];
 }
 
 export interface CyberwareCatalogData {
@@ -377,20 +379,29 @@ export interface BiowareCatalogItemData {
   availability: number;
   legality?: ItemLegality;
 
+  // -------------------------------------------------------------------------
+  // UNIFIED RATINGS TABLE (Preferred Approach)
+  // -------------------------------------------------------------------------
+
+  /** Whether this item has selectable ratings */
+  hasRating?: boolean;
+  /** Minimum rating (defaults to 1) */
+  minRating?: number;
+  /** Maximum rating */
+  maxRating?: number;
+  /** Unified ratings table with explicit per-rating values */
+  ratings?: import("@/lib/types/ratings").RatingTable;
+
+  // -------------------------------------------------------------------------
+  // LEGACY RATING SPECIFICATION (Deprecated)
+  // -------------------------------------------------------------------------
+
   /**
    * Unified rating specification (preferred over legacy properties)
    * @see CatalogItemRatingSpec
+   * @deprecated Use ratings table instead
    */
   ratingSpec?: CatalogItemRatingSpec;
-
-  /**
-   * @deprecated Use ratingSpec.rating.hasRating instead
-   */
-  hasRating?: boolean;
-  /**
-   * @deprecated Use ratingSpec.rating.maxRating instead
-   */
-  maxRating?: number;
   /**
    * @deprecated Use ratingSpec.essenceScaling.perRating instead
    */
@@ -399,17 +410,32 @@ export interface BiowareCatalogItemData {
    * @deprecated Use ratingSpec.costScaling.perRating instead
    */
   costPerRating?: boolean;
-  attributeBonuses?: Record<string, number>;
   /**
    * @deprecated Use ratingSpec.attributeBonusScaling instead
    */
   attributeBonusesPerRating?: Record<string, number>;
+
+  // -------------------------------------------------------------------------
+  // BONUSES & EFFECTS
+  // -------------------------------------------------------------------------
+
+  attributeBonuses?: Record<string, number>;
   maxAttributeBonus?: number;
   initiativeDiceBonus?: number;
   description?: string;
   page?: number;
   source?: string;
   requirements?: string[];
+
+  // Compatibility & Skill-linked bioware
+  /** List of augmentation IDs incompatible with this bioware */
+  incompatibleWith?: string[];
+  /** Whether this bioware requires selecting a target skill */
+  requiresSkillTarget?: boolean;
+  /** Filter for which skill attributes are valid targets */
+  skillAttributeFilter?: string[];
+  /** Bonus to apply to the target skill (defaults to 1) */
+  skillBonus?: number;
 }
 
 export interface BiowareCatalogData {

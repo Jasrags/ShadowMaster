@@ -37,6 +37,7 @@ import {
   type CyberlimbAccessorySelection,
   type CyberlimbWeaponSelection,
   type InstalledCyberlimb,
+  type InstalledSkillLinkedBioware,
 } from "./augmentations";
 import {
   type CyberlimbLocation,
@@ -218,12 +219,18 @@ function AugmentationItem({
       </div>
 
       {/* Collapsed preview: bonuses shown inline */}
-      {!isExpanded && ((item.attributeBonuses && Object.keys(item.attributeBonuses).length > 0) || item.armorBonus) && (
+      {!isExpanded && ((item.attributeBonuses && Object.keys(item.attributeBonuses).length > 0) || item.armorBonus || (item as CyberwareItem).initiativeDiceBonus) && (
         <div className="flex flex-wrap gap-1.5 border-t border-zinc-100 px-3 py-2 dark:border-zinc-800">
           {item.armorBonus && (
             <span className="flex items-center gap-1 rounded bg-amber-100 px-1.5 py-0.5 text-[10px] font-medium text-amber-700 dark:bg-amber-900/50 dark:text-amber-300">
               <Shield className="h-3 w-3" />
               +{item.armorBonus} Armor
+            </span>
+          )}
+          {(item as CyberwareItem).initiativeDiceBonus && (
+            <span className="flex items-center gap-1 rounded bg-purple-100 px-1.5 py-0.5 text-[10px] font-medium text-purple-700 dark:bg-purple-900/50 dark:text-purple-300">
+              <Zap className="h-3 w-3" />
+              +{(item as CyberwareItem).initiativeDiceBonus}D6 Init
             </span>
           )}
           {item.attributeBonuses && Object.entries(item.attributeBonuses).map(([attr, bonus]) => (
@@ -256,8 +263,8 @@ function AugmentationItem({
       {isExpanded && (
         <div className="border-t border-zinc-100 dark:border-zinc-800">
           <div className="space-y-3 p-3">
-            {/* Bonuses (Armor and Attributes) */}
-            {((item.attributeBonuses && Object.keys(item.attributeBonuses).length > 0) || item.armorBonus) && (
+            {/* Bonuses (Armor, Attributes, Initiative) */}
+            {((item.attributeBonuses && Object.keys(item.attributeBonuses).length > 0) || item.armorBonus || (item as CyberwareItem).initiativeDiceBonus) && (
               <div>
                 <div className="mb-1.5 text-[10px] font-semibold uppercase tracking-wider text-zinc-500 dark:text-zinc-400">
                   Bonuses
@@ -267,6 +274,12 @@ function AugmentationItem({
                     <span className="flex items-center gap-1 rounded bg-amber-100 px-2 py-1 text-xs font-medium text-amber-700 dark:bg-amber-900/50 dark:text-amber-300">
                       <Shield className="h-3.5 w-3.5" />
                       +{item.armorBonus} Armor
+                    </span>
+                  )}
+                  {(item as CyberwareItem).initiativeDiceBonus && (
+                    <span className="flex items-center gap-1 rounded bg-purple-100 px-2 py-1 text-xs font-medium text-purple-700 dark:bg-purple-900/50 dark:text-purple-300">
+                      <Zap className="h-3.5 w-3.5" />
+                      +{(item as CyberwareItem).initiativeDiceBonus}D6 Initiative
                     </span>
                   )}
                   {item.attributeBonuses && Object.entries(item.attributeBonuses).map(([attr, bonus]) => (
@@ -824,6 +837,16 @@ export function AugmentationsCard({ state, updateState }: AugmentationsCardProps
       }));
   }, [selectedCyberware]);
 
+  // Get installed skill-linked bioware for duplicate checking
+  const installedSkillLinkedBioware = useMemo((): InstalledSkillLinkedBioware[] => {
+    return selectedBioware
+      .filter((item) => "targetSkill" in item && item.targetSkill)
+      .map((item) => ({
+        catalogId: item.catalogId,
+        targetSkill: item.targetSkill!,
+      }));
+  }, [selectedBioware]);
+
   // Check if character is magical or technomancer
   const magicPath = (state.selections?.["magical-path"] as string) || "mundane";
   const isAwakened = ["magician", "mystic-adept", "aspected-mage", "adept"].includes(magicPath);
@@ -959,7 +982,13 @@ export function AugmentationsCard({ state, updateState }: AugmentationsCardProps
               ...(selection.baseStrength && { baseStrength: selection.baseStrength }),
               ...(selection.baseAgility && { baseAgility: selection.baseAgility }),
             } as CyberwareItem)
-          : (baseItem as BiowareItem);
+          : ({
+              ...baseItem,
+              // Add initiative dice bonus if present (e.g., Synaptic Booster)
+              ...(selection.initiativeDiceBonus && { initiativeDiceBonus: selection.initiativeDiceBonus }),
+              // Add skill-linked bioware fields if present
+              ...(selection.targetSkill && { targetSkill: selection.targetSkill }),
+            } as BiowareItem);
 
       if (selection.type === "cyberware") {
         // For cyberlimbs, remove any limbs that would be replaced
@@ -1671,6 +1700,7 @@ export function AugmentationsCard({ state, updateState }: AugmentationsCardProps
         currentMagic={magicRating}
         currentResonance={resonanceRating}
         installedCyberlimbs={installedCyberlimbs}
+        installedSkillLinkedBioware={installedSkillLinkedBioware}
       />
 
       {/* Enhancement Modal */}
