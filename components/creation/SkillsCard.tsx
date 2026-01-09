@@ -726,11 +726,6 @@ export function SkillsCard({ state, updateState }: SkillsCardProps) {
     <>
       <CreationCard
         title="Skills"
-        description={
-          skillPointsRemaining === 0 && groupPointsRemaining === 0
-            ? "All points allocated"
-            : `${skillPointsRemaining} skill pts, ${groupPointsRemaining} group pts remaining`
-        }
         status={validationStatus}
       >
         <div className="space-y-4">

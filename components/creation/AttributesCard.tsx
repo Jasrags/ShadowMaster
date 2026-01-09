@@ -136,14 +136,14 @@ function CompactBudgetBar({
   label,
   spent,
   total,
-  source,
+  tooltip,
   isOver,
   karmaRequired,
 }: {
   label: string;
   spent: number;
   total: number;
-  source: string;
+  tooltip: string;
   isOver: boolean;
   karmaRequired?: number;
 }) {
@@ -151,17 +151,17 @@ function CompactBudgetBar({
   const percentage = Math.min(100, (spent / total) * 100);
 
   return (
-    <div
-      className={`rounded-lg border p-2 ${
-        isOver
-          ? "border-amber-200 bg-amber-50 dark:border-amber-800 dark:bg-amber-900/20"
-          : "border-zinc-200 bg-zinc-50 dark:border-zinc-700 dark:bg-zinc-800/50"
-      }`}
-    >
+    <div className="space-y-1">
       <div className="flex items-center justify-between text-xs">
-        <span className="font-medium text-zinc-700 dark:text-zinc-300">{label}</span>
         <span
-          className={`font-bold ${
+          className="flex cursor-help items-center gap-1 text-zinc-600 dark:text-zinc-400"
+          title={tooltip}
+        >
+          {label}
+          <Info className="h-3 w-3 text-zinc-400" />
+        </span>
+        <span
+          className={`font-medium ${
             isOver
               ? "text-amber-600 dark:text-amber-400"
               : remaining === 0
@@ -169,12 +169,12 @@ function CompactBudgetBar({
                 : "text-zinc-900 dark:text-zinc-100"
           }`}
         >
-          {remaining} remaining
+          {spent} / {total}
         </span>
       </div>
-      <div className="mt-1.5 h-1.5 overflow-hidden rounded-full bg-zinc-200 dark:bg-zinc-700">
+      <div className="h-2 overflow-hidden rounded-full bg-zinc-100 dark:bg-zinc-800">
         <div
-          className={`h-full rounded-full transition-all ${
+          className={`h-full transition-all ${
             isOver
               ? "bg-amber-500"
               : remaining === 0
@@ -184,15 +184,12 @@ function CompactBudgetBar({
           style={{ width: `${percentage}%` }}
         />
       </div>
-      <div className="mt-1 flex items-center justify-between text-[10px] text-zinc-500 dark:text-zinc-400">
-        <span>{source}</span>
-        {isOver && karmaRequired && (
-          <span className="flex items-center gap-1 text-amber-600 dark:text-amber-400">
-            <AlertTriangle className="h-3 w-3" />
-            {karmaRequired} karma needed
-          </span>
-        )}
-      </div>
+      {isOver && karmaRequired && (
+        <div className="flex items-center gap-1 text-xs text-amber-600 dark:text-amber-400">
+          <AlertTriangle className="h-3 w-3" />
+          <span>{karmaRequired} karma needed</span>
+        </div>
+      )}
     </div>
   );
 }
@@ -643,17 +640,6 @@ export function AttributesCard({ state, updateState }: AttributesCardProps) {
     return "Metatype";
   }, [metatypePriority]);
 
-  // Build description string
-  const descriptionText = useMemo(() => {
-    const parts: string[] = [];
-    if (attributePoints > 0) {
-      parts.push(`${corePointsRemaining} of ${attributePoints} pts`);
-    }
-    if (specialAttributePoints > 0) {
-      parts.push(`${specialPointsRemaining} of ${specialAttributePoints} special`);
-    }
-    return parts.join(" │ ") || "Awaiting priority";
-  }, [attributePoints, corePointsRemaining, specialAttributePoints, specialPointsRemaining]);
 
   // Render core attribute row
   const renderCoreAttribute = (attr: {
@@ -707,7 +693,7 @@ export function AttributesCard({ state, updateState }: AttributesCardProps) {
             label="Attribute Points"
             spent={0}
             total={attributePoints}
-            source={attributePrioritySource}
+            tooltip={attributePrioritySource}
             isOver={false}
           />
           <div className="flex items-center gap-2 rounded-lg border border-blue-200 bg-blue-50 p-3 dark:border-blue-800 dark:bg-blue-900/20">
@@ -722,14 +708,14 @@ export function AttributesCard({ state, updateState }: AttributesCardProps) {
   }
 
   return (
-    <CreationCard title="Attributes" description={descriptionText} status={validationStatus}>
+    <CreationCard title="Attributes" status={validationStatus}>
       <div className="space-y-4">
         {/* Core Attribute Budget */}
         <CompactBudgetBar
           label="Attribute Points"
           spent={corePointsSpent}
           total={attributePoints}
-          source={attributePrioritySource}
+          tooltip={attributePrioritySource}
           isOver={isCoreOverBudget}
           karmaRequired={karmaRequired}
         />
@@ -763,7 +749,7 @@ export function AttributesCard({ state, updateState }: AttributesCardProps) {
                 label="Special Attr Points"
                 spent={specialPointsSpent}
                 total={specialAttributePoints}
-                source={specialPrioritySource}
+                tooltip={specialPrioritySource}
                 isOver={false}
               />
             )}

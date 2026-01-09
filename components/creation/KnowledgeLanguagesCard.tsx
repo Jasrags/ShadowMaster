@@ -24,6 +24,7 @@ import {
   Book,
   Languages,
   AlertTriangle,
+  Info,
 } from "lucide-react";
 
 // =============================================================================
@@ -85,13 +86,13 @@ interface KnowledgeLanguagesCardProps {
 
 function BudgetProgressBar({
   label,
-  description,
+  tooltip,
   spent,
   total,
   isOver,
 }: {
   label: string;
-  description: string;
+  tooltip: string;
   spent: number;
   total: number;
   isOver: boolean;
@@ -100,43 +101,36 @@ function BudgetProgressBar({
   const percentage = total > 0 ? Math.min(100, (spent / total) * 100) : 0;
 
   return (
-    <div
-      className={`rounded-lg border p-3 ${
-        isOver
-          ? "border-amber-200 bg-amber-50 dark:border-amber-800 dark:bg-amber-900/20"
-          : "border-zinc-200 bg-zinc-50 dark:border-zinc-700 dark:bg-zinc-800/50"
-      }`}
-    >
-      <div className="flex items-center justify-between">
-        <div className="text-sm font-medium text-zinc-900 dark:text-zinc-100">
+    <div className="space-y-1">
+      <div className="flex items-center justify-between text-xs">
+        <span
+          className="flex cursor-help items-center gap-1 text-zinc-600 dark:text-zinc-400"
+          title={tooltip}
+        >
           {label}
-        </div>
-        <div
-          className={`text-lg font-bold ${
+          <Info className="h-3 w-3 text-zinc-400" />
+        </span>
+        <span
+          className={`font-medium ${
             isOver
               ? "text-amber-600 dark:text-amber-400"
               : remaining === 0
-              ? "text-emerald-600 dark:text-emerald-400"
-              : "text-zinc-900 dark:text-zinc-100"
+                ? "text-emerald-600 dark:text-emerald-400"
+                : "text-zinc-900 dark:text-zinc-100"
           }`}
         >
-          {remaining}
-        </div>
-      </div>
-
-      <div className="mt-1 text-xs text-zinc-500 dark:text-zinc-400">
-        {description}
-        <span className="float-right">of {total} remaining</span>
+          {spent} / {total}
+        </span>
       </div>
 
       {/* Progress bar */}
-      <div className="mt-2 h-2 overflow-hidden rounded-full bg-zinc-200 dark:bg-zinc-700">
+      <div className="h-2 overflow-hidden rounded-full bg-zinc-100 dark:bg-zinc-800">
         <div
-          className={`h-full rounded-full transition-all ${
+          className={`h-full transition-all ${
             isOver
               ? "bg-amber-500"
               : remaining === 0
-              ? "bg-emerald-500"
+                ? "bg-emerald-500"
               : "bg-blue-500"
           }`}
           style={{ width: `${percentage}%` }}
@@ -878,18 +872,13 @@ export function KnowledgeLanguagesCard({
   return (
     <CreationCard
       title="Knowledge & Languages"
-      description={
-        knowledgePointsRemaining === 0
-          ? "All points allocated"
-          : `${knowledgePointsRemaining} of ${knowledgePointsTotal} points remaining`
-      }
       status={validationStatus}
     >
       <div className="space-y-4">
         {/* Budget indicator */}
         <BudgetProgressBar
           label="Knowledge Points"
-          description={`Based on (INT ${intuition} + LOG ${logic}) × 2`}
+          tooltip={`Based on (INT ${intuition} + LOG ${logic}) × 2`}
           spent={knowledgePointsSpent}
           total={knowledgePointsTotal}
           isOver={isOverBudget}
