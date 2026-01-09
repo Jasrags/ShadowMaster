@@ -1,4 +1,3 @@
-
 "use client";
 
 import type { EditionCode } from "@/lib/types";
@@ -157,4 +156,3 @@ export function EditionSelector({ onSelect }: EditionSelectorProps) {
     </div>
   );
 }
-

@@ -17,9 +17,9 @@ export function LifestyleSubscriptionSelector({
   const [isOpen, setIsOpen] = useState(false);
   const [selectedSubscription, setSelectedSubscription] = useState<string | null>(null);
   const [rating, setRating] = useState<number>(1);
-  
+
   const availableSubscriptions = useLifestyleSubscriptions();
-  
+
   const filteredSubscriptions = useMemo(() => {
     return availableSubscriptions.filter(
       (sub) => !existingSubscriptions.some((existing) => existing.catalogId === sub.id)
@@ -36,7 +36,7 @@ export function LifestyleSubscriptionSelector({
     if (!selectedSubData) return;
 
     let monthlyCost = 0;
-    
+
     // Handle cost per rating (e.g., Food Service)
     if (selectedSubData.costPerRating && selectedSubData.monthlyCost) {
       monthlyCost = selectedSubData.monthlyCost * rating;
@@ -181,4 +181,3 @@ export function LifestyleSubscriptionSelector({
     </DialogTrigger>
   );
 }
-

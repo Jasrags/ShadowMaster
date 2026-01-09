@@ -35,8 +35,8 @@ import type {
 import { SinnerQuality as SinnerQualityEnum } from "@/lib/types/character";
 import { useCreationBudgets } from "@/lib/contexts";
 import { CreationCard } from "./shared";
-import { LifestyleModificationSelector } from "@/app/characters/create/components/LifestyleModificationSelector";
-import { LifestyleSubscriptionSelector } from "@/app/characters/create/components/LifestyleSubscriptionSelector";
+import { LifestyleModificationSelector } from "./shared/LifestyleModificationSelector";
+import { LifestyleSubscriptionSelector } from "./shared/LifestyleSubscriptionSelector";
 
 // =============================================================================
 // TYPES
