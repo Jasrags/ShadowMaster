@@ -13,15 +13,33 @@
 
 import { useState, useMemo, useCallback } from "react";
 import type { Character, CyberwareItem, BiowareItem, CyberwareGrade, BiowareGrade } from "@/lib/types";
+import type { CyberlimbItem } from "@/lib/types/cyberlimb";
 import { Theme, THEMES, DEFAULT_THEME } from "@/lib/themes";
 import { Section } from "./Section";
 import { AugmentationCard } from "@/components/AugmentationCard";
 import { EssenceDisplay } from "@/components/EssenceDisplay";
-import { Cpu, Heart, Wifi, WifiOff, Plus, Settings } from "lucide-react";
+import {
+  CyberlimbList,
+  CyberlimbInstallModal,
+  CyberlimbEnhancementModal,
+  CyberlimbAccessoryModal,
+  CyberlimbDetailPanel,
+} from "@/components/cyberlimbs";
+import type { CyberlimbInstallSelection } from "@/components/cyberlimbs";
+import { Cpu, Heart, Wifi, WifiOff, Plus, Settings, CircuitBoard } from "lucide-react";
 import {
   useRemoveAugmentation,
   useUpgradeAugmentation,
 } from "@/lib/rules/augmentations/hooks";
+import {
+  useInstallCyberlimb,
+  useRemoveCyberlimb,
+  useToggleCyberlimbWireless,
+  useAddCyberlimbEnhancement,
+  useRemoveCyberlimbEnhancement,
+  useAddCyberlimbAccessory,
+  useRemoveCyberlimbAccessory,
+} from "@/lib/rules/augmentations/cyberlimb-hooks";
 
 // =============================================================================
 // TYPES
@@ -59,24 +77,42 @@ export function AugmentationsPanel({
   showActions = false,
 }: AugmentationsPanelProps) {
   const t = theme || THEMES[DEFAULT_THEME];
-  const [activeTab, setActiveTab] = useState<"cyberware" | "bioware">("cyberware");
+  const [activeTab, setActiveTab] = useState<"cyberware" | "bioware" | "cyberlimbs">("cyberware");
   const [wirelessEnabled, setWirelessEnabled] = useState(
     character.wirelessBonusesEnabled ?? true
   );
 
-  // Mutations
+  // Modal state
+  const [installModalOpen, setInstallModalOpen] = useState(false);
+  const [selectedLimbId, setSelectedLimbId] = useState<string | null>(null);
+  const [enhancementModalOpen, setEnhancementModalOpen] = useState(false);
+  const [accessoryModalOpen, setAccessoryModalOpen] = useState(false);
+  const [detailPanelOpen, setDetailPanelOpen] = useState(false);
+
+  // Mutations - Augmentations
   const { remove: removeAugmentation, loading: removeLoading } = useRemoveAugmentation(character.id || null);
   const { upgrade: upgradeAugmentation, loading: upgradeLoading } = useUpgradeAugmentation(character.id || null);
+
+  // Mutations - Cyberlimbs
+  const { install: installCyberlimb, loading: installLoading } = useInstallCyberlimb(character.id || null);
+  const { remove: removeCyberlimb, loading: removeLimbLoading } = useRemoveCyberlimb(character.id || null);
+  const { toggle: toggleWireless, loading: wirelessLoading } = useToggleCyberlimbWireless(character.id || null);
+  const { add: addEnhancement, loading: enhancementLoading } = useAddCyberlimbEnhancement(character.id || null);
+  const { remove: removeEnhancement, loading: removeEnhancementLoading } = useRemoveCyberlimbEnhancement(character.id || null);
+  const { add: addAccessory, loading: accessoryLoading } = useAddCyberlimbAccessory(character.id || null);
+  const { remove: removeAccessory, loading: removeAccessoryLoading } = useRemoveCyberlimbAccessory(character.id || null);
 
   // Get augmentation data
   const cyberware = useMemo(() => character.cyberware || [], [character.cyberware]);
   const bioware = useMemo(() => character.bioware || [], [character.bioware]);
+  const cyberlimbs = useMemo(() => (character.cyberlimbs || []) as CyberlimbItem[], [character.cyberlimbs]);
 
   // Calculate essence values
   const maxEssence = 6;
   const cyberwareEssence = cyberware.reduce((sum, item) => sum + item.essenceCost, 0);
   const biowareEssence = bioware.reduce((sum, item) => sum + item.essenceCost, 0);
-  const totalEssenceLoss = Math.round((cyberwareEssence + biowareEssence) * 100) / 100;
+  const cyberlimbEssence = cyberlimbs.reduce((sum, limb) => sum + limb.essenceCost, 0);
+  const totalEssenceLoss = Math.round((cyberwareEssence + biowareEssence + cyberlimbEssence) * 100) / 100;
   const currentEssence = Math.round((maxEssence - totalEssenceLoss) * 100) / 100;
 
   // Check for awakened/technomancer
@@ -178,7 +214,192 @@ export function AugmentationsPanel({
     [upgradeAugmentation, cyberware, bioware, character, onUpdate]
   );
 
-  const hasAugmentations = cyberware.length > 0 || bioware.length > 0;
+  // Get selected limb for modals
+  const selectedLimb = useMemo(() => {
+    if (!selectedLimbId) return null;
+    return cyberlimbs.find((l) => l.id === selectedLimbId) || null;
+  }, [selectedLimbId, cyberlimbs]);
+
+  // Cyberlimb handlers
+  const handleAddCyberlimb = useCallback(() => {
+    setInstallModalOpen(true);
+  }, []);
+
+  const handleInstallCyberlimb = useCallback(
+    async (selection: CyberlimbInstallSelection) => {
+      // Generate catalog ID from limb type and appearance
+      // Format: cyberlimb-{type}-{appearance} e.g., "cyberlimb-full-arm-obvious"
+      const catalogId = `cyberlimb-${selection.limbType}-${selection.appearance}`;
+
+      const result = await installCyberlimb({
+        catalogId,
+        location: selection.location,
+        grade: selection.grade,
+        customization: {
+          strengthCustomization: selection.customStrength,
+          agilityCustomization: selection.customAgility,
+        },
+        confirmReplacement: true,
+      });
+      if (result.success && onUpdate) {
+        // Optimistically update - refetch would be better in production
+        const newLimb = {
+          ...result.installedLimb,
+          enhancements: [],
+          accessories: [],
+          weapons: [],
+          modificationHistory: [],
+        } as unknown as CyberlimbItem;
+        onUpdate({
+          ...character,
+          cyberlimbs: [...cyberlimbs, newLimb],
+        });
+      }
+      setInstallModalOpen(false);
+    },
+    [installCyberlimb, character, cyberlimbs, onUpdate]
+  );
+
+  const handleToggleCyberlimbWireless = useCallback(
+    async (limbId: string, enabled: boolean) => {
+      const result = await toggleWireless(limbId, enabled);
+      if (result.success && onUpdate) {
+        const updatedLimbs = cyberlimbs.map((limb) =>
+          limb.id === limbId ? { ...limb, wirelessEnabled: enabled } : limb
+        );
+        onUpdate({
+          ...character,
+          cyberlimbs: updatedLimbs,
+        });
+      }
+    },
+    [toggleWireless, character, cyberlimbs, onUpdate]
+  );
+
+  const handleRemoveCyberlimb = useCallback(
+    async (limbId: string) => {
+      const result = await removeCyberlimb(limbId);
+      if (result.success && onUpdate) {
+        const updatedLimbs = cyberlimbs.filter((limb) => limb.id !== limbId);
+        onUpdate({
+          ...character,
+          cyberlimbs: updatedLimbs,
+        });
+      }
+    },
+    [removeCyberlimb, character, cyberlimbs, onUpdate]
+  );
+
+  const handleOpenEnhancementModal = useCallback((limbId: string) => {
+    setSelectedLimbId(limbId);
+    setEnhancementModalOpen(true);
+  }, []);
+
+  const handleAddEnhancement = useCallback(
+    async (selection: { enhancementType: string; rating: number; capacityCost: number; cost: number }) => {
+      if (!selectedLimbId) return;
+      // Map enhancement type to catalog ID (simplified - would need proper catalog lookup)
+      const catalogIdMap: Record<string, string> = {
+        strength: "cyberlimb-enhanced-strength",
+        agility: "cyberlimb-enhanced-agility",
+        armor: "cyberlimb-armor",
+      };
+      const catalogId = catalogIdMap[selection.enhancementType] || selection.enhancementType;
+
+      const result = await addEnhancement(selectedLimbId, {
+        catalogId,
+        rating: selection.rating,
+      });
+      if (result.success && result.enhancement && onUpdate) {
+        const updatedLimbs = cyberlimbs.map((limb) => {
+          if (limb.id !== selectedLimbId) return limb;
+          return {
+            ...limb,
+            enhancements: [
+              ...limb.enhancements,
+              {
+                id: result.enhancement!.id,
+                catalogId: result.enhancement!.catalogId,
+                name: result.enhancement!.name,
+                enhancementType: result.enhancement!.enhancementType as "strength" | "agility" | "armor",
+                rating: result.enhancement!.rating,
+                capacityUsed: result.enhancement!.capacityUsed,
+                cost: result.enhancement!.cost,
+                availability: 0,
+              },
+            ],
+            capacityUsed: limb.capacityUsed + result.enhancement!.capacityUsed,
+          };
+        });
+        onUpdate({
+          ...character,
+          cyberlimbs: updatedLimbs,
+        });
+      }
+      setEnhancementModalOpen(false);
+      setSelectedLimbId(null);
+    },
+    [selectedLimbId, addEnhancement, character, cyberlimbs, onUpdate]
+  );
+
+  const handleOpenAccessoryModal = useCallback((limbId: string) => {
+    setSelectedLimbId(limbId);
+    setAccessoryModalOpen(true);
+  }, []);
+
+  const handleAddAccessory = useCallback(
+    async (selection: { catalogId: string; name: string; rating?: number; capacityCost: number; cost: number }) => {
+      if (!selectedLimbId) return;
+
+      const result = await addAccessory(selectedLimbId, {
+        catalogId: selection.catalogId,
+        rating: selection.rating,
+      });
+      if (result.success && result.accessory && onUpdate) {
+        const updatedLimbs = cyberlimbs.map((limb) => {
+          if (limb.id !== selectedLimbId) return limb;
+          return {
+            ...limb,
+            accessories: [
+              ...limb.accessories,
+              {
+                id: result.accessory!.id,
+                catalogId: result.accessory!.catalogId,
+                name: result.accessory!.name,
+                rating: result.accessory!.rating,
+                capacityUsed: result.accessory!.capacityUsed,
+                cost: result.accessory!.cost,
+                availability: 0,
+              },
+            ],
+            capacityUsed: limb.capacityUsed + result.accessory!.capacityUsed,
+          };
+        });
+        onUpdate({
+          ...character,
+          cyberlimbs: updatedLimbs,
+        });
+      }
+      setAccessoryModalOpen(false);
+      setSelectedLimbId(null);
+    },
+    [selectedLimbId, addAccessory, character, cyberlimbs, onUpdate]
+  );
+
+  const handleViewDetails = useCallback((limbId: string) => {
+    setSelectedLimbId(limbId);
+    setDetailPanelOpen(true);
+  }, []);
+
+  const handleCloseModals = useCallback(() => {
+    setInstallModalOpen(false);
+    setEnhancementModalOpen(false);
+    setAccessoryModalOpen(false);
+    setDetailPanelOpen(false);
+    setSelectedLimbId(null);
+  }, []);
+
+  const hasAugmentations = cyberware.length > 0 || bioware.length > 0 || cyberlimbs.length > 0;
   const isActive = character.status === "active";
 
   if (!hasAugmentations) {
@@ -291,6 +512,18 @@ export function AugmentationsPanel({
             Bioware
             <span className="text-xs text-muted-foreground/70">({bioware.length})</span>
           </button>
+          <button
+            onClick={() => setActiveTab("cyberlimbs")}
+            className={`flex items-center gap-1.5 px-3 py-2 text-sm transition-colors border-b-2 -mb-px ${
+              activeTab === "cyberlimbs"
+                ? "border-orange-500 text-orange-400"
+                : "border-transparent text-muted-foreground hover:text-foreground"
+            }`}
+          >
+            <CircuitBoard className="w-4 h-4" />
+            Cyberlimbs
+            <span className="text-xs text-muted-foreground/70">({cyberlimbs.length})</span>
+          </button>
         </div>
 
         {/* Augmentation Lists */}
@@ -319,28 +552,43 @@ export function AugmentationsPanel({
                 />
               ))
             )
-          ) : bioware.length === 0 ? (
-            <p className="text-sm text-muted-foreground text-center py-4">No bioware installed</p>
+          ) : activeTab === "bioware" ? (
+            bioware.length === 0 ? (
+              <p className="text-sm text-muted-foreground text-center py-4">No bioware installed</p>
+            ) : (
+              bioware.map((item) => (
+                <AugmentationCard
+                  key={item.id || item.catalogId}
+                  item={item}
+                  type="bioware"
+                  showActions={showActions}
+                  isActive={isActive}
+                  onRemove={
+                    showActions && isActive && item.id
+                      ? () => handleRemove(item.id!)
+                      : undefined
+                  }
+                  onUpgrade={
+                    showActions && isActive && item.id
+                      ? (grade) => handleUpgrade(item.id!, grade)
+                      : undefined
+                  }
+                />
+              ))
+            )
           ) : (
-            bioware.map((item) => (
-              <AugmentationCard
-                key={item.id || item.catalogId}
-                item={item}
-                type="bioware"
-                showActions={showActions}
-                isActive={isActive}
-                onRemove={
-                  showActions && isActive && item.id
-                    ? () => handleRemove(item.id!)
-                    : undefined
-                }
-                onUpgrade={
-                  showActions && isActive && item.id
-                    ? (grade) => handleUpgrade(item.id!, grade)
-                    : undefined
-                }
-              />
-            ))
+            /* Cyberlimbs Tab */
+            <CyberlimbList
+              cyberlimbs={cyberlimbs}
+              showActions={showActions}
+              isActive={isActive}
+              onAddCyberlimb={showActions && isActive ? handleAddCyberlimb : undefined}
+              onToggleWireless={showActions && isActive ? handleToggleCyberlimbWireless : undefined}
+              onRemoveLimb={showActions && isActive ? handleRemoveCyberlimb : undefined}
+              onAddEnhancement={showActions && isActive ? handleOpenEnhancementModal : undefined}
+              onAddAccessory={showActions && isActive ? handleOpenAccessoryModal : undefined}
+              onViewDetails={handleViewDetails}
+            />
           )}
         </div>
 
@@ -353,12 +601,52 @@ export function AugmentationsPanel({
             <span>
               <span className="text-emerald-400">{bioware.length}</span> bioware
             </span>
+            <span>
+              <span className="text-orange-400">{cyberlimbs.length}</span> cyberlimbs
+            </span>
           </div>
           <div className="flex items-center gap-1">
             <span className="text-red-400">{formatEssence(totalEssenceLoss)}</span>
             <span>essence lost</span>
           </div>
         </div>
+
+        {/* Cyberlimb Modals */}
+        <CyberlimbInstallModal
+          isOpen={installModalOpen}
+          onClose={handleCloseModals}
+          onInstall={handleInstallCyberlimb}
+          existingCyberlimbs={cyberlimbs}
+          naturalMaxStrength={character.attributes?.strength ?? 6}
+          naturalMaxAgility={character.attributes?.agility ?? 6}
+          availableEssence={currentEssence}
+          availableNuyen={character.nuyen ?? 0}
+          maxAvailability={character.status === "draft" ? 12 : undefined}
+        />
+
+        {selectedLimb && (
+          <>
+            <CyberlimbEnhancementModal
+              isOpen={enhancementModalOpen}
+              onClose={handleCloseModals}
+              onAdd={handleAddEnhancement}
+              limb={selectedLimb}
+              naturalMaxStrength={character.attributes?.strength ?? 6}
+              naturalMaxAgility={character.attributes?.agility ?? 6}
+              availableNuyen={character.nuyen ?? 0}
+              maxAvailability={character.status === "draft" ? 12 : undefined}
+            />
+
+            <CyberlimbAccessoryModal
+              isOpen={accessoryModalOpen}
+              onClose={handleCloseModals}
+              onAdd={handleAddAccessory}
+              limb={selectedLimb}
+              availableNuyen={character.nuyen ?? 0}
+              maxAvailability={character.status === "draft" ? 12 : undefined}
+            />
+          </>
+        )}
       </div>
     </Section>
   );

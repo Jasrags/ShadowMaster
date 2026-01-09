@@ -44,7 +44,7 @@ import {
   type ValidationContext,
   type AugmentationValidationResult,
 } from "./validation";
-import { createCyberlimb, isCyberlimb, type CyberlimbItem } from "./cyberlimb";
+import { isCyberlimbCatalogItem } from "./cyberlimb";
 
 // =============================================================================
 // TYPES
@@ -169,18 +169,20 @@ export function installCyberware(
     };
   }
 
+  // Check if this is a cyberlimb - they require dedicated installation with location
+  if (isCyberlimbCatalogItem(catalogItem)) {
+    return {
+      success: false,
+      error: "Cyberlimbs require location specification. Use installCyberlimb() instead.",
+      code: "CYBERLIMB_REQUIRES_LOCATION",
+    };
+  }
+
   // Calculate essence cost
   const essenceCost = calculateCyberwareEssence(catalogItem, grade, rating);
 
   // Create the installed item
-  let installedItem: CyberwareItem;
-
-  if (isCyberlimb(catalogItem as CyberwareItem)) {
-    // Use special cyberlimb creation
-    installedItem = createCyberlimb(catalogItem, grade, character) as CyberwareItem;
-  } else {
-    installedItem = createCyberwareItem(catalogItem, grade, rating);
-  }
+  const installedItem = createCyberwareItem(catalogItem, grade, rating);
 
   // Generate unique ID if not present
   if (!installedItem.id) {

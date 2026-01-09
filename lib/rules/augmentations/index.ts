@@ -119,33 +119,65 @@ export {
 
 // Cyberlimb management
 export {
-  // Identification
+  // Type guards
   isCyberlimb,
-  // Capacity calculations
-  getBaseCyberlimbCapacity,
-  calculateCyberlimbCapacity,
-  calculateEnhancementCapacityUsed,
-  calculateCustomizationCapacityCost,
-  calculateUsedCapacity,
+  isCyberlimbCatalogItem,
+  // Location & hierarchy validation
+  checkLocationConflicts,
+  validateLocationForLimbType,
+  // Customization validation
+  getMaxCustomization,
+  validateCustomization,
+  // Capacity management
+  getCapacityBreakdown,
+  validateCapacityAvailable,
   // Enhancement management
-  validateEnhancementFits,
-  addEnhancementToLimb,
-  removeEnhancementFromLimb,
-  // Attribute customization
-  getCyberlimbCustomizationLimits,
-  validateCyberlimbCustomization,
-  setCyberlimbAttribute,
-  getCyberlimbEffectiveAttributes,
-  // Averaging
-  calculateCyberlimbAverageAttribute,
-  // Creation
+  validateEnhancementInstall,
+  addEnhancement,
+  removeEnhancement,
+  // Accessory management
+  validateAccessoryInstall,
+  addAccessory,
+  removeAccessory,
+  // Physical CM bonus
+  calculateTotalCMBonus,
+  getLimbCMBonus,
+  // Attribute calculations
+  getCyberlimbStrength,
+  getCyberlimbAgility,
+  calculateEffectiveAttribute,
+  calculateAverageAttribute,
+  // Creation and validation
   createCyberlimb,
+  calculateCyberlimbCosts,
+  validateCyberlimbInstallation,
+  // Utilities
   getCyberlimbSummary,
+  toggleCyberlimbWireless,
+  // Re-exported constants from types
+  LIMB_HIERARCHY,
+  LIMB_CM_BONUS,
+  LOCATION_SIDE,
+  LOCATION_LIMB_TYPE,
+  LIMB_TYPE_LOCATIONS,
+  getCyberlimbAvailableCapacity,
+  calculateCyberlimbCapacityUsed,
+  wouldReplaceExisting,
+  isBlockedByExisting,
+  getAffectedLocations,
   // Types
-  type CyberlimbCustomization,
-  type CyberlimbCapacityBreakdown,
   type CyberlimbValidationResult,
+  type CyberlimbCapacityBreakdown,
+  type CyberlimbCustomizationOptions,
+  type LocationConflictResult,
+  type CyberlimbInstallResult,
   type CyberlimbItem,
+  type CyberlimbLocation,
+  type CyberlimbType,
+  type CyberlimbAppearance,
+  type CyberlimbEnhancement,
+  type CyberlimbAccessory,
+  type CyberlimbModificationEntry,
 } from "./cyberlimb";
 
 // Augmentation management

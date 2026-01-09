@@ -27,6 +27,7 @@ import type {
   EncumbranceState,
 } from "./gear-state";
 import type { WirelessEffect } from "./wireless-effects";
+import type { CyberlimbItem, CyberImplantWeapon } from "./cyberlimb";
 
 // =============================================================================
 // CHARACTER CORE
@@ -389,6 +390,24 @@ export interface Character {
 
   /** Bioware installed (edition-dependent) */
   bioware?: BiowareItem[];
+
+  /**
+   * Cyberlimbs installed on the character.
+   * Tracked separately from general cyberware due to unique mechanics:
+   * - Location tracking on the body
+   * - Internal STR/AGI attributes with customization
+   * - Capacity for enhancements and accessories
+   * - Hierarchical replacement rules
+   * @see lib/types/cyberlimb.ts
+   */
+  cyberlimbs?: CyberlimbItem[];
+
+  /**
+   * Cyber implant weapons installed directly in meat (not in cyberlimbs).
+   * These have essence cost but no capacity cost.
+   * Includes hand blades, razors, spurs, shock hands, etc.
+   */
+  cyberImplantWeapons?: CyberImplantWeapon[];
 
   /**
    * Global wireless bonus toggle

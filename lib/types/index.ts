@@ -81,6 +81,14 @@ export type {
   QualityLevel,
   SourceReference,
   DynamicStateType,
+  // Cyberlimb catalog types
+  CyberlimbType,
+  CyberlimbAppearance,
+  CyberlimbCatalogItem,
+  CyberlimbEnhancementType,
+  CyberlimbEnhancementCatalogItem,
+  CyberlimbAccessoryCatalogItem,
+  CyberImplantWeaponCatalogItem,
 } from "./edition";
 
 // Character types
@@ -725,3 +733,37 @@ export {
   mergeWirelessBonuses,
   applyWirelessEffect,
 } from "./wireless-effects";
+
+// Cyberlimb types (Character-owned cyberlimb items)
+export type {
+  CyberlimbLocation,
+  CyberlimbType as CyberlimbTypeCharacter, // Alias to avoid conflict with edition export
+  CyberlimbAppearance as CyberlimbAppearanceCharacter,
+  CyberlimbEnhancementType as CyberlimbEnhancementTypeCharacter,
+  CyberlimbModificationEntry,
+  CyberlimbEnhancement,
+  CyberlimbAccessory,
+  CyberImplantWeapon,
+  CyberlimbItem,
+} from "./cyberlimb";
+
+// Cyberlimb constants and helper functions
+export {
+  LIMB_HIERARCHY,
+  LIMB_TYPE_LOCATIONS,
+  LIMB_CM_BONUS,
+  LOCATION_SIDE,
+  LOCATION_LIMB_TYPE,
+  isCyberlimb,
+  isArmLocation,
+  isLegLocation,
+  getCyberlimbStrength,
+  getCyberlimbAgility,
+  getCyberlimbArmorBonus,
+  getCyberlimbAvailableCapacity,
+  calculateCyberlimbCapacityUsed,
+  getCyberlimbCMBonus,
+  wouldReplaceExisting,
+  isBlockedByExisting,
+  getAffectedLocations,
+} from "./cyberlimb";

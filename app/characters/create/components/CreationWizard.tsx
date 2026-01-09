@@ -53,6 +53,7 @@ import { AdeptPowersStep } from "./steps/AdeptPowersStep";
 import { VehiclesStep } from "./steps/VehiclesStep";
 import { ProgramsStep } from "./steps/ProgramsStep";
 import { IdentitiesStep } from "./steps/IdentitiesStep";
+import { AugmentationsStep } from "./steps/AugmentationsStep";
 import { ReviewStep } from "./steps/ReviewStep";
 import type { Campaign } from "@/lib/types/campaign";
 
@@ -1453,6 +1454,8 @@ export function CreationWizard({ onCancel, onComplete, characterId: initialChara
         return <QualitiesStep {...stepProps} />;
       case "contacts":
         return <ContactsStep {...stepProps} />;
+      case "augmentations":
+        return <AugmentationsStep {...stepProps} />;
       case "gear":
         return <GearStep {...stepProps} />;
       case "vehicles":

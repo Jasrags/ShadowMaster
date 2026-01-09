@@ -1,59 +1,99 @@
 /**
- * Cyberlimb Capacity and Customization Tests
+ * Cyberlimb System Tests
  *
- * Tests for cyberlimb capacity management and attribute customization.
+ * Tests for the cyberlimb management system including:
+ * - Type guards and identification
+ * - Location and hierarchy validation
+ * - Customization validation
+ * - Capacity management
+ * - Enhancement and accessory management
+ * - Physical CM bonus calculations
+ * - Effective attribute calculations
+ * - Cyberlimb creation
  */
 
 import { describe, it, expect } from "vitest";
 import {
+  // Type guards
   isCyberlimb,
-  getBaseCyberlimbCapacity,
-  calculateCyberlimbCapacity,
-  calculateEnhancementCapacityUsed,
-  calculateCustomizationCapacityCost,
-  calculateUsedCapacity,
-  validateEnhancementFits,
-  addEnhancementToLimb,
-  removeEnhancementFromLimb,
-  getCyberlimbCustomizationLimits,
-  validateCyberlimbCustomization,
-  setCyberlimbAttribute,
-  getCyberlimbEffectiveAttributes,
-  calculateCyberlimbAverageAttribute,
+  isCyberlimbCatalogItem,
+  // Location & hierarchy
+  checkLocationConflicts,
+  validateLocationForLimbType,
+  // Customization
+  getMaxCustomization,
+  validateCustomization,
+  // Capacity
+  getCapacityBreakdown,
+  validateCapacityAvailable,
+  // Enhancement management
+  validateEnhancementInstall,
+  addEnhancement,
+  removeEnhancement,
+  // Accessory management
+  validateAccessoryInstall,
+  addAccessory,
+  removeAccessory,
+  // CM bonus
+  calculateTotalCMBonus,
+  getLimbCMBonus,
+  // Attribute calculations
+  getCyberlimbStrength,
+  getCyberlimbAgility,
+  calculateEffectiveAttribute,
+  calculateAverageAttribute,
+  // Creation
   createCyberlimb,
+  calculateCyberlimbCosts,
+  validateCyberlimbInstallation,
   getCyberlimbSummary,
+  toggleCyberlimbWireless,
+  // Constants
+  LIMB_CM_BONUS,
   type CyberlimbItem,
+  type CyberlimbLocation,
 } from "../cyberlimb";
-import type { CyberwareItem, Character } from "@/lib/types/character";
-import type { CyberwareCatalogItem } from "@/lib/types/edition";
+import type { Character } from "@/lib/types/character";
+import type { CyberlimbCatalogItem, CyberwareCatalogItem } from "@/lib/types/edition";
 
 // =============================================================================
 // HELPER FUNCTIONS
 // =============================================================================
 
 function createTestCyberlimb(overrides: Partial<CyberlimbItem> = {}): CyberlimbItem {
+  const now = new Date().toISOString();
   return {
-    catalogId: "cyberarm-standard",
-    name: "Cyberarm (Standard)",
+    catalogId: "cyberlimb-arm",
+    name: "Obvious Cyberarm",
     category: "cyberlimb",
     grade: "standard",
     baseEssenceCost: 1.0,
     essenceCost: 1.0,
     cost: 15000,
     availability: 4,
-    capacity: 15,
+    location: "left-arm",
+    limbType: "full-arm",
+    appearance: "obvious",
+    baseStrength: 3,
+    baseAgility: 3,
+    customStrength: 0,
+    customAgility: 0,
+    baseCapacity: 15,
     capacityUsed: 0,
     enhancements: [],
-    limbStrength: 3,
-    limbAgility: 3,
-    strengthCustomization: 0,
-    agilityCustomization: 0,
+    accessories: [],
+    weapons: [],
+    wirelessEnabled: true,
+    condition: "working",
+    installedAt: now,
+    modificationHistory: [],
     ...overrides,
   };
 }
 
 function createTestCharacter(overrides: Partial<Character> = {}): Partial<Character> {
   return {
+    metatype: "human",
     specialAttributes: {
       edge: 3,
       essence: 6.0,
@@ -70,11 +110,30 @@ function createTestCharacter(overrides: Partial<Character> = {}): Partial<Charac
     },
     cyberware: [],
     bioware: [],
+    cyberlimbs: [],
     ...overrides,
   };
 }
 
-function createTestEnhancement(overrides: Partial<CyberwareCatalogItem> = {}): CyberwareCatalogItem {
+function createTestCatalogItem(): CyberlimbCatalogItem {
+  return {
+    id: "cyberlimb-arm",
+    name: "Obvious Cyberarm",
+    category: "cyberlimb",
+    essenceCost: 1.0,
+    cost: 15000,
+    availability: 4,
+    description: "A standard obvious cyberarm",
+    capacity: 15,
+    limbType: "full-arm",
+    appearance: "obvious",
+    baseStrength: 3,
+    baseAgility: 3,
+    physicalCMBonus: 1,
+  };
+}
+
+function createTestEnhancementCatalog(): CyberwareCatalogItem {
   return {
     id: "enhanced-agility",
     name: "Enhanced Agility",
@@ -88,729 +147,796 @@ function createTestEnhancement(overrides: Partial<CyberwareCatalogItem> = {}): C
     capacityCost: 1,
     hasRating: true,
     maxRating: 3,
-    ...overrides,
+    enhancementType: "agility",
   } as CyberwareCatalogItem;
 }
 
 // =============================================================================
-// CYBERLIMB IDENTIFICATION
+// TYPE GUARD TESTS
 // =============================================================================
 
 describe("isCyberlimb", () => {
-  it("returns true for cyberlimb category", () => {
-    const item: CyberwareItem = {
-      catalogId: "cyberarm",
-      name: "Cyberarm",
-      category: "cyberlimb",
-      grade: "standard",
-      baseEssenceCost: 1.0,
-      essenceCost: 1.0,
-      cost: 15000,
-      availability: 4,
-    };
-
-    expect(isCyberlimb(item)).toBe(true);
+  it("returns true for CyberlimbItem", () => {
+    const limb = createTestCyberlimb();
+    expect(isCyberlimb(limb)).toBe(true);
   });
 
-  it("returns false for non-cyberlimb category", () => {
-    const item: CyberwareItem = {
+  it("returns false for regular cyberware", () => {
+    const item = {
       catalogId: "datajack",
       name: "Datajack",
       category: "headware",
-      grade: "standard",
+      grade: "standard" as const,
       baseEssenceCost: 0.1,
       essenceCost: 0.1,
       cost: 500,
       availability: 2,
     };
-
     expect(isCyberlimb(item)).toBe(false);
   });
 });
 
-// =============================================================================
-// BASE CAPACITY
-// =============================================================================
-
-describe("getBaseCyberlimbCapacity", () => {
-  it("returns 15 for cyberarm", () => {
-    expect(getBaseCyberlimbCapacity("cyberarm")).toBe(15);
-    expect(getBaseCyberlimbCapacity("cyberarm-standard")).toBe(15);
-    expect(getBaseCyberlimbCapacity("CYBERARM")).toBe(15);
+describe("isCyberlimbCatalogItem", () => {
+  it("returns true for cyberlimb catalog items", () => {
+    const item = createTestCatalogItem();
+    expect(isCyberlimbCatalogItem(item)).toBe(true);
   });
 
-  it("returns 20 for cyberleg", () => {
-    expect(getBaseCyberlimbCapacity("cyberleg")).toBe(20);
-    expect(getBaseCyberlimbCapacity("cyberleg-obvious")).toBe(20);
-  });
-
-  it("returns 4 for cyberhand", () => {
-    expect(getBaseCyberlimbCapacity("cyberhand")).toBe(4);
-  });
-
-  it("returns 4 for cyberfoot", () => {
-    expect(getBaseCyberlimbCapacity("cyberfoot")).toBe(4);
-  });
-
-  it("returns 10 for cybertorso", () => {
-    expect(getBaseCyberlimbCapacity("cybertorso")).toBe(10);
-  });
-
-  it("returns 4 for cyberskull", () => {
-    expect(getBaseCyberlimbCapacity("cyberskull")).toBe(4);
-  });
-
-  it("defaults to arm capacity for unknown types", () => {
-    expect(getBaseCyberlimbCapacity("unknown-limb")).toBe(15);
-  });
-});
-
-describe("calculateCyberlimbCapacity", () => {
-  it("uses explicit capacity if set", () => {
-    const limb = createTestCyberlimb({ capacity: 18 });
-
-    expect(calculateCyberlimbCapacity(limb)).toBe(18);
-  });
-
-  it("derives capacity from catalogId if not set", () => {
-    const limb = createTestCyberlimb({ capacity: 0, catalogId: "cyberleg" });
-
-    expect(calculateCyberlimbCapacity(limb)).toBe(20);
-  });
-
-  it("defaults to arm capacity when catalogId doesn't match", () => {
-    const limb = createTestCyberlimb({
-      capacity: undefined,
-      catalogId: "custom-limb",
-      name: "Custom Cyberleg",
-    });
-
-    // Function uses catalogId for lookup, not name
-    // Unknown types default to arm capacity (15)
-    expect(calculateCyberlimbCapacity(limb)).toBe(15);
+  it("returns false for non-cyberlimb catalog items", () => {
+    const item: CyberwareCatalogItem = {
+      id: "datajack",
+      name: "Datajack",
+      category: "headware",
+      essenceCost: 0.1,
+      cost: 500,
+      availability: 2,
+      description: "A datajack",
+    };
+    expect(isCyberlimbCatalogItem(item)).toBe(false);
   });
 });
 
 // =============================================================================
-// CAPACITY CALCULATIONS
+// LOCATION VALIDATION TESTS
 // =============================================================================
 
-describe("calculateEnhancementCapacityUsed", () => {
-  it("returns 0 with no enhancements", () => {
-    const limb = createTestCyberlimb({ enhancements: [] });
-
-    expect(calculateEnhancementCapacityUsed(limb)).toBe(0);
+describe("validateLocationForLimbType", () => {
+  it("accepts valid location for full-arm", () => {
+    expect(validateLocationForLimbType("left-arm", "full-arm").valid).toBe(true);
+    expect(validateLocationForLimbType("right-arm", "full-arm").valid).toBe(true);
   });
 
-  it("sums enhancement capacity usage", () => {
-    const limb = createTestCyberlimb({
-      enhancements: [
-        { catalogId: "a", name: "A", category: "cyberlimb-enhancement", grade: "standard", baseEssenceCost: 0, essenceCost: 0, cost: 1000, availability: 4, capacityUsed: 2 } as CyberwareItem,
-        { catalogId: "b", name: "B", category: "cyberlimb-enhancement", grade: "standard", baseEssenceCost: 0, essenceCost: 0, cost: 1000, availability: 4, capacityUsed: 3 } as CyberwareItem,
-      ],
-    });
-
-    expect(calculateEnhancementCapacityUsed(limb)).toBe(5);
-  });
-
-  it("falls back to baseEssenceCost if capacityUsed not set", () => {
-    const limb = createTestCyberlimb({
-      enhancements: [
-        { catalogId: "a", name: "A", category: "cyberlimb-enhancement", grade: "standard", baseEssenceCost: 2, essenceCost: 2, cost: 1000, availability: 4 } as CyberwareItem,
-      ],
-    });
-
-    expect(calculateEnhancementCapacityUsed(limb)).toBe(2);
-  });
-
-  it("uses 0 when baseEssenceCost is 0 (nullish coalescing)", () => {
-    const limb = createTestCyberlimb({
-      enhancements: [
-        { catalogId: "a", name: "A", category: "cyberlimb-enhancement", grade: "standard", baseEssenceCost: 0, essenceCost: 0, cost: 1000, availability: 4 } as CyberwareItem,
-      ],
-    });
-
-    // Uses nullish coalescing (??) so 0 is a valid value, not treated as fallback
-    expect(calculateEnhancementCapacityUsed(limb)).toBe(0);
-  });
-});
-
-describe("calculateCustomizationCapacityCost", () => {
-  it("returns 0 with no customization", () => {
-    const limb = createTestCyberlimb({ strengthCustomization: 0, agilityCustomization: 0 });
-
-    expect(calculateCustomizationCapacityCost(limb)).toBe(0);
-  });
-
-  it("calculates cost as sum of STR and AGI bonuses", () => {
-    const limb = createTestCyberlimb({ strengthCustomization: 2, agilityCustomization: 3 });
-
-    expect(calculateCustomizationCapacityCost(limb)).toBe(5);
-  });
-
-  it("handles only STR customization", () => {
-    const limb = createTestCyberlimb({ strengthCustomization: 3, agilityCustomization: 0 });
-
-    expect(calculateCustomizationCapacityCost(limb)).toBe(3);
-  });
-
-  it("handles only AGI customization", () => {
-    const limb = createTestCyberlimb({ strengthCustomization: 0, agilityCustomization: 4 });
-
-    expect(calculateCustomizationCapacityCost(limb)).toBe(4);
-  });
-});
-
-describe("calculateUsedCapacity", () => {
-  it("calculates complete breakdown", () => {
-    const limb = createTestCyberlimb({
-      capacity: 15,
-      strengthCustomization: 2,
-      agilityCustomization: 1,
-      enhancements: [
-        { catalogId: "a", name: "A", category: "cyberlimb-enhancement", grade: "standard", baseEssenceCost: 0, essenceCost: 0, cost: 1000, availability: 4, capacityUsed: 3 } as CyberwareItem,
-      ],
-    });
-
-    const breakdown = calculateUsedCapacity(limb);
-
-    expect(breakdown.totalCapacity).toBe(15);
-    expect(breakdown.usedByEnhancements).toBe(3);
-    expect(breakdown.usedByCustomization).toBe(3); // 2 + 1
-    expect(breakdown.remainingCapacity).toBe(9); // 15 - 3 - 3
-  });
-
-  it("clamps remaining to minimum 0", () => {
-    const limb = createTestCyberlimb({
-      capacity: 5,
-      strengthCustomization: 3,
-      agilityCustomization: 3,
-      enhancements: [],
-    });
-
-    const breakdown = calculateUsedCapacity(limb);
-
-    expect(breakdown.remainingCapacity).toBe(0); // Max 0, not negative
-  });
-});
-
-// =============================================================================
-// ENHANCEMENT MANAGEMENT
-// =============================================================================
-
-describe("validateEnhancementFits", () => {
-  it("allows enhancement that fits", () => {
-    const limb = createTestCyberlimb({ capacity: 15, capacityUsed: 0 });
-    const enhancement = createTestEnhancement({ capacityCost: 3 });
-
-    const result = validateEnhancementFits(limb, enhancement);
-
-    expect(result.valid).toBe(true);
-  });
-
-  it("rejects enhancement that doesn't fit", () => {
-    const limb = createTestCyberlimb({
-      capacity: 15,
-      strengthCustomization: 5,
-      agilityCustomization: 5,
-      enhancements: [
-        { catalogId: "existing", name: "Existing", category: "cyberlimb-enhancement", grade: "standard", baseEssenceCost: 0, essenceCost: 0, cost: 1000, availability: 4, capacityUsed: 4 } as CyberwareItem,
-      ],
-    });
-    const enhancement = createTestEnhancement({ capacityCost: 5 }); // Only 1 remaining
-
-    const result = validateEnhancementFits(limb, enhancement);
-
+  it("rejects invalid location for full-arm", () => {
+    const result = validateLocationForLimbType("left-leg", "full-arm");
     expect(result.valid).toBe(false);
-    expect(result.error).toContain("capacity");
+    expect(result.error).toContain("cannot be installed");
   });
 
-  it("rejects non-enhancement items", () => {
-    const limb = createTestCyberlimb();
-    const item = createTestEnhancement({ category: "bodyware" });
-
-    const result = validateEnhancementFits(limb, item);
-
-    expect(result.valid).toBe(false);
-    expect(result.error).toContain("not a cyberlimb enhancement");
+  it("accepts valid location for hand", () => {
+    expect(validateLocationForLimbType("left-hand", "hand").valid).toBe(true);
+    expect(validateLocationForLimbType("right-hand", "hand").valid).toBe(true);
   });
 
-  it("accounts for rated enhancement capacity", () => {
-    const limb = createTestCyberlimb({ capacity: 15, capacityUsed: 0 });
-    const enhancement = createTestEnhancement({
-      capacityCost: 2,
-      ratingSpec: { capacityCostScaling: { perRating: true } },
-    } as Partial<CyberwareCatalogItem>);
-
-    // Rating 3 = 2 * 3 = 6 capacity
-    const result = validateEnhancementFits(limb, enhancement, 3);
-
-    expect(result.valid).toBe(true);
+  it("accepts torso location for torso type", () => {
+    expect(validateLocationForLimbType("torso", "torso").valid).toBe(true);
   });
 
-  it("allows cyberlimb-accessory items", () => {
-    const limb = createTestCyberlimb({ capacity: 15 });
-    const accessory = createTestEnhancement({ category: "cyberlimb-accessory", capacityCost: 2 });
-
-    const result = validateEnhancementFits(limb, accessory);
-
-    expect(result.valid).toBe(true);
-  });
-});
-
-describe("addEnhancementToLimb", () => {
-  it("adds enhancement to limb", () => {
-    const limb = createTestCyberlimb({ enhancements: [] });
-    const enhancement = createTestEnhancement({ id: "new-enhancement", name: "New Enhancement", capacityCost: 2 });
-
-    const result = addEnhancementToLimb(limb, enhancement, "standard");
-
-    expect(result.enhancements).toHaveLength(1);
-    expect(result.enhancements![0].catalogId).toBe("new-enhancement");
-    expect(result.enhancements![0].capacityUsed).toBe(2);
-    expect(result.capacityUsed).toBe(2);
-  });
-
-  it("preserves existing enhancements", () => {
-    const existing: CyberwareItem = {
-      catalogId: "existing",
-      name: "Existing",
-      category: "cyberlimb-enhancement",
-      grade: "standard",
-      baseEssenceCost: 0,
-      essenceCost: 0,
-      cost: 1000,
-      availability: 4,
-      capacityUsed: 3,
-    };
-    const limb = createTestCyberlimb({ enhancements: [existing], capacityUsed: 3 });
-    const enhancement = createTestEnhancement({ capacityCost: 2 });
-
-    const result = addEnhancementToLimb(limb, enhancement, "standard");
-
-    expect(result.enhancements).toHaveLength(2);
-    expect(result.capacityUsed).toBe(5);
-  });
-
-  it("applies grade to cost and essence", () => {
-    const limb = createTestCyberlimb();
-    const enhancement = createTestEnhancement({ cost: 1000, essenceCost: 0.2 });
-
-    const result = addEnhancementToLimb(limb, enhancement, "alpha");
-
-    // Alpha cost multiplier is 2.0 (double the price for better quality)
-    expect(result.enhancements![0].cost).toBe(2000);
-    // Alpha essence multiplier is 0.8
-    expect(result.enhancements![0].essenceCost).toBe(0.16);
-  });
-
-  it("handles rated enhancements", () => {
-    const limb = createTestCyberlimb();
-    const enhancement = createTestEnhancement({
-      capacityCost: 1,
-      ratingSpec: { capacityCostScaling: { perRating: true } },
-    } as Partial<CyberwareCatalogItem>);
-
-    const result = addEnhancementToLimb(limb, enhancement, "standard", 3);
-
-    expect(result.enhancements![0].rating).toBe(3);
-    expect(result.enhancements![0].capacityUsed).toBe(3);
-  });
-});
-
-describe("removeEnhancementFromLimb", () => {
-  it("removes enhancement by catalogId", () => {
-    const existing: CyberwareItem = {
-      catalogId: "to-remove",
-      name: "To Remove",
-      category: "cyberlimb-enhancement",
-      grade: "standard",
-      baseEssenceCost: 0,
-      essenceCost: 0,
-      cost: 1000,
-      availability: 4,
-      capacityUsed: 3,
-    };
-    const limb = createTestCyberlimb({ enhancements: [existing], capacityUsed: 3 });
-
-    const result = removeEnhancementFromLimb(limb, "to-remove");
-
-    expect(result.enhancements).toHaveLength(0);
-    expect(result.capacityUsed).toBe(0);
-  });
-
-  it("returns unchanged limb if enhancement not found", () => {
-    const limb = createTestCyberlimb({ enhancements: [], capacityUsed: 0 });
-
-    const result = removeEnhancementFromLimb(limb, "nonexistent");
-
-    expect(result).toEqual(limb);
-  });
-
-  it("preserves other enhancements", () => {
-    const keep: CyberwareItem = {
-      catalogId: "keep",
-      name: "Keep",
-      category: "cyberlimb-enhancement",
-      grade: "standard",
-      baseEssenceCost: 0,
-      essenceCost: 0,
-      cost: 1000,
-      availability: 4,
-      capacityUsed: 2,
-    };
-    const remove: CyberwareItem = {
-      catalogId: "remove",
-      name: "Remove",
-      category: "cyberlimb-enhancement",
-      grade: "standard",
-      baseEssenceCost: 0,
-      essenceCost: 0,
-      cost: 1000,
-      availability: 4,
-      capacityUsed: 3,
-    };
-    const limb = createTestCyberlimb({ enhancements: [keep, remove], capacityUsed: 5 });
-
-    const result = removeEnhancementFromLimb(limb, "remove");
-
-    expect(result.enhancements).toHaveLength(1);
-    expect(result.enhancements![0].catalogId).toBe("keep");
-    expect(result.capacityUsed).toBe(2);
+  it("accepts skull location for skull type", () => {
+    expect(validateLocationForLimbType("skull", "skull").valid).toBe(true);
   });
 });
 
 // =============================================================================
-// ATTRIBUTE CUSTOMIZATION
+// HIERARCHY CONFLICT TESTS
 // =============================================================================
 
-describe("getCyberlimbCustomizationLimits", () => {
-  it("calculates limits based on character", () => {
-    const limb = createTestCyberlimb({ strengthCustomization: 2, agilityCustomization: 1 });
-    const char = createTestCharacter({ attributes: { bod: 5, agi: 4 } });
+describe("checkLocationConflicts", () => {
+  it("returns no conflict when no limbs exist", () => {
+    const char = createTestCharacter({ cyberlimbs: [] });
+    const result = checkLocationConflicts(char, "left-arm", "full-arm");
 
-    const limits = getCyberlimbCustomizationLimits(limb, char);
+    expect(result.hasConflict).toBe(false);
+    expect(result.limbsToReplace).toHaveLength(0);
+    expect(result.blockingLimb).toBeUndefined();
+  });
 
-    expect(limits.baseStrength).toBe(5);
-    expect(limits.baseAgility).toBe(4);
-    expect(limits.strengthBonus).toBe(2);
-    expect(limits.agilityBonus).toBe(1);
-    expect(limits.strength).toBe(5); // base 3 + 2
-    expect(limits.agility).toBe(4); // base 3 + 1
-    expect(limits.maxStrength).toBe(9); // racial max 6 + 3
-    expect(limits.maxAgility).toBe(9);
+  it("detects that full-arm would replace hand on same side", () => {
+    const existingHand = createTestCyberlimb({
+      location: "left-hand",
+      limbType: "hand",
+      name: "Left Cyberhand",
+    });
+    const char = createTestCharacter({ cyberlimbs: [existingHand] });
+
+    const result = checkLocationConflicts(char, "left-arm", "full-arm");
+
+    expect(result.hasConflict).toBe(true);
+    expect(result.limbsToReplace).toHaveLength(1);
+    expect(result.limbsToReplace[0].location).toBe("left-hand");
+    expect(result.blockingLimb).toBeUndefined();
+  });
+
+  it("detects blocking when trying to install hand where full-arm exists", () => {
+    const existingArm = createTestCyberlimb({
+      location: "left-arm",
+      limbType: "full-arm",
+      name: "Left Cyberarm",
+    });
+    const char = createTestCharacter({ cyberlimbs: [existingArm] });
+
+    const result = checkLocationConflicts(char, "left-hand", "hand");
+
+    expect(result.hasConflict).toBe(true);
+    expect(result.blockingLimb).toBeDefined();
+    expect(result.blockingLimb?.limbType).toBe("full-arm");
+  });
+
+  it("allows hand on opposite side when arm exists", () => {
+    const existingArm = createTestCyberlimb({
+      location: "left-arm",
+      limbType: "full-arm",
+    });
+    const char = createTestCharacter({ cyberlimbs: [existingArm] });
+
+    const result = checkLocationConflicts(char, "right-hand", "hand");
+
+    expect(result.hasConflict).toBe(false);
   });
 });
 
-describe("validateCyberlimbCustomization", () => {
-  it("validates valid customization", () => {
-    const limb = createTestCyberlimb({
-      capacity: 15,
+// =============================================================================
+// CUSTOMIZATION TESTS
+// =============================================================================
+
+describe("getMaxCustomization", () => {
+  it("returns 3 for human (racial max 6 - base 3)", () => {
+    const char = createTestCharacter({ metatype: "human" });
+
+    expect(getMaxCustomization(char, "strength")).toBe(3);
+    expect(getMaxCustomization(char, "agility")).toBe(3);
+  });
+
+  it("returns higher value for dwarf strength (racial max 8)", () => {
+    const char = createTestCharacter({ metatype: "dwarf" });
+
+    expect(getMaxCustomization(char, "strength")).toBe(5); // 8 - 3
+    expect(getMaxCustomization(char, "agility")).toBe(3); // 6 - 3
+  });
+
+  it("returns higher value for troll strength (racial max 10)", () => {
+    const char = createTestCharacter({ metatype: "troll" });
+
+    expect(getMaxCustomization(char, "strength")).toBe(7); // 10 - 3
+    expect(getMaxCustomization(char, "agility")).toBe(2); // 5 - 3
+  });
+});
+
+describe("validateCustomization", () => {
+  it("accepts valid customization within limits", () => {
+    const char = createTestCharacter({ metatype: "human" });
+
+    const result = validateCustomization(char, {
       strengthCustomization: 2,
       agilityCustomization: 2,
     });
-    const char = createTestCharacter();
-
-    const result = validateCyberlimbCustomization(limb, char);
 
     expect(result.valid).toBe(true);
   });
 
-  it("rejects STR exceeding maximum", () => {
-    const limb = createTestCyberlimb({
-      strengthCustomization: 7, // Would be 3 + 7 = 10, max is 9
-      agilityCustomization: 0,
-    });
+  it("rejects negative customization", () => {
     const char = createTestCharacter();
 
-    const result = validateCyberlimbCustomization(limb, char);
+    const result = validateCustomization(char, { strengthCustomization: -1 });
+
+    expect(result.valid).toBe(false);
+    expect(result.error).toContain("negative");
+  });
+
+  it("rejects STR customization exceeding racial maximum", () => {
+    const char = createTestCharacter({ metatype: "human" });
+
+    const result = validateCustomization(char, { strengthCustomization: 5 }); // Max is 3
 
     expect(result.valid).toBe(false);
     expect(result.error).toContain("STR");
     expect(result.error).toContain("exceeds maximum");
   });
 
-  it("rejects AGI exceeding maximum", () => {
-    const limb = createTestCyberlimb({
-      strengthCustomization: 0,
-      agilityCustomization: 7, // Would be 3 + 7 = 10, max is 9
-    });
-    const char = createTestCharacter();
+  it("rejects AGI customization exceeding racial maximum", () => {
+    const char = createTestCharacter({ metatype: "human" });
 
-    const result = validateCyberlimbCustomization(limb, char);
+    const result = validateCustomization(char, { agilityCustomization: 5 }); // Max is 3
 
     expect(result.valid).toBe(false);
     expect(result.error).toContain("AGI");
+    expect(result.error).toContain("exceeds maximum");
+  });
+});
+
+// =============================================================================
+// CAPACITY TESTS
+// =============================================================================
+
+describe("getCapacityBreakdown", () => {
+  it("returns full capacity when empty", () => {
+    const limb = createTestCyberlimb({ baseCapacity: 15, capacityUsed: 0 });
+
+    const breakdown = getCapacityBreakdown(limb);
+
+    expect(breakdown.totalCapacity).toBe(15);
+    expect(breakdown.usedByEnhancements).toBe(0);
+    expect(breakdown.usedByAccessories).toBe(0);
+    expect(breakdown.usedByWeapons).toBe(0);
+    expect(breakdown.remainingCapacity).toBe(15);
   });
 
-  it("rejects customization exceeding available capacity", () => {
+  it("calculates used capacity from enhancements", () => {
     const limb = createTestCyberlimb({
-      capacity: 5,
-      strengthCustomization: 3,
-      agilityCustomization: 3, // Total 6, but only 5 capacity
-      enhancements: [],
+      baseCapacity: 15,
+      enhancements: [
+        {
+          id: "enh-1",
+          catalogId: "enhanced-agility",
+          name: "Enhanced Agility",
+          enhancementType: "agility",
+          rating: 2,
+          capacityUsed: 2,
+          cost: 13000,
+          availability: 12,
+        },
+      ],
     });
-    const char = createTestCharacter();
 
-    const result = validateCyberlimbCustomization(limb, char);
+    const breakdown = getCapacityBreakdown(limb);
+
+    expect(breakdown.usedByEnhancements).toBe(2);
+    expect(breakdown.remainingCapacity).toBe(13);
+  });
+
+  it("calculates used capacity from multiple sources", () => {
+    const limb = createTestCyberlimb({
+      baseCapacity: 20,
+      enhancements: [
+        {
+          id: "enh-1",
+          catalogId: "enhanced-strength",
+          name: "Enhanced Strength",
+          enhancementType: "strength",
+          rating: 3,
+          capacityUsed: 3,
+          cost: 19500,
+          availability: 18,
+        },
+      ],
+      accessories: [
+        {
+          id: "acc-1",
+          catalogId: "gyromount",
+          name: "Gyromount",
+          capacityUsed: 6,
+          cost: 6000,
+          availability: 8,
+        },
+      ],
+    });
+
+    const breakdown = getCapacityBreakdown(limb);
+
+    expect(breakdown.usedByEnhancements).toBe(3);
+    expect(breakdown.usedByAccessories).toBe(6);
+    expect(breakdown.remainingCapacity).toBe(11); // 20 - 3 - 6
+  });
+});
+
+describe("validateCapacityAvailable", () => {
+  it("accepts item that fits", () => {
+    const limb = createTestCyberlimb({ baseCapacity: 15, capacityUsed: 0 });
+
+    const result = validateCapacityAvailable(limb, 5);
+
+    expect(result.valid).toBe(true);
+  });
+
+  it("rejects item that doesn't fit", () => {
+    // Create limb with actual enhancements that use capacity
+    const limb = createTestCyberlimb({
+      baseCapacity: 15,
+      enhancements: [
+        {
+          id: "enh-1",
+          catalogId: "enhanced-strength",
+          name: "Enhanced Strength",
+          enhancementType: "strength",
+          rating: 3,
+          capacityUsed: 3,
+          cost: 19500,
+          availability: 18,
+        },
+        {
+          id: "enh-2",
+          catalogId: "enhanced-agility",
+          name: "Enhanced Agility",
+          enhancementType: "agility",
+          rating: 3,
+          capacityUsed: 3,
+          cost: 19500,
+          availability: 18,
+        },
+      ],
+      accessories: [
+        {
+          id: "acc-1",
+          catalogId: "gyromount",
+          name: "Gyromount",
+          capacityUsed: 6,
+          cost: 6000,
+          availability: 8,
+        },
+      ],
+    }); // 3 + 3 + 6 = 12 used, 3 remaining
+
+    const result = validateCapacityAvailable(limb, 5); // Only 3 remaining
 
     expect(result.valid).toBe(false);
     expect(result.error).toContain("capacity");
   });
 });
 
-describe("setCyberlimbAttribute", () => {
-  it("sets strength successfully", () => {
-    const limb = createTestCyberlimb({ capacity: 15 });
-    const char = createTestCharacter();
+// =============================================================================
+// ENHANCEMENT MANAGEMENT TESTS
+// =============================================================================
 
-    const result = setCyberlimbAttribute(limb, "strength", 5, char);
-
-    expect(result.success).toBe(true);
-    if (result.success) {
-      expect(result.limb.limbStrength).toBe(5);
-      expect(result.limb.strengthCustomization).toBe(2); // 5 - 3 base
-    }
-  });
-
-  it("sets agility successfully", () => {
-    const limb = createTestCyberlimb({ capacity: 15 });
-    const char = createTestCharacter();
-
-    const result = setCyberlimbAttribute(limb, "agility", 6, char);
-
-    expect(result.success).toBe(true);
-    if (result.success) {
-      expect(result.limb.limbAgility).toBe(6);
-      expect(result.limb.agilityCustomization).toBe(3);
-    }
-  });
-
-  it("rejects setting below base value", () => {
+describe("validateEnhancementInstall", () => {
+  it("accepts valid enhancement", () => {
     const limb = createTestCyberlimb();
-    const char = createTestCharacter();
+    const enhancement = createTestEnhancementCatalog();
 
-    const result = setCyberlimbAttribute(limb, "strength", 2, char);
+    const result = validateEnhancementInstall(limb, enhancement, 2);
 
-    expect(result.success).toBe(false);
-    if (!result.success) {
-      expect(result.error).toContain("below base value");
-    }
+    expect(result.valid).toBe(true);
   });
 
-  it("rejects setting above maximum", () => {
+  it("rejects non-enhancement item", () => {
     const limb = createTestCyberlimb();
-    const char = createTestCharacter();
+    const item: CyberwareCatalogItem = {
+      id: "datajack",
+      name: "Datajack",
+      category: "headware",
+      essenceCost: 0.1,
+      cost: 500,
+      availability: 2,
+      description: "A datajack",
+    };
 
-    const result = setCyberlimbAttribute(limb, "strength", 10, char); // Max is 9
+    const result = validateEnhancementInstall(limb, item, 1);
 
-    expect(result.success).toBe(false);
-    if (!result.success) {
-      expect(result.error).toContain("exceeds maximum");
-    }
+    expect(result.valid).toBe(false);
+    expect(result.error).toContain("not a cyberlimb enhancement");
   });
 
-  it("rejects when capacity would be exceeded", () => {
+  it("rejects duplicate enhancement type", () => {
     const limb = createTestCyberlimb({
-      capacity: 5,
-      strengthCustomization: 3,
-      agilityCustomization: 0,
+      enhancements: [
+        {
+          id: "enh-1",
+          catalogId: "enhanced-agility",
+          name: "Enhanced Agility",
+          enhancementType: "agility",
+          rating: 2,
+          capacityUsed: 2,
+          cost: 13000,
+          availability: 12,
+        },
+      ],
     });
-    const char = createTestCharacter();
+    const enhancement = createTestEnhancementCatalog(); // Also agility
 
-    // Setting AGI to 6 (bonus 3) would need 3 + 3 = 6 capacity, but only 5 available
-    const result = setCyberlimbAttribute(limb, "agility", 6, char);
+    const result = validateEnhancementInstall(limb, enhancement, 1);
 
-    expect(result.success).toBe(false);
-    if (!result.success) {
-      expect(result.error).toContain("capacity");
-    }
+    expect(result.valid).toBe(false);
+    expect(result.error).toContain("already has");
+  });
+
+  it("rejects rating exceeding maximum", () => {
+    const limb = createTestCyberlimb();
+    const enhancement = createTestEnhancementCatalog();
+
+    const result = validateEnhancementInstall(limb, enhancement, 5); // Max is 3
+
+    expect(result.valid).toBe(false);
+    expect(result.error).toContain("invalid");
   });
 });
 
-describe("getCyberlimbEffectiveAttributes", () => {
-  it("returns current limb attributes", () => {
-    const limb = createTestCyberlimb({
-      limbStrength: 5,
-      limbAgility: 4,
-    });
+describe("addEnhancement", () => {
+  it("adds enhancement to limb", () => {
+    const limb = createTestCyberlimb();
+    const enhancement = createTestEnhancementCatalog();
 
-    const attrs = getCyberlimbEffectiveAttributes(limb);
+    const result = addEnhancement(limb, enhancement, 2);
 
-    expect(attrs.strength).toBe(5);
-    expect(attrs.agility).toBe(4);
+    expect(result.enhancements).toHaveLength(1);
+    expect(result.enhancements[0].enhancementType).toBe("agility");
+    expect(result.enhancements[0].rating).toBe(2);
+    expect(result.enhancements[0].capacityUsed).toBe(2);
+    expect(result.capacityUsed).toBe(2);
+    expect(result.modificationHistory).toHaveLength(1);
   });
 
-  it("calculates from customization if limb values not set", () => {
+  it("preserves existing enhancements", () => {
     const limb = createTestCyberlimb({
-      limbStrength: undefined,
-      limbAgility: undefined,
-      strengthCustomization: 2,
-      agilityCustomization: 3,
+      enhancements: [
+        {
+          id: "existing",
+          catalogId: "enhanced-strength",
+          name: "Enhanced Strength",
+          enhancementType: "strength",
+          rating: 1,
+          capacityUsed: 1,
+          cost: 6500,
+          availability: 6,
+        },
+      ],
+      capacityUsed: 1,
+    });
+    const enhancement = createTestEnhancementCatalog();
+
+    const result = addEnhancement(limb, enhancement, 2);
+
+    expect(result.enhancements).toHaveLength(2);
+    expect(result.capacityUsed).toBe(3);
+  });
+});
+
+describe("removeEnhancement", () => {
+  it("removes enhancement by ID", () => {
+    const limb = createTestCyberlimb({
+      enhancements: [
+        {
+          id: "to-remove",
+          catalogId: "enhanced-agility",
+          name: "Enhanced Agility",
+          enhancementType: "agility",
+          rating: 2,
+          capacityUsed: 2,
+          cost: 13000,
+          availability: 12,
+        },
+      ],
+      capacityUsed: 2,
     });
 
-    const attrs = getCyberlimbEffectiveAttributes(limb);
+    const result = removeEnhancement(limb, "to-remove");
 
-    expect(attrs.strength).toBe(5); // 3 + 2
-    expect(attrs.agility).toBe(6); // 3 + 3
+    expect(result.enhancements).toHaveLength(0);
+    expect(result.capacityUsed).toBe(0);
+    expect(result.modificationHistory).toHaveLength(1);
+  });
+
+  it("returns unchanged limb if enhancement not found", () => {
+    const limb = createTestCyberlimb();
+
+    const result = removeEnhancement(limb, "nonexistent");
+
+    expect(result).toEqual(limb);
   });
 });
 
 // =============================================================================
-// CYBERLIMB AVERAGING
+// CM BONUS TESTS
 // =============================================================================
 
-describe("calculateCyberlimbAverageAttribute", () => {
+describe("getLimbCMBonus", () => {
+  it("returns 1 for full limbs", () => {
+    expect(getLimbCMBonus("full-arm")).toBe(1);
+    expect(getLimbCMBonus("full-leg")).toBe(1);
+    expect(getLimbCMBonus("torso")).toBe(1);
+    expect(getLimbCMBonus("skull")).toBe(1);
+  });
+
+  it("returns 0.5 for partial limbs", () => {
+    expect(getLimbCMBonus("lower-arm")).toBe(0.5);
+    expect(getLimbCMBonus("lower-leg")).toBe(0.5);
+  });
+
+  it("returns 0 for extremities", () => {
+    expect(getLimbCMBonus("hand")).toBe(0);
+    expect(getLimbCMBonus("foot")).toBe(0);
+  });
+});
+
+describe("calculateTotalCMBonus", () => {
+  it("returns 0 with no cyberlimbs", () => {
+    const char = createTestCharacter({ cyberlimbs: [] });
+
+    expect(calculateTotalCMBonus(char)).toBe(0);
+  });
+
+  it("returns 1 for single full arm", () => {
+    const char = createTestCharacter({
+      cyberlimbs: [createTestCyberlimb({ limbType: "full-arm" })],
+    });
+
+    expect(calculateTotalCMBonus(char)).toBe(1);
+  });
+
+  it("floors combined partial limb bonuses", () => {
+    const char = createTestCharacter({
+      cyberlimbs: [
+        createTestCyberlimb({ limbType: "lower-arm", location: "left-lower-arm" }),
+      ],
+    });
+
+    expect(calculateTotalCMBonus(char)).toBe(0); // 0.5 floors to 0
+  });
+
+  it("adds multiple partial limbs correctly", () => {
+    const char = createTestCharacter({
+      cyberlimbs: [
+        createTestCyberlimb({ limbType: "lower-arm", location: "left-lower-arm" }),
+        createTestCyberlimb({ limbType: "lower-arm", location: "right-lower-arm" }),
+      ],
+    });
+
+    expect(calculateTotalCMBonus(char)).toBe(1); // 0.5 + 0.5 = 1
+  });
+
+  it("sums multiple full limbs", () => {
+    const char = createTestCharacter({
+      cyberlimbs: [
+        createTestCyberlimb({ limbType: "full-arm", location: "left-arm" }),
+        createTestCyberlimb({ limbType: "full-leg", location: "left-leg" }),
+        createTestCyberlimb({ limbType: "torso", location: "torso" }),
+      ],
+    });
+
+    expect(calculateTotalCMBonus(char)).toBe(3);
+  });
+});
+
+// =============================================================================
+// ATTRIBUTE CALCULATION TESTS
+// =============================================================================
+
+describe("getCyberlimbStrength", () => {
+  it("returns base 3 with no customization or enhancement", () => {
+    const limb = createTestCyberlimb({
+      baseStrength: 3,
+      customStrength: 0,
+      enhancements: [],
+    });
+
+    expect(getCyberlimbStrength(limb)).toBe(3);
+  });
+
+  it("adds customization to base", () => {
+    const limb = createTestCyberlimb({
+      baseStrength: 3,
+      customStrength: 2,
+      enhancements: [],
+    });
+
+    expect(getCyberlimbStrength(limb)).toBe(5);
+  });
+
+  it("adds enhancement rating to total", () => {
+    const limb = createTestCyberlimb({
+      baseStrength: 3,
+      customStrength: 2,
+      enhancements: [
+        {
+          id: "enh-1",
+          catalogId: "enhanced-strength",
+          name: "Enhanced Strength",
+          enhancementType: "strength",
+          rating: 3,
+          capacityUsed: 3,
+          cost: 19500,
+          availability: 18,
+        },
+      ],
+    });
+
+    expect(getCyberlimbStrength(limb)).toBe(8); // 3 + 2 + 3
+  });
+});
+
+describe("getCyberlimbAgility", () => {
+  it("calculates correctly with all components", () => {
+    const limb = createTestCyberlimb({
+      baseAgility: 3,
+      customAgility: 3,
+      enhancements: [
+        {
+          id: "enh-1",
+          catalogId: "enhanced-agility",
+          name: "Enhanced Agility",
+          enhancementType: "agility",
+          rating: 2,
+          capacityUsed: 2,
+          cost: 13000,
+          availability: 12,
+        },
+      ],
+    });
+
+    expect(getCyberlimbAgility(limb)).toBe(8); // 3 + 3 + 2
+  });
+});
+
+describe("calculateAverageAttribute", () => {
   it("returns natural value with no cyberlimbs", () => {
-    const char = createTestCharacter({ attributes: { bod: 5, agi: 4 } });
+    const char = createTestCharacter({
+      attributes: { bod: 4, agi: 4, rea: 3, str: 5, wil: 3, log: 3, int: 3, cha: 3 },
+      cyberlimbs: [],
+    });
 
-    const avgStr = calculateCyberlimbAverageAttribute(char, "strength");
-    const avgAgi = calculateCyberlimbAverageAttribute(char, "agility");
-
-    expect(avgStr).toBe(5);
-    expect(avgAgi).toBe(4);
+    expect(calculateAverageAttribute(char, "strength")).toBe(5);
+    expect(calculateAverageAttribute(char, "agility")).toBe(4);
   });
 
-  it("averages with one cyberarm", () => {
+  it("averages with one full arm", () => {
     const limb = createTestCyberlimb({
-      catalogId: "cyberarm",
-      limbStrength: 6,
-      limbAgility: 5,
+      baseStrength: 3,
+      customStrength: 3,
+      enhancements: [], // STR = 6
     });
     const char = createTestCharacter({
-      attributes: { bod: 4, agi: 4 },
-      cyberware: [limb],
+      attributes: { bod: 4, agi: 4, rea: 3, str: 4, wil: 3, log: 3, int: 3, cha: 3 },
+      cyberlimbs: [limb],
     });
 
-    // 4 limbs total, 1 cyber (STR 6), 3 natural (STR 4)
-    // Average = (6 + 4*3) / 4 = 18/4 = 4.5
-    const avgStr = calculateCyberlimbAverageAttribute(char, "strength");
-
-    expect(avgStr).toBe(4.5);
-  });
-
-  it("handles multiple cyberlimbs", () => {
-    const arm = createTestCyberlimb({
-      catalogId: "cyberarm",
-      limbStrength: 6,
-      limbAgility: 5,
-    });
-    const leg = createTestCyberlimb({
-      catalogId: "cyberleg",
-      limbStrength: 6,
-      limbAgility: 5,
-    });
-    const char = createTestCharacter({
-      attributes: { bod: 4, agi: 4 },
-      cyberware: [arm, leg],
-    });
-
-    // 4 limbs total, 2 cyber (STR 6), 2 natural (STR 4)
-    // Average = (6*2 + 4*2) / 4 = 20/4 = 5
-    const avgStr = calculateCyberlimbAverageAttribute(char, "strength");
-
-    expect(avgStr).toBe(5);
-  });
-
-  it("weights hands/feet as half limbs", () => {
-    const hand = createTestCyberlimb({
-      catalogId: "cyberhand",
-      limbStrength: 6,
-      limbAgility: 5,
-    });
-    const char = createTestCharacter({
-      attributes: { bod: 4, agi: 4 },
-      cyberware: [hand],
-    });
-
-    // 4 limbs total, 0.5 cyber (STR 6 * 0.5 = 3), 3.5 natural (STR 4 * 3.5 = 14)
-    // Average = (3 + 14) / 4 = 17/4 = 4.25 → 4.3
-    const avgStr = calculateCyberlimbAverageAttribute(char, "strength");
-
-    expect(avgStr).toBeCloseTo(4.3, 1);
+    // 4 limb slots, 1 cyber (STR 6), 3 natural (STR 4)
+    // Average = (6 * 1 + 4 * 3) / 4 = 18/4 = 4.5 → floor to 4
+    expect(calculateAverageAttribute(char, "strength")).toBe(4);
   });
 });
 
 // =============================================================================
-// CYBERLIMB CREATION
+// CREATION TESTS
 // =============================================================================
 
 describe("createCyberlimb", () => {
   it("creates a new cyberlimb with correct defaults", () => {
-    const catalogItem: CyberwareCatalogItem = {
-      id: "cyberarm-obvious",
-      name: "Obvious Cyberarm",
-      category: "cyberlimb",
-      essenceCost: 1.0,
-      cost: 15000,
-      availability: 4,
-      restricted: false,
-      forbidden: false,
-      description: "An obvious cyberarm",
-      capacity: 15,
-    } as CyberwareCatalogItem;
+    const catalogItem = createTestCatalogItem();
     const char = createTestCharacter();
 
-    const limb = createCyberlimb(catalogItem, "standard", char);
+    const limb = createCyberlimb(catalogItem, "left-arm", "standard");
 
-    expect(limb.catalogId).toBe("cyberarm-obvious");
+    expect(limb.catalogId).toBe("cyberlimb-arm");
     expect(limb.name).toBe("Obvious Cyberarm");
     expect(limb.category).toBe("cyberlimb");
     expect(limb.grade).toBe("standard");
     expect(limb.baseEssenceCost).toBe(1.0);
     expect(limb.essenceCost).toBe(1.0);
-    expect(limb.capacity).toBe(15);
+    expect(limb.location).toBe("left-arm");
+    expect(limb.limbType).toBe("full-arm");
+    expect(limb.appearance).toBe("obvious");
+    expect(limb.baseStrength).toBe(3);
+    expect(limb.baseAgility).toBe(3);
+    expect(limb.customStrength).toBe(0);
+    expect(limb.customAgility).toBe(0);
+    expect(limb.baseCapacity).toBe(15);
     expect(limb.capacityUsed).toBe(0);
     expect(limb.enhancements).toEqual([]);
-    expect(limb.limbStrength).toBe(3);
-    expect(limb.limbAgility).toBe(3);
-    expect(limb.strengthCustomization).toBe(0);
-    expect(limb.agilityCustomization).toBe(0);
+    expect(limb.accessories).toEqual([]);
+    expect(limb.weapons).toEqual([]);
+    expect(limb.wirelessEnabled).toBe(true);
+    expect(limb.condition).toBe("working");
+    expect(limb.modificationHistory).toHaveLength(1);
+  });
+
+  it("applies customization costs", () => {
+    const catalogItem = createTestCatalogItem();
+
+    const limb = createCyberlimb(catalogItem, "left-arm", "standard", {
+      strengthCustomization: 2,
+      agilityCustomization: 1,
+    });
+
+    expect(limb.customStrength).toBe(2);
+    expect(limb.customAgility).toBe(1);
+    // Base cost 15000 + (2 + 1) * 5000 = 30000
+    expect(limb.cost).toBe(30000);
+    // Base avail 4 + (2 + 1) * 1 = 7
+    expect(limb.availability).toBe(7);
   });
 
   it("applies grade multipliers", () => {
-    const catalogItem: CyberwareCatalogItem = {
-      id: "cyberarm",
-      name: "Cyberarm",
-      category: "cyberlimb",
-      essenceCost: 1.0,
-      cost: 15000,
-      availability: 4,
-      restricted: false,
-      forbidden: false,
-      description: "",
-    } as CyberwareCatalogItem;
-    const char = createTestCharacter();
+    const catalogItem = createTestCatalogItem();
 
-    const limb = createCyberlimb(catalogItem, "alpha", char);
+    const limb = createCyberlimb(catalogItem, "left-arm", "alpha");
 
     expect(limb.essenceCost).toBe(0.8); // 1.0 * 0.8
     expect(limb.cost).toBe(30000); // 15000 * 2.0 (alpha grade costs double)
   });
+});
 
-  it("derives capacity if not specified", () => {
-    const catalogItem: CyberwareCatalogItem = {
-      id: "cyberleg",
-      name: "Cyberleg",
-      category: "cyberlimb",
-      essenceCost: 1.0,
-      cost: 15000,
-      availability: 4,
-      restricted: false,
-      forbidden: false,
-      description: "",
-      // No capacity specified
-    } as CyberwareCatalogItem;
+describe("calculateCyberlimbCosts", () => {
+  it("calculates all costs correctly", () => {
+    const catalogItem = createTestCatalogItem();
+
+    const costs = calculateCyberlimbCosts(catalogItem, "standard", {
+      strengthCustomization: 2,
+      agilityCustomization: 1,
+    });
+
+    expect(costs.essenceCost).toBe(1.0);
+    expect(costs.nuyenCost).toBe(30000); // 15000 base + 15000 customization
+    expect(costs.availability).toBe(7); // 4 base + 3 customization
+    expect(costs.breakdown.baseCost).toBe(15000);
+    expect(costs.breakdown.customizationCost).toBe(15000);
+  });
+});
+
+describe("validateCyberlimbInstallation", () => {
+  it("accepts valid installation", () => {
     const char = createTestCharacter();
+    const catalogItem = createTestCatalogItem();
 
-    const limb = createCyberlimb(catalogItem, "standard", char);
+    const result = validateCyberlimbInstallation(
+      char,
+      catalogItem,
+      "left-arm",
+      "standard"
+    );
 
-    expect(limb.capacity).toBe(20); // Derived from "cyberleg"
+    expect(result.valid).toBe(true);
+  });
+
+  it("rejects installation at invalid location", () => {
+    const char = createTestCharacter();
+    const catalogItem = createTestCatalogItem();
+
+    const result = validateCyberlimbInstallation(
+      char,
+      catalogItem,
+      "left-leg", // Invalid for arm
+      "standard"
+    );
+
+    expect(result.valid).toBe(false);
+    expect(result.error).toContain("cannot be installed");
+  });
+
+  it("rejects installation blocked by existing limb", () => {
+    const existingArm = createTestCyberlimb({
+      location: "left-arm",
+      limbType: "full-arm",
+    });
+    const char = createTestCharacter({ cyberlimbs: [existingArm] });
+
+    // Try to install a hand where full arm exists
+    const handCatalog: CyberlimbCatalogItem = {
+      id: "cyberhand",
+      name: "Cyberhand",
+      category: "cyberlimb",
+      essenceCost: 0.25,
+      cost: 4000,
+      availability: 4,
+      description: "A cyberhand",
+      capacity: 4,
+      limbType: "hand",
+      appearance: "obvious",
+      baseStrength: 3,
+      baseAgility: 3,
+      physicalCMBonus: 0,
+    };
+
+    const result = validateCyberlimbInstallation(
+      char,
+      handCatalog,
+      "left-hand",
+      "standard"
+    );
+
+    expect(result.valid).toBe(false);
+    expect(result.error).toContain("already exists");
   });
 });
 
 // =============================================================================
-// SUMMARY
+// UTILITY TESTS
 // =============================================================================
 
 describe("getCyberlimbSummary", () => {
@@ -818,22 +944,71 @@ describe("getCyberlimbSummary", () => {
     const limb = createTestCyberlimb({
       name: "Obvious Cyberarm",
       grade: "alpha",
-      limbStrength: 5,
-      limbAgility: 4,
-      capacity: 15,
+      location: "left-arm",
+      customStrength: 2,
+      customAgility: 1,
+      baseCapacity: 15,
       enhancements: [
-        { catalogId: "a", name: "A", category: "cyberlimb-enhancement", grade: "standard", baseEssenceCost: 0, essenceCost: 0, cost: 1000, availability: 4, capacityUsed: 3 } as CyberwareItem,
+        {
+          id: "enh-1",
+          catalogId: "enhanced-strength",
+          name: "Enhanced Strength",
+          enhancementType: "strength",
+          rating: 3,
+          capacityUsed: 3,
+          cost: 19500,
+          availability: 18,
+        },
       ],
-      strengthCustomization: 2,
-      agilityCustomization: 1,
     });
 
     const summary = getCyberlimbSummary(limb);
 
     expect(summary).toContain("Obvious Cyberarm");
     expect(summary).toContain("alpha");
-    expect(summary).toContain("STR 5");
-    expect(summary).toContain("AGI 4");
+    expect(summary).toContain("left-arm");
+    expect(summary).toContain("STR 8"); // 3 base + 2 custom + 3 enhancement
+    expect(summary).toContain("AGI 4"); // 3 base + 1 custom
     expect(summary).toContain("1 enhancement");
+  });
+});
+
+describe("toggleCyberlimbWireless", () => {
+  it("toggles wireless state for limb and contents", () => {
+    const limb = createTestCyberlimb({
+      wirelessEnabled: true,
+      enhancements: [
+        {
+          id: "enh-1",
+          catalogId: "enhanced-agility",
+          name: "Enhanced Agility",
+          enhancementType: "agility",
+          rating: 2,
+          capacityUsed: 2,
+          cost: 13000,
+          availability: 12,
+          wirelessEnabled: true,
+        },
+      ],
+      accessories: [
+        {
+          id: "acc-1",
+          catalogId: "gyromount",
+          name: "Gyromount",
+          capacityUsed: 6,
+          cost: 6000,
+          availability: 8,
+          wirelessEnabled: true,
+        },
+      ],
+    });
+
+    const result = toggleCyberlimbWireless(limb, false);
+
+    expect(result.wirelessEnabled).toBe(false);
+    expect(result.enhancements[0].wirelessEnabled).toBe(false);
+    expect(result.accessories[0].wirelessEnabled).toBe(false);
+    expect(result.modificationHistory).toHaveLength(1);
+    expect(result.modificationHistory[0].action).toBe("wireless_toggled");
   });
 });

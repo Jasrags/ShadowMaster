@@ -1,84 +1,70 @@
 /**
- * Cyberlimb Capacity and Customization
+ * Cyberlimb Capacity, Customization, and Location Management
  *
- * Manages cyberlimb internal capacity constraints and attribute customization.
- * Cyberlimbs can have STR/AGI customized and can contain enhancements
- * that use capacity slots.
+ * Manages cyberlimb mechanics including:
+ * - Internal capacity constraints for enhancements and accessories
+ * - STR/AGI customization (set at purchase, immutable)
+ * - Location tracking with hierarchical replacement rules
+ * - Physical Condition Monitor bonuses
+ * - Effective attribute calculations (single limb, averaging, weakest)
  *
  * @satisfies Requirement: Cybernetic limbs MUST manage internal capacity constraints
  * @satisfies Decision: Full STR/AGI per-limb customization in Phase 1
+ * @satisfies ADR-010: Wireless state, device condition
+ * @see docs/rules/5e/game-mechanics/cyberlimbs.md
+ * @see docs/capabilities/character.augmentation-systems.md
  */
 
-import type { CyberwareItem, CyberwareGrade, Character } from "@/lib/types/character";
-import type { CyberwareCatalogItem } from "@/lib/types/edition";
+import type { Character, CyberwareGrade } from "@/lib/types/character";
+import type { CyberwareCatalogItem, CyberlimbCatalogItem } from "@/lib/types/edition";
+import type {
+  CyberlimbItem,
+  CyberlimbLocation,
+  CyberlimbType,
+  CyberlimbAppearance,
+  CyberlimbEnhancement,
+  CyberlimbAccessory,
+  CyberlimbModificationEntry,
+} from "@/lib/types/cyberlimb";
+import {
+  LIMB_HIERARCHY,
+  LIMB_CM_BONUS,
+  LOCATION_SIDE,
+  LOCATION_LIMB_TYPE,
+  LIMB_TYPE_LOCATIONS,
+  getCyberlimbStrength as getStrengthFromType,
+  getCyberlimbAgility as getAgilityFromType,
+  getCyberlimbAvailableCapacity,
+  calculateCyberlimbCapacityUsed,
+  wouldReplaceExisting,
+  isBlockedByExisting,
+  getAffectedLocations,
+} from "@/lib/types/cyberlimb";
 import { roundEssence } from "./essence";
-import { getCyberwareGradeMultiplier, applyGradeToCost } from "./grades";
+import { getCyberwareGradeMultiplier, applyGradeToCost, applyGradeToAvailability } from "./grades";
 
 // =============================================================================
 // CONSTANTS
 // =============================================================================
 
-/** Base capacity for standard cyberlimbs */
-const BASE_CYBERLIMB_CAPACITY: Record<string, number> = {
-  "cyberarm": 15,
-  "cyberleg": 20,
-  "cyberhand": 4,
-  "cyberfoot": 4,
-  "cybertorso": 10,
-  "cyberskull": 4,
-};
+/** Cost per point of attribute customization (above base 3) */
+const CUSTOMIZATION_COST_PER_POINT = 5000;
 
-/** Capacity cost per +1 to STR or AGI */
-const CUSTOMIZATION_CAPACITY_COST = 1;
+/** Availability increase per point of customization */
+const CUSTOMIZATION_AVAILABILITY_PER_POINT = 1;
 
-/** Default attributes for a cyberlimb before customization */
+/** Default attributes for all cyberlimbs before customization */
 const DEFAULT_CYBERLIMB_ATTRIBUTES = {
   strength: 3,
   agility: 3,
-};
+} as const;
 
-/** Maximum attribute bonus from customization (racial max + this) */
-const MAX_CUSTOMIZATION_BONUS = 3;
+/** Maximum enhancement rating for STR/AGI/Armor enhancements */
+const MAX_ENHANCEMENT_RATING = 3;
 
 // =============================================================================
 // INTERFACES
 // =============================================================================
-
-/**
- * Cyberlimb attribute customization state
- */
-export interface CyberlimbCustomization {
-  /** Current STR value for this limb */
-  strength: number;
-  /** Current AGI value for this limb */
-  agility: number;
-  /** Character's natural STR (starting point) */
-  baseStrength: number;
-  /** Character's natural AGI (starting point) */
-  baseAgility: number;
-  /** Additional STR purchased (costs capacity) */
-  strengthBonus: number;
-  /** Additional AGI purchased (costs capacity) */
-  agilityBonus: number;
-  /** Maximum allowed STR (racial max + 3) */
-  maxStrength: number;
-  /** Maximum allowed AGI (racial max + 3) */
-  maxAgility: number;
-}
-
-/**
- * Breakdown of how capacity is used
- */
-export interface CyberlimbCapacityBreakdown {
-  /** Total capacity available */
-  totalCapacity: number;
-  /** Capacity used by installed enhancements */
-  usedByEnhancements: number;
-  /** Capacity used by attribute customization (1 per +1 STR or AGI) */
-  usedByCustomization: number;
-  /** Remaining available capacity */
-  remainingCapacity: number;
-}
 
 /**
  * Validation result for cyberlimb operations
@@ -90,114 +76,295 @@ export interface CyberlimbValidationResult {
 }
 
 /**
- * Enhanced cyberware item with cyberlimb-specific fields
+ * Breakdown of how capacity is used in a cyberlimb
  */
-export interface CyberlimbItem extends CyberwareItem {
-  /** Cyberlimb STR value */
-  limbStrength?: number;
-  /** Cyberlimb AGI value */
-  limbAgility?: number;
-  /** Customization bonus to STR (above base 3) */
+export interface CyberlimbCapacityBreakdown {
+  /** Total capacity available */
+  totalCapacity: number;
+  /** Capacity used by enhancements */
+  usedByEnhancements: number;
+  /** Capacity used by accessories */
+  usedByAccessories: number;
+  /** Capacity used by weapons */
+  usedByWeapons: number;
+  /** Remaining available capacity */
+  remainingCapacity: number;
+}
+
+/**
+ * Customization options when creating a cyberlimb
+ */
+export interface CyberlimbCustomizationOptions {
+  /** STR customization above base 3 (0 to racial max - 3) */
   strengthCustomization?: number;
-  /** Customization bonus to AGI (above base 3) */
+  /** AGI customization above base 3 (0 to racial max - 3) */
   agilityCustomization?: number;
 }
 
-// =============================================================================
-// CAPACITY FUNCTIONS
-// =============================================================================
-
 /**
- * Check if an item is a cyberlimb
+ * Result of a location conflict check
  */
-export function isCyberlimb(item: CyberwareItem | CyberwareCatalogItem): boolean {
-  const category = item.category;
-  return category === "cyberlimb";
+export interface LocationConflictResult {
+  hasConflict: boolean;
+  /** Existing limbs that would be replaced (with user confirmation) */
+  limbsToReplace: CyberlimbItem[];
+  /** Existing limb that blocks installation (higher-level limb exists) */
+  blockingLimb?: CyberlimbItem;
+  error?: string;
 }
 
 /**
- * Get the base capacity for a cyberlimb type
- *
- * @param limbType - The type of cyberlimb (e.g., "cyberarm", "cyberleg")
- * @returns Base capacity for that limb type
+ * Result of installing a cyberlimb
  */
-export function getBaseCyberlimbCapacity(limbType: string): number {
-  // Normalize the limb type
-  const normalized = limbType.toLowerCase().replace(/[-_\s]/g, "");
+export interface CyberlimbInstallResult {
+  success: boolean;
+  limb?: CyberlimbItem;
+  removedLimbs?: CyberlimbItem[];
+  error?: string;
+}
 
-  for (const [key, capacity] of Object.entries(BASE_CYBERLIMB_CAPACITY)) {
-    if (normalized.includes(key.replace("cyber", ""))) {
-      return capacity;
+// =============================================================================
+// TYPE GUARDS
+// =============================================================================
+
+/**
+ * Check if a catalog item is a cyberlimb
+ */
+export function isCyberlimbCatalogItem(
+  item: CyberwareCatalogItem
+): item is CyberlimbCatalogItem {
+  return item.category === "cyberlimb" && "limbType" in item;
+}
+
+/**
+ * Check if a cyberware item is a cyberlimb (legacy compatibility)
+ * @deprecated Use isCyberlimb from @/lib/types/cyberlimb instead
+ */
+export function isCyberlimb(item: { category: string }): boolean {
+  return item.category === "cyberlimb";
+}
+
+// =============================================================================
+// LOCATION & HIERARCHY VALIDATION
+// =============================================================================
+
+/**
+ * Check for location conflicts when installing a new cyberlimb
+ *
+ * @param character - The character
+ * @param location - Target installation location
+ * @param limbType - Type of limb being installed
+ * @returns Conflict information
+ */
+export function checkLocationConflicts(
+  character: Partial<Character>,
+  location: CyberlimbLocation,
+  limbType: CyberlimbType
+): LocationConflictResult {
+  const existingLimbs = character.cyberlimbs ?? [];
+  const limbsToReplace: CyberlimbItem[] = [];
+  let blockingLimb: CyberlimbItem | undefined;
+
+  // Get the side of the target location
+  const targetSide = LOCATION_SIDE[location];
+
+  for (const existing of existingLimbs) {
+    const existingSide = LOCATION_SIDE[existing.location];
+
+    // Only check limbs on the same side (or center for torso/skull)
+    if (existingSide !== targetSide && existingSide !== "center" && targetSide !== "center") {
+      continue;
+    }
+
+    // Check if the new limb would replace the existing one
+    if (wouldReplaceExisting(limbType, existing.limbType)) {
+      limbsToReplace.push(existing);
+    }
+
+    // Check if the existing limb blocks the new one
+    if (isBlockedByExisting(limbType, existing.limbType)) {
+      // Only block if on the same side
+      if (existingSide === targetSide || location === existing.location) {
+        blockingLimb = existing;
+      }
+    }
+
+    // Check for exact location match (can't have two limbs in same location)
+    if (existing.location === location) {
+      // If same type, this is a replacement scenario handled above
+      // If different type at same location, block
+      if (existing.limbType !== limbType && !wouldReplaceExisting(limbType, existing.limbType)) {
+        blockingLimb = existing;
+      }
     }
   }
 
-  // Default to arm capacity if unknown
-  return BASE_CYBERLIMB_CAPACITY["cyberarm"];
-}
-
-/**
- * Calculate total capacity of a cyberlimb
- *
- * @param limb - The installed cyberlimb
- * @returns Total capacity
- */
-export function calculateCyberlimbCapacity(limb: CyberwareItem): number {
-  // If capacity is explicitly set, use it
-  if (limb.capacity !== undefined && limb.capacity > 0) {
-    return limb.capacity;
+  if (blockingLimb) {
+    return {
+      hasConflict: true,
+      limbsToReplace: [],
+      blockingLimb,
+      error: `Cannot install ${limbType} at ${location}: ${blockingLimb.name} already exists at ${blockingLimb.location}. Remove the existing ${blockingLimb.limbType} first.`,
+    };
   }
 
-  // Otherwise derive from limb name/catalogId
-  return getBaseCyberlimbCapacity(limb.catalogId || limb.name);
+  return {
+    hasConflict: limbsToReplace.length > 0,
+    limbsToReplace,
+  };
 }
 
 /**
- * Calculate capacity used by installed enhancements
+ * Validate that a location is valid for a limb type
  *
- * @param limb - The cyberlimb to check
- * @returns Capacity used by enhancements
+ * @param location - Target location
+ * @param limbType - Type of limb
+ * @returns Validation result
  */
-export function calculateEnhancementCapacityUsed(limb: CyberwareItem): number {
-  if (!limb.enhancements || limb.enhancements.length === 0) {
-    return 0;
+export function validateLocationForLimbType(
+  location: CyberlimbLocation,
+  limbType: CyberlimbType
+): CyberlimbValidationResult {
+  const validLocations = LIMB_TYPE_LOCATIONS[limbType];
+
+  if (!validLocations.includes(location)) {
+    return {
+      valid: false,
+      error: `${limbType} cannot be installed at ${location}. Valid locations: ${validLocations.join(", ")}`,
+      details: { limbType, location, validLocations },
+    };
   }
 
-  return limb.enhancements.reduce((total, enhancement) => {
-    return total + (enhancement.capacityUsed ?? enhancement.baseEssenceCost ?? 1);
-  }, 0);
+  return { valid: true };
 }
 
+// =============================================================================
+// CUSTOMIZATION VALIDATION
+// =============================================================================
+
 /**
- * Calculate capacity used by attribute customization
+ * Get the maximum customization allowed for a character based on metatype
  *
- * @param limb - The cyberlimb to check
- * @returns Capacity used by customization
+ * @param character - The character
+ * @param attribute - "strength" or "agility"
+ * @returns Maximum customization points (racial max - 3)
  */
-export function calculateCustomizationCapacityCost(limb: CyberlimbItem): number {
-  const strBonus = limb.strengthCustomization ?? 0;
-  const agiBonus = limb.agilityCustomization ?? 0;
+export function getMaxCustomization(
+  character: Partial<Character>,
+  attribute: "strength" | "agility"
+): number {
+  // TODO: Get actual racial maximums from metatype data
+  // For now, use defaults (6 for humans = max custom of 3)
+  const racialMaximums: Record<string, Record<string, number>> = {
+    human: { strength: 6, agility: 6 },
+    elf: { strength: 6, agility: 7 },
+    dwarf: { strength: 8, agility: 6 },
+    ork: { strength: 8, agility: 6 },
+    troll: { strength: 10, agility: 5 },
+  };
 
-  return (strBonus + agiBonus) * CUSTOMIZATION_CAPACITY_COST;
+  const metatype = character.metatype?.toLowerCase() ?? "human";
+  const maxAttr = racialMaximums[metatype]?.[attribute] ?? 6;
+
+  return maxAttr - DEFAULT_CYBERLIMB_ATTRIBUTES[attribute];
 }
 
 /**
- * Get complete capacity breakdown for a cyberlimb
+ * Validate customization values for a cyberlimb
+ *
+ * @param character - The character
+ * @param customization - Customization options
+ * @returns Validation result
+ */
+export function validateCustomization(
+  character: Partial<Character>,
+  customization: CyberlimbCustomizationOptions
+): CyberlimbValidationResult {
+  const strCustom = customization.strengthCustomization ?? 0;
+  const agiCustom = customization.agilityCustomization ?? 0;
+
+  if (strCustom < 0 || agiCustom < 0) {
+    return {
+      valid: false,
+      error: "Customization cannot be negative.",
+    };
+  }
+
+  const maxStr = getMaxCustomization(character, "strength");
+  const maxAgi = getMaxCustomization(character, "agility");
+
+  if (strCustom > maxStr) {
+    return {
+      valid: false,
+      error: `STR customization ${strCustom} exceeds maximum of ${maxStr} for ${character.metatype ?? "human"}.`,
+      details: { strengthCustomization: strCustom, maxAllowed: maxStr },
+    };
+  }
+
+  if (agiCustom > maxAgi) {
+    return {
+      valid: false,
+      error: `AGI customization ${agiCustom} exceeds maximum of ${maxAgi} for ${character.metatype ?? "human"}.`,
+      details: { agilityCustomization: agiCustom, maxAllowed: maxAgi },
+    };
+  }
+
+  return { valid: true };
+}
+
+// =============================================================================
+// CAPACITY MANAGEMENT
+// =============================================================================
+
+/**
+ * Get detailed capacity breakdown for a cyberlimb
  *
  * @param limb - The cyberlimb to analyze
  * @returns Detailed capacity breakdown
  */
-export function calculateUsedCapacity(limb: CyberlimbItem): CyberlimbCapacityBreakdown {
-  const totalCapacity = calculateCyberlimbCapacity(limb);
-  const usedByEnhancements = calculateEnhancementCapacityUsed(limb);
-  const usedByCustomization = calculateCustomizationCapacityCost(limb);
-  const remainingCapacity = Math.max(0, totalCapacity - usedByEnhancements - usedByCustomization);
+export function getCapacityBreakdown(limb: CyberlimbItem): CyberlimbCapacityBreakdown {
+  const usedByEnhancements = limb.enhancements.reduce(
+    (sum, e) => sum + e.capacityUsed,
+    0
+  );
+  const usedByAccessories = limb.accessories.reduce(
+    (sum, a) => sum + a.capacityUsed,
+    0
+  );
+  const usedByWeapons = limb.weapons.reduce((sum, w) => sum + w.capacityUsed, 0);
+  const totalUsed = usedByEnhancements + usedByAccessories + usedByWeapons;
 
   return {
-    totalCapacity,
+    totalCapacity: limb.baseCapacity,
     usedByEnhancements,
-    usedByCustomization,
-    remainingCapacity,
+    usedByAccessories,
+    usedByWeapons,
+    remainingCapacity: Math.max(0, limb.baseCapacity - totalUsed),
   };
+}
+
+/**
+ * Validate that an item fits in the remaining capacity
+ *
+ * @param limb - The cyberlimb
+ * @param capacityCost - Capacity required
+ * @returns Validation result
+ */
+export function validateCapacityAvailable(
+  limb: CyberlimbItem,
+  capacityCost: number
+): CyberlimbValidationResult {
+  const breakdown = getCapacityBreakdown(limb);
+
+  if (capacityCost > breakdown.remainingCapacity) {
+    return {
+      valid: false,
+      error: `Requires ${capacityCost} capacity but only ${breakdown.remainingCapacity} available.`,
+      details: { required: capacityCost, available: breakdown.remainingCapacity, breakdown },
+    };
+  }
+
+  return { valid: true };
 }
 
 // =============================================================================
@@ -205,343 +372,460 @@ export function calculateUsedCapacity(limb: CyberlimbItem): CyberlimbCapacityBre
 // =============================================================================
 
 /**
- * Validate that an enhancement fits in a cyberlimb
+ * Validate that an enhancement can be installed
  *
  * @param limb - The cyberlimb
- * @param enhancement - The enhancement to install
- * @param rating - Optional rating for rated enhancements
+ * @param enhancement - The enhancement catalog item
+ * @param rating - Rating for the enhancement
  * @returns Validation result
  */
-export function validateEnhancementFits(
+export function validateEnhancementInstall(
   limb: CyberlimbItem,
   enhancement: CyberwareCatalogItem,
-  rating?: number
+  rating: number
 ): CyberlimbValidationResult {
-  // Check if it's an enhancement type
-  if (enhancement.category !== "cyberlimb-enhancement" && enhancement.category !== "cyberlimb-accessory") {
+  // Check category
+  if (enhancement.category !== "cyberlimb-enhancement") {
     return {
       valid: false,
-      error: `${enhancement.name} is not a cyberlimb enhancement or accessory.`,
-      details: { category: enhancement.category },
+      error: `${enhancement.name} is not a cyberlimb enhancement.`,
     };
   }
 
-  // Calculate capacity cost
-  let capacityCost = enhancement.capacityCost ?? 1;
-  if (rating && (enhancement.ratingSpec?.capacityCostScaling?.perRating || enhancement.capacityPerRating)) {
-    capacityCost = capacityCost * rating;
-  }
-
-  // Check available capacity
-  const breakdown = calculateUsedCapacity(limb);
-
-  if (capacityCost > breakdown.remainingCapacity) {
+  // Check rating
+  const maxRating = enhancement.maxRating ?? MAX_ENHANCEMENT_RATING;
+  if (rating < 1 || rating > maxRating) {
     return {
       valid: false,
-      error: `${enhancement.name} requires ${capacityCost} capacity but only ${breakdown.remainingCapacity} is available.`,
-      details: {
-        required: capacityCost,
-        available: breakdown.remainingCapacity,
-        breakdown,
-      },
+      error: `Rating ${rating} is invalid. Valid range: 1-${maxRating}.`,
     };
   }
 
-  return { valid: true };
+  // Check for duplicate enhancement type
+  const enhancementType = (enhancement as { enhancementType?: string }).enhancementType;
+  if (enhancementType) {
+    const existing = limb.enhancements.find(
+      (e) => e.enhancementType === enhancementType
+    );
+    if (existing) {
+      return {
+        valid: false,
+        error: `This limb already has a ${enhancementType} enhancement (${existing.name}). Only one per type allowed.`,
+        details: { existingEnhancement: existing.name, type: enhancementType },
+      };
+    }
+  }
+
+  // Check capacity
+  const capacityCost = (enhancement.capacityCost ?? 1) * rating;
+  return validateCapacityAvailable(limb, capacityCost);
 }
 
 /**
  * Add an enhancement to a cyberlimb
  *
- * @param limb - The cyberlimb to modify
+ * @param limb - The cyberlimb
  * @param enhancement - The enhancement catalog item
- * @param grade - Grade of the enhancement
- * @param rating - Optional rating
- * @returns Updated cyberlimb with enhancement installed
+ * @param rating - Rating for the enhancement
+ * @param grade - Grade (for cost calculation)
+ * @returns Updated cyberlimb
  */
-export function addEnhancementToLimb(
+export function addEnhancement(
   limb: CyberlimbItem,
   enhancement: CyberwareCatalogItem,
-  grade: CyberwareGrade = "standard",
-  rating?: number
+  rating: number,
+  grade: CyberwareGrade = "standard"
 ): CyberlimbItem {
-  // Calculate costs
-  let capacityCost = enhancement.capacityCost ?? 1;
-  if (rating && (enhancement.ratingSpec?.capacityCostScaling?.perRating || enhancement.capacityPerRating)) {
-    capacityCost = capacityCost * rating;
-  }
+  const capacityCost = (enhancement.capacityCost ?? 1) * rating;
+  const cost = applyGradeToCost(enhancement.cost * rating, grade, true);
+  const availability = applyGradeToAvailability(
+    (enhancement.availability ?? 0) * rating,
+    grade,
+    true
+  );
 
-  let essenceCost = enhancement.essenceCost;
-  if (rating && (enhancement.ratingSpec?.essenceScaling?.perRating || enhancement.essencePerRating)) {
-    essenceCost = essenceCost * rating;
-  }
-  essenceCost = roundEssence(essenceCost * getCyberwareGradeMultiplier(grade));
-
-  const cost = applyGradeToCost(enhancement.cost * (rating ?? 1), grade, true);
-
-  // Create the installed enhancement
-  const installedEnhancement: CyberwareItem = {
+  const newEnhancement: CyberlimbEnhancement = {
+    id: `${enhancement.id}-${Date.now()}`,
     catalogId: enhancement.id,
     name: enhancement.name,
-    category: enhancement.category,
-    grade,
-    baseEssenceCost: enhancement.essenceCost,
-    essenceCost,
+    enhancementType: (enhancement as { enhancementType?: string }).enhancementType as
+      | "agility"
+      | "strength"
+      | "armor",
     rating,
     capacityUsed: capacityCost,
     cost,
-    availability: enhancement.availability,
+    availability,
     legality: enhancement.legality,
-    attributeBonuses: enhancement.attributeBonuses,
-    initiativeDiceBonus: enhancement.initiativeDiceBonus,
-    wirelessBonus: enhancement.wirelessBonus,
-    notes: enhancement.description,
+    wirelessEnabled: limb.wirelessEnabled,
+    wirelessEffects: enhancement.wirelessEffects,
   };
 
-  // Add to limb
-  const updatedEnhancements = [...(limb.enhancements ?? []), installedEnhancement];
-  const newCapacityUsed = (limb.capacityUsed ?? 0) + capacityCost;
+  const modEntry: CyberlimbModificationEntry = {
+    id: `mod-${Date.now()}`,
+    timestamp: new Date().toISOString(),
+    action: "enhancement_added",
+    targetId: newEnhancement.id,
+    targetName: enhancement.name,
+    newValue: { rating, cost },
+  };
 
   return {
     ...limb,
-    enhancements: updatedEnhancements,
-    capacityUsed: newCapacityUsed,
+    enhancements: [...limb.enhancements, newEnhancement],
+    capacityUsed: limb.capacityUsed + capacityCost,
+    modificationHistory: [...limb.modificationHistory, modEntry],
   };
 }
 
 /**
  * Remove an enhancement from a cyberlimb
  *
- * @param limb - The cyberlimb to modify
- * @param enhancementId - ID of the enhancement to remove (catalogId or id)
- * @returns Updated cyberlimb with enhancement removed
+ * @param limb - The cyberlimb
+ * @param enhancementId - ID of enhancement to remove
+ * @returns Updated cyberlimb
  */
-export function removeEnhancementFromLimb(
+export function removeEnhancement(
   limb: CyberlimbItem,
   enhancementId: string
 ): CyberlimbItem {
-  const enhancements = limb.enhancements ?? [];
-  const enhancementIndex = enhancements.findIndex(
-    e => e.catalogId === enhancementId || e.id === enhancementId
-  );
-
-  if (enhancementIndex === -1) {
-    return limb; // Enhancement not found, return unchanged
+  const enhancement = limb.enhancements.find((e) => e.id === enhancementId);
+  if (!enhancement) {
+    return limb;
   }
 
-  const removedEnhancement = enhancements[enhancementIndex];
-  const updatedEnhancements = enhancements.filter((_, i) => i !== enhancementIndex);
-  const newCapacityUsed = Math.max(0, (limb.capacityUsed ?? 0) - (removedEnhancement.capacityUsed ?? 0));
+  const modEntry: CyberlimbModificationEntry = {
+    id: `mod-${Date.now()}`,
+    timestamp: new Date().toISOString(),
+    action: "enhancement_removed",
+    targetId: enhancementId,
+    targetName: enhancement.name,
+    previousValue: { rating: enhancement.rating },
+  };
 
   return {
     ...limb,
-    enhancements: updatedEnhancements,
-    capacityUsed: newCapacityUsed,
+    enhancements: limb.enhancements.filter((e) => e.id !== enhancementId),
+    capacityUsed: Math.max(0, limb.capacityUsed - enhancement.capacityUsed),
+    modificationHistory: [...limb.modificationHistory, modEntry],
   };
 }
 
 // =============================================================================
-// ATTRIBUTE CUSTOMIZATION
+// ACCESSORY MANAGEMENT
 // =============================================================================
 
 /**
- * Get the customization limits for a cyberlimb based on character
+ * Validate that an accessory can be installed
  *
  * @param limb - The cyberlimb
- * @param character - The character (for racial limits)
- * @returns Complete customization state and limits
- */
-export function getCyberlimbCustomizationLimits(
-  limb: CyberlimbItem,
-  character: Partial<Character>
-): CyberlimbCustomization {
-  // Get character's natural attributes
-  const baseStrength = character.attributes?.["bod"] ?? 3; // Use BOD as proxy for STR base
-  const baseAgility = character.attributes?.["agi"] ?? 3;
-
-  // Get racial maximums (typically 6 for humans)
-  // In a full implementation, this would come from metatype data
-  const racialMaxStr = 6; // TODO: Get from metatype
-  const racialMaxAgi = 6;
-
-  // Calculate maximums (racial max + 3)
-  const maxStrength = racialMaxStr + MAX_CUSTOMIZATION_BONUS;
-  const maxAgility = racialMaxAgi + MAX_CUSTOMIZATION_BONUS;
-
-  // Get current customization
-  const strengthBonus = limb.strengthCustomization ?? 0;
-  const agilityBonus = limb.agilityCustomization ?? 0;
-
-  // Calculate current values
-  const strength = DEFAULT_CYBERLIMB_ATTRIBUTES.strength + strengthBonus;
-  const agility = DEFAULT_CYBERLIMB_ATTRIBUTES.agility + agilityBonus;
-
-  return {
-    strength,
-    agility,
-    baseStrength,
-    baseAgility,
-    strengthBonus,
-    agilityBonus,
-    maxStrength,
-    maxAgility,
-  };
-}
-
-/**
- * Validate a cyberlimb attribute customization
- *
- * @param limb - The cyberlimb
- * @param character - The character
+ * @param accessory - The accessory catalog item
+ * @param character - The character (for pair validation)
  * @returns Validation result
  */
-export function validateCyberlimbCustomization(
+export function validateAccessoryInstall(
   limb: CyberlimbItem,
-  character: Partial<Character>
+  accessory: CyberwareCatalogItem,
+  character?: Partial<Character>
 ): CyberlimbValidationResult {
-  const limits = getCyberlimbCustomizationLimits(limb, character);
-  const breakdown = calculateUsedCapacity(limb);
-
-  // Check STR within limits
-  if (limits.strength > limits.maxStrength) {
+  // Check category
+  if (accessory.category !== "cyberlimb-accessory") {
     return {
       valid: false,
-      error: `Cyberlimb STR ${limits.strength} exceeds maximum of ${limits.maxStrength}.`,
-      details: { strength: limits.strength, maxStrength: limits.maxStrength },
+      error: `${accessory.name} is not a cyberlimb accessory.`,
     };
   }
 
-  // Check AGI within limits
-  if (limits.agility > limits.maxAgility) {
+  // Check compatible limbs
+  const compatibleLimbs = (accessory as { compatibleLimbs?: string[] }).compatibleLimbs;
+  if (compatibleLimbs && !compatibleLimbs.includes(limb.limbType)) {
     return {
       valid: false,
-      error: `Cyberlimb AGI ${limits.agility} exceeds maximum of ${limits.maxAgility}.`,
-      details: { agility: limits.agility, maxAgility: limits.maxAgility },
+      error: `${accessory.name} is not compatible with ${limb.limbType}. Compatible: ${compatibleLimbs.join(", ")}`,
     };
   }
 
-  // Check capacity for customization
-  if (breakdown.usedByCustomization > breakdown.totalCapacity - breakdown.usedByEnhancements) {
-    return {
-      valid: false,
-      error: `Customization requires ${breakdown.usedByCustomization} capacity but only ${breakdown.totalCapacity - breakdown.usedByEnhancements} is available after enhancements.`,
-      details: { breakdown },
-    };
+  // Check pair requirement (e.g., hydraulic jacks need both legs)
+  const requiresPair = (accessory as { requiresPair?: boolean }).requiresPair;
+  const pairLocation = (accessory as { pairLocation?: string }).pairLocation;
+  if (requiresPair && pairLocation && character) {
+    // This is validated at a higher level when installing
+    // Here we just check if this limb is valid for the pair
+    if (pairLocation === "legs" && !limb.limbType.includes("leg")) {
+      return {
+        valid: false,
+        error: `${accessory.name} requires cybernetic legs.`,
+      };
+    }
   }
 
-  return { valid: true };
+  // Check capacity
+  const rating = (accessory as { hasRating?: boolean }).hasRating ? 1 : undefined;
+  const capacityCost = rating
+    ? (accessory.capacityCost ?? 1) * rating
+    : (accessory.capacityCost ?? 1);
+  return validateCapacityAvailable(limb, capacityCost);
 }
 
 /**
- * Set a cyberlimb attribute value
- *
- * @param limb - The cyberlimb to modify
- * @param attribute - 'strength' or 'agility'
- * @param value - The new value (base is 3)
- * @param character - The character (for validation)
- * @returns Updated cyberlimb or error
- */
-export function setCyberlimbAttribute(
-  limb: CyberlimbItem,
-  attribute: "strength" | "agility",
-  value: number,
-  character: Partial<Character>
-): { success: true; limb: CyberlimbItem } | { success: false; error: string } {
-  // Calculate the bonus needed
-  const bonus = value - DEFAULT_CYBERLIMB_ATTRIBUTES[attribute];
-
-  if (bonus < 0) {
-    return {
-      success: false,
-      error: `Cannot set ${attribute} below base value of ${DEFAULT_CYBERLIMB_ATTRIBUTES[attribute]}.`,
-    };
-  }
-
-  // Create updated limb
-  const updatedLimb: CyberlimbItem = {
-    ...limb,
-    [attribute === "strength" ? "strengthCustomization" : "agilityCustomization"]: bonus,
-    [attribute === "strength" ? "limbStrength" : "limbAgility"]: value,
-  };
-
-  // Validate the change
-  const validation = validateCyberlimbCustomization(updatedLimb, character);
-
-  if (!validation.valid) {
-    return { success: false, error: validation.error ?? "Invalid customization" };
-  }
-
-  return { success: true, limb: updatedLimb };
-}
-
-/**
- * Get the effective attributes for a cyberlimb
+ * Add an accessory to a cyberlimb
  *
  * @param limb - The cyberlimb
- * @returns Current STR and AGI values
+ * @param accessory - The accessory catalog item
+ * @param rating - Optional rating
+ * @returns Updated cyberlimb
  */
-export function getCyberlimbEffectiveAttributes(limb: CyberlimbItem): {
-  strength: number;
-  agility: number;
-} {
+export function addAccessory(
+  limb: CyberlimbItem,
+  accessory: CyberwareCatalogItem,
+  rating?: number
+): CyberlimbItem {
+  const effectiveRating = rating ?? 1;
+  const hasRating = (accessory as { hasRating?: boolean }).hasRating;
+  const capacityCost = hasRating
+    ? (accessory.capacityCost ?? 1) * effectiveRating
+    : (accessory.capacityCost ?? 1);
+  const cost = hasRating
+    ? accessory.cost * effectiveRating
+    : accessory.cost;
+
+  const newAccessory: CyberlimbAccessory = {
+    id: `${accessory.id}-${Date.now()}`,
+    catalogId: accessory.id,
+    name: accessory.name,
+    rating: hasRating ? effectiveRating : undefined,
+    capacityUsed: capacityCost,
+    cost,
+    availability: accessory.availability,
+    legality: accessory.legality,
+    wirelessEnabled: limb.wirelessEnabled,
+    wirelessEffects: accessory.wirelessEffects,
+    wirelessBonus: accessory.wirelessBonus,
+  };
+
+  const modEntry: CyberlimbModificationEntry = {
+    id: `mod-${Date.now()}`,
+    timestamp: new Date().toISOString(),
+    action: "accessory_added",
+    targetId: newAccessory.id,
+    targetName: accessory.name,
+    newValue: { rating: hasRating ? effectiveRating : undefined, cost },
+  };
+
   return {
-    strength: limb.limbStrength ?? DEFAULT_CYBERLIMB_ATTRIBUTES.strength + (limb.strengthCustomization ?? 0),
-    agility: limb.limbAgility ?? DEFAULT_CYBERLIMB_ATTRIBUTES.agility + (limb.agilityCustomization ?? 0),
+    ...limb,
+    accessories: [...limb.accessories, newAccessory],
+    capacityUsed: limb.capacityUsed + capacityCost,
+    modificationHistory: [...limb.modificationHistory, modEntry],
+  };
+}
+
+/**
+ * Remove an accessory from a cyberlimb
+ *
+ * @param limb - The cyberlimb
+ * @param accessoryId - ID of accessory to remove
+ * @returns Updated cyberlimb
+ */
+export function removeAccessory(
+  limb: CyberlimbItem,
+  accessoryId: string
+): CyberlimbItem {
+  const accessory = limb.accessories.find((a) => a.id === accessoryId);
+  if (!accessory) {
+    return limb;
+  }
+
+  const modEntry: CyberlimbModificationEntry = {
+    id: `mod-${Date.now()}`,
+    timestamp: new Date().toISOString(),
+    action: "accessory_removed",
+    targetId: accessoryId,
+    targetName: accessory.name,
+    previousValue: { rating: accessory.rating },
+  };
+
+  return {
+    ...limb,
+    accessories: limb.accessories.filter((a) => a.id !== accessoryId),
+    capacityUsed: Math.max(0, limb.capacityUsed - accessory.capacityUsed),
+    modificationHistory: [...limb.modificationHistory, modEntry],
   };
 }
 
 // =============================================================================
-// CYBERLIMB AVERAGING (SR5 Rules)
+// PHYSICAL CONDITION MONITOR BONUS
 // =============================================================================
 
 /**
- * Calculate average attribute when character has partial cyberlimbs
- * SR5 uses limb averaging for physical actions
+ * Calculate total Physical CM bonus from all installed cyberlimbs
  *
  * @param character - The character
- * @param attribute - 'strength' or 'agility'
- * @returns Average attribute considering all limbs
+ * @returns Total CM bonus (floored)
  */
-export function calculateCyberlimbAverageAttribute(
+export function calculateTotalCMBonus(character: Partial<Character>): number {
+  const cyberlimbs = character.cyberlimbs ?? [];
+
+  const totalBonus = cyberlimbs.reduce((sum, limb) => {
+    return sum + LIMB_CM_BONUS[limb.limbType];
+  }, 0);
+
+  return Math.floor(totalBonus);
+}
+
+/**
+ * Get CM bonus for a specific limb type
+ *
+ * @param limbType - The limb type
+ * @returns CM bonus (1, 0.5, or 0)
+ */
+export function getLimbCMBonus(limbType: CyberlimbType): number {
+  return LIMB_CM_BONUS[limbType];
+}
+
+// =============================================================================
+// EFFECTIVE ATTRIBUTE CALCULATIONS
+// =============================================================================
+
+/**
+ * Get the effective STR of a cyberlimb (base + custom + enhancement)
+ *
+ * @param limb - The cyberlimb
+ * @returns Effective STR
+ */
+export function getCyberlimbStrength(limb: CyberlimbItem): number {
+  return getStrengthFromType(limb);
+}
+
+/**
+ * Get the effective AGI of a cyberlimb (base + custom + enhancement)
+ *
+ * @param limb - The cyberlimb
+ * @returns Effective AGI
+ */
+export function getCyberlimbAgility(limb: CyberlimbItem): number {
+  return getAgilityFromType(limb);
+}
+
+/**
+ * Calculate effective attribute for an action involving cyberlimbs
+ *
+ * SR5 Rules:
+ * - Single limb action: Use limb's attribute
+ * - Multiple limbs (e.g., melee attack): Average all involved limbs + meat
+ * - Coordinated action: Use the weakest limb
+ *
+ * @param character - The character
+ * @param attribute - "strength" or "agility"
+ * @param involvedLimbs - Locations of limbs involved in the action
+ * @param mode - Calculation mode
+ * @returns Effective attribute value
+ */
+export function calculateEffectiveAttribute(
+  character: Partial<Character>,
+  attribute: "strength" | "agility",
+  involvedLimbs: CyberlimbLocation[],
+  mode: "single" | "average" | "weakest" = "average"
+): number {
+  // Get natural attribute
+  const naturalAttr =
+    character.attributes?.[attribute === "strength" ? "str" : "agi"] ??
+    character.attributes?.[attribute === "strength" ? "bod" : "agi"] ??
+    3;
+
+  const cyberlimbs = character.cyberlimbs ?? [];
+  if (cyberlimbs.length === 0) {
+    return naturalAttr;
+  }
+
+  // Find cyberlimbs at the involved locations
+  const involvedCyberlimbs = cyberlimbs.filter((limb) =>
+    involvedLimbs.includes(limb.location)
+  );
+
+  if (involvedCyberlimbs.length === 0) {
+    return naturalAttr;
+  }
+
+  // Get attribute values from involved cyberlimbs
+  const limbValues = involvedCyberlimbs.map((limb) =>
+    attribute === "strength"
+      ? getCyberlimbStrength(limb)
+      : getCyberlimbAgility(limb)
+  );
+
+  switch (mode) {
+    case "single":
+      // Use the first (or only) limb's value
+      return limbValues[0];
+
+    case "weakest":
+      // Use the lowest value among involved limbs
+      return Math.min(...limbValues);
+
+    case "average":
+    default: {
+      // Average all limbs (cyber + meat for uninvolved slots)
+      // For simplicity, average the cyber limbs
+      // Full implementation would weight by limb coverage
+      const sum = limbValues.reduce((a, b) => a + b, 0);
+      return Math.floor(sum / limbValues.length);
+    }
+  }
+}
+
+/**
+ * Calculate average attribute across all limbs (SR5 averaging rule)
+ *
+ * @param character - The character
+ * @param attribute - "strength" or "agility"
+ * @returns Averaged attribute value
+ */
+export function calculateAverageAttribute(
   character: Partial<Character>,
   attribute: "strength" | "agility"
 ): number {
-  const naturalValue = character.attributes?.[attribute === "strength" ? "bod" : "agi"] ?? 3;
+  const naturalAttr =
+    character.attributes?.[attribute === "strength" ? "str" : "agi"] ??
+    character.attributes?.[attribute === "strength" ? "bod" : "agi"] ??
+    3;
 
-  // Get all cyberlimbs
-  const cyberlimbs = (character.cyberware ?? []).filter(isCyberlimb) as CyberlimbItem[];
-
+  const cyberlimbs = character.cyberlimbs ?? [];
   if (cyberlimbs.length === 0) {
-    return naturalValue;
+    return naturalAttr;
   }
 
-  // Count limbs (arms = 2 each, legs = 2 each, hands/feet = 1 each)
-  // Full body = all natural limbs replaced
-  const totalLimbs = 4; // 2 arms + 2 legs for simplicity
+  // Count total limbs (4 for full set: 2 arms + 2 legs)
+  const totalLimbSlots = 4;
   let cyberLimbCount = 0;
   let cyberLimbTotal = 0;
 
   for (const limb of cyberlimbs) {
-    const attrs = getCyberlimbEffectiveAttributes(limb);
-    const limbValue = attribute === "strength" ? attrs.strength : attrs.agility;
+    const limbValue =
+      attribute === "strength"
+        ? getCyberlimbStrength(limb)
+        : getCyberlimbAgility(limb);
 
-    // Count based on limb type
-    const catalogId = limb.catalogId?.toLowerCase() ?? "";
-    if (catalogId.includes("arm") || catalogId.includes("leg")) {
+    // Weight by limb type
+    if (limb.limbType === "full-arm" || limb.limbType === "full-leg") {
       cyberLimbCount += 1;
       cyberLimbTotal += limbValue;
-    } else if (catalogId.includes("hand") || catalogId.includes("foot")) {
+    } else if (limb.limbType === "lower-arm" || limb.limbType === "lower-leg") {
+      cyberLimbCount += 0.75;
+      cyberLimbTotal += limbValue * 0.75;
+    } else if (limb.limbType === "hand" || limb.limbType === "foot") {
       cyberLimbCount += 0.5;
       cyberLimbTotal += limbValue * 0.5;
     }
+    // Torso and skull don't contribute to limb averaging
   }
 
   // Calculate weighted average
-  const naturalLimbCount = Math.max(0, totalLimbs - cyberLimbCount);
-  const naturalTotal = naturalValue * naturalLimbCount;
-  const average = (naturalTotal + cyberLimbTotal) / totalLimbs;
+  const naturalLimbCount = Math.max(0, totalLimbSlots - cyberLimbCount);
+  const naturalTotal = naturalAttr * naturalLimbCount;
+  const average = (naturalTotal + cyberLimbTotal) / totalLimbSlots;
 
-  return Math.round(average * 10) / 10; // Round to 1 decimal
+  return Math.floor(average);
 }
 
 // =============================================================================
@@ -552,50 +836,286 @@ export function calculateCyberlimbAverageAttribute(
  * Create a new cyberlimb from a catalog item
  *
  * @param catalogItem - The cyberlimb catalog item
- * @param grade - The grade to install
- * @param character - The character (for customization limits)
- * @returns A new cyberlimb item
+ * @param location - Installation location
+ * @param grade - Grade to install at
+ * @param customization - Optional customization
+ * @returns New cyberlimb item
  */
 export function createCyberlimb(
-  catalogItem: CyberwareCatalogItem,
+  catalogItem: CyberlimbCatalogItem,
+  location: CyberlimbLocation,
   grade: CyberwareGrade,
-  character: Partial<Character>
+  customization?: CyberlimbCustomizationOptions
 ): CyberlimbItem {
+  const strCustom = customization?.strengthCustomization ?? 0;
+  const agiCustom = customization?.agilityCustomization ?? 0;
+  const customizationCost = (strCustom + agiCustom) * CUSTOMIZATION_COST_PER_POINT;
+
   const gradeMultiplier = getCyberwareGradeMultiplier(grade);
   const essenceCost = roundEssence(catalogItem.essenceCost * gradeMultiplier);
-  const cost = applyGradeToCost(catalogItem.cost, grade, true);
+  const baseCost = applyGradeToCost(catalogItem.cost, grade, true);
+  const totalCost = baseCost + customizationCost;
+
+  const baseAvailability = catalogItem.availability;
+  const customizationAvailability =
+    (strCustom + agiCustom) * CUSTOMIZATION_AVAILABILITY_PER_POINT;
+  const gradeAvailability = applyGradeToAvailability(baseAvailability, grade, true);
+  const totalAvailability = gradeAvailability + customizationAvailability;
+
+  const now = new Date().toISOString();
 
   const limb: CyberlimbItem = {
+    // Base cyberware fields
     catalogId: catalogItem.id,
     name: catalogItem.name,
-    category: catalogItem.category,
+    category: "cyberlimb",
     grade,
     baseEssenceCost: catalogItem.essenceCost,
     essenceCost,
-    cost,
-    availability: catalogItem.availability,
+    cost: totalCost,
+    availability: totalAvailability,
     legality: catalogItem.legality,
-    capacity: catalogItem.capacity ?? getBaseCyberlimbCapacity(catalogItem.id),
+    wirelessBonus: catalogItem.wirelessBonus,
+    wirelessEffects: catalogItem.wirelessEffects,
+    notes: catalogItem.description,
+
+    // Cyberlimb-specific fields
+    location,
+    limbType: catalogItem.limbType,
+    appearance: catalogItem.appearance,
+    baseStrength: 3,
+    baseAgility: 3,
+    customStrength: strCustom,
+    customAgility: agiCustom,
+    baseCapacity: catalogItem.capacity ?? 15,
     capacityUsed: 0,
     enhancements: [],
-    limbStrength: DEFAULT_CYBERLIMB_ATTRIBUTES.strength,
-    limbAgility: DEFAULT_CYBERLIMB_ATTRIBUTES.agility,
-    strengthCustomization: 0,
-    agilityCustomization: 0,
-    wirelessBonus: catalogItem.wirelessBonus,
-    notes: catalogItem.description,
+    accessories: [],
+    weapons: [],
+    wirelessEnabled: true,
+    condition: "working",
+    installedAt: now,
+    modificationHistory: [
+      {
+        id: `mod-${Date.now()}`,
+        timestamp: now,
+        action: "installed",
+        notes: `Installed ${catalogItem.name} at ${location} with ${grade} grade. Customization: STR +${strCustom}, AGI +${agiCustom}`,
+      },
+    ],
   };
 
   return limb;
 }
 
 /**
+ * Calculate installation costs for a cyberlimb
+ *
+ * @param catalogItem - The catalog item
+ * @param grade - Grade to install at
+ * @param customization - Customization options
+ * @returns Cost breakdown
+ */
+export function calculateCyberlimbCosts(
+  catalogItem: CyberlimbCatalogItem,
+  grade: CyberwareGrade,
+  customization?: CyberlimbCustomizationOptions
+): {
+  essenceCost: number;
+  nuyenCost: number;
+  availability: number;
+  breakdown: {
+    baseEssence: number;
+    gradedEssence: number;
+    baseCost: number;
+    gradedCost: number;
+    customizationCost: number;
+    baseAvailability: number;
+    gradedAvailability: number;
+    customizationAvailability: number;
+  };
+} {
+  const strCustom = customization?.strengthCustomization ?? 0;
+  const agiCustom = customization?.agilityCustomization ?? 0;
+  const customizationCost = (strCustom + agiCustom) * CUSTOMIZATION_COST_PER_POINT;
+  const customizationAvailability =
+    (strCustom + agiCustom) * CUSTOMIZATION_AVAILABILITY_PER_POINT;
+
+  const gradeMultiplier = getCyberwareGradeMultiplier(grade);
+  const gradedEssence = roundEssence(catalogItem.essenceCost * gradeMultiplier);
+  const gradedCost = applyGradeToCost(catalogItem.cost, grade, true);
+  const gradedAvailability = applyGradeToAvailability(
+    catalogItem.availability,
+    grade,
+    true
+  );
+
+  return {
+    essenceCost: gradedEssence,
+    nuyenCost: gradedCost + customizationCost,
+    availability: gradedAvailability + customizationAvailability,
+    breakdown: {
+      baseEssence: catalogItem.essenceCost,
+      gradedEssence,
+      baseCost: catalogItem.cost,
+      gradedCost,
+      customizationCost,
+      baseAvailability: catalogItem.availability,
+      gradedAvailability,
+      customizationAvailability,
+    },
+  };
+}
+
+// =============================================================================
+// FULL INSTALLATION VALIDATION
+// =============================================================================
+
+/**
+ * Validate complete cyberlimb installation
+ *
+ * @param character - The character
+ * @param catalogItem - The catalog item
+ * @param location - Installation location
+ * @param grade - Grade to install at
+ * @param customization - Customization options
+ * @param context - Validation context
+ * @returns Validation result
+ */
+export function validateCyberlimbInstallation(
+  character: Partial<Character>,
+  catalogItem: CyberlimbCatalogItem,
+  location: CyberlimbLocation,
+  grade: CyberwareGrade,
+  customization?: CyberlimbCustomizationOptions,
+  context?: { lifecycleStage?: "creation" | "active"; maxAvailability?: number }
+): CyberlimbValidationResult {
+  // 1. Validate location is valid for limb type
+  const locationResult = validateLocationForLimbType(location, catalogItem.limbType);
+  if (!locationResult.valid) {
+    return locationResult;
+  }
+
+  // 2. Check for location conflicts
+  const conflicts = checkLocationConflicts(character, location, catalogItem.limbType);
+  if (conflicts.blockingLimb) {
+    return {
+      valid: false,
+      error: conflicts.error,
+      details: { blockingLimb: conflicts.blockingLimb.name },
+    };
+  }
+
+  // 3. Validate customization
+  if (customization) {
+    const customResult = validateCustomization(character, customization);
+    if (!customResult.valid) {
+      return customResult;
+    }
+  }
+
+  // 4. Calculate costs and check availability at creation
+  const costs = calculateCyberlimbCosts(catalogItem, grade, customization);
+  const maxAvail = context?.maxAvailability ?? 12;
+
+  if (
+    context?.lifecycleStage === "creation" &&
+    costs.availability > maxAvail
+  ) {
+    return {
+      valid: false,
+      error: `Availability ${costs.availability} exceeds maximum of ${maxAvail} at character creation.`,
+      details: { availability: costs.availability, maxAllowed: maxAvail },
+    };
+  }
+
+  // 5. Check essence (would need current essence from character)
+  // This is typically done at a higher level with the full validation engine
+
+  return {
+    valid: true,
+    details: {
+      limbsToReplace: conflicts.limbsToReplace.map((l) => l.name),
+      costs,
+    },
+  };
+}
+
+// =============================================================================
+// UTILITY FUNCTIONS
+// =============================================================================
+
+/**
  * Get a summary of a cyberlimb for display
+ *
+ * @param limb - The cyberlimb
+ * @returns Human-readable summary
  */
 export function getCyberlimbSummary(limb: CyberlimbItem): string {
-  const attrs = getCyberlimbEffectiveAttributes(limb);
-  const capacity = calculateUsedCapacity(limb);
-  const enhancementCount = limb.enhancements?.length ?? 0;
+  const str = getCyberlimbStrength(limb);
+  const agi = getCyberlimbAgility(limb);
+  const breakdown = getCapacityBreakdown(limb);
+  const enhCount = limb.enhancements.length;
+  const accCount = limb.accessories.length;
 
-  return `${limb.name} (${limb.grade}) - STR ${attrs.strength}/AGI ${attrs.agility} - Capacity: ${capacity.remainingCapacity}/${capacity.totalCapacity} - ${enhancementCount} enhancements`;
+  return `${limb.name} (${limb.grade}) @ ${limb.location} - STR ${str}/AGI ${agi} - Capacity: ${breakdown.remainingCapacity}/${breakdown.totalCapacity} - ${enhCount} enhancements, ${accCount} accessories`;
 }
+
+/**
+ * Toggle wireless enabled state for a cyberlimb and all its contents
+ *
+ * @param limb - The cyberlimb
+ * @param enabled - New wireless state
+ * @returns Updated cyberlimb
+ */
+export function toggleCyberlimbWireless(
+  limb: CyberlimbItem,
+  enabled: boolean
+): CyberlimbItem {
+  const modEntry: CyberlimbModificationEntry = {
+    id: `mod-${Date.now()}`,
+    timestamp: new Date().toISOString(),
+    action: "wireless_toggled",
+    previousValue: limb.wirelessEnabled,
+    newValue: enabled,
+  };
+
+  return {
+    ...limb,
+    wirelessEnabled: enabled,
+    enhancements: limb.enhancements.map((e) => ({
+      ...e,
+      wirelessEnabled: enabled,
+    })),
+    accessories: limb.accessories.map((a) => ({
+      ...a,
+      wirelessEnabled: enabled,
+    })),
+    modificationHistory: [...limb.modificationHistory, modEntry],
+  };
+}
+
+// Re-export types for convenience
+export type {
+  CyberlimbItem,
+  CyberlimbLocation,
+  CyberlimbType,
+  CyberlimbAppearance,
+  CyberlimbEnhancement,
+  CyberlimbAccessory,
+  CyberlimbModificationEntry,
+};
+
+// Re-export constants
+export {
+  LIMB_HIERARCHY,
+  LIMB_CM_BONUS,
+  LOCATION_SIDE,
+  LOCATION_LIMB_TYPE,
+  LIMB_TYPE_LOCATIONS,
+  getCyberlimbAvailableCapacity,
+  calculateCyberlimbCapacityUsed,
+  wouldReplaceExisting,
+  isBlockedByExisting,
+  getAffectedLocations,
+};

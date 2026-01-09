@@ -527,6 +527,106 @@ export interface AugmentationRules {
 }
 
 // =============================================================================
+// CYBERLIMB CATALOG TYPES (for ruleset data)
+// =============================================================================
+
+/**
+ * Cyberlimb type classification
+ */
+export type CyberlimbType =
+  | "full-arm"
+  | "lower-arm"
+  | "hand"
+  | "full-leg"
+  | "lower-leg"
+  | "foot"
+  | "torso"
+  | "skull";
+
+/**
+ * Cyberlimb appearance classification
+ */
+export type CyberlimbAppearance = "obvious" | "synthetic";
+
+/**
+ * Cyberlimb catalog item in ruleset data.
+ * Extends CyberwareCatalogItem with cyberlimb-specific fields.
+ */
+export interface CyberlimbCatalogItem extends CyberwareCatalogItem {
+  /** Type classification of this limb */
+  limbType: CyberlimbType;
+  /** Appearance (obvious or synthetic) */
+  appearance: CyberlimbAppearance;
+  /** Base Strength (always 3) */
+  baseStrength: 3;
+  /** Base Agility (always 3) */
+  baseAgility: 3;
+  /**
+   * Physical Condition Monitor bonus.
+   * Full limbs: 1, Partial limbs: 0.5, Hands/feet: 0
+   */
+  physicalCMBonus: number;
+  /**
+   * Base capacity for this limb type.
+   * Synthetic limbs have reduced capacity compared to obvious.
+   */
+  capacity: number;
+}
+
+/**
+ * Enhancement type for cyberlimb enhancements
+ */
+export type CyberlimbEnhancementType = "agility" | "strength" | "armor";
+
+/**
+ * Cyberlimb enhancement catalog item in ruleset data.
+ * Includes Agility Enhancement, Strength Enhancement, and Armor Enhancement.
+ */
+export interface CyberlimbEnhancementCatalogItem extends CyberwareCatalogItem {
+  /** Enhancement type for stacking validation */
+  enhancementType: CyberlimbEnhancementType;
+  /** Parent limb types this can be installed in (if restricted) */
+  compatibleLimbs?: CyberlimbType[];
+}
+
+/**
+ * Cyberlimb accessory catalog item in ruleset data.
+ * Includes gyromount, holster, slide, hydraulic jacks, smuggling compartment.
+ */
+export interface CyberlimbAccessoryCatalogItem extends CyberwareCatalogItem {
+  /** Parent limb types this can be installed in */
+  compatibleLimbs?: CyberlimbType[];
+  /**
+   * Whether this accessory requires a matching pair (e.g., hydraulic jacks).
+   * If true, both legs must have the same rating.
+   */
+  requiresPair?: boolean;
+  /** Body area where pair is required (e.g., "legs") */
+  pairLocation?: "legs";
+}
+
+/**
+ * Cyber implant weapon catalog item in ruleset data.
+ * Includes cyberguns (hold-out to SMG) and cyber melee weapons (razors, blades, spurs).
+ */
+export interface CyberImplantWeaponCatalogItem extends CyberwareCatalogItem {
+  /** Damage string (e.g., "(STR+2)P", "7P") */
+  damage?: string;
+  /** Armor penetration */
+  ap?: number;
+  /** Reach for melee weapons */
+  reach?: number;
+  /** Fire modes for ranged weapons */
+  mode?: string[];
+  /** Magazine capacity for ranged weapons */
+  ammoCapacity?: number;
+  /** Accuracy for ranged weapons */
+  accuracy?: number;
+  /** Recoil compensation */
+  recoilCompensation?: number;
+}
+
+// =============================================================================
 // QUALITY CATALOG TYPES (re-exported for convenience)
 // =============================================================================
 

@@ -32,7 +32,14 @@ import {
   type AugmentationSelection,
   type AugmentationType,
   type CyberwareEnhancementSelection,
+  type InstalledCyberlimb,
 } from "./augmentations";
+import {
+  type CyberlimbLocation,
+  type CyberlimbType,
+  LOCATION_SIDE,
+  wouldReplaceExisting,
+} from "@/lib/types/cyberlimb";
 import {
   Lock,
   X,
@@ -407,6 +414,18 @@ export function AugmentationsCard({ state, updateState }: AugmentationsCardProps
     [state.selections?.bioware]
   );
 
+  // Extract installed cyberlimbs for conflict checking
+  const installedCyberlimbs = useMemo((): InstalledCyberlimb[] => {
+    return selectedCyberware
+      .filter((item) => item.category === "cyberlimb" && "location" in item && "limbType" in item)
+      .map((item) => ({
+        id: item.id || item.catalogId,
+        name: item.name,
+        location: (item as CyberwareItem & { location: CyberlimbLocation }).location,
+        limbType: (item as CyberwareItem & { limbType: CyberlimbType }).limbType,
+      }));
+  }, [selectedCyberware]);
+
   // Check if character is magical or technomancer
   const magicPath = (state.selections?.["magical-path"] as string) || "mundane";
   const isAwakened = ["magician", "mystic-adept", "aspected-mage", "adept"].includes(magicPath);
@@ -510,47 +529,81 @@ export function AugmentationsCard({ state, updateState }: AugmentationsCardProps
   // Add augmentation (actual implementation)
   const actuallyAddAugmentation = useCallback(
     (selection: AugmentationSelection) => {
+      // Build the base item
+      const baseItem = {
+        id: `${selection.catalogId}-${Date.now()}`,
+        catalogId: selection.catalogId,
+        name: selection.name,
+        category: selection.category,
+        grade: selection.grade,
+        baseEssenceCost: selection.baseEssenceCost,
+        essenceCost: selection.essenceCost,
+        cost: selection.cost,
+        availability: selection.availability,
+        legality: selection.legality,
+        attributeBonuses: selection.attributeBonuses,
+        armorBonus: selection.armorBonus,
+      };
+
       const newItem =
         selection.type === "cyberware"
           ? ({
-              id: `${selection.catalogId}-${Date.now()}`,
-              catalogId: selection.catalogId,
-              name: selection.name,
-              category: selection.category,
-              grade: selection.grade,
-              baseEssenceCost: selection.baseEssenceCost,
-              essenceCost: selection.essenceCost,
-              cost: selection.cost,
-              availability: selection.availability,
-              legality: selection.legality,
+              ...baseItem,
               capacity: selection.capacity,
               capacityUsed: 0,
               enhancements: [],
-              attributeBonuses: selection.attributeBonuses,
               initiativeDiceBonus: selection.initiativeDiceBonus,
               wirelessBonus: selection.wirelessBonus,
-              armorBonus: selection.armorBonus,
+              // Add cyberlimb-specific fields if present
+              ...(selection.location && { location: selection.location }),
+              ...(selection.limbType && { limbType: selection.limbType }),
+              ...(selection.appearance && { appearance: selection.appearance }),
+              ...(selection.baseStrength && { baseStrength: selection.baseStrength }),
+              ...(selection.baseAgility && { baseAgility: selection.baseAgility }),
             } as CyberwareItem)
-          : ({
-              id: `${selection.catalogId}-${Date.now()}`,
-              catalogId: selection.catalogId,
-              name: selection.name,
-              category: selection.category,
-              grade: selection.grade,
-              baseEssenceCost: selection.baseEssenceCost,
-              essenceCost: selection.essenceCost,
-              cost: selection.cost,
-              availability: selection.availability,
-              legality: selection.legality,
-              attributeBonuses: selection.attributeBonuses,
-              armorBonus: selection.armorBonus,
-            } as BiowareItem);
+          : (baseItem as BiowareItem);
 
       if (selection.type === "cyberware") {
+        // For cyberlimbs, remove any limbs that would be replaced
+        let updatedCyberware = [...selectedCyberware];
+
+        if (selection.location && selection.limbType) {
+          const newSide = LOCATION_SIDE[selection.location];
+
+          // Filter out any cyberlimbs that would be replaced
+          updatedCyberware = updatedCyberware.filter((item) => {
+            // Skip non-cyberlimbs
+            if (item.category !== "cyberlimb" || !("location" in item) || !("limbType" in item)) {
+              return true;
+            }
+
+            const existingItem = item as CyberwareItem & { location: CyberlimbLocation; limbType: CyberlimbType };
+            const existingSide = LOCATION_SIDE[existingItem.location];
+
+            // Only check items on the same side
+            if (existingSide !== newSide) {
+              return true;
+            }
+
+            // Check if the new limb would replace this one
+            // Same location = direct replacement
+            if (existingItem.location === selection.location) {
+              return false;
+            }
+
+            // Hierarchy replacement (e.g., full-arm replaces lower-arm and hand)
+            if (selection.limbType && wouldReplaceExisting(selection.limbType, existingItem.limbType)) {
+              return false;
+            }
+
+            return true;
+          });
+        }
+
         updateState({
           selections: {
             ...state.selections,
-            cyberware: [...selectedCyberware, newItem as CyberwareItem],
+            cyberware: [...updatedCyberware, newItem as CyberwareItem],
           },
         });
       } else {
@@ -915,6 +968,7 @@ export function AugmentationsCard({ state, updateState }: AugmentationsCardProps
         isTechnomancer={isTechnomancer}
         currentMagic={magicRating}
         currentResonance={resonanceRating}
+        installedCyberlimbs={installedCyberlimbs}
       />
 
       {/* Enhancement Modal */}
