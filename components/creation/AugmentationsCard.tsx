@@ -1465,6 +1465,37 @@ export function AugmentationsCard({ state, updateState }: AugmentationsCardProps
             </div>
           </div>
 
+          {/* Nuyen bar - compact style */}
+          <div className="space-y-1">
+            <div className="flex items-center justify-between text-xs">
+              <span className="flex items-center gap-1 text-zinc-600 dark:text-zinc-400">
+                <span>Nuyen</span>
+                <span className="group relative">
+                  <Info className="h-3 w-3 cursor-help text-zinc-400" />
+                  <span className="pointer-events-none absolute bottom-full left-1/2 z-50 mb-1 -translate-x-1/2 whitespace-nowrap rounded bg-zinc-900 px-2 py-1 text-[10px] text-white opacity-0 shadow-lg transition-opacity group-hover:opacity-100 dark:bg-zinc-100 dark:text-zinc-900">
+                    Total nuyen spent across all gear categories
+                  </span>
+                </span>
+                {karmaConversion > 0 && (
+                  <span className="ml-1 text-[10px] text-emerald-600 dark:text-emerald-400">
+                    (+{formatCurrency(convertedNuyen)}¥ karma)
+                  </span>
+                )}
+              </span>
+              <span className="font-medium text-zinc-900 dark:text-zinc-100">
+                {formatCurrency(totalSpent)} / {formatCurrency(totalNuyen)}
+              </span>
+            </div>
+            <div className="h-2 overflow-hidden rounded-full bg-zinc-100 dark:bg-zinc-800">
+              <div
+                className={`h-full transition-all ${
+                  remainingNuyen < 0 ? "bg-red-500" : "bg-blue-500"
+                }`}
+                style={{ width: `${Math.min(100, (totalSpent / totalNuyen) * 100)}%` }}
+              />
+            </div>
+          </div>
+
           {/* Magic/Resonance warning */}
           {isAwakened && magicLoss > 0 && (
             <div className="flex items-start gap-2 rounded-lg bg-amber-50 p-2 text-xs dark:bg-amber-900/20">
