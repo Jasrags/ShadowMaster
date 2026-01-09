@@ -10211,7 +10211,8 @@
               "reaction": 1
             },
             "initiativeDiceBonus": 1,
-            "legality": "restricted"
+            "legality": "restricted",
+            "incompatibleWith": ["reaction-enhancers", "synaptic-booster"]
           },
           {
             "id": "datajack",
@@ -10773,7 +10774,8 @@
               "bodyArmor": 1
             },
             "page": 456,
-            "legality": "restricted"
+            "legality": "restricted",
+            "incompatibleWith": ["bone-density-augmentation"]
           },
           {
             "id": "bone-lacing-aluminum",
@@ -10787,7 +10789,8 @@
               "bodyArmor": 2
             },
             "page": 456,
-            "legality": "restricted"
+            "legality": "restricted",
+            "incompatibleWith": ["bone-density-augmentation"]
           },
           {
             "id": "bone-lacing-titanium",
@@ -10801,7 +10804,8 @@
               "bodyArmor": 3
             },
             "page": 456,
-            "legality": "restricted"
+            "legality": "restricted",
+            "incompatibleWith": ["bone-density-augmentation"]
           },
           {
             "id": "fingertip-compartment",
@@ -11652,7 +11656,8 @@
             "attributeBonuses": {
               "strength": 1
             },
-            "legality": "restricted"
+            "legality": "restricted",
+            "incompatibleWith": ["muscle-replacement"]
           },
           {
             "id": "muscle-toner",
@@ -11696,7 +11701,8 @@
             "attributeBonuses": {
               "agility": 1
             },
-            "legality": "restricted"
+            "legality": "restricted",
+            "incompatibleWith": ["muscle-replacement"]
           },
           {
             "id": "pathogenic-defense",
@@ -11875,7 +11881,8 @@
             },
             "category": "basic",
             "description": "Unarmed damage becomes (STR)P. Incompatible with bone lacing.",
-            "page": 459
+            "page": 459,
+            "incompatibleWith": ["bone-lacing-plastic", "bone-lacing-aluminum", "bone-lacing-titanium"]
           },
           {
             "id": "toxin-extractor",
@@ -12048,7 +12055,8 @@
               "reaction": 1
             },
             "initiativeDiceBonus": 1,
-            "legality": "restricted"
+            "legality": "restricted",
+            "incompatibleWith": ["wired-reflexes", "reaction-enhancers"]
           },
           {
             "id": "cat-eyes",
@@ -12057,7 +12065,7 @@
             "essenceCost": 0.1,
             "cost": 4000,
             "availability": 4,
-            "description": "Low-Light Vision.",
+            "description": "Low-Light Vision. Note: Incompatible with cybereyes.",
             "page": 460
           },
           {
@@ -12126,7 +12134,8 @@
             "cost": 14000,
             "availability": 10,
             "description": "+1 die to skill linked to implant.",
-            "page": 461
+            "page": 461,
+            "incompatibleWith": ["skillwires"]
           },
           {
             "id": "skin-pocket",
