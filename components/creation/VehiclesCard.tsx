@@ -32,11 +32,10 @@ import type { CreationState, CharacterDrone, CharacterRCC, CharacterAutosoft, It
 import { useCreationBudgets } from "@/lib/contexts";
 import {
   CreationCard,
-  BudgetIndicator,
   KarmaConversionModal,
   useKarmaConversionPrompt,
 } from "./shared";
-import { Lock, Search, X, Car, Bot, Wifi, Code } from "lucide-react";
+import { Lock, Search, X, Car, Bot, Wifi, Code, Info } from "lucide-react";
 
 // =============================================================================
 // CONSTANTS
@@ -500,15 +499,36 @@ export function VehiclesCard({ state, updateState }: VehiclesCardProps) {
       status={validationStatus}
     >
       <div className="space-y-4">
-        {/* Budget indicator */}
-        <BudgetIndicator
-          label="Nuyen"
-          spent={totalNuyen - remaining}
-          total={totalNuyen}
-          displayFormat="currency"
-          compact
-          note={karmaConversion > 0 ? `+${(karmaConversion * 2000).toLocaleString()}¥ from karma` : undefined}
-        />
+        {/* Nuyen bar - compact style */}
+        <div className="space-y-1">
+          <div className="flex items-center justify-between text-xs">
+            <span className="flex items-center gap-1 text-zinc-600 dark:text-zinc-400">
+              <span>Nuyen</span>
+              <span className="group relative">
+                <Info className="h-3 w-3 cursor-help text-zinc-400" />
+                <span className="pointer-events-none absolute bottom-full left-1/2 z-50 mb-1 -translate-x-1/2 whitespace-nowrap rounded bg-zinc-900 px-2 py-1 text-[10px] text-white opacity-0 shadow-lg transition-opacity group-hover:opacity-100 dark:bg-zinc-100 dark:text-zinc-900">
+                  Nuyen spent on vehicles, drones, RCCs, and autosofts
+                </span>
+              </span>
+              {karmaConversion > 0 && (
+                <span className="ml-1 text-[10px] text-emerald-600 dark:text-emerald-400">
+                  (+{(karmaConversion * 2000).toLocaleString()}¥ karma)
+                </span>
+              )}
+            </span>
+            <span className="font-medium text-zinc-900 dark:text-zinc-100">
+              {formatCurrency(totalSpent)} / {formatCurrency(totalNuyen)}
+            </span>
+          </div>
+          <div className="h-2 overflow-hidden rounded-full bg-zinc-100 dark:bg-zinc-800">
+            <div
+              className={`h-full transition-all ${
+                remaining < 0 ? "bg-red-500" : "bg-blue-500"
+              }`}
+              style={{ width: `${Math.min(100, (totalSpent / totalNuyen) * 100)}%` }}
+            />
+          </div>
+        </div>
 
         {/* Category tabs */}
         <div className="grid grid-cols-4 gap-1">
@@ -741,76 +761,161 @@ export function VehiclesCard({ state, updateState }: VehiclesCardProps) {
           )}
         </div>
 
-        {/* Selected items */}
+        {/* VEHICLES Section */}
+        {selectedVehicles.length > 0 && (
+          <div>
+            <div className="mb-2 flex items-center gap-2">
+              <Car className="h-3.5 w-3.5 text-blue-500" />
+              <span className="text-xs font-semibold uppercase tracking-wider text-zinc-500 dark:text-zinc-400">
+                Vehicles
+              </span>
+              <span className="rounded-full bg-blue-100 px-1.5 py-0.5 text-[10px] font-medium text-blue-700 dark:bg-blue-900/50 dark:text-blue-300">
+                {selectedVehicles.length}
+              </span>
+            </div>
+            <div className="rounded-lg border border-zinc-200 p-2 dark:border-zinc-700">
+              {selectedVehicles.map((v, index) => (
+                <div key={v.id}>
+                  {index > 0 && (
+                    <div className="my-1.5 border-t border-zinc-100 dark:border-zinc-800" />
+                  )}
+                  <div className="flex items-center justify-between py-1">
+                    <span className="truncate text-sm text-zinc-900 dark:text-zinc-100">{v.name}</span>
+                    <div className="flex items-center gap-2">
+                      <span className="text-xs text-zinc-500">{formatCurrency(v.cost)}¥</span>
+                      <button
+                        onClick={() => removeVehicle(v.id)}
+                        className="rounded p-0.5 text-zinc-400 hover:bg-red-100 hover:text-red-600 dark:hover:bg-red-900/30 dark:hover:text-red-400"
+                      >
+                        <X className="h-3.5 w-3.5" />
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
+
+        {/* DRONES Section */}
+        {selectedDrones.length > 0 && (
+          <div>
+            <div className="mb-2 flex items-center gap-2">
+              <Bot className="h-3.5 w-3.5 text-green-500" />
+              <span className="text-xs font-semibold uppercase tracking-wider text-zinc-500 dark:text-zinc-400">
+                Drones
+              </span>
+              <span className="rounded-full bg-green-100 px-1.5 py-0.5 text-[10px] font-medium text-green-700 dark:bg-green-900/50 dark:text-green-300">
+                {selectedDrones.length}
+              </span>
+            </div>
+            <div className="rounded-lg border border-zinc-200 p-2 dark:border-zinc-700">
+              {selectedDrones.map((d, index) => (
+                <div key={d.id}>
+                  {index > 0 && (
+                    <div className="my-1.5 border-t border-zinc-100 dark:border-zinc-800" />
+                  )}
+                  <div className="flex items-center justify-between py-1">
+                    <span className="truncate text-sm text-zinc-900 dark:text-zinc-100">{d.name}</span>
+                    <div className="flex items-center gap-2">
+                      <span className="text-xs text-zinc-500">{formatCurrency(d.cost)}¥</span>
+                      <button
+                        onClick={() => removeDrone(d.id!)}
+                        className="rounded p-0.5 text-zinc-400 hover:bg-red-100 hover:text-red-600 dark:hover:bg-red-900/30 dark:hover:text-red-400"
+                      >
+                        <X className="h-3.5 w-3.5" />
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
+
+        {/* RCCS Section */}
+        {selectedRCCs.length > 0 && (
+          <div>
+            <div className="mb-2 flex items-center gap-2">
+              <Wifi className="h-3.5 w-3.5 text-purple-500" />
+              <span className="text-xs font-semibold uppercase tracking-wider text-zinc-500 dark:text-zinc-400">
+                RCCs
+              </span>
+              <span className="rounded-full bg-purple-100 px-1.5 py-0.5 text-[10px] font-medium text-purple-700 dark:bg-purple-900/50 dark:text-purple-300">
+                {selectedRCCs.length}
+              </span>
+            </div>
+            <div className="rounded-lg border border-zinc-200 p-2 dark:border-zinc-700">
+              {selectedRCCs.map((r, index) => (
+                <div key={r.id}>
+                  {index > 0 && (
+                    <div className="my-1.5 border-t border-zinc-100 dark:border-zinc-800" />
+                  )}
+                  <div className="flex items-center justify-between py-1">
+                    <span className="truncate text-sm text-zinc-900 dark:text-zinc-100">{r.name}</span>
+                    <div className="flex items-center gap-2">
+                      <span className="text-xs text-zinc-500">{formatCurrency(r.cost)}¥</span>
+                      <button
+                        onClick={() => removeRCC(r.id!)}
+                        className="rounded p-0.5 text-zinc-400 hover:bg-red-100 hover:text-red-600 dark:hover:bg-red-900/30 dark:hover:text-red-400"
+                      >
+                        <X className="h-3.5 w-3.5" />
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
+
+        {/* AUTOSOFTS Section */}
+        {selectedAutosofts.length > 0 && (
+          <div>
+            <div className="mb-2 flex items-center gap-2">
+              <Code className="h-3.5 w-3.5 text-cyan-500" />
+              <span className="text-xs font-semibold uppercase tracking-wider text-zinc-500 dark:text-zinc-400">
+                Autosofts
+              </span>
+              <span className="rounded-full bg-cyan-100 px-1.5 py-0.5 text-[10px] font-medium text-cyan-700 dark:bg-cyan-900/50 dark:text-cyan-300">
+                {selectedAutosofts.length}
+              </span>
+            </div>
+            <div className="rounded-lg border border-zinc-200 p-2 dark:border-zinc-700">
+              {selectedAutosofts.map((a, index) => (
+                <div key={a.id}>
+                  {index > 0 && (
+                    <div className="my-1.5 border-t border-zinc-100 dark:border-zinc-800" />
+                  )}
+                  <div className="flex items-center justify-between py-1">
+                    <span className="truncate text-sm text-zinc-900 dark:text-zinc-100">
+                      {a.name} R{a.rating}
+                    </span>
+                    <div className="flex items-center gap-2">
+                      <span className="text-xs text-zinc-500">{formatCurrency(a.cost)}¥</span>
+                      <button
+                        onClick={() => removeAutosoft(a.id!)}
+                        className="rounded p-0.5 text-zinc-400 hover:bg-red-100 hover:text-red-600 dark:hover:bg-red-900/30 dark:hover:text-red-400"
+                      >
+                        <X className="h-3.5 w-3.5" />
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
+
+        {/* Summary - ContactsCard pattern */}
         {totalItems > 0 && (
-          <div className="space-y-2 rounded-lg border border-zinc-200 bg-zinc-50 p-3 dark:border-zinc-700 dark:bg-zinc-800/50">
-            <h4 className="text-xs font-semibold text-zinc-500 dark:text-zinc-400">
-              Selected ({totalItems})
-            </h4>
-            <div className="max-h-24 space-y-1 overflow-y-auto text-xs">
-              {selectedVehicles.map((v) => (
-                <div key={v.id} className="flex items-center justify-between">
-                  <div className="flex items-center gap-1">
-                    <Car className="h-3 w-3 text-blue-500" />
-                    <span className="truncate">{v.name}</span>
-                  </div>
-                  <div className="flex items-center gap-2">
-                    <span className="text-zinc-500">{formatCurrency(v.cost)}¥</span>
-                    <button onClick={() => removeVehicle(v.id)} className="text-red-500 hover:text-red-700">
-                      <X className="h-3 w-3" />
-                    </button>
-                  </div>
-                </div>
-              ))}
-              {selectedDrones.map((d) => (
-                <div key={d.id} className="flex items-center justify-between">
-                  <div className="flex items-center gap-1">
-                    <Bot className="h-3 w-3 text-green-500" />
-                    <span className="truncate">{d.name}</span>
-                  </div>
-                  <div className="flex items-center gap-2">
-                    <span className="text-zinc-500">{formatCurrency(d.cost)}¥</span>
-                    <button onClick={() => removeDrone(d.id!)} className="text-red-500 hover:text-red-700">
-                      <X className="h-3 w-3" />
-                    </button>
-                  </div>
-                </div>
-              ))}
-              {selectedRCCs.map((r) => (
-                <div key={r.id} className="flex items-center justify-between">
-                  <div className="flex items-center gap-1">
-                    <Wifi className="h-3 w-3 text-purple-500" />
-                    <span className="truncate">{r.name}</span>
-                  </div>
-                  <div className="flex items-center gap-2">
-                    <span className="text-zinc-500">{formatCurrency(r.cost)}¥</span>
-                    <button onClick={() => removeRCC(r.id!)} className="text-red-500 hover:text-red-700">
-                      <X className="h-3 w-3" />
-                    </button>
-                  </div>
-                </div>
-              ))}
-              {selectedAutosofts.map((a) => (
-                <div key={a.id} className="flex items-center justify-between">
-                  <div className="flex items-center gap-1">
-                    <Code className="h-3 w-3 text-cyan-500" />
-                    <span className="truncate">{a.name} R{a.rating}</span>
-                  </div>
-                  <div className="flex items-center gap-2">
-                    <span className="text-zinc-500">{formatCurrency(a.cost)}¥</span>
-                    <button onClick={() => removeAutosoft(a.id!)} className="text-red-500 hover:text-red-700">
-                      <X className="h-3 w-3" />
-                    </button>
-                  </div>
-                </div>
-              ))}
-            </div>
-            <div className="border-t border-zinc-200 pt-2 dark:border-zinc-700">
-              <div className="flex justify-between text-xs font-medium">
-                <span>Total:</span>
-                <span>{formatCurrency(vehiclesSpent)}¥</span>
-              </div>
-            </div>
+          <div className="flex items-center justify-between rounded-lg bg-zinc-50 px-3 py-2 dark:bg-zinc-800/50">
+            <span className="text-xs text-zinc-500 dark:text-zinc-400">
+              Total: {selectedVehicles.length} vehicle{selectedVehicles.length !== 1 ? "s" : ""}, {selectedDrones.length} drone{selectedDrones.length !== 1 ? "s" : ""}, {selectedRCCs.length} RCC{selectedRCCs.length !== 1 ? "s" : ""}, {selectedAutosofts.length} autosoft{selectedAutosofts.length !== 1 ? "s" : ""}
+            </span>
+            <span className="text-xs font-bold text-zinc-900 dark:text-zinc-100">
+              {formatCurrency(vehiclesSpent)}¥
+            </span>
           </div>
         )}
 
