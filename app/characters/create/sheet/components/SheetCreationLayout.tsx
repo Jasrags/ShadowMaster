@@ -146,10 +146,18 @@ function BudgetSummaryCard({ creationState }: BudgetSummaryCardProps) {
 
   const budgetList = useMemo(
     () =>
-      Object.entries(budgets).map(([id, budget]) => ({
-        id,
-        ...budget,
-      })),
+      Object.entries(budgets)
+        // Hide budgets with 0 total that aren't relevant for this character
+        .filter(([id, budget]) => {
+          // Always hide special-attribute-points and skill-group-points if total is 0
+          if (id === "special-attribute-points" && budget.total === 0) return false;
+          if (id === "skill-group-points" && budget.total === 0) return false;
+          return true;
+        })
+        .map(([id, budget]) => ({
+          id,
+          ...budget,
+        })),
     [budgets]
   );
 
