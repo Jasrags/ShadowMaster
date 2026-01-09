@@ -60,6 +60,7 @@ import {
   Crosshair,
   Settings,
   Wrench,
+  Info,
 } from "lucide-react";
 
 // =============================================================================
@@ -1432,10 +1433,18 @@ export function AugmentationsCard({ state, updateState }: AugmentationsCardProps
         status={validationStatus}
       >
         <div className="space-y-4">
-          {/* Essence bar */}
+          {/* Essence bar - compact style */}
           <div className="space-y-1">
             <div className="flex items-center justify-between text-xs">
-              <span className="text-zinc-600 dark:text-zinc-400">Essence</span>
+              <span className="flex items-center gap-1 text-zinc-600 dark:text-zinc-400">
+                <span>Essence</span>
+                <span className="group relative">
+                  <Info className="h-3 w-3 cursor-help text-zinc-400" />
+                  <span className="pointer-events-none absolute bottom-full left-1/2 z-50 mb-1 -translate-x-1/2 whitespace-nowrap rounded bg-zinc-900 px-2 py-1 text-[10px] text-white opacity-0 shadow-lg transition-opacity group-hover:opacity-100 dark:bg-zinc-100 dark:text-zinc-900">
+                    Remaining essence after augmentations
+                  </span>
+                </span>
+              </span>
               <span
                 className={`font-medium ${
                   remainingEssence < 1
@@ -1443,7 +1452,7 @@ export function AugmentationsCard({ state, updateState }: AugmentationsCardProps
                     : "text-zinc-900 dark:text-zinc-100"
                 }`}
               >
-                {formatEssence(remainingEssence)} / {maxEssence}
+                {formatEssence(totalEssenceLoss)} / {maxEssence}
               </span>
             </div>
             <div className="h-2 overflow-hidden rounded-full bg-zinc-100 dark:bg-zinc-800">
@@ -1451,7 +1460,7 @@ export function AugmentationsCard({ state, updateState }: AugmentationsCardProps
                 className={`h-full transition-all ${
                   remainingEssence < 1 ? "bg-amber-500" : "bg-emerald-500"
                 }`}
-                style={{ width: `${Math.max(0, (remainingEssence / maxEssence) * 100)}%` }}
+                style={{ width: `${Math.min(100, (totalEssenceLoss / maxEssence) * 100)}%` }}
               />
             </div>
           </div>
@@ -1489,91 +1498,126 @@ export function AugmentationsCard({ state, updateState }: AugmentationsCardProps
             </div>
           )}
 
-          {/* Add buttons */}
-          <div className="flex gap-2">
-            <button
-              onClick={() => openAugModal("cyberware")}
-              className="flex flex-1 items-center justify-center gap-1.5 rounded-lg border border-dashed border-cyan-300 bg-cyan-50 px-3 py-2 text-xs font-medium text-cyan-700 transition-colors hover:border-cyan-400 hover:bg-cyan-100 dark:border-cyan-700 dark:bg-cyan-900/20 dark:text-cyan-300 dark:hover:border-cyan-600 dark:hover:bg-cyan-900/30"
-            >
-              <Cpu className="h-3.5 w-3.5" />
-              Add Cyberware
-            </button>
-            <button
-              onClick={() => openAugModal("bioware")}
-              className="flex flex-1 items-center justify-center gap-1.5 rounded-lg border border-dashed border-pink-300 bg-pink-50 px-3 py-2 text-xs font-medium text-pink-700 transition-colors hover:border-pink-400 hover:bg-pink-100 dark:border-pink-700 dark:bg-pink-900/20 dark:text-pink-300 dark:hover:border-pink-600 dark:hover:bg-pink-900/30"
-            >
-              <Heart className="h-3.5 w-3.5" />
-              Add Bioware
-            </button>
+          {/* CYBERWARE Section */}
+          <div>
+            <div className="mb-2 flex items-center justify-between">
+              <div className="flex items-center gap-2">
+                <Cpu className="h-3.5 w-3.5 text-cyan-500" />
+                <span className="text-xs font-semibold uppercase tracking-wider text-zinc-500 dark:text-zinc-400">
+                  Cyberware
+                </span>
+                {selectedCyberware.length > 0 && (
+                  <span className="rounded-full bg-cyan-100 px-1.5 py-0.5 text-[10px] font-medium text-cyan-700 dark:bg-cyan-900/50 dark:text-cyan-300">
+                    {selectedCyberware.length}
+                  </span>
+                )}
+              </div>
+              <button
+                onClick={() => openAugModal("cyberware")}
+                className="flex items-center gap-1 rounded-lg bg-amber-500 px-2 py-1 text-xs font-medium text-white transition-colors hover:bg-amber-600"
+              >
+                <Plus className="h-3 w-3" />
+                Add
+              </button>
+            </div>
+            {selectedCyberware.length > 0 ? (
+              <div className="space-y-2 rounded-lg border border-zinc-200 p-2 dark:border-zinc-700">
+                {selectedCyberware.map((item, index) => (
+                  <div key={item.id}>
+                    {index > 0 && (
+                      <div className="my-2 border-t border-zinc-100 dark:border-zinc-800" />
+                    )}
+                    {isCyberlimb(item) ? (
+                      <CyberlimbAugmentationItem
+                        item={item}
+                        onRemove={() => item.id && removeCyberware(item.id)}
+                        onAddEnhancement={() => setEnhancementModalCyberware(item)}
+                        onRemoveEnhancement={(idx) => removeEnhancement(item.id!, idx)}
+                        onAddAccessory={() => setAccessoryModalCyberlimb(item)}
+                        onRemoveAccessory={(idx) => removeAccessory(item.id!, idx)}
+                        onAddWeapon={() => setWeaponModalCyberlimb(item)}
+                        onRemoveWeapon={(idx) => removeWeapon(item.id!, idx)}
+                      />
+                    ) : (
+                      <AugmentationItem
+                        item={item}
+                        type="cyberware"
+                        onRemove={() => item.id && removeCyberware(item.id)}
+                        onAddEnhancement={
+                          item.capacity && item.capacity > 0
+                            ? () => setEnhancementModalCyberware(item)
+                            : undefined
+                        }
+                        onRemoveEnhancement={
+                          item.id && item.capacity && item.capacity > 0
+                            ? (idx) => removeEnhancement(item.id!, idx)
+                            : undefined
+                        }
+                      />
+                    )}
+                  </div>
+                ))}
+              </div>
+            ) : (
+              <div className="rounded-lg border-2 border-dashed border-zinc-200 p-3 text-center dark:border-zinc-700">
+                <p className="text-xs text-zinc-400 dark:text-zinc-500">
+                  No cyberware installed
+                </p>
+              </div>
+            )}
           </div>
 
-          {/* Unified augmentation list */}
-          {totalAugmentations > 0 && (
-            <div className="space-y-2">
-              {selectedCyberware.map((item) => {
-                // Check if this is a cyberlimb using the type guard
-                if (isCyberlimb(item)) {
-                  return (
-                    <CyberlimbAugmentationItem
-                      key={item.id}
+          {/* BIOWARE Section */}
+          <div>
+            <div className="mb-2 flex items-center justify-between">
+              <div className="flex items-center gap-2">
+                <Heart className="h-3.5 w-3.5 text-pink-500" />
+                <span className="text-xs font-semibold uppercase tracking-wider text-zinc-500 dark:text-zinc-400">
+                  Bioware
+                </span>
+                {selectedBioware.length > 0 && (
+                  <span className="rounded-full bg-pink-100 px-1.5 py-0.5 text-[10px] font-medium text-pink-700 dark:bg-pink-900/50 dark:text-pink-300">
+                    {selectedBioware.length}
+                  </span>
+                )}
+              </div>
+              <button
+                onClick={() => openAugModal("bioware")}
+                className="flex items-center gap-1 rounded-lg bg-amber-500 px-2 py-1 text-xs font-medium text-white transition-colors hover:bg-amber-600"
+              >
+                <Plus className="h-3 w-3" />
+                Add
+              </button>
+            </div>
+            {selectedBioware.length > 0 ? (
+              <div className="space-y-2 rounded-lg border border-zinc-200 p-2 dark:border-zinc-700">
+                {selectedBioware.map((item, index) => (
+                  <div key={item.id}>
+                    {index > 0 && (
+                      <div className="my-2 border-t border-zinc-100 dark:border-zinc-800" />
+                    )}
+                    <AugmentationItem
                       item={item}
-                      onRemove={() => item.id && removeCyberware(item.id)}
-                      onAddEnhancement={() => setEnhancementModalCyberware(item)}
-                      onRemoveEnhancement={(idx) => removeEnhancement(item.id!, idx)}
-                      onAddAccessory={() => setAccessoryModalCyberlimb(item)}
-                      onRemoveAccessory={(idx) => removeAccessory(item.id!, idx)}
-                      onAddWeapon={() => setWeaponModalCyberlimb(item)}
-                      onRemoveWeapon={(idx) => removeWeapon(item.id!, idx)}
+                      type="bioware"
+                      onRemove={() => item.id && removeBioware(item.id)}
                     />
-                  );
-                }
+                  </div>
+                ))}
+              </div>
+            ) : (
+              <div className="rounded-lg border-2 border-dashed border-zinc-200 p-3 text-center dark:border-zinc-700">
+                <p className="text-xs text-zinc-400 dark:text-zinc-500">
+                  No bioware installed
+                </p>
+              </div>
+            )}
+          </div>
 
-                // Regular cyberware
-                return (
-                  <AugmentationItem
-                    key={item.id}
-                    item={item}
-                    type="cyberware"
-                    onRemove={() => item.id && removeCyberware(item.id)}
-                    onAddEnhancement={
-                      item.capacity && item.capacity > 0
-                        ? () => setEnhancementModalCyberware(item)
-                        : undefined
-                    }
-                    onRemoveEnhancement={
-                      item.id && item.capacity && item.capacity > 0
-                        ? (idx) => removeEnhancement(item.id!, idx)
-                        : undefined
-                    }
-                  />
-                );
-              })}
-              {selectedBioware.map((item) => (
-                <AugmentationItem
-                  key={item.id}
-                  item={item}
-                  type="bioware"
-                  onRemove={() => item.id && removeBioware(item.id)}
-                />
-              ))}
-            </div>
-          )}
-
-          {/* Empty state */}
-          {totalAugmentations === 0 && (
-            <div className="rounded-lg border-2 border-dashed border-zinc-200 p-4 text-center dark:border-zinc-700">
-              <p className="text-xs text-zinc-400 dark:text-zinc-500">
-                Augmentations reduce Essence. Each point lost reduces Magic/Resonance by 1.
-              </p>
-            </div>
-          )}
-
-          {/* Summary */}
+          {/* Summary - ContactsCard pattern */}
           {totalAugmentations > 0 && (
             <div className="flex items-center justify-between rounded-lg bg-zinc-50 px-3 py-2 dark:bg-zinc-800/50">
               <span className="text-xs text-zinc-500 dark:text-zinc-400">
-                Total: {totalAugmentations} augmentation
-                {totalAugmentations !== 1 ? "s" : ""}
+                Total: {selectedCyberware.length} cyberware, {selectedBioware.length} bioware
               </span>
               <span className="text-xs font-bold text-zinc-900 dark:text-zinc-100">
                 {formatCurrency(cyberwareSpent + biowareSpent)}¥
