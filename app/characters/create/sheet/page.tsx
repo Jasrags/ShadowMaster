@@ -15,9 +15,9 @@ import { useRouter, useSearchParams } from "next/navigation";
 import { RulesetProvider, useRulesetStatus, useRuleset, usePriorityTable } from "@/lib/rules";
 import { CreationBudgetProvider } from "@/lib/contexts";
 import { SheetCreationLayout } from "./components/SheetCreationLayout";
-import { EditionSelector } from "../components/EditionSelector";
+import { EditionSelector } from "@/components/creation/EditionSelector";
 import type { EditionCode, Campaign, CreationState, ID } from "@/lib/types";
-import { Loader2, ArrowLeft, Wand2 } from "lucide-react";
+import { Loader2, ArrowLeft } from "lucide-react";
 import Link from "next/link";
 
 // =============================================================================
@@ -357,26 +357,6 @@ export default function SheetCreationPage() {
             )}
           </div>
 
-          <div className="flex items-center gap-3">
-            {/* Mode switcher - link to wizard mode */}
-            <Link
-              href={(() => {
-                // If we have an existing character, go to the edit page
-                if (existingCharacterId) {
-                  return `/characters/${existingCharacterId}/edit`;
-                }
-                // Otherwise go to create with optional campaignId
-                const params = new URLSearchParams();
-                if (campaignId) params.set("campaignId", campaignId);
-                const queryString = params.toString();
-                return `/characters/create${queryString ? `?${queryString}` : ""}`;
-              })()}
-              className="flex items-center gap-1.5 rounded-lg border border-zinc-200 px-3 py-1.5 text-xs font-medium text-zinc-600 transition-colors hover:bg-zinc-100 dark:border-zinc-700 dark:text-zinc-400 dark:hover:bg-zinc-800"
-            >
-              <Wand2 className="h-3.5 w-3.5" />
-              Switch to Wizard
-            </Link>
-          </div>
         </div>
       </header>
 

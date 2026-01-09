@@ -53,7 +53,8 @@ This file provides guidance to Claude Code (claude.ai/code) and Cursor IDE when 
   /api                  # API route handlers
     /characters/[characterId]/advancement  # Advancement API endpoints
   /characters           # Character management pages
-    /create             # Character creation wizard
+    /create             # Character creation (redirects to sheet)
+    /create/sheet       # Sheet-based character creation
     /[id]               # Character sheet view/edit
     /[id]/advancement   # Character advancement UI
   /campaigns            # Campaign management pages
@@ -120,30 +121,33 @@ loadRuleset(editionCode)
 
 ### 2. Character Creation Framework
 
-Wizard-based, step-driven, budget-constrained character creation.
+Sheet-based, single-page character creation with all sections visible simultaneously.
 
 **Key Concepts:**
 
-- **CreationMethod**: Defines creation steps, budgets, and constraints
-- **CreationState**: Tracks wizard progress, selections, and budgets
-- **Step Types**: `select`, `priority`, `allocate`, `choose`, `purchase`, `info`, `validate`
-- **Draft Auto-save**: Persists state to localStorage on every change
+- **CreationMethod**: Defines creation budgets and constraints
+- **CreationState**: Tracks selections and budget allocations
+- **CreationBudgetContext**: Real-time budget tracking and validation
+- **Draft Auto-save**: Debounced auto-save to server (1 second delay)
 
 **Critical Files:**
 
-- `/app/characters/create/components/CreationWizard.tsx` - Main orchestrator
-- `/app/characters/create/components/steps/` - Individual step components
+- `/app/characters/create/sheet/page.tsx` - Entry point
+- `/app/characters/create/sheet/components/SheetCreationLayout.tsx` - Main layout
+- `/components/creation/` - Creation card components (28+ components)
 - `/lib/types/creation.ts` - Creation method and state types
+- `/lib/contexts/CreationBudgetContext.tsx` - Budget tracking context
 
 **Character Creation Flow:**
 
 ```
-EditionSelector
-  → RulesetProvider.loadRuleset()
-  → CreationWizard renders steps
-  → User completes steps (auto-saved to localStorage)
-  → POST /api/characters (creates draft)
-  → Redirect to character sheet
+/characters/create → Redirect to /characters/create/sheet
+  → EditionSelector picks edition
+  → RulesetProvider loads ruleset
+  → SheetCreationLayout renders all sections
+  → User fills out character (auto-saved to server)
+  → POST /api/characters/{id}/finalize
+  → Redirect to /characters/[id]
 ```
 
 ### 3. Character Advancement System
@@ -197,8 +201,8 @@ User requests advancement
 
 **Local Storage**:
 
-- Character creation wizard auto-saves drafts
-- Draft recovery on page reload
+- User preferences and UI state
+- Draft recovery handled server-side via auto-save
 
 ### 4. File-Based Storage Pattern
 
@@ -287,18 +291,18 @@ Client: loadRuleset("sr5")
 ### Character Creation
 
 ```
-/characters/create
+/characters/create → Redirects to /characters/create/sheet
   → EditionSelector picks edition
   → RulesetProvider loads ruleset
-  → CreationWizard renders steps
-  → Each step updates CreationState
-  → Auto-save to localStorage
-  → Final step: POST /api/characters
+  → SheetCreationLayout renders all creation cards
+  → User selections update CreationState
+  → Auto-save to server (debounced 1s)
+  → POST /api/characters/{id}/finalize
   → createCharacterDraft() saves to /data
   → Redirect to /characters/[id]
 ```
 
-**Files:** `/app/characters/create/components/CreationWizard.tsx`, `/app/characters/create/components/steps/*`, `/app/api/characters/route.ts`
+**Files:** `/app/characters/create/sheet/page.tsx`, `/components/creation/*`, `/app/api/characters/route.ts`
 
 ## Type System
 
@@ -349,12 +353,12 @@ Wrapped in `/app/providers.tsx` and applied in `/app/layout.tsx`:
 4. Call storage layer functions
 5. Return JSON responses
 
-**New Character Creation Step:**
+**New Character Creation Card:**
 
-1. Define step in ruleset JSON (`core-rulebook.json`)
-2. Create step component in `/app/characters/create/components/steps/`
-3. Import and map in `CreationWizard.tsx`
-4. Update `CreationState` type if needed
+1. Create card component in `/components/creation/`
+2. Follow the `CreationCard` wrapper pattern from `/components/creation/shared/`
+3. Add to `SheetCreationLayout.tsx` in the appropriate column
+4. Update `CreationState` type in `/lib/types/creation.ts` if needed
 
 **New Ruleset Module:**
 
@@ -406,10 +410,10 @@ pnpm test:e2e:ui       # E2E with visual UI
 **Manual Testing:**
 
 1. Create test user via `/signup`
-2. Test character creation wizard end-to-end
+2. Test character creation via `/characters/create/sheet` end-to-end
 3. Check `/data` directory for persisted JSON
 4. Verify authentication by signing out and back in
-5. Test draft auto-save by refreshing wizard mid-creation
+5. Test draft auto-save by refreshing page mid-creation (drafts persist server-side)
 
 ## Documentation
 
@@ -441,10 +445,11 @@ Comprehensive architecture docs in `/docs/`:
 2. `/lib/rules/loader.ts` + `merge.ts` - Ruleset system core
 3. `/lib/rules/advancement/` - Karma advancement system
 4. `/lib/storage/base.ts` - Storage abstraction
-5. `/app/characters/create/components/CreationWizard.tsx` - Character creation orchestrator
-6. `/lib/auth/AuthProvider.tsx` - Authentication context
-7. `/lib/rules/RulesetContext.tsx` - Ruleset hooks and context
-8. `/docs/architecture/` - Architecture documentation
+5. `/app/characters/create/sheet/page.tsx` - Character creation entry point
+6. `/components/creation/` - Character creation card components
+7. `/lib/auth/AuthProvider.tsx` - Authentication context
+8. `/lib/rules/RulesetContext.tsx` - Ruleset hooks and context
+9. `/docs/architecture/` - Architecture documentation
 
 ## MCP Servers
 
