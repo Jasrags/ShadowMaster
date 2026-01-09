@@ -22,7 +22,7 @@ import type { QualityData, SkillGroupData } from "@/lib/rules/loader-types";
 import { hasUnifiedRatings, getRatingTableValue, getAvailableRatings } from "@/lib/types/ratings";
 import { useCreationBudgets } from "@/lib/contexts";
 import { CreationCard } from "./shared";
-import { Plus, Search, AlertTriangle, X, Check, ChevronDown } from "lucide-react";
+import { Plus, Search, AlertTriangle, X, Check, ChevronDown, Info } from "lucide-react";
 
 // =============================================================================
 // CONSTANTS
@@ -115,14 +115,14 @@ interface SelectedQuality {
 
 function QualityBudgetBar({
   label,
-  description,
+  tooltip,
   used,
   max,
   isOver,
   isPositive,
 }: {
   label: string;
-  description: string;
+  tooltip: string;
   used: number;
   max: number;
   isOver: boolean;
@@ -132,58 +132,43 @@ function QualityBudgetBar({
   const percentage = max > 0 ? Math.min(100, (used / max) * 100) : 0;
 
   return (
-    <div
-      className={`rounded-lg border p-3 ${
-        isOver
-          ? "border-red-200 bg-red-50 dark:border-red-800 dark:bg-red-900/20"
-          : "border-zinc-200 bg-zinc-50 dark:border-zinc-700 dark:bg-zinc-800/50"
-      }`}
-    >
-      <div className="flex items-center justify-between">
-        <div className="text-sm font-medium text-zinc-900 dark:text-zinc-100">{label}</div>
-        <div
-          className={`text-lg font-bold ${
+    <div className="space-y-1">
+      <div className="flex items-center justify-between text-xs">
+        <span
+          className="flex cursor-help items-center gap-1 text-zinc-600 dark:text-zinc-400"
+          title={tooltip}
+        >
+          {label}
+          <Info className="h-3 w-3 text-zinc-400" />
+        </span>
+        <span
+          className={`font-medium ${
             isOver
               ? "text-red-600 dark:text-red-400"
               : remaining === 0
-              ? "text-emerald-600 dark:text-emerald-400"
-              : isPositive
-              ? "text-blue-600 dark:text-blue-400"
-              : "text-amber-600 dark:text-amber-400"
+                ? "text-emerald-600 dark:text-emerald-400"
+                : isPositive
+                  ? "text-blue-600 dark:text-blue-400"
+                  : "text-amber-600 dark:text-amber-400"
           }`}
         >
-          {used}
-        </div>
+          {used} / {max}
+        </span>
       </div>
-
-      <div className="mt-1 text-xs text-zinc-500 dark:text-zinc-400">
-        {description}
-        <span className="float-right">of {max} max</span>
-      </div>
-
-      {/* Progress bar */}
-      <div className="mt-2 h-2 overflow-hidden rounded-full bg-zinc-200 dark:bg-zinc-700">
+      <div className="h-2 overflow-hidden rounded-full bg-zinc-100 dark:bg-zinc-800">
         <div
-          className={`h-full rounded-full transition-all ${
+          className={`h-full transition-all ${
             isOver
               ? "bg-red-500"
               : remaining === 0
-              ? "bg-emerald-500"
-              : isPositive
-              ? "bg-blue-500"
-              : "bg-amber-500"
+                ? "bg-emerald-500"
+                : isPositive
+                  ? "bg-blue-500"
+                  : "bg-amber-500"
           }`}
           style={{ width: `${percentage}%` }}
         />
       </div>
-
-      {/* Over budget warning */}
-      {isOver && (
-        <div className="mt-2 flex items-center gap-1.5 text-xs text-red-600 dark:text-red-400">
-          <AlertTriangle className="h-3.5 w-3.5" />
-          <span>{Math.abs(remaining)} karma over limit</span>
-        </div>
-      )}
     </div>
   );
 }
@@ -218,48 +203,36 @@ function SelectedQualityCard({
     : quality.name;
 
   return (
-    <div
-      className={`rounded-lg border p-3 ${
-        isPositive
-          ? "border-blue-200 bg-blue-50 dark:border-blue-800 dark:bg-blue-900/20"
-          : "border-amber-200 bg-amber-50 dark:border-amber-800 dark:bg-amber-900/20"
-      }`}
-    >
-      {/* Header */}
-      <div className="flex items-start justify-between">
-        <div className="flex-1">
-          <div className="flex items-center gap-2">
-            <span className="text-sm font-semibold text-zinc-900 dark:text-zinc-100">
-              {displayName}
-            </span>
-            <span
-              className={`text-sm font-medium ${
-                isPositive ? "text-blue-600 dark:text-blue-400" : "text-amber-600 dark:text-amber-400"
-              }`}
-            >
-              {isPositive ? `${cost} karma` : `+${cost} karma`}
-            </span>
-          </div>
-
-          {/* Description */}
-          <p className="mt-1 text-xs text-zinc-600 dark:text-zinc-400">{quality.summary}</p>
-
-          {/* Specification display */}
-          {selection.specification && (
-            <p className="mt-1 text-xs text-zinc-500 dark:text-zinc-500">
-              {quality.specificationLabel}: {selection.specification}
-            </p>
-          )}
+    <div className="py-1.5">
+      {/* Header row */}
+      <div className="flex items-center justify-between">
+        <div className="flex min-w-0 items-center gap-1.5">
+          <span
+            className={`h-1.5 w-1.5 shrink-0 rounded-full ${
+              isPositive ? "bg-blue-500" : "bg-amber-500"
+            }`}
+          />
+          <span className="truncate text-sm font-medium text-zinc-900 dark:text-zinc-100">
+            {displayName}
+          </span>
+          <span
+            className={`shrink-0 text-xs font-medium ${
+              isPositive ? "text-blue-600 dark:text-blue-400" : "text-amber-600 dark:text-amber-400"
+            }`}
+          >
+            {isPositive ? `${cost}` : `+${cost}`}
+          </span>
         </div>
-
         <button
           onClick={onRemove}
-          className="ml-2 text-zinc-400 hover:text-red-500 dark:hover:text-red-400"
+          className="shrink-0 rounded p-1 text-zinc-400 hover:bg-zinc-200 hover:text-red-500 dark:hover:bg-zinc-700 dark:hover:text-red-400"
           title="Remove quality"
         >
-          <X className="h-4 w-4" />
+          <X className="h-3 w-3" />
         </button>
       </div>
+      {/* Description */}
+      <p className="ml-3 truncate text-xs text-zinc-500 dark:text-zinc-400">{quality.summary}</p>
     </div>
   );
 }
@@ -950,19 +923,14 @@ export function QualitiesCard({ state, updateState }: QualitiesCardProps) {
   return (
     <CreationCard
       title="Qualities"
-      description={
-        selectedPositive.length + selectedNegative.length > 0
-          ? `${selectedPositive.length} positive, ${selectedNegative.length} negative`
-          : "Optional traits"
-      }
       status={validationStatus}
     >
-      <div className="space-y-4">
+      <div className="space-y-3">
         {/* Budget indicators */}
-        <div className="grid gap-2 sm:grid-cols-2">
+        <div className="grid gap-3 sm:grid-cols-2">
           <QualityBudgetBar
             label="Positive Qualities"
-            description="Cost karma to acquire"
+            tooltip="Cost karma to acquire (max 25)"
             used={positiveKarmaSpent}
             max={MAX_POSITIVE_KARMA}
             isOver={isPositiveOver}
@@ -970,7 +938,7 @@ export function QualitiesCard({ state, updateState }: QualitiesCardProps) {
           />
           <QualityBudgetBar
             label="Negative Qualities"
-            description="Grant karma when taken"
+            tooltip="Grant karma when taken (max 25)"
             used={negativeKarmaGained}
             max={MAX_NEGATIVE_KARMA}
             isOver={isNegativeOver}
@@ -980,24 +948,23 @@ export function QualitiesCard({ state, updateState }: QualitiesCardProps) {
 
         {/* Positive Qualities Section */}
         <div>
-          <div className="mb-2 flex items-center justify-between">
-            <h4 className="text-xs font-semibold uppercase tracking-wider text-zinc-500 dark:text-zinc-400">
+          <div className="mb-1 flex items-center justify-between">
+            <h4 className="text-[10px] font-semibold uppercase tracking-wider text-zinc-500 dark:text-zinc-400">
               Positive Qualities
             </h4>
             <button
               onClick={() => setShowPositiveModal(true)}
-              className="flex items-center gap-1 text-sm text-blue-600 hover:text-blue-700 dark:text-blue-400 dark:hover:text-blue-300"
+              className="flex items-center gap-1 rounded-lg bg-amber-500 px-2 py-1 text-xs font-medium text-white transition-colors hover:bg-amber-600"
             >
-              <Plus className="h-4 w-4" />
-              Add
+              <Plus className="h-3.5 w-3.5" />
+              Positive
             </button>
           </div>
-
-          <div className="space-y-2">
-            {selectedPositive.length === 0 ? (
-              <p className="text-sm text-zinc-500 dark:text-zinc-400">No positive qualities selected.</p>
-            ) : (
-              selectedPositive.map((selection) => {
+          {selectedPositive.length === 0 ? (
+            <p className="text-xs text-zinc-400 dark:text-zinc-500">No positive qualities selected</p>
+          ) : (
+            <div className="divide-y divide-zinc-100 rounded-lg border border-zinc-200 px-3 dark:divide-zinc-800 dark:border-zinc-700">
+              {selectedPositive.map((selection) => {
                 const quality = positiveQualities.find((q) => q.id === selection.id);
                 if (!quality) return null;
                 const cost = getSelectionCost(selection, positiveQualities);
@@ -1012,31 +979,30 @@ export function QualitiesCard({ state, updateState }: QualitiesCardProps) {
                     onRemove={() => handleRemoveQuality(selection.id, true)}
                   />
                 );
-              })
-            )}
-          </div>
+              })}
+            </div>
+          )}
         </div>
 
         {/* Negative Qualities Section */}
         <div>
-          <div className="mb-2 flex items-center justify-between">
-            <h4 className="text-xs font-semibold uppercase tracking-wider text-zinc-500 dark:text-zinc-400">
+          <div className="mb-1 flex items-center justify-between">
+            <h4 className="text-[10px] font-semibold uppercase tracking-wider text-zinc-500 dark:text-zinc-400">
               Negative Qualities
             </h4>
             <button
               onClick={() => setShowNegativeModal(true)}
-              className="flex items-center gap-1 text-sm text-amber-600 hover:text-amber-700 dark:text-amber-400 dark:hover:text-amber-300"
+              className="flex items-center gap-1 rounded-lg bg-amber-500 px-2 py-1 text-xs font-medium text-white transition-colors hover:bg-amber-600"
             >
-              <Plus className="h-4 w-4" />
-              Add
+              <Plus className="h-3.5 w-3.5" />
+              Negative
             </button>
           </div>
-
-          <div className="space-y-2">
-            {selectedNegative.length === 0 ? (
-              <p className="text-sm text-zinc-500 dark:text-zinc-400">No negative qualities selected.</p>
-            ) : (
-              selectedNegative.map((selection) => {
+          {selectedNegative.length === 0 ? (
+            <p className="text-xs text-zinc-400 dark:text-zinc-500">No negative qualities selected</p>
+          ) : (
+            <div className="divide-y divide-zinc-100 rounded-lg border border-zinc-200 px-3 dark:divide-zinc-800 dark:border-zinc-700">
+              {selectedNegative.map((selection) => {
                 const quality = negativeQualities.find((q) => q.id === selection.id);
                 if (!quality) return null;
                 const cost = getSelectionCost(selection, negativeQualities);
@@ -1051,28 +1017,28 @@ export function QualitiesCard({ state, updateState }: QualitiesCardProps) {
                     onRemove={() => handleRemoveQuality(selection.id, false)}
                   />
                 );
-              })
-            )}
-          </div>
+              })}
+            </div>
+          )}
         </div>
 
-        {/* Karma balance summary */}
-        <div className="rounded-lg bg-zinc-100 p-3 text-center dark:bg-zinc-800">
-          <div className="text-xs text-zinc-500 dark:text-zinc-400">Karma Balance</div>
-          <div className="mt-1 text-sm text-zinc-700 dark:text-zinc-300">
-            {startingKarma} (starting) − {positiveKarmaSpent} (positive) + {negativeKarmaGained}{" "}
-            (negative) ={" "}
+        {/* Summary */}
+        {(selectedPositive.length > 0 || selectedNegative.length > 0) && (
+          <div className="flex items-center justify-between rounded-lg bg-zinc-50 px-3 py-2 dark:bg-zinc-800/50">
+            <span className="text-xs text-zinc-500 dark:text-zinc-400">
+              Total: {selectedPositive.length} positive, {selectedNegative.length} negative
+            </span>
             <span
-              className={`font-bold ${
+              className={`text-xs font-bold ${
                 karmaBalance >= 0
-                  ? "text-emerald-600 dark:text-emerald-400"
+                  ? "text-zinc-900 dark:text-zinc-100"
                   : "text-red-600 dark:text-red-400"
               }`}
             >
               {karmaBalance} karma
             </span>
           </div>
-        </div>
+        )}
       </div>
 
       {/* Modals */}
