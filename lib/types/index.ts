@@ -201,6 +201,67 @@ export type {
   ValidationError,
 } from "./creation";
 
+// Creation selections types (Phase 4.3: typed selection interfaces)
+export type {
+  CoreAttributeId,
+  SpecialAttributeId,
+  CharacterInfoSelections,
+  MetatypeSelections,
+  MagicalPathValue,
+  MagicalPathSelections,
+  AttributeSelections,
+  SkillSelections,
+  SelectedQuality,
+  QualitySelectionValue,
+  QualitySelections,
+  KnowledgeLanguageSelections,
+  SpellSelection,
+  CreationFocusBase,
+  MagicSelections,
+  ContactSelections,
+  IdentitySelections,
+  GearSelections,
+  AugmentationSelections,
+  CreationVehicleBase,
+  VehicleSelections,
+  CreationSelections,
+} from "./creation-selections";
+
+// Creation selection type guards and accessors
+export {
+  hasCharacterInfo,
+  hasMetatypeSelection,
+  hasAttributeSelections,
+  hasSkillSelections,
+  hasQualitySelections,
+  hasMagicalPath,
+  isSpellcaster,
+  isAdept,
+  isTechnomancer,
+  hasGearSelections,
+  hasAugmentationSelections,
+  hasVehicleSelections,
+  getAttributes,
+  getSpecialAttributes,
+  getSkills,
+  getSkillGroups,
+  getPositiveQualities,
+  getNegativeQualities,
+  getQualityId,
+  getPositiveQualityIds,
+  getNegativeQualityIds,
+  getSpells,
+  getAdeptPowers,
+  getCyberware,
+  getBioware,
+  getGear,
+  getWeapons,
+  getArmor,
+  getVehicles,
+  getFoci,
+  getContacts,
+} from "./creation-selections";
+
 // User types
 export * from "./user";
 

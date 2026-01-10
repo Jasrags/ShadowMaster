@@ -363,7 +363,8 @@ export function GearPanel({ state, updateState }: GearPanelProps) {
       }
 
       const installedMod = {
-        id: mod.id,
+        id: crypto.randomUUID(),
+        catalogId: mod.id,
         name: mod.hasRating ? `${mod.name} (Rating ${effectiveRating})` : mod.name,
         rating: mod.hasRating ? effectiveRating : undefined,
         cost,
